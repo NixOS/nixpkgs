@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, desktop-file-utils
-, pkg-config
-, gnome
-, gtk4
-, libadwaita
-, wrapGAppsHook4
-, gjs
-, gobject-introspection
-, libgweather
-, meson
-, ninja
-, geoclue2
-, python3
-, gsettings-desktop-schemas
+{
+  lib,
+  stdenv,
+  fetchurl,
+  desktop-file-utils,
+  pkg-config,
+  gnome,
+  gtk4,
+  libadwaita,
+  wrapGAppsHook4,
+  gjs,
+  gobject-introspection,
+  libgweather,
+  meson,
+  ninja,
+  geoclue2,
+  python3,
+  gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation rec {

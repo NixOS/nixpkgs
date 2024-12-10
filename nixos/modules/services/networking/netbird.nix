@@ -115,57 +115,52 @@ in
       networking.dhcpcd.denyInterfaces = attrNames cfg.tunnels;
 
       systemd.network.networks = mkIf config.networking.useNetworkd (
-        mapAttrs'
-          (
-            name: _:
-            nameValuePair "50-netbird-${name}" {
-              matchConfig = {
-                Name = name;
-              };
-              linkConfig = {
-                Unmanaged = true;
-                ActivationPolicy = "manual";
-              };
-            }
-          )
-          cfg.tunnels
+        mapAttrs' (
+          name: _:
+          nameValuePair "50-netbird-${name}" {
+            matchConfig = {
+              Name = name;
+            };
+            linkConfig = {
+              Unmanaged = true;
+              ActivationPolicy = "manual";
+            };
+          }
+        ) cfg.tunnels
       );
 
-      systemd.services =
-        mapAttrs'
-          (
-            name:
-            { environment, stateDir, ... }:
-            nameValuePair "netbird-${name}" {
-              description = "A WireGuard-based mesh network that connects your devices into a single private network";
+      systemd.services = mapAttrs' (
+        name:
+        { environment, stateDir, ... }:
+        nameValuePair "netbird-${name}" {
+          description = "A WireGuard-based mesh network that connects your devices into a single private network";
 
-              documentation = [ "https://netbird.io/docs/" ];
+          documentation = [ "https://netbird.io/docs/" ];
 
-              after = [ "network.target" ];
-              wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
+          wantedBy = [ "multi-user.target" ];
 
-              path = with pkgs; [ openresolv ];
+          path = with pkgs; [ openresolv ];
 
-              inherit environment;
+          inherit environment;
 
-              serviceConfig = {
-                ExecStart = "${getExe cfg.package} service run";
-                Restart = "always";
-                RuntimeDirectory = stateDir;
-                StateDirectory = stateDir;
-                StateDirectoryMode = "0700";
-                WorkingDirectory = "/var/lib/${stateDir}";
-              };
+          serviceConfig = {
+            ExecStart = "${getExe cfg.package} service run";
+            Restart = "always";
+            RuntimeDirectory = stateDir;
+            StateDirectory = stateDir;
+            StateDirectoryMode = "0700";
+            WorkingDirectory = "/var/lib/${stateDir}";
+          };
 
-              unitConfig = {
-                StartLimitInterval = 5;
-                StartLimitBurst = 10;
-              };
+          unitConfig = {
+            StartLimitInterval = 5;
+            StartLimitBurst = 10;
+          };
 
-              stopIfChanged = false;
-            }
-          )
-          cfg.tunnels;
+          stopIfChanged = false;
+        }
+      ) cfg.tunnels;
     })
   ];
 }

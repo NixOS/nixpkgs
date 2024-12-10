@@ -1,7 +1,13 @@
-{ fetchFromGitHub
-, lib, stdenv
-, ncurses, neovim, procps
-, scdoc, lua51Packages, util-linux
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  ncurses,
+  neovim,
+  procps,
+  scdoc,
+  lua51Packages,
+  util-linux,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,22 +28,31 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ scdoc ];
 
   makeFlags = [ "PREFIX=$(out)" ];
-  buildFlags = [ "nvimpager.configured" "nvimpager.1" ];
+  buildFlags = [
+    "nvimpager.configured"
+    "nvimpager.1"
+  ];
   preBuild = ''
     patchShebangs nvimpager
     substituteInPlace nvimpager --replace ':-nvim' ':-${neovim}/bin/nvim'
-    '';
+  '';
 
   doCheck = true;
-  nativeCheckInputs = [ lua51Packages.busted util-linux neovim ];
+  nativeCheckInputs = [
+    lua51Packages.busted
+    util-linux
+    neovim
+  ];
   # filter out one test that fails in the sandbox of nix
-  checkPhase = let
-    exclude-tags = if stdenv.isDarwin then "nix,mac" else "nix";
-  in ''
-    runHook preCheck
-    make test BUSTED='busted --output TAP --exclude-tags=${exclude-tags}'
-    runHook postCheck
-  '';
+  checkPhase =
+    let
+      exclude-tags = if stdenv.isDarwin then "nix,mac" else "nix";
+    in
+    ''
+      runHook preCheck
+      make test BUSTED='busted --output TAP --exclude-tags=${exclude-tags}'
+      runHook postCheck
+    '';
 
   meta = with lib; {
     description = "Use neovim as pager";

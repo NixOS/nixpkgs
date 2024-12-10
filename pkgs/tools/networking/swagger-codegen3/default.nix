@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, jre, makeWrapper, testers, swagger-codegen3 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeWrapper,
+  testers,
+  swagger-codegen3,
+}:
 
 stdenv.mkDerivation rec {
   version = "3.0.56";

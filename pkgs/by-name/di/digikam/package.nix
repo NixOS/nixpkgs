@@ -1,43 +1,52 @@
-{ stdenv, config, lib, fetchurl, cmake, doxygen, extra-cmake-modules, wrapGAppsHook3
+{
+  stdenv,
+  config,
+  lib,
+  fetchurl,
+  cmake,
+  doxygen,
+  extra-cmake-modules,
+  wrapGAppsHook3,
 
-# For `digitaglinktree`
-, perl, sqlite
+  # For `digitaglinktree`
+  perl,
+  sqlite,
 
-, libsForQt5
+  libsForQt5,
 
-, bison
-, boost
-, eigen
-, exiv2
-, ffmpeg_4
-, flex
-, graphviz
-, imagemagick
-, lcms2
-, lensfun
-, libgphoto2
-, liblqr1
-, libusb1
-, libheif
-, libGL
-, libGLU
-, opencv
-, pcre
-, x265
-, jasper
+  bison,
+  boost,
+  eigen,
+  exiv2,
+  ffmpeg_4,
+  flex,
+  graphviz,
+  imagemagick,
+  lcms2,
+  lensfun,
+  libgphoto2,
+  liblqr1,
+  libusb1,
+  libheif,
+  libGL,
+  libGLU,
+  opencv,
+  pcre,
+  x265,
+  jasper,
 
-, bash
-# For panorama and focus stacking
-, enblend-enfuse
-, hugin
-, gnumake
+  bash,
+  # For panorama and focus stacking
+  enblend-enfuse,
+  hugin,
+  gnumake,
 
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? {}
+  cudaSupport ? config.cudaSupport,
+  cudaPackages ? { },
 }:
 
 stdenv.mkDerivation rec {
-  pname   = "digikam";
+  pname = "digikam";
   version = "8.3.0";
 
   src = fetchurl {
@@ -49,67 +58,78 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ cmake ];
 
-  nativeBuildInputs = [
-    cmake
-    doxygen
-    extra-cmake-modules
-    libsForQt5.kdoctools
-    libsForQt5.wrapQtAppsHook
-    wrapGAppsHook3
-  ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_nvcc
-  ]);
+  nativeBuildInputs =
+    [
+      cmake
+      doxygen
+      extra-cmake-modules
+      libsForQt5.kdoctools
+      libsForQt5.wrapQtAppsHook
+      wrapGAppsHook3
+    ]
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_nvcc
+      ]
+    );
 
-  buildInputs = [
-    bison
-    boost
-    eigen
-    exiv2
-    ffmpeg_4
-    flex
-    graphviz
-    imagemagick
-    lcms2
-    lensfun
-    libgphoto2
-    libheif
-    liblqr1
-    libusb1
-    libGL
-    libGLU
-    opencv
-    pcre
-    x265
-    jasper
-  ] ++ (with libsForQt5; [
-    libkipi
-    libksane
-    libqtav
+  buildInputs =
+    [
+      bison
+      boost
+      eigen
+      exiv2
+      ffmpeg_4
+      flex
+      graphviz
+      imagemagick
+      lcms2
+      lensfun
+      libgphoto2
+      libheif
+      liblqr1
+      libusb1
+      libGL
+      libGLU
+      opencv
+      pcre
+      x265
+      jasper
+    ]
+    ++ (with libsForQt5; [
+      libkipi
+      libksane
+      libqtav
 
-    qtbase
-    qtxmlpatterns
-    qtsvg
-    qtwebengine
-    qtnetworkauth
+      qtbase
+      qtxmlpatterns
+      qtsvg
+      qtwebengine
+      qtnetworkauth
 
-    akonadi-contacts
-    kcalendarcore
-    kconfigwidgets
-    kcoreaddons
-    kfilemetadata
-    knotifications
-    knotifyconfig
-    ktextwidgets
-    kwidgetsaddons
-    kxmlgui
+      akonadi-contacts
+      kcalendarcore
+      kconfigwidgets
+      kcoreaddons
+      kfilemetadata
+      knotifications
+      knotifyconfig
+      ktextwidgets
+      kwidgetsaddons
+      kxmlgui
 
-    breeze-icons
-    marble
-    oxygen
-    threadweaver
-  ]) ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_cudart
-  ]);
+      breeze-icons
+      marble
+      oxygen
+      threadweaver
+    ])
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_cudart
+      ]
+    );
 
   postPatch = ''
     substituteInPlace \
@@ -131,7 +151,13 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
-    qtWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ gnumake hugin enblend-enfuse ]})
+    qtWrapperArgs+=(--prefix PATH : ${
+      lib.makeBinPath [
+        gnumake
+        hugin
+        enblend-enfuse
+      ]
+    })
     qtWrapperArgs+=(--suffix DK_PLUGIN_PATH : ${placeholder "out"}/${libsForQt5.qtbase.qtPluginPrefix}/${pname})
     substituteInPlace $out/bin/digitaglinktree \
       --replace "/usr/bin/perl" "${perl}/bin/perl" \

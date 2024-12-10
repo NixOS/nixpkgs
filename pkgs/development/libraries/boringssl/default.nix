@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchgit
-, cmake
-, ninja
-, perl
-, buildGoModule
+{
+  lib,
+  stdenv,
+  fetchgit,
+  cmake,
+  ninja,
+  perl,
+  buildGoModule,
 }:
 
 # reference: https://boringssl.googlesource.com/boringssl/+/2661/BUILDING.md
@@ -18,23 +19,31 @@ buildGoModule {
     hash = "sha256-nu+5TeWEAVLGhTE15kxmTWZxo0V2elNUy67gdaU3Y+I=";
   };
 
-  nativeBuildInputs = [ cmake ninja perl ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    perl
+  ];
 
   vendorHash = "sha256-074bgtoBRS3SOxLrwZbBdK1jFpdCvF6tRtU1CkrhoDY=";
   proxyVendor = true;
 
   # hack to get both go and cmake configure phase
   # (if we use postConfigure then cmake will loop runHook postConfigure)
-  preBuild = ''
-    cmakeConfigurePhase
-  '' + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
-    export GOARCH=$(go env GOHOSTARCH)
-  '';
+  preBuild =
+    ''
+      cmakeConfigurePhase
+    ''
+    + lib.optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+      export GOARCH=$(go env GOHOSTARCH)
+    '';
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
-    # Needed with GCC 12 but breaks on darwin (with clang)
-    "-Wno-error=stringop-overflow"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isGNU [
+      # Needed with GCC 12 but breaks on darwin (with clang)
+      "-Wno-error=stringop-overflow"
+    ]
+  );
 
   buildPhase = ''
     ninjaBuildPhase
@@ -55,13 +64,22 @@ buildGoModule {
     mv ../include $dev
   '';
 
-  outputs = [ "out" "bin" "dev" ];
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
 
   meta = with lib; {
     description = "Free TLS/SSL implementation";
     mainProgram = "bssl";
-    homepage    = "https://boringssl.googlesource.com";
+    homepage = "https://boringssl.googlesource.com";
     maintainers = [ maintainers.thoughtpolice ];
-    license = with licenses; [ openssl isc mit bsd3 ];
+    license = with licenses; [
+      openssl
+      isc
+      mit
+      bsd3
+    ];
   };
 }

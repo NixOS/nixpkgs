@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "fission";
@@ -13,7 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-hZmQxG4cw1Len3ZyGhWVTXB8N9fDRkgNDyF18/8dKuo=";
 
-  ldflags = [ "-s" "-w" "-X info.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X info.Version=${version}"
+  ];
 
   subPackages = [ "cmd/fission-cli" ];
 

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, aml
-, ffmpeg
-, gnutls
-, libjpeg_turbo
-, mesa
-, pixman
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  aml,
+  ffmpeg,
+  gnutls,
+  libjpeg_turbo,
+  mesa,
+  pixman,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {

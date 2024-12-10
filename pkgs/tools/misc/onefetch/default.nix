@@ -1,15 +1,16 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, installShellFiles
-, pkg-config
-, zstd
-, stdenv
-, CoreFoundation
-, libresolv
-, Security
-, git
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  installShellFiles,
+  pkg-config,
+  zstd,
+  stdenv,
+  CoreFoundation,
+  libresolv,
+  Security,
+  git,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,10 +31,19 @@ rustPlatform.buildRustPackage rec {
     ./zstd-pkg-config.patch
   ];
 
-  nativeBuildInputs = [ cmake installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    installShellFiles
+    pkg-config
+  ];
 
-  buildInputs = [ zstd ]
-    ++ lib.optionals stdenv.isDarwin [ CoreFoundation libresolv Security ];
+  buildInputs =
+    [ zstd ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreFoundation
+      libresolv
+      Security
+    ];
 
   nativeCheckInputs = [
     git
@@ -59,7 +69,11 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/o2sh/onefetch";
     changelog = "https://github.com/o2sh/onefetch/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne figsoda kloenk ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      figsoda
+      kloenk
+    ];
     mainProgram = "onefetch";
   };
 }

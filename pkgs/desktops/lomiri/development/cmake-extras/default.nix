@@ -1,8 +1,9 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitLab
-, cmake
-, qtbase
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitLab,
+  cmake,
+  qtbase,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

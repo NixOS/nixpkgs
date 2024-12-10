@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,18 +23,23 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   meta = with lib; {
     description = "CLI command organizer written in rust";
     homepage = "https://github.com/hyde46/hoard";
     changelog = "https://github.com/Hyde46/hoard/blob/${src.rev}/CHANGES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ builditluc figsoda ];
+    maintainers = with maintainers; [
+      builditluc
+      figsoda
+    ];
     mainProgram = "hoard";
   };
 }

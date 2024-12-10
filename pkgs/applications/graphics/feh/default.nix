@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, xorg
-, imlib2
-, libjpeg
-, libpng
-, curl
-, libexif
-, jpegexiforient
-, perl
-, enableAutoreload ? !stdenv.hostPlatform.isDarwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  xorg,
+  imlib2,
+  libjpeg,
+  libpng,
+  curl,
+  libexif,
+  jpegexiforient,
+  perl,
+  enableAutoreload ? !stdenv.hostPlatform.isDarwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,21 +25,41 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-378rhZhpcua3UbsY0OcGKGXdMIQCuG84YjJ9vfJhZVs=";
   };
 
-  outputs = [ "out" "man" "doc" ];
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [ xorg.libXt xorg.libX11 xorg.libXinerama imlib2 libjpeg libpng curl libexif ];
+  buildInputs = [
+    xorg.libXt
+    xorg.libX11
+    xorg.libXinerama
+    imlib2
+    libjpeg
+    libpng
+    curl
+    libexif
+  ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "exif=1"
-  ] ++ lib.optional stdenv.isDarwin "verscmp=0"
-  ++ lib.optional enableAutoreload "inotify=1";
+  makeFlags =
+    [
+      "PREFIX=${placeholder "out"}"
+      "exif=1"
+    ]
+    ++ lib.optional stdenv.isDarwin "verscmp=0"
+    ++ lib.optional enableAutoreload "inotify=1";
 
   installTargets = [ "install" ];
   postInstall = ''
-    wrapProgram "$out/bin/feh" --prefix PATH : "${lib.makeBinPath [ libjpeg jpegexiforient ]}" \
+    wrapProgram "$out/bin/feh" --prefix PATH : "${
+      lib.makeBinPath [
+        libjpeg
+        jpegexiforient
+      ]
+    }" \
                                --add-flags '--theme=feh'
   '';
 
@@ -51,7 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
     # released under a variant of the MIT license
     # https://spdx.org/licenses/MIT-feh.html
     license = licenses.mit-feh;
-    maintainers = with maintainers; [ gepbird globin viric willibutz ];
+    maintainers = with maintainers; [
+      gepbird
+      globin
+      viric
+      willibutz
+    ];
     platforms = platforms.unix;
     mainProgram = "feh";
   };

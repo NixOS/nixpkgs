@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, libosip, sqlite }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libosip,
+  sqlite,
+}:
 
 stdenv.mkDerivation rec {
   pname = "siproxd";
@@ -11,13 +17,16 @@ stdenv.mkDerivation rec {
 
   patches = [ ./cheaders.patch ];
 
-  buildInputs = [ libosip sqlite ];
+  buildInputs = [
+    libosip
+    sqlite
+  ];
 
   meta = {
     homepage = "http://siproxd.sourceforge.net/";
     description = "A masquerading SIP Proxy Server";
     mainProgram = "siproxd";
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
     license = lib.licenses.gpl2Plus;
   };

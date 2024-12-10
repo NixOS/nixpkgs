@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-hakari";
@@ -13,8 +17,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-UaSW9PZMUhqjvRM0/URHaOfofG5Ap3bvKgAHa+H+MFw=";
 
-  cargoBuildFlags = [ "-p" "cargo-hakari" ];
-  cargoTestFlags = [ "-p" "cargo-hakari" ];
+  cargoBuildFlags = [
+    "-p"
+    "cargo-hakari"
+  ];
+  cargoTestFlags = [
+    "-p"
+    "cargo-hakari"
+  ];
 
   meta = with lib; {
     description = "Manage workspace-hack packages to speed up builds in large workspaces.";
@@ -26,7 +36,13 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://crates.io/crates/cargo-hakari";
     changelog = "https://github.com/guppy-rs/guppy/blob/cargo-hakari-${version}/tools/cargo-hakari/CHANGELOG.md";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ figsoda macalinao ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+      figsoda
+      macalinao
+    ];
   };
 }

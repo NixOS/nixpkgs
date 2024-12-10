@@ -1,6 +1,7 @@
-{ lib
-, stdenvNoCC
-, fetchzip
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -31,6 +32,9 @@ stdenvNoCC.mkDerivation rec {
     changelog = "https://github.com/mainsail-crew/mainsail/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ shhht lovesegfault ];
+    maintainers = with maintainers; [
+      shhht
+      lovesegfault
+    ];
   };
 }

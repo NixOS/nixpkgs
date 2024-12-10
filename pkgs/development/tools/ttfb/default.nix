@@ -1,8 +1,9 @@
-{ darwin
-, fetchCrate
-, lib
-, rustPlatform
-, stdenv
+{
+  darwin,
+  fetchCrate,
+  lib,
+  rustPlatform,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -38,4 +39,3 @@ rustPlatform.buildRustPackage rec {
     maintainers = with lib.maintainers; [ phip1611 ];
   };
 }
-

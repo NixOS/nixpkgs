@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchCrate
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -14,7 +15,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-R7jqFgMj4YjUbEObdRxxvataYMXe9wq8B8k+t7+Dv30=";
 
-  cargoBuildFlags = [ "--bin" "svlint" ];
+  cargoBuildFlags = [
+    "--bin"
+    "svlint"
+  ];
 
   meta = with lib; {
     description = "SystemVerilog linter";

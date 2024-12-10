@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, pkgs
-, rustPackages
-, fetchFromGitHub
-, rustPlatform
-, writers
-, nixosTests
-, CoreServices
-, Security
+{
+  lib,
+  stdenv,
+  pkgs,
+  rustPackages,
+  fetchFromGitHub,
+  rustPlatform,
+  writers,
+  nixosTests,
+  CoreServices,
+  Security,
 }:
 
 let
@@ -18,7 +19,8 @@ let
   sha256 = "sha256-pGNhhEBHyWhTaW24dHrxAvpb/qr5RPbHXRwDZx6Rf74=";
   cargoSha256 = "sha256-ENZATiBhoO+N6NpSknOWpvsatkaYb4mS/E63XNRXfMU=";
 
-in (rustPlatform.buildRustPackage rec {
+in
+(rustPlatform.buildRustPackage rec {
   pname = "lorri";
   inherit version;
 
@@ -29,7 +31,11 @@ in (rustPlatform.buildRustPackage rec {
     inherit sha256;
   };
 
-  outputs = [ "out" "man" "doc" ];
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
 
   inherit cargoSha256;
   doCheck = false;
@@ -38,7 +44,10 @@ in (rustPlatform.buildRustPackage rec {
   RUN_TIME_CLOSURE = pkgs.callPackage ./runtime.nix { };
 
   nativeBuildInputs = [ rustPackages.rustfmt ];
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreServices
+    Security
+  ];
 
   # copy the docs to the $man and $doc outputs
   postInstall = ''
@@ -66,7 +75,11 @@ in (rustPlatform.buildRustPackage rec {
     description = "Your project's nix-env";
     homepage = "https://github.com/nix-community/lorri";
     license = licenses.asl20;
-    maintainers = with maintainers; [ grahamc Profpatsch nyarly ];
+    maintainers = with maintainers; [
+      grahamc
+      Profpatsch
+      nyarly
+    ];
     mainProgram = "lorri";
   };
 })

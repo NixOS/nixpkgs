@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gitUpdater
-, nixosTests
-, testers
-, accountsservice
-, cmake
-, dbus-test-runner
-, withDocumentation ? true
-, docbook_xsl
-, docbook_xml_dtd_45
-, glib
-, gobject-introspection
-, gtest
-, gtk-doc
-, intltool
-, lomiri
-, pkg-config
-, python3
-, systemd
-, vala
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  nixosTests,
+  testers,
+  accountsservice,
+  cmake,
+  dbus-test-runner,
+  withDocumentation ? true,
+  docbook_xsl,
+  docbook_xml_dtd_45,
+  glib,
+  gobject-introspection,
+  gtest,
+  gtk-doc,
+  intltool,
+  lomiri,
+  pkg-config,
+  python3,
+  systemd,
+  vala,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,45 +35,51 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FBJeP5hOXJcOk04cRJpw+oN7L3w3meDX3ivLmFWkhVI=";
   };
 
-  outputs = [
-    "out"
-    "dev"
-  ] ++ lib.optionals withDocumentation [
-    "devdoc"
-  ];
+  outputs =
+    [
+      "out"
+      "dev"
+    ]
+    ++ lib.optionals withDocumentation [
+      "devdoc"
+    ];
 
-  postPatch = ''
-    # Uses pkg_get_variable, cannot substitute prefix with that
-    substituteInPlace data/CMakeLists.txt \
-      --replace "\''${SYSTEMD_USER_DIR}" "$out/lib/systemd/user"
+  postPatch =
+    ''
+      # Uses pkg_get_variable, cannot substitute prefix with that
+      substituteInPlace data/CMakeLists.txt \
+        --replace "\''${SYSTEMD_USER_DIR}" "$out/lib/systemd/user"
 
-    # Bad concatenation
-    substituteInPlace libmessaging-menu/messaging-menu.pc.in \
-      --replace "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@' \
-      --replace "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
+      # Bad concatenation
+      substituteInPlace libmessaging-menu/messaging-menu.pc.in \
+        --replace "\''${exec_prefix}/@CMAKE_INSTALL_LIBDIR@" '@CMAKE_INSTALL_FULL_LIBDIR@' \
+        --replace "\''${prefix}/@CMAKE_INSTALL_INCLUDEDIR@" '@CMAKE_INSTALL_FULL_INCLUDEDIR@'
 
-    # Fix tests with gobject-introspection 1.80 not installing GLib introspection data
-    substituteInPlace tests/CMakeLists.txt \
-      --replace-fail 'GI_TYPELIB_PATH=\"' 'GI_TYPELIB_PATH=\"$GI_TYPELIB_PATH$\{GI_TYPELIB_PATH\:+\:\}'
-  '' + lib.optionalString (!withDocumentation) ''
-    sed -i CMakeLists.txt \
-      '/add_subdirectory(doc)/d'
-  '';
+      # Fix tests with gobject-introspection 1.80 not installing GLib introspection data
+      substituteInPlace tests/CMakeLists.txt \
+        --replace-fail 'GI_TYPELIB_PATH=\"' 'GI_TYPELIB_PATH=\"$GI_TYPELIB_PATH$\{GI_TYPELIB_PATH\:+\:\}'
+    ''
+    + lib.optionalString (!withDocumentation) ''
+      sed -i CMakeLists.txt \
+        '/add_subdirectory(doc)/d'
+    '';
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    glib # For glib-compile-schemas
-    intltool
-    pkg-config
-    vala
-    wrapGAppsHook3
-  ] ++ lib.optionals withDocumentation [
-    docbook_xsl
-    docbook_xml_dtd_45
-    gtk-doc
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      glib # For glib-compile-schemas
+      intltool
+      pkg-config
+      vala
+      wrapGAppsHook3
+    ]
+    ++ lib.optionals withDocumentation [
+      docbook_xsl
+      docbook_xml_dtd_45
+      gtk-doc
+    ];
 
   buildInputs = [
     accountsservice
@@ -83,10 +90,12 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    (python3.withPackages (ps: with ps; [
-      pygobject3
-      python-dbusmock
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        pygobject3
+        python-dbusmock
+      ]
+    ))
   ];
 
   checkInputs = [

@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, runCommand
-, makeWrapper
-, tflint
-, tflint-plugins
-, symlinkJoin
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  runCommand,
+  makeWrapper,
+  tflint,
+  tflint-plugins,
+  symlinkJoin,
 }:
 
 buildGoModule rec {
@@ -25,9 +26,13 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  passthru.withPlugins = plugins:
+  passthru.withPlugins =
+    plugins:
     let
       actualPlugins = plugins tflint-plugins;
       pluginDir = symlinkJoin {
@@ -38,10 +43,11 @@ buildGoModule rec {
     runCommand "tflint-with-plugins"
       {
         nativeBuildInputs = [ makeWrapper ];
-      } ''
-      makeWrapper ${tflint}/bin/tflint $out/bin/tflint \
-        --set TFLINT_PLUGIN_DIR "${pluginDir}"
-    '';
+      }
+      ''
+        makeWrapper ${tflint}/bin/tflint $out/bin/tflint \
+          --set TFLINT_PLUGIN_DIR "${pluginDir}"
+      '';
 
   meta = with lib; {
     description = "Terraform linter focused on possible errors, best practices, and so on";

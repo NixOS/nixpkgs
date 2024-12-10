@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -102,55 +107,62 @@ in
       };
     };
 
-    users.groups.jitsi-meet = {};
+    users.groups.jitsi-meet = { };
 
-    systemd.services.jicofo = let
-      jicofoProps = {
-        "-Dnet.java.sip.communicator.SC_HOME_DIR_LOCATION" = "/etc/jitsi";
-        "-Dnet.java.sip.communicator.SC_HOME_DIR_NAME" = "jicofo";
-        "-Djava.util.logging.config.file" = "/etc/jitsi/jicofo/logging.properties";
-        "-Dconfig.file" = configFile;
+    systemd.services.jicofo =
+      let
+        jicofoProps = {
+          "-Dnet.java.sip.communicator.SC_HOME_DIR_LOCATION" = "/etc/jitsi";
+          "-Dnet.java.sip.communicator.SC_HOME_DIR_NAME" = "jicofo";
+          "-Djava.util.logging.config.file" = "/etc/jitsi/jicofo/logging.properties";
+          "-Dconfig.file" = configFile;
+        };
+      in
+      {
+        description = "JItsi COnference FOcus";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+
+        restartTriggers = [
+          configFile
+        ];
+        environment.JAVA_SYS_PROPS = concatStringsSep " " (
+          mapAttrsToList (k: v: "${k}=${toString v}") jicofoProps
+        );
+
+        script = ''
+          export JICOFO_AUTH_PASS="$(<${cfg.userPasswordFile})"
+          exec "${pkgs.jicofo}/bin/jicofo"
+        '';
+
+        serviceConfig = {
+          Type = "exec";
+
+          DynamicUser = true;
+          User = "jicofo";
+          Group = "jitsi-meet";
+
+          CapabilityBoundingSet = "";
+          NoNewPrivileges = true;
+          ProtectSystem = "strict";
+          ProtectHome = true;
+          PrivateTmp = true;
+          PrivateDevices = true;
+          ProtectHostname = true;
+          ProtectKernelTunables = true;
+          ProtectKernelModules = true;
+          ProtectControlGroups = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+            "AF_UNIX"
+          ];
+          RestrictNamespaces = true;
+          LockPersonality = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+        };
       };
-    in
-    {
-      description = "JItsi COnference FOcus";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-
-      restartTriggers = [
-        configFile
-      ];
-      environment.JAVA_SYS_PROPS = concatStringsSep " " (mapAttrsToList (k: v: "${k}=${toString v}") jicofoProps);
-
-      script = ''
-        export JICOFO_AUTH_PASS="$(<${cfg.userPasswordFile})"
-        exec "${pkgs.jicofo}/bin/jicofo"
-      '';
-
-      serviceConfig = {
-        Type = "exec";
-
-        DynamicUser = true;
-        User = "jicofo";
-        Group = "jitsi-meet";
-
-        CapabilityBoundingSet = "";
-        NoNewPrivileges = true;
-        ProtectSystem = "strict";
-        ProtectHome = true;
-        PrivateTmp = true;
-        PrivateDevices = true;
-        ProtectHostname = true;
-        ProtectKernelTunables = true;
-        ProtectKernelModules = true;
-        ProtectControlGroups = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
-        RestrictNamespaces = true;
-        LockPersonality = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-      };
-    };
 
     environment.etc."jitsi/jicofo/sip-communicator.properties".text = "";
     environment.etc."jitsi/jicofo/logging.properties".source =

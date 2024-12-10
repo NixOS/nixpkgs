@@ -1,4 +1,15 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, git, Cocoa, Virtualization, sigtool, testers, linuxkit }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  git,
+  Cocoa,
+  Virtualization,
+  sigtool,
+  testers,
+  linuxkit,
+}:
 
 buildGoModule rec {
   pname = "linuxkit";
@@ -25,7 +36,10 @@ buildGoModule rec {
   # - sigtool is allows us to validly sign such executables with a dummy
   #   authority.
   nativeBuildInputs = lib.optionals stdenv.isDarwin [ sigtool ];
-  buildInputs = lib.optionals stdenv.isDarwin [ Cocoa Virtualization ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Cocoa
+    Virtualization
+  ];
 
   ldflags = [
     "-s"

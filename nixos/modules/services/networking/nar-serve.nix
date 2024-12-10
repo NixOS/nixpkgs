@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 let
@@ -6,7 +11,10 @@ let
 in
 {
   meta = {
-    maintainers = [ maintainers.rizary maintainers.zimbatm ];
+    maintainers = [
+      maintainers.rizary
+      maintainers.zimbatm
+    ];
   };
   options = {
     services.nar-serve = {

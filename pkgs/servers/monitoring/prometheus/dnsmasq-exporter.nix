@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "dnsmasq_exporter";
@@ -22,6 +27,9 @@ buildGoModule rec {
     description = "A dnsmasq exporter for Prometheus";
     mainProgram = "dnsmasq_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ willibutz globin ];
+    maintainers = with maintainers; [
+      willibutz
+      globin
+    ];
   };
 }

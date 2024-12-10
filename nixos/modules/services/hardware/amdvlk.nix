@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.hardware.amdgpu.amdvlk;
-in {
+in
+{
   options.hardware.amdgpu.amdvlk = {
     enable = lib.mkEnableOption "AMDVLK Vulkan driver";
 
@@ -44,12 +50,11 @@ in {
     };
 
     environment.etc = lib.mkIf (cfg.settings != { }) {
-      "amd/amdVulkanSettings.cfg".text = lib.concatStrings
-        (lib.mapAttrsToList
-          (n: v: ''
-            ${n},${builtins.toString v}
-          '')
-          cfg.settings);
+      "amd/amdVulkanSettings.cfg".text = lib.concatStrings (
+        lib.mapAttrsToList (n: v: ''
+          ${n},${builtins.toString v}
+        '') cfg.settings
+      );
     };
   };
 

@@ -1,15 +1,16 @@
-{ coreutils
-, fetchurl
-, gawk
-, gnused
-, jdk8
-, lib
-, makeDesktopItem
-, makeWrapper
-, stdenv
-, writeScript
-, writeTextFile
-, recommendedUdevRules ? true
+{
+  coreutils,
+  fetchurl,
+  gawk,
+  gnused,
+  jdk8,
+  lib,
+  makeDesktopItem,
+  makeWrapper,
+  stdenv,
+  writeScript,
+  writeTextFile,
+  recommendedUdevRules ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,9 @@ stdenv.mkDerivation rec {
   version = "5.31.1";
 
   src = fetchurl {
-    url = "https://www.roomeqwizard.com/installers/REW_linux_no_jre_${lib.replaceStrings [ "." ] [ "_" ] version}.sh";
+    url = "https://www.roomeqwizard.com/installers/REW_linux_no_jre_${
+      lib.replaceStrings [ "." ] [ "_" ] version
+    }.sh";
     sha256 = "sha256-n1Ohja6Hpg/TNoxQKF1VCDkVj0UDCefr1x5ArIsgs2A=";
   };
 
@@ -75,7 +78,13 @@ stdenv.mkDerivation rec {
     mkdir -p $out/bin $out/lib/udev/rules.d $out/share/icons/hicolor/256x256/apps
     makeWrapper $out/share/roomeqwizard/roomeqwizard $out/bin/roomeqwizard \
       --set INSTALL4J_JAVA_HOME_OVERRIDE ${jdk8} \
-      --prefix PATH : ${lib.makeBinPath [ coreutils gnused gawk ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          gnused
+          gawk
+        ]
+      }
 
     cp -r "$desktopItem/share/applications" $out/share/
     cp $out/share/roomeqwizard/.install4j/roomeqwizard.png "$out/share/icons/hicolor/256x256/apps/${pname}.png"
@@ -108,7 +117,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.roomeqwizard.com/";
     license = licenses.unfree;
     platforms = platforms.all;
-    maintainers = with maintainers; [ orivej zaninime ];
+    maintainers = with maintainers; [
+      orivej
+      zaninime
+    ];
     description = "Room Acoustics Software";
     longDescription = ''
       REW is free software for room acoustic measurement, loudspeaker

@@ -1,14 +1,15 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fetchpatch
-, gobject-introspection
-, gtk4
-, libadwaita
-, libfido2
-, libnotify
-, python3
-, wrapGAppsHook4
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+  gobject-introspection,
+  gtk4,
+  libadwaita,
+  libfido2,
+  libnotify,
+  python3,
+  wrapGAppsHook4,
 }:
 
 buildGoModule rec {
@@ -50,7 +51,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-IH0p7t1qInA9rNYv6ekxDN/BT5Kguhh4cZfmL+iqwVU=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = [
     gobject-introspection

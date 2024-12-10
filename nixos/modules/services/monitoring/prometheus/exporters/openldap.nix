@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.openldap;
   inherit (lib) mkOption types concatStringsSep;
-in {
+in
+{
   port = 9330;
   extraOpts = {
     ldapCredentialFile = mkOption {

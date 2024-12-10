@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, libraw1394
-, libusb1, CoreServices }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libraw1394,
+  libusb1,
+  CoreServices,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libdc1394";
@@ -10,9 +16,8 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-U3zreN087ycaGD9KF2GR0c7PhfAlUg5r03WLDhnmYJ8=";
   };
 
-  buildInputs = [ libusb1 ]
-    ++ lib.optional stdenv.isLinux libraw1394
-    ++ lib.optional stdenv.isDarwin CoreServices;
+  buildInputs =
+    [ libusb1 ] ++ lib.optional stdenv.isLinux libraw1394 ++ lib.optional stdenv.isDarwin CoreServices;
 
   meta = with lib; {
     description = "Capture and control API for IIDC compliant cameras";

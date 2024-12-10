@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, gperf
-, kmod
-, pkg-config
-, util-linux
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gperf,
+  kmod,
+  pkg-config,
+  util-linux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -79,7 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/eudev-project/eudev/releases/tag/${finalAttrs.src.rev}";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ raskin AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      raskin
+      AndersonTorres
+    ];
     inherit (kmod.meta) platforms;
   };
 })

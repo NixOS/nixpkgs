@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, neuron-version
-, libX11
-, libXext
-, patchelf
+{
+  lib,
+  stdenv,
+  fetchurl,
+  neuron-version,
+  libX11,
+  libXext,
+  patchelf,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,17 +23,19 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  postInstall = ''
-    for dir in $out/*; do # */
-      if [ -d $dir/lib ]; then
-        mv $dir/* $out # */
-        rmdir $dir
-        break
-      fi
-    done
-  '' + lib.optionalString stdenv.isLinux ''
-    patchelf --add-needed ${libX11}/lib/libX11.so $out/lib/libIVhines.so
-  '';
+  postInstall =
+    ''
+      for dir in $out/*; do # */
+        if [ -d $dir/lib ]; then
+          mv $dir/* $out # */
+          rmdir $dir
+          break
+        fi
+      done
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      patchelf --add-needed ${libX11}/lib/libX11.so $out/lib/libIVhines.so
+    '';
 
   meta = with lib; {
     description = "InterViews graphical library for Neuron";

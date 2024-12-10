@@ -1,13 +1,17 @@
-{ lib, mkCoqDerivation, coq, aac-tactics, mathcomp, version ? null }:
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  aac-tactics,
+  mathcomp,
+  version ? null,
+}:
 
 mkCoqDerivation {
   pname = "relation-algebra";
   owner = "damien-pous";
 
-  releaseRev = v:
-    if lib.versions.isGe "1.7.6" v
-    then "v.${v}"
-    else "v${v}";
+  releaseRev = v: if lib.versions.isGe "1.7.6" v then "v.${v}" else "v${v}";
 
   release."1.7.9".sha256 = "sha256-1WzAZyj6q7s0u/9r7lahzxTl8612EA540l9wpm7TYEg=";
   release."1.7.8".sha256 = "sha256-RITFd3G5TjY+rFzW073Ao1AGU+u6OGQyQeGHVodAXnA=";
@@ -20,21 +24,53 @@ mkCoqDerivation {
   release."1.7.1".sha256 = "sha256-WWVMcR6z8rT4wzZPb8SlaVWGe7NC8gScPqawd7bltQA=";
 
   inherit version;
-  defaultVersion = with lib.versions; lib.switch coq.coq-version [
-    { case = isEq "8.17"; out = "1.7.9"; }
-    { case = isEq "8.16"; out = "1.7.8"; }
-    { case = isEq "8.15"; out = "1.7.7"; }
-    { case = isEq "8.14"; out = "1.7.6"; }
-    { case = isEq "8.13"; out = "1.7.5"; }
-    { case = isEq "8.12"; out = "1.7.4"; }
-    { case = isEq "8.11"; out = "1.7.3"; }
-    { case = isEq "8.10"; out = "1.7.2"; }
-    { case = isEq "8.9";  out = "1.7.1"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch coq.coq-version [
+      {
+        case = isEq "8.17";
+        out = "1.7.9";
+      }
+      {
+        case = isEq "8.16";
+        out = "1.7.8";
+      }
+      {
+        case = isEq "8.15";
+        out = "1.7.7";
+      }
+      {
+        case = isEq "8.14";
+        out = "1.7.6";
+      }
+      {
+        case = isEq "8.13";
+        out = "1.7.5";
+      }
+      {
+        case = isEq "8.12";
+        out = "1.7.4";
+      }
+      {
+        case = isEq "8.11";
+        out = "1.7.3";
+      }
+      {
+        case = isEq "8.10";
+        out = "1.7.2";
+      }
+      {
+        case = isEq "8.9";
+        out = "1.7.1";
+      }
+    ] null;
 
   mlPlugin = true;
 
-  propagatedBuildInputs = [ aac-tactics mathcomp.ssreflect ];
+  propagatedBuildInputs = [
+    aac-tactics
+    mathcomp.ssreflect
+  ];
 
   meta = with lib; {
     description = "Relation algebra library for Coq";

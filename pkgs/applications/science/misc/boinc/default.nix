@@ -1,28 +1,29 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, autoconf
-, automake
-, pkg-config
-, m4
-, curl
-, libGLU
-, libGL
-, libXmu
-, libXi
-, freeglut
-, libjpeg
-, libtool
-, wxGTK32
-, xcbutil
-, sqlite
-, gtk3
-, patchelf
-, libXScrnSaver
-, libnotify
-, libX11
-, libxcb
-, headless ? false
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  autoconf,
+  automake,
+  pkg-config,
+  m4,
+  curl,
+  libGLU,
+  libGL,
+  libXmu,
+  libXi,
+  freeglut,
+  libjpeg,
+  libtool,
+  wxGTK32,
+  xcbutil,
+  sqlite,
+  gtk3,
+  patchelf,
+  libXScrnSaver,
+  libnotify,
+  libX11,
+  libxcb,
+  headless ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,27 +38,35 @@ stdenv.mkDerivation rec {
     hash = "sha256-pjk9+VRWrFIoHolIEEWlRx89hifLNeFtIi34F1OBD38=";
   };
 
-  nativeBuildInputs = [ libtool automake autoconf m4 pkg-config ];
-
-  buildInputs = [
-    curl
-    sqlite
-    patchelf
-  ] ++ lib.optionals (!headless) [
-    libGLU
-    libGL
-    libXmu
-    libXi
-    freeglut
-    libjpeg
-    wxGTK32
-    gtk3
-    libXScrnSaver
-    libnotify
-    libX11
-    libxcb
-    xcbutil
+  nativeBuildInputs = [
+    libtool
+    automake
+    autoconf
+    m4
+    pkg-config
   ];
+
+  buildInputs =
+    [
+      curl
+      sqlite
+      patchelf
+    ]
+    ++ lib.optionals (!headless) [
+      libGLU
+      libGL
+      libXmu
+      libXi
+      freeglut
+      libjpeg
+      wxGTK32
+      gtk3
+      libXScrnSaver
+      libnotify
+      libX11
+      libxcb
+      xcbutil
+    ];
 
   NIX_LDFLAGS = lib.optionalString (!headless) "-lX11";
 

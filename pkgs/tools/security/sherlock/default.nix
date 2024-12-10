@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, python3
-, unstableGitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
+  unstableGitUpdater,
 }:
 
 python3.pkgs.buildPythonApplication rec {

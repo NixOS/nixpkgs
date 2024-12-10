@@ -1,38 +1,51 @@
-{ lib, stdenv, fetchzip }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 
 let
-  mkVariant = variant: { version, abbreviation, sha256, outputHash }: stdenv.mkDerivation {
-    name = "tex-gyre-${variant}-${version}";
-    inherit version;
+  mkVariant =
+    variant:
+    {
+      version,
+      abbreviation,
+      sha256,
+      outputHash,
+    }:
+    stdenv.mkDerivation {
+      name = "tex-gyre-${variant}-${version}";
+      inherit version;
 
-    src = fetchzip {
-      url = "http://www.gust.org.pl/projects/e-foundry/tex-gyre/${variant}/${abbreviation}${version}otf.zip";
-      stripRoot = false;
-      inherit sha256;
+      src = fetchzip {
+        url = "http://www.gust.org.pl/projects/e-foundry/tex-gyre/${variant}/${abbreviation}${version}otf.zip";
+        stripRoot = false;
+        inherit sha256;
+      };
+
+      installPhase = ''
+        mkdir -p $out/share/fonts/opentype/
+        # Pagella & Adventor are not flat archives
+        test -d "${abbreviation}${version}otf" && cd "${abbreviation}${version}otf"
+        cp -v *.otf $out/share/fonts/opentype/
+      '';
+
+      outputHashAlgo = "sha256";
+      outputHashMode = "recursive";
+      inherit outputHash;
+
+      meta = with lib; {
+        homepage = "http://www.gust.org.pl/projects/e-foundry/tex-gyre";
+        # "The TeX Gyre fonts are licensed under the GUST Font License (GFL),
+        # which is a free license, legally equivalent to the LaTeX Project Public
+        # License (LPPL), version 1.3c or later." - GUST website
+        license = licenses.lppl13c;
+        maintainers = with maintainers; [ ];
+        platforms = platforms.all;
+      };
     };
-
-    installPhase = ''
-      mkdir -p $out/share/fonts/opentype/
-      # Pagella & Adventor are not flat archives
-      test -d "${abbreviation}${version}otf" && cd "${abbreviation}${version}otf"
-      cp -v *.otf $out/share/fonts/opentype/
-    '';
-
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    inherit outputHash;
-
-    meta = with lib; {
-      homepage = "http://www.gust.org.pl/projects/e-foundry/tex-gyre";
-      # "The TeX Gyre fonts are licensed under the GUST Font License (GFL),
-      # which is a free license, legally equivalent to the LaTeX Project Public
-      # License (LPPL), version 1.3c or later." - GUST website
-      license = licenses.lppl13c;
-      maintainers = with maintainers; [ ];
-      platforms = platforms.all;
-    };
-  };
-in lib.mapAttrs mkVariant {
+in
+lib.mapAttrs mkVariant {
   adventor = {
     version = "2_501";
     sha256 = "0qjg3x0adfppyx3x33cm07ww9i9sl88xaq07m7wfip8rmyp567fn";
@@ -64,7 +77,7 @@ in lib.mapAttrs mkVariant {
     abbreviation = "qhv";
   };
   pagella = {
-    version ="2_501";
+    version = "2_501";
     sha256 = "1kccaxs3vk93la2pz4nv05hx1x3diyla49cz4l33zifdcp2zgg9d";
     outputHash = "1nnjsgplimh29502pkd19rvfg93x31svxxmx4x7h51njrx1j8qa8";
     abbreviation = "qpl";

@@ -1,30 +1,35 @@
-{ lib
-, stdenv
-, fetchurl
-, gi-docgen
-, meson
-, ninja
-, pkg-config
-, vala
-, gobject-introspection
-, gperf
-, glib
-, cairo
-, sqlite
-, libsoup_3
-, gtk4
-, libsysprof-capture
-, json-glib
-, protobufc
-, xvfb-run
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gi-docgen,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gobject-introspection,
+  gperf,
+  glib,
+  cairo,
+  sqlite,
+  libsoup_3,
+  gtk4,
+  libsysprof-capture,
+  json-glib,
+  protobufc,
+  xvfb-run,
+  gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libshumate";
   version = "1.2.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
   outputBin = "devdoc"; # demo app
 
   src = fetchurl {

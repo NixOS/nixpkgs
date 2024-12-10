@@ -1,13 +1,14 @@
-{ buildDunePackage
-, cstruct
-, dns
-, mirage-crypto
-, mirage-crypto-pk
-, mirage-crypto-ec
-, domain-name
-, logs
-, alcotest
-, base64
+{
+  buildDunePackage,
+  cstruct,
+  dns,
+  mirage-crypto,
+  mirage-crypto-pk,
+  mirage-crypto-ec,
+  domain-name,
+  logs,
+  alcotest,
+  base64,
 }:
 
 buildDunePackage {

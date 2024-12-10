@@ -1,11 +1,12 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, jdk8
-, jre8
-, strip-nondeterminism
-, makeWrapper
-, zip
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  jdk8,
+  jre8,
+  strip-nondeterminism,
+  makeWrapper,
+  zip,
 }:
 
 let
@@ -74,6 +75,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       binaryBytecode # source bundles dependencies as jars
     ];
     license = licenses.asl20;
-    maintainers = with maintainers; [ bzizou tomasajt ];
+    maintainers = with maintainers; [
+      bzizou
+      tomasajt
+    ];
   };
 })

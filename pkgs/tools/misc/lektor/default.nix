@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, fetchNpmDeps
-, fetchPypi
-, nodejs
-, npmHooks
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  fetchPypi,
+  nodejs,
+  npmHooks,
+  python3,
 }:
 
 let

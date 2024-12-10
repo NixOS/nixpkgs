@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, gcc, postgresql }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gcc,
+  postgresql,
+}:
 
 stdenv.mkDerivation {
 
@@ -11,7 +17,10 @@ stdenv.mkDerivation {
     sha256 = "1z4v4r2yccdr8kz3935fnk1bc5vj0qj0apscldyap4wxlyi89xim";
   };
 
-  buildInputs = [ postgresql gcc ];
+  buildInputs = [
+    postgresql
+    gcc
+  ];
   buildPhase = "USE_PGXS=1 make";
   installPhase = ''
     install -D pg_similarity${postgresql.dlSuffix} -t $out/lib/
@@ -21,9 +30,9 @@ stdenv.mkDerivation {
   meta = {
     description = "An extension to support similarity queries on PostgreSQL";
     longDescription = ''
-       pg_similarity is an extension to support similarity queries on PostgreSQL. The implementation
-       is tightly integrated in the RDBMS in the sense that it defines operators so instead of the traditional
-       operators (= and <>) you can use ~~~ and ~!~ (any of these operators represents a similarity function).
+      pg_similarity is an extension to support similarity queries on PostgreSQL. The implementation
+      is tightly integrated in the RDBMS in the sense that it defines operators so instead of the traditional
+      operators (= and <>) you can use ~~~ and ~!~ (any of these operators represents a similarity function).
     '';
     platforms = postgresql.meta.platforms;
     license = lib.licenses.gpl2;

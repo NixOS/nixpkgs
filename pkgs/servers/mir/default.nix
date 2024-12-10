@@ -1,41 +1,42 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, gitUpdater
-, testers
-, cmake
-, pkg-config
-, python3
-, boost
-, egl-wayland
-, freetype
-, glib
-, glm
-, glog
-, libdrm
-, libepoxy
-, libevdev
-, libglvnd
-, libinput
-, libuuid
-, libxcb
-, libxkbcommon
-, libxmlxx
-, yaml-cpp
-, lttng-ust
-, mesa
-, nettle
-, udev
-, wayland
-, xorg
-, xwayland
-, dbus
-, gobject-introspection
-, gtest
-, umockdev
-, wlcs
-, validatePkgConfig
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  gitUpdater,
+  testers,
+  cmake,
+  pkg-config,
+  python3,
+  boost,
+  egl-wayland,
+  freetype,
+  glib,
+  glm,
+  glog,
+  libdrm,
+  libepoxy,
+  libevdev,
+  libglvnd,
+  libinput,
+  libuuid,
+  libxcb,
+  libxkbcommon,
+  libxmlxx,
+  yaml-cpp,
+  lttng-ust,
+  mesa,
+  nettle,
+  udev,
+  wayland,
+  xorg,
+  xwayland,
+  dbus,
+  gobject-introspection,
+  gtest,
+  umockdev,
+  wlcs,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -92,12 +93,17 @@ stdenv.mkDerivation (finalAttrs: {
     glib # gdbus-codegen
     lttng-ust # lttng-gen-tp
     pkg-config
-    (python3.withPackages (ps: with ps; [
-      pillow
-    ] ++ lib.optionals finalAttrs.finalPackage.doCheck [
-      pygobject3
-      python-dbusmock
-    ]))
+    (python3.withPackages (
+      ps:
+      with ps;
+      [
+        pillow
+      ]
+      ++ lib.optionals finalAttrs.finalPackage.doCheck [
+        pygobject3
+        python-dbusmock
+      ]
+    ))
     validatePkgConfig
   ];
 
@@ -147,8 +153,10 @@ stdenv.mkDerivation (finalAttrs: {
     # BadBufferTest.test_truncated_shm_file *doesn't* throw an error as the test expected, mark as such
     # https://github.com/MirServer/mir/pull/1947#issuecomment-811810872
     "-DMIR_SIGBUS_HANDLER_ENVIRONMENT_BROKEN=ON"
-    "-DMIR_EXCLUDE_TESTS=${lib.strings.concatStringsSep ";" [
-    ]}"
+    "-DMIR_EXCLUDE_TESTS=${
+      lib.strings.concatStringsSep ";" [
+      ]
+    }"
     # These get built but don't get executed by default, yet they get installed when tests are enabled
     "-DMIR_BUILD_PERFORMANCE_TESTS=OFF"
     "-DMIR_BUILD_PLATFORM_TEST_HARNESS=OFF"
@@ -165,7 +173,10 @@ stdenv.mkDerivation (finalAttrs: {
     export XDG_RUNTIME_DIR=/tmp
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   passthru = {
     tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
@@ -187,7 +198,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://mir-server.io";
     changelog = "https://github.com/MirServer/mir/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ onny OPNA2608 ];
+    maintainers = with maintainers; [
+      onny
+      OPNA2608
+    ];
     platforms = platforms.linux;
     pkgConfigModules = [
       "miral"

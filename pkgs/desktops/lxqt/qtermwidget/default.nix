@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qtbase
-, qttools
-, lxqt-build-tools
-, wrapQtAppsHook
-, gitUpdater
-, version ? "2.0.0"
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qttools,
+  lxqt-build-tools,
+  wrapQtAppsHook,
+  gitUpdater,
+  version ? "2.0.0",
 }:
 
 stdenv.mkDerivation rec {
@@ -18,10 +19,12 @@ stdenv.mkDerivation rec {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = {
-      "1.4.0" = "sha256-wYUOqAiBjnupX1ITbFMw7sAk42V37yDz9SrjVhE4FgU=";
-      "2.0.0" = "sha256-kZS6D/wSJFRt/+Afq0zCCmNnJPpFT+1hd4zVPc+rJsE=";
-    }."${version}";
+    hash =
+      {
+        "1.4.0" = "sha256-wYUOqAiBjnupX1ITbFMw7sAk42V37yDz9SrjVhE4FgU=";
+        "2.0.0" = "sha256-kZS6D/wSJFRt/+Afq0zCCmNnJPpFT+1hd4zVPc+rJsE=";
+      }
+      ."${version}";
   };
 
   nativeBuildInputs = [

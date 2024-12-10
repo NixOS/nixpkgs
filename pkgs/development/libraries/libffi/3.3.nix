@@ -1,8 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
 
-, doCheck ? true # test suite depends on dejagnu which cannot be used during bootstrapping
-, dejagnu
+  doCheck ? true, # test suite depends on dejagnu which cannot be used during bootstrapping
+  dejagnu,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,9 +18,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-cvunkicD3fp6Ao1ROsFahcjVTI1n9V+lpIAohdxlIFY=";
   };
 
-  patches = [];
+  patches = [ ];
 
-  outputs = [ "out" "dev" "man" "info" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "info"
+  ];
 
   configureFlags = [
     "--with-gcc-arch=generic" # no detection of -march= or -mtune=

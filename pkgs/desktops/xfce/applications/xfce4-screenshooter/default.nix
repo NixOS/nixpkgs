@@ -1,16 +1,17 @@
-{ lib
-, mkXfceDerivation
-, exo
-, libxml2
-, libsoup_3
-, libxfce4ui
-, libxfce4util
-, xfce4-panel
-, xfconf
-, curl
-, gnome
-, jq
-, xclip
+{
+  lib,
+  mkXfceDerivation,
+  exo,
+  libxml2,
+  libsoup_3,
+  libxfce4ui,
+  libxfce4util,
+  xfce4-panel,
+  xfconf,
+  curl,
+  gnome,
+  jq,
+  xclip,
 }:
 
 mkXfceDerivation {
@@ -35,7 +36,14 @@ mkXfceDerivation {
     # For Imgur upload action
     # https://gitlab.xfce.org/apps/xfce4-screenshooter/-/merge_requests/51
     gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ curl gnome.zenity jq xclip ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          curl
+          gnome.zenity
+          jq
+          xclip
+        ]
+      }
     )
   '';
 

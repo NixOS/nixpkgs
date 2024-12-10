@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, catch2
-, libX11
-, libXrandr
-, libXinerama
-, libXext
-, libXcursor
-, freetype
-, alsa-lib
-, Accelerate
-, Cocoa
-, WebKit
-, CoreServices
-, DiscRecording
-, CoreAudioKit
-, MetalKit
-, simd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  catch2,
+  libX11,
+  libXrandr,
+  libXinerama,
+  libXext,
+  libXcursor,
+  freetype,
+  alsa-lib,
+  Accelerate,
+  Cocoa,
+  WebKit,
+  CoreServices,
+  DiscRecording,
+  CoreAudioKit,
+  MetalKit,
+  simd,
 }:
 
 let
@@ -68,41 +69,49 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    libX11
-    libXrandr
-    libXinerama
-    libXext
-    libXcursor
-    freetype
-    alsa-lib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Accelerate
-    Cocoa
-    WebKit
-    CoreServices
-    DiscRecording
-    CoreAudioKit
-    MetalKit
-    simd
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      libX11
+      libXrandr
+      libXinerama
+      libXext
+      libXcursor
+      freetype
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Accelerate
+      Cocoa
+      WebKit
+      CoreServices
+      DiscRecording
+      CoreAudioKit
+      MetalKit
+      simd
+    ];
 
-  installPhase = let
-    vst3Dir = "${placeholder "out"}/${if stdenv.hostPlatform.isDarwin then "Library/Audio/Plug-Ins/VST3" else "lib/vst3"}";
-    auDir = "${placeholder "out"}/Library/Audio/Plug-Ins/Components";
-  in ''
-    runHook preInstall
+  installPhase =
+    let
+      vst3Dir = "${placeholder "out"}/${
+        if stdenv.hostPlatform.isDarwin then "Library/Audio/Plug-Ins/VST3" else "lib/vst3"
+      }";
+      auDir = "${placeholder "out"}/Library/Audio/Plug-Ins/Components";
+    in
+    ''
+      runHook preInstall
 
-    mkdir -p ${vst3Dir}
-    # Exact path of the build artefact depends on used CMAKE_BUILD_TYPE
-    cp -R Fire_artefacts/*/VST3/* ${vst3Dir}/
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p ${auDir}
-    cp -R Fire_artefacts/*/AU/* ${auDir}/
-  '' + ''
+      mkdir -p ${vst3Dir}
+      # Exact path of the build artefact depends on used CMAKE_BUILD_TYPE
+      cp -R Fire_artefacts/*/VST3/* ${vst3Dir}/
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir -p ${auDir}
+      cp -R Fire_artefacts/*/AU/* ${auDir}/
+    ''
+    + ''
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   # Fails to find fp.h on its own
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-isystem ${CoreServices}/Library/Frameworks/CoreServices.framework/Versions/Current/Frameworks/CarbonCore.framework/Versions/Current/Headers/";

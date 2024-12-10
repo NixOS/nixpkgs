@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, atk
-, cairo
-, czkawka
-, darwin
-, fetchFromGitHub
-, gdk-pixbuf
-, glib
-, gobject-introspection
-, gtk4
-, pango
-, pkg-config
-, rustPlatform
-, testers
-, wrapGAppsHook4
-, xvfb-run
+{
+  lib,
+  stdenv,
+  atk,
+  cairo,
+  czkawka,
+  darwin,
+  fetchFromGitHub,
+  gdk-pixbuf,
+  glib,
+  gobject-introspection,
+  gtk4,
+  pango,
+  pkg-config,
+  rustPlatform,
+  testers,
+  wrapGAppsHook4,
+  xvfb-run,
 }:
 
 let
@@ -30,7 +31,12 @@ let
   cargoHash = "sha256-GOX7V6NLEMP06nMeRZINwcWCaHwK6T3nkRKl4e25DPg=";
 in
 rustPlatform.buildRustPackage {
-  inherit pname version src cargoHash;
+  inherit
+    pname
+    version
+    src
+    cargoHash
+    ;
 
   nativeBuildInputs = [
     gobject-introspection
@@ -38,17 +44,22 @@ rustPlatform.buildRustPackage {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    atk
-    cairo
-    gdk-pixbuf
-    glib
-    gtk4
-    pango
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    Foundation
-    AppKit
-  ]);
+  buildInputs =
+    [
+      atk
+      cairo
+      gdk-pixbuf
+      glib
+      gtk4
+      pango
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Foundation
+        AppKit
+      ]
+    );
 
   nativeCheckInputs = [
     xvfb-run
@@ -62,8 +73,7 @@ rustPlatform.buildRustPackage {
     runHook postCheck
   '';
 
-  doCheck = stdenv.hostPlatform.isLinux
-          && (stdenv.hostPlatform == stdenv.buildPlatform);
+  doCheck = stdenv.hostPlatform.isLinux && (stdenv.hostPlatform == stdenv.buildPlatform);
 
   passthru.tests.version = testers.testVersion {
     package = czkawka;
@@ -84,6 +94,10 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/qarmin/czkawka";
     license = with lib.licenses; [ mit ];
     mainProgram = "czkawka_gui";
-    maintainers = with lib.maintainers; [ AndersonTorres yanganto _0x4A6F ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      yanganto
+      _0x4A6F
+    ];
   };
 }

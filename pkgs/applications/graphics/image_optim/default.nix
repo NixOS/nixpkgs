@@ -1,22 +1,39 @@
-{ lib, bundlerApp, bundlerUpdateScript, makeWrapper,
-  withPngcrush ? true,       pngcrush,
-  withPngout ? false,        pngout, # disabled by default because it's unfree
-  withAdvpng ? true,         advancecomp,
-  withOptipng ? true,        optipng,
-  withPngquant ? true,       pngquant,
-  withOxipng ? true,         oxipng,
-  withJhead ? true,          jhead,
-  withJpegoptim ? true,      jpegoptim,
-  withJpegrecompress ? true, jpeg-archive,
-  withJpegtran ? true,       libjpeg,
-  withGifsicle ? true,       gifsicle,
-  withSvgo ? true,           svgo
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+  makeWrapper,
+  withPngcrush ? true,
+  pngcrush,
+  withPngout ? false,
+  pngout, # disabled by default because it's unfree
+  withAdvpng ? true,
+  advancecomp,
+  withOptipng ? true,
+  optipng,
+  withPngquant ? true,
+  pngquant,
+  withOxipng ? true,
+  oxipng,
+  withJhead ? true,
+  jhead,
+  withJpegoptim ? true,
+  jpegoptim,
+  withJpegrecompress ? true,
+  jpeg-archive,
+  withJpegtran ? true,
+  libjpeg,
+  withGifsicle ? true,
+  gifsicle,
+  withSvgo ? true,
+  svgo,
 }:
 
 with lib;
 
 let
-  optionalDepsPath = optional withPngcrush pngcrush
+  optionalDepsPath =
+    optional withPngcrush pngcrush
     ++ optional withPngout pngout
     ++ optional withAdvpng advancecomp
     ++ optional withOptipng optipng
@@ -29,7 +46,8 @@ let
     ++ optional withGifsicle gifsicle
     ++ optional withSvgo svgo;
 
-  disabledWorkersFlags = optional (!withPngcrush) "--no-pngcrush"
+  disabledWorkersFlags =
+    optional (!withPngcrush) "--no-pngcrush"
     ++ optional (!withPngout) "--no-pngout"
     ++ optional (!withAdvpng) "--no-advpng"
     ++ optional (!withOptipng) "--no-optipng"
@@ -69,7 +87,10 @@ bundlerApp {
     '';
     homepage = "https://github.com/toy/image_optim";
     license = licenses.mit;
-    maintainers = with maintainers; [ srghma nicknovitski ];
+    maintainers = with maintainers; [
+      srghma
+      nicknovitski
+    ];
     platforms = platforms.all;
     mainProgram = "image_optim";
   };

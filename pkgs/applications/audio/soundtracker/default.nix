@@ -1,15 +1,17 @@
-{ lib, stdenv
-, fetchzip
-, pkg-config
-, autoreconfHook
-, gtk2
-, alsa-lib
-, SDL
-, jack2
-, audiofile
-, goocanvas # graphical envelope editing
-, libxml2
-, libsndfile
+{
+  lib,
+  stdenv,
+  fetchzip,
+  pkg-config,
+  autoreconfHook,
+  gtk2,
+  alsa-lib,
+  SDL,
+  jack2,
+  audiofile,
+  goocanvas, # graphical envelope editing
+  libxml2,
+  libsndfile,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,11 +40,13 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -e '/seteuid/d' -e '/setegid/d' app/main.c
   '';
 
-  configureFlags = [
-    "--with-graphics-backend=gdk"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "--disable-alsa"
-  ];
+  configureFlags =
+    [
+      "--with-graphics-backend=gdk"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--disable-alsa"
+    ];
 
   enableParallelBuilding = true;
 

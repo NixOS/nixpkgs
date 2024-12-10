@@ -1,6 +1,14 @@
-{ lib, mkDerivation, fetchFromGitHub, makeWrapper, runCommand
-, python3, vapoursynth
-, qmake, qtbase, qtwebsockets
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  makeWrapper,
+  runCommand,
+  python3,
+  vapoursynth,
+  qmake,
+  qtbase,
+  qtwebsockets,
 }:
 
 let
@@ -16,7 +24,11 @@ let
     };
 
     nativeBuildInputs = [ qmake ];
-    buildInputs = [ qtbase vapoursynth qtwebsockets ];
+    buildInputs = [
+      qtbase
+      vapoursynth
+      qtwebsockets
+    ];
 
     dontWrapQtApps = true;
 
@@ -42,18 +54,25 @@ let
     };
   };
 
-  withPlugins = plugins: let
-    vapoursynthWithPlugins = vapoursynth.withPlugins plugins;
-  in runCommand "${unwrapped.name}-with-plugins" {
-    nativeBuildInputs = [ makeWrapper ];
-    passthru = { withPlugins = plugins': withPlugins (plugins ++ plugins'); };
-  } ''
-    mkdir -p $out/bin
-    for bin in vsedit{,-job-server{,-watcher}}; do
-        makeWrapper ${unwrapped}/bin/$bin $out/bin/$bin \
-            --prefix PYTHONPATH : ${vapoursynthWithPlugins}/${python3.sitePackages} \
-            --prefix LD_LIBRARY_PATH : ${vapoursynthWithPlugins}/lib
-    done
-  '';
+  withPlugins =
+    plugins:
+    let
+      vapoursynthWithPlugins = vapoursynth.withPlugins plugins;
+    in
+    runCommand "${unwrapped.name}-with-plugins"
+      {
+        nativeBuildInputs = [ makeWrapper ];
+        passthru = {
+          withPlugins = plugins': withPlugins (plugins ++ plugins');
+        };
+      }
+      ''
+        mkdir -p $out/bin
+        for bin in vsedit{,-job-server{,-watcher}}; do
+            makeWrapper ${unwrapped}/bin/$bin $out/bin/$bin \
+                --prefix PYTHONPATH : ${vapoursynthWithPlugins}/${python3.sitePackages} \
+                --prefix LD_LIBRARY_PATH : ${vapoursynthWithPlugins}/lib
+        done
+      '';
 in
-  withPlugins []
+withPlugins [ ]

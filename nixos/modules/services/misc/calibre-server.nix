@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -9,22 +14,32 @@ let
   documentationLink = "https://manual.calibre-ebook.com";
   generatedDocumentationLink = documentationLink + "/generated/en/calibre-server.html";
 
-  execFlags = (concatStringsSep " "
-    (mapAttrsToList (k: v: "${k} ${toString v}") (filterAttrs (name: value: value != null) {
-      "--listen-on" = cfg.host;
-      "--port" = cfg.port;
-      "--auth-mode" = cfg.auth.mode;
-      "--userdb" = cfg.auth.userDb;
-    }) ++ [(optionalString (cfg.auth.enable == true) "--enable-auth")])
+  execFlags = (
+    concatStringsSep " " (
+      mapAttrsToList (k: v: "${k} ${toString v}") (
+        filterAttrs (name: value: value != null) {
+          "--listen-on" = cfg.host;
+          "--port" = cfg.port;
+          "--auth-mode" = cfg.auth.mode;
+          "--userdb" = cfg.auth.userDb;
+        }
+      )
+      ++ [ (optionalString (cfg.auth.enable == true) "--enable-auth") ]
+    )
   );
 in
 
 {
   imports = [
-    (mkChangedOptionModule [ "services" "calibre-server" "libraryDir" ] [ "services" "calibre-server" "libraries" ]
-      (config:
-        let libraryDir = getAttrFromPath [ "services" "calibre-server" "libraryDir" ] config;
-        in [ libraryDir ]
+    (mkChangedOptionModule
+      [ "services" "calibre-server" "libraryDir" ]
+      [ "services" "calibre-server" "libraries" ]
+      (
+        config:
+        let
+          libraryDir = getAttrFromPath [ "services" "calibre-server" "libraryDir" ] config;
+        in
+        [ libraryDir ]
       )
     )
   ];
@@ -87,7 +102,11 @@ in
         };
 
         mode = mkOption {
-          type = types.enum [ "auto" "basic" "digest" ];
+          type = types.enum [
+            "auto"
+            "basic"
+            "digest"
+          ];
           default = "auto";
           description = ''
             Choose the type of authentication used.

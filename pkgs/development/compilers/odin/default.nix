@@ -1,17 +1,19 @@
-{ lib
-, fetchFromGitHub
-, llvmPackages_13
-, makeBinaryWrapper
-, libiconv
-, MacOSX-SDK
-, Security
-, which
+{
+  lib,
+  fetchFromGitHub,
+  llvmPackages_13,
+  makeBinaryWrapper,
+  libiconv,
+  MacOSX-SDK,
+  Security,
+  which,
 }:
 
 let
   llvmPackages = llvmPackages_13;
   inherit (llvmPackages) stdenv;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "odin";
   version = "dev-2024-05";
 
@@ -23,7 +25,8 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    makeBinaryWrapper which
+    makeBinaryWrapper
+    which
   ];
 
   buildInputs = lib.optionals stdenv.isDarwin [
@@ -33,14 +36,16 @@ in stdenv.mkDerivation rec {
 
   LLVM_CONFIG = "${llvmPackages.llvm.dev}/bin/llvm-config";
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace src/linker.cpp \
-        --replace-fail '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk' ${MacOSX-SDK}
-    '' + ''
-    substituteInPlace build_odin.sh \
-        --replace-fail '-framework System' '-lSystem'
-    patchShebangs build_odin.sh
-  '';
+  postPatch =
+    lib.optionalString stdenv.isDarwin ''
+      substituteInPlace src/linker.cpp \
+          --replace-fail '/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk' ${MacOSX-SDK}
+    ''
+    + ''
+      substituteInPlace build_odin.sh \
+          --replace-fail '-framework System' '-lSystem'
+      patchShebangs build_odin.sh
+    '';
 
   dontConfigure = true;
 
@@ -60,12 +65,17 @@ in stdenv.mkDerivation rec {
     cp -r vendor $out/share/vendor
 
     wrapProgram $out/bin/odin \
-      --prefix PATH : ${lib.makeBinPath (with llvmPackages; [
-        bintools
-        llvm
-        clang
-        lld
-      ])} \
+      --prefix PATH : ${
+        lib.makeBinPath (
+          with llvmPackages;
+          [
+            bintools
+            llvm
+            clang
+            lld
+          ]
+        )
+      } \
       --set-default ODIN_ROOT $out/share
 
     runHook postInstall
@@ -76,7 +86,11 @@ in stdenv.mkDerivation rec {
     mainProgram = "odin";
     homepage = "https://odin-lang.org/";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ luc65r astavie znaniye ];
+    maintainers = with maintainers; [
+      luc65r
+      astavie
+      znaniye
+    ];
     platforms = platforms.x86_64 ++ [ "aarch64-darwin" ];
   };
 }

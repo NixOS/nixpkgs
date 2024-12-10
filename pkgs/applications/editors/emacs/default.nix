@@ -1,12 +1,11 @@
 { lib, pkgs }:
 
-lib.makeScope pkgs.newScope (self:
+lib.makeScope pkgs.newScope (
+  self:
   let
     gconf = pkgs.gnome2.GConf;
     inherit (self) callPackage;
-    stdenv = if pkgs.stdenv.isDarwin
-             then pkgs.darwin.apple_sdk_11_0.stdenv
-             else pkgs.stdenv;
+    stdenv = if pkgs.stdenv.isDarwin then pkgs.darwin.apple_sdk_11_0.stdenv else pkgs.stdenv;
     inheritedArgs = {
       inherit gconf;
       inherit stdenv;
@@ -14,22 +13,37 @@ lib.makeScope pkgs.newScope (self:
       inherit (pkgs.darwin) sigtool;
       inherit (pkgs.darwin.apple_sdk_11_0) llvmPackages_14;
       inherit (pkgs.darwin.apple_sdk_11_0.frameworks)
-        Accelerate AppKit Carbon Cocoa GSS ImageCaptureCore ImageIO IOKit OSAKit
-        Quartz QuartzCore UniformTypeIdentifiers WebKit;
+        Accelerate
+        AppKit
+        Carbon
+        Cocoa
+        GSS
+        ImageCaptureCore
+        ImageIO
+        IOKit
+        OSAKit
+        Quartz
+        QuartzCore
+        UniformTypeIdentifiers
+        WebKit
+        ;
       gnutls =
-        if pkgs.stdenv.isDarwin
-        then pkgs.gnutls.override {
-          inherit stdenv;
-          inherit (pkgs.darwin.apple_sdk_11_0.frameworks) Security;
-        }
-        else pkgs.gnutls;
+        if pkgs.stdenv.isDarwin then
+          pkgs.gnutls.override {
+            inherit stdenv;
+            inherit (pkgs.darwin.apple_sdk_11_0.frameworks) Security;
+          }
+        else
+          pkgs.gnutls;
     };
-  in {
+  in
+  {
     sources = import ./sources.nix {
       inherit lib;
       inherit (pkgs)
         fetchFromBitbucket
-        fetchFromSavannah;
+        fetchFromSavannah
+        ;
     };
 
     emacs28 = callPackage (self.sources.emacs28) inheritedArgs;
@@ -42,9 +56,11 @@ lib.makeScope pkgs.newScope (self:
       withGTK3 = true;
     };
 
-    emacs28-nox = pkgs.lowPrio (self.emacs28.override {
-      noGui = true;
-    });
+    emacs28-nox = pkgs.lowPrio (
+      self.emacs28.override {
+        noGui = true;
+      }
+    );
 
     emacs29 = callPackage (self.sources.emacs29) inheritedArgs;
 
@@ -77,4 +93,5 @@ lib.makeScope pkgs.newScope (self:
     emacs28-macport = callPackage (self.sources.emacs28-macport) inheritedArgs;
 
     emacs29-macport = callPackage (self.sources.emacs29-macport) inheritedArgs;
-  })
+  }
+)

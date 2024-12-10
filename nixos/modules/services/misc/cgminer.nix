@@ -1,28 +1,36 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.cgminer;
 
-  convType = with builtins;
-    v: if isBool v then boolToString v else toString v;
-  mergedHwConfig =
-    mapAttrsToList (n: v: ''"${n}": "${(concatStringsSep "," (map convType v))}"'')
-      (foldAttrs (n: a: [n] ++ a) [] cfg.hardware);
-  mergedConfig = with builtins;
-    mapAttrsToList (n: v: ''"${n}":  ${if isBool v then convType v else ''"${convType v}"''}'')
-      cfg.config;
+  convType = with builtins; v: if isBool v then boolToString v else toString v;
+  mergedHwConfig = mapAttrsToList (n: v: ''"${n}": "${(concatStringsSep "," (map convType v))}"'') (
+    foldAttrs (n: a: [ n ] ++ a) [ ] cfg.hardware
+  );
+  mergedConfig =
+    with builtins;
+    mapAttrsToList (
+      n: v: ''"${n}":  ${if isBool v then convType v else ''"${convType v}"''}''
+    ) cfg.config;
 
   cgminerConfig = pkgs.writeText "cgminer.conf" ''
-  {
-  ${concatStringsSep ",\n" mergedHwConfig},
-  ${concatStringsSep ",\n" mergedConfig},
-  "pools": [
-  ${concatStringsSep ",\n"
-    (map (v: ''{"url": "${v.url}", "user": "${v.user}", "pass": "${v.pass}"}'')
-          cfg.pools)}]
-  }
+    {
+    ${concatStringsSep ",\n" mergedHwConfig},
+    ${concatStringsSep ",\n" mergedConfig},
+    "pools": [
+    ${
+      concatStringsSep ",\n" (
+        map (v: ''{"url": "${v.url}", "user": "${v.user}", "pass": "${v.pass}"}'') cfg.pools
+      )
+    }]
+    }
   '';
 in
 {
@@ -42,45 +50,48 @@ in
       };
 
       pools = mkOption {
-        default = [];  # Run benchmark
+        default = [ ]; # Run benchmark
         type = types.listOf (types.attrsOf types.str);
         description = "List of pools where to mine";
-        example = [{
-          url = "http://p2pool.org:9332";
-          username = "17EUZxTvs9uRmPsjPZSYUU3zCz9iwstudk";
-          password="X";
-        }];
+        example = [
+          {
+            url = "http://p2pool.org:9332";
+            username = "17EUZxTvs9uRmPsjPZSYUU3zCz9iwstudk";
+            password = "X";
+          }
+        ];
       };
 
       hardware = mkOption {
-        default = []; # Run without options
+        default = [ ]; # Run without options
         type = types.listOf (types.attrsOf (types.either types.str types.int));
-        description= "List of config options for every GPU";
+        description = "List of config options for every GPU";
         example = [
-        {
-          intensity = 9;
-          gpu-engine = "0-985";
-          gpu-fan = "0-85";
-          gpu-memclock = 860;
-          gpu-powertune = 20;
-          temp-cutoff = 95;
-          temp-overheat = 85;
-          temp-target = 75;
-        }
-        {
-          intensity = 9;
-          gpu-engine = "0-950";
-          gpu-fan = "0-85";
-          gpu-memclock = 825;
-          gpu-powertune = 20;
-          temp-cutoff = 95;
-          temp-overheat = 85;
-          temp-target = 75;
-        }];
+          {
+            intensity = 9;
+            gpu-engine = "0-985";
+            gpu-fan = "0-85";
+            gpu-memclock = 860;
+            gpu-powertune = 20;
+            temp-cutoff = 95;
+            temp-overheat = 85;
+            temp-target = 75;
+          }
+          {
+            intensity = 9;
+            gpu-engine = "0-950";
+            gpu-fan = "0-85";
+            gpu-memclock = 825;
+            gpu-powertune = 20;
+            temp-cutoff = 95;
+            temp-overheat = 85;
+            temp-target = 75;
+          }
+        ];
       };
 
       config = mkOption {
-        default = {};
+        default = { };
         type = types.attrsOf (types.either types.bool types.int);
         description = "Additional config";
         example = {
@@ -98,7 +109,6 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf config.services.cgminer.enable {
@@ -111,7 +121,7 @@ in
       };
     };
     users.groups = optionalAttrs (cfg.user == "cgminer") {
-      cgminer = {};
+      cgminer = { };
     };
 
     environment.systemPackages = [ cfg.package ];
@@ -119,7 +129,10 @@ in
     systemd.services.cgminer = {
       path = [ pkgs.cgminer ];
 
-      after = [ "network.target" "display-manager.service" ];
+      after = [
+        "network.target"
+        "display-manager.service"
+      ];
       wantedBy = [ "multi-user.target" ];
 
       environment = {
@@ -129,7 +142,7 @@ in
         GPU_USE_SYNC_OBJECTS = "1";
       };
 
-      startLimitIntervalSec = 60;  # 1 min
+      startLimitIntervalSec = 60; # 1 min
       serviceConfig = {
         ExecStart = "${pkgs.cgminer}/bin/cgminer --syslog --text-only --config ${cgminerConfig}";
         User = cfg.user;

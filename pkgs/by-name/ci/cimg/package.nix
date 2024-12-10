@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gmic
-, gmic-qt
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gmic,
+  gmic-qt,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,7 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-yNIHCEiLvoNNsYisAKo/jj6Q2mLrLMttZyj2XzrWFU4=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   installPhase = ''
     runHook preInstall

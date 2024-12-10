@@ -1,11 +1,12 @@
-{ targetPackages
-, lib
-, makeSetupHook
-, dieHook
-, writeShellScript
-, tests
-, cc ? targetPackages.stdenv.cc
-, sanitizers ? []
+{
+  targetPackages,
+  lib,
+  makeSetupHook,
+  dieHook,
+  writeShellScript,
+  tests,
+  cc ? targetPackages.stdenv.cc,
+  sanitizers ? [ ],
 }:
 
 makeSetupHook {
@@ -13,7 +14,9 @@ makeSetupHook {
   propagatedBuildInputs = [ dieHook ];
 
   substitutions = {
-    cc = "${cc}/bin/${cc.targetPrefix}cc ${lib.escapeShellArgs (map (s: "-fsanitize=${s}") sanitizers)}";
+    cc = "${cc}/bin/${cc.targetPrefix}cc ${
+      lib.escapeShellArgs (map (s: "-fsanitize=${s}") sanitizers)
+    }";
   };
 
   passthru = {

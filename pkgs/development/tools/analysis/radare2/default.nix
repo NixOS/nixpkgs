@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, buildPackages
-, pkg-config
-, meson
-, ninja
-, libusb-compat-0_1
-, readline
-, libewf
-, perl
-, zlib
-, openssl
-, libuv
-, file
-, libzip
-, xxHash
-, gtk2
-, vte
-, gtkdialog
-, python3
-, ruby
-, lua
-, lz4
-, capstone
-, useX11 ? false
-, rubyBindings ? false
-, luaBindings ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  buildPackages,
+  pkg-config,
+  meson,
+  ninja,
+  libusb-compat-0_1,
+  readline,
+  libewf,
+  perl,
+  zlib,
+  openssl,
+  libuv,
+  file,
+  libzip,
+  xxHash,
+  gtk2,
+  vte,
+  gtkdialog,
+  python3,
+  ruby,
+  lua,
+  lz4,
+  capstone,
+  useX11 ? false,
+  rubyBindings ? false,
+  luaBindings ? false,
 }:
 
 let
@@ -71,38 +72,51 @@ stdenv.mkDerivation rec {
   '';
 
   mesonFlags = [
-   "-Duse_sys_capstone=true"
-   "-Duse_sys_magic=true"
-   "-Duse_sys_zip=true"
-   "-Duse_sys_xxhash=true"
-   "-Duse_sys_lz4=true"
-   "-Dr2_gittap=${version}"
+    "-Duse_sys_capstone=true"
+    "-Duse_sys_magic=true"
+    "-Duse_sys_zip=true"
+    "-Duse_sys_xxhash=true"
+    "-Duse_sys_lz4=true"
+    "-Dr2_gittap=${version}"
   ];
 
   # TODO: remove when upstream fixes the issue
   # https://github.com/radareorg/radare2/issues/22793
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
-     "-DTHREAD_CONVERT_THREAD_STATE_TO_SELF=1"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.isDarwin [
+      "-DTHREAD_CONVERT_THREAD_STATE_TO_SELF=1"
+    ]
+  );
 
   enableParallelBuilding = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
   strictDeps = true;
 
-  nativeBuildInputs = [ pkg-config meson ninja python3 ];
-  buildInputs = [
-    capstone
-    file
-    readline
-    libusb-compat-0_1
-    libewf
-    perl
-    zlib
-    openssl
-    libuv
-    lz4
-  ] ++ lib.optionals useX11 [ gtkdialog vte gtk2 ]
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    python3
+  ];
+  buildInputs =
+    [
+      capstone
+      file
+      readline
+      libusb-compat-0_1
+      libewf
+      perl
+      zlib
+      openssl
+      libuv
+      lz4
+    ]
+    ++ lib.optionals useX11 [
+      gtkdialog
+      vte
+      gtk2
+    ]
     ++ lib.optionals rubyBindings [ ruby ]
     ++ lib.optionals luaBindings [ lua ];
 
@@ -118,7 +132,13 @@ stdenv.mkDerivation rec {
     homepage = "https://radare.org";
     changelog = "https://github.com/radareorg/radare2/releases/tag/${version}";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ azahi raskin makefu mic92 arkivm ];
+    maintainers = with maintainers; [
+      azahi
+      raskin
+      makefu
+      mic92
+      arkivm
+    ];
     platforms = platforms.unix;
   };
 }

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 let
   version = "1.0.13";
   sha256 = "162hhmnww8z9k0795ffs8v3f61hlfm375law156sk5l08if19a4r";
@@ -32,7 +37,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     maintainers = [ maintainers.khumba ];
     license = [ licenses.gpl2Plus ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     broken = versionOlder kernel.version "4.14";
     description = "System76 DKMS driver";
     homepage = "https://github.com/pop-os/system76-dkms";

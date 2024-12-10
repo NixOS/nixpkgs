@@ -1,13 +1,14 @@
-{ bash
-, buildGoModule
-, fetchFromGitHub
+{
+  bash,
+  buildGoModule,
+  fetchFromGitHub,
 
-, withFish ? false
-, fish
+  withFish ? false,
+  fish,
 
-, lib
-, makeWrapper
-, xdg-utils
+  lib,
+  makeWrapper,
+  xdg-utils,
 }:
 
 buildGoModule rec {
@@ -38,23 +39,25 @@ buildGoModule rec {
     "cmd/granted"
   ];
 
-  postInstall = ''
-    ln -s $out/bin/granted $out/bin/assumego
+  postInstall =
+    ''
+      ln -s $out/bin/granted $out/bin/assumego
 
-    # Install shell script
-    install -Dm755 $src/scripts/assume $out/bin/assume
-    substituteInPlace $out/bin/assume \
-      --replace /bin/bash ${bash}/bin/bash
+      # Install shell script
+      install -Dm755 $src/scripts/assume $out/bin/assume
+      substituteInPlace $out/bin/assume \
+        --replace /bin/bash ${bash}/bin/bash
 
-    wrapProgram $out/bin/assume \
-      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
+      wrapProgram $out/bin/assume \
+        --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}
 
-  '' + lib.optionalString withFish ''
-    # Install fish script
-    install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
-    substituteInPlace $out/share/assume.fish \
-      --replace /bin/fish ${fish}/bin/fish
-  '';
+    ''
+    + lib.optionalString withFish ''
+      # Install fish script
+      install -Dm755 $src/scripts/assume.fish $out/share/assume.fish
+      substituteInPlace $out/share/assume.fish \
+        --replace /bin/fish ${fish}/bin/fish
+    '';
 
   meta = with lib; {
     description = "The easiest way to access your cloud";

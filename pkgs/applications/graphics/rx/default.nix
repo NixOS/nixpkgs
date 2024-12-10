@@ -1,7 +1,14 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, makeWrapper
-, cmake, pkg-config
-, xorg ? null
-, libGL ? null }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  cmake,
+  pkg-config,
+  xorg ? null,
+  libGL ? null,
+}:
 
 with lib;
 
@@ -18,13 +25,24 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-4hi1U4jl6QA7H8AKHlU+Hqz5iKGYHRXHDsrcqY7imkU=";
 
-  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    makeWrapper
+  ];
 
-  buildInputs = optionals stdenv.isLinux
-  (with xorg; [
-    # glfw-sys dependencies:
-    libX11 libXrandr libXinerama libXcursor libXi libXext
-  ]);
+  buildInputs = optionals stdenv.isLinux (
+    with xorg;
+    [
+      # glfw-sys dependencies:
+      libX11
+      libXrandr
+      libXinerama
+      libXcursor
+      libXi
+      libXext
+    ]
+  );
 
   # FIXME: GLFW (X11) requires DISPLAY env variable for all tests
   doCheck = false;
@@ -40,7 +58,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rx";
     homepage = "https://rx.cloudhead.io/";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ minijackson Br1ght0ne ];
+    maintainers = with maintainers; [
+      minijackson
+      Br1ght0ne
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

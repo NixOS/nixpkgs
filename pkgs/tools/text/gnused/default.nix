@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnused";
@@ -9,7 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-biJrcy4c1zlGStaGK9Ghq6QteYKSLaelNRljHSSXUYE=";
   };
 
-  outputs = [ "out" "info" ];
+  outputs = [
+    "out"
+    "info"
+  ];
 
   nativeBuildInputs = [ perl ];
   preConfigure = "patchShebangs ./build-aux/help2man";

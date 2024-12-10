@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3
-, pythonRelaxDepsHook
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
+  pythonRelaxDepsHook,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -36,9 +37,11 @@ python3.pkgs.buildPythonApplication rec {
       --replace 'python = ">=3.7.1,<4.0"' 'python = ">=3.8,<4.0"' \
   '';
 
-  nativeBuildInputs = (with python3.pkgs; [
-    poetry-core
-  ]) ++ [ pythonRelaxDepsHook ];
+  nativeBuildInputs =
+    (with python3.pkgs; [
+      poetry-core
+    ])
+    ++ [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = with python3.pkgs; [
     cli-helpers

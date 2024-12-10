@@ -1,17 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libdrm
-, libva
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libdrm,
+  libva,
 }:
 
 stdenv.mkDerivation rec {
   pname = "onevpl-intel-gpu";
   version = "24.2.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "oneapi-src";
@@ -20,9 +24,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-JtvRh4p4wPRnqFfE86tJW+yS9AKMoi3TPZO+LZ2Q7Mo=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ libdrm libva ];
+  buildInputs = [
+    libdrm
+    libva
+  ];
 
   meta = {
     description = "oneAPI Video Processing Library Intel GPU implementation";

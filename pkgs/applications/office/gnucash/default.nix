@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, aqbanking
-, boost
-, cmake
-, gettext
-, glib
-, glibcLocales
-, gtest
-, guile
-, gwenhywfar
-, icu
-, libdbi
-, libdbiDrivers
-, libofx
-, libxml2
-, libxslt
-, makeWrapper
-, perlPackages
-, pkg-config
-, swig
-, webkitgtk
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  aqbanking,
+  boost,
+  cmake,
+  gettext,
+  glib,
+  glibcLocales,
+  gtest,
+  guile,
+  gwenhywfar,
+  icu,
+  libdbi,
+  libdbiDrivers,
+  libofx,
+  libxml2,
+  libxslt,
+  makeWrapper,
+  perlPackages,
+  pkg-config,
+  swig,
+  webkitgtk,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,28 +44,29 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    aqbanking
-    boost
-    glib
-    glibcLocales
-    gtest
-    guile
-    gwenhywfar
-    icu
-    libdbi
-    libdbiDrivers
-    libofx
-    libxml2
-    libxslt
-    swig
-    webkitgtk
-  ]
-  ++ (with perlPackages; [
-    JSONParse
-    FinanceQuote
-    perl
-  ]);
+  buildInputs =
+    [
+      aqbanking
+      boost
+      glib
+      glibcLocales
+      gtest
+      guile
+      gwenhywfar
+      icu
+      libdbi
+      libdbiDrivers
+      libofx
+      libxml2
+      libxslt
+      swig
+      webkitgtk
+    ]
+    ++ (with perlPackages; [
+      JSONParse
+      FinanceQuote
+      perl
+    ]);
 
   patches = [
     # this patch disables test-gnc-timezone and test-gnc-datetime which fail due to nix datetime challenges
@@ -84,10 +86,12 @@ stdenv.mkDerivation rec {
   # guile warning
   env.GUILE_AUTO_COMPILE = "0";
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
-    # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
-    "-Wno-error=use-after-free"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+      # Needed with GCC 12 but breaks on darwin (with clang) or older gcc
+      "-Wno-error=use-after-free"
+    ]
+  );
 
   doCheck = true;
   enableParallelChecking = true;
@@ -105,7 +109,10 @@ stdenv.mkDerivation rec {
     };
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ libxml2 libxslt ];
+    buildInputs = [
+      libxml2
+      libxslt
+    ];
   };
 
   preFixup = ''
@@ -130,7 +137,13 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/gnucash-cli "''${gappsWrapperArgs[@]}"
 
     wrapProgram $out/bin/finance-quote-wrapper \
-      --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [ JSONParse FinanceQuote ]}"
+      --prefix PERL5LIB : "${
+        with perlPackages;
+        makeFullPerlPath [
+          JSONParse
+          FinanceQuote
+        ]
+      }"
   '';
 
   passthru.updateScript = ./update.sh;
@@ -159,7 +172,12 @@ stdenv.mkDerivation rec {
       - Financial Calculations
     '';
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ domenkozar AndersonTorres rski nevivurn ];
+    maintainers = with maintainers; [
+      domenkozar
+      AndersonTorres
+      rski
+      nevivurn
+    ];
     platforms = platforms.unix;
     mainProgram = "gnucash";
   };

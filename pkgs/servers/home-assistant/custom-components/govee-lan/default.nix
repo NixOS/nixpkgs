@@ -1,7 +1,8 @@
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
-, govee-led-wez
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
+  govee-led-wez,
 }:
 
 buildHomeAssistantComponent {

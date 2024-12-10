@@ -1,8 +1,23 @@
 # This script was inspired by the ArchLinux User Repository package:
 #
 #   https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=oh-my-zsh-git
-{ lib, stdenv, fetchFromGitHub, nixosTests, writeScript, common-updater-scripts
-, git, nix, nixfmt-classic, jq, coreutils, gnused, curl, cacert, bash }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
+  writeScript,
+  common-updater-scripts,
+  git,
+  nix,
+  nixfmt-classic,
+  jq,
+  coreutils,
+  gnused,
+  curl,
+  cacert,
+  bash,
+}:
 
 stdenv.mkDerivation rec {
   version = "2024-05-03";

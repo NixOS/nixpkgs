@@ -1,18 +1,25 @@
-{ lib, stdenv
-, fetchurl
-, cmake
-, pkg-config
-, libffi
-, boehmgc
-, openssl
-, zlib
-, odbcSupport ? !stdenv.isDarwin
-, libiodbc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  libffi,
+  boehmgc,
+  openssl,
+  zlib,
+  odbcSupport ? !stdenv.isDarwin,
+  libiodbc,
 }:
 
-let platformLdLibraryPath = if stdenv.isDarwin then "DYLD_FALLBACK_LIBRARY_PATH"
-                            else if (stdenv.isLinux or stdenv.isBSD) then "LD_LIBRARY_PATH"
-                            else throw "unsupported platform";
+let
+  platformLdLibraryPath =
+    if stdenv.isDarwin then
+      "DYLD_FALLBACK_LIBRARY_PATH"
+    else if (stdenv.isLinux or stdenv.isBSD) then
+      "LD_LIBRARY_PATH"
+    else
+      throw "unsupported platform";
 in
 stdenv.mkDerivation rec {
   pname = "sagittarius-scheme";
@@ -22,21 +29,32 @@ stdenv.mkDerivation rec {
     hash = "sha256-LIF1EW8sMBMKycQnVAXk+5iEpKmRHMmzBILAg2tjk8c=";
   };
   preBuild = ''
-           # since we lack rpath during build, need to explicitly add build path
-           # to LD_LIBRARY_PATH so we can load libsagittarius.so as required to
-           # build extensions
-           export ${platformLdLibraryPath}="$(pwd)/build"
-           '';
-  nativeBuildInputs = [ pkg-config cmake ];
+    # since we lack rpath during build, need to explicitly add build path
+    # to LD_LIBRARY_PATH so we can load libsagittarius.so as required to
+    # build extensions
+    export ${platformLdLibraryPath}="$(pwd)/build"
+  '';
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
 
-  buildInputs = [ libffi boehmgc openssl zlib ] ++ lib.optional odbcSupport libiodbc;
+  buildInputs = [
+    libffi
+    boehmgc
+    openssl
+    zlib
+  ] ++ lib.optional odbcSupport libiodbc;
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
-    "-Wno-error=int-conversion"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    # error: '__builtin_ia32_aeskeygenassist128' needs target feature aes
-    "-maes"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.isDarwin [
+      "-Wno-error=int-conversion"
+    ]
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+      # error: '__builtin_ia32_aeskeygenassist128' needs target feature aes
+      "-maes"
+    ]
+  );
 
   meta = with lib; {
     description = "An R6RS/R7RS Scheme system";

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, enableMail ? false
-, gnused
-, hostname
-, mailutils
-, IOKit
-, ApplicationServices
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  enableMail ? false,
+  gnused,
+  hostname,
+  mailutils,
+  IOKit,
+  ApplicationServices,
 }:
 
 let
@@ -18,7 +19,13 @@ let
     sha256 = "sha256-0dtLev4JjeHsS259+qOgg19rz4yjkeX4D3ooUgS4RTI=";
     name = "smartmontools-drivedb.h";
   };
-  scriptPath = lib.makeBinPath ([ gnused hostname ] ++ lib.optionals enableMail [ mailutils ]);
+  scriptPath = lib.makeBinPath (
+    [
+      gnused
+      hostname
+    ]
+    ++ lib.optionals enableMail [ mailutils ]
+  );
 
 in
 stdenv.mkDerivation rec {
@@ -45,7 +52,10 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ApplicationServices ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    IOKit
+    ApplicationServices
+  ];
   enableParallelBuilding = true;
 
   meta = with lib; {

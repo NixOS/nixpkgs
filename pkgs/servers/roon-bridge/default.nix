@@ -1,26 +1,35 @@
-{ alsa-lib
-, alsa-utils
-, autoPatchelfHook
-, fetchurl
-, ffmpeg
-, lib
-, makeWrapper
-, openssl
-, stdenv
-, zlib
+{
+  alsa-lib,
+  alsa-utils,
+  autoPatchelfHook,
+  fetchurl,
+  ffmpeg,
+  lib,
+  makeWrapper,
+  openssl,
+  stdenv,
+  zlib,
 }:
 let
   version = "1.8-1125";
   urlVersion = builtins.replaceStrings [ "." "-" ] [ "00" "0" ] version;
   host = stdenv.hostPlatform.system;
-  system = if host == "x86_64-linux" then "linuxx64"
-           else if host == "aarch64-linux" then "linuxarmv8"
-           else throw "Unsupported platform ${host}";
+  system =
+    if host == "x86_64-linux" then
+      "linuxx64"
+    else if host == "aarch64-linux" then
+      "linuxarmv8"
+    else
+      throw "Unsupported platform ${host}";
   src = fetchurl {
     url = "https://download.roonlabs.com/updates/stable/RoonBridge_${system}_${urlVersion}.tar.bz2";
-    hash = if system == "linuxx64" then "sha256-DbtKPFEz2WIoKTxP+zoehzz+BjfsLZ2ZQk/FMh+zFBM="
-           else if system == "linuxarmv8" then "sha256-+przEj96R+f1z4ewETFarF4oY6tT2VW/ukSTgUBLiYk="
-           else throw "Unsupported platform ${host}";
+    hash =
+      if system == "linuxx64" then
+        "sha256-DbtKPFEz2WIoKTxP+zoehzz+BjfsLZ2ZQk/FMh+zFBM="
+      else if system == "linuxarmv8" then
+        "sha256-+przEj96R+f1z4ewETFarF4oY6tT2VW/ukSTgUBLiYk="
+      else
+        throw "Unsupported platform ${host}";
   };
 in
 stdenv.mkDerivation {
@@ -36,7 +45,10 @@ stdenv.mkDerivation {
     stdenv.cc.cc.lib
   ];
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+  ];
 
   installPhase =
     let
@@ -46,8 +58,19 @@ stdenv.mkDerivation {
           sed -i 's@^SCRIPT=.*@SCRIPT="$(basename "${binPath}")"@' ${binPath}
           wrapProgram ${binPath} \
             --argv0 "$(basename ${binPath})" \
-            --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ alsa-lib ffmpeg openssl ]}" \
-            --prefix PATH : "${lib.makeBinPath [ alsa-utils ffmpeg ]}"
+            --prefix LD_LIBRARY_PATH : "${
+              lib.makeLibraryPath [
+                alsa-lib
+                ffmpeg
+                openssl
+              ]
+            }" \
+            --prefix PATH : "${
+              lib.makeBinPath [
+                alsa-utils
+                ffmpeg
+              ]
+            }"
         )
       '';
     in
@@ -77,7 +100,10 @@ stdenv.mkDerivation {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ lovesegfault ];
-    platforms = [ "aarch64-linux" "x86_64-linux" ];
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
     mainProgram = "RoonBridge";
   };
 }

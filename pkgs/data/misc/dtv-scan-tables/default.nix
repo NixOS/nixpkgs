@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, v4l-utils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  v4l-utils,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +34,10 @@ stdenv.mkDerivation rec {
     # but sometimes they lag behind several weeks or even months.
     description = "Digital TV (DVB) channel/transponder scan tables";
     homepage = "https://www.linuxtv.org/wiki/index.php/Dtv-scan-tables";
-    license = with licenses; [ gpl2Only lgpl21Only ];
+    license = with licenses; [
+      gpl2Only
+      lgpl21Only
+    ];
     longDescription = ''
       When scanning for dvb channels,
       most applications require an initial set of

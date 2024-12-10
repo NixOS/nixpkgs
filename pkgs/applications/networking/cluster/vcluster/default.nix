@@ -1,4 +1,12 @@
-{ lib, go, buildGoModule, fetchFromGitHub, installShellFiles, testers, vcluster }:
+{
+  lib,
+  go,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  vcluster,
+}:
 
 buildGoModule rec {
   pname = "vcluster";
@@ -16,7 +24,8 @@ buildGoModule rec {
   subPackages = [ "cmd/vclusterctl" ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.version=${version}"
     "-X main.goVersion=${lib.getVersion go}"
   ];
@@ -52,6 +61,10 @@ buildGoModule rec {
     homepage = "https://www.vcluster.com/";
     license = lib.licenses.asl20;
     mainProgram = "vcluster";
-    maintainers = with lib.maintainers; [ berryp peterromfeldhk qjoly ];
+    maintainers = with lib.maintainers; [
+      berryp
+      peterromfeldhk
+      qjoly
+    ];
   };
 }

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, graalvmCEPackages
-, libyaml
-, openssl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  graalvmCEPackages,
+  libyaml,
+  openssl,
 }:
 
 graalvmCEPackages.buildGraalvmProduct {
@@ -30,9 +31,11 @@ graalvmCEPackages.buildGraalvmProduct {
     export LANG=C
     export LC_ALL=C
     $out/bin/ruby -e 'puts(1 + 1)'
-    ${# broken in darwin with sandbox enabled
+    ${
+      # broken in darwin with sandbox enabled
       lib.optionalString stdenv.isLinux ''
-      echo '1 + 1' | $out/bin/irb
-    ''}
+        echo '1 + 1' | $out/bin/irb
+      ''
+    }
   '';
 }

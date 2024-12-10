@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, autoAddDriverRunpath
-, dcgm
-, linuxPackages
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  autoAddDriverRunpath,
+  dcgm,
+  linuxPackages,
 }:
 buildGoModule rec {
   pname = "dcgm-exporter";

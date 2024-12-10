@@ -1,9 +1,10 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, dpkg
-, nix-update-script
-, python3
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  dpkg,
+  nix-update-script,
+  python3,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -28,14 +29,17 @@ python3Packages.buildPythonApplication rec {
     spdx-lookup
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pytest-check
-    pytest-mock
-    pytest-subprocess
-    pytestCheckHook
-  ] ++ [
-    dpkg
-  ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pytest-check
+      pytest-mock
+      pytest-subprocess
+      pytestCheckHook
+    ]
+    ++ [
+      dpkg
+    ];
 
   preCheck = ''
     mkdir -p check-phase

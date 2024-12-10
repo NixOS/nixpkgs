@@ -1,4 +1,9 @@
-{ lib, fetchurl, appimageTools, wrapGAppsHook3 }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+  wrapGAppsHook3,
+}:
 
 let
   pname = "jbrowse";

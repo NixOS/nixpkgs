@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "protoc-gen-entgrpc";
@@ -15,7 +19,10 @@ buildGoModule rec {
 
   subPackages = [ "entproto/cmd/protoc-gen-entgrpc" ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Generator of an implementation of the service interface for ent protobuff";
@@ -26,4 +33,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ ];
   };
 }
-

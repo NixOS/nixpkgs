@@ -2,17 +2,20 @@
 # XXX: todo: support multiple upstream links
 # see http://yesican.chsoft.biz/lartc/MultihomedLinuxNetworking.html
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.networking.nat;
 
-  mkDest = externalIP:
-    if externalIP == null
-    then "-j MASQUERADE"
-    else "-j SNAT --to-source ${externalIP}";
+  mkDest =
+    externalIP: if externalIP == null then "-j MASQUERADE" else "-j SNAT --to-source ${externalIP}";
   dest = mkDest cfg.externalIP;
   destIPv6 = mkDest cfg.externalIPv6;
 
@@ -36,59 +39,75 @@ let
     ${cfg.extraStopCommands}
   '';
 
-  mkSetupNat = { iptables, dest, internalIPs, forwardPorts }: ''
-    # We can't match on incoming interface in POSTROUTING, so
-    # mark packets coming from the internal interfaces.
-    ${concatMapStrings (iface: ''
-      ${iptables} -w -t nat -A nixos-nat-pre \
-        -i '${iface}' -j MARK --set-mark 1
-    '') cfg.internalInterfaces}
+  mkSetupNat =
+    {
+      iptables,
+      dest,
+      internalIPs,
+      forwardPorts,
+    }:
+    ''
+      # We can't match on incoming interface in POSTROUTING, so
+      # mark packets coming from the internal interfaces.
+      ${concatMapStrings (iface: ''
+        ${iptables} -w -t nat -A nixos-nat-pre \
+          -i '${iface}' -j MARK --set-mark 1
+      '') cfg.internalInterfaces}
 
-    # NAT the marked packets.
-    ${optionalString (cfg.internalInterfaces != []) ''
-      ${iptables} -w -t nat -A nixos-nat-post -m mark --mark 1 \
-        ${optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"} ${dest}
-    ''}
+      # NAT the marked packets.
+      ${optionalString (cfg.internalInterfaces != [ ]) ''
+        ${iptables} -w -t nat -A nixos-nat-post -m mark --mark 1 \
+          ${optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"} ${dest}
+      ''}
 
-    # NAT packets coming from the internal IPs.
-    ${concatMapStrings (range: ''
-      ${iptables} -w -t nat -A nixos-nat-post \
-        -s '${range}' ${optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"} ${dest}
-    '') internalIPs}
+      # NAT packets coming from the internal IPs.
+      ${concatMapStrings (range: ''
+        ${iptables} -w -t nat -A nixos-nat-post \
+          -s '${range}' ${
+            optionalString (cfg.externalInterface != null) "-o ${cfg.externalInterface}"
+          } ${dest}
+      '') internalIPs}
 
-    # NAT from external ports to internal ports.
-    ${concatMapStrings (fwd: ''
-      ${iptables} -w -t nat -A nixos-nat-pre \
-        -i ${toString cfg.externalInterface} -p ${fwd.proto} \
-        --dport ${builtins.toString fwd.sourcePort} \
-        -j DNAT --to-destination ${fwd.destination}
+      # NAT from external ports to internal ports.
+      ${concatMapStrings (fwd: ''
+        ${iptables} -w -t nat -A nixos-nat-pre \
+          -i ${toString cfg.externalInterface} -p ${fwd.proto} \
+          --dport ${builtins.toString fwd.sourcePort} \
+          -j DNAT --to-destination ${fwd.destination}
 
-      ${concatMapStrings (loopbackip:
-        let
-          matchIP          = if isIPv6 fwd.destination then "[[]([0-9a-fA-F:]+)[]]" else "([0-9.]+)";
-          m                = builtins.match "${matchIP}:([0-9-]+)" fwd.destination;
-          destinationIP    = if m == null then throw "bad ip:ports `${fwd.destination}'" else elemAt m 0;
-          destinationPorts = if m == null then throw "bad ip:ports `${fwd.destination}'" else builtins.replaceStrings ["-"] [":"] (elemAt m 1);
-        in ''
-          # Allow connections to ${loopbackip}:${toString fwd.sourcePort} from the host itself
-          ${iptables} -w -t nat -A nixos-nat-out \
-            -d ${loopbackip} -p ${fwd.proto} \
-            --dport ${builtins.toString fwd.sourcePort} \
-            -j DNAT --to-destination ${fwd.destination}
+        ${concatMapStrings (
+          loopbackip:
+          let
+            matchIP = if isIPv6 fwd.destination then "[[]([0-9a-fA-F:]+)[]]" else "([0-9.]+)";
+            m = builtins.match "${matchIP}:([0-9-]+)" fwd.destination;
+            destinationIP = if m == null then throw "bad ip:ports `${fwd.destination}'" else elemAt m 0;
+            destinationPorts =
+              if m == null then
+                throw "bad ip:ports `${fwd.destination}'"
+              else
+                builtins.replaceStrings [ "-" ] [ ":" ] (elemAt m 1);
+          in
+          ''
+            # Allow connections to ${loopbackip}:${toString fwd.sourcePort} from the host itself
+            ${iptables} -w -t nat -A nixos-nat-out \
+              -d ${loopbackip} -p ${fwd.proto} \
+              --dport ${builtins.toString fwd.sourcePort} \
+              -j DNAT --to-destination ${fwd.destination}
 
-          # Allow connections to ${loopbackip}:${toString fwd.sourcePort} from other hosts behind NAT
-          ${iptables} -w -t nat -A nixos-nat-pre \
-            -d ${loopbackip} -p ${fwd.proto} \
-            --dport ${builtins.toString fwd.sourcePort} \
-            -j DNAT --to-destination ${fwd.destination}
+            # Allow connections to ${loopbackip}:${toString fwd.sourcePort} from other hosts behind NAT
+            ${iptables} -w -t nat -A nixos-nat-pre \
+              -d ${loopbackip} -p ${fwd.proto} \
+              --dport ${builtins.toString fwd.sourcePort} \
+              -j DNAT --to-destination ${fwd.destination}
 
-          ${iptables} -w -t nat -A nixos-nat-post \
-            -d ${destinationIP} -p ${fwd.proto} \
-            --dport ${destinationPorts} \
-            -j SNAT --to-source ${loopbackip}
-        '') fwd.loopbackIPs}
-    '') forwardPorts}
-  '';
+            ${iptables} -w -t nat -A nixos-nat-post \
+              -d ${destinationIP} -p ${fwd.proto} \
+              --dport ${destinationPorts} \
+              -j SNAT --to-source ${loopbackip}
+          ''
+        ) fwd.loopbackIPs}
+      '') forwardPorts}
+    '';
 
   setupNat = ''
     ${helpers}
@@ -157,35 +176,36 @@ in
 
   };
 
+  config = mkIf (!config.networking.nftables.enable) (mkMerge [
+    ({ networking.firewall.extraCommands = mkBefore flushNat; })
+    (mkIf config.networking.nat.enable {
 
-  config = mkIf (!config.networking.nftables.enable)
-    (mkMerge [
-      ({ networking.firewall.extraCommands = mkBefore flushNat; })
-      (mkIf config.networking.nat.enable {
+      networking.firewall = mkIf config.networking.firewall.enable {
+        extraCommands = setupNat;
+        extraStopCommands = flushNat;
+      };
 
-        networking.firewall = mkIf config.networking.firewall.enable {
-          extraCommands = setupNat;
-          extraStopCommands = flushNat;
-        };
+      systemd.services = mkIf (!config.networking.firewall.enable) {
+        nat = {
+          description = "Network Address Translation";
+          wantedBy = [ "network.target" ];
+          after = [
+            "network-pre.target"
+            "systemd-modules-load.service"
+          ];
+          path = [ config.networking.firewall.package ];
+          unitConfig.ConditionCapability = "CAP_NET_ADMIN";
 
-        systemd.services = mkIf (!config.networking.firewall.enable) {
-          nat = {
-            description = "Network Address Translation";
-            wantedBy = [ "network.target" ];
-            after = [ "network-pre.target" "systemd-modules-load.service" ];
-            path = [ config.networking.firewall.package ];
-            unitConfig.ConditionCapability = "CAP_NET_ADMIN";
-
-            serviceConfig = {
-              Type = "oneshot";
-              RemainAfterExit = true;
-            };
-
-            script = flushNat + setupNat;
-
-            postStop = flushNat;
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
           };
+
+          script = flushNat + setupNat;
+
+          postStop = flushNat;
         };
-      })
-    ]);
+      };
+    })
+  ]);
 }

@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gfortran
-, autoreconfHook
-, fftwMpi
-, mpi
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gfortran,
+  autoreconfHook,
+  fftwMpi,
+  mpi,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,9 +20,15 @@ stdenv.mkDerivation rec {
     sha256 = "1c7pjrvifncbdyngs2bv185imxbcbq64nka8gshhp8n2ns6fids6";
   };
 
-  nativeBuildInputs = [ autoreconfHook gfortran ];
+  nativeBuildInputs = [
+    autoreconfHook
+    gfortran
+  ];
 
-  buildInputs = [ mpi fftwMpi ];
+  buildInputs = [
+    mpi
+    fftwMpi
+  ];
 
   preConfigure = ''
     mkdir build && cd build
@@ -44,7 +51,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Portable C library of density functionals with van der Waals interactions for density functional theory";
-    license = with licenses; [ lgpl3Plus bsd3 ];
+    license = with licenses; [
+      lgpl3Plus
+      bsd3
+    ];
     homepage = "https://libvdwxc.org/";
     platforms = platforms.unix;
     maintainers = [ maintainers.sheepforce ];

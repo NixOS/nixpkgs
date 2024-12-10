@@ -1,4 +1,10 @@
-{ callPackage, lib, fetchurl, fetchpatch, autoreconfHook }:
+{
+  callPackage,
+  lib,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+}:
 let
   common = opts: callPackage (import ./common.nix opts) { };
 in
@@ -30,29 +36,32 @@ in
       hash = "sha256-SQQm92bYKidj/KzY2D6j1weYdQx70q/y5X3FZg93P/0=";
     };
 
-    extraPatches = let url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/b3f86656fc67aa397f60747c85f7f7b967c3279d/security/openssh-portable/files/extra-patch-hpn"; in
-    [
-      ./ssh-keysign-8.5.patch
-      ./openssh-9.6_p1-CVE-2024-6387.patch
-      ./openssh-9.6_p1-chaff-logic.patch
+    extraPatches =
+      let
+        url = "https://raw.githubusercontent.com/freebsd/freebsd-ports/b3f86656fc67aa397f60747c85f7f7b967c3279d/security/openssh-portable/files/extra-patch-hpn";
+      in
+      [
+        ./ssh-keysign-8.5.patch
+        ./openssh-9.6_p1-CVE-2024-6387.patch
+        ./openssh-9.6_p1-chaff-logic.patch
 
-      # HPN Patch from FreeBSD ports
-      (fetchpatch {
-        name = "ssh-hpn-wo-channels.patch";
-        inherit url;
-        stripLen = 1;
-        excludes = [ "channels.c" ];
-        hash = "sha256-MydulQvz8sDVQ6Up9U1yrsiyI5EGmyKl/stUk7DvVOU=";
-      })
+        # HPN Patch from FreeBSD ports
+        (fetchpatch {
+          name = "ssh-hpn-wo-channels.patch";
+          inherit url;
+          stripLen = 1;
+          excludes = [ "channels.c" ];
+          hash = "sha256-MydulQvz8sDVQ6Up9U1yrsiyI5EGmyKl/stUk7DvVOU=";
+        })
 
-      (fetchpatch {
-        name = "ssh-hpn-channels.patch";
-        inherit url;
-        extraPrefix = "";
-        includes = [ "channels.c" ];
-        hash = "sha256-pDLUbjv5XIyByEbiRAXC3WMUPKmn15af1stVmcvr7fE=";
-      })
-    ];
+        (fetchpatch {
+          name = "ssh-hpn-channels.patch";
+          inherit url;
+          extraPrefix = "";
+          includes = [ "channels.c" ];
+          hash = "sha256-pDLUbjv5XIyByEbiRAXC3WMUPKmn15af1stVmcvr7fE=";
+        })
+      ];
 
     extraNativeBuildInputs = [ autoreconfHook ];
 

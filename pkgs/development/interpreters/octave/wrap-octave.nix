@@ -1,7 +1,8 @@
-{ lib
-, octave
-, makeSetupHook
-, makeWrapper
+{
+  lib,
+  octave,
+  makeSetupHook,
+  makeWrapper,
 }:
 
 # Defined in trivial-builders

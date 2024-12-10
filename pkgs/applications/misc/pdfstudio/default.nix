@@ -8,29 +8,32 @@
 # - year identifies the year portion of the version, defaults to most recent year.
 # - pname is either "pdfstudio${year}" or "pdfstudioviewer".
 
-{ lib
-, stdenv
-, program ? "pdfstudio"
-, year ? "2023"
-, fetchurl
-, callPackage
-, jdk11
-, jdk17
+{
+  lib,
+  stdenv,
+  program ? "pdfstudio",
+  year ? "2023",
+  fetchurl,
+  callPackage,
+  jdk11,
+  jdk17,
 }:
 let
   longDescription = ''
     PDF Studio is an easy to use, full-featured PDF editing software. This is the standard/pro edition, which requires a license. For the free PDF Studio Viewer see the package pdfstudioviewer.
   '';
   pname = if (program == "pdfstudio") then "${program}${year}" else program;
-  desktopName =
-    if (program == "pdfstudio")
-    then "PDF Studio ${year}"
-    else "PDF Studio Viewer";
+  desktopName = if (program == "pdfstudio") then "PDF Studio ${year}" else "PDF Studio Viewer";
   dot2dash = str: builtins.replaceStrings [ "." ] [ "_" ] str;
 in
 {
   pdfstudioviewer = callPackage ./common.nix rec {
-    inherit desktopName pname program year;
+    inherit
+      desktopName
+      pname
+      program
+      year
+      ;
     version = "${year}.0.3";
     longDescription = ''
       PDF Studio Viewer is an easy to use, full-featured PDF editing software. This is the free edition. For the standard/pro edition, see the package pdfstudio.
@@ -43,33 +46,51 @@ in
   };
 
   pdfstudio2021 = callPackage ./common.nix rec {
-    inherit desktopName longDescription pname program year;
+    inherit
+      desktopName
+      longDescription
+      pname
+      program
+      year
+      ;
     version = "${year}.2.2";
     src = fetchurl {
       url = "https://download.qoppa.com/pdfstudio/v${year}/PDFStudio_v${dot2dash version}_linux64.deb";
       sha256 = "sha256-HdkwRMqwquAaW6l3AukGReFtw2f5n36tZ8vXo6QiPvU=";
     };
     extraBuildInputs = [
-      (lib.getLib stdenv.cc.cc)  # for libstdc++.so.6 and libgomp.so.1
+      (lib.getLib stdenv.cc.cc) # for libstdc++.so.6 and libgomp.so.1
     ];
     jdk = jdk11;
   };
 
   pdfstudio2022 = callPackage ./common.nix rec {
-    inherit desktopName longDescription pname program year;
+    inherit
+      desktopName
+      longDescription
+      pname
+      program
+      year
+      ;
     version = "${year}.2.5";
     src = fetchurl {
       url = "https://download.qoppa.com/pdfstudio/v${year}/PDFStudio_v${dot2dash version}_linux64.deb";
       sha256 = "sha256-3faZyWUnFe//S+gOskWhsZ6jzHw67FRsv/xP77R1jj4=";
     };
     extraBuildInputs = [
-      (lib.getLib stdenv.cc.cc)  # for libstdc++.so.6 and libgomp.so.1
+      (lib.getLib stdenv.cc.cc) # for libstdc++.so.6 and libgomp.so.1
     ];
     jdk = jdk17;
   };
 
   pdfstudio2023 = callPackage ./common.nix rec {
-    inherit desktopName longDescription pname program year;
+    inherit
+      desktopName
+      longDescription
+      pname
+      program
+      year
+      ;
     version = "${year}.0.3";
     src = fetchurl {
       url = "https://download.qoppa.com/pdfstudio/v${year}/PDFStudio_v${dot2dash version}_linux64.deb";
@@ -77,4 +98,5 @@ in
     };
     jdk = jdk17;
   };
-}.${pname}
+}
+.${pname}

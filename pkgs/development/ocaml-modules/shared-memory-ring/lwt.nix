@@ -1,12 +1,13 @@
-{ lib
-, buildDunePackage
-, shared-memory-ring
-, ppx_cstruct
-, cstruct
-, lwt
-, lwt-dllist
-, mirage-profile
-, ounit
+{
+  lib,
+  buildDunePackage,
+  shared-memory-ring,
+  ppx_cstruct,
+  cstruct,
+  lwt,
+  lwt-dllist,
+  mirage-profile,
+  ounit,
 }:
 
 buildDunePackage {

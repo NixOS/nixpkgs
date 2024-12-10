@@ -1,6 +1,12 @@
 # NixOS module for Buildbot continuous integration server.
 
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -58,14 +64,15 @@ let
     m.setServiceParent(application)
   '';
 
-in {
+in
+{
   options = {
     services.buildbot-master = {
 
       factorySteps = mkOption {
         type = types.listOf types.str;
         description = "Factory Steps";
-        default = [];
+        default = [ ];
         example = [
           "steps.Git(repourl='https://github.com/buildbot/pyflakes.git', mode='incremental')"
           "steps.ShellCommand(command=['trial', 'pyflakes'])"
@@ -75,7 +82,7 @@ in {
       changeSource = mkOption {
         type = types.listOf types.str;
         description = "List of Change Sources.";
-        default = [];
+        default = [ ];
         example = [
           "changes.GitPoller('https://github.com/buildbot/pyflakes.git', workdir='gitpoller-workdir', branch='master', pollinterval=300)"
         ];
@@ -84,7 +91,7 @@ in {
       configurators = mkOption {
         type = types.listOf types.str;
         description = "Configurator Steps, see https://docs.buildbot.net/latest/manual/configuration/configurators.html";
-        default = [];
+        default = [ ];
         example = [
           "util.JanitorConfigurator(logHorizon=timedelta(weeks=4), hour=12, dayOfWeek=6)"
         ];
@@ -141,7 +148,7 @@ in {
       };
 
       reporters = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = "List of reporter objects used to present build status to various users.";
       };
@@ -160,7 +167,7 @@ in {
 
       extraGroups = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "List of extra groups that the buildbot user should be a part of.";
       };
 
@@ -270,7 +277,9 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = cfg.packages ++ cfg.pythonPackages python.pkgs;
-      environment.PYTHONPATH = "${python.withPackages (self: cfg.pythonPackages self ++ [ package ])}/${python.sitePackages}";
+      environment.PYTHONPATH = "${
+        python.withPackages (self: cfg.pythonPackages self ++ [ package ])
+      }/${python.sitePackages}";
 
       preStart = ''
         mkdir -vp "${cfg.buildbotDir}"
@@ -298,7 +307,10 @@ in {
   };
 
   imports = [
-    (mkRenamedOptionModule [ "services" "buildbot-master" "bpPort" ] [ "services" "buildbot-master" "pbPort" ])
+    (mkRenamedOptionModule
+      [ "services" "buildbot-master" "bpPort" ]
+      [ "services" "buildbot-master" "pbPort" ]
+    )
     (mkRemovedOptionModule [ "services" "buildbot-master" "status" ] ''
       Since Buildbot 0.9.0, status targets are deprecated and ignored.
       Review your configuration and migrate to reporters (available at services.buildbot-master.reporters).

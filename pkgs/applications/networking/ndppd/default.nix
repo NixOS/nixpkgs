@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, gzip }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ndppd";

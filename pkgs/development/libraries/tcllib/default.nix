@@ -1,8 +1,9 @@
-{ lib
-, fetchzip
-, tcl
-, critcl
-, withCritcl ? true
+{
+  lib,
+  fetchzip,
+  tcl,
+  critcl,
+  withCritcl ? true,
 }:
 
 tcl.mkTclDerivation rec {

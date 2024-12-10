@@ -1,23 +1,25 @@
-{ lib
-, sqliteSupport ? true
-, postgresqlSupport ? true
-, mysqlSupport ? true
-, rustPlatform
-, fetchCrate
-, installShellFiles
-, pkg-config
-, openssl
-, stdenv
-, Security
-, libiconv
-, sqlite
-, postgresql
-, libmysqlclient
-, zlib
+{
+  lib,
+  sqliteSupport ? true,
+  postgresqlSupport ? true,
+  mysqlSupport ? true,
+  rustPlatform,
+  fetchCrate,
+  installShellFiles,
+  pkg-config,
+  openssl,
+  stdenv,
+  Security,
+  libiconv,
+  sqlite,
+  postgresql,
+  libmysqlclient,
+  zlib,
 }:
 
-assert lib.assertMsg (sqliteSupport == true || postgresqlSupport == true || mysqlSupport == true)
-  "support for at least one database must be enabled";
+assert lib.assertMsg (
+  sqliteSupport == true || postgresqlSupport == true || mysqlSupport == true
+) "support for at least one database must be enabled";
 
 let
   inherit (lib) optional optionals optionalString;
@@ -35,31 +37,44 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-nPmUCww8sOJwnG7+uIflLPgT87xPX0s7g0AcuDKhY2I=";
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
-  buildInputs = [ openssl ]
+  buildInputs =
+    [ openssl ]
     ++ optional stdenv.isDarwin Security
     ++ optional (stdenv.isDarwin && mysqlSupport) libiconv
     ++ optional sqliteSupport sqlite
     ++ optional postgresqlSupport postgresql
-    ++ optionals mysqlSupport [ libmysqlclient zlib ];
+    ++ optionals mysqlSupport [
+      libmysqlclient
+      zlib
+    ];
 
   buildNoDefaultFeatures = true;
-  buildFeatures = optional sqliteSupport "sqlite"
+  buildFeatures =
+    optional sqliteSupport "sqlite"
     ++ optional postgresqlSupport "postgres"
     ++ optional mysqlSupport "mysql";
 
-  checkPhase = ''
-    runHook preCheck
-  '' + optionalString sqliteSupport ''
-    cargo check --features sqlite
-  '' + optionalString postgresqlSupport ''
-    cargo check --features postgres
-  '' + optionalString mysqlSupport ''
-    cargo check --features mysql
-  '' + ''
-    runHook postCheck
-  '';
+  checkPhase =
+    ''
+      runHook preCheck
+    ''
+    + optionalString sqliteSupport ''
+      cargo check --features sqlite
+    ''
+    + optionalString postgresqlSupport ''
+      cargo check --features postgres
+    ''
+    + optionalString mysqlSupport ''
+      cargo check --features mysql
+    ''
+    + ''
+      runHook postCheck
+    '';
 
   postInstall = ''
     installShellCompletion --cmd diesel \
@@ -75,7 +90,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Database tool for working with Rust projects that use Diesel";
     homepage = "https://github.com/diesel-rs/diesel/tree/master/diesel_cli";
-    license = with licenses; [ mit asl20 ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
     maintainers = with maintainers; [ ];
     mainProgram = "diesel";
   };

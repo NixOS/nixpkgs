@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildBazelPackage
-, fetchFromGitHub
-, bazel_5
-, jdk
-, bison
-, flex
-, python3
+{
+  lib,
+  stdenv,
+  buildBazelPackage,
+  fetchFromGitHub,
+  bazel_5,
+  jdk,
+  bison,
+  flex,
+  python3,
 }:
 
 let
@@ -22,13 +23,15 @@ buildBazelPackage rec {
   GIT_VERSION = "v0.0-3515-g2d841599";
 
   # Derive nix package version from GIT_VERSION: "v1.2-345-abcde" -> "1.2.345"
-  version = builtins.concatStringsSep "." (lib.take 3 (lib.drop 1 (builtins.splitVersion GIT_VERSION)));
+  version = builtins.concatStringsSep "." (
+    lib.take 3 (lib.drop 1 (builtins.splitVersion GIT_VERSION))
+  );
 
   src = fetchFromGitHub {
     owner = "chipsalliance";
-    repo  = "verible";
-    rev   = "${GIT_VERSION}";
-    hash  = "sha256-D/blcex/St1nLKvjzuKnmAJE8HVlGy8ampmXIxKK11M=";
+    repo = "verible";
+    rev = "${GIT_VERSION}";
+    hash = "sha256-D/blcex/St1nLKvjzuKnmAJE8HVlGy8ampmXIxKK11M=";
   };
 
   bazel = bazel_5;
@@ -43,9 +46,9 @@ buildBazelPackage rec {
   };
 
   nativeBuildInputs = [
-    jdk        # bazel uses that.
-    bison      # We use local flex and bison as WORKSPACE sources fail
-    flex       # .. to compile with newer glibc
+    jdk # bazel uses that.
+    bison # We use local flex and bison as WORKSPACE sources fail
+    flex # .. to compile with newer glibc
     python3
   ];
 
@@ -90,7 +93,10 @@ buildBazelPackage rec {
     description = "Suite of SystemVerilog developer tools. Including a style-linter, indexer, formatter, and language server.";
     homepage = "https://github.com/chipsalliance/verible";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hzeller newam ];
+    maintainers = with maintainers; [
+      hzeller
+      newam
+    ];
     # Platforms linux only currently; some LIBTOOL issue on Darwin w/ bazel
     platforms = platforms.linux;
   };

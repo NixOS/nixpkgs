@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, ninja
-, installCompatHeader ? false
-, installLegacyHeaders ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  ninja,
+  installCompatHeader ? false,
+  installLegacyHeaders ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,15 +28,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
 
-  cmakeFlags = lib.mapAttrsToList
-    (name: value: ''-DGSL_LITE_OPT_${name}:BOOL=${if value then "ON" else "OFF"}'')
-    {
-      INSTALL_COMPAT_HEADER = installCompatHeader;
-      INSTALL_LEGACY_HEADERS = installLegacyHeaders;
-      BUILD_TESTS = doCheck;
-    };
+  cmakeFlags =
+    lib.mapAttrsToList (name: value: ''-DGSL_LITE_OPT_${name}:BOOL=${if value then "ON" else "OFF"}'')
+      {
+        INSTALL_COMPAT_HEADER = installCompatHeader;
+        INSTALL_LEGACY_HEADERS = installLegacyHeaders;
+        BUILD_TESTS = doCheck;
+      };
 
   # Building tests is broken on Darwin.
   doCheck = !stdenv.isDarwin;

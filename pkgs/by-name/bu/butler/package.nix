@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, stdenv
-, Cocoa
-, fetchpatch
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  stdenv,
+  Cocoa,
+  fetchpatch,
 }:
 
 buildGoModule rec {

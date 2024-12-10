@@ -1,8 +1,9 @@
-{ trivialBuild
-, fetchFromGitHub
-, emacs
-, popup
-, ess
+{
+  trivialBuild,
+  fetchFromGitHub,
+  emacs,
+  popup,
+  ess,
 }:
 
 trivialBuild rec {

@@ -1,19 +1,21 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, wrapGAppsHook3
-, intltool
-, itstool
-, libxml2
-, gobject-introspection
-, gtk3
-, goocanvas2
-, gtkspell3
-, isocodes
-, gnome
-, python3
-, tesseract4
-, extraOcrEngines ? [] # other supported engines are: ocrad gocr cuneiform
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  wrapGAppsHook3,
+  intltool,
+  itstool,
+  libxml2,
+  gobject-introspection,
+  gtk3,
+  goocanvas2,
+  gtkspell3,
+  isocodes,
+  gnome,
+  python3,
+  tesseract4,
+  extraOcrEngines ? [ ], # other supported engines are: ocrad gocr cuneiform
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,14 +41,16 @@ stdenv.mkDerivation (finalAttrs: {
     goocanvas2
     gtkspell3
     isocodes
-    (python3.withPackages(ps: with ps; [
-      pyenchant
-      sane
-      pillow
-      reportlab
-      odfpy
-      pygobject3
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        pyenchant
+        sane
+        pillow
+        reportlab
+        odfpy
+        pygobject3
+      ]
+    ))
   ];
   patches = [
     # Compiles, but doesn't launch without this, see:
@@ -54,9 +58,12 @@ stdenv.mkDerivation (finalAttrs: {
     ./fix-launch.diff
   ];
 
-  enginesPath = lib.makeBinPath ([
-    tesseract4
-  ] ++ extraOcrEngines);
+  enginesPath = lib.makeBinPath (
+    [
+      tesseract4
+    ]
+    ++ extraOcrEngines
+  );
 
   preFixup = ''
     gappsWrapperArgs+=(--prefix PATH : "${finalAttrs.enginesPath}")

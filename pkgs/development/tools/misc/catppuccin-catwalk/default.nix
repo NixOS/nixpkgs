@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
-, pkg-config
-, libwebp
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  pkg-config,
+  libwebp,
 }:
 
 rustPlatform.buildRustPackage {
@@ -21,7 +22,10 @@ rustPlatform.buildRustPackage {
   buildAndTestSubdir = "catwalk";
   cargoHash = "sha256-KoxivYLzJEjWbxIkizrMpmVwUF7bfVxl13H774lzQRg=";
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
   buildInputs = [ libwebp ];
 
   postInstall = ''

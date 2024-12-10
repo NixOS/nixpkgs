@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, dtkwidget
-, gio-qt
-, cmake
-, extra-cmake-modules
-, qttools
-, wayland
-, kwayland
-, dwayland
-, pkg-config
-, wrapQtAppsHook
-, glibmm
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dtkwidget,
+  gio-qt,
+  cmake,
+  extra-cmake-modules,
+  qttools,
+  wayland,
+  kwayland,
+  dwayland,
+  pkg-config,
+  wrapQtAppsHook,
+  glibmm,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, git
-, coq
-, ocamlPackages
-, cacert
-, ocaml-crunch
-, jq
-, mustache-go
-, yaml2json
-, tezos-rust-libs
-, darwin
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  git,
+  coq,
+  ocamlPackages,
+  cacert,
+  ocaml-crunch,
+  jq,
+  mustache-go,
+  yaml2json,
+  tezos-rust-libs,
+  darwin,
 }:
 
 ocamlPackages.buildDunePackage rec {
@@ -43,77 +44,80 @@ ocamlPackages.buildDunePackage rec {
     yaml2json
   ];
 
-  buildInputs = with ocamlPackages; [
-    coq
-    menhir
-    menhirLib
-    qcheck
-    ocamlgraph
-    bisect_ppx
-    decompress
-    fileutils
-    ppx_deriving
-    ppx_deriving_yojson
-    ppx_yojson_conv
-    ppx_expect
-    ppx_import
-    terminal_size
-    ocaml-recovery-parser
-    yojson
-    getopt
-    core
-    core_unix
-    pprint
-    linenoise
-    crunch
-    semver
-    lambda-term
-    tar-unix
-    parse-argv
-    hacl-star
-    prometheus
-    lwt_ppx
-    msgpck
-    # lsp
-    linol
-    linol-lwt
-    ocaml-lsp
-    # Test helpers deps
-    qcheck
-    qcheck-alcotest
-    alcotest-lwt
-    # vendored tezos' deps
-    aches
-    aches-lwt
-    ctypes
-    ctypes_stubs_js
-    class_group_vdf
-    dune-configurator
-    hacl-star
-    hacl-star-raw
-    lwt-canceler
-    ipaddr
-    bls12-381
-    bls12-381-signature
-    ptime
-    mtime
-    lwt_log
-    secp256k1-internal
-    resto
-    resto-directory
-    resto-cohttp-self-serving-client
-    irmin-pack
-    ezjsonm
-    data-encoding
-    pure-splitmix
-    zarith_stubs_js
-    simple-diff
-    seqes
-    stdint
-    tezt
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    with ocamlPackages;
+    [
+      coq
+      menhir
+      menhirLib
+      qcheck
+      ocamlgraph
+      bisect_ppx
+      decompress
+      fileutils
+      ppx_deriving
+      ppx_deriving_yojson
+      ppx_yojson_conv
+      ppx_expect
+      ppx_import
+      terminal_size
+      ocaml-recovery-parser
+      yojson
+      getopt
+      core
+      core_unix
+      pprint
+      linenoise
+      crunch
+      semver
+      lambda-term
+      tar-unix
+      parse-argv
+      hacl-star
+      prometheus
+      lwt_ppx
+      msgpck
+      # lsp
+      linol
+      linol-lwt
+      ocaml-lsp
+      # Test helpers deps
+      qcheck
+      qcheck-alcotest
+      alcotest-lwt
+      # vendored tezos' deps
+      aches
+      aches-lwt
+      ctypes
+      ctypes_stubs_js
+      class_group_vdf
+      dune-configurator
+      hacl-star
+      hacl-star-raw
+      lwt-canceler
+      ipaddr
+      bls12-381
+      bls12-381-signature
+      ptime
+      mtime
+      lwt_log
+      secp256k1-internal
+      resto
+      resto-directory
+      resto-cohttp-self-serving-client
+      irmin-pack
+      ezjsonm
+      data-encoding
+      pure-splitmix
+      zarith_stubs_js
+      simple-diff
+      seqes
+      stdint
+      tezt
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   nativeCheckInputs = [
     cacert

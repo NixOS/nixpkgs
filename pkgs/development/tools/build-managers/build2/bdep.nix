@@ -1,19 +1,25 @@
-{ lib, stdenv
-, build2
-, fetchurl
-, libbpkg
-, libbutl
-, libodb
-, libodb-sqlite
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
+{
+  lib,
+  stdenv,
+  build2,
+  fetchurl,
+  libbpkg,
+  libbutl,
+  libodb,
+  libodb-sqlite,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableStatic ? !enableShared,
 }:
 
 stdenv.mkDerivation rec {
   pname = "bdep";
   version = "0.16.0";
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
   src = fetchurl {
     url = "https://pkg.cppget.org/1/alpha/build2/bdep-${version}.tar.gz";
     hash = "sha256-5w8Ng8TS8g+Nkbixn5txg4FGi57TSfc6ii+2wh8apCo=";

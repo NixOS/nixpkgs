@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, testers
-, cmake
-, dbus-test-runner
-, pkg-config
-, qtbase
-, qtdeclarative
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  testers,
+  cmake,
+  dbus-test-runner,
+  pkg-config,
+  qtbase,
+  qtdeclarative,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,21 +39,23 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = ''
-    patchShebangs tests/strict-qmltestrunner.sh
+  postPatch =
+    ''
+      patchShebangs tests/strict-qmltestrunner.sh
 
-    # QMake query response is broken, just hardcode the expected location
-    substituteInPlace modules/U1db/CMakeLists.txt \
-      --replace-fail 'exec_program(''${QMAKE_EXECUTABLE} ARGS "-query QT_INSTALL_QML"' 'exec_program(echo ARGS "''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"'
+      # QMake query response is broken, just hardcode the expected location
+      substituteInPlace modules/U1db/CMakeLists.txt \
+        --replace-fail 'exec_program(''${QMAKE_EXECUTABLE} ARGS "-query QT_INSTALL_QML"' 'exec_program(echo ARGS "''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"'
 
-    # For our automatic pkg-config output patcher to work, prefix must be used here
-    substituteInPlace libu1db-qt.pc.in \
-      --replace-fail 'libdir=''${exec_prefix}/lib' 'libdir=''${prefix}/lib'
-  '' + lib.optionalString (!finalAttrs.doCheck) ''
-    # Other locations add dependencies to custom check target from tests
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'add_subdirectory(tests)' 'add_custom_target(check COMMAND "echo check dummy")'
-  '';
+      # For our automatic pkg-config output patcher to work, prefix must be used here
+      substituteInPlace libu1db-qt.pc.in \
+        --replace-fail 'libdir=''${exec_prefix}/lib' 'libdir=''${prefix}/lib'
+    ''
+    + lib.optionalString (!finalAttrs.doCheck) ''
+      # Other locations add dependencies to custom check target from tests
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'add_subdirectory(tests)' 'add_custom_target(check COMMAND "echo check dummy")'
+    '';
 
   strictDeps = true;
 

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, libxcb
-, openssl
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  libxcb,
+  openssl,
   # Darwin dependencies
-, AppKit
+  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,18 +24,22 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-QERnohWpkJ0LWkdxHrY6gKxdGqxDkLla7jlG44laojk=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ] ++ lib.optionals stdenv.isLinux [
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      installShellFiles
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      pkg-config
+    ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    libxcb
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-  ];
+  buildInputs =
+    lib.optionals stdenv.isLinux [
+      libxcb
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit
+    ];
 
   postInstall = ''
     installManPage man/dym.1
@@ -49,7 +54,10 @@ rustPlatform.buildRustPackage rec {
     description = "A CLI spelling corrector for when you're unsure";
     homepage = "https://github.com/hisbaan/didyoumean";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ evanjs wegank ];
+    maintainers = with maintainers; [
+      evanjs
+      wegank
+    ];
     mainProgram = "dym";
   };
 }

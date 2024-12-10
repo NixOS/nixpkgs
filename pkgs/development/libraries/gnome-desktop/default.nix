@@ -1,35 +1,40 @@
-{ lib
-, stdenv
-, fetchurl
-, substituteAll
-, pkg-config
-, libxslt
-, ninja
-, gnome
-, gtk3
-, gtk4
-, glib
-, gettext
-, libxml2
-, xkeyboard_config
-, libxkbcommon
-, isocodes
-, meson
-, wayland
-, libseccomp
-, systemd
-, bubblewrap
-, gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
-, gsettings-desktop-schemas
+{
+  lib,
+  stdenv,
+  fetchurl,
+  substituteAll,
+  pkg-config,
+  libxslt,
+  ninja,
+  gnome,
+  gtk3,
+  gtk4,
+  glib,
+  gettext,
+  libxml2,
+  xkeyboard_config,
+  libxkbcommon,
+  isocodes,
+  meson,
+  wayland,
+  libseccomp,
+  systemd,
+  bubblewrap,
+  gobject-introspection,
+  gtk-doc,
+  docbook-xsl-nons,
+  gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-desktop";
   version = "44.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-desktop/${lib.versions.major version}/${pname}-${version}.tar.xz";
@@ -57,31 +62,35 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  buildInputs = [
-    xkeyboard_config
-    libxkbcommon # for xkbregistry
-    isocodes
-    gtk3
-    gtk4
-    glib
-  ] ++ lib.optionals stdenv.isLinux [
-    bubblewrap
-    wayland
-    libseccomp
-    systemd
-  ];
+  buildInputs =
+    [
+      xkeyboard_config
+      libxkbcommon # for xkbregistry
+      isocodes
+      gtk3
+      gtk4
+      glib
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      bubblewrap
+      wayland
+      libseccomp
+      systemd
+    ];
 
   propagatedBuildInputs = [
     gsettings-desktop-schemas
   ];
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-    "-Ddesktop_docs=false"
-  ] ++ lib.optionals (!stdenv.isLinux) [
-    "-Dsystemd=disabled"
-    "-Dudev=disabled"
-  ];
+  mesonFlags =
+    [
+      "-Dgtk_doc=true"
+      "-Ddesktop_docs=false"
+    ]
+    ++ lib.optionals (!stdenv.isLinux) [
+      "-Dsystemd=disabled"
+      "-Dudev=disabled"
+    ];
 
   separateDebugInfo = stdenv.isLinux;
 
@@ -94,7 +103,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Library with common API for various GNOME modules";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-desktop";
-    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus
+    ];
     platforms = platforms.unix;
     maintainers = teams.gnome.members;
   };

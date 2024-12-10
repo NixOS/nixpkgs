@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, pkg-config
-, bison
-, flex
-, openssl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  bison,
+  flex,
+  openssl,
 }:
 
 stdenv.mkDerivation {
@@ -18,7 +19,11 @@ stdenv.mkDerivation {
     hash = "sha256-K+6AC8mg0aLQsCgiDoFBM5w2XrR+V2tfWnI8ByeRmOI=";
   };
 
-  outputs = [ "out" "man" "doc" ];
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
 
   postPatch = ''
     # Drop blanket -Werror to avoid build failure on fresh toolchains
@@ -27,8 +32,15 @@ stdenv.mkDerivation {
     substituteInPlace src/Makefile.am --replace-fail ' -Werror ' ' '
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ bison flex openssl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    bison
+    flex
+    openssl
+  ];
 
   enableParallelBuilding = true;
 

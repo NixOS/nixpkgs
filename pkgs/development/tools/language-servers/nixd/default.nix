@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, bison
-, boost182
-, flex
-, fmt
-, gtest
-, libbacktrace
-, lit
-, llvmPackages
-, meson
-, ninja
-, nix
-, nixpkgs-fmt
-, pkg-config
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  bison,
+  boost182,
+  flex,
+  fmt,
+  gtest,
+  libbacktrace,
+  lit,
+  llvmPackages,
+  meson,
+  ninja,
+  nix,
+  nixpkgs-fmt,
+  pkg-config,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -87,7 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     };
     pkg-config = testers.hasPkgConfigModules {
       package = finalAttrs.finalPackage;
-      moduleNames = [ "libnixf" "libnixt" ];
+      moduleNames = [
+        "libnixf"
+        "libnixt"
+      ];
     };
   };
 
@@ -96,7 +100,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/nix-community/nixd";
     changelog = "https://github.com/nix-community/nixd/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ inclyc Ruixi-rebirth ];
+    maintainers = with lib.maintainers; [
+      inclyc
+      Ruixi-rebirth
+    ];
     mainProgram = "nixd";
     platforms = lib.platforms.unix;
   };

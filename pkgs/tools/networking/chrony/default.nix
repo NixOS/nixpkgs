@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config
-, gnutls, libedit, nspr, nss, readline, texinfo
-, libcap, libseccomp, pps-tools
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gnutls,
+  libedit,
+  nspr,
+  nss,
+  readline,
+  texinfo,
+  libcap,
+  libseccomp,
+  pps-tools,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,12 +24,27 @@ stdenv.mkDerivation rec {
     hash = "sha256-Gf4dn0Zk1EWmmpbHHo/bYLzY3yTHPROG4CKH9zZq1CI=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ gnutls libedit nspr nss readline texinfo ]
-    ++ lib.optionals stdenv.isLinux [ libcap libseccomp pps-tools ];
+  buildInputs =
+    [
+      gnutls
+      libedit
+      nspr
+      nss
+      readline
+      texinfo
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      libcap
+      libseccomp
+      pps-tools
+    ];
 
   configureFlags = [
     "--enable-ntp-signd"
@@ -44,7 +70,10 @@ stdenv.mkDerivation rec {
     homepage = "https://chrony.tuxfamily.org/";
     license = licenses.gpl2Only;
     platforms = with platforms; linux ++ freebsd ++ openbsd;
-    maintainers = with maintainers; [ fpletz thoughtpolice ];
+    maintainers = with maintainers; [
+      fpletz
+      thoughtpolice
+    ];
 
     longDescription = ''
       Chronyd is a daemon which runs in background on the system. It obtains

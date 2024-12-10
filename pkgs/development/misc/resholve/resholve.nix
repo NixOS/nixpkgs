@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, callPackage
-, python27
-, fetchFromGitHub
-, installShellFiles
-, rSrc
-, version
-, oildev
-, configargparse
-, gawk
-, binlore
-, resholve
-, resholve-utils
+{
+  lib,
+  stdenv,
+  callPackage,
+  python27,
+  fetchFromGitHub,
+  installShellFiles,
+  rSrc,
+  version,
+  oildev,
+  configargparse,
+  gawk,
+  binlore,
+  resholve,
+  resholve-utils,
 }:
 
 let
@@ -26,7 +27,8 @@ let
     };
   };
 
-in python27.pkgs.buildPythonApplication {
+in
+python27.pkgs.buildPythonApplication {
   pname = "resholve";
   inherit version;
   src = rSrc;
@@ -60,8 +62,20 @@ in python27.pkgs.buildPythonApplication {
   '';
 
   passthru = {
-    inherit (resholve-utils) mkDerivation phraseSolution writeScript writeScriptBin;
-    tests = callPackage ./test.nix { inherit rSrc binlore python27 resholve; };
+    inherit (resholve-utils)
+      mkDerivation
+      phraseSolution
+      writeScript
+      writeScriptBin
+      ;
+    tests = callPackage ./test.nix {
+      inherit
+        rSrc
+        binlore
+        python27
+        resholve
+        ;
+    };
   };
 
   meta = with lib; {
@@ -70,10 +84,12 @@ in python27.pkgs.buildPythonApplication {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ abathur ];
     platforms = platforms.all;
-    knownVulnerabilities = [ ''
-      resholve depends on python27 (EOL). While it's safe to
-      run on trusted input in the build sandbox, you should
-      avoid running it on untrusted input.
-    '' ];
+    knownVulnerabilities = [
+      ''
+        resholve depends on python27 (EOL). While it's safe to
+        run on trusted input in the build sandbox, you should
+        avoid running it on untrusted input.
+      ''
+    ];
   };
 }

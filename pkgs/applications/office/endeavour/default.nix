@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, gettext
-, gnome
-, glib
-, gtk4
-, wayland
-, libadwaita
-, libpeas
-, gnome-online-accounts
-, gsettings-desktop-schemas
-, evolution-data-server-gtk4
-, libical
-, itstool
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  gettext,
+  gnome,
+  glib,
+  gtk4,
+  wayland,
+  libadwaita,
+  libpeas,
+  gnome-online-accounts,
+  gsettings-desktop-schemas,
+  evolution-data-server-gtk4,
+  libical,
+  itstool,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
   cfg = config.services.clatd;
 
-  settingsFormat = pkgs.formats.keyValue {};
+  settingsFormat = pkgs.formats.keyValue { };
 
   configFile = settingsFormat.generate "clatd.conf" cfg.settings;
 in
@@ -16,9 +21,12 @@ in
       package = mkPackageOption pkgs "clatd" { };
 
       settings = mkOption {
-        type = types.submodule ({ name, ... }: {
-          freeformType = settingsFormat.type;
-        });
+        type = types.submodule (
+          { name, ... }:
+          {
+            freeformType = settingsFormat.type;
+          }
+        );
         default = { };
         example = literalExpression ''
           {

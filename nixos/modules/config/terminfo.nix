@@ -1,6 +1,11 @@
 # This module manages the terminfo database
 # and its integration in the system.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -31,21 +36,26 @@ with lib;
     # attrNames (filterAttrs
     #  (_: drv: (builtins.tryEval (isDerivation drv && drv ? terminfo)).value)
     #  pkgs)
-    environment.systemPackages = mkIf config.environment.enableAllTerminfo (map (x: x.terminfo) (with pkgs.pkgsBuildBuild; [
-      alacritty
-      contour
-      foot
-      kitty
-      mtm
-      rio
-      rxvt-unicode-unwrapped
-      rxvt-unicode-unwrapped-emoji
-      st
-      termite
-      tmux
-      wezterm
-      yaft
-    ]));
+    environment.systemPackages = mkIf config.environment.enableAllTerminfo (
+      map (x: x.terminfo) (
+        with pkgs.pkgsBuildBuild;
+        [
+          alacritty
+          contour
+          foot
+          kitty
+          mtm
+          rio
+          rxvt-unicode-unwrapped
+          rxvt-unicode-unwrapped-emoji
+          st
+          termite
+          tmux
+          wezterm
+          yaft
+        ]
+      )
+    );
 
     environment.pathsToLink = [
       "/share/terminfo"

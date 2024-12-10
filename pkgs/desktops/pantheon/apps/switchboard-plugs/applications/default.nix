@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, libhandy
-, granite
-, gtk3
-, switchboard
-, flatpak
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libgee,
+  libhandy,
+  granite,
+  gtk3,
+  switchboard,
+  flatpak,
 }:
 
 stdenv.mkDerivation rec {

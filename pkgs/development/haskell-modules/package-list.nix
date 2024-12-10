@@ -1,4 +1,10 @@
-{ runCommand, haskellPackages, lib, all-cabal-hashes, writeShellScript }:
+{
+  runCommand,
+  haskellPackages,
+  lib,
+  all-cabal-hashes,
+  writeShellScript,
+}:
 let
   # Checks if the version looks like a Haskell PVP version which is the format
   # Hackage enforces. This will return false if the version strings is empty or
@@ -6,13 +12,16 @@ let
   # (sadly there's no good way to show something useful on hackage in this case).
   isPvpVersion = v: builtins.match "([0-9]+)(\\.[0-9]+)*" v != null;
 
-  pkgLine = name: pkg:
+  pkgLine =
+    name: pkg:
     let
       version = pkg.version or "";
     in
     lib.optionalString (isPvpVersion version && (pkg.meta.hydraPlatforms or null) != lib.platforms.none)
       ''"${name}","${version}","http://hydra.nixos.org/job/nixpkgs/trunk/haskellPackages.${name}.x86_64-linux"'';
-  all-haskellPackages = builtins.toFile "all-haskellPackages" (lib.concatStringsSep "\n" (lib.filter (x: x != "") (lib.mapAttrsToList pkgLine haskellPackages)));
+  all-haskellPackages = builtins.toFile "all-haskellPackages" (
+    lib.concatStringsSep "\n" (lib.filter (x: x != "") (lib.mapAttrsToList pkgLine haskellPackages))
+  );
 in
 runCommand "hackage-package-list" { }
   # This command will make a join between all packages on hackage and haskellPackages.*.

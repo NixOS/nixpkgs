@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, git, linux-pam, libxcb }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  git,
+  linux-pam,
+  libxcb,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ly";
@@ -14,7 +21,10 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "all" ];
   nativeBuildInputs = [ git ];
-  buildInputs = [ libxcb linux-pam ];
+  buildInputs = [
+    libxcb
+    linux-pam
+  ];
 
   installPhase = ''
     mkdir -p $out/bin

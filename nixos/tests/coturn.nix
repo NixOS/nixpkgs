@@ -1,22 +1,23 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
-  name = "coturn";
-  nodes = {
-    default = {
-      services.coturn.enable = true;
-    };
-    secretsfile = {
-      boot.postBootCommands = ''
-        echo "some-very-secret-string" > /run/coturn-secret
-      '';
-      services.coturn = {
-        enable = true;
-        static-auth-secret-file = "/run/coturn-secret";
+import ./make-test-python.nix (
+  { pkgs, ... }:
+  {
+    name = "coturn";
+    nodes = {
+      default = {
+        services.coturn.enable = true;
+      };
+      secretsfile = {
+        boot.postBootCommands = ''
+          echo "some-very-secret-string" > /run/coturn-secret
+        '';
+        services.coturn = {
+          enable = true;
+          static-auth-secret-file = "/run/coturn-secret";
+        };
       };
     };
-  };
 
-  testScript =
-    ''
+    testScript = ''
       start_all()
 
       with subtest("by default works without configuration"):
@@ -31,4 +32,5 @@ import ./make-test-python.nix ({ pkgs, ... }: {
           # allowed-peer-ip, should succeed:
           secretsfile.succeed("${pkgs.coturn}/bin/turnutils_uclient -W some-very-secret-string 192.168.1.2 -DgX -e 192.168.1.2 -n 1 -c -y")
     '';
-})
+  }
+)

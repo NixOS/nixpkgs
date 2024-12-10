@@ -1,28 +1,29 @@
-{ stdenv
-, lib
-, autoPatchelfHook
-, buildFHSEnv
-, cairo
-, dpkg
-, fetchurl
-, gcc-unwrapped
-, glib
-, glibc
-, gnome2
-, gtk2-x11
-, libGL
-, libpulseaudio
-, libSM
-, libXxf86vm
-, libX11
-, openssl_1_1
-, pango
-, SDL2
-, wrapGAppsHook3
-, xdg-utils
-, xorg
-, xorg_sys_opengl
-, zlib
+{
+  stdenv,
+  lib,
+  autoPatchelfHook,
+  buildFHSEnv,
+  cairo,
+  dpkg,
+  fetchurl,
+  gcc-unwrapped,
+  glib,
+  glibc,
+  gnome2,
+  gtk2-x11,
+  libGL,
+  libpulseaudio,
+  libSM,
+  libXxf86vm,
+  libX11,
+  openssl_1_1,
+  pango,
+  SDL2,
+  wrapGAppsHook3,
+  xdg-utils,
+  xorg,
+  xorg_sys_opengl,
+  zlib,
 }:
 let
 
@@ -94,7 +95,6 @@ let
       rm -r $out/usr
     '';
 
-
     meta = with lib; {
       description = "Launcher for RuneScape 3, the current main RuneScape";
       homepage = "https://www.runescape.com/";
@@ -107,49 +107,49 @@ let
 
 in
 
-  /*
+/*
   * We can patch the runescape launcher, but it downloads a client at runtime and checks it for changes.
   * For that we need use a buildFHSEnv.
   * FHS simulates a classic linux shell
-  */
-  buildFHSEnv {
-    name = "RuneScape";
-    targetPkgs = pkgs: [
-      runescape
-      cairo
-      dpkg
-      gcc-unwrapped
-      glib
-      glibc
-      gtk2-x11
-      libGL
-      libpulseaudio
-      libSM
-      libXxf86vm
-      libX11
-      openssl_1_1
-      pango
-      SDL2
-      xdg-utils
-      xorg.libX11
-      xorg_sys_opengl
-      zlib
-    ];
-    multiPkgs = pkgs: [ libGL ];
-    runScript = "runescape-launcher";
-    extraInstallCommands = ''
-      mkdir -p "$out/share/applications"
-      cp ${runescape}/share/applications/runescape-launcher.desktop "$out/share/applications"
-      cp -r ${runescape}/share/icons "$out/share/icons"
-      substituteInPlace "$out/share/applications/runescape-launcher.desktop" \
-        --replace "/usr/bin/runescape-launcher" "RuneScape"
-    '';
+*/
+buildFHSEnv {
+  name = "RuneScape";
+  targetPkgs = pkgs: [
+    runescape
+    cairo
+    dpkg
+    gcc-unwrapped
+    glib
+    glibc
+    gtk2-x11
+    libGL
+    libpulseaudio
+    libSM
+    libXxf86vm
+    libX11
+    openssl_1_1
+    pango
+    SDL2
+    xdg-utils
+    xorg.libX11
+    xorg_sys_opengl
+    zlib
+  ];
+  multiPkgs = pkgs: [ libGL ];
+  runScript = "runescape-launcher";
+  extraInstallCommands = ''
+    mkdir -p "$out/share/applications"
+    cp ${runescape}/share/applications/runescape-launcher.desktop "$out/share/applications"
+    cp -r ${runescape}/share/icons "$out/share/icons"
+    substituteInPlace "$out/share/applications/runescape-launcher.desktop" \
+      --replace "/usr/bin/runescape-launcher" "RuneScape"
+  '';
 
-    meta = with lib; {
-      description = "RuneScape Game Client (NXT) - Launcher for RuneScape 3";
-      homepage = "https://www.runescape.com/";
-      license = licenses.unfree;
-      maintainers = with maintainers; [ grburst ];
-      platforms = [ "x86_64-linux" ];
-    };
-  }
+  meta = with lib; {
+    description = "RuneScape Game Client (NXT) - Launcher for RuneScape 3";
+    homepage = "https://www.runescape.com/";
+    license = licenses.unfree;
+    maintainers = with maintainers; [ grburst ];
+    platforms = [ "x86_64-linux" ];
+  };
+}

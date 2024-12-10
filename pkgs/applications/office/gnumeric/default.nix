@@ -1,11 +1,23 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, perlPackages
-, goffice, gnome, wrapGAppsHook3, gtk3, bison, python3Packages
-, itstool
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  intltool,
+  perlPackages,
+  goffice,
+  gnome,
+  wrapGAppsHook3,
+  gtk3,
+  bison,
+  python3Packages,
+  itstool,
 }:
 
 let
   inherit (python3Packages) python pygobject3;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "gnumeric";
   version = "1.12.57";
 
@@ -16,13 +28,27 @@ in stdenv.mkDerivation rec {
 
   configureFlags = [ "--disable-component" ];
 
-  nativeBuildInputs = [ pkg-config intltool bison itstool wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+    bison
+    itstool
+    wrapGAppsHook3
+  ];
 
   # ToDo: optional libgda, introspection?
-  buildInputs = [
-    goffice gtk3 gnome.adwaita-icon-theme
-    python pygobject3
-  ] ++ (with perlPackages; [ perl XMLParser ]);
+  buildInputs =
+    [
+      goffice
+      gtk3
+      gnome.adwaita-icon-theme
+      python
+      pygobject3
+    ]
+    ++ (with perlPackages; [
+      perl
+      XMLParser
+    ]);
 
   enableParallelBuilding = true;
 

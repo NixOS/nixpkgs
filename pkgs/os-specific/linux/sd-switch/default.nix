@@ -1,7 +1,15 @@
-{ lib, fetchFromSourcehut, rustPlatform, pkg-config, dbus }:
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+  pkg-config,
+  dbus,
+}:
 
-let version = "0.3.0";
-in rustPlatform.buildRustPackage {
+let
+  version = "0.3.0";
+in
+rustPlatform.buildRustPackage {
   pname = "sd-switch";
   inherit version;
 

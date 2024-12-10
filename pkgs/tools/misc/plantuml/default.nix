@@ -1,9 +1,10 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, makeBinaryWrapper
-, jre
-, graphviz
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  makeBinaryWrapper,
+  jre,
+  graphviz,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -41,7 +42,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     # "plantuml -license" says GPLv3 or later
     license = lib.licenses.gpl3Plus;
     mainProgram = "plantuml";
-    maintainers = with lib.maintainers; [ bjornfor Mogria ];
+    maintainers = with lib.maintainers; [
+      bjornfor
+      Mogria
+    ];
     platforms = lib.platforms.unix;
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };

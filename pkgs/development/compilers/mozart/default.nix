@@ -1,21 +1,24 @@
-{ lib
-, fetchurl
-, fetchpatch
-, cmake
-, unzip
-, makeWrapper
-, boost
-, llvmPackages
-, gmp
-, emacs
-, jre_headless
-, tcl
-, tk
+{
+  lib,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  unzip,
+  makeWrapper,
+  boost,
+  llvmPackages,
+  gmp,
+  emacs,
+  jre_headless,
+  tcl,
+  tk,
 }:
 
-let stdenv = llvmPackages.stdenv;
+let
+  stdenv = llvmPackages.stdenv;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "mozart2";
   version = "2.0.1";
   name = "${pname}-${version}";
@@ -45,7 +48,11 @@ in stdenv.mkDerivation rec {
     cp ${bootcompiler} bootcompiler/bootcompiler.jar
   '';
 
-  nativeBuildInputs = [ cmake makeWrapper unzip ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    unzip
+  ];
 
   cmakeFlags = [
     "-DBoost_USE_STATIC_LIBS=OFF"
@@ -71,7 +78,10 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "An open source implementation of Oz 3";
-    maintainers = with maintainers; [ layus h7x4 ];
+    maintainers = with maintainers; [
+      layus
+      h7x4
+    ];
     license = licenses.bsd2;
     homepage = "https://mozart.github.io";
     platforms = platforms.all;

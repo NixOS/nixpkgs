@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, doxygen
-, wrapQtAppsHook
-, qtbase
-, dtkgui
-, qtdeclarative
-, qtquickcontrols2
-, qtgraphicaleffects
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  doxygen,
+  wrapQtAppsHook,
+  qtbase,
+  dtkgui,
+  qtdeclarative,
+  qtquickcontrols2,
+  qtgraphicaleffects,
 }:
 
 stdenv.mkDerivation rec {
@@ -60,7 +61,11 @@ stdenv.mkDerivation rec {
     export QML2_IMPORT_PATH=${qtdeclarative.bin}/${qtbase.qtQmlPrefix}
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   meta = with lib; {
     description = "A widget development toolkit based on QtQuick/QtQml";

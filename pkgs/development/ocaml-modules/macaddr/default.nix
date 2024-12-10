@@ -1,5 +1,10 @@
-{ lib, fetchurl, buildDunePackage, ocaml
-, ppx_sexp_conv, ounit2
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ocaml,
+  ppx_sexp_conv,
+  ounit2,
 }:
 
 buildDunePackage rec {
@@ -13,7 +18,10 @@ buildDunePackage rec {
     hash = "sha256-YokLMW4DV5KtKa8a2XFFbRDe/VJbdLU9sbZ/pCN1wXg=";
   };
 
-  checkInputs = [ ppx_sexp_conv ounit2 ];
+  checkInputs = [
+    ppx_sexp_conv
+    ounit2
+  ];
   doCheck = lib.versionAtLeast ocaml.version "4.08";
 
   meta = with lib; {

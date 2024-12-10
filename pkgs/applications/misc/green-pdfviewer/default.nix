@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, poppler, pkg-config, gdk-pixbuf, SDL, gtk2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  poppler,
+  pkg-config,
+  gdk-pixbuf,
+  SDL,
+  gtk2,
+}:
 
 stdenv.mkDerivation {
   pname = "green-pdfviewer";
@@ -12,7 +21,12 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ poppler gdk-pixbuf SDL gtk2 ];
+  buildInputs = [
+    poppler
+    gdk-pixbuf
+    SDL
+    gtk2
+  ];
 
   patches = [
     ./gdk-libs.patch
@@ -32,7 +46,7 @@ stdenv.mkDerivation {
     description = "Viewer for PDF files, uses SDL and libpoppler";
 
     platforms = platforms.unix;
-    license  = licenses.gpl3;
+    license = licenses.gpl3;
     maintainers = [ maintainers.vrthra ];
     mainProgram = "green";
   };

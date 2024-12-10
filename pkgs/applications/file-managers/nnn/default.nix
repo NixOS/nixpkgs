@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, makeWrapper
-, pkg-config
-, file
-, ncurses
-, readline
-, which
-, musl-fts
-, pcre
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  pkg-config,
+  file,
+  ncurses,
+  readline,
+  which,
+  musl-fts,
+  pcre,
   # options
-, conf ? null
-, withIcons ? false
-, withNerdIcons ? false
-, withEmojis ? false
-, withPcre ? false
-, extraMakeFlags ? [ ]
+  conf ? null,
+  withIcons ? false,
+  withNerdIcons ? false,
+  withEmojis ? false,
+  withPcre ? false,
+  extraMakeFlags ? [ ],
 }:
 
 # Mutually exclusive options
@@ -45,24 +46,39 @@ stdenv.mkDerivation (finalAttrs: {
   configFile = lib.optionalString (conf != null) (builtins.toFile "nnn.h" conf);
   preBuild = lib.optionalString (conf != null) "cp ${finalAttrs.configFile} src/nnn.h";
 
-  nativeBuildInputs = [ installShellFiles makeWrapper pkg-config ];
-  buildInputs = [ readline ncurses ]
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+    pkg-config
+  ];
+  buildInputs =
+    [
+      readline
+      ncurses
+    ]
     ++ lib.optional stdenv.hostPlatform.isMusl musl-fts
     ++ lib.optional withPcre pcre;
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isMusl "-I${musl-fts}/include";
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isMusl "-lfts";
 
-  makeFlags = [ "PREFIX=$(out)" ]
+  makeFlags =
+    [ "PREFIX=$(out)" ]
     ++ lib.optionals withIcons [ "O_ICONS=1" ]
     ++ lib.optionals withNerdIcons [ "O_NERD=1" ]
     ++ lib.optionals withEmojis [ "O_EMOJI=1" ]
     ++ lib.optionals withPcre [ "O_PCRE=1" ]
     ++ extraMakeFlags;
 
-  binPath = lib.makeBinPath [ file which ];
+  binPath = lib.makeBinPath [
+    file
+    which
+  ];
 
-  installTargets = [ "install" "install-desktop" ];
+  installTargets = [
+    "install"
+    "install-desktop"
+  ];
 
   postInstall = ''
     installShellCompletion --bash --name nnn.bash misc/auto-completion/bash/nnn-completion.bash

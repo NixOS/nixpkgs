@@ -1,12 +1,13 @@
-{ buildPythonApplication
-, click
-, fetchPypi
-, hypothesis
-, lib
-, poetry-core
-, pytest
-, pytestCheckHook
-, stringcase
+{
+  buildPythonApplication,
+  click,
+  fetchPypi,
+  hypothesis,
+  lib,
+  poetry-core,
+  pytest,
+  pytestCheckHook,
+  stringcase,
 }:
 
 buildPythonApplication rec {

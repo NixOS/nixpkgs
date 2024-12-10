@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, intltool
-, pkg-config
-, wrapGAppsHook3
-, gtk3
-, miniupnpc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  intltool,
+  pkg-config,
+  wrapGAppsHook3,
+  gtk3,
+  miniupnpc,
 }:
 
 stdenv.mkDerivation {

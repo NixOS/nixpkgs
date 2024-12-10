@@ -1,9 +1,10 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, libX11
-, stdenv
-, darwin
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  libX11,
+  stdenv,
+  darwin,
 }:
 
 buildGoModule rec {
@@ -19,7 +20,8 @@ buildGoModule rec {
 
   vendorHash = "sha256-09pRwsB2ycB/MK3isXZLBZDpga95SHYkNPjWWYtUuoU=";
 
-  buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa
+  buildInputs =
+    lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Cocoa
     ++ lib.optional stdenv.isLinux libX11;
 
   hardeningEnabled = [ "pie" ];

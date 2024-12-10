@@ -1,4 +1,12 @@
-{ lib, buildKodiAddon, fetchFromGitHub, future, kodi-six, simplejson, inputstreamhelper }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  future,
+  kodi-six,
+  simplejson,
+  inputstreamhelper,
+}:
 
 buildKodiAddon rec {
   pname = "orftvthek";

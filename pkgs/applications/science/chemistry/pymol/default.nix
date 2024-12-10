@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeDesktopItem
-, python3
-, python3Packages
-, netcdf
-, glew
-, glm
-, libpng
-, libxml2
-, freetype
-, msgpack
-, qt5
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeDesktopItem,
+  python3,
+  python3Packages,
+  netcdf,
+  glew,
+  glm,
+  libpng,
+  libxml2,
+  freetype,
+  msgpack,
+  qt5,
 }:
 let
   pname = "pymol";
@@ -33,7 +34,12 @@ let
       "chemical/x-xyz"
       "chemical/x-mdl-sdf"
     ];
-    categories = [ "Graphics" "Education" "Science" "Chemistry" ];
+    categories = [
+      "Graphics"
+      "Education"
+      "Science"
+      "Chemistry"
+    ];
   };
 in
 python3Packages.buildPythonApplication rec {
@@ -58,18 +64,36 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeBuildInputs = [ qt5.wrapQtAppsHook ];
-  buildInputs = [ python3Packages.numpy python3Packages.pyqt5 glew glm libpng libxml2 freetype msgpack netcdf ];
+  buildInputs = [
+    python3Packages.numpy
+    python3Packages.pyqt5
+    glew
+    glm
+    libpng
+    libxml2
+    freetype
+    msgpack
+    netcdf
+  ];
   env.NIX_CFLAGS_COMPILE = "-I ${libxml2.dev}/include/libxml2";
 
-  postInstall = with python3Packages; ''
-    wrapProgram $out/bin/pymol \
-      --prefix PYTHONPATH : ${lib.makeSearchPathOutput "lib" python3.sitePackages [ pyqt5 pyqt5.pyqt5-sip ]}
+  postInstall =
+    with python3Packages;
+    ''
+      wrapProgram $out/bin/pymol \
+        --prefix PYTHONPATH : ${
+          lib.makeSearchPathOutput "lib" python3.sitePackages [
+            pyqt5
+            pyqt5.pyqt5-sip
+          ]
+        }
 
-    mkdir -p "$out/share/icons/"
-    ln -s $out/${python3.sitePackages}/pymol/pymol_path/data/pymol/icons/icon2.svg "$out/share/icons/pymol.svg"
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-    cp -r "${desktopItem}/share/applications/" "$out/share/"
-  '';
+      mkdir -p "$out/share/icons/"
+      ln -s $out/${python3.sitePackages}/pymol/pymol_path/data/pymol/icons/icon2.svg "$out/share/icons/pymol.svg"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      cp -r "${desktopItem}/share/applications/" "$out/share/"
+    '';
 
   pythonImportsCheck = [
     "pymol"
@@ -116,6 +140,9 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "pymol";
     homepage = "https://www.pymol.org/";
     license = licenses.mit;
-    maintainers = with maintainers; [ natsukium samlich ];
+    maintainers = with maintainers; [
+      natsukium
+      samlich
+    ];
   };
 }

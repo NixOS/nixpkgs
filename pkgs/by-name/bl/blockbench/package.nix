@@ -7,7 +7,7 @@
   imagemagick,
   copyDesktopItems,
   makeDesktopItem,
-  electron
+  electron,
 }:
 
 let

@@ -1,14 +1,15 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, wrapQtAppsHook
-, qtbase
-, kwin
-, kcmutils
-, libepoxy
-, libxcb
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  wrapQtAppsHook,
+  qtbase,
+  kwin,
+  kcmutils,
+  libepoxy,
+  libxcb,
+  lib,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,8 +23,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-g7gNFv4/ighfxYz/VXF5KvcoT6t4lT5soDLlV3oAKvc=";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules wrapQtAppsHook ];
-  buildInputs = [ kcmutils kwin libepoxy libxcb qtbase ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    kcmutils
+    kwin
+    libepoxy
+    libxcb
+    qtbase
+  ];
 
   meta = with lib; {
     description = "Rounds the corners of your windows";

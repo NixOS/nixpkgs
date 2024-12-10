@@ -1,27 +1,28 @@
-{ lib
-, writeScriptBin
-, bash
-, stdenv
-, fetchFromGitHub
-, fpc
-, lazarus-qt
-, wrapQtAppsHook
-, breeze-qt5
-, libGL
-, libGLU
-, libqt5pas
-, libX11
-, coreutils
-, git
-, gnugrep
-, libnotify
-, polkit
-, procps
-, systemd
-, util-linux
-, vulkan-tools
-, which
-, nix-update-script
+{
+  lib,
+  writeScriptBin,
+  bash,
+  stdenv,
+  fetchFromGitHub,
+  fpc,
+  lazarus-qt,
+  wrapQtAppsHook,
+  breeze-qt5,
+  libGL,
+  libGLU,
+  libqt5pas,
+  libX11,
+  coreutils,
+  git,
+  gnugrep,
+  libnotify,
+  polkit,
+  procps,
+  systemd,
+  util-linux,
+  vulkan-tools,
+  which,
+  nix-update-script,
 }:
 
 let
@@ -36,7 +37,8 @@ let
       fi
     done
   '';
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "goverlay";
   version = "0.7.1";
 
@@ -47,7 +49,10 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-oXkGrMHjs8uui0pzGYW8jnttet/5IX0r8eat0n5saFk=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   patches = [
     # Find MangoHud & vkBasalt Vulkan layers using the XDG Base Directory Specification
@@ -85,20 +90,22 @@ in stdenv.mkDerivation rec {
   '';
 
   qtWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [
-      bash
-      coreutils
-      find-xdg-data-files
-      git
-      gnugrep
-      libnotify
-      polkit
-      procps
-      systemd
-      util-linux.bin
-      vulkan-tools
-      which
-    ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        bash
+        coreutils
+        find-xdg-data-files
+        git
+        gnugrep
+        libnotify
+        polkit
+        procps
+        systemd
+        util-linux.bin
+        vulkan-tools
+        which
+      ]
+    }"
 
     # Force xcb since libqt5pas doesn't support Wayland
     # See https://github.com/benjamimgois/goverlay/issues/107

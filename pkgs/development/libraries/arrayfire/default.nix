@@ -1,35 +1,36 @@
-{ blas
-, boost
-, clblast
-, cmake
-, config
-, cudaPackages
-, fetchFromGitHub
-, fftw
-, fftwFloat
-, fmt_9
-, forge
-, freeimage
-, gtest
-, lapack
-, lib
-, libGL
-, mesa
-, ocl-icd
-, opencl-clhpp
-, pkg-config
-, python3
-, span-lite
-, stdenv
+{
+  blas,
+  boost,
+  clblast,
+  cmake,
+  config,
+  cudaPackages,
+  fetchFromGitHub,
+  fftw,
+  fftwFloat,
+  fmt_9,
+  forge,
+  freeimage,
+  gtest,
+  lapack,
+  lib,
+  libGL,
+  mesa,
+  ocl-icd,
+  opencl-clhpp,
+  pkg-config,
+  python3,
+  span-lite,
+  stdenv,
   # NOTE: We disable tests by default, because they cannot be run easily on
   # non-NixOS systems when either CUDA or OpenCL support is enabled (CUDA and
   # OpenCL need access to drivers that are installed outside of Nix on
   # non-NixOS systems).
-, doCheck ? false
-, cpuSupport ? true
-, cudaSupport ? config.cudaSupport
+  doCheck ? false,
+  cpuSupport ? true,
+  cudaSupport ? config.cudaSupport,
   # OpenCL needs mesa which is broken on Darwin
-, openclSupport ? !stdenv.isDarwin
+  openclSupport ? !stdenv.isDarwin,
   # This argument lets one run CUDA & OpenCL tests on non-NixOS systems by
   # telling Nix where to find the drivers. If you know the version of the
   # Nvidia driver that is installed on your system, you can do:
@@ -48,7 +49,7 @@
   #       })
   #       { libsOnly = true; };
   # }
-, nvidiaComputeDrivers ? null
+  nvidiaComputeDrivers ? null,
 }:
 
 # ArrayFire compiles with 64-bit BLAS, but some tests segfault or throw
@@ -105,32 +106,37 @@ stdenv.mkDerivation rec {
     hash = "sha256-GSUdHtvV/97RyDKy8i+ticnSlQCubGGWHg4Oo+YAr8Y=";
   };
 
-  cmakeFlags = [
-    "-DBUILD_TESTING=ON"
-    # We do not build examples, because building tests already takes long enough...
-    "-DAF_BUILD_EXAMPLES=OFF"
-    # No need to build forge, because it's a separate package
-    "-DAF_BUILD_FORGE=OFF"
-    "-DAF_COMPUTE_LIBRARY='FFTW/LAPACK/BLAS'"
-    # Prevent ArrayFire from trying to download some matrices from the Internet
-    "-DAF_TEST_WITH_MTX_FILES=OFF"
-    # Have to use the header-only version, because we're not using the version
-    # from Nixpkgs. Otherwise, libaf.so won't be able to find the shared
-    # library, because ArrayFire's CMake files do not run the install step of
-    # spdlog.
-    "-DAF_WITH_SPDLOG_HEADER_ONLY=ON"
-    (if cpuSupport then "-DAF_BUILD_CPU=ON" else "-DAF_BUILD_CPU=OFF")
-    (if openclSupport then "-DAF_BUILD_OPENCL=ON" else "-DAF_BUILD_OPENCL=OFF")
-    (if cudaSupport then "-DAF_BUILD_CUDA=ON" else "-DAF_BUILD_CUDA=OFF")
-  ] ++ lib.optionals cudaSupport [
-    # ArrayFire use deprecated FindCUDA in their CMake files, so we help CMake
-    # locate cudatoolkit.
-    "-DCUDA_LIBRARIES_PATH=${cudaPackages.cudatoolkit}/lib"
-  ];
+  cmakeFlags =
+    [
+      "-DBUILD_TESTING=ON"
+      # We do not build examples, because building tests already takes long enough...
+      "-DAF_BUILD_EXAMPLES=OFF"
+      # No need to build forge, because it's a separate package
+      "-DAF_BUILD_FORGE=OFF"
+      "-DAF_COMPUTE_LIBRARY='FFTW/LAPACK/BLAS'"
+      # Prevent ArrayFire from trying to download some matrices from the Internet
+      "-DAF_TEST_WITH_MTX_FILES=OFF"
+      # Have to use the header-only version, because we're not using the version
+      # from Nixpkgs. Otherwise, libaf.so won't be able to find the shared
+      # library, because ArrayFire's CMake files do not run the install step of
+      # spdlog.
+      "-DAF_WITH_SPDLOG_HEADER_ONLY=ON"
+      (if cpuSupport then "-DAF_BUILD_CPU=ON" else "-DAF_BUILD_CPU=OFF")
+      (if openclSupport then "-DAF_BUILD_OPENCL=ON" else "-DAF_BUILD_OPENCL=OFF")
+      (if cudaSupport then "-DAF_BUILD_CUDA=ON" else "-DAF_BUILD_CUDA=OFF")
+    ]
+    ++ lib.optionals cudaSupport [
+      # ArrayFire use deprecated FindCUDA in their CMake files, so we help CMake
+      # locate cudatoolkit.
+      "-DCUDA_LIBRARIES_PATH=${cudaPackages.cudatoolkit}/lib"
+    ];
 
   # ArrayFire have a repo with assets for the examples. Since we don't build
   # the examples anyway, remove the dependency on assets.
-  patches = [ ./no-assets.patch ./no-download.patch ];
+  patches = [
+    ./no-assets.patch
+    ./no-download.patch
+  ];
 
   postPatch = ''
     mkdir -p ./extern/af_glad-src
@@ -156,55 +162,64 @@ stdenv.mkDerivation rec {
   checkPhase =
     let
       LD_LIBRARY_PATH = builtins.concatStringsSep ":" (
-        [ "${forge}/lib" "${freeimage}/lib" ]
+        [
+          "${forge}/lib"
+          "${freeimage}/lib"
+        ]
         ++ lib.optional cudaSupport "${cudaPackages.cudatoolkit}/lib64"
         # On non-NixOS systems, help the tests find Nvidia drivers
         ++ lib.optional (nvidiaComputeDrivers != null) "${nvidiaComputeDrivers}/lib"
       );
       ctestFlags = builtins.concatStringsSep " " (
         # We have to run with "-j1" otherwise various segfaults occur on non-NixOS systems.
-        [ "--output-on-errors" "-j1" ]
+        [
+          "--output-on-errors"
+          "-j1"
+        ]
         # See https://github.com/arrayfire/arrayfire/issues/3484
         ++ lib.optional openclSupport "-E '(inverse_dense|cholesky_dense)'"
       );
     in
     ''
       export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}
-    '' +
-    # On non-NixOS systems, help the tests find Nvidia drivers
-    lib.optionalString (openclSupport && nvidiaComputeDrivers != null) ''
-      export OCL_ICD_VENDORS=${nvidiaComputeDrivers}/etc/OpenCL/vendors
-    '' + ''
+    ''
+    +
+      # On non-NixOS systems, help the tests find Nvidia drivers
+      lib.optionalString (openclSupport && nvidiaComputeDrivers != null) ''
+        export OCL_ICD_VENDORS=${nvidiaComputeDrivers}/etc/OpenCL/vendors
+      ''
+    + ''
       # Note: for debugging, enable AF_TRACE=all
       AF_PRINT_ERRORS=1 ctest ${ctestFlags}
     '';
 
-  buildInputs = [
-    blas
-    boost.dev
-    boost.out
-    clblast
-    fftw
-    fftwFloat
-    # We need fmt_9 because ArrayFire fails to compile with newer versions.
-    fmt_9
-    forge
-    freeimage
-    gtest
-    lapack
-    libGL
-    ocl-icd
-    opencl-clhpp
-    span-lite
-  ]
-  ++ lib.optionals cudaSupport [
-    cudaPackages.cudatoolkit
-    cudaPackages.cudnn
-    cudaPackages.cuda_cccl
-  ]
-  ++ lib.optionals openclSupport [
-    mesa
-  ];
+  buildInputs =
+    [
+      blas
+      boost.dev
+      boost.out
+      clblast
+      fftw
+      fftwFloat
+      # We need fmt_9 because ArrayFire fails to compile with newer versions.
+      fmt_9
+      forge
+      freeimage
+      gtest
+      lapack
+      libGL
+      ocl-icd
+      opencl-clhpp
+      span-lite
+    ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cudatoolkit
+      cudaPackages.cudnn
+      cudaPackages.cuda_cccl
+    ]
+    ++ lib.optionals openclSupport [
+      mesa
+    ];
 
   nativeBuildInputs = [
     cmake
@@ -220,6 +235,9 @@ stdenv.mkDerivation rec {
     license = licenses.bsd3;
     homepage = "https://arrayfire.com/";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ chessai twesterhout ];
+    maintainers = with maintainers; [
+      chessai
+      twesterhout
+    ];
   };
 }

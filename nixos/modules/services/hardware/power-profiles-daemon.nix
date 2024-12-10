@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.power-profiles-daemon;
@@ -27,13 +32,13 @@ in
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
 
     assertions = [
-      { assertion = !config.services.tlp.enable;
+      {
+        assertion = !config.services.tlp.enable;
         message = ''
           You have set services.power-profiles-daemon.enable = true;
           which conflicts with services.tlp.enable = true;

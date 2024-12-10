@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, autoPatchelfHook
-, fetchurl
-, glib-networking
-, glibc
-, gcc-unwrapped
-, gtk3
-, jre
-, libsecret
-, makeDesktopItem
-, webkitgtk
-, wrapGAppsHook3
-, writeScript
+{
+  lib,
+  stdenv,
+  autoPatchelfHook,
+  fetchurl,
+  glib-networking,
+  glibc,
+  gcc-unwrapped,
+  gtk3,
+  jre,
+  libsecret,
+  makeDesktopItem,
+  webkitgtk,
+  wrapGAppsHook3,
+  writeScript,
 }:
 let
   desktopItem = makeDesktopItem {
@@ -23,7 +24,10 @@ let
     categories = [ "Office" ];
   };
 
-  runtimeLibs = lib.makeLibraryPath [ gtk3 webkitgtk ];
+  runtimeLibs = lib.makeLibraryPath [
+    gtk3
+    webkitgtk
+  ];
 in
 stdenv.mkDerivation rec {
   pname = "PortfolioPerformance";
@@ -73,7 +77,12 @@ stdenv.mkDerivation rec {
     homepage = "https://www.portfolio-performance.info/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.epl10;
-    maintainers = with maintainers; [ elohmeier kilianar oyren shawn8901 ];
+    maintainers = with maintainers; [
+      elohmeier
+      kilianar
+      oyren
+      shawn8901
+    ];
     mainProgram = "portfolio";
     platforms = [ "x86_64-linux" ];
   };

@@ -1,13 +1,15 @@
-{ lib, stdenv
-, rustPlatform
-, fetchCrate
-, fetchFromGitHub
-, libiconv
-, openssl
-, pkg-config
-, Security
-, SystemConfiguration
-, IOKit
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchCrate,
+  fetchFromGitHub,
+  libiconv,
+  openssl,
+  pkg-config,
+  Security,
+  SystemConfiguration,
+  IOKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,13 +26,15 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    IOKit
-    Security
-    SystemConfiguration
-  ];
+  buildInputs =
+    lib.optionals stdenv.isLinux [
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      IOKit
+      Security
+      SystemConfiguration
+    ];
 
   # The rust program expects an environment (at build time) that points to the
   # devour-flake flake.
@@ -45,7 +49,10 @@ rustPlatform.buildRustPackage rec {
     description = "Define and build CI for Nix projects anywhere";
     homepage = "https://github.com/srid/nixci";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ srid shivaraj-bh ];
+    maintainers = with maintainers; [
+      srid
+      shivaraj-bh
+    ];
     mainProgram = "nixci";
   };
 }

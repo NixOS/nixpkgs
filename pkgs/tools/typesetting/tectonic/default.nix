@@ -6,16 +6,17 @@
     which provides a compatible version of `biber`.
 */
 
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, fontconfig
-, harfbuzz
-, openssl
-, pkg-config
-, icu
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+  fontconfig,
+  harfbuzz,
+  openssl,
+  pkg-config,
+  icu,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,18 +36,33 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "external-harfbuzz" ];
 
-  buildInputs = [ icu fontconfig harfbuzz openssl ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ ApplicationServices Cocoa Foundation ]);
+  buildInputs =
+    [
+      icu
+      fontconfig
+      harfbuzz
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        ApplicationServices
+        Cocoa
+        Foundation
+      ]
+    );
 
-  postInstall = ''
-    # Makes it possible to automatically use the V2 CLI API
-    ln -s $out/bin/tectonic $out/bin/nextonic
-  '' + lib.optionalString stdenv.isLinux ''
-    substituteInPlace dist/appimage/tectonic.desktop \
-      --replace Exec=tectonic Exec=$out/bin/tectonic
-    install -D dist/appimage/tectonic.desktop -t $out/share/applications/
-    install -D dist/appimage/tectonic.svg -t $out/share/icons/hicolor/scalable/apps/
-  '';
+  postInstall =
+    ''
+      # Makes it possible to automatically use the V2 CLI API
+      ln -s $out/bin/tectonic $out/bin/nextonic
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      substituteInPlace dist/appimage/tectonic.desktop \
+        --replace Exec=tectonic Exec=$out/bin/tectonic
+      install -D dist/appimage/tectonic.desktop -t $out/share/applications/
+      install -D dist/appimage/tectonic.svg -t $out/share/icons/hicolor/scalable/apps/
+    '';
 
   doCheck = true;
 
@@ -56,6 +72,10 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/tectonic-typesetting/tectonic/blob/tectonic@${version}/CHANGELOG.md";
     license = with licenses; [ mit ];
     mainProgram = "tectonic";
-    maintainers = with maintainers; [ lluchs doronbehar bryango ];
+    maintainers = with maintainers; [
+      lluchs
+      doronbehar
+      bryango
+    ];
   };
 }

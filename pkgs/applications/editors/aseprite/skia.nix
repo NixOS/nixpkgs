@@ -1,6 +1,22 @@
-{ stdenv, lib, fetchFromGitHub, fetchgit, python3, gn, ninja
-, fontconfig, expat, icu, libglvnd, libjpeg, libpng, libwebp, zlib
-, mesa, libX11, harfbuzzFull
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchgit,
+  python3,
+  gn,
+  ninja,
+  fontconfig,
+  expat,
+  icu,
+  libglvnd,
+  libjpeg,
+  libpng,
+  libwebp,
+  zlib,
+  mesa,
+  libX11,
+  harfbuzzFull,
 }:
 
 let
@@ -19,11 +35,24 @@ stdenv.mkDerivation {
     hash = "sha256-IlZbalmHl549uDUfPG8hlzub8TLWhG0EsV6HVAPdsl0=";
   };
 
-  nativeBuildInputs = [ python3 gn ninja ];
+  nativeBuildInputs = [
+    python3
+    gn
+    ninja
+  ];
 
   buildInputs = [
-    fontconfig expat icu libglvnd libjpeg libpng libwebp zlib
-    mesa libX11 harfbuzzFull
+    fontconfig
+    expat
+    icu
+    libglvnd
+    libjpeg
+    libpng
+    libwebp
+    zlib
+    mesa
+    libX11
+    harfbuzzFull
   ];
 
   preConfigure = with depSrcs; ''

@@ -31,5 +31,9 @@ mkKdeDerivation rec {
     rustc
   ];
 
-  extraBuildInputs = [discount corrosion alpaka];
+  extraBuildInputs = [
+    discount
+    corrosion
+    alpaka
+  ];
 }

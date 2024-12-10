@@ -52,7 +52,7 @@ stdenv.mkDerivation (attrs: {
     description = "Library for manipulating Systems Biology Markup Language (SBML)";
     homepage = "https://github.com/sbmlteam/libsbml";
     license = licenses.lgpl21Only;
-    maintainers = [maintainers.kupac];
+    maintainers = [ maintainers.kupac ];
     platforms = platforms.all;
   };
 })

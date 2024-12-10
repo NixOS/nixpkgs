@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, SDL2
-, aalib
-, alsa-lib
-, libXext
-, libXxf86vm
-, libcaca
-, libpulseaudio
-, libsndfile
-, ncurses
-, openssl
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  SDL2,
+  aalib,
+  alsa-lib,
+  libXext,
+  libXxf86vm,
+  libcaca,
+  libpulseaudio,
+  libsndfile,
+  ncurses,
+  openssl,
+  which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

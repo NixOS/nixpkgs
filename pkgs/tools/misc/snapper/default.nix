@@ -1,8 +1,28 @@
-{ lib, stdenv, fetchFromGitHub
-, autoreconfHook, pkg-config, docbook_xsl, libxslt, docbook_xml_dtd_45
-, acl, attr, boost, btrfs-progs, coreutils, dbus, diffutils, e2fsprogs, libxml2
-, lvm2, pam, util-linux, json_c, nixosTests
-, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  docbook_xsl,
+  libxslt,
+  docbook_xml_dtd_45,
+  acl,
+  attr,
+  boost,
+  btrfs-progs,
+  coreutils,
+  dbus,
+  diffutils,
+  e2fsprogs,
+  libxml2,
+  lvm2,
+  pam,
+  util-linux,
+  json_c,
+  nixosTests,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "snapper";
@@ -18,12 +38,26 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   nativeBuildInputs = [
-    autoreconfHook pkg-config
-    docbook_xsl libxslt docbook_xml_dtd_45
+    autoreconfHook
+    pkg-config
+    docbook_xsl
+    libxslt
+    docbook_xml_dtd_45
   ];
   buildInputs = [
-    acl attr boost btrfs-progs dbus diffutils e2fsprogs libxml2
-    lvm2 pam util-linux json_c ncurses
+    acl
+    attr
+    boost
+    btrfs-progs
+    dbus
+    diffutils
+    e2fsprogs
+    libxml2
+    lvm2
+    pam
+    util-linux
+    json_c
+    ncurses
   ];
 
   passthru.tests.snapper = nixosTests.snapper;
@@ -41,7 +75,7 @@ stdenv.mkDerivation rec {
   '';
 
   configureFlags = [
-    "--disable-ext4"	# requires patched kernel & e2fsprogs
+    "--disable-ext4" # requires patched kernel & e2fsprogs
     "DIFFBIN=${diffutils}/bin/diff"
     "RMBIN=${coreutils}/bin/rm"
   ];

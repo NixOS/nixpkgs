@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, perl, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  zlib,
+}:
 stdenv.mkDerivation rec {
   pname = "libeb";
   version = "4.4.3";

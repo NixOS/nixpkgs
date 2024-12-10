@@ -1,17 +1,33 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, runtimeShell, nixosTests
-, autoreconfHook, bison, flex
-, docbook_xml_dtd_45, docbook_xsl
-, itstool, libbsd, libxml2, libxslt
-, libxcrypt, pkg-config
-, glibcCross ? null
-, pam ? null
-, withTcb ? lib.meta.availableOn stdenv.hostPlatform tcb, tcb
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  runtimeShell,
+  nixosTests,
+  autoreconfHook,
+  bison,
+  flex,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  itstool,
+  libbsd,
+  libxml2,
+  libxslt,
+  libxcrypt,
+  pkg-config,
+  glibcCross ? null,
+  pam ? null,
+  withTcb ? lib.meta.availableOn stdenv.hostPlatform tcb,
+  tcb,
 }:
 let
   glibc =
-    if stdenv.hostPlatform != stdenv.buildPlatform then glibcCross
-    else assert stdenv.hostPlatform.libc == "glibc"; stdenv.cc.libc;
+    if stdenv.hostPlatform != stdenv.buildPlatform then
+      glibcCross
+    else
+      assert stdenv.hostPlatform.libc == "glibc";
+      stdenv.cc.libc;
 
 in
 
@@ -26,18 +42,32 @@ stdenv.mkDerivation rec {
     hash = "sha256-+klU1a0cSgHPwZkDnbCSjKnBUKIm2Z3OGUvR/zrqQxo=";
   };
 
-  outputs = [ "out" "su" "dev" "man" ];
+  outputs = [
+    "out"
+    "su"
+    "dev"
+    "man"
+  ];
 
   RUNTIME_SHELL = runtimeShell;
 
   nativeBuildInputs = [
-    autoreconfHook bison flex
-    docbook_xml_dtd_45 docbook_xsl
-    itstool libxml2 libxslt
+    autoreconfHook
+    bison
+    flex
+    docbook_xml_dtd_45
+    docbook_xsl
+    itstool
+    libxml2
+    libxslt
     pkg-config
   ];
 
-  buildInputs = [ libbsd libxcrypt ]
+  buildInputs =
+    [
+      libbsd
+      libxcrypt
+    ]
     ++ lib.optional (pam != null && stdenv.isLinux) pam
     ++ lib.optional withTcb tcb;
 
@@ -68,12 +98,14 @@ stdenv.mkDerivation rec {
     export shadow_cv_logdir=/var/log
   '';
 
-  configureFlags = [
-    "--enable-man"
-    "--with-group-name-max-length=32"
-    "--with-bcrypt"
-    "--with-yescrypt"
-  ] ++ lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd"
+  configureFlags =
+    [
+      "--enable-man"
+      "--with-group-name-max-length=32"
+      "--with-bcrypt"
+      "--with-yescrypt"
+    ]
+    ++ lib.optional (stdenv.hostPlatform.libc != "glibc") "--disable-nscd"
     ++ lib.optional withTcb "--with-tcb";
 
   preBuild = lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
@@ -92,7 +124,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  disallowedReferences = lib.optional (stdenv.buildPlatform != stdenv.hostPlatform) stdenv.shellPackage;
+  disallowedReferences = lib.optional (
+    stdenv.buildPlatform != stdenv.hostPlatform
+  ) stdenv.shellPackage;
 
   meta = with lib; {
     homepage = "https://github.com/shadow-maint";

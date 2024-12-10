@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, wrapGAppsHook3
-, meson
-, vala
-, pkg-config
-, ninja
-, itstool
-, clutter-gtk
-, libgee
-, libgnome-games-support
-, gnome
-, gtk3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  wrapGAppsHook3,
+  meson,
+  vala,
+  pkg-config,
+  ninja,
+  itstool,
+  clutter-gtk,
+  libgee,
+  libgnome-games-support,
+  gnome,
+  gtk3,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchsvn, zlib, gmp, ecm }:
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  zlib,
+  gmp,
+  ecm,
+}:
 
 stdenv.mkDerivation rec {
   pname = "msieve";
@@ -10,12 +17,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-cn6OhE4zhrpB7BFrRdOnucjATbfo5mLkK7O0Usx1quE=";
   };
 
-  buildInputs = [ zlib gmp ecm ];
+  buildInputs = [
+    zlib
+    gmp
+    ecm
+  ];
 
   ECM = if ecm == null then "0" else "1";
 
   # Doesn't hurt Linux but lets clang-based platforms like Darwin work fine too
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "all" ];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "all"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin/

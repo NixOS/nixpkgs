@@ -1,7 +1,34 @@
-{ stdenv, lib, fetchFromGitHub, fetchurl, fetchpatch, substituteAll, cmake, makeWrapper, pkg-config
-, curl, ffmpeg, glib, libjpeg, libselinux, libsepol, mp4v2, libmysqlclient, mariadb, pcre, perl, perlPackages
-, polkit, util-linuxMinimal, x264, zlib
-, coreutils, procps, psmisc, nixosTests }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  fetchpatch,
+  substituteAll,
+  cmake,
+  makeWrapper,
+  pkg-config,
+  curl,
+  ffmpeg,
+  glib,
+  libjpeg,
+  libselinux,
+  libsepol,
+  mp4v2,
+  libmysqlclient,
+  mariadb,
+  pcre,
+  perl,
+  perlPackages,
+  polkit,
+  util-linuxMinimal,
+  x264,
+  zlib,
+  coreutils,
+  procps,
+  psmisc,
+  nixosTests,
+}:
 
 # NOTES:
 #
@@ -51,18 +78,19 @@ let
     }
   ];
 
-  user    = "zoneminder";
+  user = "zoneminder";
   dirName = "zoneminder";
   perlBin = "${perl}/bin/perl";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "zoneminder";
   version = "1.36.35";
 
   src = fetchFromGitHub {
-    owner  = "ZoneMinder";
-    repo   = "zoneminder";
-    rev    = version;
+    owner = "ZoneMinder";
+    repo = "zoneminder";
+    rev = version;
     hash = "sha256-0mpT3qjF8zlcsd6OlNIvrabDsz+oJPPy9Vn2TQSuHAI=";
     fetchSubmodules = true;
   };
@@ -75,9 +103,11 @@ in stdenv.mkDerivation rec {
   postPatch = ''
     rm -rf web/api/lib/Cake/Test
 
-    ${lib.concatStringsSep "\n" (map (e: ''
-      cp ${e.src} ${e.path}
-    '') addons)}
+    ${lib.concatStringsSep "\n" (
+      map (e: ''
+        cp ${e.src} ${e.path}
+      '') addons
+    )}
 
     for d in scripts/ZoneMinder onvif/{modules,proxy} ; do
       substituteInPlace $d/CMakeLists.txt \
@@ -93,7 +123,13 @@ in stdenv.mkDerivation rec {
              scripts/ZoneMinder/lib/ZoneMinder/Memory.pm.in ; do
       substituteInPlace $f \
         --replace '/usr/bin/perl' '${perlBin}' \
-        --replace '/bin:/usr/bin' "$out/bin:${lib.makeBinPath [ coreutils procps psmisc ]}"
+        --replace '/bin:/usr/bin' "$out/bin:${
+          lib.makeBinPath [
+            coreutils
+            procps
+            psmisc
+          ]
+        }"
     done
 
     substituteInPlace scripts/zmdbbackup.in \
@@ -127,18 +163,50 @@ in stdenv.mkDerivation rec {
       --subst-var-by srcHash "`basename $out`"
   '';
 
-  buildInputs = [
-    curl ffmpeg glib libjpeg libselinux libsepol mp4v2 libmysqlclient mariadb pcre perl polkit x264 zlib
-    util-linuxMinimal # for libmount
-  ] ++ (with perlPackages; [
-    # build-time dependencies
-    DateManip DBI DBDmysql LWP SysMmap
-    # run-time dependencies not checked at build-time
-    ClassStdFast DataDump DeviceSerialPort JSONMaybeXS LWPProtocolHttps NumberBytesHuman SysCPU SysMemInfo TimeDate
-    CryptEksblowfish DataEntropy # zmupdate.pl
-  ]);
+  buildInputs =
+    [
+      curl
+      ffmpeg
+      glib
+      libjpeg
+      libselinux
+      libsepol
+      mp4v2
+      libmysqlclient
+      mariadb
+      pcre
+      perl
+      polkit
+      x264
+      zlib
+      util-linuxMinimal # for libmount
+    ]
+    ++ (with perlPackages; [
+      # build-time dependencies
+      DateManip
+      DBI
+      DBDmysql
+      LWP
+      SysMmap
+      # run-time dependencies not checked at build-time
+      ClassStdFast
+      DataDump
+      DeviceSerialPort
+      JSONMaybeXS
+      LWPProtocolHttps
+      NumberBytesHuman
+      SysCPU
+      SysMemInfo
+      TimeDate
+      CryptEksblowfish
+      DataEntropy # zmupdate.pl
+    ]);
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    pkg-config
+  ];
 
   cmakeFlags = [
     "-DWITH_SYSTEMD=ON"

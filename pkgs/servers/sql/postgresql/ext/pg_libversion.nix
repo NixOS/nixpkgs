@@ -1,10 +1,11 @@
- { lib
-, stdenv
-, fetchFromGitHub
-, gitUpdater
-, pkg-config
-, postgresql
-, libversion
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  pkg-config,
+  postgresql,
+  libversion,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,4 +48,3 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = postgresql.meta.platforms;
   };
 })
-

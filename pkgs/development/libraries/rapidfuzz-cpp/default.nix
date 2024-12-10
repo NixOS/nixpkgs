@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, catch2_3
-, python3Packages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  catch2_3,
+  python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,7 +37,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      /** `python3Packages.levenshtein` crucially depends on `rapidfuzz-cpp` */
+      /**
+        `python3Packages.levenshtein` crucially depends on `rapidfuzz-cpp`
+      */
       inherit (python3Packages) levenshtein;
     };
   };

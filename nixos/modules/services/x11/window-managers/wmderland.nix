@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -55,7 +60,8 @@ in
       '';
     };
     environment.systemPackages = [
-      pkgs.wmderland pkgs.wmderlandc
+      pkgs.wmderland
+      pkgs.wmderlandc
     ] ++ cfg.extraPackages;
   };
 }

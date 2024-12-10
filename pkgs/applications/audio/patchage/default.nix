@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, alsa-lib
-, boost
-, dbus-glib
-, ganv
-, glibmm
-, gtkmm2
-, libjack2
-, pkg-config
-, python3
-, wafHook
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  alsa-lib,
+  boost,
+  dbus-glib,
+  ganv,
+  glibmm,
+  gtkmm2,
+  libjack2,
+  pkg-config,
+  python3,
+  wafHook,
 }:
 
 stdenv.mkDerivation rec {

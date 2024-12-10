@@ -1,20 +1,21 @@
-{ autoPatchelfHook
-, c-ares
-, darwin
-, expat
-, fetchurl
-, glibc
-, icu60
-, lib
-, libiconv
-, libredirect
-, libxcrypt-legacy
-, libxml2
-, makeWrapper
-, stdenv
-, unzip
-, xercesc
-, zlib
+{
+  autoPatchelfHook,
+  c-ares,
+  darwin,
+  expat,
+  fetchurl,
+  glibc,
+  icu60,
+  lib,
+  libiconv,
+  libredirect,
+  libxcrypt-legacy,
+  libxml2,
+  makeWrapper,
+  stdenv,
+  unzip,
+  xercesc,
+  zlib,
 }:
 
 let
@@ -57,23 +58,28 @@ stdenv.mkDerivation {
     inherit (ovftoolSystem) name url hash;
   };
 
-  buildInputs = [
-    c-ares
-    expat
-    icu60
-    libiconv
-    libxcrypt-legacy
-    xercesc
-    zlib
-  ] ++ lib.optionals stdenv.isLinux [
-    glibc
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.Libsystem
-    libxml2
-  ];
+  buildInputs =
+    [
+      c-ares
+      expat
+      icu60
+      libiconv
+      libxcrypt-legacy
+      xercesc
+      zlib
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      glibc
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.Libsystem
+      libxml2
+    ];
 
-  nativeBuildInputs = [ unzip makeWrapper ]
-  ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+  ] ++ lib.optionals stdenv.isLinux [ autoPatchelfHook ];
 
   postUnpack = ''
     # The linux package wraps ovftool.bin with ovftool. Wrapping
@@ -84,26 +90,28 @@ stdenv.mkDerivation {
     fi
   '';
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    # Based on https://aur.archlinux.org/packages/vmware-ovftool/
-    # with the addition of a libexec directory and a Nix-style binary wrapper.
+      # Based on https://aur.archlinux.org/packages/vmware-ovftool/
+      # with the addition of a libexec directory and a Nix-style binary wrapper.
 
-    # Almost all libs in the package appear to be VMware proprietary except for
-    # libgoogleurl and libcurl. The rest of the libraries that the installer
-    # extracts are omitted here, and provided in buildInputs. Since libcurl
-    # depends on VMware's OpenSSL, both libs are still used.
-    # FIXME: Replace libgoogleurl? Possibly from Chromium?
-    # FIXME: Tell VMware to use a modern version of OpenSSL. As of ovftool
-    # v4.6.2 ovftool uses openssl-1.0.2zh which in seems to be the extended
-    # support LTS release: https://www.openssl.org/support/contracts.html
+      # Almost all libs in the package appear to be VMware proprietary except for
+      # libgoogleurl and libcurl. The rest of the libraries that the installer
+      # extracts are omitted here, and provided in buildInputs. Since libcurl
+      # depends on VMware's OpenSSL, both libs are still used.
+      # FIXME: Replace libgoogleurl? Possibly from Chromium?
+      # FIXME: Tell VMware to use a modern version of OpenSSL. As of ovftool
+      # v4.6.2 ovftool uses openssl-1.0.2zh which in seems to be the extended
+      # support LTS release: https://www.openssl.org/support/contracts.html
 
-    # Install all libs that are not patched in preFixup.
-    # Darwin dylibs are under `lib` in the zip.
-    install -m 755 -d "$out/lib"
-    install -m 644 -t "$out/lib" \
-  '' + lib.optionalString stdenv.isLinux ''
+      # Install all libs that are not patched in preFixup.
+      # Darwin dylibs are under `lib` in the zip.
+      install -m 755 -d "$out/lib"
+      install -m 644 -t "$out/lib" \
+    ''
+    + lib.optionalString stdenv.isLinux ''
       libcrypto.so.1.0.2 \
       libcurl.so.4 \
       libgoogleurl.so.59 \
@@ -112,7 +120,8 @@ stdenv.mkDerivation {
       libvim-types.so \
       libvmacore.so \
       libvmomi.so
-  '' + lib.optionalString stdenv.isDarwin ''
+    ''
+    + lib.optionalString stdenv.isDarwin ''
       lib/libcrypto.1.0.2.dylib \
       lib/libcurl.4.dylib \
       lib/libgoogleurl.59.0.30.45.2.dylib \
@@ -121,91 +130,97 @@ stdenv.mkDerivation {
       lib/libvim-types.dylib \
       lib/libvmacore.dylib \
       lib/libvmomi.dylib
-    '' + ''
-    # Install libexec binaries
-    # ovftool expects to be run relative to certain directories, namely `env`.
-    # Place the binary and those dirs in libexec.
-    install -m 755 -d "$out/libexec"
-    install -m 755 -t "$out/libexec" ovftool
-    [ -f ovftool.bin ] && install -m 755 -t "$out/libexec" ovftool.bin
-    install -m 644 -t "$out/libexec" icudt44l.dat
+    ''
+    + ''
+      # Install libexec binaries
+      # ovftool expects to be run relative to certain directories, namely `env`.
+      # Place the binary and those dirs in libexec.
+      install -m 755 -d "$out/libexec"
+      install -m 755 -t "$out/libexec" ovftool
+      [ -f ovftool.bin ] && install -m 755 -t "$out/libexec" ovftool.bin
+      install -m 644 -t "$out/libexec" icudt44l.dat
 
-    # Install other libexec resources that need to be relative to the `ovftool`
-    # binary.
-    for subdir in "certs" "env" "env/en" "schemas/DMTF" "schemas/vmware"; do
-      install -m 755 -d "$out/libexec/$subdir"
-      install -m 644 -t "$out/libexec/$subdir" "$subdir"/*.*
-    done
+      # Install other libexec resources that need to be relative to the `ovftool`
+      # binary.
+      for subdir in "certs" "env" "env/en" "schemas/DMTF" "schemas/vmware"; do
+        install -m 755 -d "$out/libexec/$subdir"
+        install -m 644 -t "$out/libexec/$subdir" "$subdir"/*.*
+      done
 
-    # Install EULA/OSS files
-    install -m 755 -d "$out/share/licenses"
-    install -m 644 -t "$out/share/licenses" \
-      "vmware.eula" \
-      "vmware-eula.rtf" \
-      "open_source_licenses.txt"
+      # Install EULA/OSS files
+      install -m 755 -d "$out/share/licenses"
+      install -m 644 -t "$out/share/licenses" \
+        "vmware.eula" \
+        "vmware-eula.rtf" \
+        "open_source_licenses.txt"
 
-    # Install Docs
-    install -m 755 -d "$out/share/doc"
-    install -m 644 -t "$out/share/doc" "README.txt"
+      # Install Docs
+      install -m 755 -d "$out/share/doc"
+      install -m 644 -t "$out/share/doc" "README.txt"
 
-    # Install final executable
-    install -m 755 -d "$out/bin"
-    makeWrapper "$out/libexec/ovftool" "$out/bin/ovftool" \
-  '' + lib.optionalString stdenv.isLinux ''
+      # Install final executable
+      install -m 755 -d "$out/bin"
+      makeWrapper "$out/libexec/ovftool" "$out/bin/ovftool" \
+    ''
+    + lib.optionalString stdenv.isLinux ''
       --prefix LD_LIBRARY_PATH : "$out/lib"
-  '' + lib.optionalString stdenv.isDarwin ''
+    ''
+    + lib.optionalString stdenv.isDarwin ''
       --prefix DYLD_LIBRARY_PATH : "$out/lib"
-  '' + ''
-    runHook postInstall
-  '';
+    ''
+    + ''
+      runHook postInstall
+    '';
 
-  preFixup = lib.optionalString stdenv.isLinux ''
-    addAutoPatchelfSearchPath "$out/lib"
-  '' + lib.optionalString stdenv.isDarwin ''
-    change_args=()
+  preFixup =
+    lib.optionalString stdenv.isLinux ''
+      addAutoPatchelfSearchPath "$out/lib"
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      change_args=()
 
-    # Change relative @loader_path dylibs to absolute paths.
-    for lib in $out/lib/*.dylib; do
-      libname=$(basename $lib)
-      change_args+=(-change "@loader_path/lib/$libname" "$out/lib/$libname")
-    done
+      # Change relative @loader_path dylibs to absolute paths.
+      for lib in $out/lib/*.dylib; do
+        libname=$(basename $lib)
+        change_args+=(-change "@loader_path/lib/$libname" "$out/lib/$libname")
+      done
 
-    # Patches for ovftool binary
-    change_args+=(-change /usr/lib/libSystem.B.dylib ${darwin.Libsystem}/lib/libSystem.B.dylib)
-    change_args+=(-change /usr/lib/libc++.1.dylib ${stdenv.cc.libcxx}/lib/libc++.1.dylib)
-    change_args+=(-change /usr/lib/libiconv.2.dylib ${libiconv}/lib/libiconv.2.dylib)
-    change_args+=(-change /usr/lib/libxml2.2.dylib ${libxml2}/lib/libxml2.2.dylib)
-    change_args+=(-change /usr/lib/libz.1.dylib ${zlib}/lib/libz.1.dylib)
-    change_args+=(-change @loader_path/lib/libcares.2.dylib ${c-ares}/lib/libcares.2.dylib)
-    change_args+=(-change @loader_path/lib/libexpat.dylib ${expat}/lib/libexpat.dylib)
-    change_args+=(-change @loader_path/lib/libicudata.60.2.dylib ${icu60}/lib/libicudata.60.2.dylib)
-    change_args+=(-change @loader_path/lib/libicuuc.60.2.dylib ${icu60}/lib/libicuuc.60.2.dylib)
-    change_args+=(-change @loader_path/lib/libxerces-c-3.2.dylib ${xercesc}/lib/libxerces-c-3.2.dylib)
+      # Patches for ovftool binary
+      change_args+=(-change /usr/lib/libSystem.B.dylib ${darwin.Libsystem}/lib/libSystem.B.dylib)
+      change_args+=(-change /usr/lib/libc++.1.dylib ${stdenv.cc.libcxx}/lib/libc++.1.dylib)
+      change_args+=(-change /usr/lib/libiconv.2.dylib ${libiconv}/lib/libiconv.2.dylib)
+      change_args+=(-change /usr/lib/libxml2.2.dylib ${libxml2}/lib/libxml2.2.dylib)
+      change_args+=(-change /usr/lib/libz.1.dylib ${zlib}/lib/libz.1.dylib)
+      change_args+=(-change @loader_path/lib/libcares.2.dylib ${c-ares}/lib/libcares.2.dylib)
+      change_args+=(-change @loader_path/lib/libexpat.dylib ${expat}/lib/libexpat.dylib)
+      change_args+=(-change @loader_path/lib/libicudata.60.2.dylib ${icu60}/lib/libicudata.60.2.dylib)
+      change_args+=(-change @loader_path/lib/libicuuc.60.2.dylib ${icu60}/lib/libicuuc.60.2.dylib)
+      change_args+=(-change @loader_path/lib/libxerces-c-3.2.dylib ${xercesc}/lib/libxerces-c-3.2.dylib)
 
-    # Patch binary
-    install_name_tool "''${change_args[@]}" "$out/libexec/ovftool"
+      # Patch binary
+      install_name_tool "''${change_args[@]}" "$out/libexec/ovftool"
 
-    # Additional patches for ovftool dylibs
-    change_args+=(-change /usr/lib/libresolv.9.dylib ${darwin.Libsystem}/lib/libresolv.9.dylib)
-    change_args+=(-change @loader_path/libcares.2.dylib ${c-ares}/lib/libcares.2.dylib)
-    change_args+=(-change @loader_path/libexpat.dylib ${expat}/lib/libexpat.dylib)
-    change_args+=(-change @loader_path/libicudata.60.2.dylib ${icu60}/lib/libicudata.60.2.dylib)
-    change_args+=(-change @loader_path/libicuuc.60.2.dylib ${icu60}/lib/libicuuc.60.2.dylib)
-    change_args+=(-change @loader_path/libxerces-c-3.2.dylib ${xercesc}/lib/libxerces-c-3.2.dylib)
+      # Additional patches for ovftool dylibs
+      change_args+=(-change /usr/lib/libresolv.9.dylib ${darwin.Libsystem}/lib/libresolv.9.dylib)
+      change_args+=(-change @loader_path/libcares.2.dylib ${c-ares}/lib/libcares.2.dylib)
+      change_args+=(-change @loader_path/libexpat.dylib ${expat}/lib/libexpat.dylib)
+      change_args+=(-change @loader_path/libicudata.60.2.dylib ${icu60}/lib/libicudata.60.2.dylib)
+      change_args+=(-change @loader_path/libicuuc.60.2.dylib ${icu60}/lib/libicuuc.60.2.dylib)
+      change_args+=(-change @loader_path/libxerces-c-3.2.dylib ${xercesc}/lib/libxerces-c-3.2.dylib)
 
-    # Add new abolute paths for other libs to all libs
-    for lib in $out/lib/*.dylib; do
-      libname=$(basename $lib)
-      change_args+=(-change "@loader_path/$libname" "$out/lib/$libname")
-    done
+      # Add new abolute paths for other libs to all libs
+      for lib in $out/lib/*.dylib; do
+        libname=$(basename $lib)
+        change_args+=(-change "@loader_path/$libname" "$out/lib/$libname")
+      done
 
-    # Patch all libs
-    for lib in $out/lib/*.dylib; do
-      libname=$(basename $lib)
-      install_name_tool -id "$libname" "$lib"
-      install_name_tool "''${change_args[@]}" "$lib"
-    done
-  '';
+      # Patch all libs
+      for lib in $out/lib/*.dylib; do
+        libname=$(basename $lib)
+        install_name_tool -id "$libname" "$lib"
+        install_name_tool "''${change_args[@]}" "$lib"
+      done
+    '';
 
   # These paths are need for install check tests
   propagatedSandboxProfile = lib.optionalString stdenv.isDarwin ''
@@ -216,42 +231,48 @@ stdenv.mkDerivation {
 
   doInstallCheck = true;
 
-  postInstallCheck = lib.optionalString stdenv.isDarwin ''
-    export HOME=$TMPDIR
-    # Construct a dummy /etc/passwd file - ovftool attempts to determine the
-    # user's "real" home using this
-    DUMMY_PASSWD="$(realpath $HOME/dummy-passwd)"
-    cat > $DUMMY_PASSWD <<EOF
-    $(whoami)::$(id -u):$(id -g)::$HOME:$SHELL
-    EOF
-    export DYLD_INSERT_LIBRARIES="${libredirect}/lib/libredirect.dylib"
-    export NIX_REDIRECTS="/etc/passwd=$DUMMY_PASSWD"
-  '' + ''
-    mkdir -p ovftool-check && cd ovftool-check
+  postInstallCheck =
+    lib.optionalString stdenv.isDarwin ''
+      export HOME=$TMPDIR
+      # Construct a dummy /etc/passwd file - ovftool attempts to determine the
+      # user's "real" home using this
+      DUMMY_PASSWD="$(realpath $HOME/dummy-passwd)"
+      cat > $DUMMY_PASSWD <<EOF
+      $(whoami)::$(id -u):$(id -g)::$HOME:$SHELL
+      EOF
+      export DYLD_INSERT_LIBRARIES="${libredirect}/lib/libredirect.dylib"
+      export NIX_REDIRECTS="/etc/passwd=$DUMMY_PASSWD"
+    ''
+    + ''
+      mkdir -p ovftool-check && cd ovftool-check
 
-    ovftool_with_args="$out/bin/ovftool --X:logToConsole"
+      ovftool_with_args="$out/bin/ovftool --X:logToConsole"
 
-    # `installCheckPhase.ova` is a NixOS 22.11 image (doesn't actually matter)
-    # with a 1 MiB root disk that's all zero. Make sure that it converts
-    # properly.
+      # `installCheckPhase.ova` is a NixOS 22.11 image (doesn't actually matter)
+      # with a 1 MiB root disk that's all zero. Make sure that it converts
+      # properly.
 
-    $ovftool_with_args --schemaValidate ${./installCheckPhase.ova}
-    $ovftool_with_args --sourceType=OVA --targetType=OVF ${./installCheckPhase.ova} nixos.ovf
+      $ovftool_with_args --schemaValidate ${./installCheckPhase.ova}
+      $ovftool_with_args --sourceType=OVA --targetType=OVF ${./installCheckPhase.ova} nixos.ovf
 
-    # Test that the output files are there
-    test -f nixos.ovf
-    test -f nixos.mf
-    test -f nixos-disk1.vmdk
+      # Test that the output files are there
+      test -f nixos.ovf
+      test -f nixos.mf
+      test -f nixos-disk1.vmdk
 
-    $ovftool_with_args --schemaValidate nixos.ovf
-  '';
+      $ovftool_with_args --schemaValidate nixos.ovf
+    '';
 
   meta = with lib; {
     description = "VMware tools for working with OVF, OVA, and VMX images";
     homepage = "https://developer.vmware.com/web/tool/ovf-tool/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ numinit wolfangaukang thanegill ];
+    maintainers = with maintainers; [
+      numinit
+      wolfangaukang
+      thanegill
+    ];
     platforms = builtins.attrNames ovftoolSystems;
     mainProgram = "ovftool";
     knownVulnerabilities = [

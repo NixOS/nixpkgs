@@ -1,10 +1,11 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, just
-, pop-icon-theme
-, hicolor-icon-theme
-, unstableGitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  just,
+  pop-icon-theme,
+  hicolor-icon-theme,
+  unstableGitUpdater,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "cosmic-icons";

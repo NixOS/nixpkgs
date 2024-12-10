@@ -1,27 +1,29 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook3
-, atk
-, cairo
-, gdk-pixbuf
-, glib
-, gtk3
-, libsecret
-, libxkbcommon
-, openssl
-, pango
-, sqlite
-, vulkan-loader
-, stdenv
-, darwin
-, wayland
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook3,
+  atk,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libsecret,
+  libxkbcommon,
+  openssl,
+  pango,
+  sqlite,
+  vulkan-loader,
+  stdenv,
+  darwin,
+  wayland,
 }:
 
 let
   commitDate = "2024-04-30";
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "cosmic-tasks";
   version = "0-unstable-${commitDate}";
 
@@ -60,34 +62,42 @@ in rustPlatform.buildRustPackage rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    atk
-    cairo
-    gdk-pixbuf
-    glib
-    gtk3
-    libsecret
-    libxkbcommon
-    openssl
-    pango
-    sqlite
-    vulkan-loader
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.CoreGraphics
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.Foundation
-    darwin.apple_sdk.frameworks.Metal
-    darwin.apple_sdk.frameworks.QuartzCore
-    darwin.apple_sdk.frameworks.Security
-  ] ++ lib.optionals stdenv.isLinux [
-    wayland
-  ];
+  buildInputs =
+    [
+      atk
+      cairo
+      gdk-pixbuf
+      glib
+      gtk3
+      libsecret
+      libxkbcommon
+      openssl
+      pango
+      sqlite
+      vulkan-loader
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.CoreFoundation
+      darwin.apple_sdk.frameworks.CoreGraphics
+      darwin.apple_sdk.frameworks.CoreServices
+      darwin.apple_sdk.frameworks.Foundation
+      darwin.apple_sdk.frameworks.Metal
+      darwin.apple_sdk.frameworks.QuartzCore
+      darwin.apple_sdk.frameworks.Security
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      wayland
+    ];
 
   postFixup = lib.optionalString stdenv.isLinux ''
     wrapProgram $out/bin/cosmic-tasks \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libxkbcommon wayland ]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          libxkbcommon
+          wayland
+        ]
+      }"
   '';
 
   meta = with lib; {

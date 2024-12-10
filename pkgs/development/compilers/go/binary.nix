@@ -1,18 +1,26 @@
-{ lib, stdenv, fetchurl, version, hashes, autoPatchelfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  version,
+  hashes,
+  autoPatchelfHook,
+}:
 let
-  toGoKernel = platform:
-    if platform.isDarwin then "darwin"
-    else platform.parsed.kernel.name;
+  toGoKernel = platform: if platform.isDarwin then "darwin" else platform.parsed.kernel.name;
 
-  toGoCPU = platform: {
-    "i686" = "386";
-    "x86_64" = "amd64";
-    "aarch64" = "arm64";
-    "armv6l" = "armv6l";
-    "armv7l" = "armv6l";
-    "powerpc64le" = "ppc64le";
-    "riscv64" = "riscv64";
-  }.${platform.parsed.cpu.name} or (throw "Unsupported CPU ${platform.parsed.cpu.name}");
+  toGoCPU =
+    platform:
+    {
+      "i686" = "386";
+      "x86_64" = "amd64";
+      "aarch64" = "arm64";
+      "armv6l" = "armv6l";
+      "armv7l" = "armv6l";
+      "powerpc64le" = "ppc64le";
+      "riscv64" = "riscv64";
+    }
+    .${platform.parsed.cpu.name} or (throw "Unsupported CPU ${platform.parsed.cpu.name}");
 
   toGoPlatform = platform: "${toGoKernel platform}-${toGoCPU platform}";
 

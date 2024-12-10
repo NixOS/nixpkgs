@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, protobuf
-, rustPlatform
-, pkg-config
-, openssl
-, extra-cmake-modules
-, fontconfig
-, rust-jemalloc-sys
-, testers
-, turbo
-, nix-update-script
-, IOKit
-, CoreServices
-, CoreFoundation
-, capnproto
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  protobuf,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  extra-cmake-modules,
+  fontconfig,
+  rust-jemalloc-sys,
+  testers,
+  turbo,
+  nix-update-script,
+  IOKit,
+  CoreServices,
+  CoreFoundation,
+  capnproto,
 }:
-rustPlatform.buildRustPackage rec{
+rustPlatform.buildRustPackage rec {
   pname = "turbo-unwrapped";
   version = "1.13.2";
   src = fetchFromGitHub {
@@ -43,22 +44,27 @@ rustPlatform.buildRustPackage rec{
     protobuf
     capnproto
   ];
-  buildInputs = [
-    openssl
-    fontconfig
-    rust-jemalloc-sys
-  ] ++ lib.optionals stdenv.isDarwin [
+  buildInputs =
+    [
+      openssl
+      fontconfig
+      rust-jemalloc-sys
+    ]
+    ++ lib.optionals stdenv.isDarwin [
       IOKit
       CoreServices
       CoreFoundation
-  ];
+    ];
 
   # Browser tests time out with chromium and google-chrome
   doCheck = false;
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex" "^\d+\.\d+\.\d+$" ];
+      extraArgs = [
+        "--version-regex"
+        "^\d+\.\d+\.\d+$"
+      ];
     };
     tests.version = testers.testVersion { package = turbo; };
   };

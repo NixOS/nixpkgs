@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "messagelib";
 
-  extraPropagatedBuildInputs = [qtwebengine];
+  extraPropagatedBuildInputs = [ qtwebengine ];
 }

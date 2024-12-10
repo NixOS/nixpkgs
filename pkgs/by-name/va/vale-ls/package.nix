@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, rustPlatform
-, pkg-config
-, openssl
-, darwin
-, vale
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  darwin,
+  vale,
 }:
 
 rustPlatform.buildRustPackage {
@@ -26,20 +27,27 @@ rustPlatform.buildRustPackage {
     makeWrapper
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    SystemConfiguration
-  ]);
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        SystemConfiguration
+      ]
+    );
 
-  checkFlags = [
-    # The following tests are reaching to the network.
-    "--skip=vale::tests"
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
-    # This test does not account for the existence of aarch64-linux machines,
-    # despite upstream shipping artifacts for that architecture
-    "--skip=utils::tests::arch"
-  ];
+  checkFlags =
+    [
+      # The following tests are reaching to the network.
+      "--skip=vale::tests"
+    ]
+    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+      # This test does not account for the existence of aarch64-linux machines,
+      # despite upstream shipping artifacts for that architecture
+      "--skip=utils::tests::arch"
+    ];
 
   env.OPENSSL_NO_VENDOR = true;
 
@@ -55,7 +63,9 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/errata-ai/vale-ls";
     license = licenses.mit;
     mainProgram = "vale-ls";
-    maintainers = with maintainers; [ foo-dogsquared jansol ];
+    maintainers = with maintainers; [
+      foo-dogsquared
+      jansol
+    ];
   };
 }
-

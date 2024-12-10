@@ -80,40 +80,43 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    binutils
-    boost179
-    cereal
-    cgal_5
-    curl
-    dbus
-    eigen
-    expat
-    gcc-unwrapped
-    glew
-    glfw
-    glib
-    glib-networking
-    gmp
-    gstreamer
-    gst-plugins-base
-    gst-plugins-bad
-    gst-plugins-good
-    gtk3
-    hicolor-icon-theme
-    ilmbase
-    libpng
-    mesa.osmesa
-    mpfr
-    nlopt
-    opencascade-occt
-    openvdb_tbb_2021_8
-    pcre
-    tbb_2021_11
-    webkitgtk
-    wxGTK31'
-    xorg.libX11
-  ] ++ lib.optionals withSystemd [ systemd ] ++ checkInputs;
+  buildInputs =
+    [
+      binutils
+      boost179
+      cereal
+      cgal_5
+      curl
+      dbus
+      eigen
+      expat
+      gcc-unwrapped
+      glew
+      glfw
+      glib
+      glib-networking
+      gmp
+      gstreamer
+      gst-plugins-base
+      gst-plugins-bad
+      gst-plugins-good
+      gtk3
+      hicolor-icon-theme
+      ilmbase
+      libpng
+      mesa.osmesa
+      mpfr
+      nlopt
+      opencascade-occt
+      openvdb_tbb_2021_8
+      pcre
+      tbb_2021_11
+      webkitgtk
+      wxGTK31'
+      xorg.libX11
+    ]
+    ++ lib.optionals withSystemd [ systemd ]
+    ++ checkInputs;
 
   patches = [
     # Fix for webkitgtk linking

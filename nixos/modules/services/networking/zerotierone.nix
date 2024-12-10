@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -11,7 +16,7 @@ in
   options.services.zerotierone.enable = mkEnableOption "ZeroTierOne";
 
   options.services.zerotierone.joinNetworks = mkOption {
-    default = [];
+    default = [ ];
     example = [ "a8a2c3c10c1a68de" ];
     type = types.listOf types.str;
     description = ''
@@ -54,22 +59,25 @@ in
 
       path = [ cfg.package ];
 
-      preStart = ''
-        mkdir -p /var/lib/zerotier-one/networks.d
-        chmod 700 /var/lib/zerotier-one
-        chown -R root:root /var/lib/zerotier-one
-      '' + (concatMapStrings (netId: ''
-        touch "/var/lib/zerotier-one/networks.d/${netId}.conf"
-      '') cfg.joinNetworks) + optionalString (cfg.localConf != null) ''
-        if [ -L "${localConfFilePath}" ]
-        then
-          rm ${localConfFilePath}
-        elif [ -f "${localConfFilePath}" ]
-        then
-          mv ${localConfFilePath} ${localConfFilePath}.bak
-        fi
-        ln -s ${localConfFile} ${localConfFilePath}
-      '';
+      preStart =
+        ''
+          mkdir -p /var/lib/zerotier-one/networks.d
+          chmod 700 /var/lib/zerotier-one
+          chown -R root:root /var/lib/zerotier-one
+        ''
+        + (concatMapStrings (netId: ''
+          touch "/var/lib/zerotier-one/networks.d/${netId}.conf"
+        '') cfg.joinNetworks)
+        + optionalString (cfg.localConf != null) ''
+          if [ -L "${localConfFilePath}" ]
+          then
+            rm ${localConfFilePath}
+          elif [ -f "${localConfFilePath}" ]
+          then
+            mv ${localConfFilePath} ${localConfFilePath}.bak
+          fi
+          ln -s ${localConfFile} ${localConfFilePath}
+        '';
 
       serviceConfig = {
         ExecStart = "${cfg.package}/bin/zerotier-one -p${toString cfg.port}";

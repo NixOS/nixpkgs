@@ -1,27 +1,28 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
 
-, withLibei ? true
+  withLibei ? true,
 
-, avahi
-, curl
-, libICE
-, libSM
-, libX11
-, libXdmcp
-, libXext
-, libXinerama
-, libXrandr
-, libXtst
-, libei
-, libportal
-, openssl
-, pkg-config
-, qtbase
-, qttools
-, wrapGAppsHook3
+  avahi,
+  curl,
+  libICE,
+  libSM,
+  libX11,
+  libXdmcp,
+  libXext,
+  libXinerama,
+  libXrandr,
+  libXtst,
+  libei,
+  libportal,
+  openssl,
+  pkg-config,
+  qtbase,
+  qttools,
+  wrapGAppsHook3,
 }:
 
 mkDerivation rec {
@@ -36,11 +37,30 @@ mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ pkg-config cmake wrapGAppsHook3 qttools ];
-  buildInputs = [
-    curl qtbase avahi
-    libX11 libXext libXtst libXinerama libXrandr libXdmcp libICE libSM
-  ] ++ lib.optionals withLibei [ libei libportal ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    wrapGAppsHook3
+    qttools
+  ];
+  buildInputs =
+    [
+      curl
+      qtbase
+      avahi
+      libX11
+      libXext
+      libXtst
+      libXinerama
+      libXrandr
+      libXdmcp
+      libICE
+      libSM
+    ]
+    ++ lib.optionals withLibei [
+      libei
+      libportal
+    ];
 
   cmakeFlags = [
     "-DINPUTLEAP_REVISION=${builtins.substring 0 8 src.rev}"
@@ -71,7 +91,12 @@ mkDerivation rec {
     '';
     homepage = "https://github.com/input-leap/input-leap";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ kovirobi phryneas twey shymega ];
+    maintainers = with lib.maintainers; [
+      kovirobi
+      phryneas
+      twey
+      shymega
+    ];
     platforms = lib.platforms.linux;
   };
 }

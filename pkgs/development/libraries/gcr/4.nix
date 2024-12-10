@@ -1,34 +1,40 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, gettext
-, gnupg
-, p11-kit
-, glib
-, libgcrypt
-, libtasn1
-, gtk4
-, pango
-, libsecret
-, openssh
-, systemd
-, gobject-introspection
-, wrapGAppsHook4
-, vala
-, gi-docgen
-, gnome
-, python3
-, shared-mime-info
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  gettext,
+  gnupg,
+  p11-kit,
+  glib,
+  libgcrypt,
+  libtasn1,
+  gtk4,
+  pango,
+  libsecret,
+  openssh,
+  systemd,
+  gobject-introspection,
+  wrapGAppsHook4,
+  vala,
+  gi-docgen,
+  gnome,
+  python3,
+  shared-mime-info,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gcr";
   version = "4.3.0";
 
-  outputs = [ "out" "bin" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

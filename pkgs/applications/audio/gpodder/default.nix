@@ -1,15 +1,16 @@
-{ lib
-, fetchFromGitHub
-, gitUpdater
-, glibcLocales
-, gnome
-, gobject-introspection
-, gtk3
-, intltool
-, python3
-, python3Packages
-, wrapGAppsHook3
-, xdg-utils
+{
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  glibcLocales,
+  gnome,
+  gobject-introspection,
+  gtk3,
+  intltool,
+  python3,
+  python3Packages,
+  wrapGAppsHook3,
+  xdg-utils,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -84,7 +85,7 @@ python3Packages.buildPythonApplication rec {
 
   makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}" ];
 
-  passthru.updateScript = gitUpdater {};
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "A podcatcher written in python";

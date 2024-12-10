@@ -1,4 +1,10 @@
-{ qtModule, stdenv, lib, qtbase, systemd }:
+{
+  qtModule,
+  stdenv,
+  lib,
+  qtbase,
+  systemd,
+}:
 
 qtModule {
   pname = "qtserialport";

@@ -1,17 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, libebml }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libebml,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libmatroska";
   version = "1.7.1";
 
   src = fetchFromGitHub {
-    owner  = "Matroska-Org";
-    repo   = "libmatroska";
-    rev    = "release-${version}";
+    owner = "Matroska-Org";
+    repo = "libmatroska";
+    rev = "release-${version}";
     sha256 = "sha256-hfu3Q1lIyMlWFWUM2Pu70Hie0rlQmua7Kq8kSIWnfHE=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   buildInputs = [ libebml ];
 

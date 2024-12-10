@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libmd";
@@ -23,7 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://archive.hadrons.org/software/libmd/libmd-${finalAttrs.version}.announce";
     # Git: https://git.hadrons.org/cgit/libmd.git
     description = "Message Digest functions from BSD systems";
-    license = with licenses; [ bsd3 bsd2 isc beerware publicDomain ];
+    license = with licenses; [
+      bsd3
+      bsd2
+      isc
+      beerware
+      publicDomain
+    ];
     maintainers = with maintainers; [ primeos ];
     platforms = platforms.unix;
   };

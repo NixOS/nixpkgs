@@ -13,7 +13,11 @@ mkKdeDerivation rec {
     hash = "sha256-m8rBPa+YcF4vDVsGshoahpSWIHj84b9iDbvDZIc6Dv4=";
   };
 
-  extraBuildInputs = [qtpositioning];
+  extraBuildInputs = [ qtpositioning ];
 
-  meta.license = with lib.licenses; [cc-by-40 cc0 lgpl2Plus];
+  meta.license = with lib.licenses; [
+    cc-by-40
+    cc0
+    lgpl2Plus
+  ];
 }

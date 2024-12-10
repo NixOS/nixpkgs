@@ -1,24 +1,26 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, beautifulsoup4
-, boto3
-, configparser
-, filelock
-, keyring
-, keyrings-alt
-, lxml
-, pillow
-, requests
-, six
-, tabulate
-, tzlocal
-, nose
-, mock
-, setuptools
-, aws-google-auth
-, testers
-, withU2F ? false, python-u2flib-host
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  beautifulsoup4,
+  boto3,
+  configparser,
+  filelock,
+  keyring,
+  keyrings-alt,
+  lxml,
+  pillow,
+  requests,
+  six,
+  tabulate,
+  tzlocal,
+  nose,
+  mock,
+  setuptools,
+  aws-google-auth,
+  testers,
+  withU2F ? false,
+  python-u2flib-host,
 }:
 
 buildPythonApplication rec {

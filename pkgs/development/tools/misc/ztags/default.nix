@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, scdoc
-, zig_0_11
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  scdoc,
+  zig_0_11,
 }:
 
 stdenv.mkDerivation {

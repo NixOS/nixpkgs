@@ -1,16 +1,22 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
 
   cfg = config.services.lighthouse;
-in {
+in
+{
 
   options = {
     services.lighthouse = {
       beacon = mkOption {
         description = "Beacon node";
-        default = {};
+        default = { };
         type = types.submodule {
           options = {
             enable = lib.mkEnableOption "Lightouse Beacon node";
@@ -135,7 +141,7 @@ in {
 
       validator = mkOption {
         description = "Validator node";
-        default = {};
+        default = { };
         type = types.submodule {
           options = {
             enable = mkOption {
@@ -154,7 +160,7 @@ in {
 
             beaconNodes = mkOption {
               type = types.listOf types.str;
-              default = ["http://localhost:5052"];
+              default = [ "http://localhost:5052" ];
               description = ''
                 Beacon nodes to connect to.
               '';
@@ -192,7 +198,15 @@ in {
       };
 
       network = mkOption {
-        type = types.enum [ "mainnet" "prater" "goerli" "gnosis" "kiln" "ropsten" "sepolia" ];
+        type = types.enum [
+          "mainnet"
+          "prater"
+          "goerli"
+          "gnosis"
+          "kiln"
+          "ropsten"
+          "sepolia"
+        ];
         default = "mainnet";
         description = ''
           The network to connect to. Mainnet is the default ethereum network.
@@ -212,13 +226,12 @@ in {
 
   config = mkIf (cfg.beacon.enable || cfg.validator.enable) {
 
-    environment.systemPackages = [ pkgs.lighthouse ] ;
+    environment.systemPackages = [ pkgs.lighthouse ];
 
     networking.firewall = mkIf cfg.beacon.enable {
       allowedTCPPorts = mkIf cfg.beacon.openFirewall [ cfg.beacon.port ];
       allowedUDPPorts = mkIf cfg.beacon.openFirewall [ cfg.beacon.port ];
     };
-
 
     systemd.services.lighthouse-beacon = mkIf cfg.beacon.enable {
       description = "Lighthouse beacon node (connect to P2P nodes and verify blocks)";
@@ -238,8 +251,8 @@ in {
           --datadir ${cfg.beacon.dataDir}/${cfg.network} \
           --execution-endpoint http://${cfg.beacon.execution.address}:${toString cfg.beacon.execution.port} \
           --execution-jwt ''${CREDENTIALS_DIRECTORY}/LIGHTHOUSE_JWT \
-          ${lib.optionalString cfg.beacon.http.enable '' --http --http-address ${cfg.beacon.http.address} --http-port ${toString cfg.beacon.http.port}''} \
-          ${lib.optionalString cfg.beacon.metrics.enable '' --metrics --metrics-address ${cfg.beacon.metrics.address} --metrics-port ${toString cfg.beacon.metrics.port}''} \
+          ${lib.optionalString cfg.beacon.http.enable ''--http --http-address ${cfg.beacon.http.address} --http-port ${toString cfg.beacon.http.port}''} \
+          ${lib.optionalString cfg.beacon.metrics.enable ''--metrics --metrics-address ${cfg.beacon.metrics.address} --metrics-port ${toString cfg.beacon.metrics.port}''} \
           ${cfg.extraArgs} ${cfg.beacon.extraArgs}
       '';
       serviceConfig = {
@@ -264,7 +277,10 @@ in {
         RestrictNamespaces = true;
         LockPersonality = true;
         RemoveIPC = true;
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
       };
     };
 
@@ -307,8 +323,14 @@ in {
         RestrictNamespaces = true;
         LockPersonality = true;
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
       };
     };
   };

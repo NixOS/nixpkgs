@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, perl
-, procps
-, bash
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  perl,
+  procps,
+  bash,
 
-# shell referenced dependencies
-, resholve
-, binutils-unwrapped
-, file
-, gnugrep
-, coreutils
-, gnused
-, gnutar
-, iconv
-, ncurses
+  # shell referenced dependencies
+  resholve,
+  binutils-unwrapped,
+  file,
+  gnugrep,
+  coreutils,
+  gnused,
+  gnutar,
+  iconv,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,8 +30,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-jJrKiRdrargk0JzcPWxBZGyOpMfTIONHG8HNRecazVo=";
   };
 
-  nativeBuildInputs = [ perl makeWrapper ];
-  buildInputs = [ perl bash ];
+  nativeBuildInputs = [
+    perl
+    makeWrapper
+  ];
+  buildInputs = [
+    perl
+    bash
+  ];
   strictDeps = true;
 
   postPatch = ''
@@ -38,7 +45,10 @@ stdenv.mkDerivation rec {
     substituteInPlace configure --replace '/etc/bash_completion.d' '/share/bash-completion/completions'
   '';
 
-  configureFlags = [ "--shell=${bash}/bin/bash" "--prefix=/" ];
+  configureFlags = [
+    "--shell=${bash}/bin/bash"
+    "--prefix=/"
+  ];
   configurePlatforms = [ ];
 
   dontBuild = true;
@@ -62,23 +72,100 @@ stdenv.mkDerivation rec {
         procps
         ncurses
       ];
-      keep = [ "$prog" "$c1" "$c2" "$c3" "$c4" "$c5" "$cmd" "$colorizer" "$HOME" ];
+      keep = [
+        "$prog"
+        "$c1"
+        "$c2"
+        "$c3"
+        "$c4"
+        "$c5"
+        "$cmd"
+        "$colorizer"
+        "$HOME"
+      ];
       fake = {
         # script guards usage behind has_cmd test function, it's safe to leave these external and optional
-        external = [
-          "cpio" "isoinfo" "cabextract" "bsdtar" "rpm2cpio" "bsdtar" "unzip" "ar" "unrar" "rar" "7zr" "7za" "isoinfo"
-          "gzip" "bzip2" "lzip" "lzma" "xz" "brotli" "compress" "zstd" "lz4"
-          "archive_color" "bat" "batcat" "pygmentize" "source-highlight" "vimcolor" "code2color"
+        external =
+          [
+            "cpio"
+            "isoinfo"
+            "cabextract"
+            "bsdtar"
+            "rpm2cpio"
+            "bsdtar"
+            "unzip"
+            "ar"
+            "unrar"
+            "rar"
+            "7zr"
+            "7za"
+            "isoinfo"
+            "gzip"
+            "bzip2"
+            "lzip"
+            "lzma"
+            "xz"
+            "brotli"
+            "compress"
+            "zstd"
+            "lz4"
+            "archive_color"
+            "bat"
+            "batcat"
+            "pygmentize"
+            "source-highlight"
+            "vimcolor"
+            "code2color"
 
-          "w3m" "lynx" "elinks" "html2text" "dtc" "pdftotext" "pdftohtml" "pdfinfo" "ps2ascii" "procyon" "ccze"
-          "mdcat" "pandoc" "docx2txt" "libreoffice" "pptx2md" "mdcat" "xlscat" "odt2txt" "wvText" "antiword" "catdoc"
-          "broken_catppt" "sxw2txt" "groff" "mandoc" "unrtf" "dvi2tty" "pod2text" "perldoc" "h5dump" "ncdump" "matdump"
-          "djvutxt" "openssl" "gpg" "plistutil" "plutil" "id3v2" "csvlook" "jq" "zlib-flate" "lessfilter"
-        ] ++ lib.optional stdenv.isDarwin [
-          # resholve only identifies this on darwin
-          # call site is gaurded by || so it's safe to leave dynamic
-          "locale"
-        ];
+            "w3m"
+            "lynx"
+            "elinks"
+            "html2text"
+            "dtc"
+            "pdftotext"
+            "pdftohtml"
+            "pdfinfo"
+            "ps2ascii"
+            "procyon"
+            "ccze"
+            "mdcat"
+            "pandoc"
+            "docx2txt"
+            "libreoffice"
+            "pptx2md"
+            "mdcat"
+            "xlscat"
+            "odt2txt"
+            "wvText"
+            "antiword"
+            "catdoc"
+            "broken_catppt"
+            "sxw2txt"
+            "groff"
+            "mandoc"
+            "unrtf"
+            "dvi2tty"
+            "pod2text"
+            "perldoc"
+            "h5dump"
+            "ncdump"
+            "matdump"
+            "djvutxt"
+            "openssl"
+            "gpg"
+            "plistutil"
+            "plutil"
+            "id3v2"
+            "csvlook"
+            "jq"
+            "zlib-flate"
+            "lessfilter"
+          ]
+          ++ lib.optional stdenv.isDarwin [
+            # resholve only identifies this on darwin
+            # call site is gaurded by || so it's safe to leave dynamic
+            "locale"
+          ];
         builtin = [ "setopt" ];
       };
       execer = [
@@ -95,12 +182,40 @@ stdenv.mkDerivation rec {
         gnused
         gnutar
       ];
-      keep = [ "$prog" "$c1" "$c2" "$c3" "$c4" "$c5" "$cmd" ];
+      keep = [
+        "$prog"
+        "$c1"
+        "$c2"
+        "$c3"
+        "$c4"
+        "$c5"
+        "$cmd"
+      ];
       fake = {
         # script guards usage behind has_cmd test function, it's safe to leave these external and optional
         external = [
-          "cpio" "isoinfo" "cabextract" "bsdtar" "rpm2cpio" "bsdtar" "unzip" "ar" "unrar" "rar" "7zr" "7za" "isoinfo"
-          "gzip" "bzip2" "lzip" "lzma" "xz" "brotli" "compress" "zstd" "lz4"
+          "cpio"
+          "isoinfo"
+          "cabextract"
+          "bsdtar"
+          "rpm2cpio"
+          "bsdtar"
+          "unzip"
+          "ar"
+          "unrar"
+          "rar"
+          "7zr"
+          "7za"
+          "isoinfo"
+          "gzip"
+          "bzip2"
+          "lzip"
+          "lzma"
+          "xz"
+          "brotli"
+          "compress"
+          "zstd"
+          "lz4"
         ];
         builtin = [ "setopt" ];
       };

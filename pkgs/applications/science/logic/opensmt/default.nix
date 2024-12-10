@@ -1,7 +1,15 @@
-{ stdenv, lib, fetchFromGitHub
-, cmake, libedit, gmpxx, bison, flex
-, enableReadline ? false, readline
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  libedit,
+  gmpxx,
+  bison,
+  flex,
+  enableReadline ? false,
+  readline,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,9 +23,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-glIiyPSkLG7sGYw5ujfl47GuDuPIPdP+UybA1vSn0Uw=";
   };
 
-  nativeBuildInputs = [ cmake bison flex ];
-  buildInputs = [ libedit gmpxx ]
-    ++ lib.optional enableReadline readline;
+  nativeBuildInputs = [
+    cmake
+    bison
+    flex
+  ];
+  buildInputs = [
+    libedit
+    gmpxx
+  ] ++ lib.optional enableReadline readline;
 
   preConfigure = ''
     substituteInPlace test/CMakeLists.txt \

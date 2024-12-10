@@ -1,19 +1,26 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ctrtool";
   version = "0.7";
 
   src = fetchFromGitHub {
-    owner  = "jakcron";
-    repo   = "Project_CTR";
-    rev    = "ctrtool-v${version}";
+    owner = "jakcron";
+    repo = "Project_CTR";
+    rev = "ctrtool-v${version}";
     sha256 = "07aayck82w5xcp3si35d7ghybmrbqw91fqqvmbpjrjcixc6m42z7";
   };
 
   sourceRoot = "${src.name}/ctrtool";
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "CXX=${stdenv.cc.targetPrefix}c++"];
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "CXX=${stdenv.cc.targetPrefix}c++"
+  ];
   enableParallelBuilding = true;
 
   installPhase = "

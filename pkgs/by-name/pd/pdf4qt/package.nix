@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, lcms
-, cmake
-, pkg-config
-, qt6
-, wrapGAppsHook3
-, openjpeg
-, tbb_2021_11
-, blend2d
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  lcms,
+  cmake,
+  pkg-config,
+  qt6,
+  wrapGAppsHook3,
+  openjpeg,
+  tbb_2021_11,
+  blend2d,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

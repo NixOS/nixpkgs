@@ -1,14 +1,15 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, colorama
-, iproute2
-, iptables
-, netaddr
-, netifaces
-, scapy
-, terminaltables
-, tqdm
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  colorama,
+  iproute2,
+  iptables,
+  netaddr,
+  netifaces,
+  scapy,
+  terminaltables,
+  tqdm,
 }:
 
 buildPythonApplication rec {

@@ -12,30 +12,32 @@ in
 
   meta.maintainers = with lib.maintainers; [ nikstur ];
 
-  nodes.machine = { pkgs, ... }: {
-    systemd.sysusers.enable = true;
-    users.mutableUsers = true;
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      systemd.sysusers.enable = true;
+      users.mutableUsers = true;
 
-    # Prerequisites
-    system.etc.overlay.enable = true;
-    boot.initrd.systemd.enable = true;
-    boot.kernelPackages = pkgs.linuxPackages_latest;
+      # Prerequisites
+      system.etc.overlay.enable = true;
+      boot.initrd.systemd.enable = true;
+      boot.kernelPackages = pkgs.linuxPackages_latest;
 
-    # Override the empty root password set by the test instrumentation
-    users.users.root.hashedPasswordFile = lib.mkForce null;
-    users.users.root.initialHashedPassword = rootPassword;
-    users.users.normalo = {
-      isNormalUser = true;
-      initialPassword = normaloPassword;
-    };
-
-    specialisation.new-generation.configuration = {
-      users.users.new-normalo = {
+      # Override the empty root password set by the test instrumentation
+      users.users.root.hashedPasswordFile = lib.mkForce null;
+      users.users.root.initialHashedPassword = rootPassword;
+      users.users.normalo = {
         isNormalUser = true;
-        initialHashedPassword = newNormaloPassword;
+        initialPassword = normaloPassword;
+      };
+
+      specialisation.new-generation.configuration = {
+        users.users.new-normalo = {
+          isNormalUser = true;
+          initialHashedPassword = newNormaloPassword;
+        };
       };
     };
-  };
 
   testScript = ''
     machine.wait_for_unit("systemd-sysusers.service")

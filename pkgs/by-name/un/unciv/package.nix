@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchurl
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, jre
-, libGL
-, libpulseaudio
-, libXxf86vm
+{
+  stdenv,
+  lib,
+  fetchurl,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  jre,
+  libGL,
+  libpulseaudio,
+  libXxf86vm,
 }:
 let
   desktopItem = makeDesktopItem {
@@ -18,11 +19,13 @@ let
     categories = [ "Game" ];
   };
 
-  envLibPath = lib.makeLibraryPath (lib.optionals stdenv.isLinux [
-    libGL
-    libpulseaudio
-    libXxf86vm
-  ]);
+  envLibPath = lib.makeLibraryPath (
+    lib.optionals stdenv.isLinux [
+      libGL
+      libpulseaudio
+      libXxf86vm
+    ]
+  );
 
 in
 stdenv.mkDerivation rec {
@@ -36,7 +39,10 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall

@@ -1,7 +1,8 @@
-{ lib
-, pkgs
-, config
-, ...
+{
+  lib,
+  pkgs,
+  config,
+  ...
 }:
 
 with lib;
@@ -9,7 +10,7 @@ with lib;
 let
   cfg = config.services.evcc;
 
-  format = pkgs.formats.yaml {};
+  format = pkgs.formats.yaml { };
   configFile = format.generate "evcc.yml" cfg.settings;
 
   package = pkgs.evcc;
@@ -23,7 +24,7 @@ in
 
     extraArgs = mkOption {
       type = listOf str;
-      default = [];
+      default = [ ];
       description = ''
         Extra arguments to pass to the evcc executable.
       '';
@@ -75,7 +76,7 @@ in
         PrivateUsers = true;
         ProcSubset = "pid";
         ProtectClock = true;
-        ProtectControlGroups= true;
+        ProtectControlGroups = true;
         ProtectHome = true;
         ProtectHostname = true;
         ProtectKernelLogs = true;

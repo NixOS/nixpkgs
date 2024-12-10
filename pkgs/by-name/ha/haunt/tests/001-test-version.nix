@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, haunt
+{
+  lib,
+  stdenv,
+  haunt,
 }:
 
 stdenv.mkDerivation {

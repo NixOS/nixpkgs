@@ -1,8 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.hydron;
-in with lib; {
+in
+with lib;
+{
   options.services.hydron = {
     enable = mkEnableOption "hydron";
 
@@ -66,7 +73,7 @@ in with lib; {
 
     importPaths = mkOption {
       type = types.listOf types.path;
-      default = [];
+      default = [ ];
       example = [ "/home/okina/Pictures" ];
       description = "Paths that hydron will recursively import.";
     };
@@ -80,7 +87,9 @@ in with lib; {
 
   config = mkIf cfg.enable {
     services.hydron.passwordFile = mkDefault (pkgs.writeText "hydron-password-file" cfg.password);
-    services.hydron.postgresArgsFile = mkDefault (pkgs.writeText "hydron-postgres-args" cfg.postgresArgs);
+    services.hydron.postgresArgsFile = mkDefault (
+      pkgs.writeText "hydron-postgres-args" cfg.postgresArgs
+    );
     services.hydron.postgresArgs = mkDefault ''
       {
         "driver": "postgres",
@@ -92,7 +101,8 @@ in with lib; {
       enable = true;
       ensureDatabases = [ "hydron" ];
       ensureUsers = [
-        { name = "hydron";
+        {
+          name = "hydron";
           ensureDBOwnership = true;
         }
       ];
@@ -109,14 +119,18 @@ in with lib; {
 
     systemd.services.hydron = {
       description = "hydron";
-      after = [ "network.target" "postgresql.service" ];
+      after = [
+        "network.target"
+        "postgresql.service"
+      ];
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
         User = "hydron";
         Group = "hydron";
-        ExecStart = "${pkgs.hydron}/bin/hydron serve"
-        + optionalString (cfg.listenAddress != null) " -a ${cfg.listenAddress}";
+        ExecStart =
+          "${pkgs.hydron}/bin/hydron serve"
+          + optionalString (cfg.listenAddress != null) " -a ${cfg.listenAddress}";
       };
     };
 
@@ -127,15 +141,21 @@ in with lib; {
         Type = "oneshot";
         User = "hydron";
         Group = "hydron";
-        ExecStart = "${pkgs.hydron}/bin/hydron import "
-        + optionalString cfg.fetchTags "-f "
-        + (escapeShellArg cfg.dataDir) + "/images " + (escapeShellArgs cfg.importPaths);
+        ExecStart =
+          "${pkgs.hydron}/bin/hydron import "
+          + optionalString cfg.fetchTags "-f "
+          + (escapeShellArg cfg.dataDir)
+          + "/images "
+          + (escapeShellArgs cfg.importPaths);
       };
     };
 
     systemd.timers.hydron-fetch = {
       description = "Automatically import paths into hydron and possibly fetch tags";
-      after = [ "network.target" "hydron.service" ];
+      after = [
+        "network.target"
+        "hydron.service"
+      ];
       wantedBy = [ "timers.target" ];
 
       timerConfig = {

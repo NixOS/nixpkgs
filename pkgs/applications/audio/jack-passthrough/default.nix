@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, libjack2
-, meson
-, ninja
-, fmt_9
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libjack2,
+  meson,
+  ninja,
+  fmt_9,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,8 +21,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-9IsNaLW5dYAqiwe+vX0+D3oIKFP2TIfy1q1YaqmS6wE=";
   };
 
-  nativeBuildInputs = [ pkg-config meson ninja ];
-  buildInputs = [ fmt_9 libjack2 ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+  ];
+  buildInputs = [
+    fmt_9
+    libjack2
+  ];
 
   meta = with lib; {
     description = "A simple app to help with JACK apps that behave strangely.";

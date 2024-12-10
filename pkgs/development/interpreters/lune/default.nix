@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  darwin,
 }:
 
 let

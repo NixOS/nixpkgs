@@ -1,27 +1,28 @@
-{ lib
-, cairo
-, fetchFromGitHub
-, gettext
-, glib
-, libdrm
-, libinput
-, libpng
-, librsvg
-, libxcb
-, libxkbcommon
-, libxml2
-, meson
-, ninja
-, pango
-, pkg-config
-, scdoc
-, stdenv
-, wayland
-, wayland-protocols
-, wayland-scanner
-, wlroots
-, xcbutilwm
-, xwayland
+{
+  lib,
+  cairo,
+  fetchFromGitHub,
+  gettext,
+  glib,
+  libdrm,
+  libinput,
+  libpng,
+  librsvg,
+  libxcb,
+  libxkbcommon,
+  libxml2,
+  meson,
+  ninja,
+  pango,
+  pkg-config,
+  scdoc,
+  stdenv,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  wlroots,
+  xcbutilwm,
+  xwayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,7 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-8TSBBNg9+W65vEKmwyAWB2yEOpHqV9YRm5+ttL19ke4=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [
     gettext

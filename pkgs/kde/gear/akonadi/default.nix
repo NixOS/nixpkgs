@@ -20,8 +20,16 @@ mkKdeDerivation {
     "-DMYSQLD_SCRIPTS_PATH=${lib.getBin mariadb}/bin"
   ];
 
-  extraNativeBuildInputs = [qttools shared-mime-info];
-  extraBuildInputs = [kaccounts-integration accounts-qt xz mariadb];
+  extraNativeBuildInputs = [
+    qttools
+    shared-mime-info
+  ];
+  extraBuildInputs = [
+    kaccounts-integration
+    accounts-qt
+    xz
+    mariadb
+  ];
 
   # Hardcoded as a QString, which is UTF-16 so Nix can't pick it up automatically
   postFixup = ''

@@ -1,4 +1,10 @@
-{ buildDunePackage, dns, mirage-crypto, base64, alcotest }:
+{
+  buildDunePackage,
+  dns,
+  mirage-crypto,
+  base64,
+  alcotest,
+}:
 
 buildDunePackage {
   pname = "dns-tsig";

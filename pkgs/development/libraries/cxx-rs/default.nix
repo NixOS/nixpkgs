@@ -1,4 +1,10 @@
-{ cxx-rs, fetchFromGitHub, lib, rustPlatform, testers }:
+{
+  cxx-rs,
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
+  testers,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cxx-rs";
@@ -30,7 +36,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoTestFlags = [ "--workspace" ];
 
-  outputs = [ "out" "doc" "dev" ];
+  outputs = [
+    "out"
+    "doc"
+    "dev"
+  ];
 
   postInstall = ''
     mkdir -p $doc

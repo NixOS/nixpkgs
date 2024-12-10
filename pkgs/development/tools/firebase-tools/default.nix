@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, fetchFromGitHub
-, python3
-, xcbuild
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  python3,
+  xcbuild,
 }:
 
 buildNpmPackage rec {
@@ -23,11 +24,13 @@ buildNpmPackage rec {
     ln -s npm-shrinkwrap.json package-lock.json
   '';
 
-  nativeBuildInputs = [
-    python3
-  ] ++ lib.optionals stdenv.isDarwin [
-    xcbuild
-  ];
+  nativeBuildInputs =
+    [
+      python3
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      xcbuild
+    ];
 
   env = {
     PUPPETEER_SKIP_DOWNLOAD = true;

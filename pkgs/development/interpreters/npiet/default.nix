@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, gd
-, giflib
-, groff
-, libpng
-, tk
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gd,
+  giflib,
+  groff,
+  libpng,
+  tk,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Le2FYGKr1zWZ6F4edozmvGC6LbItx9aptidj3KBLhVo=";
   };
 
-  buildInputs = [ gd giflib libpng ];
+  buildInputs = [
+    gd
+    giflib
+    libpng
+  ];
 
   nativeBuildInputs = [ groff ];
 

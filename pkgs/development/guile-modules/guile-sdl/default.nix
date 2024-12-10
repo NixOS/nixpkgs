@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, guile
-, lzip
-, pkg-config
-, SDL
-, SDL_image
-, SDL_mixer
-, SDL_ttf
-, buildEnv
+{
+  lib,
+  stdenv,
+  fetchurl,
+  guile,
+  lzip,
+  pkg-config,
+  SDL,
+  SDL_image,
+  SDL_mixer,
+  SDL_ttf,
+  buildEnv,
 }:
 
 stdenv.mkDerivation rec {

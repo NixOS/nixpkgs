@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, flutterPackages
-, corrosion
-, rustPlatform
-, cargo
-, rustc
-, udev
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  fetchFromGitHub,
+  flutterPackages,
+  corrosion,
+  rustPlatform,
+  cargo,
+  rustc,
+  udev,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 flutterPackages.v3_19.buildFlutterApplication rec {
   pname = "intiface-central";

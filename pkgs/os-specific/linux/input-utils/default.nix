@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, linuxHeaders }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  linuxHeaders,
+}:
 
 stdenv.mkDerivation rec {
   pname = "input-utils";
@@ -22,9 +27,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Input layer utilities, includes lsinput";
-    homepage    = "https://www.kraxel.org/blog/linux/input/";
-    license     = licenses.gpl2;
+    homepage = "https://www.kraxel.org/blog/linux/input/";
+    license = licenses.gpl2;
     maintainers = with maintainers; [ samueldr ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

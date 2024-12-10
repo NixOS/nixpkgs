@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, testers
-, cmake
-, gsl
-, libtool
-, findutils
-, llvmPackages
-, mpi
-, nest
-, pkg-config
-, boost
-, python3
-, readline
-, autoPatchelfHook
-, withPython ? false
-, withMpi ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  testers,
+  cmake,
+  gsl,
+  libtool,
+  findutils,
+  llvmPackages,
+  mpi,
+  nest,
+  pkg-config,
+  boost,
+  python3,
+  readline,
+  autoPatchelfHook,
+  withPython ? false,
+  withMpi ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,15 +44,18 @@ stdenv.mkDerivation rec {
     findutils
   ];
 
-  buildInputs = [
-    gsl
-    readline
-    libtool # libltdl
-    boost
-  ] ++ lib.optionals withPython [
-    python3
-    python3.pkgs.cython
-  ] ++ lib.optional withMpi mpi
+  buildInputs =
+    [
+      gsl
+      readline
+      libtool # libltdl
+      boost
+    ]
+    ++ lib.optionals withPython [
+      python3
+      python3.pkgs.cython
+    ]
+    ++ lib.optional withMpi mpi
     ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
 
   propagatedBuildInputs = with python3.pkgs; [
@@ -80,7 +84,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.nest-simulator.org/";
     changelog = "https://github.com/nest/nest-simulator/releases/tag/v${version}";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ jiegec davidcromp ];
+    maintainers = with maintainers; [
+      jiegec
+      davidcromp
+    ];
     platforms = platforms.unix;
   };
 }

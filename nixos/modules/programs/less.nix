@@ -1,26 +1,35 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
   cfg = config.programs.less;
 
-  configText = if (cfg.configFile != null) then (builtins.readFile cfg.configFile) else ''
-    #command
-    ${builtins.concatStringsSep "\n"
-      (lib.mapAttrsToList (command: action: "${command} ${action}") cfg.commands)
-    }
-    ${lib.optionalString cfg.clearDefaultCommands "#stop"}
+  configText =
+    if (cfg.configFile != null) then
+      (builtins.readFile cfg.configFile)
+    else
+      ''
+        #command
+        ${builtins.concatStringsSep "\n" (
+          lib.mapAttrsToList (command: action: "${command} ${action}") cfg.commands
+        )}
+        ${lib.optionalString cfg.clearDefaultCommands "#stop"}
 
-    #line-edit
-    ${builtins.concatStringsSep "\n"
-      (lib.mapAttrsToList (command: action: "${command} ${action}") cfg.lineEditingKeys)
-    }
+        #line-edit
+        ${builtins.concatStringsSep "\n" (
+          lib.mapAttrsToList (command: action: "${command} ${action}") cfg.lineEditingKeys
+        )}
 
-    #env
-    ${builtins.concatStringsSep "\n"
-      (lib.mapAttrsToList (variable: values: "${variable}=${values}") cfg.envVariables)
-    }
-  '';
+        #env
+        ${builtins.concatStringsSep "\n" (
+          lib.mapAttrsToList (variable: values: "${variable}=${values}") cfg.envVariables
+        )}
+      '';
 
   lessKey = pkgs.writeText "lessconfig" configText;
 
@@ -50,7 +59,7 @@ in
 
       commands = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;
-        default = {};
+        default = { };
         example = {
           h = "noaction 5\\e(";
           l = "noaction 5\\e)";
@@ -70,7 +79,7 @@ in
 
       lineEditingKeys = lib.mkOption {
         type = lib.types.attrsOf lib.types.str;
-        default = {};
+        default = { };
         example = {
           e = "abort";
         };
@@ -112,20 +121,24 @@ in
 
     environment.systemPackages = [ pkgs.less ];
 
-    environment.variables = {
-      LESSKEYIN_SYSTEM = builtins.toString lessKey;
-    } // lib.optionalAttrs (cfg.lessopen != null) {
-      LESSOPEN = cfg.lessopen;
-    } // lib.optionalAttrs (cfg.lessclose != null) {
-      LESSCLOSE = cfg.lessclose;
-    };
+    environment.variables =
+      {
+        LESSKEYIN_SYSTEM = builtins.toString lessKey;
+      }
+      // lib.optionalAttrs (cfg.lessopen != null) {
+        LESSOPEN = cfg.lessopen;
+      }
+      // lib.optionalAttrs (cfg.lessclose != null) {
+        LESSCLOSE = cfg.lessclose;
+      };
 
-    warnings = lib.optional (
-      cfg.clearDefaultCommands && (builtins.all (x: x != "quit") (builtins.attrValues cfg.commands))
-    ) ''
-      config.programs.less.clearDefaultCommands clears all default commands of less but there is no alternative binding for exiting.
-      Consider adding a binding for 'quit'.
-    '';
+    warnings =
+      lib.optional
+        (cfg.clearDefaultCommands && (builtins.all (x: x != "quit") (builtins.attrValues cfg.commands)))
+        ''
+          config.programs.less.clearDefaultCommands clears all default commands of less but there is no alternative binding for exiting.
+          Consider adding a binding for 'quit'.
+        '';
   };
 
   meta.maintainers = with lib.maintainers; [ johnazoidberg ];

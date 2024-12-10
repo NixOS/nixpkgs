@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, python3Packages
-, ffmpeg
-, flac
-, libjxl
-, librsvg
-, gobject-introspection
-, gtk3
-, kissfft
-, libappindicator
-, libnotify
-, libsamplerate
-, libvorbis
-, miniaudio
-, mpg123
-, libopenmpt
-, opusfile
-, wavpack
-, pango
-, pulseaudio
-, withDiscordRPC ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  python3Packages,
+  ffmpeg,
+  flac,
+  libjxl,
+  librsvg,
+  gobject-introspection,
+  gtk3,
+  kissfft,
+  libappindicator,
+  libnotify,
+  libsamplerate,
+  libvorbis,
+  miniaudio,
+  mpg123,
+  libopenmpt,
+  opusfile,
+  wavpack,
+  pango,
+  pulseaudio,
+  withDiscordRPC ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -88,31 +89,34 @@ stdenv.mkDerivation (finalAttrs: {
     wavpack
   ];
 
-  pythonPath = with python3Packages; [
-    beautifulsoup4
-    gst-python
-    dbus-python
-    isounidecode
-    libjxl
-    musicbrainzngs
-    mutagen
-    natsort
-    pillow
-    plexapi
-    pycairo
-    pychromecast
-    pylast
-    pygobject3
-    pylyrics
-    pysdl2
-    requests
-    send2trash
-    setproctitle
-  ] ++ lib.optional withDiscordRPC pypresence
+  pythonPath =
+    with python3Packages;
+    [
+      beautifulsoup4
+      gst-python
+      dbus-python
+      isounidecode
+      libjxl
+      musicbrainzngs
+      mutagen
+      natsort
+      pillow
+      plexapi
+      pycairo
+      pychromecast
+      pylast
+      pygobject3
+      pylyrics
+      pysdl2
+      requests
+      send2trash
+      setproctitle
+    ]
+    ++ lib.optional withDiscordRPC pypresence
     ++ lib.optional stdenv.isLinux pulsectl;
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ffmpeg]}"
+    "--prefix PATH : ${lib.makeBinPath [ ffmpeg ]}"
     "--prefix LD_LIBRARY_PATH : ${pulseaudio}/lib"
     "--prefix PYTHONPATH : $out/share/tauon"
     "--set GI_TYPELIB_PATH $GI_TYPELIB_PATH"

@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, biometryd
-, cmake
-, libqtdbusmock
-, libqtdbustest
-, lomiri-system-settings-unwrapped
-, pkg-config
-, polkit
-, python3
-, qtbase
-, qtdeclarative
-, trust-store
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  biometryd,
+  cmake,
+  libqtdbusmock,
+  libqtdbustest,
+  lomiri-system-settings-unwrapped,
+  pkg-config,
+  polkit,
+  python3,
+  qtbase,
+  qtdeclarative,
+  trust-store,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

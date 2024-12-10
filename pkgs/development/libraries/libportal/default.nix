@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, vala
-, gi-docgen
-, glib
-, gtk3
-, gtk4
-, libsForQt5
-, variant ? null
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  vala,
+  gi-docgen,
+  glib,
+  gtk3,
+  gtk4,
+  libsForQt5,
+  variant ? null,
 }:
 
 assert variant == null || variant == "gtk3" || variant == "gtk4" || variant == "qt5";
@@ -20,8 +21,10 @@ stdenv.mkDerivation rec {
   pname = "libportal" + lib.optionalString (variant != null) "-${variant}";
   version = "0.7.1";
 
-  outputs = [ "out" "dev" ]
-    ++ lib.optional (variant != "qt5") "devdoc";
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optional (variant != "qt5") "devdoc";
 
   src = fetchFromGitHub {
     owner = "flatpak";
@@ -34,26 +37,32 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gi-docgen
-  ] ++ lib.optionals (variant != "qt5") [
-    gobject-introspection
-    vala
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      gi-docgen
+    ]
+    ++ lib.optionals (variant != "qt5") [
+      gobject-introspection
+      vala
+    ];
 
-  propagatedBuildInputs = [
-    glib
-  ] ++ lib.optionals (variant == "gtk3") [
-    gtk3
-  ] ++ lib.optionals (variant == "gtk4") [
-    gtk4
-  ] ++ lib.optionals (variant == "qt5") [
-    libsForQt5.qtbase
-    libsForQt5.qtx11extras
-  ];
+  propagatedBuildInputs =
+    [
+      glib
+    ]
+    ++ lib.optionals (variant == "gtk3") [
+      gtk3
+    ]
+    ++ lib.optionals (variant == "gtk4") [
+      gtk4
+    ]
+    ++ lib.optionals (variant == "qt5") [
+      libsForQt5.qtbase
+      libsForQt5.qtx11extras
+    ];
 
   mesonFlags = [
     (lib.mesonEnable "backend-gtk3" (variant == "gtk3"))

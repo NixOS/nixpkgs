@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, jre
-, makeBinaryWrapper
-, copyDesktopItems
-, makeDesktopItem
-, desktopToDarwinBundle
-, unzip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre,
+  makeBinaryWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
+  desktopToDarwinBundle,
+  unzip,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,13 +20,15 @@ stdenv.mkDerivation (finalAttrs: {
   };
   dontUnpack = true;
 
-  nativeBuildInputs = [
-    makeBinaryWrapper
-    copyDesktopItems
-    unzip
-  ] ++ lib.optionals stdenv.isDarwin [
-    desktopToDarwinBundle
-  ];
+  nativeBuildInputs =
+    [
+      makeBinaryWrapper
+      copyDesktopItems
+      unzip
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      desktopToDarwinBundle
+    ];
 
   desktopItems = [
     (makeDesktopItem {

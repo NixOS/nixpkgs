@@ -1,7 +1,19 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
-  inherit (lib) mkDefault mkEnableOption mkIf mkOption optional types;
+  inherit (lib)
+    mkDefault
+    mkEnableOption
+    mkIf
+    mkOption
+    optional
+    types
+    ;
 
   cfg = config.hardware.ipu6;
 
@@ -13,7 +25,11 @@ in
     enable = mkEnableOption "support for Intel IPU6/MIPI cameras";
 
     platform = mkOption {
-      type = types.enum [ "ipu6" "ipu6ep" "ipu6epmtl" ];
+      type = types.enum [
+        "ipu6"
+        "ipu6ep"
+        "ipu6epmtl"
+      ];
       description = ''
         Choose the version for your hardware platform.
 
@@ -27,7 +43,8 @@ in
   config = mkIf cfg.enable {
 
     # Module is upstream as of 6.10
-    boot.extraModulePackages = with config.boot.kernelPackages;
+    boot.extraModulePackages =
+      with config.boot.kernelPackages;
       optional (kernelOlder "6.10") ipu6-drivers;
 
     hardware.firmware = with pkgs; [
@@ -44,7 +61,9 @@ in
 
       cardLabel = mkDefault "Intel MIPI Camera";
 
-      extraPackages = with pkgs.gst_all_1; [ ]
+      extraPackages =
+        with pkgs.gst_all_1;
+        [ ]
         ++ optional (cfg.platform == "ipu6") icamerasrc-ipu6
         ++ optional (cfg.platform == "ipu6ep") icamerasrc-ipu6ep
         ++ optional (cfg.platform == "ipu6epmtl") icamerasrc-ipu6epmtl;

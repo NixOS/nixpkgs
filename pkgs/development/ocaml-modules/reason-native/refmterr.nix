@@ -1,4 +1,10 @@
-{ atdgen, re, reason, pastel, ... }:
+{
+  atdgen,
+  re,
+  reason,
+  pastel,
+  ...
+}:
 
 {
   pname = "refmterr";

@@ -1,2 +1,1 @@
-with import ../../.. {};
-pkgs.callPackage ./default.nix {}
+with import ../../.. { }; pkgs.callPackage ./default.nix { }

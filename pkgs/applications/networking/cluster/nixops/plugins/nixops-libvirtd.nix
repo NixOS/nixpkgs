@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, unstableGitUpdater
-, poetry-core
-, libvirt
-, nixops
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  poetry-core,
+  libvirt,
+  nixops,
 }:
 
 buildPythonPackage {

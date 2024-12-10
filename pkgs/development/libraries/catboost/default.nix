@@ -1,20 +1,21 @@
-{ lib
-, config
-, fetchFromGitHub
-, cmake
-, darwin
-, libiconv
-, llvmPackages
-, ninja
-, openssl
-, python3Packages
-, ragel
-, yasm
-, zlib
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? {}
-, llvmPackages_12
-, pythonSupport ? false
+{
+  lib,
+  config,
+  fetchFromGitHub,
+  cmake,
+  darwin,
+  libiconv,
+  llvmPackages,
+  ninja,
+  openssl,
+  python3Packages,
+  ragel,
+  yasm,
+  zlib,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages ? { },
+  llvmPackages_12,
+  pythonSupport ? false,
 }:
 let
   inherit (llvmPackages) stdenv;
@@ -50,31 +51,46 @@ stdenv.mkDerivation (finalAttrs: {
     done
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [
-    cmake
-    llvmPackages.bintools
-    ninja
-    (python3Packages.python.withPackages (ps: with ps; [ six ]))
-    ragel
-    yasm
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.cctools
-  ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_nvcc
-  ]);
+  nativeBuildInputs =
+    [
+      cmake
+      llvmPackages.bintools
+      ninja
+      (python3Packages.python.withPackages (ps: with ps; [ six ]))
+      ragel
+      yasm
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.cctools
+    ]
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_nvcc
+      ]
+    );
 
-  buildInputs = [
-    openssl
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-  ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_cudart
-    cuda_cccl
-    libcublas
-  ]);
+  buildInputs =
+    [
+      openssl
+      zlib
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+    ]
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_cudart
+        cuda_cccl
+        libcublas
+      ]
+    );
 
   env = {
     # catboost requires clang 14+ for build, but does clang 12 for cuda build.
@@ -115,7 +131,10 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.asl20;
     platforms = platforms.unix;
     homepage = "https://catboost.ai";
-    maintainers = with maintainers; [ PlushBeaver natsukium ];
+    maintainers = with maintainers; [
+      PlushBeaver
+      natsukium
+    ];
     mainProgram = "catboost";
   };
 })

@@ -1,8 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
-
 
 let
   python = python3.override {
@@ -10,7 +10,8 @@ let
       pydantic = self.pydantic_1;
     };
   };
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "cfripper";
   version = "1.15.6";
   pyproject = true;

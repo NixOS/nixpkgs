@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "convmv";
@@ -9,11 +14,11 @@ stdenv.mkDerivation rec {
     sha256 = "19hwv197p7c23f43vvav5bs19z9b72jzca2npkjsxgprwj5ardjk";
   };
 
-  preBuild=''
+  preBuild = ''
     makeFlags="PREFIX=$out"
   '';
 
-  patchPhase=''
+  patchPhase = ''
     tar -xf testsuite.tar
     patchShebangs .
   '';

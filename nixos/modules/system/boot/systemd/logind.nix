@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 with lib;
 
@@ -6,8 +12,16 @@ let
   cfg = config.services.logind;
 
   logindHandlerType = types.enum [
-    "ignore" "poweroff" "reboot" "halt" "kexec" "suspend"
-    "hibernate" "hybrid-sleep" "suspend-then-hibernate" "lock"
+    "ignore"
+    "poweroff"
+    "reboot"
+    "halt"
+    "kexec"
+    "suspend"
+    "hibernate"
+    "hybrid-sleep"
+    "suspend-then-hibernate"
+    "lock"
   ];
 in
 {
@@ -155,21 +169,26 @@ in
   };
 
   config = {
-    systemd.additionalUpstreamSystemUnits = [
-      "systemd-logind.service"
-      "autovt@.service"
-      "systemd-user-sessions.service"
-    ] ++ optionals config.systemd.package.withImportd [
-      "dbus-org.freedesktop.import1.service"
-    ] ++ optionals config.systemd.package.withMachined [
-      "dbus-org.freedesktop.machine1.service"
-    ] ++ optionals config.systemd.package.withPortabled [
-      "dbus-org.freedesktop.portable1.service"
-    ] ++ [
-      "dbus-org.freedesktop.login1.service"
-      "user@.service"
-      "user-runtime-dir@.service"
-    ];
+    systemd.additionalUpstreamSystemUnits =
+      [
+        "systemd-logind.service"
+        "autovt@.service"
+        "systemd-user-sessions.service"
+      ]
+      ++ optionals config.systemd.package.withImportd [
+        "dbus-org.freedesktop.import1.service"
+      ]
+      ++ optionals config.systemd.package.withMachined [
+        "dbus-org.freedesktop.machine1.service"
+      ]
+      ++ optionals config.systemd.package.withPortabled [
+        "dbus-org.freedesktop.portable1.service"
+      ]
+      ++ [
+        "dbus-org.freedesktop.login1.service"
+        "user@.service"
+        "user-runtime-dir@.service"
+      ];
 
     environment.etc = {
       "systemd/logind.conf".text = ''

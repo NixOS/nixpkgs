@@ -1,10 +1,17 @@
-{ config, options, lib, pkgs, ... }:
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.cfssl;
-in {
+in
+{
   options.services.cfssl = {
     enable = mkEnableOption "the CFSSL CA api-server";
 
@@ -150,7 +157,14 @@ in {
 
     logLevel = mkOption {
       default = 1;
-      type = types.enum [ 0 1 2 3 4 5 ];
+      type = types.enum [
+        0
+        1
+        2
+        3
+        4
+        5
+      ];
       description = "Log level (0 = DEBUG, 5 = FATAL).";
     };
   };
@@ -179,9 +193,11 @@ in {
           User = "cfssl";
           Group = "cfssl";
 
-          ExecStart = with cfg; let
-            opt = n: v: optionalString (v != null) ''-${n}="${v}"'';
-          in
+          ExecStart =
+            with cfg;
+            let
+              opt = n: v: optionalString (v != null) ''-${n}="${v}"'';
+            in
             lib.concatStringsSep " \\\n" [
               "${pkgs.cfssl}/bin/cfssl serve"
               (opt "address" address)

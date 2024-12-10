@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, cmake, pkg-config, which, makeWrapper
-, libpfm, zlib, python3Packages, procps, gdb, capnproto
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  which,
+  makeWrapper,
+  libpfm,
+  zlib,
+  python3Packages,
+  procps,
+  gdb,
+  capnproto,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,9 +45,20 @@ stdenv.mkDerivation rec {
   # See also https://github.com/NixOS/nixpkgs/pull/110846
   preConfigure = ''substituteInPlace CMakeLists.txt --replace "-flto" ""'';
 
-  nativeBuildInputs = [ cmake pkg-config which makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    which
+    makeWrapper
+  ];
   buildInputs = [
-    libpfm zlib python3Packages.python python3Packages.pexpect procps gdb capnproto
+    libpfm
+    zlib
+    python3Packages.python
+    python3Packages.pexpect
+    procps
+    gdb
+    capnproto
   ];
   cmakeFlags = [
     "-Ddisable32bit=ON"
@@ -54,9 +77,11 @@ stdenv.mkDerivation rec {
   # needs GDB to replay programs at runtime
   preFixup = ''
     wrapProgram "$out/bin/rr" \
-      --prefix PATH ":" "${lib.makeBinPath [
-        gdb
-      ]}";
+      --prefix PATH ":" "${
+        lib.makeBinPath [
+          gdb
+        ]
+      }";
   '';
 
   meta = {
@@ -69,8 +94,18 @@ stdenv.mkDerivation rec {
       time the same execution is replayed.
     '';
 
-    license = with lib.licenses; [ mit bsd2 ];
-    maintainers = with lib.maintainers; [ pierron thoughtpolice ];
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
+    license = with lib.licenses; [
+      mit
+      bsd2
+    ];
+    maintainers = with lib.maintainers; [
+      pierron
+      thoughtpolice
+    ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

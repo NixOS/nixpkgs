@@ -1,11 +1,22 @@
-{ lib, stdenv, fetchurl, fetchpatch, flex }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  flex,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libsepol";
   version = "3.6";
   se_url = "https://github.com/SELinuxProject/selinux/releases/download";
 
-  outputs = [ "bin" "out" "dev" "man" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "man"
+  ];
 
   src = fetchurl {
     url = "${se_url}/${version}/libsepol-${version}.tar.gz";

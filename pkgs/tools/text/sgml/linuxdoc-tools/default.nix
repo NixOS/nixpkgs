@@ -1,5 +1,18 @@
-{ stdenv, lib, makeWrapper, fetchFromGitLab, perl, flex
-, gnused, coreutils, which, opensp, groff, texliveMedium, texinfo, withLatex ? false
+{
+  stdenv,
+  lib,
+  makeWrapper,
+  fetchFromGitLab,
+  perl,
+  flex,
+  gnused,
+  coreutils,
+  which,
+  opensp,
+  groff,
+  texliveMedium,
+  texinfo,
+  withLatex ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,18 +26,26 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1F3MDYJ9UH7ypgTSfYZV59PfLirlTmw6XBMEnz5Jtyk=";
   };
 
-  outputs = [ "out" "man" "doc" ];
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
 
   configureFlags = [
-    ("--enable-docs=txt info lyx html rtf"
-      + lib.optionalString withLatex " pdf")
+    ("--enable-docs=txt info lyx html rtf" + lib.optionalString withLatex " pdf")
   ];
 
   LEX = "flex";
 
   postInstall = ''
     wrapProgram $out/bin/linuxdoc \
-      --prefix PATH : "${lib.makeBinPath [ groff opensp ]}:$out/bin" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          groff
+          opensp
+        ]
+      }:$out/bin" \
       --prefix PERL5LIB : "$out/share/linuxdoc-tools/"
   '';
 
@@ -39,10 +60,20 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  nativeBuildInputs = [ flex which makeWrapper ];
+  nativeBuildInputs = [
+    flex
+    which
+    makeWrapper
+  ];
 
-  buildInputs = [ opensp groff texinfo perl gnused coreutils ]
-    ++ lib.optionals withLatex [ texliveMedium ];
+  buildInputs = [
+    opensp
+    groff
+    texinfo
+    perl
+    gnused
+    coreutils
+  ] ++ lib.optionals withLatex [ texliveMedium ];
 
   meta = with lib; {
     description = "Toolset for processing LinuxDoc DTD SGML files";
@@ -55,7 +86,11 @@ stdenv.mkDerivation rec {
       documents written in LinuxDoc DTD sgml source.
     '';
     homepage = "https://gitlab.com/agmartin/linuxdoc-tools";
-    license = with licenses; [ gpl3Plus mit sgmlug ];
+    license = with licenses; [
+      gpl3Plus
+      mit
+      sgmlug
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ p-h ];
   };

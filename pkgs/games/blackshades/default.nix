@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, glfw
-, libGL
-, libGLU
-, libsndfile
-, openal
-, zig_0_11
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  glfw,
+  libGL,
+  libGLU,
+  libsndfile,
+  openal,
+  zig_0_11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://git.sr.ht/~cnx/blackshades/refs/${finalAttrs.version}";
     mainProgram = "blackshades";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ McSinyx viric ];
+    maintainers = with lib.maintainers; [
+      McSinyx
+      viric
+    ];
     platforms = lib.platforms.linux;
   };
 })

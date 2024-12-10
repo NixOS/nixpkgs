@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, xz
-, lzo
-, zlib
-, zstd
-, lz4
-, lz4Support ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  xz,
+  lzo,
+  zlib,
+  zstd,
+  lz4,
+  lz4Support ? false,
 }:
 
 let
-  patch = fetchFromGitHub
-    {
+  patch =
+    fetchFromGitHub {
       # NOTE: This uses my personal fork for now, until
       # https://github.com/devttys0/sasquatch/pull/40 is merged.
       # I, cole-h, will keep this fork available until that happens.
@@ -20,7 +21,8 @@ let
       repo = "sasquatch";
       rev = "6edc54705454c6410469a9cb5bc58e412779731a";
       sha256 = "x+PuPYGD4Pd0fcJtlLWByGy/nggsmZkxwSXxJfPvUgo=";
-    } + "/patches/patch0.txt";
+    }
+    + "/patches/patch0.txt";
 in
 stdenv.mkDerivation rec {
   pname = "sasquatch";
@@ -36,8 +38,7 @@ stdenv.mkDerivation rec {
     lzo
     zlib
     zstd
-  ]
-  ++ lib.optionals lz4Support [ lz4 ];
+  ] ++ lib.optionals lz4Support [ lz4 ];
 
   patches = [ patch ];
   patchFlags = [ "-p0" ];
@@ -62,8 +63,7 @@ stdenv.mkDerivation rec {
     "CC=${stdenv.cc.targetPrefix}cc"
     "CXX=${stdenv.cc.targetPrefix}c++"
     "AR=${stdenv.cc.targetPrefix}ar"
-  ]
-    ++ lib.optional lz4Support "LZ4_SUPPORT=1";
+  ] ++ lib.optional lz4Support "LZ4_SUPPORT=1";
 
   meta = with lib; {
     homepage = "https://github.com/devttys0/sasquatch";

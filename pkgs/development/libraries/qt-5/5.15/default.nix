@@ -1,52 +1,73 @@
 /*
+  # Updates
 
-# Updates
-
-Run `./fetch.sh` to update package sources from Git.
-Check for any minor version changes.
-
+  Run `./fetch.sh` to update package sources from Git.
+  Check for any minor version changes.
 */
 
-{ makeScopeWithSplicing', generateSplicesForMkScope
-, lib, stdenv, fetchurl, fetchgit, fetchpatch, fetchFromGitHub, makeSetupHook, makeWrapper
-, bison, cups ? null, harfbuzz, libGL, perl, python3
-, gstreamer, gst-plugins-base, gtk3, dconf
-, llvmPackages_15, overrideSDK, overrideLibcxx
-, darwin
+{
+  makeScopeWithSplicing',
+  generateSplicesForMkScope,
+  lib,
+  stdenv,
+  fetchurl,
+  fetchgit,
+  fetchpatch,
+  fetchFromGitHub,
+  makeSetupHook,
+  makeWrapper,
+  bison,
+  cups ? null,
+  harfbuzz,
+  libGL,
+  perl,
+  python3,
+  gstreamer,
+  gst-plugins-base,
+  gtk3,
+  dconf,
+  llvmPackages_15,
+  overrideSDK,
+  overrideLibcxx,
+  darwin,
 
   # options
-, developerBuild ? false
-, decryptSslTraffic ? false
-, debug ? false
-, config
+  developerBuild ? false,
+  decryptSslTraffic ? false,
+  debug ? false,
+  config,
 }:
 
 let
 
-  srcs = import ./srcs.nix { inherit lib fetchgit fetchFromGitHub; } // { __attrsFailEvaluation = true; };
+  srcs = import ./srcs.nix { inherit lib fetchgit fetchFromGitHub; } // {
+    __attrsFailEvaluation = true;
+  };
 
   qtCompatVersion = srcs.qtbase.version;
 
   patches = {
-    qtbase = lib.optionals stdenv.isDarwin [
-      ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
+    qtbase =
+      lib.optionals stdenv.isDarwin [
+        ./qtbase.patch.d/0001-qtbase-mkspecs-mac.patch
 
-      # Patch framework detection to support X.framework/X.tbd,
-      # extending the current support for X.framework/X.
-      ./qtbase.patch.d/0012-qtbase-tbd-frameworks.patch
+        # Patch framework detection to support X.framework/X.tbd,
+        # extending the current support for X.framework/X.
+        ./qtbase.patch.d/0012-qtbase-tbd-frameworks.patch
 
-      ./qtbase.patch.d/0014-aarch64-darwin.patch
-    ] ++ [
-      ./qtbase.patch.d/0003-qtbase-mkspecs.patch
-      ./qtbase.patch.d/0004-qtbase-replace-libdir.patch
-      ./qtbase.patch.d/0005-qtbase-cmake.patch
-      ./qtbase.patch.d/0006-qtbase-gtk3.patch
-      ./qtbase.patch.d/0007-qtbase-xcursor.patch
-      ./qtbase.patch.d/0008-qtbase-tzdir.patch
-      ./qtbase.patch.d/0009-qtbase-qtpluginpath.patch
-      ./qtbase.patch.d/0010-qtbase-assert.patch
-      ./qtbase.patch.d/0011-fix-header_module.patch
-    ];
+        ./qtbase.patch.d/0014-aarch64-darwin.patch
+      ]
+      ++ [
+        ./qtbase.patch.d/0003-qtbase-mkspecs.patch
+        ./qtbase.patch.d/0004-qtbase-replace-libdir.patch
+        ./qtbase.patch.d/0005-qtbase-cmake.patch
+        ./qtbase.patch.d/0006-qtbase-gtk3.patch
+        ./qtbase.patch.d/0007-qtbase-xcursor.patch
+        ./qtbase.patch.d/0008-qtbase-tzdir.patch
+        ./qtbase.patch.d/0009-qtbase-qtpluginpath.patch
+        ./qtbase.patch.d/0010-qtbase-assert.patch
+        ./qtbase.patch.d/0011-fix-header_module.patch
+      ];
     qtdeclarative = [
       ./qtdeclarative.patch
       # prevent headaches from stale qmlcache data
@@ -178,63 +199,80 @@ let
         hash = "sha256-B/z/+tai01RU/bAJSCp5a0/dGI8g36nwso8MiJv27YM=";
       })
     ];
-    qtwebengine = [
-      ./qtwebengine-link-pulseaudio.patch
-    ] ++ lib.optionals stdenv.isDarwin [
-      ./qtwebengine-darwin-no-platform-check.patch
-      ./qtwebengine-mac-dont-set-dsymutil-path.patch
-      ./qtwebengine-darwin-checks.patch
-    ];
-    qtwebkit = [
-      (fetchpatch {
-        name = "qtwebkit-python39-json.patch";
-        url = "https://github.com/qtwebkit/qtwebkit/commit/78360c01c796b6260bf828bc9c8a0ef73c5132fd.patch";
-        sha256 = "yCX/UL666BPxjnxT6rIsUrJsPcSWHhZwMFJfuHhbkhk=";
-      })
-      (fetchpatch {
-        name = "qtwebkit-bison-3.7-build.patch";
-        url = "https://github.com/qtwebkit/qtwebkit/commit/d92b11fea65364fefa700249bd3340e0cd4c5b31.patch";
-        sha256 = "0h8ymfnwgkjkwaankr3iifiscsvngqpwb91yygndx344qdiw9y0n";
-      })
-      (fetchpatch {
-        name = "qtwebkit-glib-2.68.patch";
-        url = "https://github.com/qtwebkit/qtwebkit/pull/1058/commits/5b698ba3faffd4e198a45be9fe74f53307395e4b.patch";
-        sha256 = "0a3xv0h4lv8wggckgy8cg8xnpkg7n9h45312pdjdnnwy87xvzss0";
-      })
-      (fetchpatch {
-        name = "qtwebkit-darwin-handle.patch";
-        url = "https://github.com/qtwebkit/qtwebkit/commit/5c272a21e621a66862821d3ae680f27edcc64c19.patch";
-        sha256 = "9hjqLyABz372QDgoq7nXXXQ/3OXBGcYN1/92ekcC3WE=";
-      })
-      (fetchpatch {
-        name = "qtwebkit-libxml2-api-change.patch";
-        url = "https://github.com/WebKit/WebKit/commit/1bad176b2496579d760852c80cff3ad9fb7c3a4b.patch";
-        sha256 = "WZEj+UuKhgJBM7auhND3uddk1wWdTY728jtiWVe7CSI=";
-      })
-      ./qtwebkit.patch
-      ./qtwebkit-icu68.patch
-      ./qtwebkit-cstdint.patch
-    ] ++ lib.optionals stdenv.isDarwin [
-      ./qtwebkit-darwin-no-readline.patch
-      ./qtwebkit-darwin-no-qos-classes.patch
-    ];
+    qtwebengine =
+      [
+        ./qtwebengine-link-pulseaudio.patch
+      ]
+      ++ lib.optionals stdenv.isDarwin [
+        ./qtwebengine-darwin-no-platform-check.patch
+        ./qtwebengine-mac-dont-set-dsymutil-path.patch
+        ./qtwebengine-darwin-checks.patch
+      ];
+    qtwebkit =
+      [
+        (fetchpatch {
+          name = "qtwebkit-python39-json.patch";
+          url = "https://github.com/qtwebkit/qtwebkit/commit/78360c01c796b6260bf828bc9c8a0ef73c5132fd.patch";
+          sha256 = "yCX/UL666BPxjnxT6rIsUrJsPcSWHhZwMFJfuHhbkhk=";
+        })
+        (fetchpatch {
+          name = "qtwebkit-bison-3.7-build.patch";
+          url = "https://github.com/qtwebkit/qtwebkit/commit/d92b11fea65364fefa700249bd3340e0cd4c5b31.patch";
+          sha256 = "0h8ymfnwgkjkwaankr3iifiscsvngqpwb91yygndx344qdiw9y0n";
+        })
+        (fetchpatch {
+          name = "qtwebkit-glib-2.68.patch";
+          url = "https://github.com/qtwebkit/qtwebkit/pull/1058/commits/5b698ba3faffd4e198a45be9fe74f53307395e4b.patch";
+          sha256 = "0a3xv0h4lv8wggckgy8cg8xnpkg7n9h45312pdjdnnwy87xvzss0";
+        })
+        (fetchpatch {
+          name = "qtwebkit-darwin-handle.patch";
+          url = "https://github.com/qtwebkit/qtwebkit/commit/5c272a21e621a66862821d3ae680f27edcc64c19.patch";
+          sha256 = "9hjqLyABz372QDgoq7nXXXQ/3OXBGcYN1/92ekcC3WE=";
+        })
+        (fetchpatch {
+          name = "qtwebkit-libxml2-api-change.patch";
+          url = "https://github.com/WebKit/WebKit/commit/1bad176b2496579d760852c80cff3ad9fb7c3a4b.patch";
+          sha256 = "WZEj+UuKhgJBM7auhND3uddk1wWdTY728jtiWVe7CSI=";
+        })
+        ./qtwebkit.patch
+        ./qtwebkit-icu68.patch
+        ./qtwebkit-cstdint.patch
+      ]
+      ++ lib.optionals stdenv.isDarwin [
+        ./qtwebkit-darwin-no-readline.patch
+        ./qtwebkit-darwin-no-qos-classes.patch
+      ];
     qttools = [ ./qttools.patch ];
   };
 
-  addPackages = self:
+  addPackages =
+    self:
     let
       qtModule = callPackage ../qtModule.nix {
         inherit patches;
         # Use a variant of mkDerivation that does not include wrapQtApplications
         # to avoid cyclic dependencies between Qt modules.
-        mkDerivation =
-          (callPackage ../mkDerivation.nix { wrapQtAppsHook = null; }) stdenv.mkDerivation;
+        mkDerivation = (callPackage ../mkDerivation.nix { wrapQtAppsHook = null; }) stdenv.mkDerivation;
       };
 
-      callPackage = self.newScope { inherit qtCompatVersion qtModule srcs stdenv; };
-    in {
+      callPackage = self.newScope {
+        inherit
+          qtCompatVersion
+          qtModule
+          srcs
+          stdenv
+          ;
+      };
+    in
+    {
 
-      inherit callPackage qtCompatVersion qtModule srcs;
+      inherit
+        callPackage
+        qtCompatVersion
+        qtModule
+        srcs
+        ;
 
       mkDerivationWith = callPackage ../mkDerivation.nix { };
 
@@ -243,58 +281,79 @@ let
       qtbase = callPackage ../modules/qtbase.nix {
         inherit (srcs.qtbase) src version;
         patches = patches.qtbase;
-        inherit bison cups harfbuzz libGL;
-        withGtk3 = !stdenv.isDarwin; inherit dconf gtk3;
+        inherit
+          bison
+          cups
+          harfbuzz
+          libGL
+          ;
+        withGtk3 = !stdenv.isDarwin;
+        inherit dconf gtk3;
         inherit developerBuild decryptSslTraffic;
-        inherit (darwin.apple_sdk_11_0.frameworks) AGL AppKit ApplicationServices AVFoundation Carbon Cocoa CoreAudio CoreBluetooth
-          CoreLocation CoreServices DiskArbitration Foundation OpenGL MetalKit IOKit;
+        inherit (darwin.apple_sdk_11_0.frameworks)
+          AGL
+          AppKit
+          ApplicationServices
+          AVFoundation
+          Carbon
+          Cocoa
+          CoreAudio
+          CoreBluetooth
+          CoreLocation
+          CoreServices
+          DiskArbitration
+          Foundation
+          OpenGL
+          MetalKit
+          IOKit
+          ;
         libobjc = darwin.apple_sdk_11_0.objc4;
         xcbuild = darwin.apple_sdk_11_0.xcodebuild;
       };
 
-      qt3d = callPackage ../modules/qt3d.nix {};
-      qtcharts = callPackage ../modules/qtcharts.nix {};
+      qt3d = callPackage ../modules/qt3d.nix { };
+      qtcharts = callPackage ../modules/qtcharts.nix { };
       qtconnectivity = callPackage ../modules/qtconnectivity.nix {
         inherit (darwin.apple_sdk_11_0.frameworks) IOBluetooth;
       };
-      qtdatavis3d = callPackage ../modules/qtdatavis3d.nix {};
-      qtdeclarative = callPackage ../modules/qtdeclarative.nix {};
-      qtdoc = callPackage ../modules/qtdoc.nix {};
+      qtdatavis3d = callPackage ../modules/qtdatavis3d.nix { };
+      qtdeclarative = callPackage ../modules/qtdeclarative.nix { };
+      qtdoc = callPackage ../modules/qtdoc.nix { };
       qtgamepad = callPackage ../modules/qtgamepad.nix {
         inherit (darwin.apple_sdk_11_0.frameworks) GameController;
       };
-      qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix {};
-      qtimageformats = callPackage ../modules/qtimageformats.nix {};
-      qtlocation = callPackage ../modules/qtlocation.nix {};
-      qtlottie = callPackage ../modules/qtlottie.nix {};
-      qtmacextras = callPackage ../modules/qtmacextras.nix {};
+      qtgraphicaleffects = callPackage ../modules/qtgraphicaleffects.nix { };
+      qtimageformats = callPackage ../modules/qtimageformats.nix { };
+      qtlocation = callPackage ../modules/qtlocation.nix { };
+      qtlottie = callPackage ../modules/qtlottie.nix { };
+      qtmacextras = callPackage ../modules/qtmacextras.nix { };
       qtmultimedia = callPackage ../modules/qtmultimedia.nix {
         inherit gstreamer gst-plugins-base;
       };
-      qtnetworkauth = callPackage ../modules/qtnetworkauth.nix {};
-      qtpim = callPackage ../modules/qtpim.nix {};
-      qtpositioning = callPackage ../modules/qtpositioning.nix {};
+      qtnetworkauth = callPackage ../modules/qtnetworkauth.nix { };
+      qtpim = callPackage ../modules/qtpim.nix { };
+      qtpositioning = callPackage ../modules/qtpositioning.nix { };
       qtpurchasing = callPackage ../modules/qtpurchasing.nix {
         inherit (darwin.apple_sdk_11_0.frameworks) Foundation StoreKit;
       };
       qtquick1 = null;
       qtquick3d = callPackage ../modules/qtquick3d.nix { };
-      qtquickcontrols = callPackage ../modules/qtquickcontrols.nix {};
-      qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix {};
-      qtremoteobjects = callPackage ../modules/qtremoteobjects.nix {};
-      qtscript = callPackage ../modules/qtscript.nix {};
-      qtsensors = callPackage ../modules/qtsensors.nix {};
-      qtserialbus = callPackage ../modules/qtserialbus.nix {};
-      qtserialport = callPackage ../modules/qtserialport.nix {};
-      qtspeech = callPackage ../modules/qtspeech.nix {};
-      qtsvg = callPackage ../modules/qtsvg.nix {};
-      qtsystems = callPackage ../modules/qtsystems.nix {};
-      qtscxml = callPackage ../modules/qtscxml.nix {};
-      qttools = callPackage ../modules/qttools.nix {};
-      qttranslations = callPackage ../modules/qttranslations.nix {};
-      qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix {};
-      qtwayland = callPackage ../modules/qtwayland.nix {};
-      qtwebchannel = callPackage ../modules/qtwebchannel.nix {};
+      qtquickcontrols = callPackage ../modules/qtquickcontrols.nix { };
+      qtquickcontrols2 = callPackage ../modules/qtquickcontrols2.nix { };
+      qtremoteobjects = callPackage ../modules/qtremoteobjects.nix { };
+      qtscript = callPackage ../modules/qtscript.nix { };
+      qtsensors = callPackage ../modules/qtsensors.nix { };
+      qtserialbus = callPackage ../modules/qtserialbus.nix { };
+      qtserialport = callPackage ../modules/qtserialport.nix { };
+      qtspeech = callPackage ../modules/qtspeech.nix { };
+      qtsvg = callPackage ../modules/qtsvg.nix { };
+      qtsystems = callPackage ../modules/qtsystems.nix { };
+      qtscxml = callPackage ../modules/qtscxml.nix { };
+      qttools = callPackage ../modules/qttools.nix { };
+      qttranslations = callPackage ../modules/qttranslations.nix { };
+      qtvirtualkeyboard = callPackage ../modules/qtvirtualkeyboard.nix { };
+      qtwayland = callPackage ../modules/qtwayland.nix { };
+      qtwebchannel = callPackage ../modules/qtwebchannel.nix { };
       qtwebengine = callPackage ../modules/qtwebengine.nix {
         # The version of Chromium used by Qt WebEngine 5.15.x does not build with clang 16 due
         # to the following errors:
@@ -306,58 +365,121 @@ let
         # Because the first error is non-trivial to fix and suppressing it risks future breakage,
         # clang is pinned to clang 15. That also makes fixing the second set of errors unnecessary.
         stdenv =
-          let stdenv' = if stdenv.cc.isClang then overrideLibcxx llvmPackages_15.stdenv else stdenv;
-          in if stdenv'.isDarwin then overrideSDK stdenv' "11.0" else stdenv';
+          let
+            stdenv' = if stdenv.cc.isClang then overrideLibcxx llvmPackages_15.stdenv else stdenv;
+          in
+          if stdenv'.isDarwin then overrideSDK stdenv' "11.0" else stdenv';
         inherit (srcs.qtwebengine) version;
         python = python3;
         inherit (darwin) cctools xnu;
         inherit (darwin.apple_sdk_11_0) libpm libunwind;
         inherit (darwin.apple_sdk_11_0.libs) sandbox;
-        inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices AVFoundation Foundation ForceFeedback GameController AppKit
-          ImageCaptureCore CoreBluetooth IOBluetooth CoreWLAN Quartz Cocoa LocalAuthentication
-          MediaPlayer MediaAccessibility SecurityInterface Vision CoreML OpenDirectory Accelerate;
+        inherit (darwin.apple_sdk_11_0.frameworks)
+          ApplicationServices
+          AVFoundation
+          Foundation
+          ForceFeedback
+          GameController
+          AppKit
+          ImageCaptureCore
+          CoreBluetooth
+          IOBluetooth
+          CoreWLAN
+          Quartz
+          Cocoa
+          LocalAuthentication
+          MediaPlayer
+          MediaAccessibility
+          SecurityInterface
+          Vision
+          CoreML
+          OpenDirectory
+          Accelerate
+          ;
         libobjc = darwin.apple_sdk_11_0.objc4;
       };
-      qtwebglplugin = callPackage ../modules/qtwebglplugin.nix {};
+      qtwebglplugin = callPackage ../modules/qtwebglplugin.nix { };
       qtwebkit = callPackage ../modules/qtwebkit.nix {
         inherit (darwin) ICU;
         inherit (darwin.apple_sdk_11_0.frameworks) OpenGL;
       };
-      qtwebsockets = callPackage ../modules/qtwebsockets.nix {};
+      qtwebsockets = callPackage ../modules/qtwebsockets.nix { };
       qtwebview = callPackage ../modules/qtwebview.nix {
         inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation WebKit;
       };
-      qtx11extras = callPackage ../modules/qtx11extras.nix {};
-      qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix {};
+      qtx11extras = callPackage ../modules/qtx11extras.nix { };
+      qtxmlpatterns = callPackage ../modules/qtxmlpatterns.nix { };
 
-      env = callPackage ../qt-env.nix {};
-      full = callPackage ({ env, qtbase }: env "qt-full-${qtbase.version}") { }
-      # `with self` is ok to use here because having these spliced is unnecessary
-      (with self; [
-        qt3d qtcharts qtconnectivity qtdeclarative qtdoc qtgraphicaleffects
-        qtimageformats qtlocation qtmultimedia qtquickcontrols qtquickcontrols2
-        qtscript qtsensors qtserialport qtsvg qttools qttranslations
-        qtvirtualkeyboard qtwebchannel qtwebengine qtwebsockets
-        qtwebview qtx11extras qtxmlpatterns qtlottie qtdatavis3d
-      ] ++ lib.optional (!stdenv.isDarwin) qtwayland
-        ++ lib.optional (stdenv.isDarwin) qtmacextras);
+      env = callPackage ../qt-env.nix { };
+      full =
+        callPackage ({ env, qtbase }: env "qt-full-${qtbase.version}") { }
+          # `with self` is ok to use here because having these spliced is unnecessary
+          (
+            with self;
+            [
+              qt3d
+              qtcharts
+              qtconnectivity
+              qtdeclarative
+              qtdoc
+              qtgraphicaleffects
+              qtimageformats
+              qtlocation
+              qtmultimedia
+              qtquickcontrols
+              qtquickcontrols2
+              qtscript
+              qtsensors
+              qtserialport
+              qtsvg
+              qttools
+              qttranslations
+              qtvirtualkeyboard
+              qtwebchannel
+              qtwebengine
+              qtwebsockets
+              qtwebview
+              qtx11extras
+              qtxmlpatterns
+              qtlottie
+              qtdatavis3d
+            ]
+            ++ lib.optional (!stdenv.isDarwin) qtwayland
+            ++ lib.optional (stdenv.isDarwin) qtmacextras
+          );
 
-      qmake = callPackage ({ qtbase }: makeSetupHook {
-        name = "qmake-hook";
-        ${if stdenv.buildPlatform == stdenv.hostPlatform
-          then "propagatedBuildInputs"
-          else "depsTargetTargetPropagated"} = [ qtbase.dev ];
-        substitutions = {
-          inherit debug;
-          fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
-        };
-      } ../hooks/qmake-hook.sh) { };
+      qmake = callPackage (
+        { qtbase }:
+        makeSetupHook {
+          name = "qmake-hook";
+          ${
+            if stdenv.buildPlatform == stdenv.hostPlatform then
+              "propagatedBuildInputs"
+            else
+              "depsTargetTargetPropagated"
+          } =
+            [ qtbase.dev ];
+          substitutions = {
+            inherit debug;
+            fix_qmake_libtool = ../hooks/fix-qmake-libtool.sh;
+          };
+        } ../hooks/qmake-hook.sh
+      ) { };
 
-      wrapQtAppsHook = callPackage ({ makeBinaryWrapper, qtbase, qtwayland }: makeSetupHook {
-        name = "wrap-qt5-apps-hook";
-        propagatedBuildInputs = [ qtbase.dev makeBinaryWrapper ]
-          ++ lib.optional stdenv.isLinux qtwayland.dev;
-      } ../hooks/wrap-qt-apps-hook.sh) { };
+      wrapQtAppsHook = callPackage (
+        {
+          makeBinaryWrapper,
+          qtbase,
+          qtwayland,
+        }:
+        makeSetupHook {
+          name = "wrap-qt5-apps-hook";
+          propagatedBuildInputs = [
+            qtbase.dev
+            makeBinaryWrapper
+          ] ++ lib.optional stdenv.isLinux qtwayland.dev;
+        } ../hooks/wrap-qt-apps-hook.sh
+      ) { };
     };
 
   baseScope = makeScopeWithSplicing' {
@@ -365,17 +487,20 @@ let
     f = addPackages;
   };
 
-  bootstrapScope = baseScope.overrideScope(final: prev: {
-    qtbase = prev.qtbase.override { qttranslations = null; };
-    qtdeclarative = null;
-  });
+  bootstrapScope = baseScope.overrideScope (
+    final: prev: {
+      qtbase = prev.qtbase.override { qttranslations = null; };
+      qtdeclarative = null;
+    }
+  );
 
-  finalScope = baseScope.overrideScope(final: prev: {
-    # qttranslations causes eval-time infinite recursion when
-    # cross-compiling; disabled for now.
-    qttranslations =
-      if stdenv.buildPlatform == stdenv.hostPlatform
-      then bootstrapScope.qttranslations
-      else null;
-  });
-in finalScope
+  finalScope = baseScope.overrideScope (
+    final: prev: {
+      # qttranslations causes eval-time infinite recursion when
+      # cross-compiling; disabled for now.
+      qttranslations =
+        if stdenv.buildPlatform == stdenv.hostPlatform then bootstrapScope.qttranslations else null;
+    }
+  );
+in
+finalScope

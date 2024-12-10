@@ -1,22 +1,23 @@
-{ lib
-, callPackage
+{
+  lib,
+  callPackage,
 
-, fetchFromGitLab
+  fetchFromGitLab,
 
-, appstream
-, gobject-introspection
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook3
+  appstream,
+  gobject-introspection,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
 
-, glib
-, glib-networking
-, gtk3
-, libhandy
-, listparser ? callPackage ./listparser.nix { }
-, webkitgtk
-, python3
+  glib,
+  glib-networking,
+  gtk3,
+  libhandy,
+  listparser ? callPackage ./listparser.nix { },
+  webkitgtk,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {

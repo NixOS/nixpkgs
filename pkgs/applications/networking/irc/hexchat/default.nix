@@ -1,8 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gtk2, lua, perl, python3Packages
-, pciutils, dbus-glib, libcanberra-gtk2, libproxy
-, enchant2, libnotify, openssl, isocodes
-, desktop-file-utils
-, meson, ninja, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gtk2,
+  lua,
+  perl,
+  python3Packages,
+  pciutils,
+  dbus-glib,
+  libcanberra-gtk2,
+  libproxy,
+  enchant2,
+  libnotify,
+  openssl,
+  isocodes,
+  desktop-file-utils,
+  meson,
+  ninja,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,11 +32,26 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-rgaXqXbBWlfSyz+CT0jRLyfGOR1cYYnRhEAu7AsaWus=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config makeWrapper ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    makeWrapper
+  ];
 
   buildInputs = [
-    gtk2 lua perl python3Packages.python python3Packages.cffi pciutils dbus-glib libcanberra-gtk2 libproxy
-    libnotify openssl desktop-file-utils
+    gtk2
+    lua
+    perl
+    python3Packages.python
+    python3Packages.cffi
+    pciutils
+    dbus-glib
+    libcanberra-gtk2
+    libproxy
+    libnotify
+    openssl
+    desktop-file-utils
     isocodes
   ];
 
@@ -39,7 +70,10 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  mesonFlags = [ "-Dwith-lua=lua" "-Dtext-frontend=true" ];
+  mesonFlags = [
+    "-Dwith-lua=lua"
+    "-Dtext-frontend=true"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/hexchat --prefix PYTHONPATH : "$PYTHONPATH"

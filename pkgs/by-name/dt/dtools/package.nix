@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, ldc
-, curl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  ldc,
+  curl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

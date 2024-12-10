@@ -1,5 +1,18 @@
 # Build Open Dylan from source using the binary builds to bootstrap.
-{lib, stdenv, fetchFromGitHub, boehmgc, mps, gnused, opendylan-bootstrap, autoconf, automake, perl, makeWrapper, gcc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boehmgc,
+  mps,
+  gnused,
+  opendylan-bootstrap,
+  autoconf,
+  automake,
+  perl,
+  makeWrapper,
+  gcc,
+}:
 
 stdenv.mkDerivation {
   pname = "opendylan";
@@ -13,22 +26,36 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ makeWrapper autoconf automake ];
+  nativeBuildInputs = [
+    makeWrapper
+    autoconf
+    automake
+  ];
   buildInputs = (if stdenv.hostPlatform.system == "i686-linux" then [ mps ] else [ boehmgc ]) ++ [
-    opendylan-bootstrap boehmgc perl
+    opendylan-bootstrap
+    boehmgc
+    perl
   ];
 
-  preConfigure = if stdenv.hostPlatform.system == "i686-linux" then ''
-    mkdir -p $TMPDIR/mps
-    tar --strip-components=1 -xf ${mps.src} -C $TMPDIR/mps
-    ./autogen.sh
-  ''
-  else ''
-    ./autogen.sh
-  '';
+  preConfigure =
+    if stdenv.hostPlatform.system == "i686-linux" then
+      ''
+        mkdir -p $TMPDIR/mps
+        tar --strip-components=1 -xf ${mps.src} -C $TMPDIR/mps
+        ./autogen.sh
+      ''
+    else
+      ''
+        ./autogen.sh
+      '';
 
   configureFlags = [
-    (if stdenv.hostPlatform.system == "i686-linux" then "--with-mps=$(TMPDIR)/mps" else "--with-gc=${boehmgc.out}")
+    (
+      if stdenv.hostPlatform.system == "i686-linux" then
+        "--with-mps=$(TMPDIR)/mps"
+      else
+        "--with-gc=${boehmgc.out}"
+    )
   ];
   buildPhase = "make 3-stage-bootstrap";
 

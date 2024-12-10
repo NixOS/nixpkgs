@@ -1,15 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, appimageTools
-, imagemagick
+{
+  lib,
+  stdenv,
+  fetchurl,
+  appimageTools,
+  imagemagick,
 }:
 
 let
   pname = "mqttx";
   version = "1.9.9";
 
-  suffixedUrl = suffix: "https://github.com/emqx/MQTTX/releases/download/v${version}/MQTTX-${version}${suffix}.AppImage";
+  suffixedUrl =
+    suffix:
+    "https://github.com/emqx/MQTTX/releases/download/v${version}/MQTTX-${version}${suffix}.AppImage";
   sources = {
     "aarch64-linux" = fetchurl {
       url = suffixedUrl "-arm64";
@@ -21,8 +24,9 @@ let
     };
   };
 
-  src = sources.${stdenv.hostPlatform.system}
-    or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;

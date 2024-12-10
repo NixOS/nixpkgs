@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, testers
-, cmake
-, dbus
-, dbus-test-runner
-, pkg-config
-, qtbase
-, qtdeclarative
-, validatePkgConfig
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  testers,
+  cmake,
+  dbus,
+  dbus-test-runner,
+  pkg-config,
+  qtbase,
+  qtdeclarative,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

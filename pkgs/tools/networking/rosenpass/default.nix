@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, nixosTests
-, rustPlatform
-, hostPlatform
-, installShellFiles
-, cmake
-, libsodium
-, pkg-config
+{
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+  rustPlatform,
+  hostPlatform,
+  installShellFiles,
+  cmake,
+  libsodium,
+  pkg-config,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rosenpass";
@@ -45,9 +46,17 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Build post-quantum-secure VPNs with WireGuard";
     homepage = "https://rosenpass.eu/";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ wucke13 ];
-    platforms = [ "aarch64-darwin" "aarch64-linux" "x86_64-darwin" "x86_64-linux" ];
+    platforms = [
+      "aarch64-darwin"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "x86_64-linux"
+    ];
     mainProgram = "rosenpass";
   };
 }

@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, libXext, Xaw3d, ghostscriptX, perl, pkg-config, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libXext,
+  Xaw3d,
+  ghostscriptX,
+  perl,
+  pkg-config,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gv";
@@ -14,14 +24,16 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    libXext
-    Xaw3d
-    ghostscriptX
-    perl
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      libXext
+      Xaw3d
+      ghostscriptX
+      perl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+    ];
 
   patchPhase = ''
     sed 's|\<gs\>|${ghostscriptX}/bin/gs|g' -i "src/"*.in

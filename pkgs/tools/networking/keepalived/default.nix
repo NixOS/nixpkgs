@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nixosTests
-, file
-, libmnl
-, libnftnl
-, libnl
-, net-snmp
-, openssl
-, pkg-config
-, autoreconfHook
-, withNetSnmp ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
+  file,
+  libmnl,
+  libnftnl,
+  libnl,
+  net-snmp,
+  openssl,
+  pkg-config,
+  autoreconfHook,
+  withNetSnmp ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,27 +25,34 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-QkebGQCYE4ccUvcxKG3qQ4wqC+RzxGHim8kgHQbIr5Q=";
   };
 
-  buildInputs = [
-    file
-    libmnl
-    libnftnl
-    libnl
-    openssl
-  ] ++ lib.optionals withNetSnmp [
-    net-snmp
-  ];
+  buildInputs =
+    [
+      file
+      libmnl
+      libnftnl
+      libnl
+      openssl
+    ]
+    ++ lib.optionals withNetSnmp [
+      net-snmp
+    ];
 
   enableParallelBuilding = true;
 
   passthru.tests.keepalived = nixosTests.keepalived;
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-
-  configureFlags = [
-    "--enable-sha1"
-  ] ++ lib.optionals withNetSnmp [
-    "--enable-snmp"
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
   ];
+
+  configureFlags =
+    [
+      "--enable-sha1"
+    ]
+    ++ lib.optionals withNetSnmp [
+      "--enable-snmp"
+    ];
 
   meta = with lib; {
     homepage = "https://keepalived.org";

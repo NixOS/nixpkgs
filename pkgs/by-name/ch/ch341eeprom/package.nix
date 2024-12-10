@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libusb1
-,
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libusb1,
 }:
 stdenv.mkDerivation {
   pname = "ch341eeprom";

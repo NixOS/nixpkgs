@@ -1,5 +1,6 @@
-{ trivialBuild
-, llvmPackages
+{
+  trivialBuild,
+  llvmPackages,
 }:
 
 trivialBuild {

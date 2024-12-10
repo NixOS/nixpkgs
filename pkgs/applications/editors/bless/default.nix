@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, mono
-, meson
-, ninja
-, gtk-sharp-2_0
-, gettext
-, makeWrapper
-, glib
-, gtk2-x11
-, libxslt
-, docbook_xsl
-, python3
-, itstool
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  mono,
+  meson,
+  ninja,
+  gtk-sharp-2_0,
+  gettext,
+  makeWrapper,
+  glib,
+  gtk2-x11,
+  libxslt,
+  docbook_xsl,
+  python3,
+  itstool,
 }:
 
 stdenv.mkDerivation rec {

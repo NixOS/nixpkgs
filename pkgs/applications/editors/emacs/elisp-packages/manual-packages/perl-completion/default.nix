@@ -1,5 +1,6 @@
-{ trivialBuild
-, fetchurl
+{
+  trivialBuild,
+  fetchurl,
 }:
 
 trivialBuild {

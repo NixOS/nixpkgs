@@ -1,30 +1,31 @@
-{ stdenv
-, lib
-, gitUpdater
-, fetchFromGitHub
-, nixosTests
-, accountsservice
-, cmake
-, cppcheck
-, dbus
-, geoclue2
-, glib
-, gsettings-desktop-schemas
-, gtest
-, intltool
-, libayatana-common
-, libgudev
-, libqtdbusmock
-, libqtdbustest
-, libsForQt5
-, lomiri
-, mate
-, pkg-config
-, properties-cpp
-, python3
-, systemd
-, wrapGAppsHook3
-, xsct
+{
+  stdenv,
+  lib,
+  gitUpdater,
+  fetchFromGitHub,
+  nixosTests,
+  accountsservice,
+  cmake,
+  cppcheck,
+  dbus,
+  geoclue2,
+  glib,
+  gsettings-desktop-schemas,
+  gtest,
+  intltool,
+  libayatana-common,
+  libgudev,
+  libqtdbusmock,
+  libqtdbustest,
+  libsForQt5,
+  lomiri,
+  mate,
+  pkg-config,
+  properties-cpp,
+  python3,
+  systemd,
+  wrapGAppsHook3,
+  xsct,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,29 +61,34 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # TODO Can we get around requiring every desktop's schemas just to avoid segfaulting on some systems?
-  buildInputs = [
-    accountsservice
-    geoclue2
-    gsettings-desktop-schemas # gnome schemas
-    glib
-    libayatana-common
-    libgudev
-    libsForQt5.qtbase
-    systemd
-  ] ++ (with lomiri; [
-    cmake-extras
-    lomiri-schemas # lomiri schema
-  ]) ++ (with mate; [
-    mate.marco # marco schema
-    mate.mate-settings-daemon # mate mouse schema
-  ]);
+  buildInputs =
+    [
+      accountsservice
+      geoclue2
+      gsettings-desktop-schemas # gnome schemas
+      glib
+      libayatana-common
+      libgudev
+      libsForQt5.qtbase
+      systemd
+    ]
+    ++ (with lomiri; [
+      cmake-extras
+      lomiri-schemas # lomiri schema
+    ])
+    ++ (with mate; [
+      mate.marco # marco schema
+      mate.mate-settings-daemon # mate mouse schema
+    ]);
 
   nativeCheckInputs = [
     cppcheck
     dbus
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        python-dbusmock
+      ]
+    ))
   ];
 
   checkInputs = [

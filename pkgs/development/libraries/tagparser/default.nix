@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, cpp-utilities
-, zlib
-, isocodes
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  cpp-utilities,
+  zlib,
+  isocodes,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +22,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [
-    cpp-utilities zlib
+    cpp-utilities
+    zlib
   ];
 
   cmakeFlags = [
@@ -35,4 +37,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.matthiasbeyer ];
   };
 }
-

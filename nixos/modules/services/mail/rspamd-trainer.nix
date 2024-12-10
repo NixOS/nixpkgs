@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -7,7 +12,8 @@ let
   cfg = config.services.rspamd-trainer;
   format = pkgs.formats.toml { };
 
-in {
+in
+{
   options.services.rspamd-trainer = {
 
     enable = mkEnableOption "Spam/ham trainer for rspamd";
@@ -54,7 +60,7 @@ in {
           Type = "oneshot";
           DynamicUser = true;
           EnvironmentFile = [
-            ( format.generate "rspamd-trainer-env" cfg.settings )
+            (format.generate "rspamd-trainer-env" cfg.settings)
             cfg.secrets
           ];
         };

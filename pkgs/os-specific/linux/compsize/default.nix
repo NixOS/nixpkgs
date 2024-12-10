@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, btrfs-progs }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  btrfs-progs,
+}:
 
 stdenv.mkDerivation rec {
   pname = "compsize";

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, doctest
-, enableAssertions ? false
-, enableBoundChecks ? false # Broadcasts don't pass bound checks
-, nlohmann_json
-, xtl
-, xsimd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  doctest,
+  enableAssertions ? false,
+  enableBoundChecks ? false, # Broadcasts don't pass bound checks
+  nlohmann_json,
+  xtl,
+  xsimd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,22 +36,26 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     cmake
   ];
-  propagatedBuildInputs = [
-    nlohmann_json
-    xtl
-  ] ++ lib.optionals (!(stdenv.isAarch64 && stdenv.isLinux)) [
-    # xsimd support is broken on aarch64-linux, see:
-    # https://github.com/xtensor-stack/xsimd/issues/945
-    xsimd
-  ];
+  propagatedBuildInputs =
+    [
+      nlohmann_json
+      xtl
+    ]
+    ++ lib.optionals (!(stdenv.isAarch64 && stdenv.isLinux)) [
+      # xsimd support is broken on aarch64-linux, see:
+      # https://github.com/xtensor-stack/xsimd/issues/945
+      xsimd
+    ];
 
-  cmakeFlags = let
-    cmakeBool = x: if x then "ON" else "OFF";
-  in [
-    "-DBUILD_TESTS=${cmakeBool finalAttrs.finalPackage.doCheck}"
-    "-DXTENSOR_ENABLE_ASSERT=${cmakeBool enableAssertions}"
-    "-DXTENSOR_CHECK_DIMENSION=${cmakeBool enableBoundChecks}"
-  ];
+  cmakeFlags =
+    let
+      cmakeBool = x: if x then "ON" else "OFF";
+    in
+    [
+      "-DBUILD_TESTS=${cmakeBool finalAttrs.finalPackage.doCheck}"
+      "-DXTENSOR_ENABLE_ASSERT=${cmakeBool enableAssertions}"
+      "-DXTENSOR_CHECK_DIMENSION=${cmakeBool enableBoundChecks}"
+    ];
 
   doCheck = true;
   nativeCheckInputs = [

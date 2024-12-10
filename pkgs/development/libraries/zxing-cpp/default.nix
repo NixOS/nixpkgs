@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, python3
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  python3,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,7 +51,10 @@ stdenv.mkDerivation (finalAttrs: {
       formats.
     '';
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ AndersonTorres lukegb ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      lukegb
+    ];
     platforms = lib.platforms.unix;
   };
 })

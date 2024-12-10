@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, llvmPackages_15
-, zlib
-, ncurses
-, libxml2
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  llvmPackages_15,
+  zlib,
+  ncurses,
+  libxml2,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,7 +26,11 @@ rustPlatform.buildRustPackage rec {
   buildFeatures = [ "system-llvm" ];
 
   nativeBuildInputs = [ llvmPackages_15.llvm ];
-  buildInputs = [ zlib ncurses libxml2 ];
+  buildInputs = [
+    zlib
+    ncurses
+    libxml2
+  ];
 
   # fails with: couldn't find crate `core` with expected target triple bpfel-unknown-none
   # rust-src and `-Z build-std=core` are required to properly run the tests
@@ -35,7 +40,10 @@ rustPlatform.buildRustPackage rec {
     description = "Simple BPF static linker";
     mainProgram = "bpf-linker";
     homepage = "https://github.com/aya-rs/bpf-linker";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ nickcao ];
     # llvm-sys crate locates llvm by calling llvm-config
     # which is not available when cross compiling

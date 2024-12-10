@@ -1,12 +1,30 @@
-{ lib, fetchFromGitHub, rustPlatform, cargo, rustc, meson, ninja
-, pkg-config, wrapGAppsHook4, desktop-file-utils, appstream-glib
-, blueprint-compiler, dbus, gtk4, libadwaita, bluez, libpulseaudio }: let
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  cargo,
+  rustc,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  appstream-glib,
+  blueprint-compiler,
+  dbus,
+  gtk4,
+  libadwaita,
+  bluez,
+  libpulseaudio,
+}:
+let
 
-owner = "kaii-lb";
-name = "overskride";
-version = "0.5.7";
+  owner = "kaii-lb";
+  name = "overskride";
+  version = "0.5.7";
 
-in rustPlatform.buildRustPackage {
+in
+rustPlatform.buildRustPackage {
 
   pname = name;
   inherit version;
@@ -32,7 +50,13 @@ in rustPlatform.buildRustPackage {
     rustc
   ];
 
-  buildInputs = [ dbus gtk4 libadwaita bluez libpulseaudio ];
+  buildInputs = [
+    dbus
+    gtk4
+    libadwaita
+    bluez
+    libpulseaudio
+  ];
 
   buildPhase = ''
     runHook preBuild
@@ -53,8 +77,7 @@ in rustPlatform.buildRustPackage {
   '';
 
   meta = with lib; {
-    description =
-      "A Bluetooth and Obex client that is straight to the point, DE/WM agnostic, and beautiful";
+    description = "A Bluetooth and Obex client that is straight to the point, DE/WM agnostic, and beautiful";
     homepage = "https://github.com/${owner}/${name}";
     changelog = "https://github.com/${owner}/${name}/blob/v${version}/CHANGELOG.md";
     license = licenses.gpl3Only;

@@ -1,26 +1,28 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, libsodium
-, ncurses
-, libopus
-, libvpx
-, check
-, libconfig
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  libsodium,
+  ncurses,
+  libopus,
+  libvpx,
+  check,
+  libconfig,
+  pkg-config,
 }:
 
-let buildToxAV = !stdenv.isAarch32;
-in stdenv.mkDerivation rec {
+let
+  buildToxAV = !stdenv.isAarch32;
+in
+stdenv.mkDerivation rec {
   pname = "libtoxcore";
   version = "0.2.19";
 
   src =
     # We need the prepared sources tarball.
     fetchurl {
-      url =
-        "https://github.com/TokTok/c-toxcore/releases/download/v${version}/c-toxcore-${version}.tar.gz";
+      url = "https://github.com/TokTok/c-toxcore/releases/download/v${version}/c-toxcore-${version}.tar.gz";
       sha256 = "sha256-i0GPZHDbCFz1mpkVaFYTVWVW3yv0JxSPGBS3sRhihZQ=";
     };
 
@@ -29,16 +31,21 @@ in stdenv.mkDerivation rec {
     "-DBOOTSTRAP_DAEMON=ON"
   ] ++ lib.optional buildToxAV "-DMUST_BUILD_TOXAV=ON";
 
-  buildInputs = [
-    libsodium
-    ncurses
-    libconfig
-  ] ++ lib.optionals buildToxAV [
-    libopus
-    libvpx
-  ];
+  buildInputs =
+    [
+      libsodium
+      ncurses
+      libconfig
+    ]
+    ++ lib.optionals buildToxAV [
+      libopus
+      libvpx
+    ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   doCheck = true;
   nativeCheckInputs = [ check ];
@@ -55,7 +62,10 @@ in stdenv.mkDerivation rec {
     description = "P2P FOSS instant messaging application aimed to replace Skype";
     homepage = "https://tox.chat";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ peterhoeg ehmry ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      ehmry
+    ];
     platforms = lib.platforms.all;
   };
 }

@@ -1,15 +1,17 @@
-{ lib, stdenv
-, fetchurl
-, libX11
-, libXt
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  libXt,
 
-, libjpeg ? null
-, libpng ? null
-, libtiff ? null
+  libjpeg ? null,
+  libpng ? null,
+  libtiff ? null,
 
-, withJpegSupport ? true
-, withPngSupport ? true
-, withTiffSupport ? true
+  withJpegSupport ? true,
+  withPngSupport ? true,
+  withTiffSupport ? true,
 }:
 
 assert withJpegSupport -> libjpeg != null;
@@ -33,15 +35,20 @@ stdenv.mkDerivation rec {
     sha256 = "17k518vrdrya5c9dqhpmm4g0h2vlkq1iy87sg2ngzygypbli1xvn";
   };
 
-  buildInputs = [
-    libX11 libXt
-  ] ++ lib.optionals withJpegSupport [
-    libjpeg
-  ] ++ lib.optionals withPngSupport [
-    libpng
-  ] ++ lib.optionals withTiffSupport [
-    libtiff
-  ];
+  buildInputs =
+    [
+      libX11
+      libXt
+    ]
+    ++ lib.optionals withJpegSupport [
+      libjpeg
+    ]
+    ++ lib.optionals withPngSupport [
+      libpng
+    ]
+    ++ lib.optionals withTiffSupport [
+      libtiff
+    ];
 
   # NOTE: we patch the build-info script so that it never detects the utilities
   # it's trying to find; one of the Debian patches adds support for
@@ -83,6 +90,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
 
     maintainers = with lib.maintainers; [ ];
-    platforms = lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.linux; # arbitrary choice
   };
 }

@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "eb-garamond";
@@ -21,7 +25,10 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     homepage = "http://www.georgduffner.at/ebgaramond/";
     description = "Digitization of the Garamond shown on the Egenolff-Berner specimen";
-    maintainers = with maintainers; [ relrod rycee ];
+    maintainers = with maintainers; [
+      relrod
+      rycee
+    ];
     license = licenses.ofl;
     platforms = platforms.all;
   };

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -16,14 +21,16 @@ let
     The global options at `services.fcgiwrap.*` will be removed in NixOS 24.11.
   '';
 
-in {
+in
+{
 
   options = {
     services.fcgiwrap = {
       enable = mkOption {
         type = types.bool;
         default = false;
-        description = "Whether to enable fcgiwrap, a server for running CGI applications over FastCGI." + deprecationNote;
+        description =
+          "Whether to enable fcgiwrap, a server for running CGI applications over FastCGI." + deprecationNote;
       };
 
       allowGlobalInstanceLocalPrivilegeEscalation = mkOption {
@@ -44,7 +51,11 @@ in {
       };
 
       socketType = mkOption {
-        type = types.enum [ "unix" "tcp" "tcp6" ];
+        type = types.enum [
+          "unix"
+          "tcp"
+          "tcp6"
+        ];
         default = "unix";
         description = "Socket type: 'unix', 'tcp' or 'tcp6'." + deprecationNote;
       };
@@ -53,7 +64,8 @@ in {
         type = types.str;
         default = "/run/fcgiwrap.sock";
         example = "1.2.3.4:5678";
-        description = "Socket address. In case of a UNIX socket, this should be its filesystem path." + deprecationNote;
+        description =
+          "Socket address. In case of a UNIX socket, this should be its filesystem path." + deprecationNote;
       };
 
       user = mkOption {
@@ -74,10 +86,12 @@ in {
     assertions = [
       {
         assertion = cfg.allowGlobalInstanceLocalPrivilegeEscalation;
-        message = securityWarning + ''
-          To temporarily accept the risk and continue using the global instance,
-          set `services.fcgiwrap.allowGlobalInstanceLocalPrivilegeEscalation` to true.
-        '';
+        message =
+          securityWarning
+          + ''
+            To temporarily accept the risk and continue using the global instance,
+            set `services.fcgiwrap.allowGlobalInstanceLocalPrivilegeEscalation` to true.
+          '';
       }
     ];
 
@@ -87,21 +101,32 @@ in {
       after = [ "nss-user-lookup.target" ];
       wantedBy = optional (cfg.socketType != "unix") "multi-user.target";
 
-      serviceConfig = {
-        ExecStart = "${pkgs.fcgiwrap}/sbin/fcgiwrap -c ${builtins.toString cfg.preforkProcesses} ${
-          optionalString (cfg.socketType != "unix") "-s ${cfg.socketType}:${cfg.socketAddress}"
-        }";
-      } // (if cfg.user != null && cfg.group != null then {
-        User = cfg.user;
-        Group = cfg.group;
-      } else { } );
+      serviceConfig =
+        {
+          ExecStart = "${pkgs.fcgiwrap}/sbin/fcgiwrap -c ${builtins.toString cfg.preforkProcesses} ${
+            optionalString (cfg.socketType != "unix") "-s ${cfg.socketType}:${cfg.socketAddress}"
+          }";
+        }
+        // (
+          if cfg.user != null && cfg.group != null then
+            {
+              User = cfg.user;
+              Group = cfg.group;
+            }
+          else
+            { }
+        );
     };
 
-    systemd.sockets = if (cfg.socketType == "unix") then {
-      fcgiwrap = {
-        wantedBy = [ "sockets.target" ];
-        socketConfig.ListenStream = cfg.socketAddress;
-      };
-    } else { };
+    systemd.sockets =
+      if (cfg.socketType == "unix") then
+        {
+          fcgiwrap = {
+            wantedBy = [ "sockets.target" ];
+            socketConfig.ListenStream = cfg.socketAddress;
+          };
+        }
+      else
+        { };
   };
 }

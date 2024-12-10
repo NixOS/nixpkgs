@@ -1,6 +1,7 @@
-{ lib
-, buildGo122Module
-, fetchFromGitHub
+{
+  lib,
+  buildGo122Module,
+  fetchFromGitHub,
 }:
 
 buildGo122Module rec {
@@ -34,7 +35,10 @@ buildGo122Module rec {
     '';
     homepage = "https://github.com/GoogleCloudPlatform/cloud-sql-proxy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nicknovitski totoroot ];
+    maintainers = with maintainers; [
+      nicknovitski
+      totoroot
+    ];
     mainProgram = "cloud-sql-proxy";
   };
 }

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapQtAppsHook
-, pkg-config
-, qmake
-, qtwayland
-, qtsvg
-, postgresql
-, cups
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  pkg-config,
+  qmake,
+  qtwayland,
+  qtsvg,
+  postgresql,
+  cups,
+  libxml2,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,19 +23,35 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-LDgRv7Todyy2pnE21Z0O5JQ6mE4ZO3THv6rfEWU66Cc=";
   };
 
-  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook ];
-  qmakeFlags = [ "pgmodeler.pro" "CONFIG+=release" ] ++ lib.optionals stdenv.isDarwin [
-    "PGSQL_INC=${postgresql}/include"
-    "PGSQL_LIB=${postgresql.lib}/lib/libpq.dylib"
-    "XML_INC=${libxml2.dev}/include/libxml2"
-    "XML_LIB=${libxml2.out}/lib/libxml2.dylib"
-    "PREFIX=${placeholder "out"}/Applications/pgModeler.app/Contents"
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+    wrapQtAppsHook
   ];
+  qmakeFlags =
+    [
+      "pgmodeler.pro"
+      "CONFIG+=release"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "PGSQL_INC=${postgresql}/include"
+      "PGSQL_LIB=${postgresql.lib}/lib/libpq.dylib"
+      "XML_INC=${libxml2.dev}/include/libxml2"
+      "XML_LIB=${libxml2.out}/lib/libxml2.dylib"
+      "PREFIX=${placeholder "out"}/Applications/pgModeler.app/Contents"
+    ];
 
   # todo: libpq would suffice here. Unfortunately this won't work, if one uses only postgresql.lib here.
-  buildInputs = [ postgresql qtsvg ]
+  buildInputs =
+    [
+      postgresql
+      qtsvg
+    ]
     ++ lib.optionals stdenv.isLinux [ qtwayland ]
-    ++ lib.optionals stdenv.isDarwin [ cups libxml2 ];
+    ++ lib.optionals stdenv.isDarwin [
+      cups
+      libxml2
+    ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/bin

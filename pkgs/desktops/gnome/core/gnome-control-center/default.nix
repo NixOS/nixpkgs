@@ -1,74 +1,75 @@
-{ fetchurl
-, lib
-, stdenv
-, substituteAll
-, accountsservice
-, adwaita-icon-theme
-, colord
-, colord-gtk4
-, cups
-, dbus
-, docbook-xsl-nons
-, fontconfig
-, gdk-pixbuf
-, gettext
-, glib
-, glib-networking
-, gcr_4
-, glibc
-, gnome-bluetooth
-, gnome-color-manager
-, gnome-desktop
-, gnome-online-accounts
-, gnome-settings-daemon
-, gnome-tecla
-, gnome
-, gsettings-desktop-schemas
-, gsound
-, gst_all_1
-, gtk4
-, ibus
-, json-glib
-, libgtop
-, libgudev
-, libadwaita
-, libkrb5
-, libjxl
-, libpulseaudio
-, libpwquality
-, librsvg
-, webp-pixbuf-loader
-, libsecret
-, libsoup_3
-, libwacom
-, libXi
-, libxml2
-, libxslt
-, meson
-, modemmanager
-, mutter
-, networkmanager
-, networkmanagerapplet
-, libnma-gtk4
-, ninja
-, pkg-config
-, polkit
-, python3
-, samba
-, setxkbmap
-, shadow
-, shared-mime-info
-, sound-theme-freedesktop
-, tracker
-, tracker-miners
-, tzdata
-, udisks2
-, upower
-, libepoxy
-, gnome-user-share
-, gnome-remote-desktop
-, wrapGAppsHook4
-, xvfb-run
+{
+  fetchurl,
+  lib,
+  stdenv,
+  substituteAll,
+  accountsservice,
+  adwaita-icon-theme,
+  colord,
+  colord-gtk4,
+  cups,
+  dbus,
+  docbook-xsl-nons,
+  fontconfig,
+  gdk-pixbuf,
+  gettext,
+  glib,
+  glib-networking,
+  gcr_4,
+  glibc,
+  gnome-bluetooth,
+  gnome-color-manager,
+  gnome-desktop,
+  gnome-online-accounts,
+  gnome-settings-daemon,
+  gnome-tecla,
+  gnome,
+  gsettings-desktop-schemas,
+  gsound,
+  gst_all_1,
+  gtk4,
+  ibus,
+  json-glib,
+  libgtop,
+  libgudev,
+  libadwaita,
+  libkrb5,
+  libjxl,
+  libpulseaudio,
+  libpwquality,
+  librsvg,
+  webp-pixbuf-loader,
+  libsecret,
+  libsoup_3,
+  libwacom,
+  libXi,
+  libxml2,
+  libxslt,
+  meson,
+  modemmanager,
+  mutter,
+  networkmanager,
+  networkmanagerapplet,
+  libnma-gtk4,
+  ninja,
+  pkg-config,
+  polkit,
+  python3,
+  samba,
+  setxkbmap,
+  shadow,
+  shared-mime-info,
+  sound-theme-freedesktop,
+  tracker,
+  tracker-miners,
+  tzdata,
+  udisks2,
+  upower,
+  libepoxy,
+  gnome-user-share,
+  gnome-remote-desktop,
+  wrapGAppsHook4,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -101,57 +102,59 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    accountsservice
-    adwaita-icon-theme
-    colord
-    colord-gtk4
-    cups
-    fontconfig
-    gdk-pixbuf
-    glib
-    glib-networking
-    gcr_4
-    gnome-bluetooth
-    gnome-desktop
-    gnome-online-accounts
-    gnome-remote-desktop # optional, sharing panel
-    gnome-settings-daemon
-    gnome-tecla
-    gnome-user-share # optional, sharing panel
-    gsettings-desktop-schemas
-    gsound
-    gtk4
-    ibus
-    json-glib
-    libepoxy
-    libgtop
-    libgudev
-    libadwaita
-    libkrb5
-    libnma-gtk4
-    libpulseaudio
-    libpwquality
-    librsvg
-    libsecret
-    libsoup_3
-    libwacom
-    libXi
-    libxml2
-    modemmanager
-    mutter # schemas for the keybindings
-    networkmanager
-    polkit
-    samba
-    tracker
-    tracker-miners # for search locations dialog
-    udisks2
-    upower
-  ] ++ (with gst_all_1; [
-    # For animations in Mouse panel.
-    gst-plugins-base
-    gst-plugins-good
-  ]);
+  buildInputs =
+    [
+      accountsservice
+      adwaita-icon-theme
+      colord
+      colord-gtk4
+      cups
+      fontconfig
+      gdk-pixbuf
+      glib
+      glib-networking
+      gcr_4
+      gnome-bluetooth
+      gnome-desktop
+      gnome-online-accounts
+      gnome-remote-desktop # optional, sharing panel
+      gnome-settings-daemon
+      gnome-tecla
+      gnome-user-share # optional, sharing panel
+      gsettings-desktop-schemas
+      gsound
+      gtk4
+      ibus
+      json-glib
+      libepoxy
+      libgtop
+      libgudev
+      libadwaita
+      libkrb5
+      libnma-gtk4
+      libpulseaudio
+      libpwquality
+      librsvg
+      libsecret
+      libsoup_3
+      libwacom
+      libXi
+      libxml2
+      modemmanager
+      mutter # schemas for the keybindings
+      networkmanager
+      polkit
+      samba
+      tracker
+      tracker-miners # for search locations dialog
+      udisks2
+      upower
+    ]
+    ++ (with gst_all_1; [
+      # For animations in Mouse panel.
+      gst-plugins-base
+      gst-plugins-good
+    ]);
 
   nativeCheckInputs = [
     dbus
@@ -185,13 +188,15 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # Pull in WebP and JXL support for gnome-backgrounds.
     # In postInstall to run before gappsWrapperArgsHook.
-    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
-      extraLoaders = [
-        libjxl
-        librsvg
-        webp-pixbuf-loader
-      ];
-    }}"
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          libjxl
+          librsvg
+          webp-pixbuf-loader
+        ];
+      }
+    }"
   '';
 
   preFixup = ''

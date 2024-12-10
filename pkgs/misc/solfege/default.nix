@@ -1,8 +1,26 @@
-{ lib, fetchurl, gettext, pkg-config, texinfo, wrapGAppsHook3
-, buildPythonApplication, pycairo, pygobject3
-, gdk-pixbuf, gobject-introspection, gtk3, librsvg
-, alsa-utils, timidity, mpg123, vorbis-tools, csound, lilypond
-, automake, autoconf, txt2man
+{
+  lib,
+  fetchurl,
+  gettext,
+  pkg-config,
+  texinfo,
+  wrapGAppsHook3,
+  buildPythonApplication,
+  pycairo,
+  pygobject3,
+  gdk-pixbuf,
+  gobject-introspection,
+  gtk3,
+  librsvg,
+  alsa-utils,
+  timidity,
+  mpg123,
+  vorbis-tools,
+  csound,
+  lilypond,
+  automake,
+  autoconf,
+  txt2man,
 }:
 
 buildPythonApplication rec {
@@ -68,7 +86,11 @@ buildPythonApplication rec {
     homepage = "https://www.gnu.org/software/solfege/";
     license = licenses.gpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bjornfor orivej anthonyroussel ];
+    maintainers = with maintainers; [
+      bjornfor
+      orivej
+      anthonyroussel
+    ];
     mainProgram = "solfege";
   };
 }

@@ -42,7 +42,7 @@ rustPlatform.buildRustPackage rec {
     description = "A simple API client (postman like) in your terminal";
     homepage = "https://github.com/Julien-cpsn/ATAC";
     license = licenses.mit;
-    maintainers = with maintainers; [vinnymeller];
+    maintainers = with maintainers; [ vinnymeller ];
     mainProgram = "atac";
   };
 }

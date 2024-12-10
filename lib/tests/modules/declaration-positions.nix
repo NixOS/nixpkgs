@@ -1,9 +1,13 @@
 { lib, options, ... }:
-let discardPositions = lib.mapAttrs (k: v: v);
+let
+  discardPositions = lib.mapAttrs (k: v: v);
 in
 # unsafeGetAttrPos is unspecified best-effort behavior, so we only want to consider this test on an evaluator that satisfies some basic assumptions about this function.
 assert builtins.unsafeGetAttrPos "a" { a = true; } != null;
-assert builtins.unsafeGetAttrPos "a" (discardPositions { a = true; }) == null;
+assert
+  builtins.unsafeGetAttrPos "a" (discardPositions {
+    a = true;
+  }) == null;
 {
   imports = [
     {
@@ -35,15 +39,19 @@ assert builtins.unsafeGetAttrPos "a" (discardPositions { a = true; }) == null;
     default = { };
     type = lib.types.submoduleWith {
       modules = [
-        ({ options, ... }: {
-          options.submodDeclLine39 = lib.mkOption { };
-        })
+        (
+          { options, ... }:
+          {
+            options.submodDeclLine39 = lib.mkOption { };
+          }
+        )
         { freeformType = with lib.types; lazyAttrsOf (uniq unspecified); }
       ];
     };
   };
 
   config = {
-    submoduleLine34.submodDeclLine39 = (options.submoduleLine34.type.getSubOptions [ ]).submodDeclLine39.declarationPositions;
+    submoduleLine34.submodDeclLine39 =
+      (options.submoduleLine34.type.getSubOptions [ ]).submodDeclLine39.declarationPositions;
   };
 }

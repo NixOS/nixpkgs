@@ -1,6 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, unzip, meson, ninja, pkg-config, qtbase, qttools, wrapQtAppsHook, luajit }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  unzip,
+  meson,
+  ninja,
+  pkg-config,
+  qtbase,
+  qttools,
+  wrapQtAppsHook,
+  luajit,
+}:
 let
-  data = stdenv.mkDerivation(finalAttrs: {
+  data = stdenv.mkDerivation (finalAttrs: {
     pname = "path-of-building-data";
     version = "2.42.0";
 
@@ -42,8 +54,18 @@ stdenv.mkDerivation {
     hash = "sha256-zhw2PZ6ZNMgZ2hG+a6AcYBkeg7kbBHNc2eSt4if17Wk=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config qttools wrapQtAppsHook ];
-  buildInputs = [ qtbase luajit luajit.pkgs.lua-curl ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    qttools
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    qtbase
+    luajit
+    luajit.pkgs.lua-curl
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -67,6 +89,6 @@ stdenv.mkDerivation {
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.k900 ];
     mainProgram = "pobfrontend";
-    broken = stdenv.isDarwin;  # doesn't find uic6 for some reason
+    broken = stdenv.isDarwin; # doesn't find uic6 for some reason
   };
 }

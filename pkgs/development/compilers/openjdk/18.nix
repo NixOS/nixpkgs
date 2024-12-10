@@ -1,11 +1,48 @@
-{ stdenv, lib, fetchurl, fetchpatch, fetchFromGitHub, bash, pkg-config, autoconf, cpio
-, file, which, unzip, zip, perl, cups, freetype, harfbuzz, alsa-lib, libjpeg, giflib
-, libpng, zlib, lcms2, libX11, libICE, libXrender, libXext, libXt, libXtst
-, libXi, libXinerama, libXcursor, libXrandr, fontconfig, openjdk18-bootstrap
-, setJavaClassPath
-, headless ? false
-, enableJavaFX ? false, openjfx
-, enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  fetchFromGitHub,
+  bash,
+  pkg-config,
+  autoconf,
+  cpio,
+  file,
+  which,
+  unzip,
+  zip,
+  perl,
+  cups,
+  freetype,
+  harfbuzz,
+  alsa-lib,
+  libjpeg,
+  giflib,
+  libpng,
+  zlib,
+  lcms2,
+  libX11,
+  libICE,
+  libXrender,
+  libXext,
+  libXt,
+  libXtst,
+  libXi,
+  libXinerama,
+  libXcursor,
+  libXrandr,
+  fontconfig,
+  openjdk18-bootstrap,
+  setJavaClassPath,
+  headless ? false,
+  enableJavaFX ? false,
+  openjfx,
+  enableGnome2 ? true,
+  gtk3,
+  gnome_vfs,
+  glib,
+  GConf,
 }:
 
 let
@@ -29,40 +66,76 @@ let
       sha256 = "sha256-L6dsN0kqWcfemM8LBg62qtHQdymwRQoV1ndc8r+0qn8=";
     };
 
-    nativeBuildInputs = [ pkg-config autoconf unzip ];
-    buildInputs = [
-      cpio file which zip perl zlib cups freetype harfbuzz alsa-lib libjpeg giflib
-      libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      gtk3 gnome_vfs GConf glib
+    nativeBuildInputs = [
+      pkg-config
+      autoconf
+      unzip
     ];
+    buildInputs =
+      [
+        cpio
+        file
+        which
+        zip
+        perl
+        zlib
+        cups
+        freetype
+        harfbuzz
+        alsa-lib
+        libjpeg
+        giflib
+        libpng
+        zlib
+        lcms2
+        libX11
+        libICE
+        libXrender
+        libXext
+        libXtst
+        libXt
+        libXtst
+        libXi
+        libXinerama
+        libXcursor
+        libXrandr
+        fontconfig
+        openjdk-bootstrap
+      ]
+      ++ lib.optionals (!headless && enableGnome2) [
+        gtk3
+        gnome_vfs
+        GConf
+        glib
+      ];
 
-    patches = [
-      ./fix-java-home-jdk10.patch
-      ./read-truststore-from-env-jdk10.patch
-      ./currency-date-range-jdk10.patch
-      ./increase-javadoc-heap-jdk13.patch
-      ./ignore-LegalNoticeFilePlugin-jdk18.patch
+    patches =
+      [
+        ./fix-java-home-jdk10.patch
+        ./read-truststore-from-env-jdk10.patch
+        ./currency-date-range-jdk10.patch
+        ./increase-javadoc-heap-jdk13.patch
+        ./ignore-LegalNoticeFilePlugin-jdk18.patch
 
-      # -Wformat etc. are stricter in newer gccs, per
-      # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
-      # so grab the work-around from
-      # https://src.fedoraproject.org/rpms/java-openjdk/pull-request/24
-      (fetchurl {
-        url = "https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch";
-        sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
-      })
+        # -Wformat etc. are stricter in newer gccs, per
+        # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79677
+        # so grab the work-around from
+        # https://src.fedoraproject.org/rpms/java-openjdk/pull-request/24
+        (fetchurl {
+          url = "https://src.fedoraproject.org/rpms/java-openjdk/raw/06c001c7d87f2e9fe4fedeef2d993bcd5d7afa2a/f/rh1673833-remove_removal_of_wformat_during_test_compilation.patch";
+          sha256 = "082lmc30x64x583vqq00c8y0wqih3y4r0mp1c4bqq36l22qv6b6r";
+        })
 
-      # Patch borrowed from Alpine to fix build errors with musl libc and recent gcc.
-      # This is applied anywhere to prevent patchrot.
-      (fetchpatch {
-        url = "https://git.alpinelinux.org/aports/plain/testing/openjdk18/FixNullPtrCast.patch?id=b93d1fc37fcf106144958d957bb97c7db67bd41f";
-        hash = "sha256-nvO8RcmKwMcPdzq28mZ4If1XJ6FQ76CYWqRIozPCk5U=";
-      })
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      ./swing-use-gtk-jdk13.patch
-    ];
+        # Patch borrowed from Alpine to fix build errors with musl libc and recent gcc.
+        # This is applied anywhere to prevent patchrot.
+        (fetchpatch {
+          url = "https://git.alpinelinux.org/aports/plain/testing/openjdk18/FixNullPtrCast.patch?id=b93d1fc37fcf106144958d957bb97c7db67bd41f";
+          hash = "sha256-nvO8RcmKwMcPdzq28mZ4If1XJ6FQ76CYWqRIozPCk5U=";
+        })
+      ]
+      ++ lib.optionals (!headless && enableGnome2) [
+        ./swing-use-gtk-jdk13.patch
+      ];
 
     postPatch = ''
       chmod +x configure
@@ -72,35 +145,50 @@ let
     # JDK's build system attempts to specifically detect
     # and special-case WSL, and we don't want it to do that,
     # so pass the correct platform names explicitly
-    configurePlatforms = ["build" "host"];
+    configurePlatforms = [
+      "build"
+      "host"
+    ];
 
-    configureFlags = [
-      "--with-boot-jdk=${openjdk-bootstrap.home}"
-      "--with-version-build=${version.build}"
-      "--with-version-opt=nixos"
-      "--with-version-pre="
-      "--enable-unlimited-crypto"
-      "--with-native-debug-symbols=internal"
-      "--with-freetype=system"
-      "--with-harfbuzz=system"
-      "--with-libjpeg=system"
-      "--with-giflib=system"
-      "--with-libpng=system"
-      "--with-zlib=system"
-      "--with-lcms=system"
-      "--with-stdc++lib=dynamic"
-    ] ++ lib.optional headless "--enable-headless-only"
+    configureFlags =
+      [
+        "--with-boot-jdk=${openjdk-bootstrap.home}"
+        "--with-version-build=${version.build}"
+        "--with-version-opt=nixos"
+        "--with-version-pre="
+        "--enable-unlimited-crypto"
+        "--with-native-debug-symbols=internal"
+        "--with-freetype=system"
+        "--with-harfbuzz=system"
+        "--with-libjpeg=system"
+        "--with-giflib=system"
+        "--with-libpng=system"
+        "--with-zlib=system"
+        "--with-lcms=system"
+        "--with-stdc++lib=dynamic"
+      ]
+      ++ lib.optional headless "--enable-headless-only"
       ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
 
     separateDebugInfo = true;
 
     env.NIX_CFLAGS_COMPILE = "-Wno-error";
 
-    NIX_LDFLAGS = toString (lib.optionals (!headless) [
-      "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      "-lgtk-3" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
-    ]);
+    NIX_LDFLAGS = toString (
+      lib.optionals (!headless) [
+        "-lfontconfig"
+        "-lcups"
+        "-lXinerama"
+        "-lXrandr"
+        "-lmagic"
+      ]
+      ++ lib.optionals (!headless && enableGnome2) [
+        "-lgtk-3"
+        "-lgio-2.0"
+        "-lgnomevfs-2"
+        "-lgconf-2"
+      ]
+    );
 
     # -j flag is explicitly rejected by the build system:
     #     Error: 'make -jN' is not supported, use 'make JOBS=N'
@@ -188,4 +276,5 @@ let
       inherit gtk3;
     };
   };
-in openjdk
+in
+openjdk

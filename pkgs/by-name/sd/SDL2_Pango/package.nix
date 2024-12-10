@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, freetype
-, pango
-, SDL2
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  freetype,
+  pango,
+  SDL2,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-8SL5ylxi87TuKreC8m2kxlLr8rcmwYYvwkp4vQZ9dkc=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   strictDeps = true;
 
@@ -30,13 +34,15 @@ stdenv.mkDerivation rec {
     SDL2
   ];
 
-  buildInputs = [
-    freetype
-    pango
-    SDL2
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.libobjc
-  ];
+  buildInputs =
+    [
+      freetype
+      pango
+      SDL2
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.libobjc
+    ];
 
   meta = with lib; {
     description = "A library for graphically rendering internationalized and tagged text in SDL2 using TrueType fonts";

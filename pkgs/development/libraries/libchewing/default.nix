@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, sqlite, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  sqlite,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libchewing";

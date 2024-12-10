@@ -1,17 +1,18 @@
-{ lib
-, substituteAll
-, fetchurl
-, ocaml
-, dune_3
-, buildDunePackage
-, yojson
-, csexp
-, merlin-lib
-, dot-merlin-reader
-, jq
-, menhir
-, menhirLib
-, menhirSdk
+{
+  lib,
+  substituteAll,
+  fetchurl,
+  ocaml,
+  dune_3,
+  buildDunePackage,
+  yojson,
+  csexp,
+  merlin-lib,
+  dot-merlin-reader,
+  jq,
+  menhir,
+  menhirLib,
+  menhirSdk,
 }:
 
 let
@@ -40,56 +41,57 @@ let
   version = lib.getAttr ocaml.version merlinVersions;
 in
 
-if !lib.hasAttr ocaml.version merlinVersions
-then builtins.throw "merlin is not available for OCaml ${ocaml.version}"
+if !lib.hasAttr ocaml.version merlinVersions then
+  builtins.throw "merlin is not available for OCaml ${ocaml.version}"
 else
 
-buildDunePackage {
-  pname = "merlin";
-  inherit version;
-  duneVersion = "3";
+  buildDunePackage {
+    pname = "merlin";
+    inherit version;
+    duneVersion = "3";
 
-  src = fetchurl {
-    url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-${version}.tbz";
-    sha256 = hashes."${version}";
-  };
+    src = fetchurl {
+      url = "https://github.com/ocaml/merlin/releases/download/v${version}/merlin-${version}.tbz";
+      sha256 = hashes."${version}";
+    };
 
-  patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
-      dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
-      dune = "${dune_3}/bin/dune";
-    })
-  ];
+    patches = [
+      (substituteAll {
+        src = ./fix-paths.patch;
+        dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
+        dune = "${dune_3}/bin/dune";
+      })
+    ];
 
-  strictDeps = true;
+    strictDeps = true;
 
-  nativeBuildInputs = [
-    menhir
-    jq
-  ];
-  buildInputs = [
-    dot-merlin-reader
-    yojson
-    (if lib.versionAtLeast version "4.7-414"
-     then merlin-lib
-     else csexp)
-    menhirSdk
-    menhirLib
-  ];
+    nativeBuildInputs = [
+      menhir
+      jq
+    ];
+    buildInputs = [
+      dot-merlin-reader
+      yojson
+      (if lib.versionAtLeast version "4.7-414" then merlin-lib else csexp)
+      menhirSdk
+      menhirLib
+    ];
 
-  doCheck = false;
-  checkPhase = ''
-    runHook preCheck
-    patchShebangs tests/merlin-wrapper
-    dune runtest # filtering with -p disables tests
-    runHook postCheck
-  '';
+    doCheck = false;
+    checkPhase = ''
+      runHook preCheck
+      patchShebangs tests/merlin-wrapper
+      dune runtest # filtering with -p disables tests
+      runHook postCheck
+    '';
 
-  meta = with lib; {
-    description = "An editor-independent tool to ease the development of programs in OCaml";
-    homepage = "https://github.com/ocaml/merlin";
-    license = licenses.mit;
-    maintainers = [ maintainers.vbgl maintainers.sternenseemann ];
-  };
-}
+    meta = with lib; {
+      description = "An editor-independent tool to ease the development of programs in OCaml";
+      homepage = "https://github.com/ocaml/merlin";
+      license = licenses.mit;
+      maintainers = [
+        maintainers.vbgl
+        maintainers.sternenseemann
+      ];
+    };
+  }

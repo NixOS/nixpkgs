@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gi-docgen
-, glib
-, libxml2
-, gobject-introspection
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  gi-docgen,
+  glib,
+  libxml2,
+  gobject-introspection,
 
-, enableGstPlugin ? true
-, enableViewer ? true
-, gst_all_1
-, gtk3
-, wrapGAppsHook3
+  enableGstPlugin ? true,
+  enableViewer ? true,
+  gst_all_1,
+  gtk3,
+  wrapGAppsHook3,
 
-, enableUsb ? true
-, libusb1
+  enableUsb ? true,
+  libusb1,
 
-, enablePacketSocket ? true
-, enableFastHeartbeat ? false
+  enablePacketSocket ? true,
+  enableFastHeartbeat ? false,
 }:
 
 assert enableGstPlugin -> gst_all_1 != null;
@@ -38,7 +39,12 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-CsXnwrZqBCS7JVAB/7JlAAvks5HnYxgrdc4Bmg68QdE=";
   };
 
-  outputs = [ "bin" "dev" "out" "lib" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "lib"
+  ];
 
   nativeBuildInputs = [
     meson
@@ -49,17 +55,30 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional enableViewer wrapGAppsHook3;
 
   buildInputs =
-    [ glib libxml2 ]
+    [
+      glib
+      libxml2
+    ]
     ++ lib.optional enableUsb libusb1
-    ++ lib.optionals (enableViewer || enableGstPlugin) (with gst_all_1; [ gstreamer gst-plugins-base (gst-plugins-good.override { gtkSupport = true; }) gst-plugins-bad ])
+    ++ lib.optionals (enableViewer || enableGstPlugin) (
+      with gst_all_1;
+      [
+        gstreamer
+        gst-plugins-base
+        (gst-plugins-good.override { gtkSupport = true; })
+        gst-plugins-bad
+      ]
+    )
     ++ lib.optionals (enableViewer) [ gtk3 ];
 
-  mesonFlags = [
-  ] ++ lib.optional enableFastHeartbeat "-Dfast-heartbeat=enabled"
-  ++ lib.optional (!enableGstPlugin) "-Dgst-plugin=disabled"
-  ++ lib.optional (!enableViewer) "-Dviewer=disabled"
-  ++ lib.optional (!enableUsb) "-Dviewer=disabled"
-  ++ lib.optional (!enablePacketSocket) "-Dpacket-socket=disabled";
+  mesonFlags =
+    [
+    ]
+    ++ lib.optional enableFastHeartbeat "-Dfast-heartbeat=enabled"
+    ++ lib.optional (!enableGstPlugin) "-Dgst-plugin=disabled"
+    ++ lib.optional (!enableViewer) "-Dviewer=disabled"
+    ++ lib.optional (!enableUsb) "-Dviewer=disabled"
+    ++ lib.optional (!enablePacketSocket) "-Dpacket-socket=disabled";
 
   doCheck = true;
 

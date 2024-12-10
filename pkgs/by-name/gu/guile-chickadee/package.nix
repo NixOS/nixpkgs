@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, makeWrapper
-, testers
-, guile
-, pkg-config
-, texinfo
-, freetype
-, libjpeg_turbo
-, libpng
-, libvorbis
-, mpg123
-, openal
-, readline
-, guile-opengl
-, guile-sdl2
-, guile-chickadee
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  makeWrapper,
+  testers,
+  guile,
+  pkg-config,
+  texinfo,
+  freetype,
+  libjpeg_turbo,
+  libpng,
+  libvorbis,
+  mpg123,
+  openal,
+  readline,
+  guile-opengl,
+  guile-sdl2,
+  guile-chickadee,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "guile-chickadee";

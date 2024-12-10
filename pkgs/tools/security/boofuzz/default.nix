@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -41,14 +42,16 @@ python3.pkgs.buildPythonApplication rec {
     pytestCheckHook
   ];
 
-  disabledTests = [
-    "TestNetworkMonitor"
-    "TestNoResponseFailure"
-    "TestProcessMonitor"
-    "TestSocketConnection"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "test_time_repeater"
-  ];
+  disabledTests =
+    [
+      "TestNetworkMonitor"
+      "TestNoResponseFailure"
+      "TestProcessMonitor"
+      "TestSocketConnection"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "test_time_repeater"
+    ];
 
   pythonImportsCheck = [
     "boofuzz"

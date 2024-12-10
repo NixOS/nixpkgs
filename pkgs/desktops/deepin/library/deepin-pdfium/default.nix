@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, qmake
-, pkg-config
-, libchardet
-, lcms2
-, openjpeg
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  qmake,
+  pkg-config,
+  libchardet,
+  lcms2,
+  openjpeg,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, fetchFromGitHub, zlib, dune-configurator, zarith }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  zlib,
+  dune-configurator,
+  zarith,
+}:
 
 buildDunePackage rec {
   pname = "cryptokit";
@@ -9,7 +16,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "xavierleroy";
     repo = "cryptokit";
-    rev = "release${lib.replaceStrings ["."] [""] version}";
+    rev = "release${lib.replaceStrings [ "." ] [ "" ] version}";
     hash = "sha256-8RRAPFgL2pqKotc1I3fIB9q2cNi46SP8pt+0rZM+QUc=";
   };
 
@@ -20,7 +27,10 @@ buildDunePackage rec {
   '';
 
   buildInputs = [ dune-configurator ];
-  propagatedBuildInputs = [ zarith zlib ];
+  propagatedBuildInputs = [
+    zarith
+    zlib
+  ];
 
   doCheck = true;
 

@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, python3
-, ninja
-, vala
-, desktop-file-utils
-, gtk3
-, granite
-, libgee
-, libhandy
-, gcr
-, webkitgtk_4_1
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  python3,
+  ninja,
+  vala,
+  desktop-file-utils,
+  gtk3,
+  granite,
+  libgee,
+  libhandy,
+  gcr,
+  webkitgtk_4_1,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

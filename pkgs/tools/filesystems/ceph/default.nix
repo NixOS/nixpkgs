@@ -1,97 +1,99 @@
-{ lib
-, stdenv
-, runCommand
-, fetchurl
-, fetchFromGitHub
-, fetchPypi
-, fetchpatch
+{
+  lib,
+  stdenv,
+  runCommand,
+  fetchurl,
+  fetchFromGitHub,
+  fetchPypi,
+  fetchpatch,
 
-# Build time
-, cmake
-, ensureNewerSourcesHook
-, fmt
-, git
-, makeWrapper
-, nasm
-, pkg-config
-, which
+  # Build time
+  cmake,
+  ensureNewerSourcesHook,
+  fmt,
+  git,
+  makeWrapper,
+  nasm,
+  pkg-config,
+  which,
 
-# Tests
-, nixosTests
+  # Tests
+  nixosTests,
 
-# Runtime dependencies
-, arrow-cpp
-, babeltrace
-, boost179
-, bzip2
-, cryptsetup
-, cunit
-, doxygen
-, gperf
-, graphviz
-, gnugrep
-, gtest
-, icu
-, kmod
-, libcap
-, libcap_ng
-, libnl
-, libxml2
-, lttng-ust
-, lua
-, lz4
-, oath-toolkit
-, openldap
-, python311
-, rdkafka
-, rocksdb
-, snappy
-, sqlite
-, utf8proc
-, zlib
-, zstd
+  # Runtime dependencies
+  arrow-cpp,
+  babeltrace,
+  boost179,
+  bzip2,
+  cryptsetup,
+  cunit,
+  doxygen,
+  gperf,
+  graphviz,
+  gnugrep,
+  gtest,
+  icu,
+  kmod,
+  libcap,
+  libcap_ng,
+  libnl,
+  libxml2,
+  lttng-ust,
+  lua,
+  lz4,
+  oath-toolkit,
+  openldap,
+  python311,
+  rdkafka,
+  rocksdb,
+  snappy,
+  sqlite,
+  utf8proc,
+  zlib,
+  zstd,
 
-# Dependencies of overridden Python dependencies, hopefully we can remove these soon.
-, rustPlatform
+  # Dependencies of overridden Python dependencies, hopefully we can remove these soon.
+  rustPlatform,
 
-# Optional Dependencies
-, curl ? null
-, expat ? null
-, fuse ? null
-, libatomic_ops ? null
-, libedit ? null
-, libs3 ? null
-, yasm ? null
+  # Optional Dependencies
+  curl ? null,
+  expat ? null,
+  fuse ? null,
+  libatomic_ops ? null,
+  libedit ? null,
+  libs3 ? null,
+  yasm ? null,
 
-# Mallocs
-, gperftools ? null
-, jemalloc ? null
+  # Mallocs
+  gperftools ? null,
+  jemalloc ? null,
 
-# Crypto Dependencies
-, cryptopp ? null
-, nspr ? null
-, nss ? null
+  # Crypto Dependencies
+  cryptopp ? null,
+  nspr ? null,
+  nss ? null,
 
-# Linux Only Dependencies
-, linuxHeaders
-, util-linux
-, libuuid
-, udev
-, keyutils
-, rdma-core
-, rabbitmq-c
-, libaio ? null
-, libxfs ? null
-, liburing ? null
-, zfs ? null
-, ...
+  # Linux Only Dependencies
+  linuxHeaders,
+  util-linux,
+  libuuid,
+  udev,
+  keyutils,
+  rdma-core,
+  rabbitmq-c,
+  libaio ? null,
+  libxfs ? null,
+  liburing ? null,
+  zfs ? null,
+  ...
 }:
 
 # We must have one crypto library
 assert cryptopp != null || (nss != null && nspr != null);
 
 let
-  shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
+  shouldUsePkg =
+    pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
   optYasm = shouldUsePkg yasm;
   optExpat = shouldUsePkg expat;
@@ -129,139 +131,171 @@ let
   malloc = if optJemalloc != null then optJemalloc else optGperftools;
 
   # We prefer nss over cryptopp
-  cryptoStr = if optNss != null && optNspr != null then "nss" else
-    if optCryptopp != null then "cryptopp" else "none";
+  cryptoStr =
+    if optNss != null && optNspr != null then
+      "nss"
+    else if optCryptopp != null then
+      "cryptopp"
+    else
+      "none";
 
   cryptoLibsMap = {
-    nss = [ optNss optNspr ];
+    nss = [
+      optNss
+      optNspr
+    ];
     cryptopp = [ optCryptopp ];
     none = [ ];
   };
 
-  getMeta = description: with lib; {
-     homepage = "https://ceph.io/en/";
-     inherit description;
-     license = with licenses; [ lgpl21 gpl2Only bsd3 mit publicDomain ];
-     maintainers = with maintainers; [ adev ak johanot krav ];
-     platforms = [ "x86_64-linux" "aarch64-linux" ];
-   };
+  getMeta =
+    description: with lib; {
+      homepage = "https://ceph.io/en/";
+      inherit description;
+      license = with licenses; [
+        lgpl21
+        gpl2Only
+        bsd3
+        mit
+        publicDomain
+      ];
+      maintainers = with maintainers; [
+        adev
+        ak
+        johanot
+        krav
+      ];
+      platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+    };
 
-  ceph-common = with python.pkgs; buildPythonPackage {
-    pname = "ceph-common";
-    inherit src version;
+  ceph-common =
+    with python.pkgs;
+    buildPythonPackage {
+      pname = "ceph-common";
+      inherit src version;
 
-    sourceRoot = "ceph-${version}/src/python-common";
+      sourceRoot = "ceph-${version}/src/python-common";
 
-    propagatedBuildInputs = [
-      pyyaml
-    ];
+      propagatedBuildInputs = [
+        pyyaml
+      ];
 
-    nativeCheckInputs = [
-      pytestCheckHook
-    ];
+      nativeCheckInputs = [
+        pytestCheckHook
+      ];
 
-    disabledTests = [
-      # requires network access
-      "test_valid_addr"
-    ];
+      disabledTests = [
+        # requires network access
+        "test_valid_addr"
+      ];
 
-    meta = getMeta "Ceph common module for code shared by manager modules";
-  };
+      meta = getMeta "Ceph common module for code shared by manager modules";
+    };
 
   # Watch out for python <> boost compatibility
   python = python311.override {
-    packageOverrides = self: super: let
-      cryptographyOverrideVersion = "40.0.1";
-      bcryptOverrideVersion = "4.0.1";
-    in {
-      # Ceph does not support `bcrypt` > 4.0 yet:
-      # * Upstream issue: https://tracker.ceph.com/issues/63529
-      #   > Python Sub-Interpreter Model Used by ceph-mgr Incompatible With Python Modules Based on PyO3
-      bcrypt = super.bcrypt.overridePythonAttrs (old: rec {
-        pname = "bcrypt";
-        version = bcryptOverrideVersion;
-        src = fetchPypi {
-          inherit pname version;
-          hash = "sha256-J9N1kDrIJhz+QEf2cJ0W99GNObHskqr3KvmJVSplDr0=";
-        };
-        cargoRoot = "src/_bcrypt";
-        cargoDeps = rustPlatform.fetchCargoTarball {
-          inherit src;
-          sourceRoot = "${pname}-${version}/${cargoRoot}";
-          name = "${pname}-${version}";
-          hash = "sha256-lDWX69YENZFMu7pyBmavUZaalGvFqbHSHfkwkzmDQaY=";
-        };
-      });
-      # Ceph does not support `cryptography` > 40 yet:
-      # * https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
-      # * Upstream issue: https://tracker.ceph.com/issues/63529
-      #   > Python Sub-Interpreter Model Used by ceph-mgr Incompatible With Python Modules Based on PyO3
-      #
-      # We pin the older `cryptography` 40 here;
-      # this also forces us to pin an older `pyopenssl` because the current one
-      # is not compatible with older `cryptography`, see:
-      #     https://github.com/pyca/pyopenssl/blob/d9752e44127ba36041b045417af8a0bf16ec4f1e/CHANGELOG.rst#2320-2023-05-30
-      cryptography = super.cryptography.overridePythonAttrs (old: rec {
-        version = cryptographyOverrideVersion;
-
-        src = fetchPypi {
-          inherit (old) pname;
+    packageOverrides =
+      self: super:
+      let
+        cryptographyOverrideVersion = "40.0.1";
+        bcryptOverrideVersion = "4.0.1";
+      in
+      {
+        # Ceph does not support `bcrypt` > 4.0 yet:
+        # * Upstream issue: https://tracker.ceph.com/issues/63529
+        #   > Python Sub-Interpreter Model Used by ceph-mgr Incompatible With Python Modules Based on PyO3
+        bcrypt = super.bcrypt.overridePythonAttrs (old: rec {
+          pname = "bcrypt";
+          version = bcryptOverrideVersion;
+          src = fetchPypi {
+            inherit pname version;
+            hash = "sha256-J9N1kDrIJhz+QEf2cJ0W99GNObHskqr3KvmJVSplDr0=";
+          };
+          cargoRoot = "src/_bcrypt";
+          cargoDeps = rustPlatform.fetchCargoTarball {
+            inherit src;
+            sourceRoot = "${pname}-${version}/${cargoRoot}";
+            name = "${pname}-${version}";
+            hash = "sha256-lDWX69YENZFMu7pyBmavUZaalGvFqbHSHfkwkzmDQaY=";
+          };
+        });
+        # Ceph does not support `cryptography` > 40 yet:
+        # * https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
+        # * Upstream issue: https://tracker.ceph.com/issues/63529
+        #   > Python Sub-Interpreter Model Used by ceph-mgr Incompatible With Python Modules Based on PyO3
+        #
+        # We pin the older `cryptography` 40 here;
+        # this also forces us to pin an older `pyopenssl` because the current one
+        # is not compatible with older `cryptography`, see:
+        #     https://github.com/pyca/pyopenssl/blob/d9752e44127ba36041b045417af8a0bf16ec4f1e/CHANGELOG.rst#2320-2023-05-30
+        cryptography = super.cryptography.overridePythonAttrs (old: rec {
           version = cryptographyOverrideVersion;
-          hash = "sha256-KAPy+LHpX2FEGZJsfm9V2CivxhTKXtYVQ4d65mjMNHI=";
-        };
 
-        cargoDeps = rustPlatform.fetchCargoTarball {
-          inherit src;
-          sourceRoot = let cargoRoot = "src/rust"; in "${old.pname}-${cryptographyOverrideVersion}/${cargoRoot}";
-          name = "${old.pname}-${cryptographyOverrideVersion}";
-          hash = "sha256-gFfDTc2QWBWHBCycVH1dYlCsWQMVcRZfOBIau+njtDU=";
-        };
+          src = fetchPypi {
+            inherit (old) pname;
+            version = cryptographyOverrideVersion;
+            hash = "sha256-KAPy+LHpX2FEGZJsfm9V2CivxhTKXtYVQ4d65mjMNHI=";
+          };
 
-        # Not using the normal `(old.patches or []) ++` pattern here to use
-        # the overridden package's patches, because current nixpkgs's `cryptography`
-        # has patches that do not apply on this old version.
-        patches = [
-          # Fix https://nvd.nist.gov/vuln/detail/CVE-2023-49083 which has no upstream backport.
-          # See https://github.com/pyca/cryptography/commit/f09c261ca10a31fe41b1262306db7f8f1da0e48a#diff-f5134bf8f3cf0a5cc8601df55e50697acc866c603a38caff98802bd8e17976c5R1893
-          ./python-cryptography-Cherry-pick-fix-for-CVE-2023-49083-on-cryptography-40.patch
-        ];
+          cargoDeps = rustPlatform.fetchCargoTarball {
+            inherit src;
+            sourceRoot =
+              let
+                cargoRoot = "src/rust";
+              in
+              "${old.pname}-${cryptographyOverrideVersion}/${cargoRoot}";
+            name = "${old.pname}-${cryptographyOverrideVersion}";
+            hash = "sha256-gFfDTc2QWBWHBCycVH1dYlCsWQMVcRZfOBIau+njtDU=";
+          };
 
-        # Tests would require overriding `cryptography-vectors`, which is not currently
-        # possible/desired, see: https://github.com/NixOS/nixpkgs/pull/281858#pullrequestreview-1841421866
-        doCheck = false;
-      });
+          # Not using the normal `(old.patches or []) ++` pattern here to use
+          # the overridden package's patches, because current nixpkgs's `cryptography`
+          # has patches that do not apply on this old version.
+          patches = [
+            # Fix https://nvd.nist.gov/vuln/detail/CVE-2023-49083 which has no upstream backport.
+            # See https://github.com/pyca/cryptography/commit/f09c261ca10a31fe41b1262306db7f8f1da0e48a#diff-f5134bf8f3cf0a5cc8601df55e50697acc866c603a38caff98802bd8e17976c5R1893
+            ./python-cryptography-Cherry-pick-fix-for-CVE-2023-49083-on-cryptography-40.patch
+          ];
 
-      # This is the most recent version of `pyopenssl` that's still compatible with `cryptography` 40.
-      # See https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
-      pyopenssl = super.pyopenssl.overridePythonAttrs (old: rec {
-        version = "23.1.1";
-        src = fetchPypi {
-          pname = "pyOpenSSL";
-          inherit version;
-          hash = "sha256-hBSYub7GFiOxtsR+u8AjZ8B9YODhlfGXkIF/EMyNsLc=";
-        };
-        disabledTests = old.disabledTests or [ ] ++ [
-          "test_export_md5_digest"
-        ];
-        propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [
-          self.flaky
-        ];
-      });
+          # Tests would require overriding `cryptography-vectors`, which is not currently
+          # possible/desired, see: https://github.com/NixOS/nixpkgs/pull/281858#pullrequestreview-1841421866
+          doCheck = false;
+        });
 
-      # Ceph does not support `kubernetes` >= 19, see:
-      #     https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1900324090
-      kubernetes = super.kubernetes.overridePythonAttrs (old: rec {
-        version = "18.20.0";
-        src = fetchFromGitHub {
-          owner = "kubernetes-client";
-          repo = "python";
-          rev = "v${version}";
-          sha256 = "1sawp62j7h0yksmg9jlv4ik9b9i1a1w9syywc9mv8x89wibf5ql1";
-          fetchSubmodules = true;
-        };
-      });
+        # This is the most recent version of `pyopenssl` that's still compatible with `cryptography` 40.
+        # See https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1899358602
+        pyopenssl = super.pyopenssl.overridePythonAttrs (old: rec {
+          version = "23.1.1";
+          src = fetchPypi {
+            pname = "pyOpenSSL";
+            inherit version;
+            hash = "sha256-hBSYub7GFiOxtsR+u8AjZ8B9YODhlfGXkIF/EMyNsLc=";
+          };
+          disabledTests = old.disabledTests or [ ] ++ [
+            "test_export_md5_digest"
+          ];
+          propagatedBuildInputs = old.propagatedBuildInputs or [ ] ++ [
+            self.flaky
+          ];
+        });
 
-    };
+        # Ceph does not support `kubernetes` >= 19, see:
+        #     https://github.com/NixOS/nixpkgs/pull/281858#issuecomment-1900324090
+        kubernetes = super.kubernetes.overridePythonAttrs (old: rec {
+          version = "18.20.0";
+          src = fetchFromGitHub {
+            owner = "kubernetes-client";
+            repo = "python";
+            rev = "v${version}";
+            sha256 = "1sawp62j7h0yksmg9jlv4ik9b9i1a1w9syywc9mv8x89wibf5ql1";
+            fetchSubmodules = true;
+          };
+        });
+
+      };
   };
 
   boost = boost179.override {
@@ -270,43 +304,45 @@ let
   };
 
   # TODO: split this off in build and runtime environment
-  ceph-python-env = python.withPackages (ps: with ps; [
-    ceph-common
+  ceph-python-env = python.withPackages (
+    ps: with ps; [
+      ceph-common
 
-    # build time
-    cython_0
+      # build time
+      cython_0
 
-    # debian/control
-    bcrypt
-    cherrypy
-    influxdb
-    jinja2
-    kubernetes
-    natsort
-    numpy
-    pecan
-    prettytable
-    pyjwt
-    pyopenssl
-    python-dateutil
-    pyyaml
-    requests
-    routes
-    scikit-learn
-    scipy
-    setuptools
-    sphinx
-    virtualenv
-    werkzeug
+      # debian/control
+      bcrypt
+      cherrypy
+      influxdb
+      jinja2
+      kubernetes
+      natsort
+      numpy
+      pecan
+      prettytable
+      pyjwt
+      pyopenssl
+      python-dateutil
+      pyyaml
+      requests
+      routes
+      scikit-learn
+      scipy
+      setuptools
+      sphinx
+      virtualenv
+      werkzeug
 
-    # src/pybind/mgr/requirements-required.txt
-    cryptography
-    jsonpatch
+      # src/pybind/mgr/requirements-required.txt
+      cryptography
+      jsonpatch
 
-    # src/tools/cephfs/shell/setup.py
-    cmd2
-    colorama
-  ]);
+      # src/tools/cephfs/shell/setup.py
+      cmd2
+      colorama
+    ]
+  );
   inherit (ceph-python-env.python) sitePackages;
 
   version = "18.2.4";
@@ -314,7 +350,8 @@ let
     url = "https://download.ceph.com/tarballs/ceph-${version}.tar.gz";
     hash = "sha256-EFqteP3Jo+hASXVesH6gkjDjFO7/1RN151tIf/lQ06s=";
   };
-in rec {
+in
+rec {
   ceph = stdenv.mkDerivation {
     pname = "ceph";
     inherit src version;
@@ -369,61 +406,68 @@ in rec {
       graphviz
     ];
 
-    buildInputs = cryptoLibsMap.${cryptoStr} ++ [
-      arrow-cpp
-      babeltrace
-      boost
-      bzip2
-      ceph-python-env
-      cryptsetup
-      cunit
-      gperf
-      gtest
-      icu
-      libcap
-      libnl
-      libxml2
-      lttng-ust
-      lua
-      lz4
-      malloc
-      oath-toolkit
-      openldap
-      optLibatomic_ops
-      optLibs3
-      optYasm
-      rdkafka
-      rocksdb'
-      snappy
-      sqlite
-      utf8proc
-      zlib
-      zstd
-    ] ++ lib.optionals stdenv.isLinux [
-      keyutils
-      libcap_ng
-      liburing
-      libuuid
-      linuxHeaders
-      optLibaio
-      optLibxfs
-      optZfs
-      rabbitmq-c
-      rdma-core
-      udev
-      util-linux
-    ] ++ lib.optionals hasRadosgw [
-      optCurl
-      optExpat
-      optFuse
-      optLibedit
-    ];
+    buildInputs =
+      cryptoLibsMap.${cryptoStr}
+      ++ [
+        arrow-cpp
+        babeltrace
+        boost
+        bzip2
+        ceph-python-env
+        cryptsetup
+        cunit
+        gperf
+        gtest
+        icu
+        libcap
+        libnl
+        libxml2
+        lttng-ust
+        lua
+        lz4
+        malloc
+        oath-toolkit
+        openldap
+        optLibatomic_ops
+        optLibs3
+        optYasm
+        rdkafka
+        rocksdb'
+        snappy
+        sqlite
+        utf8proc
+        zlib
+        zstd
+      ]
+      ++ lib.optionals stdenv.isLinux [
+        keyutils
+        libcap_ng
+        liburing
+        libuuid
+        linuxHeaders
+        optLibaio
+        optLibxfs
+        optZfs
+        rabbitmq-c
+        rdma-core
+        udev
+        util-linux
+      ]
+      ++ lib.optionals hasRadosgw [
+        optCurl
+        optExpat
+        optFuse
+        optLibedit
+      ];
 
-    pythonPath = [ ceph-python-env "${placeholder "out"}/${ceph-python-env.sitePackages}" ];
+    pythonPath = [
+      ceph-python-env
+      "${placeholder "out"}/${ceph-python-env.sitePackages}"
+    ];
 
     # replace /sbin and /bin based paths with direct nix store paths
     # increase the `command` buffer size since 2 nix store paths cannot fit within 128 characters
-    preConfigure =''
+    preConfigure = ''
       substituteInPlace src/common/module.c \
         --replace "char command[128];" "char command[256];" \
         --replace "/sbin/modinfo"  "${kmod}/bin/modinfo" \
@@ -493,7 +537,13 @@ in rec {
       test -f $out/bin/ceph-volume
     '';
 
-    outputs = [ "out" "lib" "dev" "doc" "man" ];
+    outputs = [
+      "out"
+      "lib"
+      "dev"
+      "doc"
+      "man"
+    ];
 
     doCheck = false; # uses pip to install things from the internet
 
@@ -509,25 +559,29 @@ in rec {
           ceph-multi-node
           ceph-single-node
           ceph-single-node-bluestore
-          ceph-single-node-bluestore-dmcrypt;
+          ceph-single-node-bluestore-dmcrypt
+          ;
       };
     };
   };
 
-  ceph-client = runCommand "ceph-client-${version}" {
-      meta = getMeta "Tools needed to mount Ceph's RADOS Block Devices/Cephfs";
-    } ''
-      mkdir -p $out/{bin,etc,${sitePackages},share/bash-completion/completions}
-      cp -r ${ceph}/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $out/bin
-      cp -r ${ceph}/bin/ceph-{authtool,conf,dencoder,rbdnamer,syn} $out/bin
-      cp -r ${ceph}/bin/rbd-replay* $out/bin
-      cp -r ${ceph}/sbin/mount.ceph $out/bin
-      cp -r ${ceph}/sbin/mount.fuse.ceph $out/bin
-      ln -s bin $out/sbin
-      cp -r ${ceph}/${sitePackages}/* $out/${sitePackages}
-      cp -r ${ceph}/etc/bash_completion.d $out/share/bash-completion/completions
-      # wrapPythonPrograms modifies .ceph-wrapped, so lets just update its paths
-      substituteInPlace $out/bin/ceph          --replace ${ceph} $out
-      substituteInPlace $out/bin/.ceph-wrapped --replace ${ceph} $out
-   '';
+  ceph-client =
+    runCommand "ceph-client-${version}"
+      {
+        meta = getMeta "Tools needed to mount Ceph's RADOS Block Devices/Cephfs";
+      }
+      ''
+        mkdir -p $out/{bin,etc,${sitePackages},share/bash-completion/completions}
+        cp -r ${ceph}/bin/{ceph,.ceph-wrapped,rados,rbd,rbdmap} $out/bin
+        cp -r ${ceph}/bin/ceph-{authtool,conf,dencoder,rbdnamer,syn} $out/bin
+        cp -r ${ceph}/bin/rbd-replay* $out/bin
+        cp -r ${ceph}/sbin/mount.ceph $out/bin
+        cp -r ${ceph}/sbin/mount.fuse.ceph $out/bin
+        ln -s bin $out/sbin
+        cp -r ${ceph}/${sitePackages}/* $out/${sitePackages}
+        cp -r ${ceph}/etc/bash_completion.d $out/share/bash-completion/completions
+        # wrapPythonPrograms modifies .ceph-wrapped, so lets just update its paths
+        substituteInPlace $out/bin/ceph          --replace ${ceph} $out
+        substituteInPlace $out/bin/.ceph-wrapped --replace ${ceph} $out
+      '';
 }

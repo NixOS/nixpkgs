@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, breeze-icons
-, kdeclarative
-, kirigami2
-, plasma-framework
-, plasma-workspace
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  breeze-icons,
+  kdeclarative,
+  kirigami2,
+  plasma-framework,
+  plasma-workspace,
 }:
 
 stdenv.mkDerivation rec {

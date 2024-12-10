@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, SDL2
-, SDL2_mixer
-, SDL2_image
-, fluidsynth
-, soundfont-fluid
-, portmidi
-, dumb
-, libvorbis
-, libmad
-, libGLU
-, libzip
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  SDL2,
+  SDL2_mixer,
+  SDL2_image,
+  fluidsynth,
+  soundfont-fluid,
+  portmidi,
+  dumb,
+  libvorbis,
+  libmad,
+  libGLU,
+  libzip,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,21 +1,22 @@
-{ abseil-cpp
-, bzip2
-, cbc
-, cmake
-, eigen
-, ensureNewerSourcesForZipFilesHook
-, fetchFromGitHub
-, fetchpatch
-, glpk
-, lib
-, pkg-config
-, protobuf
-, python
-, re2
-, stdenv
-, swig4
-, unzip
-, zlib
+{
+  abseil-cpp,
+  bzip2,
+  cbc,
+  cmake,
+  eigen,
+  ensureNewerSourcesForZipFilesHook,
+  fetchFromGitHub,
+  fetchpatch,
+  glpk,
+  lib,
+  pkg-config,
+  protobuf,
+  python,
+  re2,
+  stdenv,
+  swig4,
+  unzip,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -65,17 +66,19 @@ stdenv.mkDerivation rec {
     "-DUSE_SCIP=OFF"
     "-DPython3_EXECUTABLE=${python.pythonOnBuildForHost.interpreter}"
   ] ++ lib.optionals stdenv.isDarwin [ "-DCMAKE_MACOSX_RPATH=OFF" ];
-  nativeBuildInputs = [
-    cmake
-    ensureNewerSourcesForZipFilesHook
-    pkg-config
-    python.pythonOnBuildForHost
-    swig4
-    unzip
-  ] ++ (with python.pythonOnBuildForHost.pkgs; [
-    pip
-    mypy-protobuf
-  ]);
+  nativeBuildInputs =
+    [
+      cmake
+      ensureNewerSourcesForZipFilesHook
+      pkg-config
+      python.pythonOnBuildForHost
+      swig4
+      unzip
+    ]
+    ++ (with python.pythonOnBuildForHost.pkgs; [
+      pip
+      mypy-protobuf
+    ]);
   buildInputs = [
     bzip2
     cbc
@@ -112,7 +115,10 @@ stdenv.mkDerivation rec {
     pip install --prefix="$python" python/
   '';
 
-  outputs = [ "out" "python" ];
+  outputs = [
+    "out"
+    "python"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/google/or-tools";

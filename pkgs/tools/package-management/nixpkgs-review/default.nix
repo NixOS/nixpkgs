@@ -1,17 +1,18 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 
-, installShellFiles
-, bubblewrap
-, nix-output-monitor
-, cacert
-, git
-, nix
+  installShellFiles,
+  bubblewrap,
+  nix-output-monitor,
+  cacert,
+  git,
+  nix,
 
-, withAutocomplete ? true
-, withSandboxSupport ? false
-, withNom ? false
+  withAutocomplete ? true,
+  withSandboxSupport ? false,
+  withNom ? false,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -26,18 +27,24 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-+4T6Mm4YfH0wWlkNYS03H9Z9oNlYQnVUncvWGA0CKIQ=";
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-    python3.pkgs.setuptools
-  ] ++ lib.optionals withAutocomplete [
-    python3.pkgs.argcomplete
-  ];
+  nativeBuildInputs =
+    [
+      installShellFiles
+      python3.pkgs.setuptools
+    ]
+    ++ lib.optionals withAutocomplete [
+      python3.pkgs.argcomplete
+    ];
 
   propagatedBuildInputs = [ python3.pkgs.argcomplete ];
 
   makeWrapperArgs =
     let
-      binPath = [ nix git ]
+      binPath =
+        [
+          nix
+          git
+        ]
         ++ lib.optional withSandboxSupport bubblewrap
         ++ lib.optional withNom nix-output-monitor;
     in
@@ -65,6 +72,9 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Mic92/nixpkgs-review";
     license = licenses.mit;
     mainProgram = "nixpkgs-review";
-    maintainers = with maintainers; [ figsoda mic92 ];
+    maintainers = with maintainers; [
+      figsoda
+      mic92
+    ];
   };
 }

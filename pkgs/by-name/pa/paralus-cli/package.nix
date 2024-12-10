@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, paralus-cli
-, testers
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  paralus-cli,
+  testers,
 }:
 
 buildGoModule rec {

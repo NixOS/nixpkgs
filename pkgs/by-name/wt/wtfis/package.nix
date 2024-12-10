@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 let
@@ -12,7 +13,8 @@ let
     rev = "refs/tags/v${version}";
     hash = "sha256-nVcF7mPoWL5PNLh0W4FBPE7WVU72FidHpBZqMNl+Fd4=";
   };
-in python3.pkgs.buildPythonApplication {
+in
+python3.pkgs.buildPythonApplication {
   inherit pname version src;
 
   format = "pyproject";

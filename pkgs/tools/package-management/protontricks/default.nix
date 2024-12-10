@@ -1,18 +1,19 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, setuptools-scm
-, setuptools
-, vdf
-, pillow
-, substituteAll
-, writeShellScript
-, steam-run
-, fetchpatch2
-, winetricks
-, yad
-, pytestCheckHook
-, nix-update-script
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  setuptools-scm,
+  setuptools,
+  vdf,
+  pillow,
+  substituteAll,
+  writeShellScript,
+  steam-run,
+  fetchpatch2,
+  winetricks,
+  yad,
+  pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonApplication rec {
@@ -59,10 +60,12 @@ buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [
-      winetricks
-      yad
-    ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        winetricks
+        yad
+      ]
+    }"
     # Steam Runtime does not work outside of steam-run, so don't use it
     "--set STEAM_RUNTIME 0"
   ];
@@ -84,6 +87,9 @@ buildPythonApplication rec {
     homepage = "https://github.com/Matoking/protontricks";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ kira-bruneau ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

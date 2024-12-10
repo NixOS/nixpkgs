@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, dpkg
-, autoPatchelfHook
-, wrapQtAppsHook
-, qtbase
-, qtdeclarative
-, qtsvg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  wrapQtAppsHook,
+  qtbase,
+  qtdeclarative,
+  qtsvg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

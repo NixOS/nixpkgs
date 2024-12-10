@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -35,13 +40,23 @@ in
     };
 
     allowUploads = mkOption {
-      type = types.nullOr (types.enum [ "dir" "page" ]);
+      type = types.nullOr (
+        types.enum [
+          "dir"
+          "page"
+        ]
+      );
       default = null;
       description = "Enable uploads of external files";
     };
 
     user-icons = mkOption {
-      type = types.nullOr (types.enum [ "gravatar" "identicon" ]);
+      type = types.nullOr (
+        types.enum [
+          "gravatar"
+          "identicon"
+        ]
+      );
       default = null;
       description = "Enable specific user icons for history view";
     };
@@ -147,5 +162,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ erictapen bbenno ];
+  meta.maintainers = with lib.maintainers; [
+    erictapen
+    bbenno
+  ];
 }

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, plistcpp
-, pugixml
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  plistcpp,
+  pugixml,
 }:
 
 stdenv.mkDerivation {

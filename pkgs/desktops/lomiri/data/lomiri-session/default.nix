@@ -1,20 +1,21 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitLab
-, fetchpatch
-, fetchpatch2
-, gitUpdater
-, nixosTests
-, bash
-, cmake
-, dbus
-, deviceinfo
-, inotify-tools
-, lomiri
-, makeWrapper
-, pkg-config
-, runtimeShell
-, systemd
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  fetchpatch2,
+  gitUpdater,
+  nixosTests,
+  bash,
+  cmake,
+  dbus,
+  deviceinfo,
+  inotify-tools,
+  lomiri,
+  makeWrapper,
+  pkg-config,
+  runtimeShell,
+  systemd,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -175,7 +176,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   postInstall = ''
     patchShebangs $out/bin/lomiri-session
     wrapProgram $out/bin/lomiri-session \
-      --prefix PATH : ${lib.makeBinPath [ deviceinfo inotify-tools lomiri ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          deviceinfo
+          inotify-tools
+          lomiri
+        ]
+      }
   '';
 
   passthru = {

@@ -1,66 +1,67 @@
-{ addOpenGLRunpath
-, alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, autoPatchelfHook
-, cairo
-, cups
-, curl
-, dbus
-, dpkg
-, expat
-, fetchurl
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, glibc
-, gnutls
-, gtk3
-, lib
-, libGL
-, libX11
-, libXScrnSaver
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXrandr
-, libXrender
-, libXtst
-, libappindicator-gtk3
-, libcxx
-, libdbusmenu
-, libdrm
-, libgcrypt
-, libglvnd
-, libnotify
-, libpulseaudio
-, libuuid
-, libxcb
-, libxkbcommon
-, libxkbfile
-, libxshmfence
-, makeShellWrapper
-, mesa
-, nspr
-, nss
-, pango
-, pciutils
-, pipewire
-, pixman
-, stdenv
-, systemd
-, wayland
-, wrapGAppsHook3
-, xdg-utils
-, writeScript
+{
+  addOpenGLRunpath,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  autoPatchelfHook,
+  cairo,
+  cups,
+  curl,
+  dbus,
+  dpkg,
+  expat,
+  fetchurl,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  glibc,
+  gnutls,
+  gtk3,
+  lib,
+  libGL,
+  libX11,
+  libXScrnSaver,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXrandr,
+  libXrender,
+  libXtst,
+  libappindicator-gtk3,
+  libcxx,
+  libdbusmenu,
+  libdrm,
+  libgcrypt,
+  libglvnd,
+  libnotify,
+  libpulseaudio,
+  libuuid,
+  libxcb,
+  libxkbcommon,
+  libxkbfile,
+  libxshmfence,
+  makeShellWrapper,
+  mesa,
+  nspr,
+  nss,
+  pango,
+  pciutils,
+  pipewire,
+  pixman,
+  stdenv,
+  systemd,
+  wayland,
+  wrapGAppsHook3,
+  xdg-utils,
+  writeScript,
 
   # for custom command line arguments, e.g. "--use-gl=desktop"
-, commandLineArgs ? ""
+  commandLineArgs ? "",
 }:
 
 let
@@ -75,7 +76,10 @@ let
     };
   };
 
-  supportedPlatforms = [ "x86_64-linux" "aarch64-linux" ];
+  supportedPlatforms = [
+    "x86_64-linux"
+    "aarch64-linux"
+  ];
 
   rpath = lib.makeLibraryPath [
     alsa-lib
@@ -135,7 +139,9 @@ stdenv.mkDerivation {
   version = "7.15.13";
   pname = "feishu";
 
-  src = sources.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  src =
+    sources.${stdenv.hostPlatform.system}
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [
     autoPatchelfHook
@@ -180,7 +186,9 @@ stdenv.mkDerivation {
         --prefix XDG_DATA_DIRS    :  "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
         --prefix LD_LIBRARY_PATH  :  ${rpath}:$out/opt/bytedance/feishu:${addOpenGLRunpath.driverLink}/share \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
-        ${lib.optionalString (commandLineArgs!="") "--add-flags ${lib.escapeShellArg commandLineArgs}"}
+        ${lib.optionalString (
+          commandLineArgs != ""
+        ) "--add-flags ${lib.escapeShellArg commandLineArgs}"}
     done
 
     mkdir -p $out/share/icons/hicolor

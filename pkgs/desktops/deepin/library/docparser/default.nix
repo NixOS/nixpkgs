@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, qmake
-, qttools
-, wrapQtAppsHook
-, poppler
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  qmake,
+  qttools,
+  wrapQtAppsHook,
+  poppler,
 }:
 
 stdenv.mkDerivation rec {

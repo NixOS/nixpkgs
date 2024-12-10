@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, gzip
-, brotli
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gzip,
+  brotli,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +15,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-Oz+FdMrIGNmJKHl/wOVZCP1b0AJODcURvDUKz4gCqYU=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   nativeBuildInputs = [ brotli ];
 
@@ -36,13 +40,13 @@ stdenv.mkDerivation rec {
       -exec brotli --best --keep --no-copy-stat {} ';'
 
     runHook postInstall
-   '';
+  '';
 
   meta = {
     description = "Console Light is a lightweight, real-time activity monitoring interface.";
-    homepage    = "https://angie.software/en/console/";
-    license     = lib.licenses.asl20;
-    platforms   = lib.platforms.all;
+    homepage = "https://angie.software/en/console/";
+    license = lib.licenses.asl20;
+    platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [ izorkin ];
   };
 }

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, boost
-, gfortran
-, lhapdf
-, ncurses
-, perl
-, python ? null
-, swig
-, yoda
-, zlib
-, withPython ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+  gfortran,
+  lhapdf,
+  ncurses,
+  perl,
+  python ? null,
+  swig,
+  yoda,
+  zlib,
+  withPython ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,13 +23,15 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7aIMYCOkHC/17CHYiEfrxvtSJxTDivrS7BQ32cGiEy0=";
   };
 
-  buildInputs = [
-    boost
-    gfortran
-    gfortran.cc.lib
-    lhapdf
-    yoda
-  ] ++ lib.optional withPython python
+  buildInputs =
+    [
+      boost
+      gfortran
+      gfortran.cc.lib
+      lhapdf
+      yoda
+    ]
+    ++ lib.optional withPython python
     ++ lib.optional (withPython && python.isPy3k) ncurses;
 
   propagatedBuildInputs = [
@@ -62,7 +65,7 @@ stdenv.mkDerivation rec {
 
   # None of our currently packaged versions of swig are C++17-friendly
   # Use a workaround from https://github.com/swig/swig/issues/1538
-  env.CXXFLAGS="-D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES";
+  env.CXXFLAGS = "-D_LIBCPP_ENABLE_CXX17_REMOVED_FEATURES";
 
   meta = with lib; {
     homepage = "http://fastnlo.hepforge.org";

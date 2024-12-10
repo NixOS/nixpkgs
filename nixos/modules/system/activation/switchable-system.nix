@@ -1,8 +1,18 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
-  perlWrapped = pkgs.perl.withPackages (p: with p; [ ConfigIniFiles FileSlurp ]);
+  perlWrapped = pkgs.perl.withPackages (
+    p: with p; [
+      ConfigIniFiles
+      FileSlurp
+    ]
+  );
 
   description = extra: ''
     Whether to include the capability to switch configurations.
@@ -40,10 +50,12 @@ in
 
   config = lib.mkMerge [
     {
-      assertions = [{
-        assertion = with config.system.switch; enable -> !enableNg;
-        message = "Only one of system.switch.enable and system.switch.enableNg may be enabled at a time";
-      }];
+      assertions = [
+        {
+          assertion = with config.system.switch; enable -> !enableNg;
+          message = "Only one of system.switch.enable and system.switch.enableNg may be enabled at a time";
+        }
+      ];
     }
     (lib.mkIf config.system.switch.enable {
       system.activatableSystemBuilderCommands = ''

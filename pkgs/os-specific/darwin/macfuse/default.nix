@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, cpio, xar, undmg, libtapi, DiskArbitration }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cpio,
+  xar,
+  undmg,
+  libtapi,
+  DiskArbitration,
+}:
 
 stdenv.mkDerivation rec {
   pname = "macfuse-stubs";
@@ -9,7 +18,12 @@ stdenv.mkDerivation rec {
     sha256 = "2a2d0f37ec5fcff547c5efa7d08539103a0b46bc16080c2b41a7e749f6e65c61";
   };
 
-  nativeBuildInputs = [ cpio xar undmg libtapi ];
+  nativeBuildInputs = [
+    cpio
+    xar
+    undmg
+    libtapi
+  ];
   propagatedBuildInputs = [ DiskArbitration ];
 
   postUnpack = ''

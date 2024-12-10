@@ -7,7 +7,7 @@
 python3Packages.buildPythonApplication rec {
   pname = "prometheus-borgmatic-exporter";
   version = "0.2.5";
-    pyproject = true;
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maxim-mityutko";
@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
     pytest-mock
   ];
 
-  buildInputs = [python3Packages.poetry-core];
+  buildInputs = [ python3Packages.poetry-core ];
 
   propagatedBuildInputs =
     [ borgmatic ]

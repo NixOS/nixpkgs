@@ -28,7 +28,7 @@ buildPythonPackage rec {
     (fetchpatch {
       name = "CVE-2024-34078.patch";
       url = "https://github.com/matthiask/html-sanitizer/commit/48db42fc5143d0140c32d929c46b802f96913550.patch";
-      excludes = ["CHANGELOG.rst"];
+      excludes = [ "CHANGELOG.rst" ];
       hash = "sha256-VowhomgPsBKSMdJwKvZjL0+rGjkTWobpWQeEHGLNp2M=";
     })
   ];

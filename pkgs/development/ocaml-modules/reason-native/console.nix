@@ -1,4 +1,10 @@
-{ buildDunePackage, callPackage, reason, console, ... }:
+{
+  buildDunePackage,
+  callPackage,
+  reason,
+  console,
+  ...
+}:
 
 {
   pname = "console";

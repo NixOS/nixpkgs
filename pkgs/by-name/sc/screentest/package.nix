@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, intltool
-, pkg-config
-, gtk2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  intltool,
+  pkg-config,
+  gtk2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

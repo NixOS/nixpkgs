@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, boost
-, immer
-, zug
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  boost,
+  immer,
+  zug,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

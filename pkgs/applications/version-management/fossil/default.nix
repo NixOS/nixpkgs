@@ -1,18 +1,20 @@
-{ lib, stdenv
-, installShellFiles
-, tcl
-, libiconv
-, fetchurl
-, buildPackages
-, zlib
-, openssl
-, readline
-, withInternalSqlite ? true
-, sqlite
-, ed
-, which
-, tcllib
-, withJson ? true
+{
+  lib,
+  stdenv,
+  installShellFiles,
+  tcl,
+  libiconv,
+  fetchurl,
+  buildPackages,
+  zlib,
+  openssl,
+  readline,
+  withInternalSqlite ? true,
+  sqlite,
+  ed,
+  which,
+  tcllib,
+  withJson ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,9 +29,20 @@ stdenv.mkDerivation (finalAttrs: {
   # required for build time tool `./tools/translate.c`
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ installShellFiles tcl tcllib ];
+  nativeBuildInputs = [
+    installShellFiles
+    tcl
+    tcllib
+  ];
 
-  buildInputs = [ zlib openssl readline which ed ]
+  buildInputs =
+    [
+      zlib
+      openssl
+      readline
+      which
+      ed
+    ]
     ++ lib.optional stdenv.isDarwin libiconv
     ++ lib.optional (!withInternalSqlite) sqlite;
 
@@ -64,7 +77,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.fossil-scm.org/";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ maggesi viric ];
+    maintainers = with maintainers; [
+      maggesi
+      viric
+    ];
     platforms = platforms.all;
     mainProgram = "fossil";
   };

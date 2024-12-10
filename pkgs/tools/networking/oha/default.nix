@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, pkg-config
-, openssl
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  pkg-config,
+  openssl,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,11 +25,13 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    lib.optionals stdenv.isLinux [
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   # tests don't work inside the sandbox
   doCheck = false;

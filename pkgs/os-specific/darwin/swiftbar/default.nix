@@ -1,7 +1,8 @@
-{ lib
-, fetchzip
-, stdenvNoCC
-, makeWrapper
+{
+  lib,
+  fetchzip,
+  stdenvNoCC,
+  makeWrapper,
 }:
 
 stdenvNoCC.mkDerivation rec {

@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "kubectl-gadget";
@@ -16,7 +20,8 @@ buildGoModule rec {
   CGO_ENABLED = 0;
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/inspektor-gadget/inspektor-gadget/cmd/common.version=v${version}"
     "-X main.gadgetimage=ghcr.io/inspektor-gadget/inspektor-gadget:v${version}"
     "-extldflags=-static"
@@ -33,6 +38,9 @@ buildGoModule rec {
     mainProgram = "kubectl-gadget";
     homepage = "https://inspektor-gadget.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kranurag7 devusb ];
+    maintainers = with maintainers; [
+      kranurag7
+      devusb
+    ];
   };
 }

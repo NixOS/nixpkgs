@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, openssl
-, rustPlatform
-, darwin
-, testers
-, komac
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  rustPlatform,
+  darwin,
+  testers,
+  komac,
 }:
 
 let
@@ -27,11 +28,13 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = lib.optionals stdenv.isLinux [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    lib.optionals stdenv.isLinux [
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   passthru.tests.version = testers.testVersion {
     inherit version;

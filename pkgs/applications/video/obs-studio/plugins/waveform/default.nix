@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, obs-studio
-, pkg-config
-, fftwFloat
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  obs-studio,
+  pkg-config,
+  fftwFloat,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-NcBtj+5X9tPH853a6oXzQCBH26hx8Yt17WjP9ryvgmc=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   postFixup = ''
     mkdir -p $out/lib $out/share/obs/obs-plugins
@@ -38,6 +42,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/phandasm/waveform";
     maintainers = with lib.maintainers; [ matthewcroughan ];
     license = lib.licenses.gpl3;
-    platforms = ["x86_64-linux"];
+    platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,23 +1,24 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, pkg-config
-, openssl
-, fontconfig
-, nasm
-, libX11
-, libXcursor
-, libXrandr
-, libXi
-, libGL
-, libxkbcommon
-, wayland
-, stdenv
-, gtk3
-, darwin
-, perl
-, wrapGAppsHook3
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  openssl,
+  fontconfig,
+  nasm,
+  libX11,
+  libXcursor,
+  libXrandr,
+  libXi,
+  libGL,
+  libxkbcommon,
+  wayland,
+  stdenv,
+  gtk3,
+  darwin,
+  perl,
+  wrapGAppsHook3,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -43,22 +44,25 @@ rustPlatform.buildRustPackage rec {
 
   checkFlagsArray = [ "--skip=tests::net" ]; # requires network access
 
-  buildInputs = [
-    openssl
-    fontconfig
-  ] ++ lib.optionals stdenv.isLinux [
-    libGL
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    gtk3
+  buildInputs =
+    [
+      openssl
+      fontconfig
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      libGL
+      libX11
+      libXcursor
+      libXi
+      libXrandr
+      gtk3
 
-    libxkbcommon
-    wayland
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.libobjc
-  ];
+      libxkbcommon
+      wayland
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.libobjc
+    ];
 
   checkFlags = [
     "--skip=bench"
@@ -68,7 +72,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 $src/res/oculante.png -t $out/share/icons/hicolor/128x128/apps/
     install -Dm444 $src/res/oculante.desktop -t $out/share/applications
     wrapProgram $out/bin/oculante \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libGL]}
+      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libGL ]}
   '';
 
   meta = with lib; {
@@ -78,6 +82,9 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/woelper/oculante/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
     mainProgram = "oculante";
-    maintainers = with maintainers; [ dit7ya figsoda ];
+    maintainers = with maintainers; [
+      dit7ya
+      figsoda
+    ];
   };
 }

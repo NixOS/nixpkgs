@@ -39,7 +39,10 @@ mkKdeDerivation {
     "--set-default TZDIR /etc/zoneinfo"
   ];
 
-  extraNativeBuildInputs = [pkg-config python3];
+  extraNativeBuildInputs = [
+    pkg-config
+    python3
+  ];
   extraBuildInputs = [
     qtquick3d
     qtsensors

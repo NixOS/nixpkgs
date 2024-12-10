@@ -1,6 +1,7 @@
-{ lib
-, fetchurl
-, appimageTools
+{
+  lib,
+  fetchurl,
+  appimageTools,
 }:
 
 let
@@ -10,14 +11,15 @@ let
   src = fetchurl {
     url = "https://github.com/zulip/zulip-desktop/releases/download/v${version}/Zulip-${version}-x86_64.AppImage";
     hash = "sha256-t5qBm5+kTdeRMvcHpNbS5mp184UG/IqgJrtj7Ntcbb0=";
-    name="${pname}-${version}.AppImage";
+    name = "${pname}-${version}.AppImage";
   };
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
 
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
 
   runScript = "appimage-exec.sh -w ${appimageContents} -- \${NIXOS_OZONE_WL:+\${WAYLAND_DISPLAY:+--ozone-platform-hint=auto}}";
@@ -34,7 +36,10 @@ in appimageTools.wrapType2 {
     description = "Desktop client for Zulip Chat";
     homepage = "https://zulip.com";
     license = licenses.asl20;
-    maintainers = with maintainers; [ andersk jonafato ];
+    maintainers = with maintainers; [
+      andersk
+      jonafato
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "zulip";
   };

@@ -62,7 +62,10 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/kxxt/tracexec";
     license = lib.licenses.gpl2Plus;
     mainProgram = "tracexec";
-    maintainers = with lib.maintainers; [ fpletz nh2 ];
+    maintainers = with lib.maintainers; [
+      fpletz
+      nh2
+    ];
     platforms = lib.platforms.linux;
   };
 }

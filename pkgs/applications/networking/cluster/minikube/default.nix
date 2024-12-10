@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, which
-, libvirt
-, vmnet
-, withQemu ? false
-, qemu
-, makeWrapper
-, OVMF
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  which,
+  libvirt,
+  vmnet,
+  withQemu ? false,
+  qemu,
+  makeWrapper,
+  OVMF,
 }:
 
 buildGoModule rec {
@@ -28,25 +29,33 @@ buildGoModule rec {
     sha256 = "sha256-z0wNngEzddxpeeLyQVA2yRC5SfYvU5G66V95sVmW6bA=";
   };
   postPatch =
-    (
-      lib.optionalString (withQemu && stdenv.isDarwin) ''
-        substituteInPlace \
-          pkg/minikube/registry/drvs/qemu2/qemu2.go \
-          --replace "/usr/local/opt/qemu/share/qemu" "${qemu}/share/qemu" \
-          --replace "/opt/homebrew/opt/qemu/share/qemu" "${qemu}/share/qemu"
-      ''
-    ) + (
-      lib.optionalString (withQemu && stdenv.isLinux) ''
-        substituteInPlace \
-          pkg/minikube/registry/drvs/qemu2/qemu2.go \
-          --replace "/usr/share/OVMF/OVMF_CODE.fd" "${OVMF.firmware}" \
-          --replace "/usr/share/AAVMF/AAVMF_CODE.fd" "${OVMF.firmware}"
-      ''
-    );
+    (lib.optionalString (withQemu && stdenv.isDarwin) ''
+      substituteInPlace \
+        pkg/minikube/registry/drvs/qemu2/qemu2.go \
+        --replace "/usr/local/opt/qemu/share/qemu" "${qemu}/share/qemu" \
+        --replace "/opt/homebrew/opt/qemu/share/qemu" "${qemu}/share/qemu"
+    '')
+    + (lib.optionalString (withQemu && stdenv.isLinux) ''
+      substituteInPlace \
+        pkg/minikube/registry/drvs/qemu2/qemu2.go \
+        --replace "/usr/share/OVMF/OVMF_CODE.fd" "${OVMF.firmware}" \
+        --replace "/usr/share/AAVMF/AAVMF_CODE.fd" "${OVMF.firmware}"
+    '');
 
-  nativeBuildInputs = [ installShellFiles pkg-config which makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    which
+    makeWrapper
+  ];
 
-  buildInputs = if stdenv.isDarwin then [ vmnet ] else if stdenv.isLinux then [ libvirt ] else null;
+  buildInputs =
+    if stdenv.isDarwin then
+      [ vmnet ]
+    else if stdenv.isLinux then
+      [ libvirt ]
+    else
+      null;
 
   buildPhase = ''
     make COMMIT=${src.rev}
@@ -69,6 +78,12 @@ buildGoModule rec {
     description = "A tool that makes it easy to run Kubernetes locally";
     mainProgram = "minikube";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ebzzry copumpkin vdemeester atkinschang Chili-Man ];
+    maintainers = with maintainers; [
+      ebzzry
+      copumpkin
+      vdemeester
+      atkinschang
+      Chili-Man
+    ];
   };
 }

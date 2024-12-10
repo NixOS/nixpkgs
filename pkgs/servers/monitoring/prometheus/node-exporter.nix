@@ -1,6 +1,12 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, nixosTests
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
   # darwin
-  , CoreFoundation, IOKit
+  CoreFoundation,
+  IOKit,
 }:
 
 buildGoModule rec {
@@ -20,7 +26,10 @@ buildGoModule rec {
   # FIXME: tests fail due to read-only nix store
   doCheck = false;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreFoundation IOKit ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreFoundation
+    IOKit
+  ];
 
   excludedPackages = [ "docs/node-mixin" ];
 
@@ -42,6 +51,11 @@ buildGoModule rec {
     homepage = "https://github.com/prometheus/node_exporter";
     changelog = "https://github.com/prometheus/node_exporter/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley fpletz globin Frostman ];
+    maintainers = with maintainers; [
+      benley
+      fpletz
+      globin
+      Frostman
+    ];
   };
 }

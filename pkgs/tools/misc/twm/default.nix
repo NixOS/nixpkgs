@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, rustPlatform
-, openssl
-, pkg-config
-, Security
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  rustPlatform,
+  openssl,
+  pkg-config,
+  Security,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/vinnymeller/twm";
     changelog = "https://github.com/vinnymeller/twm/releases/tag/${src.rev}";
     license = lib.licenses.mit;
-    maintainers =  [ lib.maintainers.vinnymeller ];
+    maintainers = [ lib.maintainers.vinnymeller ];
     mainProgram = "twm";
   };
 }

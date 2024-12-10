@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitLab
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
 
-, cmake
+  cmake,
 
-, glm
-, libGL
-, openxr-loader
-, python3
-, vulkan-headers
-, vulkan-loader
-, xorg
+  glm,
+  libGL,
+  openxr-loader,
+  python3,
+  vulkan-headers,
+  vulkan-loader,
+  xorg,
 
-, unstableGitUpdater
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation {

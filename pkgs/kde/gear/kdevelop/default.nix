@@ -5,7 +5,7 @@
 mkKdeDerivation {
   pname = "kdevelop";
 
-  extraBuildInputs = [extra-cmake-modules];
+  extraBuildInputs = [ extra-cmake-modules ];
   # FIXME(qt5)
   meta.broken = true;
 }

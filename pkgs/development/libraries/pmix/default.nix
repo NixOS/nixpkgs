@@ -1,8 +1,23 @@
-{ lib, stdenv, fetchFromGitHub, perl, autoconf, automake
-, removeReferencesTo, libtool, python3, flex, libevent
-, targetPackages, makeWrapper
-, hwloc, munge, zlib, pandoc, gitMinimal
-} :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  autoconf,
+  automake,
+  removeReferencesTo,
+  libtool,
+  python3,
+  flex,
+  libevent,
+  targetPackages,
+  makeWrapper,
+  hwloc,
+  munge,
+  zlib,
+  pandoc,
+  gitMinimal,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pmix";
@@ -16,7 +31,10 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postPatch = ''
     patchShebangs ./autogen.pl
@@ -36,7 +54,12 @@ stdenv.mkDerivation rec {
     makeWrapper
   ];
 
-  buildInputs = [ libevent hwloc munge zlib ];
+  buildInputs = [
+    libevent
+    hwloc
+    munge
+    zlib
+  ];
 
   configureFlags = [
     "--with-libevent=${lib.getDev libevent}"
@@ -85,4 +108,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
   };
 }
-

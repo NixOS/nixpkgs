@@ -1,9 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config, fetchpatch
-, ncurses, libpcap, libnet
-# alpha version of GTK interface
-, withGtk ? false, gtk2
-# enable remote admin interface
-, enableAdmin ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  fetchpatch,
+  ncurses,
+  libpcap,
+  libnet,
+  # alpha version of GTK interface
+  withGtk ? false,
+  gtk2,
+  # enable remote admin interface
+  enableAdmin ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,18 +26,25 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VShg9Nzd8dzUNiqYnKcDzRgqjwar/8XRGEJCJL25aR0=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libpcap libnet ncurses ]
-    ++ lib.optional withGtk gtk2;
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libpcap
+    libnet
+    ncurses
+  ] ++ lib.optional withGtk gtk2;
 
   autoreconfPhase = "./autogen.sh";
 
-  configureFlags = [
-    "--with-pcap-includes=${libpcap}/include"
-    "--with-libnet-includes=${libnet}/include"
-  ]
-  ++ lib.optional (!enableAdmin) "--disable-admin"
-  ++ lib.optional (!withGtk) "--disable-gtk";
+  configureFlags =
+    [
+      "--with-pcap-includes=${libpcap}/include"
+      "--with-libnet-includes=${libnet}/include"
+    ]
+    ++ lib.optional (!enableAdmin) "--disable-admin"
+    ++ lib.optional (!withGtk) "--disable-gtk";
 
   makeFlags = [ "LDFLAGS=-lncurses" ];
 

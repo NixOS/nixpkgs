@@ -1,11 +1,12 @@
-{ lib
-, maven
-, jre
-, makeWrapper
-, git
-, fetchFromGitHub
-, graphviz
-, ensureNewerSourcesHook
+{
+  lib,
+  maven,
+  jre,
+  makeWrapper,
+  git,
+  fetchFromGitHub,
+  graphviz,
+  ensureNewerSourcesHook,
 }:
 
 maven.buildMavenPackage rec {
@@ -64,4 +65,3 @@ maven.buildMavenPackage rec {
     maintainers = with maintainers; [ jraygauthier ];
   };
 }
-

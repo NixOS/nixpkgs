@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "feed2imap-go";
@@ -12,7 +16,8 @@ buildGoModule rec {
   };
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/Necoro/feed2imap-go/pkg/version.version=${version}"
     "-X github.com/Necoro/feed2imap-go/pkg/version.commit=nixpkgs"
   ];

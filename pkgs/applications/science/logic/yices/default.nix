@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cudd, gmp-static, gperf, autoreconfHook, libpoly }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cudd,
+  gmp-static,
+  gperf,
+  autoreconfHook,
+  libpoly,
+}:
 
 stdenv.mkDerivation rec {
   pname = "yices";
@@ -6,9 +15,9 @@ stdenv.mkDerivation rec {
   version = "2.6.4";
 
   src = fetchFromGitHub {
-    owner  = "SRI-CSL";
-    repo   = "yices2";
-    rev    = "Yices-${version}";
+    owner = "SRI-CSL";
+    repo = "yices2";
+    rev = "Yices-${version}";
     sha256 = "sha256-qdxh86CkKdm65oHcRgaafTG9GUOoIgTDjeWmRofIpNE=";
   };
 
@@ -19,21 +28,26 @@ stdenv.mkDerivation rec {
   postPatch = "patchShebangs tests/regress/check.sh";
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ cudd gmp-static gperf libpoly ];
-  configureFlags =
-    [ "--with-static-gmp=${gmp-static.out}/lib/libgmp.a"
-      "--with-static-gmp-include-dir=${gmp-static.dev}/include"
-      "--enable-mcsat"
-    ];
+  buildInputs = [
+    cudd
+    gmp-static
+    gperf
+    libpoly
+  ];
+  configureFlags = [
+    "--with-static-gmp=${gmp-static.out}/lib/libgmp.a"
+    "--with-static-gmp-include-dir=${gmp-static.dev}/include"
+    "--enable-mcsat"
+  ];
 
   enableParallelBuilding = true;
   doCheck = true;
 
   meta = with lib; {
     description = "A high-performance theorem prover and SMT solver";
-    homepage    = "https://yices.csl.sri.com";
-    license     = licenses.gpl3;
-    platforms   = with platforms; linux ++ darwin;
+    homepage = "https://yices.csl.sri.com";
+    license = licenses.gpl3;
+    platforms = with platforms; linux ++ darwin;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

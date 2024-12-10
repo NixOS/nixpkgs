@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3
-, makeWrapper
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
+  makeWrapper,
+  nixosTests,
 }:
 let
   python = python3.override {
@@ -85,7 +86,10 @@ python.pkgs.buildPythonApplication rec {
     description = "The web end of seafile server";
     homepage = "https://github.com/haiwen/seahub";
     license = licenses.asl20;
-    maintainers = with maintainers; [ greizgh schmittlauch ];
+    maintainers = with maintainers; [
+      greizgh
+      schmittlauch
+    ];
     platforms = platforms.linux;
   };
 }

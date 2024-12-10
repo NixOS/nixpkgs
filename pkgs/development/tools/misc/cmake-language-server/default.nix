@@ -1,13 +1,14 @@
-{ lib
-, buildPythonApplication
-, pythonOlder
-, fetchFromGitHub
-, pdm-backend
-, cmake-format
-, pygls
-, cmake
-, pytest-datadir
-, pytestCheckHook
+{
+  lib,
+  buildPythonApplication,
+  pythonOlder,
+  fetchFromGitHub,
+  pdm-backend,
+  cmake-format,
+  pygls,
+  cmake,
+  pytest-datadir,
+  pytestCheckHook,
 }:
 
 buildPythonApplication rec {

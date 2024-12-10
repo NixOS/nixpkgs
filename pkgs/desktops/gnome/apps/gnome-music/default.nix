@@ -1,31 +1,32 @@
-{ lib
-, meson
-, ninja
-, gettext
-, fetchurl
-, gdk-pixbuf
-, tracker
-, libxml2
-, python3
-, libnotify
-, wrapGAppsHook4
-, libmediaart
-, gobject-introspection
-, gnome-online-accounts
-, grilo
-, grilo-plugins
-, pkg-config
-, gtk4
-, pango
-, glib
-, desktop-file-utils
-, appstream-glib
-, itstool
-, gnome
-, gst_all_1
-, libsoup_3
-, libadwaita
-, gsettings-desktop-schemas
+{
+  lib,
+  meson,
+  ninja,
+  gettext,
+  fetchurl,
+  gdk-pixbuf,
+  tracker,
+  libxml2,
+  python3,
+  libnotify,
+  wrapGAppsHook4,
+  libmediaart,
+  gobject-introspection,
+  gnome-online-accounts,
+  grilo,
+  grilo-plugins,
+  pkg-config,
+  gtk4,
+  pango,
+  glib,
+  desktop-file-utils,
+  appstream-glib,
+  itstool,
+  gnome,
+  gst_all_1,
+  libsoup_3,
+  libadwaita,
+  gsettings-desktop-schemas,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -52,29 +53,31 @@ python3.pkgs.buildPythonApplication rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    gtk4
-    pango
-    glib
-    libmediaart
-    gnome-online-accounts
-    gdk-pixbuf
-    python3
-    grilo
-    grilo-plugins
-    libnotify
-    libsoup_3
-    libadwaita
-    gsettings-desktop-schemas
-    tracker
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-    gst-plugins-bad
-    gst-plugins-ugly
-    gst-libav
-  ]);
+  buildInputs =
+    [
+      gtk4
+      pango
+      glib
+      libmediaart
+      gnome-online-accounts
+      gdk-pixbuf
+      python3
+      grilo
+      grilo-plugins
+      libnotify
+      libsoup_3
+      libadwaita
+      gsettings-desktop-schemas
+      tracker
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+      gst-plugins-bad
+      gst-plugins-ugly
+      gst-libav
+    ]);
 
   pythonPath = with python3.pkgs; [
     pycairo

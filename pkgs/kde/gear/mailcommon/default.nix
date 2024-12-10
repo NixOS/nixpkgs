@@ -6,5 +6,8 @@
 mkKdeDerivation {
   pname = "mailcommon";
 
-  extraBuildInputs = [qtwebengine qttools];
+  extraBuildInputs = [
+    qtwebengine
+    qttools
+  ];
 }

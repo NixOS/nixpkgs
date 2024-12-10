@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, jq, makeWrapper }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  jq,
+  makeWrapper,
+}:
 
 buildGoModule rec {
   pname = "jiq";

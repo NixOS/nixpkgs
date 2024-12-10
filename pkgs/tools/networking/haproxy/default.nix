@@ -1,23 +1,29 @@
-{ useLua ? true
-, usePcre ? true
-, withPrometheusExporter ? true
-, sslLibrary ? "quictls"
-, stdenv
-, lib
-, fetchurl
-, nixosTests
-, zlib
-, libxcrypt
-, wolfssl
-, libressl
-, quictls
-, openssl
-, lua5_4
-, pcre2
-, systemd
+{
+  useLua ? true,
+  usePcre ? true,
+  withPrometheusExporter ? true,
+  sslLibrary ? "quictls",
+  stdenv,
+  lib,
+  fetchurl,
+  nixosTests,
+  zlib,
+  libxcrypt,
+  wolfssl,
+  libressl,
+  quictls,
+  openssl,
+  lua5_4,
+  pcre2,
+  systemd,
 }:
 
-assert lib.assertOneOf "sslLibrary" sslLibrary [ "quictls" "openssl" "libressl" "wolfssl" ];
+assert lib.assertOneOf "sslLibrary" sslLibrary [
+  "quictls"
+  "openssl"
+  "libressl"
+  "wolfssl"
+];
 let
   sslPkgs = {
     inherit quictls openssl libressl;
@@ -27,7 +33,8 @@ let
     };
   };
   sslPkg = sslPkgs.${sslLibrary};
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "haproxy";
   version = "2.9.10";
 
@@ -36,7 +43,12 @@ in stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-xWG3XhAxE13Hc8e7ru725T0koqzNJ6DrzliDzbEmQMA=";
   };
 
-  buildInputs = [ sslPkg zlib libxcrypt ]
+  buildInputs =
+    [
+      sslPkg
+      zlib
+      libxcrypt
+    ]
     ++ lib.optional useLua lua5_4
     ++ lib.optional usePcre pcre2
     ++ lib.optional stdenv.isLinux systemd;
@@ -44,36 +56,53 @@ in stdenv.mkDerivation (finalAttrs: {
   # TODO: make it work on bsd as well
   makeFlags = [
     "PREFIX=${placeholder "out"}"
-    ("TARGET=" + (if stdenv.isSunOS then "solaris"
-    else if stdenv.isLinux then "linux-glibc"
-    else if stdenv.isDarwin then "osx"
-    else "generic"))
+    (
+      "TARGET="
+      + (
+        if stdenv.isSunOS then
+          "solaris"
+        else if stdenv.isLinux then
+          "linux-glibc"
+        else if stdenv.isDarwin then
+          "osx"
+        else
+          "generic"
+      )
+    )
   ];
 
-  buildFlags = [
-    "USE_ZLIB=yes"
-    "USE_OPENSSL=yes"
-    "SSL_INC=${lib.getDev sslPkg}/include"
-    "SSL_LIB=${lib.getDev sslPkg}/lib"
-    "USE_QUIC=yes"
-  ] ++ lib.optionals (sslLibrary == "openssl") [
-    "USE_QUIC_OPENSSL_COMPAT=yes"
-  ] ++ lib.optionals (sslLibrary == "wolfssl") [
-    "USE_OPENSSL_WOLFSSL=yes"
-  ] ++ lib.optionals usePcre [
-    "USE_PCRE2=yes"
-    "USE_PCRE2_JIT=yes"
-  ] ++ lib.optionals useLua [
-    "USE_LUA=yes"
-    "LUA_LIB_NAME=lua"
-    "LUA_LIB=${lua5_4}/lib"
-    "LUA_INC=${lua5_4}/include"
-  ] ++ lib.optionals stdenv.isLinux [
-    "USE_SYSTEMD=yes"
-    "USE_GETADDRINFO=1"
-  ] ++ lib.optionals withPrometheusExporter [
-    "USE_PROMEX=yes"
-  ] ++ [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  buildFlags =
+    [
+      "USE_ZLIB=yes"
+      "USE_OPENSSL=yes"
+      "SSL_INC=${lib.getDev sslPkg}/include"
+      "SSL_LIB=${lib.getDev sslPkg}/lib"
+      "USE_QUIC=yes"
+    ]
+    ++ lib.optionals (sslLibrary == "openssl") [
+      "USE_QUIC_OPENSSL_COMPAT=yes"
+    ]
+    ++ lib.optionals (sslLibrary == "wolfssl") [
+      "USE_OPENSSL_WOLFSSL=yes"
+    ]
+    ++ lib.optionals usePcre [
+      "USE_PCRE2=yes"
+      "USE_PCRE2_JIT=yes"
+    ]
+    ++ lib.optionals useLua [
+      "USE_LUA=yes"
+      "LUA_LIB_NAME=lua"
+      "LUA_LIB=${lua5_4}/lib"
+      "LUA_INC=${lua5_4}/include"
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      "USE_SYSTEMD=yes"
+      "USE_GETADDRINFO=1"
+    ]
+    ++ lib.optionals withPrometheusExporter [
+      "USE_PROMEX=yes"
+    ]
+    ++ [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   enableParallelBuilding = true;
 
@@ -83,7 +112,10 @@ in stdenv.mkDerivation (finalAttrs: {
     changelog = "https://www.haproxy.org/download/${lib.versions.majorMinor finalAttrs.version}/src/CHANGELOG";
     description = "Reliable, high performance TCP/HTTP load balancer";
     homepage = "https://haproxy.org";
-    license = with lib.licenses; [ gpl2Plus lgpl21Only ];
+    license = with lib.licenses; [
+      gpl2Plus
+      lgpl21Only
+    ];
     longDescription = ''
       HAProxy is a free, very fast and reliable solution offering high
       availability, load balancing, and proxying for TCP and HTTP-based

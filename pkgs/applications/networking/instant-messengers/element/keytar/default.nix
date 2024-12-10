@@ -1,10 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, nodejs, python3, removeReferencesTo
-, pkg-config, libsecret, xcbuild, Security, AppKit, fetchNpmDeps, npmHooks }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nodejs,
+  python3,
+  removeReferencesTo,
+  pkg-config,
+  libsecret,
+  xcbuild,
+  Security,
+  AppKit,
+  fetchNpmDeps,
+  npmHooks,
+}:
 
 let
   pinData = lib.importJSON ./pin.json;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "keytar";
   inherit (pinData) version;
 
@@ -16,13 +30,18 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    nodejs python3 pkg-config
+    nodejs
+    python3
+    pkg-config
     npmHooks.npmConfigHook
-  ]
-    ++ lib.optional  stdenv.isDarwin xcbuild;
+  ] ++ lib.optional stdenv.isDarwin xcbuild;
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [ libsecret ]
-    ++ lib.optionals stdenv.isDarwin [ Security AppKit ];
+  buildInputs =
+    lib.optionals (!stdenv.isDarwin) [ libsecret ]
+    ++ lib.optionals stdenv.isDarwin [
+      Security
+      AppKit
+    ];
 
   npmDeps = fetchNpmDeps {
     inherit src;
@@ -37,10 +56,18 @@ in stdenv.mkDerivation rec {
   '';
 
   # https://nodejs.org/api/os.html#osarch
-  npmFlagsArray = [ "--arch=${if stdenv.hostPlatform.parsed.cpu.name == "i686" then "ia32"
-                             else if stdenv.hostPlatform.parsed.cpu.name == "x86_64" then "x64"
-                             else if stdenv.hostPlatform.parsed.cpu.name == "aarch64" then "arm64"
-                             else stdenv.hostPlatform.parsed.cpu.name}" ];
+  npmFlagsArray = [
+    "--arch=${
+      if stdenv.hostPlatform.parsed.cpu.name == "i686" then
+        "ia32"
+      else if stdenv.hostPlatform.parsed.cpu.name == "x86_64" then
+        "x64"
+      else if stdenv.hostPlatform.parsed.cpu.name == "aarch64" then
+        "arm64"
+      else
+        stdenv.hostPlatform.parsed.cpu.name
+    }"
+  ];
 
   installPhase = ''
     runHook preInstall

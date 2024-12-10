@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, qmake, wrapQtAppsHook, ffmpeg, qtmultimedia, qwt }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  qmake,
+  wrapQtAppsHook,
+  ffmpeg,
+  qtmultimedia,
+  qwt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "qctools";
@@ -11,9 +20,16 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${pname}/Project/QtCreator";
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ ffmpeg qtmultimedia qwt ];
+  buildInputs = [
+    ffmpeg
+    qtmultimedia
+    qwt
+  ];
 
   installPhase = ''
     runHook preInstall

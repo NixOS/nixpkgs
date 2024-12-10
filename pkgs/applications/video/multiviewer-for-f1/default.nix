@@ -1,26 +1,27 @@
-{ stdenvNoCC
-, fetchurl
-, lib
-, makeWrapper
-, autoPatchelfHook
-, dpkg
-, alsa-lib
-, at-spi2-atk
-, cairo
-, cups
-, dbus
-, expat
-, ffmpeg
-, glib
-, gtk3
-, libdrm
-, libudev0-shim
-, libxkbcommon
-, mesa
-, nspr
-, nss
-, pango
-, xorg
+{
+  stdenvNoCC,
+  fetchurl,
+  lib,
+  makeWrapper,
+  autoPatchelfHook,
+  dpkg,
+  alsa-lib,
+  at-spi2-atk,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  ffmpeg,
+  glib,
+  gtk3,
+  libdrm,
+  libudev0-shim,
+  libxkbcommon,
+  mesa,
+  nspr,
+  nss,
+  pango,
+  xorg,
 }:
 let
   id = "154421934";
@@ -85,7 +86,9 @@ stdenvNoCC.mkDerivation rec {
 
     makeWrapper "$out/share/multiviewer-for-f1/MultiViewer for F1" $out/bin/multiviewer-for-f1 \
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}" \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ libudev0-shim ]}:\"$out/share/Multiviewer for F1\""
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [ libudev0-shim ]
+      }:\"$out/share/Multiviewer for F1\""
 
     runHook postInstall
   '';
@@ -100,4 +103,3 @@ stdenvNoCC.mkDerivation rec {
     mainProgram = "multiviewer-for-f1";
   };
 }
-

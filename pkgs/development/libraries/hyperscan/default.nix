@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ragel
-, python3
-, util-linux
-, pkg-config
-, boost
-, pcre
-, withStatic ? false # build only shared libs by default, build static+shared if true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ragel,
+  python3,
+  util-linux,
+  pkg-config,
+  boost,
+  pcre,
+  withStatic ? false, # build only shared libs by default, build static+shared if true
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,19 +23,27 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   buildInputs = [ boost ];
   nativeBuildInputs = [
-    cmake ragel python3 util-linux pkg-config
+    cmake
+    ragel
+    python3
+    util-linux
+    pkg-config
   ];
 
-  cmakeFlags = [
-    "-DBUILD_AVX512=ON"
-  ]
-  ++ lib.optional (!stdenv.isDarwin) "-DFAT_RUNTIME=ON"
-  ++ lib.optional (withStatic) "-DBUILD_STATIC_AND_SHARED=ON"
-  ++ lib.optional (!withStatic) "-DBUILD_SHARED_LIBS=ON";
+  cmakeFlags =
+    [
+      "-DBUILD_AVX512=ON"
+    ]
+    ++ lib.optional (!stdenv.isDarwin) "-DFAT_RUNTIME=ON"
+    ++ lib.optional (withStatic) "-DBUILD_STATIC_AND_SHARED=ON"
+    ++ lib.optional (!withStatic) "-DBUILD_SHARED_LIBS=ON";
 
   # hyperscan CMake is completely broken for chimera builds when pcre is compiled
   # the only option to make it build - building from source
@@ -78,7 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
 
     homepage = "https://www.hyperscan.io/";
     maintainers = with maintainers; [ avnik ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     license = licenses.bsd3;
   };
 })

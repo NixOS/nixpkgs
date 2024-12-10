@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, git
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  git,
 }:
 
 buildGoModule rec {
@@ -20,10 +21,16 @@ buildGoModule rec {
   # required for version info
   nativeBuildInputs = [ git ];
 
-  ldflags = [ "-extldflags" "-static" ];
+  ldflags = [
+    "-extldflags"
+    "-static"
+  ];
 
   # Disable failing E2E tests preventing the package from building
-  excludedPackages = [ "./cmd/terramate/e2etests/cloud" "./cmd/terramate/e2etests/core" ];
+  excludedPackages = [
+    "./cmd/terramate/e2etests/cloud"
+    "./cmd/terramate/e2etests/core"
+  ];
 
   meta = with lib; {
     description = "Adds code generation, stacks, orchestration, change detection, data sharing and more to Terraform";

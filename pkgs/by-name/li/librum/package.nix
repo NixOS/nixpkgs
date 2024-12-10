@@ -1,11 +1,12 @@
-{ lib
-, mupdf
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, cmake
-, qt6
-, desktopToDarwinBundle
+{
+  lib,
+  mupdf,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  cmake,
+  qt6,
+  desktopToDarwinBundle,
 }:
 
 let
@@ -31,20 +32,24 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    cmake
-    qt6.qttools
-    qt6.wrapQtAppsHook
-  ] ++ lib.optionals stdenv.isDarwin [
-    desktopToDarwinBundle
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      qt6.qttools
+      qt6.wrapQtAppsHook
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      desktopToDarwinBundle
+    ];
 
-  buildInputs = [
-    qt6.qtbase
-    qt6.qtsvg
-  ] ++ lib.optionals stdenv.isLinux [
-    qt6.qtwayland
-  ];
+  buildInputs =
+    [
+      qt6.qtbase
+      qt6.qtsvg
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      qt6.qtwayland
+    ];
 
   meta = with lib; {
     description = "An application designed to make reading enjoyable and straightforward";
@@ -62,7 +67,10 @@ stdenv.mkDerivation rec {
     homepage = "https://librumreader.com";
     license = licenses.gpl3Plus;
     mainProgram = "librum";
-    maintainers = with maintainers; [ aleksana oluceps ];
+    maintainers = with maintainers; [
+      aleksana
+      oluceps
+    ];
     platforms = platforms.unix;
   };
 }

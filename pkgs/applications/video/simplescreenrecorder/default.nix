@@ -1,5 +1,25 @@
-{ lib, stdenv, mkDerivation, fetchFromGitHub, alsa-lib, ffmpeg_4, libjack2, libX11, libXext, libXinerama, qtx11extras
-, libXfixes, libGLU, libGL, pkg-config, libpulseaudio, libv4l, qtbase, qttools, cmake, ninja
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchFromGitHub,
+  alsa-lib,
+  ffmpeg_4,
+  libjack2,
+  libX11,
+  libXext,
+  libXinerama,
+  qtx11extras,
+  libXfixes,
+  libGLU,
+  libGL,
+  pkg-config,
+  libpulseaudio,
+  libv4l,
+  qtbase,
+  qttools,
+  cmake,
+  ninja,
 }:
 
 mkDerivation rec {
@@ -28,10 +48,26 @@ mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ pkg-config cmake ninja ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    ninja
+  ];
   buildInputs = [
-    alsa-lib ffmpeg_4 libjack2 libX11 libXext libXfixes libXinerama libGLU libGL
-    libpulseaudio libv4l qtbase qttools qtx11extras
+    alsa-lib
+    ffmpeg_4
+    libjack2
+    libX11
+    libXext
+    libXfixes
+    libXinerama
+    libGLU
+    libGL
+    libpulseaudio
+    libv4l
+    qtbase
+    qttools
+    qtx11extras
   ];
 
   meta = with lib; {

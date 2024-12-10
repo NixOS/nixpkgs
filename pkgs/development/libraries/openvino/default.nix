@@ -1,39 +1,40 @@
-{ lib
-, gcc12Stdenv
-, fetchFromGitHub
-, fetchurl
-, cudaSupport ? opencv.cudaSupport or false
+{
+  lib,
+  gcc12Stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  cudaSupport ? opencv.cudaSupport or false,
 
-# build
-, scons
-, addOpenGLRunpath
-, autoPatchelfHook
-, cmake
-, git
-, libarchive
-, patchelf
-, pkg-config
-, python3Packages
-, shellcheck
+  # build
+  scons,
+  addOpenGLRunpath,
+  autoPatchelfHook,
+  cmake,
+  git,
+  libarchive,
+  patchelf,
+  pkg-config,
+  python3Packages,
+  shellcheck,
 
-# runtime
-, flatbuffers
-, level-zero
-, libusb1
-, libxml2
-, ocl-icd
-, opencv
-, protobuf
-, pugixml
-, snappy
-, tbb_2021_5
-, cudaPackages
+  # runtime
+  flatbuffers,
+  level-zero,
+  libusb1,
+  libxml2,
+  ocl-icd,
+  opencv,
+  protobuf,
+  pugixml,
+  snappy,
+  tbb_2021_5,
+  cudaPackages,
 }:
 
 let
   inherit (lib)
     cmakeBool
-  ;
+    ;
 
   stdenv = gcc12Stdenv;
 
@@ -46,13 +47,15 @@ let
     hash = "sha256-Tr8wJGUweV8Gb7lhbmcHxrF756ZdKdNRi1eKdp3VTuo=";
   };
 
-  python = python3Packages.python.withPackages (ps: with ps; [
-    cython
-    pybind11
-    setuptools
-    sphinx
-    wheel
-  ]);
+  python = python3Packages.python.withPackages (
+    ps: with ps; [
+      cython
+      pybind11
+      setuptools
+      sphinx
+      wheel
+    ]
+  );
 
 in
 
@@ -73,20 +76,22 @@ stdenv.mkDerivation rec {
     "python"
   ];
 
-  nativeBuildInputs = [
-    addOpenGLRunpath
-    autoPatchelfHook
-    cmake
-    git
-    libarchive
-    patchelf
-    pkg-config
-    python
-    scons'
-    shellcheck
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
-  ];
+  nativeBuildInputs =
+    [
+      addOpenGLRunpath
+      autoPatchelfHook
+      cmake
+      git
+      libarchive
+      patchelf
+      pkg-config
+      python
+      scons'
+      shellcheck
+    ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_nvcc
+    ];
 
   postPatch = ''
     mkdir -p temp/tbbbind_${tbbbind_version}
@@ -136,19 +141,21 @@ stdenv.mkDerivation rec {
     "libngraph_backend.so"
   ];
 
-  buildInputs = [
-    flatbuffers
-    level-zero
-    libusb1
-    libxml2
-    ocl-icd
-    opencv.cxxdev
-    pugixml
-    snappy
-    tbb_2021_5
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_cudart
-  ];
+  buildInputs =
+    [
+      flatbuffers
+      level-zero
+      libusb1
+      libxml2
+      ocl-icd
+      opencv.cxxdev
+      pugixml
+      snappy
+      tbb_2021_5
+    ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_cudart
+    ];
 
   enableParallelBuilding = true;
 

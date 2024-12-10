@@ -1,13 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, requireFile
-, cmake
-, pkg-config
-, SDL2
-, SDL2_image
-, audiality2
-, useProprietaryAssets ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  requireFile,
+  cmake,
+  pkg-config,
+  SDL2,
+  SDL2_image,
+  audiality2,
+  useProprietaryAssets ? true,
 }:
 
 let
@@ -57,10 +59,12 @@ stdenv.mkDerivation rec {
   sourceRoot = main_src.name;
 
   # Fix clang build
-  patches = [(fetchpatch {
-    url = "https://github.com/olofson/koboredux/commit/cf92b8a61d002ccaa9fbcda7a96dab08a681dee4.patch";
-    sha256 = "0dwhvis7ghf3mgzjd2rwn8hk3ndlgfwwcqaq581yc5rwd73v6vw4";
-  })];
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/olofson/koboredux/commit/cf92b8a61d002ccaa9fbcda7a96dab08a681dee4.patch";
+      sha256 = "0dwhvis7ghf3mgzjd2rwn8hk3ndlgfwwcqaq581yc5rwd73v6vw4";
+    })
+  ];
 
   postPatch = optionalString useProprietaryAssets ''
     cp -r ../koboredux-${version}-Linux/sfx/redux data/sfx/
@@ -80,23 +84,25 @@ stdenv.mkDerivation rec {
   ];
 
   meta = {
-    description = "A frantic 80's style 2D shooter, similar to XKobo and Kobo Deluxe" +
-      optionalString (!useProprietaryAssets) " (built without proprietary assets)";
+    description =
+      "A frantic 80's style 2D shooter, similar to XKobo and Kobo Deluxe"
+      + optionalString (!useProprietaryAssets) " (built without proprietary assets)";
     mainProgram = "kobord";
-    longDescription = ''
-      Kobo Redux is a frantic 80's style 2D shooter, inspired by the look and
-      feel of 90's arcade cabinets. The gameplay is fast and unforgiving,
-      although with less of the frustrating quirkiness of the actual games
-      of the 80's. A true challenge in the spirit of the arcade era!
-    '' + optionalString (!useProprietaryAssets) ''
+    longDescription =
+      ''
+        Kobo Redux is a frantic 80's style 2D shooter, inspired by the look and
+        feel of 90's arcade cabinets. The gameplay is fast and unforgiving,
+        although with less of the frustrating quirkiness of the actual games
+        of the 80's. A true challenge in the spirit of the arcade era!
+      ''
+      + optionalString (!useProprietaryAssets) ''
 
-      This version replaces the official proprietary assets with placeholders.
-      For the full experience, consider installing "koboredux" instead.
-    '';
+        This version replaces the official proprietary assets with placeholders.
+        For the full experience, consider installing "koboredux" instead.
+      '';
     homepage = "https://olofson.itch.io/kobo-redux";
     license = with licenses; if useProprietaryAssets then unfree else gpl2;
     platforms = platforms.all;
     maintainers = with maintainers; [ fgaz ];
   };
 }
-

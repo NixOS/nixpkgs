@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchPypi, dbus }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  dbus,
+}:
 python3Packages.buildPythonApplication rec {
   pname = "spotify-cli-linux";
   version = "1.8.2";
@@ -14,7 +19,10 @@ python3Packages.buildPythonApplication rec {
   '';
 
   disabled = !python3Packages.isPy3k;
-  propagatedBuildInputs = with python3Packages; [ lyricwikia dbus-python ];
+  propagatedBuildInputs = with python3Packages; [
+    lyricwikia
+    dbus-python
+  ];
 
   # upstream has no code tests, but uses its "tests" for linting and formatting checks
   doCheck = false;

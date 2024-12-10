@@ -1,10 +1,43 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, pkg-config, cmake, ninja, yasm
-, libjpeg, openssl, libopus, ffmpeg, alsa-lib, libpulseaudio, protobuf
-, openh264, usrsctp, libevent, libvpx
-, libX11, libXtst, libXcomposite, libXdamage, libXext, libXrender, libXrandr, libXi
-, glib, abseil-cpp, pcre, util-linuxMinimal, libselinux, libsepol, pipewire
-, mesa, libepoxy, libglvnd, unstableGitUpdater, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  cmake,
+  ninja,
+  yasm,
+  libjpeg,
+  openssl,
+  libopus,
+  ffmpeg,
+  alsa-lib,
+  libpulseaudio,
+  protobuf,
+  openh264,
+  usrsctp,
+  libevent,
+  libvpx,
+  libX11,
+  libXtst,
+  libXcomposite,
+  libXdamage,
+  libXext,
+  libXrender,
+  libXrandr,
+  libXi,
+  glib,
+  abseil-cpp,
+  pcre,
+  util-linuxMinimal,
+  libselinux,
+  libsepol,
+  pipewire,
+  mesa,
+  libepoxy,
+  libglvnd,
+  unstableGitUpdater,
+  darwin,
 }:
 
 stdenv.mkDerivation {
@@ -19,33 +52,71 @@ stdenv.mkDerivation {
     fetchSubmodules = true;
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ pkg-config cmake ninja yasm ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    ninja
+    yasm
+  ];
 
-  buildInputs = [
-    libjpeg libopus ffmpeg protobuf openh264 usrsctp libevent libvpx abseil-cpp
-  ] ++ lib.optionals stdenv.isLinux [
-    libX11 libXtst libXcomposite libXdamage libXext libXrender libXrandr libXi
-    glib pcre util-linuxMinimal libselinux libsepol pipewire alsa-lib libpulseaudio
-    mesa libepoxy libglvnd
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    Cocoa
-    AppKit
-    IOKit
-    IOSurface
-    Foundation
-    AVFoundation
-    CoreMedia
-    VideoToolbox
-    CoreGraphics
-    CoreVideo
-    OpenGL
-    Metal
-    MetalKit
-    CoreFoundation
-    ApplicationServices
-  ]);
+  buildInputs =
+    [
+      libjpeg
+      libopus
+      ffmpeg
+      protobuf
+      openh264
+      usrsctp
+      libevent
+      libvpx
+      abseil-cpp
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      libX11
+      libXtst
+      libXcomposite
+      libXdamage
+      libXext
+      libXrender
+      libXrandr
+      libXi
+      glib
+      pcre
+      util-linuxMinimal
+      libselinux
+      libsepol
+      pipewire
+      alsa-lib
+      libpulseaudio
+      mesa
+      libepoxy
+      libglvnd
+    ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Cocoa
+        AppKit
+        IOKit
+        IOSurface
+        Foundation
+        AVFoundation
+        CoreMedia
+        VideoToolbox
+        CoreGraphics
+        CoreVideo
+        OpenGL
+        Metal
+        MetalKit
+        CoreFoundation
+        ApplicationServices
+      ]
+    );
 
   patches = [
     # GCC 12 Fix
@@ -67,7 +138,12 @@ stdenv.mkDerivation {
 
   propagatedBuildInputs = [
     # Required for linking downstream binaries.
-    abseil-cpp openh264 usrsctp libevent libvpx openssl
+    abseil-cpp
+    openh264
+    usrsctp
+    libevent
+    libvpx
+    openssl
   ];
 
   passthru.updateScript = unstableGitUpdater { };

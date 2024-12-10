@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, desktop-file-utils
-, itstool
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook3
-, glib
-, gtk3
-, libgtop
-, dnsutils
-, iputils
-, nmap
-, inetutils
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  desktop-file-utils,
+  itstool,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  wrapGAppsHook3,
+  glib,
+  gtk3,
+  libgtop,
+  dnsutils,
+  iputils,
+  nmap,
+  inetutils,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
@@ -60,12 +61,14 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [
-        dnsutils # for dig
-        iputils # for ping
-        nmap # for nmap
-        inetutils # for ping6, traceroute, whois
-      ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          dnsutils # for dig
+          iputils # for ping
+          nmap # for nmap
+          inetutils # for ping6, traceroute, whois
+        ]
+      }"
     )
   '';
 

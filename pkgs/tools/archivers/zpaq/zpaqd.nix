@@ -1,9 +1,19 @@
-{ lib, stdenv, fetchurl, unzip }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 
 let
-  compileFlags = lib.concatStringsSep " " ([ "-O3" "-DNDEBUG" ]
+  compileFlags = lib.concatStringsSep " " (
+    [
+      "-O3"
+      "-DNDEBUG"
+    ]
     ++ lib.optional (stdenv.hostPlatform.isUnix) "-Dunix -pthread"
-    ++ lib.optional (!stdenv.hostPlatform.isx86) "-DNOJIT");
+    ++ lib.optional (!stdenv.hostPlatform.isx86) "-DNOJIT"
+  );
 in
 stdenv.mkDerivation rec {
   pname = "zpaqd";

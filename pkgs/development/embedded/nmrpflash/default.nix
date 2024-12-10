@@ -1,9 +1,10 @@
-{ fetchFromGitHub
-, lib
-, libnl
-, libpcap
-, pkg-config
-, stdenv
+{
+  fetchFromGitHub,
+  lib,
+  libnl,
+  libpcap,
+  pkg-config,
+  stdenv,
 }:
 stdenv.mkDerivation rec {
   pname = "nmrpflash";
@@ -18,7 +19,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libnl libpcap ];
+  buildInputs = [
+    libnl
+    libpcap
+  ];
 
   PREFIX = "${placeholder "out"}";
   STANDALONE_VERSION = version;

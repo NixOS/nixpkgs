@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, pkg-config
-, itstool
-, gtk3
-, wrapGAppsHook3
-, meson
-, librsvg
-, libxml2
-, desktop-file-utils
-, guile
-, libcanberra-gtk3
-, ninja
-, yelp-tools
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  pkg-config,
+  itstool,
+  gtk3,
+  wrapGAppsHook3,
+  meson,
+  librsvg,
+  libxml2,
+  desktop-file-utils,
+  guile,
+  libcanberra-gtk3,
+  ninja,
+  yelp-tools,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

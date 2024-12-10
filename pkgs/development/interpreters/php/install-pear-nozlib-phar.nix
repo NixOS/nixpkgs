@@ -1,5 +1,5 @@
 {
-  fetchurl
+  fetchurl,
 }:
 
 fetchurl {

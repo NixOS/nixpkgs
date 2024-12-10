@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, openssl
-, pkg-config
-, rustPlatform
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,11 +25,13 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      Security
+    ];
 
   checkFlags = [
     # requires network access

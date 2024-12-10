@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchCrate
-, pkg-config
-, installShellFiles
-, fuse
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  installShellFiles,
+  fuse,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +19,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoSha256 = "sha256-izz10ePmEt2xxOyR4NODIMAcY9d4ODo677mq+DVf4RI=";
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
   buildInputs = [ fuse ];
 

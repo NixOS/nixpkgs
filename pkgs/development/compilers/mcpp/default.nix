@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -11,7 +12,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "museoa";
     repo = "mcpp";
     rev = finalAttrs.version;
-    hash= "sha256-T4feegblOeG+NU+c+PAobf8HT8KDSfcINkRAa1hNpkY=";
+    hash = "sha256-T4feegblOeG+NU+c+PAobf8HT8KDSfcINkRAa1hNpkY=";
   };
 
   patches = [

@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, gnome, glib, libxml2, gtk-engine-murrine, gdk-pixbuf, librsvg, bc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gnome,
+  glib,
+  libxml2,
+  gtk-engine-murrine,
+  gdk-pixbuf,
+  librsvg,
+  bc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "equilux-theme";
@@ -11,9 +22,17 @@ stdenv.mkDerivation rec {
     sha256 = "0lv2yyxhnmnkwxp576wnb01id4fp734b5z5n0l67sg5z7vc2h8fc";
   };
 
-  nativeBuildInputs = [ glib libxml2 bc ];
+  nativeBuildInputs = [
+    glib
+    libxml2
+    bc
+  ];
 
-  buildInputs = [ gnome.gnome-themes-extra gdk-pixbuf librsvg ];
+  buildInputs = [
+    gnome.gnome-themes-extra
+    gdk-pixbuf
+    librsvg
+  ];
 
   propagatedUserEnvPkgs = [ gtk-engine-murrine ];
 

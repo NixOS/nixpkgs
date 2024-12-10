@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, python3
-, fetchPypi
+{
+  lib,
+  stdenv,
+  python3,
+  fetchPypi,
 }:
 
 let

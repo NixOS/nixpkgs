@@ -1,6 +1,13 @@
-{ config, lib, pkgs, ... }:
-let cfg = config.programs.yubikey-touch-detector;
-in {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.programs.yubikey-touch-detector;
+in
+{
   options = {
     programs.yubikey-touch-detector = {
       enable = lib.mkEnableOption "yubikey-touch-detector";

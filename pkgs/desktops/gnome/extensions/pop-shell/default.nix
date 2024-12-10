@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, glib, gjs, typescript, unstableGitUpdater }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  glib,
+  gjs,
+  typescript,
+  unstableGitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-pop-shell";
@@ -11,7 +19,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-IQJtTMYCkKyjqDKoR35qsgQkvXIrGLq+qtMDOTkvy08=";
   };
 
-  nativeBuildInputs = [ glib gjs typescript ];
+  nativeBuildInputs = [
+    glib
+    gjs
+    typescript
+  ];
 
   buildInputs = [ gjs ];
 

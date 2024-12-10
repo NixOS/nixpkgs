@@ -1,8 +1,17 @@
-{ stdenv, lib, fetchurl, pkg-config, meson, ninja, docutils
-, libpthreadstubs
-, withIntel ? lib.meta.availableOn stdenv.hostPlatform libpciaccess, libpciaccess
-, withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light, valgrind-light
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  docutils,
+  libpthreadstubs,
+  withIntel ? lib.meta.availableOn stdenv.hostPlatform libpciaccess,
+  libpciaccess,
+  withValgrind ? lib.meta.availableOn stdenv.hostPlatform valgrind-light,
+  valgrind-light,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,24 +23,37 @@ stdenv.mkDerivation rec {
     hash = "sha256-O/VTY/dsclCUZEGrUdOmzArlGAVcD/AXMkq3bN77Mno=";
   };
 
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [
+    "out"
+    "dev"
+    "bin"
+  ];
 
-  nativeBuildInputs = [ pkg-config meson ninja docutils ];
-  buildInputs = [ libpthreadstubs ]
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    docutils
+  ];
+  buildInputs =
+    [ libpthreadstubs ]
     ++ lib.optional withIntel libpciaccess
     ++ lib.optional withValgrind valgrind-light;
 
-  mesonFlags = [
-    "-Dinstall-test-programs=true"
-    "-Dcairo-tests=disabled"
-    (lib.mesonEnable "intel" withIntel)
-    (lib.mesonEnable "omap" stdenv.hostPlatform.isLinux)
-    (lib.mesonEnable "valgrind" withValgrind)
-  ] ++ lib.optionals stdenv.hostPlatform.isAarch [
-    "-Dtegra=enabled"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-    "-Detnaviv=disabled"
-  ];
+  mesonFlags =
+    [
+      "-Dinstall-test-programs=true"
+      "-Dcairo-tests=disabled"
+      (lib.mesonEnable "intel" withIntel)
+      (lib.mesonEnable "omap" stdenv.hostPlatform.isLinux)
+      (lib.mesonEnable "valgrind" withValgrind)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch [
+      "-Dtegra=enabled"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+      "-Detnaviv=disabled"
+    ];
 
   passthru = {
     updateScript = gitUpdater {

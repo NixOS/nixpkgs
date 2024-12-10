@@ -1,4 +1,8 @@
-{ lib, fetchurl, appimageTools }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+}:
 
 let
   pname = "openlens";
@@ -32,7 +36,10 @@ appimageTools.wrapType2 {
     description = "The Kubernetes IDE";
     homepage = "https://github.com/MuhammedKalkan/OpenLens";
     license = licenses.mit;
-    maintainers = with maintainers; [ benwbooth sebtm ];
+    maintainers = with maintainers; [
+      benwbooth
+      sebtm
+    ];
     mainProgram = "openlens";
     platforms = [ "x86_64-linux" ];
   };

@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, boost
-, libevent
-, double-conversion
-, glog
-, fmt_8
-, gflags
-, openssl
-, fizz
-, folly
-, gtest
-, libsodium
-, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  libevent,
+  double-conversion,
+  glog,
+  fmt_8,
+  gflags,
+  openssl,
+  fizz,
+  folly,
+  gtest,
+  libsodium,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,12 +32,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeDir = "../wangle";
 
-  cmakeFlags = [
-    "-Wno-dev"
-    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
-  ];
+  cmakeFlags =
+    [
+      "-Wno-dev"
+      (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
+    ];
 
   buildInputs = [
     fmt_8
@@ -56,22 +59,26 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [
     gtest
   ];
-  preCheck = let
-    disabledTests = [
-      # these depend on example pem files from the folly source tree (?)
-      "SSLContextManagerTest.TestSingleClientCAFileSet"
-      "SSLContextManagerTest.TestMultipleClientCAsSet"
+  preCheck =
+    let
+      disabledTests =
+        [
+          # these depend on example pem files from the folly source tree (?)
+          "SSLContextManagerTest.TestSingleClientCAFileSet"
+          "SSLContextManagerTest.TestMultipleClientCAsSet"
 
-      # https://github.com/facebook/wangle/issues/206
-      "SSLContextManagerTest.TestSessionContextCertRemoval"
-    ] ++ lib.optionals stdenv.isDarwin [
-      # flaky
-      "BroadcastPoolTest.ThreadLocalPool"
-      "Bootstrap.UDPClientServerTest"
-    ];
-  in ''
-    export GTEST_FILTER="-${lib.concatStringsSep ":" disabledTests}"
-  '';
+          # https://github.com/facebook/wangle/issues/206
+          "SSLContextManagerTest.TestSessionContextCertRemoval"
+        ]
+        ++ lib.optionals stdenv.isDarwin [
+          # flaky
+          "BroadcastPoolTest.ThreadLocalPool"
+          "Bootstrap.UDPClientServerTest"
+        ];
+    in
+    ''
+      export GTEST_FILTER="-${lib.concatStringsSep ":" disabledTests}"
+    '';
 
   meta = with lib; {
     description = "An open-source C++ networking library";
@@ -83,6 +90,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/facebook/wangle";
     license = licenses.asl20;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pierreis kylesferrazza ];
+    maintainers = with maintainers; [
+      pierreis
+      kylesferrazza
+    ];
   };
 })

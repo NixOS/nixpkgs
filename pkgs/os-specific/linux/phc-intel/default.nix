@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, kernel, which }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  kernel,
+  which,
+}:
 
 # Don't bother with older versions, though some might even work:
 assert lib.versionAtLeast kernel.version "4.10";
@@ -6,7 +12,8 @@ assert lib.versionAtLeast kernel.version "4.10";
 let
   release = "0.4.0";
   revbump = "rev25"; # don't forget to change forum download id...
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "linux-phc-intel-${version}-${kernel.version}";
   version = "${release}-${revbump}";
 
@@ -46,7 +53,10 @@ in stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/danielw86dev/phc-intel-dkms";
     license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     broken = lib.versionAtLeast kernel.version "4.18";
   };
 }

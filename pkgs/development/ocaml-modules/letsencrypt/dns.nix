@@ -1,12 +1,13 @@
-{ lib
-, buildDunePackage
-, letsencrypt
-, logs
-, fmt
-, lwt
-, dns
-, dns-tsig
-, domain-name
+{
+  lib,
+  buildDunePackage,
+  letsencrypt,
+  logs,
+  fmt,
+  lwt,
+  dns,
+  dns-tsig,
+  domain-name,
 }:
 
 buildDunePackage {

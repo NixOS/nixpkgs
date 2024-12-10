@@ -1,6 +1,22 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, ncurses, texinfo, writeScript
-, common-updater-scripts, git, nix, nixfmt-classic, coreutils, gnused
-, callPackage, file ? null, gettext ? null, enableNls ? true, enableTiny ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  ncurses,
+  texinfo,
+  writeScript,
+  common-updater-scripts,
+  git,
+  nix,
+  nixfmt-classic,
+  coreutils,
+  gnused,
+  callPackage,
+  file ? null,
+  gettext ? null,
+  enableNls ? true,
+  enableTiny ? false,
 }:
 
 assert enableNls -> (gettext != null);
@@ -13,7 +29,8 @@ let
     sha256 = "0773s5iz8aw9npgyasb0r2ybp6gvy2s9sq51az8w7h52bzn5blnn";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "nano";
   version = "8.0";
 
@@ -25,7 +42,10 @@ in stdenv.mkDerivation rec {
   nativeBuildInputs = [ texinfo ] ++ lib.optional enableNls gettext;
   buildInputs = [ ncurses ] ++ lib.optional (!enableTiny) file;
 
-  outputs = [ "out" "info" ];
+  outputs = [
+    "out"
+    "info"
+  ];
 
   configureFlags = [
     "--sysconfdir=/etc"
@@ -33,16 +53,20 @@ in stdenv.mkDerivation rec {
     (lib.enableFeature enableTiny "tiny")
   ];
 
-  postInstall = if enableTiny then
-    null
-  else ''
-    cp ${nixSyntaxHighlight}/nix.nanorc $out/share/nano/
-  '';
+  postInstall =
+    if enableTiny then
+      null
+    else
+      ''
+        cp ${nixSyntaxHighlight}/nix.nanorc $out/share/nano/
+      '';
 
   enableParallelBuilding = true;
 
   passthru = {
-    tests = { expect = callPackage ./test-with-expect.nix { }; };
+    tests = {
+      expect = callPackage ./test-with-expect.nix { };
+    };
 
     updateScript = writeScript "update.sh" ''
       #!${stdenv.shell}
@@ -76,7 +100,10 @@ in stdenv.mkDerivation rec {
     homepage = "https://www.nano-editor.org/";
     description = "A small, user-friendly console text editor";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ joachifm nequissimus ];
+    maintainers = with maintainers; [
+      joachifm
+      nequissimus
+    ];
     platforms = platforms.all;
     mainProgram = "nano";
   };

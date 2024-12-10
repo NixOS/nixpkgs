@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, pkg-config
-, doxygen
-, graphviz
-, libogg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  pkg-config,
+  doxygen,
+  graphviz,
+  libogg,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,12 +34,21 @@ stdenv.mkDerivation rec {
     "-DBUILD_SHARED_LIBS=ON"
   ];
 
-  CFLAGS = [ "-O3" "-funroll-loops" ];
+  CFLAGS = [
+    "-O3"
+    "-funroll-loops"
+  ];
   CXXFLAGS = [ "-O3" ];
 
   # doCheck = true; # takes lots of time
 
-  outputs = [ "bin" "dev" "out" "man" "doc" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+    "doc"
+  ];
 
   meta = with lib; {
     homepage = "https://xiph.org/flac/";

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, git, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  git,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "git-backdate";
@@ -29,4 +35,3 @@ stdenv.mkDerivation rec {
     mainProgram = "git-backdate";
   };
 }
-

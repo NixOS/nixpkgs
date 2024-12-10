@@ -1,12 +1,13 @@
-{ stdenv
-, fetchFromGitHub
-, fetchpatch
-, callPackage
-, gnat
-, zlib
-, llvm
-, lib
-, backend ? "mcode"
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  callPackage,
+  gnat,
+  zlib,
+  llvm,
+  lib,
+  backend ? "mcode",
 }:
 
 assert backend == "mcode" || backend == "llvm";
@@ -16,10 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
   version = "4.1.0";
 
   src = fetchFromGitHub {
-    owner  = "ghdl";
-    repo   = "ghdl";
-    rev    = "v${finalAttrs.version}";
-    hash   = "sha256-tPSHer3qdtEZoPh9BsEyuTOrXgyENFUyJqnUS3UYAvM=";
+    owner = "ghdl";
+    repo = "ghdl";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-tPSHer3qdtEZoPh9BsEyuTOrXgyENFUyJqnUS3UYAvM=";
   };
 
   LIBRARY_PATH = "${stdenv.cc.libc}/lib";
@@ -27,28 +28,34 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     gnat
   ];
-  buildInputs = [
-    zlib
-  ] ++ lib.optionals (backend == "llvm") [
-    llvm
-  ];
-  propagatedBuildInputs = [
-  ] ++ lib.optionals (backend == "llvm") [
-    zlib
-  ];
+  buildInputs =
+    [
+      zlib
+    ]
+    ++ lib.optionals (backend == "llvm") [
+      llvm
+    ];
+  propagatedBuildInputs =
+    [
+    ]
+    ++ lib.optionals (backend == "llvm") [
+      zlib
+    ];
 
   preConfigure = ''
     # If llvm 7.0 works, 7.x releases should work too.
     sed -i 's/check_version  7.0/check_version  7/g' configure
   '';
 
-  configureFlags = [
-    # See https://github.com/ghdl/ghdl/pull/2058
-    "--disable-werror"
-    "--enable-synth"
-  ] ++ lib.optionals (backend == "llvm") [
-    "--with-llvm-config=${llvm.dev}/bin/llvm-config"
-  ];
+  configureFlags =
+    [
+      # See https://github.com/ghdl/ghdl/pull/2058
+      "--disable-werror"
+      "--enable-synth"
+    ]
+    ++ lib.optionals (backend == "llvm") [
+      "--with-llvm-config=${llvm.dev}/bin/llvm-config"
+    ];
 
   enableParallelBuilding = true;
 
@@ -66,7 +73,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "VHDL 2008/93/87 simulator";
     license = lib.licenses.gpl2Plus;
     mainProgram = "ghdl";
-    maintainers = with lib.maintainers; [ lucus16 thoughtpolice ];
+    maintainers = with lib.maintainers; [
+      lucus16
+      thoughtpolice
+    ];
     platforms = lib.platforms.linux;
   };
 })

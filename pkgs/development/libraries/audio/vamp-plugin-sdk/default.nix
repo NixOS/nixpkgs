@@ -1,7 +1,13 @@
 # set VAMP_PATH ?
 # plugins availible on sourceforge and http://www.vamp-plugins.org/download.html (various licenses)
 
-{ lib, stdenv, fetchFromGitHub, pkg-config, libsndfile }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libsndfile,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vamp-plugin-sdk";
@@ -27,7 +33,10 @@ stdenv.mkDerivation rec {
     description = "Audio processing plugin system for plugins that extract descriptive information from audio data";
     homepage = "https://vamp-plugins.org/";
     license = licenses.bsd3;
-    maintainers = [ maintainers.goibhniu maintainers.marcweber ];
+    maintainers = [
+      maintainers.goibhniu
+      maintainers.marcweber
+    ];
     platforms = platforms.unix;
   };
 }

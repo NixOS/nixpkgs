@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, which
-, gmp
-, avx2Support ? stdenv.hostPlatform.avx2Support
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  gmp,
+  avx2Support ? stdenv.hostPlatform.avx2Support,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,18 +31,24 @@ stdenv.mkDerivation rec {
 
   # Emulate jplatform64.sh configuration variables
   jplatform =
-    if stdenv.isDarwin then "darwin"
-    else if stdenv.hostPlatform.isAarch then "raspberry"
-    else if stdenv.isLinux then "linux"
-    else "unsupported";
+    if stdenv.isDarwin then
+      "darwin"
+    else if stdenv.hostPlatform.isAarch then
+      "raspberry"
+    else if stdenv.isLinux then
+      "linux"
+    else
+      "unsupported";
 
   j64x =
-    if stdenv.is32bit then "j32"
+    if stdenv.is32bit then
+      "j32"
     else if stdenv.isx86_64 then
       if stdenv.isLinux && avx2Support then "j64avx2" else "j64"
     else if stdenv.isAarch64 then
       if stdenv.isDarwin then "j64arm" else "j64"
-    else "unsupported";
+    else
+      "unsupported";
 
   env.NIX_LDFLAGS = "-lgmp";
 
@@ -79,7 +86,11 @@ stdenv.mkDerivation rec {
       problems that are not already well understood.
     '';
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ raskin synthetica AndersonTorres ];
+    maintainers = with maintainers; [
+      raskin
+      synthetica
+      AndersonTorres
+    ];
     broken = stdenv.isDarwin;
     platforms = platforms.all;
     mainProgram = "jconsole";

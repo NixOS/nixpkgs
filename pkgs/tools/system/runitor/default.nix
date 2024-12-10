@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, runitor }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  runitor,
+}:
 
 buildGoModule rec {
   pname = "runitor";
@@ -13,7 +19,9 @@ buildGoModule rec {
   };
 
   ldflags = [
-    "-s" "-w" "-X main.Version=v${version}"
+    "-s"
+    "-w"
+    "-X main.Version=v${version}"
   ];
 
   passthru.tests.version = testers.testVersion {

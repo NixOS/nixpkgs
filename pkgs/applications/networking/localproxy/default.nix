@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, openssl
-, protobuf_21
-, catch2
-, boost181
-, icu
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  openssl,
+  protobuf_21,
+  catch2,
+  boost181,
+  icu,
 }:
 let
   boost = boost181.override { enableStatic = true; };
@@ -41,7 +42,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ openssl protobuf catch2 boost icu ];
+  buildInputs = [
+    openssl
+    protobuf
+    catch2
+    boost
+    icu
+  ];
 
   # causes redefinition of _FORTIFY_SOURCE
   hardeningDisable = [ "fortify3" ];

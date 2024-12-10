@@ -1,11 +1,12 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, installShellFiles
-, testers
-, backblaze-b2
-# executable is renamed to backblaze-b2 by default, to avoid collision with boost's 'b2'
-, execName ? "backblaze-b2"
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  backblaze-b2,
+  # executable is renamed to backblaze-b2 by default, to avoid collision with boost's 'b2'
+  execName ? "backblaze-b2",
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -72,32 +73,38 @@ python3Packages.buildPythonApplication rec {
     "test_install_autocomplete"
   ];
 
-  postInstall = lib.optionalString (execName != "b2") ''
-    mv "$out/bin/b2" "$out/bin/${execName}"
-  ''
-  + ''
-    installShellCompletion --cmd ${execName} \
-      --bash <(${python3Packages.argcomplete}/bin/register-python-argcomplete ${execName}) \
-      --zsh <(${python3Packages.argcomplete}/bin/register-python-argcomplete ${execName})
-  '';
-
-  passthru.tests.version = (testers.testVersion {
-    package = backblaze-b2;
-    command = "${execName} version --short";
-  }).overrideAttrs (old: {
-    # workaround the error: Permission denied: '/homeless-shelter'
-    # backblaze-b2 fails to create a 'b2' directory under the XDG config path
-    preHook = ''
-      export HOME=$(mktemp -d)
+  postInstall =
+    lib.optionalString (execName != "b2") ''
+      mv "$out/bin/b2" "$out/bin/${execName}"
+    ''
+    + ''
+      installShellCompletion --cmd ${execName} \
+        --bash <(${python3Packages.argcomplete}/bin/register-python-argcomplete ${execName}) \
+        --zsh <(${python3Packages.argcomplete}/bin/register-python-argcomplete ${execName})
     '';
-  });
+
+  passthru.tests.version =
+    (testers.testVersion {
+      package = backblaze-b2;
+      command = "${execName} version --short";
+    }).overrideAttrs
+      (old: {
+        # workaround the error: Permission denied: '/homeless-shelter'
+        # backblaze-b2 fails to create a 'b2' directory under the XDG config path
+        preHook = ''
+          export HOME=$(mktemp -d)
+        '';
+      });
 
   meta = with lib; {
     description = "Command-line tool for accessing the Backblaze B2 storage service";
     homepage = "https://github.com/Backblaze/B2_Command_Line_Tool";
     changelog = "https://github.com/Backblaze/B2_Command_Line_Tool/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ hrdinka tomhoule ];
+    maintainers = with maintainers; [
+      hrdinka
+      tomhoule
+    ];
     mainProgram = "backblaze-b2";
   };
 }

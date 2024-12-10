@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, freetype
-, gtk3-x11
-, mount
-, pcre
-, pkg-config
-, webkitgtk
-, xorg
-, llvmPackages
-, WebKit
-, MetalKit
-, CoreAudioKit
-, simd
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  freetype,
+  gtk3-x11,
+  mount,
+  pcre,
+  pkg-config,
+  webkitgtk,
+  xorg,
+  llvmPackages,
+  WebKit,
+  MetalKit,
+  CoreAudioKit,
+  simd,
 }:
 stdenv.mkDerivation rec {
   pname = "rnnoise-plugin";
@@ -26,7 +27,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-1DgrpGYF7G5Zr9vbgtKm/Yv0HSdI7LrFYPSGKYNnNDQ=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   patches = lib.optionals stdenv.isDarwin [
     # Ubsan seems to be broken on aarch64-darwin, it produces linker errors similar to https://github.com/NixOS/nixpkgs/issues/140751
@@ -40,9 +44,11 @@ stdenv.mkDerivation rec {
       pcre
       xorg.libX11
       xorg.libXrandr
-    ] ++ lib.optionals stdenv.isLinux [
+    ]
+    ++ lib.optionals stdenv.isLinux [
       webkitgtk
-    ] ++ lib.optionals stdenv.isDarwin [
+    ]
+    ++ lib.optionals stdenv.isDarwin [
       WebKit
       MetalKit
       CoreAudioKit
@@ -54,6 +60,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/werman/noise-suppression-for-voice";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ panaeon henrikolsson sciencentistguy ];
+    maintainers = with maintainers; [
+      panaeon
+      henrikolsson
+      sciencentistguy
+    ];
   };
 }

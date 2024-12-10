@@ -1,6 +1,12 @@
 # tcsd daemon.
 
-{ config, options, pkgs, lib, ... }:
+{
+  config,
+  options,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 let
@@ -157,6 +163,6 @@ in
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == "tss") { tss = {}; };
+    users.groups = optionalAttrs (cfg.group == "tss") { tss = { }; };
   };
 }

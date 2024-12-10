@@ -1,4 +1,8 @@
-{ lib, buildGoPackage, fetchFromGitHub }:
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+}:
 
 buildGoPackage rec {
   version = "3.9.0pre";

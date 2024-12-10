@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, fetchgit,
-  fetchHex, erlang, makeWrapper,
-  writeScript, common-updater-scripts, coreutils, git, gnused, nix, rebar3-nix }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchgit,
+  fetchHex,
+  erlang,
+  makeWrapper,
+  writeScript,
+  common-updater-scripts,
+  coreutils,
+  git,
+  gnused,
+  nix,
+  rebar3-nix,
+}:
 
 let
   version = "3.23.0";
@@ -24,9 +37,11 @@ let
     postPatch = ''
       mkdir -p _checkouts _build/default/lib/
 
-      ${toString (lib.mapAttrsToList (k: v: ''
-        cp -R --no-preserve=mode ${v} _checkouts/${k}
-      '') deps)}
+      ${toString (
+        lib.mapAttrsToList (k: v: ''
+          cp -R --no-preserve=mode ${v} _checkouts/${k}
+        '') deps
+      )}
 
       # Bootstrap script expects the dependencies in _build/default/lib
       # TODO: Make it accept checkouts?
@@ -62,7 +77,7 @@ let
         of build configuration work. rebar also provides dependency management,
         enabling application writers to easily re-use common libraries from a
         variety of locations (hex.pm, git, hg, and so on).
-        '';
+      '';
 
       platforms = lib.platforms.unix;
       maintainers = lib.teams.beam.members;
@@ -79,7 +94,7 @@ let
           git
           gnused
           nix
-          (rebar3WithPlugins { globalPlugins = [rebar3-nix]; })
+          (rebar3WithPlugins { globalPlugins = [ rebar3-nix ]; })
         ]
       }
       latest=$(list-git-tags | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
@@ -99,27 +114,41 @@ let
   # Alias rebar3 so we can use it as default parameter below
   _rebar3 = rebar3;
 
-  rebar3WithPlugins = { plugins ? [ ], globalPlugins ? [ ], rebar3 ? _rebar3 }:
+  rebar3WithPlugins =
+    {
+      plugins ? [ ],
+      globalPlugins ? [ ],
+      rebar3 ? _rebar3,
+    }:
     let
       pluginLibDirs = map (p: "${p}/lib/erlang/lib") (lib.unique (plugins ++ globalPlugins));
       globalPluginNames = lib.unique (map (p: p.packageName) globalPlugins);
-      rebar3Patched = (rebar3.overrideAttrs (old: {
+      rebar3Patched = (
+        rebar3.overrideAttrs (old: {
 
-        # skip-plugins.patch is necessary because otherwise rebar3 will always
-        # try to fetch plugins if they are not already present in _build.
-        #
-        # global-deps.patch makes it possible to use REBAR_GLOBAL_PLUGINS to
-        # instruct rebar3 to always load a certain plugin. It is necessary since
-        # REBAR_GLOBAL_CONFIG_DIR doesn't seem to work for this.
-        patches = [ ./skip-plugins.patch ./global-plugins.patch ];
+          # skip-plugins.patch is necessary because otherwise rebar3 will always
+          # try to fetch plugins if they are not already present in _build.
+          #
+          # global-deps.patch makes it possible to use REBAR_GLOBAL_PLUGINS to
+          # instruct rebar3 to always load a certain plugin. It is necessary since
+          # REBAR_GLOBAL_CONFIG_DIR doesn't seem to work for this.
+          patches = [
+            ./skip-plugins.patch
+            ./global-plugins.patch
+          ];
 
-        # our patches cause the tests to fail
-        doCheck = false;
-      }));
-    in stdenv.mkDerivation {
+          # our patches cause the tests to fail
+          doCheck = false;
+        })
+      );
+    in
+    stdenv.mkDerivation {
       pname = "rebar3-with-plugins";
       inherit (rebar3) version;
-      nativeBuildInputs = [ erlang makeWrapper ];
+      nativeBuildInputs = [
+        erlang
+        makeWrapper
+      ];
       unpackPhase = "true";
 
       # Here we extract the rebar3 escript (like `rebar3_prv_local_install.erl`) and
@@ -141,4 +170,7 @@ let
           --add-flags "+sbtu +A1 -noshell -boot start_clean -s rebar3 main -extra"
       '';
     };
-in { inherit rebar3 rebar3WithPlugins; }
+in
+{
+  inherit rebar3 rebar3WithPlugins;
+}

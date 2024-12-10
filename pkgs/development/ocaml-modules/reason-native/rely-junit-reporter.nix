@@ -1,4 +1,12 @@
-{ atdgen, junit, re, reason, pastel, rely, ... }:
+{
+  atdgen,
+  junit,
+  re,
+  reason,
+  pastel,
+  rely,
+  ...
+}:
 
 {
   pname = "rely-junit-reporter";

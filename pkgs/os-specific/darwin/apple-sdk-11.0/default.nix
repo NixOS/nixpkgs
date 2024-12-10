@@ -1,24 +1,42 @@
-{ stdenvNoCC, fetchurl, newScope, lib, pkgs
-, stdenv, overrideCC
-, xar, cpio, python3, pbzx }:
+{
+  stdenvNoCC,
+  fetchurl,
+  newScope,
+  lib,
+  pkgs,
+  stdenv,
+  overrideCC,
+  xar,
+  cpio,
+  python3,
+  pbzx,
+}:
 
 let
-  mkSusDerivation = args: stdenvNoCC.mkDerivation (args // {
-    dontBuild = true;
-    darwinDontCodeSign = true;
+  mkSusDerivation =
+    args:
+    stdenvNoCC.mkDerivation (
+      args
+      // {
+        dontBuild = true;
+        darwinDontCodeSign = true;
 
-    nativeBuildInputs = [ cpio pbzx ];
+        nativeBuildInputs = [
+          cpio
+          pbzx
+        ];
 
-    outputs = [ "out" ];
+        outputs = [ "out" ];
 
-    unpackPhase = ''
-      pbzx $src | cpio -idm
-    '';
+        unpackPhase = ''
+          pbzx $src | cpio -idm
+        '';
 
-    passthru = {
-      inherit (args) version;
-    };
-  });
+        passthru = {
+          inherit (args) version;
+        };
+      }
+    );
 
   MacOSX-SDK = mkSusDerivation {
     pname = "MacOSX-SDK";
@@ -50,16 +68,20 @@ let
     '';
   };
 
-  mkCc = cc:
-    if stdenv.isAarch64 then cc
+  mkCc =
+    cc:
+    if stdenv.isAarch64 then
+      cc
     else
       cc.override {
         bintools = stdenv.cc.bintools.override { libc = packages.Libsystem; };
         libc = packages.Libsystem;
       };
 
-  mkStdenv = stdenv:
-    if stdenv.isAarch64 then stdenv
+  mkStdenv =
+    stdenv:
+    if stdenv.isAarch64 then
+      stdenv
     else
       let
         darwinMinVersion = "10.12";
@@ -67,23 +89,38 @@ let
       in
       (overrideCC stdenv (mkCc stdenv.cc)).override {
         extraBuildInputs = [ pkgs.darwin.apple_sdk_11_0.frameworks.CoreFoundation ];
-        buildPlatform = stdenv.buildPlatform // { inherit darwinMinVersion darwinSdkVersion; };
-        hostPlatform = stdenv.hostPlatform // { inherit darwinMinVersion darwinSdkVersion; };
-        targetPlatform = stdenv.targetPlatform // { inherit darwinMinVersion darwinSdkVersion; };
+        buildPlatform = stdenv.buildPlatform // {
+          inherit darwinMinVersion darwinSdkVersion;
+        };
+        hostPlatform = stdenv.hostPlatform // {
+          inherit darwinMinVersion darwinSdkVersion;
+        };
+        targetPlatform = stdenv.targetPlatform // {
+          inherit darwinMinVersion darwinSdkVersion;
+        };
       };
 
-  stdenvs = {
-    stdenv = mkStdenv stdenv;
-  } // builtins.listToAttrs (map
-    (v: {
-      name = "llvmPackages_${v}";
-      value = pkgs."llvmPackages_${v}" // {
-        stdenv = mkStdenv pkgs."llvmPackages_${v}".stdenv;
-        clang = mkCc pkgs."llvmPackages_${v}".clang;
-      };
-    })
-    [ "12" "13" "14" "15" "16" ]
-  );
+  stdenvs =
+    {
+      stdenv = mkStdenv stdenv;
+    }
+    // builtins.listToAttrs (
+      map
+        (v: {
+          name = "llvmPackages_${v}";
+          value = pkgs."llvmPackages_${v}" // {
+            stdenv = mkStdenv pkgs."llvmPackages_${v}".stdenv;
+            clang = mkCc pkgs."llvmPackages_${v}".clang;
+          };
+        })
+        [
+          "12"
+          "13"
+          "14"
+          "15"
+          "16"
+        ]
+    );
 
   callPackage = newScope (packages // pkgs.darwin // { inherit MacOSX-SDK; });
 
@@ -116,35 +153,47 @@ let
       inherit (pkgs.darwin.apple_sdk_11_0.frameworks) CoreServices CoreGraphics ImageIO;
     };
 
-    rustPlatform = pkgs.makeRustPlatform {
-      inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
-      inherit (pkgs) rustc cargo;
-    } // {
-      inherit (pkgs.callPackage ../../../build-support/rust/hooks {
+    rustPlatform =
+      pkgs.makeRustPlatform {
         inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
-        inherit (pkgs) cargo rustc;
-        clang = mkCc pkgs.clang;
-      }) bindgenHook;
-    };
-
-    callPackage = newScope (lib.optionalAttrs stdenv.isDarwin (stdenvs // rec {
-      inherit (pkgs.darwin.apple_sdk_11_0) xcodebuild rustPlatform;
-      darwin = pkgs.darwin.overrideScope (_: prev: {
-        inherit (prev.darwin.apple_sdk_11_0)
-          IOKit
-          Libsystem
-          LibsystemCross
-          Security
-          configd
-          libcharset
-          libunwind
-          objc4
+        inherit (pkgs) rustc cargo;
+      }
+      // {
+        inherit
+          (pkgs.callPackage ../../../build-support/rust/hooks {
+            inherit (pkgs.darwin.apple_sdk_11_0) stdenv;
+            inherit (pkgs) cargo rustc;
+            clang = mkCc pkgs.clang;
+          })
+          bindgenHook
           ;
-        apple_sdk = prev.darwin.apple_sdk_11_0;
-        CF = prev.darwin.apple_sdk_11_0.CoreFoundation;
-      });
-      xcbuild = xcodebuild;
-    }));
+      };
+
+    callPackage = newScope (
+      lib.optionalAttrs stdenv.isDarwin (
+        stdenvs
+        // rec {
+          inherit (pkgs.darwin.apple_sdk_11_0) xcodebuild rustPlatform;
+          darwin = pkgs.darwin.overrideScope (
+            _: prev: {
+              inherit (prev.darwin.apple_sdk_11_0)
+                IOKit
+                Libsystem
+                LibsystemCross
+                Security
+                configd
+                libcharset
+                libunwind
+                objc4
+                ;
+              apple_sdk = prev.darwin.apple_sdk_11_0;
+              CF = prev.darwin.apple_sdk_11_0.CoreFoundation;
+            }
+          );
+          xcbuild = xcodebuild;
+        }
+      )
+    );
 
     darwin-stubs = stdenvNoCC.mkDerivation {
       pname = "darwin-stubs";
@@ -157,4 +206,5 @@ let
       '';
     };
   };
-in packages
+in
+packages

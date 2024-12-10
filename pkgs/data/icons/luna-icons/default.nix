@@ -1,11 +1,12 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gtk3
-, breeze-icons
-, hicolor-icon-theme
-, pantheon
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  breeze-icons,
+  hicolor-icon-theme,
+  pantheon,
+  gitUpdater,
 }:
 
 stdenvNoCC.mkDerivation rec {

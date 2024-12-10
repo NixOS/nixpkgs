@@ -1,13 +1,30 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
-  inherit (lib) mapAttrs mkIf mkOption optional optionals types;
+  inherit (lib)
+    mapAttrs
+    mkIf
+    mkOption
+    optional
+    optionals
+    types
+    ;
 
   cfg = config.services.kmscon;
 
   autologinArg = lib.optionalString (cfg.autologinUser != null) "-f ${cfg.autologinUser}";
 
-  configDir = pkgs.writeTextFile { name = "kmscon-config"; destination = "/kmscon.conf"; text = cfg.extraConfig; };
-in {
+  configDir = pkgs.writeTextFile {
+    name = "kmscon-config";
+    destination = "/kmscon.conf";
+    text = cfg.extraConfig;
+  };
+in
+{
   options = {
     services.kmscon = {
       enable = mkOption {
@@ -32,13 +49,23 @@ in {
         description = "Fonts used by kmscon, in order of priority.";
         default = null;
         example = lib.literalExpression ''[ { name = "Source Code Pro"; package = pkgs.source-code-pro; } ]'';
-        type = with types;
-          let fontType = submodule {
-                options = {
-                  name = mkOption { type = str; description = "Font name, as used by fontconfig."; };
-                  package = mkOption { type = package; description = "Package providing the font."; };
+        type =
+          with types;
+          let
+            fontType = submodule {
+              options = {
+                name = mkOption {
+                  type = str;
+                  description = "Font name, as used by fontconfig.";
                 };
-          }; in nullOr (nonEmptyListOf fontType);
+                package = mkOption {
+                  type = package;
+                  description = "Package providing the font.";
+                };
+              };
+            };
+          in
+          nullOr (nonEmptyListOf fontType);
       };
 
       extraConfig = mkOption {
@@ -103,9 +130,15 @@ in {
 
     services.kmscon.extraConfig =
       let
-        render = optionals cfg.hwRender [ "drm" "hwaccel" ];
-        fonts = optional (cfg.fonts != null) "font-name=${lib.concatMapStringsSep ", " (f: f.name) cfg.fonts}";
-      in lib.concatStringsSep "\n" (render ++ fonts);
+        render = optionals cfg.hwRender [
+          "drm"
+          "hwaccel"
+        ];
+        fonts =
+          optional (cfg.fonts != null)
+            "font-name=${lib.concatMapStringsSep ", " (f: f.name) cfg.fonts}";
+      in
+      lib.concatStringsSep "\n" (render ++ fonts);
 
     hardware.opengl.enable = mkIf cfg.hwRender true;
 

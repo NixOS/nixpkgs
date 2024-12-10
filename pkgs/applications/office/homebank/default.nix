@@ -1,5 +1,15 @@
-{ fetchurl, lib, stdenv, gtk, pkg-config, libofx, intltool, wrapGAppsHook3
-, libsoup_3, gnome }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  gtk,
+  pkg-config,
+  libofx,
+  intltool,
+  wrapGAppsHook3,
+  libsoup_3,
+  gnome,
+}:
 
 stdenv.mkDerivation rec {
   pname = "homebank";
@@ -13,15 +23,27 @@ stdenv.mkDerivation rec {
     ./fix-clang-build.diff
   ];
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 intltool ];
-  buildInputs = [ gtk libofx libsoup_3 gnome.adwaita-icon-theme];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+    intltool
+  ];
+  buildInputs = [
+    gtk
+    libofx
+    libsoup_3
+    gnome.adwaita-icon-theme
+  ];
 
   meta = with lib; {
     description = "Free, easy, personal accounting for everyone";
     mainProgram = "homebank";
     homepage = "https://www.gethomebank.org";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ pSub frlan ];
+    maintainers = with maintainers; [
+      pSub
+      frlan
+    ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

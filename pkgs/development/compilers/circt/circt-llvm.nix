@@ -1,17 +1,23 @@
-{ lib
-, stdenv
-, cmake
-, ninja
-, circt
-, llvm
-, python3
-}: stdenv.mkDerivation {
+{
+  lib,
+  stdenv,
+  cmake,
+  ninja,
+  circt,
+  llvm,
+  python3,
+}:
+stdenv.mkDerivation {
   pname = circt.pname + "-llvm";
   inherit (circt) version src;
 
   requiredSystemFeatures = [ "big-parallel" ];
 
-  nativeBuildInputs = [ cmake ninja python3 ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    python3
+  ];
 
   preConfigure = ''
     cd llvm/llvm
@@ -30,7 +36,11 @@
     "-DLLVM_INSTALL_UTILS=ON"
   ];
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
 
   # Get rid of ${extra_libdir} (which ends up containing a path to circt-llvm.dev
   # in circt) so that we only have to remove the one fixed rpath.

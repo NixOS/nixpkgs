@@ -1,5 +1,8 @@
-{ lib, fetchFromGitLab, buildDunePackage
-, menhirLib
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  menhirLib,
 }:
 
 buildDunePackage rec {
@@ -12,4 +15,3 @@ buildDunePackage rec {
     license = with lib.licenses; [ gpl2Only ];
   };
 }
-

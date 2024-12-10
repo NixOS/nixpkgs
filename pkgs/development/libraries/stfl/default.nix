@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, ncurses, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "stfl";
@@ -11,7 +17,10 @@ stdenv.mkDerivation rec {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
-  buildInputs = [ ncurses libiconv ];
+  buildInputs = [
+    ncurses
+    libiconv
+  ];
 
   # Silence warnings related to use of implicitly declared library functions and implicit ints.
   # TODO: Remove and/or fix with patches the next time this package is updated.
@@ -22,29 +31,32 @@ stdenv.mkDerivation rec {
     ];
   };
 
-  preBuild = ''
-    sed -i s/gcc/cc/g Makefile
-    sed -i s%ncursesw/ncurses.h%ncurses.h% stfl_internals.h
-  '' + lib.optionalString stdenv.isDarwin ''
-    sed -i s/-soname/-install_name/ Makefile
-  ''
-  # upstream builds shared library unconditionally. Also, it has no
-  # support for cross-compilation.
-  + lib.optionalString stdenv.hostPlatform.isStatic ''
-    sed -i 's/all:.*/all: libstfl.a stfl.pc/' Makefile
-    sed -i 's/\tar /\t${stdenv.cc.targetPrefix}ar /' Makefile
-    sed -i 's/\tranlib /\t${stdenv.cc.targetPrefix}ranlib /' Makefile
-    sed -i '/install -m 644 libstfl.so./d' Makefile
-    sed -i '/ln -fs libstfl.so./d' Makefile
-  '' ;
+  preBuild =
+    ''
+      sed -i s/gcc/cc/g Makefile
+      sed -i s%ncursesw/ncurses.h%ncurses.h% stfl_internals.h
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      sed -i s/-soname/-install_name/ Makefile
+    ''
+    # upstream builds shared library unconditionally. Also, it has no
+    # support for cross-compilation.
+    + lib.optionalString stdenv.hostPlatform.isStatic ''
+      sed -i 's/all:.*/all: libstfl.a stfl.pc/' Makefile
+      sed -i 's/\tar /\t${stdenv.cc.targetPrefix}ar /' Makefile
+      sed -i 's/\tranlib /\t${stdenv.cc.targetPrefix}ranlib /' Makefile
+      sed -i '/install -m 644 libstfl.so./d' Makefile
+      sed -i '/ln -fs libstfl.so./d' Makefile
+    '';
 
-  installPhase = ''
-    DESTDIR=$out prefix=\"\" make install
-  ''
-  # some programs rely on libstfl.so.0 to be present, so link it
-  + lib.optionalString (!stdenv.hostPlatform.isStatic) ''
-    ln -s $out/lib/libstfl.so.0.24 $out/lib/libstfl.so.0
-  '';
+  installPhase =
+    ''
+      DESTDIR=$out prefix=\"\" make install
+    ''
+    # some programs rely on libstfl.so.0 to be present, so link it
+    + lib.optionalString (!stdenv.hostPlatform.isStatic) ''
+      ln -s $out/lib/libstfl.so.0.24 $out/lib/libstfl.so.0
+    '';
 
   meta = {
     homepage = "http://www.clifford.at/stfl/";

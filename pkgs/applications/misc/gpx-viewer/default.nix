@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, libxml2
-, meson
-, ninja
-, vala
-, pkg-config
-, gnome
-, libchamplain
-, gdl
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libxml2,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  gnome,
+  libchamplain,
+  gdl,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

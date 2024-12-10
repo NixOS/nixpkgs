@@ -1,7 +1,8 @@
-{ buildNpmPackage
-, fetchFromGitHub
-, lib
-, nix-update-script
+{
+  buildNpmPackage,
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
 }:
 
 buildNpmPackage rec {
@@ -25,7 +26,7 @@ buildNpmPackage rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib;{
+  meta = with lib; {
     description = "Run gitlab pipelines locally as shell executor or docker executor";
     mainProgram = "gitlab-ci-local";
     longDescription = ''

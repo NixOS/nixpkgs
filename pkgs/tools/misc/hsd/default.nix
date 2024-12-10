@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, fetchFromGitHub
-, python3
-, unbound
-, darwin
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  python3,
+  unbound,
+  darwin,
 }:
 
 buildNpmPackage rec {
@@ -20,11 +21,13 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-EBrCuRckBg42k6ZUoB25xObv3lULnSPNJ2nO9l/TWvA=";
 
-  nativeBuildInputs = [
-    python3
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.cctools
-  ];
+  nativeBuildInputs =
+    [
+      python3
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.cctools
+    ];
 
   buildInputs = [
     unbound

@@ -1,14 +1,20 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "typodermic-public-domain";
   version = "2022-11";
 
   src = fetchzip {
-    url =
-      "https://typodermicfonts.com/wp-content/uploads/2022/11/typodermic-public-domain-2022-11.zip";
+    url = "https://typodermicfonts.com/wp-content/uploads/2022/11/typodermic-public-domain-2022-11.zip";
     hash = "sha256-2hqpehQ4zxSvsw2dtom/fkMAayJKNvOdYs+c+rrvJKw=";
-    curlOptsList = [ "--user-agent" "Mozilla/5.0" ]; # unbreak their wordpress
+    curlOptsList = [
+      "--user-agent"
+      "Mozilla/5.0"
+    ]; # unbreak their wordpress
     stripRoot = false;
   };
 

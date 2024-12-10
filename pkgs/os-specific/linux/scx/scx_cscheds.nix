@@ -64,11 +64,14 @@ mkScxScheduler "c" {
       --replace-fail '[build_bpftool' "['${misbehaviorBash}', build_bpftool"
   '';
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    jq
-  ] ++ bpftools.buildInputs ++ bpftools.nativeBuildInputs;
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      jq
+    ]
+    ++ bpftools.buildInputs
+    ++ bpftools.nativeBuildInputs;
 
   buildInputs = [
     elfutils

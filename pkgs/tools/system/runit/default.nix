@@ -1,7 +1,11 @@
-{ lib, stdenv, fetchurl, darwin
+{
+  lib,
+  stdenv,
+  fetchurl,
+  darwin,
 
-# Build runit-init as a static binary
-, static ? false
+  # Build runit-init as a static binary
+  static ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,23 +21,32 @@ stdenv.mkDerivation rec {
     ./fix-ar-ranlib.patch
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   sourceRoot = "admin/${pname}-${version}";
 
   doCheck = true;
 
-  buildInputs = lib.optionals static [ stdenv.cc.libc stdenv.cc.libc.static ] ++
-    lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
+  buildInputs =
+    lib.optionals static [
+      stdenv.cc.libc
+      stdenv.cc.libc.static
+    ]
+    ++ lib.optional stdenv.isDarwin darwin.apple_sdk.libs.utmp;
 
-  postPatch = ''
-    sed -i "s,\(#define RUNIT\) .*,\1 \"$out/bin/runit\"," src/runit.h
-    # usernamespace sandbox of nix seems to conflict with runit's assumptions
-    # about unix users. Therefor skip the check
-    sed -i '/.\/chkshsgr/d' src/Makefile
-  '' + lib.optionalString (!static) ''
-    sed -i 's,-static,,g' src/Makefile
-  '';
+  postPatch =
+    ''
+      sed -i "s,\(#define RUNIT\) .*,\1 \"$out/bin/runit\"," src/runit.h
+      # usernamespace sandbox of nix seems to conflict with runit's assumptions
+      # about unix users. Therefor skip the check
+      sed -i '/.\/chkshsgr/d' src/Makefile
+    ''
+    + lib.optionalString (!static) ''
+      sed -i 's,-static,,g' src/Makefile
+    '';
 
   preBuild = ''
     cd src

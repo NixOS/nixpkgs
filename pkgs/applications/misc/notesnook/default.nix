@@ -1,4 +1,10 @@
-{ lib, stdenv, appimageTools, fetchurl, undmg }:
+{
+  lib,
+  stdenv,
+  appimageTools,
+  fetchurl,
+  undmg,
+}:
 
 let
   pname = "notesnook";
@@ -7,19 +13,23 @@ let
   inherit (stdenv.hostPlatform) system;
   throwSystem = throw "Unsupported system: ${system}";
 
-  suffix = {
-    x86_64-linux = "linux_x86_64.AppImage";
-    x86_64-darwin = "mac_x64.dmg";
-    aarch64-darwin = "mac_arm64.dmg";
-  }.${system} or throwSystem;
+  suffix =
+    {
+      x86_64-linux = "linux_x86_64.AppImage";
+      x86_64-darwin = "mac_x64.dmg";
+      aarch64-darwin = "mac_arm64.dmg";
+    }
+    .${system} or throwSystem;
 
   src = fetchurl {
     url = "https://github.com/streetwriters/notesnook/releases/download/v${version}/notesnook_${suffix}";
-    hash = {
-      x86_64-linux = "sha256-PLHP1Q4+xcHyr0323K4BD+oH57SspsrAcxRe/C6RFDU=";
-      x86_64-darwin = "sha256-gOUL3qLSM+/pr519Gc0baUtbmhA40lG6XzuCRyGILkc=";
-      aarch64-darwin = "sha256-d1nXdCv1mK4+4Gef1upIkHS3J2d9qzTLXbBWabsJwpw=";
-    }.${system} or throwSystem;
+    hash =
+      {
+        x86_64-linux = "sha256-PLHP1Q4+xcHyr0323K4BD+oH57SspsrAcxRe/C6RFDU=";
+        x86_64-darwin = "sha256-gOUL3qLSM+/pr519Gc0baUtbmhA40lG6XzuCRyGILkc=";
+        aarch64-darwin = "sha256-d1nXdCv1mK4+4Gef1upIkHS3J2d9qzTLXbBWabsJwpw=";
+      }
+      .${system} or throwSystem;
   };
 
   appimageContents = appimageTools.extractType2 {
@@ -37,12 +47,21 @@ let
     homepage = "https://notesnook.com";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ j0lol ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     mainProgram = "notesnook";
   };
 
   linux = appimageTools.wrapType2 rec {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
 
     profile = ''
       export LC_ALL=C.UTF-8
@@ -57,7 +76,12 @@ let
   };
 
   darwin = stdenv.mkDerivation {
-    inherit pname version src meta;
+    inherit
+      pname
+      version
+      src
+      meta
+      ;
 
     nativeBuildInputs = [ undmg ];
 
@@ -69,6 +93,4 @@ let
     '';
   };
 in
-if stdenv.isDarwin
-then darwin
-else linux
+if stdenv.isDarwin then darwin else linux

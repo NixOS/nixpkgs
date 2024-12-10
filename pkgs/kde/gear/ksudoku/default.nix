@@ -5,6 +5,6 @@
 mkKdeDerivation {
   pname = "ksudoku";
 
-  extraBuildInputs = [qtsvg];
+  extraBuildInputs = [ qtsvg ];
   meta.mainProgram = "ksudoku";
 }

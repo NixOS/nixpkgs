@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kaccounts-integration";
 
-  propagatedNativeBuildInputs = [intltool];
+  propagatedNativeBuildInputs = [ intltool ];
 }

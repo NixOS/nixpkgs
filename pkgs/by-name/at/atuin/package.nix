@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, rustPlatform
-, libiconv
-, darwin
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  rustPlatform,
+  libiconv,
+  darwin,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,15 +22,19 @@ rustPlatform.buildRustPackage rec {
 
   # TODO: unify this to one hash because updater do not support this
   cargoHash =
-    if stdenv.isLinux
-    then "sha256-KMH19Op7uyb3Z/cjT6bdmO+JEp1o2n6rWRNYmn1+0hE="
-    else "sha256-mBOyo6bKipMfmsowQujeUpog12jXAiqx5CtkwCxquRU=";
+    if stdenv.isLinux then
+      "sha256-KMH19Op7uyb3Z/cjT6bdmO+JEp1o2n6rWRNYmn1+0hE="
+    else
+      "sha256-mBOyo6bKipMfmsowQujeUpog12jXAiqx5CtkwCxquRU=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
   buildNoDefaultFeatures = true;
   buildFeatures = [
-    "client" "sync" "server" "clipboard"
+    "client"
+    "sync"
+    "server"
+    "clipboard"
   ];
 
   nativeBuildInputs = [ installShellFiles ];
@@ -68,7 +73,11 @@ rustPlatform.buildRustPackage rec {
     description = "Replacement for a shell history which records additional commands context with optional encrypted synchronization between machines";
     homepage = "https://github.com/atuinsh/atuin";
     license = licenses.mit;
-    maintainers = with maintainers; [ SuperSandro2000 sciencentistguy _0x4A6F ];
+    maintainers = with maintainers; [
+      SuperSandro2000
+      sciencentistguy
+      _0x4A6F
+    ];
     mainProgram = "atuin";
   };
 }

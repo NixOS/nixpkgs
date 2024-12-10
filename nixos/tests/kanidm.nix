@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix (
+  { pkgs, ... }:
   let
     certs = import ./common/acme/server/snakeoil-certs.nix;
     serverDomain = certs.domain;
@@ -16,58 +17,77 @@ import ./make-test-python.nix ({ pkgs, ... }:
   in
   {
     name = "kanidm";
-    meta.maintainers = with pkgs.lib.maintainers; [ erictapen Flakebi ];
+    meta.maintainers = with pkgs.lib.maintainers; [
+      erictapen
+      Flakebi
+    ];
 
-    nodes.server = { config, pkgs, lib, ... }: {
-      services.kanidm = {
-        enableServer = true;
-        serverSettings = {
-          origin = "https://${serverDomain}";
-          domain = serverDomain;
-          bindaddress = "[::]:443";
-          ldapbindaddress = "[::1]:636";
-          tls_chain = "${certsPath}/snakeoil.crt";
-          tls_key = "${certsPath}/snakeoil.key";
+    nodes.server =
+      {
+        config,
+        pkgs,
+        lib,
+        ...
+      }:
+      {
+        services.kanidm = {
+          enableServer = true;
+          serverSettings = {
+            origin = "https://${serverDomain}";
+            domain = serverDomain;
+            bindaddress = "[::]:443";
+            ldapbindaddress = "[::1]:636";
+            tls_chain = "${certsPath}/snakeoil.crt";
+            tls_key = "${certsPath}/snakeoil.key";
+          };
         };
+
+        security.pki.certificateFiles = [ certs.ca.cert ];
+
+        networking.hosts."::1" = [ serverDomain ];
+        networking.firewall.allowedTCPPorts = [ 443 ];
+
+        users.users.kanidm.shell = pkgs.bashInteractive;
+
+        environment.systemPackages = with pkgs; [
+          kanidm
+          openldap
+          ripgrep
+        ];
       };
 
-      security.pki.certificateFiles = [ certs.ca.cert ];
-
-      networking.hosts."::1" = [ serverDomain ];
-      networking.firewall.allowedTCPPorts = [ 443 ];
-
-      users.users.kanidm.shell = pkgs.bashInteractive;
-
-      environment.systemPackages = with pkgs; [ kanidm openldap ripgrep ];
-    };
-
-    nodes.client = { pkgs, nodes, ... }: {
-      services.kanidm = {
-        enableClient = true;
-        clientSettings = {
-          uri = "https://${serverDomain}";
-          verify_ca = true;
-          verify_hostnames = true;
+    nodes.client =
+      { pkgs, nodes, ... }:
+      {
+        services.kanidm = {
+          enableClient = true;
+          clientSettings = {
+            uri = "https://${serverDomain}";
+            verify_ca = true;
+            verify_hostnames = true;
+          };
+          enablePam = true;
+          unixSettings = {
+            pam_allowed_login_groups = [ "shell" ];
+          };
         };
-        enablePam = true;
-        unixSettings = {
-          pam_allowed_login_groups = [ "shell" ];
-        };
+
+        networking.hosts."${nodes.server.networking.primaryIPAddress}" = [ serverDomain ];
+
+        security.pki.certificateFiles = [ certs.ca.cert ];
       };
 
-      networking.hosts."${nodes.server.networking.primaryIPAddress}" = [ serverDomain ];
-
-      security.pki.certificateFiles = [ certs.ca.cert ];
-    };
-
-    testScript = { nodes, ... }:
+    testScript =
+      { nodes, ... }:
       let
-        ldapBaseDN = builtins.concatStringsSep "," (map (s: "dc=" + s) (pkgs.lib.splitString "." serverDomain));
+        ldapBaseDN = builtins.concatStringsSep "," (
+          map (s: "dc=" + s) (pkgs.lib.splitString "." serverDomain)
+        );
 
         # We need access to the config file in the test script.
-        filteredConfig = pkgs.lib.converge
-          (pkgs.lib.filterAttrsRecursive (_: v: v != null))
-          nodes.server.services.kanidm.serverSettings;
+        filteredConfig = pkgs.lib.converge (pkgs.lib.filterAttrsRecursive (
+          _: v: v != null
+        )) nodes.server.services.kanidm.serverSettings;
         serverConfigFile = (pkgs.formats.toml { }).generate "server.toml" filteredConfig;
 
       in
@@ -130,4 +150,5 @@ import ./make-test-python.nix ({ pkgs, ... }:
             client.send_chars("touch done\n")
             client.wait_for_file("/home/testuser@${serverDomain}/done")
       '';
-  })
+  }
+)

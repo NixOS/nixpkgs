@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, go-md2man
-, installShellFiles
-, pkg-config
-, gpgme
-, lvm2
-, btrfs-progs
-, libapparmor
-, libselinux
-, libseccomp
-, testers
-, buildah
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  go-md2man,
+  installShellFiles,
+  pkg-config,
+  gpgme,
+  lvm2,
+  btrfs-progs,
+  libapparmor,
+  libselinux,
+  libseccomp,
+  testers,
+  buildah,
 }:
 
 buildGoModule rec {
@@ -26,23 +27,32 @@ buildGoModule rec {
     hash = "sha256-lcB23yU7Wn+aILGFLDBnFg30NRDQgJt3J61FmGuQtRo=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   vendorHash = null;
 
   doCheck = false;
 
-  nativeBuildInputs = [ go-md2man installShellFiles pkg-config ];
-
-  buildInputs = [
-    gpgme
-  ] ++ lib.optionals stdenv.isLinux [
-    btrfs-progs
-    libapparmor
-    libseccomp
-    libselinux
-    lvm2
+  nativeBuildInputs = [
+    go-md2man
+    installShellFiles
+    pkg-config
   ];
+
+  buildInputs =
+    [
+      gpgme
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      btrfs-progs
+      libapparmor
+      libseccomp
+      libselinux
+      lvm2
+    ];
 
   buildPhase = ''
     runHook preBuild
@@ -77,4 +87,3 @@ buildGoModule rec {
     maintainers = with maintainers; [ ] ++ teams.podman.members;
   };
 }
-

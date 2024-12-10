@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rustypaste";
@@ -32,7 +38,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/orhun/rustypaste";
     changelog = "https://github.com/orhun/rustypaste/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda seqizz ];
+    maintainers = with maintainers; [
+      figsoda
+      seqizz
+    ];
     mainProgram = "rustypaste";
   };
 }

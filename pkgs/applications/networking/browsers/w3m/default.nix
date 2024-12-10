@@ -1,24 +1,43 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch
-, ncurses, boehmgc, gettext, zlib
-, sslSupport ? true, openssl
-, graphicsSupport ? !stdenv.isDarwin, imlib2
-, x11Support ? graphicsSupport, libX11
-, mouseSupport ? !stdenv.isDarwin, gpm-ncurses
-, perl, man, pkg-config, buildPackages, w3m
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  ncurses,
+  boehmgc,
+  gettext,
+  zlib,
+  sslSupport ? true,
+  openssl,
+  graphicsSupport ? !stdenv.isDarwin,
+  imlib2,
+  x11Support ? graphicsSupport,
+  libX11,
+  mouseSupport ? !stdenv.isDarwin,
+  gpm-ncurses,
+  perl,
+  man,
+  pkg-config,
+  buildPackages,
+  w3m,
+  testers,
 }:
 
 let
   mktable = buildPackages.stdenv.mkDerivation {
     name = "w3m-mktable";
     inherit (w3m) src;
-    nativeBuildInputs = [ pkg-config boehmgc ];
+    nativeBuildInputs = [
+      pkg-config
+      boehmgc
+    ];
     makeFlags = [ "mktable" ];
     installPhase = ''
       install -D mktable $out/bin/mktable
     '';
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "w3m";
   version = "0.5.3+git20230121";
 
@@ -53,8 +72,16 @@ in stdenv.mkDerivation rec {
     sed -ie 's!mktable.*:.*!mktable:!' Makefile.in
   '';
 
-  nativeBuildInputs = [ pkg-config gettext ];
-  buildInputs = [ ncurses boehmgc zlib ]
+  nativeBuildInputs = [
+    pkg-config
+    gettext
+  ];
+  buildInputs =
+    [
+      ncurses
+      boehmgc
+      zlib
+    ]
     ++ lib.optional sslSupport openssl
     ++ lib.optional mouseSupport gpm-ncurses
     ++ lib.optional graphicsSupport imlib2
@@ -67,7 +94,10 @@ in stdenv.mkDerivation rec {
   hardeningDisable = [ "format" ];
 
   configureFlags =
-    [ "--with-ssl=${openssl.dev}" "--with-gc=${boehmgc.dev}" ]
+    [
+      "--with-ssl=${openssl.dev}"
+      "--with-gc=${boehmgc.dev}"
+    ]
     ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
       "ac_cv_func_setpgrp_void=yes"
     ]

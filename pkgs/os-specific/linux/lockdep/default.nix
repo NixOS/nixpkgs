@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, bash, flex, bison, valgrind }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bash,
+  flex,
+  bison,
+  valgrind,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lockdep";
@@ -21,7 +29,10 @@ stdenv.mkDerivation rec {
       --replace 'CONFIG_INCLUDES =' $'CONFIG_INCLUDES = -I../../../usr/include\n#'
   '';
 
-  nativeBuildInputs = [ flex bison ];
+  nativeBuildInputs = [
+    flex
+    bison
+  ];
 
   # Workaround build failure on -fno-common toolchains like upstream
   # gcc-10. Otherwise build fails as:
@@ -60,9 +71,9 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Userspace locking validation tool built on the Linux kernel";
     mainProgram = "lockdep";
-    homepage    = "https://kernel.org/";
-    license     = lib.licenses.gpl2;
-    platforms   = lib.platforms.linux;
+    homepage = "https://kernel.org/";
+    license = lib.licenses.gpl2;
+    platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

@@ -1,31 +1,38 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, python3
-, autoreconfHook
-, libuuid
-, sqlite
-, glib
-, libevent
-, libsearpc
-, openssl
-, fuse
-, libarchive
-, libjwt
-, curl
-, which
-, vala
-, cmake
-, oniguruma
-, nixosTests
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  python3,
+  autoreconfHook,
+  libuuid,
+  sqlite,
+  glib,
+  libevent,
+  libsearpc,
+  openssl,
+  fuse,
+  libarchive,
+  libjwt,
+  curl,
+  which,
+  vala,
+  cmake,
+  oniguruma,
+  nixosTests,
 }:
 
 let
   # seafile-server relies on a specific version of libevhtp.
   # It contains non upstreamed patches and is forked off an outdated version.
   libevhtp = import ./libevhtp.nix {
-    inherit stdenv lib fetchFromGitHub cmake libevent;
+    inherit
+      stdenv
+      lib
+      fetchFromGitHub
+      cmake
+      libevent
+      ;
   };
 in
 stdenv.mkDerivation rec {
@@ -39,7 +46,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-a5vtJcbnaYzq6/3xmhbWk23BZ+Wil/Tb/q22ML4bDqs=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [
     libuuid
@@ -73,6 +83,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/haiwen/seafile-server";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ greizgh schmittlauch ];
+    maintainers = with maintainers; [
+      greizgh
+      schmittlauch
+    ];
   };
 }

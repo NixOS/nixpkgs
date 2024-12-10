@@ -1,11 +1,52 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
-  inherit (lib) optionalString mkDefault mkIf mkOption mkEnableOption literalExpression;
-  inherit (lib.types) nullOr attrsOf oneOf str int bool path package enum submodule;
-  inherit (lib.strings) concatLines removePrefix toShellVars removeSuffix hasSuffix;
-  inherit (lib.attrsets) mapAttrsToList attrValues genAttrs filterAttrs mapAttrs' nameValuePair;
-  inherit (builtins) isInt isString toString typeOf;
+  inherit (lib)
+    optionalString
+    mkDefault
+    mkIf
+    mkOption
+    mkEnableOption
+    literalExpression
+    ;
+  inherit (lib.types)
+    nullOr
+    attrsOf
+    oneOf
+    str
+    int
+    bool
+    path
+    package
+    enum
+    submodule
+    ;
+  inherit (lib.strings)
+    concatLines
+    removePrefix
+    toShellVars
+    removeSuffix
+    hasSuffix
+    ;
+  inherit (lib.attrsets)
+    mapAttrsToList
+    attrValues
+    genAttrs
+    filterAttrs
+    mapAttrs'
+    nameValuePair
+    ;
+  inherit (builtins)
+    isInt
+    isString
+    toString
+    typeOf
+    ;
 
   cfg = config.services.firefly-iii;
 
@@ -17,9 +58,10 @@ let
 
   artisan = "${cfg.package}/artisan";
 
-  env-file-values = mapAttrs' (n: v: nameValuePair (removeSuffix "_FILE" n) v)
-    (filterAttrs (n: v: hasSuffix "_FILE" n) cfg.settings);
-  env-nonfile-values = filterAttrs (n: v: ! hasSuffix "_FILE" n) cfg.settings;
+  env-file-values = mapAttrs' (n: v: nameValuePair (removeSuffix "_FILE" n) v) (
+    filterAttrs (n: v: hasSuffix "_FILE" n) cfg.settings
+  );
+  env-nonfile-values = filterAttrs (n: v: !hasSuffix "_FILE" n) cfg.settings;
 
   fileenv-func = ''
     set -a
@@ -31,8 +73,9 @@ let
   firefly-iii-maintenance = pkgs.writeShellScript "firefly-iii-maintenance.sh" ''
     ${fileenv-func}
 
-    ${optionalString (cfg.settings.DB_CONNECTION == "sqlite")
-      "touch ${cfg.dataDir}/storage/database/database.sqlite"}
+    ${optionalString (
+      cfg.settings.DB_CONNECTION == "sqlite"
+    ) "touch ${cfg.dataDir}/storage/database/database.sqlite"}
     ${artisan} cache:clear
     ${artisan} package:discover
     ${artisan} firefly-iii:upgrade-database
@@ -78,7 +121,8 @@ let
     PrivateUsers = true;
   };
 
-in {
+in
+{
 
   options.services.firefly-iii = {
 
@@ -118,9 +162,11 @@ in {
         may also be used to set the package to a different version, say a
         development version.
       '';
-      apply = firefly-iii : firefly-iii.override (prev: {
-        dataDir = cfg.dataDir;
-      });
+      apply =
+        firefly-iii:
+        firefly-iii.override (prev: {
+          dataDir = cfg.dataDir;
+        });
     };
 
     enableNginx = mkOption {
@@ -145,7 +191,11 @@ in {
     };
 
     poolConfig = mkOption {
-      type = attrsOf (oneOf [ str int bool ]);
+      type = attrsOf (oneOf [
+        str
+        int
+        bool
+      ]);
       default = {
         "pm" = "dynamic";
         "pm.max_children" = 32;
@@ -161,7 +211,7 @@ in {
     };
 
     settings = mkOption {
-      default = {};
+      default = { };
       description = ''
         Options for firefly-iii configuration. Refer to
         <https://github.com/firefly-iii/firefly-iii/blob/main/.env.example> for
@@ -185,10 +235,18 @@ in {
         }
       '';
       type = submodule {
-        freeformType = attrsOf (oneOf [str int bool]);
+        freeformType = attrsOf (oneOf [
+          str
+          int
+          bool
+        ]);
         options = {
           DB_CONNECTION = mkOption {
-            type = enum [ "sqlite" "pgsql" "mysql" ];
+            type = enum [
+              "sqlite"
+              "pgsql"
+              "mysql"
+            ];
             default = "sqlite";
             example = "pgsql";
             description = ''
@@ -197,7 +255,11 @@ in {
             '';
           };
           APP_ENV = mkOption {
-            type = enum [ "local" "production" "testing" ];
+            type = enum [
+              "local"
+              "production"
+              "testing"
+            ];
             default = "local";
             example = "production";
             description = ''
@@ -207,9 +269,13 @@ in {
           };
           DB_PORT = mkOption {
             type = nullOr int;
-            default = if cfg.settings.DB_CONNECTION == "pgsql" then 5432
-                      else if cfg.settings.DB_CONNECTION == "mysql" then 3306
-                      else null;
+            default =
+              if cfg.settings.DB_CONNECTION == "pgsql" then
+                5432
+              else if cfg.settings.DB_CONNECTION == "mysql" then
+                3306
+              else
+                null;
             defaultText = ''
               `null` if DB_CONNECTION is "sqlite", `3306` if "mysql", `5432` if "pgsql"
             '';
@@ -220,8 +286,7 @@ in {
           };
           DB_HOST = mkOption {
             type = str;
-            default = if cfg.settings.DB_CONNECTION == "pgsql" then "/run/postgresql"
-                      else "localhost";
+            default = if cfg.settings.DB_CONNECTION == "pgsql" then "/run/postgresql" else "localhost";
             defaultText = ''
               "localhost" if DB_CONNECTION is "sqlite" or "mysql", "/run/postgresql" if "pgsql".
             '';
@@ -243,8 +308,11 @@ in {
           };
           APP_URL = mkOption {
             type = str;
-            default = if cfg.virtualHost == "localhost" then "http://${cfg.virtualHost}"
-                      else "https://${cfg.virtualHost}";
+            default =
+              if cfg.virtualHost == "localhost" then
+                "http://${cfg.virtualHost}"
+              else
+                "https://${cfg.virtualHost}";
             defaultText = ''
               http(s)://''${config.services.firefly-iii.virtualHost}
             '';
@@ -277,7 +345,10 @@ in {
     };
 
     systemd.services.firefly-iii-setup = {
-      after = [ "postgresql.service" "mysql.service" ];
+      after = [
+        "postgresql.service"
+        "mysql.service"
+      ];
       requiredBy = [ "phpfpm-firefly-iii.service" ];
       before = [ "phpfpm-firefly-iii.service" ];
       serviceConfig = {
@@ -289,7 +360,11 @@ in {
     };
 
     systemd.services.firefly-iii-cron = {
-      after = [ "firefly-iii-setup.service" "postgresql.service" "mysql.service" ];
+      after = [
+        "firefly-iii-setup.service"
+        "postgresql.service"
+        "mysql.service"
+      ];
       wants = [ "firefly-iii-setup.service" ];
       description = "Daily Firefly III cron job";
       serviceConfig = {
@@ -335,31 +410,35 @@ in {
       };
     };
 
-    systemd.tmpfiles.settings."10-firefly-iii" = genAttrs [
-      "${cfg.dataDir}/storage"
-      "${cfg.dataDir}/storage/app"
-      "${cfg.dataDir}/storage/database"
-      "${cfg.dataDir}/storage/export"
-      "${cfg.dataDir}/storage/framework"
-      "${cfg.dataDir}/storage/framework/cache"
-      "${cfg.dataDir}/storage/framework/sessions"
-      "${cfg.dataDir}/storage/framework/views"
-      "${cfg.dataDir}/storage/logs"
-      "${cfg.dataDir}/storage/upload"
-      "${cfg.dataDir}/cache"
-    ] (n: {
-      d = {
-        group = group;
-        mode = "0700";
-        user = user;
+    systemd.tmpfiles.settings."10-firefly-iii" =
+      genAttrs
+        [
+          "${cfg.dataDir}/storage"
+          "${cfg.dataDir}/storage/app"
+          "${cfg.dataDir}/storage/database"
+          "${cfg.dataDir}/storage/export"
+          "${cfg.dataDir}/storage/framework"
+          "${cfg.dataDir}/storage/framework/cache"
+          "${cfg.dataDir}/storage/framework/sessions"
+          "${cfg.dataDir}/storage/framework/views"
+          "${cfg.dataDir}/storage/logs"
+          "${cfg.dataDir}/storage/upload"
+          "${cfg.dataDir}/cache"
+        ]
+        (n: {
+          d = {
+            group = group;
+            mode = "0700";
+            user = user;
+          };
+        })
+      // {
+        "${cfg.dataDir}".d = {
+          group = group;
+          mode = "0710";
+          user = user;
+        };
       };
-    }) // {
-      "${cfg.dataDir}".d = {
-        group = group;
-        mode = "0710";
-        user = user;
-      };
-    };
 
     users = {
       users = mkIf (user == defaultUser) {
@@ -371,7 +450,7 @@ in {
         };
       };
       groups = mkIf (group == defaultGroup) {
-        ${defaultGroup} = {};
+        ${defaultGroup} = { };
       };
     };
   };

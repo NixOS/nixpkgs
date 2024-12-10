@@ -1,15 +1,17 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, cmake
-, argtable
-, catch2
-, curl
-, doxygen
-, hiredis
-, jsoncpp
-, libmicrohttpd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  cmake,
+  argtable,
+  catch2,
+  curl,
+  doxygen,
+  hiredis,
+  jsoncpp,
+  libmicrohttpd,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +35,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config cmake doxygen ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    doxygen
+  ];
   buildInputs = [
     argtable
     catch2
@@ -71,7 +77,14 @@ stdenv.mkDerivation rec {
   preInstall = ''
     function fixRunPath {
       p=$(patchelf --print-rpath $1)
-      q="$p:${lib.makeLibraryPath [ jsoncpp argtable libmicrohttpd curl ]}:$out/lib"
+      q="$p:${
+        lib.makeLibraryPath [
+          jsoncpp
+          argtable
+          libmicrohttpd
+          curl
+        ]
+      }:$out/lib"
       patchelf --set-rpath $q $1
     }
 

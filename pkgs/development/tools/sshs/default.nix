@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, testers
-, sshs
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  testers,
+  sshs,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,16 +1,17 @@
-{ python3Packages
-, lib
-, fetchFromGitLab
-, meson
-, pkg-config
-, glib
-, ninja
-, desktop-file-utils
-, gobject-introspection
-, gtk3
-, libnotify
-, dbus
-, wrapGAppsHook3
+{
+  python3Packages,
+  lib,
+  fetchFromGitLab,
+  meson,
+  pkg-config,
+  glib,
+  ninja,
+  desktop-file-utils,
+  gobject-introspection,
+  gtk3,
+  libnotify,
+  dbus,
+  wrapGAppsHook3,
 }:
 
 python3Packages.buildPythonApplication rec {

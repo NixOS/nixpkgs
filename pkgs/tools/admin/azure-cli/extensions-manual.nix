@@ -1,5 +1,6 @@
-{ mkAzExtension
-, python3Packages
+{
+  mkAzExtension,
+  python3Packages,
 }:
 
 {

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, git
-, pkg-config
-, gperf
-, libmicrohttpd
-, libsodium
-, lz4
-, openssl
-, readline
-, secp256k1
-, zlib
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  git,
+  pkg-config,
+  gperf,
+  libmicrohttpd,
+  libsodium,
+  lz4,
+  openssl,
+  readline,
+  secp256k1,
+  zlib,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +28,10 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     cmake

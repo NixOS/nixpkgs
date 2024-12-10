@@ -1,4 +1,8 @@
-{ lib, mkDiscoursePlugin, fetchFromGitHub }:
+{
+  lib,
+  mkDiscoursePlugin,
+  fetchFromGitHub,
+}:
 
 mkDiscoursePlugin {
   name = "discourse-openid-connect";
@@ -16,4 +20,3 @@ mkDiscoursePlugin {
     description = "Discourse plugin to integrate Discourse with an openid-connect login provider.";
   };
 }
-

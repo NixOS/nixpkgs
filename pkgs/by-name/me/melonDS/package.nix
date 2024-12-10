@@ -1,25 +1,27 @@
-{ lib
-, SDL2
-, cmake
-, extra-cmake-modules
-, fetchFromGitHub
-, libGL
-, libarchive
-, libpcap
-, libsForQt5
-, libslirp
-, pkg-config
-, stdenv
-, unstableGitUpdater
-, wayland
-, zstd
+{
+  lib,
+  SDL2,
+  cmake,
+  extra-cmake-modules,
+  fetchFromGitHub,
+  libGL,
+  libarchive,
+  libpcap,
+  libsForQt5,
+  libslirp,
+  pkg-config,
+  stdenv,
+  unstableGitUpdater,
+  wayland,
+  zstd,
 }:
 
 let
   inherit (libsForQt5)
     qtbase
     qtmultimedia
-    wrapQtAppsHook;
+    wrapQtAppsHook
+    ;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "melonDS";

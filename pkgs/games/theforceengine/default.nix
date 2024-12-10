@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, SDL2_image
-, rtaudio
-, rtmidi
-, glew
-, alsa-lib
-, cmake
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  SDL2_image,
+  rtaudio,
+  rtmidi,
+  glew,
+  alsa-lib,
+  cmake,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {

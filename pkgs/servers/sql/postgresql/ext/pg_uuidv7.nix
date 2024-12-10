@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, postgresql
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +19,8 @@ stdenv.mkDerivation rec {
   };
 
   installPhase = ''
-      install -D -t $out/lib pg_uuidv7${postgresql.dlSuffix}
-      install -D {sql/pg_uuidv7--${lib.versions.majorMinor version}.sql,pg_uuidv7.control} -t $out/share/postgresql/extension
+    install -D -t $out/lib pg_uuidv7${postgresql.dlSuffix}
+    install -D {sql/pg_uuidv7--${lib.versions.majorMinor version}.sql,pg_uuidv7.control} -t $out/share/postgresql/extension
   '';
 
   meta = with lib; {

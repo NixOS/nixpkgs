@@ -1,4 +1,8 @@
-{ writeShellApplication, pnpm, pnpmDeps }:
+{
+  writeShellApplication,
+  pnpm,
+  pnpmDeps,
+}:
 writeShellApplication {
   name = "serve-pnpm-store";
 

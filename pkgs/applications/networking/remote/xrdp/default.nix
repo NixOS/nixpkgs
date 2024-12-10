@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, applyPatches
-, fetchFromGitHub
-, pkg-config
-, which
-, perl
-, autoconf
-, automake
-, libtool
-, openssl
-, systemd
-, pam
-, fuse
-, libjpeg
-, libopus
-, nasm
-, xorg
-, lame
-, pixman
-, libjpeg_turbo
-, _experimental-update-script-combinators
-, gitUpdater
+{
+  lib,
+  stdenv,
+  applyPatches,
+  fetchFromGitHub,
+  pkg-config,
+  which,
+  perl,
+  autoconf,
+  automake,
+  libtool,
+  openssl,
+  systemd,
+  pam,
+  fuse,
+  libjpeg,
+  libopus,
+  nasm,
+  xorg,
+  lame,
+  pixman,
+  libjpeg_turbo,
+  _experimental-update-script-combinators,
+  gitUpdater,
 }:
 
 let
@@ -35,7 +36,14 @@ let
       hash = "sha256-cAAWk/GqR5zJmh7EAzX3qJiYNl/RrDWdncdFeqsFIaU=";
     };
 
-    nativeBuildInputs = [ pkg-config autoconf automake which libtool nasm ];
+    nativeBuildInputs = [
+      pkg-config
+      autoconf
+      automake
+      which
+      libtool
+      nasm
+    ];
 
     buildInputs = [ xorg.xorgserver ];
 
@@ -51,7 +59,7 @@ let
 
     preConfigure = "./bootstrap";
 
-    configureFlags = [ "XRDP_CFLAGS=-I${xrdp.src}/common"  ];
+    configureFlags = [ "XRDP_CFLAGS=-I${xrdp.src}/common" ];
 
     enableParallelBuilding = true;
 
@@ -75,7 +83,15 @@ let
       };
     };
 
-    nativeBuildInputs = [ pkg-config autoconf automake which libtool nasm perl ];
+    nativeBuildInputs = [
+      pkg-config
+      autoconf
+      automake
+      which
+      libtool
+      nasm
+      perl
+    ];
 
     buildInputs = [
       fuse
@@ -118,7 +134,10 @@ let
       "--enable-vsock"
     ];
 
-    installFlags = [ "DESTDIR=$(out)" "prefix=" ];
+    installFlags = [
+      "DESTDIR=$(out)"
+      "prefix="
+    ];
 
     postInstall = ''
       # remove generated keys (as non-deterministic)
@@ -154,19 +173,37 @@ let
 
     passthru = {
       inherit xorgxrdp;
-      updateScript = _experimental-update-script-combinators.sequence (map (item: item.command) [
-        (gitUpdater { rev-prefix = "v"; attrPath = "xrdp.src"; ignoredVersions = [ "beta" ]; })
-        { command = ["rm" "update-git-commits.txt"]; }
-        (gitUpdater { rev-prefix = "v"; attrPath = "xrdp.xorgxrdp"; })
-      ]);
+      updateScript = _experimental-update-script-combinators.sequence (
+        map (item: item.command) [
+          (gitUpdater {
+            rev-prefix = "v";
+            attrPath = "xrdp.src";
+            ignoredVersions = [ "beta" ];
+          })
+          {
+            command = [
+              "rm"
+              "update-git-commits.txt"
+            ];
+          }
+          (gitUpdater {
+            rev-prefix = "v";
+            attrPath = "xrdp.xorgxrdp";
+          })
+        ]
+      );
     };
 
     meta = with lib; {
       description = "An open source RDP server";
       homepage = "https://github.com/neutrinolabs/xrdp";
       license = licenses.asl20;
-      maintainers = with maintainers; [ chvp lucasew ];
+      maintainers = with maintainers; [
+        chvp
+        lucasew
+      ];
       platforms = platforms.linux;
     };
   };
-in xrdp
+in
+xrdp

@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, packr, ... }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  packr,
+  ...
+}:
 
 buildGoModule rec {
   pname = "kubernetes-polaris";

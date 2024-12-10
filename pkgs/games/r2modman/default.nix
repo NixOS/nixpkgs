@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, yarn
-, fetchYarnDeps
-, fixup-yarn-lock
-, nodejs
-, electron
-, fetchFromGitHub
-, gitUpdater
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  yarn,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  nodejs,
+  electron,
+  fetchFromGitHub,
+  gitUpdater,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -99,7 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
       desktopName = "r2modman";
       comment = finalAttrs.meta.description;
       categories = [ "Game" ];
-      keywords = [ "launcher" "mod manager" "thunderstore" ];
+      keywords = [
+        "launcher"
+        "mod manager"
+        "thunderstore"
+      ];
     })
   ];
 
@@ -113,7 +118,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ebkr/r2modmanPlus";
     license = lib.licenses.mit;
     mainProgram = "r2modman";
-    maintainers = with lib.maintainers; [ aidalgol huantian ];
+    maintainers = with lib.maintainers; [
+      aidalgol
+      huantian
+    ];
     inherit (electron.meta) platforms;
   };
 })

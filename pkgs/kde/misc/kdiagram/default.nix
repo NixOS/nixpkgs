@@ -14,7 +14,10 @@ mkKdeDerivation rec {
     hash = "sha256-Rlmwws2dsYFD9avZyAYJHDqrarwalWu/goFas9MYnG0=";
   };
 
-  extraNativeBuildInputs = [qttools qtsvg];
+  extraNativeBuildInputs = [
+    qttools
+    qtsvg
+  ];
 
-  meta.license = [lib.licenses.gpl2];
+  meta.license = [ lib.licenses.gpl2 ];
 }

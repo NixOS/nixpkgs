@@ -1,15 +1,16 @@
-{ callPackage
-, stdenv
-, fetchzip
-, lib
-, libcxx
-, llvmPackages
+{
+  callPackage,
+  stdenv,
+  fetchzip,
+  lib,
+  libcxx,
+  llvmPackages,
 
-, addOpenGLRunpath
-, patchelf
-, fixDarwinDylibNames
+  addOpenGLRunpath,
+  patchelf,
+  fixDarwinDylibNames,
 
-, cudaSupport
+  cudaSupport,
 }:
 
 let
@@ -23,15 +24,18 @@ let
   srcs = import ./binary-hashes.nix version;
   unavailable = throw "libtorch is not available for this platform";
   libcxx-for-libtorch = if stdenv.isDarwin then libcxx else stdenv.cc.cc.lib;
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit version;
   pname = "libtorch";
 
   src = fetchzip srcs."${stdenv.hostPlatform.system}-${device}" or unavailable;
 
   nativeBuildInputs =
-    if stdenv.isDarwin then [ fixDarwinDylibNames ]
-    else [ patchelf ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
+    if stdenv.isDarwin then
+      [ fixDarwinDylibNames ]
+    else
+      [ patchelf ] ++ lib.optionals cudaSupport [ addOpenGLRunpath ];
 
   dontBuild = true;
   dontConfigure = true;
@@ -57,38 +61,44 @@ in stdenv.mkDerivation {
       --replace \''${_IMPORT_PREFIX}/lib "$out/lib" \
   '';
 
-  postFixup = let
-    rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
-  in lib.optionalString stdenv.isLinux ''
-    find $out/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
-      echo "setting rpath for $lib..."
-      patchelf --set-rpath "${rpath}:$out/lib" "$lib"
-      ${lib.optionalString cudaSupport ''
-        addOpenGLRunpath "$lib"
-      ''}
-    done
-  '' + lib.optionalString stdenv.isDarwin ''
-    for f in $out/lib/*.dylib; do
-        otool -L $f
-    done
-    for f in $out/lib/*.dylib; do
-      if otool -L $f | grep "@rpath/libomp.dylib" >& /dev/null; then
-        install_name_tool -change "@rpath/libomp.dylib" ${llvmPackages.openmp}/lib/libomp.dylib $f
-      fi
-      install_name_tool -id $out/lib/$(basename $f) $f || true
-      for rpath in $(otool -L $f | grep rpath | awk '{print $1}');do
-        install_name_tool -change $rpath $out/lib/$(basename $rpath) $f
+  postFixup =
+    let
+      rpath = lib.makeLibraryPath [ stdenv.cc.cc.lib ];
+    in
+    lib.optionalString stdenv.isLinux ''
+      find $out/lib -type f \( -name '*.so' -or -name '*.so.*' \) | while read lib; do
+        echo "setting rpath for $lib..."
+        patchelf --set-rpath "${rpath}:$out/lib" "$lib"
+        ${lib.optionalString cudaSupport ''
+          addOpenGLRunpath "$lib"
+        ''}
       done
-      if otool -L $f | grep /usr/lib/libc++ >& /dev/null; then
-        install_name_tool -change /usr/lib/libc++.1.dylib ${libcxx-for-libtorch.outPath}/lib/libc++.1.0.dylib $f
-      fi
-    done
-    for f in $out/lib/*.dylib; do
-        otool -L $f
-    done
-  '';
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      for f in $out/lib/*.dylib; do
+          otool -L $f
+      done
+      for f in $out/lib/*.dylib; do
+        if otool -L $f | grep "@rpath/libomp.dylib" >& /dev/null; then
+          install_name_tool -change "@rpath/libomp.dylib" ${llvmPackages.openmp}/lib/libomp.dylib $f
+        fi
+        install_name_tool -id $out/lib/$(basename $f) $f || true
+        for rpath in $(otool -L $f | grep rpath | awk '{print $1}');do
+          install_name_tool -change $rpath $out/lib/$(basename $rpath) $f
+        done
+        if otool -L $f | grep /usr/lib/libc++ >& /dev/null; then
+          install_name_tool -change /usr/lib/libc++.1.dylib ${libcxx-for-libtorch.outPath}/lib/libc++.1.0.dylib $f
+        fi
+      done
+      for f in $out/lib/*.dylib; do
+          otool -L $f
+      done
+    '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   passthru.tests.cmake = callPackage ./test {
     inherit cudaSupport;

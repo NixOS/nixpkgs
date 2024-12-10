@@ -20,7 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-sEcKn/apA6FcR7ijb7sfuvP03ZdVfjkNZTXsasK8fAI=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     SDL2

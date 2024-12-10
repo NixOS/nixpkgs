@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -14,12 +19,14 @@ in
 
   # implementation
   config = mkIf cfg.enable {
-    assertions = [ {
-      assertion = config.services.corosync.enable;
-      message = ''
-        Enabling services.pacemaker requires a services.corosync configuration.
-      '';
-    } ];
+    assertions = [
+      {
+        assertion = config.services.corosync.enable;
+        message = ''
+          Enabling services.pacemaker requires a services.corosync configuration.
+        '';
+      }
+    ];
 
     environment.systemPackages = [ cfg.package ];
 
@@ -29,7 +36,7 @@ in
       group = "pacemaker";
       home = "/var/lib/pacemaker";
     };
-    users.groups.pacemaker = {};
+    users.groups.pacemaker = { };
 
     systemd.tmpfiles.rules = [
       "d /var/log/pacemaker 0700 hacluster pacemaker -"

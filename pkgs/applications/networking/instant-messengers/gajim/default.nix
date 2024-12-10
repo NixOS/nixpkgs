@@ -1,22 +1,42 @@
-{ lib, fetchurl, fetchFromGitLab, gettext, wrapGAppsHook3
+{
+  lib,
+  fetchurl,
+  fetchFromGitLab,
+  gettext,
+  wrapGAppsHook3,
 
-# Native dependencies
-, python3, gtk3, gobject-introspection, gnome
-, gtksourceview4
-, glib-networking
+  # Native dependencies
+  python3,
+  gtk3,
+  gobject-introspection,
+  gnome,
+  gtksourceview4,
+  glib-networking,
 
-# Test dependencies
-, xvfb-run, dbus
+  # Test dependencies
+  xvfb-run,
+  dbus,
 
-# Optional dependencies
-, enableJingle ? true, farstream, gstreamer, gst-plugins-base, gst-libav, gst-plugins-good, libnice
-, enableE2E ? true
-, enableSecrets ? true, libsecret
-, enableRST ? true, docutils
-, enableSpelling ? true, gspell
-, enableUPnP ? true, gupnp-igd
-, enableAppIndicator ? true, libappindicator-gtk3
-, extraPythonPackages ? ps: []
+  # Optional dependencies
+  enableJingle ? true,
+  farstream,
+  gstreamer,
+  gst-plugins-base,
+  gst-libav,
+  gst-plugins-good,
+  libnice,
+  enableE2E ? true,
+  enableSecrets ? true,
+  libsecret,
+  enableRST ? true,
+  docutils,
+  enableSpelling ? true,
+  gspell,
+  enableUPnP ? true,
+  gupnp-igd,
+  enableAppIndicator ? true,
+  libappindicator-gtk3,
+  extraPythonPackages ? ps: [ ],
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -30,18 +50,30 @@ python3.pkgs.buildPythonApplication rec {
 
   format = "pyproject";
 
-  buildInputs = [
-    gtk3 gnome.adwaita-icon-theme
-    gtksourceview4
-    glib-networking
-  ] ++ lib.optionals enableJingle [ farstream gstreamer gst-plugins-base gst-libav gst-plugins-good libnice ]
+  buildInputs =
+    [
+      gtk3
+      gnome.adwaita-icon-theme
+      gtksourceview4
+      glib-networking
+    ]
+    ++ lib.optionals enableJingle [
+      farstream
+      gstreamer
+      gst-plugins-base
+      gst-libav
+      gst-plugins-good
+      libnice
+    ]
     ++ lib.optional enableSecrets libsecret
     ++ lib.optional enableSpelling gspell
     ++ lib.optional enableUPnP gupnp-igd
     ++ lib.optional enableAppIndicator libappindicator-gtk3;
 
   nativeBuildInputs = [
-    gettext wrapGAppsHook3 gobject-introspection
+    gettext
+    wrapGAppsHook3
+    gobject-introspection
   ];
 
   dontWrapGApps = true;
@@ -50,14 +82,35 @@ python3.pkgs.buildPythonApplication rec {
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
-    nbxmpp pygobject3 dbus-python pillow css-parser precis-i18n keyring setuptools packaging gssapi
-    omemo-dr qrcode sqlalchemy emoji
-  ] ++ lib.optionals enableE2E [ pycrypto python-gnupg ]
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      nbxmpp
+      pygobject3
+      dbus-python
+      pillow
+      css-parser
+      precis-i18n
+      keyring
+      setuptools
+      packaging
+      gssapi
+      omemo-dr
+      qrcode
+      sqlalchemy
+      emoji
+    ]
+    ++ lib.optionals enableE2E [
+      pycrypto
+      python-gnupg
+    ]
     ++ lib.optional enableRST docutils
     ++ extraPythonPackages python3.pkgs;
 
-  nativeCheckInputs = [ xvfb-run dbus ];
+  nativeCheckInputs = [
+    xvfb-run
+    dbus
+  ];
 
   preBuild = ''
     python pep517build/build_metadata.py -o dist/metadata
@@ -84,7 +137,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "http://gajim.org/";
     description = "Jabber client written in PyGTK";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ raskin abbradar ];
+    maintainers = with lib.maintainers; [
+      raskin
+      abbradar
+    ];
     downloadPage = "http://gajim.org/download/";
     platforms = lib.platforms.linux;
     mainProgram = "gajim";

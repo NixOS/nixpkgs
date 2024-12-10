@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, makeWrapper
-, gdk-pixbuf
-, libwebp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  makeWrapper,
+  gdk-pixbuf,
+  libwebp,
 }:
 
 let

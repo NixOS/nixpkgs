@@ -1,27 +1,29 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchurl
-, runCommand
-, cmake
-, ffmpeg_4
-, libdrm
-, libglvnd
-, libffi
-, libpng
-, libX11
-, libXau
-, libXdmcp
-, libxcb
-, makeWrapper
-, mesa
-, ninja
-, pkg-config
-, python3
-, vulkan-loader
-, wayland
-, wayland-protocols
-, wayland-scanner
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  runCommand,
+  cmake,
+  ffmpeg_4,
+  libdrm,
+  libglvnd,
+  libffi,
+  libpng,
+  libX11,
+  libXau,
+  libXdmcp,
+  libxcb,
+  makeWrapper,
+  mesa,
+  ninja,
+  pkg-config,
+  python3,
+  vulkan-loader,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  zlib,
 }:
 let
   renderdoc = fetchurl {
@@ -106,12 +108,14 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = ./update.sh;
-  passthru.tests.lavapipe = runCommand "vulkan-cts-tests-lavapipe" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
-    # Expand the wildcard to pick the existing architecture
-    export VK_ICD_FILENAMES=$(echo ${mesa.drivers}/share/vulkan/icd.d/lvp_icd.*.json)
-    deqp-vk -n dEQP-VK.api.smoke.triangle
-    touch $out
-  '';
+  passthru.tests.lavapipe =
+    runCommand "vulkan-cts-tests-lavapipe" { nativeBuildInputs = [ finalAttrs.finalPackage ]; }
+      ''
+        # Expand the wildcard to pick the existing architecture
+        export VK_ICD_FILENAMES=$(echo ${mesa.drivers}/share/vulkan/icd.d/lvp_icd.*.json)
+        deqp-vk -n dEQP-VK.api.smoke.triangle
+        touch $out
+      '';
 
   meta = with lib; {
     description = "Khronos Vulkan Conformance Tests";

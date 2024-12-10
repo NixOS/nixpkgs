@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,15 +11,15 @@ let
   cfg = config.services.logcheck;
 
   defaultRules = pkgs.runCommand "logcheck-default-rules" { preferLocalBuild = true; } ''
-                   cp -prd ${pkgs.logcheck}/etc/logcheck $out
-                   chmod u+w $out
-                   rm -r $out/logcheck.*
-                 '';
+    cp -prd ${pkgs.logcheck}/etc/logcheck $out
+    chmod u+w $out
+    rm -r $out/logcheck.*
+  '';
 
-  rulesDir = pkgs.symlinkJoin
-    { name = "logcheck-rules-dir";
-      paths = ([ defaultRules ] ++ cfg.extraRulesDirs);
-    };
+  rulesDir = pkgs.symlinkJoin {
+    name = "logcheck-rules-dir";
+    paths = ([ defaultRules ] ++ cfg.extraRulesDirs);
+  };
 
   configFile = pkgs.writeText "logcheck.conf" cfg.config;
 
@@ -22,31 +27,49 @@ let
 
   flags = "-r ${rulesDir} -c ${configFile} -L ${logFiles} -${levelFlag} -m ${cfg.mailTo}";
 
-  levelFlag = getAttrFromPath [cfg.level]
-    { paranoid    = "p";
-      server      = "s";
-      workstation = "w";
-    };
+  levelFlag = getAttrFromPath [ cfg.level ] {
+    paranoid = "p";
+    server = "s";
+    workstation = "w";
+  };
 
   cronJob = ''
     @reboot   logcheck env PATH=/run/wrappers/bin:$PATH nice -n10 ${pkgs.logcheck}/sbin/logcheck -R ${flags}
     2 ${cfg.timeOfDay} * * * logcheck env PATH=/run/wrappers/bin:$PATH nice -n10 ${pkgs.logcheck}/sbin/logcheck ${flags}
   '';
 
-  writeIgnoreRule = name: {level, regex, ...}:
-    pkgs.writeTextFile
-      { inherit name;
-        destination = "/ignore.d.${level}/${name}";
-        text = ''
-          ^\w{3} [ :[:digit:]]{11} [._[:alnum:]-]+ ${regex}
-        '';
-      };
+  writeIgnoreRule =
+    name:
+    { level, regex, ... }:
+    pkgs.writeTextFile {
+      inherit name;
+      destination = "/ignore.d.${level}/${name}";
+      text = ''
+        ^\w{3} [ :[:digit:]]{11} [._[:alnum:]-]+ ${regex}
+      '';
+    };
 
-  writeIgnoreCronRule = name: {level, user, regex, cmdline, ...}:
-    let escapeRegex = escape (stringToCharacters "\\[]{}()^$?*+|.");
-        cmdline_ = builtins.unsafeDiscardStringContext cmdline;
-        re = if regex != "" then regex else if cmdline_ == "" then ".*" else escapeRegex cmdline_;
-    in writeIgnoreRule "cron-${name}" {
+  writeIgnoreCronRule =
+    name:
+    {
+      level,
+      user,
+      regex,
+      cmdline,
+      ...
+    }:
+    let
+      escapeRegex = escape (stringToCharacters "\\[]{}()^$?*+|.");
+      cmdline_ = builtins.unsafeDiscardStringContext cmdline;
+      re =
+        if regex != "" then
+          regex
+        else if cmdline_ == "" then
+          ".*"
+        else
+          escapeRegex cmdline_;
+    in
+    writeIgnoreRule "cron-${name}" {
       inherit level;
       regex = ''
         (/usr/bin/)?cron\[[0-9]+\]: \(${user}\) CMD \(${re}\)$
@@ -55,7 +78,11 @@ let
 
   levelOption = mkOption {
     default = "server";
-    type = types.enum [ "workstation" "server" "paranoid" ];
+    type = types.enum [
+      "workstation"
+      "server"
+      "paranoid"
+    ];
     description = ''
       Set the logcheck level.
     '';
@@ -158,14 +185,17 @@ in
       files = mkOption {
         default = [ "/var/log/messages" ];
         type = types.listOf types.path;
-        example = [ "/var/log/messages" "/var/log/mail" ];
+        example = [
+          "/var/log/messages"
+          "/var/log/mail"
+        ];
         description = ''
           Which log files to check.
         '';
       };
 
       extraRulesDirs = mkOption {
-        default = [];
+        default = [ ];
         example = [ "/etc/logcheck" ];
         type = types.listOf types.path;
         description = ''
@@ -174,7 +204,7 @@ in
       };
 
       ignore = mkOption {
-        default = {};
+        default = { };
         description = ''
           This option defines extra ignore rules.
         '';
@@ -182,7 +212,7 @@ in
       };
 
       ignoreCron = mkOption {
-        default = {};
+        default = { };
         description = ''
           This option defines extra ignore rules for cronjobs.
         '';
@@ -190,9 +220,12 @@ in
       };
 
       extraGroups = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
-        example = [ "postdrop" "mongodb" ];
+        example = [
+          "postdrop"
+          "mongodb"
+        ];
         description = ''
           Extra groups for the logcheck user, for example to be able to use sendmail,
           or to access certain log files.
@@ -204,8 +237,8 @@ in
 
   config = mkIf cfg.enable {
     services.logcheck.extraRulesDirs =
-        mapAttrsToList writeIgnoreRule cfg.ignore
-        ++ mapAttrsToList writeIgnoreCronRule cfg.ignoreCron;
+      mapAttrsToList writeIgnoreRule cfg.ignore
+      ++ mapAttrsToList writeIgnoreCronRule cfg.ignoreCron;
 
     users.users = optionalAttrs (cfg.user == "logcheck") {
       logcheck = {
@@ -217,7 +250,7 @@ in
       };
     };
     users.groups = optionalAttrs (cfg.user == "logcheck") {
-      logcheck = {};
+      logcheck = { };
     };
 
     systemd.tmpfiles.settings.logcheck = {
@@ -232,11 +265,20 @@ in
     };
 
     services.cron.systemCronJobs =
-        let withTime = name: {timeArgs, ...}: timeArgs != null;
-            mkCron = name: {user, cmdline, timeArgs, ...}: ''
-              ${timeArgs} ${user} ${cmdline}
-            '';
-        in mapAttrsToList mkCron (filterAttrs withTime cfg.ignoreCron)
-           ++ [ cronJob ];
+      let
+        withTime = name: { timeArgs, ... }: timeArgs != null;
+        mkCron =
+          name:
+          {
+            user,
+            cmdline,
+            timeArgs,
+            ...
+          }:
+          ''
+            ${timeArgs} ${user} ${cmdline}
+          '';
+      in
+      mapAttrsToList mkCron (filterAttrs withTime cfg.ignoreCron) ++ [ cronJob ];
   };
 }

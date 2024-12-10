@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 let
   version = "1.9.0";

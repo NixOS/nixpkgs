@@ -1,8 +1,28 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, fetchDebianPatch, fetchpatch, cmake, pkg-config
-, SDL2, libvorbis, libogg, libjpeg, libpng, freetype, glew, tinyxml, openal, libepoxy
-, curl
-, freealut, readline, libb2, gcc-unwrapped
-, enableSoundtrack ? false # Enable the "Open Clonk Soundtrack - Explorers Journey" by David Oerther
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  fetchDebianPatch,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  SDL2,
+  libvorbis,
+  libogg,
+  libjpeg,
+  libpng,
+  freetype,
+  glew,
+  tinyxml,
+  openal,
+  libepoxy,
+  curl,
+  freealut,
+  readline,
+  libb2,
+  gcc-unwrapped,
+  enableSoundtrack ? false, # Enable the "Open Clonk Soundtrack - Explorers Journey" by David Oerther
 }:
 
 let
@@ -10,7 +30,8 @@ let
     url = "http://www.openclonk.org/download/Music.ocg";
     sha256 = "1ckj0dlpp5zsnkbb5qxxfxpkiq76jj2fgj91fyf3ll7n0gbwcgw5";
   };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   version = "unstable-2023-10-30";
   pname = "openclonk";
 
@@ -33,20 +54,38 @@ in stdenv.mkDerivation rec {
 
   enableParallelInstalling = false;
 
-  postInstall = ''
-  '' + lib.optionalString enableSoundtrack ''
-    ln -sv ${soundtrack_src} $out/share/games/openclonk/Music.ocg
-  '';
+  postInstall =
+    ''''
+    + lib.optionalString enableSoundtrack ''
+      ln -sv ${soundtrack_src} $out/share/games/openclonk/Music.ocg
+    '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
-
-  buildInputs = [
-    SDL2 libvorbis libogg libjpeg libpng freetype glew tinyxml openal freealut
-    libepoxy curl
-    readline libb2
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
 
-  cmakeFlags = [ "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar" "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib" ];
+  buildInputs = [
+    SDL2
+    libvorbis
+    libogg
+    libjpeg
+    libpng
+    freetype
+    glew
+    tinyxml
+    openal
+    freealut
+    libepoxy
+    curl
+    readline
+    libb2
+  ];
+
+  cmakeFlags = [
+    "-DCMAKE_AR=${gcc-unwrapped}/bin/gcc-ar"
+    "-DCMAKE_RANLIB=${gcc-unwrapped}/bin/gcc-ranlib"
+  ];
 
   cmakeBuildType = "RelWithDebInfo";
 
@@ -56,6 +95,9 @@ in stdenv.mkDerivation rec {
     license = if enableSoundtrack then licenses.unfreeRedistributable else licenses.isc;
     mainProgram = "openclonk";
     maintainers = with maintainers; [ lheckemann ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

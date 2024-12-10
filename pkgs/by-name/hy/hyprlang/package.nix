@@ -32,6 +32,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "The official implementation library for the hypr config language";
     license = licenses.lgpl3Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ iogamaster fufexan ];
+    maintainers = with maintainers; [
+      iogamaster
+      fufexan
+    ];
   };
 })

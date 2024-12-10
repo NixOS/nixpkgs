@@ -1,7 +1,8 @@
-{ appimageTools
-, fetchurl
-, lib
-, makeWrapper
+{
+  appimageTools,
+  fetchurl,
+  lib,
+  makeWrapper,
 }:
 
 appimageTools.wrapType2 rec {
@@ -14,8 +15,10 @@ appimageTools.wrapType2 rec {
   };
 
   extraInstallCommands =
-    let contents = appimageTools.extract { inherit pname version src; };
-    in ''
+    let
+      contents = appimageTools.extract { inherit pname version src; };
+    in
+    ''
       source "${makeWrapper}/nix-support/setup-hook"
       wrapProgram $out/bin/lunar-client \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
@@ -33,7 +36,11 @@ appimageTools.wrapType2 rec {
     homepage = "https://www.lunarclient.com/";
     license = with licenses; [ unfree ];
     mainProgram = "lunar-client";
-    maintainers = with maintainers; [ zyansheep Technical27 surfaceflinger ];
+    maintainers = with maintainers; [
+      zyansheep
+      Technical27
+      surfaceflinger
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

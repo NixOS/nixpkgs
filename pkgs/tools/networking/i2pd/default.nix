@@ -1,9 +1,15 @@
-{ lib, stdenv, fetchFromGitHub
-, installShellFiles
-, boost, zlib, openssl
-, upnpSupport ? true, miniupnpc
-, aesniSupport ? stdenv.hostPlatform.aesSupport
-, avxSupport   ? stdenv.hostPlatform.avxSupport
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  boost,
+  zlib,
+  openssl,
+  upnpSupport ? true,
+  miniupnpc,
+  aesniSupport ? stdenv.hostPlatform.aesSupport,
+  avxSupport ? stdenv.hostPlatform.avxSupport,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,18 +23,24 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0n3cPF3KBuzNOagrn88HeTvFAu1sYTkijpiGr77X5GI=";
   };
 
-  buildInputs = [ boost zlib openssl ]
-    ++ lib.optional upnpSupport miniupnpc;
+  buildInputs = [
+    boost
+    zlib
+    openssl
+  ] ++ lib.optional upnpSupport miniupnpc;
 
   nativeBuildInputs = [
     installShellFiles
   ];
 
   makeFlags =
-    let ynf = a: b: a + "=" + (if b then "yes" else "no"); in
-    [ (ynf "USE_AESNI" aesniSupport)
-      (ynf "USE_AVX"   avxSupport)
-      (ynf "USE_UPNP"  upnpSupport)
+    let
+      ynf = a: b: a + "=" + (if b then "yes" else "no");
+    in
+    [
+      (ynf "USE_AESNI" aesniSupport)
+      (ynf "USE_AVX" avxSupport)
+      (ynf "USE_UPNP" upnpSupport)
     ];
 
   enableParallelBuilding = true;

@@ -1,45 +1,46 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, testers
-, accountsservice
-, ayatana-indicator-datetime
-, cmake
-, cmake-extras
-, content-hub
-, dbus
-, deviceinfo
-, geonames
-, gettext
-, glib
-, gnome-desktop
-, gsettings-qt
-, gtk3
-, icu
-, intltool
-, json-glib
-, libqofono
-, libqtdbustest
-, libqtdbusmock
-, lomiri-indicator-network
-, lomiri-schemas
-, lomiri-settings-components
-, lomiri-ui-toolkit
-, maliit-keyboard
-, pkg-config
-, python3
-, qmenumodel
-, qtbase
-, qtdeclarative
-, qtmultimedia
-, ubports-click
-, upower
-, validatePkgConfig
-, wrapGAppsHook3
-, wrapQtAppsHook
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  testers,
+  accountsservice,
+  ayatana-indicator-datetime,
+  cmake,
+  cmake-extras,
+  content-hub,
+  dbus,
+  deviceinfo,
+  geonames,
+  gettext,
+  glib,
+  gnome-desktop,
+  gsettings-qt,
+  gtk3,
+  icu,
+  intltool,
+  json-glib,
+  libqofono,
+  libqtdbustest,
+  libqtdbusmock,
+  lomiri-indicator-network,
+  lomiri-schemas,
+  lomiri-settings-components,
+  lomiri-ui-toolkit,
+  maliit-keyboard,
+  pkg-config,
+  python3,
+  qmenumodel,
+  qtbase,
+  qtdeclarative,
+  qtmultimedia,
+  ubports-click,
+  upower,
+  validatePkgConfig,
+  wrapGAppsHook3,
+  wrapQtAppsHook,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,40 +59,42 @@ stdenv.mkDerivation (finalAttrs: {
     "dev"
   ];
 
-  patches = [
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-system-settings/-/merge_requests/433 merged & in release
-    (fetchpatch {
-      name = "0001-lomiri-system-settings-plugins-language-Fix-linking-against-accountsservice.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/75763ae2f9669f5f7f29aec3566606e6f6cb7478.patch";
-      hash = "sha256-2CE0yizkaz93kK82DhaaFjKmGnMoaikrwFj4k7RN534=";
-    })
+  patches =
+    [
+      # Remove when https://gitlab.com/ubports/development/core/lomiri-system-settings/-/merge_requests/433 merged & in release
+      (fetchpatch {
+        name = "0001-lomiri-system-settings-plugins-language-Fix-linking-against-accountsservice.patch";
+        url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/75763ae2f9669f5f7f29aec3566606e6f6cb7478.patch";
+        hash = "sha256-2CE0yizkaz93kK82DhaaFjKmGnMoaikrwFj4k7RN534=";
+      })
 
-    # Remove when https://gitlab.com/ubports/development/core/lomiri-system-settings/-/merge_requests/434 merged & in release
-    (fetchpatch {
-      name = "0002-lomiri-system-settings-GNUInstallDirs-and-fix-absolute-path-handling.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/93ee84423f3677a608ef73addcd3ddcbe7dc1d32.patch";
-      hash = "sha256-lSKAhtE3oSSv7USvDbbcfBZWAtWMmuKneWawKQABIiM=";
-    })
+      # Remove when https://gitlab.com/ubports/development/core/lomiri-system-settings/-/merge_requests/434 merged & in release
+      (fetchpatch {
+        name = "0002-lomiri-system-settings-GNUInstallDirs-and-fix-absolute-path-handling.patch";
+        url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/93ee84423f3677a608ef73addcd3ddcbe7dc1d32.patch";
+        hash = "sha256-lSKAhtE3oSSv7USvDbbcfBZWAtWMmuKneWawKQABIiM=";
+      })
 
-    # Fixes tests with very-recent python-dbusmock
-    # Remove when version > 1.1.0
-    (fetchpatch {
-      name = "0003-lomiri-system-settings-Revert-Pass-missing-parameter-to-dbusmock-bluez-PairDevice-function.patch";
-      url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/67d9e28ebab8bdb9473d5bf8da2b7573e6848fa2.patch";
-      hash = "sha256-pFWNne2UH3R5Fz9ayHvIpDXDQbXPs0k4b/oRg0fzi+s=";
-    })
-  ] ++ [
+      # Fixes tests with very-recent python-dbusmock
+      # Remove when version > 1.1.0
+      (fetchpatch {
+        name = "0003-lomiri-system-settings-Revert-Pass-missing-parameter-to-dbusmock-bluez-PairDevice-function.patch";
+        url = "https://gitlab.com/ubports/development/core/lomiri-system-settings/-/commit/67d9e28ebab8bdb9473d5bf8da2b7573e6848fa2.patch";
+        hash = "sha256-pFWNne2UH3R5Fz9ayHvIpDXDQbXPs0k4b/oRg0fzi+s=";
+      })
+    ]
+    ++ [
 
-    ./2000-Support-wrapping-for-Nixpkgs.patch
+      ./2000-Support-wrapping-for-Nixpkgs.patch
 
-    # Make it work with regular accountsservice
-    # https://gitlab.com/ubports/development/core/lomiri-system-settings/-/issues/341
-    (fetchpatch {
-      name = "2001-lomiri-system-settings-disable-current-language-switching.patch";
-      url = "https://sources.debian.org/data/main/l/lomiri-system-settings/1.0.1-2/debian/patches/2001_disable-current-language-switching.patch";
-      hash = "sha256-ZOFYwxS8s6+qMFw8xDCBv3nLBOBm86m9d/VhbpOjamY=";
-    })
-  ];
+      # Make it work with regular accountsservice
+      # https://gitlab.com/ubports/development/core/lomiri-system-settings/-/issues/341
+      (fetchpatch {
+        name = "2001-lomiri-system-settings-disable-current-language-switching.patch";
+        url = "https://sources.debian.org/data/main/l/lomiri-system-settings/1.0.1-2/debian/patches/2001_disable-current-language-switching.patch";
+        hash = "sha256-ZOFYwxS8s6+qMFw8xDCBv3nLBOBm86m9d/VhbpOjamY=";
+      })
+    ];
 
   postPatch = ''
     substituteInPlace CMakeLists.txt \
@@ -162,9 +165,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     dbus
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        python-dbusmock
+      ]
+    ))
     xvfb-run
   ];
 
@@ -179,14 +184,19 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_LIBDEVICEINFO" true)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
-      # Exclude tests
-      "-E" (lib.strings.escapeShellArg "(${lib.concatStringsSep "|" [
-        # Hits OpenGL context issue inside lomiri-ui-toolkit, see derivation of that on details
-        "^testmouse"
-        "^tst_notifications"
-      ]})")
-    ]))
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
+      lib.concatStringsSep ";" [
+        # Exclude tests
+        "-E"
+        (lib.strings.escapeShellArg "(${
+          lib.concatStringsSep "|" [
+            # Hits OpenGL context issue inside lomiri-ui-toolkit, see derivation of that on details
+            "^testmouse"
+            "^tst_notifications"
+          ]
+        })")
+      ]
+    ))
   ];
 
   # CMake option had to be excluded from earlier patchset
@@ -203,7 +213,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   preCheck = ''
     export QT_PLUGIN_PATH=${lib.getBin qtbase}/${qtbase.qtPluginPrefix}
-    export QML2_IMPORT_PATH=${lib.makeSearchPathOutput "bin" qtbase.qtQmlPrefix ([ qtdeclarative lomiri-ui-toolkit lomiri-settings-components ] ++ lomiri-ui-toolkit.propagatedBuildInputs)}
+    export QML2_IMPORT_PATH=${
+      lib.makeSearchPathOutput "bin" qtbase.qtQmlPrefix (
+        [
+          qtdeclarative
+          lomiri-ui-toolkit
+          lomiri-settings-components
+        ]
+        ++ lomiri-ui-toolkit.propagatedBuildInputs
+      )
+    }
   '';
 
   postInstall = ''

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, runCommand
-, fetchFromGitHub
-, bash
-, btrfs-progs
-, coreutils
-, python3Packages
-, util-linux
-, nixosTests
+{
+  lib,
+  stdenv,
+  runCommand,
+  fetchFromGitHub,
+  bash,
+  btrfs-progs,
+  coreutils,
+  python3Packages,
+  util-linux,
+  nixosTests,
 }:
 
 let
@@ -70,13 +71,16 @@ in
     inherit bash bees coreutils;
     utillinux = util-linux; # needs to be a valid shell variable name
     btrfsProgs = btrfs-progs; # needs to be a valid shell variable name
-  } ''
-  mkdir -p -- "$out/bin"
-  substituteAll ${./bees-service-wrapper} "$out"/bin/bees-service-wrapper
-  chmod +x "$out"/bin/bees-service-wrapper
-  ln -s ${bees}/bin/beesd "$out"/bin/beesd
-'').overrideAttrs {
-  passthru.tests = {
-    smoke-test = nixosTests.bees;
-  };
-}
+  }
+  ''
+    mkdir -p -- "$out/bin"
+    substituteAll ${./bees-service-wrapper} "$out"/bin/bees-service-wrapper
+    chmod +x "$out"/bin/bees-service-wrapper
+    ln -s ${bees}/bin/beesd "$out"/bin/beesd
+  ''
+).overrideAttrs
+  {
+    passthru.tests = {
+      smoke-test = nixosTests.bees;
+    };
+  }

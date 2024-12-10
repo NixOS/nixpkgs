@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, zlib
-, ninja
-, meson
-, pkg-config
-, cmake
-, libpng
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  zlib,
+  ninja,
+  meson,
+  pkg-config,
+  cmake,
+  libpng,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +31,10 @@ stdenv.mkDerivation rec {
     "-Ddev_build=true"
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeCheckInputs = [
     cmake

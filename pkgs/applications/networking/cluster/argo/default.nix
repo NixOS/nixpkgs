@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, pkgsBuildBuild
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  pkgsBuildBuild,
 }:
 
 let
@@ -29,7 +30,10 @@ let
       cp ${./staticfiles.go.mod} go.mod
     '';
 
-    ldflags = [ "-s" "-w" ];
+    ldflags = [
+      "-s"
+      "-w"
+    ];
   };
 in
 buildGoModule rec {
@@ -74,9 +78,11 @@ buildGoModule rec {
 
   postInstall = ''
     for shell in bash zsh; do
-      ${if (stdenv.buildPlatform == stdenv.hostPlatform)
-        then "$out/bin/argo"
-        else "${pkgsBuildBuild.argo}/bin/argo"
+      ${
+        if (stdenv.buildPlatform == stdenv.hostPlatform) then
+          "$out/bin/argo"
+        else
+          "${pkgsBuildBuild.argo}/bin/argo"
       } completion $shell > argo.$shell
       installShellCompletion argo.$shell
     done

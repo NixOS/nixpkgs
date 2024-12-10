@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+}:
 stdenv.mkDerivation rec {
   pname = "ocaml${ocaml.version}-ocamlbuild";
   version = "0.14.3";
@@ -12,22 +18,25 @@ stdenv.mkDerivation rec {
 
   createFindlibDestdir = true;
 
-  nativeBuildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+  ];
   strictDeps = true;
 
   # x86_64-unknown-linux-musl-ld: -r and -pie may not be used together
   hardeningDisable = lib.optional stdenv.hostPlatform.isStatic "pie";
 
   configurePhase = ''
-  runHook preConfigure
+    runHook preConfigure
 
-  make -f configure.make Makefile.config \
-    "OCAMLBUILD_PREFIX=$out" \
-    "OCAMLBUILD_BINDIR=$out/bin" \
-    "OCAMLBUILD_MANDIR=$out/share/man" \
-    "OCAMLBUILD_LIBDIR=$OCAMLFIND_DESTDIR"
+    make -f configure.make Makefile.config \
+      "OCAMLBUILD_PREFIX=$out" \
+      "OCAMLBUILD_BINDIR=$out/bin" \
+      "OCAMLBUILD_MANDIR=$out/share/man" \
+      "OCAMLBUILD_LIBDIR=$OCAMLFIND_DESTDIR"
 
-  runHook postConfigure
+    runHook postConfigure
   '';
 
   meta = with lib; {

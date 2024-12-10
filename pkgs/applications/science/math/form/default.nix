@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, gmp, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gmp,
+  zlib,
+}:
 
 stdenv.mkDerivation {
   version = "4.3.1";
@@ -10,7 +16,10 @@ stdenv.mkDerivation {
     sha256 = "sha256-8fUS3DT+m71rGfLf7wX8uZEt+0PINop1t5bsRy7ou84=";
   };
 
-  buildInputs = [ gmp zlib ];
+  buildInputs = [
+    gmp
+    zlib
+  ];
 
   meta = with lib; {
     description = "The FORM project for symbolic manipulation of very big expressions";

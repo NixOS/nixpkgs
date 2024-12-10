@@ -1,16 +1,17 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, makeWrapper
-, scdoc
-, coreutils
-, grim
-, hyprland
-, hyprpicker
-, jq
-, libnotify
-, slurp
-, wl-clipboard
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  makeWrapper,
+  scdoc,
+  coreutils,
+  grim,
+  hyprland,
+  hyprpicker,
+  jq,
+  libnotify,
+  slurp,
+  wl-clipboard,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -39,16 +40,18 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   postInstall = ''
     wrapProgram $out/bin/grimblast --prefix PATH ':' \
-      "${lib.makeBinPath [
-        coreutils
-        grim
-        hyprland
-        hyprpicker
-        jq
-        libnotify
-        slurp
-        wl-clipboard
-      ]}"
+      "${
+        lib.makeBinPath [
+          coreutils
+          grim
+          hyprland
+          hyprpicker
+          jq
+          libnotify
+          slurp
+          wl-clipboard
+        ]
+      }"
   '';
 
   meta = with lib; {

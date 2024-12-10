@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchFromGitHub
-, pkg-config
-, cmake
-, openssl
-, db53
-, boost
-, zlib
-, miniupnpc
-, qtbase ? null
-, qttools ? null
-, util-linux
-, protobuf
-, qrencode
-, libevent
-, libnatpmp
-, sqlite
-, withGui
-, python3
-, jemalloc
-, zeromq4
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  openssl,
+  db53,
+  boost,
+  zlib,
+  miniupnpc,
+  qtbase ? null,
+  qttools ? null,
+  util-linux,
+  protobuf,
+  qrencode,
+  libevent,
+  libnatpmp,
+  sqlite,
+  withGui,
+  python3,
+  jemalloc,
+  zeromq4,
 }:
 
 mkDerivation rec {
@@ -34,22 +35,31 @@ mkDerivation rec {
     hash = "sha256-RT9sdwwF39arW2AnoQ9KnRzYqhnQhpjWU1eykTiKWSo=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [
-    openssl
-    db53
-    boost
-    zlib
-    python3
-    jemalloc
-    libnatpmp
-    zeromq4
-    miniupnpc
-    util-linux
-    protobuf
-    libevent
-    sqlite
-  ] ++ lib.optionals withGui [ qtbase qttools qrencode ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
+  buildInputs =
+    [
+      openssl
+      db53
+      boost
+      zlib
+      python3
+      jemalloc
+      libnatpmp
+      zeromq4
+      miniupnpc
+      util-linux
+      protobuf
+      libevent
+      sqlite
+    ]
+    ++ lib.optionals withGui [
+      qtbase
+      qttools
+      qrencode
+    ];
 
   cmakeFlags = lib.optionals (!withGui) [
     "-DBUILD_BITCOIN_QT=OFF"

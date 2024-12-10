@@ -1,16 +1,17 @@
-{ lib
-, unstableGitUpdater
-, buildPythonApplication
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, requests
-, protobuf
-, pycryptodome
-, zstandard
-, json5
-, platformdirs
-, cacert
+{
+  lib,
+  unstableGitUpdater,
+  buildPythonApplication,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  requests,
+  protobuf,
+  pycryptodome,
+  zstandard,
+  json5,
+  platformdirs,
+  cacert,
 }:
 
 buildPythonApplication rec {

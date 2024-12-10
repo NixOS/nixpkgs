@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, curl
-, fetchFromGitHub
-, lz4
-, postgresql
+{
+  lib,
+  stdenv,
+  curl,
+  fetchFromGitHub,
+  lz4,
+  postgresql,
 }:
 
 stdenv.mkDerivation rec {

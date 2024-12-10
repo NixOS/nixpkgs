@@ -1,4 +1,10 @@
-{ lib, stdenvNoCC, fetchzip, texlive, callPackage }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  texlive,
+  callPackage,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "junicode";
@@ -9,7 +15,11 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-oOKg85Yz5/2/pvwjVqeQXE8xE7X+QJvPYwYN+E18oEc=";
   };
 
-  outputs = [ "out" "doc" "tex" ];
+  outputs = [
+    "out"
+    "doc"
+    "tex"
+  ];
 
   patches = [ ./tex-font-path.patch ];
 
@@ -37,7 +47,10 @@ stdenvNoCC.mkDerivation rec {
   '';
 
   passthru = {
-    tlDeps = with texlive; [ xkeyval fontspec ];
+    tlDeps = with texlive; [
+      xkeyval
+      fontspec
+    ];
 
     tests = callPackage ./tests.nix { };
   };

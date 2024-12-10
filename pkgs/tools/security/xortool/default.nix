@@ -1,9 +1,10 @@
-{ lib
-, buildPythonApplication
-, docopt
-, fetchFromGitHub
-, importlib-metadata
-, poetry-core
+{
+  lib,
+  buildPythonApplication,
+  docopt,
+  fetchFromGitHub,
+  importlib-metadata,
+  poetry-core,
 }:
 
 buildPythonApplication rec {
@@ -20,7 +21,10 @@ buildPythonApplication rec {
 
   nativeBuildInputs = [ poetry-core ];
 
-  propagatedBuildInputs = [ docopt importlib-metadata ];
+  propagatedBuildInputs = [
+    docopt
+    importlib-metadata
+  ];
 
   # Project has no tests
   doCheck = false;

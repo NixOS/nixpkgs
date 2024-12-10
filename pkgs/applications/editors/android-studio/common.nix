@@ -1,70 +1,79 @@
-{ channel, pname, version, sha256Hash }:
+{
+  channel,
+  pname,
+  version,
+  sha256Hash,
+}:
 
-{ alsa-lib
-, bash
-, buildFHSEnv
-, cacert
-, coreutils
-, dbus
-, e2fsprogs
-, expat
-, fetchurl
-, findutils
-, file
-, fontsConf
-, git
-, glxinfo
-, gnugrep
-, gnused
-, gnutar
-, gtk2, gnome_vfs, glib, GConf
-, gzip
-, fontconfig
-, freetype
-, libbsd
-, libpulseaudio
-, libGL
-, libdrm
-, libpng
-, libuuid
-, libX11
-, libxcb
-, libxkbcommon
-, xcbutilwm
-, xcbutilrenderutil
-, xcbutilkeysyms
-, xcbutilimage
-, xcbutilcursor
-, libxkbfile
-, libXcomposite
-, libXcursor
-, libXdamage
-, libXext
-, libXfixes
-, libXi
-, libXrandr
-, libXrender
-, libXtst
-, makeWrapper
-, ncurses5
-, nspr
-, nss_latest
-, pciutils
-, pkgsi686Linux
-, ps
-, setxkbmap
-, lib
-, stdenv
-, systemd
-, unzip
-, usbutils
-, which
-, runCommand
-, xkeyboard_config
-, xorg
-, zlib
-, makeDesktopItem
-, tiling_wm # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
+{
+  alsa-lib,
+  bash,
+  buildFHSEnv,
+  cacert,
+  coreutils,
+  dbus,
+  e2fsprogs,
+  expat,
+  fetchurl,
+  findutils,
+  file,
+  fontsConf,
+  git,
+  glxinfo,
+  gnugrep,
+  gnused,
+  gnutar,
+  gtk2,
+  gnome_vfs,
+  glib,
+  GConf,
+  gzip,
+  fontconfig,
+  freetype,
+  libbsd,
+  libpulseaudio,
+  libGL,
+  libdrm,
+  libpng,
+  libuuid,
+  libX11,
+  libxcb,
+  libxkbcommon,
+  xcbutilwm,
+  xcbutilrenderutil,
+  xcbutilkeysyms,
+  xcbutilimage,
+  xcbutilcursor,
+  libxkbfile,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXrandr,
+  libXrender,
+  libXtst,
+  makeWrapper,
+  ncurses5,
+  nspr,
+  nss_latest,
+  pciutils,
+  pkgsi686Linux,
+  ps,
+  setxkbmap,
+  lib,
+  stdenv,
+  systemd,
+  unzip,
+  usbutils,
+  which,
+  runCommand,
+  xkeyboard_config,
+  xorg,
+  zlib,
+  makeDesktopItem,
+  tiling_wm, # if we are using a tiling wm, need to set _JAVA_AWT_WM_NONREPARENTING in wrapper
 }:
 
 let
@@ -95,95 +104,101 @@ let
         --set QT_XKB_CONFIG_ROOT "${xkeyboard_config}/share/X11/xkb" \
         ${lib.optionalString tiling_wm "--set _JAVA_AWT_WM_NONREPARENTING 1"} \
         --set FONTCONFIG_FILE ${fontsConf} \
-        --prefix PATH : "${lib.makeBinPath [
+        --prefix PATH : "${
+          lib.makeBinPath [
 
-          # Checked in studio.sh
-          coreutils
-          findutils
-          gnugrep
-          which
-          gnused
+            # Checked in studio.sh
+            coreutils
+            findutils
+            gnugrep
+            which
+            gnused
 
-          # For Android emulator
-          file
-          glxinfo
-          pciutils
-          setxkbmap
+            # For Android emulator
+            file
+            glxinfo
+            pciutils
+            setxkbmap
 
-          # Used during setup wizard
-          gnutar
-          gzip
+            # Used during setup wizard
+            gnutar
+            gzip
 
-          # Runtime stuff
-          git
-          ps
-          usbutils
-        ]}" \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
+            # Runtime stuff
+            git
+            ps
+            usbutils
+          ]
+        }" \
+        --prefix LD_LIBRARY_PATH : "${
+          lib.makeLibraryPath [
 
-          # Crash at startup without these
-          fontconfig
-          freetype
-          libXext
-          libXi
-          libXrender
-          libXtst
+            # Crash at startup without these
+            fontconfig
+            freetype
+            libXext
+            libXi
+            libXrender
+            libXtst
 
-          # No crash, but attempted to load at startup
-          e2fsprogs
+            # No crash, but attempted to load at startup
+            e2fsprogs
 
-          # Gradle wants libstdc++.so.6
-          stdenv.cc.cc.lib
-          # mksdcard wants 32 bit libstdc++.so.6
-          pkgsi686Linux.stdenv.cc.cc.lib
+            # Gradle wants libstdc++.so.6
+            stdenv.cc.cc.lib
+            # mksdcard wants 32 bit libstdc++.so.6
+            pkgsi686Linux.stdenv.cc.cc.lib
 
-          # aapt wants libz.so.1
-          zlib
-          pkgsi686Linux.zlib
-          # Support multiple monitors
-          libXrandr
+            # aapt wants libz.so.1
+            zlib
+            pkgsi686Linux.zlib
+            # Support multiple monitors
+            libXrandr
 
-          # For Android emulator
-          alsa-lib
-          dbus
-          expat
-          libbsd
-          libpulseaudio
-          libuuid
-          libX11
-          libxcb
-          libxkbcommon
-          xcbutilwm
-          xcbutilrenderutil
-          xcbutilkeysyms
-          xcbutilimage
-          xcbutilcursor
-          xorg.libICE
-          xorg.libSM
-          libxkbfile
-          libXcomposite
-          libXcursor
-          libXdamage
-          libXfixes
-          libGL
-          libdrm
-          libpng
-          nspr
-          nss_latest
-          systemd
+            # For Android emulator
+            alsa-lib
+            dbus
+            expat
+            libbsd
+            libpulseaudio
+            libuuid
+            libX11
+            libxcb
+            libxkbcommon
+            xcbutilwm
+            xcbutilrenderutil
+            xcbutilkeysyms
+            xcbutilimage
+            xcbutilcursor
+            xorg.libICE
+            xorg.libSM
+            libxkbfile
+            libXcomposite
+            libXcursor
+            libXdamage
+            libXfixes
+            libGL
+            libdrm
+            libpng
+            nspr
+            nss_latest
+            systemd
 
-          # For GTKLookAndFeel
-          gtk2
-          gnome_vfs
-          glib
-          GConf
-        ]}"
+            # For GTKLookAndFeel
+            gtk2
+            gnome_vfs
+            glib
+            GConf
+          ]
+        }"
 
       # AS launches LLDBFrontend with a custom LD_LIBRARY_PATH
-      wrapProgram $(find $out -name LLDBFrontend) --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
-        ncurses5
-        zlib
-      ]}"
+      wrapProgram $(find $out -name LLDBFrontend) --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          ncurses5
+          zlib
+        ]
+      }"
     '';
   };
 
@@ -193,7 +208,10 @@ let
     icon = pname;
     desktopName = "Android Studio (${channel} channel)";
     comment = "The official Android IDE";
-    categories = [ "Development" "IDE" ];
+    categories = [
+      "Development"
+      "IDE"
+    ];
     startupNotify = true;
     startupWMClass = "jetbrains-studio";
   };
@@ -207,15 +225,14 @@ let
       ncurses5
 
       # Flutter can only search for certs Fedora-way.
-      (runCommand "fedoracert" {}
-        ''
+      (runCommand "fedoracert" { } ''
         mkdir -p $out/etc/pki/tls/
         ln -s ${cacert}/etc/ssl/certs $out/etc/pki/tls/certs
-        '')
+      '')
     ];
   };
-in runCommand
-  drvName
+in
+runCommand drvName
   {
     startScript = ''
       #!${bash}/bin/bash
@@ -232,10 +249,15 @@ in runCommand
         Android Studio is the official IDE for Android app development, based on
         IntelliJ IDEA.
       '';
-      homepage = if channel == "stable"
-        then "https://developer.android.com/studio/index.html"
-        else "https://developer.android.com/studio/preview/index.html";
-      license = with licenses; [ asl20 unfree ]; # The code is under Apache-2.0, but:
+      homepage =
+        if channel == "stable" then
+          "https://developer.android.com/studio/index.html"
+        else
+          "https://developer.android.com/studio/preview/index.html";
+      license = with licenses; [
+        asl20
+        unfree
+      ]; # The code is under Apache-2.0, but:
       # If one selects Help -> Licenses in Android Studio, the dialog shows the following:
       # "Android Studio includes proprietary code subject to separate license,
       # including JetBrains CLion(R) (www.jetbrains.com/clion) and IntelliJ(R)
@@ -244,12 +266,15 @@ in runCommand
       # binaries are also distributed as proprietary software (unlike the
       # source-code itself).
       platforms = [ "x86_64-linux" ];
-      maintainers = with maintainers; rec {
-        stable = [ alapshin ];
-        beta = [ alapshin ];
-        canary = [ alapshin ];
-        dev = canary;
-      }."${channel}";
+      maintainers =
+        with maintainers;
+        rec {
+          stable = [ alapshin ];
+          beta = [ alapshin ];
+          canary = [ alapshin ];
+          dev = canary;
+        }
+        ."${channel}";
       mainProgram = pname;
     };
   }

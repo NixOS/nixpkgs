@@ -1,34 +1,35 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, kdoctools
-, wrapGAppsHook3
-, kconfig
-, kcrash
-, kinit
-, kpmcore
-, polkit-qt
-, cryptsetup
-, lvm2
-, mdadm
-, smartmontools
-, systemdMinimal
-, util-linux
-, btrfs-progs
-, dosfstools
-, e2fsprogs
-, exfat
-, f2fs-tools
-, fatresize
-, hfsprogs
-, jfsutils
-, nilfs-utils
-, ntfs3g
-, reiser4progs
-, reiserfsprogs
-, udftools
-, xfsprogs
-, zfs
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  wrapGAppsHook3,
+  kconfig,
+  kcrash,
+  kinit,
+  kpmcore,
+  polkit-qt,
+  cryptsetup,
+  lvm2,
+  mdadm,
+  smartmontools,
+  systemdMinimal,
+  util-linux,
+  btrfs-progs,
+  dosfstools,
+  e2fsprogs,
+  exfat,
+  f2fs-tools,
+  fatresize,
+  hfsprogs,
+  jfsutils,
+  nilfs-utils,
+  ntfs3g,
+  reiser4progs,
+  reiserfsprogs,
+  udftools,
+  xfsprogs,
+  zfs,
 }:
 
 let
@@ -67,9 +68,19 @@ in
 mkDerivation {
   pname = "partitionmanager";
 
-  nativeBuildInputs = [ extra-cmake-modules kdoctools wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    kdoctools
+    wrapGAppsHook3
+  ];
 
-  propagatedBuildInputs = [ kconfig kcrash kinit kpmcore polkit-qt ];
+  propagatedBuildInputs = [
+    kconfig
+    kcrash
+    kinit
+    kpmcore
+    polkit-qt
+  ];
 
   dontWrapGApps = true;
   preFixup = ''
@@ -92,9 +103,18 @@ mkDerivation {
 
       To install on NixOS, use the option `programs.partition-manager.enable = true`.
     '';
-    license = with licenses; [ cc-by-40 cc0 gpl3Plus lgpl3Plus mit ];
+    license = with licenses; [
+      cc-by-40
+      cc0
+      gpl3Plus
+      lgpl3Plus
+      mit
+    ];
     homepage = "https://www.kde.org/applications/system/kdepartitionmanager/";
-    maintainers = with maintainers; [ peterhoeg oxalica ];
+    maintainers = with maintainers; [
+      peterhoeg
+      oxalica
+    ];
     mainProgram = "partitionmanager";
   };
 }

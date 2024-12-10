@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, cmark
-, darwin
-, git
-, libssh2
-, lua5_4
-, hunspell
-, ninja
-, openssl
-, pkg-config
-, qtbase
-, qttools
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  cmark,
+  darwin,
+  git,
+  libssh2,
+  lua5_4,
+  hunspell,
+  ninja,
+  openssl,
+  pkg-config,
+  qtbase,
+  qttools,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,19 +49,24 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    cmark
-    git
-    hunspell
-    libssh2
-    lua5_4
-    openssl
-    qtbase
-    qttools
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    CoreFoundation
-    Security
-  ]);
+  buildInputs =
+    [
+      cmark
+      git
+      hunspell
+      libssh2
+      lua5_4
+      openssl
+      qtbase
+      qttools
+    ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        CoreFoundation
+        Security
+      ]
+    );
 
   postInstall = ''
     # Those are not program libs, just some Qt5 libs that the build system leaks for some reason

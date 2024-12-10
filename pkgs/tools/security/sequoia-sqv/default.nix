@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitLab
-, nettle
-, nix-update-script
-, rustPlatform
-, pkg-config
-, installShellFiles
+{
+  lib,
+  fetchFromGitLab,
+  nettle,
+  nix-update-script,
+  rustPlatform,
+  pkg-config,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,7 +33,8 @@ rustPlatform.buildRustPackage rec {
   ];
   # Otherwise, the shell completion files are not built
   cargoBuildFlags = [
-    "--package" "sequoia-sqv"
+    "--package"
+    "sequoia-sqv"
   ];
   # Use a predictable target directory, to access it when installing shell
   # completion files.

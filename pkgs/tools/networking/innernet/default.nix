@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, sqlite
-, installShellFiles
-, Security
-, libiconv
-, innernet
-, testers
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  sqlite,
+  installShellFiles,
+  Security,
+  libiconv,
+  innernet,
+  testers,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,26 +29,36 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs = [
-    sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-    libiconv
-  ];
+  buildInputs =
+    [
+      sqlite
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      Security
+      libiconv
+    ];
 
-  postInstall = ''
-    installManPage doc/innernet-server.8.gz
-    installManPage doc/innernet.8.gz
-    installShellCompletion doc/innernet.completions.{bash,fish,zsh}
-    installShellCompletion doc/innernet-server.completions.{bash,fish,zsh}
-  '' + (lib.optionalString stdenv.isLinux ''
-    find . -regex '.*\.\(target\|service\)' | xargs install -Dt $out/lib/systemd/system
-    find $out/lib/systemd/system -type f | xargs sed -i "s|/usr/bin/innernet|$out/bin/innernet|"
-  '');
+  postInstall =
+    ''
+      installManPage doc/innernet-server.8.gz
+      installManPage doc/innernet.8.gz
+      installShellCompletion doc/innernet.completions.{bash,fish,zsh}
+      installShellCompletion doc/innernet-server.completions.{bash,fish,zsh}
+    ''
+    + (lib.optionalString stdenv.isLinux ''
+      find . -regex '.*\.\(target\|service\)' | xargs install -Dt $out/lib/systemd/system
+      find $out/lib/systemd/system -type f | xargs sed -i "s|/usr/bin/innernet|$out/bin/innernet|"
+    '');
 
   passthru.tests = {
-    serverVersion = testers.testVersion { package = innernet; command = "innernet-server --version"; };
-    version = testers.testVersion { package = innernet; command = "innernet --version"; };
+    serverVersion = testers.testVersion {
+      package = innernet;
+      command = "innernet-server --version";
+    };
+    version = testers.testVersion {
+      package = innernet;
+      command = "innernet --version";
+    };
   };
 
   meta = with lib; {
@@ -55,6 +66,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/tonarino/innernet";
     changelog = "https://github.com/tonarino/innernet/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ tomberek _0x4A6F ];
+    maintainers = with maintainers; [
+      tomberek
+      _0x4A6F
+    ];
   };
 }

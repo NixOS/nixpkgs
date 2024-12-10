@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchgit
-, autoreconfHook
-, pkg-config
-, fltk13
-, libsndfile
-, gettext
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  fltk13,
+  libsndfile,
+  gettext,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

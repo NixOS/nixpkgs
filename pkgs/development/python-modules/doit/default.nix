@@ -30,11 +30,14 @@ let
       hash = "sha256-cdB8zJUUyyL+WdmJmVd2ZeqrV+FvZE0EM2rgtLriNLw=";
     };
 
-    propagatedBuildInputs = [
-      cloudpickle
-      importlib-metadata
-      toml
-    ] ++ lib.optional stdenv.isLinux pyinotify ++ lib.optional stdenv.isDarwin macfsevents;
+    propagatedBuildInputs =
+      [
+        cloudpickle
+        importlib-metadata
+        toml
+      ]
+      ++ lib.optional stdenv.isLinux pyinotify
+      ++ lib.optional stdenv.isDarwin macfsevents;
 
     nativeCheckInputs = [
       configclass

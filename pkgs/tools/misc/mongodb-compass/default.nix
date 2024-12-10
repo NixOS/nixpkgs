@@ -1,35 +1,35 @@
 {
-alsa-lib,
-at-spi2-atk,
-at-spi2-core,
-atk,
-cairo,
-cups,
-curl,
-dbus,
-dpkg,
-expat,
-fetchurl,
-fontconfig,
-freetype,
-gdk-pixbuf,
-glib,
-gtk3,
-lib,
-libdrm,
-libnotify,
-libsecret,
-libuuid,
-libxcb,
-libxkbcommon,
-mesa,
-nspr,
-nss,
-pango,
-stdenv,
-systemd,
-wrapGAppsHook3,
-xorg,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  curl,
+  dbus,
+  dpkg,
+  expat,
+  fetchurl,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  lib,
+  libdrm,
+  libnotify,
+  libsecret,
+  libuuid,
+  libxcb,
+  libxkbcommon,
+  mesa,
+  nspr,
+  nss,
+  pango,
+  stdenv,
+  systemd,
+  wrapGAppsHook3,
+  xorg,
 }:
 
 let
@@ -86,16 +86,21 @@ let
       }
     else
       throw "MongoDB compass is not supported on ${stdenv.hostPlatform.system}";
-      # NOTE While MongoDB Compass is available to darwin, I do not have resources to test it
-      # Feel free to make a PR adding support if desired
+  # NOTE While MongoDB Compass is available to darwin, I do not have resources to test it
+  # Feel free to make a PR adding support if desired
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "mongodb-compass";
   inherit version;
 
   inherit src;
 
-  buildInputs = [ dpkg wrapGAppsHook3 gtk3 ];
+  buildInputs = [
+    dpkg
+    wrapGAppsHook3
+    gtk3
+  ];
   dontUnpack = true;
 
   buildCommand = ''

@@ -3,12 +3,14 @@
   lib,
   pkgs,
   ...
-}: let
+}:
+let
   cfg = config.services.invidious-router;
-  settingsFormat = pkgs.formats.yaml {};
+  settingsFormat = pkgs.formats.yaml { };
   configFile = settingsFormat.generate "config.yaml" cfg.settings;
-in {
-  meta.maintainers = [lib.maintainers.s1ls];
+in
+{
+  meta.maintainers = [ lib.maintainers.s1ls ];
 
   options.services.invidious-router = {
     enable = lib.mkEnableOption "the invidious-router service";
@@ -89,7 +91,7 @@ in {
       };
       extraDomains = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         description = ''
           Additional domains to serve invidious-router on.
         '';
@@ -98,7 +100,7 @@ in {
   };
   config = lib.mkIf cfg.enable {
     systemd.services.invidious-router = {
-      wantedBy = ["multi-user.target"];
+      wantedBy = [ "multi-user.target" ];
       serviceConfig = {
         Restart = "on-failure";
         ExecStart = "${lib.getExe cfg.package} --configfile ${configFile}";

@@ -1,16 +1,17 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, installShellFiles
-, bzip2
-, openssl
-, xz
-, zstd
-, stdenv
-, darwin
-, testers
-, espup
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  installShellFiles,
+  bzip2,
+  openssl,
+  xz,
+  zstd,
+  stdenv,
+  darwin,
+  testers,
+  espup,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,16 +32,18 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs = [
-    bzip2
-    openssl
-    xz
-    zstd
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      bzip2
+      openssl
+      xz
+      zstd
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.CoreFoundation
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -70,8 +73,14 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Tool for installing and maintaining Espressif Rust ecosystem.";
     homepage = "https://github.com/esp-rs/espup/";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ knightpp beeb ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+      knightpp
+      beeb
+    ];
     mainProgram = "espup";
   };
 }

@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, stdenv
-, darwin
-, makeWrapper
-, typst
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  stdenv,
+  darwin,
+  makeWrapper,
+  typst,
 }:
 
 rustPlatform.buildRustPackage rec {

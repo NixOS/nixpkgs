@@ -28,13 +28,15 @@ buildPythonPackage rec {
     hash = "sha256-h4Rv5xOWSJSv0nLbosviz5EiF/IsZO5wzBel9YRd0Bg=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "versioneer[toml]==0.28" "versioneer[toml]"
-  '' + lib.optionalString (!pythonOlder "3.12") ''
-    substituteInPlace setup.py \
-      --replace-fail "distutils" "setuptools._distutils"
-  '';
+  postPatch =
+    ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "versioneer[toml]==0.28" "versioneer[toml]"
+    ''
+    + lib.optionalString (!pythonOlder "3.12") ''
+      substituteInPlace setup.py \
+        --replace-fail "distutils" "setuptools._distutils"
+    '';
 
   nativeBuildInputs = [
     cython

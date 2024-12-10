@@ -1,4 +1,8 @@
-{ stdenv, fetchurl, mecab-nodic }:
+{
+  stdenv,
+  fetchurl,
+  mecab-nodic,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mecab-ipadic";

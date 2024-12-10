@@ -1,38 +1,39 @@
-{ withGUI ? true
-, stdenv
-, lib
-, fetchFromGitHub
-, wrapQtAppsHook
+{
+  withGUI ? true,
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  wrapQtAppsHook,
 
-, cmake
-, openssl
-, pcre
-, util-linux
-, libselinux
-, libsepol
-, pkg-config
-, gdk-pixbuf
-, libnotify
-, qttools
-, libICE
-, libSM
-, libX11
-, libxkbfile
-, libXi
-, libXtst
-, libXrandr
-, libXinerama
-, xkeyboardconfig
-, xinput
-, avahi-compat
+  cmake,
+  openssl,
+  pcre,
+  util-linux,
+  libselinux,
+  libsepol,
+  pkg-config,
+  gdk-pixbuf,
+  libnotify,
+  qttools,
+  libICE,
+  libSM,
+  libX11,
+  libxkbfile,
+  libXi,
+  libXtst,
+  libXrandr,
+  libXinerama,
+  xkeyboardconfig,
+  xinput,
+  avahi-compat,
 
   # MacOS / darwin
-, ApplicationServices
-, Carbon
-, Cocoa
-, CoreServices
-, ScreenSaver
-, UserNotifications
+  ApplicationServices,
+  Carbon,
+  Cocoa,
+  CoreServices,
+  ScreenSaver,
+  UserNotifications,
 }:
 
 stdenv.mkDerivation rec {
@@ -52,86 +53,102 @@ stdenv.mkDerivation rec {
     ./darwin-non-static-openssl.patch
   ];
 
-  postPatch = ''
-    substituteInPlace src/gui/src/SslCertificate.cpp \
-      --replace 'kUnixOpenSslCommand[] = "openssl";' 'kUnixOpenSslCommand[] = "${openssl}/bin/openssl";'
-  '' + lib.optionalString stdenv.isLinux ''
-    substituteInPlace src/lib/synergy/unix/AppUtilUnix.cpp \
-      --replace "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
-  '';
+  postPatch =
+    ''
+      substituteInPlace src/gui/src/SslCertificate.cpp \
+        --replace 'kUnixOpenSslCommand[] = "openssl";' 'kUnixOpenSslCommand[] = "${openssl}/bin/openssl";'
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      substituteInPlace src/lib/synergy/unix/AppUtilUnix.cpp \
+        --replace "/usr/share/X11/xkb/rules/evdev.xml" "${xkeyboardconfig}/share/X11/xkb/rules/evdev.xml"
+    '';
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ] ++ lib.optional withGUI wrapQtAppsHook;
 
-  buildInputs = [
-    qttools # Used for translations even when not building the GUI
-    openssl
-    pcre
-  ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices
-    Carbon
-    Cocoa
-    CoreServices
-    ScreenSaver
-    UserNotifications
-  ] ++ lib.optionals stdenv.isLinux [
-    util-linux
-    libselinux
-    libsepol
-    libICE
-    libSM
-    libX11
-    libXi
-    libXtst
-    libXrandr
-    libXinerama
-    libxkbfile
-    xinput
-    avahi-compat
-    gdk-pixbuf
-    libnotify
-  ];
+  buildInputs =
+    [
+      qttools # Used for translations even when not building the GUI
+      openssl
+      pcre
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      ApplicationServices
+      Carbon
+      Cocoa
+      CoreServices
+      ScreenSaver
+      UserNotifications
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      util-linux
+      libselinux
+      libsepol
+      libICE
+      libSM
+      libX11
+      libXi
+      libXtst
+      libXrandr
+      libXinerama
+      libxkbfile
+      xinput
+      avahi-compat
+      gdk-pixbuf
+      libnotify
+    ];
 
   # Silences many warnings
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-Wno-inconsistent-missing-override";
 
-  cmakeFlags = lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF"
+  cmakeFlags =
+    lib.optional (!withGUI) "-DSYNERGY_BUILD_LEGACY_GUI=OFF"
     # NSFilenamesPboardType is deprecated in 10.14+
-    ++ lib.optional stdenv.isDarwin "-DCMAKE_OSX_DEPLOYMENT_TARGET=${if stdenv.isAarch64 then "10.13" else stdenv.hostPlatform.darwinSdkVersion}";
+    ++ lib.optional stdenv.isDarwin "-DCMAKE_OSX_DEPLOYMENT_TARGET=${
+      if stdenv.isAarch64 then "10.13" else stdenv.hostPlatform.darwinSdkVersion
+    }";
 
   doCheck = true;
 
-  checkPhase = ''
-    runHook preCheck
-  '' + lib.optionalString stdenv.isDarwin ''
-    # filter out tests failing with sandboxing on darwin
-    export GTEST_FILTER=-ServerConfigTests.serverconfig_will_deem_equal_configs_with_same_cell_names:NetworkAddress.hostname_valid_parsing
-  '' + ''
-    bin/unittests
-    runHook postCheck
-  '';
+  checkPhase =
+    ''
+      runHook preCheck
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      # filter out tests failing with sandboxing on darwin
+      export GTEST_FILTER=-ServerConfigTests.serverconfig_will_deem_equal_configs_with_same_cell_names:NetworkAddress.hostname_valid_parsing
+    ''
+    + ''
+      bin/unittests
+      runHook postCheck
+    '';
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    mkdir -p $out/bin
-    cp bin/{synergyc,synergys,synergyd,syntool} $out/bin/
-  '' + lib.optionalString withGUI ''
-    cp bin/synergy $out/bin/
-  '' + lib.optionalString stdenv.isLinux ''
-    mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
-    cp ../res/synergy.svg $out/share/icons/hicolor/scalable/apps/
-    substitute ../res/synergy.desktop $out/share/applications/synergy.desktop \
-      --replace "/usr/bin" "$out/bin"
-  '' + lib.optionalString (stdenv.isDarwin && withGUI) ''
-    mkdir -p $out/Applications
-    cp -r bundle/Synergy.app $out/Applications
-    ln -s $out/bin $out/Applications/Synergy.app/Contents/MacOS
-  '' + ''
-    runHook postInstall
-  '';
+      mkdir -p $out/bin
+      cp bin/{synergyc,synergys,synergyd,syntool} $out/bin/
+    ''
+    + lib.optionalString withGUI ''
+      cp bin/synergy $out/bin/
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      mkdir -p $out/share/{applications,icons/hicolor/scalable/apps}
+      cp ../res/synergy.svg $out/share/icons/hicolor/scalable/apps/
+      substitute ../res/synergy.desktop $out/share/applications/synergy.desktop \
+        --replace "/usr/bin" "$out/bin"
+    ''
+    + lib.optionalString (stdenv.isDarwin && withGUI) ''
+      mkdir -p $out/Applications
+      cp -r bundle/Synergy.app $out/Applications
+      ln -s $out/bin $out/Applications/Synergy.app/Contents/MacOS
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   dontWrapQtApps = lib.optional (!withGUI) true;
 

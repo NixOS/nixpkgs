@@ -1,20 +1,30 @@
-{ stdenv
-, lib
-, unzip
-, util-linux
-, libusb1
-, evdi
-, makeBinaryWrapper
-, requireFile
+{
+  stdenv,
+  lib,
+  unzip,
+  util-linux,
+  libusb1,
+  evdi,
+  makeBinaryWrapper,
+  requireFile,
 }:
 
 let
   bins =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "x64-ubuntu-1604"
-    else if stdenv.hostPlatform.system == "i686-linux" then "x86-ubuntu-1604"
-    else if stdenv.hostPlatform.system == "aarch64-linux" then "aarch64-linux-gnu"
-    else throw "Unsupported architecture";
-  libPath = lib.makeLibraryPath [ stdenv.cc.cc util-linux libusb1 evdi ];
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      "x64-ubuntu-1604"
+    else if stdenv.hostPlatform.system == "i686-linux" then
+      "x86-ubuntu-1604"
+    else if stdenv.hostPlatform.system == "aarch64-linux" then
+      "aarch64-linux-gnu"
+    else
+      throw "Unsupported architecture";
+  libPath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    util-linux
+    libusb1
+    evdi
+  ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "displaylink";
@@ -75,11 +85,15 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "DisplayLink DL-5xxx, DL-41xx and DL-3x00 Driver for Linux";
     homepage = "https://www.displaylink.com/";
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
     license = licenses.unfree;
     mainProgram = "DisplayLinkManager";
     maintainers = with maintainers; [ abbradar ];
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 })

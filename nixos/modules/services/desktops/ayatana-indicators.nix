@@ -1,7 +1,8 @@
-{ config
-, pkgs
-, lib
-, ...
+{
+  config,
+  pkgs,
+  lib,
+  ...
 }:
 
 let
@@ -40,11 +41,9 @@ in
     # libayatana-common's ayatana-indicators.target with explicit Wants & Before to bring up requested indicator services
     systemd.user.targets."ayatana-indicators" =
       let
-        indicatorServices = lib.lists.flatten
-          (map
-            (pkg:
-              (map (ind: "${ind}.service") pkg.passthru.ayatana-indicators))
-            cfg.packages);
+        indicatorServices = lib.lists.flatten (
+          map (pkg: (map (ind: "${ind}.service") pkg.passthru.ayatana-indicators)) cfg.packages
+        );
       in
       {
         description = "Target representing the lifecycle of the Ayatana Indicators. Each indicator should be bound to it in its individual service file";

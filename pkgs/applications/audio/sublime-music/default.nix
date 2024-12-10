@@ -1,17 +1,18 @@
-{ lib
-, fetchFromGitHub
-, python3
-, gobject-introspection
-, gtk3
-, pango
-, wrapGAppsHook3
-, chromecastSupport ? false
-, serverSupport ? false
-, keyringSupport ? true
-, notifySupport ? true
-, libnotify
-, networkSupport ? true
-, networkmanager
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  gobject-introspection,
+  gtk3,
+  pango,
+  wrapGAppsHook3,
+  chromecastSupport ? false,
+  serverSupport ? false,
+  keyringSupport ? true,
+  notifySupport ? true,
+  libnotify,
+  networkSupport ? true,
+  networkmanager,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -43,31 +44,32 @@ python3.pkgs.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    gtk3
-    pango
-  ]
-  ++ lib.optional notifySupport libnotify
-  ++ lib.optional networkSupport networkmanager
-  ;
+  buildInputs =
+    [
+      gtk3
+      pango
+    ]
+    ++ lib.optional notifySupport libnotify
+    ++ lib.optional networkSupport networkmanager;
 
-  propagatedBuildInputs = with python3.pkgs; [
-    bleach
-    bottle
-    dataclasses-json
-    deepdiff
-    levenshtein
-    mpv
-    peewee
-    pychromecast
-    pygobject3
-    python-dateutil
-    requests
-    semver
-    thefuzz
-  ]
-  ++ lib.optional keyringSupport keyring
-  ;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      bleach
+      bottle
+      dataclasses-json
+      deepdiff
+      levenshtein
+      mpv
+      peewee
+      pychromecast
+      pygobject3
+      python-dateutil
+      requests
+      semver
+      thefuzz
+    ]
+    ++ lib.optional keyringSupport keyring;
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
@@ -97,7 +99,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://sublimemusic.app/";
     changelog = "https://github.com/sublime-music/sublime-music/blob/v${version}/CHANGELOG.rst";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ albakham sumnerevans ];
+    maintainers = with maintainers; [
+      albakham
+      sumnerevans
+    ];
     mainProgram = "sublime-music";
   };
 }

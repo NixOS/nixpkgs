@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+}:
 rustPlatform.buildRustPackage {
   pname = "loco-cli";
   version = "0.2.6";

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, libapparmor
-, which
-, xdg-dbus-proxy
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  libapparmor,
+  which,
+  xdg-dbus-proxy,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {

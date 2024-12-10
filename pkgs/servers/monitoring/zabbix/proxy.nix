@@ -1,10 +1,25 @@
-{ lib, stdenv, fetchurl, pkg-config, libevent, libiconv, openssl, pcre, zlib
-, odbcSupport ? true, unixODBC
-, snmpSupport ? stdenv.buildPlatform == stdenv.hostPlatform, net-snmp
-, sshSupport ? true, libssh2
-, sqliteSupport ? false, sqlite
-, mysqlSupport ? false, libmysqlclient
-, postgresqlSupport ? false, postgresql
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libevent,
+  libiconv,
+  openssl,
+  pcre,
+  zlib,
+  odbcSupport ? true,
+  unixODBC,
+  snmpSupport ? stdenv.buildPlatform == stdenv.hostPlatform,
+  net-snmp,
+  sshSupport ? true,
+  libssh2,
+  sqliteSupport ? false,
+  sqlite,
+  mysqlSupport ? false,
+  libmysqlclient,
+  postgresqlSupport ? false,
+  postgresql,
 }:
 
 # ensure exactly one database type is selected
@@ -15,18 +30,20 @@ assert sqliteSupport -> !mysqlSupport && !postgresqlSupport;
 let
   inherit (lib) optional optionalString;
 in
-  import ./versions.nix ({ version, hash, ... }:
-    stdenv.mkDerivation {
-      pname = "zabbix-proxy";
-      inherit version;
+import ./versions.nix (
+  { version, hash, ... }:
+  stdenv.mkDerivation {
+    pname = "zabbix-proxy";
+    inherit version;
 
-      src = fetchurl {
-        url = "https://cdn.zabbix.com/zabbix/sources/stable/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
-        inherit hash;
-      };
+    src = fetchurl {
+      url = "https://cdn.zabbix.com/zabbix/sources/stable/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
+      inherit hash;
+    };
 
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [
+    nativeBuildInputs = [ pkg-config ];
+    buildInputs =
+      [
         libevent
         libiconv
         openssl
@@ -40,7 +57,8 @@ in
       ++ optional mysqlSupport libmysqlclient
       ++ optional postgresqlSupport postgresql;
 
-      configureFlags = [
+    configureFlags =
+      [
         "--enable-ipv6"
         "--enable-proxy"
         "--with-iconv"
@@ -56,33 +74,38 @@ in
       ++ optional mysqlSupport "--with-mysql"
       ++ optional postgresqlSupport "--with-postgresql";
 
-      prePatch = ''
-        find database -name data.sql -exec sed -i 's|/usr/bin/||g' {} +
-      '';
+    prePatch = ''
+      find database -name data.sql -exec sed -i 's|/usr/bin/||g' {} +
+    '';
 
-      makeFlags = [
-        "AR:=$(AR)"
-        "RANLIB:=$(RANLIB)"
-      ];
+    makeFlags = [
+      "AR:=$(AR)"
+      "RANLIB:=$(RANLIB)"
+    ];
 
-      postInstall = ''
+    postInstall =
+      ''
         mkdir -p $out/share/zabbix/database/
-      '' + optionalString sqliteSupport ''
+      ''
+      + optionalString sqliteSupport ''
         mkdir -p $out/share/zabbix/database/sqlite3
         cp -prvd database/sqlite3/schema.sql $out/share/zabbix/database/sqlite3/
-      '' + optionalString mysqlSupport ''
+      ''
+      + optionalString mysqlSupport ''
         mkdir -p $out/share/zabbix/database/mysql
         cp -prvd database/mysql/schema.sql $out/share/zabbix/database/mysql/
-      '' + optionalString postgresqlSupport ''
+      ''
+      + optionalString postgresqlSupport ''
         mkdir -p $out/share/zabbix/database/postgresql
         cp -prvd database/postgresql/schema.sql $out/share/zabbix/database/postgresql/
       '';
 
-      meta = with lib; {
-        description = "An enterprise-class open source distributed monitoring solution (client-server proxy)";
-        homepage = "https://www.zabbix.com/";
-        license = licenses.gpl2;
-        maintainers = [ maintainers.mmahut ];
-        platforms = platforms.linux;
-      };
-    })
+    meta = with lib; {
+      description = "An enterprise-class open source distributed monitoring solution (client-server proxy)";
+      homepage = "https://www.zabbix.com/";
+      license = licenses.gpl2;
+      maintainers = [ maintainers.mmahut ];
+      platforms = platforms.linux;
+    };
+  }
+)

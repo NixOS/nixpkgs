@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gmp
-, flint
-, mpfr
-, libmpc
-, withShared ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gmp,
+  flint,
+  mpfr,
+  libmpc,
+  withShared ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,20 +23,28 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ gmp flint mpfr libmpc ];
-
-  cmakeFlags = [
-    "-DWITH_FLINT=ON"
-    "-DINTEGER_CLASS=flint"
-    "-DWITH_SYMENGINE_THREAD_SAFE=yes"
-    "-DWITH_MPC=yes"
-    "-DBUILD_FOR_DISTRIBUTION=yes"
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
-    # error: unrecognized instruction mnemonic, did you mean: bit, cnt, hint, ins, not?
-    "-DBUILD_TESTS=OFF"
-  ] ++ lib.optionals withShared [
-    "-DBUILD_SHARED_LIBS=ON"
+  buildInputs = [
+    gmp
+    flint
+    mpfr
+    libmpc
   ];
+
+  cmakeFlags =
+    [
+      "-DWITH_FLINT=ON"
+      "-DINTEGER_CLASS=flint"
+      "-DWITH_SYMENGINE_THREAD_SAFE=yes"
+      "-DWITH_MPC=yes"
+      "-DBUILD_FOR_DISTRIBUTION=yes"
+    ]
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+      # error: unrecognized instruction mnemonic, did you mean: bit, cnt, hint, ins, not?
+      "-DBUILD_TESTS=OFF"
+    ]
+    ++ lib.optionals withShared [
+      "-DBUILD_SHARED_LIBS=ON"
+    ];
 
   doCheck = true;
 

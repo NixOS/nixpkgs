@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, wrapGAppsHook3
-, pkg-config
-, gtk
-, libxml2
-, enchant
-, gucharmap
-, python3
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  wrapGAppsHook3,
+  pkg-config,
+  gtk,
+  libxml2,
+  enchant,
+  gucharmap,
+  python3,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YUPlHGtVedWW86moXg8NhYDJ9Y+ChXWxGYgODKHZQbw=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
   buildInputs = [
     gnome.adwaita-icon-theme
     gtk

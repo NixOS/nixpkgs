@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, gitUpdater
-, fetchFromGitea
-, pkg-config
-, meson
-, ninja
-, scdoc
-, wayland-scanner
-, fontconfig
-, freetype
-, pixman
-, libpng
-, tllist
-, wayland
-, wayland-protocols
-, dbus
-, fcft
+{
+  stdenv,
+  lib,
+  gitUpdater,
+  fetchFromGitea,
+  pkg-config,
+  meson,
+  ninja,
+  scdoc,
+  wayland-scanner,
+  fontconfig,
+  freetype,
+  pixman,
+  libpng,
+  tllist,
+  wayland,
+  wayland-protocols,
+  dbus,
+  fcft,
 }:
 
 stdenv.mkDerivation rec {
@@ -58,7 +59,10 @@ stdenv.mkDerivation rec {
   meta = {
     homepage = "https://codeberg.org/dnkl/fnott";
     description = "Keyboard driven and lightweight Wayland notification daemon for wlroots-based compositors";
-    license = with lib.licenses; [ mit zlib ];
+    license = with lib.licenses; [
+      mit
+      zlib
+    ];
     maintainers = with lib.maintainers; [ polykernel ];
     mainProgram = "fnott";
     platforms = lib.platforms.linux;

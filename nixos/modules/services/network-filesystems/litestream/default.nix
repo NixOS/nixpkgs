@@ -1,10 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.litestream;
-  settingsFormat = pkgs.formats.yaml {};
+  settingsFormat = pkgs.formats.yaml { };
 in
 {
   options.services.litestream = {
@@ -87,7 +92,7 @@ in
       group = "litestream";
       isSystemUser = true;
     };
-    users.groups.litestream = {};
+    users.groups.litestream = { };
   };
 
   meta.doc = ./default.md;

@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, python3
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  python3,
 }:
 
 stdenv.mkDerivation rec {

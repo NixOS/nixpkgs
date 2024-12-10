@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, libuv
-, coreutils-full
-, pkg-config
-, gnugrep
-, gnused
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  libuv,
+  coreutils-full,
+  pkg-config,
+  gnugrep,
+  gnused,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +41,10 @@ stdenv.mkDerivation rec {
     description = "DPS8M: GE / Honeywell / Bull DPS‑8/M mainframe simulator";
     homepage = "https://gitlab.com/dps8m/dps8m";
     license = licenses.icu;
-    maintainers = with maintainers; [ matthewcroughan sarcasticadmin ];
+    maintainers = with maintainers; [
+      matthewcroughan
+      sarcasticadmin
+    ];
     mainProgram = "dps8m";
     platforms = platforms.all;
   };

@@ -1,28 +1,33 @@
-{ lib
-, _experimental-update-script-combinators
-, curl
-, darwin
-, duktape
-, fetchFromGitHub
-, gi-docgen
-, gitUpdater
-, glib
-, gobject-introspection
-, gsettings-desktop-schemas
-, makeHardcodeGsettingsPatch
-, meson
-, ninja
-, pkg-config
-, stdenv
-, substituteAll
-, vala
+{
+  lib,
+  _experimental-update-script-combinators,
+  curl,
+  darwin,
+  duktape,
+  fetchFromGitHub,
+  gi-docgen,
+  gitUpdater,
+  glib,
+  gobject-introspection,
+  gsettings-desktop-schemas,
+  makeHardcodeGsettingsPatch,
+  meson,
+  ninja,
+  pkg-config,
+  stdenv,
+  substituteAll,
+  vala,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libproxy";
   version = "0.5.6";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitHub {
     owner = "libproxy";
@@ -31,20 +36,21 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2uDlKjxzrKlyZKV0BSUDzmLSo2voJKDerbZZkamgNYk=";
   };
 
-  patches = [
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    # Disable schema presence detection, it would fail because it cannot be autopatched,
-    # and it will be hardcoded by the next patch anyway.
-    ./skip-gsettings-detection.patch
+  patches =
+    [
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      # Disable schema presence detection, it would fail because it cannot be autopatched,
+      # and it will be hardcoded by the next patch anyway.
+      ./skip-gsettings-detection.patch
 
-    # Hardcode path to Settings schemas for GNOME & related desktops.
-    # Otherwise every app using libproxy would need to be wrapped individually.
-    (substituteAll {
-      src = ./hardcode-gsettings.patch;
-      gds = glib.getSchemaPath gsettings-desktop-schemas;
-    })
-  ];
+      # Hardcode path to Settings schemas for GNOME & related desktops.
+      # Otherwise every app using libproxy would need to be wrapped individually.
+      (substituteAll {
+        src = ./hardcode-gsettings.patch;
+        gds = glib.getSchemaPath gsettings-desktop-schemas;
+      })
+    ];
 
   postPatch = ''
     # Fix running script that will try to install git hooks.
@@ -68,23 +74,31 @@ stdenv.mkDerivation (finalAttrs: {
     vala
   ];
 
-  buildInputs = [
-    curl
-    duktape
-  ] ++ (if stdenv.hostPlatform.isDarwin then (with darwin.apple_sdk.frameworks; [
-    Foundation
-  ]) else [
-    glib
-    gsettings-desktop-schemas
-  ]);
+  buildInputs =
+    [
+      curl
+      duktape
+    ]
+    ++ (
+      if stdenv.hostPlatform.isDarwin then
+        (with darwin.apple_sdk.frameworks; [
+          Foundation
+        ])
+      else
+        [
+          glib
+          gsettings-desktop-schemas
+        ]
+    );
 
-  mesonFlags = [
-    # Prevent installing commit hook.
-    "-Drelease=true"
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-Dconfig-gnome=false"
-  ];
+  mesonFlags =
+    [
+      # Prevent installing commit hook.
+      "-Drelease=true"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-Dconfig-gnome=false"
+    ];
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

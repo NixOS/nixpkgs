@@ -86,16 +86,19 @@ buildPythonPackage rec {
     ]
     ++ uvicorn.optional-dependencies.standard;
 
-  nativeCheckInputs = [
-    dirty-equals
-    flask
-    passlib
-    pytestCheckHook
-    pytest-asyncio
-    python-jose
-    trio
-    sqlalchemy
-  ] ++ passthru.optional-dependencies.all ++ python-jose.optional-dependencies.cryptography;
+  nativeCheckInputs =
+    [
+      dirty-equals
+      flask
+      passlib
+      pytestCheckHook
+      pytest-asyncio
+      python-jose
+      trio
+      sqlalchemy
+    ]
+    ++ passthru.optional-dependencies.all
+    ++ python-jose.optional-dependencies.cryptography;
 
   pytestFlagsArray = [
     # ignoring deprecation warnings to avoid test failure from

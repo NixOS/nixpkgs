@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, qtsvg, qtwebengine, wrapQtAppsHook, qttools }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtsvg,
+  qtwebengine,
+  wrapQtAppsHook,
+  qttools,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pageedit";
@@ -11,20 +20,30 @@ stdenv.mkDerivation rec {
     hash = "sha256-zwOSt1eyvuuqfQ1G2bCB4yj6GgixFRc2FLOgcCrdg3Q=";
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook qttools ];
-  propagatedBuildInputs = [ qtsvg qtwebengine ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+    qttools
+  ];
+  propagatedBuildInputs = [
+    qtsvg
+    qtwebengine
+  ];
   cmakeFlags = [ "-DINSTALL_BUNDLED_DICTS=0" ];
 
   installPhase =
-    if stdenv.isDarwin then ''
-      runHook preInstall
+    if stdenv.isDarwin then
+      ''
+        runHook preInstall
 
-      mkdir -p $out/Applications
-      cp -r bin/PageEdit.app $out/Applications
-      makeWrapper $out/Applications/PageEdit.app/Contents/MacOS/PageEdit $out/bin/pageedit
+        mkdir -p $out/Applications
+        cp -r bin/PageEdit.app $out/Applications
+        makeWrapper $out/Applications/PageEdit.app/Contents/MacOS/PageEdit $out/bin/pageedit
 
-      runHook postInstall
-    '' else null;
+        runHook postInstall
+      ''
+    else
+      null;
 
   meta = with lib; {
     description = "ePub XHTML Visual Editor";
