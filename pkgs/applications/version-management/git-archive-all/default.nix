@@ -1,10 +1,11 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, git
-, pytestCheckHook
-, pytest-cov-stub
-, pytest-mock
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  git,
+  pytestCheckHook,
+  pytest-cov-stub,
+  pytest-mock,
 }:
 
 buildPythonApplication rec {

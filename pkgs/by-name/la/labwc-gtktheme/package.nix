@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, gobject-introspection
-, gtk3
-, python3Packages
-, wrapGAppsHook3
-, unstableGitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  gobject-introspection,
+  gtk3,
+  python3Packages,
+  wrapGAppsHook3,
+  unstableGitUpdater,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -49,6 +50,9 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "labwc-gtktheme";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ AndersonTorres romildo ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      romildo
+    ];
   };
 }

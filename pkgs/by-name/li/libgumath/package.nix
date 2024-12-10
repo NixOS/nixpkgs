@@ -1,7 +1,9 @@
-{ lib, stdenv
-, fetchFromGitHub
-, libndtypes
-, libxnd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libndtypes,
+  libxnd,
 }:
 
 stdenv.mkDerivation {
@@ -15,7 +17,10 @@ stdenv.mkDerivation {
     sha256 = "1wprkxpmjrk369fpw8rbq51r7jvqkcndqs209y7p560cnagmsxc6";
   };
 
-  buildInputs = [ libndtypes libxnd ];
+  buildInputs = [
+    libndtypes
+    libxnd
+  ];
 
   # Override linker with cc (symlink to either gcc or clang)
   # Library expects to use cc for linking

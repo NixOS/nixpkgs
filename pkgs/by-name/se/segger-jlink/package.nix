@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, callPackage
-, autoPatchelfHook
-, udev
-, config
-, acceptLicense ? config.segger-jlink.acceptLicense or false
-, headless ? false
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchurl,
+  callPackage,
+  autoPatchelfHook,
+  udev,
+  config,
+  acceptLicense ? config.segger-jlink.acceptLicense or false,
+  headless ? false,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 let
   source = import ./source.nix;
-  supported = removeAttrs source ["version"];
+  supported = removeAttrs source [ "version" ];
 
   platform = supported.${stdenv.system} or (throw "unsupported platform ${stdenv.system}");
 
@@ -22,45 +23,50 @@ let
   url = "https://www.segger.com/downloads/jlink/JLink_Linux_V${version}_${platform.name}.tgz";
 
   src =
-    assert !acceptLicense -> throw ''
-      Use of the "SEGGER JLink Software and Documentation pack" requires the
-      acceptance of the following licenses:
+    assert
+      !acceptLicense
+      -> throw ''
+        Use of the "SEGGER JLink Software and Documentation pack" requires the
+        acceptance of the following licenses:
 
-        - SEGGER Downloads Terms of Use [1]
-        - SEGGER Software Licensing [2]
+          - SEGGER Downloads Terms of Use [1]
+          - SEGGER Software Licensing [2]
 
-      You can express acceptance by setting acceptLicense to true in your
-      configuration. Note that this is not a free license so it requires allowing
-      unfree licenses as well.
+        You can express acceptance by setting acceptLicense to true in your
+        configuration. Note that this is not a free license so it requires allowing
+        unfree licenses as well.
 
-      configuration.nix:
-        nixpkgs.config.allowUnfree = true;
-        nixpkgs.config.segger-jlink.acceptLicense = true;
+        configuration.nix:
+          nixpkgs.config.allowUnfree = true;
+          nixpkgs.config.segger-jlink.acceptLicense = true;
 
-      config.nix:
-        allowUnfree = true;
-        segger-jlink.acceptLicense = true;
+        config.nix:
+          allowUnfree = true;
+          segger-jlink.acceptLicense = true;
 
-      [1]: ${url}
-      [2]: https://www.segger.com/purchase/licensing/
-    '';
-      fetchurl {
-        inherit url;
-        inherit (platform) hash;
-        curlOpts = "--data accept_license_agreement=accepted";
-      };
+        [1]: ${url}
+        [2]: https://www.segger.com/purchase/licensing/
+      '';
+    fetchurl {
+      inherit url;
+      inherit (platform) hash;
+      curlOpts = "--data accept_license_agreement=accepted";
+    };
 
   qt4-bundled = callPackage ./qt4-bundled.nix { inherit src version; };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "segger-jlink";
   inherit src version;
 
-  nativeBuildInputs = [
-    autoPatchelfHook
-  ] ++ lib.optionals (!headless) [
-    copyDesktopItems
-  ];
+  nativeBuildInputs =
+    [
+      autoPatchelfHook
+    ]
+    ++ lib.optionals (!headless) [
+      copyDesktopItems
+    ];
 
   buildInputs = lib.optionals (!headless) [
     qt4-bundled
@@ -75,32 +81,35 @@ in stdenv.mkDerivation {
   dontBuild = true;
 
   desktopItems = lib.optionals (!headless) (
-    map (entry:
-      (makeDesktopItem {
-        name = entry;
-        exec = entry;
-        icon = "applications-utilities";
-        desktopName = entry;
-        genericName = "SEGGER ${entry}";
-        categories = [ "Development" ];
-        type = "Application";
-        terminal = false;
-        startupNotify = false;
-      })
-    ) [
-      "JFlash"
-      "JFlashLite"
-      "JFlashSPI"
-      "JLinkConfig"
-      "JLinkGDBServer"
-      "JLinkLicenseManager"
-      "JLinkRTTViewer"
-      "JLinkRegistration"
-      "JLinkRemoteServer"
-      "JLinkSWOViewer"
-      "JLinkUSBWebServer"
-      "JMem"
-    ]
+    map
+      (
+        entry:
+        (makeDesktopItem {
+          name = entry;
+          exec = entry;
+          icon = "applications-utilities";
+          desktopName = entry;
+          genericName = "SEGGER ${entry}";
+          categories = [ "Development" ];
+          type = "Application";
+          terminal = false;
+          startupNotify = false;
+        })
+      )
+      [
+        "JFlash"
+        "JFlashLite"
+        "JFlashSPI"
+        "JLinkConfig"
+        "JLinkGDBServer"
+        "JLinkLicenseManager"
+        "JLinkRTTViewer"
+        "JLinkRegistration"
+        "JLinkRemoteServer"
+        "JLinkSWOViewer"
+        "JLinkUSBWebServer"
+        "JMem"
+      ]
   );
 
   installPhase = ''

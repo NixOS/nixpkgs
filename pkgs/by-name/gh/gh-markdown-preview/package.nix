@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, gh-markdown-preview
-, testers
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  gh-markdown-preview,
+  testers,
 }:
 
 buildGoModule rec {

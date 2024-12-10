@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, patchelf, gmp }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  patchelf,
+  gmp,
+}:
 let
   dynamic-linker = stdenv.cc.bintools.dynamicLinker;
 in
@@ -34,27 +40,29 @@ stdenv.mkDerivation rec {
     make install PREFIX=$out
   '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    patchelf --set-interpreter ${dynamic-linker} $out/lib/mlton/mlton-compile
-    patchelf --set-rpath ${gmp}/lib $out/lib/mlton/mlton-compile
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --set-interpreter ${dynamic-linker} $out/lib/mlton/mlton-compile
+      patchelf --set-rpath ${gmp}/lib $out/lib/mlton/mlton-compile
 
-    for e in mllex mlnlffigen mlprof mlyacc; do
-      patchelf --set-interpreter ${dynamic-linker} $out/bin/$e
-      patchelf --set-rpath ${gmp}/lib $out/bin/$e
-    done
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool -change \
-      /opt/local/lib/libgmp.10.dylib \
-      ${gmp}/lib/libgmp.10.dylib \
-      $out/lib/mlton/mlton-compile
-
-    for e in mllex mlnlffigen mlprof mlyacc; do
+      for e in mllex mlnlffigen mlprof mlyacc; do
+        patchelf --set-interpreter ${dynamic-linker} $out/bin/$e
+        patchelf --set-rpath ${gmp}/lib $out/bin/$e
+      done
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool -change \
         /opt/local/lib/libgmp.10.dylib \
         ${gmp}/lib/libgmp.10.dylib \
-        $out/bin/$e
-    done
-  '';
+        $out/lib/mlton/mlton-compile
+
+      for e in mllex mlnlffigen mlprof mlyacc; do
+        install_name_tool -change \
+          /opt/local/lib/libgmp.10.dylib \
+          ${gmp}/lib/libgmp.10.dylib \
+          $out/bin/$e
+      done
+    '';
 
   meta = import ./meta.nix;
 }

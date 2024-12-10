@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, cmake
-, pkg-config
-, lz4
-, pugixml
-, zlib
-, zstd
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  cmake,
+  pkg-config,
+  lz4,
+  pugixml,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

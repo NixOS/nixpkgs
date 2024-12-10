@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch2
-, appstream-glib
-, cargo
-, desktop-file-utils
-, itstool
-, meson
-, ninja
-, pkg-config
-, python3
-, rustPlatform
-, rustc
-, wrapGAppsHook4
-, glib
-, gtk4
-, libadwaita
-, zbar
-, gst_all_1
-, Security
-, Foundation
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch2,
+  appstream-glib,
+  cargo,
+  desktop-file-utils,
+  itstool,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  glib,
+  gtk4,
+  libadwaita,
+  zbar,
+  gst_all_1,
+  Security,
+  Foundation,
 }:
 
 stdenv.mkDerivation rec {
@@ -67,25 +68,31 @@ stdenv.mkDerivation rec {
     rustc
   ];
 
-  buildInputs = [
-    glib
-    gtk4
-    libadwaita
-    zbar
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-bad
-  ]) ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    Foundation
-  ];
+  buildInputs =
+    [
+      glib
+      gtk4
+      libadwaita
+      zbar
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-bad
+    ])
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      Foundation
+    ];
 
   meta = {
     description = "Fast and secure file transfer";
     homepage = "https://apps.gnome.org/Warp/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ dotlambda foo-dogsquared ];
+    maintainers = with lib.maintainers; [
+      dotlambda
+      foo-dogsquared
+    ];
     platforms = lib.platforms.all;
     mainProgram = "warp";
     broken = stdenv.hostPlatform.isDarwin;

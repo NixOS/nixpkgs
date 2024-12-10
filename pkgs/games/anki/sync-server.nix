@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, rustPlatform
-, anki
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  anki,
+  darwin,
 
-, openssl
-, pkg-config
-, protobuf
+  openssl,
+  pkg-config,
+  protobuf,
 }:
 
 rustPlatform.buildRustPackage {
@@ -30,14 +31,19 @@ rustPlatform.buildRustPackage {
     "--skip=scheduler::answering::test::state_application"
   ];
 
-  nativeBuildInputs = [ protobuf pkg-config ];
-
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
+  nativeBuildInputs = [
+    protobuf
+    pkg-config
   ];
+
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   env.PROTOC = lib.getExe protobuf;
 

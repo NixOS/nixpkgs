@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, fetchurl
-, cargo
-, desktop-file-utils
-, itstool
-, meson
-, ninja
-, pkg-config
-, jq
-, moreutils
-, rustc
-, wrapGAppsHook4
-, gtk4
-, lcms2
-, libadwaita
-, libgweather
-, libseccomp
-, glycin-loaders
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cargo,
+  desktop-file-utils,
+  itstool,
+  meson,
+  ninja,
+  pkg-config,
+  jq,
+  moreutils,
+  rustc,
+  wrapGAppsHook4,
+  gtk4,
+  lcms2,
+  libadwaita,
+  libgweather,
+  libseccomp,
+  glycin-loaders,
+  gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

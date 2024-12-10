@@ -1,17 +1,18 @@
-{ mkXfceDerivation
-, lib
-, cmake
-, accountsservice
-, exo
-, garcon
-, gettext
-, glib
-, gtk-layer-shell
-, gtk3
-, libxfce4ui
-, libxfce4util
-, xfce4-panel
-, xfconf
+{
+  mkXfceDerivation,
+  lib,
+  cmake,
+  accountsservice,
+  exo,
+  garcon,
+  gettext,
+  glib,
+  gtk-layer-shell,
+  gtk3,
+  libxfce4ui,
+  libxfce4util,
+  xfce4-panel,
+  xfconf,
 }:
 
 mkXfceDerivation {

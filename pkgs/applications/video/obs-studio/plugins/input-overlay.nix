@@ -1,14 +1,16 @@
-{ stdenv, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, obs-studio
-, libuiohook
-, qtbase
-, xorg
-, libxkbcommon
-, libxkbfile
-, SDL2
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  obs-studio,
+  libuiohook,
+  qtbase,
+  xorg,
+  libxkbcommon,
+  libxkbfile,
+  SDL2,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,11 +24,25 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = [
-    obs-studio libuiohook qtbase SDL2
-    xorg.libX11 xorg.libXau xorg.libXdmcp xorg.libXtst xorg.libXext
-    xorg.libXi xorg.libXt xorg.libXinerama libxkbcommon libxkbfile
+    obs-studio
+    libuiohook
+    qtbase
+    SDL2
+    xorg.libX11
+    xorg.libXau
+    xorg.libXdmcp
+    xorg.libXtst
+    xorg.libXext
+    xorg.libXi
+    xorg.libXt
+    xorg.libXinerama
+    libxkbcommon
+    libxkbfile
   ];
 
   cmakeFlags = [

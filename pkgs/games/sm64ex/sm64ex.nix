@@ -1,5 +1,6 @@
-{ callPackage
-, fetchFromGitHub
+{
+  callPackage,
+  fetchFromGitHub,
 }:
 
 callPackage ./generic.nix {
@@ -18,4 +19,3 @@ callPackage ./generic.nix {
     description = "Super Mario 64 port based off of decompilation";
   };
 }
-

@@ -1,11 +1,11 @@
 {
-  lib
-  , stdenv
-  , fetchFromGitHub
-  , makeWrapper
-  , bash
-  , subversion
-  , zenity
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  bash,
+  subversion,
+  zenity,
 }:
 stdenv.mkDerivation {
   pname = "thcrap-proton";

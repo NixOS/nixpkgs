@@ -1,11 +1,36 @@
-{ lib, stdenv, fetchurl, makeWrapper, makeDesktopItem, genericUpdater, writeShellScript
-, atk, cairo, gdk-pixbuf, glib, gnome2, gtk2, libGLU, libGL, pango, xorg, minizip
-, lsb-release, freetype, fontconfig, polkit, polkit_gnome, pciutils, copyDesktopItems
-, pulseaudio }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  makeDesktopItem,
+  genericUpdater,
+  writeShellScript,
+  atk,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  gnome2,
+  gtk2,
+  libGLU,
+  libGL,
+  pango,
+  xorg,
+  minizip,
+  lsb-release,
+  freetype,
+  fontconfig,
+  polkit,
+  polkit_gnome,
+  pciutils,
+  copyDesktopItems,
+  pulseaudio,
+}:
 
 let
   description = "Desktop sharing application, providing remote support and online meetings";
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "anydesk";
   version = "6.3.3";
 
@@ -17,16 +42,46 @@ in stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-uSotkFOpuC2a2sRTagY9KFx3F2VJmgrsn+dBa5ycdck=";
   };
 
-  buildInputs = [
-    atk cairo gdk-pixbuf glib gtk2 stdenv.cc.cc pango
-    gnome2.gtkglext libGLU libGL minizip freetype
-    fontconfig polkit polkit_gnome pulseaudio
-  ] ++ (with xorg; [
-    libxcb libxkbfile libX11 libXdamage libXext libXfixes libXi libXmu
-    libXrandr libXtst libXt libICE libSM libXrender
-  ]);
+  buildInputs =
+    [
+      atk
+      cairo
+      gdk-pixbuf
+      glib
+      gtk2
+      stdenv.cc.cc
+      pango
+      gnome2.gtkglext
+      libGLU
+      libGL
+      minizip
+      freetype
+      fontconfig
+      polkit
+      polkit_gnome
+      pulseaudio
+    ]
+    ++ (with xorg; [
+      libxcb
+      libxkbfile
+      libX11
+      libXdamage
+      libXext
+      libXfixes
+      libXi
+      libXmu
+      libXrandr
+      libXtst
+      libXt
+      libICE
+      libSM
+      libXrender
+    ]);
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -63,7 +118,12 @@ in stdenv.mkDerivation (finalAttrs: {
       $out/bin/anydesk
 
     wrapProgram $out/bin/anydesk \
-      --prefix PATH : ${lib.makeBinPath [ lsb-release pciutils ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          lsb-release
+          pciutils
+        ]
+      }
   '';
 
   passthru = {
@@ -83,6 +143,9 @@ in stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with lib.maintainers; [ shyim cheriimoya ];
+    maintainers = with lib.maintainers; [
+      shyim
+      cheriimoya
+    ];
   };
 })

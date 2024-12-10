@@ -23,10 +23,13 @@ buildPythonPackage rec {
   doCheck = false; # Tests are (i) not 3.x compatible, (ii) broken under 2.7
   pythonImportsCheck = [ "ete3" ];
 
-  propagatedBuildInputs = [
-    six
-    numpy
-  ] ++ lib.optional withTreeVisualization pyqt5 ++ lib.optional withXmlSupport lxml;
+  propagatedBuildInputs =
+    [
+      six
+      numpy
+    ]
+    ++ lib.optional withTreeVisualization pyqt5
+    ++ lib.optional withXmlSupport lxml;
 
   meta = with lib; {
     description = "Python framework for the analysis and visualization of trees";

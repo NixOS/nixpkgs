@@ -1,11 +1,12 @@
-{ stdenvNoCC
-, lib
-, fetchurl
-, undmg
-, pname
-, version
-, sha256
-, metaCommon ? { }
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  undmg,
+  pname,
+  version,
+  sha256,
+  metaCommon ? { },
 }:
 
 stdenvNoCC.mkDerivation {

@@ -1,9 +1,11 @@
-{ buildNpmPackage
+{
+  buildNpmPackage,
 }:
 
-{ version
-, src
-, meta
+{
+  version,
+  src,
+  meta,
 }:
 
 buildNpmPackage {

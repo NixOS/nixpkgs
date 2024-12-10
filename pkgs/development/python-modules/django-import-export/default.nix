@@ -31,7 +31,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools-scm ];
 
-
   dependencies = [
     diff-match-patch
     django

@@ -1,6 +1,17 @@
-{ lib, stdenv, fetchFromGitHub,
-  libev, libX11, libXext, libXi, libXfixes,
-  pkg-config, asciidoc, libxslt, docbook_xsl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libev,
+  libX11,
+  libXext,
+  libXi,
+  libXfixes,
+  pkg-config,
+  asciidoc,
+  libxslt,
+  docbook_xsl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "unclutter-xfixes";
@@ -13,8 +24,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-suKmaoJq0PBHZc7NzBQ60JGwJkAtWmvzPtTHWOPJEdc=";
   };
 
-  nativeBuildInputs = [ pkg-config asciidoc libxslt docbook_xsl ];
-  buildInputs = [ libev libX11 libXext libXi libXfixes ];
+  nativeBuildInputs = [
+    pkg-config
+    asciidoc
+    libxslt
+    docbook_xsl
+  ];
+  buildInputs = [
+    libev
+    libX11
+    libXext
+    libXi
+    libXfixes
+  ];
 
   prePatch = ''
     substituteInPlace Makefile --replace 'PKG_CONFIG =' 'PKG_CONFIG ?='

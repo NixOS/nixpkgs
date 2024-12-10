@@ -17,7 +17,7 @@ let
     optionalString
     getExe
     mapAttrs
-  ;
+    ;
 in
 {
   options.services.rimgo = {

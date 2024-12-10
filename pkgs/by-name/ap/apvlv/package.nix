@@ -106,7 +106,10 @@ stdenv.mkDerivation (finalAttrs: {
       with Vim-like behaviour.
     '';
     mainProgram = "apvlv";
-    maintainers = with lib.maintainers; [ ardumont anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      ardumont
+      anthonyroussel
+    ];
     platforms = lib.platforms.linux;
   };
 })

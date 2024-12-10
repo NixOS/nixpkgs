@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, gprbuild-boot
-, which
-, gnat
-, xmlada
+{
+  lib,
+  stdenv,
+  gprbuild-boot,
+  which,
+  gnat,
+  xmlada,
 }:
 
 stdenv.mkDerivation {
@@ -29,15 +30,17 @@ stdenv.mkDerivation {
     xmlada
   ];
 
-  makeFlags = [
-    "ENABLE_SHARED=${if stdenv.hostPlatform.isStatic then "no" else "yes"}"
-    "PROCESSORS=$(NIX_BUILD_CORES)"
-    # confusingly, for gprbuild --target is autoconf --host
-    "TARGET=${stdenv.hostPlatform.config}"
-    "prefix=${placeholder "out"}"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
-    "LIBRARY_TYPE=relocatable"
-  ];
+  makeFlags =
+    [
+      "ENABLE_SHARED=${if stdenv.hostPlatform.isStatic then "no" else "yes"}"
+      "PROCESSORS=$(NIX_BUILD_CORES)"
+      # confusingly, for gprbuild --target is autoconf --host
+      "TARGET=${stdenv.hostPlatform.config}"
+      "prefix=${placeholder "out"}"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isStatic) [
+      "LIBRARY_TYPE=relocatable"
+    ];
 
   env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
     # Ensure that there is enough space for the `fixDarwinDylibNames` hook to
@@ -51,9 +54,15 @@ stdenv.mkDerivation {
     ./gprbuild-relocatable-build.patch
   ];
 
-  buildFlags = [ "all" "libgpr.build" ];
+  buildFlags = [
+    "all"
+    "libgpr.build"
+  ];
 
-  installFlags = [ "all" "libgpr.install" ];
+  installFlags = [
+    "all"
+    "libgpr.install"
+  ];
 
   # link gprconfig_kb db from gprbuild-boot into build dir,
   # the install process copies its contents to $out

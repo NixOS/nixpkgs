@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildGoModule
-, darwin
-, fetchFromGitHub
-, restish
-, testers
-, xorg
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  darwin,
+  fetchFromGitHub,
+  restish,
+  testers,
+  xorg,
 }:
 
 buildGoModule rec {
@@ -21,16 +22,18 @@ buildGoModule rec {
 
   vendorHash = "sha256-qeArar0WnMACUnKBlC+PcFeJPzofwbK440A4M/rQ04U=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-    darwin.apple_sdk.frameworks.Kernel
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXinerama
-    xorg.libXrandr
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Cocoa
+      darwin.apple_sdk.frameworks.Kernel
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXi
+      xorg.libXinerama
+      xorg.libXrandr
+    ];
 
   ldflags = [
     "-s"

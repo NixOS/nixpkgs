@@ -29,7 +29,7 @@ buildPythonPackage rec {
     hash = "sha256-Mr+mWRvOXoy7+SosMae80o0V1jBMn1dEoGmaR/BGHrc=";
   };
 
-  build-system =  [
+  build-system = [
     setuptools
   ];
 

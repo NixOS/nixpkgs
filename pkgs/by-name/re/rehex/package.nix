@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, which
-, zip
-, libicns
-, botan3
-, capstone
-, jansson
-, libunistring
-, wxGTK32
-, lua53Packages
-, perlPackages
-, gtk3
-, apple-sdk_11
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  which,
+  zip,
+  libicns,
+  botan3,
+  capstone,
+  jansson,
+  libunistring,
+  wxGTK32,
+  lua53Packages,
+  perlPackages,
+  gtk3,
+  apple-sdk_11,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,12 +28,28 @@ stdenv.mkDerivation rec {
     hash = "sha256-RlYpg3aon1d25n8K/bbHGVLn5/iOOUSlvjT8U0fp9hA=";
   };
 
-  nativeBuildInputs = [ pkg-config which zip ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ libicns ];
+  nativeBuildInputs = [
+    pkg-config
+    which
+    zip
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libicns ];
 
-  buildInputs = [ botan3 capstone jansson libunistring wxGTK32 ]
-    ++ (with lua53Packages; [ lua busted ])
-    ++ (with perlPackages; [ perl TemplateToolkit ])
+  buildInputs =
+    [
+      botan3
+      capstone
+      jansson
+      libunistring
+      wxGTK32
+    ]
+    ++ (with lua53Packages; [
+      lua
+      busted
+    ])
+    ++ (with perlPackages; [
+      perl
+      TemplateToolkit
+    ])
     ++ lib.optionals stdenv.hostPlatform.isLinux [ gtk3 ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
@@ -57,7 +74,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/solemnwarning/rehex";
     changelog = "https://github.com/solemnwarning/rehex/raw/${version}/CHANGES.txt";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ markus1189 wegank ];
+    maintainers = with maintainers; [
+      markus1189
+      wegank
+    ];
     platforms = platforms.all;
     mainProgram = "rehex";
   };

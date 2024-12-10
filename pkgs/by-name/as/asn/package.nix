@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, curl
-, whois
-, bind
-, mtr
-, jq
-, ipcalc
-, grepcidr
-, nmap
-, aha
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  curl,
+  whois,
+  bind,
+  mtr,
+  jq,
+  ipcalc,
+  grepcidr,
+  nmap,
+  aha,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +33,19 @@ stdenv.mkDerivation rec {
     install -Dv asn "$out/bin/asn"
 
     wrapProgram $out/bin/asn \
-      --prefix PATH : "${lib.makeBinPath [ curl whois bind mtr jq ipcalc grepcidr nmap aha ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          curl
+          whois
+          bind
+          mtr
+          jq
+          ipcalc
+          grepcidr
+          nmap
+          aha
+        ]
+      }"
   '';
 
   meta = with lib; {

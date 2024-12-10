@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, ocaml, findlib, ocamlbuild
-, buildDunePackage
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  buildDunePackage,
 }:
 
 let
@@ -20,51 +26,57 @@ in
 
 if lib.versionAtLeast ocaml.version "4.02" then
 
-buildDunePackage rec {
-  inherit pname;
-  version = "1.6.9";
+  buildDunePackage rec {
+    inherit pname;
+    version = "1.6.9";
 
-  duneVersion = "3";
+    duneVersion = "3";
 
-  src = fetchFromGitHub {
-    owner = "ocaml-community";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-NdN2QnVRfRq9hEcSAnO2Wha7icDlf2Zg4JQqoEWmErE=";
-  };
+    src = fetchFromGitHub {
+      owner = "ocaml-community";
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "sha256-NdN2QnVRfRq9hEcSAnO2Wha7icDlf2Zg4JQqoEWmErE=";
+    };
 
-  doCheck = true;
+    doCheck = true;
 
-  inherit meta;
-}
+    inherit meta;
+  }
 
 else
 
-let version = "1.5.0"; in
+  let
+    version = "1.5.0";
+  in
 
-stdenv.mkDerivation {
+  stdenv.mkDerivation {
 
-  name = "${pname}-${version}";
+    name = "${pname}-${version}";
 
-  src = fetchFromGitHub {
-    owner = "mjambon";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "1xqldjz9risndnabvadw41fdbi5sa2hl4fnqls7j9xfbby1izbg8";
-  };
+    src = fetchFromGitHub {
+      owner = "mjambon";
+      repo = pname;
+      rev = "v${version}";
+      sha256 = "1xqldjz9risndnabvadw41fdbi5sa2hl4fnqls7j9xfbby1izbg8";
+    };
 
-  strictDeps = true;
+    strictDeps = true;
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild ];
+    nativeBuildInputs = [
+      ocaml
+      findlib
+      ocamlbuild
+    ];
 
-  inherit meta;
+    inherit meta;
 
-  createFindlibDestdir = true;
+    createFindlibDestdir = true;
 
-  makeFlags = [ "PREFIX=$(out)" ];
+    makeFlags = [ "PREFIX=$(out)" ];
 
-  preBuild = ''
-    mkdir -p $out/bin
-  '';
+    preBuild = ''
+      mkdir -p $out/bin
+    '';
 
-}
+  }

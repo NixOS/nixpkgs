@@ -1,22 +1,23 @@
-{ stdenvNoCC
-, lib
-, fetchurl
-, autoPatchelfHook
-, buildPackages
-, gnome-keyring
-, libsecret
-, git
-, curl
-, nss
-, nspr
-, xorg
-, libdrm
-, alsa-lib
-, cups
-, mesa
-, systemd
-, openssl
-, libglvnd
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  buildPackages,
+  gnome-keyring,
+  libsecret,
+  git,
+  curl,
+  nss,
+  nspr,
+  xorg,
+  libdrm,
+  alsa-lib,
+  cups,
+  mesa,
+  systemd,
+  openssl,
+  libglvnd,
 }:
 
 let
@@ -39,7 +40,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         };
       };
     in
-    fetchurl urls."${stdenvNoCC.hostPlatform.system}" or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
+    fetchurl
+      urls."${stdenvNoCC.hostPlatform.system}"
+        or (throw "Unsupported system: ${stdenvNoCC.hostPlatform.system}");
 
   nativeBuildInputs = [
     autoPatchelfHook

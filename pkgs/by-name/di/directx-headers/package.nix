@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+}:
 stdenv.mkDerivation rec {
   pname = "directx-headers";
   version = "1.614.1";
@@ -10,7 +16,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-CDmzKdV40EExLpOHPAUnytqG9x1+IGW4AZldfYs5YJk=";
   };
 
-  nativeBuildInputs = [ meson ninja ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
 
   # tests require WSL2
   mesonFlags = [ "-Dbuild-test=false" ];

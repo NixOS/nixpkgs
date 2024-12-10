@@ -1,4 +1,9 @@
-{ callPackage, luaPackages, perlPackages, python3Packages }:
+{
+  callPackage,
+  luaPackages,
+  perlPackages,
+  python3Packages,
+}:
 
 {
   autosort = callPackage ./autosort { };

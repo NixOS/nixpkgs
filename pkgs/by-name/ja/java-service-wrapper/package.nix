@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, jdk
-, ant
-, cunit
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk,
+  ant,
+  cunit,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,9 +19,15 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildInputs = [ cunit ncurses ];
+  buildInputs = [
+    cunit
+    ncurses
+  ];
 
-  nativeBuildInputs = [ ant jdk ];
+  nativeBuildInputs = [
+    ant
+    jdk
+  ];
 
   postConfigure = ''
     substituteInPlace default.properties \
@@ -55,7 +62,11 @@ stdenv.mkDerivation rec {
     homepage = "https://wrapper.tanukisoftware.com/";
     changelog = "https://wrapper.tanukisoftware.com/doc/english/release-notes.html#${version}";
     license = licenses.gpl2Only;
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+    ];
     maintainers = [ maintainers.suhr ];
     mainProgram = "wrapper";
     # Broken for Musl at 2024-01-17. Errors as:

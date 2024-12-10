@@ -1,4 +1,8 @@
-{ lib, fetchurl, lilypond }:
+{
+  lib,
+  fetchurl,
+  lilypond,
+}:
 
 lilypond.overrideAttrs (oldAttrs: rec {
   version = "2.25.20";
@@ -8,7 +12,10 @@ lilypond.overrideAttrs (oldAttrs: rec {
   };
 
   passthru.updateScript = {
-    command = [ ./update.sh "unstable" ];
+    command = [
+      ./update.sh
+      "unstable"
+    ];
     supportedFeatures = [ "commit" ];
   };
 })

@@ -1,51 +1,52 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, mkDerivation
-, substituteAll
-, wrapGAppsHook3
-, wrapQtAppsHook
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  mkDerivation,
+  substituteAll,
+  wrapGAppsHook3,
+  wrapQtAppsHook,
 
-, withGrass
-, withServer
-, withWebKit
+  withGrass,
+  withServer,
+  withWebKit,
 
-, bison
-, cmake
-, draco
-, exiv2
-, fcgi
-, flex
-, geos
-, grass
-, gsl
-, hdf5
-, libspatialindex
-, libspatialite
-, libzip
-, netcdf
-, ninja
-, openssl
-, pdal
-, postgresql
-, proj
-, protobuf
-, python311
-, qca-qt5
-, qscintilla
-, qt3d
-, qtbase
-, qtkeychain
-, qtlocation
-, qtmultimedia
-, qtsensors
-, qtserialport
-, qtwebkit
-, qtxmlpatterns
-, qwt
-, sqlite
-, txt2tags
-, zstd
+  bison,
+  cmake,
+  draco,
+  exiv2,
+  fcgi,
+  flex,
+  geos,
+  grass,
+  gsl,
+  hdf5,
+  libspatialindex,
+  libspatialite,
+  libzip,
+  netcdf,
+  ninja,
+  openssl,
+  pdal,
+  postgresql,
+  proj,
+  protobuf,
+  python311,
+  qca-qt5,
+  qscintilla,
+  qt3d,
+  qtbase,
+  qtkeychain,
+  qtlocation,
+  qtmultimedia,
+  qtsensors,
+  qtserialport,
+  qtwebkit,
+  qtxmlpatterns,
+  qwt,
+  sqlite,
+  txt2tags,
+  zstd,
 }:
 
 let
@@ -78,7 +79,8 @@ let
     six
     urllib3
   ];
-in mkDerivation rec {
+in
+mkDerivation rec {
   version = "3.34.11";
   pname = "qgis-ltr-unwrapped";
 
@@ -105,37 +107,39 @@ in mkDerivation rec {
     ninja
   ];
 
-  buildInputs = [
-    draco
-    exiv2
-    fcgi
-    geos
-    gsl
-    hdf5
-    libspatialindex
-    libspatialite
-    libzip
-    netcdf
-    openssl
-    pdal
-    postgresql
-    proj
-    protobuf
-    qca-qt5
-    qscintilla
-    qt3d
-    qtbase
-    qtkeychain
-    qtlocation
-    qtmultimedia
-    qtsensors
-    qtserialport
-    qtxmlpatterns
-    qwt
-    sqlite
-    txt2tags
-    zstd
-  ] ++ lib.optional withGrass grass
+  buildInputs =
+    [
+      draco
+      exiv2
+      fcgi
+      geos
+      gsl
+      hdf5
+      libspatialindex
+      libspatialite
+      libzip
+      netcdf
+      openssl
+      pdal
+      postgresql
+      proj
+      protobuf
+      qca-qt5
+      qscintilla
+      qt3d
+      qtbase
+      qtkeychain
+      qtlocation
+      qtmultimedia
+      qtsensors
+      qtserialport
+      qtxmlpatterns
+      qwt
+      sqlite
+      txt2tags
+      zstd
+    ]
+    ++ lib.optional withGrass grass
     ++ lib.optional withWebKit qtwebkit
     ++ pythonBuildInputs;
 
@@ -149,20 +153,25 @@ in mkDerivation rec {
 
   # Add path to Qt platform plugins
   # (offscreen is needed by "${APIS_SRC_DIR}/generate_console_pap.py")
-  env.QT_QPA_PLATFORM_PLUGIN_PATH="${qtbase}/${qtbase.qtPluginPrefix}/platforms";
+  env.QT_QPA_PLATFORM_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}/platforms";
 
-  cmakeFlags = [
-    "-DWITH_3D=True"
-    "-DWITH_PDAL=True"
-    "-DENABLE_TESTS=False"
-  ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
+  cmakeFlags =
+    [
+      "-DWITH_3D=True"
+      "-DWITH_PDAL=True"
+      "-DENABLE_TESTS=False"
+    ]
+    ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withServer [
-    "-DWITH_SERVER=True"
-    "-DQGIS_CGIBIN_SUBDIR=${placeholder "out"}/lib/cgi-bin"
-  ] ++ lib.optional withGrass (let
+      "-DWITH_SERVER=True"
+      "-DQGIS_CGIBIN_SUBDIR=${placeholder "out"}/lib/cgi-bin"
+    ]
+    ++ lib.optional withGrass (
+      let
         gmajor = lib.versions.major grass.version;
         gminor = lib.versions.minor grass.version;
-      in "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
+      in
+      "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"
     );
 
   qtWrapperArgs = [

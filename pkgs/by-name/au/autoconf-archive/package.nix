@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, xz }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  xz,
+}:
 
 stdenv.mkDerivation rec {
   pname = "autoconf-archive";

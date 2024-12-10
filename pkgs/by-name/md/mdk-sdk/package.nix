@@ -1,6 +1,23 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook
-, alsa-lib, gcc-unwrapped, libX11, libcxx, libdrm, libglvnd, libpulseaudio, libxcb, mesa, wayland, xz, zlib
-, libva, libvdpau, addDriverRunpath
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  alsa-lib,
+  gcc-unwrapped,
+  libX11,
+  libcxx,
+  libdrm,
+  libglvnd,
+  libpulseaudio,
+  libxcb,
+  mesa,
+  wayland,
+  xz,
+  zlib,
+  libva,
+  libvdpau,
+  addDriverRunpath,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,11 +32,24 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ autoPatchelfHook ];
 
   buildInputs = [
-    alsa-lib gcc-unwrapped libX11 libcxx libdrm libglvnd libpulseaudio libxcb mesa wayland xz zlib
+    alsa-lib
+    gcc-unwrapped
+    libX11
+    libcxx
+    libdrm
+    libglvnd
+    libpulseaudio
+    libxcb
+    mesa
+    wayland
+    xz
+    zlib
   ];
 
   appendRunpaths = lib.makeLibraryPath [
-    libva libvdpau addDriverRunpath.driverLink
+    libva
+    libvdpau
+    addDriverRunpath.driverLink
   ];
 
   installPhase = ''

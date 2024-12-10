@@ -1,23 +1,27 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
   pname = "nebula";
-  version = "1.9.4";
+  version = "1.9.5";
 
   src = fetchFromGitHub {
     owner = "slackhq";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-Y8BTbvdSJ+xlxHuy0TzQEGiymJzAqlHe3PiXAlUddPs=";
+    hash = "sha256-IJMmVKdgYCXCaRndlcoozFBr+RsUhzC1Eqo427K1k+o=";
   };
 
   vendorHash = "sha256-oXhq+s5gDKPVClZpOzYi7BaYwcDqbCLBEO5BNGy9LJA=";
 
-  subPackages = [ "cmd/nebula" "cmd/nebula-cert" ];
+  subPackages = [
+    "cmd/nebula"
+    "cmd/nebula-cert"
+  ];
 
   ldflags = [ "-X main.Build=${version}" ];
 
@@ -45,6 +49,9 @@ buildGoModule rec {
     homepage = "https://github.com/slackhq/nebula";
     changelog = "https://github.com/slackhq/nebula/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne numinit ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      numinit
+    ];
   };
 }

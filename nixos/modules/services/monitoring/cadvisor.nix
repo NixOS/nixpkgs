@@ -1,11 +1,17 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.cadvisor;
 
-in {
+in
+{
   options = {
     services.cadvisor = {
       enable = mkEnableOption "Cadvisor service";
@@ -83,7 +89,7 @@ in {
 
       extraOptions = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = ''
           Additional cadvisor options.
 
@@ -94,18 +100,27 @@ in {
   };
 
   config = mkMerge [
-    { services.cadvisor.storageDriverPasswordFile = mkIf (cfg.storageDriverPassword != "") (
-        mkDefault (toString (pkgs.writeTextFile {
-          name = "cadvisor-storage-driver-password";
-          text = cfg.storageDriverPassword;
-        }))
+    {
+      services.cadvisor.storageDriverPasswordFile = mkIf (cfg.storageDriverPassword != "") (
+        mkDefault (
+          toString (
+            pkgs.writeTextFile {
+              name = "cadvisor-storage-driver-password";
+              text = cfg.storageDriverPassword;
+            }
+          )
+        )
       );
     }
 
     (mkIf cfg.enable {
       systemd.services.cadvisor = {
         wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" "docker.service" "influxdb.service" ];
+        after = [
+          "network.target"
+          "docker.service"
+          "influxdb.service"
+        ];
 
         path = optionals config.boot.zfs.enabled [ pkgs.zfs ];
 
@@ -131,7 +146,7 @@ in {
             ''}
         '';
 
-        serviceConfig.TimeoutStartSec=300;
+        serviceConfig.TimeoutStartSec = 300;
       };
     })
   ];

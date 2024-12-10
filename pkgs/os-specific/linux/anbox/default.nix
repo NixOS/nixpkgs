@@ -1,31 +1,37 @@
-{ lib, stdenv, fetchFromGitHub
-, callPackage
-, fetchpatch
-, cmake, pkg-config, dbus, makeWrapper
-, boost
-, elfutils # for libdw
-, git
-, glib
-, glm
-, gtest
-, libbfd
-, libcap
-, libdwarf
-, libGL
-, libglvnd
-, lxc
-, mesa
-, properties-cpp
-, protobuf
-, protobufc
-, python3
-, runtimeShell
-, SDL2
-, SDL2_image
-, systemd
-, writeText
-, writeShellScript
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  callPackage,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  dbus,
+  makeWrapper,
+  boost,
+  elfutils, # for libdw
+  git,
+  glib,
+  glm,
+  gtest,
+  libbfd,
+  libcap,
+  libdwarf,
+  libGL,
+  libglvnd,
+  lxc,
+  mesa,
+  properties-cpp,
+  protobuf,
+  protobufc,
+  python3,
+  runtimeShell,
+  SDL2,
+  SDL2_image,
+  systemd,
+  writeText,
+  writeShellScript,
+  nixosTests,
 }:
 
 let
@@ -77,7 +83,8 @@ stdenv.mkDerivation rec {
     properties-cpp
     protobuf
     python3
-    SDL2 SDL2_image
+    SDL2
+    SDL2_image
     systemd
   ];
 
@@ -87,7 +94,7 @@ stdenv.mkDerivation rec {
     "-Wno-error=redundant-move"
     # Flag needed by GCC 12 but unrecognized by GCC 9 (aarch64-linux default now)
     (lib.optionalString (lib.versionAtLeast stdenv.cc.version "12") "-Wno-error=mismatched-new-delete")
-   ]);
+  ]);
 
   prePatch = ''
     patchShebangs scripts
@@ -143,7 +150,12 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/anbox \
       --set SDL_VIDEO_X11_WMCLASS "anbox" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libGL libglvnd]} \
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libGL
+          libglvnd
+        ]
+      } \
       --prefix PATH : ${git}/bin
 
     mkdir -p $out/share/dbus-1/services
@@ -167,7 +179,11 @@ stdenv.mkDerivation rec {
     description = "Android in a box";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ edwtjo ];
-    platforms = [ "armv7l-linux" "aarch64-linux" "x86_64-linux" ];
+    platforms = [
+      "armv7l-linux"
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
   };
 
 }

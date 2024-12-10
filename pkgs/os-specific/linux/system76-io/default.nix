@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 let
   version = "1.0.4";
   hash = "sha256-VE6sCehjXlRuOVcK4EN2H+FhaVaBi/jrAYx4TZjbreA=";
@@ -28,9 +33,16 @@ stdenv.mkDerivation {
   '';
 
   meta = {
-    maintainers = with lib.maintainers; [ khumba ahoneybun ];
+    maintainers = with lib.maintainers; [
+      khumba
+      ahoneybun
+    ];
     license = lib.licenses.gpl2Plus;
-    platforms = [ "i686-linux" "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     broken = lib.versionOlder kernel.version "5.10";
     description = "DKMS module for controlling System76 Io board";
     homepage = "https://github.com/pop-os/system76-io-dkms";

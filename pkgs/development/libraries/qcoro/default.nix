@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libpthreadstubs
-, qtbase
-, qtwebsockets
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libpthreadstubs,
+  qtbase,
+  qtwebsockets,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-teRuWtNR8r/MHZhqphazr7Jmn43qsHGv9eXOGrhSND0=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     wrapQtAppsHook

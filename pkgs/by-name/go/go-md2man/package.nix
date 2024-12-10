@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "go-md2man";
@@ -18,6 +22,6 @@ buildGoModule rec {
     mainProgram = "go-md2man";
     license = licenses.mit;
     homepage = "https://github.com/cpuguy83/go-md2man";
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [ offline ];
   };
 }

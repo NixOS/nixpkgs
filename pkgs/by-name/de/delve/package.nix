@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, makeWrapper, stdenv }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  stdenv,
+}:
 
 buildGoModule rec {
   pname = "delve";

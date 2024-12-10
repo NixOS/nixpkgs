@@ -107,13 +107,16 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
-  nativeCheckInputs = [
-    fakeredis
-    moto
-    pytest-xdist
-    pytestCheckHook
-    scipy
-  ] ++ fakeredis.optional-dependencies.lua ++ optional-dependencies.optional;
+  nativeCheckInputs =
+    [
+      fakeredis
+      moto
+      pytest-xdist
+      pytestCheckHook
+      scipy
+    ]
+    ++ fakeredis.optional-dependencies.lua
+    ++ optional-dependencies.optional;
 
   pytestFlagsArray = [ "-m 'not integration'" ];
 

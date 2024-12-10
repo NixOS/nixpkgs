@@ -22,7 +22,7 @@
   # tests
   cudaSupport ? config.cudaSupport,
   pytestCheckHook,
-  torchvision
+  torchvision,
 }:
 
 buildPythonPackage rec {
@@ -75,31 +75,34 @@ buildPythonPackage rec {
     torchvision
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  disabledTests = [
-    # network access
-    "test_tuplestoweights_sampler"
-    "test_metric_loss_only"
-    "test_add_to_indexer"
-    "test_get_nearest_neighbors"
-    "test_list_of_text"
-    "test_untrained_indexer"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # AttributeError: module 'torch.distributed' has no attribute 'init_process_group'
-    "test_single_proc"
-  ] ++ lib.optionals cudaSupport [
-    # crashes with SIGBART
-    "test_accuracy_calculator_and_faiss_with_torch_and_numpy"
-    "test_accuracy_calculator_large_k"
-    "test_custom_knn"
-    "test_global_embedding_space_tester"
-    "test_global_two_stream_embedding_space_tester"
-    "test_index_type"
-    "test_k_warning"
-    "test_many_tied_distances"
-    "test_query_within_reference"
-    "test_tied_distances"
-    "test_with_same_parent_label_tester"
-  ];
+  disabledTests =
+    [
+      # network access
+      "test_tuplestoweights_sampler"
+      "test_metric_loss_only"
+      "test_add_to_indexer"
+      "test_get_nearest_neighbors"
+      "test_list_of_text"
+      "test_untrained_indexer"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # AttributeError: module 'torch.distributed' has no attribute 'init_process_group'
+      "test_single_proc"
+    ]
+    ++ lib.optionals cudaSupport [
+      # crashes with SIGBART
+      "test_accuracy_calculator_and_faiss_with_torch_and_numpy"
+      "test_accuracy_calculator_large_k"
+      "test_custom_knn"
+      "test_global_embedding_space_tester"
+      "test_global_two_stream_embedding_space_tester"
+      "test_index_type"
+      "test_k_warning"
+      "test_many_tied_distances"
+      "test_query_within_reference"
+      "test_tied_distances"
+      "test_with_same_parent_label_tester"
+    ];
 
   meta = {
     description = "Metric learning library for PyTorch";

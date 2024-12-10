@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, glib
-, pkg-config
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  glib,
+  pkg-config,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,6 +42,9 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "labwc-menu-generator";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ AndersonTorres romildo ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      romildo
+    ];
   };
 })

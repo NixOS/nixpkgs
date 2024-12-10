@@ -1,13 +1,22 @@
-{ config, options, pkgs, lib, ... }:
+{
+  config,
+  options,
+  pkgs,
+  lib,
+  ...
+}:
 let
   dataDir = "/var/lib/matrix-appservice-discord";
   registrationFile = "${dataDir}/discord-registration.yaml";
   cfg = config.services.matrix-appservice-discord;
   opt = options.services.matrix-appservice-discord;
   # TODO: switch to configGen.json once RFC42 is implemented
-  settingsFile = pkgs.writeText "matrix-appservice-discord-settings.json" (builtins.toJSON cfg.settings);
+  settingsFile = pkgs.writeText "matrix-appservice-discord-settings.json" (
+    builtins.toJSON cfg.settings
+  );
 
-in {
+in
+{
   options = {
     services.matrix-appservice-discord = {
       enable = lib.mkEnableOption "a bridge between Matrix and Discord";
@@ -115,7 +124,9 @@ in {
           ${cfg.package}/bin/matrix-appservice-discord \
             --generate-registration \
             --url=${lib.escapeShellArg cfg.url} \
-            ${lib.optionalString (cfg.localpart != null) "--localpart=${lib.escapeShellArg cfg.localpart}"} \
+            ${
+              lib.optionalString (cfg.localpart != null) "--localpart=${lib.escapeShellArg cfg.localpart}"
+            } \
             --config='${settingsFile}' \
             --file='${registrationFile}'
         fi

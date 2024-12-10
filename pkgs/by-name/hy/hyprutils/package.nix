@@ -28,7 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     pixman
   ];
 
-  outputs = ["out" "dev"];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   cmakeBuildType = "RelWithDebInfo";
 
@@ -39,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Small C++ library for utilities used across the Hypr* ecosystem";
     license = lib.licenses.bsd3;
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
-    maintainers =  with lib.maintainers; [
+    maintainers = with lib.maintainers; [
       donovanglover
       johnrtitor
     ];

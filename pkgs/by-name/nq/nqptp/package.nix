@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,10 @@ stdenv.mkDerivation rec {
     ./systemd-service-capability.patch
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   passthru.updateScript = gitUpdater {
     ignoredVersions = ".*(-dev|d0)";
@@ -39,7 +43,10 @@ stdenv.mkDerivation rec {
     description = "Daemon and companion application to Shairport Sync that monitors timing data from any PTP clocks";
     license = lib.licenses.gpl2Only;
     mainProgram = "nqptp";
-    maintainers = with lib.maintainers; [ jordanisaacs adamcstephens ];
+    maintainers = with lib.maintainers; [
+      jordanisaacs
+      adamcstephens
+    ];
     platforms = lib.platforms.linux ++ lib.platforms.freebsd;
   };
 }

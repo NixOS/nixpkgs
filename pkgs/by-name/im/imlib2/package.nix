@@ -1,29 +1,41 @@
-{ lib, stdenv, fetchurl
-# Image file formats
-, libjpeg, libtiff, giflib, libpng, libwebp, libjxl
-, libspectre
-# imlib2 can load images from ID3 tags.
-, libid3tag, librsvg, libheif
-, freetype , bzip2, pkg-config
-, x11Support ? true
-, webpSupport ? true
-, svgSupport ? false
-, heifSupport ? false
-, jxlSupport ? false
-, psSupport ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  # Image file formats
+  libjpeg,
+  libtiff,
+  giflib,
+  libpng,
+  libwebp,
+  libjxl,
+  libspectre,
+  # imlib2 can load images from ID3 tags.
+  libid3tag,
+  librsvg,
+  libheif,
+  freetype,
+  bzip2,
+  pkg-config,
+  x11Support ? true,
+  webpSupport ? true,
+  svgSupport ? false,
+  heifSupport ? false,
+  jxlSupport ? false,
+  psSupport ? false,
 
-# for passthru.tests
-, libcaca
-, diffoscopeMinimal
-, feh
-, icewm
-, openbox
-, fluxbox
-, enlightenment
-, xorg
-, testers
+  # for passthru.tests
+  libcaca,
+  diffoscopeMinimal,
+  feh,
+  icewm,
+  openbox,
+  fluxbox,
+  enlightenment,
+  xorg,
+  testers,
 
-, gitUpdater
+  gitUpdater,
 }:
 
 let
@@ -38,10 +50,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-liRGVldqPgpvWLeOUU3ckZYirGgGcRvCMYN+7mLB3jQ=";
   };
 
-  buildInputs = [
-    libjpeg libtiff giflib libpng
-    bzip2 freetype libid3tag
-  ] ++ optionals x11Support [ xorg.libXft xorg.libXext ]
+  buildInputs =
+    [
+      libjpeg
+      libtiff
+      giflib
+      libpng
+      bzip2
+      freetype
+      libid3tag
+    ]
+    ++ optionals x11Support [
+      xorg.libXft
+      xorg.libXext
+    ]
     ++ optional heifSupport libheif
     ++ optional svgSupport librsvg
     ++ optional webpSupport libwebp
@@ -54,12 +76,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   # Do not build amd64 assembly code on Darwin, because it fails to compile
   # with unknow directive errors
-  configureFlags = optional stdenv.hostPlatform.isDarwin "--enable-amd64=no"
+  configureFlags =
+    optional stdenv.hostPlatform.isDarwin "--enable-amd64=no"
     ++ optional (!svgSupport) "--without-svg"
     ++ optional (!heifSupport) "--without-heif"
     ++ optional (!x11Support) "--without-x";
 
-  outputs = [ "bin" "out" "dev" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+  ];
 
   passthru = {
     tests = {
@@ -70,7 +97,8 @@ stdenv.mkDerivation (finalAttrs: {
         icewm
         openbox
         fluxbox
-        enlightenment;
+        enlightenment
+        ;
       pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     };
     updateScript = gitUpdater {

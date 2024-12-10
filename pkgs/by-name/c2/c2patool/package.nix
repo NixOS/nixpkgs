@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, libiconv
-, darwin
-, openssl
-, pkg-config
-, git
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  libiconv,
+  darwin,
+  openssl,
+  pkg-config,
+  git,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "c2patool";
@@ -28,13 +29,15 @@ rustPlatform.buildRustPackage rec {
     git
     pkg-config
   ];
-  buildInputs = [
-    openssl
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin [
-    libiconv
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.Carbon
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
+      libiconv
+      darwin.apple_sdk.frameworks.CoreServices
+      darwin.apple_sdk.frameworks.Carbon
+    ];
 
   checkFlags = [
     # These tests rely on additional executables to be compiled to "target/debug/".
@@ -59,7 +62,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Command line tool for displaying and adding C2PA manifests";
     homepage = "https://github.com/contentauth/c2patool";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ ok-nick ];
     mainProgram = "c2patool";
   };

@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchzip
-, pkg-config
-, libbpf
-, cmake
-, elfutils
-, zlib
-, argp-standalone
-, musl-obstack
-, nixosTests
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchzip,
+  pkg-config,
+  libbpf,
+  cmake,
+  elfutils,
+  zlib,
+  argp-standalone,
+  musl-obstack,
+  nixosTests,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,12 +21,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-BwA17lc2yegmOzLfoIu8OmG/PVdc+4sOGzB8Jc4ZjGM=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ elfutils zlib libbpf ]
-    ++ lib.optionals stdenv.hostPlatform.isMusl [
-    argp-standalone
-    musl-obstack
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
+  buildInputs =
+    [
+      elfutils
+      zlib
+      libbpf
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
+      argp-standalone
+      musl-obstack
+    ];
 
   patches = [
     # https://github.com/acmel/dwarves/pull/51 / https://lkml.kernel.org/r/20240626032253.3406460-1-asmadeus@codewreck.org
@@ -44,7 +53,10 @@ stdenv.mkDerivation rec {
   ];
 
   # Put libraries in "lib" subdirectory, not top level of $out
-  cmakeFlags = [ "-D__LIB=lib" "-DLIBBPF_EMBEDDED=OFF" ];
+  cmakeFlags = [
+    "-D__LIB=lib"
+    "-DLIBBPF_EMBEDDED=OFF"
+  ];
 
   passthru.tests = {
     inherit (nixosTests) bpf;
@@ -56,6 +68,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
 
     platforms = platforms.linux;
-    maintainers = with maintainers; [ bosu martinetd ];
+    maintainers = with maintainers; [
+      bosu
+      martinetd
+    ];
   };
 }

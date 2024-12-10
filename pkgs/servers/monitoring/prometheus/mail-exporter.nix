@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nixosTests,
+}:
 
 buildGoModule {
   pname = "mailexporter";
@@ -27,7 +33,10 @@ buildGoModule {
     mainProgram = "mailexporter";
     homepage = "https://github.com/cherti/mailexporter";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ willibutz globin ];
+    maintainers = with maintainers; [
+      willibutz
+      globin
+    ];
     platforms = platforms.linux;
   };
 }

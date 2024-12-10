@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, bash
-, btrfs-progs
-, openssh
-, perl
-, perlPackages
-, util-linux
-, asciidoctor
-, mbuffer
-, makeWrapper
-, genericUpdater
-, curl
-, writeShellScript
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bash,
+  btrfs-progs,
+  openssh,
+  perl,
+  perlPackages,
+  util-linux,
+  asciidoctor,
+  mbuffer,
+  makeWrapper,
+  genericUpdater,
+  curl,
+  writeShellScript,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,9 +26,15 @@ stdenv.mkDerivation rec {
     sha256 = "AuKsZHyRhGMgLL5ge7lVV6T3/SNwaRJDM8VNpbK7t2s=";
   };
 
-  nativeBuildInputs = [ asciidoctor makeWrapper ];
+  nativeBuildInputs = [
+    asciidoctor
+    makeWrapper
+  ];
 
-  buildInputs = with perlPackages; [ perl DateCalc ];
+  buildInputs = with perlPackages; [
+    perl
+    DateCalc
+  ];
 
   preInstall = ''
     for f in $(find . -name Makefile); do
@@ -50,11 +57,23 @@ stdenv.mkDerivation rec {
     wrapProgram $out/bin/btrbk \
       --set PERL5LIB $PERL5LIB \
       --run 'export program_name=$0' \
-      --prefix PATH ':' "${lib.makeBinPath [ btrfs-progs bash mbuffer openssh ]}"
+      --prefix PATH ':' "${
+        lib.makeBinPath [
+          btrfs-progs
+          bash
+          mbuffer
+          openssh
+        ]
+      }"
   '';
 
   passthru.tests = {
-    inherit (nixosTests) btrbk btrbk-no-timer btrbk-section-order btrbk-doas;
+    inherit (nixosTests)
+      btrbk
+      btrbk-no-timer
+      btrbk-section-order
+      btrbk-doas
+      ;
   };
 
   passthru.updateScript = genericUpdater {

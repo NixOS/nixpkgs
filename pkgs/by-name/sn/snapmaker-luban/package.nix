@@ -1,9 +1,40 @@
-{ lib, stdenv, autoPatchelfHook, makeDesktopItem, copyDesktopItems, wrapGAppsHook3, fetchurl
-, alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups
-, gtk3, nss, glib, nspr, gdk-pixbuf, libdrm, mesa
-, libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
-, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, pango
-, gcc-unwrapped, udev
+{
+  lib,
+  stdenv,
+  autoPatchelfHook,
+  makeDesktopItem,
+  copyDesktopItems,
+  wrapGAppsHook3,
+  fetchurl,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  gtk3,
+  nss,
+  glib,
+  nspr,
+  gdk-pixbuf,
+  libdrm,
+  mesa,
+  libX11,
+  libXScrnSaver,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXrandr,
+  libXrender,
+  libXtst,
+  libxcb,
+  libxshmfence,
+  pango,
+  gcc-unwrapped,
+  udev,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,10 +73,33 @@ stdenv.mkDerivation rec {
   ];
 
   libPath = lib.makeLibraryPath [
-    stdenv.cc.cc alsa-lib atk at-spi2-atk at-spi2-core cairo cups
-    gdk-pixbuf glib gtk3 libX11 libXcomposite libxshmfence
-    libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-    libXtst nspr nss libxcb pango libXScrnSaver udev
+    stdenv.cc.cc
+    alsa-lib
+    atk
+    at-spi2-atk
+    at-spi2-core
+    cairo
+    cups
+    gdk-pixbuf
+    glib
+    gtk3
+    libX11
+    libXcomposite
+    libxshmfence
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXrandr
+    libXrender
+    libXtst
+    nspr
+    nss
+    libxcb
+    pango
+    libXScrnSaver
+    udev
   ];
 
   autoPatchelfIgnoreMissingDeps = [
@@ -83,7 +137,10 @@ stdenv.mkDerivation rec {
       icon = "snapmaker-luban";
       desktopName = "Snapmaker Luban";
       genericName = meta.description;
-      categories = [ "Office" "Printing" ];
+      categories = [
+        "Office"
+        "Printing"
+      ];
     })
   ];
 

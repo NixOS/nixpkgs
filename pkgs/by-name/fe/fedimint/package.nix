@@ -1,17 +1,18 @@
-{ lib
-, buildPackages
-, clang
-, fetchFromGitHub
-, libclang
-, libiconv
-, llvmPackages_12
-, openssl
-, pkg-config
-, protobuf
-, rustPlatform
-, stdenv
-, Security
-, SystemConfiguration
+{
+  lib,
+  buildPackages,
+  clang,
+  fetchFromGitHub,
+  libclang,
+  libiconv,
+  llvmPackages_12,
+  openssl,
+  pkg-config,
+  protobuf,
+  rustPlatform,
+  stdenv,
+  Security,
+  SystemConfiguration,
 }:
 let
   # Rust rocksdb bindings have C++ compilation/linking errors on Darwin when using newer clang
@@ -42,16 +43,25 @@ buildRustPackage rec {
     (lib.getLib libclang)
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    libiconv
-    Security
-    SystemConfiguration
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      libiconv
+      Security
+      SystemConfiguration
+    ];
 
-  outputs = [ "out" "fedimintCli" "fedimint" "gateway" "gatewayCli" "devimint" ];
+  outputs = [
+    "out"
+    "fedimintCli"
+    "fedimint"
+    "gateway"
+    "gatewayCli"
+    "devimint"
+  ];
 
   postInstall = ''
     mkdir -p $fedimint/bin $fedimintCli/bin $gateway/bin $gatewayCli/bin $devimint/bin

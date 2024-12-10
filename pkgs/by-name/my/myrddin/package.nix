@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, bison
-, binutils
-, makeWrapper
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  bison,
+  binutils,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -53,6 +54,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ luc65r ];
     platforms = platforms.all;
     # darwin: never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/myrddin.x86_64-darwin
-    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
+    broken =
+      (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) || stdenv.hostPlatform.isDarwin;
   };
 }

@@ -1,8 +1,9 @@
-{ callPackage
-, fetchFromGitHub
-, autoPatchelfHook
-, zlib
-, stdenvNoCC
+{
+  callPackage,
+  fetchFromGitHub,
+  autoPatchelfHook,
+  zlib,
+  stdenvNoCC,
 }:
 
 callPackage ./generic.nix {

@@ -1,13 +1,18 @@
-{ lib, stdenv, fetchFromGitLab, makeWrapper, nixosTests,
-# optional dependencies, the command(s) they provide
-coreutils,  # mktemp
-grub2,      # grub-mount and grub-probe
-cryptsetup, # cryptsetup
-libuuid,    # blkid and blockdev
-systemd,    # udevadm
-ntfs3g,     # ntfs3g
-dmraid,     # dmraid
-lvm2        # lvs
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  makeWrapper,
+  nixosTests,
+  # optional dependencies, the command(s) they provide
+  coreutils, # mktemp
+  grub2, # grub-mount and grub-probe
+  cryptsetup, # cryptsetup
+  libuuid, # blkid and blockdev
+  systemd, # udevadm
+  ntfs3g, # ntfs3g
+  dmraid, # dmraid
+  lvm2, # lvs
 }:
 
 stdenv.mkDerivation rec {
@@ -56,7 +61,18 @@ stdenv.mkDerivation rec {
     done;
     for file in $out/bin/*; do
       wrapProgram $file \
-        --suffix PATH : ${lib.makeBinPath [ grub2 systemd coreutils cryptsetup libuuid ntfs3g lvm2 dmraid ]} \
+        --suffix PATH : ${
+          lib.makeBinPath [
+            grub2
+            systemd
+            coreutils
+            cryptsetup
+            libuuid
+            ntfs3g
+            lvm2
+            dmraid
+          ]
+        } \
         --run "[ -d /var/lib/os-prober ] || mkdir /var/lib/os-prober"
     done;
   '';

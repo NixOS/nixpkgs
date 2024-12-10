@@ -1,41 +1,46 @@
-{ lib
-, stdenv
-, gettext
-, fetchurl
-, wrapGAppsHook3
-, gnome-video-effects
-, libcanberra-gtk3
-, pkg-config
-, gtk3
-, glib
-, clutter-gtk
-, clutter-gst
-, gst_all_1
-, itstool
-, vala
-, docbook_xml_dtd_43
-, docbook-xsl-nons
-, appstream-glib
-, libxslt
-, gtk-doc
-, adwaita-icon-theme
-, librsvg
-, totem
-, gdk-pixbuf
-, gnome
-, gnome-desktop
-, libxml2
-, meson
-, ninja
-, dbus
-, pipewire
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  wrapGAppsHook3,
+  gnome-video-effects,
+  libcanberra-gtk3,
+  pkg-config,
+  gtk3,
+  glib,
+  clutter-gtk,
+  clutter-gst,
+  gst_all_1,
+  itstool,
+  vala,
+  docbook_xml_dtd_43,
+  docbook-xsl-nons,
+  appstream-glib,
+  libxslt,
+  gtk-doc,
+  adwaita-icon-theme,
+  librsvg,
+  totem,
+  gdk-pixbuf,
+  gnome,
+  gnome-desktop,
+  libxml2,
+  meson,
+  ninja,
+  dbus,
+  pipewire,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cheese";
   version = "44.1";
 
-  outputs = [ "out" "man" "devdoc" ];
+  outputs = [
+    "out"
+    "man"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/cheese/${lib.versions.major version}/cheese-${version}.tar.xz";

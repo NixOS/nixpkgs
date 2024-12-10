@@ -1,4 +1,10 @@
-{ lib, buildNimPackage, fetchFromGitHub, pcre, testers }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  pcre,
+  testers,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "mosdepth";

@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "zeronet";
@@ -13,8 +17,19 @@ python3Packages.buildPythonApplication rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    gevent msgpack base58 merkletools rsa pysocks pyasn1 websocket-client
-    gevent-websocket rencode bitcoinlib maxminddb pyopenssl
+    gevent
+    msgpack
+    base58
+    merkletools
+    rsa
+    pysocks
+    pyasn1
+    websocket-client
+    gevent-websocket
+    rencode
+    bitcoinlib
+    maxminddb
+    pyopenssl
   ];
 
   buildPhase = ''
@@ -37,9 +52,11 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://zeronet.io/";
     license = licenses.gpl2;
     maintainers = with maintainers; [ fgaz ];
-    knownVulnerabilities = [ ''
-      Unmaintained. Probable XSS/code injection vulnerability.
-      Switching to the maintained zeronet-conservancy package is recommended
-    '' ];
+    knownVulnerabilities = [
+      ''
+        Unmaintained. Probable XSS/code injection vulnerability.
+        Switching to the maintained zeronet-conservancy package is recommended
+      ''
+    ];
   };
 }

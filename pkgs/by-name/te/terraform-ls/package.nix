@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "terraform-ls";
@@ -13,7 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-NL5pqcQTjauxLschhj3kCiZLBLagABSCU/zHLcG2anM=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # There's a mixture of tests that use networking and several that fail on aarch64
   doCheck = false;
@@ -32,6 +39,9 @@ buildGoModule rec {
     homepage = "https://github.com/hashicorp/terraform-ls";
     changelog = "https://github.com/hashicorp/terraform-ls/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ mbaillie jk ];
+    maintainers = with maintainers; [
+      mbaillie
+      jk
+    ];
   };
 }

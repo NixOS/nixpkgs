@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, qmake, qtbase, qttools, substituteAll, libGLU, wrapQtAppsHook, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  qttools,
+  substituteAll,
+  libGLU,
+  wrapQtAppsHook,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation {
   pname = "nifskope";
@@ -25,8 +36,15 @@ stdenv.mkDerivation {
     })
   ] ++ (lib.optional stdenv.hostPlatform.isAarch64 ./no-sse-on-arm.patch);
 
-  buildInputs = [ qtbase qttools libGLU ];
-  nativeBuildInputs = [ qmake wrapQtAppsHook ];
+  buildInputs = [
+    qtbase
+    qttools
+    libGLU
+  ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
   preConfigure = ''
     shopt -s globstar

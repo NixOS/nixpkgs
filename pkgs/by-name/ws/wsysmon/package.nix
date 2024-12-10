@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, cmake
-, pkg-config
-, gtkmm3
-, gtk3
-, procps
-, spdlog
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  cmake,
+  pkg-config,
+  gtkmm3,
+  gtk3,
+  procps,
+  spdlog,
 }:
 
 stdenv.mkDerivation rec {

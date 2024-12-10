@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libdvdread }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libdvdread,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lxdvdrip";

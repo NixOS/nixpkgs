@@ -1,8 +1,16 @@
-{ stdenv, lib, fetchFromGitHub, zsh, ncurses, nix-update-script }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  zsh,
+  ncurses,
+  nix-update-script,
+}:
 
 let
-  INSTALL_PATH="${placeholder "out"}/share/fzf-tab";
-in stdenv.mkDerivation rec {
+  INSTALL_PATH = "${placeholder "out"}/share/fzf-tab";
+in
+stdenv.mkDerivation rec {
   pname = "zsh-fzf-tab";
   version = "1.1.2";
 

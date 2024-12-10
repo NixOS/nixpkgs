@@ -1,37 +1,38 @@
-{ alsa-lib
-, at-spi2-atk
-, autoPatchelfHook
-, cairo
-, cups
-, dbus
-, desktop-file-utils
-, expat
-, fetchurl
-, gdk-pixbuf
-, gtk3
-, gvfs
-, hicolor-icon-theme
-, lib
-, libdrm
-, libglvnd
-, libnotify
-, libsForQt5
-, libxkbcommon
-, mesa
-, nspr
-, nss
-, openssl
-, pango
-, rpmextract
-, stdenv
-, systemd
-, trash-cli
-, vulkan-loader
-, wrapGAppsHook3
-, xdg-utils
-, xorg
+{
+  alsa-lib,
+  at-spi2-atk,
+  autoPatchelfHook,
+  cairo,
+  cups,
+  dbus,
+  desktop-file-utils,
+  expat,
+  fetchurl,
+  gdk-pixbuf,
+  gtk3,
+  gvfs,
+  hicolor-icon-theme,
+  lib,
+  libdrm,
+  libglvnd,
+  libnotify,
+  libsForQt5,
+  libxkbcommon,
+  mesa,
+  nspr,
+  nss,
+  openssl,
+  pango,
+  rpmextract,
+  stdenv,
+  systemd,
+  trash-cli,
+  vulkan-loader,
+  wrapGAppsHook3,
+  xdg-utils,
+  xorg,
 }:
-stdenv.mkDerivation rec  {
+stdenv.mkDerivation rec {
   pname = "plasticity";
   version = "24.2.4";
 
@@ -42,7 +43,12 @@ stdenv.mkDerivation rec  {
 
   passthru.updateScript = ./update.sh;
 
-  nativeBuildInputs = [ wrapGAppsHook3 autoPatchelfHook rpmextract mesa ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    autoPatchelfHook
+    rpmextract
+    mesa
+  ];
 
   buildInputs = [
     alsa-lib
@@ -72,7 +78,7 @@ stdenv.mkDerivation rec  {
   runtimeDependencies = [
     systemd
     libglvnd
-    vulkan-loader #may help with nvidia users
+    vulkan-loader # may help with nvidia users
     xorg.libX11
     xorg.libxcb
     xorg.libXcomposite
@@ -96,19 +102,19 @@ stdenv.mkDerivation rec  {
     "TD_DbEntities.tx"
     "TD_DbIO.tx"
     "WipeOut.tx"
-   ];
+  ];
 
-installPhase = ''
-  runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-  mkdir $out
-  cd $out
-  rpmextract $src
-  mv $out/usr/* $out
-  rm -r $out/usr
+    mkdir $out
+    cd $out
+    rpmextract $src
+    mv $out/usr/* $out
+    rm -r $out/usr
 
-  runHook postInstall
-'';
+    runHook postInstall
+  '';
 
   #--use-gl=egl for it to use hardware rendering it seems. Otherwise there are terrible framerates
   preFixup = ''

@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "sabnzbd_exporter";
@@ -13,7 +17,10 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-c+NbaHYr/CzZ94/i92W2g7+RBSPSmkE2yszNE6L6M6Y=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ prometheus-client requests ];
+  propagatedBuildInputs = with python3Packages; [
+    prometheus-client
+    requests
+  ];
 
   installPhase = ''
     runHook preInstall

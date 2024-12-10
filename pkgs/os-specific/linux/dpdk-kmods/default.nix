@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchzip, kernel }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dpdk-kmods";

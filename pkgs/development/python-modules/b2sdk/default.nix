@@ -35,7 +35,6 @@ buildPythonPackage rec {
 
   build-system = [ pdm-backend ];
 
-
   pythonRemoveDeps = [ "setuptools" ];
 
   dependencies =

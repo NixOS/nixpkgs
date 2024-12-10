@@ -1,41 +1,42 @@
-{ mkDerivation
-, substituteAll
-, lib
-, extra-cmake-modules
-, breeze-icons
-, breeze-qt5
-, kdoctools
-, kconfig
-, kcrash
-, kguiaddons
-, kiconthemes
-, ki18n
-, kinit
-, kdbusaddons
-, knotifications
-, knewstuff
-, karchive
-, knotifyconfig
-, kplotting
-, ktextwidgets
-, mediainfo
-, mlt
-, shared-mime-info
-, libv4l
-, kfilemetadata
-, ffmpeg-full
-, frei0r
-, phonon-backend-gstreamer
-, qtdeclarative
-, qtmultimedia
-, qtnetworkauth
-, qtquickcontrols2
-, qtscript
-, rttr
-, kpurpose
-, kdeclarative
-, wrapGAppsHook3
-, glaxnimate
+{
+  mkDerivation,
+  substituteAll,
+  lib,
+  extra-cmake-modules,
+  breeze-icons,
+  breeze-qt5,
+  kdoctools,
+  kconfig,
+  kcrash,
+  kguiaddons,
+  kiconthemes,
+  ki18n,
+  kinit,
+  kdbusaddons,
+  knotifications,
+  knewstuff,
+  karchive,
+  knotifyconfig,
+  kplotting,
+  ktextwidgets,
+  mediainfo,
+  mlt,
+  shared-mime-info,
+  libv4l,
+  kfilemetadata,
+  ffmpeg-full,
+  frei0r,
+  phonon-backend-gstreamer,
+  qtdeclarative,
+  qtmultimedia,
+  qtnetworkauth,
+  qtquickcontrols2,
+  qtscript,
+  rttr,
+  kpurpose,
+  kdeclarative,
+  wrapGAppsHook3,
+  glaxnimate,
 }:
 
 let
@@ -88,14 +89,12 @@ mkDerivation {
   # doesn't find them. See:
   # https://github.com/NixOS/nixpkgs/issues/83885
   patches = [
-    (
-      substituteAll {
-        src = ./dependency-paths.patch;
-        inherit mediainfo glaxnimate;
-        ffmpeg = ffmpeg-full;
-        mlt = mlt-full;
-      }
-    )
+    (substituteAll {
+      src = ./dependency-paths.patch;
+      inherit mediainfo glaxnimate;
+      ffmpeg = ffmpeg-full;
+      mlt = mlt-full;
+    })
   ];
 
   postPatch =

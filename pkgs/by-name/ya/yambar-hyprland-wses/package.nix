@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +20,10 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Enable Yambar to show Hyprland workspaces";
     homepage = "https://github.com/jonhoo/yambar-hyprland-wses";
-    license = with lib.licenses; [ asl20 mit ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     maintainers = with lib.maintainers; [ ludovicopiero ];
     mainProgram = "yambar-hyprland-wses";
     platforms = lib.platforms.linux;

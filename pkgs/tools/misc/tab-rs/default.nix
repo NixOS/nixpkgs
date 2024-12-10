@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, IOKit }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  IOKit,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tab-rs";

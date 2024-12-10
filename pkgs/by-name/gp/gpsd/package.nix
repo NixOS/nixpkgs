@@ -1,34 +1,37 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
 
-# nativeBuildInputs
-, scons
-, pkg-config
+  # nativeBuildInputs
+  scons,
+  pkg-config,
 
-# buildInputs
-, dbus
-, libusb1
-, ncurses
-, kppsSupport ? stdenv.hostPlatform.isLinux, pps-tools
-, python3Packages
+  # buildInputs
+  dbus,
+  libusb1,
+  ncurses,
+  kppsSupport ? stdenv.hostPlatform.isLinux,
+  pps-tools,
+  python3Packages,
 
-# optional deps for GUI packages
-, guiSupport ? true
-, dbus-glib
-, libX11
-, libXt
-, libXpm
-, libXaw
-, libXext
-, gobject-introspection
-, pango
-, gdk-pixbuf
-, atk
-, wrapGAppsHook3
+  # optional deps for GUI packages
+  guiSupport ? true,
+  dbus-glib,
+  libX11,
+  libXt,
+  libXpm,
+  libXaw,
+  libXext,
+  gobject-introspection,
+  pango,
+  gdk-pixbuf,
+  atk,
+  wrapGAppsHook3,
 
-, gpsdUser ? "gpsd", gpsdGroup ? "dialout"
+  gpsdUser ? "gpsd",
+  gpsdGroup ? "dialout",
 }:
 
 stdenv.mkDerivation rec {
@@ -41,33 +44,38 @@ stdenv.mkDerivation rec {
   };
 
   # TODO: render & install HTML documentation using asciidoctor
-  nativeBuildInputs = [
-    pkg-config
-    python3Packages.wrapPython
-    scons
-  ] ++ lib.optionals guiSupport [
-    gobject-introspection
-    wrapGAppsHook3
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      python3Packages.wrapPython
+      scons
+    ]
+    ++ lib.optionals guiSupport [
+      gobject-introspection
+      wrapGAppsHook3
+    ];
 
-  buildInputs = [
-    dbus
-    libusb1
-    ncurses
-    python3Packages.python
-  ] ++ lib.optionals kppsSupport [
-    pps-tools
-  ] ++ lib.optionals guiSupport [
-    atk
-    dbus-glib
-    gdk-pixbuf
-    libX11
-    libXaw
-    libXext
-    libXpm
-    libXt
-    pango
-  ];
+  buildInputs =
+    [
+      dbus
+      libusb1
+      ncurses
+      python3Packages.python
+    ]
+    ++ lib.optionals kppsSupport [
+      pps-tools
+    ]
+    ++ lib.optionals guiSupport [
+      atk
+      dbus-glib
+      gdk-pixbuf
+      libX11
+      libXaw
+      libXext
+      libXpm
+      libXt
+      pango
+    ];
 
   pythonPath = lib.optionals guiSupport [
     python3Packages.pygobject3
@@ -113,7 +121,10 @@ stdenv.mkDerivation rec {
     mkdir -p "$out/lib/udev/rules.d"
   '';
 
-  installTargets = [ "install" "udev-install" ];
+  installTargets = [
+    "install"
+    "udev-install"
+  ];
 
   # remove binaries for x-less install because xgps sconsflag is partially broken
   postFixup = ''
@@ -144,6 +155,9 @@ stdenv.mkDerivation rec {
     changelog = "https://gitlab.com/gpsd/gpsd/-/blob/release-${version}/NEWS";
     license = licenses.bsd2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ bjornfor rasendubi ];
+    maintainers = with maintainers; [
+      bjornfor
+      rasendubi
+    ];
   };
 }

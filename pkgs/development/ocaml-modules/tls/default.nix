@@ -1,7 +1,19 @@
-{ lib, fetchurl, buildDunePackage
-, domain-name, fmt, logs, kdf, mirage-crypto, mirage-crypto-ec, mirage-crypto-pk, mirage-crypto-rng, x509
-, ipaddr
-, alcotest, ounit2
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  domain-name,
+  fmt,
+  logs,
+  kdf,
+  mirage-crypto,
+  mirage-crypto-ec,
+  mirage-crypto-pk,
+  mirage-crypto-rng,
+  x509,
+  ipaddr,
+  alcotest,
+  ounit2,
 }:
 
 buildDunePackage rec {

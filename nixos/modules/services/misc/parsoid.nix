@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -10,16 +15,20 @@ let
 
   confTree = {
     worker_heartbeat_timeout = 300000;
-    logging = { level = "info"; };
-    services = [{
-      module = "lib/index.js";
-      entrypoint = "apiServiceWorker";
-      conf = {
-        mwApis = map (x: if isAttrs x then x else { uri = x; }) cfg.wikis;
-        serverInterface = cfg.interface;
-        serverPort = cfg.port;
-      };
-    }];
+    logging = {
+      level = "info";
+    };
+    services = [
+      {
+        module = "lib/index.js";
+        entrypoint = "apiServiceWorker";
+        conf = {
+          mwApis = map (x: if isAttrs x then x else { uri = x; }) cfg.wikis;
+          serverInterface = cfg.interface;
+          serverPort = cfg.port;
+        };
+      }
+    ];
   };
 
   confFile = pkgs.writeText "config.yml" (builtins.toJSON (recursiveUpdate confTree cfg.extraConfig));
@@ -79,7 +88,7 @@ in
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         description = ''
           Extra configuration to add to parsoid configuration.
         '';
@@ -114,7 +123,10 @@ in
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
         ProtectControlGroups = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         LockPersonality = true;
         #MemoryDenyWriteExecute = true;

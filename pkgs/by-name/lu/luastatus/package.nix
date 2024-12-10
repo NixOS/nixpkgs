@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-# Native Build Inputs
-, cmake
-, pkg-config
-, makeWrapper
-# Dependencies
-, yajl
-, alsa-lib
-, libpulseaudio
-, glib
-, libnl
-, udev
-, libXau
-, libXdmcp
-, pcre2
-, pcre
-, util-linux
-, libselinux
-, libsepol
-, lua5
-, docutils
-, libxcb
-, libX11
-, xcbutil
-, xcbutilwm
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  # Native Build Inputs
+  cmake,
+  pkg-config,
+  makeWrapper,
+  # Dependencies
+  yajl,
+  alsa-lib,
+  libpulseaudio,
+  glib,
+  libnl,
+  udev,
+  libXau,
+  libXdmcp,
+  pcre2,
+  pcre,
+  util-linux,
+  libselinux,
+  libsepol,
+  lua5,
+  docutils,
+  libxcb,
+  libX11,
+  xcbutil,
+  xcbutilwm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

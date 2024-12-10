@@ -1,8 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, python3, makeWrapper, libarchive }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  makeWrapper,
+  libarchive,
+}:
 
 let
-  pythonEnv = python3.withPackages(ps: with ps; [ cheetah3 lxml ]);
-in stdenv.mkDerivation rec {
+  pythonEnv = python3.withPackages (
+    ps: with ps; [
+      cheetah3
+      lxml
+    ]
+  );
+in
+stdenv.mkDerivation rec {
   pname = "sickgear";
   version = "3.32.10";
 
@@ -21,7 +34,10 @@ in stdenv.mkDerivation rec {
   doCheck = false;
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ pythonEnv libarchive ];
+  buildInputs = [
+    pythonEnv
+    libarchive
+  ];
 
   installPhase = ''
     mkdir -p $out/bin $out/opt/sickgear
@@ -34,8 +50,8 @@ in stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Most reliable stable TV fork of the great Sick-Beard to fully automate TV enjoyment with innovation";
     mainProgram = "sickgear";
-    license     = licenses.gpl3;
-    homepage    = "https://github.com/SickGear/SickGear";
+    license = licenses.gpl3;
+    homepage = "https://github.com/SickGear/SickGear";
     maintainers = with lib.maintainers; [ rembo10 ];
   };
 }

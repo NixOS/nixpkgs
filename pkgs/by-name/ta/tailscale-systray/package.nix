@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, gtk3
-, libayatana-appindicator
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  gtk3,
+  libayatana-appindicator,
 }:
 buildGoModule rec {
   pname = "tailscale-systray";
@@ -19,7 +20,10 @@ buildGoModule rec {
   vendorHash = "sha256-YJ74SeZAMS+dXyoPhPTJ3L+5uL5bF8gumhMOqfvmlms=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk3 libayatana-appindicator ];
+  buildInputs = [
+    gtk3
+    libayatana-appindicator
+  ];
 
   proxyVendor = true;
 

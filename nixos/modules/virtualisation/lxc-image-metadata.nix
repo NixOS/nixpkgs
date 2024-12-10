@@ -1,51 +1,71 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 let
-  templateSubmodule = {...}: {
-    options = {
-      enable = lib.mkEnableOption "this template";
+  templateSubmodule =
+    { ... }:
+    {
+      options = {
+        enable = lib.mkEnableOption "this template";
 
-      target = lib.mkOption {
-        description = "Path in the container";
-        type = lib.types.path;
-      };
-      template = lib.mkOption {
-        description = ".tpl file for rendering the target";
-        type = lib.types.path;
-      };
-      when = lib.mkOption {
-        description = "Events which trigger a rewrite (create, copy)";
-        type = lib.types.listOf (lib.types.str);
-      };
-      properties = lib.mkOption {
-        description = "Additional properties";
-        type = lib.types.attrs;
-        default = {};
+        target = lib.mkOption {
+          description = "Path in the container";
+          type = lib.types.path;
+        };
+        template = lib.mkOption {
+          description = ".tpl file for rendering the target";
+          type = lib.types.path;
+        };
+        when = lib.mkOption {
+          description = "Events which trigger a rewrite (create, copy)";
+          type = lib.types.listOf (lib.types.str);
+        };
+        properties = lib.mkOption {
+          description = "Additional properties";
+          type = lib.types.attrs;
+          default = { };
+        };
       };
     };
-  };
 
-  toYAML = name: data: pkgs.writeText name (lib.generators.toYAML {} data);
+  toYAML = name: data: pkgs.writeText name (lib.generators.toYAML { } data);
 
   cfg = config.virtualisation.lxc;
-  templates = if cfg.templates != {} then let
-    list = lib.mapAttrsToList (name: value: { inherit name; } // value)
-      (lib.filterAttrs (name: value: value.enable) cfg.templates);
-  in
-    {
-      files = map (tpl: {
-        source = tpl.template;
-        target = "/templates/${tpl.name}.tpl";
-      }) list;
-      properties = lib.listToAttrs (map (tpl: lib.nameValuePair tpl.target {
-        when = tpl.when;
-        template = "${tpl.name}.tpl";
-        properties = tpl.properties;
-      }) list);
-    }
-  else { files = []; properties = {}; };
+  templates =
+    if cfg.templates != { } then
+      let
+        list = lib.mapAttrsToList (name: value: { inherit name; } // value) (
+          lib.filterAttrs (name: value: value.enable) cfg.templates
+        );
+      in
+      {
+        files = map (tpl: {
+          source = tpl.template;
+          target = "/templates/${tpl.name}.tpl";
+        }) list;
+        properties = lib.listToAttrs (
+          map (
+            tpl:
+            lib.nameValuePair tpl.target {
+              when = tpl.when;
+              template = "${tpl.name}.tpl";
+              properties = tpl.properties;
+            }
+          ) list
+        );
+      }
+    else
+      {
+        files = [ ];
+        properties = { };
+      };
 
-in {
+in
+{
   meta = {
     maintainers = lib.teams.lxc.members;
   };
@@ -55,7 +75,7 @@ in {
       templates = lib.mkOption {
         description = "Templates for LXD";
         type = lib.types.attrsOf (lib.types.submodule templateSubmodule);
-        default = {};
+        default = { };
         example = lib.literalExpression ''
           {
             # create /etc/hostname on container creation

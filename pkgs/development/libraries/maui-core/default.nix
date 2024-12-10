@@ -1,12 +1,13 @@
-{ lib
-, mkDerivation
-, libcanberra
-, pulseaudio
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, kio
-, kidletime
+{
+  lib,
+  mkDerivation,
+  libcanberra,
+  pulseaudio,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  kio,
+  kidletime,
 }:
 
 mkDerivation rec {

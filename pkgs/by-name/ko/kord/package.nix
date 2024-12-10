@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, darwin
-, fetchFromGitHub
-, fetchpatch
-, rustPlatform
-, pkg-config
-, alsa-lib
+{
+  lib,
+  stdenv,
+  darwin,
+  fetchFromGitHub,
+  fetchpatch,
+  rustPlatform,
+  pkg-config,
+  alsa-lib,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -40,10 +41,12 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ]
+  nativeBuildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AudioUnit ];
 
   meta = with lib; {
