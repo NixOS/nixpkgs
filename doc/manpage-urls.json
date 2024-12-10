@@ -322,5 +322,6 @@
   "nix-shell(1)": "https://nixos.org/manual/nix/stable/command-ref/nix-shell.html",
   "mksquashfs(1)": "https://man.archlinux.org/man/extra/squashfs-tools/mksquashfs.1.en",
   "curl(1)": "https://curl.se/docs/manpage.html",
-  "netrc(5)": "https://man.cx/netrc"
+  "netrc(5)": "https://man.cx/netrc",
+  "cat(1)": "https://www.gnu.org/software/coreutils/manual/html_node/cat-invocation.html"
 }
