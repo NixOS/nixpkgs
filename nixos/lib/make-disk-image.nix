@@ -445,7 +445,7 @@ let format' = format; in let
       --system ${config.system.build.toplevel} \
       ${if copyChannel then "--channel ${channelSources}" else "--no-channel-copy"} \
       --substituters ""
-    
+
     ${lib.optionalString (additionalPaths' != []) ''
       nix --extra-experimental-features nix-command copy --to $root --no-check-sigs ${lib.concatStringsSep " " additionalPaths'}
     ''}
@@ -544,7 +544,7 @@ let format' = format; in let
     mkdir -p $out/nix-support
     echo "file ${format}-image $out/${filename}" >> $out/nix-support/hydra-build-products
   '';
-  
+
   buildSystem = pkgs.stdenv.buildPlatform.system;
   hostSystem = pkgs.stdenv.hostPlatform.system;
   crossPkgs = if (hostSystem != buildSystem) then
@@ -585,7 +585,7 @@ let format' = format; in let
       mountPoint=/mnt
       mkdir $mountPoint
       mount $rootDisk $mountPoint
-      
+
       # Fix activation error (not related to PR)
       mkdir $mountPoint/run
       mount -t tmpfs -o "mode=755" none $mountPoint/run
