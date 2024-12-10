@@ -1,17 +1,18 @@
-{ fetchurl
-, lib
-, stdenv
-, cmake
-, netcdf
-, openjpeg
-, libaec
-, libpng
-, gfortran
-, perl
-, enablePython ? false
-, pythonPackages
-, enablePosixThreads ? false
-, enableOpenMPThreads ? false
+{
+  fetchurl,
+  lib,
+  stdenv,
+  cmake,
+  netcdf,
+  openjpeg,
+  libaec,
+  libpng,
+  gfortran,
+  perl,
+  enablePython ? false,
+  pythonPackages,
+  enablePosixThreads ? false,
+  enableOpenMPThreads ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,7 +39,11 @@ stdenv.mkDerivation rec {
       --replace '$'{CMAKE_INSTALL_PREFIX}/'$'{INSTALL_INCLUDE_DIR} '$'{'$'{PROJECT_NAME}_FULL_INSTALL_INCLUDE_DIR}
   '';
 
-  nativeBuildInputs = [ cmake gfortran perl ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+    perl
+  ];
 
   buildInputs = [
     netcdf

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, version
-, hash
-, patches ? []
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  version,
+  hash,
+  patches ? [ ],
+  fetchFromGitHub,
 
-, cmake
-, ninja
-, perl # Project uses Perl for scripting and testing
-, python3
+  cmake,
+  ninja,
+  perl, # Project uses Perl for scripting and testing
+  python3,
 
-, enableThreading ? true # Threading can be disabled to increase security https://tls.mbed.org/kb/development/thread-safety-and-multi-threading
+  enableThreading ? true, # Threading can be disabled to increase security https://tls.mbed.org/kb/development/thread-safety-and-multi-threading
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +29,12 @@ stdenv.mkDerivation rec {
 
   inherit patches;
 
-  nativeBuildInputs = [ cmake ninja perl python3 ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    perl
+    python3
+  ];
 
   strictDeps = true;
 
@@ -47,9 +53,11 @@ stdenv.mkDerivation rec {
     "-DGEN_FILES=off"
   ];
 
-  env = lib.optionalAttrs (stdenv.cc.isGNU && (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "14")) {
-    NIX_CFLAGS_COMPILE = "-Wno-error=calloc-transposed-args";
-  };
+  env =
+    lib.optionalAttrs (stdenv.cc.isGNU && (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "14"))
+      {
+        NIX_CFLAGS_COMPILE = "-Wno-error=calloc-transposed-args";
+      };
 
   doCheck = true;
 
@@ -61,7 +69,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.trustedfirmware.org/projects/mbed-tls/";
     changelog = "https://github.com/Mbed-TLS/mbedtls/blob/${pname}-${version}/ChangeLog";
     description = "Portable cryptographic and TLS library, formerly known as PolarSSL";
-    license = [ licenses.asl20 /* or */ licenses.gpl2Plus ];
+    license = [
+      licenses.asl20 # or
+      licenses.gpl2Plus
+    ];
     platforms = platforms.all;
     maintainers = with maintainers; [ raphaelr ];
   };

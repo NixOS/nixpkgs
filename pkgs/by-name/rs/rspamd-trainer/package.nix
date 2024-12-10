@@ -1,10 +1,11 @@
-{ lib
-, python3
-, python3Packages
-, fetchFromGitLab
-, fetchpatch
-, rspamd
-, nixosTests
+{
+  lib,
+  python3,
+  python3Packages,
+  fetchFromGitLab,
+  fetchpatch,
+  rspamd,
+  nixosTests,
 }:
 
 python3Packages.buildPythonApplication {

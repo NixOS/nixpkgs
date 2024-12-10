@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, runCommand
-, alp
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  runCommand,
+  alp,
 }:
 
 buildGoModule rec {
@@ -39,7 +40,7 @@ buildGoModule rec {
   '';
 
   passthru.tests = {
-    test-version = runCommand "${pname}-test" {} ''
+    test-version = runCommand "${pname}-test" { } ''
       ${alp}/bin/alp version > $out
       cat $out | grep '${version}'
     '';

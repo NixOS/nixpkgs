@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {

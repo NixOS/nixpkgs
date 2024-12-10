@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, DiskArbitration
-, pkg-config
-, bzip2
-, libarchive
-, libconfuse
-, libsodium
-, xz
-, zlib
-, coreutils
-, dosfstools
-, mtools
-, unzip
-, zip
-, which
-, xdelta
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  DiskArbitration,
+  pkg-config,
+  bzip2,
+  libarchive,
+  libconfuse,
+  libsodium,
+  xz,
+  zlib,
+  coreutils,
+  dosfstools,
+  mtools,
+  unzip,
+  zip,
+  which,
+  xdelta,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,25 +36,29 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    bzip2
-    libarchive
-    libconfuse
-    libsodium
-    xz
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    DiskArbitration
-  ];
+  buildInputs =
+    [
+      bzip2
+      libarchive
+      libconfuse
+      libsodium
+      xz
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      DiskArbitration
+    ];
 
-  propagatedBuildInputs = [
-    coreutils
-    unzip
-    zip
-  ] ++ lib.optionals doCheck [
-    mtools
-    dosfstools
-  ];
+  propagatedBuildInputs =
+    [
+      coreutils
+      unzip
+      zip
+    ]
+    ++ lib.optionals doCheck [
+      mtools
+      dosfstools
+    ];
 
   nativeCheckInputs = [
     which

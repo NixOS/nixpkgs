@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, awk
-, cmake
-, grep
-, libXext
-, libXft
-, libXinerama
-, libXpm
-, libXrandr
-, libjpeg
-, libpng
-, pkg-config
-, runtimeShell
-, sed
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  awk,
+  cmake,
+  grep,
+  libXext,
+  libXft,
+  libXinerama,
+  libXpm,
+  libXrandr,
+  libjpeg,
+  libpng,
+  pkg-config,
+  runtimeShell,
+  sed,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pekdon";
     repo = "pekwm";
     rev = "release-${finalAttrs.version}";
-    hash= "sha256-l43xxCowSEBQjwg7hjpBwybFB12ESOep6hqdzSsD3YI=";
+    hash = "sha256-l43xxCowSEBQjwg7hjpBwybFB12ESOep6hqdzSsD3YI=";
   };
 
   nativeBuildInputs = [
@@ -42,7 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     libpng
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 

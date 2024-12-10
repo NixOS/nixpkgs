@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
 
-, cmake
-, installShellFiles
-, pkg-config
+  cmake,
+  installShellFiles,
+  pkg-config,
 
-, bzip2
-, libusb1
-, openssl
-, tinyxml-2
-, zlib
-, zstd
+  bzip2,
+  libusb1,
+  openssl,
+  tinyxml-2,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,7 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "uuu_\([0-9.]+\)" ];
+    extraArgs = [
+      "--version-regex"
+      "uuu_\([0-9.]+\)"
+    ];
   };
 
   nativeBuildInputs = [

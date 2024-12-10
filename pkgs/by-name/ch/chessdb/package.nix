@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, tcl, tk, libX11, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  tcl,
+  tk,
+  libX11,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "chessdb";
@@ -10,7 +18,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ tcl tk libX11 ];
+  buildInputs = [
+    tcl
+    tk
+    libX11
+  ];
 
   makeFlags = [
     "BINDIR=$(out)/bin"

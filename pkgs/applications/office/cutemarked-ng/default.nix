@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qmake
-, pkg-config
-, qttools
-, qtwebengine
-, wrapQtAppsHook
-, qmarkdowntextedit
-, md4c
-, hunspell
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  pkg-config,
+  qttools,
+  qtwebengine,
+  wrapQtAppsHook,
+  qmarkdowntextedit,
+  md4c,
+  hunspell,
 }:
 
 stdenv.mkDerivation rec {

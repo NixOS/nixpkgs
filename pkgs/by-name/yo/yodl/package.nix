@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitLab, perl, icmake, util-linux }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  perl,
+  icmake,
+  util-linux,
+}:
 
 stdenv.mkDerivation rec {
   pname = "yodl";

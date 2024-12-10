@@ -1,40 +1,43 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, jetbrains
-, openjdk17
-, openjdk17-bootstrap
-, git
-, autoconf
-, unzip
-, rsync
-, debugBuild ? false
-, withJcef ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jetbrains,
+  openjdk17,
+  openjdk17-bootstrap,
+  git,
+  autoconf,
+  unzip,
+  rsync,
+  debugBuild ? false,
+  withJcef ? true,
 
-, libXdamage
-, libXxf86vm
-, libXrandr
-, libXi
-, libXcursor
-, libXrender
-, libX11
-, libXext
-, libxcb
-, nss
-, nspr
-, libdrm
-, mesa
-, wayland
-, udev
+  libXdamage,
+  libXxf86vm,
+  libXrandr,
+  libXi,
+  libXcursor,
+  libXrender,
+  libX11,
+  libXext,
+  libxcb,
+  nss,
+  nspr,
+  libdrm,
+  mesa,
+  wayland,
+  udev,
 }:
 
 assert debugBuild -> withJcef;
 
 let
-  arch = {
-    "aarch64-linux" = "aarch64";
-    "x86_64-linux" = "x64";
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  arch =
+    {
+      "aarch64-linux" = "aarch64";
+      "x86_64-linux" = "x64";
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   cpu = stdenv.hostPlatform.parsed.cpu.name;
 in
 openjdk17.overrideAttrs (oldAttrs: rec {
@@ -81,7 +84,9 @@ openjdk17.overrideAttrs (oldAttrs: rec {
         -i jb/project/tools/linux/scripts/mkimages_${arch}.sh
 
     patchShebangs .
-    ./jb/project/tools/linux/scripts/mkimages_${arch}.sh ${build} ${if debugBuild then "fd" else (if withJcef then "jcef" else "nomod")}
+    ./jb/project/tools/linux/scripts/mkimages_${arch}.sh ${build} ${
+      if debugBuild then "fd" else (if withJcef then "jcef" else "nomod")
+    }
 
     runHook postBuild
   '';
@@ -99,7 +104,9 @@ openjdk17.overrideAttrs (oldAttrs: rec {
       mv build/linux-${cpu}-server-${buildType}/images/jdk/man build/linux-${cpu}-server-${buildType}/images/${jbrsdkDir}
       rm -rf build/linux-${cpu}-server-${buildType}/images/jdk
       mv build/linux-${cpu}-server-${buildType}/images/${jbrsdkDir} build/linux-${cpu}-server-${buildType}/images/jdk
-    '' + oldAttrs.installPhase + "runHook postInstall";
+    ''
+    + oldAttrs.installPhase
+    + "runHook postInstall";
 
   postInstall = lib.optionalString withJcef ''
     chmod +x $out/lib/openjdk/lib/chrome-sandbox
@@ -109,10 +116,25 @@ openjdk17.overrideAttrs (oldAttrs: rec {
 
   postFixup = ''
     # Build the set of output library directories to rpath against
-    LIBDIRS="${lib.makeLibraryPath [
-      libXdamage libXxf86vm libXrandr libXi libXcursor libXrender libX11 libXext libxcb
-      nss nspr libdrm mesa wayland udev
-    ]}"
+    LIBDIRS="${
+      lib.makeLibraryPath [
+        libXdamage
+        libXxf86vm
+        libXrandr
+        libXi
+        libXcursor
+        libXrender
+        libX11
+        libXext
+        libxcb
+        nss
+        nspr
+        libdrm
+        mesa
+        wayland
+        udev
+      ]
+    }"
     for output in $outputs; do
       if [ "$output" = debug ]; then continue; fi
       LIBDIRS="$(find $(eval echo \$$output) -name \*.so\* -exec dirname {} \+ | sort -u | tr '\n' ':'):$LIBDIRS"
@@ -129,7 +151,12 @@ openjdk17.overrideAttrs (oldAttrs: rec {
     done
   '';
 
-  nativeBuildInputs = [ git autoconf unzip rsync ] ++ oldAttrs.nativeBuildInputs;
+  nativeBuildInputs = [
+    git
+    autoconf
+    unzip
+    rsync
+  ] ++ oldAttrs.nativeBuildInputs;
 
   meta = with lib; {
     description = "An OpenJDK fork to better support Jetbrains's products.";

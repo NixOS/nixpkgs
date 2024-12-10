@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, ncurses
-, readline
-, unixtools
-, enableReadline ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  ncurses,
+  readline,
+  unixtools,
+  enableReadline ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,22 +37,23 @@ stdenv.mkDerivation (finalAttrs: {
     readline
   ];
 
-  makeFlags = [
-    "T=$(out)"
-    "INCDIR="
-    "BINDIR=/bin"
-    "LIBDIR=/lib"
-    "CALC_SHAREDIR=/share/calc"
-    "CALC_INCDIR=/include"
-    "MANDIR=/share/man/man1"
+  makeFlags =
+    [
+      "T=$(out)"
+      "INCDIR="
+      "BINDIR=/bin"
+      "LIBDIR=/lib"
+      "CALC_SHAREDIR=/share/calc"
+      "CALC_INCDIR=/include"
+      "MANDIR=/share/man/man1"
 
-    # Handle LDFLAGS defaults in calc
-    "DEFAULT_LIB_INSTALL_PATH=$(out)/lib"
-  ]
-  ++ lib.optionals enableReadline [
-    "READLINE_LIB=-lreadline"
-    "USE_READLINE=-DUSE_READLINE"
-  ];
+      # Handle LDFLAGS defaults in calc
+      "DEFAULT_LIB_INSTALL_PATH=$(out)/lib"
+    ]
+    ++ lib.optionals enableReadline [
+      "READLINE_LIB=-lreadline"
+      "USE_READLINE=-DUSE_READLINE"
+    ];
 
   meta = {
     homepage = "http://www.isthe.com/chongo/tech/comp/calc/";
@@ -60,9 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/lcn2/calc/blob/v${finalAttrs.version}/CHANGES";
     # The licensing situation depends on readline (see section 3 of the LGPL)
     # If linked against readline then GPLv2 otherwise LGPLv2.1
-    license = if enableReadline
-              then lib.licenses.gpl2Only
-              else lib.licenses.lgpl21Only;
+    license = if enableReadline then lib.licenses.gpl2Only else lib.licenses.lgpl21Only;
     maintainers = with lib.maintainers; [ matthewbauer ];
     platforms = lib.platforms.all;
   };

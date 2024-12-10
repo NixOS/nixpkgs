@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, makeWrapper, gnuplot }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  gnuplot,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "fornalder";
@@ -24,7 +30,10 @@ rustPlatform.buildRustPackage rec {
     description = "Visualize long-term trends in collections of Git repositories";
     homepage = "https://github.com/hpjansson/fornalder";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ astro figsoda ];
+    maintainers = with maintainers; [
+      astro
+      figsoda
+    ];
     mainProgram = "fornalder";
   };
 }

@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.monetdb;
 
-in {
+in
+{
   meta.maintainers = with lib.maintainers; [ StillerHarpo ];
 
   ###### interface

@@ -1,10 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, installShellFiles
-, libuuid
-, lvm2_dmeventd  # <libdevmapper-event.h>
-, zlib
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  libuuid,
+  lvm2_dmeventd, # <libdevmapper-event.h>
+  zlib,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -58,7 +60,13 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dm-vdo/vdo";
     description = "Set of userspace tools for managing pools of deduplicated and/or compressed block storage";
     # platforms are defined in https://github.com/dm-vdo/vdo/blob/master/utils/uds/atomicDefs.h
-    platforms = [ "x86_64-linux" "aarch64-linux" "s390-linux" "powerpc64-linux" "powerpc64le-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "s390-linux"
+      "powerpc64-linux"
+      "powerpc64le-linux"
+    ];
     license = with licenses; [ gpl2Plus ];
     maintainers = [ ];
   };

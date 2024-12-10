@@ -1,12 +1,13 @@
-{ fetchFromGitHub
-, lib
-, stb
-, stdenv
+{
+  fetchFromGitHub,
+  lib,
+  stb,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "qoi";
-  version = "unstable-2023-08-10";  # no upstream version yet.
+  version = "unstable-2023-08-10"; # no upstream version yet.
 
   src = fetchFromGitHub {
     owner = "phoboslab";
@@ -15,7 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-E1hMtjMuDS2zma2s5hlHby/sroRGhtyZm9gLQ+VztsM=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [ stb ];
 

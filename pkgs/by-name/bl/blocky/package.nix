@@ -1,7 +1,8 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, nixosTests
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -21,7 +22,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-I4UXTynulsRuu9U8tsLbPQO1MMPfUC5dAZE420sW1sU=";
 
-  ldflags = [ "-s" "-w" "-X github.com/0xERR0R/blocky/util.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/0xERR0R/blocky/util.Version=${version}"
+  ];
 
   passthru.tests = { inherit (nixosTests) blocky; };
 

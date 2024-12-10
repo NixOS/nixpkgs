@@ -53,7 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
       osqp-eigen
       proxsuite
     ]
-    ++ lib.optional (!pythonSupport) pinocchio ++ lib.optional pythonSupport python3Packages.pinocchio;
+    ++ lib.optional (!pythonSupport) pinocchio
+    ++ lib.optional pythonSupport python3Packages.pinocchio;
 
   doCheck = true;
   pythonImportsCheck = [ "tsid" ];

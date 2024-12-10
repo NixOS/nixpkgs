@@ -1,7 +1,8 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, tags ? [
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  tags ? [
     # `RELEASE_TAGS` from https://github.com/lightningnetwork/lnd/blob/master/make/release_flags.mk
     "autopilotrpc"
     "chainrpc"
@@ -17,7 +18,7 @@
     "watchtowerrpc"
     # Extra tags useful for testing
     "routerrpc"
-  ]
+  ],
 }:
 
 buildGoModule rec {
@@ -33,7 +34,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-dr8Ra8ywy+Zow8JF3K21XZ7lDIIdxvjRz+OD3E+348o=";
 
-  subPackages = [ "cmd/lncli" "cmd/lnd" ];
+  subPackages = [
+    "cmd/lncli"
+    "cmd/lnd"
+  ];
 
   inherit tags;
 
@@ -41,6 +45,9 @@ buildGoModule rec {
     description = "Lightning Network Daemon";
     homepage = "https://github.com/lightningnetwork/lnd";
     license = licenses.mit;
-    maintainers = with maintainers; [ cypherpunk2140 prusnak ];
+    maintainers = with maintainers; [
+      cypherpunk2140
+      prusnak
+    ];
   };
 }

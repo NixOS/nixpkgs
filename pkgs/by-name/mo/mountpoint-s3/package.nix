@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, cmake
-, fuse3
-, pkg-config
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  cmake,
+  fuse3,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,7 +25,11 @@ rustPlatform.buildRustPackage rec {
   # cargo metadata failure: error: none of the selected packages contains these features: libfuse3
   auditable = false;
 
-  nativeBuildInputs = [ cmake pkg-config rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
   buildInputs = [ fuse3 ];
 
   checkFlags = [

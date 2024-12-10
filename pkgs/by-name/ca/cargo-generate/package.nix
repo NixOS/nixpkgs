@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libgit2
-, openssl
-, stdenv
-, darwin
-, git
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libgit2,
+  openssl,
+  stdenv,
+  darwin,
+  git,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,9 +25,14 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libgit2 openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [
+      libgit2
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   nativeCheckInputs = [ git ];
 
@@ -42,16 +48,18 @@ rustPlatform.buildRustPackage rec {
   # Exclude some tests that don't work in sandbox:
   # - favorites_default_to_git_if_not_defined: requires network access to github.com
   # - should_canonicalize: the test assumes that it will be called from the /Users/<project_dir>/ folder on darwin variant.
-  checkFlags = [
-    "--skip=favorites::favorites_default_to_git_if_not_defined"
-    "--skip=git_instead_of::should_read_the_instead_of_config_and_rewrite_an_git_at_url_to_https"
-    "--skip=git_instead_of::should_read_the_instead_of_config_and_rewrite_an_ssh_url_to_https"
-    "--skip=git_over_ssh::it_should_retrieve_the_private_key_from_ssh_agent"
-    "--skip=git_over_ssh::it_should_support_a_public_repo"
-    "--skip=git_over_ssh::it_should_use_a_ssh_key_provided_by_identity_argument"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "--skip=git::utils::should_canonicalize"
-  ];
+  checkFlags =
+    [
+      "--skip=favorites::favorites_default_to_git_if_not_defined"
+      "--skip=git_instead_of::should_read_the_instead_of_config_and_rewrite_an_git_at_url_to_https"
+      "--skip=git_instead_of::should_read_the_instead_of_config_and_rewrite_an_ssh_url_to_https"
+      "--skip=git_over_ssh::it_should_retrieve_the_private_key_from_ssh_agent"
+      "--skip=git_over_ssh::it_should_support_a_public_repo"
+      "--skip=git_over_ssh::it_should_use_a_ssh_key_provided_by_identity_argument"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--skip=git::utils::should_canonicalize"
+    ];
 
   env = {
     LIBGIT2_NO_VENDOR = 1;
@@ -62,7 +70,14 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-generate";
     homepage = "https://github.com/cargo-generate/cargo-generate";
     changelog = "https://github.com/cargo-generate/cargo-generate/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ figsoda turbomack matthiasbeyer ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      figsoda
+      turbomack
+      matthiasbeyer
+    ];
   };
 }

@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, makeWrapper
-, rr
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  makeWrapper,
+  rr,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,6 +35,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-rr";
     homepage = "https://github.com/danielzfranklin/cargo-rr";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ otavio matthiasbeyer ];
+    maintainers = with maintainers; [
+      otavio
+      matthiasbeyer
+    ];
   };
 }

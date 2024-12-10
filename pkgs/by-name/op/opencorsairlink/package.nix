@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, libusb1, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  libusb1,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "OpenCorsairLink";
@@ -30,7 +37,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/audiohacked/OpenCorsairLink";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = [];
+    maintainers = [ ];
     mainProgram = "OpenCorsairLink.elf";
   };
 }

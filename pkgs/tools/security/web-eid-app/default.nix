@@ -1,11 +1,12 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, cmake
-, gtest
-, pcsclite
-, pkg-config
-, qttools
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  gtest,
+  pcsclite,
+  pkg-config,
+  qttools,
 }:
 
 mkDerivation rec {

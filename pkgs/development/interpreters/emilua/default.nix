@@ -22,7 +22,7 @@
   cmake,
   asciidoctor,
   makeWrapper,
-  gitUpdater
+  gitUpdater,
 }:
 
 let
@@ -107,7 +107,8 @@ stdenv.mkDerivation (self: {
   mesonCheckFlags = [
     # Skipped test: libpsx
     # Known issue with no-new-privs disabled in the Nix build environment.
-    "--no-suite" "libpsx"
+    "--no-suite"
+    "libpsx"
   ];
 
   postInstall = ''
@@ -118,7 +119,7 @@ stdenv.mkDerivation (self: {
   '';
 
   passthru = {
-    updateScript = gitUpdater {rev-prefix = "v";};
+    updateScript = gitUpdater { rev-prefix = "v"; };
     inherit boost;
     sitePackages = "lib/emilua-${(lib.concatStringsSep "." (lib.take 2 (lib.splitVersion self.version)))}";
   };
@@ -128,7 +129,10 @@ stdenv.mkDerivation (self: {
     mainProgram = "emilua";
     homepage = "https://emilua.org/";
     license = licenses.boost;
-    maintainers = with maintainers; [ manipuladordedados lucasew ];
+    maintainers = with maintainers; [
+      manipuladordedados
+      lucasew
+    ];
     platforms = platforms.linux;
   };
 })

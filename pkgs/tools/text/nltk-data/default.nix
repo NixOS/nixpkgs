@@ -1,4 +1,10 @@
-{ lib, newScope, fetchFromGitHub, unzip, stdenvNoCC }:
+{
+  lib,
+  newScope,
+  fetchFromGitHub,
+  unzip,
+  stdenvNoCC,
+}:
 let
   base = {
     version = "0-unstable-2024-07-29";
@@ -12,7 +18,12 @@ let
       maintainers = with maintainers; [ happysalada ];
     };
   };
-  makeNltkDataPackage = {pname, location, hash}:
+  makeNltkDataPackage =
+    {
+      pname,
+      location,
+      hash,
+    }:
     let
       src = fetchFromGitHub {
         owner = "nltk";
@@ -22,20 +33,23 @@ let
         sparseCheckout = [ "packages/${location}/${pname}.zip" ];
       };
     in
-    stdenvNoCC.mkDerivation (base // {
-      inherit pname src;
-      inherit (base) version;
-      installPhase = ''
-        runHook preInstall
+    stdenvNoCC.mkDerivation (
+      base
+      // {
+        inherit pname src;
+        inherit (base) version;
+        installPhase = ''
+          runHook preInstall
 
-        mkdir -p $out
-        unzip ${src}/packages/${location}/${pname}.zip
-        mkdir -p $out/${location}
-        cp -R ${pname}/ $out/${location}
+          mkdir -p $out
+          unzip ${src}/packages/${location}/${pname}.zip
+          mkdir -p $out/${location}
+          cp -R ${pname}/ $out/${location}
 
-        runHook postInstall
-      '';
-    });
+          runHook postInstall
+        '';
+      }
+    );
 in
 lib.makeScope newScope (self: {
   punkt = makeNltkDataPackage {

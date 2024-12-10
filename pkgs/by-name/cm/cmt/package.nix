@@ -1,6 +1,8 @@
-{ lib, stdenv
-, fetchurl
-, ladspaH
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ladspaH,
 }:
 
 stdenv.mkDerivation rec {

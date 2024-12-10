@@ -1,4 +1,10 @@
-{ buildGoModule, fetchFromGitHub, lib, testers, github-release }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  testers,
+  github-release,
+}:
 
 buildGoModule rec {
   pname = "github-release";
@@ -31,7 +37,10 @@ buildGoModule rec {
 
     license = licenses.mit;
     homepage = "https://github.com/github-release/github-release";
-    maintainers = with maintainers; [ ardumont j03 ];
+    maintainers = with maintainers; [
+      ardumont
+      j03
+    ];
     platforms = with platforms; unix;
   };
 }

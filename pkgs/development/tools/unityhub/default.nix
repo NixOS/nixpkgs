@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, dpkg
-, makeWrapper
-, buildFHSEnv
-, extraPkgs ? pkgs: [ ]
-, extraLibs ? pkgs: [ ]
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  makeWrapper,
+  buildFHSEnv,
+  extraPkgs ? pkgs: [ ],
+  extraLibs ? pkgs: [ ],
 }:
 
 stdenv.mkDerivation rec {
@@ -27,81 +28,89 @@ stdenv.mkDerivation rec {
     inherit version;
     runScript = "";
 
-    targetPkgs = pkgs: with pkgs; [
-      # Unity Hub binary dependencies
-      xorg.libXrandr
-      xdg-utils
+    targetPkgs =
+      pkgs:
+      with pkgs;
+      [
+        # Unity Hub binary dependencies
+        xorg.libXrandr
+        xdg-utils
 
-      # GTK filepicker
-      gsettings-desktop-schemas
-      hicolor-icon-theme
+        # GTK filepicker
+        gsettings-desktop-schemas
+        hicolor-icon-theme
 
-      # Bug Reporter dependencies
-      fontconfig
-      freetype
-      lsb-release
-    ] ++ extraPkgs pkgs;
+        # Bug Reporter dependencies
+        fontconfig
+        freetype
+        lsb-release
+      ]
+      ++ extraPkgs pkgs;
 
-    multiPkgs = pkgs: with pkgs; [
-      # Unity Hub ldd dependencies
-      cups
-      gtk3
-      expat
-      libxkbcommon
-      lttng-ust_2_12
-      krb5
-      alsa-lib
-      nss
-      libdrm
-      mesa
-      nspr
-      atk
-      dbus
-      at-spi2-core
-      pango
-      xorg.libXcomposite
-      xorg.libXext
-      xorg.libXdamage
-      xorg.libXfixes
-      xorg.libxcb
-      xorg.libxshmfence
-      xorg.libXScrnSaver
-      xorg.libXtst
+    multiPkgs =
+      pkgs:
+      with pkgs;
+      [
+        # Unity Hub ldd dependencies
+        cups
+        gtk3
+        expat
+        libxkbcommon
+        lttng-ust_2_12
+        krb5
+        alsa-lib
+        nss
+        libdrm
+        mesa
+        nspr
+        atk
+        dbus
+        at-spi2-core
+        pango
+        xorg.libXcomposite
+        xorg.libXext
+        xorg.libXdamage
+        xorg.libXfixes
+        xorg.libxcb
+        xorg.libxshmfence
+        xorg.libXScrnSaver
+        xorg.libXtst
 
-      # Unity Hub additional dependencies
-      libva
-      openssl
-      cairo
-      libnotify
-      libuuid
-      libsecret
-      udev
-      libappindicator
-      wayland
-      cpio
-      icu
-      libpulseaudio
+        # Unity Hub additional dependencies
+        libva
+        openssl
+        cairo
+        libnotify
+        libuuid
+        libsecret
+        udev
+        libappindicator
+        wayland
+        cpio
+        icu
+        libpulseaudio
 
-      # Unity Editor dependencies
-      libglvnd # provides ligbl
-      xorg.libX11
-      xorg.libXcursor
-      glib
-      gdk-pixbuf
-      libxml2
-      zlib
-      clang
-      git # for git-based packages in unity package manager
+        # Unity Editor dependencies
+        libglvnd # provides ligbl
+        xorg.libX11
+        xorg.libXcursor
+        glib
+        gdk-pixbuf
+        libxml2
+        zlib
+        clang
+        git # for git-based packages in unity package manager
 
-      # Unity Editor 2019 specific dependencies
-      xorg.libXi
-      xorg.libXrender
-      gnome2.GConf
-      libcap
+        # Unity Editor 2019 specific dependencies
+        xorg.libXi
+        xorg.libXrender
+        gnome2.GConf
+        libcap
 
-      # Unity Editor 6000 specific dependencies
-      harfbuzz
-    ] ++ extraLibs pkgs;
+        # Unity Editor 6000 specific dependencies
+        harfbuzz
+      ]
+      ++ extraLibs pkgs;
   };
 
   unpackCmd = "dpkg -x $curSrc src";
@@ -140,7 +149,10 @@ stdenv.mkDerivation rec {
     downloadPage = "https://unity.com/unity-hub";
     changelog = "https://unity.com/unity-hub/release-notes";
     license = licenses.unfree;
-    maintainers = with maintainers; [ tesq0 huantian ];
+    maintainers = with maintainers; [
+      tesq0
+      huantian
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };

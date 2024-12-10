@@ -8,7 +8,7 @@
   nix-update-script,
   stdenv,
   testers,
-  talecast
+  talecast,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,8 +24,9 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   passthru = {
     updateScript = nix-update-script { };
@@ -37,6 +38,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/TBS1996/TaleCast";
     license = lib.licenses.mit;
     mainProgram = "talecast";
-    maintainers = with lib.maintainers; [ confusedalex getchoo ];
+    maintainers = with lib.maintainers; [
+      confusedalex
+      getchoo
+    ];
   };
 }

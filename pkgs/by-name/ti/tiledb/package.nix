@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, cmake
-, zlib
-, lz4
-, bzip2
-, zstd
-, spdlog
-, tbb
-, openssl
-, boost
-, libpqxx
-, clang-tools
-, catch2_3
-, python3
-, gtest
-, doxygen
-, fixDarwinDylibNames
-, useAVX2 ? stdenv.hostPlatform.avx2Support
+  cmake,
+  zlib,
+  lz4,
+  bzip2,
+  zstd,
+  spdlog,
+  tbb,
+  openssl,
+  boost,
+  libpqxx,
+  clang-tools,
+  catch2_3,
+  python3,
+  gtest,
+  doxygen,
+  fixDarwinDylibNames,
+  useAVX2 ? stdenv.hostPlatform.avx2Support,
 }:
 
 let
   # pre-fetch ExternalProject from cmake/Modules/FindMagic_EP.cmake
   ep-file-windows = fetchFromGitHub {
     owner = "TileDB-Inc";
-    repo   = "file-windows";
-    rev    = "5.38.2.tiledb";
+    repo = "file-windows";
+    rev = "5.38.2.tiledb";
     hash = "sha256-TFn30VCuWZr252VN1T5NNCZe2VEN3xQSomS7XxxKGF8=";
     fetchSubmodules = true;
   };
@@ -106,7 +107,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  installTargets = [ "install-tiledb" "doc" ];
+  installTargets = [
+    "install-tiledb"
+    "doc"
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -add_rpath ${tbb}/lib $out/lib/libtiledb.dylib

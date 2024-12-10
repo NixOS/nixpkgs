@@ -1,15 +1,16 @@
-{ lib
-, llvmPackages
-, fetchurl
-, fetchFromGitHub
-, linuxHeaders
-, python3
-, curl
-, which
-, nix-update-script
-, debugRuntime ? true
-, runtimeAsserts ? false
-, extraKleeuClibcConfig ? {}
+{
+  lib,
+  llvmPackages,
+  fetchurl,
+  fetchFromGitHub,
+  linuxHeaders,
+  python3,
+  curl,
+  which,
+  nix-update-script,
+  debugRuntime ? true,
+  runtimeAsserts ? false,
+  extraKleeuClibcConfig ? { },
 }:
 
 let
@@ -18,11 +19,14 @@ let
     url = "http://www.uclibc.org/downloads/${localeSrcBase}";
     sha256 = "xDYr4xijjxjZjcz0YtItlbq5LwVUi7k/ZSmP6a+uvVc=";
   };
-  resolvedExtraKleeuClibcConfig = lib.mapAttrsToList (name: value: "${name}=${value}") (extraKleeuClibcConfig // {
-    "UCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA" = "n";
-    "RUNTIME_PREFIX" = "/";
-    "DEVEL_PREFIX" = "/";
-  });
+  resolvedExtraKleeuClibcConfig = lib.mapAttrsToList (name: value: "${name}=${value}") (
+    extraKleeuClibcConfig
+    // {
+      "UCLIBC_DOWNLOAD_PREGENERATED_LOCALE_DATA" = "n";
+      "RUNTIME_PREFIX" = "/";
+      "DEVEL_PREFIX" = "/";
+    }
+  );
 in
 llvmPackages.stdenv.mkDerivation rec {
   pname = "klee-uclibc";
@@ -56,11 +60,13 @@ llvmPackages.stdenv.mkDerivation rec {
 
   # klee-uclibc configure does not support --prefix, so we override configurePhase entirely
   configurePhase = ''
-    ./configure ${lib.escapeShellArgs (
-      ["--make-llvm-lib"]
-      ++ lib.optional (!debugRuntime) "--enable-release"
-      ++ lib.optional runtimeAsserts "--enable-assertions"
-    )}
+    ./configure ${
+      lib.escapeShellArgs (
+        [ "--make-llvm-lib" ]
+        ++ lib.optional (!debugRuntime) "--enable-release"
+        ++ lib.optional runtimeAsserts "--enable-assertions"
+      )
+    }
 
     # Set all the configs we care about.
     configs=(
@@ -86,12 +92,15 @@ llvmPackages.stdenv.mkDerivation rec {
     ln -sf ${localeSrc} extra/locale/${localeSrcBase}
   '';
 
-  makeFlags = ["HAVE_DOT_CONFIG=y"];
+  makeFlags = [ "HAVE_DOT_CONFIG=y" ];
 
   enableParallelBuilding = true;
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "v(\d\.\d)" ];
+    extraArgs = [
+      "--version-regex"
+      "v(\d\.\d)"
+    ];
   };
 
   meta = with lib; {

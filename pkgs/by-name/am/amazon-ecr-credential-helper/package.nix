@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, amazon-ecr-credential-helper }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  amazon-ecr-credential-helper,
+}:
 
 buildGoModule rec {
   pname = "amazon-ecr-credential-helper";

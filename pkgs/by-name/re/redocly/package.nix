@@ -1,9 +1,10 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, makeWrapper
-, redocly
-, testers
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  redocly,
+  testers,
 }:
 
 buildNpmPackage rec {

@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, cmake, llvmPackages }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  llvmPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cppe";
@@ -11,8 +17,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-guM7+ZWDJLcAUJtPkKLvC4LYSA2eBvER7cgwPZ7FxHw=";
   };
 
-  nativeBuildInputs = [ cmake ]
-    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
+  nativeBuildInputs = [ cmake ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   cmakeFlags = [ "-DCMAKE_INSTALL_LIBDIR=lib" ];
 

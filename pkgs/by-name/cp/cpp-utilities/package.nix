@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, cppunit
-, libiconv
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  cppunit,
+  libiconv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     libiconv # needed on Darwin, see https://github.com/Martchus/cpp-utilities/issues/4
   ];
 
-  cmakeFlags = ["-DBUILD_SHARED_LIBS=ON"];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   # Otherwise, tests fail since the resulting shared object libc++utilities.so is only available in PWD of the make files
   preCheck = ''

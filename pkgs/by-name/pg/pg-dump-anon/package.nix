@@ -1,4 +1,11 @@
-{ lib, fetchFromGitLab, buildGoModule, nixosTests, postgresql_17, makeWrapper }:
+{
+  lib,
+  fetchFromGitLab,
+  buildGoModule,
+  nixosTests,
+  postgresql_17,
+  makeWrapper,
+}:
 
 buildGoModule rec {
   pname = "pg-dump-anon";

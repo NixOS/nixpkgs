@@ -1,7 +1,8 @@
-{ lib
-, config
-, options
-, ...
+{
+  lib,
+  config,
+  options,
+  ...
 }:
 let
   inherit (builtins) hasAttr;
@@ -15,51 +16,70 @@ let
   # Generates `foo=bar` parameters to pass to the kernel.
   # If `module = baz` is passed, generates `baz.foo=bar`.
   # Adds double quotes on demand to handle `foo="bar baz"`.
-  kernelParam = { module ? null }: name: value:
-    assert lib.asserts.assertMsg (!lib.strings.hasInfix "=" name) "kernel parameter cannot have '=' in name";
+  kernelParam =
+    {
+      module ? null,
+    }:
+    name: value:
+    assert lib.asserts.assertMsg (
+      !lib.strings.hasInfix "=" name
+    ) "kernel parameter cannot have '=' in name";
     let
       key = (if module == null then "" else module + ".") + name;
-      valueString = lib.generators.mkValueStringDefault {} value;
-      quotedValueString = if lib.strings.hasInfix " " valueString
-        then lib.strings.escape ["\""] valueString
-        else valueString;
-    in "${key}=${quotedValueString}";
+      valueString = lib.generators.mkValueStringDefault { } value;
+      quotedValueString =
+        if lib.strings.hasInfix " " valueString then
+          lib.strings.escape [ "\"" ] valueString
+        else
+          valueString;
+    in
+    "${key}=${quotedValueString}";
   msrKernelParam = kernelParam { module = "msr"; };
 in
 {
-  options.hardware.cpu.x86.msr = with lib.options; with lib.types; {
-    enable = mkEnableOption "the `msr` (Model-Specific Registers) kernel module and configure `udev` rules for its devices (usually `/dev/cpu/*/msr`)";
-    owner = mkOption {
-      type = str;
-      default = "root";
-      example = "nobody";
-      description = "Owner ${set}";
-    };
-    group = mkOption {
-      type = str;
-      default = defaultGroup;
-      example = "nobody";
-      description = "Group ${set}";
-    };
-    mode = mkOption {
-      type = str;
-      default = "0640";
-      example = "0660";
-      description = "Mode ${set}";
-    };
-    settings = mkOption {
-      type = submodule {
-        freeformType = attrsOf (oneOf [ bool int str ]);
-        options.allow-writes = mkOption {
-          type = nullOr (enum ["on" "off"]);
-          default = null;
-          description = "Whether to allow writes to MSRs (`\"on\"`) or not (`\"off\"`).";
-        };
+  options.hardware.cpu.x86.msr =
+    with lib.options;
+    with lib.types;
+    {
+      enable = mkEnableOption "the `msr` (Model-Specific Registers) kernel module and configure `udev` rules for its devices (usually `/dev/cpu/*/msr`)";
+      owner = mkOption {
+        type = str;
+        default = "root";
+        example = "nobody";
+        description = "Owner ${set}";
       };
-      default = {};
-      description = "Parameters for the `msr` kernel module.";
+      group = mkOption {
+        type = str;
+        default = defaultGroup;
+        example = "nobody";
+        description = "Group ${set}";
+      };
+      mode = mkOption {
+        type = str;
+        default = "0640";
+        example = "0660";
+        description = "Mode ${set}";
+      };
+      settings = mkOption {
+        type = submodule {
+          freeformType = attrsOf (oneOf [
+            bool
+            int
+            str
+          ]);
+          options.allow-writes = mkOption {
+            type = nullOr (enum [
+              "on"
+              "off"
+            ]);
+            default = null;
+            description = "Whether to allow writes to MSRs (`\"on\"`) or not (`\"off\"`).";
+          };
+        };
+        default = { };
+        description = "Parameters for the `msr` kernel module.";
+      };
     };
-  };
 
   config = mkIf cfg.enable {
     assertions = [
@@ -75,7 +95,9 @@ in
 
     boot = {
       kernelModules = [ "msr" ];
-      kernelParams = lib.attrsets.mapAttrsToList msrKernelParam (lib.attrsets.filterAttrs (_: value: value != null) cfg.settings);
+      kernelParams = lib.attrsets.mapAttrsToList msrKernelParam (
+        lib.attrsets.filterAttrs (_: value: value != null) cfg.settings
+      );
     };
 
     users.groups.${cfg.group} = mkIf isDefaultGroup { };

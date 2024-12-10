@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapGAppsHook3
-, libglvnd
-, libxkbcommon
-, openssl
-, nix-update-script
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapGAppsHook3,
+  libglvnd,
+  libxkbcommon,
+  openssl,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {

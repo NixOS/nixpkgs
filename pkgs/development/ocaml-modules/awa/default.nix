@@ -1,8 +1,21 @@
-{ lib, buildDunePackage, fetchurl
-, mirage-crypto, mirage-crypto-ec, mirage-crypto-rng, mirage-crypto-pk
-, x509, cstruct, cstruct-unix, eqaf
-, mtime, logs, fmt, cmdliner, base64
-, zarith
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  mirage-crypto,
+  mirage-crypto-ec,
+  mirage-crypto-rng,
+  mirage-crypto-pk,
+  x509,
+  cstruct,
+  cstruct-unix,
+  eqaf,
+  mtime,
+  logs,
+  fmt,
+  cmdliner,
+  base64,
+  zarith,
 }:
 
 buildDunePackage rec {
@@ -17,14 +30,25 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [
-    mirage-crypto mirage-crypto-ec mirage-crypto-rng mirage-crypto-pk x509
-    cstruct mtime
-    logs base64 zarith
+    mirage-crypto
+    mirage-crypto-ec
+    mirage-crypto-rng
+    mirage-crypto-pk
+    x509
+    cstruct
+    mtime
+    logs
+    base64
+    zarith
     eqaf
   ];
 
   doCheck = true;
-  checkInputs = [ cstruct-unix cmdliner fmt ];
+  checkInputs = [
+    cstruct-unix
+    cmdliner
+    fmt
+  ];
 
   meta = with lib; {
     description = "SSH implementation in OCaml";

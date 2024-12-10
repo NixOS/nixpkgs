@@ -309,35 +309,41 @@ stdenv.mkDerivation (finalAttrs: {
     rm src/out/run_tests.log
   '';
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    rm -rf $out/out/$outName/{obj,exe.unstripped,lib.unstripped,zip_archives}
-    rm $out/out/$outName/{args.gn,build.ninja,build.ninja.d,compile_commands.json,toolchain.ninja}
-    find $out/out/$outName -name '*_unittests' -delete
-    find $out/out/$outName -name '*_benchmarks' -delete
-  '' + lib.optionalString (finalAttrs.doCheck) ''
-    rm $out/out/$outName/{display_list_rendertests,flutter_tester}
-  '' + ''
-    runHook postInstall
-  '';
+      rm -rf $out/out/$outName/{obj,exe.unstripped,lib.unstripped,zip_archives}
+      rm $out/out/$outName/{args.gn,build.ninja,build.ninja.d,compile_commands.json,toolchain.ninja}
+      find $out/out/$outName -name '*_unittests' -delete
+      find $out/out/$outName -name '*_benchmarks' -delete
+    ''
+    + lib.optionalString (finalAttrs.doCheck) ''
+      rm $out/out/$outName/{display_list_rendertests,flutter_tester}
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   passthru = {
     dart = callPackage ./dart.nix { engine = finalAttrs.finalPackage; };
   };
 
-  meta = with lib; {
-    # Very broken on Darwin
-    broken = stdenv.hostPlatform.isDarwin;
-    description = "The Flutter engine";
-    homepage = "https://flutter.dev";
-    maintainers = with maintainers; [ RossComputerGuy ];
-    license = licenses.bsd3;
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-      "x86_64-darwin"
-      "aarch64-darwin"
-    ];
-  } // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") { hydraPlatforms = [ ]; };
+  meta =
+    with lib;
+    {
+      # Very broken on Darwin
+      broken = stdenv.hostPlatform.isDarwin;
+      description = "The Flutter engine";
+      homepage = "https://flutter.dev";
+      maintainers = with maintainers; [ RossComputerGuy ];
+      license = licenses.bsd3;
+      platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+    }
+    // lib.optionalAttrs (lib.versionOlder flutterVersion "3.22") { hydraPlatforms = [ ]; };
 })

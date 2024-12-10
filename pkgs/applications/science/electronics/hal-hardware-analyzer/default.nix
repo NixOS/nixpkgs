@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, boost
-, cmake
-, fetchFromGitHub
-, fetchpatch
-, graphviz
-, igraph
-, llvmPackages
-, ninja
-, nlohmann_json
-, pkg-config
-, python3Packages
-, qtbase
-, qtsvg
-, quazip
-, rapidjson
-, spdlog
-, verilator
-, wrapQtAppsHook
-, z3
+{
+  lib,
+  stdenv,
+  boost,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+  graphviz,
+  igraph,
+  llvmPackages,
+  ninja,
+  nlohmann_json,
+  pkg-config,
+  python3Packages,
+  qtbase,
+  qtsvg,
+  quazip,
+  rapidjson,
+  spdlog,
+  verilator,
+  wrapQtAppsHook,
+  z3,
 }:
 
 stdenv.mkDerivation rec {
@@ -62,22 +63,25 @@ stdenv.mkDerivation rec {
     pkg-config
     wrapQtAppsHook
   ];
-  buildInputs = [
-    qtbase
-    qtsvg
-    boost
-    rapidjson
-    igraph
-    nlohmann_json
-    spdlog
-    graphviz
-    verilator
-    z3
-    quazip
-  ]
-  ++ (with python3Packages; [ python pybind11 ])
-  ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
-  ;
+  buildInputs =
+    [
+      qtbase
+      qtsvg
+      boost
+      rapidjson
+      igraph
+      nlohmann_json
+      spdlog
+      graphviz
+      verilator
+      z3
+      quazip
+    ]
+    ++ (with python3Packages; [
+      python
+      pybind11
+    ])
+    ++ lib.optional stdenv.cc.isClang llvmPackages.openmp;
 
   cmakeFlags = with lib.versions; [
     "-DHAL_VERSION_RETURN=${version}"
@@ -116,6 +120,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/emsec/hal";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ris shamilton ];
+    maintainers = with maintainers; [
+      ris
+      shamilton
+    ];
   };
 }

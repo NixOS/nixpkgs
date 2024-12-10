@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "cni-plugin-flannel";
@@ -14,7 +18,8 @@ buildGoModule rec {
   vendorHash = "sha256-ZBd7ngYfsmdSGHE9a0kiEB7SeYc9RfaU9MILK2r3cyg=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.Version=${version}"
     "-X main.Commit=${version}"
     "-X main.Program=flannel"

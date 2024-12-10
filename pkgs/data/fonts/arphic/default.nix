@@ -1,4 +1,10 @@
-{ lib, stdenvNoCC, fetchurl, mkfontdir, mkfontscale }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  mkfontdir,
+  mkfontscale,
+}:
 
 let
   version = "0.2.20080216.2";

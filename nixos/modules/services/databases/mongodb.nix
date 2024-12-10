@@ -1,20 +1,26 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.mongodb;
 
   mongodb = cfg.package;
 
-  mongoCnf = cfg: pkgs.writeText "mongodb.conf"
-  ''
-    net.bindIp: ${cfg.bind_ip}
-    ${lib.optionalString cfg.quiet "systemLog.quiet: true"}
-    systemLog.destination: syslog
-    storage.dbPath: ${cfg.dbpath}
-    ${lib.optionalString cfg.enableAuth "security.authorization: enabled"}
-    ${lib.optionalString (cfg.replSetName != "") "replication.replSetName: ${cfg.replSetName}"}
-    ${cfg.extraConfig}
-  '';
+  mongoCnf =
+    cfg:
+    pkgs.writeText "mongodb.conf" ''
+      net.bindIp: ${cfg.bind_ip}
+      ${lib.optionalString cfg.quiet "systemLog.quiet: true"}
+      systemLog.destination: syslog
+      storage.dbPath: ${cfg.dbpath}
+      ${lib.optionalString cfg.enableAuth "security.authorization: enabled"}
+      ${lib.optionalString (cfg.replSetName != "") "replication.replSetName: ${cfg.replSetName}"}
+      ${cfg.extraConfig}
+    '';
 
 in
 
@@ -101,44 +107,49 @@ in
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf config.services.mongodb.enable {
     assertions = [
-      { assertion = !cfg.enableAuth || cfg.initialRootPassword != null;
+      {
+        assertion = !cfg.enableAuth || cfg.initialRootPassword != null;
         message = "`enableAuth` requires `initialRootPassword` to be set.";
       }
     ];
 
-    users.users.mongodb = lib.mkIf (cfg.user == "mongodb")
-      { name = "mongodb";
-        isSystemUser = true;
-        group = "mongodb";
-        description = "MongoDB server user";
-      };
-    users.groups.mongodb = lib.mkIf (cfg.user == "mongodb") {};
+    users.users.mongodb = lib.mkIf (cfg.user == "mongodb") {
+      name = "mongodb";
+      isSystemUser = true;
+      group = "mongodb";
+      description = "MongoDB server user";
+    };
+    users.groups.mongodb = lib.mkIf (cfg.user == "mongodb") { };
 
     environment.systemPackages = [ mongodb ];
 
-    systemd.services.mongodb =
-      { description = "MongoDB server";
+    systemd.services.mongodb = {
+      description = "MongoDB server";
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
 
-        serviceConfig = {
-          ExecStart = "${mongodb}/bin/mongod --config ${mongoCnf cfg} --fork --pidfilepath ${cfg.pidFile}";
-          User = cfg.user;
-          PIDFile = cfg.pidFile;
-          Type = "forking";
-          TimeoutStartSec=120; # initial creating of journal can take some time
-          PermissionsStartOnly = true;
-        };
+      serviceConfig = {
+        ExecStart = "${mongodb}/bin/mongod --config ${mongoCnf cfg} --fork --pidfilepath ${cfg.pidFile}";
+        User = cfg.user;
+        PIDFile = cfg.pidFile;
+        Type = "forking";
+        TimeoutStartSec = 120; # initial creating of journal can take some time
+        PermissionsStartOnly = true;
+      };
 
-        preStart = let
-          cfg_ = cfg // { enableAuth = false; bind_ip = "127.0.0.1"; };
-        in ''
+      preStart =
+        let
+          cfg_ = cfg // {
+            enableAuth = false;
+            bind_ip = "127.0.0.1";
+          };
+        in
+        ''
           rm ${cfg.dbpath}/mongod.lock || true
           if ! test -e ${cfg.dbpath}; then
               install -d -m0700 -o ${cfg.user} ${cfg.dbpath}
@@ -147,7 +158,8 @@ in
           fi
           if ! test -e ${cfg.pidFile}; then
               install -D -o ${cfg.user} /dev/null ${cfg.pidFile}
-          fi '' + lib.optionalString cfg.enableAuth ''
+          fi ''
+        + lib.optionalString cfg.enableAuth ''
 
           if ! test -e "${cfg.dbpath}/.auth_setup_complete"; then
             systemd-run --unit=mongodb-for-setup --uid=${cfg.user} ${mongodb}/bin/mongod --config ${mongoCnf cfg_}
@@ -172,15 +184,15 @@ in
             systemctl stop mongodb-for-setup
           fi
         '';
-        postStart = ''
-            if test -e "${cfg.dbpath}/.first_startup"; then
-              ${lib.optionalString (cfg.initialScript != null) ''
-                ${mongodb}/bin/mongo ${lib.optionalString (cfg.enableAuth) "-u root -p ${cfg.initialRootPassword}"} admin "${cfg.initialScript}"
-              ''}
-              rm -f "${cfg.dbpath}/.first_startup"
-            fi
-        '';
-      };
+      postStart = ''
+        if test -e "${cfg.dbpath}/.first_startup"; then
+          ${lib.optionalString (cfg.initialScript != null) ''
+            ${mongodb}/bin/mongo ${lib.optionalString (cfg.enableAuth) "-u root -p ${cfg.initialRootPassword}"} admin "${cfg.initialScript}"
+          ''}
+          rm -f "${cfg.dbpath}/.first_startup"
+        fi
+      '';
+    };
 
   };
 

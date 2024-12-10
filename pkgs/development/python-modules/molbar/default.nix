@@ -1,21 +1,22 @@
-{ buildPythonPackage
-, lib
-, gfortran
-, fetchgit
-, cmake
-, ninja
-, networkx
-, numpy
-, pandas
-, scipy
-, tqdm
-, joblib
-, numba
-, ase
-, scikit-build
-, dscribe
-, pyyaml
-, pytestCheckHook
+{
+  buildPythonPackage,
+  lib,
+  gfortran,
+  fetchgit,
+  cmake,
+  ninja,
+  networkx,
+  numpy,
+  pandas,
+  scipy,
+  tqdm,
+  joblib,
+  numba,
+  ase,
+  scikit-build,
+  dscribe,
+  pyyaml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

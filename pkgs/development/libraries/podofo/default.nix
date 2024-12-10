@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchurl, cmake, zlib, freetype, libjpeg, libtiff, fontconfig
-, openssl, libpng, lua5, pkg-config, libidn, expat
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  zlib,
+  freetype,
+  libjpeg,
+  libtiff,
+  fontconfig,
+  openssl,
+  libpng,
+  lua5,
+  pkg-config,
+  libidn,
+  expat,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,12 +25,29 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-XeYH4V8ZK4rZBzgwB1nYjeoPXM3OO/AASKDJMrxkUVQ=";
   };
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ zlib freetype libjpeg libtiff fontconfig openssl libpng
-                  libidn expat lua5 ];
+  buildInputs = [
+    zlib
+    freetype
+    libjpeg
+    libtiff
+    fontconfig
+    openssl
+    libpng
+    libidn
+    expat
+    lua5
+  ];
 
   cmakeFlags = [
     "-DPODOFO_BUILD_SHARED=ON"
@@ -37,6 +68,9 @@ stdenv.mkDerivation rec {
     homepage = "https://podofo.sourceforge.net";
     description = "Library to work with the PDF file format";
     platforms = platforms.all;
-    license = with licenses; [ gpl2Plus lgpl2Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl2Plus
+    ];
   };
 }

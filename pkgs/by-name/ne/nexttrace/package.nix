@@ -1,4 +1,8 @@
-{ lib, buildGo122Module, fetchFromGitHub }:
+{
+  lib,
+  buildGo122Module,
+  fetchFromGitHub,
+}:
 
 buildGo122Module rec {
   pname = "nexttrace";
@@ -32,4 +36,3 @@ buildGo122Module rec {
     mainProgram = "nexttrace";
   };
 }
-

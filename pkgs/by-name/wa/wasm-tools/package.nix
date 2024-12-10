@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,10 +19,18 @@ rustPlatform.buildRustPackage rec {
   # Disable cargo-auditable until https://github.com/rust-secure-code/cargo-auditable/issues/124 is solved.
   auditable = false;
   cargoHash = "sha256-il9Zdj50XBMCxiOyQwyToOtaP34hcklOwlDuVGEmyVY=";
-  cargoBuildFlags = [ "--package" "wasm-tools" ];
-  cargoTestFlags = [ "--all" ] ++
+  cargoBuildFlags = [
+    "--package"
+    "wasm-tools"
+  ];
+  cargoTestFlags =
+    [ "--all" ]
+    ++
     # Due to https://github.com/bytecodealliance/wasm-tools/issues/1820
-    [ "--" "--test-threads=1" ];
+    [
+      "--"
+      "--test-threads=1"
+    ];
 
   meta = with lib; {
     description = "Low level tooling for WebAssembly in Rust";

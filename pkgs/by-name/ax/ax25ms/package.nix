@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, protobuf
-, pkg-config
-, grpc
-, libtool
-, which
-, automake
-, libax25
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  protobuf,
+  pkg-config,
+  grpc,
+  libtool,
+  which,
+  automake,
+  libax25,
 }:
 
 stdenv.mkDerivation {

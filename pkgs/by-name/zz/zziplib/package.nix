@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, perl
-, pkg-config
-, python3
-, xmlto
-, zip
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  perl,
+  pkg-config,
+  python3,
+  xmlto,
+  zip,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -58,7 +59,10 @@ stdenv.mkDerivation rec {
       The implementation is based only on the (free) subset of compression with
       the zlib algorithm which is actually used by the zip/unzip tools.
     '';
-    license = with licenses; [ lgpl2Plus mpl11 ];
+    license = with licenses; [
+      lgpl2Plus
+      mpl11
+    ];
     maintainers = with maintainers; [ AndersonTorres ];
     platforms = platforms.unix;
   };

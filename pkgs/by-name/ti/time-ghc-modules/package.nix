@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, sqlite
-, python3
-, coreutils
-, findutils
-, gnused
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  sqlite,
+  python3,
+  coreutils,
+  findutils,
+  gnused,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,14 +21,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/PhJAhP3KCWFyeSk8e5JV0cpBueH/eVDwQTMZSnnZCo=";
   };
 
-  nativeBuildInputs = [makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
 
   buildPhase = ''
     runHook preBuild
 
     mkdir -p $out/bin
     cp ./time-ghc-modules $out/bin/time-ghc-modules
-    wrapProgram $out/bin/time-ghc-modules --prefix PATH : ${lib.makeBinPath [ sqlite python3 coreutils findutils gnused ]} \
+    wrapProgram $out/bin/time-ghc-modules --prefix PATH : ${
+      lib.makeBinPath [
+        sqlite
+        python3
+        coreutils
+        findutils
+        gnused
+      ]
+    } \
                                           --set PROCESS_SCRIPT $out/lib/process \
                                           --set HTML_FILE $out/lib/index.html
 

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, gtkmm3
-, autoreconfHook
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  gtkmm3,
+  autoreconfHook,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,4 +1,14 @@
-{ fetchgit, gawk, jq, lib, makeWrapper, slurp, stdenv, sway, bash }:
+{
+  fetchgit,
+  gawk,
+  jq,
+  lib,
+  makeWrapper,
+  slurp,
+  stdenv,
+  sway,
+  bash,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wlprop";
@@ -20,7 +30,14 @@ stdenv.mkDerivation rec {
 
     install -Dm755 wlprop.sh $out/bin/wlprop
     wrapProgram "$out/bin/wlprop" \
-      --prefix PATH : "$out/bin:${lib.makeBinPath [ gawk jq slurp sway ]}"
+      --prefix PATH : "$out/bin:${
+        lib.makeBinPath [
+          gawk
+          jq
+          slurp
+          sway
+        ]
+      }"
 
     runHook postInstall
   '';
@@ -30,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "Xprop clone for wlroots based compositors";
     homepage = "https://gist.github.com/crispyricepc/f313386043395ff06570e02af2d9a8e0";
     license = licenses.mit;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     platforms = platforms.linux;
     mainProgram = "wlprop";
   };

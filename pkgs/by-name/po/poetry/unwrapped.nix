@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, installShellFiles
-, build
-, cachecontrol
-, cleo
-, crashtest
-, dulwich
-, fastjsonschema
-, installer
-, keyring
-, packaging
-, pexpect
-, pkginfo
-, platformdirs
-, poetry-core
-, poetry-plugin-export
-, pyproject-hooks
-, requests
-, requests-toolbelt
-, shellingham
-, tomlkit
-, trove-classifiers
-, virtualenv
-, xattr
-, tomli
-, importlib-metadata
-, deepdiff
-, pytestCheckHook
-, httpretty
-, pytest-mock
-, pytest-xdist
-, darwin
+{
+  lib,
+  stdenv,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  installShellFiles,
+  build,
+  cachecontrol,
+  cleo,
+  crashtest,
+  dulwich,
+  fastjsonschema,
+  installer,
+  keyring,
+  packaging,
+  pexpect,
+  pkginfo,
+  platformdirs,
+  poetry-core,
+  poetry-plugin-export,
+  pyproject-hooks,
+  requests,
+  requests-toolbelt,
+  shellingham,
+  tomlkit,
+  trove-classifiers,
+  virtualenv,
+  xattr,
+  tomli,
+  importlib-metadata,
+  deepdiff,
+  pytestCheckHook,
+  httpretty,
+  pytest-mock,
+  pytest-xdist,
+  darwin,
 }:
 
 buildPythonPackage rec {
@@ -64,35 +65,40 @@ buildPythonPackage rec {
     "virtualenv"
   ];
 
-  dependencies = [
-    build
-    cachecontrol
-    cleo
-    crashtest
-    dulwich
-    fastjsonschema
-    installer
-    keyring
-    packaging
-    pexpect
-    pkginfo
-    platformdirs
-    poetry-core
-    poetry-plugin-export
-    pyproject-hooks
-    requests
-    requests-toolbelt
-    shellingham
-    tomlkit
-    trove-classifiers
-    virtualenv
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
-    xattr
-  ] ++ lib.optionals (pythonOlder "3.11") [
-    tomli
-  ] ++ lib.optionals (pythonOlder "3.10") [
-    importlib-metadata
-  ] ++ cachecontrol.optional-dependencies.filecache;
+  dependencies =
+    [
+      build
+      cachecontrol
+      cleo
+      crashtest
+      dulwich
+      fastjsonschema
+      installer
+      keyring
+      packaging
+      pexpect
+      pkginfo
+      platformdirs
+      poetry-core
+      poetry-plugin-export
+      pyproject-hooks
+      requests
+      requests-toolbelt
+      shellingham
+      tomlkit
+      trove-classifiers
+      virtualenv
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+      xattr
+    ]
+    ++ lib.optionals (pythonOlder "3.11") [
+      tomli
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      importlib-metadata
+    ]
+    ++ cachecontrol.optional-dependencies.filecache;
 
   postInstall = ''
     installShellCompletion --cmd poetry \
@@ -101,22 +107,27 @@ buildPythonPackage rec {
       --zsh <($out/bin/poetry completions zsh) \
   '';
 
-  nativeCheckInputs = [
-    deepdiff
-    pytestCheckHook
-    httpretty
-    pytest-mock
-    pytest-xdist
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.ps
-  ];
+  nativeCheckInputs =
+    [
+      deepdiff
+      pytestCheckHook
+      httpretty
+      pytest-mock
+      pytest-xdist
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.ps
+    ];
 
-  preCheck = (''
-    export HOME=$TMPDIR
-  '' + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
-    # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
-    export no_proxy='*';
-  '');
+  preCheck = (
+    ''
+      export HOME=$TMPDIR
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
+      # https://github.com/python/cpython/issues/74570#issuecomment-1093748531
+      export no_proxy='*';
+    ''
+  );
 
   postCheck = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
     unset no_proxy
@@ -141,14 +152,17 @@ buildPythonPackage rec {
   # Unset ambient PYTHONPATH in the wrapper, so Poetry only ever runs with its own,
   # isolated set of dependencies. This works because the correct PYTHONPATH is set
   # in the Python script, which runs after the wrapper.
-  makeWrapperArgs = ["--unset PYTHONPATH"];
+  makeWrapperArgs = [ "--unset PYTHONPATH" ];
 
   meta = with lib; {
     changelog = "https://github.com/python-poetry/poetry/blob/${src.rev}/CHANGELOG.md";
     homepage = "https://python-poetry.org/";
     description = "Python dependency management and packaging made easy";
     license = licenses.mit;
-    maintainers = with maintainers; [ jakewaksbaum dotlambda ];
+    maintainers = with maintainers; [
+      jakewaksbaum
+      dotlambda
+    ];
     mainProgram = "poetry";
   };
 }

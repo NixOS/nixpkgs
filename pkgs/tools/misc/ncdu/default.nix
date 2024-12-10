@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
-, pkg-config
-, zig
-, zstd
-, installShellFiles
-, testers
-, pie ? stdenv.hostPlatform.isDarwin
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  pkg-config,
+  zig,
+  zstd,
+  installShellFiles,
+  testers,
+  pie ? stdenv.hostPlatform.isDarwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,7 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Disk usage analyzer with an ncurses interface";
     changelog = "https://dev.yorhel.nl/ncdu/changes2";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pSub rodrgz ];
+    maintainers = with lib.maintainers; [
+      pSub
+      rodrgz
+    ];
     inherit (zig.meta) platforms;
     mainProgram = "ncdu";
   };

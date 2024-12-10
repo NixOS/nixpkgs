@@ -1,6 +1,15 @@
-{ lib, stdenvNoCC, breezy }:
+{
+  lib,
+  stdenvNoCC,
+  breezy,
+}:
 lib.fetchers.withNormalizedHash { } (
-  { url, rev, outputHash, outputHashAlgo }:
+  {
+    url,
+    rev,
+    outputHash,
+    outputHashAlgo,
+  }:
 
   stdenvNoCC.mkDerivation {
     name = "bzr-export";

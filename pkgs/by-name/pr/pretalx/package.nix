@@ -1,10 +1,11 @@
-{ lib
-, buildNpmPackage
-, gettext
-, python3
-, fetchFromGitHub
-, plugins ? [ ]
-, nixosTests
+{
+  lib,
+  buildNpmPackage,
+  gettext,
+  python3,
+  fetchFromGitHub,
+  plugins ? [ ],
+  nixosTests,
 }:
 
 let
@@ -52,7 +53,7 @@ let
     homepage = "https://github.com/pretalx/pretalx";
     changelog = "https://docs.pretalx.org/changelog/#${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ hexa] ++ teams.c3d2.members;
+    maintainers = with maintainers; [ hexa ] ++ teams.c3d2.members;
     platforms = platforms.linux;
   };
 
@@ -112,46 +113,48 @@ python.pkgs.buildPythonApplication rec {
     "whitenoise"
   ];
 
-  dependencies = with python.pkgs; [
-    beautifulsoup4
-    bleach
-    celery
-    css-inline
-    csscompressor
-    cssutils
-    defusedcsv
-    defusedxml
-    django
-    django-bootstrap4
-    django-compressor
-    django-context-decorator
-    django-countries
-    django-csp
-    django-filter
-    django-formset-js-improved
-    django-formtools
-    django-hierarkey
-    django-i18nfield
-    django-libsass
-    django-scopes
-    djangorestframework
-    libsass
-    markdown
-    pillow
-    publicsuffixlist
-    python-dateutil
-    qrcode
-    reportlab
-    requests
-    rules
-    urlman
-    vobject
-    whitenoise
-    zxcvbn
-  ]
-  ++ beautifulsoup4.optional-dependencies.lxml
-  ++ django.optional-dependencies.argon2
-  ++ plugins;
+  dependencies =
+    with python.pkgs;
+    [
+      beautifulsoup4
+      bleach
+      celery
+      css-inline
+      csscompressor
+      cssutils
+      defusedcsv
+      defusedxml
+      django
+      django-bootstrap4
+      django-compressor
+      django-context-decorator
+      django-countries
+      django-csp
+      django-filter
+      django-formset-js-improved
+      django-formtools
+      django-hierarkey
+      django-i18nfield
+      django-libsass
+      django-scopes
+      djangorestframework
+      libsass
+      markdown
+      pillow
+      publicsuffixlist
+      python-dateutil
+      qrcode
+      reportlab
+      requests
+      rules
+      urlman
+      vobject
+      whitenoise
+      zxcvbn
+    ]
+    ++ beautifulsoup4.optional-dependencies.lxml
+    ++ django.optional-dependencies.argon2
+    ++ plugins;
 
   optional-dependencies = {
     postgres = with python.pkgs; [
@@ -194,17 +197,20 @@ python.pkgs.buildPythonApplication rec {
     cd src
   '';
 
-  nativeCheckInputs = with python.pkgs; [
-    faker
-    freezegun
-    jsonschema
-    pytest-cov-stub
-    pytest-django
-    pytest-mock
-    pytest-xdist
-    pytestCheckHook
-    responses
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      faker
+      freezegun
+      jsonschema
+      pytest-cov-stub
+      pytest-django
+      pytest-mock
+      pytest-xdist
+      pytestCheckHook
+      responses
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTests = [
     # tries to run npm run i18n:extract

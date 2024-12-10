@@ -262,11 +262,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeInstallCheckInputs = [
-    perl
-    which
-    sqlite
-  ] ++ lib.optionals enableS3 [ minio ] ++ lib.optionals enableFlight [ python3 ];
+  nativeInstallCheckInputs =
+    [
+      perl
+      which
+      sqlite
+    ]
+    ++ lib.optionals enableS3 [ minio ]
+    ++ lib.optionals enableFlight [ python3 ];
 
   installCheckPhase =
     let

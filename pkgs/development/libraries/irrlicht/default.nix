@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchzip, libGLU, libGL, libXrandr, libX11, libXxf86vm, zlib }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  libGLU,
+  libGL,
+  libXrandr,
+  libX11,
+  libXxf86vm,
+  zlib,
+}:
 
 let
   common = import ./common.nix { inherit fetchzip; };
@@ -10,12 +20,14 @@ stdenv.mkDerivation rec {
 
   src = common.src;
 
-  postPatch = ''
-    sed -ie '/sys\/sysctl.h/d' source/Irrlicht/COSOperator.cpp
-  '' + lib.optionalString stdenv.hostPlatform.isAarch64 ''
-    substituteInPlace source/Irrlicht/Makefile \
-      --replace "-DIRRLICHT_EXPORTS=1" "-DIRRLICHT_EXPORTS=1 -DPNG_ARM_NEON_OPT=0"
-  '';
+  postPatch =
+    ''
+      sed -ie '/sys\/sysctl.h/d' source/Irrlicht/COSOperator.cpp
+    ''
+    + lib.optionalString stdenv.hostPlatform.isAarch64 ''
+      substituteInPlace source/Irrlicht/Makefile \
+        --replace "-DIRRLICHT_EXPORTS=1" "-DIRRLICHT_EXPORTS=1 -DPNG_ARM_NEON_OPT=0"
+    '';
 
   preConfigure = ''
     cd source/Irrlicht
@@ -33,7 +45,11 @@ stdenv.mkDerivation rec {
   '';
 
   buildInputs = [
-    libGLU libGL libXrandr libX11 libXxf86vm
+    libGLU
+    libGL
+    libXrandr
+    libX11
+    libXxf86vm
   ] ++ lib.optional stdenv.hostPlatform.isAarch64 zlib;
 
   meta = {

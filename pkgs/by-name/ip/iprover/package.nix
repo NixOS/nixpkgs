@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitLab, ocamlPackages, eprover, z3, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  ocamlPackages,
+  eprover,
+  z3,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "iprover";
@@ -17,12 +25,23 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ eprover ] ++ (with ocamlPackages; [
-    ocaml findlib
-  ]);
-  buildInputs = [ zlib ocamlPackages.z3 z3 ] ++ (with ocamlPackages; [
-    ocamlgraph yojson zarith
-  ]);
+  nativeBuildInputs =
+    [ eprover ]
+    ++ (with ocamlPackages; [
+      ocaml
+      findlib
+    ]);
+  buildInputs =
+    [
+      zlib
+      ocamlPackages.z3
+      z3
+    ]
+    ++ (with ocamlPackages; [
+      ocamlgraph
+      yojson
+      zarith
+    ]);
 
   preConfigure = "patchShebangs .";
 
@@ -39,7 +58,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Automated first-order logic theorem prover";
     homepage = "http://www.cs.man.ac.uk/~korovink/iprover/";
-    maintainers = with maintainers; [ raskin gebner ];
+    maintainers = with maintainers; [
+      raskin
+      gebner
+    ];
     platforms = platforms.linux;
     license = licenses.gpl3;
   };

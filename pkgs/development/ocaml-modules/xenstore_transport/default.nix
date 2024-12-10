@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, fetchFromGitHub, xenstore, lwt }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  xenstore,
+  lwt,
+}:
 
 buildDunePackage rec {
   pname = "xenstore_transport";
@@ -14,7 +20,10 @@ buildDunePackage rec {
     sha256 = "1kxxd9i4qiq98r7sgvl59iq2ni7y6drnv48qj580q5cyiyyc85q3";
   };
 
-  propagatedBuildInputs = [ xenstore lwt ];
+  propagatedBuildInputs = [
+    xenstore
+    lwt
+  ];
 
   # requires a mounted xenfs and xen server
   doCheck = false;

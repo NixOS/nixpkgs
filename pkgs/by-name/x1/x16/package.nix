@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, callPackage
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  callPackage,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     inherit (finalAttrs) version;
     emulator = finalAttrs.finalPackage;
     rom = callPackage ./rom.nix { };
-    run = (callPackage ./run.nix { }){
+    run = (callPackage ./run.nix { }) {
       inherit (finalAttrs.finalPackage) emulator rom;
     };
   };

@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, just
-, pkg-config
-, makeBinaryWrapper
-, libxkbcommon
-, wayland
-, appstream-glib
-, desktop-file-utils
-, intltool
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  just,
+  pkg-config,
+  makeBinaryWrapper,
+  libxkbcommon,
+  wayland,
+  appstream-glib,
+  desktop-file-utils,
+  intltool,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,8 +27,18 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-bHJUsXHnPH6aV2vTQv1Cdx+p4/Pplg6HMguw5BK9qJ8=";
 
-  nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
-  buildInputs = [ libxkbcommon wayland appstream-glib desktop-file-utils intltool ];
+  nativeBuildInputs = [
+    just
+    pkg-config
+    makeBinaryWrapper
+  ];
+  buildInputs = [
+    libxkbcommon
+    wayland
+    appstream-glib
+    desktop-file-utils
+    intltool
+  ];
 
   dontUseJustBuild = true;
 
@@ -46,7 +57,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/cosmic-launcher \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [wayland]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
   '';
 
   RUSTFLAGS = "--cfg tokio_unstable";

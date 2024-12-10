@@ -1,7 +1,14 @@
-{ lib, fetchFromSourcehut, rustPlatform, nix-update-script }:
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+  nix-update-script,
+}:
 
-let version = "0.5.1";
-in rustPlatform.buildRustPackage {
+let
+  version = "0.5.1";
+in
+rustPlatform.buildRustPackage {
   pname = "sd-switch";
   inherit version;
 

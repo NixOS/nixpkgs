@@ -31,7 +31,6 @@ buildPythonPackage rec {
     "prometheus-client"
   ];
 
-
   propagatedBuildInputs = [
     flask
     karton-core

@@ -1,7 +1,8 @@
-{ soundfont-fluid
-, buildFHSEnv
-, runCommand
-, callPackage
+{
+  soundfont-fluid,
+  buildFHSEnv,
+  runCommand,
+  callPackage,
 }:
 
 let

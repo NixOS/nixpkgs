@@ -1,52 +1,72 @@
 # GeoClue 2 daemon.
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.geoclue2;
 
-  defaultWhitelist = [ "gnome-shell" "io.elementary.desktop.agent-geoclue2" ];
+  defaultWhitelist = [
+    "gnome-shell"
+    "io.elementary.desktop.agent-geoclue2"
+  ];
 
-  appConfigModule = lib.types.submodule ({ name, ... }: {
-    options = {
-      desktopID = lib.mkOption {
-        type = lib.types.str;
-        description = "Desktop ID of the application.";
+  appConfigModule = lib.types.submodule (
+    { name, ... }:
+    {
+      options = {
+        desktopID = lib.mkOption {
+          type = lib.types.str;
+          description = "Desktop ID of the application.";
+        };
+
+        isAllowed = lib.mkOption {
+          type = lib.types.bool;
+          description = ''
+            Whether the application will be allowed access to location information.
+          '';
+        };
+
+        isSystem = lib.mkOption {
+          type = lib.types.bool;
+          description = ''
+            Whether the application is a system component or not.
+          '';
+        };
+
+        users = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ ];
+          description = ''
+            List of UIDs of all users for which this application is allowed location
+            info access, Defaults to an empty string to allow it for all users.
+          '';
+        };
       };
 
-      isAllowed = lib.mkOption {
-        type = lib.types.bool;
-        description = ''
-          Whether the application will be allowed access to location information.
-        '';
-      };
+      config.desktopID = lib.mkDefault name;
+    }
+  );
 
-      isSystem = lib.mkOption {
-        type = lib.types.bool;
-        description = ''
-          Whether the application is a system component or not.
-        '';
-      };
-
-      users = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
-        default = [];
-        description = ''
-          List of UIDs of all users for which this application is allowed location
-          info access, Defaults to an empty string to allow it for all users.
-        '';
+  appConfigToINICompatible =
+    _:
+    {
+      desktopID,
+      isAllowed,
+      isSystem,
+      users,
+      ...
+    }:
+    {
+      name = desktopID;
+      value = {
+        allowed = isAllowed;
+        system = isSystem;
+        users = lib.concatStringsSep ";" users;
       };
     };
-
-    config.desktopID = lib.mkDefault name;
-  });
-
-  appConfigToINICompatible = _: { desktopID, isAllowed, isSystem, users, ... }: {
-    name = desktopID;
-    value = {
-      allowed = isAllowed;
-      system = isSystem;
-      users = lib.concatStringsSep ";" users;
-    };
-  };
 
 in
 {
@@ -129,10 +149,12 @@ in
         type = lib.types.package;
         default = pkgs.geoclue2;
         defaultText = lib.literalExpression "pkgs.geoclue2";
-        apply = pkg: pkg.override {
-          # the demo agent isn't built by default, but we need it here
-          withDemoAgent = cfg.enableDemoAgent;
-        };
+        apply =
+          pkg:
+          pkg.override {
+            # the demo agent isn't built by default, but we need it here
+            withDemoAgent = cfg.enableDemoAgent;
+          };
         description = "The geoclue2 package to use";
       };
 
@@ -163,7 +185,7 @@ in
 
       appConfig = lib.mkOption {
         type = lib.types.attrsOf appConfigModule;
-        default = {};
+        default = { };
         example = lib.literalExpression ''
           "com.github.app" = {
             isAllowed = true;
@@ -179,7 +201,6 @@ in
     };
 
   };
-
 
   ###### implementation
   config = lib.mkIf cfg.enable {
@@ -200,7 +221,7 @@ in
         description = "Geoinformation service";
       };
 
-      groups.geoclue = {};
+      groups.geoclue = { };
     };
 
     systemd.services.geoclue = {
@@ -244,11 +265,12 @@ in
       isSystem = false;
     };
 
-    environment.etc."geoclue/geoclue.conf".text =
-      lib.generators.toINI {} ({
+    environment.etc."geoclue/geoclue.conf".text = lib.generators.toINI { } (
+      {
         agent = {
-          whitelist = lib.concatStringsSep ";"
-            (lib.optional cfg.enableDemoAgent "geoclue-demo-agent" ++ defaultWhitelist);
+          whitelist = lib.concatStringsSep ";" (
+            lib.optional cfg.enableDemoAgent "geoclue-demo-agent" ++ defaultWhitelist
+          );
         };
         network-nmea = {
           enable = cfg.enableNmea;
@@ -269,7 +291,9 @@ in
           submission-url = cfg.submissionUrl;
           submission-nick = cfg.submissionNick;
         };
-      } // lib.mapAttrs' appConfigToINICompatible cfg.appConfig);
+      }
+      // lib.mapAttrs' appConfigToINICompatible cfg.appConfig
+    );
   };
 
   meta = with lib; {

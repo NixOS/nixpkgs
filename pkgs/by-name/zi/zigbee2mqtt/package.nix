@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, fetchFromGitHub
-, systemdMinimal
-, nixosTests
-, nix-update-script
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  systemdMinimal,
+  nixosTests,
+  nix-update-script,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
 }:
 
 buildNpmPackage rec {
@@ -41,7 +42,10 @@ buildNpmPackage rec {
       It bridges events and allows you to control your Zigbee devices via MQTT.
       In this way you can integrate your Zigbee devices with whatever smart home infrastructure you are using.
     '';
-    maintainers = with maintainers; [ sweber hexa ];
+    maintainers = with maintainers; [
+      sweber
+      hexa
+    ];
     mainProgram = "zigbee2mqtt";
   };
 }

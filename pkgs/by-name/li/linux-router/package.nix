@@ -1,41 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
 
-# --- Runtime Dependencies ---
-, bash
-, procps
-, iproute2
-, dnsmasq
-, iptables
-, coreutils
-, flock
-, gawk
-, getopt
-, gnugrep
-, gnused
-, which
-# `nmcli` is not required for create_ap.
-# Use NetworkManager by default because it is very likely already present
-, useNetworkManager ? true
-, networkmanager
+  # --- Runtime Dependencies ---
+  bash,
+  procps,
+  iproute2,
+  dnsmasq,
+  iptables,
+  coreutils,
+  flock,
+  gawk,
+  getopt,
+  gnugrep,
+  gnused,
+  which,
+  # `nmcli` is not required for create_ap.
+  # Use NetworkManager by default because it is very likely already present
+  useNetworkManager ? true,
+  networkmanager,
 
-# --- WiFi Hotspot Dependencies ---
-, useWifiDependencies ? true
-, hostapd
-, iw
-# You only need this if 'iw' can not recognize your adapter.
-, useWirelessTools ? true
-, wirelesstools # for iwconfig
-# To fall back to haveged if entropy is low.
-# Defaulting to false because not having it does not break things.
-# If it is really needed, warnings will be logged to journal.
-, useHaveged ? false
-, haveged
-# You only need this if you wish to show WiFi QR codes in terminal
-, useQrencode ? true
-, qrencode
+  # --- WiFi Hotspot Dependencies ---
+  useWifiDependencies ? true,
+  hostapd,
+  iw,
+  # You only need this if 'iw' can not recognize your adapter.
+  useWirelessTools ? true,
+  wirelesstools, # for iwconfig
+  # To fall back to haveged if entropy is low.
+  # Defaulting to false because not having it does not break things.
+  # If it is really needed, warnings will be logged to journal.
+  useHaveged ? false,
+  haveged,
+  # You only need this if you wish to show WiFi QR codes in terminal
+  useQrencode ? true,
+  qrencode,
 }:
 
 stdenv.mkDerivation rec {
@@ -55,15 +56,30 @@ stdenv.mkDerivation rec {
 
   dontBuild = true;
 
-  installPhase = let
-      binPath = lib.makeBinPath ([ procps iproute2 getopt bash dnsmasq
-        iptables coreutils which flock gnugrep gnused gawk ]
-        ++ lib.optional useNetworkManager                          networkmanager
-        ++ lib.optional useWifiDependencies                        hostapd
-        ++ lib.optional useWifiDependencies                        iw
-        ++ lib.optional (useWifiDependencies && useWirelessTools)  wirelesstools
-        ++ lib.optional (useWifiDependencies && useHaveged)        haveged
-        ++ lib.optional (useWifiDependencies && useQrencode)       qrencode);
+  installPhase =
+    let
+      binPath = lib.makeBinPath (
+        [
+          procps
+          iproute2
+          getopt
+          bash
+          dnsmasq
+          iptables
+          coreutils
+          which
+          flock
+          gnugrep
+          gnused
+          gawk
+        ]
+        ++ lib.optional useNetworkManager networkmanager
+        ++ lib.optional useWifiDependencies hostapd
+        ++ lib.optional useWifiDependencies iw
+        ++ lib.optional (useWifiDependencies && useWirelessTools) wirelesstools
+        ++ lib.optional (useWifiDependencies && useHaveged) haveged
+        ++ lib.optional (useWifiDependencies && useQrencode) qrencode
+      );
     in
     ''
       mkdir -p $out/bin/ $out/.bin-wrapped

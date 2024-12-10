@@ -1,17 +1,18 @@
-{ lib
-, mkXfceDerivation
-, glib
-, gtk3
-, gtk-layer-shell
-, libX11
-, libxfce4ui
-, vte
-, xfconf
-, pcre2
-, libxslt
-, docbook_xml_dtd_45
-, docbook_xsl
-, nixosTests
+{
+  lib,
+  mkXfceDerivation,
+  glib,
+  gtk3,
+  gtk-layer-shell,
+  libX11,
+  libxfce4ui,
+  vte,
+  xfconf,
+  pcre2,
+  libxslt,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  nixosTests,
 }:
 
 mkXfceDerivation {

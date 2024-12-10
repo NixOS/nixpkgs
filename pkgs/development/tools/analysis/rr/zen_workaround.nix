@@ -1,6 +1,12 @@
-{ stdenv, lib, kernel, rr }:
+{
+  stdenv,
+  lib,
+  kernel,
+  rr,
+}:
 
-/* The python script shouldn't be needed for users of this kernel module.
+/*
+  The python script shouldn't be needed for users of this kernel module.
   https://github.com/rr-debugger/rr/blob/master/scripts/zen_workaround.py
   The module itself is called "zen_workaround" (a bit generic unfortunately).
 */
@@ -21,15 +27,17 @@ stdenv.mkDerivation {
   '';
   buildFlags = [ "modules" ];
 
-  installPhase = let
-    modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel"; #TODO: longer path?
-  in ''
-    runHook preInstall
-    mkdir -p "${modDestDir}"
-    cp *.ko "${modDestDir}/"
-    find ${modDestDir} -name '*.ko' -exec xz -f '{}' \;
-    runHook postInstall
-  '';
+  installPhase =
+    let
+      modDestDir = "$out/lib/modules/${kernel.modDirVersion}/kernel"; # TODO: longer path?
+    in
+    ''
+      runHook preInstall
+      mkdir -p "${modDestDir}"
+      cp *.ko "${modDestDir}/"
+      find ${modDestDir} -name '*.ko' -exec xz -f '{}' \;
+      runHook postInstall
+    '';
 
   meta = with lib; {
     description = "Kernel module supporting the rr debugger on (some) AMD Zen-based CPUs";

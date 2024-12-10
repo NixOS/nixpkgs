@@ -1,14 +1,15 @@
-{ lib
-, buildGoModule
-, fetchFromSourcehut
-, fetchpatch
-, ncurses
-, notmuch
-, scdoc
-, python3Packages
-, w3m
-, dante
-, gawk
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+  fetchpatch,
+  ncurses,
+  notmuch,
+  scdoc,
+  python3Packages,
+  w3m,
+  dante,
+  gawk,
 }:
 
 buildGoModule rec {
@@ -35,7 +36,7 @@ buildGoModule rec {
 
     # patch to fix a encoding problem with gpg signed messages
     (fetchpatch {
-      url ="https://git.sr.ht/~rjarry/aerc/commit/7346d20.patch";
+      url = "https://git.sr.ht/~rjarry/aerc/commit/7346d20.patch";
       hash = "sha256-OCm8BcovYN2IDSgslZklQxkGVkSYQ8HLCrf2+DRB2mM=";
     })
   ];
@@ -55,7 +56,11 @@ buildGoModule rec {
     python3Packages.vobject
   ];
 
-  buildInputs = [ python3Packages.python notmuch gawk ];
+  buildInputs = [
+    python3Packages.python
+    notmuch
+    gawk
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -69,9 +74,19 @@ buildGoModule rec {
     wrapProgram $out/bin/aerc \
       --prefix PATH : ${lib.makeBinPath [ ncurses ]}
     wrapProgram $out/libexec/aerc/filters/html \
-      --prefix PATH : ${lib.makeBinPath [ w3m dante ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          w3m
+          dante
+        ]
+      }
     wrapProgram $out/libexec/aerc/filters/html-unsafe \
-      --prefix PATH : ${lib.makeBinPath [ w3m dante ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          w3m
+          dante
+        ]
+      }
     patchShebangs $out/libexec/aerc/filters
   '';
 

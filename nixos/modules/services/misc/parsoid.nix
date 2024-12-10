@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.parsoid;
@@ -7,24 +12,34 @@ let
 
   confTree = {
     worker_heartbeat_timeout = 300000;
-    logging = { level = "info"; };
-    services = [{
-      module = "lib/index.js";
-      entrypoint = "apiServiceWorker";
-      conf = {
-        mwApis = map (x: if lib.isAttrs x then x else { uri = x; }) cfg.wikis;
-        serverInterface = cfg.interface;
-        serverPort = cfg.port;
-      };
-    }];
+    logging = {
+      level = "info";
+    };
+    services = [
+      {
+        module = "lib/index.js";
+        entrypoint = "apiServiceWorker";
+        conf = {
+          mwApis = map (x: if lib.isAttrs x then x else { uri = x; }) cfg.wikis;
+          serverInterface = cfg.interface;
+          serverPort = cfg.port;
+        };
+      }
+    ];
   };
 
-  confFile = pkgs.writeText "config.yml" (builtins.toJSON (lib.recursiveUpdate confTree cfg.extraConfig));
+  confFile = pkgs.writeText "config.yml" (
+    builtins.toJSON (lib.recursiveUpdate confTree cfg.extraConfig)
+  );
 
 in
 {
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "parsoid" "interwikis" ] "Use services.parsoid.wikis instead")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "parsoid"
+      "interwikis"
+    ] "Use services.parsoid.wikis instead")
   ];
 
   ##### interface
@@ -76,7 +91,7 @@ in
 
       extraConfig = lib.mkOption {
         type = lib.types.attrs;
-        default = {};
+        default = { };
         description = ''
           Extra configuration to add to parsoid configuration.
         '';
@@ -111,7 +126,10 @@ in
         ProtectKernelTunables = true;
         ProtectKernelModules = true;
         ProtectControlGroups = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         LockPersonality = true;
         #MemoryDenyWriteExecute = true;

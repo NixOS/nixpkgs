@@ -1,75 +1,78 @@
-{ lib
-, stdenv
-, buildPythonApplication
-, fetchFromGitHub
-, makeWrapper
-# Tie withPlugins through the fixed point here, so it will receive an
-# overridden version properly
-, buildbot
-, pythonOlder
-, python
-, twisted
-, jinja2
-, msgpack
-, zope-interface
-, sqlalchemy
-, alembic
-, python-dateutil
-, txaio
-, autobahn
-, pyjwt
-, pyyaml
-, treq
-, txrequests
-, pypugjs
-, boto3
-, moto
-, markdown
-, lz4
-, brotli
-, zstandard
-, setuptools-trial
-, buildbot-worker
-, buildbot-plugins
-, buildbot-pkg
-, parameterized
-, git
-, openssh
-, setuptools
-, croniter
-, importlib-resources
-, packaging
-, unidiff
-, glibcLocales
-, nixosTests
+{
+  lib,
+  stdenv,
+  buildPythonApplication,
+  fetchFromGitHub,
+  makeWrapper,
+  # Tie withPlugins through the fixed point here, so it will receive an
+  # overridden version properly
+  buildbot,
+  pythonOlder,
+  python,
+  twisted,
+  jinja2,
+  msgpack,
+  zope-interface,
+  sqlalchemy,
+  alembic,
+  python-dateutil,
+  txaio,
+  autobahn,
+  pyjwt,
+  pyyaml,
+  treq,
+  txrequests,
+  pypugjs,
+  boto3,
+  moto,
+  markdown,
+  lz4,
+  brotli,
+  zstandard,
+  setuptools-trial,
+  buildbot-worker,
+  buildbot-plugins,
+  buildbot-pkg,
+  parameterized,
+  git,
+  openssh,
+  setuptools,
+  croniter,
+  importlib-resources,
+  packaging,
+  unidiff,
+  glibcLocales,
+  nixosTests,
 }:
 
 let
-  withPlugins = plugins: buildPythonApplication {
-    pname = "${buildbot.pname}-with-plugins";
-    inherit (buildbot) version;
-    format = "other";
+  withPlugins =
+    plugins:
+    buildPythonApplication {
+      pname = "${buildbot.pname}-with-plugins";
+      inherit (buildbot) version;
+      format = "other";
 
-    dontUnpack = true;
-    dontBuild = true;
-    doCheck = false;
+      dontUnpack = true;
+      dontBuild = true;
+      doCheck = false;
 
-    nativeBuildInputs = [
-      makeWrapper
-    ];
+      nativeBuildInputs = [
+        makeWrapper
+      ];
 
-    propagatedBuildInputs = plugins ++ buildbot.propagatedBuildInputs;
+      propagatedBuildInputs = plugins ++ buildbot.propagatedBuildInputs;
 
-    installPhase = ''
-      makeWrapper ${buildbot}/bin/buildbot $out/bin/buildbot \
-        --prefix PYTHONPATH : "${buildbot}/${python.sitePackages}:$PYTHONPATH"
-      ln -sfv ${buildbot}/lib $out/lib
-    '';
+      installPhase = ''
+        makeWrapper ${buildbot}/bin/buildbot $out/bin/buildbot \
+          --prefix PYTHONPATH : "${buildbot}/${python.sitePackages}:$PYTHONPATH"
+        ln -sfv ${buildbot}/lib $out/lib
+      '';
 
-    passthru = buildbot.passthru // {
-      withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
+      passthru = buildbot.passthru // {
+        withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
+      };
     };
-  };
 in
 buildPythonApplication rec {
   pname = "buildbot";
@@ -92,28 +95,29 @@ buildPythonApplication rec {
     "twisted"
   ];
 
-  propagatedBuildInputs = [
-    # core
-    twisted
-    jinja2
-    msgpack
-    zope-interface
-    sqlalchemy
-    alembic
-    python-dateutil
-    txaio
-    autobahn
-    pyjwt
-    pyyaml
-    setuptools
-    croniter
-    importlib-resources
-    packaging
-    unidiff
-    treq
-    brotli
-    zstandard
-  ]
+  propagatedBuildInputs =
+    [
+      # core
+      twisted
+      jinja2
+      msgpack
+      zope-interface
+      sqlalchemy
+      alembic
+      python-dateutil
+      txaio
+      autobahn
+      pyjwt
+      pyyaml
+      setuptools
+      croniter
+      importlib-resources
+      packaging
+      unidiff
+      treq
+      brotli
+      zstandard
+    ]
     # tls
     ++ twisted.optional-dependencies.tls;
 
@@ -155,14 +159,16 @@ buildPythonApplication rec {
     export PATH="$out/bin:$PATH"
   '';
 
-  passthru = {
-    inherit withPlugins python;
-    updateScript = ./update.sh;
-  } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-    tests = {
-      inherit (nixosTests) buildbot;
+  passthru =
+    {
+      inherit withPlugins python;
+      updateScript = ./update.sh;
+    }
+    // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      tests = {
+        inherit (nixosTests) buildbot;
+      };
     };
-  };
 
   meta = with lib; {
     description = "Open-source continuous integration framework for automating software build, test, and release processes";

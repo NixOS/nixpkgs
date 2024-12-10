@@ -1,14 +1,15 @@
-{ cmake
-, fetchFromGitHub
-, jazz2-content
-, lib
-, libopenmpt
-, libvorbis
-, openal
-, SDL2
-, stdenv
-, testers
-, zlib
+{
+  cmake,
+  fetchFromGitHub,
+  jazz2-content,
+  lib,
+  libopenmpt,
+  libvorbis,
+  openal,
+  SDL2,
+  stdenv,
+  testers,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +26,13 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [ ./nocontent.patch ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libopenmpt libvorbis openal SDL2 zlib ];
+  buildInputs = [
+    libopenmpt
+    libvorbis
+    openal
+    SDL2
+    zlib
+  ];
 
   cmakeFlags = [
     "-DLIBOPENMPT_INCLUDE_DIR=${lib.getDev libopenmpt}/include/libopenmpt"

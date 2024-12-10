@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, icu
-, pkg-config
-, enableUnicodeHelp ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  icu,
+  pkg-config,
+  enableUnicodeHelp ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +20,9 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = lib.optionals enableUnicodeHelp [ icu.dev ];
-  cmakeFlags = [ "-DCXXOPTS_BUILD_EXAMPLES=OFF" ]
-    ++ lib.optional enableUnicodeHelp "-DCXXOPTS_USE_UNICODE_HELP=TRUE";
+  cmakeFlags = [
+    "-DCXXOPTS_BUILD_EXAMPLES=OFF"
+  ] ++ lib.optional enableUnicodeHelp "-DCXXOPTS_USE_UNICODE_HELP=TRUE";
   nativeBuildInputs = [ cmake ] ++ lib.optionals enableUnicodeHelp [ pkg-config ];
 
   doCheck = true;

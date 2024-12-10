@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch2, libpng }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch2,
+  libpng,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pngcrush";
@@ -16,7 +22,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" "LD=${stdenv.cc.targetPrefix}cc" ];      # gcc and/or clang compat
+  makeFlags = [
+    "CC=${stdenv.cc.targetPrefix}cc"
+    "LD=${stdenv.cc.targetPrefix}cc"
+  ]; # gcc and/or clang compat
 
   configurePhase = ''
     sed -i s,/usr,$out, Makefile

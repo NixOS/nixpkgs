@@ -1,12 +1,13 @@
-{ lib
-, bash
-, fetchFromGitHub
-, installShellFiles
-, nix-update-script
-, nixosTests
-, pam
-, pandoc
-, rustPlatform
+{
+  lib,
+  bash,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
+  nixosTests,
+  pam,
+  pandoc,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +22,10 @@ rustPlatform.buildRustPackage rec {
   };
   cargoHash = "sha256-laTcGi2pwc9uWjum03PviyakVMmjijKgxfIPjIpoRy8=";
 
-  nativeBuildInputs = [ installShellFiles pandoc ];
+  nativeBuildInputs = [
+    installShellFiles
+    pandoc
+  ];
 
   buildInputs = [ pam ];
 
@@ -73,7 +77,10 @@ rustPlatform.buildRustPackage rec {
     description = "Memory safe implementation of sudo and su";
     homepage = "https://github.com/trifectatechfoundation/sudo-rs";
     changelog = "${meta.homepage}/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ nicoo ];
     platforms = platforms.linux;
   };

@@ -1,11 +1,12 @@
-{ buildDunePackage
-, ocaml
-, lib
-, ppxlib
-, fetchFromGitHub
-, ojs
-, js_of_ocaml-compiler
-, nodejs
+{
+  buildDunePackage,
+  ocaml,
+  lib,
+  ppxlib,
+  fetchFromGitHub,
+  ojs,
+  js_of_ocaml-compiler,
+  nodejs,
 }:
 
 buildDunePackage rec {
@@ -21,8 +22,14 @@ buildDunePackage rec {
 
   minimalOCamlVersion = "4.11";
 
-  propagatedBuildInputs = [ ojs ppxlib ];
-  nativeCheckInputs = [ js_of_ocaml-compiler nodejs ];
+  propagatedBuildInputs = [
+    ojs
+    ppxlib
+  ];
+  nativeCheckInputs = [
+    js_of_ocaml-compiler
+    nodejs
+  ];
   doCheck = lib.versionAtLeast ocaml.version "4.13";
 
   meta = {

@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, testers
-, cmake
-, cmake-extras
-, glib
-, intltool
-, pkg-config
-, validatePkgConfig
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  testers,
+  cmake,
+  cmake-extras,
+  glib,
+  intltool,
+  pkg-config,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

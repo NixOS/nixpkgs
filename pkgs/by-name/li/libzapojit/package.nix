@@ -1,18 +1,44 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, intltool, json-glib, librest, libsoup_2_4, gnome, gnome-online-accounts, gobject-introspection }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  intltool,
+  json-glib,
+  librest,
+  libsoup_2_4,
+  gnome,
+  gnome-online-accounts,
+  gobject-introspection,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libzapojit";
   version = "0.0.3";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "0zn3s7ryjc3k1abj4k55dr2na844l451nrg9s6cvnnhh569zj99x";
   };
 
-  nativeBuildInputs = [ pkg-config intltool gobject-introspection ];
-  propagatedBuildInputs = [ glib json-glib librest libsoup_2_4 gnome-online-accounts ]; # zapojit-0.0.pc
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+    gobject-introspection
+  ];
+  propagatedBuildInputs = [
+    glib
+    json-glib
+    librest
+    libsoup_2_4
+    gnome-online-accounts
+  ]; # zapojit-0.0.pc
 
   passthru = {
     updateScript = gnome.updateScript {

@@ -1,8 +1,9 @@
-{ buildOctavePackage
-, stdenv
-, lib
-, fetchurl
-, gsl
+{
+  buildOctavePackage,
+  stdenv,
+  lib,
+  fetchurl,
+  gsl,
 }:
 
 buildOctavePackage rec {

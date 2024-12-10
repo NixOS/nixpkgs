@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -13,7 +18,7 @@ in
 
       config = mkOption {
         type = attrs;
-        default = {};
+        default = { };
         description = ''
           Content of /etc/target/saveconfig.json
           This file is normally read and written by targetcli
@@ -31,11 +36,18 @@ in
 
     environment.systemPackages = with pkgs; [ targetcli ];
 
-    boot.kernelModules = [ "configfs" "target_core_mod" "iscsi_target_mod" ];
+    boot.kernelModules = [
+      "configfs"
+      "target_core_mod"
+      "iscsi_target_mod"
+    ];
 
     systemd.services.iscsi-target = {
       enable = true;
-      after = [ "network.target" "local-fs.target" ];
+      after = [
+        "network.target"
+        "local-fs.target"
+      ];
       requires = [ "sys-kernel-config.mount" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {

@@ -1,7 +1,21 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, cmdliner, dap, fmt, iter, logs, lru, lwt_ppx, lwt_react, menhir, menhirLib, path_glob, ppx_deriving_yojson
-, ppx_optcomp
-, gitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  cmdliner,
+  dap,
+  fmt,
+  iter,
+  logs,
+  lru,
+  lwt_ppx,
+  lwt_react,
+  menhir,
+  menhirLib,
+  path_glob,
+  ppx_deriving_yojson,
+  ppx_optcomp,
+  gitUpdater,
 }:
 
 buildDunePackage rec {

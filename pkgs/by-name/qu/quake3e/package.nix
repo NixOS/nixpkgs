@@ -1,24 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, curl
-, libGL
-, libX11
-, libXxf86dga
-, alsa-lib
-, libXrandr
-, libXxf86vm
-, libXext
-, SDL2
-, glibc
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  curl,
+  libGL,
+  libX11,
+  libXxf86dga,
+  alsa-lib,
+  libXrandr,
+  libXxf86vm,
+  libXext,
+  SDL2,
+  glibc,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 let
-  arch =
-    /**/ if stdenv.hostPlatform.isx86_64 then "x64"
-    else stdenv.hostPlatform.parsed.cpu.name;
+  arch = if stdenv.hostPlatform.isx86_64 then "x64" else stdenv.hostPlatform.parsed.cpu.name;
 in
 stdenv.mkDerivation rec {
   pname = "Quake3e";
@@ -31,8 +30,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-tQgrHiP+QhBzcUnHRwzaDe38Th0uDt450fra8O3Vjqc=";
   };
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
-  buildInputs = [ curl libGL libX11 libXxf86dga alsa-lib libXrandr libXxf86vm libXext SDL2 glibc ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
+  buildInputs = [
+    curl
+    libGL
+    libX11
+    libXxf86dga
+    alsa-lib
+    libXrandr
+    libXxf86vm
+    libXext
+    SDL2
+    glibc
+  ];
   env.NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2";
   enableParallelBuilding = true;
 
@@ -75,6 +88,9 @@ stdenv.mkDerivation rec {
     description = "Improved Quake III Arena engine";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ pmiddend alx ];
+    maintainers = with maintainers; [
+      pmiddend
+      alx
+    ];
   };
 }

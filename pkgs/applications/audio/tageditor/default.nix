@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, cmake
-, cpp-utilities
-, qtutilities
-, mp4v2
-, libid3tag
-, qtbase
-, qttools
-, qtwebengine
-, qtx11extras
-, tagparser
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  cpp-utilities,
+  qtutilities,
+  mp4v2,
+  libid3tag,
+  qtbase,
+  qttools,
+  qtwebengine,
+  qtx11extras,
+  tagparser,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {

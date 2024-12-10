@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, autoreconfHook
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  autoreconfHook,
 }:
 stdenv.mkDerivation rec {
   pname = "symmetrica";

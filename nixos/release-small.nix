@@ -6,9 +6,17 @@
 #
 #   nix-build nixos/release-small.nix -A <jobname>
 #
-{ nixpkgs ? { outPath = (import ../lib).cleanSource ./..; revCount = 56789; shortRev = "gfedcba"; }
-, stableBranch ? false
-, supportedSystems ? [ "aarch64-linux" "x86_64-linux" ] # no i686-linux
+{
+  nixpkgs ? {
+    outPath = (import ../lib).cleanSource ./..;
+    revCount = 56789;
+    shortRev = "gfedcba";
+  },
+  stableBranch ? false,
+  supportedSystems ? [
+    "aarch64-linux"
+    "x86_64-linux"
+  ], # no i686-linux
 }:
 
 let
@@ -29,10 +37,16 @@ let
     nixpkgs = nixpkgsSrc;
   }) [ "unstable" ];
 
-in rec {
+in
+rec {
 
   nixos = {
-    inherit (nixos') channel manual options dummy;
+    inherit (nixos')
+      channel
+      manual
+      options
+      dummy
+      ;
     tests = {
       inherit (nixos'.tests)
         acme
@@ -48,13 +62,15 @@ in rec {
         php
         predictable-interface-names
         proxy
-        simple;
+        simple
+        ;
       installer = {
         inherit (nixos'.tests.installer)
           lvm
           separateBoot
           simple
-          simpleUefiSystemdBoot;
+          simpleUefiSystemdBoot
+          ;
       };
     };
   };
@@ -84,58 +100,61 @@ in rec {
       subversion
       tarball
       vim
-      tests-stdenv-gcc-stageCompare;
+      tests-stdenv-gcc-stageCompare
+      ;
   };
 
-  tested = let
-    onSupported = x: map (system: "${x}.${system}") supportedSystems;
-    onSystems = systems: x: map (system: "${x}.${system}")
-      (pkgs.lib.intersectLists systems supportedSystems);
-  in pkgs.releaseTools.aggregate {
-    name = "nixos-${nixos.channel.version}";
-    meta = {
-      description = "Release-critical builds for the NixOS channel";
-      maintainers = [ ];
+  tested =
+    let
+      onSupported = x: map (system: "${x}.${system}") supportedSystems;
+      onSystems =
+        systems: x: map (system: "${x}.${system}") (pkgs.lib.intersectLists systems supportedSystems);
+    in
+    pkgs.releaseTools.aggregate {
+      name = "nixos-${nixos.channel.version}";
+      meta = {
+        description = "Release-critical builds for the NixOS channel";
+        maintainers = [ ];
+      };
+      constituents = lib.flatten [
+        [
+          "nixos.channel"
+          "nixpkgs.tarball"
+          "nixpkgs.release-checks"
+        ]
+        (map (onSystems [ "x86_64-linux" ]) [
+          "nixos.tests.installer.lvm"
+          "nixos.tests.installer.separateBoot"
+          "nixos.tests.installer.simple"
+        ])
+        (map onSupported [
+          "nixos.dummy"
+          "nixos.manual"
+          "nixos.tests.acme"
+          "nixos.tests.containers-imperative"
+          "nixos.tests.containers-ip"
+          "nixos.tests.firewall"
+          "nixos.tests.ipv6"
+          "nixos.tests.installer.simpleUefiSystemdBoot"
+          "nixos.tests.login"
+          "nixos.tests.misc"
+          "nixos.tests.nat.firewall"
+          "nixos.tests.nat.standalone"
+          "nixos.tests.nfs4.simple"
+          "nixos.tests.openssh"
+          "nixos.tests.php.fpm"
+          "nixos.tests.php.pcre"
+          "nixos.tests.predictable-interface-names.predictable"
+          "nixos.tests.predictable-interface-names.predictableNetworkd"
+          "nixos.tests.predictable-interface-names.unpredictable"
+          "nixos.tests.predictable-interface-names.unpredictableNetworkd"
+          "nixos.tests.proxy"
+          "nixos.tests.simple"
+          "nixpkgs.jdk"
+          "nixpkgs.tests-stdenv-gcc-stageCompare"
+          "nixpkgs.opensshTest"
+        ])
+      ];
     };
-    constituents = lib.flatten [
-      [
-        "nixos.channel"
-        "nixpkgs.tarball"
-        "nixpkgs.release-checks"
-      ]
-      (map (onSystems [ "x86_64-linux" ]) [
-        "nixos.tests.installer.lvm"
-        "nixos.tests.installer.separateBoot"
-        "nixos.tests.installer.simple"
-      ])
-      (map onSupported [
-        "nixos.dummy"
-        "nixos.manual"
-        "nixos.tests.acme"
-        "nixos.tests.containers-imperative"
-        "nixos.tests.containers-ip"
-        "nixos.tests.firewall"
-        "nixos.tests.ipv6"
-        "nixos.tests.installer.simpleUefiSystemdBoot"
-        "nixos.tests.login"
-        "nixos.tests.misc"
-        "nixos.tests.nat.firewall"
-        "nixos.tests.nat.standalone"
-        "nixos.tests.nfs4.simple"
-        "nixos.tests.openssh"
-        "nixos.tests.php.fpm"
-        "nixos.tests.php.pcre"
-        "nixos.tests.predictable-interface-names.predictable"
-        "nixos.tests.predictable-interface-names.predictableNetworkd"
-        "nixos.tests.predictable-interface-names.unpredictable"
-        "nixos.tests.predictable-interface-names.unpredictableNetworkd"
-        "nixos.tests.proxy"
-        "nixos.tests.simple"
-        "nixpkgs.jdk"
-        "nixpkgs.tests-stdenv-gcc-stageCompare"
-        "nixpkgs.opensshTest"
-      ])
-    ];
-  };
 
 }

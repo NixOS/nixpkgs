@@ -1,9 +1,23 @@
-{ lib, stdenv, writeScriptBin, fetchpatch, fetchFromGitLab, autoreconfHook, pkg-config
-, autoconf-archive, libxslt, boost, gtkmm2, imagemagick, sane-backends
-, tesseract4, udev, libusb1
-, withNetworkScan ? false, utsushi-networkscan
+{
+  lib,
+  stdenv,
+  writeScriptBin,
+  fetchpatch,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  autoconf-archive,
+  libxslt,
+  boost,
+  gtkmm2,
+  imagemagick,
+  sane-backends,
+  tesseract4,
+  udev,
+  libusb1,
+  withNetworkScan ? false,
+  utsushi-networkscan,
 }:
-
 
 let
   fakegit = writeScriptBin "git" ''
@@ -13,7 +27,8 @@ let
     fi
   '';
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "imagescan";
   version = "3.65.0";
 
@@ -65,7 +80,6 @@ in stdenv.mkDerivation rec {
     "-Wno-error=parentheses"
     "-Wno-error=unused-variable"
   ];
-
 
   postPatch = ''
     # create fake udev and sane config
@@ -174,7 +188,10 @@ in stdenv.mkDerivation rec {
     '';
     homepage = "https://gitlab.com/utsushi/imagescan";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ wucke13 maxwilson ];
+    maintainers = with maintainers; [
+      wucke13
+      maxwilson
+    ];
     platforms = platforms.linux;
   };
 }

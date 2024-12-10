@@ -1,8 +1,9 @@
-{ installShellFiles
-, lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
+{
+  installShellFiles,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,7 +33,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dyc3/steamguard-cli";
     license = with licenses; [ gpl3Only ];
     mainProgram = "steamguard";
-    maintainers = with maintainers; [ surfaceflinger sigmasquadron ];
+    maintainers = with maintainers; [
+      surfaceflinger
+      sigmasquadron
+    ];
     platforms = platforms.linux;
   };
 }

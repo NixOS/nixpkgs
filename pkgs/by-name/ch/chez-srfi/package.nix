@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, chez }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  chez,
+}:
 
 stdenv.mkDerivation rec {
   pname = "chez-srfi";
@@ -13,7 +18,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ chez ];
 
-  makeFlags = [ "CHEZ=${lib.getExe chez}" "PREFIX=$(out)" ];
+  makeFlags = [
+    "CHEZ=${lib.getExe chez}"
+    "PREFIX=$(out)"
+  ];
 
   doCheck = false;
 

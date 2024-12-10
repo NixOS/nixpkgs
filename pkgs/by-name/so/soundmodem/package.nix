@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, pkg-config, alsa-lib, audiofile, gtk2, libxml2, copyDesktopItems, makeDesktopItem }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  alsa-lib,
+  audiofile,
+  gtk2,
+  libxml2,
+  copyDesktopItems,
+  makeDesktopItem,
+}:
 
 stdenv.mkDerivation rec {
   pname = "soundmodem";
@@ -13,7 +24,12 @@ stdenv.mkDerivation rec {
     pkg-config
     copyDesktopItems
   ];
-  buildInputs = [ alsa-lib audiofile gtk2 libxml2 ];
+  buildInputs = [
+    alsa-lib
+    audiofile
+    gtk2
+    libxml2
+  ];
 
   patches = [ ./matFix.patch ];
 

@@ -1,13 +1,14 @@
-{ stdenv
-, Foundation
-, fetchurl
-, lib
-, libevent
-, net-snmp
-, openssl
-, pkg-config
-, readline
-, removeReferencesTo
+{
+  stdenv,
+  Foundation,
+  fetchurl,
+  lib,
+  libevent,
+  net-snmp,
+  openssl,
+  pkg-config,
+  readline,
+  removeReferencesTo,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,25 +20,39 @@ stdenv.mkDerivation rec {
     hash = "sha256-SzIGddYIkBpKDU/v+PlruEbUkT2RSwz3W30K6ASQ8vc=";
   };
 
-  configureFlags = [
-    "--localstatedir=/var"
-    "--enable-pie"
-    "--with-snmp"
-    "--with-systemdsystemunitdir=\${out}/lib/systemd/system"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "--with-launchddaemonsdir=no"
-    "--with-privsep-chroot=/var/empty"
-    "--with-privsep-group=nogroup"
-    "--with-privsep-user=nobody"
-  ];
+  configureFlags =
+    [
+      "--localstatedir=/var"
+      "--enable-pie"
+      "--with-snmp"
+      "--with-systemdsystemunitdir=\${out}/lib/systemd/system"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "--with-launchddaemonsdir=no"
+      "--with-privsep-chroot=/var/empty"
+      "--with-privsep-group=nogroup"
+      "--with-privsep-user=nobody"
+    ];
 
-  nativeBuildInputs = [ pkg-config removeReferencesTo ];
-  buildInputs = [ libevent readline net-snmp openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
+  nativeBuildInputs = [
+    pkg-config
+    removeReferencesTo
+  ];
+  buildInputs = [
+    libevent
+    readline
+    net-snmp
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
 
   enableParallelBuilding = true;
 
-  outputs = [ "out" "dev" "man" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "doc"
+  ];
 
   preFixup = ''
     find $out -type f -exec remove-references-to -t ${stdenv.cc} '{}' +

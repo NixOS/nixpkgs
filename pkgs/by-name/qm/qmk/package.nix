@@ -1,14 +1,15 @@
-{ lib
-, python3
-, fetchPypi
-, pkgsCross
-, avrdude
-, dfu-programmer
-, dfu-util
-, wb32-dfu-updater
-, gcc-arm-embedded
-, gnumake
-, teensy-loader-cli
+{
+  lib,
+  python3,
+  fetchPypi,
+  pkgsCross,
+  avrdude,
+  dfu-programmer,
+  dfu-util,
+  wb32-dfu-updater,
+  gcc-arm-embedded,
+  gnumake,
+  teensy-loader-cli,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -25,29 +26,33 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    dotty-dict
-    hid
-    hjson
-    jsonschema
-    milc
-    pygments
-    pyserial
-    pyusb
-    pillow
-  ] ++ [ # Binaries need to be in the path so this is in propagatedBuildInputs
-    avrdude
-    dfu-programmer
-    dfu-util
-    wb32-dfu-updater
-    teensy-loader-cli
-    gcc-arm-embedded
-    gnumake
-    pkgsCross.avr.buildPackages.binutils
-    pkgsCross.avr.buildPackages.binutils.bintools
-    pkgsCross.avr.buildPackages.gcc
-    pkgsCross.avr.libcCross
-  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      dotty-dict
+      hid
+      hjson
+      jsonschema
+      milc
+      pygments
+      pyserial
+      pyusb
+      pillow
+    ]
+    ++ [
+      # Binaries need to be in the path so this is in propagatedBuildInputs
+      avrdude
+      dfu-programmer
+      dfu-util
+      wb32-dfu-updater
+      teensy-loader-cli
+      gcc-arm-embedded
+      gnumake
+      pkgsCross.avr.buildPackages.binutils
+      pkgsCross.avr.buildPackages.binutils.bintools
+      pkgsCross.avr.buildPackages.gcc
+      pkgsCross.avr.libcCross
+    ];
 
   # no tests implemented
   doCheck = false;
@@ -70,7 +75,10 @@ python3.pkgs.buildPythonApplication rec {
       - ... and many more!
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ bhipple ekleog ];
+    maintainers = with maintainers; [
+      bhipple
+      ekleog
+    ];
     mainProgram = "qmk";
   };
 }

@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
-, xorg
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,11 +20,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-rxNp9dOvy/UTx6Q9pzZGccEKmIiWxzWVYyMxb+h5bqw=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libxcb
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      xorg.libxcb
+    ];
 
   checkFlags = [
     # skip flaky test

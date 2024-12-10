@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchzip, useVariableFont ? true }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  useVariableFont ? true,
+}:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "fira-code";
@@ -14,7 +19,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    install -Dm644 -t $out/share/fonts/truetype ${if useVariableFont then "variable_ttf/*-VF.ttf" else "ttf/*.ttf"}
+    install -Dm644 -t $out/share/fonts/truetype ${
+      if useVariableFont then "variable_ttf/*-VF.ttf" else "ttf/*.ttf"
+    }
 
     runHook postInstall
   '';

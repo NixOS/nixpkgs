@@ -195,7 +195,9 @@ stdenv.mkDerivation {
       (lib.mesonBool "enable-tests" true)
       (lib.mesonBool "enable-docs" enableDocumentation)
       (lib.mesonEnable "internal-api-docs" enableDocumentation)
-      (lib.mesonBool "enable-embedded-sandbox-shell" (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic))
+      (lib.mesonBool "enable-embedded-sandbox-shell" (
+        stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isStatic
+      ))
       (lib.mesonEnable "seccomp-sandboxing" withLibseccomp)
 
       (lib.mesonOption "store-dir" storeDir)
@@ -265,13 +267,14 @@ stdenv.mkDerivation {
     meson test --no-rebuild "''${flagsArray[@]}"
     runHook postInstallCheck
   '';
-  hardeningDisable = [
-    "shadowstack"
-    # strictoverflow is disabled because we trap on signed overflow instead
-    "strictoverflow"
-  ]
-  # fortify breaks the build with lto and musl for some reason
-  ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
+  hardeningDisable =
+    [
+      "shadowstack"
+      # strictoverflow is disabled because we trap on signed overflow instead
+      "strictoverflow"
+    ]
+    # fortify breaks the build with lto and musl for some reason
+    ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
 
   # hardeningEnable = lib.optionals (!stdenv.hostPlatform.isDarwin) [ "pie" ];
   separateDebugInfo = stdenv.hostPlatform.isLinux && !enableStatic;

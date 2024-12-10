@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.security.pki;
@@ -35,7 +40,7 @@ in
 
     security.pki.certificateFiles = lib.mkOption {
       type = lib.types.listOf lib.types.path;
-      default = [];
+      default = [ ];
       example = lib.literalExpression ''[ "''${pkgs.cacert}/etc/ssl/certs/ca-bundle.crt" ]'';
       description = ''
         A list of files containing trusted root certificates in PEM
@@ -48,7 +53,7 @@ in
 
     security.pki.certificates = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [];
+      default = [ ];
       example = lib.literalExpression ''
         [ '''
             NixOS.org
@@ -68,9 +73,10 @@ in
 
     security.pki.caCertificateBlacklist = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [];
+      default = [ ];
       example = [
-        "WoSign" "WoSign China"
+        "WoSign"
+        "WoSign China"
         "CA WoSign ECC Root"
         "Certification Authority of WoSign G2"
       ];

@@ -1,20 +1,22 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, libxfce4util
-, xfce4-panel
-, xfconf
-, libxfce4ui
-, gtk3
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  intltool,
+  libxfce4util,
+  xfce4-panel,
+  xfconf,
+  libxfce4ui,
+  gtk3,
+  gitUpdater,
 }:
 
 let
   category = "panel-plugins";
-in stdenv.mkDerivation rec {
-  pname  = "xfce4-genmon-plugin";
+in
+stdenv.mkDerivation rec {
+  pname = "xfce4-genmon-plugin";
   version = "4.2.0";
 
   src = fetchurl {

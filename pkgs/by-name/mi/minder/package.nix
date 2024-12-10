@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, python3
-, shared-mime-info
-, vala
-, wrapGAppsHook3
-, cairo
-, discount
-, glib
-, gtk3
-, gtksourceview4
-, hicolor-icon-theme # for setup-hook
-, json-glib
-, libarchive
-, libgee
-, libhandy
-, libxml2
-, pantheon
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  shared-mime-info,
+  vala,
+  wrapGAppsHook3,
+  cairo,
+  discount,
+  glib,
+  gtk3,
+  gtksourceview4,
+  hicolor-icon-theme, # for setup-hook
+  json-glib,
+  libarchive,
+  libgee,
+  libhandy,
+  libxml2,
+  pantheon,
 }:
 
 stdenv.mkDerivation rec {

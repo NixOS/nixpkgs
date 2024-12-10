@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, nix-update-script
-, go
-, testers
-, pulsarctl
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
+  go,
+  testers,
+  pulsarctl,
 }:
 
 buildGoModule rec {
@@ -33,7 +34,9 @@ buildGoModule rec {
         GoVersion = "go${go.version}";
       };
     in
-    (lib.mapAttrsToList (k: v: "-X github.com/streamnative/pulsarctl/pkg/cmdutils.${k}=${v}") buildVars);
+    (lib.mapAttrsToList (
+      k: v: "-X github.com/streamnative/pulsarctl/pkg/cmdutils.${k}=${v}"
+    ) buildVars);
 
   excludedPackages = [
     "./pkg/test"

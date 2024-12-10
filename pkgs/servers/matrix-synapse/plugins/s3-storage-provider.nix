@@ -1,13 +1,14 @@
-{ lib
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, humanize
-, matrix-synapse-unwrapped
-, pythonOlder
-, tqdm
-, twisted
-, psycopg2
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  humanize,
+  matrix-synapse-unwrapped,
+  pythonOlder,
+  tqdm,
+  twisted,
+  psycopg2,
 }:
 
 buildPythonPackage rec {
@@ -33,15 +34,16 @@ buildPythonPackage rec {
     matrix-synapse-unwrapped
   ];
 
-  propagatedBuildInputs = [
-    boto3
-    humanize
-    tqdm
-    twisted
-    psycopg2
-  ]
-  # For the s3_media_upload script
-  ++ matrix-synapse-unwrapped.propagatedBuildInputs;
+  propagatedBuildInputs =
+    [
+      boto3
+      humanize
+      tqdm
+      twisted
+      psycopg2
+    ]
+    # For the s3_media_upload script
+    ++ matrix-synapse-unwrapped.propagatedBuildInputs;
 
   # Tests need network access
   doCheck = false;

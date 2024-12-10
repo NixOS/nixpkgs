@@ -1,13 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.webdav-server-rs;
   format = pkgs.formats.toml { };
-  settings = lib.recursiveUpdate
-    {
-      server.uid = config.users.users."${cfg.user}".uid;
-      server.gid = config.users.groups."${cfg.group}".gid;
-    }
-    cfg.settings;
+  settings = lib.recursiveUpdate {
+    server.uid = config.users.users."${cfg.user}".uid;
+    server.gid = config.users.groups."${cfg.group}".gid;
+  } cfg.settings;
 in
 {
   options = {
@@ -93,7 +96,8 @@ in
         message = "users.users.${cfg.user} and users.users.${cfg.user}.uid must be defined.";
       }
       {
-        assertion = lib.hasAttr cfg.group config.users.groups && config.users.groups."${cfg.group}".gid != null;
+        assertion =
+          lib.hasAttr cfg.group config.users.groups && config.users.groups."${cfg.group}".gid != null;
         message = "users.groups.${cfg.group} and users.groups.${cfg.group}.gid must be defined.";
       }
     ];

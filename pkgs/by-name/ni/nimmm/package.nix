@@ -1,4 +1,10 @@
-{ lib, buildNimPackage, fetchFromGitHub, termbox, pcre }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  termbox,
+  pcre,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "nimmm";
@@ -13,7 +19,10 @@ buildNimPackage (finalAttrs: {
 
   lockFile = ./lock.json;
 
-  buildInputs = [ termbox pcre ];
+  buildInputs = [
+    termbox
+    pcre
+  ];
 
   meta = {
     description = "Terminal file manager for Linux";

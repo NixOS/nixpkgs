@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchzip, makeWrapper, python3, unar, ffmpeg, nixosTests }:
+{
+  stdenv,
+  lib,
+  fetchzip,
+  makeWrapper,
+  python3,
+  unar,
+  ffmpeg,
+  nixosTests,
+}:
 
 let
   runtimeProgDeps = [

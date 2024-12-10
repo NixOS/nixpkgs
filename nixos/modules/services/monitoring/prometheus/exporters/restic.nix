@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.restic;
@@ -62,7 +68,12 @@ in
     };
 
     rcloneOptions = mkOption {
-      type = with types; attrsOf (oneOf [ str bool ]);
+      type =
+        with types;
+        attrsOf (oneOf [
+          str
+          bool
+        ]);
       default = { };
       description = ''
         Options to pass to rclone to control its behavior.
@@ -75,7 +86,12 @@ in
     };
 
     rcloneConfig = mkOption {
-      type = with types; attrsOf (oneOf [ str bool ]);
+      type =
+        with types;
+        attrsOf (oneOf [
+          str
+          bool
+        ]);
       default = { };
       description = ''
         Configuration for the rclone remote being used for backup.
@@ -114,9 +130,10 @@ in
   serviceOpts = {
     script = ''
       export RESTIC_REPOSITORY=${
-        if cfg.repositoryFile != null
-        then "$(cat $CREDENTIALS_DIRECTORY/RESTIC_REPOSITORY)"
-        else "${cfg.repository}"
+        if cfg.repositoryFile != null then
+          "$(cat $CREDENTIALS_DIRECTORY/RESTIC_REPOSITORY)"
+        else
+          "${cfg.repository}"
       }
       export RESTIC_PASSWORD_FILE=$CREDENTIALS_DIRECTORY/RESTIC_PASSWORD_FILE
       ${pkgs.prometheus-restic-exporter}/bin/restic-exporter.py \
@@ -124,10 +141,9 @@ in
     '';
     serviceConfig = {
       EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
-      LoadCredential =
-        [ "RESTIC_PASSWORD_FILE:${cfg.passwordFile}" ]
-        ++ optional (cfg.repositoryFile != null)
-          [ "RESTIC_REPOSITORY:${cfg.repositoryFile}" ];
+      LoadCredential = [
+        "RESTIC_PASSWORD_FILE:${cfg.passwordFile}"
+      ] ++ optional (cfg.repositoryFile != null) [ "RESTIC_REPOSITORY:${cfg.repositoryFile}" ];
     };
     environment =
       let
@@ -141,18 +157,14 @@ in
         LISTEN_PORT = toString cfg.port;
         REFRESH_INTERVAL = toString cfg.refreshInterval;
       }
-      // (mapAttrs'
-        (name: value:
-          nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
-        )
-        cfg.rcloneOptions)
+      // (mapAttrs' (
+        name: value: nameValuePair (rcloneAttrToOpt name) (toRcloneVal value)
+      ) cfg.rcloneOptions)
       // optionalAttrs (cfg.rcloneConfigFile != null) {
         RCLONE_CONFIG = cfg.rcloneConfigFile;
       }
-      // (mapAttrs'
-        (name: value:
-          nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
-        )
-        cfg.rcloneConfig);
+      // (mapAttrs' (
+        name: value: nameValuePair (rcloneAttrToConf name) (toRcloneVal value)
+      ) cfg.rcloneConfig);
   };
 }

@@ -1,8 +1,9 @@
-{ buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, lib
-, stdenv
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  stdenv,
 }:
 buildGoModule rec {
   pname = "devbox";
@@ -41,6 +42,9 @@ buildGoModule rec {
     description = "Instant, easy, predictable shells and containers";
     homepage = "https://www.jetpack.io/devbox";
     license = licenses.asl20;
-    maintainers = with maintainers; [ urandom lagoja ];
+    maintainers = with maintainers; [
+      urandom
+      lagoja
+    ];
   };
 }

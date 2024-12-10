@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl, cmake,
-  gfortran, blas, lapack}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  gfortran,
+  blas,
+  lapack,
+}:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
 
@@ -12,7 +19,10 @@ stdenv.mkDerivation rec {
     sha256 = "0qzlb7cd608q62kyppd0a8c65l03vrwqql6gsm465rky23b6dyr8";
   };
 
-  nativeBuildInputs = [ cmake gfortran ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+  ];
 
   propagatedBuildInputs = [ blas ];
 

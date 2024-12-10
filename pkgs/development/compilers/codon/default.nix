@@ -1,14 +1,15 @@
-{ cacert
-, cmake
-, fetchFromGitHub
-, git
-, lib
-, lld
-, ninja
-, nix-update-script
-, perl
-, python3
-, stdenv
+{
+  cacert,
+  cmake,
+  fetchFromGitHub,
+  git,
+  lib,
+  lld,
+  ninja,
+  nix-update-script,
+  perl,
+  python3,
+  stdenv,
 }:
 
 let

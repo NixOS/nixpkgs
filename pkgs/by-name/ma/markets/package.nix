@@ -1,7 +1,22 @@
-{ lib, stdenv, fetchFromGitHub
-, desktop-file-utils, glib, gtk3, meson, ninja, pkg-config, python3, vala
-, wrapGAppsHook3
-, glib-networking, gobject-introspection, json-glib, libgee, libhandy, libsoup_2_4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  desktop-file-utils,
+  glib,
+  gtk3,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  vala,
+  wrapGAppsHook3,
+  glib-networking,
+  gobject-introspection,
+  json-glib,
+  libgee,
+  libhandy,
+  libsoup_2_4,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,11 +31,24 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    desktop-file-utils glib gtk3 meson ninja pkg-config python3 vala
-    wrapGAppsHook3 gobject-introspection
+    desktop-file-utils
+    glib
+    gtk3
+    meson
+    ninja
+    pkg-config
+    python3
+    vala
+    wrapGAppsHook3
+    gobject-introspection
   ];
   buildInputs = [
-    glib glib-networking gtk3 json-glib libgee libhandy
+    glib
+    glib-networking
+    gtk3
+    json-glib
+    libgee
+    libhandy
     libsoup_2_4
   ];
 

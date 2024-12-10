@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, python3Packages
-, fetchFromGitHub
-, gitUpdater
-, resvg
+{
+  lib,
+  stdenv,
+  python3Packages,
+  fetchFromGitHub,
+  gitUpdater,
+  resvg,
 }:
 
 let
@@ -44,7 +45,8 @@ let
       platforms = platforms.linux;
     };
   };
-in python3Packages.buildPythonApplication rec {
+in
+python3Packages.buildPythonApplication rec {
   inherit version src;
   pname = "gerbolyze";
 
@@ -80,7 +82,11 @@ in python3Packages.buildPythonApplication rec {
 
   pythonImportsCheck = [ "gerbolyze" ];
 
-  nativeCheckInputs = [ python3Packages.pytestCheckHook resvg svg-flatten ];
+  nativeCheckInputs = [
+    python3Packages.pytestCheckHook
+    resvg
+    svg-flatten
+  ];
 
   passthru.updateScript = gitUpdater {
     rev-prefix = "v";

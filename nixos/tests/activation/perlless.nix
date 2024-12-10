@@ -6,14 +6,16 @@
 
   meta.maintainers = with lib.maintainers; [ nikstur ];
 
-  nodes.machine = { pkgs, modulesPath, ... }: {
-    imports = [ "${modulesPath}/profiles/perlless.nix" ];
+  nodes.machine =
+    { pkgs, modulesPath, ... }:
+    {
+      imports = [ "${modulesPath}/profiles/perlless.nix" ];
 
-    boot.kernelPackages = pkgs.linuxPackages_latest;
+      boot.kernelPackages = pkgs.linuxPackages_latest;
 
-    virtualisation.mountHostNixStore = false;
-    virtualisation.useNixStoreImage = true;
-  };
+      virtualisation.mountHostNixStore = false;
+      virtualisation.useNixStoreImage = true;
+    };
 
   testScript = ''
     perl_store_paths = machine.succeed("ls /nix/store | grep perl || true")

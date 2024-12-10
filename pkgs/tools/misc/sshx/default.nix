@@ -1,11 +1,12 @@
-{ lib
-, callPackage
-, rustPlatform
-, fetchFromGitHub
-, protobuf
-, darwin
-, stdenv
-, buildNpmPackage
+{
+  lib,
+  callPackage,
+  rustPlatform,
+  fetchFromGitHub,
+  protobuf,
+  darwin,
+  stdenv,
+  buildNpmPackage,
 }:
 let
   version = "0.2.4";
@@ -17,31 +18,42 @@ let
     hash = "sha256-RIQRX4sXlMl73Opi6hK2WD/erdAMNrm40IasHasikuw=";
   };
 
-  mkSshxPackage = { pname, cargoHash, ... }@args:
-    rustPlatform.buildRustPackage (rec {
-      inherit
-        pname
-        version
-        src
-        cargoHash;
+  mkSshxPackage =
+    { pname, cargoHash, ... }@args:
+    rustPlatform.buildRustPackage (
+      rec {
+        inherit
+          pname
+          version
+          src
+          cargoHash
+          ;
 
-      nativeBuildInputs = [ protobuf ];
+        nativeBuildInputs = [ protobuf ];
 
-      buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
+        buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
-      cargoBuildFlags = [ "--package" pname ];
+        cargoBuildFlags = [
+          "--package"
+          pname
+        ];
 
-      cargoTestFlags = cargoBuildFlags;
+        cargoTestFlags = cargoBuildFlags;
 
-      meta = {
-        description = "Fast, collaborative live terminal sharing over the web";
-        homepage = "https://github.com/ekzhang/sshx";
-        changelog = "https://github.com/ekzhang/sshx/releases/tag/v${version}";
-        license = lib.licenses.mit;
-        maintainers = with lib.maintainers; [ pinpox kranzes ];
-        mainProgram = pname;
-      };
-    } // args);
+        meta = {
+          description = "Fast, collaborative live terminal sharing over the web";
+          homepage = "https://github.com/ekzhang/sshx";
+          changelog = "https://github.com/ekzhang/sshx/releases/tag/v${version}";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [
+            pinpox
+            kranzes
+          ];
+          mainProgram = pname;
+        };
+      }
+      // args
+    );
 in
 {
   sshx = mkSshxPackage {
@@ -64,7 +76,8 @@ in
 
       inherit
         version
-        src;
+        src
+        ;
 
       postPatch = ''
         substituteInPlace vite.config.ts \

@@ -1,19 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-, ant
-, jdk8
-, makeWrapper
-, stripJavaArchivesHook
-, callPackage
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  ant,
+  jdk8,
+  makeWrapper,
+  stripJavaArchivesHook,
+  callPackage,
 }:
 
 let
   jdk = jdk8;
   jre = jdk8.jre;
 
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "jasmin";
   version = "2.4";
 
@@ -47,7 +49,7 @@ in stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    minimal-module = callPackage ./test-assemble-hello-world {};
+    minimal-module = callPackage ./test-assemble-hello-world { };
   };
 
   meta = with lib; {

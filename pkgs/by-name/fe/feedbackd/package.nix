@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, docbook-xsl-nons
-, docutils
-, gi-docgen
-, gobject-introspection
-, gtk-doc
-, libxslt
-, meson
-, ninja
-, pkg-config
-, vala
-, wrapGAppsHook3
-, glib
-, gsound
-, json-glib
-, libgudev
-, dbus
-, gmobile
-, umockdev
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  docbook-xsl-nons,
+  docutils,
+  gi-docgen,
+  gobject-introspection,
+  gtk-doc,
+  libxslt,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook3,
+  glib,
+  gsound,
+  json-glib,
+  libgudev,
+  dbus,
+  gmobile,
+  umockdev,
 }:
 
 let
@@ -34,7 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "feedbackd";
   version = "0.4.1";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitLab {
     domain = "source.puri.sm";

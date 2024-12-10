@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libarchive }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libarchive,
+}:
 
 stdenv.mkDerivation rec {
   pname = "virtio-win";

@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, pam
-, e2fsprogs
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pam,
+  e2fsprogs,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,7 @@ stdenv.mkDerivation rec {
       name = "inherit_private_prefix_from_home.patch";
       url = "https://git.altlinux.org/gears/p/pam_mktemp.git?p=pam_mktemp.git;a=commitdiff_plain;h=3d2e8ad6da6a44c047bf7a8afa1e1bb2a6e36a55";
       hash = "sha256-xe44fi2xH9jqlStlIR4QPB0KS7spflRdOsvNPEmxJpU";
-     })
+    })
     (fetchpatch {
       name = "allow_private_prefix_to_be_stricter.patch";
       url = "https://git.altlinux.org/gears/p/pam_mktemp.git?p=pam_mktemp.git;a=commitdiff_plain;h=bb2cee0c695d22310e5364c30d74bccb0dbf3205";
@@ -32,7 +33,10 @@ stdenv.mkDerivation rec {
 
   dontConfigure = true;
 
-  buildInputs = [ pam e2fsprogs ];
+  buildInputs = [
+    pam
+    e2fsprogs
+  ];
 
   makeFlags = [ "DESTDIR=$(out)" ];
 

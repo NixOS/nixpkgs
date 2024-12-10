@@ -1,20 +1,32 @@
-{ lib, stdenv, glibc, buildPackages }:
+{
+  lib,
+  stdenv,
+  glibc,
+  buildPackages,
+}:
 
 let
   # Sanitizers are not supported on Darwin.
   # Sanitizer headers aren't available in older libc++ stdenvs due to a bug
-  sanitizersWorking = (stdenv.buildPlatform == stdenv.hostPlatform) && !stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isMusl && (
-    (stdenv.cc.isClang && lib.versionAtLeast (lib.getVersion stdenv.cc.name) "5.0.0")
-    || (stdenv.cc.isGNU && stdenv.hostPlatform.isLinux)
-  );
+  sanitizersWorking =
+    (stdenv.buildPlatform == stdenv.hostPlatform)
+    && !stdenv.hostPlatform.isDarwin
+    && !stdenv.hostPlatform.isMusl
+    && (
+      (stdenv.cc.isClang && lib.versionAtLeast (lib.getVersion stdenv.cc.name) "5.0.0")
+      || (stdenv.cc.isGNU && stdenv.hostPlatform.isLinux)
+    );
   staticLibc = lib.optionalString (stdenv.hostPlatform.libc == "glibc") "-L ${glibc.static}/lib";
-  emulator = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (stdenv.hostPlatform.emulator buildPackages);
+  emulator = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
+    stdenv.hostPlatform.emulator buildPackages
+  );
   isCxx = stdenv.cc.libcxx != null;
   libcxxStdenvSuffix = lib.optionalString isCxx "-libcxx";
   CC = "PATH= ${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}cc"}";
   CXX = "PATH= ${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}c++"}";
   READELF = "PATH= ${lib.getExe' stdenv.cc "${stdenv.cc.targetPrefix}readelf"}";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "cc-wrapper-test-${stdenv.cc.cc.pname}${libcxxStdenvSuffix}";
   version = stdenv.cc.version;
 
@@ -45,7 +57,9 @@ in stdenv.mkDerivation {
     ${lib.optionalString (!isCxx) ''
       # https://github.com/NixOS/nixpkgs/issues/91285
       echo "checking whether libatomic.so can be linked... " >&2
-      ${CXX} -shared -o atomics.so ${./atomics.cc} -latomic ${lib.optionalString (stdenv.cc.isClang && lib.versionOlder stdenv.cc.version "6.0.0" ) "-std=c++17"}
+      ${CXX} -shared -o atomics.so ${./atomics.cc} -latomic ${
+        lib.optionalString (stdenv.cc.isClang && lib.versionOlder stdenv.cc.version "6.0.0") "-std=c++17"
+      }
       ${READELF} -d ./atomics.so | grep libatomic.so && echo "ok" >&2 || echo "failed" >&2
     ''}
 
@@ -72,14 +86,17 @@ in stdenv.mkDerivation {
       echo "checking whether compiler builds valid static C binaries... " >&2
       ${CC} ${staticLibc} -static -o cc-static ${./cc-main.c}
       ${emulator} ./cc-static
-      ${lib.optionalString (stdenv.cc.isGNU && lib.versionAtLeast (lib.getVersion stdenv.cc.name) "8.0.0") ''
-        echo "checking whether compiler builds valid static pie C binaries... " >&2
-        ${CC} ${staticLibc} -static-pie -o cc-static-pie ${./cc-main.c}
-        ${emulator} ./cc-static-pie
-      ''}
+      ${lib.optionalString (stdenv.cc.isGNU && lib.versionAtLeast (lib.getVersion stdenv.cc.name) "8.0.0")
+        ''
+          echo "checking whether compiler builds valid static pie C binaries... " >&2
+          ${CC} ${staticLibc} -static-pie -o cc-static-pie ${./cc-main.c}
+          ${emulator} ./cc-static-pie
+        ''
+      }
     ''}
 
-    ${# See: https://github.com/llvm/llvm-project/commit/ed1d07282cc9d8e4c25d585e03e5c8a1b6f63a74
+    ${
+      # See: https://github.com/llvm/llvm-project/commit/ed1d07282cc9d8e4c25d585e03e5c8a1b6f63a74
       # `gcc` does not support this so we gate the test on `clang`
       lib.optionalString stdenv.cc.isClang ''
         echo "checking whether cc-wrapper accepts -- followed by positional (file) args..." >&2
@@ -98,7 +115,8 @@ in stdenv.mkDerivation {
         ${CC} -c -DVALUE=42 -o positional/foo.o -- ${./foo.c}
         ${CC} -o positional/main -- positional/foo.o ${./ldflags-main.c}
         ${emulator} ./positional/main
-    ''}
+      ''
+    }
 
     echo "checking whether compiler uses NIX_CFLAGS_COMPILE... " >&2
     mkdir -p foo/include

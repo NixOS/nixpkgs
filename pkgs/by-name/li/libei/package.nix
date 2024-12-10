@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchFromGitLab
-, libevdev
-, libxkbcommon
-, meson
-, ninja
-, pkg-config
-, protobuf
-, protobufc
-, systemd
-, buildPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  libevdev,
+  libxkbcommon,
+  meson,
+  ninja,
+  pkg-config,
+  protobuf,
+  protobufc,
+  systemd,
+  buildPackages,
 }:
 let
   munit = fetchFromGitHub {
@@ -43,14 +44,16 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
-    (buildPackages.python3.withPackages (ps: with ps; [
-      attrs
-      jinja2
-      pytest
-      python-dbusmock
-      strenum
-      structlog
-    ]))
+    (buildPackages.python3.withPackages (
+      ps: with ps; [
+        attrs
+        jinja2
+        pytest
+        python-dbusmock
+        strenum
+        structlog
+      ]
+    ))
   ];
 
   postPatch = ''

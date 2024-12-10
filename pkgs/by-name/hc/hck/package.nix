@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,8 +24,14 @@ rustPlatform.buildRustPackage rec {
     description = "Close to drop in replacement for cut that can use a regex delimiter instead of a fixed string";
     homepage = "https://github.com/sstadick/hck";
     changelog = "https://github.com/sstadick/hck/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit /* or */ unlicense ];
-    maintainers = with maintainers; [ figsoda gepbird ];
+    license = with licenses; [
+      mit # or
+      unlicense
+    ];
+    maintainers = with maintainers; [
+      figsoda
+      gepbird
+    ];
     mainProgram = "hck";
   };
 }

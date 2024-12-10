@@ -1,6 +1,28 @@
-{ fetchpatch, fetchurl, lib, stdenv, libGLU, libglut, libX11, plib, openal, freealut, libXrandr, xorgproto,
-libXext, libSM, libICE, libXi, libXt, libXrender, libXxf86vm, libvorbis,
-libpng, zlib, makeWrapper }:
+{
+  fetchpatch,
+  fetchurl,
+  lib,
+  stdenv,
+  libGLU,
+  libglut,
+  libX11,
+  plib,
+  openal,
+  freealut,
+  libXrandr,
+  xorgproto,
+  libXext,
+  libSM,
+  libICE,
+  libXi,
+  libXt,
+  libXrender,
+  libXxf86vm,
+  libvorbis,
+  libpng,
+  zlib,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "torcs";
@@ -40,8 +62,26 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ makeWrapper ];
-  buildInputs = [ libGLU libglut libX11 plib openal freealut libXrandr xorgproto
-    libXext libSM libICE libXi libXt libXrender libXxf86vm libpng zlib libvorbis ];
+  buildInputs = [
+    libGLU
+    libglut
+    libX11
+    plib
+    openal
+    freealut
+    libXrandr
+    xorgproto
+    libXext
+    libSM
+    libICE
+    libXi
+    libXt
+    libXrender
+    libXxf86vm
+    libpng
+    zlib
+    libvorbis
+  ];
 
   installTargets = "install datainstall";
 
@@ -51,6 +91,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = [ ];
     platforms = lib.platforms.linux;
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 }

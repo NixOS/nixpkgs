@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -37,7 +38,10 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/GoogleCloudPlatform/cloud-sql-proxy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nicknovitski totoroot ];
+    maintainers = with maintainers; [
+      nicknovitski
+      totoroot
+    ];
     mainProgram = "cloud-sql-proxy";
   };
 }

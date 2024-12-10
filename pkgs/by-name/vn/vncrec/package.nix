@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchurl, libX11, xorgproto, imake, gccmakedep, libXt, libXmu
-, libXaw, libXext, libSM, libICE, libXpm, libXp
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  xorgproto,
+  imake,
+  gccmakedep,
+  libXt,
+  libXmu,
+  libXaw,
+  libXext,
+  libSM,
+  libICE,
+  libXpm,
+  libXp,
 }:
 
 stdenv.mkDerivation {
@@ -13,17 +27,31 @@ stdenv.mkDerivation {
 
   hardeningDisable = [ "format" ];
 
-  nativeBuildInputs = [ imake gccmakedep ];
+  nativeBuildInputs = [
+    imake
+    gccmakedep
+  ];
   buildInputs = [
-    libX11 xorgproto libXt libXmu libXaw
-    libXext libSM libICE libXpm libXp
+    libX11
+    xorgproto
+    libXt
+    libXmu
+    libXaw
+    libXext
+    libSM
+    libICE
+    libXpm
+    libXp
   ];
 
   makeFlags = [
     "BINDIR=${placeholder "out"}/bin"
     "MANDIR=${placeholder "out"}/share/man"
   ];
-  installTargets = [ "install" "install.man" ];
+  installTargets = [
+    "install"
+    "install.man"
+  ];
 
   meta = {
     description = "VNC recorder";

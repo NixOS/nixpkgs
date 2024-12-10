@@ -1,4 +1,10 @@
-{ rustPlatform, fetchFromGitHub, lib, stdenv, Security }:
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "viceroy";
@@ -24,7 +30,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "viceroy";
     homepage = "https://github.com/fastly/Viceroy";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ereslibre shyim ];
+    maintainers = with maintainers; [
+      ereslibre
+      shyim
+    ];
     platforms = platforms.unix;
   };
 }

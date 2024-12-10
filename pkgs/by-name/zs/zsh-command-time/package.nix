@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 # To make use of this plugin, need to add
 #   programs.zsh.interactiveShellInit = ''

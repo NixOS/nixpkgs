@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, testers
-, nix-update-script
-, committed
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+  testers,
+  nix-update-script,
+  committed,
 }:
 let
   version = "1.1.2";

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, gtk3
-, libtool
-, pkg-config
-, guiSupport ? false
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  gtk3,
+  libtool,
+  pkg-config,
+  guiSupport ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +33,10 @@ stdenv.mkDerivation rec {
     description = "ZBC device manipulation library";
     homepage = "https://github.com/westerndigitalcorporation/libzbc";
     maintainers = [ ];
-    license = with licenses; [ bsd2 lgpl3Plus ];
+    license = with licenses; [
+      bsd2
+      lgpl3Plus
+    ];
     platforms = platforms.linux;
   };
 }

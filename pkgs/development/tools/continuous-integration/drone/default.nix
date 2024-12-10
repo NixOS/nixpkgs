@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, enableUnfree ? true
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  enableUnfree ? true,
 }:
 
 buildGoModule rec {
@@ -17,7 +18,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-9jzhoFN7aAUgPxENPuGYR41gXLzSv1VtnTPB38heVlI=";
 
-  tags = lib.optionals (!enableUnfree) [ "oss" "nolimit" ];
+  tags = lib.optionals (!enableUnfree) [
+    "oss"
+    "nolimit"
+  ];
 
   doCheck = false;
 
@@ -25,7 +29,10 @@ buildGoModule rec {
     description = "Continuous Integration platform built on container technology";
     mainProgram = "drone-server";
     homepage = "https://github.com/harness/drone";
-    maintainers = with maintainers; [ vdemeester techknowlogick ];
+    maintainers = with maintainers; [
+      vdemeester
+      techknowlogick
+    ];
     license = with licenses; if enableUnfree then unfreeRedistributable else asl20;
   };
 }

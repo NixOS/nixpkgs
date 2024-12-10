@@ -108,7 +108,7 @@ stdenv.mkDerivation (finalAttrs: {
         "dwarfs/tools_test.categorize/*"
       ];
     in
-      "-${lib.concatStringsSep ":" disabledTests}";
+    "-${lib.concatStringsSep ":" disabledTests}";
 
   meta = {
     description = "Fast high compression read-only file system";

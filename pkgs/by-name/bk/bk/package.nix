@@ -1,8 +1,9 @@
-{ fetchCrate
-, go-md2man
-, installShellFiles
-, lib
-, rustPlatform
+{
+  fetchCrate,
+  go-md2man,
+  installShellFiles,
+  lib,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +17,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-pE5loMwNMdHL3GODiw3kVVHj374hf3+vIDEYTqvx5WI=";
 
-  nativeBuildInputs = [ go-md2man installShellFiles ];
+  nativeBuildInputs = [
+    go-md2man
+    installShellFiles
+  ];
 
   postBuild = ''
     sed -i '$ a # Source and further info' README.md

@@ -1,11 +1,17 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "anonymouspro";
   version = "1.002";
 
   src = fetchzip {
-    url = "https://www.marksimonson.com/assets/content/fonts/AnonymousPro-${lib.replaceStrings ["."] ["_"] version}.zip";
+    url = "https://www.marksimonson.com/assets/content/fonts/AnonymousPro-${
+      lib.replaceStrings [ "." ] [ "_" ] version
+    }.zip";
     hash = "sha256-FhyzV4By8XKN9EyukAknzml/7lUuV6Evnt6Ht3H6TUU=";
   };
 

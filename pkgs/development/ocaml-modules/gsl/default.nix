@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, buildDunePackage, pkg-config, gsl, darwin, dune-configurator }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildDunePackage,
+  pkg-config,
+  gsl,
+  darwin,
+  dune-configurator,
+}:
 
 buildDunePackage rec {
   pname = "gsl";
@@ -14,8 +23,13 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dune-configurator gsl ];
-  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Accelerate ];
+  buildInputs = [
+    dune-configurator
+    gsl
+  ];
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    darwin.apple_sdk.frameworks.Accelerate
+  ];
 
   meta = with lib; {
     homepage = "https://mmottl.github.io/gsl-ocaml/";

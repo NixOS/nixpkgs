@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, coreutils
-, gawk
-, curl
-, gnugrep
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  coreutils,
+  gawk,
+  curl,
+  gnugrep,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-XnBmKOZBHWyjNlv+L24LYns05oGTOJnNNzM0jCwZMuI=";
   };
 
-  buildInputs = [ coreutils curl gnugrep gawk ];
+  buildInputs = [
+    coreutils
+    curl
+    gnugrep
+    gawk
+  ];
   nativeBuildInputs = [ makeWrapper ];
 
   installFlags = [
@@ -27,7 +33,14 @@ stdenv.mkDerivation rec {
   ];
   postInstall = ''
     wrapProgram "$out/bin/hblock" \
-      --prefix PATH : ${lib.makeBinPath [ coreutils curl gnugrep gawk ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          curl
+          gnugrep
+          gawk
+        ]
+      }
   '';
 
   meta = with lib; {

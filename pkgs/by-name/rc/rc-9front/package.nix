@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFrom9Front
-, unstableGitUpdater
-, byacc
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFrom9Front,
+  unstableGitUpdater,
+  byacc,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation {
@@ -19,7 +20,10 @@ stdenv.mkDerivation {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ byacc installShellFiles ];
+  nativeBuildInputs = [
+    byacc
+    installShellFiles
+  ];
   enableParallelBuilding = true;
   patches = [ ./path.patch ];
   makeFlags = [ "PREFIX=$(out)" ];

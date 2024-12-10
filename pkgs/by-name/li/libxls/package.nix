@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, autoconf-archive }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  autoconf-archive,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libxls";
@@ -19,7 +26,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook autoconf-archive ];
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
+  ];
 
   enableParallelBuilding = true;
 

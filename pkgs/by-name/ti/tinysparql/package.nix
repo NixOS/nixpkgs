@@ -1,46 +1,55 @@
-{ stdenv
-, lib
-, fetchpatch2
-, fetchurl
-, gettext
-, meson
-, mesonEmulatorHook
-, ninja
-, pkg-config
-, asciidoc
-, gobject-introspection
-, buildPackages
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
-, vala
-, python3
-, gi-docgen
-, graphviz
-, libxml2
-, glib
-, wrapGAppsNoGuiHook
-, sqlite
-, libstemmer
-, gnome
-, icu
-, libuuid
-, libsoup_3
-, json-glib
-, avahi
-, systemd
-, dbus
-, man-db
-, writeText
-, testers
+{
+  stdenv,
+  lib,
+  fetchpatch2,
+  fetchurl,
+  gettext,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  pkg-config,
+  asciidoc,
+  gobject-introspection,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  vala,
+  python3,
+  gi-docgen,
+  graphviz,
+  libxml2,
+  glib,
+  wrapGAppsNoGuiHook,
+  sqlite,
+  libstemmer,
+  gnome,
+  icu,
+  libuuid,
+  libsoup_3,
+  json-glib,
+  avahi,
+  systemd,
+  dbus,
+  man-db,
+  writeText,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinysparql";
   version = "3.8.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
-    url = with finalAttrs; "mirror://gnome/sources/tinysparql/${lib.versions.majorMinor version}/tinysparql-${version}.tar.xz";
+    url =
+      with finalAttrs;
+      "mirror://gnome/sources/tinysparql/${lib.versions.majorMinor version}/tinysparql-${version}.tar.xz";
     hash = "sha256-wPzad1IPUxVIsjlRN9zRk+6c3l4iLTydJz8DDRdipQQ=";
   };
 
@@ -50,62 +59,70 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    asciidoc
-    gettext
-    glib
-    wrapGAppsNoGuiHook
-    gi-docgen
-    graphviz
-    (python3.pythonOnBuildForHost.withPackages (p: [ p.pygobject3 ]))
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-    vala
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      asciidoc
+      gettext
+      glib
+      wrapGAppsNoGuiHook
+      gi-docgen
+      graphviz
+      (python3.pythonOnBuildForHost.withPackages (p: [ p.pygobject3 ]))
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      vala
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
-  buildInputs = [
-    glib
-    libxml2
-    sqlite
-    icu
-    libsoup_3
-    libuuid
-    json-glib
-    avahi
-    libstemmer
-    dbus
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    systemd
-  ];
+  buildInputs =
+    [
+      glib
+      libxml2
+      sqlite
+      icu
+      libsoup_3
+      libuuid
+      json-glib
+      avahi
+      libstemmer
+      dbus
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      systemd
+    ];
 
   nativeCheckInputs = [
     dbus
     man-db
   ];
 
-  mesonFlags = [
-    "-Ddocs=true"
-    (lib.mesonEnable "introspection" withIntrospection)
-    (lib.mesonEnable "vapi" withIntrospection)
-  ] ++ (
-    let
-      # https://gitlab.gnome.org/GNOME/tinysparql/-/blob/3.7.3/meson.build#L170
-      crossFile = writeText "cross-file.conf" ''
-        [properties]
-        sqlite3_has_fts5 = '${lib.boolToString (lib.hasInfix "-DSQLITE_ENABLE_FTS3" sqlite.NIX_CFLAGS_COMPILE)}'
-      '';
-    in
+  mesonFlags =
     [
-      "--cross-file=${crossFile}"
+      "-Ddocs=true"
+      (lib.mesonEnable "introspection" withIntrospection)
+      (lib.mesonEnable "vapi" withIntrospection)
     ]
-  ) ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-    "-Dsystemd_user_services=false"
-  ];
+    ++ (
+      let
+        # https://gitlab.gnome.org/GNOME/tinysparql/-/blob/3.7.3/meson.build#L170
+        crossFile = writeText "cross-file.conf" ''
+          [properties]
+          sqlite3_has_fts5 = '${lib.boolToString (lib.hasInfix "-DSQLITE_ENABLE_FTS3" sqlite.NIX_CFLAGS_COMPILE)}'
+        '';
+      in
+      [
+        "--cross-file=${crossFile}"
+      ]
+    )
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+      "-Dsystemd_user_services=false"
+    ];
 
   patches = [
     # https://gitlab.gnome.org/GNOME/tinysparql/-/merge_requests/730
@@ -187,7 +204,10 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    pkgConfigModules = [ "tracker-sparql-3.0" "tinysparql-3.0" ];
+    pkgConfigModules = [
+      "tracker-sparql-3.0"
+      "tinysparql-3.0"
+    ];
     # Not before <gio/gdesktopappinfo.h> is properly conditioned.
     broken = stdenv.hostPlatform.isDarwin;
   };

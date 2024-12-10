@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pure-prompt";
@@ -24,6 +28,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/sindresorhus/pure";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pacien pablovsky ];
+    maintainers = with maintainers; [
+      pacien
+      pablovsky
+    ];
   };
 }

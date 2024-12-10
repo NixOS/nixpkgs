@@ -1,5 +1,17 @@
-{ lib, stdenv, meson, ninja, pkg-config, fetchFromGitHub, glib, vala, ctpl
-, libgee, libsoup_2_4, fcgi }:
+{
+  lib,
+  stdenv,
+  meson,
+  ninja,
+  pkg-config,
+  fetchFromGitHub,
+  glib,
+  vala,
+  ctpl,
+  libgee,
+  libsoup_2_4,
+  fcgi,
+}:
 
 stdenv.mkDerivation rec {
   pname = "valum";
@@ -12,8 +24,19 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-baAv83YiX8HdBm/t++ktB7pmTVlt4aWZ5xnsAs/NrTI=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
-  buildInputs = [ glib vala ctpl libgee libsoup_2_4 fcgi ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+  ];
+  buildInputs = [
+    glib
+    vala
+    ctpl
+    libgee
+    libsoup_2_4
+    fcgi
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/valum-framework/valum";

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, cmake
-, ninja
-, pkg-config
-, sqlite
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  ninja,
+  pkg-config,
+  sqlite,
+  zlib,
 }:
 
 stdenv.mkDerivation {
@@ -27,7 +28,10 @@ stdenv.mkDerivation {
     pkg-config
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   buildInputs = [
     boost

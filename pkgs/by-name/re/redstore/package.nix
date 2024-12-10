@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, redland, pkg-config, gmp, zlib, librdf_raptor2
-  , librdf_rasqal }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  redland,
+  pkg-config,
+  gmp,
+  zlib,
+  librdf_raptor2,
+  librdf_rasqal,
+}:
 
 stdenv.mkDerivation rec {
   pname = "redstore";
@@ -11,7 +20,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gmp redland zlib librdf_raptor2 librdf_rasqal ];
+  buildInputs = [
+    gmp
+    redland
+    zlib
+    librdf_raptor2
+    librdf_rasqal
+  ];
 
   preConfigure = ''
     # Define _XOPEN_SOURCE to enable, e.g., getaddrinfo.
@@ -25,8 +40,7 @@ stdenv.mkDerivation rec {
     mainProgram = "redstore";
     homepage = "https://www.aelius.com/njh/redstore/";
     maintainers = [ lib.maintainers.raskin ];
-    platforms = with lib.platforms;
-      linux ++ freebsd ++ gnu;
+    platforms = with lib.platforms; linux ++ freebsd ++ gnu;
     license = lib.licenses.gpl3Plus;
   };
 }

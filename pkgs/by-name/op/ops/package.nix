@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 buildGoModule rec {
   pname = "ops";
@@ -22,7 +23,8 @@ buildGoModule rec {
   doInstallCheck = true;
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/nanovms/ops/lepton.Version=${version}"
   ];
 

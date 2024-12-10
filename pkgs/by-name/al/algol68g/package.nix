@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, curl
-, gmp
-, gsl
-, mpfr
-, ncurses
-, plotutils
-, postgresql
-, pkg-config
-, withPDFDoc ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  curl,
+  gmp,
+  gsl,
+  mpfr,
+  ncurses,
+  plotutils,
+  postgresql,
+  pkg-config,
+  withPDFDoc ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +22,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-hKiRMU98sZhGgHhjgtwUNSIv2iPgb4T+dgYw58IGK8Q=";
   };
 
-  outputs = [ "out" "man" ] ++ lib.optionals withPDFDoc [ "doc" ];
+  outputs = [
+    "out"
+    "man"
+  ] ++ lib.optionals withPDFDoc [ "doc" ];
 
   nativeBuildInputs = [
     pkg-config
@@ -39,13 +43,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  postInstall = let
-    pdfdoc = fetchurl {
-      url = "https://jmvdveer.home.xs4all.nl/learning-algol-68-genie.pdf";
-      hash = "sha256-QCwn1e/lVfTYTeolCFErvfMhvwCgsBnASqq2K+NYmlU=";
-    };
-  in lib.optionalString withPDFDoc
-    ''
+  postInstall =
+    let
+      pdfdoc = fetchurl {
+        url = "https://jmvdveer.home.xs4all.nl/learning-algol-68-genie.pdf";
+        hash = "sha256-QCwn1e/lVfTYTeolCFErvfMhvwCgsBnASqq2K+NYmlU=";
+      };
+    in
+    lib.optionalString withPDFDoc ''
       install -m644 ${pdfdoc} ${placeholder "doc"}/share/doc/algol68g/learning-algol-68-genie.pdf
     '';
 

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, wl-clipboard, bash }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wl-clipboard,
+  bash,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wl-clipboard-x11";

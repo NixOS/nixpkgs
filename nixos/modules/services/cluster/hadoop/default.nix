@@ -1,14 +1,24 @@
-{ config, lib, options, pkgs, ...}:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.hadoop;
   opt = options.services.hadoop;
 in
 {
-  imports = [ ./yarn.nix ./hdfs.nix ./hbase.nix ];
+  imports = [
+    ./yarn.nix
+    ./hdfs.nix
+    ./hbase.nix
+  ];
 
   options.services.hadoop = {
     coreSite = lib.mkOption {
-      default = {};
+      default = { };
       type = lib.types.attrsOf lib.types.anything;
       example = lib.literalExpression ''
         {
@@ -21,7 +31,7 @@ in
       '';
     };
     coreSiteInternal = lib.mkOption {
-      default = {};
+      default = { };
       type = lib.types.attrsOf lib.types.anything;
       internal = true;
       description = ''
@@ -42,7 +52,7 @@ in
       '';
     };
     hdfsSite = lib.mkOption {
-      default = {};
+      default = { };
       type = lib.types.attrsOf lib.types.anything;
       example = lib.literalExpression ''
         {
@@ -55,7 +65,7 @@ in
       '';
     };
     hdfsSiteInternal = lib.mkOption {
-      default = {};
+      default = { };
       type = lib.types.attrsOf lib.types.anything;
       internal = true;
       description = ''
@@ -84,7 +94,7 @@ in
       '';
     };
     mapredSite = lib.mkOption {
-      default = {};
+      default = { };
       type = lib.types.attrsOf lib.types.anything;
       example = lib.literalExpression ''
         {
@@ -103,13 +113,17 @@ in
         "yarn.nodemanager.aux-services" = "mapreduce_shuffle";
         "yarn.nodemanager.aux-services.mapreduce_shuffle.class" = "org.apache.hadoop.mapred.ShuffleHandler";
         "yarn.nodemanager.bind-host" = "0.0.0.0";
-        "yarn.nodemanager.container-executor.class" = "org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor";
-        "yarn.nodemanager.env-whitelist" = "JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_HOME,LANG,TZ";
+        "yarn.nodemanager.container-executor.class" =
+          "org.apache.hadoop.yarn.server.nodemanager.LinuxContainerExecutor";
+        "yarn.nodemanager.env-whitelist" =
+          "JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_HOME,LANG,TZ";
         "yarn.nodemanager.linux-container-executor.group" = "hadoop";
-        "yarn.nodemanager.linux-container-executor.path" = "/run/wrappers/yarn-nodemanager/bin/container-executor";
+        "yarn.nodemanager.linux-container-executor.path" =
+          "/run/wrappers/yarn-nodemanager/bin/container-executor";
         "yarn.nodemanager.log-dirs" = "/var/log/hadoop/yarn/nodemanager";
         "yarn.resourcemanager.bind-host" = "0.0.0.0";
-        "yarn.resourcemanager.scheduler.class" = "org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler";
+        "yarn.resourcemanager.scheduler.class" =
+          "org.apache.hadoop.yarn.server.resourcemanager.scheduler.fair.FairScheduler";
       };
       type = lib.types.attrsOf lib.types.anything;
       description = ''
@@ -117,7 +131,7 @@ in
       '';
     };
     yarnSite = lib.mkOption {
-      default = {};
+      default = { };
       type = lib.types.attrsOf lib.types.anything;
       example = lib.literalExpression ''
         {
@@ -130,7 +144,7 @@ in
       '';
     };
     yarnSiteInternal = lib.mkOption {
-      default = {};
+      default = { };
       type = lib.types.attrsOf lib.types.anything;
       internal = true;
       description = ''
@@ -167,9 +181,9 @@ in
     containerExecutorCfg = lib.mkOption {
       default = {
         # must be the same as yarn.nodemanager.linux-container-executor.group in yarnSite
-        "yarn.nodemanager.linux-container-executor.group"="hadoop";
-        "min.user.id"=1000;
-        "feature.terminal.enabled"=1;
+        "yarn.nodemanager.linux-container-executor.group" = "hadoop";
+        "min.user.id" = 1000;
+        "feature.terminal.enabled" = 1;
         "feature.mount-cgroup.enabled" = 1;
       };
       type = lib.types.attrsOf lib.types.anything;
@@ -185,7 +199,7 @@ in
     };
 
     extraConfDirs = lib.mkOption {
-      default = [];
+      default = [ ];
       type = lib.types.listOf lib.types.path;
       example = lib.literalExpression ''
         [
@@ -201,16 +215,17 @@ in
     package = lib.mkPackageOption pkgs "hadoop" { };
   };
 
-
   config = lib.mkIf cfg.gatewayRole.enable {
     users.groups.hadoop = {
       gid = config.ids.gids.hadoop;
     };
     environment = {
       systemPackages = [ cfg.package ];
-      etc."hadoop-conf".source = let
-        hadoopConf = "${import ./conf.nix { inherit cfg pkgs lib; }}/";
-      in "${hadoopConf}";
+      etc."hadoop-conf".source =
+        let
+          hadoopConf = "${import ./conf.nix { inherit cfg pkgs lib; }}/";
+        in
+        "${hadoopConf}";
       variables.HADOOP_CONF_DIR = "/etc/hadoop-conf/";
     };
   };

@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchCrate
-, pkg-config
-, alsa-lib
-, rust
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  alsa-lib,
+  rust,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -41,7 +42,10 @@ rustPlatform.buildRustPackage rec {
     description = "Userspace daemon written in Rust that implements an analogue of the Texas Instruments Smart Amp speaker protection model";
     mainProgram = "speakersafetyd";
     homepage = "https://github.com/AsahiLinux/speakersafetyd";
-    maintainers = with maintainers; [ flokli yuka ];
+    maintainers = with maintainers; [
+      flokli
+      yuka
+    ];
     license = licenses.mit;
     platforms = platforms.linux;
   };

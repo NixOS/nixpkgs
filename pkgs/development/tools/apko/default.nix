@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -79,6 +80,10 @@ buildGoModule rec {
     description = "Build OCI images using APK directly without Dockerfile";
     mainProgram = "apko";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk developer-guy emilylange ];
+    maintainers = with maintainers; [
+      jk
+      developer-guy
+      emilylange
+    ];
   };
 }

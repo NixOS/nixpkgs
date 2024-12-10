@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libiconv }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libiconv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "kakasi";
@@ -13,9 +18,9 @@ stdenv.mkDerivation rec {
       characters to Hiragana, Katakana or Romaji and may be
       helpful to read Japanese documents.
     '';
-    homepage    = "http://kakasi.namazu.org/";
-    license     = licenses.gpl2Plus;
-    platforms   = platforms.unix;
+    homepage = "http://kakasi.namazu.org/";
+    license = licenses.gpl2Plus;
+    platforms = platforms.unix;
   };
 
   src = fetchurl {

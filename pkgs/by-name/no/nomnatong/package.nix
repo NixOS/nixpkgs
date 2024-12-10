@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, python3Packages
-, nix-update-script
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  python3Packages,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

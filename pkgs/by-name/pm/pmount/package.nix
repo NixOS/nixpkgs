@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchurl, intltool, ntfs3g, util-linux
-, mediaDir ? "/media/"
-, lockDir ? "/var/lock/pmount"
-, whiteList ? "/etc/pmount.allow"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  intltool,
+  ntfs3g,
+  util-linux,
+  mediaDir ? "/media/",
+  lockDir ? "/var/lock/pmount",
+  whiteList ? "/etc/pmount.allow",
 }:
 
 # constraint mention in the configure.ac
@@ -16,7 +22,10 @@ stdenv.mkDerivation rec {
     sha256 = "db38fc290b710e8e9e9d442da2fb627d41e13b3ee80326c15cc2595ba00ea036";
   };
 
-  nativeBuildInputs = [ intltool util-linux ];
+  nativeBuildInputs = [
+    intltool
+    util-linux
+  ];
   buildInputs = [ util-linux ];
 
   configureFlags = [

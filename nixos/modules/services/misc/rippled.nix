@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.rippled;
   opt = options.services.rippled;
@@ -8,154 +14,169 @@ let
   dbCfg = db: ''
     type=${db.type}
     path=${db.path}
-    ${lib.optionalString (db.compression != null) ("compression=${b2i db.compression}") }
+    ${lib.optionalString (db.compression != null) ("compression=${b2i db.compression}")}
     ${lib.optionalString (db.onlineDelete != null) ("online_delete=${toString db.onlineDelete}")}
     ${lib.optionalString (db.advisoryDelete != null) ("advisory_delete=${b2i db.advisoryDelete}")}
     ${db.extraOpts}
   '';
 
-  rippledCfg = ''
-    [server]
-    ${lib.concatMapStringsSep "\n" (n: "port_${n}") (lib.attrNames cfg.ports)}
+  rippledCfg =
+    ''
+      [server]
+      ${lib.concatMapStringsSep "\n" (n: "port_${n}") (lib.attrNames cfg.ports)}
 
-    ${lib.concatMapStrings (p: ''
-    [port_${p.name}]
-    ip=${p.ip}
-    port=${toString p.port}
-    protocol=${lib.concatStringsSep "," p.protocol}
-    ${lib.optionalString (p.user != "") "user=${p.user}"}
-    ${lib.optionalString (p.password != "") "user=${p.password}"}
-    admin=${lib.concatStringsSep "," p.admin}
-    ${lib.optionalString (p.ssl.key != null) "ssl_key=${p.ssl.key}"}
-    ${lib.optionalString (p.ssl.cert != null) "ssl_cert=${p.ssl.cert}"}
-    ${lib.optionalString (p.ssl.chain != null) "ssl_chain=${p.ssl.chain}"}
-    '') (lib.attrValues cfg.ports)}
+      ${lib.concatMapStrings (p: ''
+        [port_${p.name}]
+        ip=${p.ip}
+        port=${toString p.port}
+        protocol=${lib.concatStringsSep "," p.protocol}
+        ${lib.optionalString (p.user != "") "user=${p.user}"}
+        ${lib.optionalString (p.password != "") "user=${p.password}"}
+        admin=${lib.concatStringsSep "," p.admin}
+        ${lib.optionalString (p.ssl.key != null) "ssl_key=${p.ssl.key}"}
+        ${lib.optionalString (p.ssl.cert != null) "ssl_cert=${p.ssl.cert}"}
+        ${lib.optionalString (p.ssl.chain != null) "ssl_chain=${p.ssl.chain}"}
+      '') (lib.attrValues cfg.ports)}
 
-    [database_path]
-    ${cfg.databasePath}
+      [database_path]
+      ${cfg.databasePath}
 
-    [node_db]
-    ${dbCfg cfg.nodeDb}
+      [node_db]
+      ${dbCfg cfg.nodeDb}
 
-    ${lib.optionalString (cfg.tempDb != null) ''
-    [temp_db]
-    ${dbCfg cfg.tempDb}''}
+      ${lib.optionalString (cfg.tempDb != null) ''
+        [temp_db]
+        ${dbCfg cfg.tempDb}''}
 
-    ${lib.optionalString (cfg.importDb != null) ''
-    [import_db]
-    ${dbCfg cfg.importDb}''}
+      ${lib.optionalString (cfg.importDb != null) ''
+        [import_db]
+        ${dbCfg cfg.importDb}''}
 
-    [ips]
-    ${lib.concatStringsSep "\n" cfg.ips}
+      [ips]
+      ${lib.concatStringsSep "\n" cfg.ips}
 
-    [ips_fixed]
-    ${lib.concatStringsSep "\n" cfg.ipsFixed}
+      [ips_fixed]
+      ${lib.concatStringsSep "\n" cfg.ipsFixed}
 
-    [validators]
-    ${lib.concatStringsSep "\n" cfg.validators}
+      [validators]
+      ${lib.concatStringsSep "\n" cfg.validators}
 
-    [node_size]
-    ${cfg.nodeSize}
+      [node_size]
+      ${cfg.nodeSize}
 
-    [ledger_history]
-    ${toString cfg.ledgerHistory}
+      [ledger_history]
+      ${toString cfg.ledgerHistory}
 
-    [fetch_depth]
-    ${toString cfg.fetchDepth}
+      [fetch_depth]
+      ${toString cfg.fetchDepth}
 
-    [validation_quorum]
-    ${toString cfg.validationQuorum}
+      [validation_quorum]
+      ${toString cfg.validationQuorum}
 
-    [sntp_servers]
-    ${lib.concatStringsSep "\n" cfg.sntpServers}
+      [sntp_servers]
+      ${lib.concatStringsSep "\n" cfg.sntpServers}
 
-    ${lib.optionalString cfg.statsd.enable ''
-    [insight]
-    server=statsd
-    address=${cfg.statsd.address}
-    prefix=${cfg.statsd.prefix}
-    ''}
+      ${lib.optionalString cfg.statsd.enable ''
+        [insight]
+        server=statsd
+        address=${cfg.statsd.address}
+        prefix=${cfg.statsd.prefix}
+      ''}
 
-    [rpc_startup]
-    { "command": "log_level", "severity": "${cfg.logLevel}" }
-  '' + cfg.extraConfig;
+      [rpc_startup]
+      { "command": "log_level", "severity": "${cfg.logLevel}" }
+    ''
+    + cfg.extraConfig;
 
-  portOptions = { name, ...}: {
-    options = {
-      name = lib.mkOption {
-        internal = true;
-        default = name;
-      };
-
-      ip = lib.mkOption {
-        default = "127.0.0.1";
-        description = "Ip where rippled listens.";
-        type = lib.types.str;
-      };
-
-      port = lib.mkOption {
-        description = "Port where rippled listens.";
-        type = lib.types.port;
-      };
-
-      protocol = lib.mkOption {
-        description = "Protocols expose by rippled.";
-        type = lib.types.listOf (lib.types.enum ["http" "https" "ws" "wss" "peer"]);
-      };
-
-      user = lib.mkOption {
-        description = "When set, these credentials will be required on HTTP/S requests.";
-        type = lib.types.str;
-        default = "";
-      };
-
-      password = lib.mkOption {
-        description = "When set, these credentials will be required on HTTP/S requests.";
-        type = lib.types.str;
-        default = "";
-      };
-
-      admin = lib.mkOption {
-        description = "A comma-separated list of admin IP addresses.";
-        type = lib.types.listOf lib.types.str;
-        default = ["127.0.0.1"];
-      };
-
-      ssl = {
-        key = lib.mkOption {
-          description = ''
-            Specifies the filename holding the SSL key in PEM format.
-          '';
-          default = null;
-          type = lib.types.nullOr lib.types.path;
+  portOptions =
+    { name, ... }:
+    {
+      options = {
+        name = lib.mkOption {
+          internal = true;
+          default = name;
         };
 
-        cert = lib.mkOption {
-          description = ''
-            Specifies the path to the SSL certificate file in PEM format.
-            This is not needed if the chain includes it.
-          '';
-          default = null;
-          type = lib.types.nullOr lib.types.path;
+        ip = lib.mkOption {
+          default = "127.0.0.1";
+          description = "Ip where rippled listens.";
+          type = lib.types.str;
         };
 
-        chain = lib.mkOption {
-          description = ''
-            If you need a certificate chain, specify the path to the
-            certificate chain here. The chain may include the end certificate.
-          '';
-          default = null;
-          type = lib.types.nullOr lib.types.path;
+        port = lib.mkOption {
+          description = "Port where rippled listens.";
+          type = lib.types.port;
+        };
+
+        protocol = lib.mkOption {
+          description = "Protocols expose by rippled.";
+          type = lib.types.listOf (
+            lib.types.enum [
+              "http"
+              "https"
+              "ws"
+              "wss"
+              "peer"
+            ]
+          );
+        };
+
+        user = lib.mkOption {
+          description = "When set, these credentials will be required on HTTP/S requests.";
+          type = lib.types.str;
+          default = "";
+        };
+
+        password = lib.mkOption {
+          description = "When set, these credentials will be required on HTTP/S requests.";
+          type = lib.types.str;
+          default = "";
+        };
+
+        admin = lib.mkOption {
+          description = "A comma-separated list of admin IP addresses.";
+          type = lib.types.listOf lib.types.str;
+          default = [ "127.0.0.1" ];
+        };
+
+        ssl = {
+          key = lib.mkOption {
+            description = ''
+              Specifies the filename holding the SSL key in PEM format.
+            '';
+            default = null;
+            type = lib.types.nullOr lib.types.path;
+          };
+
+          cert = lib.mkOption {
+            description = ''
+              Specifies the path to the SSL certificate file in PEM format.
+              This is not needed if the chain includes it.
+            '';
+            default = null;
+            type = lib.types.nullOr lib.types.path;
+          };
+
+          chain = lib.mkOption {
+            description = ''
+              If you need a certificate chain, specify the path to the
+              certificate chain here. The chain may include the end certificate.
+            '';
+            default = null;
+            type = lib.types.nullOr lib.types.path;
+          };
         };
       };
     };
-  };
 
   dbOptions = {
     options = {
       type = lib.mkOption {
         description = "Rippled database type.";
-        type = lib.types.enum ["rocksdb" "nudb"];
+        type = lib.types.enum [
+          "rocksdb"
+          "nudb"
+        ];
         default = "rocksdb";
       };
 
@@ -214,20 +235,23 @@ in
         default = {
           rpc = {
             port = 5005;
-            admin = ["127.0.0.1"];
-            protocol = ["http"];
+            admin = [ "127.0.0.1" ];
+            protocol = [ "http" ];
           };
 
           peer = {
             port = 51235;
             ip = "0.0.0.0";
-            protocol = ["peer"];
+            protocol = [ "peer" ];
           };
 
           ws_public = {
             port = 5006;
             ip = "0.0.0.0";
-            protocol = ["ws" "wss"];
+            protocol = [
+              "ws"
+              "wss"
+            ];
           };
         };
       };
@@ -264,7 +288,13 @@ in
           Rippled size of the node you are running.
           "tiny", "small", "medium", "large", and "huge"
         '';
-        type = lib.types.enum ["tiny" "small" "medium" "large" "huge"];
+        type = lib.types.enum [
+          "tiny"
+          "small"
+          "medium"
+          "large"
+          "huge"
+        ];
         default = "small";
       };
 
@@ -280,7 +310,7 @@ in
           to least trusted.
         '';
         type = lib.types.listOf lib.types.str;
-        default = ["r.ripple.com 51235"];
+        default = [ "r.ripple.com 51235" ];
       };
 
       ipsFixed = lib.mkOption {
@@ -294,7 +324,7 @@ in
           A port may optionally be specified after adding a space to the address
         '';
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
       };
 
       validators = lib.mkOption {
@@ -334,7 +364,7 @@ in
           The number of past ledgers to acquire on server startup and the minimum
           to maintain while running.
         '';
-        type = lib.types.either lib.types.int (lib.types.enum ["full"]);
+        type = lib.types.either lib.types.int (lib.types.enum [ "full" ]);
         default = 1296000; # 1 month
       };
 
@@ -343,7 +373,7 @@ in
           The number of past ledgers to serve to other peers that request historical
           ledger data (or "full" for no limit).
         '';
-        type = lib.types.either lib.types.int (lib.types.enum ["full"]);
+        type = lib.types.either lib.types.int (lib.types.enum [ "full" ]);
         default = "full";
       };
 
@@ -362,7 +392,11 @@ in
 
       logLevel = lib.mkOption {
         description = "Logging verbosity.";
-        type = lib.types.enum ["debug" "error" "info"];
+        type = lib.types.enum [
+          "debug"
+          "error"
+          "info"
+        ];
         default = "error";
       };
 
@@ -398,19 +432,18 @@ in
     };
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
 
     users.users.rippled = {
-        description = "Ripple server user";
-        isSystemUser = true;
-        group = "rippled";
-        home = cfg.databasePath;
-        createHome = true;
-      };
-    users.groups.rippled = {};
+      description = "Ripple server user";
+      isSystemUser = true;
+      group = "rippled";
+      home = cfg.databasePath;
+      createHome = true;
+    };
+    users.groups.rippled = { };
 
     systemd.services.rippled = {
       after = [ "network.target" ];
@@ -420,7 +453,7 @@ in
         ExecStart = "${cfg.package}/bin/rippled --fg --conf ${cfg.config}";
         User = "rippled";
         Restart = "on-failure";
-        LimitNOFILE=10000;
+        LimitNOFILE = 10000;
       };
     };
 

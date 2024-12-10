@@ -1,8 +1,15 @@
-{ stdenv, fetchFromGitHub, coreutils, autoreconfHook, smlnj }:
+{
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  autoreconfHook,
+  smlnj,
+}:
 
 let
   rev = "7376cb20ba5285a6b076a73c821e4743809c1d9d";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "manticore";
   version = "2019.12.03";
 
@@ -17,9 +24,15 @@ in stdenv.mkDerivation {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ coreutils smlnj ];
+  buildInputs = [
+    coreutils
+    smlnj
+  ];
 
-  autoreconfFlags = [ "-Iconfig" "-vfi" ];
+  autoreconfFlags = [
+    "-Iconfig"
+    "-vfi"
+  ];
 
   unpackPhase = ''
     mkdir -p $out

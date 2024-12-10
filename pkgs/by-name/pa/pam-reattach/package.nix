@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openpam, darwin }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openpam,
+  darwin,
+}:
 
 let
   sdkOlderThan11 = lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11.0";
@@ -19,8 +26,7 @@ stdenv.mkDerivation rec {
     "-DENABLE_CLI=ON"
   ] ++ lib.optional sdkOlderThan11 "-DCMAKE_LIBRARY_PATH=${darwin.apple_sdk.sdk}/usr/lib";
 
-  buildInputs = [ openpam ]
-    ++ lib.optional sdkOlderThan11 darwin.apple_sdk.sdk;
+  buildInputs = [ openpam ] ++ lib.optional sdkOlderThan11 darwin.apple_sdk.sdk;
 
   nativeBuildInputs = [ cmake ];
 

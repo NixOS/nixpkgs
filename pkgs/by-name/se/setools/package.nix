@@ -1,6 +1,11 @@
-{ lib, fetchFromGitHub, python3
-, libsepol, libselinux, checkpolicy
-, withGraphics ? false
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  libsepol,
+  libselinux,
+  checkpolicy,
+  withGraphics ? false,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -16,10 +21,20 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [ python3.pkgs.cython ];
   buildInputs = [ libsepol ];
-  propagatedBuildInputs = with python3.pkgs; [ enum34 libselinux networkx setuptools ]
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      enum34
+      libselinux
+      networkx
+      setuptools
+    ]
     ++ lib.optionals withGraphics [ pyqt5 ];
 
-  nativeCheckInputs = [ python3.pkgs.tox checkpolicy ];
+  nativeCheckInputs = [
+    python3.pkgs.tox
+    checkpolicy
+  ];
   preCheck = ''
     export CHECKPOLICY=${checkpolicy}/bin/checkpolicy
   '';

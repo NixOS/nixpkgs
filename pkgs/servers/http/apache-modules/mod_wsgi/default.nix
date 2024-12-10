@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, apacheHttpd, python3, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  apacheHttpd,
+  python3,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mod_wsgi";
@@ -11,7 +18,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-FhOSU8/4QoWa73bNi/qkgKm3CeEEdboh2MgxgQxcYzE=";
   };
 
-  buildInputs = [ apacheHttpd python3 ncurses ];
+  buildInputs = [
+    apacheHttpd
+    python3
+    ncurses
+  ];
 
   postPatch = ''
     substituteInPlace configure --replace '/usr/bin/lipo' 'lipo'

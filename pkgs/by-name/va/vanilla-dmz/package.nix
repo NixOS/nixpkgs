@@ -1,8 +1,9 @@
-{ stdenvNoCC
-, lib
-, fetchzip
-, xorg
-, hicolor-icon-theme
+{
+  stdenvNoCC,
+  lib,
+  fetchzip,
+  xorg,
+  hicolor-icon-theme,
 }:
 
 stdenvNoCC.mkDerivation rec {

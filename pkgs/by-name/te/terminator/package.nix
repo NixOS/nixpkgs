@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, python3
-, keybinder3
-, intltool
-, file
-, gtk3
-, gobject-introspection
-, libnotify
-, makeBinaryWrapper
-, wrapGAppsHook3
-, vte
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  keybinder3,
+  intltool,
+  file,
+  gtk3,
+  gobject-introspection,
+  libnotify,
+  makeBinaryWrapper,
+  wrapGAppsHook3,
+  vte,
+  nixosTests,
 }:
 
 python3.pkgs.buildPythonApplication rec {

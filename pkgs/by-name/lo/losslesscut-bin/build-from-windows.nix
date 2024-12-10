@@ -1,11 +1,12 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, p7zip
-, pname
-, version
-, hash
-, metaCommon ? { }
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  p7zip,
+  pname,
+  version,
+  hash,
+  metaCommon ? { },
 }:
 
 stdenvNoCC.mkDerivation {
@@ -35,8 +36,10 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = metaCommon // (with lib; {
-    platforms = platforms.windows;
-    mainProgram = "LosslessCut.exe";
-  });
+  meta =
+    metaCommon
+    // (with lib; {
+      platforms = platforms.windows;
+      mainProgram = "LosslessCut.exe";
+    });
 }

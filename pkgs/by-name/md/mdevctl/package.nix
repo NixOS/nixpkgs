@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, docutils
-, installShellFiles
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  docutils,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {

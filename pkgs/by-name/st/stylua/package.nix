@@ -1,8 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
   # lua54 implies lua52/lua53
-, features ? [ "lua54" "luajit" "luau" ]
+  features ? [
+    "lua54"
+    "luajit"
+    "luau"
+  ],
 }:
 
 rustPlatform.buildRustPackage rec {

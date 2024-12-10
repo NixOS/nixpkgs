@@ -1,16 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.networking.firewall;
 
-  ifaceSet = lib.concatStringsSep ", " (
-    map (x: ''"${x}"'') cfg.trustedInterfaces
-  );
+  ifaceSet = lib.concatStringsSep ", " (map (x: ''"${x}"'') cfg.trustedInterfaces);
 
-  portsToNftSet = ports: portRanges: lib.concatStringsSep ", " (
-    map (x: toString x) ports
-    ++ map (x: "${toString x.from}-${toString x.to}") portRanges
-  );
+  portsToNftSet =
+    ports: portRanges:
+    lib.concatStringsSep ", " (
+      map (x: toString x) ports ++ map (x: "${toString x.from}-${toString x.to}") portRanges
+    );
 
 in
 
@@ -81,68 +85,72 @@ in
 
     networking.nftables.tables."nixos-fw".family = "inet";
     networking.nftables.tables."nixos-fw".content = ''
-        set temp-ports {
-          comment "Temporarily opened ports"
-          type inet_proto . inet_service
-          flags interval
-          auto-merge
+      set temp-ports {
+        comment "Temporarily opened ports"
+        type inet_proto . inet_service
+        flags interval
+        auto-merge
+      }
+
+      ${lib.optionalString (cfg.checkReversePath != false) ''
+        chain rpfilter {
+          type filter hook prerouting priority mangle + 10; policy drop;
+
+          meta nfproto ipv4 udp sport . udp dport { 67 . 68, 68 . 67 } accept comment "DHCPv4 client/server"
+          fib saddr . mark ${lib.optionalString (cfg.checkReversePath != "loose") ". iif"} oif exists accept
+
+          jump rpfilter-allow
+
+          ${lib.optionalString cfg.logReversePathDrops ''
+            log level info prefix "rpfilter drop: "
+          ''}
+
+        }
+      ''}
+
+      chain rpfilter-allow {
+        ${cfg.extraReversePathFilterRules}
+      }
+
+      chain input {
+        type filter hook input priority filter; policy drop;
+
+        ${lib.optionalString (
+          ifaceSet != ""
+        ) ''iifname { ${ifaceSet} } accept comment "trusted interfaces"''}
+
+        # Some ICMPv6 types like NDP is untracked
+        ct state vmap {
+          invalid : drop,
+          established : accept,
+          related : accept,
+          new : jump input-allow,
+          untracked: jump input-allow,
         }
 
-        ${lib.optionalString (cfg.checkReversePath != false) ''
-          chain rpfilter {
-            type filter hook prerouting priority mangle + 10; policy drop;
-
-            meta nfproto ipv4 udp sport . udp dport { 67 . 68, 68 . 67 } accept comment "DHCPv4 client/server"
-            fib saddr . mark ${lib.optionalString (cfg.checkReversePath != "loose") ". iif"} oif exists accept
-
-            jump rpfilter-allow
-
-            ${lib.optionalString cfg.logReversePathDrops ''
-              log level info prefix "rpfilter drop: "
-            ''}
-
-          }
+        ${lib.optionalString cfg.logRefusedConnections ''
+          tcp flags syn / fin,syn,rst,ack log level info prefix "refused connection: "
+        ''}
+        ${lib.optionalString (cfg.logRefusedPackets && !cfg.logRefusedUnicastsOnly) ''
+          pkttype broadcast log level info prefix "refused broadcast: "
+          pkttype multicast log level info prefix "refused multicast: "
+        ''}
+        ${lib.optionalString cfg.logRefusedPackets ''
+          pkttype host log level info prefix "refused packet: "
         ''}
 
-        chain rpfilter-allow {
-          ${cfg.extraReversePathFilterRules}
-        }
+        ${lib.optionalString cfg.rejectPackets ''
+          meta l4proto tcp reject with tcp reset
+          reject
+        ''}
 
-        chain input {
-          type filter hook input priority filter; policy drop;
+      }
 
-          ${lib.optionalString (ifaceSet != "") ''iifname { ${ifaceSet} } accept comment "trusted interfaces"''}
+      chain input-allow {
 
-          # Some ICMPv6 types like NDP is untracked
-          ct state vmap {
-            invalid : drop,
-            established : accept,
-            related : accept,
-            new : jump input-allow,
-            untracked: jump input-allow,
-          }
-
-          ${lib.optionalString cfg.logRefusedConnections ''
-            tcp flags syn / fin,syn,rst,ack log level info prefix "refused connection: "
-          ''}
-          ${lib.optionalString (cfg.logRefusedPackets && !cfg.logRefusedUnicastsOnly) ''
-            pkttype broadcast log level info prefix "refused broadcast: "
-            pkttype multicast log level info prefix "refused multicast: "
-          ''}
-          ${lib.optionalString cfg.logRefusedPackets ''
-            pkttype host log level info prefix "refused packet: "
-          ''}
-
-          ${lib.optionalString cfg.rejectPackets ''
-            meta l4proto tcp reject with tcp reset
-            reject
-          ''}
-
-        }
-
-        chain input-allow {
-
-          ${lib.concatStrings (lib.mapAttrsToList (iface: cfg:
+        ${lib.concatStrings (
+          lib.mapAttrsToList (
+            iface: cfg:
             let
               ifaceExpr = lib.optionalString (iface != "default") "iifname ${iface}";
               tcpSet = portsToNftSet cfg.allowedTCPPorts cfg.allowedTCPPortRanges;
@@ -152,45 +160,48 @@ in
               ${lib.optionalString (tcpSet != "") "${ifaceExpr} tcp dport { ${tcpSet} } accept"}
               ${lib.optionalString (udpSet != "") "${ifaceExpr} udp dport { ${udpSet} } accept"}
             ''
-          ) cfg.allInterfaces)}
+          ) cfg.allInterfaces
+        )}
 
-          meta l4proto . th dport @temp-ports accept
+        meta l4proto . th dport @temp-ports accept
 
-          ${lib.optionalString cfg.allowPing ''
-            icmp type echo-request ${lib.optionalString (cfg.pingLimit != null) "limit rate ${cfg.pingLimit}"} accept comment "allow ping"
-          ''}
+        ${lib.optionalString cfg.allowPing ''
+          icmp type echo-request ${
+            lib.optionalString (cfg.pingLimit != null) "limit rate ${cfg.pingLimit}"
+          } accept comment "allow ping"
+        ''}
 
-          icmpv6 type != { nd-redirect, 139 } accept comment "Accept all ICMPv6 messages except redirects and node information queries (type 139).  See RFC 4890, section 4.4."
-          ip6 daddr fe80::/64 udp dport 546 accept comment "DHCPv6 client"
+        icmpv6 type != { nd-redirect, 139 } accept comment "Accept all ICMPv6 messages except redirects and node information queries (type 139).  See RFC 4890, section 4.4."
+        ip6 daddr fe80::/64 udp dport 546 accept comment "DHCPv6 client"
 
-          ${cfg.extraInputRules}
+        ${cfg.extraInputRules}
+
+      }
+
+      ${lib.optionalString cfg.filterForward ''
+        chain forward {
+          type filter hook forward priority filter; policy drop;
+
+          ct state vmap {
+            invalid : drop,
+            established : accept,
+            related : accept,
+            new : jump forward-allow,
+            untracked : jump forward-allow,
+          }
 
         }
 
-        ${lib.optionalString cfg.filterForward ''
-          chain forward {
-            type filter hook forward priority filter; policy drop;
+        chain forward-allow {
 
-            ct state vmap {
-              invalid : drop,
-              established : accept,
-              related : accept,
-              new : jump forward-allow,
-              untracked : jump forward-allow,
-            }
+          icmpv6 type != { router-renumbering, 139 } accept comment "Accept all ICMPv6 messages except renumbering and node information queries (type 139).  See RFC 4890, section 4.3."
 
-          }
+          ct status dnat accept comment "allow port forward"
 
-          chain forward-allow {
+          ${cfg.extraForwardRules}
 
-            icmpv6 type != { router-renumbering, 139 } accept comment "Accept all ICMPv6 messages except renumbering and node information queries (type 139).  See RFC 4890, section 4.3."
-
-            ct status dnat accept comment "allow port forward"
-
-            ${cfg.extraForwardRules}
-
-          }
-        ''}
+        }
+      ''}
     '';
 
   };

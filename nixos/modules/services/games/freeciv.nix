@@ -1,24 +1,47 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.freeciv;
   inherit (config.users) groups;
   rootDir = "/run/freeciv";
   argsFormat = {
-    type = with lib.types; let
-      valueType = nullOr (oneOf [
-        bool int float str
-        (listOf valueType)
-      ]) // {
-        description = "freeciv-server params";
-      };
-    in valueType;
-    generate = name: value:
-      let mkParam = k: v:
-            if v == null then []
-            else if lib.isBool v then lib.optional v ("--"+k)
-            else [("--"+k) v];
-          mkParams = k: v: map (mkParam k) (if lib.isList v then v else [v]);
-      in lib.escapeShellArgs (lib.concatLists (lib.concatLists (lib.mapAttrsToList mkParams value)));
+    type =
+      with lib.types;
+      let
+        valueType =
+          nullOr (oneOf [
+            bool
+            int
+            float
+            str
+            (listOf valueType)
+          ])
+          // {
+            description = "freeciv-server params";
+          };
+      in
+      valueType;
+    generate =
+      name: value:
+      let
+        mkParam =
+          k: v:
+          if v == null then
+            [ ]
+          else if lib.isBool v then
+            lib.optional v ("--" + k)
+          else
+            [
+              ("--" + k)
+              v
+            ];
+        mkParams = k: v: map (mkParam k) (if lib.isList v then v else [ v ]);
+      in
+      lib.escapeShellArgs (lib.concatLists (lib.concatLists (lib.mapAttrsToList mkParams value)));
   };
 in
 {
@@ -29,11 +52,15 @@ in
         description = ''
           Parameters of freeciv-server.
         '';
-        default = {};
+        default = { };
         type = lib.types.submodule {
           freeformType = argsFormat.type;
           options.Announce = lib.mkOption {
-            type = lib.types.enum ["IPv4" "IPv6" "none"];
+            type = lib.types.enum [
+              "IPv4"
+              "IPv6"
+              "none"
+            ];
             default = "none";
             description = "Announce game in LAN using given protocol.";
           };
@@ -89,7 +116,7 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
-    users.groups.freeciv = {};
+    users.groups.freeciv = { };
     # Use with:
     #   journalctl -u freeciv.service -f -o cat &
     #   cat >/run/freeciv.stdin
@@ -114,21 +141,30 @@ in
         StandardInput = "fd:freeciv.socket";
         StandardOutput = "journal";
         StandardError = "journal";
-        ExecStart = pkgs.writeShellScript "freeciv-server" (''
-          set -eux
-          savedir=$(date +%Y-%m-%d_%H-%M-%S)
-          '' + "${pkgs.freeciv}/bin/freeciv-server"
-          + " " + lib.optionalString (cfg.settings.saves != null)
-            (lib.concatStringsSep " " [ "--saves" "${lib.escapeShellArg cfg.settings.saves}/$savedir" ])
-          + " " + argsFormat.generate "freeciv-server" (cfg.settings // { saves = null; }));
+        ExecStart = pkgs.writeShellScript "freeciv-server" (
+          ''
+            set -eux
+            savedir=$(date +%Y-%m-%d_%H-%M-%S)
+          ''
+          + "${pkgs.freeciv}/bin/freeciv-server"
+          + " "
+          + lib.optionalString (cfg.settings.saves != null) (
+            lib.concatStringsSep " " [
+              "--saves"
+              "${lib.escapeShellArg cfg.settings.saves}/$savedir"
+            ]
+          )
+          + " "
+          + argsFormat.generate "freeciv-server" (cfg.settings // { saves = null; })
+        );
         DynamicUser = true;
         # Create rootDir in the host's mount namespace.
-        RuntimeDirectory = [(baseNameOf rootDir)];
+        RuntimeDirectory = [ (baseNameOf rootDir) ];
         RuntimeDirectoryMode = "755";
         StateDirectory = [ "freeciv" ];
         WorkingDirectory = "/var/lib/freeciv";
         # Avoid mounting rootDir in the own rootDir of ExecStart='s mount namespace.
-        InaccessiblePaths = ["-+${rootDir}"];
+        InaccessiblePaths = [ "-+${rootDir}" ];
         # This is for BindPaths= and BindReadOnlyPaths=
         # to allow traversal of directories they create in RootDirectory=.
         UMask = "0066";
@@ -163,7 +199,10 @@ in
         ProtectKernelTunables = true;
         ProtectSystem = "strict";
         RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
@@ -172,15 +211,21 @@ in
           # Groups in @system-service which do not contain a syscall listed by:
           # perf stat -x, 2>perf.log -e 'syscalls:sys_enter_*' freeciv-server
           # in tests, and seem likely not necessary for freeciv-server.
-          "~@aio" "~@chown" "~@ipc" "~@keyring" "~@memlock"
-          "~@resources" "~@setuid" "~@sync" "~@timer"
+          "~@aio"
+          "~@chown"
+          "~@ipc"
+          "~@keyring"
+          "~@memlock"
+          "~@resources"
+          "~@setuid"
+          "~@sync"
+          "~@timer"
         ];
         SystemCallArchitectures = "native";
         SystemCallErrorNumber = "EPERM";
       };
     };
-    networking.firewall = lib.mkIf cfg.openFirewall
-      { allowedTCPPorts = [ cfg.settings.port ]; };
+    networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.settings.port ]; };
   };
   meta.maintainers = with lib.maintainers; [ julm ];
 }

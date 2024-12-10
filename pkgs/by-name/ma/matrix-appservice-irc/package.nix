@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, fixup-yarn-lock
-, nodejs
-, nodejs-slim
-, matrix-sdk-crypto-nodejs
-, nixosTests
-, nix-update-script
-, yarn
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  nodejs,
+  nodejs-slim,
+  matrix-sdk-crypto-nodejs,
+  nixosTests,
+  nix-update-script,
+  yarn,
 }:
 
 let
@@ -30,7 +31,12 @@ let
 
 in
 stdenv.mkDerivation {
-  inherit pname version src yarnOfflineCache;
+  inherit
+    pname
+    version
+    src
+    yarnOfflineCache
+    ;
 
   strictDeps = true;
 

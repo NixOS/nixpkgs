@@ -1,20 +1,24 @@
-{ lib
-, stdenv
-, fetchurl
-, lv2
-, meson
-, ninja
-, pkg-config
-, serd
-, sord
-, writeScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  lv2,
+  meson,
+  ninja,
+  pkg-config,
+  serd,
+  sord,
+  writeScript,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sratom";
   version = "0.6.16";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "https://download.drobilla.net/${pname}-${version}.tar.xz";

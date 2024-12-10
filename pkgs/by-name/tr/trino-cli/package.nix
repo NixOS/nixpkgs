@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, jre_headless, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jre_headless,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "trino-cli";
@@ -31,6 +37,9 @@ stdenv.mkDerivation rec {
     mainProgram = "trino";
     homepage = "https://github.com/trinodb/trino";
     license = licenses.asl20;
-    maintainers = with maintainers; [ regadas cpcloud ];
+    maintainers = with maintainers; [
+      regadas
+      cpcloud
+    ];
   };
 }

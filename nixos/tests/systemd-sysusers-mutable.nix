@@ -12,34 +12,36 @@ in
 
   meta.maintainers = with lib.maintainers; [ nikstur ];
 
-  nodes.machine = { pkgs, ... }: {
-    systemd.sysusers.enable = true;
-    users.mutableUsers = true;
+  nodes.machine =
+    { pkgs, ... }:
+    {
+      systemd.sysusers.enable = true;
+      users.mutableUsers = true;
 
-    # Prerequisites
-    system.etc.overlay.enable = true;
-    boot.initrd.systemd.enable = true;
-    boot.kernelPackages = pkgs.linuxPackages_latest;
+      # Prerequisites
+      system.etc.overlay.enable = true;
+      boot.initrd.systemd.enable = true;
+      boot.kernelPackages = pkgs.linuxPackages_latest;
 
-    # Override the empty root password set by the test instrumentation
-    users.users.root.hashedPasswordFile = lib.mkForce null;
-    users.users.root.initialHashedPassword = rootPassword;
-    users.users.sysuser = {
-      isSystemUser = true;
-      group = "wheel";
-      home = "/sysuser";
-      initialPassword = sysuserPassword;
-    };
-
-    specialisation.new-generation.configuration = {
-      users.users.new-sysuser = {
+      # Override the empty root password set by the test instrumentation
+      users.users.root.hashedPasswordFile = lib.mkForce null;
+      users.users.root.initialHashedPassword = rootPassword;
+      users.users.sysuser = {
         isSystemUser = true;
         group = "wheel";
-        home = "/new-sysuser";
-        initialHashedPassword = newSysuserPassword;
+        home = "/sysuser";
+        initialPassword = sysuserPassword;
+      };
+
+      specialisation.new-generation.configuration = {
+        users.users.new-sysuser = {
+          isSystemUser = true;
+          group = "wheel";
+          home = "/new-sysuser";
+          initialHashedPassword = newSysuserPassword;
+        };
       };
     };
-  };
 
   testScript = ''
     machine.wait_for_unit("systemd-sysusers.service")

@@ -1,6 +1,7 @@
-{ lib
-, stdenvNoCC
-, fetchzip
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -8,7 +9,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   version = "3.9.14";
 
   src = fetchzip {
-    url = "https://coconut-flavour.com/downloads/coconutBattery_${builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version}.zip";
+    url = "https://coconut-flavour.com/downloads/coconutBattery_${
+      builtins.replaceStrings [ "." ] [ "" ] finalAttrs.version
+    }.zip";
     hash = "sha256-zKSPKwDBwxlyNJFurCLLGtba9gpizJCjOOAd81vdD5Q=";
   };
 
@@ -36,6 +39,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = with licenses; [ unfree ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     maintainers = with maintainers; [ stepbrobd ];
-    platforms = [ "aarch64-darwin" "x86_64-darwin" ];
+    platforms = [
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
   };
 })

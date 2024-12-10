@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, buildPackages
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  buildPackages,
 }:
 
 buildGoModule rec {
@@ -19,13 +20,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-dGVfWKnlZxVdqgZSIRrEWmqSf360J/LKkyiMkKJ88ro=";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall =
-    let emulator = stdenv.hostPlatform.emulator buildPackages;
-    in ''
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
       ${emulator} $out/bin/nfpm man > nfpm.1
       installManPage ./nfpm.1
       installShellCompletion --cmd nfpm \
@@ -38,7 +45,10 @@ buildGoModule rec {
     description = "Simple deb and rpm packager written in Go";
     homepage = "https://github.com/goreleaser/nfpm";
     changelog = "https://github.com/goreleaser/nfpm/releases/tag/v${version}";
-    maintainers = with maintainers; [ techknowlogick caarlos0 ];
+    maintainers = with maintainers; [
+      techknowlogick
+      caarlos0
+    ];
     license = with licenses; [ mit ];
     mainProgram = "nfpm";
   };

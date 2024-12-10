@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gettext
-, pkg-config
-, wrapGAppsHook3
-, ibus
-, glib
-, gobject-introspection
-, gtk3
-, python3
-, autoreconfHook
-, intltool
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gettext,
+  pkg-config,
+  wrapGAppsHook3,
+  ibus,
+  glib,
+  gobject-introspection,
+  gtk3,
+  python3,
+  autoreconfHook,
+  intltool,
 }:
 
 let

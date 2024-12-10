@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pnpm
-, nodejs
-, electron_32
-, makeWrapper
-, copyDesktopItems
-, makeDesktopItem
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pnpm,
+  nodejs,
+  electron_32,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
+  nix-update-script,
 }:
 stdenv.mkDerivation rec {
   pname = "legcord";
@@ -20,7 +21,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-9CicqDZDetxElD36OLizyVNxkqz3rQOjAtUNTGWVwss=";
   };
 
-  nativeBuildInputs = [ pnpm.configHook nodejs makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    pnpm.configHook
+    nodejs
+    makeWrapper
+    copyDesktopItems
+  ];
 
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
@@ -80,8 +86,14 @@ stdenv.mkDerivation rec {
     homepage = "https://legcord.app";
     downloadPage = "https://github.com/Legcord/Legcord";
     license = licenses.osl3;
-    maintainers = with maintainers; [ wrmilling water-sucks ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [
+      wrmilling
+      water-sucks
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "legcord";
   };
 }

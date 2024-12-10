@@ -1,4 +1,12 @@
-{ lib, fetchurl, buildDunePackage, cppo, gettext, fileutils, ounit }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  cppo,
+  gettext,
+  fileutils,
+  ounit,
+}:
 
 buildDunePackage rec {
   pname = "gettext";
@@ -13,7 +21,10 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ cppo ];
 
-  propagatedBuildInputs = [ gettext fileutils ];
+  propagatedBuildInputs = [
+    gettext
+    fileutils
+  ];
 
   # Tests for version 0.4.2 are not compatible with OUnit 2.2.6
   doCheck = false;

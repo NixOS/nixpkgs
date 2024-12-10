@@ -1,8 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, libX11
-, libXt
-, withGraphics ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  libXt,
+  withGraphics ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,18 +17,27 @@ stdenv.mkDerivation rec {
     sha256 = "1lj2f13pbaajcy4v3744bz46rghhw5sv4dwwfnzhsllbj5gnjsv2";
   };
 
-  buildInputs = lib.optionals withGraphics [ libX11 libXt ];
+  buildInputs = lib.optionals withGraphics [
+    libX11
+    libXt
+  ];
 
   configurePhase =
     let
       target = if withGraphics then "X-Configure" else "Configure";
       platform =
-        if stdenv.hostPlatform.isLinux then "linux"
-        else if stdenv.hostPlatform.isDarwin then "macintosh"
-        else if stdenv.hostPlatform.isBSD then "bsd"
-        else if stdenv.hostPlatform.isCygwin then "cygwin"
-        else if stdenv.hostPlatform.isSunOS then "solaris"
-        else throw "unsupported system";
+        if stdenv.hostPlatform.isLinux then
+          "linux"
+        else if stdenv.hostPlatform.isDarwin then
+          "macintosh"
+        else if stdenv.hostPlatform.isBSD then
+          "bsd"
+        else if stdenv.hostPlatform.isCygwin then
+          "cygwin"
+        else if stdenv.hostPlatform.isSunOS then
+          "solaris"
+        else
+          throw "unsupported system";
     in
     "make ${target} name=${platform}";
 

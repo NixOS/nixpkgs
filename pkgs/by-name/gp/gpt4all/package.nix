@@ -1,18 +1,19 @@
-{ lib
-, config
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, fetchpatch
-, cmake
-, qt6
-, fmt
-, shaderc
-, vulkan-headers
-, wayland
-, cudaSupport ? config.cudaSupport
-, cudaPackages ? { }
-, autoAddDriverRunpath
+{
+  lib,
+  config,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  fetchpatch,
+  cmake,
+  qt6,
+  fmt,
+  shaderc,
+  vulkan-headers,
+  wayland,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages ? { },
+  autoAddDriverRunpath,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -44,44 +45,50 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/gpt4all-chat";
 
-  nativeBuildInputs = [
-    cmake
-    qt6.wrapQtAppsHook
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
-    autoAddDriverRunpath
-  ];
-
-  buildInputs = [
-    fmt
-    qt6.qtwayland
-    qt6.qtquicktimeline
-    qt6.qtsvg
-    qt6.qthttpserver
-    qt6.qtwebengine
-    qt6.qt5compat
-    qt6.qttools
-    shaderc
-    vulkan-headers
-    wayland
-  ] ++ lib.optionals cudaSupport (
-    with cudaPackages;
+  nativeBuildInputs =
     [
-      cuda_cccl
-      cuda_cudart
-      libcublas
+      cmake
+      qt6.wrapQtAppsHook
     ]
-  );
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_nvcc
+      autoAddDriverRunpath
+    ];
 
-  cmakeFlags = [
-    "-DKOMPUTE_OPT_USE_BUILT_IN_VULKAN_HEADER=OFF"
-    "-DKOMPUTE_OPT_DISABLE_VULKAN_VERSION_CHECK=ON"
-    "-DKOMPUTE_OPT_USE_BUILT_IN_FMT=OFF"
-    "-DGGML_VULKAN=ON"
-    "-DGGML_KOMPUTE=ON"
-  ] ++ lib.optionals (!cudaSupport) [
-    "-DLLMODEL_CUDA=OFF"
-  ];
+  buildInputs =
+    [
+      fmt
+      qt6.qtwayland
+      qt6.qtquicktimeline
+      qt6.qtsvg
+      qt6.qthttpserver
+      qt6.qtwebengine
+      qt6.qt5compat
+      qt6.qttools
+      shaderc
+      vulkan-headers
+      wayland
+    ]
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_cccl
+        cuda_cudart
+        libcublas
+      ]
+    );
+
+  cmakeFlags =
+    [
+      "-DKOMPUTE_OPT_USE_BUILT_IN_VULKAN_HEADER=OFF"
+      "-DKOMPUTE_OPT_DISABLE_VULKAN_VERSION_CHECK=ON"
+      "-DKOMPUTE_OPT_USE_BUILT_IN_FMT=OFF"
+      "-DGGML_VULKAN=ON"
+      "-DGGML_KOMPUTE=ON"
+    ]
+    ++ lib.optionals (!cudaSupport) [
+      "-DLLMODEL_CUDA=OFF"
+    ];
 
   postInstall = ''
     rm -rf $out/include
@@ -100,6 +107,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/nomic-ai/gpt4all";
     license = lib.licenses.mit;
     mainProgram = "gpt4all";
-    maintainers = with lib.maintainers; [ polygon titaniumtown ];
+    maintainers = with lib.maintainers; [
+      polygon
+      titaniumtown
+    ];
   };
 })

@@ -1,13 +1,14 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, hicolor-icon-theme
-, gtk3
-, xcursorgen
-, librsvg
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  hicolor-icon-theme,
+  gtk3,
+  xcursorgen,
+  librsvg,
 }:
 
 stdenvNoCC.mkDerivation rec {

@@ -1,12 +1,12 @@
 {
-  alsa-lib
-, fetchFromGitHub
-, gtk3
-, lib
-, libpulseaudio
-, pkg-config
-, stdenv
-, wrapGAppsHook3
+  alsa-lib,
+  fetchFromGitHub,
+  gtk3,
+  lib,
+  libpulseaudio,
+  pkg-config,
+  stdenv,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,35 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, libadwaita
-, libsecret
-, modemmanager
-, gtk4
-, gom
-, gsound
-, feedbackd
-, callaudiod
-, evolution-data-server-gtk4
-, folks
-, desktop-file-utils
-, appstream-glib
-, libpeas2
-, dbus
-, vala
-, wrapGAppsHook4
-, xvfb-run
-, gtk-doc
-, bubblewrap
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, docutils
-, gst_all_1
-, shared-mime-info
-, sofia_sip
-, writeShellScriptBin
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  libadwaita,
+  libsecret,
+  modemmanager,
+  gtk4,
+  gom,
+  gsound,
+  feedbackd,
+  callaudiod,
+  evolution-data-server-gtk4,
+  folks,
+  desktop-file-utils,
+  appstream-glib,
+  libpeas2,
+  dbus,
+  vala,
+  wrapGAppsHook4,
+  xvfb-run,
+  gtk-doc,
+  bubblewrap,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  docutils,
+  gst_all_1,
+  shared-mime-info,
+  sofia_sip,
+  writeShellScriptBin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,7 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-HzQz5jmlXwUHLXC6nhHCa8E8zczaA89YxteZgxSV0YY=";
   };
 
-  outputs = [ "out" "devdoc" ];
+  outputs = [
+    "out"
+    "devdoc"
+  ];
 
   nativeBuildInputs = [
     meson

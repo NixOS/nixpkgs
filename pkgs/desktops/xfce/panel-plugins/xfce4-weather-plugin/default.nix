@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, glib
-, gtk3
-, json_c
-, libxml2
-, libsoup_2_4
-, upower
-, libxfce4ui
-, libxfce4util
-, xfce4-panel
-, xfconf
-, hicolor-icon-theme
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  intltool,
+  glib,
+  gtk3,
+  json_c,
+  libxml2,
+  libsoup_2_4,
+  upower,
+  libxfce4ui,
+  libxfce4util,
+  xfce4-panel,
+  xfconf,
+  hicolor-icon-theme,
+  gitUpdater,
 }:
 
 let

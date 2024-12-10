@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitLab, postgresql, buildPostgresqlExtension }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  postgresql,
+  buildPostgresqlExtension,
+}:
 
 buildPostgresqlExtension rec {
   pname = "pg_ed25519";
@@ -20,4 +26,3 @@ buildPostgresqlExtension rec {
     broken = lib.versionAtLeast postgresql.version "16" && stdenv.cc.isClang;
   };
 }
-

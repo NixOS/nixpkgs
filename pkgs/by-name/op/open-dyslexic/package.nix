@@ -1,6 +1,12 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 
-let version = "0.91.12"; in
+let
+  version = "0.91.12";
+in
 stdenvNoCC.mkDerivation {
   pname = "open-dyslexic";
   inherit version;

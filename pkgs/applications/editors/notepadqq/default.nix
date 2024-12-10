@@ -1,14 +1,15 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, pkg-config
-, which
-, libuchardet
-, qtbase
-, qtsvg
-, qttools
-, qtwebengine
-, qtwebsockets
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  which,
+  libuchardet,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwebengine,
+  qtwebsockets,
 }:
 
 mkDerivation rec {

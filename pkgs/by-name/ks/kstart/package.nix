@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, keyutils
-, libkrb5
-, openafs
-, perl
-, pkg-config
-, enableSetPAG ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  keyutils,
+  libkrb5,
+  openafs,
+  perl,
+  pkg-config,
+  enableSetPAG ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,8 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   configureFlags = [
     "--enable-silent-rules"
-  ]
-  ++ (lib.optional enableSetPAG "--enable-setpag");
+  ] ++ (lib.optional enableSetPAG "--enable-setpag");
 
   preBuild = ''
     for f in k5start krenew; do
@@ -49,10 +49,16 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs tests
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   meta = with lib; {
-    outputsToInstall = [ "out" "man" ];
+    outputsToInstall = [
+      "out"
+      "man"
+    ];
     description = "Modified version of kerberos tools that support automatic ticket refresh";
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -12,7 +17,6 @@ in
   options = {
     services.owamp.enable = mkEnableOption "OWAMP server";
   };
-
 
   ###### implementation
 
@@ -30,10 +34,10 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart="${pkgs.owamp}/bin/owampd -R /run/owamp -d /run/owamp -v -Z ";
+        ExecStart = "${pkgs.owamp}/bin/owampd -R /run/owamp -d /run/owamp -v -Z ";
         PrivateTmp = true;
         Restart = "always";
-        Type="simple";
+        Type = "simple";
         User = "owamp";
         Group = "owamp";
         RuntimeDirectory = "owamp";

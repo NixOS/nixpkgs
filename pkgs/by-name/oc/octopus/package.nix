@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cmake
-, pkg-config
-, ninja
-, gfortran
-, which
-, perl
-, procps
-, libvdwxc
-, libyaml
-, libxc
-, fftw
-, blas
-, lapack
-, gsl
-, netcdf
-, arpack
-, spglib
-, metis
-, scalapack
-, mpi
-, enableMpi ? true
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  pkg-config,
+  ninja,
+  gfortran,
+  which,
+  perl,
+  procps,
+  libvdwxc,
+  libyaml,
+  libxc,
+  fftw,
+  blas,
+  lapack,
+  gsl,
+  netcdf,
+  arpack,
+  spglib,
+  metis,
+  scalapack,
+  mpi,
+  enableMpi ? true,
+  python3,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -93,7 +94,12 @@ stdenv.mkDerivation rec {
     description = "Real-space time dependent density-functional theory code";
     homepage = "https://octopus-code.org";
     maintainers = with maintainers; [ markuskowa ];
-    license = with licenses; [ gpl2Only asl20 lgpl3Plus bsd3 ];
+    license = with licenses; [
+      gpl2Only
+      asl20
+      lgpl3Plus
+      bsd3
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

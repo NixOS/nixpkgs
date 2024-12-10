@@ -1,23 +1,25 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, pkg-config
-, gnome
-, gtk3
-, libxml2
-, intltool
-, itstool
-, gdb
-, boost
-, sqlite
-, libgtop
-, glibmm
-, gtkmm3
-, vte
-, gtksourceview
-, gsettings-desktop-schemas
-, gtksourceviewmm
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  gnome,
+  gtk3,
+  libxml2,
+  intltool,
+  itstool,
+  gdb,
+  boost,
+  sqlite,
+  libgtop,
+  glibmm,
+  gtkmm3,
+  vte,
+  gtksourceview,
+  gsettings-desktop-schemas,
+  gtksourceviewmm,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

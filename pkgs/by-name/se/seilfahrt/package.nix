@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pandoc
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pandoc,
 }:
 
 buildGoModule rec {

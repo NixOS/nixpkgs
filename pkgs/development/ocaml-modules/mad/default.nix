@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, fetchFromGitHub, dune-configurator, libmad }:
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  dune-configurator,
+  libmad,
+}:
 
 buildDunePackage rec {
   pname = "mad";

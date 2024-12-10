@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
-, wireshark-cli
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  wireshark-cli,
 }:
 
 python3.pkgs.buildPythonApplication rec {

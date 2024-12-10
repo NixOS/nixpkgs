@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libmpdclient
-, openssl
-, lua5_3
-, libid3tag
-, flac
-, pcre2
-, gzip
-, perl
-, jq
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libmpdclient,
+  openssl,
+  lua5_3,
+  libid3tag,
+  flac,
+  pcre2,
+  gzip,
+  perl,
+  jq,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

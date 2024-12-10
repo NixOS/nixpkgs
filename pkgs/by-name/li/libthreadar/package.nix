@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, gcc-unwrapped }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gcc-unwrapped,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.5.0";
@@ -9,7 +14,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wJAkIUGK7Ud6n2p1275vNkSx/W7LlgKWXQaDevetPko=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   buildInputs = [ gcc-unwrapped ];
 

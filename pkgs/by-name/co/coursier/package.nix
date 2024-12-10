@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre, writeScript, common-updater-scripts
-, coreutils, git, gnused, nix, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+  writeScript,
+  common-updater-scripts,
+  coreutils,
+  git,
+  gnused,
+  nix,
+  zlib,
+}:
 
 let
   libPath = lib.makeLibraryPath [
@@ -34,7 +46,15 @@ stdenv.mkDerivation rec {
   passthru.updateScript = writeScript "update.sh" ''
     #!${stdenv.shell}
     set -o errexit
-    PATH=${lib.makeBinPath [ common-updater-scripts coreutils git gnused nix ]}
+    PATH=${
+      lib.makeBinPath [
+        common-updater-scripts
+        coreutils
+        git
+        gnused
+        nix
+      ]
+    }
     oldVersion="$(nix-instantiate --eval -E "with import ./. {}; lib.getVersion ${pname}" | tr -d '"')"
     latestTag="$(git -c 'versionsort.suffix=-' ls-remote --exit-code --refs --sort='version:refname' --tags https://github.com/coursier/coursier.git 'v*.*.*' | tail --lines=1 | cut --delimiter='/' --fields=3 | sed 's|^v||g')"
     if [ "$oldVersion" != "$latestTag" ]; then
@@ -51,7 +71,10 @@ stdenv.mkDerivation rec {
     description = "Scala library to fetch dependencies from Maven / Ivy repositories";
     mainProgram = "cs";
     license = licenses.asl20;
-    maintainers = with maintainers; [ adelbertc nequissimus ];
+    maintainers = with maintainers; [
+      adelbertc
+      nequissimus
+    ];
     platforms = platforms.all;
   };
 }

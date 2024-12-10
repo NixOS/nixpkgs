@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, fetchurl
-, substituteAll
-, bubblewrap
-, cairo
-, cargo
-, git
-, gnome
-, gtk4
-, lcms2
-, libheif
-, libjxl
-, librsvg
-, libseccomp
-, libxml2
-, meson
-, ninja
-, pkg-config
-, rustc
+{
+  stdenv,
+  lib,
+  fetchurl,
+  substituteAll,
+  bubblewrap,
+  cairo,
+  cargo,
+  git,
+  gnome,
+  gtk4,
+  lcms2,
+  libheif,
+  libjxl,
+  librsvg,
+  libseccomp,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -79,7 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Glycin loaders for several formats";
     homepage = "https://gitlab.gnome.org/sophie-h/glycin";
     maintainers = teams.gnome.members;
-    license = with licenses; [ mpl20 /* or */ lgpl21Plus ];
+    license = with licenses; [
+      mpl20 # or
+      lgpl21Plus
+    ];
     platforms = platforms.linux;
   };
 })

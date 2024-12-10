@@ -1,4 +1,10 @@
-{ lib, buildNpmPackage, fetchFromGitHub, eslint_d, testers }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  eslint_d,
+  testers,
+}:
 
 buildNpmPackage rec {
   pname = "eslint_d";
@@ -15,7 +21,10 @@ buildNpmPackage rec {
 
   dontNpmBuild = true;
 
-  passthru.tests.version = testers.testVersion { package = eslint_d; version = src.rev; };
+  passthru.tests.version = testers.testVersion {
+    package = eslint_d;
+    version = src.rev;
+  };
 
   meta = with lib; {
     description = "Makes eslint the fastest linter on the planet";

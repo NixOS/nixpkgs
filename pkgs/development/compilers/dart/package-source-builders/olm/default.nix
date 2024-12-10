@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, writeScript
-, olm
+{
+  stdenv,
+  lib,
+  writeScript,
+  olm,
 }:
 
 { version, src, ... }:

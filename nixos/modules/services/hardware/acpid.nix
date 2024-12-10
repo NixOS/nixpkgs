@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.acpid;
 
@@ -19,21 +24,21 @@ let
     };
   };
 
-  acpiConfDir = pkgs.runCommand "acpi-events" { preferLocalBuild = true; }
-    ''
-      mkdir -p $out
-      ${
-        # Generate a configuration file for each event. (You can't have
-        # multiple events in one config file...)
-        let f = name: handler:
-          ''
-            fn=$out/${name}
-            echo "event=${handler.event}" > $fn
-            echo "action=${pkgs.writeShellScriptBin "${name}.sh" handler.action }/bin/${name}.sh '%e'" >> $fn
-          '';
-        in lib.concatStringsSep "\n" (lib.mapAttrsToList f (canonicalHandlers // cfg.handlers))
-      }
-    '';
+  acpiConfDir = pkgs.runCommand "acpi-events" { preferLocalBuild = true; } ''
+    mkdir -p $out
+    ${
+      # Generate a configuration file for each event. (You can't have
+      # multiple events in one config file...)
+      let
+        f = name: handler: ''
+          fn=$out/${name}
+          echo "event=${handler.event}" > $fn
+          echo "action=${pkgs.writeShellScriptBin "${name}.sh" handler.action}/bin/${name}.sh '%e'" >> $fn
+        '';
+      in
+      lib.concatStringsSep "\n" (lib.mapAttrsToList f (canonicalHandlers // cfg.handlers))
+    }
+  '';
 
 in
 
@@ -54,20 +59,22 @@ in
       };
 
       handlers = lib.mkOption {
-        type = lib.types.attrsOf (lib.types.submodule {
-          options = {
-            event = lib.mkOption {
-              type = lib.types.str;
-              example = lib.literalExpression ''"button/power.*" "button/lid.*" "ac_adapter.*" "button/mute.*" "button/volumedown.*" "cd/play.*" "cd/next.*"'';
-              description = "Event type.";
-            };
+        type = lib.types.attrsOf (
+          lib.types.submodule {
+            options = {
+              event = lib.mkOption {
+                type = lib.types.str;
+                example = lib.literalExpression ''"button/power.*" "button/lid.*" "ac_adapter.*" "button/mute.*" "button/volumedown.*" "cd/play.*" "cd/next.*"'';
+                description = "Event type.";
+              };
 
-            action = lib.mkOption {
-              type = lib.types.lines;
-              description = "Shell commands to execute when the event is triggered.";
+              action = lib.mkOption {
+                type = lib.types.lines;
+                description = "Shell commands to execute when the event is triggered.";
+              };
             };
-          };
-        });
+          }
+        );
 
         description = ''
           Event handlers.
@@ -76,7 +83,7 @@ in
           Handler can be a single command.
           :::
         '';
-        default = {};
+        default = { };
         example = {
           ac-power = {
             event = "ac_adapter/*";
@@ -120,7 +127,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
@@ -132,13 +138,16 @@ in
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
-        ExecStart = lib.escapeShellArgs
-          ([ "${pkgs.acpid}/bin/acpid"
-             "--foreground"
-             "--netlink"
-             "--confdir" "${acpiConfDir}"
-           ] ++ lib.optional cfg.logEvents "--logevents"
-          );
+        ExecStart = lib.escapeShellArgs (
+          [
+            "${pkgs.acpid}/bin/acpid"
+            "--foreground"
+            "--netlink"
+            "--confdir"
+            "${acpiConfDir}"
+          ]
+          ++ lib.optional cfg.logEvents "--logevents"
+        );
       };
       unitConfig = {
         ConditionVirtualization = "!systemd-nspawn";

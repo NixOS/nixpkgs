@@ -1,8 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.netbox;
-  pythonFmt = pkgs.formats.pythonVars {};
+  pythonFmt = pkgs.formats.pythonVars { };
   staticDir = cfg.dataDir + "/static";
 
   settingsFile = pythonFmt.generate "netbox-settings.py" cfg.settings;
@@ -10,24 +15,35 @@ let
     name = "netbox-extraConfig.py";
     text = cfg.extraConfig;
   };
-  configFile = pkgs.concatText "configuration.py" [ settingsFile extraConfigFile ];
+  configFile = pkgs.concatText "configuration.py" [
+    settingsFile
+    extraConfigFile
+  ];
 
-  pkg = (cfg.package.overrideAttrs (old: {
-    installPhase = old.installPhase + ''
-      ln -s ${configFile} $out/opt/netbox/netbox/netbox/configuration.py
-    '' + lib.optionalString cfg.enableLdap ''
-      ln -s ${cfg.ldapConfigPath} $out/opt/netbox/netbox/netbox/ldap_config.py
-    '';
-  })).override {
-    inherit (cfg) plugins;
-  };
-  netboxManageScript = with pkgs; (writeScriptBin "netbox-manage" ''
-    #!${stdenv.shell}
-    export PYTHONPATH=${pkg.pythonPath}
-    sudo -u netbox ${pkg}/bin/netbox "$@"
-  '');
+  pkg =
+    (cfg.package.overrideAttrs (old: {
+      installPhase =
+        old.installPhase
+        + ''
+          ln -s ${configFile} $out/opt/netbox/netbox/netbox/configuration.py
+        ''
+        + lib.optionalString cfg.enableLdap ''
+          ln -s ${cfg.ldapConfigPath} $out/opt/netbox/netbox/netbox/ldap_config.py
+        '';
+    })).override
+      {
+        inherit (cfg) plugins;
+      };
+  netboxManageScript =
+    with pkgs;
+    (writeScriptBin "netbox-manage" ''
+      #!${stdenv.shell}
+      export PYTHONPATH=${pkg.pythonPath}
+      sudo -u netbox ${pkg}/bin/netbox "$@"
+    '');
 
-in {
+in
+{
   options.services.netbox = {
     enable = lib.mkOption {
       type = lib.types.bool;
@@ -54,7 +70,7 @@ in {
         options = {
           ALLOWED_HOSTS = lib.mkOption {
             type = with lib.types; listOf str;
-            default = ["*"];
+            default = [ "*" ];
             description = ''
               A list of valid fully-qualified domain names (FQDNs) and/or IP
               addresses that can be used to reach the NetBox service.
@@ -75,11 +91,12 @@ in {
     package = lib.mkOption {
       type = lib.types.package;
       default =
-        if lib.versionAtLeast config.system.stateVersion "24.11"
-        then pkgs.netbox_4_1
-        else if lib.versionAtLeast config.system.stateVersion "24.05"
-        then pkgs.netbox_3_7
-        else pkgs.netbox_3_6;
+        if lib.versionAtLeast config.system.stateVersion "24.11" then
+          pkgs.netbox_4_1
+        else if lib.versionAtLeast config.system.stateVersion "24.05" then
+          pkgs.netbox_3_7
+        else
+          pkgs.netbox_3_6;
       defaultText = lib.literalExpression ''
         if lib.versionAtLeast config.system.stateVersion "24.11"
         then pkgs.netbox_4_1
@@ -102,7 +119,7 @@ in {
 
     plugins = lib.mkOption {
       type = with lib.types; functionTo (listOf package);
-      default = _: [];
+      default = _: [ ];
       defaultText = lib.literalExpression ''
         python3Packages: with python3Packages; [];
       '';
@@ -210,14 +227,14 @@ in {
         # sections, and it is strongly recommended to use two separate database
         # IDs.
         REDIS = {
-            tasks = {
-                URL = "unix://${config.services.redis.servers.netbox.unixSocket}?db=0";
-                SSL = false;
-            };
-            caching =  {
-                URL = "unix://${config.services.redis.servers.netbox.unixSocket}?db=1";
-                SSL = false;
-            };
+          tasks = {
+            URL = "unix://${config.services.redis.servers.netbox.unixSocket}?db=0";
+            SSL = false;
+          };
+          caching = {
+            URL = "unix://${config.services.redis.servers.netbox.unixSocket}?db=1";
+            SSL = false;
+          };
         };
 
         REMOTE_AUTH_BACKEND = lib.mkIf cfg.enableLdap "netbox.authentication.LDAPBackend";
@@ -240,13 +257,15 @@ in {
         };
       };
 
-      extraConfig = ''
-        with open("${cfg.secretKeyFile}", "r") as file:
-            SECRET_KEY = file.readline()
-      '' + (lib.optionalString (cfg.keycloakClientSecret != null) ''
-        with open("${cfg.keycloakClientSecret}", "r") as file:
-            SOCIAL_AUTH_KEYCLOAK_SECRET = file.readline()
-      '');
+      extraConfig =
+        ''
+          with open("${cfg.secretKeyFile}", "r") as file:
+              SECRET_KEY = file.readline()
+        ''
+        + (lib.optionalString (cfg.keycloakClientSecret != null) ''
+          with open("${cfg.keycloakClientSecret}", "r") as file:
+              SOCIAL_AUTH_KEYCLOAK_SECRET = file.readline()
+        '');
     };
 
     services.redis.servers.netbox.enable = true;
@@ -268,102 +287,111 @@ in {
       description = "Target for all NetBox services";
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" "redis-netbox.service" ];
+      after = [
+        "network-online.target"
+        "redis-netbox.service"
+      ];
     };
 
-    systemd.services = let
-      defaultServiceConfig = {
-        WorkingDirectory = "${cfg.dataDir}";
-        User = "netbox";
-        Group = "netbox";
-        StateDirectory = "netbox";
-        StateDirectoryMode = "0750";
-        Restart = "on-failure";
-        RestartSec = 30;
-      };
-    in {
-      netbox = {
-        description = "NetBox WSGI Service";
-        documentation = [ "https://docs.netbox.dev/" ];
+    systemd.services =
+      let
+        defaultServiceConfig = {
+          WorkingDirectory = "${cfg.dataDir}";
+          User = "netbox";
+          Group = "netbox";
+          StateDirectory = "netbox";
+          StateDirectoryMode = "0750";
+          Restart = "on-failure";
+          RestartSec = 30;
+        };
+      in
+      {
+        netbox = {
+          description = "NetBox WSGI Service";
+          documentation = [ "https://docs.netbox.dev/" ];
 
-        wantedBy = [ "netbox.target" ];
+          wantedBy = [ "netbox.target" ];
 
-        after = [ "network-online.target" ];
-        wants = [ "network-online.target" ];
+          after = [ "network-online.target" ];
+          wants = [ "network-online.target" ];
 
-        environment.PYTHONPATH = pkg.pythonPath;
+          environment.PYTHONPATH = pkg.pythonPath;
 
-        preStart = ''
-          # On the first run, or on upgrade / downgrade, run migrations and related.
-          # This mostly correspond to upstream NetBox's 'upgrade.sh' script.
-          versionFile="${cfg.dataDir}/version"
+          preStart = ''
+            # On the first run, or on upgrade / downgrade, run migrations and related.
+            # This mostly correspond to upstream NetBox's 'upgrade.sh' script.
+            versionFile="${cfg.dataDir}/version"
 
-          if [[ -h "$versionFile" && "$(readlink -- "$versionFile")" == "${cfg.package}" ]]; then
-            exit 0
-          fi
+            if [[ -h "$versionFile" && "$(readlink -- "$versionFile")" == "${cfg.package}" ]]; then
+              exit 0
+            fi
 
-          ${pkg}/bin/netbox migrate
-          ${pkg}/bin/netbox trace_paths --no-input
-          ${pkg}/bin/netbox collectstatic --clear --no-input
-          ${pkg}/bin/netbox remove_stale_contenttypes --no-input
-          ${pkg}/bin/netbox reindex --lazy
-          ${pkg}/bin/netbox clearsessions
-          ${lib.optionalString
-            # The clearcache command was removed in 3.7.0:
-            # https://github.com/netbox-community/netbox/issues/14458
-            (lib.versionOlder cfg.package.version "3.7.0")
-            "${pkg}/bin/netbox clearcache"}
+            ${pkg}/bin/netbox migrate
+            ${pkg}/bin/netbox trace_paths --no-input
+            ${pkg}/bin/netbox collectstatic --clear --no-input
+            ${pkg}/bin/netbox remove_stale_contenttypes --no-input
+            ${pkg}/bin/netbox reindex --lazy
+            ${pkg}/bin/netbox clearsessions
+            ${lib.optionalString
+              # The clearcache command was removed in 3.7.0:
+              # https://github.com/netbox-community/netbox/issues/14458
+              (lib.versionOlder cfg.package.version "3.7.0")
+              "${pkg}/bin/netbox clearcache"
+            }
 
-          ln -sfn "${cfg.package}" "$versionFile"
-        '';
-
-        serviceConfig = defaultServiceConfig // {
-          ExecStart = ''
-            ${pkg.gunicorn}/bin/gunicorn netbox.wsgi \
-              --bind ${cfg.listenAddress}:${toString cfg.port} \
-              --pythonpath ${pkg}/opt/netbox/netbox
+            ln -sfn "${cfg.package}" "$versionFile"
           '';
-          PrivateTmp = true;
-          TimeoutStartSec = lib.mkDefault "5min";
+
+          serviceConfig = defaultServiceConfig // {
+            ExecStart = ''
+              ${pkg.gunicorn}/bin/gunicorn netbox.wsgi \
+                --bind ${cfg.listenAddress}:${toString cfg.port} \
+                --pythonpath ${pkg}/opt/netbox/netbox
+            '';
+            PrivateTmp = true;
+            TimeoutStartSec = lib.mkDefault "5min";
+          };
+        };
+
+        netbox-rq = {
+          description = "NetBox Request Queue Worker";
+          documentation = [ "https://docs.netbox.dev/" ];
+
+          wantedBy = [ "netbox.target" ];
+          after = [ "netbox.service" ];
+
+          environment.PYTHONPATH = pkg.pythonPath;
+
+          serviceConfig = defaultServiceConfig // {
+            ExecStart = ''
+              ${pkg}/bin/netbox rqworker high default low
+            '';
+            PrivateTmp = true;
+          };
+        };
+
+        netbox-housekeeping = {
+          description = "NetBox housekeeping job";
+          documentation = [ "https://docs.netbox.dev/" ];
+
+          wantedBy = [ "multi-user.target" ];
+
+          after = [
+            "network-online.target"
+            "netbox.service"
+          ];
+          wants = [ "network-online.target" ];
+
+          environment.PYTHONPATH = pkg.pythonPath;
+
+          serviceConfig = defaultServiceConfig // {
+            Type = "oneshot";
+            ExecStart = ''
+              ${pkg}/bin/netbox housekeeping
+            '';
+          };
         };
       };
-
-      netbox-rq = {
-        description = "NetBox Request Queue Worker";
-        documentation = [ "https://docs.netbox.dev/" ];
-
-        wantedBy = [ "netbox.target" ];
-        after = [ "netbox.service" ];
-
-        environment.PYTHONPATH = pkg.pythonPath;
-
-        serviceConfig = defaultServiceConfig // {
-          ExecStart = ''
-            ${pkg}/bin/netbox rqworker high default low
-          '';
-          PrivateTmp = true;
-        };
-      };
-
-      netbox-housekeeping = {
-        description = "NetBox housekeeping job";
-        documentation = [ "https://docs.netbox.dev/" ];
-
-        wantedBy = [ "multi-user.target" ];
-
-        after = [ "network-online.target" "netbox.service" ];
-        wants = [ "network-online.target" ];
-
-        environment.PYTHONPATH = pkg.pythonPath;
-
-        serviceConfig = defaultServiceConfig // {
-          Type = "oneshot";
-          ExecStart = ''
-            ${pkg}/bin/netbox housekeeping
-          '';
-        };
-      };
-    };
 
     systemd.timers.netbox-housekeeping = {
       description = "Run NetBox housekeeping job";
@@ -371,7 +399,10 @@ in {
 
       wantedBy = [ "multi-user.target" ];
 
-      after = [ "network-online.target" "netbox.service" ];
+      after = [
+        "network-online.target"
+        "netbox.service"
+      ];
       wants = [ "network-online.target" ];
 
       timerConfig = {
@@ -386,7 +417,7 @@ in {
       isSystemUser = true;
       group = "netbox";
     };
-    users.groups.netbox = {};
+    users.groups.netbox = { };
     users.groups."${config.services.redis.servers.netbox.user}".members = [ "netbox" ];
   };
 }

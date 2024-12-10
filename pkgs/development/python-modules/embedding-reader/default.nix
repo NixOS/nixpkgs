@@ -21,7 +21,6 @@ buildPythonPackage rec {
     hash = "sha256-paN6rAyH3L7qCfWPr5kXo9Xl57gRMhdcDnoyLJ7II2w=";
   };
 
-
   pythonRelaxDeps = [ "pyarrow" ];
 
   propagatedBuildInputs = [

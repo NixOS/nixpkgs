@@ -1,22 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, docbook-xsl-nons
-, gobject-introspection
-, gtk-doc
-, meson
-, ninja
-, pkg-config
-, mesonEmulatorHook
-, gtk3
-, glib
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  docbook-xsl-nons,
+  gobject-introspection,
+  gtk-doc,
+  meson,
+  ninja,
+  pkg-config,
+  mesonEmulatorHook,
+  gtk3,
+  glib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgedit-gfls";
   version = "0.2.1";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -27,16 +32,18 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-kMkqEly8RDc5eKqUupQD4tkVIXxL1rt4e/OCAPoutIg=";
   };
 
-  nativeBuildInputs = [
-    docbook-xsl-nons
-    gobject-introspection
-    gtk-doc
-    meson
-    ninja
-    pkg-config
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      docbook-xsl-nons
+      gobject-introspection
+      gtk-doc
+      meson
+      ninja
+      pkg-config
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   buildInputs = [
     gtk3

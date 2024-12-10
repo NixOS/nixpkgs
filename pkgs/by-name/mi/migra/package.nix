@@ -1,9 +1,9 @@
-{ lib
-, python3
-, fetchFromGitHub
-, postgresql
-, postgresqlTestHook
-,
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  postgresql,
+  postgresqlTestHook,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "migra";

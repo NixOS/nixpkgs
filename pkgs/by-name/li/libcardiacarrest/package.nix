@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, glib, libpulseaudio }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  glib,
+  libpulseaudio,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libcardiacarrest";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "0vrigwcw3g8zknqyznv6y3437ahn1w00gv3d303smmygr0p8bd94";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 
@@ -25,22 +35,25 @@ stdenv.mkDerivation rec {
     moveToOutput $out/lib/cmake $dev
   '';
 
-  meta = with lib; src.meta // {
-    description = "Trivial implementation of libpulse PulseAudio library API";
-    longDescription = ''
-      libcardiacarrest is a trivial implementation of libpulse
-      PulseAudio library API that unconditionally (but gracefully)
-      fails to connect to the PulseAudio daemon and does nothing else.
+  meta =
+    with lib;
+    src.meta
+    // {
+      description = "Trivial implementation of libpulse PulseAudio library API";
+      longDescription = ''
+        libcardiacarrest is a trivial implementation of libpulse
+        PulseAudio library API that unconditionally (but gracefully)
+        fails to connect to the PulseAudio daemon and does nothing else.
 
-      apulse and pressureaudio (which uses apulse internally) are an
-      inspiration for this but unlike those two projects
-      libcardiacarrest is not an emulation layer, all it does is it
-      gracefully fails to provide the requested PulseAudio service
-      hoping the application would try something else (e.g. ALSA or
-      JACK).
-    '';
-    license = libpulseaudio.meta.license; # "same as PA headers"
-    maintainers = [ maintainers.oxij ]; # also the author
-  };
+        apulse and pressureaudio (which uses apulse internally) are an
+        inspiration for this but unlike those two projects
+        libcardiacarrest is not an emulation layer, all it does is it
+        gracefully fails to provide the requested PulseAudio service
+        hoping the application would try something else (e.g. ALSA or
+        JACK).
+      '';
+      license = libpulseaudio.meta.license; # "same as PA headers"
+      maintainers = [ maintainers.oxij ]; # also the author
+    };
 
 }

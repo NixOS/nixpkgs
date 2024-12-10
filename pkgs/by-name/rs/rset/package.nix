@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, coreutils, openssh, gnutar }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  coreutils,
+  openssh,
+  gnutar,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rset";

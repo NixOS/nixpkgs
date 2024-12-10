@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, unzip
-, cmake
-, libtiff
-, expat
-, zlib
-, libpng
-, libjpeg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unzip,
+  cmake,
+  libtiff,
+  expat,
+  zlib,
+  libpng,
+  libjpeg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,7 +35,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # test failure on aarch64-linux; unknown reason:
-  cmakeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "-DCMAKE_CTEST_ARGUMENTS='-E vgl_test_frustum_3d'" ];
+  cmakeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [
+    "-DCMAKE_CTEST_ARGUMENTS='-E vgl_test_frustum_3d'"
+  ];
 
   doCheck = true;
 

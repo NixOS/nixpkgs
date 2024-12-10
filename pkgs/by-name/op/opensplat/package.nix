@@ -35,35 +35,41 @@ stdenv'.mkDerivation {
     hash = "sha256-u2UmD0O3sUWELYb4CjQE19i4HUjLMcaWqOinQH0PPTM=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
-    autoAddDriverRunpath
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      ninja
+    ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_nvcc
+      autoAddDriverRunpath
+    ];
 
-  buildInputs = [
-    nlohmann_json
-    nanoflann
-    glm
-    cxxopts
-    torch.cxxdev
-    torch
-    opencv
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_cudart
-  ];
+  buildInputs =
+    [
+      nlohmann_json
+      nanoflann
+      glm
+      cxxopts
+      torch.cxxdev
+      torch
+      opencv
+    ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_cudart
+    ];
 
   env.TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" python3.pkgs.torch.cudaCapabilities}";
 
-  cmakeFlags = [
-    (lib.cmakeBool "CMAKE_SKIP_RPATH" true)
-    (lib.cmakeFeature "FETCHCONTENT_TRY_FIND_PACKAGE_MODE" "ALWAYS")
-  ] ++ lib.optionals cudaSupport [
-    (lib.cmakeFeature "GPU_RUNTIME" "CUDA")
-    (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}/")
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "CMAKE_SKIP_RPATH" true)
+      (lib.cmakeFeature "FETCHCONTENT_TRY_FIND_PACKAGE_MODE" "ALWAYS")
+    ]
+    ++ lib.optionals cudaSupport [
+      (lib.cmakeFeature "GPU_RUNTIME" "CUDA")
+      (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}/")
+    ];
 
   passthru.updateScript = nix-update-script { };
 

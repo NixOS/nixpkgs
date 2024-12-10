@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchzip
-, autoconf-archive
-, autoreconfHook
-, pkg-config
-, curlWithGnuTls
-, libev
-, sqlite
+{
+  lib,
+  stdenv,
+  fetchzip,
+  autoconf-archive,
+  autoreconfHook,
+  pkg-config,
+  curlWithGnuTls,
+  libev,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-Qp8br4ZxiqaxFZ6Tb+wFpqp2APmnU9QdNkM8MyGAtrw=";
   };
 
-  nativeBuildInputs = [ autoconf-archive autoreconfHook pkg-config libev curlWithGnuTls sqlite ];
+  nativeBuildInputs = [
+    autoconf-archive
+    autoreconfHook
+    pkg-config
+    libev
+    curlWithGnuTls
+    sqlite
+  ];
 
   enableParallelBuilding = true;
 

@@ -26,7 +26,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = true;
 
-
   propagatedBuildInputs = [
     aiohttp
     promise

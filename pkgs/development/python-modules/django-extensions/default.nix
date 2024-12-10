@@ -29,7 +29,7 @@ buildPythonPackage rec {
   version = "3.2.3";
   pyproject = true;
 
-   src = fetchFromGitHub {
+  src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";

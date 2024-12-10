@@ -1,6 +1,14 @@
-{ lib, buildPythonApplication, fetchFromGitHub
-, gtk3, wrapGAppsHook3, gst_all_1, gobject-introspection
-, python3Packages, adwaita-icon-theme }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  gtk3,
+  wrapGAppsHook3,
+  gst_all_1,
+  gobject-introspection,
+  python3Packages,
+  adwaita-icon-theme,
+}:
 
 buildPythonApplication {
   pname = "gscrabble";
@@ -15,14 +23,24 @@ buildPythonApplication {
 
   doCheck = false;
 
-  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
-
-  buildInputs = with gst_all_1; [
-    gst-plugins-base gst-plugins-good gst-plugins-ugly gst-plugins-bad
-    adwaita-icon-theme gtk3
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    gobject-introspection
   ];
 
-  propagatedBuildInputs = with python3Packages; [ gst-python pygobject3 ];
+  buildInputs = with gst_all_1; [
+    gst-plugins-base
+    gst-plugins-good
+    gst-plugins-ugly
+    gst-plugins-bad
+    adwaita-icon-theme
+    gtk3
+  ];
+
+  propagatedBuildInputs = with python3Packages; [
+    gst-python
+    pygobject3
+  ];
 
   preFixup = ''
     gappsWrapperArgs+=(

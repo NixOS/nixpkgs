@@ -1,5 +1,20 @@
-{ lib, stdenv, fetchurl, fetchgit, cmake, libuuid, expat, sqlite, libidn
-, libiconv, botan2, systemd, pkg-config, udns, python3Packages } :
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchgit,
+  cmake,
+  libuuid,
+  expat,
+  sqlite,
+  libidn,
+  libiconv,
+  botan2,
+  systemd,
+  pkg-config,
+  udns,
+  python3Packages,
+}:
 
 let
   louiz_catch = fetchgit {
@@ -19,10 +34,26 @@ stdenv.mkDerivation rec {
 
   patches = [ ./catch.patch ];
 
-  nativeBuildInputs = [ cmake pkg-config python3Packages.sphinx ];
-  buildInputs = [ libuuid expat sqlite libiconv libidn botan2 systemd udns ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3Packages.sphinx
+  ];
+  buildInputs = [
+    libuuid
+    expat
+    sqlite
+    libiconv
+    libidn
+    botan2
+    systemd
+    udns
+  ];
 
-  buildFlags = [ "all" "man" ];
+  buildFlags = [
+    "all"
+    "man"
+  ];
 
   preConfigure = ''
     substituteInPlace CMakeLists.txt --replace /etc/biboumi $out/etc/biboumi

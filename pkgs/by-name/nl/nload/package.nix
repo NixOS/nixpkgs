@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, fetchpatch, ncurses, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  ncurses,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   version = "0.7.4";

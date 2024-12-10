@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoconf
-, automake
-, pkg-config
-, utf8cpp
-, libtool
-, libxml2
-, icu
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoconf,
+  automake,
+  pkg-config,
+  utf8cpp,
+  libtool,
+  libxml2,
+  icu,
+  python3,
 }:
 
 stdenv.mkDerivation rec {

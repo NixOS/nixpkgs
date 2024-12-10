@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, libX11 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+}:
 
 stdenv.mkDerivation {
   pname = "disk-indicator";

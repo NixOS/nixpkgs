@@ -1,9 +1,10 @@
-{ lib
-, fetchpatch
-, python3
-, fetchFromGitHub
-, wrapQtAppsHook
-, cups
+{
+  lib,
+  fetchpatch,
+  python3,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  cups,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -75,7 +76,11 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   dontWrapQtApps = true;
-  makeWrapperArgs = [ "--unset" "PYTHONPATH" "\${qtWrapperArgs[@]}" ];
+  makeWrapperArgs = [
+    "--unset"
+    "PYTHONPATH"
+    "\${qtWrapperArgs[@]}"
+  ];
 
   postInstall = ''
     mkdir -p $out/share/inkscape/extensions

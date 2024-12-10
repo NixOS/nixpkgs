@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildHomeAssistantComponent
-, pyemvue
+{
+  lib,
+  fetchFromGitHub,
+  buildHomeAssistantComponent,
+  pyemvue,
 }:
 
 buildHomeAssistantComponent rec {

@@ -1,56 +1,64 @@
-{ stdenv
-, fetchFromGitLab
-, python
-, libxml2
-, sqlite
+{
+  stdenv,
+  fetchFromGitLab,
+  python,
+  libxml2,
+  sqlite,
 
-, boost
-, gtk3-x11
-, root
-, glib
-, gsl
+  boost,
+  gtk3-x11,
+  root,
+  glib,
+  gsl,
 
-, cmake
-, pkg-config
+  cmake,
+  pkg-config,
 
+  libpcap,
 
-, libpcap
+  jansson,
 
-, jansson
-
-, harfbuzz
-, freetype
+  harfbuzz,
+  freetype,
 
   # for binding generation
-, castxml ? null
-, cppyy ? null
+  castxml ? null,
+  cppyy ? null,
 
   # can take a long time, generates > 30000 images/graphs
-, enableDoxygen ? false
+  enableDoxygen ? false,
 
   # very long
-, withManual ? false
-, doxygen ? null
-, graphviz ? null
-, imagemagick ? null
+  withManual ? false,
+  doxygen ? null,
+  graphviz ? null,
+  imagemagick ? null,
   # for manual, tetex is used to get the eps2pdf binary
   # texlive to get latexmk. building manual still fails though
-, dia
-, tetex ? null
-, ghostscript ? null
-, texliveMedium ? null
+  dia,
+  tetex ? null,
+  ghostscript ? null,
+  texliveMedium ? null,
 
   # generates python bindings
-, pythonSupport ? true
-, ncurses ? null
+  pythonSupport ? true,
+  ncurses ? null,
 
-, lib
+  lib,
 }:
 
 let
-  pythonEnv = python.withPackages (ps:
+  pythonEnv = python.withPackages (
+    ps:
     lib.optional withManual ps.sphinx
-    ++ lib.optionals pythonSupport (with ps;[ pybindgen pygccxml cppyy])
+    ++ lib.optionals pythonSupport (
+      with ps;
+      [
+        pybindgen
+        pygccxml
+        cppyy
+      ]
+    )
   );
 in
 stdenv.mkDerivation rec {
@@ -64,29 +72,47 @@ stdenv.mkDerivation rec {
     hash = "sha256-2d8xCCfxRpcCZgt7ne17F7cUo/wIxLyvjQs3izNUnmY=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config pythonEnv ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    pythonEnv
+  ];
 
   outputs = [ "out" ];
 
   # ncurses is a hidden dependency of waf when checking python
-  buildInputs = lib.optionals pythonSupport [ castxml ncurses ]
-    ++ lib.optionals enableDoxygen [ doxygen graphviz imagemagick ]
-    ++ lib.optionals withManual [ dia tetex ghostscript imagemagick texliveMedium ]
+  buildInputs =
+    lib.optionals pythonSupport [
+      castxml
+      ncurses
+    ]
+    ++ lib.optionals enableDoxygen [
+      doxygen
+      graphviz
+      imagemagick
+    ]
+    ++ lib.optionals withManual [
+      dia
+      tetex
+      ghostscript
+      imagemagick
+      texliveMedium
+    ]
     ++ [
-    libxml2
-    pythonEnv
-    sqlite.dev
-    gsl
-    boost
-    root # provides cppyy
-    glib.out
-    glib.dev
-    libpcap
-    gtk3-x11.dev
-    harfbuzz
-    freetype
-    jansson
-  ];
+      libxml2
+      pythonEnv
+      sqlite.dev
+      gsl
+      boost
+      root # provides cppyy
+      glib.out
+      glib.dev
+      libpcap
+      gtk3-x11.dev
+      harfbuzz
+      freetype
+      jansson
+    ];
 
   propagatedBuildInputs = [ pythonEnv ];
 
@@ -103,15 +129,16 @@ stdenv.mkDerivation rec {
 
   doCheck = false;
 
-  buildTargets = "build"
-    + lib.optionalString enableDoxygen " doxygen"
-    + lib.optionalString withManual "sphinx";
+  buildTargets =
+    "build" + lib.optionalString enableDoxygen " doxygen" + lib.optionalString withManual "sphinx";
 
   # to prevent fatal error: 'backward_warning.h' file not found
   CXXFLAGS = "-D_GLIBCXX_PERMIT_BACKWARD_HASH";
 
   # Make generated python bindings discoverable in customized python environment
-  passthru = { pythonModule = python; };
+  passthru = {
+    pythonModule = python;
+  };
 
   cmakeFlags = [
     "-DPython3_LIBRARY_DIRS=${pythonEnv}/lib"
@@ -124,19 +151,26 @@ stdenv.mkDerivation rec {
     "-DNS3_ASSERT=ON"
     "-DNS3_GTK3=ON"
     "-DGTK3_GLIBCONFIG_INCLUDE_DIR=${glib.out}/lib/glib-2.0/include"
-  ]
-    ++ lib.optional doCheck "-DNS3_TESTS=ON";
+  ] ++ lib.optional doCheck "-DNS3_TESTS=ON";
 
   # strictoverflow prevents clang from discovering pyembed when bindings
-  hardeningDisable = [ "fortify" "strictoverflow" ];
+  hardeningDisable = [
+    "fortify"
+    "strictoverflow"
+  ];
 
   meta = with lib; {
     homepage = "http://www.nsnam.org";
     license = licenses.gpl3;
     description = "Discrete time event network simulator";
     platforms = with platforms; unix;
-    maintainers = with maintainers; [ teto rgrunbla ];
+    maintainers = with maintainers; [
+      teto
+      rgrunbla
+    ];
     # never built on aarch64-darwin since first introduction in nixpkgs
-    broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
+    broken =
+      (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+      || (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
   };
 }

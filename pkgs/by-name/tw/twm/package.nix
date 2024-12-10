@@ -1,12 +1,13 @@
-{ lib
-, darwin
-, fetchFromGitHub
-, stdenv
-, rustPlatform
-, openssl
-, pkg-config
-, nix-update-script
-, installShellFiles
+{
+  lib,
+  darwin,
+  fetchFromGitHub,
+  stdenv,
+  rustPlatform,
+  openssl,
+  pkg-config,
+  nix-update-script,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,8 +23,13 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-BjQ7dDXHzX+O/V328TTwl9wGtpOq+NjOMRiZwb9O7ZU=";
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd twm \
@@ -42,7 +48,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/vinnymeller/twm";
     changelog = "https://github.com/vinnymeller/twm/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     license = lib.licenses.mit;
-    maintainers =  [ lib.maintainers.vinnymeller ];
+    maintainers = [ lib.maintainers.vinnymeller ];
     mainProgram = "twm";
   };
 }

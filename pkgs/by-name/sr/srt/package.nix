@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, openssl
-, windows
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+  windows,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,11 +20,13 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isMinGW [
-    windows.mingw_w64_pthreads
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMinGW [
+      windows.mingw_w64_pthreads
+    ];
 
   patches = lib.optionals stdenv.hostPlatform.isMinGW [
     ./no-msvc-compat-headers.patch

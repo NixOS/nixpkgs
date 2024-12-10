@@ -1,11 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, libzip, libiconv, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libzip,
+  libiconv,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.4";
   pname = "runzip";
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libiconv libzip ];
+  buildInputs = [
+    libiconv
+    libzip
+  ];
 
   src = fetchFromGitHub {
     owner = "vlm";

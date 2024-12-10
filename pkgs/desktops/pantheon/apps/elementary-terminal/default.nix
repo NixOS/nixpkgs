@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, vala
-, desktop-file-utils
-, gtk3
-, granite
-, libhandy
-, libnotify
-, vte
-, libgee
-, pcre2
-, wrapGAppsHook3
-, xvfb-run
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  desktop-file-utils,
+  gtk3,
+  granite,
+  libhandy,
+  libnotify,
+  vte,
+  libgee,
+  pcre2,
+  wrapGAppsHook3,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation rec {

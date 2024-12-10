@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 
 buildGoModule rec {
@@ -29,6 +30,9 @@ buildGoModule rec {
     homepage = "https://github.com/Azure/azure-storage-azcopy";
     changelog = "https://github.com/Azure/azure-storage-azcopy/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ colemickens kashw2 ];
+    maintainers = with maintainers; [
+      colemickens
+      kashw2
+    ];
   };
 }

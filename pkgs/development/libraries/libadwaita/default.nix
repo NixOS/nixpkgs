@@ -1,32 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, gi-docgen
-, meson
-, ninja
-, pkg-config
-, sassc
-, vala
-, gobject-introspection
-, appstream
-, fribidi
-, glib
-, gtk4
-, gnome
-, adwaita-icon-theme
-, gsettings-desktop-schemas
-, desktop-file-utils
-, xvfb-run
-, AppKit
-, Foundation
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gi-docgen,
+  meson,
+  ninja,
+  pkg-config,
+  sassc,
+  vala,
+  gobject-introspection,
+  appstream,
+  fribidi,
+  glib,
+  gtk4,
+  gnome,
+  adwaita-icon-theme,
+  gsettings-desktop-schemas,
+  desktop-file-utils,
+  xvfb-run,
+  AppKit,
+  Foundation,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libadwaita";
   version = "1.6.2";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
   outputBin = "devdoc"; # demo app
 
   src = fetchFromGitLab {
@@ -49,32 +54,38 @@ stdenv.mkDerivation (finalAttrs: {
     sassc
     vala
     gobject-introspection
-    desktop-file-utils  # for validate-desktop-file
+    desktop-file-utils # for validate-desktop-file
   ];
 
-  mesonFlags = [
-    "-Dgtk_doc=true"
-  ] ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
-    "-Dtests=false"
-  ];
+  mesonFlags =
+    [
+      "-Dgtk_doc=true"
+    ]
+    ++ lib.optionals (!finalAttrs.finalPackage.doCheck) [
+      "-Dtests=false"
+    ];
 
-  buildInputs = [
-    appstream
-    fribidi
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    Foundation
-  ];
+  buildInputs =
+    [
+      appstream
+      fribidi
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+      Foundation
+    ];
 
   propagatedBuildInputs = [
     gtk4
   ];
 
-  nativeCheckInputs = [
-    adwaita-icon-theme
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    xvfb-run
-  ];
+  nativeCheckInputs =
+    [
+      adwaita-icon-theme
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      xvfb-run
+    ];
 
   # Tests had to be disabled on Darwin because test-button-content fails
   #

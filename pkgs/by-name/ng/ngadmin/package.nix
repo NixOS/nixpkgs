@@ -1,7 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, readline
-, withReadline ? true
-, enableEmu ? true
-, enableSpy ? true
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  readline,
+  withReadline ? true,
+  enableEmu ? true,
+  enableSpy ? true,
 }:
 
 stdenv.mkDerivation {
@@ -15,9 +20,7 @@ stdenv.mkDerivation {
     sha256 = "15vixhwqcpbjdxlaznans9w63kwl29mdkds6spvbv2i7l33qnhq4";
   };
 
-  nativeBuildInputs =
-    [ autoreconfHook ]
-    ++ lib.optional withReadline readline;
+  nativeBuildInputs = [ autoreconfHook ] ++ lib.optional withReadline readline;
   enableParallelBuilding = true;
   configureFlags =
     lib.optional (!withReadline) "--without-readline"

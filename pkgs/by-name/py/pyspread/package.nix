@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchPypi
-, copyDesktopItems
-, libsForQt5
-, makeDesktopItem
+{
+  lib,
+  python3,
+  fetchPypi,
+  copyDesktopItems,
+  libsForQt5,
+  makeDesktopItem,
 }:
 
 let
@@ -16,7 +17,8 @@ let
   };
   inherit (libsForQt5)
     qtsvg
-    wrapQtAppsHook;
+    wrapQtAppsHook
+    ;
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version src;
@@ -54,7 +56,11 @@ python3.pkgs.buildPythonApplication {
       desktopName = "Pyspread";
       genericName = "Spreadsheet";
       comment = "A Python-oriented spreadsheet application";
-      categories = [ "Office" "Development" "Spreadsheet" ];
+      categories = [
+        "Office"
+        "Development"
+        "Spreadsheet"
+      ];
     })
   ];
 

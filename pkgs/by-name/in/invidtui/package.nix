@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, yt-dlp, ffmpeg, mpv }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  yt-dlp,
+  ffmpeg,
+  mpv,
+}:
 
 buildGoModule rec {
   pname = "invidtui";
@@ -16,10 +23,10 @@ buildGoModule rec {
   doCheck = true;
 
   postPatch = ''
-        substituteInPlace cmd/flags.go \
-          --replace "\"ffmpeg\"" "\"${lib.getBin ffmpeg}/bin/ffmpeg\"" \
-          --replace "\"mpv\"" "\"${lib.getBin mpv}/bin/mpv\"" \
-          --replace "\"yt-dlp\"" "\"${lib.getBin yt-dlp}/bin/yt-dlp\""
+    substituteInPlace cmd/flags.go \
+      --replace "\"ffmpeg\"" "\"${lib.getBin ffmpeg}/bin/ffmpeg\"" \
+      --replace "\"mpv\"" "\"${lib.getBin mpv}/bin/mpv\"" \
+      --replace "\"yt-dlp\"" "\"${lib.getBin yt-dlp}/bin/yt-dlp\""
   '';
 
   meta = with lib; {

@@ -1,9 +1,10 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, makeWrapper
-, img2pdf
-, zathura
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  img2pdf,
+  zathura,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -25,7 +26,12 @@ stdenvNoCC.mkDerivation {
     install -Dm755 manga-cli $out/bin/manga-cli
 
     wrapProgram $out/bin/manga-cli \
-      --prefix PATH : ${lib.makeBinPath [ img2pdf zathura ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          img2pdf
+          zathura
+        ]
+      }
 
     runHook postInstall
   '';

@@ -1,8 +1,20 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
 let
   cfg = config.services.go-camo;
-  inherit (lib) mkOption mkEnableOption mkIf mkMerge types optionalString;
+  inherit (lib)
+    mkOption
+    mkEnableOption
+    mkIf
+    mkMerge
+    types
+    optionalString
+    ;
 in
 {
   options.services.go-camo = {
@@ -41,7 +53,7 @@ in
     };
     extraOptions = mkOption {
       type = with types; listOf str;
-      default = [];
+      default = [ ];
       description = "Extra options passed to the go-camo command.";
     };
   };
@@ -57,7 +69,20 @@ in
       script = ''
         GOCAMO_HMAC="$(cat "$GOCAMO_HMAC_FILE")"
         export GOCAMO_HMAC
-        exec ${lib.escapeShellArgs(lib.lists.remove "" ([ "${pkgs.go-camo}/bin/go-camo" cfg.listen cfg.sslListen cfg.sslKey cfg.sslCert ] ++ cfg.extraOptions))}
+        exec ${
+          lib.escapeShellArgs (
+            lib.lists.remove "" (
+              [
+                "${pkgs.go-camo}/bin/go-camo"
+                cfg.listen
+                cfg.sslListen
+                cfg.sslKey
+                cfg.sslCert
+              ]
+              ++ cfg.extraOptions
+            )
+          )
+        }
       '';
       serviceConfig = {
         NoNewPrivileges = true;

@@ -1,8 +1,9 @@
-{ lib
-, python3
-, fetchFromGitHub
-, exabgp
-, testers
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  exabgp,
+  testers,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -40,6 +41,9 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/Exa-Networks/exabgp";
     changelog = "https://github.com/Exa-Networks/exabgp/blob/${src.rev}/CHANGELOG.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ hexa raitobezarius ];
+    maintainers = with maintainers; [
+      hexa
+      raitobezarius
+    ];
   };
 }

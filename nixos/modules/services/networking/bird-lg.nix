@@ -1,49 +1,61 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.bird-lg;
 
   stringOrConcat = sep: v: if builtins.isString v then v else lib.concatStringsSep sep v;
 
-  frontend_args = let
-    fe = cfg.frontend;
-  in {
-    "--servers" = lib.concatStringsSep "," fe.servers;
-    "--domain" = fe.domain;
-    "--listen" = fe.listenAddress;
-    "--proxy-port" = fe.proxyPort;
-    "--whois" = fe.whois;
-    "--dns-interface" = fe.dnsInterface;
-    "--bgpmap-info" = lib.concatStringsSep "," cfg.frontend.bgpMapInfo;
-    "--title-brand" = fe.titleBrand;
-    "--navbar-brand" = fe.navbar.brand;
-    "--navbar-brand-url" = fe.navbar.brandURL;
-    "--navbar-all-servers" = fe.navbar.allServers;
-    "--navbar-all-url" = fe.navbar.allServersURL;
-    "--net-specific-mode" = fe.netSpecificMode;
-    "--protocol-filter" = lib.concatStringsSep "," cfg.frontend.protocolFilter;
-  };
+  frontend_args =
+    let
+      fe = cfg.frontend;
+    in
+    {
+      "--servers" = lib.concatStringsSep "," fe.servers;
+      "--domain" = fe.domain;
+      "--listen" = fe.listenAddress;
+      "--proxy-port" = fe.proxyPort;
+      "--whois" = fe.whois;
+      "--dns-interface" = fe.dnsInterface;
+      "--bgpmap-info" = lib.concatStringsSep "," cfg.frontend.bgpMapInfo;
+      "--title-brand" = fe.titleBrand;
+      "--navbar-brand" = fe.navbar.brand;
+      "--navbar-brand-url" = fe.navbar.brandURL;
+      "--navbar-all-servers" = fe.navbar.allServers;
+      "--navbar-all-url" = fe.navbar.allServersURL;
+      "--net-specific-mode" = fe.netSpecificMode;
+      "--protocol-filter" = lib.concatStringsSep "," cfg.frontend.protocolFilter;
+    };
 
-  proxy_args = let
-    px = cfg.proxy;
-  in {
-    "--allowed" = lib.concatStringsSep "," px.allowedIPs;
-    "--bird" = px.birdSocket;
-    "--listen" = px.listenAddress;
-    "--traceroute_bin" = px.traceroute.binary;
-    "--traceroute_flags" = lib.concatStringsSep " " px.traceroute.flags;
-    "--traceroute_raw" = px.traceroute.rawOutput;
-  };
+  proxy_args =
+    let
+      px = cfg.proxy;
+    in
+    {
+      "--allowed" = lib.concatStringsSep "," px.allowedIPs;
+      "--bird" = px.birdSocket;
+      "--listen" = px.listenAddress;
+      "--traceroute_bin" = px.traceroute.binary;
+      "--traceroute_flags" = lib.concatStringsSep " " px.traceroute.flags;
+      "--traceroute_raw" = px.traceroute.rawOutput;
+    };
 
-  mkArgValue = value:
-    if lib.isString value
-      then lib.escapeShellArg value
-      else if lib.isBool value
-        then lib.boolToString value
-        else toString value;
+  mkArgValue =
+    value:
+    if lib.isString value then
+      lib.escapeShellArg value
+    else if lib.isBool value then
+      lib.boolToString value
+    else
+      toString value;
 
-  filterNull = lib.filterAttrs (_: v: v != "" && v != null && v != []);
+  filterNull = lib.filterAttrs (_: v: v != "" && v != null && v != [ ]);
 
-  argsAttrToList = args: lib.mapAttrsToList (name: value: "${name} " + mkArgValue value ) (filterNull args);
+  argsAttrToList =
+    args: lib.mapAttrsToList (name: value: "${name} " + mkArgValue value) (filterNull args);
 in
 {
   options = {
@@ -85,7 +97,10 @@ in
 
         servers = lib.mkOption {
           type = lib.types.listOf lib.types.str;
-          example = [ "gigsgigscloud" "hostdare" ];
+          example = [
+            "gigsgigscloud"
+            "hostdare"
+          ];
           description = "Server name prefixes.";
         };
 
@@ -103,7 +118,12 @@ in
 
         bgpMapInfo = lib.mkOption {
           type = lib.types.listOf lib.types.str;
-          default = [ "asn" "as-name" "ASName" "descr" ];
+          default = [
+            "asn"
+            "as-name"
+            "ASName"
+            "descr"
+          ];
           description = "Information displayed in bgpmap.";
         };
 
@@ -191,7 +211,11 @@ in
         allowedIPs = lib.mkOption {
           type = lib.types.listOf lib.types.str;
           default = [ ];
-          example = [ "192.168.25.52" "192.168.25.53" "192.168.0.0/24" ];
+          example = [
+            "192.168.25.52"
+            "192.168.25.53"
+            "192.168.0.0/24"
+          ];
           description = "List of IPs or networks to allow (default all allowed).";
         };
 
@@ -242,13 +266,12 @@ in
   config = {
 
     warnings =
-      lib.optional (cfg.frontend.enable  && builtins.isString cfg.frontend.extraArgs) ''
+      lib.optional (cfg.frontend.enable && builtins.isString cfg.frontend.extraArgs) ''
         Passing strings to `services.bird-lg.frontend.extraOptions' is deprecated. Please pass a list of strings instead.
       ''
-      ++ lib.optional (cfg.proxy.enable  && builtins.isString cfg.proxy.extraArgs) ''
+      ++ lib.optional (cfg.proxy.enable && builtins.isString cfg.proxy.extraArgs) ''
         Passing strings to `services.bird-lg.proxy.extraOptions' is deprecated. Please pass a list of strings instead.
-      ''
-    ;
+      '';
 
     systemd.services = {
       bird-lg-frontend = lib.mkIf cfg.frontend.enable {

@@ -1,13 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, unstableGitUpdater
-, xxd
-, pkg-config
-, imagemagick
-, wrapGAppsHook3
-, gtk3
-, jansson
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  xxd,
+  pkg-config,
+  imagemagick,
+  wrapGAppsHook3,
+  gtk3,
+  jansson,
+  nixosTests,
 }:
 
 stdenv.mkDerivation {

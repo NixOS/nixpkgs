@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, ncurses
-, libjpeg
-, libX11
-, libXt
-, alsa-lib
-, aalib
-, libXft
-, xorgproto
-, libv4l
-, libFS
-, libXaw
-, libXpm
-, libXext
-, libSM
-, libICE
-, perl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  libjpeg,
+  libX11,
+  libXt,
+  alsa-lib,
+  aalib,
+  libXft,
+  xorgproto,
+  libv4l,
+  libFS,
+  libXaw,
+  libXpm,
+  libXext,
+  libSM,
+  libICE,
+  perl,
 }:
 
 stdenv.mkDerivation rec {

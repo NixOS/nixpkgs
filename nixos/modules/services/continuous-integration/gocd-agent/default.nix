@@ -1,8 +1,15 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.gocd-agent;
   opt = options.services.gocd-agent;
-in {
+in
+{
   options = {
     services.gocd-agent = {
       enable = lib.mkEnableOption "gocd-agent";
@@ -27,14 +34,23 @@ in {
       extraGroups = lib.mkOption {
         type = lib.types.listOf lib.types.str;
         default = [ ];
-        example = [ "wheel" "docker" ];
+        example = [
+          "wheel"
+          "docker"
+        ];
         description = ''
           List of extra groups that the "gocd-agent" user should be a part of.
         '';
       };
 
       packages = lib.mkOption {
-        default = [ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ];
+        default = [
+          pkgs.stdenv
+          pkgs.jre
+          pkgs.git
+          config.programs.ssh.package
+          pkgs.nix
+        ];
         defaultText = lib.literalExpression "[ pkgs.stdenv pkgs.jre pkgs.git config.programs.ssh.package pkgs.nix ]";
         type = lib.types.listOf lib.types.package;
         description = ''
@@ -167,19 +183,19 @@ in {
 
       environment =
         let
-          selectedSessionVars =
-            lib.filterAttrs (n: v: builtins.elem n [ "NIX_PATH" ])
-              config.environment.sessionVariables;
+          selectedSessionVars = lib.filterAttrs (
+            n: v: builtins.elem n [ "NIX_PATH" ]
+          ) config.environment.sessionVariables;
         in
-          selectedSessionVars //
-            {
-              NIX_REMOTE = "daemon";
-              AGENT_WORK_DIR = cfg.workDir;
-              AGENT_STARTUP_ARGS = ''${lib.concatStringsSep " "  cfg.startupOptions}'';
-              LOG_DIR = cfg.workDir;
-              LOG_FILE = "${cfg.workDir}/go-agent-start.log";
-            } //
-            cfg.environment;
+        selectedSessionVars
+        // {
+          NIX_REMOTE = "daemon";
+          AGENT_WORK_DIR = cfg.workDir;
+          AGENT_STARTUP_ARGS = ''${lib.concatStringsSep " " cfg.startupOptions}'';
+          LOG_DIR = cfg.workDir;
+          LOG_FILE = "${cfg.workDir}/go-agent-start.log";
+        }
+        // cfg.environment;
 
       path = cfg.packages;
 

@@ -1,8 +1,10 @@
-{ lib, stdenv
-, fetchurl
-, fetchpatch
-, coreutils
-, dos2unix
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  coreutils,
+  dos2unix,
 }:
 
 stdenv.mkDerivation rec {

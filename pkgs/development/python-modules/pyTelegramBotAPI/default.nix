@@ -47,10 +47,13 @@ buildPythonPackage rec {
     watchdog = [ watchdog ];
   };
 
-  checkInputs = [
-    pytestCheckHook
-    requests
-  ] ++ optional-dependencies.watchdog ++ optional-dependencies.aiohttp;
+  checkInputs =
+    [
+      pytestCheckHook
+      requests
+    ]
+    ++ optional-dependencies.watchdog
+    ++ optional-dependencies.aiohttp;
 
   pythonImportsCheck = [ "telebot" ];
 

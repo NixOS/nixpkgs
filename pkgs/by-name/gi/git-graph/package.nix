@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,7 +23,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mlange-42/git-graph";
     license = licenses.mit;
     broken = stdenv.hostPlatform.isDarwin;
-    maintainers = with maintainers; [ cafkafk matthiasbeyer ];
+    maintainers = with maintainers; [
+      cafkafk
+      matthiasbeyer
+    ];
     mainProgram = "git-graph";
   };
 }

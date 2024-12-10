@@ -1,28 +1,29 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, cmake
-, glib-networking
-, gst_all_1
-, gtkmm3
-, libayatana-appindicator
-, libcanberra
-, libepoxy
-, libpsl
-, libdatrie
-, libdeflate
-, libselinux
-, libsepol
-, libsysprof-capture
-, libthai
-, libxkbcommon
-, sqlite
-, pcre
-, pcre2
-, pkg-config
-, webkitgtk_4_0
-, wrapGAppsHook3
-, xorg
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  cmake,
+  glib-networking,
+  gst_all_1,
+  gtkmm3,
+  libayatana-appindicator,
+  libcanberra,
+  libepoxy,
+  libpsl,
+  libdatrie,
+  libdeflate,
+  libselinux,
+  libsepol,
+  libsysprof-capture,
+  libthai,
+  libxkbcommon,
+  sqlite,
+  pcre,
+  pcre2,
+  pkg-config,
+  webkitgtk_4_0,
+  wrapGAppsHook3,
+  xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -74,6 +75,9 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "whatsapp-for-linux";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ bartuka ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 })

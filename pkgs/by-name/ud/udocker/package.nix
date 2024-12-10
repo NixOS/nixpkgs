@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, singularity
-, python3Packages
-, testers
-, udocker
+{
+  lib,
+  fetchFromGitHub,
+  singularity,
+  python3Packages,
+  testers,
+  udocker,
 }:
 
 python3Packages.buildPythonApplication rec {

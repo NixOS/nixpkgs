@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.syslogd;
@@ -92,35 +97,35 @@ in
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
 
-    assertions =
-      [ { assertion = !config.services.rsyslogd.enable;
-          message = "rsyslogd conflicts with syslogd";
-        }
-      ];
+    assertions = [
+      {
+        assertion = !config.services.rsyslogd.enable;
+        message = "rsyslogd conflicts with syslogd";
+      }
+    ];
 
     environment.systemPackages = [ pkgs.sysklogd ];
 
     services.syslogd.extraParams = lib.optional cfg.enableNetworkInput "-r";
 
     # FIXME: restarting syslog seems to break journal logging.
-    systemd.services.syslog =
-      { description = "Syslog Daemon";
+    systemd.services.syslog = {
+      description = "Syslog Daemon";
 
-        requires = [ "syslog.socket" ];
+      requires = [ "syslog.socket" ];
 
-        wantedBy = [ "multi-user.target" ];
+      wantedBy = [ "multi-user.target" ];
 
-        serviceConfig =
-          { ExecStart = "${pkgs.sysklogd}/sbin/syslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
-            # Prevent syslogd output looping back through journald.
-            StandardOutput = "null";
-          };
+      serviceConfig = {
+        ExecStart = "${pkgs.sysklogd}/sbin/syslogd ${toString cfg.extraParams} -f ${syslogConf} -n";
+        # Prevent syslogd output looping back through journald.
+        StandardOutput = "null";
       };
+    };
 
   };
 

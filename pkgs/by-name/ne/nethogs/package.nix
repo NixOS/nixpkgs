@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, libpcap }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+  libpcap,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nethogs";
@@ -11,11 +17,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-+yVMyGSBIBWYjA9jaGWvrcsNPbJ6S4ax9H1BhWHYUUU=";
   };
 
-  buildInputs = [ ncurses libpcap ];
+  buildInputs = [
+    ncurses
+    libpcap
+  ];
 
-  makeFlags = [ "VERSION=${version}" "nethogs" ];
+  makeFlags = [
+    "VERSION=${version}"
+    "nethogs"
+  ];
 
-  installFlags = [ "PREFIX=$(out)" "sbin=$(out)/bin" ];
+  installFlags = [
+    "PREFIX=$(out)"
+    "sbin=$(out)/bin"
+  ];
 
   meta = with lib; {
     description = "Small 'net top' tool, grouping bandwidth by process";

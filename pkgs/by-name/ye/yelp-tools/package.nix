@@ -1,14 +1,15 @@
-{ lib
-, fetchurl
-, libxml2
-, libxslt
-, itstool
-, gnome
-, pkg-config
-, meson
-, ninja
-, python3
-, yelp-xsl
+{
+  lib,
+  fetchurl,
+  libxml2,
+  libxslt,
+  itstool,
+  gnome,
+  pkg-config,
+  meson,
+  ninja,
+  python3,
+  yelp-xsl,
 }:
 
 python3.pkgs.buildPythonApplication rec {

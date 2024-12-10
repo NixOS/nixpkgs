@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, ocamlPackages, ncurses, remind }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocamlPackages,
+  ncurses,
+  remind,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.4.6";
@@ -14,8 +21,14 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
-  nativeBuildInputs = [ ocamlPackages.ocaml ocamlPackages.camlp4  ];
-  buildInputs = [ ncurses remind ];
+  nativeBuildInputs = [
+    ocamlPackages.ocaml
+    ocamlPackages.camlp4
+  ];
+  buildInputs = [
+    ncurses
+    remind
+  ];
 
   preferLocalBuild = true;
 

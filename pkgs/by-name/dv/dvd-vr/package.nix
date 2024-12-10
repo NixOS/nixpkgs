@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "dvd-vr";
@@ -17,5 +21,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ fgaz ];
     mainProgram = "dvd-vr";
   };
-}
-)
+})
