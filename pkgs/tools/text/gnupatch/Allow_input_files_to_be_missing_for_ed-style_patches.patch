@@ -1,0 +1,33 @@
+From b5a91a01e5d0897facdd0f49d64b76b0f02b43e1 Mon Sep 17 00:00:00 2001
+From: Andreas Gruenbacher <agruen@gnu.org>
+Date: Fri, 6 Apr 2018 11:34:51 +0200
+Subject: Allow input files to be missing for ed-style patches
+
+* src/pch.c (do_ed_script): Allow input files to be missing so that new
+files will be created as with non-ed-style patches.
+---
+ src/pch.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/src/pch.c b/src/pch.c
+index bc6278c..0c5cc26 100644
+--- a/src/pch.c
++++ b/src/pch.c
+@@ -2394,9 +2394,11 @@ do_ed_script (char const *inname, char const *outname,
+ 
+     if (! dry_run && ! skip_rest_of_patch) {
+ 	int exclusive = *outname_needs_removal ? 0 : O_EXCL;
+-	assert (! inerrno);
+-	*outname_needs_removal = true;
+-	copy_file (inname, outname, 0, exclusive, instat.st_mode, true);
++	if (inerrno != ENOENT)
++	  {
++	    *outname_needs_removal = true;
++	    copy_file (inname, outname, 0, exclusive, instat.st_mode, true);
++	  }
+ 	sprintf (buf, "%s %s%s", editor_program,
+ 		 verbosity == VERBOSE ? "" : "- ",
+ 		 outname);
+-- 
+cgit v1.0-41-gc330
+
