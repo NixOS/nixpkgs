@@ -37,7 +37,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "appstream";
-  version = "1.0.3";
+  version = "1.0.4";
 
   outputs = [ "out" "dev" "installedTests" ];
 
@@ -45,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ximion";
     repo = "appstream";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-pniZq+rR9wW86QqfRw4WZiBo1F16aSAb1J2RjI4aqE0=";
+    sha256 = "sha256-UnSJcXH0yWK/dPKgbOx9x3iJjKcKNYFkD2Qs5c3FtM8=";
   };
 
   patches = [
