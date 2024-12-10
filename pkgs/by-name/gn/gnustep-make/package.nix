@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, which
-, libobjc
+{
+  lib,
+  clangStdenv,
+  fetchurl,
+  gnustep-libobjc,
+  which,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+clangStdenv.mkDerivation (finalAttrs: {
   pname = "gnustep-make";
   version = "2.9.2";
 
@@ -27,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     "GNUSTEP_INSTALLATION_DOMAIN=SYSTEM"
   ];
 
-  buildInputs = [ libobjc ];
+  buildInputs = [ gnustep-libobjc ];
 
   propagatedBuildInputs = [ which ];
 
@@ -35,11 +36,17 @@ stdenv.mkDerivation (finalAttrs: {
   setupHook = ./setup-hook.sh;
 
   meta = {
-    changelog = "https://github.com/gnustep/tools-make/releases/tag/make-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    changelog = "https://github.com/gnustep/tools-make/releases/tag/make-${
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }";
     description = "Build manager for GNUstep";
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ ashalkhakov matthewbauer dblsaiko ];
+    maintainers = with lib.maintainers; [
+      ashalkhakov
+      dblsaiko
+      matthewbauer
+    ];
     platforms = lib.platforms.unix;
   };
 })
