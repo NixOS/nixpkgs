@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Web based virtual user administration interface for Postfix mail servers";
-    homepage = "https://postfixadmin.sourceforge.io/";
+    homepage = "https://postfixadmin.github.io/postfixadmin/";
     maintainers = with maintainers; [ globin ];
     license = licenses.gpl2Plus;
     platforms = lib.subtractLists platforms.darwin platforms.unix; # There is no /var/cache/ on MacOS
