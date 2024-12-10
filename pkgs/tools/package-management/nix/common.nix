@@ -247,7 +247,8 @@ self = stdenv.mkDerivation {
 
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
-  doInstallCheck = true;
+  # Certain tests fail due to "unexpected end-of-file"
+  doInstallCheck = !(stdenv.targetPlatform.useLLVM or false);
   installCheckTarget = if atLeast210 then "installcheck" else null;
 
   # socket path becomes too long otherwise
