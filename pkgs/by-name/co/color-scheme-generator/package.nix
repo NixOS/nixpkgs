@@ -1,9 +1,4 @@
-{
-  rustPlatform,
-  fetchFromGitHub,
-  lib,
-  perl,
-}:
+{ rustPlatform, fetchFromGitHub, lib, perl, }:
 
 rustPlatform.buildRustPackage rec {
   pname = "color-scheme-generator";
@@ -32,6 +27,6 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/nikolaizombie1/color_scheme_generator";
     license = with lib.licenses; [ gpl3 ];
-    maintainers =  with lib.maintainers; [ nikolaizombie1 ];
+    maintainers = with lib.maintainers; [ nikolaizombie1 ];
   };
 }
