@@ -1,4 +1,8 @@
-{ trivialBuild, lib, fetchurl }:
+{
+  trivialBuild,
+  lib,
+  fetchurl,
+}:
 
 trivialBuild rec {
   pname = "pod-mode";

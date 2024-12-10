@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, udisks2-qt5
-, cmake
-, qtbase
-, qttools
-, pkg-config
-, kcodecs
-, karchive
-, wrapQtAppsHook
-, minizip
-, libzip
-, libuuid
-, libarchive
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  udisks2-qt5,
+  cmake,
+  qtbase,
+  qttools,
+  pkg-config,
+  kcodecs,
+  karchive,
+  wrapQtAppsHook,
+  minizip,
+  libzip,
+  libuuid,
+  libarchive,
 }:
 
 stdenv.mkDerivation rec {

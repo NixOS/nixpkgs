@@ -16,26 +16,26 @@ stdenv.mkDerivation {
   };
 
   installPhase = ''
-  runHook preInstall
+    runHook preInstall
 
-  make DESTDIR="$out" PREFIX= install
-  cp scripts.* $out
+    make DESTDIR="$out" PREFIX= install
+    cp scripts.* $out
 
-  runHook postInstall
+    runHook postInstall
   '';
 
   meta = with lib; {
     description = "a small program to automate tasks specific to certain directories";
     longDescription = ''
-    It works by executing scripts in directories when you enter and leave them.
-    This is done by overriding the shell builtins cd, pushd, and popd,
-     which is a manual action.
-    The user is required to add a snippet to their shell initialisation file like .bashrc or .profile.
+      It works by executing scripts in directories when you enter and leave them.
+      This is done by overriding the shell builtins cd, pushd, and popd,
+       which is a manual action.
+      The user is required to add a snippet to their shell initialisation file like .bashrc or .profile.
 
-    Which commands are executed on directory entry and leave is done
-     in predefined locations with a .ondirrc file.
+      Which commands are executed on directory entry and leave is done
+       in predefined locations with a .ondirrc file.
 
-    See man ondir for more information
+      See man ondir for more information
     '';
     homepage = "https://github.com/alecthomas/ondir/";
     license = licenses.gpl2Only;

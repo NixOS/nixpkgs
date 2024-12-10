@@ -1,6 +1,35 @@
-{ lib, stdenv, makeDesktopItem, fetchurl, unzip
-, gdk-pixbuf, glib, gtk3, atk, at-spi2-atk, pango, cairo, freetype, fontconfig, dbus, nss, nspr, alsa-lib, cups, expat, udev, gnome
-, xorg, mozjpeg, makeWrapper, wrapGAppsHook3, libuuid, at-spi2-core, libdrm, mesa, libxkbcommon
+{
+  lib,
+  stdenv,
+  makeDesktopItem,
+  fetchurl,
+  unzip,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  atk,
+  at-spi2-atk,
+  pango,
+  cairo,
+  freetype,
+  fontconfig,
+  dbus,
+  nss,
+  nspr,
+  alsa-lib,
+  cups,
+  expat,
+  udev,
+  gnome,
+  xorg,
+  mozjpeg,
+  makeWrapper,
+  wrapGAppsHook3,
+  libuuid,
+  at-spi2-core,
+  libdrm,
+  mesa,
+  libxkbcommon,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,43 +41,46 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-vNQT4jyMIIAk1pV3Hrp40nawFutWCv7xtwg2gU6ejy0=";
   };
 
-  libPath = lib.makeLibraryPath (with xorg; [
-    stdenv.cc.cc.lib
-    at-spi2-core.out
-    gdk-pixbuf
-    glib
-    gtk3
-    atk
-    at-spi2-atk
-    pango
-    cairo
-    freetype
-    fontconfig
-    dbus
-    nss
-    nspr
-    alsa-lib
-    cups
-    expat
-    udev
-    libX11
-    libxcb
-    libxshmfence
-    libxkbcommon
-    libXi
-    libXcursor
-    libXdamage
-    libXrandr
-    libXcomposite
-    libXext
-    libXfixes
-    libXrender
-    libXtst
-    libXScrnSaver
-    libuuid
-    libdrm
-    mesa
-  ]);
+  libPath = lib.makeLibraryPath (
+    with xorg;
+    [
+      stdenv.cc.cc.lib
+      at-spi2-core.out
+      gdk-pixbuf
+      glib
+      gtk3
+      atk
+      at-spi2-atk
+      pango
+      cairo
+      freetype
+      fontconfig
+      dbus
+      nss
+      nspr
+      alsa-lib
+      cups
+      expat
+      udev
+      libX11
+      libxcb
+      libxshmfence
+      libxkbcommon
+      libXi
+      libXcursor
+      libXdamage
+      libXrandr
+      libXcomposite
+      libXext
+      libXfixes
+      libXrender
+      libXtst
+      libXScrnSaver
+      libuuid
+      libdrm
+      mesa
+    ]
+  );
 
   desktopItem = makeDesktopItem {
     name = "Avocode";
@@ -60,8 +92,15 @@ stdenv.mkDerivation rec {
     comment = "The bridge between designers and developers";
   };
 
-  nativeBuildInputs = [makeWrapper wrapGAppsHook3 unzip];
-  buildInputs = [ gtk3 gnome.adwaita-icon-theme ];
+  nativeBuildInputs = [
+    makeWrapper
+    wrapGAppsHook3
+    unzip
+  ];
+  buildInputs = [
+    gtk3
+    gnome.adwaita-icon-theme
+  ];
 
   # src is producing multiple folder on unzip so we must
   # override unpackCmd to extract it into newly created folder

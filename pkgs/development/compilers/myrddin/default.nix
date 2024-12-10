@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, bison
-, binutils
-, makeWrapper
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  bison,
+  binutils,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {

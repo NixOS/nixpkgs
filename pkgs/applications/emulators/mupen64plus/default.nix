@@ -1,4 +1,18 @@
-{lib, stdenv, fetchurl, fetchpatch, boost, dash, freetype, libpng, pkg-config, SDL, which, zlib, nasm }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  boost,
+  dash,
+  freetype,
+  libpng,
+  pkg-config,
+  SDL,
+  which,
+  zlib,
+  nasm,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mupen64plus";
@@ -22,8 +36,19 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config nasm ];
-  buildInputs = [ boost dash freetype libpng SDL which zlib ];
+  nativeBuildInputs = [
+    pkg-config
+    nasm
+  ];
+  buildInputs = [
+    boost
+    dash
+    freetype
+    libpng
+    SDL
+    which
+    zlib
+  ];
 
   buildPhase = ''
     dash m64p_build.sh PREFIX="$out" COREDIR="$out/lib/" PLUGINDIR="$out/lib/mupen64plus" SHAREDIR="$out/share/mupen64plus"

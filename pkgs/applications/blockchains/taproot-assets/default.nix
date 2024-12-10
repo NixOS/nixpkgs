@@ -1,6 +1,7 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
 
 buildGoModule rec {
@@ -16,9 +17,15 @@ buildGoModule rec {
 
   vendorHash = "sha256-jz6q3l2FtkJM3qyaTTqqu3ZG2FeKW9s7WdlW1pHij5k=";
 
-  subPackages = [ "cmd/tapcli" "cmd/tapd" ];
+  subPackages = [
+    "cmd/tapcli"
+    "cmd/tapd"
+  ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Daemon for the Taro protocol specification";

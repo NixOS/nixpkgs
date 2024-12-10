@@ -1,5 +1,6 @@
-{ trivialBuild
-, haskellPackages
+{
+  trivialBuild,
+  haskellPackages,
 }:
 
 trivialBuild {

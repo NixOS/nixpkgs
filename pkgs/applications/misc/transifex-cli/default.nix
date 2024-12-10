@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -17,7 +18,9 @@ buildGoModule rec {
   vendorHash = "sha256-rcimaHr3fFeHSjZXw1w23cKISCT+9t8SgtPnY/uYGAU=";
 
   ldflags = [
-    "-s" "-w" "-X 'github.com/transifex/cli/internal/txlib.Version=${version}'"
+    "-s"
+    "-w"
+    "-X 'github.com/transifex/cli/internal/txlib.Version=${version}'"
   ];
 
   postInstall = ''

@@ -1,16 +1,17 @@
-{ binaryen
-, fetchFromGitHub
-, fetchpatch
-, fetchzip
-, lib
-, lldap
-, nixosTests
-, rustPlatform
-, rustc
-, stdenv
-, wasm-bindgen-cli
-, wasm-pack
-, which
+{
+  binaryen,
+  fetchFromGitHub,
+  fetchpatch,
+  fetchzip,
+  lib,
+  lldap,
+  nixosTests,
+  rustPlatform,
+  rustc,
+  stdenv,
+  wasm-bindgen-cli,
+  wasm-pack,
+  which,
 }:
 
 let
@@ -43,51 +44,70 @@ let
     };
   };
 
-  frontend = rustPlatform.buildRustPackage (commonDerivationAttrs // {
-    pname = commonDerivationAttrs.pname + "-frontend";
+  frontend = rustPlatform.buildRustPackage (
+    commonDerivationAttrs
+    // {
+      pname = commonDerivationAttrs.pname + "-frontend";
 
-    nativeBuildInputs = [
-      wasm-pack wasm-bindgen-84 binaryen which rustc rustc.llvmPackages.lld
+      nativeBuildInputs = [
+        wasm-pack
+        wasm-bindgen-84
+        binaryen
+        which
+        rustc
+        rustc.llvmPackages.lld
+      ];
+
+      buildPhase = ''
+        HOME=`pwd` RUSTFLAGS="-C linker=lld" ./app/build.sh
+      '';
+
+      installPhase = ''
+        mkdir -p $out
+        cp -R app/{index.html,pkg,static} $out/
+      '';
+
+      doCheck = false;
+    }
+  );
+
+in
+rustPlatform.buildRustPackage (
+  commonDerivationAttrs
+  // {
+
+    cargoBuildFlags = [
+      "-p"
+      "lldap"
+      "-p"
+      "lldap_migration_tool"
+      "-p"
+      "lldap_set_password"
     ];
 
-    buildPhase = ''
-      HOME=`pwd` RUSTFLAGS="-C linker=lld" ./app/build.sh
+    patches = [
+      ./static-frontend-path.patch
+    ];
+
+    postPatch = ''
+      substituteInPlace server/src/infra/tcp_server.rs --subst-var-by frontend '${frontend}'
     '';
 
-    installPhase = ''
-      mkdir -p $out
-      cp -R app/{index.html,pkg,static} $out/
-    '';
-
-    doCheck = false;
-  });
-
-in rustPlatform.buildRustPackage (commonDerivationAttrs // {
-
-  cargoBuildFlags = [ "-p" "lldap" "-p" "lldap_migration_tool" "-p" "lldap_set_password" ];
-
-  patches = [
-    ./static-frontend-path.patch
-  ];
-
-  postPatch = ''
-    substituteInPlace server/src/infra/tcp_server.rs --subst-var-by frontend '${frontend}'
-  '';
-
-  passthru = {
-    inherit frontend;
-    tests = {
-      inherit (nixosTests) lldap;
+    passthru = {
+      inherit frontend;
+      tests = {
+        inherit (nixosTests) lldap;
+      };
     };
-  };
 
-  meta = with lib; {
-    description = "A lightweight authentication server that provides an opinionated, simplified LDAP interface for authentication";
-    homepage = "https://github.com/lldap/lldap";
-    changelog = "https://github.com/lldap/lldap/blob/v${lldap.version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ bendlas ];
-    mainProgram = "lldap";
-  };
-})
+    meta = with lib; {
+      description = "A lightweight authentication server that provides an opinionated, simplified LDAP interface for authentication";
+      homepage = "https://github.com/lldap/lldap";
+      changelog = "https://github.com/lldap/lldap/blob/v${lldap.version}/CHANGELOG.md";
+      license = licenses.gpl3Only;
+      platforms = platforms.linux;
+      maintainers = with maintainers; [ bendlas ];
+      mainProgram = "lldap";
+    };
+  }
+)

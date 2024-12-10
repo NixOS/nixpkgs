@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -17,7 +18,8 @@ buildGoModule rec {
   vendorHash = "sha256-7x3vVRFFxWhwwelPJ2EV78UTSXIo6bMj3ljVIPTPteg=";
 
   ldflags = [
-    "-w" "-s"
+    "-w"
+    "-s"
     "-X github.com/xjasonlyu/tun2socks/v2/internal/version.Version=v${version}"
     "-X github.com/xjasonlyu/tun2socks/v2/internal/version.GitCommit=v${version}"
   ];

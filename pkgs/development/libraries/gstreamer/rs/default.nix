@@ -1,38 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchFromGitHub
-, fetchpatch
-, rustPlatform
-, meson
-, ninja
-, python3
-, pkg-config
-, rustc
-, cargo
-, cargo-c
-, nasm
-, gstreamer
-, gst-plugins-base
-, gst-plugins-bad
-, gtk4
-, cairo
-, csound
-, dav1d
-, libsodium
-, libwebp
-, openssl
-, pango
-, Security
-, SystemConfiguration
-, gst-plugins-good
-, nix-update-script
-# specifies a limited subset of plugins to build (the default `null` means all plugins supported on the stdenv platform)
-, plugins ? null
-, withGtkPlugins ? true
-# Checks meson.is_cross_build(), so even canExecute isn't enough.
-, enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform && plugins == null
-, hotdoc
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchFromGitHub,
+  fetchpatch,
+  rustPlatform,
+  meson,
+  ninja,
+  python3,
+  pkg-config,
+  rustc,
+  cargo,
+  cargo-c,
+  nasm,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-bad,
+  gtk4,
+  cairo,
+  csound,
+  dav1d,
+  libsodium,
+  libwebp,
+  openssl,
+  pango,
+  Security,
+  SystemConfiguration,
+  gst-plugins-good,
+  nix-update-script,
+  # specifies a limited subset of plugins to build (the default `null` means all plugins supported on the stdenv platform)
+  plugins ? null,
+  withGtkPlugins ? true,
+  # Checks meson.is_cross_build(), so even canExecute isn't enough.
+  enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform && plugins == null,
+  hotdoc,
 }:
 
 let
@@ -63,8 +64,24 @@ let
     raptorq = [ ];
     reqwest = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
     rtp = [ ];
-    webrtc = [ gst-plugins-bad openssl ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
-    webrtchttp = [ gst-plugins-bad openssl ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+    webrtc =
+      [
+        gst-plugins-bad
+        openssl
+      ]
+      ++ lib.optionals stdenv.isDarwin [
+        Security
+        SystemConfiguration
+      ];
+    webrtchttp =
+      [
+        gst-plugins-bad
+        openssl
+      ]
+      ++ lib.optionals stdenv.isDarwin [
+        Security
+        SystemConfiguration
+      ];
 
     # text
     textahead = [ ];
@@ -105,30 +122,37 @@ let
     webp = [ libwebp ];
   };
 
-  selectedPlugins = if plugins != null then lib.unique (lib.sort lib.lessThan plugins) else lib.subtractLists (
-    [
-      "csound" # tests have weird failure on x86, does not currently work on arm or darwin
-      "livesync" # tests have suspicious intermittent failure, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/357
-    ] ++ lib.optionals stdenv.isAarch64 [
-      "raptorq" # pointer alignment failure in tests on aarch64
-    ] ++ lib.optionals stdenv.isDarwin [
-      "reqwest" # tests hang on darwin
-      "threadshare" # tests cannot bind to localhost on darwin
-      "webp" # not supported on darwin (upstream crate issue)
-    ] ++ lib.optionals (!gst-plugins-base.glEnabled || !withGtkPlugins) [
-      # these require gstreamer-gl
-      "gtk4"
-      "livesync"
-      "fallbackswitch"
-      "togglerecord"
-    ]
-  ) (lib.attrNames validPlugins);
+  selectedPlugins =
+    if plugins != null then
+      lib.unique (lib.sort lib.lessThan plugins)
+    else
+      lib.subtractLists (
+        [
+          "csound" # tests have weird failure on x86, does not currently work on arm or darwin
+          "livesync" # tests have suspicious intermittent failure, see https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/357
+        ]
+        ++ lib.optionals stdenv.isAarch64 [
+          "raptorq" # pointer alignment failure in tests on aarch64
+        ]
+        ++ lib.optionals stdenv.isDarwin [
+          "reqwest" # tests hang on darwin
+          "threadshare" # tests cannot bind to localhost on darwin
+          "webp" # not supported on darwin (upstream crate issue)
+        ]
+        ++ lib.optionals (!gst-plugins-base.glEnabled || !withGtkPlugins) [
+          # these require gstreamer-gl
+          "gtk4"
+          "livesync"
+          "fallbackswitch"
+          "togglerecord"
+        ]
+      ) (lib.attrNames validPlugins);
 
   invalidPlugins = lib.subtractLists (lib.attrNames validPlugins) selectedPlugins;
 
   # TODO: figure out what must be done about this upstream - related lu-zero/cargo-c#323 lu-zero/cargo-c#138
   cargo-c' = (cargo-c.__spliced.buildHost or cargo-c).overrideAttrs (oldAttrs: {
-    patches = (oldAttrs.patches or []) ++ [
+    patches = (oldAttrs.patches or [ ]) ++ [
       (fetchpatch {
         name = "cargo-c-test-rlib-fix.patch";
         url = "https://github.com/lu-zero/cargo-c/commit/8421f2da07cd066d2ae8afbb027760f76dc9ee6c.diff";
@@ -138,14 +162,19 @@ let
     ];
   });
 in
-  assert lib.assertMsg (invalidPlugins == [])
-    "Invalid gst-plugins-rs plugin${lib.optionalString (lib.length invalidPlugins > 1) "s"}: ${lib.concatStringsSep ", " invalidPlugins}";
+assert lib.assertMsg (invalidPlugins == [ ])
+  "Invalid gst-plugins-rs plugin${
+    lib.optionalString (lib.length invalidPlugins > 1) "s"
+  }: ${lib.concatStringsSep ", " invalidPlugins}";
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gst-plugins-rs";
   version = "0.12.4";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -188,20 +217,22 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    rustPlatform.cargoSetupHook
-    meson
-    ninja
-    python3
-    python3.pkgs.tomli
-    pkg-config
-    rustc
-    cargo
-    cargo-c'
-    nasm
-  ] ++ lib.optionals enableDocumentation [
-    hotdoc
-  ];
+  nativeBuildInputs =
+    [
+      rustPlatform.cargoSetupHook
+      meson
+      ninja
+      python3
+      python3.pkgs.tomli
+      pkg-config
+      rustc
+      cargo
+      cargo-c'
+      nasm
+    ]
+    ++ lib.optionals enableDocumentation [
+      hotdoc
+    ];
 
   buildInputs = [
     gstreamer
@@ -213,9 +244,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-bad
   ];
 
-  mesonFlags = (
-    map (plugin: lib.mesonEnable plugin true) selectedPlugins
-  ) ++ [
+  mesonFlags = (map (plugin: lib.mesonEnable plugin true) selectedPlugins) ++ [
     (lib.mesonOption "sodium-source" "system")
     (lib.mesonEnable "tests" finalAttrs.finalPackage.doCheck)
     (lib.mesonEnable "doc" enableDocumentation)
@@ -227,19 +256,25 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   # csound lib dir must be manually specified for it to build
-  preConfigure = ''
-    export CARGO_BUILD_JOBS=$NIX_BUILD_CORES
+  preConfigure =
+    ''
+      export CARGO_BUILD_JOBS=$NIX_BUILD_CORES
 
-    patchShebangs dependencies.py
-  '' + lib.optionalString (lib.elem "csound" selectedPlugins) ''
-    export CSOUND_LIB_DIR=${lib.getLib csound}/lib
-  '';
+      patchShebangs dependencies.py
+    ''
+    + lib.optionalString (lib.elem "csound" selectedPlugins) ''
+      export CSOUND_LIB_DIR=${lib.getLib csound}/lib
+    '';
 
   # give meson longer before timing out for tests
-  mesonCheckFlags = [ "--verbose" "--timeout-multiplier" "12" ];
+  mesonCheckFlags = [
+    "--verbose"
+    "--timeout-multiplier"
+    "12"
+  ];
 
-  doInstallCheck = (lib.elem "webp" selectedPlugins) && !stdenv.hostPlatform.isStatic &&
-    stdenv.hostPlatform.isElf;
+  doInstallCheck =
+    (lib.elem "webp" selectedPlugins) && !stdenv.hostPlatform.isStatic && stdenv.hostPlatform.isElf;
   installCheckPhase = ''
     runHook preInstallCheck
     readelf -a $out/lib/gstreamer-1.0/libgstrswebp.so | grep -F 'Shared library: [libwebpdemux.so'
@@ -249,14 +284,22 @@ stdenv.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script {
     # use numbered releases rather than gstreamer-* releases
     # this matches upstream's recommendation: https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs/-/issues/470#note_2202772
-    extraArgs = [ "--version-regex" "([0-9.]+)" ];
+    extraArgs = [
+      "--version-regex"
+      "([0-9.]+)"
+    ];
   };
 
   meta = with lib; {
     description = "GStreamer plugins written in Rust";
     mainProgram = "gst-webrtc-signalling-server";
     homepage = "https://gitlab.freedesktop.org/gstreamer/gst-plugins-rs";
-    license = with licenses; [ mpl20 asl20 mit lgpl21Plus ];
+    license = with licenses; [
+      mpl20
+      asl20
+      mit
+      lgpl21Plus
+    ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ lilyinstarlight ];
   };

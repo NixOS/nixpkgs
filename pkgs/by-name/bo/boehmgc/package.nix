@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-# doc: https://github.com/ivmai/bdwgc/blob/v8.2.6/doc/README.macros (LARGE_CONFIG)
-, enableLargeConfig ? false
-, enableMmap ? true
-, enableStatic ? false
-, nixVersions
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  # doc: https://github.com/ivmai/bdwgc/blob/v8.2.6/doc/README.macros (LARGE_CONFIG)
+  enableLargeConfig ? false,
+  enableMmap ? true,
+  enableStatic ? false,
+  nixVersions,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,20 +21,25 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-y6hU5qU4qO9VvQvKNH9dvReCrf3+Ih2HHbF6IS1V3WQ=";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
   separateDebugInfo = stdenv.isLinux && stdenv.hostPlatform.libc != "musl";
 
   nativeBuildInputs = [
     autoreconfHook
   ];
 
-  configureFlags = [
-    "--enable-cplusplus"
-    "--with-libatomic-ops=none"
-  ]
-  ++ lib.optional enableStatic "--enable-static"
-  ++ lib.optional enableMmap "--enable-mmap"
-  ++ lib.optional enableLargeConfig "--enable-large-config";
+  configureFlags =
+    [
+      "--enable-cplusplus"
+      "--with-libatomic-ops=none"
+    ]
+    ++ lib.optional enableStatic "--enable-static"
+    ++ lib.optional enableMmap "--enable-mmap"
+    ++ lib.optional enableLargeConfig "--enable-large-config";
 
   # This stanza can be dropped when a release fixes this issue:
   #   https://github.com/ivmai/bdwgc/issues/376
@@ -41,14 +47,12 @@ stdenv.mkDerivation (finalAttrs: {
   # don't forget to disable the fix (and if the next release does
   # not fix the problem the test failure will be a reminder to
   # extend the set of versions requiring the workaround).
-  makeFlags = lib.optionals (stdenv.hostPlatform.isPower64 &&
-                  finalAttrs.version == "8.2.6")
-    [
-      # do not use /proc primitives to track dirty bits; see:
-      # https://github.com/ivmai/bdwgc/issues/479#issuecomment-1279687537
-      # https://github.com/ivmai/bdwgc/blob/54522af853de28f45195044dadfd795c4e5942aa/include/private/gcconfig.h#L741
-      "CFLAGS_EXTRA=-DNO_SOFT_VDB"
-    ];
+  makeFlags = lib.optionals (stdenv.hostPlatform.isPower64 && finalAttrs.version == "8.2.6") [
+    # do not use /proc primitives to track dirty bits; see:
+    # https://github.com/ivmai/bdwgc/issues/479#issuecomment-1279687537
+    # https://github.com/ivmai/bdwgc/blob/54522af853de28f45195044dadfd795c4e5942aa/include/private/gcconfig.h#L741
+    "CFLAGS_EXTRA=-DNO_SOFT_VDB"
+  ];
 
   # `gctest` fails under emulation on aarch64-darwin
   doCheck = !(stdenv.isDarwin && stdenv.isx86_64);

@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
-, extras ? [ "all" ]
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  extras ? [ "all" ],
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -21,19 +22,22 @@ python3.pkgs.buildPythonApplication rec {
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    art
-    click
-    pandas
-    pillow
-    pymupdf
-    pyperclip
-    rich
-    rich-click
-    rich-pixels
-    textual
-    textual-universal-directorytree
-  ] ++ lib.attrVals extras passthru.optional-dependencies;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      art
+      click
+      pandas
+      pillow
+      pymupdf
+      pyperclip
+      rich
+      rich-click
+      rich-pixels
+      textual
+      textual-universal-directorytree
+    ]
+    ++ lib.attrVals extras passthru.optional-dependencies;
 
   passthru.optional-dependencies = with python3.pkgs; {
     all = [

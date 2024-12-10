@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, stdenvNoCC
-, rustPlatform
-, fetchFromGitHub
-, wrapGAppsHook3
-, cargo
-, rustc
-, cargo-tauri
-, pkg-config
-, nodePackages
-, esbuild
-, buildGoModule
-, jq
-, moreutils
-, libayatana-appindicator
-, gtk3
-, webkitgtk
-, libsoup
-, openssl
-, xdotool
-, cacert
+{
+  lib,
+  stdenv,
+  stdenvNoCC,
+  rustPlatform,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  cargo,
+  rustc,
+  cargo-tauri,
+  pkg-config,
+  nodePackages,
+  esbuild,
+  buildGoModule,
+  jq,
+  moreutils,
+  libayatana-appindicator,
+  gtk3,
+  webkitgtk,
+  libsoup,
+  openssl,
+  xdotool,
+  cacert,
 }:
 
 stdenv.mkDerivation rec {
@@ -98,18 +99,25 @@ stdenv.mkDerivation rec {
     xdotool
   ];
 
-  ESBUILD_BINARY_PATH = "${lib.getExe (esbuild.override {
-    buildGoModule = args: buildGoModule (args // rec {
-      version = "0.18.20";
-      src = fetchFromGitHub {
-        owner = "evanw";
-        repo = "esbuild";
-        rev = "v${version}";
-        hash = "sha256-mED3h+mY+4H465m02ewFK/BgA1i/PQ+ksUNxBlgpUoI=";
-      };
-      vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-    });
-  })}";
+  ESBUILD_BINARY_PATH = "${lib.getExe (
+    esbuild.override {
+      buildGoModule =
+        args:
+        buildGoModule (
+          args
+          // rec {
+            version = "0.18.20";
+            src = fetchFromGitHub {
+              owner = "evanw";
+              repo = "esbuild";
+              rev = "v${version}";
+              hash = "sha256-mED3h+mY+4H465m02ewFK/BgA1i/PQ+ksUNxBlgpUoI=";
+            };
+            vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+          }
+        );
+    }
+  )}";
 
   preBuild = ''
     export HOME=$(mktemp -d)
@@ -135,4 +143,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ linsui ];
   };
 }
-

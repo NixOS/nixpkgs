@@ -1,12 +1,13 @@
-{ lib
-, cmake
-, darwin
-, fetchFromGitHub
-, libopus
-, openssl
-, pkg-config
-, rustPlatform
-, stdenv
+{
+  lib,
+  cmake,
+  darwin,
+  fetchFromGitHub,
+  libopus,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,13 +28,16 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    libopus
-  ] ++ lib.optionals stdenv.isLinux [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      libopus
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   OPENSSL_NO_VENDOR = 1;
 

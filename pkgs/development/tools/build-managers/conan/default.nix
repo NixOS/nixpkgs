@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, git
-, pkg-config
-, xcbuild
-, python3
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  git,
+  pkg-config,
+  xcbuild,
+  python3,
+  zlib,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -24,41 +25,47 @@ python3.pkgs.buildPythonApplication rec {
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    bottle
-    colorama
-    python-dateutil
-    distro
-    fasteners
-    jinja2
-    patch-ng
-    pluginbase
-    pygments
-    pyjwt
-    pylint # Not in `requirements.txt` but used in hooks, see https://github.com/conan-io/conan/pull/6152
-    pyyaml
-    requests
-    tqdm
-    urllib3
-  ] ++ lib.optionals stdenv.isDarwin [
-    idna
-    cryptography
-    pyopenssl
-  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      bottle
+      colorama
+      python-dateutil
+      distro
+      fasteners
+      jinja2
+      patch-ng
+      pluginbase
+      pygments
+      pyjwt
+      pylint # Not in `requirements.txt` but used in hooks, see https://github.com/conan-io/conan/pull/6152
+      pyyaml
+      requests
+      tqdm
+      urllib3
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      idna
+      cryptography
+      pyopenssl
+    ];
 
-  nativeCheckInputs = [
-    git
-    pkg-config
-    zlib
-  ] ++ lib.optionals (stdenv.isDarwin) [
-    xcbuild.xcrun
-  ] ++ (with python3.pkgs; [
-    mock
-    parameterized
-    pytest-xdist
-    pytestCheckHook
-    webtest
-  ]);
+  nativeCheckInputs =
+    [
+      git
+      pkg-config
+      zlib
+    ]
+    ++ lib.optionals (stdenv.isDarwin) [
+      xcbuild.xcrun
+    ]
+    ++ (with python3.pkgs; [
+      mock
+      parameterized
+      pytest-xdist
+      pytestCheckHook
+      webtest
+    ]);
 
   __darwinAllowLocalNetworking = true;
 
@@ -71,21 +78,23 @@ python3.pkgs.buildPythonApplication rec {
     "$NIX_BUILD_CORES"
   ];
 
-  disabledTests = [
-    # Tests require network access
-    "TestFTP"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # Rejects paths containing nix
-    "test_conditional_os"
-    # Requires Apple Clang
-    "test_detect_default_compilers"
-    "test_detect_default_in_mac_os_using_gcc_as_default"
-    # Incompatible with darwin.xattr and xcbuild from nixpkgs
-    "test_dot_files"
-    "test_xcrun"
-    "test_xcrun_in_required_by_tool_requires"
-    "test_xcrun_in_tool_requires"
-  ];
+  disabledTests =
+    [
+      # Tests require network access
+      "TestFTP"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # Rejects paths containing nix
+      "test_conditional_os"
+      # Requires Apple Clang
+      "test_detect_default_compilers"
+      "test_detect_default_in_mac_os_using_gcc_as_default"
+      # Incompatible with darwin.xattr and xcbuild from nixpkgs
+      "test_dot_files"
+      "test_xcrun"
+      "test_xcrun_in_required_by_tool_requires"
+      "test_xcrun_in_tool_requires"
+    ];
 
   disabledTestPaths = [
     # Requires cmake, meson, autotools, apt-get, etc.

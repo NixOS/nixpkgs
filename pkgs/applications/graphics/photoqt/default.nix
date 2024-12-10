@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, extra-cmake-modules
-, qttools
-, wrapQtAppsHook
-, exiv2
-, graphicsmagick
-, libarchive
-, libraw
-, mpv
-, poppler
-, pugixml
-, qtbase
-, qtcharts
-, qtdeclarative
-, qtimageformats
-, qtlocation
-, qtmultimedia
-, qtpositioning
-, qtsvg
-, zxing-cpp
-, qtwayland
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  extra-cmake-modules,
+  qttools,
+  wrapQtAppsHook,
+  exiv2,
+  graphicsmagick,
+  libarchive,
+  libraw,
+  mpv,
+  poppler,
+  pugixml,
+  qtbase,
+  qtcharts,
+  qtdeclarative,
+  qtimageformats,
+  qtlocation,
+  qtmultimedia,
+  qtpositioning,
+  qtsvg,
+  zxing-cpp,
+  qtwayland,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,26 +41,28 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    exiv2
-    graphicsmagick
-    libarchive
-    libraw
-    mpv
-    poppler
-    pugixml
-    qtbase
-    qtcharts
-    qtdeclarative
-    qtimageformats
-    qtlocation
-    qtmultimedia
-    qtpositioning
-    qtsvg
-    zxing-cpp
-  ] ++ lib.optionals stdenv.isLinux [
-    qtwayland
-  ];
+  buildInputs =
+    [
+      exiv2
+      graphicsmagick
+      libarchive
+      libraw
+      mpv
+      poppler
+      pugixml
+      qtbase
+      qtcharts
+      qtdeclarative
+      qtimageformats
+      qtlocation
+      qtmultimedia
+      qtpositioning
+      qtsvg
+      zxing-cpp
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      qtwayland
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "DEVIL" false)

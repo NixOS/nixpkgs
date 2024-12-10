@@ -21,11 +21,12 @@
 #
 #   nix-instantiate --eval --strict --json pkgs/top-level/release-attrpaths-superset.nix -A names
 #
-{ lib ? import (path + "/lib")
-, trace ? false
-, enableWarnings ? true
-, checkMeta ? true
-, path ? ./../..
+{
+  lib ? import (path + "/lib"),
+  trace ? false,
+  enableWarnings ? true,
+  checkMeta ? true,
+  path ? ./../..,
 }:
 let
 
@@ -125,46 +126,55 @@ let
   # attrnames of derivations (!).  We should probably restructure
   # the job tree so that this is not the case.
   #
-  justAttrNames = path: value:
+  justAttrNames =
+    path: value:
     let
       attempt =
-        if lib.isDerivation value &&
-           # in some places we have *derivations* with jobsets as subattributes, ugh
-           !(value.__recurseIntoDerivationForReleaseJobs or false) then
-             [ path ]
+        if
+          lib.isDerivation value
+          &&
+            # in some places we have *derivations* with jobsets as subattributes, ugh
+            !(value.__recurseIntoDerivationForReleaseJobs or false)
+        then
+          [ path ]
 
         # Even wackier case: we have meta.broken==true jobs with
         # !meta.broken jobs as subattributes with license=unfree, and
         # check-meta.nix won't throw an "unfree" failure because the
         # enclosing derivation is marked broken.  Yeah.  Bonkers.
         # We should just forbid jobsets enclosed by derivations.
-        else if lib.isDerivation value &&
-                !value.meta.available then []
+        else if lib.isDerivation value && !value.meta.available then
+          [ ]
 
-        else if !(lib.isAttrs value) then []
-        else if (value.__attrsFailEvaluation or false) then []
-        else lib.pipe value [
-          (builtins.mapAttrs
-            (name: value:
-              if excluded-attrnames-at-any-depth.${name} or false then [] else
-              (justAttrNames (path ++ [name]) value)))
-          builtins.attrValues
-          builtins.concatLists
-        ];
+        else if !(lib.isAttrs value) then
+          [ ]
+        else if (value.__attrsFailEvaluation or false) then
+          [ ]
+        else
+          lib.pipe value [
+            (builtins.mapAttrs (
+              name: value:
+              if excluded-attrnames-at-any-depth.${name} or false then
+                [ ]
+              else
+                (justAttrNames (path ++ [ name ]) value)
+            ))
+            builtins.attrValues
+            builtins.concatLists
+          ];
 
       seq = builtins.deepSeq attempt attempt;
       tried = builtins.tryEval seq;
 
       result =
-        if tried.success
-        then tried.value
-        else if enableWarnings && path != [ "AAAAAASomeThingsFailToEvaluate" ]
-        then lib.warn "tryEval failed at: ${lib.concatStringsSep "." path}" []
-        else [];
+        if tried.success then
+          tried.value
+        else if enableWarnings && path != [ "AAAAAASomeThingsFailToEvaluate" ] then
+          lib.warn "tryEval failed at: ${lib.concatStringsSep "." path}" [ ]
+        else
+          [ ];
     in
-      if !trace
-      then result
-      else lib.trace "** ${lib.concatStringsSep "." path}" result;
+    if !trace then result else lib.trace "** ${lib.concatStringsSep "." path}" result;
 
   unfiltered = import ./release-outpaths.nix {
     inherit checkMeta;
@@ -176,18 +186,25 @@ let
     (pkgs: builtins.removeAttrs pkgs (builtins.attrNames excluded-toplevel-attrs))
   ];
 
-  paths =
+  paths = [
+    # I am not entirely sure why these three packages end up in
+    # the Hydra jobset.  But they do, and they don't meet the
+    # criteria above, so at the moment they are special-cased.
     [
-      # I am not entirely sure why these three packages end up in
-      # the Hydra jobset.  But they do, and they don't meet the
-      # criteria above, so at the moment they are special-cased.
-      [ "pkgsLLVM" "stdenv" ]
-      [ "pkgsStatic" "stdenv" ]
-      [ "pkgsMusl" "stdenv" ]
-    ] ++ justAttrNames [] filtered;
+      "pkgsLLVM"
+      "stdenv"
+    ]
+    [
+      "pkgsStatic"
+      "stdenv"
+    ]
+    [
+      "pkgsMusl"
+      "stdenv"
+    ]
+  ] ++ justAttrNames [ ] filtered;
 
-  names =
-    map (path: (lib.concatStringsSep "." path)) paths;
+  names = map (path: (lib.concatStringsSep "." path)) paths;
 
 in
 {

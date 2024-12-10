@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, hexdump
-, wxGTK32
-, zlib
-, Cocoa
+{
+  lib,
+  stdenv,
+  fetchurl,
+  hexdump,
+  wxGTK32,
+  zlib,
+  Cocoa,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,12 +25,14 @@ stdenv.mkDerivation rec {
     hexdump
   ];
 
-  buildInputs = [
-    wxGTK32
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
-  ];
+  buildInputs =
+    [
+      wxGTK32
+      zlib
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      Cocoa
+    ];
 
   makeFlags = [
     "prefix=${placeholder "out"}"
@@ -45,7 +48,10 @@ stdenv.mkDerivation rec {
     description = "Viewer of CBR and CBZ files, often used to store scanned comics";
     homepage = "https://comical.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ viric wegank ];
+    maintainers = with lib.maintainers; [
+      viric
+      wegank
+    ];
     platforms = with lib.platforms; unix;
     mainProgram = "comical";
   };

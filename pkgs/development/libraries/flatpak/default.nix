@@ -1,55 +1,57 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, docbook_xml_dtd_45
-, docbook-xsl-nons
-, which
-, libxml2
-, gobject-introspection
-, gtk-doc
-, intltool
-, libxslt
-, pkg-config
-, xmlto
-, substituteAll
-, runCommand
-, bison
-, xdg-dbus-proxy
-, p11-kit
-, appstream
-, bubblewrap
-, bzip2
-, curl
-, dbus
-, glib
-, gpgme
-, json-glib
-, libarchive
-, libcap
-, libseccomp
-, coreutils
-, socat
-, gettext
-, hicolor-icon-theme
-, shared-mime-info
-, desktop-file-utils
-, gtk3
-, fuse3
-, nixosTests
-, xz
-, zstd
-, ostree
-, polkit
-, python3
-, systemd
-, xorg
-, valgrind
-, glib-networking
-, wrapGAppsNoGuiHook
-, dconf
-, gsettings-desktop-schemas
-, librsvg
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  docbook_xml_dtd_45,
+  docbook-xsl-nons,
+  which,
+  libxml2,
+  gobject-introspection,
+  gtk-doc,
+  intltool,
+  libxslt,
+  pkg-config,
+  xmlto,
+  substituteAll,
+  runCommand,
+  bison,
+  xdg-dbus-proxy,
+  p11-kit,
+  appstream,
+  bubblewrap,
+  bzip2,
+  curl,
+  dbus,
+  glib,
+  gpgme,
+  json-glib,
+  libarchive,
+  libcap,
+  libseccomp,
+  coreutils,
+  socat,
+  gettext,
+  hicolor-icon-theme,
+  shared-mime-info,
+  desktop-file-utils,
+  gtk3,
+  fuse3,
+  nixosTests,
+  xz,
+  zstd,
+  ostree,
+  polkit,
+  python3,
+  systemd,
+  xorg,
+  valgrind,
+  glib-networking,
+  wrapGAppsNoGuiHook,
+  dconf,
+  gsettings-desktop-schemas,
+  librsvg,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,7 +59,14 @@ stdenv.mkDerivation (finalAttrs: {
   version = "1.14.6";
 
   # TODO: split out lib once we figure out what to do with triggerdir
-  outputs = [ "out" "dev" "man" "doc" "devdoc" "installedTests" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "doc"
+    "devdoc"
+    "installedTests"
+  ];
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
@@ -69,7 +78,12 @@ stdenv.mkDerivation (finalAttrs: {
     # https://github.com/flatpak/flatpak/issues/1460
     (substituteAll {
       src = ./fix-test-paths.patch;
-      inherit coreutils gettext socat gtk3;
+      inherit
+        coreutils
+        gettext
+        socat
+        gtk3
+        ;
       smi = shared-mime-info;
       dfu = desktop-file-utils;
       hicolorIconTheme = hicolor-icon-theme;
@@ -175,15 +189,17 @@ stdenv.mkDerivation (finalAttrs: {
     "installed_test_metadir=${placeholder "installedTests"}/share/installed-tests/flatpak"
   ];
 
-  postPatch = let
-    vsc-py = python3.withPackages (pp: [
-      pp.pyparsing
-    ]);
-  in ''
-    patchShebangs buildutil
-    patchShebangs tests
-    PATH=${lib.makeBinPath [vsc-py]}:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
-  '';
+  postPatch =
+    let
+      vsc-py = python3.withPackages (pp: [
+        pp.pyparsing
+      ]);
+    in
+    ''
+      patchShebangs buildutil
+      patchShebangs tests
+      PATH=${lib.makeBinPath [ vsc-py ]}:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
+    '';
 
   passthru = {
     icon-validator-patch = substituteAll {

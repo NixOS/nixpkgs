@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "bazel-buildtools";
@@ -23,15 +27,24 @@ buildGoModule rec {
 
   excludedPackages = [ "generatetables" ];
 
-  ldflags = [ "-s" "-w" "-X main.buildVersion=${version}" "-X main.buildScmRevision=${src.rev}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.buildVersion=${version}"
+    "-X main.buildScmRevision=${src.rev}"
+  ];
 
   meta = with lib; {
     description = "Tools for working with Google's bazel buildtool. Includes buildifier, buildozer, and unused_deps";
     homepage = "https://github.com/bazelbuild/buildtools";
     changelog = "https://github.com/bazelbuild/buildtools/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers;
-      [ elasticdog uri-canva ]
+    maintainers =
+      with maintainers;
+      [
+        elasticdog
+        uri-canva
+      ]
       ++ lib.teams.bazel.members;
   };
 }

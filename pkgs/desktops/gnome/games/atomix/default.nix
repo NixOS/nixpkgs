@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook3
-, python3
-, gettext
-, gnome
-, glib
-, gtk3
-, libgnome-games-support
-, gdk-pixbuf
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
+  python3,
+  gettext,
+  gnome,
+  glib,
+  gtk3,
+  libgnome-games-support,
+  gdk-pixbuf,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

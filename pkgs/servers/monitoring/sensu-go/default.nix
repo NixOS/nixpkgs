@@ -1,7 +1,17 @@
-{ buildGo121Module, fetchFromGitHub, lib }:
+{
+  buildGo121Module,
+  fetchFromGitHub,
+  lib,
+}:
 
 let
-  generic = { subPackages, pname, postInstall ? "", mainProgram }:
+  generic =
+    {
+      subPackages,
+      pname,
+      postInstall ? "",
+      mainProgram,
+    }:
     buildGo121Module rec {
       inherit pname;
       version = "6.11.0";
@@ -27,19 +37,24 @@ let
 
       doCheck = false;
 
-      ldflags = let
-        versionPkg = "github.com/sensu/sensu-go/version";
-      in [
-        "-X ${versionPkg}.Version=${version}"
-        "-X ${versionPkg}.BuildSHA=${shortRev}"
-      ];
+      ldflags =
+        let
+          versionPkg = "github.com/sensu/sensu-go/version";
+        in
+        [
+          "-X ${versionPkg}.Version=${version}"
+          "-X ${versionPkg}.BuildSHA=${shortRev}"
+        ];
 
       meta = {
         inherit mainProgram;
         homepage = "https://sensu.io";
         description = "Open source monitoring tool for ephemeral infrastructure & distributed applications";
         license = lib.licenses.mit;
-        maintainers = with lib.maintainers; [ thefloweringash teutat3s ];
+        maintainers = with lib.maintainers; [
+          thefloweringash
+          teutat3s
+        ];
       };
     };
 in

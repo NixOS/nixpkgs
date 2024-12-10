@@ -1,40 +1,42 @@
-import ./make-test-python.nix ({ pkgs, ... }:
+import ./make-test-python.nix (
+  { pkgs, ... }:
 
-{
-  name = "samba";
+  {
+    name = "samba";
 
-  meta.maintainers = [ ];
+    meta.maintainers = [ ];
 
-  nodes =
-    { client =
+    nodes = {
+      client =
         { pkgs, ... }:
-        { virtualisation.fileSystems =
-            { "/public" = {
-                fsType = "cifs";
-                device = "//server/public";
-                options = [ "guest" ];
-              };
+        {
+          virtualisation.fileSystems = {
+            "/public" = {
+              fsType = "cifs";
+              device = "//server/public";
+              options = [ "guest" ];
             };
+          };
         };
 
       server =
         { ... }:
-        { services.samba.enable = true;
+        {
+          services.samba.enable = true;
           services.samba.openFirewall = true;
-          services.samba.shares.public =
-            { path = "/public";
-              "read only" = true;
-              browseable = "yes";
-              "guest ok" = "yes";
-              comment = "Public samba share.";
-            };
+          services.samba.shares.public = {
+            path = "/public";
+            "read only" = true;
+            browseable = "yes";
+            "guest ok" = "yes";
+            comment = "Public samba share.";
+          };
         };
     };
 
-  # client# [    4.542997] mount[777]: sh: systemd-ask-password: command not found
+    # client# [    4.542997] mount[777]: sh: systemd-ask-password: command not found
 
-  testScript =
-    ''
+    testScript = ''
       server.start()
       server.wait_for_unit("samba.target")
       server.succeed("mkdir -p /public; echo bar > /public/foo")
@@ -43,4 +45,5 @@ import ./make-test-python.nix ({ pkgs, ... }:
       client.wait_for_unit("remote-fs.target")
       client.succeed("[[ $(cat /public/foo) = bar ]]")
     '';
-})
+  }
+)

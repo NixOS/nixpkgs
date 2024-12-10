@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, libphonenumber, icu, protobuf }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libphonenumber,
+  icu,
+  protobuf,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pn";
@@ -12,7 +20,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libphonenumber icu protobuf ];
+  buildInputs = [
+    libphonenumber
+    icu
+    protobuf
+  ];
 
   meta = with lib; {
     description = "A libphonenumber command-line wrapper";

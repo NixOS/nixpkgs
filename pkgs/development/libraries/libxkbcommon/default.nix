@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, bison
-, doxygen
-, xkeyboard_config
-, libxcb
-, libxml2
-, python3
-, libX11
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  bison,
+  doxygen,
+  xkeyboard_config,
+  libxcb,
+  libxml2,
+  python3,
+  libX11,
   # To enable the "interactive-wayland" subcommand of xkbcli. This is the
   # wayland equivalent of `xev` on X11.
-, xorgserver # for Xvfb in tests
-, withWaylandTools ? stdenv.isLinux
-, wayland
-, wayland-protocols
-, wayland-scanner
-, testers
+  xorgserver, # for Xvfb in tests
+  withWaylandTools ? stdenv.isLinux,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,13 +36,31 @@ stdenv.mkDerivation (finalAttrs: {
     ./disable-x11com.patch
   ];
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ meson ninja pkg-config bison doxygen xorgserver ]
-    ++ lib.optional withWaylandTools wayland-scanner;
-  buildInputs = [ xkeyboard_config libxcb libxml2 ]
-    ++ lib.optionals withWaylandTools [ wayland wayland-protocols ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    bison
+    doxygen
+    xorgserver
+  ] ++ lib.optional withWaylandTools wayland-scanner;
+  buildInputs =
+    [
+      xkeyboard_config
+      libxcb
+      libxml2
+    ]
+    ++ lib.optionals withWaylandTools [
+      wayland
+      wayland-protocols
+    ];
   nativeCheckInputs = [ python3 ];
 
   mesonFlags = [
@@ -74,7 +93,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://xkbcommon.org";
     changelog = "https://github.com/xkbcommon/libxkbcommon/blob/xkbcommon-${finalAttrs.version}/NEWS";
     license = licenses.mit;
-    maintainers = with maintainers; [ primeos ttuegel ];
+    maintainers = with maintainers; [
+      primeos
+      ttuegel
+    ];
     mainProgram = "xkbcli";
     platforms = with platforms; unix;
     pkgConfigModules = [

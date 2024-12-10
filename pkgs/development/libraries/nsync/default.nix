@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/google/nsync";
     description = "C library that exports various synchronization primitives";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ puffnfresh Luflosi ];
+    maintainers = with lib.maintainers; [
+      puffnfresh
+      Luflosi
+    ];
     platforms = lib.platforms.unix;
   };
 }

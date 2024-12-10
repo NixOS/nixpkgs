@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   inherit (lib)
@@ -7,20 +12,31 @@ let
     mkOption
     mkRenamedOptionModule
     teams
-    types;
+    types
+    ;
 
-  associationOptions = with types; attrsOf (
-    coercedTo (either (listOf str) str) (x: lib.concatStringsSep ";" (lib.toList x)) str
-  );
+  associationOptions =
+    with types;
+    attrsOf (coercedTo (either (listOf str) str) (x: lib.concatStringsSep ";" (lib.toList x)) str);
 in
 
 {
   imports = [
     (mkRenamedOptionModule [ "services" "flatpak" "extraPortals" ] [ "xdg" "portal" "extraPortals" ])
 
-    ({ config, lib, options, ... }:
+    (
+      {
+        config,
+        lib,
+        options,
+        ...
+      }:
       let
-        from = [ "xdg" "portal" "gtkUsePortal" ];
+        from = [
+          "xdg"
+          "portal"
+          "gtkUsePortal"
+        ];
         fromOpt = lib.getAttrFromPath from options;
       in
       {
@@ -37,7 +53,8 @@ in
 
   options.xdg.portal = {
     enable =
-      mkEnableOption ''[xdg desktop integration](https://github.com/flatpak/xdg-desktop-portal)'' // {
+      mkEnableOption ''[xdg desktop integration](https://github.com/flatpak/xdg-desktop-portal)''
+      // {
         default = false;
       };
 
@@ -82,10 +99,16 @@ in
       default = { };
       example = {
         x-cinnamon = {
-          default = [ "xapp" "gtk" ];
+          default = [
+            "xapp"
+            "gtk"
+          ];
         };
         pantheon = {
-          default = [ "pantheon" "gtk" ];
+          default = [
+            "pantheon"
+            "gtk"
+          ];
           "org.freedesktop.impl.portal.Secret" = [ "gnome-keyring" ];
         };
         common = {
@@ -159,11 +182,15 @@ in
           NIX_XDG_DESKTOP_PORTAL_DIR = "/run/current-system/sw/share/xdg-desktop-portal/portals";
         };
 
-        etc = lib.concatMapAttrs
-          (desktop: conf: lib.optionalAttrs (conf != { }) {
-            "xdg/xdg-desktop-portal/${lib.optionalString (desktop != "common") "${desktop}-"}portals.conf".text =
+        etc = lib.concatMapAttrs (
+          desktop: conf:
+          lib.optionalAttrs (conf != { }) {
+            "xdg/xdg-desktop-portal/${
+              lib.optionalString (desktop != "common") "${desktop}-"
+            }portals.conf".text =
               lib.generators.toINI { } { preferred = conf; };
-          }) cfg.config;
+          }
+        ) cfg.config;
       };
     };
 }

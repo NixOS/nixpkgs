@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -19,7 +20,10 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -29,9 +33,14 @@ buildGoModule rec {
 
   meta = with lib; {
     description = "A tool for creating identical machine images for multiple platforms from a single source configuration";
-    homepage    = "https://www.packer.io";
-    license     = licenses.bsl11;
-    maintainers = with maintainers; [ zimbatm ma27 techknowlogick qjoly ];
-    changelog   = "https://github.com/hashicorp/packer/blob/v${version}/CHANGELOG.md";
+    homepage = "https://www.packer.io";
+    license = licenses.bsl11;
+    maintainers = with maintainers; [
+      zimbatm
+      ma27
+      techknowlogick
+      qjoly
+    ];
+    changelog = "https://github.com/hashicorp/packer/blob/v${version}/CHANGELOG.md";
   };
 }

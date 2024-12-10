@@ -1,4 +1,19 @@
-{ lib, fetchFromGitHub, fetchpatch, stdenv, stdenvNoCC,  nodePackages, buildGoModule, jq, mage, writeShellScriptBin, nixosTests, buildNpmPackage, moreutils, cacert }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  stdenv,
+  stdenvNoCC,
+  nodePackages,
+  buildGoModule,
+  jq,
+  mage,
+  writeShellScriptBin,
+  nixosTests,
+  buildNpmPackage,
+  moreutils,
+  cacert,
+}:
 
 let
   version = "0.23.0";
@@ -45,7 +60,10 @@ let
       pnpmPatch = builtins.toJSON {
         pnpm.supportedArchitectures = {
           os = [ "linux" ];
-          cpu = [ "x64" "arm64" ];
+          cpu = [
+            "x64"
+            "arm64"
+          ];
         };
       };
 
@@ -72,10 +90,12 @@ let
       dontBuild = true;
       dontFixup = true;
       outputHashMode = "recursive";
-      outputHash = {
-        x86_64-linux = "sha256-ybAkXe2/VhGZhr59ZQOcQ+SI2a204e8uPjyE40xUVwU=";
-        aarch64-linux = "sha256-2iURs6JtI/b2+CnLwhog1X5hSFFO6OmmgFRuTbMjH+k=";
-      }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+      outputHash =
+        {
+          x86_64-linux = "sha256-ybAkXe2/VhGZhr59ZQOcQ+SI2a204e8uPjyE40xUVwU=";
+          aarch64-linux = "sha256-2iURs6JtI/b2+CnLwhog1X5hSFFO6OmmgFRuTbMjH+k=";
+        }
+        .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
     };
 
     nativeBuildInputs = [
@@ -107,10 +127,12 @@ let
   });
 
   # Injects a `t.Skip()` into a given test since there's apparently no other way to skip tests here.
-  skipTest = lineOffset: testCase: file:
+  skipTest =
+    lineOffset: testCase: file:
     let
       jumpAndAppend = lib.concatStringsSep ";" (lib.replicate (lineOffset - 1) "n" ++ [ "a" ]);
-    in ''
+    in
+    ''
       sed -i -e '/${testCase}/{
       ${jumpAndAppend} t.Skip();
       }' ${file}
@@ -131,7 +153,10 @@ buildGoModule {
         fi
       '';
     in
-    [ fakeGit mage ];
+    [
+      fakeGit
+      mage
+    ];
 
   vendorHash = "sha256-d4AeQEAtPqMDe5a5aKhCe3i3pDXAMZJkJXxfcAFTx7A=";
 

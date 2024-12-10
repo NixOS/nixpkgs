@@ -1,15 +1,16 @@
-{ fetchgit
-, installShellFiles
-, lib
-, libftdi1
-, libgpiod
-, libjaylink
-, libusb1
-, pciutils
-, pkg-config
-, stdenv
-, withJlink ? true
-, withGpio ? stdenv.isLinux
+{
+  fetchgit,
+  installShellFiles,
+  lib,
+  libftdi1,
+  libgpiod,
+  libjaylink,
+  libusb1,
+  pciutils,
+  pkg-config,
+  stdenv,
+  withJlink ? true,
+  withGpio ? stdenv.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,16 +27,20 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
     pkg-config
   ];
-  buildInputs = [
-    libftdi1
-    libusb1
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    pciutils
-  ] ++ lib.optionals (withJlink) [
-    libjaylink
-  ] ++ lib.optionals (withGpio) [
-    libgpiod
-  ];
+  buildInputs =
+    [
+      libftdi1
+      libusb1
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      pciutils
+    ]
+    ++ lib.optionals (withJlink) [
+      libjaylink
+    ]
+    ++ lib.optionals (withGpio) [
+      libgpiod
+    ];
 
   makeFlags =
     let

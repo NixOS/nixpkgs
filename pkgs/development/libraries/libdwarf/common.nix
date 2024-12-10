@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, buildInputs, hash, version, libelf, url, knownVulnerabilities }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildInputs,
+  hash,
+  version,
+  libelf,
+  url,
+  knownVulnerabilities,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libdwarf";
@@ -8,11 +18,19 @@ stdenv.mkDerivation rec {
     inherit url hash;
   };
 
-  configureFlags = [ "--enable-shared" "--disable-nonshared" ];
+  configureFlags = [
+    "--enable-shared"
+    "--disable-nonshared"
+  ];
 
   inherit buildInputs;
 
-  outputs = [ "bin" "lib" "dev" "out" ];
+  outputs = [
+    "bin"
+    "lib"
+    "dev"
+    "out"
+  ];
 
   meta = {
     homepage = "https://github.com/davea42/libdwarf-code";

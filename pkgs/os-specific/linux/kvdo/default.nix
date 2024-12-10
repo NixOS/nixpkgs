@@ -1,7 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, vdo, kernel }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  vdo,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
-  inherit (vdo);
+  inherit (vdo) ;
   pname = "kvdo";
   version = "8.2.3.3"; # bump this version with vdo
 

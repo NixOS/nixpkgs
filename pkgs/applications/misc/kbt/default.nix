@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, pkg-config
-, darwin
-, xorg
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  pkg-config,
+  darwin,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,11 +25,13 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-  ] ++ lib.optionals stdenv.isLinux [
-    xorg.libX11
-  ];
+  buildInputs =
+    lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      xorg.libX11
+    ];
 
   meta = with lib; {
     description = "Keyboard tester in terminal";

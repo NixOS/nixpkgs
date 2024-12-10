@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, callPackage
-, buildEnv
-, linkFarm
-, substituteAll
-, R
-, rPackages
-, cmake
-, ninja
-, pkg-config
-, boost
-, libarchive
-, readstat
-, qt6
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  callPackage,
+  buildEnv,
+  linkFarm,
+  substituteAll,
+  R,
+  rPackages,
+  cmake,
+  ninja,
+  pkg-config,
+  boost,
+  libarchive,
+  readstat,
+  qt6,
 }:
 
 let
@@ -27,10 +28,14 @@ let
     fetchSubmodules = true;
   };
 
-  inherit (callPackage ./modules.nix {
-    jasp-src = src;
-    jasp-version = version;
-  }) engine modules;
+  inherit
+    (callPackage ./modules.nix {
+      jasp-src = src;
+      jasp-version = version;
+    })
+    engine
+    modules
+    ;
 
   # Merges ${R}/lib/R with all used R packages (even propagated ones)
   customREnv = buildEnv {
@@ -42,8 +47,12 @@ let
     ] ++ lib.attrValues modules;
   };
 
-  modulesDir = linkFarm "jasp-${version}-modules"
-    (lib.mapAttrsToList (name: drv: { name = name; path = "${drv}/library"; }) modules);
+  modulesDir = linkFarm "jasp-${version}-modules" (
+    lib.mapAttrsToList (name: drv: {
+      name = name;
+      path = "${drv}/library";
+    }) modules
+  );
 in
 stdenv.mkDerivation {
   pname = "jasp-desktop";
@@ -73,18 +82,20 @@ stdenv.mkDerivation {
     qt6.wrapQtAppsHook
   ];
 
-  buildInputs = [
-    customREnv
-    boost
-    libarchive
-    readstat
-  ] ++ (with qt6; [
-    qtbase
-    qtdeclarative
-    qtwebengine
-    qtsvg
-    qt5compat
-  ]);
+  buildInputs =
+    [
+      customREnv
+      boost
+      libarchive
+      readstat
+    ]
+    ++ (with qt6; [
+      qtbase
+      qtdeclarative
+      qtwebengine
+      qtsvg
+      qt5compat
+    ]);
 
   env.NIX_LDFLAGS = "-L${rPackages.RInside}/library/RInside/lib";
 
@@ -118,4 +129,3 @@ stdenv.mkDerivation {
     platforms = lib.platforms.linux;
   };
 }
-

@@ -1,10 +1,15 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.lxd-image-server;
-  format = pkgs.formats.toml {};
+  format = pkgs.formats.toml { };
 
   location = "/var/www/simplestreams";
 in
@@ -27,7 +32,7 @@ in
 
           Example see <https://github.com/Avature/lxd-image-server/blob/master/config.toml>.
         '';
-        default = {};
+        default = { };
       };
 
       nginx = {
@@ -47,7 +52,7 @@ in
         isSystemUser = true;
         group = cfg.group;
       };
-      users.groups.${cfg.group} = {};
+      users.groups.${cfg.group} = { };
 
       environment.etc."lxd-image-server/config.toml".source = format.generate "config.toml" cfg.settings;
 

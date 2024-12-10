@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, python2, pkg-config, pam, xorg }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python2,
+  pkg-config,
+  pam,
+  xorg,
+}:
 
 stdenv.mkDerivation {
   pname = "xtrlock-pam";
@@ -12,7 +20,11 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ python2 pam xorg.libX11 ];
+  buildInputs = [
+    python2
+    pam
+    xorg.libX11
+  ];
 
   configurePhase = ''
     substituteInPlace .config/options.py --replace /usr/include/security/pam_appl.h ${pam}/include/security/pam_appl.h

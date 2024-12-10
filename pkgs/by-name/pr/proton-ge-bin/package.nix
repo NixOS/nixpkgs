@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchzip
-, writeScript
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  writeScript,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "proton-ge-bin";
@@ -12,7 +13,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-bUlV533M5BL5UEOB0ED8VIMmquvVAvIm+E/ZJNjftRU=";
   };
 
-  outputs = [ "out" "steamcompattool" ];
+  outputs = [
+    "out"
+    "steamcompattool"
+  ];
 
   buildCommand = ''
     runHook preBuild
@@ -50,7 +54,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/GloriousEggroll/proton-ge-custom";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ NotAShelf shawn8901 ];
+    maintainers = with lib.maintainers; [
+      NotAShelf
+      shawn8901
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };

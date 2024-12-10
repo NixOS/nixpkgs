@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -17,7 +18,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-exKQTsyP7LL63WHZ8/WchLh4y0Oj9LC4lxiZTOfWARU=";
 
-  ldflags = [ "-s" "-w" "-X github.com/bitmagnet-io/bitmagnet/internal/version.GitTag=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/bitmagnet-io/bitmagnet/internal/version.GitTag=v${version}"
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

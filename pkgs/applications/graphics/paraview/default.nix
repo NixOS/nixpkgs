@@ -1,8 +1,28 @@
-{ lib, stdenv, fetchFromGitLab, fetchurl
-, boost, cmake, ffmpeg, wrapQtAppsHook, qtbase, qtx11extras
-, qttools, qtxmlpatterns, qtsvg, gdal, gfortran, libXt, makeWrapper
-, ninja, mpi, python3, tbb, libGLU, libGL
-, withDocs ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchurl,
+  boost,
+  cmake,
+  ffmpeg,
+  wrapQtAppsHook,
+  qtbase,
+  qtx11extras,
+  qttools,
+  qtxmlpatterns,
+  qtsvg,
+  gdal,
+  gfortran,
+  libXt,
+  makeWrapper,
+  ninja,
+  mpi,
+  python3,
+  tbb,
+  libGLU,
+  libGL,
+  withDocs ? true,
 }:
 
 let
@@ -26,7 +46,8 @@ let
     })
   ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "paraview";
   inherit version;
 
@@ -92,7 +113,10 @@ in stdenv.mkDerivation rec {
 
   env.CXXFLAGS = "-include cstdint";
 
-  postInstall = let docDir = "$out/share/paraview-${lib.versions.majorMinor version}/doc"; in
+  postInstall =
+    let
+      docDir = "$out/share/paraview-${lib.versions.majorMinor version}/doc";
+    in
     lib.optionalString withDocs ''
       mkdir -p ${docDir};
       for docFile in ${lib.concatStringsSep " " docFiles}; do
@@ -101,7 +125,13 @@ in stdenv.mkDerivation rec {
     '';
 
   propagatedBuildInputs = [
-    (python3.withPackages (ps: with ps; [ numpy matplotlib mpi4py ]))
+    (python3.withPackages (
+      ps: with ps; [
+        numpy
+        matplotlib
+        mpi4py
+      ]
+    ))
   ];
 
   meta = with lib; {

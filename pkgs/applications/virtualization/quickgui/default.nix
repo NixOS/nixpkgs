@@ -1,11 +1,12 @@
-{ stdenvNoCC
-, lib
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, wrapGAppsHook3
-, quickemu
-, gnome
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  wrapGAppsHook3,
+  quickemu,
+  gnome,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -42,7 +43,12 @@ stdenvNoCC.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [ quickemu gnome.zenity ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          quickemu
+          gnome.zenity
+        ]
+      }
     )
   '';
 

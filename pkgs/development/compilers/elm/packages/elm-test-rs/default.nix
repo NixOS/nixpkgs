@@ -1,4 +1,11 @@
-{ lib, rustPlatform, fetchurl, openssl, stdenv, darwin }:
+{
+  lib,
+  rustPlatform,
+  fetchurl,
+  openssl,
+  stdenv,
+  darwin,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "elm-test-rs";
@@ -9,12 +16,17 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256:1manr42w613r9vyji7pxx5gb08jcgkdxv29qqylrqlwxa8d5dcid";
   };
 
-  buildInputs = lib.optionals (!stdenv.isDarwin) [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    Security
-    CoreServices
-  ]);
+  buildInputs =
+    lib.optionals (!stdenv.isDarwin) [
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        Security
+        CoreServices
+      ]
+    );
 
   cargoSha256 = "sha256:1dpdlzv96kpc25yf5jgsz9qldghyw35x382qpxhkadkn5dryzjvd";
 

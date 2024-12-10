@@ -1,28 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, arpack
-, bison
-, blas
-, cmake
-, flex
-, fop
-, glpk
-, gmp
-, lapack
-, libxml2
-, libxslt
-, llvmPackages
-, pkg-config
-, plfit
-, python3
-, sourceHighlight
-, xmlto
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  arpack,
+  bison,
+  blas,
+  cmake,
+  flex,
+  fop,
+  glpk,
+  gmp,
+  lapack,
+  libxml2,
+  libxslt,
+  llvmPackages,
+  pkg-config,
+  plfit,
+  python3,
+  sourceHighlight,
+  xmlto,
 }:
 
-assert (blas.isILP64 == lapack.isILP64 &&
-        blas.isILP64 == arpack.isILP64 &&
-        !blas.isILP64);
+assert (blas.isILP64 == lapack.isILP64 && blas.isILP64 == arpack.isILP64 && !blas.isILP64);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "igraph";
@@ -39,7 +38,11 @@ stdenv.mkDerivation (finalAttrs: {
     echo "${finalAttrs.version}" > IGRAPH_VERSION
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   nativeBuildInputs = [
     bison
@@ -54,17 +57,19 @@ stdenv.mkDerivation (finalAttrs: {
     xmlto
   ];
 
-  buildInputs = [
-    arpack
-    blas
-    glpk
-    gmp
-    lapack
-    libxml2
-    plfit
-  ] ++ lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
-  ];
+  buildInputs =
+    [
+      arpack
+      blas
+      glpk
+      gmp
+      lapack
+      libxml2
+      plfit
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      llvmPackages.openmp
+    ];
 
   cmakeFlags = [
     "-DIGRAPH_USE_INTERNAL_BLAS=OFF"
@@ -88,12 +93,14 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r doc "$out/share"
   '';
 
-  postFixup = ''
-    substituteInPlace $dev/lib/cmake/igraph/igraph-targets.cmake \
-      --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
-  '' + lib.optionalString stdenv.isDarwin ''
-    install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
-  '';
+  postFixup =
+    ''
+      substituteInPlace $dev/lib/cmake/igraph/igraph-targets.cmake \
+        --replace-fail "_IMPORT_PREFIX \"$out\"" "_IMPORT_PREFIX \"$dev\""
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libigraph.dylib
+    '';
 
   passthru.tests = {
     python = python3.pkgs.igraph;
@@ -105,6 +112,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/igraph/igraph/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     license = licenses.gpl2Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ MostAwesomeDude dotlambda ];
+    maintainers = with maintainers; [
+      MostAwesomeDude
+      dotlambda
+    ];
   };
 })

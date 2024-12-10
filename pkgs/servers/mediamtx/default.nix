@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, fetchurl
-, buildGoModule
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  buildGoModule,
+  nixosTests,
 }:
 
 let
@@ -39,9 +40,7 @@ buildGoModule rec {
   passthru.tests = { inherit (nixosTests) mediamtx; };
 
   meta = with lib; {
-    description =
-      "Ready-to-use RTSP server and RTSP proxy that allows to read and publish video and audio streams"
-    ;
+    description = "Ready-to-use RTSP server and RTSP proxy that allows to read and publish video and audio streams";
     inherit (src.meta) homepage;
     license = licenses.mit;
     mainProgram = "mediamtx";

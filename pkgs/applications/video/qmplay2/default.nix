@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, cmake
-, ffmpeg
-, fribidi
-, game-music-emu
-, libXdmcp
-, libXv
-, libass
-, libcddb
-, libcdio
-, libpulseaudio
-, libsidplayfp
-, libva
-, libxcb
-, pkg-config
-, qtbase
-, qttools
-, taglib
-, vulkan-headers
-, vulkan-tools
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  cmake,
+  ffmpeg,
+  fribidi,
+  game-music-emu,
+  libXdmcp,
+  libXv,
+  libass,
+  libcddb,
+  libcdio,
+  libpulseaudio,
+  libsidplayfp,
+  libva,
+  libxcb,
+  pkg-config,
+  qtbase,
+  qttools,
+  taglib,
+  vulkan-headers,
+  vulkan-tools,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -79,7 +80,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     changelog = "https://github.com/zaps166/QMPlay2/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres kashw2 ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      kashw2
+    ];
     platforms = lib.platforms.linux;
   };
 })

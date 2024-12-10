@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, makeWrapper, gcc, asciidoc, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  gcc,
+  asciidoc,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "colm";
@@ -11,7 +19,11 @@ stdenv.mkDerivation rec {
 
   patches = [ ./cross-compile.patch ];
 
-  nativeBuildInputs = [ makeWrapper asciidoc autoreconfHook ];
+  nativeBuildInputs = [
+    makeWrapper
+    asciidoc
+    autoreconfHook
+  ];
 
   doCheck = true;
 

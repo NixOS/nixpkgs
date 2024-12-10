@@ -53,14 +53,17 @@ python3Packages.buildPythonApplication rec {
     "urllib3"
   ];
 
-  nativeCheckInputs = with python3Packages; [
-    pyfakefs
-    pytest-check
-    pytest-mock
-    pytest-subprocess
-    pytestCheckHook
-    responses
-  ] ++ [ git ];
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pyfakefs
+      pytest-check
+      pytest-mock
+      pytest-subprocess
+      pytestCheckHook
+      responses
+    ]
+    ++ [ git ];
 
   preCheck = ''
     mkdir -p check-phase

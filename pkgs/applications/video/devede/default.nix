@@ -1,9 +1,29 @@
-{ lib, fetchFromGitLab, python3Packages, ffmpeg, mplayer, vcdimager, cdrkit, dvdauthor
-, gtk3, gettext, wrapGAppsHook3, gdk-pixbuf, gobject-introspection }:
+{
+  lib,
+  fetchFromGitLab,
+  python3Packages,
+  ffmpeg,
+  mplayer,
+  vcdimager,
+  cdrkit,
+  dvdauthor,
+  gtk3,
+  gettext,
+  wrapGAppsHook3,
+  gdk-pixbuf,
+  gobject-introspection,
+}:
 
 let
-  inherit (python3Packages) dbus-python buildPythonApplication pygobject3 urllib3 setuptools;
-in buildPythonApplication rec {
+  inherit (python3Packages)
+    dbus-python
+    buildPythonApplication
+    pygobject3
+    urllib3
+    setuptools
+    ;
+in
+buildPythonApplication rec {
   pname = "devede";
   version = "4.17.0";
   namePrefix = "";
@@ -16,7 +36,8 @@ in buildPythonApplication rec {
   };
 
   nativeBuildInputs = [
-    gettext wrapGAppsHook3
+    gettext
+    wrapGAppsHook3
     gobject-introspection
   ];
 
@@ -25,7 +46,17 @@ in buildPythonApplication rec {
   ];
 
   propagatedBuildInputs = [
-    gtk3 pygobject3 gdk-pixbuf dbus-python ffmpeg mplayer dvdauthor vcdimager cdrkit urllib3 setuptools
+    gtk3
+    pygobject3
+    gdk-pixbuf
+    dbus-python
+    ffmpeg
+    mplayer
+    dvdauthor
+    vcdimager
+    cdrkit
+    urllib3
+    setuptools
   ];
 
   postPatch = ''

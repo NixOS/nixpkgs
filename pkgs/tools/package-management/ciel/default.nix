@@ -1,17 +1,18 @@
-{ lib
-, bash
-, dbus
-, fetchFromGitHub
-, fetchpatch
-, installShellFiles
-, libgit2
-, libssh2
-, openssl
-, pkg-config
-, rustPlatform
-, systemd
-, xz
-, zlib
+{
+  lib,
+  bash,
+  dbus,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  libgit2,
+  libssh2,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  systemd,
+  xz,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,11 +33,23 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
   # ciel has plugins which is actually bash scripts.
   # Therefore, bash is required for plugins to work.
-  buildInputs = [ bash systemd dbus openssl libssh2 libgit2 xz zlib ];
+  buildInputs = [
+    bash
+    systemd
+    dbus
+    openssl
+    libssh2
+    libgit2
+    xz
+    zlib
+  ];
 
   patches = [
     # cli,completions: use canonicalize path to find libexec location

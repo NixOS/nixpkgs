@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, glib
-, meson
-, ninja
-, wrapGAppsHook3
-, desktop-file-utils
-, gobject-introspection
-, gtk3
-, python3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  glib,
+  meson,
+  ninja,
+  wrapGAppsHook3,
+  desktop-file-utils,
+  gobject-introspection,
+  gtk3,
+  python3,
 }:
 
 stdenv.mkDerivation rec {

@@ -58,20 +58,23 @@ buildPythonPackage rec {
     hatchling
   ];
 
-  dependencies = [
-    aiofiles
-    aiohttp
-    aioshutil
-    dateparser
-    orjson
-    packaging
-    pillow
-    platformdirs
-    pydantic
-    pyjwt
-    pytz
-    typer
-  ] ++ typer.optional-dependencies.all ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  dependencies =
+    [
+      aiofiles
+      aiohttp
+      aioshutil
+      dateparser
+      orjson
+      packaging
+      pillow
+      platformdirs
+      pydantic
+      pyjwt
+      pytz
+      typer
+    ]
+    ++ typer.optional-dependencies.all
+    ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
 
   passthru.optional-dependencies = {
     shell = [

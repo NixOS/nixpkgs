@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, cmake
-, libGL
-, libGLU
-, libX11
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  libGL,
+  libGLU,
+  libX11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,7 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "High-level, retained-mode toolkit for effective 3D graphics development";
     mainProgram = "coin-config";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ gebner viric ];
+    maintainers = with maintainers; [
+      gebner
+      viric
+    ];
     platforms = platforms.linux;
   };
 })

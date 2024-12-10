@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, smassh
-, python3
-, testers
+{
+  lib,
+  fetchFromGitHub,
+  smassh,
+  python3,
+  testers,
 }:
 
 python3.pkgs.buildPythonApplication rec {

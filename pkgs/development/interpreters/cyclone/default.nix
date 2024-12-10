@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, libck, darwin }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libck,
+  darwin,
+}:
 
 let
   version = "0.34.0";
@@ -35,8 +41,7 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ bootstrap ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.cctools ];
+  nativeBuildInputs = [ bootstrap ] ++ lib.optionals stdenv.isDarwin [ darwin.cctools ];
 
   buildInputs = [ libck ];
 

@@ -1,25 +1,61 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja, pkg-config, wrapGAppsNoGuiHook, gobject-introspection
-, glib, systemd, udev, libevdev, gitMinimal, check, valgrind, swig, python3
-, json-glib, libunistring }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsNoGuiHook,
+  gobject-introspection,
+  glib,
+  systemd,
+  udev,
+  libevdev,
+  gitMinimal,
+  check,
+  valgrind,
+  swig,
+  python3,
+  json-glib,
+  libunistring,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libratbag";
   version = "0.17";
 
   src = fetchFromGitHub {
-    owner  = "libratbag";
-    repo   = "libratbag";
-    rev    = "v${version}";
+    owner = "libratbag";
+    repo = "libratbag";
+    rev = "v${version}";
     sha256 = "sha256-TQ8DVj4yqq3IA0oGnLDz+QNTyNRmGqspEjkPeBmXNew=";
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config gitMinimal swig check valgrind wrapGAppsNoGuiHook gobject-introspection
+    meson
+    ninja
+    pkg-config
+    gitMinimal
+    swig
+    check
+    valgrind
+    wrapGAppsNoGuiHook
+    gobject-introspection
   ];
 
   buildInputs = [
-    glib systemd udev libevdev json-glib libunistring
-    (python3.withPackages (ps: with ps; [ evdev pygobject3 ]))
+    glib
+    systemd
+    udev
+    libevdev
+    json-glib
+    libunistring
+    (python3.withPackages (
+      ps: with ps; [
+        evdev
+        pygobject3
+      ]
+    ))
   ];
 
   mesonFlags = [
@@ -28,9 +64,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Configuration library for gaming mice";
-    homepage    = "https://github.com/libratbag/libratbag";
-    license     = licenses.mit;
+    homepage = "https://github.com/libratbag/libratbag";
+    license = licenses.mit;
     maintainers = with maintainers; [ mvnetbiz ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

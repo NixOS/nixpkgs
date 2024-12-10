@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, python3
-, meson
-, ninja
-, pkg-config
-, vala
-, glib
-, gtk4
-, libgee
-, libadwaita
-, libportal-gtk4
-, json-glib
-, blueprint-compiler
-, gtksourceview5
-, gobject-introspection
-, wrapGAppsHook4
-, appstream-glib
-, desktop-file-utils
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  glib,
+  gtk4,
+  libgee,
+  libadwaita,
+  libportal-gtk4,
+  json-glib,
+  blueprint-compiler,
+  gtksourceview5,
+  gobject-introspection,
+  wrapGAppsHook4,
+  appstream-glib,
+  desktop-file-utils,
 }:
 
 let
@@ -63,10 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-  (fetchpatch {
-    url = "https://github.com/liferooter/textpieces/commit/26348782b9fddc5f2ffb9497cf18ec8ce9592960.patch";
-    hash = "sha256-w86PCeDhoyMPm63GCBa2Ax8KfCdlxtmGeUrmt1ZSz1k=";
-  })
+    (fetchpatch {
+      url = "https://github.com/liferooter/textpieces/commit/26348782b9fddc5f2ffb9497cf18ec8ce9592960.patch";
+      hash = "sha256-w86PCeDhoyMPm63GCBa2Ax8KfCdlxtmGeUrmt1ZSz1k=";
+    })
   ];
 
   postPatch = ''

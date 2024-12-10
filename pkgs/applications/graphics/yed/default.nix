@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchzip, makeWrapper, unzip, jre, wrapGAppsHook3 }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  makeWrapper,
+  unzip,
+  jre,
+  wrapGAppsHook3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "yEd";
@@ -9,7 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-u83OmIzq9VygKbfa886mj6BIa/9ET1btry2nR/wxeyI=";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+    wrapGAppsHook3
+  ];
   # For wrapGAppsHook3 setup hook
   buildInputs = [ (jre.gtk3 or null) ];
 

@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeBinaryWrapper
-, substituteAll
-, age
-, getopt
-, coreutils
-, findutils
-, gnugrep
-, gnused
-, qrencode ? null
-, wl-clipboard ? null
-, git ? null
-, xclip ? null
-# Used to pretty-print list of all stored passwords, but is not needed to fetch
-# or store password by its name. Most users would want this dependency.
-, tree ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  substituteAll,
+  age,
+  getopt,
+  coreutils,
+  findutils,
+  gnugrep,
+  gnused,
+  qrencode ? null,
+  wl-clipboard ? null,
+  git ? null,
+  xclip ? null,
+  # Used to pretty-print list of all stored passwords, but is not needed to fetch
+  # or store password by its name. Most users would want this dependency.
+  tree ? null,
 }:
 
 stdenv.mkDerivation {
@@ -57,14 +58,20 @@ stdenv.mkDerivation {
     wrapProgram $out/bin/passage --prefix PATH : $extraPath --argv0 $pname
   '';
 
-  installFlags = [ "PREFIX=$(out)" "WITH_ALLCOMP=yes" ];
+  installFlags = [
+    "PREFIX=$(out)"
+    "WITH_ALLCOMP=yes"
+  ];
 
   meta = with lib; {
     description = "Stores, retrieves, generates, and synchronizes passwords securely";
-    homepage    = "https://github.com/FiloSottile/passage";
-    license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kaction ma27 ];
-    platforms   = platforms.unix;
+    homepage = "https://github.com/FiloSottile/passage";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      kaction
+      ma27
+    ];
+    platforms = platforms.unix;
     mainProgram = "passage";
 
     longDescription = ''

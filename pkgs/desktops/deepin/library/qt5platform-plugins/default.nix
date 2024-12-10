@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, pkg-config
-, dtkcommon
-, qtbase
-, qtx11extras
-, mtdev
-, cairo
-, xorg
-, wayland
-, dwayland
-, qtwayland
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  dtkcommon,
+  qtbase,
+  qtx11extras,
+  mtdev,
+  cairo,
+  xorg,
+  wayland,
+  dwayland,
+  qtwayland,
 }:
 
 stdenv.mkDerivation rec {

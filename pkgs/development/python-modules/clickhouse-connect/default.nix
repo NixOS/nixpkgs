@@ -50,10 +50,13 @@ buildPythonPackage rec {
     lz4
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-    pytest-dotenv
-  ] ++ passthru.optional-dependencies.sqlalchemy ++ passthru.optional-dependencies.numpy;
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+      pytest-dotenv
+    ]
+    ++ passthru.optional-dependencies.sqlalchemy
+    ++ passthru.optional-dependencies.numpy;
 
   # these tests require a running clickhouse instance
   disabledTestPaths = [

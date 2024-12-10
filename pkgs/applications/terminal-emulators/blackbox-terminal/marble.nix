@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, vala
-, gobject-introspection
-, gtk4
-, gtk3
-, desktop-file-utils
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gobject-introspection,
+  gtk4,
+  gtk3,
+  desktop-file-utils,
 }:
 
 stdenv.mkDerivation {

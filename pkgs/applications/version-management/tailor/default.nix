@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchurl
+{
+  lib,
+  python3,
+  fetchurl,
 }:
 
 python3.pkgs.buildPythonApplication rec {

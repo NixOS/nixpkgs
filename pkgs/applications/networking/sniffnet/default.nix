@@ -1,17 +1,18 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libpcap
-, libxkbcommon
-, openssl
-, stdenv
-, alsa-lib
-, expat
-, fontconfig
-, vulkan-loader
-, xorg
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libpcap,
+  libxkbcommon,
+  openssl,
+  stdenv,
+  alsa-lib,
+  expat,
+  fontconfig,
+  vulkan-loader,
+  xorg,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,22 +30,25 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    libpcap
-    openssl
-  ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
-    expat
-    fontconfig
-    vulkan-loader
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-    rustPlatform.bindgenHook
-  ];
+  buildInputs =
+    [
+      libpcap
+      openssl
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      alsa-lib
+      expat
+      fontconfig
+      vulkan-loader
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXi
+      xorg.libXrandr
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+      rustPlatform.bindgenHook
+    ];
 
   # requires internet access
   checkFlags = [
@@ -63,14 +67,23 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = lib.optionalString stdenv.isLinux ''
     patchelf $out/bin/sniffnet \
-      --add-rpath ${lib.makeLibraryPath [ vulkan-loader xorg.libX11 libxkbcommon ]}
+      --add-rpath ${
+        lib.makeLibraryPath [
+          vulkan-loader
+          xorg.libX11
+          libxkbcommon
+        ]
+      }
   '';
 
   meta = with lib; {
     description = "Cross-platform application to monitor your network traffic with ease";
     homepage = "https://github.com/gyulyvgc/sniffnet";
     changelog = "https://github.com/gyulyvgc/sniffnet/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "sniffnet";
   };

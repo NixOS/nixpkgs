@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, xorg, i3lock }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xorg,
+  i3lock,
+}:
 
 stdenv.mkDerivation {
   pname = "i3lock-fancy-rapid";

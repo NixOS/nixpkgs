@@ -1,6 +1,9 @@
-{ lib, fetchFromGitHub, nix-update-script
-, buildDunePackage
-, core
+{
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
+  buildDunePackage,
+  core,
 }:
 
 buildDunePackage rec {

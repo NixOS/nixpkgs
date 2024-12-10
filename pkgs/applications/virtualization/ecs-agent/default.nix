@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "amazon-ecs-agent";
@@ -17,7 +21,10 @@ buildGoModule rec {
 
   excludedPackages = [ "./version/gen" ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "The agent that runs on AWS EC2 container instances and starts containers on behalf of Amazon ECS";
@@ -29,4 +36,3 @@ buildGoModule rec {
     mainProgram = "agent";
   };
 }
-

@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, validatePkgConfig
-, urdfdom-headers, console-bridge, tinyxml }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  validatePkgConfig,
+  urdfdom-headers,
+  console-bridge,
+  tinyxml,
+}:
 
 stdenv.mkDerivation rec {
   pname = "urdfdom";
@@ -20,8 +30,16 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config validatePkgConfig ];
-  propagatedBuildInputs = [ urdfdom-headers console-bridge tinyxml ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    validatePkgConfig
+  ];
+  propagatedBuildInputs = [
+    urdfdom-headers
+    console-bridge
+    tinyxml
+  ];
 
   meta = with lib; {
     description = "Provides core data structures and a simple XML parser for populating the class data structures from an URDF file";

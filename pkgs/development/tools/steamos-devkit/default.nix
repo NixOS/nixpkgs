@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, fetchFromGitLab
-, writeScript
-, python3
-, copyDesktopItems
-, makeDesktopItem
-, pkg-config
-, SDL2
+{
+  lib,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  writeScript,
+  python3,
+  copyDesktopItems,
+  makeDesktopItem,
+  pkg-config,
+  SDL2,
 }:
 let
   # steamos-devkit requires a build of the unreleased pyimgui 2.0 branch, move to pythonPackages when 2.0 is released.

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, makeWrapper
-, alsa-lib
-, curl
-, libao
-, libpulseaudio
-, libzip
-, lua
-, miniupnpc
-, SDL2
-, vulkan-loader
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  makeWrapper,
+  alsa-lib,
+  curl,
+  libao,
+  libpulseaudio,
+  libzip,
+  lua,
+  miniupnpc,
+  SDL2,
+  vulkan-loader,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,12 +1,13 @@
-{ lib
-, fetchurl
-, fetchpatch
-, stdenv
-, zlib
-, openssl
-, libuuid
-, pkg-config
-, bzip2
+{
+  lib,
+  fetchurl,
+  fetchpatch,
+  stdenv,
+  zlib,
+  openssl,
+  libuuid,
+  pkg-config,
+  bzip2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,8 +20,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ zlib openssl libuuid ]
-    ++ lib.optionals stdenv.isDarwin [ bzip2 ];
+  buildInputs = [
+    zlib
+    openssl
+    libuuid
+  ] ++ lib.optionals stdenv.isDarwin [ bzip2 ];
 
   meta = {
     description = "Legacy library for support of the Expert Witness Compression Format";

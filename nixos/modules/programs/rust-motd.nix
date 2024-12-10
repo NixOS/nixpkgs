@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.rust-motd;
@@ -6,21 +11,26 @@ let
 
   # Order the sections in the TOML according to the order of sections
   # in `cfg.order`.
-  motdConf = pkgs.runCommand "motd.conf"
-    {
-      __structuredAttrs = true;
-      inherit (cfg) order settings;
-      nativeBuildInputs = [ pkgs.remarshal pkgs.jq ];
-    }
-    ''
-      cat "$NIX_ATTRS_JSON_FILE" \
-        | jq '.settings as $settings
-              | .order
-              | map({ key: ., value: $settings."\(.)" })
-              | from_entries' -r \
-        | json2toml /dev/stdin "$out"
-    '';
-in {
+  motdConf =
+    pkgs.runCommand "motd.conf"
+      {
+        __structuredAttrs = true;
+        inherit (cfg) order settings;
+        nativeBuildInputs = [
+          pkgs.remarshal
+          pkgs.jq
+        ];
+      }
+      ''
+        cat "$NIX_ATTRS_JSON_FILE" \
+          | jq '.settings as $settings
+                | .order
+                | map({ key: ., value: $settings."\(.)" })
+                | from_entries' -r \
+          | json2toml /dev/stdin "$out"
+      '';
+in
+{
   options.programs.rust-motd = {
     enable = lib.mkEnableOption "rust-motd, a Message Of The Day (MOTD) generator";
     enableMotdInSSHD = lib.mkOption {
@@ -88,12 +98,14 @@ in {
   };
   config = lib.mkIf cfg.enable {
     assertions = [
-      { assertion = config.users.motd == null;
+      {
+        assertion = config.users.motd == null;
         message = ''
           `programs.rust-motd` is incompatible with `users.motd`!
         '';
       }
-      { assertion = builtins.sort (a: b: a < b) cfg.order == builtins.attrNames cfg.settings;
+      {
+        assertion = builtins.sort (a: b: a < b) cfg.order == builtins.attrNames cfg.settings;
         message = ''
           Please ensure that every section from `programs.rust-motd.settings` is present in
           `programs.rust-motd.order`.
@@ -102,7 +114,9 @@ in {
     ];
     systemd.services.rust-motd = {
       path = with pkgs; [ bash ];
-      documentation = [ "https://github.com/rust-motd/rust-motd/blob/v${pkgs.rust-motd.version}/README.md" ];
+      documentation = [
+        "https://github.com/rust-motd/rust-motd/blob/v${pkgs.rust-motd.version}/README.md"
+      ];
       description = "motd generator";
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
@@ -136,12 +150,18 @@ in {
       wantedBy = [ "timers.target" ];
       timerConfig.OnCalendar = cfg.refreshInterval;
     };
-    security.pam.services.sshd.text = lib.mkIf cfg.enableMotdInSSHD (lib.mkDefault (lib.mkAfter ''
-      session optional ${pkgs.pam}/lib/security/pam_motd.so motd=/var/lib/rust-motd/motd
-    ''));
-    services.openssh.extraConfig = lib.mkIf (cfg.settings ? last_login && cfg.settings.last_login != {}) ''
-      PrintLastLog no
-    '';
+    security.pam.services.sshd.text = lib.mkIf cfg.enableMotdInSSHD (
+      lib.mkDefault (
+        lib.mkAfter ''
+          session optional ${pkgs.pam}/lib/security/pam_motd.so motd=/var/lib/rust-motd/motd
+        ''
+      )
+    );
+    services.openssh.extraConfig =
+      lib.mkIf (cfg.settings ? last_login && cfg.settings.last_login != { })
+        ''
+          PrintLastLog no
+        '';
   };
   meta.maintainers = with lib.maintainers; [ ma27 ];
 }

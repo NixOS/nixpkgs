@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, calibre
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  calibre,
 }:
 
 rustPlatform.buildRustPackage rec {

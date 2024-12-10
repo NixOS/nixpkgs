@@ -51,11 +51,14 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    aioresponses
-    pytest-asyncio
-    pytestCheckHook
-  ] ++ passthru.optional-dependencies.async ++ passthru.optional-dependencies.encrypted;
+  nativeCheckInputs =
+    [
+      aioresponses
+      pytest-asyncio
+      pytestCheckHook
+    ]
+    ++ passthru.optional-dependencies.async
+    ++ passthru.optional-dependencies.encrypted;
 
   pythonImportsCheck = [ "samsungtvws" ];
 

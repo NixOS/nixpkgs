@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, postgresqlTestHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  postgresqlTestHook,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pg_roaringbitmap";

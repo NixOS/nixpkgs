@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, buildGoModule
-, go
-, glib
-, pkg-config
-, cairo
-, gtk3
-, xcur2png
-, libX11
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  buildGoModule,
+  go,
+  glib,
+  pkg-config,
+  cairo,
+  gtk3,
+  xcur2png,
+  libX11,
+  zlib,
 }:
 
 buildGoModule rec {
@@ -34,7 +35,10 @@ buildGoModule rec {
     substituteInPlace main.go tools.go --replace '@out@' $out
   '';
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = [
     pkg-config

@@ -1,4 +1,9 @@
-{ reason, console, pastel, ... }:
+{
+  reason,
+  console,
+  pastel,
+  ...
+}:
 
 {
   pname = "pastel-console";

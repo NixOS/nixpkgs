@@ -1,6 +1,10 @@
 { version, hash }:
 
-{ lib, stdenvNoCC, fetchurl }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "jetty";
@@ -24,7 +28,13 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://eclipse.dev/jetty/";
     platforms = platforms.all;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = with licenses; [ asl20 epl10 ];
-    maintainers = with maintainers; [ emmanuelrosa anthonyroussel ];
+    license = with licenses; [
+      asl20
+      epl10
+    ];
+    maintainers = with maintainers; [
+      emmanuelrosa
+      anthonyroussel
+    ];
   };
 }

@@ -1,4 +1,6 @@
-{ pkgs ? import ../../../.. {} }:
+{
+  pkgs ? import ../../../.. { },
+}:
 pkgs.mkShell {
   nativeBuildInputs = [
     pkgs.nodePackages.node2nix

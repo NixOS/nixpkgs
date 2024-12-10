@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, gmp, libffi, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  gmp,
+  libffi,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "polyml";
@@ -18,7 +26,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ libffi gmp ];
+  buildInputs = [
+    libffi
+    gmp
+  ];
 
   nativeBuildInputs = lib.optional stdenv.isDarwin autoreconfHook;
 

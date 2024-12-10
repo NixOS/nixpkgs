@@ -1,8 +1,19 @@
-{ stdenv, fetchFromGitHub, lib
-, cmake, pkg-config, openjdk
-, libuuid, python3
-, silice, yosys, nextpnr, verilator
-, dfu-util, icestorm, trellis
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  cmake,
+  pkg-config,
+  openjdk,
+  libuuid,
+  python3,
+  silice,
+  yosys,
+  nextpnr,
+  verilator,
+  dfu-util,
+  icestorm,
+  trellis,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,33 +54,36 @@ stdenv.mkDerivation rec {
 
   passthru.tests =
     let
-      testProject = project: stdenv.mkDerivation {
-        name = "${silice.name}-test-${project}";
-        nativeBuildInputs = [
-          silice
-          yosys
-          nextpnr
-          verilator
-          dfu-util
-          icestorm
-          trellis
-        ];
-        src = "${src}/projects";
-        sourceRoot = "projects/${project}";
-        buildPhase = ''
-          targets=$(cut -d " " -f 2 configs | tr -d '\r')
-          for target in $targets ; do
-            make $target ARGS="--no_program"
-          done
-        '';
-        installPhase = ''
-          mkdir $out
-          for target in $targets ; do
-            cp -r BUILD_$target $out/
-          done
-        '';
-      };
-    in {
+      testProject =
+        project:
+        stdenv.mkDerivation {
+          name = "${silice.name}-test-${project}";
+          nativeBuildInputs = [
+            silice
+            yosys
+            nextpnr
+            verilator
+            dfu-util
+            icestorm
+            trellis
+          ];
+          src = "${src}/projects";
+          sourceRoot = "projects/${project}";
+          buildPhase = ''
+            targets=$(cut -d " " -f 2 configs | tr -d '\r')
+            for target in $targets ; do
+              make $target ARGS="--no_program"
+            done
+          '';
+          installPhase = ''
+            mkdir $out
+            for target in $targets ; do
+              cp -r BUILD_$target $out/
+            done
+          '';
+        };
+    in
+    {
       # a selection of test projects that build with the FPGA tools in
       # nixpkgs
       audio_sdcard_streamer = testProject "audio_sdcard_streamer";

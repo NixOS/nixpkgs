@@ -1,10 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, numactl, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  numactl,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libpsm2";
   version = "12.0.1";
 
-  preConfigure= ''
+  preConfigure = ''
     export UDEVDIR=$out/etc/udev
     substituteInPlace ./Makefile --replace "udevrulesdir}" "prefix}/etc/udev";
   '';
@@ -41,7 +47,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/intel/opa-psm2";
     description = "The PSM2 library supports a number of fabric media and stacks";
-    license = with licenses; [ gpl2 bsd3 ];
+    license = with licenses; [
+      gpl2
+      bsd3
+    ];
     platforms = [ "x86_64-linux" ];
     maintainers = [ maintainers.bzizou ];
   };

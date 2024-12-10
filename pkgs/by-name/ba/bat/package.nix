@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, less
-, libiconv
-, installShellFiles
-, makeWrapper
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  less,
+  libiconv,
+  installShellFiles,
+  makeWrapper,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,9 +23,16 @@ rustPlatform.buildRustPackage rec {
   };
   cargoHash = "sha256-b7wNWdKQ4QLeCf7bNZRfzT9hD/D/oDglU7Xyb65IrGY=";
 
-  nativeBuildInputs = [ pkg-config installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+    makeWrapper
+  ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ libiconv darwin.apple_sdk.frameworks.Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    libiconv
+    darwin.apple_sdk.frameworks.Security
+  ];
 
   postInstall = ''
     installManPage $releaseDir/build/bat-*/out/assets/manual/bat.1
@@ -73,8 +81,16 @@ rustPlatform.buildRustPackage rec {
     description = "A cat(1) clone with syntax highlighting and Git integration";
     homepage = "https://github.com/sharkdp/bat";
     changelog = "https://github.com/sharkdp/bat/raw/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     mainProgram = "bat";
-    maintainers = with maintainers; [ dywedir lilyball zowoq SuperSandro2000 ];
+    maintainers = with maintainers; [
+      dywedir
+      lilyball
+      zowoq
+      SuperSandro2000
+    ];
   };
 }

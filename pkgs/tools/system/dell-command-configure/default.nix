@@ -69,11 +69,15 @@ let
     '';
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   inherit version;
   pname = "dell-command-configure";
 
-  buildInputs = [ openssl stdenv.cc.cc.lib ];
+  buildInputs = [
+    openssl
+    stdenv.cc.cc.lib
+  ];
   nativeBuildInputs = [ autoPatchelfHook ];
   dontConfigure = true;
 
@@ -102,8 +106,7 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Configure BIOS settings on Dell laptops";
-    homepage =
-      "https://www.dell.com/support/article/us/en/19/sln311302/dell-command-configure";
+    homepage = "https://www.dell.com/support/article/us/en/19/sln311302/dell-command-configure";
     license = licenses.unfree;
     maintainers = with maintainers; [ ryangibb ];
     platforms = [ "x86_64-linux" ];

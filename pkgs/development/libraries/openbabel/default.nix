@@ -1,4 +1,19 @@
-{ stdenv, lib, fetchFromGitHub, cmake, perl, zlib, libxml2, eigen, python, cairo, pcre, pkg-config, swig, rapidjson }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  perl,
+  zlib,
+  libxml2,
+  eigen,
+  python,
+  cairo,
+  pcre,
+  pkg-config,
+  swig,
+  rapidjson,
+}:
 
 stdenv.mkDerivation rec {
   pname = "openbabel";
@@ -15,9 +30,22 @@ stdenv.mkDerivation rec {
     sed '1i#include <ctime>' -i include/openbabel/obutil.h # gcc12
   '';
 
-  buildInputs = [ perl zlib libxml2 eigen python cairo pcre swig rapidjson ];
+  buildInputs = [
+    perl
+    zlib
+    libxml2
+    eigen
+    python
+    cairo
+    pcre
+    swig
+    rapidjson
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   pythonMajorMinor = "${python.sourceVersion.major}.${python.sourceVersion.minor}";
 

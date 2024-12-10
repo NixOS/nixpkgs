@@ -1,16 +1,17 @@
-{ buildDunePackage
-, happy-eyeballs
-, duration
-, dns-client-mirage
-, domain-name
-, ipaddr
-, fmt
-, logs
-, lwt
-, mirage-clock
-, mirage-random
-, mirage-time
-, tcpip
+{
+  buildDunePackage,
+  happy-eyeballs,
+  duration,
+  dns-client-mirage,
+  domain-name,
+  ipaddr,
+  fmt,
+  logs,
+  lwt,
+  mirage-clock,
+  mirage-random,
+  mirage-time,
+  tcpip,
 }:
 
 buildDunePackage {

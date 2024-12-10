@@ -1,9 +1,10 @@
-{ bctoolbox
-, cmake
-, fetchFromGitLab
-, sqlite
-, lib
-, stdenv
+{
+  bctoolbox,
+  cmake,
+  fetchFromGitLab,
+  sqlite,
+  lib,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +20,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-sLvvQhJ9uVt/dx57xs9ftY/ETi46xmyGDH8372zpqj8=";
   };
 
-  buildInputs = [ bctoolbox sqlite ];
+  buildInputs = [
+    bctoolbox
+    sqlite
+  ];
   nativeBuildInputs = [ cmake ];
 
   # Do not build static libraries

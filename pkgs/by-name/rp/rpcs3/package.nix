@@ -1,33 +1,34 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, git
-, qt6Packages
-, openal
-, glew
-, vulkan-headers
-, vulkan-loader
-, libpng
-, libSM
-, ffmpeg
-, libevdev
-, libusb1
-, zlib
-, curl
-, wolfssl
-, python3
-, pugixml
-, flatbuffers
-, llvm_16
-, cubeb
-, enableDiscordRpc ? false
-, faudioSupport ? true
-, faudio
-, SDL2
-, waylandSupport ? true
-, wayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  git,
+  qt6Packages,
+  openal,
+  glew,
+  vulkan-headers,
+  vulkan-loader,
+  libpng,
+  libSM,
+  ffmpeg,
+  libevdev,
+  libusb1,
+  zlib,
+  curl,
+  wolfssl,
+  python3,
+  pugixml,
+  flatbuffers,
+  llvm_16,
+  cubeb,
+  enableDiscordRpc ? false,
+  faudioSupport ? true,
+  faudio,
+  SDL2,
+  waylandSupport ? true,
+  wayland,
 }:
 
 let
@@ -37,7 +38,12 @@ let
   rpcs3Revision = "39e946630da8e23c4d2d2b763f63145eb9205e43";
   rpcs3Hash = "sha256-CIPUmcpBc6iRMzZJZ5vKty/Uh4TYiR65xXD4aKRPSKc=";
 
-  inherit (qt6Packages) qtbase qtmultimedia wrapQtAppsHook qtwayland;
+  inherit (qt6Packages)
+    qtbase
+    qtmultimedia
+    wrapQtAppsHook
+    qtwayland
+    ;
 in
 stdenv.mkDerivation {
   pname = "rpcs3";
@@ -81,14 +87,41 @@ stdenv.mkDerivation {
     (lib.cmakeBool "USE_FAUDIO" faudioSupport)
   ];
 
-  nativeBuildInputs = [ cmake pkg-config git wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    git
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [
-    qtbase qtmultimedia openal glew vulkan-headers vulkan-loader libpng ffmpeg
-    libevdev zlib libusb1 curl wolfssl python3 pugixml SDL2 flatbuffers llvm_16 libSM
-  ] ++ cubeb.passthru.backendLibs
+  buildInputs =
+    [
+      qtbase
+      qtmultimedia
+      openal
+      glew
+      vulkan-headers
+      vulkan-loader
+      libpng
+      ffmpeg
+      libevdev
+      zlib
+      libusb1
+      curl
+      wolfssl
+      python3
+      pugixml
+      SDL2
+      flatbuffers
+      llvm_16
+      libSM
+    ]
+    ++ cubeb.passthru.backendLibs
     ++ lib.optional faudioSupport faudio
-    ++ lib.optionals waylandSupport [ wayland qtwayland ];
+    ++ lib.optionals waylandSupport [
+      wayland
+      qtwayland
+    ];
 
   postInstall = ''
     # Taken from https://wiki.rpcs3.net/index.php?title=Help:Controller_Configuration
@@ -100,9 +133,17 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "PS3 emulator/debugger";
     homepage = "https://rpcs3.net/";
-    maintainers = with maintainers; [ abbradar neonfuz ilian zane ];
+    maintainers = with maintainers; [
+      abbradar
+      neonfuz
+      ilian
+      zane
+    ];
     license = licenses.gpl2Only;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "rpcs3";
   };
 }

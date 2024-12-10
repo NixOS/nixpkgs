@@ -1,20 +1,22 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchpatch
-, openssl
-, boost
-, libevent
-, autoreconfHook
-, db4
-, pkg-config
-, protobuf
-, hexdump
-, zeromq
-, gmp
-, withGui
-, qtbase ? null
-, qttools ? null
-, wrapQtAppsHook ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  openssl,
+  boost,
+  libevent,
+  autoreconfHook,
+  db4,
+  pkg-config,
+  protobuf,
+  hexdump,
+  zeromq,
+  gmp,
+  withGui,
+  qtbase ? null,
+  qttools ? null,
+  wrapQtAppsHook ? null,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,35 +46,41 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook
-    pkg-config
-    hexdump
-  ] ++ lib.optionals withGui [
-    wrapQtAppsHook
-  ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      pkg-config
+      hexdump
+    ]
+    ++ lib.optionals withGui [
+      wrapQtAppsHook
+    ];
 
-  buildInputs = [
-    openssl
-    boost
-    libevent
-    db4
-    zeromq
-    gmp
-  ] ++ lib.optionals withGui [
-    qtbase
-    qttools
-    protobuf
-  ];
+  buildInputs =
+    [
+      openssl
+      boost
+      libevent
+      db4
+      zeromq
+      gmp
+    ]
+    ++ lib.optionals withGui [
+      qtbase
+      qttools
+      protobuf
+    ];
 
   enableParallelBuilding = true;
 
-  configureFlags = [
+  configureFlags =
+    [
       "--with-boost-libdir=${boost.out}/lib"
-  ] ++ lib.optionals withGui [
+    ]
+    ++ lib.optionals withGui [
       "--with-gui=qt5"
       "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
-  ];
+    ];
 
   meta = with lib; {
     description = "A digital currency with mining decentralisation and ASIC resistance as a key focus";

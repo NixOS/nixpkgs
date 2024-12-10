@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,7 +11,8 @@ let
 
   cfg = config.services.postgresqlBackup;
 
-  postgresqlBackupService = db: dumpCmd:
+  postgresqlBackupService =
+    db: dumpCmd:
     let
       compressSuffixes = {
         "none" = "";
@@ -26,14 +32,18 @@ let
       prevFile = mkSqlPath ".prev" compressSuffix;
       prevFiles = map (mkSqlPath ".prev") (attrValues compressSuffixes);
       inProgressFile = mkSqlPath ".in-progress" compressSuffix;
-    in {
+    in
+    {
       enable = true;
 
       description = "Backup of ${db} database(s)";
 
       requires = [ "postgresql.service" ];
 
-      path = [ pkgs.coreutils config.services.postgresql.package ];
+      path = [
+        pkgs.coreutils
+        config.services.postgresql.package
+      ];
 
       script = ''
         set -e -o pipefail
@@ -60,12 +70,13 @@ let
       startAt = cfg.startAt;
     };
 
-in {
+in
+{
 
   imports = [
     (mkRemovedOptionModule [ "services" "postgresqlBackup" "period" ] ''
-       A systemd timer is now used instead of cron.
-       The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
+      A systemd timer is now used instead of cron.
+      The starting time can be configured via <literal>services.postgresqlBackup.startAt</literal>.
     '')
   ];
 
@@ -84,7 +95,7 @@ in {
       };
 
       backupAll = mkOption {
-        default = cfg.databases == [];
+        default = cfg.databases == [ ];
         defaultText = literalExpression "services.postgresqlBackup.databases == []";
         type = lib.types.bool;
         description = ''
@@ -97,7 +108,7 @@ in {
       };
 
       databases = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = ''
           List of database names to dump.
@@ -124,7 +135,11 @@ in {
       };
 
       compression = mkOption {
-        type = types.enum ["none" "gzip" "zstd"];
+        type = types.enum [
+          "none"
+          "gzip"
+          "zstd"
+        ];
         default = "gzip";
         description = ''
           The type of compression to use on the generated database dump.
@@ -147,13 +162,14 @@ in {
     {
       assertions = [
         {
-          assertion = cfg.backupAll -> cfg.databases == [];
+          assertion = cfg.backupAll -> cfg.databases == [ ];
           message = "config.services.postgresqlBackup.backupAll cannot be used together with config.services.postgresqlBackup.databases";
         }
         {
-          assertion = cfg.compression == "none" ||
-            (cfg.compression == "gzip" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 9) ||
-            (cfg.compression == "zstd" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 19);
+          assertion =
+            cfg.compression == "none"
+            || (cfg.compression == "gzip" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 9)
+            || (cfg.compression == "zstd" && cfg.compressionLevel >= 1 && cfg.compressionLevel <= 19);
           message = "config.services.postgresqlBackup.compressionLevel must be set between 1 and 9 for gzip and 1 and 19 for zstd";
         }
       ];
@@ -164,17 +180,21 @@ in {
       ];
     })
     (mkIf (cfg.enable && cfg.backupAll) {
-      systemd.services.postgresqlBackup =
-        postgresqlBackupService "all" "pg_dumpall";
+      systemd.services.postgresqlBackup = postgresqlBackupService "all" "pg_dumpall";
     })
     (mkIf (cfg.enable && !cfg.backupAll) {
-      systemd.services = listToAttrs (map (db:
-        let
-          cmd = "pg_dump ${cfg.pgdumpOptions} ${db}";
-        in {
-          name = "postgresqlBackup-${db}";
-          value = postgresqlBackupService db cmd;
-        }) cfg.databases);
+      systemd.services = listToAttrs (
+        map (
+          db:
+          let
+            cmd = "pg_dump ${cfg.pgdumpOptions} ${db}";
+          in
+          {
+            name = "postgresqlBackup-${db}";
+            value = postgresqlBackupService db cmd;
+          }
+        ) cfg.databases
+      );
     })
   ];
 

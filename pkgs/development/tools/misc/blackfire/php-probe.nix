@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, php
-, writeShellScript
-, curl
-, jq
-, common-updater-scripts
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  php,
+  writeShellScript,
+  curl,
+  jq,
+  common-updater-scripts,
 }:
 
 assert lib.assertMsg (!php.ztsSupport) "blackfire only supports non zts versions of PHP";
@@ -59,13 +60,16 @@ let
     };
   };
 
-  makeSource = { system, phpMajor }:
+  makeSource =
+    { system, phpMajor }:
     let
       isLinux = builtins.match ".+-linux" system != null;
     in
     assert !isLinux -> (phpMajor != null);
     fetchurl {
-      url = "https://packages.blackfire.io/binaries/blackfire-php/${version}/blackfire-php-${if isLinux then "linux" else "darwin"}_${hashes.${system}.system}-php-${builtins.replaceStrings [ "." ] [ "" ] phpMajor}.so";
+      url = "https://packages.blackfire.io/binaries/blackfire-php/${version}/blackfire-php-${
+        if isLinux then "linux" else "darwin"
+      }_${hashes.${system}.system}-php-${builtins.replaceStrings [ "." ] [ "" ] phpMajor}.so";
       hash = hashes.${system}.hash.${phpMajor};
     };
 in
@@ -98,7 +102,13 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     updateScript = writeShellScript "update-${finalAttrs.pname}" ''
       set -o errexit
-      export PATH="${lib.makeBinPath [ curl jq common-updater-scripts ]}"
+      export PATH="${
+        lib.makeBinPath [
+          curl
+          jq
+          common-updater-scripts
+        ]
+      }"
       NEW_VERSION=$(curl --silent https://blackfire.io/api/v1/releases | jq .probe.php --raw-output)
 
       if [[ "${version}" = "$NEW_VERSION" ]]; then
@@ -115,39 +125,34 @@ stdenv.mkDerivation (finalAttrs: {
     # All sources for updating by the update script.
     updateables =
       let
-        createName = path:
-          builtins.replaceStrings [ "." ] [ "_" ] (lib.concatStringsSep "_" path);
+        createName = path: builtins.replaceStrings [ "." ] [ "_" ] (lib.concatStringsSep "_" path);
 
-        createSourceParams = path:
+        createSourceParams =
+          path:
           let
             # The path will be either [«system» sha256], or [«system» sha256 «phpMajor» «zts»],
             # Let’s skip the sha256.
             rest = builtins.tail (builtins.tail path);
           in
           {
-            system =
-              builtins.head path;
-            phpMajor =
-              if builtins.length rest == 0
-              then null
-              else builtins.head rest;
+            system = builtins.head path;
+            phpMajor = if builtins.length rest == 0 then null else builtins.head rest;
           };
 
-        createUpdateable = path: _value:
-          lib.nameValuePair
-            (createName path)
-            (finalAttrs.finalPackage.overrideAttrs (attrs: {
+        createUpdateable =
+          path: _value:
+          lib.nameValuePair (createName path) (
+            finalAttrs.finalPackage.overrideAttrs (attrs: {
               src = makeSource (createSourceParams path);
-            }));
+            })
+          );
 
         # Filter out all attributes other than hashes.
         hashesOnly = lib.filterAttrsRecursive (name: _value: name != "system") hashes;
       in
       builtins.listToAttrs
         # Collect all leaf attributes (containing hashes).
-        (lib.collect
-          (attrs: attrs ? name)
-          (lib.mapAttrsRecursive createUpdateable hashesOnly));
+        (lib.collect (attrs: attrs ? name) (lib.mapAttrsRecursive createUpdateable hashesOnly));
   };
 
   meta = {
@@ -155,7 +160,13 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://blackfire.io/";
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ shyim ];
-    platforms = [ "x86_64-linux" "aarch64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "i686-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })

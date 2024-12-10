@@ -1,18 +1,19 @@
-{ lib
-, nix-update-script
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, coreutils
-, bash
-, pkg-config
-, openssl
-, direnv
-, Security
-, SystemConfiguration
-, mise
-, testers
+{
+  lib,
+  nix-update-script,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  coreutils,
+  bash,
+  pkg-config,
+  openssl,
+  direnv,
+  Security,
+  SystemConfiguration,
+  mise,
+  testers,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,8 +35,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-7kcs1vOM68uKjMrRn8jGI6mgXd90TeMUeYWnAGl8sgE=";
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [
+      Security
+      SystemConfiguration
+    ];
 
   postPatch = ''
     patchShebangs --build \

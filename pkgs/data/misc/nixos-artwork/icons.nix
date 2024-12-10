@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, imagemagick
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  imagemagick,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Icons of the Nix logo, in Freedesktop Icon Directory Layout";
     homepage = "https://github.com/NixOS/nixos-artwork";
     license = licenses.cc-by-40;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     platforms = platforms.all;
   };
 })

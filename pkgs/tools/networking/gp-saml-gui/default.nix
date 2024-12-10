@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildPythonPackage
-, webkitgtk
-, wrapGAppsHook3
-, glib-networking
-, gobject-introspection
-, openconnect
-, pygobject3
-, requests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPythonPackage,
+  webkitgtk,
+  wrapGAppsHook3,
+  glib-networking,
+  gobject-introspection,
+  openconnect,
+  pygobject3,
+  requests,
 }:
 buildPythonPackage rec {
   pname = "gp-saml-gui";
@@ -23,7 +24,11 @@ buildPythonPackage rec {
 
   buildInputs = lib.optional stdenv.isLinux glib-networking;
 
-  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection glib-networking ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    gobject-introspection
+    glib-networking
+  ];
 
   propagatedBuildInputs = [
     requests

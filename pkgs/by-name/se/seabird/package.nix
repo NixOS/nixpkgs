@@ -1,15 +1,16 @@
-{ lib
-, buildGo122Module
-, copyDesktopItems
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook4
-, gobject-introspection
-, gtk4
-, gtksourceview5
-, libadwaita
-, libxml2
-, vte-gtk4
+{
+  lib,
+  buildGo122Module,
+  copyDesktopItems,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook4,
+  gobject-introspection,
+  gtk4,
+  gtksourceview5,
+  libadwaita,
+  libxml2,
+  vte-gtk4,
 }:
 
 buildGo122Module rec {
@@ -40,7 +41,10 @@ buildGo122Module rec {
     vte-gtk4
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   postPatch = ''
     substituteInPlace main.go --replace-fail 'version = "dev"' 'version = "${version}"'

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -155,7 +160,6 @@ in
     };
   };
 
-
   ###### implementation
   config = mkIf cfg.enable {
 
@@ -174,12 +178,14 @@ in
 
     users.groups.rabbitmq.gid = config.ids.gids.rabbitmq;
 
-    services.rabbitmq.configItems = {
-      "listeners.tcp.1" = mkDefault "${cfg.listenAddress}:${toString cfg.port}";
-    } // optionalAttrs cfg.managementPlugin.enable {
-      "management.tcp.port" = toString cfg.managementPlugin.port;
-      "management.tcp.ip" = cfg.listenAddress;
-    };
+    services.rabbitmq.configItems =
+      {
+        "listeners.tcp.1" = mkDefault "${cfg.listenAddress}:${toString cfg.port}";
+      }
+      // optionalAttrs cfg.managementPlugin.enable {
+        "management.tcp.port" = toString cfg.managementPlugin.port;
+        "management.tcp.ip" = cfg.listenAddress;
+      };
 
     services.rabbitmq.plugins = optional cfg.managementPlugin.enable "rabbitmq_management";
 
@@ -187,8 +193,14 @@ in
       description = "RabbitMQ Server";
 
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "epmd.socket" ];
-      wants = [ "network.target" "epmd.socket" ];
+      after = [
+        "network.target"
+        "epmd.socket"
+      ];
+      wants = [
+        "network.target"
+        "epmd.socket"
+      ];
 
       path = [
         cfg.package

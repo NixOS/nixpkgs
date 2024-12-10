@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, desktop-file-utils
-, gettext
-, itstool
-, python3
-, wrapGAppsHook3
-, gtk3
-, glib
-, libsoup
-, gnome-online-accounts
-, librest
-, json-glib
-, gnome-autoar
-, gspell
-, libcanberra
-, nix-update-script
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  desktop-file-utils,
+  gettext,
+  itstool,
+  python3,
+  wrapGAppsHook3,
+  gtk3,
+  glib,
+  libsoup,
+  gnome-online-accounts,
+  librest,
+  json-glib,
+  gnome-autoar,
+  gspell,
+  libcanberra,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {

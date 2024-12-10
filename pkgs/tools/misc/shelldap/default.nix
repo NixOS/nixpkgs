@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, perlPackages
-, shortenPerlShebang
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perlPackages,
+  shortenPerlShebang,
 }:
 
 perlPackages.buildPerlPackage rec {
@@ -54,7 +55,10 @@ perlPackages.buildPerlPackage rec {
     description = "A handy shell-like interface for browsing LDAP servers and editing their content";
     changelog = "https://github.com/mahlonsmith/shelldap/blob/v${version}/CHANGELOG";
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ clerie tobiasBora ];
+    maintainers = with maintainers; [
+      clerie
+      tobiasBora
+    ];
     platforms = platforms.unix;
     mainProgram = "shelldap";
   };

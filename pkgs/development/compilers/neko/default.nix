@@ -1,5 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, boehmgc, zlib, sqlite, pcre, cmake, pkg-config
-, git, apacheHttpd, apr, aprutil, libmysqlclient, mbedtls_2, openssl, pkgs, gtk2, libpthreadstubs
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  boehmgc,
+  zlib,
+  sqlite,
+  pcre,
+  cmake,
+  pkg-config,
+  git,
+  apacheHttpd,
+  apr,
+  aprutil,
+  libmysqlclient,
+  mbedtls_2,
+  openssl,
+  pkgs,
+  gtk2,
+  libpthreadstubs,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,13 +40,30 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config git ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    git
+  ];
   buildInputs =
-    [ boehmgc zlib sqlite pcre apacheHttpd apr aprutil
-      libmysqlclient mbedtls_2 openssl libpthreadstubs ]
-      ++ lib.optional stdenv.isLinux gtk2
-      ++ lib.optionals stdenv.isDarwin [ pkgs.darwin.apple_sdk.frameworks.Security
-                                                pkgs.darwin.apple_sdk.frameworks.Carbon];
+    [
+      boehmgc
+      zlib
+      sqlite
+      pcre
+      apacheHttpd
+      apr
+      aprutil
+      libmysqlclient
+      mbedtls_2
+      openssl
+      libpthreadstubs
+    ]
+    ++ lib.optional stdenv.isLinux gtk2
+    ++ lib.optionals stdenv.isDarwin [
+      pkgs.darwin.apple_sdk.frameworks.Security
+      pkgs.darwin.apple_sdk.frameworks.Carbon
+    ];
   cmakeFlags = [ "-DRUN_LDCONFIG=OFF" ];
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
@@ -48,15 +84,18 @@ stdenv.mkDerivation rec {
     homepage = "https://nekovm.org";
     license = [
       # list based on https://github.com/HaxeFoundation/neko/blob/v2-3-0/LICENSE
-      licenses.gpl2Plus    # nekoc, nekoml
-      licenses.lgpl21Plus  # mysql.ndll
-      licenses.bsd3        # regexp.ndll
-      licenses.zlib        # zlib.ndll
-      licenses.asl20       # mod_neko, mod_tora, mbedTLS
-      licenses.mit         # overall, other libs
+      licenses.gpl2Plus # nekoc, nekoml
+      licenses.lgpl21Plus # mysql.ndll
+      licenses.bsd3 # regexp.ndll
+      licenses.zlib # zlib.ndll
+      licenses.asl20 # mod_neko, mod_tora, mbedTLS
+      licenses.mit # overall, other libs
       "https://github.com/HaxeFoundation/neko/blob/v2-3-0/LICENSE#L24-L40" # boehm gc
     ];
-    maintainers = [ maintainers.marcweber maintainers.locallycompact ];
+    maintainers = [
+      maintainers.marcweber
+      maintainers.locallycompact
+    ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

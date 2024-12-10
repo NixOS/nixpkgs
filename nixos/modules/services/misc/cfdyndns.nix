@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -7,9 +12,11 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule
-      [ "services" "cfdyndns" "apikey" ]
-      "Use services.cfdyndns.apikeyFile instead.")
+    (mkRemovedOptionModule [
+      "services"
+      "cfdyndns"
+      "apikey"
+    ] "Use services.cfdyndns.apikeyFile instead.")
   ];
 
   options = {
@@ -42,7 +49,7 @@ in
       };
 
       records = mkOption {
-        default = [];
+        default = [ ];
         example = [ "host.tld" ];
         type = types.listOf types.str;
         description = ''
@@ -60,11 +67,13 @@ in
       startAt = "*:0/5";
       serviceConfig = {
         Type = "simple";
-        LoadCredential = lib.optional (cfg.apiTokenFile != null) "CLOUDFLARE_APITOKEN_FILE:${cfg.apiTokenFile}";
+        LoadCredential = lib.optional (
+          cfg.apiTokenFile != null
+        ) "CLOUDFLARE_APITOKEN_FILE:${cfg.apiTokenFile}";
         DynamicUser = true;
       };
       environment = {
-        CLOUDFLARE_RECORDS="${concatStringsSep "," cfg.records}";
+        CLOUDFLARE_RECORDS = "${concatStringsSep "," cfg.records}";
       };
       script = ''
         ${optionalString (cfg.apikeyFile != null) ''

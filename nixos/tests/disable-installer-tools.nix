@@ -1,17 +1,22 @@
-import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
+import ./make-test-python.nix (
+  {
+    pkgs,
+    latestKernel ? false,
+    ...
+  }:
 
-{
-  name = "disable-installer-tools";
+  {
+    name = "disable-installer-tools";
 
-  nodes.machine =
-    { pkgs, lib, ... }:
-    {
+    nodes.machine =
+      { pkgs, lib, ... }:
+      {
         system.disableInstallerTools = true;
         boot.enableContainers = false;
-        environment.defaultPackages = [];
-    };
+        environment.defaultPackages = [ ];
+      };
 
-  testScript = ''
+    testScript = ''
       machine.wait_for_unit("multi-user.target")
       machine.wait_until_succeeds("pgrep -f 'agetty.*tty1'")
 
@@ -25,5 +30,6 @@ import ./make-test-python.nix ({ pkgs, latestKernel ? false, ... }:
 
       with subtest("perl should not be included"):
           machine.fail("which perl")
-  '';
-})
+    '';
+  }
+)

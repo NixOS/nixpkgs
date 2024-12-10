@@ -1,8 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, gettext, makeWrapper, tcl, which
-, ncurses, perl , cyrus_sasl, gss, gpgme, libkrb5, libidn2, libxml2, notmuch, openssl
-, lua, lmdb, libxslt, docbook_xsl, docbook_xml_dtd_42, w3m, mailcap, sqlite, zlib, lndir
-, pkg-config, zstd, enableZstd ? true, enableMixmaster ? false, enableLua ? false
-, withContrib ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gettext,
+  makeWrapper,
+  tcl,
+  which,
+  ncurses,
+  perl,
+  cyrus_sasl,
+  gss,
+  gpgme,
+  libkrb5,
+  libidn2,
+  libxml2,
+  notmuch,
+  openssl,
+  lua,
+  lmdb,
+  libxslt,
+  docbook_xsl,
+  docbook_xml_dtd_42,
+  w3m,
+  mailcap,
+  sqlite,
+  zlib,
+  lndir,
+  pkg-config,
+  zstd,
+  enableZstd ? true,
+  enableMixmaster ? false,
+  enableLua ? false,
+  withContrib ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,22 +39,41 @@ stdenv.mkDerivation rec {
   pname = "neomutt";
 
   src = fetchFromGitHub {
-    owner  = "neomutt";
-    repo   = "neomutt";
-    rev    = version;
+    owner = "neomutt";
+    repo = "neomutt";
+    rev = version;
     sha256 = "sha256-IXly2N/DD2+XBXVIXJw1sE/0eJwbUaONDNRMi7n1T44=";
   };
 
-  buildInputs = [
-    cyrus_sasl gss gpgme libkrb5 libidn2 ncurses
-    notmuch openssl perl lmdb
-    mailcap sqlite
-  ]
-  ++ lib.optional enableZstd zstd
-  ++ lib.optional enableLua lua;
+  buildInputs =
+    [
+      cyrus_sasl
+      gss
+      gpgme
+      libkrb5
+      libidn2
+      ncurses
+      notmuch
+      openssl
+      perl
+      lmdb
+      mailcap
+      sqlite
+    ]
+    ++ lib.optional enableZstd zstd
+    ++ lib.optional enableLua lua;
 
   nativeBuildInputs = [
-    docbook_xsl docbook_xml_dtd_42 gettext libxml2 libxslt.bin makeWrapper tcl which zlib w3m
+    docbook_xsl
+    docbook_xml_dtd_42
+    gettext
+    libxml2
+    libxslt.bin
+    makeWrapper
+    tcl
+    which
+    zlib
+    w3m
     pkg-config
   ];
 
@@ -49,31 +97,33 @@ stdenv.mkDerivation rec {
       --replace /etc/mime.types ${mailcap}/etc/mime.types
   '';
 
-  configureFlags = [
-    "--enable-autocrypt"
-    "--gpgme"
-    "--gss"
-    "--lmdb"
-    "--notmuch"
-    "--ssl"
-    "--sasl"
-    "--with-homespool=mailbox"
-    "--with-mailpath="
-    # To make it not reference .dev outputs. See:
-    # https://github.com/neomutt/neomutt/pull/2367
-    "--disable-include-path-in-cflags"
-    "--zlib"
-  ]
-  ++ lib.optional enableZstd "--zstd"
-  ++ lib.optional enableLua "--lua"
-  ++ lib.optional enableMixmaster "--mixmaster";
+  configureFlags =
+    [
+      "--enable-autocrypt"
+      "--gpgme"
+      "--gss"
+      "--lmdb"
+      "--notmuch"
+      "--ssl"
+      "--sasl"
+      "--with-homespool=mailbox"
+      "--with-mailpath="
+      # To make it not reference .dev outputs. See:
+      # https://github.com/neomutt/neomutt/pull/2367
+      "--disable-include-path-in-cflags"
+      "--zlib"
+    ]
+    ++ lib.optional enableZstd "--zstd"
+    ++ lib.optional enableLua "--lua"
+    ++ lib.optional enableMixmaster "--mixmaster";
 
-  postInstall = ''
-    wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/libexec/neomutt"
-  ''
-  # https://github.com/neomutt/neomutt-contrib
-  # Contains vim-keys, keybindings presets and more.
-  + lib.optionalString withContrib "${lib.getExe lndir} ${passthru.contrib} $out/share/doc/neomutt";
+  postInstall =
+    ''
+      wrapProgram "$out/bin/neomutt" --prefix PATH : "$out/libexec/neomutt"
+    ''
+    # https://github.com/neomutt/neomutt-contrib
+    # Contains vim-keys, keybindings presets and more.
+    + lib.optionalString withContrib "${lib.getExe lndir} ${passthru.contrib} $out/share/doc/neomutt";
 
   doCheck = true;
 
@@ -106,9 +156,14 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "A small but very powerful text-based mail client";
     mainProgram = "neomutt";
-    homepage    = "http://www.neomutt.org";
-    license     = licenses.gpl2Plus;
-    maintainers = with maintainers; [ erikryb vrthra ma27 raitobezarius ];
-    platforms   = platforms.unix;
+    homepage = "http://www.neomutt.org";
+    license = licenses.gpl2Plus;
+    maintainers = with maintainers; [
+      erikryb
+      vrthra
+      ma27
+      raitobezarius
+    ];
+    platforms = platforms.unix;
   };
 }

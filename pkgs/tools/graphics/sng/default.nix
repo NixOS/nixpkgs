@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, libpng, netpbm }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libpng,
+  netpbm,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sng";

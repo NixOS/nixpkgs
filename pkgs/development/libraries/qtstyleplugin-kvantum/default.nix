@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, qmake
-, qtbase
-, qtsvg
-, qtx11extras ? null
-, kwindowsystem ? null
-, qtwayland
-, libX11
-, libXext
-, qttools
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  qmake,
+  qtbase,
+  qtsvg,
+  qtx11extras ? null,
+  kwindowsystem ? null,
+  qtwayland,
+  libX11,
+  libXext,
+  qttools,
+  wrapQtAppsHook,
+  gitUpdater,
 
-, qt6Kvantum ? null
+  qt6Kvantum ? null,
 }:
 let
   isQt5 = lib.versionOlder qtbase.version "6";
@@ -38,13 +39,15 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtbase
-    qtsvg
-    libX11
-    libXext
-    kwindowsystem
-  ] ++ lib.optionals isQt5 [ qtx11extras ]
+  buildInputs =
+    [
+      qtbase
+      qtsvg
+      libX11
+      libXext
+      kwindowsystem
+    ]
+    ++ lib.optionals isQt5 [ qtx11extras ]
     ++ lib.optionals (!isQt5) [ qtwayland ];
 
   sourceRoot = "${finalAttrs.src.name}/Kvantum";
@@ -83,6 +86,9 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/tsujan/Kvantum";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ romildo Scrumplex ];
+    maintainers = with maintainers; [
+      romildo
+      Scrumplex
+    ];
   };
 })

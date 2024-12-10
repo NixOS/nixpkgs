@@ -1,7 +1,8 @@
-{ callPackage
-, fetchFromGitHub
-, fetchpatch
-, substitute
+{
+  callPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  substitute,
 }:
 
 callPackage ./generic.nix rec {
@@ -19,7 +20,11 @@ callPackage ./generic.nix rec {
   patches = [
     (substitute {
       src = ./disable-git-version.patch;
-      substitutions = [ "--subst-var-by" "version" version ];
+      substitutions = [
+        "--subst-var-by"
+        "version"
+        version
+      ];
     })
     # FIXME: Remove after next release
     (fetchpatch {

@@ -1,13 +1,20 @@
-{ lib, stdenv, cmake, fetchFromGitHub, fetchpatch, fixDarwinDylibNames }:
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+  fixDarwinDylibNames,
+}:
 
 stdenv.mkDerivation rec {
   pname = "btor2tools";
   version = "1.0.0-pre_${src.rev}";
 
   src = fetchFromGitHub {
-    owner  = "boolector";
-    repo   = "btor2tools";
-    rev    = "9831f9909fb283752a3d6d60d43613173bd8af42";
+    owner = "boolector";
+    repo = "btor2tools";
+    rev = "9831f9909fb283752a3d6d60d43613173bd8af42";
     sha256 = "0mfqmkgvyw8fa2c09kww107dmk180ch1hp98r5kv41vnc04iqb0s";
   };
 
@@ -29,7 +36,11 @@ stdenv.mkDerivation rec {
     cp -v  lib/libbtor2parser.* $lib/lib
   '';
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
   cmakeFlags = [
     # RPATH of binary /nix/store/.../bin/btorsim contains a forbidden reference to /build/
@@ -38,9 +49,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A generic parser and tool package for the BTOR2 format";
-    homepage    = "https://github.com/Boolector/btor2tools";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/Boolector/btor2tools";
+    license = licenses.mit;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ thoughtpolice ];
   };
 }

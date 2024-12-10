@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, readline }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  readline,
+}:
 
 stdenv.mkDerivation {
   pname = "picoc";
@@ -15,9 +20,11 @@ stdenv.mkDerivation {
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.isDarwin [
-    "-Wno-error=implicit-function-declaration"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.isDarwin [
+      "-Wno-error=implicit-function-declaration"
+    ]
+  );
 
   enableParallelBuilding = true;
 

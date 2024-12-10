@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, installShellFiles
-, libiconv
-, libmpdclient
-, meson
-, ninja
-, pkg-config
-, sphinx
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  libiconv,
+  libmpdclient,
+  meson,
+  ninja,
+  pkg-config,
+  sphinx,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,8 +33,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libmpdclient
-  ]
-  ++ lib.optionals stdenv.isDarwin [ libiconv ];
+  ] ++ lib.optionals stdenv.isDarwin [ libiconv ];
 
   nativeBuildInputs = [
     installShellFiles

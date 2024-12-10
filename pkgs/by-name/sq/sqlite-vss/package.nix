@@ -1,12 +1,13 @@
-{ lib
-, cmake
-, faiss
-, fetchFromGitHub
-, gomp
-, llvmPackages
-, nlohmann_json
-, sqlite
-, stdenv
+{
+  lib,
+  cmake,
+  faiss,
+  fetchFromGitHub,
+  gomp,
+  llvmPackages,
+  nlohmann_json,
+  sqlite,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,7 +25,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ nlohmann_json faiss sqlite ]
+  buildInputs =
+    [
+      nlohmann_json
+      faiss
+      sqlite
+    ]
     ++ lib.optional stdenv.isLinux gomp
     ++ lib.optional stdenv.isDarwin llvmPackages.openmp;
 
@@ -42,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib;{
+  meta = with lib; {
     description = "SQLite extension for efficient vector search based on Faiss";
     homepage = "https://github.com/asg017/sqlite-vss";
     changelog = "https://github.com/asg017/sqlite-vss/releases/tag/v${finalAttrs.version}";

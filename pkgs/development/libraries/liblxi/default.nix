@@ -1,6 +1,15 @@
-{ lib, stdenv, fetchFromGitHub
-, meson, ninja, pkg-config, cmake
-, libtirpc, rpcsvc-proto, avahi, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  cmake,
+  libtirpc,
+  rpcsvc-proto,
+  avahi,
+  libxml2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,14 +30,22 @@ stdenv.mkDerivation (finalAttrs: {
         -i src/bonjour.c
   '';
 
-  nativeBuildInputs = [ meson ninja cmake pkg-config rpcsvc-proto ];
-
-  buildInputs = lib.optionals (!stdenv.isDarwin) [
-    libtirpc
-    avahi
-  ] ++ [
-    libxml2
+  nativeBuildInputs = [
+    meson
+    ninja
+    cmake
+    pkg-config
+    rpcsvc-proto
   ];
+
+  buildInputs =
+    lib.optionals (!stdenv.isDarwin) [
+      libtirpc
+      avahi
+    ]
+    ++ [
+      libxml2
+    ];
 
   meta = with lib; {
     description = "Library for communicating with LXI compatible instruments";

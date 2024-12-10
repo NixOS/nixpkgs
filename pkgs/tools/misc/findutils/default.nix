@@ -1,5 +1,8 @@
-{ lib, stdenv, fetchurl
-, coreutils
+{
+  lib,
+  stdenv,
+  fetchurl,
+  coreutils,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -25,13 +28,17 @@ stdenv.mkDerivation rec {
   buildInputs = [ coreutils ]; # bin/updatedb script needs to call sort
 
   # Since glibc-2.25 the i686 tests hang reliably right after test-sleep.
-  doCheck
-    =  !stdenv.hostPlatform.isDarwin
+  doCheck =
+    !stdenv.hostPlatform.isDarwin
     && !(stdenv.hostPlatform.libc == "glibc" && stdenv.hostPlatform.isi686)
     && (stdenv.hostPlatform.libc != "musl")
     && stdenv.hostPlatform == stdenv.buildPlatform;
 
-  outputs = [ "out" "info" "locate"];
+  outputs = [
+    "out"
+    "info"
+    "locate"
+  ];
 
   configureFlags = [
     # "sort" need not be on the PATH as a run-time dep, so we need to tell

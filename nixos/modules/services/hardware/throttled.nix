@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.throttled;
-in {
+in
+{
   options = {
     services.throttled = {
       enable = mkEnableOption "fix for Intel CPU throttling";
@@ -23,9 +29,10 @@ in {
     systemd.services.throttled.wantedBy = [ "multi-user.target" ];
 
     environment.etc."throttled.conf".source =
-      if cfg.extraConfig != ""
-      then pkgs.writeText "throttled.conf" cfg.extraConfig
-      else "${pkgs.throttled}/etc/throttled.conf";
+      if cfg.extraConfig != "" then
+        pkgs.writeText "throttled.conf" cfg.extraConfig
+      else
+        "${pkgs.throttled}/etc/throttled.conf";
 
     hardware.cpu.x86.msr.enable = true;
     # Kernel 5.9 spams warnings whenever userspace writes to CPU MSRs.

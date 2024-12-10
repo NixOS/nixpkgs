@@ -1,4 +1,8 @@
-{ stdenv, lib, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+}:
 
 let
   games = {
@@ -24,34 +28,41 @@ let
     };
   };
 
-  toDrv = title: data: stdenv.mkDerivation rec {
-    inherit (data) id version description sha256;
-    inherit title;
+  toDrv =
+    title: data:
+    stdenv.mkDerivation rec {
+      inherit (data)
+        id
+        version
+        description
+        sha256
+        ;
+      inherit title;
 
-    pname = "yquake2-${title}";
+      pname = "yquake2-${title}";
 
-    src = fetchFromGitHub {
-      inherit sha256;
-      owner = "yquake2";
-      repo = data.id;
-      rev = "${lib.toUpper id}_${builtins.replaceStrings ["."] ["_"] version}";
+      src = fetchFromGitHub {
+        inherit sha256;
+        owner = "yquake2";
+        repo = data.id;
+        rev = "${lib.toUpper id}_${builtins.replaceStrings [ "." ] [ "_" ] version}";
+      };
+
+      installPhase = ''
+        runHook preInstall
+        mkdir -p $out/lib/yquake2/${id}
+        cp release/* $out/lib/yquake2/${id}
+        runHook postInstall
+      '';
+
+      meta = with lib; {
+        inherit (data) description;
+        homepage = "https://www.yamagi.org/quake2/";
+        license = licenses.unfree;
+        platforms = platforms.unix;
+        maintainers = with maintainers; [ tadfisher ];
+      };
     };
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out/lib/yquake2/${id}
-      cp release/* $out/lib/yquake2/${id}
-      runHook postInstall
-    '';
-
-    meta = with lib; {
-      inherit (data) description;
-      homepage = "https://www.yamagi.org/quake2/";
-      license = licenses.unfree;
-      platforms = platforms.unix;
-      maintainers = with maintainers; [ tadfisher ];
-    };
-  };
 
 in
-  lib.mapAttrs toDrv games
+lib.mapAttrs toDrv games

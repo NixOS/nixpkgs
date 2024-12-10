@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, dotnetCorePackages
-, dotnet-runtime_8
-, buildDotnetModule
-, fetchFromGitHub
-, fontconfig
-, xorg
-, libglvnd
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  dotnetCorePackages,
+  dotnet-runtime_8,
+  buildDotnetModule,
+  fetchFromGitHub,
+  fontconfig,
+  xorg,
+  libglvnd,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 buildDotnetModule rec {
@@ -34,7 +35,10 @@ buildDotnetModule rec {
     copyDesktopItems
   ];
 
-  buildInputs = [ stdenv.cc.cc.lib fontconfig ];
+  buildInputs = [
+    stdenv.cc.cc.lib
+    fontconfig
+  ];
 
   postInstall = ''
     rm -rf $out/lib/${lib.toLower pname}/runtimes/{*musl*,win*}

@@ -1,15 +1,16 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, libpng
-, libX11
-, libXi
-, libXtst
-, zlib
-, electron
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  libpng,
+  libX11,
+  libXi,
+  libXtst,
+  zlib,
+  electron,
 }:
 
 buildNpmPackage rec {
@@ -82,7 +83,13 @@ buildNpmPackage rec {
       icon = "jitsi-meet-electron";
       desktopName = "Jitsi Meet";
       comment = meta.description;
-      categories = [ "VideoConference" "AudioVideo" "Audio" "Video" "Network" ];
+      categories = [
+        "VideoConference"
+        "AudioVideo"
+        "Audio"
+        "Video"
+        "Network"
+      ];
       mimeTypes = [ "x-scheme-handler/jitsi-meet" ];
       terminal = false;
     })

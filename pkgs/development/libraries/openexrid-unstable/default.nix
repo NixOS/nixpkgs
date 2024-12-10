@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, re2, openfx, zlib, ilmbase, libGLU, libGL, openexr }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  re2,
+  openfx,
+  zlib,
+  ilmbase,
+  libGLU,
+  libGL,
+  openexr,
+}:
 
 stdenv.mkDerivation {
   pname = "openexrid-unstable";
@@ -11,7 +22,11 @@ stdenv.mkDerivation {
     sha256 = "0h4b74lv59p4hhrvrqdmlnchn2i0v5id4kl8xc7j26l9884q0383";
   };
 
-  outputs = [ "dev" "out" "lib" ];
+  outputs = [
+    "dev"
+    "out"
+    "lib"
+  ];
 
   patches = [ ./openexrid.patch ];
 
@@ -20,28 +35,37 @@ stdenv.mkDerivation {
         --replace g++ c++
   '';
 
-  env.NIX_CFLAGS_COMPILE = ''-I${ilmbase.dev}/include/OpenEXR
-                       -I${openexr.dev}/include/OpenEXR
-                       -I${openfx.dev}/include/OpenFX
-                      '';
+  env.NIX_CFLAGS_COMPILE = ''
+    -I${ilmbase.dev}/include/OpenEXR
+                           -I${openexr.dev}/include/OpenEXR
+                           -I${openfx.dev}/include/OpenFX
+  '';
 
-  buildInputs = [ re2 openfx zlib ilmbase libGLU libGL openexr ];
+  buildInputs = [
+    re2
+    openfx
+    zlib
+    ilmbase
+    libGLU
+    libGL
+    openexr
+  ];
 
   enableParallelBuilding = true;
 
   buildPhase = ''
-      mkdir openexrid/release
+    mkdir openexrid/release
 
-      PREFIX=$out make -C openexrid install
+    PREFIX=$out make -C openexrid install
 
-      mkdir $dev;
-      mkdir $lib;
+    mkdir $dev;
+    mkdir $lib;
   '';
 
   installPhase = ''
-      find $out
-      mv $out/include $dev/
-      mv $out/lib $lib/
+    find $out
+    mv $out/include $dev/
+    mv $out/lib $lib/
   '';
 
   meta = with lib; {

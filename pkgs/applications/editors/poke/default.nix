@@ -1,17 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, help2man
-, pkg-config
-, texinfo
-, boehmgc
-, readline
-, nbdSupport ? !stdenv.isDarwin, libnbd
-, textStylingSupport ? true, gettext
-, dejagnu
+{
+  lib,
+  stdenv,
+  fetchurl,
+  help2man,
+  pkg-config,
+  texinfo,
+  boehmgc,
+  readline,
+  nbdSupport ? !stdenv.isDarwin,
+  libnbd,
+  textStylingSupport ? true,
+  gettext,
+  dejagnu,
 
   # update script only
-, writeScript
+  writeScript,
 }:
 
 let
@@ -26,7 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ArqyLLH6YVOhtqknyLs81Y1QhUPBRIQqbX7nTxmXOnc=";
   };
 
-  outputs = [ "out" "dev" "info" "lib" ]
+  outputs =
+    [
+      "out"
+      "dev"
+      "info"
+      "lib"
+    ]
     # help2man can't cross compile because it runs `poke --help` to
     # generate the man page
     ++ lib.optional (!isCross) "man";
@@ -37,14 +46,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    pkg-config
-    texinfo
-  ] ++ lib.optionals (!isCross) [
-    help2man
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      texinfo
+    ]
+    ++ lib.optionals (!isCross) [
+      help2man
+    ];
 
-  buildInputs = [ boehmgc readline ]
+  buildInputs =
+    [
+      boehmgc
+      readline
+    ]
     ++ lib.optional nbdSupport libnbd
     ++ lib.optional textStylingSupport gettext
     ++ lib.optional finalAttrs.finalPackage.doCheck dejagnu;
@@ -84,7 +99,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "http://www.jemarch.net/poke";
     changelog = "https://git.savannah.gnu.org/cgit/poke.git/plain/ChangeLog?h=releases/poke-${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ AndersonTorres kira-bruneau ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      kira-bruneau
+    ];
     platforms = lib.platforms.unix;
     broken = stdenv.isDarwin && stdenv.isAarch64;
   };

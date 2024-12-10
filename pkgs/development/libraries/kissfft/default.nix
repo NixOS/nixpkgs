@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fftw
-, fftwFloat
-, python3
-, datatype ? "double"
-, withTools ? false
-, libpng
-, enableStatic ? stdenv.hostPlatform.isStatic
-, enableOpenmp ? false
-, llvmPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fftw,
+  fftwFloat,
+  python3,
+  datatype ? "double",
+  withTools ? false,
+  libpng,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  enableOpenmp ? false,
+  llvmPackages,
 }:
 let
   py = python3.withPackages (ps: with ps; [ numpy ]);
@@ -31,17 +32,20 @@ stdenv.mkDerivation rec {
   ];
 
   # https://bugs.llvm.org/show_bug.cgi?id=45034
-  postPatch = lib.optionalString (stdenv.hostPlatform.isLinux && stdenv.cc.isClang && lib.versionOlder stdenv.cc.version "10") ''
-    substituteInPlace test/Makefile \
-      --replace "-ffast-math" ""
-  ''
-  + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
-    substituteInPlace test/Makefile \
-      --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
-    # Don't know how to make math.h's double long constants available
-    substituteInPlace test/testcpp.cc \
-      --replace "M_PIl" "M_PI"
-  '';
+  postPatch =
+    lib.optionalString
+      (stdenv.hostPlatform.isLinux && stdenv.cc.isClang && lib.versionOlder stdenv.cc.version "10")
+      ''
+        substituteInPlace test/Makefile \
+          --replace "-ffast-math" ""
+      ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin) ''
+      substituteInPlace test/Makefile \
+        --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
+      # Don't know how to make math.h's double long constants available
+      substituteInPlace test/testcpp.cc \
+        --replace "M_PIl" "M_PI"
+    '';
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -51,7 +55,8 @@ stdenv.mkDerivation rec {
     "KISSFFT_OPENMP=${option enableOpenmp}"
   ];
 
-  buildInputs = lib.optionals (withTools && datatype != "simd") [ libpng ]
+  buildInputs =
+    lib.optionals (withTools && datatype != "simd") [ libpng ]
     # TODO: This may mismatch the LLVM version in the stdenv, see #79818.
     ++ lib.optional (enableOpenmp && stdenv.cc.isClang) llvmPackages.openmp;
 

@@ -1,19 +1,21 @@
-{ lib, stdenv
-, fetchurl
-, python3
-, pkg-config
-, readline
-, tdb
-, talloc
-, tevent
-, popt
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_42
-, cmocka
-, wafHook
-, libxcrypt
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  pkg-config,
+  readline,
+  tdb,
+  talloc,
+  tevent,
+  popt,
+  libxslt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_42,
+  cmocka,
+  wafHook,
+  libxcrypt,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-EFqv9xrYgaf661gv1BauKCIbb94zj/+CgoBlBiwlB6U=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -69,7 +74,11 @@ stdenv.mkDerivation (finalAttrs: {
   # module, which works correctly in all cases.
   PYTHON_CONFIG = "/invalid";
 
-  stripDebugList = [ "bin" "lib" "modules" ];
+  stripDebugList = [
+    "bin"
+    "lib"
+    "modules"
+  ];
 
   passthru.tests.pkg-config = testers.hasPkgConfigModules {
     package = finalAttrs.finalPackage;

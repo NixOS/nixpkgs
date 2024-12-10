@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, stdenv
-, libiconv
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  stdenv,
+  libiconv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,7 +29,13 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Cargo subcommand \"limit\": reduces the noise of compiler messages";
     homepage = "https://github.com/alopatindev/cargo-limit";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ otavio matthiasbeyer ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      otavio
+      matthiasbeyer
+    ];
   };
 }

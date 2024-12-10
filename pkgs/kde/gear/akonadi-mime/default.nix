@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "akonadi-mime";
 
-  extraNativeBuildInputs = [shared-mime-info];
+  extraNativeBuildInputs = [ shared-mime-info ];
 }

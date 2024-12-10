@@ -1,17 +1,18 @@
-{ lib
-, acl
-, attr
-, autoreconfHook
-, bzip2
-, fetchFromGitea
-, libburn
-, libcdio
-, libiconv
-, libisofs
-, pkg-config
-, readline
-, stdenv
-, zlib
+{
+  lib,
+  acl,
+  attr,
+  autoreconfHook,
+  bzip2,
+  fetchFromGitea,
+  libburn,
+  libcdio,
+  libiconv,
+  libisofs,
+  pkg-config,
+  readline,
+  stdenv,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -31,24 +32,32 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    bzip2
-    libcdio
-    libiconv
-    readline
-    zlib
-    libburn
-    libisofs
-  ] ++ lib.optionals stdenv.isLinux [
-    acl
-    attr
-  ];
+  buildInputs =
+    [
+      bzip2
+      libcdio
+      libiconv
+      readline
+      zlib
+      libburn
+      libisofs
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      acl
+      attr
+    ];
 
   propagatedBuildInputs = lib.optionals stdenv.isLinux [
     acl
   ];
 
-  outputs = [ "out" "lib" "dev" "info" "man" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "info"
+    "man"
+  ];
 
   strictDeps = true;
 

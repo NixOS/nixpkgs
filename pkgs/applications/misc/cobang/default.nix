@@ -1,25 +1,26 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, brotlicffi
-, gst-python
-, kiss-headers
-, logbook
-, pillow
-, pygobject3
-, python-zbar
-, requests
-, single-version
-, gobject-introspection
-, gst-plugins-good
-, gtk3
-, libhandy
-, librsvg
-, networkmanager
-, setuptools
-, python
-, pytestCheckHook
-, wrapGAppsHook3
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  brotlicffi,
+  gst-python,
+  kiss-headers,
+  logbook,
+  pillow,
+  pygobject3,
+  python-zbar,
+  requests,
+  single-version,
+  gobject-introspection,
+  gst-plugins-good,
+  gtk3,
+  libhandy,
+  librsvg,
+  networkmanager,
+  setuptools,
+  python,
+  pytestCheckHook,
+  wrapGAppsHook3,
 }:
 
 buildPythonApplication rec {

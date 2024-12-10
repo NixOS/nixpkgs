@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, dtkwidget
-, deepin-gettext-tools
-, qt5integration
-, qmake
-, qtbase
-, qttools
-, qtx11extras
-, pkg-config
-, wrapQtAppsHook
-, udisks2-qt5
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  dtkwidget,
+  deepin-gettext-tools,
+  qt5integration,
+  qmake,
+  qtbase,
+  qttools,
+  qtx11extras,
+  pkg-config,
+  wrapQtAppsHook,
+  udisks2-qt5,
 }:
 
 stdenv.mkDerivation rec {

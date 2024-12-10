@@ -1,4 +1,9 @@
-{ lib, stdenv , fetchurl, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+}:
 stdenv.mkDerivation rec {
   pname = "bbe";
   version = "0.2.2";
@@ -10,7 +15,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   meta = with lib; {
     description = "A sed-like editor for binary files";

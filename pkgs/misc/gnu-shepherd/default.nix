@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchurl, guile, pkg-config, guile-fibers }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  guile,
+  pkg-config,
+  guile-fibers,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnu-shepherd";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--localstatedir=/" ];
 
-  buildInputs = [ guile guile-fibers ];
+  buildInputs = [
+    guile
+    guile-fibers
+  ];
   nativeBuildInputs = [ pkg-config ];
 
   meta = with lib; {

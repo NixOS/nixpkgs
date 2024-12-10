@@ -1,4 +1,12 @@
-{ stdenv, lib, appleDerivation, xcbuild, ncurses, libutil, Libc }:
+{
+  stdenv,
+  lib,
+  appleDerivation,
+  xcbuild,
+  ncurses,
+  libutil,
+  Libc,
+}:
 
 let
   # Libc conflicts with libc++ 16, so provide only the header from it that’s needed to build.
@@ -56,7 +64,11 @@ appleDerivation {
   '';
 
   nativeBuildInputs = [ xcbuild ];
-  buildInputs = [ ncurses libutil msgcat ];
+  buildInputs = [
+    ncurses
+    libutil
+    msgcat
+  ];
 
   meta = {
     platforms = lib.platforms.darwin;

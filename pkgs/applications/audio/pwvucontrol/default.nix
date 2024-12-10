@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchFromGitLab
-, cargo
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
-, cairo
-, gdk-pixbuf
-, glib
-, gtk4
-, libadwaita
-, pango
-, pipewire
-, wireplumber
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  cargo,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  gtk4,
+  libadwaita,
+  pango,
+  pipewire,
+  wireplumber,
 }:
 
 let

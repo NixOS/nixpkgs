@@ -1,24 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, bmake
-, groff
-, inetutils
-, wget
-, openssl
-, libxcrypt
-, minimal ? false
-, userSupport ? !minimal
-, cgiSupport ? !minimal
-, dirIndexSupport ? !minimal
-, dynamicContentSupport ? !minimal
-, sslSupport ? !minimal
-, luaSupport ? !minimal
-, lua
-, htpasswdSupport ? !minimal
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bmake,
+  groff,
+  inetutils,
+  wget,
+  openssl,
+  libxcrypt,
+  minimal ? false,
+  userSupport ? !minimal,
+  cgiSupport ? !minimal,
+  dirIndexSupport ? !minimal,
+  dynamicContentSupport ? !minimal,
+  sslSupport ? !minimal,
+  luaSupport ? !minimal,
+  lua,
+  htpasswdSupport ? !minimal,
 }:
 
-let inherit (lib) optional optionals;
+let
+  inherit (lib) optional optionals;
 in
 stdenv.mkDerivation rec {
   pname = "bozohttpd";
@@ -31,36 +33,50 @@ stdenv.mkDerivation rec {
     hash = "sha512-fr1PnyYAS3wkpmj/npRC3A87UL9LIXw4thlM4GfrtlJbuX5EkWGVJnHJW/EmYp7z+N91dcdRJgdO79l6WJsKpg==";
   };
 
-  buildInputs = [ openssl libxcrypt ] ++ optional (luaSupport) lua;
-  nativeBuildInputs = [ bmake groff ];
+  buildInputs = [
+    openssl
+    libxcrypt
+  ] ++ optional (luaSupport) lua;
+  nativeBuildInputs = [
+    bmake
+    groff
+  ];
 
-  COPTS = [
-    "-D_DEFAULT_SOURCE"
-    "-D_GNU_SOURCE"
+  COPTS =
+    [
+      "-D_DEFAULT_SOURCE"
+      "-D_GNU_SOURCE"
 
-    # ensure that we can serve >2GB files even on 32-bit systems.
-    "-D_LARGEFILE_SOURCE"
-    "-D_FILE_OFFSET_BITS=64"
+      # ensure that we can serve >2GB files even on 32-bit systems.
+      "-D_LARGEFILE_SOURCE"
+      "-D_FILE_OFFSET_BITS=64"
 
-    # unpackaged dependency: https://man.netbsd.org/blocklist.3
-    "-DNO_BLOCKLIST_SUPPORT"
-  ]
-  ++ optional (!userSupport) "-DNO_USER_SUPPORT"
-  ++ optional (!dirIndexSupport) "-DNO_DIRINDEX_SUPPORT"
-  ++ optional (!dynamicContentSupport) "-DNO_DYNAMIC_CONTENT"
-  ++ optional (!luaSupport) "-DNO_LUA_SUPPORT"
-  ++ optional (!sslSupport) "-DNO_SSL_SUPPORT"
-  ++ optional (!cgiSupport) "-DNO_CGIBIN_SUPPORT"
-  ++ optional (htpasswdSupport) "-DDO_HTPASSWD";
+      # unpackaged dependency: https://man.netbsd.org/blocklist.3
+      "-DNO_BLOCKLIST_SUPPORT"
+    ]
+    ++ optional (!userSupport) "-DNO_USER_SUPPORT"
+    ++ optional (!dirIndexSupport) "-DNO_DIRINDEX_SUPPORT"
+    ++ optional (!dynamicContentSupport) "-DNO_DYNAMIC_CONTENT"
+    ++ optional (!luaSupport) "-DNO_LUA_SUPPORT"
+    ++ optional (!sslSupport) "-DNO_SSL_SUPPORT"
+    ++ optional (!cgiSupport) "-DNO_CGIBIN_SUPPORT"
+    ++ optional (htpasswdSupport) "-DDO_HTPASSWD";
 
-  _LDADD = [ "-lm" ]
+  _LDADD =
+    [ "-lm" ]
     ++ optional (stdenv.hostPlatform.libc != "libSystem") "-lcrypt"
     ++ optional (luaSupport) "-llua"
-    ++ optionals (sslSupport) [ "-lssl" "-lcrypto" ];
+    ++ optionals (sslSupport) [
+      "-lssl"
+      "-lcrypto"
+    ];
   makeFlags = [ "LDADD=$(_LDADD)" ];
 
   doCheck = true;
-  nativeCheckInputs = [ inetutils wget ];
+  nativeCheckInputs = [
+    inetutils
+    wget
+  ];
   checkFlags = optional (!cgiSupport) "CGITESTS=";
 
   meta = with lib; {

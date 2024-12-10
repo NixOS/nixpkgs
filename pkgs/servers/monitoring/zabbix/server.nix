@@ -1,12 +1,32 @@
-{ lib, stdenv, fetchurl, autoreconfHook, pkg-config, curl, libevent, libiconv, libxml2, openssl, pcre, zlib
-, jabberSupport ? true, iksemel
-, ldapSupport ? true, openldap
-, odbcSupport ? true, unixODBC
-, snmpSupport ? true, net-snmp
-, sshSupport ? true, libssh2
-, mysqlSupport ? false, libmysqlclient
-, postgresqlSupport ? false, postgresql
-, ipmiSupport ? false, openipmi
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  curl,
+  libevent,
+  libiconv,
+  libxml2,
+  openssl,
+  pcre,
+  zlib,
+  jabberSupport ? true,
+  iksemel,
+  ldapSupport ? true,
+  openldap,
+  odbcSupport ? true,
+  unixODBC,
+  snmpSupport ? true,
+  net-snmp,
+  sshSupport ? true,
+  libssh2,
+  mysqlSupport ? false,
+  libmysqlclient,
+  postgresqlSupport ? false,
+  postgresql,
+  ipmiSupport ? false,
+  openipmi,
 }:
 
 # ensure exactly one primary database type is selected
@@ -16,18 +36,23 @@ assert postgresqlSupport -> !mysqlSupport;
 let
   inherit (lib) optional optionalString;
 in
-  import ./versions.nix ({ version, hash, ... }:
-    stdenv.mkDerivation {
-      pname = "zabbix-server";
-      inherit version;
+import ./versions.nix (
+  { version, hash, ... }:
+  stdenv.mkDerivation {
+    pname = "zabbix-server";
+    inherit version;
 
-      src = fetchurl {
-        url = "https://cdn.zabbix.com/zabbix/sources/stable/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
-        inherit hash;
-      };
+    src = fetchurl {
+      url = "https://cdn.zabbix.com/zabbix/sources/stable/${lib.versions.majorMinor version}/zabbix-${version}.tar.gz";
+      inherit hash;
+    };
 
-      nativeBuildInputs = [ autoreconfHook pkg-config ];
-      buildInputs = [
+    nativeBuildInputs = [
+      autoreconfHook
+      pkg-config
+    ];
+    buildInputs =
+      [
         curl
         libevent
         libiconv
@@ -45,7 +70,8 @@ in
       ++ optional postgresqlSupport postgresql
       ++ optional ipmiSupport openipmi;
 
-      configureFlags = [
+    configureFlags =
+      [
         "--enable-ipv6"
         "--enable-server"
         "--with-iconv"
@@ -65,33 +91,40 @@ in
       ++ optional postgresqlSupport "--with-postgresql"
       ++ optional ipmiSupport "--with-openipmi=${openipmi.dev}";
 
-      prePatch = ''
-        find database -name data.sql -exec sed -i 's|/usr/bin/||g' {} +
-      '';
+    prePatch = ''
+      find database -name data.sql -exec sed -i 's|/usr/bin/||g' {} +
+    '';
 
-      preAutoreconf = ''
-        for i in $(find . -type f -name "*.m4"); do
-          substituteInPlace $i \
-            --replace 'test -x "$PKG_CONFIG"' 'type -P "$PKG_CONFIG" >/dev/null'
-        done
-      '';
+    preAutoreconf = ''
+      for i in $(find . -type f -name "*.m4"); do
+        substituteInPlace $i \
+          --replace 'test -x "$PKG_CONFIG"' 'type -P "$PKG_CONFIG" >/dev/null'
+      done
+    '';
 
-      postInstall = ''
+    postInstall =
+      ''
         mkdir -p $out/share/zabbix/database/
         cp -r include $out/
-      '' + optionalString mysqlSupport ''
+      ''
+      + optionalString mysqlSupport ''
         mkdir -p $out/share/zabbix/database/mysql
         cp -prvd database/mysql/*.sql $out/share/zabbix/database/mysql/
-      '' + optionalString postgresqlSupport ''
+      ''
+      + optionalString postgresqlSupport ''
         mkdir -p $out/share/zabbix/database/postgresql
         cp -prvd database/postgresql/*.sql $out/share/zabbix/database/postgresql/
       '';
 
-      meta = with lib; {
-        description = "An enterprise-class open source distributed monitoring solution";
-        homepage = "https://www.zabbix.com/";
-        license = licenses.gpl2;
-        maintainers = with maintainers; [ mmahut psyanticy ];
-        platforms = platforms.linux;
-      };
-    })
+    meta = with lib; {
+      description = "An enterprise-class open source distributed monitoring solution";
+      homepage = "https://www.zabbix.com/";
+      license = licenses.gpl2;
+      maintainers = with maintainers; [
+        mmahut
+        psyanticy
+      ];
+      platforms = platforms.linux;
+    };
+  }
+)

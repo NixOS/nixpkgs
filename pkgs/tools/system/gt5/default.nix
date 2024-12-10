@@ -1,4 +1,8 @@
-{lib, stdenv, fetchurl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gt5";
@@ -21,7 +25,7 @@ stdenv.mkDerivation rec {
     description = "A diff-capable 'du' browser";
     homepage = "https://gt5.sourceforge.net/";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; all;
     mainProgram = "gt5";
   };

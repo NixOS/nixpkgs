@@ -1,20 +1,21 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, boost
-, libevent
-, double-conversion
-, glog
-, lib
-, fmt_8
-, zstd
-, gflags
-, libiberty
-, openssl
-, folly
-, libsodium
-, gtest
-, zlib
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  libevent,
+  double-conversion,
+  glog,
+  lib,
+  fmt_8,
+  zstd,
+  gflags,
+  libiberty,
+  openssl,
+  folly,
+  libsodium,
+  gtest,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,12 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeDir = "../fizz";
 
-  cmakeFlags = [
-    "-Wno-dev"
-    (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
-  ];
+  cmakeFlags =
+    [
+      "-Wno-dev"
+      (lib.cmakeBool "BUILD_TESTS" finalAttrs.finalPackage.doCheck)
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
+    ];
 
   NIX_LDFLAGS = "-lz";
 
@@ -60,19 +63,21 @@ stdenv.mkDerivation (finalAttrs: {
   checkInputs = [
     gtest
   ];
-  preCheck = let
-    disabledTests = [
-      # these don't work with openssl 3.x probably due to
-      # https://github.com/openssl/openssl/issues/13283
-      "DefaultCertificateVerifierTest.TestVerifySuccess"
-      "DefaultCertificateVerifierTest.TestVerifyWithIntermediates"
+  preCheck =
+    let
+      disabledTests = [
+        # these don't work with openssl 3.x probably due to
+        # https://github.com/openssl/openssl/issues/13283
+        "DefaultCertificateVerifierTest.TestVerifySuccess"
+        "DefaultCertificateVerifierTest.TestVerifyWithIntermediates"
 
-      # timing-related & flaky
-      "SlidingBloomReplayCacheTest.TestTimeBucketing"
-    ];
-  in ''
-    export GTEST_FILTER="-${lib.concatStringsSep ":" disabledTests}"
-  '';
+        # timing-related & flaky
+        "SlidingBloomReplayCacheTest.TestTimeBucketing"
+      ];
+    in
+    ''
+      export GTEST_FILTER="-${lib.concatStringsSep ":" disabledTests}"
+    '';
 
   meta = with lib; {
     description = "C++14 implementation of the TLS-1.3 standard";
@@ -80,6 +85,9 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/facebookincubator/fizz/releases/tag/v${finalAttrs.version}";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ pierreis kylesferrazza ];
+    maintainers = with maintainers; [
+      pierreis
+      kylesferrazza
+    ];
   };
 })

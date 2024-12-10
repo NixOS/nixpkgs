@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, stdenv, testers, earthly }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  stdenv,
+  testers,
+  earthly,
+}:
 
 buildGoModule rec {
   pname = "earthly";
@@ -12,20 +19,25 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-Uj7GGRknXtcu64rzS7SSnwQyE84hnGAyiT62vyppDE4=";
-  subPackages = [ "cmd/earthly" "cmd/debugger" ];
+  subPackages = [
+    "cmd/earthly"
+    "cmd/debugger"
+  ];
 
   CGO_ENABLED = 0;
 
-  ldflags = [
-    "-s"
-    "-w"
-    "-X main.Version=v${version}"
-    "-X main.DefaultBuildkitdImage=docker.io/earthly/buildkitd:v${version}"
-    "-X main.GitSha=v${version}"
-    "-X main.DefaultInstallationName=earthly"
-  ] ++ lib.optionals stdenv.isLinux [
-    "-extldflags '-static'"
-  ];
+  ldflags =
+    [
+      "-s"
+      "-w"
+      "-X main.Version=v${version}"
+      "-X main.DefaultBuildkitdImage=docker.io/earthly/buildkitd:v${version}"
+      "-X main.GitSha=v${version}"
+      "-X main.DefaultInstallationName=earthly"
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      "-extldflags '-static'"
+    ];
 
   tags = [
     "dfrunmount"
@@ -51,6 +63,9 @@ buildGoModule rec {
     homepage = "https://earthly.dev/";
     changelog = "https://github.com/earthly/earthly/releases/tag/v${version}";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ zoedsoupe konradmalik ];
+    maintainers = with maintainers; [
+      zoedsoupe
+      konradmalik
+    ];
   };
 }

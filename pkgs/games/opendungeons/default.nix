@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, ogre_13
-, cegui
-, boost
-, sfml
-, openal
-, ois
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  ogre_13,
+  cegui,
+  boost,
+  sfml,
+  openal,
+  ois,
 }:
 
 let
@@ -66,7 +67,15 @@ stdenv.mkDerivation {
     description = "An open source, real time strategy game sharing game elements with the Dungeon Keeper series and Evil Genius";
     mainProgram = "opendungeons";
     homepage = "https://opendungeons.github.io";
-    license = with licenses; [ gpl3Plus zlib mit cc-by-sa-30 cc0 ofl cc-by-30 ];
+    license = with licenses; [
+      gpl3Plus
+      zlib
+      mit
+      cc-by-sa-30
+      cc0
+      ofl
+      cc-by-30
+    ];
     platforms = platforms.linux;
   };
 }

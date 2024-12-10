@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, autoconf
-, automake
-, libtool
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "jnv";
@@ -30,6 +31,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "jnv";
     homepage = "https://github.com/ynqa/jnv";
     license = with licenses; [ mit ];
-    maintainers = with maintainers; [ nealfennimore nshalman ];
+    maintainers = with maintainers; [
+      nealfennimore
+      nshalman
+    ];
   };
 }

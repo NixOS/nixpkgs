@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, json_c
-, libnet
-, libpcap
-, openssl
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  json_c,
+  libnet,
+  libpcap,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {

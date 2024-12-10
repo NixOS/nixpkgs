@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, pkg-config, which
-, libxslt, libxml2, docbook_xml_dtd_412, docbook_xsl, glib, imagemagick
-, Foundation
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  which,
+  libxslt,
+  libxml2,
+  docbook_xml_dtd_412,
+  docbook_xsl,
+  glib,
+  imagemagick,
+  Foundation,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,19 +27,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7l8+WD5/5uBXVnhwqiEScIEQ1dg0W2zqqZJ2AeKCZRU=";
   };
 
-  nativeBuildInputs = [ autoconf
-                        automake
-                        libtool
-                        pkg-config
-                        which
-                        libxslt
-                        libxml2
-                        docbook_xml_dtd_412
-                        docbook_xsl
-                      ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    pkg-config
+    which
+    libxslt
+    libxml2
+    docbook_xml_dtd_412
+    docbook_xsl
+  ];
 
-  buildInputs = [ glib imagemagick ]
-    ++ lib.optional stdenv.isDarwin Foundation;
+  buildInputs = [
+    glib
+    imagemagick
+  ] ++ lib.optional stdenv.isDarwin Foundation;
 
   patches = [ ./xmlcatalog_patch.patch ];
 
@@ -35,9 +51,10 @@ stdenv.mkDerivation rec {
     NOCONFIGURE=1 ./autogen.sh
   '';
 
-  configureFlags = [ "--enable-man"
-                     "--with-xml-catalog=${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml"
-                   ];
+  configureFlags = [
+    "--enable-man"
+    "--with-xml-catalog=${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml"
+  ];
 
   # https://github.com/NixOS/nixpkgs/pull/240893#issuecomment-1635347507
   NIX_LDFLAGS = [ "-lwebp" ];

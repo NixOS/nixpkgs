@@ -1,19 +1,20 @@
-{ lib
-, python3
-, fetchFromGitHub
-, appstream-glib
-, desktop-file-utils
-, gettext
-, glib
-, gobject-introspection
-, gtk3
-, gtk4
-, libadwaita
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, nix-update-script
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  appstream-glib,
+  desktop-file-utils,
+  gettext,
+  glib,
+  gobject-introspection,
+  gtk3,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -79,6 +80,9 @@ python3.pkgs.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "dev.tchx84.Portfolio";
-    maintainers = with maintainers; [ dotlambda chuangzhu ];
+    maintainers = with maintainers; [
+      dotlambda
+      chuangzhu
+    ];
   };
 }

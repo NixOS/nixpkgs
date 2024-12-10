@@ -1,10 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "kustomize";
   version = "5.4.1";
 
-  ldflags = let t = "sigs.k8s.io/kustomize/api/provenance"; in
+  ldflags =
+    let
+      t = "sigs.k8s.io/kustomize/api/provenance";
+    in
     [
       "-s"
       "-X ${t}.version=${version}"
@@ -42,6 +50,13 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/kubernetes-sigs/kustomize";
     license = licenses.asl20;
-    maintainers = with maintainers; [ carlosdagos vdemeester periklis zaninime Chili-Man saschagrunert ];
+    maintainers = with maintainers; [
+      carlosdagos
+      vdemeester
+      periklis
+      zaninime
+      Chili-Man
+      saschagrunert
+    ];
   };
 }

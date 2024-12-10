@@ -1,11 +1,47 @@
-{ stdenv, lib, fetchpatch, fetchFromGitHub, bash, pkg-config, autoconf, cpio, file, which, unzip
-, zip, perl, cups, freetype, harfbuzz, alsa-lib, libjpeg, giflib, libpng, zlib, lcms2
-, libX11, libICE, libXrender, libXext, libXt, libXtst, libXi, libXinerama
-, libXcursor, libXrandr, fontconfig, openjdk11-bootstrap
-, setJavaClassPath
-, headless ? false
-, enableJavaFX ? false, openjfx
-, enableGnome2 ? true, gtk3, gnome_vfs, glib, GConf
+{
+  stdenv,
+  lib,
+  fetchpatch,
+  fetchFromGitHub,
+  bash,
+  pkg-config,
+  autoconf,
+  cpio,
+  file,
+  which,
+  unzip,
+  zip,
+  perl,
+  cups,
+  freetype,
+  harfbuzz,
+  alsa-lib,
+  libjpeg,
+  giflib,
+  libpng,
+  zlib,
+  lcms2,
+  libX11,
+  libICE,
+  libXrender,
+  libXext,
+  libXt,
+  libXtst,
+  libXi,
+  libXinerama,
+  libXcursor,
+  libXrandr,
+  fontconfig,
+  openjdk11-bootstrap,
+  setJavaClassPath,
+  headless ? false,
+  enableJavaFX ? false,
+  openjfx,
+  enableGnome2 ? true,
+  gtk3,
+  gnome_vfs,
+  glib,
+  GConf,
 }:
 
 let
@@ -28,53 +64,91 @@ let
       sha256 = "sha256-6y6wge8ZuSKBpb5QNihvAlD4Pv/0d3AQCPOkxUm/sJk=";
     };
 
-    nativeBuildInputs = [ pkg-config autoconf unzip ];
-    buildInputs = [
-      cpio file which zip perl zlib cups freetype harfbuzz alsa-lib libjpeg giflib
-      libpng zlib lcms2 libX11 libICE libXrender libXext libXtst libXt libXtst
-      libXi libXinerama libXcursor libXrandr fontconfig openjdk-bootstrap
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      gtk3 gnome_vfs GConf glib
+    nativeBuildInputs = [
+      pkg-config
+      autoconf
+      unzip
     ];
+    buildInputs =
+      [
+        cpio
+        file
+        which
+        zip
+        perl
+        zlib
+        cups
+        freetype
+        harfbuzz
+        alsa-lib
+        libjpeg
+        giflib
+        libpng
+        zlib
+        lcms2
+        libX11
+        libICE
+        libXrender
+        libXext
+        libXtst
+        libXt
+        libXtst
+        libXi
+        libXinerama
+        libXcursor
+        libXrandr
+        fontconfig
+        openjdk-bootstrap
+      ]
+      ++ lib.optionals (!headless && enableGnome2) [
+        gtk3
+        gnome_vfs
+        GConf
+        glib
+      ];
 
-    patches = [
-      ./fix-java-home-jdk10.patch
-      ./read-truststore-from-env-jdk10.patch
-      ./currency-date-range-jdk10.patch
-      ./increase-javadoc-heap.patch
-      ./fix-library-path-jdk11.patch
+    patches =
+      [
+        ./fix-java-home-jdk10.patch
+        ./read-truststore-from-env-jdk10.patch
+        ./currency-date-range-jdk10.patch
+        ./increase-javadoc-heap.patch
+        ./fix-library-path-jdk11.patch
 
-      # Fix build for gnumake-4.4.1:
-      #   https://github.com/openjdk/jdk/pull/12992
-      (fetchpatch {
-        name = "gnumake-4.4.1";
-        url = "https://github.com/openjdk/jdk/commit/9341d135b855cc208d48e47d30cd90aafa354c36.patch";
-        hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
-      })
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      ./swing-use-gtk-jdk10.patch
-    ];
+        # Fix build for gnumake-4.4.1:
+        #   https://github.com/openjdk/jdk/pull/12992
+        (fetchpatch {
+          name = "gnumake-4.4.1";
+          url = "https://github.com/openjdk/jdk/commit/9341d135b855cc208d48e47d30cd90aafa354c36.patch";
+          hash = "sha256-Qcm3ZmGCOYLZcskNjj7DYR85R4v07vYvvavrVOYL8vg=";
+        })
+      ]
+      ++ lib.optionals (!headless && enableGnome2) [
+        ./swing-use-gtk-jdk10.patch
+      ];
 
     preConfigure = ''
       chmod +x configure
       substituteInPlace configure --replace /bin/bash "${bash}/bin/bash"
     '';
 
-    configureFlags = [
-      "--with-boot-jdk=${openjdk-bootstrap.home}"
-      "--with-version-pre="
-      "--enable-unlimited-crypto"
-      "--with-native-debug-symbols=internal"
-      "--with-freetype=system"
-      "--with-harfbuzz=system"
-      "--with-libjpeg=system"
-      "--with-giflib=system"
-      "--with-libpng=system"
-      "--with-zlib=system"
-      "--with-lcms=system"
-      "--with-stdc++lib=dynamic"
-      "--disable-warnings-as-errors"
-    ] ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
+    configureFlags =
+      [
+        "--with-boot-jdk=${openjdk-bootstrap.home}"
+        "--with-version-pre="
+        "--enable-unlimited-crypto"
+        "--with-native-debug-symbols=internal"
+        "--with-freetype=system"
+        "--with-harfbuzz=system"
+        "--with-libjpeg=system"
+        "--with-giflib=system"
+        "--with-libpng=system"
+        "--with-zlib=system"
+        "--with-lcms=system"
+        "--with-stdc++lib=dynamic"
+        "--disable-warnings-as-errors"
+      ]
+      ++ lib.optional stdenv.isx86_64 "--with-jvm-features=zgc"
       ++ lib.optional headless "--enable-headless-only"
       ++ lib.optional (!headless && enableJavaFX) "--with-import-modules=${openjfx}";
 
@@ -85,11 +159,21 @@ let
     # when building jtreg
     env.NIX_CFLAGS_COMPILE = "-Wformat";
 
-    NIX_LDFLAGS = toString (lib.optionals (!headless) [
-      "-lfontconfig" "-lcups" "-lXinerama" "-lXrandr" "-lmagic"
-    ] ++ lib.optionals (!headless && enableGnome2) [
-      "-lgtk-3" "-lgio-2.0" "-lgnomevfs-2" "-lgconf-2"
-    ]);
+    NIX_LDFLAGS = toString (
+      lib.optionals (!headless) [
+        "-lfontconfig"
+        "-lcups"
+        "-lXinerama"
+        "-lXrandr"
+        "-lmagic"
+      ]
+      ++ lib.optionals (!headless && enableGnome2) [
+        "-lgtk-3"
+        "-lgio-2.0"
+        "-lgnomevfs-2"
+        "-lgconf-2"
+      ]
+    );
 
     # -j flag is explicitly rejected by the build system:
     #     Error: 'make -jN' is not supported, use 'make JOBS=N'
@@ -168,4 +252,5 @@ let
       inherit gtk3;
     };
   };
-in openjdk
+in
+openjdk

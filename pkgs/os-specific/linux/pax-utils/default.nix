@@ -1,17 +1,19 @@
-{ stdenv
-, lib
-, fetchgit
-, buildPackages
-, docbook_xml_dtd_44
-, docbook_xsl
-, withLibcap ? stdenv.isLinux, libcap
-, pkg-config
-, meson
-, ninja
-, xmlto
-, python3
+{
+  stdenv,
+  lib,
+  fetchgit,
+  buildPackages,
+  docbook_xml_dtd_44,
+  docbook_xsl,
+  withLibcap ? stdenv.isLinux,
+  libcap,
+  pkg-config,
+  meson,
+  ninja,
+  xmlto,
+  python3,
 
-, gitUpdater
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +33,14 @@ stdenv.mkDerivation rec {
   ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ docbook_xml_dtd_44 docbook_xsl meson ninja pkg-config xmlto ];
+  nativeBuildInputs = [
+    docbook_xml_dtd_44
+    docbook_xsl
+    meson
+    ninja
+    pkg-config
+    xmlto
+  ];
   buildInputs = lib.optionals withLibcap [ libcap ];
   # Needed for lddtree
   propagatedBuildInputs = [ (python3.withPackages (p: with p; [ pyelftools ])) ];
@@ -52,6 +61,9 @@ stdenv.mkDerivation rec {
     homepage = "https://wiki.gentoo.org/wiki/Hardened/PaX_Utilities";
     license = licenses.gpl2Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice joachifm ];
+    maintainers = with maintainers; [
+      thoughtpolice
+      joachifm
+    ];
   };
 }

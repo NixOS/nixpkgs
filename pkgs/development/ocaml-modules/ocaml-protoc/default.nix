@@ -1,6 +1,9 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, pbrt
-, stdlib-shims
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  pbrt,
+  stdlib-shims,
 }:
 
 buildDunePackage rec {

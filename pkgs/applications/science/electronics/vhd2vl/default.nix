@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bison
-, flex
-, verilog
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  flex,
+  verilog,
+  which,
 }:
 
 stdenv.mkDerivation rec {

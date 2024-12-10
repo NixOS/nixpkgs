@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchurl
-, extra-cmake-modules
-, unzip
-, libsForQt5
+{
+  stdenv,
+  lib,
+  fetchurl,
+  extra-cmake-modules,
+  unzip,
+  libsForQt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -16,17 +17,25 @@ stdenv.mkDerivation (finalAttrs: {
     name = "kshutdown-source-${finalAttrs.version}.zip";
   };
 
-  nativeBuildInputs = [ extra-cmake-modules unzip libsForQt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    unzip
+    libsForQt5.wrapQtAppsHook
+  ];
 
-  buildInputs = with libsForQt5; [ qtbase kxmlgui knotifyconfig kidletime ];
+  buildInputs = with libsForQt5; [
+    qtbase
+    kxmlgui
+    knotifyconfig
+    kidletime
+  ];
 
   meta = with lib; {
     homepage = "https://kshutdown.sourceforge.io/";
     description = "A graphical shutdown utility for Linux and Windows";
     mainProgram = "kshutdown";
     license = with licenses; [ gpl3 ];
-    maintainers = with maintainers ; [ eymeric ];
+    maintainers = with maintainers; [ eymeric ];
     platforms = platforms.linux;
   };
 })
-

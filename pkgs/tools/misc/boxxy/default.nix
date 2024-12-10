@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, oniguruma
-, stdenv
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  oniguruma,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,7 +36,10 @@ rustPlatform.buildRustPackage rec {
     description = "Puts bad Linux applications in a box with only their files";
     homepage = "https://github.com/queer/boxxy";
     license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya figsoda ];
+    maintainers = with maintainers; [
+      dit7ya
+      figsoda
+    ];
     platforms = platforms.linux;
     broken = stdenv.isAarch64;
     mainProgram = "boxxy";

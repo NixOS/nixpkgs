@@ -1,10 +1,11 @@
-{ lib
-, makeDesktopItem
-, copyDesktopItems
-, stdenvNoCC
-, fetchurl
-, appimageTools
-, makeWrapper
+{
+  lib,
+  makeDesktopItem,
+  copyDesktopItems,
+  stdenvNoCC,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
 }:
 
 let
@@ -26,7 +27,10 @@ stdenvNoCC.mkDerivation {
   inherit version pname;
   src = appimage;
 
-  nativeBuildInputs = [ copyDesktopItems makeWrapper ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    makeWrapper
+  ];
 
   desktopItems = [
     (makeDesktopItem {

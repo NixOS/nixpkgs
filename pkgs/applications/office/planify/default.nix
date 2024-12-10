@@ -1,29 +1,30 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, vala
-, wrapGAppsHook4
-, evolution-data-server
-, glib
-, glib-networking
-, gst_all_1
-, gtk4
-, gtksourceview5
-, gxml
-, json-glib
-, libadwaita
-, libgee
-, libical
-, libportal-gtk4
-, libsecret
-, libsoup_3
-, pantheon
-, sqlite
-, webkitgtk_6_0
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook4,
+  evolution-data-server,
+  glib,
+  glib-networking,
+  gst_all_1,
+  gtk4,
+  gtksourceview5,
+  gxml,
+  json-glib,
+  libadwaita,
+  libgee,
+  libical,
+  libportal-gtk4,
+  libsecret,
+  libsoup_3,
+  pantheon,
+  sqlite,
+  webkitgtk_6_0,
 }:
 
 stdenv.mkDerivation rec {

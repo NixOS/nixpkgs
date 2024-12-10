@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jitterentropy";
@@ -11,7 +15,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-GSGlupTN1o8BbTN287beqYSRFDaXOk6SlIRvtjpvmhQ=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   enableParallelBuilding = true;
   hardeningDisable = [ "fortify" ]; # avoid warnings
@@ -27,8 +34,14 @@ stdenv.mkDerivation rec {
     description = "Provides a noise source using the CPU execution timing jitter";
     homepage = "https://github.com/smuellerDD/jitterentropy-library";
     changelog = "https://github.com/smuellerDD/jitterentropy-library/raw/v${version}/CHANGES.md";
-    license = with licenses; [ bsd3 /* OR */ gpl2Only ];
+    license = with licenses; [
+      bsd3 # OR
+      gpl2Only
+    ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [ johnazoidberg c0bw3b ];
+    maintainers = with maintainers; [
+      johnazoidberg
+      c0bw3b
+    ];
   };
 }

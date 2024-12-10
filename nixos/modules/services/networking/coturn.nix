@@ -1,43 +1,53 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.services.coturn;
   pidfile = "/run/turnserver/turnserver.pid";
   configFile = pkgs.writeText "turnserver.conf" ''
-listening-port=${toString cfg.listening-port}
-tls-listening-port=${toString cfg.tls-listening-port}
-alt-listening-port=${toString cfg.alt-listening-port}
-alt-tls-listening-port=${toString cfg.alt-tls-listening-port}
-${concatStringsSep "\n" (map (x: "listening-ip=${x}") cfg.listening-ips)}
-${concatStringsSep "\n" (map (x: "relay-ip=${x}") cfg.relay-ips)}
-min-port=${toString cfg.min-port}
-max-port=${toString cfg.max-port}
-${lib.optionalString cfg.lt-cred-mech "lt-cred-mech"}
-${lib.optionalString cfg.no-auth "no-auth"}
-${lib.optionalString cfg.use-auth-secret "use-auth-secret"}
-${lib.optionalString (cfg.static-auth-secret != null) ("static-auth-secret=${cfg.static-auth-secret}")}
-${lib.optionalString (cfg.static-auth-secret-file != null) ("static-auth-secret=#static-auth-secret#")}
-realm=${cfg.realm}
-${lib.optionalString cfg.no-udp "no-udp"}
-${lib.optionalString cfg.no-tcp "no-tcp"}
-${lib.optionalString cfg.no-tls "no-tls"}
-${lib.optionalString cfg.no-dtls "no-dtls"}
-${lib.optionalString cfg.no-udp-relay "no-udp-relay"}
-${lib.optionalString cfg.no-tcp-relay "no-tcp-relay"}
-${lib.optionalString (cfg.cert != null) "cert=${cfg.cert}"}
-${lib.optionalString (cfg.pkey != null) "pkey=${cfg.pkey}"}
-${lib.optionalString (cfg.dh-file != null) ("dh-file=${cfg.dh-file}")}
-no-stdout-log
-syslog
-pidfile=${pidfile}
-${lib.optionalString cfg.secure-stun "secure-stun"}
-${lib.optionalString cfg.no-cli "no-cli"}
-cli-ip=${cfg.cli-ip}
-cli-port=${toString cfg.cli-port}
-${lib.optionalString (cfg.cli-password != null) ("cli-password=${cfg.cli-password}")}
-${cfg.extraConfig}
-'';
-in {
+    listening-port=${toString cfg.listening-port}
+    tls-listening-port=${toString cfg.tls-listening-port}
+    alt-listening-port=${toString cfg.alt-listening-port}
+    alt-tls-listening-port=${toString cfg.alt-tls-listening-port}
+    ${concatStringsSep "\n" (map (x: "listening-ip=${x}") cfg.listening-ips)}
+    ${concatStringsSep "\n" (map (x: "relay-ip=${x}") cfg.relay-ips)}
+    min-port=${toString cfg.min-port}
+    max-port=${toString cfg.max-port}
+    ${lib.optionalString cfg.lt-cred-mech "lt-cred-mech"}
+    ${lib.optionalString cfg.no-auth "no-auth"}
+    ${lib.optionalString cfg.use-auth-secret "use-auth-secret"}
+    ${lib.optionalString (cfg.static-auth-secret != null) (
+      "static-auth-secret=${cfg.static-auth-secret}"
+    )}
+    ${lib.optionalString (cfg.static-auth-secret-file != null) (
+      "static-auth-secret=#static-auth-secret#"
+    )}
+    realm=${cfg.realm}
+    ${lib.optionalString cfg.no-udp "no-udp"}
+    ${lib.optionalString cfg.no-tcp "no-tcp"}
+    ${lib.optionalString cfg.no-tls "no-tls"}
+    ${lib.optionalString cfg.no-dtls "no-dtls"}
+    ${lib.optionalString cfg.no-udp-relay "no-udp-relay"}
+    ${lib.optionalString cfg.no-tcp-relay "no-tcp-relay"}
+    ${lib.optionalString (cfg.cert != null) "cert=${cfg.cert}"}
+    ${lib.optionalString (cfg.pkey != null) "pkey=${cfg.pkey}"}
+    ${lib.optionalString (cfg.dh-file != null) ("dh-file=${cfg.dh-file}")}
+    no-stdout-log
+    syslog
+    pidfile=${pidfile}
+    ${lib.optionalString cfg.secure-stun "secure-stun"}
+    ${lib.optionalString cfg.no-cli "no-cli"}
+    cli-ip=${cfg.cli-ip}
+    cli-port=${toString cfg.cli-port}
+    ${lib.optionalString (cfg.cli-password != null) ("cli-password=${cfg.cli-password}")}
+    ${cfg.extraConfig}
+  '';
+in
+{
   options = {
     services.coturn = {
       enable = mkEnableOption "coturn TURN server";
@@ -90,8 +100,11 @@ in {
       };
       listening-ips = mkOption {
         type = types.listOf types.str;
-        default = [];
-        example = [ "203.0.113.42" "2001:DB8::42" ];
+        default = [ ];
+        example = [
+          "203.0.113.42"
+          "2001:DB8::42"
+        ];
         description = ''
           Listener IP addresses of relay server.
           If no IP(s) specified in the config file or in the command line options,
@@ -100,8 +113,11 @@ in {
       };
       relay-ips = mkOption {
         type = types.listOf types.str;
-        default = [];
-        example = [ "203.0.113.42" "2001:DB8::42" ];
+        default = [ ];
+        example = [
+          "203.0.113.42"
+          "2001:DB8::42"
+        ];
         description = ''
           Relay address (the local IP address that will be used to relay the
           packets to the peer).
@@ -303,64 +319,69 @@ in {
   };
 
   config = mkIf cfg.enable (mkMerge ([
-    { assertions = [
-      { assertion = cfg.static-auth-secret != null -> cfg.static-auth-secret-file == null ;
-        message = "static-auth-secret and static-auth-secret-file cannot be set at the same time";
-      }
-    ];}
+    {
+      assertions = [
+        {
+          assertion = cfg.static-auth-secret != null -> cfg.static-auth-secret-file == null;
+          message = "static-auth-secret and static-auth-secret-file cannot be set at the same time";
+        }
+      ];
+    }
 
     {
-      users.users.turnserver =
-        { uid = config.ids.uids.turnserver;
-          group = "turnserver";
-          description = "coturn TURN server user";
-        };
-      users.groups.turnserver =
-        { gid = config.ids.gids.turnserver;
-          members = [ "turnserver" ];
-        };
-
-      systemd.services.coturn = let
-        runConfig = "/run/coturn/turnserver.cfg";
-      in {
-        description = "coturn TURN server";
-        after = [ "network-online.target" ];
-        wants = [ "network-online.target" ];
-        wantedBy = [ "multi-user.target" ];
-
-        unitConfig = {
-          Documentation = "man:coturn(1) man:turnadmin(1) man:turnserver(1)";
-        };
-
-        preStart = ''
-          cat ${configFile} > ${runConfig}
-          ${optionalString (cfg.static-auth-secret-file != null) ''
-            ${pkgs.replace-secret}/bin/replace-secret \
-              "#static-auth-secret#" \
-              ${cfg.static-auth-secret-file} \
-              ${runConfig}
-          '' }
-          chmod 640 ${runConfig}
-        '';
-        serviceConfig = {
-          Type = "simple";
-          ExecStart = "${pkgs.coturn}/bin/turnserver -c ${runConfig}";
-          RuntimeDirectory = "turnserver";
-          User = "turnserver";
-          Group = "turnserver";
-          AmbientCapabilities =
-            mkIf (
-              cfg.listening-port < 1024 ||
-              cfg.alt-listening-port < 1024 ||
-              cfg.tls-listening-port < 1024 ||
-              cfg.alt-tls-listening-port < 1024 ||
-              cfg.min-port < 1024
-            ) "cap_net_bind_service";
-          Restart = "on-abort";
-        };
+      users.users.turnserver = {
+        uid = config.ids.uids.turnserver;
+        group = "turnserver";
+        description = "coturn TURN server user";
       };
-    systemd.tmpfiles.rules = [
-      "d  /run/coturn 0700 turnserver turnserver - -"
-    ];
-  }]));
+      users.groups.turnserver = {
+        gid = config.ids.gids.turnserver;
+        members = [ "turnserver" ];
+      };
+
+      systemd.services.coturn =
+        let
+          runConfig = "/run/coturn/turnserver.cfg";
+        in
+        {
+          description = "coturn TURN server";
+          after = [ "network-online.target" ];
+          wants = [ "network-online.target" ];
+          wantedBy = [ "multi-user.target" ];
+
+          unitConfig = {
+            Documentation = "man:coturn(1) man:turnadmin(1) man:turnserver(1)";
+          };
+
+          preStart = ''
+            cat ${configFile} > ${runConfig}
+            ${optionalString (cfg.static-auth-secret-file != null) ''
+              ${pkgs.replace-secret}/bin/replace-secret \
+                "#static-auth-secret#" \
+                ${cfg.static-auth-secret-file} \
+                ${runConfig}
+            ''}
+            chmod 640 ${runConfig}
+          '';
+          serviceConfig = {
+            Type = "simple";
+            ExecStart = "${pkgs.coturn}/bin/turnserver -c ${runConfig}";
+            RuntimeDirectory = "turnserver";
+            User = "turnserver";
+            Group = "turnserver";
+            AmbientCapabilities = mkIf (
+              cfg.listening-port < 1024
+              || cfg.alt-listening-port < 1024
+              || cfg.tls-listening-port < 1024
+              || cfg.alt-tls-listening-port < 1024
+              || cfg.min-port < 1024
+            ) "cap_net_bind_service";
+            Restart = "on-abort";
+          };
+        };
+      systemd.tmpfiles.rules = [
+        "d  /run/coturn 0700 turnserver turnserver - -"
+      ];
+    }
+  ]));
 }

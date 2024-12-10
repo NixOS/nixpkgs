@@ -28,10 +28,13 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  propagatedBuildInputs = [
-    eth-hash
-    eth-typing
-  ] ++ lib.optional (!isPyPy) cytoolz ++ lib.optional isPyPy toolz;
+  propagatedBuildInputs =
+    [
+      eth-hash
+      eth-typing
+    ]
+    ++ lib.optional (!isPyPy) cytoolz
+    ++ lib.optional isPyPy toolz;
 
   nativeCheckInputs = [
     hypothesis

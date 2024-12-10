@@ -1,4 +1,10 @@
-{ config, lib, pkgs, options, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  options,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.pgbouncer;
@@ -86,7 +92,12 @@ in
     };
 
     logLevel = mkOption {
-      type = types.enum ["debug" "info" "warn" "error" ];
+      type = types.enum [
+        "debug"
+        "info"
+        "warn"
+        "error"
+      ];
       default = "info";
       description = ''
         Only log messages with the given severity or above.
@@ -94,7 +105,10 @@ in
     };
 
     logFormat = mkOption {
-      type = types.enum ["logfmt" "json"];
+      type = types.enum [
+        "logfmt"
+        "json"
+      ];
       default = "logfmt";
       description = ''
         Output format of log messages. One of: [logfmt, json]
@@ -121,31 +135,36 @@ in
 
   serviceOpts = {
     after = [ "pgbouncer.service" ];
-      serviceConfig = let
-      startScript = pkgs.writeShellScriptBin "pgbouncer-start" "${concatStringsSep " " ([
+    serviceConfig =
+      let
+        startScript = pkgs.writeShellScriptBin "pgbouncer-start" "${concatStringsSep " " (
+          [
             "${pkgs.prometheus-pgbouncer-exporter}/bin/pgbouncer_exporter"
             "--web.listen-address ${cfg.listenAddress}:${toString cfg.port}"
-          ] ++ optionals (cfg.connectionString != null) [
+          ]
+          ++ optionals (cfg.connectionString != null) [
             "--pgBouncer.connectionString ${escapeShellArg cfg.connectionString}"
-          ] ++ optionals (cfg.telemetryPath != null) [
+          ]
+          ++ optionals (cfg.telemetryPath != null) [
             "--web.telemetry-path ${escapeShellArg cfg.telemetryPath}"
           ]
-            ++ optionals (cfg.pidFile != null) [
+          ++ optionals (cfg.pidFile != null) [
             "--pgBouncer.pid-file= ${escapeShellArg cfg.pidFile}"
           ]
-            ++ optionals (cfg.logLevel != null) [
+          ++ optionals (cfg.logLevel != null) [
             "--log.level ${escapeShellArg cfg.logLevel}"
           ]
-            ++ optionals (cfg.logFormat != null) [
+          ++ optionals (cfg.logFormat != null) [
             "--log.format ${escapeShellArg cfg.logFormat}"
           ]
-            ++ optionals (cfg.webSystemdSocket != false) [
+          ++ optionals (cfg.webSystemdSocket != false) [
             "--web.systemd-socket ${escapeShellArg cfg.webSystemdSocket}"
           ]
-            ++ optionals (cfg.webConfigFile != null) [
+          ++ optionals (cfg.webConfigFile != null) [
             "--web.config.file ${escapeShellArg cfg.webConfigFile}"
           ]
-            ++ cfg.extraFlags)}";
+          ++ cfg.extraFlags
+        )}";
       in
       {
         ExecStart = "${startScript}/bin/pgbouncer-start";
@@ -165,6 +184,9 @@ in
       into the cmdline of the exporter making the connection string effectively
       world-readable.
     '')
-    ({ options.warnings = options.warnings; options.assertions = options.assertions; })
+    ({
+      options.warnings = options.warnings;
+      options.assertions = options.assertions;
+    })
   ];
 }

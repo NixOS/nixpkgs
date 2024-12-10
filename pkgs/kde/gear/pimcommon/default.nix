@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "pimcommon";
 
-  extraBuildInputs = [qttools];
+  extraBuildInputs = [ qttools ];
 }

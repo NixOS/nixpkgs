@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, openssl
-, pkg-config
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,8 +19,9 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-JKthXrosqDZh6CWEqT08h3ySPZulitDol7lX3Eo7orM=";
   };
 
-  buildInputs = [ openssl ] ++
-    lib.optionals stdenv.isDarwin [
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.isDarwin [
       darwin.apple_sdk.frameworks.Security
       darwin.apple_sdk.frameworks.SystemConfiguration
     ];
@@ -32,7 +34,10 @@ rustPlatform.buildRustPackage rec {
     description = "Command line internet speedtest tool written in rust";
     homepage = "https://github.com/nelsonjchen/speedtest-rs";
     changelog = "https://github.com/nelsonjchen/speedtest-rs/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit asl20 ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
     maintainers = with maintainers; [ GaetanLepage ];
     mainProgram = "speedtest-rs";
   };

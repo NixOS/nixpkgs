@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, openssl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wraith";
@@ -9,7 +14,10 @@ stdenv.mkDerivation rec {
   };
   hardeningDisable = [ "format" ];
   buildInputs = [ openssl ];
-  patches = [ ./configure.patch ./dlopen.patch ];
+  patches = [
+    ./configure.patch
+    ./dlopen.patch
+  ];
   postPatch = ''
     substituteInPlace configure        --subst-var-by openssl.dev ${openssl.dev} \
                                        --subst-var-by openssl-lib ${lib.getLib openssl}

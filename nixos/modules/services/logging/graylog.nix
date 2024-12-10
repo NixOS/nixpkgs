@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -38,8 +43,11 @@ in
 
       package = mkOption {
         type = types.package;
-        default = if versionOlder config.system.stateVersion "23.05" then pkgs.graylog-3_3 else pkgs.graylog-5_1;
-        defaultText = literalExpression (if versionOlder config.system.stateVersion "23.05" then "pkgs.graylog-3_3" else "pkgs.graylog-5_1");
+        default =
+          if versionOlder config.system.stateVersion "23.05" then pkgs.graylog-3_3 else pkgs.graylog-5_1;
+        defaultText = literalExpression (
+          if versionOlder config.system.stateVersion "23.05" then "pkgs.graylog-3_3" else "pkgs.graylog-5_1"
+        );
         description = "Graylog package to use.";
       };
 
@@ -127,7 +135,6 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
@@ -139,7 +146,7 @@ in
         description = "Graylog server daemon user";
       };
     };
-    users.groups = mkIf (cfg.user == "graylog") { graylog = {}; };
+    users.groups = mkIf (cfg.user == "graylog") { graylog = { }; };
 
     systemd.tmpfiles.rules = [
       "d '${cfg.messageJournalDir}' - ${cfg.user} - - -"
@@ -151,7 +158,10 @@ in
       environment = {
         GRAYLOG_CONF = "${confFile}";
       };
-      path = [ pkgs.which pkgs.procps ];
+      path = [
+        pkgs.which
+        pkgs.procps
+      ];
       preStart = ''
         rm -rf /var/lib/graylog/plugins || true
         mkdir -p /var/lib/graylog/plugins -m 755
@@ -167,7 +177,7 @@ in
         done
       '';
       serviceConfig = {
-        User="${cfg.user}";
+        User = "${cfg.user}";
         StateDirectory = "graylog";
         ExecStart = "${cfg.package}/bin/graylogctl run";
       };

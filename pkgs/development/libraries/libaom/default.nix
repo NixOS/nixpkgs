@@ -1,11 +1,20 @@
-{ lib, stdenv, fetchzip, yasm, perl, cmake, pkg-config, python3
-, enableVmaf ? true, libvmaf
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchzip,
+  yasm,
+  perl,
+  cmake,
+  pkg-config,
+  python3,
+  enableVmaf ? true,
+  libvmaf,
+  gitUpdater,
 
-# for passthru.tests
-, ffmpeg
-, libavif
-, libheif
+  # for passthru.tests
+  ffmpeg,
+  libavif,
+  libheif,
 }:
 
 let
@@ -24,7 +33,11 @@ stdenv.mkDerivation rec {
   patches = [ ./outputs.patch ];
 
   nativeBuildInputs = [
-    yasm perl cmake pkg-config python3
+    yasm
+    perl
+    cmake
+    pkg-config
+    python3
   ];
 
   propagatedBuildInputs = lib.optional enableVmaf libvmaf;
@@ -42,26 +55,37 @@ stdenv.mkDerivation rec {
   # Configuration options:
   # https://aomedia.googlesource.com/aom/+/refs/heads/master/build/cmake/aom_config_defaults.cmake
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DENABLE_TESTS=OFF"
-  ] ++ lib.optionals enableVmaf [
-    "-DCONFIG_TUNE_VMAF=1"
-  ] ++ lib.optionals (isCross && !stdenv.hostPlatform.isx86) [
-    "-DCMAKE_ASM_COMPILER=${stdenv.cc.targetPrefix}as"
-  ] ++ lib.optionals stdenv.isAarch32 [
-    # armv7l-hf-multiplatform does not support NEON
-    # see lib/systems/platform.nix
-    "-DENABLE_NEON=0"
+  cmakeFlags =
+    [
+      "-DBUILD_SHARED_LIBS=ON"
+      "-DENABLE_TESTS=OFF"
+    ]
+    ++ lib.optionals enableVmaf [
+      "-DCONFIG_TUNE_VMAF=1"
+    ]
+    ++ lib.optionals (isCross && !stdenv.hostPlatform.isx86) [
+      "-DCMAKE_ASM_COMPILER=${stdenv.cc.targetPrefix}as"
+    ]
+    ++ lib.optionals stdenv.isAarch32 [
+      # armv7l-hf-multiplatform does not support NEON
+      # see lib/systems/platform.nix
+      "-DENABLE_NEON=0"
+    ];
+
+  postFixup =
+    ''
+      moveToOutput lib/libaom.a "$static"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isStatic ''
+      ln -s $static $out
+    '';
+
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+    "static"
   ];
-
-  postFixup = ''
-    moveToOutput lib/libaom.a "$static"
-  '' + lib.optionalString stdenv.hostPlatform.isStatic ''
-    ln -s $static $out
-  '';
-
-  outputs = [ "out" "bin" "dev" "static" ];
 
   passthru = {
     updateScript = gitUpdater {
@@ -82,10 +106,14 @@ stdenv.mkDerivation rec {
       for Open Media. It contains an AV1 library as well as applications like
       an encoder (aomenc) and a decoder (aomdec).
     '';
-    homepage    = "https://aomedia.org/av1-features/get-started/";
-    changelog   = "https://aomedia.googlesource.com/aom/+/refs/tags/v${version}/CHANGELOG";
-    maintainers = with maintainers; [ primeos kiloreux dandellion ];
-    platforms   = platforms.all;
+    homepage = "https://aomedia.org/av1-features/get-started/";
+    changelog = "https://aomedia.googlesource.com/aom/+/refs/tags/v${version}/CHANGELOG";
+    maintainers = with maintainers; [
+      primeos
+      kiloreux
+      dandellion
+    ];
+    platforms = platforms.all;
     outputsToInstall = [ "bin" ];
     license = licenses.bsd2;
   };

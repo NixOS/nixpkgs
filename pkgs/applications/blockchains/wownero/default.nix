@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, boost
-, libsodium
-, openssl
-, rapidjson
-, readline
-, unbound
-, zeromq
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  boost,
+  libsodium,
+  openssl,
+  rapidjson,
+  readline,
+  unbound,
+  zeromq,
+  darwin,
 }:
 
 let
@@ -59,17 +60,19 @@ stdenv.mkDerivation rec {
     cmake
   ];
 
-  buildInputs = [
-    boost
-    libsodium
-    openssl
-    rapidjson
-    readline
-    unbound
-    zeromq
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.IOKit
-  ];
+  buildInputs =
+    [
+      boost
+      libsodium
+      openssl
+      rapidjson
+      readline
+      unbound
+      zeromq
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.IOKit
+    ];
 
   postUnpack = ''
     rm -r $sourceRoot/external/miniupnp

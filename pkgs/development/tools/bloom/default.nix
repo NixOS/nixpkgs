@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, yaml-cpp
-, qtbase
-, qtsvg
-, wrapQtAppsHook
-, qttools
-, libusb1
-, php
-, hidapi
-, procps
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  yaml-cpp,
+  qtbase,
+  qtsvg,
+  wrapQtAppsHook,
+  qttools,
+  libusb1,
+  php,
+  hidapi,
+  procps,
 }:
 
 stdenv.mkDerivation rec {

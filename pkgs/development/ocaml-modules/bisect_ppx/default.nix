@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, fetchpatch, buildDunePackage, cmdliner, ppxlib }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  buildDunePackage,
+  cmdliner,
+  ppxlib,
+}:
 
 buildDunePackage rec {
   pname = "bisect_ppx";

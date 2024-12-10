@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, qttools
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, qtsvg
-, dtkwidget
-, dde-dock
-, dde-control-center
-, dde-session-shell
-, networkmanager-qt
-, glib
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qttools,
+  pkg-config,
+  wrapQtAppsHook,
+  qtbase,
+  qtsvg,
+  dtkwidget,
+  dde-dock,
+  dde-control-center,
+  dde-session-shell,
+  networkmanager-qt,
+  glib,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {

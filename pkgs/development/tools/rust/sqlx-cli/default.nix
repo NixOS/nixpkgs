@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, openssl
-, libiconv
-, testers
-, sqlx-cli
-, CoreFoundation
-, Security
-, SystemConfiguration
-, nix-update-script
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  openssl,
+  libiconv,
+  testers,
+  sqlx-cli,
+  CoreFoundation,
+  Security,
+  SystemConfiguration,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -53,8 +54,8 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     lib.optionals stdenv.isLinux [
       openssl
-    ] ++
-    lib.optionals stdenv.isDarwin [
+    ]
+    ++ lib.optionals stdenv.isDarwin [
       CoreFoundation
       Security
       SystemConfiguration
@@ -76,11 +77,14 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description =
-      "SQLx's associated command-line utility for managing databases, migrations, and enabling offline mode with sqlx::query!() and friends.";
+    description = "SQLx's associated command-line utility for managing databases, migrations, and enabling offline mode with sqlx::query!() and friends.";
     homepage = "https://github.com/launchbadge/sqlx";
     license = licenses.asl20;
-    maintainers = with maintainers; [ greizgh xrelkd fd ];
+    maintainers = with maintainers; [
+      greizgh
+      xrelkd
+      fd
+    ];
     mainProgram = "sqlx";
   };
 }

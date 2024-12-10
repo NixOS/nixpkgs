@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fetchpatch
-, testers
-, adrgen
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+  testers,
+  adrgen,
 }:
 
 buildGoModule rec {

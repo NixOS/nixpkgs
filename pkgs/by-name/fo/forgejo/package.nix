@@ -1,23 +1,24 @@
-{ bash
-, brotli
-, buildGoModule
-, forgejo
-, fetchpatch
-, git
-, gzip
-, lib
-, makeWrapper
-, nix-update-script
-, nixosTests
-, openssh
-, pam
-, pamSupport ? true
-, sqliteSupport ? true
-, xorg
-, runCommand
-, stdenv
-, fetchFromGitea
-, buildNpmPackage
+{
+  bash,
+  brotli,
+  buildGoModule,
+  forgejo,
+  fetchpatch,
+  git,
+  gzip,
+  lib,
+  makeWrapper,
+  nix-update-script,
+  nixosTests,
+  openssh,
+  pam,
+  pamSupport ? true,
+  sqliteSupport ? true,
+  xorg,
+  runCommand,
+  stdenv,
+  fetchFromGitea,
+  buildNpmPackage,
 }:
 
 let
@@ -54,7 +55,10 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  outputs = [ "out" "data" ];
+  outputs = [
+    "out"
+    "data"
+  ];
 
   nativeBuildInputs = [
     makeWrapper
@@ -71,8 +75,12 @@ buildGoModule rec {
     substituteInPlace modules/setting/server.go --subst-var data
   '';
 
-  tags = lib.optional pamSupport "pam"
-    ++ lib.optionals sqliteSupport [ "sqlite" "sqlite_unlock_notify" ];
+  tags =
+    lib.optional pamSupport "pam"
+    ++ lib.optionals sqliteSupport [
+      "sqlite"
+      "sqlite_unlock_notify"
+    ];
 
   ldflags = [
     "-s"
@@ -118,29 +126,44 @@ buildGoModule rec {
     mkdir -p $out
     cp -R ./options/locale $out/locale
     wrapProgram $out/bin/gitea \
-      --prefix PATH : ${lib.makeBinPath [ bash git gzip openssh ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          bash
+          git
+          gzip
+          openssh
+        ]
+      }
   '';
 
   # $data is not available in goModules.drv
-  overrideModAttrs = (_: {
-    postPatch = null;
-  });
+  overrideModAttrs = (
+    _: {
+      postPatch = null;
+    }
+  );
 
   passthru = {
     # allow nix-update to handle npmDepsHash
     inherit (frontend) npmDeps;
 
-    data-compressed = runCommand "forgejo-data-compressed" {
-      nativeBuildInputs = [ brotli xorg.lndir ];
-    } ''
-      mkdir $out
-      lndir ${forgejo.data}/ $out/
+    data-compressed =
+      runCommand "forgejo-data-compressed"
+        {
+          nativeBuildInputs = [
+            brotli
+            xorg.lndir
+          ];
+        }
+        ''
+          mkdir $out
+          lndir ${forgejo.data}/ $out/
 
-      # Create static gzip and brotli files
-      find -L $out -type f -regextype posix-extended -iregex '.*\.(css|html|js|svg|ttf|txt)' \
-        -exec gzip --best --keep --force {} ';' \
-        -exec brotli --best --keep --no-copy-stat {} ';'
-    '';
+          # Create static gzip and brotli files
+          find -L $out -type f -regextype posix-extended -iregex '.*\.(css|html|js|svg|ttf|txt)' \
+            -exec gzip --best --keep --force {} ';' \
+            -exec brotli --best --keep --no-copy-stat {} ';'
+        '';
 
     tests = nixosTests.forgejo;
     updateScript = nix-update-script { };
@@ -151,7 +174,12 @@ buildGoModule rec {
     homepage = "https://forgejo.org";
     changelog = "https://codeberg.org/forgejo/forgejo/releases/tag/${src.rev}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ emilylange urandom bendlas adamcstephens ];
+    maintainers = with lib.maintainers; [
+      emilylange
+      urandom
+      bendlas
+      adamcstephens
+    ];
     broken = stdenv.isDarwin;
     mainProgram = "gitea";
   };

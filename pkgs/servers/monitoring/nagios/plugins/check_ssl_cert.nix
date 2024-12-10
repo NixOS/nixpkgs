@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, bc
-, bind # host and dig binary
-, coreutils # date and timeout binary
-, curl
-, fetchFromGitHub
-, file
-, iproute2
-, makeWrapper
-, netcat-gnu
-, nmap
-, openssl
-, python3
-, which
+{
+  lib,
+  stdenv,
+  bc,
+  bind, # host and dig binary
+  coreutils, # date and timeout binary
+  curl,
+  fetchFromGitHub,
+  file,
+  iproute2,
+  makeWrapper,
+  netcat-gnu,
+  nmap,
+  openssl,
+  python3,
+  which,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +38,23 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/check_ssl_cert \
-      --prefix PATH : "${lib.makeBinPath ([ openssl file which curl bc coreutils bind nmap netcat-gnu python3 ] ++ lib.optional stdenv.isLinux iproute2) }"
+      --prefix PATH : "${
+        lib.makeBinPath (
+          [
+            openssl
+            file
+            which
+            curl
+            bc
+            coreutils
+            bind
+            nmap
+            netcat-gnu
+            python3
+          ]
+          ++ lib.optional stdenv.isLinux iproute2
+        )
+      }"
   '';
 
   meta = with lib; {

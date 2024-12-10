@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, acme
-, ldc
-, patchelf
-, SDL
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  acme,
+  ldc,
+  patchelf,
+  SDL,
 }:
 stdenv.mkDerivation rec {
   pname = "cheesecutter";
@@ -17,13 +18,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256:0q4a791nayya6n01l0f4kk497rdq6kiq0n72fqdpwqy138pfwydn";
   };
 
-  patches = [
-    ./0001-Drop-baked-in-build-date-for-r13y.patch
-  ]
-  ++ lib.optional stdenv.hostPlatform.isDarwin ./0002-Prepend-libSDL.dylib-to-macOS-SDL-loader.patch;
+  patches =
+    [
+      ./0001-Drop-baked-in-build-date-for-r13y.patch
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin ./0002-Prepend-libSDL.dylib-to-macOS-SDL-loader.patch;
 
-  nativeBuildInputs = [ acme ldc ]
-    ++ lib.optional (!stdenv.hostPlatform.isDarwin) patchelf;
+  nativeBuildInputs = [
+    acme
+    ldc
+  ] ++ lib.optional (!stdenv.hostPlatform.isDarwin) patchelf;
 
   buildInputs = [ SDL ];
 
@@ -47,18 +51,25 @@ stdenv.mkDerivation rec {
     let
       rpathSDL = lib.makeLibraryPath [ SDL ];
     in
-    if stdenv.hostPlatform.isDarwin then ''
-      install_name_tool -add_rpath ${rpathSDL} $out/bin/ccutter
-    '' else ''
-      rpath=$(patchelf --print-rpath $out/bin/ccutter)
-      patchelf --set-rpath "$rpath:${rpathSDL}" $out/bin/ccutter
-    '';
+    if stdenv.hostPlatform.isDarwin then
+      ''
+        install_name_tool -add_rpath ${rpathSDL} $out/bin/ccutter
+      ''
+    else
+      ''
+        rpath=$(patchelf --print-rpath $out/bin/ccutter)
+        patchelf --set-rpath "$rpath:${rpathSDL}" $out/bin/ccutter
+      '';
 
   meta = with lib; {
     description = "A tracker program for composing music for the SID chip";
     homepage = "https://github.com/theyamo/CheeseCutter/";
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "x86_64-darwin"
+    ];
     maintainers = with maintainers; [ OPNA2608 ];
   };
 }

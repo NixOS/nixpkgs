@@ -1,4 +1,9 @@
-{ appimageTools, lib, fetchurl, makeDesktopItem }:
+{
+  appimageTools,
+  lib,
+  fetchurl,
+  makeDesktopItem,
+}:
 
 let
   pname = "rambox";
@@ -9,13 +14,15 @@ let
     hash = "sha256-9AGzhj4UL2rEe67qvkX5VYhQEMETGYSDWv5XOgABSEE=";
   };
 
-  desktopItem = (makeDesktopItem {
-    desktopName = "Rambox";
-    name = pname;
-    exec = "rambox";
-    icon = pname;
-    categories = [ "Network" ];
-  });
+  desktopItem = (
+    makeDesktopItem {
+      desktopName = "Rambox";
+      name = pname;
+      exec = "rambox";
+      icon = pname;
+      categories = [ "Network" ];
+    }
+  );
 
   appimageContents = appimageTools.extract {
     inherit pname version src;

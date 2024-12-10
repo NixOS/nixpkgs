@@ -1,4 +1,11 @@
-{ lib, python3Packages, fetchFromGitHub, hddtemp, hdparm, smartmontools }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  hddtemp,
+  hdparm,
+  smartmontools,
+}:
 
 python3Packages.buildPythonPackage rec {
   pname = "hddfancontrol";

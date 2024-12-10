@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, nixosTests
-, testers
-, sonic-server
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  nixosTests,
+  testers,
+  sonic-server,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -62,6 +63,9 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mpl20;
     platforms = platforms.unix;
     mainProgram = "sonic";
-    maintainers = with maintainers; [ pleshevskiy anthonyroussel ];
+    maintainers = with maintainers; [
+      pleshevskiy
+      anthonyroussel
+    ];
   };
 }

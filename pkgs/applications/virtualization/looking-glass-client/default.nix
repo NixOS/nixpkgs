@@ -1,41 +1,42 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeDesktopItem
-, pkg-config
-, cmake
-, freefont_ttf
-, spice-protocol
-, nettle
-, libbfd
-, fontconfig
-, libffi
-, expat
-, libGL
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeDesktopItem,
+  pkg-config,
+  cmake,
+  freefont_ttf,
+  spice-protocol,
+  nettle,
+  libbfd,
+  fontconfig,
+  libffi,
+  expat,
+  libGL,
 
-, libX11
-, libxkbcommon
-, libXext
-, libXrandr
-, libXi
-, libXScrnSaver
-, libXinerama
-, libXcursor
-, libXpresent
-, libXdmcp
+  libX11,
+  libxkbcommon,
+  libXext,
+  libXrandr,
+  libXi,
+  libXScrnSaver,
+  libXinerama,
+  libXcursor,
+  libXpresent,
+  libXdmcp,
 
-, wayland
-, wayland-protocols
+  wayland,
+  wayland-protocols,
 
-, pipewire
-, pulseaudio
-, libsamplerate
+  pipewire,
+  pulseaudio,
+  libsamplerate,
 
-, openGLSupport ? true
-, xorgSupport ? true
-, waylandSupport ? true
-, pipewireSupport ? true
-, pulseSupport ? true
+  openGLSupport ? true,
+  xorgSupport ? true,
+  waylandSupport ? true,
+  pipewireSupport ? true,
+  pulseSupport ? true,
 }:
 
 let
@@ -64,15 +65,50 @@ stdenv.mkDerivation rec {
     ./0001-client-cmake-move-X11-config-directives-to-displayse.patch
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ libX11 libGL freefont_ttf spice-protocol expat libbfd nettle fontconfig libffi ]
-    ++ lib.optionals xorgSupport [ libxkbcommon libXi libXScrnSaver libXinerama libXcursor libXpresent libXext libXrandr libXdmcp ]
-    ++ lib.optionals waylandSupport [ libxkbcommon wayland wayland-protocols ]
-    ++ lib.optionals pipewireSupport [ pipewire libsamplerate ]
-    ++ lib.optionals pulseSupport [ pulseaudio libsamplerate ];
+  buildInputs =
+    [
+      libX11
+      libGL
+      freefont_ttf
+      spice-protocol
+      expat
+      libbfd
+      nettle
+      fontconfig
+      libffi
+    ]
+    ++ lib.optionals xorgSupport [
+      libxkbcommon
+      libXi
+      libXScrnSaver
+      libXinerama
+      libXcursor
+      libXpresent
+      libXext
+      libXrandr
+      libXdmcp
+    ]
+    ++ lib.optionals waylandSupport [
+      libxkbcommon
+      wayland
+      wayland-protocols
+    ]
+    ++ lib.optionals pipewireSupport [
+      pipewire
+      libsamplerate
+    ]
+    ++ lib.optionals pulseSupport [
+      pulseaudio
+      libsamplerate
+    ];
 
-  cmakeFlags = [ "-DOPTIMIZE_FOR_NATIVE=OFF" ]
+  cmakeFlags =
+    [ "-DOPTIMIZE_FOR_NATIVE=OFF" ]
     ++ lib.optionals (!openGLSupport) [ "-DENABLE_OPENGL=no" ]
     ++ lib.optionals (!xorgSupport) [ "-DENABLE_X11=no" ]
     ++ lib.optionals (!waylandSupport) [ "-DENABLE_WAYLAND=no" ]
@@ -102,7 +138,11 @@ stdenv.mkDerivation rec {
     homepage = "https://looking-glass.io/";
     license = licenses.gpl2Plus;
     mainProgram = "looking-glass-client";
-    maintainers = with maintainers; [ alexbakker babbaj j-brn ];
+    maintainers = with maintainers; [
+      alexbakker
+      babbaj
+      j-brn
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

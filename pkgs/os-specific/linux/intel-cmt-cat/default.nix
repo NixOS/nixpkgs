@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   version = "23.11.1";
@@ -13,7 +17,10 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  makeFlags = [ "PREFIX=$(out)" "NOLDCONFIG=y" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "NOLDCONFIG=y"
+  ];
 
   meta = with lib; {
     description = "User space software for Intel(R) Resource Director Technology";

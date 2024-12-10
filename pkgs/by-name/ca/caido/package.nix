@@ -1,7 +1,8 @@
-{ lib
-, fetchurl
-, appimageTools
-, makeWrapper
+{
+  lib,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
 }:
 
 let
@@ -13,7 +14,8 @@ let
   };
   appimageContents = appimageTools.extractType2 { inherit pname src version; };
 
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname src version;
 
   extraPkgs = pkgs: [ pkgs.libthai ];

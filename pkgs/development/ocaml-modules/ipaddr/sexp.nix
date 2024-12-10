@@ -1,5 +1,10 @@
-{ lib, buildDunePackage
-, ipaddr, ipaddr-cstruct, ounit2, ppx_sexp_conv
+{
+  lib,
+  buildDunePackage,
+  ipaddr,
+  ipaddr-cstruct,
+  ounit2,
+  ppx_sexp_conv,
 }:
 
 buildDunePackage rec {
@@ -11,7 +16,11 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ ipaddr ];
 
-  checkInputs = [ ipaddr-cstruct ounit2 ppx_sexp_conv ];
+  checkInputs = [
+    ipaddr-cstruct
+    ounit2
+    ppx_sexp_conv
+  ];
   doCheck = true;
 
   meta = ipaddr.meta // {

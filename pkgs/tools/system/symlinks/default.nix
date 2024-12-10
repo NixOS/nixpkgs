@@ -1,4 +1,8 @@
-{ fetchFromGitHub, lib, stdenv }:
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "symlinks";
@@ -23,7 +27,10 @@ stdenv.mkDerivation rec {
     description = "Find and remedy problematic symbolic links on a system";
     homepage = "https://github.com/brandt/symlinks";
     license = licenses.mit;
-    maintainers = with maintainers; [ goibhniu ckauhaus ];
+    maintainers = with maintainers; [
+      goibhniu
+      ckauhaus
+    ];
     platforms = platforms.unix;
     mainProgram = "symlinks";
   };

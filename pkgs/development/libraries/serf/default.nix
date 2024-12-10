@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, apr
-, scons
-, openssl
-, aprutil
-, zlib
-, libkrb5
-, pkg-config
-, libiconv
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchurl,
+  apr,
+  scons,
+  openssl,
+  aprutil,
+  zlib,
+  libkrb5,
+  pkg-config,
+  libiconv,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,9 +22,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-voHvCLqiUW7Np2p3rffe97wyJ+61eLmjO0X3tB3AZOY=";
   };
 
-  nativeBuildInputs = [ pkg-config scons ];
-  buildInputs = [ apr openssl aprutil zlib libiconv ]
-    ++ lib.optional (!stdenv.isCygwin) libkrb5;
+  nativeBuildInputs = [
+    pkg-config
+    scons
+  ];
+  buildInputs = [
+    apr
+    openssl
+    aprutil
+    zlib
+    libiconv
+  ] ++ lib.optional (!stdenv.isCygwin) libkrb5;
 
   patches = [
     ./scons.patch
@@ -36,15 +45,17 @@ stdenv.mkDerivation rec {
 
   prefixKey = "PREFIX=";
 
-  preConfigure = ''
-    sconsFlags+=" APR=$(echo ${apr.dev}/bin/*-config)"
-    sconsFlags+=" APU=$(echo ${aprutil.dev}/bin/*-config)"
-    sconsFlags+=" CC=$CC"
-    sconsFlags+=" OPENSSL=${openssl}"
-    sconsFlags+=" ZLIB=${zlib}"
-  '' + lib.optionalString (!stdenv.isCygwin) ''
-    sconsFlags+=" GSSAPI=${libkrb5.dev}"
-  '';
+  preConfigure =
+    ''
+      sconsFlags+=" APR=$(echo ${apr.dev}/bin/*-config)"
+      sconsFlags+=" APU=$(echo ${aprutil.dev}/bin/*-config)"
+      sconsFlags+=" CC=$CC"
+      sconsFlags+=" OPENSSL=${openssl}"
+      sconsFlags+=" ZLIB=${zlib}"
+    ''
+    + lib.optionalString (!stdenv.isCygwin) ''
+      sconsFlags+=" GSSAPI=${libkrb5.dev}"
+    '';
 
   enableParallelBuilding = true;
 
@@ -52,7 +63,10 @@ stdenv.mkDerivation rec {
     description = "HTTP client library based on APR";
     homepage = "https://serf.apache.org/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ orivej raskin ];
+    maintainers = with maintainers; [
+      orivej
+      raskin
+    ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 python3Packages.buildPythonPackage rec {
   pname = "opsdroid";
@@ -17,11 +21,38 @@ python3Packages.buildPythonPackage rec {
   doCheck = false;
 
   propagatedBuildInputs = with python3Packages; [
-    click babel opsdroid-get-image-size slackclient webexteamssdk bleach
-    parse emoji puremagic yamale nbformat websockets pycron nbconvert
-    aiohttp matrix-api-async aioredis aiosqlite arrow pyyaml motor regex
-    mattermostdriver setuptools voluptuous ibm-watson tailer multidict
-    watchgod get-video-properties appdirs bitstring
+    click
+    babel
+    opsdroid-get-image-size
+    slackclient
+    webexteamssdk
+    bleach
+    parse
+    emoji
+    puremagic
+    yamale
+    nbformat
+    websockets
+    pycron
+    nbconvert
+    aiohttp
+    matrix-api-async
+    aioredis
+    aiosqlite
+    arrow
+    pyyaml
+    motor
+    regex
+    mattermostdriver
+    setuptools
+    voluptuous
+    ibm-watson
+    tailer
+    multidict
+    watchgod
+    get-video-properties
+    appdirs
+    bitstring
     (matrix-nio.override { withOlm = true; })
   ];
 
@@ -30,7 +61,10 @@ python3Packages.buildPythonPackage rec {
   meta = with lib; {
     description = "An open source chat-ops bot framework";
     homepage = "https://opsdroid.dev";
-    maintainers = with maintainers; [ globin willibutz ];
+    maintainers = with maintainers; [
+      globin
+      willibutz
+    ];
     license = licenses.asl20;
     platforms = platforms.unix;
     mainProgram = "opsdroid";

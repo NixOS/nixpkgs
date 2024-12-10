@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,15 +16,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-yCShZ+ALzSe/svErt9/i1JyyEvbIeABGPbpS4lVil0A=";
   };
 
-  postPatch = let
-    shortRev = builtins.substring 0 9 finalAttrs.src.rev;
-  in ''
-    substituteInPlace \
-      apfs-snap/Makefile apfsck/Makefile mkapfs/Makefile \
-      --replace \
-        '$(shell git describe --always HEAD | tail -c 9)' \
-        '${shortRev}'
-  '';
+  postPatch =
+    let
+      shortRev = builtins.substring 0 9 finalAttrs.src.rev;
+    in
+    ''
+      substituteInPlace \
+        apfs-snap/Makefile apfsck/Makefile mkapfs/Makefile \
+        --replace \
+          '$(shell git describe --always HEAD | tail -c 9)' \
+          '${shortRev}'
+    '';
 
   buildPhase = ''
     runHook preBuild

@@ -1,20 +1,29 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   cfg = config.virtualisation.containerd;
 
-  configFile = if cfg.configFile == null then
-    settingsFormat.generate "containerd.toml" cfg.settings
-  else
-    cfg.configFile;
+  configFile =
+    if cfg.configFile == null then
+      settingsFormat.generate "containerd.toml" cfg.settings
+    else
+      cfg.configFile;
 
-  containerdConfigChecked = pkgs.runCommand "containerd-config-checked.toml" {
-    nativeBuildInputs = [ pkgs.containerd ];
-  } ''
-    containerd -c ${configFile} config dump >/dev/null
-    ln -s ${configFile} $out
-  '';
+  containerdConfigChecked =
+    pkgs.runCommand "containerd-config-checked.toml"
+      {
+        nativeBuildInputs = [ pkgs.containerd ];
+      }
+      ''
+        containerd -c ${configFile} config dump >/dev/null
+        ln -s ${configFile} $out
+      '';
 
-  settingsFormat = pkgs.formats.toml {};
+  settingsFormat = pkgs.formats.toml { };
 in
 {
 
@@ -24,22 +33,22 @@ in
     configFile = lib.mkOption {
       default = null;
       description = ''
-       Path to containerd config file.
-       Setting this option will override any configuration applied by the settings option.
+        Path to containerd config file.
+        Setting this option will override any configuration applied by the settings option.
       '';
       type = nullOr path;
     };
 
     settings = lib.mkOption {
       type = settingsFormat.type;
-      default = {};
+      default = { };
       description = ''
         Verbatim lines to add to containerd.toml
       '';
     };
 
     args = lib.mkOption {
-      default = {};
+      default = { };
       description = "extra args to append to the containerd cmdline";
       type = attrsOf str;
     };
@@ -55,9 +64,8 @@ in
       settings = {
         version = 2;
         plugins."io.containerd.grpc.v1.cri" = {
-         containerd.snapshotter =
-           lib.mkIf config.boot.zfs.enabled (lib.mkOptionDefault "zfs");
-         cni.bin_dir = lib.mkOptionDefault "${pkgs.cni-plugins}/bin";
+          containerd.snapshotter = lib.mkIf config.boot.zfs.enabled (lib.mkOptionDefault "zfs");
+          cni.bin_dir = lib.mkOptionDefault "${pkgs.cni-plugins}/bin";
         };
       };
     };
@@ -68,13 +76,18 @@ in
       description = "containerd - container runtime";
       wantedBy = [ "multi-user.target" ];
       after = [ "network.target" ];
-      path = with pkgs; [
-        containerd
-        runc
-        iptables
-      ] ++ lib.optional config.boot.zfs.enabled config.boot.zfs.package;
+      path =
+        with pkgs;
+        [
+          containerd
+          runc
+          iptables
+        ]
+        ++ lib.optional config.boot.zfs.enabled config.boot.zfs.package;
       serviceConfig = {
-        ExecStart = ''${pkgs.containerd}/bin/containerd ${lib.concatStringsSep " " (lib.cli.toGNUCommandLine {} cfg.args)}'';
+        ExecStart = ''${pkgs.containerd}/bin/containerd ${
+          lib.concatStringsSep " " (lib.cli.toGNUCommandLine { } cfg.args)
+        }'';
         Delegate = "yes";
         KillMode = "process";
         Type = "notify";

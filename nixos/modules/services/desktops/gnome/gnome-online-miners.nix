@@ -1,6 +1,11 @@
 # GNOME Online Miners daemon.
 
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 {
 
@@ -26,7 +31,6 @@
     };
 
   };
-
 
   ###### implementation
 

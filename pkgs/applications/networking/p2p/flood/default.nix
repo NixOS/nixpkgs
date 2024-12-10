@@ -1,6 +1,7 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage rec {
@@ -20,7 +21,10 @@ buildNpmPackage rec {
     description = "Modern web UI for various torrent clients with a Node.js backend and React frontend";
     homepage = "https://flood.js.org";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ thiagokokada winter ];
+    maintainers = with maintainers; [
+      thiagokokada
+      winter
+    ];
     mainProgram = "flood";
   };
 }

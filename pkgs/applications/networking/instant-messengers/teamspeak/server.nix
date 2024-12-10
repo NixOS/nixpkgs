@@ -1,19 +1,32 @@
-{ lib, stdenv, fetchurl, postgresql, autoPatchelfHook, writeScript }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  postgresql,
+  autoPatchelfHook,
+  writeScript,
+}:
 
 let
   arch = if stdenv.is64bit then "amd64" else "x86";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "teamspeak-server";
   version = "3.13.7";
 
   src = fetchurl {
     url = "https://files.teamspeak-services.com/releases/server/${version}/teamspeak3-server_linux_${arch}-${version}.tar.bz2";
-    sha256 = if stdenv.is64bit
-      then "sha256-d1pXMamAmAHkyPkGbNm8ViobNoVTE5wSSfKgdA1QBB4="
-      else "sha256-aMEDOnvBeKfzG8lDFhU8I5DYgG53IsCDBMV2MUyJi2g=";
+    sha256 =
+      if stdenv.is64bit then
+        "sha256-d1pXMamAmAHkyPkGbNm8ViobNoVTE5wSSfKgdA1QBB4="
+      else
+        "sha256-aMEDOnvBeKfzG8lDFhU8I5DYgG53IsCDBMV2MUyJi2g=";
   };
 
-  buildInputs = [ stdenv.cc.cc postgresql.lib ];
+  buildInputs = [
+    stdenv.cc.cc
+    postgresql.lib
+  ];
 
   nativeBuildInputs = [ autoPatchelfHook ];
 
@@ -62,6 +75,9 @@ in stdenv.mkDerivation rec {
     # See distribution-permit.txt for a confirmation that nixpkgs is allowed to distribute TeamSpeak.
     license = licenses.unfreeRedistributable;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ arobyn gerschtli ];
+    maintainers = with maintainers; [
+      arobyn
+      gerschtli
+    ];
   };
 }

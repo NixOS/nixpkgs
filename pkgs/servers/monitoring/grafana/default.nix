@@ -1,8 +1,20 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, removeReferencesTo
-, tzdata, wire
-, yarn, nodejs, python3, cacert
-, jq, moreutils
-, nix-update-script, nixosTests, xcbuild
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  removeReferencesTo,
+  tzdata,
+  wire,
+  yarn,
+  nodejs,
+  python3,
+  cacert,
+  jq,
+  moreutils,
+  nix-update-script,
+  nixosTests,
+  xcbuild,
 }:
 
 let
@@ -28,15 +40,19 @@ let
 in
 buildGoModule rec {
   pname = "grafana";
-  version = "10.4.13";
+  version = "10.4.14";
 
-  subPackages = [ "pkg/cmd/grafana" "pkg/cmd/grafana-server" "pkg/cmd/grafana-cli" ];
+  subPackages = [
+    "pkg/cmd/grafana"
+    "pkg/cmd/grafana-server"
+    "pkg/cmd/grafana-cli"
+  ];
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "grafana";
     rev = "v${version}";
-    hash = "sha256-nJpZSW5eHleBZjPoPScMmXl9BAqUnEGrKUu/UJzHEfI=";
+    hash = "sha256-JbrJEJU/i7NvwcGR1smPueqGbYVxVmHp2n5putnoRyo=";
   };
 
   # borrowed from: https://github.com/NixOS/nixpkgs/blob/d70d9425f49f9aba3c49e2c389fe6d42bac8c5b0/pkgs/development/tools/analysis/snyk/default.nix#L20-L22
@@ -50,9 +66,13 @@ buildGoModule rec {
     name = "${pname}-${version}-yarn-offline-cache";
     inherit src env;
     nativeBuildInputs = [
-      yarn nodejs cacert
-      jq moreutils python3
-    # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
+      yarn
+      nodejs
+      cacert
+      jq
+      moreutils
+      python3
+      # @esfx/equatable@npm:1.0.2 fails to build on darwin as it requires `xcbuild`
     ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
     postPatch = ''
       ${patchAwayGrafanaE2E}
@@ -72,12 +92,14 @@ buildGoModule rec {
     dontInstall = true;
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = rec {
-      x86_64-linux = "sha256-BKvYnXgk7JNkjnka7Co/AfI3d+j/OapXLjS47yoSVPI=";
-      aarch64-linux = x86_64-linux;
-      aarch64-darwin = "sha256-Rr3NSHrb8aYt1gEfv2huexA2O/6zVIzdM56pTWSob6s=";
-      x86_64-darwin = aarch64-darwin;
-    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    outputHash =
+      rec {
+        x86_64-linux = "sha256-BKvYnXgk7JNkjnka7Co/AfI3d+j/OapXLjS47yoSVPI=";
+        aarch64-linux = x86_64-linux;
+        aarch64-darwin = "sha256-Rr3NSHrb8aYt1gEfv2huexA2O/6zVIzdM56pTWSob6s=";
+        x86_64-darwin = aarch64-darwin;
+      }
+      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   disallowedRequisites = [ offlineCache ];
@@ -86,7 +108,14 @@ buildGoModule rec {
 
   proxyVendor = true;
 
-  nativeBuildInputs = [ wire yarn jq moreutils removeReferencesTo python3 ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
+  nativeBuildInputs = [
+    wire
+    yarn
+    jq
+    moreutils
+    removeReferencesTo
+    python3
+  ] ++ lib.optionals stdenv.isDarwin [ xcbuild.xcbuild ];
 
   postPatch = ''
     ${patchAwayGrafanaE2E}
@@ -127,7 +156,9 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w" "-X main.version=${version}"
+    "-s"
+    "-w"
+    "-X main.version=${version}"
   ];
 
   # Tests start http servers which need to bind to local addresses:
@@ -160,8 +191,20 @@ buildGoModule rec {
     description = "Gorgeous metric viz, dashboards & editors for Graphite, InfluxDB & OpenTSDB";
     license = licenses.agpl3Only;
     homepage = "https://grafana.com";
-    maintainers = with maintainers; [ offline fpletz willibutz globin ma27 Frostman ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-linux" "aarch64-darwin" ];
+    maintainers = with maintainers; [
+      offline
+      fpletz
+      willibutz
+      globin
+      ma27
+      Frostman
+    ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-linux"
+      "aarch64-darwin"
+    ];
     mainProgram = "grafana-server";
   };
 }

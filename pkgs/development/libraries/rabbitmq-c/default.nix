@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openssl, popt, xmlto }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+  popt,
+  xmlto,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rabbitmq-c";
@@ -12,7 +20,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ openssl popt xmlto ];
+  buildInputs = [
+    openssl
+    popt
+    xmlto
+  ];
 
   # https://github.com/alanxz/rabbitmq-c/issues/733
   postPatch = ''

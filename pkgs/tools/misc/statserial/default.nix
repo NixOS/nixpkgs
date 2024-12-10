@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, ncurses, glibc }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ncurses,
+  glibc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "statserial";
@@ -17,14 +23,17 @@ stdenv.mkDerivation rec {
       --replace 'LDFLAGS = -s -N' '#LDFLAGS = -s -N'
   '';
 
-  buildInputs = [ ncurses glibc ];
+  buildInputs = [
+    ncurses
+    glibc
+  ];
 
   installPhase = ''
-  mkdir -p $out/bin
-  cp statserial $out/bin
+    mkdir -p $out/bin
+    cp statserial $out/bin
 
-  mkdir -p $out/share/man/man1
-  cp statserial.1 $out/share/man/man1
+    mkdir -p $out/share/man/man1
+    cp statserial.1 $out/share/man/man1
   '';
 
   meta = with lib; {
@@ -32,11 +41,11 @@ stdenv.mkDerivation rec {
     description = "Display serial port modem status lines";
     license = licenses.gpl2Plus;
 
-    longDescription =
-      '' Statserial displays a table of the signals on a standard 9-pin or
-      25-pin serial port, and indicates the status of the handshaking lines. It
-      can be useful for debugging problems with serial ports or modems.
-      '';
+    longDescription = ''
+      Statserial displays a table of the signals on a standard 9-pin or
+           25-pin serial port, and indicates the status of the handshaking lines. It
+           can be useful for debugging problems with serial ports or modems.
+    '';
 
     platforms = platforms.unix;
     maintainers = with maintainers; [ rps ];

@@ -1,6 +1,7 @@
-{ lib
-, makeSetupHook
-, teensy-cmake-macros
+{
+  lib,
+  makeSetupHook,
+  teensy-cmake-macros,
 }:
 
 makeSetupHook {

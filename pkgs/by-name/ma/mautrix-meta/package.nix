@@ -1,16 +1,17 @@
-{ buildGoModule
-, config
-, fetchFromGitHub
-, nix-update-script
-, lib
-, nixosTests
-, olm
-# This option enables the use of an experimental pure-Go implementation of the
-# Olm protocol instead of libolm for end-to-end encryption. Using goolm is not
-# recommended by the mautrix developers, but they are interested in people
-# trying it out in non-production-critical environments and reporting any
-# issues they run into.
-, withGoolm ? false
+{
+  buildGoModule,
+  config,
+  fetchFromGitHub,
+  nix-update-script,
+  lib,
+  nixosTests,
+  olm,
+  # This option enables the use of an experimental pure-Go implementation of the
+  # Olm protocol instead of libolm for end-to-end encryption. Using goolm is not
+  # recommended by the mautrix developers, but they are interested in people
+  # trying it out in non-production-critical environments and reporting any
+  # issues they run into.
+  withGoolm ? false,
 }:
 
 buildGoModule rec {
@@ -42,12 +43,14 @@ buildGoModule rec {
     updateScript = nix-update-script { };
   };
 
-
   meta = {
     homepage = "https://github.com/mautrix/meta";
     description = "Matrix <-> Facebook and Matrix <-> Instagram hybrid puppeting/relaybot bridge";
     license = lib.licenses.agpl3Plus;
-    maintainers = with lib.maintainers; [ rutherther eyjhb ];
+    maintainers = with lib.maintainers; [
+      rutherther
+      eyjhb
+    ];
     mainProgram = "mautrix-meta";
   };
 }

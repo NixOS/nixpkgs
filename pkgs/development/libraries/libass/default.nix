@@ -1,10 +1,18 @@
-{ lib, stdenv, fetchurl, pkg-config, yasm
-, freetype, fribidi, harfbuzz
-, fontconfigSupport ? true, fontconfig ? null # fontconfig support
-, rasterizerSupport ? false # Internal rasterizer
-, largeTilesSupport ? false # Use larger tiles in the rasterizer
-, libiconv
-, darwin
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  yasm,
+  freetype,
+  fribidi,
+  harfbuzz,
+  fontconfigSupport ? true,
+  fontconfig ? null, # fontconfig support
+  rasterizerSupport ? false, # Internal rasterizer
+  largeTilesSupport ? false, # Use larger tiles in the rasterizer
+  libiconv,
+  darwin,
 }:
 
 assert fontconfigSupport -> fontconfig != null;
@@ -18,7 +26,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-8NoLv7pHbBauPhz9hiJW0wkVkR96uqGxbOYu5lMZJ4Q=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   configureFlags = [
     (lib.enableFeature fontconfigSupport "fontconfig")
@@ -26,9 +37,17 @@ stdenv.mkDerivation rec {
     (lib.enableFeature largeTilesSupport "large-tiles")
   ];
 
-  nativeBuildInputs = [ pkg-config yasm ];
+  nativeBuildInputs = [
+    pkg-config
+    yasm
+  ];
 
-  buildInputs = [ freetype fribidi harfbuzz ]
+  buildInputs =
+    [
+      freetype
+      fribidi
+      harfbuzz
+    ]
     ++ lib.optional fontconfigSupport fontconfig
     ++ lib.optional stdenv.isDarwin [
       libiconv
@@ -39,9 +58,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Portable ASS/SSA subtitle renderer";
-    homepage    = "https://github.com/libass/libass";
-    license     = licenses.isc;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/libass/libass";
+    license = licenses.isc;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ codyopel ];
   };
 }

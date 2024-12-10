@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, lazygit, testers }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  lazygit,
+  testers,
+}:
 
 buildGoModule rec {
   pname = "lazygit";
@@ -14,7 +20,10 @@ buildGoModule rec {
   vendorHash = null;
   subPackages = [ "." ];
 
-  ldflags = [ "-X main.version=${version}" "-X main.buildSource=nix" ];
+  ldflags = [
+    "-X main.version=${version}"
+    "-X main.buildSource=nix"
+  ];
 
   passthru.tests.version = testers.testVersion {
     package = lazygit;
@@ -25,7 +34,12 @@ buildGoModule rec {
     homepage = "https://github.com/jesseduffield/lazygit";
     changelog = "https://github.com/jesseduffield/lazygit/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne equirosa paveloom starsep ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      equirosa
+      paveloom
+      starsep
+    ];
     mainProgram = "lazygit";
   };
 }

@@ -1,17 +1,20 @@
-{ lib, appimageTools, fetchurl }:
+{
+  lib,
+  appimageTools,
+  fetchurl,
+}:
 
 let
   pname = "chrysalis";
   version = "0.13.3";
   name = "${pname}-${version}-binary";
   src = fetchurl {
-    url =
-      "https://github.com/keyboardio/${pname}/releases/download/v${version}/${pname}-${version}-x64.AppImage";
-    hash =
-      "sha512-F6Y87rgIclj1OA3gVX/gqqp9AvXKQlBXrbqk/26F1KHPF9NzHJgVmeszSo3Nhb6xg4CzWmzkqc8IW2H/Bg57kw==";
+    url = "https://github.com/keyboardio/${pname}/releases/download/v${version}/${pname}-${version}-x64.AppImage";
+    hash = "sha512-F6Y87rgIclj1OA3gVX/gqqp9AvXKQlBXrbqk/26F1KHPF9NzHJgVmeszSo3Nhb6xg4CzWmzkqc8IW2H/Bg57kw==";
   };
   appimageContents = appimageTools.extract { inherit name src; };
-in appimageTools.wrapType2 rec {
+in
+appimageTools.wrapType2 rec {
   inherit name pname src;
 
   extraPkgs = pkgs: [ pkgs.glib ];
@@ -41,7 +44,11 @@ in appimageTools.wrapType2 rec {
     description = "A graphical configurator for Kaleidoscope-powered keyboards";
     homepage = "https://github.com/keyboardio/Chrysalis";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ aw eclairevoyant nshalman ];
+    maintainers = with maintainers; [
+      aw
+      eclairevoyant
+      nshalman
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "chrysalis";
   };

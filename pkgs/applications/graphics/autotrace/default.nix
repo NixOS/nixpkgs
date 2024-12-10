@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, gettext
-, intltool
-, pkg-config
-, glib
-, imagemagick
-, libpng
-, pstoedit
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  gettext,
+  intltool,
+  pkg-config,
+  glib,
+  imagemagick,
+  libpng,
+  pstoedit,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,14 +41,16 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    glib
-    imagemagick
-    libpng
-    pstoedit
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  buildInputs =
+    [
+      glib
+      imagemagick
+      libpng
+      pstoedit
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Foundation
+    ];
 
   meta = with lib; {
     homepage = "https://github.com/autotrace/autotrace";

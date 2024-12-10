@@ -1,24 +1,25 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, brotli
-, hatchling
-, certifi
-, ffmpeg
-, rtmpdump
-, atomicparsley
-, pycryptodomex
-, websockets
-, mutagen
-, pythonRelaxDepsHook
-, requests
-, secretstorage
-, urllib3
-, atomicparsleySupport ? true
-, ffmpegSupport ? true
-, rtmpSupport ? true
-, withAlias ? false # Provides bin/youtube-dl for backcompat
-, update-python-libraries
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  brotli,
+  hatchling,
+  certifi,
+  ffmpeg,
+  rtmpdump,
+  atomicparsley,
+  pycryptodomex,
+  websockets,
+  mutagen,
+  pythonRelaxDepsHook,
+  requests,
+  secretstorage,
+  urllib3,
+  atomicparsleySupport ? true,
+  ffmpegSupport ? true,
+  rtmpSupport ? true,
+  withAlias ? false, # Provides bin/youtube-dl for backcompat
+  update-python-libraries,
 }:
 
 buildPythonPackage rec {

@@ -1,62 +1,63 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, fetchpatch2
-, gitUpdater
-, linkFarm
-, nixosTests
-, ayatana-indicator-datetime
-, bash
-, biometryd
-, boost
-, cmake
-, cmake-extras
-, coreutils
-, dbus
-, dbus-test-runner
-, deviceinfo
-, geonames
-, glib
-, glm
-, gnome-desktop
-, gsettings-qt
-, gtk3
-, hfd-service
-, libevdev
-, libqtdbustest
-, libqtdbusmock
-, libusermetrics
-, libuuid
-, lightdm_qt
-, lomiri-api
-, lomiri-app-launch
-, lomiri-download-manager
-, lomiri-indicator-network
-, lomiri-ui-toolkit
-, lomiri-settings-components
-, lomiri-system-settings-unwrapped
-, lomiri-schemas
-, lomiri-notifications
-, lomiri-thumbnailer
-, maliit-keyboard
-, mir
-, nixos-icons
-, pam
-, pkg-config
-, properties-cpp
-, protobuf
-, python3
-, qmenumodel
-, qtbase
-, qtdeclarative
-, qtmir
-, qtmultimedia
-, qtsvg
-, telephony-service
-, wrapGAppsHook3
-, wrapQtAppsHook
-, xwayland
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  fetchpatch2,
+  gitUpdater,
+  linkFarm,
+  nixosTests,
+  ayatana-indicator-datetime,
+  bash,
+  biometryd,
+  boost,
+  cmake,
+  cmake-extras,
+  coreutils,
+  dbus,
+  dbus-test-runner,
+  deviceinfo,
+  geonames,
+  glib,
+  glm,
+  gnome-desktop,
+  gsettings-qt,
+  gtk3,
+  hfd-service,
+  libevdev,
+  libqtdbustest,
+  libqtdbusmock,
+  libusermetrics,
+  libuuid,
+  lightdm_qt,
+  lomiri-api,
+  lomiri-app-launch,
+  lomiri-download-manager,
+  lomiri-indicator-network,
+  lomiri-ui-toolkit,
+  lomiri-settings-components,
+  lomiri-system-settings-unwrapped,
+  lomiri-schemas,
+  lomiri-notifications,
+  lomiri-thumbnailer,
+  maliit-keyboard,
+  mir,
+  nixos-icons,
+  pam,
+  pkg-config,
+  properties-cpp,
+  protobuf,
+  python3,
+  qmenumodel,
+  qtbase,
+  qtdeclarative,
+  qtmir,
+  qtmultimedia,
+  qtsvg,
+  telephony-service,
+  wrapGAppsHook3,
+  wrapQtAppsHook,
+  xwayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -120,40 +121,42 @@ stdenv.mkDerivation (finalAttrs: {
     ./9902-lomiri-Check-NIXOS_XKB_LAYOUTS.patch
   ];
 
-  postPatch = ''
-    # Part of greeter fix, applies separately due to merge conflicts
-    substituteInPlace data/lomiri-greeter.desktop.in.in \
-      --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/lomiri-greeter-wrapper @CMAKE_INSTALL_FULL_BINDIR@/lomiri --mode=greeter' '@CMAKE_INSTALL_FULL_BINDIR@/lomiri --mode=greeter' \
-      --replace-fail 'X-LightDM-Session-Type=mir' 'X-LightDM-Session-Type=wayland'
+  postPatch =
+    ''
+      # Part of greeter fix, applies separately due to merge conflicts
+      substituteInPlace data/lomiri-greeter.desktop.in.in \
+        --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/lomiri-greeter-wrapper @CMAKE_INSTALL_FULL_BINDIR@/lomiri --mode=greeter' '@CMAKE_INSTALL_FULL_BINDIR@/lomiri --mode=greeter' \
+        --replace-fail 'X-LightDM-Session-Type=mir' 'X-LightDM-Session-Type=wayland'
 
-    # Need to replace prefix
-    substituteInPlace data/systemd-user/CMakeLists.txt \
-      --replace-fail 'pkg_get_variable(SYSTEMD_USERUNITDIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USERUNITDIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
+      # Need to replace prefix
+      substituteInPlace data/systemd-user/CMakeLists.txt \
+        --replace-fail 'pkg_get_variable(SYSTEMD_USERUNITDIR systemd systemduserunitdir)' 'pkg_get_variable(SYSTEMD_USERUNITDIR systemd systemduserunitdir DEFINE_VARIABLES prefix=''${CMAKE_INSTALL_PREFIX})'
 
-    # Don't embed full paths into regular desktop files (but do embed them into lightdm greeter one)
-    substituteInPlace data/{indicators-client,lomiri}.desktop.in.in \
-      --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/' ""
+      # Don't embed full paths into regular desktop files (but do embed them into lightdm greeter one)
+      substituteInPlace data/{indicators-client,lomiri}.desktop.in.in \
+        --replace-fail '@CMAKE_INSTALL_FULL_BINDIR@/' ""
 
-    # Exclude tests that don't compile (Mir headers these relied on were removed in mir 2.9)
-    # fatal error: mirtest/mir/test/doubles/stub_surface.h: No such file or directory
-    substituteInPlace tests/mocks/CMakeLists.txt \
-      --replace-fail 'add_subdirectory(QtMir/Application)' ""
+      # Exclude tests that don't compile (Mir headers these relied on were removed in mir 2.9)
+      # fatal error: mirtest/mir/test/doubles/stub_surface.h: No such file or directory
+      substituteInPlace tests/mocks/CMakeLists.txt \
+        --replace-fail 'add_subdirectory(QtMir/Application)' ""
 
-    #substituteInPlace plugins/AccountsService/CMakeLists.txt \
-    #  --replace-fail 'CMAKE_INSTALL_DATADIR' 'CMAKE_INSTALL_FULL_DATADIR'
+      #substituteInPlace plugins/AccountsService/CMakeLists.txt \
+      #  --replace-fail 'CMAKE_INSTALL_DATADIR' 'CMAKE_INSTALL_FULL_DATADIR'
 
-    # NixOS-ify
+      # NixOS-ify
 
-    # Use Nix flake instead of Canonical's Ubuntu logo
-    rm qml/Launcher/graphics/home.svg
-    ln -s ${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg qml/Launcher/graphics/home.svg
+      # Use Nix flake instead of Canonical's Ubuntu logo
+      rm qml/Launcher/graphics/home.svg
+      ln -s ${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg qml/Launcher/graphics/home.svg
 
-    # Look up default wallpaper in current system
-    substituteInPlace plugins/Utils/constants.cpp \
-      --replace-fail '/usr/share/backgrounds' '/run/current-system/sw/share/wallpapers'
-  '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
-    patchShebangs tests/whitespace/check_whitespace.py
-  '';
+      # Look up default wallpaper in current system
+      substituteInPlace plugins/Utils/constants.cpp \
+        --replace-fail '/usr/share/backgrounds' '/run/current-system/sw/share/wallpapers'
+    ''
+    + lib.optionalString finalAttrs.finalPackage.doCheck ''
+      patchShebangs tests/whitespace/check_whitespace.py
+    '';
 
   strictDeps = true;
 
@@ -212,9 +215,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        python-dbusmock
+      ]
+    ))
   ];
 
   checkInputs = [
@@ -253,7 +258,14 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtApp $out/bin/lomiri-mock-indicator-service
 
     wrapProgram $out/bin/lomiri-greeter-wrapper \
-      --prefix PATH : ${lib.makeBinPath [ coreutils dbus deviceinfo glib ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          dbus
+          deviceinfo
+          glib
+        ]
+      } \
       --set LOMIRI_BINARY "$out/bin/lomiri"
 
     wrapProgram $out/libexec/Xwayland.lomiri \
@@ -266,10 +278,12 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     tests.lomiri = nixosTests.lomiri;
     updateScript = gitUpdater { };
-    greeter = linkFarm "lomiri-greeter" [{
-      path = "${finalAttrs.finalPackage}/share/lightdm/greeters/lomiri-greeter.desktop";
-      name = "lomiri-greeter.desktop";
-    }];
+    greeter = linkFarm "lomiri-greeter" [
+      {
+        path = "${finalAttrs.finalPackage}/share/lightdm/greeters/lomiri-greeter.desktop";
+        name = "lomiri-greeter.desktop";
+      }
+    ];
   };
 
   meta = with lib; {

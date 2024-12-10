@@ -1,46 +1,47 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libpng
-, gzip
-, fftw
-, blas
-, lapack
-, cmake
-, autoAddDriverRunpath
-, pkg-config
-# Available list of packages can be found near here:
-#
-# - https://github.com/lammps/lammps/blob/develop/cmake/CMakeLists.txt#L222
-# - https://docs.lammps.org/Build_extras.html
-, packages ? {
-  ASPHERE = true;
-  BODY = true;
-  CLASS2 = true;
-  COLLOID = true;
-  COMPRESS = true;
-  CORESHELL = true;
-  DIPOLE = true;
-  GRANULAR = true;
-  KSPACE = true;
-  MANYBODY = true;
-  MC = true;
-  MISC = true;
-  MOLECULE = true;
-  OPT = true;
-  PERI = true;
-  QEQ = true;
-  REPLICA = true;
-  RIGID = true;
-  SHOCK = true;
-  ML-SNAP = true;
-  SRD = true;
-  REAXFF = true;
-}
-# Extra cmakeFlags to add as "-D${attr}=${value}"
-, extraCmakeFlags ? {}
-# Extra `buildInputs` - meant for packages that require more inputs
-, extraBuildInputs ? []
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libpng,
+  gzip,
+  fftw,
+  blas,
+  lapack,
+  cmake,
+  autoAddDriverRunpath,
+  pkg-config,
+  # Available list of packages can be found near here:
+  #
+  # - https://github.com/lammps/lammps/blob/develop/cmake/CMakeLists.txt#L222
+  # - https://docs.lammps.org/Build_extras.html
+  packages ? {
+    ASPHERE = true;
+    BODY = true;
+    CLASS2 = true;
+    COLLOID = true;
+    COMPRESS = true;
+    CORESHELL = true;
+    DIPOLE = true;
+    GRANULAR = true;
+    KSPACE = true;
+    MANYBODY = true;
+    MC = true;
+    MISC = true;
+    MOLECULE = true;
+    OPT = true;
+    PERI = true;
+    QEQ = true;
+    REPLICA = true;
+    RIGID = true;
+    SHOCK = true;
+    ML-SNAP = true;
+    SRD = true;
+    REAXFF = true;
+  },
+  # Extra cmakeFlags to add as "-D${attr}=${value}"
+  extraCmakeFlags ? { },
+  # Extra `buildInputs` - meant for packages that require more inputs
+  extraBuildInputs ? [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -74,11 +75,11 @@ stdenv.mkDerivation (finalAttrs: {
     inherit extraCmakeFlags;
     inherit extraBuildInputs;
   };
-  cmakeFlags = [
-  ]
-  ++ (builtins.map (p: "-DPKG_${p}=ON") (builtins.attrNames (lib.filterAttrs (n: v: v) packages)))
-  ++ (lib.mapAttrsToList (n: v: "-D${n}=${v}") extraCmakeFlags)
-  ;
+  cmakeFlags =
+    [
+    ]
+    ++ (builtins.map (p: "-DPKG_${p}=ON") (builtins.attrNames (lib.filterAttrs (n: v: v) packages)))
+    ++ (lib.mapAttrsToList (n: v: "-D${n}=${v}") extraCmakeFlags);
 
   buildInputs = [
     fftw
@@ -86,8 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     blas
     lapack
     gzip
-  ] ++ extraBuildInputs
-  ;
+  ] ++ extraBuildInputs;
 
   postInstall = ''
     # For backwards compatibility
@@ -107,7 +107,7 @@ stdenv.mkDerivation (finalAttrs: {
       National Laboratories, a US Department of Energy facility, with
       funding from the DOE. It is an open-source code, distributed freely
       under the terms of the GNU Public License (GPL).
-      '';
+    '';
     homepage = "https://www.lammps.org";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
@@ -115,7 +115,10 @@ stdenv.mkDerivation (finalAttrs: {
     # segfaults. In anycase both blas and lapack should have the same #bits
     # support.
     broken = (blas.isILP64 && lapack.isILP64);
-    maintainers = [ maintainers.costrouc maintainers.doronbehar ];
+    maintainers = [
+      maintainers.costrouc
+      maintainers.doronbehar
+    ];
     mainProgram = "lmp";
   };
 })

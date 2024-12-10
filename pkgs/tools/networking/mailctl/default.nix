@@ -1,28 +1,29 @@
-{ mkDerivation
-, fetchFromGitHub
-, aeson
-, base
-, base64
-, bytestring
-, containers
-, directory
-, hsyslog
-, http-conduit
-, lib
-, network-uri
-, optparse-applicative
-, pretty-simple
-, process
-, random
-, strings
-, template-haskell
-, text
-, time
-, twain
-, unix
-, utf8-string
-, warp
-, yaml
+{
+  mkDerivation,
+  fetchFromGitHub,
+  aeson,
+  base,
+  base64,
+  bytestring,
+  containers,
+  directory,
+  hsyslog,
+  http-conduit,
+  lib,
+  network-uri,
+  optparse-applicative,
+  pretty-simple,
+  process,
+  random,
+  strings,
+  template-haskell,
+  text,
+  time,
+  twain,
+  unix,
+  utf8-string,
+  warp,
+  yaml,
 }:
 mkDerivation rec {
   pname = "mailctl";

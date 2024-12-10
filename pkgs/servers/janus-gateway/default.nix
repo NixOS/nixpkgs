@@ -1,7 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, gengetopt
-, glib, libconfig, libnice, jansson, boringssl, zlib, srtp, libuv
-, libmicrohttpd, curl, libwebsockets, sofia_sip, libogg, libopus
-, usrsctp, ffmpeg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  gengetopt,
+  glib,
+  libconfig,
+  libnice,
+  jansson,
+  boringssl,
+  zlib,
+  srtp,
+  libuv,
+  libmicrohttpd,
+  curl,
+  libwebsockets,
+  sofia_sip,
+  libogg,
+  libopus,
+  usrsctp,
+  ffmpeg,
 }:
 
 let
@@ -24,11 +43,29 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-BS6ErS2Wi8pOy8oFmVnbujYPwClxX8e+GL4CcqvOL9E=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config gengetopt ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    gengetopt
+  ];
 
   buildInputs = [
-    glib libconfig libnice jansson boringssl zlib srtp libuv libmicrohttpd
-    curl libwebsockets_janus sofia_sip libogg libopus usrsctp ffmpeg
+    glib
+    libconfig
+    libnice
+    jansson
+    boringssl
+    zlib
+    srtp
+    libuv
+    libmicrohttpd
+    curl
+    libwebsockets_janus
+    sofia_sip
+    libogg
+    libopus
+    usrsctp
+    ffmpeg
   ];
 
   enableParallelBuilding = true;
@@ -46,7 +83,12 @@ stdenv.mkDerivation rec {
     "BORINGSSL_LIBS=-L${lib.getLib boringssl}/lib"
   ];
 
-  outputs = [ "out" "dev" "doc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "man"
+  ];
 
   postInstall = ''
     moveToOutput share/janus "$doc"

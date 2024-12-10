@@ -1,9 +1,10 @@
-{ stdenv
-, bash
-, buildPackages
-, buildBazelPackage
-, fetchFromGitHub
-, lib
+{
+  stdenv,
+  bash,
+  buildPackages,
+  buildBazelPackage,
+  fetchFromGitHub,
+  lib,
 }:
 let
   buildPlatform = stdenv.buildPlatform;
@@ -20,10 +21,11 @@ let
   };
   bazelHostConfigName.aarch64-linux = "elinux_aarch64";
   bazelDepsSha256ByHost =
-    bazelDepsSha256ByBuildAndHost.${buildPlatform.system} or
-      (throw "unsupported build system ${buildPlatform.system}");
-  bazelDepsSha256 = bazelDepsSha256ByHost.${hostPlatform.system} or
-      (throw "unsupported host system ${hostPlatform.system} with build system ${buildPlatform.system}");
+    bazelDepsSha256ByBuildAndHost.${buildPlatform.system}
+      or (throw "unsupported build system ${buildPlatform.system}");
+  bazelDepsSha256 =
+    bazelDepsSha256ByHost.${hostPlatform.system}
+      or (throw "unsupported host system ${hostPlatform.system} with build system ${buildPlatform.system}");
 in
 buildBazelPackage rec {
   name = "tensorflow-lite";
@@ -38,7 +40,10 @@ buildBazelPackage rec {
 
   bazel = buildPackages.bazel_5;
 
-  nativeBuildInputs = [ pythonEnv buildPackages.perl ];
+  nativeBuildInputs = [
+    pythonEnv
+    buildPackages.perl
+  ];
 
   bazelTargets = [
     "//tensorflow/lite:libtensorflowlite.so"
@@ -47,11 +52,13 @@ buildBazelPackage rec {
     "//tensorflow/lite/tools/benchmark:benchmark_model_performance_options"
   ];
 
-  bazelFlags = [
-    "--config=opt"
-  ] ++ lib.optionals (hostPlatform.system != buildPlatform.system) [
-    "--config=${bazelHostConfigName.${hostPlatform.system}}"
-  ];
+  bazelFlags =
+    [
+      "--config=opt"
+    ]
+    ++ lib.optionals (hostPlatform.system != buildPlatform.system) [
+      "--config=${bazelHostConfigName.${hostPlatform.system}}"
+    ];
 
   bazelBuildFlags = [ "--cxxopt=--std=c++17" ];
 
@@ -96,13 +103,19 @@ buildBazelPackage rec {
 
   # configure script freaks out when parameters are passed
   dontAddPrefix = true;
-  configurePlatforms = [];
+  configurePlatforms = [ ];
 
   meta = with lib; {
     description = "An open source deep learning framework for on-device inference.";
     homepage = "https://www.tensorflow.org/lite";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mschwaig cpcloud ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [
+      mschwaig
+      cpcloud
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

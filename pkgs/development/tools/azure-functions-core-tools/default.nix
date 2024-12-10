@@ -1,4 +1,5 @@
-{ lib,
+{
+  lib,
   stdenv,
   callPackage,
   fetchFromGitHub,
@@ -44,7 +45,14 @@ buildDotnetModule rec {
     homepage = "https://github.com/Azure/azure-functions-core-tools";
     description = "Command line tools for Azure Functions";
     license = licenses.mit;
-    maintainers = with maintainers; [ mdarocha detegr ];
-    platforms = ["x86_64-linux" "aarch64-darwin" "x86_64-darwin"];
+    maintainers = with maintainers; [
+      mdarocha
+      detegr
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-darwin"
+      "x86_64-darwin"
+    ];
   };
 }

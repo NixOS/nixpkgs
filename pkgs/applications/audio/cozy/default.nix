@@ -1,15 +1,16 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, appstream-glib
-, desktop-file-utils
-, gobject-introspection
-, libadwaita
-, gst_all_1
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  appstream-glib,
+  desktop-file-utils,
+  gobject-introspection,
+  libadwaita,
+  gst_all_1,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -34,15 +35,17 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    libadwaita
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-good
-    gst-plugins-ugly
-    gst-plugins-base
-    gst-plugins-bad
-  ]);
+  buildInputs =
+    [
+      libadwaita
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-good
+      gst-plugins-ugly
+      gst-plugins-base
+      gst-plugins-bad
+    ]);
 
   propagatedBuildInputs = with python3Packages; [
     distro
@@ -66,7 +69,10 @@ python3Packages.buildPythonApplication rec {
   meta = with lib; {
     description = "A modern audio book player for Linux";
     homepage = "https://cozy.geigi.de/";
-    maintainers = with maintainers; [ makefu aleksana ];
+    maintainers = with maintainers; [
+      makefu
+      aleksana
+    ];
     license = licenses.gpl3Plus;
     mainProgram = "com.github.geigi.cozy";
     platforms = platforms.linux;

@@ -1,11 +1,14 @@
-{ lib
-, pkgs
-, fetchFromGitHub
-, zig_0_12
-, darwin
+{
+  lib,
+  pkgs,
+  fetchFromGitHub,
+  zig_0_12,
+  darwin,
 }:
 
-let stdenv = if pkgs.stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else pkgs.stdenv; in
+let
+  stdenv = if pkgs.stdenv.isDarwin then darwin.apple_sdk_11_0.stdenv else pkgs.stdenv;
+in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "glsl_analyzer";

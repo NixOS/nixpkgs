@@ -1,10 +1,12 @@
-{ lib
-, fetchFromGitHub
-, libpulseaudio
-, libnotify
-, gobject-introspection
-, python3Packages
-, extraLibs ? [] }:
+{
+  lib,
+  fetchFromGitHub,
+  libpulseaudio,
+  libnotify,
+  gobject-introspection,
+  python3Packages,
+  extraLibs ? [ ],
+}:
 
 python3Packages.buildPythonApplication rec {
   # i3pystatus moved to rolling release:
@@ -23,16 +25,32 @@ python3Packages.buildPythonApplication rec {
     gobject-introspection
   ];
 
-  buildInputs = [ libpulseaudio libnotify ];
+  buildInputs = [
+    libpulseaudio
+    libnotify
+  ];
 
-  propagatedBuildInputs = with python3Packages; [
-    keyring colour netifaces psutil basiciw pygobject3
-  ] ++ extraLibs;
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      keyring
+      colour
+      netifaces
+      psutil
+      basiciw
+      pygobject3
+    ]
+    ++ extraLibs;
 
   makeWrapperArgs = [
     # LC_TIME != C results in locale.Error: unsupported locale setting
-    "--set" "LC_TIME" "C"
-    "--suffix" "LD_LIBRARY_PATH" ":" "${lib.makeLibraryPath [ libpulseaudio ]}"
+    "--set"
+    "LC_TIME"
+    "C"
+    "--suffix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "${lib.makeLibraryPath [ libpulseaudio ]}"
   ];
 
   postPatch = ''

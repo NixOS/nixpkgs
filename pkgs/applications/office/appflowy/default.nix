@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchzip
-, autoPatchelfHook
-, makeWrapper
-, copyDesktopItems
-, makeDesktopItem
-, gtk3
-, xdg-user-dirs
-, keybinder3
-, libnotify
+{
+  stdenv,
+  lib,
+  fetchzip,
+  autoPatchelfHook,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
+  gtk3,
+  xdg-user-dirs,
+  keybinder3,
+  libnotify,
 }:
 
 stdenv.mkDerivation rec {

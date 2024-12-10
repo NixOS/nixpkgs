@@ -1,4 +1,12 @@
-{ lib, stdenv, makeDesktopItem, makeWrapper, requireFile, unzip, jdk }:
+{
+  lib,
+  stdenv,
+  makeDesktopItem,
+  makeWrapper,
+  requireFile,
+  unzip,
+  jdk,
+}:
 
 let
   version = "20.4.0.379.2205";
@@ -13,7 +21,7 @@ let
     categories = [ "Development" ];
   };
 in
-  stdenv.mkDerivation {
+stdenv.mkDerivation {
 
   inherit version;
   pname = "sqldeveloper";
@@ -49,7 +57,10 @@ in
     sha256 = "1h53gl41ydr7kim6q9ckg3xyhb0rhmwj7jnis0xz6vms52b3h59k";
   };
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+  ];
 
   unpackCmd = "unzip $curSrc";
 

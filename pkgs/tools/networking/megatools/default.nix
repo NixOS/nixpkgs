@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchgit
-, asciidoc
-, docbook_xml_dtd_45
-, docbook2x
-, libxml2
-, meson
-, ninja
-, pkg-config
-, curl
-, glib
-, fuse
+{
+  lib,
+  stdenv,
+  fetchgit,
+  asciidoc,
+  docbook_xml_dtd_45,
+  docbook2x,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  curl,
+  glib,
+  fuse,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,7 +46,10 @@ stdenv.mkDerivation rec {
     description = "Command line client for Mega.co.nz";
     homepage = "https://megatools.megous.com/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric AndersonTorres ];
+    maintainers = with maintainers; [
+      viric
+      AndersonTorres
+    ];
     platforms = platforms.unix;
   };
 }

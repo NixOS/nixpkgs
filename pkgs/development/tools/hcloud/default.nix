@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -38,6 +39,9 @@ buildGoModule rec {
     mainProgram = "hcloud";
     homepage = "https://github.com/hetznercloud/cli";
     license = licenses.mit;
-    maintainers = with maintainers; [ zauberpony techknowlogick ];
+    maintainers = with maintainers; [
+      zauberpony
+      techknowlogick
+    ];
   };
 }

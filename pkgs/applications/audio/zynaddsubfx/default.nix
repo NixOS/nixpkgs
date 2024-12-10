@@ -1,61 +1,70 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, callPackage
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  callPackage,
 
   # Required build tools
-, cmake
-, makeWrapper
-, pkg-config
+  cmake,
+  makeWrapper,
+  pkg-config,
 
   # Required dependencies
-, fftw
-, liblo
-, minixml
-, zlib
+  fftw,
+  liblo,
+  minixml,
+  zlib,
 
   # Optional dependencies
-, alsaSupport ? stdenv.isLinux
-, alsa-lib
-, dssiSupport ? false
-, dssi
-, ladspaH
-, jackSupport ? true
-, libjack2
-, lashSupport ? false
-, lash
-, ossSupport ? true
-, portaudioSupport ? true
-, portaudio
-, sndioSupport ? stdenv.isOpenBSD
-, sndio
+  alsaSupport ? stdenv.isLinux,
+  alsa-lib,
+  dssiSupport ? false,
+  dssi,
+  ladspaH,
+  jackSupport ? true,
+  libjack2,
+  lashSupport ? false,
+  lash,
+  ossSupport ? true,
+  portaudioSupport ? true,
+  portaudio,
+  sndioSupport ? stdenv.isOpenBSD,
+  sndio,
 
   # Optional GUI dependencies
-, guiModule ? "off"
-, cairo
-, fltk
-, libGL
-, libjpeg
-, libX11
-, libXpm
-, ntk
+  guiModule ? "off",
+  cairo,
+  fltk,
+  libGL,
+  libjpeg,
+  libX11,
+  libXpm,
+  ntk,
 
   # Test dependencies
-, cxxtest
-, ruby
+  cxxtest,
+  ruby,
 }:
 
-assert builtins.any (g: guiModule == g) [ "fltk" "ntk" "zest" "off" ];
+assert builtins.any (g: guiModule == g) [
+  "fltk"
+  "ntk"
+  "zest"
+  "off"
+];
 
 let
-  guiName = {
-    "fltk" = "FLTK";
-    "ntk" = "NTK";
-    "zest" = "Zyn-Fusion";
-  }.${guiModule};
+  guiName =
+    {
+      "fltk" = "FLTK";
+      "ntk" = "NTK";
+      "zest" = "Zyn-Fusion";
+    }
+    .${guiModule};
 
   mruby-zest = callPackage ./mruby-zest { };
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "zynaddsubfx";
   version = "3.0.6";
 
@@ -67,27 +76,55 @@ in stdenv.mkDerivation rec {
     sha256 = "sha256-0siAx141DZx39facXWmKbsi0rHBNpobApTdey07EcXg=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   postPatch = ''
     patchShebangs rtosc/test/test-port-checker.rb src/Tests/check-ports.rb
     substituteInPlace src/Misc/Config.cpp --replace /usr $out
   '';
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    makeWrapper
+    pkg-config
+  ];
 
-  buildInputs = [ fftw liblo minixml zlib ]
+  buildInputs =
+    [
+      fftw
+      liblo
+      minixml
+      zlib
+    ]
     ++ lib.optionals alsaSupport [ alsa-lib ]
-    ++ lib.optionals dssiSupport [ dssi ladspaH ]
+    ++ lib.optionals dssiSupport [
+      dssi
+      ladspaH
+    ]
     ++ lib.optionals jackSupport [ libjack2 ]
     ++ lib.optionals lashSupport [ lash ]
     ++ lib.optionals portaudioSupport [ portaudio ]
     ++ lib.optionals sndioSupport [ sndio ]
-    ++ lib.optionals (guiModule == "fltk") [ fltk libjpeg libXpm ]
-    ++ lib.optionals (guiModule == "ntk") [ ntk cairo libXpm ]
-    ++ lib.optionals (guiModule == "zest") [ libGL libX11 ];
+    ++ lib.optionals (guiModule == "fltk") [
+      fltk
+      libjpeg
+      libXpm
+    ]
+    ++ lib.optionals (guiModule == "ntk") [
+      ntk
+      cairo
+      libXpm
+    ]
+    ++ lib.optionals (guiModule == "zest") [
+      libGL
+      libX11
+    ];
 
-  cmakeFlags = [ "-DGuiModule=${guiModule}" ]
+  cmakeFlags =
+    [ "-DGuiModule=${guiModule}" ]
     # OSS library is included in glibc.
     # Must explicitly disable if support is not wanted.
     ++ lib.optional (!ossSupport) "-DOssEnable=OFF"
@@ -100,22 +137,30 @@ in stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
-  nativeCheckInputs = [ cxxtest ruby ];
+  nativeCheckInputs = [
+    cxxtest
+    ruby
+  ];
 
   # TODO: Update cmake hook to make it simpler to selectively disable cmake tests: #113829
-  checkPhase = let
-    disabledTests =
-      # PortChecker test fails when lashSupport is enabled because
-      # zynaddsubfx takes to long to start trying to connect to lash
-      lib.optionals lashSupport [ "PortChecker" ]
+  checkPhase =
+    let
+      disabledTests =
+        # PortChecker test fails when lashSupport is enabled because
+        # zynaddsubfx takes to long to start trying to connect to lash
+        lib.optionals lashSupport [ "PortChecker" ]
 
-      # Tests fail on aarch64
-      ++ lib.optionals stdenv.isAarch64 [ "MessageTest" "UnisonTest" ];
-  in ''
-    runHook preCheck
-    ctest --output-on-failure -E '^${lib.concatStringsSep "|" disabledTests}$'
-    runHook postCheck
-  '';
+        # Tests fail on aarch64
+        ++ lib.optionals stdenv.isAarch64 [
+          "MessageTest"
+          "UnisonTest"
+        ];
+    in
+    ''
+      runHook preCheck
+      ctest --output-on-failure -E '^${lib.concatStringsSep "|" disabledTests}$'
+      runHook postCheck
+    '';
 
   # Use Zyn-Fusion logo for zest build
   # An SVG version of the logo isn't hosted anywhere we can fetch, I
@@ -143,12 +188,16 @@ in stdenv.mkDerivation rec {
     description = "High quality software synthesizer (${guiName} GUI)";
     mainProgram = "zynaddsubfx";
     homepage =
-      if guiModule == "zest"
-      then "https://zynaddsubfx.sourceforge.io/zyn-fusion.html"
-      else "https://zynaddsubfx.sourceforge.io";
+      if guiModule == "zest" then
+        "https://zynaddsubfx.sourceforge.io/zyn-fusion.html"
+      else
+        "https://zynaddsubfx.sourceforge.io";
 
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ goibhniu kira-bruneau ];
+    maintainers = with maintainers; [
+      goibhniu
+      kira-bruneau
+    ];
     platforms = platforms.all;
 
     # On macOS:

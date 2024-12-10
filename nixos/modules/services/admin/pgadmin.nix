@@ -1,29 +1,65 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.pgadmin;
 
-  _base = with types; [ int bool str ];
-  base = with types; oneOf ([ (listOf (oneOf _base)) (attrsOf (oneOf _base)) ] ++ _base);
+  _base = with types; [
+    int
+    bool
+    str
+  ];
+  base =
+    with types;
+    oneOf (
+      [
+        (listOf (oneOf _base))
+        (attrsOf (oneOf _base))
+      ]
+      ++ _base
+    );
 
-  formatAttrset = attr:
-    "{${concatStringsSep "\n" (mapAttrsToList (key: value: "${builtins.toJSON key}: ${formatPyValue value},") attr)}}";
+  formatAttrset =
+    attr:
+    "{${
+      concatStringsSep "\n" (
+        mapAttrsToList (key: value: "${builtins.toJSON key}: ${formatPyValue value},") attr
+      )
+    }}";
 
-  formatPyValue = value:
-    if builtins.isString value then builtins.toJSON value
-    else if value ? _expr then value._expr
-    else if builtins.isInt value then toString value
-    else if builtins.isBool value then (if value then "True" else "False")
-    else if builtins.isAttrs value then (formatAttrset value)
-    else if builtins.isList value then "[${concatStringsSep "\n" (map (v: "${formatPyValue v},") value)}]"
-    else throw "Unrecognized type";
+  formatPyValue =
+    value:
+    if builtins.isString value then
+      builtins.toJSON value
+    else if value ? _expr then
+      value._expr
+    else if builtins.isInt value then
+      toString value
+    else if builtins.isBool value then
+      (if value then "True" else "False")
+    else if builtins.isAttrs value then
+      (formatAttrset value)
+    else if builtins.isList value then
+      "[${concatStringsSep "\n" (map (v: "${formatPyValue v},") value)}]"
+    else
+      throw "Unrecognized type";
 
-  formatPy = attrs:
-    concatStringsSep "\n" (mapAttrsToList (key: value: "${key} = ${formatPyValue value}") attrs);
+  formatPy =
+    attrs: concatStringsSep "\n" (mapAttrsToList (key: value: "${key} = ${formatPyValue value}") attrs);
 
-  pyType = with types; attrsOf (oneOf [ (attrsOf base) (listOf base) base ]);
+  pyType =
+    with types;
+    attrsOf (oneOf [
+      (attrsOf base)
+      (listOf base)
+      base
+    ]);
 in
 {
   options.services.pgadmin = {
@@ -121,21 +157,24 @@ in
   config = mkIf (cfg.enable) {
     networking.firewall.allowedTCPPorts = mkIf (cfg.openFirewall) [ cfg.port ];
 
-    services.pgadmin.settings = {
-      DEFAULT_SERVER_PORT = cfg.port;
-      PASSWORD_LENGTH_MIN = cfg.minimumPasswordLength;
-      SERVER_MODE = true;
-      UPGRADE_CHECK_ENABLED = false;
-    } // (optionalAttrs cfg.openFirewall {
-      DEFAULT_SERVER = mkDefault "::";
-    }) // (optionalAttrs cfg.emailServer.enable {
-      MAIL_SERVER = cfg.emailServer.address;
-      MAIL_PORT = cfg.emailServer.port;
-      MAIL_USE_SSL = cfg.emailServer.useSSL;
-      MAIL_USE_TLS = cfg.emailServer.useTLS;
-      MAIL_USERNAME = cfg.emailServer.username;
-      SECURITY_EMAIL_SENDER = cfg.emailServer.sender;
-    });
+    services.pgadmin.settings =
+      {
+        DEFAULT_SERVER_PORT = cfg.port;
+        PASSWORD_LENGTH_MIN = cfg.minimumPasswordLength;
+        SERVER_MODE = true;
+        UPGRADE_CHECK_ENABLED = false;
+      }
+      // (optionalAttrs cfg.openFirewall {
+        DEFAULT_SERVER = mkDefault "::";
+      })
+      // (optionalAttrs cfg.emailServer.enable {
+        MAIL_SERVER = cfg.emailServer.address;
+        MAIL_PORT = cfg.emailServer.port;
+        MAIL_USE_SSL = cfg.emailServer.useSSL;
+        MAIL_USE_TLS = cfg.emailServer.useTLS;
+        MAIL_USERNAME = cfg.emailServer.username;
+        SECURITY_EMAIL_SENDER = cfg.emailServer.sender;
+      });
 
     systemd.services.pgadmin = {
       wantedBy = [ "multi-user.target" ];
@@ -145,7 +184,11 @@ in
       # in case postgres doesn't start, pgadmin will just start normally
       wants = [ "postgresql.service" ];
 
-      path = [ config.services.postgresql.package pkgs.coreutils pkgs.bash ];
+      path = [
+        config.services.postgresql.package
+        pkgs.coreutils
+        pkgs.bash
+      ];
 
       preStart = ''
         # NOTE: this is idempotent (aka running it twice has no effect)
@@ -182,8 +225,9 @@ in
         LogsDirectory = "pgadmin";
         StateDirectory = "pgadmin";
         ExecStart = "${cfg.package}/bin/pgadmin4";
-        LoadCredential = [ "initial_password:${cfg.initialPasswordFile}" ]
-          ++ optional cfg.emailServer.enable "email_password:${cfg.emailServer.passwordFile}";
+        LoadCredential = [
+          "initial_password:${cfg.initialPasswordFile}"
+        ] ++ optional cfg.emailServer.enable "email_password:${cfg.emailServer.passwordFile}";
       };
     };
 
@@ -195,12 +239,14 @@ in
     users.groups.pgadmin = { };
 
     environment.etc."pgadmin/config_system.py" = {
-      text = lib.optionalString cfg.emailServer.enable ''
-        import os
-        with open(os.path.join(os.environ['CREDENTIALS_DIRECTORY'], 'email_password')) as f:
-          pw = f.read()
-        MAIL_PASSWORD = pw
-      '' + formatPy cfg.settings;
+      text =
+        lib.optionalString cfg.emailServer.enable ''
+          import os
+          with open(os.path.join(os.environ['CREDENTIALS_DIRECTORY'], 'email_password')) as f:
+            pw = f.read()
+          MAIL_PASSWORD = pw
+        ''
+        + formatPy cfg.settings;
       mode = "0600";
       user = "pgadmin";
       group = "pgadmin";

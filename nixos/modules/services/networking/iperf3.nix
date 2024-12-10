@@ -1,22 +1,28 @@
-{ config, lib, pkgs, ... }: with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib;
 let
   cfg = config.services.iperf3;
 
   api = {
     enable = mkEnableOption "iperf3 network throughput testing server";
     port = mkOption {
-      type        = types.ints.u16;
-      default     = 5201;
+      type = types.ints.u16;
+      default = 5201;
       description = "Server port to listen on for iperf3 client requests.";
     };
     affinity = mkOption {
-      type        = types.nullOr types.ints.unsigned;
-      default     = null;
+      type = types.nullOr types.ints.unsigned;
+      default = null;
       description = "CPU affinity for the process.";
     };
     bind = mkOption {
-      type        = types.nullOr types.str;
-      default     = null;
+      type = types.nullOr types.str;
+      default = null;
       description = "Bind to the specific interface associated with the given address.";
     };
     openFirewall = mkOption {
@@ -25,33 +31,33 @@ let
       description = "Open ports in the firewall for iperf3.";
     };
     verbose = mkOption {
-      type        = types.bool;
-      default     = false;
+      type = types.bool;
+      default = false;
       description = "Give more detailed output.";
     };
     forceFlush = mkOption {
-      type        = types.bool;
-      default     = false;
+      type = types.bool;
+      default = false;
       description = "Force flushing output at every interval.";
     };
     debug = mkOption {
-      type        = types.bool;
-      default     = false;
+      type = types.bool;
+      default = false;
       description = "Emit debugging output.";
     };
     rsaPrivateKey = mkOption {
-      type        = types.nullOr types.path;
-      default     = null;
+      type = types.nullOr types.path;
+      default = null;
       description = "Path to the RSA private key (not password-protected) used to decrypt authentication credentials from the client.";
     };
     authorizedUsersFile = mkOption {
-      type        = types.nullOr types.path;
-      default     = null;
+      type = types.nullOr types.path;
+      default = null;
       description = "Path to the configuration file containing authorized users credentials to run iperf tests.";
     };
     extraFlags = mkOption {
-      type        = types.listOf types.str;
-      default     = [ ];
+      type = types.listOf types.str;
+      default = [ ];
       description = "Extra flags to pass to iperf3(1).";
     };
   };
@@ -82,7 +88,11 @@ let
             ${optionalString (cfg.affinity != null) "--affinity ${toString cfg.affinity}"} \
             ${optionalString (cfg.bind != null) "--bind ${cfg.bind}"} \
             ${optionalString (cfg.rsaPrivateKey != null) "--rsa-private-key-path ${cfg.rsaPrivateKey}"} \
-            ${optionalString (cfg.authorizedUsersFile != null) "--authorized-users-path ${cfg.authorizedUsersFile}"} \
+            ${
+              optionalString (
+                cfg.authorizedUsersFile != null
+              ) "--authorized-users-path ${cfg.authorizedUsersFile}"
+            } \
             ${optionalString cfg.verbose "--verbose"} \
             ${optionalString cfg.debug "--debug"} \
             ${optionalString cfg.forceFlush "--forceflush"} \
@@ -91,7 +101,8 @@ let
       };
     };
   };
-in {
+in
+{
   options.services.iperf3 = api;
   config = mkIf cfg.enable imp;
 }

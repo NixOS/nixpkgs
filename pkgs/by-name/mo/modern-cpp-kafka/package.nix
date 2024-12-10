@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, boost
-, rdkafka
-, gtest
-, rapidjson
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  boost,
+  rdkafka,
+  gtest,
+  rapidjson,
 }:
 
 stdenv.mkDerivation rec {
@@ -58,7 +59,10 @@ stdenv.mkDerivation rec {
     "-DCMAKE_CXX_FLAGS=-Wno-uninitialized"
   ];
 
-  checkInputs = [ gtest rapidjson ];
+  checkInputs = [
+    gtest
+    rapidjson
+  ];
 
   meta = with lib; {
     description = "A C++ API for Kafka clients (i.e. KafkaProducer, KafkaConsumer, AdminClient)";

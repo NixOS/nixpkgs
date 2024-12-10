@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook3
-, gtk3
-, librsvg
-, gtk-layer-shell
-, stdenv
-, libdbusmenu-gtk3
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook3,
+  gtk3,
+  librsvg,
+  gtk-layer-shell,
+  stdenv,
+  libdbusmenu-gtk3,
 }:
 
 rustPlatform.buildRustPackage rec {

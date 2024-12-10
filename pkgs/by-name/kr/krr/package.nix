@@ -1,8 +1,9 @@
-{ lib
-, python3
-, fetchFromGitHub
-, testers
-, krr
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  testers,
+  krr,
 }:
 
 python3.pkgs.buildPythonPackage rec {
@@ -29,18 +30,21 @@ python3.pkgs.buildPythonPackage rec {
       --replace-fail 'typer = { extras = ["all"], version = "^0.7.0" }' 'typer = { extras = ["all"], version = "*" }'
   '';
 
-  propagatedBuildInputs = with python3.pkgs; [
-    aiostream
-    alive-progress
-    kubernetes
-    numpy
-    poetry-core
-    prometheus-api-client
-    prometrix
-    pydantic_1
-    slack-sdk
-    typer
-  ] ++ typer.optional-dependencies.all;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      aiostream
+      alive-progress
+      kubernetes
+      numpy
+      poetry-core
+      prometheus-api-client
+      prometrix
+      pydantic_1
+      slack-sdk
+      typer
+    ]
+    ++ typer.optional-dependencies.all;
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook

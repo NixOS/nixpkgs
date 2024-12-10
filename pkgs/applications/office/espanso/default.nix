@@ -1,37 +1,38 @@
-{ lib
-, coreutils
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, extra-cmake-modules
-, dbus
-, libX11
-, libXi
-, libXtst
-, libnotify
-, libxkbcommon
-, openssl
-, xclip
-, xdotool
-, setxkbmap
-, wl-clipboard
-, wxGTK32
-, makeWrapper
-, stdenv
-, AppKit
-, Cocoa
-, Foundation
-, IOKit
-, Kernel
-, AVFoundation
-, Carbon
-, QTKit
-, AVKit
-, WebKit
-, waylandSupport ? false
-, x11Support ? stdenv.isLinux
-, testers
-, espanso
+{
+  lib,
+  coreutils,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  extra-cmake-modules,
+  dbus,
+  libX11,
+  libXi,
+  libXtst,
+  libnotify,
+  libxkbcommon,
+  openssl,
+  xclip,
+  xdotool,
+  setxkbmap,
+  wl-clipboard,
+  wxGTK32,
+  makeWrapper,
+  stdenv,
+  AppKit,
+  Cocoa,
+  Foundation,
+  IOKit,
+  Kernel,
+  AVFoundation,
+  Carbon,
+  QTKit,
+  AVKit,
+  WebKit,
+  waylandSupport ? false,
+  x11Support ? stdenv.isLinux,
+  testers,
+  espanso,
 }:
 # espanso does not support building with both X11 and Wayland support at the same time
 assert stdenv.isLinux -> x11Support != waylandSupport;
@@ -68,43 +69,52 @@ rustPlatform.buildRustPackage rec {
 
   # Ref: https://github.com/espanso/espanso/blob/78df1b704fe2cc5ea26f88fdc443b6ae1df8a989/scripts/build_binary.rs#LL49C3-L62C4
   buildNoDefaultFeatures = true;
-  buildFeatures = [
-    "modulo"
-  ] ++ lib.optionals waylandSupport[
-    "wayland"
-  ] ++ lib.optionals stdenv.isLinux [
-    "vendored-tls"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "native-tls"
-  ];
+  buildFeatures =
+    [
+      "modulo"
+    ]
+    ++ lib.optionals waylandSupport [
+      "wayland"
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      "vendored-tls"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "native-tls"
+    ];
 
-  buildInputs = [
-    wxGTK32
-  ] ++ lib.optionals stdenv.isLinux [
-    openssl
-    dbus
-    libnotify
-    libxkbcommon
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    Cocoa
-    Foundation
-    IOKit
-    Kernel
-    AVFoundation
-    Carbon
-    QTKit
-    AVKit
-    WebKit
-  ] ++ lib.optionals waylandSupport [
-    wl-clipboard
-  ] ++ lib.optionals x11Support [
-    libXi
-    libXtst
-    libX11
-    xclip
-    xdotool
-  ];
+  buildInputs =
+    [
+      wxGTK32
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      openssl
+      dbus
+      libnotify
+      libxkbcommon
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit
+      Cocoa
+      Foundation
+      IOKit
+      Kernel
+      AVFoundation
+      Carbon
+      QTKit
+      AVKit
+      WebKit
+    ]
+    ++ lib.optionals waylandSupport [
+      wl-clipboard
+    ]
+    ++ lib.optionals x11Support [
+      libXi
+      libXtst
+      libX11
+      xclip
+      xdotool
+    ];
 
   postPatch = lib.optionalString stdenv.isDarwin ''
     substituteInPlace scripts/create_bundle.sh \
@@ -123,21 +133,29 @@ rustPlatform.buildRustPackage rec {
   # Some tests require networking
   doCheck = false;
 
-  postInstall = if stdenv.isDarwin then ''
-    EXEC_PATH=$out/bin/espanso BUILD_ARCH=current ${stdenv.shell} ./scripts/create_bundle.sh
-  '' else ''
-    wrapProgram $out/bin/espanso \
-      --prefix PATH : ${lib.makeBinPath (
-        lib.optionals stdenv.isLinux [
-          libnotify
-          setxkbmap
-        ] ++ lib.optionals waylandSupport [
-          wl-clipboard
-        ] ++ lib.optionals x11Support [
-          xclip
-        ]
-      )}
-  '';
+  postInstall =
+    if stdenv.isDarwin then
+      ''
+        EXEC_PATH=$out/bin/espanso BUILD_ARCH=current ${stdenv.shell} ./scripts/create_bundle.sh
+      ''
+    else
+      ''
+        wrapProgram $out/bin/espanso \
+          --prefix PATH : ${
+            lib.makeBinPath (
+              lib.optionals stdenv.isLinux [
+                libnotify
+                setxkbmap
+              ]
+              ++ lib.optionals waylandSupport [
+                wl-clipboard
+              ]
+              ++ lib.optionals x11Support [
+                xclip
+              ]
+            )
+          }
+      '';
 
   passthru.tests.version = testers.testVersion {
     package = espanso;
@@ -148,7 +166,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "espanso";
     homepage = "https://espanso.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ kimat pyrox0 ];
+    maintainers = with maintainers; [
+      kimat
+      pyrox0
+    ];
     platforms = platforms.unix;
 
     longDescription = ''

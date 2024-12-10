@@ -1,11 +1,12 @@
-{ lib
-, copyPkgconfigItems
-, fetchFromRepoOrCz
-, makePkgconfigItem
-, perl
-, stdenv
-, texinfo
-, which
+{
+  lib,
+  copyPkgconfigItems,
+  fetchFromRepoOrCz,
+  makePkgconfigItem,
+  perl,
+  stdenv,
+  texinfo,
+  which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +19,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-jY0P2GErmo//YBaz6u4/jj/voOE3C2JaIDRmo0orXN8=";
   };
 
-  outputs = [ "out" "info" "man" ];
+  outputs = [
+    "out"
+    "info"
+    "man"
+  ];
 
   nativeBuildInputs = [
     copyPkgconfigItems
@@ -29,55 +34,61 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  pkgconfigItems = let
-    libtcc-pcitem = {
-      name = "libtcc";
-      inherit (finalAttrs) version;
-      cflags = [ "-I${libtcc-pcitem.variables.includedir}" ];
-      libs = [
-        "-L${libtcc-pcitem.variables.libdir}"
-        "-Wl,--rpath ${libtcc-pcitem.variables.libdir}"
-        "-ltcc"
-      ];
-      variables = {
-        prefix = "${placeholder "out"}";
-        includedir = "${placeholder "dev"}/include";
-        libdir = "${placeholder "lib"}/lib";
+  pkgconfigItems =
+    let
+      libtcc-pcitem = {
+        name = "libtcc";
+        inherit (finalAttrs) version;
+        cflags = [ "-I${libtcc-pcitem.variables.includedir}" ];
+        libs = [
+          "-L${libtcc-pcitem.variables.libdir}"
+          "-Wl,--rpath ${libtcc-pcitem.variables.libdir}"
+          "-ltcc"
+        ];
+        variables = {
+          prefix = "${placeholder "out"}";
+          includedir = "${placeholder "dev"}/include";
+          libdir = "${placeholder "lib"}/lib";
+        };
+        description = "Tiny C compiler backend";
       };
-      description = "Tiny C compiler backend";
-    };
-  in [
-    (makePkgconfigItem libtcc-pcitem)
-  ];
+    in
+    [
+      (makePkgconfigItem libtcc-pcitem)
+    ];
 
   postPatch = ''
     patchShebangs texi2pod.pl
   '';
 
-  configureFlags = [
-    "--cc=$CC"
-    "--ar=$AR"
-    "--crtprefix=${lib.getLib stdenv.cc.libc}/lib"
-    "--sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include"
-    "--libpaths=${lib.getLib stdenv.cc.libc}/lib"
-    # build cross compilers
-    "--enable-cross"
-  ] ++ lib.optionals stdenv.hostPlatform.isMusl [
-    "--config-musl"
-  ];
+  configureFlags =
+    [
+      "--cc=$CC"
+      "--ar=$AR"
+      "--crtprefix=${lib.getLib stdenv.cc.libc}/lib"
+      "--sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include"
+      "--libpaths=${lib.getLib stdenv.cc.libc}/lib"
+      # build cross compilers
+      "--enable-cross"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isMusl [
+      "--config-musl"
+    ];
 
-  preConfigure = let
-    # To avoid "malformed 32-bit x.y.z" error on mac when using clang
-    versionIsClean = version:
-      builtins.match "^[0-9]\\.+[0-9]+\\.[0-9]+" version != null;
-  in ''
-    ${
-      if stdenv.isDarwin && ! versionIsClean finalAttrs.version
-      then "echo 'not overwriting VERSION since it would upset ld'"
-      else "echo ${finalAttrs.version} > VERSION"
-    }
-    configureFlagsArray+=("--elfinterp=$(< $NIX_CC/nix-support/dynamic-linker)")
-  '';
+  preConfigure =
+    let
+      # To avoid "malformed 32-bit x.y.z" error on mac when using clang
+      versionIsClean = version: builtins.match "^[0-9]\\.+[0-9]+\\.[0-9]+" version != null;
+    in
+    ''
+      ${
+        if stdenv.isDarwin && !versionIsClean finalAttrs.version then
+          "echo 'not overwriting VERSION since it would upset ld'"
+        else
+          "echo ${finalAttrs.version} > VERSION"
+      }
+      configureFlagsArray+=("--elfinterp=$(< $NIX_CC/nix-support/dynamic-linker)")
+    '';
 
   # Test segfault for static build
   doCheck = !stdenv.hostPlatform.isStatic;
@@ -114,7 +125,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ lgpl21Only ];
     mainProgram = "tcc";
-    maintainers = with lib.maintainers; [ joachifm AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      joachifm
+      AndersonTorres
+    ];
     platforms = lib.platforms.unix;
     # https://www.mail-archive.com/tinycc-devel@nongnu.org/msg10199.html
     broken = stdenv.isDarwin && stdenv.isAarch64;

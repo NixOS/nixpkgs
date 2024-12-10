@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, sqlite
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,7 +31,10 @@ rustPlatform.buildRustPackage rec {
     description = "A CLI for indexing and searching packages in Nix expressions";
     homepage = "https://github.com/replit/rippkgs";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ eclairevoyant cdmistman ];
+    maintainers = with lib.maintainers; [
+      eclairevoyant
+      cdmistman
+    ];
     mainProgram = "rippkgs";
   };
 }

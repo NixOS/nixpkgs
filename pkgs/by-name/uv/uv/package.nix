@@ -1,13 +1,14 @@
-{ lib
-, cmake
-, darwin
-, fetchFromGitHub
-, installShellFiles
-, openssl
-, pkg-config
-, rustPlatform
-, stdenv
-, nix-update-script
+{
+  lib,
+  cmake,
+  darwin,
+  fetchFromGitHub,
+  installShellFiles,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,13 +36,18 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
-  cargoBuildFlags = [ "--package" "uv" ];
+  cargoBuildFlags = [
+    "--package"
+    "uv"
+  ];
 
   # Tests require network access
   doCheck = false;
@@ -64,7 +70,10 @@ rustPlatform.buildRustPackage rec {
     description = "An extremely fast Python package installer and resolver, written in Rust";
     homepage = "https://github.com/astral-sh/uv";
     changelog = "https://github.com/astral-sh/uv/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ GaetanLepage ];
     mainProgram = "uv";
   };

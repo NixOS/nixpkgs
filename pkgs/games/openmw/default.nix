@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, SDL2
-, CoreMedia
-, VideoToolbox
-, VideoDecodeAcceleration
-, boost
-, bullet
-, ffmpeg
-, libXt
-, luajit
-, lz4
-, mygui
-, openal
-, openscenegraph
-, recastnavigation
-, unshield
-, yaml-cpp
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  SDL2,
+  CoreMedia,
+  VideoToolbox,
+  VideoDecodeAcceleration,
+  boost,
+  bullet,
+  ffmpeg,
+  libXt,
+  luajit,
+  lz4,
+  mygui,
+  openal,
+  openscenegraph,
+  recastnavigation,
+  unshield,
+  yaml-cpp,
 }:
 
 let
@@ -35,12 +36,24 @@ let
         sha256 = "sha256-/CLRZofZHot8juH78VG1/qhTHPhy5DoPMN+oH8hC58U=";
       })
     ];
-    cmakeFlags = (old.cmakeFlags or [ ]) ++ [
-      "-Wno-dev"
-      "-DOpenGL_GL_PREFERENCE=${GL}"
-      "-DBUILD_OSG_PLUGINS_BY_DEFAULT=0"
-      "-DBUILD_OSG_DEPRECATED_SERIALIZERS=0"
-    ] ++ (map (e: "-DBUILD_OSG_PLUGIN_${e}=1") [ "BMP" "DAE" "DDS" "FREETYPE" "JPEG" "OSG" "PNG" "TGA" ]);
+    cmakeFlags =
+      (old.cmakeFlags or [ ])
+      ++ [
+        "-Wno-dev"
+        "-DOpenGL_GL_PREFERENCE=${GL}"
+        "-DBUILD_OSG_PLUGINS_BY_DEFAULT=0"
+        "-DBUILD_OSG_DEPRECATED_SERIALIZERS=0"
+      ]
+      ++ (map (e: "-DBUILD_OSG_PLUGIN_${e}=1") [
+        "BMP"
+        "DAE"
+        "DDS"
+        "FREETYPE"
+        "JPEG"
+        "OSG"
+        "PNG"
+        "TGA"
+      ]);
   });
 
   bullet' = bullet.overrideDerivation (old: {
@@ -64,50 +77,63 @@ stdenv.mkDerivation rec {
     hash = "sha256-zkjVt3GfQZsFXl2Ht3lCuQtDMYQWxhdFO4aGSb3rsyo=";
   };
 
-  postPatch = ''
-    sed '1i#include <memory>' -i components/myguiplatform/myguidatamanager.cpp # gcc12
-  '' + lib.optionalString stdenv.isDarwin ''
-    # Don't fix Darwin app bundle
-    sed -i '/fixup_bundle/d' CMakeLists.txt
-  '';
+  postPatch =
+    ''
+      sed '1i#include <memory>' -i components/myguiplatform/myguidatamanager.cpp # gcc12
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      # Don't fix Darwin app bundle
+      sed -i '/fixup_bundle/d' CMakeLists.txt
+    '';
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+  ];
 
   # If not set, OSG plugin .so files become shell scripts on Darwin.
   dontWrapQtApps = stdenv.isDarwin;
 
-  buildInputs = [
-    SDL2
-    boost
-    bullet'
-    ffmpeg
-    libXt
-    luajit
-    lz4
-    mygui
-    openal
-    osg'
-    recastnavigation
-    unshield
-    yaml-cpp
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreMedia
-    VideoDecodeAcceleration
-    VideoToolbox
-  ];
+  buildInputs =
+    [
+      SDL2
+      boost
+      bullet'
+      ffmpeg
+      libXt
+      luajit
+      lz4
+      mygui
+      openal
+      osg'
+      recastnavigation
+      unshield
+      yaml-cpp
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreMedia
+      VideoDecodeAcceleration
+      VideoToolbox
+    ];
 
-  cmakeFlags = [
-    "-DOpenGL_GL_PREFERENCE=${GL}"
-    "-DOPENMW_USE_SYSTEM_RECASTNAVIGATION=1"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DOPENMW_OSX_DEPLOYMENT=ON"
-  ];
+  cmakeFlags =
+    [
+      "-DOpenGL_GL_PREFERENCE=${GL}"
+      "-DOPENMW_USE_SYSTEM_RECASTNAVIGATION=1"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "-DOPENMW_OSX_DEPLOYMENT=ON"
+    ];
 
   meta = with lib; {
     description = "An unofficial open source engine reimplementation of the game Morrowind";
     homepage = "https://openmw.org";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ abbradar marius851000 ];
+    maintainers = with maintainers; [
+      abbradar
+      marius851000
+    ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

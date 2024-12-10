@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, git
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  git,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-p9XaMsrOgnEdb0yl52HXhNzz6YxuvTD5GCaq1a+l1bQ=";
   };
 
-  nativeBuildInputs = [ cmake git ];
+  nativeBuildInputs = [
+    cmake
+    git
+  ];
 
   meta = with lib; {
     description = "A library to parse and emit YAML, and do it fast.";

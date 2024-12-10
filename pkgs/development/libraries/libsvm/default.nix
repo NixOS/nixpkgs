@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, fixDarwinDylibNames
-, llvmPackages
-, withOpenMP ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fixDarwinDylibNames,
+  llvmPackages,
+  withOpenMP ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,9 +20,16 @@ stdenv.mkDerivation rec {
 
   buildInputs = lib.optionals (stdenv.cc.isClang && withOpenMP) [ llvmPackages.openmp ];
 
-  buildFlags = [ "lib" "all" ];
+  buildFlags = [
+    "lib"
+    "all"
+  ];
 
-  outputs = [ "out" "bin" "dev" ];
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
 
   nativeBuildInputs = lib.optionals stdenv.isDarwin [ fixDarwinDylibNames ];
 
@@ -29,7 +37,8 @@ stdenv.mkDerivation rec {
     let
       libSuff = stdenv.hostPlatform.extensions.sharedLibrary;
       soVersion = "3";
-      libName = if stdenv.isDarwin then "libsvm.${soVersion}${libSuff}" else "libsvm${libSuff}.${soVersion}";
+      libName =
+        if stdenv.isDarwin then "libsvm.${soVersion}${libSuff}" else "libsvm${libSuff}.${soVersion}";
     in
     ''
       runHook preInstall

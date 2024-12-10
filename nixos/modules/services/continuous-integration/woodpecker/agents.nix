@@ -1,7 +1,8 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
 
 let
@@ -109,7 +110,10 @@ let
   };
 in
 {
-  meta.maintainers = with lib.maintainers; [ janik ambroisie ];
+  meta.maintainers = with lib.maintainers; [
+    janik
+    ambroisie
+  ];
 
   options = {
     services.woodpecker-agents = {

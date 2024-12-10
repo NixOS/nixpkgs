@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, pkg-config, gtk2, poppler }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  gtk2,
+  poppler,
+}:
 
 stdenv.mkDerivation rec {
   pname = "epdfview";
@@ -10,21 +18,25 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 poppler ];
+  buildInputs = [
+    gtk2
+    poppler
+  ];
 
   hardeningDisable = [ "format" ];
 
-  patches = [ (fetchpatch {
-                name = "epdfview-0.1.8-glib2-headers.patch";
-                url = "https://projects.archlinux.org/svntogit/community.git/plain/trunk/epdfview-0.1.8-glib2-headers.patch?h=packages/epdfview&id=40ba115c860bdec31d03a30fa594a7ec2864d634";
-                sha256 = "17df6s1zij5ficj67xszq6kd88cy620az3ic55065ccnmsd73f8h";
-              })
-              (fetchpatch {
-                name = "epdfview-0.1.8-modern-cups.patch";
-                url = "https://projects.archlinux.org/svntogit/community.git/plain/trunk/epdfview-0.1.8-modern-cups.patch?h=packages/epdfview&id=40ba115c860bdec31d03a30fa594a7ec2864d634";
-                sha256 = "07yvgvai2bvbr5fa1mv6lg7nqr0qyryjn1xyjlh8nidg9k9vv001";
-              })
-            ];
+  patches = [
+    (fetchpatch {
+      name = "epdfview-0.1.8-glib2-headers.patch";
+      url = "https://projects.archlinux.org/svntogit/community.git/plain/trunk/epdfview-0.1.8-glib2-headers.patch?h=packages/epdfview&id=40ba115c860bdec31d03a30fa594a7ec2864d634";
+      sha256 = "17df6s1zij5ficj67xszq6kd88cy620az3ic55065ccnmsd73f8h";
+    })
+    (fetchpatch {
+      name = "epdfview-0.1.8-modern-cups.patch";
+      url = "https://projects.archlinux.org/svntogit/community.git/plain/trunk/epdfview-0.1.8-modern-cups.patch?h=packages/epdfview&id=40ba115c860bdec31d03a30fa594a7ec2864d634";
+      sha256 = "07yvgvai2bvbr5fa1mv6lg7nqr0qyryjn1xyjlh8nidg9k9vv001";
+    })
+  ];
 
   meta = with lib; {
     homepage = "https://packages.debian.org/wheezy/epdfview";

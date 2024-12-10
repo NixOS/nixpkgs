@@ -1,18 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libusb1
-, readline
-, libimobiledevice-glue
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libusb1,
+  readline,
+  libimobiledevice-glue,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libirecovery";
   version = "1.2.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "libimobiledevice";

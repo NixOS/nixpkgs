@@ -1,4 +1,8 @@
-{ lib, fetchurl, tcl }:
+{
+  lib,
+  fetchurl,
+  tcl,
+}:
 
 tcl.mkTclDerivation {
   pname = "wapp";

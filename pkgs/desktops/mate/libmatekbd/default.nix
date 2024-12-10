@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gettext
-, gtk3-x11
-, libxklavier
-, mateUpdateScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gettext,
+  gtk3-x11,
+  libxklavier,
+  mateUpdateScript,
 }:
 
 stdenv.mkDerivation rec {

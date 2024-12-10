@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, cctools
-, autoSignDarwinBinariesHook
-, fixDarwinDylibNames
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  cctools,
+  autoSignDarwinBinariesHook,
+  fixDarwinDylibNames,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,8 +21,13 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optionals stdenv.isDarwin [ "LIBTOOL=${cctools}/bin/libtool" ];
 
-  nativeBuildInputs = [ autoreconfHook ]
-    ++ lib.optionals stdenv.isDarwin [ cctools autoSignDarwinBinariesHook fixDarwinDylibNames ];
+  nativeBuildInputs =
+    [ autoreconfHook ]
+    ++ lib.optionals stdenv.isDarwin [
+      cctools
+      autoSignDarwinBinariesHook
+      fixDarwinDylibNames
+    ];
 
   meta = {
     homepage = "https://liquidsdr.org/";

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, libxml2
-, libxslt
-, itstool
-, gnome
-, pkg-config
-, meson
-, ninja
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libxml2,
+  libxslt,
+  itstool,
+  gnome,
+  pkg-config,
+  meson,
+  ninja,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {

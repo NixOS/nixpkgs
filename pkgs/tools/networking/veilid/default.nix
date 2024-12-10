@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, AppKit
-, Security
-, fetchFromGitLab
-, rustPlatform
-, protobuf
-, capnproto
-, cmake
+{
+  lib,
+  stdenv,
+  AppKit,
+  Security,
+  fetchFromGitLab,
+  rustPlatform,
+  protobuf,
+  capnproto,
+  cmake,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -36,7 +37,10 @@ rustPlatform.buildRustPackage rec {
     protobuf
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ AppKit Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    AppKit
+    Security
+  ];
 
   cargoBuildFlags = [
     "--workspace"
@@ -46,7 +50,11 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
 
   postInstall = ''
     moveToOutput "lib" "$lib"
@@ -56,6 +64,9 @@ rustPlatform.buildRustPackage rec {
     description = "Open-source, peer-to-peer, mobile-first, networked application framework";
     homepage = "https://veilid.com";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ bbigras qbit ];
+    maintainers = with maintainers; [
+      bbigras
+      qbit
+    ];
   };
 }

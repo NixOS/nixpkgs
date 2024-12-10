@@ -1,4 +1,9 @@
-{ stdenv, runtimeShell, lib, fetchzip }:
+{
+  stdenv,
+  runtimeShell,
+  lib,
+  fetchzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "terminal-notifier";
@@ -29,6 +34,6 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ ];
     homepage = "https://github.com/julienXX/terminal-notifier";
     license = licenses.mit;
-    platforms  = platforms.darwin;
+    platforms = platforms.darwin;
   };
 }

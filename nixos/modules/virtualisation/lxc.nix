@@ -1,6 +1,11 @@
 # LXC Configuration
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.virtualisation.lxc;
@@ -12,47 +17,43 @@ in
   };
 
   options.virtualisation.lxc = {
-    enable =
-      lib.mkOption {
-        type = lib.types.bool;
-        default = false;
-        description = ''
-            This enables Linux Containers (LXC), which provides tools
-            for creating and managing system or application containers
-            on Linux.
-          '';
-      };
+    enable = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        This enables Linux Containers (LXC), which provides tools
+        for creating and managing system or application containers
+        on Linux.
+      '';
+    };
 
-    systemConfig =
-      lib.mkOption {
-        type = lib.types.lines;
-        default = "";
-        description = ''
-            This is the system-wide LXC config. See
-            {manpage}`lxc.system.conf(5)`.
-          '';
-      };
+    systemConfig = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+      description = ''
+        This is the system-wide LXC config. See
+        {manpage}`lxc.system.conf(5)`.
+      '';
+    };
     package = lib.mkPackageOption pkgs "lxc" { };
 
-    defaultConfig =
-      lib.mkOption {
-        type = lib.types.lines;
-        default = "";
-        description = ''
-            Default config (default.conf) for new containers, i.e. for
-            network config. See {manpage}`lxc.container.conf(5)`.
-          '';
-      };
+    defaultConfig = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+      description = ''
+        Default config (default.conf) for new containers, i.e. for
+        network config. See {manpage}`lxc.container.conf(5)`.
+      '';
+    };
 
-    usernetConfig =
-      lib.mkOption {
-        type = lib.types.lines;
-        default = "";
-        description = ''
-            This is the config file for managing unprivileged user network
-            administration access in LXC. See {manpage}`lxc-usernet(5)`.
-          '';
-      };
+    usernetConfig = lib.mkOption {
+      type = lib.types.lines;
+      default = "";
+      description = ''
+        This is the config file for managing unprivileged user network
+        administration access in LXC. See {manpage}`lxc-usernet(5)`.
+      '';
+    };
   };
 
   ###### implementation

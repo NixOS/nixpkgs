@@ -7,20 +7,34 @@
 #   3) used by `google-cloud-sdk` only on GCE guests
 #
 
-{ stdenv, lib, fetchurl, makeWrapper, python, openssl, jq, callPackage, with-gce ? false }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  python,
+  openssl,
+  jq,
+  callPackage,
+  with-gce ? false,
+}:
 
 let
-  pythonEnv = python.withPackages (p: with p; [
-    cffi
-    cryptography
-    pyopenssl
-    crcmod
-    numpy
-  ] ++ lib.optional (with-gce) google-compute-engine);
+  pythonEnv = python.withPackages (
+    p:
+    with p;
+    [
+      cffi
+      cryptography
+      pyopenssl
+      crcmod
+      numpy
+    ]
+    ++ lib.optional (with-gce) google-compute-engine
+  );
 
   data = import ./data.nix { };
-  sources = system:
-    data.googleCloudSdkPkgs.${system} or (throw "Unsupported system: ${system}");
+  sources = system: data.googleCloudSdkPkgs.${system} or (throw "Unsupported system: ${system}");
 
   components = callPackage ./components.nix {
     snapshotPath = ./components.json;
@@ -28,7 +42,8 @@ let
 
   withExtraComponents = callPackage ./withExtraComponents.nix { inherit components; };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "google-cloud-sdk";
   inherit (data) version;
 
@@ -36,7 +51,10 @@ in stdenv.mkDerivation rec {
 
   buildInputs = [ python ];
 
-  nativeBuildInputs = [ jq makeWrapper ];
+  nativeBuildInputs = [
+    jq
+    makeWrapper
+  ];
 
   patches = [
     # For kubectl configs, don't store the absolute path of the `gcloud` binary as it can be garbage-collected
@@ -125,13 +143,19 @@ in stdenv.mkDerivation rec {
     longDescription = "The Google Cloud SDK for GCE hosts. Used by `google-cloud-sdk` only on GCE guests.";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryNativeCode  # anthoscli and possibly more
+      binaryNativeCode # anthoscli and possibly more
     ];
     # This package contains vendored dependencies. All have free licenses.
     license = licenses.free;
     homepage = "https://cloud.google.com/sdk/";
     changelog = "https://cloud.google.com/sdk/docs/release-notes";
-    maintainers = with maintainers; [ iammrinal0 marcusramberg pradyuman stephenmw zimbatm ];
+    maintainers = with maintainers; [
+      iammrinal0
+      marcusramberg
+      pradyuman
+      stephenmw
+      zimbatm
+    ];
     platforms = builtins.attrNames data.googleCloudSdkPkgs;
     mainProgram = "gcloud";
   };

@@ -1,4 +1,11 @@
-{ lib, buildPythonPackage, fetchFromGitHub, fetchPypi, rustPlatform, setuptools-rust }:
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchPypi,
+  rustPlatform,
+  setuptools-rust,
+}:
 
 buildPythonPackage rec {
   pname = "matrix-http-rendezvous-synapse";
@@ -22,15 +29,16 @@ buildPythonPackage rec {
     hash = "sha256-TyxDq6YxZUArRj5gpjB1afDQgtUlCVer3Uhq6YKvVYM=";
   };
 
-  nativeBuildInputs = [
-    setuptools-rust
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-  ]);
+  nativeBuildInputs =
+    [
+      setuptools-rust
+    ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+      maturinBuildHook
+    ]);
 
   buildAndTestSubdir = "synapse";
-
 
   pythonImportsCheck = [ "matrix_http_rendezvous_synapse" ];
 

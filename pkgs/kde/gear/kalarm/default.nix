@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kalarm";
 
-  extraBuildInputs = [libcanberra];
+  extraBuildInputs = [ libcanberra ];
 }

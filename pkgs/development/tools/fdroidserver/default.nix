@@ -1,28 +1,29 @@
-{ lib
-, fetchFromGitLab
-, fetchPypi
-, apksigner
-, buildPythonApplication
-, python3
-, pythonRelaxDepsHook
-, installShellFiles
-, androguard
-, babel
-, clint
-, defusedxml
-, gitpython
-, libcloud
-, mwclient
-, paramiko
-, pillow
-, pyasn1
-, pyasn1-modules
-, python-vagrant
-, pyyaml
-, qrcode
-, requests
-, ruamel-yaml
-, yamllint
+{
+  lib,
+  fetchFromGitLab,
+  fetchPypi,
+  apksigner,
+  buildPythonApplication,
+  python3,
+  pythonRelaxDepsHook,
+  installShellFiles,
+  androguard,
+  babel,
+  clint,
+  defusedxml,
+  gitpython,
+  libcloud,
+  mwclient,
+  paramiko,
+  pillow,
+  pyasn1,
+  pyasn1-modules,
+  python-vagrant,
+  pyyaml,
+  qrcode,
+  requests,
+  ruamel-yaml,
+  yamllint,
 }:
 
 buildPythonApplication rec {
@@ -111,7 +112,10 @@ buildPythonApplication rec {
     changelog = "https://gitlab.com/fdroid/fdroidserver/-/blob/${version}/CHANGELOG.md";
     description = "Server and tools for F-Droid, the Free Software repository system for Android";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ linsui jugendhacker ];
+    maintainers = with maintainers; [
+      linsui
+      jugendhacker
+    ];
     mainProgram = "fdroid";
   };
 }

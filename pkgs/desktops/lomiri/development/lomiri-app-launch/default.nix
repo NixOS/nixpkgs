@@ -1,44 +1,47 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, testers
-, cmake
-, cmake-extras
-, curl
-, dbus
-, dbus-test-runner
-, dpkg
-, gobject-introspection
-, gtest
-, json-glib
-, libxkbcommon
-, lomiri-api
-, lttng-ust
-, pkg-config
-, properties-cpp
-, python3
-, systemd
-, ubports-click
-, validatePkgConfig
-, zeitgeist
-, withDocumentation ? true
-, doxygen
-, python3Packages
-, sphinx
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  testers,
+  cmake,
+  cmake-extras,
+  curl,
+  dbus,
+  dbus-test-runner,
+  dpkg,
+  gobject-introspection,
+  gtest,
+  json-glib,
+  libxkbcommon,
+  lomiri-api,
+  lttng-ust,
+  pkg-config,
+  properties-cpp,
+  python3,
+  systemd,
+  ubports-click,
+  validatePkgConfig,
+  zeitgeist,
+  withDocumentation ? true,
+  doxygen,
+  python3Packages,
+  sphinx,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lomiri-app-launch";
   version = "0.1.9";
 
-  outputs = [
-    "out"
-    "dev"
-  ] ++ lib.optionals withDocumentation [
-    "doc"
-  ];
+  outputs =
+    [
+      "out"
+      "dev"
+    ]
+    ++ lib.optionals withDocumentation [
+      "doc"
+    ];
 
   src = fetchFromGitLab {
     owner = "ubports";
@@ -72,17 +75,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    cmake
-    dpkg # for setting LOMIRI_APP_LAUNCH_ARCH
-    gobject-introspection
-    pkg-config
-    validatePkgConfig
-  ] ++ lib.optionals withDocumentation [
-    doxygen
-    python3Packages.breathe
-    sphinx
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      dpkg # for setting LOMIRI_APP_LAUNCH_ARCH
+      gobject-introspection
+      pkg-config
+      validatePkgConfig
+    ]
+    ++ lib.optionals withDocumentation [
+      doxygen
+      python3Packages.breathe
+      sphinx
+    ];
 
   buildInputs = [
     cmake-extras
@@ -100,9 +105,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     dbus
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        python-dbusmock
+      ]
+    ))
   ];
 
   checkInputs = [
@@ -113,14 +120,19 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_MIRCLIENT" false)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
-      # Exclude tests
-      "-E" (lib.strings.escapeShellArg "(${lib.concatStringsSep "|" [
-        # Flaky, randomly hangs
-        # https://gitlab.com/ubports/development/core/lomiri-app-launch/-/issues/19
-        "^helper-handshake-test"
-      ]})")
-    ]))
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
+      lib.concatStringsSep ";" [
+        # Exclude tests
+        "-E"
+        (lib.strings.escapeShellArg "(${
+          lib.concatStringsSep "|" [
+            # Flaky, randomly hangs
+            # https://gitlab.com/ubports/development/core/lomiri-app-launch/-/issues/19
+            "^helper-handshake-test"
+          ]
+        })")
+      ]
+    ))
   ];
 
   postBuild = lib.optionalString withDocumentation ''

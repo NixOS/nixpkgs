@@ -1,4 +1,11 @@
-{ lib, stdenv, rustPlatform, fetchCrate, git, CoreServices }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchCrate,
+  git,
+  CoreServices,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "fac-build";
@@ -9,7 +16,6 @@ rustPlatform.buildRustPackage rec {
     crateName = "fac";
     sha256 = "sha256-+JJVuKUdnjJoQJ4a2EE0O6jZdVoFxPwbPgfD2LfiDPI=";
   };
-
 
   buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
   cargoSha256 = "sha256-XT4FQVE+buORuZAFZK5Qnf/Fl3QSvw4SHUuCzWhxUdk=";

@@ -1,15 +1,28 @@
-{ stdenv, lib, coreutils, findutils, gnugrep, darwin, bash
-# Avoid having GHC in the build-time closure of all NixOS configurations
-, doCheck ? false, shellcheck
+{
+  stdenv,
+  lib,
+  coreutils,
+  findutils,
+  gnugrep,
+  darwin,
+  bash,
+  # Avoid having GHC in the build-time closure of all NixOS configurations
+  doCheck ? false,
+  shellcheck,
 }:
 
 stdenv.mkDerivation {
   name = "nix-info";
   src = ./info.sh;
 
-  path = lib.makeBinPath ([
-    coreutils findutils gnugrep
-  ] ++ (lib.optionals stdenv.isDarwin [ darwin.DarwinTools ]));
+  path = lib.makeBinPath (
+    [
+      coreutils
+      findutils
+      gnugrep
+    ]
+    ++ (lib.optionals stdenv.isDarwin [ darwin.DarwinTools ])
+  );
   is_darwin = if stdenv.isDarwin then "yes" else "no";
 
   sandboxtest = ./sandbox.nix;
@@ -21,7 +34,7 @@ stdenv.mkDerivation {
     cp $src ./nix-info/nix-info
   '';
 
-  buildPhase  = ''
+  buildPhase = ''
     substituteAllInPlace ./nix-info
   '';
 

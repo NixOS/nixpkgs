@@ -1,57 +1,60 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, runCommand
-, libtool
-, cmake
-, zlib
-, bzip2
-, enableRexx ? stdenv.isLinux, regina
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  runCommand,
+  libtool,
+  cmake,
+  zlib,
+  bzip2,
+  enableRexx ? stdenv.isLinux,
+  regina,
 }:
 let
-  herculesCpu =
-    if stdenv.hostPlatform.isx86 then "x86"
-    else stdenv.hostPlatform.qemuArch;
+  herculesCpu = if stdenv.hostPlatform.isx86 then "x86" else stdenv.hostPlatform.qemuArch;
   herculesBits = if stdenv.hostPlatform.is32bit then "32" else "64";
 
-  herculesLibDir =
-    if stdenv.hostPlatform.isx86 then "lib"
-    else "lib/${herculesCpu}";
+  herculesLibDir = if stdenv.hostPlatform.isx86 then "lib" else "lib/${herculesCpu}";
 
-  mkExtPkg = depName: attrFn: (stdenv.mkDerivation {
-    pname = "hercules-${depName}";
+  mkExtPkg =
+    depName: attrFn:
+    (stdenv.mkDerivation {
+      pname = "hercules-${depName}";
 
-    postPatch = ''
-      patchShebangs build
-      sed -i build \
-        -e "s%_tool=.*$%_tool=${cmake}/bin/cmake%" \
-        -e "s/CPUS=.*$/CPUS=$NIX_BUILD_CORES/"
-    '';
+      postPatch = ''
+        patchShebangs build
+        sed -i build \
+          -e "s%_tool=.*$%_tool=${cmake}/bin/cmake%" \
+          -e "s/CPUS=.*$/CPUS=$NIX_BUILD_CORES/"
+      '';
 
-    dontUseCmakeConfigure = true;
+      dontUseCmakeConfigure = true;
 
-    buildPhase = ''
-      mkdir ../build $out
-      # In source builds are not allowed.
-      cd ../build
-      ../source/build \
-        --pkgname ${depName} \
-        --cpu ${herculesCpu} \
-        --arch ${herculesBits} \
-        --install "$out"
-    '';
+      buildPhase = ''
+        mkdir ../build $out
+        # In source builds are not allowed.
+        cd ../build
+        ../source/build \
+          --pkgname ${depName} \
+          --cpu ${herculesCpu} \
+          --arch ${herculesBits} \
+          --install "$out"
+      '';
 
-    nativeBuildInputs = [ cmake ];
+      nativeBuildInputs = [ cmake ];
 
-    enableParallelBuilding = true;
+      enableParallelBuilding = true;
 
-    meta = with lib; {
-      description = "Hercules ${depName} library";
-      license = lib.licenses.free; # Mixture of Public Domain, ICU (MIT compatible) and others
-      maintainers = with maintainers; [ anna328p vifino ];
-    };
-  }).overrideAttrs (default: attrFn default);
-
+      meta = with lib; {
+        description = "Hercules ${depName} library";
+        license = lib.licenses.free; # Mixture of Public Domain, ICU (MIT compatible) and others
+        maintainers = with maintainers; [
+          anna328p
+          vifino
+        ];
+      };
+    }).overrideAttrs
+      (default: attrFn default);
 
   crypto = mkExtPkg "crypto" (default: {
     version = "1.0.0";
@@ -93,7 +96,7 @@ let
     };
   });
 
-  extpkgs = runCommand "hercules-extpkgs" {} ''
+  extpkgs = runCommand "hercules-extpkgs" { } ''
     OUTINC="$out/include"
     OUTLIB="$out/${herculesLibDir}"
     mkdir -p "$OUTINC" "$OUTLIB"
@@ -119,24 +122,28 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ libtool ];
-  buildInputs = [
-    (lib.getOutput "lib" libtool)
-    zlib
-    bzip2
-    extpkgs
-  ] ++ lib.optionals enableRexx [
-    regina
-  ];
+  buildInputs =
+    [
+      (lib.getOutput "lib" libtool)
+      zlib
+      bzip2
+      extpkgs
+    ]
+    ++ lib.optionals enableRexx [
+      regina
+    ];
 
-  configureFlags = [
-    "--enable-extpkgs=${extpkgs}"
-    "--without-included-ltdl"
-    "--enable-ipv6"
-    "--enable-cckd-bzip2"
-    "--enable-het-bzip2"
-  ] ++ lib.optionals enableRexx [
-    "--enable-regina-rexx"
-  ];
+  configureFlags =
+    [
+      "--enable-extpkgs=${extpkgs}"
+      "--without-included-ltdl"
+      "--enable-ipv6"
+      "--enable-cckd-bzip2"
+      "--enable-het-bzip2"
+    ]
+    ++ lib.optionals enableRexx [
+      "--enable-regina-rexx"
+    ];
 
   meta = with lib; {
     homepage = "https://sdl-hercules-390.github.io/html/";
@@ -148,6 +155,9 @@ stdenv.mkDerivation rec {
       Mac OS X.
     '';
     license = licenses.qpl;
-    maintainers = with maintainers; [ anna328p vifino ];
+    maintainers = with maintainers; [
+      anna328p
+      vifino
+    ];
   };
 }

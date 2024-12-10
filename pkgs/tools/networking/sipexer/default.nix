@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -21,7 +22,10 @@ buildGoModule rec {
     homepage = "https://github.com/miconda/sipexer";
     changelog = "https://github.com/miconda/sipexer/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ astro janik ];
+    maintainers = with maintainers; [
+      astro
+      janik
+    ];
     mainProgram = "sipexer";
   };
 }

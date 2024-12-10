@@ -1,37 +1,41 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, fetchFromGitLab
-, python3
-, vala
-, glib
-, gtk3
-, libpeas
-, libsoup_3
-, libxml2
-, libsecret
-, libnotify
-, libdmapsharing
-, gnome
-, gobject-introspection
-, totem-pl-parser
-, libgudev
-, libgpod
-, libmtp
-, lirc
-, brasero
-, grilo
-, tdb
-, json-glib
-, itstool
-, wrapGAppsHook3
-, desktop-file-utils
-, gst_all_1
-, gst_plugins ? with gst_all_1; [ gst-plugins-good gst-plugins-ugly ]
-, check
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  fetchFromGitLab,
+  python3,
+  vala,
+  glib,
+  gtk3,
+  libpeas,
+  libsoup_3,
+  libxml2,
+  libsecret,
+  libnotify,
+  libdmapsharing,
+  gnome,
+  gobject-introspection,
+  totem-pl-parser,
+  libgudev,
+  libgpod,
+  libmtp,
+  lirc,
+  brasero,
+  grilo,
+  tdb,
+  json-glib,
+  itstool,
+  wrapGAppsHook3,
+  desktop-file-utils,
+  gst_all_1,
+  gst_plugins ? with gst_all_1; [
+    gst-plugins-good
+    gst-plugins-ugly
+  ],
+  check,
 }:
 
 stdenv.mkDerivation rec {

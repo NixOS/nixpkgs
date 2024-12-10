@@ -1,59 +1,60 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, accountsservice
-, budgie-desktop
-, clutter
-, clutter-gtk
-, colord
-, colord-gtk
-, cups
-, docbook-xsl-nons
-, fontconfig
-, gcr
-, gdk-pixbuf
-, gettext
-, glib
-, glib-networking
-, glibc
-, gnome
-, gnome-desktop
-, gsettings-desktop-schemas
-, gsound
-, gtk3
-, ibus
-, libcanberra-gtk3
-, libepoxy
-, libgnomekbd
-, libgtop
-, libgudev
-, libhandy
-, libkrb5
-, libnma
-, libpulseaudio
-, libpwquality
-, librsvg
-, libsecret
-, libwacom
-, libxml2
-, libxslt
-, meson
-, modemmanager
-, networkmanager
-, networkmanagerapplet
-, ninja
-, pkg-config
-, polkit
-, samba
-, shadow
-, shared-mime-info
-, tzdata
-, udisks2
-, upower
-, webp-pixbuf-loader
-, wrapGAppsHook3
-, enableSshSocket ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  accountsservice,
+  budgie-desktop,
+  clutter,
+  clutter-gtk,
+  colord,
+  colord-gtk,
+  cups,
+  docbook-xsl-nons,
+  fontconfig,
+  gcr,
+  gdk-pixbuf,
+  gettext,
+  glib,
+  glib-networking,
+  glibc,
+  gnome,
+  gnome-desktop,
+  gsettings-desktop-schemas,
+  gsound,
+  gtk3,
+  ibus,
+  libcanberra-gtk3,
+  libepoxy,
+  libgnomekbd,
+  libgtop,
+  libgudev,
+  libhandy,
+  libkrb5,
+  libnma,
+  libpulseaudio,
+  libpwquality,
+  librsvg,
+  libsecret,
+  libwacom,
+  libxml2,
+  libxslt,
+  meson,
+  modemmanager,
+  networkmanager,
+  networkmanagerapplet,
+  ninja,
+  pkg-config,
+  polkit,
+  samba,
+  shadow,
+  shared-mime-info,
+  tzdata,
+  udisks2,
+  upower,
+  webp-pixbuf-loader,
+  wrapGAppsHook3,
+  enableSshSocket ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -73,7 +74,12 @@ stdenv.mkDerivation (finalAttrs: {
       src = ./paths.patch;
       budgie_desktop = budgie-desktop;
       gcm = gnome.gnome-color-manager;
-      inherit cups glibc libgnomekbd shadow;
+      inherit
+        cups
+        glibc
+        libgnomekbd
+        shadow
+        ;
       inherit networkmanagerapplet tzdata;
     })
   ];
@@ -145,12 +151,14 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     # Pull in WebP support for gnome-backgrounds.
     # In postInstall to run before gappsWrapperArgsHook.
-    export GDK_PIXBUF_MODULE_FILE="${gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
-      extraLoaders = [
-        librsvg
-        webp-pixbuf-loader
-      ];
-    }}"
+    export GDK_PIXBUF_MODULE_FILE="${
+      gnome._gdkPixbufCacheBuilder_DO_NOT_USE {
+        extraLoaders = [
+          librsvg
+          webp-pixbuf-loader
+        ];
+      }
+    }"
   '';
 
   preFixup = ''

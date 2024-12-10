@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, dooit
-, python3
-, testers
-, nix-update-script
+{
+  lib,
+  fetchFromGitHub,
+  dooit,
+  python3,
+  testers,
+  nix-update-script,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -54,7 +55,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/kraanzu/dooit";
     changelog = "https://github.com/kraanzu/dooit/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ khaneliman wesleyjrz ];
+    maintainers = with maintainers; [
+      khaneliman
+      wesleyjrz
+    ];
     mainProgram = "dooit";
   };
 }

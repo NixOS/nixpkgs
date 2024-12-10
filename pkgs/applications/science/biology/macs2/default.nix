@@ -1,4 +1,9 @@
-{ lib, python3, fetchpatch, fetchPypi }:
+{
+  lib,
+  python3,
+  fetchpatch,
+  fetchPypi,
+}:
 
 python3.pkgs.buildPythonPackage rec {
   pname = "macs2";

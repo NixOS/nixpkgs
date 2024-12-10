@@ -1,14 +1,36 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config
-, libXtst, libvorbis, hunspell, lzo, xz, bzip2, libiconv
-, qtbase, qtsvg, qtwebkit, qtx11extras, qttools, qmake
-, wrapQtAppsHook
-, wrapGAppsHook3
-, withCC ? true, opencc
-, withEpwing ? true, libeb
-, withExtraTiff ? true, libtiff
-, withFFmpeg ? true, libao, ffmpeg
-, withMultimedia ? true
-, withZim ? true, zstd }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libXtst,
+  libvorbis,
+  hunspell,
+  lzo,
+  xz,
+  bzip2,
+  libiconv,
+  qtbase,
+  qtsvg,
+  qtwebkit,
+  qtx11extras,
+  qttools,
+  qmake,
+  wrapQtAppsHook,
+  wrapGAppsHook3,
+  withCC ? true,
+  opencc,
+  withEpwing ? true,
+  libeb,
+  withExtraTiff ? true,
+  libtiff,
+  withFFmpeg ? true,
+  libao,
+  ffmpeg,
+  withMultimedia ? true,
+  withZim ? true,
+  zstd,
+}:
 
 stdenv.mkDerivation rec {
   pname = "goldendict";
@@ -32,16 +54,38 @@ stdenv.mkDerivation rec {
       --replace "opencc.2" "opencc"
   '';
 
-  nativeBuildInputs = [ pkg-config qmake wrapQtAppsHook wrapGAppsHook3 ];
-  buildInputs = [
-    qtbase qtsvg qtwebkit qttools
-    libvorbis hunspell xz lzo
-  ] ++ lib.optionals stdenv.isLinux [ qtx11extras libXtst ]
-    ++ lib.optionals stdenv.isDarwin [ bzip2 libiconv ]
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+    wrapQtAppsHook
+    wrapGAppsHook3
+  ];
+  buildInputs =
+    [
+      qtbase
+      qtsvg
+      qtwebkit
+      qttools
+      libvorbis
+      hunspell
+      xz
+      lzo
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      qtx11extras
+      libXtst
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      bzip2
+      libiconv
+    ]
     ++ lib.optional withCC opencc
     ++ lib.optional withEpwing libeb
     ++ lib.optional withExtraTiff libtiff
-    ++ lib.optionals withFFmpeg [ libao ffmpeg ]
+    ++ lib.optionals withFFmpeg [
+      libao
+      ffmpeg
+    ]
     ++ lib.optional withZim zstd;
 
   qmakeFlags = with lib; [
@@ -51,7 +95,7 @@ stdenv.mkDerivation rec {
     (optional (!withEpwing) "CONFIG+=no_epwing_support")
     (optional (!withExtraTiff) "CONFIG+=no_extra_tiff_handler")
     (optional (!withFFmpeg) "CONFIG+=no_ffmpeg_player")
-    (optional (!withMultimedia)"CONFIG+=no_qtmultimedia_player")
+    (optional (!withMultimedia) "CONFIG+=no_qtmultimedia_player")
     (optional withZim "CONFIG+=zim_support")
   ];
 
@@ -65,7 +109,11 @@ stdenv.mkDerivation rec {
     description = "A feature-rich dictionary lookup program";
     platforms = with platforms; linux ++ darwin;
     mainProgram = "goldendict";
-    maintainers = with maintainers; [ gebner astsmtl sikmir ];
+    maintainers = with maintainers; [
+      gebner
+      astsmtl
+      sikmir
+    ];
     license = licenses.gpl3Plus;
   };
 }

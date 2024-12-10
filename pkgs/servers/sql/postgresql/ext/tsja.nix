@@ -1,10 +1,11 @@
-{ lib
-, fetchzip
-, nixosTests
-, stdenv
+{
+  lib,
+  fetchzip,
+  nixosTests,
+  stdenv,
 
-, mecab
-, postgresql
+  mecab,
+  postgresql,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,10 @@ stdenv.mkDerivation rec {
     substituteInPlace tsja.c --replace /usr/local/lib/mecab ${mecab}/lib/mecab
   '';
 
-  buildInputs = [ mecab postgresql ];
+  buildInputs = [
+    mecab
+    postgresql
+  ];
 
   installPhase = ''
     mkdir -p $out/lib $out/share/postgresql/extension

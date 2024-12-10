@@ -1,13 +1,14 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, unstableGitUpdater
-, poetry-core
-, boto
-, boto3
-, nixops
-, nixos-modules-contrib
-, typing-extensions
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  poetry-core,
+  boto,
+  boto3,
+  nixops,
+  nixos-modules-contrib,
+  typing-extensions,
 }:
 
 buildPythonPackage {

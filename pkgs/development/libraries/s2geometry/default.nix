@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, cmake, pkg-config, openssl, gtest }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  openssl,
+  gtest,
+}:
 
 stdenv.mkDerivation rec {
   pname = "s2geometry";
@@ -19,8 +28,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ openssl gtest ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    openssl
+    gtest
+  ];
 
   # Default of C++11 is too low for gtest.
   # In newer versions of s2geometry this can be done with cmakeFlags.

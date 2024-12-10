@@ -1,21 +1,47 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja, python3, pango, glibmm, cairomm, gnome
-, ApplicationServices }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  python3,
+  pango,
+  glibmm,
+  cairomm,
+  gnome,
+  ApplicationServices,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pangomm";
-  version= "2.46.4";
+  version = "2.46.4";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     sha256 = "sha256-uSAWZhUmQk3kuTd/FRL1l4H0H7FsnAJn1hM7oc1o2yI=";
   };
 
-  outputs = [ "out" "dev" ];
-
-  nativeBuildInputs = [ pkg-config meson ninja python3 ] ++ lib.optionals stdenv.isDarwin [
-    ApplicationServices
+  outputs = [
+    "out"
+    "dev"
   ];
-  propagatedBuildInputs = [ pango glibmm cairomm ];
+
+  nativeBuildInputs =
+    [
+      pkg-config
+      meson
+      ninja
+      python3
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      ApplicationServices
+    ];
+  propagatedBuildInputs = [
+    pango
+    glibmm
+    cairomm
+  ];
 
   doCheck = true;
 
@@ -29,10 +55,16 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C++ interface to the Pango text rendering library";
-    homepage    = "https://www.pango.org/";
-    license     = with licenses; [ lgpl2 lgpl21 ];
-    maintainers = with maintainers; [ lovek323 raskin ];
-    platforms   = platforms.unix;
+    homepage = "https://www.pango.org/";
+    license = with licenses; [
+      lgpl2
+      lgpl21
+    ];
+    maintainers = with maintainers; [
+      lovek323
+      raskin
+    ];
+    platforms = platforms.unix;
 
     longDescription = ''
       Pango is a library for laying out and rendering of text, with an

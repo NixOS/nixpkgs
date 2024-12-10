@@ -1,18 +1,19 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, darwin
-, coreutils
-, gnome
-, libsecret
-, bash
-, openvpn
-, nerdfonts
-, gzip
-, killall
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  darwin,
+  coreutils,
+  gnome,
+  libsecret,
+  bash,
+  openvpn,
+  nerdfonts,
+  gzip,
+  killall,
 }:
 
 rustPlatform.buildRustPackage {
@@ -38,14 +39,17 @@ rustPlatform.buildRustPackage {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isLinux [
-    gnome.gnome-keyring
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      gnome.gnome-keyring
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   postPatch = ''
     substituteInPlace src/manage.rs \

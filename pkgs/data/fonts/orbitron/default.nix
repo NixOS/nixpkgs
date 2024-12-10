@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "orbitron";
@@ -43,6 +47,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     license = licenses.ofl;
     platforms = platforms.all;
-    maintainers = with lib.maintainers; [ leenaars minijackson ];
+    maintainers = with lib.maintainers; [
+      leenaars
+      minijackson
+    ];
   };
 })

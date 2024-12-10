@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, installShellFiles, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "trash-cli";
@@ -11,7 +16,10 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-pXDqn+QuhTE12zXq6A4GSGSCtYJ6hBahv2p9aYQXxaI=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ psutil six ];
+  propagatedBuildInputs = with python3Packages; [
+    psutil
+    six
+  ];
 
   nativeBuildInputs = with python3Packages; [
     installShellFiles

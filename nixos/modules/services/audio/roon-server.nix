@@ -1,11 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   name = "roon-server";
   cfg = config.services.roon-server;
-in {
+in
+{
   options = {
     services.roon-server = {
       enable = mkEnableOption "Roon Server";
@@ -54,9 +60,18 @@ in {
 
     networking.firewall = mkIf cfg.openFirewall {
       allowedTCPPortRanges = [
-        { from = 9100; to = 9200; }
-        { from = 9330; to = 9339; }
-        { from = 30000; to = 30010; }
+        {
+          from = 9100;
+          to = 9200;
+        }
+        {
+          from = 9330;
+          to = 9339;
+        }
+        {
+          from = 30000;
+          to = 30010;
+        }
       ];
       allowedUDPPorts = [ 9003 ];
       extraCommands = optionalString (!config.networking.nftables.enable) ''
@@ -74,14 +89,12 @@ in {
       '';
     };
 
-
-    users.groups.${cfg.group} = {};
-    users.users.${cfg.user} =
-      optionalAttrs (cfg.user == "roon-server") {
-        isSystemUser = true;
-        description = "Roon Server user";
-        group = cfg.group;
-        extraGroups = [ "audio" ];
-      };
+    users.groups.${cfg.group} = { };
+    users.users.${cfg.user} = optionalAttrs (cfg.user == "roon-server") {
+      isSystemUser = true;
+      description = "Roon Server user";
+      group = cfg.group;
+      extraGroups = [ "audio" ];
+    };
   };
 }

@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchgit, pkg-config, asciidoc, xmlto, docbook_xml_dtd_45, docbook_xsl, meson, ninja, cunit, gitUpdater }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  pkg-config,
+  asciidoc,
+  xmlto,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  meson,
+  ninja,
+  cunit,
+  gitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libtraceevent";
@@ -15,10 +28,26 @@ stdenv.mkDerivation rec {
     patchShebangs --build check-manpages.sh Documentation/install-docs.sh.in
   '';
 
-  outputs = [ "out" "dev" "devman" "doc" ];
-  nativeBuildInputs = [ meson ninja pkg-config asciidoc xmlto docbook_xml_dtd_45 docbook_xsl ];
+  outputs = [
+    "out"
+    "dev"
+    "devman"
+    "doc"
+  ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    asciidoc
+    xmlto
+    docbook_xml_dtd_45
+    docbook_xsl
+  ];
 
-  ninjaFlags = [ "all" "docs" ];
+  ninjaFlags = [
+    "all"
+    "docs"
+  ];
 
   doCheck = true;
   checkInputs = [ cunit ];
@@ -31,9 +60,9 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Linux kernel trace event library";
-    homepage    = "https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/";
-    license     = licenses.lgpl21Only;
-    platforms   = platforms.linux;
+    homepage = "https://git.kernel.org/pub/scm/libs/libtrace/libtraceevent.git/";
+    license = licenses.lgpl21Only;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ wentasah ];
   };
 }

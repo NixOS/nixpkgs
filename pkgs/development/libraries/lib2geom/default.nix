@@ -1,23 +1,27 @@
-{ stdenv
-, fetchpatch
-, fetchFromGitLab
-, cmake
-, ninja
-, pkg-config
-, boost
-, glib
-, gsl
-, cairo
-, double-conversion
-, gtest
-, lib
+{
+  stdenv,
+  fetchpatch,
+  fetchFromGitLab,
+  cmake,
+  ninja,
+  pkg-config,
+  boost,
+  glib,
+  gsl,
+  cairo,
+  double-conversion,
+  gtest,
+  lib,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lib2geom";
   version = "1.3";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitLab {
     owner = "inkscape";
@@ -75,29 +79,33 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   # TODO: Update cmake hook to make it simpler to selectively disable cmake tests: #113829
-  checkPhase = let
-    disabledTests =
-      lib.optionals stdenv.isAarch64 [
-        # Broken on all platforms, test just accidentally passes on some.
-        # https://gitlab.com/inkscape/lib2geom/-/issues/63
-        "elliptical-arc-test"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isMusl [
-        # Fails due to rounding differences
-        # https://gitlab.com/inkscape/lib2geom/-/issues/70
-        "circle-test"
-      ]
-      ;
-  in ''
-    runHook preCheck
-    ctest --output-on-failure -E '^${lib.concatStringsSep "|" disabledTests}$'
-    runHook postCheck
-  '';
+  checkPhase =
+    let
+      disabledTests =
+        lib.optionals stdenv.isAarch64 [
+          # Broken on all platforms, test just accidentally passes on some.
+          # https://gitlab.com/inkscape/lib2geom/-/issues/63
+          "elliptical-arc-test"
+        ]
+        ++ lib.optionals stdenv.hostPlatform.isMusl [
+          # Fails due to rounding differences
+          # https://gitlab.com/inkscape/lib2geom/-/issues/70
+          "circle-test"
+        ];
+    in
+    ''
+      runHook preCheck
+      ctest --output-on-failure -E '^${lib.concatStringsSep "|" disabledTests}$'
+      runHook postCheck
+    '';
 
   meta = with lib; {
     description = "Easy to use 2D geometry library in C++";
     homepage = "https://gitlab.com/inkscape/lib2geom";
-    license = [ licenses.lgpl21Only licenses.mpl11 ];
+    license = [
+      licenses.lgpl21Only
+      licenses.mpl11
+    ];
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;
   };

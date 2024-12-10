@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "arpa2cm";
@@ -28,6 +33,9 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gitlab.com/arpa2/arpa2cm";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ leenaars fufexan ];
+    maintainers = with maintainers; [
+      leenaars
+      fufexan
+    ];
   };
 }

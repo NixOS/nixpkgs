@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -7,7 +12,11 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "plex" "managePlugins" ] "Please omit or define the option: `services.plex.extraPlugins' instead.")
+    (mkRemovedOptionModule [
+      "services"
+      "plex"
+      "managePlugins"
+    ] "Please omit or define the option: `services.plex.extraPlugins' instead.")
   ];
 
   options = {
@@ -48,7 +57,7 @@ in
 
       extraPlugins = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           A list of paths to extra plugin bundles to install in Plex's plugin
           directory. Every time the systemd unit for Plex starts up, all of the
@@ -72,7 +81,7 @@ in
 
       extraScanners = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = ''
           A list of paths to extra scanners to install in Plex's scanners
           directory.
@@ -95,7 +104,7 @@ in
 
       accelerationDevices = mkOption {
         type = types.listOf types.str;
-        default = ["*"];
+        default = [ "*" ];
         example = [ "/dev/dri/renderD128" ];
         description = ''
           A list of device paths to hardware acceleration devices that Plex should
@@ -127,17 +136,18 @@ in
 
         # Run the pre-start script with full permissions (the "!" prefix) so it
         # can create the data directory if necessary.
-        ExecStartPre = let
-          preStartScript = pkgs.writeScript "plex-run-prestart" ''
-            #!${pkgs.bash}/bin/bash
+        ExecStartPre =
+          let
+            preStartScript = pkgs.writeScript "plex-run-prestart" ''
+              #!${pkgs.bash}/bin/bash
 
-            # Create data directory if it doesn't exist
-            if ! test -d "$PLEX_DATADIR"; then
-              echo "Creating initial Plex data directory in: $PLEX_DATADIR"
-              install -d -m 0755 -o "${cfg.user}" -g "${cfg.group}" "$PLEX_DATADIR"
-            fi
-         '';
-        in
+              # Create data directory if it doesn't exist
+              if ! test -d "$PLEX_DATADIR"; then
+                echo "Creating initial Plex data directory in: $PLEX_DATADIR"
+                install -d -m 0755 -o "${cfg.user}" -g "${cfg.group}" "$PLEX_DATADIR"
+              fi
+            '';
+          in
           "!${preStartScript}";
 
         ExecStart = "${cfg.package}/bin/plexmediaserver";
@@ -148,14 +158,21 @@ in
         # Hardening
         NoNewPrivileges = true;
         PrivateTmp = true;
-        PrivateDevices = cfg.accelerationDevices == [];
-        DeviceAllow = mkIf (cfg.accelerationDevices != [] && !lib.elem "*" cfg.accelerationDevices) cfg.accelerationDevices;
+        PrivateDevices = cfg.accelerationDevices == [ ];
+        DeviceAllow = mkIf (
+          cfg.accelerationDevices != [ ] && !lib.elem "*" cfg.accelerationDevices
+        ) cfg.accelerationDevices;
         ProtectSystem = true;
         ProtectHome = true;
         ProtectControlGroups = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        RestrictAddressFamilies = ["AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK"];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+          "AF_NETLINK"
+        ];
         # This could be made to work if the namespaces needed were known
         # RestrictNamespaces = true;
         RestrictRealtime = true;
@@ -166,9 +183,9 @@ in
 
       environment = {
         # Configuration for our FHS userenv script
-        PLEX_DATADIR=cfg.dataDir;
-        PLEX_PLUGINS=concatMapStringsSep ":" builtins.toString cfg.extraPlugins;
-        PLEX_SCANNERS=concatMapStringsSep ":" builtins.toString cfg.extraScanners;
+        PLEX_DATADIR = cfg.dataDir;
+        PLEX_PLUGINS = concatMapStringsSep ":" builtins.toString cfg.extraPlugins;
+        PLEX_SCANNERS = concatMapStringsSep ":" builtins.toString cfg.extraScanners;
 
         # The following variables should be set by the FHS userenv script:
         #   PLEX_MEDIA_SERVER_APPLICATION_SUPPORT_DIR
@@ -176,19 +193,31 @@ in
 
         # Allow access to GPU acceleration; the Plex LD_LIBRARY_PATH is added
         # by the FHS userenv script.
-        LD_LIBRARY_PATH="/run/opengl-driver/lib";
+        LD_LIBRARY_PATH = "/run/opengl-driver/lib";
 
-        PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS="6";
-        PLEX_MEDIA_SERVER_TMPDIR="/tmp";
-        PLEX_MEDIA_SERVER_USE_SYSLOG="true";
-        LC_ALL="en_US.UTF-8";
-        LANG="en_US.UTF-8";
+        PLEX_MEDIA_SERVER_MAX_PLUGIN_PROCS = "6";
+        PLEX_MEDIA_SERVER_TMPDIR = "/tmp";
+        PLEX_MEDIA_SERVER_USE_SYSLOG = "true";
+        LC_ALL = "en_US.UTF-8";
+        LANG = "en_US.UTF-8";
       };
     };
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = [ 32400 3005 8324 32469 ];
-      allowedUDPPorts = [ 1900 5353 32410 32412 32413 32414 ];
+      allowedTCPPorts = [
+        32400
+        3005
+        8324
+        32469
+      ];
+      allowedUDPPorts = [
+        1900
+        5353
+        32410
+        32412
+        32413
+        32414
+      ];
     };
 
     users.users = mkIf (cfg.user == "plex") {

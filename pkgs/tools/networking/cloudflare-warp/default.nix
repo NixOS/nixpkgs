@@ -1,32 +1,37 @@
-{ stdenv
-, lib
-, autoPatchelfHook
-, copyDesktopItems
-, dbus
-, dpkg
-, fetchurl
-, gtk3
-, libpcap
-, makeDesktopItem
-, makeWrapper
-, nftables
+{
+  stdenv,
+  lib,
+  autoPatchelfHook,
+  copyDesktopItems,
+  dbus,
+  dpkg,
+  fetchurl,
+  gtk3,
+  libpcap,
+  makeDesktopItem,
+  makeWrapper,
+  nftables,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cloudflare-warp";
   version = "2024.4.133";
 
-  suffix = {
-    aarch64-linux = "arm64";
-    x86_64-linux = "amd64";
-  }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  suffix =
+    {
+      aarch64-linux = "arm64";
+      x86_64-linux = "amd64";
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   src = fetchurl {
     url = "https://pkg.cloudflareclient.com/pool/jammy/main/c/cloudflare-warp/cloudflare-warp_${version}-1_${suffix}.deb";
-    hash = {
-      aarch64-linux = "sha256-qua+aL4+yvpTBGCVUS1rzJX1KZ3DeaW9Bce9lYWvWOM=";
-      x86_64-linux = "sha256-xZhyYDMjcv8SLfYwclvWBqPDETbeaxiA6jFCg3Nv5gc=";
-    }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    hash =
+      {
+        aarch64-linux = "sha256-qua+aL4+yvpTBGCVUS1rzJX1KZ3DeaW9Bce9lYWvWOM=";
+        x86_64-linux = "sha256-xZhyYDMjcv8SLfYwclvWBqPDETbeaxiA6jFCg3Nv5gc=";
+      }
+      .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   nativeBuildInputs = [
@@ -47,7 +52,11 @@ stdenv.mkDerivation rec {
     (makeDesktopItem {
       name = "com.cloudflare.WarpCli";
       desktopName = "Cloudflare Zero Trust Team Enrollment";
-      categories = [ "Utility" "Security" "ConsoleOnly" ];
+      categories = [
+        "Utility"
+        "Security"
+        "ConsoleOnly"
+      ];
       noDisplay = true;
       mimeTypes = [ "x-scheme-handler/com.cloudflare.warp" ];
       exec = "warp-cli teams-enroll-token %u";
@@ -95,6 +104,9 @@ stdenv.mkDerivation rec {
       wolfangaukang
       devpikachu
     ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

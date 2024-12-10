@@ -1,48 +1,53 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, substituteAll
-, cairo
-, cinnamon-desktop
-, dbus
-, desktop-file-utils
-, egl-wayland
-, glib
-, gnome
-, gobject-introspection
-, graphene
-, gtk3
-, json-glib
-, libcanberra
-, libdrm
-, libgnomekbd
-, libgudev
-, libinput
-, libstartup_notification
-, libwacom
-, libxcvt
-, libXdamage
-, libxkbcommon
-, libXtst
-, mesa
-, meson
-, ninja
-, pipewire
-, pkg-config
-, python3
-, udev
-, wayland
-, wayland-protocols
-, wrapGAppsHook3
-, xorgserver
-, xwayland
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  substituteAll,
+  cairo,
+  cinnamon-desktop,
+  dbus,
+  desktop-file-utils,
+  egl-wayland,
+  glib,
+  gnome,
+  gobject-introspection,
+  graphene,
+  gtk3,
+  json-glib,
+  libcanberra,
+  libdrm,
+  libgnomekbd,
+  libgudev,
+  libinput,
+  libstartup_notification,
+  libwacom,
+  libxcvt,
+  libXdamage,
+  libxkbcommon,
+  libXtst,
+  mesa,
+  meson,
+  ninja,
+  pipewire,
+  pkg-config,
+  python3,
+  udev,
+  wayland,
+  wayland-protocols,
+  wrapGAppsHook3,
+  xorgserver,
+  xwayland,
 }:
 
 stdenv.mkDerivation rec {
   pname = "muffin";
   version = "6.0.1";
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "linuxmint";

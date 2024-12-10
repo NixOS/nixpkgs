@@ -1,38 +1,39 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchFromGitHub
-, cargo
-, libxml2
-, meson
-, ninja
-, pkg-config
-, python311
-, rustPlatform
-, symlinkJoin
-, rustc
-, wrapGAppsHook4
-, appstream-glib
-, blueprint-compiler
-, cairo
-, cmake
-, dbus
-, desktop-file-utils
-, gdk-pixbuf
-, gettext
-, glib
-, graphene
-, gtk4
-, libGL
-, libadwaita
-, libdrm
-, mesa
-, pango
-, sqlite
-, udev
-, wayland
-, dmidecode
-, vulkan-loader
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchFromGitHub,
+  cargo,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  python311,
+  rustPlatform,
+  symlinkJoin,
+  rustc,
+  wrapGAppsHook4,
+  appstream-glib,
+  blueprint-compiler,
+  cairo,
+  cmake,
+  dbus,
+  desktop-file-utils,
+  gdk-pixbuf,
+  gettext,
+  glib,
+  graphene,
+  gtk4,
+  libGL,
+  libadwaita,
+  libdrm,
+  mesa,
+  pango,
+  sqlite,
+  udev,
+  wayland,
+  dmidecode,
+  vulkan-loader,
 }:
 
 let
@@ -65,7 +66,6 @@ stdenv.mkDerivation rec {
       })
     ];
   };
-
 
   nativeBuildInputs = [
     blueprint-compiler

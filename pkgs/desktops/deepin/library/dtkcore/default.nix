@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, doxygen
-, wrapQtAppsHook
-, qtbase
-, gsettings-qt
-, lshw
-, libuchardet
-, spdlog
-, dtkcommon
-, systemd
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  doxygen,
+  wrapQtAppsHook,
+  qtbase,
+  gsettings-qt,
+  lshw,
+  libuchardet,
+  spdlog,
+  dtkcommon,
+  systemd,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,8 +49,7 @@ stdenv.mkDerivation rec {
     lshw
     libuchardet
     spdlog
-  ]
-  ++ lib.optional withSystemd systemd;
+  ] ++ lib.optional withSystemd systemd;
 
   propagatedBuildInputs = [ dtkcommon ];
 
@@ -71,7 +71,11 @@ stdenv.mkDerivation rec {
     export QT_PLUGIN_PATH=${qtbase.bin}/${qtbase.qtPluginPrefix}
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   meta = with lib; {
     description = "Deepin tool kit core library";

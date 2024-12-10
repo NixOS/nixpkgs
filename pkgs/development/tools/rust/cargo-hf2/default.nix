@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, pkg-config
-, libusb1
-, stdenv
-, AppKit
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  libusb1,
+  stdenv,
+  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {

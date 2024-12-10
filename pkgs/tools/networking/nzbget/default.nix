@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, boost
-, pkg-config
-, gnutls
-, libgcrypt
-, libpar2
-, libcap
-, libsigcxx
-, libxml2
-, ncurses
-, openssl
-, zlib
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  boost,
+  pkg-config,
+  gnutls,
+  libgcrypt,
+  libpar2,
+  libcap,
+  libsigcxx,
+  libxml2,
+  ncurses,
+  openssl,
+  zlib,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-HovfnTsgu07/lp/spI+iA8H7lOj0Qyrri2MOJKyMKHQ=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [
     boost
@@ -56,7 +60,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/nzbgetcom/nzbget/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Plus;
     description = "A command line tool for downloading files from news servers";
-    maintainers = with maintainers; [ pSub devusb ];
+    maintainers = with maintainers; [
+      pSub
+      devusb
+    ];
     platforms = with platforms; unix;
     mainProgram = "nzbget";
   };

@@ -1,10 +1,11 @@
-{ lib
-, qt5
-, qtbase
-, qttools
-, qtwebsockets
-, qtmultimedia
-, fetchFromGitHub
+{
+  lib,
+  qt5,
+  qtbase,
+  qttools,
+  qtwebsockets,
+  qtmultimedia,
+  fetchFromGitHub,
 }:
 
 qt5.mkDerivation {

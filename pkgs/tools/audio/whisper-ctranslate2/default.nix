@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 let
   pname = "whisper-ctranslate2";

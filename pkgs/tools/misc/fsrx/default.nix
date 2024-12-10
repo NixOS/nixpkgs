@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, rustPlatform, testers, fsrx }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  testers,
+  fsrx,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "fsrx";

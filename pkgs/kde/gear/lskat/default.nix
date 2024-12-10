@@ -5,6 +5,6 @@
 mkKdeDerivation {
   pname = "lskat";
 
-  extraBuildInputs = [qtsvg];
+  extraBuildInputs = [ qtsvg ];
   meta.mainProgram = "lskat";
 }

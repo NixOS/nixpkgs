@@ -2,10 +2,12 @@
 # mods. It will eventually be replaced by a nixos-channel that will provide
 # derivations for most or all of the mods tracked through the official mod
 # manager site.
-{ lib, fetchurl
-, factorio-utils
-, allRecommendedMods ? true
-, allOptionalMods ? false
+{
+  lib,
+  fetchurl,
+  factorio-utils,
+  allRecommendedMods ? true,
+  allOptionalMods ? false,
 }:
 
 let
@@ -109,7 +111,11 @@ rec {
       sha256 = "1l7k3v4aizihppgi802fr5b8zbnq2h05c2bbsk5hds239qgxy80m";
     };
     deps = [ boblibrary ];
-    optionalDeps = [ bobconfig bobores bobplates ];
+    optionalDeps = [
+      bobconfig
+      bobores
+      bobplates
+    ];
   };
 
   bobmodules = modDrv {
@@ -121,7 +127,11 @@ rec {
     };
     deps = [ boblibrary ];
     optionalDeps = [ bobconfig ];
-    recommendedDeps = [ bobplates bobassembly bobelectronics ];
+    recommendedDeps = [
+      bobplates
+      bobassembly
+      bobelectronics
+    ];
   };
 
   bobores = modDrv {
@@ -143,8 +153,14 @@ rec {
       sha256 = "0iczpa26hflj17k84p4n6wz0pwhbbrfk86dgac4bfz28kqg58nj1";
     };
     deps = [ boblibrary ];
-    optionalDeps = [ bobconfig bobenemies ];
-    recommendedDeps = [ bobores bobtech ];
+    optionalDeps = [
+      bobconfig
+      bobenemies
+    ];
+    recommendedDeps = [
+      bobores
+      bobtech
+    ];
   };
 
   bobpower = modDrv {
@@ -197,7 +213,10 @@ rec {
       sha256 = "07wzn16i4r0qjm41wfyl17rrhry2vrph08a0kq8w5iy6qcbqqfd3";
     };
     deps = [ boblibrary ];
-    optionalDeps = [ boblibrary bobplates ];
+    optionalDeps = [
+      boblibrary
+      bobplates
+    ];
     recommendedDeps = [ bobtech ];
   };
 

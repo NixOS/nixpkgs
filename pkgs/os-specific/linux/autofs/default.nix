@@ -1,6 +1,24 @@
-{ lib, stdenv, fetchurl, flex, bison, linuxHeaders, libtirpc, mount, umount, nfs-utils, e2fsprogs
-, libxml2, libkrb5, kmod, openldap, sssd, cyrus_sasl, openssl, rpcsvc-proto
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+  bison,
+  linuxHeaders,
+  libtirpc,
+  mount,
+  umount,
+  nfs-utils,
+  e2fsprogs,
+  libxml2,
+  libkrb5,
+  kmod,
+  openldap,
+  sssd,
+  cyrus_sasl,
+  openssl,
+  rpcsvc-proto,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,10 +63,23 @@ stdenv.mkDerivation rec {
     #make install SUBDIRS="samples" # impure!
   '';
 
-  buildInputs = [ linuxHeaders libtirpc libxml2 libkrb5 kmod openldap sssd
-                  openssl cyrus_sasl rpcsvc-proto ];
+  buildInputs = [
+    linuxHeaders
+    libtirpc
+    libxml2
+    libkrb5
+    kmod
+    openldap
+    sssd
+    openssl
+    cyrus_sasl
+    rpcsvc-proto
+  ];
 
-  nativeBuildInputs = [ flex bison ];
+  nativeBuildInputs = [
+    flex
+    bison
+  ];
 
   meta = {
     description = "Kernel-based automounter";

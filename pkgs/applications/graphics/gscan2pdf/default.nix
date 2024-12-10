@@ -1,10 +1,26 @@
-{ lib, fetchurl, perlPackages, wrapGAppsHook3,
+{
+  lib,
+  fetchurl,
+  perlPackages,
+  wrapGAppsHook3,
   # libs
-  librsvg, sane-backends, sane-frontends,
+  librsvg,
+  sane-backends,
+  sane-frontends,
   # runtime dependencies
-  imagemagick, libtiff, djvulibre, poppler_utils, ghostscript, unpaper, pdftk,
+  imagemagick,
+  libtiff,
+  djvulibre,
+  poppler_utils,
+  ghostscript,
+  unpaper,
+  pdftk,
   # test dependencies
-  xvfb-run, liberation_ttf, file, tesseract }:
+  xvfb-run,
+  liberation_ttf,
+  file,
+  tesseract,
+}:
 
 with lib;
 
@@ -25,8 +41,12 @@ perlPackages.buildPerlPackage rec {
   nativeBuildInputs = [ wrapGAppsHook3 ];
 
   buildInputs =
-    [ librsvg sane-backends sane-frontends ] ++
-    (with perlPackages; [
+    [
+      librsvg
+      sane-backends
+      sane-frontends
+    ]
+    ++ (with perlPackages; [
       Gtk3
       Gtk3ImageView
       Gtk3SimpleList
@@ -57,16 +77,18 @@ perlPackages.buildPerlPackage rec {
       SubOverride
     ]);
 
-  postPatch = let
-    fontSubstitute = "${liberation_ttf}/share/fonts/truetype/LiberationSans-Regular.ttf";
-  in ''
-    # Required for the program to properly load its SVG assets
-    substituteInPlace bin/gscan2pdf \
-      --replace "/usr/share" "$out/share"
+  postPatch =
+    let
+      fontSubstitute = "${liberation_ttf}/share/fonts/truetype/LiberationSans-Regular.ttf";
+    in
+    ''
+      # Required for the program to properly load its SVG assets
+      substituteInPlace bin/gscan2pdf \
+        --replace "/usr/share" "$out/share"
 
-    # Substitute the non-free Helvetica font in the tests
-    sed -i 's|-pointsize|-font ${fontSubstitute} -pointsize|g' t/*.t
-  '';
+      # Substitute the non-free Helvetica font in the tests
+      sed -i 's|-pointsize|-font ${fontSubstitute} -pointsize|g' t/*.t
+    '';
 
   postInstall = ''
     # Remove impurity
@@ -88,23 +110,28 @@ perlPackages.buildPerlPackage rec {
 
   installTargets = [ "install" ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
-  nativeCheckInputs = [
-    imagemagick
-    libtiff
-    djvulibre
-    poppler_utils
-    ghostscript
-    unpaper
-    pdftk
+  nativeCheckInputs =
+    [
+      imagemagick
+      libtiff
+      djvulibre
+      poppler_utils
+      ghostscript
+      unpaper
+      pdftk
 
-    xvfb-run
-    file
-    tesseract # tests are expecting tesseract 3.x precisely
-  ] ++ (with perlPackages; [
-    TestPod
-  ]);
+      xvfb-run
+      file
+      tesseract # tests are expecting tesseract 3.x precisely
+    ]
+    ++ (with perlPackages; [
+      TestPod
+    ]);
 
   checkPhase = ''
     # Temporarily disable a dubiously failing test:

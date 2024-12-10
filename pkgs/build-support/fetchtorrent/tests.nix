@@ -1,4 +1,9 @@
-{ testers, fetchtorrent, lib, ... }:
+{
+  testers,
+  fetchtorrent,
+  lib,
+  ...
+}:
 
 let
   wired-cd.meta.license = [

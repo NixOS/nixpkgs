@@ -1,7 +1,8 @@
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
-, pysmartthings
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
+  pysmartthings,
 }:
 
 buildHomeAssistantComponent rec {

@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, stdenv
-, curl
-, libgit2
-, libssh2
-, openssl
-, zlib
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  stdenv,
+  curl,
+  libgit2,
+  libssh2,
+  openssl,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage {
@@ -25,20 +26,24 @@ rustPlatform.buildRustPackage {
     lockFile = ./Cargo.lock;
   };
 
-  nativeBuildInputs = [
-    pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [
-    curl
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      curl
+    ];
 
-  buildInputs = [
-    libgit2
-    libssh2
-    openssl
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    curl
-  ];
+  buildInputs =
+    [
+      libgit2
+      libssh2
+      openssl
+      zlib
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      curl
+    ];
 
   LIBGIT2_SYS_USE_PKG_CONFIG = true;
   LIBSSH2_SYS_USE_PKG_CONFIG = true;
@@ -62,7 +67,10 @@ rustPlatform.buildRustPackage {
     homepage = "https://github.com/git-series/git-series";
 
     license = licenses.mit;
-    maintainers = with maintainers; [ edef vmandela ];
+    maintainers = with maintainers; [
+      edef
+      vmandela
+    ];
     mainProgram = "git-series";
   };
 }

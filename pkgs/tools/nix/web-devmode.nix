@@ -4,7 +4,8 @@
   buildArgs,
   # what path to open a browser at
   open,
-}: let
+}:
+let
   inherit (pkgs) lib;
 
   error_page = pkgs.writeShellScriptBin "error_page" ''
@@ -86,32 +87,30 @@
       $serve
   '';
 
-  devmode =
-    pkgs.writeShellScriptBin "devmode"
-    ''
-      set -euxo pipefail
+  devmode = pkgs.writeShellScriptBin "devmode" ''
+    set -euxo pipefail
 
-      function handle_exit {
-        rm -rf "$tmpdir"
-      }
+    function handle_exit {
+      rm -rf "$tmpdir"
+    }
 
-      tmpdir=$(mktemp -d)
-      trap handle_exit EXIT
+    tmpdir=$(mktemp -d)
+    trap handle_exit EXIT
 
-      export out_link="$tmpdir/result"
-      export serve="$tmpdir/serve"
-      mkdir $serve
-      export error_page_relative=error.html
-      export error_page_absolute=$serve/$error_page_relative
-      ${lib.getBin error_page}/bin/error_page "building …" > $error_page_absolute
+    export out_link="$tmpdir/result"
+    export serve="$tmpdir/serve"
+    mkdir $serve
+    export error_page_relative=error.html
+    export error_page_absolute=$serve/$error_page_relative
+    ${lib.getBin error_page}/bin/error_page "building …" > $error_page_absolute
 
-      ${lib.getBin pkgs.parallel}/bin/parallel \
-        --will-cite \
-        --line-buffer \
-        --tagstr '{/}' \
-        ::: \
-        "${lib.getBin watcher}/bin/watcher" \
-        "${lib.getBin server}/bin/server"
-    '';
+    ${lib.getBin pkgs.parallel}/bin/parallel \
+      --will-cite \
+      --line-buffer \
+      --tagstr '{/}' \
+      ::: \
+      "${lib.getBin watcher}/bin/watcher" \
+      "${lib.getBin server}/bin/server"
+  '';
 in
-  devmode
+devmode

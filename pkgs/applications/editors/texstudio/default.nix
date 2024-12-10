@@ -1,7 +1,20 @@
-{ stdenv, lib, fetchFromGitHub, cmake, qtbase, qttools, qtsvg, qt5compat, quazip
-, qtwayland
-, hunspell
-, wrapQtAppsHook, poppler, zlib, pkg-config }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  qttools,
+  qtsvg,
+  qt5compat,
+  quazip,
+  qtwayland,
+  hunspell,
+  wrapQtAppsHook,
+  poppler,
+  zlib,
+  pkg-config,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "texstudio";
@@ -19,18 +32,20 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
     pkg-config
   ];
-  buildInputs = [
-    hunspell
-    poppler
-    qt5compat
-    qtbase
-    qtsvg
-    qttools
-    quazip
-    zlib
-  ] ++ lib.optionals stdenv.isLinux [
-    qtwayland
-  ];
+  buildInputs =
+    [
+      hunspell
+      poppler
+      qt5compat
+      qtbase
+      qtsvg
+      qttools
+      quazip
+      zlib
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      qtwayland
+    ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p "$out/Applications"
@@ -40,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "TeX and LaTeX editor";
-    longDescription=''
+    longDescription = ''
       Fork of TeXMaker, this editor is a full fledged IDE for
       LaTeX editing with completion, structure viewer, preview,
       spell checking and support of any compilation chain.
@@ -49,7 +64,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/texstudio-org/texstudio/blob/${finalAttrs.version}/utilities/manual/CHANGELOG.txt";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ajs124 cfouche ];
+    maintainers = with maintainers; [
+      ajs124
+      cfouche
+    ];
     mainProgram = "texstudio";
   };
 })

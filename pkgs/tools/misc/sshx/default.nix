@@ -1,11 +1,12 @@
-{ lib
-, callPackage
-, rustPlatform
-, fetchFromGitHub
-, protobuf
-, darwin
-, stdenv
-, buildNpmPackage
+{
+  lib,
+  callPackage,
+  rustPlatform,
+  fetchFromGitHub,
+  protobuf,
+  darwin,
+  stdenv,
+  buildNpmPackage,
 }:
 let
   version = "unstable-2023-11-23";
@@ -17,28 +18,39 @@ let
     hash = "sha256-9fo8hNUzJr4gse0J2tw7j+alqE82+y8McADzTkxryWk=";
   };
 
-  mkSshxPackage = { pname, cargoHash, ... }@args:
-    rustPlatform.buildRustPackage (rec {
-      inherit
-        pname
-        version
-        src
-        cargoHash;
+  mkSshxPackage =
+    { pname, cargoHash, ... }@args:
+    rustPlatform.buildRustPackage (
+      rec {
+        inherit
+          pname
+          version
+          src
+          cargoHash
+          ;
 
-      nativeBuildInputs = [ protobuf ];
-      buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
+        nativeBuildInputs = [ protobuf ];
+        buildInputs = lib.optional stdenv.isDarwin darwin.apple_sdk.frameworks.Security;
 
-      cargoBuildFlags = [ "--package" pname ];
-      cargoTestFlags = cargoBuildFlags;
+        cargoBuildFlags = [
+          "--package"
+          pname
+        ];
+        cargoTestFlags = cargoBuildFlags;
 
-      meta = {
-        description = "Fast, collaborative live terminal sharing over the web";
-        homepage = "https://github.com/ekzhang/sshx";
-        license = lib.licenses.mit;
-        maintainers = with lib.maintainers; [ pinpox kranzes ];
-        mainProgram = pname;
-      };
-    } // args);
+        meta = {
+          description = "Fast, collaborative live terminal sharing over the web";
+          homepage = "https://github.com/ekzhang/sshx";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [
+            pinpox
+            kranzes
+          ];
+          mainProgram = pname;
+        };
+      }
+      // args
+    );
 in
 {
   sshx = mkSshxPackage {
@@ -61,7 +73,8 @@ in
 
       inherit
         version
-        src;
+        src
+        ;
 
       postPatch = ''
         substituteInPlace vite.config.ts \

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -98,7 +103,10 @@ in
 
       database = {
         type = mkOption {
-          type = types.enum [ "PostgreSQL" "MySQL" ];
+          type = types.enum [
+            "PostgreSQL"
+            "MySQL"
+          ];
           default = "PostgreSQL";
           example = "MySQL";
           description = "Database engine to use.";
@@ -106,10 +114,12 @@ in
 
         host = mkOption {
           type = types.nullOr types.str;
-          default = {
-            PostgreSQL = "/run/postgresql";
-            MySQL = "localhost";
-          }.${cfg.database.type};
+          default =
+            {
+              PostgreSQL = "/run/postgresql";
+              MySQL = "localhost";
+            }
+            .${cfg.database.type};
           defaultText = literalExpression ''
             {
               PostgreSQL = "/run/postgresql";
@@ -201,10 +211,12 @@ in
 
     services.zammad.database.settings = {
       production = mapAttrs (_: v: mkDefault v) (filterNull {
-        adapter = {
-          PostgreSQL = "postgresql";
-          MySQL = "mysql2";
-        }.${cfg.database.type};
+        adapter =
+          {
+            PostgreSQL = "postgresql";
+            MySQL = "mysql2";
+          }
+          .${cfg.database.type};
         database = cfg.database.name;
         pool = 50;
         timeout = 5000;
@@ -230,7 +242,8 @@ in
 
     assertions = [
       {
-        assertion = cfg.database.createLocally -> cfg.database.user == "zammad" && cfg.database.name == "zammad";
+        assertion =
+          cfg.database.createLocally -> cfg.database.user == "zammad" && cfg.database.name == "zammad";
         message = "services.zammad.database.user must be set to \"zammad\" if services.zammad.database.createLocally is set to true";
       }
       {
@@ -250,21 +263,25 @@ in
       ensureUsers = [
         {
           name = cfg.database.user;
-          ensurePermissions = { "${cfg.database.name}.*" = "ALL PRIVILEGES"; };
+          ensurePermissions = {
+            "${cfg.database.name}.*" = "ALL PRIVILEGES";
+          };
         }
       ];
     };
 
-    services.postgresql = optionalAttrs (cfg.database.createLocally && cfg.database.type == "PostgreSQL") {
-      enable = true;
-      ensureDatabases = [ cfg.database.name ];
-      ensureUsers = [
+    services.postgresql =
+      optionalAttrs (cfg.database.createLocally && cfg.database.type == "PostgreSQL")
         {
-          name = cfg.database.user;
-          ensureDBOwnership = true;
-        }
-      ];
-    };
+          enable = true;
+          ensureDatabases = [ cfg.database.name ];
+          ensureUsers = [
+            {
+              name = cfg.database.user;
+              ensureDBOwnership = true;
+            }
+          ];
+        };
 
     services.redis = optionalAttrs cfg.redis.createLocally {
       servers."${cfg.redis.name}" = {
@@ -279,12 +296,14 @@ in
         # loading all the gems takes time
         TimeoutStartSec = 1200;
       };
-      after = [
-        "network.target"
-        "postgresql.service"
-      ] ++ optionals cfg.redis.createLocally [
-        "redis-${cfg.redis.name}.service"
-      ];
+      after =
+        [
+          "network.target"
+          "postgresql.service"
+        ]
+        ++ optionals cfg.redis.createLocally [
+          "redis-${cfg.redis.name}.service"
+        ];
       requires = [
         "postgresql.service"
       ];
@@ -302,24 +321,22 @@ in
         cp ${databaseConfig} ./config/database.yml
         chmod -R +w .
         ${optionalString (cfg.database.passwordFile != null) ''
-        {
-          echo -n "  password: "
-          cat ${cfg.database.passwordFile}
-        } >> ./config/database.yml
+          {
+            echo -n "  password: "
+            cat ${cfg.database.passwordFile}
+          } >> ./config/database.yml
         ''}
         ${optionalString (cfg.secretKeyBaseFile != null) ''
-        {
-          echo "production: "
-          echo -n "  secret_key_base: "
-          cat ${cfg.secretKeyBaseFile}
-        } > ./config/secrets.yml
+          {
+            echo "production: "
+            echo -n "  secret_key_base: "
+            cat ${cfg.secretKeyBaseFile}
+          } > ./config/secrets.yml
         ''}
 
         if [ `${config.services.postgresql.package}/bin/psql \
                   --host ${cfg.database.host} \
-                  ${optionalString
-                    (cfg.database.port != null)
-                    "--port ${toString cfg.database.port}"} \
+                  ${optionalString (cfg.database.port != null) "--port ${toString cfg.database.port}"} \
                   --username ${cfg.database.user} \
                   --dbname ${cfg.database.name} \
                   --command "SELECT COUNT(*) FROM pg_class c \
@@ -357,5 +374,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ taeer netali ];
+  meta.maintainers = with lib.maintainers; [
+    taeer
+    netali
+  ];
 }

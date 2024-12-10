@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, qtbase
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, qtsvg
-, dde-qt-dbus-factory
-, qtmultimedia
-, qtwebengine
-, libvlc
-, gst_all_1
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  qtbase,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  qtsvg,
+  dde-qt-dbus-factory,
+  qtmultimedia,
+  qtwebengine,
+  libvlc,
+  gst_all_1,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,21 +48,23 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtbase
-    qtsvg
-    dtkwidget
-    qt5platform-plugins
-    dde-qt-dbus-factory
-    qtmultimedia
-    qtwebengine
-    libvlc
-    gtest
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-  ]);
+  buildInputs =
+    [
+      qtbase
+      qtsvg
+      dtkwidget
+      qt5platform-plugins
+      dde-qt-dbus-factory
+      qtmultimedia
+      qtwebengine
+      libvlc
+      gtest
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+    ]);
 
   strictDeps = true;
 

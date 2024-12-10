@@ -1,10 +1,20 @@
-{ lib, maven, fetchFromGitHub, jre, makeWrapper, nix-update-script }:
+{
+  lib,
+  maven,
+  fetchFromGitHub,
+  jre,
+  makeWrapper,
+  nix-update-script,
+}:
 
 maven.buildMavenPackage rec {
   pname = "h2";
   version = "2.2.224";
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "h2database";
@@ -30,7 +40,10 @@ maven.buildMavenPackage rec {
   '';
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version-regex" "^version-([0-9.]+)$" ];
+    extraArgs = [
+      "--version-regex"
+      "^version-([0-9.]+)$"
+    ];
   };
 
   meta = with lib; {
@@ -39,7 +52,10 @@ maven.buildMavenPackage rec {
     changelog = "https://h2database.com/html/changelog.html";
     license = licenses.mpl20;
     platforms = lib.platforms.unix;
-    maintainers = with maintainers; [ mahe anthonyroussel ];
+    maintainers = with maintainers; [
+      mahe
+      anthonyroussel
+    ];
     mainProgram = "h2";
   };
 }

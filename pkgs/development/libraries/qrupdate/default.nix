@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, lapack
-, which
-, gfortran
-, blas
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  lapack,
+  which,
+  gfortran,
+  blas,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -19,16 +20,23 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-dHxLPrN00wwozagY2JyfZkD3sKUD2+BcnbjNgZepzFg=";
   };
 
-  cmakeFlags = assert (blas.isILP64 == lapack.isILP64); [
-    "-DCMAKE_Fortran_FLAGS=${toString ([
-      "-std=legacy"
-    ] ++ lib.optionals blas.isILP64 [
-      # If another application intends to use qrupdate compiled with blas with
-      # 64 bit support, it should add this to it's FFLAGS as well. See (e.g):
-      # https://savannah.gnu.org/bugs/?50339
-      "-fdefault-integer-8"
-    ])}"
-  ];
+  cmakeFlags =
+    assert (blas.isILP64 == lapack.isILP64);
+    [
+      "-DCMAKE_Fortran_FLAGS=${
+        toString (
+          [
+            "-std=legacy"
+          ]
+          ++ lib.optionals blas.isILP64 [
+            # If another application intends to use qrupdate compiled with blas with
+            # 64 bit support, it should add this to it's FFLAGS as well. See (e.g):
+            # https://savannah.gnu.org/bugs/?50339
+            "-fdefault-integer-8"
+          ]
+        )
+      }"
+    ];
 
   doCheck = true;
 

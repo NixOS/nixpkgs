@@ -1,36 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, wrapGAppsHook3
-, pkg-config
-, meson
-, ninja
-, cmake
-, gobject-introspection
-, desktop-file-utils
-, python3
-, gtk3
-, libdazzle
-, libappindicator-gtk3
-, libnotify
-, nvidia_x11
- }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  wrapGAppsHook3,
+  pkg-config,
+  meson,
+  ninja,
+  cmake,
+  gobject-introspection,
+  desktop-file-utils,
+  python3,
+  gtk3,
+  libdazzle,
+  libappindicator-gtk3,
+  libnotify,
+  nvidia_x11,
+}:
 
 let
- pythonEnv = python3.withPackages (pypkgs: with pypkgs; [
-   injector
-   matplotlib
-   peewee
-   pynvml
-   pygobject3
-   xlib
-   pyxdg
-   requests
-   rx
-   gtk3
-   reactivex
- ]);
-in stdenv.mkDerivation rec {
+  pythonEnv = python3.withPackages (
+    pypkgs: with pypkgs; [
+      injector
+      matplotlib
+      peewee
+      pynvml
+      pygobject3
+      xlib
+      pyxdg
+      requests
+      rx
+      gtk3
+      reactivex
+    ]
+  );
+in
+stdenv.mkDerivation rec {
   pname = "gwe";
   version = "0.15.7";
 
@@ -74,7 +78,15 @@ in stdenv.mkDerivation rec {
     makeWrapper ${pythonEnv}/bin/python $out/bin/gwe \
       --add-flags "$out/lib/gwe-bin" \
       --prefix LD_LIBRARY_PATH : "/run/opengl-driver/lib" \
-      --prefix PATH : "${builtins.concatStringsSep ":" [ (lib.makeBinPath [ nvidia_x11 nvidia_x11.settings ]) "/run/wrappers/bin" ]}" \
+      --prefix PATH : "${
+        builtins.concatStringsSep ":" [
+          (lib.makeBinPath [
+            nvidia_x11
+            nvidia_x11.settings
+          ])
+          "/run/wrappers/bin"
+        ]
+      }" \
       --unset "SHELL" \
       ''${gappsWrapperArgs[@]}
   '';

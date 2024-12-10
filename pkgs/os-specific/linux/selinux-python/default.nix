@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, python3
-, libselinux, libsemanage, libsepol, setools }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  libselinux,
+  libsemanage,
+  libsepol,
+  setools,
+}:
 
 # this is python3 only because setools only supports python3
 
@@ -18,9 +26,17 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ python3 python3.pkgs.wrapPython ];
+  nativeBuildInputs = [
+    python3
+    python3.pkgs.wrapPython
+  ];
   buildInputs = [ libsepol ];
-  propagatedBuildInputs = [ libselinux libsemanage setools python3.pkgs.ipy ];
+  propagatedBuildInputs = [
+    libselinux
+    libsemanage
+    setools
+    python3.pkgs.ipy
+  ];
 
   postPatch = ''
     substituteInPlace sepolicy/Makefile --replace "echo --root" "echo --prefix"
@@ -36,7 +52,6 @@ stdenv.mkDerivation rec {
     "PYTHONLIBDIR=$(out)/${python3.sitePackages}"
     "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
   ];
-
 
   postFixup = ''
     wrapPythonPrograms

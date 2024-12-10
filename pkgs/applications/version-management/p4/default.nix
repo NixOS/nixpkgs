@@ -1,15 +1,16 @@
-{ stdenv
-, fetchurl
-, fetchzip
-, lib
-, emptyDirectory
-, linkFarm
-, jam
-, openssl
-, xcbuild
-, CoreServices
-, Foundation
-, Security
+{
+  stdenv,
+  fetchurl,
+  fetchzip,
+  lib,
+  emptyDirectory,
+  linkFarm,
+  jam,
+  openssl,
+  xcbuild,
+  CoreServices,
+  Foundation,
+  Security,
 }:
 
 let
@@ -28,7 +29,10 @@ let
       # We only want to keep the contrib directory as the other files conflict
       # with p4's own zlib files. (For the same reason, we can't use the
       # cone-based Git sparse checkout, either.)
-      { name = "contrib"; path = "${src}/contrib"; }
+      {
+        name = "contrib";
+        path = "${src}/contrib";
+      }
     ];
 in
 stdenv.mkDerivation rec {
@@ -43,9 +47,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ jam ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Foundation Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    CoreServices
+    Foundation
+    Security
+  ];
 
-  outputs = [ "out" "bin" "dev" ];
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
 
   hardeningDisable = lib.optionals stdenv.isDarwin [ "strictoverflow" ];
 
@@ -57,8 +69,14 @@ stdenv.mkDerivation rec {
       "-sSSLINCDIR=${lib.getDev opensslStatic}/include"
       "-sSSLLIBDIR=${lib.getLib opensslStatic}/lib"
     ]
-    ++ lib.optionals stdenv.cc.isClang [ "-sOSCOMP=clang" "-sCLANGVER=${stdenv.cc.cc.version}" ]
-    ++ lib.optionals stdenv.cc.isGNU [ "-sOSCOMP=gcc" "-sGCCVER=${stdenv.cc.cc.version}" ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "-sOSCOMP=clang"
+      "-sCLANGVER=${stdenv.cc.cc.version}"
+    ]
+    ++ lib.optionals stdenv.cc.isGNU [
+      "-sOSCOMP=gcc"
+      "-sGCCVER=${stdenv.cc.cc.version}"
+    ]
     ++ lib.optionals stdenv.isLinux [ "-sOSVER=26" ]
     ++ lib.optionals stdenv.isDarwin [
       "-sOSVER=1013"
@@ -77,9 +95,15 @@ stdenv.mkDerivation rec {
     # See the "Header dependency changes" section of
     # https://www.gnu.org/software/gcc/gcc-11/porting_to.html for more
     # information on why we need to include these.
-    ++ lib.optionals
-      (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0.0"))
-      [ "-include" "limits" "-include" "thread" ];
+    ++
+      lib.optionals
+        (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0.0"))
+        [
+          "-include"
+          "limits"
+          "-include"
+          "thread"
+        ];
 
   buildPhase = ''
     runHook preBuild
@@ -103,6 +127,9 @@ stdenv.mkDerivation rec {
     license = licenses.bsd2;
     mainProgram = "p4";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ corngood impl ];
+    maintainers = with maintainers; [
+      corngood
+      impl
+    ];
   };
 }

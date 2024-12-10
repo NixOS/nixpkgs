@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, rustPlatform
-, installShellFiles
-, darwin
-, pandoc
-, testers
-, lsd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  rustPlatform,
+  installShellFiles,
+  darwin,
+  pandoc,
+  testers,
+  lsd,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,7 +32,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-TDHHY5F4lVrKd7r0QfrfUV2xzT6HMA/PtOIStMryaBA=";
 
-  nativeBuildInputs = [ installShellFiles pandoc ];
+  nativeBuildInputs = [
+    installShellFiles
+    pandoc
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security ];
 
@@ -56,7 +60,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/lsd-rs/lsd";
     description = "The next gen ls command";
     license = licenses.asl20;
-    maintainers = with maintainers; [ zowoq SuperSandro2000 ];
+    maintainers = with maintainers; [
+      zowoq
+      SuperSandro2000
+    ];
     mainProgram = "lsd";
   };
 }

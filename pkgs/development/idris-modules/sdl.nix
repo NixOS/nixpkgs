@@ -1,17 +1,21 @@
-{ build-idris-package
-, fetchFromGitHub
-, effects
-, lib
-, SDL
-, SDL_gfx
+{
+  build-idris-package,
+  fetchFromGitHub,
+  effects,
+  lib,
+  SDL,
+  SDL_gfx,
 }:
-build-idris-package  {
+build-idris-package {
   pname = "sdl";
   version = "2017-03-24";
 
   idrisDeps = [ effects ];
 
-  extraBuildInputs = [ SDL SDL_gfx ];
+  extraBuildInputs = [
+    SDL
+    SDL_gfx
+  ];
 
   src = fetchFromGitHub {
     owner = "edwinb";

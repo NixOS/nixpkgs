@@ -1,24 +1,25 @@
-{ lib
-, meson
-, ninja
-, fetchurl
-, desktop-file-utils
-, gdk-pixbuf
-, gettext
-, glib
-, gnome
-, gnome-desktop
-, gobject-introspection
-, gsettings-desktop-schemas
-, gtk4
-, itstool
-, libadwaita
-, libgudev
-, libnotify
-, libxml2
-, pkg-config
-, python3Packages
-, wrapGAppsHook4
+{
+  lib,
+  meson,
+  ninja,
+  fetchurl,
+  desktop-file-utils,
+  gdk-pixbuf,
+  gettext,
+  glib,
+  gnome,
+  gnome-desktop,
+  gobject-introspection,
+  gsettings-desktop-schemas,
+  gtk4,
+  itstool,
+  libadwaita,
+  libgudev,
+  libnotify,
+  libxml2,
+  pkg-config,
+  python3Packages,
+  wrapGAppsHook4,
 }:
 
 python3Packages.buildPythonApplication rec {

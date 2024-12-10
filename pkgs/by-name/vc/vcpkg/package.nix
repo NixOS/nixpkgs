@@ -1,8 +1,9 @@
-{ fetchFromGitHub
-, stdenvNoCC
-, lib
-, vcpkg-tool
-, writeShellScript
+{
+  fetchFromGitHub,
+  stdenvNoCC,
+  lib,
+  vcpkg-tool,
+  writeShellScript,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -16,19 +17,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     hash = "sha256-Bu1sZhk8fqG5D7m/0QK3uI97stXx8l8y30lnffTr9h0=";
   };
 
-  installPhase = let
-    # vcpkg needs two directories to write to that is independent of installation directory.
-    # Since vcpkg already creates $HOME/.vcpkg/ we use that to create a root where vcpkg can write into.
-    vcpkgScript = writeShellScript "vcpkg" ''
-      vcpkg_writable_path="$HOME/.vcpkg/root/"
+  installPhase =
+    let
+      # vcpkg needs two directories to write to that is independent of installation directory.
+      # Since vcpkg already creates $HOME/.vcpkg/ we use that to create a root where vcpkg can write into.
+      vcpkgScript = writeShellScript "vcpkg" ''
+        vcpkg_writable_path="$HOME/.vcpkg/root/"
 
-      VCPKG_ROOT="@out@/share/vcpkg" ${vcpkg-tool}/bin/vcpkg \
-        --x-downloads-root="$vcpkg_writable_path"/downloads \
-        --x-buildtrees-root="$vcpkg_writable_path"/buildtrees \
-        --x-packages-root="$vcpkg_writable_path"/packages \
-        "$@"
+        VCPKG_ROOT="@out@/share/vcpkg" ${vcpkg-tool}/bin/vcpkg \
+          --x-downloads-root="$vcpkg_writable_path"/downloads \
+          --x-buildtrees-root="$vcpkg_writable_path"/buildtrees \
+          --x-packages-root="$vcpkg_writable_path"/packages \
+          "$@"
       '';
-    in ''
+    in
+    ''
       runHook preInstall
 
       mkdir -p $out/bin $out/share/vcpkg/scripts/buildsystems
@@ -46,7 +49,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     mainProgram = "vcpkg";
     homepage = "https://vcpkg.io/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ guekka gracicot ];
+    maintainers = with lib.maintainers; [
+      guekka
+      gracicot
+    ];
     platforms = lib.platforms.all;
   };
 })

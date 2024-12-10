@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "monocypher";
@@ -16,7 +21,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Boring crypto that simply works";
     homepage = "https://monocypher.org";
-    license = with licenses; [ bsd2 cc0 ];
+    license = with licenses; [
+      bsd2
+      cc0
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ sikmir ];
   };

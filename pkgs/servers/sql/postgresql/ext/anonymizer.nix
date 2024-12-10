@@ -1,4 +1,12 @@
-{ lib, stdenv, pg-dump-anon, postgresql, runtimeShell, jitSupport, llvm }:
+{
+  lib,
+  stdenv,
+  pg-dump-anon,
+  postgresql,
+  runtimeShell,
+  jitSupport,
+  llvm,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "postgresql_anonymizer";

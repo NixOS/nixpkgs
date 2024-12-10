@@ -1,10 +1,11 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, installShellFiles
-, testers
-, cue
-, callPackage
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  installShellFiles,
+  testers,
+  cue,
+  callPackage,
 }:
 
 buildGoModule rec {
@@ -24,7 +25,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd cue \
@@ -45,7 +49,7 @@ buildGoModule rec {
     };
   };
 
-  meta = with lib;  {
+  meta = with lib; {
     description = "A data constraint language which aims to simplify tasks involving defining and using data";
     homepage = "https://cuelang.org/";
     license = lib.licenses.asl20;

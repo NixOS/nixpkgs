@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, ldc
-, installShellFiles
-, pkg-config
-, curl
-, sqlite
-, libnotify
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  ldc,
+  installShellFiles,
+  pkg-config,
+  curl,
+  sqlite,
+  libnotify,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,7 +24,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-M6EOJiykmAKWIuAXdm9ebTSX1eVoO+1axgzxlAmuI8U=";
   };
 
-  nativeBuildInputs = [ autoreconfHook ldc installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    ldc
+    installShellFiles
+    pkg-config
+  ];
 
   buildInputs = [
     curl
@@ -31,12 +37,14 @@ stdenv.mkDerivation rec {
     libnotify
   ] ++ lib.optional withSystemd systemd;
 
-  configureFlags = [
-    "--enable-notifications"
-  ] ++ lib.optionals withSystemd [
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-    "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
-  ];
+  configureFlags =
+    [
+      "--enable-notifications"
+    ]
+    ++ lib.optionals withSystemd [
+      "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+      "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
+    ];
 
   # we could also pass --enable-completions to configure but we would then have to
   # figure out the paths manually and pass those along.
@@ -51,7 +59,11 @@ stdenv.mkDerivation rec {
     mainProgram = "onedrive";
     homepage = "https://github.com/abraunegg/onedrive";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ srgom peterhoeg bertof ];
+    maintainers = with maintainers; [
+      srgom
+      peterhoeg
+      bertof
+    ];
     platforms = platforms.linux;
   };
 }

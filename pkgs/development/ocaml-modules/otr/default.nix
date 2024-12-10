@@ -1,5 +1,13 @@
-{ lib, fetchurl, buildDunePackage
-, cstruct, sexplib0, mirage-crypto, mirage-crypto-pk, astring, base64
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  cstruct,
+  sexplib0,
+  mirage-crypto,
+  mirage-crypto-pk,
+  astring,
+  base64,
 }:
 
 buildDunePackage rec {
@@ -15,8 +23,14 @@ buildDunePackage rec {
 
   duneVersion = "3";
 
-  propagatedBuildInputs = [ cstruct sexplib0 mirage-crypto mirage-crypto-pk
-                            astring base64 ];
+  propagatedBuildInputs = [
+    cstruct
+    sexplib0
+    mirage-crypto
+    mirage-crypto-pk
+    astring
+    base64
+  ];
 
   doCheck = true;
 

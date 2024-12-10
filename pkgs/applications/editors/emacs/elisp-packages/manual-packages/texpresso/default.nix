@@ -1,6 +1,7 @@
-{ lib
-, trivialBuild
-, texpresso
+{
+  lib,
+  trivialBuild,
+  texpresso,
 }:
 trivialBuild {
   pname = "texpresso";

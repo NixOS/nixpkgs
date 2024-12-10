@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeWrapper
-, stripJavaArchivesHook
-, meson
-, ninja
-, pkg-config
-, gradle_8
-, curl
-, cryptopp
-, fontconfig
-, jre
-, libxml2
-, openssl
-, pcsclite
-, podofo
-, ghostscript
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  stripJavaArchivesHook,
+  meson,
+  ninja,
+  pkg-config,
+  gradle_8,
+  curl,
+  cryptopp,
+  fontconfig,
+  jre,
+  libxml2,
+  openssl,
+  pcsclite,
+  podofo,
+  ghostscript,
 }:
 
 let

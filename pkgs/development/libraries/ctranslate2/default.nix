@@ -1,22 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, darwin # Accelerate
-, llvmPackages # openmp
-, withMkl ? false, mkl
-, withCUDA ? false
-, withCuDNN ? false
-, cudaPackages
-# Enabling both withOneDNN and withOpenblas is broken
-# https://github.com/OpenNMT/CTranslate2/issues/1294
-, withOneDNN ? false, oneDNN
-, withOpenblas ? true, openblas
-, withRuy ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  darwin, # Accelerate
+  llvmPackages, # openmp
+  withMkl ? false,
+  mkl,
+  withCUDA ? false,
+  withCuDNN ? false,
+  cudaPackages,
+  # Enabling both withOneDNN and withOpenblas is broken
+  # https://github.com/OpenNMT/CTranslate2/issues/1294
+  withOneDNN ? false,
+  oneDNN,
+  withOpenblas ? true,
+  openblas,
+  withRuy ? true,
 
-# passthru tests
-, libretranslate
-, wyoming-faster-whisper
+  # passthru tests
+  libretranslate,
+  wyoming-faster-whisper,
 }:
 
 let
@@ -34,11 +38,13 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals withCUDA [
-    cudaPackages.cuda_nvcc
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals withCUDA [
+      cudaPackages.cuda_nvcc
+    ];
 
   cmakeFlags = [
     # https://opennmt.net/CTranslate2/installation.html#build-options
@@ -51,35 +57,41 @@ stdenv.mkDerivation rec {
     "-DWITH_OPENBLAS=${cmakeBool withOpenblas}"
     "-DWITH_RUY=${cmakeBool withRuy}"
     "-DWITH_MKL=${cmakeBool withMkl}"
-  ]
-  ++ lib.optional stdenv.isDarwin "-DWITH_ACCELERATE=ON";
+  ] ++ lib.optional stdenv.isDarwin "-DWITH_ACCELERATE=ON";
 
-  buildInputs = lib.optionals withMkl [
-    mkl
-  ] ++ lib.optionals withCUDA [
-    cudaPackages.cuda_cccl # <nv/target> required by the fp16 headers in cudart
-    cudaPackages.cuda_cudart
-    cudaPackages.libcublas
-    cudaPackages.libcurand
-  ] ++ lib.optionals (withCUDA && withCuDNN) [
-    cudaPackages.cudnn
-  ] ++ lib.optionals withOneDNN [
-    oneDNN
-  ] ++ lib.optionals withOpenblas [
-    openblas
-  ] ++ lib.optionals stdenv.isDarwin [
-    llvmPackages.openmp
-    darwin.apple_sdk.frameworks.Accelerate
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    darwin.apple_sdk.frameworks.CoreGraphics
-    darwin.apple_sdk.frameworks.CoreVideo
-  ];
+  buildInputs =
+    lib.optionals withMkl [
+      mkl
+    ]
+    ++ lib.optionals withCUDA [
+      cudaPackages.cuda_cccl # <nv/target> required by the fp16 headers in cudart
+      cudaPackages.cuda_cudart
+      cudaPackages.libcublas
+      cudaPackages.libcurand
+    ]
+    ++ lib.optionals (withCUDA && withCuDNN) [
+      cudaPackages.cudnn
+    ]
+    ++ lib.optionals withOneDNN [
+      oneDNN
+    ]
+    ++ lib.optionals withOpenblas [
+      openblas
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      llvmPackages.openmp
+      darwin.apple_sdk.frameworks.Accelerate
+    ]
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+      darwin.apple_sdk.frameworks.CoreGraphics
+      darwin.apple_sdk.frameworks.CoreVideo
+    ];
 
   passthru.tests = {
     inherit
       libretranslate
       wyoming-faster-whisper
-    ;
+      ;
   };
 
   meta = with lib; {
@@ -88,9 +100,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/OpenNMT/CTranslate2";
     changelog = "https://github.com/OpenNMT/CTranslate2/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ hexa misuzu ];
-    broken =
-      (lib.versionOlder cudaPackages.cudaVersion "11.4")
-      || !(withCuDNN -> withCUDA);
+    maintainers = with maintainers; [
+      hexa
+      misuzu
+    ];
+    broken = (lib.versionOlder cudaPackages.cudaVersion "11.4") || !(withCuDNN -> withCUDA);
   };
 }

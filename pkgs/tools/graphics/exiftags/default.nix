@@ -1,4 +1,8 @@
-{lib, stdenv, fetchurl}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "exiftags";
@@ -21,7 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "http://johnst.org/sw/exiftags/";
     description = "Displays EXIF data from JPEG files";
     license = lib.licenses.free;
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; unix;
     knownVulnerabilities = [
       "CVE-2023-50671"

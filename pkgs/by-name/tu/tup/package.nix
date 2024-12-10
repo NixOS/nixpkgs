@@ -1,11 +1,25 @@
-{ lib, stdenv, fetchFromGitHub, fuse3, macfuse-stubs, pkg-config, sqlite, pcre2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fuse3,
+  macfuse-stubs,
+  pkg-config,
+  sqlite,
+  pcre2,
+}:
 
 let
   fuse = if stdenv.isDarwin then macfuse-stubs else fuse3;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "tup";
   version = "0.8";
-  outputs = [ "bin" "man" "out" ];
+  outputs = [
+    "bin"
+    "man"
+    "out"
+  ];
 
   src = fetchFromGitHub {
     owner = "gittup";
@@ -15,7 +29,11 @@ in stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ fuse pcre2 sqlite ];
+  buildInputs = [
+    fuse
+    pcre2
+    sqlite
+  ];
 
   patches = [ ./fusermount-setuid.patch ];
 

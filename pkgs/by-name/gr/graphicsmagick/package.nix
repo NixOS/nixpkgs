@@ -1,26 +1,27 @@
-{ lib
-, bzip2
-, callPackage
-, coreutils
-, fetchurl
-, fixDarwinDylibNames
-, freetype
-, ghostscript
-, graphviz
-, libX11
-, libjpeg
-, libpng
-, libtiff
-, libtool
-, libwebp
-, libxml2
-, nukeReferences
-, pkg-config
-, quantumdepth ? 8
-, runCommand
-, stdenv
-, xz
-, zlib
+{
+  lib,
+  bzip2,
+  callPackage,
+  coreutils,
+  fetchurl,
+  fixDarwinDylibNames,
+  freetype,
+  ghostscript,
+  graphviz,
+  libX11,
+  libjpeg,
+  libpng,
+  libtiff,
+  libtool,
+  libwebp,
+  libxml2,
+  nukeReferences,
+  pkg-config,
+  quantumdepth ? 8,
+  runCommand,
+  stdenv,
+  xz,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +33,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-K4hYBzLNfkCdniLGEWI4vvSuBvzaEUUb8z0ln5y/OZ8=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   buildInputs = [
     bzip2
@@ -81,11 +85,14 @@ stdenv.mkDerivation (finalAttrs: {
       graphicsmagick = finalAttrs.finalPackage;
     };
     tests = {
-      issue-157920 = runCommand "issue-157920-regression-test" {
-        buildInputs = [ finalAttrs.finalPackage ];
-      } ''
-        gm convert ${graphviz}/share/doc/graphviz/neatoguide.pdf jpg:$out
-      '';
+      issue-157920 =
+        runCommand "issue-157920-regression-test"
+          {
+            buildInputs = [ finalAttrs.finalPackage ];
+          }
+          ''
+            gm convert ${graphviz}/share/doc/graphviz/neatoguide.pdf jpg:$out
+          '';
     };
   };
 

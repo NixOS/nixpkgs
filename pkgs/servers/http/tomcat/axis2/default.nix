@@ -1,4 +1,11 @@
-{ lib, stdenvNoCC, fetchurl, apacheAnt, jdk, unzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  apacheAnt,
+  jdk,
+  unzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "axis2";
@@ -10,7 +17,10 @@ stdenvNoCC.mkDerivation rec {
   };
 
   nativeBuildInputs = [ unzip ];
-  buildInputs = [ apacheAnt jdk ];
+  buildInputs = [
+    apacheAnt
+    jdk
+  ];
   builder = ./builder.sh;
 
   meta = {

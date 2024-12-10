@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchCrate }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "toml2nix";
@@ -19,7 +23,10 @@ rustPlatform.buildRustPackage rec {
     description = "A tool to convert TOML files to Nix expressions";
     mainProgram = "toml2nix";
     homepage = "https://crates.io/crates/toml2nix";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

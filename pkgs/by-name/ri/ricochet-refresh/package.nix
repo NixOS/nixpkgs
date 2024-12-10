@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qt5
-, openssl
-, protobuf3_20  # https://github.com/blueprint-freespeech/ricochet-refresh/issues/178
-, pkg-config
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qt5,
+  openssl,
+  protobuf3_20, # https://github.com/blueprint-freespeech/ricochet-refresh/issues/178
+  pkg-config,
+  cmake,
 }:
 
 let
@@ -27,16 +28,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  buildInputs = (with qt5; [
-    qtbase
-    qttools
-    qtmultimedia
-    qtquickcontrols2
-    qtwayland
-  ]) ++ [
-    openssl
-    protobuf
-  ];
+  buildInputs =
+    (with qt5; [
+      qtbase
+      qttools
+      qtmultimedia
+      qtquickcontrols2
+      qtwayland
+    ])
+    ++ [
+      openssl
+      protobuf
+    ];
 
   nativeBuildInputs = [
     pkg-config

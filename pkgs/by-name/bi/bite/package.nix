@@ -95,7 +95,10 @@ rustPlatform.buildRustPackage rec {
       icon = "bite";
       desktopName = "BiTE";
       comment = meta.description;
-      categories = ["Development" "Utility"];
+      categories = [
+        "Development"
+        "Utility"
+      ];
     })
   ];
 
@@ -103,7 +106,7 @@ rustPlatform.buildRustPackage rec {
     description = "Disassembler focused on comprehensive rust support";
     homepage = "https://github.com/WINSDK/bite";
     license = licenses.mit;
-    maintainers = with maintainers; [vinnymeller];
+    maintainers = with maintainers; [ vinnymeller ];
     mainProgram = "bite";
     broken = stdenv.isDarwin && stdenv.isx86_64;
   };

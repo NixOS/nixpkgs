@@ -1,10 +1,11 @@
-{ lib
-, makeWrapper
-, fetchFromGitHub
-, rustPackages
-, pkg-config
-, elfutils
-, zlib
+{
+  lib,
+  makeWrapper,
+  fetchFromGitHub,
+  rustPackages,
+  pkg-config,
+  elfutils,
+  zlib,
 }:
 let
   inherit (rustPackages.rustc) llvmPackages;
@@ -111,7 +112,15 @@ rustPlatform.buildRustPackage rec {
   postFixup = ''
     wrapProgram $out/bin/ecc-rs \
       --prefix LIBCLANG_PATH : ${llvmPackages.libclang.lib}/lib \
-      --prefix PATH : ${lib.makeBinPath (with llvmPackages; [clang bintools-unwrapped])}
+      --prefix PATH : ${
+        lib.makeBinPath (
+          with llvmPackages;
+          [
+            clang
+            bintools-unwrapped
+          ]
+        )
+      }
   '';
 
   meta = with lib; {

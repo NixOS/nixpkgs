@@ -1,9 +1,25 @@
-{ lib, stdenv, buildEnv, makeFontsConf, gnused, writeScript, xorg, bashInteractive, xterm, xcbuild, makeWrapper
-, quartz-wm, fontconfig, xlsfonts, xfontsel
-, ttf_bitstream_vera, freefont_ttf, liberation_ttf
-, shell ? "${bashInteractive}/bin/bash"
-, unfreeFonts ? false
-, extraFontDirs ? []
+{
+  lib,
+  stdenv,
+  buildEnv,
+  makeFontsConf,
+  gnused,
+  writeScript,
+  xorg,
+  bashInteractive,
+  xterm,
+  xcbuild,
+  makeWrapper,
+  quartz-wm,
+  fontconfig,
+  xlsfonts,
+  xfontsel,
+  ttf_bitstream_vera,
+  freefont_ttf,
+  liberation_ttf,
+  shell ? "${bashInteractive}/bin/bash",
+  unfreeFonts ? false,
+  extraFontDirs ? [ ],
 }:
 
 # ------------
@@ -61,17 +77,20 @@ let
     sudo launchctl load -w /Library/LaunchAgents/$agentName
     sudo launchctl load -w /Library/LaunchDaemons/$daemonName
   '';
-  fontDirs = [
-    ttf_bitstream_vera
-    freefont_ttf
-    liberation_ttf
-    xorg.fontmiscmisc
-    xorg.fontcursormisc
-  ] ++ lib.optionals unfreeFonts [
-    xorg.fontbhlucidatypewriter100dpi
-    xorg.fontbhlucidatypewriter75dpi
-    xorg.fontbh100dpi
-  ] ++ extraFontDirs;
+  fontDirs =
+    [
+      ttf_bitstream_vera
+      freefont_ttf
+      liberation_ttf
+      xorg.fontmiscmisc
+      xorg.fontcursormisc
+    ]
+    ++ lib.optionals unfreeFonts [
+      xorg.fontbhlucidatypewriter100dpi
+      xorg.fontbhlucidatypewriter75dpi
+      xorg.fontbh100dpi
+    ]
+    ++ extraFontDirs;
   fontsConf = makeFontsConf {
     fontDirectories = fontDirs ++ [
       "/Library/Fonts"
@@ -84,16 +103,62 @@ let
   # any X related programs expected to be available via $PATH
   pkgs = with xorg; [
     # non-xorg
-    quartz-wm xterm fontconfig
+    quartz-wm
+    xterm
+    fontconfig
     # xorg
-    xlsfonts xfontsel
-    bdftopcf fontutil iceauth libXpm lndir luit makedepend mkfontdir
-    mkfontscale sessreg setxkbmap smproxy twm x11perf xauth xbacklight xclock
-    xcmsdb xcursorgen xdm xdpyinfo xdriinfo xev xeyes xfs xgamma xhost
-    xinput xkbcomp xkbevd xkbutils xkill xlsatoms xlsclients xmessage xmodmap
-    xpr xprop xrandr xrdb xrefresh xset xsetroot xvinfo xwd xwininfo xwud
+    xlsfonts
+    xfontsel
+    bdftopcf
+    fontutil
+    iceauth
+    libXpm
+    lndir
+    luit
+    makedepend
+    mkfontdir
+    mkfontscale
+    sessreg
+    setxkbmap
+    smproxy
+    twm
+    x11perf
+    xauth
+    xbacklight
+    xclock
+    xcmsdb
+    xcursorgen
+    xdm
+    xdpyinfo
+    xdriinfo
+    xev
+    xeyes
+    xfs
+    xgamma
+    xhost
+    xinput
+    xkbcomp
+    xkbevd
+    xkbutils
+    xkill
+    xlsatoms
+    xlsclients
+    xmessage
+    xmodmap
+    xpr
+    xprop
+    xrandr
+    xrdb
+    xrefresh
+    xset
+    xsetroot
+    xvinfo
+    xwd
+    xwininfo
+    xwud
   ];
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "xquartz";
   version = lib.getVersion xorg.xorgserver;
 
@@ -176,8 +241,8 @@ in stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    platforms   = platforms.darwin;
+    platforms = platforms.darwin;
     maintainers = with maintainers; [ ];
-    license     = licenses.mit;
+    license = licenses.mit;
   };
 }

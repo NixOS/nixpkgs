@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, cmocka, acl, libuuid, lzo, zlib, zstd }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  cmocka,
+  acl,
+  libuuid,
+  lzo,
+  zlib,
+  zstd,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mtd-utils";
@@ -10,8 +22,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-uYXzZnVL5PkyDAntH8YsocwmQ8tf1f0Vl78SdE2B+Oc=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ] ++ lib.optional doCheck cmocka;
-  buildInputs = [ acl libuuid lzo zlib zstd ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ] ++ lib.optional doCheck cmocka;
+  buildInputs = [
+    acl
+    libuuid
+    lzo
+    zlib
+    zstd
+  ];
 
   enableParallelBuilding = true;
 
@@ -26,7 +47,10 @@ stdenv.mkDerivation rec {
 
   doCheck = stdenv.hostPlatform == stdenv.buildPlatform;
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postInstall = ''
     mkdir -p $dev/lib

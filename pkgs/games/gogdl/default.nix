@@ -1,12 +1,13 @@
-{ lib
-, fetchpatch
-, writeScript
-, buildPythonApplication
-, fetchFromGitHub
-, pythonOlder
-, setuptools
-, requests
-, cacert
+{
+  lib,
+  fetchpatch,
+  writeScript,
+  buildPythonApplication,
+  fetchFromGitHub,
+  pythonOlder,
+  setuptools,
+  requests,
+  cacert,
 }:
 
 buildPythonApplication rec {

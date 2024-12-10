@@ -1,10 +1,13 @@
-{ lib, fetchFromGitHub, buildDunePackage
-, algaeff
-, bwd
-, eio
-, eio_main
-, lsp
-, notty
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  algaeff,
+  bwd,
+  eio,
+  eio_main,
+  lsp,
+  notty,
 }:
 
 buildDunePackage rec {

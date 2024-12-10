@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, nix-update-script }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
+}:
 
 buildGoModule rec {
   pname = "globalping-cli";
@@ -16,7 +22,11 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   CGO_ENABLED = 0;
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   postInstall = ''
     mv $out/bin/${pname} $out/bin/globalping

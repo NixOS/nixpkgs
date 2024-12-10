@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, cmake
-, openjpeg
-, yaml-cpp
-, batchVersion ? false
-, withJpegLs ? true
-, withOpenJpeg ? true
-, withCloudflareZlib ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  cmake,
+  openjpeg,
+  yaml-cpp,
+  batchVersion ? false,
+  withJpegLs ? true,
+  withOpenJpeg ? true,
+  withCloudflareZlib ? true,
 }:
 
 let
@@ -40,20 +41,28 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals batchVersion [ yaml-cpp ]
-    ++ lib.optionals withOpenJpeg [ openjpeg openjpeg.dev ];
+  buildInputs =
+    lib.optionals batchVersion [ yaml-cpp ]
+    ++ lib.optionals withOpenJpeg [
+      openjpeg
+      openjpeg.dev
+    ];
 
-  cmakeFlags = lib.optionals batchVersion [
-    "-DBATCH_VERSION=ON"
-    "-DYAML-CPP_DIR=${yaml-cpp}/lib/cmake/yaml-cpp"
-  ] ++ lib.optionals withJpegLs [
-    "-DUSE_JPEGLS=ON"
-  ] ++ lib.optionals withOpenJpeg [
-    "-DUSE_OPENJPEG=ON"
-    "-DOpenJPEG_DIR=${openjpeg}/lib/${openjpeg.pname}-${lib.versions.majorMinor openjpeg.version}"
-  ] ++ lib.optionals withCloudflareZlib [
-    "-DZLIB_IMPLEMENTATION=Cloudflare"
-  ];
+  cmakeFlags =
+    lib.optionals batchVersion [
+      "-DBATCH_VERSION=ON"
+      "-DYAML-CPP_DIR=${yaml-cpp}/lib/cmake/yaml-cpp"
+    ]
+    ++ lib.optionals withJpegLs [
+      "-DUSE_JPEGLS=ON"
+    ]
+    ++ lib.optionals withOpenJpeg [
+      "-DUSE_OPENJPEG=ON"
+      "-DOpenJPEG_DIR=${openjpeg}/lib/${openjpeg.pname}-${lib.versions.majorMinor openjpeg.version}"
+    ]
+    ++ lib.optionals withCloudflareZlib [
+      "-DZLIB_IMPLEMENTATION=Cloudflare"
+    ];
 
   meta = with lib; {
     description = "DICOM to NIfTI converter";
@@ -63,7 +72,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.nitrc.org/projects/dcm2nii";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ashgillman rbreslow ];
+    maintainers = with maintainers; [
+      ashgillman
+      rbreslow
+    ];
     platforms = platforms.all;
   };
 }

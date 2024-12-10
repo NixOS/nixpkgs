@@ -1,21 +1,22 @@
-{ lib
-, python3
-, fetchFromGitHub
-, meson
-, ninja
-, gettext
-, appstream
-, appstream-glib
-, wrapGAppsHook4
-, desktop-file-utils
-, gobject-introspection
-, gtk4
-, gtksourceview5
-, libadwaita
-, libportal
-, librsvg
-, poppler_gi
-, webkitgtk_6_0
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  gettext,
+  appstream,
+  appstream-glib,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  gobject-introspection,
+  gtk4,
+  gtksourceview5,
+  libadwaita,
+  libportal,
+  librsvg,
+  poppler_gi,
+  webkitgtk_6_0,
 }:
 
 python3.pkgs.buildPythonApplication rec {

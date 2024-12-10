@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,6 +29,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/blyxyas/mdbook-emojicodes";
     changelog = "https://github.com/blyxyas/mdbook-emojicodes/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ blaggacao matthiasbeyer ];
+    maintainers = with maintainers; [
+      blaggacao
+      matthiasbeyer
+    ];
   };
 }

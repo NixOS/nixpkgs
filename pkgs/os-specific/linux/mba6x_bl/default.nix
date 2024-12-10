@@ -1,4 +1,9 @@
-{ fetchFromGitHub, kernel, lib, stdenv }:
+{
+  fetchFromGitHub,
+  kernel,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation {
   pname = "mba6x_bl";

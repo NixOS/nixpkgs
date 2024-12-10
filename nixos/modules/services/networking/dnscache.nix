@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -12,11 +17,13 @@ let
       touch "$out/ip/"${lib.escapeShellArg ip}
     '') cfg.clientIps}
 
-    ${concatStrings (mapAttrsToList (host: ips: ''
-      ${concatMapStrings (ip: ''
-        echo ${lib.escapeShellArg ip} >> "$out/servers/"${lib.escapeShellArg host}
-      '') ips}
-    '') cfg.domainServers)}
+    ${concatStrings (
+      mapAttrsToList (host: ips: ''
+        ${concatMapStrings (ip: ''
+          echo ${lib.escapeShellArg ip} >> "$out/servers/"${lib.escapeShellArg host}
+        '') ips}
+      '') cfg.domainServers
+    )}
 
     # if a list of root servers was not provided in config, copy it
     # over. (this is also done by dnscache-conf, but we 'rm -rf
@@ -28,7 +35,8 @@ let
     fi
   '';
 
-in {
+in
+{
 
   ###### interface
 
@@ -51,7 +59,10 @@ in {
         default = [ "127.0.0.1" ];
         type = types.listOf types.str;
         description = "Client IP addresses (or prefixes) from which to accept connections.";
-        example = ["192.168" "172.23.75.82"];
+        example = [
+          "192.168"
+          "172.23.75.82"
+        ];
       };
 
       domainServers = mkOption {
@@ -87,15 +98,19 @@ in {
   config = mkIf config.services.dnscache.enable {
     environment.systemPackages = [ pkgs.djbdns ];
     users.users.dnscache = {
-        isSystemUser = true;
-        group = "dnscache";
+      isSystemUser = true;
+      group = "dnscache";
     };
-    users.groups.dnscache = {};
+    users.groups.dnscache = { };
 
     systemd.services.dnscache = {
       description = "djbdns dnscache server";
       wantedBy = [ "multi-user.target" ];
-      path = with pkgs; [ bash daemontools djbdns ];
+      path = with pkgs; [
+        bash
+        daemontools
+        djbdns
+      ];
       preStart = ''
         rm -rf /var/lib/dnscache
         dnscache-conf dnscache dnscache /var/lib/dnscache ${config.services.dnscache.ip}

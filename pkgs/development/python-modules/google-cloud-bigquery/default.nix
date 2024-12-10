@@ -69,16 +69,19 @@ buildPythonPackage rec {
     ipython = [ ipython ];
   };
 
-  nativeCheckInputs = [
-    freezegun
-    google-cloud-testutils
-    mock
-    psutil
-    google-cloud-datacatalog
-    google-cloud-storage
-    pytestCheckHook
-    pytest-xdist
-  ] ++ passthru.optional-dependencies.pandas ++ passthru.optional-dependencies.ipython;
+  nativeCheckInputs =
+    [
+      freezegun
+      google-cloud-testutils
+      mock
+      psutil
+      google-cloud-datacatalog
+      google-cloud-storage
+      pytestCheckHook
+      pytest-xdist
+    ]
+    ++ passthru.optional-dependencies.pandas
+    ++ passthru.optional-dependencies.ipython;
 
   # prevent google directory from shadowing google imports
   preCheck = ''

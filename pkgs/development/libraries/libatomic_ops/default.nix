@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, autoconf, automake, libtool }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoconf,
+  automake,
+  libtool,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libatomic_ops";
@@ -12,9 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0wUgf+IH8rP7XLTAGdoStEzj/LxZPf1QgNhnsaJBm1E=";
   };
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
-  nativeBuildInputs = lib.optionals stdenv.isCygwin [ autoconf automake libtool ];
+  nativeBuildInputs = lib.optionals stdenv.isCygwin [
+    autoconf
+    automake
+    libtool
+  ];
 
   preConfigure = lib.optionalString stdenv.isCygwin ''
     sed -i -e "/libatomic_ops_gpl_la_SOURCES/a libatomic_ops_gpl_la_LIBADD = libatomic_ops.la" src/Makefile.am
@@ -23,8 +38,8 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "A library for semi-portable access to hardware-provided atomic memory update operations";
-    license = lib.licenses.gpl2Plus ;
-    maintainers = [lib.maintainers.raskin];
+    license = lib.licenses.gpl2Plus;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = with lib.platforms; unix ++ windows;
   };
 }

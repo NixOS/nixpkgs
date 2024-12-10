@@ -1,4 +1,10 @@
-{ config, options, lib, pkgs, ... }:
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -98,8 +104,10 @@ in
       # because we would need some kind of evil shim taking the *calling* flake's self path,
       # perhaps, to ever make that work (in order to know where the Nix expr for the system came
       # from and how to call it).
-      nix.nixPath = mkDefault ([ "nixpkgs=flake:nixpkgs" ]
-        ++ optional config.nix.channel.enable "/nix/var/nix/profiles/per-user/root/channels");
+      nix.nixPath = mkDefault (
+        [ "nixpkgs=flake:nixpkgs" ]
+        ++ optional config.nix.channel.enable "/nix/var/nix/profiles/per-user/root/channels"
+      );
     })
   ]);
 }

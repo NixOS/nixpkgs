@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, libsixel
-, testers
-, presenterm
-, stdenv
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  libsixel,
+  testers,
+  presenterm,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {

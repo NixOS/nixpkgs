@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, nixosTests
-, openssh
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  nixosTests,
+  openssh,
 }:
 buildGoModule rec {
   pname = "zrepl";
@@ -24,7 +25,11 @@ buildGoModule rec {
     makeWrapper
   ];
 
-  ldflags = [ "-s" "-w" "-X github.com/zrepl/zrepl/version.zreplVersion=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/zrepl/zrepl/version.zreplVersion=${version}"
+  ];
 
   postInstall = ''
     mkdir -p $out/lib/systemd/system
@@ -44,7 +49,10 @@ buildGoModule rec {
     description = "A one-stop, integrated solution for ZFS replication";
     platforms = platforms.linux;
     license = licenses.mit;
-    maintainers = with maintainers; [ cole-h mdlayher ];
+    maintainers = with maintainers; [
+      cole-h
+      mdlayher
+    ];
     mainProgram = "zrepl";
   };
 }

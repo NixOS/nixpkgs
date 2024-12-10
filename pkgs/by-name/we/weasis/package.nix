@@ -1,18 +1,22 @@
-{ lib
-, stdenv
-, fetchzip
-, jre
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jre,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 let
   throwSystem = throw "Unsupported system: ${stdenv.system}";
-  platform = {
-    "x86_64-linux" = "linux-x86-64";
-  }.${stdenv.system} or throwSystem;
+  platform =
+    {
+      "x86_64-linux" = "linux-x86-64";
+    }
+    .${stdenv.system} or throwSystem;
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "weasis";
   version = "4.4.0";
 
@@ -72,7 +76,10 @@ in stdenv.mkDerivation rec {
     homepage = "https://weasis.org";
     # Using changelog from releases as it is more accurate
     changelog = "https://github.com/nroduit/Weasis/releases/tag/v${version}";
-    license = with lib.licenses; [ asl20 epl20 ];
+    license = with lib.licenses; [
+      asl20
+      epl20
+    ];
     maintainers = [ lib.maintainers.wolfangaukang ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "Weasis";

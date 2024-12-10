@@ -1,17 +1,22 @@
-{ lib, stdenv
-, fetchgit
-, autoreconfHook
-, pkg-config
-, dbus
-, sysctl
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  dbus,
+  sysctl,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "ell";
   version = "0.64";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchgit {
     url = "https://git.kernel.org/pub/scm/libs/ell/ell.git";
@@ -50,6 +55,9 @@ stdenv.mkDerivation rec {
     changelog = "https://git.kernel.org/pub/scm/libs/ell/ell.git/tree/ChangeLog?h=${version}";
     license = licenses.lgpl21Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mic92 dtzWill ];
+    maintainers = with maintainers; [
+      mic92
+      dtzWill
+    ];
   };
 }

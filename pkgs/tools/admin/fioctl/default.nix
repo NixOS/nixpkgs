@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, fioctl }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  fioctl,
+}:
 
 buildGoModule rec {
   pname = "fioctl";
@@ -14,7 +21,8 @@ buildGoModule rec {
   vendorHash = "sha256-cu1TwCWdDQi2ZR96SvEeH/LIP7sZOVZoly3VczKZfRw=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/foundriesio/fioctl/subcommands/version.Commit=${src.rev}"
   ];
 
@@ -37,7 +45,10 @@ buildGoModule rec {
     description = "A simple CLI to manage your Foundries Factory";
     homepage = "https://github.com/foundriesio/fioctl";
     license = licenses.asl20;
-    maintainers = with maintainers; [ nixinator matthewcroughan ];
+    maintainers = with maintainers; [
+      nixinator
+      matthewcroughan
+    ];
     mainProgram = "fioctl";
   };
 }

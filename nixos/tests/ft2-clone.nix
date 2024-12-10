@@ -1,22 +1,25 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
-  name = "ft2-clone";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ fgaz ];
-  };
+import ./make-test-python.nix (
+  { pkgs, ... }:
+  {
+    name = "ft2-clone";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ fgaz ];
+    };
 
-  nodes.machine = { pkgs, ... }: {
-    imports = [
-      ./common/x11.nix
-    ];
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        imports = [
+          ./common/x11.nix
+        ];
 
-    sound.enable = true;
-    environment.systemPackages = [ pkgs.ft2-clone ];
-  };
+        sound.enable = true;
+        environment.systemPackages = [ pkgs.ft2-clone ];
+      };
 
-  enableOCR = true;
+    enableOCR = true;
 
-  testScript =
-    ''
+    testScript = ''
       machine.wait_for_x()
       # Add a dummy sound card, or the program won't start
       machine.execute("modprobe snd-dummy")
@@ -28,4 +31,5 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       machine.wait_for_text(r"(Songlen|Repstart|Time|About|Nibbles|Help)")
       machine.screenshot("screen")
     '';
-})
+  }
+)

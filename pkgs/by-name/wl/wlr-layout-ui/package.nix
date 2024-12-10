@@ -1,27 +1,20 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wlr-layout-ui";
-  version = "1.6.10";
+  version = "1.6.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "fdev31";
     repo = "wlr-layout-ui";
     rev = "refs/tags/${version}";
-    hash = "sha256-UM1p5b5+xJY6BgPUMXjluIC9zQxe388+gBWTbNQPWYQ=";
+    hash = "sha256-Qgg4fdxOVkADDOxmQgQFSF/wgrEQihoRNC9oXeQvaoI=";
   };
-
-  postPatch = ''
-    # The hyprland default.nix patches the version.h of hyprland so that the
-    # version info moves to the commit key.
-    substituteInPlace src/wlr_layout_ui/screens.py \
-      --replace 'json.loads(subprocess.getoutput("hyprctl -j version"))["tag"]'\
-                'json.loads(subprocess.getoutput("hyprctl -j version"))["commit"]'
-  '';
 
   nativeBuildInputs = [
     python3.pkgs.poetry-core

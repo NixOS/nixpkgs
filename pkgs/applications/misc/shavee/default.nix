@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pam
-, pkg-config
-, openssl
-, zlib
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pam,
+  pkg-config,
+  openssl,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-   # these tests require network access
+  # these tests require network access
   checkFlags = [
     "--skip=filehash::tests::remote_file_hash"
     "--skip=filehash::tests::get_filehash_unit_test"

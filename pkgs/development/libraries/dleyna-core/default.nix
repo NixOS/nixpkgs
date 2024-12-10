@@ -1,17 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gupnp
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  gupnp,
 }:
 
 stdenv.mkDerivation rec {
   pname = "dleyna-core";
   version = "0.7.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   setupHook = ./setup-hook.sh;
 

@@ -1,8 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, alsa-lib, qt5 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  qt5,
+}:
 
 let
-  inherit (qt5) qmake wrapQtAppsHook qtgraphicaleffects qtquickcontrols2;
-in stdenv.mkDerivation rec {
+  inherit (qt5)
+    qmake
+    wrapQtAppsHook
+    qtgraphicaleffects
+    qtquickcontrols2
+    ;
+in
+stdenv.mkDerivation rec {
   pname = "opensoundmeter";
   version = "1.3";
 
@@ -20,9 +32,16 @@ in stdenv.mkDerivation rec {
       --replace 'APP_GIT_VERSION = ?' 'APP_GIT_VERSION = ${src.rev}'
   '';
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ alsa-lib qtgraphicaleffects qtquickcontrols2 ];
+  buildInputs = [
+    alsa-lib
+    qtgraphicaleffects
+    qtquickcontrols2
+  ];
 
   installPhase = ''
     runHook preInstall

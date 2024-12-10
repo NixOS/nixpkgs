@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qt6
-, curl
-, ffmpeg
-, cubeb
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qt6,
+  curl,
+  ffmpeg,
+  cubeb,
 }:
 
 stdenv.mkDerivation rec {

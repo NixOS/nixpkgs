@@ -1,15 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, indent
-, perl
-, argp-standalone
-, fmt_9
-, libev
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
-, withUsb ? stdenv.isLinux, libusb1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  indent,
+  perl,
+  argp-standalone,
+  fmt_9,
+  libev,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  withUsb ? stdenv.isLinux,
+  libusb1,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,14 +31,24 @@ stdenv.mkDerivation rec {
     sed -i '2i exit' tools/get_libfmt
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config indent perl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    indent
+    perl
+  ];
 
-  buildInputs = [ fmt_9 libev ]
+  buildInputs =
+    [
+      fmt_9
+      libev
+    ]
     ++ lib.optional withSystemd systemd
     ++ lib.optional withUsb libusb1
     ++ lib.optional stdenv.isDarwin argp-standalone;
 
-  configureFlags = lib.optional (!withSystemd) "--disable-systemd"
+  configureFlags =
+    lib.optional (!withSystemd) "--disable-systemd"
     ++ lib.optional (!withUsb) "--disable-usb";
 
   installFlags = lib.optionals withSystemd [
@@ -51,4 +64,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
   };
 }
-

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, postgresql
-, openssl
-, libxcrypt
-, withPam ? stdenv.isLinux
-, pam
+{
+  lib,
+  stdenv,
+  fetchurl,
+  postgresql,
+  openssl,
+  libxcrypt,
+  withPam ? stdenv.isLinux,
+  pam,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,7 +46,9 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.pgpool.net/mediawiki/index.php/Main_Page";
     description = "A middleware that works between PostgreSQL servers and PostgreSQL clients";
-    changelog = "https://www.pgpool.net/docs/latest/en/html/release-${builtins.replaceStrings ["."] ["-"] version}.html";
+    changelog = "https://www.pgpool.net/docs/latest/en/html/release-${
+      builtins.replaceStrings [ "." ] [ "-" ] version
+    }.html";
     license = licenses.free;
     platforms = platforms.unix;
     maintainers = with maintainers; [ ];

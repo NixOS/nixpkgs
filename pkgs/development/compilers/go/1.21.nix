@@ -1,43 +1,51 @@
-{ lib
-, stdenv
-, fetchurl
-, tzdata
-, substituteAll
-, iana-etc
-, Security
-, Foundation
-, xcbuild
-, mailcap
-, buildPackages
-, pkgsBuildTarget
-, threadsCross
-, testers
-, skopeo
-, buildGo121Module
+{
+  lib,
+  stdenv,
+  fetchurl,
+  tzdata,
+  substituteAll,
+  iana-etc,
+  Security,
+  Foundation,
+  xcbuild,
+  mailcap,
+  buildPackages,
+  pkgsBuildTarget,
+  threadsCross,
+  testers,
+  skopeo,
+  buildGo121Module,
 }:
 
 let
   useGccGoBootstrap = stdenv.buildPlatform.isMusl;
-  goBootstrap = if useGccGoBootstrap then buildPackages.gccgo12 else buildPackages.callPackage ./bootstrap121.nix { };
+  goBootstrap =
+    if useGccGoBootstrap then
+      buildPackages.gccgo12
+    else
+      buildPackages.callPackage ./bootstrap121.nix { };
 
   skopeoTest = skopeo.override { buildGoModule = buildGo121Module; };
 
-  goarch = platform: {
-    "aarch64" = "arm64";
-    "arm" = "arm";
-    "armv5tel" = "arm";
-    "armv6l" = "arm";
-    "armv7l" = "arm";
-    "i686" = "386";
-    "mips" = "mips";
-    "mips64el" = "mips64le";
-    "mipsel" = "mipsle";
-    "powerpc64" = "ppc64";
-    "powerpc64le" = "ppc64le";
-    "riscv64" = "riscv64";
-    "s390x" = "s390x";
-    "x86_64" = "amd64";
-  }.${platform.parsed.cpu.name} or (throw "Unsupported system: ${platform.parsed.cpu.name}");
+  goarch =
+    platform:
+    {
+      "aarch64" = "arm64";
+      "arm" = "arm";
+      "armv5tel" = "arm";
+      "armv6l" = "arm";
+      "armv7l" = "arm";
+      "i686" = "386";
+      "mips" = "mips";
+      "mips64el" = "mips64le";
+      "mipsel" = "mipsle";
+      "powerpc64" = "ppc64";
+      "powerpc64le" = "ppc64le";
+      "riscv64" = "riscv64";
+      "s390x" = "s390x";
+      "x86_64" = "amd64";
+    }
+    .${platform.parsed.cpu.name} or (throw "Unsupported system: ${platform.parsed.cpu.name}");
 
   # We need a target compiler which is still runnable at build time,
   # to handle the cross-building case where build != host == target
@@ -55,11 +63,16 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   strictDeps = true;
-  buildInputs = [ ]
+  buildInputs =
+    [ ]
     ++ lib.optionals stdenv.isLinux [ stdenv.cc.libc.out ]
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
-  depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [ Foundation Security xcbuild ];
+  depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [
+    Foundation
+    Security
+    xcbuild
+  ];
 
   depsBuildTarget = lib.optional isCross targetCC;
 
@@ -100,18 +113,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   # {CC,CXX}_FOR_TARGET must be only set for cross compilation case as go expect those
   # to be different from CC/CXX
-  CC_FOR_TARGET =
-    if isCross then
-      "${targetCC}/bin/${targetCC.targetPrefix}cc"
-    else
-      null;
-  CXX_FOR_TARGET =
-    if isCross then
-      "${targetCC}/bin/${targetCC.targetPrefix}c++"
-    else
-      null;
+  CC_FOR_TARGET = if isCross then "${targetCC}/bin/${targetCC.targetPrefix}cc" else null;
+  CXX_FOR_TARGET = if isCross then "${targetCC}/bin/${targetCC.targetPrefix}c++" else null;
 
-  GOARM = toString (lib.intersectLists [ (stdenv.hostPlatform.parsed.cpu.version or "") ] [ "5" "6" "7" ]);
+  GOARM = toString (
+    lib.intersectLists [ (stdenv.hostPlatform.parsed.cpu.version or "") ] [ "5" "6" "7" ]
+  );
   GO386 = "softfloat"; # from Arch: don't assume sse2 on i686
   CGO_ENABLED = 1;
 
@@ -126,9 +133,9 @@ stdenv.mkDerivation (finalAttrs: {
     export PATH=$(pwd)/bin:$PATH
 
     ${lib.optionalString isCross ''
-    # Independent from host/target, CC should produce code for the building system.
-    # We only set it when cross-compiling.
-    export CC=${buildPackages.stdenv.cc}/bin/cc
+      # Independent from host/target, CC should produce code for the building system.
+      # We only set it when cross-compiling.
+      export CC=${buildPackages.stdenv.cc}/bin/cc
     ''}
     ulimit -a
 
@@ -138,22 +145,35 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  preInstall = ''
-    # Contains the wrong perl shebang when cross compiling,
-    # since it is not used for anything we can deleted as well.
-    rm src/regexp/syntax/make_perl_groups.pl
-  '' + (if (stdenv.buildPlatform.system != stdenv.hostPlatform.system) then ''
-    mv bin/*_*/* bin
-    rmdir bin/*_*
-    ${lib.optionalString (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS)) ''
-      rm -rf pkg/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH} pkg/tool/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH}
-    ''}
-  '' else lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system) ''
-    rm -rf bin/*_*
-    ${lib.optionalString (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS)) ''
-      rm -rf pkg/${finalAttrs.GOOS}_${finalAttrs.GOARCH} pkg/tool/${finalAttrs.GOOS}_${finalAttrs.GOARCH}
-    ''}
-  '');
+  preInstall =
+    ''
+      # Contains the wrong perl shebang when cross compiling,
+      # since it is not used for anything we can deleted as well.
+      rm src/regexp/syntax/make_perl_groups.pl
+    ''
+    + (
+      if (stdenv.buildPlatform.system != stdenv.hostPlatform.system) then
+        ''
+          mv bin/*_*/* bin
+          rmdir bin/*_*
+          ${lib.optionalString
+            (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS))
+            ''
+              rm -rf pkg/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH} pkg/tool/${finalAttrs.GOHOSTOS}_${finalAttrs.GOHOSTARCH}
+            ''
+          }
+        ''
+      else
+        lib.optionalString (stdenv.hostPlatform.system != stdenv.targetPlatform.system) ''
+          rm -rf bin/*_*
+          ${lib.optionalString
+            (!(finalAttrs.GOHOSTARCH == finalAttrs.GOARCH && finalAttrs.GOOS == finalAttrs.GOHOSTOS))
+            ''
+              rm -rf pkg/${finalAttrs.GOOS}_${finalAttrs.GOARCH} pkg/tool/${finalAttrs.GOOS}_${finalAttrs.GOARCH}
+            ''
+          }
+        ''
+    );
 
   installPhase = ''
     runHook preInstall

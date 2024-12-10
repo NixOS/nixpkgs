@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "xsv";
@@ -19,7 +25,10 @@ rustPlatform.buildRustPackage rec {
     description = "A fast CSV toolkit written in Rust";
     mainProgram = "xsv";
     homepage = "https://github.com/BurntSushi/xsv";
-    license = with licenses; [ unlicense /* or */ mit ];
+    license = with licenses; [
+      unlicense # or
+      mit
+    ];
     maintainers = [ maintainers.jgertm ];
   };
 }

@@ -1,4 +1,8 @@
-{ lib, fetchurl, appimageTools }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+}:
 
 let
   pname = "plexamp";
@@ -32,7 +36,11 @@ appimageTools.wrapType2 {
     homepage = "https://plexamp.com/";
     changelog = "https://forums.plex.tv/t/plexamp-release-notes/221280/73";
     license = licenses.unfree;
-    maintainers = with maintainers; [ killercup redhawk synthetica ];
+    maintainers = with maintainers; [
+      killercup
+      redhawk
+      synthetica
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

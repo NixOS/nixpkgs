@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, wrapQtAppsHook
-, qtbase
-, qtdeclarative
-, Cocoa
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  wrapQtAppsHook,
+  qtbase,
+  qtdeclarative,
+  Cocoa,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -27,12 +28,14 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtbase
-    qtdeclarative
-  ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
-  ];
+  buildInputs =
+    [
+      qtbase
+      qtdeclarative
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      Cocoa
+    ];
 
   postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir $out/Applications

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, expat
-, pkg-config
-, systemd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  expat,
+  pkg-config,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {

@@ -58,7 +58,10 @@ stdenv.mkDerivation {
     '';
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsd3;
-    maintainers = with maintainers; [ goibhniu primeos ];
+    maintainers = with maintainers; [
+      goibhniu
+      primeos
+    ];
     # Note from primeos: By updating Chromium I also update Google Chrome and
     # ChromeDriver.
     platforms = platforms.darwin;

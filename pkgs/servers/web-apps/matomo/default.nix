@@ -7,15 +7,15 @@ let
       hash = "sha256-cGnsxfpvt7FyhxFcA2/gWWe7CyanVGZVKtCDES3XLdI=";
     };
     matomo_5 = {
-      version = "5.1.1";
-      hash = "sha256-xi6R9O/pOxBgga6+wwqziwDKK7Q1Ispldvxg+0mpdeQ=";
+      version = "5.1.2";
+      hash = "sha256-6kR6OOyqwQfV+pRqHO+VMLM1eZQb0om65EilAnIlW9U=";
     };
     matomo-beta = {
-      version = "5.0.0";
+      version = "5.2.0";
       # `beta` examples: "b1", "rc1", null
       # when updating: use null if stable version is >= latest beta or release candidate
-      beta = "rc9";
-      hash = "sha256-OXxJCEXcrl6UXYh+jbNqLQGYphrSjxaOAZg3AZVPAqs=";
+      beta = "rc1";
+      hash = "sha256-heAd01p8QHkrxQY2MEf//YXNplgL19Opw/WhA2cwZ+c=";
     };
   };
   common = pname: { version, hash, beta ? null }:

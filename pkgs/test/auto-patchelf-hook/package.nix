@@ -2,27 +2,30 @@
 # which uses the hook. We took the derivation from tonelib-jam, which sounds
 # like a good candidate with a small closure, and trimmed it down.
 
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, freetype
-, curl
-# This test checks that the behavior of autoPatchelfHook is correct whether
-# __structuredAttrs
-# (https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-structuredAttrs)
-# is set or not. Hence __structuredAttrs is provided as a parameter.
-, __structuredAttrs
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  freetype,
+  curl,
+  # This test checks that the behavior of autoPatchelfHook is correct whether
+  # __structuredAttrs
+  # (https://nixos.org/manual/nix/stable/language/advanced-attributes#adv-attr-structuredAttrs)
+  # is set or not. Hence __structuredAttrs is provided as a parameter.
+  __structuredAttrs,
 }:
 
-let runtimeDependencies = [
-  (lib.getLib curl)
-  "/some/dep"
-  "/some/other/dep"
-]
-# A dependency with space only works with __structuredAttrs set to true.
-++ lib.lists.optional __structuredAttrs "/some/dep with space";
+let
+  runtimeDependencies =
+    [
+      (lib.getLib curl)
+      "/some/dep"
+      "/some/other/dep"
+    ]
+    # A dependency with space only works with __structuredAttrs set to true.
+    ++ lib.lists.optional __structuredAttrs "/some/dep with space";
 in
 
 stdenv.mkDerivation {
@@ -59,7 +62,8 @@ stdenv.mkDerivation {
 
   # Additional phase performing the actual test.
   installCheckPhase =
-    let allDeps = runtimeDependencies ++ [ (lib.getLib freetype) ];
+    let
+      allDeps = runtimeDependencies ++ [ (lib.getLib freetype) ];
     in
     ''
       local binary="$out/bin/ToneLib-Jam"
@@ -80,16 +84,18 @@ stdenv.mkDerivation {
 
       echo "[auto-patchelf-hook-test]: Check that the runpath contains the expected runtime deps"
     ''
-    + lib.strings.concatStringsSep "\n"
-      (lib.lists.imap0
-        (i: path:
-          let iAsStr = builtins.toString i; in
-          ''
-            echo "[auto-patchelf-hook-test]: Check that entry ${iAsStr} is ${path}"
-            test "''${paths[${iAsStr}]}" = "$path"
-          '')
-        allDeps
-      );
+    + lib.strings.concatStringsSep "\n" (
+      lib.lists.imap0 (
+        i: path:
+        let
+          iAsStr = builtins.toString i;
+        in
+        ''
+          echo "[auto-patchelf-hook-test]: Check that entry ${iAsStr} is ${path}"
+          test "''${paths[${iAsStr}]}" = "$path"
+        ''
+      ) allDeps
+    );
 
   doInstallCheck = true;
   inherit __structuredAttrs;

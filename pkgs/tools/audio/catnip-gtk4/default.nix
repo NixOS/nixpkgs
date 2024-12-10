@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook4
-, gobject-introspection
-, gtk4
-, libadwaita
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook4,
+  gobject-introspection,
+  gtk4,
+  libadwaita,
 }:
 
 buildGoModule {
@@ -32,7 +33,10 @@ buildGoModule {
     libadwaita
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "GTK4 frontend for catnip";

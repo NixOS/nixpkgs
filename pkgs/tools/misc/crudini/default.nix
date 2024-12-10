@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3Packages
-, help2man
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3Packages,
+  help2man,
+  installShellFiles,
 }:
 
 python3Packages.buildPythonApplication rec {

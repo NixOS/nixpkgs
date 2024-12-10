@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, wrapQtAppsHook
-, hidapi
-, readline
-, qtsvg
-, qtxmlpatterns
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  wrapQtAppsHook,
+  hidapi,
+  readline,
+  qtsvg,
+  qtxmlpatterns,
 }:
 
 stdenv.mkDerivation {

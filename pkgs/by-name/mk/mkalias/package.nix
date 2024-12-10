@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/vs49688/mkalias";
     license = lib.licenses.mit;
     mainProgram = "mkalias";
-    maintainers = with lib.maintainers; [ zane emilytrau ];
+    maintainers = with lib.maintainers; [
+      zane
+      emilytrau
+    ];
     platforms = lib.platforms.darwin;
   };
 })

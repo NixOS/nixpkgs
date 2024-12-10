@@ -1,9 +1,10 @@
-{ buildGoModule
-, doppler
-, fetchFromGitHub
-, installShellFiles
-, lib
-, testers
+{
+  buildGoModule,
+  doppler,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  testers,
 }:
 
 buildGoModule rec {

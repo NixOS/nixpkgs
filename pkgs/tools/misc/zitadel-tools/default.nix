@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -20,7 +21,8 @@ buildGoModule rec {
   vendorHash = "sha256-y2PYj0XRSgfiaYpeqAh4VR/+NKUPKd1c0w9pPCWsUrY=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.version=${version}"
   ];
 

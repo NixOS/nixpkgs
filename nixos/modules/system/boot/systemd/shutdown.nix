@@ -1,15 +1,29 @@
-{ config, lib, utils, pkgs, ... }: let
+{
+  config,
+  lib,
+  utils,
+  pkgs,
+  ...
+}:
+let
 
   cfg = config.systemd.shutdownRamfs;
 
-  ramfsContents = let
-    storePaths = map (p: "${p}\n") cfg.storePaths;
-    contents = lib.mapAttrsToList (_: v: "${v.source}\n${v.target}") (lib.filterAttrs (_: v: v.enable) cfg.contents);
-  in pkgs.writeText "shutdown-ramfs-contents" (lib.concatStringsSep "\n" (storePaths ++ contents));
+  ramfsContents =
+    let
+      storePaths = map (p: "${p}\n") cfg.storePaths;
+      contents = lib.mapAttrsToList (_: v: "${v.source}\n${v.target}") (
+        lib.filterAttrs (_: v: v.enable) cfg.contents
+      );
+    in
+    pkgs.writeText "shutdown-ramfs-contents" (lib.concatStringsSep "\n" (storePaths ++ contents));
 
-in {
+in
+{
   options.systemd.shutdownRamfs = {
-    enable = lib.mkEnableOption "pivoting back to an initramfs for shutdown" // { default = true; };
+    enable = lib.mkEnableOption "pivoting back to an initramfs for shutdown" // {
+      default = true;
+    };
     contents = lib.mkOption {
       description = "Set of files that have to be linked into the shutdown ramfs";
       example = lib.literalExpression ''
@@ -25,7 +39,7 @@ in {
         Store paths to copy into the shutdown ramfs as well.
       '';
       type = lib.types.listOf lib.types.singleLineStr;
-      default = [];
+      default = [ ];
     };
   };
 
@@ -35,13 +49,18 @@ in {
       "/etc/initrd-release".source = config.environment.etc.os-release.source;
       "/etc/os-release".source = config.environment.etc.os-release.source;
     };
-    systemd.shutdownRamfs.storePaths = [pkgs.runtimeShell "${pkgs.coreutils}/bin"];
+    systemd.shutdownRamfs.storePaths = [
+      pkgs.runtimeShell
+      "${pkgs.coreutils}/bin"
+    ];
 
-    systemd.mounts = [{
-      what = "tmpfs";
-      where = "/run/initramfs";
-      type = "tmpfs";
-    }];
+    systemd.mounts = [
+      {
+        what = "tmpfs";
+        where = "/run/initramfs";
+        type = "tmpfs";
+      }
+    ];
 
     systemd.services.generate-shutdown-ramfs = {
       description = "Generate shutdown ramfs";

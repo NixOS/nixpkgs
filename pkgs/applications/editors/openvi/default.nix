@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ncurses
-, perl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+  perl,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-P4w/PM9UmHmTzS9+WDK3x3MyZ7OoY2yO/Rx0vRMJuLI=";
   };
 
-  buildInputs = [ ncurses perl ];
+  buildInputs = [
+    ncurses
+    perl
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"

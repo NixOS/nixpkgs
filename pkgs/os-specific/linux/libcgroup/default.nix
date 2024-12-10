@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pam, bison, flex, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pam,
+  bison,
+  flex,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libcgroup";
@@ -12,7 +20,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-x2yBqpr3LedtWmpZ4K1ipZxIualNJuDtC4FVGzzcQn8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook bison flex ];
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+    flex
+  ];
   buildInputs = [ pam ];
 
   postPatch = ''
@@ -22,9 +34,9 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Library and tools to manage Linux cgroups";
-    homepage    = "https://github.com/libcgroup/libcgroup";
-    license     = lib.licenses.lgpl2;
-    platforms   = lib.platforms.linux;
+    homepage = "https://github.com/libcgroup/libcgroup";
+    license = lib.licenses.lgpl2;
+    platforms = lib.platforms.linux;
     maintainers = [ lib.maintainers.thoughtpolice ];
   };
 }

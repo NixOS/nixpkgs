@@ -1,13 +1,14 @@
-{ fetchurl
-, stdenv
-, installShellFiles
-, lib
-, libftdi1
-, libjaylink
-, libusb1
-, pciutils
-, pkg-config
-, jlinkSupport ? false
+{
+  fetchurl,
+  stdenv,
+  installShellFiles,
+  lib,
+  libftdi1,
+  libjaylink,
+  libusb1,
+  pciutils,
+  pkg-config,
+  jlinkSupport ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +20,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-oFMjRFPM0BLnnzRDvcxhYlz5e3/Xy0zdi/v/vosUliM=";
   };
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
-  buildInputs = [ libftdi1 libusb1 ]
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
+  buildInputs =
+    [
+      libftdi1
+      libusb1
+    ]
     ++ lib.optionals (!stdenv.isDarwin) [ pciutils ]
     ++ lib.optional jlinkSupport libjaylink;
 
@@ -29,9 +37,17 @@ stdenv.mkDerivation rec {
       --replace 'GROUP="plugdev"' 'TAG+="uaccess", TAG+="udev-acl"'
   '';
 
-  makeFlags = [ "PREFIX=$(out)" "libinstall" ]
+  makeFlags =
+    [
+      "PREFIX=$(out)"
+      "libinstall"
+    ]
     ++ lib.optional jlinkSupport "CONFIG_JLINK_SPI=yes"
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ "CONFIG_INTERNAL_X86=no" "CONFIG_INTERNAL_DMI=no" "CONFIG_RAYER_SPI=no" ];
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+      "CONFIG_INTERNAL_X86=no"
+      "CONFIG_INTERNAL_DMI=no"
+      "CONFIG_RAYER_SPI=no"
+    ];
 
   postInstall = ''
     install -Dm644 util/flashrom_udev.rules $out/lib/udev/rules.d/flashrom.rules
@@ -41,7 +57,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.flashrom.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fpletz felixsinger ];
+    maintainers = with maintainers; [
+      fpletz
+      felixsinger
+    ];
     platforms = platforms.all;
     mainProgram = "flashrom";
   };

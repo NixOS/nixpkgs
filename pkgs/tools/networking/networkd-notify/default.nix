@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitLab
-, buildPythonApplication
-, dbus-python
-, pygobject3
-, systemd
-, wirelesstools
+{
+  lib,
+  fetchFromGitLab,
+  buildPythonApplication,
+  dbus-python,
+  pygobject3,
+  systemd,
+  wirelesstools,
 }:
 
 buildPythonApplication rec {

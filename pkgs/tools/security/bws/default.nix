@@ -1,14 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, oniguruma
-, openssl
-, stdenv
-, darwin
-, python3
-, perl
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  oniguruma,
+  openssl,
+  stdenv,
+  darwin,
+  python3,
+  perl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,17 +30,20 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  nativeBuildInputs = [
-    installShellFiles
-    pkg-config
-  ] ++ lib.optionals stdenv.isLinux [
-    perl
-  ];
+  nativeBuildInputs =
+    [
+      installShellFiles
+      pkg-config
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      perl
+    ];
 
   buildInputs =
     [
       oniguruma
-    ] ++ lib.optionals stdenv.isLinux [
+    ]
+    ++ lib.optionals stdenv.isLinux [
       openssl
     ]
     ++ lib.optionals stdenv.isDarwin [
@@ -51,9 +55,15 @@ rustPlatform.buildRustPackage rec {
     RUSTONIG_SYSTEM_LIBONIG = true;
   };
 
-  cargoBuildFlags = [ "--package" "bws" ];
+  cargoBuildFlags = [
+    "--package"
+    "bws"
+  ];
 
-  cargoTestFlags = [ "--package" "bws" ];
+  cargoTestFlags = [
+    "--package"
+    "bws"
+  ];
 
   postInstall = ''
     installShellCompletion --cmd bws \

@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, ffmpeg
-, fzf
-, mpv
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  ffmpeg,
+  fzf,
+  mpv,
+  python3,
 }:
 
 let
@@ -44,15 +45,17 @@ python3.pkgs.buildPythonPackage {
     "tldextract"
   ];
 
-  makeWrapperArgs = let
-    binPath = lib.makeBinPath [
-      ffmpeg
-      fzf
-      mpv
+  makeWrapperArgs =
+    let
+      binPath = lib.makeBinPath [
+        ffmpeg
+        fzf
+        mpv
+      ];
+    in
+    [
+      "--prefix PATH : ${binPath}"
     ];
-  in [
-    "--prefix PATH : ${binPath}"
-  ];
 
   meta = with lib; {
     homepage = "https://github.com/mov-cli/mov-cli";

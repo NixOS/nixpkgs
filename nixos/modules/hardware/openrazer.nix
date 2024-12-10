@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
@@ -84,7 +89,7 @@ in
         description = ''
           Settings for device battery notifications.
         '';
-        default = {};
+        default = { };
         type = types.submodule {
           options = {
             enable = mkOption {
@@ -126,7 +131,7 @@ in
 
       users = mkOption {
         type = with types; listOf str;
-        default = [];
+        default = [ ];
         description = ''
           Usernames to be added to the "openrazer" group, so that they
           can start and interact with the OpenRazer userspace daemon.
@@ -136,7 +141,10 @@ in
   };
 
   imports = [
-    (mkRenamedOptionModule [ "hardware" "openrazer" "mouseBatteryNotifier" ] [ "hardware" "openrazer" "batteryNotifier" "enable" ])
+    (mkRenamedOptionModule
+      [ "hardware" "openrazer" "mouseBatteryNotifier" ]
+      [ "hardware" "openrazer" "batteryNotifier" "enable" ]
+    )
   ];
 
   config = mkIf cfg.enable {

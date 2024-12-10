@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, pkg-config, bison, flex, libsepol, libselinux, bzip2, audit
-, enablePython ? true, swig ? null, python ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  bison,
+  flex,
+  libsepol,
+  libselinux,
+  bzip2,
+  audit,
+  enablePython ? true,
+  swig ? null,
+  python ? null,
 }:
 
 with lib;
@@ -12,15 +24,27 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "${se_url}/${version}/libsemanage-${version}.tar.gz";
     sha256 = "sha256-QROPRiIkOeEkLyfBWH6Vz1SgWSWarxaB22QswwxODWA=";
-   };
+  };
 
-  outputs = [ "out" "dev" "man" ] ++ optional enablePython "py";
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ] ++ optional enablePython "py";
 
   strictDeps = true;
 
-  nativeBuildInputs = [ bison flex pkg-config ] ++ optional enablePython swig;
-  buildInputs = [ libsepol libselinux bzip2 audit ]
-    ++ optional enablePython python;
+  nativeBuildInputs = [
+    bison
+    flex
+    pkg-config
+  ] ++ optional enablePython swig;
+  buildInputs = [
+    libsepol
+    libselinux
+    bzip2
+    audit
+  ] ++ optional enablePython python;
 
   makeFlags = [
     "PREFIX=$(out)"
@@ -47,7 +71,7 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
+  meta = removeAttrs libsepol.meta [ "outputsToInstall" ] // {
     description = "Policy management tools for SELinux";
     license = lib.licenses.lgpl21;
   };

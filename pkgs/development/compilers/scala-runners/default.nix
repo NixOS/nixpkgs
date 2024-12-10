@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, coursier }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  coursier,
+}:
 
 stdenv.mkDerivation rec {
   pname = "scala-runners";

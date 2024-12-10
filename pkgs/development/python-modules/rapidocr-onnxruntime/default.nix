@@ -29,11 +29,13 @@ let
     hash = "sha256-+iY+/IdOgsn+LPZQ4Kdzxuh31csQ7dyh5Zf552ne3N0=";
   };
 
-  models = fetchzip {
-    url = "https://github.com/RapidAI/RapidOCR/releases/download/v1.1.0/required_for_whl_v1.3.0.zip";
-    hash = "sha256-j/0nzyvu/HfNTt5EZ+2Phe5dkyPOdQw/OZTz0yS63aA=";
-    stripRoot = false;
-  } + "/required_for_whl_v1.3.0/resources/models";
+  models =
+    fetchzip {
+      url = "https://github.com/RapidAI/RapidOCR/releases/download/v1.1.0/required_for_whl_v1.3.0.zip";
+      hash = "sha256-j/0nzyvu/HfNTt5EZ+2Phe5dkyPOdQw/OZTz0yS63aA=";
+      stripRoot = false;
+    }
+    + "/required_for_whl_v1.3.0/resources/models";
 in
 buildPythonPackage {
   pname = "rapidocr-onnxruntime";

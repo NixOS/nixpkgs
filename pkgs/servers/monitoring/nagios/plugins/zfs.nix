@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
-, zfs
-, sudo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  zfs,
+  sudo,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +18,11 @@ stdenv.mkDerivation rec {
     sha256 = "gPLCNt6hp4E94s9/PRgsnBN5XXQQ+s2MGcgRFeknXg4=";
   };
 
-  buildInputs = [ python3 zfs sudo ];
+  buildInputs = [
+    python3
+    zfs
+    sudo
+  ];
 
   postPatch = ''
     patchShebangs check_zfs.py

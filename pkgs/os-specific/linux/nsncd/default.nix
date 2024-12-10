@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, nix-gitignore
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  nix-gitignore,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -12,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "twosigma";
     repo = "nsncd";
-    rev =  "f4706786f26d12c533035fb2916be9be5751150b";
+    rev = "f4706786f26d12c533035fb2916be9be5751150b";
     hash = "sha256-GbKDWW00eZZwmslkaGIO8hjCyD5xi7h+S2WP6q5ekOQ=";
   };
 
@@ -32,7 +33,10 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/twosigma/nsncd";
     license = licenses.asl20;
-    maintainers = with maintainers; [ flokli picnoir ];
+    maintainers = with maintainers; [
+      flokli
+      picnoir
+    ];
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
     broken = stdenv.isDarwin;
   };

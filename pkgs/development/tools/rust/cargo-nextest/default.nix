@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, stdenv, darwin }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-nextest";
@@ -17,8 +23,14 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.SystemConfiguration
   ];
 
-  cargoBuildFlags = [ "-p" "cargo-nextest" ];
-  cargoTestFlags = [ "-p" "cargo-nextest" ];
+  cargoBuildFlags = [
+    "-p"
+    "cargo-nextest"
+  ];
+  cargoTestFlags = [
+    "-p"
+    "cargo-nextest"
+  ];
 
   # TODO: investigate some more why these tests fail in nix
   checkFlags = [
@@ -32,7 +44,14 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-nextest";
     homepage = "https://github.com/nextest-rs/nextest";
     changelog = "https://nexte.st/CHANGELOG.html";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ ekleog figsoda matthiasbeyer ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+      ekleog
+      figsoda
+      matthiasbeyer
+    ];
   };
 }

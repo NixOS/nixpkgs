@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, glib
-, libgudev
-, polkit
-, ppp
-, gettext
-, pkg-config
-, libxslt
-, python3
-, libmbim
-, libqmi
-, systemd
-, bash-completion
-, meson
-, ninja
-, vala
-, gobject-introspection
-, dbus
-, bash
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  glib,
+  libgudev,
+  polkit,
+  ppp,
+  gettext,
+  pkg-config,
+  libxslt,
+  python3,
+  libmbim,
+  libqmi,
+  systemd,
+  bash-completion,
+  meson,
+  ninja,
+  vala,
+  gobject-introspection,
+  dbus,
+  bash,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,18 +1,22 @@
 {
-  fetchurl
-, lib
-, nixosTests
-, openssl
-, stdenv
-, systemd
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
+  fetchurl,
+  lib,
+  nixosTests,
+  openssl,
+  stdenv,
+  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "stunnel";
   version = "5.72";
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   src = fetchurl {
     url = "https://www.stunnel.org/archive/${lib.versions.major finalAttrs.version}.x/stunnel-${finalAttrs.version}.tar.gz";
@@ -23,11 +27,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals systemdSupport [
-    systemd
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals systemdSupport [
+      systemd
+    ];
 
   configureFlags = [
     "--with-ssl=${openssl.dev}"

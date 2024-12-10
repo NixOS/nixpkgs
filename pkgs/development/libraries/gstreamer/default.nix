@@ -1,21 +1,22 @@
-{ callPackage
-, AVFoundation
-, AudioToolbox
-, Cocoa
-, CoreFoundation
-, CoreMedia
-, CoreServices
-, CoreVideo
-, DiskArbitration
-, Foundation
-, IOKit
-, MediaToolbox
-, OpenGL
-, Security
-, SystemConfiguration
-, VideoToolbox
-, ipu6ep-camera-hal
-, ipu6epmtl-camera-hal
+{
+  callPackage,
+  AVFoundation,
+  AudioToolbox,
+  Cocoa,
+  CoreFoundation,
+  CoreMedia,
+  CoreServices,
+  CoreVideo,
+  DiskArbitration,
+  Foundation,
+  IOKit,
+  MediaToolbox,
+  OpenGL,
+  Security,
+  SystemConfiguration,
+  VideoToolbox,
+  ipu6ep-camera-hal,
+  ipu6epmtl-camera-hal,
 }:
 
 {
@@ -27,7 +28,18 @@
 
   gst-plugins-good = callPackage ./good { inherit Cocoa; };
 
-  gst-plugins-bad = callPackage ./bad { inherit AudioToolbox AVFoundation Cocoa CoreMedia CoreVideo Foundation MediaToolbox VideoToolbox; };
+  gst-plugins-bad = callPackage ./bad {
+    inherit
+      AudioToolbox
+      AVFoundation
+      Cocoa
+      CoreMedia
+      CoreVideo
+      Foundation
+      MediaToolbox
+      VideoToolbox
+      ;
+  };
 
   gst-plugins-ugly = callPackage ./ugly { inherit CoreFoundation DiskArbitration IOKit; };
 

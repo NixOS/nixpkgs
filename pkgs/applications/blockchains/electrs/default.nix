@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, llvmPackages
-, rocksdb_7_10
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  llvmPackages,
+  rocksdb_7_10,
+  Security,
 }:
 
 let

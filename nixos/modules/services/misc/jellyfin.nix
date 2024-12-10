@@ -1,7 +1,19 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
-  inherit (lib) mkIf getExe maintainers mkEnableOption mkOption mkPackageOption;
+  inherit (lib)
+    mkIf
+    getExe
+    maintainers
+    mkEnableOption
+    mkOption
+    mkPackageOption
+    ;
   inherit (lib.types) str path bool;
   cfg = config.services.jellyfin;
 in
@@ -111,13 +123,21 @@ in
           ExecStart = "${getExe cfg.package} --datadir '${cfg.dataDir}' --configdir '${cfg.configDir}' --cachedir '${cfg.cacheDir}' --logdir '${cfg.logDir}'";
           Restart = "on-failure";
           TimeoutSec = 15;
-          SuccessExitStatus = ["0" "143"];
+          SuccessExitStatus = [
+            "0"
+            "143"
+          ];
 
           # Security options:
           NoNewPrivileges = true;
           SystemCallArchitectures = "native";
           # AF_NETLINK needed because Jellyfin monitors the network connection
-          RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" "AF_NETLINK" ];
+          RestrictAddressFamilies = [
+            "AF_UNIX"
+            "AF_INET"
+            "AF_INET6"
+            "AF_NETLINK"
+          ];
           RestrictNamespaces = !config.boot.isContainer;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
@@ -134,7 +154,21 @@ in
           RemoveIPC = true;
 
           SystemCallFilter = [
-            "~@clock" "~@aio" "~@chown" "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@module" "~@mount" "~@obsolete" "~@privileged" "~@raw-io" "~@reboot" "~@setuid" "~@swap"
+            "~@clock"
+            "~@aio"
+            "~@chown"
+            "~@cpu-emulation"
+            "~@debug"
+            "~@keyring"
+            "~@memlock"
+            "~@module"
+            "~@mount"
+            "~@obsolete"
+            "~@privileged"
+            "~@raw-io"
+            "~@reboot"
+            "~@setuid"
+            "~@swap"
           ];
           SystemCallErrorNumber = "EPERM";
         };
@@ -149,16 +183,25 @@ in
     };
 
     users.groups = mkIf (cfg.group == "jellyfin") {
-      jellyfin = {};
+      jellyfin = { };
     };
 
     networking.firewall = mkIf cfg.openFirewall {
       # from https://jellyfin.org/docs/general/networking/index.html
-      allowedTCPPorts = [ 8096 8920 ];
-      allowedUDPPorts = [ 1900 7359 ];
+      allowedTCPPorts = [
+        8096
+        8920
+      ];
+      allowedUDPPorts = [
+        1900
+        7359
+      ];
     };
 
   };
 
-  meta.maintainers = with maintainers; [ minijackson nu-nu-ko ];
+  meta.maintainers = with maintainers; [
+    minijackson
+    nu-nu-ko
+  ];
 }

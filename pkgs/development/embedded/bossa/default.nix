@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wxGTK32
-, libX11
-, readline
-, darwin
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wxGTK32,
+  libX11,
+  readline,
+  darwin,
+  fetchpatch,
 }:
 
 let
@@ -47,13 +48,15 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ bin2c ];
-  buildInputs = [
-    wxGTK32
-    libX11
-    readline
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-  ];
+  buildInputs =
+    [
+      wxGTK32
+      libX11
+      readline
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Cocoa
+    ];
 
   makeFlags = [
     "WXVERSION=3.2"

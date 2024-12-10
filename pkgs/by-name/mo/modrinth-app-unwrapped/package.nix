@@ -104,20 +104,25 @@ rustPlatform.buildRustPackage {
         Darwin = "app";
       }
       .${stdenv.hostPlatform.uname.system}
-      or (builtins.throw "No tauri bundle available for ${stdenv.hostPlatform.uname.system}!");
+        or (builtins.throw "No tauri bundle available for ${stdenv.hostPlatform.uname.system}!");
 
     ESBUILD_BINARY_PATH = lib.getExe (
       esbuild.override {
-        buildGoModule = args: buildGoModule (args // rec {
-          version = "0.20.2";
-          src = fetchFromGitHub {
-            owner = "evanw";
-            repo = "esbuild";
-            rev = "v${version}";
-            hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
-          };
-          vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-        });
+        buildGoModule =
+          args:
+          buildGoModule (
+            args
+            // rec {
+              version = "0.20.2";
+              src = fetchFromGitHub {
+                owner = "evanw";
+                repo = "esbuild";
+                rev = "v${version}";
+                hash = "sha256-h/Vqwax4B4nehRP9TaYbdixAZdb1hx373dNxNHvDrtY=";
+              };
+              vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+            }
+          );
       }
     );
   };

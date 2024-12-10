@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, libsodium, libevent, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libsodium,
+  libevent,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dnscrypt-wrapper";
@@ -16,8 +25,14 @@ stdenv.mkDerivation rec {
   # causes `dnscrypt-wrapper --gen-provider-keypair` to crash
   hardeningDisable = [ "fortify3" ];
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ libsodium libevent ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+  buildInputs = [
+    libsodium
+    libevent
+  ];
 
   passthru.tests = {
     inherit (nixosTests) dnscrypt-wrapper;

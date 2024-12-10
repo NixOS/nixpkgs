@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchpatch
-, fetchurl
-, fixDarwinDylibNames
-, cmake
-, libjpeg
-, uselibtirpc ? stdenv.isLinux
-, libtirpc
-, zlib
-, szipSupport ? false
-, szip
-, javaSupport ? false
-, jdk
-, fortranSupport ? false
-, gfortran
-, netcdfSupport ? false
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchurl,
+  fixDarwinDylibNames,
+  cmake,
+  libjpeg,
+  uselibtirpc ? stdenv.isLinux,
+  libtirpc,
+  zlib,
+  szipSupport ? false,
+  szip,
+  javaSupport ? false,
+  jdk,
+  fortranSupport ? false,
+  gfortran,
+  netcdfSupport ? false,
 }:
 stdenv.mkDerivation rec {
   pname = "hdf";
@@ -49,51 +50,63 @@ stdenv.mkDerivation rec {
     ./darwin-aarch64.patch
   ];
 
-  nativeBuildInputs = [
-    cmake
-  ] ++ lib.optionals stdenv.isDarwin [
-    fixDarwinDylibNames
-  ] ++ lib.optional fortranSupport gfortran;
+  nativeBuildInputs =
+    [
+      cmake
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      fixDarwinDylibNames
+    ]
+    ++ lib.optional fortranSupport gfortran;
 
-  buildInputs = [
-    libjpeg
-    zlib
-  ]
-  ++ lib.optional javaSupport jdk
-  ++ lib.optional szipSupport szip
-  ++ lib.optional uselibtirpc libtirpc;
+  buildInputs =
+    [
+      libjpeg
+      zlib
+    ]
+    ++ lib.optional javaSupport jdk
+    ++ lib.optional szipSupport szip
+    ++ lib.optional uselibtirpc libtirpc;
 
-  preConfigure = lib.optionalString uselibtirpc ''
-    # Make tirpc discovery work with CMAKE_PREFIX_PATH
-    substituteInPlace config/cmake/FindXDR.cmake \
-      --replace 'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATHS "/usr/include" "/usr/include/tirpc")' \
-                'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATH_SUFFIXES include/tirpc)'
-  '' + lib.optionalString szipSupport ''
-    export SZIP_INSTALL=${szip}
-  '';
+  preConfigure =
+    lib.optionalString uselibtirpc ''
+      # Make tirpc discovery work with CMAKE_PREFIX_PATH
+      substituteInPlace config/cmake/FindXDR.cmake \
+        --replace 'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATHS "/usr/include" "/usr/include/tirpc")' \
+                  'find_path(XDR_INCLUDE_DIR NAMES rpc/types.h PATH_SUFFIXES include/tirpc)'
+    ''
+    + lib.optionalString szipSupport ''
+      export SZIP_INSTALL=${szip}
+    '';
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DHDF4_BUILD_TOOLS=ON"
-    "-DHDF4_BUILD_UTILS=ON"
-    "-DHDF4_BUILD_WITH_INSTALL_NAME=OFF"
-    "-DHDF4_ENABLE_JPEG_LIB_SUPPORT=ON"
-    "-DHDF4_ENABLE_NETCDF=${if netcdfSupport then "ON" else "OFF"}"
-    "-DHDF4_ENABLE_Z_LIB_SUPPORT=ON"
-    "-DJPEG_DIR=${libjpeg}"
-  ] ++ lib.optionals javaSupport [
-    "-DHDF4_BUILD_JAVA=ON"
-    "-DJAVA_HOME=${jdk}"
-  ] ++ lib.optionals szipSupport [
-    "-DHDF4_ENABLE_SZIP_ENCODING=ON"
-    "-DHDF4_ENABLE_SZIP_SUPPORT=ON"
-  ] ++ (if fortranSupport
-  then [
-    "-DHDF4_BUILD_FORTRAN=ON"
-    "-DCMAKE_Fortran_FLAGS=-fallow-argument-mismatch"
-  ]
-  else [ "-DHDF4_BUILD_FORTRAN=OFF" ]
-  );
+  cmakeFlags =
+    [
+      "-DBUILD_SHARED_LIBS=ON"
+      "-DHDF4_BUILD_TOOLS=ON"
+      "-DHDF4_BUILD_UTILS=ON"
+      "-DHDF4_BUILD_WITH_INSTALL_NAME=OFF"
+      "-DHDF4_ENABLE_JPEG_LIB_SUPPORT=ON"
+      "-DHDF4_ENABLE_NETCDF=${if netcdfSupport then "ON" else "OFF"}"
+      "-DHDF4_ENABLE_Z_LIB_SUPPORT=ON"
+      "-DJPEG_DIR=${libjpeg}"
+    ]
+    ++ lib.optionals javaSupport [
+      "-DHDF4_BUILD_JAVA=ON"
+      "-DJAVA_HOME=${jdk}"
+    ]
+    ++ lib.optionals szipSupport [
+      "-DHDF4_ENABLE_SZIP_ENCODING=ON"
+      "-DHDF4_ENABLE_SZIP_SUPPORT=ON"
+    ]
+    ++ (
+      if fortranSupport then
+        [
+          "-DHDF4_BUILD_FORTRAN=ON"
+          "-DCMAKE_Fortran_FLAGS=-fallow-argument-mismatch"
+        ]
+      else
+        [ "-DHDF4_BUILD_FORTRAN=OFF" ]
+    );
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = toString [
@@ -113,7 +126,9 @@ stdenv.mkDerivation rec {
 
   checkPhase =
     let
-      excludedTestsRegex = lib.optionalString (excludedTests != [ ]) "(${lib.concatStringsSep "|" excludedTests})";
+      excludedTestsRegex = lib.optionalString (
+        excludedTests != [ ]
+      ) "(${lib.concatStringsSep "|" excludedTests})";
     in
     ''
       runHook preCheck
@@ -121,7 +136,11 @@ stdenv.mkDerivation rec {
       runHook postCheck
     '';
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+  ];
 
   postInstall = ''
     moveToOutput bin "$bin"

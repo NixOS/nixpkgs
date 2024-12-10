@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchPypi
-, glibcLocales
+{
+  lib,
+  python3,
+  fetchPypi,
+  glibcLocales,
 }:
 
 with python3.pkgs;
@@ -31,7 +32,10 @@ buildPythonApplication rec {
     sqlparse
   ];
 
-  nativeCheckInputs = [ pytestCheckHook glibcLocales ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    glibcLocales
+  ];
 
   preCheck = ''
     export HOME=.

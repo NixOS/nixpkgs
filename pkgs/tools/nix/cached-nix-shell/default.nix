@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, nix, ronn, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  nix,
+  ronn,
+  rustPlatform,
+}:
 
 let
   blake3-src = fetchFromGitHub {
@@ -8,7 +14,8 @@ let
     sha256 = "0av41ld0gqf3g60gcllpz59nqlr7r62v99mgfq9gs0p8diw5gi7x";
   };
 
-in rustPlatform.buildRustPackage rec {
+in
+rustPlatform.buildRustPackage rec {
   pname = "cached-nix-shell";
   version = "0.1.5";
 
@@ -26,7 +33,10 @@ in rustPlatform.buildRustPackage rec {
   # https://github.com/BLAKE3-team/BLAKE3/blob/0.3.1/c/README.md#building
   BLAKE3_CSRC = "${blake3-src}/c";
 
-  nativeBuildInputs = [ nix ronn ];
+  nativeBuildInputs = [
+    nix
+    ronn
+  ];
 
   postBuild = ''
     make -f nix/Makefile post-build
@@ -40,7 +50,10 @@ in rustPlatform.buildRustPackage rec {
     description = "Instant startup time for nix-shell";
     mainProgram = "cached-nix-shell";
     homepage = "https://github.com/xzfc/cached-nix-shell";
-    license = with licenses; [ unlicense /* or */ mit ];
+    license = with licenses; [
+      unlicense # or
+      mit
+    ];
     maintainers = with maintainers; [ xzfc ];
     platforms = platforms.linux;
   };

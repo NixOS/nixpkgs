@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, nano }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  nano,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cvs";
@@ -19,7 +25,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  hardeningDisable = [ "fortify" "format" ];
+  hardeningDisable = [
+    "fortify"
+    "format"
+  ];
 
   preConfigure = ''
     # Apply the Debian patches.

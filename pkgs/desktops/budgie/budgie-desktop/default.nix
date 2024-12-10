@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch2
-, accountsservice
-, alsa-lib
-, budgie-screensaver
-, docbook-xsl-nons
-, glib
-, gnome
-, gnome-desktop
-, graphene
-, gst_all_1
-, gtk-doc
-, gtk3
-, ibus
-, intltool
-, libcanberra-gtk3
-, libgee
-, libGL
-, libnotify
-, libpeas
-, libpulseaudio
-, libuuid
-, libwnck
-, magpie
-, mesa
-, meson
-, ninja
-, pkg-config
-, polkit
-, sassc
-, upower
-, vala
-, xfce
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch2,
+  accountsservice,
+  alsa-lib,
+  budgie-screensaver,
+  docbook-xsl-nons,
+  glib,
+  gnome,
+  gnome-desktop,
+  graphene,
+  gst_all_1,
+  gtk-doc,
+  gtk3,
+  ibus,
+  intltool,
+  libcanberra-gtk3,
+  libgee,
+  libGL,
+  libnotify,
+  libpeas,
+  libpulseaudio,
+  libuuid,
+  libwnck,
+  magpie,
+  mesa,
+  meson,
+  ninja,
+  pkg-config,
+  polkit,
+  sassc,
+  upower,
+  vala,
+  xfce,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -125,7 +126,11 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "A feature-rich, modern desktop designed to keep out the way of the user";
     homepage = "https://github.com/BuddiesOfBudgie/budgie-desktop";
-    license = with lib.licenses; [ gpl2Plus lgpl21Plus cc-by-sa-30 ];
+    license = with lib.licenses; [
+      gpl2Plus
+      lgpl21Plus
+      cc-by-sa-30
+    ];
     platforms = lib.platforms.linux;
     maintainers = lib.teams.budgie.members;
   };

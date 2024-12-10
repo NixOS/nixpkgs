@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, openssl, libbsd }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  openssl,
+  libbsd,
+}:
 
 let
   version = "332.25";
@@ -31,7 +38,10 @@ stdenv.mkDerivation rec {
   sourceRoot = apple_src.name;
   patches = [ "../debian/patches/*.patch" ];
 
-  buildInputs = [ openssl libbsd ];
+  buildInputs = [
+    openssl
+    libbsd
+  ];
   makefile = "Makefile.lnx";
 
   # Inspired by PKGBUILD of https://www.archlinux.org/packages/community/x86_64/hfsprogs/

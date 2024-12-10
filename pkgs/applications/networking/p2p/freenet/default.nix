@@ -1,5 +1,19 @@
-{ lib, stdenv, fetchurl, fetchFromGitHub, jdk, jre, gradle, bash, coreutils
-, substituteAll, nixosTests, perl, fetchpatch, writeText }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  jdk,
+  jre,
+  gradle,
+  bash,
+  coreutils,
+  substituteAll,
+  nixosTests,
+  perl,
+  fetchpatch,
+  writeText,
+}:
 
 let
   version = "01497";
@@ -23,7 +37,8 @@ let
     })
   ];
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "freenet";
   inherit version patches;
 
@@ -38,11 +53,19 @@ in stdenv.mkDerivation rec {
     rm gradle/verification-{keyring.keys,metadata.xml}
   '';
 
-  nativeBuildInputs = [ gradle jdk ];
+  nativeBuildInputs = [
+    gradle
+    jdk
+  ];
 
   wrapper = substituteAll {
     src = ./freenetWrapper;
-    inherit bash coreutils jre seednodes;
+    inherit
+      bash
+      coreutils
+      jre
+      seednodes
+      ;
   };
 
   # https://github.com/freenet/fred/blob/next/build-offline.sh
@@ -51,7 +74,10 @@ in stdenv.mkDerivation rec {
     pname = "${pname}-deps";
     inherit src version patches;
 
-    nativeBuildInputs = [ gradle perl ];
+    nativeBuildInputs = [
+      gradle
+      perl
+    ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       gradle --no-daemon build

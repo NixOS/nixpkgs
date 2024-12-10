@@ -1,8 +1,9 @@
-{ lib
-, callPackage
-, runCommand
-, gtk-engine-murrine
-, gnome-themes-extra
+{
+  lib,
+  callPackage,
+  runCommand,
+  gtk-engine-murrine,
+  gnome-themes-extra,
 }:
 
 let
@@ -13,26 +14,38 @@ let
 
     value = lib.mapAttrs' (variantName: variant: {
       name = variantName;
-      value = callPackage ./generic.nix { inherit prefix type variantName variant; };
+      value = callPackage ./generic.nix {
+        inherit
+          prefix
+          type
+          variantName
+          variant
+          ;
+      };
     }) content;
   }) (lib.importJSON ./variants.json);
-in packages // {
+in
+packages
+// {
   # Not using `symlinkJoin` because it's massively inefficient in this case
-  full = runCommand "${prefix}_full" {
-    preferLocalBuild = true;
+  full =
+    runCommand "${prefix}_full"
+      {
+        preferLocalBuild = true;
 
-    propagatedUserEnvPkgs = [
-      gtk-engine-murrine
-      gnome-themes-extra
-    ];
-  } ''
-    mkdir -p $out/share/{icons,themes,${prefix}}
+        propagatedUserEnvPkgs = [
+          gtk-engine-murrine
+          gnome-themes-extra
+        ];
+      }
+      ''
+        mkdir -p $out/share/{icons,themes,${prefix}}
 
-    ${lib.concatStrings (lib.forEach (lib.attrValues (lib.attrsets.mergeAttrsList (lib.attrValues packages))) (variant:
-      ''
-        ln -s ${variant}/share/${variant.ptype}/Tokyonight-${variant.pvariant} $out/share/${variant.ptype}/Tokyonight-${variant.pvariant}
-        ln -s ${variant}/share/${prefix}/LICENSE $out/share/${prefix}/LICENSE 2>/dev/null || true
-      ''
-    ))}
-  '';
+        ${lib.concatStrings (
+          lib.forEach (lib.attrValues (lib.attrsets.mergeAttrsList (lib.attrValues packages))) (variant: ''
+            ln -s ${variant}/share/${variant.ptype}/Tokyonight-${variant.pvariant} $out/share/${variant.ptype}/Tokyonight-${variant.pvariant}
+            ln -s ${variant}/share/${prefix}/LICENSE $out/share/${prefix}/LICENSE 2>/dev/null || true
+          '')
+        )}
+      '';
 }

@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, go_1_21 }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  go_1_21,
+}:
 buildGoModule rec {
   pname = "terraform-docs";
   version = "0.17.0";

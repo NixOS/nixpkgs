@@ -1,8 +1,9 @@
-{ lib
-, ocamlPackages
-, fetchFromGitHub
-, makeWrapper
-, python3
+{
+  lib,
+  ocamlPackages,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
 }:
 
 ocamlPackages.buildDunePackage {

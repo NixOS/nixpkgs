@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, git
-, gitls
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  git,
+  gitls,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "licensure";
@@ -19,7 +20,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ku0SI14pZmbhzE7RnK5kJY6tSMjRVKEMssC9e0Hq6hc=";
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl git gitls ];
+  buildInputs = [
+    openssl
+    git
+    gitls
+  ];
 
   checkFlags = [
     # Checking for files in the git repo (git ls-files),

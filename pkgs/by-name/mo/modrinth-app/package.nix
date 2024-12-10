@@ -37,28 +37,30 @@ symlinkJoin rec {
     wrapGAppsHook3
   ];
 
-  runtimeDependencies = lib.optionalString stdenv.isLinux (lib.makeLibraryPath [
-    addOpenGLRunpath.driverLink
-    flite # narrator support
+  runtimeDependencies = lib.optionalString stdenv.isLinux (
+    lib.makeLibraryPath [
+      addOpenGLRunpath.driverLink
+      flite # narrator support
 
-    udev # oshi
+      udev # oshi
 
-    # lwjgl
-    libGL
-    libpulseaudio
-    stdenv.cc.cc.lib
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXext
-    xorg.libXxf86vm
-    xorg.libXrandr
-  ]);
+      # lwjgl
+      libGL
+      libpulseaudio
+      stdenv.cc.cc.lib
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXext
+      xorg.libXxf86vm
+      xorg.libXrandr
+    ]
+  );
 
   postBuild = ''
     gappsWrapperArgs+=(
       --prefix PATH : ${lib.makeSearchPath "bin/java" jdks}
       ${lib.optionalString stdenv.isLinux ''
-        --prefix PATH : ${lib.makeBinPath [xorg.xrandr]}
+        --prefix PATH : ${lib.makeBinPath [ xorg.xrandr ]}
         --set LD_LIBRARY_PATH $runtimeDependencies
       ''}
     )

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, ocamlPackages, why3, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocamlPackages,
+  why3,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "easycrypt";

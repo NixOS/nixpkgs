@@ -51,7 +51,14 @@ import ./make-test-python.nix (
       server = {
         services.restic.backups = {
           remotebackup = {
-            inherit passwordFile paths exclude pruneOpts backupPrepareCommand backupCleanupCommand;
+            inherit
+              passwordFile
+              paths
+              exclude
+              pruneOpts
+              backupPrepareCommand
+              backupCleanupCommand
+              ;
             repository = remoteRepository;
             initialize = true;
             timerConfig = null; # has no effect here, just checking that it doesn't break the service

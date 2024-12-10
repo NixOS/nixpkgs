@@ -1,17 +1,30 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  inherit (lib) mkIf mkOption mkPackageOption mkRemovedOptionModule;
+  inherit (lib)
+    mkIf
+    mkOption
+    mkPackageOption
+    mkRemovedOptionModule
+    ;
   inherit (lib.types) bool;
 
-  mkRemovedOptionModule' = name: reason: mkRemovedOptionModule ["krb5" name] reason;
-  mkRemovedOptionModuleCfg = name: mkRemovedOptionModule' name ''
-    The option `krb5.${name}' has been removed. Use
-    `security.krb5.settings.${name}' for structured configuration.
-  '';
+  mkRemovedOptionModule' = name: reason: mkRemovedOptionModule [ "krb5" name ] reason;
+  mkRemovedOptionModuleCfg =
+    name:
+    mkRemovedOptionModule' name ''
+      The option `krb5.${name}' has been removed. Use
+      `security.krb5.settings.${name}' for structured configuration.
+    '';
 
   cfg = config.security.krb5;
   format = import ./krb5-conf-format.nix { inherit pkgs lib; } { };
-in {
+in
+{
   imports = [
     (mkRemovedOptionModuleCfg "libdefaults")
     (mkRemovedOptionModuleCfg "realms")

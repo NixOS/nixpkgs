@@ -1,4 +1,12 @@
-{ lib, buildPythonApplication, fetchFromGitHub, python, pyyaml, fonttools, fontforge }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  python,
+  pyyaml,
+  fonttools,
+  fontforge,
+}:
 
 buildPythonApplication {
   pname = "scfbuild";
@@ -13,7 +21,11 @@ buildPythonApplication {
     sha256 = "0wkyzkhshlax9rvdmn441gv87n9abfr0qqmgs8bkg9kbcjb4bhad";
   };
 
-  propagatedBuildInputs = [ pyyaml fonttools fontforge ];
+  propagatedBuildInputs = [
+    pyyaml
+    fonttools
+    fontforge
+  ];
 
   installPhase = ''
     runHook preInstall

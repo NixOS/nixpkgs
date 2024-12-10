@@ -1,11 +1,13 @@
-{ lib
-, fetchurl
+{
+  lib,
+  fetchurl,
 }:
 
 let
   pname = "netboot.xyz-efi";
   version = "2.0.75";
-in fetchurl {
+in
+fetchurl {
   name = "${pname}-${version}";
 
   url = "https://github.com/netbootxyz/netboot.xyz/releases/download/${version}/netboot.xyz.efi";

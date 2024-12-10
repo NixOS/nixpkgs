@@ -1,23 +1,23 @@
 {
-  alsa-lib
-, AppKit
-, CoreAudio
-, CoreGraphics
-, dbus
-, Foundation
-, fetchFromGitHub
-, glib
-, gst_all_1
-, IOKit
-, lib
-, MediaPlayer
-, openssl
-, pkg-config
-, protobuf
-, rustPlatform
-, Security
-, sqlite
-, stdenv
+  alsa-lib,
+  AppKit,
+  CoreAudio,
+  CoreGraphics,
+  dbus,
+  Foundation,
+  fetchFromGitHub,
+  glib,
+  gst_all_1,
+  IOKit,
+  lib,
+  MediaPlayer,
+  openssl,
+  pkg-config,
+  protobuf,
+  rustPlatform,
+  Security,
+  sqlite,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -49,23 +49,26 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [
-    dbus
-    glib
-    gst_all_1.gstreamer
-    openssl
-    sqlite
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    CoreAudio
-    CoreGraphics
-    Foundation
-    IOKit
-    MediaPlayer
-    Security
-  ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
-  ];
+  buildInputs =
+    [
+      dbus
+      glib
+      gst_all_1.gstreamer
+      openssl
+      sqlite
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit
+      CoreAudio
+      CoreGraphics
+      Foundation
+      IOKit
+      MediaPlayer
+      Security
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      alsa-lib
+    ];
 
   meta = {
     description = "Terminal Music Player TUI written in Rust";

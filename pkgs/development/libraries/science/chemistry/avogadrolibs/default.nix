@@ -1,9 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, eigen, libGL, doxygen, spglib
-, mmtf-cpp, glew, python3, libarchive, libmsym, msgpack, qttools, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  zlib,
+  eigen,
+  libGL,
+  doxygen,
+  spglib,
+  mmtf-cpp,
+  glew,
+  python3,
+  libarchive,
+  libmsym,
+  msgpack,
+  qttools,
+  wrapQtAppsHook,
 }:
 
 let
-  pythonWP = python3.withPackages (p: with p; [ openbabel-bindings numpy ]);
+  pythonWP = python3.withPackages (
+    p: with p; [
+      openbabel-bindings
+      numpy
+    ]
+  );
 
   # Pure data repositories
   moleculesRepo = fetchFromGitHub {
@@ -25,7 +47,8 @@ let
     hash = "sha256-Valc5zwlaZ//eDupFouCfWCeID7/4ObU1SDLFJ/mo/g=";
   };
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "avogadrolibs";
   version = "1.99.0";
 

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, imlib2
-, xorg
-, ncurses
-, pkg-config
-, zlib
-, x11Support ? !stdenv.isDarwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  imlib2,
+  xorg,
+  ncurses,
+  pkg-config,
+  zlib,
+  x11Support ? !stdenv.isDarwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,16 +27,23 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    ncurses
-    zlib
-    (imlib2.override { inherit x11Support; })
-  ] ++ lib.optionals x11Support [
-    xorg.libX11
-    xorg.libXext
-  ];
+  buildInputs =
+    [
+      ncurses
+      zlib
+      (imlib2.override { inherit x11Support; })
+    ]
+    ++ lib.optionals x11Support [
+      xorg.libX11
+      xorg.libXext
+    ];
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+  ];
 
   configureFlags = [
     (if x11Support then "--enable-x11" else "--disable-x11")

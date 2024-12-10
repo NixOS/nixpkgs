@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "kconf";
@@ -14,7 +18,9 @@ buildGoModule rec {
   vendorHash = "sha256-REguLiYlcC2Q6ao2oMl92/cznW+E8MO2UGhQKRXZ1vQ=";
 
   ldflags = [
-      "-s" "-w" "-X github.com/particledecay/kconf/build.Version=${version}"
+    "-s"
+    "-w"
+    "-X github.com/particledecay/kconf/build.Version=${version}"
   ];
 
   meta = with lib; {

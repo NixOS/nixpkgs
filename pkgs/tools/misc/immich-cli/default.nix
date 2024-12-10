@@ -1,6 +1,7 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 buildNpmPackage {
@@ -26,6 +27,9 @@ buildNpmPackage {
     homepage = "https://github.com/immich-app/immich";
     license = lib.licenses.mit;
     mainProgram = "immich";
-    maintainers = with lib.maintainers; [ felschr pineapplehunter ];
+    maintainers = with lib.maintainers; [
+      felschr
+      pineapplehunter
+    ];
   };
 }

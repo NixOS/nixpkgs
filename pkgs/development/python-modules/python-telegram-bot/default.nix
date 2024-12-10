@@ -35,14 +35,17 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    aiolimiter
-    apscheduler
-    cachetools
-    cryptography
-    httpx
-    pytz
-  ] ++ httpx.optional-dependencies.socks ++ httpx.optional-dependencies.http2;
+  dependencies =
+    [
+      aiolimiter
+      apscheduler
+      cachetools
+      cryptography
+      httpx
+      pytz
+    ]
+    ++ httpx.optional-dependencies.socks
+    ++ httpx.optional-dependencies.http2;
 
   nativeCheckInputs = [
     beautifulsoup4

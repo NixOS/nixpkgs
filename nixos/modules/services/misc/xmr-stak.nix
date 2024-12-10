@@ -1,4 +1,9 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -20,14 +25,17 @@ in
 
       extraArgs = mkOption {
         type = types.listOf types.str;
-        default = [];
-        example = [ "--noCPU" "--currency monero" ];
+        default = [ ];
+        example = [
+          "--noCPU"
+          "--currency monero"
+        ];
         description = "List of parameters to pass to xmr-stak.";
       };
 
       configFiles = mkOption {
         type = types.attrsOf types.str;
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             "config.txt" = '''
@@ -64,23 +72,31 @@ in
       bindsTo = [ "network-online.target" ];
       after = [ "network-online.target" ];
 
-      preStart = concatStrings (flip mapAttrsToList cfg.configFiles (fn: content: ''
-        ln -sf '${pkgs.writeText "xmr-stak-${fn}" content}' '${fn}'
-      ''));
+      preStart = concatStrings (
+        flip mapAttrsToList cfg.configFiles (
+          fn: content: ''
+            ln -sf '${pkgs.writeText "xmr-stak-${fn}" content}' '${fn}'
+          ''
+        )
+      );
 
-      serviceConfig = let rootRequired = cfg.openclSupport; in {
-        ExecStart = "${pkg}/bin/xmr-stak ${concatStringsSep " " cfg.extraArgs}";
-        # xmr-stak generates cpu and/or gpu configuration files
-        WorkingDirectory = "/tmp";
-        PrivateTmp = true;
-        DynamicUser = !rootRequired;
-        LimitMEMLOCK = toString (1024*1024);
-      };
+      serviceConfig =
+        let
+          rootRequired = cfg.openclSupport;
+        in
+        {
+          ExecStart = "${pkg}/bin/xmr-stak ${concatStringsSep " " cfg.extraArgs}";
+          # xmr-stak generates cpu and/or gpu configuration files
+          WorkingDirectory = "/tmp";
+          PrivateTmp = true;
+          DynamicUser = !rootRequired;
+          LimitMEMLOCK = toString (1024 * 1024);
+        };
     };
   };
 
   imports = [
-    (mkRemovedOptionModule ["services" "xmr-stak" "configText"] ''
+    (mkRemovedOptionModule [ "services" "xmr-stak" "configText" ] ''
       This option was removed in favour of `services.xmr-stak.configFiles`
       because the new config file `pools.txt` was introduced. You are
       now able to define all other config files like cpu.txt or amd.txt.

@@ -1,25 +1,28 @@
-{ lib, stdenv
-, fetchFromGitHub
-, perl
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  python3,
 
-# Enable BLAS interface with 64-bit integer width.
-, blas64 ? false
+  # Enable BLAS interface with 64-bit integer width.
+  blas64 ? false,
 
-# Target architecture. "amdzen" compiles kernels for all Zen
-# generations. To build kernels for specific Zen generations,
-# use "zen", "zen2", "zen3", or "zen4".
-, withArchitecture ? "amdzen"
+  # Target architecture. "amdzen" compiles kernels for all Zen
+  # generations. To build kernels for specific Zen generations,
+  # use "zen", "zen2", "zen3", or "zen4".
+  withArchitecture ? "amdzen",
 
-# Enable OpenMP-based threading.
-, withOpenMP ? true
+  # Enable OpenMP-based threading.
+  withOpenMP ? true,
 }:
 
 let
   threadingSuffix = lib.optionalString withOpenMP "-mt";
   blasIntSize = if blas64 then "64" else "32";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "amd-blis";
   version = "4.2";
 
@@ -44,10 +47,12 @@ in stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  configureFlags = [
-    "--enable-cblas"
-    "--blas-int-size=${blasIntSize}"
-  ] ++ lib.optionals withOpenMP [ "--enable-threading=openmp" ]
+  configureFlags =
+    [
+      "--enable-cblas"
+      "--blas-int-size=${blasIntSize}"
+    ]
+    ++ lib.optionals withOpenMP [ "--enable-threading=openmp" ]
     ++ [ withArchitecture ];
 
   postPatch = ''

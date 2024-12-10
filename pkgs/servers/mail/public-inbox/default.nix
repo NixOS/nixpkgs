@@ -1,43 +1,48 @@
-{ stdenv, lib, fetchurl, makeWrapper, nixosTests
-, buildPerlPackage
-, coreutils
-, curl
-, git
-, gnumake
-, highlight
-, libgit2
-, libxcrypt
-, man
-, openssl
-, pkg-config
-, sqlite
-, xapian
-, AnyURIEscape
-, DBDSQLite
-, DBI
-, EmailAddressXS
-, EmailMIME
-, IOSocketSSL
-# FIXME: to be packaged
-#, IOSocketSocks
-, IPCRun
-, Inline
-, InlineC
-, LinuxInotify2
-, MailIMAPClient
-# FIXME: to be packaged
-#, NetNetrc
-# FIXME: to be packaged
-#, NetNNTP
-, ParseRecDescent
-, Plack
-, PlackMiddlewareReverseProxy
-, PlackTestExternalServer
-, SearchXapian
-, TestSimple13
-, TimeDate
-, URI
-, XMLTreePP
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  nixosTests,
+  buildPerlPackage,
+  coreutils,
+  curl,
+  git,
+  gnumake,
+  highlight,
+  libgit2,
+  libxcrypt,
+  man,
+  openssl,
+  pkg-config,
+  sqlite,
+  xapian,
+  AnyURIEscape,
+  DBDSQLite,
+  DBI,
+  EmailAddressXS,
+  EmailMIME,
+  IOSocketSSL,
+  # FIXME: to be packaged
+  #, IOSocketSocks
+  IPCRun,
+  Inline,
+  InlineC,
+  LinuxInotify2,
+  MailIMAPClient,
+  # FIXME: to be packaged
+  #, NetNetrc
+  # FIXME: to be packaged
+  #, NetNNTP
+  ParseRecDescent,
+  Plack,
+  PlackMiddlewareReverseProxy,
+  PlackTestExternalServer,
+  SearchXapian,
+  TestSimple13,
+  TimeDate,
+  URI,
+  XMLTreePP,
 }:
 
 let
@@ -78,7 +83,8 @@ let
     "v2mirror"
   ];
 
-  testConditions = with lib;
+  testConditions =
+    with lib;
     concatMapStringsSep " " (n: "! -name ${escapeShellArg n}.t") skippedTests;
 
 in
@@ -92,7 +98,11 @@ buildPerlPackage rec {
     sha256 = "sha256-ENnT2YK7rpODII9TqiEYSCp5mpWOnxskeSuAf8Ilqro=";
   };
 
-  outputs = [ "out" "devdoc" "sa_config" ];
+  outputs = [
+    "out"
+    "devdoc"
+    "sa_config"
+  ];
 
   postConfigure = ''
     substituteInPlace Makefile --replace 'TEST_FILES = t/*.t' \
@@ -128,20 +138,22 @@ buildPerlPackage rec {
   ];
 
   doCheck = !stdenv.isDarwin;
-  nativeCheckInputs = [
-    curl
-    git
-    openssl
-    pkg-config
-    sqlite
-    xapian
-    EmailMIME
-    PlackTestExternalServer
-    TestSimple13
-    XMLTreePP
-  ] ++ lib.optionals stdenv.isLinux [
-    LinuxInotify2
-  ];
+  nativeCheckInputs =
+    [
+      curl
+      git
+      openssl
+      pkg-config
+      sqlite
+      xapian
+      EmailMIME
+      PlackTestExternalServer
+      TestSimple13
+      XMLTreePP
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      LinuxInotify2
+    ];
   preCheck = ''
     perl certs/create-certs.perl
     export TEST_LEI_ERR_LOUD=1
@@ -154,13 +166,15 @@ buildPerlPackage rec {
     for prog in $out/bin/*; do
         wrapProgram $prog \
             --set NIX_CFLAGS_COMPILE_${stdenv.cc.suffixSalt} -I${lib.getDev libxcrypt}/include \
-            --prefix PATH : ${lib.makeBinPath [
-              git
-              xapian
-              /* for InlineC */
-              gnumake
-              stdenv.cc
-            ]}
+            --prefix PATH : ${
+              lib.makeBinPath [
+                git
+                xapian
+                # for InlineC
+                gnumake
+                stdenv.cc
+              ]
+            }
     done
 
     mv sa_config $sa_config
@@ -173,7 +187,10 @@ buildPerlPackage rec {
   meta = with lib; {
     homepage = "https://public-inbox.org/";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ julm qyliss ];
+    maintainers = with maintainers; [
+      julm
+      qyliss
+    ];
     platforms = platforms.all;
   };
 }

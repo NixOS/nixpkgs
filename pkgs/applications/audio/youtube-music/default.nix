@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, electron
-, python3
-, stdenv
-, stdenvNoCC
-, copyDesktopItems
-, moreutils
-, cacert
-, jq
-, nodePackages
-, makeDesktopItem
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  electron,
+  python3,
+  stdenv,
+  stdenvNoCC,
+  copyDesktopItems,
+  moreutils,
+  cacert,
+  jq,
+  nodePackages,
+  makeDesktopItem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,7 +29,12 @@ stdenv.mkDerivation (finalAttrs: {
     pname = "${finalAttrs.pname}-pnpm-deps";
     inherit (finalAttrs) src version ELECTRON_SKIP_BINARY_DOWNLOAD;
 
-    nativeBuildInputs = [ jq moreutils nodePackages.pnpm cacert ];
+    nativeBuildInputs = [
+      jq
+      moreutils
+      nodePackages.pnpm
+      cacert
+    ];
 
     installPhase = ''
       export HOME=$(mktemp -d)
@@ -46,17 +52,22 @@ stdenv.mkDerivation (finalAttrs: {
     dontBuild = true;
     dontFixup = true;
     outputHashMode = "recursive";
-    outputHash = {
-      x86_64-linux = "sha256-bujlQxP6Lr3qPUDxYXKyb702ZJY/xbuCsu3wVDhcb+8=";
-      aarch64-linux = "sha256-0kyjjttpXpFVhdza5NAjGrRn++qc/N5/u2dQl7VufLE=";
-      x86_64-darwin = "sha256-Q37QJt/mhfpSguOlkJGKFTCrIOrpbG3OBwaD/Bg09Us=";
-      aarch64-darwin = "sha256-wbfjzoGa/6vIlOOVX3bKNQ2uxzph3WSofo3MGXqA6yQ=";
-    }.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
+    outputHash =
+      {
+        x86_64-linux = "sha256-bujlQxP6Lr3qPUDxYXKyb702ZJY/xbuCsu3wVDhcb+8=";
+        aarch64-linux = "sha256-0kyjjttpXpFVhdza5NAjGrRn++qc/N5/u2dQl7VufLE=";
+        x86_64-darwin = "sha256-Q37QJt/mhfpSguOlkJGKFTCrIOrpbG3OBwaD/Bg09Us=";
+        aarch64-darwin = "sha256-wbfjzoGa/6vIlOOVX3bKNQ2uxzph3WSofo3MGXqA6yQ=";
+      }
+      .${stdenv.system} or (throw "Unsupported system: ${stdenv.system}");
   };
 
-  nativeBuildInputs = [ makeWrapper python3 nodePackages.pnpm nodePackages.nodejs ]
-    ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems ];
-
+  nativeBuildInputs = [
+    makeWrapper
+    python3
+    nodePackages.pnpm
+    nodePackages.nodejs
+  ] ++ lib.optionals (!stdenv.isDarwin) [ copyDesktopItems ];
 
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
@@ -72,37 +83,43 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs node_modules/{*,.*}
   '';
 
-  postBuild = lib.optionalString stdenv.isDarwin ''
-    cp -R ${electron}/Applications/Electron.app Electron.app
-    chmod -R u+w Electron.app
-  '' + ''
-    pnpm build
-    ./node_modules/.bin/electron-builder \
-      --dir \
-      -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
-      -c.electronVersion=${electron.version}
-  '';
+  postBuild =
+    lib.optionalString stdenv.isDarwin ''
+      cp -R ${electron}/Applications/Electron.app Electron.app
+      chmod -R u+w Electron.app
+    ''
+    + ''
+      pnpm build
+      ./node_modules/.bin/electron-builder \
+        --dir \
+        -c.electronDist=${if stdenv.isDarwin then "." else "${electron}/libexec/electron"} \
+        -c.electronVersion=${electron.version}
+    '';
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-  '' + lib.optionalString stdenv.isDarwin ''
-    mkdir -p $out/{Applications,bin}
-    mv pack/mac*/YouTube\ Music.app $out/Applications
-    makeWrapper $out/Applications/YouTube\ Music.app/Contents/MacOS/YouTube\ Music $out/bin/youtube-music
-  '' + lib.optionalString (!stdenv.isDarwin) ''
-    mkdir -p "$out/share/lib/youtube-music"
-    cp -r pack/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/youtube-music"
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      mkdir -p $out/{Applications,bin}
+      mv pack/mac*/YouTube\ Music.app $out/Applications
+      makeWrapper $out/Applications/YouTube\ Music.app/Contents/MacOS/YouTube\ Music $out/bin/youtube-music
+    ''
+    + lib.optionalString (!stdenv.isDarwin) ''
+      mkdir -p "$out/share/lib/youtube-music"
+      cp -r pack/*-unpacked/{locales,resources{,.pak}} "$out/share/lib/youtube-music"
 
-    pushd assets/generated/icons/png
-    for file in *.png; do
-      install -Dm0644 $file $out/share/icons/hicolor/''${file//.png}/apps/youtube-music.png
-    done
-    popd
-  '' + ''
+      pushd assets/generated/icons/png
+      for file in *.png; do
+        install -Dm0644 $file $out/share/icons/hicolor/''${file//.png}/apps/youtube-music.png
+      done
+      popd
+    ''
+    + ''
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   postFixup = lib.optionalString (!stdenv.isDarwin) ''
     makeWrapper ${electron}/bin/electron $out/bin/youtube-music \
@@ -130,6 +147,11 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     maintainers = [ maintainers.aacebedo ];
     mainProgram = "youtube-music";
-    platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 })

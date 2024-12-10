@@ -1,4 +1,13 @@
-{ lib, stdenv, nixosTests, fetchpatch, fetchFromGitHub, pam, openssl, perl }:
+{
+  lib,
+  stdenv,
+  nixosTests,
+  fetchpatch,
+  fetchFromGitHub,
+  pam,
+  openssl,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pam_ssh_agent_auth";
@@ -18,7 +27,11 @@ stdenv.mkDerivation rec {
     sha256 = "ETFpIaWQnlYG8ZuDG2dNjUJddlvibB4ukHquTFn3NZM=";
   };
 
-  buildInputs = [ pam openssl perl ];
+  buildInputs = [
+    pam
+    openssl
+    perl
+  ];
 
   patches = [
     # Allow multiple colon-separated authorized keys files to be

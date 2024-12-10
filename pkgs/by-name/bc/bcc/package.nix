@@ -1,21 +1,22 @@
-{ audit
-, bash
-, bison
-, cmake
-, elfutils
-, fetchFromGitHub
-, flex
-, iperf
-, lib
-, libbpf
-, llvmPackages
-, luajit
-, makeWrapper
-, netperf
-, nixosTests
-, python3Packages
-, stdenv
-, zip
+{
+  audit,
+  bash,
+  bison,
+  cmake,
+  elfutils,
+  fetchFromGitHub,
+  flex,
+  iperf,
+  lib,
+  libbpf,
+  llvmPackages,
+  luajit,
+  makeWrapper,
+  netperf,
+  nixosTests,
+  python3Packages,
+  stdenv,
+  zip,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -33,9 +34,16 @@ python3Packages.buildPythonApplication rec {
   format = "other";
 
   buildInputs = with llvmPackages; [
-    llvm llvm.dev libclang
-    elfutils luajit netperf iperf
-    flex bash libbpf
+    llvm
+    llvm.dev
+    libclang
+    elfutils
+    luajit
+    netperf
+    iperf
+    flex
+    bash
+    libbpf
   ];
 
   patches = [
@@ -107,7 +115,10 @@ python3Packages.buildPythonApplication rec {
     wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   passthru.tests = {
     bpf = nixosTests.bpf;
@@ -115,9 +126,14 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Dynamic Tracing Tools for Linux";
-    homepage    = "https://iovisor.github.io/bcc/";
-    license     = licenses.asl20;
-    maintainers = with maintainers; [ ragge mic92 thoughtpolice martinetd ];
-    platforms   = platforms.linux;
+    homepage = "https://iovisor.github.io/bcc/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      ragge
+      mic92
+      thoughtpolice
+      martinetd
+    ];
+    platforms = platforms.linux;
   };
 }

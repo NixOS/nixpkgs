@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, parted
-, systemd
-, argp-standalone
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  parted,
+  systemd,
+  argp-standalone,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,13 +27,16 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  buildInputs = lib.optionals stdenv.isLinux [ systemd parted ]
+  buildInputs =
+    lib.optionals stdenv.isLinux [
+      systemd
+      parted
+    ]
     ++ lib.optionals stdenv.isDarwin [ argp-standalone ];
 
   buildFlags = [
     "all" # f3read, f3write
-  ]
-  ++ lib.optional stdenv.isLinux "extra"; # f3brew, f3fix, f3probe
+  ] ++ lib.optional stdenv.isLinux "extra"; # f3brew, f3fix, f3probe
 
   installFlags = [
     "PREFIX=${placeholder "out"}"
@@ -40,8 +44,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [
     "install"
-  ]
-  ++ lib.optional stdenv.isLinux "install-extra";
+  ] ++ lib.optional stdenv.isLinux "install-extra";
 
   postInstall = ''
     install -Dm555 -t $out/bin f3write.h2w log-f3wr
@@ -52,6 +55,9 @@ stdenv.mkDerivation rec {
     description = "Fight Flash Fraud";
     homepage = "https://fight-flash-fraud.readthedocs.io/en/stable/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ makefu evils ];
+    maintainers = with maintainers; [
+      makefu
+      evils
+    ];
   };
 }

@@ -1,33 +1,39 @@
-{ stdenv
-, lib
-, fetchurl
-, clang
-, llvm
-, pkg-config
-, makeWrapper
-, elfutils
-, file
-, hyperscan
-, jansson
-, libbpf
-, libcap_ng
-, libevent
-, libmaxminddb
-, libnet
-, libnetfilter_log
-, libnetfilter_queue
-, libnfnetlink
-, libpcap
-, libyaml
-, luajit
-, lz4
-, nspr
-, pcre2
-, python
-, zlib
-, redisSupport ? true, redis, hiredis
-, rustSupport ? true, rustc, cargo
-}: let
+{
+  stdenv,
+  lib,
+  fetchurl,
+  clang,
+  llvm,
+  pkg-config,
+  makeWrapper,
+  elfutils,
+  file,
+  hyperscan,
+  jansson,
+  libbpf,
+  libcap_ng,
+  libevent,
+  libmaxminddb,
+  libnet,
+  libnetfilter_log,
+  libnetfilter_queue,
+  libnfnetlink,
+  libpcap,
+  libyaml,
+  luajit,
+  lz4,
+  nspr,
+  pcre2,
+  python,
+  zlib,
+  redisSupport ? true,
+  redis,
+  hiredis,
+  rustSupport ? true,
+  rustc,
+  cargo,
+}:
+let
   libmagic = file;
   hyperscanSupport = stdenv.system == "x86_64-linux" || stdenv.system == "i686-linux";
 in
@@ -40,43 +46,49 @@ stdenv.mkDerivation rec {
     hash = "sha256-JtCjYZTVMID8iwm5mbK1qDxASfQK0H72rmnHIlpyi4Y=";
   };
 
-  nativeBuildInputs = [
-    clang
-    llvm
-    makeWrapper
-    pkg-config
-  ]
-  ++ lib.optionals rustSupport [ rustc cargo ]
-  ;
+  nativeBuildInputs =
+    [
+      clang
+      llvm
+      makeWrapper
+      pkg-config
+    ]
+    ++ lib.optionals rustSupport [
+      rustc
+      cargo
+    ];
 
   propagatedBuildInputs = with python.pkgs; [
     pyyaml
   ];
 
-  buildInputs = [
-    elfutils
-    jansson
-    libbpf
-    libcap_ng
-    libevent
-    libmagic
-    libmaxminddb
-    libnet
-    libnetfilter_log
-    libnetfilter_queue
-    libnfnetlink
-    libpcap
-    libyaml
-    luajit
-    lz4
-    nspr
-    pcre2
-    python
-    zlib
-  ]
-  ++ lib.optional hyperscanSupport hyperscan
-  ++ lib.optionals redisSupport [ redis hiredis ]
-  ;
+  buildInputs =
+    [
+      elfutils
+      jansson
+      libbpf
+      libcap_ng
+      libevent
+      libmagic
+      libmaxminddb
+      libnet
+      libnetfilter_log
+      libnetfilter_queue
+      libnfnetlink
+      libpcap
+      libyaml
+      luajit
+      lz4
+      nspr
+      pcre2
+      python
+      zlib
+    ]
+    ++ lib.optional hyperscanSupport hyperscan
+    ++ lib.optionals redisSupport [
+      redis
+      hiredis
+    ];
 
   enableParallelBuilding = true;
 
@@ -92,33 +104,34 @@ stdenv.mkDerivation rec {
     touch bpf_stubs_workaround/gnu/stubs-32.h
   '';
 
-  configureFlags = [
-    "--disable-gccmarch-native"
-    "--enable-af-packet"
-    "--enable-ebpf"
-    "--enable-ebpf-build"
-    "--enable-gccprotect"
-    "--enable-geoip"
-    "--enable-luajit"
-    "--enable-nflog"
-    "--enable-nfqueue"
-    "--enable-pie"
-    "--enable-python"
-    "--enable-unix-socket"
-    "--localstatedir=/var"
-    "--sysconfdir=/etc"
-    "--with-libnet-includes=${libnet}/include"
-    "--with-libnet-libraries=${libnet}/lib"
-  ]
-  ++ lib.optionals hyperscanSupport [
-    "--with-libhs-includes=${hyperscan.dev}/include/hs"
-    "--with-libhs-libraries=${hyperscan}/lib"
-  ]
-  ++ lib.optional redisSupport "--enable-hiredis"
-  ++ lib.optionals rustSupport [
-    "--enable-rust"
-    "--enable-rust-experimental"
-  ];
+  configureFlags =
+    [
+      "--disable-gccmarch-native"
+      "--enable-af-packet"
+      "--enable-ebpf"
+      "--enable-ebpf-build"
+      "--enable-gccprotect"
+      "--enable-geoip"
+      "--enable-luajit"
+      "--enable-nflog"
+      "--enable-nfqueue"
+      "--enable-pie"
+      "--enable-python"
+      "--enable-unix-socket"
+      "--localstatedir=/var"
+      "--sysconfdir=/etc"
+      "--with-libnet-includes=${libnet}/include"
+      "--with-libnet-libraries=${libnet}/lib"
+    ]
+    ++ lib.optionals hyperscanSupport [
+      "--with-libhs-includes=${hyperscan.dev}/include/hs"
+      "--with-libhs-libraries=${hyperscan}/lib"
+    ]
+    ++ lib.optional redisSupport "--enable-hiredis"
+    ++ lib.optionals rustSupport [
+      "--enable-rust"
+      "--enable-rust-experimental"
+    ];
 
   postConfigure = ''
     # Avoid unintended clousure growth.
@@ -141,7 +154,10 @@ stdenv.mkDerivation rec {
     "sysconfdir=\${out}/etc"
   ];
 
-  installTargets = [ "install" "install-conf" ];
+  installTargets = [
+    "install"
+    "install-conf"
+  ];
 
   postInstall = ''
     wrapProgram "$out/bin/suricatasc" \

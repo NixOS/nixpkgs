@@ -53,31 +53,37 @@ stdenv'.mkDerivation {
     ln -s ${cxxopts}/include/cxxopts.hpp vendor/cxxopts.hpp
   '';
 
-  nativeBuildInputs = [
-    cmake
-    ninja
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_nvcc
-    autoAddDriverRunpath
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      ninja
+    ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_nvcc
+      autoAddDriverRunpath
+    ];
 
-  buildInputs = [
-    nlohmann_json
-    torch.cxxdev
-    torch
-    opencv
-  ] ++ lib.optionals cudaSupport [
-    cudaPackages.cuda_cudart
-  ];
+  buildInputs =
+    [
+      nlohmann_json
+      torch.cxxdev
+      torch
+      opencv
+    ]
+    ++ lib.optionals cudaSupport [
+      cudaPackages.cuda_cudart
+    ];
 
   env.TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" python3.pkgs.torch.cudaCapabilities}";
 
-  cmakeFlags = [
-    (lib.cmakeBool "CMAKE_SKIP_RPATH" true)
-  ] ++ lib.optionals cudaSupport [
-    (lib.cmakeFeature "GPU_RUNTIME" "CUDA")
-    (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}/")
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "CMAKE_SKIP_RPATH" true)
+    ]
+    ++ lib.optionals cudaSupport [
+      (lib.cmakeFeature "GPU_RUNTIME" "CUDA")
+      (lib.cmakeFeature "CUDA_TOOLKIT_ROOT_DIR" "${cudaPackages.cudatoolkit}/")
+    ];
 
   meta = {
     description = "Production-grade 3D gaussian splatting";

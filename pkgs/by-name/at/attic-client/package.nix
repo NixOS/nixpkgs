@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix
-, boost
-, pkg-config
-, stdenv
-, installShellFiles
-, darwin
-, crates ? [ "attic-client" ]
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix,
+  boost,
+  pkg-config,
+  stdenv,
+  installShellFiles,
+  darwin,
+  crates ? [ "attic-client" ],
 }:
 rustPlatform.buildRustPackage {
   pname = "attic";
@@ -25,12 +26,17 @@ rustPlatform.buildRustPackage {
     installShellFiles
   ];
 
-  buildInputs = [
-    nix
-    boost
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    SystemConfiguration
-  ]);
+  buildInputs =
+    [
+      nix
+      boost
+    ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        SystemConfiguration
+      ]
+    );
 
   cargoLock = {
     lockFile = ./Cargo.lock;
@@ -59,7 +65,10 @@ rustPlatform.buildRustPackage {
     description = "Multi-tenant Nix Binary Cache";
     homepage = "https://github.com/zhaofengli/attic";
     license = licenses.asl20;
-    maintainers = with maintainers; [ zhaofengli aciceri ];
+    maintainers = with maintainers; [
+      zhaofengli
+      aciceri
+    ];
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "attic";
   };

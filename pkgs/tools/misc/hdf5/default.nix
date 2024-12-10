@@ -1,35 +1,39 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, removeReferencesTo
-, cppSupport ? true
-, fortranSupport ? false
-, fortran
-, zlibSupport ? true
-, zlib
-, szipSupport ? false
-, szip
-, mpiSupport ? false
-, mpi
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? stdenv.hostPlatform.isStatic
-, javaSupport ? false
-, jdk
-, usev110Api ? false
-, threadsafe ? false
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  removeReferencesTo,
+  cppSupport ? true,
+  fortranSupport ? false,
+  fortran,
+  zlibSupport ? true,
+  zlib,
+  szipSupport ? false,
+  szip,
+  mpiSupport ? false,
+  mpi,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  javaSupport ? false,
+  jdk,
+  usev110Api ? false,
+  threadsafe ? false,
+  python3,
 }:
 
 # cpp and mpi options are mutually exclusive
 # (--enable-unsupported could be used to force the build)
 assert !cppSupport || !mpiSupport;
 
-let inherit (lib) optional optionals; in
+let
+  inherit (lib) optional optionals;
+in
 
 stdenv.mkDerivation rec {
   version = "1.14.3";
-  pname = "hdf5"
+  pname =
+    "hdf5"
     + lib.optionalString cppSupport "-cpp"
     + lib.optionalString fortranSupport "-fortran"
     + lib.optionalString mpiSupport "-mpi"
@@ -59,22 +63,28 @@ stdenv.mkDerivation rec {
       ;
   };
 
-  outputs = [ "out" "dev" "bin" ];
+  outputs = [
+    "out"
+    "dev"
+    "bin"
+  ];
 
-  nativeBuildInputs = [ removeReferencesTo cmake ]
-    ++ optional fortranSupport fortran;
+  nativeBuildInputs = [
+    removeReferencesTo
+    cmake
+  ] ++ optional fortranSupport fortran;
 
-  buildInputs = optional fortranSupport fortran
-    ++ optional szipSupport szip
-    ++ optional javaSupport jdk;
+  buildInputs =
+    optional fortranSupport fortran ++ optional szipSupport szip ++ optional javaSupport jdk;
 
-  propagatedBuildInputs = optional zlibSupport zlib
-    ++ optional mpiSupport mpi;
+  propagatedBuildInputs = optional zlibSupport zlib ++ optional mpiSupport mpi;
 
-  cmakeFlags = [
-    "-DHDF5_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake"
-    "-DBUILD_STATIC_LIBS=${lib.boolToString enableStatic}"
-  ] ++ lib.optional stdenv.isDarwin "-DHDF5_BUILD_WITH_INSTALL_NAME=ON"
+  cmakeFlags =
+    [
+      "-DHDF5_INSTALL_CMAKE_DIR=${placeholder "dev"}/lib/cmake"
+      "-DBUILD_STATIC_LIBS=${lib.boolToString enableStatic}"
+    ]
+    ++ lib.optional stdenv.isDarwin "-DHDF5_BUILD_WITH_INSTALL_NAME=ON"
     ++ lib.optional cppSupport "-DHDF5_BUILD_CPP_LIB=ON"
     ++ lib.optional fortranSupport "-DHDF5_BUILD_FORTRAN=ON"
     ++ lib.optional szipSupport "-DHDF5_ENABLE_SZIP_SUPPORT=ON"
@@ -82,28 +92,33 @@ stdenv.mkDerivation rec {
     ++ lib.optional enableShared "-DBUILD_SHARED_LIBS=ON"
     ++ lib.optional javaSupport "-DHDF5_BUILD_JAVA=ON"
     ++ lib.optional usev110Api "-DDEFAULT_API_VERSION=v110"
-    ++ lib.optionals threadsafe [ "-DDHDF5_ENABLE_THREADSAFE:BOOL=ON" "-DHDF5_BUILD_HL_LIB=OFF" ]
-  ;
+    ++ lib.optionals threadsafe [
+      "-DDHDF5_ENABLE_THREADSAFE:BOOL=ON"
+      "-DHDF5_BUILD_HL_LIB=OFF"
+    ];
 
-  postInstall = ''
-    find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
-    moveToOutput 'bin/' "''${!outputBin}"
-    moveToOutput 'bin/h5cc' "''${!outputDev}"
-    moveToOutput 'bin/h5c++' "''${!outputDev}"
-    moveToOutput 'bin/h5fc' "''${!outputDev}"
-    moveToOutput 'bin/h5pcc' "''${!outputDev}"
-    moveToOutput 'bin/h5hlcc' "''${!outputDev}"
-    moveToOutput 'bin/h5hlc++' "''${!outputDev}"
-  '' + lib.optionalString enableShared
-  # The shared build creates binaries with -shared suffixes,
-  # so we remove these suffixes.
-  ''
-    pushd ''${!outputBin}/bin
-    for file in *-shared; do
-      mv "$file" "''${file%%-shared}"
-    done
-    popd
-  '';
+  postInstall =
+    ''
+      find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
+      moveToOutput 'bin/' "''${!outputBin}"
+      moveToOutput 'bin/h5cc' "''${!outputDev}"
+      moveToOutput 'bin/h5c++' "''${!outputDev}"
+      moveToOutput 'bin/h5fc' "''${!outputDev}"
+      moveToOutput 'bin/h5pcc' "''${!outputDev}"
+      moveToOutput 'bin/h5hlcc' "''${!outputDev}"
+      moveToOutput 'bin/h5hlc++' "''${!outputDev}"
+    ''
+    +
+      lib.optionalString enableShared
+        # The shared build creates binaries with -shared suffixes,
+        # so we remove these suffixes.
+        ''
+          pushd ''${!outputBin}/bin
+          for file in *-shared; do
+            mv "$file" "''${file%%-shared}"
+          done
+          popd
+        '';
 
   enableParallelBuilding = true;
 

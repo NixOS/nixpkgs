@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, alsa-lib
-, freetype
-, libX11
-, libXrandr
-, libXinerama
-, libXext
-, libXcursor
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  alsa-lib,
+  freetype,
+  libX11,
+  libXrandr,
+  libXinerama,
+  libXext,
+  libXcursor,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

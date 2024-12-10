@@ -1,54 +1,66 @@
-{ lib, stdenv
-, fetchurl
-, ninja
-, meson
-, mesonEmulatorHook
-, pkg-config
-, vala
-, gobject-introspection
-, buildPackages
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, glib
-, libgudev
-, libevdev
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ninja,
+  meson,
+  mesonEmulatorHook,
+  pkg-config,
+  vala,
+  gobject-introspection,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  glib,
+  libgudev,
+  libevdev,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libmanette";
   version = "0.2.7";
 
-  outputs = [ "out" "dev" ] ++ lib.optional withIntrospection "devdoc";
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     hash = "sha256-zd1cAqExBywZxs3m8sss1X6ufay1DRTDN+/ZgLqlGlE=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    glib
-  ] ++ lib.optionals withIntrospection [
-    vala
-    gobject-introspection
-    gtk-doc
-    docbook-xsl-nons
-    docbook_xml_dtd_43
-  ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      glib
+    ]
+    ++ lib.optionals withIntrospection [
+      vala
+      gobject-introspection
+      gtk-doc
+      docbook-xsl-nons
+      docbook_xml_dtd_43
+    ]
+    ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
-  buildInputs = [
-    glib
-    libevdev
-  ] ++ lib.optionals withIntrospection [
-    libgudev
-  ];
+  buildInputs =
+    [
+      glib
+      libevdev
+    ]
+    ++ lib.optionals withIntrospection [
+      libgudev
+    ];
 
   mesonFlags = [
     (lib.mesonBool "doc" withIntrospection)

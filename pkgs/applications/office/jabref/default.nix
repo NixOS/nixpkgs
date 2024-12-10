@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapGAppsHook3
-, makeDesktopItem
-, copyDesktopItems
-, unzip
-, xdg-utils
-, gtk3
-, jdk
-, gradle
-, perl
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  makeDesktopItem,
+  copyDesktopItems,
+  unzip,
+  xdg-utils,
+  gtk3,
+  jdk,
+  gradle,
+  perl,
+  python3,
 }:
 
 let
@@ -51,7 +52,10 @@ stdenv.mkDerivation rec {
     pname = "${pname}-deps";
     inherit src version postPatch;
 
-    nativeBuildInputs = [ gradle perl ];
+    nativeBuildInputs = [
+      gradle
+      perl
+    ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       gradle --no-daemon downloadDependencies -Dos.arch=amd64
@@ -187,7 +191,13 @@ stdenv.mkDerivation rec {
       binaryNativeCode # source bundles dependencies as jars
     ];
     license = licenses.mit;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ gebner linsui ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      gebner
+      linsui
+    ];
   };
 }

@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config, cmake
-, gtk3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  gtk3,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Y+5fHUe1HAjU/cy7jWKE7zVQUezJNFg4q9tn7H1+NuA=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
 
   buildInputs = [ gtk3 ];
 
@@ -22,7 +29,10 @@ stdenv.mkDerivation rec {
     description = "Ayatana Display Indicator Objects";
     homepage = "https://github.com/AyatanaIndicators/ayatana-ido";
     changelog = "https://github.com/AyatanaIndicators/ayatana-ido/blob/${version}/ChangeLog";
-    license = [ licenses.lgpl3Plus licenses.lgpl21Plus ];
+    license = [
+      licenses.lgpl3Plus
+      licenses.lgpl21Plus
+    ];
     maintainers = [ maintainers.nickhu ];
     platforms = platforms.linux;
   };

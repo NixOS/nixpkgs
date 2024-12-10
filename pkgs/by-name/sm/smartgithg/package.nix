@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, makeDesktopItem
-, openjdk21
-, gtk3
-, glib
-, gnome
-, wrapGAppsHook3
-, libXtst
-, which
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  openjdk21,
+  gtk3,
+  glib,
+  gnome,
+  wrapGAppsHook3,
+  libXtst,
+  which,
 }:
 let
   jre = openjdk21;
@@ -18,22 +19,35 @@ stdenv.mkDerivation rec {
   version = "23.1.3";
 
   src = fetchurl {
-    url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${builtins.replaceStrings [ "." ] [ "_" ] version}.tar.gz";
+    url = "https://www.syntevo.com/downloads/smartgit/smartgit-linux-${
+      builtins.replaceStrings [ "." ] [ "_" ] version
+    }.tar.gz";
     hash = "sha256-UvdHr1L5MYwl7eT1BVS/M8Ydtw8VjDG+QuqMW0Q5La4=";
   };
 
   nativeBuildInputs = [ wrapGAppsHook3 ];
 
-  buildInputs = [ jre gnome.adwaita-icon-theme gtk3 ];
+  buildInputs = [
+    jre
+    gnome.adwaita-icon-theme
+    gtk3
+  ];
 
   preFixup = with lib; ''
     gappsWrapperArgs+=( \
-      --prefix PATH : ${makeBinPath [ jre which ]} \
-      --prefix LD_LIBRARY_PATH : ${makeLibraryPath [
-        gtk3
-        glib
-        libXtst
-      ]} \
+      --prefix PATH : ${
+        makeBinPath [
+          jre
+          which
+        ]
+      } \
+      --prefix LD_LIBRARY_PATH : ${
+        makeLibraryPath [
+          gtk3
+          glib
+          libXtst
+        ]
+      } \
       --prefix JRE_HOME : ${jre} \
       --prefix JAVA_HOME : ${jre} \
       --prefix SMARTGITHG_JAVA_HOME : ${jre} \
@@ -65,26 +79,28 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  desktopItem = with lib; makeDesktopItem rec {
-    name = "smartgit";
-    exec = "smartgit";
-    comment = meta.description;
-    icon = "smartgit";
-    desktopName = "SmartGit";
-    categories = [
-      "Application"
-      "Development"
-      "RevisionControl"
-    ];
-    mimeTypes = [
-      "x-scheme-handler/git"
-      "x-scheme-handler/smartgit"
-      "x-scheme-handler/sourcetree"
-    ];
-    startupNotify = true;
-    startupWMClass = name;
-    keywords = [ "git" ];
-  };
+  desktopItem =
+    with lib;
+    makeDesktopItem rec {
+      name = "smartgit";
+      exec = "smartgit";
+      comment = meta.description;
+      icon = "smartgit";
+      desktopName = "SmartGit";
+      categories = [
+        "Application"
+        "Development"
+        "RevisionControl"
+      ];
+      mimeTypes = [
+        "x-scheme-handler/git"
+        "x-scheme-handler/smartgit"
+        "x-scheme-handler/sourcetree"
+      ];
+      startupNotify = true;
+      startupWMClass = name;
+      keywords = [ "git" ];
+    };
 
   meta = with lib; {
     description = "GUI for Git, Mercurial, Subversion";

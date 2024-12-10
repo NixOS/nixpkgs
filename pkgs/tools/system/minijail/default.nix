@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitiles, libcap }:
+{
+  stdenv,
+  lib,
+  fetchFromGitiles,
+  libcap,
+}:
 
 stdenv.mkDerivation rec {
   pname = "minijail";
@@ -12,7 +17,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ libcap ];
 
-  makeFlags = [ "ECHO=echo" "LIBDIR=$(out)/lib" ];
+  makeFlags = [
+    "ECHO=echo"
+    "LIBDIR=$(out)/lib"
+  ];
 
   postPatch = ''
     substituteInPlace Makefile --replace /bin/echo echo
@@ -41,7 +49,10 @@ stdenv.mkDerivation rec {
     description = "Sandboxing library and application using Linux namespaces and capabilities";
     changelog = "https://chromium.googlesource.com/chromiumos/platform/minijail/+/refs/tags/linux-v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ pcarrier qyliss ];
+    maintainers = with maintainers; [
+      pcarrier
+      qyliss
+    ];
     platforms = platforms.linux;
     mainProgram = "minijail0";
   };

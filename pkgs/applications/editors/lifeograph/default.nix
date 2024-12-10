@@ -1,5 +1,17 @@
-{ stdenv, lib, fetchgit, pkg-config, meson, ninja, wrapGAppsHook3
-, enchant, gtkmm3, libchamplain, libgcrypt, shared-mime-info }:
+{
+  stdenv,
+  lib,
+  fetchgit,
+  pkg-config,
+  meson,
+  ninja,
+  wrapGAppsHook3,
+  enchant,
+  gtkmm3,
+  libchamplain,
+  libgcrypt,
+  shared-mime-info,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lifeograph";

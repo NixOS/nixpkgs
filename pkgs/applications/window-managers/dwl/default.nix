@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, installShellFiles
-, libX11
-, libinput
-, libxcb
-, libxkbcommon
-, pixman
-, pkg-config
-, substituteAll
-, wayland-scanner
-, wayland
-, wayland-protocols
-, wlroots
-, writeText
-, xcbutilwm
-, xwayland
-, enableXWayland ? true
-, conf ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  installShellFiles,
+  libX11,
+  libinput,
+  libxcb,
+  libxkbcommon,
+  pixman,
+  pkg-config,
+  substituteAll,
+  wayland-scanner,
+  wayland,
+  wayland-protocols,
+  wlroots,
+  writeText,
+  xcbutilwm,
+  xwayland,
+  enableXWayland ? true,
+  conf ? null,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,28 +39,34 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-scanner
   ];
 
-  buildInputs = [
-    libinput
-    libxcb
-    libxkbcommon
-    pixman
-    wayland
-    wayland-protocols
-    wlroots
-  ] ++ lib.optionals enableXWayland [
-    libX11
-    xcbutilwm
-    xwayland
+  buildInputs =
+    [
+      libinput
+      libxcb
+      libxkbcommon
+      pixman
+      wayland
+      wayland-protocols
+      wlroots
+    ]
+    ++ lib.optionals enableXWayland [
+      libX11
+      xcbutilwm
+      xwayland
+    ];
+
+  outputs = [
+    "out"
+    "man"
   ];
 
-  outputs = [ "out" "man" ];
-
   # Allow users to set an alternative config.def.h
-  postPatch = let
-    configFile = if lib.isDerivation conf || builtins.isPath conf
-                 then conf
-                 else writeText "config.def.h" conf;
-  in lib.optionalString (conf != null) "cp ${configFile} config.def.h";
+  postPatch =
+    let
+      configFile =
+        if lib.isDerivation conf || builtins.isPath conf then conf else writeText "config.def.h" conf;
+    in
+    lib.optionalString (conf != null) "cp ${configFile} config.def.h";
 
   makeFlags = [
     "PKG_CONFIG=${stdenv.cc.targetPrefix}pkg-config"
