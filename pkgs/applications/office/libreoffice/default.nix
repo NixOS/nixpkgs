@@ -1,4 +1,5 @@
 { stdenv
+, stdenvNoCC
 , fetchurl
 , fetchgit
 , fetchpatch2
@@ -149,6 +150,9 @@
 , qttools ? null
 , solid ? null
 , sonnet ? null
+
+# List of extensions/plugins to include.
+, withExtensions ? [ ]
 }:
 
 assert builtins.elem variant [ "fresh" "still" "collabora" ];
@@ -228,6 +232,50 @@ let
     ]);
   };
   tarballPath = "external/tarballs";
+
+  # Builder for LibreOffice extensions.
+  mkLibreOfficeExtension =
+    {
+      pname,
+      version,
+      url,
+      hash,
+      ...
+    }@args:
+    stdenvNoCC.mkDerivation (
+      {
+        src = fetchurl { inherit url hash; };
+        meta = {
+          inherit (libreoffice.meta) platforms maintainers;
+        } // args.meta or { };
+      }
+      // (removeAttrs args [
+        "url"
+        "hash"
+        "meta"
+      ])
+    );
+
+  extensions = callPackages ./extensions.nix { inherit mkAzExtension; };
+
+  extensionDir = stdenvNoCC.mkDerivation {
+    name = "libreoffice-extensions";
+    dontUnpack = true;
+    installPhase =
+      let
+        namePaths = map (p: "${p.pname},${p}/") withExtensions;
+      in
+      ''
+        for line in ${lib.concatStringsSep " " namePaths}; do
+          name=$(echo $line | cut -d',' -f1)
+          path=$(echo $line | cut -d',' -f2)
+          mkdir -p $out/$name
+          for f in $(ls $path); do
+            ln -s $path/$f $out/$name/$f
+          done
+        done
+      '';
+  };
 
 in stdenv.mkDerivation (finalAttrs: {
   pname = "libreoffice";
@@ -589,6 +637,8 @@ in stdenv.mkDerivation (finalAttrs: {
   dontWrapQtApps = true;
 
   passthru = {
+    inherit extensions extensionDir;
+    withExtensions = extensions: libreoffice-unwrapped.override { withExtensions = extensions; };
     inherit srcs;
     jdk = jre';
     python = python311; # for unoconv

@@ -131,4 +131,6 @@ in runCommand "${unwrapped.name}-wrapped" {
   done
   # A symlink many users rely upon
   ln -s $out/bin/soffice $out/bin/libreoffice
+'' + lib.optionalString (withExtensions != [ ]) ''
+  ls ${extensionDir}
 '')
