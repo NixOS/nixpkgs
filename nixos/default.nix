@@ -1,11 +1,12 @@
 { configuration ? import ./lib/from-env.nix "NIXOS_CONFIG" <nixos-config>
 , system ? builtins.currentSystem
+, specialArgs ? {}
 }:
 
 let
 
   eval = import ./lib/eval-config.nix {
-    inherit system;
+    inherit system specialArgs;
     modules = [ configuration ];
   };
 
