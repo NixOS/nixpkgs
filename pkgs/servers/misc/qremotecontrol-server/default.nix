@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchgit
-, qmake
-, wrapQtAppsHook
-, qtbase
-, xorg
+{
+  lib,
+  stdenv,
+  fetchgit,
+  qmake,
+  wrapQtAppsHook,
+  qtbase,
+  xorg,
 }:
 
 stdenv.mkDerivation {

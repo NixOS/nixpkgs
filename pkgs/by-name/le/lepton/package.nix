@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, git, glibc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  git,
+  glibc,
+}:
 
 stdenv.mkDerivation rec {
   version = "2019-08-20";
@@ -11,14 +18,20 @@ stdenv.mkDerivation rec {
     sha256 = "0aqs6nvcbq8cbfv8699fa634bsz7csmk0169n069yvv17d1c07fd";
   };
 
-  nativeBuildInputs = [ cmake git ];
+  nativeBuildInputs = [
+    cmake
+    git
+  ];
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ glibc.static ];
 
   meta = with lib; {
     homepage = "https://github.com/dropbox/lepton";
     description = "Tool to losslessly compress JPEGs";
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     maintainers = with maintainers; [ artemist ];
     knownVulnerabilities = [ "CVE-2022-4104" ];
   };

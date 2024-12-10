@@ -1,4 +1,10 @@
-{ coreutils-prefixed, lib, makeWrapper, stdenv, fetchFromGitHub }:
+{
+  coreutils-prefixed,
+  lib,
+  makeWrapper,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "git-radar";

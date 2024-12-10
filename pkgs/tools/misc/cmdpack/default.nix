@@ -1,40 +1,50 @@
-{ stdenv, lib, fetchurl }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+}:
 let
-  mkCmdPackDerivation = { pname, postInstall ? "", description }: stdenv.mkDerivation {
-    inherit pname postInstall;
+  mkCmdPackDerivation =
+    {
+      pname,
+      postInstall ? "",
+      description,
+    }:
+    stdenv.mkDerivation {
+      inherit pname postInstall;
 
-    version = "1.03";
+      version = "1.03";
 
-    src = fetchurl {
-      url = "https://web.archive.org/web/20140330233023/http://www.neillcorlett.com/downloads/cmdpack-1.03-src.tar.gz";
-      sha256 = "0v0a9rpv59w8lsp1cs8f65568qj65kd9qp7854z1ivfxfpq0da2n";
+      src = fetchurl {
+        url = "https://web.archive.org/web/20140330233023/http://www.neillcorlett.com/downloads/cmdpack-1.03-src.tar.gz";
+        sha256 = "0v0a9rpv59w8lsp1cs8f65568qj65kd9qp7854z1ivfxfpq0da2n";
+      };
+
+      buildPhase = ''
+        runHook preBuild
+
+        $CC -o "$pname" "src/$pname.c"
+
+        runHook postBuild
+      '';
+
+      installPhase = ''
+        runHook preInstall
+
+        install -Dm555 -t "$out/bin" "$pname"
+
+        runHook postInstall
+      '';
+
+      meta = with lib; {
+        inherit description;
+
+        homepage = "https://web.archive.org/web/20140330233023/http://www.neillcorlett.com/cmdpack/";
+        platforms = platforms.all;
+        license = licenses.gpl3Plus;
+        maintainers = with maintainers; [ zane ];
+      };
     };
-
-    buildPhase = ''
-      runHook preBuild
-
-      $CC -o "$pname" "src/$pname.c"
-
-      runHook postBuild
-    '';
-
-    installPhase = ''
-      runHook preInstall
-
-      install -Dm555 -t "$out/bin" "$pname"
-
-      runHook postInstall
-    '';
-
-    meta = with lib; {
-      inherit description;
-
-      homepage = "https://web.archive.org/web/20140330233023/http://www.neillcorlett.com/cmdpack/";
-      platforms = platforms.all;
-      license = licenses.gpl3Plus;
-      maintainers = with maintainers; [ zane ];
-    };
-  };
 in
 {
   bin2iso = mkCmdPackDerivation {

@@ -1,14 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, cargo
-, llvm_16
-, stdenv
-, libffi
-, libz
-, libxml2
-, ncurses
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  cargo,
+  llvm_16,
+  stdenv,
+  libffi,
+  libz,
+  libxml2,
+  ncurses,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,13 +35,21 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     wrapProgram $out/bin/ivm \
-      --prefix PATH : ${lib.makeBinPath [ cargo llvm_16.dev stdenv.cc ]} \
-      --prefix LIBRARY_PATH : ${lib.makeLibraryPath [
-        libffi
-        libz
-        libxml2
-        ncurses
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          cargo
+          llvm_16.dev
+          stdenv.cc
+        ]
+      } \
+      --prefix LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libffi
+          libz
+          libxml2
+          ncurses
+        ]
+      }
   '';
 
   meta = {

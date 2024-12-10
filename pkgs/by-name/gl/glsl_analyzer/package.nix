@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, zig_0_13
-, apple-sdk_11
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zig_0_13,
+  apple-sdk_11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

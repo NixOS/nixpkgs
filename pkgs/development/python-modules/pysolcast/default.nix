@@ -34,7 +34,6 @@ buildPythonPackage rec {
     poetry-dynamic-versioning
   ];
 
-
   dependencies = [
     anyconfig
     isodate

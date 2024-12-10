@@ -1,4 +1,11 @@
-{ lib, buildKodiAddon, fetchFromGitHub, inputstream-adaptive, inputstreamhelper, routing }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  inputstream-adaptive,
+  inputstreamhelper,
+  routing,
+}:
 
 buildKodiAddon rec {
   pname = "orftvthek";

@@ -1,4 +1,11 @@
-{ lib, stdenv, cmake, fetchgit, libubox, libjson }:
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchgit,
+  libubox,
+  libjson,
+}:
 
 stdenv.mkDerivation {
   pname = "ubus";
@@ -11,12 +18,17 @@ stdenv.mkDerivation {
   };
 
   cmakeFlags = [ "-DBUILD_LUA=OFF" ];
-  buildInputs = [ libubox libjson ];
+  buildInputs = [
+    libubox
+    libjson
+  ];
   nativeBuildInputs = [ cmake ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    "-Wno-error=gnu-folding-constant"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+      "-Wno-error=gnu-folding-constant"
+    ]
+  );
 
   meta = with lib; {
     description = "OpenWrt system message/RPC bus";

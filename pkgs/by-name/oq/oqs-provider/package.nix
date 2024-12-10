@@ -1,10 +1,11 @@
-{ stdenv
-, fetchFromGitHub
-, cmake
-, openssl
-, liboqs
-, lib
-, nix-update-script
+{
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openssl,
+  liboqs,
+  lib,
+  nix-update-script,
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "oqs-provider";
@@ -12,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "open-quantum-safe";
-    repo  = "oqs-provider";
+    repo = "oqs-provider";
     rev = finalAttrs.version;
     hash = "sha256-v7YIE5uzBvQHfi2hqkkRrW0F3K4haZyuoKHxAtRqQDA=";
   };

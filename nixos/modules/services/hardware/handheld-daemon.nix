@@ -1,9 +1,11 @@
-{ config
-, lib
-, pkgs
-, ...
+{
+  config,
+  lib,
+  pkgs,
+  ...
 }:
-with lib; let
+with lib;
+let
   cfg = config.services.handheld-daemon;
 in
 {
@@ -45,7 +47,7 @@ in
       ];
 
       serviceConfig = {
-        ExecStart = "${ lib.getExe cfg.package } --user ${ cfg.user }";
+        ExecStart = "${lib.getExe cfg.package} --user ${cfg.user}";
         Nice = "-12";
         Restart = "on-failure";
         RestartSec = "10";

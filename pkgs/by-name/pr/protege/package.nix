@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, copyDesktopItems
-, iconConvTools
-, makeDesktopItem
-, makeWrapper
-, jdk11
-, maven
+{
+  lib,
+  fetchFromGitHub,
+  copyDesktopItems,
+  iconConvTools,
+  makeDesktopItem,
+  makeWrapper,
+  jdk11,
+  maven,
 }:
 
 maven.buildMavenPackage rec {
@@ -86,6 +87,9 @@ maven.buildMavenPackage rec {
     #      will leave the task to someone who has the right tools and knowledge.
     platforms = lib.platforms.unix;
     mainProgram = "protege";
-    sourceProvenance = with lib.sourceTypes; [ fromSource binaryBytecode ];
+    sourceProvenance = with lib.sourceTypes; [
+      fromSource
+      binaryBytecode
+    ];
   };
 }

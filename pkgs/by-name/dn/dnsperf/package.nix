@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, autoreconfHook
-, fetchFromGitHub
-, ldns
-, libck
-, nghttp2
-, openssl
-, pkg-config
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  ldns,
+  libck,
+  nghttp2,
+  openssl,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,6 +42,9 @@ stdenv.mkDerivation rec {
     license = licenses.isc;
     platforms = platforms.unix;
     mainProgram = "dnsperf";
-    maintainers = with maintainers; [ vcunat mfrw ];
+    maintainers = with maintainers; [
+      vcunat
+      mfrw
+    ];
   };
 }

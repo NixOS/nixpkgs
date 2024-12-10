@@ -1,23 +1,24 @@
-{ buildDunePackage
-, lib
-, astring
-, base64
-, cmdliner
-, fmt
-, httpaf
-, httpaf-lwt-unix
-, logs
-, magic-mime
-, mirage-crypto
-, mtime
-, multipart-form-data
-, ptime
-, re
-, rock
-, tyxml
-, uri
-, yojson
-, alcotest-lwt
+{
+  buildDunePackage,
+  lib,
+  astring,
+  base64,
+  cmdliner,
+  fmt,
+  httpaf,
+  httpaf-lwt-unix,
+  logs,
+  magic-mime,
+  mirage-crypto,
+  mtime,
+  multipart-form-data,
+  ptime,
+  re,
+  rock,
+  tyxml,
+  uri,
+  yojson,
+  alcotest-lwt,
 }:
 
 buildDunePackage rec {

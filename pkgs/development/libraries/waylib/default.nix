@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wayland-scanner
-, wrapQtAppsHook
-, qtbase
-, qtdeclarative
-, qwlroots
-, wayland
-, wayland-protocols
-, wlr-protocols
-, pixman
-, libdrm
-, libinput
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wayland-scanner,
+  wrapQtAppsHook,
+  qtbase,
+  qtdeclarative,
+  qwlroots,
+  wayland,
+  wayland-protocols,
+  wlr-protocols,
+  pixman,
+  libdrm,
+  libinput,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -54,14 +55,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontWrapQtApps = true;
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = {
     description = "Wrapper for wlroots based on Qt";
     homepage = "https://github.com/vioken/waylib";
-    license = with lib.licenses; [ gpl3Only lgpl3Only asl20 ];
+    license = with lib.licenses; [
+      gpl3Only
+      lgpl3Only
+      asl20
+    ];
     platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ rewine ];
   };
 })
-

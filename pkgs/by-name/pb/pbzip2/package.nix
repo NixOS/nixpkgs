@@ -1,7 +1,13 @@
-{ lib, stdenv, fetchurl, bzip2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bzip2,
+}:
 
-let major = "1.1";
-    version = "${major}.13";
+let
+  major = "1.1";
+  version = "${major}.13";
 in
 stdenv.mkDerivation rec {
   pname = "pbzip2";

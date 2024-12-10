@@ -1,4 +1,10 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, Security }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "wagyu";
@@ -20,7 +26,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Rust library for generating cryptocurrency wallets";
     homepage = "https://github.com/AleoHQ/wagyu";
-    license = with licenses; [ mit asl20 ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
     maintainers = [ maintainers.offline ];
     mainProgram = "wagyu";
   };

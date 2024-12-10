@@ -1,10 +1,11 @@
-{ lib
-, autoreconfHook
-, fetchFromGitHub
-, stdenv
-, wxGTK31
-, darwin
-, withGui ? true
+{
+  lib,
+  autoreconfHook,
+  fetchFromGitHub,
+  stdenv,
+  wxGTK31,
+  darwin,
+  withGui ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,9 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OuI2DA/5CLgHqcHwOGUE9IdrnyjlGKy8B7tWueUfUtg=";
   };
 
-  nativeBuildInputs =
-    [ autoreconfHook ]
-    ++ lib.optional withGui wxGTK31;
+  nativeBuildInputs = [ autoreconfHook ] ++ lib.optional withGui wxGTK31;
 
   buildInputs =
     lib.optional withGui wxGTK31

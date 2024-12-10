@@ -30,11 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-MAQoc+WcuoG6Psa44VRaZ2TWB2LBpvf6EmqbUZPUf38=";
   };
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-  ] ++ lib.optionals (!useQt) [ wrapGAppsHook3 ] ++ lib.optionals useQt [ libsForQt5.wrapQtAppsHook ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+    ]
+    ++ lib.optionals (!useQt) [ wrapGAppsHook3 ]
+    ++ lib.optionals useQt [ libsForQt5.wrapQtAppsHook ];
 
   buildInputs =
     [

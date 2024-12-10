@@ -1,13 +1,17 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "crypto-tracker";
   version = "0.1.8";
 
   src = fetchFromGitHub {
-    owner  = "Nox04";
-    repo   = "crypto-tracker";
-    rev    = "v${version}";
+    owner = "Nox04";
+    repo = "crypto-tracker";
+    rev = "v${version}";
     hash = "sha256-8tTaXpHZWcDq0Jfa9Hf258VYwfimLhYjCAzD4X/Ow0s=";
   };
 

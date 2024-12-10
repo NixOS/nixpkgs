@@ -16,7 +16,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-JweKjKvShiimFHQwRtoVuongWqqGIPcPz77qEVNec+M=";
 
-  patches = [./go-mod.patch];
+  patches = [ ./go-mod.patch ];
 
   ldflags = [
     "-s"
@@ -28,7 +28,7 @@ buildGoModule rec {
     description = "Creates screenshots based on terminal command output";
     homepage = "https://github.com/homeport/termshot";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [defelo];
+    maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "termshot";
   };
 }

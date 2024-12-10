@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchzip, openjdk, gradle, makeWrapper, maven }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  openjdk,
+  gradle,
+  makeWrapper,
+  maven,
+}:
 
 stdenv.mkDerivation rec {
   pname = "kotlin-language-server";
@@ -17,11 +25,22 @@ stdenv.mkDerivation rec {
     cp -r bin/* $out/bin
   '';
 
-  nativeBuildInputs = [ gradle makeWrapper ];
-  buildInputs = [ openjdk gradle ];
+  nativeBuildInputs = [
+    gradle
+    makeWrapper
+  ];
+  buildInputs = [
+    openjdk
+    gradle
+  ];
 
   postFixup = ''
-    wrapProgram "$out/bin/kotlin-language-server" --set JAVA_HOME ${openjdk} --prefix PATH : ${lib.strings.makeBinPath [ openjdk maven ] }
+    wrapProgram "$out/bin/kotlin-language-server" --set JAVA_HOME ${openjdk} --prefix PATH : ${
+      lib.strings.makeBinPath [
+        openjdk
+        maven
+      ]
+    }
   '';
 
   meta = {

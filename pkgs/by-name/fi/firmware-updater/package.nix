@@ -1,7 +1,8 @@
-{ lib
-, writeText
-, flutter
-, fetchFromGitHub
+{
+  lib,
+  writeText,
+  flutter,
+  fetchFromGitHub,
 }:
 
 flutter.buildFlutterApplication rec {

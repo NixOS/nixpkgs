@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, substituteAll
-, git
-, fetchFromGitLab
-, buildGoModule
-, wrapQtAppsHook
-, python3
-, python3Packages
-, pkg-config
-, openvpn
-, cmake
-, qmake
-, which
-, iproute2
-, iptables
-, procps
-, qtbase
-, qtdeclarative
-, qtsvg
-, qttools
-, qtwayland
-, CoreFoundation
-, Security
-, provider ? "riseup"
+{
+  lib,
+  stdenv,
+  substituteAll,
+  git,
+  fetchFromGitLab,
+  buildGoModule,
+  wrapQtAppsHook,
+  python3,
+  python3Packages,
+  pkg-config,
+  openvpn,
+  cmake,
+  qmake,
+  which,
+  iproute2,
+  iptables,
+  procps,
+  qtbase,
+  qtdeclarative,
+  qtsvg,
+  qttools,
+  qtwayland,
+  CoreFoundation,
+  Security,
+  provider ? "riseup",
 }:
 let
   version = "0.24.8";
@@ -82,29 +83,31 @@ buildGoModule rec {
     ./build_release.patch
   ];
 
-  postPatch = ''
-    substituteInPlace pkg/pickle/helpers.go \
-      --replace /usr/share $out/share
+  postPatch =
+    ''
+      substituteInPlace pkg/pickle/helpers.go \
+        --replace /usr/share $out/share
 
-    # Using $PROVIDER is not working,
-    # thus replacing directly into the vendor.conf
-    substituteInPlace providers/vendor.conf \
-      --replace "provider = bitmask" "provider = ${provider}"
+      # Using $PROVIDER is not working,
+      # thus replacing directly into the vendor.conf
+      substituteInPlace providers/vendor.conf \
+        --replace "provider = bitmask" "provider = ${provider}"
 
-    substituteInPlace branding/templates/debian/app.desktop-template \
-      --replace "Icon=icon" "Icon=${pname}"
+      substituteInPlace branding/templates/debian/app.desktop-template \
+        --replace "Icon=icon" "Icon=${pname}"
 
-    patchShebangs gui/build.sh
-    wrapPythonProgramsIn branding/scripts
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace pkg/helper/linux.go \
-      --replace /usr/sbin/openvpn ${openvpn}/bin/openvpn
-    substituteInPlace pkg/launcher/launcher_linux.go \
-      --replace /usr/sbin/openvpn ${openvpn}/bin/openvpn \
-      --replace /usr/sbin/bitmask-root ${bitmask-root}/bin/bitmask-root \
-      --replace /usr/bin/lxpolkit /run/wrappers/bin/polkit-agent-helper-1 \
-      --replace '"polkit-gnome-authentication-agent-1",' '"polkit-gnome-authentication-agent-1","polkitd",'
-  '';
+      patchShebangs gui/build.sh
+      wrapPythonProgramsIn branding/scripts
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace pkg/helper/linux.go \
+        --replace /usr/sbin/openvpn ${openvpn}/bin/openvpn
+      substituteInPlace pkg/launcher/launcher_linux.go \
+        --replace /usr/sbin/openvpn ${openvpn}/bin/openvpn \
+        --replace /usr/sbin/bitmask-root ${bitmask-root}/bin/bitmask-root \
+        --replace /usr/bin/lxpolkit /run/wrappers/bin/polkit-agent-helper-1 \
+        --replace '"polkit-gnome-authentication-agent-1",' '"polkit-gnome-authentication-agent-1","polkitd",'
+    '';
 
   nativeBuildInputs = [
     cmake
@@ -119,12 +122,17 @@ buildGoModule rec {
     qtsvg
   ];
 
-  buildInputs = [
-    qtbase
-    qtdeclarative
-    qtsvg
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreFoundation Security ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
+  buildInputs =
+    [
+      qtbase
+      qtdeclarative
+      qtsvg
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreFoundation
+      Security
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
 
   # FIXME: building on Darwin currently fails
   # due to missing debug symbols for Qt,
@@ -149,16 +157,18 @@ buildGoModule rec {
     runHook postBuild
   '';
 
-  postInstall = ''
-    install -m 755 -D -t $out/bin build/qt/release/${pname}
+  postInstall =
+    ''
+      install -m 755 -D -t $out/bin build/qt/release/${pname}
 
-    VERSION=${version} VENDOR_PATH=providers branding/scripts/generate-debian branding/templates/debian/data.json
-    (cd branding/templates/debian && ${python3Packages.python}/bin/python3 generate.py)
-    install -m 444 -D branding/templates/debian/app.desktop $out/share/applications/${pname}.desktop
-    install -m 444 -D providers/${provider}/assets/icon.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-    install -m 444 -D -t $out/share/polkit-1/actions ${bitmask-root}/share/polkit-1/actions/se.leap.bitmask.policy
-  '';
+      VERSION=${version} VENDOR_PATH=providers branding/scripts/generate-debian branding/templates/debian/data.json
+      (cd branding/templates/debian && ${python3Packages.python}/bin/python3 generate.py)
+      install -m 444 -D branding/templates/debian/app.desktop $out/share/applications/${pname}.desktop
+      install -m 444 -D providers/${provider}/assets/icon.svg $out/share/icons/hicolor/scalable/apps/${pname}.svg
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -m 444 -D -t $out/share/polkit-1/actions ${bitmask-root}/share/polkit-1/actions/se.leap.bitmask.policy
+    '';
 
   # Some tests need access to the Internet:
   # Post "https://api.black.riseup.net/3/cert": dial tcp: lookup api.black.riseup.net on [::1]:53: read udp [::1]:56553->[::1]:53: read: connection refused

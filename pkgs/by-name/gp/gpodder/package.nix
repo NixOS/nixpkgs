@@ -1,14 +1,15 @@
-{ lib
-, fetchFromGitHub
-, gitUpdater
-, glibcLocales
-, adwaita-icon-theme
-, gobject-introspection
-, gtk3
-, intltool
-, python311Packages
-, wrapGAppsHook3
-, xdg-utils
+{
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  glibcLocales,
+  adwaita-icon-theme,
+  gobject-introspection,
+  gtk3,
+  intltool,
+  python311Packages,
+  wrapGAppsHook3,
+  xdg-utils,
 }:
 
 python311Packages.buildPythonApplication rec {
@@ -82,7 +83,7 @@ python311Packages.buildPythonApplication rec {
 
   makeWrapperArgs = [ "--suffix PATH : ${lib.makeBinPath [ xdg-utils ]}" ];
 
-  passthru.updateScript = gitUpdater {};
+  passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
     description = "Podcatcher written in python";

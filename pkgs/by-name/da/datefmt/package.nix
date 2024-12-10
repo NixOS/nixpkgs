@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, testers }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  testers,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "datefmt";

@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qmake
-, nix-update-script
-, qtbase
-, qttools
-, qtlocation ? null # qt5 only
-, qtpositioning ? null # qt6 only
-, qtserialport
-, qtsvg
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  nix-update-script,
+  qtbase,
+  qttools,
+  qtlocation ? null, # qt5 only
+  qtpositioning ? null, # qt6 only
+  qtserialport,
+  qtsvg,
+  wrapQtAppsHook,
 }:
 
 let
@@ -26,15 +27,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wz5cYZe7OHfIgoHrYRj0DKNFjYjb+CGlLnDItRNu+bk=";
   };
 
-  buildInputs = [
-    qtserialport
-  ] ++ (if isQt6 then [
-    qtbase
-    qtpositioning
-    qtsvg
-  ] else [
-    qtlocation
-  ]);
+  buildInputs =
+    [
+      qtserialport
+    ]
+    ++ (
+      if isQt6 then
+        [
+          qtbase
+          qtpositioning
+          qtsvg
+        ]
+      else
+        [
+          qtlocation
+        ]
+    );
 
   nativeBuildInputs = [
     qmake
@@ -68,7 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
       GPXSee is a Qt-based GPS log file viewer and analyzer that supports
       all common GPS log file formats.
     '';
-    maintainers = with lib.maintainers; [ womfoo sikmir ];
+    maintainers = with lib.maintainers; [
+      womfoo
+      sikmir
+    ];
     platforms = lib.platforms.unix;
   };
 })

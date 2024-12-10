@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
-, python3Packages
-, asciidoc
-, wrapGAppsNoGuiHook
-, iw
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
+  python3Packages,
+  asciidoc,
+  wrapGAppsNoGuiHook,
+  iw,
 }:
 
 stdenv.mkDerivation rec {

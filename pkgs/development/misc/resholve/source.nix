@@ -1,5 +1,6 @@
-{ fetchFromGitHub
-, ...
+{
+  fetchFromGitHub,
+  ...
 }:
 
 rec {

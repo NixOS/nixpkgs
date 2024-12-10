@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchurl
-, dpkg
-, autoPatchelfHook
-, copyDesktopItems
-, pango
-, gtk3
-, alsa-lib
-, nss
-, libXdamage
-, libdrm
-, mesa
-, libxshmfence
-, makeDesktopItem
-, makeWrapper
-, wrapGAppsHook3
-, gcc-unwrapped
-, udev
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+  copyDesktopItems,
+  pango,
+  gtk3,
+  alsa-lib,
+  nss,
+  libXdamage,
+  libdrm,
+  mesa,
+  libxshmfence,
+  makeDesktopItem,
+  makeWrapper,
+  wrapGAppsHook3,
+  gcc-unwrapped,
+  udev,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,7 +40,10 @@ stdenv.mkDerivation rec {
       desktopName = "BlueMail";
       comment = meta.description;
       genericName = "Email Reader";
-      mimeTypes = [ "x-scheme-handler/me.blueone.linux" "x-scheme-handler/mailto" ];
+      mimeTypes = [
+        "x-scheme-handler/me.blueone.linux"
+        "x-scheme-handler/mailto"
+      ];
       categories = [ "Office" ];
     })
   ];
@@ -82,7 +86,13 @@ stdenv.mkDerivation rec {
   '';
 
   makeWrapperArgs = [
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ gcc-unwrapped.lib gtk3 udev ]}"
+    "--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        gcc-unwrapped.lib
+        gtk3
+        udev
+      ]
+    }"
     "--prefix PATH : ${lib.makeBinPath [ stdenv.cc ]}"
   ];
 

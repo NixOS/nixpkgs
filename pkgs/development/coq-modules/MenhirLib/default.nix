@@ -14,8 +14,14 @@ let
     defaultVersion =
       with lib.versions;
       lib.switch coq.coq-version [
-        { case = range "8.12" "8.20"; out = "20240715"; }
-        { case = range "8.7" "8.11"; out = "20200624"; }
+        {
+          case = range "8.12" "8.20";
+          out = "20240715";
+        }
+        {
+          case = range "8.7" "8.11";
+          out = "20200624";
+        }
       ] null;
     release = {
       "20240715".sha256 = "sha256-9CSxAIm0aEXkwF+aj8u/bqLG30y5eDNz65EnohJPjzI="; # coq 8.9 - 8.20

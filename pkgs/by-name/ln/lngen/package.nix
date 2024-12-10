@@ -1,6 +1,7 @@
-{ lib
-, haskellPackages
-, fetchFromGitHub
+{
+  lib,
+  haskellPackages,
+  fetchFromGitHub,
 }:
 
 haskellPackages.mkDerivation {
@@ -14,7 +15,13 @@ haskellPackages.mkDerivation {
   };
   isLibrary = true;
   isExecutable = true;
-  libraryHaskellDepends = with haskellPackages; [ base syb parsec containers mtl ];
+  libraryHaskellDepends = with haskellPackages; [
+    base
+    syb
+    parsec
+    containers
+    mtl
+  ];
   executableHaskellDepends = with haskellPackages; [ base ];
   homepage = "https://github.com/plclub/lngen";
   description = "Tool for generating Locally Nameless definitions and proofs in Coq, working together with Ott";

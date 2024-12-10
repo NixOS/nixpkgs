@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, perl, zlib, buildPackages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  zlib,
+  buildPackages,
+}:
 
 stdenv.mkDerivation rec {
   name = "${passthru.pname}-${passthru.version}";
@@ -15,7 +22,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-cxD11YdA0h1tIVwReWWGAu99qXqBa8FJfIdkvpeqvqM=";
   };
 
-  patches = [./remove-shared-library-checks.patch];
+  patches = [ ./remove-shared-library-checks.patch ];
   postPatch = "patchShebangs .";
   preBuild = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
     make CC=${buildPackages.stdenv.cc}/bin/cc find_sizes
@@ -30,7 +37,10 @@ stdenv.mkDerivation rec {
   postInstall = ''
     patchShebangs --update $out/bin/multispell
   '';
-  nativeBuildInputs = [ perl zlib ];
+  nativeBuildInputs = [
+    perl
+    zlib
+  ];
   buildInputs = [ perl ];
 
   strictDeps = true;

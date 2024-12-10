@@ -1,15 +1,16 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, makeWrapper
-, python3
-, binutils-unwrapped
-, findutils
-, flashrom
-, gawk
-, kmod
-, pciutils
-, libraspberrypi
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
+  binutils-unwrapped,
+  findutils,
+  flashrom,
+  gawk,
+  kmod,
+  pciutils,
+  libraspberrypi,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "raspberrypi-eeprom";
@@ -50,25 +51,36 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       wrapProgram $out/bin/$i \
         --set FIRMWARE_ROOT "$out/lib/firmware/raspberrypi/bootloader" \
         ${lib.optionalString stdenvNoCC.hostPlatform.isAarch64 "--set VCMAILBOX ${libraspberrypi}/bin/vcmailbox"} \
-        --prefix PATH : "${lib.makeBinPath ([
-          binutils-unwrapped
-          findutils
-          flashrom
-          gawk
-          kmod
-          pciutils
-          (placeholder "out")
-        ] ++ lib.optionals stdenvNoCC.hostPlatform.isAarch64 [
-          libraspberrypi
-        ])}"
+        --prefix PATH : "${
+          lib.makeBinPath (
+            [
+              binutils-unwrapped
+              findutils
+              flashrom
+              gawk
+              kmod
+              pciutils
+              (placeholder "out")
+            ]
+            ++ lib.optionals stdenvNoCC.hostPlatform.isAarch64 [
+              libraspberrypi
+            ]
+          )
+        }"
     done
   '';
 
   meta = with lib; {
     description = "Installation scripts and binaries for the closed sourced Raspberry Pi 4 and 5 bootloader EEPROMs";
     homepage = "https://www.raspberrypi.com/documentation/computers/raspberry-pi.html#raspberry-pi-4-boot-eeprom";
-    license = with licenses; [ bsd3 unfreeRedistributableFirmware ];
-    maintainers = with maintainers; [ das_j Luflosi ];
+    license = with licenses; [
+      bsd3
+      unfreeRedistributableFirmware
+    ];
+    maintainers = with maintainers; [
+      das_j
+      Luflosi
+    ];
     platforms = platforms.linux;
   };
 })

@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchPypi
-, ansible
+{
+  lib,
+  python3,
+  fetchPypi,
+  ansible,
 }:
 
 python3.pkgs.buildPythonApplication rec {

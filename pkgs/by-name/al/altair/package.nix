@@ -1,4 +1,9 @@
-{ lib, appimageTools, makeWrapper, fetchurl }:
+{
+  lib,
+  appimageTools,
+  makeWrapper,
+  fetchurl,
+}:
 
 let
   pname = "altair";

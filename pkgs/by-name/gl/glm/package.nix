@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,16 +16,22 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GnGyzNRpzuguc3yYbEFtYLvG+KiCtRAktiN+NvbOICE=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   nativeBuildInputs = [ cmake ];
 
   env.NIX_CFLAGS_COMPILE =
     # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=102823
-    if (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") then "-fno-ipa-modref"
+    if (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "11") then
+      "-fno-ipa-modref"
     # Fix compilation errors on darwin
-    else if (stdenv.cc.isClang) then "-Wno-error"
-    else "";
+    else if (stdenv.cc.isClang) then
+      "-Wno-error"
+    else
+      "";
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" false)
@@ -58,4 +65,3 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ smancill ];
   };
 }
-

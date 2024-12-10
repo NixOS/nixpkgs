@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchurl
-, perl
-, gmp
-, gf2x ? null
-# I asked the ntl maintainer weather or not to include gf2x by default:
-# > If I remember correctly, gf2x is now thread safe, so there's no reason not to use it.
-, withGf2x ? true
-, tune ? false # tune for current system; non reproducible and time consuming
+{
+  stdenv,
+  lib,
+  fetchurl,
+  perl,
+  gmp,
+  gf2x ? null,
+  # I asked the ntl maintainer weather or not to include gf2x by default:
+  # > If I remember correctly, gf2x is now thread safe, so there's no reason not to use it.
+  withGf2x ? true,
+  tune ? false, # tune for current system; non reproducible and time consuming
 }:
 
 assert withGf2x -> gf2x != null;
@@ -41,23 +42,25 @@ stdenv.mkDerivation rec {
   configurePlatforms = [ ];
 
   # reference: http://shoup.net/ntl/doc/tour-unix.html
-  configureFlags = [
-    "DEF_PREFIX=$(out)"
-    "SHARED=on" # genereate a shared library (as well as static)
-    "NATIVE=off" # don't target code to current hardware (reproducibility, portability)
-    "TUNE=${
-      if tune then
-        "auto"
-      else if stdenv.hostPlatform.isx86 then
-        "x86" # "chooses options that should be well suited for most x86 platforms"
-      else
-        "generic" # "chooses options that should be OK for most platforms"
-    }"
-    "CXX=${stdenv.cc.targetPrefix}c++"
-  ] ++ lib.optionals withGf2x [
-    "NTL_GF2X_LIB=on"
-    "GF2X_PREFIX=${gf2x}"
-  ];
+  configureFlags =
+    [
+      "DEF_PREFIX=$(out)"
+      "SHARED=on" # genereate a shared library (as well as static)
+      "NATIVE=off" # don't target code to current hardware (reproducibility, portability)
+      "TUNE=${
+        if tune then
+          "auto"
+        else if stdenv.hostPlatform.isx86 then
+          "x86" # "chooses options that should be well suited for most x86 platforms"
+        else
+          "generic" # "chooses options that should be OK for most platforms"
+      }"
+      "CXX=${stdenv.cc.targetPrefix}c++"
+    ]
+    ++ lib.optionals withGf2x [
+      "NTL_GF2X_LIB=on"
+      "GF2X_PREFIX=${gf2x}"
+    ];
 
   doCheck = true; # takes some time
 

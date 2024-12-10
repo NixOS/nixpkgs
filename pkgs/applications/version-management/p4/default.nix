@@ -1,15 +1,16 @@
-{ stdenv
-, fetchurl
-, fetchzip
-, lib
-, emptyDirectory
-, linkFarm
-, jam
-, openssl
-, CoreServices
-, Foundation
-, Security
-, testers
+{
+  stdenv,
+  fetchurl,
+  fetchzip,
+  lib,
+  emptyDirectory,
+  linkFarm,
+  jam,
+  openssl,
+  CoreServices,
+  Foundation,
+  Security,
+  testers,
 }:
 
 let
@@ -28,7 +29,10 @@ let
       # We only want to keep the contrib directory as the other files conflict
       # with p4's own zlib files. (For the same reason, we can't use the
       # cone-based Git sparse checkout, either.)
-      { name = "contrib"; path = "${src}/contrib"; }
+      {
+        name = "contrib";
+        path = "${src}/contrib";
+      }
     ];
 in
 stdenv.mkDerivation (finalAttrs: rec {
@@ -43,9 +47,17 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   nativeBuildInputs = [ jam ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Foundation Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    CoreServices
+    Foundation
+    Security
+  ];
 
-  outputs = [ "out" "bin" "dev" ];
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
 
   hardeningDisable = lib.optionals stdenv.hostPlatform.isDarwin [ "strictoverflow" ];
 
@@ -57,8 +69,14 @@ stdenv.mkDerivation (finalAttrs: rec {
       "-sSSLINCDIR=${lib.getDev opensslStatic}/include"
       "-sSSLLIBDIR=${lib.getLib opensslStatic}/lib"
     ]
-    ++ lib.optionals stdenv.cc.isClang [ "-sOSCOMP=clang" "-sCLANGVER=${stdenv.cc.cc.version}" ]
-    ++ lib.optionals stdenv.cc.isGNU [ "-sOSCOMP=gcc" "-sGCCVER=${stdenv.cc.cc.version}" ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "-sOSCOMP=clang"
+      "-sCLANGVER=${stdenv.cc.cc.version}"
+    ]
+    ++ lib.optionals stdenv.cc.isGNU [
+      "-sOSCOMP=gcc"
+      "-sGCCVER=${stdenv.cc.cc.version}"
+    ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ "-sOSVER=26" ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-sOSVER=1013"
@@ -76,9 +94,15 @@ stdenv.mkDerivation (finalAttrs: rec {
     # See the "Header dependency changes" section of
     # https://www.gnu.org/software/gcc/gcc-11/porting_to.html for more
     # information on why we need to include these.
-    ++ lib.optionals
-      (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0.0"))
-      [ "-include" "limits" "-include" "thread" ];
+    ++
+      lib.optionals
+        (stdenv.cc.isClang || (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.cc.version "11.0.0"))
+        [
+          "-include"
+          "limits"
+          "-include"
+          "thread"
+        ];
 
   preBuild = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export MACOSX_SDK=$SDKROOT
@@ -111,6 +135,9 @@ stdenv.mkDerivation (finalAttrs: rec {
     license = licenses.bsd2;
     mainProgram = "p4";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ corngood impl ];
+    maintainers = with maintainers; [
+      corngood
+      impl
+    ];
   };
 })

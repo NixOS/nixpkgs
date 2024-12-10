@@ -1,11 +1,12 @@
-{ lib
-, buildEnv
-, makeWrapper
-, dconf
-, hicolor-icon-theme
-, ibus
-, librsvg
-, plugins ? [ ]
+{
+  lib,
+  buildEnv,
+  makeWrapper,
+  dconf,
+  hicolor-icon-theme,
+  ibus,
+  librsvg,
+  plugins ? [ ],
 }:
 
 buildEnv {

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.hardware.bladeRF;
 
@@ -20,6 +25,6 @@ in
 
   config = lib.mkIf cfg.enable {
     services.udev.packages = [ pkgs.libbladeRF ];
-    users.groups.bladerf = {};
+    users.groups.bladerf = { };
   };
 }

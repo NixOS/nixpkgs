@@ -1,10 +1,11 @@
-{ lib
-, buildPackages
-, fetchFromGitHub
-, openssl
-, pkg-config
-, protobuf
-, rustPlatform
+{
+  lib,
+  buildPackages,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  protobuf,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,7 +31,14 @@ rustPlatform.buildRustPackage rec {
     openssl
   ];
 
-  outputs = [ "out" "fedimintCli" "fedimint" "gateway" "gatewayCli" "devimint" ];
+  outputs = [
+    "out"
+    "fedimintCli"
+    "fedimint"
+    "gateway"
+    "gatewayCli"
+    "devimint"
+  ];
 
   postInstall = ''
     mkdir -p $fedimint/bin $fedimintCli/bin $gateway/bin $gatewayCli/bin $devimint/bin

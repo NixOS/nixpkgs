@@ -1,5 +1,11 @@
 # NixOS module for Buildbot Worker.
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.buildbot-worker;
   opt = options.services.buildbot-worker;
@@ -39,7 +45,8 @@ let
     s.setServiceParent(application)
   '';
 
-in {
+in
+{
   options = {
     services.buildbot-worker = {
 
@@ -63,7 +70,7 @@ in {
 
       extraGroups = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         description = "List of extra groups that the Buildbot Worker user should be a part of.";
       };
 
@@ -136,7 +143,9 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    services.buildbot-worker.workerPassFile = lib.mkDefault (pkgs.writeText "buildbot-worker-password" cfg.workerPass);
+    services.buildbot-worker.workerPassFile = lib.mkDefault (
+      pkgs.writeText "buildbot-worker-password" cfg.workerPass
+    );
 
     users.groups = lib.optionalAttrs (cfg.group == "bbworker") {
       bbworker = { };
@@ -156,7 +165,10 @@ in {
 
     systemd.services.buildbot-worker = {
       description = "Buildbot Worker.";
-      after = [ "network.target" "buildbot-master.service" ];
+      after = [
+        "network.target"
+        "buildbot-master.service"
+      ];
       wantedBy = [ "multi-user.target" ];
       path = cfg.packages;
       environment.PYTHONPATH = "${python.withPackages (p: [ package ])}/${python.sitePackages}";

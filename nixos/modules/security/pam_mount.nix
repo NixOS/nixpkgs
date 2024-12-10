@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.security.pam.mount;
 
@@ -10,7 +15,9 @@ let
     ${pkgs.lsof}/bin/lsof | ${pkgs.gnugrep}/bin/grep $MNTPT | ${pkgs.gawk}/bin/awk '{print $2}' | ${pkgs.findutils}/bin/xargs ${pkgs.util-linux}/bin/kill -$SIGNAL
   '';
 
-  anyPamMount = lib.any (lib.attrByPath ["pamMount"] false) (lib.attrValues config.security.pam.services);
+  anyPamMount = lib.any (lib.attrByPath [ "pamMount" ] false) (
+    lib.attrValues config.security.pam.services
+  );
 in
 
 {
@@ -27,7 +34,7 @@ in
 
       extraVolumes = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         description = ''
           List of volume definitions for pam_mount.
           For more information, visit <https://pam-mount.sourceforge.net/pam_mount.conf.5.html>.
@@ -36,7 +43,7 @@ in
 
       additionalSearchPaths = lib.mkOption {
         type = lib.types.listOf lib.types.package;
-        default = [];
+        default = [ ];
         example = lib.literalExpression "[ pkgs.bindfs ]";
         description = ''
           Additional programs to include in the search path of pam_mount.
@@ -46,7 +53,7 @@ in
 
       cryptMountOptions = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         example = lib.literalExpression ''
           [ "allow_discard" ]
         '';
@@ -58,7 +65,7 @@ in
 
       fuseMountOptions = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         example = lib.literalExpression ''
           [ "nodev" "nosuid" "force-user=%(USER)" "gid=%(USERGID)" "perms=0700" "chmod-deny" "chown-deny" "chgrp-deny" ]
         '';
@@ -140,42 +147,54 @@ in
     environment.etc."security/pam_mount.conf.xml" = {
       source =
         let
-          extraUserVolumes = lib.filterAttrs (n: u: u.cryptHomeLuks != null || u.pamMount != {}) config.users.users;
+          extraUserVolumes = lib.filterAttrs (
+            n: u: u.cryptHomeLuks != null || u.pamMount != { }
+          ) config.users.users;
           mkAttr = k: v: ''${k}="${v}"'';
-          userVolumeEntry = user: let
-            attrs = {
-              user = user.name;
-              path = user.cryptHomeLuks;
-              mountpoint = user.home;
-            } // user.pamMount;
-          in
+          userVolumeEntry =
+            user:
+            let
+              attrs = {
+                user = user.name;
+                path = user.cryptHomeLuks;
+                mountpoint = user.home;
+              } // user.pamMount;
+            in
             "<volume ${lib.concatStringsSep " " (lib.mapAttrsToList mkAttr attrs)} />\n";
         in
-         pkgs.writeText "pam_mount.conf.xml" ''
+        pkgs.writeText "pam_mount.conf.xml" ''
           <?xml version="1.0" encoding="utf-8" ?>
           <!DOCTYPE pam_mount SYSTEM "pam_mount.conf.xml.dtd">
           <!-- auto generated from Nixos: modules/config/users-groups.nix -->
           <pam_mount>
           <debug enable="${toString cfg.debugLevel}" />
           <!-- if activated, requires ofl from hxtools to be present -->
-          <logout wait="${toString cfg.logoutWait}" hup="${if cfg.logoutHup then "yes" else "no"}" term="${if cfg.logoutTerm then "yes" else "no"}" kill="${if cfg.logoutKill then "yes" else "no"}" />
+          <logout wait="${toString cfg.logoutWait}" hup="${if cfg.logoutHup then "yes" else "no"}" term="${
+            if cfg.logoutTerm then "yes" else "no"
+          }" kill="${if cfg.logoutKill then "yes" else "no"}" />
           <!-- set PATH variable for pam_mount module -->
           <path>${lib.makeBinPath ([ pkgs.util-linux ] ++ cfg.additionalSearchPaths)}</path>
           <!-- create mount point if not present -->
-          <mkmountpoint enable="${if cfg.createMountPoints then "1" else "0"}" remove="${if cfg.removeCreatedMountPoints then "true" else "false"}" />
+          <mkmountpoint enable="${if cfg.createMountPoints then "1" else "0"}" remove="${
+            if cfg.removeCreatedMountPoints then "true" else "false"
+          }" />
           <!-- specify the binaries to be called -->
           <!-- the comma in front of the options is necessary for empty options -->
-          <fusemount>${pkgs.fuse}/bin/mount.fuse %(VOLUME) %(MNTPT) -o ,${lib.concatStringsSep "," (cfg.fuseMountOptions ++ [ "%(OPTIONS)" ])}'</fusemount>
+          <fusemount>${pkgs.fuse}/bin/mount.fuse %(VOLUME) %(MNTPT) -o ,${
+            lib.concatStringsSep "," (cfg.fuseMountOptions ++ [ "%(OPTIONS)" ])
+          }'</fusemount>
           <fuseumount>${pkgs.fuse}/bin/fusermount -u %(MNTPT)</fuseumount>
           <!-- the comma in front of the options is necessary for empty options -->
-          <cryptmount>${pkgs.pam_mount}/bin/mount.crypt -o ,${lib.concatStringsSep "," (cfg.cryptMountOptions ++ [ "%(OPTIONS)" ])} %(VOLUME) %(MNTPT)</cryptmount>
+          <cryptmount>${pkgs.pam_mount}/bin/mount.crypt -o ,${
+            lib.concatStringsSep "," (cfg.cryptMountOptions ++ [ "%(OPTIONS)" ])
+          } %(VOLUME) %(MNTPT)</cryptmount>
           <cryptumount>${pkgs.pam_mount}/bin/umount.crypt %(MNTPT)</cryptumount>
           <pmvarrun>${pkgs.pam_mount}/bin/pmvarrun -u %(USER) -o %(OPERATION)</pmvarrun>
           ${lib.optionalString oflRequired "<ofl>${fake_ofl}/bin/fake_ofl %(SIGNAL) %(MNTPT)</ofl>"}
           ${lib.concatStrings (map userVolumeEntry (lib.attrValues extraUserVolumes))}
           ${lib.concatStringsSep "\n" cfg.extraVolumes}
           </pam_mount>
-          '';
+        '';
     };
 
   };

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, expat
-, gettext
-, gtk3
-, libconfuse
-, makeWrapper
-, pcre2
-, pkg-config
-, vte
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  expat,
+  gettext,
+  gtk3,
+  libconfuse,
+  makeWrapper,
+  pcre2,
+  pkg-config,
+  vte,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

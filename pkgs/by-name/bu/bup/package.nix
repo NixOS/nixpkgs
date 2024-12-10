@@ -62,12 +62,16 @@ stdenv.mkDerivation {
     "LIBDIR=$(out)/lib/bup"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
-    "-Wno-error=implicit-function-declaration -Wno-error=implicit-int";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration -Wno-error=implicit-int";
 
   postInstall = ''
     wrapProgram $out/bin/bup \
-      --prefix PATH : ${lib.makeBinPath [ git par2cmdline ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          git
+          par2cmdline
+        ]
+      } \
       --prefix NIX_PYTHONPATH : ${lib.makeSearchPathOutput "lib" python3.sitePackages pythonDeps}
   '';
 

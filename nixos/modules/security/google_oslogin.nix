@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.security.googleOsLogin;
@@ -53,8 +58,14 @@ in
 
     # enable the nss module, so user lookups etc. work
     system.nssModules = [ package ];
-    system.nssDatabases.passwd = [ "cache_oslogin" "oslogin" ];
-    system.nssDatabases.group = [ "cache_oslogin" "oslogin" ];
+    system.nssDatabases.passwd = [
+      "cache_oslogin"
+      "oslogin"
+    ];
+    system.nssDatabases.group = [
+      "cache_oslogin"
+      "oslogin"
+    ];
 
     # Ugly: sshd refuses to start if a store path is given because /nix/store is group-writable.
     # So indirect by a symlink.

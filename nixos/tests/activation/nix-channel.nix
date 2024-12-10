@@ -10,17 +10,19 @@
     nix.channel.enable = true;
   };
 
-  testScript = { nodes, ... }: ''
-    machine.start(allow_reboot=True)
+  testScript =
+    { nodes, ... }:
+    ''
+      machine.start(allow_reboot=True)
 
-    assert machine.succeed("cat /root/.nix-channels") == "${nodes.machine.system.defaultChannel} nixos\n"
+      assert machine.succeed("cat /root/.nix-channels") == "${nodes.machine.system.defaultChannel} nixos\n"
 
-    nixpkgs_unstable_channel = "https://nixos.org/channels/nixpkgs-unstable nixpkgs"
-    machine.succeed(f"echo '{nixpkgs_unstable_channel}' > /root/.nix-channels")
+      nixpkgs_unstable_channel = "https://nixos.org/channels/nixpkgs-unstable nixpkgs"
+      machine.succeed(f"echo '{nixpkgs_unstable_channel}' > /root/.nix-channels")
 
-    machine.reboot()
+      machine.reboot()
 
-    assert machine.succeed("cat /root/.nix-channels") == f"{nixpkgs_unstable_channel}\n"
-  '';
+      assert machine.succeed("cat /root/.nix-channels") == f"{nixpkgs_unstable_channel}\n"
+    '';
 
 }

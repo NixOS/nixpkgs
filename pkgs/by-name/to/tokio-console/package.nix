@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, installShellFiles
-, rustPlatform
-, protobuf
-, stdenv
+{
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  rustPlatform,
+  protobuf,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitLab, flac }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  flac,
+}:
 
 stdenv.mkDerivation rec {
   version = "3.0.10+git20130108.4ca41f4-1";

@@ -1,4 +1,9 @@
-{ stdenv, fetchgit, lib, dtc }:
+{
+  stdenv,
+  fetchgit,
+  lib,
+  dtc,
+}:
 
 stdenv.mkDerivation {
   pname = "kvmtool";
@@ -16,20 +21,29 @@ stdenv.mkDerivation {
 
   enableParallelBuilding = true;
 
-  makeFlags = [
-    "prefix=${placeholder "out"}"
-    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-    "ARCH=${stdenv.hostPlatform.linuxArch}"
-  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 ([
-    "LIBFDT_DIR=${dtc}/lib"
-  ]);
+  makeFlags =
+    [
+      "prefix=${placeholder "out"}"
+      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+      "ARCH=${stdenv.hostPlatform.linuxArch}"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 ([
+      "LIBFDT_DIR=${dtc}/lib"
+    ]);
 
   meta = with lib; {
     description = "Lightweight tool for hosting KVM guests";
     homepage = "https://git.kernel.org/pub/scm/linux/kernel/git/will/kvmtool.git/tree/README";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ astro mfrw peigongdsd ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [
+      astro
+      mfrw
+      peigongdsd
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "lkvm";
   };
 }
