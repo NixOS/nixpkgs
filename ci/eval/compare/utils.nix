@@ -113,6 +113,8 @@ rec {
           "0"
         else if rebuildCount <= 10 then
           "1-10"
+        else if rebuildCount <= 100 then
+          "11-100"
         else if rebuildCount <= 500 then
           "101-500"
         else if rebuildCount <= 1000 then
