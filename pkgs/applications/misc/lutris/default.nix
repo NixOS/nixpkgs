@@ -138,6 +138,7 @@ buildPythonApplication rec {
   dontWrapGApps = true;
   makeWrapperArgs = [
     "--prefix PATH : ${lib.makeBinPath requiredTools}"
+    "--prefix APPIMAGE_EXTRACT_AND_RUN : 1"
     "\${gappsWrapperArgs[@]}"
   ];
 
@@ -145,7 +146,7 @@ buildPythonApplication rec {
     homepage = "https://lutris.net";
     description = "Open Source gaming platform for GNU/Linux";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ Madouura ];
+    maintainers = with maintainers; [ Madouura rapiteanu ];
     platforms = platforms.linux;
     mainProgram = "lutris";
   };
