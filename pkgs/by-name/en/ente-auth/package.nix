@@ -2,6 +2,7 @@
   lib,
   flutter324,
   fetchFromGitHub,
+  fetchpatch,
   webkitgtk_4_0,
   sqlite,
   libayatana-appindicator,
@@ -29,6 +30,18 @@ flutter324.buildFlutterApplication rec {
   };
 
   sourceRoot = "${src.name}/auth";
+
+  patches = [
+    # Fixes an issue that would allow device credential based app lock to be short-circuited.
+    # Included in 4.1.0, which introduces breaking changes to the app name and storage path,
+    # so instead of updating to 4.1.0 on 24.11 we backport the patch instead.
+    # https://github.com/ente-io/ente/pull/3545
+    (fetchpatch {
+      url = "https://github.com/ente-io/ente/commit/c56a96454a9971d418ed30bfccc7302f301d7a2c.patch";
+      stripLen = 1;
+      hash = "sha256-LcwzC5/COHurQE+OqN9HoAXezxsR9jQyQbsdJXrTs6c=";
+    })
+  ];
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
