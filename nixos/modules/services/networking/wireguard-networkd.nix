@@ -17,7 +17,7 @@ let
   inherit (lib.lists) concatMap concatLists;
   inherit (lib.modules) mkIf;
   inherit (lib.options) literalExpression mkOption;
-  inherit (lib.strings) hasInfix;
+  inherit (lib.strings) hasInfix versionAtLeast;
   inherit (lib.trivial) flip;
 
   removeNulls = filterAttrs (_: v: v != null);
@@ -96,8 +96,10 @@ in
 
   options.networking.wireguard = {
     useNetworkd = mkOption {
-      default = config.networking.useNetworkd;
-      defaultText = literalExpression "config.networking.useNetworkd";
+      default = config.networking.useNetworkd && (versionAtLeast config.system.stateVersion "25.05");
+      defaultText = literalExpression ''
+        config.networking.useNetworkd && (lib.versionAtLeast config.system.stateVersion "25.05")
+      '';
       type = types.bool;
       description = ''
         Whether to use networkd as the network configuration backend for
