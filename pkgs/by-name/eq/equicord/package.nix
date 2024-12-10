@@ -5,6 +5,7 @@
   nodejs,
   pnpm_9,
   stdenv,
+  nix-update-script,
   buildWebExtension ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -50,6 +51,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "The other cutest Discord client mod";
