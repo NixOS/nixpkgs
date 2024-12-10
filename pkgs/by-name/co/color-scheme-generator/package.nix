@@ -1,4 +1,9 @@
-{ rustPlatform, fetchFromGitHub, lib, perl, }:
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
+  perl,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "color-scheme-generator";
