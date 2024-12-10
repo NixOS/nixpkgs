@@ -108,7 +108,8 @@ in
 
   options.networking.wireguard = {
     useNetworkd = mkOption {
-      default = false;
+      default = config.networking.useNetworkd;
+      defaultText = literalExpression "config.networking.useNetworkd";
       type = types.bool;
       description = ''
         Whether to use networkd as the network configuration backend for
