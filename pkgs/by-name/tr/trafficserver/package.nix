@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchzip
+, autoreconfHook
 , makeWrapper
 , nixosTests
 , pkg-config
@@ -10,7 +11,6 @@
 , pcre
 , perlPackages
 , python3
-, catch2
 # recommended dependencies
 , withHwloc ? true
 , hwloc
@@ -47,11 +47,11 @@
 
 stdenv.mkDerivation rec {
   pname = "trafficserver";
-  version = "9.2.5";
+  version = "9.2.7";
 
   src = fetchzip {
     url = "mirror://apache/trafficserver/trafficserver-${version}.tar.bz2";
-    hash = "sha256-RwhTI31LyupkAbXHsNrjcJqUjVoVpX3/2Ofxl2NdasU=";
+    hash = "sha256-i3UTqOO3gQezL2HmQllJa+hwy03tJViyOOflW2iXBAM=";
   };
 
   # NOTE: The upstream README indicates that flex is needed for some features,
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
   #
   # [1]: https://github.com/apache/trafficserver/pull/5617
   # [2]: https://github.com/apache/trafficserver/blob/3fd2c60/configure.ac#L742-L788
-  nativeBuildInputs = [ makeWrapper pkg-config file python3 ]
+  nativeBuildInputs = [ autoreconfHook makeWrapper pkg-config file python3 ]
     ++ (with perlPackages; [ perl ExtUtilsMakeMaker ])
     ++ lib.optionals stdenv.hostPlatform.isLinux [ linuxHeaders ];
 
@@ -93,15 +93,13 @@ stdenv.mkDerivation rec {
       src/traffic_via/test_traffic_via \
       src/traffic_logstats/tests \
       tools/check-unused-dependencies
-
-    substituteInPlace configure --replace '/usr/bin/file' '${file}/bin/file'
   '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace configure \
-      --replace '/usr/include/linux' '${linuxHeaders}/include/linux'
+    substituteInPlace configure.ac \
+      --replace-fail '/usr/include/linux' '${linuxHeaders}/include/linux'
   '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     # 'xcrun leaks' probably requires non-free XCode
     substituteInPlace iocore/net/test_certlookup.cc \
-      --replace 'xcrun leaks' 'true'
+      --replace-fail 'xcrun leaks' 'true'
   '';
 
   configureFlags = [
@@ -123,7 +121,6 @@ stdenv.mkDerivation rec {
   ];
 
   postInstall = ''
-    substituteInPlace rc/trafficserver.service --replace "syslog.target" ""
     install -Dm644 rc/trafficserver.service $out/lib/systemd/system/trafficserver.service
 
     wrapProgram $out/bin/tspush \
