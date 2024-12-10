@@ -1,23 +1,28 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, glib
-, librest
-, gnome-online-accounts
-, gnome
-, libsoup
-, json-glib
-, gobject-introspection
-, gtk-doc
-, docbook-xsl-nons
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  glib,
+  librest,
+  gnome-online-accounts,
+  gnome,
+  libsoup_2_4,
+  json-glib,
+  gobject-introspection,
+  gtk-doc,
+  docbook-xsl-nons,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gfbgraph";
   version = "0.2.5";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -37,7 +42,7 @@ stdenv.mkDerivation rec {
   ];
 
   propagatedBuildInputs = [
-    libsoup
+    libsoup_2_4
     json-glib
     librest
   ];

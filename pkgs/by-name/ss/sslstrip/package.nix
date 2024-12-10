@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -33,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   # Project has no test
-  doCheck= false;
+  doCheck = false;
 
   pythonImportsCheck = [
     "sslstrip"

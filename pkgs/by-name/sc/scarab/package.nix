@@ -11,13 +11,13 @@
 
 buildDotnetModule rec {
   pname = "scarab";
-  version = "2.5.0.0";
+  version = "2.6.0.0";
 
   src = fetchFromGitHub {
     owner = "fifty-six";
     repo = "scarab";
     rev = "refs/tags/v${version}";
-    hash = "sha256-z1hmMrfeoYyjVEPPjWvUfKUKsOS7UsocSWMYrFY+/kI=";
+    hash = "sha256-xnvS3FDY4hi3yauwoSzO1fO6tJJAwFCkAc0Wzfs/puQ=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
@@ -25,17 +25,6 @@ buildDotnetModule rec {
   projectFile = "Scarab/Scarab.csproj";
   testProjectFile = "Scarab.Tests/Scarab.Tests.csproj";
   executables = [ "Scarab" ];
-
-  postPatch = ''
-    substituteInPlace Scarab/Scarab.csproj Scarab.Tests/Scarab.Tests.csproj \
-      --replace-fail 'net6.0' 'net8.0'
-  '';
-
-  preConfigureNuGet = ''
-    # This should really be in the upstream nuget.config
-    dotnet nuget add source https://api.nuget.org/v3/index.json \
-      -n nuget.org --configfile NuGet.Config
-  '';
 
   runtimeDeps = [
     bc

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, fetchzip }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  fetchzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "figlet";
@@ -28,7 +34,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  makeFlags = [ "prefix=$(out)" "CC:=$(CC)" "LD:=$(CC)" ];
+  makeFlags = [
+    "prefix=$(out)"
+    "CC:=$(CC)"
+    "LD:=$(CC)"
+  ];
 
   postInstall = "cp -ar ${contributed}/* $out/share/figlet/";
 

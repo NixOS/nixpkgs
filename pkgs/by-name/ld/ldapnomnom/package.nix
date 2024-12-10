@@ -1,17 +1,18 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "ldapnomnom";
-  version = "1.4.1";
+  version = "1.5.1";
 
   src = fetchFromGitHub {
     owner = "lkarlslund";
     repo = "ldapnomnom";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JYpwk7ShLH9fPTFYzLecD+iPekFMnHOlzusizCYo8dA=";
+    hash = "sha256-BKErfWJ6XKG4cKIjp5WU8SVZvyQlqtm/mvDwbUtDYIw=";
   };
 
   vendorHash = "sha256-lm801UM7JOYsGRe92FErY2jonrqRRjLKojN5YyytqvY=";

@@ -1,4 +1,14 @@
-{ lib, fetchFromGitHub, stdenv, bitlbee, autoconf, automake, libtool, pkg-config, libgcrypt }:
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  bitlbee,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  libgcrypt,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.4.2";
@@ -11,8 +21,16 @@ stdenv.mkDerivation rec {
     sha256 = "121r92mgwv445wwxzh35n19fs5k81ihr0j19k256ia5502b1xxaq";
   };
 
-  nativeBuildInputs = [ pkg-config autoconf automake ];
-  buildInputs = [ bitlbee libtool libgcrypt ];
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+    automake
+  ];
+  buildInputs = [
+    bitlbee
+    libtool
+    libgcrypt
+  ];
 
   preConfigure = ''
     export BITLBEE_PLUGINDIR=$out/lib/bitlbee

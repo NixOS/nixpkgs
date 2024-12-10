@@ -91,7 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   # required for GCC 14
-  postPatch = ''
+  # (not applicable to super-slicer fork)
+  postPatch = lib.optionalString (finalAttrs.pname == "prusa-slicer") ''
     substituteInPlace src/libslic3r/Arrange/Core/DataStoreTraits.hpp \
       --replace-fail \
       "WritableDataStoreTraits<ArrItem>::template set" \

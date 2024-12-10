@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, buildPackages
-, callPackage
-, sqlite
-, libtiff
-, curl
-, gtest
-, nlohmann_json
-, python3
-, cacert
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  buildPackages,
+  callPackage,
+  sqlite,
+  libtiff,
+  curl,
+  gtest,
+  nlohmann_json,
+  python3,
+  cacert,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -30,13 +31,27 @@ stdenv.mkDerivation (finalAttrs: {
     ./only-add-curl-for-static-builds.patch
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ sqlite libtiff curl nlohmann_json ];
+  buildInputs = [
+    sqlite
+    libtiff
+    curl
+    nlohmann_json
+  ];
 
-  nativeCheckInputs = [ cacert gtest ];
+  nativeCheckInputs = [
+    cacert
+    gtest
+  ];
 
   cmakeFlags = [
     "-DUSE_EXTERNAL_GTEST=ON"
@@ -53,11 +68,11 @@ stdenv.mkDerivation (finalAttrs: {
     let
       libPathEnvVar = if stdenv.hostPlatform.isDarwin then "DYLD_LIBRARY_PATH" else "LD_LIBRARY_PATH";
     in
-      ''
-        export HOME=$TMPDIR
-        export TMP=$TMPDIR
-        export ${libPathEnvVar}=$PWD/lib
-      '';
+    ''
+      export HOME=$TMPDIR
+      export TMP=$TMPDIR
+      export ${libPathEnvVar}=$PWD/lib
+    '';
 
   doCheck = true;
 

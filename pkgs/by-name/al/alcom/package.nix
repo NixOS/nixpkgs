@@ -8,7 +8,7 @@
   glib-networking,
   google-fonts,
   lib,
-  libsoup,
+  libsoup_2_4,
   nodejs,
   npmHooks,
   openssl,
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       glib-networking
-      libsoup
+      libsoup_2_4
       webkitgtk_4_0
     ]
     ++ dotnetSdk.packages

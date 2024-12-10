@@ -1,25 +1,38 @@
-{ lib, fetchFromGitHub, symlinkJoin, buildGoModule, makeWrapper, nixosTests
-, nix-update-script
-, v2ray-geoip, v2ray-domain-list-community
-, assets ? [ v2ray-geoip v2ray-domain-list-community ]
+{
+  lib,
+  fetchFromGitHub,
+  symlinkJoin,
+  buildGoModule,
+  makeWrapper,
+  nixosTests,
+  nix-update-script,
+  v2ray-geoip,
+  v2ray-domain-list-community,
+  assets ? [
+    v2ray-geoip
+    v2ray-domain-list-community
+  ],
 }:
 
 buildGoModule rec {
   pname = "v2ray-core";
-  version = "5.20.0";
+  version = "5.22.0";
 
   src = fetchFromGitHub {
     owner = "v2fly";
     repo = "v2ray-core";
     rev = "v${version}";
-    hash = "sha256-9YPFgsU1XpdT+fRaJmEB3z5sKjkrG3aiRIV3r4cDLfE=";
+    hash = "sha256-fDlZFBq5TiyLEriZdPonF/ifwiOu3vYtXWzNlmAik38=";
   };
 
   # `nix-update` doesn't support `vendorHash` yet.
   # https://github.com/Mic92/nix-update/pull/95
-  vendorHash = "sha256-Z+jM02SzmpuZ3PXXqrLDIOWDhIh8AxMUr1S4A+du5LU=";
+  vendorHash = "sha256-9JJjpAvmeXBAauu58eQuE262XN1TIK2SwLUlPQBbwYA=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   subPackages = [ "main" ];
 

@@ -35,7 +35,6 @@
   libvdpau,
   rustPlatform,
   stdenv,
-  xdg-user-dirs,
   zenity,
   copyDesktopItems,
   makeDesktopItem,
@@ -43,19 +42,19 @@
 }:
 let
   pname = "mangayomi";
-  version = "0.3.75";
+  version = "0.3.8";
   src = fetchFromGitHub {
     owner = "kodjodevf";
     repo = "mangayomi";
     tag = "v${version}";
-    hash = "sha256-kVAtUXEysaCJSLobXlgAgK59pgLq8Ze/XDqQNNdKdzg=";
+    hash = "sha256-TOCDGmJ5tlpcGS8NeVdIdx946rM1/ItQVY9OnDS6uZ0=";
   };
   rustDep = rustPlatform.buildRustPackage {
     inherit pname version src;
 
     sourceRoot = "${src.name}/rust";
 
-    cargoHash = "sha256-b4PRFe8FgP/PXHwSw2qmderPRFCBC1ISQuf8uZcsxpY=";
+    cargoHash = "sha256-6Iraw5gtlVW3iSrT2zQh6JLubVTZy/y8/5quXKee2Ko=";
 
     passthru.libraryPath = "lib/librust_lib_mangayomi.so";
   };
@@ -90,7 +89,7 @@ flutter324.buildFlutterApplication {
   };
 
   gitHashes = {
-    desktop_webview_window = "sha256-Z9ehzDKe1W3wGa2AcZoP73hlSwydggO6DaXd9mop+cM=";
+    desktop_webview_window = "sha256-wRxQPlJZZe4t2C6+G5dMx3+w8scxWENLwII08dlZ4IA=";
     flutter_qjs = "sha256-m+Z0bCswylfd1E2Y6X6bdPivkSlXUxO4J0Icbco+/0A=";
     media_kit_libs_windows_video = "sha256-SYVVOR6vViAsDH5MclInJk8bTt/Um4ccYgYDFrb5LBk=";
     media_kit_native_event_loop = "sha256-SYVVOR6vViAsDH5MclInJk8bTt/Um4ccYgYDFrb5LBk=";
@@ -161,7 +160,6 @@ flutter324.buildFlutterApplication {
     --prefix LD_LIBRARY_PATH : "$out/app/${pname}/lib" \
     --prefix PATH : "${
       lib.makeBinPath [
-        xdg-user-dirs
         zenity
       ]
     }"

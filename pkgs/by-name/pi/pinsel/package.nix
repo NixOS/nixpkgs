@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gtk3, lua, glib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gtk3,
+  lua,
+  glib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pinsel";
@@ -13,9 +21,15 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ pkg-config glib ];
+  nativeBuildInputs = [
+    pkg-config
+    glib
+  ];
 
-  buildInputs = [ lua gtk3 ];
+  buildInputs = [
+    lua
+    gtk3
+  ];
 
   makeFlags = [ "INSTALLDIR=${placeholder "out"}/bin" ];
 

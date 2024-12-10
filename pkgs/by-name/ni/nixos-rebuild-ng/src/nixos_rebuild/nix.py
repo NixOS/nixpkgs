@@ -77,7 +77,6 @@ def remote_build(
     r = run_wrapper(
         [
             "nix-instantiate",
-            "--raw",
             build_attr.path,
             "--attr",
             build_attr.to_attr(attr),

@@ -372,7 +372,7 @@ in
           (pkgs.dockerTools.pullImage {
             imageName = "docker.io/bitnami/keycloak";
             imageDigest = "sha256:714dfadc66a8e3adea6609bda350345bd3711657b7ef3cf2e8015b526bac2d6b";
-            sha256 = "0imblp0kw9vkcr7sp962jmj20fpmb3hvd3hmf4cs4x04klnq3k90";
+            hash = "sha256-IM2BLZ0EdKIZcRWOtuFY9TogZJXCpKtPZnMnPsGlq0Y=";
             finalImageTag = "21.1.2-debian-11-r0";
           })
 
@@ -434,6 +434,22 @@ in
         for further information.
       '';
     };
+
+    extraKubeProxyConfig = lib.mkOption {
+      type = with lib.types; attrsOf anything;
+      default = { };
+      example = {
+        mode = "nftables";
+        clientConnection.kubeconfig = "/var/lib/rancher/k3s/agent/kubeproxy.kubeconfig";
+      };
+      description = ''
+        Extra configuration to add to the kube-proxy's configuration file. The subset of the kube-proxy's
+        configuration that can be configured via a file is defined by the
+        [KubeProxyConfiguration](https://kubernetes.io/docs/reference/config-api/kube-proxy-config.v1alpha1/)
+        struct. Note that the kubeconfig param will be override by `clientConnection.kubeconfig`, so you must
+        set the `clientConnection.kubeconfig` if you want to use `extraKubeProxyConfig`.
+      '';
+    };
   };
 
   # implementation
@@ -486,6 +502,14 @@ in
           }
           // kubeletParams
         );
+
+        kubeProxyConfig = (pkgs.formats.yaml { }).generate "k3s-kubeProxy-config" (
+          {
+            apiVersion = "kubeproxy.config.k8s.io/v1alpha1";
+            kind = "KubeProxyConfiguration";
+          }
+          // cfg.extraKubeProxyConfig
+        );
       in
       {
         description = "k3s service";
@@ -521,6 +545,7 @@ in
             ++ (lib.optional (cfg.tokenFile != null) "--token-file ${cfg.tokenFile}")
             ++ (lib.optional (cfg.configPath != null) "--config ${cfg.configPath}")
             ++ (lib.optional (kubeletParams != { }) "--kubelet-arg=config=${kubeletConfig}")
+            ++ (lib.optional (cfg.extraKubeProxyConfig != { }) "--kube-proxy-arg=config=${kubeProxyConfig}")
             ++ (lib.flatten cfg.extraFlags)
           );
         };

@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   version = "0.4.1";
@@ -23,4 +27,3 @@ rustPlatform.buildRustPackage rec {
     platforms = lib.platforms.unix;
   };
 }
-

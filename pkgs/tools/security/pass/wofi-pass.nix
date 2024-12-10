@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pass-wayland
-, coreutils
-, gnugrep
-, libnotify
-, pwgen
-, findutils
-, makeWrapper
-, wl-clipboard
-, wtype
-, wofi
-, extensions ? exts: []
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pass-wayland,
+  coreutils,
+  gnugrep,
+  libnotify,
+  pwgen,
+  findutils,
+  makeWrapper,
+  wl-clipboard,
+  wtype,
+  wofi,
+  extensions ? exts: [ ],
 }:
 
 let

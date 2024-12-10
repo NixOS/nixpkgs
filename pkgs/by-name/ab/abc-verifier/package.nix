@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, readline
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  readline,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname   = "abc-verifier";
+  pname = "abc-verifier";
   version = "unstable-2023-10-13";
 
   src = fetchFromGitHub {
     owner = "yosyshq";
-    repo  = "abc";
-    rev   = "896e5e7dedf9b9b1459fa019f1fa8aa8101fdf43";
-    hash  = "sha256-ou+E2lvDEOxXRXNygE/TyVi7quqk+CJHRI+HDI0xljE=";
+    repo = "abc";
+    rev = "896e5e7dedf9b9b1459fa019f1fa8aa8101fdf43";
+    hash = "sha256-ou+E2lvDEOxXRXNygE/TyVi7quqk+CJHRI+HDI0xljE=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -30,10 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Tool for squential logic synthesis and formal verification";
-    homepage    = "https://people.eecs.berkeley.edu/~alanmi/abc";
-    license     = licenses.mit;
-    maintainers = with maintainers; [ thoughtpolice Luflosi ];
+    homepage = "https://people.eecs.berkeley.edu/~alanmi/abc";
+    license = licenses.mit;
+    maintainers = with maintainers; [
+      thoughtpolice
+      Luflosi
+    ];
     mainProgram = "abc";
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 })

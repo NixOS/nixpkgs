@@ -1,4 +1,18 @@
-{ stdenvNoCC, lib, fetchFromGitHub, makeWrapper, apk-tools, coreutils, findutils, gnugrep, gnused, gnutar, gzip, rsync, util-linux, wget
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  apk-tools,
+  coreutils,
+  findutils,
+  gnugrep,
+  gnused,
+  gnutar,
+  gzip,
+  rsync,
+  util-linux,
+  wget,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "alpine-make-rootfs";
@@ -17,9 +31,20 @@ stdenvNoCC.mkDerivation rec {
   makeFlags = [ "PREFIX=$(out)" ];
 
   postInstall = ''
-    wrapProgram $out/bin/alpine-make-rootfs --set PATH ${lib.makeBinPath [
-      apk-tools coreutils findutils gnugrep gnused gnutar gzip rsync util-linux wget
-    ]}
+    wrapProgram $out/bin/alpine-make-rootfs --set PATH ${
+      lib.makeBinPath [
+        apk-tools
+        coreutils
+        findutils
+        gnugrep
+        gnused
+        gnutar
+        gzip
+        rsync
+        util-linux
+        wget
+      ]
+    }
   '';
 
   meta = with lib; {

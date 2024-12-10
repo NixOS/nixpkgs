@@ -6,7 +6,7 @@ assert (!blas.isILP64) && (!lapack.isILP64);
 
 buildDunePackage rec {
   pname = "lacaml";
-  version = "11.0.10";
+  version = "11.1.0";
 
   useDune2 = true;
 
@@ -14,7 +14,7 @@ buildDunePackage rec {
 
   src = fetchurl {
     url = "https://github.com/mmottl/lacaml/releases/download/${version}/lacaml-${version}.tbz";
-    sha256 = "sha256-Vg6Hl31u1bvh0hfWU9eqoI8pGZt4YhpGRf3ul3h+SJk=";
+    sha256 = "sha256-3wuUX942wyWWXb5MjfeHZhx2/kS/+3JFVd04Ty/ZtwA=";
   };
 
   buildInputs = [ dune-configurator ];

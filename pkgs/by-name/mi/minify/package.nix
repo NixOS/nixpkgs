@@ -1,28 +1,33 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, nix-update-script
-, testers
-, minify
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
+  testers,
+  minify,
 }:
 
 buildGoModule rec {
   pname = "minify";
-  version = "2.21.1";
+  version = "2.21.2";
 
   src = fetchFromGitHub {
     owner = "tdewolff";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-CpZhKt+14pf10L84ijaPPoDKdHmGirAdUkRbQbwB+Kw=";
+    hash = "sha256-iR52KkstnpruTG7xJKbAIn15Ybrt03ctiSTU2EOnC24=";
   };
 
-  vendorHash = "sha256-WbEl6/dhWZ9TwW/Hc9GX5hbiKgjndMfyqizHD/hA5h0=";
+  vendorHash = "sha256-tWNC2/sFqX+KcFrTD8ifN2f3TRHA3enT5glESy8spgo=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
+  ];
 
   subPackages = [ "cmd/minify" ];
 

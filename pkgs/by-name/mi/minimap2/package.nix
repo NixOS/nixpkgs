@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "minimap2";
@@ -13,7 +18,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ zlib ];
 
-  makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [ "arm_neon=1" "aarch64=1" ];
+  makeFlags = lib.optionals stdenv.hostPlatform.isAarch64 [
+    "arm_neon=1"
+    "aarch64=1"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin

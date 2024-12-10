@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, libX11, libXext, libjpeg, libpng, giflib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  libXext,
+  libjpeg,
+  libpng,
+  giflib,
+}:
 
 stdenv.mkDerivation {
   pname = "meh";
@@ -13,9 +22,18 @@ stdenv.mkDerivation {
 
   installFlags = [ "PREFIX=${placeholder "out"}" ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
-  buildInputs = [ libXext libX11 libjpeg libpng giflib ];
+  buildInputs = [
+    libXext
+    libX11
+    libjpeg
+    libpng
+    giflib
+  ];
 
   meta = {
     description = "Minimal image viewer using raw XLib";

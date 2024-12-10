@@ -1,4 +1,10 @@
-{ stdenv, fetchFromGitHub, fetchpatch, kernel, lib }:
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  kernel,
+  lib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vendor-reset";

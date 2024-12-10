@@ -1,37 +1,43 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, cimg
-, cmake
-, common-updater-scripts
-, coreutils
-, curl
-, fftw
-, gmic-qt
-, gnugrep
-, gnused
-, graphicsmagick
-, jq
-, libX11
-, libXext
-, libjpeg
-, libpng
-, libtiff
-, llvmPackages
-, ninja
-, opencv
-, openexr
-, pkg-config
-, writeShellScript
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  cimg,
+  cmake,
+  common-updater-scripts,
+  coreutils,
+  curl,
+  fftw,
+  gmic-qt,
+  gnugrep,
+  gnused,
+  graphicsmagick,
+  jq,
+  libX11,
+  libXext,
+  libjpeg,
+  libpng,
+  libtiff,
+  llvmPackages,
+  ninja,
+  opencv,
+  openexr,
+  pkg-config,
+  writeShellScript,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gmic";
   version = "3.4.3";
 
-  outputs = [ "out" "lib" "dev" "man" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "GreycLab";
@@ -44,7 +50,9 @@ stdenv.mkDerivation (finalAttrs: {
   # Reference: src/Makefile, directive gmic_stdlib_community.h
   gmic_stdlib = fetchurl {
     name = "gmic_stdlib_community.h";
-    url = "https://gmic.eu/gmic_stdlib_community${lib.replaceStrings ["."] [""] finalAttrs.version}.h";
+    url = "https://gmic.eu/gmic_stdlib_community${
+      lib.replaceStrings [ "." ] [ "" ] finalAttrs.version
+    }.h";
     hash = "sha256-M/AL1w9KGi+dIGVQ+vdWY8PSCHi+s/aZef08AxeQMJE=";
   };
 
@@ -54,21 +62,23 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    cimg
-    fftw
-    graphicsmagick
-    libX11
-    libXext
-    libjpeg
-    libpng
-    libtiff
-    opencv
-    openexr
-    zlib
-  ] ++ lib.optionals stdenv.cc.isClang [
-    llvmPackages.openmp
-  ];
+  buildInputs =
+    [
+      cimg
+      fftw
+      graphicsmagick
+      libX11
+      libXext
+      libjpeg
+      libpng
+      libtiff
+      opencv
+      openexr
+      zlib
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      llvmPackages.openmp
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_LIB_STATIC" false)
@@ -79,13 +89,14 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_CIMG" true)
   ];
 
-  postPatch = ''
-    cp -r ${finalAttrs.gmic_stdlib} src/gmic_stdlib_community.h
-  ''
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace CMakeLists.txt \
-      --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
-  '';
+  postPatch =
+    ''
+      cp -r ${finalAttrs.gmic_stdlib} src/gmic_stdlib_community.h
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace CMakeLists.txt \
+        --replace "LD_LIBRARY_PATH" "DYLD_LIBRARY_PATH"
+    '';
 
   passthru = {
     tests = {
@@ -95,7 +106,16 @@ stdenv.mkDerivation (finalAttrs: {
 
     updateScript = writeShellScript "gmic-update-script" ''
       set -o errexit
-      PATH=${lib.makeBinPath [ common-updater-scripts coreutils curl gnugrep gnused jq ]}
+      PATH=${
+        lib.makeBinPath [
+          common-updater-scripts
+          coreutils
+          curl
+          gnugrep
+          gnused
+          jq
+        ]
+      }
 
       latestVersion=$(curl 'https://gmic.eu/files/source/' \
                        | grep -E 'gmic_[^"]+\.tar\.gz' \

@@ -1,4 +1,11 @@
-{ lib, fetchurl, buildDunePackage, js_of_ocaml-compiler , gen_js_api, ojs }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  js_of_ocaml-compiler,
+  gen_js_api,
+  ojs,
+}:
 
 buildDunePackage rec {
   pname = "ocaml-vdom";
@@ -31,5 +38,3 @@ buildDunePackage rec {
     maintainers = with lib.maintainers; [ jayesh-bhoot ];
   };
 }
-
-

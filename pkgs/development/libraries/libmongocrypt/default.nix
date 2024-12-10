@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, mongoc
-, openssl
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  mongoc,
+  openssl,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,13 +30,18 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [
-    mongoc
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Security
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
+  buildInputs =
+    [
+      mongoc
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.Security
+    ];
 
   cmakeFlags = [
     # all three of these are required to use system libbson

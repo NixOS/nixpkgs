@@ -1,11 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, jdk11, maven, makeWrapper, jre_headless, pcsclite, proot, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jdk11,
+  maven,
+  makeWrapper,
+  jre_headless,
+  pcsclite,
+  proot,
+  zlib,
+}:
 
 let
   defineMvnWrapper = ''
     mvn()
     {
         # One of the deps that are downloaded and run needs zlib.
-        export LD_LIBRARY_PATH="${lib.makeLibraryPath [zlib]}"
+        export LD_LIBRARY_PATH="${lib.makeLibraryPath [ zlib ]}"
         # Give access to ELF interpreter under FHS path, to be able to run
         # prebuilt binaries.
         "${lib.getExe proot}" -b "${stdenv.cc.libc}/lib:/lib64" mvn "$@"
@@ -27,7 +38,10 @@ maven.buildMavenPackage rec {
   mvnJdk = jdk11;
   mvnHash = "sha256-vTlOxFBjEZRD23ldMF+VRKZx6jyZ6YvgvZM353FWrWQ=";
 
-  nativeBuildInputs = [ jdk11 makeWrapper ];
+  nativeBuildInputs = [
+    jdk11
+    makeWrapper
+  ];
 
   # Fix build error due to missing .git directory:
   #  Failed to execute goal pl.project13.maven:git-commit-id-plugin:4.0.0:revision (retrieve-git-info) on project gppro: .git directory is not found! Please specify a valid [dotGitDirectory] in your pom.xml -> [Help 1]

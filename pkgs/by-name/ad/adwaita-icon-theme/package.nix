@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gnome
-, gtk3
-, gdk-pixbuf
-, librsvg
-, hicolor-icon-theme
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  gtk3,
+  gdk-pixbuf,
+  librsvg,
+  hicolor-icon-theme,
 }:
 
 stdenv.mkDerivation rec {

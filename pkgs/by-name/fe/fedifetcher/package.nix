@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, python3, stdenv }:
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  stdenv,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "fedifetcher";

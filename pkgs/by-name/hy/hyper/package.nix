@@ -1,15 +1,82 @@
-{ stdenv, lib, fetchurl, dpkg, atk, glib, pango, gdk-pixbuf, gtk3, cairo
-, freetype, fontconfig, dbus, libXi, libXcursor, libXdamage, libXrandr, libXcomposite
-, libXext, libXfixes, libXrender, libX11, libXtst, libXScrnSaver, libxcb, nss, nspr
-, alsa-lib, cups, expat, udev, libpulseaudio, at-spi2-atk, at-spi2-core, libxshmfence
-, libdrm, libxkbcommon, mesa, nixosTests}:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  atk,
+  glib,
+  pango,
+  gdk-pixbuf,
+  gtk3,
+  cairo,
+  freetype,
+  fontconfig,
+  dbus,
+  libXi,
+  libXcursor,
+  libXdamage,
+  libXrandr,
+  libXcomposite,
+  libXext,
+  libXfixes,
+  libXrender,
+  libX11,
+  libXtst,
+  libXScrnSaver,
+  libxcb,
+  nss,
+  nspr,
+  alsa-lib,
+  cups,
+  expat,
+  udev,
+  libpulseaudio,
+  at-spi2-atk,
+  at-spi2-core,
+  libxshmfence,
+  libdrm,
+  libxkbcommon,
+  mesa,
+  nixosTests,
+}:
 
 let
   libPath = lib.makeLibraryPath [
-    stdenv.cc.cc gtk3 atk glib pango gdk-pixbuf cairo freetype fontconfig dbus
-    libXi libXcursor libXdamage libXrandr libXcomposite libXext libXfixes libxcb
-    libXrender libX11 libXtst libXScrnSaver nss nspr alsa-lib cups expat udev libpulseaudio
-    at-spi2-atk at-spi2-core libxshmfence libdrm libxkbcommon mesa
+    stdenv.cc.cc
+    gtk3
+    atk
+    glib
+    pango
+    gdk-pixbuf
+    cairo
+    freetype
+    fontconfig
+    dbus
+    libXi
+    libXcursor
+    libXdamage
+    libXrandr
+    libXcomposite
+    libXext
+    libXfixes
+    libxcb
+    libXrender
+    libX11
+    libXtst
+    libXScrnSaver
+    nss
+    nspr
+    alsa-lib
+    cups
+    expat
+    udev
+    libpulseaudio
+    at-spi2-atk
+    at-spi2-core
+    libxshmfence
+    libdrm
+    libxkbcommon
+    mesa
   ];
 
 in
@@ -42,11 +109,14 @@ stdenv.mkDerivation rec {
   dontPatchELF = true;
   meta = with lib; {
     description = "Terminal built on web technologies";
-    homepage    = "https://hyper.is/";
-    maintainers = with maintainers; [ puffnfresh fabiangd ];
+    homepage = "https://hyper.is/";
+    maintainers = with maintainers; [
+      puffnfresh
+      fabiangd
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license     = licenses.mit;
-    platforms   = [ "x86_64-linux" ];
+    license = licenses.mit;
+    platforms = [ "x86_64-linux" ];
     mainProgram = "hyper";
     broken = true; # Error: 'node-pty' failed to load
   };

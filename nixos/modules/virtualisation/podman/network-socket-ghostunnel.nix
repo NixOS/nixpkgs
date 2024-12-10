@@ -1,4 +1,9 @@
-{ config, lib, pkg, ... }:
+{
+  config,
+  lib,
+  pkg,
+  ...
+}:
 let
   inherit (lib)
     mkOption

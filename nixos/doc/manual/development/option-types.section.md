@@ -399,7 +399,7 @@ Composed types are types that take a type as parameter. `listOf
     returned instead for the same `mkIf false` definition.
     :::
 
-`types.attrsWith` { *`elemType`*, *`lazy`* ? false }
+`types.attrsWith` { *`elemType`*, *`lazy`* ? false, *`placeholder`* ? "name" }
 
 :   An attribute set of where all the values are of *`elemType`* type.
 
@@ -411,10 +411,18 @@ Composed types are types that take a type as parameter. `listOf
     `lazy`
     : Determines whether the attribute set is lazily evaluated. See: `types.lazyAttrsOf`
 
+    `placeholder` (`String`, default: `name` )
+    : Placeholder string in documentation for the attribute names.
+      The default value `name` results in the placeholder `<name>`
+
     **Behavior**
 
     - `attrsWith { elemType = t; }` is equivalent to `attrsOf t`
     - `attrsWith { lazy = true; elemType = t; }` is equivalent to `lazyAttrsOf t`
+    - `attrsWith { placeholder = "id"; elemType = t; }`
+
+      Displays the option as `foo.<id>` in the manual.
+
 
 `types.uniq` *`t`*
 

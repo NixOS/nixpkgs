@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation {
   version = "unstable-2018-10-18";
@@ -6,13 +10,13 @@ stdenv.mkDerivation {
 
   src = fetchFromGitHub {
     owner = "ps2dev";
-    repo  = "ps2client";
+    repo = "ps2client";
     rev = "92fcaf18aabf74daaed40bd50d428cce326a87c0";
     sha256 = "1rlmns44pxm6dkh6d3cz9sw8v7pvi53r7r5r3kgwdzkhixjj0cdg";
   };
 
   patchPhase = ''
-   sed -i -e "s|-I/usr/include||g" -e "s|-I/usr/local/include||g" Makefile
+    sed -i -e "s|-I/usr/include||g" -e "s|-I/usr/local/include||g" Makefile
   '';
 
   installPhase = ''

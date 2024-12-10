@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, boehmgc
-, glib
-, help2man
-, libgee
-, ncurses
-, perl
-, pkg-config
-, vala
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boehmgc,
+  glib,
+  help2man,
+  libgee,
+  ncurses,
+  perl,
+  pkg-config,
+  vala,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,14 +27,15 @@ stdenv.mkDerivation rec {
     libgee
     ncurses
   ];
-  nativeBuildInputs = [
-    perl
-    pkg-config
-    vala
-  ]
-  # `help2man' wants to run Zile, which won't work when the
-  # newly-produced binary can't be run at build-time.
-  ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) help2man;
+  nativeBuildInputs =
+    [
+      perl
+      pkg-config
+      vala
+    ]
+    # `help2man' wants to run Zile, which won't work when the
+    # newly-produced binary can't be run at build-time.
+    ++ lib.optional (stdenv.hostPlatform == stdenv.buildPlatform) help2man;
 
   # Tests can't be run because most of them rely on the ability to
   # fiddle with the terminal.
@@ -42,7 +44,7 @@ stdenv.mkDerivation rec {
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
 
   # XXX: Work around cross-compilation-unfriendly `gl_FUNC_FSTATAT' macro.
-  gl_cv_func_fstatat_zero_flag="yes";
+  gl_cv_func_fstatat_zero_flag = "yes";
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/zile/";

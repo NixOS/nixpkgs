@@ -1,14 +1,15 @@
-{ lib
-, callPackage
-, python3Packages
-, fetchFromGitHub
-, installShellFiles
-, platformio
-, esptool
-, git
-, inetutils
-, stdenv
-, nixosTests
+{
+  lib,
+  callPackage,
+  python3Packages,
+  fetchFromGitHub,
+  installShellFiles,
+  platformio,
+  esptool,
+  git,
+  inetutils,
+  stdenv,
+  nixosTests,
 }:
 
 let
@@ -21,14 +22,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2024.11.2";
+  version = "2024.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-zxFP7QXZbX/kj17po3tMNHoc7OfCdFSQ73e1umf+QA8=";
+    hash = "sha256-ZGqYvbNBQSoU6F20Bdzif8zmzLPr4XusVVrOR0iWl7k=";
   };
 
   build-systems = with python.pkgs; [
@@ -102,10 +103,19 @@ python.pkgs.buildPythonApplication rec {
     # esptool is used in esphome/__main__.py
     # git is used in esphome/writer.py
     # inetutils is used in esphome/dashboard/status/ping.py
-    "--prefix PATH : ${lib.makeBinPath [ platformio esptool git inetutils ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        platformio
+        esptool
+        git
+        inetutils
+      ]
+    }"
     "--prefix PYTHONPATH : ${python.pkgs.makePythonPath dependencies}" # will show better error messages
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
+    # https://github.com/NixOS/nixpkgs/issues/362193
+    "--set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION 'python'"
   ];
 
   # Needed for tests
@@ -149,7 +159,10 @@ python.pkgs.buildPythonApplication rec {
       mit # The C++/runtime codebase of the ESPHome project (file extensions .c, .cpp, .h, .hpp, .tcc, .ino)
       gpl3Only # The python codebase and all other parts of this codebase
     ];
-    maintainers = with maintainers; [ globin hexa ];
+    maintainers = with maintainers; [
+      globin
+      hexa
+    ];
     mainProgram = "esphome";
   };
 }

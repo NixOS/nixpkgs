@@ -1,5 +1,10 @@
-{ fetchurl, lib, stdenv, ncurses
-, emacsSupport ? true, emacs
+{
+  fetchurl,
+  lib,
+  stdenv,
+  ncurses,
+  emacsSupport ? true,
+  emacs,
 }:
 
 stdenv.mkDerivation rec {

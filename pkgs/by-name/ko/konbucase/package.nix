@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, vala
-, pkg-config
-, wrapGAppsHook3
-, pantheon
-, gtksourceview5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  wrapGAppsHook3,
+  pantheon,
+  gtksourceview5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

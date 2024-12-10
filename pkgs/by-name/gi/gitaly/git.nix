@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, gitaly
-, fetchFromGitLab
-, curl
-, pcre2
-, zlib
+{
+  stdenv,
+  lib,
+  gitaly,
+  fetchFromGitLab,
+  curl,
+  pcre2,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {

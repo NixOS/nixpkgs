@@ -1,40 +1,47 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, imagemagickBig
-, pkg-config
-, withXorg ? true
-, libX11
-, libv4l
-, qtbase
-, qtx11extras
-, wrapQtAppsHook
-, wrapGAppsHook3
-, gtk3
-, xmlto
-, docbook_xsl
-, autoreconfHook
-, dbus
-, enableVideo ? stdenv.hostPlatform.isLinux
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  imagemagickBig,
+  pkg-config,
+  withXorg ? true,
+  libX11,
+  libv4l,
+  qtbase,
+  qtx11extras,
+  wrapQtAppsHook,
+  wrapGAppsHook3,
+  gtk3,
+  xmlto,
+  docbook_xsl,
+  autoreconfHook,
+  dbus,
+  enableVideo ? stdenv.hostPlatform.isLinux,
   # The implementation is buggy and produces an error like
   # Name Error (Connection ":1.4380" is not allowed to own the service "org.linuxtv.Zbar" due to security policies in the configuration file)
   # for every scanned code.
   # see https://github.com/mchehab/zbar/issues/104
-, enableDbus ? false
-, libintl
-, libiconv
-, Foundation
-, bash
-, python3
-, argp-standalone
+  enableDbus ? false,
+  libintl,
+  libiconv,
+  Foundation,
+  bash,
+  python3,
+  argp-standalone,
 }:
 
 stdenv.mkDerivation rec {
   pname = "zbar";
   version = "0.23.92";
 
-  outputs = [ "out" "lib" "dev" "doc" "man" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "doc"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "mchehab";
@@ -56,33 +63,40 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-    xmlto
-    autoreconfHook
-    docbook_xsl
-  ] ++ lib.optionals enableVideo [
-    wrapGAppsHook3
-    wrapQtAppsHook
-    qtbase
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      xmlto
+      autoreconfHook
+      docbook_xsl
+    ]
+    ++ lib.optionals enableVideo [
+      wrapGAppsHook3
+      wrapQtAppsHook
+      qtbase
+    ];
 
-  buildInputs = [
-    imagemagickBig
-    libintl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-    Foundation
-  ] ++ lib.optionals enableDbus [
-    dbus
-  ] ++ lib.optionals withXorg [
-    libX11
-  ] ++ lib.optionals enableVideo [
-    libv4l
-    gtk3
-    qtbase
-    qtx11extras
-  ];
+  buildInputs =
+    [
+      imagemagickBig
+      libintl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+      Foundation
+    ]
+    ++ lib.optionals enableDbus [
+      dbus
+    ]
+    ++ lib.optionals withXorg [
+      libX11
+    ]
+    ++ lib.optionals enableVideo [
+      libv4l
+      gtk3
+      qtbase
+      qtx11extras
+    ];
 
   nativeCheckInputs = [
     bash
@@ -103,19 +117,32 @@ stdenv.mkDerivation rec {
   # Disable assertions which include -dev QtBase file paths.
   env.NIX_CFLAGS_COMPILE = "-DQT_NO_DEBUG";
 
-  configureFlags = [
-    "--without-python"
-  ] ++ (if enableDbus then [
-    "--with-dbusconfdir=${placeholder "out"}/share"
-  ] else [
-    "--without-dbus"
-  ]) ++ (if enableVideo then [
-    "--with-gtk=gtk3"
-  ] else [
-    "--disable-video"
-    "--without-gtk"
-    "--without-qt"
-  ]);
+  configureFlags =
+    [
+      "--without-python"
+    ]
+    ++ (
+      if enableDbus then
+        [
+          "--with-dbusconfdir=${placeholder "out"}/share"
+        ]
+      else
+        [
+          "--without-dbus"
+        ]
+    )
+    ++ (
+      if enableVideo then
+        [
+          "--with-gtk=gtk3"
+        ]
+      else
+        [
+          "--disable-video"
+          "--without-gtk"
+          "--without-qt"
+        ]
+    );
 
   doCheck = true;
 

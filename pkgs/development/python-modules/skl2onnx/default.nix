@@ -32,7 +32,6 @@ buildPythonPackage rec {
     onnxconverter-common
   ];
 
-
   pythonRelaxDeps = [ "scikit-learn" ];
 
   nativeCheckInputs = [

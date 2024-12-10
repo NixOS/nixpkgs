@@ -1,7 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-,
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 let
   version = "2.1.0";

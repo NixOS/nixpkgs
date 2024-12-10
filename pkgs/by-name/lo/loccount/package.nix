@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitLab, python3 }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitLab,
+  python3,
+}:
 buildGoModule rec {
   pname = "loccount";
   version = "2.16";
@@ -16,7 +21,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ python3 ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   preBuild = ''
     patchShebangs --build tablegen.py

@@ -138,7 +138,7 @@ let
 
     };
 
-    config.device = lib.mkIf (config.label != null) "/dev/disk/by-label/${escape config.label}";
+    config.device = lib.mkIf (config.label != null) (lib.mkDefault "/dev/disk/by-label/${escape config.label}");
 
     config.options = let
       inInitrd = utils.fsNeededForBoot config;
@@ -354,7 +354,15 @@ in
           options.
         '';
       }
-    ];
+    ] ++ lib.map (fs: {
+      assertion = fs.label != null -> fs.device == "/dev/disk/by-label/${escape fs.label}";
+      message = ''
+        The filesystem with mount point ${fs.mountPoint} has its label and device set to inconsistent values:
+          label: ${toString fs.label}
+          device: ${toString fs.device}
+        'filesystems.<name>.label' and 'filesystems.<name>.device' are mutually exclusive. Please set only one.
+      '';
+    }) fileSystems;
 
     # Export for use in other modules
     system.build.fileSystems = fileSystems;

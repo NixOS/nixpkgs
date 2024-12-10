@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitLab, autoreconfHook, pkg-config, git, guile, curl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  git,
+  guile,
+  curl,
+}:
 stdenv.mkDerivation rec {
   pname = "akku";
   version = "1.1.0-unstable-2024-03-03";
@@ -10,11 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-6xqASnFxzz0yE5oJnh15SOB74PVrVkMVwS3PwKAmgks=";
   };
 
-
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   # akku calls curl commands
-  buildInputs = [ guile curl git ];
+  buildInputs = [
+    guile
+    curl
+    git
+  ];
 
   # Use a dummy package index to boostrap Akku
   preBuild = ''

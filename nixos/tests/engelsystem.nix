@@ -14,7 +14,10 @@ import ./make-test-python.nix (
           domain = "engelsystem";
           createDatabase = true;
         };
-        networking.firewall.allowedTCPPorts = [ 80 443 ];
+        networking.firewall.allowedTCPPorts = [
+          80
+          443
+        ];
         environment.systemPackages = with pkgs; [
           xmlstarlet
           libxml2
@@ -38,4 +41,5 @@ import ./make-test-python.nix (
           "test 'News - Engelsystem' = \"$(xml sel -T -t -c html/head/title news)\""
       )
     '';
-  })
+  }
+)

@@ -1,16 +1,18 @@
-{ lib
-, fetchurl
-, python3
-, readline
-, stdenv
-, enableCurrenciesUpdater ? true
+{
+  lib,
+  fetchurl,
+  python3,
+  readline,
+  stdenv,
+  enableCurrenciesUpdater ? true,
 }:
 
 let
-  pythonEnv = python3.withPackages(p: [
+  pythonEnv = python3.withPackages (p: [
     p.requests
   ]);
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "units";
   version = "2.23";
 
@@ -19,13 +21,19 @@ in stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2Ve0USRZJcnmFMRRM5dEljDq+SvWK4SVugm741Ghc3A=";
   };
 
-  outputs = [ "out" "info" "man" ];
-
-  buildInputs = [
-    readline
-  ] ++ lib.optionals enableCurrenciesUpdater [
-    pythonEnv
+  outputs = [
+    "out"
+    "info"
+    "man"
   ];
+
+  buildInputs =
+    [
+      readline
+    ]
+    ++ lib.optionals enableCurrenciesUpdater [
+      pythonEnv
+    ];
 
   prePatch = lib.optionalString enableCurrenciesUpdater ''
     substituteInPlace units_cur \

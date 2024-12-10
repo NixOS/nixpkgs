@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libusb-compat-0_1 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libusb-compat-0_1,
+}:
 stdenv.mkDerivation rec {
   pname = "dfu-programmer";
   version = "0.7.2";

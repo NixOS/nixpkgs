@@ -1,23 +1,24 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, cmake
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, pkg-config
-, alsa-lib
-, curl
-, gtkmm3
-, libhandy
-, libopus
-, libpulseaudio
-, libsecret
-, libsodium
-, nlohmann_json
-, pcre2
-, spdlog
-, sqlite
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  cmake,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  pkg-config,
+  alsa-lib,
+  curl,
+  gtkmm3,
+  libhandy,
+  libopus,
+  libpulseaudio,
+  libsecret,
+  libsodium,
+  nlohmann_json,
+  pcre2,
+  spdlog,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
@@ -60,7 +61,12 @@ stdenv.mkDerivation rec {
     mkdir $out/bin
     cp abaddon $out/bin
     wrapProgram $out/bin/abaddon \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ alsa-lib libpulseaudio ]}" \
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          alsa-lib
+          libpulseaudio
+        ]
+      }" \
       --chdir $out/share/abaddon
 
     runHook postInstall
@@ -73,7 +79,10 @@ stdenv.mkDerivation rec {
       desktopName = "Abaddon";
       genericName = meta.description;
       startupWMClass = pname;
-      categories = [ "Network" "InstantMessaging" ];
+      categories = [
+        "Network"
+        "InstantMessaging"
+      ];
       mimeTypes = [ "x-scheme-handler/discord" ];
     })
   ];

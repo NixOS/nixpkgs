@@ -1,17 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, help2man
-, pkg-config
-, texinfo
-, boehmgc
-, readline
-, nbdSupport ? !stdenv.hostPlatform.isDarwin, libnbd
-, textStylingSupport ? true, gettext
-, dejagnu
+{
+  lib,
+  stdenv,
+  fetchurl,
+  help2man,
+  pkg-config,
+  texinfo,
+  boehmgc,
+  readline,
+  nbdSupport ? !stdenv.hostPlatform.isDarwin,
+  libnbd,
+  textStylingSupport ? true,
+  gettext,
+  dejagnu,
 
   # update script only
-, writeScript
+  writeScript,
 }:
 
 let
@@ -26,7 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-iq825h42elMUDqQOJVnp7FEud5xCvuNOesJLNLoRm94=";
   };
 
-  outputs = [ "out" "dev" "info" "lib" ]
+  outputs =
+    [
+      "out"
+      "dev"
+      "info"
+      "lib"
+    ]
     # help2man can't cross compile because it runs `poke --help` to
     # generate the man page
     ++ lib.optional (!isCross) "man";
@@ -37,14 +46,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    pkg-config
-    texinfo
-  ] ++ lib.optionals (!isCross) [
-    help2man
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      texinfo
+    ]
+    ++ lib.optionals (!isCross) [
+      help2man
+    ];
 
-  buildInputs = [ boehmgc readline ]
+  buildInputs =
+    [
+      boehmgc
+      readline
+    ]
     ++ lib.optional nbdSupport libnbd
     ++ lib.optional textStylingSupport gettext
     ++ lib.optional finalAttrs.finalPackage.doCheck dejagnu;

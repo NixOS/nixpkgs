@@ -1,13 +1,25 @@
-{ stdenv, lib, fetchurl, makeWrapper, perl
-, unzip, gzip, file
-# extractors which are added to unp’s PATH
-, extraBackends ? []
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  perl,
+  unzip,
+  gzip,
+  file,
+  # extractors which are added to unp’s PATH
+  extraBackends ? [ ],
 }:
 
 let
-  runtime_bins =  [ file unzip gzip ] ++ extraBackends;
+  runtime_bins = [
+    file
+    unzip
+    gzip
+  ] ++ extraBackends;
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "unp";
   version = "2.0-pre9";
   nativeBuildInputs = [ makeWrapper ];
@@ -22,16 +34,16 @@ in stdenv.mkDerivation {
   dontConfigure = true;
   dontBuild = true;
   installPhase = ''
-  mkdir -p $out/bin
-  mkdir -p $out/share/man/man1
-  install ./unp $out/bin/unp
-  install ./ucat $out/bin/ucat
-  cp debian/unp.1 $out/share/man/man1
+    mkdir -p $out/bin
+    mkdir -p $out/share/man/man1
+    install ./unp $out/bin/unp
+    install ./ucat $out/bin/ucat
+    cp debian/unp.1 $out/share/man/man1
 
-  wrapProgram $out/bin/unp \
-    --prefix PATH : ${lib.makeBinPath runtime_bins}
-  wrapProgram $out/bin/ucat \
-    --prefix PATH : ${lib.makeBinPath runtime_bins}
+    wrapProgram $out/bin/unp \
+      --prefix PATH : ${lib.makeBinPath runtime_bins}
+    wrapProgram $out/bin/ucat \
+      --prefix PATH : ${lib.makeBinPath runtime_bins}
   '';
 
   meta = with lib; {
