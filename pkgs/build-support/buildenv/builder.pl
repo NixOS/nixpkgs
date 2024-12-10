@@ -1,6 +1,7 @@
 #! @perl@ -w
 
 use strict;
+use feature 'signatures';
 use Cwd 'abs_path';
 use IO::Handle;
 use File::Path;
@@ -18,8 +19,7 @@ my $extraPrefix = $ENV{"extraPrefix"};
 
 my @pathsToLink = split ' ', $ENV{"pathsToLink"};
 
-sub isInPathsToLink {
-    my $path = shift;
+sub isInPathsToLink($path) {
     $path = "/" if $path eq "";
     foreach my $elem (@pathsToLink) {
         return 1 if
@@ -32,8 +32,7 @@ sub isInPathsToLink {
 
 # Returns whether a path in one of the linked packages may contain
 # files in one of the elements of pathsToLink.
-sub hasPathsToLink {
-    my $path = shift;
+sub hasPathsToLink($path) {
     foreach my $elem (@pathsToLink) {
         return 1 if
             $path eq "" ||
@@ -44,8 +43,7 @@ sub hasPathsToLink {
 }
 
 # Similar to `lib.isStorePath`
-sub isStorePath {
-    my $path = shift;
+sub isStorePath($path) {
     my $storePath = "@storeDir@";
 
     return substr($path, 0, 1) eq "/" && dirname($path) eq $storePath;
@@ -76,9 +74,7 @@ for my $p (@pathsToLink) {
 
 sub findFiles;
 
-sub findFilesInDir {
-    my ($relName, $target, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs) = @_;
-
+sub findFilesInDir($relName, $target, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs) {
     opendir DIR, "$target" or die "cannot open `$target': $!";
     my @names = readdir DIR or die;
     closedir DIR;
@@ -89,9 +85,7 @@ sub findFilesInDir {
     }
 }
 
-sub checkCollision {
-    my ($path1, $path2) = @_;
-
+sub checkCollision($path1, $path2) {
     if (! -e $path1 || ! -e $path2) {
         return 0;
     }
@@ -109,14 +103,11 @@ sub checkCollision {
     return compare($path1, $path2) == 0;
 }
 
-sub prependDangling {
-    my $path = shift;
+sub prependDangling($path) {
     return (-l $path && ! -e $path ? "dangling symlink " : "") . "`$path'";
 }
 
-sub findFiles {
-    my ($relName, $target, $baseName, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs) = @_;
-
+sub findFiles($relName, $target, $baseName, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs) {
     # The store path must not be a file when not ignoreSingleFileOutputs
     if (-f $target && isStorePath $target) {
         if ($ignoreSingleFileOutputs) {
@@ -203,9 +194,7 @@ sub findFiles {
 my %done;
 my %postponed;
 
-sub addPkg {
-    my ($pkgDir, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs)  = @_;
-
+sub addPkg($pkgDir, $ignoreCollisions, $checkCollisionContents, $priority, $ignoreSingleFileOutputs) {
     return if (defined $done{$pkgDir});
     $done{$pkgDir} = 1;
 
