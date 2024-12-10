@@ -71,6 +71,7 @@
   ./hardware/hackrf.nix
   ./hardware/i2c.nix
   ./hardware/infiniband.nix
+  ./hardware/keyboard/keyboardio.nix
   ./hardware/keyboard/qmk.nix
   ./hardware/keyboard/teck.nix
   ./hardware/keyboard/uhk.nix
