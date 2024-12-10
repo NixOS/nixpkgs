@@ -29,6 +29,6 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://postfixadmin.sourceforge.io/";
     maintainers = with maintainers; [ globin ];
     license = licenses.gpl2Plus;
-    platforms = platforms.all;
+    platforms = lib.subtractLists platforms.darwin platforms.unix; # There is no /var/cache/ on MacOS
   };
 })
