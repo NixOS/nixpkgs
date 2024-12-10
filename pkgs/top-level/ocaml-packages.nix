@@ -1844,6 +1844,8 @@ let
 
     tls-async = callPackage ../development/ocaml-modules/tls/async.nix { };
 
+    tls-eio = callPackage ../development/ocaml-modules/tls/eio.nix { };
+
     tls-lwt = callPackage ../development/ocaml-modules/tls/lwt.nix { };
 
     tls-mirage = callPackage ../development/ocaml-modules/tls/mirage.nix { };
