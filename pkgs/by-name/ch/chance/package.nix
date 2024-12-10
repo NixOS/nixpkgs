@@ -16,18 +16,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "chance";
-  version = "4.0.0";
+  version = "4.0.1";
 
   src = fetchFromGitLab {
     owner = "zelikos";
     repo = "rollit";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-2lZ7iMHMFE1wTSlJj0mIUV62jO0NundYiOC8rdUJGkQ=";
+    hash = "sha256-25+/TvTba/QF7+QE8+O7u4yc9BNi0pcZeNj11dGkEfg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
-    hash = "sha256-Q4CfDQxlhspjg7Et+0zHwZ/iSnp0CnwwpW/gT7htlL8=";
+    hash = "sha256-Jy/Tc5Rmqh6NIcLzGSIxQg1dLiAkw+xbrdo6qfqrRSg=";
   };
 
   nativeBuildInputs = [
