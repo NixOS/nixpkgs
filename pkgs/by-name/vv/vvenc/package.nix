@@ -9,7 +9,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vvenc";
-  version = "1.12.1";
+  version = "1.13.0-rc1";
 
   outputs = [
     "out"
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "fraunhoferhhi";
     repo = "vvenc";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Et/JmF/2hh6A1EsOzvgzruMN47rd5cPgRke3uPvz298=";
+    hash = "sha256-Y6t3x5F5olQf2tgfg08dMsBEG+ndgGveRyBQQACZmn0=";
   };
 
   env.NIX_CFLAGS_COMPILE = toString (
