@@ -1025,18 +1025,6 @@ final: prev:
     meta.homepage = "https://github.com/nullishamy/autosave.nvim/";
   };
 
-  avante-nvim = buildVimPlugin {
-    pname = "avante.nvim";
-    version = "2024-12-05";
-    src = fetchFromGitHub {
-      owner = "yetone";
-      repo = "avante.nvim";
-      rev = "4464b7f4ae26254cd506a354284a02129941e244";
-      sha256 = "0h1l3d332hh3gbdwydmm5wpswfzcl7w9j0bx6g6xnazya5cpzc3s";
-    };
-    meta.homepage = "https://github.com/yetone/avante.nvim/";
-  };
-
   aw-watcher-vim = buildVimPlugin {
     pname = "aw-watcher-vim";
     version = "2023-10-09";
