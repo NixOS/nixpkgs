@@ -1,6 +1,8 @@
-{ lib, stdenv
-, fetchurl
-, python3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +13,6 @@ stdenv.mkDerivation rec {
     url = "mirror://sageupstream/${pname}/${pname}-${version}.tar.bz2";
     sha256 = "0l7xh4abw5sb4d37r0ylr3vwb88fpx2zrvfm5ql0c7yrv5q59fjz";
   };
-
 
   # Script that creates the sqlite database from the allcurves textfile
   spkg-install = fetchurl {

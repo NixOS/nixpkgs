@@ -1,28 +1,33 @@
-{ stdenv
-, lib
-, fetchpatch2
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, vala
-, gi-docgen
-, python3
-, libsoup
-, glib
-, gnome
-, gssdp-tools
-, buildPackages
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+{
+  stdenv,
+  lib,
+  fetchpatch2,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  vala,
+  gi-docgen,
+  python3,
+  libsoup,
+  glib,
+  gnome,
+  gssdp-tools,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gssdp";
   version = "1.4.1";
 
-  outputs = [ "out" "dev" ]
-    ++ lib.optionals withIntrospection [ "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optionals withIntrospection [ "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -43,17 +48,19 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    glib
-    python3
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-    vala
-    gi-docgen
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      glib
+      python3
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      vala
+      gi-docgen
+    ];
 
   buildInputs = [
     libsoup

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, pam
-, coreutils
-, installShellFiles
-, scdoc
-, nixosTests
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  pam,
+  coreutils,
+  installShellFiles,
+  scdoc,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -24,13 +25,20 @@ buildGoModule rec {
 
   tags = [ "libpam" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/foxcpp/maddy.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/foxcpp/maddy.Version=${version}"
+  ];
 
   subPackages = [ "cmd/maddy" ];
 
   buildInputs = [ pam ];
 
-  nativeBuildInputs = [ installShellFiles scdoc ];
+  nativeBuildInputs = [
+    installShellFiles
+    scdoc
+  ];
 
   postInstall = ''
     for f in docs/man/*.scd; do

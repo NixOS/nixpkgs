@@ -1,8 +1,9 @@
-{ appimageTools
-, fetchurl
-, version
-, pname
-, meta
+{
+  appimageTools,
+  fetchurl,
+  version,
+  pname,
+  meta,
 }:
 let
   src = fetchurl {
@@ -13,7 +14,12 @@ let
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
 in
 appimageTools.wrapType2 {
-  inherit meta pname version src;
+  inherit
+    meta
+    pname
+    version
+    src
+    ;
 
   extraPkgs = pkgs: [ pkgs.ocl-icd ];
 
@@ -25,4 +31,3 @@ appimageTools.wrapType2 {
       --replace-fail 'Exec=AppRun --no-sandbox %U' 'Exec=lmstudio'
   '';
 }
-

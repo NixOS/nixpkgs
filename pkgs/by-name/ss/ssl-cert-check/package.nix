@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, coreutils
-, fetchFromGitHub
-, findutils
-, gawk
-, gnugrep
-, gnused
-, makeWrapper
-, mktemp
-, openssl
-, which
+{
+  lib,
+  stdenv,
+  coreutils,
+  fetchFromGitHub,
+  findutils,
+  gawk,
+  gnugrep,
+  gnused,
+  makeWrapper,
+  mktemp,
+  openssl,
+  which,
 }:
 
 stdenv.mkDerivation rec {

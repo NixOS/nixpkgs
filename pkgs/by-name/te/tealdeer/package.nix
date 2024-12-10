@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, apple-sdk_11
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  apple-sdk_11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -45,8 +46,15 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Very fast implementation of tldr in Rust";
     homepage = "https://github.com/dbrgn/tealdeer";
-    maintainers = with maintainers; [ davidak newam mfrw ];
-    license = with licenses; [ asl20 mit ];
+    maintainers = with maintainers; [
+      davidak
+      newam
+      mfrw
+    ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     mainProgram = "tldr";
   };
 }

@@ -1,54 +1,77 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
-  name = "containers-extra_veth";
-  meta = {
-    maintainers = with lib.maintainers; [ kampfschlaefer ];
-  };
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
+  {
+    name = "containers-extra_veth";
+    meta = {
+      maintainers = with lib.maintainers; [ kampfschlaefer ];
+    };
 
-  nodes.machine =
-    { pkgs, ... }:
-    { imports = [ ../modules/installer/cd-dvd/channel.nix ];
-      virtualisation.writableStore = true;
-      virtualisation.vlans = [];
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        imports = [ ../modules/installer/cd-dvd/channel.nix ];
+        virtualisation.writableStore = true;
+        virtualisation.vlans = [ ];
 
-      networking.useDHCP = false;
-      networking.bridges = {
-        br0 = {
-          interfaces = [];
+        networking.useDHCP = false;
+        networking.bridges = {
+          br0 = {
+            interfaces = [ ];
+          };
+          br1 = {
+            interfaces = [ ];
+          };
         };
-        br1 = { interfaces = []; };
-      };
-      networking.interfaces = {
-        br0 = {
-          ipv4.addresses = [{ address = "192.168.0.1"; prefixLength = 24; }];
-          ipv6.addresses = [{ address = "fc00::1"; prefixLength = 7; }];
+        networking.interfaces = {
+          br0 = {
+            ipv4.addresses = [
+              {
+                address = "192.168.0.1";
+                prefixLength = 24;
+              }
+            ];
+            ipv6.addresses = [
+              {
+                address = "fc00::1";
+                prefixLength = 7;
+              }
+            ];
+          };
+          br1 = {
+            ipv4.addresses = [
+              {
+                address = "192.168.1.1";
+                prefixLength = 24;
+              }
+            ];
+          };
         };
-        br1 = {
-          ipv4.addresses = [{ address = "192.168.1.1"; prefixLength = 24; }];
-        };
-      };
 
-      containers.webserver =
-        {
+        containers.webserver = {
           autoStart = true;
           privateNetwork = true;
           hostBridge = "br0";
           localAddress = "192.168.0.100/24";
           localAddress6 = "fc00::2/7";
           extraVeths = {
-            veth1 = { hostBridge = "br1"; localAddress = "192.168.1.100/24"; };
-            veth2 = { hostAddress = "192.168.2.1"; localAddress = "192.168.2.100"; };
-          };
-          config =
-            {
-              networking.firewall.allowedTCPPorts = [ 80 ];
+            veth1 = {
+              hostBridge = "br1";
+              localAddress = "192.168.1.100/24";
             };
+            veth2 = {
+              hostAddress = "192.168.2.1";
+              localAddress = "192.168.2.100";
+            };
+          };
+          config = {
+            networking.firewall.allowedTCPPorts = [ 80 ];
+          };
         };
 
-      virtualisation.additionalPaths = [ pkgs.stdenv ];
-    };
+        virtualisation.additionalPaths = [ pkgs.stdenv ];
+      };
 
-  testScript =
-    ''
+    testScript = ''
       machine.wait_for_unit("default.target")
       assert "webserver" in machine.succeed("nixos-container list")
 
@@ -88,4 +111,5 @@ import ./make-test-python.nix ({ pkgs, lib, ... }: {
       with subtest("Destroying a declarative container should fail"):
           machine.fail("nixos-container destroy webserver")
     '';
-})
+  }
+)

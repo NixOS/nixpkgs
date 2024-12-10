@@ -1,4 +1,9 @@
-{ config, lib, name, ... }:
+{
+  config,
+  lib,
+  name,
+  ...
+}:
 {
   options = {
     dataPath = lib.mkOption {
@@ -10,7 +15,12 @@
     };
 
     logLevel = lib.mkOption {
-      type = lib.types.enum [ "info" "warning" "error" "debug" ];
+      type = lib.types.enum [
+        "info"
+        "warning"
+        "error"
+        "debug"
+      ];
       default = "warning";
       description = ''
         Set the log level of the daemon.

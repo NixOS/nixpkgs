@@ -1,14 +1,15 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, mirage-crypto
-, mirage-clock
-, x509
-, logs
-, fmt
-, bos
-, cmdliner
-, alcotest
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  mirage-crypto,
+  mirage-clock,
+  x509,
+  logs,
+  fmt,
+  bos,
+  cmdliner,
+  alcotest,
 }:
 
 buildDunePackage rec {

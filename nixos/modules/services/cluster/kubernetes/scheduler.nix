@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -65,15 +71,22 @@ in
       after = [ "kube-apiserver.service" ];
       serviceConfig = {
         Slice = "kubernetes.slice";
-        ExecStart = ''${top.package}/bin/kube-scheduler \
-          --bind-address=${cfg.address} \
-          ${optionalString (cfg.featureGates != {})
-            "--feature-gates=${concatStringsSep "," (builtins.attrValues (mapAttrs (n: v: "${n}=${trivial.boolToString v}") cfg.featureGates))}"} \
-          --kubeconfig=${top.lib.mkKubeConfig "kube-scheduler" cfg.kubeconfig} \
-          --leader-elect=${boolToString cfg.leaderElect} \
-          --secure-port=${toString cfg.port} \
-          ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
-          ${cfg.extraOpts}
+        ExecStart = ''
+          ${top.package}/bin/kube-scheduler \
+                    --bind-address=${cfg.address} \
+                    ${
+                      optionalString (cfg.featureGates != { })
+                        "--feature-gates=${
+                          concatStringsSep "," (
+                            builtins.attrValues (mapAttrs (n: v: "${n}=${trivial.boolToString v}") cfg.featureGates)
+                          )
+                        }"
+                    } \
+                    --kubeconfig=${top.lib.mkKubeConfig "kube-scheduler" cfg.kubeconfig} \
+                    --leader-elect=${boolToString cfg.leaderElect} \
+                    --secure-port=${toString cfg.port} \
+                    ${optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
+                    ${cfg.extraOpts}
         '';
         WorkingDirectory = top.dataDir;
         User = "kubernetes";

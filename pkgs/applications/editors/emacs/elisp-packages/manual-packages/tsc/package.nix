@@ -1,9 +1,10 @@
-{ lib
-, melpaBuild
-, fetchFromGitHub
-, rustPlatform
-, stdenv
-, nix-update-script
+{
+  lib,
+  melpaBuild,
+  fetchFromGitHub,
+  rustPlatform,
+  stdenv,
+  nix-update-script,
 }:
 
 let
@@ -36,7 +37,8 @@ let
       popd
     '';
   };
-in melpaBuild {
+in
+melpaBuild {
   pname = "tsc";
   inherit (tsc-dyn) version src;
 

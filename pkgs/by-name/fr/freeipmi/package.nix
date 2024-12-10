@@ -1,4 +1,12 @@
-{ buildPackages, fetchurl, lib, stdenv, libgcrypt, readline, libgpg-error }:
+{
+  buildPackages,
+  fetchurl,
+  lib,
+  stdenv,
+  libgcrypt,
+  readline,
+  libgpg-error,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.6.14";
@@ -11,10 +19,16 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  buildInputs = [ libgcrypt readline libgpg-error ];
+  buildInputs = [
+    libgcrypt
+    readline
+    libgpg-error
+  ];
 
-  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
-    [ "ac_cv_file__dev_urandom=true" "ac_cv_file__dev_random=true" ];
+  configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+    "ac_cv_file__dev_urandom=true"
+    "ac_cv_file__dev_random=true"
+  ];
 
   doCheck = true;
 
@@ -41,6 +55,6 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
 
     maintainers = with lib.maintainers; [ raskin ];
-    platforms = lib.platforms.gnu ++ lib.platforms.linux;  # arbitrary choice
+    platforms = lib.platforms.gnu ++ lib.platforms.linux; # arbitrary choice
   };
 }

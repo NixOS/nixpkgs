@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, cmake
-, cmake-extras
-, pkg-config
-, python3
-, qtbase
-, qtdeclarative
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  cmake,
+  cmake-extras,
+  pkg-config,
+  python3,
+  qtbase,
+  qtdeclarative,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,15 +22,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-2Wyh+2AW6EeKRv26D4l+GIoH5sWC9SmOODNHOveFZPg=";
   };
 
-  postPatch = ''
-    patchShebangs tests/imports/check_imports.py
+  postPatch =
+    ''
+      patchShebangs tests/imports/check_imports.py
 
-    substituteInPlace CMakeLists.txt \
-      --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" '${placeholder "out"}/${qtbase.qtQmlPrefix}'
-  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    sed -i CMakeLists.txt \
-      -e '/add_subdirectory(tests)/d'
-  '';
+      substituteInPlace CMakeLists.txt \
+        --replace "\''${CMAKE_INSTALL_LIBDIR}/qt5/qml" '${placeholder "out"}/${qtbase.qtQmlPrefix}'
+    ''
+    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+      sed -i CMakeLists.txt \
+        -e '/add_subdirectory(tests)/d'
+    '';
 
   strictDeps = true;
 

@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 let
@@ -6,16 +11,17 @@ let
   pkg = cfg.package;
 
   # SECRET_KEY through an env file
-  env = {
-    GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
-    DEBUG = "0";
-    DEBUG_TOOLBAR = "0";
-    MEDIA_ROOT = "/var/lib/tandoor-recipes";
-  } // optionalAttrs (config.time.timeZone != null) {
-    TZ = config.time.timeZone;
-  } // (
-    lib.mapAttrs (_: toString) cfg.extraConfig
-  );
+  env =
+    {
+      GUNICORN_CMD_ARGS = "--bind=${cfg.address}:${toString cfg.port}";
+      DEBUG = "0";
+      DEBUG_TOOLBAR = "0";
+      MEDIA_ROOT = "/var/lib/tandoor-recipes";
+    }
+    // optionalAttrs (config.time.timeZone != null) {
+      TZ = config.time.timeZone;
+    }
+    // (lib.mapAttrs (_: toString) cfg.extraConfig);
 
   manage = pkgs.writeShellScript "manage" ''
     set -o allexport # Export the following env vars
@@ -92,7 +98,9 @@ in
         RuntimeDirectory = "tandoor-recipes";
 
         BindReadOnlyPaths = [
-          "${config.environment.etc."ssl/certs/ca-certificates.crt".source}:/etc/ssl/certs/ca-certificates.crt"
+          "${
+            config.environment.etc."ssl/certs/ca-certificates.crt".source
+          }:/etc/ssl/certs/ca-certificates.crt"
           builtins.storeDir
           "-/etc/resolv.conf"
           "-/etc/nsswitch.conf"
@@ -112,12 +120,22 @@ in
         ProtectKernelLogs = true;
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
-        RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_UNIX"
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
         # gunicorn needs setuid
-        SystemCallFilter = [ "@system-service" "~@privileged" "@resources" "@setuid" "@keyring" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "@resources"
+          "@setuid"
+          "@keyring"
+        ];
         UMask = "0066";
       };
 

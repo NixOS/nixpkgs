@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, libxkbcommon
-, pulseaudio
-, udev
-, wayland
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  libxkbcommon,
+  pulseaudio,
+  udev,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -40,7 +41,12 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libxkbcommon pulseaudio wayland udev ];
+  buildInputs = [
+    libxkbcommon
+    pulseaudio
+    wayland
+    udev
+  ];
 
   env.POLKIT_AGENT_HELPER_1 = "/run/wrappers/bin/polkit-agent-helper-1";
 

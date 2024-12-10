@@ -13,7 +13,7 @@ buildGoModule rec {
   pname = "steampipe";
   version = "1.0.0";
 
-  CGO_ENABLED=0;
+  CGO_ENABLED = 0;
 
   src = fetchFromGitHub {
     owner = "turbot";
@@ -80,6 +80,9 @@ buildGoModule rec {
     homepage = "https://steampipe.io/";
     license = lib.licenses.agpl3Only;
     mainProgram = "steampipe";
-    maintainers = with lib.maintainers; [ hardselius anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      hardselius
+      anthonyroussel
+    ];
   };
 }

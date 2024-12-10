@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, cargo
-, sphinx
-, Security
-, libiconv
-, prefix ? "uutils-"
-, buildMulticallBinary ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  cargo,
+  sphinx,
+  Security,
+  libiconv,
+  prefix ? "uutils-",
+  buildMulticallBinary ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,17 +28,25 @@ stdenv.mkDerivation rec {
     hash = "sha256-JowORfYHxN8GqvWeUm0ACnHNM3uZviYbhR7BOeAfphw=";
   };
 
-  nativeBuildInputs = [ rustPlatform.cargoSetupHook sphinx ];
+  nativeBuildInputs = [
+    rustPlatform.cargoSetupHook
+    sphinx
+  ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    Security
+    libiconv
+  ];
 
-  makeFlags = [
-    "CARGO=${cargo}/bin/cargo"
-    "PREFIX=${placeholder "out"}"
-    "PROFILE=release"
-    "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
-  ] ++ lib.optionals (prefix != null) [ "PROG_PREFIX=${prefix}" ]
-  ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
+  makeFlags =
+    [
+      "CARGO=${cargo}/bin/cargo"
+      "PREFIX=${placeholder "out"}"
+      "PROFILE=release"
+      "INSTALLDIR_MAN=${placeholder "out"}/share/man/man1"
+    ]
+    ++ lib.optionals (prefix != null) [ "PROG_PREFIX=${prefix}" ]
+    ++ lib.optionals buildMulticallBinary [ "MULTICALL=y" ];
 
   # too many impure/platform-dependent tests
   doCheck = false;

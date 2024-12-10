@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -6,14 +11,17 @@ let
 
   cfg = config.services.mtprotoproxy;
 
-  configOpts = {
-    PORT = cfg.port;
-    USERS = cfg.users;
-    SECURE_ONLY = cfg.secureOnly;
-  } // lib.optionalAttrs (cfg.adTag != null) { AD_TAG = cfg.adTag; }
+  configOpts =
+    {
+      PORT = cfg.port;
+      USERS = cfg.users;
+      SECURE_ONLY = cfg.secureOnly;
+    }
+    // lib.optionalAttrs (cfg.adTag != null) { AD_TAG = cfg.adTag; }
     // cfg.extraConfig;
 
-  convertOption = opt:
+  convertOption =
+    opt:
     if isString opt || isInt opt then
       builtins.toJSON opt
     else if isBool opt then
@@ -21,11 +29,17 @@ let
     else if isList opt then
       "[" + concatMapStringsSep "," convertOption opt + "]"
     else if isAttrs opt then
-      "{" + concatStringsSep "," (mapAttrsToList (name: opt: "${builtins.toJSON name}: ${convertOption opt}") opt) + "}"
+      "{"
+      + concatStringsSep "," (
+        mapAttrsToList (name: opt: "${builtins.toJSON name}: ${convertOption opt}") opt
+      )
+      + "}"
     else
       throw "Invalid option type";
 
-  configFile = pkgs.writeText "config.py" (concatStringsSep "\n" (mapAttrsToList (name: opt: "${name} = ${convertOption opt}") configOpts));
+  configFile = pkgs.writeText "config.py" (
+    concatStringsSep "\n" (mapAttrsToList (name: opt: "${name} = ${convertOption opt}") configOpts)
+  );
 
 in
 
@@ -78,7 +92,7 @@ in
 
       extraConfig = mkOption {
         type = types.attrs;
-        default = {};
+        default = { };
         example = {
           STATS_PRINT_PERIOD = 600;
         };
@@ -90,7 +104,6 @@ in
     };
 
   };
-
 
   ###### implementation
 

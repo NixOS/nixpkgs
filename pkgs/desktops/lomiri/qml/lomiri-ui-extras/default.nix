@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, cmake
-, cmake-extras
-, cups
-, exiv2
-, lomiri-ui-toolkit
-, pam
-, pkg-config
-, qtbase
-, qtdeclarative
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  cmake,
+  cmake-extras,
+  cups,
+  exiv2,
+  lomiri-ui-toolkit,
+  pam,
+  pkg-config,
+  qtbase,
+  qtdeclarative,
+  xvfb-run,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -59,15 +60,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
-      # Exclude tests
-      "-E" (lib.strings.escapeShellArg "(${lib.concatStringsSep "|" [
-        # tst_busy_indicator runs into a codepath in lomiri-ui-toolkit that expects a working GL context
-        "^tst_busy_indicator"
-        # Photo & PhotoImageProvider Randomly fail, unsure why
-        "^tst_PhotoEditorPhoto"
-      ]})")
-    ]))
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
+      lib.concatStringsSep ";" [
+        # Exclude tests
+        "-E"
+        (lib.strings.escapeShellArg "(${
+          lib.concatStringsSep "|" [
+            # tst_busy_indicator runs into a codepath in lomiri-ui-toolkit that expects a working GL context
+            "^tst_busy_indicator"
+            # Photo & PhotoImageProvider Randomly fail, unsure why
+            "^tst_PhotoEditorPhoto"
+          ]
+        })")
+      ]
+    ))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -75,13 +81,23 @@ stdenv.mkDerivation (finalAttrs: {
   # Parallelism breaks xvfb-run-launched script for QML tests
   enableParallelChecking = false;
 
-  preCheck = let
-    listToQtVar = suffix: lib.makeSearchPathOutput "bin" suffix;
-  in ''
-    export QT_PLUGIN_PATH=${listToQtVar qtbase.qtPluginPrefix [ qtbase ]}
-    export QML2_IMPORT_PATH=${listToQtVar qtbase.qtQmlPrefix ([ qtdeclarative lomiri-ui-toolkit ] ++ lomiri-ui-toolkit.propagatedBuildInputs)}
-    export XDG_RUNTIME_DIR=$PWD
-  '';
+  preCheck =
+    let
+      listToQtVar = suffix: lib.makeSearchPathOutput "bin" suffix;
+    in
+    ''
+      export QT_PLUGIN_PATH=${listToQtVar qtbase.qtPluginPrefix [ qtbase ]}
+      export QML2_IMPORT_PATH=${
+        listToQtVar qtbase.qtQmlPrefix (
+          [
+            qtdeclarative
+            lomiri-ui-toolkit
+          ]
+          ++ lomiri-ui-toolkit.propagatedBuildInputs
+        )
+      }
+      export XDG_RUNTIME_DIR=$PWD
+    '';
 
   passthru = {
     updateScript = gitUpdater { };

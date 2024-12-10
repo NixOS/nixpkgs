@@ -1,6 +1,22 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, makeDesktopItem, unzip
-, fpc, lazarus, libX11, glib, gtk2, gdk-pixbuf, pango, atk, cairo, openssl
-, unstableGitUpdater }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  makeDesktopItem,
+  unzip,
+  fpc,
+  lazarus,
+  libX11,
+  glib,
+  gtk2,
+  gdk-pixbuf,
+  pango,
+  atk,
+  cairo,
+  openssl,
+  unstableGitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "transgui";
@@ -13,10 +29,22 @@ stdenv.mkDerivation rec {
     hash = "sha256-jQIe2vTDeJM/lhl6alNhEPOqXjyd18x+Kg29+le/dks=";
   };
 
-  nativeBuildInputs = [ pkg-config unzip ];
+  nativeBuildInputs = [
+    pkg-config
+    unzip
+  ];
   buildInputs = [
-    fpc lazarus stdenv.cc libX11 glib gtk2 gdk-pixbuf
-    pango atk cairo openssl
+    fpc
+    lazarus
+    stdenv.cc
+    libX11
+    glib
+    gtk2
+    gdk-pixbuf
+    pango
+    atk
+    cairo
+    openssl
   ];
 
   NIX_LDFLAGS = ''
@@ -34,7 +62,11 @@ stdenv.mkDerivation rec {
     lazbuild -B transgui.lpr --lazarusdir=${lazarus}/share/lazarus
   '';
 
-  makeFlags = [ "FPC=fpc" "PP=fpc" "INSTALL_PREFIX=$(out)" ];
+  makeFlags = [
+    "FPC=fpc"
+    "PP=fpc"
+    "INSTALL_PREFIX=$(out)"
+  ];
 
   LCL_PLATFORM = "gtk2";
 
@@ -46,9 +78,17 @@ stdenv.mkDerivation rec {
     comment = meta.description;
     desktopName = "Transmission Remote GUI";
     genericName = "BitTorrent Client";
-    categories = [ "Network" "FileTransfer" "P2P" "GTK" ];
+    categories = [
+      "Network"
+      "FileTransfer"
+      "P2P"
+      "GTK"
+    ];
     startupNotify = true;
-    mimeTypes = [ "application/x-bittorrent" "x-scheme-handler/magnet" ];
+    mimeTypes = [
+      "application/x-bittorrent"
+      "x-scheme-handler/magnet"
+    ];
   };
 
   postInstall = ''
@@ -70,6 +110,9 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Plus;
     maintainers = with lib.maintainers; [ ramkromberg ];
     mainProgram = "transgui";
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
   };
 }

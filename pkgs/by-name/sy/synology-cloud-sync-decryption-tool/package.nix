@@ -1,4 +1,10 @@
-{ lib, writeScript, qt5, fetchurl, autoPatchelfHook }:
+{
+  lib,
+  writeScript,
+  qt5,
+  fetchurl,
+  autoPatchelfHook,
+}:
 
 qt5.mkDerivation rec {
   pname = "synology-cloud-sync-decryption-tool";

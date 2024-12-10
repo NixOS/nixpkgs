@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchurl, ocaml, findlib, camlp4 }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  ocaml,
+  findlib,
+  camlp4,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ocaml-config-file";
@@ -9,7 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "1b02yxcnsjhr05ssh2br2ka4hxsjpdw34ldl3nk33wfnkwk7g67q";
   };
 
-  nativeBuildInputs = [ ocaml findlib camlp4 ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+    camlp4
+  ];
 
   strictDeps = true;
 

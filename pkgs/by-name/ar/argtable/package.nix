@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,7 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
       are essential but tedious to implement for a robust CLI program.
     '';
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ AndersonTorres artuuge ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      artuuge
+    ];
     platforms = lib.platforms.all;
   };
 })

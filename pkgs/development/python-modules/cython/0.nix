@@ -77,11 +77,9 @@ buildPythonPackage rec {
     export HOME="$NIX_BUILD_TOP"
     ${python.interpreter} runtests.py -j$NIX_BUILD_CORES \
       --no-code-style \
-      ${
-        lib.optionalString (
-          builtins.length excludedTests != 0
-        ) ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''
-      }
+      ${lib.optionalString (
+        builtins.length excludedTests != 0
+      ) ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''}
   '';
 
   # https://github.com/cython/cython/issues/2785

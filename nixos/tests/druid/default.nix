@@ -3,7 +3,8 @@ let
   inherit (pkgs) lib;
   commonConfig = {
     "druid.zk.service.host" = "zk1:2181";
-    "druid.extensions.loadList" = ''[ "druid-histogram", "druid-datasketches",  "mysql-metadata-storage", "druid-avro-extensions", "druid-parquet-extensions", "druid-lookups-cached-global", "druid-hdfs-storage","druid-kafka-indexing-service","druid-basic-security","druid-kinesis-indexing-service"]'';
+    "druid.extensions.loadList" =
+      ''[ "druid-histogram", "druid-datasketches",  "mysql-metadata-storage", "druid-avro-extensions", "druid-parquet-extensions", "druid-lookups-cached-global", "druid-hdfs-storage","druid-kafka-indexing-service","druid-basic-security","druid-kinesis-indexing-service"]'';
     "druid.startup.logging.logProperties" = "true";
     "druid.metadata.storage.connector.connectURI" = "jdbc:mysql://mysql:3306/druid";
     "druid.metadata.storage.connector.user" = "druid";

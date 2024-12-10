@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 let
@@ -7,7 +12,8 @@ let
 
   loggerSettingsFormat = pkgs.formats.yaml { };
   loggerConfigFile = loggerSettingsFormat.generate "logger.yaml" cfg.loggerSettings;
-in {
+in
+{
 
   options = {
     services.tremor-rs = {
@@ -15,7 +21,7 @@ in {
 
       troyFileList = mkOption {
         type = types.listOf types.path;
-        default = [];
+        default = [ ];
         description = "List of troy files to load.";
       };
 
@@ -39,7 +45,7 @@ in {
 
       loggerSettings = mkOption {
         description = "Tremor logger configuration";
-        default = {};
+        default = { };
         type = loggerSettingsFormat.type;
 
         example = {
@@ -92,7 +98,7 @@ in {
 
   config = mkIf (cfg.enable) {
 
-    environment.systemPackages = [ pkgs.tremor-rs ] ;
+    environment.systemPackages = [ pkgs.tremor-rs ];
 
     systemd.services.tremor-rs = {
       description = "Tremor event- or stream-processing system";
@@ -122,7 +128,10 @@ in {
         RestrictNamespaces = true;
         LockPersonality = true;
         RemoveIPC = true;
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
       };
     };
   };

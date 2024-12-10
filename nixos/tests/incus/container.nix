@@ -1,140 +1,154 @@
-import ../make-test-python.nix ({ pkgs, lib, extra ? {}, name ? "incus-container", incus ? pkgs.incus-lts, ... } :
+import ../make-test-python.nix (
+  {
+    pkgs,
+    lib,
+    extra ? { },
+    name ? "incus-container",
+    incus ? pkgs.incus-lts,
+    ...
+  }:
 
-let
-  releases = import ../../release.nix {
-    configuration = lib.recursiveUpdate {
+  let
+    releases = import ../../release.nix {
+      configuration = lib.recursiveUpdate {
         # Building documentation makes the test unnecessarily take a longer time:
         documentation.enable = lib.mkForce false;
 
         boot.kernel.sysctl."net.ipv4.ip_forward" = "1";
-    }
-    extra;
-  };
-
-  container-image-metadata = "${releases.incusContainerMeta.${pkgs.stdenv.hostPlatform.system}}/tarball/nixos-system-${pkgs.stdenv.hostPlatform.system}.tar.xz";
-  container-image-rootfs = "${releases.incusContainerImage.${pkgs.stdenv.hostPlatform.system}}/nixos-lxc-image-${pkgs.stdenv.hostPlatform.system}.squashfs";
-in
-{
-  inherit name;
-
-  meta = {
-    maintainers = lib.teams.lxc.members;
-  };
-
-  nodes.machine = { ... }: {
-    virtualisation = {
-      # Ensure test VM has enough resources for creating and managing guests
-      cores = 2;
-      memorySize = 1024;
-      diskSize = 4096;
-
-      incus = {
-        enable = true;
-        package = incus;
-      };
+      } extra;
     };
-    networking.nftables.enable = true;
-  };
 
-  testScript = # python
-  ''
-    def instance_is_up(_) -> bool:
-        status, _ = machine.execute("incus exec container --disable-stdin --force-interactive /run/current-system/sw/bin/systemctl -- is-system-running")
-        return status == 0
+    container-image-metadata = "${
+      releases.incusContainerMeta.${pkgs.stdenv.hostPlatform.system}
+    }/tarball/nixos-system-${pkgs.stdenv.hostPlatform.system}.tar.xz";
+    container-image-rootfs = "${
+      releases.incusContainerImage.${pkgs.stdenv.hostPlatform.system}
+    }/nixos-lxc-image-${pkgs.stdenv.hostPlatform.system}.squashfs";
+  in
+  {
+    inherit name;
 
-    def set_container(config):
-        machine.succeed(f"incus config set container {config}")
-        machine.succeed("incus restart container")
-        with machine.nested("Waiting for instance to start and be usable"):
-          retry(instance_is_up)
+    meta = {
+      maintainers = lib.teams.lxc.members;
+    };
 
-    def check_sysctl(instance):
-        with subtest("systemd sysctl settings are applied"):
-            machine.succeed(f"incus exec {instance} -- systemctl status systemd-sysctl")
-            sysctl = machine.succeed(f"incus exec {instance} -- sysctl net.ipv4.ip_forward").strip().split(" ")[-1]
-            assert "1" == sysctl, f"systemd-sysctl configuration not correctly applied, {sysctl} != 1"
+    nodes.machine =
+      { ... }:
+      {
+        virtualisation = {
+          # Ensure test VM has enough resources for creating and managing guests
+          cores = 2;
+          memorySize = 1024;
+          diskSize = 4096;
 
-    machine.wait_for_unit("incus.service")
+          incus = {
+            enable = true;
+            package = incus;
+          };
+        };
+        networking.nftables.enable = true;
+      };
 
-    # no preseed should mean no service
-    machine.fail("systemctl status incus-preseed.service")
+    testScript = # python
+      ''
+        def instance_is_up(_) -> bool:
+            status, _ = machine.execute("incus exec container --disable-stdin --force-interactive /run/current-system/sw/bin/systemctl -- is-system-running")
+            return status == 0
 
-    machine.succeed("incus admin init --minimal")
-
-    with subtest("Container image can be imported"):
-        machine.succeed("incus image import ${container-image-metadata} ${container-image-rootfs} --alias nixos")
-
-    with subtest("Container can be launched and managed"):
-        machine.succeed("incus launch nixos container")
-        with machine.nested("Waiting for instance to start and be usable"):
-          retry(instance_is_up)
-        machine.succeed("echo true | incus exec container /run/current-system/sw/bin/bash -")
-
-    with subtest("Container mounts lxcfs overlays"):
-        machine.succeed("incus exec container mount | grep 'lxcfs on /proc/cpuinfo type fuse.lxcfs'")
-        machine.succeed("incus exec container mount | grep 'lxcfs on /proc/meminfo type fuse.lxcfs'")
-
-    with subtest("resource limits"):
-        with subtest("Container CPU limits can be managed"):
-            set_container("limits.cpu 1")
-            cpuinfo = machine.succeed("incus exec container grep -- -c ^processor /proc/cpuinfo").strip()
-            assert cpuinfo == "1", f"Wrong number of CPUs reported from /proc/cpuinfo, want: 1, got: {cpuinfo}"
-
-            set_container("limits.cpu 2")
-            cpuinfo = machine.succeed("incus exec container grep -- -c ^processor /proc/cpuinfo").strip()
-            assert cpuinfo == "2", f"Wrong number of CPUs reported from /proc/cpuinfo, want: 2, got: {cpuinfo}"
-
-        with subtest("Container memory limits can be managed"):
-            set_container("limits.memory 64MB")
-            meminfo = machine.succeed("incus exec container grep -- MemTotal /proc/meminfo").strip()
-            meminfo_bytes = " ".join(meminfo.split(' ')[-2:])
-            assert meminfo_bytes == "62500 kB", f"Wrong amount of memory reported from /proc/meminfo, want: '62500 kB', got: '{meminfo_bytes}'"
-
-            set_container("limits.memory 128MB")
-            meminfo = machine.succeed("incus exec container grep -- MemTotal /proc/meminfo").strip()
-            meminfo_bytes = " ".join(meminfo.split(' ')[-2:])
-            assert meminfo_bytes == "125000 kB", f"Wrong amount of memory reported from /proc/meminfo, want: '125000 kB', got: '{meminfo_bytes}'"
-
-    with subtest("virtual tpm can be configured"):
-        machine.succeed("incus config device add container vtpm tpm path=/dev/tpm0 pathrm=/dev/tpmrm0")
-        machine.succeed("incus exec container -- test -e /dev/tpm0")
-        machine.succeed("incus exec container -- test -e /dev/tpmrm0")
-        machine.succeed("incus config device remove container vtpm")
-        machine.fail("incus exec container -- test -e /dev/tpm0")
-
-    with subtest("lxc-generator"):
-        with subtest("lxc-container generator configures plain container"):
-            # reuse the existing container to save some time
-            machine.succeed("incus exec container test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
-            check_sysctl("container")
-
-        with subtest("lxc-container generator configures nested container"):
-            machine.execute("incus delete --force container")
-            machine.succeed("incus launch nixos container --config security.nesting=true")
+        def set_container(config):
+            machine.succeed(f"incus config set container {config}")
+            machine.succeed("incus restart container")
             with machine.nested("Waiting for instance to start and be usable"):
               retry(instance_is_up)
 
-            machine.fail("incus exec container test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
-            target = machine.succeed("incus exec container readlink -- -f /run/systemd/system/systemd-binfmt.service").strip()
-            assert target == "/dev/null", "lxc generator did not correctly mask /run/systemd/system/systemd-binfmt.service"
+        def check_sysctl(instance):
+            with subtest("systemd sysctl settings are applied"):
+                machine.succeed(f"incus exec {instance} -- systemctl status systemd-sysctl")
+                sysctl = machine.succeed(f"incus exec {instance} -- sysctl net.ipv4.ip_forward").strip().split(" ")[-1]
+                assert "1" == sysctl, f"systemd-sysctl configuration not correctly applied, {sysctl} != 1"
 
-            check_sysctl("container")
+        machine.wait_for_unit("incus.service")
 
-        with subtest("lxc-container generator configures privileged container"):
-            machine.execute("incus delete --force container")
-            machine.succeed("incus launch nixos container --config security.privileged=true")
+        # no preseed should mean no service
+        machine.fail("systemctl status incus-preseed.service")
+
+        machine.succeed("incus admin init --minimal")
+
+        with subtest("Container image can be imported"):
+            machine.succeed("incus image import ${container-image-metadata} ${container-image-rootfs} --alias nixos")
+
+        with subtest("Container can be launched and managed"):
+            machine.succeed("incus launch nixos container")
             with machine.nested("Waiting for instance to start and be usable"):
               retry(instance_is_up)
+            machine.succeed("echo true | incus exec container /run/current-system/sw/bin/bash -")
 
-            machine.succeed("incus exec container test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
+        with subtest("Container mounts lxcfs overlays"):
+            machine.succeed("incus exec container mount | grep 'lxcfs on /proc/cpuinfo type fuse.lxcfs'")
+            machine.succeed("incus exec container mount | grep 'lxcfs on /proc/meminfo type fuse.lxcfs'")
 
-            check_sysctl("container")
+        with subtest("resource limits"):
+            with subtest("Container CPU limits can be managed"):
+                set_container("limits.cpu 1")
+                cpuinfo = machine.succeed("incus exec container grep -- -c ^processor /proc/cpuinfo").strip()
+                assert cpuinfo == "1", f"Wrong number of CPUs reported from /proc/cpuinfo, want: 1, got: {cpuinfo}"
 
-    with subtest("softDaemonRestart"):
-        with subtest("Instance remains running when softDaemonRestart is enabled and services is stopped"):
-            pid = machine.succeed("incus info container | grep 'PID'").split(":")[1].strip()
-            machine.succeed(f"ps {pid}")
-            machine.succeed("systemctl stop incus")
-            machine.succeed(f"ps {pid}")
-  '';
-})
+                set_container("limits.cpu 2")
+                cpuinfo = machine.succeed("incus exec container grep -- -c ^processor /proc/cpuinfo").strip()
+                assert cpuinfo == "2", f"Wrong number of CPUs reported from /proc/cpuinfo, want: 2, got: {cpuinfo}"
+
+            with subtest("Container memory limits can be managed"):
+                set_container("limits.memory 64MB")
+                meminfo = machine.succeed("incus exec container grep -- MemTotal /proc/meminfo").strip()
+                meminfo_bytes = " ".join(meminfo.split(' ')[-2:])
+                assert meminfo_bytes == "62500 kB", f"Wrong amount of memory reported from /proc/meminfo, want: '62500 kB', got: '{meminfo_bytes}'"
+
+                set_container("limits.memory 128MB")
+                meminfo = machine.succeed("incus exec container grep -- MemTotal /proc/meminfo").strip()
+                meminfo_bytes = " ".join(meminfo.split(' ')[-2:])
+                assert meminfo_bytes == "125000 kB", f"Wrong amount of memory reported from /proc/meminfo, want: '125000 kB', got: '{meminfo_bytes}'"
+
+        with subtest("virtual tpm can be configured"):
+            machine.succeed("incus config device add container vtpm tpm path=/dev/tpm0 pathrm=/dev/tpmrm0")
+            machine.succeed("incus exec container -- test -e /dev/tpm0")
+            machine.succeed("incus exec container -- test -e /dev/tpmrm0")
+            machine.succeed("incus config device remove container vtpm")
+            machine.fail("incus exec container -- test -e /dev/tpm0")
+
+        with subtest("lxc-generator"):
+            with subtest("lxc-container generator configures plain container"):
+                # reuse the existing container to save some time
+                machine.succeed("incus exec container test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
+                check_sysctl("container")
+
+            with subtest("lxc-container generator configures nested container"):
+                machine.execute("incus delete --force container")
+                machine.succeed("incus launch nixos container --config security.nesting=true")
+                with machine.nested("Waiting for instance to start and be usable"):
+                  retry(instance_is_up)
+
+                machine.fail("incus exec container test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
+                target = machine.succeed("incus exec container readlink -- -f /run/systemd/system/systemd-binfmt.service").strip()
+                assert target == "/dev/null", "lxc generator did not correctly mask /run/systemd/system/systemd-binfmt.service"
+
+                check_sysctl("container")
+
+            with subtest("lxc-container generator configures privileged container"):
+                machine.execute("incus delete --force container")
+                machine.succeed("incus launch nixos container --config security.privileged=true")
+                with machine.nested("Waiting for instance to start and be usable"):
+                  retry(instance_is_up)
+
+                machine.succeed("incus exec container test -- -e /run/systemd/system/service.d/zzz-lxc-service.conf")
+
+                check_sysctl("container")
+
+        with subtest("softDaemonRestart"):
+            with subtest("Instance remains running when softDaemonRestart is enabled and services is stopped"):
+                pid = machine.succeed("incus info container | grep 'PID'").split(":")[1].strip()
+                machine.succeed(f"ps {pid}")
+                machine.succeed("systemctl stop incus")
+                machine.succeed(f"ps {pid}")
+      '';
+  }
+)

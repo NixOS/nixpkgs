@@ -1,10 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, makeWrapper
-, dart-sass
-, git
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  dart-sass,
+  git,
 }:
 
 buildGoModule rec {
@@ -17,8 +18,14 @@ buildGoModule rec {
     hash = "sha256-mimFOZjWiDodCopJ23RZxWijOT7bDPUOH+A8GL/UyXs=";
   };
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
-  nativeCheckInputs = [ git dart-sass ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
+  nativeCheckInputs = [
+    git
+    dart-sass
+  ];
 
   vendorHash = "sha256-NXk3wH/XHohI7aYK+dvUmh+0hUrBNiH6xouT9EM8eiE=";
 

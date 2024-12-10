@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, callPackage
+{
+  lib,
+  stdenv,
+  callPackage,
 }:
 let
   pname = "realvnc-vnc-viewer";
@@ -15,10 +16,15 @@ let
       url = "https://static.realvnc.com/media/documents/LICENSE-4.0a_en.pdf";
       free = false;
     };
-    maintainers = with lib.maintainers; [ emilytrau onedragon ];
+    maintainers = with lib.maintainers; [
+      emilytrau
+      onedragon
+    ];
     platforms = [ "x86_64-linux" ] ++ lib.platforms.darwin;
     mainProgram = "vncviewer";
   };
 in
-if stdenv.hostPlatform.isDarwin then callPackage ./darwin.nix { inherit pname version meta; }
-else callPackage ./linux.nix { inherit pname version meta; }
+if stdenv.hostPlatform.isDarwin then
+  callPackage ./darwin.nix { inherit pname version meta; }
+else
+  callPackage ./linux.nix { inherit pname version meta; }

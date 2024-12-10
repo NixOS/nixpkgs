@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "bazelisk";
@@ -15,7 +19,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X main.BazeliskVersion=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.BazeliskVersion=${version}"
+  ];
 
   meta = with lib; {
     description = "User-friendly launcher for Bazel";

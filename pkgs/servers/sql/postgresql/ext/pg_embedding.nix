@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, buildPostgresqlExtension }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  buildPostgresqlExtension,
+}:
 
 buildPostgresqlExtension rec {
   pname = "pg_embedding";
@@ -17,6 +23,8 @@ buildPostgresqlExtension rec {
     maintainers = with maintainers; [ ];
     platforms = postgresql.meta.platforms;
     license = licenses.asl20;
-    knownVulnerabilities = [ "As of Sept 29, 2023, the authors have abandoned the project and strongly encourage using pgvector, which is faster, has more functionality, and is actively maintained: check out the author's instructions to migrate at https://neon.tech/docs/extensions/pg_embedding#migrate-from-pg_embedding-to-pgvector" ];
+    knownVulnerabilities = [
+      "As of Sept 29, 2023, the authors have abandoned the project and strongly encourage using pgvector, which is faster, has more functionality, and is actively maintained: check out the author's instructions to migrate at https://neon.tech/docs/extensions/pg_embedding#migrate-from-pg_embedding-to-pgvector"
+    ];
   };
 }

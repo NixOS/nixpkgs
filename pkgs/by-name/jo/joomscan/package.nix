@@ -1,7 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, perl, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  makeWrapper,
+}:
 
 let
-  p = perl.withPackages (ps: with ps; [ LWP LWPProtocolHttps ]);
+  p = perl.withPackages (
+    ps: with ps; [
+      LWP
+      LWPProtocolHttps
+    ]
+  );
 in
 stdenv.mkDerivation rec {
   pname = "joomscan";

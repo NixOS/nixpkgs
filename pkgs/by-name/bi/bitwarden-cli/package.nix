@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, nodejs_20
-, fetchFromGitHub
-, python3
-, cctools
-, nix-update-script
-, nixosTests
-, xcbuild
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  nodejs_20,
+  fetchFromGitHub,
+  python3,
+  cctools,
+  nix-update-script,
+  nixosTests,
+  xcbuild,
 }:
 
 buildNpmPackage rec {
@@ -30,12 +31,14 @@ buildNpmPackage rec {
 
   npmDepsHash = "sha256-L7/frKCNlq0xr6T+aSqyEQ44yrIXwcpdU/djrhCJNNk=";
 
-  nativeBuildInputs = [
-    (python3.withPackages (ps: with ps; [ setuptools ]))
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
-    xcbuild.xcrun
-  ];
+  nativeBuildInputs =
+    [
+      (python3.withPackages (ps: with ps; [ setuptools ]))
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools
+      xcbuild.xcrun
+    ];
 
   makeCacheWritable = true;
 
@@ -64,7 +67,11 @@ buildNpmPackage rec {
       vaultwarden = nixosTests.vaultwarden.sqlite;
     };
     updateScript = nix-update-script {
-      extraArgs = [ "--commit" "--version=stable" "--version-regex=^cli-v(.*)$" ];
+      extraArgs = [
+        "--commit"
+        "--version=stable"
+        "--version-regex=^cli-v(.*)$"
+      ];
     };
   };
 

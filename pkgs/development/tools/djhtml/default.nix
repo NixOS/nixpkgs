@@ -1,7 +1,8 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, setuptools
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  setuptools,
 }:
 buildPythonApplication rec {
   pname = "djhtml";

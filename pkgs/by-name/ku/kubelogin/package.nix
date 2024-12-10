@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, buildGoModule, installShellFiles, go }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+  go,
+}:
 
 buildGoModule rec {
   pname = "kubelogin";

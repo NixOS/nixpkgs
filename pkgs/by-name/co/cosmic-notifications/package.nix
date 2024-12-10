@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, just
-, which
-, pkg-config
-, makeBinaryWrapper
-, libxkbcommon
-, wayland
-, appstream-glib
-, desktop-file-utils
-, intltool
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  just,
+  which,
+  pkg-config,
+  makeBinaryWrapper,
+  libxkbcommon,
+  wayland,
+  appstream-glib,
+  desktop-file-utils,
+  intltool,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -48,8 +49,19 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
-  nativeBuildInputs = [ just which pkg-config makeBinaryWrapper ];
-  buildInputs = [ libxkbcommon wayland appstream-glib desktop-file-utils intltool ];
+  nativeBuildInputs = [
+    just
+    which
+    pkg-config
+    makeBinaryWrapper
+  ];
+  buildInputs = [
+    libxkbcommon
+    wayland
+    appstream-glib
+    desktop-file-utils
+    intltool
+  ];
 
   dontUseJustBuild = true;
 
@@ -64,7 +76,7 @@ rustPlatform.buildRustPackage rec {
 
   postInstall = ''
     wrapProgram $out/bin/cosmic-notifications \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [wayland]}"
+      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
   '';
 
   meta = with lib; {

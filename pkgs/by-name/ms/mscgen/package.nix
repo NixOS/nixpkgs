@@ -1,14 +1,16 @@
-{ lib, stdenv
-, bison
-, fetchurl
-, flex
-, gd
-, libjpeg
-, libpng
-, libwebp
-, pkg-config
-, runtimeShell
-, zlib
+{
+  lib,
+  stdenv,
+  bison,
+  fetchurl,
+  flex,
+  gd,
+  libjpeg,
+  libpng,
+  libwebp,
+  pkg-config,
+  runtimeShell,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,15 +22,28 @@ stdenv.mkDerivation rec {
     sha256 = "3c3481ae0599e1c2d30b7ed54ab45249127533ab2f20e768a0ae58d8551ddc23";
   };
 
-  nativeBuildInputs = [ bison flex pkg-config ];
-  buildInputs = [ gd libjpeg libpng libwebp zlib ];
+  nativeBuildInputs = [
+    bison
+    flex
+    pkg-config
+  ];
+  buildInputs = [
+    gd
+    libjpeg
+    libpng
+    libwebp
+    zlib
+  ];
 
   doCheck = true;
   preCheck = ''
     sed -i -e "s|#!/bin/bash|#!${runtimeShell}|" test/renderercheck.sh
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   meta = {
     homepage = "http://www.mcternan.me.uk/mscgen/";

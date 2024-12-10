@@ -1,8 +1,9 @@
-{ lib,
-rustPlatform,
-fetchFromGitHub,
-pkg-config,
-openssl,
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,7 +28,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/trunk-rs/trunk";
     description = "Build, bundle & ship your Rust WASM application to the web";
     mainProgram = "trunk";
-    maintainers = with maintainers; [ freezeboy ctron ];
+    maintainers = with maintainers; [
+      freezeboy
+      ctron
+    ];
     license = with licenses; [ asl20 ];
   };
 }

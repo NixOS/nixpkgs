@@ -1,19 +1,20 @@
-{ config
-, stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, gtest
-, doCheck ? true
-, autoAddDriverRunpath
-, cudaSupport ? config.cudaSupport
-, ncclSupport ? false
-, rLibrary ? false
-, cudaPackages
-, llvmPackages
-, R
-, rPackages
+{
+  config,
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  gtest,
+  doCheck ? true,
+  autoAddDriverRunpath,
+  cudaSupport ? config.cudaSupport,
+  ncclSupport ? false,
+  rLibrary ? false,
+  cudaPackages,
+  llvmPackages,
+  R,
+  rPackages,
 }@inputs:
 
 assert ncclSupport -> (cudaSupport && !cudaPackages.nccl.meta.unsupported);
@@ -59,19 +60,23 @@ effectiveStdenv.mkDerivation rec {
   };
 
   patches = lib.optionals (cudaSupport && cudaPackages.cudaMajorMinorVersion == "12.4") [
-    (fetchpatch { # https://github.com/dmlc/xgboost/pull/10123
+    (fetchpatch {
+      # https://github.com/dmlc/xgboost/pull/10123
       name = "Fix compilation with the ctk 12.4.";
       url = "https://github.com/dmlc/xgboost/commit/c760f85db0bc7bd6379901fbfb67ceccc2b37700.patch";
       hash = "sha256-iP9mll9pg8T2ztCR7dBPnLP17/x3ImJFrr5G3e2dqHo=";
     })
   ];
 
-  nativeBuildInputs = [ cmake ]
+  nativeBuildInputs =
+    [ cmake ]
     ++ lib.optionals effectiveStdenv.hostPlatform.isDarwin [ llvmPackages.openmp ]
     ++ lib.optionals cudaSupport [ autoAddDriverRunpath ]
     ++ lib.optionals rLibrary [ R ];
 
-  buildInputs = [ gtest ] ++ lib.optional cudaSupport cudaPackages.cudatoolkit
+  buildInputs =
+    [ gtest ]
+    ++ lib.optional cudaSupport cudaPackages.cudatoolkit
     ++ lib.optional ncclSupport cudaPackages.nccl;
 
   propagatedBuildInputs = lib.optionals rLibrary [
@@ -80,14 +85,16 @@ effectiveStdenv.mkDerivation rec {
     rPackages.Matrix
   ];
 
-  cmakeFlags = lib.optionals doCheck [ "-DGOOGLE_TEST=ON" ]
+  cmakeFlags =
+    lib.optionals doCheck [ "-DGOOGLE_TEST=ON" ]
     ++ lib.optionals cudaSupport [
-    "-DUSE_CUDA=ON"
-    # Their CMakeLists.txt does not respect CUDA_HOST_COMPILER, instead using the CXX compiler.
-    # https://github.com/dmlc/xgboost/blob/ccf43d4ba0a94e2f0a3cc5a526197539ae46f410/CMakeLists.txt#L145
-    "-DCMAKE_C_COMPILER=${effectiveStdenv.cc}/bin/gcc"
-    "-DCMAKE_CXX_COMPILER=${effectiveStdenv.cc}/bin/g++"
-  ] ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ]
+      "-DUSE_CUDA=ON"
+      # Their CMakeLists.txt does not respect CUDA_HOST_COMPILER, instead using the CXX compiler.
+      # https://github.com/dmlc/xgboost/blob/ccf43d4ba0a94e2f0a3cc5a526197539ae46f410/CMakeLists.txt#L145
+      "-DCMAKE_C_COMPILER=${effectiveStdenv.cc}/bin/gcc"
+      "-DCMAKE_CXX_COMPILER=${effectiveStdenv.cc}/bin/g++"
+    ]
+    ++ lib.optionals ncclSupport [ "-DUSE_NCCL=ON" ]
     ++ lib.optionals rLibrary [ "-DR_LIB=ON" ];
 
   preConfigure = lib.optionals rLibrary ''
@@ -100,9 +107,7 @@ effectiveStdenv.mkDerivation rec {
   # By default, cmake build will run ctests with all checks enabled
   # If we're building with cuda, we run ctest manually so that we can skip the GPU tests
   checkPhase = lib.optionalString cudaSupport ''
-    ctest --force-new-ctest-process ${
-      lib.optionalString cudaSupport "-E TestXGBoostLib"
-    }
+    ctest --force-new-ctest-process ${lib.optionalString cudaSupport "-E TestXGBoostLib"}
   '';
 
   # Disable finicky tests from dmlc core that fail in Hydra. XGboost team
@@ -126,7 +131,8 @@ effectiveStdenv.mkDerivation rec {
     + lib.optionalString rLibrary ''
       mkdir -p $out/library
       export R_LIBS_SITE="$out/library:$R_LIBS_SITE''${R_LIBS_SITE:+:}"
-    '' + ''
+    ''
+    + ''
       cmake --install .
       cp -r ../rabit/include/rabit $out/include
       runHook postInstall
@@ -139,13 +145,15 @@ effectiveStdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description =
-      "Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library";
+    description = "Scalable, Portable and Distributed Gradient Boosting (GBDT, GBRT or GBM) Library";
     homepage = "https://github.com/dmlc/xgboost";
     broken = cudaSupport && cudaPackages.cudaOlder "11.4";
     license = licenses.asl20;
     mainProgram = "xgboost";
     platforms = platforms.unix;
-    maintainers = with maintainers; [ abbradar nviets ];
+    maintainers = with maintainers; [
+      abbradar
+      nviets
+    ];
   };
 }

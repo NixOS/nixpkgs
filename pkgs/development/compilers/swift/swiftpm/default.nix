@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, callPackage
-, fetchpatch
-, cmake
-, ninja
-, git
-, swift
-, swiftpm2nix
-, Foundation
-, XCTest
-, pkg-config
-, sqlite
-, ncurses
-, substituteAll
-, runCommandLocal
-, makeWrapper
-, DarwinTools # sw_vers
-, cctools # vtool
-, darwinMinVersionHook
-, xcbuild
-, CryptoKit
-, LocalAuthentication
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchpatch,
+  cmake,
+  ninja,
+  git,
+  swift,
+  swiftpm2nix,
+  Foundation,
+  XCTest,
+  pkg-config,
+  sqlite,
+  ncurses,
+  substituteAll,
+  runCommandLocal,
+  makeWrapper,
+  DarwinTools, # sw_vers
+  cctools, # vtool
+  darwinMinVersionHook,
+  xcbuild,
+  CryptoKit,
+  LocalAuthentication,
 }:
 
 let
@@ -81,7 +82,8 @@ let
   };
 
   # Tools invoked by swiftpm at run-time.
-  runtimeDeps = [ git ]
+  runtimeDeps =
+    [ git ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       xcbuild.xcrun
       # These tools are part of cctools, but adding that as a build input puts
@@ -97,47 +99,57 @@ let
     ];
 
   # Common attributes for the bootstrap derivations.
-  mkBootstrapDerivation = attrs: stdenv.mkDerivation (attrs // {
-    nativeBuildInputs = (attrs.nativeBuildInputs or [ ])
-      ++ [ cmake ninja swift ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
+  mkBootstrapDerivation =
+    attrs:
+    stdenv.mkDerivation (
+      attrs
+      // {
+        nativeBuildInputs =
+          (attrs.nativeBuildInputs or [ ])
+          ++ [
+            cmake
+            ninja
+            swift
+          ]
+          ++ lib.optionals stdenv.hostPlatform.isDarwin [ DarwinTools ];
 
-    buildInputs = (attrs.buildInputs or [ ])
-      ++ [ Foundation ];
+        buildInputs = (attrs.buildInputs or [ ]) ++ [ Foundation ];
 
-    postPatch = (attrs.postPatch or "")
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        # On Darwin only, Swift uses arm64 as cpu arch.
-        if [ -e cmake/modules/SwiftSupport.cmake ]; then
-          substituteInPlace cmake/modules/SwiftSupport.cmake \
-            --replace '"aarch64" PARENT_SCOPE' '"arm64" PARENT_SCOPE'
-        fi
-      '';
+        postPatch =
+          (attrs.postPatch or "")
+          + lib.optionalString stdenv.hostPlatform.isDarwin ''
+            # On Darwin only, Swift uses arm64 as cpu arch.
+            if [ -e cmake/modules/SwiftSupport.cmake ]; then
+              substituteInPlace cmake/modules/SwiftSupport.cmake \
+                --replace '"aarch64" PARENT_SCOPE' '"arm64" PARENT_SCOPE'
+            fi
+          '';
 
-    postInstall = (attrs.postInstall or "")
-      + lib.optionalString stdenv.hostPlatform.isDarwin ''
-        # The install name of libraries is incorrectly set to lib/ (via our
-        # CMake setup hook) instead of lib/swift/. This'd be easily fixed by
-        # fixDarwinDylibNames, but some builds create libraries that reference
-        # eachother, and we also have to fix those references.
-        dylibs="$(find $out/lib/swift* -name '*.dylib')"
-        changes=""
-        for dylib in $dylibs; do
-          changes+=" -change $(otool -D $dylib | tail -n 1) $dylib"
-        done
-        for dylib in $dylibs; do
-          install_name_tool -id $dylib $changes $dylib
-        done
-      '';
+        postInstall =
+          (attrs.postInstall or "")
+          + lib.optionalString stdenv.hostPlatform.isDarwin ''
+            # The install name of libraries is incorrectly set to lib/ (via our
+            # CMake setup hook) instead of lib/swift/. This'd be easily fixed by
+            # fixDarwinDylibNames, but some builds create libraries that reference
+            # eachother, and we also have to fix those references.
+            dylibs="$(find $out/lib/swift* -name '*.dylib')"
+            changes=""
+            for dylib in $dylibs; do
+              changes+=" -change $(otool -D $dylib | tail -n 1) $dylib"
+            done
+            for dylib in $dylibs; do
+              install_name_tool -id $dylib $changes $dylib
+            done
+          '';
 
-    cmakeFlags = (attrs.cmakeFlags or [ ])
-      ++ [
-        # Some builds link to libraries within the same build. Make sure these
-        # create references to $out. None of our builds run their own products,
-        # so we don't have to account for that scenario.
-        "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
-      ];
-  });
+        cmakeFlags = (attrs.cmakeFlags or [ ]) ++ [
+          # Some builds link to libraries within the same build. Make sure these
+          # create references to $out. None of our builds run their own products,
+          # so we don't have to account for that scenario.
+          "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
+        ];
+      }
+    );
 
   # On Darwin, we only want ncurses in the linker search path, because headers
   # are part of libsystem. Adding its headers to the search path causes strange
@@ -161,7 +173,8 @@ let
     name = "swift-system";
     src = generated.sources.swift-system;
 
-    postInstall = cmakeGlue.SwiftSystem
+    postInstall =
+      cmakeGlue.SwiftSystem
       + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
         # The cmake rules apparently only use the Darwin install convention.
         # Fix up the installation so the module can be found on non-Darwin.
@@ -181,7 +194,8 @@ let
       sed -i -e '/BUILD_SHARED_LIBS/d' CMakeLists.txt
     '';
 
-    postInstall = cmakeGlue.SwiftCollections
+    postInstall =
+      cmakeGlue.SwiftCollections
       + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
         # The cmake rules apparently only use the Darwin install convention.
         # Fix up the installation so the module can be found on non-Darwin.
@@ -213,32 +227,38 @@ let
       sqlite
     ];
 
-    postInstall = cmakeGlue.TSC + ''
-      # Swift modules are not installed.
-      mkdir -p $out/${swiftModuleSubdir}
-      cp swift/*.swift{module,doc} $out/${swiftModuleSubdir}/
+    postInstall =
+      cmakeGlue.TSC
+      + ''
+        # Swift modules are not installed.
+        mkdir -p $out/${swiftModuleSubdir}
+        cp swift/*.swift{module,doc} $out/${swiftModuleSubdir}/
 
-      # Static libs are not installed.
-      cp lib/*.a $out/lib/
+        # Static libs are not installed.
+        cp lib/*.a $out/lib/
 
-      # Headers are not installed.
-      mkdir -p $out/include
-      cp -r ../Sources/TSCclibc/include $out/include/TSC
-    '';
+        # Headers are not installed.
+        mkdir -p $out/include
+        cp -r ../Sources/TSCclibc/include $out/include/TSC
+      '';
   };
 
   swift-argument-parser = mkBootstrapDerivation {
     name = "swift-argument-parser";
     src = generated.sources.swift-argument-parser;
 
-    buildInputs = [ ncursesInput sqlite ];
+    buildInputs = [
+      ncursesInput
+      sqlite
+    ];
 
     cmakeFlags = [
       "-DBUILD_TESTING=NO"
       "-DBUILD_EXAMPLES=NO"
     ];
 
-    postInstall = cmakeGlue.ArgumentParser
+    postInstall =
+      cmakeGlue.ArgumentParser
       + lib.optionalString stdenv.hostPlatform.isLinux ''
         # Fix rpath so ArgumentParserToolInfo can be found.
         patchelf --add-rpath "$out/lib/swift/${swiftOs}" \
@@ -261,7 +281,10 @@ let
     src = generated.sources.swift-llbuild;
 
     nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin xcbuild;
-    buildInputs = [ ncursesInput sqlite ];
+    buildInputs = [
+      ncursesInput
+      sqlite
+    ];
 
     patches = [
       ./patches/llbuild-cmake-disable-rpath.patch
@@ -287,14 +310,16 @@ let
       "-DLLBUILD_SUPPORT_BINDINGS=Swift"
     ];
 
-    postInstall = cmakeGlue.LLBuild + ''
-      # Install module map.
-      cp ../products/libllbuild/include/module.modulemap $out/include
+    postInstall =
+      cmakeGlue.LLBuild
+      + ''
+        # Install module map.
+        cp ../products/libllbuild/include/module.modulemap $out/include
 
-      # Swift modules are not installed.
-      mkdir -p $out/${swiftModuleSubdir}
-      cp products/llbuildSwift/*.swift{module,doc} $out/${swiftModuleSubdir}/
-    '';
+        # Swift modules are not installed.
+        mkdir -p $out/${swiftModuleSubdir}
+        cp products/llbuildSwift/*.swift{module,doc} $out/${swiftModuleSubdir}/
+      '';
   };
 
   swift-driver = mkBootstrapDerivation {
@@ -315,11 +340,13 @@ let
         --replace CYaml ""
     '';
 
-    postInstall = cmakeGlue.SwiftDriver + ''
-      # Swift modules are not installed.
-      mkdir -p $out/${swiftModuleSubdir}
-      cp swift/*.swift{module,doc} $out/${swiftModuleSubdir}/
-    '';
+    postInstall =
+      cmakeGlue.SwiftDriver
+      + ''
+        # Swift modules are not installed.
+        mkdir -p $out/${swiftModuleSubdir}
+        cp swift/*.swift{module,doc} $out/${swiftModuleSubdir}/
+      '';
   };
 
   swift-crypto = mkBootstrapDerivation {
@@ -334,122 +361,137 @@ let
         --replace /usr/bin/ranlib $NIX_CC/bin/ranlib
     '';
 
-    postInstall = cmakeGlue.SwiftCrypto + ''
-      # Static libs are not installed.
-      cp lib/*.a $out/lib/
+    postInstall =
+      cmakeGlue.SwiftCrypto
+      + ''
+        # Static libs are not installed.
+        cp lib/*.a $out/lib/
 
-      # Headers are not installed.
-      cp -r ../Sources/CCryptoBoringSSL/include $out/include
-    '';
+        # Headers are not installed.
+        cp -r ../Sources/CCryptoBoringSSL/include $out/include
+      '';
   };
 
   # Build a bootrapping swiftpm using CMake.
-  swiftpm-bootstrap = mkBootstrapDerivation (commonAttrs // {
-    pname = "swiftpm-bootstrap";
+  swiftpm-bootstrap = mkBootstrapDerivation (
+    commonAttrs
+    // {
+      pname = "swiftpm-bootstrap";
 
-    buildInputs = [
-      llbuild
-      sqlite
-      swift-argument-parser
-      swift-collections
-      swift-crypto
-      swift-driver
-      swift-system
-      swift-tools-support-core
-    ] ++ lib.optionals stdenv.isDarwin [ (darwinMinVersionHook "10.15.4") ];
+      buildInputs = [
+        llbuild
+        sqlite
+        swift-argument-parser
+        swift-collections
+        swift-crypto
+        swift-driver
+        swift-system
+        swift-tools-support-core
+      ] ++ lib.optionals stdenv.isDarwin [ (darwinMinVersionHook "10.15.4") ];
 
-    cmakeFlags = [
-      "-DUSE_CMAKE_INSTALL=ON"
-    ];
+      cmakeFlags = [
+        "-DUSE_CMAKE_INSTALL=ON"
+      ];
 
-    postInstall = ''
-      for program in $out/bin/swift-*; do
-        wrapProgram $program --prefix PATH : ${lib.makeBinPath runtimeDeps}
-      done
-    '';
-  });
-
-# Build the final swiftpm with the bootstrapping swiftpm.
-in stdenv.mkDerivation (commonAttrs // {
-  pname = "swiftpm";
-
-  nativeBuildInputs = commonAttrs.nativeBuildInputs ++ [
-    pkg-config
-    swift
-    swiftpm-bootstrap
-  ];
-  buildInputs = [
-    ncursesInput
-    sqlite
-    XCTest
-  ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CryptoKit
-      LocalAuthentication
-  ] ++ lib.optionals stdenv.isDarwin [ (darwinMinVersionHook "10.15.4") ];
-
-  configurePhase = generated.configure + ''
-    # Functionality provided by Xcode XCTest, but not available in
-    # swift-corelibs-xctest.
-    swiftpmMakeMutable swift-tools-support-core
-    substituteInPlace .build/checkouts/swift-tools-support-core/Sources/TSCTestSupport/XCTestCasePerf.swift \
-      --replace 'canImport(Darwin)' 'false'
-    patch -p1 -d .build/checkouts/swift-tools-support-core -i ${swift-tools-support-core-glibc-fix}
-
-    # Prevent a warning about SDK directories we don't have.
-    swiftpmMakeMutable swift-driver
-    patch -p1 -d .build/checkouts/swift-driver -i ${substituteAll {
-      src = ../swift-driver/patches/prevent-sdk-dirs-warnings.patch;
-      inherit (builtins) storeDir;
-    }}
-  '';
-
-  buildPhase = ''
-    TERM=dumb swift-build -c release
-  '';
-
-  # TODO: Tests depend on indexstore-db being provided by an existing Swift
-  # toolchain. (ie. looks for `../lib/libIndexStore.so` relative to swiftc.
-  #doCheck = true;
-  #checkPhase = ''
-  #  TERM=dumb swift-test -c release
-  #'';
-
-  # The following is dervied from Utilities/bootstrap, see install_swiftpm.
-  installPhase = ''
-    binPath="$(swift-build --show-bin-path -c release)"
-
-    mkdir -p $out/bin $out/lib/swift
-
-    cp $binPath/swift-package-manager $out/bin/swift-package
-    wrapProgram $out/bin/swift-package \
-      --prefix PATH : ${lib.makeBinPath runtimeDeps}
-    for tool in swift-build swift-test swift-run swift-package-collection swift-experimental-destination; do
-      ln -s $out/bin/swift-package $out/bin/$tool
-    done
-
-    installSwiftpmModule() {
-      mkdir -p $out/lib/swift/pm/$2
-      cp $binPath/lib$1${sharedLibraryExt} $out/lib/swift/pm/$2/
-
-      if [[ -f $binPath/$1.swiftinterface ]]; then
-        cp $binPath/$1.swiftinterface $out/lib/swift/pm/$2/
-      else
-        cp -r $binPath/$1.swiftmodule $out/lib/swift/pm/$2/
-      fi
-      cp $binPath/$1.swiftdoc $out/lib/swift/pm/$2/
+      postInstall = ''
+        for program in $out/bin/swift-*; do
+          wrapProgram $program --prefix PATH : ${lib.makeBinPath runtimeDeps}
+        done
+      '';
     }
-    installSwiftpmModule PackageDescription ManifestAPI
-    installSwiftpmModule PackagePlugin PluginAPI
-  '';
+  );
 
-  setupHook = ./setup-hook.sh;
+in
+# Build the final swiftpm with the bootstrapping swiftpm.
+stdenv.mkDerivation (
+  commonAttrs
+  // {
+    pname = "swiftpm";
 
-  meta = {
-    description = "Package Manager for the Swift Programming Language";
-    homepage = "https://github.com/apple/swift-package-manager";
-    platforms = with lib.platforms; linux ++ darwin;
-    license = lib.licenses.asl20;
-    maintainers = lib.teams.swift.members;
-  };
-})
+    nativeBuildInputs = commonAttrs.nativeBuildInputs ++ [
+      pkg-config
+      swift
+      swiftpm-bootstrap
+    ];
+    buildInputs =
+      [
+        ncursesInput
+        sqlite
+        XCTest
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        CryptoKit
+        LocalAuthentication
+      ]
+      ++ lib.optionals stdenv.isDarwin [ (darwinMinVersionHook "10.15.4") ];
+
+    configurePhase =
+      generated.configure
+      + ''
+        # Functionality provided by Xcode XCTest, but not available in
+        # swift-corelibs-xctest.
+        swiftpmMakeMutable swift-tools-support-core
+        substituteInPlace .build/checkouts/swift-tools-support-core/Sources/TSCTestSupport/XCTestCasePerf.swift \
+          --replace 'canImport(Darwin)' 'false'
+        patch -p1 -d .build/checkouts/swift-tools-support-core -i ${swift-tools-support-core-glibc-fix}
+
+        # Prevent a warning about SDK directories we don't have.
+        swiftpmMakeMutable swift-driver
+        patch -p1 -d .build/checkouts/swift-driver -i ${
+          substituteAll {
+            src = ../swift-driver/patches/prevent-sdk-dirs-warnings.patch;
+            inherit (builtins) storeDir;
+          }
+        }
+      '';
+
+    buildPhase = ''
+      TERM=dumb swift-build -c release
+    '';
+
+    # TODO: Tests depend on indexstore-db being provided by an existing Swift
+    # toolchain. (ie. looks for `../lib/libIndexStore.so` relative to swiftc.
+    #doCheck = true;
+    #checkPhase = ''
+    #  TERM=dumb swift-test -c release
+    #'';
+
+    # The following is dervied from Utilities/bootstrap, see install_swiftpm.
+    installPhase = ''
+      binPath="$(swift-build --show-bin-path -c release)"
+
+      mkdir -p $out/bin $out/lib/swift
+
+      cp $binPath/swift-package-manager $out/bin/swift-package
+      wrapProgram $out/bin/swift-package \
+        --prefix PATH : ${lib.makeBinPath runtimeDeps}
+      for tool in swift-build swift-test swift-run swift-package-collection swift-experimental-destination; do
+        ln -s $out/bin/swift-package $out/bin/$tool
+      done
+
+      installSwiftpmModule() {
+        mkdir -p $out/lib/swift/pm/$2
+        cp $binPath/lib$1${sharedLibraryExt} $out/lib/swift/pm/$2/
+
+        if [[ -f $binPath/$1.swiftinterface ]]; then
+          cp $binPath/$1.swiftinterface $out/lib/swift/pm/$2/
+        else
+          cp -r $binPath/$1.swiftmodule $out/lib/swift/pm/$2/
+        fi
+        cp $binPath/$1.swiftdoc $out/lib/swift/pm/$2/
+      }
+      installSwiftpmModule PackageDescription ManifestAPI
+      installSwiftpmModule PackagePlugin PluginAPI
+    '';
+
+    setupHook = ./setup-hook.sh;
+
+    meta = {
+      description = "Package Manager for the Swift Programming Language";
+      homepage = "https://github.com/apple/swift-package-manager";
+      platforms = with lib.platforms; linux ++ darwin;
+      license = lib.licenses.asl20;
+      maintainers = lib.teams.swift.members;
+    };
+  }
+)

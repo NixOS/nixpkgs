@@ -1,21 +1,38 @@
-{ config, pkgs, lib, ... }: with lib;
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
+with lib;
 let
   cfg = config.services.vmalert;
 
-  format = pkgs.formats.yaml {};
+  format = pkgs.formats.yaml { };
 
-  confOpts = concatStringsSep " \\\n" (mapAttrsToList mkLine (filterAttrs (_: v: v != false) cfg.settings));
-  confType = with types;
+  confOpts = concatStringsSep " \\\n" (
+    mapAttrsToList mkLine (filterAttrs (_: v: v != false) cfg.settings)
+  );
+  confType =
+    with types;
     let
-      valueType = oneOf [ bool int path str ];
+      valueType = oneOf [
+        bool
+        int
+        path
+        str
+      ];
     in
     attrsOf (either valueType (listOf valueType));
 
-  mkLine = key: value:
-    if value == true then "-${key}"
-    else if isList value then concatMapStringsSep " " (v: "-${key}=${escapeShellArg (toString v)}") value
-    else "-${key}=${escapeShellArg (toString value)}"
-  ;
+  mkLine =
+    key: value:
+    if value == true then
+      "-${key}"
+    else if isList value then
+      concatMapStringsSep " " (v: "-${key}=${escapeShellArg (toString v)}") value
+    else
+      "-${key}=${escapeShellArg (toString value)}";
 in
 {
   # interface
@@ -39,7 +56,7 @@ in
 
           "notifier.url" = mkOption {
             type = with types; listOf nonEmptyStr;
-            default = [];
+            default = [ ];
             example = [ "http://127.0.0.1:9093" ];
             description = ''
               Prometheus Alertmanager URL. List all Alertmanager URLs if it runs in the cluster mode to ensure high availability.
@@ -79,12 +96,14 @@ in
 
     rules = mkOption {
       type = format.type;
-      default = {};
+      default = { };
       example = {
         group = [
-          { name = "TestGroup";
+          {
+            name = "TestGroup";
             rules = [
-              { alert = "ExampleAlertAlwaysFiring";
+              {
+                alert = "ExampleAlertAlwaysFiring";
                 expr = ''
                   sum by(job)
                   (up == 1)

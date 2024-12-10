@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nix-update-script }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+}:
 
 let
   pname = "erigon";
@@ -47,7 +52,13 @@ buildGoModule {
   meta = with lib; {
     homepage = "https://github.com/ledgerwatch/erigon/";
     description = "Ethereum node implementation focused on scalability and modularity";
-    license = with licenses; [ lgpl3Plus gpl3Plus ];
-    maintainers = with maintainers; [ d-xo happysalada ];
+    license = with licenses; [
+      lgpl3Plus
+      gpl3Plus
+    ];
+    maintainers = with maintainers; [
+      d-xo
+      happysalada
+    ];
   };
 }

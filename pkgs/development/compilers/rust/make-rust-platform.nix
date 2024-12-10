@@ -1,10 +1,19 @@
-{ lib, buildPackages, callPackage, callPackages, cargo-auditable, stdenv, runCommand }@prev:
+{
+  lib,
+  buildPackages,
+  callPackage,
+  callPackages,
+  cargo-auditable,
+  stdenv,
+  runCommand,
+}@prev:
 
-{ rustc
-, cargo
-, cargo-auditable ? prev.cargo-auditable
-, stdenv ? prev.stdenv
-, ...
+{
+  rustc,
+  cargo,
+  cargo-auditable ? prev.cargo-auditable,
+  stdenv ? prev.stdenv,
+  ...
 }:
 
 rec {
@@ -18,14 +27,30 @@ rec {
     inherit cargo;
   };
 
-  fetchCargoVendor = buildPackages.callPackage ../../../build-support/rust/fetch-cargo-vendor.nix { inherit cargo; };
-
-  buildRustPackage = callPackage ../../../build-support/rust/build-rust-package {
-    inherit stdenv cargoBuildHook cargoCheckHook cargoInstallHook cargoNextestHook cargoSetupHook
-      fetchCargoTarball fetchCargoVendor importCargoLock rustc cargo cargo-auditable;
+  fetchCargoVendor = buildPackages.callPackage ../../../build-support/rust/fetch-cargo-vendor.nix {
+    inherit cargo;
   };
 
-  importCargoLock = buildPackages.callPackage ../../../build-support/rust/import-cargo-lock.nix { inherit cargo; };
+  buildRustPackage = callPackage ../../../build-support/rust/build-rust-package {
+    inherit
+      stdenv
+      cargoBuildHook
+      cargoCheckHook
+      cargoInstallHook
+      cargoNextestHook
+      cargoSetupHook
+      fetchCargoTarball
+      fetchCargoVendor
+      importCargoLock
+      rustc
+      cargo
+      cargo-auditable
+      ;
+  };
+
+  importCargoLock = buildPackages.callPackage ../../../build-support/rust/import-cargo-lock.nix {
+    inherit cargo;
+  };
 
   rustcSrc = callPackage ./rust-src.nix {
     inherit runCommand rustc;
@@ -36,7 +61,16 @@ rec {
   };
 
   # Hooks
-  inherit (callPackages ../../../build-support/rust/hooks {
-    inherit stdenv cargo rustc;
-  }) cargoBuildHook cargoCheckHook cargoInstallHook cargoNextestHook cargoSetupHook maturinBuildHook bindgenHook;
+  inherit
+    (callPackages ../../../build-support/rust/hooks {
+      inherit stdenv cargo rustc;
+    })
+    cargoBuildHook
+    cargoCheckHook
+    cargoInstallHook
+    cargoNextestHook
+    cargoSetupHook
+    maturinBuildHook
+    bindgenHook
+    ;
 }

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, qemu
-, sigtool
-, makeWrapper
-, nix-update-script
-, apple-sdk_15
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  qemu,
+  sigtool,
+  makeWrapper,
+  nix-update-script,
+  apple-sdk_15,
 }:
 
 buildGoModule rec {
@@ -23,8 +24,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-nNSBwvhKSWs6to37+RLziYQqVOYfvjYib3fRRALACho=";
 
-  nativeBuildInputs = [ makeWrapper installShellFiles ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ sigtool ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_15 ];
 

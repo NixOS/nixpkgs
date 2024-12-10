@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "treefmt";
   version = "2.1.0";
@@ -27,7 +31,10 @@ buildGoModule rec {
     description = "one CLI to format the code tree";
     homepage = "https://github.com/numtide/treefmt";
     license = lib.licenses.mit;
-    maintainers = [ lib.maintainers.brianmcgee lib.maintainers.zimbatm ];
+    maintainers = [
+      lib.maintainers.brianmcgee
+      lib.maintainers.zimbatm
+    ];
     mainProgram = "treefmt";
   };
 }

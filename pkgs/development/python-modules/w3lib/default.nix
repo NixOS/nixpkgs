@@ -4,7 +4,7 @@
   fetchPypi,
   pytestCheckHook,
   pythonOlder,
-  setuptools
+  setuptools,
 }:
 
 buildPythonPackage rec {

@@ -1,5 +1,15 @@
-{ mkDerivation, lib, fetchFromGitHub, pkg-config, scons, qtbase, lash, libjack2, jack ? libjack2, alsa-lib
-, fetchpatch
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  scons,
+  qtbase,
+  lash,
+  libjack2,
+  jack ? libjack2,
+  alsa-lib,
+  fetchpatch,
 }:
 
 mkDerivation rec {
@@ -22,7 +32,10 @@ mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ scons pkg-config ];
+  nativeBuildInputs = [
+    scons
+    pkg-config
+  ];
   buildInputs = [
     qtbase
     lash

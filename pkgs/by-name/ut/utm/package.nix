@@ -1,8 +1,9 @@
-{ lib
-, undmg
-, makeWrapper
-, fetchurl
-, stdenvNoCC
+{
+  lib,
+  undmg,
+  makeWrapper,
+  fetchurl,
+  stdenvNoCC,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -14,7 +15,10 @@ stdenvNoCC.mkDerivation rec {
     hash = "sha256-GzwokK/q8S38lbOVhGgNaqbDAAryHJ9eBAAWGpuOQOE=";
   };
 
-  nativeBuildInputs = [ undmg makeWrapper ];
+  nativeBuildInputs = [
+    undmg
+    makeWrapper
+  ];
 
   sourceRoot = ".";
   installPhase = ''
@@ -62,6 +66,9 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.darwin; # 11.3 is the minimum supported version as of UTM 4.
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ rrbutani wegank ];
+    maintainers = with maintainers; [
+      rrbutani
+      wegank
+    ];
   };
 }

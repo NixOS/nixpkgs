@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 python3Packages.buildPythonApplication rec {
   pname = "rclip";
@@ -29,7 +30,10 @@ python3Packages.buildPythonApplication rec {
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];
 
-  pythonRelaxDeps = [ "torch" "torchvision" ];
+  pythonRelaxDeps = [
+    "torch"
+    "torchvision"
+  ];
 
   pythonImportsCheck = [ "rclip" ];
 

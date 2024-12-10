@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +20,8 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-ML+USTwdMLyLcc3Fzu/eD7J7s7Sa1lEOZm/txjZv31E=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
-    with darwin.apple_sdk.frameworks; [
+    with darwin.apple_sdk.frameworks;
+    [
       SystemConfiguration
     ]
   );
@@ -27,7 +29,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Tool to send files and directories, based on iroh";
     homepage = "https://iroh.computer/sendme";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ cameronfyfe ];
     mainProgram = "sendme";
   };

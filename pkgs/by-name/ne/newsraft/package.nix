@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, pkg-config
-, curl
-, expat
-, gumbo
-, ncurses
-, sqlite
-, yajl
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  pkg-config,
+  curl,
+  expat,
+  gumbo,
+  ncurses,
+  sqlite,
+  yajl,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,11 +25,18 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ curl expat gumbo ncurses sqlite yajl ];
+  buildInputs = [
+    curl
+    expat
+    gumbo
+    ncurses
+    sqlite
+    yajl
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Feed reader for terminal";

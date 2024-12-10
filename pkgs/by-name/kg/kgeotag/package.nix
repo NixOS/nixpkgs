@@ -1,4 +1,11 @@
-{ stdenv, cmake, extra-cmake-modules, fetchFromGitLab, lib, libsForQt5 }:
+{
+  stdenv,
+  cmake,
+  extra-cmake-modules,
+  fetchFromGitLab,
+  lib,
+  libsForQt5,
+}:
 
 stdenv.mkDerivation rec {
   pname = "kgeotag";
@@ -12,9 +19,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-lUfU6SHRCglC81BTcVFFOp/psWXsUFOTEPUrZutrJaY=";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules libsForQt5.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+    libsForQt5.wrapQtAppsHook
+  ];
 
-  buildInputs = [ libsForQt5.libkexiv2 libsForQt5.marble ];
+  buildInputs = [
+    libsForQt5.libkexiv2
+    libsForQt5.marble
+  ];
 
   meta = with lib; {
     homepage = "https://kgeotag.kde.org/";

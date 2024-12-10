@@ -1,41 +1,69 @@
-{ lib, stdenv, fetchurl, gtk2, pkg-config, fftw, file,
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gtk2,
+  pkg-config,
+  fftw,
+  file,
   gnome2,
-  openexrSupport ? true, openexr,
-  libzipSupport ? true, libzip,
-  libxml2Support ? true, libxml2,
-  libwebpSupport ? true, libwebp,
+  openexrSupport ? true,
+  openexr,
+  libzipSupport ? true,
+  libzip,
+  libxml2Support ? true,
+  libxml2,
+  libwebpSupport ? true,
+  libwebp,
   # libXmu is not used if libunique is.
-  libXmuSupport ? false, xorg,
-  libxsltSupport ? true, libxslt,
-  fitsSupport ? true, cfitsio,
-  zlibSupport ? true, zlib,
-  libuniqueSupport ? true, libunique,
-  libpngSupport ? true, libpng,
-  openglSupport ? !stdenv.hostPlatform.isDarwin, libGL
+  libXmuSupport ? false,
+  xorg,
+  libxsltSupport ? true,
+  libxslt,
+  fitsSupport ? true,
+  cfitsio,
+  zlibSupport ? true,
+  zlib,
+  libuniqueSupport ? true,
+  libunique,
+  libpngSupport ? true,
+  libpng,
+  openglSupport ? !stdenv.hostPlatform.isDarwin,
+  libGL,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gwyddion";
-   version = "2.66";
+  version = "2.66";
   src = fetchurl {
     url = "mirror://sourceforge/gwyddion/gwyddion-${version}.tar.xz";
     sha256 = "sha256-N3vtzSsNjRM6MpaG2p9fkYB/8dR5N/mZEZXx6GN5LVI=";
   };
 
-  nativeBuildInputs = [ pkg-config file ];
+  nativeBuildInputs = [
+    pkg-config
+    file
+  ];
 
-  buildInputs = [ gtk2 fftw ] ++
-    lib.optionals openglSupport [ gnome2.gtkglext libGL ] ++
-    lib.optional openexrSupport openexr ++
-    lib.optional libXmuSupport xorg.libXmu ++
-    lib.optional fitsSupport cfitsio ++
-    lib.optional libpngSupport libpng ++
-    lib.optional libxsltSupport libxslt ++
-    lib.optional libxml2Support libxml2 ++
-    lib.optional libwebpSupport libwebp ++
-    lib.optional zlibSupport zlib ++
-    lib.optional libuniqueSupport libunique ++
-    lib.optional libzipSupport libzip;
+  buildInputs =
+    [
+      gtk2
+      fftw
+    ]
+    ++ lib.optionals openglSupport [
+      gnome2.gtkglext
+      libGL
+    ]
+    ++ lib.optional openexrSupport openexr
+    ++ lib.optional libXmuSupport xorg.libXmu
+    ++ lib.optional fitsSupport cfitsio
+    ++ lib.optional libpngSupport libpng
+    ++ lib.optional libxsltSupport libxslt
+    ++ lib.optional libxml2Support libxml2
+    ++ lib.optional libwebpSupport libwebp
+    ++ lib.optional zlibSupport zlib
+    ++ lib.optional libuniqueSupport libunique
+    ++ lib.optional libzipSupport libzip;
 
   # This patch corrects problems with python support, but should apply cleanly
   # regardless of whether python support is enabled, and have no effects if

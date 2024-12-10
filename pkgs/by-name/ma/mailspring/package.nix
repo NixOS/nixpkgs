@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, callPackage
+{
+  lib,
+  stdenv,
+  callPackage,
 }:
 let
   pname = "mailspring";
@@ -17,10 +18,14 @@ let
     '';
     mainProgram = "mailspring";
     maintainers = with maintainers; [ toschmidt ];
-    platforms = [ "x86_64-linux" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-darwin"
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
   };
 
   linux = callPackage ./linux.nix { inherit pname version meta; };
   darwin = callPackage ./darwin.nix { inherit pname version meta; };
-in if stdenv.hostPlatform.isDarwin then darwin else linux
+in
+if stdenv.hostPlatform.isDarwin then darwin else linux

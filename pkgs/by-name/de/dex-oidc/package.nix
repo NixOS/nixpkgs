@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests, testers, dex-oidc }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+  testers,
+  dex-oidc,
+}:
 
 buildGoModule rec {
   pname = "dex";
@@ -18,7 +25,9 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-w" "-s" "-X main.version=${src.rev}"
+    "-w"
+    "-s"
+    "-X main.version=${src.rev}"
   ];
 
   postInstall = ''
@@ -39,7 +48,10 @@ buildGoModule rec {
     description = "OpenID Connect and OAuth2 identity provider with pluggable connectors";
     homepage = "https://github.com/dexidp/dex";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley techknowlogick ];
+    maintainers = with maintainers; [
+      benley
+      techknowlogick
+    ];
     mainProgram = "dex";
   };
 }

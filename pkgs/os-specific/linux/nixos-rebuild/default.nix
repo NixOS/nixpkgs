@@ -1,17 +1,18 @@
-{ callPackage
-, substitute
-, runtimeShell
-, coreutils
-, gnused
-, gnugrep
-, jq
-, util-linux
-, nix
-, lib
-, nixosTests
-, installShellFiles
-, binlore
-, nixos-rebuild
+{
+  callPackage,
+  substitute,
+  runtimeShell,
+  coreutils,
+  gnused,
+  gnugrep,
+  jq,
+  util-linux,
+  nix,
+  lib,
+  nixosTests,
+  installShellFiles,
+  binlore,
+  nixos-rebuild,
 }:
 let
   fallback = import ./../../../../nixos/modules/installer/tools/nix-fallback-paths.nix;
@@ -23,12 +24,30 @@ substitute {
   isExecutable = true;
 
   substitutions = [
-    "--subst-var-by" "runtimeShell" runtimeShell
-    "--subst-var-by" "nix" nix
-    "--subst-var-by" "nix_x86_64_linux" fallback.x86_64-linux
-    "--subst-var-by" "nix_i686_linux" fallback.i686-linux
-    "--subst-var-by" "nix_aarch64_linux" fallback.aarch64-linux
-    "--subst-var-by" "path" (lib.makeBinPath [ coreutils gnused gnugrep jq util-linux ])
+    "--subst-var-by"
+    "runtimeShell"
+    runtimeShell
+    "--subst-var-by"
+    "nix"
+    nix
+    "--subst-var-by"
+    "nix_x86_64_linux"
+    fallback.x86_64-linux
+    "--subst-var-by"
+    "nix_i686_linux"
+    fallback.i686-linux
+    "--subst-var-by"
+    "nix_aarch64_linux"
+    fallback.aarch64-linux
+    "--subst-var-by"
+    "path"
+    (lib.makeBinPath [
+      coreutils
+      gnused
+      gnugrep
+      jq
+      util-linux
+    ])
   ];
 
   nativeBuildInputs = [
@@ -45,7 +64,7 @@ substitute {
   # run some a simple installer tests to make sure nixos-rebuild still works for them
   passthru.tests = {
     install-bootloader = nixosTests.nixos-rebuild-install-bootloader;
-    repl = callPackage ./test/repl.nix {};
+    repl = callPackage ./test/repl.nix { };
     simple-installer = nixosTests.installer.simple;
     specialisations = nixosTests.nixos-rebuild-specialisations;
     target-host = nixosTests.nixos-rebuild-target-host;

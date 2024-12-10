@@ -1,9 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, pkg-config
-, curl
-, mpv
-, yajl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  curl,
+  mpv,
+  yajl,
 }:
 
 stdenv.mkDerivation rec {

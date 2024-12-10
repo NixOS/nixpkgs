@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, nodejs
-, pnpm
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  nodejs,
+  pnpm,
 }:
 
 let
@@ -20,7 +21,10 @@ in
 buildGoModule {
   inherit pname version src;
 
-  outputs = [ "out" "server" ];
+  outputs = [
+    "out"
+    "server"
+  ];
 
   nativeBuildInputs = [
     nodejs

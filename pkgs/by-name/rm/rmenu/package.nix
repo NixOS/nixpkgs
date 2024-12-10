@@ -1,13 +1,14 @@
-{ fetchFromGitHub
-, glib
-, gtk3
-, lib
-, libsoup_3
-, networkmanager
-, pkg-config
-, rustPlatform
-, webkitgtk_4_1
-, wrapGAppsHook3
+{
+  fetchFromGitHub,
+  glib,
+  gtk3,
+  lib,
+  libsoup_3,
+  networkmanager,
+  pkg-config,
+  rustPlatform,
+  webkitgtk_4_1,
+  wrapGAppsHook3,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "rmenu";

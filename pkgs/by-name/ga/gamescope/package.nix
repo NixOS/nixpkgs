@@ -1,41 +1,42 @@
-{ stdenv
-, buildPackages
-, edid-decode
-, fetchFromGitHub
-, meson
-, pkg-config
-, ninja
-, cmake
-, xorg
-, libdrm
-, libei
-, vulkan-loader
-, vulkan-headers
-, wayland
-, wayland-protocols
-, wayland-scanner
-, libxkbcommon
-, glm
-, gbenchmark
-, libcap
-, libavif
-, SDL2
-, pipewire
-, pixman
-, python3
-, libinput
-, glslang
-, hwdata
-, stb
-, wlroots
-, libdecor
-, lcms
-, lib
-, makeBinaryWrapper
-, nix-update-script
-, writeShellScriptBin
-, enableExecutable ? true
-, enableWsi ? true
+{
+  stdenv,
+  buildPackages,
+  edid-decode,
+  fetchFromGitHub,
+  meson,
+  pkg-config,
+  ninja,
+  cmake,
+  xorg,
+  libdrm,
+  libei,
+  vulkan-loader,
+  vulkan-headers,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  libxkbcommon,
+  glm,
+  gbenchmark,
+  libcap,
+  libavif,
+  SDL2,
+  pipewire,
+  pixman,
+  python3,
+  libinput,
+  glslang,
+  hwdata,
+  stb,
+  wlroots,
+  libdecor,
+  lcms,
+  lib,
+  makeBinaryWrapper,
+  nix-update-script,
+  writeShellScriptBin,
+  enableExecutable ? true,
+  enableWsi ? true,
 }:
 let
   joshShaders = fetchFromGitHub {
@@ -80,7 +81,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # don't install vendored vkroots etc
-  mesonInstallFlags = ["--skip-subprojects"];
+  mesonInstallFlags = [ "--skip-subprojects" ];
 
   strictDeps = true;
 
@@ -88,59 +89,68 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    meson
-    pkg-config
-    ninja
-    wayland-scanner
-    # For `libdisplay-info`
-    python3
-    hwdata
-    edid-decode
-    # For OpenVR
-    cmake
+  nativeBuildInputs =
+    [
+      meson
+      pkg-config
+      ninja
+      wayland-scanner
+      # For `libdisplay-info`
+      python3
+      hwdata
+      edid-decode
+      # For OpenVR
+      cmake
 
-    # calls git describe to encode its own version into the build
-    (writeShellScriptBin "git" "echo ${finalAttrs.version}")
-  ] ++ lib.optionals enableExecutable [
-    makeBinaryWrapper
-    glslang
-  ];
+      # calls git describe to encode its own version into the build
+      (writeShellScriptBin "git" "echo ${finalAttrs.version}")
+    ]
+    ++ lib.optionals enableExecutable [
+      makeBinaryWrapper
+      glslang
+    ];
 
-  buildInputs = [
-    pipewire
-    hwdata
-    xorg.libX11
-    wayland
-    wayland-protocols
-    vulkan-loader
-    glm
-  ] ++ lib.optionals enableWsi [
-    vulkan-headers
-  ] ++ lib.optionals enableExecutable (wlroots.buildInputs ++ [  # gamescope uses a custom wlroots branch
-    xorg.libXcomposite
-    xorg.libXcursor
-    xorg.libXdamage
-    xorg.libXext
-    xorg.libXi
-    xorg.libXmu
-    xorg.libXrender
-    xorg.libXres
-    xorg.libXtst
-    xorg.libXxf86vm
-    libavif
-    libdrm
-    libei
-    SDL2
-    libdecor
-    libinput
-    libxkbcommon
-    gbenchmark
-    pixman
-    libcap
-    stb
-    lcms
-  ]);
+  buildInputs =
+    [
+      pipewire
+      hwdata
+      xorg.libX11
+      wayland
+      wayland-protocols
+      vulkan-loader
+      glm
+    ]
+    ++ lib.optionals enableWsi [
+      vulkan-headers
+    ]
+    ++ lib.optionals enableExecutable (
+      wlroots.buildInputs
+      ++ [
+        # gamescope uses a custom wlroots branch
+        xorg.libXcomposite
+        xorg.libXcursor
+        xorg.libXdamage
+        xorg.libXext
+        xorg.libXi
+        xorg.libXmu
+        xorg.libXrender
+        xorg.libXres
+        xorg.libXtst
+        xorg.libXxf86vm
+        libavif
+        libdrm
+        libei
+        SDL2
+        libdecor
+        libinput
+        libxkbcommon
+        gbenchmark
+        pixman
+        libcap
+        stb
+        lcms
+      ]
+    );
 
   postInstall = lib.optionalString enableExecutable ''
     # using patchelf unstable because the stable version corrupts the binary
@@ -149,20 +159,32 @@ stdenv.mkDerivation (finalAttrs: {
 
     # --debug-layers flag expects these in the path
     wrapProgram "$out/bin/gamescope" \
-      --prefix PATH : ${with xorg; lib.makeBinPath [xprop xwininfo]}
+      --prefix PATH : ${
+        with xorg;
+        lib.makeBinPath [
+          xprop
+          xwininfo
+        ]
+      }
 
     # Install ReShade shaders
     mkdir -p $out/share/gamescope/reshade
     cp -r ${joshShaders}/* $out/share/gamescope/reshade/
   '';
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "SteamOS session compositing window manager";
     homepage = "https://github.com/ValveSoftware/gamescope";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ nrdxp pedrohlc Scrumplex zhaofengli k900 ];
+    maintainers = with maintainers; [
+      nrdxp
+      pedrohlc
+      Scrumplex
+      zhaofengli
+      k900
+    ];
     platforms = platforms.linux;
     mainProgram = "gamescope";
   };

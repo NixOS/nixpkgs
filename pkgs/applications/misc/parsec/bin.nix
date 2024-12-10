@@ -1,27 +1,28 @@
-{ stdenvNoCC
-, stdenv
-, lib
-, dpkg
-, autoPatchelfHook
-, makeWrapper
-, fetchurl
-, alsa-lib
-, openssl
-, udev
-, libglvnd
-, libX11
-, libXcursor
-, libXi
-, libXrandr
-, libXfixes
-, libpulseaudio
-, libva
-, ffmpeg_6
-, libpng
-, libjpeg8
-, curl
-, vulkan-loader
-, zenity
+{
+  stdenvNoCC,
+  stdenv,
+  lib,
+  dpkg,
+  autoPatchelfHook,
+  makeWrapper,
+  fetchurl,
+  alsa-lib,
+  openssl,
+  udev,
+  libglvnd,
+  libX11,
+  libXcursor,
+  libXi,
+  libXrandr,
+  libXfixes,
+  libpulseaudio,
+  libva,
+  ffmpeg_6,
+  libpng,
+  libjpeg8,
+  curl,
+  vulkan-loader,
+  zenity,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -41,7 +42,11 @@ stdenvNoCC.mkDerivation {
     runHook postUnpack
   '';
 
-  nativeBuildInputs = [ dpkg autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    autoPatchelfHook
+    makeWrapper
+  ];
 
   buildInputs = [
     stdenv.cc.cc # libstdc++
@@ -116,7 +121,10 @@ stdenvNoCC.mkDerivation {
     changelog = "https://parsec.app/changelog";
     description = "Remote streaming service client";
     license = licenses.unfree;
-    maintainers = with maintainers; [ arcnmx pabloaul ];
+    maintainers = with maintainers; [
+      arcnmx
+      pabloaul
+    ];
     platforms = platforms.linux;
     mainProgram = "parsecd";
   };

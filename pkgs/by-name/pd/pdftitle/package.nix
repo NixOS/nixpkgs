@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   python3Packages,
-  pdfminer
+  pdfminer,
 }:
 
 python3Packages.buildPythonApplication rec {

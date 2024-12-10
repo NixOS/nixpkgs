@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, requireFile
-, dpkg
-, xorg
-, libGL
-, alsa-lib
-, pulseaudio
+{
+  lib,
+  stdenv,
+  requireFile,
+  dpkg,
+  xorg,
+  libGL,
+  alsa-lib,
+  pulseaudio,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,23 +34,25 @@ stdenv.mkDerivation rec {
     ln -s $out/opt/Wonderdraft/Wonderdraft.x86_64 $out/bin/Wonderdraft.x86_64
     runHook postInstall
   '';
-  preFixup = let
-    libPath = lib.makeLibraryPath [
-      xorg.libXcursor
-      xorg.libXinerama
-      xorg.libXrandr
-      xorg.libX11
-      xorg.libXi
-      libGL
-      alsa-lib
-      pulseaudio
-    ];
-  in ''
-    patchelf \
-      --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-      --set-rpath "${libPath}" \
-      $out/opt/Wonderdraft/Wonderdraft.x86_64
-  '';
+  preFixup =
+    let
+      libPath = lib.makeLibraryPath [
+        xorg.libXcursor
+        xorg.libXinerama
+        xorg.libXrandr
+        xorg.libX11
+        xorg.libXi
+        libGL
+        alsa-lib
+        pulseaudio
+      ];
+    in
+    ''
+      patchelf \
+        --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+        --set-rpath "${libPath}" \
+        $out/opt/Wonderdraft/Wonderdraft.x86_64
+    '';
 
   meta = with lib; {
     homepage = "https://wonderdraft.net/";

@@ -1,10 +1,11 @@
-{ lib
-, stdenvNoCC
-, nodejs
-, yarn-berry
-, cacert
-, version
-, src
+{
+  lib,
+  stdenvNoCC,
+  nodejs,
+  yarn-berry,
+  cacert,
+  version,
+  src,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -12,7 +13,10 @@ stdenvNoCC.mkDerivation {
   src = "${src}/web";
   inherit version;
 
-  nativeBuildInputs = [ nodejs yarn-berry ];
+  nativeBuildInputs = [
+    nodejs
+    yarn-berry
+  ];
 
   yarnOfflineCache = stdenvNoCC.mkDerivation {
     name = "tilt-assets-deps";
@@ -21,9 +25,20 @@ stdenvNoCC.mkDerivation {
     nativeBuildInputs = [ yarn-berry ];
 
     supportedArchitectures = builtins.toJSON {
-      os = [ "darwin" "linux" ];
-      cpu = [ "arm" "arm64" "ia32" "x64" ];
-      libc = [ "glibc" "musl" ];
+      os = [
+        "darwin"
+        "linux"
+      ];
+      cpu = [
+        "arm"
+        "arm64"
+        "ia32"
+        "x64"
+      ];
+      libc = [
+        "glibc"
+        "musl"
+      ];
     };
 
     NODE_EXTRA_CA_CERTS = "${cacert}/etc/ssl/certs/ca-bundle.crt";

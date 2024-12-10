@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +22,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Decodetalkers/neocmakelsp";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ rewine multivac61 ];
+    maintainers = with maintainers; [
+      rewine
+      multivac61
+    ];
     mainProgram = "neocmakelsp";
   };
 }

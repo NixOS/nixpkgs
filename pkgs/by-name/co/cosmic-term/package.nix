@@ -1,19 +1,20 @@
-{ lib
-, cosmic-icons
-, fetchFromGitHub
-, fontconfig
-, freetype
-, just
-, libglvnd
-, libinput
-, libxkbcommon
-, makeBinaryWrapper
-, pkg-config
-, rustPlatform
-, stdenv
-, vulkan-loader
-, wayland
-, xorg
+{
+  lib,
+  cosmic-icons,
+  fetchFromGitHub,
+  fontconfig,
+  freetype,
+  just,
+  libglvnd,
+  libinput,
+  libxkbcommon,
+  makeBinaryWrapper,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+  vulkan-loader,
+  wayland,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -98,20 +99,25 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     wrapProgram "$out/bin/cosmic-term" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        libxkbcommon
-        vulkan-loader
-        xorg.libX11
-        xorg.libXcursor
-        xorg.libXi
-      ]}
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          libxkbcommon
+          vulkan-loader
+          xorg.libX11
+          xorg.libXcursor
+          xorg.libXi
+        ]
+      }
   '';
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-term";
     description = "Terminal for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ahoneybun nyabinary ];
+    maintainers = with maintainers; [
+      ahoneybun
+      nyabinary
+    ];
     platforms = platforms.linux;
     mainProgram = "cosmic-term";
   };

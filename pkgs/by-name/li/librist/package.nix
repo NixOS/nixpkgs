@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, cjson
-, cmocka
-, mbedtls
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  cjson,
+  cmocka,
+  mbedtls,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,8 +44,15 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Library that can be used to easily add the RIST protocol to your application";
     homepage = "https://code.videolan.org/rist/librist";
-    license = with licenses; [ bsd2 mit isc ];
-    maintainers = with maintainers; [ raphaelr sebtm ];
+    license = with licenses; [
+      bsd2
+      mit
+      isc
+    ];
+    maintainers = with maintainers; [
+      raphaelr
+      sebtm
+    ];
     platforms = platforms.all;
   };
 }

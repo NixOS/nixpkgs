@@ -1,19 +1,23 @@
-{ lib
-, fetchFromSourcehut
-, buildGoModule
-, buildPythonPackage
-, python
-, srht
-, setuptools
-, pip
-, pyyaml
-, pythonOlder
-, unzip
+{
+  lib,
+  fetchFromSourcehut,
+  buildGoModule,
+  buildPythonPackage,
+  python,
+  srht,
+  setuptools,
+  pip,
+  pyyaml,
+  pythonOlder,
+  unzip,
 }:
 
 let
   version = "0.17.7";
-  gqlgen = import ./fix-gqlgen-trimpath.nix { inherit unzip; gqlgenVersion = "0.17.43"; };
+  gqlgen = import ./fix-gqlgen-trimpath.nix {
+    inherit unzip;
+    gqlgenVersion = "0.17.43";
+  };
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
@@ -22,12 +26,15 @@ let
     hash = "sha256-IyY7Niy/vZSAXjYZMlxY6uuQ8nH/4yT4+MaRjHtl6G4=";
   };
 
-  hubsrht-api = buildGoModule ({
-    inherit src version;
-    pname = "hubsrht-api";
-    modRoot = "api";
-    vendorHash = "sha256-GVN11nEJqIHh8MtKvIXe4zcUwJph9eTSkJ2R+ufD+ic=";
-  } // gqlgen);
+  hubsrht-api = buildGoModule (
+    {
+      inherit src version;
+      pname = "hubsrht-api";
+      modRoot = "api";
+      vendorHash = "sha256-GVN11nEJqIHh8MtKvIXe4zcUwJph9eTSkJ2R+ufD+ic=";
+    }
+    // gqlgen
+  );
 in
 buildPythonPackage rec {
   inherit src version;
@@ -59,7 +66,6 @@ buildPythonPackage rec {
     ln -s ${hubsrht-api}/bin/api $out/bin/hubsrht-api
   '';
 
-
   # Module has no tests
   doCheck = false;
 
@@ -71,6 +77,9 @@ buildPythonPackage rec {
     homepage = "https://git.sr.ht/~sircmpwn/hub.sr.ht";
     description = "Project hub service for the sr.ht network";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ eadwu christoph-heiss ];
+    maintainers = with maintainers; [
+      eadwu
+      christoph-heiss
+    ];
   };
 }

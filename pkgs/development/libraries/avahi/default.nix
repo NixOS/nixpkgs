@@ -1,29 +1,31 @@
-{ fetchurl
-, fetchpatch
-, lib
-, config
-, stdenv
-, pkg-config
-, libdaemon
-, dbus
-, libpcap
-, expat
-, gettext
-, glib
-, libiconv
-, libevent
-, nixosTests
-, gtk3Support ? false
-, gtk3
-, qt5
-, qt5Support ? false
-, withLibdnssdCompat ? false
-, python ? null
-, withPython ? false
+{
+  fetchurl,
+  fetchpatch,
+  lib,
+  config,
+  stdenv,
+  pkg-config,
+  libdaemon,
+  dbus,
+  libpcap,
+  expat,
+  gettext,
+  glib,
+  libiconv,
+  libevent,
+  nixosTests,
+  gtk3Support ? false,
+  gtk3,
+  qt5,
+  qt5Support ? false,
+  withLibdnssdCompat ? false,
+  python ? null,
+  withPython ? false,
 }:
 
 # Added 2024-09-03. Drop this assertion after 24.11 is released.
-assert lib.assertMsg (config.avahi or {} == {}) "config.avahi has been removed; please use an overlay or services.avahi.package to configure the avahi package.";
+assert lib.assertMsg (config.avahi or { } == { })
+  "config.avahi has been removed; please use an overlay or services.avahi.package to configure the avahi package.";
 
 stdenv.mkDerivation rec {
   pname = "avahi${lib.optionalString withLibdnssdCompat "-compat"}";
@@ -34,7 +36,11 @@ stdenv.mkDerivation rec {
     sha256 = "1npdixwxxn3s9q1f365x9n9rc5xgfz39hxf23faqvlrklgbhj0q6";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
   patches = [
     # CVE-2021-36217 / CVE-2021-3502
@@ -120,7 +126,10 @@ stdenv.mkDerivation rec {
       name = "core-no-longer-supply-bogus-services-to-callbacks.patch";
       url = "https://github.com/avahi/avahi/commit/93b14365c1c1e04efd1a890e8caa01a2a514bfd8.patch";
       sha256 = "sha256-VBm8vsBZkTbbWAK8FI71SL89lZuYd1yFNoB5o+FvlEU=";
-      excludes = [ ".github/workflows/smoke-tests.sh" "fuzz/fuzz-packet.c" ];
+      excludes = [
+        ".github/workflows/smoke-tests.sh"
+        "fuzz/fuzz-packet.c"
+      ];
     })
   ];
 
@@ -134,47 +143,57 @@ stdenv.mkDerivation rec {
     glib
   ];
 
-  buildInputs = [
-    libdaemon
-    dbus
-    glib
-    expat
-    libiconv
-    libevent
-  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-    libpcap
-  ] ++ lib.optionals gtk3Support [
-    gtk3
-  ] ++ lib.optionals qt5Support [
-    qt5
-  ];
+  buildInputs =
+    [
+      libdaemon
+      dbus
+      glib
+      expat
+      libiconv
+      libevent
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+      libpcap
+    ]
+    ++ lib.optionals gtk3Support [
+      gtk3
+    ]
+    ++ lib.optionals qt5Support [
+      qt5
+    ];
 
-  propagatedBuildInputs = lib.optionals withPython (with python.pkgs; [
-    python
-    pygobject3
-    dbus-python
-  ]);
+  propagatedBuildInputs = lib.optionals withPython (
+    with python.pkgs;
+    [
+      python
+      pygobject3
+      dbus-python
+    ]
+  );
 
-  configureFlags = [
-    "--disable-gdbm"
-    "--disable-mono"
-    # Use non-deprecated path https://github.com/lathiat/avahi/pull/376
-    "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
-    (lib.enableFeature gtk3Support "gtk3")
-    (lib.enableFeature qt5Support "qt5")
-    (lib.enableFeature withPython "python")
-    "--localstatedir=/var"
-    "--runstatedir=/run"
-    "--sysconfdir=/etc"
-    "--with-distro=${with stdenv.hostPlatform; if isBSD then parsed.kernel.name else "none"}"
-    # A systemd unit is provided by the avahi-daemon NixOS module
-    "--with-systemdsystemunitdir=no"
-  ] ++ lib.optionals withLibdnssdCompat [
-    "--enable-compat-libdns_sd"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # autoipd won't build on darwin
-    "--disable-autoipd"
-  ];
+  configureFlags =
+    [
+      "--disable-gdbm"
+      "--disable-mono"
+      # Use non-deprecated path https://github.com/lathiat/avahi/pull/376
+      "--with-dbus-sys=${placeholder "out"}/share/dbus-1/system.d"
+      (lib.enableFeature gtk3Support "gtk3")
+      (lib.enableFeature qt5Support "qt5")
+      (lib.enableFeature withPython "python")
+      "--localstatedir=/var"
+      "--runstatedir=/run"
+      "--sysconfdir=/etc"
+      "--with-distro=${with stdenv.hostPlatform; if isBSD then parsed.kernel.name else "none"}"
+      # A systemd unit is provided by the avahi-daemon NixOS module
+      "--with-systemdsystemunitdir=no"
+    ]
+    ++ lib.optionals withLibdnssdCompat [
+      "--enable-compat-libdns_sd"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # autoipd won't build on darwin
+      "--disable-autoipd"
+    ];
 
   installFlags = [
     # Override directories to install into the package.
@@ -205,7 +224,10 @@ stdenv.mkDerivation rec {
     homepage = "http://avahi.org";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ lovek323 globin ];
+    maintainers = with maintainers; [
+      lovek323
+      globin
+    ];
 
     longDescription = ''
       Avahi is a system which facilitates service discovery on a local

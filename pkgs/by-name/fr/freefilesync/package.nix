@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, fetchDebianPatch
-, copyDesktopItems
-, pkg-config
-, wrapGAppsHook3
-, unzip
-, curl
-, glib
-, gtk3
-, libssh2
-, openssl
-, wxGTK32
-, makeDesktopItem
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  fetchDebianPatch,
+  copyDesktopItems,
+  pkg-config,
+  wrapGAppsHook3,
+  unzip,
+  curl,
+  glib,
+  gtk3,
+  libssh2,
+  openssl,
+  wxGTK32,
+  makeDesktopItem,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -116,7 +117,10 @@ stdenv.mkDerivation (finalAttrs: {
       genericName = "Folder Comparison and Synchronization";
       icon = name;
       exec = name;
-      categories = [ "Utility" "FileTools" ];
+      categories = [
+        "Utility"
+        "FileTools"
+      ];
     })
     (makeDesktopItem rec {
       name = "RealTimeSync";
@@ -124,14 +128,22 @@ stdenv.mkDerivation (finalAttrs: {
       genericName = "Automated Synchronization";
       icon = name;
       exec = name;
-      categories = [ "Utility" "FileTools" ];
+      categories = [
+        "Utility"
+        "FileTools"
+      ];
     })
   ];
 
   meta = with lib; {
     description = "Open Source File Synchronization & Backup Software";
     homepage = "https://freefilesync.org";
-    license = [ licenses.gpl3Only licenses.openssl licenses.curl licenses.bsd3 ];
+    license = [
+      licenses.gpl3Only
+      licenses.openssl
+      licenses.curl
+      licenses.bsd3
+    ];
     maintainers = with maintainers; [ wegank ];
     platforms = platforms.linux;
   };

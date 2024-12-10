@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,11 +13,13 @@ let
   pcmPlugin = cfg.jackd.enable && cfg.alsa.enable;
   loopback = cfg.jackd.enable && cfg.loopback.enable;
 
-  enable32BitAlsaPlugins = cfg.alsa.support32Bit && pkgs.stdenv.hostPlatform.isx86_64 && pkgs.pkgsi686Linux.alsa-lib != null;
+  enable32BitAlsaPlugins =
+    cfg.alsa.support32Bit && pkgs.stdenv.hostPlatform.isx86_64 && pkgs.pkgsi686Linux.alsa-lib != null;
 
   umaskNeeded = versionOlder cfg.jackd.package.version "1.9.12";
   bridgeNeeded = versionAtLeast cfg.jackd.package.version "1.9.12";
-in {
+in
+{
   options = {
     services.jack = {
       jackd = {
@@ -20,12 +27,14 @@ in {
           JACK Audio Connection Kit. You need to add yourself to the "jackaudio" group
         '';
 
-        package = mkPackageOption pkgs "jack2" {
-          example = "jack1";
-        } // {
-          # until jack1 promiscuous mode is fixed
-          internal = true;
-        };
+        package =
+          mkPackageOption pkgs "jack2" {
+            example = "jack1";
+          }
+          // {
+            # until jack1 promiscuous mode is fixed
+            internal = true;
+          };
 
         extraOptions = mkOption {
           type = types.listOf types.str;
@@ -125,8 +134,7 @@ in {
       environment.etc."alsa/conf.d/98-jack.conf".text = ''
         pcm_type.jack {
           libs.native = ${pkgs.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;
-          ${lib.optionalString enable32BitAlsaPlugins
-          "libs.32Bit = ${pkgs.pkgsi686Linux.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;"}
+          ${lib.optionalString enable32BitAlsaPlugins "libs.32Bit = ${pkgs.pkgsi686Linux.alsa-plugins}/lib/alsa-lib/libasound_module_pcm_jack.so ;"}
         }
         pcm.!default {
           @func getenv
@@ -222,10 +230,20 @@ in {
       };
       # https://jackaudio.org/faq/linux_rt_config.html
       security.pam.loginLimits = [
-        { domain = "@jackaudio"; type = "-"; item = "rtprio"; value = "99"; }
-        { domain = "@jackaudio"; type = "-"; item = "memlock"; value = "unlimited"; }
+        {
+          domain = "@jackaudio";
+          type = "-";
+          item = "rtprio";
+          value = "99";
+        }
+        {
+          domain = "@jackaudio";
+          type = "-";
+          item = "memlock";
+          value = "unlimited";
+        }
       ];
-      users.groups.jackaudio = {};
+      users.groups.jackaudio = { };
 
       environment = {
         systemPackages = [ cfg.jackd.package ];
@@ -239,17 +257,19 @@ in {
 
       systemd.services.jack = {
         description = "JACK Audio Connection Kit";
-        serviceConfig = {
-          User = "jackaudio";
-          SupplementaryGroups = lib.optional
-            (config.hardware.pulseaudio.enable
-            && !config.hardware.pulseaudio.systemWide) "users";
-          ExecStart = "${cfg.jackd.package}/bin/jackd ${lib.escapeShellArgs cfg.jackd.extraOptions}";
-          LimitRTPRIO = 99;
-          LimitMEMLOCK = "infinity";
-        } // optionalAttrs umaskNeeded {
-          UMask = "007";
-        };
+        serviceConfig =
+          {
+            User = "jackaudio";
+            SupplementaryGroups = lib.optional (
+              config.hardware.pulseaudio.enable && !config.hardware.pulseaudio.systemWide
+            ) "users";
+            ExecStart = "${cfg.jackd.package}/bin/jackd ${lib.escapeShellArgs cfg.jackd.extraOptions}";
+            LimitRTPRIO = 99;
+            LimitMEMLOCK = "infinity";
+          }
+          // optionalAttrs umaskNeeded {
+            UMask = "007";
+          };
         path = [ cfg.jackd.package ];
         environment = {
           JACK_PROMISCUOUS_SERVER = "jackaudio";

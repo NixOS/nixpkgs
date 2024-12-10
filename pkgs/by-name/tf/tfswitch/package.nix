@@ -1,4 +1,8 @@
-{ buildGoModule, lib, fetchFromGitHub }:
+{
+  buildGoModule,
+  lib,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "tfswitch";
   version = "1.2.3";
@@ -22,8 +26,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description =
-      "A command line tool to switch between different versions of terraform";
+    description = "A command line tool to switch between different versions of terraform";
     mainProgram = "tfswitch";
     homepage = "https://github.com/warrensbox/terraform-switcher";
     license = licenses.mit;

@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "dnscrypt-proxy";
@@ -22,7 +27,10 @@ buildGoModule rec {
 
     license = licenses.isc;
     homepage = "https://dnscrypt.info/";
-    maintainers = with maintainers; [ atemu waynr ];
+    maintainers = with maintainers; [
+      atemu
+      waynr
+    ];
     mainProgram = "dnscrypt-proxy";
     platforms = with platforms; unix;
   };

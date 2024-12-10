@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchzip, autoreconfHook, bison, flex, help2man, perl, tk }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  autoreconfHook,
+  bison,
+  flex,
+  help2man,
+  perl,
+  tk,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ifm";
@@ -9,9 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "14af21qjd5jvsscm6vxpsdrnipdr33g6niagzmykrhyfhwcbjahi";
   };
 
-  nativeBuildInputs = [ autoreconfHook bison flex help2man ];
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+    flex
+    help2man
+  ];
 
-  buildInputs = [ perl tk ]; # perl and wish are not run but written as shebangs.
+  buildInputs = [
+    perl
+    tk
+  ]; # perl and wish are not run but written as shebangs.
 
   # Workaround build failure on -fno-common toolchains:
   #   ld: libvars.a(vars-freeze-lex.o):src/libvars/vars-freeze-lex.l:23:

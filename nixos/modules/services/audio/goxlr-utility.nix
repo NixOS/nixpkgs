@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.goxlr-utility;
@@ -48,11 +53,10 @@ with lib;
       services.udev.packages = [ cfg.package ];
 
       xdg.autostart.enable = mkIf cfg.autoStart.xdg true;
-      environment.systemPackages = mkIf cfg.autoStart.xdg
-        [
-          cfg.package
-          goxlr-autostart
-        ];
+      environment.systemPackages = mkIf cfg.autoStart.xdg [
+        cfg.package
+        goxlr-autostart
+      ];
     };
 
   meta.maintainers = with maintainers; [ errnoh ];

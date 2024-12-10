@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, scons
-, rubberband
-, boost
-, libjack2
-, liblo
-, libsamplerate
-, libsndfile
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  scons,
+  rubberband,
+  boost,
+  libjack2,
+  liblo,
+  libsamplerate,
+  libsndfile,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +28,13 @@ stdenv.mkDerivation rec {
     rubberband
     scons
   ];
-  buildInputs = [ libsamplerate libsndfile liblo libjack2 boost ];
+  buildInputs = [
+    libsamplerate
+    libsndfile
+    liblo
+    libjack2
+    boost
+  ];
   prefixKey = "PREFIX=";
 
   meta = {

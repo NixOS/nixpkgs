@@ -37,7 +37,6 @@ buildPythonPackage rec {
     "lxml"
   ];
 
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "svg2tikz" ];

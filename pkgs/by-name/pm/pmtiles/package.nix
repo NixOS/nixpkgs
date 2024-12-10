@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "pmtiles";
   version = "1.22.1";
@@ -12,7 +16,12 @@ buildGoModule rec {
 
   vendorHash = "sha256-QDGs0L29W4QQBeIH1Z23nI/FYdu95kLnOAIZEWPOMWw=";
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" "-X main.commit=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+    "-X main.commit=v${version}"
+  ];
 
   postInstall = ''
     mv $out/bin/go-pmtiles $out/bin/pmtiles

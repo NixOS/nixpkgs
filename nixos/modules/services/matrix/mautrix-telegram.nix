@@ -1,13 +1,18 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   dataDir = "/var/lib/mautrix-telegram";
   registrationFile = "${dataDir}/telegram-registration.yaml";
   cfg = config.services.mautrix-telegram;
-  settingsFormat = pkgs.formats.json {};
-  settingsFile =
-    settingsFormat.generate "mautrix-telegram-config.json" cfg.settings;
+  settingsFormat = pkgs.formats.json { };
+  settingsFile = settingsFormat.generate "mautrix-telegram-config.json" cfg.settings;
 
-in {
+in
+{
   options = {
     services.mautrix-telegram = {
       enable = lib.mkEnableOption "Mautrix-Telegram, a Matrix-Telegram hybrid puppeting/relaybot bridge";
@@ -22,7 +27,7 @@ in {
 
           appservice = rec {
             database = "sqlite:///${dataDir}/mautrix-telegram.db";
-            database_opts = {};
+            database_opts = { };
             hostname = "0.0.0.0";
             port = 8080;
             address = "http://localhost:${toString port}";
@@ -31,8 +36,8 @@ in {
           bridge = {
             permissions."*" = "relaybot";
             relaybot.whitelist = [ ];
-            double_puppet_server_map = {};
-            login_shared_secret_map = {};
+            double_puppet_server_map = { };
+            login_shared_secret_map = { };
           };
 
           logging = {
@@ -137,7 +142,10 @@ in {
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ] ++ cfg.serviceDependencies;
       after = [ "network-online.target" ] ++ cfg.serviceDependencies;
-      path = [ pkgs.lottieconverter pkgs.ffmpeg-full ];
+      path = [
+        pkgs.lottieconverter
+        pkgs.ffmpeg-full
+      ];
 
       # mautrix-telegram tries to generate a dotfile in the home directory of
       # the running user if using a postgresql database:
@@ -151,18 +159,20 @@ in {
       # RuntimeError: Could not determine home directory.
       environment.HOME = dataDir;
 
-      preStart = ''
-        # generate the appservice's registration file if absent
-        if [ ! -f '${registrationFile}' ]; then
-          ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
-            --generate-registration \
-            --config='${settingsFile}' \
-            --registration='${registrationFile}'
-        fi
-      '' + lib.optionalString (pkgs.mautrix-telegram ? alembic) ''
-        # run automatic database init and migration scripts
-        ${pkgs.mautrix-telegram.alembic}/bin/alembic -x config='${settingsFile}' upgrade head
-      '';
+      preStart =
+        ''
+          # generate the appservice's registration file if absent
+          if [ ! -f '${registrationFile}' ]; then
+            ${pkgs.mautrix-telegram}/bin/mautrix-telegram \
+              --generate-registration \
+              --config='${settingsFile}' \
+              --registration='${registrationFile}'
+          fi
+        ''
+        + lib.optionalString (pkgs.mautrix-telegram ? alembic) ''
+          # run automatic database init and migration scripts
+          ${pkgs.mautrix-telegram.alembic}/bin/alembic -x config='${settingsFile}' upgrade head
+        '';
 
       serviceConfig = {
         Type = "simple";
@@ -189,5 +199,8 @@ in {
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ pacien vskilet ];
+  meta.maintainers = with lib.maintainers; [
+    pacien
+    vskilet
+  ];
 }

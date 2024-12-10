@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, bashInteractive
-, cacert
-, coreutils
-, dbus
-, docbook_xml_dtd_43
-, docbook_xsl
-, findutils
-, gettext
-, git
-, glib
-, glib-networking
-, gnused
-, gnutls
-, json-glib
-, krb5
-, libssh
-, libxcrypt
-, libxslt
-, makeWrapper
-, nodejs
-, nixosTests
-, nix-update-script
-, openssh
-, openssl
-, pam
-, pkg-config
-, polkit
-, python3Packages
-, runtimeShell
-, systemd
-, udev
-, xmlto
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  bashInteractive,
+  cacert,
+  coreutils,
+  dbus,
+  docbook_xml_dtd_43,
+  docbook_xsl,
+  findutils,
+  gettext,
+  git,
+  glib,
+  glib-networking,
+  gnused,
+  gnutls,
+  json-glib,
+  krb5,
+  libssh,
+  libxcrypt,
+  libxslt,
+  makeWrapper,
+  nodejs,
+  nixosTests,
+  nix-update-script,
+  openssh,
+  openssl,
+  pam,
+  pkg-config,
+  polkit,
+  python3Packages,
+  runtimeShell,
+  systemd,
+  udev,
+  xmlto,
 }:
 
 stdenv.mkDerivation rec {
@@ -168,7 +169,12 @@ stdenv.mkDerivation rec {
     runHook preFixup
 
     wrapProgram $out/libexec/cockpit-certificate-helper \
-      --prefix PATH : ${lib.makeBinPath [ coreutils openssl ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          openssl
+        ]
+      } \
       --run 'cd $(mktemp -d)'
 
     wrapProgram $out/share/cockpit/motd/update-motd \
@@ -210,7 +216,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = { inherit (nixosTests) cockpit; };
-    updateScript = nix-update-script {};
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

@@ -1,34 +1,41 @@
-{ config, options, lib, pkgs, ... }:
+{
+  config,
+  options,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.neo4j;
   opt = options.services.neo4j;
   certDirOpt = options.services.neo4j.directories.certificates;
-  isDefaultPathOption = opt: lib.isOption opt && opt.type == lib.types.path && opt.highestPrio >= 1500;
+  isDefaultPathOption =
+    opt: lib.isOption opt && opt.type == lib.types.path && opt.highestPrio >= 1500;
 
-  sslPolicies = lib.mapAttrsToList (
-    name: conf: ''
-      dbms.ssl.policy.${name}.allow_key_generation=${lib.boolToString conf.allowKeyGeneration}
-      dbms.ssl.policy.${name}.base_directory=${conf.baseDirectory}
-      ${lib.optionalString (conf.ciphers != null) ''
-        dbms.ssl.policy.${name}.ciphers=${lib.concatStringsSep "," conf.ciphers}
-      ''}
-      dbms.ssl.policy.${name}.client_auth=${conf.clientAuth}
-      ${if lib.length (lib.splitString "/" conf.privateKey) > 1 then
+  sslPolicies = lib.mapAttrsToList (name: conf: ''
+    dbms.ssl.policy.${name}.allow_key_generation=${lib.boolToString conf.allowKeyGeneration}
+    dbms.ssl.policy.${name}.base_directory=${conf.baseDirectory}
+    ${lib.optionalString (conf.ciphers != null) ''
+      dbms.ssl.policy.${name}.ciphers=${lib.concatStringsSep "," conf.ciphers}
+    ''}
+    dbms.ssl.policy.${name}.client_auth=${conf.clientAuth}
+    ${
+      if lib.length (lib.splitString "/" conf.privateKey) > 1 then
         "dbms.ssl.policy.${name}.private_key=${conf.privateKey}"
       else
         "dbms.ssl.policy.${name}.private_key=${conf.baseDirectory}/${conf.privateKey}"
-      }
-      ${if lib.length (lib.splitString "/" conf.privateKey) > 1 then
+    }
+    ${
+      if lib.length (lib.splitString "/" conf.privateKey) > 1 then
         "dbms.ssl.policy.${name}.public_certificate=${conf.publicCertificate}"
       else
         "dbms.ssl.policy.${name}.public_certificate=${conf.baseDirectory}/${conf.publicCertificate}"
-      }
-      dbms.ssl.policy.${name}.revoked_dir=${conf.revokedDir}
-      dbms.ssl.policy.${name}.tls_versions=${lib.concatStringsSep "," conf.tlsVersions}
-      dbms.ssl.policy.${name}.trust_all=${lib.boolToString conf.trustAll}
-      dbms.ssl.policy.${name}.trusted_dir=${conf.trustedDir}
-    ''
-  ) cfg.ssl.policies;
+    }
+    dbms.ssl.policy.${name}.revoked_dir=${conf.revokedDir}
+    dbms.ssl.policy.${name}.tls_versions=${lib.concatStringsSep "," conf.tlsVersions}
+    dbms.ssl.policy.${name}.trust_all=${lib.boolToString conf.trustAll}
+    dbms.ssl.policy.${name}.trusted_dir=${conf.trustedDir}
+  '') cfg.ssl.policies;
 
   serverConfig = pkgs.writeText "neo4j.conf" ''
     # General
@@ -44,7 +51,7 @@ let
     server.directories.lib=${cfg.package}/share/neo4j/lib
     ${lib.optionalString (cfg.constrainLoadCsv) ''
       server.directories.import=${cfg.directories.imports}
-   ''}
+    ''}
 
     # Directories (read and write)
     server.directories.data=${cfg.directories.data}
@@ -93,20 +100,61 @@ let
     ${cfg.extraServerConfig}
   '';
 
-in {
+in
+{
 
   imports = [
-    (lib.mkRenamedOptionModule [ "services" "neo4j" "host" ] [ "services" "neo4j" "defaultListenAddress" ])
-    (lib.mkRenamedOptionModule [ "services" "neo4j" "listenAddress" ] [ "services" "neo4j" "defaultListenAddress" ])
-    (lib.mkRenamedOptionModule [ "services" "neo4j" "enableBolt" ] [ "services" "neo4j" "bolt" "enable" ])
-    (lib.mkRenamedOptionModule [ "services" "neo4j" "enableHttps" ] [ "services" "neo4j" "https" "enable" ])
-    (lib.mkRenamedOptionModule [ "services" "neo4j" "certDir" ] [ "services" "neo4j" "directories" "certificates" ])
-    (lib.mkRenamedOptionModule [ "services" "neo4j" "dataDir" ] [ "services" "neo4j" "directories" "home" ])
-    (lib.mkRemovedOptionModule [ "services" "neo4j" "port" ] "Use services.neo4j.http.listenAddress instead.")
-    (lib.mkRemovedOptionModule [ "services" "neo4j" "boltPort" ] "Use services.neo4j.bolt.listenAddress instead.")
-    (lib.mkRemovedOptionModule [ "services" "neo4j" "httpsPort" ] "Use services.neo4j.https.listenAddress instead.")
-    (lib.mkRemovedOptionModule [ "services" "neo4j" "shell" "enabled" ] "shell.enabled was removed upstream")
-    (lib.mkRemovedOptionModule [ "services" "neo4j" "udc" "enabled" ] "udc.enabled was removed upstream")
+    (lib.mkRenamedOptionModule
+      [ "services" "neo4j" "host" ]
+      [ "services" "neo4j" "defaultListenAddress" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "neo4j" "listenAddress" ]
+      [ "services" "neo4j" "defaultListenAddress" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "neo4j" "enableBolt" ]
+      [ "services" "neo4j" "bolt" "enable" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "neo4j" "enableHttps" ]
+      [ "services" "neo4j" "https" "enable" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "neo4j" "certDir" ]
+      [ "services" "neo4j" "directories" "certificates" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "neo4j" "dataDir" ]
+      [ "services" "neo4j" "directories" "home" ]
+    )
+    (lib.mkRemovedOptionModule [
+      "services"
+      "neo4j"
+      "port"
+    ] "Use services.neo4j.http.listenAddress instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "neo4j"
+      "boltPort"
+    ] "Use services.neo4j.bolt.listenAddress instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "neo4j"
+      "httpsPort"
+    ] "Use services.neo4j.https.listenAddress instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "neo4j"
+      "shell"
+      "enabled"
+    ] "shell.enabled was removed upstream")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "neo4j"
+      "udc"
+      "enabled"
+    ] "udc.enabled was removed upstream")
   ];
 
   ###### interface
@@ -219,7 +267,11 @@ in {
       };
 
       tlsLevel = lib.mkOption {
-        type = lib.types.enum [ "REQUIRED" "OPTIONAL" "DISABLED" ];
+        type = lib.types.enum [
+          "REQUIRED"
+          "OPTIONAL"
+          "DISABLED"
+        ];
         default = "OPTIONAL";
         description = ''
           SSL/TSL requirement level for BOLT traffic.
@@ -376,163 +428,179 @@ in {
     };
 
     ssl.policies = lib.mkOption {
-      type = with lib.types; attrsOf (submodule ({ name, config, options, ... }: {
-        options = {
+      type =
+        with lib.types;
+        attrsOf (
+          submodule (
+            {
+              name,
+              config,
+              options,
+              ...
+            }:
+            {
+              options = {
 
-          allowKeyGeneration = lib.mkOption {
-            type = lib.types.bool;
-            default = false;
-            description = ''
-              Allows the generation of a private key and associated self-signed
-              certificate. Only performed when both objects cannot be found for
-              this policy. It is recommended to turn this off again after keys
-              have been generated.
+                allowKeyGeneration = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = ''
+                    Allows the generation of a private key and associated self-signed
+                    certificate. Only performed when both objects cannot be found for
+                    this policy. It is recommended to turn this off again after keys
+                    have been generated.
 
-              The public certificate is required to be duplicated to the
-              directory holding trusted certificates as defined by the
-              {option}`trustedDir` option.
+                    The public certificate is required to be duplicated to the
+                    directory holding trusted certificates as defined by the
+                    {option}`trustedDir` option.
 
-              Keys should in general be generated and distributed offline by a
-              trusted certificate authority and not by utilizing this mode.
-            '';
-          };
+                    Keys should in general be generated and distributed offline by a
+                    trusted certificate authority and not by utilizing this mode.
+                  '';
+                };
 
-          baseDirectory = lib.mkOption {
-            type = lib.types.path;
-            default = "${cfg.directories.certificates}/${name}";
-            defaultText = lib.literalExpression ''"''${config.${opt.directories.certificates}}/''${name}"'';
-            description = ''
-              The mandatory base directory for cryptographic objects of this
-              policy. This path is only automatically generated when this
-              option as well as {option}`directories.certificates` are
-              left at their default. Ensure read/write permissions are given
-              to the Neo4j daemon user `neo4j`.
+                baseDirectory = lib.mkOption {
+                  type = lib.types.path;
+                  default = "${cfg.directories.certificates}/${name}";
+                  defaultText = lib.literalExpression ''"''${config.${opt.directories.certificates}}/''${name}"'';
+                  description = ''
+                    The mandatory base directory for cryptographic objects of this
+                    policy. This path is only automatically generated when this
+                    option as well as {option}`directories.certificates` are
+                    left at their default. Ensure read/write permissions are given
+                    to the Neo4j daemon user `neo4j`.
 
-              It is also possible to override each individual
-              configuration with absolute paths. See the
-              {option}`privateKey` and {option}`publicCertificate`
-              policy options.
-            '';
-          };
+                    It is also possible to override each individual
+                    configuration with absolute paths. See the
+                    {option}`privateKey` and {option}`publicCertificate`
+                    policy options.
+                  '';
+                };
 
-          ciphers = lib.mkOption {
-            type = lib.types.nullOr (lib.types.listOf lib.types.str);
-            default = null;
-            description = ''
-              Restrict the allowed ciphers of this policy to those defined
-              here. The default ciphers are those of the JVM platform.
-            '';
-          };
+                ciphers = lib.mkOption {
+                  type = lib.types.nullOr (lib.types.listOf lib.types.str);
+                  default = null;
+                  description = ''
+                    Restrict the allowed ciphers of this policy to those defined
+                    here. The default ciphers are those of the JVM platform.
+                  '';
+                };
 
-          clientAuth = lib.mkOption {
-            type = lib.types.enum [ "NONE" "OPTIONAL" "REQUIRE" ];
-            default = "REQUIRE";
-            description = ''
-              The client authentication stance for this policy.
-            '';
-          };
+                clientAuth = lib.mkOption {
+                  type = lib.types.enum [
+                    "NONE"
+                    "OPTIONAL"
+                    "REQUIRE"
+                  ];
+                  default = "REQUIRE";
+                  description = ''
+                    The client authentication stance for this policy.
+                  '';
+                };
 
-          privateKey = lib.mkOption {
-            type = lib.types.str;
-            default = "private.key";
-            description = ''
-              The name of private PKCS #8 key file for this policy to be found
-              in the {option}`baseDirectory`, or the absolute path to
-              the key file. It is mandatory that a key can be found or generated.
-            '';
-          };
+                privateKey = lib.mkOption {
+                  type = lib.types.str;
+                  default = "private.key";
+                  description = ''
+                    The name of private PKCS #8 key file for this policy to be found
+                    in the {option}`baseDirectory`, or the absolute path to
+                    the key file. It is mandatory that a key can be found or generated.
+                  '';
+                };
 
-          publicCertificate = lib.mkOption {
-            type = lib.types.str;
-            default = "public.crt";
-            description = ''
-              The name of public X.509 certificate (chain) file in PEM format
-              for this policy to be found in the {option}`baseDirectory`,
-              or the absolute path to the certificate file. It is mandatory
-              that a certificate can be found or generated.
+                publicCertificate = lib.mkOption {
+                  type = lib.types.str;
+                  default = "public.crt";
+                  description = ''
+                    The name of public X.509 certificate (chain) file in PEM format
+                    for this policy to be found in the {option}`baseDirectory`,
+                    or the absolute path to the certificate file. It is mandatory
+                    that a certificate can be found or generated.
 
-              The public certificate is required to be duplicated to the
-              directory holding trusted certificates as defined by the
-              {option}`trustedDir` option.
-            '';
-          };
+                    The public certificate is required to be duplicated to the
+                    directory holding trusted certificates as defined by the
+                    {option}`trustedDir` option.
+                  '';
+                };
 
-          revokedDir = lib.mkOption {
-            type = lib.types.path;
-            default = "${config.baseDirectory}/revoked";
-            defaultText = lib.literalExpression ''"''${config.${options.baseDirectory}}/revoked"'';
-            description = ''
-              Path to directory of CRLs (Certificate Revocation Lists) in
-              PEM format. Must be an absolute path. The existence of this
-              directory is mandatory and will need to be created manually when:
-              setting this option to something other than its default; setting
-              either this policy's {option}`baseDirectory` or
-              {option}`directories.certificates` to something other than
-              their default. Ensure read/write permissions are given to the
-              Neo4j daemon user `neo4j`.
-            '';
-          };
+                revokedDir = lib.mkOption {
+                  type = lib.types.path;
+                  default = "${config.baseDirectory}/revoked";
+                  defaultText = lib.literalExpression ''"''${config.${options.baseDirectory}}/revoked"'';
+                  description = ''
+                    Path to directory of CRLs (Certificate Revocation Lists) in
+                    PEM format. Must be an absolute path. The existence of this
+                    directory is mandatory and will need to be created manually when:
+                    setting this option to something other than its default; setting
+                    either this policy's {option}`baseDirectory` or
+                    {option}`directories.certificates` to something other than
+                    their default. Ensure read/write permissions are given to the
+                    Neo4j daemon user `neo4j`.
+                  '';
+                };
 
-          tlsVersions = lib.mkOption {
-            type = lib.types.listOf lib.types.str;
-            default = [ "TLSv1.2" ];
-            description = ''
-              Restrict the TLS protocol versions of this policy to those
-              defined here.
-            '';
-          };
+                tlsVersions = lib.mkOption {
+                  type = lib.types.listOf lib.types.str;
+                  default = [ "TLSv1.2" ];
+                  description = ''
+                    Restrict the TLS protocol versions of this policy to those
+                    defined here.
+                  '';
+                };
 
-          trustAll = lib.mkOption {
-            type = lib.types.bool;
-            default = false;
-            description = ''
-              Makes this policy trust all remote parties. Enabling this is not
-              recommended and the policy's trusted directory will be ignored.
-              Use of this mode is discouraged. It would offer encryption but
-              no security.
-            '';
-          };
+                trustAll = lib.mkOption {
+                  type = lib.types.bool;
+                  default = false;
+                  description = ''
+                    Makes this policy trust all remote parties. Enabling this is not
+                    recommended and the policy's trusted directory will be ignored.
+                    Use of this mode is discouraged. It would offer encryption but
+                    no security.
+                  '';
+                };
 
-          trustedDir = lib.mkOption {
-            type = lib.types.path;
-            default = "${config.baseDirectory}/trusted";
-            defaultText = lib.literalExpression ''"''${config.${options.baseDirectory}}/trusted"'';
-            description = ''
-              Path to directory of X.509 certificates in PEM format for
-              trusted parties. Must be an absolute path. The existence of this
-              directory is mandatory and will need to be created manually when:
-              setting this option to something other than its default; setting
-              either this policy's {option}`baseDirectory` or
-              {option}`directories.certificates` to something other than
-              their default. Ensure read/write permissions are given to the
-              Neo4j daemon user `neo4j`.
+                trustedDir = lib.mkOption {
+                  type = lib.types.path;
+                  default = "${config.baseDirectory}/trusted";
+                  defaultText = lib.literalExpression ''"''${config.${options.baseDirectory}}/trusted"'';
+                  description = ''
+                    Path to directory of X.509 certificates in PEM format for
+                    trusted parties. Must be an absolute path. The existence of this
+                    directory is mandatory and will need to be created manually when:
+                    setting this option to something other than its default; setting
+                    either this policy's {option}`baseDirectory` or
+                    {option}`directories.certificates` to something other than
+                    their default. Ensure read/write permissions are given to the
+                    Neo4j daemon user `neo4j`.
 
-              The public certificate as defined by
-              {option}`publicCertificate` is required to be duplicated
-              to this directory.
-            '';
-          };
+                    The public certificate as defined by
+                    {option}`publicCertificate` is required to be duplicated
+                    to this directory.
+                  '';
+                };
 
-          directoriesToCreate = lib.mkOption {
-            type = lib.types.listOf lib.types.path;
-            internal = true;
-            readOnly = true;
-            description = ''
-              Directories of this policy that will be created automatically
-              when the certificates directory is left at its default value.
-              This includes all options of type path that are left at their
-              default value.
-            '';
-          };
+                directoriesToCreate = lib.mkOption {
+                  type = lib.types.listOf lib.types.path;
+                  internal = true;
+                  readOnly = true;
+                  description = ''
+                    Directories of this policy that will be created automatically
+                    when the certificates directory is left at its default value.
+                    This includes all options of type path that are left at their
+                    default value.
+                  '';
+                };
 
-        };
+              };
 
-        config.directoriesToCreate = lib.optionals
-          (certDirOpt.highestPrio >= 1500 && options.baseDirectory.highestPrio >= 1500)
-          (map (opt: opt.value) (lib.filter isDefaultPathOption (lib.attrValues options)));
+              config.directoriesToCreate = lib.optionals (
+                certDirOpt.highestPrio >= 1500 && options.baseDirectory.highestPrio >= 1500
+              ) (map (opt: opt.value) (lib.filter isDefaultPathOption (lib.attrValues options)));
 
-      }));
-      default = {};
+            }
+          )
+        );
+      default = { };
       description = ''
         Defines the SSL policies for use with Neo4j connectors. Each attribute
         of this set defines a policy, with the attribute name defining the name
@@ -555,18 +623,28 @@ in {
       validPolicyNameString = lib.concatStringsSep ", " validPolicyNameList;
 
       # Capture various directories left at their default so they can be created.
-      defaultDirectoriesToCreate = map (opt: opt.value) (lib.filter isDefaultPathOption (lib.attrValues options.services.neo4j.directories));
-      policyDirectoriesToCreate = lib.concatMap (pol: pol.directoriesToCreate) (lib.attrValues cfg.ssl.policies);
+      defaultDirectoriesToCreate = map (opt: opt.value) (
+        lib.filter isDefaultPathOption (lib.attrValues options.services.neo4j.directories)
+      );
+      policyDirectoriesToCreate = lib.concatMap (pol: pol.directoriesToCreate) (
+        lib.attrValues cfg.ssl.policies
+      );
     in
 
     lib.mkIf cfg.enable {
       assertions = [
-        { assertion = !lib.elem "legacy" policyNameList;
-          message = "The policy 'legacy' is special to Neo4j, and its name is reserved."; }
-        { assertion = lib.elem cfg.bolt.sslPolicy validPolicyNameList;
-          message = "Invalid policy assigned: `services.neo4j.bolt.sslPolicy = \"${cfg.bolt.sslPolicy}\"`, defined policies are: ${validPolicyNameString}"; }
-        { assertion = lib.elem cfg.https.sslPolicy validPolicyNameList;
-          message = "Invalid policy assigned: `services.neo4j.https.sslPolicy = \"${cfg.https.sslPolicy}\"`, defined policies are: ${validPolicyNameString}"; }
+        {
+          assertion = !lib.elem "legacy" policyNameList;
+          message = "The policy 'legacy' is special to Neo4j, and its name is reserved.";
+        }
+        {
+          assertion = lib.elem cfg.bolt.sslPolicy validPolicyNameList;
+          message = "Invalid policy assigned: `services.neo4j.bolt.sslPolicy = \"${cfg.bolt.sslPolicy}\"`, defined policies are: ${validPolicyNameString}";
+        }
+        {
+          assertion = lib.elem cfg.https.sslPolicy validPolicyNameList;
+          message = "Invalid policy assigned: `services.neo4j.https.sslPolicy = \"${cfg.https.sslPolicy}\"`, defined policies are: ${validPolicyNameString}";
+        }
       ];
 
       systemd.services.neo4j = {
@@ -590,9 +668,8 @@ in {
           mkdir -m 0700 -p ${cfg.directories.home}/{conf,logs}
 
           #   Create other sub-directories and policy directories that have been left at their default.
-          ${lib.concatMapStringsSep "\n" (
-            dir: ''
-              mkdir -m 0700 -p ${dir}
+          ${lib.concatMapStringsSep "\n" (dir: ''
+            mkdir -m 0700 -p ${dir}
           '') (defaultDirectoriesToCreate ++ policyDirectoriesToCreate)}
 
           # Place the configuration where Neo4j can find it.
@@ -611,7 +688,7 @@ in {
         description = "Neo4j daemon user";
         home = cfg.directories.home;
       };
-      users.groups.neo4j = {};
+      users.groups.neo4j = { };
     };
 
   meta = {

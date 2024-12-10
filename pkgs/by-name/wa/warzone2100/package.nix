@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, ninja
-, p7zip
-, pkg-config
-, asciidoctor
-, gettext
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  ninja,
+  p7zip,
+  pkg-config,
+  asciidoctor,
+  gettext,
 
-, SDL2
-, libtheora
-, libvorbis
-, libopus
-, openal
-, openalSoft
-, physfs
-, miniupnpc
-, libsodium
-, curl
-, libpng
-, freetype
-, harfbuzz
-, sqlite
-, which
-, vulkan-headers
-, vulkan-loader
-, shaderc
+  SDL2,
+  libtheora,
+  libvorbis,
+  libopus,
+  openal,
+  openalSoft,
+  physfs,
+  miniupnpc,
+  libsodium,
+  curl,
+  libpng,
+  freetype,
+  harfbuzz,
+  sqlite,
+  which,
+  vulkan-headers,
+  vulkan-loader,
+  shaderc,
 
-, testers
-, warzone2100
-, nixosTests
+  testers,
+  warzone2100,
+  nixosTests,
 
-, gitUpdater
+  gitUpdater,
 
-, withVideos ? false
+  withVideos ? false,
 }:
 
 let
@@ -46,32 +47,34 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version  = "4.5.4";
+  version = "4.5.4";
 
   src = fetchurl {
     url = "mirror://sourceforge/project/warzone2100/releases/${finalAttrs.version}/warzone2100_src.tar.xz";
     hash = "sha256-v7Odn5UJwNxdr6Pm959VgtdkFJYpN6e9f30bVXqIr8I=";
   };
 
-  buildInputs = [
-    SDL2
-    libtheora
-    libvorbis
-    libopus
-    openal
-    openalSoft
-    physfs
-    miniupnpc
-    libsodium
-    curl
-    libpng
-    freetype
-    harfbuzz
-    sqlite
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    vulkan-headers
-    vulkan-loader
-  ];
+  buildInputs =
+    [
+      SDL2
+      libtheora
+      libvorbis
+      libopus
+      openal
+      openalSoft
+      physfs
+      miniupnpc
+      libsodium
+      curl
+      libpng
+      freetype
+      harfbuzz
+      sqlite
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      vulkan-headers
+      vulkan-loader
+    ];
 
   nativeBuildInputs = [
     pkg-config
@@ -137,7 +140,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://wz2100.net";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ astsmtl fgaz ];
+    maintainers = with maintainers; [
+      astsmtl
+      fgaz
+    ];
     platforms = platforms.all;
     # configure_mac.cmake tries to download stuff
     # https://github.com/Warzone2100/warzone2100/blob/master/macosx/README.md

@@ -1,11 +1,16 @@
-{ config, pkgs, lib }:
+{
+  config,
+  pkgs,
+  lib,
+}:
 
 # The cinnamon scope is deprecated and no package additions should be done here.
 #
 # TODO (after 24.11 branch-off): Remove this scope entirely.
 # TODO (after 25.05 branch-off): Rename pkgs.cinnamon-common to pkgs.cinnamon.
 
-lib.makeScope pkgs.newScope (self: { }) // lib.optionalAttrs config.allowAliases {
+lib.makeScope pkgs.newScope (self: { })
+// lib.optionalAttrs config.allowAliases {
   # Aliases need to be outside the scope or they will shadow the attributes from parent scope.
   bulky = lib.warn "cinnamon.bulky was moved to top-level. Please use pkgs.bulky directly." pkgs.bulky; # Added on 2024-07-14
   cinnamon-common = lib.warn "cinnamon.cinnamon-common was moved to top-level. Please use pkgs.cinnamon-common directly." pkgs.cinnamon-common; # Added on 2024-07-22

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, rustPlatform
-, testers
-, cachix
-, darwin
-, sqlx-cli
-, nixVersions
-, openssl
-, pkg-config
-, devenv  # required to run version test
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  rustPlatform,
+  testers,
+  cachix,
+  darwin,
+  sqlx-cli,
+  nixVersions,
+  openssl,
+  pkg-config,
+  devenv, # required to run version test
 }:
 
 let
@@ -27,7 +28,8 @@ let
   });
 
   version = "1.3.1";
-in rustPlatform.buildRustPackage {
+in
+rustPlatform.buildRustPackage {
   pname = "devenv";
   inherit version;
 
@@ -52,11 +54,17 @@ in rustPlatform.buildRustPackage {
     cargo sqlx prepare --workspace
   '';
 
-  nativeBuildInputs = [ makeWrapper pkg-config sqlx-cli ];
-
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+    sqlx-cli
   ];
+
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   postInstall = ''
     wrapProgram $out/bin/devenv --set DEVENV_NIX ${devenv_nix} --prefix PATH ":" "$out/bin:${cachix}/bin"

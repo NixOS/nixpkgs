@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, okteto }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  okteto,
+}:
 
 buildGoModule rec {
   pname = "okteto";
@@ -21,7 +28,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  excludedPackages = [ "integration" "samples" ];
+  excludedPackages = [
+    "integration"
+    "samples"
+  ];
 
   ldflags = [
     "-s"
@@ -29,7 +39,11 @@ buildGoModule rec {
     "-X github.com/okteto/okteto/pkg/config.VersionString=${version}"
   ];
 
-  tags = [ "osusergo" "netgo" "static_build" ];
+  tags = [
+    "osusergo"
+    "netgo"
+    "static_build"
+  ];
 
   preCheck = ''
     export HOME="$(mktemp -d)"

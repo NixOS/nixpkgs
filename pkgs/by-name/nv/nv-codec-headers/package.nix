@@ -8,13 +8,15 @@
 
 let
   sources = callPackage ./sources.nix { };
-  pick = {
-    "8" = sources.nv-codec-headers-8;
-    "9" = sources.nv-codec-headers-9;
-    "10" = sources.nv-codec-headers-10;
-    "11" = sources.nv-codec-headers-11;
-    "12" = sources.nv-codec-headers-12;
-  }.${majorVersion};
+  pick =
+    {
+      "8" = sources.nv-codec-headers-8;
+      "9" = sources.nv-codec-headers-9;
+      "10" = sources.nv-codec-headers-10;
+      "11" = sources.nv-codec-headers-11;
+      "12" = sources.nv-codec-headers-12;
+    }
+    .${majorVersion};
 in
 stdenvNoCC.mkDerivation {
   inherit (pick) pname version src;

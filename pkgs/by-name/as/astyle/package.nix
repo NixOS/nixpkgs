@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchurl, cmake, asLibrary ? false }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  cmake,
+  asLibrary ? false,
+}:
 
 stdenv.mkDerivation rec {
   pname = "astyle";

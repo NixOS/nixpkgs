@@ -1,6 +1,15 @@
-{ lib, fetchFromGitHub
-, buildGoModule, pkg-config, wrapGAppsHook3, gobject-introspection
-, gtk-layer-shell, gtk3, pango, gdk-pixbuf, atk
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  pkg-config,
+  wrapGAppsHook3,
+  gobject-introspection,
+  gtk-layer-shell,
+  gtk3,
+  pango,
+  gdk-pixbuf,
+  atk,
 }:
 
 buildGoModule rec {
@@ -18,8 +27,18 @@ buildGoModule rec {
 
   doCheck = false;
 
-  buildInputs = [ atk gtk3 gdk-pixbuf gtk-layer-shell pango ];
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 gobject-introspection ];
+  buildInputs = [
+    atk
+    gtk3
+    gdk-pixbuf
+    gtk-layer-shell
+    pango
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+    gobject-introspection
+  ];
 
   prePatch = ''
     for file in main.go tools.go; do
