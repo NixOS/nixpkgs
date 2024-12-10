@@ -586,7 +586,6 @@ let format' = format; in let
       mkdir $mountPoint
       mount $rootDisk $mountPoint
 
-      # Fix activation error (not related to PR)
       mkdir $mountPoint/run
       mount -t tmpfs -o "mode=755" none $mountPoint/run
       mkdir $mountPoint/run/current-system
