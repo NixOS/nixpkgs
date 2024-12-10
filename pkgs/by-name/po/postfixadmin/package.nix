@@ -24,11 +24,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.tests = { inherit (nixosTests) postfixadmin; };
 
-  meta = {
+  meta = with lib; {
     description = "Web based virtual user administration interface for Postfix mail servers";
     homepage = "https://postfixadmin.sourceforge.io/";
-    maintainers = with lib.maintainers; [ globin ];
-    license = lib.licenses.gpl2Plus;
-    platforms = lib.platforms.all;
+    maintainers = with maintainers; [ globin ];
+    license = licenses.gpl2Plus;
+    platforms = platforms.all;
   };
 })
