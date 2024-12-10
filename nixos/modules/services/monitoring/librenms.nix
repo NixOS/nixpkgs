@@ -5,7 +5,7 @@ let
   settingsFormat = pkgs.formats.json { };
   configJson = settingsFormat.generate "librenms-config.json" cfg.settings;
 
-  package = pkgs.librenms.override {
+  package = cfg.package.override {
     logDir = cfg.logDir;
     dataDir = cfg.dataDir;
   };
@@ -59,6 +59,18 @@ in
 {
   options.services.librenms = with lib; {
     enable = mkEnableOption "LibreNMS network monitoring system";
+
+    package = lib.mkPackageOption pkgs "librenms" { };
+
+    finalPackage = lib.mkOption {
+      type = lib.types.package;
+      readOnly = true;
+      default = package;
+      defaultText = lib.literalExpression "package";
+      description = ''
+        The final package used by the module. This is the package that has all overrides.
+      '';
+    };
 
     user = mkOption {
       type = types.str;
