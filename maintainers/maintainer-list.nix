@@ -15843,6 +15843,12 @@
     github = "nigelgbanks";
     githubId = 487373;
   };
+  nikolaizombie1 = {
+    name = "Fabio J. Matos Nieves";
+    email = "fabio.matos999@gmail.com";
+    githubId = "70602908";
+    github = "nikolaizombie1";
+  };
   nikitavoloboev = {
     email = "nikita.voloboev@gmail.com";
     github = "nikitavoloboev";
