@@ -156,7 +156,7 @@ in
         pkgs.util-linux
       ];
       script = ''
-        set -eu
+        set -euo pipefail
 
         PSQL() {
             psql --port=${toString pgsql.port} "$@"
