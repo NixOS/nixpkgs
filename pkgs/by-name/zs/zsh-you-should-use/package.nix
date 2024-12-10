@@ -1,4 +1,4 @@
-{ lib, stdenvNoCC, fetchFromGitHub, gitUpdater }:
+{ lib, stdenvNoCC, ncurses, fetchFromGitHub, gitUpdater }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "zsh-you-should-use";
@@ -13,6 +13,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   strictDeps = true;
   dontBuild = true;
+
+  postPatch = ''
+    substituteInPlace you-should-use.plugin.zsh \
+      --replace-fail "tput" "${lib.getExe' ncurses "tput"}"
+  '';
 
   installPhase = ''
     install -D you-should-use.plugin.zsh $out/share/zsh/plugins/you-should-use/you-should-use.plugin.zsh
