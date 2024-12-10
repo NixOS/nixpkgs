@@ -27,6 +27,7 @@ let
     mate-common = callPackage ./mate-common { };
     mate-control-center = callPackage ./mate-control-center { };
     mate-desktop = callPackage ./mate-desktop { };
+    mate-dock-applet = callPackage ./mate-dock-applet { };
     mate-gsettings-overrides = callPackage ./mate-gsettings-overrides { };
     mate-icon-theme = callPackage ./mate-icon-theme { };
     mate-icon-theme-faenza = callPackage ./mate-icon-theme-faenza { };
