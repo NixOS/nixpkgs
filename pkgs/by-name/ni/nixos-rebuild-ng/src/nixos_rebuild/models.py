@@ -94,7 +94,7 @@ class Flake:
                 try:
                     return run_wrapper(
                         ["uname", "-n"],
-                        capture_output=True,
+                        stdout=subprocess.PIPE,
                         remote=target_host,
                     ).stdout.strip()
                 except (AttributeError, subprocess.CalledProcessError):
