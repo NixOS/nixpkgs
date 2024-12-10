@@ -7151,6 +7151,12 @@
     githubId = 345808;
     name = "Jakub Okoński";
   };
+  fatimatooth = {
+    name = "fatimatooth";
+    email = "fatimatooth.truffle903@slmail.me";
+    github = "fatima-toothpaste";
+    githubId = 79351515;
+  };
   fbeffa = {
     email = "beffa@fbengineering.ch";
     github = "fedeinthemix";
