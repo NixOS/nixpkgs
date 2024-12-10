@@ -3,10 +3,14 @@
 let
   cfg = config.services.journald.gateway;
 
-  cliArgs = lib.cli.toGNUCommandLineShell { } {
-    # If either of these are null / false, they are not passed in the command-line
-    inherit (cfg) cert key trust system user merge;
-  };
+  cliArgs = lib.cli.toGNUCommandLineShell { }
+    ({
+      # If either of these are null / false, they are not passed in the command-line
+      inherit (cfg) system user merge;
+    } //
+    lib.optionalAttrs (cfg.cert != null) { cert = ''''${CREDENTIALS_DIRECTORY}/cert.pem''; } //
+    lib.optionalAttrs (cfg.key != null) { key = ''''${CREDENTIALS_DIRECTORY}/key.pem''; } //
+    lib.optionalAttrs (cfg.trust != null) { trust = ''''${CREDENTIALS_DIRECTORY}/ca.pem''; });
 in
 {
   meta.maintainers = [ lib.maintainers.raitobezarius ];
@@ -117,11 +121,18 @@ in
     users.users.systemd-journal-gateway.group = "systemd-journal-gateway";
     users.groups.systemd-journal-gateway.gid = config.ids.gids.systemd-journal-gateway;
 
-    systemd.services.systemd-journal-gatewayd.serviceConfig.ExecStart = [
+    systemd.services.systemd-journal-gatewayd.serviceConfig = {
+      LoadCredential =
+        lib.optional (cfg.cert != null) "cert.pem:${cfg.cert}" ++
+        lib.optional (cfg.key != null) "key.pem:${cfg.key}" ++
+        lib.optional (cfg.trust != null) "ca.pem:${cfg.trust}";
+
+      ExecStart = [
         # Clear the default command line
         ""
         "${pkgs.systemd}/lib/systemd/systemd-journal-gatewayd ${cliArgs}"
-    ];
+      ];
+    };
 
     systemd.sockets.systemd-journal-gatewayd = {
       wantedBy = [ "sockets.target" ];
