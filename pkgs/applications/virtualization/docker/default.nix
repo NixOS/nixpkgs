@@ -343,9 +343,9 @@ rec {
   };
 
   docker_27 = callPackage dockerGen rec {
-    version = "27.3.1";
+    version = "27.4.0";
     cliRev = "v${version}";
-    cliHash = "sha256-Iurud1BwswGZCFgJ04/wl1U9AKcsXDmzFXLFCrjfc0Y=";
+    cliHash = "sha256-q6xKERB5K7idExTrwFfX2ORs2G/55s2pybyhPcV5wuo=";
     mobyRev = "v${version}";
     mobyHash = "sha256-AKl06k2ePWOFhL3oH086HcLLYs2Da+wLOcGjGnQ0SXE=";
     runcRev = "v1.1.14";
