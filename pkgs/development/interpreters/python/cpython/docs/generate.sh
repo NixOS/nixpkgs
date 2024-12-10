@@ -11,7 +11,7 @@ ${VERSIONS}
 
 
 cat >default.nix <<EOF
-{ stdenv, fetchurl, lib }:
+{ callPackage }:
 
 let
 pythonDocs = {
@@ -57,9 +57,7 @@ EOF
 
         attrname=python${major}${minor}
         cat >>default.nix <<EOF
-    ${attrname} = import ./${major}.${minor}-${type}.nix {
-      inherit stdenv fetchurl lib;
-    };
+    ${attrname} = callPackage ./${major}.${minor}-${type}.nix { };
 EOF
 
         echo "done."
