@@ -720,7 +720,14 @@ in {
     imports = [ ./nixos-rebuild-specialisations.nix ];
     _module.args.withNg = true;
   };
-  nixos-rebuild-target-host = runTest ./nixos-rebuild-target-host.nix;
+  nixos-rebuild-target-host = runTest {
+    imports = [ ./nixos-rebuild-target-host.nix ];
+    _module.args.withNg = false;
+  };
+  nixos-rebuild-target-host-ng = runTest {
+    imports = [ ./nixos-rebuild-target-host.nix ];
+    _module.args.withNg = true;
+  };
   nixpkgs = pkgs.callPackage ../modules/misc/nixpkgs/test.nix { inherit evalMinimalConfig; };
   nixseparatedebuginfod = handleTest ./nixseparatedebuginfod.nix {};
   node-red = handleTest ./node-red.nix {};
