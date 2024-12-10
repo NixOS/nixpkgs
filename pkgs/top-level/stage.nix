@@ -309,7 +309,11 @@ let
       overlays = [ (self': super': {
         pkgsStatic = super';
       })] ++ overlays;
-      crossSystem = {
+      crossSystem = (
+        builtins.intersectAttrs {
+          useLLVM = true; linker = true; # Allow pkgsStatic to commute with pkgsLLVM.
+        } stdenv.hostPlatform
+      ) // {
         isStatic = true;
         config = lib.systems.parse.tripleFromSystem (
           if stdenv.hostPlatform.isLinux
