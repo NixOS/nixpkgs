@@ -104,12 +104,15 @@ stdenvNoCC.mkDerivation rec {
     id=$(echo $latest | jq -r '.downloads[] | select(.platform=="linux_deb").id')
     version=$(echo $latest | jq -r '.version')
 
-    # Pre-calculate package hash
-    hash=$(nix-prefetch-url --type sha256 $link)
-
-    # Update ID and version in source
-    update-source-version ${pname} "$id" --version-key=id
-    update-source-version ${pname} "$version" "$hash" --system=x86_64-linux
+    if [ "$version" != "${version}" ] 
+    then
+      # Pre-calculate package hash
+      hash=$(nix-prefetch-url --type sha256 $link)
+  
+      # Update ID and version in source
+      update-source-version ${pname} "$id" --version-key=id
+      update-source-version ${pname} "$version" "$hash" --system=x86_64-linux
+    fi
   '';
 
   meta = with lib; {
