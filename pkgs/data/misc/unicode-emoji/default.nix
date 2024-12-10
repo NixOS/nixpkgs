@@ -1,33 +1,36 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, symlinkJoin
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  symlinkJoin,
 }:
 
 let
   version = "15.1";
 
-  fetchData = { suffix, hash }: stdenvNoCC.mkDerivation {
-    pname = "unicode-emoji-${suffix}";
-    inherit version;
+  fetchData =
+    { suffix, hash }:
+    stdenvNoCC.mkDerivation {
+      pname = "unicode-emoji-${suffix}";
+      inherit version;
 
-    src = fetchurl {
-      url = "https://www.unicode.org/Public/emoji/${version}/emoji-${suffix}.txt";
-      inherit hash;
+      src = fetchurl {
+        url = "https://www.unicode.org/Public/emoji/${version}/emoji-${suffix}.txt";
+        inherit hash;
+      };
+
+      dontUnpack = true;
+
+      installPhase = ''
+        runHook preInstall
+
+        installDir="$out/share/unicode/emoji"
+        mkdir -p "$installDir"
+        cp "$src" "$installDir/emoji-${suffix}.txt"
+
+        runHook postInstall
+      '';
     };
-
-    dontUnpack = true;
-
-    installPhase = ''
-      runHook preInstall
-
-      installDir="$out/share/unicode/emoji"
-      mkdir -p "$installDir"
-      cp "$src" "$installDir/emoji-${suffix}.txt"
-
-      runHook postInstall
-    '';
-  };
 
   srcs = {
     emoji-sequences = fetchData {

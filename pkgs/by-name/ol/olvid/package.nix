@@ -1,36 +1,45 @@
-{ stdenv
-, lib
-, fetchurl
-, zlib
-, libXext
-, libX11
-, libXrender
-, libXtst
-, libXi
-, freetype
-, alsa-lib
-, jdk21
-, openjfx21
-, autoPatchelfHook
-, makeBinaryWrapper
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  zlib,
+  libXext,
+  libX11,
+  libXrender,
+  libXtst,
+  libXi,
+  freetype,
+  alsa-lib,
+  jdk21,
+  openjfx21,
+  autoPatchelfHook,
+  makeBinaryWrapper,
+  wrapGAppsHook3,
 }:
 
 let
   repo = "olvid";
 
-  javafxModules = [ "swing" "controls" "media" "fxml" "graphics" "base" ];
+  javafxModules = [
+    "swing"
+    "controls"
+    "media"
+    "fxml"
+    "graphics"
+    "base"
+  ];
 
   classpath =
     lib.concatMap (mod: [
       "${openjfx21}/modules_src/javafx.${mod}/module-info.java"
       "${openjfx21}/modules/javafx.${mod}"
       "${openjfx21}/modules_libs/javafx.${mod}"
-    ]) javafxModules ++
-    [ "$out/share/${repo}/*" ];
+    ]) javafxModules
+    ++ [ "$out/share/${repo}/*" ];
 
   jvmArgs = [
-    "-cp" (lib.concatStringsSep ":" classpath)
+    "-cp"
+    (lib.concatStringsSep ":" classpath)
     "-Djpackage.app-version=$version"
     "-Dolvid.sqlcipher=true"
     "-Dolvid.dev=false"

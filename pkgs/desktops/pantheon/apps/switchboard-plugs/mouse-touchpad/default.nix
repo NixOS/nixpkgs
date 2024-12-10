@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, libxml2
-, granite
-, gtk3
-, switchboard
-, gnome-settings-daemon
-, glib
-, gala # needed for gestures support
-, touchegg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  substituteAll,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libgee,
+  libxml2,
+  granite,
+  gtk3,
+  switchboard,
+  gnome-settings-daemon,
+  glib,
+  gala, # needed for gestures support
+  touchegg,
 }:
 
 stdenv.mkDerivation rec {

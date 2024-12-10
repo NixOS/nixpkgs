@@ -1,8 +1,9 @@
-{ formats
-, glibcLocales
-, jdk
-, lib
-, stdenv
+{
+  formats,
+  glibcLocales,
+  jdk,
+  lib,
+  stdenv,
 }:
 
 # This test primarily tests correct escaping.
@@ -59,19 +60,17 @@ stdenv.mkDerivation {
 
   # Expected output as printed by Main.java
   passAsFile = [ "expected" ];
-  expected = concatStrings (attrValues (
-    mapAttrs
-      (key: value:
-        ''
-          KEY
-          ${key}
-          VALUE
-          ${value}
+  expected = concatStrings (
+    attrValues (
+      mapAttrs (key: value: ''
+        KEY
+        ${key}
+        VALUE
+        ${value}
 
-        ''
-      )
-      input
-  ));
+      '') input
+    )
+  );
 
   src = lib.sourceByRegex ./. [
     ".*\.java"

@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, python3
-, fetchFromGitHub
-, fetchPypi
-, curl
-, wget
-, git
-, ripgrep
-, postlight-parser
-, readability-extractor
-, chromium
-, yt-dlp
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+  fetchPypi,
+  curl,
+  wget,
+  git,
+  ripgrep,
+  postlight-parser,
+  readability-extractor,
+  chromium,
+  yt-dlp,
 }:
 
 let
@@ -78,26 +79,36 @@ python.pkgs.buildPythonApplication rec {
     yt-dlp
   ];
 
-  makeWrapperArgs = [
-    "--set USE_NODE True" # used through dependencies, not needed explicitly
-    "--set READABILITY_BINARY ${lib.meta.getExe readability-extractor}"
-    "--set MERCURY_BINARY ${lib.meta.getExe postlight-parser}"
-    "--set CURL_BINARY ${lib.meta.getExe curl}"
-    "--set RIPGREP_BINARY ${lib.meta.getExe ripgrep}"
-    "--set WGET_BINARY ${lib.meta.getExe wget}"
-    "--set GIT_BINARY ${lib.meta.getExe git}"
-    "--set YOUTUBEDL_BINARY ${lib.meta.getExe yt-dlp}"
-  ] ++ (if (lib.meta.availableOn stdenv.hostPlatform chromium) then [
-    "--set CHROME_BINARY ${chromium}/bin/chromium-browser"
-  ] else [
-    "--set-default USE_CHROME False"
-  ]);
+  makeWrapperArgs =
+    [
+      "--set USE_NODE True" # used through dependencies, not needed explicitly
+      "--set READABILITY_BINARY ${lib.meta.getExe readability-extractor}"
+      "--set MERCURY_BINARY ${lib.meta.getExe postlight-parser}"
+      "--set CURL_BINARY ${lib.meta.getExe curl}"
+      "--set RIPGREP_BINARY ${lib.meta.getExe ripgrep}"
+      "--set WGET_BINARY ${lib.meta.getExe wget}"
+      "--set GIT_BINARY ${lib.meta.getExe git}"
+      "--set YOUTUBEDL_BINARY ${lib.meta.getExe yt-dlp}"
+    ]
+    ++ (
+      if (lib.meta.availableOn stdenv.hostPlatform chromium) then
+        [
+          "--set CHROME_BINARY ${chromium}/bin/chromium-browser"
+        ]
+      else
+        [
+          "--set-default USE_CHROME False"
+        ]
+    );
 
   meta = with lib; {
     description = "Open source self-hosted web archiving";
     homepage = "https://archivebox.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ siraben viraptor ];
+    maintainers = with maintainers; [
+      siraben
+      viraptor
+    ];
     platforms = platforms.unix;
   };
 }

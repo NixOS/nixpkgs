@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, obs-studio
-, webkitgtk
-, glib-networking
-, meson
-, cmake
-, pkg-config
-, ninja
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  obs-studio,
+  webkitgtk,
+  glib-networking,
+  meson,
+  cmake,
+  pkg-config,
+  ninja,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

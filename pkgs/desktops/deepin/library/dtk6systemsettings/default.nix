@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, doxygen
-, qt6Packages
-, dtk6core
-, libxcrypt
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  doxygen,
+  qt6Packages,
+  dtk6core,
+  libxcrypt,
 }:
 
 stdenv.mkDerivation rec {
@@ -51,7 +52,11 @@ stdenv.mkDerivation rec {
     export QT_PLUGIN_PATH=${lib.getBin qt6Packages.qtbase}/${qt6Packages.qtbase.qtPluginPrefix}
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   meta = {
     description = "Qt-based development library for system settings";

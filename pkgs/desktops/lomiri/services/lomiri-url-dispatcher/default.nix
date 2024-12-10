@@ -1,31 +1,32 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, testers
-, cmake
-, cmake-extras
-, dbus
-, dbus-test-runner
-, glib
-, gtest
-, intltool
-, json-glib
-, libapparmor
-, libxkbcommon
-, lomiri-app-launch
-, lomiri-ui-toolkit
-, makeWrapper
-, pkg-config
-, python3
-, qtbase
-, qtdeclarative
-, qtwayland
-, runtimeShell
-, sqlite
-, systemd
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  testers,
+  cmake,
+  cmake-extras,
+  dbus,
+  dbus-test-runner,
+  glib,
+  gtest,
+  intltool,
+  json-glib,
+  libapparmor,
+  libxkbcommon,
+  lomiri-app-launch,
+  lomiri-ui-toolkit,
+  makeWrapper,
+  pkg-config,
+  python3,
+  qtbase,
+  qtdeclarative,
+  qtwayland,
+  runtimeShell,
+  sqlite,
+  systemd,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,19 +54,21 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace data/CMakeLists.txt \
-      --replace "\''${SYSTEMD_USER_UNIT_DIR}" "\''${CMAKE_INSTALL_LIBDIR}/systemd/user"
+  postPatch =
+    ''
+      substituteInPlace data/CMakeLists.txt \
+        --replace "\''${SYSTEMD_USER_UNIT_DIR}" "\''${CMAKE_INSTALL_LIBDIR}/systemd/user"
 
-    substituteInPlace tests/url_dispatcher_testability/CMakeLists.txt \
-      --replace "\''${PYTHON_PACKAGE_DIR}" "$out/${python3.sitePackages}"
+      substituteInPlace tests/url_dispatcher_testability/CMakeLists.txt \
+        --replace "\''${PYTHON_PACKAGE_DIR}" "$out/${python3.sitePackages}"
 
-    # Update URI handler database whenever new url-handler is installed system-wide
-    substituteInPlace data/lomiri-url-dispatcher-update-system-dir.*.in \
-      --replace '@CMAKE_INSTALL_FULL_DATAROOTDIR@' '/run/current-system/sw/share'
-  '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
-    patchShebangs tests/test-sql.sh
-  '';
+      # Update URI handler database whenever new url-handler is installed system-wide
+      substituteInPlace data/lomiri-url-dispatcher-update-system-dir.*.in \
+        --replace '@CMAKE_INSTALL_FULL_DATAROOTDIR@' '/run/current-system/sw/share'
+    ''
+    + lib.optionalString finalAttrs.finalPackage.doCheck ''
+      patchShebangs tests/test-sql.sh
+    '';
 
   strictDeps = true;
 
@@ -75,11 +78,16 @@ stdenv.mkDerivation (finalAttrs: {
     intltool
     makeWrapper
     pkg-config
-    (python3.withPackages (ps: with ps; [
-      setuptools
-    ] ++ lib.optionals finalAttrs.finalPackage.doCheck [
-      python-dbusmock
-    ]))
+    (python3.withPackages (
+      ps:
+      with ps;
+      [
+        setuptools
+      ]
+      ++ lib.optionals finalAttrs.finalPackage.doCheck [
+        python-dbusmock
+      ]
+    ))
     wrapQtAppsHook
   ];
 
@@ -154,12 +162,15 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Lomiri operating environment service for requesting URLs to be opened";
     longDescription = ''
-       Allows applications to request a URL to be opened and handled by another
-       process without seeing the list of other applications on the system or
-       starting them inside its own Application Confinement.
+      Allows applications to request a URL to be opened and handled by another
+      process without seeing the list of other applications on the system or
+      starting them inside its own Application Confinement.
     '';
     homepage = "https://gitlab.com/ubports/development/core/lomiri-url-dispatcher";
-    license = with licenses; [ lgpl3Only gpl3Only ];
+    license = with licenses; [
+      lgpl3Only
+      gpl3Only
+    ];
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;
     pkgConfigModules = [

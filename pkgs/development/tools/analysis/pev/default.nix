@@ -1,4 +1,9 @@
-{ lib, stdenv, openssl, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  openssl,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation {
   pname = "pev";

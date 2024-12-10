@@ -1,4 +1,10 @@
-{ lib, buildNimPackage, fetchFromGitHub, openssl, pcre }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  openssl,
+  pcre,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "min";
@@ -13,7 +19,10 @@ buildNimPackage (finalAttrs: {
 
   lockFile = ./lock.json;
 
-  buildInputs = [ openssl pcre ];
+  buildInputs = [
+    openssl
+    pcre
+  ];
 
   prePatch = ''
     # substitude our code for their code for data
@@ -34,8 +43,7 @@ buildNimPackage (finalAttrs: {
   NIX_LDFLAGS = [ "-lpcre" ];
 
   meta = {
-    description =
-      "A functional, concatenative programming language with a minimalist syntax";
+    description = "A functional, concatenative programming language with a minimalist syntax";
     homepage = "https://min-lang.org/";
     license = lib.licenses.mit;
     mainProgram = "min";

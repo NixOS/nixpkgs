@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, desktop-file-utils
-, ffmpeg
-, granite
-, gtk
-, imagemagick
-, meson
-, ninja
-, pkg-config
-, python
-, vala
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  desktop-file-utils,
+  ffmpeg,
+  granite,
+  gtk,
+  imagemagick,
+  meson,
+  ninja,
+  pkg-config,
+  python,
+  vala,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,12 +50,13 @@ stdenv.mkDerivation rec {
 
   dontWrapGApps = true;
 
-  postFixup = let
-    binPath = lib.makeBinPath [
-      ffmpeg
-      imagemagick
-    ];
-  in
+  postFixup =
+    let
+      binPath = lib.makeBinPath [
+        ffmpeg
+        imagemagick
+      ];
+    in
     ''
       wrapProgram $out/bin/com.github.robertsanseries.ciano \
          --prefix PATH : ${binPath} "''${gappsWrapperArgs[@]}"

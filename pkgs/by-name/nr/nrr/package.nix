@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, pkg-config
-, libiconv
-, nrxAlias ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+  pkg-config,
+  libiconv,
+  nrxAlias ? true,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,16 +1,17 @@
-{ lib
-, fetchPypi
-, buildPythonApplication
-, pythonRelaxDepsHook
-, poetry-core
-, colorama
-, packaging
-, pydantic
-, requests
-, pygobject3
-, tqdm
-, gobject-introspection
-, wrapGAppsNoGuiHook
+{
+  lib,
+  fetchPypi,
+  buildPythonApplication,
+  pythonRelaxDepsHook,
+  poetry-core,
+  colorama,
+  packaging,
+  pydantic,
+  requests,
+  pygobject3,
+  tqdm,
+  gobject-introspection,
+  wrapGAppsNoGuiHook,
 }:
 
 buildPythonApplication rec {

@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchpatch
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, qttools
-, pkg-config
-, wrapQtAppsHook
-, wrapGAppsHook3
-, qtbase
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, dwayland
-, qtx11extras
-, gsettings-qt
-, libdbusmenu
-, xorg
+{
+  stdenv,
+  lib,
+  fetchpatch,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  qttools,
+  pkg-config,
+  wrapQtAppsHook,
+  wrapGAppsHook3,
+  qtbase,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  dwayland,
+  qtx11extras,
+  gsettings-qt,
+  libdbusmenu,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +41,7 @@ stdenv.mkDerivation rec {
     for file in $(grep -rl "/usr/lib/deepin-daemon"); do
       substituteInPlace $file --replace "/usr/lib/deepin-daemon" "/run/current-system/sw/lib/deepin-daemon"
     done
-   '';
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -66,7 +67,10 @@ stdenv.mkDerivation rec {
     xorg.libXres
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   cmakeFlags = [ "-DVERSION=${version}" ];
 

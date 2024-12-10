@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
-, DiskArbitration
-, Foundation
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  DiskArbitration,
+  Foundation,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +22,11 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ DiskArbitration Foundation Security ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    DiskArbitration
+    Foundation
+    Security
+  ];
 
   cargoHash = "sha256-//DCxAC8Jf7g8SkG4NfwkM0NyWUdASuw1g4COFIY0mU=";
 

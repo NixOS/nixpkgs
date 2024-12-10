@@ -1,5 +1,14 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, pkg-config
-, openssl, libiconv, CoreServices, Security }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  libiconv,
+  CoreServices,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "trunk-ng";
@@ -13,9 +22,15 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = if stdenv.isDarwin
-    then [ libiconv CoreServices Security ]
-    else [ openssl ];
+  buildInputs =
+    if stdenv.isDarwin then
+      [
+        libiconv
+        CoreServices
+        Security
+      ]
+    else
+      [ openssl ];
 
   # requires network
   checkFlags = [ "--skip=tools::tests::download_and_install_binaries" ];

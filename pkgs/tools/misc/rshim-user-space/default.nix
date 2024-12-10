@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoconf
-, automake
-, makeBinaryWrapper
-, pkg-config
-, pciutils
-, libusb1
-, fuse
-, busybox
-, pv
-, withBfbInstall ? true
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  makeBinaryWrapper,
+  pkg-config,
+  pciutils,
+  libusb1,
+  fuse,
+  busybox,
+  pv,
+  withBfbInstall ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,16 +41,23 @@ stdenv.mkDerivation rec {
 
   preConfigure = "./bootstrap.sh";
 
-  installPhase = ''
-    mkdir -p "$out"/bin
-    cp -a src/rshim "$out"/bin/
-  '' + lib.optionalString withBfbInstall ''
-    cp -a scripts/bfb-install "$out"/bin/
-  '';
+  installPhase =
+    ''
+      mkdir -p "$out"/bin
+      cp -a src/rshim "$out"/bin/
+    ''
+    + lib.optionalString withBfbInstall ''
+      cp -a scripts/bfb-install "$out"/bin/
+    '';
 
   postFixup = lib.optionalString withBfbInstall ''
     wrapProgram $out/bin/bfb-install \
-      --set PATH ${lib.makeBinPath [ busybox pv ]}
+      --set PATH ${
+        lib.makeBinPath [
+          busybox
+          pv
+        ]
+      }
   '';
 
   meta = with lib; {

@@ -1,21 +1,25 @@
-{ stdenv
-, lib
-, fetchurl
-, aspell
-, groff
-, pkg-config
-, glib
-, hunspell
-, hspell
-, nuspell
-, unittest-cpp
+{
+  stdenv,
+  lib,
+  fetchurl,
+  aspell,
+  groff,
+  pkg-config,
+  glib,
+  hunspell,
+  hspell,
+  nuspell,
+  unittest-cpp,
 }:
 
 stdenv.mkDerivation rec {
   pname = "enchant";
   version = "2.6.9";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "https://github.com/AbiWord/${pname}/releases/download/v${version}/${pname}-${version}.tar.gz";

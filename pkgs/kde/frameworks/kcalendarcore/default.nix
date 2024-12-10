@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kcalendarcore";
 
-  extraBuildInputs = [libical];
+  extraBuildInputs = [ libical ];
 }

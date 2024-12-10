@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, python3
-, cmake
-, doxygen
-, graphviz
-, quickmem
-, arpa2common
-, arpa2cm
-, ensureNewerSourcesForZipFilesHook
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  python3,
+  cmake,
+  doxygen,
+  graphviz,
+  quickmem,
+  arpa2common,
+  arpa2cm,
+  ensureNewerSourcesForZipFilesHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,16 +33,17 @@ stdenv.mkDerivation rec {
   buildInputs = [
     arpa2cm
     arpa2common
-    (python3.withPackages (ps: with ps; [
-      asn1ate
-      colored
-      pyparsing
-      setuptools
-      six
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        asn1ate
+        colored
+        pyparsing
+        setuptools
+        six
+      ]
+    ))
     quickmem
   ];
-
 
   postPatch = ''
     substituteInPlace setup.py --replace 'pyparsing==' 'pyparsing>='

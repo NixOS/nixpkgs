@@ -1,7 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, buildPackages, pcre2, pkg-config, libsepol
-, enablePython ? !stdenv.hostPlatform.isStatic
-, swig ? null, python3 ? null, python3Packages
-, fts
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  buildPackages,
+  pcre2,
+  pkg-config,
+  libsepol,
+  enablePython ? !stdenv.hostPlatform.isStatic,
+  swig ? null,
+  python3 ? null,
+  python3Packages,
+  fts,
 }:
 
 assert enablePython -> swig != null && python3 != null;
@@ -13,7 +23,12 @@ stdenv.mkDerivation rec {
   version = "3.6";
   inherit (libsepol) se_url;
 
-  outputs = [ "bin" "out" "dev" "man" ] ++ optional enablePython "py";
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "man"
+  ] ++ optional enablePython "py";
 
   src = fetchurl {
     url = "${se_url}/${version}/libselinux-${version}.tar.gz";
@@ -46,13 +61,22 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config python3 ] ++ optionals enablePython [
-    python3Packages.pip
-    python3Packages.setuptools
-    python3Packages.wheel
-    swig
-  ];
-  buildInputs = [ libsepol pcre2 fts ] ++ optionals enablePython [ python3 ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      python3
+    ]
+    ++ optionals enablePython [
+      python3Packages.pip
+      python3Packages.setuptools
+      python3Packages.wheel
+      swig
+    ];
+  buildInputs = [
+    libsepol
+    pcre2
+    fts
+  ] ++ optionals enablePython [ python3 ];
 
   # drop fortify here since package uses it by default, leading to compile error:
   # command-line>:0:0: error: "_FORTIFY_SOURCE" redefined [-Werror]
@@ -60,27 +84,31 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error -D_FILE_OFFSET_BITS=64";
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "INCDIR=$(dev)/include/selinux"
-    "INCLUDEDIR=$(dev)/include"
-    "MAN3DIR=$(man)/share/man/man3"
-    "MAN5DIR=$(man)/share/man/man5"
-    "MAN8DIR=$(man)/share/man/man8"
-    "SBINDIR=$(bin)/sbin"
-    "SHLIBDIR=$(out)/lib"
+  makeFlags =
+    [
+      "PREFIX=$(out)"
+      "INCDIR=$(dev)/include/selinux"
+      "INCLUDEDIR=$(dev)/include"
+      "MAN3DIR=$(man)/share/man/man3"
+      "MAN5DIR=$(man)/share/man/man5"
+      "MAN8DIR=$(man)/share/man/man8"
+      "SBINDIR=$(bin)/sbin"
+      "SHLIBDIR=$(out)/lib"
 
-    "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
-    "ARCH=${stdenv.hostPlatform.linuxArch}"
-  ] ++ optionals (fts != null) [
-    "FTS_LDLIBS=-lfts"
-  ] ++ optionals stdenv.hostPlatform.isStatic [
-    "DISABLE_SHARED=y"
-  ] ++ optionals enablePython [
-    "PYTHON=${python3.pythonOnBuildForHost.interpreter}"
-    "PYTHONLIBDIR=$(py)/${python3.sitePackages}"
-    "PYTHON_SETUP_ARGS=--no-build-isolation"
-  ];
+      "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
+      "ARCH=${stdenv.hostPlatform.linuxArch}"
+    ]
+    ++ optionals (fts != null) [
+      "FTS_LDLIBS=-lfts"
+    ]
+    ++ optionals stdenv.hostPlatform.isStatic [
+      "DISABLE_SHARED=y"
+    ]
+    ++ optionals enablePython [
+      "PYTHON=${python3.pythonOnBuildForHost.interpreter}"
+      "PYTHONLIBDIR=$(py)/${python3.sitePackages}"
+      "PYTHON_SETUP_ARGS=--no-build-isolation"
+    ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isMusl ''
     substituteInPlace src/procattr.c \
@@ -93,7 +121,7 @@ stdenv.mkDerivation rec {
 
   installTargets = [ "install" ] ++ optional enablePython "install-pywrap";
 
-  meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
+  meta = removeAttrs libsepol.meta [ "outputsToInstall" ] // {
     description = "SELinux core library";
   };
 }

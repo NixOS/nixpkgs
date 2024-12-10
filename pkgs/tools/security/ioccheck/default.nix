@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 let
@@ -32,7 +33,8 @@ let
       };
     };
   };
-in py.pkgs.buildPythonApplication rec {
+in
+py.pkgs.buildPythonApplication rec {
   pname = "ioccheck";
   version = "unstable-2021-09-29";
   pyproject = true;

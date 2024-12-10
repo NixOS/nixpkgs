@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kernel
-, bc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  bc,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,6 +41,7 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ hhm ];
-    broken = stdenv.isAarch64 || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
+    broken =
+      stdenv.isAarch64 || ((lib.versions.majorMinor kernel.version) == "5.4" && kernel.isHardened);
   };
 }

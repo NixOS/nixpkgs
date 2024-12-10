@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, vala
-, gettext
-, itstool
-, desktop-file-utils
-, wrapGAppsHook3
-, glib
-, gtk3
-, libhandy
-, libsecret
-, libxml2
-, gtk-vnc
-, gtk-frdp
-, gnome
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  gettext,
+  itstool,
+  desktop-file-utils,
+  wrapGAppsHook3,
+  glib,
+  gtk3,
+  libhandy,
+  libsecret,
+  libxml2,
+  gtk-vnc,
+  gtk-frdp,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {

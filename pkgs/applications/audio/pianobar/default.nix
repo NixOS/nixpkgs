@@ -1,4 +1,14 @@
-{ fetchurl, lib, stdenv, pkg-config, libao, json_c, libgcrypt, ffmpeg, curl }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  pkg-config,
+  libao,
+  json_c,
+  libgcrypt,
+  ffmpeg,
+  curl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pianobar";
@@ -11,7 +21,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    libao json_c libgcrypt ffmpeg curl
+    libao
+    json_c
+    libgcrypt
+    ffmpeg
+    curl
   ];
 
   makeFlags = [ "PREFIX=$(out)" ];

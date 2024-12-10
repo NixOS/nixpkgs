@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, ruby, buildRubyGem, bundlerEnv }:
+{
+  lib,
+  fetchFromGitHub,
+  ruby,
+  buildRubyGem,
+  bundlerEnv,
+}:
 let
   deps = bundlerEnv rec {
     inherit ruby;

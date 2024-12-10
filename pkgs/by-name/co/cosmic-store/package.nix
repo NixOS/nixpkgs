@@ -1,7 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, appstream, makeBinaryWrapper
-, cosmic-icons, glib, just, pkg-config, libglvnd, libxkbcommon, libinput
-, fontconfig, flatpak, freetype, openssl, mesa, wayland, xorg, vulkan-loader
-, vulkan-validation-layers, }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  appstream,
+  makeBinaryWrapper,
+  cosmic-icons,
+  glib,
+  just,
+  pkg-config,
+  libglvnd,
+  libxkbcommon,
+  libinput,
+  fontconfig,
+  flatpak,
+  freetype,
+  openssl,
+  mesa,
+  wayland,
+  xorg,
+  vulkan-loader,
+  vulkan-validation-layers,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-store";
@@ -36,7 +56,11 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
-  nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
+  nativeBuildInputs = [
+    just
+    pkg-config
+    makeBinaryWrapper
+  ];
   buildInputs = [
     appstream
     glib
@@ -95,7 +119,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pop-os/cosmic-store";
     description = "App Store for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ahoneybun nyanbinary ];
+    maintainers = with maintainers; [
+      ahoneybun
+      nyanbinary
+    ];
     platforms = platforms.linux;
   };
 }

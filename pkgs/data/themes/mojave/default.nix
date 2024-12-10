@@ -1,22 +1,23 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, glib
-, gnome-shell
-, gtk-engine-murrine
-, gtk_engines
-, inkscape
-, jdupes
-, optipng
-, sassc
-, which
-, buttonSizeVariants ? [] # default to standard
-, buttonVariants ? [] # default to all
-, colorVariants ? [] # default to all
-, opacityVariants ? [] # default to all
-, themeVariants ? [] # default to MacOS blue
-, wallpapers ? false
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  glib,
+  gnome-shell,
+  gtk-engine-murrine,
+  gtk_engines,
+  inkscape,
+  jdupes,
+  optipng,
+  sassc,
+  which,
+  buttonSizeVariants ? [ ], # default to standard
+  buttonVariants ? [ ], # default to all
+  colorVariants ? [ ], # default to all
+  opacityVariants ? [ ], # default to all
+  themeVariants ? [ ], # default to MacOS blue
+  wallpapers ? false,
+  gitUpdater,
 }:
 
 let
@@ -42,106 +43,132 @@ let
 in
 
 lib.checkListOfEnum "${pname}: button size variants" [ "standard" "small" ] buttonSizeVariants
-lib.checkListOfEnum "${pname}: button variants" [ "standard" "alt" ] buttonVariants
-lib.checkListOfEnum "${pname}: color variants" [ "light" "dark" ] colorVariants
-lib.checkListOfEnum "${pname}: opacity variants" [ "standard" "solid" ] opacityVariants
-lib.checkListOfEnum "${pname}: theme variants" [ "default" "blue" "purple" "pink" "red" "orange" "yellow" "green" "grey" "all" ] themeVariants
+  lib.checkListOfEnum
+  "${pname}: button variants"
+  [ "standard" "alt" ]
+  buttonVariants
+  lib.checkListOfEnum
+  "${pname}: color variants"
+  [ "light" "dark" ]
+  colorVariants
+  lib.checkListOfEnum
+  "${pname}: opacity variants"
+  [ "standard" "solid" ]
+  opacityVariants
+  lib.checkListOfEnum
+  "${pname}: theme variants"
+  [
+    "default"
+    "blue"
+    "purple"
+    "pink"
+    "red"
+    "orange"
+    "yellow"
+    "green"
+    "grey"
+    "all"
+  ]
+  themeVariants
 
-stdenvNoCC.mkDerivation rec {
-  inherit pname version;
+  stdenvNoCC.mkDerivation
+  rec {
+    inherit pname version;
 
-  srcs = [ main_src ] ++ lib.optional wallpapers wallpapers_src;
+    srcs = [ main_src ] ++ lib.optional wallpapers wallpapers_src;
 
-  sourceRoot = main_src.name;
+    sourceRoot = main_src.name;
 
-  nativeBuildInputs = [
-    glib
-    gnome-shell
-    inkscape
-    jdupes
-    optipng
-    sassc
-    which
-  ];
+    nativeBuildInputs = [
+      glib
+      gnome-shell
+      inkscape
+      jdupes
+      optipng
+      sassc
+      which
+    ];
 
-  buildInputs = [
-    gtk_engines
-  ];
+    buildInputs = [
+      gtk_engines
+    ];
 
-  propagatedUserEnvPkgs = [
-    gtk-engine-murrine
-  ];
+    propagatedUserEnvPkgs = [
+      gtk-engine-murrine
+    ];
 
-  # These fixup steps are slow and unnecessary.
-  dontPatchELF = true;
-  dontRewriteSymlinks = true;
+    # These fixup steps are slow and unnecessary.
+    dontPatchELF = true;
+    dontRewriteSymlinks = true;
 
-  postPatch = ''
-    patchShebangs \
-      install.sh \
-      src/main/gtk-3.0/make_gresource_xml.sh \
-      src/main/gtk-4.0/make_gresource_xml.sh
+    postPatch = ''
+      patchShebangs \
+        install.sh \
+        src/main/gtk-3.0/make_gresource_xml.sh \
+        src/main/gtk-4.0/make_gresource_xml.sh
 
-    for f in \
-      render-assets.sh \
-      src/assets/cinnamon/thumbnails/render-thumbnails.sh \
-      src/assets/gtk-2.0/render-assets.sh \
-      src/assets/gtk/common-assets/render-assets.sh \
-      src/assets/gtk/thumbnails/render-thumbnails.sh \
-      src/assets/gtk/windows-assets/render-alt-assets.sh \
-      src/assets/gtk/windows-assets/render-alt-small-assets.sh \
-      src/assets/gtk/windows-assets/render-assets.sh \
-      src/assets/gtk/windows-assets/render-small-assets.sh \
-      src/assets/metacity-1/render-assets.sh \
-      src/assets/xfwm4/render-assets.sh
-    do
-      patchShebangs $f
-      substituteInPlace $f \
-        --replace /usr/bin/inkscape ${inkscape}/bin/inkscape \
-        --replace /usr/bin/optipng ${optipng}/bin/optipng
-    done
-
-    ${lib.optionalString wallpapers ''
-      for f in ../${wallpapers_src.name}/Mojave{,-timed}.xml; do
-        substituteInPlace $f --replace /usr $out
+      for f in \
+        render-assets.sh \
+        src/assets/cinnamon/thumbnails/render-thumbnails.sh \
+        src/assets/gtk-2.0/render-assets.sh \
+        src/assets/gtk/common-assets/render-assets.sh \
+        src/assets/gtk/thumbnails/render-thumbnails.sh \
+        src/assets/gtk/windows-assets/render-alt-assets.sh \
+        src/assets/gtk/windows-assets/render-alt-small-assets.sh \
+        src/assets/gtk/windows-assets/render-assets.sh \
+        src/assets/gtk/windows-assets/render-small-assets.sh \
+        src/assets/metacity-1/render-assets.sh \
+        src/assets/xfwm4/render-assets.sh
+      do
+        patchShebangs $f
+        substituteInPlace $f \
+          --replace /usr/bin/inkscape ${inkscape}/bin/inkscape \
+          --replace /usr/bin/optipng ${optipng}/bin/optipng
       done
-    ''}
-  '';
 
-  installPhase = ''
-    runHook preInstall
+      ${lib.optionalString wallpapers ''
+        for f in ../${wallpapers_src.name}/Mojave{,-timed}.xml; do
+          substituteInPlace $f --replace /usr $out
+        done
+      ''}
+    '';
 
-    name= ./install.sh \
-      ${lib.optionalString (buttonSizeVariants != []) "--small " + builtins.toString buttonSizeVariants} \
-      ${lib.optionalString (buttonVariants != []) "--alt " + builtins.toString buttonVariants} \
-      ${lib.optionalString (colorVariants != []) "--color " + builtins.toString colorVariants} \
-      ${lib.optionalString (opacityVariants != []) "--opacity " + builtins.toString opacityVariants} \
-      ${lib.optionalString (themeVariants != []) "--theme " + builtins.toString themeVariants} \
-      --icon nixos \
-      --dest $out/share/themes
+    installPhase = ''
+      runHook preInstall
 
-    ${lib.optionalString wallpapers ''
-      mkdir -p $out/share/backgrounds/Mojave
-      mkdir -p $out/share/gnome-background-properties
-      cp -a ../${wallpapers_src.name}/Mojave*.jpeg $out/share/backgrounds/Mojave/
-      cp -a ../${wallpapers_src.name}/Mojave-timed.xml $out/share/backgrounds/Mojave/
-      cp -a ../${wallpapers_src.name}/Mojave.xml $out/share/gnome-background-properties/
-    ''}
+      name= ./install.sh \
+        ${
+          lib.optionalString (buttonSizeVariants != [ ]) "--small " + builtins.toString buttonSizeVariants
+        } \
+        ${lib.optionalString (buttonVariants != [ ]) "--alt " + builtins.toString buttonVariants} \
+        ${lib.optionalString (colorVariants != [ ]) "--color " + builtins.toString colorVariants} \
+        ${lib.optionalString (opacityVariants != [ ]) "--opacity " + builtins.toString opacityVariants} \
+        ${lib.optionalString (themeVariants != [ ]) "--theme " + builtins.toString themeVariants} \
+        --icon nixos \
+        --dest $out/share/themes
 
-    # Replace duplicate files with soft links to the first file in each
-    # set of duplicates, reducing the installed size in about 53%
-    jdupes --quiet --link-soft --recurse $out/share
+      ${lib.optionalString wallpapers ''
+        mkdir -p $out/share/backgrounds/Mojave
+        mkdir -p $out/share/gnome-background-properties
+        cp -a ../${wallpapers_src.name}/Mojave*.jpeg $out/share/backgrounds/Mojave/
+        cp -a ../${wallpapers_src.name}/Mojave-timed.xml $out/share/backgrounds/Mojave/
+        cp -a ../${wallpapers_src.name}/Mojave.xml $out/share/gnome-background-properties/
+      ''}
 
-    runHook postInstall
-  '';
+      # Replace duplicate files with soft links to the first file in each
+      # set of duplicates, reducing the installed size in about 53%
+      jdupes --quiet --link-soft --recurse $out/share
 
-  passthru.updateScript = gitUpdater { };
+      runHook postInstall
+    '';
 
-  meta = with lib; {
-    description = "Mac OSX Mojave like theme for GTK based desktop environments";
-    homepage = "https://github.com/vinceliuice/Mojave-gtk-theme";
-    license = licenses.gpl3Only;
-    platforms = platforms.unix;
-    maintainers = [ maintainers.romildo ];
-  };
-}
+    passthru.updateScript = gitUpdater { };
+
+    meta = with lib; {
+      description = "Mac OSX Mojave like theme for GTK based desktop environments";
+      homepage = "https://github.com/vinceliuice/Mojave-gtk-theme";
+      license = licenses.gpl3Only;
+      platforms = platforms.unix;
+      maintainers = [ maintainers.romildo ];
+    };
+  }

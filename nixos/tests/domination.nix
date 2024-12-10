@@ -1,23 +1,26 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
-  name = "domination";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ fgaz ];
-  };
+import ./make-test-python.nix (
+  { pkgs, ... }:
+  {
+    name = "domination";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ fgaz ];
+    };
 
-  nodes.machine = { config, pkgs, ... }: {
-    imports = [
-      ./common/x11.nix
-    ];
+    nodes.machine =
+      { config, pkgs, ... }:
+      {
+        imports = [
+          ./common/x11.nix
+        ];
 
-    services.xserver.enable = true;
-    sound.enable = true;
-    environment.systemPackages = [ pkgs.domination ];
-  };
+        services.xserver.enable = true;
+        sound.enable = true;
+        environment.systemPackages = [ pkgs.domination ];
+      };
 
-  enableOCR = true;
+    enableOCR = true;
 
-  testScript =
-    ''
+    testScript = ''
       machine.wait_for_x()
       # Add a dummy sound card, or an error reporting popup will appear,
       # covering the main window and preventing OCR
@@ -27,4 +30,5 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       machine.wait_for_text(r"(New Game|Start Server|Load Game|Help Manual|Join Game|About|Play Online)")
       machine.screenshot("screen")
     '';
-})
+  }
+)

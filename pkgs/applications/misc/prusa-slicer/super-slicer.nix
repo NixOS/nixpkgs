@@ -1,4 +1,12 @@
-{ lib, fetchFromGitHub, fetchpatch, makeDesktopItem, wxGTK31, prusa-slicer, libspnav }:
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  makeDesktopItem,
+  wxGTK31,
+  prusa-slicer,
+  libspnav,
+}:
 let
   appname = "SuperSlicer";
   pname = "super-slicer";
@@ -37,60 +45,72 @@ let
     };
   };
 
-  override = { version, sha256, patches }: super: {
-    inherit version pname patches;
+  override =
+    {
+      version,
+      sha256,
+      patches,
+    }:
+    super: {
+      inherit version pname patches;
 
-    src = fetchFromGitHub {
-      owner = "supermerill";
-      repo = "SuperSlicer";
-      inherit sha256;
-      rev = version;
-      fetchSubmodules = true;
+      src = fetchFromGitHub {
+        owner = "supermerill";
+        repo = "SuperSlicer";
+        inherit sha256;
+        rev = version;
+        fetchSubmodules = true;
+      };
+
+      # - wxScintilla is not used on macOS
+      # - Partially applied upstream changes cause a bug when trying to link against a nonexistent libexpat
+      prePatch =
+        super.prePatch
+        + ''
+          substituteInPlace src/CMakeLists.txt \
+            --replace "scintilla" "" \
+            --replace "list(APPEND wxWidgets_LIBRARIES libexpat)" "list(APPEND wxWidgets_LIBRARIES EXPAT::EXPAT)"
+
+          substituteInPlace src/libslic3r/CMakeLists.txt \
+            --replace "libexpat" "EXPAT::EXPAT"
+        '';
+
+      # We don't need PS overrides anymore, and gcode-viewer is embedded in the binary.
+      postInstall = null;
+      separateDebugInfo = true;
+
+      buildInputs = super.buildInputs ++ [
+        libspnav
+      ];
+
+      desktopItems = [
+        (makeDesktopItem {
+          name = "superslicer";
+          exec = "superslicer";
+          icon = appname;
+          comment = description;
+          desktopName = appname;
+          genericName = "3D printer tool";
+          categories = [ "Development" ];
+        })
+      ];
+
+      meta = with lib; {
+        inherit description;
+        homepage = "https://github.com/supermerill/SuperSlicer";
+        license = licenses.agpl3Plus;
+        maintainers = with maintainers; [
+          cab404
+          moredread
+          tmarkus
+        ];
+        mainProgram = "superslicer";
+      };
+
+      passthru = allVersions;
+
     };
-
-    # - wxScintilla is not used on macOS
-    # - Partially applied upstream changes cause a bug when trying to link against a nonexistent libexpat
-    prePatch = super.prePatch + ''
-      substituteInPlace src/CMakeLists.txt \
-        --replace "scintilla" "" \
-        --replace "list(APPEND wxWidgets_LIBRARIES libexpat)" "list(APPEND wxWidgets_LIBRARIES EXPAT::EXPAT)"
-
-      substituteInPlace src/libslic3r/CMakeLists.txt \
-        --replace "libexpat" "EXPAT::EXPAT"
-    '';
-
-    # We don't need PS overrides anymore, and gcode-viewer is embedded in the binary.
-    postInstall = null;
-    separateDebugInfo = true;
-
-    buildInputs = super.buildInputs ++ [
-      libspnav
-    ];
-
-    desktopItems = [
-      (makeDesktopItem {
-        name = "superslicer";
-        exec = "superslicer";
-        icon = appname;
-        comment = description;
-        desktopName = appname;
-        genericName = "3D printer tool";
-        categories = [ "Development" ];
-      })
-    ];
-
-    meta = with lib; {
-      inherit description;
-      homepage = "https://github.com/supermerill/SuperSlicer";
-      license = licenses.agpl3Plus;
-      maintainers = with maintainers; [ cab404 moredread tmarkus ];
-      mainProgram = "superslicer";
-    };
-
-    passthru = allVersions;
-
-  };
- wxGTK31-prusa = wxGTK31.overrideAttrs (old: rec {
+  wxGTK31-prusa = wxGTK31.overrideAttrs (old: rec {
     pname = "wxwidgets-prusa3d-patched";
     version = "3.1.4";
     src = fetchFromGitHub {
@@ -102,6 +122,8 @@ let
     };
   });
   prusa-slicer-wxGTK-override = prusa-slicer.override { wxGTK-override = wxGTK31-prusa; };
-  allVersions = builtins.mapAttrs (_name: version: (prusa-slicer-wxGTK-override.overrideAttrs (override version))) versions;
+  allVersions = builtins.mapAttrs (
+    _name: version: (prusa-slicer-wxGTK-override.overrideAttrs (override version))
+  ) versions;
 in
 allVersions.stable

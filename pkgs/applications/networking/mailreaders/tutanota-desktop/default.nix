@@ -1,6 +1,7 @@
-{ lib
-, appimageTools
-, fetchurl
+{
+  lib,
+  appimageTools,
+  fetchurl,
 }:
 
 appimageTools.wrapType2 rec {
@@ -15,8 +16,10 @@ appimageTools.wrapType2 rec {
   extraPkgs = pkgs: [ pkgs.libsecret ];
 
   extraInstallCommands =
-    let appimageContents = appimageTools.extract { inherit pname version src; };
-    in ''
+    let
+      appimageContents = appimageTools.extract { inherit pname version src; };
+    in
+    ''
       install -Dm 444 ${appimageContents}/tutanota-desktop.desktop -t $out/share/applications
       install -Dm 444 ${appimageContents}/tutanota-desktop.png -t $out/share/pixmaps
 

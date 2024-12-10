@@ -1,8 +1,26 @@
-{ mkDerivation, lib, fetchFromGitHub
-, aeson, base, bytestring, containers, criterion
-, doctest, Glob, mersenne-random-pure64, mtl
-, optparse-applicative, parsec, random, regex-tdfa, scientific
-, text, time, unordered-containers, uuid, vector
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  aeson,
+  base,
+  bytestring,
+  containers,
+  criterion,
+  doctest,
+  Glob,
+  mersenne-random-pure64,
+  mtl,
+  optparse-applicative,
+  parsec,
+  random,
+  regex-tdfa,
+  scientific,
+  text,
+  time,
+  unordered-containers,
+  uuid,
+  vector,
 }:
 
 mkDerivation rec {
@@ -18,24 +36,79 @@ mkDerivation rec {
   isLibrary = false;
   isExecutable = true;
   libraryHaskellDepends = [
-    aeson base bytestring containers mersenne-random-pure64 mtl
-    optparse-applicative parsec random regex-tdfa scientific text time
-    unordered-containers uuid vector
+    aeson
+    base
+    bytestring
+    containers
+    mersenne-random-pure64
+    mtl
+    optparse-applicative
+    parsec
+    random
+    regex-tdfa
+    scientific
+    text
+    time
+    unordered-containers
+    uuid
+    vector
   ];
   executableHaskellDepends = [
-    aeson base bytestring containers mersenne-random-pure64 mtl
-    optparse-applicative parsec random regex-tdfa scientific text time
-    unordered-containers uuid vector
+    aeson
+    base
+    bytestring
+    containers
+    mersenne-random-pure64
+    mtl
+    optparse-applicative
+    parsec
+    random
+    regex-tdfa
+    scientific
+    text
+    time
+    unordered-containers
+    uuid
+    vector
   ];
   testHaskellDepends = [
-    aeson base bytestring containers doctest Glob
-    mersenne-random-pure64 mtl optparse-applicative parsec random
-    regex-tdfa scientific text time unordered-containers uuid vector
+    aeson
+    base
+    bytestring
+    containers
+    doctest
+    Glob
+    mersenne-random-pure64
+    mtl
+    optparse-applicative
+    parsec
+    random
+    regex-tdfa
+    scientific
+    text
+    time
+    unordered-containers
+    uuid
+    vector
   ];
   benchmarkHaskellDepends = [
-    aeson base bytestring containers criterion mersenne-random-pure64
-    mtl optparse-applicative parsec random regex-tdfa scientific text
-    time unordered-containers uuid vector
+    aeson
+    base
+    bytestring
+    containers
+    criterion
+    mersenne-random-pure64
+    mtl
+    optparse-applicative
+    parsec
+    random
+    regex-tdfa
+    scientific
+    text
+    time
+    unordered-containers
+    uuid
+    vector
   ];
 
   description = "A commandline tool to generate static or random JSON records";

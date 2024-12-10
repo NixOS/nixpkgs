@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qmake
-, vulkan-loader
-, wayland
-, wrapQtAppsHook
-, x11Support ? true
-, qtx11extras
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  vulkan-loader,
+  wayland,
+  wrapQtAppsHook,
+  x11Support ? true,
+  qtx11extras,
 }:
 
 stdenv.mkDerivation rec {

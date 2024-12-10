@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, nixosTests
-, rustPlatform
-, fetchFromGitHub
-, Security
+{
+  lib,
+  stdenv,
+  nixosTests,
+  rustPlatform,
+  fetchFromGitHub,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,6 +34,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/libreddit/libreddit";
     changelog = "https://github.com/libreddit/libreddit/releases/tag/v${version}";
     license = with licenses; [ agpl3Only ];
-    maintainers = with maintainers; [ fab jojosch ];
+    maintainers = with maintainers; [
+      fab
+      jojosch
+    ];
   };
 }

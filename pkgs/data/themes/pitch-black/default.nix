@@ -1,6 +1,10 @@
-{ lib, stdenvNoCC, fetchFromGitHub }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+}:
 
-stdenvNoCC.mkDerivation rec{
+stdenvNoCC.mkDerivation rec {
   pname = "pitch-black";
   version = "unstable-2019-07-23";
 

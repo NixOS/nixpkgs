@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, buildPackages, perl, which, ncurses, nukeReferences }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildPackages,
+  perl,
+  which,
+  ncurses,
+  nukeReferences,
+}:
 
 let
   dialect = with lib; last (splitString "-" stdenv.hostPlatform.system);
@@ -15,18 +24,24 @@ stdenv.mkDerivation rec {
     hash = "sha256-XW3l+E9D8hgI9jGJGKkIAKa8O9m0JHgZhEASqg4gYuw=";
   };
 
-  postPatch = ''
-    patchShebangs --build lib/dialects/*/Mksrc
-    # Do not re-build version.h in every 'make' to allow nuke-refs below.
-    # We remove phony 'FRC' target that forces rebuilds:
-    #   'version.h: FRC ...' is translated to 'version.h: ...'.
-    sed -i lib/dialects/*/Makefile -e 's/version.h:\s*FRC/version.h:/'
-  '' + lib.optionalString stdenv.isDarwin ''
-    sed -i 's|lcurses|lncurses|g' Configure
-  '';
+  postPatch =
+    ''
+      patchShebangs --build lib/dialects/*/Mksrc
+      # Do not re-build version.h in every 'make' to allow nuke-refs below.
+      # We remove phony 'FRC' target that forces rebuilds:
+      #   'version.h: FRC ...' is translated to 'version.h: ...'.
+      sed -i lib/dialects/*/Makefile -e 's/version.h:\s*FRC/version.h:/'
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      sed -i 's|lcurses|lncurses|g' Configure
+    '';
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ nukeReferences perl which ];
+  nativeBuildInputs = [
+    nukeReferences
+    perl
+    which
+  ];
   buildInputs = [ ncurses ];
 
   # Stop build scripts from searching global include paths

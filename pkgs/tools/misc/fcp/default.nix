@@ -1,4 +1,10 @@
-{ expect, fetchFromGitHub, lib, rustPlatform, stdenv }:
+{
+  expect,
+  fetchFromGitHub,
+  lib,
+  rustPlatform,
+  stdenv,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "fcp";

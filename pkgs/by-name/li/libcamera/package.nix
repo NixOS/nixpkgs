@@ -1,25 +1,26 @@
-{ stdenv
-, fetchgit
-, lib
-, meson
-, ninja
-, pkg-config
-, makeFontsConf
-, openssl
-, libdrm
-, libevent
-, libyaml
-, lttng-ust
-, gst_all_1
-, gtest
-, graphviz
-, doxygen
-, python3
-, python3Packages
-, systemd # for libudev
-, withQcam ? false
-, qt5 # withQcam
-, libtiff # withQcam
+{
+  stdenv,
+  fetchgit,
+  lib,
+  meson,
+  ninja,
+  pkg-config,
+  makeFontsConf,
+  openssl,
+  libdrm,
+  libevent,
+  libyaml,
+  lttng-ust,
+  gst_all_1,
+  gtest,
+  graphviz,
+  doxygen,
+  python3,
+  python3Packages,
+  systemd, # for libudev
+  withQcam ? false,
+  qt5, # withQcam
+  libtiff, # withQcam
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +33,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-x0Im9m9MoACJhQKorMI34YQ+/bd62NdAPc2nWwaJAvM=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postPatch = ''
     patchShebangs utils/
@@ -52,29 +56,35 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  buildInputs = [
-    # IPA and signing
-    openssl
+  buildInputs =
+    [
+      # IPA and signing
+      openssl
 
-    # gstreamer integration
-    gst_all_1.gstreamer
-    gst_all_1.gst-plugins-base
+      # gstreamer integration
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-base
 
-    # cam integration
-    libevent
-    libdrm
+      # cam integration
+      libevent
+      libdrm
 
-    # hotplugging
-    systemd
+      # hotplugging
+      systemd
 
-    # lttng tracing
-    lttng-ust
+      # lttng tracing
+      lttng-ust
 
-    # yamlparser
-    libyaml
+      # yamlparser
+      libyaml
 
-    gtest
-  ] ++ lib.optionals withQcam [ libtiff qt5.qtbase qt5.qttools ];
+      gtest
+    ]
+    ++ lib.optionals withQcam [
+      libtiff
+      qt5.qtbase
+      qt5.qttools
+    ];
 
   nativeBuildInputs = [
     meson

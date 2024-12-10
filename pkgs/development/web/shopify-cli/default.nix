@@ -1,4 +1,11 @@
-{ stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper, ruby }:
+{
+  stdenv,
+  lib,
+  bundlerEnv,
+  bundlerUpdateScript,
+  makeWrapper,
+  ruby,
+}:
 
 let
   rubyEnv = bundlerEnv {
@@ -26,11 +33,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "CLI which helps you build against the Shopify platform faster";
-    homepage    = "https://github.com/Shopify/shopify-cli";
-    license     = licenses.mit;
+    homepage = "https://github.com/Shopify/shopify-cli";
+    license = licenses.mit;
     maintainers = with maintainers; [ onny ];
     mainProgram = "shopify";
     platforms = ruby.meta.platforms;
   };
 }
-

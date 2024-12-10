@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "writefreely";
@@ -17,7 +21,11 @@ buildGoModule rec {
     ./fix-go-version-error.patch
   ];
 
-  ldflags = [ "-s" "-w" "-X github.com/writefreely/writefreely.softwareVer=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/writefreely/writefreely.softwareVer=${version}"
+  ];
 
   tags = [ "sqlite" ];
 

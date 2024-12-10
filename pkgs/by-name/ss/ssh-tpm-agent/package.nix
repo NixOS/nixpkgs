@@ -1,7 +1,8 @@
-{ lib
-, buildGo122Module
-, fetchFromGitHub
-, openssl
+{
+  lib,
+  buildGo122Module,
+  fetchFromGitHub,
+  openssl,
 }:
 
 buildGo122Module rec {

@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, fuse
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  fuse,
 }:
 
 let
@@ -20,7 +21,10 @@ let
 
     buildInputs = [ fuse ];
 
-    ldflags = [ "-s" "-w" ];
+    ldflags = [
+      "-s"
+      "-w"
+    ];
 
     subPackages = [ "pkg/main" ];
   };
@@ -50,7 +54,9 @@ buildGoModule rec {
   vendorHash = "sha256-wvzrnwzkV4SXsiZfIrowMF0G7qFdjEVrF77vM81rxLs=";
 
   ldflags = [
-    "-s" "-w" "-X=github.com/telepresenceio/telepresence/v2/pkg/version.Version=${src.rev}"
+    "-s"
+    "-w"
+    "-X=github.com/telepresenceio/telepresence/v2/pkg/version.Version=${src.rev}"
   ];
 
   subPackages = [ "cmd/telepresence" ];
@@ -59,7 +65,10 @@ buildGoModule rec {
     description = "Local development against a remote Kubernetes or OpenShift cluster";
     homepage = "https://telepresence.io";
     license = licenses.asl20;
-    maintainers = with maintainers; [ mausch vilsol ];
+    maintainers = with maintainers; [
+      mausch
+      vilsol
+    ];
     mainProgram = "telepresence";
   };
 }

@@ -1,14 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, dpkg
-, electron
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  dpkg,
+  electron,
 }:
 
 let
   mainProgram = "proton-mail";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "protonmail-desktop";
   version = "1.0.4";
 
@@ -20,7 +22,10 @@ in stdenv.mkDerivation rec {
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -43,10 +48,12 @@ in stdenv.mkDerivation rec {
     description = "Desktop application for Mail and Calendar, made with Electron";
     homepage = "https://github.com/ProtonMail/inbox-desktop";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ rsniezek sebtm ];
+    maintainers = with maintainers; [
+      rsniezek
+      sebtm
+    ];
     platforms = [ "x86_64-linux" ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     inherit mainProgram;
   };
 }
-

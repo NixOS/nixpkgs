@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, cmake
-, pkg-config
-, libdrm
-, libGL
-, atkmm
-, pcre
-, gtkmm4
-, pugixml
-, mesa
-, pciutils
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  cmake,
+  pkg-config,
+  libdrm,
+  libGL,
+  atkmm,
+  pcre,
+  gtkmm4,
+  pugixml,
+  mesa,
+  pciutils,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,8 +26,20 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-GRmra4P30EW9/WrG84HXYC3Rk4RD+BhuWtsSXvY/5Rk=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ libdrm libGL atkmm pcre gtkmm4 pugixml mesa pciutils ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    libdrm
+    libGL
+    atkmm
+    pcre
+    gtkmm4
+    pugixml
+    mesa
+    pciutils
+  ];
 
   cmakeFlags = [ "-DENABLE_UNIT_TESTS=off" ];
 

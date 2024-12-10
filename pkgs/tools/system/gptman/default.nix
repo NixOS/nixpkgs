@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, testers, gptman }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  libiconv,
+  testers,
+  gptman,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "gptman";
@@ -24,7 +32,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "A GPT manager that allows you to copy partitions from one disk to another and more";
     homepage = "https://github.com/rust-disk-partition-management/gptman";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ akshgpt7 ];
     mainProgram = "gptman";
   };

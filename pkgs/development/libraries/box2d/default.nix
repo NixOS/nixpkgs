@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, libGLU
-, libGL
-, freeglut
-, libX11
-, libXcursor
-, libXinerama
-, libXrandr
-, xorgproto
-, libXi
-, pkg-config
-, Carbon
-, Cocoa
-, Kernel
-, OpenGL
-, settingsFile ? "include/box2d/b2_settings.h"
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  libGLU,
+  libGL,
+  freeglut,
+  libX11,
+  libXcursor,
+  libXinerama,
+  libXrandr,
+  xorgproto,
+  libXi,
+  pkg-config,
+  Carbon,
+  Cocoa,
+  Kernel,
+  OpenGL,
+  settingsFile ? "include/box2d/b2_settings.h",
 }:
 
 let
@@ -34,21 +35,29 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cL8L+WSTcswj+Bwy8kSOwuEqLyWEM6xa/j/94aBiSck=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-
-  buildInputs = [
-    libGLU
-    libGL
-    freeglut
-    libX11
-    libXcursor
-    libXinerama
-    libXrandr
-    xorgproto
-    libXi
-  ] ++ optionals stdenv.isDarwin [
-    Carbon Cocoa Kernel OpenGL
+  nativeBuildInputs = [
+    cmake
+    pkg-config
   ];
+
+  buildInputs =
+    [
+      libGLU
+      libGL
+      freeglut
+      libX11
+      libXcursor
+      libXinerama
+      libXrandr
+      xorgproto
+      libXi
+    ]
+    ++ optionals stdenv.isDarwin [
+      Carbon
+      Cocoa
+      Kernel
+      OpenGL
+    ];
 
   cmakeFlags = [
     (cmakeBool "BOX2D_BUILD_UNIT_TESTS" finalAttrs.doCheck)

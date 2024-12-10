@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, oniguruma
-, darwin
-, installShellFiles
-, zola
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  oniguruma,
+  darwin,
+  installShellFiles,
+  zola,
+  testers,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,11 +29,17 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs = [
-    oniguruma
-  ] ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [
-    CoreServices SystemConfiguration
-  ]);
+  buildInputs =
+    [
+      oniguruma
+    ]
+    ++ lib.optionals stdenv.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        CoreServices
+        SystemConfiguration
+      ]
+    );
 
   RUSTONIG_SYSTEM_LIBONIG = true;
 
@@ -51,6 +58,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://www.getzola.org/";
     changelog = "https://github.com/getzola/zola/raw/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ dandellion dywedir _0x4A6F ];
+    maintainers = with maintainers; [
+      dandellion
+      dywedir
+      _0x4A6F
+    ];
   };
 }

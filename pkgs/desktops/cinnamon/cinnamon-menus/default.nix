@@ -1,12 +1,13 @@
-{ fetchFromGitHub
-, glib
-, gobject-introspection
-, meson
-, ninja
-, pkg-config
-, lib
-, stdenv
-, wrapGAppsHook3
+{
+  fetchFromGitHub,
+  glib,
+  gobject-introspection,
+  meson,
+  ninja,
+  pkg-config,
+  lib,
+  stdenv,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +36,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/linuxmint/cinnamon-menus";
     description = "A menu system for the Cinnamon project";
-    license = [ licenses.gpl2 licenses.lgpl2 ];
+    license = [
+      licenses.gpl2
+      licenses.lgpl2
+    ];
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;
   };

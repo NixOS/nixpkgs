@@ -1,16 +1,32 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.snapper;
 
-  mkValue = v:
-    if isList v then "\"${concatMapStringsSep " " (escape [ "\\" " " ]) v}\""
-    else if v == true then "yes"
-    else if v == false then "no"
-    else if isString v then "\"${v}\""
-    else builtins.toJSON v;
+  mkValue =
+    v:
+    if isList v then
+      "\"${
+        concatMapStringsSep " " (escape [
+          "\\"
+          " "
+        ]) v
+      }\""
+    else if v == true then
+      "yes"
+    else if v == false then
+      "no"
+    else if isString v then
+      "\"${v}\""
+    else
+      builtins.toJSON v;
 
   mkKeyValue = k: v: "${k}=${mkValue v}";
 
@@ -43,7 +59,7 @@ let
 
     ALLOW_GROUPS = mkOption {
       type = types.listOf safeStr;
-      default = [];
+      default = [ ];
       description = ''
         List of groups allowed to operate with the config.
 
@@ -53,7 +69,7 @@ let
 
     ALLOW_USERS = mkOption {
       type = types.listOf safeStr;
-      default = [];
+      default = [ ];
       example = [ "alice" ];
       description = ''
         List of users allowed to operate with the config. "root" is always
@@ -152,112 +168,134 @@ in
         is valid here, even if NixOS doesn't document it.
       '';
 
-      type = types.attrsOf (types.submodule {
-        freeformType = types.attrsOf (types.oneOf [ (types.listOf safeStr) types.bool safeStr types.number ]);
+      type = types.attrsOf (
+        types.submodule {
+          freeformType = types.attrsOf (
+            types.oneOf [
+              (types.listOf safeStr)
+              types.bool
+              safeStr
+              types.number
+            ]
+          );
 
-        options = configOptions;
-      });
+          options = configOptions;
+        }
+      );
     };
   };
 
-  config = mkIf (cfg.configs != {}) (let
-    documentation = [ "man:snapper(8)" "man:snapper-configs(5)" ];
-  in {
+  config = mkIf (cfg.configs != { }) (
+    let
+      documentation = [
+        "man:snapper(8)"
+        "man:snapper-configs(5)"
+      ];
+    in
+    {
 
-    environment = {
+      environment = {
 
-      systemPackages = [ pkgs.snapper ];
+        systemPackages = [ pkgs.snapper ];
 
-      # Note: snapper/config-templates/default is only needed for create-config
-      #       which is not the NixOS way to configure.
-      etc = {
+        # Note: snapper/config-templates/default is only needed for create-config
+        #       which is not the NixOS way to configure.
+        etc =
+          {
 
-        "sysconfig/snapper".text = ''
-          SNAPPER_CONFIGS="${lib.concatStringsSep " " (builtins.attrNames cfg.configs)}"
-        '';
+            "sysconfig/snapper".text = ''
+              SNAPPER_CONFIGS="${lib.concatStringsSep " " (builtins.attrNames cfg.configs)}"
+            '';
 
-      }
-      // (mapAttrs' (name: subvolume: nameValuePair "snapper/configs/${name}" ({
-        text = lib.generators.toKeyValue { inherit mkKeyValue; } (filterAttrs (k: v: v != defaultOf k) subvolume);
-      })) cfg.configs)
-      // (lib.optionalAttrs (cfg.filters != null) {
-        "snapper/filters/default.txt".text = cfg.filters;
-      });
+          }
+          // (mapAttrs' (
+            name: subvolume:
+            nameValuePair "snapper/configs/${name}" ({
+              text = lib.generators.toKeyValue { inherit mkKeyValue; } (
+                filterAttrs (k: v: v != defaultOf k) subvolume
+              );
+            })
+          ) cfg.configs)
+          // (lib.optionalAttrs (cfg.filters != null) {
+            "snapper/filters/default.txt".text = cfg.filters;
+          });
 
-    };
-
-    services.dbus.packages = [ pkgs.snapper ];
-
-    systemd.services.snapperd = {
-      description = "DBus interface for snapper";
-      inherit documentation;
-      serviceConfig = {
-        Type = "dbus";
-        BusName = "org.opensuse.Snapper";
-        ExecStart = "${pkgs.snapper}/bin/snapperd";
-        CapabilityBoundingSet = "CAP_DAC_OVERRIDE CAP_FOWNER CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_SYS_ADMIN CAP_SYS_MODULE CAP_IPC_LOCK CAP_SYS_NICE";
-        LockPersonality = true;
-        NoNewPrivileges = false;
-        PrivateNetwork = true;
-        ProtectHostname = true;
-        RestrictAddressFamilies = "AF_UNIX";
-        RestrictRealtime = true;
       };
-    };
 
-    systemd.services.snapper-timeline = {
-      description = "Timeline of Snapper Snapshots";
-      inherit documentation;
-      requires = [ "local-fs.target" ];
-      serviceConfig.ExecStart = "${pkgs.snapper}/lib/snapper/systemd-helper --timeline";
-    };
+      services.dbus.packages = [ pkgs.snapper ];
 
-    systemd.timers.snapper-timeline = {
-      wantedBy = [ "timers.target" ];
-      timerConfig = {
-        Persistent = cfg.persistentTimer;
-        OnCalendar = cfg.snapshotInterval;
+      systemd.services.snapperd = {
+        description = "DBus interface for snapper";
+        inherit documentation;
+        serviceConfig = {
+          Type = "dbus";
+          BusName = "org.opensuse.Snapper";
+          ExecStart = "${pkgs.snapper}/bin/snapperd";
+          CapabilityBoundingSet = "CAP_DAC_OVERRIDE CAP_FOWNER CAP_CHOWN CAP_FSETID CAP_SETFCAP CAP_SYS_ADMIN CAP_SYS_MODULE CAP_IPC_LOCK CAP_SYS_NICE";
+          LockPersonality = true;
+          NoNewPrivileges = false;
+          PrivateNetwork = true;
+          ProtectHostname = true;
+          RestrictAddressFamilies = "AF_UNIX";
+          RestrictRealtime = true;
+        };
       };
-    };
 
-    systemd.services.snapper-cleanup = {
-      description = "Cleanup of Snapper Snapshots";
-      inherit documentation;
-      serviceConfig.ExecStart = "${pkgs.snapper}/lib/snapper/systemd-helper --cleanup";
-    };
+      systemd.services.snapper-timeline = {
+        description = "Timeline of Snapper Snapshots";
+        inherit documentation;
+        requires = [ "local-fs.target" ];
+        serviceConfig.ExecStart = "${pkgs.snapper}/lib/snapper/systemd-helper --timeline";
+      };
 
-    systemd.timers.snapper-cleanup = {
-      description = "Cleanup of Snapper Snapshots";
-      inherit documentation;
-      wantedBy = [ "timers.target" ];
-      requires = [ "local-fs.target" ];
-      timerConfig.OnBootSec = "10m";
-      timerConfig.OnUnitActiveSec = cfg.cleanupInterval;
-    };
+      systemd.timers.snapper-timeline = {
+        wantedBy = [ "timers.target" ];
+        timerConfig = {
+          Persistent = cfg.persistentTimer;
+          OnCalendar = cfg.snapshotInterval;
+        };
+      };
 
-    systemd.services.snapper-boot = lib.optionalAttrs cfg.snapshotRootOnBoot {
-      description = "Take snapper snapshot of root on boot";
-      inherit documentation;
-      serviceConfig.ExecStart = "${pkgs.snapper}/bin/snapper --config root create --cleanup-algorithm number --description boot";
-      serviceConfig.Type = "oneshot";
-      requires = [ "local-fs.target" ];
-      wantedBy = [ "multi-user.target" ];
-      unitConfig.ConditionPathExists = "/etc/snapper/configs/root";
-    };
+      systemd.services.snapper-cleanup = {
+        description = "Cleanup of Snapper Snapshots";
+        inherit documentation;
+        serviceConfig.ExecStart = "${pkgs.snapper}/lib/snapper/systemd-helper --cleanup";
+      };
 
-    assertions =
-      concatMap
-        (name:
-          let
-            sub = cfg.configs.${name};
-          in
-          [ { assertion = !(sub ? extraConfig);
-              message = ''
-                The option definition `services.snapper.configs.${name}.extraConfig' no longer has any effect; please remove it.
-                The contents of this option should be migrated to attributes on `services.snapper.configs.${name}'.
-              '';
-            }
-          ] ++
+      systemd.timers.snapper-cleanup = {
+        description = "Cleanup of Snapper Snapshots";
+        inherit documentation;
+        wantedBy = [ "timers.target" ];
+        requires = [ "local-fs.target" ];
+        timerConfig.OnBootSec = "10m";
+        timerConfig.OnUnitActiveSec = cfg.cleanupInterval;
+      };
+
+      systemd.services.snapper-boot = lib.optionalAttrs cfg.snapshotRootOnBoot {
+        description = "Take snapper snapshot of root on boot";
+        inherit documentation;
+        serviceConfig.ExecStart = "${pkgs.snapper}/bin/snapper --config root create --cleanup-algorithm number --description boot";
+        serviceConfig.Type = "oneshot";
+        requires = [ "local-fs.target" ];
+        wantedBy = [ "multi-user.target" ];
+        unitConfig.ConditionPathExists = "/etc/snapper/configs/root";
+      };
+
+      assertions = concatMap (
+        name:
+        let
+          sub = cfg.configs.${name};
+        in
+        [
+          {
+            assertion = !(sub ? extraConfig);
+            message = ''
+              The option definition `services.snapper.configs.${name}.extraConfig' no longer has any effect; please remove it.
+              The contents of this option should be migrated to attributes on `services.snapper.configs.${name}'.
+            '';
+          }
+        ]
+        ++
           map
             (attr: {
               assertion = !(hasAttr attr sub);
@@ -265,8 +303,11 @@ in
                 The option definition `services.snapper.configs.${name}.${attr}' has been renamed to `services.snapper.configs.${name}.${toUpper attr}'.
               '';
             })
-            [ "fstype" "subvolume" ]
-        )
-        (attrNames cfg.configs);
-  });
+            [
+              "fstype"
+              "subvolume"
+            ]
+      ) (attrNames cfg.configs);
+    }
+  );
 }

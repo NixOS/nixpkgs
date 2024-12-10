@@ -1,7 +1,8 @@
-{ fetchFromGitHub
-, lib
-, stdenvNoCC
-, testers
+{
+  fetchFromGitHub,
+  lib,
+  stdenvNoCC,
+  testers,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

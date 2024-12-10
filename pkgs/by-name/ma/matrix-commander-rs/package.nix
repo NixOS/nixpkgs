@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, darwin
-, fetchFromGitHub
-, openssl
-, pkg-config
-, rustPlatform
+{
+  lib,
+  stdenv,
+  darwin,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,12 +25,14 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   meta = with lib; {
     description = "CLI-based Matrix client app for sending and receiving";

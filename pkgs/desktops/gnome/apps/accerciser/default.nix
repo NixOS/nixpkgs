@@ -1,19 +1,20 @@
-{ lib
-, fetchurl
-, pkg-config
-, gnome
-, gtk3
-, wrapGAppsHook3
-, gobject-introspection
-, itstool
-, libxml2
-, python3
-, at-spi2-core
-, dbus
-, gettext
-, libwnck
-, adwaita-icon-theme
-, librsvg
+{
+  lib,
+  fetchurl,
+  pkg-config,
+  gnome,
+  gtk3,
+  wrapGAppsHook3,
+  gobject-introspection,
+  itstool,
+  libxml2,
+  python3,
+  at-spi2-core,
+  dbus,
+  gettext,
+  libwnck,
+  adwaita-icon-theme,
+  librsvg,
 }:
 
 python3.pkgs.buildPythonApplication rec {

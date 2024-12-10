@@ -1,26 +1,27 @@
-{ cmake
-, dnsmasq
-, fetchFromGitHub
-, git
-, gtest
-, iproute2
-, iptables
-, lib
-, libapparmor
-, libvirt
-, libxml2
-, nixosTests
-, openssl
-, OVMF
-, pkg-config
-, qemu
-, qemu-utils
-, qtbase
-, qtwayland
-, wrapQtAppsHook
-, slang
-, stdenv
-, xterm
+{
+  cmake,
+  dnsmasq,
+  fetchFromGitHub,
+  git,
+  gtest,
+  iproute2,
+  iptables,
+  lib,
+  libapparmor,
+  libvirt,
+  libxml2,
+  nixosTests,
+  openssl,
+  OVMF,
+  pkg-config,
+  qemu,
+  qemu-utils,
+  qtbase,
+  qtwayland,
+  wrapQtAppsHook,
+  slang,
+  stdenv,
+  xterm,
 }:
 
 let
@@ -38,8 +39,7 @@ let
     fetchSubmodules = true;
   };
 in
-stdenv.mkDerivation
-{
+stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {
@@ -118,15 +118,17 @@ stdenv.mkDerivation
   nativeCheckInputs = [ gtest ];
 
   postInstall = ''
-    wrapProgram $out/bin/multipassd --prefix PATH : ${lib.makeBinPath [
-      dnsmasq
-      iproute2
-      iptables
-      OVMF.fd
-      qemu
-      qemu-utils
-      xterm
-    ]}
+    wrapProgram $out/bin/multipassd --prefix PATH : ${
+      lib.makeBinPath [
+        dnsmasq
+        iproute2
+        iptables
+        OVMF.fd
+        qemu
+        qemu-utils
+        xterm
+      ]
+    }
   '';
 
   passthru.tests = {

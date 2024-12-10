@@ -1,32 +1,37 @@
-{ stdenv
-, lib
-, desktop-file-utils
-, fetchurl
-, gettext
-, glib
-, gtk4
-, json-glib
-, itstool
-, libadwaita
-, libdex
-, libpanel
-, libunwind
-, libxml2
-, meson
-, ninja
-, pkg-config
-, polkit
-, shared-mime-info
-, systemd
-, wrapGAppsHook4
-, gnome
+{
+  stdenv,
+  lib,
+  desktop-file-utils,
+  fetchurl,
+  gettext,
+  glib,
+  gtk4,
+  json-glib,
+  itstool,
+  libadwaita,
+  libdex,
+  libpanel,
+  libunwind,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  polkit,
+  shared-mime-info,
+  systemd,
+  wrapGAppsHook4,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sysprof";
   version = "46.0";
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";

@@ -1,20 +1,21 @@
-{ lib
-, writeText
-, rustPlatform
-, fetchFromGitHub
-, curl
-, installShellFiles
-, pkg-config
-, bzip2
-, libgit2
-, openssl
-, zlib
-, zstd
-, stdenv
-, darwin
-, spdx-license-list-data
-, nix
-, nurl
+{
+  lib,
+  writeText,
+  rustPlatform,
+  fetchFromGitHub,
+  curl,
+  installShellFiles,
+  pkg-config,
+  bzip2,
+  libgit2,
+  openssl,
+  zlib,
+  zstd,
+  stdenv,
+  darwin,
+  spdx-license-list-data,
+  nix,
+  nurl,
 }:
 
 let
@@ -42,18 +43,21 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    bzip2
-    curl
-    libgit2
-    openssl
-    zlib
-    zstd
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ] ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
-    darwin.apple_sdk.frameworks.CoreFoundation
-  ];
+  buildInputs =
+    [
+      bzip2
+      curl
+      libgit2
+      openssl
+      zlib
+      zstd
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ]
+    ++ lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [
+      darwin.apple_sdk.frameworks.CoreFoundation
+    ];
 
   buildNoDefaultFeatures = true;
 

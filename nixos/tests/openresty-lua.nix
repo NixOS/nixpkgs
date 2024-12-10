@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
   let
     lualibs = [
       pkgs.lua.pkgs.markdown
@@ -15,65 +16,68 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
     };
 
     nodes = {
-      webserver = { pkgs, lib, ... }: {
-        networking = {
-          extraHosts = ''
-            127.0.0.1 default.test
-            127.0.0.1 sandbox.test
-          '';
-        };
-        services.nginx = {
-          enable = true;
-          package = pkgs.openresty;
+      webserver =
+        { pkgs, lib, ... }:
+        {
+          networking = {
+            extraHosts = ''
+              127.0.0.1 default.test
+              127.0.0.1 sandbox.test
+            '';
+          };
+          services.nginx = {
+            enable = true;
+            package = pkgs.openresty;
 
-          commonHttpConfig = ''
-            lua_package_path '${luaPath};;';
-          '';
+            commonHttpConfig = ''
+              lua_package_path '${luaPath};;';
+            '';
 
-          virtualHosts."default.test" = {
-            default = true;
-            locations."/" = {
-              extraConfig = ''
-                default_type text/html;
-                access_by_lua '
-                  local markdown = require "markdown"
-                  markdown("source")
-                ';
-              '';
+            virtualHosts."default.test" = {
+              default = true;
+              locations."/" = {
+                extraConfig = ''
+                  default_type text/html;
+                  access_by_lua '
+                    local markdown = require "markdown"
+                    markdown("source")
+                  ';
+                '';
+              };
+            };
+
+            virtualHosts."sandbox.test" = {
+              locations."/test1-write" = {
+                extraConfig = ''
+                  content_by_lua_block {
+                    local create = os.execute('${pkgs.coreutils}/bin/mkdir /tmp/test1-read')
+                    local create = os.execute('${pkgs.coreutils}/bin/touch /tmp/test1-read/foo.txt')
+                    local echo = os.execute('${pkgs.coreutils}/bin/echo worked > /tmp/test1-read/foo.txt')
+                  }
+                '';
+              };
+              locations."/test1-read" = {
+                root = "/tmp";
+              };
+              locations."/test2-write" = {
+                extraConfig = ''
+                  content_by_lua_block {
+                    local create = os.execute('${pkgs.coreutils}/bin/mkdir /var/web/test2-read')
+                    local create = os.execute('${pkgs.coreutils}/bin/touch /var/web/test2-read/bar.txt')
+                    local echo = os.execute('${pkgs.coreutils}/bin/echo error-worked > /var/web/test2-read/bar.txt')
+                  }
+                '';
+              };
+              locations."/test2-read" = {
+                root = "/var/web";
+              };
             };
           };
-
-          virtualHosts."sandbox.test" = {
-            locations."/test1-write" = {
-              extraConfig = ''
-                content_by_lua_block {
-                  local create = os.execute('${pkgs.coreutils}/bin/mkdir /tmp/test1-read')
-                  local create = os.execute('${pkgs.coreutils}/bin/touch /tmp/test1-read/foo.txt')
-                  local echo = os.execute('${pkgs.coreutils}/bin/echo worked > /tmp/test1-read/foo.txt')
-                }
-              '';
-            };
-            locations."/test1-read" = {
-              root = "/tmp";
-            };
-            locations."/test2-write" = {
-              extraConfig = ''
-                content_by_lua_block {
-                  local create = os.execute('${pkgs.coreutils}/bin/mkdir /var/web/test2-read')
-                  local create = os.execute('${pkgs.coreutils}/bin/touch /var/web/test2-read/bar.txt')
-                  local echo = os.execute('${pkgs.coreutils}/bin/echo error-worked > /var/web/test2-read/bar.txt')
-                }
-              '';
-            };
-            locations."/test2-read" = {
-              root = "/var/web";
-            };
-          };
         };
-      };
     };
 
-    testScript = { nodes, ... }:
+    testScript =
+      { nodes, ... }:
       ''
         url = "http://localhost"
 
@@ -98,4 +102,5 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
             "curl -vvv -s http://sandbox.test/test2-read/bar.txt"
         )
       '';
-  })
+  }
+)

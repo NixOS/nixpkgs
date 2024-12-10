@@ -1,19 +1,23 @@
-{ autoPatchelfHook
-, buildFHSEnv
-, dpkg
-, fetchurl
-, inotify-tools
-, lib
-, stdenvNoCC
-, sysctl
-, writeScript
+{
+  autoPatchelfHook,
+  buildFHSEnv,
+  dpkg,
+  fetchurl,
+  inotify-tools,
+  lib,
+  stdenvNoCC,
+  sysctl,
+  writeScript,
 }:
 
 let
   pname = "expressvpn";
   clientVersion = "3.52.0";
   clientBuild = "2";
-  version = lib.strings.concatStringsSep "." [ clientVersion clientBuild ];
+  version = lib.strings.concatStringsSep "." [
+    clientVersion
+    clientBuild
+  ];
 
   expressvpnBase = stdenvNoCC.mkDerivation {
     inherit pname version;
@@ -23,7 +27,10 @@ let
       hash = "sha256-cDZ9R+MA3FXEto518bH4/c1X4W9XxgTvXns7zisylew=";
     };
 
-    nativeBuildInputs = [ dpkg autoPatchelfHook ];
+    nativeBuildInputs = [
+      dpkg
+      autoPatchelfHook
+    ];
 
     dontConfigure = true;
     dontBuild = true;
@@ -65,11 +72,12 @@ let
     # The expressvpnd binary also uses hard-coded paths to the other binaries and files
     # it ships with, hence the FHS environment.
 
-    targetPkgs = pkgs: with pkgs; [
-      expressvpnBase
-      inotify-tools
-      iproute2
-    ];
+    targetPkgs =
+      pkgs: with pkgs; [
+        expressvpnBase
+        inotify-tools
+        iproute2
+      ];
   };
 in
 stdenvNoCC.mkDerivation {

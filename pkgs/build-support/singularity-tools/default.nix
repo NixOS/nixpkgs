@@ -1,19 +1,21 @@
-{ runCommand
-, lib
-, stdenv
-, storeDir ? builtins.storeDir
-, writeScript
-, singularity
-, writeClosure
-, bash
-, vmTools
-, gawk
-, util-linux
-, runtimeShell
-, e2fsprogs
+{
+  runCommand,
+  lib,
+  stdenv,
+  storeDir ? builtins.storeDir,
+  writeScript,
+  singularity,
+  writeClosure,
+  bash,
+  vmTools,
+  gawk,
+  util-linux,
+  runtimeShell,
+  e2fsprogs,
 }:
 rec {
-  shellScript = name: text:
+  shellScript =
+    name: text:
     writeScript name ''
       #!${runtimeShell}
       set -e
@@ -21,32 +23,35 @@ rec {
     '';
 
   mkLayer =
-    { name
-    , contents ? [ ]
+    {
+      name,
+      contents ? [ ],
       # May be "apptainer" instead of "singularity"
-    , projectName ? (singularity.projectName or "singularity")
+      projectName ? (singularity.projectName or "singularity"),
     }:
     runCommand "${projectName}-layer-${name}"
       {
         inherit contents;
-      } ''
-      mkdir $out
-      for f in $contents ; do
-        cp -ra $f $out/
-      done
-    '';
+      }
+      ''
+        mkdir $out
+        for f in $contents ; do
+          cp -ra $f $out/
+        done
+      '';
 
   buildImage =
     let
       defaultSingularity = singularity;
     in
-    { name
-    , contents ? [ ]
-    , diskSize ? 1024
-    , runScript ? "#!${stdenv.shell}\nexec /bin/sh"
-    , runAsRoot ? null
-    , memSize ? 1024
-    , singularity ? defaultSingularity
+    {
+      name,
+      contents ? [ ],
+      diskSize ? 1024,
+      runScript ? "#!${stdenv.shell}\nexec /bin/sh",
+      runAsRoot ? null,
+      memSize ? 1024,
+      singularity ? defaultSingularity,
     }:
     let
       projectName = singularity.projectName or "singularity";
@@ -55,7 +60,12 @@ rec {
       result = vmTools.runInLinuxVM (
         runCommand "${projectName}-image-${name}.img"
           {
-            buildInputs = [ singularity e2fsprogs util-linux gawk ];
+            buildInputs = [
+              singularity
+              e2fsprogs
+              util-linux
+              gawk
+            ];
             layerClosure = writeClosure contents;
             preVM = vmTools.createEmptyImage {
               size = diskSize;
@@ -110,7 +120,8 @@ rec {
             echo "root:x:0:0:System administrator:/root:/bin/sh" > /etc/passwd
             echo > /etc/resolv.conf
             TMPDIR=$(pwd -P) ${projectName} build $out ./img
-          '');
+          ''
+      );
 
     in
     result;

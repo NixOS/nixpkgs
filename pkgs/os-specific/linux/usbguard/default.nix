@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, installShellFiles
-, nixosTests
-, asciidoc
-, pkg-config
-, libxslt
-, libxml2
-, docbook_xml_dtd_45
-, docbook_xsl
-, dbus-glib
-, libcap_ng
-, libqb
-, libseccomp
-, polkit
-, protobuf
-, audit
-, libsodium
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  installShellFiles,
+  nixosTests,
+  asciidoc,
+  pkg-config,
+  libxslt,
+  libxml2,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  dbus-glib,
+  libcap_ng,
+  libqb,
+  libseccomp,
+  polkit,
+  protobuf,
+  audit,
+  libsodium,
 }:
 
 stdenv.mkDerivation rec {

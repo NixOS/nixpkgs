@@ -1,19 +1,20 @@
-{ lib
-, buildGoModule
-, buildFHSEnv
-, binutils
-, dejavu_fonts
-, pkg-config
-, fetchFromGitHub
-, roboto
-, writeScript
-, xorg
-, libglvnd
-, addOpenGLRunpath
-, makeWrapper
-, gcc
-, go
-, flutter
+{
+  lib,
+  buildGoModule,
+  buildFHSEnv,
+  binutils,
+  dejavu_fonts,
+  pkg-config,
+  fetchFromGitHub,
+  roboto,
+  writeScript,
+  xorg,
+  libglvnd,
+  addOpenGLRunpath,
+  makeWrapper,
+  gcc,
+  go,
+  flutter,
 }:
 
 let
@@ -55,7 +56,10 @@ let
       sha256 = "sha256-ch59Wx4g72u7x99807ppURI4I+5aJ/W8Zr35q8X68v4=";
     };
 
-    nativeBuildInputs = [ addOpenGLRunpath makeWrapper ];
+    nativeBuildInputs = [
+      addOpenGLRunpath
+      makeWrapper
+    ];
 
     buildInputs = libs;
 
@@ -86,16 +90,19 @@ let
 in
 buildFHSEnv rec {
   name = pname;
-  targetPkgs = pkgs: [
-    binutils
-    dejavu_fonts
-    flutter
-    gcc
-    go
-    hover
-    pkg-config
-    roboto
-  ] ++ libs;
+  targetPkgs =
+    pkgs:
+    [
+      binutils
+      dejavu_fonts
+      flutter
+      gcc
+      go
+      hover
+      pkg-config
+      roboto
+    ]
+    ++ libs;
 
   runScript = "hover";
 }

@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "cilium-cli";
@@ -16,7 +21,8 @@ buildGoModule rec {
   subPackages = [ "cmd/cilium" ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/cilium/cilium-cli/defaults.CLIVersion=${version}"
   ];
 
@@ -42,7 +48,11 @@ buildGoModule rec {
     description = "CLI to install, manage & troubleshoot Kubernetes clusters running Cilium";
     license = lib.licenses.asl20;
     homepage = "https://www.cilium.io/";
-    maintainers = with lib.maintainers; [ bryanasdev000 humancalico qjoly ];
+    maintainers = with lib.maintainers; [
+      bryanasdev000
+      humancalico
+      qjoly
+    ];
     mainProgram = "cilium";
   };
 }

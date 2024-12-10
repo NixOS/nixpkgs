@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, dpkg
-, fetchurl
-, autoPatchelfHook
-, webkitgtk
+{
+  lib,
+  stdenv,
+  dpkg,
+  fetchurl,
+  autoPatchelfHook,
+  webkitgtk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -38,7 +39,10 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "A UI for configuring Ploopy Headphones";
     homepage = "https://github.com/ploopyco/headphones-toolbox/";
-    maintainers = with maintainers; [ knarkzel nyanbinary ];
+    maintainers = with maintainers; [
+      knarkzel
+      nyanbinary
+    ];
     license = licenses.gpl3Only;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     platforms = [ "x86_64-linux" ];

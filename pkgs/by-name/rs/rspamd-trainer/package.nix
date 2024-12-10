@@ -1,11 +1,12 @@
-{ lib
-, python3
-, python3Packages
-, fetchFromGitLab
-, makeWrapper
-, stdenv
-, fetchpatch
-, rspamd
+{
+  lib,
+  python3,
+  python3Packages,
+  fetchFromGitLab,
+  makeWrapper,
+  stdenv,
+  fetchpatch,
+  rspamd,
 }:
 
 python3Packages.buildPythonApplication {

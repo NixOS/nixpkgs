@@ -1,16 +1,17 @@
-{ lib
-, python3Packages
-, fetchFromGitLab
-, meson
-, ninja
-, vala
-, pkg-config
-, gobject-introspection
-, blueprint-compiler
-, wrapGAppsHook4
-, desktop-file-utils
-, shared-mime-info
-, libadwaita
+{
+  lib,
+  python3Packages,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  gobject-introspection,
+  blueprint-compiler,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  shared-mime-info,
+  libadwaita,
 }:
 
 python3Packages.buildPythonApplication rec {

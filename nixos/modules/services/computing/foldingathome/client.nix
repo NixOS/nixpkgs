@@ -1,18 +1,31 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.services.foldingathome;
 
   args =
-    ["--team" "${toString cfg.team}"]
-    ++ lib.optionals (cfg.user != null) ["--user" cfg.user]
-    ++ cfg.extraArgs
-    ;
+    [
+      "--team"
+      "${toString cfg.team}"
+    ]
+    ++ lib.optionals (cfg.user != null) [
+      "--user"
+      cfg.user
+    ]
+    ++ cfg.extraArgs;
 in
 {
   imports = [
     (mkRenamedOptionModule [ "services" "foldingAtHome" ] [ "services" "foldingathome" ])
-    (mkRenamedOptionModule [ "services" "foldingathome" "nickname" ] [ "services" "foldingathome" "user" ])
+    (mkRenamedOptionModule
+      [ "services" "foldingathome" "nickname" ]
+      [ "services" "foldingathome" "user" ]
+    )
     (mkRemovedOptionModule [ "services" "foldingathome" "config" ] ''
       Use <literal>services.foldingathome.extraArgs instead<literal>
     '')
@@ -53,7 +66,7 @@ in
 
     extraArgs = mkOption {
       type = types.listOf types.str;
-      default = [];
+      default = [ ];
       description = ''
         Extra startup options for the FAHClient. Run
         `fah-client --help` to find all the available options.

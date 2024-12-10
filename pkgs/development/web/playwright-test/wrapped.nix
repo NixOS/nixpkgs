@@ -1,15 +1,15 @@
-{ lib
-, callPackage
-, buildNpmPackage
-, fetchurl
-, python3
-, playwright-driver
-, makeWrapper
+{
+  lib,
+  callPackage,
+  buildNpmPackage,
+  fetchurl,
+  python3,
+  playwright-driver,
+  makeWrapper,
 }:
 let
   driver = playwright-driver;
   browsers = playwright-driver.browsers;
-
 
   # nodeDependencies / package / shell
   playwright-test-raw = (callPackage ./default.nix { })."@playwright/test-${driver.version}";
@@ -26,4 +26,4 @@ let
     '';
   });
 in
-  playwright-test
+playwright-test

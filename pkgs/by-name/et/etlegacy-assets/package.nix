@@ -1,31 +1,36 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
 
 stdenv.mkDerivation {
   pname = "etlegacy-assets";
   version = "2.82.0";
 
-  srcs = let
-    fetchAsset = { asset, hash }: fetchurl {
-      url = "https://mirror.etlegacy.com/etmain/${asset}";
-      inherit hash;
-    };
-  in [
-    (fetchAsset {
-      asset = "pak0.pk3";
-      hash = "sha256-cSlmsg4GUj/oFBlRZQDkmchrK0/sgjhW3b0zP8s9JuU=";
-    })
-    (fetchAsset {
-      asset = "pak1.pk3";
-      hash = "sha256-VhD9dJAkQFtEJafOY5flgYe5QdIgku8R1IRLQn31Pl0=";
-    })
-    (fetchAsset {
-      asset = "pak2.pk3";
-      hash = "sha256-pIq3SaGhKrTZE3KGsfI9ZCwp2lmEWyuvyPZOBSzwbz4=";
-    })
-  ];
+  srcs =
+    let
+      fetchAsset =
+        { asset, hash }:
+        fetchurl {
+          url = "https://mirror.etlegacy.com/etmain/${asset}";
+          inherit hash;
+        };
+    in
+    [
+      (fetchAsset {
+        asset = "pak0.pk3";
+        hash = "sha256-cSlmsg4GUj/oFBlRZQDkmchrK0/sgjhW3b0zP8s9JuU=";
+      })
+      (fetchAsset {
+        asset = "pak1.pk3";
+        hash = "sha256-VhD9dJAkQFtEJafOY5flgYe5QdIgku8R1IRLQn31Pl0=";
+      })
+      (fetchAsset {
+        asset = "pak2.pk3";
+        hash = "sha256-pIq3SaGhKrTZE3KGsfI9ZCwp2lmEWyuvyPZOBSzwbz4=";
+      })
+    ];
 
   sourceRoot = ".";
   unpackCmd = "cp -r $curSrc \${curSrc##*-}";

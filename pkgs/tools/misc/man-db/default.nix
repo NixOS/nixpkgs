@@ -1,17 +1,18 @@
-{ buildPackages
-, db
-, fetchurl
-, groff
-, gzip
-, lib
-, libiconv
-, libpipeline
-, makeWrapper
-, nixosTests
-, pkg-config
-, stdenv
-, zstd
-, autoreconfHook
+{
+  buildPackages,
+  db,
+  fetchurl,
+  groff,
+  gzip,
+  lib,
+  libiconv,
+  libpipeline,
+  makeWrapper,
+  nixosTests,
+  pkg-config,
+  stdenv,
+  zstd,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -23,13 +24,28 @@ stdenv.mkDerivation rec {
     hash = "sha256-3e4kna63jPkrq3lMzQacyLV1mSJl6iDiOeiHFW6IAmU=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
   outputMan = "out"; # users will want `man man` to work
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook groff makeWrapper pkg-config zstd ];
-  buildInputs = [ libpipeline db groff ]; # (Yes, 'groff' is both native and build input)
-  nativeCheckInputs = [ libiconv /* for 'iconv' binary */ ];
+  nativeBuildInputs = [
+    autoreconfHook
+    groff
+    makeWrapper
+    pkg-config
+    zstd
+  ];
+  buildInputs = [
+    libpipeline
+    db
+    groff
+  ]; # (Yes, 'groff' is both native and build input)
+  nativeCheckInputs = [
+    libiconv # for 'iconv' binary
+  ];
 
   patches = [
     ./systemwide-man-db-conf.patch
@@ -47,19 +63,21 @@ stdenv.mkDerivation rec {
     echo "MANDB_MAP	/nix/var/nix/profiles/default/share/man	/var/cache/man/nixpkgs" >> src/man_db.conf.in
   '';
 
-  configureFlags = [
-    "--disable-setuid"
-    "--disable-cache-owner"
-    "--localstatedir=/var"
-    "--with-config-file=${placeholder "out"}/etc/man_db.conf"
-    "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-    "--with-pager=less"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "ac_cv_func__set_invalid_parameter_handler=no"
-    "ac_cv_func_posix_fadvise=no"
-    "ac_cv_func_mempcpy=no"
-  ];
+  configureFlags =
+    [
+      "--disable-setuid"
+      "--disable-cache-owner"
+      "--localstatedir=/var"
+      "--with-config-file=${placeholder "out"}/etc/man_db.conf"
+      "--with-systemdtmpfilesdir=${placeholder "out"}/lib/tmpfiles.d"
+      "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+      "--with-pager=less"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "ac_cv_func__set_invalid_parameter_handler=no"
+      "ac_cv_func_posix_fadvise=no"
+      "ac_cv_func_mempcpy=no"
+    ];
 
   preConfigure = ''
     configureFlagsArray+=("--with-sections=1 n l 8 3 0 2 5 4 9 6 7")
@@ -71,7 +89,13 @@ stdenv.mkDerivation rec {
     # make sure that we don't wrap symlinks (since that changes argv[0] to the -wrapped name)
     find "$out/bin" -type f | while read file; do
       wrapProgram "$file" \
-        --prefix PATH : "${lib.makeBinPath [ groff gzip zstd ]}"
+        --prefix PATH : "${
+          lib.makeBinPath [
+            groff
+            gzip
+            zstd
+          ]
+        }"
     done
   '';
 
@@ -81,7 +105,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  doCheck = !stdenv.hostPlatform.isMusl /* iconv binary */;
+  doCheck =
+    !stdenv.hostPlatform.isMusl # iconv binary
+  ;
 
   passthru.tests = {
     nixos = nixosTests.man;

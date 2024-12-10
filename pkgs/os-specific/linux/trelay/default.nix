@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchgit, kernel, kmod }:
+{
+  stdenv,
+  lib,
+  fetchgit,
+  kernel,
+  kmod,
+}:
 let
   version = "22.03.5";
 in
@@ -14,7 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   sourceRoot = "${finalAttrs.src.name}/package/kernel/trelay/src";
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
   postPatch = ''

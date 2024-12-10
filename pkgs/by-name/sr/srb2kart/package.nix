@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchzip
-, fetchFromGitHub
-, cmake
-, curl
-, nasm
-, game-music-emu
-, libpng
-, SDL2
-, SDL2_mixer
-, zlib
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchzip,
+  fetchFromGitHub,
+  cmake,
+  curl,
+  nasm,
+  game-music-emu,
+  libpng,
+  SDL2,
+  SDL2_mixer,
+  zlib,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -100,7 +101,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://mb.srb2.org/threads/srb2kart.25868/";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ viric donovanglover ];
+    maintainers = with maintainers; [
+      viric
+      donovanglover
+    ];
     mainProgram = "srb2kart";
   };
 })

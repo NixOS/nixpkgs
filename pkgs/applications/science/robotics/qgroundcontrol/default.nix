@@ -1,14 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, SDL2, qtbase, qtcharts, qtlocation, qtserialport
-, qtsvg, qtquickcontrols2, qtgraphicaleffects, qtspeech, qtx11extras, qmake
-, qttools, gst_all_1, wayland, pkg-config, wrapQtAppsHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  qtbase,
+  qtcharts,
+  qtlocation,
+  qtserialport,
+  qtsvg,
+  qtquickcontrols2,
+  qtgraphicaleffects,
+  qtspeech,
+  qtx11extras,
+  qmake,
+  qttools,
+  gst_all_1,
+  wayland,
+  pkg-config,
+  wrapQtAppsHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "qgroundcontrol";
   version = "4.3.0";
 
   propagatedBuildInputs = [
-    qtbase qtcharts qtlocation qtserialport qtsvg qtquickcontrols2
-    qtgraphicaleffects qtspeech qtx11extras
+    qtbase
+    qtcharts
+    qtlocation
+    qtserialport
+    qtsvg
+    qtquickcontrols2
+    qtgraphicaleffects
+    qtspeech
+    qtx11extras
   ];
 
   gstInputs = with gst_all_1; [
@@ -21,7 +46,12 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [ SDL2 ] ++ gstInputs ++ propagatedBuildInputs;
-  nativeBuildInputs = [ pkg-config qmake qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    pkg-config
+    qmake
+    qttools
+    wrapQtAppsHook
+  ];
 
   preConfigure = ''
     mkdir build

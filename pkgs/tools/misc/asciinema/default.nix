@@ -1,7 +1,8 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, glibcLocales
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  glibcLocales,
 }:
 
 python3Packages.buildPythonApplication rec {

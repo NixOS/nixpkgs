@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, kernel, runtimeShell }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  kernel,
+  runtimeShell,
+}:
 
 let
   baseName = "bbswitch";
@@ -56,7 +63,10 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "A module for powering off hybrid GPUs";
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     homepage = "https://github.com/Bumblebee-Project/bbswitch";
     maintainers = with maintainers; [ abbradar ];
     license = licenses.gpl2Plus;

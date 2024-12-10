@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/JohnDowson/i3-open-next-ws";
     license = lib.licenses.mit;
     mainProgram = "i3-open-next-ws";
-    maintainers = with lib.maintainers; [quantenzitrone];
+    maintainers = with lib.maintainers; [ quantenzitrone ];
     platforms = lib.platforms.linux;
   };
 }

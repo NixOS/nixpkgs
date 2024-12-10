@@ -1,22 +1,31 @@
-{ lib
-, pkgs
-, config
-, options
-, ...
+{
+  lib,
+  pkgs,
+  config,
+  options,
+  ...
 }:
 let
   cfg = config.programs.benchexec;
   opt = options.programs.benchexec;
 
-  filterUsers = x:
-    if builtins.isString x then config.users.users ? ${x} else
-    if builtins.isInt    x then x                         else
-    throw "filterUsers expects string (username) or int (UID)";
+  filterUsers =
+    x:
+    if builtins.isString x then
+      config.users.users ? ${x}
+    else if builtins.isInt x then
+      x
+    else
+      throw "filterUsers expects string (username) or int (UID)";
 
-  uid = x:
-    if builtins.isString x then config.users.users.${x}.uid else
-    if builtins.isInt    x then x                           else
-    throw "uid expects string (username) or int (UID)";
+  uid =
+    x:
+    if builtins.isString x then
+      config.users.users.${x}.uid
+    else if builtins.isInt x then
+      x
+    else
+      throw "uid expects string (username) or int (UID)";
 in
 {
   options.programs.benchexec = {
@@ -43,43 +52,40 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = (map
-      (user: {
+    assertions =
+      (map (user: {
         assertion = config.users.users ? ${user};
         message = ''
           The user '${user}' intends to use BenchExec (via `${opt.users}`), but is not configured via `${options.users.users}`.
         '';
-      })
-      (builtins.filter builtins.isString cfg.users)
-    ) ++ (map
-      (id: {
+      }) (builtins.filter builtins.isString cfg.users))
+      ++ (map (id: {
         assertion = config.users.mutableUsers;
         message = ''
           The user with UID '${id}' intends to use BenchExec (via `${opt.users}`), but mutable users are disabled via `${options.users.mutableUsers}`.
         '';
-      })
-      (builtins.filter builtins.isInt cfg.users)
-    ) ++ [
-      {
-        assertion = config.systemd.enableUnifiedCgroupHierarchy == true;
-        message = ''
-          The BenchExec module `${opt.enable}` only supports control groups 2 (`${options.systemd.enableUnifiedCgroupHierarchy} = true`).
-        '';
-      }
-    ];
+      }) (builtins.filter builtins.isInt cfg.users))
+      ++ [
+        {
+          assertion = config.systemd.enableUnifiedCgroupHierarchy == true;
+          message = ''
+            The BenchExec module `${opt.enable}` only supports control groups 2 (`${options.systemd.enableUnifiedCgroupHierarchy} = true`).
+          '';
+        }
+      ];
 
     environment.systemPackages = [ cfg.package ];
 
     # See <https://github.com/sosy-lab/benchexec/blob/3.18/doc/INSTALL.md#setting-up-cgroups>.
-    systemd.services = builtins.listToAttrs (map
-      (user: {
+    systemd.services = builtins.listToAttrs (
+      map (user: {
         name = "user@${builtins.toString (uid user)}";
         value = {
           serviceConfig.Delegate = "yes";
           overrideStrategy = "asDropin";
         };
-      })
-      (builtins.filter filterUsers cfg.users));
+      }) (builtins.filter filterUsers cfg.users)
+    );
 
     # See <https://github.com/sosy-lab/benchexec/blob/3.18/doc/INSTALL.md#requirements>.
     virtualisation.lxc.lxcfs.enable = lib.mkDefault true;

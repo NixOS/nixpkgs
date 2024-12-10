@@ -1,6 +1,17 @@
-{ fetchFromGitHub, automake, autoconf, which, pkg-config, libtool, lib, stdenv, gnutls, asciidoc, doxygen
-, withTLS ? true
-, withDocs ? true
+{
+  fetchFromGitHub,
+  automake,
+  autoconf,
+  which,
+  pkg-config,
+  libtool,
+  lib,
+  stdenv,
+  gnutls,
+  asciidoc,
+  doxygen,
+  withTLS ? true,
+  withDocs ? true,
 }:
 stdenv.mkDerivation rec {
   pname = "libcoap";
@@ -12,15 +23,22 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
     sha256 = "sha256-SzuXFn4rihZIHxKSH5waC5362mhsOtBdRatIGI6nv4I=";
   };
-  nativeBuildInputs = [
-    automake
-    autoconf
-    which
-    libtool
-    pkg-config
-  ] ++ lib.optional withTLS gnutls ++ lib.optionals withDocs [ doxygen asciidoc ] ;
+  nativeBuildInputs =
+    [
+      automake
+      autoconf
+      which
+      libtool
+      pkg-config
+    ]
+    ++ lib.optional withTLS gnutls
+    ++ lib.optionals withDocs [
+      doxygen
+      asciidoc
+    ];
   preConfigure = "./autogen.sh";
-  configureFlags = [ "--disable-shared" ]
+  configureFlags =
+    [ "--disable-shared" ]
     ++ lib.optional (!withDocs) "--disable-documentation"
     ++ lib.optional withTLS "--enable-dtls";
   meta = with lib; {

@@ -3,7 +3,14 @@
 with pkgs;
 
 runCommand "nixpkgs-metrics"
-  { nativeBuildInputs = with pkgs.lib; map getBin [ nix time jq ];
+  {
+    nativeBuildInputs =
+      with pkgs.lib;
+      map getBin [
+        nix
+        time
+        jq
+      ];
     requiredSystemFeatures = [ "benchmark" ]; # dedicated `t2a` machine, by @vcunat
   }
   ''

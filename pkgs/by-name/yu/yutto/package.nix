@@ -1,8 +1,9 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, ffmpeg
-, nix-update-script
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  ffmpeg,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -23,14 +24,17 @@ python3Packages.buildPythonApplication rec {
     poetry-core
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    httpx
-    aiofiles
-    biliass
-    dict2xml
-    colorama
-    typing-extensions
-  ] ++ (with httpx.optional-dependencies; http2 ++ socks);
+  propagatedBuildInputs =
+    with python3Packages;
+    [
+      httpx
+      aiofiles
+      biliass
+      dict2xml
+      colorama
+      typing-extensions
+    ]
+    ++ (with httpx.optional-dependencies; http2 ++ socks);
 
   preFixup = ''
     makeWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ ffmpeg ]})
@@ -39,7 +43,10 @@ python3Packages.buildPythonApplication rec {
   pythonImportsCheck = [ "yutto" ];
 
   passthru.updateScript = nix-update-script {
-    extraArgs = [ "--version" "unstable" ];
+    extraArgs = [
+      "--version"
+      "unstable"
+    ];
   };
 
   meta = with lib; {

@@ -1,12 +1,22 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
-  inherit (lib) mkOption mkIf types optionalString;
+  inherit (lib)
+    mkOption
+    mkIf
+    types
+    optionalString
+    ;
 
   cfg = config.programs.tmux;
 
-  defaultKeyMode  = "emacs";
-  defaultResize   = 5;
+  defaultKeyMode = "emacs";
+  defaultResize = 5;
   defaultShortcut = "b";
   defaultTerminal = "screen";
 
@@ -20,31 +30,31 @@ let
     ${optionalString cfg.newSession "new-session"}
 
     ${optionalString cfg.reverseSplit ''
-    bind v split-window -h
-    bind s split-window -v
+      bind v split-window -h
+      bind s split-window -v
     ''}
 
     set -g status-keys ${cfg.keyMode}
     set -g mode-keys   ${cfg.keyMode}
 
     ${optionalString (cfg.keyMode == "vi" && cfg.customPaneNavigationAndResize) ''
-    bind h select-pane -L
-    bind j select-pane -D
-    bind k select-pane -U
-    bind l select-pane -R
+      bind h select-pane -L
+      bind j select-pane -D
+      bind k select-pane -U
+      bind l select-pane -R
 
-    bind -r H resize-pane -L ${toString cfg.resizeAmount}
-    bind -r J resize-pane -D ${toString cfg.resizeAmount}
-    bind -r K resize-pane -U ${toString cfg.resizeAmount}
-    bind -r L resize-pane -R ${toString cfg.resizeAmount}
+      bind -r H resize-pane -L ${toString cfg.resizeAmount}
+      bind -r J resize-pane -D ${toString cfg.resizeAmount}
+      bind -r K resize-pane -U ${toString cfg.resizeAmount}
+      bind -r L resize-pane -R ${toString cfg.resizeAmount}
     ''}
 
     ${optionalString (cfg.shortcut != defaultShortcut) ''
-    # rebind main key: C-${cfg.shortcut}
-    unbind C-${defaultShortcut}
-    set -g prefix C-${cfg.shortcut}
-    bind ${cfg.shortcut} send-prefix
-    bind C-${cfg.shortcut} last-window
+      # rebind main key: C-${cfg.shortcut}
+      unbind C-${defaultShortcut}
+      set -g prefix C-${cfg.shortcut}
+      bind ${cfg.shortcut} send-prefix
+      bind C-${cfg.shortcut} last-window
     ''}
 
     setw -g aggressive-resize ${boolToStr cfg.aggressiveResize}
@@ -54,16 +64,17 @@ let
 
     ${cfg.extraConfigBeforePlugins}
 
-    ${lib.optionalString (cfg.plugins != []) ''
-    # Run plugins
-    ${lib.concatMapStringsSep "\n" (x: "run-shell ${x.rtp}") cfg.plugins}
+    ${lib.optionalString (cfg.plugins != [ ]) ''
+      # Run plugins
+      ${lib.concatMapStringsSep "\n" (x: "run-shell ${x.rtp}") cfg.plugins}
 
     ''}
 
     ${cfg.extraConfig}
   '';
 
-in {
+in
+{
   ###### interface
 
   options = {
@@ -136,7 +147,10 @@ in {
       keyMode = mkOption {
         default = defaultKeyMode;
         example = "vi";
-        type = types.enum [ "emacs" "vi" ];
+        type = types.enum [
+          "emacs"
+          "vi"
+        ];
         description = "VI or Emacs style shortcuts.";
       };
 
@@ -186,7 +200,7 @@ in {
       };
 
       plugins = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.package;
         description = "List of plugins to install.";
         example = lib.literalExpression "[ pkgs.tmuxPlugins.nord ]";
@@ -228,6 +242,9 @@ in {
   };
 
   imports = [
-    (lib.mkRenamedOptionModule [ "programs" "tmux" "extraTmuxConf" ] [ "programs" "tmux" "extraConfig" ])
+    (lib.mkRenamedOptionModule
+      [ "programs" "tmux" "extraTmuxConf" ]
+      [ "programs" "tmux" "extraConfig" ]
+    )
   ];
 }

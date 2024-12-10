@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, curl
-, libGL
-, libX11
-, libXxf86dga
-, alsa-lib
-, libXrandr
-, libXxf86vm
-, libXext
-, SDL2
-, glibc
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  curl,
+  libGL,
+  libX11,
+  libXxf86dga,
+  alsa-lib,
+  libXrandr,
+  libXxf86vm,
+  libXext,
+  SDL2,
+  glibc,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,8 +28,22 @@ stdenv.mkDerivation rec {
     sha256 = "0qd13fndbhgkkmhxbprpzmj2l2v9ihacxagpdqi9sg9nrzvahr9h";
   };
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
-  buildInputs = [ curl libGL libX11 libXxf86dga alsa-lib libXrandr libXxf86vm libXext SDL2 glibc ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
+  buildInputs = [
+    curl
+    libGL
+    libX11
+    libXxf86dga
+    alsa-lib
+    libXrandr
+    libXxf86vm
+    libXext
+    SDL2
+    glibc
+  ];
   env.NIX_CFLAGS_COMPILE = "-I${SDL2.dev}/include/SDL2";
   enableParallelBuilding = true;
 

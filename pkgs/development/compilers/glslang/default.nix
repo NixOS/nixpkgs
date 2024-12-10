@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, bison
-, cmake
-, jq
-, python3
-, spirv-headers
-, spirv-tools
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  cmake,
+  jq,
+  python3,
+  spirv-headers,
+  spirv-tools,
 }:
 stdenv.mkDerivation rec {
   pname = "glslang";
@@ -24,7 +26,12 @@ stdenv.mkDerivation rec {
     spirv-headers = spirv-headers;
   };
 
-  nativeBuildInputs = [ cmake python3 bison jq ];
+  nativeBuildInputs = [
+    cmake
+    python3
+    bison
+    jq
+  ];
 
   postPatch = ''
     cp --no-preserve=mode -r "${spirv-tools.src}" External/spirv-tools

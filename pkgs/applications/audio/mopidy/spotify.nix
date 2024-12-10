@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, pythonPackages, mopidy, unstableGitUpdater }:
+{
+  lib,
+  fetchFromGitHub,
+  pythonPackages,
+  mopidy,
+  unstableGitUpdater,
+}:
 
 pythonPackages.buildPythonApplication rec {
   pname = "mopidy-spotify";

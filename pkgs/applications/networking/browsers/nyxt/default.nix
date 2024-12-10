@@ -1,9 +1,22 @@
-{ stdenv, lib, sbclPackages
-, makeWrapper, wrapGAppsHook3, gst_all_1
-, glib, gdk-pixbuf, cairo
-, mailcap, pango, gtk3
-, glib-networking, gsettings-desktop-schemas
-, xclip, wl-clipboard, notify-osd, enchant
+{
+  stdenv,
+  lib,
+  sbclPackages,
+  makeWrapper,
+  wrapGAppsHook3,
+  gst_all_1,
+  glib,
+  gdk-pixbuf,
+  cairo,
+  mailcap,
+  pango,
+  gtk3,
+  glib-networking,
+  gsettings-desktop-schemas,
+  xclip,
+  wl-clipboard,
+  notify-osd,
+  enchant,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,19 +25,29 @@ stdenv.mkDerivation rec {
 
   src = sbclPackages.nyxt;
 
-  nativeBuildInputs = [ makeWrapper wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    makeWrapper
+    wrapGAppsHook3
+  ];
   gstBuildInputs = with gst_all_1; [
-    gstreamer gst-libav
+    gstreamer
+    gst-libav
     gst-plugins-base
     gst-plugins-good
     gst-plugins-bad
     gst-plugins-ugly
   ];
   buildInputs = [
-    glib gdk-pixbuf cairo
-    mailcap pango gtk3
-    glib-networking gsettings-desktop-schemas
-    notify-osd enchant
+    glib
+    gdk-pixbuf
+    cairo
+    mailcap
+    pango
+    gtk3
+    glib-networking
+    gsettings-desktop-schemas
+    notify-osd
+    enchant
   ] ++ gstBuildInputs;
 
   GST_PLUGIN_SYSTEM_PATH_1_0 = lib.makeSearchPathOutput "lib" "lib/gstreamer-1.0" gstBuildInputs;
@@ -42,7 +65,12 @@ stdenv.mkDerivation rec {
     done
 
     mkdir -p $out/bin && makeWrapper $src/bin/nyxt $out/bin/nyxt \
-      --prefix PATH : ${lib.makeBinPath [ xclip wl-clipboard ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          xclip
+          wl-clipboard
+        ]
+      } \
       --prefix GST_PLUGIN_SYSTEM_PATH_1_0 : "${GST_PLUGIN_SYSTEM_PATH_1_0}" \
       --argv0 nyxt "''${gappsWrapperArgs[@]}"
   '';
@@ -56,7 +84,10 @@ stdenv.mkDerivation rec {
     mainProgram = "nyxt";
     homepage = "https://nyxt.atlas.engineer";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ lewo dariof4 ];
+    maintainers = with maintainers; [
+      lewo
+      dariof4
+    ];
     platforms = platforms.all;
   };
 }

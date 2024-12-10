@@ -1,6 +1,11 @@
 # Module for VirtualBox guests.
 
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -61,10 +66,12 @@ in
 
   config = mkIf cfg.enable (mkMerge [
     {
-      assertions = [{
-        assertion = pkgs.stdenv.hostPlatform.isx86;
-        message = "Virtualbox not currently supported on ${pkgs.stdenv.hostPlatform.system}";
-      }];
+      assertions = [
+        {
+          assertion = pkgs.stdenv.hostPlatform.isx86;
+          message = "Virtualbox not currently supported on ${pkgs.stdenv.hostPlatform.system}";
+        }
+      ];
 
       environment.systemPackages = [ kernel.virtualboxGuestAdditions ];
 
@@ -87,32 +94,25 @@ in
         serviceConfig.ExecStart = "@${kernel.virtualboxGuestAdditions}/bin/VBoxService VBoxService --foreground";
       };
 
-      services.udev.extraRules =
-        ''
-          # /dev/vboxuser is necessary for VBoxClient to work.  Maybe we
-          # should restrict this to logged-in users.
-          KERNEL=="vboxuser",  OWNER="root", GROUP="root", MODE="0666"
+      services.udev.extraRules = ''
+        # /dev/vboxuser is necessary for VBoxClient to work.  Maybe we
+        # should restrict this to logged-in users.
+        KERNEL=="vboxuser",  OWNER="root", GROUP="root", MODE="0666"
 
-          # Allow systemd dependencies on vboxguest.
-          SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"
-        '';
+        # Allow systemd dependencies on vboxguest.
+        SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"
+      '';
 
       systemd.user.services.virtualboxClientVmsvga = mkVirtualBoxUserService "--vmsvga-session";
     }
-    (
-      mkIf cfg.clipboard {
-        systemd.user.services.virtualboxClientClipboard = mkVirtualBoxUserService "--clipboard";
-      }
-    )
-    (
-      mkIf cfg.seamless {
-        systemd.user.services.virtualboxClientSeamless = mkVirtualBoxUserService "--seamless";
-      }
-    )
-    (
-      mkIf cfg.draganddrop {
-        systemd.user.services.virtualboxClientDragAndDrop = mkVirtualBoxUserService "--draganddrop";
-      }
-    )
+    (mkIf cfg.clipboard {
+      systemd.user.services.virtualboxClientClipboard = mkVirtualBoxUserService "--clipboard";
+    })
+    (mkIf cfg.seamless {
+      systemd.user.services.virtualboxClientSeamless = mkVirtualBoxUserService "--seamless";
+    })
+    (mkIf cfg.draganddrop {
+      systemd.user.services.virtualboxClientDragAndDrop = mkVirtualBoxUserService "--draganddrop";
+    })
   ]);
 }

@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeFontsConf
-, nix-update-script
-, testers
-, autoreconfHook
-, docSupport ? true
-, doxygen
-, graphviz
-, libexsid
-, libgcrypt
-, perl
-, pkg-config
-, unittest-cpp
-, xa
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeFontsConf,
+  nix-update-script,
+  testers,
+  autoreconfHook,
+  docSupport ? true,
+  doxygen,
+  graphviz,
+  libexsid,
+  libgcrypt,
+  perl,
+  pkg-config,
+  unittest-cpp,
+  xa,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,11 +29,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-NYdV70YEepjGMmeTALTQvlRvK3R7JjA4VJYYjOwO4AA=";
   };
 
-  outputs = [
-    "out"
-  ] ++ lib.optionals docSupport [
-    "doc"
-  ];
+  outputs =
+    [
+      "out"
+    ]
+    ++ lib.optionals docSupport [
+      "doc"
+    ];
 
   postPatch = ''
     patchShebangs .
@@ -40,15 +43,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    autoreconfHook
-    perl
-    pkg-config
-    xa
-  ] ++ lib.optionals docSupport [
-    doxygen
-    graphviz
-  ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      perl
+      pkg-config
+      xa
+    ]
+    ++ lib.optionals docSupport [
+      doxygen
+      graphviz
+    ];
 
   buildInputs = [
     libexsid
@@ -69,18 +74,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # Make Doxygen happy with the setup, reduce log noise
-  FONTCONFIG_FILE = lib.optionalString docSupport (makeFontsConf { fontDirectories = [ ]; });
+  FONTCONFIG_FILE = lib.optionalString docSupport (makeFontsConf {
+    fontDirectories = [ ];
+  });
 
   preBuild = ''
     # Reduce noise from fontconfig during doc building
     export XDG_CACHE_HOME=$TMPDIR
   '';
 
-  buildFlags = [
-    "all"
-  ] ++ lib.optionals docSupport [
-    "doc"
-  ];
+  buildFlags =
+    [
+      "all"
+    ]
+    ++ lib.optionals docSupport [
+      "doc"
+    ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
@@ -104,7 +113,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/libsidplayfp/libsidplayfp";
     license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ ramkromberg OPNA2608 ];
+    maintainers = with maintainers; [
+      ramkromberg
+      OPNA2608
+    ];
     platforms = platforms.all;
     pkgConfigModules = [
       "libsidplayfp"

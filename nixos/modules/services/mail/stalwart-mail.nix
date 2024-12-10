@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -9,7 +14,8 @@ let
   dataDir = "/var/lib/stalwart-mail";
   stalwartAtLeast = versionAtLeast cfg.package.version;
 
-in {
+in
+{
   options.services.stalwart-mail = {
     enable = mkEnableOption "the Stalwart all-in-one email server";
 
@@ -27,7 +33,10 @@ in {
       default = pkgs.stalwart-mail_0_6;
       defaultText = lib.literalExpression "pkgs.stalwart-mail_0_6";
       example = lib.literalExpression "pkgs.stalwart-mail";
-      relatedPackages = [ "stalwart-mail_0_6" "stalwart-mail" ];
+      relatedPackages = [
+        "stalwart-mail_0_6"
+        "stalwart-mail"
+      ];
     };
 
     settings = mkOption {
@@ -77,15 +86,17 @@ in {
 
     systemd.services.stalwart-mail = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "local-fs.target" "network.target" ];
+      after = [
+        "local-fs.target"
+        "network.target"
+      ];
 
       preStart = ''
         mkdir -p ${dataDir}/{queue,reports,data/blobs}
       '';
 
       serviceConfig = {
-        ExecStart =
-          "${cfg.package}/bin/stalwart-mail --config=${configFile}";
+        ExecStart = "${cfg.package}/bin/stalwart-mail --config=${configFile}";
 
         # Base from template resources/systemd/stalwart-mail.service
         Type = "simple";
@@ -111,7 +122,7 @@ in {
         LockPersonality = true;
         MemoryDenyWriteExecute = true;
         PrivateDevices = true;
-        PrivateUsers = false;  # incompatible with CAP_NET_BIND_SERVICE
+        PrivateUsers = false; # incompatible with CAP_NET_BIND_SERVICE
         ProcSubset = "pid";
         PrivateTmp = true;
         ProtectClock = true;
@@ -123,12 +134,18 @@ in {
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         ProtectSystem = "strict";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
         UMask = "0077";
       };
     };
@@ -138,6 +155,9 @@ in {
   };
 
   meta = {
-    maintainers = with maintainers; [ happysalada pacien ];
+    maintainers = with maintainers; [
+      happysalada
+      pacien
+    ];
   };
 }

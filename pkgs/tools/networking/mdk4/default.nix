@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, libnl, libpcap, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libnl,
+  libpcap,
+  pkg-config,
+}:
 
 stdenv.mkDerivation {
   pname = "mdk4";
@@ -20,9 +27,15 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libnl libpcap ];
+  buildInputs = [
+    libnl
+    libpcap
+  ];
 
-  makeFlags = [ "PREFIX=$(out)" "SBINDIR=$(PREFIX)/bin" ];
+  makeFlags = [
+    "PREFIX=$(out)"
+    "SBINDIR=$(PREFIX)/bin"
+  ];
 
   meta = with lib; {
     description = "A tool that injects data into wireless networks";

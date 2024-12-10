@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, ocamlPackages }:
+{
+  lib,
+  fetchFromGitHub,
+  ocamlPackages,
+}:
 
 let
   inherit (ocamlPackages) buildDunePackage lablgtk3-sourceview3 ocp-index;
@@ -15,7 +19,10 @@ buildDunePackage rec {
     hash = "sha256-xmPGGB/zUpfeAxUIhR1PhfoESAJq7sTpqHuf++EH3Lw=";
   };
 
-  buildInputs = [ lablgtk3-sourceview3 ocp-index ];
+  buildInputs = [
+    lablgtk3-sourceview3
+    ocp-index
+  ];
 
   meta = {
     homepage = "https://www.typerex.org/ocaml-top.html";

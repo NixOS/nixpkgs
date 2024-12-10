@@ -1,4 +1,11 @@
-{ config, lib, options, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  utils,
+  ...
+}:
 with lib;
 let
   cfg = config.services.unifi-video;
@@ -56,7 +63,6 @@ let
          mode: off
     '';
   };
-
 
   mongoWtConf = pkgs.writeTextFile {
     name = "mongowt.conf";
@@ -155,9 +161,9 @@ in
 
   config = mkIf cfg.enable {
 
-    warnings = optional
-      (options.services.unifi-video.openFirewall.highestPrio >= (mkOptionDefault null).priority)
-      "The current services.unifi-video.openFirewall = true default is deprecated and will change to false in 22.11. Set it explicitly to silence this warning.";
+    warnings =
+      optional (options.services.unifi-video.openFirewall.highestPrio >= (mkOptionDefault null).priority)
+        "The current services.unifi-video.openFirewall = true default is deprecated and will change to false in 22.11. Set it explicitly to silence this warning.";
 
     users.users.unifi-video = {
       description = "UniFi Video controller daemon user";
@@ -165,7 +171,7 @@ in
       group = "unifi-video";
       isSystemUser = true;
     };
-    users.groups.unifi-video = {};
+    users.groups.unifi-video = { };
 
     networking.firewall = mkIf cfg.openFirewall {
       # https://help.ui.com/hc/en-us/articles/217875218-UniFi-Video-Ports-Used
@@ -227,11 +233,23 @@ in
     systemd.services.unifi-video = {
       description = "UniFi Video NVR daemon";
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ] ;
+      after = [ "network.target" ];
       unitConfig.RequiresMountsFor = stateDir;
       # Make sure package upgrades trigger a service restart
-      restartTriggers = [ cfg.unifiVideoPackage cfg.mongodbPackage ];
-      path = with pkgs; [ gawk coreutils busybox which jre8 lsb-release libcap util-linux ];
+      restartTriggers = [
+        cfg.unifiVideoPackage
+        cfg.mongodbPackage
+      ];
+      path = with pkgs; [
+        gawk
+        coreutils
+        busybox
+        which
+        jre8
+        lsb-release
+        libcap
+        util-linux
+      ];
       serviceConfig = {
         Type = "simple";
         ExecStart = "${(removeSuffix "\n" cmd)} ${mainClass} start";
@@ -245,7 +263,10 @@ in
   };
 
   imports = [
-    (mkRenamedOptionModule [ "services" "unifi-video" "openPorts" ] [ "services" "unifi-video" "openFirewall" ])
+    (mkRenamedOptionModule
+      [ "services" "unifi-video" "openPorts" ]
+      [ "services" "unifi-video" "openFirewall" ]
+    )
   ];
 
   meta.maintainers = with lib.maintainers; [ rsynnest ];

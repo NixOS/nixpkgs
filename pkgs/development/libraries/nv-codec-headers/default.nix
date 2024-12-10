@@ -1,6 +1,7 @@
-{ lib
-, fetchgit
-, stdenvNoCC
+{
+  lib,
+  fetchgit,
+  stdenvNoCC,
 }:
 
 let

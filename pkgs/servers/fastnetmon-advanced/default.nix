@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, bzip2
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  bzip2,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {

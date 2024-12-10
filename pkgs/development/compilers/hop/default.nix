@@ -1,10 +1,18 @@
-{ lib, stdenv, fetchurl, bigloo }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bigloo,
+}:
 
 # Compute the “release” version of bigloo (before the first dash, if any)
-let bigloo-release =
-  let inherit (lib) head splitString; in
-  head (splitString "-" (builtins.parseDrvName bigloo.name).version)
-; in
+let
+  bigloo-release =
+    let
+      inherit (lib) head splitString;
+    in
+    head (splitString "-" (builtins.parseDrvName bigloo.name).version);
+in
 
 stdenv.mkDerivation rec {
   pname = "hop";

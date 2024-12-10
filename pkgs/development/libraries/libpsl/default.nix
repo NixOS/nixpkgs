@@ -1,17 +1,19 @@
-{ lib, stdenv
-, fetchurl
-, autoreconfHook
-, docbook_xsl
-, docbook_xml_dtd_43
-, gtk-doc
-, lzip
-, libidn2
-, libunistring
-, libxslt
-, pkg-config
-, python3
-, valgrind
-, publicsuffix-list
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  docbook_xsl,
+  docbook_xml_dtd_43,
+  gtk-doc,
+  lzip,
+  libidn2,
+  libunistring,
+  libxslt,
+  pkg-config,
+  python3,
+  valgrind,
+  publicsuffix-list,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +26,11 @@ stdenv.mkDerivation rec {
   };
 
   # bin/psl-make-dafsa brings a large runtime closure through python3
-  outputs = [ "bin" "out" "dev" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

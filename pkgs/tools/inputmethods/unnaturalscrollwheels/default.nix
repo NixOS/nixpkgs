@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, _7zz
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  _7zz,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "unnaturalscrollwheels";
@@ -30,7 +31,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ther0n/UnnaturalScrollWheels";
     license = licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau Enzime ];
+    maintainers = with maintainers; [
+      emilytrau
+      Enzime
+    ];
     platforms = platforms.darwin;
   };
 })

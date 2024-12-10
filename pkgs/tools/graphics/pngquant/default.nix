@@ -1,10 +1,21 @@
-{ lib, rustPlatform, fetchFromGitHub, pkg-config, libpng, zlib, lcms2 }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libpng,
+  zlib,
+  lcms2,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "pngquant";
   version = "3.0.3";
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "kornelski";
@@ -21,7 +32,11 @@ rustPlatform.buildRustPackage rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libpng zlib lcms2 ];
+  buildInputs = [
+    libpng
+    zlib
+    lcms2
+  ];
 
   doCheck = false; # Has no Rust-based tests
 
@@ -34,7 +49,11 @@ rustPlatform.buildRustPackage rec {
     description = "A tool to convert 24/32-bit RGBA PNGs to 8-bit palette with alpha channel preserved";
     changelog = "https://github.com/kornelski/pngquant/raw/${version}/CHANGELOG";
     platforms = platforms.unix;
-    license = with licenses; [ gpl3Plus hpnd bsd2 ];
+    license = with licenses; [
+      gpl3Plus
+      hpnd
+      bsd2
+    ];
     mainProgram = "pngquant";
     maintainers = [ ];
   };

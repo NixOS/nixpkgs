@@ -1,10 +1,11 @@
-{ autoreconfHook
-, fetchFromGitHub
-, lib
-, nix-update-script
-, openssl
-, pkg-config
-, stdenv
+{
+  autoreconfHook,
+  fetchFromGitHub,
+  lib,
+  nix-update-script,
+  openssl,
+  pkg-config,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +27,10 @@ stdenv.mkDerivation rec {
     "--with-python=no"
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = lib.optionals stdenv.isDarwin [ openssl ];
 

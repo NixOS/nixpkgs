@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kcachegrind";
 
-  extraNativeBuildInputs = [qttools];
+  extraNativeBuildInputs = [ qttools ];
 }

@@ -1,8 +1,20 @@
-{ callPackage, fetchurl, lib, stdenv, gtk3, pkg-config, libxml2, llvm, perl, sqlite }:
+{
+  callPackage,
+  fetchurl,
+  lib,
+  stdenv,
+  gtk3,
+  pkg-config,
+  libxml2,
+  llvm,
+  perl,
+  sqlite,
+}:
 
 let
   GCC_BASE = "${stdenv.cc.cc}/lib/gcc/${stdenv.hostPlatform.uname.processor}-unknown-linux-gnu/${stdenv.cc.cc.version}";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "sparse";
   version = "0.6.4";
 
@@ -18,7 +30,13 @@ in stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk3 libxml2 llvm perl sqlite ];
+  buildInputs = [
+    gtk3
+    libxml2
+    llvm
+    perl
+    sqlite
+  ];
   doCheck = true;
   buildFlags = [ "GCC_BASE:=${GCC_BASE}" ];
 
@@ -36,9 +54,12 @@ in stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Semantic parser for C";
-    homepage    = "https://git.kernel.org/pub/scm/devel/sparse/sparse.git/";
-    license     = licenses.mit;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [ thoughtpolice jkarlson ];
+    homepage = "https://git.kernel.org/pub/scm/devel/sparse/sparse.git/";
+    license = licenses.mit;
+    platforms = platforms.linux;
+    maintainers = with maintainers; [
+      thoughtpolice
+      jkarlson
+    ];
   };
 }

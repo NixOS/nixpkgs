@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kplotting";
 
-  extraBuildInputs = [qttools];
+  extraBuildInputs = [ qttools ];
 }

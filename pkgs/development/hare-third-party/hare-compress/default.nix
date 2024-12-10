@@ -1,4 +1,10 @@
-{ lib, stdenv, hare, harec, fetchFromSourcehut }:
+{
+  lib,
+  stdenv,
+  hare,
+  harec,
+  fetchFromSourcehut,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hare-compress";

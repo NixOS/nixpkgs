@@ -1,12 +1,18 @@
-{config, pkgs, lib, ...}:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.zwave-js;
   mergedConfigFile = "/run/zwave-js/config.json";
-  settingsFormat = pkgs.formats.json {};
-in {
+  settingsFormat = pkgs.formats.json { };
+in
+{
   options.services.zwave-js = {
     enable = mkEnableOption "the zwave-js server on boot";
 
@@ -77,7 +83,7 @@ in {
           };
         };
       };
-      default = {};
+      default = { };
       description = ''
         Configuration settings for the generated config
         file.
@@ -95,57 +101,59 @@ in {
   };
 
   config = mkIf cfg.enable {
-    systemd.services.zwave-js = let
-      configFile = settingsFormat.generate "zwave-js-config.json" cfg.settings;
-    in {
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-      description = "Z-Wave JS Server";
-      serviceConfig = {
-        ExecStartPre = ''
-          /bin/sh -c "${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${configFile} ${cfg.secretsConfigFile} > ${mergedConfigFile}"
-        '';
-        ExecStart = lib.concatStringsSep " " [
-          "${cfg.package}/bin/zwave-server"
-          "--config ${mergedConfigFile}"
-          "--port ${toString cfg.port}"
-          cfg.serialPort
-          (escapeShellArgs cfg.extraFlags)
-        ];
-        Restart = "on-failure";
-        User = "zwave-js";
-        SupplementaryGroups = [ "dialout" ];
-        CacheDirectory = "zwave-js";
-        RuntimeDirectory = "zwave-js";
+    systemd.services.zwave-js =
+      let
+        configFile = settingsFormat.generate "zwave-js-config.json" cfg.settings;
+      in
+      {
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
+        description = "Z-Wave JS Server";
+        serviceConfig = {
+          ExecStartPre = ''
+            /bin/sh -c "${pkgs.jq}/bin/jq -s '.[0] * .[1]' ${configFile} ${cfg.secretsConfigFile} > ${mergedConfigFile}"
+          '';
+          ExecStart = lib.concatStringsSep " " [
+            "${cfg.package}/bin/zwave-server"
+            "--config ${mergedConfigFile}"
+            "--port ${toString cfg.port}"
+            cfg.serialPort
+            (escapeShellArgs cfg.extraFlags)
+          ];
+          Restart = "on-failure";
+          User = "zwave-js";
+          SupplementaryGroups = [ "dialout" ];
+          CacheDirectory = "zwave-js";
+          RuntimeDirectory = "zwave-js";
 
-        # Hardening
-        CapabilityBoundingSet = "";
-        DeviceAllow = [cfg.serialPort];
-        DevicePolicy = "closed";
-        DynamicUser = true;
-        LockPersonality = true;
-        MemoryDenyWriteExecute = false;
-        NoNewPrivileges = true;
-        PrivateUsers = true;
-        PrivateTmp = true;
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        RemoveIPC = true;
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [
-          "@system-service @pkey"
-          "~@privileged @resources"
-        ];
-        UMask = "0077";
+          # Hardening
+          CapabilityBoundingSet = "";
+          DeviceAllow = [ cfg.serialPort ];
+          DevicePolicy = "closed";
+          DynamicUser = true;
+          LockPersonality = true;
+          MemoryDenyWriteExecute = false;
+          NoNewPrivileges = true;
+          PrivateUsers = true;
+          PrivateTmp = true;
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          RemoveIPC = true;
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service @pkey"
+            "~@privileged @resources"
+          ];
+          UMask = "0077";
+        };
       };
-    };
   };
 
   meta.maintainers = with lib.maintainers; [ graham33 ];

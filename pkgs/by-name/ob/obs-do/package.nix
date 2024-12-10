@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +20,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "CLI for common OBS operations while streaming using WebSocket";
     homepage = "https://github.com/jonhoo/obs-do";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ GaetanLepage ];
     mainProgram = "obs-do";
   };

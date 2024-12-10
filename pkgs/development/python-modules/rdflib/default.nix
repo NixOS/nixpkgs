@@ -57,13 +57,16 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [
-    pip
-    pytest-cov
-    # Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.
-    pytest7CheckHook
-    setuptools
-  ] ++ passthru.optional-dependencies.networkx ++ passthru.optional-dependencies.html;
+  nativeCheckInputs =
+    [
+      pip
+      pytest-cov
+      # Failed: DID NOT WARN. No warnings of type (<class 'UserWarning'>,) were emitted.
+      pytest7CheckHook
+      setuptools
+    ]
+    ++ passthru.optional-dependencies.networkx
+    ++ passthru.optional-dependencies.html;
 
   pytestFlagsArray = [
     # requires network access

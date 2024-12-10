@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, fixDarwinDylibNames
-, readline
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fixDarwinDylibNames,
+  readline,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,4 +1,10 @@
-{ lib, python3Packages, fetchPypi, netcat-openbsd, nix-update-script }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  netcat-openbsd,
+  nix-update-script,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "flashfocus";

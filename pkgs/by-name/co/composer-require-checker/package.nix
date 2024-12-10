@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, php
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  php,
 }:
 
 php.buildComposerProject (finalAttrs: {

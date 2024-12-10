@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchurl, libpcap, pkg-config, openssl, lua5_4
-, pcre, libssh2
-, withLua ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libpcap,
+  pkg-config,
+  openssl,
+  lua5_4,
+  pcre,
+  libssh2,
+  withLua ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +45,12 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ pcre libssh2 libpcap openssl ];
+  buildInputs = [
+    pcre
+    libssh2
+    libpcap
+    openssl
+  ];
 
   enableParallelBuilding = true;
 
@@ -45,9 +58,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "A free and open source utility for network discovery and security auditing";
-    homepage    = "http://www.nmap.org";
-    license     = licenses.gpl2Only;
-    platforms   = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice fpletz ];
+    homepage = "http://www.nmap.org";
+    license = licenses.gpl2Only;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+      thoughtpolice
+      fpletz
+    ];
   };
 }

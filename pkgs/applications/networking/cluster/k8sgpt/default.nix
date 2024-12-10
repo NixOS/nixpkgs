@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "k8sgpt";
@@ -16,7 +20,8 @@ buildGoModule rec {
   CGO_ENABLED = 0;
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.version=v${version}"
     "-X main.commit=${src.rev}"
     "-X main.date=1970-01-01-00:00:01"
@@ -28,6 +33,9 @@ buildGoModule rec {
     homepage = "https://k8sgpt.ai";
     changelog = "https://github.com/k8sgpt-ai/k8sgpt/releases/tag/v${version}";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ developer-guy kranurag7 ];
+    maintainers = with lib.maintainers; [
+      developer-guy
+      kranurag7
+    ];
   };
 }

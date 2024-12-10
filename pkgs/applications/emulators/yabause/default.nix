@@ -1,5 +1,17 @@
-{ mkDerivation, lib, fetchurl, cmake, pkg-config, qtbase, qt5, libGLU, libGL
-, freeglut ? null, openal ? null, SDL2 ? null }:
+{
+  mkDerivation,
+  lib,
+  fetchurl,
+  cmake,
+  pkg-config,
+  qtbase,
+  qt5,
+  libGLU,
+  libGL,
+  freeglut ? null,
+  openal ? null,
+  SDL2 ? null,
+}:
 
 mkDerivation rec {
   pname = "yabause";
@@ -10,8 +22,19 @@ mkDerivation rec {
     sha256 = "1cn2rjjb7d9pkr4g5bqz55vd4pzyb7hg94cfmixjkzzkw0zw8d23";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
-  buildInputs = [ qtbase qt5.qtmultimedia libGLU libGL freeglut openal SDL2 ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs = [
+    qtbase
+    qt5.qtmultimedia
+    libGLU
+    libGL
+    freeglut
+    openal
+    SDL2
+  ];
 
   patches = [
     ./linkage-rwx-linux-elf.patch
@@ -24,7 +47,7 @@ mkDerivation rec {
     "-DYAB_NETWORK=ON"
     "-DYAB_OPTIMIZED_DMA=ON"
     "-DYAB_PORTS=qt"
-  ] ;
+  ];
 
   meta = with lib; {
     description = "An open-source Sega Saturn emulator";

@@ -1,12 +1,12 @@
-{ alsa-lib
-, dbus
-, fetchFromGitHub
-, lib
-, openssl
-, pkg-config
-, rustPlatform
-, stdenv
-,
+{
+  alsa-lib,
+  dbus,
+  fetchFromGitHub,
+  lib,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {

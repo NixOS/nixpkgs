@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation {
   pname = "ryzen-monitor-ng";
@@ -19,7 +23,10 @@ stdenv.mkDerivation {
     rm src/ryzen_monitor
   '';
 
-  makeTargets = [ "clean" "install" ];
+  makeTargets = [
+    "clean"
+    "install"
+  ];
 
   installPhase = ''
     runHook preInstall

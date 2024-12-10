@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, qmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, dde-qt-dbus-factory
-, qtwebengine
-, karchive
-, poppler
-, libchardet
-, libspectre
-, openjpeg
-, djvulibre
-, qtbase
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  qmake,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  dde-qt-dbus-factory,
+  qtwebengine,
+  karchive,
+  poppler,
+  libchardet,
+  libspectre,
+  openjpeg,
+  djvulibre,
+  qtbase,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {

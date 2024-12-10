@@ -1,4 +1,10 @@
-{ lib, pkgs, config, generators, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  generators,
+  ...
+}:
 with lib;
 let
   cfg = config.services.grafana-agent;
@@ -7,7 +13,10 @@ let
 in
 {
   meta = {
-    maintainers = with maintainers; [ flokli zimbatm ];
+    maintainers = with maintainers; [
+      flokli
+      zimbatm
+    ];
   };
 
   options.services.grafana-agent = {
@@ -35,7 +44,10 @@ in
     extraFlags = mkOption {
       type = with types; listOf str;
       default = [ ];
-      example = [ "-enable-features=integrations-next" "-disable-reporting" ];
+      example = [
+        "-enable-features=integrations-next"
+        "-disable-reporting"
+      ];
       description = ''
         Extra command-line flags passed to {command}`grafana-agent`.
 
@@ -69,43 +81,49 @@ in
         }
       '';
       example = {
-        metrics.global.remote_write = [{
-          url = "\${METRICS_REMOTE_WRITE_URL}";
-          basic_auth.username = "\${METRICS_REMOTE_WRITE_USERNAME}";
-          basic_auth.password_file = "\${CREDENTIALS_DIRECTORY}/metrics_remote_write_password";
-        }];
-        logs.configs = [{
-          name = "default";
-          scrape_configs = [
-            {
-              job_name = "journal";
-              journal = {
-                max_age = "12h";
-                labels.job = "systemd-journal";
-              };
-              relabel_configs = [
-                {
-                  source_labels = [ "__journal__systemd_unit" ];
-                  target_label = "systemd_unit";
-                }
-                {
-                  source_labels = [ "__journal__hostname" ];
-                  target_label = "nodename";
-                }
-                {
-                  source_labels = [ "__journal_syslog_identifier" ];
-                  target_label = "syslog_identifier";
-                }
-              ];
-            }
-          ];
-          positions.filename = "\${STATE_DIRECTORY}/loki_positions.yaml";
-          clients = [{
-            url = "\${LOGS_REMOTE_WRITE_URL}";
-            basic_auth.username = "\${LOGS_REMOTE_WRITE_USERNAME}";
-            basic_auth.password_file = "\${CREDENTIALS_DIRECTORY}/logs_remote_write_password";
-          }];
-        }];
+        metrics.global.remote_write = [
+          {
+            url = "\${METRICS_REMOTE_WRITE_URL}";
+            basic_auth.username = "\${METRICS_REMOTE_WRITE_USERNAME}";
+            basic_auth.password_file = "\${CREDENTIALS_DIRECTORY}/metrics_remote_write_password";
+          }
+        ];
+        logs.configs = [
+          {
+            name = "default";
+            scrape_configs = [
+              {
+                job_name = "journal";
+                journal = {
+                  max_age = "12h";
+                  labels.job = "systemd-journal";
+                };
+                relabel_configs = [
+                  {
+                    source_labels = [ "__journal__systemd_unit" ];
+                    target_label = "systemd_unit";
+                  }
+                  {
+                    source_labels = [ "__journal__hostname" ];
+                    target_label = "nodename";
+                  }
+                  {
+                    source_labels = [ "__journal_syslog_identifier" ];
+                    target_label = "syslog_identifier";
+                  }
+                ];
+              }
+            ];
+            positions.filename = "\${STATE_DIRECTORY}/loki_positions.yaml";
+            clients = [
+              {
+                url = "\${LOGS_REMOTE_WRITE_URL}";
+                basic_auth.username = "\${LOGS_REMOTE_WRITE_USERNAME}";
+                basic_auth.password_file = "\${CREDENTIALS_DIRECTORY}/logs_remote_write_password";
+              }
+            ];
+          }
+        ];
       };
     };
   };

@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapGAppsHook3
-, libglvnd
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapGAppsHook3,
+  libglvnd,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {

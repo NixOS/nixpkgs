@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nix-update-script }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+}:
 let
   pname = "teller";
   version = "1.5.6";

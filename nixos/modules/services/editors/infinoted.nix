@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.infinoted;
-in {
+in
+{
   options.services.infinoted = {
     enable = mkEnableOption "infinoted";
 
@@ -36,7 +42,11 @@ in {
     };
 
     securityPolicy = mkOption {
-      type = types.enum ["no-tls" "allow-tls" "require-tls"];
+      type = types.enum [
+        "no-tls"
+        "allow-tls"
+        "require-tls"
+      ];
       default = "require-tls";
       description = ''
         How strictly to enforce clients connection with TLS.
@@ -61,7 +71,12 @@ in {
 
     plugins = mkOption {
       type = types.listOf types.str;
-      default = [ "note-text" "note-chat" "logging" "autosave" ];
+      default = [
+        "note-text"
+        "note-chat"
+        "logging"
+        "autosave"
+      ];
       description = ''
         Plugins to enable
       '';
@@ -104,50 +119,50 @@ in {
   };
 
   config = mkIf (cfg.enable) {
-    users.users = optionalAttrs (cfg.user == "infinoted")
-      { infinoted = {
-          description = "Infinoted user";
-          group = cfg.group;
-          isSystemUser = true;
-        };
+    users.users = optionalAttrs (cfg.user == "infinoted") {
+      infinoted = {
+        description = "Infinoted user";
+        group = cfg.group;
+        isSystemUser = true;
       };
-    users.groups = optionalAttrs (cfg.group == "infinoted")
-      { infinoted = { };
+    };
+    users.groups = optionalAttrs (cfg.group == "infinoted") {
+      infinoted = { };
+    };
+
+    systemd.services.infinoted = {
+      description = "Gobby Dedicated Server";
+
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+
+      serviceConfig = {
+        Type = "simple";
+        Restart = "always";
+        ExecStart = "${cfg.package.infinoted} --config-file=/var/lib/infinoted/infinoted.conf";
+        User = cfg.user;
+        Group = cfg.group;
+        PermissionsStartOnly = true;
       };
+      preStart = ''
+        mkdir -p /var/lib/infinoted
+        install -o ${cfg.user} -g ${cfg.group} -m 0600 /dev/null /var/lib/infinoted/infinoted.conf
+        cat >>/var/lib/infinoted/infinoted.conf <<EOF
+        [infinoted]
+        ${optionalString (cfg.keyFile != null) "key-file=${cfg.keyFile}"}
+        ${optionalString (cfg.certificateFile != null) "certificate-file=${cfg.certificateFile}"}
+        ${optionalString (cfg.certificateChain != null) "certificate-chain=${cfg.certificateChain}"}
+        port=${toString cfg.port}
+        security-policy=${cfg.securityPolicy}
+        root-directory=${cfg.rootDirectory}
+        plugins=${concatStringsSep ";" cfg.plugins}
+        ${optionalString (cfg.passwordFile != null) "password=$(head -n 1 ${cfg.passwordFile})"}
 
-    systemd.services.infinoted =
-      { description = "Gobby Dedicated Server";
+        ${cfg.extraConfig}
+        EOF
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-
-        serviceConfig = {
-          Type = "simple";
-          Restart = "always";
-          ExecStart = "${cfg.package.infinoted} --config-file=/var/lib/infinoted/infinoted.conf";
-          User = cfg.user;
-          Group = cfg.group;
-          PermissionsStartOnly = true;
-        };
-        preStart = ''
-          mkdir -p /var/lib/infinoted
-          install -o ${cfg.user} -g ${cfg.group} -m 0600 /dev/null /var/lib/infinoted/infinoted.conf
-          cat >>/var/lib/infinoted/infinoted.conf <<EOF
-          [infinoted]
-          ${optionalString (cfg.keyFile != null) "key-file=${cfg.keyFile}"}
-          ${optionalString (cfg.certificateFile != null) "certificate-file=${cfg.certificateFile}"}
-          ${optionalString (cfg.certificateChain != null) "certificate-chain=${cfg.certificateChain}"}
-          port=${toString cfg.port}
-          security-policy=${cfg.securityPolicy}
-          root-directory=${cfg.rootDirectory}
-          plugins=${concatStringsSep ";" cfg.plugins}
-          ${optionalString (cfg.passwordFile != null) "password=$(head -n 1 ${cfg.passwordFile})"}
-
-          ${cfg.extraConfig}
-          EOF
-
-          install -o ${cfg.user} -g ${cfg.group} -m 0750 -d ${cfg.rootDirectory}
-        '';
-      };
+        install -o ${cfg.user} -g ${cfg.group} -m 0750 -d ${cfg.rootDirectory}
+      '';
+    };
   };
 }

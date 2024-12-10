@@ -1,23 +1,28 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, mesonEmulatorHook
-, ninja
-, pkg-config
-, gobject-introspection
-, vala
-, gtk-doc
-, docbook-xsl-nons
-, glib
-, libsoup_3
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  vala,
+  gtk-doc,
+  docbook-xsl-nons,
+  glib,
+  libsoup_3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uhttpmock";
   version = "0.10.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
@@ -29,17 +34,19 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    gobject-introspection
-    vala
-    gtk-doc
-    docbook-xsl-nons
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      gobject-introspection
+      vala
+      gtk-doc
+      docbook-xsl-nons
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   propagatedBuildInputs = [
     glib

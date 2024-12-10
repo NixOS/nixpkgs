@@ -47,13 +47,12 @@ buildPythonPackage {
 
   patches = [ ./0001-fix-allow-building-without-git.patch ];
 
-  preBuild =
-    ''
-      cat << EOF > ./xformers/version.py
-      # noqa: C801
-      __version__ = "${version}"
-      EOF
-    '';
+  preBuild = ''
+    cat << EOF > ./xformers/version.py
+    # noqa: C801
+    __version__ = "${version}"
+    EOF
+  '';
 
   env = lib.attrsets.optionalAttrs cudaSupport {
     TORCH_CUDA_ARCH_LIST = "${lib.concatStringsSep ";" torch.cudaCapabilities}";
@@ -74,9 +73,14 @@ buildPythonPackage {
     ]
   );
 
-  nativeBuildInputs = [ which ] ++ lib.optionals cudaSupport (with cudaPackages; [
-    cuda_nvcc
-  ]);
+  nativeBuildInputs =
+    [ which ]
+    ++ lib.optionals cudaSupport (
+      with cudaPackages;
+      [
+        cuda_nvcc
+      ]
+    );
 
   propagatedBuildInputs = [
     numpy

@@ -5,8 +5,16 @@ let
   sources = lib.importJSON ./sources.json;
 in
 {
-  jdk-hotspot = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk8.${variant}.jdk.hotspot; };
-  jre-hotspot = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk8.${variant}.jre.hotspot; };
-  jdk-openj9 = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk8.${variant}.jdk.openj9; };
-  jre-openj9 = import ./jdk-linux-base.nix { sourcePerArch = sources.openjdk8.${variant}.jre.openj9; };
+  jdk-hotspot = import ./jdk-linux-base.nix {
+    sourcePerArch = sources.openjdk8.${variant}.jdk.hotspot;
+  };
+  jre-hotspot = import ./jdk-linux-base.nix {
+    sourcePerArch = sources.openjdk8.${variant}.jre.hotspot;
+  };
+  jdk-openj9 = import ./jdk-linux-base.nix {
+    sourcePerArch = sources.openjdk8.${variant}.jdk.openj9;
+  };
+  jre-openj9 = import ./jdk-linux-base.nix {
+    sourcePerArch = sources.openjdk8.${variant}.jre.openj9;
+  };
 }

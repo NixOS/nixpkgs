@@ -1,5 +1,13 @@
-{ stdenv, cmake, lib, fetchFromGitLab,
-  qtmultimedia, qttools, wrapQtAppsHook, ... }:
+{
+  stdenv,
+  cmake,
+  lib,
+  fetchFromGitLab,
+  qtmultimedia,
+  qttools,
+  wrapQtAppsHook,
+  ...
+}:
 
 stdenv.mkDerivation rec {
   pname = "tipp10";
@@ -12,7 +20,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-e0sWH4pT7ej9XGK/Sg9XMX2bMqcXqtSaYI7KBZTXvp4=";
   };
 
-  nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+    wrapQtAppsHook
+  ];
   buildInputs = [ qtmultimedia ];
 
   meta = with lib; {

@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, which, coreutils, rrdtool, perlPackages
-, python3, ruby, jre8, nettools, bc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  which,
+  coreutils,
+  rrdtool,
+  perlPackages,
+  python3,
+  ruby,
+  jre8,
+  nettools,
+  bc,
 }:
 
 stdenv.mkDerivation rec {
@@ -62,8 +74,8 @@ stdenv.mkDerivation rec {
   doCheck = false;
 
   checkPhase = ''
-   export PERL5LIB="$PERL5LIB:${rrdtool}/${perlPackages.perl.libPrefix}"
-   LC_ALL=C make -j1 test
+    export PERL5LIB="$PERL5LIB:${rrdtool}/${perlPackages.perl.libPrefix}"
+    LC_ALL=C make -j1 test
   '';
 
   patches = [
@@ -125,11 +137,27 @@ stdenv.mkDerivation rec {
             *.jar) continue;;
         esac
         wrapProgram "$file" \
-          --set PERL5LIB "$out/${perlPackages.perl.libPrefix}:${with perlPackages; makePerlPath [
-                LogLog4perl IOSocketINET6 Socket6 URI DBFile TimeDate
-                HTMLTemplate FileCopyRecursive FCGI NetCIDR NetSNMP NetServer
-                ListMoreUtils DBDPg LWP rrdtool
-                ]}"
+          --set PERL5LIB "$out/${perlPackages.perl.libPrefix}:${
+            with perlPackages;
+            makePerlPath [
+              LogLog4perl
+              IOSocketINET6
+              Socket6
+              URI
+              DBFile
+              TimeDate
+              HTMLTemplate
+              FileCopyRecursive
+              FCGI
+              NetCIDR
+              NetSNMP
+              NetServer
+              ListMoreUtils
+              DBDPg
+              LWP
+              rrdtool
+            ]
+          }"
     done
   '';
 

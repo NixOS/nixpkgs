@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, cscope
-, fetchFromGitHub
-, fetchpatch
-, git
-, libevent
-, libopus
-, libsodium
-, libtoxcore
-, libvpx
-, msgpack
-, pkg-config
-, python3
-, python3Packages
+{
+  lib,
+  stdenv,
+  cscope,
+  fetchFromGitHub,
+  fetchpatch,
+  git,
+  libevent,
+  libopus,
+  libsodium,
+  libtoxcore,
+  libvpx,
+  msgpack,
+  pkg-config,
+  python3,
+  python3Packages,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,9 +27,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-c/0OxUH8iw8nRuVg4Fszf6Z/JiEV+m0B2ofzy81uFu8=";
   };
 
-  nativeBuildInputs = [ cscope git pkg-config ];
+  nativeBuildInputs = [
+    cscope
+    git
+    pkg-config
+  ];
 
-  buildInputs = [ libopus libtoxcore libsodium libevent libvpx msgpack python3 ];
+  buildInputs = [
+    libopus
+    libtoxcore
+    libsodium
+    libevent
+    libvpx
+    msgpack
+    python3
+  ];
 
   pythonBuildInputs = with python3Packages; [
     jinja2
@@ -43,22 +56,27 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  postPatch = ''
+  postPatch =
+    ''
       substituteInPlace gitversion.h --replace '7d45afdf7d00a95a8c3687175e2b1669fa1f7745' '365d2e5cbc0e3655fb64c204db0515f5f4cdf5a4'
-    '' + lib.optionalString stdenv.isLinux ''
+    ''
+    + lib.optionalString stdenv.isLinux ''
       substituteInPlace Makefile --replace ' -static ' ' '
       substituteInPlace Makefile --replace 'CC=gcc' ' '
-    '' + lib.optionalString stdenv.isDarwin ''
+    ''
+    + lib.optionalString stdenv.isDarwin ''
       substituteInPlace Makefile.mac --replace '.git/HEAD .git/index' ' '
       substituteInPlace Makefile.mac --replace '/usr/local/lib/libtoxcore.a' '${libtoxcore}/lib/libtoxcore.a'
       substituteInPlace Makefile.mac --replace '/usr/local/lib/libsodium.a' '${libsodium}/lib/libsodium.dylib'
       substituteInPlace Makefile.mac --replace 'CC=gcc' ' '
     '';
 
-  buildPhase = ''
-    '' + lib.optionalString stdenv.isLinux ''
+  buildPhase =
+    ''''
+    + lib.optionalString stdenv.isLinux ''
       make
-    '' + lib.optionalString stdenv.isDarwin ''
+    ''
+    + lib.optionalString stdenv.isDarwin ''
       make -f Makefile.mac tuntox
     '';
 

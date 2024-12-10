@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, singularity
-, python3Packages
-, fetchpatch
+{
+  lib,
+  fetchFromGitHub,
+  singularity,
+  python3Packages,
+  fetchpatch,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -18,12 +19,14 @@ python3Packages.buildPythonApplication rec {
 
   # crun patchelf proot runc fakechroot
   # are download statistically linked during runtime
-  buildInputs = [
-    singularity
-  ] ++ (with python3Packages; [
-    pytest-runner
-    pycurl
-  ]);
+  buildInputs =
+    [
+      singularity
+    ]
+    ++ (with python3Packages; [
+      pytest-runner
+      pycurl
+    ]);
 
   patches = [
     (fetchpatch {

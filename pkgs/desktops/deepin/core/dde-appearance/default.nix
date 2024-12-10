@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, dtkgui
-, gsettings-qt
-, gtk3
-, kconfig
-, kwindowsystem
-, kglobalaccel
-, xorg
-, iconv
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  qtbase,
+  dtkgui,
+  gsettings-qt,
+  gtk3,
+  kconfig,
+  kwindowsystem,
+  kglobalaccel,
+  xorg,
+  iconv,
 }:
 
 stdenv.mkDerivation rec {

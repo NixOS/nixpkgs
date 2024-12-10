@@ -1,4 +1,10 @@
-{ lib, buildPythonPackage, fetchPypi, isPy3k, buildbot }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  isPy3k,
+  buildbot,
+}:
 
 buildPythonPackage rec {
   pname = "buildbot_pkg";

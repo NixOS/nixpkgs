@@ -1,10 +1,11 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, fetchpatch
-, haskellPackages
-, haskell
-, slither-analyzer
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fetchpatch,
+  haskellPackages,
+  haskell,
+  slither-analyzer,
 }:
 
 mkDerivation rec {
@@ -25,16 +26,60 @@ mkDerivation rec {
     haskellPackages.hpack
   ];
 
-  executableHaskellDepends = with haskellPackages; [ aeson base base16-bytestring binary bytestring code-page
-  containers data-bword data-dword deepseq directory exceptions extra filepath hashable hevm html-conduit html-entities
-  http-conduit ListLike MonadRandom mtl optics optics-core optparse-applicative process random rosezipper semver split
-  strip-ansi-escape text time transformers unliftio utf8-string vector wai-extra warp with-utf8 word-wrap xml-conduit
-  yaml ];
+  executableHaskellDepends = with haskellPackages; [
+    aeson
+    base
+    base16-bytestring
+    binary
+    bytestring
+    code-page
+    containers
+    data-bword
+    data-dword
+    deepseq
+    directory
+    exceptions
+    extra
+    filepath
+    hashable
+    hevm
+    html-conduit
+    html-entities
+    http-conduit
+    ListLike
+    MonadRandom
+    mtl
+    optics
+    optics-core
+    optparse-applicative
+    process
+    random
+    rosezipper
+    semver
+    split
+    strip-ansi-escape
+    text
+    time
+    transformers
+    unliftio
+    utf8-string
+    vector
+    wai-extra
+    warp
+    with-utf8
+    word-wrap
+    xml-conduit
+    yaml
+  ];
 
   # Note: there is also a runtime dependency of slither-analyzer, let's include it also.
   executableSystemDepends = [ slither-analyzer ];
 
-  testHaskellDepends = with haskellPackages; [ tasty tasty-hunit tasty-quickcheck ];
+  testHaskellDepends = with haskellPackages; [
+    tasty
+    tasty-hunit
+    tasty-quickcheck
+  ];
 
   preConfigure = ''
     hpack
@@ -49,7 +94,10 @@ mkDerivation rec {
   description = "Ethereum smart contract fuzzer";
   homepage = "https://github.com/crytic/echidna";
   license = lib.licenses.agpl3Plus;
-  maintainers = with lib.maintainers; [ arturcygan hellwolf ];
+  maintainers = with lib.maintainers; [
+    arturcygan
+    hellwolf
+  ];
   platforms = lib.platforms.unix;
   mainProgram = "echidna-test";
 }

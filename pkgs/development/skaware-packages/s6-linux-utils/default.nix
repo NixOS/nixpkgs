@@ -1,4 +1,8 @@
-{ lib, skawarePackages, skalibs }:
+{
+  lib,
+  skawarePackages,
+  skalibs,
+}:
 
 skawarePackages.buildPackage {
   pname = "s6-linux-utils";
@@ -8,7 +12,12 @@ skawarePackages.buildPackage {
   description = "A set of minimalistic Linux-specific system utilities";
   platforms = lib.platforms.linux;
 
-  outputs = [ "bin" "dev" "doc" "out" ];
+  outputs = [
+    "bin"
+    "dev"
+    "doc"
+    "out"
+  ];
 
   # TODO: nsss support
   configureFlags = [

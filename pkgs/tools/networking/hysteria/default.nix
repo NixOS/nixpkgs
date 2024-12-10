@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 buildGoModule rec {
   pname = "hysteria";
@@ -17,8 +18,10 @@ buildGoModule rec {
   proxyVendor = true;
 
   ldflags =
-    let cmd = "github.com/apernet/hysteria/app/cmd";
-    in [
+    let
+      cmd = "github.com/apernet/hysteria/app/cmd";
+    in
+    [
       "-s"
       "-w"
       "-X ${cmd}.appVersion=${version}"

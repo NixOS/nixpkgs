@@ -1,7 +1,8 @@
-{ lib
-, lua
-, makeSetupHook
-, makeWrapper
+{
+  lib,
+  lua,
+  makeSetupHook,
+  makeWrapper,
 }:
 
 # defined in trivial-builders

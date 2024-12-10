@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchurl
-, dpkg
-, openjdk11
-, jnr-posix
-, makeWrapper
-, openjfx17
-, zip
-, nixosTests
-, bash
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  openjdk11,
+  jnr-posix,
+  makeWrapper,
+  openjfx17,
+  zip,
+  nixosTests,
+  bash,
 }:
 stdenv.mkDerivation rec {
   pname = "microsoft-identity-broker";
@@ -19,7 +20,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-HJ5Q462ziYd+JB1paj0f0OENSJLHqNcX59Fxe+/5RYE=";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper openjdk11 zip ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+    openjdk11
+    zip
+  ];
 
   buildPhase = ''
     runHook preBuild

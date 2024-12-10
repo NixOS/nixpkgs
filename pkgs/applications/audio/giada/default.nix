@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, fltk
-, fmt
-, rtmidi
-, libsamplerate
-, libmpg123
-, libsndfile
-, jack2
-, alsa-lib
-, libpulseaudio
-, libXpm
-, libXrandr
-, flac
-, libogg
-, libvorbis
-, libopus
-, nlohmann_json
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  fltk,
+  fmt,
+  rtmidi,
+  libsamplerate,
+  libmpg123,
+  libsndfile,
+  jack2,
+  alsa-lib,
+  libpulseaudio,
+  libXpm,
+  libXrandr,
+  flac,
+  libogg,
+  libvorbis,
+  libopus,
+  nlohmann_json,
 }:
 
 stdenv.mkDerivation rec {

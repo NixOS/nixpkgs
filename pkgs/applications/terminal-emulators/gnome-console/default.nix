@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, gettext
-, gnome
-, libgtop
-, gtk4
-, libadwaita
-, pcre2
-, vte-gtk4
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  gnome,
+  libgtop,
+  gtk4,
+  libadwaita,
+  pcre2,
+  vte-gtk4,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {

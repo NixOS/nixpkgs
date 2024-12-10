@@ -1,9 +1,10 @@
-{ lib
-, SDL2
-, fetchFromGitHub
-, sqlite
-, pkg-config
-, stdenv
+{
+  lib,
+  SDL2,
+  fetchFromGitHub,
+  sqlite,
+  pkg-config,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

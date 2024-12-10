@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, undmg
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  undmg,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "disk-inventory-x";
@@ -29,7 +30,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://www.derlien.com";
     license = licenses.gpl3Plus;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau Enzime ];
+    maintainers = with maintainers; [
+      emilytrau
+      Enzime
+    ];
     platforms = [ "x86_64-darwin" ];
   };
 })

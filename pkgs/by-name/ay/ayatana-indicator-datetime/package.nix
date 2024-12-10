@@ -1,29 +1,30 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gitUpdater
-, nixosTests
-, ayatana-indicator-messages
-, cmake
-, dbus
-, dbus-test-runner
-, evolution-data-server
-, glib
-, gst_all_1
-, gtest
-, intltool
-, libaccounts-glib
-, libayatana-common
-, libical
-, libnotify
-, libuuid
-, lomiri
-, pkg-config
-, properties-cpp
-, python3
-, systemd
-, tzdata
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  nixosTests,
+  ayatana-indicator-messages,
+  cmake,
+  dbus,
+  dbus-test-runner,
+  evolution-data-server,
+  glib,
+  gst_all_1,
+  gtest,
+  intltool,
+  libaccounts-glib,
+  libayatana-common,
+  libical,
+  libnotify,
+  libuuid,
+  lomiri,
+  pkg-config,
+  properties-cpp,
+  python3,
+  systemd,
+  tzdata,
+  wrapGAppsHook3,
 }:
 
 let
@@ -61,33 +62,38 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    ayatana-indicator-messages
-    evolution-data-server
-    glib
-    libaccounts-glib
-    libayatana-common
-    libical
-    libnotify
-    libuuid
-    properties-cpp
-    systemd
-  ] ++ (with gst_all_1; [
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
-  ]) ++ (with lomiri; [
-    cmake-extras
-    lomiri-schemas
-    lomiri-sounds
-    lomiri-url-dispatcher
-  ]);
+  buildInputs =
+    [
+      ayatana-indicator-messages
+      evolution-data-server
+      glib
+      libaccounts-glib
+      libayatana-common
+      libical
+      libnotify
+      libuuid
+      properties-cpp
+      systemd
+    ]
+    ++ (with gst_all_1; [
+      gstreamer
+      gst-plugins-base
+      gst-plugins-good
+    ])
+    ++ (with lomiri; [
+      cmake-extras
+      lomiri-schemas
+      lomiri-sounds
+      lomiri-url-dispatcher
+    ]);
 
   nativeCheckInputs = [
     dbus
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        python-dbusmock
+      ]
+    ))
     tzdata
   ];
 
@@ -108,13 +114,15 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelChecking = false;
 
   preCheck = ''
-    export XDG_DATA_DIRS=${lib.strings.concatStringsSep ":" [
-      # org.ayatana.common schema
-      (glib.passthru.getSchemaDataDirPath libayatana-common)
+    export XDG_DATA_DIRS=${
+      lib.strings.concatStringsSep ":" [
+        # org.ayatana.common schema
+        (glib.passthru.getSchemaDataDirPath libayatana-common)
 
-      # loading EDS engines to handle ICS-loading
-      edsDataDir
-    ]}
+        # loading EDS engines to handle ICS-loading
+        edsDataDir
+      ]
+    }
   '';
 
   # schema is already added automatically by wrapper, EDS needs to be added explicitly

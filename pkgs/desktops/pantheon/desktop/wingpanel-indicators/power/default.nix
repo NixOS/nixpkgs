@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, nix-update-script
-, gnome-power-manager
-, pkg-config
-, meson
-, ninja
-, vala
-, gtk3
-, granite
-, bamf
-, libgtop
-, libnotify
-, udev
-, wingpanel
-, libgee
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  nix-update-script,
+  gnome-power-manager,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  gtk3,
+  granite,
+  bamf,
+  libgtop,
+  libnotify,
+  udev,
+  wingpanel,
+  libgee,
 }:
 
 stdenv.mkDerivation rec {

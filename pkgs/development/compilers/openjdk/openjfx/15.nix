@@ -1,8 +1,25 @@
-{ stdenv, lib, fetchFromGitHub, writeText, openjdk11_headless, gradle_6
-, pkg-config, perl, cmake, gperf, gtk2, gtk3, libXtst, libXxf86vm, glib, alsa-lib
-, ffmpeg_4-headless, python3, ruby
-, withMedia ? true
-, withWebKit ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  writeText,
+  openjdk11_headless,
+  gradle_6,
+  pkg-config,
+  perl,
+  cmake,
+  gperf,
+  gtk2,
+  gtk3,
+  libXtst,
+  libXxf86vm,
+  glib,
+  alsa-lib,
+  ffmpeg_4-headless,
+  python3,
+  ruby,
+  withMedia ? true,
+  withWebKit ? false,
 }:
 
 let
@@ -10,52 +27,78 @@ let
   update = ".0.1";
   build = "+1";
   repover = "${major}${update}${build}";
-  gradle_ = (gradle_6.override {
-    java = openjdk11_headless;
-  });
+  gradle_ = (
+    gradle_6.override {
+      java = openjdk11_headless;
+    }
+  );
 
-  makePackage = args: stdenv.mkDerivation ({
-    version = "${major}${update}${build}";
+  makePackage =
+    args:
+    stdenv.mkDerivation (
+      {
+        version = "${major}${update}${build}";
 
-    src = fetchFromGitHub {
-      owner = "openjdk";
-      repo = "jfx";
-      rev = repover;
-      sha256 = "019glq8rhn6amy3n5jc17vi2wpf1pxpmmywvyz1ga8n09w7xscq1";
-    };
+        src = fetchFromGitHub {
+          owner = "openjdk";
+          repo = "jfx";
+          rev = repover;
+          sha256 = "019glq8rhn6amy3n5jc17vi2wpf1pxpmmywvyz1ga8n09w7xscq1";
+        };
 
-    buildInputs = [ gtk2 gtk3 libXtst libXxf86vm glib alsa-lib ffmpeg_4-headless ];
-    nativeBuildInputs = [ gradle_ perl pkg-config cmake gperf python3 ruby ];
+        buildInputs = [
+          gtk2
+          gtk3
+          libXtst
+          libXxf86vm
+          glib
+          alsa-lib
+          ffmpeg_4-headless
+        ];
+        nativeBuildInputs = [
+          gradle_
+          perl
+          pkg-config
+          cmake
+          gperf
+          python3
+          ruby
+        ];
 
-    dontUseCmakeConfigure = true;
+        dontUseCmakeConfigure = true;
 
-    config = writeText "gradle.properties" (''
-      CONF = Release
-      JDK_HOME = ${openjdk11_headless.home}
-    '' + args.gradleProperties or "");
+        config = writeText "gradle.properties" (
+          ''
+            CONF = Release
+            JDK_HOME = ${openjdk11_headless.home}
+          ''
+          + args.gradleProperties or ""
+        );
 
-    env.NIX_CFLAGS_COMPILE = toString [
-      #avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
-      "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
+        env.NIX_CFLAGS_COMPILE = toString [
+          #avoids errors about deprecation of GTypeDebugFlags, GTimeVal, etc.
+          "-DGLIB_DISABLE_DEPRECATION_WARNINGS"
 
-      # gstreamer workaround for -fno-common toolchains:
-      #   ld: gsttypefindelement.o:(.bss._gst_disable_registry_cache+0x0): multiple definition of
-      #     `_gst_disable_registry_cache'; gst.o:(.bss._gst_disable_registry_cache+0x0): first defined here
-      "-fcommon"
-    ];
+          # gstreamer workaround for -fno-common toolchains:
+          #   ld: gsttypefindelement.o:(.bss._gst_disable_registry_cache+0x0): multiple definition of
+          #     `_gst_disable_registry_cache'; gst.o:(.bss._gst_disable_registry_cache+0x0): first defined here
+          "-fcommon"
+        ];
 
-    buildPhase = ''
-      runHook preBuild
+        buildPhase = ''
+          runHook preBuild
 
-      export NUMBER_OF_PROCESSORS=$NIX_BUILD_CORES
-      export GRADLE_USER_HOME=$(mktemp -d)
-      ln -s $config gradle.properties
-      export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"
-      gradle --no-daemon $gradleFlags sdk
+          export NUMBER_OF_PROCESSORS=$NIX_BUILD_CORES
+          export GRADLE_USER_HOME=$(mktemp -d)
+          ln -s $config gradle.properties
+          export NIX_CFLAGS_COMPILE="$(pkg-config --cflags glib-2.0) $NIX_CFLAGS_COMPILE"
+          gradle --no-daemon $gradleFlags sdk
 
-      runHook postBuild
-    '';
-  } // args);
+          runHook postBuild
+        '';
+      }
+      // args
+    );
 
   # Fake build to pre-download deps into fixed-output derivation.
   # We run nearly full build because I see no other way to download everything that's needed.
@@ -76,7 +119,8 @@ let
     outputHash = "sha256-fGLTMM9s/Vn7eMzn6OQR3tL0cGbAYc7c4J4/aW3JvkI=";
   };
 
-in makePackage {
+in
+makePackage {
   pname = "openjfx-modular-sdk";
 
   gradleProperties = ''

@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, cmake
-, cubeb
-, curl
-, extra-cmake-modules
-, libXrandr
-, libbacktrace
-, makeWrapper
-, ninja
-, pkg-config
-, qtbase
-, qtsvg
-, qttools
-, qtwayland
-, substituteAll
-, vulkan-loader
-, wayland
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  cmake,
+  cubeb,
+  curl,
+  extra-cmake-modules,
+  libXrandr,
+  libbacktrace,
+  makeWrapper,
+  ninja,
+  pkg-config,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwayland,
+  substituteAll,
+  vulkan-loader,
+  wayland,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -63,8 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtsvg
     qtwayland
     wayland
-  ]
-  ++ cubeb.passthru.backendLibs;
+  ] ++ cubeb.passthru.backendLibs;
 
   strictDeps = true;
 
@@ -95,10 +95,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   qtWrapperArgs =
     let
-      libPath = lib.makeLibraryPath ([
-        vulkan-loader
-      ] ++ cubeb.passthru.backendLibs);
-    in [
+      libPath = lib.makeLibraryPath (
+        [
+          vulkan-loader
+        ]
+        ++ cubeb.passthru.backendLibs
+      );
+    in
+    [
       "--prefix LD_LIBRARY_PATH : ${libPath}"
     ];
 
@@ -115,7 +119,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Fast PlayStation 1 emulator for x86-64/AArch32/AArch64";
     license = lib.licenses.gpl3Only;
     mainProgram = "duckstation-qt";
-    maintainers = with lib.maintainers; [ guibou AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      guibou
+      AndersonTorres
+    ];
     platforms = lib.platforms.linux;
   };
 })

@@ -1,12 +1,14 @@
-{ config
-, pkgs
-, lib
-, ...}:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 let
   cfg = config.services.polaris;
-  settingsFormat = pkgs.formats.toml {};
+  settingsFormat = pkgs.formats.toml { };
 in
 {
   options = {
@@ -29,7 +31,7 @@ in
 
       extraGroups = mkOption {
         type = types.listOf types.str;
-        default = [];
+        default = [ ];
         description = "Polaris' auxiliary groups.";
         example = literalExpression ''["media" "music"]'';
       };
@@ -45,7 +47,7 @@ in
 
       settings = mkOption {
         type = settingsFormat.type;
-        default = {};
+        default = { };
         description = ''
           Contents for the TOML Polaris config, applied each start.
           Although poorly documented, an example may be found here:
@@ -93,15 +95,22 @@ in
         SupplementaryGroups = cfg.extraGroups;
         StateDirectory = "polaris";
         CacheDirectory = "polaris";
-        ExecStart = escapeShellArgs ([
-          "${cfg.package}/bin/polaris"
-          "--foreground"
-          "--port" cfg.port
-          "--database" "/var/lib/${StateDirectory}/db.sqlite"
-          "--cache" "/var/cache/${CacheDirectory}"
-        ] ++ optionals (cfg.settings != {}) [
-          "--config" (settingsFormat.generate "polaris-config.toml" cfg.settings)
-        ]);
+        ExecStart = escapeShellArgs (
+          [
+            "${cfg.package}/bin/polaris"
+            "--foreground"
+            "--port"
+            cfg.port
+            "--database"
+            "/var/lib/${StateDirectory}/db.sqlite"
+            "--cache"
+            "/var/cache/${CacheDirectory}"
+          ]
+          ++ optionals (cfg.settings != { }) [
+            "--config"
+            (settingsFormat.generate "polaris-config.toml" cfg.settings)
+          ]
+        );
         Restart = "on-failure";
 
         # Security options:
@@ -128,7 +137,11 @@ in
         ProtectKernelTunables = true;
 
         RestrictNamespaces = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" "AF_UNIX" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+          "AF_UNIX"
+        ];
         RestrictRealtime = true;
         #RestrictSUIDSGID = true; # implied by DynamicUser
 
@@ -136,7 +149,13 @@ in
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"
-          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@setuid"
+          "~@cpu-emulation"
+          "~@debug"
+          "~@keyring"
+          "~@memlock"
+          "~@obsolete"
+          "~@privileged"
+          "~@setuid"
         ];
       };
     };

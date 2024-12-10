@@ -17,13 +17,15 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-NjxJzHRT2/zZ9YzzjqaMVxpOELkDneQgc1/y1GUnZow=";
   };
 
-  postPatch = ''
-    find . -type f -not -path "./bin/*" -exec chmod -x {} \;
-  '' + lib.optionalString stdenvNoCC.isDarwin ''
-    for f in cmdline-tools/bin/*; do
-      sed -i 's|start up script for Linux|start up script for Mac|' $f
-    done
-  '';
+  postPatch =
+    ''
+      find . -type f -not -path "./bin/*" -exec chmod -x {} \;
+    ''
+    + lib.optionalString stdenvNoCC.isDarwin ''
+      for f in cmdline-tools/bin/*; do
+        sed -i 's|start up script for Linux|start up script for Mac|' $f
+      done
+    '';
 
   nativeBuildInputs = [ makeWrapper ];
 

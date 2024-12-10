@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, scons
-, libX11
-, pkg-config
-, libusb1
-, boost
-, glib
-, dbus-glib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  scons,
+  libX11,
+  pkg-config,
+  libusb1,
+  boost,
+  glib,
+  dbus-glib,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,8 +23,17 @@ stdenv.mkDerivation rec {
   };
 
   makeFlags = [ "PREFIX=$(out)" ];
-  nativeBuildInputs = [ pkg-config scons ];
-  buildInputs = [ libX11 libusb1 boost glib dbus-glib ];
+  nativeBuildInputs = [
+    pkg-config
+    scons
+  ];
+  buildInputs = [
+    libX11
+    libusb1
+    boost
+    glib
+    dbus-glib
+  ];
   enableParallelBuilding = true;
   dontUseSconsInstall = true;
 

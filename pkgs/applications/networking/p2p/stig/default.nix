@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python310Packages
-, testers
-, stig
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python310Packages,
+  testers,
+  stig,
 }:
 
 python310Packages.buildPythonApplication rec {
@@ -64,6 +65,6 @@ python310Packages.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     # Too many broken tests, and it fails to launch
     broken = true;
-    maintainers = with maintainers; [  ];
+    maintainers = with maintainers; [ ];
   };
 }

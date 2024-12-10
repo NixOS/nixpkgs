@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, graphviz
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  graphviz,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -29,13 +30,19 @@ python3.pkgs.buildPythonApplication rec {
     pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = [
-    graphviz
-  ] ++ (with python3.pkgs; [
-    scapy
-    typer
-    typing-extensions
-  ] ++ typer.optional-dependencies.all);
+  propagatedBuildInputs =
+    [
+      graphviz
+    ]
+    ++ (
+      with python3.pkgs;
+      [
+        scapy
+        typer
+        typing-extensions
+      ]
+      ++ typer.optional-dependencies.all
+    );
 
   # Project has no tests
   doCheck = false;

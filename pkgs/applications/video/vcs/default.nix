@@ -1,14 +1,32 @@
-{ lib, stdenv, fetchurl, makeWrapper
-, coreutils, ffmpeg, gawk, gnugrep, gnused, imagemagick, mplayer
-, util-linux, getopt
-, dejavu_fonts
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  coreutils,
+  ffmpeg,
+  gawk,
+  gnugrep,
+  gnused,
+  imagemagick,
+  mplayer,
+  util-linux,
+  getopt,
+  dejavu_fonts,
 }:
 with lib;
 let
   version = "1.13.4";
   gopt = if stdenv.isLinux then util-linux else getopt;
   runtimeDeps = [
-    coreutils ffmpeg gawk gnugrep gnused imagemagick mplayer gopt
+    coreutils
+    ffmpeg
+    gawk
+    gnugrep
+    gnused
+    imagemagick
+    mplayer
+    gopt
   ];
 in
 stdenv.mkDerivation {

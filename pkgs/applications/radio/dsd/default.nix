@@ -1,6 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, mbelib, libsndfile, itpp
-, portaudioSupport ? true, portaudio ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  mbelib,
+  libsndfile,
+  itpp,
+  portaudioSupport ? true,
+  portaudio ? null,
 }:
 
 assert portaudioSupport -> portaudio != null;
@@ -18,7 +25,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
   buildInputs = [
-    mbelib libsndfile itpp
+    mbelib
+    libsndfile
+    itpp
   ] ++ lib.optionals portaudioSupport [ portaudio ];
 
   doCheck = true;

@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, substituteAll
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  substituteAll,
 }:
 
 buildGoModule rec {
@@ -64,6 +65,9 @@ buildGoModule rec {
       reported for a Linux build.
     '';
     license = with licenses; [ bsd3 ];
-    maintainers = with maintainers; [ jk SuperSandro2000 ];
+    maintainers = with maintainers; [
+      jk
+      SuperSandro2000
+    ];
   };
 }

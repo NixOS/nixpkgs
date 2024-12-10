@@ -1,8 +1,20 @@
-{ lib, stdenv, fetchurl, fetchzip, autoPatchelfHook, installShellFiles, cpio, xar, _1password, testers }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchzip,
+  autoPatchelfHook,
+  installShellFiles,
+  cpio,
+  xar,
+  _1password,
+  testers,
+}:
 
 let
   inherit (stdenv.hostPlatform) system;
-  fetch = srcPlatform: hash: extension:
+  fetch =
+    srcPlatform: hash: extension:
     let
       args = {
         url = "https://cache.agilebits.com/dist/1P/op2/pkg/v${version}/op_${srcPlatform}_v${version}.${extension}";
@@ -17,7 +29,9 @@ let
     aarch64-linux = fetch "linux_arm64" "sha256-rF0HWKLdLDmT5nXqZyn+nwd3DZxkP76Jm+xofvA1dpU=" "zip";
     i686-linux = fetch "linux_386" "sha256-b9OPsZJTGoAeedj/dv88lkX2Q4p9HG585mWyl7ZfDz4=" "zip";
     x86_64-linux = fetch "linux_amd64" "sha256-5ZiMQaQLYUR9BZroyG0o+M79cR4GQb6rDyVmIcTZh3o=" "zip";
-    aarch64-darwin = fetch "apple_universal" "sha256-5VmogWqCYMdrg9dyRt4lurPmSRdUUHt4LT3lkOEKdEI=" "pkg";
+    aarch64-darwin =
+      fetch "apple_universal" "sha256-5VmogWqCYMdrg9dyRt4lurPmSRdUUHt4LT3lkOEKdEI="
+        "pkg";
     x86_64-darwin = aarch64-darwin;
   };
   platforms = builtins.attrNames sources;
@@ -34,7 +48,10 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional stdenv.isLinux autoPatchelfHook;
 
-  buildInputs = lib.optionals stdenv.isDarwin [ xar cpio ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    xar
+    cpio
+  ];
 
   unpackPhase = lib.optionalString stdenv.isDarwin ''
     xar -xf $src

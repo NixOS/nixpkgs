@@ -1,4 +1,10 @@
-{ coreutils, fetchurl, fping, lib, stdenvNoCC }:
+{
+  coreutils,
+  fetchurl,
+  fping,
+  lib,
+  stdenvNoCC,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "zs-wait4host";

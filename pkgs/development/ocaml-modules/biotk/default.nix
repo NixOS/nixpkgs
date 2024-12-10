@@ -1,21 +1,22 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, angstrom-unix
-, binning
-, ocaml-crunch
-, camlzip
-, core_kernel
-, core_unix
-, csvfields
-, fmt
-, gsl
-, ppx_csv_conv
-, ppx_deriving
-, rresult
-, tyxml
-, uri
-, vg
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  angstrom-unix,
+  binning,
+  ocaml-crunch,
+  camlzip,
+  core_kernel,
+  core_unix,
+  csvfields,
+  fmt,
+  gsl,
+  ppx_csv_conv,
+  ppx_deriving,
+  rresult,
+  tyxml,
+  uri,
+  vg,
 }:
 
 buildDunePackage rec {

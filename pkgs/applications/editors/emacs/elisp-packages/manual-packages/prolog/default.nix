@@ -1,4 +1,8 @@
-{ lib, trivialBuild, fetchurl }:
+{
+  lib,
+  trivialBuild,
+  fetchurl,
+}:
 
 trivialBuild {
   pname = "prolog-mode";

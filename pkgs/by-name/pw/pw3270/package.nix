@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, which
-, pkg-config
-, automake
-, autoconf
-, m4
-, libtool
-, gtk3
-, libv3270
-, lib3270
-, openssl
-, gettext
-, desktop-file-utils
-, glib
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  which,
+  pkg-config,
+  automake,
+  autoconf,
+  m4,
+  libtool,
+  gtk3,
+  libv3270,
+  lib3270,
+  openssl,
+  gettext,
+  desktop-file-utils,
+  glib,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

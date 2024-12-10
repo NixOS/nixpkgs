@@ -1,4 +1,11 @@
-{ stdenv, fetchFromGitHub, makeBinaryWrapper, unstableGitUpdater, odin, lib }:
+{
+  stdenv,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  unstableGitUpdater,
+  odin,
+  lib,
+}:
 
 stdenv.mkDerivation {
   pname = "ols";
@@ -50,6 +57,9 @@ stdenv.mkDerivation {
     mainProgram = "ols";
     homepage = "https://github.com/DanielGavin/ols";
     license = licenses.mit;
-    maintainers = with maintainers; [ astavie znaniye ];
+    maintainers = with maintainers; [
+      astavie
+      znaniye
+    ];
   };
 }

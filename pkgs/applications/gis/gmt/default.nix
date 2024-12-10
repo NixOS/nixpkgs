@@ -1,10 +1,28 @@
-{ lib, stdenv, fetchurl, cmake, curl, Accelerate, CoreGraphics, CoreVideo
-, fftwSinglePrec, netcdf, pcre, gdal, blas, lapack, glibc, ghostscript, dcw-gmt
-, gshhg-gmt }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  curl,
+  Accelerate,
+  CoreGraphics,
+  CoreVideo,
+  fftwSinglePrec,
+  netcdf,
+  pcre,
+  gdal,
+  blas,
+  lapack,
+  glibc,
+  ghostscript,
+  dcw-gmt,
+  gshhg-gmt,
+}:
 
-/* The onus is on the user to also install:
-    - ffmpeg for webm or mp4 output
-    - graphicsmagick for gif output
+/*
+  The onus is on the user to also install:
+   - ffmpeg for webm or mp4 output
+   - graphicsmagick for gif output
 */
 
 stdenv.mkDerivation rec {
@@ -17,41 +35,58 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ curl gdal netcdf pcre dcw-gmt gshhg-gmt ]
-    ++ (if stdenv.isDarwin then [
-      Accelerate
-      CoreGraphics
-      CoreVideo
-    ] else [
-      glibc
-      fftwSinglePrec
-      blas
-      lapack
-    ]);
+  buildInputs =
+    [
+      curl
+      gdal
+      netcdf
+      pcre
+      dcw-gmt
+      gshhg-gmt
+    ]
+    ++ (
+      if stdenv.isDarwin then
+        [
+          Accelerate
+          CoreGraphics
+          CoreVideo
+        ]
+      else
+        [
+          glibc
+          fftwSinglePrec
+          blas
+          lapack
+        ]
+    );
 
   propagatedBuildInputs = [ ghostscript ];
 
-  cmakeFlags = [
-    "-DGMT_DOCDIR=share/doc/gmt"
-    "-DGMT_MANDIR=share/man"
-    "-DGMT_LIBDIR=lib"
-    "-DCOPY_GSHHG:BOOL=FALSE"
-    "-DGSHHG_ROOT=${gshhg-gmt.out}/share/gshhg-gmt"
-    "-DCOPY_DCW:BOOL=FALSE"
-    "-DDCW_ROOT=${dcw-gmt.out}/share/dcw-gmt"
-    "-DGDAL_ROOT=${gdal.out}"
-    "-DNETCDF_ROOT=${netcdf.out}"
-    "-DPCRE_ROOT=${pcre.out}"
-    "-DGMT_INSTALL_TRADITIONAL_FOLDERNAMES:BOOL=FALSE"
-    "-DGMT_ENABLE_OPENMP:BOOL=TRUE"
-    "-DGMT_INSTALL_MODULE_LINKS:BOOL=FALSE"
-    "-DLICENSE_RESTRICTED=LGPL" # "GPL" and "no" also valid
-  ] ++ (with stdenv;
-    lib.optionals (!isDarwin) [
-      "-DFFTW3_ROOT=${fftwSinglePrec.dev}"
-      "-DLAPACK_LIBRARY=${lapack}/lib/liblapack.so"
-      "-DBLAS_LIBRARY=${blas}/lib/libblas.so"
-    ]);
+  cmakeFlags =
+    [
+      "-DGMT_DOCDIR=share/doc/gmt"
+      "-DGMT_MANDIR=share/man"
+      "-DGMT_LIBDIR=lib"
+      "-DCOPY_GSHHG:BOOL=FALSE"
+      "-DGSHHG_ROOT=${gshhg-gmt.out}/share/gshhg-gmt"
+      "-DCOPY_DCW:BOOL=FALSE"
+      "-DDCW_ROOT=${dcw-gmt.out}/share/dcw-gmt"
+      "-DGDAL_ROOT=${gdal.out}"
+      "-DNETCDF_ROOT=${netcdf.out}"
+      "-DPCRE_ROOT=${pcre.out}"
+      "-DGMT_INSTALL_TRADITIONAL_FOLDERNAMES:BOOL=FALSE"
+      "-DGMT_ENABLE_OPENMP:BOOL=TRUE"
+      "-DGMT_INSTALL_MODULE_LINKS:BOOL=FALSE"
+      "-DLICENSE_RESTRICTED=LGPL" # "GPL" and "no" also valid
+    ]
+    ++ (
+      with stdenv;
+      lib.optionals (!isDarwin) [
+        "-DFFTW3_ROOT=${fftwSinglePrec.dev}"
+        "-DLAPACK_LIBRARY=${lapack}/lib/liblapack.so"
+        "-DBLAS_LIBRARY=${blas}/lib/libblas.so"
+      ]
+    );
 
   meta = with lib; {
     homepage = "https://www.generic-mapping-tools.org";
@@ -65,7 +100,10 @@ stdenv.mkDerivation rec {
       transformations and includes supporting data such as coastlines, rivers,
       and political boundaries and optionally country polygons.
     '';
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     license = licenses.lgpl3Plus;
     maintainers = with maintainers; [ tviti ];
   };

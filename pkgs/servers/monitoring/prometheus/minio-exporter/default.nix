@@ -1,4 +1,9 @@
-{ lib, buildGoPackage, fetchFromGitHub, fetchpatch }:
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 buildGoPackage rec {
   pname = "minio-exporter";
@@ -7,7 +12,7 @@ buildGoPackage rec {
 
   goPackagePath = "github.com/joe-pll/minio-exporter";
 
-  src= fetchFromGitHub {
+  src = fetchFromGitHub {
     inherit rev;
     owner = "joe-pll";
     repo = "minio-exporter";

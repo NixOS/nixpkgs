@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, darwin
-, rustPlatform
-, fetchFromGitHub
-, withCmd ? false
+{
+  stdenv,
+  lib,
+  darwin,
+  rustPlatform,
+  fetchFromGitHub,
+  withCmd ? false,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,9 +19,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash =
-    if stdenv.isLinux
-    then "sha256-R2lHg+I8Sry3/n8vTfPpDysKCKMDUvxyMKRhEQKDqS0="
-    else "sha256-9CXrOP6SI+sCD9Q94N8TlRB/h+F/l7t3zHbtVDqddS4=";
+    if stdenv.isLinux then
+      "sha256-R2lHg+I8Sry3/n8vTfPpDysKCKMDUvxyMKRhEQKDqS0="
+    else
+      "sha256-9CXrOP6SI+sCD9Q94N8TlRB/h+F/l7t3zHbtVDqddS4=";
 
   buildInputs = lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.IOKit ];
 
@@ -34,7 +36,10 @@ rustPlatform.buildRustPackage rec {
     description = "A tool to improve keyboard comfort and usability with advanced customization";
     homepage = "https://github.com/jtroo/kanata";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ bmanuel linj ];
+    maintainers = with maintainers; [
+      bmanuel
+      linj
+    ];
     platforms = platforms.unix;
     mainProgram = "kanata";
     broken = stdenv.isDarwin;

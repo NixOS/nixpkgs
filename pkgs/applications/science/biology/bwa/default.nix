@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
+}:
 
 stdenv.mkDerivation {
   pname = "bwa";
@@ -39,8 +44,8 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "A software package for mapping low-divergent sequences against a large reference genome, such as the human genome";
     mainProgram = "bwa";
-    license     = licenses.gpl3Plus;
-    homepage    = "https://bio-bwa.sourceforge.net/";
+    license = licenses.gpl3Plus;
+    homepage = "https://bio-bwa.sourceforge.net/";
     maintainers = with maintainers; [ luispedro ];
     platforms = platforms.unix;
   };

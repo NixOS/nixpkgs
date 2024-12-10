@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, cmake, doxygen }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  doxygen,
+}:
 
 stdenv.mkDerivation rec {
   pname = "geographiclib";
@@ -11,7 +17,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-FVA2y1q0WjRSCltCN2qntWC//Zj94TXO/fTebFfQ9NY=";
   };
 
-  nativeBuildInputs = [ cmake doxygen ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+  ];
 
   cmakeFlags = [
     "-DBUILD_DOCUMENTATION=ON"

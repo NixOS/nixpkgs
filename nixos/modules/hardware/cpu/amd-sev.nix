@@ -1,4 +1,9 @@
-{ config, options, lib, ... }:
+{
+  config,
+  options,
+  lib,
+  ...
+}:
 with lib;
 let
   cfgSev = config.hardware.cpu.amd.sev;
@@ -23,7 +28,8 @@ let
     };
   };
 in
-with lib; {
+with lib;
+{
   options.hardware.cpu.amd.sev = optionsFor "SEV" "sev";
 
   options.hardware.cpu.amd.sevGuest = optionsFor "SEV guest" "sev-guest";
@@ -37,7 +43,9 @@ with lib; {
           message = "Given user does not exist";
         }
         {
-          assertion = (cfgSev.group == options.hardware.cpu.amd.sev.group.default) || (hasAttr cfgSev.group config.users.groups);
+          assertion =
+            (cfgSev.group == options.hardware.cpu.amd.sev.group.default)
+            || (hasAttr cfgSev.group config.users.groups);
           message = "Given group does not exist";
         }
       ];
@@ -63,14 +71,18 @@ with lib; {
           message = "Given user does not exist";
         }
         {
-          assertion = (cfgSevGuest.group == options.hardware.cpu.amd.sevGuest.group.default) || (hasAttr cfgSevGuest.group config.users.groups);
+          assertion =
+            (cfgSevGuest.group == options.hardware.cpu.amd.sevGuest.group.default)
+            || (hasAttr cfgSevGuest.group config.users.groups);
           message = "Given group does not exist";
         }
       ];
 
-      users.groups = optionalAttrs (cfgSevGuest.group == options.hardware.cpu.amd.sevGuest.group.default) {
-        "${cfgSevGuest.group}" = { };
-      };
+      users.groups =
+        optionalAttrs (cfgSevGuest.group == options.hardware.cpu.amd.sevGuest.group.default)
+          {
+            "${cfgSevGuest.group}" = { };
+          };
 
       services.udev.extraRules = with cfgSevGuest; ''
         KERNEL=="sev-guest", OWNER="${user}", GROUP="${group}", MODE="${mode}"

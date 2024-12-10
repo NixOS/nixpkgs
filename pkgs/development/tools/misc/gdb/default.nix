@@ -1,29 +1,53 @@
-{ lib, stdenv, targetPackages
+{
+  lib,
+  stdenv,
+  targetPackages,
 
-# Build time
-, fetchurl, fetchpatch, pkg-config, perl, texinfo, setupDebugInfoDirs, buildPackages
+  # Build time
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  perl,
+  texinfo,
+  setupDebugInfoDirs,
+  buildPackages,
 
-# Run time
-, ncurses, readline, gmp, mpfr, expat, libipt, zlib, zstd, xz, dejagnu, sourceHighlight, libiconv
+  # Run time
+  ncurses,
+  readline,
+  gmp,
+  mpfr,
+  expat,
+  libipt,
+  zlib,
+  zstd,
+  xz,
+  dejagnu,
+  sourceHighlight,
+  libiconv,
 
-, pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin, python3 ? null
-, enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils, elfutils
-, guile ? null
-, hostCpuOnly ? false
-, enableSim ? false
-, safePaths ? [
-   # $debugdir:$datadir/auto-load are whitelisted by default by GDB
-   "$debugdir" "$datadir/auto-load"
-   # targetPackages so we get the right libc when cross-compiling and using buildPackages.gdb
-   targetPackages.stdenv.cc.cc.lib
-  ]
-, writeScript
+  pythonSupport ? stdenv.hostPlatform == stdenv.buildPlatform && !stdenv.hostPlatform.isCygwin,
+  python3 ? null,
+  enableDebuginfod ? lib.meta.availableOn stdenv.hostPlatform elfutils,
+  elfutils,
+  guile ? null,
+  hostCpuOnly ? false,
+  enableSim ? false,
+  safePaths ? [
+    # $debugdir:$datadir/auto-load are whitelisted by default by GDB
+    "$debugdir"
+    "$datadir/auto-load"
+    # targetPackages so we get the right libc when cross-compiling and using buildPackages.gdb
+    targetPackages.stdenv.cc.cc.lib
+  ],
+  writeScript,
 }:
 
 let
   basename = "gdb";
-  targetPrefix = lib.optionalString (stdenv.targetPlatform != stdenv.hostPlatform)
-                 "${stdenv.targetPlatform.config}-";
+  targetPrefix = lib.optionalString (
+    stdenv.targetPlatform != stdenv.hostPlatform
+  ) "${stdenv.targetPlatform.config}-";
 in
 
 assert pythonSupport -> python3 != null;
@@ -37,25 +61,47 @@ stdenv.mkDerivation rec {
     hash = "sha256-LU3YBh2N7RK2xj9V5FNEiB6CJhBfTSqbI0BA76XOd3I=";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace gdb/darwin-nat.c \
-      --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
-  '' + lib.optionalString stdenv.hostPlatform.isMusl ''
-    substituteInPlace sim/erc32/erc32.c  --replace sys/fcntl.h fcntl.h
-    substituteInPlace sim/erc32/interf.c  --replace sys/fcntl.h fcntl.h
-    substituteInPlace sim/erc32/sis.c  --replace sys/fcntl.h fcntl.h
-    substituteInPlace sim/ppc/emul_unix.c --replace sys/termios.h termios.h
-  '';
+  postPatch =
+    lib.optionalString stdenv.isDarwin ''
+      substituteInPlace gdb/darwin-nat.c \
+        --replace '#include "bfd/mach-o.h"' '#include "mach-o.h"'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isMusl ''
+      substituteInPlace sim/erc32/erc32.c  --replace sys/fcntl.h fcntl.h
+      substituteInPlace sim/erc32/interf.c  --replace sys/fcntl.h fcntl.h
+      substituteInPlace sim/erc32/sis.c  --replace sys/fcntl.h fcntl.h
+      substituteInPlace sim/ppc/emul_unix.c --replace sys/termios.h termios.h
+    '';
 
-  patches = [
-    ./debug-info-from-env.patch
-  ] ++ lib.optionals stdenv.isDarwin [
-    ./darwin-target-match.patch
+  patches =
+    [
+      ./debug-info-from-env.patch
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      ./darwin-target-match.patch
+    ];
+
+  nativeBuildInputs = [
+    pkg-config
+    texinfo
+    perl
+    setupDebugInfoDirs
   ];
 
-  nativeBuildInputs = [ pkg-config texinfo perl setupDebugInfoDirs ];
-
-  buildInputs = [ ncurses readline gmp mpfr expat libipt zlib zstd xz guile sourceHighlight ]
+  buildInputs =
+    [
+      ncurses
+      readline
+      gmp
+      mpfr
+      expat
+      libipt
+      zlib
+      zstd
+      xz
+      guile
+      sourceHighlight
+    ]
     ++ lib.optional pythonSupport python3
     ++ lib.optional doCheck dejagnu
     ++ lib.optional enableDebuginfod (elfutils.override { enableDebuginfod = true; })
@@ -72,7 +118,11 @@ stdenv.mkDerivation rec {
 
   env.NIX_CFLAGS_COMPILE = "-Wno-format-nonliteral";
 
-  configurePlatforms = [ "build" "host" "target" ];
+  configurePlatforms = [
+    "build"
+    "host"
+    "target"
+  ];
 
   preConfigure = ''
     # remove precompiled docs, required for man gdbinit to mention /etc/gdb/gdbinit
@@ -88,39 +138,46 @@ stdenv.mkDerivation rec {
   '';
   configureScript = "../configure";
 
-  configureFlags = with lib; [
-    # Set the program prefix to the current targetPrefix.
-    # This ensures that the prefix always conforms to
-    # nixpkgs' expectations instead of relying on the build
-    # system which only receives `config` which is merely a
-    # subset of the platform description.
-    "--program-prefix=${targetPrefix}"
+  configureFlags =
+    with lib;
+    [
+      # Set the program prefix to the current targetPrefix.
+      # This ensures that the prefix always conforms to
+      # nixpkgs' expectations instead of relying on the build
+      # system which only receives `config` which is merely a
+      # subset of the platform description.
+      "--program-prefix=${targetPrefix}"
 
-    "--disable-werror"
-  ] ++ lib.optional (!hostCpuOnly) "--enable-targets=all" ++ [
-    "--enable-64-bit-bfd"
-    "--disable-install-libbfd"
-    "--disable-shared" "--enable-static"
-    "--with-system-zlib"
-    "--with-system-readline"
+      "--disable-werror"
+    ]
+    ++ lib.optional (!hostCpuOnly) "--enable-targets=all"
+    ++ [
+      "--enable-64-bit-bfd"
+      "--disable-install-libbfd"
+      "--disable-shared"
+      "--enable-static"
+      "--with-system-zlib"
+      "--with-system-readline"
 
-    "--with-system-gdbinit=/etc/gdb/gdbinit"
-    "--with-system-gdbinit-dir=/etc/gdb/gdbinit.d"
+      "--with-system-gdbinit=/etc/gdb/gdbinit"
+      "--with-system-gdbinit-dir=/etc/gdb/gdbinit.d"
 
-    "--with-gmp=${gmp.dev}"
-    "--with-mpfr=${mpfr.dev}"
-    "--with-expat" "--with-libexpat-prefix=${expat.dev}"
-    "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
-  ] ++ lib.optional (!pythonSupport) "--without-python"
+      "--with-gmp=${gmp.dev}"
+      "--with-mpfr=${mpfr.dev}"
+      "--with-expat"
+      "--with-libexpat-prefix=${expat.dev}"
+      "--with-auto-load-safe-path=${builtins.concatStringsSep ":" safePaths}"
+    ]
+    ++ lib.optional (!pythonSupport) "--without-python"
     ++ lib.optional stdenv.hostPlatform.isMusl "--disable-nls"
     ++ lib.optional stdenv.hostPlatform.isStatic "--disable-inprocess-agent"
     ++ lib.optional enableDebuginfod "--with-debuginfod=yes"
     ++ lib.optional (!enableSim) "--disable-sim";
 
-  postInstall =
-    '' # Remove Info files already provided by Binutils and other packages.
-       rm -v $out/share/info/bfd.info
-    '';
+  postInstall = ''
+    # Remove Info files already provided by Binutils and other packages.
+          rm -v $out/share/info/bfd.info
+  '';
 
   # TODO: Investigate & fix the test failures.
   doCheck = false;
@@ -153,7 +210,11 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl3Plus;
 
     # GDB upstream does not support ARM darwin
-    platforms = with platforms; linux ++ cygwin ++ ["x86_64-darwin"];
-    maintainers = with maintainers; [ pierron globin lsix ];
+    platforms = with platforms; linux ++ cygwin ++ [ "x86_64-darwin" ];
+    maintainers = with maintainers; [
+      pierron
+      globin
+      lsix
+    ];
   };
 }

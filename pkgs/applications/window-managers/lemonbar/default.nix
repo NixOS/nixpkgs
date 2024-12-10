@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, perl, libxcb }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  libxcb,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lemonbar";
@@ -11,14 +17,23 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-lmppcnQ8r4jEuhegpTBxYqxfTTS/IrbtQVZ44HqnoWo=";
   };
 
-  buildInputs = [ libxcb perl ];
+  buildInputs = [
+    libxcb
+    perl
+  ];
 
-  installFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+  installFlags = [
+    "DESTDIR=$(out)"
+    "PREFIX="
+  ];
 
   meta = with lib; {
     description = "A lightweight xcb based bar";
     homepage = "https://github.com/LemonBoy/bar";
-    maintainers = with maintainers; [ meisternu moni ];
+    maintainers = with maintainers; [
+      meisternu
+      moni
+    ];
     license = licenses.mit;
     platforms = platforms.linux;
     mainProgram = "lemonbar";

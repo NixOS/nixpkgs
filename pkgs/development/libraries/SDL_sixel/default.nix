@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libsixel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libsixel,
+}:
 
 stdenv.mkDerivation {
   pname = "SDL_sixel";
@@ -19,9 +25,9 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "A cross-platform multimedia library, that supports sixel graphics on consoles";
     mainProgram = "sdl-config";
-    homepage    = "https://github.com/saitoha/SDL1.2-SIXEL";
+    homepage = "https://github.com/saitoha/SDL1.2-SIXEL";
     maintainers = with maintainers; [ vrthra ];
-    platforms   = platforms.linux;
-    license     = licenses.lgpl21;
+    platforms = platforms.linux;
+    license = licenses.lgpl21;
   };
 }

@@ -1,18 +1,19 @@
-{ lib
-, stdenvNoCC
-, testers
-, callPackage
-, writeText
+{
+  lib,
+  stdenvNoCC,
+  testers,
+  callPackage,
+  writeText,
   # nativeBuildInputs
-, shellcheck-minimal
+  shellcheck-minimal,
   # Samples
-, samples ? cleanSamples (callPackage ./samples.nix { })
+  samples ? cleanSamples (callPackage ./samples.nix { }),
   # Filter out the non-string-like attributes such as <pkg>.override added by
   # callPackage.
-, cleanSamples ? lib.filterAttrs (n: lib.isStringLike)
+  cleanSamples ? lib.filterAttrs (n: lib.isStringLike),
   # Test targets
-, writeDirectReferencesToFile
-, writeClosure
+  writeDirectReferencesToFile,
+  writeClosure,
 }:
 
 # -------------------------------------------------------------------------- #
@@ -43,8 +44,11 @@ let
   # Map each attribute to an element specification of Bash associative arrary
   # and concatenate them with white spaces, to be used to define a
   # one-line Bash associative array.
-  samplesToString = attrs:
-    lib.concatMapStringsSep " " (name: "[${name}]=${lib.escapeShellArg "${attrs.${name}}"}") (builtins.attrNames attrs);
+  samplesToString =
+    attrs:
+    lib.concatMapStringsSep " " (name: "[${name}]=${lib.escapeShellArg "${attrs.${name}}"}") (
+      builtins.attrNames attrs
+    );
 
   closures = lib.mapAttrs (n: v: writeClosure [ v ]) samples;
   directReferences = lib.mapAttrs (n: v: writeDirectReferencesToFile v) samples;
@@ -95,21 +99,22 @@ let
 in
 testers.nixosTest {
   name = "nixpkgs-trivial-builders";
-  nodes.machine = { ... }: {
-    virtualisation.writableStore = true;
+  nodes.machine =
+    { ... }:
+    {
+      virtualisation.writableStore = true;
 
-    # Test runs without network, so we don't substitute and prepare our deps
-    nix.settings.substituters = lib.mkForce [ ];
-    environment.etc."pre-built-paths".source = writeText "pre-built-paths" (
-      builtins.toJSON [ testScriptBin ]
-    );
-  };
-  testScript =
-    ''
-      machine.succeed("""
-        ${lib.getExe testScriptBin} 2>/dev/console
-      """)
-    '';
+      # Test runs without network, so we don't substitute and prepare our deps
+      nix.settings.substituters = lib.mkForce [ ];
+      environment.etc."pre-built-paths".source = writeText "pre-built-paths" (
+        builtins.toJSON [ testScriptBin ]
+      );
+    };
+  testScript = ''
+    machine.succeed("""
+      ${lib.getExe testScriptBin} 2>/dev/console
+    """)
+  '';
   passthru = {
     inherit
       collectiveClosure

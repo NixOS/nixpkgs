@@ -1,8 +1,10 @@
-{ self, fetchurl ? null }:
+{
+  self,
+  fetchurl ? null,
+}:
 
 {
-  by-spec."abbrev"."1" =
-    self.by-version."abbrev"."1.0.5";
+  by-spec."abbrev"."1" = self.by-version."abbrev"."1.0.5";
   by-version."abbrev"."1.0.5" = self.buildNodePackage {
     name = "abbrev-1.0.5";
     version = "1.0.5";
@@ -16,14 +18,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."abbrev"."1.0.x" =
-    self.by-version."abbrev"."1.0.5";
-  by-spec."accepts"."~1.2.5" =
-    self.by-version."accepts"."1.2.7";
+  by-spec."abbrev"."1.0.x" = self.by-version."abbrev"."1.0.5";
+  by-spec."accepts"."~1.2.5" = self.by-version."accepts"."1.2.7";
   by-version."accepts"."1.2.7" = self.buildNodePackage {
     name = "accepts-1.2.7";
     version = "1.2.7";
@@ -39,14 +39,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."accepts"."~1.2.7" =
-    self.by-version."accepts"."1.2.7";
-  by-spec."amdefine".">=0.0.4" =
-    self.by-version."amdefine"."0.1.0";
+  by-spec."accepts"."~1.2.7" = self.by-version."accepts"."1.2.7";
+  by-spec."amdefine".">=0.0.4" = self.by-version."amdefine"."0.1.0";
   by-version."amdefine"."0.1.0" = self.buildNodePackage {
     name = "amdefine-0.1.0";
     version = "0.1.0";
@@ -60,12 +58,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."ansi"."^0.3.0" =
-    self.by-version."ansi"."0.3.0";
+  by-spec."ansi"."^0.3.0" = self.by-version."ansi"."0.3.0";
   by-version."ansi"."0.3.0" = self.buildNodePackage {
     name = "ansi-0.3.0";
     version = "0.3.0";
@@ -79,14 +76,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."ansi"."~0.3.0" =
-    self.by-version."ansi"."0.3.0";
-  by-spec."ansi-regex"."^0.2.0" =
-    self.by-version."ansi-regex"."0.2.1";
+  by-spec."ansi"."~0.3.0" = self.by-version."ansi"."0.3.0";
+  by-spec."ansi-regex"."^0.2.0" = self.by-version."ansi-regex"."0.2.1";
   by-version."ansi-regex"."0.2.1" = self.buildNodePackage {
     name = "ansi-regex-0.2.1";
     version = "0.2.1";
@@ -100,14 +95,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."ansi-regex"."^0.2.1" =
-    self.by-version."ansi-regex"."0.2.1";
-  by-spec."ansi-regex"."^1.0.0" =
-    self.by-version."ansi-regex"."1.1.1";
+  by-spec."ansi-regex"."^0.2.1" = self.by-version."ansi-regex"."0.2.1";
+  by-spec."ansi-regex"."^1.0.0" = self.by-version."ansi-regex"."1.1.1";
   by-version."ansi-regex"."1.1.1" = self.buildNodePackage {
     name = "ansi-regex-1.1.1";
     version = "1.1.1";
@@ -121,14 +114,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."ansi-regex"."^1.1.0" =
-    self.by-version."ansi-regex"."1.1.1";
-  by-spec."ansi-styles"."^1.1.0" =
-    self.by-version."ansi-styles"."1.1.0";
+  by-spec."ansi-regex"."^1.1.0" = self.by-version."ansi-regex"."1.1.1";
+  by-spec."ansi-styles"."^1.1.0" = self.by-version."ansi-styles"."1.1.0";
   by-version."ansi-styles"."1.1.0" = self.buildNodePackage {
     name = "ansi-styles-1.1.0";
     version = "1.1.0";
@@ -142,12 +133,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."ansi-styles"."^2.0.1" =
-    self.by-version."ansi-styles"."2.0.1";
+  by-spec."ansi-styles"."^2.0.1" = self.by-version."ansi-styles"."2.0.1";
   by-version."ansi-styles"."2.0.1" = self.buildNodePackage {
     name = "ansi-styles-2.0.1";
     version = "2.0.1";
@@ -161,12 +151,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."are-we-there-yet"."~1.0.0" =
-    self.by-version."are-we-there-yet"."1.0.4";
+  by-spec."are-we-there-yet"."~1.0.0" = self.by-version."are-we-there-yet"."1.0.4";
   by-version."are-we-there-yet"."1.0.4" = self.buildNodePackage {
     name = "are-we-there-yet-1.0.4";
     version = "1.0.4";
@@ -182,12 +171,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."argparse"."~ 0.1.11" =
-    self.by-version."argparse"."0.1.16";
+  by-spec."argparse"."~ 0.1.11" = self.by-version."argparse"."0.1.16";
   by-version."argparse"."0.1.16" = self.buildNodePackage {
     name = "argparse-0.1.16";
     version = "0.1.16";
@@ -203,12 +191,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."argparse"."~1.0.2" =
-    self.by-version."argparse"."1.0.2";
+  by-spec."argparse"."~1.0.2" = self.by-version."argparse"."1.0.2";
   by-version."argparse"."1.0.2" = self.buildNodePackage {
     name = "argparse-1.0.2";
     version = "1.0.2";
@@ -224,12 +211,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."asn1"."0.1.11" =
-    self.by-version."asn1"."0.1.11";
+  by-spec."asn1"."0.1.11" = self.by-version."asn1"."0.1.11";
   by-version."asn1"."0.1.11" = self.buildNodePackage {
     name = "asn1-0.1.11";
     version = "0.1.11";
@@ -243,12 +229,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."assert-diff"."^0.0.4" =
-    self.by-version."assert-diff"."0.0.4";
+  by-spec."assert-diff"."^0.0.4" = self.by-version."assert-diff"."0.0.4";
   by-version."assert-diff"."0.0.4" = self.buildNodePackage {
     name = "assert-diff-0.0.4";
     version = "0.0.4";
@@ -264,13 +249,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "assert-diff" = self.by-version."assert-diff"."0.0.4";
-  by-spec."assert-plus"."0.1.4" =
-    self.by-version."assert-plus"."0.1.4";
+  by-spec."assert-plus"."0.1.4" = self.by-version."assert-plus"."0.1.4";
   by-version."assert-plus"."0.1.4" = self.buildNodePackage {
     name = "assert-plus-0.1.4";
     version = "0.1.4";
@@ -284,12 +268,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."assert-plus"."^0.1.5" =
-    self.by-version."assert-plus"."0.1.5";
+  by-spec."assert-plus"."^0.1.5" = self.by-version."assert-plus"."0.1.5";
   by-version."assert-plus"."0.1.5" = self.buildNodePackage {
     name = "assert-plus-0.1.5";
     version = "0.1.5";
@@ -303,12 +286,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."assertion-error"."1.0.0" =
-    self.by-version."assertion-error"."1.0.0";
+  by-spec."assertion-error"."1.0.0" = self.by-version."assertion-error"."1.0.0";
   by-version."assertion-error"."1.0.0" = self.buildNodePackage {
     name = "assertion-error-1.0.0";
     version = "1.0.0";
@@ -322,12 +304,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."async"."0.2.9" =
-    self.by-version."async"."0.2.9";
+  by-spec."async"."0.2.9" = self.by-version."async"."0.2.9";
   by-version."async"."0.2.9" = self.buildNodePackage {
     name = "async-0.2.9";
     version = "0.2.9";
@@ -341,12 +322,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."async"."0.9.x" =
-    self.by-version."async"."0.9.0";
+  by-spec."async"."0.9.x" = self.by-version."async"."0.9.0";
   by-version."async"."0.9.0" = self.buildNodePackage {
     name = "async-0.9.0";
     version = "0.9.0";
@@ -360,12 +340,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."async"."^0.2.9" =
-    self.by-version."async"."0.2.10";
+  by-spec."async"."^0.2.9" = self.by-version."async"."0.2.10";
   by-version."async"."0.2.10" = self.buildNodePackage {
     name = "async-0.2.10";
     version = "0.2.10";
@@ -379,19 +358,15 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "async" = self.by-version."async"."0.2.10";
-  by-spec."async"."~0.2.6" =
-    self.by-version."async"."0.2.10";
-  by-spec."async"."~0.2.9" =
-    self.by-version."async"."0.2.10";
-  by-spec."async"."~0.9.0" =
-    self.by-version."async"."0.9.0";
-  by-spec."aws-sign2"."~0.5.0" =
-    self.by-version."aws-sign2"."0.5.0";
+  by-spec."async"."~0.2.6" = self.by-version."async"."0.2.10";
+  by-spec."async"."~0.2.9" = self.by-version."async"."0.2.10";
+  by-spec."async"."~0.9.0" = self.by-version."async"."0.9.0";
+  by-spec."aws-sign2"."~0.5.0" = self.by-version."aws-sign2"."0.5.0";
   by-version."aws-sign2"."0.5.0" = self.buildNodePackage {
     name = "aws-sign2-0.5.0";
     version = "0.5.0";
@@ -405,12 +380,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."balanced-match"."^0.2.0" =
-    self.by-version."balanced-match"."0.2.0";
+  by-spec."balanced-match"."^0.2.0" = self.by-version."balanced-match"."0.2.0";
   by-version."balanced-match"."0.2.0" = self.buildNodePackage {
     name = "balanced-match-0.2.0";
     version = "0.2.0";
@@ -424,12 +398,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."basic-auth"."~1.0.1" =
-    self.by-version."basic-auth"."1.0.1";
+  by-spec."basic-auth"."~1.0.1" = self.by-version."basic-auth"."1.0.1";
   by-version."basic-auth"."1.0.1" = self.buildNodePackage {
     name = "basic-auth-1.0.1";
     version = "1.0.1";
@@ -443,12 +416,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."bignumber.js"."^1.4.0" =
-    self.by-version."bignumber.js"."1.5.0";
+  by-spec."bignumber.js"."^1.4.0" = self.by-version."bignumber.js"."1.5.0";
   by-version."bignumber.js"."1.5.0" = self.buildNodePackage {
     name = "bignumber.js-1.5.0";
     version = "1.5.0";
@@ -462,13 +434,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "bignumber.js" = self.by-version."bignumber.js"."1.5.0";
-  by-spec."bignumber.js"."^2.0.3" =
-    self.by-version."bignumber.js"."2.0.7";
+  by-spec."bignumber.js"."^2.0.3" = self.by-version."bignumber.js"."2.0.7";
   by-version."bignumber.js"."2.0.7" = self.buildNodePackage {
     name = "bignumber.js-2.0.7";
     version = "2.0.7";
@@ -482,12 +453,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."bignumber.js"."~1.4.0" =
-    self.by-version."bignumber.js"."1.4.1";
+  by-spec."bignumber.js"."~1.4.0" = self.by-version."bignumber.js"."1.4.1";
   by-version."bignumber.js"."1.4.1" = self.buildNodePackage {
     name = "bignumber.js-1.4.1";
     version = "1.4.1";
@@ -501,12 +471,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."bindings"."1.2.x" =
-    self.by-version."bindings"."1.2.1";
+  by-spec."bindings"."1.2.x" = self.by-version."bindings"."1.2.1";
   by-version."bindings"."1.2.1" = self.buildNodePackage {
     name = "bindings-1.2.1";
     version = "1.2.1";
@@ -520,12 +489,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."bl"."~0.9.0" =
-    self.by-version."bl"."0.9.4";
+  by-spec."bl"."~0.9.0" = self.by-version."bl"."0.9.4";
   by-version."bl"."0.9.4" = self.buildNodePackage {
     name = "bl-0.9.4";
     version = "0.9.4";
@@ -540,12 +508,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."block-stream"."*" =
-    self.by-version."block-stream"."0.0.7";
+  by-spec."block-stream"."*" = self.by-version."block-stream"."0.0.7";
   by-version."block-stream"."0.0.7" = self.buildNodePackage {
     name = "block-stream-0.0.7";
     version = "0.0.7";
@@ -560,12 +527,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."bluebird"."^2.0.0" =
-    self.by-version."bluebird"."2.9.25";
+  by-spec."bluebird"."^2.0.0" = self.by-version."bluebird"."2.9.25";
   by-version."bluebird"."2.9.25" = self.buildNodePackage {
     name = "bluebird-2.9.25";
     version = "2.9.25";
@@ -579,17 +545,14 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."bluebird"."^2.3.4" =
-    self.by-version."bluebird"."2.9.25";
+  by-spec."bluebird"."^2.3.4" = self.by-version."bluebird"."2.9.25";
   "bluebird" = self.by-version."bluebird"."2.9.25";
-  by-spec."bluebird"."^2.9.25" =
-    self.by-version."bluebird"."2.9.25";
-  by-spec."body-parser"."^1.7.0" =
-    self.by-version."body-parser"."1.12.4";
+  by-spec."bluebird"."^2.9.25" = self.by-version."bluebird"."2.9.25";
+  by-spec."body-parser"."^1.7.0" = self.by-version."body-parser"."1.12.4";
   by-version."body-parser"."1.12.4" = self.buildNodePackage {
     name = "body-parser-1.12.4";
     version = "1.12.4";
@@ -612,13 +575,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "body-parser" = self.by-version."body-parser"."1.12.4";
-  by-spec."boom"."0.4.x" =
-    self.by-version."boom"."0.4.2";
+  by-spec."boom"."0.4.x" = self.by-version."boom"."0.4.2";
   by-version."boom"."0.4.2" = self.buildNodePackage {
     name = "boom-0.4.2";
     version = "0.4.2";
@@ -633,12 +595,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."boom"."2.x.x" =
-    self.by-version."boom"."2.7.1";
+  by-spec."boom"."2.x.x" = self.by-version."boom"."2.7.1";
   by-version."boom"."2.7.1" = self.buildNodePackage {
     name = "boom-2.7.1";
     version = "2.7.1";
@@ -653,12 +614,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."brace-expansion"."^1.0.0" =
-    self.by-version."brace-expansion"."1.1.0";
+  by-spec."brace-expansion"."^1.0.0" = self.by-version."brace-expansion"."1.1.0";
   by-version."brace-expansion"."1.1.0" = self.buildNodePackage {
     name = "brace-expansion-1.1.0";
     version = "1.1.0";
@@ -674,12 +634,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."bufferutil"."1.0.x" =
-    self.by-version."bufferutil"."1.0.1";
+  by-spec."bufferutil"."1.0.x" = self.by-version."bufferutil"."1.0.1";
   by-version."bufferutil"."1.0.1" = self.buildNodePackage {
     name = "bufferutil-1.0.1";
     version = "1.0.1";
@@ -695,12 +654,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."bytes"."1.0.0" =
-    self.by-version."bytes"."1.0.0";
+  by-spec."bytes"."1.0.0" = self.by-version."bytes"."1.0.0";
   by-version."bytes"."1.0.0" = self.buildNodePackage {
     name = "bytes-1.0.0";
     version = "1.0.0";
@@ -714,12 +672,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."bytes"."2.0.1" =
-    self.by-version."bytes"."2.0.1";
+  by-spec."bytes"."2.0.1" = self.by-version."bytes"."2.0.1";
   by-version."bytes"."2.0.1" = self.buildNodePackage {
     name = "bytes-2.0.1";
     version = "2.0.1";
@@ -733,12 +690,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."caseless"."~0.9.0" =
-    self.by-version."caseless"."0.9.0";
+  by-spec."caseless"."~0.9.0" = self.by-version."caseless"."0.9.0";
   by-version."caseless"."0.9.0" = self.buildNodePackage {
     name = "caseless-0.9.0";
     version = "0.9.0";
@@ -752,12 +708,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."chai".">=1.9.2 <3" =
-    self.by-version."chai"."2.3.0";
+  by-spec."chai".">=1.9.2 <3" = self.by-version."chai"."2.3.0";
   by-version."chai"."2.3.0" = self.buildNodePackage {
     name = "chai-2.3.0";
     version = "2.3.0";
@@ -773,12 +728,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."chai"."^1.10.0" =
-    self.by-version."chai"."1.10.0";
+  by-spec."chai"."^1.10.0" = self.by-version."chai"."1.10.0";
   by-version."chai"."1.10.0" = self.buildNodePackage {
     name = "chai-1.10.0";
     version = "1.10.0";
@@ -794,13 +748,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "chai" = self.by-version."chai"."1.10.0";
-  by-spec."chalk"."^1.0.0" =
-    self.by-version."chalk"."1.0.0";
+  by-spec."chalk"."^1.0.0" = self.by-version."chalk"."1.0.0";
   by-version."chalk"."1.0.0" = self.buildNodePackage {
     name = "chalk-1.0.0";
     version = "1.0.0";
@@ -819,12 +772,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."chalk"."~0.5.1" =
-    self.by-version."chalk"."0.5.1";
+  by-spec."chalk"."~0.5.1" = self.by-version."chalk"."0.5.1";
   by-version."chalk"."0.5.1" = self.buildNodePackage {
     name = "chalk-0.5.1";
     version = "0.5.1";
@@ -843,12 +795,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."cli-color"."~0.1.6" =
-    self.by-version."cli-color"."0.1.7";
+  by-spec."cli-color"."~0.1.6" = self.by-version."cli-color"."0.1.7";
   by-version."cli-color"."0.1.7" = self.buildNodePackage {
     name = "cli-color-0.1.7";
     version = "0.1.7";
@@ -863,12 +814,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."colors"."1.0.x" =
-    self.by-version."colors"."1.0.3";
+  by-spec."colors"."1.0.x" = self.by-version."colors"."1.0.3";
   by-version."colors"."1.0.3" = self.buildNodePackage {
     name = "colors-1.0.3";
     version = "1.0.3";
@@ -882,12 +832,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."combined-stream"."~0.0.4" =
-    self.by-version."combined-stream"."0.0.7";
+  by-spec."combined-stream"."~0.0.4" = self.by-version."combined-stream"."0.0.7";
   by-version."combined-stream"."0.0.7" = self.buildNodePackage {
     name = "combined-stream-0.0.7";
     version = "0.0.7";
@@ -902,14 +851,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."combined-stream"."~0.0.5" =
-    self.by-version."combined-stream"."0.0.7";
-  by-spec."commander"."0.6.1" =
-    self.by-version."commander"."0.6.1";
+  by-spec."combined-stream"."~0.0.5" = self.by-version."combined-stream"."0.0.7";
+  by-spec."commander"."0.6.1" = self.by-version."commander"."0.6.1";
   by-version."commander"."0.6.1" = self.buildNodePackage {
     name = "commander-0.6.1";
     version = "0.6.1";
@@ -923,12 +870,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."commander"."2.3.0" =
-    self.by-version."commander"."2.3.0";
+  by-spec."commander"."2.3.0" = self.by-version."commander"."2.3.0";
   by-version."commander"."2.3.0" = self.buildNodePackage {
     name = "commander-2.3.0";
     version = "2.3.0";
@@ -942,12 +888,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."commander"."^2.2.0" =
-    self.by-version."commander"."2.8.1";
+  by-spec."commander"."^2.2.0" = self.by-version."commander"."2.8.1";
   by-version."commander"."2.8.1" = self.buildNodePackage {
     name = "commander-2.8.1";
     version = "2.8.1";
@@ -962,14 +907,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."commander"."^2.8.1" =
-    self.by-version."commander"."2.8.1";
-  by-spec."commander"."~2.1.0" =
-    self.by-version."commander"."2.1.0";
+  by-spec."commander"."^2.8.1" = self.by-version."commander"."2.8.1";
+  by-spec."commander"."~2.1.0" = self.by-version."commander"."2.1.0";
   by-version."commander"."2.1.0" = self.buildNodePackage {
     name = "commander-2.1.0";
     version = "2.1.0";
@@ -983,12 +926,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."component-emitter"."1.1.2" =
-    self.by-version."component-emitter"."1.1.2";
+  by-spec."component-emitter"."1.1.2" = self.by-version."component-emitter"."1.1.2";
   by-version."component-emitter"."1.1.2" = self.buildNodePackage {
     name = "component-emitter-1.1.2";
     version = "1.1.2";
@@ -1002,12 +944,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."compressible"."~2.0.2" =
-    self.by-version."compressible"."2.0.2";
+  by-spec."compressible"."~2.0.2" = self.by-version."compressible"."2.0.2";
   by-version."compressible"."2.0.2" = self.buildNodePackage {
     name = "compressible-2.0.2";
     version = "2.0.2";
@@ -1022,12 +963,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."compression"."^1.3.0" =
-    self.by-version."compression"."1.4.4";
+  by-spec."compression"."^1.3.0" = self.by-version."compression"."1.4.4";
   by-version."compression"."1.4.4" = self.buildNodePackage {
     name = "compression-1.4.4";
     version = "1.4.4";
@@ -1047,13 +987,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "compression" = self.by-version."compression"."1.4.4";
-  by-spec."concat-map"."0.0.1" =
-    self.by-version."concat-map"."0.0.1";
+  by-spec."concat-map"."0.0.1" = self.by-version."concat-map"."0.0.1";
   by-version."concat-map"."0.0.1" = self.buildNodePackage {
     name = "concat-map-0.0.1";
     version = "0.0.1";
@@ -1067,12 +1006,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."content-disposition"."0.5.0" =
-    self.by-version."content-disposition"."0.5.0";
+  by-spec."content-disposition"."0.5.0" = self.by-version."content-disposition"."0.5.0";
   by-version."content-disposition"."0.5.0" = self.buildNodePackage {
     name = "content-disposition-0.5.0";
     version = "0.5.0";
@@ -1086,12 +1024,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."content-type"."~1.0.1" =
-    self.by-version."content-type"."1.0.1";
+  by-spec."content-type"."~1.0.1" = self.by-version."content-type"."1.0.1";
   by-version."content-type"."1.0.1" = self.buildNodePackage {
     name = "content-type-1.0.1";
     version = "1.0.1";
@@ -1105,12 +1042,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."cookie"."0.1.2" =
-    self.by-version."cookie"."0.1.2";
+  by-spec."cookie"."0.1.2" = self.by-version."cookie"."0.1.2";
   by-version."cookie"."0.1.2" = self.buildNodePackage {
     name = "cookie-0.1.2";
     version = "0.1.2";
@@ -1124,12 +1060,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."cookie-signature"."1.0.6" =
-    self.by-version."cookie-signature"."1.0.6";
+  by-spec."cookie-signature"."1.0.6" = self.by-version."cookie-signature"."1.0.6";
   by-version."cookie-signature"."1.0.6" = self.buildNodePackage {
     name = "cookie-signature-1.0.6";
     version = "1.0.6";
@@ -1143,12 +1078,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."cookiejar"."1.3.2" =
-    self.by-version."cookiejar"."1.3.2";
+  by-spec."cookiejar"."1.3.2" = self.by-version."cookiejar"."1.3.2";
   by-version."cookiejar"."1.3.2" = self.buildNodePackage {
     name = "cookiejar-1.3.2";
     version = "1.3.2";
@@ -1162,12 +1096,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."core-util-is"."~1.0.0" =
-    self.by-version."core-util-is"."1.0.1";
+  by-spec."core-util-is"."~1.0.0" = self.by-version."core-util-is"."1.0.1";
   by-version."core-util-is"."1.0.1" = self.buildNodePackage {
     name = "core-util-is-1.0.1";
     version = "1.0.1";
@@ -1181,12 +1114,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."coveralls"."^2.10.0" =
-    self.by-version."coveralls"."2.11.2";
+  by-spec."coveralls"."^2.10.0" = self.by-version."coveralls"."2.11.2";
   by-version."coveralls"."2.11.2" = self.buildNodePackage {
     name = "coveralls-2.11.2";
     version = "2.11.2";
@@ -1204,13 +1136,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "coveralls" = self.by-version."coveralls"."2.11.2";
-  by-spec."crc"."3.2.1" =
-    self.by-version."crc"."3.2.1";
+  by-spec."crc"."3.2.1" = self.by-version."crc"."3.2.1";
   by-version."crc"."3.2.1" = self.buildNodePackage {
     name = "crc-3.2.1";
     version = "3.2.1";
@@ -1224,12 +1155,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."cryptiles"."0.2.x" =
-    self.by-version."cryptiles"."0.2.2";
+  by-spec."cryptiles"."0.2.x" = self.by-version."cryptiles"."0.2.2";
   by-version."cryptiles"."0.2.2" = self.buildNodePackage {
     name = "cryptiles-0.2.2";
     version = "0.2.2";
@@ -1244,12 +1174,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."cryptiles"."2.x.x" =
-    self.by-version."cryptiles"."2.0.4";
+  by-spec."cryptiles"."2.x.x" = self.by-version."cryptiles"."2.0.4";
   by-version."cryptiles"."2.0.4" = self.buildNodePackage {
     name = "cryptiles-2.0.4";
     version = "2.0.4";
@@ -1264,12 +1193,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."ctype"."0.5.3" =
-    self.by-version."ctype"."0.5.3";
+  by-spec."ctype"."0.5.3" = self.by-version."ctype"."0.5.3";
   by-version."ctype"."0.5.3" = self.buildNodePackage {
     name = "ctype-0.5.3";
     version = "0.5.3";
@@ -1283,12 +1211,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."cycle"."1.0.x" =
-    self.by-version."cycle"."1.0.3";
+  by-spec."cycle"."1.0.x" = self.by-version."cycle"."1.0.3";
   by-version."cycle"."1.0.3" = self.buildNodePackage {
     name = "cycle-1.0.3";
     version = "1.0.3";
@@ -1302,12 +1229,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."debug"."2.0.0" =
-    self.by-version."debug"."2.0.0";
+  by-spec."debug"."2.0.0" = self.by-version."debug"."2.0.0";
   by-version."debug"."2.0.0" = self.buildNodePackage {
     name = "debug-2.0.0";
     version = "2.0.0";
@@ -1322,12 +1248,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."debug"."~0.7.2" =
-    self.by-version."debug"."0.7.4";
+  by-spec."debug"."~0.7.2" = self.by-version."debug"."0.7.4";
   by-version."debug"."0.7.4" = self.buildNodePackage {
     name = "debug-0.7.4";
     version = "0.7.4";
@@ -1341,12 +1266,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."debug"."~2.1.3" =
-    self.by-version."debug"."2.1.3";
+  by-spec."debug"."~2.1.3" = self.by-version."debug"."2.1.3";
   by-version."debug"."2.1.3" = self.buildNodePackage {
     name = "debug-2.1.3";
     version = "2.1.3";
@@ -1361,12 +1285,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."debug"."~2.2.0" =
-    self.by-version."debug"."2.2.0";
+  by-spec."debug"."~2.2.0" = self.by-version."debug"."2.2.0";
   by-version."debug"."2.2.0" = self.buildNodePackage {
     name = "debug-2.2.0";
     version = "2.2.0";
@@ -1381,12 +1304,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."deep-eql"."0.1.3" =
-    self.by-version."deep-eql"."0.1.3";
+  by-spec."deep-eql"."0.1.3" = self.by-version."deep-eql"."0.1.3";
   by-version."deep-eql"."0.1.3" = self.buildNodePackage {
     name = "deep-eql-0.1.3";
     version = "0.1.3";
@@ -1401,12 +1323,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."deep-extend"."~0.2.5" =
-    self.by-version."deep-extend"."0.2.11";
+  by-spec."deep-extend"."~0.2.5" = self.by-version."deep-extend"."0.2.11";
   by-version."deep-extend"."0.2.11" = self.buildNodePackage {
     name = "deep-extend-0.2.11";
     version = "0.2.11";
@@ -1420,12 +1341,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."delayed-stream"."0.0.5" =
-    self.by-version."delayed-stream"."0.0.5";
+  by-spec."delayed-stream"."0.0.5" = self.by-version."delayed-stream"."0.0.5";
   by-version."delayed-stream"."0.0.5" = self.buildNodePackage {
     name = "delayed-stream-0.0.5";
     version = "0.0.5";
@@ -1439,12 +1359,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."delegates"."^0.1.0" =
-    self.by-version."delegates"."0.1.0";
+  by-spec."delegates"."^0.1.0" = self.by-version."delegates"."0.1.0";
   by-version."delegates"."0.1.0" = self.buildNodePackage {
     name = "delegates-0.1.0";
     version = "0.1.0";
@@ -1458,12 +1377,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."depd"."~1.0.0" =
-    self.by-version."depd"."1.0.1";
+  by-spec."depd"."~1.0.0" = self.by-version."depd"."1.0.1";
   by-version."depd"."1.0.1" = self.buildNodePackage {
     name = "depd-1.0.1";
     version = "1.0.1";
@@ -1477,14 +1395,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."depd"."~1.0.1" =
-    self.by-version."depd"."1.0.1";
-  by-spec."destroy"."1.0.3" =
-    self.by-version."destroy"."1.0.3";
+  by-spec."depd"."~1.0.1" = self.by-version."depd"."1.0.1";
+  by-spec."destroy"."1.0.3" = self.by-version."destroy"."1.0.3";
   by-version."destroy"."1.0.3" = self.buildNodePackage {
     name = "destroy-1.0.3";
     version = "1.0.3";
@@ -1498,12 +1414,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."diff"."1.0.8" =
-    self.by-version."diff"."1.0.8";
+  by-spec."diff"."1.0.8" = self.by-version."diff"."1.0.8";
   by-version."diff"."1.0.8" = self.buildNodePackage {
     name = "diff-1.0.8";
     version = "1.0.8";
@@ -1517,12 +1432,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."difflib"."~0.2.1" =
-    self.by-version."difflib"."0.2.4";
+  by-spec."difflib"."~0.2.1" = self.by-version."difflib"."0.2.4";
   by-version."difflib"."0.2.4" = self.buildNodePackage {
     name = "difflib-0.2.4";
     version = "0.2.4";
@@ -1537,12 +1451,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."dreamopt"."~0.6.0" =
-    self.by-version."dreamopt"."0.6.0";
+  by-spec."dreamopt"."~0.6.0" = self.by-version."dreamopt"."0.6.0";
   by-version."dreamopt"."0.6.0" = self.buildNodePackage {
     name = "dreamopt-0.6.0";
     version = "0.6.0";
@@ -1557,12 +1470,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."ee-first"."1.1.0" =
-    self.by-version."ee-first"."1.1.0";
+  by-spec."ee-first"."1.1.0" = self.by-version."ee-first"."1.1.0";
   by-version."ee-first"."1.1.0" = self.buildNodePackage {
     name = "ee-first-1.1.0";
     version = "1.1.0";
@@ -1576,12 +1488,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."es5-ext"."0.8.x" =
-    self.by-version."es5-ext"."0.8.2";
+  by-spec."es5-ext"."0.8.x" = self.by-version."es5-ext"."0.8.2";
   by-version."es5-ext"."0.8.2" = self.buildNodePackage {
     name = "es5-ext-0.8.2";
     version = "0.8.2";
@@ -1595,12 +1506,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."escape-html"."1.0.1" =
-    self.by-version."escape-html"."1.0.1";
+  by-spec."escape-html"."1.0.1" = self.by-version."escape-html"."1.0.1";
   by-version."escape-html"."1.0.1" = self.buildNodePackage {
     name = "escape-html-1.0.1";
     version = "1.0.1";
@@ -1614,12 +1524,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."escape-string-regexp"."1.0.2" =
-    self.by-version."escape-string-regexp"."1.0.2";
+  by-spec."escape-string-regexp"."1.0.2" = self.by-version."escape-string-regexp"."1.0.2";
   by-version."escape-string-regexp"."1.0.2" = self.buildNodePackage {
     name = "escape-string-regexp-1.0.2";
     version = "1.0.2";
@@ -1633,12 +1542,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."escape-string-regexp"."^1.0.0" =
-    self.by-version."escape-string-regexp"."1.0.3";
+  by-spec."escape-string-regexp"."^1.0.0" = self.by-version."escape-string-regexp"."1.0.3";
   by-version."escape-string-regexp"."1.0.3" = self.buildNodePackage {
     name = "escape-string-regexp-1.0.3";
     version = "1.0.3";
@@ -1652,14 +1560,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."escape-string-regexp"."^1.0.2" =
-    self.by-version."escape-string-regexp"."1.0.3";
-  by-spec."escodegen"."1.3.x" =
-    self.by-version."escodegen"."1.3.3";
+  by-spec."escape-string-regexp"."^1.0.2" = self.by-version."escape-string-regexp"."1.0.3";
+  by-spec."escodegen"."1.3.x" = self.by-version."escodegen"."1.3.3";
   by-version."escodegen"."1.3.3" = self.buildNodePackage {
     name = "escodegen-1.3.3";
     version = "1.3.3";
@@ -1677,12 +1583,11 @@
     optionalDependencies = {
       "source-map-0.1.43" = self.by-version."source-map"."0.1.43";
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."esprima"."1.2.x" =
-    self.by-version."esprima"."1.2.5";
+  by-spec."esprima"."1.2.x" = self.by-version."esprima"."1.2.5";
   by-version."esprima"."1.2.5" = self.buildNodePackage {
     name = "esprima-1.2.5";
     version = "1.2.5";
@@ -1696,12 +1601,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."esprima"."~ 1.0.2" =
-    self.by-version."esprima"."1.0.4";
+  by-spec."esprima"."~ 1.0.2" = self.by-version."esprima"."1.0.4";
   by-version."esprima"."1.0.4" = self.buildNodePackage {
     name = "esprima-1.0.4";
     version = "1.0.4";
@@ -1715,12 +1619,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."esprima"."~1.1.1" =
-    self.by-version."esprima"."1.1.1";
+  by-spec."esprima"."~1.1.1" = self.by-version."esprima"."1.1.1";
   by-version."esprima"."1.1.1" = self.buildNodePackage {
     name = "esprima-1.1.1";
     version = "1.1.1";
@@ -1734,12 +1637,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."esprima"."~2.2.0" =
-    self.by-version."esprima"."2.2.0";
+  by-spec."esprima"."~2.2.0" = self.by-version."esprima"."2.2.0";
   by-version."esprima"."2.2.0" = self.buildNodePackage {
     name = "esprima-2.2.0";
     version = "2.2.0";
@@ -1753,12 +1655,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."estraverse"."~1.5.0" =
-    self.by-version."estraverse"."1.5.1";
+  by-spec."estraverse"."~1.5.0" = self.by-version."estraverse"."1.5.1";
   by-version."estraverse"."1.5.1" = self.buildNodePackage {
     name = "estraverse-1.5.1";
     version = "1.5.1";
@@ -1772,12 +1673,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."esutils"."~1.0.0" =
-    self.by-version."esutils"."1.0.0";
+  by-spec."esutils"."~1.0.0" = self.by-version."esutils"."1.0.0";
   by-version."esutils"."1.0.0" = self.buildNodePackage {
     name = "esutils-1.0.0";
     version = "1.0.0";
@@ -1791,12 +1691,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."etag"."~1.5.1" =
-    self.by-version."etag"."1.5.1";
+  by-spec."etag"."~1.5.1" = self.by-version."etag"."1.5.1";
   by-version."etag"."1.5.1" = self.buildNodePackage {
     name = "etag-1.5.1";
     version = "1.5.1";
@@ -1811,12 +1710,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."express"."^4.8.7" =
-    self.by-version."express"."4.12.3";
+  by-spec."express"."^4.8.7" = self.by-version."express"."4.12.3";
   by-version."express"."4.12.3" = self.buildNodePackage {
     name = "express-4.12.3";
     version = "4.12.3";
@@ -1854,13 +1752,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "express" = self.by-version."express"."4.12.3";
-  by-spec."extend"."~1.2.1" =
-    self.by-version."extend"."1.2.1";
+  by-spec."extend"."~1.2.1" = self.by-version."extend"."1.2.1";
   by-version."extend"."1.2.1" = self.buildNodePackage {
     name = "extend-1.2.1";
     version = "1.2.1";
@@ -1874,12 +1771,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."extend"."~1.3.0" =
-    self.by-version."extend"."1.3.0";
+  by-spec."extend"."~1.3.0" = self.by-version."extend"."1.3.0";
   by-version."extend"."1.3.0" = self.buildNodePackage {
     name = "extend-1.3.0";
     version = "1.3.0";
@@ -1893,12 +1789,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."eyes"."0.1.x" =
-    self.by-version."eyes"."0.1.8";
+  by-spec."eyes"."0.1.x" = self.by-version."eyes"."0.1.8";
   by-version."eyes"."0.1.8" = self.buildNodePackage {
     name = "eyes-0.1.8";
     version = "0.1.8";
@@ -1912,12 +1807,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."fileset"."0.1.x" =
-    self.by-version."fileset"."0.1.5";
+  by-spec."fileset"."0.1.x" = self.by-version."fileset"."0.1.5";
   by-version."fileset"."0.1.5" = self.buildNodePackage {
     name = "fileset-0.1.5";
     version = "0.1.5";
@@ -1933,12 +1827,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."finalhandler"."0.3.4" =
-    self.by-version."finalhandler"."0.3.4";
+  by-spec."finalhandler"."0.3.4" = self.by-version."finalhandler"."0.3.4";
   by-version."finalhandler"."0.3.4" = self.buildNodePackage {
     name = "finalhandler-0.3.4";
     version = "0.3.4";
@@ -1955,12 +1848,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."findup-sync"."~0.1.2" =
-    self.by-version."findup-sync"."0.1.3";
+  by-spec."findup-sync"."~0.1.2" = self.by-version."findup-sync"."0.1.3";
   by-version."findup-sync"."0.1.3" = self.buildNodePackage {
     name = "findup-sync-0.1.3";
     version = "0.1.3";
@@ -1976,12 +1868,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."flagged-respawn"."~0.3.0" =
-    self.by-version."flagged-respawn"."0.3.1";
+  by-spec."flagged-respawn"."~0.3.0" = self.by-version."flagged-respawn"."0.3.1";
   by-version."flagged-respawn"."0.3.1" = self.buildNodePackage {
     name = "flagged-respawn-0.3.1";
     version = "0.3.1";
@@ -1995,12 +1886,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."forever-agent"."~0.5.0" =
-    self.by-version."forever-agent"."0.5.2";
+  by-spec."forever-agent"."~0.5.0" = self.by-version."forever-agent"."0.5.2";
   by-version."forever-agent"."0.5.2" = self.buildNodePackage {
     name = "forever-agent-0.5.2";
     version = "0.5.2";
@@ -2014,12 +1904,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."forever-agent"."~0.6.0" =
-    self.by-version."forever-agent"."0.6.1";
+  by-spec."forever-agent"."~0.6.0" = self.by-version."forever-agent"."0.6.1";
   by-version."forever-agent"."0.6.1" = self.buildNodePackage {
     name = "forever-agent-0.6.1";
     version = "0.6.1";
@@ -2033,12 +1922,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."form-data"."0.1.2" =
-    self.by-version."form-data"."0.1.2";
+  by-spec."form-data"."0.1.2" = self.by-version."form-data"."0.1.2";
   by-version."form-data"."0.1.2" = self.buildNodePackage {
     name = "form-data-0.1.2";
     version = "0.1.2";
@@ -2055,12 +1943,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."form-data"."~0.1.0" =
-    self.by-version."form-data"."0.1.4";
+  by-spec."form-data"."~0.1.0" = self.by-version."form-data"."0.1.4";
   by-version."form-data"."0.1.4" = self.buildNodePackage {
     name = "form-data-0.1.4";
     version = "0.1.4";
@@ -2077,12 +1964,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."form-data"."~0.2.0" =
-    self.by-version."form-data"."0.2.0";
+  by-spec."form-data"."~0.2.0" = self.by-version."form-data"."0.2.0";
   by-version."form-data"."0.2.0" = self.buildNodePackage {
     name = "form-data-0.2.0";
     version = "0.2.0";
@@ -2099,12 +1985,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."formatio"."1.1.1" =
-    self.by-version."formatio"."1.1.1";
+  by-spec."formatio"."1.1.1" = self.by-version."formatio"."1.1.1";
   by-version."formatio"."1.1.1" = self.buildNodePackage {
     name = "formatio-1.1.1";
     version = "1.1.1";
@@ -2119,12 +2004,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."formatio"."~1.0" =
-    self.by-version."formatio"."1.0.2";
+  by-spec."formatio"."~1.0" = self.by-version."formatio"."1.0.2";
   by-version."formatio"."1.0.2" = self.buildNodePackage {
     name = "formatio-1.0.2";
     version = "1.0.2";
@@ -2139,12 +2023,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."formidable"."1.0.14" =
-    self.by-version."formidable"."1.0.14";
+  by-spec."formidable"."1.0.14" = self.by-version."formidable"."1.0.14";
   by-version."formidable"."1.0.14" = self.buildNodePackage {
     name = "formidable-1.0.14";
     version = "1.0.14";
@@ -2158,12 +2041,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."forwarded"."~0.1.0" =
-    self.by-version."forwarded"."0.1.0";
+  by-spec."forwarded"."~0.1.0" = self.by-version."forwarded"."0.1.0";
   by-version."forwarded"."0.1.0" = self.buildNodePackage {
     name = "forwarded-0.1.0";
     version = "0.1.0";
@@ -2177,12 +2059,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."fresh"."0.2.4" =
-    self.by-version."fresh"."0.2.4";
+  by-spec."fresh"."0.2.4" = self.by-version."fresh"."0.2.4";
   by-version."fresh"."0.2.4" = self.buildNodePackage {
     name = "fresh-0.2.4";
     version = "0.2.4";
@@ -2196,12 +2077,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."fstream"."^1.0.2" =
-    self.by-version."fstream"."1.0.6";
+  by-spec."fstream"."^1.0.2" = self.by-version."fstream"."1.0.6";
   by-version."fstream"."1.0.6" = self.buildNodePackage {
     name = "fstream-1.0.6";
     version = "1.0.6";
@@ -2219,12 +2099,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."fstream"."~0.1.17" =
-    self.by-version."fstream"."0.1.31";
+  by-spec."fstream"."~0.1.17" = self.by-version."fstream"."0.1.31";
   by-version."fstream"."0.1.31" = self.buildNodePackage {
     name = "fstream-0.1.31";
     version = "0.1.31";
@@ -2242,16 +2121,13 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."fstream"."~0.1.22" =
-    self.by-version."fstream"."0.1.31";
-  by-spec."fstream"."~0.1.28" =
-    self.by-version."fstream"."0.1.31";
-  by-spec."fstream-ignore"."0.0.7" =
-    self.by-version."fstream-ignore"."0.0.7";
+  by-spec."fstream"."~0.1.22" = self.by-version."fstream"."0.1.31";
+  by-spec."fstream"."~0.1.28" = self.by-version."fstream"."0.1.31";
+  by-spec."fstream-ignore"."0.0.7" = self.by-version."fstream-ignore"."0.0.7";
   by-version."fstream-ignore"."0.0.7" = self.buildNodePackage {
     name = "fstream-ignore-0.0.7";
     version = "0.0.7";
@@ -2268,12 +2144,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."gauge"."~1.2.0" =
-    self.by-version."gauge"."1.2.0";
+  by-spec."gauge"."~1.2.0" = self.by-version."gauge"."1.2.0";
   by-version."gauge"."1.2.0" = self.buildNodePackage {
     name = "gauge-1.2.0";
     version = "1.2.0";
@@ -2292,12 +2167,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."generate-function"."^2.0.0" =
-    self.by-version."generate-function"."2.0.0";
+  by-spec."generate-function"."^2.0.0" = self.by-version."generate-function"."2.0.0";
   by-version."generate-function"."2.0.0" = self.buildNodePackage {
     name = "generate-function-2.0.0";
     version = "2.0.0";
@@ -2311,12 +2185,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."generate-object-property"."^1.1.0" =
-    self.by-version."generate-object-property"."1.1.1";
+  by-spec."generate-object-property"."^1.1.0" = self.by-version."generate-object-property"."1.1.1";
   by-version."generate-object-property"."1.1.1" = self.buildNodePackage {
     name = "generate-object-property-1.1.1";
     version = "1.1.1";
@@ -2331,12 +2204,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."generic-pool-redux"."~0.1.0" =
-    self.by-version."generic-pool-redux"."0.1.0";
+  by-spec."generic-pool-redux"."~0.1.0" = self.by-version."generic-pool-redux"."0.1.0";
   by-version."generic-pool-redux"."0.1.0" = self.buildNodePackage {
     name = "generic-pool-redux-0.1.0";
     version = "0.1.0";
@@ -2350,12 +2222,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."get-stdin"."^4.0.1" =
-    self.by-version."get-stdin"."4.0.1";
+  by-spec."get-stdin"."^4.0.1" = self.by-version."get-stdin"."4.0.1";
   by-version."get-stdin"."4.0.1" = self.buildNodePackage {
     name = "get-stdin-4.0.1";
     version = "4.0.1";
@@ -2369,12 +2240,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."glob"."3.2.3" =
-    self.by-version."glob"."3.2.3";
+  by-spec."glob"."3.2.3" = self.by-version."glob"."3.2.3";
   by-version."glob"."3.2.3" = self.buildNodePackage {
     name = "glob-3.2.3";
     version = "3.2.3";
@@ -2391,12 +2261,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."glob"."3.x" =
-    self.by-version."glob"."3.2.11";
+  by-spec."glob"."3.x" = self.by-version."glob"."3.2.11";
   by-version."glob"."3.2.11" = self.buildNodePackage {
     name = "glob-3.2.11";
     version = "3.2.11";
@@ -2412,12 +2281,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."glob"."^4.4.2" =
-    self.by-version."glob"."4.5.3";
+  by-spec."glob"."^4.4.2" = self.by-version."glob"."4.5.3";
   by-version."glob"."4.5.3" = self.buildNodePackage {
     name = "glob-4.5.3";
     version = "4.5.3";
@@ -2435,14 +2303,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."glob"."~3.2.9" =
-    self.by-version."glob"."3.2.11";
-  by-spec."graceful-fs"."1.2" =
-    self.by-version."graceful-fs"."1.2.3";
+  by-spec."glob"."~3.2.9" = self.by-version."glob"."3.2.11";
+  by-spec."graceful-fs"."1.2" = self.by-version."graceful-fs"."1.2.3";
   by-version."graceful-fs"."1.2.3" = self.buildNodePackage {
     name = "graceful-fs-1.2.3";
     version = "1.2.3";
@@ -2456,12 +2322,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."graceful-fs"."3" =
-    self.by-version."graceful-fs"."3.0.6";
+  by-spec."graceful-fs"."3" = self.by-version."graceful-fs"."3.0.6";
   by-version."graceful-fs"."3.0.6" = self.buildNodePackage {
     name = "graceful-fs-3.0.6";
     version = "3.0.6";
@@ -2475,12 +2340,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."graceful-fs"."~2.0.0" =
-    self.by-version."graceful-fs"."2.0.3";
+  by-spec."graceful-fs"."~2.0.0" = self.by-version."graceful-fs"."2.0.3";
   by-version."graceful-fs"."2.0.3" = self.buildNodePackage {
     name = "graceful-fs-2.0.3";
     version = "2.0.3";
@@ -2494,14 +2358,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."graceful-fs"."~3.0.2" =
-    self.by-version."graceful-fs"."3.0.6";
-  by-spec."graceful-readlink".">= 1.0.0" =
-    self.by-version."graceful-readlink"."1.0.1";
+  by-spec."graceful-fs"."~3.0.2" = self.by-version."graceful-fs"."3.0.6";
+  by-spec."graceful-readlink".">= 1.0.0" = self.by-version."graceful-readlink"."1.0.1";
   by-version."graceful-readlink"."1.0.1" = self.buildNodePackage {
     name = "graceful-readlink-1.0.1";
     version = "1.0.1";
@@ -2515,12 +2377,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."growl"."1.8.1" =
-    self.by-version."growl"."1.8.1";
+  by-spec."growl"."1.8.1" = self.by-version."growl"."1.8.1";
   by-version."growl"."1.8.1" = self.buildNodePackage {
     name = "growl-1.8.1";
     version = "1.8.1";
@@ -2534,12 +2395,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."handlebars"."1.3.x" =
-    self.by-version."handlebars"."1.3.0";
+  by-spec."handlebars"."1.3.x" = self.by-version."handlebars"."1.3.0";
   by-version."handlebars"."1.3.0" = self.buildNodePackage {
     name = "handlebars-1.3.0";
     version = "1.3.0";
@@ -2555,12 +2415,11 @@
     optionalDependencies = {
       "uglify-js-2.3.6" = self.by-version."uglify-js"."2.3.6";
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."har-validator"."^1.4.0" =
-    self.by-version."har-validator"."1.7.0";
+  by-spec."har-validator"."^1.4.0" = self.by-version."har-validator"."1.7.0";
   by-version."har-validator"."1.7.0" = self.buildNodePackage {
     name = "har-validator-1.7.0";
     version = "1.7.0";
@@ -2578,12 +2437,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."has-ansi"."^0.1.0" =
-    self.by-version."has-ansi"."0.1.0";
+  by-spec."has-ansi"."^0.1.0" = self.by-version."has-ansi"."0.1.0";
   by-version."has-ansi"."0.1.0" = self.buildNodePackage {
     name = "has-ansi-0.1.0";
     version = "0.1.0";
@@ -2598,12 +2456,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."has-ansi"."^1.0.3" =
-    self.by-version."has-ansi"."1.0.3";
+  by-spec."has-ansi"."^1.0.3" = self.by-version."has-ansi"."1.0.3";
   by-version."has-ansi"."1.0.3" = self.buildNodePackage {
     name = "has-ansi-1.0.3";
     version = "1.0.3";
@@ -2619,12 +2476,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."has-unicode"."^1.0.0" =
-    self.by-version."has-unicode"."1.0.0";
+  by-spec."has-unicode"."^1.0.0" = self.by-version."has-unicode"."1.0.0";
   by-version."has-unicode"."1.0.0" = self.buildNodePackage {
     name = "has-unicode-1.0.0";
     version = "1.0.0";
@@ -2638,12 +2494,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."hawk"."1.1.1" =
-    self.by-version."hawk"."1.1.1";
+  by-spec."hawk"."1.1.1" = self.by-version."hawk"."1.1.1";
   by-version."hawk"."1.1.1" = self.buildNodePackage {
     name = "hawk-1.1.1";
     version = "1.1.1";
@@ -2661,12 +2516,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."hawk"."~2.3.0" =
-    self.by-version."hawk"."2.3.1";
+  by-spec."hawk"."~2.3.0" = self.by-version."hawk"."2.3.1";
   by-version."hawk"."2.3.1" = self.buildNodePackage {
     name = "hawk-2.3.1";
     version = "2.3.1";
@@ -2684,12 +2538,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."heap".">= 0.2.0" =
-    self.by-version."heap"."0.2.6";
+  by-spec."heap".">= 0.2.0" = self.by-version."heap"."0.2.6";
   by-version."heap"."0.2.6" = self.buildNodePackage {
     name = "heap-0.2.6";
     version = "0.2.6";
@@ -2703,12 +2556,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."hoek"."0.9.x" =
-    self.by-version."hoek"."0.9.1";
+  by-spec."hoek"."0.9.x" = self.by-version."hoek"."0.9.1";
   by-version."hoek"."0.9.1" = self.buildNodePackage {
     name = "hoek-0.9.1";
     version = "0.9.1";
@@ -2722,12 +2574,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."hoek"."2.x.x" =
-    self.by-version."hoek"."2.13.0";
+  by-spec."hoek"."2.x.x" = self.by-version."hoek"."2.13.0";
   by-version."hoek"."2.13.0" = self.buildNodePackage {
     name = "hoek-2.13.0";
     version = "2.13.0";
@@ -2741,12 +2592,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."http-signature"."~0.10.0" =
-    self.by-version."http-signature"."0.10.1";
+  by-spec."http-signature"."~0.10.0" = self.by-version."http-signature"."0.10.1";
   by-version."http-signature"."0.10.1" = self.buildNodePackage {
     name = "http-signature-0.10.1";
     version = "0.10.1";
@@ -2763,12 +2613,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."iconv-lite"."0.4.8" =
-    self.by-version."iconv-lite"."0.4.8";
+  by-spec."iconv-lite"."0.4.8" = self.by-version."iconv-lite"."0.4.8";
   by-version."iconv-lite"."0.4.8" = self.buildNodePackage {
     name = "iconv-lite-0.4.8";
     version = "0.4.8";
@@ -2782,12 +2631,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."inflight"."^1.0.4" =
-    self.by-version."inflight"."1.0.4";
+  by-spec."inflight"."^1.0.4" = self.by-version."inflight"."1.0.4";
   by-version."inflight"."1.0.4" = self.buildNodePackage {
     name = "inflight-1.0.4";
     version = "1.0.4";
@@ -2803,12 +2651,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."inherits"."2" =
-    self.by-version."inherits"."2.0.1";
+  by-spec."inherits"."2" = self.by-version."inherits"."2.0.1";
   by-version."inherits"."2.0.1" = self.buildNodePackage {
     name = "inherits-2.0.1";
     version = "2.0.1";
@@ -2822,18 +2669,14 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."inherits"."2.0.1" =
-    self.by-version."inherits"."2.0.1";
-  by-spec."inherits"."~2.0.0" =
-    self.by-version."inherits"."2.0.1";
-  by-spec."inherits"."~2.0.1" =
-    self.by-version."inherits"."2.0.1";
-  by-spec."ini"."1.x.x" =
-    self.by-version."ini"."1.3.3";
+  by-spec."inherits"."2.0.1" = self.by-version."inherits"."2.0.1";
+  by-spec."inherits"."~2.0.0" = self.by-version."inherits"."2.0.1";
+  by-spec."inherits"."~2.0.1" = self.by-version."inherits"."2.0.1";
+  by-spec."ini"."1.x.x" = self.by-version."ini"."1.3.3";
   by-version."ini"."1.3.3" = self.buildNodePackage {
     name = "ini-1.3.3";
     version = "1.3.3";
@@ -2847,14 +2690,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."ini"."~1.3.0" =
-    self.by-version."ini"."1.3.3";
-  by-spec."interpret"."^0.3.2" =
-    self.by-version."interpret"."0.3.10";
+  by-spec."ini"."~1.3.0" = self.by-version."ini"."1.3.3";
+  by-spec."interpret"."^0.3.2" = self.by-version."interpret"."0.3.10";
   by-version."interpret"."0.3.10" = self.buildNodePackage {
     name = "interpret-0.3.10";
     version = "0.3.10";
@@ -2868,12 +2709,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."ipaddr.js"."1.0.1" =
-    self.by-version."ipaddr.js"."1.0.1";
+  by-spec."ipaddr.js"."1.0.1" = self.by-version."ipaddr.js"."1.0.1";
   by-version."ipaddr.js"."1.0.1" = self.buildNodePackage {
     name = "ipaddr.js-1.0.1";
     version = "1.0.1";
@@ -2887,12 +2727,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."is-my-json-valid"."^2.10.1" =
-    self.by-version."is-my-json-valid"."2.11.0";
+  by-spec."is-my-json-valid"."^2.10.1" = self.by-version."is-my-json-valid"."2.11.0";
   by-version."is-my-json-valid"."2.11.0" = self.buildNodePackage {
     name = "is-my-json-valid-2.11.0";
     version = "2.11.0";
@@ -2910,12 +2749,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."is-property"."^1.0.0" =
-    self.by-version."is-property"."1.0.2";
+  by-spec."is-property"."^1.0.0" = self.by-version."is-property"."1.0.2";
   by-version."is-property"."1.0.2" = self.buildNodePackage {
     name = "is-property-1.0.2";
     version = "1.0.2";
@@ -2929,12 +2767,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."isarray"."0.0.1" =
-    self.by-version."isarray"."0.0.1";
+  by-spec."isarray"."0.0.1" = self.by-version."isarray"."0.0.1";
   by-version."isarray"."0.0.1" = self.buildNodePackage {
     name = "isarray-0.0.1";
     version = "0.0.1";
@@ -2948,12 +2785,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."isstream"."0.1.x" =
-    self.by-version."isstream"."0.1.2";
+  by-spec."isstream"."0.1.x" = self.by-version."isstream"."0.1.2";
   by-version."isstream"."0.1.2" = self.buildNodePackage {
     name = "isstream-0.1.2";
     version = "0.1.2";
@@ -2967,14 +2803,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."isstream"."~0.1.1" =
-    self.by-version."isstream"."0.1.2";
-  by-spec."istanbul"."^0.2.10" =
-    self.by-version."istanbul"."0.2.16";
+  by-spec."isstream"."~0.1.1" = self.by-version."isstream"."0.1.2";
+  by-spec."istanbul"."^0.2.10" = self.by-version."istanbul"."0.2.16";
   by-version."istanbul"."0.2.16" = self.buildNodePackage {
     name = "istanbul-0.2.16";
     version = "0.2.16";
@@ -3000,13 +2834,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "istanbul" = self.by-version."istanbul"."0.2.16";
-  by-spec."jade"."0.26.3" =
-    self.by-version."jade"."0.26.3";
+  by-spec."jade"."0.26.3" = self.by-version."jade"."0.26.3";
   by-version."jade"."0.26.3" = self.buildNodePackage {
     name = "jade-0.26.3";
     version = "0.26.3";
@@ -3022,12 +2855,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."jayschema"."^0.3.1" =
-    self.by-version."jayschema"."0.3.1";
+  by-spec."jayschema"."^0.3.1" = self.by-version."jayschema"."0.3.1";
   by-version."jayschema"."0.3.1" = self.buildNodePackage {
     name = "jayschema-0.3.1";
     version = "0.3.1";
@@ -3042,13 +2874,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "jayschema" = self.by-version."jayschema"."0.3.1";
-  by-spec."jayschema-error-messages"."^1.0.2" =
-    self.by-version."jayschema-error-messages"."1.0.3";
+  by-spec."jayschema-error-messages"."^1.0.2" = self.by-version."jayschema-error-messages"."1.0.3";
   by-version."jayschema-error-messages"."1.0.3" = self.buildNodePackage {
     name = "jayschema-error-messages-1.0.3";
     version = "1.0.3";
@@ -3062,13 +2893,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "jayschema-error-messages" = self.by-version."jayschema-error-messages"."1.0.3";
-  by-spec."js-yaml"."3.0.1" =
-    self.by-version."js-yaml"."3.0.1";
+  by-spec."js-yaml"."3.0.1" = self.by-version."js-yaml"."3.0.1";
   by-version."js-yaml"."3.0.1" = self.buildNodePackage {
     name = "js-yaml-3.0.1";
     version = "3.0.1";
@@ -3084,12 +2914,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."js-yaml"."3.x" =
-    self.by-version."js-yaml"."3.3.1";
+  by-spec."js-yaml"."3.x" = self.by-version."js-yaml"."3.3.1";
   by-version."js-yaml"."3.3.1" = self.buildNodePackage {
     name = "js-yaml-3.3.1";
     version = "3.3.1";
@@ -3105,12 +2934,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."json-diff"."0.3.1" =
-    self.by-version."json-diff"."0.3.1";
+  by-spec."json-diff"."0.3.1" = self.by-version."json-diff"."0.3.1";
   by-version."json-diff"."0.3.1" = self.buildNodePackage {
     name = "json-diff-0.3.1";
     version = "0.3.1";
@@ -3127,12 +2955,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."json-stringify-safe"."~5.0.0" =
-    self.by-version."json-stringify-safe"."5.0.0";
+  by-spec."json-stringify-safe"."~5.0.0" = self.by-version."json-stringify-safe"."5.0.0";
   by-version."json-stringify-safe"."5.0.0" = self.buildNodePackage {
     name = "json-stringify-safe-5.0.0";
     version = "5.0.0";
@@ -3146,12 +2973,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."jsonpointer"."^1.1.0" =
-    self.by-version."jsonpointer"."1.1.0";
+  by-spec."jsonpointer"."^1.1.0" = self.by-version."jsonpointer"."1.1.0";
   by-version."jsonpointer"."1.1.0" = self.buildNodePackage {
     name = "jsonpointer-1.1.0";
     version = "1.1.0";
@@ -3165,12 +2991,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."knex"."^0.7.6" =
-    self.by-version."knex"."0.7.6";
+  by-spec."knex"."^0.7.6" = self.by-version."knex"."0.7.6";
   by-version."knex"."0.7.6" = self.buildNodePackage {
     name = "knex-0.7.6";
     version = "0.7.6";
@@ -3196,13 +3021,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "knex" = self.by-version."knex"."0.7.6";
-  by-spec."lcov-parse"."0.0.6" =
-    self.by-version."lcov-parse"."0.0.6";
+  by-spec."lcov-parse"."0.0.6" = self.by-version."lcov-parse"."0.0.6";
   by-version."lcov-parse"."0.0.6" = self.buildNodePackage {
     name = "lcov-parse-0.0.6";
     version = "0.0.6";
@@ -3216,12 +3040,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."liftoff"."~0.13.2" =
-    self.by-version."liftoff"."0.13.6";
+  by-spec."liftoff"."~0.13.2" = self.by-version."liftoff"."0.13.6";
   by-version."liftoff"."0.13.6" = self.buildNodePackage {
     name = "liftoff-0.13.6";
     version = "0.13.6";
@@ -3240,12 +3063,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."lodash".">= 3.2.0 < 4.0.0" =
-    self.by-version."lodash"."3.8.0";
+  by-spec."lodash".">= 3.2.0 < 4.0.0" = self.by-version."lodash"."3.8.0";
   by-version."lodash"."3.8.0" = self.buildNodePackage {
     name = "lodash-3.8.0";
     version = "3.8.0";
@@ -3259,19 +3081,15 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."lodash"."^3.1.0" =
-    self.by-version."lodash"."3.8.0";
-  by-spec."lodash"."^3.6" =
-    self.by-version."lodash"."3.8.0";
+  by-spec."lodash"."^3.1.0" = self.by-version."lodash"."3.8.0";
+  by-spec."lodash"."^3.6" = self.by-version."lodash"."3.8.0";
   "lodash" = self.by-version."lodash"."3.8.0";
-  by-spec."lodash"."^3.6.0" =
-    self.by-version."lodash"."3.8.0";
-  by-spec."lodash"."~2.4.0" =
-    self.by-version."lodash"."2.4.2";
+  by-spec."lodash"."^3.6.0" = self.by-version."lodash"."3.8.0";
+  by-spec."lodash"."~2.4.0" = self.by-version."lodash"."2.4.2";
   by-version."lodash"."2.4.2" = self.buildNodePackage {
     name = "lodash-2.4.2";
     version = "2.4.2";
@@ -3285,14 +3103,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."lodash"."~2.4.1" =
-    self.by-version."lodash"."2.4.2";
-  by-spec."lodash._basetostring"."^3.0.0" =
-    self.by-version."lodash._basetostring"."3.0.0";
+  by-spec."lodash"."~2.4.1" = self.by-version."lodash"."2.4.2";
+  by-spec."lodash._basetostring"."^3.0.0" = self.by-version."lodash._basetostring"."3.0.0";
   by-version."lodash._basetostring"."3.0.0" = self.buildNodePackage {
     name = "lodash._basetostring-3.0.0";
     version = "3.0.0";
@@ -3306,12 +3122,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."lodash._createpadding"."^3.0.0" =
-    self.by-version."lodash._createpadding"."3.6.0";
+  by-spec."lodash._createpadding"."^3.0.0" = self.by-version."lodash._createpadding"."3.6.0";
   by-version."lodash._createpadding"."3.6.0" = self.buildNodePackage {
     name = "lodash._createpadding-3.6.0";
     version = "3.6.0";
@@ -3326,12 +3141,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."lodash.pad"."^3.0.0" =
-    self.by-version."lodash.pad"."3.1.0";
+  by-spec."lodash.pad"."^3.0.0" = self.by-version."lodash.pad"."3.1.0";
   by-version."lodash.pad"."3.1.0" = self.buildNodePackage {
     name = "lodash.pad-3.1.0";
     version = "3.1.0";
@@ -3347,12 +3161,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."lodash.padleft"."^3.0.0" =
-    self.by-version."lodash.padleft"."3.1.1";
+  by-spec."lodash.padleft"."^3.0.0" = self.by-version."lodash.padleft"."3.1.1";
   by-version."lodash.padleft"."3.1.1" = self.buildNodePackage {
     name = "lodash.padleft-3.1.1";
     version = "3.1.1";
@@ -3368,12 +3181,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."lodash.padright"."^3.0.0" =
-    self.by-version."lodash.padright"."3.1.1";
+  by-spec."lodash.padright"."^3.0.0" = self.by-version."lodash.padright"."3.1.1";
   by-version."lodash.padright"."3.1.1" = self.buildNodePackage {
     name = "lodash.padright-3.1.1";
     version = "3.1.1";
@@ -3389,12 +3201,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."lodash.repeat"."^3.0.0" =
-    self.by-version."lodash.repeat"."3.0.0";
+  by-spec."lodash.repeat"."^3.0.0" = self.by-version."lodash.repeat"."3.0.0";
   by-version."lodash.repeat"."3.0.0" = self.buildNodePackage {
     name = "lodash.repeat-3.0.0";
     version = "3.0.0";
@@ -3409,12 +3220,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."log-driver"."1.2.4" =
-    self.by-version."log-driver"."1.2.4";
+  by-spec."log-driver"."1.2.4" = self.by-version."log-driver"."1.2.4";
   by-version."log-driver"."1.2.4" = self.buildNodePackage {
     name = "log-driver-1.2.4";
     version = "1.2.4";
@@ -3428,12 +3238,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."lolex"."1.1.0" =
-    self.by-version."lolex"."1.1.0";
+  by-spec."lolex"."1.1.0" = self.by-version."lolex"."1.1.0";
   by-version."lolex"."1.1.0" = self.buildNodePackage {
     name = "lolex-1.1.0";
     version = "1.1.0";
@@ -3447,12 +3256,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."lru-cache"."2" =
-    self.by-version."lru-cache"."2.6.2";
+  by-spec."lru-cache"."2" = self.by-version."lru-cache"."2.6.2";
   by-version."lru-cache"."2.6.2" = self.buildNodePackage {
     name = "lru-cache-2.6.2";
     version = "2.6.2";
@@ -3466,12 +3274,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."lru-cache"."~2.5.0" =
-    self.by-version."lru-cache"."2.5.2";
+  by-spec."lru-cache"."~2.5.0" = self.by-version."lru-cache"."2.5.2";
   by-version."lru-cache"."2.5.2" = self.buildNodePackage {
     name = "lru-cache-2.5.2";
     version = "2.5.2";
@@ -3485,12 +3292,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."media-typer"."0.3.0" =
-    self.by-version."media-typer"."0.3.0";
+  by-spec."media-typer"."0.3.0" = self.by-version."media-typer"."0.3.0";
   by-version."media-typer"."0.3.0" = self.buildNodePackage {
     name = "media-typer-0.3.0";
     version = "0.3.0";
@@ -3504,12 +3310,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."merge-descriptors"."1.0.0" =
-    self.by-version."merge-descriptors"."1.0.0";
+  by-spec."merge-descriptors"."1.0.0" = self.by-version."merge-descriptors"."1.0.0";
   by-version."merge-descriptors"."1.0.0" = self.buildNodePackage {
     name = "merge-descriptors-1.0.0";
     version = "1.0.0";
@@ -3523,12 +3328,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."methods"."0.0.1" =
-    self.by-version."methods"."0.0.1";
+  by-spec."methods"."0.0.1" = self.by-version."methods"."0.0.1";
   by-version."methods"."0.0.1" = self.buildNodePackage {
     name = "methods-0.0.1";
     version = "0.0.1";
@@ -3542,12 +3346,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."methods"."1.0.0" =
-    self.by-version."methods"."1.0.0";
+  by-spec."methods"."1.0.0" = self.by-version."methods"."1.0.0";
   by-version."methods"."1.0.0" = self.buildNodePackage {
     name = "methods-1.0.0";
     version = "1.0.0";
@@ -3561,12 +3364,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."methods"."~1.1.1" =
-    self.by-version."methods"."1.1.1";
+  by-spec."methods"."~1.1.1" = self.by-version."methods"."1.1.1";
   by-version."methods"."1.1.1" = self.buildNodePackage {
     name = "methods-1.1.1";
     version = "1.1.1";
@@ -3580,12 +3382,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."mime"."1.2.5" =
-    self.by-version."mime"."1.2.5";
+  by-spec."mime"."1.2.5" = self.by-version."mime"."1.2.5";
   by-version."mime"."1.2.5" = self.buildNodePackage {
     name = "mime-1.2.5";
     version = "1.2.5";
@@ -3599,12 +3400,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."mime"."1.3.4" =
-    self.by-version."mime"."1.3.4";
+  by-spec."mime"."1.3.4" = self.by-version."mime"."1.3.4";
   by-version."mime"."1.3.4" = self.buildNodePackage {
     name = "mime-1.3.4";
     version = "1.3.4";
@@ -3618,12 +3418,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."mime"."~1.2.11" =
-    self.by-version."mime"."1.2.11";
+  by-spec."mime"."~1.2.11" = self.by-version."mime"."1.2.11";
   by-version."mime"."1.2.11" = self.buildNodePackage {
     name = "mime-1.2.11";
     version = "1.2.11";
@@ -3637,12 +3436,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."mime-db".">= 1.1.2 < 2" =
-    self.by-version."mime-db"."1.9.1";
+  by-spec."mime-db".">= 1.1.2 < 2" = self.by-version."mime-db"."1.9.1";
   by-version."mime-db"."1.9.1" = self.buildNodePackage {
     name = "mime-db-1.9.1";
     version = "1.9.1";
@@ -3656,14 +3454,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."mime-db"."~1.9.1" =
-    self.by-version."mime-db"."1.9.1";
-  by-spec."mime-types"."~1.0.1" =
-    self.by-version."mime-types"."1.0.2";
+  by-spec."mime-db"."~1.9.1" = self.by-version."mime-db"."1.9.1";
+  by-spec."mime-types"."~1.0.1" = self.by-version."mime-types"."1.0.2";
   by-version."mime-types"."1.0.2" = self.buildNodePackage {
     name = "mime-types-1.0.2";
     version = "1.0.2";
@@ -3677,12 +3473,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."mime-types"."~2.0.1" =
-    self.by-version."mime-types"."2.0.11";
+  by-spec."mime-types"."~2.0.1" = self.by-version."mime-types"."2.0.11";
   by-version."mime-types"."2.0.11" = self.buildNodePackage {
     name = "mime-types-2.0.11";
     version = "2.0.11";
@@ -3697,16 +3492,13 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."mime-types"."~2.0.11" =
-    self.by-version."mime-types"."2.0.11";
-  by-spec."mime-types"."~2.0.3" =
-    self.by-version."mime-types"."2.0.11";
-  by-spec."minimatch"."0.3" =
-    self.by-version."minimatch"."0.3.0";
+  by-spec."mime-types"."~2.0.11" = self.by-version."mime-types"."2.0.11";
+  by-spec."mime-types"."~2.0.3" = self.by-version."mime-types"."2.0.11";
+  by-spec."minimatch"."0.3" = self.by-version."minimatch"."0.3.0";
   by-version."minimatch"."0.3.0" = self.buildNodePackage {
     name = "minimatch-0.3.0";
     version = "0.3.0";
@@ -3722,12 +3514,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."minimatch"."0.x" =
-    self.by-version."minimatch"."0.4.0";
+  by-spec."minimatch"."0.x" = self.by-version."minimatch"."0.4.0";
   by-version."minimatch"."0.4.0" = self.buildNodePackage {
     name = "minimatch-0.4.0";
     version = "0.4.0";
@@ -3743,12 +3534,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."minimatch"."^2.0.1" =
-    self.by-version."minimatch"."2.0.7";
+  by-spec."minimatch"."^2.0.1" = self.by-version."minimatch"."2.0.7";
   by-version."minimatch"."2.0.7" = self.buildNodePackage {
     name = "minimatch-2.0.7";
     version = "2.0.7";
@@ -3763,12 +3553,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."minimatch"."~0.2.0" =
-    self.by-version."minimatch"."0.2.14";
+  by-spec."minimatch"."~0.2.0" = self.by-version."minimatch"."0.2.14";
   by-version."minimatch"."0.2.14" = self.buildNodePackage {
     name = "minimatch-0.2.14";
     version = "0.2.14";
@@ -3784,14 +3573,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."minimatch"."~0.2.11" =
-    self.by-version."minimatch"."0.2.14";
-  by-spec."minimist"."0.0.8" =
-    self.by-version."minimist"."0.0.8";
+  by-spec."minimatch"."~0.2.11" = self.by-version."minimatch"."0.2.14";
+  by-spec."minimist"."0.0.8" = self.by-version."minimist"."0.0.8";
   by-version."minimist"."0.0.8" = self.buildNodePackage {
     name = "minimist-0.0.8";
     version = "0.0.8";
@@ -3805,12 +3592,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."minimist"."~0.0.1" =
-    self.by-version."minimist"."0.0.10";
+  by-spec."minimist"."~0.0.1" = self.by-version."minimist"."0.0.10";
   by-version."minimist"."0.0.10" = self.buildNodePackage {
     name = "minimist-0.0.10";
     version = "0.0.10";
@@ -3824,14 +3610,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."minimist"."~0.0.7" =
-    self.by-version."minimist"."0.0.10";
-  by-spec."minimist"."~1.1.0" =
-    self.by-version."minimist"."1.1.1";
+  by-spec."minimist"."~0.0.7" = self.by-version."minimist"."0.0.10";
+  by-spec."minimist"."~1.1.0" = self.by-version."minimist"."1.1.1";
   by-version."minimist"."1.1.1" = self.buildNodePackage {
     name = "minimist-1.1.1";
     version = "1.1.1";
@@ -3845,12 +3629,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."mkdirp"."0.3.0" =
-    self.by-version."mkdirp"."0.3.0";
+  by-spec."mkdirp"."0.3.0" = self.by-version."mkdirp"."0.3.0";
   by-version."mkdirp"."0.3.0" = self.buildNodePackage {
     name = "mkdirp-0.3.0";
     version = "0.3.0";
@@ -3864,12 +3647,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."mkdirp"."0.5" =
-    self.by-version."mkdirp"."0.5.1";
+  by-spec."mkdirp"."0.5" = self.by-version."mkdirp"."0.5.1";
   by-version."mkdirp"."0.5.1" = self.buildNodePackage {
     name = "mkdirp-0.5.1";
     version = "0.5.1";
@@ -3884,12 +3666,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."mkdirp"."0.5.0" =
-    self.by-version."mkdirp"."0.5.0";
+  by-spec."mkdirp"."0.5.0" = self.by-version."mkdirp"."0.5.0";
   by-version."mkdirp"."0.5.0" = self.buildNodePackage {
     name = "mkdirp-0.5.0";
     version = "0.5.0";
@@ -3904,20 +3685,15 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."mkdirp"."0.5.x" =
-    self.by-version."mkdirp"."0.5.1";
-  by-spec."mkdirp".">=0.5 0" =
-    self.by-version."mkdirp"."0.5.1";
-  by-spec."mkdirp"."^0.5.0" =
-    self.by-version."mkdirp"."0.5.1";
-  by-spec."mkdirp"."~0.5.0" =
-    self.by-version."mkdirp"."0.5.1";
-  by-spec."mocha"."^2.1.0" =
-    self.by-version."mocha"."2.2.4";
+  by-spec."mkdirp"."0.5.x" = self.by-version."mkdirp"."0.5.1";
+  by-spec."mkdirp".">=0.5 0" = self.by-version."mkdirp"."0.5.1";
+  by-spec."mkdirp"."^0.5.0" = self.by-version."mkdirp"."0.5.1";
+  by-spec."mkdirp"."~0.5.0" = self.by-version."mkdirp"."0.5.1";
+  by-spec."mocha"."^2.1.0" = self.by-version."mocha"."2.2.4";
   by-version."mocha"."2.2.4" = self.buildNodePackage {
     name = "mocha-2.2.4";
     version = "2.2.4";
@@ -3940,13 +3716,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "mocha" = self.by-version."mocha"."2.2.4";
-  by-spec."morgan"."^1.3.0" =
-    self.by-version."morgan"."1.5.3";
+  by-spec."morgan"."^1.3.0" = self.by-version."morgan"."1.5.3";
   by-version."morgan"."1.5.3" = self.buildNodePackage {
     name = "morgan-1.5.3";
     version = "1.5.3";
@@ -3964,13 +3739,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "morgan" = self.by-version."morgan"."1.5.3";
-  by-spec."ms"."0.6.2" =
-    self.by-version."ms"."0.6.2";
+  by-spec."ms"."0.6.2" = self.by-version."ms"."0.6.2";
   by-version."ms"."0.6.2" = self.buildNodePackage {
     name = "ms-0.6.2";
     version = "0.6.2";
@@ -3984,12 +3758,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."ms"."0.7.0" =
-    self.by-version."ms"."0.7.0";
+  by-spec."ms"."0.7.0" = self.by-version."ms"."0.7.0";
   by-version."ms"."0.7.0" = self.buildNodePackage {
     name = "ms-0.7.0";
     version = "0.7.0";
@@ -4003,12 +3776,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."ms"."0.7.1" =
-    self.by-version."ms"."0.7.1";
+  by-spec."ms"."0.7.1" = self.by-version."ms"."0.7.1";
   by-version."ms"."0.7.1" = self.buildNodePackage {
     name = "ms-0.7.1";
     version = "0.7.1";
@@ -4022,12 +3794,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."nan"."1.6.x" =
-    self.by-version."nan"."1.6.2";
+  by-spec."nan"."1.6.x" = self.by-version."nan"."1.6.2";
   by-version."nan"."1.6.2" = self.buildNodePackage {
     name = "nan-1.6.2";
     version = "1.6.2";
@@ -4041,12 +3812,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."nan"."~1.0.0" =
-    self.by-version."nan"."1.0.0";
+  by-spec."nan"."~1.0.0" = self.by-version."nan"."1.0.0";
   by-version."nan"."1.0.0" = self.buildNodePackage {
     name = "nan-1.0.0";
     version = "1.0.0";
@@ -4060,12 +3830,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."nan"."~1.8.4" =
-    self.by-version."nan"."1.8.4";
+  by-spec."nan"."~1.8.4" = self.by-version."nan"."1.8.4";
   by-version."nan"."1.8.4" = self.buildNodePackage {
     name = "nan-1.8.4";
     version = "1.8.4";
@@ -4079,12 +3848,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."nconf"."^0.6.9" =
-    self.by-version."nconf"."0.6.9";
+  by-spec."nconf"."^0.6.9" = self.by-version."nconf"."0.6.9";
   by-version."nconf"."0.6.9" = self.buildNodePackage {
     name = "nconf-0.6.9";
     version = "0.6.9";
@@ -4101,13 +3869,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "nconf" = self.by-version."nconf"."0.6.9";
-  by-spec."negotiator"."0.5.3" =
-    self.by-version."negotiator"."0.5.3";
+  by-spec."negotiator"."0.5.3" = self.by-version."negotiator"."0.5.3";
   by-version."negotiator"."0.5.3" = self.buildNodePackage {
     name = "negotiator-0.5.3";
     version = "0.5.3";
@@ -4121,12 +3888,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."node-pre-gyp"."~0.6.7" =
-    self.by-version."node-pre-gyp"."0.6.7";
+  by-spec."node-pre-gyp"."~0.6.7" = self.by-version."node-pre-gyp"."0.6.7";
   by-version."node-pre-gyp"."0.6.7" = self.buildNodePackage {
     name = "node-pre-gyp-0.6.7";
     version = "0.6.7";
@@ -4149,12 +3915,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."node-uuid"."^1.4.1" =
-    self.by-version."node-uuid"."1.4.3";
+  by-spec."node-uuid"."^1.4.1" = self.by-version."node-uuid"."1.4.3";
   by-version."node-uuid"."1.4.3" = self.buildNodePackage {
     name = "node-uuid-1.4.3";
     version = "1.4.3";
@@ -4168,15 +3933,13 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "node-uuid" = self.by-version."node-uuid"."1.4.3";
-  by-spec."node-uuid"."~1.4.0" =
-    self.by-version."node-uuid"."1.4.3";
-  by-spec."nopt"."3.x" =
-    self.by-version."nopt"."3.0.1";
+  by-spec."node-uuid"."~1.4.0" = self.by-version."node-uuid"."1.4.3";
+  by-spec."nopt"."3.x" = self.by-version."nopt"."3.0.1";
   by-version."nopt"."3.0.1" = self.buildNodePackage {
     name = "nopt-3.0.1";
     version = "3.0.1";
@@ -4191,14 +3954,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."nopt"."~3.0.1" =
-    self.by-version."nopt"."3.0.1";
-  by-spec."npmlog"."~1.2.0" =
-    self.by-version."npmlog"."1.2.0";
+  by-spec."nopt"."~3.0.1" = self.by-version."nopt"."3.0.1";
+  by-spec."npmlog"."~1.2.0" = self.by-version."npmlog"."1.2.0";
   by-version."npmlog"."1.2.0" = self.buildNodePackage {
     name = "npmlog-1.2.0";
     version = "1.2.0";
@@ -4215,12 +3976,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."oauth-sign"."~0.3.0" =
-    self.by-version."oauth-sign"."0.3.0";
+  by-spec."oauth-sign"."~0.3.0" = self.by-version."oauth-sign"."0.3.0";
   by-version."oauth-sign"."0.3.0" = self.buildNodePackage {
     name = "oauth-sign-0.3.0";
     version = "0.3.0";
@@ -4234,12 +3994,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."oauth-sign"."~0.6.0" =
-    self.by-version."oauth-sign"."0.6.0";
+  by-spec."oauth-sign"."~0.6.0" = self.by-version."oauth-sign"."0.6.0";
   by-version."oauth-sign"."0.6.0" = self.buildNodePackage {
     name = "oauth-sign-0.6.0";
     version = "0.6.0";
@@ -4253,12 +4012,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."on-finished"."~2.2.0" =
-    self.by-version."on-finished"."2.2.1";
+  by-spec."on-finished"."~2.2.0" = self.by-version."on-finished"."2.2.1";
   by-version."on-finished"."2.2.1" = self.buildNodePackage {
     name = "on-finished-2.2.1";
     version = "2.2.1";
@@ -4273,14 +4031,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."on-finished"."~2.2.1" =
-    self.by-version."on-finished"."2.2.1";
-  by-spec."on-headers"."~1.0.0" =
-    self.by-version."on-headers"."1.0.0";
+  by-spec."on-finished"."~2.2.1" = self.by-version."on-finished"."2.2.1";
+  by-spec."on-headers"."~1.0.0" = self.by-version."on-headers"."1.0.0";
   by-version."on-headers"."1.0.0" = self.buildNodePackage {
     name = "on-headers-1.0.0";
     version = "1.0.0";
@@ -4294,12 +4050,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."once"."^1.3.0" =
-    self.by-version."once"."1.3.2";
+  by-spec."once"."^1.3.0" = self.by-version."once"."1.3.2";
   by-version."once"."1.3.2" = self.buildNodePackage {
     name = "once-1.3.2";
     version = "1.3.2";
@@ -4314,12 +4069,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."once"."~1.1.1" =
-    self.by-version."once"."1.1.1";
+  by-spec."once"."~1.1.1" = self.by-version."once"."1.1.1";
   by-version."once"."1.1.1" = self.buildNodePackage {
     name = "once-1.1.1";
     version = "1.1.1";
@@ -4333,12 +4087,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."optimist"."0.6.0" =
-    self.by-version."optimist"."0.6.0";
+  by-spec."optimist"."0.6.0" = self.by-version."optimist"."0.6.0";
   by-version."optimist"."0.6.0" = self.buildNodePackage {
     name = "optimist-0.6.0";
     version = "0.6.0";
@@ -4354,12 +4107,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."optimist"."~0.3" =
-    self.by-version."optimist"."0.3.7";
+  by-spec."optimist"."~0.3" = self.by-version."optimist"."0.3.7";
   by-version."optimist"."0.3.7" = self.buildNodePackage {
     name = "optimist-0.3.7";
     version = "0.3.7";
@@ -4374,14 +4126,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."optimist"."~0.3.5" =
-    self.by-version."optimist"."0.3.7";
-  by-spec."options".">=0.0.5" =
-    self.by-version."options"."0.0.6";
+  by-spec."optimist"."~0.3.5" = self.by-version."optimist"."0.3.7";
+  by-spec."options".">=0.0.5" = self.by-version."options"."0.0.6";
   by-version."options"."0.0.6" = self.buildNodePackage {
     name = "options-0.0.6";
     version = "0.0.6";
@@ -4395,12 +4145,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."parseurl"."~1.3.0" =
-    self.by-version."parseurl"."1.3.0";
+  by-spec."parseurl"."~1.3.0" = self.by-version."parseurl"."1.3.0";
   by-version."parseurl"."1.3.0" = self.buildNodePackage {
     name = "parseurl-1.3.0";
     version = "1.3.0";
@@ -4414,12 +4163,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."path-to-regexp"."0.1.3" =
-    self.by-version."path-to-regexp"."0.1.3";
+  by-spec."path-to-regexp"."0.1.3" = self.by-version."path-to-regexp"."0.1.3";
   by-version."path-to-regexp"."0.1.3" = self.buildNodePackage {
     name = "path-to-regexp-0.1.3";
     version = "0.1.3";
@@ -4433,12 +4181,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."pkginfo"."0.3.x" =
-    self.by-version."pkginfo"."0.3.0";
+  by-spec."pkginfo"."0.3.x" = self.by-version."pkginfo"."0.3.0";
   by-version."pkginfo"."0.3.0" = self.buildNodePackage {
     name = "pkginfo-0.3.0";
     version = "0.3.0";
@@ -4452,12 +4199,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."proxy-addr"."~1.0.7" =
-    self.by-version."proxy-addr"."1.0.8";
+  by-spec."proxy-addr"."~1.0.7" = self.by-version."proxy-addr"."1.0.8";
   by-version."proxy-addr"."1.0.8" = self.buildNodePackage {
     name = "proxy-addr-1.0.8";
     version = "1.0.8";
@@ -4473,12 +4219,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."qs"."0.6.6" =
-    self.by-version."qs"."0.6.6";
+  by-spec."qs"."0.6.6" = self.by-version."qs"."0.6.6";
   by-version."qs"."0.6.6" = self.buildNodePackage {
     name = "qs-0.6.6";
     version = "0.6.6";
@@ -4492,12 +4237,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."qs"."2.4.1" =
-    self.by-version."qs"."2.4.1";
+  by-spec."qs"."2.4.1" = self.by-version."qs"."2.4.1";
   by-version."qs"."2.4.1" = self.buildNodePackage {
     name = "qs-2.4.1";
     version = "2.4.1";
@@ -4511,12 +4255,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."qs"."2.4.2" =
-    self.by-version."qs"."2.4.2";
+  by-spec."qs"."2.4.2" = self.by-version."qs"."2.4.2";
   by-version."qs"."2.4.2" = self.buildNodePackage {
     name = "qs-2.4.2";
     version = "2.4.2";
@@ -4530,12 +4273,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."qs"."~1.0.0" =
-    self.by-version."qs"."1.0.2";
+  by-spec."qs"."~1.0.0" = self.by-version."qs"."1.0.2";
   by-version."qs"."1.0.2" = self.buildNodePackage {
     name = "qs-1.0.2";
     version = "1.0.2";
@@ -4549,14 +4291,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."qs"."~2.4.0" =
-    self.by-version."qs"."2.4.2";
-  by-spec."range-parser"."~1.0.2" =
-    self.by-version."range-parser"."1.0.2";
+  by-spec."qs"."~2.4.0" = self.by-version."qs"."2.4.2";
+  by-spec."range-parser"."~1.0.2" = self.by-version."range-parser"."1.0.2";
   by-version."range-parser"."1.0.2" = self.buildNodePackage {
     name = "range-parser-1.0.2";
     version = "1.0.2";
@@ -4570,12 +4310,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."raw-body"."~2.0.1" =
-    self.by-version."raw-body"."2.0.1";
+  by-spec."raw-body"."~2.0.1" = self.by-version."raw-body"."2.0.1";
   by-version."raw-body"."2.0.1" = self.buildNodePackage {
     name = "raw-body-2.0.1";
     version = "2.0.1";
@@ -4591,12 +4330,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."rc"."~1.0.1" =
-    self.by-version."rc"."1.0.1";
+  by-spec."rc"."~1.0.1" = self.by-version."rc"."1.0.1";
   by-version."rc"."1.0.1" = self.buildNodePackage {
     name = "rc-1.0.1";
     version = "1.0.1";
@@ -4614,12 +4352,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."readable-stream"."1.0.27-1" =
-    self.by-version."readable-stream"."1.0.27-1";
+  by-spec."readable-stream"."1.0.27-1" = self.by-version."readable-stream"."1.0.27-1";
   by-version."readable-stream"."1.0.27-1" = self.buildNodePackage {
     name = "readable-stream-1.0.27-1";
     version = "1.0.27-1";
@@ -4637,12 +4374,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."readable-stream"."^1.1.12" =
-    self.by-version."readable-stream"."1.1.13";
+  by-spec."readable-stream"."^1.1.12" = self.by-version."readable-stream"."1.1.13";
   by-version."readable-stream"."1.1.13" = self.buildNodePackage {
     name = "readable-stream-1.1.13";
     version = "1.1.13";
@@ -4660,14 +4396,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."readable-stream"."^1.1.13" =
-    self.by-version."readable-stream"."1.1.13";
-  by-spec."readable-stream"."~1.0.2" =
-    self.by-version."readable-stream"."1.0.33";
+  by-spec."readable-stream"."^1.1.13" = self.by-version."readable-stream"."1.1.13";
+  by-spec."readable-stream"."~1.0.2" = self.by-version."readable-stream"."1.0.33";
   by-version."readable-stream"."1.0.33" = self.buildNodePackage {
     name = "readable-stream-1.0.33";
     version = "1.0.33";
@@ -4685,14 +4419,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."readable-stream"."~1.0.26" =
-    self.by-version."readable-stream"."1.0.33";
-  by-spec."reduce-component"."1.0.1" =
-    self.by-version."reduce-component"."1.0.1";
+  by-spec."readable-stream"."~1.0.26" = self.by-version."readable-stream"."1.0.33";
+  by-spec."reduce-component"."1.0.1" = self.by-version."reduce-component"."1.0.1";
   by-version."reduce-component"."1.0.1" = self.buildNodePackage {
     name = "reduce-component-1.0.1";
     version = "1.0.1";
@@ -4706,12 +4438,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."request"."2.40.0" =
-    self.by-version."request"."2.40.0";
+  by-spec."request"."2.40.0" = self.by-version."request"."2.40.0";
   by-version."request"."2.40.0" = self.buildNodePackage {
     name = "request-2.40.0";
     version = "2.40.0";
@@ -4738,12 +4469,11 @@
       "aws-sign2-0.5.0" = self.by-version."aws-sign2"."0.5.0";
       "stringstream-0.0.4" = self.by-version."stringstream"."0.0.4";
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."request"."2.x" =
-    self.by-version."request"."2.55.0";
+  by-spec."request"."2.x" = self.by-version."request"."2.55.0";
   by-version."request"."2.55.0" = self.buildNodePackage {
     name = "request-2.55.0";
     version = "2.55.0";
@@ -4775,12 +4505,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."require-directory"."^1.2.0" =
-    self.by-version."require-directory"."1.2.0";
+  by-spec."require-directory"."^1.2.0" = self.by-version."require-directory"."1.2.0";
   by-version."require-directory"."1.2.0" = self.buildNodePackage {
     name = "require-directory-1.2.0";
     version = "1.2.0";
@@ -4794,13 +4523,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "require-directory" = self.by-version."require-directory"."1.2.0";
-  by-spec."resolve"."0.7.x" =
-    self.by-version."resolve"."0.7.4";
+  by-spec."resolve"."0.7.x" = self.by-version."resolve"."0.7.4";
   by-version."resolve"."0.7.4" = self.buildNodePackage {
     name = "resolve-0.7.4";
     version = "0.7.4";
@@ -4814,12 +4542,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."resolve"."~1.0.0" =
-    self.by-version."resolve"."1.0.0";
+  by-spec."resolve"."~1.0.0" = self.by-version."resolve"."1.0.0";
   by-version."resolve"."1.0.0" = self.buildNodePackage {
     name = "resolve-1.0.0";
     version = "1.0.0";
@@ -4833,12 +4560,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."rimraf"."2" =
-    self.by-version."rimraf"."2.3.3";
+  by-spec."rimraf"."2" = self.by-version."rimraf"."2.3.3";
   by-version."rimraf"."2.3.3" = self.buildNodePackage {
     name = "rimraf-2.3.3";
     version = "2.3.3";
@@ -4853,12 +4579,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."rimraf"."~2.2.0" =
-    self.by-version."rimraf"."2.2.8";
+  by-spec."rimraf"."~2.2.0" = self.by-version."rimraf"."2.2.8";
   by-version."rimraf"."2.2.8" = self.buildNodePackage {
     name = "rimraf-2.2.8";
     version = "2.2.8";
@@ -4872,14 +4597,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."rimraf"."~2.3.2" =
-    self.by-version."rimraf"."2.3.3";
-  by-spec."ripple-lib"."^0.12.3" =
-    self.by-version."ripple-lib"."0.12.4";
+  by-spec."rimraf"."~2.3.2" = self.by-version."rimraf"."2.3.3";
+  by-spec."ripple-lib"."^0.12.3" = self.by-version."ripple-lib"."0.12.4";
   by-version."ripple-lib"."0.12.4" = self.buildNodePackage {
     name = "ripple-lib-0.12.4";
     version = "0.12.4";
@@ -4900,7 +4623,7 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
@@ -4922,13 +4645,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "ripple-lib-transactionparser" = self.by-version."ripple-lib-transactionparser"."0.3.2";
-  by-spec."ripple-wallet-generator"."^1.0.3" =
-    self.by-version."ripple-wallet-generator"."1.0.3";
+  by-spec."ripple-wallet-generator"."^1.0.3" = self.by-version."ripple-wallet-generator"."1.0.3";
   by-version."ripple-wallet-generator"."1.0.3" = self.buildNodePackage {
     name = "ripple-wallet-generator-1.0.3";
     version = "1.0.3";
@@ -4942,12 +4664,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."samsam"."~1.1" =
-    self.by-version."samsam"."1.1.2";
+  by-spec."samsam"."~1.1" = self.by-version."samsam"."1.1.2";
   by-version."samsam"."1.1.2" = self.buildNodePackage {
     name = "samsam-1.1.2";
     version = "1.1.2";
@@ -4961,12 +4682,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."semver"."~4.3.2" =
-    self.by-version."semver"."4.3.4";
+  by-spec."semver"."~4.3.2" = self.by-version."semver"."4.3.4";
   by-version."semver"."4.3.4" = self.buildNodePackage {
     name = "semver-4.3.4";
     version = "4.3.4";
@@ -4980,12 +4700,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."send"."0.12.2" =
-    self.by-version."send"."0.12.2";
+  by-spec."send"."0.12.2" = self.by-version."send"."0.12.2";
   by-version."send"."0.12.2" = self.buildNodePackage {
     name = "send-0.12.2";
     version = "0.12.2";
@@ -5009,12 +4728,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."serve-static"."~1.9.2" =
-    self.by-version."serve-static"."1.9.2";
+  by-spec."serve-static"."~1.9.2" = self.by-version."serve-static"."1.9.2";
   by-version."serve-static"."1.9.2" = self.buildNodePackage {
     name = "serve-static-1.9.2";
     version = "1.9.2";
@@ -5032,12 +4750,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."sigmund"."~1.0.0" =
-    self.by-version."sigmund"."1.0.0";
+  by-spec."sigmund"."~1.0.0" = self.by-version."sigmund"."1.0.0";
   by-version."sigmund"."1.0.0" = self.buildNodePackage {
     name = "sigmund-1.0.0";
     version = "1.0.0";
@@ -5051,12 +4768,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."sinon".">=1.4.0 <2" =
-    self.by-version."sinon"."1.14.1";
+  by-spec."sinon".">=1.4.0 <2" = self.by-version."sinon"."1.14.1";
   by-version."sinon"."1.14.1" = self.buildNodePackage {
     name = "sinon-1.14.1";
     version = "1.14.1";
@@ -5073,12 +4789,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."sinon"."~1.10.0" =
-    self.by-version."sinon"."1.10.3";
+  by-spec."sinon"."~1.10.0" = self.by-version."sinon"."1.10.3";
   by-version."sinon"."1.10.3" = self.buildNodePackage {
     name = "sinon-1.10.3";
     version = "1.10.3";
@@ -5094,13 +4809,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "sinon" = self.by-version."sinon"."1.10.3";
-  by-spec."sinon-chai"."^2.5.0" =
-    self.by-version."sinon-chai"."2.7.0";
+  by-spec."sinon-chai"."^2.5.0" = self.by-version."sinon-chai"."2.7.0";
   by-version."sinon-chai"."2.7.0" = self.buildNodePackage {
     name = "sinon-chai-2.7.0";
     version = "2.7.0";
@@ -5116,13 +4830,13 @@
     };
     peerDependencies = [
       self.by-version."chai"."2.3.0"
-      self.by-version."sinon"."1.14.1"];
+      self.by-version."sinon"."1.14.1"
+    ];
     os = [ ];
     cpu = [ ];
   };
   "sinon-chai" = self.by-version."sinon-chai"."2.7.0";
-  by-spec."sntp"."0.2.x" =
-    self.by-version."sntp"."0.2.4";
+  by-spec."sntp"."0.2.x" = self.by-version."sntp"."0.2.4";
   by-version."sntp"."0.2.4" = self.buildNodePackage {
     name = "sntp-0.2.4";
     version = "0.2.4";
@@ -5137,12 +4851,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."sntp"."1.x.x" =
-    self.by-version."sntp"."1.0.9";
+  by-spec."sntp"."1.x.x" = self.by-version."sntp"."1.0.9";
   by-version."sntp"."1.0.9" = self.buildNodePackage {
     name = "sntp-1.0.9";
     version = "1.0.9";
@@ -5157,12 +4870,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."source-map"."~0.1.33" =
-    self.by-version."source-map"."0.1.43";
+  by-spec."source-map"."~0.1.33" = self.by-version."source-map"."0.1.43";
   by-version."source-map"."0.1.43" = self.buildNodePackage {
     name = "source-map-0.1.43";
     version = "0.1.43";
@@ -5177,14 +4889,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."source-map"."~0.1.7" =
-    self.by-version."source-map"."0.1.43";
-  by-spec."sprintf-js"."~1.0.2" =
-    self.by-version."sprintf-js"."1.0.2";
+  by-spec."source-map"."~0.1.7" = self.by-version."source-map"."0.1.43";
+  by-spec."sprintf-js"."~1.0.2" = self.by-version."sprintf-js"."1.0.2";
   by-version."sprintf-js"."1.0.2" = self.buildNodePackage {
     name = "sprintf-js-1.0.2";
     version = "1.0.2";
@@ -5198,12 +4908,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."sqlite3"."^3.0.2" =
-    self.by-version."sqlite3"."3.0.8";
+  by-spec."sqlite3"."^3.0.2" = self.by-version."sqlite3"."3.0.8";
   by-version."sqlite3"."3.0.8" = self.buildNodePackage {
     name = "sqlite3-3.0.8";
     version = "3.0.8";
@@ -5219,13 +4928,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "sqlite3" = self.by-version."sqlite3"."3.0.8";
-  by-spec."stack-trace"."0.0.x" =
-    self.by-version."stack-trace"."0.0.9";
+  by-spec."stack-trace"."0.0.x" = self.by-version."stack-trace"."0.0.9";
   by-version."stack-trace"."0.0.9" = self.buildNodePackage {
     name = "stack-trace-0.0.9";
     version = "0.0.9";
@@ -5239,12 +4947,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."string_decoder"."~0.10.x" =
-    self.by-version."string_decoder"."0.10.31";
+  by-spec."string_decoder"."~0.10.x" = self.by-version."string_decoder"."0.10.31";
   by-version."string_decoder"."0.10.31" = self.buildNodePackage {
     name = "string_decoder-0.10.31";
     version = "0.10.31";
@@ -5258,12 +4965,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."stringstream"."~0.0.4" =
-    self.by-version."stringstream"."0.0.4";
+  by-spec."stringstream"."~0.0.4" = self.by-version."stringstream"."0.0.4";
   by-version."stringstream"."0.0.4" = self.buildNodePackage {
     name = "stringstream-0.0.4";
     version = "0.0.4";
@@ -5277,12 +4983,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."strip-ansi"."^0.3.0" =
-    self.by-version."strip-ansi"."0.3.0";
+  by-spec."strip-ansi"."^0.3.0" = self.by-version."strip-ansi"."0.3.0";
   by-version."strip-ansi"."0.3.0" = self.buildNodePackage {
     name = "strip-ansi-0.3.0";
     version = "0.3.0";
@@ -5297,12 +5002,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."strip-ansi"."^2.0.1" =
-    self.by-version."strip-ansi"."2.0.1";
+  by-spec."strip-ansi"."^2.0.1" = self.by-version."strip-ansi"."2.0.1";
   by-version."strip-ansi"."2.0.1" = self.buildNodePackage {
     name = "strip-ansi-2.0.1";
     version = "2.0.1";
@@ -5317,12 +5021,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."strip-json-comments"."0.1.x" =
-    self.by-version."strip-json-comments"."0.1.3";
+  by-spec."strip-json-comments"."0.1.x" = self.by-version."strip-json-comments"."0.1.3";
   by-version."strip-json-comments"."0.1.3" = self.buildNodePackage {
     name = "strip-json-comments-0.1.3";
     version = "0.1.3";
@@ -5336,12 +5039,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."superagent"."0.18.0" =
-    self.by-version."superagent"."0.18.0";
+  by-spec."superagent"."0.18.0" = self.by-version."superagent"."0.18.0";
   by-version."superagent"."0.18.0" = self.buildNodePackage {
     name = "superagent-0.18.0";
     version = "0.18.0";
@@ -5366,12 +5068,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."supertest"."^0.13.0" =
-    self.by-version."supertest"."0.13.0";
+  by-spec."supertest"."^0.13.0" = self.by-version."supertest"."0.13.0";
   by-version."supertest"."0.13.0" = self.buildNodePackage {
     name = "supertest-0.13.0";
     version = "0.13.0";
@@ -5387,13 +5088,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "supertest" = self.by-version."supertest"."0.13.0";
-  by-spec."supports-color"."^0.2.0" =
-    self.by-version."supports-color"."0.2.0";
+  by-spec."supports-color"."^0.2.0" = self.by-version."supports-color"."0.2.0";
   by-version."supports-color"."0.2.0" = self.buildNodePackage {
     name = "supports-color-0.2.0";
     version = "0.2.0";
@@ -5407,12 +5107,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."supports-color"."^1.3.0" =
-    self.by-version."supports-color"."1.3.1";
+  by-spec."supports-color"."^1.3.0" = self.by-version."supports-color"."1.3.1";
   by-version."supports-color"."1.3.1" = self.buildNodePackage {
     name = "supports-color-1.3.1";
     version = "1.3.1";
@@ -5426,12 +5125,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."supports-color"."~1.2.0" =
-    self.by-version."supports-color"."1.2.1";
+  by-spec."supports-color"."~1.2.0" = self.by-version."supports-color"."1.2.1";
   by-version."supports-color"."1.2.1" = self.buildNodePackage {
     name = "supports-color-1.2.1";
     version = "1.2.1";
@@ -5445,12 +5143,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."tar"."~0.1.17" =
-    self.by-version."tar"."0.1.20";
+  by-spec."tar"."~0.1.17" = self.by-version."tar"."0.1.20";
   by-version."tar"."0.1.20" = self.buildNodePackage {
     name = "tar-0.1.20";
     version = "0.1.20";
@@ -5467,12 +5164,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."tar"."~2.1.0" =
-    self.by-version."tar"."2.1.1";
+  by-spec."tar"."~2.1.0" = self.by-version."tar"."2.1.1";
   by-version."tar"."2.1.1" = self.buildNodePackage {
     name = "tar-2.1.1";
     version = "2.1.1";
@@ -5489,12 +5185,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."tar-pack"."~2.0.0" =
-    self.by-version."tar-pack"."2.0.0";
+  by-spec."tar-pack"."~2.0.0" = self.by-version."tar-pack"."2.0.0";
   by-version."tar-pack"."2.0.0" = self.buildNodePackage {
     name = "tar-pack-2.0.0";
     version = "2.0.0";
@@ -5517,12 +5212,11 @@
     optionalDependencies = {
       "graceful-fs-1.2.3" = self.by-version."graceful-fs"."1.2.3";
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."tildify"."~1.0.0" =
-    self.by-version."tildify"."1.0.0";
+  by-spec."tildify"."~1.0.0" = self.by-version."tildify"."1.0.0";
   by-version."tildify"."1.0.0" = self.buildNodePackage {
     name = "tildify-1.0.0";
     version = "1.0.0";
@@ -5537,12 +5231,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."tinycolor"."0.x" =
-    self.by-version."tinycolor"."0.0.1";
+  by-spec."tinycolor"."0.x" = self.by-version."tinycolor"."0.0.1";
   by-version."tinycolor"."0.0.1" = self.buildNodePackage {
     name = "tinycolor-0.0.1";
     version = "0.0.1";
@@ -5556,12 +5249,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."tough-cookie".">=0.12.0" =
-    self.by-version."tough-cookie"."1.1.0";
+  by-spec."tough-cookie".">=0.12.0" = self.by-version."tough-cookie"."1.1.0";
   by-version."tough-cookie"."1.1.0" = self.buildNodePackage {
     name = "tough-cookie-1.1.0";
     version = "1.1.0";
@@ -5575,12 +5267,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."tunnel-agent"."~0.4.0" =
-    self.by-version."tunnel-agent"."0.4.0";
+  by-spec."tunnel-agent"."~0.4.0" = self.by-version."tunnel-agent"."0.4.0";
   by-version."tunnel-agent"."0.4.0" = self.buildNodePackage {
     name = "tunnel-agent-0.4.0";
     version = "0.4.0";
@@ -5594,12 +5285,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."type-detect"."0.1.1" =
-    self.by-version."type-detect"."0.1.1";
+  by-spec."type-detect"."0.1.1" = self.by-version."type-detect"."0.1.1";
   by-version."type-detect"."0.1.1" = self.buildNodePackage {
     name = "type-detect-0.1.1";
     version = "0.1.1";
@@ -5613,12 +5303,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."type-is"."~1.6.1" =
-    self.by-version."type-is"."1.6.2";
+  by-spec."type-is"."~1.6.1" = self.by-version."type-is"."1.6.2";
   by-version."type-is"."1.6.2" = self.buildNodePackage {
     name = "type-is-1.6.2";
     version = "1.6.2";
@@ -5634,14 +5323,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."type-is"."~1.6.2" =
-    self.by-version."type-is"."1.6.2";
-  by-spec."uglify-js"."~2.3" =
-    self.by-version."uglify-js"."2.3.6";
+  by-spec."type-is"."~1.6.2" = self.by-version."type-is"."1.6.2";
+  by-spec."uglify-js"."~2.3" = self.by-version."uglify-js"."2.3.6";
   by-version."uglify-js"."2.3.6" = self.buildNodePackage {
     name = "uglify-js-2.3.6";
     version = "2.3.6";
@@ -5658,12 +5345,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."uid-number"."0.0.3" =
-    self.by-version."uid-number"."0.0.3";
+  by-spec."uid-number"."0.0.3" = self.by-version."uid-number"."0.0.3";
   by-version."uid-number"."0.0.3" = self.buildNodePackage {
     name = "uid-number-0.0.3";
     version = "0.0.3";
@@ -5677,12 +5363,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."ultron"."1.0.x" =
-    self.by-version."ultron"."1.0.1";
+  by-spec."ultron"."1.0.x" = self.by-version."ultron"."1.0.1";
   by-version."ultron"."1.0.1" = self.buildNodePackage {
     name = "ultron-1.0.1";
     version = "1.0.1";
@@ -5696,12 +5381,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."underscore"."~1.7.0" =
-    self.by-version."underscore"."1.7.0";
+  by-spec."underscore"."~1.7.0" = self.by-version."underscore"."1.7.0";
   by-version."underscore"."1.7.0" = self.buildNodePackage {
     name = "underscore-1.7.0";
     version = "1.7.0";
@@ -5715,12 +5399,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."underscore.string"."~2.4.0" =
-    self.by-version."underscore.string"."2.4.0";
+  by-spec."underscore.string"."~2.4.0" = self.by-version."underscore.string"."2.4.0";
   by-version."underscore.string"."2.4.0" = self.buildNodePackage {
     name = "underscore.string-2.4.0";
     version = "2.4.0";
@@ -5734,12 +5417,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."user-home"."^1.0.0" =
-    self.by-version."user-home"."1.1.1";
+  by-spec."user-home"."^1.0.0" = self.by-version."user-home"."1.1.1";
   by-version."user-home"."1.1.1" = self.buildNodePackage {
     name = "user-home-1.1.1";
     version = "1.1.1";
@@ -5753,12 +5435,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."utf-8-validate"."1.0.x" =
-    self.by-version."utf-8-validate"."1.0.1";
+  by-spec."utf-8-validate"."1.0.x" = self.by-version."utf-8-validate"."1.0.1";
   by-version."utf-8-validate"."1.0.1" = self.buildNodePackage {
     name = "utf-8-validate-1.0.1";
     version = "1.0.1";
@@ -5774,12 +5455,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."util".">=0.10.3 <1" =
-    self.by-version."util"."0.10.3";
+  by-spec."util".">=0.10.3 <1" = self.by-version."util"."0.10.3";
   by-version."util"."0.10.3" = self.buildNodePackage {
     name = "util-0.10.3";
     version = "0.10.3";
@@ -5794,12 +5474,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."utils-merge"."1.0.0" =
-    self.by-version."utils-merge"."1.0.0";
+  by-spec."utils-merge"."1.0.0" = self.by-version."utils-merge"."1.0.0";
   by-version."utils-merge"."1.0.0" = self.buildNodePackage {
     name = "utils-merge-1.0.0";
     version = "1.0.0";
@@ -5813,12 +5492,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."vary"."~1.0.0" =
-    self.by-version."vary"."1.0.0";
+  by-spec."vary"."~1.0.0" = self.by-version."vary"."1.0.0";
   by-version."vary"."1.0.0" = self.buildNodePackage {
     name = "vary-1.0.0";
     version = "1.0.0";
@@ -5832,12 +5510,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."when"."~3.4.6" =
-    self.by-version."when"."3.4.6";
+  by-spec."when"."~3.4.6" = self.by-version."when"."3.4.6";
   by-version."when"."3.4.6" = self.buildNodePackage {
     name = "when-3.4.6";
     version = "3.4.6";
@@ -5851,12 +5528,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."which"."1.0.x" =
-    self.by-version."which"."1.0.9";
+  by-spec."which"."1.0.x" = self.by-version."which"."1.0.9";
   by-version."which"."1.0.9" = self.buildNodePackage {
     name = "which-1.0.9";
     version = "1.0.9";
@@ -5870,12 +5546,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."winston"."^1.0.0" =
-    self.by-version."winston"."1.0.0";
+  by-spec."winston"."^1.0.0" = self.by-version."winston"."1.0.0";
   by-version."winston"."1.0.0" = self.buildNodePackage {
     name = "winston-1.0.0";
     version = "1.0.0";
@@ -5896,13 +5571,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "winston" = self.by-version."winston"."1.0.0";
-  by-spec."wordwrap"."0.0.x" =
-    self.by-version."wordwrap"."0.0.3";
+  by-spec."wordwrap"."0.0.x" = self.by-version."wordwrap"."0.0.3";
   by-version."wordwrap"."0.0.3" = self.buildNodePackage {
     name = "wordwrap-0.0.3";
     version = "0.0.3";
@@ -5916,12 +5590,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."wordwrap".">=0.0.2" =
-    self.by-version."wordwrap"."1.0.0";
+  by-spec."wordwrap".">=0.0.2" = self.by-version."wordwrap"."1.0.0";
   by-version."wordwrap"."1.0.0" = self.buildNodePackage {
     name = "wordwrap-1.0.0";
     version = "1.0.0";
@@ -5935,14 +5608,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."wordwrap"."~0.0.2" =
-    self.by-version."wordwrap"."0.0.3";
-  by-spec."wrappy"."1" =
-    self.by-version."wrappy"."1.0.1";
+  by-spec."wordwrap"."~0.0.2" = self.by-version."wordwrap"."0.0.3";
+  by-spec."wrappy"."1" = self.by-version."wrappy"."1.0.1";
   by-version."wrappy"."1.0.1" = self.buildNodePackage {
     name = "wrappy-1.0.1";
     version = "1.0.1";
@@ -5956,12 +5627,11 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."ws"."^0.4.32" =
-    self.by-version."ws"."0.4.32";
+  by-spec."ws"."^0.4.32" = self.by-version."ws"."0.4.32";
   by-version."ws"."0.4.32" = self.buildNodePackage {
     name = "ws-0.4.32";
     version = "0.4.32";
@@ -5979,13 +5649,12 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
   "ws" = self.by-version."ws"."0.4.32";
-  by-spec."ws"."~0.7.1" =
-    self.by-version."ws"."0.7.1";
+  by-spec."ws"."~0.7.1" = self.by-version."ws"."0.7.1";
   by-version."ws"."0.7.1" = self.buildNodePackage {
     name = "ws-0.7.1";
     version = "0.7.1";
@@ -6003,12 +5672,11 @@
       "bufferutil-1.0.1" = self.by-version."bufferutil"."1.0.1";
       "utf-8-validate-1.0.1" = self.by-version."utf-8-validate"."1.0.1";
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };
-  by-spec."xtend"."^4.0.0" =
-    self.by-version."xtend"."4.0.0";
+  by-spec."xtend"."^4.0.0" = self.by-version."xtend"."4.0.0";
   by-version."xtend"."4.0.0" = self.buildNodePackage {
     name = "xtend-4.0.0";
     version = "4.0.0";
@@ -6022,7 +5690,7 @@
     };
     optionalDependencies = {
     };
-    peerDependencies = [];
+    peerDependencies = [ ];
     os = [ ];
     cpu = [ ];
   };

@@ -1,4 +1,12 @@
-{ lib, rel, buildKodiAddon, fetchzip, addonUpdateScript, six, addonDir }:
+{
+  lib,
+  rel,
+  buildKodiAddon,
+  fetchzip,
+  addonUpdateScript,
+  six,
+  addonDir,
+}:
 
 buildKodiAddon rec {
   pname = "websocket";

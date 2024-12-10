@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "timescaledb-tune";
@@ -13,7 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-8Q+KMYu1yiHEYS035NmCvxSgIS/+oRhhcZa6SwmvGgk=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "A tool for tuning your TimescaleDB for better performance";

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, usbmuxd
-, libimobiledevice
-, libzip
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  usbmuxd,
+  libimobiledevice,
+  libzip,
 }:
 
 stdenv.mkDerivation rec {

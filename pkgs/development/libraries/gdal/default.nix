@@ -1,81 +1,82 @@
-{ lib
-, stdenv
-, callPackage
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  stdenv,
+  callPackage,
+  fetchFromGitHub,
+  fetchpatch,
 
-, useMinimalFeatures ? false
-, useTiledb ? (!useMinimalFeatures) && !(stdenv.isDarwin && stdenv.isx86_64)
-, useLibHEIF ? (!useMinimalFeatures)
-, useLibJXL ? (!useMinimalFeatures)
-, useMysql ? (!useMinimalFeatures)
-, usePostgres ? (!useMinimalFeatures)
-, usePoppler ? (!useMinimalFeatures)
-, useArrow ? (!useMinimalFeatures)
-, useHDF ? (!useMinimalFeatures)
-, useNetCDF ? (!useMinimalFeatures)
-, useArmadillo ? (!useMinimalFeatures)
-, useJava ? (!useMinimalFeatures)
+  useMinimalFeatures ? false,
+  useTiledb ? (!useMinimalFeatures) && !(stdenv.isDarwin && stdenv.isx86_64),
+  useLibHEIF ? (!useMinimalFeatures),
+  useLibJXL ? (!useMinimalFeatures),
+  useMysql ? (!useMinimalFeatures),
+  usePostgres ? (!useMinimalFeatures),
+  usePoppler ? (!useMinimalFeatures),
+  useArrow ? (!useMinimalFeatures),
+  useHDF ? (!useMinimalFeatures),
+  useNetCDF ? (!useMinimalFeatures),
+  useArmadillo ? (!useMinimalFeatures),
+  useJava ? (!useMinimalFeatures),
 
-, ant
-, bison
-, cmake
-, gtest
-, doxygen
-, graphviz
-, pkg-config
-, python3
-, swig
-, armadillo
-, arrow-cpp
-, c-blosc
-, brunsli
-, cfitsio
-, crunch
-, curl
-, cryptopp
-, libdeflate
-, expat
-, libgeotiff
-, geos
-, giflib
-, jdk
-, libheif
-, dav1d
-, libaom
-, libde265
-, rav1e
-, x265
-, hdf4
-, hdf5-cpp
-, libiconv
-, libjpeg
-, json_c
-, libjxl
-, libhwy
-, lerc
-, xz
-, libxml2
-, lz4
-, libmysqlclient
-, netcdf
-, openexr
-, openjpeg
-, openssl
-, pcre2
-, libpng
-, poppler
-, postgresql
-, proj
-, qhull
-, libspatialite
-, sqlite
-, libtiff
-, tiledb
-, libwebp
-, xercesc
-, zlib
-, zstd
+  ant,
+  bison,
+  cmake,
+  gtest,
+  doxygen,
+  graphviz,
+  pkg-config,
+  python3,
+  swig,
+  armadillo,
+  arrow-cpp,
+  c-blosc,
+  brunsli,
+  cfitsio,
+  crunch,
+  curl,
+  cryptopp,
+  libdeflate,
+  expat,
+  libgeotiff,
+  geos,
+  giflib,
+  jdk,
+  libheif,
+  dav1d,
+  libaom,
+  libde265,
+  rav1e,
+  x265,
+  hdf4,
+  hdf5-cpp,
+  libiconv,
+  libjpeg,
+  json_c,
+  libjxl,
+  libhwy,
+  lerc,
+  xz,
+  libxml2,
+  lz4,
+  libmysqlclient,
+  netcdf,
+  openexr,
+  openjpeg,
+  openssl,
+  pcre2,
+  libpng,
+  poppler,
+  postgresql,
+  proj,
+  qhull,
+  libspatialite,
+  sqlite,
+  libtiff,
+  tiledb,
+  libwebp,
+  xercesc,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -97,36 +98,49 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [
-    bison
-    cmake
-    doxygen
-    graphviz
-    pkg-config
-    python3.pkgs.setuptools
-    python3.pkgs.wrapPython
-    swig
-  ] ++ lib.optionals useJava [ ant jdk ];
+  nativeBuildInputs =
+    [
+      bison
+      cmake
+      doxygen
+      graphviz
+      pkg-config
+      python3.pkgs.setuptools
+      python3.pkgs.wrapPython
+      swig
+    ]
+    ++ lib.optionals useJava [
+      ant
+      jdk
+    ];
 
-  cmakeFlags = [
-    "-DGDAL_USE_INTERNAL_LIBS=OFF"
-    "-DGEOTIFF_INCLUDE_DIR=${lib.getDev libgeotiff}/include"
-    "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
-    "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
-    "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"}libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
-  ] ++ lib.optionals finalAttrs.doInstallCheck [
-    "-DBUILD_TESTING=ON"
-  ] ++ lib.optionals (!stdenv.isDarwin) [
-    "-DCMAKE_SKIP_BUILD_RPATH=ON" # without, libgdal.so can't find libmariadb.so
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
-  ] ++ lib.optionals (!useTiledb) [
-    "-DGDAL_USE_TILEDB=OFF"
-  ] ++ lib.optionals (!useJava) [
-    # This is not strictly needed as the Java bindings wouldn't build anyway if
-    # ant/jdk were not available.
-    "-DBUILD_JAVA_BINDINGS=OFF"
-  ];
+  cmakeFlags =
+    [
+      "-DGDAL_USE_INTERNAL_LIBS=OFF"
+      "-DGEOTIFF_INCLUDE_DIR=${lib.getDev libgeotiff}/include"
+      "-DGEOTIFF_LIBRARY_RELEASE=${lib.getLib libgeotiff}/lib/libgeotiff${stdenv.hostPlatform.extensions.sharedLibrary}"
+      "-DMYSQL_INCLUDE_DIR=${lib.getDev libmysqlclient}/include/mysql"
+      "-DMYSQL_LIBRARY=${lib.getLib libmysqlclient}/lib/${
+        lib.optionalString (libmysqlclient.pname != "mysql") "mysql/"
+      }libmysqlclient${stdenv.hostPlatform.extensions.sharedLibrary}"
+    ]
+    ++ lib.optionals finalAttrs.doInstallCheck [
+      "-DBUILD_TESTING=ON"
+    ]
+    ++ lib.optionals (!stdenv.isDarwin) [
+      "-DCMAKE_SKIP_BUILD_RPATH=ON" # without, libgdal.so can't find libmariadb.so
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "-DCMAKE_BUILD_WITH_INSTALL_NAME_DIR=ON"
+    ]
+    ++ lib.optionals (!useTiledb) [
+      "-DGDAL_USE_TILEDB=OFF"
+    ]
+    ++ lib.optionals (!useJava) [
+      # This is not strictly needed as the Java bindings wouldn't build anyway if
+      # ant/jdk were not available.
+      "-DBUILD_JAVA_BINDINGS=OFF"
+    ];
 
   buildInputs =
     let
@@ -155,11 +169,14 @@ stdenv.mkDerivation (finalAttrs: {
       armadilloDeps = lib.optionals useArmadillo [ armadillo ];
 
       darwinDeps = lib.optionals stdenv.isDarwin [ libiconv ];
-      nonDarwinDeps = lib.optionals (!stdenv.isDarwin) ([
-        # tests for formats enabled by these packages fail on macos
-        openexr
-        xercesc
-      ] ++ arrowDeps);
+      nonDarwinDeps = lib.optionals (!stdenv.isDarwin) (
+        [
+          # tests for formats enabled by these packages fail on macos
+          openexr
+          xercesc
+        ]
+        ++ arrowDeps
+      );
     in
     [
       c-blosc
@@ -194,7 +211,8 @@ stdenv.mkDerivation (finalAttrs: {
       zstd
       python3
       python3.pkgs.numpy
-    ] ++ tileDbDeps
+    ]
+    ++ tileDbDeps
     ++ libHeifDeps
     ++ libJxlDeps
     ++ mysqlDeps
@@ -208,13 +226,15 @@ stdenv.mkDerivation (finalAttrs: {
     ++ nonDarwinDeps;
 
   pythonPath = [ python3.pkgs.numpy ];
-  postInstall = ''
-    wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
-  '' + lib.optionalString useJava ''
-    cd $out/lib
-    ln -s ./jni/libgdalalljni${stdenv.hostPlatform.extensions.sharedLibrary}
-    cd -
-  '';
+  postInstall =
+    ''
+      wrapPythonProgramsIn "$out/bin" "$out $pythonPath"
+    ''
+    + lib.optionalString useJava ''
+      cd $out/lib
+      ln -s ./jni/libgdalalljni${stdenv.hostPlatform.extensions.sharedLibrary}
+      cd -
+    '';
 
   enableParallelBuilding = true;
 
@@ -248,34 +268,39 @@ stdenv.mkDerivation (finalAttrs: {
     "gdrivers/gdalhttp.py"
     "gdrivers/wms.py"
   ];
-  disabledTests = [
-    # tests that attempt to make network requests
-    "test_jp2openjpeg_45"
-    # tests that require the full proj dataset which we don't package yet
-    # https://github.com/OSGeo/gdal/issues/5523
-    "test_transformer_dem_overrride_srs"
-    "test_osr_ct_options_area_of_interest"
-    # ZIP does not support timestamps before 1980
-    "test_sentinel2_zipped"
-    # tries to call unwrapped executable
-    "test_SetPROJAuxDbPaths"
-    # fixed and renamed in 3.8.0RC1
-    # https://github.com/OSGeo/gdal/commit/c8b471ca1e6318866ff668d2b57bb6f076e3ae29
-    "test_visoss_6"
-    # failing with PROJ 9.3.1
-    # https://github.com/OSGeo/gdal/issues/8908
-    "test_osr_esri_28"
-  ] ++ lib.optionals (!stdenv.isx86_64) [
-    # likely precision-related expecting x87 behaviour
-    "test_jp2openjpeg_22"
-  ] ++ lib.optionals stdenv.isDarwin [
-    # flaky on macos
-    "test_rda_download_queue"
-  ] ++ lib.optionals (lib.versionOlder proj.version "8") [
-    "test_ogr_parquet_write_crs_without_id_in_datum_ensemble_members"
-  ] ++ lib.optionals (!usePoppler) [
-    "test_pdf_jpx_compression"
-  ];
+  disabledTests =
+    [
+      # tests that attempt to make network requests
+      "test_jp2openjpeg_45"
+      # tests that require the full proj dataset which we don't package yet
+      # https://github.com/OSGeo/gdal/issues/5523
+      "test_transformer_dem_overrride_srs"
+      "test_osr_ct_options_area_of_interest"
+      # ZIP does not support timestamps before 1980
+      "test_sentinel2_zipped"
+      # tries to call unwrapped executable
+      "test_SetPROJAuxDbPaths"
+      # fixed and renamed in 3.8.0RC1
+      # https://github.com/OSGeo/gdal/commit/c8b471ca1e6318866ff668d2b57bb6f076e3ae29
+      "test_visoss_6"
+      # failing with PROJ 9.3.1
+      # https://github.com/OSGeo/gdal/issues/8908
+      "test_osr_esri_28"
+    ]
+    ++ lib.optionals (!stdenv.isx86_64) [
+      # likely precision-related expecting x87 behaviour
+      "test_jp2openjpeg_22"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      # flaky on macos
+      "test_rda_download_queue"
+    ]
+    ++ lib.optionals (lib.versionOlder proj.version "8") [
+      "test_ogr_parquet_write_crs_without_id_in_datum_ensemble_members"
+    ]
+    ++ lib.optionals (!usePoppler) [
+      "test_pdf_jpx_compression"
+    ];
   postCheck = ''
     popd # autotest
   '';
@@ -289,7 +314,13 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Translator library for raster geospatial data formats";
     homepage = "https://www.gdal.org/";
     license = licenses.mit;
-    maintainers = with maintainers; teams.geospatial.members ++ [ marcweber dotlambda ];
+    maintainers =
+      with maintainers;
+      teams.geospatial.members
+      ++ [
+        marcweber
+        dotlambda
+      ];
     platforms = platforms.unix;
   };
 })

@@ -1,4 +1,9 @@
-{ lib, buildPythonApplication, fetchFromGitHub, nose }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  nose,
+}:
 
 buildPythonApplication rec {
   pname = "mbutil";

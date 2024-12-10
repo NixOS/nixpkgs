@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.arbtt;
-in {
+in
+{
   options = {
     services.arbtt = {
       enable = mkEnableOption "Arbtt statistics capture service";

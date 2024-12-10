@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, nix-update-script
-, testers
-, kickstart
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nix-update-script,
+  testers,
+  kickstart,
 }:
 
 rustPlatform.buildRustPackage rec {

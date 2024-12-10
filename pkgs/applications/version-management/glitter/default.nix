@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, git }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  git,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "glitter";
@@ -23,7 +28,10 @@ rustPlatform.buildRustPackage rec {
   '';
 
   # error: Found argument '--test-threads' which wasn't expected, or isn't valid in this context
-  checkFlags = [ "--skip" "runs_correctly" ];
+  checkFlags = [
+    "--skip"
+    "runs_correctly"
+  ];
 
   meta = with lib; {
     description = "A git wrapper that allows you to compress multiple commands into one";

@@ -1,4 +1,11 @@
-{ stdenv, fetchurl, texinfo, ncurses, xz, lib }:
+{
+  stdenv,
+  fetchurl,
+  texinfo,
+  ncurses,
+  xz,
+  lib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "texinfo";
@@ -12,12 +19,16 @@ stdenv.mkDerivation rec {
   buildInputs = [ ncurses ];
   nativeBuildInputs = [ xz ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
-    "-Wno-error=implicit-function-declaration"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=implicit-function-declaration"
+    ]
+  );
 
   # Disabled because we don't have zdiff in the stdenv bootstrap.
   #doCheck = true;
 
-  meta = texinfo.meta // { branch = version; };
+  meta = texinfo.meta // {
+    branch = version;
+  };
 }

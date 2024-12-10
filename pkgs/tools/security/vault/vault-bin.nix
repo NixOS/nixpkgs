@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchzip }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vault-bin";
@@ -56,8 +60,23 @@ stdenv.mkDerivation rec {
     homepage = "https://www.vaultproject.io";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.bsl11;
-    maintainers = with maintainers; teams.serokell.members ++ [ offline psyanticy Chili-Man techknowlogick mkaito ];
+    maintainers =
+      with maintainers;
+      teams.serokell.members
+      ++ [
+        offline
+        psyanticy
+        Chili-Man
+        techknowlogick
+        mkaito
+      ];
     mainProgram = "vault";
-    platforms = [ "x86_64-linux" "i686-linux" "x86_64-darwin" "aarch64-darwin" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+      "aarch64-linux"
+    ];
   };
 }

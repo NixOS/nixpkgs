@@ -1,4 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, gitUpdater, autoreconfHook, allegro, libsamplerate, libX11, libXext, SDL, SDL_mixer, SDL2, SDL2_mixer, readline }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  autoreconfHook,
+  allegro,
+  libsamplerate,
+  libX11,
+  libXext,
+  SDL,
+  SDL_mixer,
+  SDL2,
+  SDL2_mixer,
+  readline,
+}:
 
 stdenv.mkDerivation rec {
   pname = "1oom";
@@ -12,9 +27,22 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ allegro libsamplerate libX11 libXext SDL SDL_mixer SDL2 SDL2_mixer readline ];
+  buildInputs = [
+    allegro
+    libsamplerate
+    libX11
+    libXext
+    SDL
+    SDL_mixer
+    SDL2
+    SDL2_mixer
+    readline
+  ];
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   postInstall = ''
     install -d $doc/share/doc/${pname}

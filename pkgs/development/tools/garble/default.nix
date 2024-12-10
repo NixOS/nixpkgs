@@ -1,8 +1,9 @@
-{ stdenv
-, buildGoModule
-, fetchFromGitHub
-, lib
-, git
+{
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  git,
 }:
 buildGoModule rec {
   pname = "garble";
@@ -18,7 +19,7 @@ buildGoModule rec {
   vendorHash = "sha256-SOdIlu0QrQokl9j9Ff594+1K6twU1mCuECFQaVKaPV4=";
 
   # Used for some of the tests.
-  nativeCheckInputs = [git];
+  nativeCheckInputs = [ git ];
 
   preBuild = lib.optionalString (!stdenv.isx86_64) ''
     # The test assumex amd64 assembly

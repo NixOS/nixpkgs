@@ -1,16 +1,17 @@
-{ lib
-, rust
-, stdenv
-, rustPlatform
-, fetchCrate
-, pkg-config
-, cargo-c
-, libgit2
-, nasm
-, zlib
-, libiconv
-, Security
-, buildPackages
+{
+  lib,
+  rust,
+  stdenv,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  cargo-c,
+  libgit2,
+  nasm,
+  zlib,
+  libiconv,
+  Security,
+  buildPackages,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,14 +27,20 @@ rustPlatform.buildRustPackage rec {
 
   depsBuildBuild = [ pkg-config ];
 
-  nativeBuildInputs = [ cargo-c libgit2 nasm ];
-
-  buildInputs = [
-    zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-    Security
+  nativeBuildInputs = [
+    cargo-c
+    libgit2
+    nasm
   ];
+
+  buildInputs =
+    [
+      zlib
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+      Security
+    ];
 
   # Darwin uses `llvm-strip`, which results in link errors when using `-x` to strip the asm library
   # and linking it with cctools ld64.
@@ -43,7 +50,7 @@ rustPlatform.buildRustPackage rec {
 
   checkType = "debug";
 
-  postBuild =  ''
+  postBuild = ''
     ${rust.envVars.setEnv} cargo cbuild --release --frozen --prefix=${placeholder "out"} --target ${stdenv.hostPlatform.rust.rustcTarget}
   '';
 

@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildPythonPackage
-, deltachat-rpc-server
-, libdeltachat
-, setuptools-scm
-, substituteAll
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonPackage,
+  deltachat-rpc-server,
+  libdeltachat,
+  setuptools-scm,
+  substituteAll,
 }:
 
 buildPythonPackage rec {

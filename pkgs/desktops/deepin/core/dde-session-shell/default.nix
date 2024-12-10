@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, linkFarm
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, wrapGAppsHook3
-, qtbase
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, deepin-pw-check
-, gsettings-qt
-, lightdm_qt
-, qtx11extras
-, linux-pam
-, xorg
-, gtest
-, xkeyboard_config
-, dbus
-, dde-session-shell
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  linkFarm,
+  cmake,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  wrapGAppsHook3,
+  qtbase,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  deepin-pw-check,
+  gsettings-qt,
+  lightdm_qt,
+  qtx11extras,
+  linux-pam,
+  xorg,
+  gtest,
+  xkeyboard_config,
+  dbus,
+  dde-session-shell,
 }:
 
 stdenv.mkDerivation rec {
@@ -85,7 +86,10 @@ stdenv.mkDerivation rec {
     gtest
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH
   qtWrapperArgs = [
@@ -96,10 +100,12 @@ stdenv.mkDerivation rec {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  passthru.xgreeters = linkFarm "deepin-greeter-xgreeters" [{
-    path = "${dde-session-shell}/share/xgreeters/lightdm-deepin-greeter.desktop";
-    name = "lightdm-deepin-greeter.desktop";
-  }];
+  passthru.xgreeters = linkFarm "deepin-greeter-xgreeters" [
+    {
+      path = "${dde-session-shell}/share/xgreeters/lightdm-deepin-greeter.desktop";
+      name = "lightdm-deepin-greeter.desktop";
+    }
+  ];
 
   meta = with lib; {
     description = "Deepin desktop-environment - session-shell module";

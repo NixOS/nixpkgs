@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, rustPlatform
-, makeWrapper
-, pkg-config
-, perl
-, openssl
-, rust-jemalloc-sys
-, python3
-, wrapQtAppsHook
-, qtbase
-, qtsvg
-, xdg-utils
-, substituteAll
-, buildNpmPackage
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  rustPlatform,
+  makeWrapper,
+  pkg-config,
+  perl,
+  openssl,
+  rust-jemalloc-sys,
+  python3,
+  wrapQtAppsHook,
+  qtbase,
+  qtsvg,
+  xdg-utils,
+  substituteAll,
+  buildNpmPackage,
 }:
 
 let

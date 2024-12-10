@@ -1,11 +1,12 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gtk-engine-murrine
-, breeze-icons
-, plasma-framework
-, plasma-workspace
-, jdupes
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk-engine-murrine,
+  breeze-icons,
+  plasma-framework,
+  plasma-workspace,
+  jdupes,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -80,7 +81,10 @@ stdenvNoCC.mkDerivation rec {
 
   sourceRoot = ".";
 
-  outputs = [ "out" "sddm" ];
+  outputs = [
+    "out"
+    "sddm"
+  ];
 
   nativeBuildInputs = [ jdupes ];
 

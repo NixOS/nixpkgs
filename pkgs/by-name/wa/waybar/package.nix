@@ -95,13 +95,16 @@ stdenv.mkDerivation (finalAttrs: {
     popd
   '';
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    wayland-scanner
-    wrapGAppsHook3
-  ] ++ lib.optional withMediaPlayer gobject-introspection ++ lib.optional enableManpages scdoc;
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      wayland-scanner
+      wrapGAppsHook3
+    ]
+    ++ lib.optional withMediaPlayer gobject-introspection
+    ++ lib.optional enableManpages scdoc;
 
   propagatedBuildInputs = lib.optionals withMediaPlayer [
     glib

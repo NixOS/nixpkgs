@@ -1,5 +1,9 @@
-{ lib, fetchFromGitHub, fetchPypi, python3 }:
-
+{
+  lib,
+  fetchFromGitHub,
+  fetchPypi,
+  python3,
+}:
 
 let
   py = python3.override {
@@ -54,9 +58,16 @@ buildPythonApplication rec {
   # will fail without pre-seeded config files
   doCheck = false;
 
-  nativeCheckInputs = [ unittestCheckHook mock ];
+  nativeCheckInputs = [
+    unittestCheckHook
+    mock
+  ];
 
-  unittestFlagsArray = [ "-s" "tests" "-v" ];
+  unittestFlagsArray = [
+    "-s"
+    "tests"
+    "-v"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/donnemartin/haxor-news";

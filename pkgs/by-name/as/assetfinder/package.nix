@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, buildGoPackage
+{
+  lib,
+  fetchFromGitHub,
+  buildGoPackage,
 }:
 
 buildGoPackage rec {
@@ -22,7 +23,10 @@ buildGoPackage rec {
     mainProgram = "assetfinder";
     maintainers = with maintainers; [ shard7 ];
     platforms = platforms.unix;
-    sourceProvenance = with sourceTypes; [ fromSource binaryNativeCode ];
+    sourceProvenance = with sourceTypes; [
+      fromSource
+      binaryNativeCode
+    ];
     license = with licenses; [ mit ];
   };
 }

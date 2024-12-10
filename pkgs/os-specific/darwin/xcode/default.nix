@@ -1,48 +1,58 @@
-{ stdenv, requireFile, lib }:
+{
+  stdenv,
+  requireFile,
+  lib,
+}:
 
-let requireXcode = version: sha256:
-  let
-    xip = "Xcode_" + version +  ".xip";
+let
+  requireXcode =
+    version: sha256:
+    let
+      xip = "Xcode_" + version + ".xip";
 
-    unxip = if stdenv.buildPlatform.isDarwin
-            then ''
-              open -W ${xip}
-              rm -rf ${xip}
-            ''
-            else ''
-              xar -xf ${xip}
-              rm -rf ${xip}
-              pbzx -n Content | cpio -i
-              rm Content Metadata
-              rcodesign verify Xcode.app/Contents/MacOS/Xcode
-            '';
+      unxip =
+        if stdenv.buildPlatform.isDarwin then
+          ''
+            open -W ${xip}
+            rm -rf ${xip}
+          ''
+        else
+          ''
+            xar -xf ${xip}
+            rm -rf ${xip}
+            pbzx -n Content | cpio -i
+            rm Content Metadata
+            rcodesign verify Xcode.app/Contents/MacOS/Xcode
+          '';
 
-    app = requireFile rec {
-      name     = "Xcode.app";
-      url      = "https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_${version}/${xip}";
-      hashMode = "recursive";
-      inherit sha256;
-      message  = ''
-        Unfortunately, we cannot download ${name} automatically.
-        Please go to ${url}
-        to download it yourself, and add it to the Nix store by running the following commands.
-        Note: download (~ 5GB), extraction and storing of Xcode will take a while
+      app = requireFile rec {
+        name = "Xcode.app";
+        url = "https://developer.apple.com/services-account/download?path=/Developer_Tools/Xcode_${version}/${xip}";
+        hashMode = "recursive";
+        inherit sha256;
+        message = ''
+          Unfortunately, we cannot download ${name} automatically.
+          Please go to ${url}
+          to download it yourself, and add it to the Nix store by running the following commands.
+          Note: download (~ 5GB), extraction and storing of Xcode will take a while
 
-        ${unxip}
-        nix-store --add-fixed --recursive sha256 Xcode.app
-        rm -rf Xcode.app
-      '';
-    };
-    meta = with lib; {
-      homepage = "https://developer.apple.com/downloads/";
-      description = "Apple's XCode SDK";
-      license = licenses.unfree;
-      platforms = platforms.darwin ++ platforms.linux;
-    };
+          ${unxip}
+          nix-store --add-fixed --recursive sha256 Xcode.app
+          rm -rf Xcode.app
+        '';
+      };
+      meta = with lib; {
+        homepage = "https://developer.apple.com/downloads/";
+        description = "Apple's XCode SDK";
+        license = licenses.unfree;
+        platforms = platforms.darwin ++ platforms.linux;
+      };
 
-  in app.overrideAttrs ( oldAttrs: oldAttrs // { inherit meta; });
+    in
+    app.overrideAttrs (oldAttrs: oldAttrs // { inherit meta; });
 
-in lib.makeExtensible (self: {
+in
+lib.makeExtensible (self: {
   xcode_8_1 = requireXcode "8.1" "sha256-VuAovU/b4rcLh+xMtcsZmbTWwTk35VGfMSp+fqPbsqM=";
   xcode_8_2 = requireXcode "8.2" "sha256-ohqgGD7JEEmXEvmfn/N9Ga2lM8jNwhIuh+ky7PQPzY4=";
   xcode_9_1 = requireXcode "9.1" "sha256-LG7pVMh1rNh5uP/bASvV9sKvGDrSGWH90J4gzwcgYSk=";
@@ -83,5 +93,10 @@ in lib.makeExtensible (self: {
   xcode_14_1 = requireXcode "14.1" "sha256-QJGAUVIhuDYyzDNttBPv5lIGOfvkYqdOFSUAr5tlkfs=";
   xcode_15 = requireXcode "15" "sha256-ffqISt2Ayccln5BArKIjSdzbEgoSoNwq8TPLGysAE0c=";
   xcode_15_1 = requireXcode "15.1" "sha256-0djqoSamU87rCpjo50Un3cFg9wKf+pSczRko6uumGM0=";
-  xcode = self."xcode_${lib.replaceStrings ["."] ["_"] (if (stdenv.targetPlatform ? xcodeVer) then stdenv.targetPlatform.xcodeVer else "12.3")}";
+  xcode =
+    self."xcode_${
+      lib.replaceStrings [ "." ] [ "_" ] (
+        if (stdenv.targetPlatform ? xcodeVer) then stdenv.targetPlatform.xcodeVer else "12.3"
+      )
+    }";
 })

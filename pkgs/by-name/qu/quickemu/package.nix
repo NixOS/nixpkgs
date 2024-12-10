@@ -31,29 +31,31 @@
   installShellFiles,
 }:
 let
-  runtimePaths = [
-    cdrtools
-    curl
-    gawk
-    gnugrep
-    gnused
-    jq
-    ncurses
-    pciutils
-    procps
-    python3
-    qemu_full
-    socat
-    swtpm
-    util-linux
-    unzip
-    xrandr
-    zsync
-  ] ++ lib.optionals stdenv.isLinux [
-    glxinfo
-    usbutils
-    xdg-user-dirs
-  ];
+  runtimePaths =
+    [
+      cdrtools
+      curl
+      gawk
+      gnugrep
+      gnused
+      jq
+      ncurses
+      pciutils
+      procps
+      python3
+      qemu_full
+      socat
+      swtpm
+      util-linux
+      unzip
+      xrandr
+      zsync
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      glxinfo
+      usbutils
+      xdg-user-dirs
+    ];
 in
 
 stdenv.mkDerivation (finalAttrs: {

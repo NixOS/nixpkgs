@@ -38,7 +38,11 @@ buildGoModule rec {
     homepage = "https://github.com/mautrix/signal";
     description = "A Matrix-Signal puppeting bridge";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ expipiplus1 niklaskorz ma27 ];
+    maintainers = with maintainers; [
+      expipiplus1
+      niklaskorz
+      ma27
+    ];
     mainProgram = "mautrix-signal";
   };
 }

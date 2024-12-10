@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, kernel, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  nixosTests,
+}:
 
 let
   sourceAttrs = (import ./source.nix) { inherit fetchFromGitHub; };

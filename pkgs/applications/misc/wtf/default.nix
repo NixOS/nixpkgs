@@ -1,9 +1,10 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, makeWrapper
-, ncurses
-, stdenv
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  makeWrapper,
+  ncurses,
+  stdenv,
 }:
 
 buildGoModule rec {
@@ -22,7 +23,11 @@ buildGoModule rec {
 
   doCheck = false;
 
-  ldflags = [ "-s" "-w" "-X main.version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.version=${version}"
+  ];
 
   subPackages = [ "." ];
 

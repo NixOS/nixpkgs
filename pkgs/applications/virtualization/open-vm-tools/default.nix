@@ -1,42 +1,43 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, makeWrapper
-, autoreconfHook
-, bash
-, fuse3
-, libmspack
-, openssl
-, pam
-, xercesc
-, icu
-, libdnet
-, procps
-, libtirpc
-, rpcsvc-proto
-, libX11
-, libXext
-, libXinerama
-, libXi
-, libXrender
-, libXrandr
-, libXtst
-, libxcrypt
-, libxml2
-, pkg-config
-, glib
-, gdk-pixbuf-xlib
-, gtk3
-, gtkmm3
-, iproute2
-, dbus
-, systemd
-, which
-, libdrm
-, udev
-, util-linux
-, xmlsec
-, withX ? true
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  autoreconfHook,
+  bash,
+  fuse3,
+  libmspack,
+  openssl,
+  pam,
+  xercesc,
+  icu,
+  libdnet,
+  procps,
+  libtirpc,
+  rpcsvc-proto,
+  libX11,
+  libXext,
+  libXinerama,
+  libXi,
+  libXrender,
+  libXrandr,
+  libXtst,
+  libxcrypt,
+  libxml2,
+  pkg-config,
+  glib,
+  gdk-pixbuf-xlib,
+  gtk3,
+  gtkmm3,
+  iproute2,
+  dbus,
+  systemd,
+  which,
+  libdrm,
+  udev,
+  util-linux,
+  xmlsec,
+  withX ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,7 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/open-vm-tools";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     autoreconfHook
@@ -60,35 +64,37 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    fuse3
-    glib
-    icu
-    libdnet
-    libdrm
-    libmspack
-    libtirpc
-    libxcrypt
-    libxml2
-    openssl
-    pam
-    procps
-    rpcsvc-proto
-    udev
-    xercesc
-    xmlsec
-  ] ++ lib.optionals withX [
-    gdk-pixbuf-xlib
-    gtk3
-    gtkmm3
-    libX11
-    libXext
-    libXinerama
-    libXi
-    libXrender
-    libXrandr
-    libXtst
-  ];
+  buildInputs =
+    [
+      fuse3
+      glib
+      icu
+      libdnet
+      libdrm
+      libmspack
+      libtirpc
+      libxcrypt
+      libxml2
+      openssl
+      pam
+      procps
+      rpcsvc-proto
+      udev
+      xercesc
+      xmlsec
+    ]
+    ++ lib.optionals withX [
+      gdk-pixbuf-xlib
+      gtk3
+      gtkmm3
+      libX11
+      libXext
+      libXinerama
+      libXi
+      libXrender
+      libXrandr
+      libXtst
+    ];
 
   postPatch = ''
     sed -i Makefile.am \
@@ -131,7 +137,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall = ''
     wrapProgram "$out/etc/vmware-tools/scripts/vmware/network" \
-      --prefix PATH ':' "${lib.makeBinPath [ iproute2 dbus systemd which ]}"
+      --prefix PATH ':' "${
+        lib.makeBinPath [
+          iproute2
+          dbus
+          systemd
+          which
+        ]
+      }"
     substituteInPlace "$out/lib/udev/rules.d/99-vmware-scsi-udev.rules" --replace "/bin/sh" "${bash}/bin/sh"
   '';
 
@@ -144,7 +157,14 @@ stdenv.mkDerivation (finalAttrs: {
       better management of, and seamless user interactions with, guests.
     '';
     license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
-    maintainers = with maintainers; [ joamaki kjeremy ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+    ];
+    maintainers = with maintainers; [
+      joamaki
+      kjeremy
+    ];
   };
 })

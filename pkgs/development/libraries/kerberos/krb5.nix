@@ -1,21 +1,33 @@
-{ lib, stdenv, fetchurl, pkg-config, perl, bison, bootstrap_cmds
-, openssl, openldap, libedit, keyutils, libverto, darwin
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  perl,
+  bison,
+  bootstrap_cmds,
+  openssl,
+  openldap,
+  libedit,
+  keyutils,
+  libverto,
+  darwin,
 
-# for passthru.tests
-, bind
-, curl
-, nixosTests
-, openssh
-, postgresql
-, python3
+  # for passthru.tests
+  bind,
+  curl,
+  nixosTests,
+  openssh,
+  postgresql,
+  python3,
 
-# Extra Arguments
-, type ? ""
-# This is called "staticOnly" because krb5 does not support
-# builting both static and shared, see below.
-, staticOnly ? false
-, withLdap ? false
-, withVerto ? false
+  # Extra Arguments
+  type ? "",
+  # This is called "staticOnly" because krb5 does not support
+  # builting both static and shared, see below.
+  staticOnly ? false,
+  withLdap ? false,
+  withVerto ? false,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -38,36 +50,55 @@ stdenv.mkDerivation rec {
     hash = "sha256-t6TNXq1n+wi5gLIavRUP9yF+heoyDJ7QxtrdMEhArTU=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
-  configureFlags = [ "--localstatedir=/var/lib" ]
+  configureFlags =
+    [ "--localstatedir=/var/lib" ]
     # krb5's ./configure does not allow passing --enable-shared and --enable-static at the same time.
     # See https://bbs.archlinux.org/viewtopic.php?pid=1576737#p1576737
-    ++ lib.optionals staticOnly [ "--enable-static" "--disable-shared" ]
+    ++ lib.optionals staticOnly [
+      "--enable-static"
+      "--disable-shared"
+    ]
     ++ lib.optional withLdap "--with-ldap"
     ++ lib.optional withVerto "--with-system-verto"
     ++ lib.optional stdenv.isFreeBSD ''WARN_CFLAGS=''
-    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform)
-       [ "krb5_cv_attr_constructor_destructor=yes,yes"
-         "ac_cv_func_regcomp=yes"
-         "ac_cv_printf_positional=yes"
-       ];
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "krb5_cv_attr_constructor_destructor=yes,yes"
+      "ac_cv_func_regcomp=yes"
+      "ac_cv_printf_positional=yes"
+    ];
 
-  nativeBuildInputs = [ pkg-config perl ]
+  nativeBuildInputs =
+    [
+      pkg-config
+      perl
+    ]
     ++ lib.optional (!libOnly) bison
     # Provides the mig command used by the build scripts
     ++ lib.optional stdenv.isDarwin bootstrap_cmds;
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.libc != "bionic" && !(stdenv.hostPlatform.useLLVM or false)) [ keyutils ]
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals (
+      stdenv.hostPlatform.isLinux
+      && stdenv.hostPlatform.libc != "bionic"
+      && !(stdenv.hostPlatform.useLLVM or false)
+    ) [ keyutils ]
     ++ lib.optionals (!libOnly) [ libedit ]
     ++ lib.optionals withLdap [ openldap ]
     ++ lib.optionals withVerto [ libverto ];
 
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin (with darwin.apple_sdk; [
-    libs.xpc
-    frameworks.Kerberos
-  ]);
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin (
+    with darwin.apple_sdk;
+    [
+      libs.xpc
+      frameworks.Kerberos
+    ]
+  );
 
   sourceRoot = "krb5-${version}/src";
 
@@ -76,7 +107,12 @@ stdenv.mkDerivation rec {
         --replace "'ld " "'${stdenv.cc.targetPrefix}ld "
   '';
 
-  libFolders = [ "util" "include" "lib" "build-tools" ];
+  libFolders = [
+    "util"
+    "include"
+    "lib"
+    "build-tools"
+  ];
 
   buildPhase = lib.optionalString libOnly ''
     runHook preBuild

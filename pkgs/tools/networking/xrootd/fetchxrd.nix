@@ -1,15 +1,17 @@
-{ lib
-, runCommandLocal
-, buildPlatform
-, xrootd
+{
+  lib,
+  runCommandLocal,
+  buildPlatform,
+  xrootd,
 }:
 
-{ name ? ""
-, pname ? ""
-, version ? ""
-, urls ? [ ]
-, url ? if urls == [ ] then abort "Expect either non-empty `urls` or `url`" else builtins.head urls
-, hash ? lib.fakeHash
+{
+  name ? "",
+  pname ? "",
+  version ? "",
+  urls ? [ ],
+  url ? if urls == [ ] then abort "Expect either non-empty `urls` or `url`" else builtins.head urls,
+  hash ? lib.fakeHash,
 }:
 
 (runCommandLocal name
@@ -31,10 +33,17 @@
       echo "xrdcp failed trying to download any of the urls" >&2
       exit $ret
     fi
-  '').overrideAttrs (finalAttrs:
-if (pname != "" && version != "") then {
-  inherit pname version;
-  name = "${pname}-${version}";
-} else {
-  name = if (name != "") then name else (baseNameOf finalAttrs.url);
-})
+  ''
+).overrideAttrs
+  (
+    finalAttrs:
+    if (pname != "" && version != "") then
+      {
+        inherit pname version;
+        name = "${pname}-${version}";
+      }
+    else
+      {
+        name = if (name != "") then name else (baseNameOf finalAttrs.url);
+      }
+  )

@@ -1,14 +1,24 @@
-{ stdenv, lib, which, file, mumble, mumble_i686
+{
+  stdenv,
+  lib,
+  which,
+  file,
+  mumble,
+  mumble_i686,
 }:
 
 let
-  binPath = lib.makeBinPath [ which file ];
-in stdenv.mkDerivation {
+  binPath = lib.makeBinPath [
+    which
+    file
+  ];
+in
+stdenv.mkDerivation {
   pname = "mumble-overlay";
   version = mumble.version;
 
   inherit (mumble) src;
-  patches = mumble.patches or [];
+  patches = mumble.patches or [ ];
 
   installPhase = ''
     mkdir -p $out/lib

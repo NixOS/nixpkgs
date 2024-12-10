@@ -1,4 +1,9 @@
-{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoPackage rec {
   pname = "surfboard_exporter";

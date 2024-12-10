@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, gcc, boost, eigen, libxml2, mpi, python3, petsc, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  gcc,
+  boost,
+  eigen,
+  libxml2,
+  mpi,
+  python3,
+  petsc,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "precice";
@@ -31,8 +45,20 @@ stdenv.mkDerivation rec {
     ++ [ "-fpermissive" ]
   );
 
-  nativeBuildInputs = [ cmake gcc pkg-config python3 python3.pkgs.numpy  ];
-  buildInputs = [ boost eigen libxml2 mpi petsc ];
+  nativeBuildInputs = [
+    cmake
+    gcc
+    pkg-config
+    python3
+    python3.pkgs.numpy
+  ];
+  buildInputs = [
+    boost
+    eigen
+    libxml2
+    mpi
+    petsc
+  ];
 
   meta = {
     description = "preCICE stands for Precise Code Interaction Coupling Environment";
@@ -43,5 +69,3 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.unix;
   };
 }
-
-

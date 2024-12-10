@@ -1,14 +1,18 @@
-{ lib
-, stdenv
-, scdoc
-, hare
+{
+  lib,
+  stdenv,
+  scdoc,
+  hare,
 }:
 let
   arch = stdenv.hostPlatform.uname.processor;
 in
 stdenv.mkDerivation {
   pname = "haredoc";
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
   inherit (hare) version src;
 
   strictDeps = true;

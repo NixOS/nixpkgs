@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, callPackage
-, cmake
-, gmp
-, halibut
-, ncurses
-, perl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  callPackage,
+  cmake,
+  gmp,
+  halibut,
+  ncurses,
+  perl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 

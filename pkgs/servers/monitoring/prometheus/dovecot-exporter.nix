@@ -1,4 +1,9 @@
-{ lib, buildGoPackage, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoPackage,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoPackage rec {
   pname = "dovecot_exporter";
@@ -22,6 +27,9 @@ buildGoPackage rec {
     description = "Prometheus metrics exporter for Dovecot";
     mainProgram = "dovecot_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ willibutz globin ];
+    maintainers = with maintainers; [
+      willibutz
+      globin
+    ];
   };
 }

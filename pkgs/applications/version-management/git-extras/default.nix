@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, unixtools
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unixtools,
+  which,
 }:
 
 stdenv.mkDerivation rec {
@@ -42,6 +43,9 @@ stdenv.mkDerivation rec {
     description = "GIT utilities -- repo summary, repl, changelog population, author commit percentages and more";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [ cko SuperSandro2000 ];
+    maintainers = with maintainers; [
+      cko
+      SuperSandro2000
+    ];
   };
 }

@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, glib, procps, libxml2 }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  glib,
+  procps,
+  libxml2,
+}:
 
 stdenv.mkDerivation {
   pname = "dbus-map";
@@ -11,7 +19,9 @@ stdenv.mkDerivation {
   };
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    glib procps libxml2
+    glib
+    procps
+    libxml2
   ];
   installPhase = ''
     mkdir -p $out/bin

@@ -27,8 +27,12 @@ rustPlatform.buildRustPackage rec {
     };
   };
 
-  buildInputs = [ installShellFiles ]
-    ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.Security libiconv ];
+  buildInputs =
+    [ installShellFiles ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      libiconv
+    ];
 
   HOME = "$TMPDIR";
 

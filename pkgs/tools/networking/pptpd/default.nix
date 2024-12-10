@@ -1,11 +1,16 @@
-{ lib, stdenv, fetchurl, ppp }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ppp,
+}:
 
 stdenv.mkDerivation rec {
-  pname   = "pptpd";
+  pname = "pptpd";
   version = "1.4.0";
 
   src = fetchurl {
-    url    = "mirror://sourceforge/poptop/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
+    url = "mirror://sourceforge/poptop/${pname}/${pname}-${version}/${pname}-${version}.tar.gz";
     sha256 = "1h06gyxj51ba6kbbnf6hyivwjia0i6gsmjz8kyggaany8a58pkcg";
   };
 
@@ -20,9 +25,9 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage    = "https://poptop.sourceforge.net/dox/";
+    homepage = "https://poptop.sourceforge.net/dox/";
     description = "The PPTP Server for Linux";
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
     maintainers = with maintainers; [ obadz ];
     license = licenses.gpl2Only;
   };

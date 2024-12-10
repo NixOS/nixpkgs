@@ -1,4 +1,8 @@
-{ writeShellApplication, iptables, lib }:
+{
+  writeShellApplication,
+  iptables,
+  lib,
+}:
 
 writeShellApplication {
   name = "nixos-firewall-tool";

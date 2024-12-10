@@ -1,37 +1,40 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchurl
-, freetype
-, glib
-, libGL
-, libGLU
-, libSM
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchurl,
+  freetype,
+  glib,
+  libGL,
+  libGLU,
+  libSM,
 
-, libXrender
-, libX11
+  libXrender,
+  libX11,
 
-, libxcb
-, sqlite
-, zlib
-, fontconfig
-, dpkg
-, libproxy
-, libxml2
-, gst_all_1
-, dbus
-, makeWrapper
+  libxcb,
+  sqlite,
+  zlib,
+  fontconfig,
+  dpkg,
+  libproxy,
+  libxml2,
+  gst_all_1,
+  dbus,
+  makeWrapper,
 
-, cups
-, alsa-lib
+  cups,
+  alsa-lib,
 
-, xkeyboardconfig
-, autoPatchelfHook
+  xkeyboardconfig,
+  autoPatchelfHook,
 }:
 let
   arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
-    else throw "Unsupported system ${stdenv.hostPlatform.system} ";
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      "amd64"
+    else
+      throw "Unsupported system ${stdenv.hostPlatform.system} ";
 in
 mkDerivation rec {
   pname = "googleearth-pro";
@@ -42,7 +45,11 @@ mkDerivation rec {
     sha256 = "1pbapi267snlrjari5k93y6kbrjsqhqxgkxxqaqv4r25az00dx6d";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+    autoPatchelfHook
+  ];
   propagatedBuildInputs = [ xkeyboardconfig ];
   buildInputs = [
     dbus
@@ -75,7 +82,7 @@ mkDerivation rec {
     dpkg --fsys-tarfile ${src} | tar --extract -C deb
   '';
 
-  installPhase =''
+  installPhase = ''
     runHook preInstall
 
     mkdir $out
@@ -118,8 +125,13 @@ mkDerivation rec {
     homepage = "https://www.google.com/earth/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ friedelino shamilton ];
+    maintainers = with maintainers; [
+      friedelino
+      shamilton
+    ];
     platforms = platforms.linux;
-    knownVulnerabilities = [ "Includes vulnerable versions of bundled libraries: openssl, ffmpeg, gdal, and proj." ];
+    knownVulnerabilities = [
+      "Includes vulnerable versions of bundled libraries: openssl, ffmpeg, gdal, and proj."
+    ];
   };
 }

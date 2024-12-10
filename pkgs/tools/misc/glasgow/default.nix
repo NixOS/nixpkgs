@@ -1,10 +1,11 @@
-{ lib
-, python3
-, fetchFromGitHub
-, sdcc
-, yosys
-, icestorm
-, nextpnr
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  sdcc,
+  yosys,
+  icestorm,
+  nextpnr,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -38,7 +39,11 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  nativeCheckInputs = [ yosys icestorm nextpnr ];
+  nativeCheckInputs = [
+    yosys
+    icestorm
+    nextpnr
+  ];
 
   enableParallelBuilding = true;
 
@@ -67,16 +72,25 @@ python3.pkgs.buildPythonApplication rec {
   '';
 
   makeWrapperArgs = [
-    "--set" "YOSYS" "${yosys}/bin/yosys"
-    "--set" "ICEPACK" "${icestorm}/bin/icepack"
-    "--set" "NEXTPNR_ICE40" "${nextpnr}/bin/nextpnr-ice40"
+    "--set"
+    "YOSYS"
+    "${yosys}/bin/yosys"
+    "--set"
+    "ICEPACK"
+    "${icestorm}/bin/icepack"
+    "--set"
+    "NEXTPNR_ICE40"
+    "${nextpnr}/bin/nextpnr-ice40"
   ];
 
   meta = with lib; {
     description = "Software for Glasgow, a digital interface multitool";
     homepage = "https://github.com/GlasgowEmbedded/Glasgow";
     license = licenses.bsd0;
-    maintainers = with maintainers; [ emily thoughtpolice ];
+    maintainers = with maintainers; [
+      emily
+      thoughtpolice
+    ];
     mainProgram = "glasgow";
   };
 }

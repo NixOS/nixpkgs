@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, stdenv
-, CoreServices
-, Security
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  stdenv,
+  CoreServices,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,12 +24,14 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreServices
-    Security
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      CoreServices
+      Security
+    ];
 
   meta = with lib; {
     description = "A knowledge management meta-framework for geeks";

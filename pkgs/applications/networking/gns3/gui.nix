@@ -1,15 +1,17 @@
-{ channel
-, version
-, hash
+{
+  channel,
+  version,
+  hash,
 }:
 
-{ lib
-, python3
-, fetchFromGitHub
-, qt5
-, wrapQtAppsHook
-, testers
-, gns3-gui
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  qt5,
+  wrapQtAppsHook,
+  testers,
+  gns3-gui,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -27,18 +29,22 @@ python3.pkgs.buildPythonApplication rec {
     wrapQtAppsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    distro
-    jsonschema
-    psutil
-    sentry-sdk
-    setuptools
-    sip4 (pyqt5.override { withWebSockets = true; })
-    truststore
-    qt5.qtwayland
-  ] ++ lib.optionals (pythonOlder "3.9") [
-    importlib-resources
-  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      distro
+      jsonschema
+      psutil
+      sentry-sdk
+      setuptools
+      sip4
+      (pyqt5.override { withWebSockets = true; })
+      truststore
+      qt5.qtwayland
+    ]
+    ++ lib.optionals (pythonOlder "3.9") [
+      importlib-resources
+    ];
 
   dontWrapQtApps = true;
 

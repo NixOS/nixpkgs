@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
-, rsync
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  rsync,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -31,15 +32,17 @@ python3.pkgs.buildPythonApplication rec {
     typing-extensions
   ];
 
-  nativeCheckInputs = [
-    rsync
-  ] ++ (with python3.pkgs; [
-    boto
-    botocore
-    flask
-    pytestCheckHook
-    stubserver
-  ]);
+  nativeCheckInputs =
+    [
+      rsync
+    ]
+    ++ (with python3.pkgs; [
+      boto
+      botocore
+      flask
+      pytestCheckHook
+      stubserver
+    ]);
 
   pytestFlagsArray = [
     "src/toil/test"

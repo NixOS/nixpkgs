@@ -1,11 +1,12 @@
 # expr and script based on our lsb_release
-{ stdenv
-, lib
-, substituteAll
-, coreutils
-, getopt
-, modDirVersion ? ""
-, forPlatform ? stdenv.buildPlatform
+{
+  stdenv,
+  lib,
+  substituteAll,
+  coreutils,
+  getopt,
+  modDirVersion ? "",
+  forPlatform ? stdenv.buildPlatform,
 }:
 
 substituteAll {
@@ -27,11 +28,12 @@ substituteAll {
   # https://stackoverflow.com/questions/61711186/where-does-host-operating-system-in-uname-c-comes-from
   # https://github.com/coreutils/gnulib/blob/master/m4/host-os.m4
   operatingSystem =
-    if forPlatform.isLinux
-    then "GNU/Linux"
-    else if forPlatform.isDarwin
-    then "Darwin" # darwin isn't in host-os.m4 so where does this come from?
-    else "unknown";
+    if forPlatform.isLinux then
+      "GNU/Linux"
+    else if forPlatform.isDarwin then
+      "Darwin" # darwin isn't in host-os.m4 so where does this come from?
+    else
+      "unknown";
 
   # in os-specific/linux module packages
   # --replace '$(shell uname -r)' "${kernel.modDirVersion}" \

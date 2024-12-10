@@ -1,17 +1,18 @@
-{ lib
-, symlinkJoin
-, melpaBuild
-, fetchFromGitHub
-, rustPlatform
-, writeText
-, clang
-, llvmPackages
+{
+  lib,
+  symlinkJoin,
+  melpaBuild,
+  fetchFromGitHub,
+  rustPlatform,
+  writeText,
+  clang,
+  llvmPackages,
 
-, runtimeShell
-, writeScript
-, python3
-, nix-prefetch-github
-, nix
+  runtimeShell,
+  writeScript,
+  python3,
+  nix-prefetch-github,
+  nix,
 }:
 
 let
@@ -58,23 +59,31 @@ let
     inherit (srcMeta) cargoHash;
   };
 
-in symlinkJoin {
+in
+symlinkJoin {
   name = "tsc-${version}";
-  paths = [ tsc tsc-dyn ];
+  paths = [
+    tsc
+    tsc-dyn
+  ];
 
   passthru = {
-    updateScript = let
-      pythonEnv = python3.withPackages(ps: [ ps.requests ]);
-    in writeScript "tsc-update" ''
-      #!${runtimeShell}
-      set -euo pipefail
-      export PATH=${lib.makeBinPath [
-        nix-prefetch-github
-        nix
-        pythonEnv
-      ]}:$PATH
-      exec python3 ${builtins.toString ./update.py} ${builtins.toString ./.}
-    '';
+    updateScript =
+      let
+        pythonEnv = python3.withPackages (ps: [ ps.requests ]);
+      in
+      writeScript "tsc-update" ''
+        #!${runtimeShell}
+        set -euo pipefail
+        export PATH=${
+          lib.makeBinPath [
+            nix-prefetch-github
+            nix
+            pythonEnv
+          ]
+        }:$PATH
+        exec python3 ${builtins.toString ./update.py} ${builtins.toString ./.}
+      '';
   };
 
   meta = {

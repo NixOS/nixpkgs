@@ -1,39 +1,40 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, makeBinaryWrapper
-, wrapGAppsHook3
-, alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, cairo
-, cups
-, dbus
-, expat
-, ffmpeg
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gtk3
-, libappindicator-gtk3
-, libdrm
-, libnotify
-, libpulseaudio
-, libsecret
-, libuuid
-, libxkbcommon
-, mesa
-, nss
-, pango
-, systemd
-, xdg-utils
-, xorg
-, wayland
-, pipewire
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  makeBinaryWrapper,
+  wrapGAppsHook3,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  ffmpeg,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libappindicator-gtk3,
+  libdrm,
+  libnotify,
+  libpulseaudio,
+  libsecret,
+  libuuid,
+  libxkbcommon,
+  mesa,
+  nss,
+  pango,
+  systemd,
+  xdg-utils,
+  xorg,
+  wayland,
+  pipewire,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,18 +45,24 @@ stdenv.mkDerivation rec {
     let
       base = "https://github.com/Legcord/Legcord/releases/download";
     in
-      {
-        x86_64-linux = fetchurl {
-          url = "${base}/v${version}/Legcord-${version}-linux-amd64.deb";
-          hash = "sha256-MvSnYE6JLnZUA/Td0XuvOAENEtMGWSQuFFDa8cnBB1s=";
-        };
-        aarch64-linux = fetchurl {
-          url = "${base}/v${version}/Legcord-${version}-linux-arm64.deb";
-          hash = "sha256-+HD162RfcNxNXpjW5HPAmhCQIFRXuPXdC/jQgT0aV1k=";
-        };
-      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    {
+      x86_64-linux = fetchurl {
+        url = "${base}/v${version}/Legcord-${version}-linux-amd64.deb";
+        hash = "sha256-MvSnYE6JLnZUA/Td0XuvOAENEtMGWSQuFFDa8cnBB1s=";
+      };
+      aarch64-linux = fetchurl {
+        url = "${base}/v${version}/Legcord-${version}-linux-arm64.deb";
+        hash = "sha256-+HD162RfcNxNXpjW5HPAmhCQIFRXuPXdC/jQgT0aV1k=";
+      };
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
-  nativeBuildInputs = [ autoPatchelfHook dpkg makeBinaryWrapper wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    dpkg
+    makeBinaryWrapper
+    wrapGAppsHook3
+  ];
 
   dontWrapGApps = true;
 
@@ -135,7 +142,10 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.osl3;
     maintainers = with maintainers; [ wrmilling ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "legcord";
   };
 }

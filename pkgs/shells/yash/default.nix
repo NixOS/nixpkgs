@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, gettext, ncurses, asciidoc }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gettext,
+  ncurses,
+  asciidoc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "yash";
@@ -12,7 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ asciidoc gettext ];
+  nativeBuildInputs = [
+    asciidoc
+    gettext
+  ];
   buildInputs = [ ncurses ] ++ lib.optionals stdenv.isDarwin [ gettext ];
 
   meta = with lib; {

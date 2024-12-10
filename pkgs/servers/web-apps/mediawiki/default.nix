@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchurl, nixosTests }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  nixosTests,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mediawiki";

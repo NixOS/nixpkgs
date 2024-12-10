@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, cpio, xar, undmg }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cpio,
+  xar,
+  undmg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "karabiner-elements";
@@ -9,9 +16,16 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gmJwoht/Tfm5qMecmq1N6PSAIfWOqsvuHU8VDJY8bLw=";
   };
 
-  outputs = [ "out" "driver" ];
+  outputs = [
+    "out"
+    "driver"
+  ];
 
-  nativeBuildInputs = [ cpio xar undmg ];
+  nativeBuildInputs = [
+    cpio
+    xar
+    undmg
+  ];
 
   unpackPhase = ''
     undmg $src

@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitea, autoconf, automake, libtool }:
+{
+  stdenv,
+  lib,
+  fetchFromGitea,
+  autoconf,
+  automake,
+  libtool,
+}:
 
 stdenv.mkDerivation rec {
   pname = "soundtouch";
@@ -12,7 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-imeeTj+3gXxoGTuC/13+BAplwcnQ0wRJdSVt7MPlBxc=";
   };
 
-  nativeBuildInputs = [ autoconf automake libtool ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+  ];
 
   preConfigure = "./bootstrap";
 

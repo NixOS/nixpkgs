@@ -1,4 +1,17 @@
-{ fetchFromGitHub, lib, stdenv, autoreconfHook, pkg-config, libxml2, gd, glib, getopt, libxslt, nix, bash}:
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  autoreconfHook,
+  pkg-config,
+  libxml2,
+  gd,
+  glib,
+  getopt,
+  libxslt,
+  nix,
+  bash,
+}:
 
 stdenv.mkDerivation {
   pname = "libnixxml";
@@ -28,7 +41,10 @@ stdenv.mkDerivation {
     mkdir -p config
   '';
 
-  configureFlags = [ "--with-gd" "--with-glib" ];
+  configureFlags = [
+    "--with-gd"
+    "--with-glib"
+  ];
   CFLAGS = "-Wall";
 
   strictDeps = true;

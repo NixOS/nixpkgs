@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, gmp
-, writeScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gmp,
+  writeScript,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -22,13 +23,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-J3gHNTpnJpeJlpRa8T5Sgp46vXqaW3+yeTiU4Y8fy7I=";
   };
 
-  outputs = [ "out" "dev" "doc" "info" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "info"
+  ];
 
   strictDeps = true;
   # mpfr.h requires gmp.h
   propagatedBuildInputs = [ gmp ];
 
-  configureFlags = lib.optional stdenv.hostPlatform.isSunOS "--disable-thread-safe"
+  configureFlags =
+    lib.optional stdenv.hostPlatform.isSunOS "--disable-thread-safe"
     ++ lib.optional stdenv.hostPlatform.is64bit "--with-pic"
     ++ lib.optionals stdenv.hostPlatform.isPower64 [
       # Without this, the `tget_set_d128` test experiences a link

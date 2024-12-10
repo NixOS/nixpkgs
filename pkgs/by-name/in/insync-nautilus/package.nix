@@ -1,9 +1,10 @@
-{ stdenv,
+{
+  stdenv,
   fetchurl,
   lib,
   dpkg,
   gnome,
-  insync
+  insync,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

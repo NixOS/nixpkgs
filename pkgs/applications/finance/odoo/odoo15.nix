@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, fetchzip, python310, rtlcss, wkhtmltopdf
-, nixosTests }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchzip,
+  python310,
+  rtlcss,
+  wkhtmltopdf,
+  nixosTests,
+}:
 
 let
   python = python310.override {
@@ -18,7 +26,10 @@ let
 
         nativeBuildInputs = [ ];
 
-        nativeCheckInputs = with self; [ pytestCheckHook pillow ];
+        nativeCheckInputs = with self; [
+          pytestCheckHook
+          pillow
+        ];
       });
       flask = super.flask.overridePythonAttrs (old: rec {
         version = "2.1.3";
@@ -39,7 +50,8 @@ let
 
   odoo_version = "15.0";
   odoo_release = "20230816";
-in python.pkgs.buildPythonApplication rec {
+in
+python.pkgs.buildPythonApplication rec {
   pname = "odoo15";
   version = "${odoo_version}.${odoo_release}";
 
@@ -59,7 +71,10 @@ in python.pkgs.buildPythonApplication rec {
     "--prefix"
     "PATH"
     ":"
-    "${lib.makeBinPath [ wkhtmltopdf rtlcss ]}"
+    "${lib.makeBinPath [
+      wkhtmltopdf
+      rtlcss
+    ]}"
   ];
 
   propagatedBuildInputs = with python.pkgs; [

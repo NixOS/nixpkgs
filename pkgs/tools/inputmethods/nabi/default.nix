@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, gtk2, libhangul }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk2,
+  libhangul,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nabi";
@@ -10,7 +17,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk2 libhangul ];
+  buildInputs = [
+    gtk2
+    libhangul
+  ];
 
   meta = with lib; {
     description = "The Easy Hangul XIM";

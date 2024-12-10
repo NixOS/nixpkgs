@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, libxml2, gtk2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libxml2,
+  gtk2,
+}:
 
 stdenv.mkDerivation rec {
   version = "2.1.11";
@@ -10,7 +17,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libxml2 gtk2 ];
+  buildInputs = [
+    libxml2
+    gtk2
+  ];
 
   configureFlags = [ "--with-all-plugins" ];
 

@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 # Testing this requires a Thinkpad or the presence of /proc/acpi/ibm/fan

@@ -1,21 +1,31 @@
-{ stdenv, fetchzip, lib, makeWrapper, makeDesktopItem, jdk, gawk }:
+{
+  stdenv,
+  fetchzip,
+  lib,
+  makeWrapper,
+  makeDesktopItem,
+  jdk,
+  gawk,
+}:
 
 stdenv.mkDerivation rec {
   version = "2.1.8";
   pname = "visualvm";
 
   src = fetchzip {
-    url = "https://github.com/visualvm/visualvm.src/releases/download/${version}/visualvm_${builtins.replaceStrings ["."] [""]  version}.zip";
+    url = "https://github.com/visualvm/visualvm.src/releases/download/${version}/visualvm_${
+      builtins.replaceStrings [ "." ] [ "" ] version
+    }.zip";
     sha256 = "sha256-yWSB8mqcOG7xd4/8YjPXzGvl7BgyOLdIoyAs69+/kv4=";
   };
 
   desktopItem = makeDesktopItem {
-      name = "visualvm";
-      exec = "visualvm";
-      comment = "Java Troubleshooting Tool";
-      desktopName = "VisualVM";
-      genericName = "Java Troubleshooting Tool";
-      categories = [ "Development" ];
+    name = "visualvm";
+    exec = "visualvm";
+    comment = "Java Troubleshooting Tool";
+    desktopName = "VisualVM";
+    genericName = "Java Troubleshooting Tool";
+    categories = [ "Development" ];
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -43,6 +53,9 @@ stdenv.mkDerivation rec {
     homepage = "https://visualvm.github.io";
     license = licenses.gpl2ClasspathPlus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ michalrus moaxcp ];
+    maintainers = with maintainers; [
+      michalrus
+      moaxcp
+    ];
   };
 }

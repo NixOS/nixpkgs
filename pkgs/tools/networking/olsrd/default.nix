@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, bison, flex }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  bison,
+  flex,
+}:
 
 stdenv.mkDerivation rec {
   pname = "olsrd";
@@ -20,7 +27,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ bison flex ];
+  buildInputs = [
+    bison
+    flex
+  ];
 
   preConfigure = ''
     makeFlags="prefix=$out ETCDIR=$out/etc"
@@ -30,7 +40,7 @@ stdenv.mkDerivation rec {
     description = "An adhoc wireless mesh routing daemon";
     license = lib.licenses.bsd3;
     homepage = "http://olsr.org/";
-    maintainers = with lib.maintainers; [viric];
+    maintainers = with lib.maintainers; [ viric ];
     platforms = with lib.platforms; linux;
   };
 }

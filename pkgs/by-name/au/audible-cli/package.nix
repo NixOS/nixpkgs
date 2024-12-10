@@ -1,4 +1,10 @@
-{ lib, python3Packages, fetchFromGitHub, installShellFiles, nix-update-script }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "audible-cli";
@@ -12,12 +18,15 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-AYL7lcYYY7gK12Id94aHRWRlCiznnF4r+lpI5VFpAWY=";
   };
 
-  nativeBuildInputs = with python3Packages; [
-    pythonRelaxDepsHook
-    setuptools
-  ] ++ [
-    installShellFiles
-  ];
+  nativeBuildInputs =
+    with python3Packages;
+    [
+      pythonRelaxDepsHook
+      setuptools
+    ]
+    ++ [
+      installShellFiles
+    ];
 
   propagatedBuildInputs = with python3Packages; [
     aiofiles

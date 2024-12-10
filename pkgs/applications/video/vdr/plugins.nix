@@ -1,34 +1,56 @@
-{ lib, stdenv, vdr, fetchFromGitHub
-, graphicsmagick, pcre
-, boost, libgcrypt, perl, util-linux, groff, ncurses
-, callPackage
-}: let
-  mkPlugin = name: stdenv.mkDerivation {
-    name = "vdr-${name}-${vdr.version}";
-    inherit (vdr) src;
-    buildInputs = [ vdr ];
-    preConfigure = "cd PLUGINS/src/${name}";
-    installFlags = [ "DESTDIR=$(out)" ];
-  };
-in {
+{
+  lib,
+  stdenv,
+  vdr,
+  fetchFromGitHub,
+  graphicsmagick,
+  pcre,
+  boost,
+  libgcrypt,
+  perl,
+  util-linux,
+  groff,
+  ncurses,
+  callPackage,
+}:
+let
+  mkPlugin =
+    name:
+    stdenv.mkDerivation {
+      name = "vdr-${name}-${vdr.version}";
+      inherit (vdr) src;
+      buildInputs = [ vdr ];
+      preConfigure = "cd PLUGINS/src/${name}";
+      installFlags = [ "DESTDIR=$(out)" ];
+    };
+in
+{
 
-  markad = callPackage ./markad {};
+  markad = callPackage ./markad { };
 
-  nopacity = callPackage ./nopacity {};
+  nopacity = callPackage ./nopacity { };
 
-  softhddevice = callPackage ./softhddevice {};
+  softhddevice = callPackage ./softhddevice { };
 
-  streamdev = callPackage ./streamdev {};
+  streamdev = callPackage ./streamdev { };
 
-  xineliboutput = callPackage ./xineliboutput {};
+  xineliboutput = callPackage ./xineliboutput { };
 
-  skincurses = (mkPlugin "skincurses").overrideAttrs(oldAttr: {
+  skincurses = (mkPlugin "skincurses").overrideAttrs (oldAttr: {
     buildInputs = oldAttr.buildInputs ++ [ ncurses ];
   });
 
-  inherit (lib.genAttrs [
-    "epgtableid0" "hello" "osddemo" "pictures" "servicedemo" "status" "svdrpdemo"
-  ] mkPlugin);
+  inherit
+    (lib.genAttrs [
+      "epgtableid0"
+      "hello"
+      "osddemo"
+      "pictures"
+      "servicedemo"
+      "status"
+      "svdrpdemo"
+    ] mkPlugin)
+    ;
 
   femon = stdenv.mkDerivation rec {
     pname = "vdr-femon";
@@ -94,7 +116,10 @@ in {
       "DESTDIR=$(out)"
     ];
 
-    outputs = [ "out" "man" ];
+    outputs = [
+      "out"
+      "man"
+    ];
 
     meta = with lib; {
       inherit (src.meta) homepage;
@@ -143,7 +168,10 @@ in {
       sha256 = "19hkwmaw6nwak38bv6cm2vcjjkf4w5yjyxb98qq6zfjjh5wq54aa";
     };
 
-    buildInputs = [ vdr graphicsmagick ];
+    buildInputs = [
+      vdr
+      graphicsmagick
+    ];
 
     buildFlags = [
       "DESTDIR=$(out)"
@@ -180,7 +208,11 @@ in {
       fetchSubmodules = true;
     };
 
-    buildInputs = [ vdr boost libgcrypt ];
+    buildInputs = [
+      vdr
+      boost
+      libgcrypt
+    ];
 
     installFlags = [ "DESTDIR=$(out)" ];
 

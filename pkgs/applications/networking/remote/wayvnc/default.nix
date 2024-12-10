@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, scdoc
-, wayland-scanner
-, aml
-, jansson
-, libxkbcommon
-, mesa
-, neatvnc
-, pam
-, pixman
-, wayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wayland-scanner,
+  aml,
+  jansson,
+  libxkbcommon,
+  mesa,
+  neatvnc,
+  pam,
+  pixman,
+  wayland,
 }:
 
 stdenv.mkDerivation rec {

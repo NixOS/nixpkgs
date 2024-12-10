@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, ncurses
-, openssl
-, pkg-config
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  ncurses,
+  openssl,
+  pkg-config,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,12 +24,14 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    ncurses
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  buildInputs =
+    [
+      ncurses
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      Security
+    ];
 
   cargoHash = "sha256-rKTR7vKt8woWAn7XgNYFiWu4KSiZYhaH+PLEIOfbNIY=";
 
@@ -37,7 +40,11 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/builditluc/wiki-tui";
     changelog = "https://github.com/Builditluc/wiki-tui/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ lom builditluc matthiasbeyer ];
+    maintainers = with maintainers; [
+      lom
+      builditluc
+      matthiasbeyer
+    ];
     mainProgram = "wiki-tui";
   };
 }

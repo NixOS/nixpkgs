@@ -1,4 +1,10 @@
-{ lib, bundlerEnv, ruby, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  bundlerEnv,
+  ruby,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 let
   # needed for manpage generation
   gems = bundlerEnv {
@@ -22,7 +28,10 @@ buildGoModule rec {
 
   nativeBuildInputs = [ gems ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # set HOME, otherwise bundler will insert stuff in the manpages
   postBuild = ''

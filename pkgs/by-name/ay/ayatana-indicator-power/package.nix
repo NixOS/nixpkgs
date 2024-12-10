@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, gitUpdater
-, fetchFromGitHub
-, nixosTests
-, cmake
-, dbus
-, dbus-test-runner
-, glib
-, gtest
-, intltool
-, libayatana-common
-, libnotify
-, librda
-, lomiri
-, pkg-config
-, python3
-, systemd
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  gitUpdater,
+  fetchFromGitHub,
+  nixosTests,
+  cmake,
+  dbus,
+  dbus-test-runner,
+  glib,
+  gtest,
+  intltool,
+  libayatana-common,
+  libnotify,
+  librda,
+  lomiri,
+  pkg-config,
+  python3,
+  systemd,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,24 +51,28 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    glib
-    libayatana-common
-    libnotify
-    librda
-    systemd
-  ] ++ (with lomiri; [
-    cmake-extras
-    deviceinfo
-    lomiri-schemas
-    lomiri-sounds
-  ]);
+  buildInputs =
+    [
+      glib
+      libayatana-common
+      libnotify
+      librda
+      systemd
+    ]
+    ++ (with lomiri; [
+      cmake-extras
+      deviceinfo
+      lomiri-schemas
+      lomiri-sounds
+    ]);
 
   nativeCheckInputs = [
     dbus
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        python-dbusmock
+      ]
+    ))
   ];
 
   checkInputs = [

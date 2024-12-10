@@ -1,32 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gettext
-, pkg-config
-, libsolv
-, openssl
-, check
-, json_c
-, libmodulemd
-, libsmartcols
-, sqlite
-, librepo
-, libyaml
-, rpm
-, zchunk
-, cppunit
-, python
-, swig
-, glib
-, sphinx
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gettext,
+  pkg-config,
+  libsolv,
+  openssl,
+  check,
+  json_c,
+  libmodulemd,
+  libsmartcols,
+  sqlite,
+  librepo,
+  libyaml,
+  rpm,
+  zchunk,
+  cppunit,
+  python,
+  swig,
+  glib,
+  sphinx,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libdnf";
   version = "0.73.2";
 
-  outputs = [ "out" "dev" "py" ];
+  outputs = [
+    "out"
+    "dev"
+    "py"
+  ];
 
   src = fetchFromGitHub {
     owner = "rpm-software-management";
@@ -82,7 +87,7 @@ stdenv.mkDerivation rec {
   cmakeFlags = [
     "-DWITH_GTKDOC=OFF"
     "-DWITH_HTML=OFF"
-    "-DPYTHON_DESIRED=${lib.head (lib.splitString ["."] python.version)}"
+    "-DPYTHON_DESIRED=${lib.head (lib.splitString [ "." ] python.version)}"
   ];
 
   postInstall = ''
@@ -99,6 +104,9 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/rpm-software-management/libdnf/releases/tag/${version}";
     license = licenses.gpl2Plus;
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ rb2k katexochen ];
+    maintainers = with maintainers; [
+      rb2k
+      katexochen
+    ];
   };
 }

@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, mpiCheckPhaseHook
-, autoreconfHook, pkg-config
-, p4est-sc-debugEnable ? true, p4est-sc-mpiSupport ? true
-, mpi, openssh, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mpiCheckPhaseHook,
+  autoreconfHook,
+  pkg-config,
+  p4est-sc-debugEnable ? true,
+  p4est-sc-mpiSupport ? true,
+  mpi,
+  openssh,
+  zlib,
 }:
 
 let
@@ -23,10 +31,11 @@ stdenv.mkDerivation {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  propagatedNativeBuildInputs = lib.optional mpiSupport mpi
-    ++ lib.optional isOpenmpi openssh
-  ;
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  propagatedNativeBuildInputs = lib.optional mpiSupport mpi ++ lib.optional isOpenmpi openssh;
   propagatedBuildInputs = [ zlib ];
   inherit debugEnable mpiSupport;
 
@@ -38,10 +47,10 @@ stdenv.mkDerivation {
     ${lib.optionalString mpiSupport "unset CC"}
   '';
 
-  configureFlags = [ "--enable-pthread=-pthread" ]
+  configureFlags =
+    [ "--enable-pthread=-pthread" ]
     ++ lib.optional debugEnable "--enable-debug"
-    ++ lib.optional mpiSupport "--enable-mpi"
-  ;
+    ++ lib.optional mpiSupport "--enable-mpi";
 
   dontDisableStatic = true;
   enableParallelBuilding = true;

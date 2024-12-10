@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, vulkan-loader
-, addOpenGLRunpath
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  vulkan-loader,
+  addOpenGLRunpath,
 }:
 
 rustPlatform.buildRustPackage rec {

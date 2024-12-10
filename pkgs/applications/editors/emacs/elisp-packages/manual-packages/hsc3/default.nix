@@ -1,4 +1,9 @@
-{ lib, trivialBuild, fetchurl, haskell-mode }:
+{
+  lib,
+  trivialBuild,
+  fetchurl,
+  haskell-mode,
+}:
 
 trivialBuild rec {
   pname = "hsc3-mode";

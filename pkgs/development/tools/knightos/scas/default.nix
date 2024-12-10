@@ -1,4 +1,12 @@
-{ fetchFromGitHub, lib, stdenv, cmake, buildPackages, asciidoc, libxslt }:
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  cmake,
+  buildPackages,
+  asciidoc,
+  libxslt,
+}:
 
 let
   isCrossCompiling = stdenv.hostPlatform != stdenv.buildPlatform;
@@ -23,17 +31,21 @@ stdenv.mkDerivation rec {
   strictDeps = true;
 
   depsBuildBuild = lib.optionals isCrossCompiling [ buildPackages.knightos-scas ];
-  nativeBuildInputs = [ asciidoc libxslt.bin cmake ];
+  nativeBuildInputs = [
+    asciidoc
+    libxslt.bin
+    cmake
+  ];
   postInstall = ''
     cd ..
     make DESTDIR=$out install_man
   '';
 
   meta = with lib; {
-    homepage    = "https://knightos.org/";
+    homepage = "https://knightos.org/";
     description = "Assembler and linker for the Z80";
-    license     = licenses.mit;
+    license = licenses.mit;
     maintainers = with maintainers; [ siraben ];
-    platforms   = platforms.all;
+    platforms = platforms.all;
   };
 }

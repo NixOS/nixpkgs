@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -26,7 +27,7 @@ buildGoModule rec {
         --set RUNEWIDTH_EASTASIAN 0
   '';
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "A terminal based UNIX user and group browser";

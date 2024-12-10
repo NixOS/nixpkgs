@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, curl, libxml2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  curl,
+  libxml2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xmlrpc-c";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-hNIK4z+SdYL4IdYcC5GUrvvx15JFkKE/qdpa4WmK3tk=";
   };
 
-  buildInputs = [ curl libxml2 ];
+  buildInputs = [
+    curl
+    libxml2
+  ];
 
   configureFlags = [
     "--enable-libxml2-backend"

@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, libcdio, pkg-config,
-  libiconv, IOKit, DiskArbitration}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libcdio,
+  pkg-config,
+  libiconv,
+  IOKit,
+  DiskArbitration,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libcdio-paranoia";
@@ -12,9 +21,17 @@ stdenv.mkDerivation rec {
     hash = "sha256-kNGhhslp5noAVeho0kBVfyvb4kQpDY56nyL3a4aFgjE=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libcdio ] ++
-    lib.optionals stdenv.isDarwin [ libiconv IOKit DiskArbitration ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs =
+    [ libcdio ]
+    ++ lib.optionals stdenv.isDarwin [
+      libiconv
+      IOKit
+      DiskArbitration
+    ];
 
   propagatedBuildInputs = lib.optional stdenv.isDarwin DiskArbitration;
 

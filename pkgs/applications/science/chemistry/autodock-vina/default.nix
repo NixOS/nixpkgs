@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, boost
-, glibc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  boost,
+  glibc,
 }:
 let
   boost' = boost.override {
@@ -21,15 +22,16 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   sourceRoot = "${finalAttrs.src.name}/build/${
-    if stdenv.hostPlatform.isDarwin then "mac"
-    else "linux"
+    if stdenv.hostPlatform.isDarwin then "mac" else "linux"
   }/release";
 
-  buildInputs = [
-    boost'
-  ] ++ lib.optionals stdenv.isLinux [
-    glibc.static
-  ];
+  buildInputs =
+    [
+      boost'
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      glibc.static
+    ];
 
   makeFlags = [
     "GPP=${stdenv.cc.targetPrefix}c++"

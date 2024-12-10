@@ -1,4 +1,19 @@
-{ stdenv, lib, writeScript, qt5, fetchurl, autoPatchelfHook, dpkg, glibc, cpio, xar, undmg, gtk3, pango, libxcb }:
+{
+  stdenv,
+  lib,
+  writeScript,
+  qt5,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  glibc,
+  cpio,
+  xar,
+  undmg,
+  gtk3,
+  pango,
+  libxcb,
+}:
 let
   pname = "synology-drive-client";
   baseUrl = "https://global.synologydownload.com/download/Utility/SynologyDriveClient";
@@ -9,8 +24,15 @@ let
     homepage = "https://www.synology.com/en-global/dsm/feature/drive";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ jcouyang MoritzBoehme ];
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    maintainers = with maintainers; [
+      jcouyang
+      MoritzBoehme
+    ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     mainProgram = "synology-drive";
   };
   passthru.updateScript = writeScript "update-synology-drive-client" ''
@@ -26,16 +48,29 @@ let
   '';
 
   linux = qt5.mkDerivation {
-    inherit pname version meta passthru;
+    inherit
+      pname
+      version
+      meta
+      passthru
+      ;
 
     src = fetchurl {
       url = "${baseUrl}/${version}/Ubuntu/Installer/synology-drive-client-${buildNumber}.x86_64.deb";
       sha256 = "sha256-Spl6DC+wf+JaXjwH2ecraySo1VtA+EiI3/TWw9UOSA8=";
     };
 
-    nativeBuildInputs = [ autoPatchelfHook dpkg ];
+    nativeBuildInputs = [
+      autoPatchelfHook
+      dpkg
+    ];
 
-    buildInputs = [ glibc gtk3 pango libxcb ];
+    buildInputs = [
+      glibc
+      gtk3
+      pango
+      libxcb
+    ];
 
     unpackPhase = ''
       mkdir -p $out
@@ -56,14 +91,23 @@ let
   };
 
   darwin = stdenv.mkDerivation {
-    inherit pname version meta passthru;
+    inherit
+      pname
+      version
+      meta
+      passthru
+      ;
 
     src = fetchurl {
       url = "${baseUrl}/${version}/Mac/Installer/synology-drive-client-${buildNumber}.dmg";
       sha256 = "sha256-NDYxUhWtAVUtpCf1WemqShZCFHGgLGwrkX6HldxOlH0=";
     };
 
-    nativeBuildInputs = [ cpio xar undmg ];
+    nativeBuildInputs = [
+      cpio
+      xar
+      undmg
+    ];
 
     postUnpack = ''
       xar -xf 'Install Synology Drive Client.pkg'
@@ -78,4 +122,5 @@ let
       cp -R 'Synology Drive Client.app' $out/Applications/
     '';
   };
-in if stdenv.isDarwin then darwin else linux
+in
+if stdenv.isDarwin then darwin else linux

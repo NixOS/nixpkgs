@@ -1,4 +1,11 @@
-{ lib, stdenvNoCC, fetchurl, gtk3, gnome, hicolor-icon-theme }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  gtk3,
+  gnome,
+  hicolor-icon-theme,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "humanity-icon-theme";

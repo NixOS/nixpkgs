@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitLab
+{
+  lib,
+  python3,
+  fetchFromGitLab,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -30,7 +31,10 @@ python3.pkgs.buildPythonApplication rec {
     requests
   ];
 
-  nativeCheckInputs = with python3.pkgs; [ pytestCheckHook pendulum ];
+  nativeCheckInputs = with python3.pkgs; [
+    pytestCheckHook
+    pendulum
+  ];
   disabledTests = [
     # test broken when run under Nix:
     #   "unittest.mock.InvalidSpecError: Cannot spec a Mock object."

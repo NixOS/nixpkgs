@@ -1,15 +1,16 @@
-{ lib
-, fetchFromGitHub
-, python3
-, asciidoc
-, cacert
-, docbook_xsl
-, installShellFiles
-, libxml2
-, libxslt
-, testers
-, offlineimap
-, fetchpatch
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  asciidoc,
+  cacert,
+  docbook_xsl,
+  installShellFiles,
+  libxml2,
+  libxslt,
+  testers,
+  offlineimap,
+  fetchpatch,
 }:
 
 python3.pkgs.buildPythonApplication rec {

@@ -1,11 +1,12 @@
-{ callPackage
-, kernel ? null
-, stdenv
-, lib
-, linuxKernel
-, nixosTests
-, ...
-} @ args:
+{
+  callPackage,
+  kernel ? null,
+  stdenv,
+  lib,
+  linuxKernel,
+  nixosTests,
+  ...
+}@args:
 
 let
   stdenv' = if kernel == null then stdenv else kernel.stdenv;
@@ -27,7 +28,10 @@ callPackage ./generic.nix args {
     nixosTests.zfs.series_2_2
   ];
 
-  maintainers = with lib.maintainers; [ adamcstephens amarshall ];
+  maintainers = with lib.maintainers; [
+    adamcstephens
+    amarshall
+  ];
 
   hash = "sha256-wkgoYg6uQOHVq8a9sJXzO/QXJ6q28l7JXWkC+BFvOb0=";
 }

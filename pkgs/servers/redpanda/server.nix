@@ -1,31 +1,32 @@
-{ abseil-cpp_202206
-, avro-cpp
-, callPackage
-, ccache
-, cmake
-, crc32c
-, croaring
-, ctre
-, curl
-, dpdk
-, git
-, lib
-, llvmPackages_14
-, llvm_14
-, ninja
-, p11-kit
-, pkg-config
-, procps
-, protobuf_21
-, python3
-, snappy
-, src
-, unzip
-, version
-, writeShellScriptBin
-, xxHash
-, zip
-, zstd
+{
+  abseil-cpp_202206,
+  avro-cpp,
+  callPackage,
+  ccache,
+  cmake,
+  crc32c,
+  croaring,
+  ctre,
+  curl,
+  dpdk,
+  git,
+  lib,
+  llvmPackages_14,
+  llvm_14,
+  ninja,
+  p11-kit,
+  pkg-config,
+  procps,
+  protobuf_21,
+  python3,
+  snappy,
+  src,
+  unzip,
+  version,
+  writeShellScriptBin,
+  xxHash,
+  zip,
+  zstd,
 }:
 let
   pname = "redpanda";
@@ -118,7 +119,10 @@ llvmPackages_14.stdenv.mkDerivation rec {
       ZooKeeper-free, Jepsen-tested and source available.
     '';
     homepage = "https://redpanda.com/";
-    maintainers = with maintainers; [ avakhrenev happysalada ];
+    maintainers = with maintainers; [
+      avakhrenev
+      happysalada
+    ];
     platforms = platforms.linux;
   };
 }

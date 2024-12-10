@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, cpm-cmake
-, git
-, git2-cpp
-, cacert
-, boost179
-, icu
-, libarchive
-, libgit2
-, lz4
-, mitama-cpp-result
-, ninja
-, openssl_3
-, package-project-cmake
-, spdlog
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  cpm-cmake,
+  git,
+  git2-cpp,
+  cacert,
+  boost179,
+  icu,
+  libarchive,
+  libgit2,
+  lz4,
+  mitama-cpp-result,
+  ninja,
+  openssl_3,
+  package-project-cmake,
+  spdlog,
 }:
 
 let
@@ -68,7 +69,11 @@ stdenv.mkDerivation rec {
     "-DFETCHCONTENT_SOURCE_DIR_TOML11=${toml11}"
   ];
 
-  nativeBuildInputs = [ cmake git cacert ];
+  nativeBuildInputs = [
+    cmake
+    git
+    cacert
+  ];
   buildInputs = [
     (boost179.override {
       enableShared = stdenv.isDarwin;

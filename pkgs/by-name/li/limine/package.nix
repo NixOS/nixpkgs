@@ -2,13 +2,13 @@
 
 {
   # Helpers
-  stdenv
-, fetchurl
-, lib
-, # Dependencies
-  llvmPackages
-, mtools
-, nasm
+  stdenv,
+  fetchurl,
+  lib,
+  # Dependencies
+  llvmPackages,
+  mtools,
+  nasm,
 }:
 
 let
@@ -40,9 +40,17 @@ stdenv.mkDerivation {
     "--enable-all"
   ];
 
-  installFlags = [ "destdir=$out" "manprefix=/share" ];
+  installFlags = [
+    "destdir=$out"
+    "manprefix=/share"
+  ];
 
-  outputs = [ "out" "doc" "dev" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "dev"
+    "man"
+  ];
 
   meta = with lib; {
     homepage = "https://limine-bootloader.org/";

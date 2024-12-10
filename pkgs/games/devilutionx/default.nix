@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, bzip2
-, cmake
-, pkg-config
-, gettext
-, libsodium
-, SDL2
-, SDL2_image
-, SDL_audiolib
-, flac
-, fmt
-, libpng
-, smpq
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  bzip2,
+  cmake,
+  pkg-config,
+  gettext,
+  libsodium,
+  SDL2,
+  SDL2_image,
+  SDL_audiolib,
+  flac,
+  fmt,
+  libpng,
+  smpq,
 }:
 
 let
@@ -103,25 +104,33 @@ stdenv.mkDerivation rec {
     SDL_audiolib'
   ];
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-  '' + (if stdenv.isDarwin then ''
-    mkdir -p $out/Applications
-    mv devilutionx.app $out/Applications
-  '' else ''
-    install -Dm755 -t $out/bin devilutionx
-    install -Dm755 -t $out/bin devilutionx.mpq
-    install -Dm755 -t $out/share/diasurgical/devilutionx devilutionx.mpq
-    install -Dm755 -t $out/share/applications ../Packaging/nix/devilutionx-hellfire.desktop ../Packaging/nix/devilutionx.desktop
-    install -Dm755 ../Packaging/resources/icon.png $out/share/icons/hicolor/512x512/apps/devilutionx.png
-    install -Dm755 ../Packaging/resources/hellfire.png $out/share/icons/hicolor/512x512/apps/devilutionx-hellfire.png
-    install -Dm755 ../Packaging/resources/icon_32.png $out/share/icons/hicolor/32x32/apps/devilutionx.png
-    install -Dm755 ../Packaging/resources/hellfire_32.png $out/share/icons/hicolor/32x32/apps/devilutionx-hellfire.png
-  '') + ''
+    ''
+    + (
+      if stdenv.isDarwin then
+        ''
+          mkdir -p $out/Applications
+          mv devilutionx.app $out/Applications
+        ''
+      else
+        ''
+          install -Dm755 -t $out/bin devilutionx
+          install -Dm755 -t $out/bin devilutionx.mpq
+          install -Dm755 -t $out/share/diasurgical/devilutionx devilutionx.mpq
+          install -Dm755 -t $out/share/applications ../Packaging/nix/devilutionx-hellfire.desktop ../Packaging/nix/devilutionx.desktop
+          install -Dm755 ../Packaging/resources/icon.png $out/share/icons/hicolor/512x512/apps/devilutionx.png
+          install -Dm755 ../Packaging/resources/hellfire.png $out/share/icons/hicolor/512x512/apps/devilutionx-hellfire.png
+          install -Dm755 ../Packaging/resources/icon_32.png $out/share/icons/hicolor/32x32/apps/devilutionx.png
+          install -Dm755 ../Packaging/resources/hellfire_32.png $out/share/icons/hicolor/32x32/apps/devilutionx-hellfire.png
+        ''
+    )
+    + ''
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/diasurgical/devilutionX";
@@ -129,7 +138,10 @@ stdenv.mkDerivation rec {
     mainProgram = "devilutionx";
     longDescription = "In order to play this game a copy of diabdat.mpq is required. Place a copy of diabdat.mpq in ~/.local/share/diasurgical/devilution before executing the game.";
     license = licenses.unlicense;
-    maintainers = with maintainers; [ karolchmist aanderse ];
+    maintainers = with maintainers; [
+      karolchmist
+      aanderse
+    ];
     platforms = platforms.linux ++ platforms.windows;
   };
 }

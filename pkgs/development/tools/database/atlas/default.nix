@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, atlas }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  atlas,
+}:
 
 buildGoModule rec {
   pname = "atlas";
@@ -18,7 +25,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" "-X ariga.io/atlas/cmd/atlas/internal/cmdapi.version=v${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X ariga.io/atlas/cmd/atlas/internal/cmdapi.version=v${version}"
+  ];
 
   subPackages = [ "." ];
 

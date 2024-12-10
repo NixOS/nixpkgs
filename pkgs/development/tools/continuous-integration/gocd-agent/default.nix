@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, unzip }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gocd-agent";
@@ -18,7 +23,10 @@ stdenv.mkDerivation rec {
       binaryBytecode
       binaryNativeCode
     ];
-    maintainers = with maintainers; [ grahamc swarren83 ];
+    maintainers = with maintainers; [
+      grahamc
+      swarren83
+    ];
   };
 
   nativeBuildInputs = [ unzip ];

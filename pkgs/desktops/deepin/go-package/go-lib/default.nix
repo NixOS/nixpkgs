@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, runtimeShell
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  runtimeShell,
 }:
 
 stdenv.mkDerivation rec {

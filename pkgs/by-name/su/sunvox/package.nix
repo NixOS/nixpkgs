@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchzip
-, alsa-lib
-, autoPatchelfHook
-, libglvnd
-, libjack2
-, libX11
-, libXi
-, makeWrapper
-, SDL2
+{
+  lib,
+  stdenv,
+  fetchzip,
+  alsa-lib,
+  autoPatchelfHook,
+  libglvnd,
+  libjack2,
+  libX11,
+  libXi,
+  makeWrapper,
+  SDL2,
 }:
 
 let
@@ -20,7 +21,9 @@ let
     "x86_64-darwin" = "macos";
     "aarch64-darwin" = "macos";
   };
-  bindir = platforms."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+  bindir =
+    platforms."${stdenv.hostPlatform.system}"
+      or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "sunvox";
@@ -35,11 +38,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-vJ76ELjqP4wo0tCJJd3A9RarpNo8FJaiyZhj+Q7nEGs=";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    autoPatchelfHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    makeWrapper
-  ];
+  nativeBuildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      autoPatchelfHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      makeWrapper
+    ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     alsa-lib
@@ -56,41 +61,48 @@ stdenv.mkDerivation (finalAttrs: {
   dontConfigure = true;
   dontBuild = true;
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    # Delete platform-specific data for all the platforms we're not building for
-    find sunvox -mindepth 1 -maxdepth 1 -type d -not -name "${bindir}" -exec rm -r {} \;
+      # Delete platform-specific data for all the platforms we're not building for
+      find sunvox -mindepth 1 -maxdepth 1 -type d -not -name "${bindir}" -exec rm -r {} \;
 
-    mkdir -p $out/{bin,share/sunvox}
-    mv * $out/share/sunvox/
+      mkdir -p $out/{bin,share/sunvox}
+      mv * $out/share/sunvox/
 
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-    for binary in $(find $out/share/sunvox/sunvox/${bindir}/ -type f -executable); do
-      mv $binary $out/bin/$(basename $binary)
-    done
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      for binary in $(find $out/share/sunvox/sunvox/${bindir}/ -type f -executable); do
+        mv $binary $out/bin/$(basename $binary)
+      done
 
-    # Cleanup, make sure we didn't miss anything
-    find $out/share/sunvox/sunvox -type f -name readme.txt -delete
-    rmdir $out/share/sunvox/sunvox/${bindir} $out/share/sunvox/sunvox
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir $out/Applications
-    ln -s $out/share/sunvox/sunvox/${bindir}/SunVox.app $out/Applications/
-    ln -s $out/share/sunvox/sunvox/${bindir}/reset_sunvox $out/bin/
+      # Cleanup, make sure we didn't miss anything
+      find $out/share/sunvox/sunvox -type f -name readme.txt -delete
+      rmdir $out/share/sunvox/sunvox/${bindir} $out/share/sunvox/sunvox
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      mkdir $out/Applications
+      ln -s $out/share/sunvox/sunvox/${bindir}/SunVox.app $out/Applications/
+      ln -s $out/share/sunvox/sunvox/${bindir}/reset_sunvox $out/bin/
 
-    # Need to use a wrapper, binary checks for files relative to the path it was called via
-    makeWrapper $out/Applications/SunVox.app/Contents/MacOS/SunVox $out/bin/sunvox
-  '' + ''
+      # Need to use a wrapper, binary checks for files relative to the path it was called via
+      makeWrapper $out/Applications/SunVox.app/Contents/MacOS/SunVox $out/bin/sunvox
+    ''
+    + ''
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   meta = with lib; {
     description = "Small, fast and powerful modular synthesizer with pattern-based sequencer";
     license = licenses.unfreeRedistributable;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     homepage = "https://www.warmplace.ru/soft/sunvox/";
-    maintainers = with maintainers; [ puffnfresh OPNA2608 ];
+    maintainers = with maintainers; [
+      puffnfresh
+      OPNA2608
+    ];
     platforms = lib.attrNames platforms;
   };
 })

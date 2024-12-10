@@ -1,28 +1,30 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, pixman
-, alsa-lib
-, openssl
-, libXrandr
-, libXfixes
-, libXext
-, libXrender
-, libXinerama
-, libjpeg
-, zlib
-, spice-protocol
-, python3
-, glib
-, cyrus_sasl
-, libcacard
-, lz4
-, libopus
-, gst_all_1
-, orc
-, gdk-pixbuf
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  pixman,
+  alsa-lib,
+  openssl,
+  libXrandr,
+  libXfixes,
+  libXext,
+  libXrender,
+  libXinerama,
+  libjpeg,
+  zlib,
+  spice-protocol,
+  python3,
+  glib,
+  cyrus_sasl,
+  libcacard,
+  lz4,
+  libopus,
+  gst_all_1,
+  orc,
+  gdk-pixbuf,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,30 +50,33 @@ stdenv.mkDerivation rec {
     python3.pkgs.pyparsing
   ];
 
-  buildInputs = [
-    cyrus_sasl
-    glib
-    gst_all_1.gst-plugins-base
-    libXext
-    libXfixes
-    libXinerama
-    libXrandr
-    libXrender
-    libcacard
-    libjpeg
-    libopus
-    lz4
-    openssl
-    orc
-    pixman
-    python3.pkgs.pyparsing
-    spice-protocol
-    zlib
-  ] ++ lib.optionals stdenv.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.isDarwin [
-    gdk-pixbuf
-  ];
+  buildInputs =
+    [
+      cyrus_sasl
+      glib
+      gst_all_1.gst-plugins-base
+      libXext
+      libXfixes
+      libXinerama
+      libXrandr
+      libXrender
+      libcacard
+      libjpeg
+      libopus
+      lz4
+      openssl
+      orc
+      pixman
+      python3.pkgs.pyparsing
+      spice-protocol
+      zlib
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      gdk-pixbuf
+    ];
 
   env.NIX_CFLAGS_COMPILE = "-fno-stack-protector";
 
@@ -102,7 +107,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.spice-space.org/";
     license = licenses.lgpl21;
 
-    maintainers = with maintainers; [ bluescreen303 atemu ];
+    maintainers = with maintainers; [
+      bluescreen303
+      atemu
+    ];
     platforms = with platforms; linux ++ darwin;
   };
 }

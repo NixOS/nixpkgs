@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, just
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  just,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +20,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-ZRsAhIWPm38Ys9jM/3yVJLW818lUGLCcSfFZb+UTbnU=";
 
-  nativeBuildInputs = [ just pkg-config ];
+  nativeBuildInputs = [
+    just
+    pkg-config
+  ];
 
   dontUseJustBuild = true;
 

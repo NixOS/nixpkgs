@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, makeWrapper
-, lua52Packages, libXft, ncurses, ninja, readline, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  makeWrapper,
+  lua52Packages,
+  libXft,
+  ncurses,
+  ninja,
+  readline,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wordgrinder";
@@ -33,24 +44,28 @@ stdenv.mkDerivation rec {
     ninja
   ];
 
-  buildInputs = [
-    lua52Packages.lua
-    ncurses
-    readline
-    zlib
-  ] ++ lib.optionals stdenv.isLinux [
-    libXft
-  ];
+  buildInputs =
+    [
+      lua52Packages.lua
+      ncurses
+      readline
+      zlib
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      libXft
+    ];
 
   # To be able to find <Xft.h>
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isLinux "-I${libXft.dev}/include/X11";
 
   # Binaries look for LuaFileSystem library (lfs.so) at runtime
-  postInstall = ''
-    wrapProgram $out/bin/wordgrinder --set LUA_CPATH "${lua52Packages.luafilesystem}/lib/lua/5.2/lfs.so";
-  '' + lib.optionalString stdenv.isLinux ''
-    wrapProgram $out/bin/xwordgrinder --set LUA_CPATH "${lua52Packages.luafilesystem}/lib/lua/5.2/lfs.so";
-  '';
+  postInstall =
+    ''
+      wrapProgram $out/bin/wordgrinder --set LUA_CPATH "${lua52Packages.luafilesystem}/lib/lua/5.2/lfs.so";
+    ''
+    + lib.optionalString stdenv.isLinux ''
+      wrapProgram $out/bin/xwordgrinder --set LUA_CPATH "${lua52Packages.luafilesystem}/lib/lua/5.2/lfs.so";
+    '';
 
   meta = with lib; {
     description = "Text-based word processor";

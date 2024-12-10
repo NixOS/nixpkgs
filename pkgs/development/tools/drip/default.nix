@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, jdk8, which, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jdk8,
+  which,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "drip";

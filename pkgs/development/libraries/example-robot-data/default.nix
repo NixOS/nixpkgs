@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pythonSupport ? false
-, python3Packages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pythonSupport ? false,
+  python3Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -45,7 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Set of robot URDFs for benchmarking and developed examples.";
     homepage = "https://github.com/Gepetto/example-robot-data";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ nim65s wegank ];
+    maintainers = with maintainers; [
+      nim65s
+      wegank
+    ];
     platforms = platforms.unix;
   };
 })

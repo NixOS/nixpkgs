@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-UQy8iFfl8BNT5cBUMVF1tIScFPfHekSofaebtel9JWk=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   meta = {
     description = "An open source software for reading and writing Data Matrix barcodes";

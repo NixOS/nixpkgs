@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cargo
-, cmake
-, pkg-config
-, rustPlatform
-, rustc
-, wrapQtAppsHook
-, fcitx5
-, ibus
-, qtbase
-, zstd
-, fetchpatch
-, withFcitx5Support ? false
-, withIbusSupport ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cargo,
+  cmake,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapQtAppsHook,
+  fcitx5,
+  ibus,
+  qtbase,
+  zstd,
+  fetchpatch,
+  withFcitx5Support ? false,
+  withIbusSupport ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,14 +49,17 @@ stdenv.mkDerivation rec {
     wrapQtAppsHook
   ];
 
-  buildInputs = lib.optionals withFcitx5Support [
-    fcitx5
-  ] ++ lib.optionals withIbusSupport [
-    ibus
-  ] ++ [
-    qtbase
-    zstd
-  ];
+  buildInputs =
+    lib.optionals withFcitx5Support [
+      fcitx5
+    ]
+    ++ lib.optionals withIbusSupport [
+      ibus
+    ]
+    ++ [
+      qtbase
+      zstd
+    ];
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
@@ -66,16 +70,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-XMleyP2h1aBhtjXhuGHyU0BN+tuL12CGoj+kLY5uye0=";
   };
 
-  cmakeFlags = lib.optionals withFcitx5Support [
-    "-DENABLE_FCITX=YES"
-  ] ++ lib.optionals withIbusSupport [
-    "-DENABLE_IBUS=YES"
-  ];
+  cmakeFlags =
+    lib.optionals withFcitx5Support [
+      "-DENABLE_FCITX=YES"
+    ]
+    ++ lib.optionals withIbusSupport [
+      "-DENABLE_IBUS=YES"
+    ];
 
   cargoRoot = "src/engine/riti";
   postPatch = ''
     cp ${./Cargo.lock} ${cargoRoot}/Cargo.lock
- '';
+  '';
 
   meta = {
     isIbusEngine = withIbusSupport;
@@ -83,7 +89,10 @@ stdenv.mkDerivation rec {
     mainProgram = "openbangla-gui";
     homepage = "https://openbangla.github.io/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ eclairevoyant hqurve ];
+    maintainers = with lib.maintainers; [
+      eclairevoyant
+      hqurve
+    ];
     platforms = lib.platforms.linux;
     # never built on aarch64-linux since first introduction in nixpkgs
     broken = stdenv.isLinux && stdenv.isAarch64;

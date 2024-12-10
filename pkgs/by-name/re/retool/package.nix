@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, python3
-, fetchFromGitHub
-, qt6
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+  qt6,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -27,12 +28,13 @@ python3.pkgs.buildPythonApplication rec {
 
   pythonRelaxDeps = true;
 
-  buildInputs = [
-    qt6.qtbase
-  ] ++
-  lib.optionals (stdenv.isLinux) [
-    qt6.qtwayland
-  ];
+  buildInputs =
+    [
+      qt6.qtbase
+    ]
+    ++ lib.optionals (stdenv.isLinux) [
+      qt6.qtwayland
+    ];
 
   propagatedBuildInputs = with python3.pkgs; [
     alive-progress

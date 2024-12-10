@@ -1,45 +1,54 @@
-{ stdenv
-, lib
-, fetchurl
-, gettext
-, meson
-, mesonEmulatorHook
-, ninja
-, pkg-config
-, asciidoc
-, gobject-introspection
-, buildPackages
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
-, vala
-, python3
-, gi-docgen
-, graphviz
-, libxml2
-, glib
-, wrapGAppsNoGuiHook
-, sqlite
-, libstemmer
-, gnome
-, icu
-, libuuid
-, libsoup
-, libsoup_3
-, json-glib
-, avahi
-, systemd
-, dbus
-, writeText
-, testers
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gettext,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  pkg-config,
+  asciidoc,
+  gobject-introspection,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  vala,
+  python3,
+  gi-docgen,
+  graphviz,
+  libxml2,
+  glib,
+  wrapGAppsNoGuiHook,
+  sqlite,
+  libstemmer,
+  gnome,
+  icu,
+  libuuid,
+  libsoup,
+  libsoup_3,
+  json-glib,
+  avahi,
+  systemd,
+  dbus,
+  writeText,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tracker";
   version = "3.7.3";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
-    url = with finalAttrs; "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
+    url =
+      with finalAttrs;
+      "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
     hash = "sha256-qz1KUJN+BMXteEb227mZ4pCYGUAvOJylku5rd90o0fk=";
   };
 
@@ -49,63 +58,71 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    asciidoc
-    gettext
-    glib
-    wrapGAppsNoGuiHook
-    gi-docgen
-    graphviz
-    (python3.pythonOnBuildForHost.withPackages (p: [ p.pygobject3 ]))
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-    vala
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      asciidoc
+      gettext
+      glib
+      wrapGAppsNoGuiHook
+      gi-docgen
+      graphviz
+      (python3.pythonOnBuildForHost.withPackages (p: [ p.pygobject3 ]))
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      vala
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
-  buildInputs = [
-    glib
-    libxml2
-    sqlite
-    icu
-    libsoup
-    libsoup_3
-    libuuid
-    json-glib
-    avahi
-    libstemmer
-    dbus
-  ] ++ lib.optionals stdenv.isLinux [
-    systemd
-  ];
+  buildInputs =
+    [
+      glib
+      libxml2
+      sqlite
+      icu
+      libsoup
+      libsoup_3
+      libuuid
+      json-glib
+      avahi
+      libstemmer
+      dbus
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      systemd
+    ];
 
   nativeCheckInputs = [
     dbus
   ];
 
-  mesonFlags = [
-    "-Ddocs=true"
-    (lib.mesonEnable "introspection" withIntrospection)
-    (lib.mesonEnable "vapi" withIntrospection)
-    (lib.mesonBool "test_utils" withIntrospection)
-  ] ++ (
-    let
-      # https://gitlab.gnome.org/GNOME/tracker/-/blob/master/meson.build#L159
-      crossFile = writeText "cross-file.conf" ''
-        [properties]
-        sqlite3_has_fts5 = '${lib.boolToString (lib.hasInfix "-DSQLITE_ENABLE_FTS3" sqlite.NIX_CFLAGS_COMPILE)}'
-      '';
-    in
+  mesonFlags =
     [
-      "--cross-file=${crossFile}"
+      "-Ddocs=true"
+      (lib.mesonEnable "introspection" withIntrospection)
+      (lib.mesonEnable "vapi" withIntrospection)
+      (lib.mesonBool "test_utils" withIntrospection)
     ]
-  ) ++ lib.optionals (!stdenv.isLinux) [
-    "-Dsystemd_user_services=false"
-  ];
+    ++ (
+      let
+        # https://gitlab.gnome.org/GNOME/tracker/-/blob/master/meson.build#L159
+        crossFile = writeText "cross-file.conf" ''
+          [properties]
+          sqlite3_has_fts5 = '${lib.boolToString (lib.hasInfix "-DSQLITE_ENABLE_FTS3" sqlite.NIX_CFLAGS_COMPILE)}'
+        '';
+      in
+      [
+        "--cross-file=${crossFile}"
+      ]
+    )
+    ++ lib.optionals (!stdenv.isLinux) [
+      "-Dsystemd_user_services=false"
+    ];
 
   doCheck =
     # https://gitlab.gnome.org/GNOME/tracker/-/issues/402
@@ -179,6 +196,9 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = teams.gnome.members;
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    pkgConfigModules = [ "tracker-sparql-3.0" "tracker-testutils-3.0" ];
+    pkgConfigModules = [
+      "tracker-sparql-3.0"
+      "tracker-testutils-3.0"
+    ];
   };
 })

@@ -1,11 +1,12 @@
-{ lib
-, addOpenGLRunpath
-, cmake
-, fetchFromGitHub
-, fmt_9
-, spdlog
-, stdenv
-, substituteAll
+{
+  lib,
+  addOpenGLRunpath,
+  cmake,
+  fetchFromGitHub,
+  fmt_9,
+  spdlog,
+  stdenv,
+  substituteAll,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +27,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake addOpenGLRunpath ];
+  nativeBuildInputs = [
+    cmake
+    addOpenGLRunpath
+  ];
 
   buildInputs = [ fmt_9 ];
 
@@ -42,4 +46,3 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.ziguana ];
   };
 }
-

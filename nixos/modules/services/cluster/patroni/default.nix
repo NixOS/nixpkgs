@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.services.patroni;
@@ -106,7 +111,10 @@ in
 
     otherNodesIps = mkOption {
       type = types.listOf types.str;
-      example = [ "192.168.1.2" "192.168.1.3" ];
+      example = [
+        "192.168.1.2"
+        "192.168.1.3"
+      ];
       description = ''
         IP addresses of the other nodes.
       '';
@@ -156,7 +164,15 @@ in
     };
 
     environmentFiles = mkOption {
-      type = with types; attrsOf (nullOr (oneOf [ str path package ]));
+      type =
+        with types;
+        attrsOf (
+          nullOr (oneOf [
+            str
+            path
+            package
+          ])
+        );
       default = { };
       example = {
         PATRONI_REPLICATION_PASSWORD = "/secret/file";
@@ -199,7 +215,6 @@ in
       };
     };
 
-
     users = {
       users = mkIf (cfg.user == defaultUser) {
         patroni = {
@@ -220,7 +235,11 @@ in
         after = [ "network.target" ];
 
         script = ''
-          ${concatStringsSep "\n" (attrValues (mapAttrs (name: path: ''export ${name}="$(< ${escapeShellArg path})"'') cfg.environmentFiles))}
+          ${concatStringsSep "\n" (
+            attrValues (
+              mapAttrs (name: path: ''export ${name}="$(< ${escapeShellArg path})"'') cfg.environmentFiles
+            )
+          )}
           exec ${pkgs.patroni}/bin/patroni ${configFile}
         '';
 
@@ -234,10 +253,16 @@ in
             ExecReload = "${pkgs.coreutils}/bin/kill -s HUP $MAINPID";
             KillMode = "process";
           }
-          (mkIf (cfg.postgresqlDataDir == "/var/lib/postgresql/${cfg.postgresqlPackage.psqlSchema}" && cfg.dataDir == "/var/lib/patroni") {
-            StateDirectory = "patroni patroni/raft postgresql postgresql/${cfg.postgresqlPackage.psqlSchema}";
-            StateDirectoryMode = "0750";
-          })
+          (mkIf
+            (
+              cfg.postgresqlDataDir == "/var/lib/postgresql/${cfg.postgresqlPackage.psqlSchema}"
+              && cfg.dataDir == "/var/lib/patroni"
+            )
+            {
+              StateDirectory = "patroni patroni/raft postgresql postgresql/${cfg.postgresqlPackage.psqlSchema}";
+              StateDirectoryMode = "0750";
+            }
+          )
         ];
       };
     };

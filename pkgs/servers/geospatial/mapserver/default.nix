@@ -1,7 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, cairo, curl, fcgi, freetype, fribidi, gdal, geos, giflib, harfbuzz
-, libjpeg, libpng, librsvg, libxml2, postgresql, proj, protobufc, zlib
-, withPython ? true, swig, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  cairo,
+  curl,
+  fcgi,
+  freetype,
+  fribidi,
+  gdal,
+  geos,
+  giflib,
+  harfbuzz,
+  libjpeg,
+  libpng,
+  librsvg,
+  libxml2,
+  postgresql,
+  proj,
+  protobufc,
+  zlib,
+  withPython ? true,
+  swig,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,10 +42,15 @@ stdenv.mkDerivation rec {
     ./fix-build-w-libxml2-12.patch
   ];
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-  ] ++ lib.optionals withPython [ swig python3.pkgs.setuptools ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+    ]
+    ++ lib.optionals withPython [
+      swig
+      python3.pkgs.setuptools
+    ];
 
   buildInputs = [
     cairo

@@ -1,22 +1,24 @@
-{ lib, stdenv
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gettext
-, itstool
-, desktop-file-utils
-, gnome
-, glib
-, gtk3
-, libexif
-, libtiff
-, colord
-, colord-gtk
-, libcanberra-gtk3
-, lcms2
-, vte
-, exiv2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  itstool,
+  desktop-file-utils,
+  gnome,
+  glib,
+  gtk3,
+  libexif,
+  libtiff,
+  colord,
+  colord-gtk,
+  libcanberra-gtk3,
+  lcms2,
+  vte,
+  exiv2,
 }:
 
 stdenv.mkDerivation rec {

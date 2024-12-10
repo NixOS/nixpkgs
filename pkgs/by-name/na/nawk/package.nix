@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, bison
-, buildPackages
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  buildPackages,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,7 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
@@ -50,7 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/onetrueawk/awk/blob/${finalAttrs.src.rev}/ChangeLog";
     license = lib.licenses.mit;
     mainProgram = "nawk";
-    maintainers = with lib.maintainers; [ AndersonTorres konimex ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      konimex
+    ];
     platforms = lib.platforms.all;
   };
 })

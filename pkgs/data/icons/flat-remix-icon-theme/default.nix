@@ -1,6 +1,15 @@
-{ lib, stdenvNoCC, fetchFromGitHub, gtk3, breeze-icons, pantheon, gnome-icon-theme, hicolor-icon-theme }:
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gtk3,
+  breeze-icons,
+  pantheon,
+  gnome-icon-theme,
+  hicolor-icon-theme,
+}:
 
-stdenvNoCC.mkDerivation rec  {
+stdenvNoCC.mkDerivation rec {
   pname = "flat-remix-icon-theme";
   version = "20220525";
 

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-# for passthru.tests
-, python3
-, perlPackages
-, haskellPackages
-, luaPackages
-, ocamlPackages
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  # for passthru.tests
+  python3,
+  perlPackages,
+  haskellPackages,
+  luaPackages,
+  ocamlPackages,
+  testers,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -17,20 +18,25 @@
 
 let
   version = "2.6.3";
-  tag = "R_${lib.replaceStrings ["."] ["_"] version}";
+  tag = "R_${lib.replaceStrings [ "." ] [ "_" ] version}";
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "expat";
   inherit version;
 
   src = fetchurl {
-    url = with finalAttrs; "https://github.com/libexpat/libexpat/releases/download/${tag}/${pname}-${version}.tar.xz";
+    url =
+      with finalAttrs;
+      "https://github.com/libexpat/libexpat/releases/download/${tag}/${pname}-${version}.tar.xz";
     hash = "sha256-J02yVKaXm95arUBHY6cElWlA5GWEPyqb2e168i4sDvw=";
   };
 
   strictDeps = true;
 
-  outputs = [ "out" "dev" ]; # TODO: fix referrers
+  outputs = [
+    "out"
+    "dev"
+  ]; # TODO: fix referrers
   outputBin = "dev";
 
   enableParallelBuilding = true;

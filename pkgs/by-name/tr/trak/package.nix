@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -17,10 +18,13 @@ python3Packages.buildPythonApplication rec {
 
   sourceRoot = "${src.name}/cli";
 
-  dependencies = with python3Packages; [
-    questionary
-    typer
-  ] ++ typer.optional-dependencies.all;
+  dependencies =
+    with python3Packages;
+    [
+      questionary
+      typer
+    ]
+    ++ typer.optional-dependencies.all;
 
   build-system = [ python3Packages.poetry-core ];
 

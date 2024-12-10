@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, alsa-lib
-, dbus
-, fontconfig
-, libxkbcommon
-, makeWrapper
-, openvr
-, openxr-loader
-, pipewire
-, pkg-config
-, pulseaudio
-, shaderc
-, wayland
-, xorg
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  alsa-lib,
+  dbus,
+  fontconfig,
+  libxkbcommon,
+  makeWrapper,
+  openvr,
+  openxr-loader,
+  pipewire,
+  pkg-config,
+  pulseaudio,
+  shaderc,
+  wayland,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {

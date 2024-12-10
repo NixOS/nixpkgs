@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildPackages
-, fetchurl
-, gitUpdater
-, linuxHeaders
-, libiconvReal
-, extraConfig ? ""
+{
+  lib,
+  stdenv,
+  buildPackages,
+  fetchurl,
+  gitUpdater,
+  linuxHeaders,
+  libiconvReal,
+  extraConfig ? "",
 }:
 
 let
@@ -34,28 +35,31 @@ let
   '';
 
   # UCLIBC_SUSV4_LEGACY defines 'tmpnam', needed for gcc libstdc++ builds.
-  nixConfig = ''
-    RUNTIME_PREFIX "/"
-    DEVEL_PREFIX "/"
-    UCLIBC_HAS_WCHAR y
-    UCLIBC_HAS_FTW y
-    UCLIBC_HAS_RPC y
-    DO_C99_MATH y
-    UCLIBC_HAS_PROGRAM_INVOCATION_NAME y
-    UCLIBC_HAS_RESOLVER_SUPPORT y
-    UCLIBC_SUSV4_LEGACY y
-    UCLIBC_HAS_THREADS_NATIVE y
-    KERNEL_HEADERS "${linuxHeaders}/include"
-  '' + lib.optionalString (stdenv.hostPlatform.gcc.float or "" == "soft") ''
-    UCLIBC_HAS_FPU n
-  '' + lib.optionalString (stdenv.isAarch32 && isCross) ''
-    CONFIG_ARM_EABI y
-    ARCH_WANTS_BIG_ENDIAN n
-    ARCH_BIG_ENDIAN n
-    ARCH_WANTS_LITTLE_ENDIAN y
-    ARCH_LITTLE_ENDIAN y
-    UCLIBC_HAS_FPU n
-  '';
+  nixConfig =
+    ''
+      RUNTIME_PREFIX "/"
+      DEVEL_PREFIX "/"
+      UCLIBC_HAS_WCHAR y
+      UCLIBC_HAS_FTW y
+      UCLIBC_HAS_RPC y
+      DO_C99_MATH y
+      UCLIBC_HAS_PROGRAM_INVOCATION_NAME y
+      UCLIBC_HAS_RESOLVER_SUPPORT y
+      UCLIBC_SUSV4_LEGACY y
+      UCLIBC_HAS_THREADS_NATIVE y
+      KERNEL_HEADERS "${linuxHeaders}/include"
+    ''
+    + lib.optionalString (stdenv.hostPlatform.gcc.float or "" == "soft") ''
+      UCLIBC_HAS_FPU n
+    ''
+    + lib.optionalString (stdenv.isAarch32 && isCross) ''
+      CONFIG_ARM_EABI y
+      ARCH_WANTS_BIG_ENDIAN n
+      ARCH_BIG_ENDIAN n
+      ARCH_WANTS_LITTLE_ENDIAN y
+      ARCH_LITTLE_ENDIAN y
+      UCLIBC_HAS_FPU n
+    '';
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "uclibc-ng";
@@ -85,13 +89,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  makeFlags = [
-    "ARCH=${stdenv.hostPlatform.linuxArch}"
-    "TARGET_ARCH=${stdenv.hostPlatform.linuxArch}"
-    "VERBOSE=1"
-  ] ++ lib.optionals (isCross) [
-    "CROSS=${stdenv.cc.targetPrefix}"
-  ];
+  makeFlags =
+    [
+      "ARCH=${stdenv.hostPlatform.linuxArch}"
+      "TARGET_ARCH=${stdenv.hostPlatform.linuxArch}"
+      "VERBOSE=1"
+    ]
+    ++ lib.optionals (isCross) [
+      "CROSS=${stdenv.cc.targetPrefix}"
+    ];
 
   # `make libpthread/nptl/sysdeps/unix/sysv/linux/lowlevelrwlock.h`:
   # error: bits/sysnum.h: No such file or directory
@@ -139,7 +145,10 @@ stdenv.mkDerivation (finalAttrs: {
       experimental and need more testing.
     '';
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ rasendubi AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      rasendubi
+      AndersonTorres
+    ];
     platforms = lib.platforms.linux;
     badPlatforms = lib.platforms.aarch64;
   };

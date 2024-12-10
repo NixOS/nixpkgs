@@ -1,20 +1,22 @@
-{ lib, stdenv, fetchurl
-, pkg-config
-, python3Packages
-, wrapGAppsHook3
-, atk
-, dbus
-, evemu
-, frame
-, gdk-pixbuf
-, gobject-introspection
-, grail
-, gtk3
-, xorg
-, pango
-, xorgserver
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  python3Packages,
+  wrapGAppsHook3,
+  atk,
+  dbus,
+  evemu,
+  frame,
+  gdk-pixbuf,
+  gobject-introspection,
+  grail,
+  gtk3,
+  xorg,
+  pango,
+  xorgserver,
 }:
-
 
 stdenv.mkDerivation rec {
   pname = "geis";
@@ -29,12 +31,29 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  pythonPath = with python3Packages;
-    [ pygobject3  ];
+  pythonPath = with python3Packages; [ pygobject3 ];
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 python3Packages.wrapPython gobject-introspection ];
-  buildInputs = [ atk dbus evemu frame gdk-pixbuf grail
-    gtk3 xorg.libX11 xorg.libXext xorg.libXi xorg.libXtst pango python3Packages.python xorgserver
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+    python3Packages.wrapPython
+    gobject-introspection
+  ];
+  buildInputs = [
+    atk
+    dbus
+    evemu
+    frame
+    gdk-pixbuf
+    grail
+    gtk3
+    xorg.libX11
+    xorg.libXext
+    xorg.libXi
+    xorg.libXtst
+    pango
+    python3Packages.python
+    xorgserver
   ];
 
   patchPhase = ''

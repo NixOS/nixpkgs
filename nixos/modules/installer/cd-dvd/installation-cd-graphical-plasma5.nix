@@ -26,21 +26,25 @@
     kate
   ];
 
-  system.activationScripts.installerDesktop = let
+  system.activationScripts.installerDesktop =
+    let
 
-    # Comes from documentation.nix when xserver and nixos.enable are true.
-    manualDesktopFile = "/run/current-system/sw/share/applications/nixos-manual.desktop";
+      # Comes from documentation.nix when xserver and nixos.enable are true.
+      manualDesktopFile = "/run/current-system/sw/share/applications/nixos-manual.desktop";
 
-    homeDir = "/home/nixos/";
-    desktopDir = homeDir + "Desktop/";
+      homeDir = "/home/nixos/";
+      desktopDir = homeDir + "Desktop/";
 
-  in ''
-    mkdir -p ${desktopDir}
-    chown nixos ${homeDir} ${desktopDir}
+    in
+    ''
+      mkdir -p ${desktopDir}
+      chown nixos ${homeDir} ${desktopDir}
 
-    ln -sfT ${manualDesktopFile} ${desktopDir + "nixos-manual.desktop"}
-    ln -sfT ${pkgs.gparted}/share/applications/gparted.desktop ${desktopDir + "gparted.desktop"}
-    ln -sfT ${pkgs.konsole}/share/applications/org.kde.konsole.desktop ${desktopDir + "org.kde.konsole.desktop"}
-  '';
+      ln -sfT ${manualDesktopFile} ${desktopDir + "nixos-manual.desktop"}
+      ln -sfT ${pkgs.gparted}/share/applications/gparted.desktop ${desktopDir + "gparted.desktop"}
+      ln -sfT ${pkgs.konsole}/share/applications/org.kde.konsole.desktop ${
+        desktopDir + "org.kde.konsole.desktop"
+      }
+    '';
 
 }

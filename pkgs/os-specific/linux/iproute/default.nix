@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchurl
-, buildPackages, bison, flex, pkg-config
-, db, iptables, elfutils, libmnl
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPackages,
+  bison,
+  flex,
+  pkg-config,
+  db,
+  iptables,
+  elfutils,
+  libmnl,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,24 +30,31 @@ stdenv.mkDerivation rec {
       --replace "CC := gcc" "CC ?= $CC"
   '';
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   configureFlags = [
-    "--color" "auto"
+    "--color"
+    "auto"
   ];
 
-  makeFlags = [
-    "PREFIX=$(out)"
-    "SBINDIR=$(out)/sbin"
-    "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
-    "HDRDIR=$(dev)/include/iproute2"
-  ] ++ lib.optionals stdenv.hostPlatform.isStatic [
-    "SHARED_LIBS=n"
-    # all build .so plugins:
-    "TC_CONFIG_NO_XT=y"
-  ] ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
-    "HOSTCC=$(CC_FOR_BUILD)"
-  ];
+  makeFlags =
+    [
+      "PREFIX=$(out)"
+      "SBINDIR=$(out)/sbin"
+      "DOCDIR=$(TMPDIR)/share/doc/${pname}" # Don't install docs
+      "HDRDIR=$(dev)/include/iproute2"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isStatic [
+      "SHARED_LIBS=n"
+      # all build .so plugins:
+      "TC_CONFIG_NO_XT=y"
+    ]
+    ++ lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
+      "HOSTCC=$(CC_FOR_BUILD)"
+    ];
 
   buildFlags = [
     "CONFDIR=/etc/iproute2"
@@ -49,8 +65,17 @@ stdenv.mkDerivation rec {
   ];
 
   depsBuildBuild = [ buildPackages.stdenv.cc ]; # netem requires $HOSTCC
-  nativeBuildInputs = [ bison flex pkg-config ];
-  buildInputs = [ db iptables libmnl ]
+  nativeBuildInputs = [
+    bison
+    flex
+    pkg-config
+  ];
+  buildInputs =
+    [
+      db
+      iptables
+      libmnl
+    ]
     # needed to uploaded bpf programs
     ++ lib.optionals (!stdenv.hostPlatform.isStatic) [ elfutils ];
 
@@ -67,6 +92,11 @@ stdenv.mkDerivation rec {
     description = "A collection of utilities for controlling TCP/IP networking and traffic control in Linux";
     platforms = platforms.linux;
     license = licenses.gpl2;
-    maintainers = with maintainers; [ primeos eelco fpletz globin ];
+    maintainers = with maintainers; [
+      primeos
+      eelco
+      fpletz
+      globin
+    ];
   };
 }

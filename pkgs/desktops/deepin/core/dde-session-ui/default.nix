@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, qtbase
-, dtkwidget
-, qt5integration
-, qt5platform-plugins
-, dde-dock
-, gsettings-qt
-, qtx11extras
-, gtest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  qtbase,
+  dtkwidget,
+  qt5integration,
+  qt5platform-plugins,
+  dde-dock,
+  gsettings-qt,
+  qtx11extras,
+  gtest,
 }:
 
 stdenv.mkDerivation rec {
@@ -56,7 +57,7 @@ stdenv.mkDerivation rec {
   ];
 
   cmakeFlags = [
-   "-DDISABLE_SYS_UPDATE=ON"
+    "-DDISABLE_SYS_UPDATE=ON"
   ];
 
   # qt5integration must be placed before qtsvg in QT_PLUGIN_PATH

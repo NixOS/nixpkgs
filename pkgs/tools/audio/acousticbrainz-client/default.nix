@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, python3Packages, essentia-extractor }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  essentia-extractor,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "acousticbrainz-client";
@@ -11,7 +16,10 @@ python3Packages.buildPythonApplication rec {
     sha256 = "1g1nxh58939vysfxplrgdz366dlqnic05pkzbqh75m79brg4yrv1";
   };
 
-  propagatedBuildInputs = [ essentia-extractor python3Packages.requests ];
+  propagatedBuildInputs = [
+    essentia-extractor
+    python3Packages.requests
+  ];
 
   postPatch = ''
     # The installer needs the streaming_extractor_music binary in the source directoy,
@@ -35,7 +43,10 @@ python3Packages.buildPythonApplication rec {
     license = licenses.gpl3Plus;
     homepage = "https://github.com/MTG/acousticbrainz-client";
     # essentia-extractor is only available for those platforms
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     maintainers = with maintainers; [ ];
     mainProgram = "abzsubmit";
   };

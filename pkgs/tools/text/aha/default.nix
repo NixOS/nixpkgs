@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "aha";
@@ -22,7 +26,10 @@ stdenv.mkDerivation rec {
       aha takes ANSI SGR-coloured input and produces W3C-conformant HTML code.
     '';
     homepage = "https://github.com/theZiz/aha";
-    license = with licenses; [ lgpl2Plus mpl11 ];
+    license = with licenses; [
+      lgpl2Plus
+      mpl11
+    ];
     maintainers = with maintainers; [ pSub ];
     platforms = platforms.all;
   };

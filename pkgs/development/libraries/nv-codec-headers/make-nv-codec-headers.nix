@@ -1,11 +1,13 @@
-{ lib
-, stdenvNoCC
-, fetchgit
+{
+  lib,
+  stdenvNoCC,
+  fetchgit,
 }:
 
-{ pname ? "nv-codec-headers"
-, version
-, hash
+{
+  pname ? "nv-codec-headers",
+  version,
+  hash,
 }:
 
 stdenvNoCC.mkDerivation {

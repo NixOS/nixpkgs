@@ -1,32 +1,33 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, nixosTests
-, testers
-, cmake
-, cmake-extras
-, coreutils
-, dbus
-, doxygen
-, gettext
-, glib
-, gmenuharness
-, gtest
-, intltool
-, libsecret
-, libqofono
-, libqtdbusmock
-, libqtdbustest
-, lomiri-api
-, lomiri-url-dispatcher
-, networkmanager
-, ofono
-, pkg-config
-, python3
-, qtdeclarative
-, qtbase
-, validatePkgConfig
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  nixosTests,
+  testers,
+  cmake,
+  cmake-extras,
+  coreutils,
+  dbus,
+  doxygen,
+  gettext,
+  glib,
+  gmenuharness,
+  gtest,
+  intltool,
+  libsecret,
+  libqofono,
+  libqtdbusmock,
+  libqtdbustest,
+  lomiri-api,
+  lomiri-url-dispatcher,
+  networkmanager,
+  ofono,
+  pkg-config,
+  python3,
+  qtdeclarative,
+  qtbase,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -79,9 +80,11 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
-    (python3.withPackages (ps: with ps; [
-      python-dbusmock
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        python-dbusmock
+      ]
+    ))
   ];
 
   checkInputs = [

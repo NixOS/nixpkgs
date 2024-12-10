@@ -1,14 +1,15 @@
-{ stdenv
-, fetchurl
-, lib
-, makeWrapper
-, electron
-, makeDesktopItem
-, imagemagick
-, writeScript
-, undmg
-, unzip
-, commandLineArgs ? ""
+{
+  stdenv,
+  fetchurl,
+  lib,
+  makeWrapper,
+  electron,
+  makeDesktopItem,
+  imagemagick,
+  writeScript,
+  undmg,
+  unzip,
+  commandLineArgs ? "",
 }:
 let
   pname = "obsidian";
@@ -20,13 +21,24 @@ let
     downloadPage = "https://github.com/obsidianmd/obsidian-releases/releases";
     mainProgram = "obsidian";
     license = licenses.obsidian;
-    maintainers = with maintainers; [ atila conradmearns zaninime qbit kashw2 w-lfchen ];
+    maintainers = with maintainers; [
+      atila
+      conradmearns
+      zaninime
+      qbit
+      kashw2
+      w-lfchen
+    ];
   };
 
   filename = if stdenv.isDarwin then "Obsidian-${version}.dmg" else "obsidian-${version}.tar.gz";
   src = fetchurl {
     url = "https://github.com/obsidianmd/obsidian-releases/releases/download/v${version}/${filename}";
-    hash = if stdenv.isDarwin then "sha256-rFXmhlxXlVz5nCrXMmfYGaxe4/wnBRdFxsfiwiIDHgw=" else "sha256-ok1fedN8+OXBisFpVXbKRW2OhE4o9MC9lJmtMMST6V8=";
+    hash =
+      if stdenv.isDarwin then
+        "sha256-rFXmhlxXlVz5nCrXMmfYGaxe4/wnBRdFxsfiwiIDHgw="
+      else
+        "sha256-ok1fedN8+OXBisFpVXbKRW2OhE4o9MC9lJmtMMST6V8=";
   };
 
   icon = fetchurl {
@@ -45,9 +57,23 @@ let
   };
 
   linux = stdenv.mkDerivation {
-    inherit pname version src desktopItem icon;
-    meta = meta // { platforms = [ "x86_64-linux" "aarch64-linux" ]; };
-    nativeBuildInputs = [ makeWrapper imagemagick ];
+    inherit
+      pname
+      version
+      src
+      desktopItem
+      icon
+      ;
+    meta = meta // {
+      platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+    };
+    nativeBuildInputs = [
+      makeWrapper
+      imagemagick
+    ];
     installPhase = ''
       runHook preInstall
       mkdir -p $out/bin
@@ -76,10 +102,24 @@ let
   };
 
   darwin = stdenv.mkDerivation {
-    inherit pname version src appname;
-    meta = meta // { platforms = [ "x86_64-darwin" "aarch64-darwin" ]; };
+    inherit
+      pname
+      version
+      src
+      appname
+      ;
+    meta = meta // {
+      platforms = [
+        "x86_64-darwin"
+        "aarch64-darwin"
+      ];
+    };
     sourceRoot = "${appname}.app";
-    nativeBuildInputs = [ makeWrapper undmg unzip ];
+    nativeBuildInputs = [
+      makeWrapper
+      undmg
+      unzip
+    ];
     installPhase = ''
       runHook preInstall
       mkdir -p $out/{Applications/${appname}.app,bin}

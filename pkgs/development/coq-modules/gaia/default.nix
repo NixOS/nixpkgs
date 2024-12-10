@@ -1,4 +1,10 @@
-{ lib, mkCoqDerivation, coq, mathcomp, version ? null }:
+{
+  lib,
+  mkCoqDerivation,
+  coq,
+  mathcomp,
+  version ? null,
+}:
 
 mkCoqDerivation {
   pname = "gaia";
@@ -12,13 +18,33 @@ mkCoqDerivation {
   releaseRev = (v: "v${v}");
 
   inherit version;
-  defaultVersion = with lib.versions; lib.switch [ coq.version mathcomp.version ] [
-    { cases = [ (range "8.10" "8.18") (range "1.12.0" "1.18.0") ]; out = "1.17"; }
-    { cases = [ (range "8.10" "8.12") "1.11.0" ]; out = "1.11"; }
-  ] null;
+  defaultVersion =
+    with lib.versions;
+    lib.switch
+      [ coq.version mathcomp.version ]
+      [
+        {
+          cases = [
+            (range "8.10" "8.18")
+            (range "1.12.0" "1.18.0")
+          ];
+          out = "1.17";
+        }
+        {
+          cases = [
+            (range "8.10" "8.12")
+            "1.11.0"
+          ];
+          out = "1.11";
+        }
+      ]
+      null;
 
-  propagatedBuildInputs =
-    [ mathcomp.ssreflect mathcomp.algebra mathcomp.fingroup ];
+  propagatedBuildInputs = [
+    mathcomp.ssreflect
+    mathcomp.algebra
+    mathcomp.fingroup
+  ];
 
   meta = with lib; {
     description = "Implementation of books from Bourbaki's Elements of Mathematics in Coq";

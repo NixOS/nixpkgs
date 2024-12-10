@@ -1,6 +1,5 @@
 { buildPythonPackage, pythonOlder }:
 
-
 buildPythonPackage {
 
   pname = "typeddep";

@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gfortran
-, meson
-, ninja
-, pkg-config
-, python3
-, mctc-lib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gfortran,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  mctc-lib,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,11 +21,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-dN2BulLS/ENRFVdJIrZRxgBV8S4d5+7BjTCGnhBbf4I=";
   };
 
-  nativeBuildInputs = [ gfortran meson ninja pkg-config python3 ];
+  nativeBuildInputs = [
+    gfortran
+    meson
+    ninja
+    pkg-config
+    python3
+  ];
 
   buildInputs = [ mctc-lib ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postPatch = ''
     patchShebangs --build config/install-mod.py

@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, aspell
-, audiofile
-, make
-, wrapGNUstepAppsHook
-, cups
-, fetchzip
-, fetchpatch
-, gmp
-, gnutls
-, libffi
-, binutils-unwrapped
-, libjpeg
-, libtiff
-, libpng
-, giflib
-, libxml2
-, libxslt
-, libiconv
-, libobjc
-, libgcrypt
-, icu
-, pkg-config
-, portaudio
-, libiberty
+{
+  lib,
+  stdenv,
+  aspell,
+  audiofile,
+  make,
+  wrapGNUstepAppsHook,
+  cups,
+  fetchzip,
+  fetchpatch,
+  gmp,
+  gnutls,
+  libffi,
+  binutils-unwrapped,
+  libjpeg,
+  libtiff,
+  libpng,
+  giflib,
+  libxml2,
+  libxslt,
+  libiconv,
+  libobjc,
+  libgcrypt,
+  icu,
+  pkg-config,
+  portaudio,
+  libiberty,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -33,16 +34,33 @@ stdenv.mkDerivation (finalAttrs: {
     url = "ftp://ftp.gnustep.org/pub/gnustep/core/gnustep-base-${finalAttrs.version}.tar.gz";
     hash = "sha256-4fjdsLBsYEDxLOFrq17dKii2sLKvOaFCu0cw3qQtM5U=";
   };
-  outputs = [ "out" "dev" "lib" ];
-  nativeBuildInputs = [ pkg-config make wrapGNUstepAppsHook ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    make
+    wrapGNUstepAppsHook
+  ];
   propagatedBuildInputs = [
-    aspell audiofile
+    aspell
+    audiofile
     cups
-    gmp gnutls
-    libffi binutils-unwrapped
-    libjpeg libtiff libpng giflib
-    libxml2 libxslt libiconv
-    libobjc libgcrypt
+    gmp
+    gnutls
+    libffi
+    binutils-unwrapped
+    libjpeg
+    libtiff
+    libpng
+    giflib
+    libxml2
+    libxslt
+    libiconv
+    libobjc
+    libgcrypt
     icu
     portaudio
     libiberty
@@ -69,11 +87,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = {
-    changelog = "https://github.com/gnustep/libs-base/releases/tag/base-${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
+    changelog = "https://github.com/gnustep/libs-base/releases/tag/base-${
+      builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version
+    }";
     description = "An implementation of AppKit and Foundation libraries of OPENSTEP and Cocoa";
     homepage = "https://gnustep.github.io/";
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ ashalkhakov matthewbauer dblsaiko ];
+    maintainers = with lib.maintainers; [
+      ashalkhakov
+      matthewbauer
+      dblsaiko
+    ];
     platforms = lib.platforms.linux;
   };
 })

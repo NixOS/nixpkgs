@@ -1,4 +1,11 @@
-{ lib, stdenv, gnome, fetchFromGitHub, xprop, glib }:
+{
+  lib,
+  stdenv,
+  gnome,
+  fetchFromGitHub,
+  xprop,
+  glib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-unite";

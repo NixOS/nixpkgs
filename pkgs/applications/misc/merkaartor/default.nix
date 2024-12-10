@@ -1,19 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, qttools
-, wrapQtAppsHook
-, gdal
-, proj
-, qtsvg
-, qtwebengine
-, withGeoimage ? true, exiv2
-, withGpsdlib ? (!stdenv.isDarwin), gpsd
-, withLibproxy ? false, libproxy
-, withZbar ? false, zbar
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  qttools,
+  wrapQtAppsHook,
+  gdal,
+  proj,
+  qtsvg,
+  qtwebengine,
+  withGeoimage ? true,
+  exiv2,
+  withGpsdlib ? (!stdenv.isDarwin),
+  gpsd,
+  withLibproxy ? false,
+  libproxy,
+  withZbar ? false,
+  zbar,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,9 +45,20 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config qttools wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    qttools
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ gdal proj qtsvg qtwebengine ]
+  buildInputs =
+    [
+      gdal
+      proj
+      qtsvg
+      qtwebengine
+    ]
     ++ lib.optional withGeoimage exiv2
     ++ lib.optional withGpsdlib gpsd
     ++ lib.optional withLibproxy libproxy
@@ -56,17 +72,19 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "ZBAR" withZbar)
   ];
 
-  postInstall = ''
-    # Binary is looking for .qm files in share/merkaartor
-    mv $out/share/merkaartor/{translations/*.qm,}
-    rm -r $out/share/merkaartor/translations
-  '' + lib.optionalString stdenv.isDarwin ''
-    mkdir -p $out/{Applications,bin}
-    mv $out/merkaartor.app $out/Applications
-    # Prevent wrapping, otherwise plugins will not be loaded
-    chmod -x $out/Applications/merkaartor.app/Contents/plugins/background/*.dylib
-    makeWrapper $out/{Applications/merkaartor.app/Contents/MacOS,bin}/merkaartor
-  '';
+  postInstall =
+    ''
+      # Binary is looking for .qm files in share/merkaartor
+      mv $out/share/merkaartor/{translations/*.qm,}
+      rm -r $out/share/merkaartor/translations
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      mkdir -p $out/{Applications,bin}
+      mv $out/merkaartor.app $out/Applications
+      # Prevent wrapping, otherwise plugins will not be loaded
+      chmod -x $out/Applications/merkaartor.app/Contents/plugins/background/*.dylib
+      makeWrapper $out/{Applications/merkaartor.app/Contents/MacOS,bin}/merkaartor
+    '';
 
   meta = with lib; {
     description = "OpenStreetMap editor";

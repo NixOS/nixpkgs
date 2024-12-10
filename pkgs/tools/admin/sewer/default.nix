@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "sewer";
@@ -9,7 +13,11 @@ python3Packages.buildPythonApplication rec {
     sha256 = "0s8f0w6nv8dcs5yw7rn49981b3c9mnnx4f6wzqw4zha0rpp60z22";
   };
 
-  propagatedBuildInputs = with python3Packages; [ pyopenssl requests tldextract ];
+  propagatedBuildInputs = with python3Packages; [
+    pyopenssl
+    requests
+    tldextract
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/komuw/sewer";

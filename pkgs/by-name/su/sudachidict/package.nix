@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchzip
-, dict-type ? "core"
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  dict-type ? "core",
 }:
 
 let
@@ -26,35 +27,36 @@ in
 
 lib.checkListOfEnum "${pname}: dict-type" [ "core" "full" "small" ] [ dict-type ]
 
-stdenvNoCC.mkDerivation {
-  inherit pname version;
+  stdenvNoCC.mkDerivation
+  {
+    inherit pname version;
 
-  src = srcs.${dict-type};
+    src = srcs.${dict-type};
 
-  dontConfigure = true;
+    dontConfigure = true;
 
-  dontBuild = true;
+    dontBuild = true;
 
-  installPhase = ''
-    runHook preInstall
+    installPhase = ''
+      runHook preInstall
 
-    install -Dm644 system_${dict-type}.dic $out/share/system.dic
+      install -Dm644 system_${dict-type}.dic $out/share/system.dic
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
-  passthru = {
-    dict-type = dict-type;
-  };
+    passthru = {
+      dict-type = dict-type;
+    };
 
-  meta = with lib; {
-    description = "A lexicon for Sudachi";
-    homepage = "https://github.com/WorksApplications/SudachiDict";
-    changelog = "https://github.com/WorksApplications/SudachiDict/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ natsukium ];
-    platforms = platforms.all;
-    # it is a waste of space and time to build this package in hydra since it is just data
-    hydraPlatforms = [];
-  };
-}
+    meta = with lib; {
+      description = "A lexicon for Sudachi";
+      homepage = "https://github.com/WorksApplications/SudachiDict";
+      changelog = "https://github.com/WorksApplications/SudachiDict/releases/tag/v${version}";
+      license = licenses.asl20;
+      maintainers = with maintainers; [ natsukium ];
+      platforms = platforms.all;
+      # it is a waste of space and time to build this package in hydra since it is just data
+      hydraPlatforms = [ ];
+    };
+  }

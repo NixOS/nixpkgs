@@ -1,13 +1,14 @@
-{ lib
-, SDL2
-, cmake
-, fetchFromGitHub
-, lua
-, minizip
-, pkg-config
-, stdenv
-, wrapQtAppsHook
-, x264
+{
+  lib,
+  SDL2,
+  cmake,
+  fetchFromGitHub,
+  lua,
+  minizip,
+  pkg-config,
+  stdenv,
+  wrapQtAppsHook,
+  x264,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,7 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "fceux";
     changelog = "https://github.com/TASEmulators/blob/fceux/${finalAttrs.src.rev}/changelog.txt";
     license = with lib.licenses; [ gpl2Plus ];
-    maintainers = with lib.maintainers; [ AndersonTorres sbruder ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      sbruder
+    ];
     platforms = lib.platforms.linux;
   };
 })

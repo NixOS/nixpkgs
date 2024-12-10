@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, mesa
-, libglvnd
-, libxkbcommon
-, pipewire
-, wayland
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  mesa,
+  libglvnd,
+  libxkbcommon,
+  pipewire,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -32,8 +33,17 @@ rustPlatform.buildRustPackage rec {
 
   separateDebugInfo = true;
 
-  nativeBuildInputs = [ rustPlatform.bindgenHook pkg-config ];
-  buildInputs = [ libglvnd libxkbcommon mesa pipewire wayland ];
+  nativeBuildInputs = [
+    rustPlatform.bindgenHook
+    pkg-config
+  ];
+  buildInputs = [
+    libglvnd
+    libxkbcommon
+    mesa
+    pipewire
+    wayland
+  ];
 
   # Force linking to libEGL, which is always dlopen()ed, and to
   # libwayland-client, which is always dlopen()ed except by the

@@ -1,4 +1,11 @@
-{ fetchFromGitHub, lib, nodejs, stdenv, testers, yarn }:
+{
+  fetchFromGitHub,
+  lib,
+  nodejs,
+  stdenv,
+  testers,
+  yarn,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "yarn-berry";
@@ -45,7 +52,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://yarnpkg.com/";
     description = "Fast, reliable, and secure dependency management.";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ryota-ka pyrox0 DimitarNestorov ];
+    maintainers = with maintainers; [
+      ryota-ka
+      pyrox0
+      DimitarNestorov
+    ];
     platforms = platforms.unix;
     mainProgram = "yarn";
   };

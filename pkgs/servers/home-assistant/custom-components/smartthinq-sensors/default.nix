@@ -1,9 +1,10 @@
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
-, charset-normalizer
-, pycountry
-, xmltodict
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
+  charset-normalizer,
+  pycountry,
+  xmltodict,
 }:
 
 buildHomeAssistantComponent rec {

@@ -1,12 +1,13 @@
-{ alsa-lib
-, cmake
-, CoreAudio
-, CoreFoundation
-, CoreMIDI
-, CoreServices
-, fetchFromGitHub
-, lib
-, stdenv
+{
+  alsa-lib,
+  cmake,
+  CoreAudio,
+  CoreFoundation,
+  CoreMIDI,
+  CoreServices,
+  fetchFromGitHub,
+  lib,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,13 +23,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = lib.optional stdenv.isLinux alsa-lib
+  buildInputs =
+    lib.optional stdenv.isLinux alsa-lib
     ++ lib.optionals stdenv.isDarwin [
-    CoreAudio
-    CoreFoundation
-    CoreMIDI
-    CoreServices
-  ];
+      CoreAudio
+      CoreFoundation
+      CoreMIDI
+      CoreServices
+    ];
 
   postInstall = ''
     cp -r $src/include $out

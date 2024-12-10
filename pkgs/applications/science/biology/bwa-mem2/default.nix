@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,11 +29,18 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   buildFlags = [
-    (if stdenv.hostPlatform.sse4_2Support then "arch=sse42"
-    else if stdenv.hostPlatform.avxSupport then "arch=avx"
-    else if stdenv.hostPlatform.avx2Support then "arch=avx2"
-    else if stdenv.hostPlatform.avx512Support then "arch=avx512"
-    else "arch=sse41")
+    (
+      if stdenv.hostPlatform.sse4_2Support then
+        "arch=sse42"
+      else if stdenv.hostPlatform.avxSupport then
+        "arch=avx"
+      else if stdenv.hostPlatform.avx2Support then
+        "arch=avx2"
+      else if stdenv.hostPlatform.avx512Support then
+        "arch=avx512"
+      else
+        "arch=sse41"
+    )
   ];
   enableParallelBuilding = true;
   installPhase = ''

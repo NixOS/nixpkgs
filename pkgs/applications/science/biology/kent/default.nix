@@ -1,15 +1,17 @@
-{ lib, stdenv
-, libpng
-, libuuid
-, zlib
-, bzip2
-, xz
-, openssl
-, curl
-, libmysqlclient
-, bash
-, fetchFromGitHub
-, which
+{
+  lib,
+  stdenv,
+  libpng,
+  libuuid,
+  zlib,
+  bzip2,
+  xz,
+  openssl,
+  curl,
+  libmysqlclient,
+  bash,
+  fetchFromGitHub,
+  which,
 }:
 stdenv.mkDerivation rec {
   pname = "kent";
@@ -22,7 +24,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-d8gcoyMwINdHoD6xaNKt4rCKrKir99+i4KIzJ2YnxRw=";
   };
 
-  buildInputs = [ libpng libuuid zlib bzip2 xz openssl curl libmysqlclient ];
+  buildInputs = [
+    libpng
+    libuuid
+    zlib
+    bzip2
+    xz
+    openssl
+    curl
+    libmysqlclient
+  ];
 
   postPatch = ''
     substituteInPlace ./src/checkUmask.sh \

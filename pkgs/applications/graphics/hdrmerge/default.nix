@@ -1,17 +1,18 @@
-{ lib
-, mkDerivation
-, fetchpatch
-, fetchFromGitHub
-, cmake
-, qtbase
-, wrapQtAppsHook
-, libraw
-, exiv2
-, zlib
-, alglib
-, pkg-config
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  mkDerivation,
+  fetchpatch,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
+  wrapQtAppsHook,
+  libraw,
+  exiv2,
+  zlib,
+  alglib,
+  pkg-config,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 mkDerivation rec {
@@ -31,7 +32,13 @@ mkDerivation rec {
     copyDesktopItems
   ];
 
-  buildInputs = [ qtbase libraw exiv2 zlib alglib ];
+  buildInputs = [
+    qtbase
+    libraw
+    exiv2
+    zlib
+    alglib
+  ];
 
   cmakeFlags = [
     "-DALGLIB_DIR:PATH=${alglib}"
@@ -60,7 +67,10 @@ mkDerivation rec {
       icon = "hdrmerge";
       exec = "hdrmerge %F";
       categories = [ "Graphics" ];
-      mimeTypes = [ "image/x-dcraw" "image/x-adobe-dng" ];
+      mimeTypes = [
+        "image/x-dcraw"
+        "image/x-adobe-dng"
+      ];
       terminal = false;
     })
   ];

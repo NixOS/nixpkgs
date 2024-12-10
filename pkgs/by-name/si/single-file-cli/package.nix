@@ -19,7 +19,10 @@ buildNpmPackage {
   };
   npmDepsHash = "sha256-wiBpWw9nb/pWVGIc4Vl/IxxR5ic0LzLMMr3WxRNvYdM=";
 
-  nativeCheckInputs = [chromium chromedriver];
+  nativeCheckInputs = [
+    chromium
+    chromedriver
+  ];
   doCheck = stdenv.isLinux;
 
   postBuild = ''
@@ -50,7 +53,7 @@ buildNpmPackage {
     description = "CLI tool for saving a faithful copy of a complete web page in a single HTML file";
     homepage = "https://github.com/gildas-lormeau/single-file-cli";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [n8henrie];
+    maintainers = with lib.maintainers; [ n8henrie ];
     mainProgram = "single-file";
   };
 }

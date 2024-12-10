@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, kube-router }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  kube-router,
+}:
 
 buildGoModule rec {
   pname = "kube-router";
@@ -31,7 +37,10 @@ buildGoModule rec {
     description = "All-in-one router, firewall and service proxy for Kubernetes";
     mainProgram = "kube-router";
     license = licenses.asl20;
-    maintainers = with maintainers; [ colemickens johanot ];
+    maintainers = with maintainers; [
+      colemickens
+      johanot
+    ];
     platforms = platforms.linux;
   };
 }

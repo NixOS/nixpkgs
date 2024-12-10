@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,7 +36,6 @@ rustPlatform.buildRustPackage rec {
     "--skip=tests::test_check_and_get_full_commit_when_partial_commit"
     "--skip=tests::test_get_anchor_version_from_commit"
   ];
-
 
   meta = with lib; {
     description = "Solana Sealevel Framework";

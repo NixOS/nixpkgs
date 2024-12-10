@@ -1,4 +1,9 @@
-{ lib, fetchPypi, nixosTests, python3 }:
+{
+  lib,
+  fetchPypi,
+  nixosTests,
+  python3,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   version = "0.5.0b3.dev85";

@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "crowdsec";
@@ -64,6 +69,9 @@ buildGoModule rec {
       being shared among all users to further improve everyone's security.
     '';
     license = licenses.mit;
-    maintainers = with maintainers; [ jk urandom ];
+    maintainers = with maintainers; [
+      jk
+      urandom
+    ];
   };
 }

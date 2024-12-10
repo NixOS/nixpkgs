@@ -1,4 +1,18 @@
-{ lib, stdenv, cmake, zlib, fetchFromGitHub, re2, abseil-cpp, protobuf, capstone, gtest, pkg-config, lit, llvmPackages_16 }:
+{
+  lib,
+  stdenv,
+  cmake,
+  zlib,
+  fetchFromGitHub,
+  re2,
+  abseil-cpp,
+  protobuf,
+  capstone,
+  gtest,
+  pkg-config,
+  lit,
+  llvmPackages_16,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bloaty";
@@ -39,9 +53,21 @@ stdenv.mkDerivation rec {
     rm -rf tests/wasm
   '';
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ zlib re2 abseil-cpp protobuf capstone gtest lit llvmPackages_16.libllvm ];
+  buildInputs = [
+    zlib
+    re2
+    abseil-cpp
+    protobuf
+    capstone
+    gtest
+    lit
+    llvmPackages_16.libllvm
+  ];
 
   doCheck = true;
 

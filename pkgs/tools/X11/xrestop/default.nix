@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, xorg, pkg-config, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  xorg,
+  pkg-config,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xrestop";
@@ -10,7 +17,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ xorg.libX11 xorg.libXres xorg.libXext ncurses ];
+  buildInputs = [
+    xorg.libX11
+    xorg.libXres
+    xorg.libXext
+    ncurses
+  ];
 
   meta = with lib; {
     description = "A 'top' like tool for monitoring X Client server resource usage";

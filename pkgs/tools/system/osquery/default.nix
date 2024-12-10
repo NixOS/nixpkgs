@@ -1,15 +1,16 @@
-{ lib
-, cmake
-, fetchFromGitHub
-, fetchpatch
-, git
-, llvmPackages
-, nixosTests
-, overrideCC
-, perl
-, python3
-, stdenv
-, openssl_1_1
+{
+  lib,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+  git,
+  llvmPackages,
+  nixosTests,
+  overrideCC,
+  perl,
+  python3,
+  stdenv,
+  openssl_1_1,
 }:
 
 let
@@ -39,11 +40,10 @@ buildStdenv.mkDerivation rec {
     # releases yet. Can likely be removed with versions > 5.10.2.
     (fetchpatch {
       name = "fix-build-on-clang-16.patch";
-      url  = "https://github.com/osquery/osquery/commit/222991a15b4ae0a0fb919e4965603616536e1b0a.patch";
+      url = "https://github.com/osquery/osquery/commit/222991a15b4ae0a0fb919e4965603616536e1b0a.patch";
       hash = "sha256-PdzEoeR1LXVri1Cd+7KMhKmDC8yZhAx3f1+9tjLJKyo=";
     })
   ];
-
 
   buildInputs = [
     llvmPackages.libunwind
@@ -92,6 +92,9 @@ buildStdenv.mkDerivation rec {
     homepage = "https://osquery.io";
     license = licenses.bsd3;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ znewman01 lewo ];
+    maintainers = with maintainers; [
+      znewman01
+      lewo
+    ];
   };
 }

@@ -1,38 +1,40 @@
-{ lib, stdenv, fetchurl
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, fetchFromGitHub
-, gradle
-, jdk17
-, perl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  fetchFromGitHub,
+  gradle,
+  jdk17,
+  perl,
 
-# for arc
-, SDL2
-, pkg-config
-, stb
-, ant
-, alsa-lib
-, alsa-plugins
-, glew
-, glew-egl
+  # for arc
+  SDL2,
+  pkg-config,
+  stb,
+  ant,
+  alsa-lib,
+  alsa-plugins,
+  glew,
+  glew-egl,
 
-# for soloud
-, libpulseaudio ? null
-, libjack2 ? null
+  # for soloud
+  libpulseaudio ? null,
+  libjack2 ? null,
 
-, nixosTests
+  nixosTests,
 
+  # Make the build version easily overridable.
+  # Server and client build versions must match, and an empty build version means
+  # any build is allowed, so this parameter acts as a simple whitelist.
+  # Takes the package version and returns the build version.
+  makeBuildVersion ? (v: v),
+  enableClient ? true,
+  enableServer ? true,
 
-# Make the build version easily overridable.
-# Server and client build versions must match, and an empty build version means
-# any build is allowed, so this parameter acts as a simple whitelist.
-# Takes the package version and returns the build version.
-, makeBuildVersion ? (v: v)
-, enableClient ? true
-, enableServer ? true
-
-, enableWayland ? false
+  enableWayland ? false,
 }:
 
 let
@@ -118,7 +120,10 @@ let
     inherit version unpackPhase patches;
     postPatch = cleanupMindustrySrc;
 
-    nativeBuildInputs = [ gradleWithJdk perl ];
+    nativeBuildInputs = [
+      gradleWithJdk
+      perl
+    ];
     # Here we download dependencies for both the server and the client so
     # we only have to specify one hash for 'deps'. Deps can be garbage
     # collected after the build, so this is not really an issue.
@@ -139,10 +144,16 @@ let
   };
 
 in
-assert lib.assertMsg (enableClient || enableServer)
-  "mindustry: at least one of 'enableClient' and 'enableServer' must be true";
+assert lib.assertMsg (
+  enableClient || enableServer
+) "mindustry: at least one of 'enableClient' and 'enableServer' must be true";
 stdenv.mkDerivation rec {
-  inherit pname version unpackPhase patches;
+  inherit
+    pname
+    version
+    unpackPhase
+    patches
+    ;
 
   postPatch = cleanupMindustrySrc;
 
@@ -151,87 +162,107 @@ stdenv.mkDerivation rec {
     selectedGlew
     alsa-lib
   ];
-  nativeBuildInputs = [
-    pkg-config
-    gradleWithJdk
-    makeWrapper
-    jdk
-  ] ++ lib.optionals enableClient [
-    ant
-    copyDesktopItems
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      gradleWithJdk
+      makeWrapper
+      jdk
+    ]
+    ++ lib.optionals enableClient [
+      ant
+      copyDesktopItems
+    ];
 
   desktopItems = lib.optional enableClient desktopItem;
 
-  buildPhase = with lib; ''
-    export GRADLE_USER_HOME=$(mktemp -d)
+  buildPhase =
+    with lib;
+    ''
+      export GRADLE_USER_HOME=$(mktemp -d)
 
-    # point to offline repo
-    sed -ie "1ipluginManagement { repositories { maven { url '${deps}' } } }; " Mindustry/settings.gradle
-    sed -ie "s#mavenLocal()#mavenLocal(); maven { url '${deps}' }#g" Mindustry/build.gradle
-    sed -ie "s#mavenCentral()#mavenCentral(); maven { url '${deps}' }#g" Arc/build.gradle
-    sed -ie "s#wget.*freetype.* -O #cp ${freetypeSource} #" Arc/extensions/freetype/build.gradle
-    sed -ie "/curl.*glew/{;s#curl -o #cp ${glewSource} #;s# -L http.*\.zip##;}" Arc/backends/backend-sdl/build.gradle
-    sed -ie "/curl.*sdlmingw/{;s#curl -o #cp ${SDLmingwSource} #;s# -L http.*\.tar.gz##;}" Arc/backends/backend-sdl/build.gradle
+      # point to offline repo
+      sed -ie "1ipluginManagement { repositories { maven { url '${deps}' } } }; " Mindustry/settings.gradle
+      sed -ie "s#mavenLocal()#mavenLocal(); maven { url '${deps}' }#g" Mindustry/build.gradle
+      sed -ie "s#mavenCentral()#mavenCentral(); maven { url '${deps}' }#g" Arc/build.gradle
+      sed -ie "s#wget.*freetype.* -O #cp ${freetypeSource} #" Arc/extensions/freetype/build.gradle
+      sed -ie "/curl.*glew/{;s#curl -o #cp ${glewSource} #;s# -L http.*\.zip##;}" Arc/backends/backend-sdl/build.gradle
+      sed -ie "/curl.*sdlmingw/{;s#curl -o #cp ${SDLmingwSource} #;s# -L http.*\.tar.gz##;}" Arc/backends/backend-sdl/build.gradle
 
-    pushd Mindustry
-  '' + optionalString enableClient ''
+      pushd Mindustry
+    ''
+    + optionalString enableClient ''
 
-    pushd ../Arc
-    gradle --offline --no-daemon jnigenBuild -Pbuildversion=${buildVersion}
-    gradle --offline --no-daemon jnigenJarNativesDesktop -Pbuildversion=${buildVersion}
-    glewlib=${lib.getLib selectedGlew}/lib/libGLEW.so
-    sdllib=${lib.getLib SDL2}/lib/libSDL2.so
-    patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
-      --add-needed $glewlib \
-      --add-needed $sdllib
-    # Put the freshly-built libraries where the pre-built libraries used to be:
-    cp arc-core/libs/*/* natives/natives-desktop/libs/
-    cp extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
-    popd
+      pushd ../Arc
+      gradle --offline --no-daemon jnigenBuild -Pbuildversion=${buildVersion}
+      gradle --offline --no-daemon jnigenJarNativesDesktop -Pbuildversion=${buildVersion}
+      glewlib=${lib.getLib selectedGlew}/lib/libGLEW.so
+      sdllib=${lib.getLib SDL2}/lib/libSDL2.so
+      patchelf backends/backend-sdl/libs/linux64/libsdl-arc*.so \
+        --add-needed $glewlib \
+        --add-needed $sdllib
+      # Put the freshly-built libraries where the pre-built libraries used to be:
+      cp arc-core/libs/*/* natives/natives-desktop/libs/
+      cp extensions/freetype/libs/*/* natives/natives-freetype-desktop/libs/
+      popd
 
-    gradle --offline --no-daemon desktop:dist -Pbuildversion=${buildVersion}
-  '' + optionalString enableServer ''
-    gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
-  '';
-
-  installPhase = with lib; let
-    installClient = ''
-      install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
-      mkdir -p $out/bin
-      makeWrapper ${jdk}/bin/java $out/bin/mindustry \
-        --add-flags "-jar $out/share/mindustry.jar" \
-        --suffix LD_LIBRARY_PATH : ${lib.makeLibraryPath [libpulseaudio alsa-lib libjack2]} \
-        --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/'' + optionalString enableWayland '' \
-        --set SDL_VIDEODRIVER wayland \
-        --set SDL_VIDEO_WAYLAND_WMCLASS Mindustry
-      '' + ''
-
-      # Retain runtime depends to prevent them from being cleaned up.
-      # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,
-      # and will assume that it's not actually needed.
-      # This can cause issues.
-      # See https://github.com/NixOS/nixpkgs/issues/109798.
-      echo "# Retained runtime dependencies: " >> $out/bin/mindustry
-      for dep in ${SDL2.out} ${alsa-lib.out} ${selectedGlew.out}; do
-        echo "# $dep" >> $out/bin/mindustry
-      done
-
-      install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
+      gradle --offline --no-daemon desktop:dist -Pbuildversion=${buildVersion}
+    ''
+    + optionalString enableServer ''
+      gradle --offline --no-daemon server:dist -Pbuildversion=${buildVersion}
     '';
-    installServer = ''
-      install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar
-      mkdir -p $out/bin
-      makeWrapper ${jdk}/bin/java $out/bin/mindustry-server \
-        --add-flags "-jar $out/share/mindustry-server.jar"
+
+  installPhase =
+    with lib;
+    let
+      installClient =
+        ''
+          install -Dm644 desktop/build/libs/Mindustry.jar $out/share/mindustry.jar
+          mkdir -p $out/bin
+          makeWrapper ${jdk}/bin/java $out/bin/mindustry \
+            --add-flags "-jar $out/share/mindustry.jar" \
+            --suffix LD_LIBRARY_PATH : ${
+              lib.makeLibraryPath [
+                libpulseaudio
+                alsa-lib
+                libjack2
+              ]
+            } \
+            --set ALSA_PLUGIN_DIR ${alsa-plugins}/lib/alsa-lib/''
+        + optionalString enableWayland ''
+          \
+                 --set SDL_VIDEODRIVER wayland \
+                 --set SDL_VIDEO_WAYLAND_WMCLASS Mindustry
+        ''
+        + ''
+
+          # Retain runtime depends to prevent them from being cleaned up.
+          # Since a jar is a compressed archive, nix can't figure out that the dependency is actually in there,
+          # and will assume that it's not actually needed.
+          # This can cause issues.
+          # See https://github.com/NixOS/nixpkgs/issues/109798.
+          echo "# Retained runtime dependencies: " >> $out/bin/mindustry
+          for dep in ${SDL2.out} ${alsa-lib.out} ${selectedGlew.out}; do
+            echo "# $dep" >> $out/bin/mindustry
+          done
+
+          install -Dm644 core/assets/icons/icon_64.png $out/share/icons/hicolor/64x64/apps/mindustry.png
+        '';
+      installServer = ''
+        install -Dm644 server/build/libs/server-release.jar $out/share/mindustry-server.jar
+        mkdir -p $out/bin
+        makeWrapper ${jdk}/bin/java $out/bin/mindustry-server \
+          --add-flags "-jar $out/share/mindustry-server.jar"
+      '';
+    in
+    ''
+      runHook preInstall
+    ''
+    + optionalString enableClient installClient
+    + optionalString enableServer installServer
+    + ''
+      runHook postInstall
     '';
-  in ''
-    runHook preInstall
-  '' + optionalString enableClient installClient
-     + optionalString enableServer installServer
-     + ''
-    runHook postInstall
-  '';
 
   passthru.tests = {
     nixosTest = nixosTests.mindustry;
@@ -243,10 +274,14 @@ stdenv.mkDerivation rec {
     description = "A sandbox tower defense game";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # deps
+      binaryBytecode # deps
     ];
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ chkno fgaz thekostins ];
+    maintainers = with maintainers; [
+      chkno
+      fgaz
+      thekostins
+    ];
     platforms = if enableClient then platforms.x86_64 else platforms.linux;
     # Hash mismatch on darwin:
     # https://github.com/NixOS/nixpkgs/pull/105590#issuecomment-737120293

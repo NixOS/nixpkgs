@@ -1,5 +1,12 @@
-{ lib, buildDunePackage, github
-, cohttp, cohttp-lwt-unix, stringext, cmdliner, lwt
+{
+  lib,
+  buildDunePackage,
+  github,
+  cohttp,
+  cohttp-lwt-unix,
+  stringext,
+  cmdliner,
+  lwt,
 }:
 
 buildDunePackage {

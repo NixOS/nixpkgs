@@ -1,10 +1,11 @@
-{ stdenv
-, cmake
-, python3
-, writeTextFile
-, protobuf
-, src
-, version
+{
+  stdenv,
+  cmake,
+  python3,
+  writeTextFile,
+  protobuf,
+  src,
+  version,
 }:
 let
   pyproject_toml = writeTextFile {
@@ -38,7 +39,11 @@ stdenv.mkDerivation {
   pname = "nanopb-generator-out";
   inherit src version;
 
-  nativeBuildInputs = [ cmake protobuf python3 ];
+  nativeBuildInputs = [
+    cmake
+    protobuf
+    python3
+  ];
 
   cmakeFlags = [
     "-Dnanopb_BUILD_RUNTIME=OFF"

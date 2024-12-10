@@ -1,12 +1,13 @@
-{ darwin
-, fetchFromGitHub
-, lib
-, perl
-, pkg-config
-, openssl
-, rustPlatform
-, stdenv
-, nix-update-script
+{
+  darwin,
+  fetchFromGitHub,
+  lib,
+  perl,
+  pkg-config,
+  openssl,
+  rustPlatform,
+  stdenv,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,14 +28,16 @@ rustPlatform.buildRustPackage rec {
     perl
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      darwin.apple_sdk.frameworks.CoreFoundation
+      darwin.apple_sdk.frameworks.CoreServices
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -44,6 +47,9 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/Screenly/cli/releases/tag/v${version}";
     license = lib.licenses.mit;
     mainProgram = "screenly";
-    maintainers = with lib.maintainers; [ jnsgruk vpetersson ];
+    maintainers = with lib.maintainers; [
+      jnsgruk
+      vpetersson
+    ];
   };
 }

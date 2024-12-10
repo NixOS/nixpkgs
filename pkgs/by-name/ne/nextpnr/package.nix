@@ -1,54 +1,72 @@
-{ lib, stdenv, fetchFromGitHub, cmake
-, boost, python3, eigen, python3Packages
-, icestorm, trellis
-, llvmPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  python3,
+  eigen,
+  python3Packages,
+  icestorm,
+  trellis,
+  llvmPackages,
 
-, enableGui ? false
-, wrapQtAppsHook ? null
-, qtbase ? null
-, OpenGL ? null
+  enableGui ? false,
+  wrapQtAppsHook ? null,
+  qtbase ? null,
+  OpenGL ? null,
 }:
 
 let
-  boostPython = boost.override { python = python3; enablePython = true; };
+  boostPython = boost.override {
+    python = python3;
+    enablePython = true;
+  };
 
   pname = "nextpnr";
   version = "0.7";
 
   main_src = fetchFromGitHub {
     owner = "YosysHQ";
-    repo  = "nextpnr";
-    rev   = "${pname}-${version}";
-    hash  = "sha256-YIAQcCg9RjvCys1bQ3x+sTgTmnmEeXVbt9Lr6wtg1pA=";
-    name  = "nextpnr";
+    repo = "nextpnr";
+    rev = "${pname}-${version}";
+    hash = "sha256-YIAQcCg9RjvCys1bQ3x+sTgTmnmEeXVbt9Lr6wtg1pA=";
+    name = "nextpnr";
   };
 
   test_src = fetchFromGitHub {
-    owner  = "YosysHQ";
-    repo   = "nextpnr-tests";
-    rev    = "00c55a9eb9ea2e062b51fe0d64741412b185d95d";
+    owner = "YosysHQ";
+    repo = "nextpnr-tests";
+    rev = "00c55a9eb9ea2e062b51fe0d64741412b185d95d";
     sha256 = "sha256-83suMftMtnaRFq3T2/I7Uahb11WZlXhwYt6Q/rqi2Yo=";
-    name   = "nextpnr-tests";
+    name = "nextpnr-tests";
   };
 in
 
 stdenv.mkDerivation rec {
   inherit pname version;
 
-  srcs = [ main_src test_src ];
+  srcs = [
+    main_src
+    test_src
+  ];
 
   sourceRoot = main_src.name;
 
-  nativeBuildInputs
-     = [ cmake ]
-    ++ (lib.optional enableGui wrapQtAppsHook);
-  buildInputs
-     = [ boostPython python3 eigen python3Packages.apycula ]
+  nativeBuildInputs = [ cmake ] ++ (lib.optional enableGui wrapQtAppsHook);
+  buildInputs =
+    [
+      boostPython
+      python3
+      eigen
+      python3Packages.apycula
+    ]
     ++ (lib.optional enableGui qtbase)
     ++ (lib.optional stdenv.cc.isClang llvmPackages.openmp);
 
   cmakeFlags =
-    [ "-DCURRENT_GIT_VERSION=${lib.substring 0 7 (lib.elemAt srcs 0).rev}"
+    [
+      "-DCURRENT_GIT_VERSION=${lib.substring 0 7 (lib.elemAt srcs 0).rev}"
       "-DARCH=generic;ice40;ecp5;gowin"
       "-DBUILD_TESTS=ON"
       "-DICESTORM_INSTALL_PREFIX=${icestorm}"
@@ -60,8 +78,9 @@ stdenv.mkDerivation rec {
       "-DSERIALIZE_CHIPDBS=OFF"
     ]
     ++ (lib.optional enableGui "-DBUILD_GUI=ON")
-    ++ (lib.optional (enableGui && stdenv.isDarwin)
-        "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks");
+    ++ (lib.optional (
+      enableGui && stdenv.isDarwin
+    ) "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks");
 
   patchPhase = with builtins; ''
     # use PyPy for icestorm if enabled
@@ -86,9 +105,12 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Place and route tool for FPGAs";
-    homepage    = "https://github.com/yosyshq/nextpnr";
-    license     = licenses.isc;
-    platforms   = platforms.all;
-    maintainers = with maintainers; [ thoughtpolice emily ];
+    homepage = "https://github.com/yosyshq/nextpnr";
+    license = licenses.isc;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+      thoughtpolice
+      emily
+    ];
   };
 }

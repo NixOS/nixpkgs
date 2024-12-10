@@ -1,4 +1,11 @@
-{ re, reason, cli, file-context-printer, pastel, ... }:
+{
+  re,
+  reason,
+  cli,
+  file-context-printer,
+  pastel,
+  ...
+}:
 
 {
   pname = "rely";

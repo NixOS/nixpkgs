@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchurl, skawarePackages }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  skawarePackages,
+}:
 
 let
   pname = "fdtools";
@@ -7,7 +12,8 @@ let
   sha256 = "0lnafcp4yipi0dl8gh33zjs8wlpz0mim8mwmiz9s49id0b0fmlla";
   skalibs = skawarePackages.skalibs_2_10;
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
@@ -16,7 +22,13 @@ in stdenv.mkDerivation {
   };
 
   patches = [ ./new-skalibs.patch ];
-  outputs = [ "bin" "lib" "dev" "doc" "out" ];
+  outputs = [
+    "bin"
+    "lib"
+    "dev"
+    "doc"
+    "out"
+  ];
 
   buildInputs = [
     # temporary, until fdtools catches up to skalibs
@@ -56,20 +68,22 @@ in stdenv.mkDerivation {
     mv library/fdtools.a $lib/lib/fdtools.a
     mv include/fdtools.h $dev/include/fdtools.h
 
-    ${skawarePackages.cleanPackaging.commonFileActions {
-       noiseFiles = [
-         "conf-compile/**/*"
-         "src/**/*"
-         "src/.**/*"
-         "compile/**/*"
-         "package/{build,check,compile,elsewhere,install,install_commands,own,run,sharing,upgrade,upgrade_version,url_src,url_src_latest,versions}"
-       ];
-       docFiles = [
-         "package/INSTALL"
-         "package/LICENSE"
-         "package/README"
-       ];
-    }} $docdir
+    ${
+      skawarePackages.cleanPackaging.commonFileActions {
+        noiseFiles = [
+          "conf-compile/**/*"
+          "src/**/*"
+          "src/.**/*"
+          "compile/**/*"
+          "package/{build,check,compile,elsewhere,install,install_commands,own,run,sharing,upgrade,upgrade_version,url_src,url_src_latest,versions}"
+        ];
+        docFiles = [
+          "package/INSTALL"
+          "package/LICENSE"
+          "package/README"
+        ];
+      }
+    } $docdir
 
     ${skawarePackages.cleanPackaging.checkForRemainingFiles}
 

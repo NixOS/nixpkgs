@@ -1,12 +1,13 @@
-{ lib
-, buildDunePackage
-, cstruct
-, fetchurl
-, mdx
-, poll
-, ptime
-, telemetry
-, uri
+{
+  lib,
+  buildDunePackage,
+  cstruct,
+  fetchurl,
+  mdx,
+  poll,
+  ptime,
+  telemetry,
+  uri,
 }:
 
 buildDunePackage rec {

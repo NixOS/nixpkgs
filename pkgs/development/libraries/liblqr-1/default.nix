@@ -1,10 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, glib, Carbon, AppKit }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  glib,
+  Carbon,
+  AppKit,
+}:
 
 stdenv.mkDerivation rec {
   pname = "liblqr-1";
   version = "0.4.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "carlobaldassi";
@@ -14,13 +25,19 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optionals stdenv.isDarwin [ Carbon AppKit ];
+  buildInputs = lib.optionals stdenv.isDarwin [
+    Carbon
+    AppKit
+  ];
   propagatedBuildInputs = [ glib ];
 
   meta = with lib; {
     homepage = "http://liblqr.wikidot.com";
     description = "Seam-carving C/C++ library called Liquid Rescaling";
     platforms = platforms.all;
-    license = with licenses; [ gpl3 lgpl3 ];
+    license = with licenses; [
+      gpl3
+      lgpl3
+    ];
   };
 }

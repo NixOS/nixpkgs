@@ -1,9 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config
-, libdeflate, libpng, libtiff, zlib, lcms2, jpylyzer
-, jpipLibSupport ? false # JPIP library & executables
-, jpipServerSupport ? false, curl, fcgi # JPIP Server
-, jdk
-, poppler
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libdeflate,
+  libpng,
+  libtiff,
+  zlib,
+  lcms2,
+  jpylyzer,
+  jpipLibSupport ? false, # JPIP library & executables
+  jpipServerSupport ? false,
+  curl,
+  fcgi, # JPIP Server
+  jdk,
+  poppler,
 }:
 
 let
@@ -21,7 +33,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-mQ9B3MJY2/bg0yY/7jUJrAXM6ozAHT5fmwES5Q1SGxw=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_NAME_DIR=\${CMAKE_INSTALL_PREFIX}/lib"
@@ -35,10 +50,22 @@ stdenv.mkDerivation rec {
     (mkFlag doCheck "BUILD_TESTING")
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ libpng libtiff zlib lcms2 ]
-    ++ lib.optionals jpipServerSupport [ curl fcgi ]
+  buildInputs =
+    [
+      libpng
+      libtiff
+      zlib
+      lcms2
+    ]
+    ++ lib.optionals jpipServerSupport [
+      curl
+      fcgi
+    ]
     ++ lib.optional (jpipLibSupport) jdk;
 
   doCheck = (!stdenv.isAarch64 && !stdenv.hostPlatform.isPower64); # tests fail on aarch64-linux and powerpc64

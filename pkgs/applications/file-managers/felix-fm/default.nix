@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, bzip2
-, libgit2
-, zlib
-, zstd
-, zoxide
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  bzip2,
+  libgit2,
+  zlib,
+  zstd,
+  zoxide,
 }:
 
 rustPlatform.buildRustPackage rec {

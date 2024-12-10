@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libX11
-, fontconfig
-, libXft
-, libXrender
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  fontconfig,
+  libXft,
+  libXrender,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,9 +19,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YohHF1O0lm6QWJv/wkS4RVJvWaOjcYSZNls6tt4hbqo==";
   };
 
-  buildInputs = [ libX11 fontconfig libXft libXrender ];
+  buildInputs = [
+    libX11
+    fontconfig
+    libXft
+    libXrender
+  ];
 
-  makeFlags = [ "CC:=$(CC)" "PREFIX=$(out)" ];
+  makeFlags = [
+    "CC:=$(CC)"
+    "PREFIX=$(out)"
+  ];
 
   meta = with lib; {
     description = "A simple text widget for X resembling the watch(1) command";

@@ -1,9 +1,10 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, pkg-config
-, python3
-, vips
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  pkg-config,
+  python3,
+  vips,
 }:
 
 buildNpmPackage rec {

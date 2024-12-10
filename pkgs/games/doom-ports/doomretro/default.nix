@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, Cocoa
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  Cocoa,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,13 +26,15 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    SDL2
-    SDL2_image
-    SDL2_mixer
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa
-  ];
+  buildInputs =
+    [
+      SDL2
+      SDL2_image
+      SDL2_mixer
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Cocoa
+    ];
 
   meta = {
     homepage = "https://www.doomretro.com/";

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,7 +27,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Backup a folder to AWS S3, once or periodically";
     homepage = "https://github.com/beeb/awsbck";
-    license = with licenses; [ mit asl20 ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
     maintainers = with maintainers; [ beeb ];
     mainProgram = "awsbck";
   };

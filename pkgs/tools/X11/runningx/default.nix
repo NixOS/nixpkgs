@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, pkg-config, libX11 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libX11,
+}:
 
 stdenv.mkDerivation {
   pname = "runningx";

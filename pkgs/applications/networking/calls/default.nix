@@ -1,35 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, libhandy
-, libsecret
-, modemmanager
-, gtk3
-, gom
-, gsound
-, feedbackd
-, callaudiod
-, evolution-data-server
-, glib
-, folks
-, desktop-file-utils
-, appstream-glib
-, libpeas
-, libgdata
-, dbus
-, vala
-, wrapGAppsHook3
-, xvfb-run
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, docutils
-, gobject-introspection
-, gst_all_1
-, sofia_sip
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  libhandy,
+  libsecret,
+  modemmanager,
+  gtk3,
+  gom,
+  gsound,
+  feedbackd,
+  callaudiod,
+  evolution-data-server,
+  glib,
+  folks,
+  desktop-file-utils,
+  appstream-glib,
+  libpeas,
+  libgdata,
+  dbus,
+  vala,
+  wrapGAppsHook3,
+  xvfb-run,
+  gtk-doc,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  docutils,
+  gobject-introspection,
+  gst_all_1,
+  sofia_sip,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,7 +46,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-ZUVMK0Ex77EQKTGM0gBDHt8W9l4rHspihYduMcwMGho=";
   };
 
-  outputs = [ "out" "devdoc" ];
+  outputs = [
+    "out"
+    "devdoc"
+  ];
 
   nativeBuildInputs = [
     meson
@@ -110,7 +114,11 @@ stdenv.mkDerivation rec {
     longDescription = "GNOME Calls is a phone dialer and call handler. Setting NixOS option `programs.calls.enable = true` is recommended.";
     homepage = "https://gitlab.gnome.org/GNOME/calls";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ craigem lheckemann tomfitzhenry ];
+    maintainers = with maintainers; [
+      craigem
+      lheckemann
+      tomfitzhenry
+    ];
     platforms = platforms.linux;
     mainProgram = "gnome-calls";
   };

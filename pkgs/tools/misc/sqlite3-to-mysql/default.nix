@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, nixosTests
-, testers
-, sqlite3-to-mysql
-, mysql80
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  nixosTests,
+  testers,
+  sqlite3-to-mysql,
+  mysql80,
 }:
 
 python3Packages.buildPythonApplication rec {

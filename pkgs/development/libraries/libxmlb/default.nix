@@ -1,26 +1,33 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, docbook_xml_dtd_43
-, docbook-xsl-nons
-, glib
-, gobject-introspection
-, gtk-doc
-, meson
-, ninja
-, pkg-config
-, python3
-, shared-mime-info
-, nixosTests
-, xz
-, zstd
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  docbook_xml_dtd_43,
+  docbook-xsl-nons,
+  glib,
+  gobject-introspection,
+  gtk-doc,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  shared-mime-info,
+  nixosTests,
+  xz,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libxmlb";
   version = "0.3.19";
 
-  outputs = [ "out" "lib" "dev" "devdoc" "installedTests" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "devdoc"
+    "installedTests"
+  ];
 
   src = fetchFromGitHub {
     owner = "hughsie";

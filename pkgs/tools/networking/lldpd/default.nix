@@ -1,5 +1,13 @@
-{ stdenv, lib, fetchurl, pkg-config, removeReferencesTo
-, libevent, readline, net-snmp, openssl
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  removeReferencesTo,
+  libevent,
+  readline,
+  net-snmp,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,12 +26,25 @@ stdenv.mkDerivation rec {
     "--with-systemdsystemunitdir=\${out}/lib/systemd/system"
   ];
 
-  nativeBuildInputs = [ pkg-config removeReferencesTo ];
-  buildInputs = [ libevent readline net-snmp openssl ];
+  nativeBuildInputs = [
+    pkg-config
+    removeReferencesTo
+  ];
+  buildInputs = [
+    libevent
+    readline
+    net-snmp
+    openssl
+  ];
 
   enableParallelBuilding = true;
 
-  outputs = [ "out" "dev" "man" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+    "doc"
+  ];
 
   preFixup = ''
     find $out -type f -exec remove-references-to -t ${stdenv.cc} '{}' +

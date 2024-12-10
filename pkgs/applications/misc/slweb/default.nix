@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, redo-apenwarr
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  redo-apenwarr,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

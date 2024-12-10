@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, perl
-, rustPlatform
-, darwin
-, stdenv
+{
+  lib,
+  fetchFromGitHub,
+  perl,
+  rustPlatform,
+  darwin,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -50,6 +51,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rover";
     homepage = "https://www.apollographql.com/docs/rover";
     license = licenses.mit;
-    maintainers = [ maintainers.ivanbrennan maintainers.aaronarinder ];
+    maintainers = [
+      maintainers.ivanbrennan
+      maintainers.aaronarinder
+    ];
   };
 }

@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, fbthrift
-, fizz
-, folly
-, glog
-, libsodium
-, mvfst
-, python3
-, wangle
-, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  fbthrift,
+  fizz,
+  folly,
+  glog,
+  libsodium,
+  mvfst,
+  python3,
+  wangle,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,11 +26,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  cmakeFlags = [
-    "-DPYTHON_EXTENSIONS=OFF"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
-  ];
+  cmakeFlags =
+    [
+      "-DPYTHON_EXTENSIONS=OFF"
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      "-DCMAKE_OSX_DEPLOYMENT_TARGET=10.14" # For aligned allocation
+    ];
 
   buildInputs = [
     fbthrift

@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, buildHomeAssistantComponent
-, moonraker-api
+{
+  lib,
+  fetchFromGitHub,
+  buildHomeAssistantComponent,
+  moonraker-api,
 }:
 
 buildHomeAssistantComponent rec {

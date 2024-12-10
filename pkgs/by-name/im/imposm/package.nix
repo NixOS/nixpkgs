@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, leveldb, geos }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  leveldb,
+  geos,
+}:
 
 buildGoModule rec {
   pname = "imposm";
@@ -13,7 +19,10 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  buildInputs = [ leveldb geos ];
+  buildInputs = [
+    leveldb
+    geos
+  ];
 
   ldflags = [
     "-s -w"

@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, gitUpdater
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  gitUpdater,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "nerdfetch";
@@ -26,7 +27,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     rev-prefix = "v";
   };
 
-  meta = with lib;{
+  meta = with lib; {
     description = "A POSIX *nix (Linux, macOS, Android, *BSD, etc) fetch script using Nerdfonts";
     homepage = "https://github.com/ThatOneCalculator/NerdFetch";
     maintainers = with maintainers; [ ByteSudoer ];

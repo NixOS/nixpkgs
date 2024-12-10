@@ -1,4 +1,14 @@
-{ lib, buildGoModule, fetchFromGitHub, less, more, installShellFiles, testers, jira-cli-go, nix-update-script }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  less,
+  more,
+  installShellFiles,
+  testers,
+  jira-cli-go,
+  nix-update-script,
+}:
 
 buildGoModule rec {
   pname = "jira-cli-go";
@@ -14,7 +24,8 @@ buildGoModule rec {
   vendorHash = "sha256-DAdzbANqr0fa4uO8k/yJFoirgbZiKOQhOH8u8d+ncao=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/ankitpokhrel/jira-cli/internal/version.GitCommit=${src.rev}"
     "-X github.com/ankitpokhrel/jira-cli/internal/version.SourceDateEpoch=0"
     "-X github.com/ankitpokhrel/jira-cli/internal/version.Version=${version}"
@@ -22,7 +33,10 @@ buildGoModule rec {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeCheckInputs = [ less more ]; # Tests expect a pager in $PATH
+  nativeCheckInputs = [
+    less
+    more
+  ]; # Tests expect a pager in $PATH
 
   passthru = {
     tests.version = testers.testVersion {
@@ -48,7 +62,10 @@ buildGoModule rec {
     homepage = "https://github.com/ankitpokhrel/jira-cli";
     changelog = "https://github.com/ankitpokhrel/jira-cli/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ bryanasdev000 anthonyroussel ];
+    maintainers = with maintainers; [
+      bryanasdev000
+      anthonyroussel
+    ];
     mainProgram = "jira";
   };
 }

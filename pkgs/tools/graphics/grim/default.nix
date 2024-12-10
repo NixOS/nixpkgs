@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, pixman
-, libpng
-, libjpeg
-, meson
-, ninja
-, pkg-config
-, scdoc
-, wayland
-, wayland-protocols
-, wayland-scanner
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  pixman,
+  libpng,
+  libjpeg,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,7 +50,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/emersion/grim";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ buffet eclairevoyant ];
+    maintainers = with maintainers; [
+      buffet
+      eclairevoyant
+    ];
     mainProgram = "grim";
   };
 }

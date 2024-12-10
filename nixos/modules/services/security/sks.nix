@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -9,8 +14,13 @@ let
     ${cfg.extraDbConfig}
   '';
 
-in {
-  meta.maintainers = with maintainers; [ primeos calbrecht jcumming ];
+in
+{
+  meta.maintainers = with maintainers; [
+    primeos
+    calbrecht
+    jcumming
+  ];
 
   options = {
 
@@ -52,7 +62,10 @@ in {
       };
 
       hkpAddress = mkOption {
-        default = [ "127.0.0.1" "::1" ];
+        default = [
+          "127.0.0.1"
+          "::1"
+        ];
         type = types.listOf types.str;
         description = ''
           Domain names, IPv4 and/or IPv6 addresses to listen on for HKP
@@ -94,48 +107,52 @@ in {
         createHome = true;
         group = "sks";
         useDefaultShell = true;
-        packages = [ sksPkg pkgs.db ];
+        packages = [
+          sksPkg
+          pkgs.db
+        ];
       };
       groups.sks = { };
     };
 
-    systemd.services = let
-      hkpAddress = "'" + (builtins.concatStringsSep " " cfg.hkpAddress) + "'" ;
-      hkpPort = builtins.toString cfg.hkpPort;
-    in {
-      sks-db = {
-        description = "SKS database server";
-        after = [ "network.target" ];
-        wantedBy = [ "multi-user.target" ];
-        preStart = ''
-          ${lib.optionalString (cfg.webroot != null)
-            "ln -sfT \"${cfg.webroot}\" web"}
-          mkdir -p dump
-          ${sksPkg}/bin/sks build dump/*.gpg -n 10 -cache 100 || true #*/
-          ${sksPkg}/bin/sks cleandb || true
-          ${sksPkg}/bin/sks pbuild -cache 20 -ptree_cache 70 || true
-          # Check that both database configs are symlinks before overwriting them
-          # TODO: The initial build will be without DB_CONFIG, but this will
-          # hopefully not cause any significant problems. It might be better to
-          # create both directories manually but we have to check that this does
-          # not affect the initial build of the DB.
-          for CONFIG_FILE in KDB/DB_CONFIG PTree/DB_CONFIG; do
-            if [ -e $CONFIG_FILE ] && [ ! -L $CONFIG_FILE ]; then
-              echo "$CONFIG_FILE exists but is not a symlink." >&2
-              echo "Please remove $PWD/$CONFIG_FILE manually to continue." >&2
-              exit 1
-            fi
-            ln -sf ${dbConfig} $CONFIG_FILE
-          done
-        '';
-        serviceConfig = {
-          WorkingDirectory = "~";
-          User = "sks";
-          Group = "sks";
-          Restart = "always";
-          ExecStart = "${sksPkg}/bin/sks db -hkp_address ${hkpAddress} -hkp_port ${hkpPort}";
+    systemd.services =
+      let
+        hkpAddress = "'" + (builtins.concatStringsSep " " cfg.hkpAddress) + "'";
+        hkpPort = builtins.toString cfg.hkpPort;
+      in
+      {
+        sks-db = {
+          description = "SKS database server";
+          after = [ "network.target" ];
+          wantedBy = [ "multi-user.target" ];
+          preStart = ''
+            ${lib.optionalString (cfg.webroot != null) "ln -sfT \"${cfg.webroot}\" web"}
+            mkdir -p dump
+            ${sksPkg}/bin/sks build dump/*.gpg -n 10 -cache 100 || true #*/
+            ${sksPkg}/bin/sks cleandb || true
+            ${sksPkg}/bin/sks pbuild -cache 20 -ptree_cache 70 || true
+            # Check that both database configs are symlinks before overwriting them
+            # TODO: The initial build will be without DB_CONFIG, but this will
+            # hopefully not cause any significant problems. It might be better to
+            # create both directories manually but we have to check that this does
+            # not affect the initial build of the DB.
+            for CONFIG_FILE in KDB/DB_CONFIG PTree/DB_CONFIG; do
+              if [ -e $CONFIG_FILE ] && [ ! -L $CONFIG_FILE ]; then
+                echo "$CONFIG_FILE exists but is not a symlink." >&2
+                echo "Please remove $PWD/$CONFIG_FILE manually to continue." >&2
+                exit 1
+              fi
+              ln -sf ${dbConfig} $CONFIG_FILE
+            done
+          '';
+          serviceConfig = {
+            WorkingDirectory = "~";
+            User = "sks";
+            Group = "sks";
+            Restart = "always";
+            ExecStart = "${sksPkg}/bin/sks db -hkp_address ${hkpAddress} -hkp_port ${hkpPort}";
+          };
         };
       };
-    };
   };
 }

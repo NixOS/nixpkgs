@@ -41,12 +41,15 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    funcy
-    pytestCheckHook
-    pytest-mock
-    pytest-test-utils
-  ] ++ passthru.optional-dependencies.table ++ passthru.optional-dependencies.markdown;
+  nativeCheckInputs =
+    [
+      funcy
+      pytestCheckHook
+      pytest-mock
+      pytest-test-utils
+    ]
+    ++ passthru.optional-dependencies.table
+    ++ passthru.optional-dependencies.markdown;
 
   disabledTestPaths = lib.optionals stdenv.isDarwin [ "tests/test_vega.py" ];
 

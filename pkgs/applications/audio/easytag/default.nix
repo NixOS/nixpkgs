@@ -1,12 +1,30 @@
-{ lib, stdenv, fetchurl, pkg-config, intltool, gtk3, glib, libid3tag, id3lib, taglib
-, libvorbis, libogg, opusfile, flac, itstool, libxml2, gsettings-desktop-schemas
-, gnome, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  intltool,
+  gtk3,
+  glib,
+  libid3tag,
+  id3lib,
+  taglib,
+  libvorbis,
+  libogg,
+  opusfile,
+  flac,
+  itstool,
+  libxml2,
+  gsettings-desktop-schemas,
+  gnome,
+  wrapGAppsHook3,
 }:
 
 let
   pname = "easytag";
   version = "2.4.3";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -16,10 +34,25 @@ in stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = "-lid3tag -lz";
 
-  nativeBuildInputs = [ pkg-config intltool itstool libxml2 wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+    itstool
+    libxml2
+    wrapGAppsHook3
+  ];
   buildInputs = [
-    gtk3 glib libid3tag id3lib taglib libvorbis libogg opusfile flac
-    gsettings-desktop-schemas gnome.adwaita-icon-theme
+    gtk3
+    glib
+    libid3tag
+    id3lib
+    taglib
+    libvorbis
+    libogg
+    opusfile
+    flac
+    gsettings-desktop-schemas
+    gnome.adwaita-icon-theme
   ];
 
   doCheck = false; # fails 1 out of 9 tests

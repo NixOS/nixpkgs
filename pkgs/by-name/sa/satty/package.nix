@@ -1,16 +1,17 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook4
-, gdk-pixbuf
-, glib
-, gtk4
-, libadwaita
-, libepoxy
-, libGL
-, copyDesktopItems
-, installShellFiles
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook4,
+  gdk-pixbuf,
+  glib,
+  gtk4,
+  libadwaita,
+  libepoxy,
+  libGL,
+  copyDesktopItems,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -58,7 +59,10 @@ rustPlatform.buildRustPackage rec {
     description = "A screenshot annotation tool inspired by Swappy and Flameshot";
     homepage = "https://github.com/gabm/Satty";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ pinpox donovanglover ];
+    maintainers = with maintainers; [
+      pinpox
+      donovanglover
+    ];
     mainProgram = "satty";
     platforms = lib.platforms.linux;
   };

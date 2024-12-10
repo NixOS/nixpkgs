@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, pam, openssl, libkrb5 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  pam,
+  openssl,
+  libkrb5,
+}:
 
 stdenv.mkDerivation rec {
   pname = "uw-imap";
@@ -12,17 +20,14 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
     "RANLIB=${stdenv.cc.targetPrefix}ranlib"
-    (if stdenv.isDarwin
-    then "osx"
-    else "lnp") # Linux with PAM modules;
+    (if stdenv.isDarwin then "osx" else "lnp") # Linux with PAM modules;
   ] ++ lib.optional stdenv.isx86_64 "EXTRACFLAGS=-fPIC"; # -fPIC is required to compile php with imap on x86_64 systems
-
 
   hardeningDisable = [ "format" ];
 
   buildInputs = [
     openssl
-    (if stdenv.isDarwin then libkrb5 else pam)  # Matches the make target.
+    (if stdenv.isDarwin then libkrb5 else pam) # Matches the make target.
   ];
 
   patches = [
@@ -45,8 +50,7 @@ stdenv.mkDerivation rec {
     makeFlagsArray+=("ARRC=${stdenv.cc.targetPrefix}ar rc")
   '';
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin
-    "-I${openssl.dev}/include/openssl";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${openssl.dev}/include/openssl";
 
   installPhase = ''
     mkdir -p $out/bin $out/lib $out/include/c-client

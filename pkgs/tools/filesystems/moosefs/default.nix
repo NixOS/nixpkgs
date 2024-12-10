@@ -1,10 +1,12 @@
-{ lib, stdenv
-, fetchFromGitHub
-, python3
-, fuse
-, pkg-config
-, libpcap
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  fuse,
+  pkg-config,
+  libpcap,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,8 +24,12 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [ fuse libpcap zlib python3 ];
+  buildInputs = [
+    fuse
+    libpcap
+    zlib
+    python3
+  ];
 
   strictDeps = true;
 

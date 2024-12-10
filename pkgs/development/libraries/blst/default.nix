@@ -1,6 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 
-stdenv.mkDerivation ( finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "blst";
   version = "0.3.11";
 
@@ -71,7 +76,10 @@ stdenv.mkDerivation ( finalAttrs: {
     description = "Multilingual BLS12-381 signature library";
     homepage = "https://github.com/supranational/blst";
     license = licenses.isc;
-    maintainers = with maintainers; [ iquerejeta yvan-sraka ];
+    maintainers = with maintainers; [
+      iquerejeta
+      yvan-sraka
+    ];
     platforms = platforms.all;
   };
 })

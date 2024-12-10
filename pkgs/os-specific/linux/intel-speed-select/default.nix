@@ -1,4 +1,8 @@
-{ lib, stdenv, kernel }:
+{
+  lib,
+  stdenv,
+  kernel,
+}:
 
 stdenv.mkDerivation {
   pname = "intel-speed-select";
@@ -16,7 +20,10 @@ stdenv.mkDerivation {
     mainProgram = "intel-speed-select";
     homepage = "https://www.kernel.org/";
     license = licenses.gpl2;
-    platforms = [ "i686-linux" "x86_64-linux" ]; # x86-specific
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ]; # x86-specific
     broken = kernel.kernelAtLeast "5.18";
   };
 }

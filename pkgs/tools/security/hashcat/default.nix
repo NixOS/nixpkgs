@@ -1,18 +1,24 @@
-{ lib, stdenv
-, addOpenGLRunpath
-, config
-, cudaPackages ? {}
-, cudaSupport ? config.cudaSupport
-, fetchurl
-, makeWrapper
-, opencl-headers
-, ocl-icd
-, xxHash
-, Foundation, IOKit, Metal, OpenCL, libiconv
+{
+  lib,
+  stdenv,
+  addOpenGLRunpath,
+  config,
+  cudaPackages ? { },
+  cudaSupport ? config.cudaSupport,
+  fetchurl,
+  makeWrapper,
+  opencl-headers,
+  ocl-icd,
+  xxHash,
+  Foundation,
+  IOKit,
+  Metal,
+  OpenCL,
+  libiconv,
 }:
 
 stdenv.mkDerivation rec {
-  pname   = "hashcat";
+  pname = "hashcat";
   version = "6.2.6";
 
   src = fetchurl {
@@ -30,24 +36,38 @@ stdenv.mkDerivation rec {
       --replace '-i ""' '-i'
   '';
 
-  nativeBuildInputs = [
-    makeWrapper
-  ] ++ lib.optionals cudaSupport [
-    addOpenGLRunpath
-  ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+    ]
+    ++ lib.optionals cudaSupport [
+      addOpenGLRunpath
+    ];
 
-  buildInputs = [ opencl-headers xxHash ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation IOKit Metal OpenCL libiconv ];
+  buildInputs =
+    [
+      opencl-headers
+      xxHash
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Foundation
+      IOKit
+      Metal
+      OpenCL
+      libiconv
+    ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "COMPTIME=1337"
-    "VERSION_TAG=${version}"
-    "USE_SYSTEM_OPENCL=1"
-    "USE_SYSTEM_XXHASH=1"
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform) [
-    "IS_APPLE_SILICON='${if stdenv.hostPlatform.isAarch64 then "1" else "0"}'"
-  ];
+  makeFlags =
+    [
+      "PREFIX=${placeholder "out"}"
+      "COMPTIME=1337"
+      "VERSION_TAG=${version}"
+      "USE_SYSTEM_OPENCL=1"
+      "USE_SYSTEM_XXHASH=1"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform == stdenv.buildPlatform) [
+      "IS_APPLE_SILICON='${if stdenv.hostPlatform.isAarch64 then "1" else "0"}'"
+    ];
 
   enableParallelBuilding = true;
 
@@ -59,28 +79,38 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  postFixup = let
-    LD_LIBRARY_PATH = builtins.concatStringsSep ":" ([
-      "${ocl-icd}/lib"
-    ] ++ lib.optionals cudaSupport [
-      "${cudaPackages.cudatoolkit}/lib"
-    ]);
-  in ''
-    wrapProgram $out/bin/hashcat \
-      --prefix LD_LIBRARY_PATH : ${lib.escapeShellArg LD_LIBRARY_PATH}
-  '' + lib.optionalString cudaSupport ''
-    for program in $out/bin/hashcat $out/bin/.hashcat-wrapped; do
-      isELF "$program" || continue
-      addOpenGLRunpath "$program"
-    done
-  '';
+  postFixup =
+    let
+      LD_LIBRARY_PATH = builtins.concatStringsSep ":" (
+        [
+          "${ocl-icd}/lib"
+        ]
+        ++ lib.optionals cudaSupport [
+          "${cudaPackages.cudatoolkit}/lib"
+        ]
+      );
+    in
+    ''
+      wrapProgram $out/bin/hashcat \
+        --prefix LD_LIBRARY_PATH : ${lib.escapeShellArg LD_LIBRARY_PATH}
+    ''
+    + lib.optionalString cudaSupport ''
+      for program in $out/bin/hashcat $out/bin/.hashcat-wrapped; do
+        isELF "$program" || continue
+        addOpenGLRunpath "$program"
+      done
+    '';
 
   meta = with lib; {
     description = "Fast password cracker";
     mainProgram = "hashcat";
-    homepage    = "https://hashcat.net/hashcat/";
-    license     = licenses.mit;
-    platforms   = platforms.unix;
-    maintainers = with maintainers; [ felixalbrigtsen kierdavis zimbatm ];
+    homepage = "https://hashcat.net/hashcat/";
+    license = licenses.mit;
+    platforms = platforms.unix;
+    maintainers = with maintainers; [
+      felixalbrigtsen
+      kierdavis
+      zimbatm
+    ];
   };
 }

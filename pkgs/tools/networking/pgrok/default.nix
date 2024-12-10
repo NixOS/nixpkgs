@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, callPackage
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  callPackage,
+  fetchFromGitHub,
 }:
 buildGoModule rec {
   pname = "pgrok";
@@ -16,7 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-X5FjzliIJdfJnNaUXBjv1uq5tyjMVjBbnLCBH/P0LFM=";
 
-  outputs = [ "out" "server" ];
+  outputs = [
+    "out"
+    "server"
+  ];
 
   web = callPackage ./web.nix { inherit src version; };
 

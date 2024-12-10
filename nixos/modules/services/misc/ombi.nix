@@ -1,10 +1,17 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 with lib;
 
-let cfg = config.services.ombi;
+let
+  cfg = config.services.ombi;
 
-in {
+in
+{
   options = {
     services.ombi = {
       enable = mkEnableOption ''

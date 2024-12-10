@@ -1,28 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, doxygen
-, gettext
-, graphviz
-, libxslt
-, removeReferencesTo
-, libiconv
-, brotli
-, expat
-, inih
-, zlib
-, libxml2
-, python3
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  doxygen,
+  gettext,
+  graphviz,
+  libxslt,
+  removeReferencesTo,
+  libiconv,
+  brotli,
+  expat,
+  inih,
+  zlib,
+  libxml2,
+  python3,
+  which,
 }:
 
 stdenv.mkDerivation rec {
   pname = "exiv2";
   version = "0.28.3";
 
-  outputs = [ "out" "lib" "dev" "doc" "man" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "doc"
+    "man"
+  ];
 
   src = fetchFromGitHub {
     owner = "exiv2";
@@ -70,21 +77,24 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  preCheck = ''
-    patchShebangs ../test/
-    mkdir ../test/tmp
-  '' + lib.optionalString stdenv.hostPlatform.isAarch32 ''
-    # Fix tests on arm
-    # https://github.com/Exiv2/exiv2/issues/933
-    rm -f ../tests/bugfixes/github/test_CVE_2018_12265.py
-  '' + lib.optionalString stdenv.isDarwin ''
-    export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/lib
-    export LC_ALL=C
+  preCheck =
+    ''
+      patchShebangs ../test/
+      mkdir ../test/tmp
+    ''
+    + lib.optionalString stdenv.hostPlatform.isAarch32 ''
+      # Fix tests on arm
+      # https://github.com/Exiv2/exiv2/issues/933
+      rm -f ../tests/bugfixes/github/test_CVE_2018_12265.py
+    ''
+    + lib.optionalString stdenv.isDarwin ''
+      export DYLD_LIBRARY_PATH=$DYLD_LIBRARY_PATH''${DYLD_LIBRARY_PATH:+:}$PWD/lib
+      export LC_ALL=C
 
-    # disable tests that requires loopback networking
-    substituteInPlace  ../tests/bash_tests/testcases.py \
-      --replace "def io_test(self):" "def io_disabled(self):"
-  '';
+      # disable tests that requires loopback networking
+      substituteInPlace  ../tests/bash_tests/testcases.py \
+        --replace "def io_test(self):" "def io_disabled(self):"
+    '';
 
   preFixup = ''
     remove-references-to -t ${stdenv.cc.cc} $lib/lib/*.so.*.*.* $out/bin/exiv2

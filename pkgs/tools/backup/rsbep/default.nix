@@ -1,4 +1,10 @@
-{ lib, stdenv, coreutils, gawk, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  coreutils,
+  gawk,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rsbep";
@@ -20,7 +26,12 @@ stdenv.mkDerivation rec {
     mv rsbep_chopper $libexecDir
 
     # Fix store dependencies in scripts
-    path="export PATH=$out/bin:$libexecDir:${lib.makeBinPath [ coreutils gawk ]}"
+    path="export PATH=$out/bin:$libexecDir:${
+      lib.makeBinPath [
+        coreutils
+        gawk
+      ]
+    }"
     sed -i "2i$path" freeze.sh
     sed -i "2i$path" melt.sh
 

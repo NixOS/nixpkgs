@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, sassc
-, gtk3
-, inkscape
-, optipng
-, gtk-engine-murrine
-, gdk-pixbuf
-, librsvg
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  sassc,
+  gtk3,
+  inkscape,
+  optipng,
+  gtk-engine-murrine,
+  gdk-pixbuf,
+  librsvg,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -58,7 +59,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "System76 Pop GTK+ Theme";
     homepage = "https://github.com/pop-os/gtk-theme";
-    license = with licenses; [ gpl3 lgpl21 cc-by-sa-40 ];
+    license = with licenses; [
+      gpl3
+      lgpl21
+      cc-by-sa-40
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
   };

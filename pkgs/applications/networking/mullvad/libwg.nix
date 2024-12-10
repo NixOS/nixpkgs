@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, mullvad
+{
+  lib,
+  buildGoModule,
+  mullvad,
 }:
 buildGoModule {
   pname = "libwg";
@@ -19,10 +20,14 @@ buildGoModule {
   # (this doesn't get communicated everywhere in the chain, apparently, so
   # `go` complains that it can't find an `a.out` file).
   GOBIN = "${placeholder "out"}/lib";
-  ldflags = [ "-s" "-w" "-buildmode=c-archive" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-buildmode=c-archive"
+  ];
 
   patches = [
- ];
+  ];
 
   postInstall = ''
     mv $out/lib/libwg{,.a}

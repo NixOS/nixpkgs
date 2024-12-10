@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, rustPlatform
-, CoreServices
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  rustPlatform,
+  CoreServices,
+  which,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,11 +1,25 @@
-{stdenvNoCC, subversion, sshSupport ? true, openssh ? null, expect}:
-{username, password, url, rev ? "HEAD", sha256 ? ""}:
-
+{
+  stdenvNoCC,
+  subversion,
+  sshSupport ? true,
+  openssh ? null,
+  expect,
+}:
+{
+  username,
+  password,
+  url,
+  rev ? "HEAD",
+  sha256 ? "",
+}:
 
 stdenvNoCC.mkDerivation {
   name = "svn-export-ssh";
   builder = ./builder.sh;
-  nativeBuildInputs = [subversion expect];
+  nativeBuildInputs = [
+    subversion
+    expect
+  ];
 
   outputHashAlgo = "sha256";
   outputHashMode = "recursive";
@@ -13,5 +27,12 @@ stdenvNoCC.mkDerivation {
 
   sshSubversion = ./sshsubversion.exp;
 
-  inherit username password url rev sshSupport openssh;
+  inherit
+    username
+    password
+    url
+    rev
+    sshSupport
+    openssh
+    ;
 }

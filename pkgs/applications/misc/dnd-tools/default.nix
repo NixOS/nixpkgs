@@ -1,4 +1,9 @@
-{ python3, fetchFromGitHub, fetchpatch, lib }:
+{
+  python3,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "dnd-tools";

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, gamin }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gamin,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fileschanged";
@@ -11,7 +16,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ gamin ];
 
-  patches = [./unused-variables.debian.patch];
+  patches = [ ./unused-variables.debian.patch ];
 
   doCheck = true;
 

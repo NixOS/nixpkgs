@@ -1,17 +1,33 @@
-{ lib, stdenv, fetchurl, qtbase, qtsvg, qttools, qmake, fixDarwinDylibNames }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  qtbase,
+  qtsvg,
+  qttools,
+  qmake,
+  fixDarwinDylibNames,
+}:
 
 stdenv.mkDerivation rec {
   pname = "qwt";
   version = "6.2.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://sourceforge/qwt/qwt-${version}.tar.bz2";
     sha256 = "sha256-kZT2UTlV0P1zAPZxWBdQZEYBl6urGpL6EnpnpLC3FTA=";
   };
 
-  propagatedBuildInputs = [ qtbase qtsvg qttools ];
+  propagatedBuildInputs = [
+    qtbase
+    qtsvg
+    qttools
+  ];
   nativeBuildInputs = [ qmake ] ++ lib.optional stdenv.isDarwin fixDarwinDylibNames;
 
   postPatch = ''

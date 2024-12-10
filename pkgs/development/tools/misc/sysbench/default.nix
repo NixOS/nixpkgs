@@ -1,22 +1,29 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libmysqlclient
-, libaio
-, luajit
-# For testing:
-, testers
-, sysbench
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libmysqlclient,
+  libaio,
+  luajit,
+  # For testing:
+  testers,
+  sysbench,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sysbench";
   version = "1.0.20";
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libmysqlclient luajit ] ++ lib.optionals stdenv.isLinux [ libaio ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libmysqlclient
+    luajit
+  ] ++ lib.optionals stdenv.isLinux [ libaio ];
   depsBuildBuild = [ pkg-config ];
 
   src = fetchFromGitHub {
@@ -45,7 +52,14 @@ stdenv.mkDerivation rec {
       third_party/concurrency_kit/ck/configure \
         --replace-fail \
           'COMPILER=`./.1 2> /dev/null`' \
-          "COMPILER=${if stdenv.cc.isGNU then "gcc" else if stdenv.cc.isClang then "clang" else throw "Unsupported compiler"}" \
+          "COMPILER=${
+            if stdenv.cc.isGNU then
+              "gcc"
+            else if stdenv.cc.isClang then
+              "clang"
+            else
+              throw "Unsupported compiler"
+          }" \
         --replace-fail \
           'PLATFORM=`uname -m 2> /dev/null`' \
           "PLATFORM=${stdenv.hostPlatform.parsed.cpu.name}"

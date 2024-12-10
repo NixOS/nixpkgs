@@ -1,22 +1,47 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  inherit (lib) mkEnableOption mkIf mkOption mkMerge literalExpression;
-  inherit (lib) mapAttrsToList filterAttrs unique recursiveUpdate types;
+  inherit (lib)
+    mkEnableOption
+    mkIf
+    mkOption
+    mkMerge
+    literalExpression
+    ;
+  inherit (lib)
+    mapAttrsToList
+    filterAttrs
+    unique
+    recursiveUpdate
+    types
+    ;
 
-  mkValueStringArmagetron = with lib; v:
-    if isInt v then toString v
-    else if isFloat v then toString v
-    else if isString v then v
-    else if true == v then "1"
-    else if false == v then "0"
-    else if null == v then ""
-    else throw "unsupported type: ${builtins.typeOf v}: ${(lib.generators.toPretty {} v)}";
+  mkValueStringArmagetron =
+    with lib;
+    v:
+    if isInt v then
+      toString v
+    else if isFloat v then
+      toString v
+    else if isString v then
+      v
+    else if true == v then
+      "1"
+    else if false == v then
+      "0"
+    else if null == v then
+      ""
+    else
+      throw "unsupported type: ${builtins.typeOf v}: ${(lib.generators.toPretty { } v)}";
 
   settingsFormat = pkgs.formats.keyValue {
-    mkKeyValue = lib.generators.mkKeyValueDefault
-      {
-        mkValueString = mkValueStringArmagetron;
-      } " ";
+    mkKeyValue = lib.generators.mkKeyValueDefault {
+      mkValueString = mkValueStringArmagetron;
+    } " ";
     listsAsDuplicateKeys = true;
   };
 
@@ -32,96 +57,99 @@ in
       servers = mkOption {
         description = "Armagetron server definitions.";
         default = { };
-        type = types.attrsOf (types.submodule {
-          options = {
-            enable = mkEnableOption "armagetronad";
+        type = types.attrsOf (
+          types.submodule {
+            options = {
+              enable = mkEnableOption "armagetronad";
 
-            package = lib.mkPackageOptionMD pkgs "armagetronad-dedicated" {
-              example = ''
-                pkgs.armagetronad."0.2.9-sty+ct+ap".dedicated
-              '';
-              extraDescription = ''
-                Ensure that you use a derivation which contains the path `bin/armagetronad-dedicated`.
-              '';
+              package = lib.mkPackageOptionMD pkgs "armagetronad-dedicated" {
+                example = ''
+                  pkgs.armagetronad."0.2.9-sty+ct+ap".dedicated
+                '';
+                extraDescription = ''
+                  Ensure that you use a derivation which contains the path `bin/armagetronad-dedicated`.
+                '';
+              };
+
+              host = mkOption {
+                type = types.str;
+                default = "0.0.0.0";
+                description = "Host to listen on. Used for SERVER_IP.";
+              };
+
+              port = mkOption {
+                type = types.port;
+                default = 4534;
+                description = "Port to listen on. Used for SERVER_PORT.";
+              };
+
+              dns = mkOption {
+                type = types.nullOr types.str;
+                default = null;
+                description = "DNS address to use for this server. Optional.";
+              };
+
+              openFirewall = mkOption {
+                type = types.bool;
+                default = true;
+                description = "Set to true to open the configured UDP port for Armagetron Advanced.";
+              };
+
+              name = mkOption {
+                type = types.str;
+                description = "The name of this server.";
+              };
+
+              settings = mkOption {
+                type = settingsFormat.type;
+                default = { };
+                description = ''
+                  Armagetron Advanced server rules configuration. Refer to:
+                  <https://wiki.armagetronad.org/index.php?title=Console_Commands>
+                  or `armagetronad-dedicated --doc` for a list.
+
+                  This attrset is used to populate `settings_custom.cfg`; see:
+                  <https://wiki.armagetronad.org/index.php/Configuration_Files>
+                '';
+                example = literalExpression ''
+                  {
+                    CYCLE_RUBBER = 40;
+                  }
+                '';
+              };
+
+              roundSettings = mkOption {
+                type = settingsFormat.type;
+                default = { };
+                description = ''
+                  Armagetron Advanced server per-round configuration. Refer to:
+                  <https://wiki.armagetronad.org/index.php?title=Console_Commands>
+                  or `armagetronad-dedicated --doc` for a list.
+
+                  This attrset is used to populate `everytime.cfg`; see:
+                  <https://wiki.armagetronad.org/index.php/Configuration_Files>
+                '';
+                example = literalExpression ''
+                  {
+                    SAY = [
+                      "Hosted on NixOS"
+                      "https://nixos.org"
+                      "iD Tech High Rubber rul3z!! Happy New Year 2008!!1"
+                    ];
+                  }
+                '';
+              };
             };
-
-            host = mkOption {
-              type = types.str;
-              default = "0.0.0.0";
-              description = "Host to listen on. Used for SERVER_IP.";
-            };
-
-            port = mkOption {
-              type = types.port;
-              default = 4534;
-              description = "Port to listen on. Used for SERVER_PORT.";
-            };
-
-            dns = mkOption {
-              type = types.nullOr types.str;
-              default = null;
-              description = "DNS address to use for this server. Optional.";
-            };
-
-            openFirewall = mkOption {
-              type = types.bool;
-              default = true;
-              description = "Set to true to open the configured UDP port for Armagetron Advanced.";
-            };
-
-            name = mkOption {
-              type = types.str;
-              description = "The name of this server.";
-            };
-
-            settings = mkOption {
-              type = settingsFormat.type;
-              default = { };
-              description = ''
-                Armagetron Advanced server rules configuration. Refer to:
-                <https://wiki.armagetronad.org/index.php?title=Console_Commands>
-                or `armagetronad-dedicated --doc` for a list.
-
-                This attrset is used to populate `settings_custom.cfg`; see:
-                <https://wiki.armagetronad.org/index.php/Configuration_Files>
-              '';
-              example = literalExpression ''
-                {
-                  CYCLE_RUBBER = 40;
-                }
-              '';
-            };
-
-            roundSettings = mkOption {
-              type = settingsFormat.type;
-              default = { };
-              description = ''
-                Armagetron Advanced server per-round configuration. Refer to:
-                <https://wiki.armagetronad.org/index.php?title=Console_Commands>
-                or `armagetronad-dedicated --doc` for a list.
-
-                This attrset is used to populate `everytime.cfg`; see:
-                <https://wiki.armagetronad.org/index.php/Configuration_Files>
-              '';
-              example = literalExpression ''
-                {
-                  SAY = [
-                    "Hosted on NixOS"
-                    "https://nixos.org"
-                    "iD Tech High Rubber rul3z!! Happy New Year 2008!!1"
-                  ];
-                }
-              '';
-            };
-          };
-        });
+          }
+        );
       };
     };
   };
 
   config = mkIf (enabledServers != { }) {
-    systemd.tmpfiles.settings = mkMerge (mapAttrsToList
-      (serverName: serverCfg:
+    systemd.tmpfiles.settings = mkMerge (
+      mapAttrsToList (
+        serverName: serverCfg:
         let
           serverId = nameToId serverName;
           serverRoot = getServerRoot serverName;
@@ -130,7 +158,8 @@ in
               SERVER_IP = serverCfg.host;
               SERVER_PORT = serverCfg.port;
               SERVER_NAME = serverCfg.name;
-            } // (lib.optionalAttrs (serverCfg.dns != null) { SERVER_DNS = serverCfg.dns; })
+            }
+            // (lib.optionalAttrs (serverCfg.dns != null) { SERVER_DNS = serverCfg.dns; })
           );
           customSettings = serverCfg.settings;
           everytimeSettings = serverCfg.roundSettings;
@@ -193,12 +222,12 @@ in
             };
           };
         }
-      )
-      enabledServers
+      ) enabledServers
     );
 
-    systemd.services = mkMerge (mapAttrsToList
-      (serverName: serverCfg:
+    systemd.services = mkMerge (
+      mapAttrsToList (
+        serverName: serverCfg:
         let
           serverId = nameToId serverName;
         in
@@ -206,7 +235,11 @@ in
           "armagetronad-${serverName}" = {
             description = "Armagetron Advanced Dedicated Server for ${serverName}";
             wants = [ "basic.target" ];
-            after = [ "basic.target" "network.target" "multi-user.target" ];
+            after = [
+              "basic.target"
+              "network.target"
+              "multi-user.target"
+            ];
             wantedBy = [ "multi-user.target" ];
             serviceConfig =
               let
@@ -238,31 +271,30 @@ in
                 Group = serverId;
               };
           };
-        })
-      enabledServers
+        }
+      ) enabledServers
     );
 
-    networking.firewall.allowedUDPPorts =
-      unique (mapAttrsToList (serverName: serverCfg: serverCfg.port) (filterAttrs (serverName: serverCfg: serverCfg.openFirewall) enabledServers));
-
-    users.users = mkMerge (mapAttrsToList
-      (serverName: serverCfg:
-        {
-          ${nameToId serverName} = {
-            group = nameToId serverName;
-            description = "Armagetron Advanced dedicated user for server ${serverName}";
-            isSystemUser = true;
-          };
-        })
-      enabledServers
+    networking.firewall.allowedUDPPorts = unique (
+      mapAttrsToList (serverName: serverCfg: serverCfg.port) (
+        filterAttrs (serverName: serverCfg: serverCfg.openFirewall) enabledServers
+      )
     );
 
-    users.groups = mkMerge (mapAttrsToList
-      (serverName: serverCfg:
-        {
-          ${nameToId serverName} = { };
-        })
-      enabledServers
+    users.users = mkMerge (
+      mapAttrsToList (serverName: serverCfg: {
+        ${nameToId serverName} = {
+          group = nameToId serverName;
+          description = "Armagetron Advanced dedicated user for server ${serverName}";
+          isSystemUser = true;
+        };
+      }) enabledServers
+    );
+
+    users.groups = mkMerge (
+      mapAttrsToList (serverName: serverCfg: {
+        ${nameToId serverName} = { };
+      }) enabledServers
     );
   };
 }

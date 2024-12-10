@@ -1,12 +1,13 @@
-{ stdenv
-, lib
-, callPackage
-, fetchFromGitHub
-, cmake
-, pkg-config
-, python3
-, caf
-, openssl
+{
+  stdenv,
+  lib,
+  callPackage,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  python3,
+  caf,
+  openssl,
 }:
 let
   inherit (stdenv.hostPlatform) isStatic;
@@ -40,7 +41,10 @@ in
 stdenv.mkDerivation rec {
   pname = "zeek-broker";
   version = "6.2.0";
-  outputs = [ "out" "py" ];
+  outputs = [
+    "out"
+    "py"
+  ];
 
   strictDeps = true;
 
@@ -69,7 +73,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ openssl python3.pkgs.pybind11 ];
+  buildInputs = [
+    openssl
+    python3.pkgs.pybind11
+  ];
   propagatedBuildInputs = [ caf' ];
 
   cmakeFlags = [

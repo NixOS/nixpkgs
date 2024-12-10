@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, pkg-config
-, stdenv
-, openssl
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  stdenv,
+  openssl,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +22,8 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
+  buildInputs =
+    lib.optionals stdenv.isLinux [ openssl ]
     ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ Security ]);
 
   # Checks need to be disabled here because the current test suite makes assumptions

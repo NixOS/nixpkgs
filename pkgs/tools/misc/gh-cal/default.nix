@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchCrate
-, rustPlatform
-, pkg-config
-, openssl
-, Security
+{
+  lib,
+  stdenv,
+  fetchCrate,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  Security,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "gh-cal";

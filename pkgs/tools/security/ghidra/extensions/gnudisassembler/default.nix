@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, buildGhidraExtension
-, ghidra
-, flex
-, bison
-, texinfo
-, perl
-, zlib
-, xcbuild
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildGhidraExtension,
+  ghidra,
+  flex,
+  bison,
+  texinfo,
+  perl,
+  zlib,
+  xcbuild,
 }:
 
 let
@@ -36,14 +37,16 @@ buildGhidraExtension {
 
   __darwinAllowLocalNetworking = true;
 
-  nativeBuildInputs = [
-    flex
-    bison
-    texinfo
-    perl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    xcbuild
-  ];
+  nativeBuildInputs =
+    [
+      flex
+      bison
+      texinfo
+      perl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      xcbuild
+    ];
 
   buildInputs = [
     zlib

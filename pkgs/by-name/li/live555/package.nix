@@ -44,36 +44,45 @@ stdenv.mkDerivation (finalAttrs: {
   # set CXXFLAGS directly
   env.CXXFLAGS = "-std=c++20";
 
-  postPatch = ''
-    substituteInPlace config.macosx-catalina \
-      --replace '/usr/lib/libssl.46.dylib' "${lib.getLib openssl}/lib/libssl.dylib" \
-      --replace '/usr/lib/libcrypto.44.dylib' "${lib.getLib openssl}/lib/libcrypto.dylib"
-    sed -i -e 's|/bin/rm|rm|g' genMakefiles
-    sed -i \
-      -e 's/$(INCLUDES) -I. -O2 -DSOCKLEN_T/$(INCLUDES) -I. -O2 -I. -fPIC -DRTSPCLIENT_SYNCHRONOUS_INTERFACE=1 -DSOCKLEN_T/g' \
-      config.linux
-  ''
-  # condition from icu/base.nix
-  + lib.optionalString (lib.elem stdenv.hostPlatform.libc [ "glibc" "musl" ]) ''
-    substituteInPlace liveMedia/include/Locale.hh \
-      --replace '<xlocale.h>' '<locale.h>'
-  '';
+  postPatch =
+    ''
+      substituteInPlace config.macosx-catalina \
+        --replace '/usr/lib/libssl.46.dylib' "${lib.getLib openssl}/lib/libssl.dylib" \
+        --replace '/usr/lib/libcrypto.44.dylib' "${lib.getLib openssl}/lib/libcrypto.dylib"
+      sed -i -e 's|/bin/rm|rm|g' genMakefiles
+      sed -i \
+        -e 's/$(INCLUDES) -I. -O2 -DSOCKLEN_T/$(INCLUDES) -I. -O2 -I. -fPIC -DRTSPCLIENT_SYNCHRONOUS_INTERFACE=1 -DSOCKLEN_T/g' \
+        config.linux
+    ''
+    # condition from icu/base.nix
+    +
+      lib.optionalString
+        (lib.elem stdenv.hostPlatform.libc [
+          "glibc"
+          "musl"
+        ])
+        ''
+          substituteInPlace liveMedia/include/Locale.hh \
+            --replace '<xlocale.h>' '<locale.h>'
+        '';
 
-  configurePhase = let
-    platform =
-      if stdenv.isLinux then
-        "linux"
-      else if stdenv.isDarwin then
-        "macosx-catalina"
-      else
-        throw "Unsupported platform: ${stdenv.hostPlatform.system}";
-  in ''
-    runHook preConfigure
+  configurePhase =
+    let
+      platform =
+        if stdenv.isLinux then
+          "linux"
+        else if stdenv.isDarwin then
+          "macosx-catalina"
+        else
+          throw "Unsupported platform: ${stdenv.hostPlatform.system}";
+    in
+    ''
+      runHook preConfigure
 
-    ./genMakefiles ${platform}
+      ./genMakefiles ${platform}
 
-    runHook postConfigure
-  '';
+      runHook postConfigure
+    '';
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"

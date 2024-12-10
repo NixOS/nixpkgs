@@ -1,25 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapQtAppsHook
-, cmake
-, qhull
-, flann
-, boost
-, vtk
-, eigen
-, pkg-config
-, qtbase
-, libusb1
-, libpcap
-, libtiff
-, libXt
-, libpng
-, Cocoa
-, AGL
-, OpenGL
-, config
-, cudaSupport ? config.cudaSupport, cudaPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  cmake,
+  qhull,
+  flann,
+  boost,
+  vtk,
+  eigen,
+  pkg-config,
+  qtbase,
+  libusb1,
+  libpcap,
+  libtiff,
+  libXt,
+  libpng,
+  Cocoa,
+  AGL,
+  OpenGL,
+  config,
+  cudaSupport ? config.cudaSupport,
+  cudaPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,17 +45,20 @@ stdenv.mkDerivation rec {
     pkg-config
     cmake
     wrapQtAppsHook
-  ]
-  ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
+  ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
-  buildInputs = [
-    eigen
-    libusb1
-    libpcap
-    qtbase
-    libXt
-  ]
-  ++ lib.optionals stdenv.isDarwin [ Cocoa AGL ];
+  buildInputs =
+    [
+      eigen
+      libusb1
+      libpcap
+      qtbase
+      libXt
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      Cocoa
+      AGL
+    ];
 
   propagatedBuildInputs = [
     boost
@@ -64,9 +69,11 @@ stdenv.mkDerivation rec {
     vtk
   ];
 
-  cmakeFlags = lib.optionals stdenv.isDarwin [
-    "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
-  ] ++ lib.optionals cudaSupport [ "-DWITH_CUDA=true" ];
+  cmakeFlags =
+    lib.optionals stdenv.isDarwin [
+      "-DOPENGL_INCLUDE_DIR=${OpenGL}/Library/Frameworks"
+    ]
+    ++ lib.optionals cudaSupport [ "-DWITH_CUDA=true" ];
 
   meta = {
     homepage = "https://pointclouds.org/";

@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, fetchurl
-, bash-completion
-, bison
-, cdrkit
-, cpio
-, curl
-, flex
-, getopt
-, glib
-, gnupg
-, hivex
-, jansson
-, libguestfs-with-appliance
-, libosinfo
-, libvirt
-, libxml2
-, makeWrapper
-, ncurses
-, ocamlPackages
-, openssl
-, pcre2
-, perlPackages
-, pkg-config
-, qemu
-, xz
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bash-completion,
+  bison,
+  cdrkit,
+  cpio,
+  curl,
+  flex,
+  getopt,
+  glib,
+  gnupg,
+  hivex,
+  jansson,
+  libguestfs-with-appliance,
+  libosinfo,
+  libvirt,
+  libxml2,
+  makeWrapper,
+  ncurses,
+  ocamlPackages,
+  openssl,
+  pcre2,
+  perlPackages,
+  pkg-config,
+  qemu,
+  xz,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,30 +37,31 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Iv0TIpcEX5CmdAbw/w7uDyoBBqXxyNz8XDlqYl/3g3Y=";
   };
 
-  nativeBuildInputs = [
-    bison
-    cdrkit
-    cpio
-    flex
-    getopt
-    makeWrapper
-    pkg-config
-    qemu
-  ] ++
-  (with perlPackages; [
-    GetoptLong
-    libintl-perl
-    ModuleBuild
-    perl
-    Po4a
-  ]) ++
-  (with ocamlPackages; [
-    findlib
-    gettext-stub
-    ocaml
-    ocaml_gettext
-    ounit2
-  ]);
+  nativeBuildInputs =
+    [
+      bison
+      cdrkit
+      cpio
+      flex
+      getopt
+      makeWrapper
+      pkg-config
+      qemu
+    ]
+    ++ (with perlPackages; [
+      GetoptLong
+      libintl-perl
+      ModuleBuild
+      perl
+      Po4a
+    ])
+    ++ (with ocamlPackages; [
+      findlib
+      gettext-stub
+      ocaml
+      ocaml_gettext
+      ounit2
+    ]);
 
   buildInputs = [
     bash-completion
@@ -101,15 +103,30 @@ stdenv.mkDerivation rec {
   postInstall = ''
     wrapProgram $out/bin/virt-builder \
       --argv0 virt-builder \
-      --prefix PATH : ${lib.makeBinPath [ curl gnupg ]}:$out/bin \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          curl
+          gnupg
+        ]
+      }:$out/bin \
       --suffix VIRT_BUILDER_DIRS : /etc:$out/etc
     wrapProgram $out/bin/virt-win-reg \
-      --prefix PERL5LIB : ${with perlPackages; makeFullPerlPath [ hivex libintl-perl libguestfs-with-appliance ]}
+      --prefix PERL5LIB : ${
+        with perlPackages;
+        makeFullPerlPath [
+          hivex
+          libintl-perl
+          libguestfs-with-appliance
+        ]
+      }
   '';
 
   meta = with lib; {
     description = "Extra tools for accessing and modifying virtual machine disk images";
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
     homepage = "https://libguestfs.org/";
     maintainers = with maintainers; [ ];
     platforms = platforms.linux;

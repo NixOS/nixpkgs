@@ -1,5 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, fetchpatch, pkg-config, cmake, git, doxygen, help2man, ncurses, tecla
-, libusb1, udev }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  cmake,
+  git,
+  doxygen,
+  help2man,
+  ncurses,
+  tecla,
+  libusb1,
+  udev,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libbladeRF";
@@ -13,9 +26,19 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config git doxygen help2man ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    git
+    doxygen
+    help2man
+  ];
   # ncurses used due to https://github.com/Nuand/bladeRF/blob/ab4fc672c8bab4f8be34e8917d3f241b1d52d0b8/host/utilities/bladeRF-cli/CMakeLists.txt#L208
-  buildInputs = [ tecla libusb1 ]
+  buildInputs =
+    [
+      tecla
+      libusb1
+    ]
     ++ lib.optionals stdenv.isLinux [ udev ]
     ++ lib.optionals stdenv.isDarwin [ ncurses ];
 
@@ -27,13 +50,15 @@ stdenv.mkDerivation rec {
     sed -i 's/$(hostname)/hostname/' host/utilities/bladeRF-cli/src/cmd/doc/generate.bash
   '';
 
-  cmakeFlags = [
-    "-DBUILD_DOCUMENTATION=ON"
-  ] ++ lib.optionals stdenv.isLinux [
-    "-DUDEV_RULES_PATH=etc/udev/rules.d"
-    "-DINSTALL_UDEV_RULES=ON"
-    "-DBLADERF_GROUP=bladerf"
-  ];
+  cmakeFlags =
+    [
+      "-DBUILD_DOCUMENTATION=ON"
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      "-DUDEV_RULES_PATH=etc/udev/rules.d"
+      "-DINSTALL_UDEV_RULES=ON"
+      "-DBLADERF_GROUP=bladerf"
+    ];
 
   env = lib.optionalAttrs stdenv.cc.isClang {
     NIX_CFLAGS_COMPILE = "-Wno-error=unused-but-set-variable";

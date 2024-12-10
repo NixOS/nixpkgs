@@ -1,12 +1,12 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, libidn
-, zlib
-, bzip2
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  libidn,
+  zlib,
+  bzip2,
 }:
-
 
 let
   libidn11 = libidn.overrideAttrs (old: {

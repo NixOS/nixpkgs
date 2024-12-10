@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, makeWrapper
-, iw
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  makeWrapper,
+  iw,
 }:
 let
   pname = "netscanner";
@@ -24,7 +25,7 @@ rustPlatform.buildRustPackage {
 
   postFixup = ''
     wrapProgram $out/bin/netscanner \
-      --prefix PATH : "${lib.makeBinPath [iw]}"
+      --prefix PATH : "${lib.makeBinPath [ iw ]}"
   '';
 
   meta = {

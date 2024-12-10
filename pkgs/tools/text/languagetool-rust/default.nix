@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
-, pkg-config
-, openssl
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  pkg-config,
+  openssl,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,7 +24,10 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "full" ];
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.isDarwin [ Security ];
 
   checkFlags = [

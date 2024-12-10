@@ -1,44 +1,45 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, autoreconfHook
-, makeWrapper
-, libxcrypt
-, ncurses
-, cpio
-, gperf
-, cdrkit
-, flex
-, bison
-, qemu
-, pcre2
-, augeas
-, libxml2
-, acl
-, libcap
-, libcap_ng
-, libconfig
-, systemd
-, fuse
-, yajl
-, libvirt
-, hivex
-, db
-, gmp
-, readline
-, file
-, numactl
-, libapparmor
-, jansson
-, getopt
-, perlPackages
-, ocamlPackages
-, libtirpc
-, appliance ? null
-, javaSupport ? false
-, jdk
-, zstd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  autoreconfHook,
+  makeWrapper,
+  libxcrypt,
+  ncurses,
+  cpio,
+  gperf,
+  cdrkit,
+  flex,
+  bison,
+  qemu,
+  pcre2,
+  augeas,
+  libxml2,
+  acl,
+  libcap,
+  libcap_ng,
+  libconfig,
+  systemd,
+  fuse,
+  yajl,
+  libvirt,
+  hivex,
+  db,
+  gmp,
+  readline,
+  file,
+  numactl,
+  libapparmor,
+  jansson,
+  getopt,
+  perlPackages,
+  ocamlPackages,
+  libtirpc,
+  appliance ? null,
+  javaSupport ? false,
+  jdk,
+  zstd,
 }:
 
 assert appliance == null || lib.isDerivation appliance;
@@ -53,46 +54,63 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [
-    autoreconfHook
-    bison
-    cdrkit
-    cpio
-    flex
-    getopt
-    gperf
-    makeWrapper
-    pkg-config
-    qemu
-    zstd
-  ] ++ (with perlPackages; [ perl libintl-perl GetoptLong ModuleBuild ])
-  ++ (with ocamlPackages; [ ocaml findlib ]);
-  buildInputs = [
-    libxcrypt
-    ncurses
-    jansson
-    pcre2
-    augeas
-    libxml2
-    acl
-    libcap
-    libcap_ng
-    libconfig
-    systemd
-    fuse
-    yajl
-    libvirt
-    gmp
-    readline
-    file
-    hivex
-    db
-    numactl
-    libapparmor
-    perlPackages.ModuleBuild
-    libtirpc
-  ] ++ (with ocamlPackages; [ ocamlbuild ocaml_libvirt gettext-stub ounit ])
-  ++ lib.optional javaSupport jdk;
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      bison
+      cdrkit
+      cpio
+      flex
+      getopt
+      gperf
+      makeWrapper
+      pkg-config
+      qemu
+      zstd
+    ]
+    ++ (with perlPackages; [
+      perl
+      libintl-perl
+      GetoptLong
+      ModuleBuild
+    ])
+    ++ (with ocamlPackages; [
+      ocaml
+      findlib
+    ]);
+  buildInputs =
+    [
+      libxcrypt
+      ncurses
+      jansson
+      pcre2
+      augeas
+      libxml2
+      acl
+      libcap
+      libcap_ng
+      libconfig
+      systemd
+      fuse
+      yajl
+      libvirt
+      gmp
+      readline
+      file
+      hivex
+      db
+      numactl
+      libapparmor
+      perlPackages.ModuleBuild
+      libtirpc
+    ]
+    ++ (with ocamlPackages; [
+      ocamlbuild
+      ocaml_libvirt
+      gettext-stub
+      ounit
+    ])
+    ++ lib.optional javaSupport jdk;
 
   prePatch = ''
     # build-time scripts
@@ -158,7 +176,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Tools for accessing and modifying virtual machine disk images";
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
     homepage = "https://libguestfs.org/";
     maintainers = with maintainers; [ offline ];
     platforms = platforms.linux;

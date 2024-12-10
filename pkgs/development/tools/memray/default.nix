@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, libunwind
-, lz4
-, pkg-config
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  libunwind,
+  lz4,
+  pkg-config,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -22,24 +23,29 @@ python3.pkgs.buildPythonApplication rec {
     pkg-config
   ];
 
-  buildInputs = [
-    libunwind
-    lz4
-  ] ++ (with python3.pkgs; [
-    cython
-  ]);
+  buildInputs =
+    [
+      libunwind
+      lz4
+    ]
+    ++ (with python3.pkgs; [
+      cython
+    ]);
 
   propagatedBuildInputs = with python3.pkgs; [
     jinja2
     rich
   ];
 
-  nativeCheckInputs = with python3.pkgs; [
-    ipython
-    pytestCheckHook
-  ] ++ lib.optionals (pythonOlder "3.12") [
-    greenlet
-  ];
+  nativeCheckInputs =
+    with python3.pkgs;
+    [
+      ipython
+      pytestCheckHook
+    ]
+    ++ lib.optionals (pythonOlder "3.12") [
+      greenlet
+    ];
 
   pythonImportsCheck = [
     "memray"

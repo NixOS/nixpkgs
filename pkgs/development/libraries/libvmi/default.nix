@@ -1,4 +1,6 @@
-{ lib, stdenv,
+{
+  lib,
+  stdenv,
   fetchFromGitHub,
   autoreconfHook,
   bison,
@@ -8,7 +10,8 @@
   json_c,
   xen,
   libvirt,
-  xenSupport ? true }:
+  xenSupport ? true,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libvmi";
@@ -22,8 +25,17 @@ stdenv.mkDerivation rec {
     sha256 = "0wbi2nasb1gbci6cq23g6kq7i10rwi1y7r44rl03icr5prqjpdyv";
   };
 
-  buildInputs = [ glib libvirt json_c ] ++ (lib.optional xenSupport xen);
-  nativeBuildInputs = [ autoreconfHook bison flex pkg-config ];
+  buildInputs = [
+    glib
+    libvirt
+    json_c
+  ] ++ (lib.optional xenSupport xen);
+  nativeBuildInputs = [
+    autoreconfHook
+    bison
+    flex
+    pkg-config
+  ];
 
   configureFlags = lib.optional (!xenSupport) "--disable-xen";
 
@@ -42,7 +54,10 @@ stdenv.mkDerivation rec {
       details of a running virtual machine by viewing its memory, trapping on hardware events,
       and accessing the vCPU registers.
     '';
-    license = with licenses; [ gpl3 lgpl3 ];
+    license = with licenses; [
+      gpl3
+      lgpl3
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ ];
   };

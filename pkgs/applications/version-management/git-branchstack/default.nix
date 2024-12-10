@@ -1,7 +1,8 @@
-{ lib
-, fetchPypi
-, buildPythonApplication
-, git-revise
+{
+  lib,
+  fetchPypi,
+  buildPythonApplication,
+  git-revise,
 }:
 
 buildPythonApplication rec {

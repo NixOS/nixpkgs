@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "mysqld_exporter";
@@ -13,14 +17,19 @@ buildGoModule rec {
 
   vendorHash = "sha256-GEL9sMwwdGqpklm4yKNqzSOM6I/JzZjg3+ZB2ix2M8w=";
 
-  ldflags = let t = "github.com/prometheus/common/version"; in [
-    "-s" "-w"
-    "-X ${t}.Version=${version}"
-    "-X ${t}.Revision=${src.rev}"
-    "-X ${t}.Branch=unknown"
-    "-X ${t}.BuildUser=nix@nixpkgs"
-    "-X ${t}.BuildDate=unknown"
-  ];
+  ldflags =
+    let
+      t = "github.com/prometheus/common/version";
+    in
+    [
+      "-s"
+      "-w"
+      "-X ${t}.Version=${version}"
+      "-X ${t}.Revision=${src.rev}"
+      "-X ${t}.Branch=unknown"
+      "-X ${t}.BuildUser=nix@nixpkgs"
+      "-X ${t}.BuildDate=unknown"
+    ];
 
   # skips tests with external dependencies, e.g. on mysqld
   checkFlags = [
@@ -32,6 +41,9 @@ buildGoModule rec {
     mainProgram = "mysqld_exporter";
     homepage = "https://github.com/prometheus/mysqld_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ benley globin ];
+    maintainers = with maintainers; [
+      benley
+      globin
+    ];
   };
 }

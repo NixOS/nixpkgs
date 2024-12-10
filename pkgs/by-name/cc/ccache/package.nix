@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, binutils
-, asciidoctor
-, cmake
-, perl
-, zstd
-, bashInteractive
-, xcodebuild
-, makeWrapper
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  substituteAll,
+  binutils,
+  asciidoctor,
+  cmake,
+  perl,
+  zstd,
+  bashInteractive,
+  xcodebuild,
+  makeWrapper,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,7 +25,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-n0MTq8x6KNkgwhJQG7F+e3iCOS644nLkMsiRztJe8QU=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   patches = [
     # When building for Darwin, test/run uses dwarfdump, whereas on
@@ -39,7 +43,11 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [ asciidoctor cmake perl ];
+  nativeBuildInputs = [
+    asciidoctor
+    cmake
+    perl
+  ];
   buildInputs = [ zstd ];
 
   cmakeFlags = [
@@ -57,14 +65,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkPhase =
     let
-      badTests = [
-        "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
-      ] ++ lib.optionals stdenv.isDarwin [
-        "test.basedir"
-        "test.fileclone" # flaky on hydra (possibly filesystem-specific?)
-        "test.multi_arch"
-        "test.nocpp2"
-      ];
+      badTests =
+        [
+          "test.trim_dir" # flaky on hydra (possibly filesystem-specific?)
+        ]
+        ++ lib.optionals stdenv.isDarwin [
+          "test.basedir"
+          "test.fileclone" # flaky on hydra (possibly filesystem-specific?)
+          "test.multi_arch"
+          "test.nocpp2"
+        ];
     in
     ''
       runHook preCheck
@@ -76,53 +86,59 @@ stdenv.mkDerivation (finalAttrs: {
   passthru = {
     # A derivation that provides gcc and g++ commands, but that
     # will end up calling ccache for the given cacheDir
-    links = { unwrappedCC, extraConfig }: stdenv.mkDerivation {
-      pname = "ccache-links";
-      inherit (finalAttrs) version;
-      passthru = {
-        isClang = unwrappedCC.isClang or false;
-        isGNU = unwrappedCC.isGNU or false;
-        isCcache = true;
+    links =
+      { unwrappedCC, extraConfig }:
+      stdenv.mkDerivation {
+        pname = "ccache-links";
+        inherit (finalAttrs) version;
+        passthru = {
+          isClang = unwrappedCC.isClang or false;
+          isGNU = unwrappedCC.isGNU or false;
+          isCcache = true;
+        };
+        inherit (unwrappedCC) lib;
+        nativeBuildInputs = [ makeWrapper ];
+        # Unwrapped clang does not have a targetPrefix because it is multi-target
+        # target is decided with argv0.
+        buildCommand =
+          let
+            targetPrefix =
+              if unwrappedCC.isClang or false then
+                ""
+              else
+                (lib.optionalString (
+                  unwrappedCC ? targetConfig && unwrappedCC.targetConfig != null && unwrappedCC.targetConfig != ""
+                ) "${unwrappedCC.targetConfig}-");
+          in
+          ''
+            mkdir -p $out/bin
+
+            wrap() {
+              local cname="${targetPrefix}$1"
+              if [ -x "${unwrappedCC}/bin/$cname" ]; then
+                makeWrapper ${finalAttrs.finalPackage}/bin/ccache $out/bin/$cname \
+                  --run ${lib.escapeShellArg extraConfig} \
+                  --add-flags ${unwrappedCC}/bin/$cname
+              fi
+            }
+
+            wrap cc
+            wrap c++
+            wrap gcc
+            wrap g++
+            wrap clang
+            wrap clang++
+
+            for executable in $(ls ${unwrappedCC}/bin); do
+              if [ ! -x "$out/bin/$executable" ]; then
+                ln -s ${unwrappedCC}/bin/$executable $out/bin/$executable
+              fi
+            done
+            for file in $(ls ${unwrappedCC} | grep -vw bin); do
+              ln -s ${unwrappedCC}/$file $out/$file
+            done
+          '';
       };
-      inherit (unwrappedCC) lib;
-      nativeBuildInputs = [ makeWrapper ];
-      # Unwrapped clang does not have a targetPrefix because it is multi-target
-      # target is decided with argv0.
-      buildCommand = let
-        targetPrefix = if unwrappedCC.isClang or false
-          then
-            ""
-          else
-            (lib.optionalString (unwrappedCC ? targetConfig && unwrappedCC.targetConfig != null && unwrappedCC.targetConfig != "") "${unwrappedCC.targetConfig}-");
-      in ''
-        mkdir -p $out/bin
-
-        wrap() {
-          local cname="${targetPrefix}$1"
-          if [ -x "${unwrappedCC}/bin/$cname" ]; then
-            makeWrapper ${finalAttrs.finalPackage}/bin/ccache $out/bin/$cname \
-              --run ${lib.escapeShellArg extraConfig} \
-              --add-flags ${unwrappedCC}/bin/$cname
-          fi
-        }
-
-        wrap cc
-        wrap c++
-        wrap gcc
-        wrap g++
-        wrap clang
-        wrap clang++
-
-        for executable in $(ls ${unwrappedCC}/bin); do
-          if [ ! -x "$out/bin/$executable" ]; then
-            ln -s ${unwrappedCC}/bin/$executable $out/bin/$executable
-          fi
-        done
-        for file in $(ls ${unwrappedCC} | grep -vw bin); do
-          ln -s ${unwrappedCC}/$file $out/$file
-        done
-      '';
-    };
 
     updateScript = nix-update-script { };
   };
@@ -136,7 +152,10 @@ stdenv.mkDerivation (finalAttrs: {
     }";
     license = licenses.gpl3Plus;
     mainProgram = "ccache";
-    maintainers = with maintainers; [ kira-bruneau r-burns ];
+    maintainers = with maintainers; [
+      kira-bruneau
+      r-burns
+    ];
     platforms = platforms.unix;
   };
 })

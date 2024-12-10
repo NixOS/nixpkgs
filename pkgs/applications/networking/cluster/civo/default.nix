@@ -1,13 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "civo";
   version = "1.0.83";
 
   src = fetchFromGitHub {
-    owner  = "civo";
-    repo   = "cli";
-    rev    = "v${version}";
+    owner = "civo";
+    repo = "cli";
+    rev = "v${version}";
     sha256 = "sha256-jRs8RMdTq5xylcYBN59+JzXlJlTJRp7bJVMvEmvzSnc=";
   };
 

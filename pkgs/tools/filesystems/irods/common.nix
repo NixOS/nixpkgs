@@ -1,13 +1,67 @@
-{ lib, stdenv, bzip2, zlib, autoconf, automake, cmake, help2man, texinfo, libtool, cppzmq, libarchive
-, avro-cpp, boost, zeromq, openssl, pam, libiodbc, libkrb5, gcc, libcxx, which, catch2, nanodbc, fmt
-, nlohmann_json, spdlog, curl }:
+{
+  lib,
+  stdenv,
+  bzip2,
+  zlib,
+  autoconf,
+  automake,
+  cmake,
+  help2man,
+  texinfo,
+  libtool,
+  cppzmq,
+  libarchive,
+  avro-cpp,
+  boost,
+  zeromq,
+  openssl,
+  pam,
+  libiodbc,
+  libkrb5,
+  gcc,
+  libcxx,
+  which,
+  catch2,
+  nanodbc,
+  fmt,
+  nlohmann_json,
+  spdlog,
+  curl,
+}:
 
 # Common attributes of irods packages
 
 {
-  nativeBuildInputs = [ autoconf automake cmake help2man texinfo which gcc ];
-  buildInputs = [ bzip2 zlib libtool cppzmq libarchive avro-cpp zeromq openssl pam libiodbc libkrb5 boost
-                  libcxx catch2 nanodbc fmt nlohmann_json spdlog curl ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    cmake
+    help2man
+    texinfo
+    which
+    gcc
+  ];
+  buildInputs = [
+    bzip2
+    zlib
+    libtool
+    cppzmq
+    libarchive
+    avro-cpp
+    zeromq
+    openssl
+    pam
+    libiodbc
+    libkrb5
+    boost
+    libcxx
+    catch2
+    nanodbc
+    fmt
+    nlohmann_json
+    spdlog
+    curl
+  ];
 
   cmakeFlags = [
     "-DIRODS_EXTERNALS_FULLPATH_CLANG=${stdenv.cc}"

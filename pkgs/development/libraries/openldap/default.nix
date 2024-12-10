@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 
-# dependencies
-, cyrus_sasl
-, groff
-, libsodium
-, libtool
-, openssl
-, systemdMinimal
-, libxcrypt
+  # dependencies
+  cyrus_sasl,
+  groff,
+  libsodium,
+  libtool,
+  openssl,
+  systemdMinimal,
+  libxcrypt,
 
-# passthru
-, nixosTests
+  # passthru
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,37 +41,42 @@ stdenv.mkDerivation rec {
     groff
   ];
 
-  buildInputs = [
-    (cyrus_sasl.override {
-      inherit openssl;
-    })
-    libsodium
-    libtool
-    openssl
-  ] ++ lib.optionals (stdenv.isLinux) [
-    libxcrypt # causes linking issues on *-darwin
-    systemdMinimal
-  ];
+  buildInputs =
+    [
+      (cyrus_sasl.override {
+        inherit openssl;
+      })
+      libsodium
+      libtool
+      openssl
+    ]
+    ++ lib.optionals (stdenv.isLinux) [
+      libxcrypt # causes linking issues on *-darwin
+      systemdMinimal
+    ];
 
   preConfigure = lib.optionalString (lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") ''
     MACOSX_DEPLOYMENT_TARGET=10.16
   '';
 
-  configureFlags = [
-    "--enable-argon2"
-    "--enable-crypt"
-    "--enable-modules"
-    "--enable-overlays"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "--with-yielding_select=yes"
-    "ac_cv_func_memcmp_working=yes"
-  ] ++ lib.optional stdenv.isFreeBSD "--with-pic";
+  configureFlags =
+    [
+      "--enable-argon2"
+      "--enable-crypt"
+      "--enable-modules"
+      "--enable-overlays"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "--with-yielding_select=yes"
+      "ac_cv_func_memcmp_working=yes"
+    ]
+    ++ lib.optional stdenv.isFreeBSD "--with-pic";
 
   env.NIX_CFLAGS_COMPILE = toString [ "-DLDAPI_SOCK=\"/run/openldap/ldapi\"" ];
 
-  makeFlags= [
+  makeFlags = [
     "CC=${stdenv.cc.targetPrefix}cc"
-    "STRIP="  # Disable install stripping as it breaks cross-compiling. We strip binaries anyway in fixupPhase.
+    "STRIP=" # Disable install stripping as it breaks cross-compiling. We strip binaries anyway in fixupPhase.
     "STRIP_OPTS="
     "prefix=${placeholder "out"}"
     "sysconfdir=/etc"

@@ -1,23 +1,31 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, perl
-, bsd-finger
-, withAbook ? true, abook
-, withGnupg ? true, gnupg
-, withGoobook ? true, goobook
-, withKhard ? true, khard
-, withMu ? true, mu
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  perl,
+  bsd-finger,
+  withAbook ? true,
+  abook,
+  withGnupg ? true,
+  gnupg,
+  withGoobook ? true,
+  goobook,
+  withKhard ? true,
+  khard,
+  withMu ? true,
+  mu,
 }:
 
 let
-  perl' = perl.withPackages (p: with p; [
-    AuthenSASL
-    ConvertASN1
-    IOSocketSSL
-    perlldap
-  ]);
+  perl' = perl.withPackages (
+    p: with p; [
+      AuthenSASL
+      ConvertASN1
+      IOSocketSSL
+      perlldap
+    ]
+  );
 in
 stdenv.mkDerivation rec {
   pname = "lbdb";
@@ -28,7 +36,8 @@ stdenv.mkDerivation rec {
     sha256 = "1gr5l2fr9qbdccga8bhsrpvz6jxigvfkdxrln9wyf2xpps5cdjxh";
   };
 
-  buildInputs = [ perl' ]
+  buildInputs =
+    [ perl' ]
     ++ lib.optional (!stdenv.isDarwin) bsd-finger
     ++ lib.optional withAbook abook
     ++ lib.optional withGnupg gnupg
@@ -36,7 +45,8 @@ stdenv.mkDerivation rec {
     ++ lib.optional withKhard khard
     ++ lib.optional withMu mu;
 
-  configureFlags = [ ]
+  configureFlags =
+    [ ]
     ++ lib.optional withAbook "--with-abook"
     ++ lib.optional withGnupg "--with-gpg"
     ++ lib.optional withGoobook "--with-goobook"
@@ -57,7 +67,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.spinnaker.de/lbdb/";
     description = "The Little Brother's Database";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kaiha bfortz ];
+    maintainers = with maintainers; [
+      kaiha
+      bfortz
+    ];
     platforms = platforms.all;
   };
 }

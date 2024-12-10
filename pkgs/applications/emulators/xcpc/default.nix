@@ -1,6 +1,16 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, libXaw, libX11, libXext
-  , libDSKSupport ? true, libdsk
-  , motifSupport ? false, lesstif
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  libXaw,
+  libX11,
+  libXext,
+  libDSKSupport ? true,
+  libdsk,
+  motifSupport ? false,
+  lesstif,
 }:
 
 with lib;
@@ -15,7 +25,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ glib libdsk libXaw libX11 libXext ]
+  buildInputs =
+    [
+      glib
+      libdsk
+      libXaw
+      libX11
+      libXext
+    ]
     ++ optional libDSKSupport libdsk
     ++ optional motifSupport lesstif;
 

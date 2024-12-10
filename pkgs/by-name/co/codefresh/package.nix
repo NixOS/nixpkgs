@@ -1,4 +1,11 @@
-{ lib, mkYarnPackage, fetchFromGitHub, fetchYarnDeps, testers, codefresh }:
+{
+  lib,
+  mkYarnPackage,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  testers,
+  codefresh,
+}:
 
 mkYarnPackage rec {
   pname = "codefresh";

@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromSourcehut
-, installShellFiles
-, scdoc
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+  installShellFiles,
+  scdoc,
 }:
 
 buildGoModule rec {
@@ -23,7 +24,10 @@ buildGoModule rec {
     scdoc
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   postBuild = ''
     make doc/soju.1 doc/sojuctl.1
@@ -50,6 +54,9 @@ buildGoModule rec {
     homepage = "https://soju.im";
     changelog = "https://git.sr.ht/~emersion/soju/refs/${src.rev}";
     license = licenses.agpl3Only;
-    maintainers = with maintainers; [ azahi malte-v ];
+    maintainers = with maintainers; [
+      azahi
+      malte-v
+    ];
   };
 }

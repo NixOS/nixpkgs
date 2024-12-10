@@ -1,11 +1,12 @@
-{ lib
-, annexremote
-, buildPythonApplication
-, drivelib
-, fetchPypi
-, gitpython
-, humanfriendly
-, tenacity
+{
+  lib,
+  annexremote,
+  buildPythonApplication,
+  drivelib,
+  fetchPypi,
+  gitpython,
+  humanfriendly,
+  tenacity,
 }:
 
 buildPythonApplication rec {

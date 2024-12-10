@@ -41,7 +41,11 @@ self: super: {
   stm = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
+  terminfo =
+    if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
+      null
+    else
+      doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
@@ -59,12 +63,13 @@ self: super: {
   # weeder >= 2.5 requires GHC 9.4
   weeder = doDistribute self.weeder_2_4_1;
   # Allow dhall 1.42.*
-  weeder_2_4_1 = doJailbreak (super.weeder_2_4_1.override {
-    # weeder < 2.6 only supports algebraic-graphs < 0.7
-    # We no longer have matching test deps for algebraic-graphs 0.6.1 in the set
-    algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
-  });
-
+  weeder_2_4_1 = doJailbreak (
+    super.weeder_2_4_1.override {
+      # weeder < 2.6 only supports algebraic-graphs < 0.7
+      # We no longer have matching test deps for algebraic-graphs 0.6.1 in the set
+      algebraic-graphs = dontCheck self.algebraic-graphs_0_6_1;
+    }
+  );
 
   haskell-language-server = lib.pipe super.haskell-language-server [
     (disableCabalFlag "fourmolu")
@@ -74,16 +79,21 @@ self: super: {
       # Disabling the build flags isn't enough: `Setup configure` still configures
       # every component for building and complains about missing dependencies.
       # Thus we have to mark the undesired components as non-buildable.
-      postPatch = drv.postPatch or "" + ''
-        for lib in hls-ormolu-plugin hls-fourmolu-plugin; do
-          sed -i "/^library $lib/a\  buildable: False" haskell-language-server.cabal
-        done
-      '';
+      postPatch =
+        drv.postPatch or ""
+        + ''
+          for lib in hls-ormolu-plugin hls-fourmolu-plugin; do
+            sed -i "/^library $lib/a\  buildable: False" haskell-language-server.cabal
+          done
+        '';
     }))
-    (d: d.override {
-      ormolu = null;
-      fourmolu = null;
-    })
+    (
+      d:
+      d.override {
+        ormolu = null;
+        fourmolu = null;
+      }
+    )
   ];
 
   # For GHC < 9.4, some packages need data-array-byte as an extra dependency
@@ -126,8 +136,8 @@ self: super: {
 
   # https://github.com/fpco/inline-c/pull/131
   inline-c-cpp =
-    (if isDarwin then appendConfigureFlags ["--ghc-option=-fcompact-unwind"] else x: x)
-    super.inline-c-cpp;
+    (if isDarwin then appendConfigureFlags [ "--ghc-option=-fcompact-unwind" ] else x: x)
+      super.inline-c-cpp;
 
   # A given major version of ghc-exactprint only supports one version of GHC.
   ghc-exactprint = super.ghc-exactprint_1_5_0;
@@ -136,14 +146,11 @@ self: super: {
   ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
 
   # Packages which need compat library for GHC < 9.6
-  inherit
-    (lib.mapAttrs
-      (_: addBuildDepends [ self.foldable1-classes-compat ])
-      super)
+  inherit (lib.mapAttrs (_: addBuildDepends [ self.foldable1-classes-compat ]) super)
     indexed-traversable
     OneTuple
     these
-  ;
+    ;
   base-compat-batteries = addBuildDepends [
     self.foldable1-classes-compat
     self.OneTuple

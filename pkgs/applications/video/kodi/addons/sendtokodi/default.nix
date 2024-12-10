@@ -1,4 +1,11 @@
-{ lib, buildKodiAddon, fetchFromGitHub, addonUpdateScript, kodi, inputstreamhelper }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  addonUpdateScript,
+  kodi,
+  inputstreamhelper,
+}:
 
 buildKodiAddon rec {
   pname = "sendtokodi";

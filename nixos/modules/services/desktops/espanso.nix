@@ -1,9 +1,18 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
-let cfg = config.services.espanso;
-in {
-  meta = { maintainers = with lib.maintainers; [ numkem ]; };
+let
+  cfg = config.services.espanso;
+in
+{
+  meta = {
+    maintainers = with lib.maintainers; [ numkem ];
+  };
 
   options = {
     services.espanso = {

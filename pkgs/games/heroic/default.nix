@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pnpm
-, nodejs
-, makeWrapper
-, electron
-, vulkan-helper
-, gogdl
-, legendary-gl
-, nile
-, comet-gog
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pnpm,
+  nodejs,
+  makeWrapper,
+  electron,
+  vulkan-helper,
+  gogdl,
+  legendary-gl,
+  nile,
+  comet-gog,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

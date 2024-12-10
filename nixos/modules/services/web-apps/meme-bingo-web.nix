@@ -1,10 +1,23 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkPackageOption mkIf mkOption types literalExpression;
+  inherit (lib)
+    mkEnableOption
+    mkPackageOption
+    mkIf
+    mkOption
+    types
+    literalExpression
+    ;
 
   cfg = config.services.meme-bingo-web;
-in {
+in
+{
   options = {
     services.meme-bingo-web = {
       enable = mkEnableOption ''
@@ -72,11 +85,18 @@ in {
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@privileged" "~@resources" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+          "~@resources"
+        ];
         UMask = "0077";
         RestrictSUIDSGID = true;
         RemoveIPC = true;

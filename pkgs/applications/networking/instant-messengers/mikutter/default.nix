@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, bundlerEnv
-, alsa-utils
-, atk
-, copyDesktopItems
-, gobject-introspection
-, gtk2
-, ruby
-, libicns
-, libnotify
-, makeDesktopItem
-, which
-, wrapGAppsHook3
-, writeText
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bundlerEnv,
+  alsa-utils,
+  atk,
+  copyDesktopItems,
+  gobject-introspection,
+  gtk2,
+  ruby,
+  libicns,
+  libnotify,
+  makeDesktopItem,
+  which,
+  wrapGAppsHook3,
+  writeText,
 }:
 
 let
@@ -29,7 +30,10 @@ let
   gems = bundlerEnv {
     name = "mikutter-gems"; # leave the version out to enable package reuse
     gemdir = ./deps;
-    groups = [ "default" "plugin" ];
+    groups = [
+      "default"
+      "plugin"
+    ];
     inherit ruby;
 
     # Avoid the following error:
@@ -43,7 +47,8 @@ let
     copyGemFiles = true;
   };
 
-  mkDesktopItem = { description }:
+  mkDesktopItem =
+    { description }:
     makeDesktopItem {
       name = "mikutter";
       desktopName = "mikutter";
@@ -54,22 +59,26 @@ let
       keywords = [ "Mastodon" ];
     };
 
-  mkInfoPlist = { version }:
-    writeText "Info.plist" (lib.generators.toPlist { } {
-      CFBundleName = "mikutter";
-      CFBundleDisplayName = "mikutter";
-      CFBundleExecutable = "mikutter";
-      CFBundleIconFile = "mikutter";
-      CFBundleIdentifier = "net.hachune.mikutter";
-      CFBundleInfoDictionaryVersion = "6.0";
-      CFBundlePackageType = "APPL";
-      CFBundleVersion = version;
-      CFBundleShortVersionString = version;
-    });
+  mkInfoPlist =
+    { version }:
+    writeText "Info.plist" (
+      lib.generators.toPlist { } {
+        CFBundleName = "mikutter";
+        CFBundleDisplayName = "mikutter";
+        CFBundleExecutable = "mikutter";
+        CFBundleIconFile = "mikutter";
+        CFBundleIdentifier = "net.hachune.mikutter";
+        CFBundleInfoDictionaryVersion = "6.0";
+        CFBundlePackageType = "APPL";
+        CFBundleVersion = version;
+        CFBundleShortVersionString = version;
+      }
+    );
 
   inherit (gems) wrappedRuby;
 in
-with mikutterPaths; stdenv.mkDerivation rec {
+with mikutterPaths;
+stdenv.mkDerivation rec {
   pname = "mikutter";
   version = "4.1.4";
 
@@ -78,8 +87,11 @@ with mikutterPaths; stdenv.mkDerivation rec {
     sha256 = "05253nz4i1lmnq6czj48qdab2ny4vx2mznj6nsn2l1m2z6zqkwk3";
   };
 
-  nativeBuildInputs = [ copyDesktopItems wrapGAppsHook3 gobject-introspection ]
-    ++ lib.optionals stdenv.isDarwin [ libicns ];
+  nativeBuildInputs = [
+    copyDesktopItems
+    wrapGAppsHook3
+    gobject-introspection
+  ] ++ lib.optionals stdenv.isDarwin [ libicns ];
   buildInputs = [
     atk
     gtk2
@@ -89,7 +101,11 @@ with mikutterPaths; stdenv.mkDerivation rec {
   ] ++ lib.optionals stdenv.isLinux [ alsa-utils ];
 
   scriptPath = lib.makeBinPath (
-    [ wrappedRuby libnotify which ]
+    [
+      wrappedRuby
+      libnotify
+      which
+    ]
     ++ lib.optionals stdenv.isLinux [ alsa-utils ]
   );
 
@@ -148,7 +164,11 @@ with mikutterPaths; stdenv.mkDerivation rec {
   doInstallCheck = true;
   dontWrapGApps = true; # the target is placed outside of bin/
 
-  passthru.updateScript = [ ./update.sh version (toString ./.) ];
+  passthru.updateScript = [
+    ./update.sh
+    version
+    (toString ./.)
+  ];
 
   meta = with lib; {
     description = "An extensible Mastodon client";

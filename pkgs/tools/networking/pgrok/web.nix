@@ -1,8 +1,9 @@
-{ src
-, version
-, nodejs
-, nodePackages
-, stdenvNoCC
+{
+  src,
+  version,
+  nodejs,
+  nodePackages,
+  stdenvNoCC,
 }:
 let
   build-deps = nodePackages."pgrok-build-deps-../../tools/networking/pgrok/build-deps";

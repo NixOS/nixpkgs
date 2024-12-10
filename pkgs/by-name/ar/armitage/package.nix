@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, jdk11
-, gradle_6
-, perl
-, metasploit
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, writeDarwinBundle
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  jdk11,
+  gradle_6,
+  perl,
+  metasploit,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  writeDarwinBundle,
 }:
 
 let
@@ -49,7 +50,10 @@ let
   deps = stdenv.mkDerivation {
     pname = "${pname}-deps";
     inherit version src patches;
-    nativeBuildInputs = [ gradle_6 perl ];
+    nativeBuildInputs = [
+      gradle_6
+      perl
+    ];
     buildPhase = ''
       export GRADLE_USER_HOME=$(mktemp -d)
       gradle --no-daemon assemble
@@ -67,7 +71,12 @@ let
   };
 in
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version src patches;
+  inherit
+    pname
+    version
+    src
+    patches
+    ;
 
   __darwinAllowLocalNetworking = true;
 
@@ -78,19 +87,24 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "armitage";
       icon = "armitage";
       comment = finalAttrs.meta.description;
-      categories = [ "Network" "Security" ];
+      categories = [
+        "Network"
+        "Security"
+      ];
       startupNotify = false;
     })
   ];
 
-  nativeBuildInputs = [
-    jdk11
-    gradle_6
-    makeWrapper
-    copyDesktopItems
-  ] ++ lib.optionals stdenv.isDarwin [
-    writeDarwinBundle
-  ];
+  nativeBuildInputs =
+    [
+      jdk11
+      gradle_6
+      makeWrapper
+      copyDesktopItems
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      writeDarwinBundle
+    ];
 
   buildPhase = ''
     runHook preBuild
@@ -115,13 +129,23 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace $out/bin/armitage \
       --replace "armitage.jar" "$JAR"
     wrapProgram $out/bin/armitage \
-      --prefix PATH : "${lib.makeBinPath [ jdk11 metasploit ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          jdk11
+          metasploit
+        ]
+      }"
 
     install -Dm755 dist/unix/teamserver $out/bin/teamserver
     substituteInPlace $out/bin/teamserver \
       --replace "armitage.jar" "$JAR"
     wrapProgram $out/bin/teamserver \
-      --prefix PATH : "${lib.makeBinPath [ jdk11 metasploit ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          jdk11
+          metasploit
+        ]
+      }"
 
     install -Dm444 dist/unix/armitage-logo.png $out/share/pixmaps/armitage.png
     ${lib.optionalString stdenv.isDarwin ''

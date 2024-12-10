@@ -1,64 +1,69 @@
-{ stdenv
-, lib
-, fetchurl
-, substituteAll
-, autoreconfHook
-, pkg-config
-, intltool
-, babl
-, gegl
-, gtk2
-, glib
-, gdk-pixbuf
-, isocodes
-, pango
-, cairo
-, freetype
-, fontconfig
-, lcms
-, libpng
-, libjpeg
-, libjxl
-, poppler
-, poppler_data
-, libtiff
-, libmng
-, librsvg
-, libwmf
-, zlib
-, libzip
-, ghostscript
-, aalib
-, shared-mime-info
-, libexif
-, gettext
-, makeWrapper
-, gtk-doc
-, xorg
-, glib-networking
-, libmypaint
-, gexiv2
-, harfbuzz
-, mypaint-brushes1
-, libwebp
-, libheif
-, libgudev
-, openexr
-, desktopToDarwinBundle
-, AppKit
-, Cocoa
-, gtk-mac-integration-gtk2
-, withPython ? false
-, python2
+{
+  stdenv,
+  lib,
+  fetchurl,
+  substituteAll,
+  autoreconfHook,
+  pkg-config,
+  intltool,
+  babl,
+  gegl,
+  gtk2,
+  glib,
+  gdk-pixbuf,
+  isocodes,
+  pango,
+  cairo,
+  freetype,
+  fontconfig,
+  lcms,
+  libpng,
+  libjpeg,
+  libjxl,
+  poppler,
+  poppler_data,
+  libtiff,
+  libmng,
+  librsvg,
+  libwmf,
+  zlib,
+  libzip,
+  ghostscript,
+  aalib,
+  shared-mime-info,
+  libexif,
+  gettext,
+  makeWrapper,
+  gtk-doc,
+  xorg,
+  glib-networking,
+  libmypaint,
+  gexiv2,
+  harfbuzz,
+  mypaint-brushes1,
+  libwebp,
+  libheif,
+  libgudev,
+  openexr,
+  desktopToDarwinBundle,
+  AppKit,
+  Cocoa,
+  gtk-mac-integration-gtk2,
+  withPython ? false,
+  python2,
 }:
 
 let
   python = python2.withPackages (pp: [ pp.pygtk ]);
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
   version = "2.10.38";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "http://download.gimp.org/pub/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.bz2";
@@ -78,80 +83,88 @@ in stdenv.mkDerivation (finalAttrs: {
     ./hardcode-plugin-interpreters.patch
   ];
 
-  nativeBuildInputs = [
-    autoreconfHook # hardcode-plugin-interpreters.patch changes Makefile.am
-    pkg-config
-    intltool
-    gettext
-    makeWrapper
-    gtk-doc
-  ] ++ lib.optionals stdenv.isDarwin [
-    desktopToDarwinBundle
-  ];
+  nativeBuildInputs =
+    [
+      autoreconfHook # hardcode-plugin-interpreters.patch changes Makefile.am
+      pkg-config
+      intltool
+      gettext
+      makeWrapper
+      gtk-doc
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      desktopToDarwinBundle
+    ];
 
-  buildInputs = [
-    babl
-    gegl
-    gtk2
-    glib
-    gdk-pixbuf
-    pango
-    cairo
-    gexiv2
-    harfbuzz
-    isocodes
-    freetype
-    fontconfig
-    lcms
-    libpng
-    libjpeg
-    libjxl
-    poppler
-    poppler_data
-    libtiff
-    openexr
-    libmng
-    librsvg
-    libwmf
-    zlib
-    libzip
-    ghostscript
-    aalib
-    shared-mime-info
-    libwebp
-    libheif
-    libexif
-    xorg.libXpm
-    glib-networking
-    libmypaint
-    mypaint-brushes1
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-    Cocoa
-    gtk-mac-integration-gtk2
-  ] ++ lib.optionals stdenv.isLinux [
-    libgudev
-  ] ++ lib.optionals withPython [
-    python
-    # Duplicated here because python.withPackages does not expose the dev output with pkg-config files
-    python2.pkgs.pygtk
-  ];
+  buildInputs =
+    [
+      babl
+      gegl
+      gtk2
+      glib
+      gdk-pixbuf
+      pango
+      cairo
+      gexiv2
+      harfbuzz
+      isocodes
+      freetype
+      fontconfig
+      lcms
+      libpng
+      libjpeg
+      libjxl
+      poppler
+      poppler_data
+      libtiff
+      openexr
+      libmng
+      librsvg
+      libwmf
+      zlib
+      libzip
+      ghostscript
+      aalib
+      shared-mime-info
+      libwebp
+      libheif
+      libexif
+      xorg.libXpm
+      glib-networking
+      libmypaint
+      mypaint-brushes1
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      AppKit
+      Cocoa
+      gtk-mac-integration-gtk2
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      libgudev
+    ]
+    ++ lib.optionals withPython [
+      python
+      # Duplicated here because python.withPackages does not expose the dev output with pkg-config files
+      python2.pkgs.pygtk
+    ];
 
   # needed by gimp-2.0.pc
   propagatedBuildInputs = [
     gegl
   ];
 
-  configureFlags = [
-    "--without-webkit" # old version is required
-    "--disable-check-update"
-    "--with-bug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
-    "--with-icc-directory=/run/current-system/sw/share/color/icc"
-    # fix libdir in pc files (${exec_prefix} needs to be passed verbatim)
-    "--libdir=\${exec_prefix}/lib"
-  ] ++ lib.optionals (!withPython) [
-    "--disable-python" # depends on Python2 which was EOLed on 2020-01-01
-  ];
+  configureFlags =
+    [
+      "--without-webkit" # old version is required
+      "--disable-check-update"
+      "--with-bug-report-url=https://github.com/NixOS/nixpkgs/issues/new"
+      "--with-icc-directory=/run/current-system/sw/share/color/icc"
+      # fix libdir in pc files (${exec_prefix} needs to be passed verbatim)
+      "--libdir=\${exec_prefix}/lib"
+    ]
+    ++ lib.optionals (!withPython) [
+      "--disable-python" # depends on Python2 which was EOLed on 2020-01-01
+    ];
 
   enableParallelBuilding = true;
 

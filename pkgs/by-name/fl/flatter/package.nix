@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, unstableGitUpdater
-, cmake
-, blas
-, gmp
-, mpfr
-, fplll
-, eigen
-, llvmPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  cmake,
+  blas,
+  gmp,
+  mpfr,
+  fplll,
+  eigen,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation {
@@ -28,15 +29,17 @@ stdenv.mkDerivation {
     cmake
   ];
 
-  buildInputs = [
-    blas
-    gmp
-    mpfr
-    fplll
-    eigen
-  ] ++ lib.optionals stdenv.isDarwin [
-    llvmPackages.openmp
-  ];
+  buildInputs =
+    [
+      blas
+      gmp
+      mpfr
+      fplll
+      eigen
+    ]
+    ++ lib.optionals stdenv.isDarwin [
+      llvmPackages.openmp
+    ];
 
   passthru.updateScript = unstableGitUpdater { };
 

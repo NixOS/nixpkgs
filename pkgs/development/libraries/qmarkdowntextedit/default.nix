@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
 }:
 
 stdenv.mkDerivation rec {

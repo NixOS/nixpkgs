@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "flannel";
@@ -25,7 +30,10 @@ buildGoModule rec {
     description = "Network fabric for containers, designed for Kubernetes";
     license = licenses.asl20;
     homepage = "https://github.com/flannel-io/flannel";
-    maintainers = with maintainers; [ johanot offline ];
+    maintainers = with maintainers; [
+      johanot
+      offline
+    ];
     platforms = with platforms; linux;
     mainProgram = "flannel";
   };

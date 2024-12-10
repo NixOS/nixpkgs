@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, fetchsvn, makeWrapper, unzip, jre, libXxf86vm
-, extraJavaOpts ? "-Djosm.restart=true -Djava.net.useSystemProxies=true"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchsvn,
+  makeWrapper,
+  unzip,
+  jre,
+  libXxf86vm,
+  extraJavaOpts ? "-Djosm.restart=true -Djava.net.useSystemProxies=true",
 }:
 let
   pname = "josm";
@@ -36,18 +44,21 @@ stdenv.mkDerivation rec {
   buildInputs = lib.optionals (!stdenv.isDarwin) [ jre ];
 
   installPhase =
-    if stdenv.isDarwin then ''
-      mkdir -p $out/Applications
-      ${unzip}/bin/unzip ${srcs.macosx} 'JOSM.app/*' -d $out/Applications
-    '' else ''
-      install -Dm644 ${srcs.jar} $out/share/josm/josm.jar
-      cp -R ${srcs.pkg}/usr/share $out
+    if stdenv.isDarwin then
+      ''
+        mkdir -p $out/Applications
+        ${unzip}/bin/unzip ${srcs.macosx} 'JOSM.app/*' -d $out/Applications
+      ''
+    else
+      ''
+        install -Dm644 ${srcs.jar} $out/share/josm/josm.jar
+        cp -R ${srcs.pkg}/usr/share $out
 
-      # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
-      makeWrapper ${jre}/bin/java $out/bin/josm \
-        --add-flags "${baseJavaOpts} ${extraJavaOpts} -jar $out/share/josm/josm.jar" \
-        --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib'
-    '';
+        # Add libXxf86vm to path because it is needed by at least Kendzi3D plugin
+        makeWrapper ${jre}/bin/java $out/bin/josm \
+          --add-flags "${baseJavaOpts} ${extraJavaOpts} -jar $out/share/josm/josm.jar" \
+          --prefix LD_LIBRARY_PATH ":" '${libXxf86vm}/lib'
+      '';
 
   meta = with lib; {
     description = "An extensible editor for OpenStreetMap";
@@ -55,7 +66,10 @@ stdenv.mkDerivation rec {
     changelog = "https://josm.openstreetmap.de/wiki/Changelog";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ rycee sikmir ];
+    maintainers = with maintainers; [
+      rycee
+      sikmir
+    ];
     platforms = platforms.all;
     mainProgram = "josm";
   };

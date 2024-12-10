@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gnumake
-, ncurses
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gnumake,
+  ncurses,
 }:
 stdenv.mkDerivation (finalAttrs: {
   name = "cano";
@@ -15,8 +16,14 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-qFo0szZVGLUf7c7KdEIofcieWZqtM6kQE6D8afrZ+RU=";
   };
 
-  buildInputs = [ gnumake ncurses ];
-  hardeningDisable = [ "format" "fortify" ];
+  buildInputs = [
+    gnumake
+    ncurses
+  ];
+  hardeningDisable = [
+    "format"
+    "fortify"
+  ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -24,11 +31,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-     description = "Text Editor Written In C Using ncurses";
-     homepage = "https://github.com/CobbCoding1/Cano";
-     license = lib.licenses.asl20;
-     mainProgram = "Cano";
-     maintainers = with lib.maintainers; [ sigmanificient ];
-     platforms = lib.platforms.linux;
+    description = "Text Editor Written In C Using ncurses";
+    homepage = "https://github.com/CobbCoding1/Cano";
+    license = lib.licenses.asl20;
+    mainProgram = "Cano";
+    maintainers = with lib.maintainers; [ sigmanificient ];
+    platforms = lib.platforms.linux;
   };
 })

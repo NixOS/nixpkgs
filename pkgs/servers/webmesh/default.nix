@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -18,7 +19,10 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
 
-  subPackages = [ "cmd/node" "cmd/wmctl" ];
+  subPackages = [
+    "cmd/node"
+    "cmd/wmctl"
+  ];
 
   ldflags = [
     "-w"

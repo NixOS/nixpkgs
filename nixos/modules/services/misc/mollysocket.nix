@@ -1,7 +1,19 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) getExe mkIf mkOption mkEnableOption optionals types;
+  inherit (lib)
+    getExe
+    mkIf
+    mkOption
+    mkEnableOption
+    optionals
+    types
+    ;
 
   cfg = config.services.mollysocket;
   configuration = format.generate "mollysocket.conf" cfg.settings;
@@ -9,7 +21,8 @@ let
   package = pkgs.writeShellScriptBin "mollysocket" ''
     MOLLY_CONF=${configuration} exec ${getExe pkgs.mollysocket} "$@"
   '';
-in {
+in
+{
   options.services.mollysocket = {
     enable = mkEnableOption ''
       [MollySocket](https://github.com/mollyim/mollysocket) for getting Signal
@@ -85,47 +98,56 @@ in {
       after = [ "network-online.target" ];
       wants = [ "network-online.target" ];
       environment.RUST_LOG = cfg.logLevel;
-      serviceConfig = let
-        capabilities = [ "" ] ++ optionals (cfg.settings.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
-      in {
-        EnvironmentFile = cfg.environmentFile;
-        ExecStart = "${getExe package} server";
-        KillSignal = "SIGINT";
-        Restart = "on-failure";
-        StateDirectory = "mollysocket";
-        TimeoutStopSec = 5;
-        WorkingDirectory = "/var/lib/mollysocket";
+      serviceConfig =
+        let
+          capabilities = [ "" ] ++ optionals (cfg.settings.port < 1024) [ "CAP_NET_BIND_SERVICE" ];
+        in
+        {
+          EnvironmentFile = cfg.environmentFile;
+          ExecStart = "${getExe package} server";
+          KillSignal = "SIGINT";
+          Restart = "on-failure";
+          StateDirectory = "mollysocket";
+          TimeoutStopSec = 5;
+          WorkingDirectory = "/var/lib/mollysocket";
 
-        # hardening
-        AmbientCapabilities = capabilities;
-        CapabilityBoundingSet = capabilities;
-        DevicePolicy = "closed";
-        DynamicUser = true;
-        LockPersonality = true;
-        MemoryDenyWriteExecute = true;
-        NoNewPrivileges = true;
-        PrivateDevices = true;
-        PrivateTmp = true;
-        PrivateUsers = true;
-        ProcSubset = "pid";
-        ProtectClock = true;
-        ProtectControlGroups = true;
-        ProtectHome = true;
-        ProtectHostname = true;
-        ProtectKernelLogs = true;
-        ProtectKernelModules = true;
-        ProtectKernelTunables = true;
-        ProtectProc = "invisible";
-        ProtectSystem = "strict";
-        RemoveIPC = true;
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
-        RestrictNamespaces = true;
-        RestrictRealtime = true;
-        RestrictSUIDSGID = true;
-        SystemCallArchitectures = "native";
-        SystemCallFilter = [ "@system-service" "~@resources" "~@privileged" ];
-        UMask = "0077";
-      };
+          # hardening
+          AmbientCapabilities = capabilities;
+          CapabilityBoundingSet = capabilities;
+          DevicePolicy = "closed";
+          DynamicUser = true;
+          LockPersonality = true;
+          MemoryDenyWriteExecute = true;
+          NoNewPrivileges = true;
+          PrivateDevices = true;
+          PrivateTmp = true;
+          PrivateUsers = true;
+          ProcSubset = "pid";
+          ProtectClock = true;
+          ProtectControlGroups = true;
+          ProtectHome = true;
+          ProtectHostname = true;
+          ProtectKernelLogs = true;
+          ProtectKernelModules = true;
+          ProtectKernelTunables = true;
+          ProtectProc = "invisible";
+          ProtectSystem = "strict";
+          RemoveIPC = true;
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ];
+          RestrictNamespaces = true;
+          RestrictRealtime = true;
+          RestrictSUIDSGID = true;
+          SystemCallArchitectures = "native";
+          SystemCallFilter = [
+            "@system-service"
+            "~@resources"
+            "~@privileged"
+          ];
+          UMask = "0077";
+        };
     };
   };
 

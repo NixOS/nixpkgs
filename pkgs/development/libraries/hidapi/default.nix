@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libusb1
-, udev
-, Cocoa
-, IOKit
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libusb1,
+  udev,
+  Cocoa,
+  IOKit,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,13 +22,22 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-p3uzBq5VxxQbVuy1lEHEEQdxXwnhQgJDIyAAWjVWNIg=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = lib.optionals stdenv.isLinux [ libusb1 udev ];
+  buildInputs = lib.optionals stdenv.isLinux [
+    libusb1
+    udev
+  ];
 
   enableParallelBuilding = true;
 
-  propagatedBuildInputs = lib.optionals stdenv.isDarwin [ Cocoa IOKit ];
+  propagatedBuildInputs = lib.optionals stdenv.isDarwin [
+    Cocoa
+    IOKit
+  ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
@@ -36,13 +46,18 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/libusb/hidapi";
     maintainers = with maintainers; [ prusnak ];
     # You can choose between GPLv3, BSD or HIDAPI license (even more liberal)
-    license = with licenses; [ bsd3 /* or */ gpl3Only ] ;
-    pkgConfigModules = lib.optionals stdenv.isDarwin [
-      "hidapi"
-    ] ++ lib.optionals stdenv.isLinux [
-      "hidapi-hidraw"
-      "hidapi-libusb"
+    license = with licenses; [
+      bsd3 # or
+      gpl3Only
     ];
+    pkgConfigModules =
+      lib.optionals stdenv.isDarwin [
+        "hidapi"
+      ]
+      ++ lib.optionals stdenv.isLinux [
+        "hidapi-hidraw"
+        "hidapi-libusb"
+      ];
     platforms = platforms.unix;
   };
 })

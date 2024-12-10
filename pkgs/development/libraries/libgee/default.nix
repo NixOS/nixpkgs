@@ -1,19 +1,23 @@
-{ stdenv
-, lib
-, fetchurl
-, autoconf
-, vala
-, pkg-config
-, glib
-, gobject-introspection
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoconf,
+  vala,
+  pkg-config,
+  glib,
+  gobject-introspection,
+  gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgee";
   version = "0.20.6";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/libgee/${lib.versions.majorMinor finalAttrs.version}/libgee-${finalAttrs.version}.tar.xz";

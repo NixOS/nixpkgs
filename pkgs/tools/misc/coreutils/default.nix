@@ -1,22 +1,29 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, buildPackages
-, libiconv
-, perl
-, texinfo
-, xz
-, gmpSupport ? true, gmp
-, aclSupport ? stdenv.isLinux, acl
-, attrSupport ? stdenv.isLinux, attr
-, selinuxSupport ? false, libselinux, libsepol
-# No openssl in default version, so openssl-induced rebuilds aren't too big.
-# It makes *sum functions significantly faster.
-, minimal ? true
-, withOpenssl ? !minimal, openssl
-, withPrefix ? false
-, singleBinary ? "symlinks" # you can also pass "shebangs" or false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  buildPackages,
+  libiconv,
+  perl,
+  texinfo,
+  xz,
+  gmpSupport ? true,
+  gmp,
+  aclSupport ? stdenv.isLinux,
+  acl,
+  attrSupport ? stdenv.isLinux,
+  attr,
+  selinuxSupport ? false,
+  libselinux,
+  libsepol,
+  # No openssl in default version, so openssl-induced rebuilds aren't too big.
+  # It makes *sum functions significantly faster.
+  minimal ? true,
+  withOpenssl ? !minimal,
+  openssl,
+  withPrefix ? false,
+  singleBinary ? "symlinks", # you can also pass "shebangs" or false
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus cannot use
@@ -27,7 +34,13 @@ assert aclSupport -> acl != null;
 assert selinuxSupport -> libselinux != null && libsepol != null;
 
 let
-  inherit (lib) concatStringsSep isString optional optionals optionalString;
+  inherit (lib)
+    concatStringsSep
+    isString
+    optional
+    optionals
+    optionalString
+    ;
   isCross = (stdenv.hostPlatform != stdenv.buildPlatform);
 in
 stdenv.mkDerivation rec {
@@ -44,85 +57,100 @@ stdenv.mkDerivation rec {
     ./fix-test-failure-musl.patch
   ];
 
-  postPatch = ''
-    # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
-    sed '2i echo Skipping dd sparse test && exit 77' -i ./tests/dd/sparse.sh
-    sed '2i echo Skipping du threshold test && exit 77' -i ./tests/du/threshold.sh
-    sed '2i echo Skipping cp reflink-auto test && exit 77' -i ./tests/cp/reflink-auto.sh
-    sed '2i echo Skipping cp sparse test && exit 77' -i ./tests/cp/sparse.sh
-    sed '2i echo Skipping env test && exit 77' -i ./tests/env/env.sh
-    sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
-    sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
-
-    # The test tends to fail on cephfs
-    sed '2i echo Skipping df total-verify test && exit 77' -i ./tests/df/total-verify.sh
-
-    # Some target platforms, especially when building inside a container have
-    # issues with the inotify test.
-    sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail/inotify-dir-recreate.sh
-
-    # sandbox does not allow setgid
-    sed '2i echo Skipping chmod setgid test && exit 77' -i ./tests/chmod/setgid.sh
-    substituteInPlace ./tests/install/install-C.sh \
-      --replace 'mode3=2755' 'mode3=1755'
-
-    # Fails on systems with a rootfs. Looks like a bug in the test, see
-    # https://lists.gnu.org/archive/html/bug-coreutils/2019-12/msg00000.html
-    sed '2i print "Skipping df skip-rootfs test"; exit 77' -i ./tests/df/skip-rootfs.sh
-
-    # these tests fail in the unprivileged nix sandbox (without nix-daemon) as we break posix assumptions
-    for f in ./tests/chgrp/{basic.sh,recurse.sh,default-no-deref.sh,no-x.sh,posix-H.sh}; do
-      sed '2i echo Skipping chgrp && exit 77' -i "$f"
-    done
-    for f in gnulib-tests/{test-chown.c,test-fchownat.c,test-lchown.c}; do
-      echo "int main() { return 77; }" > "$f"
-    done
-
-    # We don't have localtime in the sandbox
-    for f in gnulib-tests/{test-localtime_r.c,test-localtime_r-mt.c}; do
-      echo "int main() { return 77; }" > "$f"
-    done
-
-    # intermittent failures on builders, unknown reason
-    sed '2i echo Skipping du basic test && exit 77' -i ./tests/du/basic.sh
-  '' + (optionalString (stdenv.hostPlatform.libc == "musl") (concatStringsSep "\n" [
+  postPatch =
     ''
-      echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
-      echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
-    ''
-  ])) + (optionalString stdenv.isAarch64 ''
-    # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
-    sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/cut/cut-huge-range.sh
-  '');
+      # The test tends to fail on btrfs, f2fs and maybe other unusual filesystems.
+      sed '2i echo Skipping dd sparse test && exit 77' -i ./tests/dd/sparse.sh
+      sed '2i echo Skipping du threshold test && exit 77' -i ./tests/du/threshold.sh
+      sed '2i echo Skipping cp reflink-auto test && exit 77' -i ./tests/cp/reflink-auto.sh
+      sed '2i echo Skipping cp sparse test && exit 77' -i ./tests/cp/sparse.sh
+      sed '2i echo Skipping env test && exit 77' -i ./tests/env/env.sh
+      sed '2i echo Skipping rm deep-2 test && exit 77' -i ./tests/rm/deep-2.sh
+      sed '2i echo Skipping du long-from-unreadable test && exit 77' -i ./tests/du/long-from-unreadable.sh
 
-  outputs = [ "out" "info" ];
+      # The test tends to fail on cephfs
+      sed '2i echo Skipping df total-verify test && exit 77' -i ./tests/df/total-verify.sh
+
+      # Some target platforms, especially when building inside a container have
+      # issues with the inotify test.
+      sed '2i echo Skipping tail inotify dir recreate test && exit 77' -i ./tests/tail/inotify-dir-recreate.sh
+
+      # sandbox does not allow setgid
+      sed '2i echo Skipping chmod setgid test && exit 77' -i ./tests/chmod/setgid.sh
+      substituteInPlace ./tests/install/install-C.sh \
+        --replace 'mode3=2755' 'mode3=1755'
+
+      # Fails on systems with a rootfs. Looks like a bug in the test, see
+      # https://lists.gnu.org/archive/html/bug-coreutils/2019-12/msg00000.html
+      sed '2i print "Skipping df skip-rootfs test"; exit 77' -i ./tests/df/skip-rootfs.sh
+
+      # these tests fail in the unprivileged nix sandbox (without nix-daemon) as we break posix assumptions
+      for f in ./tests/chgrp/{basic.sh,recurse.sh,default-no-deref.sh,no-x.sh,posix-H.sh}; do
+        sed '2i echo Skipping chgrp && exit 77' -i "$f"
+      done
+      for f in gnulib-tests/{test-chown.c,test-fchownat.c,test-lchown.c}; do
+        echo "int main() { return 77; }" > "$f"
+      done
+
+      # We don't have localtime in the sandbox
+      for f in gnulib-tests/{test-localtime_r.c,test-localtime_r-mt.c}; do
+        echo "int main() { return 77; }" > "$f"
+      done
+
+      # intermittent failures on builders, unknown reason
+      sed '2i echo Skipping du basic test && exit 77' -i ./tests/du/basic.sh
+    ''
+    + (optionalString (stdenv.hostPlatform.libc == "musl") (
+      concatStringsSep "\n" [
+        ''
+          echo "int main() { return 77; }" > gnulib-tests/test-parse-datetime.c
+          echo "int main() { return 77; }" > gnulib-tests/test-getlogin.c
+        ''
+      ]
+    ))
+    + (optionalString stdenv.isAarch64 ''
+      # Sometimes fails: https://github.com/NixOS/nixpkgs/pull/143097#issuecomment-954462584
+      sed '2i echo Skipping cut huge range test && exit 77' -i ./tests/cut/cut-huge-range.sh
+    '');
+
+  outputs = [
+    "out"
+    "info"
+  ];
   separateDebugInfo = true;
 
-  nativeBuildInputs = [
-    # autoreconfHook is due to patch, normally only needed for cygwin
-    autoreconfHook
-    perl
-    xz.bin
-  ]
-  ++ optionals stdenv.hostPlatform.isCygwin [
-    # due to patch
-    texinfo
-  ];
+  nativeBuildInputs =
+    [
+      # autoreconfHook is due to patch, normally only needed for cygwin
+      autoreconfHook
+      perl
+      xz.bin
+    ]
+    ++ optionals stdenv.hostPlatform.isCygwin [
+      # due to patch
+      texinfo
+    ];
 
-  buildInputs = [ ]
+  buildInputs =
+    [ ]
     ++ optional aclSupport acl
     ++ optional attrSupport attr
     ++ optional gmpSupport gmp
     ++ optional withOpenssl openssl
-    ++ optionals selinuxSupport [ libselinux libsepol ]
+    ++ optionals selinuxSupport [
+      libselinux
+      libsepol
+    ]
     # TODO(@Ericson2314): Investigate whether Darwin could benefit too
     ++ optional (isCross && stdenv.hostPlatform.libc != "glibc") libiconv;
 
   hardeningDisable = [ "trivialautovarinit" ];
 
-  configureFlags = [ "--with-packager=https://nixos.org" ]
-    ++ optional (singleBinary != false)
-      ("--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}")
+  configureFlags =
+    [ "--with-packager=https://nixos.org" ]
+    ++ optional (singleBinary != false) (
+      "--enable-single-binary" + optionalString (isString singleBinary) "=${singleBinary}"
+    )
     ++ optional withOpenssl "--with-openssl"
     ++ optional stdenv.hostPlatform.isSunOS "ac_cv_func_inotify_init=no"
     ++ optional withPrefix "--program-prefix=g"
@@ -145,7 +173,8 @@ stdenv.mkDerivation rec {
   # Darwin (http://article.gmane.org/gmane.comp.gnu.core-utils.bugs/19351),
   # and {Open,Free}BSD.
   # With non-standard storeDir: https://github.com/NixOS/nix/issues/512
-  doCheck = (!isCross)
+  doCheck =
+    (!isCross)
     && (stdenv.hostPlatform.libc == "glibc" || stdenv.hostPlatform.libc == "musl")
     && !stdenv.isAarch32;
 
@@ -156,10 +185,12 @@ stdenv.mkDerivation rec {
 
   NIX_LDFLAGS = optionalString selinuxSupport "-lsepol";
   FORCE_UNSAFE_CONFIGURE = optionalString stdenv.hostPlatform.isSunOS "1";
-  env.NIX_CFLAGS_COMPILE = toString ([]
+  env.NIX_CFLAGS_COMPILE = toString (
+    [ ]
     # Work around a bogus warning in conjunction with musl.
     ++ optional stdenv.hostPlatform.isMusl "-Wno-error"
-    ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0");
+    ++ optional stdenv.hostPlatform.isAndroid "-D__USE_FORTIFY_LEVEL=0"
+  );
 
   # Works around a bug with 8.26:
   # Makefile:3440: *** Recursive variable 'INSTALL' references itself (eventually).  Stop.
@@ -167,14 +198,15 @@ stdenv.mkDerivation rec {
     sed -i Makefile -e 's|^INSTALL =.*|INSTALL = ${buildPackages.coreutils}/bin/install -c|'
   '';
 
-  postInstall = optionalString (isCross && !minimal) ''
-    rm $out/share/man/man1/*
-    cp ${buildPackages.coreutils-full}/share/man/man1/* $out/share/man/man1
-  ''
-  # du: 8.7 M locale + 0.4 M man pages
-  + optionalString minimal ''
-    rm -r "$out/share"
-  '';
+  postInstall =
+    optionalString (isCross && !minimal) ''
+      rm $out/share/man/man1/*
+      cp ${buildPackages.coreutils-full}/share/man/man1/* $out/share/man/man1
+    ''
+    # du: 8.7 M locale + 0.4 M man pages
+    + optionalString minimal ''
+      rm -r "$out/share"
+    '';
 
   meta = with lib; {
     homepage = "https://www.gnu.org/software/coreutils/";

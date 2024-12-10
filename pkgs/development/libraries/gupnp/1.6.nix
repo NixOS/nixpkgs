@@ -1,24 +1,29 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, vala
-, gi-docgen
-, glib
-, gssdp_1_6
-, libsoup_3
-, libxml2
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  vala,
+  gi-docgen,
+  glib,
+  gssdp_1_6,
+  libsoup_3,
+  libxml2,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gupnp";
   version = "1.6.6";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

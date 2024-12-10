@@ -1,10 +1,11 @@
-{ buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, lib
-, makeWrapper
-, stdenv
-, xdg-utils
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  makeWrapper,
+  stdenv,
+  xdg-utils,
 }:
 buildGoModule rec {
   pname = "aws-vault";
@@ -19,18 +20,22 @@ buildGoModule rec {
 
   vendorHash = "sha256-4bJKDEZlO0DzEzTQ7m+SQuzhe+wKmL6wLueqgSz/46s=";
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   postInstall = ''
     # make xdg-open overrideable at runtime
     # aws-vault uses https://github.com/skratchdot/open-golang/blob/master/open/open.go to open links
-    ${lib.optionalString (!stdenv.isDarwin) "wrapProgram $out/bin/aws-vault --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"}
+    ${lib.optionalString (
+      !stdenv.isDarwin
+    ) "wrapProgram $out/bin/aws-vault --suffix PATH : ${lib.makeBinPath [ xdg-utils ]}"}
     installShellCompletion --cmd aws-vault \
       --bash $src/contrib/completions/bash/aws-vault.bash \
       --fish $src/contrib/completions/fish/aws-vault.fish \
       --zsh $src/contrib/completions/zsh/aws-vault.zsh
   '';
-
 
   doCheck = false;
 
@@ -48,8 +53,7 @@ buildGoModule rec {
   '';
 
   meta = with lib; {
-    description =
-      "A vault for securely storing and accessing AWS credentials in development environments";
+    description = "A vault for securely storing and accessing AWS credentials in development environments";
     mainProgram = "aws-vault";
     homepage = "https://github.com/99designs/aws-vault";
     license = licenses.mit;

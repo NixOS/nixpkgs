@@ -1,9 +1,29 @@
-{ lib, stdenv, fetchFromGitLab, meson, ninja, wrapGAppsHook3, pkg-config, gitUpdater
-, appstream-glib, json-glib, desktop-file-utils, python3
-, gtk, girara, gettext, libxml2, check
-, sqlite, glib, texlive, libintl, libseccomp
-, file, librsvg
-, gtk-mac-integration
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  wrapGAppsHook3,
+  pkg-config,
+  gitUpdater,
+  appstream-glib,
+  json-glib,
+  desktop-file-utils,
+  python3,
+  gtk,
+  girara,
+  gettext,
+  libxml2,
+  check,
+  sqlite,
+  glib,
+  texlive,
+  libintl,
+  libseccomp,
+  file,
+  librsvg,
+  gtk-mac-integration,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-mHEYqgBB55p8nykFtvYtP5bWexp/IqFbeLs7gZmXCeE=";
   };
 
-  outputs = [ "bin" "man" "dev" "out" ];
+  outputs = [
+    "bin"
+    "man"
+    "dev"
+    "out"
+  ];
 
   # Flag list:
   # https://github.com/pwmt/zathura/blob/master/meson_options.txt
@@ -33,14 +58,31 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    meson ninja pkg-config desktop-file-utils python3.pythonOnBuildForHost.pkgs.sphinx
-    gettext wrapGAppsHook3 libxml2 appstream-glib
+    meson
+    ninja
+    pkg-config
+    desktop-file-utils
+    python3.pythonOnBuildForHost.pkgs.sphinx
+    gettext
+    wrapGAppsHook3
+    libxml2
+    appstream-glib
   ];
 
-  buildInputs = [
-    gtk girara libintl sqlite glib file librsvg check json-glib
-    texlive.bin.core
-  ] ++ lib.optional stdenv.isLinux libseccomp
+  buildInputs =
+    [
+      gtk
+      girara
+      libintl
+      sqlite
+      glib
+      file
+      librsvg
+      check
+      json-glib
+      texlive.bin.core
+    ]
+    ++ lib.optional stdenv.isLinux libseccomp
     ++ lib.optional stdenv.isDarwin gtk-mac-integration;
 
   doCheck = !stdenv.isDarwin;

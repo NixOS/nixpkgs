@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation {
   pname = "rowhammer-test";
@@ -25,6 +29,9 @@ stdenv.mkDerivation {
     homepage = "https://github.com/google/rowhammer-test";
     license = licenses.asl20;
     maintainers = [ maintainers.viric ];
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
   };
 }

@@ -1,9 +1,10 @@
-{ appimageTools
-, fetchurl
-, lib
-, xorg
-, udev
-, wooting-udev-rules
+{
+  appimageTools,
+  fetchurl,
+  lib,
+  xorg,
+  udev,
+  wooting-udev-rules,
 }:
 
 appimageTools.wrapType2 rec {
@@ -21,7 +22,9 @@ appimageTools.wrapType2 rec {
 
   multiPkgs = extraPkgs;
   extraPkgs =
-    pkgs: (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs) ++ ([
+    pkgs:
+    (appimageTools.defaultFhsEnvArgs.multiPkgs pkgs)
+    ++ ([
       udev
       wooting-udev-rules
       xorg.libxkbfile

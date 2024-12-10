@@ -1,8 +1,20 @@
-{ config, pkgs, lib, utils, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  utils,
+  ...
+}:
 
 let
   cfg = config.services.docuum;
-  inherit (lib) mkIf mkEnableOption mkOption getExe types;
+  inherit (lib)
+    mkIf
+    mkEnableOption
+    mkOption
+    getExe
+    types
+    ;
 in
 {
   options.services.docuum = {
@@ -37,7 +49,8 @@ in
         SupplementaryGroups = [ "docker" ];
         ExecStart = utils.escapeSystemdExecArgs [
           (getExe pkgs.docuum)
-          "--threshold" cfg.threshold
+          "--threshold"
+          cfg.threshold
         ];
       };
     };

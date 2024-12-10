@@ -1,6 +1,7 @@
-{ system ? builtins.currentSystem
-, config ? {}
-, networkExpr
+{
+  system ? builtins.currentSystem,
+  config ? { },
+  networkExpr,
 }:
 
 let
@@ -15,9 +16,13 @@ let
     inherit system pkgs;
   };
 
-  interactiveDriver = (testing.makeTest { inherit nodes; name = "network"; testScript = "start_all(); join_all();"; }).test.driverInteractive;
+  interactiveDriver =
+    (testing.makeTest {
+      inherit nodes;
+      name = "network";
+      testScript = "start_all(); join_all();";
+    }).test.driverInteractive;
 in
-
 
 pkgs.runCommand "nixos-build-vms" { nativeBuildInputs = [ pkgs.makeWrapper ]; } ''
   mkdir -p $out/bin
