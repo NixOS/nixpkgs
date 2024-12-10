@@ -1,9 +1,12 @@
-with import ../lib;
+let lib = import ../lib;
+in
+with lib;
 
 { nixpkgs ? { outPath = cleanSource ./..; revCount = 708350; shortRev = "1d95cb5"; }
 , stableBranch ? false
 , supportedSystems ? [ "x86_64-linux" "aarch64-linux" ]
 , configuration ? {}
+, hydraJob ? lib.hydraJob
 }:
 
 with import ../pkgs/top-level/release-lib.nix { inherit supportedSystems; };

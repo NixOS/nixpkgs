@@ -106,6 +106,7 @@ in rec {
       inputs = sourceFilesBySuffices ./. [ ".md" ];
       meta.description = "The NixOS manual in HTML format";
       allowedReferences = ["out"];
+      passthru = { inherit optionsDoc; };
     }
     ''
       # Generate the HTML manual.

@@ -87,6 +87,7 @@
     }
   ```
 */
+args@
 { pkgs
 , lib
 , options
@@ -107,6 +108,7 @@
 # instead of printing warnings for eg options with missing descriptions (which may be lost
 # by nix build unless -L is given), emit errors instead and fail the build
 , warningsAreErrors ? true
+, optionsNix ? null
 }:
 
 let
@@ -150,7 +152,7 @@ let
         '';
     in lib.concatMapStrings (p: describe (unpack p)) packages;
 
-  optionsNix = builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList);
+  optionsNix = args.optionsNix or (builtins.listToAttrs (map (o: { name = o.name; value = removeAttrs o ["name" "visible" "internal"]; }) optionsList));
 
 in rec {
   inherit optionsNix;
