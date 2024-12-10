@@ -12,7 +12,7 @@ rec {
       # package dependencies
       , stdenv, fetchFromGitHub, fetchpatch, buildGoModule
       , makeWrapper, installShellFiles, pkg-config, glibc
-      , go-md2man, go, containerd, runc, tini, libtool
+      , go-md2man, go, containerd, runc, tini, libtool, bash
       , sqlite, iproute2, docker-buildx, docker-compose, docker-sbom, docker-init
       , iptables, e2fsprogs, xz, util-linux, xfsprogs, gitMinimal
       , procps, rootlesskit, slirp4netns, fuse-overlayfs, nixosTests
@@ -44,6 +44,10 @@ rec {
         rev = runcRev;
         hash = runcHash;
       };
+
+      preBuild = ''
+        substituteInPlace Makefile --replace-warn "/bin/bash" "${lib.getExe bash}"
+      '';
 
       # docker/runc already include these patches / are not applicable
       patches = [];
@@ -343,15 +347,15 @@ rec {
   };
 
   docker_27 = callPackage dockerGen rec {
-    version = "27.3.1";
+    version = "27.4.0";
     cliRev = "v${version}";
-    cliHash = "sha256-Iurud1BwswGZCFgJ04/wl1U9AKcsXDmzFXLFCrjfc0Y=";
+    cliHash = "sha256-q6xKERB5K7idExTrwFfX2ORs2G/55s2pybyhPcV5wuo=";
     mobyRev = "v${version}";
     mobyHash = "sha256-AKl06k2ePWOFhL3oH086HcLLYs2Da+wLOcGjGnQ0SXE=";
-    runcRev = "v1.1.14";
-    runcHash = "sha256-7PYbSZqCQLTaeFppuNz5mxDlwEyLkA5zpdMhWy1tWmc=";
-    containerdRev = "v1.7.22";
-    containerdHash = "sha256-8IHBKai4PvvTuHPDTgx9wFEBzz4MM7Mwo8Q/bzFRzfk=";
+    runcRev = "v1.2.2";
+    runcHash = "sha256-hRi7TJP73hRd/v8hisEUx9P2I2J5oF0Wv60NWHORI7Y=";
+    containerdRev = "v1.7.24";
+    containerdHash = "sha256-03vJs61AnTuFAdImZjBfn1izFcoalVJdVs9DZeDcABI=";
     tiniRev = "v0.19.0";
     tiniHash = "sha256-ZDKu/8yE5G0RYFJdhgmCdN3obJNyRWv6K/Gd17zc1sI=";
   };
