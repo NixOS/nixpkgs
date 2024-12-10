@@ -1,24 +1,40 @@
-#include <nix/args.hh>             // for argvToStrings, UsageError
-#include <nix/attr-path.hh>        // for findAlongAttrPath, parseAttrPath
-#include <nix/attr-set.hh>         // for Attr, Bindings, Bindings::iterator
-#include <nix/common-eval-args.hh> // for MixEvalArgs
-#include <nix/eval-gc.hh>          // for initGC, initNix
-#include <nix/eval-inline.hh>      // for EvalState::forceValue
-#include <nix/eval.hh>             // for EvalState, initGC, operator<<
-#include <nix/globals.hh>          // for initPlugins, Settings, settings
-#include <nix/nixexpr.hh>          // for Pos
-#include <nix/shared.hh>           // for getArg, LegacyArgs, printVersion
-#include <nix/store-api.hh>        // for openStore
-#include <nix/symbol-table.hh>     // for Symbol, SymbolTable
-#include <nix/types.hh>            // for Error, Path, Strings, PathSet
-#include <nix/util.hh>             // for absPath, baseNameOf
-#include <nix/value.hh>            // for Value, Value::(anonymous), Value:...
-#include <string>                  // for string, operator+, operator==
-#include <utility>                 // for move
+#include <cstddef>
+#include <cstdint>
+#include <exception>
+#include <functional>
+#include <iostream>
+#include <iterator>
+#include <optional>
+#include <span>
+#include <sstream>
+#include <string>
+#include <utility>
+#include <variant>
+#include <vector>
+
+#include <nix/args.hh>
+#include <nix/attr-path.hh>
+#include <nix/attr-set.hh>
+#include <nix/common-eval-args.hh>
+#include <nix/error.hh>
+#include <nix/eval-error.hh>
+#include <nix/eval-gc.hh>
+#include <nix/eval.hh>
+#include <nix/file-system.hh>
+#include <nix/globals.hh>
+#include <nix/nixexpr.hh>
+#include <nix/pos-idx.hh>
+#include <nix/print.hh>
+#include <nix/ref.hh>
+#include <nix/shared.hh>
+#include <nix/store-api.hh>
+#include <nix/symbol-table.hh>
+#include <nix/types.hh>
+#include <nix/value.hh>
+#include <nix/value/context.hh>
 
 #include "libnix-copy-paste.hh"
 
-using nix::absPath;
 using nix::Bindings;
 using nix::Error;
 using nix::EvalError;
@@ -29,9 +45,7 @@ using nix::Strings;
 using nix::Symbol;
 using nix::nAttrs;
 using nix::ThrownError;
-using nix::tLambda;
 using nix::nString;
-using nix::UsageError;
 using nix::Value;
 
 struct Context
@@ -54,7 +68,7 @@ class Out
     class Separator
     {};
     const static Separator sep;
-    enum LinePolicy
+    enum LinePolicy : std::uint8_t
     {
         ONE_LINE,
         MULTI_LINE
@@ -66,8 +80,8 @@ class Out
     {}
     Out(const Out &) = delete;
     Out(Out &&) = default;
-    Out & operator=(const Out &) = delete;
-    Out & operator=(Out &&) = delete;
+    auto operator=(const Out &) -> Out & = delete;
+    auto operator=(Out &&) -> Out & = delete;
     ~Out() { ostream << end; }
 
   private:
@@ -76,9 +90,9 @@ class Out
     std::string end;
     LinePolicy policy;
     bool writeSinceSep;
-    template <typename T> friend Out & operator<<(Out & o, T thing);
+    template <typename T> friend auto operator<<(Out & o, T thing) -> Out &;
 
-    friend void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr> maybeValue, const std::string & path);
+    friend auto printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr> maybeValue, const std::string & path) -> void;
 };
 
 template <typename T> Out & operator<<(Out & o, T thing)
@@ -128,7 +142,7 @@ bool isOption(Context & ctx, const Value & v)
         return false;
     }
     try {
-        Value evaluatedType = evaluateValue(ctx, *actualType->value);
+        const Value evaluatedType = evaluateValue(ctx, *actualType->value);
         if (evaluatedType.type() != nString) {
             return false;
         }
@@ -152,7 +166,7 @@ std::string quoteAttribute(const std::string_view & attribute)
     return buf.str();
 }
 
-const std::string appendPath(const std::string & prefix, const std::string_view & suffix)
+std::string appendPath(const std::string & prefix, const std::string_view & suffix)
 {
     if (prefix.empty()) {
         return quoteAttribute(suffix);
@@ -192,7 +206,7 @@ void recurse(const std::function<bool(const std::string & path, std::variant<Val
         if (forbiddenRecursionName(child->name, ctx.state.symbols)) {
             continue;
         }
-        std::string_view name = ctx.state.symbols[child->name];
+        const std::string_view name = ctx.state.symbols[child->name];
         recurse(f, ctx, *child->value, appendPath(path, name));
     }
 }
@@ -204,7 +218,7 @@ bool optionTypeIs(Context & ctx, Value & v, const std::string & soughtType)
         if (typeLookup == v.attrs()->end()) {
             return false;
         }
-        Value type = evaluateValue(ctx, *typeLookup->value);
+        const Value type = evaluateValue(ctx, *typeLookup->value);
         if (type.type() != nAttrs) {
             return false;
         }
@@ -212,7 +226,7 @@ bool optionTypeIs(Context & ctx, Value & v, const std::string & soughtType)
         if (nameLookup == type.attrs()->end()) {
             return false;
         }
-        Value name = evaluateValue(ctx, *nameLookup->value);
+        const Value name = evaluateValue(ctx, *nameLookup->value);
         if (name.type() != nString) {
             return false;
         }
@@ -257,7 +271,7 @@ FindAlongOptionPathRet findAlongOptionPath(Context & ctx, const std::string & pa
     for (auto i = tokens.begin(); i != tokens.end(); i++) {
         const std::string_view attr = ctx.state.symbols[*i];
         try {
-            bool lastAttribute = std::next(i) == tokens.end();
+            const bool lastAttribute = std::next(i) == tokens.end();
             v = evaluateValue(ctx, v);
             if (attr.empty()) {
                 throw OptionPathError(ctx.state, "empty attribute name");
@@ -299,8 +313,8 @@ void mapOptions(const std::function<void(const std::string & path)> & f, Context
 {
     auto root = findAlongOptionPath(ctx, path);
     recurse(
-        [f, &ctx](const std::string & path, std::variant<Value, std::exception_ptr> v) {
-            bool isOpt = std::holds_alternative<std::exception_ptr>(v) || isOption(ctx, std::get<Value>(v));
+        [&f, &ctx](const std::string & path, std::variant<Value, std::exception_ptr> v) {
+            const bool isOpt = std::holds_alternative<std::exception_ptr>(v) || isOption(ctx, std::get<Value>(v));
             if (isOpt) {
                 f(path);
             }
@@ -334,7 +348,7 @@ void mapConfigValuesInOption(
     const std::function<void(const std::string & path, std::variant<Value, std::exception_ptr> v)> & f,
     const std::string & path, Context & ctx)
 {
-    Value * option;
+    Value * option = nullptr;
     try {
         option = findAlongAttrPath(ctx.state, path, ctx.autoArgs, ctx.configRoot).first;
     } catch (Error &) {
@@ -343,7 +357,7 @@ void mapConfigValuesInOption(
     }
     recurse(
         [f, ctx](const std::string & path, std::variant<Value, std::exception_ptr> v) {
-            bool leaf = std::holds_alternative<std::exception_ptr>(v) || std::get<Value>(v).type() != nAttrs ||
+            const bool leaf = std::holds_alternative<std::exception_ptr>(v) || std::get<Value>(v).type() != nAttrs ||
                         ctx.state.isDerivation(std::get<Value>(v));
             if (!leaf) {
                 return true; // Keep digging
@@ -360,7 +374,7 @@ void describeDerivation(Context & ctx, Out & out, Value v)
 {
     // Copy-pasted from nix/src/nix/repl.cc printDerivation()  :(
     std::optional<nix::StorePath> storePath = std::nullopt;
-    if (auto i = v.attrs()->get(ctx.state.sDrvPath)) {
+    if (const auto *i = v.attrs()->get(ctx.state.sDrvPath)) {
         nix::NixStringContext context;
         storePath = ctx.state.coerceToStorePath(i->pos, *i->value, context, "while evaluating the drvPath of a derivation");
     }
@@ -371,7 +385,7 @@ void describeDerivation(Context & ctx, Out & out, Value v)
     out << "»";
 }
 
-Value parseAndEval(EvalState & state, const std::string & expression, const std::string & path)
+Value parseAndEval(EvalState & state, const std::string & expression)
 {
     Value v{};
     state.eval(state.parseExprFromString(expression, state.rootPath(".")), v);
@@ -382,19 +396,19 @@ void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr
 
 void printList(Context & ctx, Out & out, Value & v)
 {
-    Out listOut(out, "[", "]", v.listSize());
-    for (unsigned int n = 0; n < v.listSize(); ++n) {
-        printValue(ctx, listOut, *v.listElems()[n], "");
+    Out listOut(out, "[", "]", static_cast<int>(v.listSize()));
+    for (auto *elem : v.listItems()) {
+        printValue(ctx, listOut, *elem, "");
         listOut << Out::sep;
     }
 }
 
 void printAttrs(Context & ctx, Out & out, Value & v, const std::string & path)
 {
-    Out attrsOut(out, "{", "}", v.attrs()->size());
+    Out attrsOut(out, "{", "}", static_cast<int>(v.attrs()->size()));
     for (const auto & a : v.attrs()->lexicographicOrder(ctx.state.symbols)) {
         if (!forbiddenRecursionName(a->name, ctx.state.symbols)) {
-            std::string_view name = ctx.state.symbols[a->name];
+            const std::string_view name = ctx.state.symbols[a->name];
             attrsOut << name << " = ";
             printValue(ctx, attrsOut, *a->value, appendPath(path, name));
             attrsOut << ";" << Out::sep;
@@ -404,7 +418,7 @@ void printAttrs(Context & ctx, Out & out, Value & v, const std::string & path)
 
 void multiLineStringEscape(Out & out, const std::string_view & s)
 {
-    size_t i;
+    size_t i = 0;
     for (i = 1; i < s.size(); i++) {
         if (s[i - 1] == '$' && s[i] == '{') {
             out << "''${";
@@ -423,11 +437,11 @@ void multiLineStringEscape(Out & out, const std::string_view & s)
 
 void printMultiLineString(Out & out, const Value & v)
 {
-    std::string_view s = v.string_view();
+    const std::string_view s = v.string_view();
     Out strOut(out, "''", "''", Out::MULTI_LINE);
     std::string::size_type begin = 0;
     while (begin < s.size()) {
-        std::string::size_type end = s.find('\n', begin);
+        const std::string::size_type end = s.find('\n', begin);
         if (end == std::string::npos) {
             multiLineStringEscape(strOut, s.substr(begin, s.size() - begin));
             break;
@@ -441,7 +455,7 @@ void printMultiLineString(Out & out, const Value & v)
 void printValue(Context & ctx, Out & out, std::variant<Value, std::exception_ptr> maybeValue, const std::string & path)
 {
     try {
-        if (auto ex = std::get_if<std::exception_ptr>(&maybeValue)) {
+        if (auto *ex = std::get_if<std::exception_ptr>(&maybeValue)) {
             std::rethrow_exception(*ex);
         }
         Value v = evaluateValue(ctx, std::get<Value>(maybeValue));
@@ -482,21 +496,14 @@ void printConfigValue(Context & ctx, Out & out, const std::string & path, std::v
     out << ";\n";
 }
 
-// Replace with std::starts_with when C++20 is available
-bool starts_with(const std::string & s, const std::string & prefix)
-{
-    return s.size() >= prefix.size() &&
-           std::equal(s.begin(), std::next(s.begin(), prefix.size()), prefix.begin(), prefix.end());
-}
-
 void printRecursive(Context & ctx, Out & out, const std::string & path)
 {
     mapOptions(
         [&ctx, &out, &path](const std::string & optionPath) {
             mapConfigValuesInOption(
                 [&ctx, &out, &path](const std::string & configPath, std::variant<Value, std::exception_ptr> v) {
-                    if (starts_with(configPath, path)) {
-                        printConfigValue(ctx, out, configPath, v);
+                    if (configPath.starts_with(path)) {
+                        printConfigValue(ctx, out, configPath, std::move(v));
                     }
                 },
                 optionPath, ctx);
@@ -585,65 +592,73 @@ void printOne(Context & ctx, Out & out, const std::string & path)
 
 int main(int argc, char ** argv)
 {
-    bool recursive = false;
-    std::string path = ".";
-    std::string optionsExpr = "(import <nixpkgs/nixos> {}).options";
-    std::string configExpr = "(import <nixpkgs/nixos> {}).config";
-    std::vector<std::string> args;
+    auto args = std::span(argv, argc);
+    return nix::handleExceptions(args[0], [&]() {
+        bool recursive = false;
+        std::string path = ".";
+        std::string optionsExpr = "(import <nixpkgs/nixos> {}).options";
+        std::string configExpr = "(import <nixpkgs/nixos> {}).config";
+        std::vector<std::string> args;
 
-    struct MyArgs : nix::LegacyArgs, nix::MixEvalArgs
-    {
-        using nix::LegacyArgs::LegacyArgs;
-    };
+        struct MyArgs : nix::LegacyArgs, nix::MixEvalArgs
+        {
+            MyArgs(const MyArgs& other) = default;
+            MyArgs(MyArgs&& other) noexcept = default;
+            auto operator=(const MyArgs& other) noexcept -> MyArgs& = default;
+            auto operator=(MyArgs&& other) noexcept -> MyArgs& = default;
+            virtual ~MyArgs() = default;
+            using nix::LegacyArgs::LegacyArgs;
+        };
 
-    MyArgs myArgs(std::string(nix::baseNameOf(argv[0])), [&](Strings::iterator & arg, const Strings::iterator & end) {
-        if (*arg == "--help") {
-            nix::showManPage("nixos-option");
-        } else if (*arg == "--version") {
-            nix::printVersion("nixos-option");
-        } else if (*arg == "-r" || *arg == "--recursive") {
-            recursive = true;
-        } else if (*arg == "--path") {
-            path = nix::getArg(*arg, arg, end);
-        } else if (*arg == "--options_expr") {
-            optionsExpr = nix::getArg(*arg, arg, end);
-        } else if (*arg == "--config_expr") {
-            configExpr = nix::getArg(*arg, arg, end);
-        } else if (!arg->empty() && arg->at(0) == '-') {
-            return false;
-        } else {
-            args.push_back(*arg);
+        MyArgs myArgs(std::string(nix::baseNameOf(args[0])), [&](Strings::iterator & arg, const Strings::iterator & end) {
+            if (*arg == "--help") {
+                nix::showManPage("nixos-option");
+            } else if (*arg == "--version") {
+                nix::printVersion("nixos-option");
+            } else if (*arg == "-r" || *arg == "--recursive") {
+                recursive = true;
+            } else if (*arg == "--path") {
+                path = nix::getArg(*arg, arg, end);
+            } else if (*arg == "--options_expr") {
+                optionsExpr = nix::getArg(*arg, arg, end);
+            } else if (*arg == "--config_expr") {
+                configExpr = nix::getArg(*arg, arg, end);
+            } else if (!arg->empty() && arg->at(0) == '-') {
+                return false;
+            } else {
+                args.push_back(*arg);
+            }
+            return true;
+        });
+
+        myArgs.parseCmdline(nix::argvToStrings(argc, argv));
+
+        nix::initNix();
+        nix::initGC();
+        nix::settings.readOnlyMode = true;
+        auto store = nix::openStore();
+
+        auto evalStore = myArgs.evalStoreUrl ? nix::openStore(*myArgs.evalStoreUrl)
+                                             : nix::openStore();
+        auto state = nix::make_ref<nix::EvalState>(
+            myArgs.lookupPath, evalStore, nix::fetchSettings, nix::evalSettings);
+
+        const Value optionsRoot = parseAndEval(*state, optionsExpr);
+        const Value configRoot = parseAndEval(*state, configExpr);
+
+        Context ctx{*state, *myArgs.getAutoArgs(*state), optionsRoot, configRoot};
+        Out out(std::cout);
+
+        auto print = recursive ? printRecursive : printOne;
+        if (args.empty()) {
+            print(ctx, out, "");
         }
-        return true;
+        for (const auto & arg : args) {
+            print(ctx, out, arg);
+        }
+
+        ctx.state.maybePrintStats();
+
+        return 0;
     });
-
-    myArgs.parseCmdline(nix::argvToStrings(argc, argv));
-
-    nix::initNix();
-    nix::initGC();
-    nix::settings.readOnlyMode = true;
-    auto store = nix::openStore();
-
-    auto evalStore = myArgs.evalStoreUrl ? nix::openStore(*myArgs.evalStoreUrl)
-                                       : nix::openStore();
-    auto state = nix::make_ref<nix::EvalState>(
-        myArgs.lookupPath, evalStore, nix::fetchSettings, nix::evalSettings);
-
-    Value optionsRoot = parseAndEval(*state, optionsExpr, path);
-    Value configRoot = parseAndEval(*state, configExpr, path);
-
-    Context ctx{*state, *myArgs.getAutoArgs(*state), optionsRoot, configRoot};
-    Out out(std::cout);
-
-    auto print = recursive ? printRecursive : printOne;
-    if (args.empty()) {
-        print(ctx, out, "");
-    }
-    for (const auto & arg : args) {
-        print(ctx, out, arg);
-    }
-
-    ctx.state.maybePrintStats();
-
-    return 0;
 }

@@ -21,14 +21,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2024.11.2";
+  version = "2024.11.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-zxFP7QXZbX/kj17po3tMNHoc7OfCdFSQ73e1umf+QA8=";
+    hash = "sha256-ZGqYvbNBQSoU6F20Bdzif8zmzLPr4XusVVrOR0iWl7k=";
   };
 
   build-systems = with python.pkgs; [
@@ -106,6 +106,8 @@ python.pkgs.buildPythonApplication rec {
     "--prefix PYTHONPATH : ${python.pkgs.makePythonPath dependencies}" # will show better error messages
     "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ stdenv.cc.cc ]}"
     "--set ESPHOME_USE_SUBPROCESS ''"
+    # https://github.com/NixOS/nixpkgs/issues/362193
+    "--set PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION 'python'"
   ];
 
   # Needed for tests

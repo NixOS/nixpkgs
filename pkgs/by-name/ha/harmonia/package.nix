@@ -1,9 +1,6 @@
 { lib
-, boost
 , fetchFromGitHub
 , libsodium
-, nixVersions
-, nlohmann_json
 , openssl
 , pkg-config
 , rustPlatform
@@ -13,30 +10,21 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "harmonia";
-  version = "1.0.2";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "harmonia";
     rev = "refs/tags/harmonia-v${version}";
-    hash = "sha256-72nDVSvUfZsLa2HbyricOpA0Eb8gxs/VST25b6DNBpM=";
+    hash = "sha256-tqkTzUdwnTfVuCrcFag7YKgGkiR9srR45e4v0XMXVCY=";
   };
 
-  cargoHash = "sha256-gW/OljEngDQddIovtgwghu7uHLFVZHvWIijPgbOOkDc=";
+  cargoHash = "sha256-iZbIuYSC/RLmYEhBu46EEzN+WG2RoUJbZegedXkh+Rg=";
 
   doCheck = false;
 
-  nativeBuildInputs = [
-    pkg-config nixVersions.nix_2_24
-  ];
-
-  buildInputs = [
-    boost
-    libsodium
-    openssl
-    nlohmann_json
-    nixVersions.nix_2_24
-  ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [ libsodium openssl ];
 
   passthru = {
     updateScript = nix-update-script {

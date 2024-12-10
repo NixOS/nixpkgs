@@ -2,11 +2,11 @@
 
 stdenv.mkDerivation rec {
   pname = "tqsl";
-  version = "2.7.3";
+  version = "2.7.5";
 
   src = fetchurl {
     url = "https://www.arrl.org/files/file/LoTW%20Instructions/${pname}-${version}.tar.gz";
-    sha256 = "sha256-Ca9PsytjPvrU4u+b/x6pIbQc8CDNWI6hNM6jF60Bds8=";
+    sha256 = "sha256-recq2FTyvmt5tDTjZRjQKWf5HgdkmTsMmRTWTfTPGbQ=";
   };
 
   nativeBuildInputs = [ cmake wrapGAppsHook3 ];
