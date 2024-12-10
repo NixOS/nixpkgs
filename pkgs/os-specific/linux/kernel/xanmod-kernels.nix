@@ -16,6 +16,7 @@ let
     lts = {
       version = "6.6.63";
       hash = "sha256-P4B6r3p+Buu1Hf+RQsw5h2oUANVvQvQ4e/2gQcZ0vKw=";
+      isLTS = true;
     };
     main = {
       version = "6.11.11";
@@ -28,6 +29,7 @@ let
       version,
       suffix ? "xanmod1",
       hash,
+      isLTS ? false,
     }:
     buildLinux (
       args
@@ -69,6 +71,8 @@ let
           RCU_BOOST_DELAY = freeform "0";
           RCU_EXP_KTHREAD = yes;
         };
+
+        inherit isLTS;
 
         extraMeta = {
           branch = lib.versions.majorMinor version;

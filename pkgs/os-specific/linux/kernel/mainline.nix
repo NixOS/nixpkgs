@@ -22,6 +22,7 @@ let
 
   args' = (builtins.removeAttrs args ["branch"]) // {
     inherit src version;
+    isLTS = thisKernel.lts;
 
     modDirVersion = lib.versions.pad 3 version;
     extraMeta.branch = branch;

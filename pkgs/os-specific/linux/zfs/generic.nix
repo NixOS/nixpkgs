@@ -30,6 +30,7 @@ let
   , extraPatches ? []
   , rev ? "zfs-${version}"
   , kernelCompatible ? null
+  , allowNonLTSKernels ? false # Whether to allow usage with unsupported kernels
   , maintainers ? (with lib.maintainers; [ amarshall ])
   , tests
   }@innerArgs:
@@ -50,9 +51,34 @@ let
     # If you don't do this your ZFS builds will fail on any non-standard (e.g.
     # clang-built) kernels.
     stdenv' = if kernel == null then stdenv else kernel.stdenv;
+
+    isLTS = kernel.passthru.isLTS or false;
   in
 
-  stdenv'.mkDerivation {
+  lib.warnIf (!(buildKernel -> !isLTS -> allowNonLTSKernels)) ''
+    You are using the ZFS kernel module in combination with a non-LTS kernel:
+
+    ${kernel.modDirVersion}
+
+    Because the development cycles of OpenZFS and the Linux kernel do not line
+    up, it is likely that any given kernel that is not an LTS release will go
+    EOL (and will therefore be removed from Nixpkgs) before an OpenZFS release
+    is available that supports the (at that time) latest non-LTS kernel.
+
+    When that happens, you will *no longer be able to update* and NixOS/Nixpkgs
+    maintainers will not be able to help you, unless you downgrade to an LTS
+    kernel (e.g. `pkgs.linuxPackages`).
+
+    To avoid this situation it is recommended that you only use ZFS with an LTS
+    kernel.
+
+    See https://www.kernel.org/ for more information on LTS kernel releases.
+
+    If you are willing to risk running into the described issue, this warning
+    can be suppressed using `boot.zfs.allowNonLTSKernels = true`.
+  ''
+
+  (stdenv'.mkDerivation {
     name = "zfs-${configFile}-${version}${optionalString buildKernel "-${kernel.version}"}";
     pname = "zfs";
     inherit version;
@@ -243,6 +269,6 @@ let
       mainProgram = "zfs";
       broken = buildKernel && (kernelCompatible != null) && !(kernelCompatible kernel);
     };
-  };
+  });
 in
   genericBuild

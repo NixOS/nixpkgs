@@ -227,9 +227,22 @@ in
       modulePackage = lib.mkOption {
         internal = true; # It is supposed to be selected automatically, but can be overridden by expert users.
         default = selectModulePackage cfgZfs.package;
+        apply = pkg: pkg.override { inherit (cfgZfs) allowNonLTSKernels; };
         type = lib.types.package;
         description = "Configured ZFS kernel module package.";
       };
+
+      allowNonLTSKernels = lib.mkEnableOption ''
+        usage of ZFS with non-LTS kernels that are likely to become
+        incompatible, preventing you from updating the system until you switch
+        to an LTS kernel.
+
+        Please see the evaluation warning of the ZFS package for more
+        information. If you have never seen such a warning, this option very
+        likely doesn't apply to you.
+
+        This option suppresses the warning in case you chose to ignore it.
+      '';
 
       enabled = lib.mkOption {
         readOnly = true;
