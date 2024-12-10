@@ -1,14 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, nix-update-script
-, runCommand
-, dieHook
-, nixosTests
-, testers
-, scaphandre
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  nix-update-script,
+  runCommand,
+  dieHook,
+  nixosTests,
+  testers,
+  scaphandre,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -42,15 +43,19 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     updateScript = nix-update-script { };
     tests = {
-      stdout = self: runCommand "${pname}-test" {
-        buildInputs = [
-          self
-          dieHook
-        ];
-      } ''
-        ${self}/bin/scaphandre stdout -t 4 > $out  || die "Scaphandre failed to measure consumption"
-        [ -s $out ]
-      '';
+      stdout =
+        self:
+        runCommand "${pname}-test"
+          {
+            buildInputs = [
+              self
+              dieHook
+            ];
+          }
+          ''
+            ${self}/bin/scaphandre stdout -t 4 > $out  || die "Scaphandre failed to measure consumption"
+            [ -s $out ]
+          '';
       vm = nixosTests.scaphandre;
       version = testers.testVersion {
         inherit version;

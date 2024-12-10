@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, fetchzip, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchzip,
+  nixosTests,
+}:
 
 let
   inherit (stdenv.hostPlatform) system;
@@ -24,7 +30,11 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/AdguardTeam/AdGuardHome";
     description = "Network-wide ads & trackers blocking DNS server";
     platforms = builtins.attrNames sources;
-    maintainers = with maintainers; [ numkem iagoq rhoriguchi ];
+    maintainers = with maintainers; [
+      numkem
+      iagoq
+      rhoriguchi
+    ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.gpl3Only;
     mainProgram = "adguardhome";

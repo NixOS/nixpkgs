@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, unzip, makeWrapper, openjdk }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  makeWrapper,
+  openjdk,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pmd";
@@ -9,7 +16,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-Iaz5bUPLQNWRyszMHCCmb8eW6t32nqYYEllER7rHoR0=";
   };
 
-  nativeBuildInputs = [ unzip makeWrapper ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+  ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -36,6 +46,9 @@ stdenv.mkDerivation rec {
     homepage = "https://pmd.github.io/";
     changelog = "https://pmd.github.io/pmd-${version}/pmd_release_notes.html";
     platforms = platforms.unix;
-    license = with licenses; [ bsdOriginal asl20 ];
+    license = with licenses; [
+      bsdOriginal
+      asl20
+    ];
   };
 }

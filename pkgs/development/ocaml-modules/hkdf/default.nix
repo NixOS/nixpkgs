@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, fetchurl, digestif, alcotest, ohex }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  digestif,
+  alcotest,
+  ohex,
+}:
 
 buildDunePackage rec {
   pname = "hkdf";
@@ -12,7 +19,10 @@ buildDunePackage rec {
   };
 
   propagatedBuildInputs = [ digestif ];
-  checkInputs = [ alcotest ohex ];
+  checkInputs = [
+    alcotest
+    ohex
+  ];
   doCheck = true;
 
   meta = with lib; {

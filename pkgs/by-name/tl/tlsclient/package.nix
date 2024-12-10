@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, pkg-config
-, openssl
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  pkg-config,
+  openssl,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

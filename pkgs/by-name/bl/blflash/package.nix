@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "blflash";
@@ -16,7 +20,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Bl602 serial flasher written in Rust";
     homepage = "https://github.com/spacemeowx2/blflash";
-    license = with licenses; [ mit asl20 ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
     maintainers = with maintainers; [ _0x4A6F ];
     mainProgram = "blflash";
   };

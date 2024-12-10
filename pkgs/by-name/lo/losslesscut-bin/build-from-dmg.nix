@@ -1,18 +1,21 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, _7zz
-, pname
-, version
-, hash
-, isAarch64
-, metaCommon ? { }
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  _7zz,
+  pname,
+  version,
+  hash,
+  isAarch64,
+  metaCommon ? { },
 }:
 
 let
   pname = "losslesscut";
   src = fetchurl {
-    url = "https://github.com/mifi/lossless-cut/releases/download/v${version}/LosslessCut-mac-${if isAarch64 then "arm64" else "x64"}.dmg";
+    url = "https://github.com/mifi/lossless-cut/releases/download/v${version}/LosslessCut-mac-${
+      if isAarch64 then "arm64" else "x64"
+    }.dmg";
     inherit hash;
   };
 in
@@ -33,8 +36,10 @@ stdenvNoCC.mkDerivation {
     runHook postInstall
   '';
 
-  meta = metaCommon // (with lib; {
-    platforms = if isAarch64 then [ "aarch64-darwin" ] else platforms.darwin;
-    mainProgram = "losslesscut";
-  });
+  meta =
+    metaCommon
+    // (with lib; {
+      platforms = if isAarch64 then [ "aarch64-darwin" ] else platforms.darwin;
+      mainProgram = "losslesscut";
+    });
 }

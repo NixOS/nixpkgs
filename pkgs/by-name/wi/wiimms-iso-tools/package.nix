@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, zlib, ncurses, fuse }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  zlib,
+  ncurses,
+  fuse,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wiimms-iso-tools";
@@ -9,7 +17,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-5aikiPJkZf9OwD8QmQ7ijhBOtFQpkIErvb6gOvEu2L0=";
   };
 
-  buildInputs = [ zlib ncurses fuse ];
+  buildInputs = [
+    zlib
+    ncurses
+    fuse
+  ];
 
   patches = [
     ./fix-paths.diff

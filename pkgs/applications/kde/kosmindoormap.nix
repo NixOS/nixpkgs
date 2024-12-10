@@ -1,16 +1,20 @@
-{ mkDerivation
-, lib
-, bison
-, extra-cmake-modules
-, flex
-, ki18n
-, kopeninghours
-, kpublictransport
+{
+  mkDerivation,
+  lib,
+  bison,
+  extra-cmake-modules,
+  flex,
+  ki18n,
+  kopeninghours,
+  kpublictransport,
 }:
 
 mkDerivation {
   pname = "kosmindoormap";
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     bison
@@ -25,6 +29,14 @@ mkDerivation {
   ];
 
   meta = {
-    license = with lib.licenses; [ bsd2 bsd3 cc0 lgpl2Plus lgpl3Plus mit odbl ];
+    license = with lib.licenses; [
+      bsd2
+      bsd3
+      cc0
+      lgpl2Plus
+      lgpl3Plus
+      mit
+      odbl
+    ];
   };
 }

@@ -1,10 +1,18 @@
-{ lib, stdenv, buildNpmPackage, fetchFromGitHub, unzip, vscodium, vscode-extensions }:
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  unzip,
+  vscodium,
+  vscode-extensions,
+}:
 
 buildNpmPackage rec {
   pname = "vscode-langservers-extracted";
   version = "4.10.0";
 
-  srcs =  [
+  srcs = [
     (fetchFromGitHub {
       owner = "hrsh7th";
       repo = "vscode-langservers-extracted";
@@ -23,9 +31,10 @@ buildNpmPackage rec {
   buildPhase =
     let
       extensions =
-        if stdenv.hostPlatform.isDarwin
-        then "../VSCodium.app/Contents/Resources/app/extensions"
-        else "../resources/app/extensions";
+        if stdenv.hostPlatform.isDarwin then
+          "../VSCodium.app/Contents/Resources/app/extensions"
+        else
+          "../resources/app/extensions";
     in
     ''
       npx babel ${extensions}/css-language-features/server/dist/node \

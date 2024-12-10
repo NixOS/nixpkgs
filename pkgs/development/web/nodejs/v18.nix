@@ -1,4 +1,11 @@
-{ callPackage, lib, openssl, python311, fetchpatch2, enableNpm ? true }:
+{
+  callPackage,
+  lib,
+  openssl,
+  python311,
+  fetchpatch2,
+  enableNpm ? true,
+}:
 
 let
   buildNodejs = callPackage ./nodejs.nix {
@@ -30,7 +37,7 @@ buildNodejs {
     (fetchpatch2 {
       url = "https://github.com/nodejs/node/commit/87598d4b63ef2c827a2bebdfa0f1540c35718519.patch";
       hash = "sha256-JJi8z9aaWnu/y3nZGOSUfeNzNSCYzD9dzoHXaGkeaEA=";
-      includes = ["test/common/assertSnapshot.js"];
+      includes = [ "test/common/assertSnapshot.js" ];
     })
     (fetchpatch2 {
       url = "https://github.com/nodejs/node/commit/d0a6b605fba6cd69a82e6f12ff0363eef8fe1ee9.patch";

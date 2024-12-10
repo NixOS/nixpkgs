@@ -1,15 +1,16 @@
-{ fetchgit
-, installShellFiles
-, lib
-, libftdi1
-, libgpiod
-, libjaylink
-, libusb1
-, pciutils
-, pkg-config
-, stdenv
-, withJlink ? true
-, withGpio ? stdenv.hostPlatform.isLinux
+{
+  fetchgit,
+  installShellFiles,
+  lib,
+  libftdi1,
+  libgpiod,
+  libjaylink,
+  libusb1,
+  pciutils,
+  pkg-config,
+  stdenv,
+  withJlink ? true,
+  withGpio ? stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,16 +27,20 @@ stdenv.mkDerivation (finalAttrs: {
     installShellFiles
     pkg-config
   ];
-  buildInputs = [
-    libftdi1
-    libusb1
-  ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-    pciutils
-  ] ++ lib.optionals (withJlink) [
-    libjaylink
-  ] ++ lib.optionals (withGpio) [
-    libgpiod
-  ];
+  buildInputs =
+    [
+      libftdi1
+      libusb1
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      pciutils
+    ]
+    ++ lib.optionals (withJlink) [
+      libjaylink
+    ]
+    ++ lib.optionals (withGpio) [
+      libgpiod
+    ];
 
   makeFlags =
     let
@@ -56,7 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://flashprog.org";
     description = "Utility for reading, writing, erasing and verifying flash ROM chips";
     license = with licenses; [ gpl2Plus ];
-    maintainers = with maintainers; [ felixsinger funkeleinhorn ];
+    maintainers = with maintainers; [
+      felixsinger
+      funkeleinhorn
+    ];
     platforms = platforms.all;
     mainProgram = "flashprog";
   };

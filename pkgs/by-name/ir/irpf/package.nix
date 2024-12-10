@@ -1,13 +1,14 @@
-{ lib
-, stdenvNoCC
-, fetchzip
-, copyDesktopItems
-, jdk11
-, makeDesktopItem
-, makeWrapper
-, unzip
-, xdg-utils
-, writeScript
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+  copyDesktopItems,
+  jdk11,
+  makeDesktopItem,
+  makeWrapper,
+  unzip,
+  xdg-utils,
+  writeScript,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -16,12 +17,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   # https://www.gov.br/receitafederal/pt-br/centrais-de-conteudo/download/pgd/dirpf
   # Para outros sistemas operacionais -> Multi
-  src = let
-    year = lib.head (lib.splitVersion finalAttrs.version);
-  in fetchzip {
-    url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${finalAttrs.version}.zip";
-    hash = "sha256-Pz8oI96GpLcHFEtnKUHnUHtZL3/QGhtG93ab5Au/tw0=";
-  };
+  src =
+    let
+      year = lib.head (lib.splitVersion finalAttrs.version);
+    in
+    fetchzip {
+      url = "https://downloadirpf.receita.fazenda.gov.br/irpf/${year}/irpf/arquivos/IRPF${finalAttrs.version}.zip";
+      hash = "sha256-Pz8oI96GpLcHFEtnKUHnUHtZL3/QGhtG93ab5Au/tw0=";
+    };
 
   passthru.updateScript = writeScript "update-irpf" ''
     #!/usr/bin/env nix-shell
@@ -33,7 +36,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     update-source-version irpf "$version"
   '';
 
-  nativeBuildInputs = [ unzip makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    unzip
+    makeWrapper
+    copyDesktopItems
+  ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -82,7 +89,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     license = licenses.unfree;
     platforms = platforms.all;
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    maintainers = with maintainers; [ atila bryanasdev000 ];
+    maintainers = with maintainers; [
+      atila
+      bryanasdev000
+    ];
     mainProgram = "irpf";
   };
 })

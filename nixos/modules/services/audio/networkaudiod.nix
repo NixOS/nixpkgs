@@ -1,8 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   name = "networkaudiod";
   cfg = config.services.networkaudiod;
-in {
+in
+{
   options = {
     services.networkaudiod = {
       enable = lib.mkEnableOption "Networkaudiod (NAA)";

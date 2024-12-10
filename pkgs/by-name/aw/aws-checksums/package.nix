@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, aws-c-common, nix }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  aws-c-common,
+  nix,
+}:
 
 stdenv.mkDerivation rec {
   pname = "aws-checksums";

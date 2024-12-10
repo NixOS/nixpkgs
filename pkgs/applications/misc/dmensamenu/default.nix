@@ -1,4 +1,11 @@
-{ lib, buildPythonApplication, fetchFromGitHub, substituteAll, requests, dmenu }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  substituteAll,
+  requests,
+  dmenu,
+}:
 
 buildPythonApplication rec {
   pname = "dmensamenu";

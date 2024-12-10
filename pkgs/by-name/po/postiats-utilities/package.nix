@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, python3, python3Packages }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  python3Packages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "postiats-utilities";
@@ -17,7 +23,10 @@ stdenv.mkDerivation rec {
     maintainers = [ maintainers.ttuegel ];
   };
 
-  buildInputs = [ python3 python3Packages.wrapPython ];
+  buildInputs = [
+    python3
+    python3Packages.wrapPython
+  ];
 
   postPatch = ''
     for f in pats-* postiats/*.py; do

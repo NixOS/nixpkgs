@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, rustPlatform
-, cargo
-, desktop-file-utils
-, glib
-, meson
-, ninja
-, pkg-config
-, rustc
-, wrapGAppsHook4
-, libadwaita
-, libxml2
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  rustPlatform,
+  cargo,
+  desktop-file-utils,
+  glib,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
+  wrapGAppsHook4,
+  libadwaita,
+  libxml2,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,16 +47,20 @@ stdenv.mkDerivation rec {
     rustc
   ];
 
-  buildInputs = [
-    libadwaita
-    libxml2
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  buildInputs =
+    [
+      libadwaita
+      libxml2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Foundation
+    ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
-    "-Wno-error=incompatible-function-pointer-types"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      "-Wno-error=incompatible-function-pointer-types"
+    ]
+  );
 
   meta = {
     description = "Generate project icons and avatars from a symbolic icon";
@@ -63,6 +68,10 @@ stdenv.mkDerivation rec {
     homepage = "https://gitlab.gnome.org/World/design/emblem";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ figsoda foo-dogsquared aleksana ];
+    maintainers = with lib.maintainers; [
+      figsoda
+      foo-dogsquared
+      aleksana
+    ];
   };
 }

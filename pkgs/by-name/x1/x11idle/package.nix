@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, libXScrnSaver, libX11 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libXScrnSaver,
+  libX11,
+}:
 
 stdenv.mkDerivation rec {
   version = "9.2.4";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "0fc5g57xd6bmghyl214gcff0ni3idv33i3gkr339kgn1mdjljv5g";
   };
 
-  buildInputs = [ libXScrnSaver libX11 ];
+  buildInputs = [
+    libXScrnSaver
+    libX11
+  ];
 
   dontUnpack = true;
 

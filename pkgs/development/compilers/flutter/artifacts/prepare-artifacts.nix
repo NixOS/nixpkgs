@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, callPackage
-, autoPatchelfHook
-, src
+{
+  lib,
+  stdenv,
+  callPackage,
+  autoPatchelfHook,
+  src,
 }:
 
 (stdenv.mkDerivation {
@@ -20,8 +21,10 @@
 
     runHook postInstall
   '';
-}).overrideAttrs (
-  if builtins.pathExists (./overrides + "/${src.flutterPlatform}.nix")
-  then callPackage (./overrides + "/${src.flutterPlatform}.nix") { }
-  else ({ ... }: { })
-)
+}).overrideAttrs
+  (
+    if builtins.pathExists (./overrides + "/${src.flutterPlatform}.nix") then
+      callPackage (./overrides + "/${src.flutterPlatform}.nix") { }
+    else
+      ({ ... }: { })
+  )

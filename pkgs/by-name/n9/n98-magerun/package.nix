@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, php81
+{
+  lib,
+  fetchFromGitHub,
+  php81,
 }:
 
 php81.buildComposerProject (finalAttrs: {

@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, gitUpdater
-, testers
-, webmesh
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  gitUpdater,
+  testers,
+  webmesh,
 }:
 
 buildGoModule rec {
@@ -21,7 +22,11 @@ buildGoModule rec {
 
   CGO_ENABLED = 0;
 
-  subPackages = [ "cmd/webmesh-node" "cmd/webmeshd" "cmd/wmctl" ];
+  subPackages = [
+    "cmd/webmesh-node"
+    "cmd/webmeshd"
+    "cmd/wmctl"
+  ];
 
   ldflags = [
     "-w"

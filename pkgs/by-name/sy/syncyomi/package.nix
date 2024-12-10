@@ -1,10 +1,11 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, buildGoModule
-, nodejs
-, pnpm_9
-, esbuild
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  buildGoModule,
+  nodejs,
+  pnpm_9,
+  esbuild,
 }:
 
 buildGoModule rec {
@@ -26,7 +27,12 @@ buildGoModule rec {
     sourceRoot = "${finalAttrs.src.name}/web";
 
     pnpmDeps = pnpm_9.fetchDeps {
-      inherit (finalAttrs) pname version src sourceRoot;
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        sourceRoot
+        ;
       hash = "sha256-edcZIqshnvM3jJpZWIR/UncI0VCMLq26h/n3VvV/384=";
     };
 
@@ -35,18 +41,25 @@ buildGoModule rec {
       pnpm_9.configHook
     ];
 
-    env.ESBUILD_BINARY_PATH = lib.getExe (esbuild.override {
-      buildGoModule = args: buildGoModule (args // rec {
-        version = "0.17.19";
-        src = fetchFromGitHub {
-          owner = "evanw";
-          repo = "esbuild";
-          rev = "v${version}";
-          hash = "sha256-PLC7OJLSOiDq4OjvrdfCawZPfbfuZix4Waopzrj8qsU=";
-        };
-        vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
-      });
-    });
+    env.ESBUILD_BINARY_PATH = lib.getExe (
+      esbuild.override {
+        buildGoModule =
+          args:
+          buildGoModule (
+            args
+            // rec {
+              version = "0.17.19";
+              src = fetchFromGitHub {
+                owner = "evanw";
+                repo = "esbuild";
+                rev = "v${version}";
+                hash = "sha256-PLC7OJLSOiDq4OjvrdfCawZPfbfuZix4Waopzrj8qsU=";
+              };
+              vendorHash = "sha256-+BfxCyg0KkDQpHt/wycy/8CTG6YBA/VJvJFhhzUnSiQ=";
+            }
+          );
+      }
+    );
 
     buildPhase = ''
       runHook preBuild
@@ -66,7 +79,8 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.version=v${version}"
   ];
 

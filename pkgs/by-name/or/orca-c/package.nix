@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchgit, ncurses, portmidi }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  ncurses,
+  portmidi,
+}:
 stdenv.mkDerivation {
   pname = "orca-c";
   version = "unstable-2021-02-13";
@@ -9,7 +15,10 @@ stdenv.mkDerivation {
     sha256 = "sha256-bbIH0kyHRTcMGXV3WdBQIH1br0FyIzKKL88wqpGZ0NY=";
   };
 
-  buildInputs = [ ncurses portmidi ];
+  buildInputs = [
+    ncurses
+    portmidi
+  ];
 
   postPatch = ''
     patchShebangs tool

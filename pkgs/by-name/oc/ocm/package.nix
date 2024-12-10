@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, ocm }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  ocm,
+}:
 
 buildGoModule rec {
   pname = "ocm";
@@ -14,7 +21,10 @@ buildGoModule rec {
   vendorHash = "sha256-uj4xmNZViag+j4YavFjDvc/ClMBb99DhwlcKzvGWQ7c=";
 
   # Strip the final binary.
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -27,7 +37,6 @@ buildGoModule rec {
     # Disable integration tests which require networking and gnupg which has issues in the sandbox
     "-skip=^TestCLI$"
   ];
-
 
   postInstall = ''
     installShellCompletion --cmd ocm \
@@ -46,6 +55,9 @@ buildGoModule rec {
     mainProgram = "ocm";
     license = licenses.asl20;
     homepage = "https://github.com/openshift-online/ocm-cli";
-    maintainers = with maintainers; [ stehessel jfchevrette ];
+    maintainers = with maintainers; [
+      stehessel
+      jfchevrette
+    ];
   };
 }

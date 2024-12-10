@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, python3
-, nix-update-script
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  python3,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,13 +19,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-MaMzwvvWP+vmdBVCefXI6dehuTyPcPW2b6KdarxjBjA=";
 
-  cargoBuildFlags = [ "-p nickel-lang-cli" "-p nickel-lang-lsp" ];
+  cargoBuildFlags = [
+    "-p nickel-lang-cli"
+    "-p nickel-lang-lsp"
+  ];
 
   nativeBuildInputs = [
     python3
   ];
 
-  outputs = [ "out" "nls" ];
+  outputs = [
+    "out"
+    "nls"
+  ];
 
   # This fixes the way comrak is defined as a dependency, without the sed the build fails:
   #
@@ -56,7 +63,10 @@ rustPlatform.buildRustPackage rec {
     '';
     changelog = "https://github.com/tweag/nickel/blob/${version}/RELEASES.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ felschr matthiasbeyer ];
+    maintainers = with maintainers; [
+      felschr
+      matthiasbeyer
+    ];
     mainProgram = "nickel";
   };
 }

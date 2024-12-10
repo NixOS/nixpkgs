@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchgit
-, gettext
-, python3
-, elfutils
+{
+  lib,
+  stdenv,
+  fetchgit,
+  gettext,
+  python3,
+  elfutils,
 }:
 
 stdenv.mkDerivation {

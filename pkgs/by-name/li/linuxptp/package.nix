@@ -1,5 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, linuxHeaders } :
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  linuxHeaders,
+}:
 
 stdenv.mkDerivation rec {
   pname = "linuxptp";
@@ -12,7 +16,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-w1buo+D8Mnd6ytMhQYhvCDqt+RejlNSN/iVjrDR+Khk=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   postPatch = ''
     substituteInPlace incdefs.sh --replace-fail \

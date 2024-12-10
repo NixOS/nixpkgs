@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.corosync;
 in
@@ -17,29 +22,31 @@ in
 
     extraOptions = lib.mkOption {
       type = with lib.types; listOf str;
-      default = [];
+      default = [ ];
       description = "Additional options with which to start corosync.";
     };
 
     nodelist = lib.mkOption {
       description = "Corosync nodelist: all cluster members.";
-      default = [];
-      type = with lib.types; listOf (submodule {
-        options = {
-          nodeid = lib.mkOption {
-            type = int;
-            description = "Node ID number";
+      default = [ ];
+      type =
+        with lib.types;
+        listOf (submodule {
+          options = {
+            nodeid = lib.mkOption {
+              type = int;
+              description = "Node ID number";
+            };
+            name = lib.mkOption {
+              type = str;
+              description = "Node name";
+            };
+            ring_addrs = lib.mkOption {
+              type = listOf str;
+              description = "List of addresses, one for each ring.";
+            };
           };
-          name = lib.mkOption {
-            type = str;
-            description = "Node name";
-          };
-          ring_addrs = lib.mkOption {
-            type = listOf str;
-            description = "List of addresses, one for each ring.";
-          };
-        };
-      });
+        });
     };
   };
 
@@ -56,15 +63,24 @@ in
       }
 
       nodelist {
-        ${lib.concatMapStrings ({ nodeid, name, ring_addrs }: ''
-          node {
-            nodeid: ${toString nodeid}
-            name: ${name}
-            ${lib.concatStrings (lib.imap0 (i: addr: ''
-              ring${toString i}_addr: ${addr}
-            '') ring_addrs)}
-          }
-        '') cfg.nodelist}
+        ${lib.concatMapStrings (
+          {
+            nodeid,
+            name,
+            ring_addrs,
+          }:
+          ''
+            node {
+              nodeid: ${toString nodeid}
+              name: ${name}
+              ${lib.concatStrings (
+                lib.imap0 (i: addr: ''
+                  ring${toString i}_addr: ${addr}
+                '') ring_addrs
+              )}
+            }
+          ''
+        ) cfg.nodelist}
       }
 
       quorum {
@@ -98,7 +114,7 @@ in
       };
     };
 
-    environment.etc."sysconfig/corosync".text = lib.optionalString (cfg.extraOptions != []) ''
+    environment.etc."sysconfig/corosync".text = lib.optionalString (cfg.extraOptions != [ ]) ''
       COROSYNC_OPTIONS="${lib.escapeShellArgs cfg.extraOptions}"
     '';
   };

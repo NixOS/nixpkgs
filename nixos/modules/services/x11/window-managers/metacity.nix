@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
@@ -13,13 +18,13 @@ in
 
   config = lib.mkIf cfg.enable {
 
-    services.xserver.windowManager.session = lib.singleton
-      { name = "metacity";
-        start = ''
-          ${metacity}/bin/metacity &
-          waitPID=$!
-        '';
-      };
+    services.xserver.windowManager.session = lib.singleton {
+      name = "metacity";
+      start = ''
+        ${metacity}/bin/metacity &
+        waitPID=$!
+      '';
+    };
 
     environment.systemPackages = [ metacity ];
 

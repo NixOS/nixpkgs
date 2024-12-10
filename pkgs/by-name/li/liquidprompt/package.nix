@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, gitUpdater }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "liquidprompt";

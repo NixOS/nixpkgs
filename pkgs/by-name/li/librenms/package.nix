@@ -1,28 +1,31 @@
-{ lib
-, fetchFromGitHub
-, unixtools
-, php82
-, python3
-, makeWrapper
-, nixosTests
-# run-time dependencies
-, graphviz
-, ipmitool
-, libvirt
-, monitoring-plugins
-, mtr
-, net-snmp
-, nfdump
-, nmap
-, rrdtool
-, system-sendmail
-, whois
-, dataDir ? "/var/lib/librenms", logDir ? "/var/log/librenms" }:
-
+{
+  lib,
+  fetchFromGitHub,
+  unixtools,
+  php82,
+  python3,
+  makeWrapper,
+  nixosTests,
+  # run-time dependencies
+  graphviz,
+  ipmitool,
+  libvirt,
+  monitoring-plugins,
+  mtr,
+  net-snmp,
+  nfdump,
+  nmap,
+  rrdtool,
+  system-sendmail,
+  whois,
+  dataDir ? "/var/lib/librenms",
+  logDir ? "/var/log/librenms",
+}:
 
 let
   phpPackage = php82.withExtensions ({ enabled, all }: enabled ++ [ all.memcached ]);
-in phpPackage.buildComposerProject rec {
+in
+phpPackage.buildComposerProject rec {
   pname = "librenms";
   version = "24.11.0";
 
@@ -50,15 +53,17 @@ in phpPackage.buildComposerProject rec {
     system-sendmail
     unixtools.whereis
     whois
-    (python3.withPackages (ps: with ps; [
-      pymysql
-      python-dotenv
-      python-memcached
-      redis
-      setuptools
-      psutil
-      command-runner
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        pymysql
+        python-dotenv
+        python-memcached
+        redis
+        setuptools
+        psutil
+        command-runner
+      ]
+    ))
   ];
 
   nativeBuildInputs = [ makeWrapper ];
@@ -121,9 +126,9 @@ in phpPackage.buildComposerProject rec {
 
   meta = with lib; {
     description = "Auto-discovering PHP/MySQL/SNMP based network monitoring";
-    homepage    = "https://www.librenms.org/";
-    license     = licenses.gpl3Only;
+    homepage = "https://www.librenms.org/";
+    license = licenses.gpl3Only;
     maintainers = with maintainers; [ netali ] ++ teams.wdz.members;
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

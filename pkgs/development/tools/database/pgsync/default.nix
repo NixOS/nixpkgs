@@ -1,4 +1,8 @@
-{ lib, bundlerApp, bundlerUpdateScript }:
+{
+  lib,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
 bundlerApp rec {
   gemdir = ./.;
@@ -9,8 +13,8 @@ bundlerApp rec {
 
   meta = with lib; {
     description = "Sync data from one Postgres database to another (like `pg_dump`/`pg_restore`)";
-    homepage    = "https://github.com/ankane/pgsync";
-    license     = with licenses; mit;
+    homepage = "https://github.com/ankane/pgsync";
+    license = with licenses; mit;
     maintainers = with maintainers; [ fabianhjr ];
   };
 }

@@ -1,4 +1,9 @@
-{ lib, stdenv, cmake, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wasm3";

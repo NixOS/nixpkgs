@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gtk3
-, pcre2
-, glib
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook3
-, gettext
-, icu
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk3,
+  pcre2,
+  glib,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
+  gettext,
+  icu,
 }:
 
 stdenv.mkDerivation rec {

@@ -17,9 +17,8 @@ buildPythonPackage rec {
 
   build-system = [ flit-core ];
 
-  dependencies =
-    [
-    ];
+  dependencies = [
+  ];
 
   meta = {
     description = "Some handy archive helpers for Python.";

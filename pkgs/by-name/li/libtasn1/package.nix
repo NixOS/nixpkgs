@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, perl
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  texinfo,
 
-# for passthru.tests
-, gnutls
-, samba
-, qemu
+  # for passthru.tests
+  gnutls,
+  samba,
+  qemu,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,16 +20,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-FhPwrBz0hNbsDOO4wG1WJjzHJC8cI7MNgtI940WmP3o=";
   };
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
   outputBin = "dev";
 
-  nativeBuildInputs = [ texinfo perl ];
+  nativeBuildInputs = [
+    texinfo
+    perl
+  ];
 
   doCheck = true;
-  preCheck = if stdenv.hostPlatform.isDarwin then
-    "export DYLD_LIBRARY_PATH=`pwd`/lib/.libs"
-  else
-    null;
+  preCheck =
+    if stdenv.hostPlatform.isDarwin then "export DYLD_LIBRARY_PATH=`pwd`/lib/.libs" else null;
 
   passthru.tests = {
     inherit gnutls samba qemu;

@@ -45,7 +45,8 @@ buildPythonPackage rec {
       paddleocr
       # yolox
     ]
-    ++ layoutparser.optional-dependencies.layoutmodels ++ layoutparser.optional-dependencies.tesseract;
+    ++ layoutparser.optional-dependencies.layoutmodels
+    ++ layoutparser.optional-dependencies.tesseract;
 
   nativeCheckInputs = [
     pytestCheckHook

@@ -1,9 +1,15 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.slimserver;
 
-in {
+in
+{
   options = {
 
     services.slimserver = {
@@ -28,7 +34,6 @@ in {
       };
     };
   };
-
 
   ###### implementation
 
@@ -57,9 +62,8 @@ in {
         group = "slimserver";
         isSystemUser = true;
       };
-      groups.slimserver = {};
+      groups.slimserver = { };
     };
   };
 
 }
-

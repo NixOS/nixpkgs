@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchzip, autoPatchelfHook, makeWrapper
-, alsa-lib, curl, gtk3, webkitgtk_4_0, zenity }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  autoPatchelfHook,
+  makeWrapper,
+  alsa-lib,
+  curl,
+  gtk3,
+  webkitgtk_4_0,
+  zenity,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rymcast";
@@ -11,9 +21,19 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+  ];
 
-  buildInputs = [ alsa-lib curl gtk3 (lib.getLib stdenv.cc.cc) webkitgtk_4_0 zenity ];
+  buildInputs = [
+    alsa-lib
+    curl
+    gtk3
+    (lib.getLib stdenv.cc.cc)
+    webkitgtk_4_0
+    zenity
+  ];
 
   installPhase = ''
     mkdir -p "$out/bin"

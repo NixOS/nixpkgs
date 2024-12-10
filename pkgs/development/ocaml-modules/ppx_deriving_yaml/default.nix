@@ -1,5 +1,12 @@
-{ lib, buildDunePackage, fetchurl, ppxlib, alcotest, mdx
-, ppx_deriving, yaml
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ppxlib,
+  alcotest,
+  mdx,
+  ppx_deriving,
+  yaml,
 }:
 
 buildDunePackage rec {
@@ -13,7 +20,11 @@ buildDunePackage rec {
     hash = "sha256-HLY0ozmy6zY0KjXkwP3drTdz857PvLS/buN1nB+xf1s=";
   };
 
-  propagatedBuildInputs = [ ppxlib ppx_deriving yaml ];
+  propagatedBuildInputs = [
+    ppxlib
+    ppx_deriving
+    yaml
+  ];
 
   doCheck = true;
   checkInputs = [ alcotest ];
