@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -17,7 +18,7 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ setuptools ];
 
-  propagatedBuildInputs = with python3.pkgs; [ docopt];
+  propagatedBuildInputs = with python3.pkgs; [ docopt ];
 
   nativeCheckInputs = with python3.pkgs; [
     pyfakefs

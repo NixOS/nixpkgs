@@ -1,7 +1,8 @@
-{ lib
-, python311
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  python311,
+  fetchFromGitHub,
+  fetchpatch,
 }:
 
 let
@@ -9,7 +10,7 @@ let
     self = python3;
     packageOverrides = _: super: {
       tree-sitter = super.tree-sitter_0_21;
-      lsp-tree-sitter = super.lsp-tree-sitter.overridePythonAttrs(__: {
+      lsp-tree-sitter = super.lsp-tree-sitter.overridePythonAttrs (__: {
         pythonRelaxDeps = [ "tree-sitter" ];
       });
     };

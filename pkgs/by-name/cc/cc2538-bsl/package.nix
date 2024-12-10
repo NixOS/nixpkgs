@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3Packages,
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -54,4 +55,3 @@ python3Packages.buildPythonPackage rec {
     mainProgram = "cc2538-bsl";
   };
 }
-

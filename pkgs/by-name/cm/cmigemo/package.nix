@@ -1,6 +1,12 @@
-{ lib, stdenv, fetchFromGitHub
-, iconv, nkf, perl, which
-, skkDictionaries
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  iconv,
+  nkf,
+  perl,
+  which,
+  skkDictionaries,
 }:
 
 stdenv.mkDerivation {
@@ -14,7 +20,12 @@ stdenv.mkDerivation {
     sha256 = "00a6kdmxp16b8x0p04ws050y39qspd1bqlfq74bkirc55b77a2m1";
   };
 
-  nativeBuildInputs = [ iconv nkf perl which ];
+  nativeBuildInputs = [
+    iconv
+    nkf
+    perl
+    which
+  ];
 
   postUnpack = ''
     cp ${skkDictionaries.l}/share/skk/SKK-JISYO.L source/dict/

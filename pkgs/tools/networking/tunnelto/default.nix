@@ -1,9 +1,11 @@
-{ lib, stdenv
-, rustPlatform
-, fetchFromGitHub
-, openssl
-, pkg-config
-, Security
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,7 +28,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
-  buildInputs = [ ]
+  buildInputs =
+    [ ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 

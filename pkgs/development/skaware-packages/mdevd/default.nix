@@ -1,4 +1,8 @@
-{ lib, skawarePackages, skalibs }:
+{
+  lib,
+  skawarePackages,
+  skalibs,
+}:
 
 skawarePackages.buildPackage {
   pname = "mdevd";
@@ -8,7 +12,12 @@ skawarePackages.buildPackage {
   description = "mdev-compatible Linux hotplug manager daemon";
   platforms = lib.platforms.linux;
 
-  outputs = [ "bin" "out" "dev" "doc" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "doc"
+  ];
 
   configureFlags = [
     "--with-sysdeps=${skalibs.lib}/lib/skalibs/sysdeps"

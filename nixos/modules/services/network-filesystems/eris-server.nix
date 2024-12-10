@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.eris-server;
   stateDirectoryPath = "\${STATE_DIRECTORY}";
   nullOrStr = with lib.types; nullOr str;
-in {
+in
+{
 
   options.services.eris-server = {
 
@@ -70,45 +76,52 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    assertions = [{
-      assertion = lib.strings.versionAtLeast cfg.package.version "20231219";
-      message =
-        "Version of `config.services.eris-server.package` is incompatible with this module";
-    }];
+    assertions = [
+      {
+        assertion = lib.strings.versionAtLeast cfg.package.version "20231219";
+        message = "Version of `config.services.eris-server.package` is incompatible with this module";
+      }
+    ];
 
-    systemd.services.eris-server = let
-      cmd = "${cfg.package}/bin/eris-go server"
-        + (lib.optionalString (cfg.listenCoap != null)
-          " --coap '${cfg.listenCoap}'")
-        + (lib.optionalString (cfg.listenHttp != null)
-          " --http '${cfg.listenHttp}'")
-        + (lib.optionalString cfg.decode " --decode")
-        + (lib.optionalString (cfg.mountpoint != null)
-          " --mountpoint '${cfg.mountpoint}'");
-    in {
-      description = "ERIS block server";
-      after = [ "network.target" ];
-      wantedBy = [ "multi-user.target" ];
-      environment.ERIS_STORE_URL = toString cfg.backends;
-      script = lib.mkIf (cfg.mountpoint != null) ''
-        export PATH=${config.security.wrapperDir}:$PATH
-        ${cmd}
-      '';
-      serviceConfig = let
-        umounter = lib.mkIf (cfg.mountpoint != null)
-          "-${config.security.wrapperDir}/fusermount -uz ${cfg.mountpoint}";
-      in if (cfg.mountpoint == null) then {
-        ExecStart = cmd;
-      } else
-        {
-          ExecStartPre = umounter;
-          ExecStopPost = umounter;
-        } // {
-          Restart = "always";
-          RestartSec = 20;
-          AmbientCapabilities = "CAP_NET_BIND_SERVICE";
-        };
-    };
+    systemd.services.eris-server =
+      let
+        cmd =
+          "${cfg.package}/bin/eris-go server"
+          + (lib.optionalString (cfg.listenCoap != null) " --coap '${cfg.listenCoap}'")
+          + (lib.optionalString (cfg.listenHttp != null) " --http '${cfg.listenHttp}'")
+          + (lib.optionalString cfg.decode " --decode")
+          + (lib.optionalString (cfg.mountpoint != null) " --mountpoint '${cfg.mountpoint}'");
+      in
+      {
+        description = "ERIS block server";
+        after = [ "network.target" ];
+        wantedBy = [ "multi-user.target" ];
+        environment.ERIS_STORE_URL = toString cfg.backends;
+        script = lib.mkIf (cfg.mountpoint != null) ''
+          export PATH=${config.security.wrapperDir}:$PATH
+          ${cmd}
+        '';
+        serviceConfig =
+          let
+            umounter = lib.mkIf (
+              cfg.mountpoint != null
+            ) "-${config.security.wrapperDir}/fusermount -uz ${cfg.mountpoint}";
+          in
+          if (cfg.mountpoint == null) then
+            {
+              ExecStart = cmd;
+            }
+          else
+            {
+              ExecStartPre = umounter;
+              ExecStopPost = umounter;
+            }
+            // {
+              Restart = "always";
+              RestartSec = 20;
+              AmbientCapabilities = "CAP_NET_BIND_SERVICE";
+            };
+      };
   };
 
   meta.maintainers = with lib.maintainers; [ ehmry ];

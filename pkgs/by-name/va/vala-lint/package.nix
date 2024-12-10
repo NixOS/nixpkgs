@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glib
-, json-glib
-, meson
-, ninja
-, pantheon
-, pkg-config
-, vala
-, gettext
-, wrapGAppsHook3
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glib,
+  json-glib,
+  meson,
+  ninja,
+  pantheon,
+  pkg-config,
+  vala,
+  gettext,
+  wrapGAppsHook3,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {

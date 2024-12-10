@@ -1,6 +1,13 @@
-{ lib, fetchurl, buildDunePackage
-, ppx_sexp_conv, sexplib0, astring, uri
-, ipaddr, ipaddr-sexp
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  ppx_sexp_conv,
+  sexplib0,
+  astring,
+  uri,
+  ipaddr,
+  ipaddr-sexp,
 }:
 
 buildDunePackage rec {
@@ -14,12 +21,22 @@ buildDunePackage rec {
     hash = "sha256-Pg7ChIlqldF42NE1eS56Rssk+csK8OqWTQXO4avLEhg=";
   };
 
-  propagatedBuildInputs = [ astring ipaddr ipaddr-sexp sexplib0 uri ppx_sexp_conv ];
+  propagatedBuildInputs = [
+    astring
+    ipaddr
+    ipaddr-sexp
+    sexplib0
+    uri
+    ppx_sexp_conv
+  ];
 
   meta = {
     description = "Network connection establishment library";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ alexfmpe vbgl ];
+    maintainers = with lib.maintainers; [
+      alexfmpe
+      vbgl
+    ];
     homepage = "https://github.com/mirage/ocaml-conduit";
   };
 }

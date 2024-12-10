@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, django
-, django-redis
-, fetchFromGitHub
-, pymemcache
-, pythonOlder
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  django,
+  django-redis,
+  fetchFromGitHub,
+  pymemcache,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -44,7 +45,6 @@ buildPythonPackage rec {
 
     runHook postCheck
   '';
-
 
   meta = with lib; {
     description = "Cache-based rate-limiting for Django";

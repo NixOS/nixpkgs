@@ -1,12 +1,13 @@
-{ lib
-, perlPackages
-, fetchFromGitHub
-, makeWrapper
-, stdenv
-, shortenPerlShebang
-, perl
-, atomicparsley
-, ffmpeg
+{
+  lib,
+  perlPackages,
+  fetchFromGitHub,
+  makeWrapper,
+  stdenv,
+  shortenPerlShebang,
+  perl,
+  atomicparsley,
+  ffmpeg,
 }:
 
 perlPackages.buildPerlPackage rec {
@@ -23,18 +24,29 @@ perlPackages.buildPerlPackage rec {
   nativeBuildInputs = [ makeWrapper ] ++ lib.optional stdenv.hostPlatform.isDarwin shortenPerlShebang;
   buildInputs = [ perl ];
   propagatedBuildInputs = with perlPackages; [
-    LWP LWPProtocolHttps XMLLibXML Mojolicious
+    LWP
+    LWPProtocolHttps
+    XMLLibXML
+    Mojolicious
   ];
 
   preConfigure = "touch Makefile.PL";
   doCheck = false;
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   installPhase = ''
     runHook preInstall
 
     install -D get_iplayer -t $out/bin
-    wrapProgram $out/bin/get_iplayer --suffix PATH : ${lib.makeBinPath [ atomicparsley ffmpeg ]} --prefix PERL5LIB : $PERL5LIB
+    wrapProgram $out/bin/get_iplayer --suffix PATH : ${
+      lib.makeBinPath [
+        atomicparsley
+        ffmpeg
+      ]
+    } --prefix PERL5LIB : $PERL5LIB
     install -Dm444 get_iplayer.1 -t $out/share/man/man1
 
     runHook postInstall
@@ -50,7 +62,10 @@ perlPackages.buildPerlPackage rec {
     license = licenses.gpl3Plus;
     homepage = "https://github.com/get-iplayer/get_iplayer";
     platforms = platforms.all;
-    maintainers = with maintainers; [ rika chewblacka ];
+    maintainers = with maintainers; [
+      rika
+      chewblacka
+    ];
   };
 
 }

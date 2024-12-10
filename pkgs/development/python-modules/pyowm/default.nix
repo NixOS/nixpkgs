@@ -28,7 +28,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-
   dependencies = [
     geojson
     pysocks

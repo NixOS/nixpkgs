@@ -4,7 +4,7 @@
   fetchFromGitHub,
   poetry-core,
   pytestCheckHook,
-  fetchpatch
+  fetchpatch,
 }:
 
 buildPythonPackage rec {

@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, installShellFiles
-, makeWrapper
-, pkg-config
-, ronn
-, openssl
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  installShellFiles,
+  makeWrapper,
+  pkg-config,
+  ronn,
+  openssl,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,11 +30,16 @@ rustPlatform.buildRustPackage rec {
     ronn
   ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
-  cargoBuildFlags = [ "--bin" "httplz" ];
+  cargoBuildFlags = [
+    "--bin"
+    "httplz"
+  ];
 
   postInstall = ''
     sed -E 's/http(`| |\(|$)/httplz\1/g' http.md > httplz.1.ronn

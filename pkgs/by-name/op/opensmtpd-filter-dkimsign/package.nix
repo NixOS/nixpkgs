@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, libopensmtpd
-, openssl
-, mandoc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libopensmtpd,
+  openssl,
+  mandoc,
 }:
 stdenv.mkDerivation rec {
   pname = "opensmtpd-filter-dkimsign";
@@ -16,7 +17,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./no-chown-while-installing.patch ];
 
-  buildInputs = [ libopensmtpd openssl ];
+  buildInputs = [
+    libopensmtpd
+    openssl
+  ];
 
   nativeBuildInputs = [ mandoc ];
 

@@ -1,15 +1,27 @@
-{ lib, stdenv, fetchurl, gettext, python3, testers }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  python3,
+  testers,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "iso-codes";
   version = "4.17.0";
 
   src = fetchurl {
-    url = with finalAttrs; "https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/v${version}/${pname}-v${version}.tar.gz";
+    url =
+      with finalAttrs;
+      "https://salsa.debian.org/iso-codes-team/iso-codes/-/archive/v${version}/${pname}-v${version}.tar.gz";
     hash = "sha256-3VyhPbd+xt0cwl9cAYQpCocOwf7SRdjjmgT/NPWQdsM=";
   };
 
-  nativeBuildInputs = [ gettext python3 ];
+  nativeBuildInputs = [
+    gettext
+    python3
+  ];
 
   enableParallelBuilding = true;
 

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, python3Packages, zlib, bash }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3Packages,
+  zlib,
+  bash,
+}:
 
 let
   pythonPackages = python3Packages;
@@ -14,7 +21,12 @@ pythonPackages.buildPythonApplication rec {
     sha256 = "13ml8qywbb4cc7wf2x7z5mz1rjqg51ab8wkizwcg4f6c40zgif6d";
   };
 
-  pythonPath = with pythonPackages; [ simplejson joblib setuptools matplotlib ];
+  pythonPath = with pythonPackages; [
+    simplejson
+    joblib
+    setuptools
+    matplotlib
+  ];
 
   buildInputs = [ zlib ] ++ pythonPath;
 
@@ -32,13 +44,13 @@ pythonPackages.buildPythonApplication rec {
       --prefix="$out"
   '';
 
-   postFixup = ''
-   for file in $(find $out -type f -type f -perm /0111); do
-       old_rpath=$(patchelf --print-rpath $file) && \
-       patchelf --set-rpath $old_rpath:${lib.getLib stdenv.cc.cc}/lib $file || true
-   done
-   # Link to the master program
-   ln -s $out/bin/quast.py $out/bin/quast
+  postFixup = ''
+    for file in $(find $out -type f -type f -perm /0111); do
+        old_rpath=$(patchelf --print-rpath $file) && \
+        patchelf --set-rpath $old_rpath:${lib.getLib stdenv.cc.cc}/lib $file || true
+    done
+    # Link to the master program
+    ln -s $out/bin/quast.py $out/bin/quast
   '';
 
   dontPatchELF = true;
@@ -46,12 +58,12 @@ pythonPackages.buildPythonApplication rec {
   # Tests need to download data files, so manual run after packaging is needed
   doCheck = false;
 
-  meta = with lib ; {
+  meta = with lib; {
     description = "Evaluates genome assemblies by computing various metrics";
     homepage = "https://github.com/ablab/quast";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryNativeCode  # source bundles binary dependencies
+      binaryNativeCode # source bundles binary dependencies
     ];
     license = licenses.gpl2;
     maintainers = [ maintainers.bzizou ];

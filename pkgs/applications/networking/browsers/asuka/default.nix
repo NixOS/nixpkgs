@@ -1,4 +1,13 @@
-{ lib, stdenv, rustPlatform, fetchFromSourcehut, pkg-config, ncurses, openssl, Security }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromSourcehut,
+  pkg-config,
+  ncurses,
+  openssl,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "asuka";
@@ -15,8 +24,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ ncurses openssl ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin Security;
+  buildInputs = [
+    ncurses
+    openssl
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   meta = with lib; {
     description = "Gemini Project client written in Rust with NCurses";

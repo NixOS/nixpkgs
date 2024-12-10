@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, jdk
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jdk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

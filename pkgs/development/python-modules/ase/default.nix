@@ -32,16 +32,18 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    numpy
-    scipy
-    matplotlib
-    flask
-    pillow
-    psycopg2
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    tkinter
-  ];
+  dependencies =
+    [
+      numpy
+      scipy
+      matplotlib
+      flask
+      pillow
+      psycopg2
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      tkinter
+    ];
 
   nativeCheckInputs = [
     pytestCheckHook

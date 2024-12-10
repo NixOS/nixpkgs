@@ -9,14 +9,16 @@ let
     throwIfNot
     ;
 
-  showMaybeAttrPosPre = prefix: attrName: v:
-    let pos = builtins.unsafeGetAttrPos attrName v;
-    in if pos == null then "" else "${prefix}${pos.file}:${toString pos.line}:${toString pos.column}";
+  showMaybeAttrPosPre =
+    prefix: attrName: v:
+    let
+      pos = builtins.unsafeGetAttrPos attrName v;
+    in
+    if pos == null then "" else "${prefix}${pos.file}:${toString pos.line}:${toString pos.column}";
 
-  showMaybePackagePosPre = prefix: pkg:
-    if pkg?meta.position && isString pkg.meta.position
-    then "${prefix}${pkg.meta.position}"
-    else "";
+  showMaybePackagePosPre =
+    prefix: pkg:
+    if pkg ? meta.position && isString pkg.meta.position then "${prefix}${pkg.meta.position}" else "";
 in
 {
   /**
@@ -94,15 +96,14 @@ in
       derivation,
       meta ? null,
       passthru ? { },
-      outputs ? [ "out" ]
+      outputs ? [ "out" ],
     }:
     let
       # These checks are strict in `drv` and some `drv` attributes, but the
       # attrset spine returned by lazyDerivation does not depend on it.
       # Instead, the individual derivation attributes do depend on it.
       checked =
-        throwIfNot (derivation.type or null == "derivation")
-          "lazyDerivation: input must be a derivation."
+        throwIfNot (derivation.type or null == "derivation") "lazyDerivation: input must be a derivation."
           throwIfNot
           # NOTE: Technically we could require our outputs to be a subset of the
           # actual ones, or even leave them unchecked and fail on a lazy basis.
@@ -152,7 +153,13 @@ in
       # A fixed set of derivation values, so that `lazyDerivation` can return
       # its attrset before evaluating `derivation`.
       # This must only list attributes that are available on _all_ derivations.
-      inherit (checked) outPath outputName drvPath name system;
+      inherit (checked)
+        outPath
+        outputName
+        drvPath
+        name
+        system
+        ;
       inherit outputs;
 
       # The meta attribute can either be taken from the derivation, or if the
@@ -169,7 +176,6 @@ in
     attribute set to `null` will not impact the derivation output hash.
     Thus, this function passes through its `value` argument if the `cond`
     is `true`, but returns `null` if not.
-
 
     # Inputs
 
@@ -205,9 +211,7 @@ in
 
     :::
   */
-  optionalDrvAttr =
-    cond:
-    value: if cond then value else null;
+  optionalDrvAttr = cond: value: if cond then value else null;
 
   /**
     Wrap a derivation such that instantiating it produces a warning.
@@ -238,8 +242,11 @@ in
   warnOnInstantiate =
     msg: drv:
     let
-      drvToWrap = removeAttrs drv [ "meta" "name" "type" ];
+      drvToWrap = removeAttrs drv [
+        "meta"
+        "name"
+        "type"
+      ];
     in
-    drv
-    // mapAttrs (_: lib.warn msg) drvToWrap;
+    drv // mapAttrs (_: lib.warn msg) drvToWrap;
 }

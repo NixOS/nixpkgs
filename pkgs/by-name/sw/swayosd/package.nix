@@ -59,7 +59,7 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : ${lib.makeBinPath [brightnessctl]}
+      --prefix PATH : ${lib.makeBinPath [ brightnessctl ]}
     )
   '';
 

@@ -1,8 +1,9 @@
-{ lib
-, maven
-, fetchFromGitHub
-, jre
-, makeWrapper
+{
+  lib,
+  maven,
+  fetchFromGitHub,
+  jre,
+  makeWrapper,
 }:
 maven.buildMavenPackage rec {
   pname = "apgdiff";

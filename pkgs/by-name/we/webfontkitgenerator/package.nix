@@ -1,22 +1,23 @@
-{ appstream-glib
-, blueprint-compiler
-, desktop-file-utils
-, fetchFromGitHub
-, gettext
-, glib-networking
-, gobject-introspection
-, gtk4
-, gtksourceview5
-, lib
-, libadwaita
-, libsoup_3
-, meson
-, ninja
-, pkg-config
-, python3
-, python3Packages
-, stdenv
-, wrapGAppsHook4
+{
+  appstream-glib,
+  blueprint-compiler,
+  desktop-file-utils,
+  fetchFromGitHub,
+  gettext,
+  glib-networking,
+  gobject-introspection,
+  gtk4,
+  gtksourceview5,
+  lib,
+  libadwaita,
+  libsoup_3,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  python3Packages,
+  stdenv,
+  wrapGAppsHook4,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "webfont-kit-generator";
@@ -48,11 +49,13 @@ stdenv.mkDerivation (finalAttrs: {
     gtksourceview5
     libadwaita
     libsoup_3
-    (python3.withPackages (ps: with ps; [
-      brotli
-      fonttools
-      pygobject3
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        brotli
+        fonttools
+        pygobject3
+      ]
+    ))
   ];
 
   propagatedBuildInputs = [

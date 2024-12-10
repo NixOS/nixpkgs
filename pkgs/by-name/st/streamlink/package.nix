@@ -1,8 +1,9 @@
-{ lib
-, python3Packages
-, fetchPypi
-, substituteAll
-, ffmpeg
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  substituteAll,
+  ffmpeg,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -67,6 +68,10 @@ python3Packages.buildPythonApplication rec {
     '';
     license = lib.licenses.bsd2;
     mainProgram = "streamlink";
-    maintainers = with lib.maintainers; [ dezgeg zraexy DeeUnderscore ];
+    maintainers = with lib.maintainers; [
+      dezgeg
+      zraexy
+      DeeUnderscore
+    ];
   };
 }

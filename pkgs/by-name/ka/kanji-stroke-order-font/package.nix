@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchzip }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 
 let
   font = "kanji-stroke-order";
@@ -30,7 +34,10 @@ stdenv.mkDerivation {
     homepage = "https://www.nihilist.org.uk/";
 
     license = [ licenses.bsd3 ];
-    maintainers = with maintainers; [ ptrhlm stephen-huan ];
+    maintainers = with maintainers; [
+      ptrhlm
+      stephen-huan
+    ];
     platforms = platforms.all;
   };
 }

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper, perl, perlPackages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  perl,
+  perlPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "remotebox";
@@ -9,7 +16,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-oIWSli/pc+kqMkYqkeHr3fZshWUHx6ecqAZXf6fl2ik=";
   };
 
-  buildInputs = with perlPackages; [ perl Glib Gtk2 Pango SOAPLite ];
+  buildInputs = with perlPackages; [
+    perl
+    Glib
+    Gtk2
+    Pango
+    SOAPLite
+  ];
   nativeBuildInputs = [ makeWrapper ];
 
   installPhase = ''

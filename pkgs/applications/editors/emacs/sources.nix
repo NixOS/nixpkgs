@@ -1,72 +1,104 @@
-{ lib
-, fetchFromBitbucket
-, fetchFromSavannah
+{
+  lib,
+  fetchFromBitbucket,
+  fetchFromSavannah,
 }:
 
 let
-  mkArgs = { pname, version, variant, patches ? _: [ ], rev, hash }: {
-    inherit pname version variant patches;
+  mkArgs =
+    {
+      pname,
+      version,
+      variant,
+      patches ? _: [ ],
+      rev,
+      hash,
+    }:
+    {
+      inherit
+        pname
+        version
+        variant
+        patches
+        ;
 
-    src = {
-      "mainline" = (fetchFromSavannah {
-        repo = "emacs";
-        inherit rev hash;
-      });
-      "macport" = (fetchFromBitbucket {
-        owner = "mituharu";
-        repo = "emacs-mac";
-        inherit rev hash;
-      });
-    }.${variant};
+      src =
+        {
+          "mainline" = (
+            fetchFromSavannah {
+              repo = "emacs";
+              inherit rev hash;
+            }
+          );
+          "macport" = (
+            fetchFromBitbucket {
+              owner = "mituharu";
+              repo = "emacs-mac";
+              inherit rev hash;
+            }
+          );
+        }
+        .${variant};
 
-    meta = {
-      homepage = {
-        "mainline" = "https://www.gnu.org/software/emacs/";
-        "macport" = "https://bitbucket.org/mituharu/emacs-mac/";
-      }.${variant};
-      description = "Extensible, customizable GNU text editor"
-                    + lib.optionalString (variant == "macport") " - macport variant";
-      longDescription = ''
-      GNU Emacs is an extensible, customizable text editor—and more. At its core
-      is an interpreter for Emacs Lisp, a dialect of the Lisp programming
-      language with extensions to support text editing.
+      meta = {
+        homepage =
+          {
+            "mainline" = "https://www.gnu.org/software/emacs/";
+            "macport" = "https://bitbucket.org/mituharu/emacs-mac/";
+          }
+          .${variant};
+        description =
+          "Extensible, customizable GNU text editor"
+          + lib.optionalString (variant == "macport") " - macport variant";
+        longDescription =
+          ''
+            GNU Emacs is an extensible, customizable text editor—and more. At its core
+            is an interpreter for Emacs Lisp, a dialect of the Lisp programming
+            language with extensions to support text editing.
 
-      The features of GNU Emacs include: content-sensitive editing modes,
-      including syntax coloring, for a wide variety of file types including
-      plain text, source code, and HTML; complete built-in documentation,
-      including a tutorial for new users; full Unicode support for nearly all
-      human languages and their scripts; highly customizable, using Emacs Lisp
-      code or a graphical interface; a large number of extensions that add other
-      functionality, including a project planner, mail and news reader, debugger
-      interface, calendar, and more. Many of these extensions are distributed
-      with GNU Emacs; others are available separately.
-    '' + lib.optionalString (variant == "macport") ''
+            The features of GNU Emacs include: content-sensitive editing modes,
+            including syntax coloring, for a wide variety of file types including
+            plain text, source code, and HTML; complete built-in documentation,
+            including a tutorial for new users; full Unicode support for nearly all
+            human languages and their scripts; highly customizable, using Emacs Lisp
+            code or a graphical interface; a large number of extensions that add other
+            functionality, including a project planner, mail and news reader, debugger
+            interface, calendar, and more. Many of these extensions are distributed
+            with GNU Emacs; others are available separately.
+          ''
+          + lib.optionalString (variant == "macport") ''
 
-      This release is built from Mitsuharu Yamamoto's patched source code
-      tailored for macOS.
-    '';
-      changelog = {
-        "mainline" = "https://www.gnu.org/savannah-checkouts/gnu/emacs/news/NEWS.${version}";
-        "macport" = "https://bitbucket.org/mituharu/emacs-mac/raw/${rev}/NEWS-mac";
-      }.${variant};
-      license = lib.licenses.gpl3Plus;
-      maintainers = {
-        "mainline" = with lib.maintainers; [
-          AndersonTorres
-          adisbladis
-          jwiegley
-          lovek323
-          matthewbauer
-        ];
-        "macport" = with lib.maintainers; [ ];
-      }.${variant};
-      platforms = {
-        "mainline" = lib.platforms.all;
-        "macport" = lib.platforms.darwin;
-      }.${variant};
-      mainProgram = "emacs";
+            This release is built from Mitsuharu Yamamoto's patched source code
+            tailored for macOS.
+          '';
+        changelog =
+          {
+            "mainline" = "https://www.gnu.org/savannah-checkouts/gnu/emacs/news/NEWS.${version}";
+            "macport" = "https://bitbucket.org/mituharu/emacs-mac/raw/${rev}/NEWS-mac";
+          }
+          .${variant};
+        license = lib.licenses.gpl3Plus;
+        maintainers =
+          {
+            "mainline" = with lib.maintainers; [
+              AndersonTorres
+              adisbladis
+              jwiegley
+              lovek323
+              matthewbauer
+            ];
+            "macport" = with lib.maintainers; [ ];
+          }
+          .${variant};
+        platforms =
+          {
+            "mainline" = lib.platforms.all;
+            "macport" = lib.platforms.darwin;
+          }
+          .${variant};
+        mainProgram = "emacs";
+      };
     };
-  };
 in
 {
   emacs28 = import ./make-emacs.nix (mkArgs {

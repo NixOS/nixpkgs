@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pciutils, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pciutils,
+  cmake,
+}:
 stdenv.mkDerivation rec {
   pname = "ryzenadj";
   version = "0.16.0";
@@ -10,7 +16,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-VuIrA5UrRqwUta/mrYd+6F4gh/Z65+zzoTXUlRA8wzA=";
   };
 
-  nativeBuildInputs = [ pciutils cmake ];
+  nativeBuildInputs = [
+    pciutils
+    cmake
+  ];
 
   installPhase = ''
     install -D libryzenadj.so $out/lib/libryzenadj.so

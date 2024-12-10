@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, testers
-, scorecard
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  scorecard,
 }:
 
 buildGoModule rec {
@@ -89,6 +90,9 @@ buildGoModule rec {
     description = "Security health metrics for Open Source";
     mainProgram = "scorecard";
     license = licenses.asl20;
-    maintainers = with maintainers; [ jk developer-guy ];
+    maintainers = with maintainers; [
+      jk
+      developer-guy
+    ];
   };
 }

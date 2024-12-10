@@ -45,18 +45,21 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [
-    dask-expr
-    dask-glm
-    distributed
-    multipledispatch
-    numba
-    numpy
-    packaging
-    pandas
-    scikit-learn
-    scipy
-  ] ++ dask.optional-dependencies.array ++ dask.optional-dependencies.dataframe;
+  dependencies =
+    [
+      dask-expr
+      dask-glm
+      distributed
+      multipledispatch
+      numba
+      numpy
+      packaging
+      pandas
+      scikit-learn
+      scipy
+    ]
+    ++ dask.optional-dependencies.array
+    ++ dask.optional-dependencies.dataframe;
 
   pythonImportsCheck = [
     "dask_ml"

@@ -50,20 +50,23 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-c8G0CGg4jrwq+HVR4O0AtaJNzr7pDYsie1410tisLEY=";
   };
 
-  buildInputs = [
-    cyrus_sasl
-    gss
-    gpgme
-    libkrb5
-    libidn2
-    ncurses
-    notmuch
-    openssl
-    perl
-    lmdb
-    mailcap
-    sqlite
-  ] ++ lib.optional enableZstd zstd ++ lib.optional enableLua lua;
+  buildInputs =
+    [
+      cyrus_sasl
+      gss
+      gpgme
+      libkrb5
+      libidn2
+      ncurses
+      notmuch
+      openssl
+      perl
+      lmdb
+      mailcap
+      sqlite
+    ]
+    ++ lib.optional enableZstd zstd
+    ++ lib.optional enableLua lua;
 
   nativeBuildInputs = [
     docbook_xsl
@@ -99,21 +102,24 @@ stdenv.mkDerivation (finalAttrs: {
       --replace /etc/mime.types ${mailcap}/etc/mime.types
   '';
 
-  configureFlags = [
-    "--enable-autocrypt"
-    "--gpgme"
-    "--gss"
-    "--lmdb"
-    "--notmuch"
-    "--ssl"
-    "--sasl"
-    "--with-homespool=mailbox"
-    "--with-mailpath="
-    # To make it not reference .dev outputs. See:
-    # https://github.com/neomutt/neomutt/pull/2367
-    "--disable-include-path-in-cflags"
-    "--zlib"
-  ] ++ lib.optional enableZstd "--zstd" ++ lib.optional enableLua "--lua";
+  configureFlags =
+    [
+      "--enable-autocrypt"
+      "--gpgme"
+      "--gss"
+      "--lmdb"
+      "--notmuch"
+      "--ssl"
+      "--sasl"
+      "--with-homespool=mailbox"
+      "--with-mailpath="
+      # To make it not reference .dev outputs. See:
+      # https://github.com/neomutt/neomutt/pull/2367
+      "--disable-include-path-in-cflags"
+      "--zlib"
+    ]
+    ++ lib.optional enableZstd "--zstd"
+    ++ lib.optional enableLua "--lua";
 
   postInstall =
     ''

@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, editorconfig-checker }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  editorconfig-checker,
+}:
 
 buildGoModule rec {
   pname = "editorconfig-checker";
@@ -33,6 +40,9 @@ buildGoModule rec {
     mainProgram = "editorconfig-checker";
     homepage = "https://editorconfig-checker.github.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ uri-canva zowoq ];
+    maintainers = with maintainers; [
+      uri-canva
+      zowoq
+    ];
   };
 }

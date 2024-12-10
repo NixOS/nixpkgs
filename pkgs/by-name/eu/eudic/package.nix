@@ -1,27 +1,28 @@
-{ fetchurl
-, stdenv
-, autoPatchelfHook
-, makeWrapper
-, lib
-, copyDesktopItems
-, libnotify
-, libX11
-, libXScrnSaver
-, libXext
-, libXtst
-, libuuid
-, libsecret
-, xdg-utils
-, xdg-utils-cxx
-, at-spi2-atk
-# additional dependencies autoPatchelfHook discovered
-, gtk3
-, alsa-lib
-, e2fsprogs
-, nss
-, libgpg-error
-, libjack2
-, mesa
+{
+  fetchurl,
+  stdenv,
+  autoPatchelfHook,
+  makeWrapper,
+  lib,
+  copyDesktopItems,
+  libnotify,
+  libX11,
+  libXScrnSaver,
+  libXext,
+  libXtst,
+  libuuid,
+  libsecret,
+  xdg-utils,
+  xdg-utils-cxx,
+  at-spi2-atk,
+  # additional dependencies autoPatchelfHook discovered
+  gtk3,
+  alsa-lib,
+  e2fsprogs,
+  nss,
+  libgpg-error,
+  libjack2,
+  mesa,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

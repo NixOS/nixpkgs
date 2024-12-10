@@ -1,12 +1,13 @@
-{ qtModule
-, stdenv
-, lib
-, qtbase
-, qtdeclarative
-, cups
-, llvmPackages
-# clang-based c++ parser for qdoc and lupdate
-, withClang ? false
+{
+  qtModule,
+  stdenv,
+  lib,
+  qtbase,
+  qtdeclarative,
+  cups,
+  llvmPackages,
+  # clang-based c++ parser for qdoc and lupdate
+  withClang ? false,
 }:
 
 qtModule {
@@ -15,8 +16,10 @@ qtModule {
     llvmPackages.libclang
     llvmPackages.llvm
   ];
-  propagatedBuildInputs = [ qtbase qtdeclarative ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ cups ];
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cups ];
   patches = [
     ../patches/qttools-paths.patch
   ];

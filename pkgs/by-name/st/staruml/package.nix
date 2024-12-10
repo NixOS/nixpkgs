@@ -1,25 +1,61 @@
-{ stdenv, lib, fetchurl
-, dpkg, wrapGAppsHook3
-, hicolor-icon-theme
-, gtk3, glib, systemd
-, xorg, nss, nspr
-, atk, at-spi2-atk, dbus
-, gdk-pixbuf, pango, cairo
-, expat, libdrm, mesa
-, alsa-lib, at-spi2-core, cups
-, libxkbcommon }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  wrapGAppsHook3,
+  hicolor-icon-theme,
+  gtk3,
+  glib,
+  systemd,
+  xorg,
+  nss,
+  nspr,
+  atk,
+  at-spi2-atk,
+  dbus,
+  gdk-pixbuf,
+  pango,
+  cairo,
+  expat,
+  libdrm,
+  mesa,
+  alsa-lib,
+  at-spi2-core,
+  cups,
+  libxkbcommon,
+}:
 
 let
   LD_LIBRARY_PATH = lib.makeLibraryPath [
-    glib gtk3 xorg.libXdamage
-    xorg.libX11 xorg.libxcb xorg.libXcomposite
-    xorg.libXcursor xorg.libXext xorg.libXfixes
-    xorg.libXi xorg.libXrender xorg.libXtst
-    xorg.libxshmfence libxkbcommon nss
-    nspr atk at-spi2-atk
-    dbus gdk-pixbuf pango cairo
-    xorg.libXrandr expat libdrm
-    mesa alsa-lib at-spi2-core
+    glib
+    gtk3
+    xorg.libXdamage
+    xorg.libX11
+    xorg.libxcb
+    xorg.libXcomposite
+    xorg.libXcursor
+    xorg.libXext
+    xorg.libXfixes
+    xorg.libXi
+    xorg.libXrender
+    xorg.libXtst
+    xorg.libxshmfence
+    libxkbcommon
+    nss
+    nspr
+    atk
+    at-spi2-atk
+    dbus
+    gdk-pixbuf
+    pango
+    cairo
+    xorg.libXrandr
+    expat
+    libdrm
+    mesa
+    alsa-lib
+    at-spi2-core
     cups
   ];
 in
@@ -28,12 +64,18 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "staruml";
 
   src = fetchurl {
-      url = "https://files.staruml.io/releases-v6/StarUML_${finalAttrs.version}_amd64.deb";
-      sha256 = "sha256-G63MxjefAJ0J40HzrI9j/sRkHLIdUzBf0GSbw6fAFoI=";
-    };
+    url = "https://files.staruml.io/releases-v6/StarUML_${finalAttrs.version}_amd64.deb";
+    sha256 = "sha256-G63MxjefAJ0J40HzrI9j/sRkHLIdUzBf0GSbw6fAFoI=";
+  };
 
-  nativeBuildInputs = [ wrapGAppsHook3 dpkg ];
-  buildInputs = [ glib hicolor-icon-theme ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    dpkg
+  ];
+  buildInputs = [
+    glib
+    hicolor-icon-theme
+  ];
 
   installPhase = ''
     mkdir -p $out/bin

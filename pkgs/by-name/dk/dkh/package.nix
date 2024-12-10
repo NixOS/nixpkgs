@@ -1,14 +1,20 @@
-{ lib, stdenv, gfortran, fetchFromGitHub, cmake } :
+{
+  lib,
+  stdenv,
+  gfortran,
+  fetchFromGitHub,
+  cmake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dkh";
   version = "1.2";
 
-  src = fetchFromGitHub  {
+  src = fetchFromGitHub {
     owner = "psi4";
     repo = pname;
     rev = "v${version}";
-    sha256= "1wb4qmb9f8rnrwnnw1gdhzx1fmhy628bxfrg56khxy3j5ljxkhck";
+    sha256 = "1wb4qmb9f8rnrwnnw1gdhzx1fmhy628bxfrg56khxy3j5ljxkhck";
   };
 
   nativeBuildInputs = [

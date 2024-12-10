@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, alsa-lib
-, freetype
-, libX11
-, libXrandr
-, libXinerama
-, libXext
-, libXcursor
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  alsa-lib,
+  freetype,
+  libX11,
+  libXrandr,
+  libXinerama,
+  libXext,
+  libXcursor,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -69,15 +70,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  desktopItems = [(makeDesktopItem {
-    name = "ShowMIDI";
-    exec = finalAttrs.meta.mainProgram;
-    comment = finalAttrs.meta.description;
-    type = "Application";
-    icon = "show-midi";
-    desktopName = "ShowMIDI";
-    categories = [ "Audio" ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ShowMIDI";
+      exec = finalAttrs.meta.mainProgram;
+      comment = finalAttrs.meta.description;
+      type = "Application";
+      icon = "show-midi";
+      desktopName = "ShowMIDI";
+      categories = [ "Audio" ];
+    })
+  ];
 
   # JUCE dlopens these, make sure they are in rpath
   # Otherwise, segfault will happen

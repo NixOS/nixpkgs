@@ -1,13 +1,14 @@
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
-, toPythonModule
-, async-timeout
-, music-assistant
-, pytestCheckHook
-, pytest-asyncio
-, pytest-cov-stub
-, pytest-homeassistant-custom-component
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
+  toPythonModule,
+  async-timeout,
+  music-assistant,
+  pytestCheckHook,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytest-homeassistant-custom-component,
 }:
 
 buildHomeAssistantComponent rec {

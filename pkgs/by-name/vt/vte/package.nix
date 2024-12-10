@@ -1,42 +1,45 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gettext
-, pkg-config
-, meson
-, ninja
-, gnome
-, glib
-, gtk3
-, gtk4
-, gtkVersion ? "3"
-, gobject-introspection
-, vala
-, python3
-, gi-docgen
-, libxml2
-, gnutls
-, gperf
-, pango
-, pcre2
-, cairo
-, fribidi
-, lz4
-, icu
-, systemd
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd
-, fast-float
-, nixosTests
-, blackbox-terminal
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gettext,
+  pkg-config,
+  meson,
+  ninja,
+  gnome,
+  glib,
+  gtk3,
+  gtk4,
+  gtkVersion ? "3",
+  gobject-introspection,
+  vala,
+  python3,
+  gi-docgen,
+  libxml2,
+  gnutls,
+  gperf,
+  pango,
+  pcre2,
+  cairo,
+  fribidi,
+  lz4,
+  icu,
+  systemd,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  fast-float,
+  nixosTests,
+  blackbox-terminal,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "vte";
   version = "0.78.2";
 
-  outputs = [ "out" "dev" ]
-    ++ lib.optional (gtkVersion != null) "devdoc";
+  outputs = [
+    "out"
+    "dev"
+  ] ++ lib.optional (gtkVersion != null) "devdoc";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
@@ -87,41 +90,50 @@ stdenv.mkDerivation (finalAttrs: {
     gi-docgen
   ];
 
-  buildInputs = [
-    cairo
-    fribidi
-    gnutls
-    pango # duplicated with propagatedBuildInputs to support gtkVersion == null
-    pcre2
-    lz4
-    icu
-    fast-float
-  ] ++ lib.optionals systemdSupport [
-    systemd
-  ];
+  buildInputs =
+    [
+      cairo
+      fribidi
+      gnutls
+      pango # duplicated with propagatedBuildInputs to support gtkVersion == null
+      pcre2
+      lz4
+      icu
+      fast-float
+    ]
+    ++ lib.optionals systemdSupport [
+      systemd
+    ];
 
   # Required by vte-2.91.pc.
   propagatedBuildInputs = lib.optionals (gtkVersion != null) [
-    (assert (gtkVersion == "3" || gtkVersion == "4");
-    if gtkVersion == "3" then gtk3 else gtk4)
+    (
+      assert (gtkVersion == "3" || gtkVersion == "4");
+      if gtkVersion == "3" then gtk3 else gtk4
+    )
     glib
     pango
   ];
 
-  mesonFlags = [
-    "-Ddocs=true"
-    (lib.mesonBool "gtk3" (gtkVersion == "3"))
-    (lib.mesonBool "gtk4" (gtkVersion == "4"))
-  ] ++ lib.optionals (!systemdSupport) [
-    "-D_systemd=false"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # -Bsymbolic-functions is not supported on darwin
-    "-D_b_symbolic_functions=false"
-  ];
+  mesonFlags =
+    [
+      "-Ddocs=true"
+      (lib.mesonBool "gtk3" (gtkVersion == "3"))
+      (lib.mesonBool "gtk4" (gtkVersion == "4"))
+    ]
+    ++ lib.optionals (!systemdSupport) [
+      "-D_systemd=false"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # -Bsymbolic-functions is not supported on darwin
+      "-D_b_symbolic_functions=false"
+    ];
 
   # error: argument unused during compilation: '-pie' [-Werror,-Wunused-command-line-argument]
-  env.NIX_CFLAGS_COMPILE = toString (lib.optional stdenv.hostPlatform.isMusl "-Wno-unused-command-line-argument"
-    ++ lib.optional stdenv.cc.isClang "-Wno-cast-function-type-strict");
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optional stdenv.hostPlatform.isMusl "-Wno-unused-command-line-argument"
+    ++ lib.optional stdenv.cc.isClang "-Wno-cast-function-type-strict"
+  );
 
   postPatch = ''
     patchShebangs perf/*
@@ -141,7 +153,17 @@ stdenv.mkDerivation (finalAttrs: {
       versionPolicy = "odd-unstable";
     };
     tests = {
-      inherit (nixosTests.terminal-emulators) gnome-terminal lxterminal mlterm roxterm sakura stupidterm terminator termite xfce4-terminal;
+      inherit (nixosTests.terminal-emulators)
+        gnome-terminal
+        lxterminal
+        mlterm
+        roxterm
+        sakura
+        stupidterm
+        terminator
+        termite
+        xfce4-terminal
+        ;
       blackbox-terminal = blackbox-terminal.override { sixelSupport = true; };
     };
   };
@@ -158,7 +180,13 @@ stdenv.mkDerivation (finalAttrs: {
       the system's terminfo database.
     '';
     license = licenses.lgpl3Plus;
-    maintainers = with maintainers; [ astsmtl antono ] ++ teams.gnome.members;
+    maintainers =
+      with maintainers;
+      [
+        astsmtl
+        antono
+      ]
+      ++ teams.gnome.members;
     platforms = platforms.unix;
   };
 })

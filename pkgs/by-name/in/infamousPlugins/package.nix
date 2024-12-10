@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, cairomm
-, cmake
-, lv2
-, libpthreadstubs
-, libXdmcp
-, libXft
-, ntk
-, pcre
-, fftwFloat
-, zita-resampler
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cairomm,
+  cmake,
+  lv2,
+  libpthreadstubs,
+  libXdmcp,
+  libXft,
+  ntk,
+  pcre,
+  fftwFloat,
+  zita-resampler,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,8 +26,21 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-AhW4hLmCxz7yHMdxM6kOvtCXk1jEg/XtyPgt4yk1xqs=";
   };
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ cairomm lv2 libpthreadstubs libXdmcp libXft ntk pcre fftwFloat zita-resampler ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
+  buildInputs = [
+    cairomm
+    lv2
+    libpthreadstubs
+    libXdmcp
+    libXft
+    ntk
+    pcre
+    fftwFloat
+    zita-resampler
+  ];
 
   meta = with lib; {
     homepage = "https://ssj71.github.io/infamousPlugins";

@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, darwin
-, just
-, pkg-config
-, wrapGAppsHook4
-, cairo
-, dbus
-, gdk-pixbuf
-, glib
-, graphene
-, gtk4
-, libadwaita
-, librclone
-, pango
-, rclone
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  darwin,
+  just,
+  pkg-config,
+  wrapGAppsHook4,
+  cairo,
+  dbus,
+  gdk-pixbuf,
+  glib,
+  graphene,
+  gtk4,
+  libadwaita,
+  librclone,
+  pango,
+  rclone,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -56,24 +57,28 @@ rustPlatform.buildRustPackage rec {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    cairo
-    dbus
-    gdk-pixbuf
-    glib
-    graphene
-    gtk4
-    libadwaita
-    librclone
-    pango
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [
+      cairo
+      dbus
+      gdk-pixbuf
+      glib
+      graphene
+      gtk4
+      libadwaita
+      librclone
+      pango
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Foundation
+      darwin.apple_sdk.frameworks.Security
+    ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.hostPlatform.isDarwin [
-    "-Wno-error=incompatible-function-pointer-types"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      "-Wno-error=incompatible-function-pointer-types"
+    ]
+  );
 
   preFixup = ''
     gappsWrapperArgs+=(

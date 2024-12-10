@@ -1,20 +1,21 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, rustPlatform
-, pyarrow
-, pyarrow-hotfix
-, openssl
-, stdenv
-, darwin
-, libiconv
-, pkg-config
-, pytestCheckHook
-, pytest-benchmark
-, pytest-cov
-, pytest-mock
-, pandas
-, azure-storage-blob
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  rustPlatform,
+  pyarrow,
+  pyarrow-hotfix,
+  openssl,
+  stdenv,
+  darwin,
+  libiconv,
+  pkg-config,
+  pytestCheckHook,
+  pytest-benchmark,
+  pytest-cov,
+  pytest-mock,
+  pandas,
+  azure-storage-blob,
 }:
 
 buildPythonPackage rec {
@@ -39,20 +40,24 @@ buildPythonPackage rec {
     pyarrow-hotfix
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-    libiconv
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+      libiconv
+    ];
 
-  nativeBuildInputs = [
-    pkg-config # openssl-sys needs this
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-    maturinBuildHook
-  ]);
+  nativeBuildInputs =
+    [
+      pkg-config # openssl-sys needs this
+    ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+      maturinBuildHook
+    ]);
 
   pythonImportsCheck = [ "deltalake" ];
 
@@ -81,6 +86,11 @@ buildPythonPackage rec {
     homepage = "https://github.com/delta-io/delta-rs";
     changelog = "https://github.com/delta-io/delta-rs/blob/python-v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kfollesdal mslingsby harvidsen andershus ];
+    maintainers = with maintainers; [
+      kfollesdal
+      mslingsby
+      harvidsen
+      andershus
+    ];
   };
 }

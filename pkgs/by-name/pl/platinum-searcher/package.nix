@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 buildGoModule rec {
   pname = "the_platinum_searcher";
@@ -21,7 +26,10 @@ buildGoModule rec {
     })
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/monochromegane/the_platinum_searcher";

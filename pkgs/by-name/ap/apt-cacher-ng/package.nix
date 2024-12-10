@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, bzip2
-, cmake
-, doxygen
-, fetchurl
-, fetchpatch
-, fuse
-, libevent
-, xz
-, openssl
-, pkg-config
-, systemd
-, tcp_wrappers
-, zlib
-, c-ares
+{
+  lib,
+  stdenv,
+  bzip2,
+  cmake,
+  doxygen,
+  fetchurl,
+  fetchpatch,
+  fuse,
+  libevent,
+  xz,
+  openssl,
+  pkg-config,
+  systemd,
+  tcp_wrappers,
+  zlib,
+  c-ares,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,8 +35,22 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake doxygen pkg-config ];
-  buildInputs = [ bzip2 fuse libevent xz openssl systemd tcp_wrappers zlib c-ares ];
+  nativeBuildInputs = [
+    cmake
+    doxygen
+    pkg-config
+  ];
+  buildInputs = [
+    bzip2
+    fuse
+    libevent
+    xz
+    openssl
+    systemd
+    tcp_wrappers
+    zlib
+    c-ares
+  ];
 
   meta = with lib; {
     description = "Caching proxy specialized for Linux distribution files";

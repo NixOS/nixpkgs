@@ -19,7 +19,7 @@ let
     hash = "sha256-ggMcgKfpYHWWgyYY84u4Q79IGCVTVkmIMw+N/soapfk=";
   };
 in
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "galario";
   version = "1.2.2";
 

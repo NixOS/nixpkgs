@@ -1,11 +1,19 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  cfg     = config.security.chromiumSuidSandbox;
+  cfg = config.security.chromiumSuidSandbox;
   sandbox = pkgs.chromium.sandbox;
 in
 {
   imports = [
-    (lib.mkRenamedOptionModule [ "programs" "unity3d" "enable" ] [ "security" "chromiumSuidSandbox" "enable" ])
+    (lib.mkRenamedOptionModule
+      [ "programs" "unity3d" "enable" ]
+      [ "security" "chromiumSuidSandbox" "enable" ]
+    )
   ];
 
   options.security.chromiumSuidSandbox.enable = lib.mkOption {
@@ -25,11 +33,11 @@ in
 
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ sandbox ];
-    security.wrappers.${sandbox.passthru.sandboxExecutableName} =
-      { setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${sandbox}/bin/${sandbox.passthru.sandboxExecutableName}";
-      };
+    security.wrappers.${sandbox.passthru.sandboxExecutableName} = {
+      setuid = true;
+      owner = "root";
+      group = "root";
+      source = "${sandbox}/bin/${sandbox.passthru.sandboxExecutableName}";
+    };
   };
 }
