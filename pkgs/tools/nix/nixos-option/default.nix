@@ -7,6 +7,7 @@
   pkg-config,
   installShellFiles,
   nix,
+  nixosTests,
 }:
 
 stdenv.mkDerivation {
@@ -30,6 +31,8 @@ stdenv.mkDerivation {
     boost
     nix
   ];
+
+  passthru.tests.installer-simpleUefiSystemdBoot = nixosTests.installer.simpleUefiSystemdBoot;
 
   meta = with lib; {
     license = licenses.lgpl2Plus;
