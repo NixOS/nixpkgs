@@ -810,13 +810,13 @@
   })
   (fetchNuGet {
     pname = "StyleCop.Analyzers";
-    version = "1.2.0-beta.435";
-    hash = "sha256-XufJWNfjDQvw3LJhIf6nHFJOfAla3wfPFLoRsRX4OTY=";
+    version = "1.2.0-beta.556";
+    hash = "sha256-97YYQcr5vZxTvi36608eUkA1wb6xllZQ7UcXbjrYIfU=";
   })
   (fetchNuGet {
     pname = "StyleCop.Analyzers.Unstable";
-    version = "1.2.0.435";
-    hash = "sha256-sKb7IwKT+Yb1L/Mh8ZFyGMU63W7C+SCsECkx4YmCZMs=";
+    version = "1.2.0.556";
+    hash = "sha256-aVop7a9r+X2RsZETgngBm3qQPEIiPBWgHzicGSTEymc=";
   })
   (fetchNuGet {
     pname = "Swashbuckle.AspNetCore";
