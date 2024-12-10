@@ -48,8 +48,11 @@ symlinkJoin {
     multipass-gui
   ];
 
-  passthru.tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
-    inherit (nixosTests) multipass;
+  passthru = {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit (nixosTests) multipass;
+    };
+    updateScript = ./update.sh;
   };
 
   meta = commonMeta // {
