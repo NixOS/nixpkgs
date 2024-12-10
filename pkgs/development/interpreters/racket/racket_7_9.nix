@@ -145,6 +145,7 @@ stdenv.mkDerivation rec {
       "x86_64-linux"
       "aarch64-linux"
     ];
+    knownVulnerabilities = [ "CVE-2021-32773" ];
     broken = stdenv.isDarwin; # No support yet for setting FFI lookup path
   };
 }
