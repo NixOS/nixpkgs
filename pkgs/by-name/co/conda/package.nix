@@ -44,10 +44,26 @@
 # $ conda install spyder
 let
   version = "24.9.2";
-  src = fetchurl {
-    url = "https://repo.anaconda.com/miniconda/Miniconda3-py312_${version}-0-Linux-x86_64.sh";
-    hash = "sha256-jZNrpgAwDgjso9h03uiMYcbzkwNZeytmuu5Ur097QSI=";
-  };
+  selectSystem =
+    attrs:
+    attrs.${stdenv.hostPlatform.system}
+      or (throw "conda: ${stdenv.hostPlatform.system} is not supported");
+  src =
+    let
+      arch = selectSystem {
+        x86_64-linux = "x86_64";
+        aarch64-linux = "aarch64";
+      };
+      hash = selectSystem {
+        x86_64-linux = "sha256-jZNrpgAwDgjso9h03uiMYcbzkwNZeytmuu5Ur097QSI=";
+        aarch64-linux = "sha256-hrjfdIFkbPh+d4c+l4mtt1abWCSNOqYp6y2jXm8uLu0=";
+      };
+    in
+    fetchurl {
+      url = "https://repo.anaconda.com/miniconda/Miniconda3-py312_${version}-0-Linux-${arch}.sh";
+      inherit hash;
+    };
+
   conda = (
     let
       libPath = lib.makeLibraryPath [
@@ -99,7 +115,7 @@ buildFHSEnv {
     # Some other required environment variables
     export FONTCONFIG_FILE=/etc/fonts/fonts.conf
     export QTCOMPOSE=${xorg.libX11}/share/X11/locale
-    export LIBARCHIVE=${libarchive.lib}/lib/libarchive.so
+    export LIBARCHIVE=${lib.getLib libarchive}/lib/libarchive.so
     # Allows `conda activate` to work properly
     condaSh=${installationPath}/etc/profile.d/conda.sh
     if [ ! -f $condaSh ]; then
@@ -111,11 +127,14 @@ buildFHSEnv {
   runScript = "bash -l";
 
   meta = {
-    description = "Conda is a package manager for Python";
+    description = "Package manager for Python";
     mainProgram = "conda-shell";
-    homepage = "https://conda.io/";
-    platforms = lib.platforms.linux;
-    license = lib.licenses.bsd3;
+    homepage = "https://conda.io";
+    platforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
+    license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ jluttine ];
   };
 }
