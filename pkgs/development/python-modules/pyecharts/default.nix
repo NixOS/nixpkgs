@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "pyecharts";
-  version = "2.0.6";
+  version = "2.0.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyecharts";
     repo = "pyecharts";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cD2jtiE2LDKCmhqM+qKYcsZyjDyMDpp8/Bn17csZgqo=";
+    tag = "v${version}";
+    hash = "sha256-5DM5uBVa4pRLmNKCuGJu5z5wUsLBEqqKjWIP/3Mhg18=";
   };
 
   build-system = [ setuptools ];
