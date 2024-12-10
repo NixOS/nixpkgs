@@ -1,6 +1,6 @@
 { lib, runCommand, rustc-unwrapped, sysroot ? null }:
 
-runCommand "${rustc-unwrapped.pname}-wrapper-${rustc-unwrapped.version}" {
+runCommand "${rustc-unwrapped.pname}-${rustc-unwrapped.version}" {
   preferLocalBuild = true;
   strictDeps = true;
   inherit (rustc-unwrapped) outputs;
@@ -38,7 +38,6 @@ runCommand "${rustc-unwrapped.pname}-wrapper-${rustc-unwrapped.version}" {
 
   meta = rustc-unwrapped.meta // {
     description = "${rustc-unwrapped.meta.description} (wrapper script)";
-    priority = 10;
   };
 } ''
   mkdir -p $out/bin
