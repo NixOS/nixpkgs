@@ -111,7 +111,7 @@ in {
           ${lib.optionalString (cfg.webroot != null)
             "ln -sfT \"${cfg.webroot}\" web"}
           mkdir -p dump
-          ${sksPkg}/bin/sks build dump/*.gpg -n 10 -cache 100 || true #*/
+          ${sksPkg}/bin/sks build dump/*.pgp -n 10 -cache 100 || true #*/
           ${sksPkg}/bin/sks cleandb || true
           ${sksPkg}/bin/sks pbuild -cache 20 -ptree_cache 70 || true
           # Check that both database configs are symlinks before overwriting them
@@ -133,6 +133,7 @@ in {
           User = "sks";
           Group = "sks";
           Restart = "always";
+          TimeoutStartSec = "1h";
           ExecStart = "${sksPkg}/bin/sks db -hkp_address ${hkpAddress} -hkp_port ${hkpPort}";
         };
       };
