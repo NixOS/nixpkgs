@@ -17,6 +17,9 @@ stdenv.mkDerivation rec {
       url = "https://raw.githubusercontent.com/Homebrew/formula-patches/24118ec737c7/cvs/vasnprintf-high-sierra-fix.diff";
       sha256 = "1ql6aaia7xkfq3vqhlw5bd2z2ywka82zk01njs1b2szn699liymg";
     })
+    # use return rather than exit when stdlib.h is not included to prevent
+    # features from being undetected due to compile errors
+    ./config-fixes.diff
   ];
 
   hardeningDisable = [ "fortify" "format" ];
@@ -34,15 +37,13 @@ stdenv.mkDerivation rec {
 
     # Required for cross-compilation.
     "cvs_cv_func_printf_ptr=yes"
+
+    "CFLAGS=-D_GNU_SOURCE"
   ];
 
   makeFlags = [
     "AR=${stdenv.cc.targetPrefix}ar"
   ];
-
-  env = lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.cc.isClang) {
-    NIX_CFLAGS_COMPILE = "-Wno-implicit-function-declaration";
-  };
 
   doCheck = false; # fails 1 of 1 tests
 
