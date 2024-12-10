@@ -10334,6 +10334,10 @@ self: super: with self; {
     piper-phonemize-native = pkgs.piper-phonemize;
   };
 
+  piper-tts = callPackage ../development/python-modules/piper-tts {
+    piper-tts-native = pkgs.piper-tts;
+  };
+
   pip-api = callPackage ../development/python-modules/pip-api { };
 
   pip-chill = callPackage ../development/python-modules/pip-chill { };
