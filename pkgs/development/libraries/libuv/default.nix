@@ -122,6 +122,11 @@ stdenv.mkDerivation (finalAttrs: {
           "udp_create_early_bad_bind"
           "fs_event_watch_delete_dir"
         ]
+        ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionOlder finalAttrs.version "1.49.3") [
+          # https://github.com/libuv/libuv/issues/4650
+          # can enable on upgrade from 1.49.2
+          "udp_mmsg"
+        ]
         ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
           # fail on macos < 10.15 (starting in libuv 1.47.0)
           "fs_write_alotof_bufs_with_offset"
