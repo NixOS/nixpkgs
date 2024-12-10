@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, darwin
-, gcc
-, libcxx
-, cacert
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  darwin,
+  gcc,
+  libcxx,
+  cacert,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,15 +1,16 @@
-{ lib
-, multiStdenv
-, fetchFromGitHub
-, substituteAll
-, pkgsi686Linux
-, dbus
-, meson
-, ninja
-, pkg-config
-, wine
-, libxcb
-, nix-update-script
+{
+  lib,
+  multiStdenv,
+  fetchFromGitHub,
+  substituteAll,
+  pkgsi686Linux,
+  dbus,
+  meson,
+  ninja,
+  pkg-config,
+  wine,
+  libxcb,
+  nix-update-script,
 }:
 
 let
@@ -134,7 +135,8 @@ multiStdenv.mkDerivation (finalAttrs: {
   ];
 
   mesonFlags = [
-    "--cross-file" "cross-wine.conf"
+    "--cross-file"
+    "cross-wine.conf"
     "-Dbitbridge=true"
 
     # Requires CMake and is unnecessary

@@ -1,13 +1,15 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, nodejs_20
-, runtimeShell
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  nodejs_20,
+  runtimeShell,
 }:
 
 let
   nodejs = nodejs_20;
-in buildNpmPackage rec {
+in
+buildNpmPackage rec {
   pname = "whitebophir";
   version = "1.19.1";
 

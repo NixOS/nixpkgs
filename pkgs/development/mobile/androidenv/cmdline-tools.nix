@@ -1,10 +1,21 @@
-{deployAndroidPackage, lib, package, autoPatchelfHook, makeWrapper, os, pkgs, stdenv, postInstall}:
+{
+  deployAndroidPackage,
+  lib,
+  package,
+  autoPatchelfHook,
+  makeWrapper,
+  os,
+  pkgs,
+  stdenv,
+  postInstall,
+}:
 
 deployAndroidPackage {
   name = "androidsdk";
   inherit package os;
-  nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
+  nativeBuildInputs = [
+    makeWrapper
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
   patchInstructions = ''
     ${lib.optionalString (os == "linux") ''

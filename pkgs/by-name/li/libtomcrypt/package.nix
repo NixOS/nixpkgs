@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, fetchpatch, libtool, libtommath }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  libtool,
+  libtommath,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libtomcrypt";
@@ -21,7 +28,10 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ libtool libtommath ];
+  nativeBuildInputs = [
+    libtool
+    libtommath
+  ];
 
   postPatch = ''
     substituteInPlace makefile.shared --replace "LIBTOOL:=glibtool" "LIBTOOL:=libtool"
@@ -43,7 +53,10 @@ stdenv.mkDerivation rec {
     description = "Fairly comprehensive, modular and portable cryptographic toolkit";
     homepage = "https://www.libtom.net/LibTomCrypt/";
     changelog = "https://github.com/libtom/libtomcrypt/raw/v${version}/changes";
-    license = with licenses; [ publicDomain wtfpl ];
+    license = with licenses; [
+      publicDomain
+      wtfpl
+    ];
     maintainers = [ ];
     platforms = platforms.all;
   };

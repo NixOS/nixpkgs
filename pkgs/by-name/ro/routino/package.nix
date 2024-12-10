@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, fetchpatch, perl, zlib, bzip2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  perl,
+  zlib,
+  bzip2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "routino";
@@ -28,9 +36,15 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ zlib bzip2 ];
+  buildInputs = [
+    zlib
+    bzip2
+  ];
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   CLANG = lib.optionalString stdenv.cc.isClang "1";
 

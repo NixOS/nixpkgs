@@ -26,10 +26,13 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
-  dependencies = [
-    requests
-    securesystemslib
-  ] ++ securesystemslib.optional-dependencies.pynacl ++ securesystemslib.optional-dependencies.crypto;
+  dependencies =
+    [
+      requests
+      securesystemslib
+    ]
+    ++ securesystemslib.optional-dependencies.pynacl
+    ++ securesystemslib.optional-dependencies.crypto;
 
   nativeCheckInputs = [
     ed25519

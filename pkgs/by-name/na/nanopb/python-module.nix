@@ -1,6 +1,7 @@
-{ python3
-, version
-, generator-out
+{
+  python3,
+  version,
+  generator-out,
 }:
 python3.pkgs.buildPythonPackage {
   pname = "nanopb-python-module";

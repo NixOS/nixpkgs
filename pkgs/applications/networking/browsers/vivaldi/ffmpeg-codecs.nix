@@ -1,4 +1,9 @@
-{ squashfsTools, fetchurl, lib, stdenv }:
+{
+  squashfsTools,
+  fetchurl,
+  lib,
+  stdenv,
+}:
 
 # This derivation roughly follows the update-ffmpeg script that ships with the official Vivaldi
 # downloads at https://vivaldi.com/download/
@@ -23,10 +28,14 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Additional support for proprietary codecs for Vivaldi";
-    homepage    = "https://ffmpeg.org/";
+    homepage = "https://ffmpeg.org/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license     = licenses.lgpl21;
-    maintainers = with maintainers; [ betaboon cawilliamson fptje ];
-    platforms   = [ "x86_64-linux" ];
+    license = licenses.lgpl21;
+    maintainers = with maintainers; [
+      betaboon
+      cawilliamson
+      fptje
+    ];
+    platforms = [ "x86_64-linux" ];
   };
 }

@@ -1,13 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, perlPackages, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perlPackages,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "realTimeConfigQuickScan";
   version = "unstable-2020-07-23";
 
   src = fetchFromGitHub {
-    owner  = "raboof";
-    repo   = pname;
-    rev    = "4697ba093d43d512b74a73b89531cb8c5adaa274";
+    owner = "raboof";
+    repo = pname;
+    rev = "4697ba093d43d512b74a73b89531cb8c5adaa274";
     sha256 = "16kanzp5i353x972zjkwgi3m8z90wc58613mlfzb0n01djdnm6k5";
   };
 
@@ -47,7 +53,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/raboof/realtimeconfigquickscan";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ magnetophon ];
-    platforms = platforms.linux ;
+    platforms = platforms.linux;
   };
 }
-

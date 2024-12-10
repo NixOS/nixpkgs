@@ -1,4 +1,8 @@
-{ lib, fetchPypi, buildPythonPackage }:
+{
+  lib,
+  fetchPypi,
+  buildPythonPackage,
+}:
 
 buildPythonPackage rec {
   # the frontend version corresponding to a specific home-assistant version can be found here

@@ -1,38 +1,40 @@
-{ lib, stdenv
-, runCommand
-, newScope
-, fetchFromGitLab
-, makeWrapper
-, symlinkJoin
-, callPackage
-, callPackages
+{
+  lib,
+  stdenv,
+  runCommand,
+  newScope,
+  fetchFromGitLab,
+  makeWrapper,
+  symlinkJoin,
+  callPackage,
+  callPackages,
 
-, adwaita-icon-theme
-, dconf
-, gtk3
-, wxGTK32
-, librsvg
-, cups
-, gsettings-desktop-schemas
-, hicolor-icon-theme
+  adwaita-icon-theme,
+  dconf,
+  gtk3,
+  wxGTK32,
+  librsvg,
+  cups,
+  gsettings-desktop-schemas,
+  hicolor-icon-theme,
 
-, unzip
-, jq
+  unzip,
+  jq,
 
-, pname ? "kicad"
-, stable ? true
-, testing ? false
-, withNgspice ? !stdenv.hostPlatform.isDarwin
-, libngspice
-, withScripting ? true
-, python3
-, addons ? [ ]
-, debug ? false
-, sanitizeAddress ? false
-, sanitizeThreads ? false
-, with3d ? true
-, withI18n ? true
-, srcs ? { }
+  pname ? "kicad",
+  stable ? true,
+  testing ? false,
+  withNgspice ? !stdenv.hostPlatform.isDarwin,
+  libngspice,
+  withScripting ? true,
+  python3,
+  addons ? [ ],
+  debug ? false,
+  sanitizeAddress ? false,
+  sanitizeThreads ? false,
+  with3d ? true,
+  withI18n ? true,
+  srcs ? { },
 }:
 
 # `addons`: https://dev-docs.kicad.org/en/addons/
@@ -78,9 +80,13 @@
 # }
 
 let
-  baseName = if (testing) then "kicad-testing"
-    else if (stable) then "kicad"
-    else "kicad-unstable";
+  baseName =
+    if (testing) then
+      "kicad-testing"
+    else if (stable) then
+      "kicad"
+    else
+      "kicad-unstable";
   versionsImport = import ./versions.nix;
 
   # versions.nix does not provide us with version, src and rev. We
@@ -93,13 +99,15 @@ let
     sha256 = versionsImport.${baseName}.kicadVersion.src.sha256;
   };
 
-  libSrcFetch = name: fetchFromGitLab {
-    group = "kicad";
-    owner = "libraries";
-    repo = "kicad-${name}";
-    rev = versionsImport.${baseName}.libVersion.libSources.${name}.rev;
-    sha256 = versionsImport.${baseName}.libVersion.libSources.${name}.sha256;
-  };
+  libSrcFetch =
+    name:
+    fetchFromGitLab {
+      group = "kicad";
+      owner = "libraries";
+      repo = "kicad-${name}";
+      rev = versionsImport.${baseName}.libVersion.libSources.${name}.rev;
+      sha256 = versionsImport.${baseName}.libVersion.libSources.${name}.sha256;
+    };
 
   # only override `src` or `version` if building `kicad-unstable` with
   # the appropriate attribute defined in `srcs`.
@@ -108,18 +116,20 @@ let
   # use default source and version (as defined in versions.nix) by
   # default, or use the appropriate attribute from `srcs` if building
   # unstable with `srcs` properly defined.
-  kicadSrc =
-    if srcOverridep "kicad" then srcs.kicad
-    else kicadSrcFetch;
+  kicadSrc = if srcOverridep "kicad" then srcs.kicad else kicadSrcFetch;
   kicadVersion =
-    if srcOverridep "kicadVersion" then srcs.kicadVersion
-    else versionsImport.${baseName}.kicadVersion.version;
+    if srcOverridep "kicadVersion" then
+      srcs.kicadVersion
+    else
+      versionsImport.${baseName}.kicadVersion.version;
 
   libSrc = name: if srcOverridep name then srcs.${name} else libSrcFetch name;
   # TODO does it make sense to only have one version for all libs?
   libVersion =
-    if srcOverridep "libVersion" then srcs.libVersion
-    else versionsImport.${baseName}.libVersion.version;
+    if srcOverridep "libVersion" then
+      srcs.libVersion
+    else
+      versionsImport.${baseName}.libVersion.version;
 
   wxGTK = wxGTK32;
   python = python3;
@@ -131,27 +141,36 @@ let
     runCommand "addonsJoined"
       {
         inherit addonsDrvs;
-        nativeBuildInputs = [ unzip jq ];
-      } ''
-      mkdir $out
+        nativeBuildInputs = [
+          unzip
+          jq
+        ];
+      }
+      ''
+        mkdir $out
 
-      for pkg in $addonsDrvs; do
-        unzip $pkg/addon.zip -d unpacked
+        for pkg in $addonsDrvs; do
+          unzip $pkg/addon.zip -d unpacked
 
-        folder_name=$(jq .identifier unpacked/metadata.json --raw-output | tr . _)
-        for d in unpacked/*; do
-          if [ -d "$d" ]; then
-            dest=$out/share/kicad/scripting/$(basename $d)/$folder_name
-            mkdir -p $(dirname $dest)
+          folder_name=$(jq .identifier unpacked/metadata.json --raw-output | tr . _)
+          for d in unpacked/*; do
+            if [ -d "$d" ]; then
+              dest=$out/share/kicad/scripting/$(basename $d)/$folder_name
+              mkdir -p $(dirname $dest)
 
-            mv $d $dest
-          fi
+              mv $d $dest
+            fi
+          done
+          rm -r unpacked
         done
-        rm -r unpacked
-      done
-    '';
+      '';
 
-  inherit (lib) concatStringsSep flatten optionalString optionals;
+  inherit (lib)
+    concatStringsSep
+    flatten
+    optionalString
+    optionals
+    ;
 in
 stdenv.mkDerivation rec {
 
@@ -175,12 +194,15 @@ stdenv.mkDerivation rec {
   dontBuild = true;
   dontFixup = true;
 
-  pythonPath = optionals (withScripting)
-    [ wxPython python.pkgs.six python.pkgs.requests ] ++ addonsDrvs;
+  pythonPath =
+    optionals (withScripting) [
+      wxPython
+      python.pkgs.six
+      python.pkgs.requests
+    ]
+    ++ addonsDrvs;
 
-  nativeBuildInputs = [ makeWrapper ]
-    ++ optionals (withScripting)
-    [ python.pkgs.wrapPython ];
+  nativeBuildInputs = [ makeWrapper ] ++ optionals (withScripting) [ python.pkgs.wrapPython ];
 
   # KICAD7_TEMPLATE_DIR only works with a single path (it does not handle : separated paths)
   # but it's used to find both the templates and the symbol/footprint library tables
@@ -194,70 +216,82 @@ stdenv.mkDerivation rec {
     ];
   };
   # We are emulating wrapGAppsHook3, along with other variables to the wrapper
-  makeWrapperArgs = with passthru.libraries; [
-    "--prefix XDG_DATA_DIRS : ${base}/share"
-    "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
-    "--prefix XDG_DATA_DIRS : ${adwaita-icon-theme}/share"
-    "--prefix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}"
-    "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
-    # wrapGAppsHook3 did these two as well, no idea if it matters...
-    "--prefix XDG_DATA_DIRS : ${cups}/share"
-    "--prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
-    # required to open a bug report link in firefox-wayland
-    "--set-default MOZ_DBUS_REMOTE 1"
-    "--set-default KICAD8_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
-    "--set-default KICAD8_SYMBOL_DIR ${symbols}/share/kicad/symbols"
-    "--set-default KICAD8_TEMPLATE_DIR ${template_dir}"
-  ]
-  ++ optionals (addons != [ ]) (
-    let stockDataPath = symlinkJoin {
-      name = "kicad_stock_data_path";
-      paths = [
-        "${base}/share/kicad"
-        "${addonsJoined}/share/kicad"
-      ];
-    };
-    in
-    [ "--set-default NIX_KICAD8_STOCK_DATA_PATH ${stockDataPath}" ]
-  )
-  ++ optionals (with3d)
-  [
-    "--set-default KICAD8_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
-  ]
-  ++ optionals (withNgspice) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
+  makeWrapperArgs =
+    with passthru.libraries;
+    [
+      "--prefix XDG_DATA_DIRS : ${base}/share"
+      "--prefix XDG_DATA_DIRS : ${hicolor-icon-theme}/share"
+      "--prefix XDG_DATA_DIRS : ${adwaita-icon-theme}/share"
+      "--prefix XDG_DATA_DIRS : ${gtk3}/share/gsettings-schemas/${gtk3.name}"
+      "--prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas}/share/gsettings-schemas/${gsettings-desktop-schemas.name}"
+      # wrapGAppsHook3 did these two as well, no idea if it matters...
+      "--prefix XDG_DATA_DIRS : ${cups}/share"
+      "--prefix GIO_EXTRA_MODULES : ${dconf}/lib/gio/modules"
+      # required to open a bug report link in firefox-wayland
+      "--set-default MOZ_DBUS_REMOTE 1"
+      "--set-default KICAD8_FOOTPRINT_DIR ${footprints}/share/kicad/footprints"
+      "--set-default KICAD8_SYMBOL_DIR ${symbols}/share/kicad/symbols"
+      "--set-default KICAD8_TEMPLATE_DIR ${template_dir}"
+    ]
+    ++ optionals (addons != [ ]) (
+      let
+        stockDataPath = symlinkJoin {
+          name = "kicad_stock_data_path";
+          paths = [
+            "${base}/share/kicad"
+            "${addonsJoined}/share/kicad"
+          ];
+        };
+      in
+      [ "--set-default NIX_KICAD8_STOCK_DATA_PATH ${stockDataPath}" ]
+    )
+    ++ optionals (with3d) [
+      "--set-default KICAD8_3DMODEL_DIR ${packages3d}/share/kicad/3dmodels"
+    ]
+    ++ optionals (withNgspice) [ "--prefix LD_LIBRARY_PATH : ${libngspice}/lib" ]
 
-  # infinisil's workaround for #39493
-  ++ [ "--set GDK_PIXBUF_MODULE_FILE ${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" ]
-  ;
+    # infinisil's workaround for #39493
+    ++ [ "--set GDK_PIXBUF_MODULE_FILE ${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache" ];
 
   # why does $makeWrapperArgs have to be added explicitly?
   # $out and $program_PYTHONPATH don't exist when makeWrapperArgs gets set?
   installPhase =
     let
       bin = if stdenv.hostPlatform.isDarwin then "*.app/Contents/MacOS" else "bin";
-      tools = [ "kicad" "pcbnew" "eeschema" "gerbview" "pcb_calculator" "pl_editor" "bitmap2component" ];
-      utils = [ "dxf2idf" "idf2vrml" "idfcyl" "idfrect" "kicad-cli" ];
+      tools = [
+        "kicad"
+        "pcbnew"
+        "eeschema"
+        "gerbview"
+        "pcb_calculator"
+        "pl_editor"
+        "bitmap2component"
+      ];
+      utils = [
+        "dxf2idf"
+        "idf2vrml"
+        "idfcyl"
+        "idfrect"
+        "kicad-cli"
+      ];
     in
-    (concatStringsSep "\n"
-      (flatten [
-        "runHook preInstall"
+    (concatStringsSep "\n" (flatten [
+      "runHook preInstall"
 
-        (optionalString (withScripting) "buildPythonPath \"${base} $pythonPath\" \n")
+      (optionalString (withScripting) "buildPythonPath \"${base} $pythonPath\" \n")
 
-        # wrap each of the directly usable tools
-        (map
-          (tool: "makeWrapper ${base}/${bin}/${tool} $out/bin/${tool} $makeWrapperArgs"
-            + optionalString (withScripting) " --set PYTHONPATH \"$program_PYTHONPATH\""
-          )
-          tools)
+      # wrap each of the directly usable tools
+      (map (
+        tool:
+        "makeWrapper ${base}/${bin}/${tool} $out/bin/${tool} $makeWrapperArgs"
+        + optionalString (withScripting) " --set PYTHONPATH \"$program_PYTHONPATH\""
+      ) tools)
 
-        # link in the CLI utils
-        (map (util: "ln -s ${base}/${bin}/${util} $out/bin/${util}") utils)
+      # link in the CLI utils
+      (map (util: "ln -s ${base}/${bin}/${util} $out/bin/${util}") utils)
 
-        "runHook postInstall"
-      ])
-    )
-  ;
+      "runHook postInstall"
+    ]));
 
   postInstall = ''
     mkdir -p $out/share
@@ -268,16 +302,24 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = {
-    command = [ ./update.sh "${pname}" ];
+    command = [
+      ./update.sh
+      "${pname}"
+    ];
     supportedFeatures = [ "commit" ];
   };
 
   meta = rec {
-    description = (if (stable)
-    then "Open Source Electronics Design Automation suite"
-    else if (testing) then "Open Source EDA suite, latest on stable branch"
-    else "Open Source EDA suite, latest on master branch")
-    + (lib.optionalString (!with3d) ", without 3D models");
+    description =
+      (
+        if (stable) then
+          "Open Source Electronics Design Automation suite"
+        else if (testing) then
+          "Open Source EDA suite, latest on stable branch"
+        else
+          "Open Source EDA suite, latest on master branch"
+      )
+      + (lib.optionalString (!with3d) ", without 3D models");
     homepage = "https://www.kicad.org/";
     longDescription = ''
       KiCad is an open source software suite for Electronic Design Automation.

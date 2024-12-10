@@ -1,13 +1,17 @@
-{ qtModule
-, qtbase
-, qtdeclarative
-, openssl
-, fetchpatch
+{
+  qtModule,
+  qtbase,
+  qtdeclarative,
+  openssl,
+  fetchpatch,
 }:
 
 qtModule {
   pname = "qtquick3d";
-  propagatedBuildInputs = [ qtbase qtdeclarative ];
+  propagatedBuildInputs = [
+    qtbase
+    qtdeclarative
+  ];
   buildInputs = [ openssl ];
   patches = [
     # should be able to remove on next update

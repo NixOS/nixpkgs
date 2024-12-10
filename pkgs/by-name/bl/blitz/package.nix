@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, gfortran
-, texinfo
-, python3
-, boost
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  gfortran,
+  texinfo,
+  python3,
+  boost,
   # Select SIMD alignment width (in bytes) for vectorization.
-, simdWidth ? 1
+  simdWidth ? 1,
   # Pad arrays to simdWidth by default?
   # Note: Only useful if simdWidth > 1
-, enablePadding ? false
+  enablePadding ? false,
   # Activate serialization through Boost.Serialize?
-, enableSerialization ? true
+  enableSerialization ? true,
   # Activate test-suite?
   # WARNING: Some of the tests require up to 1700MB of memory to compile.
-, doCheck ? true
+  doCheck ? true,
 }:
 
 let
@@ -50,12 +51,17 @@ stdenv.mkDerivation rec {
     texinfo
   ];
 
-  buildInputs = [ gfortran texinfo boost ];
+  buildInputs = [
+    gfortran
+    texinfo
+    boost
+  ];
 
-  cmakeFlags = optional enablePadding "-DARRAY_LENGTH_PADDING=ON"
+  cmakeFlags =
+    optional enablePadding "-DARRAY_LENGTH_PADDING=ON"
     ++ optional enableSerialization "-DENABLE_SERIALISATION=ON"
     ++ optional stdenv.hostPlatform.is64bit "-DBZ_FULLY64BIT=ON";
-    # FIXME ++ optional doCheck "-DBUILD_TESTING=ON";
+  # FIXME ++ optional doCheck "-DBUILD_TESTING=ON";
 
   # skip broken library name detection
   ax_boost_user_serialization_lib = lib.optionalString stdenv.hostPlatform.isDarwin "boost_serialization";
@@ -67,7 +73,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Fast multi-dimensional array library for C++";
     homepage = "https://sourceforge.net/projects/blitz/";
-    license = with licenses; [ artistic2 /* or */ bsd3 /* or */ lgpl3Plus ];
+    license = with licenses; [
+      artistic2 # or
+      bsd3 # or
+      lgpl3Plus
+    ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ ToxicFrog ];
     longDescription = ''

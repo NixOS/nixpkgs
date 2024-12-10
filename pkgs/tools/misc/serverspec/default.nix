@@ -1,4 +1,9 @@
-{ lib, ruby, bundlerApp, bundlerUpdateScript }:
+{
+  lib,
+  ruby,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
 bundlerApp {
   pname = "serverspec";
@@ -6,7 +11,7 @@ bundlerApp {
 
   inherit ruby;
 
-  exes = ["serverspec-init"];
+  exes = [ "serverspec-init" ];
 
   passthru.updateScript = bundlerUpdateScript "serverspec";
 

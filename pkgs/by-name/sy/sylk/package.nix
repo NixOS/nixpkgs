@@ -1,4 +1,8 @@
-{ appimageTools, fetchurl, lib }:
+{
+  appimageTools,
+  fetchurl,
+  lib,
+}:
 
 appimageTools.wrapType2 rec {
   pname = "sylk";
@@ -19,7 +23,10 @@ appimageTools.wrapType2 rec {
     license = lib.licenses.agpl3Plus;
     mainProgram = "Sylk";
     maintainers = with lib.maintainers; [ zimbatm ];
-    platforms = [ "i386-linux" "x86_64-linux" ];
+    platforms = [
+      "i386-linux"
+      "x86_64-linux"
+    ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

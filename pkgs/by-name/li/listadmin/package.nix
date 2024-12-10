@@ -1,4 +1,11 @@
-{ lib, stdenvNoCC, fetchurl, makeWrapper, perl, installShellFiles }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  makeWrapper,
+  perl,
+  installShellFiles,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "listadmin";
@@ -10,7 +17,10 @@ stdenvNoCC.mkDerivation rec {
   };
 
   buildInputs = [ perl ];
-  nativeBuildInputs = [ makeWrapper installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
   # There is a Makefile, but we don’t need it, and it prints errors
   dontBuild = true;
@@ -21,9 +31,14 @@ stdenvNoCC.mkDerivation rec {
     installManPage listadmin.1
 
     wrapProgram $out/bin/listadmin \
-      --prefix PERL5LIB : "${with perl.pkgs; makeFullPerlPath [
-        TextReform NetINET6Glue LWPProtocolHttps
-        ]}"
+      --prefix PERL5LIB : "${
+        with perl.pkgs;
+        makeFullPerlPath [
+          TextReform
+          NetINET6Glue
+          LWPProtocolHttps
+        ]
+      }"
   '';
 
   doInstallCheck = true;
@@ -34,11 +49,11 @@ stdenvNoCC.mkDerivation rec {
   meta = with lib; {
     description = "Command line mailman moderator queue manipulation";
     longDescription = ''
-       listadmin is a command line tool to manipulate the queues of messages
-       held for moderator approval by mailman. It is designed to keep user
-       interaction to a minimum, in theory you could run it from cron to prune
-       the queue. It can use the score from a header added by SpamAssassin to
-       filter, or it can match specific senders, subjects, or reasons.
+      listadmin is a command line tool to manipulate the queues of messages
+      held for moderator approval by mailman. It is designed to keep user
+      interaction to a minimum, in theory you could run it from cron to prune
+      the queue. It can use the score from a header added by SpamAssassin to
+      filter, or it can match specific senders, subjects, or reasons.
     '';
     homepage = "https://sourceforge.net/projects/listadmin/";
     license = licenses.publicDomain;

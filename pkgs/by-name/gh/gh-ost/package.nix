@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, gh-ost }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  gh-ost,
+}:
 
 buildGoModule rec {
   pname = "gh-ost";

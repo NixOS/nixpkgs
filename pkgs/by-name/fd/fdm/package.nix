@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, openssl, tdb, zlib, flex, bison }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  openssl,
+  tdb,
+  zlib,
+  flex,
+  bison,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fdm";
@@ -12,7 +22,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ openssl tdb zlib flex bison ];
+  buildInputs = [
+    openssl
+    tdb
+    zlib
+    flex
+    bison
+  ];
 
   postInstall = ''
     install fdm-sanitize $out/bin

@@ -1,18 +1,19 @@
-{ buildGo123Module
-, buildPackages
-, fetchFromGitHub
-, fetchNpmDeps
-, lib
-, nodejs
-, npmHooks
-, pkg-config
-, stdenv
-, ffmpeg-headless
-, taglib
-, zlib
-, nixosTests
-, nix-update-script
-, ffmpegSupport ? true
+{
+  buildGo123Module,
+  buildPackages,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  lib,
+  nodejs,
+  npmHooks,
+  pkg-config,
+  stdenv,
+  ffmpeg-headless,
+  taglib,
+  zlib,
+  nixosTests,
+  nix-update-script,
+  ffmpegSupport ? true,
 }:
 
 buildGo123Module rec {
@@ -80,7 +81,10 @@ buildGo123Module rec {
     homepage = "https://www.navidrome.org/";
     license = lib.licenses.gpl3Only;
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
-    maintainers = with lib.maintainers; [ aciceri squalus ];
+    maintainers = with lib.maintainers; [
+      aciceri
+      squalus
+    ];
     # Broken on Darwin: sandbox-exec: pattern serialization length exceeds maximum (NixOS/nix#4119)
     broken = stdenv.hostPlatform.isDarwin;
   };

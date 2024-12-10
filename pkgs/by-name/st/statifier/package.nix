@@ -1,4 +1,8 @@
-{ lib, multiStdenv, fetchurl }:
+{
+  lib,
+  multiStdenv,
+  fetchurl,
+}:
 
 multiStdenv.mkDerivation rec {
   pname = "statifier";
@@ -9,7 +13,10 @@ multiStdenv.mkDerivation rec {
     sha256 = "03lzkla6knjhh186b43cac410x2fmhi28pkmzb3d211n3zp5i9y8";
   };
 
-  phaseNames = [ "patchPhase" "installPhase" ];
+  phaseNames = [
+    "patchPhase"
+    "installPhase"
+  ];
 
   postPatch = ''
     sed -e s@/usr/@"$out/"@g -i */Makefile src/statifier

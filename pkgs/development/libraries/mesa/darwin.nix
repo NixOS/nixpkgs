@@ -17,15 +17,24 @@
 }:
 let
   common = import ./common.nix { inherit lib fetchFromGitLab; };
-in stdenv.mkDerivation {
-  inherit (common) pname version src meta;
+in
+stdenv.mkDerivation {
+  inherit (common)
+    pname
+    version
+    src
+    meta
+    ;
 
   patches = [
     # Submitted upstream: https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/32497
     ./darwin-build-fix.patch
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     bison
@@ -40,7 +49,7 @@ in stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    libxml2  # should be propagated from libllvm
+    libxml2 # should be propagated from libllvm
     llvmPackages.libllvm
     Xplugin
     xorg.libX11

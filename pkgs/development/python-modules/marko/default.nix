@@ -41,9 +41,12 @@ buildPythonPackage rec {
     "marko"
   ];
 
-  nativeCheckInputs = [
-    pytestCheckHook
-  ] ++ optional-dependencies.toc ++ optional-dependencies.codehilite;
+  nativeCheckInputs =
+    [
+      pytestCheckHook
+    ]
+    ++ optional-dependencies.toc
+    ++ optional-dependencies.codehilite;
 
   meta = {
     changelog = "https://github.com/frostming/marko/blob/${src.rev}/CHANGELOG.md";

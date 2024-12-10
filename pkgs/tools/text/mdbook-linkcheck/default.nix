@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, pkg-config, openssl, Security
-, testers, mdbook-linkcheck }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  Security,
+  testers,
+  mdbook-linkcheck,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-linkcheck";
@@ -29,6 +38,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "mdbook-linkcheck";
     homepage = "https://github.com/Michael-F-Bryan/mdbook-linkcheck";
     license = licenses.mit;
-    maintainers = with maintainers; [ zhaofengli matthiasbeyer ];
+    maintainers = with maintainers; [
+      zhaofengli
+      matthiasbeyer
+    ];
   };
 }

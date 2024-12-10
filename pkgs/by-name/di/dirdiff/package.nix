@@ -1,4 +1,12 @@
-{ copyDesktopItems, fetchurl, lib, makeDesktopItem, stdenv, tcl, tk }:
+{
+  copyDesktopItems,
+  fetchurl,
+  lib,
+  makeDesktopItem,
+  stdenv,
+  tcl,
+  tk,
+}:
 
 stdenv.mkDerivation rec {
   pname = "dirdiff";
@@ -10,7 +18,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ copyDesktopItems ];
-  buildInputs = [ tcl tk ];
+  buildInputs = [
+    tcl
+    tk
+  ];
 
   # Some light path patching.
   patches = [ ./dirdiff-2.1-vars.patch ];

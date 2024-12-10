@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, wxGTK32
-, ffmpeg
-, lua5_1
-, curl
-, libpng
-, xorg
-, pkg-config
-, flam3
-, libgtop
-, boost
-, tinyxml
-, libglut
-, libGLU
-, libGL
-, glee
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  wxGTK32,
+  ffmpeg,
+  lua5_1,
+  curl,
+  libpng,
+  xorg,
+  pkg-config,
+  flam3,
+  libgtop,
+  boost,
+  tinyxml,
+  libglut,
+  libGLU,
+  libGL,
+  glee,
 }:
 
 stdenv.mkDerivation {
@@ -35,7 +36,10 @@ stdenv.mkDerivation {
     ./boost-1.85.patch
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   buildInputs = [
     wxGTK32

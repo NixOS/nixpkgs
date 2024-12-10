@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, jasper
-, libpng
-, libjpeg
-, zlib
-, llvmPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jasper,
+  libpng,
+  libjpeg,
+  zlib,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation rec {

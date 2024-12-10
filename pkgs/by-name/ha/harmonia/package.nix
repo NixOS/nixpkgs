@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, libsodium
-, openssl
-, pkg-config
-, rustPlatform
-, nix-update-script
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  libsodium,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  nix-update-script,
+  nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,11 +25,17 @@ rustPlatform.buildRustPackage rec {
   doCheck = false;
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libsodium openssl ];
+  buildInputs = [
+    libsodium
+    openssl
+  ];
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex" "harmonia-v(.*)" ];
+      extraArgs = [
+        "--version-regex"
+        "harmonia-v(.*)"
+      ];
     };
     tests = { inherit (nixosTests) harmonia; };
   };

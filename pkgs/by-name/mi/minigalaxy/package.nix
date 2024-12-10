@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, glibcLocales
-, glib-networking
-, gobject-introspection
-, gtk3
-, libnotify
-, python3Packages
-, steam-run
-, substituteAll
-, unzip
-, webkitgtk_4_0
-, wrapGAppsHook3
+{
+  lib,
+  fetchFromGitHub,
+  glibcLocales,
+  glib-networking,
+  gobject-introspection,
+  gtk3,
+  libnotify,
+  python3Packages,
+  steam-run,
+  substituteAll,
+  unzip,
+  webkitgtk_4_0,
+  wrapGAppsHook3,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -28,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     (substituteAll {
       src = ./inject-launcher-steam-run.diff;
       steamrun = lib.getExe steam-run;
-     })
+    })
   ];
 
   postPatch = ''

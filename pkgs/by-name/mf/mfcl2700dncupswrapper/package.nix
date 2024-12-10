@@ -1,4 +1,15 @@
-{ coreutils, dpkg, fetchurl, gnugrep, gnused, makeWrapper, mfcl2700dnlpr, perl, lib, stdenv }:
+{
+  coreutils,
+  dpkg,
+  fetchurl,
+  gnugrep,
+  gnused,
+  makeWrapper,
+  mfcl2700dnlpr,
+  perl,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mfcl2700dncupswrapper";
@@ -9,7 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "07w48mah0xbv4h8vsh1qd5cd4b463bx8y6gc5x9pfgsxsy6h6da1";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+  ];
 
   dontUnpack = true;
 
@@ -25,7 +39,13 @@ stdenv.mkDerivation rec {
       --replace "PRINTER =~" "PRINTER = \"MFCL2700DN\"; #"
 
     wrapProgram $dir/cupswrapper/brother_lpdwrapper_MFCL2700DN \
-      --prefix PATH : ${lib.makeBinPath [ coreutils gnugrep gnused ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          gnugrep
+          gnused
+        ]
+      }
 
     mkdir -p $out/lib/cups/filter
     mkdir -p $out/share/cups/model

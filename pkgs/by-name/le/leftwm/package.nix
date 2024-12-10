@@ -1,12 +1,16 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, libX11
-, libXinerama
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  libX11,
+  libXinerama,
 }:
 
 let
-  rpathLibs = [ libXinerama libX11 ];
+  rpathLibs = [
+    libXinerama
+    libX11
+  ];
 in
 
 rustPlatform.buildRustPackage rec {
@@ -39,7 +43,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/leftwm/leftwm";
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ vuimuich yanganto ];
+    maintainers = with lib.maintainers; [
+      vuimuich
+      yanganto
+    ];
     changelog = "https://github.com/leftwm/leftwm/blob/${version}/CHANGELOG.md";
     mainProgram = "leftwm";
   };

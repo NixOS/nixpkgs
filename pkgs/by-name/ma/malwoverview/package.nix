@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -19,7 +20,7 @@ python3.pkgs.buildPythonApplication rec {
     "pathlib"
   ];
 
-  build-system  = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     setuptools
   ];
 

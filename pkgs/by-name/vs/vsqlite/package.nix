@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, boost, sqlite }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+  sqlite,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vsqlite";
@@ -9,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "17fkj0d2jh0xkjpcayhs1xvbnh1d69f026i7vs1zqnbiwbkpz237";
   };
 
-  buildInputs = [ boost sqlite ];
+  buildInputs = [
+    boost
+    sqlite
+  ];
 
   prePatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace Makefile.in \

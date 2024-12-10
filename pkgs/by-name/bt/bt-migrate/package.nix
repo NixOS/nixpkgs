@@ -1,14 +1,15 @@
-{ lib
-, boost
-, cmake
-, cxxopts
-, digestpp
-, fetchFromGitHub
-, fmt
-, jsoncons
-, pugixml
-, sqlite_orm
-, stdenv
+{
+  lib,
+  boost,
+  cmake,
+  cxxopts,
+  digestpp,
+  fetchFromGitHub,
+  fmt,
+  jsoncons,
+  pugixml,
+  sqlite_orm,
+  stdenv,
 }:
 stdenv.mkDerivation {
   pname = "bt-migrate";

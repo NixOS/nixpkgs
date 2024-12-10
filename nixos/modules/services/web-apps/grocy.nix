@@ -1,10 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.grocy;
-in {
+in
+{
   options.services.grocy = {
     enable = mkEnableOption "grocy";
 
@@ -27,7 +33,13 @@ in {
     };
 
     phpfpm.settings = mkOption {
-      type = with types; attrsOf (oneOf [ int str bool ]);
+      type =
+        with types;
+        attrsOf (oneOf [
+          int
+          str
+          bool
+        ]);
       default = {
         "pm" = "dynamic";
         "php_admin_value[error_log]" = "stderr";
@@ -66,7 +78,24 @@ in {
       };
 
       culture = mkOption {
-        type = types.enum [ "de" "en" "da" "en_GB" "es" "fr" "hu" "it" "nl" "no" "pl" "pt_BR" "ru" "sk_SK" "sv_SE" "tr" ];
+        type = types.enum [
+          "de"
+          "en"
+          "da"
+          "en_GB"
+          "es"
+          "fr"
+          "hu"
+          "it"
+          "nl"
+          "no"
+          "pl"
+          "pt_BR"
+          "ru"
+          "sk_SK"
+          "sv_SE"
+          "tr"
+        ];
         default = "en";
         description = ''
           Display language of the frontend.
@@ -109,9 +138,12 @@ in {
       group = "nginx";
     };
 
-    systemd.tmpfiles.rules = map (
-      dirName: "d '${cfg.dataDir}/${dirName}' - grocy nginx - -"
-    ) [ "viewcache" "plugins" "settingoverrides" "storage" ];
+    systemd.tmpfiles.rules = map (dirName: "d '${cfg.dataDir}/${dirName}' - grocy nginx - -") [
+      "viewcache"
+      "plugins"
+      "settingoverrides"
+      "storage"
+    ];
 
     services.phpfpm.pools.grocy = {
       user = "grocy";
@@ -145,7 +177,8 @@ in {
     services.nginx = {
       enable = true;
       virtualHosts."${cfg.hostName}" = mkMerge [
-        { root = "${cfg.package}/public";
+        {
+          root = "${cfg.package}/public";
           locations."/".extraConfig = ''
             rewrite ^ /index.php;
           '';

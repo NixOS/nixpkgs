@@ -1,16 +1,17 @@
-{ appstream
-, blueprint-compiler
-, desktop-file-utils
-, fetchFromGitHub
-, gtk4
-, lib
-, libadwaita
-, meson
-, mesonEmulatorHook
-, ninja
-, pkg-config
-, stdenv
-, wrapGAppsHook4
+{
+  appstream,
+  blueprint-compiler,
+  desktop-file-utils,
+  fetchFromGitHub,
+  gtk4,
+  lib,
+  libadwaita,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  pkg-config,
+  stdenv,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,17 +25,19 @@ stdenv.mkDerivation rec {
     hash = "sha256-LkGSEUoruWfEq/ttM3LkA/UjHc3ZrlvGF44HsJLntAo=";
   };
 
-  nativeBuildInputs = [
-    appstream
-    blueprint-compiler
-    desktop-file-utils
-    meson
-    ninja
-    pkg-config
-    wrapGAppsHook4
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      appstream
+      blueprint-compiler
+      desktop-file-utils
+      meson
+      ninja
+      pkg-config
+      wrapGAppsHook4
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   buildInputs = [
     gtk4
@@ -57,7 +60,10 @@ stdenv.mkDerivation rec {
     homepage = "https://apps.gnome.org/Raider";
     license = licenses.gpl3Plus;
     mainProgram = "raider";
-    maintainers = with maintainers; [ benediktbroich aleksana ];
+    maintainers = with maintainers; [
+      benediktbroich
+      aleksana
+    ];
     platforms = platforms.unix;
   };
 }

@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, fetchNpmDeps
-, cacert
-, git
-, go
-, enumer
-, mockgen
-, nodejs
-, npmHooks
-, nix-update-script
-, nixosTests
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  cacert,
+  git,
+  go,
+  enumer,
+  mockgen,
+  nodejs,
+  npmHooks,
+  nix-update-script,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -69,15 +70,16 @@ buildGoModule rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin; # darwin sandbox limitations around network access, access to /etc/protocols and likely more
 
-  checkFlags = let
-    skippedTests = [
-      # network access
-      "TestOctopusConfigParse"
-      "TestTemplates"
-      "TestOcpp"
-    ];
-  in
-  [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
+  checkFlags =
+    let
+      skippedTests = [
+        # network access
+        "TestOctopusConfigParse"
+        "TestTemplates"
+        "TestOcpp"
+      ];
+    in
+    [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 
   passthru = {
     tests = {

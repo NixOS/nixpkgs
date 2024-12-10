@@ -1,4 +1,8 @@
-{ buildDunePackage, junit, ounit }:
+{
+  buildDunePackage,
+  junit,
+  ounit,
+}:
 
 buildDunePackage ({
   pname = "junit_ounit";

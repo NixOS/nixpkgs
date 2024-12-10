@@ -1,4 +1,12 @@
-{ lib, buildDunePackage, atdgen, re, reason, pastel, src }:
+{
+  lib,
+  buildDunePackage,
+  atdgen,
+  re,
+  reason,
+  pastel,
+  src,
+}:
 
 buildDunePackage {
   inherit src;

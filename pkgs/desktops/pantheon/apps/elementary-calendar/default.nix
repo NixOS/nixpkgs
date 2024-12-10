@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, wrapGAppsHook3
-, clutter
-, evolution-data-server
-, folks
-, geoclue2
-, geocode-glib_2
-, granite
-, gtk3
-, libchamplain_libsoup3
-, libgee
-, libhandy
-, libical
-, libportal-gtk3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  wrapGAppsHook3,
+  clutter,
+  evolution-data-server,
+  folks,
+  geoclue2,
+  geocode-glib_2,
+  granite,
+  gtk3,
+  libchamplain_libsoup3,
+  libgee,
+  libhandy,
+  libical,
+  libportal-gtk3,
 }:
 
 stdenv.mkDerivation rec {
