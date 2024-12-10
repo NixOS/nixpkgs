@@ -37,6 +37,9 @@ buildGoModule {
     description = "Way of storing, syncing, sharing, modelling and backing up content (née Camlistore)";
     homepage = "https://perkeep.org";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ kalbasit ];
+    maintainers = with lib.maintainers; [
+      kalbasit
+      gador
+    ];
   };
 }
