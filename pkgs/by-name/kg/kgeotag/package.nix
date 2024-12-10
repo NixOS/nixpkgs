@@ -2,14 +2,14 @@
 
 stdenv.mkDerivation rec {
   pname = "kgeotag";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     repo = "kgeotag";
     owner = "graphics";
     rev = "v${version}";
-    hash = "sha256-lUfU6SHRCglC81BTcVFFOp/psWXsUFOTEPUrZutrJaY=";
+    hash = "sha256-/NYAR/18Dh+fphCBz/zFWj/xqEl28e77ZtV8LlcGyMI=";
   };
 
   nativeBuildInputs = [ cmake extra-cmake-modules libsForQt5.wrapQtAppsHook ];
