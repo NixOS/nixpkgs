@@ -11,22 +11,15 @@
 
 stdenv.mkDerivation rec {
   pname = "librist";
-  version = "0.2.10";
+  version = "0.2.11";
 
   src = fetchFromGitLab {
     domain = "code.videolan.org";
     owner = "rist";
     repo = "librist";
     rev = "v${version}";
-    hash = "sha256-8N4wQXxjNZuNGx/c7WVAV5QS48Bff5G3t11UkihT+K0=";
+    hash = "sha256-xWqyQl3peB/ENReMcDHzIdKXXCYOJYbhhG8tcSh36dY=";
   };
-
-  patches = [
-    # https://github.com/NixOS/nixpkgs/pull/257020
-    ./darwin.patch
-    # https://code.videolan.org/rist/librist/-/merge_requests/257
-    ./musl.patch
-  ];
 
   nativeBuildInputs = [
     meson

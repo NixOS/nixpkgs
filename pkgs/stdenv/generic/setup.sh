@@ -450,7 +450,9 @@ concatStringsSep() {
             -a*)
                 # \036 is the "record separator" character. We assume that this will never need to be part of
                 # an argument string we create here. If anyone ever hits this limitation: Feel free to refactor.
-                local IFS=$'\036' ;;
+                # To avoid leaking an unescaped rs character when dumping the environment with nix, we use printf
+                # in a subshell.
+                local IFS="$(printf '\036')" ;;
             *)
                 local IFS=" " ;;
 
@@ -683,7 +685,7 @@ findInputs() {
     # shellcheck disable=SC1087
     local varSlice="$var[*]"
     # ${..-} to hack around old bash empty array problem
-    case "${!varSlice-}" in
+    case " ${!varSlice-} " in
         *" $pkg "*) return 0 ;;
     esac
     unset -v varSlice

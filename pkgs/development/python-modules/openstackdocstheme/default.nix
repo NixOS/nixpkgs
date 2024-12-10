@@ -14,8 +14,7 @@ buildPythonPackage rec {
   version = "3.4.0";
   pyproject = true;
 
-  # breaks on import due to distutils import through pbr.packaging
-  disabled = pythonAtLeast "3.12";
+  disabled = pythonAtLeast "3.13";
 
   src = fetchPypi {
     inherit pname version;

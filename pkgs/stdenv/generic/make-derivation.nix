@@ -37,6 +37,7 @@ let
     splitString
     subtractLists
     unique
+    zipAttrsWith
   ;
 
   inherit (import ../../build-support/lib/cmake.nix { inherit lib stdenv; }) makeCMakeFlags;
@@ -493,17 +494,15 @@ else let
         "/bin/sh"
       ];
       __propagatedImpureHostDeps = computedPropagatedImpureHostDeps ++ __propagatedImpureHostDeps;
-    }) // lib.optionalAttrs (!__structuredAttrs) (
-      makeOutputChecks attrs
-    ) // lib.optionalAttrs (__structuredAttrs) {
+    }) // (if !__structuredAttrs then makeOutputChecks attrs else {
       outputChecks = builtins.listToAttrs (map (name: {
         inherit name;
-        value = lib.zipAttrsWith (_: builtins.concatLists) [
+        value = zipAttrsWith (_: builtins.concatLists) [
           (makeOutputChecks attrs)
           (makeOutputChecks attrs.outputChecks.${name} or {})
         ];
       }) outputs);
-    };
+    });
 
 in
   derivationArg;
