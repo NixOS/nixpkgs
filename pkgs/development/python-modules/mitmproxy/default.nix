@@ -45,7 +45,7 @@
 
 buildPythonPackage rec {
   pname = "mitmproxy";
-  version = "11.0.1";
+  version = "11.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -53,8 +53,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mitmproxy";
     repo = "mitmproxy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-1yqR82YpHD5Z2Ufa/8T0htjLm2s+fhBN5BfKGHCGnEw=";
+    tag = "v${version}";
+    hash = "sha256-qcsPOISQjHVHh4TrQ/UihZaxB/jWBfq7AVI4U1gQPVs=";
   };
 
   pythonRelaxDeps = [
