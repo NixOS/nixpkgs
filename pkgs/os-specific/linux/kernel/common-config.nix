@@ -499,6 +499,8 @@ let
     } // lib.optionalAttrs (stdenv.hostPlatform.system == "aarch64-linux") {
       # enable HDMI-CEC on RPi boards
       DRM_VC4_HDMI_CEC = yes;
+      # Enable HDMI out on platforms using the RK3588 lineup of SoCs.
+      ROCKCHIP_DW_HDMI_QP = whenAtLeast "6.13" yes;
     };
 
     # Enable Rust and features that depend on it
