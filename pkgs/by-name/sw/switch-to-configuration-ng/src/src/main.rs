@@ -1,3 +1,7 @@
+#![deny(clippy::all)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::type_complexity)]
+
 use std::{
     cell::RefCell,
     collections::HashMap,
@@ -33,6 +37,7 @@ mod systemd_manager {
     #![allow(non_camel_case_types)]
     #![allow(non_snake_case)]
     #![allow(unused)]
+    #![allow(clippy::all)]
     include!(concat!(env!("OUT_DIR"), "/systemd_manager.rs"));
 }
 
@@ -41,6 +46,7 @@ mod logind_manager {
     #![allow(non_camel_case_types)]
     #![allow(non_snake_case)]
     #![allow(unused)]
+    #![allow(clippy::all)]
     include!(concat!(env!("OUT_DIR"), "/logind_manager.rs"));
 }
 
