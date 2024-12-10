@@ -141,7 +141,10 @@ in
               after = [ "network.target" ];
               wantedBy = [ "multi-user.target" ];
 
-              path = with pkgs; [ openresolv ];
+              path = [
+                config.networking.firewall.package
+                pkgs.openresolv
+              ];
 
               inherit environment;
 
