@@ -1,14 +1,11 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.mchprs;
   settingsFormat = pkgs.formats.toml { };
 
   whitelistFile = pkgs.writeText "whitelist.json"
     (builtins.toJSON
-      (mapAttrsToList (n: v: { name = n; uuid = v; }) cfg.whitelist.list));
+      (lib.mapAttrsToList (n: v: { name = n; uuid = v; }) cfg.whitelist.list));
 
   configToml =
     (removeAttrs cfg.settings [ "address" "port" ]) //
@@ -22,18 +19,18 @@ in
 {
   options = {
     services.mchprs = {
-      enable = mkEnableOption "MCHPRS, a Minecraft server";
+      enable = lib.mkEnableOption "MCHPRS, a Minecraft server";
 
-      declarativeSettings = mkOption {
-        type = types.bool;
+      declarativeSettings = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to use a declarative configuration for MCHPRS.
         '';
       };
 
-      declarativeWhitelist = mkOption {
-        type = types.bool;
+      declarativeWhitelist = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to use a declarative whitelist.
@@ -42,16 +39,16 @@ in
         '';
       };
 
-      dataDir = mkOption {
-        type = types.path;
+      dataDir = lib.mkOption {
+        type = lib.types.path;
         default = "/var/lib/mchprs";
         description = ''
           Directory to store MCHPRS database and other state/data files.
         '';
       };
 
-      openFirewall = mkOption {
-        type = types.bool;
+      openFirewall = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to open ports in the firewall for the server.
@@ -60,8 +57,8 @@ in
         '';
       };
 
-      maxRuntime = mkOption {
-        type = types.str;
+      maxRuntime = lib.mkOption {
+        type = lib.types.str;
         default = "infinity";
         example = "7d";
         description = ''
@@ -73,15 +70,15 @@ in
         '';
       };
 
-      package = mkPackageOption pkgs "mchprs" { };
+      package = lib.mkPackageOption pkgs "mchprs" { };
 
-      settings = mkOption {
-        type = types.submodule {
+      settings = lib.mkOption {
+        type = lib.types.submodule {
           freeformType = settingsFormat.type;
 
           options = {
-            port = mkOption {
-              type = types.port;
+            port = lib.mkOption {
+              type = lib.types.port;
               default = 25565;
               description = ''
                 Port for the server.
@@ -90,8 +87,8 @@ in
               '';
             };
 
-            address = mkOption {
-              type = types.str;
+            address = lib.mkOption {
+              type = lib.types.str;
               default = "0.0.0.0";
               description = ''
                 Address for the server.
@@ -101,8 +98,8 @@ in
               '';
             };
 
-            motd = mkOption {
-              type = types.str;
+            motd = lib.mkOption {
+              type = lib.types.str;
               default = "Minecraft High Performance Redstone Server";
               description = ''
                 Message of the day.
@@ -111,8 +108,8 @@ in
               '';
             };
 
-            chat_format = mkOption {
-              type = types.str;
+            chat_format = lib.mkOption {
+              type = lib.types.str;
               default = "<{username}> {message}";
               description = ''
                 How to format chat message interpolating `username`
@@ -122,8 +119,8 @@ in
               '';
             };
 
-            max_players = mkOption {
-              type = types.ints.positive;
+            max_players = lib.mkOption {
+              type = lib.types.ints.positive;
               default = 99999;
               description = ''
                 Maximum number of simultaneous players.
@@ -132,8 +129,8 @@ in
               '';
             };
 
-            view_distance = mkOption {
-              type = types.ints.positive;
+            view_distance = lib.mkOption {
+              type = lib.types.ints.positive;
               default = 8;
               description = ''
                 Maximal distance (in chunks) between players and loaded chunks.
@@ -142,8 +139,8 @@ in
               '';
             };
 
-            bungeecord = mkOption {
-              type = types.bool;
+            bungeecord = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 Enable compatibility with
@@ -153,8 +150,8 @@ in
               '';
             };
 
-            schemati = mkOption {
-              type = types.bool;
+            schemati = lib.mkOption {
+              type = lib.types.bool;
               default = false;
               description = ''
                 Mimic the verification and directory layout used by the
@@ -165,8 +162,8 @@ in
               '';
             };
 
-            block_in_hitbox = mkOption {
-              type = types.bool;
+            block_in_hitbox = lib.mkOption {
+              type = lib.types.bool;
               default = true;
               description = ''
                 Allow placing blocks inside of players
@@ -176,8 +173,8 @@ in
               '';
             };
 
-            auto_redpiler = mkOption {
-              type = types.bool;
+            auto_redpiler = lib.mkOption {
+              type = lib.types.bool;
               default = true;
               description = ''
                 Use redpiler automatically.
@@ -196,8 +193,8 @@ in
       };
 
       whitelist = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Whether or not the whitelist (in `whitelist.json`) shoud be enabled.
@@ -205,17 +202,17 @@ in
           '';
         };
 
-        list = mkOption {
+        list = lib.mkOption {
           type =
             let
-              minecraftUUID = types.strMatching
+              minecraftUUID = lib.types.strMatching
                 "[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}" // {
                 description = "Minecraft UUID";
               };
             in
-            types.attrsOf minecraftUUID;
+            lib.types.attrsOf minecraftUUID;
           default = { };
-          example = literalExpression ''
+          example = lib.literalExpression ''
             {
               username1 = "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx";
               username2 = "yyyyyyyy-yyyy-yyyy-yyyy-yyyyyyyyyyyy";
@@ -235,7 +232,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     users.users.mchprs = {
       description = "MCHPRS service user";
       home = cfg.dataDir;
@@ -326,11 +323,11 @@ in
         '');
     };
 
-    networking.firewall = mkIf (cfg.declarativeSettings && cfg.openFirewall) {
+    networking.firewall = lib.mkIf (cfg.declarativeSettings && cfg.openFirewall) {
       allowedUDPPorts = [ cfg.settings.port ];
       allowedTCPPorts = [ cfg.settings.port ];
     };
   };
 
-  meta.maintainers = with maintainers; [ gdd ];
+  meta.maintainers = with lib.maintainers; [ gdd ];
 }
