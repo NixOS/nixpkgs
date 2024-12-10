@@ -9,8 +9,8 @@ let
   format = import ../../../security/krb5/krb5-conf-format.nix { inherit pkgs lib; } { enableKdcACLEntries = true; };
 
   aclMap = {
-    add = "a"; cpw = "c"; delete = "d"; get = "i"; list = "l"; modify = "m";
-    all = "*";
+    add = "a"; cpw = "c"; delete = "d"; get-keys = "e"; get = "i"; list = "l"; modify = "m";
+    all = "x";
   };
 
   aclConfigs = lib.pipe cfg.settings.realms [
