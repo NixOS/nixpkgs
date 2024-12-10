@@ -112,7 +112,8 @@ in
   * FHS simulates a classic linux shell
   */
   buildFHSEnv {
-    name = "RuneScape";
+    pname = "RuneScape";
+    inherit (runescape) version;
     targetPkgs = pkgs: [
       runescape
       cairo

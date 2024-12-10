@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "sqlite-vec";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitHub {
     owner = "asg017";
     repo = "sqlite-vec";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Zg1ADAN7XjlK2Oa+vN1i0Dkapu1DMEgDde3FxFTTdmo=";
+    hash = "sha256-CgeSoRoQRMb/V+RzU5NQuIk/3OonYjAfolWD2hqNuXU=";
   };
 
   nativeBuildInputs = [ gettext ];
