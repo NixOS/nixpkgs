@@ -14,6 +14,7 @@
 , glib-testing
 , python3
 , nixosTests
+, malcontent-ui
 }:
 
 stdenv.mkDerivation rec {
@@ -86,6 +87,7 @@ stdenv.mkDerivation rec {
   passthru = {
     tests = {
       installedTests = nixosTests.installed-tests.malcontent;
+      inherit malcontent-ui;
     };
   };
 
