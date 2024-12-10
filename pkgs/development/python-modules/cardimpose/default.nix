@@ -19,6 +19,8 @@ buildPythonPackage rec {
 
   dependencies = [ pymupdf ];
 
+  pythonImportsCheck = [ "cardimpose" ];
+
   meta = {
     mainProgram = "cardimpose";
     description = "Library for imposing PDF files";
