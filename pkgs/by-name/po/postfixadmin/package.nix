@@ -1,5 +1,9 @@
-{ fetchFromGitHub, stdenv, lib, nixosTests }:
-
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
+}:
 stdenv.mkDerivation rec {
   pname = "postfixadmin";
   version = "3.3.13";
