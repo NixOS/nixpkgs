@@ -12764,6 +12764,12 @@
     githubId = 26458780;
     name = "Matthew Croughan";
   };
+  matthewdargan = {
+    email = "matthewdargan57@gmail.com";
+    githubId = 18505904;
+    github = "matthewdargan";
+    name = "Matthew Dargan";
+  };
   matthew-levan = {
     email = "matthew@coeli.network";
     github = "matthew-levan";
