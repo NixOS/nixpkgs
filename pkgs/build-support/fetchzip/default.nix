@@ -21,6 +21,13 @@
 # an appropriate unpacking tool.
 , extension ? null
 
+# Optionally recompress the output (deterministically)
+# This is slow and only intended for the rare case where it exceeds
+# hydra's very sensible 3GB output size limit (at the time of writing)
+# Note: requires renaming `name` to something ending in `.tar.gz`
+# otherwise mkDerivation won't attempt to decompress it
+, repack ? false
+
 # the rest are given to fetchurl as is
 , ... } @ args:
 
@@ -70,8 +77,17 @@ fetchurl ({
     '') + ''
       ${postFetch}
       ${extraPostFetch}
+    '' + lib.optionalString repack ''
+      echo "repacking into $name"
+      mkdir -p $TMPDIR/repack
+      mv $out/* $TMPDIR/repack/.
+      rm -rf $out
+      tar --create --file "$TMPDIR/repacked.tar.gz" --use-compress-program='gzip --no-name' \
+        --sort=name --mode='a+rw' --mtime='1970-01-01' -C "$TMPDIR" repack
+      mv $TMPDIR/repacked.tar.gz $out
+    '' + ''
       chmod 755 "$out"
     '';
     # ^ Remove non-owner write permissions
     # Fixes https://github.com/NixOS/nixpkgs/issues/38649
-} // removeAttrs args [ "stripRoot" "extraPostFetch" "postFetch" "extension" "nativeBuildInputs" ])
+} // removeAttrs args [ "stripRoot" "extraPostFetch" "postFetch" "extension" "nativeBuildInputs" "repack" ])
