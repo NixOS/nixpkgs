@@ -41,7 +41,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-X/IMNEmggu9bSJFUaTohbFYxGZBguf+eFb3ObmQGplk=";
   };
 

@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    rev = "refs/tags/checkpointduckdb==${version}";
+    tag = "checkpointduckdb==${version}";
     hash = "sha256-wSrlFBfTcTgyE46uwv9GCyxRT1xVafgWyP2g87KUTAU=";
   };
 
