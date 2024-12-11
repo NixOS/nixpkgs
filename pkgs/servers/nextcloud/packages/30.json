@@ -1,8 +1,8 @@
 {
   "bookmarks": {
-    "hash": "sha256-F3r+FU5m9vj13bhJqGi7cCtZUxAIL453QUu1y65Ty/I=",
-    "url": "https://github.com/nextcloud/bookmarks/releases/download/v15.0.2/bookmarks-15.0.2.tar.gz",
-    "version": "15.0.2",
+    "hash": "sha256-sLXfAkykRU8y1XuxLUQBQt5oSPVJLwNtUDl9+7j4PV8=",
+    "url": "https://github.com/nextcloud/bookmarks/releases/download/v15.0.3/bookmarks-15.0.3.tar.gz",
+    "version": "15.0.3",
     "description": "- 📂 Sort bookmarks into folders\n- 🏷 Add tags and personal notes\n- ☠ Find broken links and duplicates\n- 📲 Synchronize with all your browsers and devices\n- 📔 Store archived versions of your links in case they are depublished\n- 🔍 Full-text search on site contents\n- 👪 Share bookmarks with other users and via public links\n- ⚛ Generate RSS feeds of your collections\n- 📈 Stats on how often you access which links\n- 🔒 Automatic backups of your bookmarks collection\n- 💼 Built-in Dashboard widgets for frequent and recent links\n\nRequirements:\n - PHP extensions:\n   - intl: *\n   - mbstring: *\n - when using MySQL, use at least v8.0",
     "homepage": "https://github.com/nextcloud/bookmarks",
     "licenses": [
@@ -90,9 +90,9 @@
     ]
   },
   "gpoddersync": {
-    "hash": "sha256-OMH/pnDS/icDVUb56mzxowAhBCaVY60bMGJmwsjEc0k=",
-    "url": "https://github.com/thrillfall/nextcloud-gpodder/releases/download/3.10.0/gpoddersync.tar.gz",
-    "version": "3.10.0",
+    "hash": "sha256-U4YzTec7mvslXk6LC5/YlIRzrbOhABHK3ZZ1zYR3JYU=",
+    "url": "https://github.com/thrillfall/nextcloud-gpodder/releases/download/3.11.0/gpoddersync.tar.gz",
+    "version": "3.11.0",
     "description": "Expose GPodder API to sync podcast consumer apps like AntennaPod",
     "homepage": "https://github.com/thrillfall/nextcloud-gpodder",
     "licenses": [
@@ -100,10 +100,10 @@
     ]
   },
   "groupfolders": {
-    "hash": "sha256-m4hKIo96MYhkOtyeu6Sh5yPFKQdwFtuX2rSzElfC8rs=",
-    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v18.0.6/groupfolders-v18.0.6.tar.gz",
-    "version": "18.0.6",
-    "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.\n\nNote: Encrypting the contents of group folders is currently not supported.",
+    "hash": "sha256-drHfR9EagYg1zUyrk7i841PDOTZZNJmRJFLA5ft6TTs=",
+    "url": "https://github.com/nextcloud-releases/groupfolders/releases/download/v18.0.7/groupfolders-v18.0.7.tar.gz",
+    "version": "18.0.7",
+    "description": "Admin configured folders shared with everyone in a group.\n\nFolders can be configured from *Group folders* in the admin settings.\n\nAfter a folder is created, the admin can give access to the folder to one or more groups, control their write/sharing permissions and assign a quota for the folder.",
     "homepage": "https://github.com/nextcloud/groupfolders",
     "licenses": [
       "agpl"
@@ -140,9 +140,9 @@
     ]
   },
   "mail": {
-    "hash": "sha256-fiG9smhCztmoBfkXcbrXLjfREMYHPOF1JD8u2HUCnhk=",
-    "url": "https://github.com/nextcloud-releases/mail/releases/download/v4.0.5/mail-stable4.0.tar.gz",
-    "version": "4.0.5",
+    "hash": "sha256-m3S4PWNsToqP0QodpJopt0A7nBVB/3vvZA92C9viiNk=",
+    "url": "https://github.com/nextcloud-releases/mail/releases/download/v4.0.7/mail-stable4.0.tar.gz",
+    "version": "4.0.7",
     "description": "**💌 A mail app for Nextcloud**\n\n- **🚀 Integration with other Nextcloud apps!** Currently Contacts, Calendar & Files – more to come.\n- **📥 Multiple mail accounts!** Personal and company account? No problem, and a nice unified inbox. Connect any IMAP account.\n- **🔒 Send & receive encrypted mails!** Using the great [Mailvelope](https://mailvelope.com) browser extension.\n- **🙈 We’re not reinventing the wheel!** Based on the great [Horde](https://horde.org) libraries.\n- **📬 Want to host your own mail server?** We do not have to reimplement this as you could set up [Mail-in-a-Box](https://mailinabox.email)!\n\n## Ethical AI Rating\n\n### Priority Inbox\n\nPositive:\n* The software for training and inferencing of this model is open source.\n* The model is created and trained on-premises based on the user's own data.\n* The training data is accessible to the user, making it possible to check or correct for bias or optimise the performance and CO2 usage.\n\n### Thread Summaries (opt-in)\n\n**Rating:** 🟢/🟡/🟠/🔴\n\nThe rating depends on the installed text processing backend. See [the rating overview](https://docs.nextcloud.com/server/latest/admin_manual/ai/index.html) for details.\n\nLearn more about the Nextcloud Ethical AI Rating [in our blog](https://nextcloud.com/blog/nextcloud-ethical-ai-rating/).",
     "homepage": "https://github.com/nextcloud/mail#readme",
     "licenses": [
@@ -180,9 +180,9 @@
     ]
   },
   "news": {
-    "hash": "sha256-iQvgyXqOwZrWDoZgXNivxqnSLjNeWm9MLJ9R/Wx/jOg=",
-    "url": "https://github.com/nextcloud/news/releases/download/25.0.3/news.tar.gz",
-    "version": "25.0.3",
+    "hash": "sha256-J4d98sk8YqU/mgMjVMU3FZ6rq2uzopljoHFQsuZ5ztA=",
+    "url": "https://github.com/nextcloud/news/releases/download/25.1.0/news.tar.gz",
+    "version": "25.1.0",
     "description": "📰 A RSS/Atom Feed reader App for Nextcloud\n\n- 📲 Synchronize your feeds with multiple mobile or desktop [clients](https://nextcloud.github.io/news/clients/)\n- 🔄 Automatic updates of your news feeds\n- 🆓 Free and open source under AGPLv3, no ads or premium functions\n\n**System Cron is currently required for this app to work**\n\nRequirements can be found [here](https://nextcloud.github.io/news/install/#dependencies)\n\nThe Changelog is available [here](https://github.com/nextcloud/news/blob/master/CHANGELOG.md)\n\nCreate a [bug report](https://github.com/nextcloud/news/issues/new/choose)\n\nCreate a [feature request](https://github.com/nextcloud/news/discussions/new)\n\nReport a [feed issue](https://github.com/nextcloud/news/discussions/new)",
     "homepage": "https://github.com/nextcloud/news",
     "licenses": [
@@ -270,9 +270,9 @@
     ]
   },
   "richdocuments": {
-    "hash": "sha256-7sdMClIyQxeCToP40mKDzD4kY/wjSe8WyNl2dlis1a8=",
-    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v8.5.2/richdocuments-v8.5.2.tar.gz",
-    "version": "8.5.2",
+    "hash": "sha256-10eTpGs3dNKQpjqkEulWM0QUB7AyoisThdWKJ96yzZM=",
+    "url": "https://github.com/nextcloud-releases/richdocuments/releases/download/v8.5.3/richdocuments-v8.5.3.tar.gz",
+    "version": "8.5.3",
     "description": "This application can connect to a Collabora Online (or other) server (WOPI-like Client). Nextcloud is the WOPI Host. Please read the documentation to learn more about that.\n\nYou can also edit your documents off-line with the Collabora Office app from the **[Android](https://play.google.com/store/apps/details?id=com.collabora.libreoffice)** and **[iOS](https://apps.apple.com/us/app/collabora-office/id1440482071)** store.",
     "homepage": "https://collaboraoffice.com/",
     "licenses": [
@@ -280,9 +280,9 @@
     ]
   },
   "spreed": {
-    "hash": "sha256-LSU++gw715ub6OGZBZtL/NnLkoz3c+vR7/2Dii3WnOo=",
-    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v20.0.2/spreed-v20.0.2.tar.gz",
-    "version": "20.0.2",
+    "hash": "sha256-VIqW/F+wU4HmLVBcFpICEUaugU8BkDmOAjolbHdJ6VY=",
+    "url": "https://github.com/nextcloud-releases/spreed/releases/download/v20.1.0/spreed-v20.1.0.tar.gz",
+    "version": "20.1.0",
     "description": "Chat, video & audio-conferencing using WebRTC\n\n* 💬 **Chat** Nextcloud Talk comes with a simple text chat, allowing you to share or upload files from your Nextcloud Files app or local device and mention other participants.\n* 👥 **Private, group, public and password protected calls!** Invite someone, a whole group or send a public link to invite to a call.\n* 🌐 **Federated chats** Chat with other Nextcloud users on their servers\n* 💻 **Screen sharing!** Share your screen with the participants of your call.\n* 🚀 **Integration with other Nextcloud apps** like Files, Calendar, User status, Dashboard, Flow, Maps, Smart picker, Contacts, Deck, and many more.\n* 🌉 **Sync with other chat solutions** With [Matterbridge](https://github.com/42wim/matterbridge/) being integrated in Talk, you can easily sync a lot of other chat solutions to Nextcloud Talk and vice-versa.",
     "homepage": "https://github.com/nextcloud/spreed",
     "licenses": [
@@ -340,9 +340,9 @@
     ]
   },
   "user_saml": {
-    "hash": "sha256-xxabQU8kZhgI7Q9D0n7hrFygvfZWZDnAQWnB8+A1xwE=",
-    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v6.3.0/user_saml-v6.3.0.tar.gz",
-    "version": "6.3.0",
+    "hash": "sha256-ospit0ZoPTxwdEDXN21EEt7WlTl4ys5IzdDBrurAPDs=",
+    "url": "https://github.com/nextcloud-releases/user_saml/releases/download/v6.4.1/user_saml-v6.4.1.tar.gz",
+    "version": "6.4.1",
     "description": "Using the SSO & SAML app of your Nextcloud you can make it easily possible to integrate your existing Single-Sign-On solution with Nextcloud. In addition, you can use the Nextcloud LDAP user provider to keep the convenience for users. (e.g. when sharing)\nThe following providers are supported and tested at the moment:\n\n* **SAML 2.0**\n\t* OneLogin\n\t* Shibboleth\n\t* Active Directory Federation Services (ADFS)\n\n* **Authentication via Environment Variable**\n\t* Kerberos (mod_auth_kerb)\n\t* Any other provider that authenticates using the environment variable\n\nWhile theoretically any other authentication provider implementing either one of those standards is compatible, we like to note that they are not part of any internal test matrix.",
     "homepage": "https://github.com/nextcloud/user_saml",
     "licenses": [
