@@ -8,13 +8,13 @@
 }:
 mkDerivation rec {
   pname = "jamulus";
-  version = "3.10.0";
+  version = "3.11.0";
 
   src = fetchFromGitHub {
     owner = "jamulussoftware";
     repo = "jamulus";
     tag = "r${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-uqBre1Hcdmmifm/gii3MlP9LiAovQVsAaPZTmVm1nnM=";
+    hash = "sha256-YxXSSVm3n96YzE51cXpWf4z2nQBSguvcEp/kU0a6iBA=";
   };
 
   nativeBuildInputs = [
