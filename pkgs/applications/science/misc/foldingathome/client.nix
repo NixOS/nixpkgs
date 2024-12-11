@@ -13,6 +13,7 @@
 , extraPkgs ? [ ]
 }:
 let
+  pname = "fah-client";
   version = "8.3.18";
 
   cbangSrc = fetchFromGitHub {
@@ -23,8 +24,7 @@ let
   };
 
   fah-client = stdenv.mkDerivation {
-    pname = "fah-client";
-    inherit version;
+    inherit pname version;
 
     src = fetchFromGitHub {
       owner = "FoldingAtHome";
@@ -66,15 +66,11 @@ let
   };
 in
 buildFHSEnv {
-  name = fah-client.name;
+  inherit pname version;
 
   targetPkgs = _: [ fah-client ocl-icd zlib expat ] ++ extraPkgs;
 
   runScript = "/bin/fah-client";
-
-  extraInstallCommands = ''
-    mv $out/bin/$name $out/bin/fah-client
-  '';
 
   meta = {
     description = "Folding@home client";
