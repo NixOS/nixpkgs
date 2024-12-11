@@ -22,7 +22,7 @@
   nss,
   pango,
   xorg,
-  writeScript
+  writeScript,
 }:
 let
   id = "203624820";
