@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "biobakery";
     repo = "phylophlan";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-KlWKt2tH2lQBh/eQ2Hbcu2gXHEFfmFEc6LrybluxINc=";
   };
 

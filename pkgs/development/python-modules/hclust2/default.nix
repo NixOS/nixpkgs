@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SegataLab";
     repo = "hclust2";
-    rev = "refs/tags/${version}";
+    tag = "version";
     hash = "sha256-xdS36Sfxg4bz5ztRbCdD3uq4Dx50E8n501ScMArjwso=";
   };
 

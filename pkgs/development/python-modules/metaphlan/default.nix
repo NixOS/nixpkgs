@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "biobakery";
     repo = "MetaPhlAn";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-+7K5gVLRUYSulMDLszlUsKbNLNg57le63wLPtl26D8c=";
   };
 
