@@ -50,5 +50,6 @@ buildPythonPackage rec {
       dotlambda
       gal_bolle
     ];
+    broken = true;
   };
 }

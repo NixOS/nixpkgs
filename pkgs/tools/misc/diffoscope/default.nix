@@ -190,7 +190,7 @@ python.pkgs.buildPythonApplication rec {
     ]
     ++ (with python.pkgs; [
       argcomplete
-      debian
+      python-debian
       defusedxml
       jsbeautifier
       jsondiff
