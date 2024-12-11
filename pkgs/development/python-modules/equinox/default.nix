@@ -40,6 +40,10 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
+  postCheck = ''
+    echo OUI
+  '';
+
   nativeCheckInputs = [
     beartype
     optax
