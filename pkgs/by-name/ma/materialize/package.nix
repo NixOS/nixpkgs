@@ -190,6 +190,7 @@ rustPlatform.buildRustPackage rec {
     description = "Streaming SQL materialized view engine for real-time applications";
     license = lib.licenses.bsl11;
     platforms = lib.platforms.unix;
+    badPlatform = lib.platforms.darwin;
     maintainers = with lib.maintainers; [ petrosagg ];
     mainProgram = "environmentd";
   };
