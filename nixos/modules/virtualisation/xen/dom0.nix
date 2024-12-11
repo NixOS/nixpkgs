@@ -1,5 +1,4 @@
 # Xen Project Hypervisor (Dom0) support.
-
 {
   config,
   lib,
@@ -8,35 +7,26 @@
 }:
 
 let
-  inherit (builtins) readFile;
-  inherit (lib.meta) hiPrio;
-  inherit (lib.modules) mkRemovedOptionModule mkRenamedOptionModule mkIf;
-  inherit (lib.options)
-    mkOption
-    mkEnableOption
+  inherit (lib)
     literalExpression
+    mkEnableOption
+    mkIf
+    mkOption
     mkPackageOption
+    mkRemovedOptionModule
+    mkRenamedOptionModule
+    optional
+    optionalString
+    optionals
+    teams
+    types
+    hiPrio
     ;
-  inherit (lib.types)
-    listOf
-    str
+  inherit (types)
     ints
     lines
-    enum
     path
-    submodule
-    addCheck
-    float
-    bool
-    int
-    nullOr
     ;
-  inherit (lib.lists) optional optionals;
-  inherit (lib.strings) hasSuffix optionalString;
-  inherit (lib.meta) getExe;
-  inherit (lib.attrsets) optionalAttrs;
-  inherit (lib.trivial) boolToString;
-  inherit (lib.teams.xen) members;
 
   cfg = config.virtualisation.xen;
 in
@@ -44,42 +34,11 @@ in
   imports = [
     ./oxenstored.nix
     ./efi.nix
-    (mkRemovedOptionModule
-      [
-        "virtualisation"
-        "xen"
-        "bridge"
-        "name"
-      ]
-      "The Xen Network Bridge options are currently unavailable. Please set up your own bridge manually."
-    )
-    (mkRemovedOptionModule
-      [
-        "virtualisation"
-        "xen"
-        "bridge"
-        "address"
-      ]
-      "The Xen Network Bridge options are currently unavailable. Please set up your own bridge manually."
-    )
-    (mkRemovedOptionModule
-      [
-        "virtualisation"
-        "xen"
-        "bridge"
-        "prefixLength"
-      ]
-      "The Xen Network Bridge options are currently unavailable. Please set up your own bridge manually."
-    )
-    (mkRemovedOptionModule
-      [
-        "virtualisation"
-        "xen"
-        "bridge"
-        "forwardDns"
-      ]
-      "The Xen Network Bridge options are currently unavailable. Please set up your own bridge manually."
-    )
+    (mkRemovedOptionModule [
+      "virtualisation"
+      "xen"
+      "bridge"
+    ] "The Xen Network Bridge options have been removed. Please set up your own bridge manually.")
     (mkRenamedOptionModule
       [
         "virtualisation"
@@ -328,7 +287,6 @@ in
       ];
 
       services = {
-
         # While this service is installed by the `xen` package, it shouldn't be used in dom0.
         xendriverdomain.enable = false;
 
@@ -382,5 +340,5 @@ in
       };
     };
   };
-  meta.maintainers = members;
+  meta.maintainers = teams.xen.members;
 }
