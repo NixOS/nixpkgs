@@ -4,17 +4,17 @@
 
 linkFarm "zig-packages" [
   {
-    name = "12204d789e17c158971f69c7b900e8d8f288e7b9e42b2242f3adfbca57e8266d848f";
-    path = fetchzip {
-      url = "https://codeberg.org/ifreund/zig-wlroots/archive/v0.18.0.tar.gz";
-      hash = "sha256-KDOroHrrye4vlYKyAk8/6CF0+6nzJ/bbETZQhSbrSSk=";
-    };
-  }
-  {
     name = "1220687c8c47a48ba285d26a05600f8700d37fc637e223ced3aa8324f3650bf52242";
     path = fetchzip {
       url = "https://codeberg.org/ifreund/zig-wayland/archive/v0.2.0.tar.gz";
       hash = "sha256-dvit+yvc0MnipqWjxJdfIsA6fJaJZOaIpx4w4woCxbE=";
+    };
+  }
+  {
+    name = "122083317b028705b5d27be12976feebf17066a4e51802b3b5e9f970bec580e433e1";
+    path = fetchzip {
+      url = "https://codeberg.org/ifreund/zig-wlroots/archive/v0.18.1.tar.gz";
+      hash = "sha256-fru44ZCuDpd8fc5qp80oAcQO3Jwy3ouywWURhltek+U=";
     };
   }
   {
