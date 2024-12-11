@@ -75,7 +75,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://apps.gnome.org/Converter/";
     license = licenses.gpl3Plus;
     mainProgram = "switcheroo";
-    maintainers = with maintainers; [ michaelgrahamevans ];
+    maintainers = with maintainers; [ michaelgrahamevans ] ++ lib.teams.gnome-circle.members;
     platforms = platforms.unix;
   };
 })

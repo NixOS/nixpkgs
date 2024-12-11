@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     mainProgram = "boatswain";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ _0xMRTT ];
+    maintainers = with maintainers; [ _0xMRTT ] ++ lib.teams.gnome-circle.members;
     broken = stdenv.hostPlatform.isDarwin;
   };
 }

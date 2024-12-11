@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://apps.gnome.org/Fretboard/";
     license = licenses.gpl3Plus;
     mainProgram = "fretboard";
-    maintainers = with maintainers; [ michaelgrahamevans ];
+    maintainers = with maintainers; [ michaelgrahamevans ] ++ lib.teams.gnome-circle.members;
     platforms = platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
