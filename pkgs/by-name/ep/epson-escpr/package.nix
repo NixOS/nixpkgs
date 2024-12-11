@@ -21,7 +21,7 @@ in stdenv.mkDerivation rec {
 
   patches = [ ./cups-filter-ppd-dirs.patch ];
 
-  buildInputs = [ cups ];
+  buildInputs = [ cups rpm cpio ];
 
   unpackPhase = ''
     runHook preUnpack
@@ -34,7 +34,7 @@ in stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "https://download.ebz.epson.net/dsc/du/02/DriverDownloadInfo.do?LG2=EN&CN2=&DSCMI=156882&DSCCHK=031e5c220930be9458438571a1fdeedb7dfcb8a6";
+    homepage = "http://download.ebz.epson.net/dsc/search/01/search";
     description = "ESC/P-R Driver (generic driver)";
     longDescription = ''
       Epson Inkjet Printer Driver (ESC/P-R) for Linux and the
