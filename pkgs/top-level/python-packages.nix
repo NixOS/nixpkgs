@@ -3058,8 +3058,6 @@ self: super: with self; {
 
   deap = callPackage ../development/python-modules/deap { };
 
-  debian = callPackage ../development/python-modules/debian { };
-
   debianbts = callPackage ../development/python-modules/debianbts { };
 
   debian-inspector = callPackage ../development/python-modules/debian-inspector { };
@@ -9361,6 +9359,8 @@ self: super: with self; {
   plugp100 = callPackage ../development/python-modules/plugp100 {};
 
   python-bugzilla = callPackage ../development/python-modules/python-bugzilla { };
+
+  python-debian = callPackage ../development/python-modules/python-debian { };
 
   python-hcl2 = callPackage ../development/python-modules/python-hcl2 { };
 

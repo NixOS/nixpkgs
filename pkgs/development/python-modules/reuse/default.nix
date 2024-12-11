@@ -14,7 +14,7 @@
   binaryornot,
   boolean-py,
   click,
-  debian,
+  python-debian,
   jinja2,
   license-expression,
   tomlkit,
@@ -56,7 +56,7 @@ buildPythonPackage rec {
     binaryornot
     boolean-py
     click
-    debian
+    python-debian
     jinja2
     license-expression
     tomlkit
