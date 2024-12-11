@@ -329,7 +329,6 @@ let format' = format; in let
       systemdMinimal
       coreutils
       findutils
-      util-linux
     ]
     ++ lib.optional deterministic gptfdisk);
 
