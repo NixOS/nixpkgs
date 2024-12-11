@@ -107,14 +107,15 @@ let
       optionalString (cfg.database.passwordFile != null)
       "$(head -n1 ${cfg.database.passwordFile})"
     }
-    oauth_client_secret=${
-      optionalString cfg.oauth.enable
-      "$(head -n1 ${cfg.oauth.clientSecretFile})"
-    }
+    ${optionalString cfg.oauth.enable ''
+    oauth_client_secret="$(head -n1 ${cfg.oauth.clientSecretFile})"
+    ''}
 
     cp -f ${configFile} '${cfg.stateDir}/config.ini'
     sed -e "s,#dbpass#,$db_pass,g" -i '${cfg.stateDir}/config.ini'
+    ${optionalString cfg.oauth.enable ''
     sed -e "s,#oauth_client_secret#,$oauth_client_secret,g" -i '${cfg.stateDir}/config.ini'
+    ''}
     chmod 440 '${cfg.stateDir}/config.ini'
 
     ${text}
