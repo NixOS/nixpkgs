@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fetchpatch
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+  nixosTests,
 }:
 buildGoModule rec {
   pname = "dovecot_exporter";
@@ -12,7 +13,7 @@ buildGoModule rec {
     owner = "kumina";
     repo = "dovecot_exporter";
     rev = "7ef79118ba619ff078594837377189477a4d059f";
-    sha256 = "sha256-qJbIBSfHYgFztuivuNjleDa+Bx0KC4OklCh3IvK2XFI=";
+    hash = "sha256-qJbIBSfHYgFztuivuNjleDa+Bx0KC4OklCh3IvK2XFI=";
   };
 
   vendorHash = "sha256-+B8sROL1h6ElBfAUBT286yJF9m9zoRvMOrf0z2SVCj0=";
@@ -22,7 +23,7 @@ buildGoModule rec {
     # https://github.com/kumina/dovecot_exporter/pull/23
     (fetchpatch {
       url = "https://github.com/kumina/dovecot_exporter/commit/b5184dd99cf8c79facf20cea281828d302327665.patch";
-      sha256 = "sha256-OcdI1fJ/wumDI/wk5PQVot9+Gw/PnsiwgJY7dcRyEsc=";
+      hash = "sha256-OcdI1fJ/wumDI/wk5PQVot9+Gw/PnsiwgJY7dcRyEsc=";
     })
   ];
 
@@ -33,6 +34,9 @@ buildGoModule rec {
     description = "Prometheus metrics exporter for Dovecot";
     mainProgram = "dovecot_exporter";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ willibutz globin ];
+    maintainers = with lib.maintainers; [
+      willibutz
+      globin
+    ];
   };
 }

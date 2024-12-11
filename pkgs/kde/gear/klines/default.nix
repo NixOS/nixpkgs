@@ -5,7 +5,7 @@
 mkKdeDerivation {
   pname = "klines";
 
-  extraNativeBuildInputs = [_7zz];
+  extraNativeBuildInputs = [ _7zz ];
 
   meta.mainProgram = "klines";
 }

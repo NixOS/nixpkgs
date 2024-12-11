@@ -1,34 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, kwindowsystem
-, layer-shell-qt
-, liblxqt
-, libqtxdg
-, lxqt-build-tools
-, lxqt-globalkeys
-, menu-cache
-, muparser
-, pcre
-, pkg-config
-, qtbase
-, qtsvg
-, qttools
-, qtwayland
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  kwindowsystem,
+  layer-shell-qt,
+  liblxqt,
+  libqtxdg,
+  lxqt-build-tools,
+  lxqt-globalkeys,
+  menu-cache,
+  muparser,
+  pcre,
+  pkg-config,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwayland,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lxqt-runner";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-r9rz6rJX60+1/+Wd5APobyZRioXzD1xveFIMToTvpXQ=";
+    hash = "sha256-NsAlaoWMvisRZ04KkrQzwi5B2eXnaHqg0HtYG4NKLcs=";
   };
 
   nativeBuildInputs = [

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, openssl
-, pkg-config
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  openssl,
+  pkg-config,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ openssl ] ++ lib.optional stdenv.isDarwin darwin.Security;
+  buildInputs = [ openssl ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.Security;
 
   OPENSSL_NO_VENDOR = true;
 

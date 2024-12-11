@@ -37,6 +37,11 @@ buildPythonPackage rec {
     packaging
     pillow
   ];
+  disabledTests = [
+    # https://github.com/madmaze/pytesseract/pull/559
+    "incorrect_tessdata_dir"
+    "invalid_tessdata_dir"
+  ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

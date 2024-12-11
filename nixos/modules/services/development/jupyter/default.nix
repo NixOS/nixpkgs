@@ -1,18 +1,20 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.jupyter;
 
   package = cfg.package;
 
-  kernels = (pkgs.jupyter-kernel.create  {
-    definitions = if cfg.kernels != null
-      then cfg.kernels
-      else  pkgs.jupyter-kernel.default;
-  });
+  kernels = (
+    pkgs.jupyter-kernel.create {
+      definitions = if cfg.kernels != null then cfg.kernels else pkgs.jupyter-kernel.default;
+    }
+  );
 
   notebookConfig = pkgs.writeText "jupyter_config.py" ''
     ${cfg.notebookConfig}
@@ -20,14 +22,15 @@ let
     c.NotebookApp.password = ${cfg.password}
   '';
 
-in {
-  meta.maintainers = with maintainers; [ aborsu ];
+in
+{
+  meta.maintainers = with lib.maintainers; [ aborsu ];
 
   options.services.jupyter = {
-    enable = mkEnableOption "Jupyter development server";
+    enable = lib.mkEnableOption "Jupyter development server";
 
-    ip = mkOption {
-      type = types.str;
+    ip = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
       description = ''
         IP address Jupyter will be listening on.
@@ -37,36 +40,36 @@ in {
     # NOTE: We don't use top-level jupyter because we don't
     # want to pass in JUPYTER_PATH but use .environment instead,
     # saving a rebuild.
-    package = mkPackageOption pkgs [ "python3" "pkgs" "notebook" ] { };
+    package = lib.mkPackageOption pkgs [ "python3" "pkgs" "notebook" ] { };
 
-    command = mkOption {
-      type = types.str;
+    command = lib.mkOption {
+      type = lib.types.str;
       default = "jupyter-notebook";
       example = "jupyter-lab";
       description = ''
         Which command the service runs. Note that not all jupyter packages
         have all commands, e.g. jupyter-lab isn't present in the default package.
-       '';
+      '';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 8888;
       description = ''
         Port number Jupyter will be listening on.
       '';
     };
 
-    notebookDir = mkOption {
-      type = types.str;
+    notebookDir = lib.mkOption {
+      type = lib.types.str;
       default = "~/";
       description = ''
         Root directory for notebooks.
       '';
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = "jupyter";
       description = ''
         Name of the user used to run the jupyter service.
@@ -76,8 +79,8 @@ in {
       example = "aborsu";
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = "jupyter";
       description = ''
         Name of the group used to run the jupyter service.
@@ -86,8 +89,8 @@ in {
       example = "users";
     };
 
-    password = mkOption {
-      type = types.str;
+    password = lib.mkOption {
+      type = lib.types.str;
       description = ''
         Password to use with notebook.
         Can be generated using:
@@ -102,21 +105,27 @@ in {
       example = "'sha1:1b961dc713fb:88483270a63e57d18d43cf337e629539de1436ba'";
     };
 
-    notebookConfig = mkOption {
-      type = types.lines;
+    notebookConfig = lib.mkOption {
+      type = lib.types.lines;
       default = "";
       description = ''
         Raw jupyter config.
       '';
     };
 
-    kernels = mkOption {
-      type = types.nullOr (types.attrsOf(types.submodule (import ./kernel-options.nix {
-        inherit lib pkgs;
-      })));
+    kernels = lib.mkOption {
+      type = lib.types.nullOr (
+        lib.types.attrsOf (
+          lib.types.submodule (
+            import ./kernel-options.nix {
+              inherit lib pkgs;
+            }
+          )
+        )
+      );
 
       default = null;
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           python3 = let
             env = (pkgs.python3.withPackages (pythonPackages: with pythonPackages; [
@@ -153,8 +162,8 @@ in {
     };
   };
 
-  config = mkMerge [
-    (mkIf cfg.enable  {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
       systemd.services.jupyter = {
         description = "Jupyter development server";
 
@@ -170,12 +179,13 @@ in {
 
         serviceConfig = {
           Restart = "always";
-          ExecStart = ''${package}/bin/${cfg.command} \
-            --no-browser \
-            --ip=${cfg.ip} \
-            --port=${toString cfg.port} --port-retries 0 \
-            --notebook-dir=${cfg.notebookDir} \
-            --NotebookApp.config_file=${notebookConfig}
+          ExecStart = ''
+            ${package}/bin/${cfg.command} \
+                        --no-browser \
+                        --ip=${cfg.ip} \
+                        --port=${toString cfg.port} --port-retries 0 \
+                        --notebook-dir=${cfg.notebookDir} \
+                        --NotebookApp.config_file=${notebookConfig}
           '';
           User = cfg.user;
           Group = cfg.group;
@@ -183,12 +193,12 @@ in {
         };
       };
     })
-    (mkIf (cfg.enable && (cfg.group == "jupyter")) {
-      users.groups.jupyter = {};
+    (lib.mkIf (cfg.enable && (cfg.group == "jupyter")) {
+      users.groups.jupyter = { };
     })
-    (mkIf (cfg.enable && (cfg.user == "jupyter")) {
+    (lib.mkIf (cfg.enable && (cfg.user == "jupyter")) {
       users.extraUsers.jupyter = {
-        extraGroups = [ cfg.group ];
+        inherit (cfg) group;
         home = "/var/lib/jupyter";
         createHome = true;
         isSystemUser = true;

@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "seq66";
-  version = "0.99.13";
+  version = "0.99.16";
 
   src = fetchFromGitHub {
     owner = "ahlstromcj";
     repo = "seq66";
     rev = version;
-    hash = "sha256-hR8kEt3tKnH96JmmkMuY0WWxxp9YTcSvsJvICKNjvyQ=";
+    hash = "sha256-HXmpAgztIr6fUdksBPyLli/eMoD3Xlfs+UhHvfrZe0U=";
   };
 
   nativeBuildInputs = [ autoreconfHook pkg-config qttools which wrapQtAppsHook ];

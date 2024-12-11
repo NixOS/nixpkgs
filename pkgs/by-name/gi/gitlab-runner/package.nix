@@ -70,6 +70,6 @@ buildGoModule rec {
     license = licenses.mit;
     homepage = "https://docs.gitlab.com/runner/";
     platforms = platforms.unix ++ platforms.darwin;
-    maintainers = with maintainers; [ bachp zimbatm ] ++ teams.gitlab.members;
+    maintainers = with maintainers; [ zimbatm ] ++ teams.gitlab.members;
   };
 }

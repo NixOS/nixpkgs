@@ -88,7 +88,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     homepage = "https://idealo.github.io/imagededup/";
-    changelog = "https://github.com/idealo/imagededup/releases/tag/${src.rev}";
+    changelog = "https://github.com/idealo/imagededup/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
     description = "Finding duplicate images made easy";
     license = licenses.asl20;
     maintainers = with maintainers; [ stunkymonkey ];

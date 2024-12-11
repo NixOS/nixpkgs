@@ -2,27 +2,32 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  isPy27,
   nbconvert,
   pytestCheckHook,
   requests,
   responses,
+  setuptools,
+  versioneer,
 }:
 
 buildPythonPackage rec {
   pname = "nbconflux";
   version = "0.7.0";
-  format = "setuptools";
-  disabled = isPy27; # no longer compatible with python 2 urllib
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = "Valassis-Digital-Media";
+    owner = "vericast";
     repo = "nbconflux";
     rev = "refs/tags/${version}";
     hash = "sha256-kHIuboFKLVsu5zlZ0bM1BUoQR8f1l0XWcaaVI9bECJw=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [
+    setuptools
+    versioneer
+  ];
+
+  dependencies = [
     nbconvert
     requests
   ];
@@ -36,6 +41,11 @@ buildPythonPackage rec {
     # The original setup.py file is missing commas in the install_requires list
     ./setup-py.patch
   ];
+
+  postPatch = ''
+    # remove vendorized versioneer.py
+    rm versioneer.py
+  '';
 
   JUPYTER_PATH = "${nbconvert}/share/jupyter";
   disabledTests = [

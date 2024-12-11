@@ -1,4 +1,9 @@
-{ lib, skawarePackages, skalibs, execline }:
+{
+  lib,
+  skawarePackages,
+  skalibs,
+  execline,
+}:
 
 skawarePackages.buildPackage {
   pname = "s6";
@@ -18,7 +23,12 @@ skawarePackages.buildPackage {
   # NOTE lib: cannot split lib from bin at the moment,
   # since some parts of lib depend on executables in bin.
   # (the `*_startf` functions in `libs6`)
-  outputs = [ /*"bin" "lib"*/ "out" "dev" "doc" ];
+  outputs = [
+    # "bin" "lib"
+    "out"
+    "dev"
+    "doc"
+  ];
 
   # TODO: nsss support
   configureFlags = [

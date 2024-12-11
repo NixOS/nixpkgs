@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchzip
+{ lib, stdenv, fetchurl, fetchzip
 , callPackage, newScope, recurseIntoAttrs, ocamlPackages_4_05, ocamlPackages_4_09
 , ocamlPackages_4_10, ocamlPackages_4_12, ocamlPackages_4_14
 , fetchpatch, makeWrapper, coq2html
@@ -11,7 +11,7 @@ let
       coqPackages = self // { __attrsFailEvaluation = true; recurseForDerivations = false; };
 
       metaFetch = import ../build-support/coq/meta-fetch/default.nix
-        {inherit lib stdenv fetchzip; };
+        {inherit lib stdenv fetchzip fetchurl; };
       mkCoqDerivation = lib.makeOverridable (callPackage ../build-support/coq {});
 
       contribs = recurseIntoAttrs
@@ -19,7 +19,11 @@ let
 
       aac-tactics = callPackage ../development/coq-modules/aac-tactics {};
       addition-chains = callPackage ../development/coq-modules/addition-chains {};
+      async-test = callPackage ../development/coq-modules/async-test {};
+      atbr = callPackage ../development/coq-modules/atbr {};
       autosubst = callPackage ../development/coq-modules/autosubst {};
+      autosubst-ocaml = callPackage ../development/coq-modules/autosubst-ocaml {};
+      bbv = callPackage ../development/coq-modules/bbv {};
       bignums = if lib.versionAtLeast coq.coq-version "8.6"
         then callPackage ../development/coq-modules/bignums {}
         else null;
@@ -38,7 +42,6 @@ let
       };
       coq-bits = callPackage ../development/coq-modules/coq-bits {};
       coq-elpi = callPackage ../development/coq-modules/coq-elpi {};
-      coq-ext-lib = callPackage ../development/coq-modules/coq-ext-lib {};
       coq-hammer = callPackage ../development/coq-modules/coq-hammer { };
       coq-hammer-tactics = callPackage ../development/coq-modules/coq-hammer/tactics.nix { };
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
@@ -54,10 +57,13 @@ let
       coqprime = callPackage ../development/coq-modules/coqprime {};
       coqtail-math = callPackage ../development/coq-modules/coqtail-math {};
       coquelicot = callPackage ../development/coq-modules/coquelicot {};
+      coqutil = callPackage ../development/coq-modules/coqutil {};
       corn = callPackage ../development/coq-modules/corn {};
       deriving = callPackage ../development/coq-modules/deriving {};
       dpdgraph = callPackage ../development/coq-modules/dpdgraph {};
+      ElmExtraction = callPackage ../development/coq-modules/ElmExtraction {};
       equations = callPackage ../development/coq-modules/equations { };
+      ExtLib = callPackage ../development/coq-modules/ExtLib {};
       extructures = callPackage ../development/coq-modules/extructures { };
       fiat_HEAD = callPackage ../development/coq-modules/fiat/HEAD.nix {};
       flocq = callPackage ../development/coq-modules/flocq {};
@@ -71,6 +77,7 @@ let
       hierarchy-builder = callPackage ../development/coq-modules/hierarchy-builder {};
       high-school-geometry = callPackage ../development/coq-modules/high-school-geometry {};
       HoTT = callPackage ../development/coq-modules/HoTT {};
+      http = callPackage ../development/coq-modules/http {};
       hydra-battles = callPackage ../development/coq-modules/hydra-battles {};
       interval = callPackage ../development/coq-modules/interval {};
       InfSeqExt = callPackage ../development/coq-modules/InfSeqExt {};
@@ -78,6 +85,9 @@ let
       iris-named-props = callPackage ../development/coq-modules/iris-named-props {};
       itauto = callPackage ../development/coq-modules/itauto { };
       ITree = callPackage ../development/coq-modules/ITree { };
+      itree-io = callPackage ../development/coq-modules/itree-io { };
+      json = callPackage ../development/coq-modules/json {};
+      lemma-overloading = callPackage ../development/coq-modules/lemma-overloading {};
       LibHyps = callPackage ../development/coq-modules/LibHyps {};
       ltac2 = callPackage ../development/coq-modules/ltac2 {};
       math-classes = callPackage ../development/coq-modules/math-classes { };
@@ -92,24 +102,37 @@ let
       mathcomp-abel = callPackage ../development/coq-modules/mathcomp-abel {};
       mathcomp-algebra-tactics = callPackage ../development/coq-modules/mathcomp-algebra-tactics {};
       mathcomp-analysis = callPackage ../development/coq-modules/mathcomp-analysis {};
+      mathcomp-analysis-stdlib = self.mathcomp-analysis.analysis-stdlib;
       mathcomp-apery = callPackage ../development/coq-modules/mathcomp-apery {};
       mathcomp-bigenough = callPackage ../development/coq-modules/mathcomp-bigenough {};
       mathcomp-classical = self.mathcomp-analysis.classical;
+      mathcomp-experimental-reals = self.mathcomp-analysis.experimental-reals;
       mathcomp-finmap = callPackage ../development/coq-modules/mathcomp-finmap {};
       mathcomp-infotheo = callPackage ../development/coq-modules/mathcomp-infotheo {};
       mathcomp-real-closed = callPackage ../development/coq-modules/mathcomp-real-closed {};
+      mathcomp-reals = self.mathcomp-analysis.reals;
+      mathcomp-reals-stdlib = self.mathcomp-analysis.reals-stdlib;
       mathcomp-tarjan = callPackage ../development/coq-modules/mathcomp-tarjan {};
       mathcomp-word = callPackage ../development/coq-modules/mathcomp-word {};
       mathcomp-zify = callPackage ../development/coq-modules/mathcomp-zify {};
       MenhirLib = callPackage ../development/coq-modules/MenhirLib {};
       metacoq = callPackage ../development/coq-modules/metacoq { };
-      metacoq-template-coq = self.metacoq.template-coq;
-      metacoq-pcuic        = self.metacoq.pcuic;
-      metacoq-safechecker  = self.metacoq.safechecker;
-      metacoq-erasure      = self.metacoq.erasure;
+      metacoq-utils              = self.metacoq.utils;
+      metacoq-common             = self.metacoq.common;
+      metacoq-template-coq       = self.metacoq.template-coq;
+      metacoq-pcuic              = self.metacoq.pcuic;
+      metacoq-safechecker        = self.metacoq.safechecker;
+      metacoq-template-pcuic     = self.metacoq.template-pcuic;
+      metacoq-erasure            = self.metacoq.erasure;
+      metacoq-quotation          = self.metacoq.quotation;
+      metacoq-safechecker-plugin = self.metacoq.safechecker-plugin;
+      metacoq-erasure-plugin     = self.metacoq.erasure-plugin;
+      metacoq-translations       = self.metacoq.translations;
       metalib = callPackage ../development/coq-modules/metalib { };
+      mtac2 = callPackage ../development/coq-modules/mtac2 {};
       multinomials = callPackage ../development/coq-modules/multinomials {};
       odd-order = callPackage ../development/coq-modules/odd-order { };
+      Ordinal = callPackage ../development/coq-modules/Ordinal {};
       paco = callPackage ../development/coq-modules/paco {};
       paramcoq = callPackage ../development/coq-modules/paramcoq {};
       parsec = callPackage ../development/coq-modules/parsec {};
@@ -117,6 +140,8 @@ let
       QuickChick = callPackage ../development/coq-modules/QuickChick {};
       reglang = callPackage ../development/coq-modules/reglang {};
       relation-algebra = callPackage ../development/coq-modules/relation-algebra {};
+      rewriter = callPackage ../development/coq-modules/rewriter {};
+      RustExtraction = callPackage ../development/coq-modules/RustExtraction {};
       semantics = callPackage ../development/coq-modules/semantics {};
       serapi = callPackage ../development/coq-modules/serapi {};
       simple-io = callPackage ../development/coq-modules/simple-io { };
@@ -130,6 +155,7 @@ let
       tlc = callPackage ../development/coq-modules/tlc {};
       topology = callPackage ../development/coq-modules/topology {};
       trakt = callPackage ../development/coq-modules/trakt {};
+      unicoq = callPackage ../development/coq-modules/unicoq {};
       vcfloat = callPackage ../development/coq-modules/vcfloat (lib.optionalAttrs
         (lib.versions.range "8.16" "8.18" self.coq.version) {
           interval = self.interval.override { version = "4.9.0"; };
@@ -153,6 +179,7 @@ let
             paco = self.paco.override { version = "4.1.2"; };
           };
        }));
+      waterproof = callPackage ../development/coq-modules/waterproof {};
       zorns-lemma = callPackage ../development/coq-modules/zorns-lemma {};
       filterPackages = doesFilter: if doesFilter then filterCoqPackages self else self;
     };
@@ -224,6 +251,6 @@ in rec {
   coqPackages_8_19 = mkCoqPackages coq_8_19;
   coqPackages_8_20 = mkCoqPackages coq_8_20;
 
-  coqPackages = recurseIntoAttrs coqPackages_8_19;
+  coqPackages = recurseIntoAttrs coqPackages_8_20;
   coq = coqPackages.coq;
 }

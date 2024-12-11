@@ -8,14 +8,13 @@
   pycryptodome,
   pytestCheckHook,
   pythonOlder,
-  rich,
   setuptools,
   setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "dissect-hypervisor";
-  version = "3.14";
+  version = "3.16";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +23,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.hypervisor";
     rev = "refs/tags/${version}";
-    hash = "sha256-27GfO1HEy9EWdWuPkznOjju6Xy3W2kjKDP0gF3NqYs0=";
+    hash = "sha256-9Ev7/W/+gfljBPCu4OGXzg2cWkUNFijcaRtKGkTck5k=";
   };
 
   build-system = [
@@ -38,10 +37,9 @@ buildPythonPackage rec {
     dissect-util
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     full = [
       pycryptodome
-      rich
     ];
   };
 

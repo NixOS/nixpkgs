@@ -1,19 +1,16 @@
 {
   lib,
-  buildPythonApplication,
   buildPythonPackage,
   fetchFromGitHub,
-  makeWrapper,
   pytestCheckHook,
-  python,
   pythonOlder,
-  ruff,
   setuptools,
   click-default-group,
   numpy,
   openai,
   pip,
   pluggy,
+  puremagic,
   pydantic,
   python-ulid,
   pyyaml,
@@ -25,28 +22,29 @@
 let
   llm = buildPythonPackage rec {
     pname = "llm";
-    version = "0.14";
+    version = "0.19.1";
     pyproject = true;
+
+    build-system = [ setuptools ];
 
     disabled = pythonOlder "3.8";
 
     src = fetchFromGitHub {
       owner = "simonw";
       repo = "llm";
-      rev = "refs/tags/${version}";
-      hash = "sha256-CgGVFUsntVkF0zORAtYQQMAeGtIwBbj9hE0Ei1OCGq4=";
+      tag = version;
+      hash = "sha256-MMqlcKSvBAdM6Xfz3MQTIbCfWEqzVeCPzuJJzFVpxb4=";
     };
 
     patches = [ ./001-disable-install-uninstall-commands.patch ];
 
-    nativeBuildInputs = [ setuptools ];
-
-    propagatedBuildInputs = [
+    dependencies = [
       click-default-group
       numpy
       openai
       pip
       pluggy
+      puremagic
       pydantic
       python-ulid
       pyyaml
@@ -81,37 +79,18 @@ let
       changelog = "https://github.com/simonw/llm/releases/tag/${version}";
       license = licenses.asl20;
       mainProgram = "llm";
-      maintainers = with maintainers; [ aldoborrero ];
+      maintainers = with maintainers; [
+        aldoborrero
+        mccartykim
+      ];
     };
   };
 
-  withPlugins =
-    plugins:
-    buildPythonApplication {
-      inherit (llm) pname version;
-      format = "other";
+  withPlugins = throw ''
+    llm.withPlugins was confusing to use and has been removed.
+    Please migrate to using python3.withPackages(ps: [ ps.llm ]) instead.
 
-      disabled = pythonOlder "3.8";
-
-      dontUnpack = true;
-      dontBuild = true;
-      doCheck = false;
-
-      nativeBuildInputs = [ makeWrapper ];
-
-      installPhase = ''
-        makeWrapper ${llm}/bin/llm $out/bin/llm \
-          --prefix PYTHONPATH : "${llm}/${python.sitePackages}:$PYTHONPATH"
-        ln -sfv ${llm}/lib $out/lib
-      '';
-
-      propagatedBuildInputs = llm.propagatedBuildInputs ++ plugins;
-
-      passthru = llm.passthru // {
-        withPlugins = morePlugins: withPlugins (morePlugins ++ plugins);
-      };
-
-      inherit (llm) meta;
-    };
+    See https://nixos.org/manual/nixpkgs/stable/#python.withpackages-function for more usage examples.
+  '';
 in
 llm

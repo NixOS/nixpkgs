@@ -13,13 +13,13 @@
 
 buildDotnetModule rec {
   pname = "jellyfin";
-  version = "10.9.7"; # ensure that jellyfin-web has matching version
+  version = "10.10.3"; # ensure that jellyfin-web has matching version
 
   src = fetchFromGitHub {
     owner = "jellyfin";
     repo = "jellyfin";
     rev = "v${version}";
-    sha256 = "sha256-jxOFbmYrgxP6jbjnWubajqXInLXu7TO4vssU4E1oeoc=";
+    hash = "sha256-kobe2hlcDzYHMMTaRtfC8L9f2W1eS2SNcYolWr+wsJQ=";
   };
 
   propagatedBuildInputs = [ sqlite ];
@@ -37,8 +37,10 @@ buildDotnetModule rec {
   dotnetBuildFlags = [ "--no-self-contained" ];
 
   makeWrapperArgs = [
-    "--add-flags" "--ffmpeg=${jellyfin-ffmpeg}/bin/ffmpeg"
-    "--add-flags" "--webdir=${jellyfin-web}/share/jellyfin-web"
+    "--add-flags"
+    "--ffmpeg=${jellyfin-ffmpeg}/bin/ffmpeg"
+    "--add-flags"
+    "--webdir=${jellyfin-web}/share/jellyfin-web"
   ];
 
   passthru.tests = {

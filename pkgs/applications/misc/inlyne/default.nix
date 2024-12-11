@@ -1,51 +1,56 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, pkg-config
-, fontconfig
-, xorg
-, libxkbcommon
-, wayland
-, libGL
-, openssl
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  pkg-config,
+  fontconfig,
+  xorg,
+  libxkbcommon,
+  wayland,
+  libGL,
+  openssl,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "inlyne";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
-    owner = "trimental";
+    owner = "Inlyne-Project";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Kae8WnahA/6k6QT5htYU2+diAFkmxVsbVaxRUlhf39o=";
+    hash = "sha256-j4DEau7LZxIoVIIYwCUgqmkSgdRxWzF5/vOS0lvjgUk=";
   };
 
-  cargoHash = "sha256-M6daK2y9HBRDV2wQjw87g1QYOqiJBfRf9uW1Eg6z6C8=";
+  cargoHash = "sha256-fMovzaP+R0CUwJy1HKATH2tPrIPwzGtubF1WHUoQDRY=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ] ++ lib.optionals stdenv.isLinux [
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      installShellFiles
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pkg-config
+    ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    fontconfig
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libxcb
-    wayland
-    libxkbcommon
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.AppKit
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      fontconfig
+      xorg.libXcursor
+      xorg.libXi
+      xorg.libXrandr
+      xorg.libxcb
+      wayland
+      libxkbcommon
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.AppKit
+    ];
 
-  checkFlags = lib.optionals stdenv.isDarwin [
+  checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # time out on darwin
     "--skip=interpreter::tests::centered_image_with_size_align_and_link"
     "--skip=watcher::tests::the_gauntlet"
@@ -58,15 +63,20 @@ rustPlatform.buildRustPackage rec {
       --zsh completions/_inlyne
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/inlyne \
-      --add-rpath ${lib.makeLibraryPath [ libGL xorg.libX11 ]}
+      --add-rpath ${
+        lib.makeLibraryPath [
+          libGL
+          xorg.libX11
+        ]
+      }
   '';
 
   meta = with lib; {
     description = "GPU powered browserless markdown viewer";
-    homepage = "https://github.com/trimental/inlyne";
-    changelog = "https://github.com/trimental/inlyne/releases/tag/${src.rev}";
+    homepage = "https://github.com/Inlyne-Project/inlyne";
+    changelog = "https://github.com/Inlyne-Project/inlyne/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "inlyne";

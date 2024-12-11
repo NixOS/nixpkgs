@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "motor";
-  version = "3.5.1";
+  version = "3.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "mongodb";
     repo = "motor";
     rev = "refs/tags/${version}";
-    hash = "sha256-mg31FzMF0xEEhfLKAdF2pzEkULESFFGaXnE0uospXqE=";
+    hash = "sha256-fSHb39C4WaQVt7jT714kxwkpUw3mV9jNgkdUyVnD+S4=";
   };
 
   build-system = [

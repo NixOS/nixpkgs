@@ -36,7 +36,7 @@ buildPythonPackage rec {
     hash = "sha256-n9yN/VRNQWCxh+BoliIMkKqJC51inpB9DQ9WtqR4oA0=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices
     libiconv
   ];

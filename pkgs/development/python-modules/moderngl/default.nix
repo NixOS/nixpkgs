@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "moderngl";
-  version = "5.11.1";
+  version = "5.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-rEVNXqhDHy9/DJXijaIEPb0wNTjChH/uBXA55AfdGRE=";
+    hash = "sha256-UpNqmMyy8uHW48sYUospGfaDHn4/kk54i1hzutzlEps=";
   };
 
   build-system = [ setuptools ];
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     changelog = "https://github.com/moderngl/moderngl/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ c0deaddict ];
-    # should be mesaPlatforms, darwin build breaks.
+    # should be mesa.meta.platforms, darwin build breaks.
     platforms = platforms.linux;
   };
 }

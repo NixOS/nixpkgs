@@ -1,17 +1,18 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitHub
-, numpy
-, scipy
-, ase
-, joblib
-, sparse
-, pybind11
-, scikit-learn
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
+  numpy,
+  scipy,
+  ase,
+  joblib,
+  sparse,
+  pybind11,
+  scikit-learn,
 }:
 
 buildPythonPackage rec {
-  name = "dscribe";
+  pname = "dscribe";
   version = "2.1.1";
 
   src = fetchFromGitHub {

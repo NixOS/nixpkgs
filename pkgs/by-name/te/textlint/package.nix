@@ -28,13 +28,13 @@
 
 buildNpmPackage rec {
   pname = "textlint";
-  version = "14.1.0";
+  version = "14.3.0";
 
   src = fetchFromGitHub {
     owner = "textlint";
     repo = "textlint";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/pXUqpQ3cRjcwZAfBVpf9K9JsPmxB9iX8p64iE/n/68=";
+    hash = "sha256-FbPJr7oTsU7WC5RTXyG7X5d0KPJJqRbjGwM/F023Cx8=";
   };
 
   patches = [
@@ -44,7 +44,7 @@ buildNpmPackage rec {
     ./remove-workspaces.patch
   ];
 
-  npmDepsHash = "sha256-FnDKPLhf9OxwRrrBJgejp4X13FGEI317yTgI3tA5cX8=";
+  npmDepsHash = "sha256-l+1JntqIPttuYXKsVEdJOB1qQfsoheZk+7Z7OJ67z5E=";
 
   nativeBuildInputs =
     [

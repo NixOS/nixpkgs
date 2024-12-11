@@ -1,40 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, appstream-glib
-, cargo
-, dbus
-, desktop-file-utils
-, glib
-, glib-networking
-, gst_all_1
-, gtk4
-, libadwaita
-, libpulseaudio
-, libsoup_3
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  cargo,
+  dbus,
+  desktop-file-utils,
+  glib,
+  glib-networking,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  libpulseaudio,
+  libsoup_3,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mousai";
-  version = "0.7.7";
+  version = "0.7.8";
 
   src = fetchFromGitHub {
     owner = "SeaDve";
     repo = "Mousai";
     rev = "v${version}";
-    hash = "sha256-8N/31WhE79qLzhWxa0EJXJ4k/rg7HUqXZkidbgwNHo4=";
+    hash = "sha256-lib2rPUTKudzbZQIGZxxxzvWNlbLkLdWtb9h7+C05QE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-FjnRI1vHA9YF/Uw2+hDtMJmeJVa5RcxaYoG4XgXa9Ds=";
+    inherit pname version src;
+    hash = "sha256-KrOvPeT8zhxSTNDRJPrAbUnSgnIQegRmNe5TEgGE8+s=";
   };
 
   nativeBuildInputs = [

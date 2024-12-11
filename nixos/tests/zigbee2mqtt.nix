@@ -1,7 +1,9 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }:
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
   {
     name = "zigbee2mqtt";
-    nodes.machine = { pkgs, ... }:
+    nodes.machine =
+      { pkgs, ... }:
       {
         systemd.services.dummy-serial = {
           wantedBy = [
@@ -23,7 +25,7 @@ import ./make-test-python.nix ({ pkgs, lib, ... }:
       machine.wait_for_unit("multi-user.target")
       machine.wait_until_fails("systemctl status zigbee2mqtt.service")
       machine.succeed(
-          "journalctl -eu zigbee2mqtt | grep 'Failed to connect to the adapter'"
+          "journalctl -eu zigbee2mqtt | grep 'Error: Inappropriate ioctl for device, cannot set'"
       )
 
       machine.log(machine.succeed("systemd-analyze security zigbee2mqtt.service"))

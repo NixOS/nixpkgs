@@ -1,14 +1,20 @@
-{ lib
-, buildPythonPackage
-, autodock-vina
-, boost
-, swig
-, setuptools
-, numpy
+{
+  lib,
+  buildPythonPackage,
+  autodock-vina,
+  boost,
+  swig,
+  setuptools,
+  numpy,
 }:
 
 buildPythonPackage {
-  inherit (autodock-vina) pname version src meta;
+  inherit (autodock-vina)
+    pname
+    version
+    src
+    meta
+    ;
 
   format = "pyproject";
 

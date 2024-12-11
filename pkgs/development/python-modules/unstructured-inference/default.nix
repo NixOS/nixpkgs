@@ -6,7 +6,7 @@
   layoutparser,
   python-multipart,
   huggingface-hub,
-  opencv,
+  opencv-python,
   onnxruntime,
   transformers,
   detectron2,
@@ -17,40 +17,36 @@
   click,
   httpx,
   mypy,
-  pytest-cov,
+  pytest-cov-stub,
   pdf2image,
 }:
 
 buildPythonPackage rec {
   pname = "unstructured-inference";
-  version = "0.7.24";
+  version = "0.7.37";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured-inference";
     rev = "refs/tags/${version}";
-    hash = "sha256-AxQHTUgE4CyiinT7HEh6fvbw+uVi7lKUgfOc1KZOezU=";
+    hash = "sha256-2k7gFlBUevVnz2A5pvUE4eIGmXwEr5s4F8BbX6j5lzc=";
   };
-
-  postPatch = ''
-    substituteInPlace requirements/base.in \
-      --replace "opencv-python" "opencv"
-  '';
 
   propagatedBuildInputs =
     [
       layoutparser
       python-multipart
       huggingface-hub
-      opencv
+      opencv-python
       onnxruntime
       transformers
       detectron2
       paddleocr
       # yolox
     ]
-    ++ layoutparser.optional-dependencies.layoutmodels ++ layoutparser.optional-dependencies.tesseract;
+    ++ layoutparser.optional-dependencies.layoutmodels
+    ++ layoutparser.optional-dependencies.tesseract;
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -58,7 +54,7 @@ buildPythonPackage rec {
     click
     httpx
     mypy
-    pytest-cov
+    pytest-cov-stub
     pdf2image
     huggingface-hub
   ];

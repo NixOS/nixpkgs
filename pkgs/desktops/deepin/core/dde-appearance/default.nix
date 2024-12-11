@@ -1,18 +1,15 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, dtkgui
-, gsettings-qt
-, gtk3
-, kconfig
-, kwindowsystem
-, kglobalaccel
-, xorg
-, iconv
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libsForQt5,
+  dtkgui,
+  gsettings-qt,
+  gtk3,
+  xorg,
+  iconv,
 }:
 
 stdenv.mkDerivation rec {
@@ -50,16 +47,16 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [
     dtkgui
     gsettings-qt
     gtk3
-    kconfig
-    kwindowsystem
-    kglobalaccel
+    libsForQt5.kconfig
+    libsForQt5.kwindowsystem
+    libsForQt5.kglobalaccel
     xorg.libXcursor
     xorg.xcbutilcursor
   ];

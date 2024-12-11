@@ -30,22 +30,21 @@
 
 buildPythonPackage rec {
   pname = "reptor";
-  version = "0.21";
+  version = "0.24";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Syslifters";
     repo = "reptor";
     rev = "refs/tags/${version}";
-    hash = "sha256-XJCysRGCg5V3ftSsu611mS8btbdebs1EOPTp1Z/6PJ0=";
+    hash = "sha256-OHS9fkJ9BomZNYgnmIv4AVFfLH40LSdvmZskhzdE9II=";
   };
 
   pythonRelaxDeps = true;
 
   build-system = [ setuptools ];
-
 
   dependencies = [
     asgiref
@@ -69,14 +68,14 @@ buildPythonPackage rec {
     xmltodict
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ghostwriter = [ gql ] ++ gql.optional-dependencies.aiohttp;
     translate = [ deepl ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -98,10 +97,10 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Module to do automated pentest reporting with SysReptor";
-    mainProgram = "reptor";
     homepage = "https://github.com/Syslifters/reptor";
     changelog = "https://github.com/Syslifters/reptor/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "reptor";
   };
 }

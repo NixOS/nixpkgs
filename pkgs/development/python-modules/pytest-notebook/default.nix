@@ -12,7 +12,7 @@
   black,
   coverage,
   ipykernel,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-regressions,
   pytestCheckHook,
 }:
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     black
     coverage
     ipykernel
-    pytest-cov
+    pytest-cov-stub
     pytest-regressions
     pytestCheckHook
   ];

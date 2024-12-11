@@ -1,17 +1,28 @@
-{ lib, stdenv, fetchFromGitHub, sqlite, zlib, perl, testers }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  sqlite,
+  zlib,
+  perl,
+  testers,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tippecanoe";
-  version = "2.58.0";
+  version = "2.72.0";
 
   src = fetchFromGitHub {
     owner = "felt";
     repo = "tippecanoe";
     rev = finalAttrs.version;
-    hash = "sha256-YeK036tiU5Z/tf4L+islWJuqbhaNCTtVMoY7jvPPhm4=";
+    hash = "sha256-5Ox/2K9cls8lZ+C/Fh5VQmgNEtbdMW0mh4fhBl6ecP8=";
   };
 
-  buildInputs = [ sqlite zlib ];
+  buildInputs = [
+    sqlite
+    zlib
+  ];
   nativeCheckInputs = [ perl ];
 
   makeFlags = [ "PREFIX=$(out)" ];
@@ -30,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Build vector tilesets from large collections of GeoJSON features";
     homepage = "https://github.com/felt/tippecanoe";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ sikmir ];
+    maintainers = teams.geospatial.members;
     platforms = platforms.unix;
     mainProgram = "tippecanoe";
   };

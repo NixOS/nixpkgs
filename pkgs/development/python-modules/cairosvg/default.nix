@@ -50,12 +50,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "cairosvg" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://cairosvg.org";
     changelog = "https://github.com/Kozea/CairoSVG/releases/tag/${version}";
-    license = licenses.lgpl3Plus;
+    license = lib.licenses.lgpl3Plus;
     description = "SVG converter based on Cairo";
     mainProgram = "cairosvg";
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.sarahec ];
   };
 }

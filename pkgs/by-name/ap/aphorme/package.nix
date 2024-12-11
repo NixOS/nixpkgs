@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, wayland
-, libxkbcommon
-, libGL
-, stdenv
-, testers
-, aphorme
-, autoPatchelfHook
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  wayland,
+  libxkbcommon,
+  libGL,
+  stdenv,
+  testers,
+  aphorme,
+  autoPatchelfHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,7 +27,7 @@ rustPlatform.buildRustPackage rec {
   # No tests exist
   doCheck = false;
 
-  buildInputs = [ stdenv.cc.cc.lib ];
+  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
   nativeBuildInputs = [ autoPatchelfHook ];
 
   runtimeDependencies = [

@@ -1,13 +1,14 @@
-{ lib
-, mkXfceDerivation
-, exo
-, glib
-, gtk3
-, libxfce4ui
-, xfconf
-, libwnck
-, libX11
-, libXmu
+{
+  lib,
+  mkXfceDerivation,
+  exo,
+  glib,
+  gtk3,
+  libxfce4ui,
+  xfconf,
+  libwnck,
+  libX11,
+  libXmu,
 }:
 
 mkXfceDerivation {

@@ -1,34 +1,42 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, pkg-config
-, curl
-, expat
-, gumbo
-, ncurses
-, sqlite
-, yajl
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  pkg-config,
+  curl,
+  expat,
+  gumbo,
+  ncurses,
+  sqlite,
+  yajl,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newsraft";
-  version = "0.25";
+  version = "0.27";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "newsraft";
     repo = "newsraft";
     rev = "newsraft-${finalAttrs.version}";
-    hash = "sha256-hRWhjv/uCL3w0BUzYho3luCeZPyDsXqxnhx1wMovHY0=";
+    hash = "sha256-MtdFnoB6Dc3xvTCc2PMIp5VsZiU5JE58q6WctM3mDZw=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ curl expat gumbo ncurses sqlite yajl ];
+  buildInputs = [
+    curl
+    expat
+    gumbo
+    ncurses
+    sqlite
+    yajl
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Feed reader for terminal";

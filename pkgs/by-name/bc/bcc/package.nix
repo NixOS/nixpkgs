@@ -1,41 +1,49 @@
-{ audit
-, bash
-, bison
-, cmake
-, elfutils
-, fetchFromGitHub
-, flex
-, iperf
-, lib
-, libbpf
-, llvmPackages
-, luajit
-, makeWrapper
-, netperf
-, nixosTests
-, python3
-, stdenv
-, zip
+{
+  audit,
+  bash,
+  bison,
+  cmake,
+  elfutils,
+  fetchFromGitHub,
+  flex,
+  iperf,
+  lib,
+  libbpf,
+  llvmPackages,
+  luajit,
+  makeWrapper,
+  netperf,
+  nixosTests,
+  python3Packages,
+  stdenv,
+  zip,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "bcc";
-  version = "0.31.0";
+  version = "0.32.0";
 
-  disabled = !stdenv.isLinux;
+  disabled = !stdenv.hostPlatform.isLinux;
 
   src = fetchFromGitHub {
     owner = "iovisor";
     repo = "bcc";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ludgmHFOyBu1CwUiaqczmNui0J8bUBAA5QGBiado8yw=";
+    hash = "sha256-urEHDDBBIdopQiT/QI5WtTbIO45pBk6bTNpfs8q/2hA=";
   };
   format = "other";
 
   buildInputs = with llvmPackages; [
-    llvm llvm.dev libclang
-    elfutils luajit netperf iperf
-    flex bash libbpf
+    llvm
+    llvm.dev
+    libclang
+    elfutils
+    luajit
+    netperf
+    iperf
+    flex
+    bash
+    libbpf
   ];
 
   patches = [
@@ -44,14 +52,14 @@ python3.pkgs.buildPythonApplication rec {
     ./fix-deadlock-detector-import.patch
   ];
 
-  propagatedBuildInputs = [ python3.pkgs.netaddr ];
+  propagatedBuildInputs = [ python3Packages.netaddr ];
   nativeBuildInputs = [
     bison
     cmake
     flex
     llvmPackages.llvm.dev
     makeWrapper
-    python3.pkgs.setuptools
+    python3Packages.setuptools
     zip
   ];
 
@@ -82,7 +90,7 @@ python3.pkgs.buildPythonApplication rec {
 
   preInstall = ''
     # required for setuptool during install
-    export PYTHONPATH=$out/${python3.sitePackages}:$PYTHONPATH
+    export PYTHONPATH=$out/${python3Packages.python.sitePackages}:$PYTHONPATH
   '';
   postInstall = ''
     mkdir -p $out/bin $out/share
@@ -107,7 +115,10 @@ python3.pkgs.buildPythonApplication rec {
     wrapPythonProgramsIn "$out/share/bcc/tools" "$out $pythonPath"
   '';
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   passthru.tests = {
     bpf = nixosTests.bpf;
@@ -115,9 +126,15 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     description = "Dynamic Tracing Tools for Linux";
-    homepage    = "https://iovisor.github.io/bcc/";
-    license     = licenses.asl20;
-    maintainers = with maintainers; [ ragge mic92 thoughtpolice martinetd ];
-    platforms   = platforms.linux;
+    homepage = "https://iovisor.github.io/bcc/";
+    license = licenses.asl20;
+    maintainers = with maintainers; [
+      ragge
+      mic92
+      thoughtpolice
+      martinetd
+      ryan4yin
+    ];
+    platforms = platforms.linux;
   };
 }

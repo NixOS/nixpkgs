@@ -1,35 +1,28 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   fetchpatch2,
   setuptools,
-  hkdf,
+  cryptography,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "spake2";
-  version = "0.8";
+  version = "0.9";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "c17a614b29ee4126206e22181f70a406c618d3c6c62ca6d6779bce95e9c926f4";
+  src = fetchFromGitHub {
+    owner = "warner";
+    repo = "python-spake2";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-WPMGH1OzG+5O+2lNl2sv06/dNardY+BHYDS290Z36vQ=";
   };
 
-  patches = [
-    # https://github.com/warner/python-spake2/pull/16
-    (fetchpatch2 {
-      name = "python312-compat.patch";
-      url = "https://github.com/warner/python-spake2/commit/1b04d33106b105207c97c64b2589c45790720b0b.patch";
-      hash = "sha256-OoBz0lN17VyVGg6UfT+Zj9M1faFTNpPIhxrwCgUwMc8=";
-    })
-  ];
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [ hkdf ];
+  dependencies = [ cryptography ];
 
   pythonImportsCheck = [ "spake2" ];
 

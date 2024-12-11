@@ -17,30 +17,29 @@
 
 buildPythonPackage rec {
   pname = "pydrive2";
-  version = "1.19.0";
+  version = "1.21.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    pname = "PyDrive2";
-    inherit version;
-    hash = "sha256-Ia6n2idjXCw/cFDgICBhkfOwMFxlUDFebo491Sb4tTE=";
+    inherit pname version;
+    hash = "sha256-ZJuE1gxje8cUZIUDlTWqjxJUrRVkI3OfB+XTJQdEfBM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     google-api-python-client
     oauth2client
     pyopenssl
     pyyaml
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     fsspec = [
       appdirs
       fsspec

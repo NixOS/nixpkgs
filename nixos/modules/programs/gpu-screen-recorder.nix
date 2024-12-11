@@ -1,14 +1,20 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.gpu-screen-recorder;
   package = cfg.package.override {
     inherit (config.security) wrapperDir;
   };
-in {
+in
+{
   options = {
     programs.gpu-screen-recorder = {
-      package = lib.mkPackageOption pkgs "gpu-screen-recorder" {};
+      package = lib.mkPackageOption pkgs "gpu-screen-recorder" { };
 
       enable = lib.mkOption {
         type = lib.types.bool;
@@ -27,12 +33,6 @@ in {
       group = "root";
       capabilities = "cap_sys_admin+ep";
       source = "${package}/bin/gsr-kms-server";
-    };
-    security.wrappers."gpu-screen-recorder" = {
-      owner = "root";
-      group = "root";
-      capabilities = "cap_sys_nice+ep";
-      source = "${package}/bin/gpu-screen-recorder";
     };
   };
 

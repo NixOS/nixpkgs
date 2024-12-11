@@ -32,11 +32,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the IEC 60870-5-101/104 protocol";
     homepage = "https://libiec61850.com/";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ stv0g ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ stv0g ];
+    platforms = lib.platforms.unix;
   };
 })

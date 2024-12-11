@@ -1,12 +1,13 @@
-{ haskellPackages
-, lib
-, nodePackages
-, perlPackages
-, python3Packages
-, runCommand
-, testers
-, writers
-, writeText
+{
+  haskellPackages,
+  lib,
+  nodePackages,
+  perlPackages,
+  python3Packages,
+  runCommand,
+  testers,
+  writers,
+  writeText,
 }:
 
 # If you are reading this, you can test these writers by running: nix-build . -A tests.writers
@@ -18,6 +19,8 @@ let
     makeFSharpWriter
     writeBash
     writeBashBin
+    writeBabashka
+    writeBabashkaBin
     writeDash
     writeDashBin
     writeFish
@@ -29,6 +32,8 @@ let
     writeJSBin
     writeJSON
     writeLua
+    writeNim
+    writeNimBin
     writeNu
     writePerl
     writePerlBin
@@ -43,8 +48,9 @@ let
     writeYAML
     ;
 
-  expectSuccess = test:
-    runCommand "run-${test.name}" {} ''
+  expectSuccess =
+    test:
+    runCommand "run-${test.name}" { } ''
       if [[ "$(${test})" != success ]]; then
         echo 'test ${test.name} failed'
         exit 1
@@ -53,8 +59,9 @@ let
       touch $out
     '';
 
-  expectSuccessBin = test:
-    runCommand "run-${test.name}" {} ''
+  expectSuccessBin =
+    test:
+    runCommand "run-${test.name}" { } ''
       if [[ "$(${getExe test})" != success ]]; then
         echo 'test ${test.name} failed'
         exit 1
@@ -63,69 +70,102 @@ let
       touch $out
     '';
 
-  expectDataEqual = { file, expected }:
+  expectDataEqual =
+    { file, expected }:
     let
       expectedFile = writeText "${file.name}-expected" expected;
     in
-    testers.testEqualContents { expected = expectedFile; actual = file; assertion = "${file.name} matches"; };
+    testers.testEqualContents {
+      expected = expectedFile;
+      actual = file;
+      assertion = "${file.name} matches";
+    };
 in
 recurseIntoAttrs {
   bin = recurseIntoAttrs {
-    bash = expectSuccessBin (writeBashBin "test-writers-bash-bin" ''
-     if [[ "test" == "test" ]]; then echo "success"; fi
-    '');
+    bash = expectSuccessBin (
+      writeBashBin "test-writers-bash-bin" ''
+        if [[ "test" == "test" ]]; then echo "success"; fi
+      ''
+    );
 
-    dash = expectSuccessBin (writeDashBin "test-writers-dash-bin" ''
-     test '~' = '~' && echo 'success'
-    '');
+    dash = expectSuccessBin (
+      writeDashBin "test-writers-dash-bin" ''
+        test '~' = '~' && echo 'success'
+      ''
+    );
 
-    fish = expectSuccessBin (writeFishBin "test-writers-fish-bin" ''
-      if test "test" = "test"
+    fish = expectSuccessBin (
+      writeFishBin "test-writers-fish-bin" ''
+        if test "test" = "test"
+          echo "success"
+        end
+      ''
+    );
+
+    babashka = expectSuccessBin (
+      writeBabashkaBin "test-writers-babashka-bin" { } ''
+        (println "success")
+      ''
+    );
+
+    rust = expectSuccessBin (
+      writeRustBin "test-writers-rust-bin" { } ''
+        fn main(){
+          println!("success")
+        }
+      ''
+    );
+
+    haskell = expectSuccessBin (
+      writeHaskellBin "test-writers-haskell-bin" { libraries = [ haskellPackages.acme-default ]; } ''
+        import Data.Default
+
+        int :: Int
+        int = def
+
+        main :: IO ()
+        main = case int of
+          18871 -> putStrLn $ id "success"
+          _ -> print "fail"
+      ''
+    );
+
+    nim = expectSuccessBin (
+      writeNimBin "test-writers-nim-bin" { } ''
         echo "success"
-      end
-    '');
+      ''
+    );
 
-    rust = expectSuccessBin (writeRustBin "test-writers-rust-bin" {} ''
-      fn main(){
-        println!("success")
-      }
-    '');
+    js = expectSuccessBin (
+      writeJSBin "test-writers-js-bin" { libraries = [ nodePackages.semver ]; } ''
+        var semver = require('semver');
 
-    haskell = expectSuccessBin (writeHaskellBin "test-writers-haskell-bin" { libraries = [ haskellPackages.acme-default ]; } ''
-      import Data.Default
+        if (semver.valid('1.2.3')) {
+          console.log('success')
+        } else {
+          console.log('fail')
+        }
+      ''
+    );
 
-      int :: Int
-      int = def
+    perl = expectSuccessBin (
+      writePerlBin "test-writers-perl-bin" { libraries = [ perlPackages.boolean ]; } ''
+        use boolean;
+        print "success\n" if true;
+      ''
+    );
 
-      main :: IO ()
-      main = case int of
-        18871 -> putStrLn $ id "success"
-        _ -> print "fail"
-    '');
+    python3 = expectSuccessBin (
+      writePython3Bin "test-writers-python3-bin" { libraries = [ python3Packages.pyyaml ]; } ''
+        import yaml
 
-    js = expectSuccessBin (writeJSBin "test-writers-js-bin" { libraries = [ nodePackages.semver ]; } ''
-      var semver = require('semver');
-
-      if (semver.valid('1.2.3')) {
-        console.log('success')
-      } else {
-        console.log('fail')
-      }
-    '');
-
-    perl = expectSuccessBin (writePerlBin "test-writers-perl-bin" { libraries = [ perlPackages.boolean ]; } ''
-      use boolean;
-      print "success\n" if true;
-    '');
-
-    python3 = expectSuccessBin (writePython3Bin "test-writers-python3-bin" { libraries = [ python3Packages.pyyaml ]; } ''
-      import yaml
-
-      y = yaml.safe_load("""
-        - test: success
-      """)
-      print(y[0]['test'])
-    '');
+        y = yaml.safe_load("""
+          - test: success
+        """)
+        print(y[0]['test'])
+      ''
+    );
 
     # Commented out because of this issue: https://github.com/NixOS/nixpkgs/issues/39356
 
@@ -171,59 +211,87 @@ recurseIntoAttrs {
   };
 
   simple = recurseIntoAttrs {
-    bash = expectSuccess (writeBash "test-writers-bash" ''
-     if [[ "test" == "test" ]]; then echo "success"; fi
-    '');
+    bash = expectSuccess (
+      writeBash "test-writers-bash" ''
+        if [[ "test" == "test" ]]; then echo "success"; fi
+      ''
+    );
 
-    dash = expectSuccess (writeDash "test-writers-dash" ''
-     test '~' = '~' && echo 'success'
-    '');
+    dash = expectSuccess (
+      writeDash "test-writers-dash" ''
+        test '~' = '~' && echo 'success'
+      ''
+    );
 
-    fish = expectSuccess (writeFish "test-writers-fish" ''
-      if test "test" = "test"
+    fish = expectSuccess (
+      writeFish "test-writers-fish" ''
+        if test "test" = "test"
+          echo "success"
+        end
+      ''
+    );
+
+    nim = expectSuccess (
+      writeNim "test-writers-nim" { } ''
         echo "success"
-      end
-    '');
+      ''
+    );
 
-    nu = expectSuccess (writeNu "test-writers-nushell" ''
-      echo "success"
-    '');
+    nu = expectSuccess (
+      writeNu "test-writers-nushell" ''
+        echo "success"
+      ''
+    );
 
-    haskell = expectSuccess (writeHaskell "test-writers-haskell" { libraries = [ haskellPackages.acme-default ]; } ''
-      import Data.Default
+    babashka = expectSuccess (
+      writeBabashka "test-writers-babashka" { } ''
+        (println "success")
+      ''
+    );
 
-      int :: Int
-      int = def
+    haskell = expectSuccess (
+      writeHaskell "test-writers-haskell" { libraries = [ haskellPackages.acme-default ]; } ''
+        import Data.Default
 
-      main :: IO ()
-      main = case int of
-        18871 -> putStrLn $ id "success"
-        _ -> print "fail"
-    '');
+        int :: Int
+        int = def
 
-    js = expectSuccess (writeJS "test-writers-js" { libraries = [ nodePackages.semver ]; } ''
-      var semver = require('semver');
+        main :: IO ()
+        main = case int of
+          18871 -> putStrLn $ id "success"
+          _ -> print "fail"
+      ''
+    );
 
-      if (semver.valid('1.2.3')) {
-        console.log('success')
-      } else {
-        console.log('fail')
-      }
-    '');
+    js = expectSuccess (
+      writeJS "test-writers-js" { libraries = [ nodePackages.semver ]; } ''
+        var semver = require('semver');
 
-    perl = expectSuccess (writePerl "test-writers-perl" { libraries = [ perlPackages.boolean ]; } ''
-      use boolean;
-      print "success\n" if true;
-    '');
+        if (semver.valid('1.2.3')) {
+          console.log('success')
+        } else {
+          console.log('fail')
+        }
+      ''
+    );
 
-    python3 = expectSuccess (writePython3 "test-writers-python3" { libraries = [ python3Packages.pyyaml ]; } ''
-      import yaml
+    perl = expectSuccess (
+      writePerl "test-writers-perl" { libraries = [ perlPackages.boolean ]; } ''
+        use boolean;
+        print "success\n" if true;
+      ''
+    );
 
-      y = yaml.safe_load("""
-        - test: success
-      """)
-      print(y[0]['test'])
-    '');
+    python3 = expectSuccess (
+      writePython3 "test-writers-python3" { libraries = [ python3Packages.pyyaml ]; } ''
+        import yaml
+
+        y = yaml.safe_load("""
+          - test: success
+        """)
+        print(y[0]['test'])
+      ''
+    );
 
     # Commented out because of this issue: https://github.com/NixOS/nixpkgs/issues/39356
 
@@ -245,72 +313,92 @@ recurseIntoAttrs {
     #  print(y[0]['test'])
     #'');
 
-    fsharp = expectSuccess (makeFSharpWriter {
-      libraries = { fetchNuGet }: [
-        (fetchNuGet { pname = "FSharp.SystemTextJson"; version = "0.17.4"; sha256 = "1bplzc9ybdqspii4q28l8gmfvzpkmgq5l1hlsiyg2h46w881lwg2"; })
-        (fetchNuGet { pname = "System.Text.Json"; version = "4.6.0"; sha256 = "0ism236hwi0k6axssfq58s1d8lihplwiz058pdvl8al71hagri39"; })
-      ];
-    } "test-writers-fsharp" ''
+    # Commented out because fails with 'error FS0039: The value or constructor 'JsonFSharpConverter' is not defined.'
 
-      #r "nuget: FSharp.SystemTextJson, 0.17.4"
-
-      module Json =
-          open System.Text.Json
-          open System.Text.Json.Serialization
-          let options = JsonSerializerOptions()
-          options.Converters.Add(JsonFSharpConverter())
-          let serialize<'a> (o: 'a) = JsonSerializer.Serialize<'a>(o, options)
-          let deserialize<'a> (str: string) = JsonSerializer.Deserialize<'a>(str, options)
-
-      type Letter = A | B
-      let a = {| Hello = Some "World"; Letter = A |}
-      if a |> Json.serialize |> Json.deserialize |> (=) a
-      then "success"
-      else "failed"
-      |> printfn "%s"
-    '');
+    # fsharp = expectSuccess (makeFSharpWriter {
+    #   libraries = { fetchNuGet }: [
+    #     (fetchNuGet { pname = "FSharp.SystemTextJson"; version = "0.17.4"; sha256 = "1bplzc9ybdqspii4q28l8gmfvzpkmgq5l1hlsiyg2h46w881lwg2"; })
+    #     (fetchNuGet { pname = "System.Text.Json"; version = "4.6.0"; sha256 = "0ism236hwi0k6axssfq58s1d8lihplwiz058pdvl8al71hagri39"; })
+    #   ];
+    # } "test-writers-fsharp" ''
+    #
+    #   #r "nuget: FSharp.SystemTextJson, 0.17.4"
+    #
+    #   module Json =
+    #       open System.Text.Json
+    #       open System.Text.Json.Serialization
+    #       let options = JsonSerializerOptions()
+    #       options.Converters.Add(JsonFSharpConverter())
+    #       let serialize<'a> (o: 'a) = JsonSerializer.Serialize<'a>(o, options)
+    #       let deserialize<'a> (str: string) = JsonSerializer.Deserialize<'a>(str, options)
+    #
+    #   type Letter = A | B
+    #   let a = {| Hello = Some "World"; Letter = A |}
+    #   if a |> Json.serialize |> Json.deserialize |> (=) a
+    #   then "success"
+    #   else "failed"
+    #   |> printfn "%s"
+    # '');
 
     #pypy2NoLibs = expectSuccess (writePyPy2 "test-writers-pypy2-no-libs" {} ''
     #  print("success")
     #'');
 
-    python3NoLibs = expectSuccess (writePython3 "test-writers-python3-no-libs" {} ''
-      print("success")
-    '');
+    python3NoLibs = expectSuccess (
+      writePython3 "test-writers-python3-no-libs" { } ''
+        print("success")
+      ''
+    );
 
-    pypy3NoLibs = expectSuccess (writePyPy3 "test-writers-pypy3-no-libs" {} ''
-      print("success")
-    '');
+    pypy3NoLibs = expectSuccess (
+      writePyPy3 "test-writers-pypy3-no-libs" { } ''
+        print("success")
+      ''
+    );
 
-    fsharpNoNugetDeps = expectSuccess (writeFSharp "test-writers-fsharp-no-nuget-deps" ''
-      printfn "success"
-      '');
+    fsharpNoNugetDeps = expectSuccess (
+      writeFSharp "test-writers-fsharp-no-nuget-deps" ''
+        printfn "success"
+      ''
+    );
 
-    luaNoLibs = expectSuccess (writeLua "test-writers-lua-no-libs" {} ''
-      print("success")
-      '');
+    luaNoLibs = expectSuccess (
+      writeLua "test-writers-lua-no-libs" { } ''
+        print("success")
+      ''
+    );
 
-    rubyNoLibs = expectSuccess (writeRuby "test-writers-ruby-no-libs" {} ''
-      puts "success"
-    '');
+    rubyNoLibs = expectSuccess (
+      writeRuby "test-writers-ruby-no-libs" { } ''
+        puts "success"
+      ''
+    );
   };
 
   path = recurseIntoAttrs {
-    bash = expectSuccess (writeBash "test-writers-bash-path" (writeText "test" ''
-      if [[ "test" == "test" ]]; then echo "success"; fi
-    ''));
+    bash = expectSuccess (
+      writeBash "test-writers-bash-path" (
+        writeText "test" ''
+          if [[ "test" == "test" ]]; then echo "success"; fi
+        ''
+      )
+    );
 
-    haskell = expectSuccess (writeHaskell "test-writers-haskell-path" { libraries = [ haskellPackages.acme-default ]; } (writeText "test" ''
-      import Data.Default
+    haskell = expectSuccess (
+      writeHaskell "test-writers-haskell-path" { libraries = [ haskellPackages.acme-default ]; } (
+        writeText "test" ''
+          import Data.Default
 
-      int :: Int
-      int = def
+          int :: Int
+          int = def
 
-      main :: IO ()
-      main = case int of
-        18871 -> putStrLn $ id "success"
-        _ -> print "fail"
-    ''));
+          main :: IO ()
+          main = case int of
+            18871 -> putStrLn $ id "success"
+            _ -> print "fail"
+        ''
+      )
+    );
   };
 
   data = {
@@ -369,6 +457,53 @@ recurseIntoAttrs {
         ''
     );
 
+    babashka-bin = expectSuccessBin (
+      writeBabashkaBin "test-writers-wrapping-babashka-bin"
+        {
+          makeWrapperArgs = [
+            "--set"
+            "ThaigerSprint"
+            "Thailand"
+          ];
+        }
+        ''
+          (when (= (System/getenv "ThaigerSprint") "Thailand")
+            (println "success"))
+        ''
+    );
+
+    babashka = expectSuccess (
+      writeBabashka "test-writers-wrapping-babashka"
+        {
+          makeWrapperArgs = [
+            "--set"
+            "ThaigerSprint"
+            "Thailand"
+          ];
+        }
+        ''
+          (when (= (System/getenv "ThaigerSprint") "Thailand")
+            (println "success"))
+        ''
+    );
+
+    nim = expectSuccess (
+      writeNim "test-writers-wrapping-nim"
+        {
+          makeWrapperArgs = [
+            "--set"
+            "ThaigerSprint"
+            "Thailand"
+          ];
+        }
+        ''
+          import os
+
+          if getEnv("ThaigerSprint") == "Thailand":
+            echo "success"
+        ''
+    );
+
     python = expectSuccess (
       writePython3 "test-writers-wrapping-python"
         {
@@ -404,16 +539,18 @@ recurseIntoAttrs {
         ''
     );
 
-    no-empty-wrapper = let
-      bin = writeBashBin "bin" { makeWrapperArgs = []; } ''true'';
-    in runCommand "run-test-writers-wrapping-no-empty-wrapper" {} ''
-      ls -A ${bin}/bin
-      if [ $(ls -A ${bin}/bin | wc -l) -eq 1 ]; then
-        touch $out
-      else
-        echo "Error: Empty wrapper was created" >&2
-        exit 1
-      fi
-    '';
+    no-empty-wrapper =
+      let
+        bin = writeBashBin "bin" { makeWrapperArgs = [ ]; } ''true'';
+      in
+      runCommand "run-test-writers-wrapping-no-empty-wrapper" { } ''
+        ls -A ${bin}/bin
+        if [ $(ls -A ${bin}/bin | wc -l) -eq 1 ]; then
+          touch $out
+        else
+          echo "Error: Empty wrapper was created" >&2
+          exit 1
+        fi
+      '';
   };
 }

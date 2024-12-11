@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitLab
-, nix-update-script
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitLab,
+  nix-update-script,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "xr-hardware";
@@ -19,7 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   installTargets = "install_package";
-  installFlagsArray = "DESTDIR=${placeholder "out"}";
+  installFlags = "DESTDIR=${placeholder "out"}";
 
   passthru.updateScript = nix-update-script { };
 

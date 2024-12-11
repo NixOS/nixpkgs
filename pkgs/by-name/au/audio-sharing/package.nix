@@ -1,23 +1,24 @@
-{ appstream-glib
-, cargo
-, dbus
-, desktop-file-utils
-, fetchFromGitLab
-, git
-, glib
-, gst_all_1
-, gtk4
-, lib
-, libadwaita
-, meson
-, ninja
-, nix-update-script
-, pkg-config
-, python3
-, rustPlatform
-, rustc
-, stdenv
-, wrapGAppsHook4
+{
+  appstream-glib,
+  cargo,
+  dbus,
+  desktop-file-utils,
+  fetchFromGitLab,
+  git,
+  glib,
+  gst_all_1,
+  gtk4,
+  lib,
+  libadwaita,
+  meson,
+  ninja,
+  nix-update-script,
+  pkg-config,
+  python3,
+  rustPlatform,
+  rustc,
+  stdenv,
+  wrapGAppsHook4,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "audio-sharing";
@@ -37,20 +38,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-FfjSttXf6WF2w59CP6L/+BIuuXp2yKPTku7FMvdIHg0=";
   };
 
-  nativeBuildInputs = [
-    appstream-glib
-    cargo
-    desktop-file-utils
-    git
-    meson
-    ninja
-    pkg-config
-    python3
-    rustc
-    wrapGAppsHook4
-  ] ++ (with rustPlatform; [
-    cargoSetupHook
-  ]);
+  nativeBuildInputs =
+    [
+      appstream-glib
+      cargo
+      desktop-file-utils
+      git
+      meson
+      ninja
+      pkg-config
+      python3
+      rustc
+      wrapGAppsHook4
+    ]
+    ++ (with rustPlatform; [
+      cargoSetupHook
+    ]);
 
   buildInputs = [
     glib

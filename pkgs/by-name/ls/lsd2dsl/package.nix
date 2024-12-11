@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchFromGitHub
-, makeDesktopItem, copyDesktopItems, cmake
-, boost, cups, fmt, libvorbis, libsndfile, minizip, gtest, qt6 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  cmake,
+  boost,
+  cups,
+  fmt,
+  libvorbis,
+  libsndfile,
+  minizip,
+  gtest,
+  qt6,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lsd2dsl";
@@ -20,7 +33,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     qt6.wrapQtAppsHook
-  ] ++ lib.optional stdenv.isLinux copyDesktopItems;
+  ] ++ lib.optional stdenv.hostPlatform.isLinux copyDesktopItems;
 
   buildInputs = [
     boost
@@ -42,7 +55,11 @@ stdenv.mkDerivation rec {
     desktopName = "lsd2dsl";
     genericName = "lsd2dsl";
     comment = meta.description;
-    categories = [ "Dictionary" "FileTools" "Qt" ];
+    categories = [
+      "Dictionary"
+      "FileTools"
+      "Qt"
+    ];
   });
 
   installPhase = ''

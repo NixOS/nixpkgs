@@ -106,7 +106,7 @@ buildPythonPackage rec {
     typer
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     server =
       [
         aiofiles
@@ -178,7 +178,7 @@ buildPythonPackage rec {
     pytest-mock
     pytest-asyncio
     factory-boy
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   disabledTestPaths = [ "tests/server/datasets/test_dao.py" ];
 

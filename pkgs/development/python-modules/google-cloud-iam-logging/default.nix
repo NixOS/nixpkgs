@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-iam-logging";
-  version = "1.3.5";
+  version = "1.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_iam_logging";
     inherit version;
-    hash = "sha256-B/OE8m6CpTddR+nAv9OP/y1V1c32/cUZPzfptAOuMrw=";
+    hash = "sha256-+7rRPIPXmxMbcTRqKTfYXciH1Op760Vm2d969zqJNnM=";
   };
 
   build-system = [ setuptools ];

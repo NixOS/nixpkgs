@@ -1,20 +1,21 @@
-{ rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, lib
+{
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "srgn";
-  version = "0.12.0";
+  version = "0.13.4";
 
   src = fetchFromGitHub {
     owner = "alexpovel";
     repo = "srgn";
     rev = "srgn-v${version}";
-    hash = "sha256-d53aSo1gzINC8WdMzjCHzU/8+9kvrrGglV4WsiCt+rM=";
+    hash = "sha256-KshZ7QnY4TXng9KCcIzdt0E4R83cTEr6fGo9p/riCPU=";
   };
 
-  cargoHash = "sha256-jy7KHcdkI+T8GbT6gH9ppJhQvhv/NPe+jRWKuybtQC4=";
+  cargoHash = "sha256-nWBDVrRzjJY3wzzGdnrcRD7Sj+dmCYprpX5p4PP/Yrw=";
 
   nativeBuildInputs = [ installShellFiles ];
 

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, zstd }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zstd,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ovh-ttyrec";
@@ -8,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "ovh";
     repo = "ovh-ttyrec";
     rev = "v${version}";
-    sha256 = "sha256-VTF9WLwAIWWn+W0sLQaoFBFro+pSXKwcTO6q6MW6JD8=";
+    hash = "sha256-VTF9WLwAIWWn+W0sLQaoFBFro+pSXKwcTO6q6MW6JD8=";
   };
 
   nativeBuildInputs = [ zstd ];
@@ -24,6 +29,9 @@ stdenv.mkDerivation rec {
     description = "Terminal interaction recorder and player";
     license = licenses.bsd3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ chaduffy zimbatm ];
+    maintainers = with maintainers; [
+      chaduffy
+      zimbatm
+    ];
   };
 }

@@ -28,11 +28,11 @@ python.pkgs.buildPythonApplication rec {
     "sqlalchemy-utils"
     "sqlalchemy"
     "pycognito"
+    "qrcode"
     "urllib3"
   ];
 
   build-system = with python.pkgs; [ poetry-core ];
-
 
   dependencies =
     [ awscli ]

@@ -149,12 +149,6 @@ let
             or (if finalAttrs.vendor.composerLock == null then nix-update-script { } else null);
       };
 
-      env = {
-        COMPOSER_CACHE_DIR = "/dev/null";
-        COMPOSER_DISABLE_NETWORK = "1";
-        COMPOSER_MIRROR_PATH_REPOS = "1";
-      };
-
       meta = previousAttrs.meta or composer.meta;
     };
 in

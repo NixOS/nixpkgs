@@ -1,7 +1,8 @@
-{ lib
-, stdenvNoCC
-, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenvNoCC,
+  fetchFromGitHub,
+  python3,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -16,11 +17,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [
-    (python3.withPackages (pp: with pp; [
-      fontforge
-      pillow
-      setuptools
-    ]))
+    (python3.withPackages (
+      pp: with pp; [
+        fontforge
+        pillow
+        setuptools
+      ]
+    ))
   ];
 
   postPatch = ''

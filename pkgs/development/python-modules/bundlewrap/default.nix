@@ -18,8 +18,8 @@
 
 buildPythonPackage rec {
   pname = "bundlewrap";
-  version = "4.19.0";
-  format = "setuptools";
+  version = "4.21.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -27,11 +27,11 @@ buildPythonPackage rec {
     owner = "bundlewrap";
     repo = "bundlewrap";
     rev = "refs/tags/${version}";
-    hash = "sha256-sNdtJRpP54xlkYis4whoGiJJ/Tjnrs4TW6EO3eAMBAo=";
+    hash = "sha256-e9gpWLOiTUZYIybLIfcR5x/NzhJSBFsU0I8LzY9sI5k=";
   };
 
-  nativeBuildInputs = [ setuptools ];
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+  dependencies = [
     setuptools
     cryptography
     jinja2

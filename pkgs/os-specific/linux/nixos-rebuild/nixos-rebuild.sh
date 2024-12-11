@@ -32,6 +32,7 @@ specialisation=
 buildHost=
 targetHost=
 remoteSudo=
+noSSHTTY=
 verboseScript=
 noFlake=
 attr=
@@ -102,21 +103,32 @@ while [ "$#" -gt 0 ]; do
       --use-substitutes|--substitute-on-destination|-s)
         copyFlags+=("-s")
         ;;
-      -I|--max-jobs|-j|--cores|--builders|--log-format)
+      -I|--builders)
         j="$1"; shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
-      --accept-flake-config|-j*|--quiet|--print-build-logs|-L|--no-build-output|-Q| --show-trace|--keep-going|-k|--keep-failed|-K|--fallback|--refresh|--repair|--impure|--offline|--no-net)
+      --max-jobs|-j|--cores|--log-format)
+        j="$1"; shift 1
+        extraBuildFlags+=("$i" "$j")
+        copyFlags+=("$i" "$j")
+        ;;
+      --accept-flake-config|-j*|--quiet|--print-build-logs|-L|--no-build-output|-Q|--show-trace|--refresh|--impure|--offline|--no-net)
         extraBuildFlags+=("$i")
+        ;;
+      --keep-going|-k|--keep-failed|-K|--fallback|--repair)
+        extraBuildFlags+=("$i")
+        copyFlags+=("$i")
         ;;
       --verbose|-v|-vv|-vvv|-vvvv|-vvvvv)
         verboseScript="true"
         extraBuildFlags+=("$i")
+        copyFlags+=("$i")
         ;;
       --option)
         j="$1"; shift 1
         k="$1"; shift 1
         extraBuildFlags+=("$i" "$j" "$k")
+        copyFlags+=("$i" "$j" "$k")
         ;;
       --fast)
         buildNix=
@@ -129,7 +141,7 @@ while [ "$#" -gt 0 ]; do
         fi
         if [ "$1" != system ]; then
             profile="/nix/var/nix/profiles/system-profiles/$1"
-            mkdir -p -m 0755 "$(dirname "$profile")"
+            (umask 022 && mkdir -p "$(dirname "$profile")")
         fi
         shift 1
         ;;
@@ -151,6 +163,9 @@ while [ "$#" -gt 0 ]; do
         ;;
       --use-remote-sudo)
         remoteSudo=1
+        ;;
+      --no-ssh-tty)
+        noSSHTTY=1
         ;;
       --flake)
         flake="$1"
@@ -227,12 +242,18 @@ targetHostCmd() {
 }
 
 targetHostSudoCmd() {
+    local t=
+    if [[ ! "${noSSHTTY:-x}" = 1 ]]; then
+        t="-t"
+    fi
+
     if [ -n "$remoteSudo" ]; then
-        useSudo=1 SSHOPTS="$SSHOPTS -t" targetHostCmd "$@"
+        useSudo=1 SSHOPTS="$SSHOPTS $t" targetHostCmd "$@"
     else
         # While a tty might not be necessary, we apply it to be consistent with
         # sudo usage, and an experience that is more consistent with local deployment.
-        SSHOPTS="$SSHOPTS -t" targetHostCmd "$@"
+        # But if the user really doesn't want it, don't do it.
+        SSHOPTS="$SSHOPTS $t" targetHostCmd "$@"
     fi
 }
 
@@ -285,6 +306,10 @@ nixBuild() {
                 ;;
             esac
         done
+
+        if [[ -z $buildingAttribute ]]; then
+            instArgs+=("$buildFile")
+        fi
 
         drv="$(runCmd nix-instantiate "${instArgs[@]}" "${extraBuildFlags[@]}")"
         if [ -a "$drv" ]; then
@@ -406,6 +431,25 @@ if [[ -z $flake && -e /etc/nixos/flake.nix && -z $noFlake ]]; then
     flake="$(dirname "$(readlink -f /etc/nixos/flake.nix)")"
 fi
 
+tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
+
+if [[ ${#tmpDir} -ge 60 ]]; then
+    # Very long tmp dirs lead to "too long for Unix domain socket"
+    # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
+    rmdir "$tmpDir"
+    tmpDir=$(TMPDIR= mktemp -t -d nixos-rebuild.XXXXXX)
+fi
+
+cleanup() {
+    for ctrl in "$tmpDir"/ssh-*; do
+        ssh -o ControlPath="$ctrl" -O exit dummyhost 2>/dev/null || true
+    done
+    rm -rf "$tmpDir"
+}
+trap cleanup EXIT
+
+SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60"
+
 # For convenience, use the hostname as the default configuration to
 # build from the flake.
 if [[ -n $flake ]]; then
@@ -428,23 +472,6 @@ if [[ ! -z "$specialisation" && ! "$action" = switch && ! "$action" = test ]]; t
     log "error: ‘--specialisation’ can only be used with ‘switch’ and ‘test’"
     exit 1
 fi
-
-tmpDir=$(mktemp -t -d nixos-rebuild.XXXXXX)
-
-if [[ ${#tmpDir} -ge 60 ]]; then
-    # Very long tmp dirs lead to "too long for Unix domain socket"
-    # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
-    rmdir "$tmpDir"
-    tmpDir=$(TMPDIR= mktemp -t -d nixos-rebuild.XXXXXX)
-fi
-
-cleanup() {
-    for ctrl in "$tmpDir"/ssh-*; do
-        ssh -o ControlPath="$ctrl" -O exit dummyhost 2>/dev/null || true
-    done
-    rm -rf "$tmpDir"
-}
-trap cleanup EXIT
 
 
 # Re-execute nixos-rebuild from the Nixpkgs tree.
@@ -488,8 +515,6 @@ if [ "$action" = edit ]; then
     fi
     exit 1
 fi
-
-SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o ControlPersist=60"
 
 # First build Nix, since NixOS may require a newer version than the
 # current one.
@@ -548,6 +573,28 @@ getNixDrv() {
     fi
 }
 
+getVersion() {
+    local dir="$1"
+    local rev=
+    local gitDir="$dir/.git"
+    if [ -e "$gitDir" ]; then
+        if [ -z "$(type -P git)" ]; then
+            echo "warning: Git not found; cannot figure out revision of $dir" >&2
+            return
+        fi
+        cd "$dir"
+        rev=$(git --git-dir="$gitDir" rev-parse --short HEAD)
+        if git --git-dir="$gitDir" describe --always --dirty | grep -q dirty; then
+            rev+=M
+        fi
+    fi
+
+    if [ -n "$rev" ]; then
+        echo ".git.$rev"
+    fi
+}
+
+
 if [[ -n $buildNix && -z $flake ]]; then
     log "building Nix..."
     getNixDrv
@@ -569,7 +616,7 @@ fi
 # nixos-version shows something useful).
 if [[ -n $canRun && -z $flake ]]; then
     if nixpkgs=$(runCmd nix-instantiate --find-file nixpkgs "${extraBuildFlags[@]}"); then
-        suffix=$(runCmd $SHELL "$nixpkgs/nixos/modules/installer/tools/get-version-suffix" "${extraBuildFlags[@]}" || true)
+        suffix=$(getVersion "$nixpkgs" || true)
         if [ -n "$suffix" ]; then
             echo -n "$suffix" > "$nixpkgs/.version-suffix" || true
         fi
@@ -588,7 +635,7 @@ if [ "$action" = repl ]; then
     if [[ -z $buildingAttribute ]]; then
         exec nix repl --file $buildFile $attr "${extraBuildFlags[@]}"
     elif [[ -z $flake ]]; then
-        exec nix repl '<nixpkgs/nixos>' "${extraBuildFlags[@]}"
+        exec nix repl --file '<nixpkgs/nixos>' "${extraBuildFlags[@]}"
     else
         if [[ -n "${lockFlags[0]}" ]]; then
             # nix repl itself does not support locking flags
@@ -812,7 +859,6 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
         "--no-ask-password"
         "--pipe"
         "--quiet"
-        "--same-dir"
         "--service-type=exec"
         "--unit=nixos-rebuild-switch-to-configuration"
         "--wait"

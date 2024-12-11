@@ -1,28 +1,29 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, alsa-lib
-, at-spi2-atk
-, atk
-, cairo
-, cups
-, dbus
-, gcc-unwrapped
-, gdk-pixbuf
-, glib
-, gtk3
-, libdrm
-, libnotify
-, libpulseaudio
-, libxkbcommon
-, mesa
-, nss
-, udev
-, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  alsa-lib,
+  at-spi2-atk,
+  atk,
+  cairo,
+  cups,
+  dbus,
+  gcc-unwrapped,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libdrm,
+  libnotify,
+  libpulseaudio,
+  libxkbcommon,
+  mesa,
+  nss,
+  udev,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
@@ -74,7 +75,12 @@ stdenv.mkDerivation rec {
       icon = pname;
       desktopName = pname;
       comment = "TeamSpeak Voice Communication Client";
-      categories = ["Audio" "AudioVideo" "Chat" "Network"];
+      categories = [
+        "Audio"
+        "AudioVideo"
+        "Chat"
+        "Network"
+      ];
     })
   ];
 

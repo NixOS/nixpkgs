@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # test fails due to unknown reason on darwin
     "test_lru_and_ttl_refresh"
   ];

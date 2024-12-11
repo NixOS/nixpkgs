@@ -1,10 +1,11 @@
-{ buildGoModule
-, fetchFromGitHub
-, getent
-, lib
-, makeWrapper
-, stdenv
-, xdg-utils
+{
+  buildGoModule,
+  fetchFromGitHub,
+  getent,
+  lib,
+  makeWrapper,
+  stdenv,
+  xdg-utils,
 }:
 buildGoModule rec {
   pname = "aws-sso-cli";
@@ -32,9 +33,15 @@ buildGoModule rec {
 
   nativeCheckInputs = [ getent ];
 
-  checkFlags = [
-    "-skip=TestAWSConsoleUrl|TestAWSFederatedUrl"
-  ] ++ lib.optionals stdenv.isDarwin [ "--skip=TestDetectShellBash" ];
+  checkFlags =
+    let
+      skippedTests = [
+        "TestAWSConsoleUrl"
+        "TestAWSFederatedUrl"
+        "TestServerWithSSL" # https://github.com/synfinatic/aws-sso-cli/issues/1030 -- remove when version >= 2.x
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "TestDetectShellBash" ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "$|^" skippedTests}$" ];
 
   meta = with lib; {
     homepage = "https://github.com/synfinatic/aws-sso-cli";

@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "jaraco-collections";
-  version = "5.0.1";
-  format = "pyproject";
+  version = "5.1.0";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "jaraco.collections";
+    pname = "jaraco_collections";
     inherit version;
-    hash = "sha256-gIYxsXS4Sk4qWSSQ1i9i38FdgEeg9xVyYJjcQ7gabPo=";
+    hash = "sha256-DkgpQJ05rRikCqZ1T+4nZ/TZcwxLpm3J34nx0nVplMI=";
   };
 
   postPatch = ''
@@ -24,12 +24,12 @@ buildPythonPackage rec {
     sed -i "/'jaraco.text',/d" setup.cfg
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jaraco-classes
     jaraco-text
   ];

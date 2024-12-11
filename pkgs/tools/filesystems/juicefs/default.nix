@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "juicefs";
-  version = "1.2.0";
+  version = "1.2.2";
 
   src = fetchFromGitHub {
     owner = "juicedata";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-qPdrcWCD8BYwRwnynNhcti7eUskgHP1kAS6KiS0LHsc=";
+    hash = "sha256-DQ3JdP1HKWORPkcP4HJ32eg6aaockZfG+FQhBJnZCFQ=";
   };
 
-  vendorHash = "sha256-tKbn/dFnYTc0fYwYUrrpdN1hzx047yQSFdTG94CifhM=";
+  vendorHash = "sha256-fHmLTAn4W8KMtZ1Ov4gBQTUpzHqQnipGSQs5hr1MD3w=";
 
   excludedPackages = [ "sdk/java/libjfs" ];
 

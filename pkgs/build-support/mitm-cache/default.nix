@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, callPackage
-, rustPlatform
-, substituteAll
-, openssl
-, Security
-, python3Packages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  callPackage,
+  rustPlatform,
+  substituteAll,
+  openssl,
+  Security,
+  python3Packages,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,7 +21,7 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-l9dnyA4Zo4jlbiCMRzUqW3NkiploVpmvxz9i896JkXU=";
   };
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ];
 

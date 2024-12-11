@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -19,16 +20,19 @@ python3.pkgs.buildPythonApplication rec {
     wheel
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    requests
-    grequests
-    cjkwrap
-    pytz
-    beautifulsoup4
-    lxml
-    mpv
-    python-vlc
-  ] ++ requests.optional-dependencies.socks;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      requests
+      grequests
+      cjkwrap
+      pytz
+      beautifulsoup4
+      lxml
+      mpv
+      python-vlc
+    ]
+    ++ requests.optional-dependencies.socks;
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook

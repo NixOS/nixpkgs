@@ -1,21 +1,22 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "leetgo";
-  version = "1.4.8";
+  version = "1.4.11";
 
   src = fetchFromGitHub {
     owner = "j178";
     repo = "leetgo";
     rev = "v${version}";
-    hash = "sha256-4Y/NwgLNBdd2uL7oiIdM1I08ZnLjreHf397s/vhS+Ac=";
+    hash = "sha256-3euD5njhZowFOhR6sYym+qV2+ioYRXbdhSI1V4vhxxI=";
   };
 
-  vendorHash = "sha256-zpS+6Z31m6g67we4JaQ0sPodqC315lgftqGzZkelDCU=";
+  vendorHash = "sha256-VrCdDHqq1ZPyK1Izh+E4O3E/iXyAHNQ3ANiCF0PkVBo=";
 
   nativeBuildInputs = [ installShellFiles ];
 

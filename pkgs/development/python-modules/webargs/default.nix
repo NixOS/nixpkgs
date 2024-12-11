@@ -2,7 +2,8 @@
   buildPythonPackage,
   fetchPypi,
   lib,
-  isPy27,
+  pythonAtLeast,
+  flit-core,
   marshmallow,
   pytestCheckHook,
   pytest-aiohttp,
@@ -19,18 +20,17 @@
 
 buildPythonPackage rec {
   pname = "webargs";
-  version = "8.4.0";
-  format = "setuptools";
-  disabled = isPy27;
+  version = "8.6.0";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-6pk2ghSkzmE5JL6Z1x21jCaWMele/0+gm3NU5S3ABqU=";
+    hash = "sha256-uNCYq5K9dMZZ7KcFr6MdaBR18hjLFcHlcnH6IQPAVHo=";
   };
 
-  pythonImportsCheck = [ "webargs" ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [ marshmallow ];
+  dependencies = [ marshmallow ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -45,6 +45,8 @@ buildPythonPackage rec {
     falcon
     aiohttp
   ];
+
+  pythonImportsCheck = [ "webargs" ];
 
   meta = with lib; {
     description = "Declarative parsing and validation of HTTP request objects, with built-in support for popular web frameworks";

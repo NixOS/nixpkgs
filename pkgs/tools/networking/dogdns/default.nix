@@ -1,13 +1,14 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, pkg-config
-, openssl
-, just
-, pandoc
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  pkg-config,
+  openssl,
+  just,
+  pandoc,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,12 +28,19 @@ rustPlatform.buildRustPackage rec {
     ./remove-date-info.patch
   ];
 
-  nativeBuildInputs = [ installShellFiles just pandoc ]
-    ++ lib.optionals stdenv.isLinux [ pkg-config ];
-  buildInputs = lib.optionals stdenv.isLinux [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security ];
+  nativeBuildInputs = [
+    installShellFiles
+    just
+    pandoc
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   cargoLock = {
     lockFile = ./Cargo.lock;

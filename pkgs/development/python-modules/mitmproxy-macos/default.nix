@@ -1,28 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  hatchling,
+  fetchPypi,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "mitmproxy-macos";
-  version = "0.5.1";
-  pyproject = true;
+  version = "0.9.2";
+  format = "wheel";
 
   disabled = pythonOlder "3.10";
 
-  src = fetchFromGitHub {
-    owner = "mitmproxy";
-    repo = "mitmproxy_rs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-nrm1T2yaGVmYsubwNJHPnPDC/A/jYiKVzwBKmuc9MD4=";
+  src = fetchPypi {
+    pname = "mitmproxy_macos";
+    inherit version;
+    format = "wheel";
+    dist = "py3";
+    python = "py3";
+    hash = "sha256-Q19gQF6qnoF0TDmeZIxu90A5/ur7N7sDcoeBi2LaNrg=";
   };
-
-  sourceRoot = "${src.name}/mitmproxy-macos";
-
-  nativeBuildInputs = [ hatchling ];
 
   pythonImportsCheck = [ "mitmproxy_macos" ];
 
@@ -33,6 +30,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ boltzmannrain ];
     platforms = platforms.darwin;
-    broken = true; # last successful build 2023-12-04
+    sourceProvenance = with sourceTypes; [ binaryBytecode ];
   };
 }

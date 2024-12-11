@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
-, openssl
-, libiconv
-, cargo
-, rustPlatform
-, rustc
-, nixosTests
-, callPackage
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  openssl,
+  libiconv,
+  cargo,
+  rustPlatform,
+  rustc,
+  nixosTests,
+  callPackage,
 }:
 
 let
@@ -17,20 +18,20 @@ let
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "matrix-synapse";
-  version = "1.113.0";
+  version = "1.120.2";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "element-hq";
     repo = "synapse";
     rev = "v${version}";
-    hash = "sha256-8Ts2QOSugPU8Do1Mpusez9tSqiaB+UzCWWY4XJk/KRM=";
+    hash = "sha256-GW5ZcrVLLR2dPADHasdqhtV8HF+X+N4W3/OZCFBd2uI=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-Jlnv3GAobrXaO5fBq6oI9Gq8phz2/jFc+QIUYsUyeNo=";
+    hash = "sha256-5x64eKFuiTWuzwbuhfJ38rksYowq9Nq3LTYCMwuXKzc=";
   };
 
   postPatch = ''
@@ -56,52 +57,60 @@ python3.pkgs.buildPythonApplication rec {
     rustc
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    libiconv
-  ];
-
-  propagatedBuildInputs = with python3.pkgs; [
-    attrs
-    bcrypt
-    bleach
-    canonicaljson
-    cryptography
-    ijson
-    immutabledict
-    jinja2
-    jsonschema
-    matrix-common
-    msgpack
-    python-multipart
-    netaddr
-    packaging
-    phonenumbers
-    pillow
-    prometheus-client
-    pyasn1
-    pyasn1-modules
-    pydantic
-    pymacaroons
-    pyopenssl
-    pyyaml
-    service-identity
-    signedjson
-    sortedcontainers
-    treq
-    twisted
-    typing-extensions
-    unpaddedbase64
-  ]
-  ++ twisted.optional-dependencies.tls;
-
-  passthru.optional-dependencies = with python3.pkgs; {
-    postgres = if isPyPy then [
-      psycopg2cffi
-    ] else [
-      psycopg2
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
     ];
+
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      attrs
+      bcrypt
+      bleach
+      canonicaljson
+      cryptography
+      ijson
+      immutabledict
+      jinja2
+      jsonschema
+      matrix-common
+      msgpack
+      python-multipart
+      netaddr
+      packaging
+      phonenumbers
+      pillow
+      prometheus-client
+      pyasn1
+      pyasn1-modules
+      pydantic
+      pymacaroons
+      pyopenssl
+      pyyaml
+      service-identity
+      signedjson
+      sortedcontainers
+      treq
+      twisted
+      typing-extensions
+      unpaddedbase64
+    ]
+    ++ twisted.optional-dependencies.tls;
+
+  optional-dependencies = with python3.pkgs; {
+    postgres =
+      if isPyPy then
+        [
+          psycopg2cffi
+        ]
+      else
+        [
+          psycopg2
+        ];
     saml2 = [
       pysaml2
     ];
@@ -132,15 +141,17 @@ python3.pkgs.buildPythonApplication rec {
     ];
   };
 
-  nativeCheckInputs = [
-    openssl
-  ] ++ (with python3.pkgs; [
-    mock
-    parameterized
-  ])
-  ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  nativeCheckInputs =
+    [
+      openssl
+    ]
+    ++ (with python3.pkgs; [
+      mock
+      parameterized
+    ])
+    ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkPhase = ''
     runHook preCheck

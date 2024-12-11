@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "pyquil";
-  version = "4.14.1";
+  version = "4.14.3";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "rigetti";
     repo = "pyquil";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PmzzYhnbNdb3nl51awpxftSeW93vo3exHJxdZ+sgwZs=";
+    hash = "sha256-kGrOvec2q1GoVweu5tTbz8kvnjG6RAfjlF64Uf3RTxw=";
   };
 
   pythonRelaxDeps = [
@@ -46,7 +46,6 @@ buildPythonPackage rec {
   ];
 
   build-system = [ poetry-core ];
-
 
   dependencies = [
     deprecated

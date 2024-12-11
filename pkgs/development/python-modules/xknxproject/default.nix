@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  cryptography,
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
@@ -12,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "xknxproject";
-  version = "3.7.1";
+  version = "3.8.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,13 +20,12 @@ buildPythonPackage rec {
     owner = "XKNX";
     repo = "xknxproject";
     rev = "refs/tags/${version}";
-    hash = "sha256-/Zg4MYOvbsbJ0zyKuq+gX0PNbm8TyyBMziIaGCq6Lt8=";
+    hash = "sha256-iuW83gKDJTgFkfSW32OPOuwyGLyFoZGKQGUDJkVUGAM=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [
-    cryptography
     pyzipper
     striprtf
   ];

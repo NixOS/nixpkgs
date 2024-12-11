@@ -57,7 +57,7 @@ buildPythonPackage rec {
       "test_head_301"
       "test_303"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # fails with "ConnectionResetError: [Errno 54] Connection reset by peer"
       "test_connection_close"
       # fails with HTTP 408 Request Timeout, instead of expected 200 OK

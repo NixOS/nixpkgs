@@ -1,24 +1,38 @@
-{ lib, buildGoModule, buildNpmPackage, fetchFromGitHub, moreutils, jq, git }:
+{
+  lib,
+  buildGoModule,
+  buildNpmPackage,
+  fetchFromGitHub,
+  fetchpatch,
+  moreutils,
+  jq,
+  git,
+}:
 let
   # finalAttrs when 🥺 (buildGoModule does not support them)
   # https://github.com/NixOS/nixpkgs/issues/273815
-  version = "1.6.1";
+  version = "1.8.3";
   src = fetchFromGitHub {
     owner = "thomiceli";
     repo = "opengist";
     rev = "v${version}";
-    hash = "sha256-rJ8oiH08kSSFNgPHKGo68Oi1i3L1SEJyHuzoxKMOZME=";
+    hash = "sha256-Wpn9rqOUwbwi6pbPTnVzHb+ip3ay9WykEZDyHNdXYJU=";
   };
 
   frontend = buildNpmPackage {
     pname = "opengist-frontend";
     inherit version src;
-
-    nativeBuildInputs = [ moreutils jq ];
-
+    patches = [
+      # fix lock file
+      # https://github.com/thomiceli/opengist/pull/395
+      (fetchpatch {
+        url = "https://github.com/thomiceli/opengist/pull/395/commits/f77c624f73f18010c7e4360287d0a3c013c21c9d.patch";
+        hash = "sha256-oCMt1HptH0jsi2cvv8wEP0+bpujx1jBxCjw0KMDGFfk=";
+      })
+    ];
     # npm complains of "invalid package". shrug. we can give it a version.
-    preBuild = ''
-      jq '.version = "${version}"' package.json | sponge package.json
+    postPatch = ''
+      ${lib.getExe jq} '.version = "${version}"' package.json | ${lib.getExe' moreutils "sponge"} package.json
     '';
 
     # copy pasta from the Makefile upstream, seems to be a workaround of sass
@@ -33,15 +47,17 @@ let
       cp -R public $out
     '';
 
-    npmDepsHash = "sha256-Sy321tIQOOrypk+EOGGixEzrPdhA9U8Hak+DOS+d00A=";
+    npmDepsHash = "sha256-fj2U8oRNfdIEnRkAOQQGiPyQFuWltLGkMzT2IQO60v0=";
   };
 in
 buildGoModule {
   pname = "opengist";
   inherit version src;
-  vendorHash = "sha256-IorqXJKzUTUL5zfKRipZaJtRlwVOmTwolJXFG/34Ais=";
-  tags = [
-    "fs_embed"
+  vendorHash = "sha256-mLFjRL4spAWuPLVOtt88KH+p2g9lGCYzaHokVxdrLOw=";
+  tags = [ "fs_embed" ];
+  ldflags = [
+    "-s"
+    "-X github.com/thomiceli/opengist/internal/config.OpengistVersion=v${version}"
   ];
 
   # required for tests
@@ -54,18 +70,28 @@ buildGoModule {
     export OG_OPENGIST_HOME=$(mktemp -d)
   '';
 
+  checkPhase = ''
+    runHook preCheck
+    make test
+    runHook postCheck
+  '';
+
   postPatch = ''
     cp -R ${frontend}/public/{manifest.json,assets} public/
   '';
 
-  passthru.frontend = frontend;
+  passthru = {
+    inherit frontend;
+    updateScript = ./update.sh;
+  };
 
   meta = {
     description = "Self-hosted pastebin powered by Git";
-    mainProgram = "opengist";
     homepage = "https://github.com/thomiceli/opengist";
     license = lib.licenses.agpl3Only;
-    maintainers = [ ];
+    changelog = "https://github.com/thomiceli/opengist/blob/master/CHANGELOG.md";
     platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [ phanirithvij ];
+    mainProgram = "opengist";
   };
 }

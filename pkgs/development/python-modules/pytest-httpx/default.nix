@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-httpx";
-  version = "0.30.0";
+  version = "0.32.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "Colin-b";
     repo = "pytest_httpx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JfyqeOCHNHO4IEHVrh47TdWvb8lcy/1Prqnfphs0ufM=";
+    hash = "sha256-YwpNwtSTyCd78Q4zjvdCoXxpFd1XItcV5dq/O9z1dMw=";
   };
 
   nativeBuildInputs = [

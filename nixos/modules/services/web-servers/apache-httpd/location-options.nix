@@ -1,4 +1,9 @@
-{ config, lib, name, ... }:
+{
+  config,
+  lib,
+  name,
+  ...
+}:
 let
   inherit (lib) mkOption types;
 in

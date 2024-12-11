@@ -1,18 +1,19 @@
-{ lib
-, boto3
-, buildPythonPackage
-, fetchFromGitHub
-, humanize
-, matrix-synapse-unwrapped
-, pythonOlder
-, tqdm
-, twisted
-, psycopg2
+{
+  lib,
+  boto3,
+  buildPythonPackage,
+  fetchFromGitHub,
+  humanize,
+  matrix-synapse-unwrapped,
+  pythonOlder,
+  tqdm,
+  twisted,
+  psycopg2,
 }:
 
 buildPythonPackage rec {
   pname = "matrix-synapse-s3-storage-provider";
-  version = "1.4.0";
+  version = "1.5.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     owner = "matrix-org";
     repo = "synapse-s3-storage-provider";
     rev = "refs/tags/v${version}";
-    hash = "sha256-LOkSsgxHoABiiVtqssBaWYUroQBzzaJ3SclYcEMm2Mk=";
+    hash = "sha256-Nv8NkzOcUDX17N7Lyx/NT1vXztiRNaTYIAWNPHxgxJ4=";
   };
 
   postPatch = ''
@@ -33,15 +34,16 @@ buildPythonPackage rec {
     matrix-synapse-unwrapped
   ];
 
-  propagatedBuildInputs = [
-    boto3
-    humanize
-    tqdm
-    twisted
-    psycopg2
-  ]
-  # For the s3_media_upload script
-  ++ matrix-synapse-unwrapped.propagatedBuildInputs;
+  propagatedBuildInputs =
+    [
+      boto3
+      humanize
+      tqdm
+      twisted
+      psycopg2
+    ]
+    # For the s3_media_upload script
+    ++ matrix-synapse-unwrapped.propagatedBuildInputs;
 
   # Tests need network access
   doCheck = false;

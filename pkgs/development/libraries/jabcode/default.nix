@@ -1,11 +1,12 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, subproject ? "library" # one of "library", "reader" or  "writer"
-, zlib
-, libpng
-, libtiff
-, jabcode
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  subproject ? "library", # one of "library", "reader" or  "writer"
+  zlib,
+  libpng,
+  libtiff,
+  jabcode,
 }:
 let
   subdir = lib.getAttr subproject {
@@ -24,20 +25,25 @@ stdenv.mkDerivation rec {
     hash = "sha256-GjRkDWefQFdT4i9hRcQhYsY4beMUIXxy38I5lsQytyA=";
   };
 
-  nativeBuildInputs =
-    [ zlib libpng libtiff ]
-    ++ lib.optionals (subproject != "library") [ jabcode ];
+  nativeBuildInputs = [
+    zlib
+    libpng
+    libtiff
+  ] ++ lib.optionals (subproject != "library") [ jabcode ];
 
   preConfigure = "cd src/${subdir}";
 
   installPhase =
-    if subproject == "library" then ''
-      mkdir -p $out/lib
-      cp build/* $out/lib
-    '' else ''
-      mkdir -p $out/bin
-      cp -RT bin $out/bin
-    '';
+    if subproject == "library" then
+      ''
+        mkdir -p $out/lib
+        cp build/* $out/lib
+      ''
+    else
+      ''
+        mkdir -p $out/bin
+        cp -RT bin $out/bin
+      '';
 
   meta = with lib; {
     description = "High-capacity 2D color bar code (${subproject})";
@@ -46,6 +52,6 @@ stdenv.mkDerivation rec {
     license = licenses.lgpl21;
     maintainers = [ maintainers.xaverdh ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/jabcode.x86_64-darwin
+    broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/jabcode.x86_64-darwin
   };
 }

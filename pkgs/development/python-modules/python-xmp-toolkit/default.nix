@@ -35,7 +35,7 @@ buildPythonPackage {
   '';
 
   # hangs on darwin + sandbox
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   preCheck = ''
     rm test/{test_exempi,test_files}.py

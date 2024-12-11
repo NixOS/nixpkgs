@@ -2,11 +2,9 @@
   mkDerivation,
   pkgsBuildBuild,
   libjail,
-  libmd,
   libnetbsd,
   libcapsicum,
   libcasper,
-  libelf,
   libxo,
   libncurses-tinfo,
   libedit,
@@ -36,11 +34,9 @@ mkDerivation {
   ];
   buildInputs = [
     libjail
-    libmd
     libnetbsd
     libcapsicum
     libcasper
-    libelf
     libxo
     libncurses-tinfo
     libedit

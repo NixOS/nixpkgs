@@ -1,23 +1,27 @@
-{ lib
-, stdenv
-, AppKit
-, Security
-, fetchFromGitLab
-, rustPlatform
-, protobuf
-, capnproto
-, cmake
+{
+  lib,
+  stdenv,
+  AppKit,
+  Security,
+  fetchFromGitLab,
+  rustPlatform,
+  protobuf,
+  capnproto,
+  cmake,
+  testers,
+  veilid,
+  gitUpdater,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "veilid";
-  version = "0.3.4";
+  version = "0.4.1";
 
   src = fetchFromGitLab {
     owner = "veilid";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-nEJxiox2aoQBV83vlpiBB4In59+lfHF6/a8HqDYcFT4=";
+    hash = "sha256-/RdPq2rHs+lfB3odwO7yRGFi3j0INdJvbWccTsGO54g=";
   };
 
   cargoLock = {
@@ -36,7 +40,10 @@ rustPlatform.buildRustPackage rec {
     protobuf
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [ AppKit Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    AppKit
+    Security
+  ];
 
   cargoBuildFlags = [
     "--workspace"
@@ -46,16 +53,33 @@ rustPlatform.buildRustPackage rec {
 
   doCheck = false;
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
 
   postInstall = ''
     moveToOutput "lib" "$lib"
   '';
 
+  passthru = {
+    updateScript = gitUpdater { rev-prefix = "v"; };
+    tests = {
+      veilid-version = testers.testVersion {
+        package = veilid;
+      };
+    };
+  };
+
   meta = with lib; {
     description = "Open-source, peer-to-peer, mobile-first, networked application framework";
+    mainProgram = "veilid-server";
     homepage = "https://veilid.com";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ bbigras qbit ];
+    maintainers = with maintainers; [
+      bbigras
+      qbit
+    ];
   };
 }

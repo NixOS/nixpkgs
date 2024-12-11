@@ -1,49 +1,59 @@
 {
   lib,
-  aiohttp,
-  asn1crypto,
+  stdenv,
   buildPythonPackage,
-  certomancer,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  asn1crypto,
   click,
   cryptography,
-  defusedxml,
-  fetchFromGitHub,
-  fonttools,
-  freezegun,
-  oscrypto,
-  pillow,
   pyhanko-certvalidator,
-  pytest-aiohttp,
-  pytestCheckHook,
-  python-barcode,
-  python-pae,
-  python-pkcs11,
-  pythonOlder,
   pyyaml,
   qrcode,
   requests,
-  requests-mock,
-  setuptools,
   tzlocal,
+
+  # optional-dependencies
+  oscrypto,
+  defusedxml,
+  fonttools,
   uharfbuzz,
+  pillow,
+  python-barcode,
+  python-pkcs11,
+  aiohttp,
   xsdata,
+
+  # tests
+  certomancer,
+  freezegun,
+  pytest-aiohttp,
+  pytestCheckHook,
+  python-pae,
+  requests-mock,
 }:
 
 buildPythonPackage rec {
   pname = "pyhanko";
-  version = "0.25.1";
+  version = "0.25.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "MatthiasValvekens";
     repo = "pyHanko";
     rev = "refs/tags/v${version}";
-    hash = "sha256-keWAiqwaMZYh92B0mlR4+jjxBKLOAJ9Kgc0l0GiIQbc=";
+    hash = "sha256-HJkCQ5YDVr17gtY4PW89ep7GwFdP21/ruBEKm7j3+Qo=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "cryptography"
+  ];
 
   dependencies = [
     asn1crypto
@@ -56,7 +66,7 @@ buildPythonPackage rec {
     tzlocal
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     extra-pubkey-algs = [ oscrypto ];
     xmp = [ defusedxml ];
     opentype = [
@@ -76,11 +86,11 @@ buildPythonPackage rec {
     aiohttp
     certomancer
     freezegun
-    python-pae
     pytest-aiohttp
-    requests-mock
     pytestCheckHook
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+    python-pae
+    requests-mock
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   disabledTestPaths = [
     # ModuleNotFoundError: No module named 'csc_dummy'
@@ -115,12 +125,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyhanko" ];
 
-  meta = with lib; {
+  meta = {
     description = "Sign and stamp PDF files";
     mainProgram = "pyhanko";
     homepage = "https://github.com/MatthiasValvekens/pyHanko";
     changelog = "https://github.com/MatthiasValvekens/pyHanko/blob/v${version}/docs/changelog.rst";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

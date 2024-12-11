@@ -1,19 +1,19 @@
-{ lib
-, asttokens
-, buildPythonPackage
-, cbor2
-, fetchPypi
-, git
-, importlib-metadata
-, packaging
-, pycryptodome
-, pytest-runner
-, pythonOlder
-, recommonmark
-, setuptools-scm
-, sphinx
-, sphinx-rtd-theme
-, writeText
+{
+  lib,
+  asttokens,
+  buildPythonPackage,
+  cbor2,
+  fetchPypi,
+  git,
+  importlib-metadata,
+  packaging,
+  pycryptodome,
+  pythonOlder,
+  recommonmark,
+  setuptools-scm,
+  sphinx,
+  sphinx-rtd-theme,
+  writeText,
 }:
 
 let
@@ -41,7 +41,8 @@ buildPythonPackage rec {
   postPatch = ''
     # pythonRelaxDeps doesn't work
     substituteInPlace setup.py \
-      --replace "setuptools_scm>=7.1.0,<8.0.0" "setuptools_scm>=7.1.0"
+      --replace-fail "setuptools_scm>=7.1.0,<8.0.0" "setuptools_scm>=7.1.0" \
+      --replace-fail '"pytest-runner",' ""
   '';
 
   nativeBuildInputs = [
@@ -49,7 +50,6 @@ buildPythonPackage rec {
     # ever since https://github.com/vyperlang/vyper/pull/2816
     git
 
-    pytest-runner
     setuptools-scm
   ];
 

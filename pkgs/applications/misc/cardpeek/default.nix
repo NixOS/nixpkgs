@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, autoreconfHook
-, glib
-, gtk3
-, pcsclite
-, lua5_2
-, curl
-, readline
-, PCSC
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  glib,
+  gtk3,
+  pcsclite,
+  lua5_2,
+  curl,
+  readline,
+  PCSC,
 }:
 let
   version = "0.8.4";
@@ -25,17 +26,27 @@ stdenv.mkDerivation {
     sha256 = "1ighpl7nvcvwnsd6r5h5n9p95kclwrq99hq7bry7s53yr57l6588";
   };
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # replace xcode check and hard-coded PCSC framework path
     substituteInPlace configure.ac \
       --replace 'if test ! -e "/Applications/Xcode.app/"; then' 'if test yes != yes; then' \
       --replace 'PCSC_HEADERS=`ls -d /Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/*.sdk/System/Library/Frameworks/PCSC.framework/Versions/Current/Headers/ | sort | head -1`' 'PCSC_HEADERS=${PCSC}/Library/Frameworks/PCSC.framework/Headers'
   '';
 
-  nativeBuildInputs = [ pkg-config autoreconfHook ];
-  buildInputs = [ glib gtk3 lua5_2 curl readline ]
-    ++ lib.optional stdenv.isDarwin PCSC
-    ++ lib.optional stdenv.isLinux pcsclite;
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+  ];
+  buildInputs =
+    [
+      glib
+      gtk3
+      lua5_2
+      curl
+      readline
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin PCSC
+    ++ lib.optional stdenv.hostPlatform.isLinux pcsclite;
 
   enableParallelBuilding = true;
 

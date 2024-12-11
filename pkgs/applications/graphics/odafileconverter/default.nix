@@ -1,13 +1,26 @@
-{ lib, stdenv, mkDerivation, dpkg, fetchurl, qtbase }:
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  dpkg,
+  fetchurl,
+  qtbase,
+}:
 
 let
   # To obtain the version you will need to run the following command:
   #
   # dpkg-deb -I ${odafileconverter.src} | grep Version
   version = "21.11.0.0";
-  rpath = "$ORIGIN:${lib.makeLibraryPath [ stdenv.cc.cc qtbase ]}";
+  rpath = "$ORIGIN:${
+    lib.makeLibraryPath [
+      stdenv.cc.cc
+      qtbase
+    ]
+  }";
 
-in mkDerivation {
+in
+mkDerivation {
   pname = "oda-file-converter";
   inherit version;
   nativeBuildInputs = [ dpkg ];
@@ -18,15 +31,10 @@ in mkDerivation {
     sha256 = "10027a3ab18efd04ca75aa699ff550eca3bdfe6f7084460d3c00001bffb50070";
   };
 
-  unpackPhase = ''
-    dpkg -x $src oda_unpacked
-    sourceRoot=$PWD/oda_unpacked
-  '';
-
   installPhase = ''
     mkdir -p $out/bin $out/lib
-    cp -vr $sourceRoot/usr/bin/ODAFileConverter_${version} $out/libexec
-    cp -vr $sourceRoot/usr/share $out/share
+    cp -vr usr/bin/ODAFileConverter_${version} $out/libexec
+    cp -vr usr/share $out/share
   '';
 
   dontWrapQtApps = true;

@@ -1,26 +1,21 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "pls";
-  version = "0.0.1-beta.7";
+  version = "0.0.1-beta.8";
 
   src = fetchFromGitHub {
     owner = "pls-rs";
     repo = "pls";
     rev = "v${version}";
-    hash = "sha256-X4HGVwBZdDXH5RuBiugEd4I+aXRqZvXoRDZnm8GY3cM=";
+    hash = "sha256-gJufm2krZSTdBbbfZ+355M9e3MJQbDEpSPf0EbZEayQ=";
   };
 
-  cargoHash = "sha256-d6HfIEROudINn2Jbnc3EEDZCD833FFFeUk6mvlu0ErA=";
-
-  buildInputs = lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  cargoHash = "sha256-cDAHzK3pgpn5zEFdLBltf1e28yFFkXOzcF+nvDb8aWI=";
 
   meta = {
     changelog = "https://github.com/pls-rs/pls/releases/tag/${src.rev}";

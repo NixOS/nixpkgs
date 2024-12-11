@@ -25,7 +25,7 @@
 
 buildPythonPackage rec {
   pname = "eliot";
-  version = "1.15.0";
+  version = "1.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8" || pythonAtLeast "3.13";
@@ -34,7 +34,7 @@ buildPythonPackage rec {
     owner = "itamarst";
     repo = "eliot";
     rev = "refs/tags/${version}";
-    hash = "sha256-Ur7q7PZ5HH4ttD3b0HyBTe1B7eQ2nEWcTBR/Hjeg9yw=";
+    hash = "sha256-KqAXOMrRawzjpt5do2KdqpMMgpBtxeZ+X+th0WwBl+U=";
   };
 
   build-system = [ setuptools ];
@@ -54,7 +54,7 @@ buildPythonPackage rec {
     pytestCheckHook
     testtools
     twisted
-  ] ++ lib.optionals stdenv.isLinux [ daemontools ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ daemontools ];
 
   __darwinAllowLocalNetworking = true;
 

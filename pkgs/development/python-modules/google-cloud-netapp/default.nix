@@ -15,14 +15,15 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-netapp";
-  version = "0.3.11";
+  version = "0.3.16";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-VFdqldB85ZP+U2CNk19nSbgRFa0UnUc0kq9oNW5nJqs=";
+    pname = "google_cloud_netapp";
+    inherit version;
+    hash = "sha256-INSBGr5IslKzhmzWy+8zuncATFkldPh9QzGl6ddC9IY=";
   };
 
   build-system = [ setuptools ];

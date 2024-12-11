@@ -39,7 +39,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ pyyaml ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aws = [
       boto3
       botocore
@@ -60,7 +60,7 @@ buildPythonPackage rec {
     pyspark
     unittestCheckHook
     warcio
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   unittestFlagsArray = [ "-v" ];
 

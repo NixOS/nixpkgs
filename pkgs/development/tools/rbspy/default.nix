@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, ruby
-, which
-, nix-update-script
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  ruby,
+  which,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rbspy";
-  version = "0.24.0";
+  version = "0.27.0";
 
   src = fetchFromGitHub {
     owner = "rbspy";
     repo = "rbspy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Tg9A7S6z/qaJ/saZRD3SSLxRQBwq/YNSTuHcmwwhqeM=";
+    hash = "sha256-K5zDM7HhSNklCMoj3yh5lf0HTITOl2UYXW0QCxDF2GU=";
   };
 
-  cargoHash = "sha256-yDz7FuAw4mvL16EMUmywB0lfnMC6okLZ1px3Blx5rn4=";
+  cargoHash = "sha256-2yYv7Pp6UqHTPrmG4BM0py3GoPYYJW7e9LQSrgxx/3A=";
 
   # error: linker `aarch64-linux-gnu-gcc` not found
   postPatch = ''
@@ -47,7 +48,7 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     ruby
     which
-  ] ++ lib.optional stdenv.isDarwin rustPlatform.bindgenHook;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin rustPlatform.bindgenHook;
 
   passthru.updateScript = nix-update-script { };
 

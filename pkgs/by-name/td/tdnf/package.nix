@@ -1,27 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, curl
-, gpgme
-, libsolv
-, libxml2
-, pkg-config
-, python3
-, rpm
-, sqlite
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch2,
+  cmake,
+  curl,
+  gpgme,
+  libsolv,
+  libxml2,
+  pkg-config,
+  python3,
+  rpm,
+  sqlite,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tdnf";
-  version = "3.5.8";
+  version = "3.5.9";
 
   src = fetchFromGitHub {
     owner = "vmware";
     repo = "tdnf";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-rs6NMIwpJCBsO7Ca+za8pVJXQwpcgFvpd15ayS01mQM=";
+    hash = "sha256-p9g+b7Fqq8V6QSaikEQMMHWqBf4UtRA9a/VtH+s5JUM=";
   };
+
+  patches = [
+    # Support for rpm >= 4.19
+    (fetchpatch2 {
+      url = "https://patch-diff.githubusercontent.com/raw/vmware/tdnf/pull/410.patch";
+      hash = "sha256-p/ix5O1J/lj2fw7qJokT+wPN4ROoulnVqByfxgFvuEo=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -68,7 +78,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tiny Dandified Yum";
     homepage = "https://github.com/vmware/tdnf";
     changelog = "https://github.com/vmware/tdnf/releases/tag/v${finalAttrs.version}";
-    license = with lib.licenses; [ gpl2 lgpl21 ];
+    license = with lib.licenses; [
+      gpl2
+      lgpl21
+    ];
     maintainers = [ lib.maintainers.malt3 ];
     mainProgram = "tdnf";
     # rpm only supports linux

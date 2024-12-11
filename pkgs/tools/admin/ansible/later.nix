@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -24,11 +25,6 @@ python3.pkgs.buildPythonApplication rec {
       hash = "sha256-++CiwwHZoaPC8XHaYbNQeU3zqEi2a4eIYbuSQkO0jTI=";
     })
   ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=ansiblelater --cov-report=xml:coverage.xml --cov-report=term --no-cov-on-fail" ""
-  '';
 
   pythonRelaxDeps = [
     "anyconfig"
@@ -62,9 +58,11 @@ python3.pkgs.buildPythonApplication rec {
     toolz
     unidiff
     yamllint
+    distutils
   ];
 
   nativeCheckInputs = with python3.pkgs; [
+    pytest-cov-stub
     pytest-mock
     pytestCheckHook
   ];

@@ -15,22 +15,14 @@
 
 buildPythonPackage rec {
   pname = "radio-beam";
-  version = "0.3.7";
+  version = "0.3.8";
   pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-7AFkuuYLzibwwgz6zrFw0fBXCnGLzdm4OgT+Chve5jU=";
+    inherit version;
+    pname = "radio_beam"; # Tarball was uploaded with an underscore in this version
+    hash = "sha256-CE/rcYKO3Duz5zwmJ4gEuqOoO3Uy7sjwOi96HP0Y53A=";
   };
-
-  # Fix distutils deprecation in Python 3.12. See:
-  # https://github.com/radio-astro-tools/radio-beam/pull/124
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/radio-astro-tools/radio-beam/commit/1eb0216c8d7f5a4494d8d1fe8c79b48425a9c491.patch";
-      hash = "sha256-kTJF/cnkJCjJI2psvs+4MWFn/+b8TvUWjdfYu5ot0XU=";
-    })
-  ];
 
   nativeBuildInputs = [ setuptools-scm ];
 

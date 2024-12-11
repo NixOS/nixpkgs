@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoconf
-, automake
-, gettext
-, libtool
-, python3
-, wxGTK
-, openmp
-, Cocoa
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoconf,
+  automake,
+  gettext,
+  libtool,
+  python3,
+  wxGTK,
+  openmp,
+  Cocoa,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,20 +35,24 @@ stdenv.mkDerivation rec {
     wxGTK
   ];
 
-  buildInputs = lib.optionals stdenv.cc.isClang [
-    openmp
-  ] ++ lib.optionals stdenv.isDarwin [
-    Cocoa
-  ];
+  buildInputs =
+    lib.optionals stdenv.cc.isClang [
+      openmp
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Cocoa
+    ];
 
   preConfigure = "patchShebangs .";
 
-  prePatch = ''
-    substituteInPlace Makefile --replace "/usr" "$out"
-    substituteInPlace Makefile --replace "mhash; ./configure" "mhash; ./configure --prefix=$out"
-  '' + lib.optionalString stdenv.cc.isClang ''
-    substituteInPlace Makefile --replace "-lgomp" "-lomp"
-  '';
+  prePatch =
+    ''
+      substituteInPlace Makefile --replace "/usr" "$out"
+      substituteInPlace Makefile --replace "mhash; ./configure" "mhash; ./configure --prefix=$out"
+    ''
+    + lib.optionalString stdenv.cc.isClang ''
+      substituteInPlace Makefile --replace "-lgomp" "-lomp"
+    '';
 
   patches = [
     # https://github.com/EUA/wxHexEditor/issues/90

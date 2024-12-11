@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kernel
-, bluez
-, nixosTests
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  bluez,
+  nixosTests,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,6 +22,8 @@ stdenv.mkDerivation (finalAttrs: {
   setSourceRoot = ''
     export sourceRoot=$(pwd)/${finalAttrs.src.name}/hid-xpadneo/src
   '';
+
+  patches = [ ./xpadneo-0.9.6-kernel-6.12.patch ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
   buildInputs = [ bluez ];

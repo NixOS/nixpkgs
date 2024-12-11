@@ -29,6 +29,7 @@ let
       "example/example.csproj"
     ];
     nugetDeps = ./deps.nix;
+    dotnet-sdk = dotnetCorePackages.sdk_6_0;
   };
 in
 buildPythonPackage {
@@ -36,10 +37,7 @@ buildPythonPackage {
 
   format = "pyproject";
 
-  buildInputs = [
-    dotnetCorePackages.sdk_6_0.packages
-    dotnet-build.nugetDeps
-  ];
+  buildInputs = dotnetCorePackages.sdk_6_0.packages ++ dotnet-build.nugetDeps;
 
   nativeBuildInputs = [
     setuptools

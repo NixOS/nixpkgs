@@ -37,7 +37,6 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-
   dependencies = [
     aiohttp
     oss2

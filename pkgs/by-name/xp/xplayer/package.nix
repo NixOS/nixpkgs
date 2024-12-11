@@ -1,26 +1,28 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, autoconf-archive
-, clutter-gst
-, clutter-gtk
-, gettext
-, glib
-, gobject-introspection
-, gst_all_1
-, gtk-doc
-, gtk3
-, intltool
-, itstool
-, libpeas
-, libxml2
-, libxplayer-plparser
-, pkg-config
-, python3
-, wrapGAppsHook3
-, xapp
-, yelp-tools }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  autoconf-archive,
+  clutter-gst,
+  clutter-gtk,
+  gettext,
+  glib,
+  gobject-introspection,
+  gst_all_1,
+  gtk-doc,
+  gtk3,
+  intltool,
+  itstool,
+  libpeas,
+  libxml2,
+  libxplayer-plparser,
+  pkg-config,
+  python3,
+  wrapGAppsHook3,
+  xapp,
+  yelp-tools,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xplayer";
@@ -30,7 +32,7 @@ stdenv.mkDerivation rec {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    sha256 = "sha256-o2vLNIELd1EYWG26t5gOpnamJrBJeg4P6fcLirkcmfM=";
+    hash = "sha256-o2vLNIELd1EYWG26t5gOpnamJrBJeg4P6fcLirkcmfM=";
   };
 
   # configure wants to find gst-inspect-1.0 via pkgconfig but
@@ -86,9 +88,15 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Generic media player from Linux Mint";
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
     homepage = "https://github.com/linuxmint/xplayer";
-    maintainers = with maintainers; [ tu-maurice bobby285271 ];
+    maintainers = with maintainers; [
+      tu-maurice
+      bobby285271
+    ];
     platforms = platforms.linux;
   };
 }

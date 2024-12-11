@@ -6,16 +6,16 @@ else
 
 stdenv.mkDerivation rec {
   pname = "dune";
-  version = "3.16.0";
+  version = "3.16.1";
 
   src = fetchurl {
     url = "https://github.com/ocaml/dune/releases/download/${version}/dune-${version}.tbz";
-    hash = "sha256-VIHd55GMoxIeAsNNdDOfc0sy1Yg++4wbgFZHHnT5vaY=";
+    hash = "sha256-t4GuIPh2E8KhG9BxeAngBHDILWFeFSZPmmTgMwUaw94=";
   };
 
   nativeBuildInputs = [ ocaml findlib ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.CoreServices
   ];
 

@@ -1,12 +1,18 @@
-{ lib, stdenv, fetchurl, cups, libusb-compat-0_1, libxml2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cups,
+  libusb-compat-0_1,
+  libxml2,
+}:
 
 let
 
-    arch = if stdenv.hostPlatform.system == "x86_64-linux"
-      then "x86_64"
-      else "i386";
+  arch = if stdenv.hostPlatform.system == "x86_64-linux" then "x86_64" else "i386";
 
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "samsung-unified-linux-driver";
   version = "1.00.37";
 
@@ -79,7 +85,7 @@ in stdenv.mkDerivation rec {
     patchelf --set-rpath "$out/lib:${lib.getLib cups}/lib" "$out/lib/libscmssc.so"
     patchelf --set-rpath "$out/lib:${libxml2.out}/lib:${libusb-compat-0_1.out}/lib" "$out/lib/sane/libsane-smfp.so.1.0.1"
 
-    ln -s ${stdenv.cc.cc.lib}/lib/libstdc++.so.6 $out/lib/
+    ln -s ${lib.getLib stdenv.cc.cc}/lib/libstdc++.so.6 $out/lib/
   '';
 
   # all binaries are already stripped

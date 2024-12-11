@@ -1,12 +1,13 @@
-{ lib
-, substituteAll
-, mkDerivation
-, fetchFromGitHub
-, gitUpdater
-, mobile-broadband-provider-info
-, qmake
-, qtbase
-, qtdeclarative
+{
+  lib,
+  substituteAll,
+  mkDerivation,
+  fetchFromGitHub,
+  gitUpdater,
+  mobile-broadband-provider-info,
+  qmake,
+  qtbase,
+  qtdeclarative,
 }:
 
 mkDerivation rec {
@@ -23,7 +24,7 @@ mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./0001-NixOS-provide-mobile-broadband-provider-info-path.patch;
-      inherit mobile-broadband-provider-info;
+      mobileBroadbandProviderInfo = mobile-broadband-provider-info;
     })
     ./0001-NixOS-Skip-tests-they-re-shock-full-of-hardcoded-FHS.patch
   ];

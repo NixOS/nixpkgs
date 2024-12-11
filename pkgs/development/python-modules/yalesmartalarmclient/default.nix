@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "yalesmartalarmclient";
-  version = "0.4.0";
+  version = "0.4.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "domwillcode";
     repo = "yale-smart-alarm-client";
     rev = "refs/tags/v${version}";
-    hash = "sha256-L9y8J0NIN1LWhzcpKY1Z4BPbCHUuLQz+3Bbq+qJJeak=";
+    hash = "sha256-a0rzPEixJXLBfN+kJRPYiJiHY1BKxg/mM14RO3RiVdA=";
   };
 
   build-system = [ poetry-core ];

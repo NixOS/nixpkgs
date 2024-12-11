@@ -1,8 +1,22 @@
-{ lib, stdenv, fetchFromGitHub
-, fontconfig, freetype, libX11, libXext, libXt, xorgproto
-, perl # For building web manuals
-, which, ed
-, Carbon, Cocoa, IOKit, Metal, QuartzCore, DarwinTools # For building on Darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fontconfig,
+  freetype,
+  libX11,
+  libXext,
+  libXt,
+  xorgproto,
+  perl, # For building web manuals
+  which,
+  ed,
+  Carbon,
+  Cocoa,
+  IOKit,
+  Metal,
+  QuartzCore,
+  DarwinTools, # For building on Darwin
 }:
 
 stdenv.mkDerivation rec {
@@ -35,13 +49,31 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ ed ];
-  buildInputs = [ perl which ] ++ (if !stdenv.isDarwin then [
-    fontconfig freetype # fontsrv uses these
-    libX11 libXext libXt xorgproto
-  ] else [
-    Carbon Cocoa IOKit Metal QuartzCore
-    DarwinTools
-  ]);
+  buildInputs =
+    [
+      perl
+      which
+    ]
+    ++ (
+      if !stdenv.hostPlatform.isDarwin then
+        [
+          fontconfig
+          freetype # fontsrv uses these
+          libX11
+          libXext
+          libXt
+          xorgproto
+        ]
+      else
+        [
+          Carbon
+          Cocoa
+          IOKit
+          Metal
+          QuartzCore
+          DarwinTools
+        ]
+    );
 
   configurePhase = ''
     runHook preConfigure
@@ -49,7 +81,7 @@ stdenv.mkDerivation rec {
     CC9='$(command -v $CC)'
     CFLAGS='$NIX_CFLAGS_COMPILE'
     LDFLAGS='$(for f in $NIX_LDFLAGS; do echo "-Wl,$f"; done | xargs echo)'
-    ${lib.optionalString (!stdenv.isDarwin) "X11='${libXt.dev}/include'"}
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "X11='${libXt.dev}/include'"}
     EOF
 
     # make '9' available in the path so there's some way to find out $PLAN9
@@ -113,7 +145,11 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [
-      AndersonTorres bbarker ehmry ftrvxmtrx kovirobi ylh
+      bbarker
+      ehmry
+      ftrvxmtrx
+      kovirobi
+      ylh
     ];
     mainProgram = "9";
     platforms = platforms.unix;

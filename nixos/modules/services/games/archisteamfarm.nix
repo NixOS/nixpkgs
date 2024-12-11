@@ -164,9 +164,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # TODO: drop with 24.11
-    services.archisteamfarm.dataDir = lib.mkIf (lib.versionAtLeast config.system.stateVersion "24.05") (lib.mkDefault "/var/lib/asf");
-
     users = {
       users.archisteamfarm = {
         home = cfg.dataDir;
@@ -224,7 +221,7 @@ in
             RestrictSUIDSGID = true;
             SecureBits = "noroot-locked";
             SystemCallArchitectures = "native";
-            SystemCallFilter = [ "@system-service" "~@privileged" ];
+            SystemCallFilter = [ "@system-service" "~@privileged" "mincore" ];
             UMask = "0077";
           }
         ];

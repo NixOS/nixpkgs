@@ -1,48 +1,49 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, gtk3
-, vala
-, enchant2
-, wrapGAppsHook3
-, meson
-, ninja
-, desktop-file-utils
-, gnome-online-accounts
-, gsettings-desktop-schemas
-, adwaita-icon-theme
-, libpeas
-, libsecret
-, gmime3
-, isocodes
-, icu
-, libxml2
-, gettext
-, sqlite
-, gcr
-, json-glib
-, itstool
-, libgee
-, gnome
-, webkitgtk_4_1
-, python3
-, gnutls
-, cacert
-, xvfb-run
-, glibcLocales
-, dbus
-, shared-mime-info
-, libunwind
-, folks
-, glib-networking
-, gobject-introspection
-, gspell
-, appstream-glib
-, libstemmer
-, libytnef
-, libhandy
-, gsound
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtk3,
+  vala,
+  enchant2,
+  wrapGAppsHook3,
+  meson,
+  ninja,
+  desktop-file-utils,
+  gnome-online-accounts,
+  gsettings-desktop-schemas,
+  adwaita-icon-theme,
+  libpeas,
+  libsecret,
+  gmime3,
+  isocodes,
+  icu,
+  libxml2,
+  gettext,
+  sqlite,
+  gcr,
+  json-glib,
+  itstool,
+  libgee,
+  gnome,
+  webkitgtk_4_1,
+  python3,
+  gnutls,
+  cacert,
+  xvfb-run,
+  glibcLocales,
+  dbus,
+  shared-mime-info,
+  libunwind,
+  folks,
+  glib-networking,
+  gobject-introspection,
+  gspell,
+  appstream-glib,
+  libstemmer,
+  libytnef,
+  libhandy,
+  gsound,
 }:
 
 stdenv.mkDerivation rec {
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/geary/${lib.versions.major version}/geary-${version}.tar.xz";
-    sha256 = "r60VEwKBfd8Ji15BbnrH8tXupWejuAu5C9PGKv0TuaE=";
+    hash = "sha256-r60VEwKBfd8Ji15BbnrH8tXupWejuAu5C9PGKv0TuaE=";
   };
 
   nativeBuildInputs = [
@@ -148,6 +149,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/geary";
+    changelog = "https://gitlab.gnome.org/GNOME/geary/-/blob/${version}/NEWS?ref_type=tags";
     description = "Mail client for GNOME 3";
     maintainers = teams.gnome.members;
     license = licenses.lgpl21Plus;

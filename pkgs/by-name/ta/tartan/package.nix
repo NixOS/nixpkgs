@@ -44,7 +44,7 @@ stdenv.mkDerivation {
   };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Tools and Clang plugins for developing code with GLib";
     homepage = "https://gitlab.freedesktop.org/tartan/tartan";
     changelog = "https://gitlab.freedesktop.org/tartan/tartan/-/blob/main/NEWS";

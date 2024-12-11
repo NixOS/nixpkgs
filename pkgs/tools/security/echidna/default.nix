@@ -110,7 +110,7 @@ mkDerivation (
     mainProgram = "echidna-test";
 
   }
-  // lib.optionalAttrs (stdenv.isDarwin && stdenv.isAarch64) {
+  // lib.optionalAttrs (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) {
 
     # https://github.com/NixOS/nixpkgs/pull/304352
     postInstall = with haskellPackages; ''

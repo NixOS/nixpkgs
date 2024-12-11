@@ -31,7 +31,7 @@
 
 buildPythonPackage rec {
   pname = "commitizen";
-  version = "3.29.0";
+  version = "4.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     owner = "commitizen-tools";
     repo = "commitizen";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7EQFip8r2Ey7Rbbwns1gvhsBOj7Hjm94NYhq8aANDIo=";
+    hash = "sha256-M6JoBVst2aJwxr/SyMpXXOnMKIl9gX0ltg3H0SpU7uQ=";
   };
 
   pythonRelaxDeps = [
@@ -76,8 +76,6 @@ buildPythonPackage rec {
     pytest-regressions
     pytest7CheckHook
   ];
-
-  doCheck = true;
 
   pythonImportsCheck = [ "commitizen" ];
 

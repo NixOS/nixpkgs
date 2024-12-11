@@ -41,7 +41,7 @@ buildGoModule rec {
     badPlatforms = [
       "aarch64-linux" # assets_test.go:44: BuildAssetPath: unexpected error unsupported platform: linux-arm64
       "x86_64-darwin" # assets_test.go:44: BuildAssetPath: unexpected error unsupported platform: darwin-amd64
-      "aach64-darwin" # install_test.go:22: installation error: failed to dequarantine files: exec: "xattr": executable file not found in $PATH
+      "aarch64-darwin" # install_test.go:22: installation error: failed to dequarantine files: exec: "xattr": executable file not found in $PATH
     ];
   };
 }

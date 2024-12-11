@@ -1,18 +1,19 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "sploitscan";
-  version = "0.10.5";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "xaitax";
     repo = "SploitScan";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-41NR31x/pJttBxv66t5g3s2PwlSBgsk0ybiH7xFs18k=";
+    rev = "refs/tags/v.${version}";
+    hash = "sha256-d9s0j/78arKnbDCgMJMdUVF/RPfnAl59WAiJ0UvCCUU=";
   };
 
   pythonRelaxDeps = [

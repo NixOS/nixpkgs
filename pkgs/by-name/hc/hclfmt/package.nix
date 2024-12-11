@@ -1,14 +1,18 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "hclfmt";
-  version = "2.21.0";
+  version = "2.23.0";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = "hcl";
     rev = "v${version}";
-    hash = "sha256-izbctn5OqaDunQLovgCGTgqMzC9i227zXlXUNCEExvA=";
+    hash = "sha256-0RRvkOBPVrdbZo9zbVgZletKNXPBsN7pa7fsyfI9hXg=";
   };
 
   vendorHash = "sha256-F2i7ph9GL9Xo43da6jHPn9P9FdWC6eSgqCyHPBxdFJY=";

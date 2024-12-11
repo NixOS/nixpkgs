@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, jdk
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jdk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quarkus-cli";
-  version = "3.13.2";
+  version = "3.17.3";
 
   src = fetchurl {
     url = "https://github.com/quarkusio/quarkus/releases/download/${finalAttrs.version}/quarkus-cli-${finalAttrs.version}.tar.gz";
-    hash = "sha256-6rt40cQde6ck0Eq3YRfN+l2QP18CHTxFj2EJyiPgkrE=";
+    hash = "sha256-Nm0tu4YYjD1NH4n0qV1YZl7ZXfN5jccFV6EPn5mPu+8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

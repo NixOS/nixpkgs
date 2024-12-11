@@ -1,4 +1,15 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, libarchive, libarchive-qt, cmake, ninja, libcprime, libcsys }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtbase,
+  libarchive,
+  libarchive-qt,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 
 mkDerivation rec {
   pname = "corearchiver";

@@ -1,4 +1,11 @@
-{ lib, stdenv, libxml2, pidgin, pkg-config, fetchFromGitHub } :
+{
+  lib,
+  stdenv,
+  libxml2,
+  pidgin,
+  pkg-config,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pidgin-carbons";
@@ -6,15 +13,18 @@ stdenv.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "gkdr";
-    repo  = "carbons";
-    rev   = "v${version}";
+    repo = "carbons";
+    rev = "v${version}";
     sha256 = "sha256-qiyIvmJbRmCrAi/93UxDVtO76nSdtzUVfT/sZGxxAh8=";
   };
 
   makeFlags = [ "PURPLE_PLUGIN_DIR=$(out)/lib/pidgin" ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libxml2 pidgin ];
+  buildInputs = [
+    libxml2
+    pidgin
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/gkdr/carbons";

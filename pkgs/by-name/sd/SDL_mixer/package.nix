@@ -12,8 +12,8 @@
   stdenv,
   # Boolean flags
   enableNativeMidi ? false,
-  enableSdltest ? (!stdenv.isDarwin),
-  enableSmpegtest ? (!stdenv.isDarwin),
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
+  enableSmpegtest ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -86,15 +86,17 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature enableSmpegtest "smpegtest")
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   strictDeps = true;
 
   meta = {
     description = "SDL multi-channel audio mixer library";
     homepage = "http://www.libsdl.org/projects/SDL_mixer/";
-    maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ ]);
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
     license = lib.licenses.zlib;
     inherit (SDL.meta) platforms;
   };

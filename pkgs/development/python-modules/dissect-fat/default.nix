@@ -11,16 +11,16 @@
 
 buildPythonPackage rec {
   pname = "dissect-fat";
-  version = "3.10";
+  version = "3.11";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.fat";
     rev = "refs/tags/${version}";
-    hash = "sha256-jwTHvh1fqmVisW5rYDa5mOD1MMdBb10EHo945WHBnp8=";
+    hash = "sha256-LGSIuRclytD4RHHzq2Zj1DG01RAFINj4+5ErbQ3M57E=";
   };
 
   build-system = [

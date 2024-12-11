@@ -1,17 +1,22 @@
-{ buildFHSEnv, envision-unwrapped }:
+{
+  buildFHSEnv,
+  envision-unwrapped,
+}:
 
 buildFHSEnv {
-  name = "envision";
+  pname = "envision";
+  inherit (envision-unwrapped) version;
 
   extraOutputsToInstall = [ "dev" ];
 
   strictDeps = true;
 
+  # TODO: I'm pretty suspicious of this list of additonal required dependencies. Are they all really needed?
   targetPkgs =
     pkgs:
     [ pkgs.envision-unwrapped ]
     ++ (with pkgs; [
-      glibc
+      stdenv.cc.libc
       gcc
     ])
     ++ (
@@ -20,7 +25,7 @@ buildFHSEnv {
     )
     ++ (
       # OpenComposite dependencies
-      pkgs.opencomposite.buildInputs ++ pkgs.opencomposite.nativeBuildInputs ++ [ pkgs.boost ]
+      pkgs.opencomposite.buildInputs ++ pkgs.opencomposite.nativeBuildInputs
     )
     ++ (
       # Monado dependencies
@@ -36,6 +41,17 @@ buildFHSEnv {
           xorg.libXrandr
           xorg.libXrender
           xorg.xorgproto
+          # Additional dependencies required for Monado WMR support
+          bc
+          fmt
+          fmt.dev
+          git-lfs
+          gtest
+          jq
+          libepoxy
+          lz4.dev
+          tbb
+          libxkbcommon
         ])
       )
     )
@@ -44,27 +60,12 @@ buildFHSEnv {
       [ pkgs.zlib ])
     ++ (
       # WiVRn dependencies
-      # TODO: Replace with https://github.com/NixOS/nixpkgs/pull/316975 once merged
-      (with pkgs; [
-        avahi
-        cmake
-        cli11
-        ffmpeg
-        git
-        gst_all_1.gstreamer
-        gst_all_1.gst-plugins-base
+      pkgs.wivrn.buildInputs
+      ++ pkgs.wivrn.nativeBuildInputs
+      ++ (with pkgs; [
+        glib
         libmd
-        libdrm
-        libpulseaudio
-        libva
         ninja
-        nlohmann_json
-        openxr-loader
-        pipewire
-        systemdLibs # udev
-        vulkan-loader
-        vulkan-headers
-        x264
       ])
       ++ (with pkgs; [
         android-tools # For adb installing WiVRn APKs
@@ -78,11 +79,7 @@ buildFHSEnv {
   '';
 
   extraInstallCommands = ''
-    mkdir -p $out/share/applications $out/share/metainfo
-    ln -s ${envision-unwrapped}/share/envision $out/share
-    ln -s ${envision-unwrapped}/share/icons $out/share
-    ln -s ${envision-unwrapped}/share/applications/org.gabmus.envision.desktop $out/share/applications
-    ln -s ${envision-unwrapped}/share/metainfo/org.gabmus.envision.appdata.xml $out/share/metainfo
+    ln -s ${envision-unwrapped}/share $out/share
   '';
 
   runScript = "envision";

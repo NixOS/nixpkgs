@@ -1,14 +1,21 @@
-{ lib, fetchurl, lilypond }:
+{
+  lib,
+  fetchurl,
+  lilypond,
+}:
 
 lilypond.overrideAttrs (oldAttrs: rec {
-  version = "2.25.17";
+  version = "2.25.21";
   src = fetchurl {
     url = "https://lilypond.org/download/sources/v${lib.versions.majorMinor version}/lilypond-${version}.tar.gz";
-    hash = "sha256-AVGd/H2+lQxUYyXGB2dOBU4rpqR5LSkn3ishu5uqDYs=";
+    hash = "sha256-mckXCpZLig0ePkeGpiqYQQREFxgioiK/+mpA3GBNwGc=";
   };
 
   passthru.updateScript = {
-    command = [ ./update.sh "unstable" ];
+    command = [
+      ./update.sh
+      "unstable"
+    ];
     supportedFeatures = [ "commit" ];
   };
 })

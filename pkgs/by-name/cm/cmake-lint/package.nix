@@ -18,18 +18,13 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-/OuWwerBlJynEibaYo+jkLpHt4x9GZrqMRJNxgrDBlM=";
   };
 
-  postPatch = ''
-    # We don't need to test coverage, so remove these checks
-    substituteInPlace setup.cfg \
-      --replace-fail "addopts = --cov-fail-under=84 --cov=./cmakelint" ""
-  '';
-
   build-system = [ python3Packages.setuptools ];
 
   pythonImportsCheck = [ "cmakelint" ];
 
   nativeCheckInputs = [
     python3Packages.pytestCheckHook
+    python3Packages.pytest-cov-stub
   ];
 
   passthru.tests = {

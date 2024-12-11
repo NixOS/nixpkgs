@@ -1,4 +1,9 @@
-{ mkDerivation, haskellPackages, fetchurl, lib }:
+{
+  mkDerivation,
+  haskellPackages,
+  fetchurl,
+  lib,
+}:
 
 mkDerivation rec {
   pname = "nota";

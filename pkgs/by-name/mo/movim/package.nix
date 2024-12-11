@@ -1,16 +1,17 @@
-{ lib
-, fetchFromGitHub
-, writeShellScript
-, dash
-, php
-, phpCfg ? null
-, withPgsql ? true # “strongly recommended” according to docs
-, withMysql ? false
-, minifyStaticFiles ? false # default files are often not minified
-, esbuild
-, lightningcss
-, scour
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  writeShellScript,
+  dash,
+  php,
+  phpCfg ? null,
+  withPgsql ? true, # “strongly recommended” according to docs
+  withMysql ? false,
+  minifyStaticFiles ? false, # default files are often not minified
+  esbuild,
+  lightningcss,
+  scour,
+  nixosTests,
 }:
 
 let
@@ -28,35 +29,65 @@ let
     };
   };
 
-  minify = lib.recursiveUpdate defaultMinifyOpts
-    (if lib.isBool minifyStaticFiles && minifyStaticFiles then
-      { script.enable = true; style.enable = true; svg.enable = true; }
+  minify = lib.recursiveUpdate defaultMinifyOpts (
+    if lib.isBool minifyStaticFiles && minifyStaticFiles then
+      {
+        script.enable = true;
+        style.enable = true;
+        svg.enable = true;
+      }
     else if lib.isAttrs minifyStaticFiles then
       lib.filterAttrsRecursive (_: v: v != null) minifyStaticFiles
     else
-      { });
+      { }
+  );
 in
 php.buildComposerProject (finalAttrs: {
   pname = "movim";
-  version = "0.26";
+  version = "0.28";
 
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-ffAA4aDcjJSuqBIqI6b36daAp7UWj+FpWxYiY+c+f5Q=";
+    hash = "sha256-mjBeBu1seH5XMls+e4ON13ayVeugKogbNTzbjp1pUjE=";
   };
 
-  php = php.buildEnv ({
-    extensions = ({ all, enabled }:
-      enabled
-        ++ (with all; [ curl dom gd imagick mbstring pdo simplexml ])
-        ++ lib.optionals withPgsql (with all; [ pdo_pgsql pgsql ])
-        ++ lib.optionals withMysql (with all; [ mysqli mysqlnd pdo_mysql ])
-    );
-  } // lib.optionalAttrs (phpCfg != null) {
-    extraConfig = phpCfg;
-  });
+  php = php.buildEnv (
+    {
+      extensions = (
+        { all, enabled }:
+        enabled
+        ++ (with all; [
+          curl
+          dom
+          gd
+          imagick
+          mbstring
+          pdo
+          simplexml
+        ])
+        ++ lib.optionals withPgsql (
+          with all;
+          [
+            pdo_pgsql
+            pgsql
+          ]
+        )
+        ++ lib.optionals withMysql (
+          with all;
+          [
+            mysqli
+            mysqlnd
+            pdo_mysql
+          ]
+        )
+      );
+    }
+    // lib.optionalAttrs (phpCfg != null) {
+      extraConfig = phpCfg;
+    }
+  );
 
   nativeBuildInputs =
     lib.optional minify.script.enable esbuild
@@ -67,7 +98,7 @@ php.buildComposerProject (finalAttrs: {
   # pinned commonmark
   composerStrictValidation = false;
 
-  vendorHash = "sha256-4KNGWI4hvlDnIxo9nh/hytxkk+KVxjB8uF/HB88XPwQ=";
+  vendorHash = "sha256-ZfMUpkIRCAsiQf6PEVPrMpljZWjP9JXf+nEFA/LunsQ=";
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;
@@ -91,32 +122,35 @@ php.buildComposerProject (finalAttrs: {
       --replace-fail "Imagick::ALPHACHANNEL_ACTIVATE" "Imagick::ALPHACHANNEL_ON"
   '';
 
-  preBuild = lib.optionalString minify.script.enable ''
-    find ./public -type f -iname "*.js" -print0 \
-      | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_script_minify" ''
+  preBuild =
+    lib.optionalString minify.script.enable ''
+      find ./public -type f -iname "*.js" -print0 \
+        | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_script_minify" ''
           file="$1"
           tmp="$(mktemp)"
           esbuild $file --minify --target=${lib.escapeShellArg minify.script.target} --outfile=$tmp
           [[ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ]] && mv $tmp $file
         ''}
-  '' + lib.optionalString minify.style.enable ''
-    find ./public -type f -iname "*.css" -print0 \
-      | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_style_minify" ''
+    ''
+    + lib.optionalString minify.style.enable ''
+      find ./public -type f -iname "*.css" -print0 \
+        | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_style_minify" ''
           export BROWSERLIST="${lib.escapeShellArg minify.style.browserslist}"
           file="$1"
           tmp="$(mktemp)"
           lightningcss $file --minify --browserslist --output-file=$tmp
           [[ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ]] && mv $tmp $file
         ''}
-  '' + lib.optionalString minify.svg.enable ''
-    find ./public -type f -iname "*.svg" -a -not -path "*/emojis/*" -print0 \
-      | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_svg_minify" ''
+    ''
+    + lib.optionalString minify.svg.enable ''
+      find ./public -type f -iname "*.svg" -a -not -path "*/emojis/*" -print0 \
+        | xargs -0 -n 1 -P $NIX_BUILD_CORES ${writeShellScript "movim_svg_minify" ''
           file="$1"
           tmp="$(mktemp)"
           scour -i $file -o $tmp --disable-style-to-xml --enable-comment-stripping --enable-viewboxing --indent=tab
           [[ "$(stat -c %s $tmp)" -lt "$(stat -c %s $file)" ]] && mv $tmp $file
         ''}
-  '';
+    '';
 
   postInstall = ''
     mkdir -p $out/bin

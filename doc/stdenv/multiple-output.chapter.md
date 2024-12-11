@@ -21,7 +21,7 @@ In the Nix language the individual outputs can be reached explicitly as attribut
 
 When a multiple-output derivation gets into a build input of another derivation, the `dev` output is added if it exists, otherwise the first output is added. In addition to that, `propagatedBuildOutputs` of that package which by default contain `$outputBin` and `$outputLib` are also added. (See [](#multiple-output-file-type-groups).)
 
-In some cases it may be desirable to combine different outputs under a single store path. A function `symlinkJoin` can be used to do this. (Note that it may negate some closure size benefits of using a multiple-output package.)
+In some cases it may be desirable to combine different outputs under a single store path. The `symlinkJoin` builder can be used to do this. (See [](#trivial-builder-symlinkJoin)). Note that this may negate some closure size benefits of using a multiple-output package.
 
 ## Writing a split derivation {#sec-multiple-outputs-}
 

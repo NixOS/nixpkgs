@@ -2,13 +2,13 @@
 
 buildGoModule rec {
   pname = "podman-tui";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-tui";
     rev = "v${version}";
-    hash = "sha256-+YY7pq+jLwfdWBT5Ug5KtvMVy8DRWQ7kfC5U2bzYWAs=";
+    hash = "sha256-3AgPt7dRZaHrM4/y35Z5elBFq1b2ZhvwBd4CKNBbgTk=";
   };
 
   vendorHash = null;
@@ -16,7 +16,7 @@ buildGoModule rec {
   CGO_ENABLED = 0;
 
   tags = [ "containers_image_openpgp" "remote" ]
-    ++ lib.optional stdenv.isDarwin "darwin";
+    ++ lib.optional stdenv.hostPlatform.isDarwin "darwin";
 
   ldflags = [ "-s" "-w" ];
 

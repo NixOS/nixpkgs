@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
     python3Packages.psutil
     python3Packages.python
   ]
-  ++ lib.optionals stdenv.isDarwin [
+  ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Accelerate
   ];
 

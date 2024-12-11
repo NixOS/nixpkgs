@@ -1,4 +1,4 @@
-{ lib,bundlerApp }:
+{ lib, bundlerApp }:
 bundlerApp {
   pname = "sublime_syntax_convertor";
   gemdir = ./.;

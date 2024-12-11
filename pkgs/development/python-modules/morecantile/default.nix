@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
@@ -16,15 +17,15 @@
 
 buildPythonPackage rec {
   pname = "morecantile";
-  version = "5.3.0";
+  version = "6.0.0";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "developmentseed";
     repo = "morecantile";
-    rev = version;
-    hash = "sha256-F7xYQrOngoRsZjmS6ZHRGN0/GD53AYcMQzyY1LZ1O7I=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-l+fQQXOrhqRanB695nR4okfmPYP05NdrGOvgG+jK2uo=";
   };
 
   nativeBuildInputs = [ flit ];
@@ -40,6 +41,11 @@ buildPythonPackage rec {
     mercantile
     pytestCheckHook
     rasterio
+  ];
+
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
+    # https://github.com/developmentseed/morecantile/issues/156
+    "test_tiles_when_tms_bounds_and_provided_bounds_cross_antimeridian"
   ];
 
   pythonImportsCheck = [ "morecantile" ];

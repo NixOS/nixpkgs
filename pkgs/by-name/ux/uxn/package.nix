@@ -1,22 +1,26 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, SDL2
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  SDL2,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "uxn";
-  version = "1.0-unstable-2024-08-12";
+  version = "1.0-unstable-2024-11-30";
 
   src = fetchFromSourcehut {
     owner = "~rabbits";
     repo = "uxn";
-    rev = "3a901ed0beeaf5e3268a40779f2944ef99f93774";
-    hash = "sha256-JlDNiKcaZG2OYeiVlIovEIDN/h7ET5d0M83vlHMQQK4=";
+    rev = "ac3f9ccb20dcbd63180d121d0df43efa01a91a8f";
+    hash = "sha256-YHRdELTVf6BNa7HFu1buAG9HKRdpx++XjU60P2huY/Q=";
   };
 
-  outputs = [ "out" "projects" ];
+  outputs = [
+    "out"
+    "projects"
+  ];
 
   nativeBuildInputs = [
     SDL2
@@ -64,6 +68,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ AndersonTorres ];
     mainProgram = "uxnemu";
     inherit (SDL2.meta) platforms;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

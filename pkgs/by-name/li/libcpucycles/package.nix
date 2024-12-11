@@ -26,10 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   inherit (librandombytes) hardeningDisable configurePlatforms env;
 
-  preFixup = lib.optionalString stdenv.isDarwin ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id "$out/lib/libcpucycles.1.dylib" "$out/lib/libcpucycles.1.dylib"
     install_name_tool -change "libcpucycles.1.dylib" "$out/lib/libcpucycles.1.dylib" "$out/bin/cpucycles-info"
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://cpucycles.cr.yp.to/";

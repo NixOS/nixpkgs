@@ -1,6 +1,19 @@
-{ lib, stdenv, fetchzip
-, meson, ninja, pkg-config, python3, python3Packages, wayland-scanner
-, libxkbcommon, mesa, pixman, xorg, wayland, gtest
+{
+  lib,
+  stdenv,
+  fetchzip,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  python3Packages,
+  wayland-scanner,
+  libxkbcommon,
+  mesa,
+  pixman,
+  xorg,
+  wayland,
+  gtest,
 }:
 
 stdenv.mkDerivation {
@@ -15,9 +28,20 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [
-    meson ninja pkg-config python3 python3Packages.jinja2 wayland-scanner
+    meson
+    ninja
+    pkg-config
+    python3
+    python3Packages.jinja2
+    wayland-scanner
   ];
-  buildInputs = [ libxkbcommon mesa pixman wayland xorg.libxcb ];
+  buildInputs = [
+    libxkbcommon
+    mesa
+    pixman
+    wayland
+    xorg.libxcb
+  ];
 
   preConfigure = ''
     patchShebangs gen-shim.py

@@ -1,25 +1,30 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, vala
-, pandoc
-, gi-docgen
-, python3
-, libsoup_3
-, glib
-, gnome
-, gssdp-tools
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  vala,
+  pandoc,
+  gi-docgen,
+  python3,
+  libsoup_3,
+  glib,
+  gnome,
+  gssdp-tools,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gssdp";
   version = "1.6.3";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gssdp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -77,7 +82,7 @@ stdenv.mkDerivation rec {
   };
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "GObject-based API for handling resource discovery and announcement over SSDP";
     homepage = "http://www.gupnp.org/";
     license = licenses.lgpl2Plus;

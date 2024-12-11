@@ -7,7 +7,7 @@
 , gst_all_1
 , libappindicator
 , libayatana-appindicator
-, webkitgtk
+, webkitgtk_4_0
 , wrapGAppsHook3
 }:
 
@@ -41,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   installPhase = ''
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Tiny alternative Discord client";
     license = lib.licenses.gpl3Only;
     mainProgram = "dorion";
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ aleksana ];
     platforms = lib.intersectLists (lib.platforms.linux) (lib.platforms.x86_64);
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

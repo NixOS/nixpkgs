@@ -15,8 +15,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "opendatakosovo";
     repo = "cyrillic-transliteration";
-    rev = "v${version}";
-    sha256 = "sha256-t8UTOmjGqjmxU7+Po0/HmOPWAvcgZibaUC9dMlttA/0=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-t8UTOmjGqjmxU7+Po0/HmOPWAvcgZibaUC9dMlttA/0=";
   };
 
   build-system = [ setuptools ];

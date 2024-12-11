@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, makeWrapper, gmp, gcc }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  makeWrapper,
+  gmp,
+  gcc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mkcl";
@@ -39,14 +47,16 @@ stdenv.mkDerivation rec {
   ];
 
   # tinycc configure flags copied from the tinycc derivation.
-  postConfigure = ''(
-    cd contrib/tinycc
-    ./configure --cc=cc \
-      --elfinterp=$(< $NIX_CC/nix-support/dynamic-linker) \
-      --crtprefix=${lib.getLib stdenv.cc.libc}/lib \
-      --sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include \
-      --libpaths=${lib.getLib stdenv.cc.libc}/lib
-  )'';
+  postConfigure = ''
+    (
+      cd contrib/tinycc;
+      ./configure --cc=cc \
+        --elfinterp=$(< $NIX_CC/nix-support/dynamic-linker) \
+        --crtprefix=${lib.getLib stdenv.cc.libc}/lib \
+        --sysincludepaths=${lib.getDev stdenv.cc.libc}/include:{B}/include \
+        --libpaths=${lib.getLib stdenv.cc.libc}/lib
+    )
+  '';
 
   postInstall = ''
     wrapProgram $out/bin/mkcl --prefix PATH : "${gcc}/bin"
@@ -55,11 +65,12 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "ANSI Common Lisp Implementation";
     homepage = "https://common-lisp.net/project/mkcl/";
     license = licenses.lgpl2Plus;
-    platforms = platforms.linux;
+    mainProgram = "mkcl";
     maintainers = lib.teams.lisp.members;
+    platforms = platforms.linux;
   };
 }

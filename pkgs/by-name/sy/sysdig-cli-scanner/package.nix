@@ -2,29 +2,41 @@
   stdenv,
   lib,
   fetchurl,
-  makeWrapper,
+  writeShellScript,
 }:
 let
   versionMetadata = import ./sysdig-cli-scanner.versions.nix;
   fetchForSystem = versionMetadata.${stdenv.system} or (throw "unsupported system ${stdenv.system}");
+
+  wrapper = writeShellScript "sysdig-cli-scanner-wrapper" ''
+    for arg in "$@"; do
+      # We must not pass --dbpath to the cli in case it has been called with --iac
+      # IaC Scanning does not make use of the vulnerability database
+      if [ "$arg" = "--iac" ]; then
+        exec @out@/libexec/sysdig-cli-scanner-unwrapped "$@"
+      fi
+    done
+
+    # --dbpath argument is needed for vulnerability scanning mode, otherwise it tries to download
+    # the vulnerability database in the same path as the binary, which is read-only in the case of the
+    # nix store
+    exec @out@/libexec/sysdig-cli-scanner-unwrapped \
+      --dbpath="$HOME/.cache/sysdig-cli-scanner/" "$@"
+  '';
 in
 stdenv.mkDerivation {
   pname = "sysdig-cli-scanner";
   version = versionMetadata.version;
 
   src = fetchurl { inherit (fetchForSystem) url hash; };
-
-  nativeBuildInputs = [ makeWrapper ];
-
   dontUnpack = true;
 
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 -T $src $out/bin/sysdig-cli-scanner
-
-    wrapProgram $out/bin/sysdig-cli-scanner \
-      --add-flags --dbpath="\$HOME/.cache/sysdig-cli-scanner/"
+    install -Dm755 -T $src $out/libexec/sysdig-cli-scanner-unwrapped
+    install -Dm755 -T ${wrapper} $out/bin/sysdig-cli-scanner
+    substituteInPlace $out/bin/sysdig-cli-scanner --subst-var out
 
     runHook postInstall
   '';

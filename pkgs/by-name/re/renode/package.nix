@@ -1,49 +1,52 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchurl
-, autoPatchelfHook
-, makeWrapper
-, nix-update-script
-, glibcLocales
-, python3Packages
-, dotnetCorePackages
-, gtk-sharp-3_0
-, gtk3-x11
-, dconf
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchurl,
+  autoPatchelfHook,
+  makeWrapper,
+  nix-update-script,
+  glibcLocales,
+  python3Packages,
+  dotnetCorePackages,
+  gtk-sharp-3_0,
+  gtk3-x11,
+  dconf,
 }:
 
 let
-  pythonLibs = with python3Packages; makePythonPath [
-    construct
-    psutil
-    pyyaml
-    requests
-    tkinter
+  pythonLibs =
+    with python3Packages;
+    makePythonPath [
+      construct
+      psutil
+      pyyaml
+      requests
+      tkinter
 
-    # from tools/csv2resd/requirements.txt
-    construct
+      # from tools/csv2resd/requirements.txt
+      construct
 
-    # from tools/execution_tracer/requirements.txt
-    pyelftools
+      # from tools/execution_tracer/requirements.txt
+      pyelftools
 
-    (robotframework.overrideDerivation (oldAttrs: {
-      src = fetchFromGitHub {
-        owner = "robotframework";
-        repo = "robotframework";
-        rev = "v6.1";
-        hash = "sha256-l1VupBKi52UWqJMisT2CVnXph3fGxB63mBVvYdM1NWE=";
-      };
-    }))
-  ];
+      (robotframework.overrideDerivation (oldAttrs: {
+        src = fetchFromGitHub {
+          owner = "robotframework";
+          repo = "robotframework";
+          rev = "v6.1";
+          hash = "sha256-l1VupBKi52UWqJMisT2CVnXph3fGxB63mBVvYdM1NWE=";
+        };
+      }))
+    ];
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "renode";
-  version = "1.15.1";
+  version = "1.15.3";
 
   src = fetchurl {
     url = "https://github.com/renode/renode/releases/download/v${finalAttrs.version}/renode-${finalAttrs.version}.linux-dotnet.tar.gz";
-    hash = "sha256-NrbdkHxZ5g4dhmkhOIWTSxuY3GA1h1FM5JkWVPuQjjc=";
+    hash = "sha256-0CZWIwIG85nT7uSHhmBkH21S5mTx2womYWV0HG+g8Mk=";
   };
 
   nativeBuildInputs = [

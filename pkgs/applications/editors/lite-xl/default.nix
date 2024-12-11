@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lite-xl";
-  version = "2.1.5";
+  version = "2.1.7";
 
   src = fetchFromGitHub {
     owner = "lite-xl";
     repo = "lite-xl";
     rev = "v${version}";
-    hash = "sha256-awXcmYAvQUdFUr2vFlnBt8WTLrACREfB7J8HoSyVPTs=";
+    hash = "sha256-Ig0XDxnll/zruAwWHwuXiqumBXgAPxuK0E1ELupvcXo=";
   };
 
   nativeBuildInputs = [ meson ninja pkg-config ];
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     lua5_4
     pcre2
     SDL2
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Foundation
   ];
 

@@ -5,7 +5,6 @@
   buildNpmPackage,
   nix-update-script,
   electron,
-  writeShellScriptBin,
   makeWrapper,
   copyDesktopItems,
   makeDesktopItem,
@@ -14,40 +13,32 @@
   cairo,
   pango,
   npm-lockfile-fix,
-  overrideSDK,
-  darwin,
+  apple-sdk_11,
 }:
 
-let
-  # fix for: https://github.com/NixOS/nixpkgs/issues/272156
-  buildNpmPackage' = buildNpmPackage.override {
-    stdenv = if stdenv.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
-in
-buildNpmPackage' rec {
+buildNpmPackage rec {
   pname = "bruno";
-  version = "1.25.0";
+  version = "1.34.2";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
     rev = "v${version}";
-    hash = "sha256-TXEe0ICrkljxfnvW1wv/e1BB7J6p/KW3JklCvYyjqSs=";
+    hash = "sha256-ydb80+FP2IsobvCZiIKzbErAJNakVoSoYrhddmPmYkc=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-/1/QPKjSgJJDtmUipgbiVR+Buea9cXO+HvICfKVX/2g=";
+  npmDepsHash = "sha256-ODE8GLIgdUEOiniki8jzkHfU5TKHWoIIbjGJjNzMZCI=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs =
     [
-      (writeShellScriptBin "phantomjs" "echo 2.1.1")
       pkg-config
     ]
-    ++ lib.optionals (!stdenv.isDarwin) [
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       makeWrapper
       copyDesktopItems
     ];
@@ -58,8 +49,9 @@ buildNpmPackage' rec {
       cairo
       pango
     ]
-    ++ lib.optionals stdenv.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.CoreText
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # fix for: https://github.com/NixOS/nixpkgs/issues/272156
+      apple-sdk_11
     ];
 
   desktopItems = [
@@ -79,6 +71,11 @@ buildNpmPackage' rec {
       --replace-fail 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
   '';
 
+  postConfigure = ''
+    # sh: line 1: /build/source/packages/bruno-common/node_modules/.bin/rollup: cannot execute: required file not found
+    patchShebangs packages/*/node_modules
+  '';
+
   ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
 
   # remove giflib dependency
@@ -89,21 +86,24 @@ buildNpmPackage' rec {
     npm rebuild
   '';
 
-  dontNpmBuild = true;
-  postBuild = ''
+  buildPhase = ''
+    runHook preBuild
+
     npm run build --workspace=packages/bruno-common
     npm run build --workspace=packages/bruno-graphql-docs
     npm run build --workspace=packages/bruno-app
     npm run build --workspace=packages/bruno-query
+
+    npm run sandbox:bundle-libraries --workspace=packages/bruno-js
 
     bash scripts/build-electron.sh
 
     pushd packages/bruno-electron
 
     ${
-      if stdenv.isDarwin then
+      if stdenv.hostPlatform.isDarwin then
         ''
-          cp -r ${electron}/Applications/Electron.app ./
+          cp -r ${electron.dist}/Electron.app ./
           find ./Electron.app -name 'Info.plist' | xargs -d '\n' chmod +rw
 
           substituteInPlace electron-builder-config.js \
@@ -121,13 +121,15 @@ buildNpmPackage' rec {
         ''
           npm exec electron-builder -- \
             --dir \
-            -c.electronDist=${electron}/libexec/electron \
+            -c.electronDist=${electron.dist} \
             -c.electronVersion=${electron.version} \
             -c.npmRebuild=false
         ''
     }
 
     popd
+
+    runHook postBuild
   '';
 
   npmPackFlags = [ "--ignore-scripts" ];
@@ -137,7 +139,7 @@ buildNpmPackage' rec {
 
 
     ${
-      if stdenv.isDarwin then
+      if stdenv.hostPlatform.isDarwin then
         ''
           mkdir -p $out/Applications
 
@@ -151,7 +153,7 @@ buildNpmPackage' rec {
 
           makeWrapper ${lib.getExe electron} $out/bin/bruno \
             --add-flags $out/opt/bruno/resources/app.asar \
-            --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+            --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
             --set-default ELECTRON_IS_DEV 0 \
             --inherit-argv0
 
@@ -167,19 +169,19 @@ buildNpmPackage' rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Open-source IDE For exploring and testing APIs";
     homepage = "https://www.usebruno.com";
-    platforms = platforms.linux ++ platforms.darwin;
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    mainProgram = "bruno";
+    maintainers = with lib.maintainers; [
       gepbird
       kashw2
       lucasew
       mattpolzin
-      water-sucks
       redyf
+      water-sucks
     ];
-    mainProgram = "bruno";
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 }

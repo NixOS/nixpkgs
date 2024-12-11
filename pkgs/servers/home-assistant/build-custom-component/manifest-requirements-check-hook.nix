@@ -1,5 +1,6 @@
-{ python
-, makeSetupHook
+{
+  python,
+  makeSetupHook,
 }:
 
 makeSetupHook {

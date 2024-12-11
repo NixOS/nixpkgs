@@ -44,6 +44,7 @@
   nss,
   pango,
   pipewire,
+  vulkan-loader,
   wayland, # ozone/wayland
 
   # Command line programs
@@ -152,6 +153,7 @@ let
       speechd-minimal
       systemd
       util-linux
+      vulkan-loader
       wayland
       wget
     ]
@@ -164,11 +166,11 @@ let
 
   linux = stdenv.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "127.0.6533.119";
+    version = "131.0.6778.108";
 
     src = fetchurl {
       url = "https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_${finalAttrs.version}-1_amd64.deb";
-      hash = "sha256-k9rsELAtOFdLSi1dOTV4Lr7E2Uu5sR1/GOL9BWDqZl4=";
+      hash = "sha256-DU9qaMnn7gM/8VR4lsetWlkYu/Gs5+i/9JPYY2sbCi0=";
     };
 
     # With strictDeps on, some shebangs were not being patched correctly
@@ -209,9 +211,12 @@ let
       exe=$out/bin/google-chrome-$dist
 
       mkdir -p $out/bin $out/share
+      cp -v -a opt/* $out/share
+      cp -v -a usr/share/* $out/share
 
-      cp -a opt/* $out/share
-      cp -a usr/share/* $out/share
+      # replace bundled vulkan-loader
+      rm -v $out/share/google/$appname/libvulkan.so.1
+      ln -v -s -t "$out/share/google/$appname" "${lib.getLib vulkan-loader}/lib/libvulkan.so.1"
 
       substituteInPlace $out/share/google/$appname/google-$appname \
         --replace-fail 'CHROME_WRAPPER' 'WRAPPER'
@@ -236,14 +241,19 @@ let
         mv "$icon_file" "$logo_output_path/google-$appname.png"
       done
 
+      # "--simulate-outdated-no-au" disables auto updates and browser outdated popup
       makeWrapper "$out/share/google/$appname/google-$appname" "$exe" \
         --prefix LD_LIBRARY_PATH : "$rpath" \
         --prefix PATH            : "$binpath" \
         --suffix PATH            : "${lib.makeBinPath [ xdg-utils ]}" \
         --prefix XDG_DATA_DIRS   : "$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH:${addDriverRunpath.driverLink}/share" \
         --set CHROME_WRAPPER  "google-chrome-$dist" \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}" \
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
+        --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
         --add-flags ${lib.escapeShellArg commandLineArgs}
+
+      # Make sure that libGL and libvulkan are found by ANGLE libGLESv2.so
+      patchelf --set-rpath $rpath $out/share/google/$appname/lib*GL*
 
       for elf in $out/share/google/$appname/{chrome,chrome-sandbox,chrome_crashpad_handler}; do
         patchelf --set-rpath $rpath $elf
@@ -256,11 +266,11 @@ let
 
   darwin = stdenvNoCC.mkDerivation (finalAttrs: {
     inherit pname meta passthru;
-    version = "127.0.6533.120";
+    version = "131.0.6778.109";
 
     src = fetchurl {
-      url = "http://dl.google.com/release2/chrome/adqui4t7hzlljw2m2mmu2dvb6tmq_127.0.6533.120/GoogleChrome-127.0.6533.120.dmg";
-      hash = "sha256-kfUCTu8BIGcZTMaby0iylOCFxI+pLXcq9fKo2ow6HrM=";
+      url = "http://dl.google.com/release2/chrome/adhpt2otqvd2vrh5vbgwgtydt7gq_131.0.6778.109/GoogleChrome-131.0.6778.109.dmg";
+      hash = "sha256-9pKGJa7UiDx1QPnWk0ONDQukUdRAPGz1PeYd7UoReoQ=";
     };
 
     dontPatch = true;
@@ -282,9 +292,11 @@ let
       cp -r *.app $out/Applications
 
       mkdir -p $out/bin
-      makeWrapper $out/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome $out/bin/google-chrome-stable \
-        --add-flags ${lib.escapeShellArg commandLineArgs}
 
+      # "--simulate-outdated-no-au" disables auto updates and browser outdated popup
+      makeWrapper $out/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome $out/bin/google-chrome-stable \
+        --add-flags "--simulate-outdated-no-au='Tue, 31 Dec 2099 23:59:59 GMT'" \
+        --add-flags ${lib.escapeShellArg commandLineArgs}
       runHook postInstall
     '';
   });
@@ -305,4 +317,4 @@ let
     mainProgram = "google-chrome-stable";
   };
 in
-if stdenvNoCC.isDarwin then darwin else linux
+if stdenvNoCC.hostPlatform.isDarwin then darwin else linux

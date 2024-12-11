@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, perl
-, perlPackages
-, tayga
-, iproute2
-, iptables
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  perl,
+  perlPackages,
+  tayga,
+  iproute2,
+  iptables,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {

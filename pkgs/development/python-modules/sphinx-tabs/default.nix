@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "sphinx-tabs";
-  version = "3.4.5";
+  version = "3.4.7";
   format = "pyproject";
 
   outputs = [
@@ -31,7 +31,7 @@ buildPythonPackage rec {
     owner = "executablebooks";
     repo = "sphinx-tabs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uFSnIhvnmg3ZURJGbSOUpLVx0EDUs/9SewspM7gtNRk=";
+    hash = "sha256-bJXm3qMT1y7NqUA0iiEUA+USTWHxdV8tbEEiDrQKk1U=";
   };
 
   nativeBuildInputs = [

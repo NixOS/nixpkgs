@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "svg2tikz";
-  version = "3.1.0";
+  version = "3.2.0";
 
   disabled = pythonOlder "3.7";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "xyz2tex";
     repo = "svg2tikz";
     rev = "refs/tags/v${version}";
-    hash = "sha256-lL+CQGZMK+rxjw2kTNE6kK3FCt6ARsAD6ROMsXWwDCs=";
+    hash = "sha256-5SOUvrK83ff1x4MTVoJy68OaDmZUfrEwraEWmPMJKTA=";
   };
 
   build-system = [
@@ -37,7 +37,6 @@ buildPythonPackage rec {
     "lxml"
   ];
 
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "svg2tikz" ];
@@ -51,5 +50,6 @@ buildPythonPackage rec {
       dotlambda
       gal_bolle
     ];
+    broken = true;
   };
 }

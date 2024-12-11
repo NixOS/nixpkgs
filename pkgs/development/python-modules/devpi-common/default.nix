@@ -2,13 +2,15 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
-  setuptools,
-  setuptools-changelog-shortener,
-  requests,
-  tomli,
-  pytestCheckHook,
   lazy,
+  packaging-legacy,
+  pytestCheckHook,
+  pythonOlder,
+  requests,
+  setuptools-changelog-shortener,
+  setuptools,
+  tomli,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -24,20 +26,23 @@ buildPythonPackage rec {
     hash = "sha256-I1oKmkXJblTGC6a6L3fYVs+Q8aacG+6UmIfp7cA6Qcw=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-changelog-shortener
   ];
 
-  propagatedBuildInputs = [
-    requests
+  dependencies = [
     lazy
+    packaging-legacy
+    requests
     tomli
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "devpi_common" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/devpi/devpi";

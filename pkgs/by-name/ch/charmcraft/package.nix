@@ -1,37 +1,14 @@
 {
   lib,
   git,
-  python3,
+  python3Packages,
   fetchFromGitHub,
   nix-update-script,
 }:
 
-let
-  python = python3.override {
-    self = python;
-    packageOverrides = self: super: {
-      pydantic-yaml = super.pydantic-yaml.overridePythonAttrs (old: rec {
-        version = "0.11.2";
-        src = fetchFromGitHub {
-          owner = "NowanIlfideme";
-          repo = "pydantic-yaml";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-AeUyVav0/k4Fz69Qizn4hcJKoi/CDR9eUan/nJhWsDY=";
-        };
-        dependencies = with self; [
-          deprecated
-          importlib-metadata
-          pydantic_1
-          ruamel-yaml
-          types-deprecated
-        ];
-      });
-    };
-  };
-in
-python.pkgs.buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "charmcraft";
-  version = "3.1.2";
+  version = "3.2.2";
 
   pyproject = true;
 
@@ -39,14 +16,14 @@ python.pkgs.buildPythonApplication rec {
     owner = "canonical";
     repo = "charmcraft";
     rev = "refs/tags/${version}";
-    hash = "sha256-Qi2ZtAYgQlKj77QPovcT3RrPwAlEwaFyoJ0MAq4EETE=";
+    hash = "sha256-2MI2cbAohfTgbilxZcFvmxt/iVjR6zJ2o0gequB//hg=";
   };
 
   postPatch = ''
     substituteInPlace charmcraft/__init__.py --replace-fail "dev" "${version}"
   '';
 
-  dependencies = with python.pkgs; [
+  dependencies = with python3Packages; [
     craft-application
     craft-cli
     craft-parts
@@ -58,7 +35,7 @@ python.pkgs.buildPythonApplication rec {
     humanize
     jinja2
     jsonschema
-    pydantic_1
+    pydantic
     python-dateutil
     pyyaml
     requests
@@ -69,15 +46,15 @@ python.pkgs.buildPythonApplication rec {
     urllib3
   ];
 
-  build-system = with python.pkgs; [
-    setuptools
-    setuptools-scm
+  build-system = with python3Packages; [ setuptools-scm ];
+
+  pythonRelaxDeps = [
+    "urllib3"
+    "craft-application"
   ];
 
-  pythonRelaxDeps = [ "urllib3" ];
-
   nativeCheckInputs =
-    with python.pkgs;
+    with python3Packages;
     [
       hypothesis
       pyfakefs

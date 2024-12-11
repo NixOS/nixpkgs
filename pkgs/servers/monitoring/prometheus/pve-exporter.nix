@@ -1,16 +1,17 @@
-{ lib
-, python3
-, fetchPypi
-, nixosTests
+{
+  lib,
+  python3,
+  fetchPypi,
+  nixosTests,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "prometheus_pve_exporter";
-  version = "3.4.4";
+  version = "3.4.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-kQo3NVrqsM78bFE9sZjubNdT6yj3Dza3BqF6DkYA6eI=";
+    hash = "sha256-V+/SeQEBRfH9vVYR43sZI0SuPSDaQqXeuy958f6txm0=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

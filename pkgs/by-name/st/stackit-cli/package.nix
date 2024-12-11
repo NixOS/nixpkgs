@@ -1,26 +1,27 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, makeWrapper
-, less
-, xdg-utils
-, testers
-, stackit-cli
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  less,
+  xdg-utils,
+  testers,
+  stackit-cli,
 }:
 
 buildGoModule rec {
   pname = "stackit-cli";
-  version = "0.11.0";
+  version = "0.17.0";
 
   src = fetchFromGitHub {
     owner = "stackitcloud";
     repo = "stackit-cli";
     rev = "v${version}";
-    hash = "sha256-ioV5ki2Jkbo/Ax9XDp/gm9NFTFS9604VAwOgs8wkoKU=";
+    hash = "sha256-oDy/imlRoMS1kVHlMSCHaurNJX5eSs6W2sj14ZpsF8k=";
   };
 
-  vendorHash = "sha256-1MM4P4eLBZvYgmdYjaihe30qnCvTuY7ZHnAZei3dHhQ=";
+  vendorHash = "sha256-EWDtVs9H7e+HSyO1ZzCV5T+pGporQhRNlI9VkXc6j1E=";
 
   subPackages = [ "." ];
 
@@ -32,7 +33,10 @@ buildGoModule rec {
     "-X main.version=${version}"
   ];
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   postInstall = ''
     mv $out/bin/{stackit-cli,stackit} # rename the binary
@@ -47,7 +51,12 @@ buildGoModule rec {
 
   postFixup = ''
     wrapProgram $out/bin/stackit \
-      --suffix PATH : ${lib.makeBinPath [ less xdg-utils ]}
+      --suffix PATH : ${
+        lib.makeBinPath [
+          less
+          xdg-utils
+        ]
+      }
   '';
 
   nativeCheckInputs = [ less ];

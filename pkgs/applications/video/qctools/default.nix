@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, qmake, wrapQtAppsHook, ffmpeg, qtmultimedia, qwt }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  qmake,
+  wrapQtAppsHook,
+  ffmpeg_6,
+  qtmultimedia,
+  qwt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "qctools";
@@ -11,9 +20,16 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${pname}/Project/QtCreator";
 
-  nativeBuildInputs = [ qmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ ffmpeg qtmultimedia qwt ];
+  buildInputs = [
+    ffmpeg_6
+    qtmultimedia
+    qwt
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -30,11 +46,11 @@ stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Audiovisual analytics and filtering of video files";
     homepage = "https://mediaarea.net/QCTools";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ orivej ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ orivej ];
+    platforms = lib.platforms.linux;
   };
 }

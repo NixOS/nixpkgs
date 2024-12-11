@@ -1,37 +1,39 @@
 # NixOS module for Buildbot continuous integration server.
-
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.buildbot-master;
   opt = options.services.buildbot-master;
 
-  package = pkgs.python3.pkgs.toPythonModule cfg.package;
-  python = package.pythonModule;
+  package = cfg.package.python.pkgs.toPythonModule cfg.package;
+  python = cfg.package.python;
 
-  escapeStr = escape [ "'" ];
+  escapeStr = lib.escape [ "'" ];
 
   defaultMasterCfg = pkgs.writeText "master.cfg" ''
     from buildbot.plugins import *
     ${cfg.extraImports}
     factory = util.BuildFactory()
     c = BuildmasterConfig = dict(
-     workers       = [${concatStringsSep "," cfg.workers}],
+     workers       = [${lib.concatStringsSep "," cfg.workers}],
      protocols     = { 'pb': {'port': ${toString cfg.pbPort} } },
      title         = '${escapeStr cfg.title}',
      titleURL      = '${escapeStr cfg.titleUrl}',
      buildbotURL   = '${escapeStr cfg.buildbotUrl}',
      db            = dict(db_url='${escapeStr cfg.dbUrl}'),
      www           = dict(port=${toString cfg.port}),
-     change_source = [ ${concatStringsSep "," cfg.changeSource} ],
-     schedulers    = [ ${concatStringsSep "," cfg.schedulers} ],
-     builders      = [ ${concatStringsSep "," cfg.builders} ],
-     services      = [ ${concatStringsSep "," cfg.reporters} ],
-     configurators = [ ${concatStringsSep "," cfg.configurators} ],
+     change_source = [ ${lib.concatStringsSep "," cfg.changeSource} ],
+     schedulers    = [ ${lib.concatStringsSep "," cfg.schedulers} ],
+     builders      = [ ${lib.concatStringsSep "," cfg.builders} ],
+     services      = [ ${lib.concatStringsSep "," cfg.reporters} ],
+     configurators = [ ${lib.concatStringsSep "," cfg.configurators} ],
     )
-    for step in [ ${concatStringsSep "," cfg.factorySteps} ]:
+    for step in [ ${lib.concatStringsSep "," cfg.factorySteps} ]:
       factory.addStep(step)
 
     ${cfg.extraConfig}
@@ -58,67 +60,68 @@ let
     m.setServiceParent(application)
   '';
 
-in {
+in
+{
   options = {
     services.buildbot-master = {
 
-      factorySteps = mkOption {
-        type = types.listOf types.str;
+      factorySteps = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         description = "Factory Steps";
-        default = [];
+        default = [ ];
         example = [
           "steps.Git(repourl='https://github.com/buildbot/pyflakes.git', mode='incremental')"
           "steps.ShellCommand(command=['trial', 'pyflakes'])"
         ];
       };
 
-      changeSource = mkOption {
-        type = types.listOf types.str;
+      changeSource = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         description = "List of Change Sources.";
-        default = [];
+        default = [ ];
         example = [
           "changes.GitPoller('https://github.com/buildbot/pyflakes.git', workdir='gitpoller-workdir', branch='master', pollinterval=300)"
         ];
       };
 
-      configurators = mkOption {
-        type = types.listOf types.str;
+      configurators = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         description = "Configurator Steps, see https://docs.buildbot.net/latest/manual/configuration/configurators.html";
-        default = [];
+        default = [ ];
         example = [
           "util.JanitorConfigurator(logHorizon=timedelta(weeks=4), hour=12, dayOfWeek=6)"
         ];
       };
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable the Buildbot continuous integration server.";
       };
 
-      extraConfig = mkOption {
-        type = types.str;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         description = "Extra configuration to append to master.cfg";
         default = "c['buildbotNetUsageData'] = None";
       };
 
-      extraImports = mkOption {
-        type = types.str;
+      extraImports = lib.mkOption {
+        type = lib.types.lines;
         description = "Extra python imports to prepend to master.cfg";
         default = "";
         example = "from buildbot.process.project import Project";
       };
 
-      masterCfg = mkOption {
-        type = types.path;
+      masterCfg = lib.mkOption {
+        type = lib.types.path;
         description = "Optionally pass master.cfg path. Other options in this configuration will be ignored.";
         default = defaultMasterCfg;
-        defaultText = literalMD ''generated configuration file'';
+        defaultText = lib.literalMD ''generated configuration file'';
         example = "/etc/nixos/buildbot/master.cfg";
       };
 
-      schedulers = mkOption {
-        type = types.listOf types.str;
+      schedulers = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         description = "List of Schedulers.";
         default = [
           "schedulers.SingleBranchScheduler(name='all', change_filter=util.ChangeFilter(branch='master'), treeStableTimer=None, builderNames=['runtests'])"
@@ -126,60 +129,60 @@ in {
         ];
       };
 
-      builders = mkOption {
-        type = types.listOf types.str;
+      builders = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         description = "List of Builders.";
         default = [
           "util.BuilderConfig(name='runtests',workernames=['example-worker'],factory=factory)"
         ];
       };
 
-      workers = mkOption {
-        type = types.listOf types.str;
+      workers = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         description = "List of Workers.";
         default = [ "worker.Worker('example-worker', 'pass')" ];
       };
 
-      reporters = mkOption {
-        default = [];
-        type = types.listOf types.str;
+      reporters = lib.mkOption {
+        default = [ ];
+        type = lib.types.listOf lib.types.str;
         description = "List of reporter objects used to present build status to various users.";
       };
 
-      user = mkOption {
+      user = lib.mkOption {
         default = "buildbot";
-        type = types.str;
+        type = lib.types.str;
         description = "User the buildbot server should execute under.";
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         default = "buildbot";
-        type = types.str;
+        type = lib.types.str;
         description = "Primary group of buildbot user.";
       };
 
-      extraGroups = mkOption {
-        type = types.listOf types.str;
-        default = [];
+      extraGroups = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
         description = "List of extra groups that the buildbot user should be a part of.";
       };
 
-      home = mkOption {
+      home = lib.mkOption {
         default = "/home/buildbot";
-        type = types.path;
+        type = lib.types.path;
         description = "Buildbot home directory.";
       };
 
-      buildbotDir = mkOption {
+      buildbotDir = lib.mkOption {
         default = "${cfg.home}/master";
-        defaultText = literalExpression ''"''${config.${opt.home}}/master"'';
-        type = types.path;
+        defaultText = lib.literalExpression ''"''${config.${opt.home}}/master"'';
+        type = lib.types.path;
         description = "Specifies the Buildbot directory.";
       };
 
-      pbPort = mkOption {
+      pbPort = lib.mkOption {
         default = 9989;
-        type = types.either types.str types.int;
+        type = lib.types.either lib.types.str lib.types.int;
         example = "'tcp:9990:interface=127.0.0.1'";
         description = ''
           The buildmaster will listen on a TCP port of your choosing
@@ -193,69 +196,69 @@ in {
         '';
       };
 
-      listenAddress = mkOption {
+      listenAddress = lib.mkOption {
         default = "0.0.0.0";
-        type = types.str;
+        type = lib.types.str;
         description = "Specifies the bind address on which the buildbot HTTP interface listens.";
       };
 
-      buildbotUrl = mkOption {
+      buildbotUrl = lib.mkOption {
         default = "http://localhost:8010/";
-        type = types.str;
+        type = lib.types.str;
         description = "Specifies the Buildbot URL.";
       };
 
-      title = mkOption {
+      title = lib.mkOption {
         default = "Buildbot";
-        type = types.str;
+        type = lib.types.str;
         description = "Specifies the Buildbot Title.";
       };
 
-      titleUrl = mkOption {
+      titleUrl = lib.mkOption {
         default = "Buildbot";
-        type = types.str;
+        type = lib.types.str;
         description = "Specifies the Buildbot TitleURL.";
       };
 
-      dbUrl = mkOption {
+      dbUrl = lib.mkOption {
         default = "sqlite:///state.sqlite";
-        type = types.str;
+        type = lib.types.str;
         description = "Specifies the database connection string.";
       };
 
-      port = mkOption {
+      port = lib.mkOption {
         default = 8010;
-        type = types.port;
+        type = lib.types.port;
         description = "Specifies port number on which the buildbot HTTP interface listens.";
       };
 
-      package = mkPackageOption pkgs "buildbot-full" {
+      package = lib.mkPackageOption pkgs "buildbot-full" {
         example = "buildbot";
       };
 
-      packages = mkOption {
+      packages = lib.mkOption {
         default = [ pkgs.git ];
-        defaultText = literalExpression "[ pkgs.git ]";
-        type = types.listOf types.package;
+        defaultText = lib.literalExpression "[ pkgs.git ]";
+        type = lib.types.listOf lib.types.package;
         description = "Packages to add to PATH for the buildbot process.";
       };
 
-      pythonPackages = mkOption {
-        type = types.functionTo (types.listOf types.package);
+      pythonPackages = lib.mkOption {
+        type = lib.types.functionTo (lib.types.listOf lib.types.package);
         default = pythonPackages: with pythonPackages; [ ];
-        defaultText = literalExpression "pythonPackages: with pythonPackages; [ ]";
+        defaultText = lib.literalExpression "pythonPackages: with pythonPackages; [ ]";
         description = "Packages to add the to the PYTHONPATH of the buildbot process.";
-        example = literalExpression "pythonPackages: with pythonPackages; [ requests ]";
+        example = lib.literalExpression "pythonPackages: with pythonPackages; [ requests ]";
       };
     };
   };
 
-  config = mkIf cfg.enable {
-    users.groups = optionalAttrs (cfg.group == "buildbot") {
+  config = lib.mkIf cfg.enable {
+    users.groups = lib.optionalAttrs (cfg.group == "buildbot") {
       buildbot = { };
     };
 
-    users.users = optionalAttrs (cfg.user == "buildbot") {
+    users.users = lib.optionalAttrs (cfg.user == "buildbot") {
       buildbot = {
         description = "Buildbot User.";
         isNormalUser = true;
@@ -270,7 +273,9 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       path = cfg.packages ++ cfg.pythonPackages python.pkgs;
-      environment.PYTHONPATH = "${python.withPackages (self: cfg.pythonPackages self ++ [ package ])}/${python.sitePackages}";
+      environment.PYTHONPATH = "${
+        python.withPackages (self: cfg.pythonPackages self ++ [ package ])
+      }/${python.sitePackages}";
 
       preStart = ''
         mkdir -vp "${cfg.buildbotDir}"
@@ -298,8 +303,11 @@ in {
   };
 
   imports = [
-    (mkRenamedOptionModule [ "services" "buildbot-master" "bpPort" ] [ "services" "buildbot-master" "pbPort" ])
-    (mkRemovedOptionModule [ "services" "buildbot-master" "status" ] ''
+    (lib.mkRenamedOptionModule
+      [ "services" "buildbot-master" "bpPort" ]
+      [ "services" "buildbot-master" "pbPort" ]
+    )
+    (lib.mkRemovedOptionModule [ "services" "buildbot-master" "status" ] ''
       Since Buildbot 0.9.0, status targets are deprecated and ignored.
       Review your configuration and migrate to reporters (available at services.buildbot-master.reporters).
     '')

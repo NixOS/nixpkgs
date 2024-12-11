@@ -45,6 +45,7 @@ PKG_PREFERENCES = {
     "numpy": "numpy_1",
     "ollama-hass": "ollama",
     "paho-mqtt": "paho-mqtt_1",
+    "pysuezV2": "pysuez",
     "sentry-sdk": "sentry-sdk",
     "slackclient": "slack-sdk",
     "SQLAlchemy": "sqlalchemy",
@@ -106,12 +107,17 @@ def parse_components(version: str = "master"):
                 components_with_tests.append(entry.name)
 
         sys.path.append(core_path)
-        from script.hassfest.model import Integration  # type: ignore
-        integrations = Integration.load_dir(
-            pathlib.Path(
+        from script.hassfest.model import Config, Integration  # type: ignore
+        config = Config(
+            root=pathlib.Path(core_path),
+            specific_integrations=None,
+            action="generate",
+            requirements=False,
+            core_integrations_path=pathlib.Path(
                 os.path.join(core_path, "homeassistant/components")
-            )
+            ),
         )
+        integrations = Integration.load_dir(config.core_integrations_path, config)
         for domain in sorted(integrations):
             integration = integrations[domain]
             if extra_deps := EXTRA_COMPONENT_DEPS.get(integration.domain):

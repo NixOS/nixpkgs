@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, SDL2
-, SDL2_image
-, SDL2_mixer
-, SDL2_ttf
-, gettext
-, libpng
-, pkg-config
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
+  gettext,
+  libpng,
+  pkg-config,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -68,6 +69,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "edgar";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     platforms = lib.platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

@@ -1,9 +1,17 @@
-{ lib, stdenv, fetchurl, fetchzip, perl, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchzip,
+  perl,
+  ncurses,
 
   # for tests
-, aspell, glibc, runCommand
+  aspell,
+  glibc,
+  runCommand,
 
-, searchNixProfiles ? true
+  searchNixProfiles ? true,
 }:
 
 let
@@ -34,7 +42,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ perl ];
-  buildInputs = [ ncurses perl ];
+  buildInputs = [
+    ncurses
+    perl
+  ];
 
   doCheck = true;
 
@@ -53,16 +64,19 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.tests = {
-    uses-curses = runCommand "${pname}-curses" {
-      buildInputs = [ glibc ];
-    } ''
-      if ! ldd ${aspell}/bin/aspell | grep -q ${ncurses}
-      then
-        echo "Test failure: It does not look like aspell picked up the curses dependency."
-        exit 1
-      fi
-      touch $out
-    '';
+    uses-curses =
+      runCommand "${pname}-curses"
+        {
+          buildInputs = [ glibc ];
+        }
+        ''
+          if ! ldd ${aspell}/bin/aspell | grep -q ${ncurses}
+          then
+            echo "Test failure: It does not look like aspell picked up the curses dependency."
+            exit 1
+          fi
+          touch $out
+        '';
   };
 
   meta = {

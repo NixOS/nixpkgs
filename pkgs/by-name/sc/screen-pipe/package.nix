@@ -49,7 +49,7 @@ rustPlatform.buildRustPackage rec {
       openssl
       sqlite
     ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk_12_3.frameworks;
       [
         CoreAudio
@@ -65,12 +65,12 @@ rustPlatform.buildRustPackage rec {
         SystemConfiguration
       ]
     )
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       xorg.libxcb
     ];
 
-  buildFeatures = lib.optional stdenv.isDarwin "metal";
+  buildFeatures = lib.optional stdenv.hostPlatform.isDarwin "metal";
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libusbp
-, cmake
-, pkg-config
-, qt5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libusbp,
+  cmake,
+  pkg-config,
+  qt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "pololu";
     repo = "pololu-tic-software";
     rev = "refs/tags/${finalAttrs.version}";
-    sha256 = "sha256-C/v5oaC5zZwm+j9CbFaDW+ebzHxPVb8kZLg9c0HyPbc=";
+    hash = "sha256-C/v5oaC5zZwm+j9CbFaDW+ebzHxPVb8kZLg9c0HyPbc=";
   };
 
   outputs = [

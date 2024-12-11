@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "craft-cli";
-  version = "2.6.0";
+  version = "2.10.1";
 
   pyproject = true;
 
@@ -21,12 +21,12 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-cli";
     rev = "refs/tags/${version}";
-    hash = "sha256-8+dyFOEW0F4t2issRlOqdbzf0Avg0NsADgk96mZFpEQ=";
+    hash = "sha256-XKRV5VJLC3B5gcNr/icOxWB6pDXDT7MV5wM/vEQHVm4=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "setuptools==70.1.0" "setuptools"
+      --replace-fail "setuptools==75.2.0" "setuptools"
   '';
 
   build-system = [ setuptools-scm ];

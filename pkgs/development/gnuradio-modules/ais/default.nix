@@ -60,7 +60,7 @@ mkDerivation rec {
     platforms = platforms.unix;
     # rpcserver_aggregator.h:111:54: error: no template named 'unary_function'
     # in namespace 'std'; did you mean '__unary_function'?
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ mog ];
   };
 }

@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ django ];
 
-  pyImportCheck = [ "pwa" ];
+  pythonImportsCheck = [ "pwa" ];
 
   checkPhase = ''
     runHook preCheck

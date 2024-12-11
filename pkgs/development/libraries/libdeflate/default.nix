@@ -1,27 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fixDarwinDylibNames
-, pkgsStatic
-, cmake
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fixDarwinDylibNames,
+  pkgsStatic,
+  cmake,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdeflate";
-  version = "1.20";
+  version = "1.22";
 
   src = fetchFromGitHub {
     owner = "ebiggers";
     repo = "libdeflate";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-kHLdu/Pb94+arj98Jjp57FpvWbAXW49s9cxCA1cf898=";
+    hash = "sha256-KpKY0A1cRV9XR1WrE15Eewf2fDWwIFGjQm/fFCnBDrg=";
   };
 
   cmakeFlags = lib.optionals stdenv.hostPlatform.isStatic [ "-DLIBDEFLATE_BUILD_SHARED_LIB=OFF" ];
 
-  nativeBuildInputs = [ cmake ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
 
   passthru.tests = {
     static = pkgsStatic.libdeflate;
@@ -36,7 +36,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ebiggers/libdeflate";
     changelog = "https://github.com/ebiggers/libdeflate/blob/v${finalAttrs.version}/NEWS.md";
     platforms = platforms.unix ++ platforms.windows;
-    maintainers = with maintainers; [ orivej kaction ];
+    maintainers = with maintainers; [
+      orivej
+      kaction
+    ];
     pkgConfigModules = [ "libdeflate" ];
   };
 })

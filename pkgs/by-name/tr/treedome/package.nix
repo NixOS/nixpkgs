@@ -1,33 +1,34 @@
-{ lib
-, cargo-tauri
-, cmake
-, dbus
-, fetchgit
-, fetchYarnDeps
-, freetype
-, gsettings-desktop-schemas
-, gtk3
-, libsoup
-, stdenv
-, yarnConfigHook
-, yarnBuildHook
-, nodejs
-, openssl
-, pkg-config
-, rustPlatform
-, webkitgtk
-, wrapGAppsHook3
-, sqlite
+{
+  lib,
+  cargo-tauri_1,
+  cmake,
+  dbus,
+  fetchgit,
+  fetchYarnDeps,
+  freetype,
+  gsettings-desktop-schemas,
+  gtk3,
+  libsoup_2_4,
+  stdenv,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  webkitgtk_4_0,
+  wrapGAppsHook3,
+  sqlite,
 }:
 
 let
   pname = "treedome";
-  version = "0.4.5";
+  version = "0.5.1";
 
   src = fetchgit {
     url = "https://codeberg.org/solver-orgz/treedome";
     rev = version;
-    hash = "sha256-YkyjG/ee5WeO5OD4FZnWaqcOJO3YC0uQkbwGkCNBxC8=";
+    hash = "sha256-EYSB9BJhk0yIwT1h8cIo6fpDI10av6yCtOR4FuAY5dM=";
     fetchLFS = true;
   };
 
@@ -37,7 +38,7 @@ let
 
     offlineCache = fetchYarnDeps {
       yarnLock = "${src}/yarn.lock";
-      hash = "sha256-CrD/n8z5fJKkBKEcvpRHJaqXBt1gbON7VsuLb2JGu1A=";
+      hash = "sha256-H9Y/heYEPU5LvIZAgVn0FhiNQ0QKAQEDQ1/oFogi9vc=";
     };
 
     nativeBuildInputs = [
@@ -87,7 +88,7 @@ rustPlatform.buildRustPackage {
   nativeBuildInputs = [
     cmake
     pkg-config
-    cargo-tauri
+    cargo-tauri_1
     wrapGAppsHook3
   ];
 
@@ -95,9 +96,9 @@ rustPlatform.buildRustPackage {
     dbus
     openssl
     freetype
-    libsoup
+    libsoup_2_4
     gtk3
-    webkitgtk
+    webkitgtk_4_0
     gsettings-desktop-schemas
     sqlite
   ];

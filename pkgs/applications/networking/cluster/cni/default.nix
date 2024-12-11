@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "cni";
@@ -17,14 +21,23 @@ buildGoModule rec {
     "./cnitool"
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Container Network Interface - networking for Linux containers";
     mainProgram = "cnitool";
     license = licenses.asl20;
     homepage = "https://github.com/containernetworking/cni";
-    maintainers = with maintainers; [ offline vdemeester ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [
+      offline
+      vdemeester
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
   };
 }

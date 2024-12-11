@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages, libspnav, jq }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  libspnav,
+  jq,
+}:
 
 let
 
@@ -73,4 +80,5 @@ let
 
   };
 
-in self
+in
+self

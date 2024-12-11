@@ -1,36 +1,37 @@
-{ lib
-, blueprint-compiler
-, cargo
-, darwin
-, desktop-file-utils
-, fetchFromGitHub
-, glib
-, gtk4
-, libadwaita
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, stdenv
-, wrapGAppsHook4
+{
+  lib,
+  blueprint-compiler,
+  cargo,
+  darwin,
+  desktop-file-utils,
+  fetchFromGitHub,
+  glib,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  stdenv,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fretboard";
-  version = "7.1";
+  version = "8.0";
 
   src = fetchFromGitHub {
     owner = "bragefuglseth";
     repo = "fretboard";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZBDsG59WLsTYdayqGMBAh9+gDtoaqlAuSdObcjAk6DA=";
+    hash = "sha256-8xINlVhWgg73DrRi8S5rhNc1sbG4DbWOsiEBjU8NSXo=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     src = finalAttrs.src;
     name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-W0gvSPVG0q1928uDky4Ad4VowuWcj6DyyWF2C2Y573c=";
+    hash = "sha256-LSL7VvRgA8MaFXn/vi5Zf1sY4cqv0a9PNnZ3JlDNIaE=";
   };
 
   nativeBuildInputs = [
@@ -45,17 +46,21 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    glib
-    gtk4
-    libadwaita
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  buildInputs =
+    [
+      glib
+      gtk4
+      libadwaita
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Foundation
+    ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
-    "-Wno-error=incompatible-function-pointer-types"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=incompatible-function-pointer-types"
+    ]
+  );
 
   meta = with lib; {
     changelog = "https://github.com/bragefuglseth/fretboard/releases/tag/v${finalAttrs.version}";
@@ -65,6 +70,6 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "fretboard";
     maintainers = with maintainers; [ michaelgrahamevans ];
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

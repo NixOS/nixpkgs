@@ -402,6 +402,7 @@ with self;
     hash = "sha256-0InGCF34LWQes9S4OgbR6w+6cylThYuj1Dj0aQyTnuY=";
     meta.description = "Websocket library for use with cohttp and async";
     propagatedBuildInputs = [
+      async_ssl
       async_websocket
       cohttp-async
       ppx_jane
@@ -1868,7 +1869,8 @@ with self;
 
   typerep = janePackage {
     pname = "typerep";
-    hash = "sha256-0KwJdWtibgjxghFmOYKyPrcOAfoLpxYGBZm2KpH8tgA=";
+    version = "0.17.1";
+    hash = "sha256-hw03erwLx9IAbkBibyhZxofA5jIi12rFJOHNEVYpLSk=";
     meta.description = "Typerep is a library for runtime types";
     propagatedBuildInputs = [ base ];
   };

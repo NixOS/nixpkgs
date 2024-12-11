@@ -2,19 +2,24 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  freezegun,
-  langchain,
+
+  # build-system
+  poetry-core,
+
+  # dependencies
   langchain-core,
   openai,
   tiktoken,
+
+  # tests
+  freezegun,
+  langchain-standard-tests,
   lark,
   pandas,
-  poetry-core,
   pytest-asyncio,
+  pytestCheckHook,
   pytest-mock,
   pytest-socket,
-  pytestCheckHook,
-  pythonOlder,
   requests-mock,
   responses,
   syrupy,
@@ -23,25 +28,20 @@
 
 buildPythonPackage rec {
   pname = "langchain-openai";
-  version = "0.1.22";
+  version = "0.2.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-openai==${version}";
-    hash = "sha256-5UAijSTfQ6nQxdZvKHl2o01wDW6+Jphf38V+dAs7Ffk=";
+    hash = "sha256-Gm7MAOuG+kYQ3TRTRdQXJ+HcoUz+iL9j+pTXz+zAySg=";
   };
 
   sourceRoot = "${src.name}/libs/partners/openai";
 
   preConfigure = ''
-    ln -s ${src}/libs/standard-tests/langchain_standard_tests ./langchain_standard_tests
-
     substituteInPlace pyproject.toml \
-      --replace-fail "path = \"../../standard-tests\"" "path = \"./langchain_standard_tests\"" \
       --replace-fail "--cov=langchain_openai" ""
   '';
 
@@ -55,12 +55,13 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     freezegun
+    langchain-standard-tests
     lark
     pandas
     pytest-asyncio
+    pytestCheckHook
     pytest-mock
     pytest-socket
-    pytestCheckHook
     requests-mock
     responses
     syrupy
@@ -71,23 +72,24 @@ buildPythonPackage rec {
 
   disabledTests = [
     # These tests require network access
+    "test__convert_dict_to_message_tool_call"
     "test__get_encoding_model"
-    "test_get_token_ids"
-    "test_azure_openai_secrets"
     "test_azure_openai_api_key_is_secret_string"
-    "test_get_num_tokens_from_messages"
     "test_azure_openai_api_key_masked_when_passed_from_env"
     "test_azure_openai_api_key_masked_when_passed_via_constructor"
+    "test_azure_openai_secrets"
     "test_azure_openai_uses_actual_secret_value_from_secretstr"
     "test_azure_serialized_secrets"
-    "test_openai_get_num_tokens"
     "test_chat_openai_get_num_tokens"
+    "test_get_num_tokens_from_messages"
+    "test_get_token_ids"
+    "test_openai_get_num_tokens"
   ];
 
   pythonImportsCheck = [ "langchain_openai" ];
 
   passthru = {
-    updateScript = langchain-core.updateScript;
+    inherit (langchain-core) updateScript;
   };
 
   meta = {
@@ -95,6 +97,9 @@ buildPythonPackage rec {
     description = "Integration package connecting OpenAI and LangChain";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/partners/openai";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ natsukium ];
+    maintainers = with lib.maintainers; [
+      natsukium
+      sarahec
+    ];
   };
 }

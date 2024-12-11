@@ -1,18 +1,19 @@
-{ lib
-, buildGoModule
-, fetchFromGitea
-, callPackage
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitea,
+  callPackage,
+  nixosTests,
 }:
 
 let
-  version = "0.13.16";
+  version = "0.14.3";
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "Klasse-Methode";
     repo = "eintopf";
     rev = "v${version}";
-    hash = "sha256-ex5bpO60ousJcgZGdviqWrCyihycW+JT+EYFvdooUDw=";
+    hash = "sha256-cWHWRxZFoArBB5PiuY6EQubKJKm3/79fwNhnABOtBrM=";
   };
   frontend = callPackage ./frontend.nix { inherit src version; };
 in
@@ -21,7 +22,7 @@ buildGoModule rec {
   pname = "eintopf";
   inherit version src;
 
-  vendorHash = "sha256-dBxI6cUGc16lg89x8b+hSLcv5y/MLf6vDIvqdMBUz3I=";
+  vendorHash = "sha256-ysAgyaewREI8TaMnKH+kh33QT6AN1eLhog35lv7CbVU=";
 
   ldflags = [
     "-s"
@@ -44,14 +45,11 @@ buildGoModule rec {
     inherit (nixosTests) eintopf;
   };
 
-  meta = with lib; {
+  meta = {
     description = "A calendar for Stuttgart, showing events, groups and places";
     homepage = "https://codeberg.org/Klasse-Methode/eintopf";
-    # License is going to change back to AGPL in the next release
-    # https://codeberg.org/Klasse-Methode/eintopf/issues/351#issuecomment-2076870
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ onny ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ onny ];
+    platforms = lib.platforms.unix;
   };
 }
-

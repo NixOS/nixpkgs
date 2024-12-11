@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
@@ -29,6 +30,14 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-eVxpcYL3ZgwidkSt6tUav3Bkne4lo1QCshdUFqkA0wI=";
   };
+
+  # ModuleNotFoundError: No module named '_decimal'
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    grep -Rl 'from _decimal' tests/ | while read -r test_file; do
+      substituteInPlace "$test_file" \
+        --replace-fail 'from _decimal' 'from decimal'
+    done
+  '';
 
   build-system = [ setuptools ];
 

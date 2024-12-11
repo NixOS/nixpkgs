@@ -1,7 +1,8 @@
-{ lib
-, python3
-, git
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  git,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -15,11 +16,6 @@ python3.pkgs.buildPythonApplication rec {
     rev = "refs/tags/${version}";
     hash = "sha256-vXQFgP0KDWo1VWe7tMGCB2yEYlr/1KMXsiNupBVLBqc=";
   };
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "--cov=gato" ""
-  '';
 
   nativeBuildInputs = with python3.pkgs; [
     setuptools
@@ -36,6 +32,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     git
+    pytest-cov-stub
     pytestCheckHook
   ];
 

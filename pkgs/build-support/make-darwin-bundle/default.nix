@@ -3,11 +3,16 @@
 # applications. If the package conatins a .desktop file use
 # `desktopToDarwinLauncher` instead.
 
-{ lib, writeShellScript, writeDarwinBundle }:
+{
+  lib,
+  writeShellScript,
+  writeDarwinBundle,
+}:
 
-{ name # The name of the Application file.
-, exec # Executable file.
-, icon ? "" # Optional icon file.
+{
+  name, # The name of the Application file.
+  exec, # Executable file.
+  icon ? "", # Optional icon file.
 }:
 
 writeShellScript "make-darwin-bundle-${name}" (''
@@ -22,5 +27,5 @@ writeShellScript "make-darwin-bundle-${name}" (''
     ${writeDarwinBundle}/bin/write-darwin-bundle "''${!outputBin}" "${name}" "${exec}"
   }
 
-  preDistPhases+=" makeDarwinBundlePhase"
+  appendToVar preDistPhases makeDarwinBundlePhase
 '')

@@ -1,33 +1,34 @@
 {
   lib,
-  buildGoModule,
+  buildGo123Module,
   fetchFromGitHub,
   pnpm,
   nodejs,
-  go,
+  go_1_23,
   git,
   cacert,
+  nixosTests,
 }:
 let
   pname = "homebox";
-  version = "0.13.0";
+  version = "0.16.0";
   src = fetchFromGitHub {
     owner = "sysadminsmedia";
     repo = "homebox";
     rev = "v${version}";
-    hash = "sha256-mhb4q0ja94TjvOzl28WVb3uzkR9MKlqifFJgUo6hfrA=";
+    hash = "sha256-d8SQWj7S6G1ZemMH6QL9QZuPQfxNRcfCurPaTnS0Iyo=";
   };
 in
-buildGoModule {
+buildGo123Module {
   inherit pname version src;
 
-  vendorHash = "sha256-QRmP6ichKjwDWEx13sEs1oetc4nojGyJnKafAATTNTA=";
+  vendorHash = "sha256-Ftm5tR3w8S3mjYLJG0+17nYP5kDbaAd8QkbZpNt7WuE=";
   modRoot = "backend";
   # the goModules derivation inherits our buildInputs and buildPhases
   # Since we do pnpm thing in those it fails if we don't explicitely remove them
   overrideModAttrs = _: {
     nativeBuildInputs = [
-      go
+      go_1_23
       git
       cacert
     ];
@@ -37,7 +38,7 @@ buildGoModule {
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version;
     src = "${src}/frontend";
-    hash = "sha256-MdTZJ/Ichpwc54r7jZjiFD12YOdRzHSuzRZ/PnDk2mY=";
+    hash = "sha256-x7sWSH84UJEXNRLCgEgXc4NrTRsn6OplANi+XGtIN9Y=";
   };
   pnpmRoot = "../frontend";
 
@@ -72,9 +73,15 @@ buildGoModule {
     "-X main.commit=${version}"
   ];
 
+  passthru = {
+    tests = {
+      inherit (nixosTests) homebox;
+    };
+  };
+
   meta = {
     mainProgram = "api";
-    homepage = "https://hay-kot.github.io/homebox/";
+    homepage = "https://homebox.software/";
     description = "Inventory and organization system built for the Home User";
     maintainers = with lib.maintainers; [ patrickdag ];
     license = lib.licenses.agpl3Only;

@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "git-codeowners";
   version = "0.1.2";
@@ -7,7 +11,7 @@ rustPlatform.buildRustPackage rec {
     owner = "softprops";
     repo = "git-codeowners";
     rev = "v${version}";
-    sha256 = "0bzq4ridzb4l1zqrj1r0vlzkjpgfaqwky5jf49cwjhz4ybwrfpkq";
+    hash = "sha256-eF6X+fLkQ8lZIk4WPzlW7l05P90gB5nxD5Ss32Im+C8=";
   };
 
   cargoHash = "sha256-TayvqcVNCFHF5UpR1pPVRe076Pa8LS4duhnZLzYxkQM=";

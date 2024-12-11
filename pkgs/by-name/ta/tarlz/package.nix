@@ -10,7 +10,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://savannah/lzip/tarlz/tarlz-${version}.tar.lz";
-    sha256 = "7d0bbe9c3a137bb93a10be56988fcf7362e4dbc65490639edc4255b704105fce";
+    hash = "sha256-fQu+nDoTe7k6EL5WmI/Pc2Lk28ZUkGOe3EJVtwQQX84=";
   };
 
   enableParallelBuilding = true;

@@ -1,22 +1,23 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, appstream-glib
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, python3
-, rustPlatform
-, rustc
-, cargo
-, wrapGAppsHook3
-, glib
-, gtk4
-, libadwaita
-, wayland
-, gocryptfs
-, cryfs
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  appstream-glib,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  rustPlatform,
+  rustc,
+  cargo,
+  wrapGAppsHook3,
+  glib,
+  gtk4,
+  libadwaita,
+  wayland,
+  gocryptfs,
+  cryfs,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,7 +47,12 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${lib.makeBinPath [ gocryptfs cryfs ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          gocryptfs
+          cryfs
+        ]
+      }"
     )
   '';
 
@@ -77,7 +83,10 @@ stdenv.mkDerivation rec {
     homepage = "https://mpobaschnig.github.io/vaults/";
     changelog = "https://github.com/mpobaschnig/vaults/releases/tag/${version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ benneti ];
+    maintainers = with lib.maintainers; [
+      benneti
+      aleksana
+    ];
     mainProgram = "vaults";
     platforms = lib.platforms.linux;
   };

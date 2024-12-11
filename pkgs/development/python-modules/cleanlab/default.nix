@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
@@ -14,7 +13,8 @@
   tqdm,
   pandas,
 
-  # test dependencies
+  # tests
+  cleanvision,
   datasets,
   fasttext,
   hypothesis,
@@ -27,20 +27,19 @@
   torch,
   torchvision,
   wget,
+  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "cleanlab";
-  version = "2.6.6";
+  version = "2.7.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cleanlab";
     repo = "cleanlab";
     rev = "refs/tags/v${version}";
-    hash = "sha256-08ePFTCRuggr4hTCfr/gbzMhLozz4KCywhPFSKYDNng=";
+    hash = "sha256-0kCEIHNOXIkdwDH5zCVWnR/W79ppc/1PFsJ/a4goGzk=";
   };
 
   build-system = [ setuptools ];
@@ -61,6 +60,7 @@ buildPythonPackage rec {
   doCheck = true;
 
   nativeCheckInputs = [
+    cleanvision
     datasets
     fasttext
     hypothesis
@@ -75,10 +75,17 @@ buildPythonPackage rec {
     wget
   ];
 
-  disabledTests = [
-    # Requires the datasets we prevent from downloading
-    "test_create_imagelab"
-  ];
+  disabledTests =
+    [
+      # Requires the datasets we prevent from downloading
+      "test_create_imagelab"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # AttributeError: 'called_once_with' is not a valid assertion.
+      # Use a spec for the mock if 'called_once_with' is meant to be an attribute..
+      # Did you mean: 'assert_called_once_with'?
+      "test_custom_issue_manager_not_registered"
+    ];
 
   disabledTestPaths = [
     # Requires internet

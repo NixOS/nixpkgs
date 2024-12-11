@@ -6,6 +6,13 @@ sha256 = "1z35j4py67c3x2f87mzvczpbbcskd80d5m7a7080gfxzrmwrn2c9"
 synopsis = "Markdown to Gemini text"
 version = "1.33"
 
+[9p]
+dependencies = ["iset", "srfi-1", "srfi-13", "srfi-18", "srfi-69"]
+license = "bsd"
+sha256 = "10lzil2d81lrqhp6kim5dwfipap2pifxfkb72p1pf8qbgmgwc00x"
+synopsis = "9p networked filesystem protocol implementation.  Includes high-level client and server code library"
+version = "0.9"
+
 [F-operator]
 dependencies = ["miscmacros", "datatype", "box"]
 license = "bsd"
@@ -289,9 +296,9 @@ version = "1.37"
 [bitwise-utils]
 dependencies = []
 license = "public-domain"
-sha256 = "1p433kx2q1zam5a2isgnxiywgkcb77bmbqlajpr7rvm5i739h8g7"
+sha256 = "1s8vxp2v2b7dxg1hwy5lzaf4bg072xd5fpl487mg34yy7l7krfla"
 synopsis = "Bitwise utilities"
-version = "1.3.1"
+version = "1.4.1"
 
 [blas]
 dependencies = ["bind", "compile-file", "srfi-13"]
@@ -611,16 +618,16 @@ version = "1.2"
 [coops-utils]
 dependencies = ["srfi-1", "srfi-13", "check-errors", "coops"]
 license = "bsd"
-sha256 = "1ywxc7r1l5a930rfp0fv99dcfg2gbvg93rp4jih4rnlpwys6gpv4"
+sha256 = "0jvikvzxy4mz8x9pg0m89pidjmfjxm2g66lz3j84ip4ip8s28nwf"
 synopsis = "coops utilities"
-version = "2.2.3"
+version = "2.2.4"
 
 [coops]
 dependencies = ["matchable", "miscmacros", "record-variants", "srfi-1"]
 license = "bsd"
-sha256 = "183pp1g5m06ss94ba1rq2rs4hqj92v6qz7ik3kzvl3b2aq77jk3z"
+sha256 = "1gzrjb4dj66c9nca6yychbamcslgip0qy2hzfk2v0a41251kl1q5"
 synopsis = "A featureful object system"
-version = "1.3"
+version = "1.4"
 
 [crc]
 dependencies = []
@@ -814,9 +821,9 @@ version = "1.0"
 [edward]
 dependencies = ["r7rs", "srfi-1", "srfi-14", "srfi-37", "matchable", "posix-regex"]
 license = "gplv3"
-sha256 = "0gfvjgg6c6hl2xmh63067xkh0sd2vmczwisirgglcm2inz4hjll3"
+sha256 = "02vqx4gbj26424hay5n7mma423s1nsmz77cy7qfh2baaap0iz8q2"
 synopsis = "An extensible implementation of the ed text editor as defined in POSIX.1-2008"
-version = "1.0.1"
+version = "1.1.0"
 
 [egg-tarballs]
 dependencies = ["simple-sha1", "srfi-1", "srfi-13"]
@@ -1248,9 +1255,9 @@ version = "0.0.1"
 [henrietta-cache]
 dependencies = ["http-client", "matchable", "srfi-1"]
 license = "bsd"
-sha256 = "0lkjrvldxps7ld4fv2c8p1vaw1nb4lbk85agq529j0ix7nzwfwxm"
+sha256 = "1ac3d4bb28cwzbamcz4ak62w4xbh7j15q0445b6c4z06cbfz0bj3"
 synopsis = "Fetch and cache extensions from various sources for Henrietta to consume"
-version = "1.6.1"
+version = "1.7"
 
 [henrietta]
 dependencies = ["regex", "srfi-1"]
@@ -1409,9 +1416,9 @@ version = "0.4"
 [ipfs]
 dependencies = ["http-client", "intarweb", "medea", "srfi-1", "srfi-13", "srfi-189", "srfi-197", "uri-common"]
 license = "unlicense"
-sha256 = "1ghsqdnw73xz9pbl6d7j38qgs066wsy1y6q9l0ardbqkmkibwyr8"
+sha256 = "1fipsadibalrakzgai8mhxhizsy5a9jdg82x7x4r84gzjr30s327"
 synopsis = "IPFS HTTP API for Scheme"
-version = "0.0.15"
+version = "0.0.17"
 
 [irc]
 dependencies = ["matchable", "regex", "srfi-1"]
@@ -1514,9 +1521,9 @@ version = "0.3"
 [lay]
 dependencies = []
 license = "bsd"
-sha256 = "1z7n51p6yzn9bd4l7jxh3mrq45a6h8mi95s2v2d9xgn3m0dmbhqi"
+sha256 = "0ak7bgs79xz5yiywv159s471zqmhawwfipfn9ccll8nw1anp8gdw"
 synopsis = "Lay eggs efficiently"
-version = "0.2.2"
+version = "0.2.3"
 
 [lazy-ffi]
 dependencies = ["bind", "srfi-1", "srfi-69"]
@@ -1549,9 +1556,9 @@ version = "1.2"
 [levenshtein]
 dependencies = ["srfi-1", "srfi-13", "srfi-63", "srfi-69", "vector-lib", "utf8", "miscmacros", "record-variants", "check-errors"]
 license = "bsd"
-sha256 = "1q09kml6igd010j630m52rg7vayfsab176k3vjcsjn7ccf3i7a31"
+sha256 = "1vgxdnas0sw47f8c68ki8fi7j6m9q5x96qnddwslwijjdhg7gdrm"
 synopsis = "Levenshtein edit distance"
-version = "2.4.1"
+version = "2.4.3"
 
 [lexgen]
 dependencies = ["srfi-1", "utf8", "srfi-127"]
@@ -1619,9 +1626,9 @@ version = "1.0.6"
 [locale]
 dependencies = ["srfi-1", "utf8", "check-errors"]
 license = "bsd"
-sha256 = "1mqdr1bw5w6nnrg5dxzc4m5qnbrvvkk9v8nm3a6y0qmpscaim9z5"
+sha256 = "1f6wkaf89b74wxlhdxd4clmgavirvw3ld2igwqwi3rh1w95ln7x4"
 synopsis = "Provides locale operations"
-version = "0.9.2"
+version = "0.9.4"
 
 [locals]
 dependencies = []
@@ -1722,11 +1729,11 @@ synopsis = "Hygienic MATCH replacement"
 version = "1.2"
 
 [math-utils]
-dependencies = []
+dependencies = ["memoize", "miscmacros"]
 license = "public-domain"
-sha256 = "1vc8xrah2yngfbwvah1948h156dp1lw75nrapjcmvybc2315fn93"
+sha256 = "1sl46zqv9al83blyzrl39k22arxq57i7j0qayri3qq9xwpgdhrf2"
 synopsis = "Miscellaneous math utilities"
-version = "1.1.0"
+version = "1.5.0"
 
 [math]
 dependencies = ["srfi-1", "r6rs-bytevectors", "miscmacros", "srfi-133", "srfi-42"]
@@ -1745,9 +1752,9 @@ version = "4.7.0"
 [matrico]
 dependencies = []
 license = "zlib-acknowledgement"
-sha256 = "0ng09xbk8229nhq4s8f8rxgrgigf81qr685mggvk2lm5p7kckpjq"
+sha256 = "11q9599lqs3rb0af6sxj2lvbm06a39igpnpdp1drl8zswdw41kyk"
 synopsis = "A flonum matrix module for CHICKEN Scheme."
-version = "0.5rel"
+version = "0.6rel"
 
 [md5]
 dependencies = ["message-digest-primitive"]
@@ -1983,9 +1990,9 @@ version = "2.0"
 [nrepl]
 dependencies = ["srfi-18"]
 license = "bsd"
-sha256 = "0d4pl1j1wayqsdryc5v8la5v5p9nifwva86z48vlss3s388na208"
+sha256 = "12iad99bpv18k7jn8shc7mga2h218g5hll3arhfcvmka4grndvzs"
 synopsis = "Simple networked REPL over TCP"
-version = "5.0.8"
+version = "5.1.0"
 
 [number-limits]
 dependencies = []
@@ -2165,9 +2172,9 @@ version = "2.1.1"
 [postgresql]
 dependencies = ["sql-null", "srfi-1", "srfi-13", "srfi-69"]
 license = "bsd"
-sha256 = "06sqn5gz5n2zfdk5z2c20mz4r6w9mslxvlanvmq1wdzr5qnvkh9s"
+sha256 = "0hhbq2bc0jzya430n67d26y86q9y11nci3shpjcwlycvq9k1vx8j"
 synopsis = "Bindings for PostgreSQL's C-api"
-version = "4.1.4"
+version = "4.1.5"
 
 [poule]
 dependencies = ["datatype", "mailbox", "matchable", "srfi-1", "srfi-18", "typed-records"]
@@ -2211,6 +2218,13 @@ sha256 = "0sid5fcw9pvf8n1zq5i757pzdr4hgx5w55qgrabsxpq5pgxj6gbs"
 synopsis = "Procedure Decoration API"
 version = "3.0.0"
 
+[prometheus]
+dependencies = ["srfi-1"]
+license = "bsd"
+sha256 = "0a7vj4wymc3cx5l4z9dagqsg1sy88cbp67fhbnvghi5b1lqz6ypz"
+synopsis = "The Prometheus Object System."
+version = "1.0.0"
+
 [protobj]
 dependencies = []
 license = "lgpl-2.1"
@@ -2228,9 +2242,9 @@ version = "1.2.3"
 [pseudo-meta-egg-info]
 dependencies = ["spiffy", "uri-common", "svn-client"]
 license = "public-domain"
-sha256 = "0dmhxm851vbzfcf14sqqxqpmigxvi0195ih9zb25nbxnsdcmy684"
+sha256 = "0fygg85s823y5sblqpbqg4flf7cyynar49p1a37rlig3d7biag5b"
 synopsis = "Provide automatically generated release-info and a pseudo-\"meta\"-file for eggs in svn"
-version = "1.1"
+version = "1.2"
 
 [pseudolists]
 dependencies = []
@@ -2529,9 +2543,9 @@ version = "1.8"
 [scm2wiki]
 dependencies = ["srfi-1", "srfi-13", "srfi-14", "args", "comparse"]
 license = "mit"
-sha256 = "0f8zwxkskzlillnbyngzgaqqgxviimn52rscj6vxx9hgl2yw3mkk"
+sha256 = "03mc88pri6c3h5r5z3xz771mdarc0a6iv4x691jlq6chs983x13v"
 synopsis = "An auto-documentation tool for CHICKEN Scheme."
-version = "0.3.2"
+version = "0.3.3"
 
 [scmfmt]
 dependencies = []
@@ -2760,9 +2774,9 @@ version = "1.1.4"
 [slib-charplot]
 dependencies = ["slib-arraymap", "srfi-63", "slib-compat"]
 license = "artistic"
-sha256 = "1ijcvs9y2vxmxg5834s4mprkinxhky0xdl3yksysmg9h9p82il2z"
+sha256 = "04hyggnbxdjk0vq0x59gi98ybvkq2y3c8llb8zh9bzz045yj7n90"
 synopsis = "The SLIB character plotting library"
-version = "1.2.2"
+version = "1.2.3"
 
 [slib-compat]
 dependencies = ["srfi-1"]
@@ -2823,9 +2837,9 @@ version = "0.3.3"
 [sparse-vectors]
 dependencies = ["srfi-1", "record-variants"]
 license = "bsd"
-sha256 = "0nmk6c9mhls38lyp0d8a9f3xh94jbl2dqbmqr9pab23pnx4hha1j"
+sha256 = "1vvwkjkw3drlmy0pmihg2l5c3s8wbvp0d60934idgyb7vvbdy0rz"
 synopsis = "Arbitrarily large vectors"
-version = "1.1.0"
+version = "1.1.1"
 
 [spiffy-cgi-handlers]
 dependencies = ["spiffy", "intarweb", "uri-common", "socket", "records", "srfi-1", "srfi-18", "srfi-13", "miscmacros"]
@@ -2872,9 +2886,9 @@ version = "1.0"
 [spiffy]
 dependencies = ["intarweb", "uri-common", "uri-generic", "sendfile", "srfi-1", "srfi-13", "srfi-14", "srfi-18"]
 license = "bsd"
-sha256 = "1nfxygrscvldmayr5sm8vqqvzv2wk63yh7pksp7v5gkffd0yhnzs"
+sha256 = "0pb03w2xjiwg2vn5v27mph53vkliq33acs0zhll9sj44hg6c4rvl"
 synopsis = "A small but powerful web server"
-version = "6.3"
+version = "6.4"
 
 [spock]
 dependencies = ["jsmin", "matchable", "make"]
@@ -3164,11 +3178,11 @@ synopsis = "SRFI-18 thread library"
 version = "0.1.7"
 
 [srfi-180]
-dependencies = ["r7rs", "srfi-60", "srfi-145", "srfi-121"]
-license = "mit"
-sha256 = "0agky55bn26967nqcaa3n2a3rsr79brybizcivh34qna15gahq39"
-synopsis = "This library describes a JavaScript Object Notation (JSON) parser and printer. It supports JSON that may be bigger than memory."
-version = "1.0.0"
+dependencies = ["srfi-34", "srfi-35", "srfi-158"]
+license = "bsd"
+sha256 = "1sxyhd4kzhlg0p3a1fzrxkqn7amhd8vb89ql4ykssrknmc9svmvd"
+synopsis = "A JSON parser and printer that supports JSON bigger than memory."
+version = "1.5.2"
 
 [srfi-189]
 dependencies = ["srfi-1", "typed-records"]
@@ -3180,9 +3194,9 @@ version = "1.0.3"
 [srfi-19]
 dependencies = ["srfi-1", "utf8", "srfi-18", "srfi-29", "miscmacros", "locale", "record-variants", "check-errors"]
 license = "bsd"
-sha256 = "06lr89dgaslq218434al3nd18zdnp6rm4c6gr96pcglhjarcyv1n"
+sha256 = "10bnm3gsc3rdafw239pwr6f8c95ma4a11k3cjjjscr8gvxl1kywp"
 synopsis = "Time Data Types and Procedures"
-version = "4.9.8"
+version = "4.9.9"
 
 [srfi-193]
 dependencies = []
@@ -3225,6 +3239,13 @@ license = "mit"
 sha256 = "04fghjk0rfcz0fp71dvwvlxmxshrbmrs85g4l5cx8sp74y047qlv"
 synopsis = "SRFI 209: Enums and enum sets"
 version = "1.3.1"
+
+[srfi-214]
+dependencies = ["r7rs", "srfi-1", "srfi-145"]
+license = "mit"
+sha256 = "0mfh9v10r51y3jcqm3fk4d9cwjjpyw31vyi8s229cxkikfq4x5rp"
+synopsis = "SRFI 241: Flexvectors"
+version = "1.0.1"
 
 [srfi-216]
 dependencies = ["srfi-18"]
@@ -3691,9 +3712,9 @@ version = "1.0.4"
 [test-utils]
 dependencies = ["test"]
 license = "bsd"
-sha256 = "0c4zj3i4g1iq38ifdgzhrl5lz0v97qzphsyg1d2a6ps6zr7jwgbf"
+sha256 = "0nd309zshnwsackk7vzxj9496g58j2ch65h0lghsjpx2ns9l2s14"
 synopsis = "Test Utilities (for test egg)"
-version = "1.0.5"
+version = "1.1.0"
 
 [test]
 dependencies = []

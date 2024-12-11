@@ -7,21 +7,21 @@
   defusedxml,
   docker,
   fetchFromGitHub,
+  hatch-vcs,
+  hatchling,
   numpy,
   pillow,
   pycountry,
   pytest-asyncio,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
-  setuptools-scm,
   svg-py,
   testfixtures,
 }:
 
 buildPythonPackage rec {
   pname = "deebot-client";
-  version = "8.3.0";
+  version = "8.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -30,15 +30,18 @@ buildPythonPackage rec {
     owner = "DeebotUniverse";
     repo = "client.py";
     rev = "refs/tags/${version}";
-    hash = "sha256-a6gFy+w+5FEs4YwS2Pfcyiv0grLcSzFpxxbcZ0AYIL4=";
+    hash = "sha256-lOKih1TzZRP4HIGzjmCkALtaz5s/lR2SjjqCnBK0G6Y=";
   };
 
-  build-system = [
-    setuptools
-    setuptools-scm
+  pythonRelaxDeps = [
+    "aiohttp"
+    "defusedxml"
   ];
 
-  pythonRelaxDeps = [ "aiohttp" ];
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   dependencies = [
     aiohttp

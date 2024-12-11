@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,7 +34,7 @@ stdenv.mkDerivation rec {
     homepage = "https://git.sr.ht/~earboxer/swipeGuess/";
     license = lib.licenses.agpl3Only;
     mainProgram = "swipeGuess";
-    maintainers = with lib.maintainers; [ eclairevoyant ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.all;
   };
 }

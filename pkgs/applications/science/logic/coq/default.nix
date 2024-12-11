@@ -5,7 +5,7 @@
 # - The exact version can be specified through the `version` argument to
 #   the derivation; it defaults to the latest stable version.
 
-{ lib, stdenv, fetchzip, writeText, pkg-config, gnumake42
+{ lib, stdenv, fetchzip, fetchurl, writeText, pkg-config, gnumake42
 , customOCamlPackages ? null
 , ocamlPackages_4_05, ocamlPackages_4_09, ocamlPackages_4_10, ocamlPackages_4_12
 , ocamlPackages_4_14
@@ -58,11 +58,11 @@ let
    "8.19.0".sha256   = "sha256-ixsYCvCXpBHqJ71hLQklphlwoOO3i/6w2PJjllKqf9k=";
    "8.19.1".sha256   = "sha256-kmZ8Uk8jpzjOd67aAPp3C+vU2oNaBw9pr7+Uixcgg94=";
    "8.19.2".sha256   = "sha256-q+i07JsMZp83Gqav6v1jxsgPLN7sPvp5/oszVnavmz0=";
-   "8.20+rc1".sha256 = "sha256-OLGPMvvA3hc42zdgWSOnOkN0/WwzBpneUcUVRNcNVms=";
+   "8.20.0".sha256   = "sha256-WFpZlA6CzFVAruPhWcHQI7VOBVhrGLdFzWrHW0DTSl0=";
   };
   releaseRev = v: "V${v}";
   fetched = import ../../../../build-support/coq/meta-fetch/default.nix
-    { inherit lib stdenv fetchzip; }
+    { inherit lib stdenv fetchzip fetchurl; }
     { inherit release releaseRev; location = { owner = "coq"; repo = "coq";}; }
     args.version;
   version = fetched.version;

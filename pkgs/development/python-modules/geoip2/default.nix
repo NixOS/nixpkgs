@@ -3,15 +3,16 @@
   aiohttp,
   buildPythonPackage,
   fetchPypi,
-  setuptools,
-  setuptools-scm,
+  h11,
   maxminddb,
   mocket,
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
-  requests,
   requests-mock,
+  requests,
+  setuptools-scm,
+  setuptools,
   urllib3,
 }:
 
@@ -40,6 +41,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    h11
     mocket
     requests-mock
     pytestCheckHook
@@ -48,7 +50,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "geoip2" ];
 
   disabledTests =
-    lib.optionals (pythonAtLeast "3.11") [
+    lib.optionals (pythonAtLeast "3.10") [
       # https://github.com/maxmind/GeoIP2-python/pull/136
       "TestAsyncClient"
     ]

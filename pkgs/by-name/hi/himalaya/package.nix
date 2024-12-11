@@ -30,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-YS8IamapvmdrOPptQh2Ef9Yold0IK1XIeGs0kDIQ5b8=";
 
-  NIX_LDFLAGS = lib.optionals stdenv.isDarwin [
+  NIX_LDFLAGS = lib.optionals stdenv.hostPlatform.isDarwin [
     "-F${darwin.apple_sdk.frameworks.AppKit}/Library/Frameworks"
     "-framework"
     "AppKit"
@@ -41,7 +41,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optional (installManPages || installShellCompletions) installShellFiles;
 
   buildInputs = [ ]
-    ++ lib.optionals stdenv.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Cocoa Security ])
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [ AppKit Cocoa Security ])
     ++ lib.optional (builtins.elem "notmuch" buildFeatures) notmuch
     ++ lib.optional (builtins.elem "pgp-gpg" buildFeatures) gpgme;
 

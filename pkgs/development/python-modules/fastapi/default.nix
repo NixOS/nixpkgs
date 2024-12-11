@@ -16,6 +16,7 @@
   # tests
   dirty-equals,
   flask,
+  inline-snapshot,
   passlib,
   pyjwt,
   pytest-asyncio,
@@ -39,7 +40,7 @@
 
 buildPythonPackage rec {
   pname = "fastapi";
-  version = "0.112.0";
+  version = "0.115.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -48,7 +49,7 @@ buildPythonPackage rec {
     owner = "tiangolo";
     repo = "fastapi";
     rev = "refs/tags/${version}";
-    hash = "sha256-M09yte0BGC5w3AZSwDUr9qKUrotqVklO8mwyms9B95Y=";
+    hash = "sha256-JIaPgZVbz887liVwd3YtubJm+L4tFCM9Jcn9/smjiKo=";
   };
 
   build-system = [ pdm-backend ];
@@ -86,6 +87,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     dirty-equals
     flask
+    inline-snapshot
     passlib
     pyjwt
     pytestCheckHook
@@ -109,17 +111,15 @@ buildPythonPackage rec {
   disabledTestPaths = [
     # Don't test docs and examples
     "docs_src"
-    # databases is incompatible with SQLAlchemy 2.0
-    "tests/test_tutorial/test_async_sql_databases"
     "tests/test_tutorial/test_sql_databases"
   ];
 
   pythonImportsCheck = [ "fastapi" ];
 
   meta = with lib; {
-    changelog = "https://github.com/tiangolo/fastapi/releases/tag/${version}";
+    changelog = "https://github.com/fastapi/fastapi/releases/tag/${version}";
     description = "Web framework for building APIs";
-    homepage = "https://github.com/tiangolo/fastapi";
+    homepage = "https://github.com/fastapi/fastapi";
     license = licenses.mit;
     maintainers = with maintainers; [ wd15 ];
   };

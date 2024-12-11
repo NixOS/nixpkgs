@@ -1,23 +1,24 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, makeBinaryWrapper
-, fuzzel
-, additionalPrograms ? [ ]
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  makeBinaryWrapper,
+  fuzzel,
+  additionalPrograms ? [ ],
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "raffi";
-  version = "0.4.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "chmouel";
     repo = "raffi";
     rev = "v${version}";
-    hash = "sha256-i4PM82vGb9Z2pwW006114/h9crokVLUpLxNjr7tgAU8=";
+    hash = "sha256-VwB5hYEGF+w7KUBVB306VCneJxRwlZG5KVdrmhYqlYk=";
   };
 
-  cargoHash = "sha256-DS56H2XjEgdXC9TKLjwyfLpFHB9dUThhr8pNFEJuAZE=";
+  cargoHash = "sha256-AQhGutsMhVjKi2kenvKatN91B7Oi9n64+RDj/ODwfno=";
 
   nativeBuildInputs = [
     makeBinaryWrapper

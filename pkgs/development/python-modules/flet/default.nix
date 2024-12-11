@@ -35,12 +35,16 @@ buildPythonPackage rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix" "PYTHONPATH" ":" "$PYTHONPATH"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "$PYTHONPATH"
   ];
 
   pythonRelaxDeps = [
     "cookiecutter"
     "packaging"
+    "qrcode"
     "watchdog"
     "websockets"
   ];

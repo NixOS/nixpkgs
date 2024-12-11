@@ -14,13 +14,13 @@ let
             mkHyprlandPlugin,
           }:
           let
-            version = "0.42.0";
+            version = "0.45.0";
 
             hyprland-plugins-src = fetchFromGitHub {
               owner = "hyprwm";
               repo = "hyprland-plugins";
               rev = "refs/tags/v${version}";
-              hash = "sha256-aPzAbDgAyxJlUjyaFPDhjcL7WnyDP5uDZKOqlQRD8eM=";
+              hash = "sha256-hOljwsXpY4Y6guvcr51tWCnXo6c56yaBknnLXk1m3Vk=";
             };
           in
           mkHyprlandPlugin hyprland {

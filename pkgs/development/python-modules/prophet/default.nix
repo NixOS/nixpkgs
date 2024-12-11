@@ -49,7 +49,7 @@ buildPythonPackage rec {
     importlib-resources
   ];
 
-  passthru.optional-dependencies.parallel = [
+  optional-dependencies.parallel = [
     dask
     distributed
   ] ++ dask.optional-dependencies.dataframe;

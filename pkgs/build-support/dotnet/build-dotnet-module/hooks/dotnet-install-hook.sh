@@ -20,13 +20,15 @@ dotnetInstallHook() {
         local dotnetRuntimeIdsArray=($dotnetRuntimeIds)
     fi
 
-    if [[ -n ${dotnetSelfContainedBuild-} ]]; then
-        dotnetInstallFlagsArray+=("--self-contained")
-    else
-        dotnetInstallFlagsArray+=("--no-self-contained")
-        # https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/trim-self-contained
-        # Trimming is only available for self-contained build, so force disable it here
-        dotnetInstallFlagsArray+=("-p:PublishTrimmed=false")
+    if [[ -v dotnetSelfContainedBuild ]]; then
+        if [[ -n $dotnetSelfContainedBuild ]]; then
+            dotnetInstallFlagsArray+=("--self-contained")
+        else
+            dotnetInstallFlagsArray+=("--no-self-contained")
+            # https://learn.microsoft.com/en-us/dotnet/core/deploying/trimming/trim-self-contained
+            # Trimming is only available for self-contained build, so force disable it here
+            dotnetInstallFlagsArray+=("-p:PublishTrimmed=false")
+        fi
     fi
 
     if [[ -n ${dotnetUseAppHost-} ]]; then
@@ -55,14 +57,13 @@ dotnetInstallHook() {
                 -p:OverwriteReadOnlyFiles=true \
                 --output "$dotnetInstallPath" \
                 --configuration "$dotnetBuildType" \
+                --no-restore \
                 --no-build \
                 "${runtimeIdFlagsArray[@]}" \
                 "${dotnetInstallFlagsArray[@]}" \
                 "${dotnetFlagsArray[@]}"
         done
     }
-
-    local -r pkgs=$PWD/.nuget-pack
 
     dotnetPack() {
         local -r projectFile="${1-}"
@@ -73,8 +74,9 @@ dotnetInstallHook() {
                    -p:ContinuousIntegrationBuild=true \
                    -p:Deterministic=true \
                    -p:OverwriteReadOnlyFiles=true \
-                   --output "$pkgs" \
+                   --output "$out/share/nuget/source" \
                    --configuration "$dotnetBuildType" \
+                   --no-restore \
                    --no-build \
                    --runtime "$runtimeId" \
                    "${dotnetPackFlagsArray[@]}" \
@@ -101,20 +103,6 @@ dotnetInstallHook() {
             done
         fi
     fi
-
-    local -r unpacked="$pkgs/.unpacked"
-    for nupkg in "$pkgs"/*.nupkg; do
-        rm -rf "$unpacked"
-        unzip -qd "$unpacked" "$nupkg"
-        chmod -R +rw "$unpacked"
-        echo {} > "$unpacked"/.nupkg.metadata
-        local id version
-        id=$(xq -r '.package.metadata.id|ascii_downcase' "$unpacked"/*.nuspec)
-        version=$(xq -r '.package.metadata.version|ascii_downcase' "$unpacked"/*.nuspec)
-        mkdir -p "$out/share/nuget/packages/$id"
-        mv "$unpacked" "$out/share/nuget/packages/$id/$version"
-        # TODO: should we fix executable flags here?
-    done
 
     runHook postInstall
 

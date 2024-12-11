@@ -1,8 +1,9 @@
-{ lib
-, python3Packages
-, fetchPypi
-, curl
- }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  curl,
+}:
 
 python3Packages.buildPythonPackage rec {
   pname = "httpy-cli";
@@ -23,7 +24,7 @@ python3Packages.buildPythonPackage rec {
   ];
 
   build-system = with python3Packages; [
-      setuptools
+    setuptools
   ];
 
   pythonImportsCheck = [
@@ -31,9 +32,9 @@ python3Packages.buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-      python3Packages.pytest
-      curl
-    ];
+    python3Packages.pytest
+    curl
+  ];
 
   checkPhase = ''
     runHook preCheck

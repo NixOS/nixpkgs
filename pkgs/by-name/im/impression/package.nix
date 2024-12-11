@@ -1,40 +1,41 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, blueprint-compiler
-, cargo
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
-, cairo
-, dbus
-, gdk-pixbuf
-, glib
-, gtk4
-, libadwaita
-, openssl
-, pango
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  blueprint-compiler,
+  cargo,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  cairo,
+  dbus,
+  gdk-pixbuf,
+  glib,
+  gtk4,
+  libadwaita,
+  openssl,
+  pango,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "impression";
-  version = "3.2.0";
+  version = "3.3.0";
 
   src = fetchFromGitLab {
     owner = "adhami3310";
     repo = "Impression";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cNkc/z0hVNYdyuCw0nHKEQKdQVeRouk/K7gIp0xpjt4=";
+    hash = "sha256-F2ZyATDKnUgEOAI++54fR6coJOr9rtyGm5TzsKzkDmg=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
     name = "${finalAttrs.pname}-${finalAttrs.version}";
-    hash = "sha256-IcmJAD/55dOdN04N/wd6gZ9DO/UdUire1eXSuNMxu9M=";
+    hash = "sha256-H4x7D25UzDdAEad7QEsZZGLXhfiUupm3mTrNho+ShFo=";
   };
 
   nativeBuildInputs = [

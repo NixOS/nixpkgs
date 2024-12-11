@@ -8,21 +8,18 @@
 , gstreamer
 , gst-plugins-base
 , gettext
-, libav
+, ffmpeg-headless
 # Checks meson.is_cross_build(), so even canExecute isn't enough.
 , enableDocumentation ? stdenv.hostPlatform == stdenv.buildPlatform, hotdoc
 }:
 
-# Note that since gst-libav-1.6, libav is actually ffmpeg. See
-# https://gstreamer.freedesktop.org/releases/1.6/ for more info.
-
 stdenv.mkDerivation rec {
   pname = "gst-libav";
-  version = "1.24.3";
+  version = "1.24.7";
 
   src = fetchurl {
     url = "https://gstreamer.freedesktop.org/src/${pname}/${pname}-${version}.tar.xz";
-    hash = "sha256-2cWxUkaKRcH6g1FBBCIJCnGScHrXTS4aQ2f1JU4YjZE=";
+    hash = "sha256-w+QXm6GDwtMQHt+H/3DdB+cox2al/uNObs3tdspYAt8=";
   };
 
   outputs = [ "out" "dev" ];
@@ -40,7 +37,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gstreamer
     gst-plugins-base
-    libav
+    ffmpeg-headless
   ];
 
   mesonFlags = [
@@ -53,7 +50,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "FFmpeg/libav plugin for GStreamer";
+    description = "FFmpeg plugin for GStreamer";
     homepage = "https://gstreamer.freedesktop.org";
     license = licenses.lgpl2Plus;
     platforms = platforms.unix;

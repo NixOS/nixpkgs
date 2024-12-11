@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "sunweg";
-  version = "3.0.2";
+  version = "3.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "rokam";
     repo = "sunweg";
     rev = "refs/tags/${version}";
-    hash = "sha256-/pniECgavRiQdKzNtPINNhOijUW/uhPEOQJtjfr46ps=";
+    hash = "sha256-T67eH5WjS7J2pcNjq9psNmD4MwMfH+HRvk9llqI3FoQ=";
   };
 
   nativeBuildInputs = [ setuptools ];

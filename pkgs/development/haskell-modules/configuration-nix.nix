@@ -113,6 +113,35 @@ self: super: builtins.intersectAttrs super {
     '' + drv.preCheck or "";
   }) super.agda2lagda;
 
+  # - Disable scrypt support since the library used only works on x86 due to SSE2:
+  #   https://github.com/informatikr/scrypt/issues/8
+  # - Use crypton as the encryption backend. That override becomes obsolete with
+  #   3.1.* since cabal2nix picks crypton by default then.
+  password =
+    let
+      scryptSupported = pkgs.stdenv.hostPlatform.isx86;
+    in
+
+      lib.pipe
+        (super.password.override ({
+          cryptonite = self.crypton;
+        } // lib.optionalAttrs (!scryptSupported) {
+          scrypt = null;
+        }))
+        ([
+          (enableCabalFlag "crypton")
+          (disableCabalFlag "cryptonite")
+          # https://github.com/cdepillabout/password/pull/84
+          (appendPatch ./patches/password-3.0.4.0-scrypt-conditional.patch)
+          (overrideCabal (drv: {
+            # patch doesn't apply otherwise because of revisions
+            prePatch = drv.prePatch or "" + ''
+              ${pkgs.buildPackages.dos2unix}/bin/dos2unix *.cabal
+            '';
+          }))
+        ] ++ lib.optionals (!scryptSupported) [
+          (disableCabalFlag "scrypt")
+        ]);
 
   audacity = enableCabalFlag "buildExamples" (overrideCabal (drv: {
       executableHaskellDepends = [self.optparse-applicative self.soxlib];
@@ -128,6 +157,9 @@ self: super: builtins.intersectAttrs super {
 
   # Link the proper version.
   zeromq4-haskell = super.zeromq4-haskell.override { zeromq = pkgs.zeromq4; };
+
+  # cabal2nix incorrectly resolves this to pkgs.zip (could be improved over there).
+  streamly-zip = super.streamly-zip.override { zip = pkgs.libzip; };
 
   threadscope = enableSeparateBinOutput super.threadscope;
 
@@ -152,6 +184,11 @@ self: super: builtins.intersectAttrs super {
       export CUDA_PATH=${pkgs.cudatoolkit}
     '';
   }) super.nvvm;
+
+  # Doesn't declare LLVM dependency, needs llvm-config
+  llvm-codegen = addBuildTools [
+    pkgs.llvmPackages_17.llvm.dev # for native llvm-config
+  ] super.llvm-codegen;
 
   # hledger* overrides
   inherit (
@@ -185,27 +222,27 @@ self: super: builtins.intersectAttrs super {
       hledger-web = installHledgerExtraFiles "" (hledgerWebTestFix super.hledger-web);
       hledger-ui = installHledgerExtraFiles "" super.hledger-ui;
 
-      hledger_1_34 = installHledgerExtraFiles "embeddedfiles"
-        (doDistribute (super.hledger_1_34.override {
-          hledger-lib = self.hledger-lib_1_34;
+      hledger_1_40 = installHledgerExtraFiles "embeddedfiles"
+        (doDistribute (super.hledger_1_40.override {
+          hledger-lib = self.hledger-lib_1_40;
         }));
-      hledger-ui_1_34 = installHledgerExtraFiles ""
-        (doDistribute (super.hledger-ui_1_34.override {
-          hledger = self.hledger_1_34;
-          hledger-lib = self.hledger-lib_1_34;
+      hledger-ui_1_40 = installHledgerExtraFiles ""
+        (doDistribute (super.hledger-ui_1_40.override {
+          hledger = self.hledger_1_40;
+          hledger-lib = self.hledger-lib_1_40;
         }));
-      hledger-web_1_34 = installHledgerExtraFiles "" (hledgerWebTestFix
-        (doDistribute (super.hledger-web_1_34.override {
-          hledger = self.hledger_1_34;
-          hledger-lib = self.hledger-lib_1_34;
+      hledger-web_1_40 = installHledgerExtraFiles "" (hledgerWebTestFix
+        (doDistribute (super.hledger-web_1_40.override {
+          hledger = self.hledger_1_40;
+          hledger-lib = self.hledger-lib_1_40;
         })));
     }
   ) hledger
     hledger-web
     hledger-ui
-    hledger_1_34
-    hledger-ui_1_34
-    hledger-web_1_34
+    hledger_1_40
+    hledger-ui_1_40
+    hledger-web_1_40
     ;
 
   cufft = overrideCabal (drv: {
@@ -297,7 +334,7 @@ self: super: builtins.intersectAttrs super {
     [ (disableHardening ["fortify"])
       (addBuildTool self.buildHaskellPackages.gtk2hs-buildtools)
     ] ++
-    ( if pkgs.stdenv.isDarwin then [(appendConfigureFlag "-fhave-quartz-gtk")] else [] )
+    ( if pkgs.stdenv.hostPlatform.isDarwin then [(appendConfigureFlag "-fhave-quartz-gtk")] else [] )
   );
   gtksourceview2 = addPkgconfigDepend pkgs.gtk2 super.gtksourceview2;
   gtk-traymanager = addPkgconfigDepend pkgs.gtk3 super.gtk-traymanager;
@@ -313,16 +350,24 @@ self: super: builtins.intersectAttrs super {
   # Add necessary reference to gtk3 package
   gi-dbusmenugtk3 = addPkgconfigDepend pkgs.gtk3 super.gi-dbusmenugtk3;
 
-  # Doesn't declare boost dependency
-  nix-serve-ng = overrideSrc {
-    version = "1.0.0-unstable-2023-12-18";
+  nix-serve-ng = (overrideCabal (old: {
     src = pkgs.fetchFromGitHub {
       repo = "nix-serve-ng";
       owner = "aristanetworks";
-      rev = "21e65cb4c62b5c9e3acc11c3c5e8197248fa46a4";
-      hash = "sha256-qseX+/8drgwxOb1I3LKqBYMkmyeI5d5gmHqbZccR660=";
+      rev = "578ad85b3096d99b25cae0a73c03df4e82f587c7";
+      hash = "sha256-2LPx4iRJonX4gtd3r73DBM/ZhN/hKu1lb/MHOav8c5s=";
     };
-  } (addPkgconfigDepend pkgs.boost.dev super.nix-serve-ng);
+    version = "1.0.0-unstable-2024-10-01";
+    #editedCabalFile = null;
+    # Doesn't declare boost dependency
+    pkg-configDepends = (old.pkg-configDepends or []) ++ [ pkgs.boost.dev ];
+    patches = (old.patches or []) ++ [
+      # Part of https://github.com/aristanetworks/nix-serve-ng/pull/40
+      ./patches/nix-serve-ng-nix.2.24.patch
+    ];
+  }) super.nix-serve-ng).override {
+    nix = pkgs.nixVersions.nix_2_24;
+  };
 
   # These packages try to access the network.
   amqp = dontCheck super.amqp;
@@ -371,9 +416,11 @@ self: super: builtins.intersectAttrs super {
   mustache = dontCheck super.mustache;
   arch-web = dontCheck super.arch-web;
 
+  # Tries accessing the GitHub API
+  github-app-token = dontCheck super.github-app-token;
+
   # The curl executable is required for withApplication tests.
   warp = addTestToolDepend pkgs.curl super.warp;
-  warp_3_3_30 = addTestToolDepend pkgs.curl super.warp_3_3_30;
 
   safe-exceptions = overrideCabal (drv: {
     # Fix strictDeps build error "could not execute: hspec-discover"
@@ -515,7 +562,7 @@ self: super: builtins.intersectAttrs super {
       "--extra-include-dirs=${pkgs.cwiid}/include"
       "--extra-include-dirs=${pkgs.bluez.dev}/include"
     ];
-    prePatch = '' sed -i -e "/Extra-Lib-Dirs/d" -e "/Include-Dirs/d" "hcwiid.cabal" '';
+    prePatch = ''sed -i -e "/Extra-Lib-Dirs/d" -e "/Include-Dirs/d" "hcwiid.cabal"'';
   }) super.hcwiid;
 
   # cabal2nix doesn't pick up some of the dependencies.
@@ -580,7 +627,7 @@ self: super: builtins.intersectAttrs super {
   #
   # Additional note: nixpkgs' freeglut and macOS's OpenGL implementation do not cooperate,
   # so disable this on Darwin only
-  ${if pkgs.stdenv.isDarwin then null else "GLUT"} = overrideCabal (drv: {
+  ${if pkgs.stdenv.hostPlatform.isDarwin then null else "GLUT"} = overrideCabal (drv: {
     pkg-configDepends = drv.pkg-configDepends or [] ++ [
       pkgs.freeglut
     ];
@@ -682,9 +729,6 @@ self: super: builtins.intersectAttrs super {
   # Also needs https://github.com/ucsd-progsys/liquidhaskell/issues/1038 resolved.
   liquid-fixpoint = disableSharedExecutables super.liquid-fixpoint;
   liquidhaskell = dontCheck (disableSharedExecutables super.liquidhaskell);
-
-  # Without this override, the builds lacks pkg-config.
-  opencv-extra = addPkgconfigDepend pkgs.opencv3 super.opencv-extra;
 
   # Break cyclic reference that results in an infinite recursion.
   partial-semigroup = dontCheck super.partial-semigroup;
@@ -821,9 +865,9 @@ self: super: builtins.intersectAttrs super {
     # https://git-annex.branchable.com/git-annex-shell/
     passthru.shellPath = "/bin/git-annex-shell";
   }) (super.git-annex.override {
-    dbus = if pkgs.stdenv.isLinux then self.dbus else null;
-    fdo-notify = if pkgs.stdenv.isLinux then self.fdo-notify else null;
-    hinotify = if pkgs.stdenv.isLinux then self.hinotify else self.fsnotify;
+    dbus = if pkgs.stdenv.hostPlatform.isLinux then self.dbus else null;
+    fdo-notify = if pkgs.stdenv.hostPlatform.isLinux then self.fdo-notify else null;
+    hinotify = if pkgs.stdenv.hostPlatform.isLinux then self.hinotify else self.fsnotify;
   });
 
   # The test suite has undeclared dependencies on git.
@@ -1115,6 +1159,22 @@ self: super: builtins.intersectAttrs super {
     (dontCheckIf (!pkgs.postgresql.doCheck))
   ];
 
+  cloudy =
+    pkgs.lib.pipe
+      super.cloudy
+      [
+        # The code-path that generates the optparse-applicative completions uses
+        # the HOME directory, so that must be set in order to generate completions.
+        # https://github.com/cdepillabout/cloudy/issues/10
+        ( overrideCabal (oldAttrs: {
+            postInstall = ''
+                export HOME=$TMPDIR
+              '' + (oldAttrs.postInstall or "");
+          })
+        )
+        (self.generateOptparseApplicativeCompletions ["cloudy"])
+      ];
+
   # Wants running postgresql database accessible over ip, so postgresqlTestHook
   # won't work (or would need to patch test suite).
   domaindriven-core = dontCheck super.domaindriven-core;
@@ -1127,7 +1187,7 @@ self: super: builtins.intersectAttrs super {
   hercules-ci-cnix-store = overrideCabal
     (old: {
       passthru = old.passthru or { } // {
-        nixPackage = pkgs.nixVersions.nix_2_19;
+        nixPackage = pkgs.nixVersions.nix_2_24;
       };
     })
     (super.hercules-ci-cnix-store.override {
@@ -1365,10 +1425,13 @@ self: super: builtins.intersectAttrs super {
     }) super)
       gi-javascriptcore
       gi-webkit2webextension
-      gi-gtk_4_0_8
-      gi-gdk_4_0_8
+      gi-gtk_4_0_9
+      gi-gdk_4_0_9
       gi-gsk
       gi-adwaita
+      sdl2-ttf
+      sdl2
+      dear-imgui
       ;
 
     webkit2gtk3-javascriptcore = lib.pipe super.webkit2gtk3-javascriptcore [
@@ -1390,7 +1453,7 @@ self: super: builtins.intersectAttrs super {
         mpiImpl = pkgs.mpi.pname;
         disableUnused = with builtins; map disableCabalFlag (filter (n: n != mpiImpl) validMpi);
      in lib.pipe
-          (super.mpi-hs_0_7_3_0.override { ompi = pkgs.mpi; })
+          (super.mpi-hs_0_7_3_1.override { ompi = pkgs.mpi; })
           ( [ (addTestToolDepends [ pkgs.openssh pkgs.mpiCheckPhaseHook ]) ]
             ++ disableUnused
             ++ lib.optional (builtins.elem mpiImpl validMpi) (enableCabalFlag mpiImpl)
@@ -1427,4 +1490,9 @@ self: super: builtins.intersectAttrs super {
       "--skip=/Cabal.Paths/paths"
     ];
   }) super.doctest;
+
+  # tracked upstream: https://github.com/snapframework/openssl-streams/pull/11
+  # certificate used only 1024 Bit RSA key and SHA-1, which is not allowed in OpenSSL 3.1+
+  # security level 2
+  openssl-streams = appendPatch ./patches/openssl-streams-cert.patch super.openssl-streams;
 }

@@ -1,45 +1,50 @@
-{ lib
-, stdenv
-, gettext
-, fetchurl
-, wrapGAppsHook3
-, gnome-video-effects
-, libcanberra-gtk3
-, pkg-config
-, gtk3
-, glib
-, clutter-gtk
-, clutter-gst
-, gst_all_1
-, itstool
-, vala
-, docbook_xml_dtd_43
-, docbook-xsl-nons
-, appstream-glib
-, libxslt
-, gtk-doc
-, adwaita-icon-theme
-, librsvg
-, totem
-, gdk-pixbuf
-, gnome
-, gnome-desktop
-, libxml2
-, meson
-, ninja
-, dbus
-, pipewire
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  wrapGAppsHook3,
+  gnome-video-effects,
+  libcanberra-gtk3,
+  pkg-config,
+  gtk3,
+  glib,
+  clutter-gtk,
+  clutter-gst,
+  gst_all_1,
+  itstool,
+  vala,
+  docbook_xml_dtd_43,
+  docbook-xsl-nons,
+  appstream-glib,
+  libxslt,
+  gtk-doc,
+  adwaita-icon-theme,
+  librsvg,
+  totem,
+  gdk-pixbuf,
+  gnome,
+  gnome-desktop,
+  libxml2,
+  meson,
+  ninja,
+  dbus,
+  pipewire,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cheese";
   version = "44.1";
 
-  outputs = [ "out" "man" "devdoc" ];
+  outputs = [
+    "out"
+    "man"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/cheese/${lib.versions.major version}/cheese-${version}.tar.xz";
-    sha256 = "XyGFxMmeVN3yuLr2DIKBmVDlSVLhMuhjmHXz7cv49o4=";
+    hash = "sha256-XyGFxMmeVN3yuLr2DIKBmVDlSVLhMuhjmHXz7cv49o4=";
   };
 
   nativeBuildInputs = [
@@ -98,9 +103,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/cheese";
+    changelog = "https://gitlab.gnome.org/GNOME/cheese/-/blob/${version}/NEWS?ref_type=tags";
     description = "Take photos and videos with your webcam, with fun graphical effects";
     mainProgram = "cheese";
-    maintainers = [ ];
+    maintainers = with maintainers; [ aleksana ];
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
   };

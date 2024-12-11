@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "pgspecial";
-  version = "2.1.2";
+  version = "2.1.3";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8EGeGzt4+zpy/jtUb2eIpxIJFTLVmf51k7X27lWoj4c=";
+    hash = "sha256-bU0jFq/31HlU25nUw5HWwLsmVo68udFR9l2reTi2y+I=";
   };
 
   build-system = [ setuptools ];

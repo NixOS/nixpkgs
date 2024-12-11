@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch,
-  pythonImportsCheckHook,
   pythonOlder,
   setuptools,
   sphinx,
@@ -47,7 +46,6 @@ buildPythonPackage {
   ];
 
   nativeBuildInputs = [
-    pythonImportsCheckHook
     sphinx-autoapi
     sphinx-prompt
     sphinx-rtd-theme

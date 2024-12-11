@@ -1,19 +1,20 @@
-{ lib
-, buildDunePackage
-, fetchFromGitHub
-, fetchpatch
-, angstrom
-, cmdliner
-, core
-, core_bench
-, core_unix ? null
-, js_of_ocaml
-, js_of_ocaml-ppx
-, ppx_deriving_yojson
-, uri
-, yojson
-, lwt
-, xmlm
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  fetchpatch,
+  angstrom,
+  cmdliner,
+  core,
+  core_bench,
+  core_unix ? null,
+  js_of_ocaml,
+  js_of_ocaml-ppx,
+  ppx_deriving_yojson,
+  uri,
+  yojson,
+  lwt,
+  xmlm,
 }:
 let
   angstrom' = angstrom.overrideAttrs (attrs: {

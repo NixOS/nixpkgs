@@ -90,10 +90,20 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "version_${finalAttrs.version}";
   };
 
+  # required for GCC 14
+  # (not applicable to super-slicer fork)
+  postPatch = lib.optionalString (finalAttrs.pname == "prusa-slicer") ''
+    substituteInPlace src/libslic3r/Arrange/Core/DataStoreTraits.hpp \
+      --replace-fail \
+      "WritableDataStoreTraits<ArrItem>::template set" \
+      "WritableDataStoreTraits<ArrItem>::set"
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
     wrapGAppsHook3
+    wxGTK-override'
   ];
 
   buildInputs = [
@@ -128,9 +138,11 @@ stdenv.mkDerivation (finalAttrs: {
     catch2
   ] ++ lib.optionals withSystemd [
     systemd
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk_11_0.frameworks.CoreWLAN
   ];
+
+  strictDeps = true;
 
   separateDebugInfo = true;
 
@@ -208,9 +220,9 @@ stdenv.mkDerivation (finalAttrs: {
     description = "G-code generator for 3D printer";
     homepage = "https://github.com/prusa3d/PrusaSlicer";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ moredread tweber tmarkus ];
+    maintainers = with maintainers; [ tweber tmarkus ];
     platforms = platforms.unix;
-  } // lib.optionalAttrs (stdenv.isDarwin) {
+  } // lib.optionalAttrs (stdenv.hostPlatform.isDarwin) {
     mainProgram = "PrusaSlicer";
   };
 })

@@ -1,7 +1,20 @@
-{ lib, mkDerivation, fetchFromGitHub, fftw, qtbase, qtmultimedia, qmake, itstool, wrapQtAppsHook
-, alsaSupport ? true, alsa-lib ? null
-, jackSupport ? false, libjack2 ? null
-, portaudioSupport ? false, portaudio ? null }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fftw,
+  qtbase,
+  qtmultimedia,
+  qmake,
+  itstool,
+  wrapQtAppsHook,
+  alsaSupport ? true,
+  alsa-lib ? null,
+  jackSupport ? false,
+  libjack2 ? null,
+  portaudioSupport ? false,
+  portaudio ? null,
+}:
 
 assert alsaSupport -> alsa-lib != null;
 assert jackSupport -> libjack2 != null;
@@ -18,8 +31,17 @@ mkDerivation rec {
     sha256 = "1q062pfwz2vr9hbfn29fv54ip3jqfd9r99nhpr8w7mn1csy38azx";
   };
 
-  nativeBuildInputs = [ qmake itstool wrapQtAppsHook ];
-  buildInputs = [ fftw qtbase qtmultimedia ]
+  nativeBuildInputs = [
+    qmake
+    itstool
+    wrapQtAppsHook
+  ];
+  buildInputs =
+    [
+      fftw
+      qtbase
+      qtmultimedia
+    ]
     ++ lib.optionals alsaSupport [ alsa-lib ]
     ++ lib.optionals jackSupport [ libjack2 ]
     ++ lib.optionals portaudioSupport [ portaudio ];
@@ -36,17 +58,6 @@ mkDerivation rec {
       PREFIXSHORTCUT=$out"
   '';
 
-  postInstall = ''
-    mkdir -p $out/share/applications
-    ln -s $out/fmit.desktop $out/share/applications/fmit.desktop
-
-    mkdir -p $out/share/icons/hicolor/128x128/apps
-    ln -s $out/fmit.png $out/share/icons/hicolor/128x128/apps/fmit.png
-
-    mkdir -p $out/share/icons/hicolor/scalable/apps
-    ln -s $out/fmit.svg $out/share/icons/hicolor/scalable/apps/fmit.svg
-  '';
-
   meta = with lib; {
     description = "Free Musical Instrument Tuner";
     longDescription = ''
@@ -55,6 +66,7 @@ mkDerivation rec {
     '';
     homepage = "http://gillesdegottex.github.io/fmit/";
     license = licenses.gpl3Plus;
+    maintainers = with maintainers; [ orivej ];
     platforms = platforms.linux;
   };
 }

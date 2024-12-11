@@ -12,7 +12,7 @@ let
 
   argset = {
     pname = "xonsh";
-    version = "0.18.2";
+    version = "0.19.0";
     pyproject = true;
 
     # PyPI package ships incomplete tests
@@ -20,7 +20,7 @@ let
       owner = "xonsh";
       repo = "xonsh";
       rev = "refs/tags/${argset.version}";
-      hash = "sha256-iTdUu2yGixWwDJICDLfzRcwgGe+xlq2CvxUeSbmDiUU=";
+      hash = "sha256-rt402MKnhjC/AYz9Rm6B5RkivcVxveVW2rM/nT/xcNo=";
     };
 
     nativeBuildInputs = with pythonPackages; [

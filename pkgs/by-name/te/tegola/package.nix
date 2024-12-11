@@ -1,4 +1,9 @@
-{ lib, buildGoModule, buildNpmPackage, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  buildNpmPackage,
+  fetchFromGitHub,
+}:
 let
   version = "0.20.0";
 
@@ -6,7 +11,7 @@ let
     owner = "go-spatial";
     repo = "tegola";
     rev = "v${version}";
-    sha256 = "sha256-Jlpw3JaU5+DO7Z5qruEMoLRf95cPGd9Z+MeDGSgbMjc=";
+    hash = "sha256-Jlpw3JaU5+DO7Z5qruEMoLRf95cPGd9Z+MeDGSgbMjc=";
   };
 
   frontend = buildNpmPackage {
@@ -30,7 +35,11 @@ buildGoModule {
 
   subPackages = [ "cmd/tegola" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/go-spatial/tegola/internal/build.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/go-spatial/tegola/internal/build.Version=${version}"
+  ];
 
   preBuild = ''
     rm -rf ui/dist

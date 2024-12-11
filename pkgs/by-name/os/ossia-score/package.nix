@@ -1,41 +1,42 @@
-{ lib
-, fetchFromGitHub
-, cmake
-, ninja
-, clangStdenv
-, pkg-config
-, alsa-lib
-, avahi
-, avahi-compat
-, bluez
-, boost185
-, fmt
-, ffmpeg
-, fftw
-, flac
-, git
-, gnutls
-, lame
-, libcoap
-, libjack2
-, libopus
-, libsamplerate
-, libsndfile
-, libvorbis
-, lilv
-, lv2
-, mpg123
-, pipewire
-, portaudio
-, qt6
-, rapidfuzz-cpp
-, re2
-, rubberband
-, snappy
-, SDL2
-, spdlog
-, suil
-, udev
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  clangStdenv,
+  pkg-config,
+  alsa-lib,
+  avahi,
+  avahi-compat,
+  bluez,
+  boost185,
+  fmt,
+  ffmpeg,
+  fftw,
+  flac,
+  git,
+  gnutls,
+  lame,
+  libcoap,
+  libjack2,
+  libopus,
+  libsamplerate,
+  libsndfile,
+  libvorbis,
+  lilv,
+  lv2,
+  mpg123,
+  pipewire,
+  portaudio,
+  qt6,
+  rapidfuzz-cpp,
+  re2,
+  rubberband,
+  snappy,
+  SDL2,
+  spdlog,
+  suil,
+  udev,
 }:
 
 # TODO: figure out LLVM jit
@@ -53,7 +54,14 @@ clangStdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake ninja git pkg-config qt6.qttools qt6.wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    git
+    pkg-config
+    qt6.qttools
+    qt6.wrapQtAppsHook
+  ];
 
   buildInputs = [
     alsa-lib
@@ -111,7 +119,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     "-DSuil_INCLUDE_DIR=${suil}/include/suil-0"
   ];
 
-  # Needed for libraries that get dlopen'd
+  # Needed for libraries that get dlopen'd
   env.NIX_LDFLAGS = toString [
     "-lasound"
     "-llilv-0"
@@ -153,6 +161,9 @@ clangStdenv.mkDerivation (finalAttrs: {
     '';
     platforms = platforms.linux;
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ jcelerier minijackson ];
+    maintainers = with maintainers; [
+      jcelerier
+      minijackson
+    ];
   };
 })

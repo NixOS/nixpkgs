@@ -2,7 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  fetchpatch,
   pkg-config,
   protobuf,
   bzip2,
@@ -15,6 +14,7 @@
   nix-update-script,
   nixosTests,
   rocksdb_8_11,
+  callPackage,
 }:
 
 let
@@ -25,7 +25,7 @@ let
   # See upstream issue for rocksdb 9.X support
   # https://github.com/stalwartlabs/mail-server/issues/407
   rocksdb = rocksdb_8_11;
-  version = "0.9.1";
+  version = "0.10.6";
 in
 rustPlatform.buildRustPackage {
   pname = "stalwart-mail";
@@ -35,21 +35,11 @@ rustPlatform.buildRustPackage {
     owner = "stalwartlabs";
     repo = "mail-server";
     rev = "refs/tags/v${version}";
-    hash = "sha256-7a2Vrrjo4Qd62dneQr3Xl2+HVUIfLa9AnGXEt2RWWZY=";
+    hash = "sha256-/mY8WNQMp15LoFhNJjNzT/SB4dJya6SXvO9A4ZR8WGM=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-sAma3T9X9N8UjJ4leePIa6gvqpKW2QkpzYaIAFWLeVc=";
-
-  patches = [
-    # Remove "PermissionsStartOnly" from systemd service files,
-    # which is deprecated and conflicts with our module's ExecPreStart.
-    # Upstream PR: https://github.com/stalwartlabs/mail-server/pull/528
-    (fetchpatch {
-      url = "https://github.com/stalwartlabs/mail-server/pull/528/commits/6e292b3d7994441e58e367b87967c9a277bce490.patch";
-      hash = "sha256-j/Li4bYNE7IppxG3FGfljra70/rHyhRvDgOkZOlhMHY=";
-    })
-  ];
+  cargoHash = "sha256-Bd88dJo7Bf/6tmt+x/tkeWecKEZtFVYhyHhGU+/qPIs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -57,16 +47,30 @@ rustPlatform.buildRustPackage {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = [
-    bzip2
-    openssl
-    sqlite
-    foundationdb
-    zstd
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
+  buildInputs =
+    [
+      bzip2
+      openssl
+      sqlite
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ foundationdb ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreFoundation
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
+
+  # skip defaults on darwin because foundationdb is not available
+  buildNoDefaultFeatures = stdenv.hostPlatform.isDarwin;
+  buildFeatures = lib.optional (stdenv.hostPlatform.isDarwin) [
+    "sqlite"
+    "postgres"
+    "mysql"
+    "rocks"
+    "elastic"
+    "s3"
+    "redis"
   ];
 
   env = {
@@ -134,20 +138,33 @@ rustPlatform.buildRustPackage {
     # thread 'smtp::queue::concurrent::concurrent_queue' panicked at tests/src/smtp/inbound/mod.rs:65:9:
     # assertion `left == right` failed
     "--skip=smtp::queue::concurrent::concurrent_queue"
+    # Failed to read system DNS config: io error: No such file or directory (os error 2)
+    "--skip=smtp::inbound::auth::auth"
+    # Failed to read system DNS config: io error: No such file or directory (os error 2)
+    "--skip=smtp::inbound::antispam::antispam"
+    # Failed to read system DNS config: io error: No such file or directory (os error 2)
+    "--skip=smtp::inbound::vrfy::vrfy_expn"
   ];
 
-  doCheck = !(stdenv.isLinux && stdenv.isAarch64);
+  doCheck = !(stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
 
   passthru = {
-    update-script = nix-update-script { };
+    inherit rocksdb; # make used rocksdb version available (e.g., for backup scripts)
+    webadmin = callPackage ./webadmin.nix { };
+    updateScript = nix-update-script { };
     tests.stalwart-mail = nixosTests.stalwart-mail;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Secure & Modern All-in-One Mail Server (IMAP, JMAP, SMTP)";
     homepage = "https://github.com/stalwartlabs/mail-server";
-    changelog = "https://github.com/stalwartlabs/mail-server/blob/${version}/CHANGELOG";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ happysalada onny oddlama ];
+    changelog = "https://github.com/stalwartlabs/mail-server/blob/main/CHANGELOG.md";
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [
+      happysalada
+      onny
+      oddlama
+      pandapip1
+    ];
   };
 }

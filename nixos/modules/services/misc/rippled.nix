@@ -1,7 +1,10 @@
-{ config, lib, options, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.rippled;
   opt = options.services.rippled;
@@ -11,189 +14,204 @@ let
   dbCfg = db: ''
     type=${db.type}
     path=${db.path}
-    ${optionalString (db.compression != null) ("compression=${b2i db.compression}") }
-    ${optionalString (db.onlineDelete != null) ("online_delete=${toString db.onlineDelete}")}
-    ${optionalString (db.advisoryDelete != null) ("advisory_delete=${b2i db.advisoryDelete}")}
+    ${lib.optionalString (db.compression != null) ("compression=${b2i db.compression}")}
+    ${lib.optionalString (db.onlineDelete != null) ("online_delete=${toString db.onlineDelete}")}
+    ${lib.optionalString (db.advisoryDelete != null) ("advisory_delete=${b2i db.advisoryDelete}")}
     ${db.extraOpts}
   '';
 
-  rippledCfg = ''
-    [server]
-    ${concatMapStringsSep "\n" (n: "port_${n}") (attrNames cfg.ports)}
+  rippledCfg =
+    ''
+      [server]
+      ${lib.concatMapStringsSep "\n" (n: "port_${n}") (lib.attrNames cfg.ports)}
 
-    ${concatMapStrings (p: ''
-    [port_${p.name}]
-    ip=${p.ip}
-    port=${toString p.port}
-    protocol=${concatStringsSep "," p.protocol}
-    ${optionalString (p.user != "") "user=${p.user}"}
-    ${optionalString (p.password != "") "user=${p.password}"}
-    admin=${concatStringsSep "," p.admin}
-    ${optionalString (p.ssl.key != null) "ssl_key=${p.ssl.key}"}
-    ${optionalString (p.ssl.cert != null) "ssl_cert=${p.ssl.cert}"}
-    ${optionalString (p.ssl.chain != null) "ssl_chain=${p.ssl.chain}"}
-    '') (attrValues cfg.ports)}
+      ${lib.concatMapStrings (p: ''
+        [port_${p.name}]
+        ip=${p.ip}
+        port=${toString p.port}
+        protocol=${lib.concatStringsSep "," p.protocol}
+        ${lib.optionalString (p.user != "") "user=${p.user}"}
+        ${lib.optionalString (p.password != "") "user=${p.password}"}
+        admin=${lib.concatStringsSep "," p.admin}
+        ${lib.optionalString (p.ssl.key != null) "ssl_key=${p.ssl.key}"}
+        ${lib.optionalString (p.ssl.cert != null) "ssl_cert=${p.ssl.cert}"}
+        ${lib.optionalString (p.ssl.chain != null) "ssl_chain=${p.ssl.chain}"}
+      '') (lib.attrValues cfg.ports)}
 
-    [database_path]
-    ${cfg.databasePath}
+      [database_path]
+      ${cfg.databasePath}
 
-    [node_db]
-    ${dbCfg cfg.nodeDb}
+      [node_db]
+      ${dbCfg cfg.nodeDb}
 
-    ${optionalString (cfg.tempDb != null) ''
-    [temp_db]
-    ${dbCfg cfg.tempDb}''}
+      ${lib.optionalString (cfg.tempDb != null) ''
+        [temp_db]
+        ${dbCfg cfg.tempDb}''}
 
-    ${optionalString (cfg.importDb != null) ''
-    [import_db]
-    ${dbCfg cfg.importDb}''}
+      ${lib.optionalString (cfg.importDb != null) ''
+        [import_db]
+        ${dbCfg cfg.importDb}''}
 
-    [ips]
-    ${concatStringsSep "\n" cfg.ips}
+      [ips]
+      ${lib.concatStringsSep "\n" cfg.ips}
 
-    [ips_fixed]
-    ${concatStringsSep "\n" cfg.ipsFixed}
+      [ips_fixed]
+      ${lib.concatStringsSep "\n" cfg.ipsFixed}
 
-    [validators]
-    ${concatStringsSep "\n" cfg.validators}
+      [validators]
+      ${lib.concatStringsSep "\n" cfg.validators}
 
-    [node_size]
-    ${cfg.nodeSize}
+      [node_size]
+      ${cfg.nodeSize}
 
-    [ledger_history]
-    ${toString cfg.ledgerHistory}
+      [ledger_history]
+      ${toString cfg.ledgerHistory}
 
-    [fetch_depth]
-    ${toString cfg.fetchDepth}
+      [fetch_depth]
+      ${toString cfg.fetchDepth}
 
-    [validation_quorum]
-    ${toString cfg.validationQuorum}
+      [validation_quorum]
+      ${toString cfg.validationQuorum}
 
-    [sntp_servers]
-    ${concatStringsSep "\n" cfg.sntpServers}
+      [sntp_servers]
+      ${lib.concatStringsSep "\n" cfg.sntpServers}
 
-    ${optionalString cfg.statsd.enable ''
-    [insight]
-    server=statsd
-    address=${cfg.statsd.address}
-    prefix=${cfg.statsd.prefix}
-    ''}
+      ${lib.optionalString cfg.statsd.enable ''
+        [insight]
+        server=statsd
+        address=${cfg.statsd.address}
+        prefix=${cfg.statsd.prefix}
+      ''}
 
-    [rpc_startup]
-    { "command": "log_level", "severity": "${cfg.logLevel}" }
-  '' + cfg.extraConfig;
+      [rpc_startup]
+      { "command": "log_level", "severity": "${cfg.logLevel}" }
+    ''
+    + cfg.extraConfig;
 
-  portOptions = { name, ...}: {
-    options = {
-      name = mkOption {
-        internal = true;
-        default = name;
-      };
-
-      ip = mkOption {
-        default = "127.0.0.1";
-        description = "Ip where rippled listens.";
-        type = types.str;
-      };
-
-      port = mkOption {
-        description = "Port where rippled listens.";
-        type = types.port;
-      };
-
-      protocol = mkOption {
-        description = "Protocols expose by rippled.";
-        type = types.listOf (types.enum ["http" "https" "ws" "wss" "peer"]);
-      };
-
-      user = mkOption {
-        description = "When set, these credentials will be required on HTTP/S requests.";
-        type = types.str;
-        default = "";
-      };
-
-      password = mkOption {
-        description = "When set, these credentials will be required on HTTP/S requests.";
-        type = types.str;
-        default = "";
-      };
-
-      admin = mkOption {
-        description = "A comma-separated list of admin IP addresses.";
-        type = types.listOf types.str;
-        default = ["127.0.0.1"];
-      };
-
-      ssl = {
-        key = mkOption {
-          description = ''
-            Specifies the filename holding the SSL key in PEM format.
-          '';
-          default = null;
-          type = types.nullOr types.path;
+  portOptions =
+    { name, ... }:
+    {
+      options = {
+        name = lib.mkOption {
+          internal = true;
+          default = name;
         };
 
-        cert = mkOption {
-          description = ''
-            Specifies the path to the SSL certificate file in PEM format.
-            This is not needed if the chain includes it.
-          '';
-          default = null;
-          type = types.nullOr types.path;
+        ip = lib.mkOption {
+          default = "127.0.0.1";
+          description = "Ip where rippled listens.";
+          type = lib.types.str;
         };
 
-        chain = mkOption {
-          description = ''
-            If you need a certificate chain, specify the path to the
-            certificate chain here. The chain may include the end certificate.
-          '';
-          default = null;
-          type = types.nullOr types.path;
+        port = lib.mkOption {
+          description = "Port where rippled listens.";
+          type = lib.types.port;
+        };
+
+        protocol = lib.mkOption {
+          description = "Protocols expose by rippled.";
+          type = lib.types.listOf (
+            lib.types.enum [
+              "http"
+              "https"
+              "ws"
+              "wss"
+              "peer"
+            ]
+          );
+        };
+
+        user = lib.mkOption {
+          description = "When set, these credentials will be required on HTTP/S requests.";
+          type = lib.types.str;
+          default = "";
+        };
+
+        password = lib.mkOption {
+          description = "When set, these credentials will be required on HTTP/S requests.";
+          type = lib.types.str;
+          default = "";
+        };
+
+        admin = lib.mkOption {
+          description = "A comma-separated list of admin IP addresses.";
+          type = lib.types.listOf lib.types.str;
+          default = [ "127.0.0.1" ];
+        };
+
+        ssl = {
+          key = lib.mkOption {
+            description = ''
+              Specifies the filename holding the SSL key in PEM format.
+            '';
+            default = null;
+            type = lib.types.nullOr lib.types.path;
+          };
+
+          cert = lib.mkOption {
+            description = ''
+              Specifies the path to the SSL certificate file in PEM format.
+              This is not needed if the chain includes it.
+            '';
+            default = null;
+            type = lib.types.nullOr lib.types.path;
+          };
+
+          chain = lib.mkOption {
+            description = ''
+              If you need a certificate chain, specify the path to the
+              certificate chain here. The chain may include the end certificate.
+            '';
+            default = null;
+            type = lib.types.nullOr lib.types.path;
+          };
         };
       };
     };
-  };
 
   dbOptions = {
     options = {
-      type = mkOption {
+      type = lib.mkOption {
         description = "Rippled database type.";
-        type = types.enum ["rocksdb" "nudb"];
+        type = lib.types.enum [
+          "rocksdb"
+          "nudb"
+        ];
         default = "rocksdb";
       };
 
-      path = mkOption {
+      path = lib.mkOption {
         description = "Location to store the database.";
-        type = types.path;
+        type = lib.types.path;
         default = cfg.databasePath;
-        defaultText = literalExpression "config.${opt.databasePath}";
+        defaultText = lib.literalExpression "config.${opt.databasePath}";
       };
 
-      compression = mkOption {
+      compression = lib.mkOption {
         description = "Whether to enable snappy compression.";
-        type = types.nullOr types.bool;
+        type = lib.types.nullOr lib.types.bool;
         default = null;
       };
 
-      onlineDelete = mkOption {
+      onlineDelete = lib.mkOption {
         description = "Enable automatic purging of older ledger information.";
-        type = types.nullOr (types.addCheck types.int (v: v > 256));
+        type = lib.types.nullOr (lib.types.addCheck lib.types.int (v: v > 256));
         default = cfg.ledgerHistory;
-        defaultText = literalExpression "config.${opt.ledgerHistory}";
+        defaultText = lib.literalExpression "config.${opt.ledgerHistory}";
       };
 
-      advisoryDelete = mkOption {
+      advisoryDelete = lib.mkOption {
         description = ''
           If set, then require administrative RPC call "can_delete"
           to enable online deletion of ledger records.
         '';
-        type = types.nullOr types.bool;
+        type = lib.types.nullOr lib.types.bool;
         default = null;
       };
 
-      extraOpts = mkOption {
+      extraOpts = lib.mkOption {
         description = "Extra database options.";
-        type = types.lines;
+        type = lib.types.lines;
         default = "";
       };
     };
@@ -207,37 +225,40 @@ in
 
   options = {
     services.rippled = {
-      enable = mkEnableOption "rippled, a decentralized cryptocurrency blockchain daemon implementing the XRP Ledger protocol in C++";
+      enable = lib.mkEnableOption "rippled, a decentralized cryptocurrency blockchain daemon implementing the XRP Ledger protocol in C++";
 
-      package = mkPackageOption pkgs "rippled" { };
+      package = lib.mkPackageOption pkgs "rippled" { };
 
-      ports = mkOption {
+      ports = lib.mkOption {
         description = "Ports exposed by rippled";
-        type = with types; attrsOf (submodule portOptions);
+        type = with lib.types; attrsOf (submodule portOptions);
         default = {
           rpc = {
             port = 5005;
-            admin = ["127.0.0.1"];
-            protocol = ["http"];
+            admin = [ "127.0.0.1" ];
+            protocol = [ "http" ];
           };
 
           peer = {
             port = 51235;
             ip = "0.0.0.0";
-            protocol = ["peer"];
+            protocol = [ "peer" ];
           };
 
           ws_public = {
             port = 5006;
             ip = "0.0.0.0";
-            protocol = ["ws" "wss"];
+            protocol = [
+              "ws"
+              "wss"
+            ];
           };
         };
       };
 
-      nodeDb = mkOption {
+      nodeDb = lib.mkOption {
         description = "Rippled main database options.";
-        type = with types; nullOr (submodule dbOptions);
+        type = with lib.types; nullOr (submodule dbOptions);
         default = {
           type = "rocksdb";
           extraOpts = ''
@@ -250,28 +271,34 @@ in
         };
       };
 
-      tempDb = mkOption {
+      tempDb = lib.mkOption {
         description = "Rippled temporary database options.";
-        type = with types; nullOr (submodule dbOptions);
+        type = with lib.types; nullOr (submodule dbOptions);
         default = null;
       };
 
-      importDb = mkOption {
+      importDb = lib.mkOption {
         description = "Settings for performing a one-time import.";
-        type = with types; nullOr (submodule dbOptions);
+        type = with lib.types; nullOr (submodule dbOptions);
         default = null;
       };
 
-      nodeSize = mkOption {
+      nodeSize = lib.mkOption {
         description = ''
           Rippled size of the node you are running.
           "tiny", "small", "medium", "large", and "huge"
         '';
-        type = types.enum ["tiny" "small" "medium" "large" "huge"];
+        type = lib.types.enum [
+          "tiny"
+          "small"
+          "medium"
+          "large"
+          "huge"
+        ];
         default = "small";
       };
 
-      ips = mkOption {
+      ips = lib.mkOption {
         description = ''
           List of hostnames or ips where the Ripple protocol is served.
           For a starter list, you can either copy entries from:
@@ -282,11 +309,11 @@ in
           address. By convention, if known, IPs are listed in from most
           to least trusted.
         '';
-        type = types.listOf types.str;
-        default = ["r.ripple.com 51235"];
+        type = lib.types.listOf lib.types.str;
+        default = [ "r.ripple.com 51235" ];
       };
 
-      ipsFixed = mkOption {
+      ipsFixed = lib.mkOption {
         description = ''
           List of IP addresses or hostnames to which rippled should always
           attempt to maintain peer connections with. This is useful for
@@ -296,16 +323,16 @@ in
 
           A port may optionally be specified after adding a space to the address
         '';
-        type = types.listOf types.str;
-        default = [];
+        type = lib.types.listOf lib.types.str;
+        default = [ ];
       };
 
-      validators = mkOption {
+      validators = lib.mkOption {
         description = ''
           List of nodes to always accept as validators. Nodes are specified by domain
           or public key.
         '';
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         default = [
           "n949f75evCHwgyP4fPVgaHqNHxUVN15PsJEZ3B3HnXPcPjcZAoy7  RL1"
           "n9MD5h24qrQqiyBC8aeqqCWvpiBiYQ3jxSr91uiDvmrkyHRdYLUj  RL2"
@@ -315,46 +342,46 @@ in
         ];
       };
 
-      databasePath = mkOption {
+      databasePath = lib.mkOption {
         description = ''
           Path to the ripple database.
         '';
-        type = types.path;
+        type = lib.types.path;
         default = "/var/lib/rippled";
       };
 
-      validationQuorum = mkOption {
+      validationQuorum = lib.mkOption {
         description = ''
           The minimum number of trusted validations a ledger must have before
           the server considers it fully validated.
         '';
-        type = types.int;
+        type = lib.types.int;
         default = 3;
       };
 
-      ledgerHistory = mkOption {
+      ledgerHistory = lib.mkOption {
         description = ''
           The number of past ledgers to acquire on server startup and the minimum
           to maintain while running.
         '';
-        type = types.either types.int (types.enum ["full"]);
+        type = lib.types.either lib.types.int (lib.types.enum [ "full" ]);
         default = 1296000; # 1 month
       };
 
-      fetchDepth = mkOption {
+      fetchDepth = lib.mkOption {
         description = ''
           The number of past ledgers to serve to other peers that request historical
           ledger data (or "full" for no limit).
         '';
-        type = types.either types.int (types.enum ["full"]);
+        type = lib.types.either lib.types.int (lib.types.enum [ "full" ]);
         default = "full";
       };
 
-      sntpServers = mkOption {
+      sntpServers = lib.mkOption {
         description = ''
           IP address or domain of NTP servers to use for time synchronization.;
         '';
-        type = types.listOf types.str;
+        type = lib.types.listOf lib.types.str;
         default = [
           "time.windows.com"
           "time.apple.com"
@@ -363,57 +390,60 @@ in
         ];
       };
 
-      logLevel = mkOption {
+      logLevel = lib.mkOption {
         description = "Logging verbosity.";
-        type = types.enum ["debug" "error" "info"];
+        type = lib.types.enum [
+          "debug"
+          "error"
+          "info"
+        ];
         default = "error";
       };
 
       statsd = {
-        enable = mkEnableOption "statsd monitoring for rippled";
+        enable = lib.mkEnableOption "statsd monitoring for rippled";
 
-        address = mkOption {
+        address = lib.mkOption {
           description = "The UDP address and port of the listening StatsD server.";
           default = "127.0.0.1:8125";
-          type = types.str;
+          type = lib.types.str;
         };
 
-        prefix = mkOption {
+        prefix = lib.mkOption {
           description = "A string prepended to each collected metric.";
           default = "";
-          type = types.str;
+          type = lib.types.str;
         };
       };
 
-      extraConfig = mkOption {
+      extraConfig = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = ''
           Extra lines to be added verbatim to the rippled.cfg configuration file.
         '';
       };
 
-      config = mkOption {
+      config = lib.mkOption {
         internal = true;
         default = pkgs.writeText "rippled.conf" rippledCfg;
-        defaultText = literalMD "generated config file";
+        defaultText = lib.literalMD "generated config file";
       };
     };
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.rippled = {
-        description = "Ripple server user";
-        isSystemUser = true;
-        group = "rippled";
-        home = cfg.databasePath;
-        createHome = true;
-      };
-    users.groups.rippled = {};
+      description = "Ripple server user";
+      isSystemUser = true;
+      group = "rippled";
+      home = cfg.databasePath;
+      createHome = true;
+    };
+    users.groups.rippled = { };
 
     systemd.services.rippled = {
       after = [ "network.target" ];
@@ -423,7 +453,7 @@ in
         ExecStart = "${cfg.package}/bin/rippled --fg --conf ${cfg.config}";
         User = "rippled";
         Restart = "on-failure";
-        LimitNOFILE=10000;
+        LimitNOFILE = 10000;
       };
     };
 

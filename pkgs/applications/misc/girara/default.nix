@@ -1,26 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, check
-, dbus
-, xvfb-run
-, glib
-, gtk
-, gettext
-, libiconv
-, json-glib
-, libintl
-, zathura
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  check,
+  dbus,
+  xvfb-run,
+  glib,
+  gtk,
+  gettext,
+  libiconv,
+  json-glib,
+  libintl,
+  zathura,
 }:
 
 stdenv.mkDerivation rec {
   pname = "girara";
   version = "0.4.3";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitLab {
     domain = "git.pwmt.org";
@@ -55,11 +59,13 @@ stdenv.mkDerivation rec {
     xvfb-run
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   mesonFlags = [
     "-Ddocs=disabled" # docs do not seem to be installed
-    (lib.mesonEnable "tests" ((stdenv.buildPlatform.canExecute stdenv.hostPlatform) && (!stdenv.isDarwin)))
+    (lib.mesonEnable "tests" (
+      (stdenv.buildPlatform.canExecute stdenv.hostPlatform) && (!stdenv.hostPlatform.isDarwin)
+    ))
   ];
 
   checkPhase = ''

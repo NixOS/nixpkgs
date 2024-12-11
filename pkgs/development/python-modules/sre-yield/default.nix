@@ -19,7 +19,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
-  doCheck = true;
   nativeCheckInputs = [ unittestCheckHook ];
 
   meta = with lib; {

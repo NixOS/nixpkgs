@@ -48,7 +48,7 @@ buildPythonPackage rec {
     xmldiff
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     credssp = [ requests-credssp ];
     kerberos = pyspnego.optional-dependencies.kerberos;
     named_pipe = [ psutil ];

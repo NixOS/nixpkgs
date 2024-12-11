@@ -9,7 +9,7 @@ payload=$(curl https://im.qq.com/rainbow/linuxQQDownload | grep -oP "var params=
 amd64_url=$(jq -r .x64DownloadUrl.deb <<< "$payload")
 arm64_url=$(jq -r .armDownloadUrl.deb <<< "$payload")
 
-version=$(grep -oP "(?<=/QQ_).*(?=_[0-9]{6})" <<< "$amd64_url")
+version=$(jq -r .version <<< "$payload")-$(jq -r .updateDate <<< "$payload")
 
 amd64_hash=$(nix-prefetch-url $amd64_url)
 arm64_hash=$(nix-prefetch-url $arm64_url)

@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   pname = "element-web";
 
   src = fetchFromGitHub {
-    owner = "vector-im";
+    owner = "element-hq";
     repo = "element-web";
     rev = "v${finalAttrs.version}";
     hash = webSrcHash;
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
     # with the update of openssl3, some key ciphers are not supported anymore
     # this flag will allow those codecs again as a workaround
     # see https://medium.com/the-node-js-collection/node-js-17-is-here-8dba1e14e382#5f07
-    # and https://github.com/vector-im/element-web/issues/21043
+    # and https://github.com/element-hq/element-web/issues/21043
     export NODE_OPTIONS=--openssl-legacy-provider
     mkdir -p $HOME
 
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: builtins.removeAttrs pinData [ "hashes" ] // {
   meta = {
     description = "Glossy Matrix collaboration client for the web";
     homepage = "https://element.io/";
-    changelog = "https://github.com/vector-im/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
+    changelog = "https://github.com/element-hq/element-web/blob/v${finalAttrs.version}/CHANGELOG.md";
     maintainers = lib.teams.matrix.members;
     license = lib.licenses.asl20;
     platforms = lib.platforms.all;

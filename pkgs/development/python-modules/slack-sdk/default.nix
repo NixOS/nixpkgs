@@ -4,12 +4,10 @@
   aiohttp,
   boto3,
   buildPythonPackage,
-  codecov,
   fetchFromGitHub,
   flake8,
   flask-sockets,
   moto,
-  pythonOlder,
   psutil,
   pytest-asyncio,
   pytestCheckHook,
@@ -21,16 +19,14 @@
 
 buildPythonPackage rec {
   pname = "slack-sdk";
-  version = "3.31.0";
+  version = "3.33.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "slackapi";
     repo = "python-slack-sdk";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6fuC2yIGtjIxnEiI2/1sQ5RZB18WlteozyS8/XDTwkg=";
+    hash = "sha256-kpilxg/S9/U6lJW8FsMvcdGh+qqDH0Kr66sc+HsY2DM=";
   };
 
   postPatch = ''
@@ -49,8 +45,9 @@ buildPythonPackage rec {
     websockets
   ];
 
+  pythonImportsCheck = [ "slack_sdk" ];
+
   nativeCheckInputs = [
-    codecov
     flake8
     flask-sockets
     moto
@@ -63,26 +60,20 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
-  disabledTestPaths = [
-    # Exclude tests that requires network features
-    "integration_tests"
-  ];
-
   disabledTests = [
-    # Requires network features
+    # Requires internet access (to slack API)
     "test_start_raises_an_error_if_rtm_ws_url_is_not_returned"
-    "test_org_installation"
-    "test_interactions"
-    "test_issue_690_oauth_access"
+    # Requires network access: [Errno 111] Connection refused
+    "test_send_message_while_disconnection"
   ];
 
-  pythonImportsCheck = [ "slack_sdk" ];
+  __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Slack Developer Kit for Python";
     homepage = "https://slack.dev/python-slack-sdk/";
     changelog = "https://github.com/slackapi/python-slack-sdk/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ fab ];
   };
 }

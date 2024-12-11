@@ -28,7 +28,7 @@
 
 let
   pname = "multipass";
-  version = "1.14.0";
+  version = "1.14.1";
 
   # This is done here because a CMakeLists.txt from one of it's submodules tries
   # to modify a file, so we grab the source for the submodule here, copy it into
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     owner = "canonical";
     repo = "multipass";
     rev = "refs/tags/v${version}";
-    hash = "sha256-1g5Og4LkNujjT4KCXHmXaiTK58Bgb2KyYLKwTFFVEHE=";
+    hash = "sha256-i6SKiV4jwiBURx85m3u7km1dhi+fRdVpMBanlZo0VK4=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''

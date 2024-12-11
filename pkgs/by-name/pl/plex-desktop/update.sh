@@ -73,6 +73,7 @@ sed --regexp-extended \
 # try to build the updated version
 #
 
+export NIXPKGS_ALLOW_UNFREE=1
 if ! nix-build -A plex-desktop "$nixpkgs"; then
   echo "The updated plex-desktop failed to build."
   exit 1

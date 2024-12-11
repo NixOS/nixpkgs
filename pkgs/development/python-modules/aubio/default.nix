@@ -31,7 +31,7 @@ buildPythonPackage rec {
     })
   ];
 
-  buildInputs = lib.optionals stdenv.isDarwin (
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
     with darwin.apple_sdk.frameworks;
     [
       Accelerate

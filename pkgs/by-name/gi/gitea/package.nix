@@ -1,20 +1,18 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, git
-, bash
-, coreutils
-, compressDrvWeb
-, gitea
-, gzip
-, openssh
-, pam
-, sqliteSupport ? true
-, pamSupport ? stdenv.hostPlatform.isLinux
-, nixosTests
-, buildNpmPackage
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  git,
+  bash,
+  coreutils,
+  compressDrvWeb,
+  gitea,
+  gzip,
+  openssh,
+  sqliteSupport ? true,
+  nixosTests,
+  buildNpmPackage,
 }:
 
 let
@@ -22,7 +20,7 @@ let
     pname = "gitea-frontend";
     inherit (gitea) src version;
 
-    npmDepsHash = "sha256-gXBBiDIIS0aW6qK37HcF0AuJOliblinznRVXoo6DV1s=";
+    npmDepsHash = "sha256-Sp3xBe5IXys2Qro4x4HKs9dQOnlbstAmtIG6xOOktEk=";
 
     # use webpack directly instead of 'make frontend' as the packages are already installed
     buildPhase = ''
@@ -34,20 +32,26 @@ let
       cp -R public $out/
     '';
   };
-in buildGoModule rec {
+in
+buildGoModule rec {
   pname = "gitea";
-  version = "1.22.1";
+  version = "1.22.4";
 
   src = fetchFromGitHub {
     owner = "go-gitea";
     repo = "gitea";
     rev = "v${gitea.version}";
-    hash = "sha256-s7su3gMdXv2sT1uYYtx29n7QDvmPU9QB3QR6ctOlE58=";
+    hash = "sha256-9vmLG2t2vBRpLwLhGOL3W/LGNpUmxPt0mRh+jFXUWAc=";
   };
 
-  vendorHash = "sha256-nzhjIfQMzSf1nuBMTIe0xn+NMDFbDZ9jRHu8Nwzmp4w=";
+  proxyVendor = true;
 
-  outputs = [ "out" "data" ];
+  vendorHash = "sha256-72Q5XBb7RwfX3eekt8dsaS1doDhLCO0MFPHzJvlzxUo=";
+
+  outputs = [
+    "out"
+    "data"
+  ];
 
   patches = [ ./static-root-path.patch ];
 
@@ -64,10 +68,10 @@ in buildGoModule rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = lib.optional pamSupport pam;
-
-  tags = lib.optional pamSupport "pam"
-    ++ lib.optionals sqliteSupport [ "sqlite" "sqlite_unlock_notify" ];
+  tags = lib.optionals sqliteSupport [
+    "sqlite"
+    "sqlite_unlock_notify"
+  ];
 
   ldflags = [
     "-s"
@@ -84,11 +88,21 @@ in buildGoModule rec {
     cp -R ./options/locale $out/locale
 
     wrapProgram $out/bin/gitea \
-      --prefix PATH : ${lib.makeBinPath [ bash coreutils git gzip openssh ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          bash
+          coreutils
+          git
+          gzip
+          openssh
+        ]
+      }
   '';
 
   passthru = {
-    data-compressed = lib.warn "gitea.passthru.data-compressed is deprecated. Use \"compressDrvWeb gitea.data\"." (compressDrvWeb gitea.data {});
+    data-compressed =
+      lib.warn "gitea.passthru.data-compressed is deprecated. Use \"compressDrvWeb gitea.data\"."
+        (compressDrvWeb gitea.data { });
 
     tests = nixosTests.gitea;
   };
@@ -97,7 +111,11 @@ in buildGoModule rec {
     description = "Git with a cup of tea";
     homepage = "https://about.gitea.com";
     license = licenses.mit;
-    maintainers = with maintainers; [ ma27 techknowlogick SuperSandro2000 ];
+    maintainers = with maintainers; [
+      ma27
+      techknowlogick
+      SuperSandro2000
+    ];
     mainProgram = "gitea";
   };
 }

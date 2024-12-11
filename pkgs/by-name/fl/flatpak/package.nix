@@ -2,11 +2,13 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   runCommand,
   appstream,
   autoreconfHook,
   bison,
   bubblewrap,
+  buildPackages,
   bzip2,
   coreutils,
   curl,
@@ -40,6 +42,7 @@
   p11-kit,
   pkg-config,
   polkit,
+  pkgsCross,
   python3,
   shared-mime-info,
   socat,
@@ -70,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     "devdoc"
     "installedTests"
   ];
+
+  separateDebugInfo = true;
 
   src = fetchurl {
     url = "https://github.com/flatpak/flatpak/releases/download/${finalAttrs.version}/flatpak-${finalAttrs.version}.tar.xz";
@@ -118,6 +123,22 @@ stdenv.mkDerivation (finalAttrs: {
     # Try mounting fonts and icons from NixOS locations if FHS locations don't exist.
     # https://github.com/NixOS/nixpkgs/issues/119433
     ./fix-fonts-icons.patch
+
+    # TODO: Remove when updating to 1.16
+    # Ensure flatpak uses the system's zoneinfo from $TZDIR
+    # https://github.com/NixOS/nixpkgs/issues/238386
+    (fetchpatch {
+      url = "https://github.com/flatpak/flatpak/pull/5850/commits/a8a35bf4d9fc3d76e1a5049a6a591faec04a42fd.patch";
+      hash = "sha256-JqkPbnzgZNZq/mplZqohhHFdjRrvYFjE4C02pI3feBo=";
+    })
+    (fetchpatch {
+      url = "https://github.com/flatpak/flatpak/pull/5850/commits/5ea13b09612215559081c27b60df4fb720cb08d5.patch";
+      hash = "sha256-BWbyQ2en3RtN4Ec5n62CULAhvywlQLhcl3Fmd4fsR1s=";
+    })
+    (fetchpatch {
+      url = "https://github.com/flatpak/flatpak/pull/5850/commits/7c8a81f08908019bbf69358de199748a9bcb29e3.patch";
+      hash = "sha256-RiG2jPmG+Igskxv8oQquOUYsG4srgdMXWe34ojMXslo=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -205,8 +226,12 @@ stdenv.mkDerivation (finalAttrs: {
       PATH=${lib.makeBinPath [ vsc-py ]}:$PATH patchShebangs --build subprojects/variant-schema-compiler/variant-schema-compiler
 
       substituteInPlace configure.ac \
-        --replace-fail '$BWRAP --version' 'echo ${bubblewrap.version}' \
-        --replace-fail '$DBUS_PROXY --version' 'echo ${xdg-dbus-proxy.version}'
+        --replace-fail '$BWRAP --' ${
+          lib.escapeShellArg (stdenv.hostPlatform.emulator buildPackages + " $BWRAP --")
+        } \
+        --replace-fail '$DBUS_PROXY --' ${
+          lib.escapeShellArg (stdenv.hostPlatform.emulator buildPackages + " $DBUS_PROXY --")
+        }
     '';
 
   passthru = {
@@ -218,14 +243,16 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = nix-update-script { };
 
     tests = {
+      cross = pkgsCross.aarch64-multiplatform.flatpak;
+
       installedTests = nixosTests.installed-tests.flatpak;
 
       validate-icon = runCommand "test-icon-validation" { } ''
         ${finalAttrs.finalPackage}/libexec/flatpak-validate-icon \
           --sandbox 512 512 \
-          "${nixos-icons}/share/icons/hicolor/scalable/apps/nix-snowflake-white.svg" > "$out"
+          "${nixos-icons}/share/icons/hicolor/512x512/apps/nix-snowflake.png" > "$out"
 
-        grep format=svg "$out"
+        grep format=png "$out"
       '';
 
       version = testers.testVersion { package = finalAttrs.finalPackage; };
@@ -238,6 +265,7 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/flatpak/flatpak/releases/tag/${finalAttrs.version}";
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [ getchoo ];
+    mainProgram = "flatpak";
     platforms = lib.platforms.linux;
   };
 })

@@ -307,6 +307,15 @@ def add_bytes(tar, path, content, mtime):
     tar.addfile(ti, io.BytesIO(content))
 
 
+now = datetime.now(tz=timezone.utc)
+
+
+def parse_time(s):
+    if s == "now":
+        return now
+    return datetime.fromisoformat(s)
+
+
 def main():
     arg_parser = argparse.ArgumentParser(
         description="""
@@ -342,12 +351,8 @@ Docker Image Specification v1.2 as reference [1].
     with open(args.conf, "r") as f:
         conf = json.load(f)
 
-    created = (
-        datetime.now(tz=timezone.utc)
-        if conf["created"] == "now"
-        else datetime.fromisoformat(conf["created"])
-    )
-    mtime = int(created.timestamp())
+    created = parse_time(conf["created"])
+    mtime = int(parse_time(conf["mtime"]).timestamp())
     uid = int(conf["uid"])
     gid = int(conf["gid"])
     uname = conf["uname"]

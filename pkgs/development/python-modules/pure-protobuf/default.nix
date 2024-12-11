@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "pure-protobuf";
-  version = "3.1.2";
+  version = "3.1.3";
 
   format = "pyproject";
   # < 3.10 requires get-annotations which isn't packaged yet
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "eigenein";
     repo = "protobuf";
     rev = "refs/tags/${version}";
-    hash = "sha256-up/01Q2IdaW41Ple+nCRpWjYnl/IAlOppdGcg4djRZY=";
+    hash = "sha256-AsiJDi3SF3nlWKFvZujUsoHY8AJ21JKzEuTdR9FtFQI=";
   };
 
   build-system = [

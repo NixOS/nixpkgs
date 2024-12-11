@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, lzip
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  lzip,
+  ncurses,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

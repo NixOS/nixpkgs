@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
       substituteInPlace tests/testsuite.c \
         --replace /bin/rm rm
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # This specific test fails on darwin for some unknown reason
       substituteInPlace tests/test-filters.c \
         --replace-fail 'test_charset_conversion (datadir, "japanese", "utf-8", "iso-2022-jp");' ""

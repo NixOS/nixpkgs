@@ -11,12 +11,17 @@
   albucore,
   eval-type-backport,
   numpy,
-  opencv4,
+  opencv-python,
   pydantic,
   pyyaml,
   scikit-image,
-  scikit-learn,
+  scipy,
 
+  # optional dependencies
+  huggingface-hub,
+  pillow,
+
+  # tests
   deepdiff,
   pytestCheckHook,
   pytest-mock,
@@ -26,19 +31,23 @@
 
 buildPythonPackage rec {
   pname = "albumentations";
-  version = "1.4.11";
+  version = "1.4.22";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "albumentations-team";
     repo = "albumentations";
     rev = "refs/tags/${version}";
-    hash = "sha256-1070V9+EZ4qrhxmbMyvTbu89pLoonrn0Peb8nwp2lwA=";
+    hash = "sha256-kRf8LhRWtzGnhPrQo5aT/4a2sNQCdwAmFFzwcE0QnxM=";
   };
 
-  pythonRemoveDeps = [ "opencv-python" ];
+  patches = [
+    ./dont-check-for-updates.patch
+  ];
+
+  pythonRelaxDeps = [ "opencv-python" ];
 
   build-system = [ setuptools ];
 
@@ -46,12 +55,17 @@ buildPythonPackage rec {
     albucore
     eval-type-backport
     numpy
-    opencv4
+    opencv-python
     pydantic
     pyyaml
     scikit-image
-    scikit-learn
+    scipy
   ];
+
+  optional-dependencies = {
+    hub = [ huggingface-hub ];
+    text = [ pillow ];
+  };
 
   nativeCheckInputs = [
     deepdiff
@@ -62,6 +76,7 @@ buildPythonPackage rec {
   ];
 
   disabledTests = [
+    "test_pca_inverse_transform"
     # this test hangs up
     "test_transforms"
   ];

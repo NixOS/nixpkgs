@@ -33,7 +33,9 @@ let
     attrsets
     customisation
     fixedPoints
+    lists
     strings
+    trivial
     versions
     ;
   # Backbone
@@ -81,6 +83,45 @@ let
     nccl = final.callPackage ../development/cuda-modules/nccl { };
     nccl-tests = final.callPackage ../development/cuda-modules/nccl-tests { };
 
+    tests =
+      let
+        bools = [
+          true
+          false
+        ];
+        configs = {
+          openCVFirst = bools;
+          useOpenCVDefaultCuda = bools;
+          useTorchDefaultCuda = bools;
+        };
+        builder =
+          {
+            openCVFirst,
+            useOpenCVDefaultCuda,
+            useTorchDefaultCuda,
+          }@config:
+          {
+            name = strings.concatStringsSep "-" (
+              [
+                "test"
+                (if openCVFirst then "opencv" else "torch")
+              ]
+              ++ lists.optionals (if openCVFirst then useOpenCVDefaultCuda else useTorchDefaultCuda) [
+                "with-default-cuda"
+              ]
+              ++ [
+                "then"
+                (if openCVFirst then "torch" else "opencv")
+              ]
+              ++ lists.optionals (if openCVFirst then useTorchDefaultCuda else useOpenCVDefaultCuda) [
+                "with-default-cuda"
+              ]
+            );
+            value = final.callPackage ../development/cuda-modules/tests/opencv-and-torch config;
+          };
+      in
+      attrsets.listToAttrs (attrsets.mapCartesianProduct builder configs);
+
     writeGpuTestPython = final.callPackage ../development/cuda-modules/write-gpu-test-python.nix { };
   });
 
@@ -123,4 +164,10 @@ let
     fixedPoints.extends composedExtension passthruFunction
   );
 in
-cudaPackages
+# We want to warn users about the upcoming deprecation of old CUDA
+# versions, without breaking Nixpkgs CI with evaluation warnings. This
+# gross hack ensures that the warning only triggers if aliases are
+# enabled, which is true by default, but not for ofborg.
+lib.warnIf (cudaPackages.cudaOlder "12.0" && config.allowAliases)
+  "CUDA versions older than 12.0 will be removed in Nixpkgs 25.05; see the 24.11 release notes for more information"
+  cudaPackages

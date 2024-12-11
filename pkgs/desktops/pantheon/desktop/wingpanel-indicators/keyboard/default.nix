@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, pkg-config
-, meson
-, ninja
-, substituteAll
-, vala
-, gtk3
-, granite
-, libxml2
-, wingpanel
-, libgee
-, xorg
-, libgnomekbd
-, ibus
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  pkg-config,
+  meson,
+  ninja,
+  substituteAll,
+  vala,
+  gtk3,
+  granite,
+  libxml2,
+  wingpanel,
+  libgee,
+  xorg,
+  libgnomekbd,
+  ibus,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wingpanel-indicator-keyboard";
-  version = "2.4.1";
+  version = "2.4.2";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-AmTAl7N+2zYRUgmnuP+S+m0n6nUIihcB5kisWoPPlTQ=";
+    sha256 = "sha256-vPQ+Bt7ggeT3Zzsvbie8Wpu3D2WMEIh8GDOI3frnedM=";
   };
 
   patches = [

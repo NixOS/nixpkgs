@@ -17,11 +17,11 @@
 
 stdenv.mkDerivation rec {
   pname = "photoqt";
-  version = "4.6";
+  version = "4.7";
 
   src = fetchurl {
     url = "https://photoqt.org/pkgs/photoqt-${version}.tar.gz";
-    hash = "sha256-5VbGMJ1B9yDbTiri7SZ+r+c9LdfG/C1c0/01QBUvbCY=";
+    hash = "sha256-uZCeJJsQoIDZ6nf+JbFhbXE4ZHL8pCY0pJOG5w6v4vs=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +49,7 @@ stdenv.mkDerivation rec {
       qt6Packages.poppler
       zxing-cpp
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       mpv
       qt6.qtwayland
     ];
@@ -59,12 +59,12 @@ stdenv.mkDerivation rec {
     (lib.cmakeBool "CHROMECAST" false)
     (lib.cmakeBool "FREEIMAGE" false)
     (lib.cmakeBool "IMAGEMAGICK" false)
-    (lib.cmakeBool "VIDEO_MPV" (!stdenv.isDarwin))
+    (lib.cmakeBool "VIDEO_MPV" (!stdenv.hostPlatform.isDarwin))
   ];
 
   env.MAGICK_LOCATION = "${graphicsmagick}/include/GraphicsMagick";
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv $out/bin/photoqt.app $out/Applications
     makeWrapper $out/{Applications/photoqt.app/Contents/MacOS,bin}/photoqt

@@ -44,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   # lots of: [Errno 48] Address already in use: ('127.0.0.1', 54323)
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   __darwinAllowLocalNetworking = true;
 

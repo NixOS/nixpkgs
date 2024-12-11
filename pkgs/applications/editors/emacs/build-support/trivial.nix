@@ -2,27 +2,40 @@
 
 { callPackage, lib, ... }@envargs:
 
-args:
+let
+  libBuildHelper = import ./lib-build-helper.nix;
+in
 
-callPackage ./generic.nix envargs ({
-  buildPhase = ''
-    runHook preBuild
+libBuildHelper.extendMkDerivation' (callPackage ./generic.nix envargs) (
+  finalAttrs:
 
-    emacs -L . --batch -f batch-byte-compile *.el
+  args:
 
-    runHook postBuild
-  '';
+  {
+    buildPhase =
+      args.buildPhase or ''
+        runHook preBuild
 
-  installPhase = ''
-    runHook preInstall
+        # This is modified from stdenv buildPhase. foundMakefile is used in stdenv checkPhase.
+        if [[ ! ( -z "''${makeFlags-}" && -z "''${makefile:-}" && ! ( -e Makefile || -e makefile || -e GNUmakefile ) ) ]]; then
+          foundMakefile=1
+        fi
 
-    LISPDIR=$out/share/emacs/site-lisp
-    install -d $LISPDIR
-    install *.el *.elc $LISPDIR
-    emacs --batch -l package --eval "(package-generate-autoloads \"${args.pname}\" \"$LISPDIR\")"
+        emacs -l package -f package-initialize -L . --batch -f batch-byte-compile *.el
 
-    runHook postInstall
-  '';
-}
+        runHook postBuild
+      '';
 
-// args)
+    installPhase =
+      args.installPhase or ''
+        runHook preInstall
+
+        LISPDIR=$out/share/emacs/site-lisp
+        install -d $LISPDIR
+        install *.el *.elc $LISPDIR
+
+        runHook postInstall
+      '';
+  }
+
+)

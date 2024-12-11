@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 let
   # The web client verifies, that the server version is a valid datetime string:
@@ -7,11 +12,15 @@ let
   # Example:
   #   versionToTimestamp "2021-04-22T15-44-28Z"
   #   => "2021-04-22T15:44:28Z"
-  versionToTimestamp = version:
+  versionToTimestamp =
+    version:
     let
       splitTS = builtins.elemAt (builtins.split "(.*)(T.*)" version) 1;
     in
-    builtins.concatStringsSep "" [ (builtins.elemAt splitTS 0) (builtins.replaceStrings [ "-" ] [ ":" ] (builtins.elemAt splitTS 1)) ];
+    builtins.concatStringsSep "" [
+      (builtins.elemAt splitTS 0)
+      (builtins.replaceStrings [ "-" ] [ ":" ] (builtins.elemAt splitTS 1))
+    ];
 
   # CopyrightYear will be printed to the CLI UI.
   # Example:
@@ -21,16 +30,16 @@ let
 in
 buildGoModule rec {
   pname = "minio";
-  version = "2024-08-17T01-24-54Z";
+  version = "2024-11-07T00-52-20Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
-    hash = "sha256-e3Zti0v+2jfRkVoXOfqW5uw9zvIfoAKhkolfNtyBNaE=";
+    hash = "sha256-vWrNqfB41Y3MAF9PuyopIDrGq4Bj41Y4gISbN6nO0zU=";
   };
 
-  vendorHash = "sha256-diRNxBmWB/aJjS8+/+7Dc/2RmI93SZpmfsqP+2i9X1Q=";
+  vendorHash = "sha256-yYAEh4L1eStx0/bID0+wZ5kdqPYshJrSZgVGuXgtgvs=";
 
   doCheck = false;
 
@@ -40,14 +49,18 @@ buildGoModule rec {
 
   tags = [ "kqueue" ];
 
-  ldflags = let t = "github.com/minio/minio/cmd"; in [
-    "-s"
-    "-w"
-    "-X ${t}.Version=${versionToTimestamp version}"
-    "-X ${t}.CopyrightYear=${versionToYear version}"
-    "-X ${t}.ReleaseTag=RELEASE.${version}"
-    "-X ${t}.CommitID=${src.rev}"
-  ];
+  ldflags =
+    let
+      t = "github.com/minio/minio/cmd";
+    in
+    [
+      "-s"
+      "-w"
+      "-X ${t}.Version=${versionToTimestamp version}"
+      "-X ${t}.CopyrightYear=${versionToYear version}"
+      "-X ${t}.ReleaseTag=RELEASE.${version}"
+      "-X ${t}.CommitID=${src.rev}"
+    ];
 
   passthru.tests.minio = nixosTests.minio;
 
@@ -55,7 +68,7 @@ buildGoModule rec {
     homepage = "https://www.minio.io/";
     description = "S3-compatible object storage server";
     changelog = "https://github.com/minio/minio/releases/tag/RELEASE.${version}";
-    maintainers = with maintainers; [ eelco bachp ];
+    maintainers = with maintainers; [ bachp ];
     license = licenses.agpl3Plus;
     mainProgram = "minio";
   };

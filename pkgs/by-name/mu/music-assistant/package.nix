@@ -1,50 +1,40 @@
-{ lib
-, python3
-, fetchFromGitHub
-, ffmpeg-headless
-, nixosTests
-, substituteAll
-, providers ? [ ]
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  ffmpeg-headless,
+  nixosTests,
+  substituteAll,
+  providers ? [ ],
 }:
 
 let
   python = python3.override {
     self = python;
     packageOverrides = self: super: {
-      aiojellyfin = super.aiojellyfin.overridePythonAttrs rec {
-        version = "0.9.2";
-
-        src = fetchFromGitHub {
-          owner = "jc2k";
-          repo = "aiojellyfin";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-q+b1tKr46qq3PULPkCaQk2VoC1aaNxPK/E1Kj4PABfI=";
-        };
-
-        doCheck = false;
-      };
-
       music-assistant-frontend = self.callPackage ./frontend.nix { };
     };
   };
 
   providerPackages = (import ./providers.nix).providers;
   providerNames = lib.attrNames providerPackages;
-  providerDependencies = lib.concatMap (provider: (providerPackages.${provider} python.pkgs)) providers;
+  providerDependencies = lib.concatMap (
+    provider: (providerPackages.${provider} python.pkgs)
+  ) providers;
 
   pythonPath = python.pkgs.makePythonPath providerDependencies;
 in
 
 python.pkgs.buildPythonApplication rec {
   pname = "music-assistant";
-  version = "2.1.1";
+  version = "2.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "server";
     rev = "refs/tags/${version}";
-    hash = "sha256-ALsl2xfAFYejDEhR5/ZpeIxoHFgvz471tb4OP5xQAUE=";
+    hash = "sha256-q71LczFsJAvZaWCQg4Lgzg2XX4XDFvA3x255Re00D9Q=";
   };
 
   patches = [
@@ -64,11 +54,14 @@ python.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  dependencies = with python.pkgs; [
-    aiohttp
-    mashumaro
-    orjson
-  ] ++ optional-dependencies.server;
+  dependencies =
+    with python.pkgs;
+    [
+      aiohttp
+      mashumaro
+      orjson
+    ]
+    ++ optional-dependencies.server;
 
   optional-dependencies = with python.pkgs; {
     server = [
@@ -98,14 +91,22 @@ python.pkgs.buildPythonApplication rec {
     ];
   };
 
-  nativeCheckInputs = with python.pkgs; [
-    aiojellyfin
-    pytest-aiohttp
-    pytest-cov-stub
-    pytestCheckHook
-    syrupy
-  ]
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs =
+    with python.pkgs;
+    [
+      aiojellyfin
+      pytest-aiohttp
+      pytest-cov-stub
+      pytestCheckHook
+      syrupy
+      pytest-timeout
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies);
+
+  pytestFlagsArray = [
+    # blocks in setup
+    "--deselect=tests/server/providers/jellyfin/test_init.py::test_initial_sync"
+  ];
 
   pythonImportsCheck = [ "music_assistant" ];
 
@@ -115,7 +116,7 @@ python.pkgs.buildPythonApplication rec {
       pythonPath
       providerPackages
       providerNames
-    ;
+      ;
     tests = nixosTests.music-assistant;
   };
 

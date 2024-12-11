@@ -10,17 +10,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "codeberg-cli";
-  version = "0.4.2";
+  version = "0.4.6";
 
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "Aviac";
     repo = "codeberg-cli";
     rev = "v${version}";
-    hash = "sha256-SUKV7tH7tvSPtlMcRlOgjvAEqPoBi4J41Ak5k4h4Qj0=";
+    hash = "sha256-BkWI4FbacgFrbSLNSqe7vdzdLvrrgX1528qFaKCd5tY=";
   };
 
-  cargoHash = "sha256-FlW0Q2UUt6AX/A0MznGpJY8+yoMs70N58Ow05ly9YyE=";
+  cargoHash = "sha256-eFS16QzPMLhoVb+hqt/p3ka58rwP5WTgHas2PZT5c/U=";
   nativeBuildInputs = [
     pkg-config
     installShellFiles
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       let
         d = darwin.apple_sdk.frameworks;
       in

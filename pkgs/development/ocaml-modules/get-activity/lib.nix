@@ -10,7 +10,7 @@
   ppx_yojson_conv,
   ppx_yojson_conv_lib,
   yojson,
-  alcotest
+  alcotest,
 }:
 
 buildDunePackage rec {
@@ -37,7 +37,10 @@ buildDunePackage rec {
     yojson
   ];
 
-  checkInputs = [ ppx_expect alcotest ];
+  checkInputs = [
+    ppx_expect
+    alcotest
+  ];
 
   doCheck = true;
 
@@ -49,4 +52,3 @@ buildDunePackage rec {
     maintainers = with lib.maintainers; [ zazedd ];
   };
 }
-

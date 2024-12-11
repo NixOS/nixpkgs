@@ -1,10 +1,11 @@
-{ stdenvNoCC
-, lib
-, fetchurl
-, fetchzip
-, appimageTools
-, makeWrapper
-, electron
+{
+  stdenvNoCC,
+  lib,
+  fetchurl,
+  fetchzip,
+  appimageTools,
+  makeWrapper,
+  electron,
 }:
 (stdenvNoCC.mkDerivation {
   pname = "revolt-desktop";
@@ -31,11 +32,11 @@
     let
       inherit (prev) pname version;
     in
-    if stdenvNoCC.isLinux then
+    if stdenvNoCC.hostPlatform.isLinux then
       {
         src = fetchurl {
           url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-linux.AppImage";
-          sha256 = "sha256-Wsm6ef2Reenq3/aKGaP2yzlOuLKaxKtRHCLLMxvWUUY=";
+          hash = "sha256-Wsm6ef2Reenq3/aKGaP2yzlOuLKaxKtRHCLLMxvWUUY=";
         };
 
         appimageContents = appimageTools.extractType2 { inherit (final) src pname version; };
@@ -60,11 +61,11 @@
         postFixup = ''
           makeWrapper ${electron}/bin/electron $out/bin/revolt-desktop \
             --add-flags $out/share/revolt-desktop/resources/app.asar \
-            --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations}}"
+            --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform=wayland --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
         '';
       }
     else
-      assert stdenvNoCC.isDarwin;
+      assert stdenvNoCC.hostPlatform.isDarwin;
       {
         src = fetchzip {
           url = "https://github.com/revoltchat/desktop/releases/download/v${version}/Revolt-${version}-mac.zip";

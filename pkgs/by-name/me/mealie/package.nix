@@ -2,7 +2,6 @@
 , stdenv
 , callPackage
 , fetchFromGitHub
-, fetchpatch
 , makeWrapper
 , nixosTests
 , python3Packages
@@ -10,12 +9,12 @@
 }:
 
 let
-  version = "1.11.0";
+  version = "2.2.0";
   src = fetchFromGitHub {
     owner = "mealie-recipes";
     repo = "mealie";
     rev = "v${version}";
-    hash = "sha256-tBbvmM66zCNpKqeekPY48j0t5PjLHeyQ8+kJ6755ivo=";
+    hash = "sha256-t4YYvj8dG8o9PVAlDxdxVBi2omBGQ2h53/IVv089778=";
   };
 
   frontend = callPackage (import ./mealie-frontend.nix src version) { };
@@ -47,16 +46,6 @@ pythonpkgs.buildPythonApplication rec {
   inherit version src;
   pyproject = true;
 
-  patches = [
-    # Pull in https://github.com/mealie-recipes/mealie/pull/4002 manually until
-    # it lands in an upstream mealie release.
-    # See https://github.com/NixOS/nixpkgs/issues/321623.
-    ( fetchpatch {
-        url = "https://github.com/mealie-recipes/mealie/commit/65ece35966120479db903785b22e9f2645f72aa4.patch";
-        hash = "sha256-4Nc0dFJrZ7ElN9rrq+CFpayKsrRjRd24fYraUFTzcH8=";
-    })
-  ];
-
   build-system = with pythonpkgs; [ poetry-core ];
 
   nativeBuildInputs = [ makeWrapper ];
@@ -78,6 +67,7 @@ pythonpkgs.buildPythonApplication rec {
     gunicorn
     html2text
     httpx
+    itsdangerous
     jinja2
     lxml
     openai

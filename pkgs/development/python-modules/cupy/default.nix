@@ -42,7 +42,7 @@ let
 in
 buildPythonPackage rec {
   pname = "cupy";
-  version = "13.2.0";
+  version = "13.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -50,8 +50,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cupy";
     repo = "cupy";
-    rev = "v13.2.0";
-    hash = "sha256-vZAtpIZztmsYeJeuq7yl7kgZse2azrIM3efHDmUswJI=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-eQZwOGCaWZ4b0JCHZlrPHVQVXQwSkibHb02j0czAMt8=";
     fetchSubmodules = true;
   };
 

@@ -37,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.42.12";
+  version = "1.52.16";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     owner = "BerriAI";
     repo = "litellm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Wd6u2bOZjdL3jexT3CkiXX3zfcXwMlNEifG/6ak5Qbw=";
+    hash = "sha256-WDD7jsFajzBTQCsB1235n3bMQXzOoh98BOBXLVvG/zQ=";
   };
 
   build-system = [ poetry-core ];
@@ -65,7 +65,7 @@ buildPythonPackage rec {
     tokenizers
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     proxy = [
       apscheduler
       backoff

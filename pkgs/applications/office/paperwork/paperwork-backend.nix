@@ -1,28 +1,29 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitLab
-, pyenchant
-, scikit-learn
-, pypillowfight
-, pycountry
-, whoosh
-, termcolor
-, pygobject3
-, pyocr
-, natsort
-, libinsane
-, distro
-, openpaperwork-core
-, openpaperwork-gtk
-, psutil
-, gtk3
-, poppler_gi
-, gettext
-, which
-, shared-mime-info
-, libreoffice
-, unittestCheckHook
-, setuptools-scm
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitLab,
+  pyenchant,
+  scikit-learn,
+  pypillowfight,
+  pycountry,
+  whoosh,
+  termcolor,
+  pygobject3,
+  pyocr,
+  natsort,
+  libinsane,
+  distro,
+  openpaperwork-core,
+  openpaperwork-gtk,
+  psutil,
+  gtk3,
+  poppler_gi,
+  gettext,
+  which,
+  shared-mime-info,
+  libreoffice,
+  unittestCheckHook,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -87,6 +88,9 @@ buildPythonPackage rec {
     description = "Backend part of Paperwork (Python API, no UI)";
     homepage = "https://openpaper.work";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ aszlig symphorien ];
+    maintainers = with maintainers; [
+      aszlig
+      symphorien
+    ];
   };
 }

@@ -1,21 +1,38 @@
-{lib, stdenv, fetchpatch, fetchurl, autoreconfHook, pkg-config, atk, cairo, glib
-, gnome-common, gtk2, pango
-, libxml2Python, perl, intltool, gettext, gtk-mac-integration-gtk2
-, testers
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchurl,
+  autoreconfHook,
+  pkg-config,
+  atk,
+  cairo,
+  glib,
+  gnome-common,
+  gtk2,
+  pango,
+  libxml2Python,
+  perl,
+  intltool,
+  gettext,
+  gtk-mac-integration-gtk2,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gtksourceview";
   version = "2.10.5";
 
-  src = let
-    inherit (finalAttrs) pname version;
-  in fetchurl {
-    url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "c585773743b1df8a04b1be7f7d90eecdf22681490d6810be54c81a7ae152191e";
-  };
+  src =
+    let
+      inherit (finalAttrs) pname version;
+    in
+    fetchurl {
+      url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
+      sha256 = "c585773743b1df8a04b1be7f7d90eecdf22681490d6810be54c81a7ae152191e";
+    };
 
-  patches = lib.optionals stdenv.isDarwin [
+  patches = lib.optionals stdenv.hostPlatform.isDarwin [
     (fetchpatch {
       name = "change-igemacintegration-to-gtkosxapplication.patch";
       url = "https://gitlab.gnome.org/GNOME/gtksourceview/commit/e88357c5f210a8796104505c090fb6a04c213902.patch";
@@ -28,16 +45,27 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config intltool ] ++ lib.optionals stdenv.isDarwin [ autoreconfHook ];
-  buildInputs = [
-    atk cairo glib gtk2
-    pango libxml2Python perl
-    gettext
-  ] ++ lib.optionals stdenv.isDarwin [
-    gnome-common gtk-mac-integration-gtk2
-  ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ autoreconfHook ];
+  buildInputs =
+    [
+      atk
+      cairo
+      glib
+      gtk2
+      pango
+      libxml2Python
+      perl
+      gettext
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      gnome-common
+      gtk-mac-integration-gtk2
+    ];
 
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     intltoolize --force
   '';
 

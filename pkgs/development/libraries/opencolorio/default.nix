@@ -1,37 +1,38 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, expat
-, yaml-cpp
-, pystring
-, imath
-, minizip-ng
-# Only required on Linux
-, glew
-, libglut
-# Only required on Darwin
-, Carbon
-, GLUT
-, Cocoa
-# Python bindings
-, pythonBindings ? true # Python bindings
-, python3Packages
-# Build apps
-, buildApps ? true # Utility applications
-, lcms2
-, openexr_3
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  expat,
+  yaml-cpp,
+  pystring,
+  imath,
+  minizip-ng,
+  # Only required on Linux
+  glew,
+  libglut,
+  # Only required on Darwin
+  Carbon,
+  GLUT,
+  Cocoa,
+  # Python bindings
+  pythonBindings ? true, # Python bindings
+  python3Packages,
+  # Build apps
+  buildApps ? true, # Utility applications
+  lcms2,
+  openexr_3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "opencolorio";
-  version = "2.3.2";
+  version = "2.4.0";
 
   src = fetchFromGitHub {
     owner = "AcademySoftwareFoundation";
     repo = "OpenColorIO";
     rev = "v${version}";
-    hash = "sha256-CSD3AZ36tmC/cYSdPsdDYx894+jd9GkGkhYJ767QY8A=";
+    hash = "sha256-7Uj1YBpunj9/32U5hpCokxfcVoRB9Oi2G9Cso+gAu5Q=";
   };
 
   patches = [
@@ -42,7 +43,7 @@ stdenv.mkDerivation rec {
     ./line-numbers.patch
   ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # these tests don't like being run headless on darwin. no builtin
     # way of skipping tests so this is what we're reduced to.
     substituteInPlace tests/cpu/Config_tests.cpp \
@@ -51,31 +52,45 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [
-    expat
-    yaml-cpp
-    pystring
-    imath
-    minizip-ng
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ glew libglut ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon GLUT Cocoa ]
-    ++ lib.optionals pythonBindings [ python3Packages.python python3Packages.pybind11 ]
+  buildInputs =
+    [
+      expat
+      yaml-cpp
+      pystring
+      imath
+      minizip-ng
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      glew
+      libglut
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      GLUT
+      Cocoa
+    ]
+    ++ lib.optionals pythonBindings [
+      python3Packages.python
+      python3Packages.pybind11
+    ]
     ++ lib.optionals buildApps [
       lcms2
       openexr_3
     ];
 
-  cmakeFlags = [
-    "-DOCIO_INSTALL_EXT_PACKAGES=NONE"
-    "-DOCIO_USE_SSE2NEON=OFF"
-    # GPU test fails with: libglut (GPU tests): failed to open display ''
-    "-DOCIO_BUILD_GPU_TESTS=OFF"
-    "-Dminizip-ng_INCLUDE_DIR=${minizip-ng}/include/minizip-ng"
-  ] ++ lib.optional (!pythonBindings) "-DOCIO_BUILD_PYTHON=OFF"
+  cmakeFlags =
+    [
+      "-DOCIO_INSTALL_EXT_PACKAGES=NONE"
+      "-DOCIO_USE_SSE2NEON=OFF"
+      # GPU test fails with: libglut (GPU tests): failed to open display ''
+      "-DOCIO_BUILD_GPU_TESTS=OFF"
+      "-Dminizip-ng_INCLUDE_DIR=${minizip-ng}/include/minizip-ng"
+    ]
+    ++ lib.optional (!pythonBindings) "-DOCIO_BUILD_PYTHON=OFF"
     ++ lib.optional (!buildApps) "-DOCIO_BUILD_APPS=OFF";
 
   # precision issues on non-x86
-  doCheck = stdenv.isx86_64;
+  doCheck = stdenv.hostPlatform.isx86_64;
   # Tends to fail otherwise.
   enableParallelChecking = false;
 

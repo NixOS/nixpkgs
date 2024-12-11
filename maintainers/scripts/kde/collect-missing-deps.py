@@ -72,6 +72,10 @@ OK_MISSING_BY_PACKAGE = {
     },
     "kwin": {
         "display-info",  # newer versions identify as libdisplay-info
+        "Libcap",  # used to call setcap at build time and nothing else
+    },
+    "libksysguard": {
+        "Libcap",  # used to call setcap at build time and nothing else
     },
     "mlt": {
         "Qt5",  # intentionally disabled
@@ -87,6 +91,10 @@ OK_MISSING_BY_PACKAGE = {
     },
     "powerdevil": {
         "DDCUtil",  # cursed, intentionally disabled
+        "Libcap",  # used to call setcap at build time and nothing else
+    },
+    "print-manager": {
+        "PackageKitQt6",  # used for auto-installing drivers which does not work for obvious reasons
     },
     "pulseaudio-qt": {
         "Qt6Qml",  # tests only

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  fetchpatch,
   swig,
   cython,
   matplotlib,
@@ -15,24 +14,15 @@
 }:
 buildPythonPackage rec {
   pname = "htseq";
-  version = "2.0.4";
+  version = "2.0.9";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "htseq";
     repo = "htseq";
     rev = "release_${version}";
-    hash = "sha256-7ocrmuj9LOtPz9XbI5rKGcdE5JbFz/pZh00Nie65XxE=";
+    hash = "sha256-i83BY7/p98/pfYzebolNW/6yNwtb2R5ARCSG3rAq2/M=";
   };
-
-  patches = [
-    # https://github.com/htseq/htseq/pull/84
-    (fetchpatch {
-      name = "replace-distutils-with-sysconfig.patch";
-      url = "https://github.com/htseq/htseq/commit/f0f1e464ee9aee56f0b44f905e7b3355b0bb8f29.patch";
-      hash = "sha256-yDYkXCPy+YFgnk1rnXwCB998aZwVd5nJeejZIgeEzAo=";
-    })
-  ];
 
   nativeBuildInputs = [ swig ];
 

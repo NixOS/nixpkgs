@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pyais";
-  version = "2.7.1";
+  version = "2.8.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "M0r13n";
     repo = "pyais";
     rev = "refs/tags/v${version}";
-    hash = "sha256-EUbEVhriJAlxr4g+iPzeyftrF+qtdIqvvljKKihK3C8=";
+    hash = "sha256-G3P1ijwOmd1UFIRXC8qPG93gtWJt+EclzO7wjtvj6tk=";
   };
 
   build-system = [ setuptools ];
@@ -42,7 +42,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Module for decoding and encoding AIS messages (AIVDM/AIVDO)";
     homepage = "https://github.com/M0r13n/pyais";
-    changelog = "https://github.com/M0r13n/pyais/blob/${version}/CHANGELOG.txt";
+    changelog = "https://github.com/M0r13n/pyais/blob/v${version}/CHANGELOG.txt";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };

@@ -1,14 +1,15 @@
-{ lib
-, buildGoModule
-, wrapGAppsHook3
-, wails
-, scdoc
-, installShellFiles
-, xorg
-, gtk3
-, webkitgtk
-, snippetexpanderd
-, snippetexpanderx
+{
+  lib,
+  buildGoModule,
+  wrapGAppsHook3,
+  wails,
+  scdoc,
+  installShellFiles,
+  xorg,
+  gtk3,
+  webkitgtk_4_0,
+  snippetexpanderd,
+  snippetexpanderx,
 }:
 
 buildGoModule rec {
@@ -32,7 +33,7 @@ buildGoModule rec {
   buildInputs = [
     xorg.libX11
     gtk3
-    webkitgtk
+    webkitgtk_4_0
     snippetexpanderd
     snippetexpanderx
   ];
@@ -57,7 +58,12 @@ buildGoModule rec {
   preFixup = ''
     gappsWrapperArgs+=(
       # Ensure snippetexpanderd and snippetexpanderx are available to start/stop.
-      --prefix PATH : ${lib.makeBinPath [ snippetexpanderd snippetexpanderx ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          snippetexpanderd
+          snippetexpanderx
+        ]
+      }
     )
   '';
 
@@ -65,7 +71,7 @@ buildGoModule rec {
     description = "Your little expandable text snippet helper GUI";
     homepage = "https://snippetexpander.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ianmjones ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
     mainProgram = "snippetexpandergui";
   };

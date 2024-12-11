@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "gios";
-  version = "4.0.0";
+  version = "5.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "bieniu";
     repo = "gios";
     rev = "refs/tags/${version}";
-    hash = "sha256-rjC4zWWtaPxuBcjiO9dVsXD4dTa47iwkKuSFx+QXeXw=";
+    hash = "sha256-J+LCu7wMuc3dYghvkKq58GcBAa76X5IPUWe7qCQwjjI=";
   };
 
   build-system = [ setuptools ];

@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "distribution";
-  version = "3.0.0-beta.1";
+  version = "3.0.0-rc.1";
 
   src = fetchFromGitHub {
     owner = "distribution";
     repo = "distribution";
     rev = "v${version}";
-    hash = "sha256-tiTwrcRtOEIs1sCkzHXY1TPYw0TOdDvM2Y8YdgQjEmI=";
+    hash = "sha256-dfy3P8zAFlni2heQcz61+sjivHE97Syh/ICreTgxUAM=";
   };
 
   vendorHash = null;
@@ -45,7 +45,7 @@ buildGoModule rec {
     homepage = "https://distribution.github.io/distribution/";
     changelog = "https://github.com/distribution/distribution/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ katexochen ];
     mainProgram = "registry";
     platforms = platforms.unix;
   };

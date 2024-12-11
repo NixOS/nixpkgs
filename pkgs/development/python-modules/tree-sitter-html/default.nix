@@ -1,8 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, setuptools
-, tree-sitter
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  setuptools,
+  tree-sitter,
 }:
 
 buildPythonPackage rec {
@@ -21,7 +22,7 @@ buildPythonPackage rec {
     setuptools
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     core = [
       tree-sitter
     ];

@@ -1,14 +1,15 @@
-{ lib
-, appimageTools
-, fetchurl
+{
+  lib,
+  appimageTools,
+  fetchurl,
 }:
 
 let
   pname = "fflogs";
-  version = "8.12.19";
+  version = "8.14.49";
   src = fetchurl {
     url = "https://github.com/RPGLogs/Uploaders-fflogs/releases/download/v${version}/fflogs-v${version}.AppImage";
-    hash = "sha256-/TGmUHMNowQFIw09OGw1ybiYE7ADPLbsZpAMPw3G5NE=";
+    hash = "sha256-pgI6xiTz1Gm5OMUnJsXD/B2eBm3MkPKIYQ6DgyVdwYo=";
   };
   extracted = appimageTools.extractType2 { inherit pname version src; };
 in

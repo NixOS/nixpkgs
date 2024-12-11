@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 buildGoModule rec {
   pname = "nix-store-gcs-proxy";
   version = "0.1.0";
@@ -7,12 +11,15 @@ buildGoModule rec {
     owner = "tweag";
     repo = "nix-store-gcs-proxy";
     rev = "v${version}";
-    sha256 = "0804p65px4wd7gzxggpdxsazkd1hbz1p15zzaxf9ygc6sh26ncln";
+    hash = "sha256-ljJrBNSGPZ9cV/+XcMNfMLT5le7tvtf/O42Tfou5BCA=";
   };
 
   vendorHash = "sha256-Bm3yFzm2LXOPYWQDk/UBusV0lPfc/BCKIb3pPlWgDFo=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = {
     description = "HTTP nix store that proxies requests to Google Storage";
@@ -22,4 +29,3 @@ buildGoModule rec {
     maintainers = with lib.maintainers; [ zimbatm ];
   };
 }
-

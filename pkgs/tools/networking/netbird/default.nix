@@ -31,26 +31,26 @@ let
 in
 buildGoModule rec {
   pname = "netbird";
-  version = "0.28.7";
+  version = "0.34.1";
 
   src = fetchFromGitHub {
     owner = "netbirdio";
     repo = "netbird";
     rev = "v${version}";
-    hash = "sha256-QeFRkUSf0KsjUHcI8cejt/q05oG+ru3aHn5feFSF5Zs=";
+    hash = "sha256-UQ91Xjw7RTtTMCrCKyv8tk08hhgyXbjG+QKuVjNk4kM=";
   };
 
-  vendorHash = "sha256-swX3Q+pLOa3D321oHcspDHUWcxt/IT8H2Mrqx3C/MY0=";
+  vendorHash = "sha256-8ML6s+XPhciYHhWfUOQqgN2XSSqgZ9ULZ6+arWgQjMY=";
 
   nativeBuildInputs = [ installShellFiles ] ++ lib.optional ui pkg-config;
 
-  buildInputs = lib.optionals (stdenv.isLinux && ui) [
+  buildInputs = lib.optionals (stdenv.hostPlatform.isLinux && ui) [
     gtk3
     libayatana-appindicator
     libX11
     libXcursor
     libXxf86vm
-  ] ++ lib.optionals (stdenv.isDarwin && ui) [
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && ui) [
     Cocoa
     IOKit
     Kernel
@@ -88,7 +88,7 @@ buildGoModule rec {
           --fish <($out/bin/${binary} completion fish) \
           --zsh <($out/bin/${binary} completion zsh)
       '')
-      modules) + lib.optionalString (stdenv.isLinux && ui) ''
+      modules) + lib.optionalString (stdenv.hostPlatform.isLinux && ui) ''
     mkdir -p $out/share/pixmaps
     cp $src/client/ui/netbird-systemtray-connected.png $out/share/pixmaps/netbird.png
 
@@ -110,7 +110,7 @@ buildGoModule rec {
     changelog = "https://github.com/netbirdio/netbird/releases/tag/v${version}";
     description = "Connect your devices into a single secure private WireGuard®-based mesh network with SSO/MFA and simple access controls";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ misuzu ];
+    maintainers = with maintainers; [ vrifox saturn745 ];
     mainProgram = "netbird";
   };
 }

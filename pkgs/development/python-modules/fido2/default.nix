@@ -11,21 +11,21 @@
 
 buildPythonPackage rec {
   pname = "fido2";
-  version = "1.1.3";
+  version = "1.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-JhAPIm0SztYhymGYUozhft9nt430KHruEoX+481aqfw=";
+    hash = "sha256-45+VkgEi1kKD/aXlWB2VogbnBPpChGv6RmL4aqDTMzs=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [ cryptography ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pcsc = [ pyscard ];
   };
 

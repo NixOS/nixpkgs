@@ -13,24 +13,27 @@
   pip,
   poetry-core,
   pyparsing,
+  pytest-mock,
   pytestCheckHook,
   pythonOlder,
+  requests-mock,
+  ruff,
   setuptools,
   typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "mypy-boto3-builder";
-  version = "7.26.0";
+  version = "8.5.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "youtype";
     repo = "mypy_boto3_builder";
     rev = "refs/tags/${version}";
-    hash = "sha256-gEIh5uHoInuGE1avR2giyq59pm/Avu5NYr3DttvqQp8=";
+    hash = "sha256-ipi31Kbh7GdKQl7PzvR4tSWzjjHogrpHPPgzn8V/RTc=";
   };
 
   build-system = [ poetry-core ];
@@ -46,11 +49,16 @@ buildPythonPackage rec {
     newversion
     pip
     pyparsing
+    ruff
     setuptools
     typing-extensions
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-mock
+    requests-mock
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "mypy_boto3_builder" ];
 

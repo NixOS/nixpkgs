@@ -13,6 +13,7 @@
   pyqt5-sip,
   pyqt-builder,
   libsForQt5,
+  mesa,
   enableVerbose ? true,
   withConnectivity ? false,
   withMultimedia ? false,
@@ -22,7 +23,7 @@
   withSerialPort ? false,
   withTools ? false,
   pkgsBuildTarget,
-  dbusSupport ? !stdenv.isDarwin,
+  dbusSupport ? !stdenv.hostPlatform.isDarwin,
 }:
 
 buildPythonPackage rec {
@@ -58,7 +59,7 @@ buildPythonPackage rec {
     # Due to bug in SIP .whl name generation we have to bump minimal macos sdk upto 11.0 for
     # aarch64-darwin. This patch can be removed once SIP will fix it in upstream,
     # see https://github.com/NixOS/nixpkgs/pull/186612#issuecomment-1214635456.
-    + lib.optionalString (stdenv.isDarwin && stdenv.isAarch64) ''
+    + lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) ''
       minimum-macos-version = "11.0"
     ''
     + ''
@@ -201,7 +202,7 @@ buildPythonPackage rec {
     description = "Python bindings for Qt5";
     homepage = "https://riverbankcomputing.com/";
     license = licenses.gpl3Only;
-    platforms = platforms.mesaPlatforms;
+    inherit (mesa.meta) platforms;
     maintainers = with maintainers; [ sander ];
   };
 }

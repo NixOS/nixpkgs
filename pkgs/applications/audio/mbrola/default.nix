@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, runCommandLocal, mbrola-voices }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  runCommandLocal,
+  mbrola-voices,
+}:
 
 let
   pname = "mbrola";
@@ -26,6 +32,10 @@ let
     # required for cross compilation
     makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
+    env = lib.optionalAttrs stdenv.cc.isGNU {
+      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+    };
+
     installPhase = ''
       runHook preInstall
       install -D Bin/mbrola $out/bin/mbrola
@@ -39,14 +49,12 @@ let
   };
 
 in
-  runCommandLocal
-    "${pname}-${version}"
-    {
-      inherit pname version meta;
-    }
-    ''
-      mkdir -p "$out/share/mbrola"
-      ln -s '${mbrola-voices}/data' "$out/share/mbrola/voices"
-      ln -s '${bin}/bin' "$out/"
-    ''
-
+runCommandLocal "${pname}-${version}"
+  {
+    inherit pname version meta;
+  }
+  ''
+    mkdir -p "$out/share/mbrola"
+    ln -s '${mbrola-voices}/data' "$out/share/mbrola/voices"
+    ln -s '${bin}/bin' "$out/"
+  ''

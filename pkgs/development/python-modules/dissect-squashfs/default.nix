@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "dissect-squashfs";
-  version = "1.6";
+  version = "1.8";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "fox-it";
     repo = "dissect.squashfs";
     rev = "refs/tags/${version}";
-    hash = "sha256-XTVGhTnDtuYTAjEeliwYDjuKfP7ljHIxaQAsQI1x5lk=";
+    hash = "sha256-C5Rp7MNuJjAk+DcjhNQfzZR47E/A2cJawhS6OFGU5xo=";
   };
 
   build-system = [
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     dissect-util
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     full = [
       lz4
       python-lzo

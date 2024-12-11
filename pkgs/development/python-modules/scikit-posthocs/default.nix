@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  wheel,
   matplotlib,
   numpy,
   pandas,
@@ -16,22 +15,19 @@
 
 buildPythonPackage rec {
   pname = "scikit-posthocs";
-  version = "0.9.0";
+  version = "0.11.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "maximtrp";
     repo = "scikit-posthocs";
     rev = "refs/tags/v${version}";
-    hash = "sha256-sRop5DKakrZEBswzTvumn68wKqU15zM5aCLfZ/PdsFg=";
+    hash = "sha256-KrQqd3zChw9sxjbrTrxXInXAJLyXwPkhbPa9One6I+g=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     matplotlib
     numpy
     pandas

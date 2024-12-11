@@ -1,12 +1,14 @@
-{ lib
-, fetchFromGitHub
-, gtest
-, meson
-, nasm
-, ninja
-, pkg-config
-, stdenv
-, windows
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch2,
+  gtest,
+  meson,
+  nasm,
+  ninja,
+  pkg-config,
+  stdenv,
+  windows,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +22,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ai7lcGcQQqpsLGSwHkSs7YAoEfGCIbxdClO6JpGA+MI=";
   };
 
-  outputs = [ "out" "dev" ];
+  patches = [
+    # build: fix build with meson on riscv64
+    # https://github.com/cisco/openh264/pull/3773
+    (fetchpatch2 {
+      name = "openh264-riscv64.patch";
+      url = "https://github.com/cisco/openh264/commit/cea886eda8fae7ba42c4819e6388ce8fc633ebf6.patch";
+      hash = "sha256-ncXuGgogXA7JcCOjGk+kBprmOErFohrYjYzZYzAbbDQ=";
+    })
+  ];
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     meson
@@ -29,11 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    gtest
-  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
-    windows.pthreads
-  ];
+  buildInputs =
+    [
+      gtest
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isWindows [
+      windows.pthreads
+    ];
 
   strictDeps = true;
 
@@ -44,8 +61,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ bsd2 ];
     maintainers = with lib.maintainers; [ AndersonTorres ];
     # See meson.build
-    platforms = lib.platforms.windows ++ lib.intersectLists
-      (lib.platforms.x86 ++ lib.platforms.arm ++ lib.platforms.aarch64 ++ lib.platforms.loongarch64)
-      (lib.platforms.linux ++ lib.platforms.darwin);
+    platforms =
+      lib.platforms.windows
+      ++ lib.intersectLists (
+        lib.platforms.x86
+        ++ lib.platforms.arm
+        ++ lib.platforms.aarch64
+        ++ lib.platforms.loongarch64
+        ++ lib.platforms.riscv64
+      ) (lib.platforms.linux ++ lib.platforms.darwin);
   };
 })

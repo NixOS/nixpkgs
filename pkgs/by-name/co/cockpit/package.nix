@@ -1,56 +1,51 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, bashInteractive
-, cacert
-, coreutils
-, dbus
-, docbook_xml_dtd_43
-, docbook_xsl
-, findutils
-, gettext
-, git
-, glib
-, glib-networking
-, gnused
-, gnutls
-, json-glib
-, krb5
-, libssh
-, libxcrypt
-, libxslt
-, makeWrapper
-, nodejs
-, nixosTests
-, nix-update-script
-, openssh
-, openssl
-, pam
-, pkg-config
-, polkit
-, python3Packages
-, runtimeShell
-, systemd
-, udev
-, xmlto
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  bashInteractive,
+  cacert,
+  coreutils,
+  dbus,
+  docbook_xml_dtd_43,
+  docbook_xsl,
+  findutils,
+  gettext,
+  git,
+  glib,
+  glib-networking,
+  gnused,
+  gnutls,
+  json-glib,
+  krb5,
+  libssh,
+  libxcrypt,
+  libxslt,
+  makeWrapper,
+  nodejs,
+  nixosTests,
+  nix-update-script,
+  openssh,
+  openssl,
+  pam,
+  pkg-config,
+  polkit,
+  python3Packages,
+  runtimeShell,
+  systemd,
+  udev,
+  xmlto,
 }:
-
-let
-  pythonWithGobject = python3Packages.python.withPackages (p: with p; [
-    pygobject3
-  ]);
-in
 
 stdenv.mkDerivation rec {
   pname = "cockpit";
-  version = "318";
+  version = "329.1";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
     repo = "cockpit";
     rev = "refs/tags/${version}";
-    hash = "sha256-1SpSzC5wOsv4Ha0ShtuyPsKLm0fVuPt8KFejJHFU8MY=";
+    hash = "sha256-KQBCJ7u5Dk9CqU9aR96Xx3ShlONcacT1ABowguguI+Y=";
     fetchSubmodules = true;
   };
 
@@ -67,7 +62,6 @@ stdenv.mkDerivation rec {
     openssl
     pam
     pkg-config
-    pythonWithGobject.python
     python3Packages.setuptools
     systemd
     xmlto
@@ -82,6 +76,8 @@ stdenv.mkDerivation rec {
     libssh
     polkit
     udev
+    python3Packages.pygobject3
+    python3Packages.pip
   ];
 
   postPatch = ''
@@ -165,8 +161,6 @@ stdenv.mkDerivation rec {
       src/tls/cockpit-certificate-helper \
       src/ws/cockpit-desktop
 
-    PATH=${pythonWithGobject}/bin patchShebangs src/client/cockpit-client
-
     substituteInPlace src/ws/cockpit-desktop \
       --replace ' /bin/bash' ' ${runtimeShell}'
   '';
@@ -175,14 +169,25 @@ stdenv.mkDerivation rec {
     runHook preFixup
 
     wrapProgram $out/libexec/cockpit-certificate-helper \
-      --prefix PATH : ${lib.makeBinPath [ coreutils openssl ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          openssl
+        ]
+      } \
       --run 'cd $(mktemp -d)'
 
     wrapProgram $out/share/cockpit/motd/update-motd \
       --prefix PATH : ${lib.makeBinPath [ gnused ]}
 
+    wrapProgram $out/bin/cockpit-bridge \
+      --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
+
+    substituteInPlace $out/${python3Packages.python.sitePackages}/cockpit/_vendor/systemd_ctypes/libsystemd.py \
+      --replace-fail libsystemd.so.0 ${systemd}/lib/libsystemd.so.0
+
     substituteInPlace $out/share/polkit-1/actions/org.cockpit-project.cockpit-bridge.policy \
-      --replace /usr $out
+      --replace-fail /usr $out
 
     runHook postFixup
   '';
@@ -202,7 +207,6 @@ stdenv.mkDerivation rec {
     export G_MESSAGES_DEBUG=cockpit-ws,cockpit-wrapper,cockpit-bridge
     export PATH=$PATH:$(pwd)
 
-    cockpit-bridge --version
     make pytest -j$NIX_BUILD_CORES || true
     make check  -j$NIX_BUILD_CORES || true
     test/static-code
@@ -212,7 +216,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = { inherit (nixosTests) cockpit; };
-    updateScript = nix-update-script {};
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

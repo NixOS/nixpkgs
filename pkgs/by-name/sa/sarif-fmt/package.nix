@@ -8,19 +8,19 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sarif-fmt";
-  version = "0.6.5";
+  version = "0.6.6";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-Zflwjj5ArNmE/7Im/O09kG07ZekCyz5jU2S3vpnlXT8=";
+    hash = "sha256-0LyTXyycdIq0FuBTxE9D7FRFfn4iZnDKOt+Rk4P1HwU=";
   };
 
-  cargoHash = "sha256-hCtVfGutgvncb05zt+lSNdlrDO+UruSUahzrxaERjFE=";
+  cargoHash = "sha256-UpVZtZ3d0N/uL9+yc1gIO3SQsoqvUBMEDjdl9SDSKd8=";
 
   # `test_clippy` (the only test we enable) is broken on Darwin
   # because `--enable-profiler` is not enabled in rustc on Darwin
   # error[E0463]: can't find crate for profiler_builtins
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   checkFlags = [
     # these tests use nix so...no go

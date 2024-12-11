@@ -1,20 +1,20 @@
 { lib
+, callPackage
 , cmake
 , coin3d
 , doxygen
 , eigen
 , fetchFromGitHub
 , fmt
-, freecad
 , gfortran
 , gts
 , hdf5
-, libGLU
-, libXmu
 , libf2c
+, libGLU
 , libredwg
 , libsForQt5
 , libspnav
+, libXmu
 , medfile
 , mpi
 , ninja
@@ -22,13 +22,13 @@
 , opencascade-occt_7_6
 , pkg-config
 , python311Packages
-, runCommand  # for passthru.tests
-, spaceNavSupport ? stdenv.isLinux
+, spaceNavSupport ? stdenv.hostPlatform.isLinux
 , stdenv
 , swig
 , vtk
 , wrapGAppsHook3
 , xercesc
+, yaml-cpp
 , zlib
 , withWayland ? false
 }:
@@ -50,6 +50,7 @@ let
     matplotlib
     pivy
     ply
+    pybind11
     pycollada
     pyside2
     pyside2-tools
@@ -58,16 +59,18 @@ let
     scipy
     shiboken2
     ;
+  freecad-utils = callPackage ./freecad-utils.nix { };
 in
-stdenv.mkDerivation (finalAttrs: {
+freecad-utils.makeCustomizable (stdenv.mkDerivation (finalAttrs: {
   pname = "freecad";
-  version = "0.21.2";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "FreeCAD";
     repo = "FreeCAD";
     rev = finalAttrs.version;
-    hash = "sha256-OX4s9rbGsAhH7tLJkUJYyq2A2vCdkq/73iqYo9adogs=";
+    hash = "sha256-u7RYSImUMAgKaAQSAGCFha++RufpZ/QuHAirbSFOUCI=";
+    fetchSubmodules = true;
   };
 
   nativeBuildInputs = [
@@ -100,6 +103,7 @@ stdenv.mkDerivation (finalAttrs: {
       opencascade-occt
       pivy
       ply # for openSCAD file support
+      pybind11
       pycollada
       pyside2
       pyside2-tools
@@ -116,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
       swig
       vtk
       xercesc
+      yaml-cpp
       zlib
     ]
     ++ lib.optionals spaceNavSupport [
@@ -125,12 +130,18 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./0001-NIXOS-don-t-ignore-PYTHONPATH.patch
+    ./0002-FreeCad-OndselSolver-pkgconfig.patch
+    ./0003-Gui-take-in-account-module-path-argument.patch
   ];
 
   cmakeFlags = [
     "-Wno-dev" # turns off warnings which otherwise makes it hard to see what is going on
     "-DBUILD_FLAT_MESH:BOOL=ON"
     "-DBUILD_QT5=ON"
+    "-DBUILD_DRAWING=ON"
+    "-DBUILD_FLAT_MESH:BOOL=ON"
+    "-DINSTALL_TO_SITEPACKAGES=OFF"
+    "-DFREECAD_USE_PYBIND11=ON"
     "-DSHIBOKEN_INCLUDE_DIR=${shiboken2}/include"
     "-DSHIBOKEN_LIBRARY=Shiboken2::libshiboken"
     (
@@ -164,22 +175,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $out/bin/FreeCADCmd $out/bin/freecadcmd
   '';
 
-  passthru.tests = {
-    # Check that things such as argument parsing still work correctly with
-    # the above PYTHONPATH patch. Previously the patch used above changed
-    # the `PyConfig_InitIsolatedConfig` to `PyConfig_InitPythonConfig`,
-    # which caused the built-in interpreter to attempt (and fail) to doubly
-    # parse argv. This should catch if that ever regresses and also ensures
-    # that PYTHONPATH is still respected enough for the FreeCAD console to
-    # successfully run and check that it was included in `sys.path`.
-    python-path =
-      runCommand "freecad-test-console"
-        {
-          nativeBuildInputs = [ freecad ];
-        } ''
-        HOME="$(mktemp -d)" PYTHONPATH="$(pwd)/test" FreeCADCmd --log-file $out -c "if not '$(pwd)/test' in sys.path: sys.exit(1)" </dev/null
-      '';
-  };
+  passthru.tests = callPackage ./tests {};
 
   meta = {
     homepage = "https://www.freecad.org";
@@ -201,7 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
       right at home with FreeCAD.
     '';
     license = lib.licenses.lgpl2Plus;
-    maintainers = with lib.maintainers; [ gebner AndersonTorres ];
+    maintainers = with lib.maintainers; [ gebner srounce ];
     platforms = lib.platforms.linux;
   };
-})
+}))

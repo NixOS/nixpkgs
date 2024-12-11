@@ -46,14 +46,6 @@ let
       libthai
     ] ++ (with libsForQt5; [ qt5.qtvirtualkeyboard ]);
 
-    unpackPhase = ''
-      runHook preUnpack
-
-      dpkg-deb --fsys-tarfile "$src" | tar -x --no-same-permissions --no-same-owner
-
-      runHook postUnpack
-    '';
-
     installPhase = ''
       runHook preInstall
 

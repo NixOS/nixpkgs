@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "krunner";
 
-  extraBuildInputs = [plasma-activities];
+  extraBuildInputs = [ plasma-activities ];
 }

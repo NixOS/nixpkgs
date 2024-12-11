@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, cmake
-, doxygen
-, libsForQt5
-, dtkcore
-, lxqt
-, librsvg
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  doxygen,
+  libsForQt5,
+  dtkcore,
+  lxqt,
+  librsvg,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +26,11 @@ stdenv.mkDerivation rec {
     ./fix-pkgconfig-path.patch
     ./fix-pri-path.patch
   ];
+
+  postPatch = ''
+    substituteInPlace src/util/dsvgrenderer.cpp \
+      --replace-fail 'QLibrary("rsvg-2", "2")' 'QLibrary("${lib.getLib librsvg}/lib/librsvg-2.so")'
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -58,7 +64,11 @@ stdenv.mkDerivation rec {
     export QT_PLUGIN_PATH=${libsForQt5.qtbase.bin}/${libsForQt5.qtbase.qtPluginPrefix}
   '';
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   postFixup = ''
     for binary in $out/libexec/dtk5/DGui/bin/*; do

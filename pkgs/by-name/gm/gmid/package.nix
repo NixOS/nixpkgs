@@ -1,19 +1,29 @@
-{ lib, stdenv, fetchFromGitHub, bison, libressl, libevent }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  bison,
+  libressl,
+  libevent,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gmid";
-  version = "2.1";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     owner = "omar-polo";
     repo = pname;
     rev = version;
-    hash = "sha256-C9CheVP0ZFf44J26KKa3+fkp8MB1sNVHnsHiNuNPKwQ=";
+    hash = "sha256-JyiGkVF9aRJXgWAwZEnGgaD+IiH3UzamfTAcWyN0now=";
   };
 
   nativeBuildInputs = [ bison ];
 
-  buildInputs = [ libressl libevent ];
+  buildInputs = [
+    libressl
+    libevent
+  ];
 
   configureFlags = [
     "PREFIX=${placeholder "out"}"

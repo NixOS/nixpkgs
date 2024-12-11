@@ -44,7 +44,10 @@ rec {
     '';
   };
 
-  bootGCC = pkgs.gcc.cc.override { enableLTO = false; };
+  bootGCC = pkgs.gcc.cc.override {
+    enableLTO = false;
+    isl = null;
+  };
 
   bootBinutils = pkgs.binutils.bintools.override {
     withAllTargets = false;

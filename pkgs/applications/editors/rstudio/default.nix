@@ -146,8 +146,8 @@ in
         --replace-fail '@node@' ${nodejs}
 
       substituteInPlace src/cpp/core/libclang/LibClang.cpp \
-        --replace-fail '@libclang@' ${llvmPackages.libclang.lib} \
-        --replace-fail '@libclang.so@' ${llvmPackages.libclang.lib}/lib/libclang.so
+        --replace-fail '@libclang@' ${lib.getLib llvmPackages.libclang} \
+        --replace-fail '@libclang.so@' ${lib.getLib llvmPackages.libclang}/lib/libclang.so
 
       substituteInPlace src/cpp/session/CMakeLists.txt \
         --replace-fail '@pandoc@' ${pandoc} \
@@ -212,7 +212,7 @@ in
     '';
 
     meta = {
-      broken = (stdenv.isLinux && stdenv.isAarch64);
+      broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
       inherit description;
       homepage = "https://www.rstudio.com/";
       license = lib.licenses.agpl3Only;

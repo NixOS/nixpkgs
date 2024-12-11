@@ -1,30 +1,34 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, git
-, nixosTests
-, python311
-, vaultwarden
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  git,
+  nixosTests,
+  python3,
+  vaultwarden,
 }:
 
 let
-  version = "2024.6.2b";
+  version = "2024.6.2c";
+
+  suffix = lib.head (lib.match "[0-9.]*([a-z]*)" version);
 
   bw_web_builds = fetchFromGitHub {
     owner = "dani-garcia";
     repo = "bw_web_builds";
     rev = "v${version}";
-    hash = "sha256-Gcn/TOXdhMqGq4NTCPQTTEvN5rOQS3LImPUYBsv8de8=";
+    hash = "sha256-Gd8yQx9j6ieUvaM6IPSELNRy83y0cBkBwLYMqk8OIjU=";
   };
 
-in buildNpmPackage rec {
+in
+buildNpmPackage rec {
   pname = "vaultwarden-webvault";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
-    rev = "web-v${lib.removeSuffix "b" version}";
+    rev = "web-v${lib.removeSuffix suffix version}";
     hash = "sha256-HMQ0oQ04WkLlUgsYt6ZpcziDq05mnSA0+VnJCpteceg=";
   };
 
@@ -37,8 +41,7 @@ in buildNpmPackage rec {
   '';
 
   nativeBuildInputs = [
-    # signalr through gyp wants to import distutils
-    python311
+    (python3.withPackages (ps: [ ps.setuptools ]))
   ];
 
   makeCacheWritable = true;
@@ -48,7 +51,8 @@ in buildNpmPackage rec {
   npmBuildScript = "dist:oss:selfhost";
 
   npmBuildFlags = [
-    "--workspace" "apps/web"
+    "--workspace"
+    "apps/web"
   ];
 
   npmFlags = [ "--legacy-peer-deps" ];

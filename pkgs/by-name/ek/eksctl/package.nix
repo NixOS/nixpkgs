@@ -1,27 +1,31 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "eksctl";
-  version = "0.189.0";
+  version = "0.197.0";
 
   src = fetchFromGitHub {
     owner = "weaveworks";
     repo = pname;
     rev = version;
-    hash = "sha256-YG1p7T2K1b3LO2MiTkCC88ZpgCpVTSCBUoCEcJK+V7I=";
+    hash = "sha256-JHhZFcjnURgt+HqRwy/0rZ2qrzpeX/WGeXJ0arhRDq8=";
   };
 
-  vendorHash = "sha256-W7tAdImEsPWSQkK8FnXgx5ADZ2JOdVc2xNBkNM11FOw=";
+  vendorHash = "sha256-f7+IlOcGJL5G52wPZz1oeHmR8LR8XZh6ASV1qi7hXi0=";
 
   doCheck = false;
 
   subPackages = [ "cmd/eksctl" ];
 
-  tags = [ "netgo" "release" ];
+  tags = [
+    "netgo"
+    "release"
+  ];
 
   ldflags = [
     "-s"
@@ -44,7 +48,10 @@ buildGoModule rec {
     homepage = "https://github.com/weaveworks/eksctl";
     changelog = "https://github.com/eksctl-io/eksctl/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ xrelkd Chili-Man ];
+    maintainers = with maintainers; [
+      xrelkd
+      Chili-Man
+    ];
     mainProgram = "eksctl";
   };
 }

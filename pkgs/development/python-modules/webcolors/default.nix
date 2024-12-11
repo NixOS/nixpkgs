@@ -9,17 +9,17 @@
 
 buildPythonPackage rec {
   pname = "webcolors";
-  version = "1.13";
-  format = "pyproject";
+  version = "24.8.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-wiW2dMg/qSO+k9I1MwzgMANz0CiFzvIyOIE7DVZoMEo=";
+    hash = "sha256-CLB68oagG80w1YOnrK32KVg9H3m/7yfdLCxcJjgXJ30=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ unittestCheckHook ];
 

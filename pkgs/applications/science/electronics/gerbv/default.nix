@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, autoconf
-, automake
-, autoreconfHook
-, cairo
-, fetchFromGitHub
-, gettext
-, gtk2-x11
-, libtool
-, pkg-config
+{
+  lib,
+  stdenv,
+  autoconf,
+  automake,
+  autoreconfHook,
+  cairo,
+  fetchFromGitHub,
+  gettext,
+  gtk2-x11,
+  libtool,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {

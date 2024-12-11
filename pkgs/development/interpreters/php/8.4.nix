@@ -1,14 +1,11 @@
-{ callPackage, fetchurl, ... }@_args:
+{ callPackage, ... }@_args:
 
 let
   base = callPackage ./generic.nix (
     _args
     // {
-      version = "8.4.0beta3";
-      phpSrc = fetchurl {
-        url = "https://downloads.php.net/~calvinb/php-8.4.0beta3.tar.xz";
-        hash = "sha256-aTgUCmS3tdV304Ag05DZObLKTQ8XgpNIfHARbhpZUAw=";
-      };
+      version = "8.4.1";
+      hash = "sha256-74onARjtEot2X8MfGYx/RlDIFxQRsPajoaOroR/KzCM=";
     }
   );
 in

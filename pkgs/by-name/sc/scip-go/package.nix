@@ -1,22 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "scip-go";
-  version = "0.1.15";
+  version = "0.1.22";
 
   src = fetchFromGitHub {
     owner = "sourcegraph";
     repo = "scip-go";
     rev = "v${version}";
-    hash = "sha256-2UKiPKeGDkNiI96RieYWaJygz/ZqfdcBmm9PCuby7qQ=";
+    hash = "sha256-1vu6+0CMQwju+Ym0iYXqVktwfJtZFWbn7aOK/w5pVq4=";
   };
 
-  vendorHash = "sha256-UID2mLrkY86k5Ms0cDgIsZR8s6h4TVwRLvLtoLXAXl4=";
+  vendorHash = "sha256-E/1ubWGIx+sGC+owqw4nOkrwUFJfgTeqDNpH8HCwNhA=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   doCheck = false;
 
