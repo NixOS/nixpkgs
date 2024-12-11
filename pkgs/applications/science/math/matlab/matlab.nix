@@ -134,7 +134,8 @@ stdenvNoCC.mkDerivation (self: {
       mkdir -p $HOME/.matlab/licenses
 
       # For some reason, MATLAB often fails to start unless this directory is cleared.
-      rm -rf ~/.MathWorks/ServiceHost/
+      # https://www.mathworks.com/matlabcentral/answers/1815365-how-do-i-uninstall-and-reinstall-the-mathworks-service-host
+      rm -rf ~/.MathWorks/ServiceHost ~/.MATLABConnector
     '';
 
     extraBwrapArgs = [
