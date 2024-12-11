@@ -13,6 +13,7 @@ let
     mkIf
     mkMerge
     mkOption
+    mkPackageOption
     optionalString
     types
     ;
@@ -27,17 +28,19 @@ let
     shell:
     if (shell != "fish") then
       ''
-        eval $(${getExe pkgs.pay-respects} ${shell} --alias ${cfg.alias})
+        eval $(${getExe cfg.package} ${shell} --alias ${cfg.alias})
       ''
     else
       ''
-        ${getExe pkgs.pay-respects} ${shell} --alias ${cfg.alias} | source
+        ${getExe cfg.package} ${shell} --alias ${cfg.alias} | source
       '';
 in
 {
   options = {
     programs.pay-respects = {
       enable = mkEnableOption "pay-respects, an app which corrects your previous console command";
+
+      package = mkPackageOption pkgs "pay-respects" { };
 
       alias = mkOption {
         default = "f";
@@ -83,7 +86,7 @@ in
     environment = mkMerge (
       [
         {
-          systemPackages = [ pkgs.pay-respects ];
+          systemPackages = [ cfg.package ];
         }
       ]
       ++ map (rule: {
