@@ -36,6 +36,8 @@ buildDotnetModule rec {
     zlib
   ];
 
+  executables = [ "WalletWasabi.Backend" ];
+
   postFixup = ''
     mv $out/bin/WalletWasabi.Backend $out/bin/WasabiBackend
   '';
