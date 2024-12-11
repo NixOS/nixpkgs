@@ -1012,6 +1012,7 @@ with pkgs;
   });
 
   gh-cal = callPackage ../tools/misc/gh-cal { };
+  gh-cal-bis = callPackage ../tools/misc/gh-cal { };
 
   gp-saml-gui = python3Packages.callPackage ../tools/networking/gp-saml-gui { };
 
