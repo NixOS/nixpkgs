@@ -575,7 +575,7 @@ in
         package = mkDefault pkgs.mariadb;
         ensureDatabases = [ cfg.database.name ];
         ensureUsers = [{
-          name = cfg.user;
+          name = cfg.database.user;
           ensureDBOwnership = true;
         }];
       };
@@ -584,7 +584,7 @@ in
         enable = mkDefault true;
         ensureDatabases = [ cfg.database.name ];
         ensureUsers = [{
-          name = cfg.user;
+          name = cfg.database.user;
           ensureDBOwnership = true;
         }];
         authentication = ''
