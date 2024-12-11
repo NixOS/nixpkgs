@@ -514,7 +514,7 @@ in
     systemd.services.librenms-setup = {
       description = "Preparation tasks for LibreNMS";
       before = [ "phpfpm-librenms.service" ];
-      after = [ "systemd-tmpfiles-setup.service" ]
+      after = [ "systemd-tmpfiles-setup.service" "network.target" ]
         ++ (lib.optional (cfg.database.host == "localhost") "mysql.service");
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ package configFile ];

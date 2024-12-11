@@ -5573,6 +5573,8 @@ self: super: with self; {
 
   greynoise = callPackage ../development/python-modules/greynoise { };
 
+  groq = callPackage ../development/python-modules/groq { };
+
   growattserver = callPackage ../development/python-modules/growattserver { };
 
   gridnet = callPackage ../development/python-modules/gridnet { };
@@ -15876,6 +15878,8 @@ self: super: with self; {
   tess = callPackage ../development/python-modules/tess { };
 
   tesserocr = callPackage ../development/python-modules/tesserocr { };
+
+  test-results-parser = callPackage ../development/python-modules/test-results-parser { };
 
   testcontainers = callPackage ../development/python-modules/testcontainers { };
 

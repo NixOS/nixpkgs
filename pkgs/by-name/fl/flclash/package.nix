@@ -7,7 +7,6 @@
   buildGoModule,
   makeDesktopItem,
   copyDesktopItems,
-  zenity,
   wrapGAppsHook3,
   autoPatchelfHook,
 }:
@@ -95,10 +94,6 @@ flutter324.buildFlutterApplication {
 
   postInstall = ''
     install -Dm644 ./assets/images/icon.png $out/share/pixmaps/flclash.png
-  '';
-
-  extraWrapProgramArgs = ''
-    --prefix PATH : ${lib.makeBinPath [ zenity ]}
   '';
 
   meta = {
