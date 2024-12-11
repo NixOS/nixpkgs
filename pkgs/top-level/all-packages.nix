@@ -18269,7 +18269,7 @@ with pkgs;
     ({ inherit pkgs lib; } // attrs);
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nix = nixVersions.nix_2_24;
+    nix = nixVersions.nix_2_25;
   };
 
   nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;
