@@ -4,7 +4,7 @@
 , fetchFromGitHub
 , makeWrapper }:
 
-let version = "2.9.4pr4";
+let version = "2.9.3-unstable-2023-04-23";
 in
   stdenv.mkDerivation {
     pname = "abcde";
