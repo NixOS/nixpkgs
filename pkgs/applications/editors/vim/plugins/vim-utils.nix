@@ -488,7 +488,7 @@ rec {
 
   toVimPlugin =
     drv:
-    drv.overrideAttrs (oldAttrs: {
+    drv.overrideAttrs (finalAttrs: oldAttrs: {
       name = "vimplugin-${oldAttrs.name}";
       # dont move the "doc" folder since vim expects it
       forceShare = [
@@ -506,11 +506,11 @@ rec {
 
       nativeCheckInputs =
         oldAttrs.nativeCheckInputs or [ ]
-        ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-          vimCommandCheckHook
-          # many neovim plugins keep using buildVimPlugin
-          neovimRequireCheckHook
-        ];
+        ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ([
+          vimCommandCheckHook ]
+        ++ lib.optional (finalAttrs.finalPackage ? nvimRequireCheck) neovimRequireCheckHook
+        )
+        ;
 
       passthru = (oldAttrs.passthru or { }) // {
         vimPlugin = true;
