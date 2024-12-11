@@ -20,7 +20,7 @@
 , xorg
 
 , version
-, buildVer
+, buildNumber
 , buildType
 , ideaHash
 , androidHash
@@ -36,14 +36,14 @@ let
   ideaSrc = fetchFromGitHub {
     owner = "jetbrains";
     repo = "intellij-community";
-    rev = "${buildType}/${buildVer}";
+    rev = "${buildType}/${buildNumber}";
     hash = ideaHash;
   };
 
   androidSrc = fetchFromGitHub {
     owner = "jetbrains";
     repo = "android";
-    rev = "${buildType}/${buildVer}";
+    rev = "${buildType}/${buildNumber}";
     hash = androidHash;
   };
 
@@ -76,7 +76,7 @@ let
 
   libdbm = stdenv.mkDerivation {
     pname = "libdbm";
-    version = buildVer;
+    version = buildNumber;
     nativeBuildInputs = [ cmake pkg-config ];
     buildInputs = [ glib xorg.libX11 libdbusmenu ];
     inherit src;
@@ -96,12 +96,12 @@ let
 
   fsnotifier = stdenv.mkDerivation {
     pname = "fsnotifier";
-    version = buildVer;
+    version = buildNumber;
     inherit src;
     sourceRoot = "${src.name}/native/fsNotifier/linux";
     buildPhase = ''
       runHook preBuild
-      $CC -O2 -Wall -Wextra -Wpedantic -D "VERSION=\"${buildVer}\"" -std=c11 main.c inotify.c util.c -o fsnotifier
+      $CC -O2 -Wall -Wextra -Wpedantic -D "VERSION=\"${buildNumber}\"" -std=c11 main.c inotify.c util.c -o fsnotifier
       runHook postBuild
     '';
     installPhase = ''
@@ -114,7 +114,7 @@ let
 
   restarter = rustPlatform.buildRustPackage {
     pname = "restarter";
-    version = buildVer;
+    version = buildNumber;
     inherit src;
     sourceRoot = "${src.name}/native/restarter";
     cargoHash = restarterHash;
@@ -137,7 +137,7 @@ let
 
   jps-bootstrap = stdenvNoCC.mkDerivation {
     pname = "jps-bootstrap";
-    version = buildVer;
+    version = buildNumber;
     inherit src;
     sourceRoot = "${src.name}/platform/jps-bootstrap";
     nativeBuildInputs = [ ant makeWrapper jbr ];
@@ -201,8 +201,7 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "${buildType}-community";
-  inherit version;
-  buildNumber = buildVer;
+  inherit version buildNumber;
   name = "${pname}-${version}.tar.gz";
   inherit src;
   nativeBuildInputs = [ p7zip jbr jps-bootstrap ];
@@ -232,7 +231,7 @@ stdenvNoCC.mkDerivation rec {
       -e 's|MAVEN_REPO_HERE|${mvnRepo}/.m2/repository/|' \
       -e 's|MAVEN_PATH_HERE|${maven}/maven|' \
       -i build/deps/src/org/jetbrains/intellij/build/impl/BundledMavenDownloader.kt
-    echo '${buildVer}.SNAPSHOT' > build.txt
+    echo '${buildNumber}.SNAPSHOT' > build.txt
   '';
 
   configurePhase = ''
@@ -241,7 +240,7 @@ stdenvNoCC.mkDerivation rec {
     ln -s "$repo"/.m2 /build/.m2
     export JPS_BOOTSTRAP_COMMUNITY_HOME=/build/source
     jps-bootstrap \
-      -Dbuild.number=${buildVer} \
+      -Dbuild.number=${buildNumber} \
       -Djps.kotlin.home=${kotlin} \
       -Dintellij.build.target.os=linux \
       -Dintellij.build.target.arch=x64 \
