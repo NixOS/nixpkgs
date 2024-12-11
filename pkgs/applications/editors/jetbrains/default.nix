@@ -91,8 +91,9 @@ let
             url = products."${pname}".url;
             sha256 = products."${pname}".sha256;
           };
-      inherit (products."${pname}") version;
-      buildNumber = products."${pname}".build_number;
+      version = if fromSource then communitySources."${pname}".version else products."${pname}".version;
+      buildNumber =
+        if fromSource then communitySources."${pname}".buildNumber else products."${pname}".build_number;
       inherit (ideInfo."${pname}") wmClass product;
       productShort = ideInfo."${pname}".productShort or ideInfo."${pname}".product;
       meta = mkMeta ideInfo."${pname}".meta fromSource;
