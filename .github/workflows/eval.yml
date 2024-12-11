@@ -179,7 +179,7 @@ jobs:
           done
 
           if [[ "$conclusion" != "success" ]]; then
-            echo "Workflow was not successful, cannot make comparison"
+            echo "Workflow was not successful (conclusion: $conclusion), cannot make comparison"
             exit 0
           fi
 
