@@ -177,6 +177,8 @@ in
       startLimitIntervalSec = 500;
       startLimitBurst = 5;
 
+      environment.PATH = lib.mkForce null; # don't use default PATH, needed for tray icon menu links to work
+
       serviceConfig = {
         # only add configFile if an application or a setting other than the default port is set to allow configuration from web UI
         ExecStart = escapeSystemdExecArgs (
