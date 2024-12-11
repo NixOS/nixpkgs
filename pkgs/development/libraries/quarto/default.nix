@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, pandoc
+, pandoc_3_5
 , typst
 , esbuild
 , deno
@@ -16,7 +16,6 @@
 , extraPythonPackages ? ps: []
 , sysctl
 }:
-
 stdenv.mkDerivation (final: {
   pname = "quarto";
   version = "1.6.37";
@@ -39,7 +38,7 @@ stdenv.mkDerivation (final: {
   preFixup = ''
     wrapProgram $out/bin/quarto \
       --prefix QUARTO_DENO : ${lib.getExe deno} \
-      --prefix QUARTO_PANDOC : ${lib.getExe pandoc} \
+      --prefix QUARTO_PANDOC : ${lib.getExe pandoc_3_5} \
       --prefix QUARTO_ESBUILD : ${lib.getExe esbuild} \
       --prefix QUARTO_DART_SASS : ${lib.getExe dart-sass} \
       --prefix QUARTO_TYPST : ${lib.getExe typst} \
