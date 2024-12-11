@@ -1657,10 +1657,6 @@ with pkgs;
   inherit (callPackages ../data/fonts/arphic {})
     arphic-ukai arphic-uming;
 
-  asciinema-agg = callPackage ../tools/misc/asciinema-agg {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   asymptote = libsForQt5.callPackage ../tools/graphics/asymptote { };
 
   atomicparsley = callPackage ../tools/video/atomicparsley {
