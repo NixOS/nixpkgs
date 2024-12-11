@@ -28,16 +28,16 @@
 
 let
   pname = "multipass";
-  version = "1.14.1";
+  version = "1.15.0";
 
   # This is done here because a CMakeLists.txt from one of it's submodules tries
   # to modify a file, so we grab the source for the submodule here, copy it into
   # the source of the Multipass project which allows the modification to happen.
   grpc_src = fetchFromGitHub {
-    owner = "CanonicalLtd";
+    owner = "canonical";
     repo = "grpc";
-    rev = "e3acf245";
-    hash = "sha256-tDc2iGxIV68Yi4RL8ES4yglJNlu8yH6FlpVvZoWjoXk=";
+    rev = "ba8e7f72a57b9e0b25783a4d3cea58c79379f194";
+    hash = "sha256-DS1UNLCUdbipn5w4p2aVa8LgHHhdJiAfzfEdIXNO69o=";
     fetchSubmodules = true;
   };
 in
@@ -48,7 +48,7 @@ stdenv.mkDerivation {
     owner = "canonical";
     repo = "multipass";
     rev = "refs/tags/v${version}";
-    hash = "sha256-i6SKiV4jwiBURx85m3u7km1dhi+fRdVpMBanlZo0VK4=";
+    hash = "sha256-xwEM7Zsjkyi91oNyiX0i1mIJfBOoJ/4X47JBEqP8xYY=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
