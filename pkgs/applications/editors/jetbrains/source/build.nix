@@ -19,6 +19,7 @@
 , pkg-config
 , xorg
 
+, version
 , buildVer
 , buildType
 , ideaHash
@@ -200,7 +201,8 @@ let
 in
 stdenvNoCC.mkDerivation rec {
   pname = "${buildType}-community";
-  version = buildVer;
+  inherit version;
+  buildNumber = buildVer;
   name = "${pname}-${version}.tar.gz";
   inherit src;
   nativeBuildInputs = [ p7zip jbr jps-bootstrap ];
