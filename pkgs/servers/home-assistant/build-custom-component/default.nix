@@ -1,5 +1,4 @@
 {
-  lib,
   home-assistant,
   makeSetupHook,
 }:
@@ -21,13 +20,18 @@ in
 home-assistant.python.pkgs.buildPythonPackage (
   {
     pname = "${owner}/${domain}";
-    inherit format;
+    inherit version format;
 
     installPhase = ''
       runHook preInstall
 
       mkdir $out
-      cp -r ./custom_components/ $out/
+      if [[ -f ./manifest.json ]]; then
+        mkdir $out/custom_components
+        cp -R $(realpath .)  $out/custom_components/
+      else
+        cp -r ./custom_components/ $out/
+      fi
 
       # optionally copy sentences, if they exist
       cp -r ./custom_sentences/ $out/ || true
