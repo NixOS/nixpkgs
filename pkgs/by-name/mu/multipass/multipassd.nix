@@ -1,4 +1,8 @@
 {
+  commonMeta,
+  multipass_src,
+  version,
+
   cmake,
   dnsmasq,
   fetchFromGitHub,
@@ -10,26 +14,20 @@
   libapparmor,
   libvirt,
   libxml2,
-  nixosTests,
   openssl,
   OVMF,
   pkg-config,
-  qemu,
   poco,
   protobuf,
   qemu-utils,
-  qtbase,
-  qtwayland,
-  wrapQtAppsHook,
+  qemu,
+  qt6,
   slang,
   stdenv,
   xterm,
 }:
 
 let
-  pname = "multipass";
-  version = "1.15.0";
-
   # This is done here because a CMakeLists.txt from one of it's submodules tries
   # to modify a file, so we grab the source for the submodule here, copy it into
   # the source of the Multipass project which allows the modification to happen.
@@ -42,21 +40,9 @@ let
   };
 in
 stdenv.mkDerivation {
-  inherit pname version;
-
-  src = fetchFromGitHub {
-    owner = "canonical";
-    repo = "multipass";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-xwEM7Zsjkyi91oNyiX0i1mIJfBOoJ/4X47JBEqP8xYY=";
-    fetchSubmodules = true;
-    leaveDotGit = true;
-    postFetch = ''
-      # Workaround for https://github.com/NixOS/nixpkgs/issues/8567
-      cd $out
-      rm -rf .git
-    '';
-  };
+  inherit version;
+  pname = "multipassd";
+  src = multipass_src;
 
   patches = [
     # Multipass is usually only delivered as a snap package on Linux, and it expects that
@@ -85,6 +71,9 @@ stdenv.mkDerivation {
     substituteInPlace ./CMakeLists.txt \
       --replace-fail "determine_version(MULTIPASS_VERSION)" "" \
       --replace-fail 'set(MULTIPASS_VERSION ''${MULTIPASS_VERSION})' 'set(MULTIPASS_VERSION "v${version}")'
+
+    # Don't build the GUI .desktop file, do that in the gui derivation instead
+    substituteInPlace ./CMakeLists.txt --replace-fail "add_subdirectory(data)" ""
 
     # Don't build/use vcpkg
     rm -rf 3rd-party/vcpkg
@@ -118,7 +107,7 @@ stdenv.mkDerivation {
     EOF
   '';
 
-  # We'll build the flutter application seperately using buildFlutterApplication
+  # We'll build the flutter application separately using buildFlutterApplication
   cmakeFlags = [ "-DMULTIPASS_ENABLE_FLUTTER_GUI=false" ];
 
   buildInputs = [
@@ -127,18 +116,18 @@ stdenv.mkDerivation {
     libvirt
     libxml2
     openssl
-    qtbase
-    qtwayland
     poco.dev
     protobuf
+    qt6.qtbase
+    qt6.qtwayland
   ];
 
   nativeBuildInputs = [
     cmake
     git
     pkg-config
+    qt6.wrapQtAppsHook
     slang
-    wrapQtAppsHook
   ];
 
   nativeCheckInputs = [ gtest ];
@@ -157,15 +146,7 @@ stdenv.mkDerivation {
     }
   '';
 
-  passthru.tests = {
-    multipass = nixosTests.multipass;
-  };
-
-  meta = with lib; {
-    description = "Ubuntu VMs on demand for any workstation";
-    homepage = "https://multipass.run";
-    license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ jnsgruk ];
-    platforms = [ "x86_64-linux" ];
+  meta = commonMeta // {
+    description = "Backend server & client for managing on-demand Ubuntu VMs";
   };
 }
