@@ -60,7 +60,7 @@ let
       let
         appDir = "$out/share/php/${finalAttrs.pname}";
 
-        stateDirectories = ''
+        stateDirectories = /* sh */ ''
           # Symlinking in our state directories
           rm -rf $out/.env $out/cache ${appDir}/public/cache
           ln -s ${cfg.dataDir}/.env ${appDir}/.env
@@ -69,7 +69,7 @@ let
           ln -s ${cfg.runtimeDir}/cache ${appDir}/cache
         '';
 
-        exposeComposer = ''
+        exposeComposer = /* sh */ ''
           # Expose PHP Composer for scripts
           mkdir -p $out/bin
           echo "#!${lib.getExe pkgs.dash}" > $out/bin/movim-composer
@@ -85,10 +85,10 @@ let
                   # Disable all Admin panel options that were set in the
                   # `cfg.podConfig` to prevent confusing situtions where the
                   # values are rewritten on server reboot
-                  ''
-                    substituteInPlace ${appDir}/app/Widgets/AdminMain/adminmain.tpl \
-                      --replace-warn 'name="${k}"' 'name="${k}" readonly'
-                  '')
+                  /* sh */ ''
+                  substituteInPlace ${appDir}/app/Widgets/AdminMain/adminmain.tpl \
+                    --replace-warn 'name="${k}"' 'name="${k}" readonly'
+                '')
               [ ]
               cfg.podConfig));
 
@@ -101,7 +101,7 @@ let
                 [ "css" "ini" "js" "json" "manifest" "mjs" "svg" "webmanifest" ]);
           in
           lib.concatStringsSep "\n" [
-            (lib.optionalString brotli.enable ''
+            (lib.optionalString brotli.enable /* sh */ ''
               echo -n "Precompressing static files with Brotli …"
               find ${appDir}/public -type f ${findTextFileNames} -print0 \
                 | xargs -0 -n 1 -P $NIX_BUILD_CORES ${pkgs.writeShellScript "movim_precompress_broti" ''
@@ -110,7 +110,7 @@ let
                   ''}
               echo " done."
             '')
-            (lib.optionalString gzip.enable ''
+            (lib.optionalString gzip.enable /* sh */ ''
               echo -n "Precompressing static files with Gzip …"
               find ${appDir}/public -type f ${findTextFileNames} -print0 \
                 | xargs -0 -n 1 -P $NIX_BUILD_CORES ${pkgs.writeShellScript "movim_precompress_gzip" ''
@@ -637,7 +637,7 @@ in
           LoadCredential = "env-secrets:${cfg.secretFile}";
         };
 
-        script = ''
+        script = /* sh */ ''
           # Env vars
           rm -f ${cfg.dataDir}/.env
           cp --no-preserve=all ${configFile} ${cfg.dataDir}/.env
