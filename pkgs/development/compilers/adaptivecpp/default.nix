@@ -66,16 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   # adaptivecpp makes use of clangs internal headers. Its cmake does not successfully discover them automatically on nixos, so we supply the path manually
-  cmakeFlags =
-    [
-      "-DCLANG_INCLUDE_PATH=${llvmPackages.libclang.dev}/include"
-      (lib.cmakeBool "WITH_CPU_BACKEND" ompSupport)
-      (lib.cmakeBool "WITH_CUDA_BACKEND" cudaSupport)
-      (lib.cmakeBool "WITH_ROCM_BACKEND" rocmSupport)
-    ]
-    ++ lib.optionals (lib.versionAtLeast finalAttrs.version "24") [
-      (lib.cmakeBool "WITH_OPENCL_BACKEND" openclSupport)
-    ];
+  cmakeFlags = [
+    "-DCLANG_INCLUDE_PATH=${llvmPackages.libclang.dev}/include"
+    (lib.cmakeBool "WITH_CPU_BACKEND" ompSupport)
+    (lib.cmakeBool "WITH_CUDA_BACKEND" cudaSupport)
+    (lib.cmakeBool "WITH_ROCM_BACKEND" rocmSupport)
+    (lib.cmakeBool "WITH_OPENCL_BACKEND" openclSupport)
+  ];
 
   # this hardening option breaks rocm builds
   hardeningDisable = [ "zerocallusedregs" ];
