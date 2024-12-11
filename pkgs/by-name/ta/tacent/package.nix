@@ -6,7 +6,7 @@
   stdenv,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tacent";
   version = "0.8.18";
 
