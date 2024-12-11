@@ -2,6 +2,8 @@
   fetchFromGitHub,
   lib,
   stdenv,
+  makeDesktopItem,
+  copyDesktopItems,
   libX11,
   libxcb,
   qt5,
@@ -20,6 +22,16 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "${finalAttrs.src.name}/src";
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = finalAttrs.pname;
+      desktopName = "Whatsie";
+      icon = finalAttrs.pname;
+      exec = finalAttrs.pname;
+      comment = finalAttrs.meta.description;
+    })
+  ];
+
   buildInputs = [
     libX11
     libxcb
@@ -27,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
+    copyDesktopItems
     qt5.wrapQtAppsHook
     qt5.qmake
   ];
@@ -43,6 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
 
     install -Dm755 whatsie -t $out/bin
+    install -Dm644 $src/snap/gui/icon.svg $out/share/icons/hicolor/scalable/apps/whatsie.svg
 
     runHook postInstall
   '';

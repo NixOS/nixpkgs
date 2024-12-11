@@ -22,13 +22,13 @@
 
 mkDerivation rec {
   pname = "twinkle";
-  version = "unstable-2023-03-25";
+  version = "unstable-2024-20-11";
 
   src = fetchFromGitHub {
     owner = "LubosD";
     repo = "twinkle";
-    rev = "355813d5640ad58c84dc063826069384470ce310";
-    hash = "sha256-u+RewFwW17Oz2+lJLlmwebaGn4ebTBquox9Av7Jh1as=";
+    rev = "e067dcba28f4e2acd7f71b875fc4168e9706aaaa";
+    hash = "sha256-3YtZwP/ugWOSfUa4uaEAEEsk9i5j93eLt5lHgAu5qqI=";
   };
 
   buildInputs = [

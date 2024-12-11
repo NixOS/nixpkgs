@@ -22578,15 +22578,6 @@ let
         sha512 = "oVNDqzBC9h3GO+NTgWeLMhhGigy6/bQaQbHS+0z7C4YEu/qK/yxHvca/2PTZtGNPsCrHwOTgKMrwu02A9iPBmw==";
       };
     };
-    "eslint-plugin-vue-9.28.0" = {
-      name = "eslint-plugin-vue";
-      packageName = "eslint-plugin-vue";
-      version = "9.28.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/eslint-plugin-vue/-/eslint-plugin-vue-9.28.0.tgz";
-        sha512 = "ShrihdjIhOTxs+MfWun6oJWuk+g/LAhN+CiuOl/jjkG3l0F2AuK5NMTaWqyvBgkFtpYmyks6P4603mLmhNJW8g==";
-      };
-    };
     "eslint-rule-docs-1.1.235" = {
       name = "eslint-rule-docs";
       packageName = "eslint-rule-docs";
@@ -51381,15 +51372,6 @@ let
         sha512 = "qh3VhDLeh773wjgNTl7ss0VejY9bMMa0GoDG2fQVyDzRFdiU3L7fw74tWZDHNQXdZqxO3EveQroa9ct39D2nqg==";
       };
     };
-    "vue-eslint-parser-9.4.3" = {
-      name = "vue-eslint-parser";
-      packageName = "vue-eslint-parser";
-      version = "9.4.3";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/vue-eslint-parser/-/vue-eslint-parser-9.4.3.tgz";
-        sha512 = "2rYRLWlIpaiN8xbPiDyXZXRgLGOtWxERV7ND5fFAv5qo1D2N9Fu9MNajBNc6o13lZ+24DAWCkQCvj4klgmcITg==";
-      };
-    };
     "w3c-hr-time-1.0.2" = {
       name = "w3c-hr-time";
       packageName = "w3c-hr-time";
@@ -52495,15 +52477,6 @@ let
       src = fetchurl {
         url = "https://registry.npmjs.org/xml-name-validator/-/xml-name-validator-3.0.0.tgz";
         sha512 = "A5CUptxDsvxKJEU3yO6DuWBSJz/qizqzJKOMIfUJHETbBw/sFaDxgd6fxm1ewUaM0jZ444Fc5vC5ROYurg/4Pw==";
-      };
-    };
-    "xml-name-validator-4.0.0" = {
-      name = "xml-name-validator";
-      packageName = "xml-name-validator";
-      version = "4.0.0";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/xml-name-validator/-/xml-name-validator-4.0.0.tgz";
-        sha512 = "ICP2e+jsHvAj2E2lIHxa5tjXRlKDJo4IdvPvCXbXQGdzSfmSpNVyIKMvoZHjDY9DP0zV17iI85o90vRFXNccRw==";
       };
     };
     "xml-name-validator-5.0.0" = {
@@ -78711,202 +78684,6 @@ in
       description = "The command-line interface for Vercel";
       homepage = "https://vercel.com";
       license = "Apache-2.0";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  vls = nodeEnv.buildNodePackage {
-    name = "vls";
-    packageName = "vls";
-    version = "0.8.5";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/vls/-/vls-0.8.5.tgz";
-      sha512 = "61kbdO2COZWBMC4wq59QfDdev9ruXd0226f57DFJTFpFXv85S+qnHakQlAmbSYFFLGKcx95HB2UjnuQh4YRwFA==";
-    };
-    dependencies = [
-      sources."@babel/code-frame-7.24.7"
-      sources."@babel/helper-validator-identifier-7.24.7"
-      (sources."@babel/highlight-7.24.7" // {
-        dependencies = [
-          sources."ansi-styles-3.2.1"
-          sources."chalk-2.4.2"
-          sources."color-convert-1.9.3"
-          sources."color-name-1.1.3"
-          sources."escape-string-regexp-1.0.5"
-          sources."has-flag-3.0.0"
-          sources."supports-color-5.5.0"
-        ];
-      })
-      sources."@eslint-community/eslint-utils-4.4.0"
-      sources."@eslint-community/regexpp-4.11.1"
-      sources."@eslint/eslintrc-2.1.4"
-      sources."@eslint/js-8.57.1"
-      sources."@humanwhocodes/config-array-0.13.0"
-      sources."@humanwhocodes/module-importer-1.0.1"
-      sources."@humanwhocodes/object-schema-2.0.3"
-      sources."@nodelib/fs.scandir-2.1.5"
-      sources."@nodelib/fs.stat-2.0.5"
-      sources."@nodelib/fs.walk-1.2.8"
-      sources."@ungap/structured-clone-1.2.0"
-      sources."acorn-8.12.1"
-      sources."acorn-jsx-5.3.2"
-      sources."ajv-6.12.6"
-      sources."ansi-regex-5.0.1"
-      sources."ansi-styles-4.3.0"
-      sources."argparse-2.0.1"
-      sources."balanced-match-1.0.2"
-      sources."boolbase-1.0.0"
-      sources."brace-expansion-1.1.11"
-      sources."builtin-modules-1.1.1"
-      sources."call-bind-1.0.7"
-      sources."callsites-3.1.0"
-      sources."chalk-4.1.2"
-      sources."character-parser-2.2.0"
-      sources."color-convert-2.0.1"
-      sources."color-name-1.1.4"
-      sources."commander-2.20.3"
-      sources."concat-map-0.0.1"
-      sources."cross-spawn-7.0.3"
-      sources."cssesc-3.0.0"
-      sources."debug-4.3.7"
-      sources."deep-is-0.1.4"
-      sources."define-data-property-1.1.4"
-      sources."diff-4.0.2"
-      sources."doctrine-3.0.0"
-      sources."es-define-property-1.0.0"
-      sources."es-errors-1.3.0"
-      sources."escape-string-regexp-4.0.0"
-      sources."eslint-8.57.1"
-      sources."eslint-plugin-vue-9.28.0"
-      sources."eslint-scope-7.2.2"
-      sources."eslint-visitor-keys-3.4.3"
-      sources."espree-9.6.1"
-      sources."esprima-4.0.1"
-      sources."esquery-1.6.0"
-      sources."esrecurse-4.3.0"
-      sources."estraverse-5.3.0"
-      sources."esutils-2.0.3"
-      sources."fast-deep-equal-3.1.3"
-      sources."fast-json-stable-stringify-2.1.0"
-      sources."fast-levenshtein-2.0.6"
-      sources."fastq-1.17.1"
-      sources."file-entry-cache-6.0.1"
-      sources."find-up-5.0.0"
-      sources."flat-cache-3.2.0"
-      sources."flatted-3.3.1"
-      sources."fs.realpath-1.0.0"
-      sources."function-bind-1.1.2"
-      sources."get-intrinsic-1.2.4"
-      sources."glob-7.2.3"
-      sources."glob-parent-6.0.2"
-      sources."globals-13.24.0"
-      sources."gopd-1.0.1"
-      sources."graphemer-1.4.0"
-      sources."has-flag-4.0.0"
-      sources."has-property-descriptors-1.0.2"
-      sources."has-proto-1.0.3"
-      sources."has-symbols-1.0.3"
-      sources."has-tostringtag-1.0.2"
-      sources."hasown-2.0.2"
-      sources."ignore-5.3.2"
-      sources."import-fresh-3.3.0"
-      sources."imurmurhash-0.1.4"
-      sources."inflight-1.0.6"
-      sources."inherits-2.0.4"
-      sources."is-core-module-2.15.1"
-      (sources."is-expression-4.0.0" // {
-        dependencies = [
-          sources."acorn-7.4.1"
-        ];
-      })
-      sources."is-extglob-2.1.1"
-      sources."is-glob-4.0.3"
-      sources."is-path-inside-3.0.3"
-      sources."is-regex-1.1.4"
-      sources."isexe-2.0.0"
-      sources."js-tokens-4.0.0"
-      sources."js-yaml-4.1.0"
-      sources."json-buffer-3.0.1"
-      sources."json-schema-traverse-0.4.1"
-      sources."json-stable-stringify-without-jsonify-1.0.1"
-      sources."keyv-4.5.4"
-      sources."levn-0.4.1"
-      sources."locate-path-6.0.0"
-      sources."lodash-4.17.21"
-      sources."lodash.merge-4.6.2"
-      sources."minimatch-3.1.2"
-      sources."minimist-1.2.8"
-      sources."mkdirp-0.5.6"
-      sources."ms-2.1.3"
-      sources."natural-compare-1.4.0"
-      sources."nth-check-2.1.1"
-      sources."object-assign-4.1.1"
-      sources."once-1.4.0"
-      sources."optionator-0.9.4"
-      sources."p-limit-3.1.0"
-      sources."p-locate-5.0.0"
-      sources."parent-module-1.0.1"
-      sources."path-exists-4.0.0"
-      sources."path-is-absolute-1.0.1"
-      sources."path-key-3.1.1"
-      sources."path-parse-1.0.7"
-      sources."picocolors-1.1.0"
-      sources."postcss-selector-parser-6.1.2"
-      sources."prelude-ls-1.2.1"
-      sources."prettier-2.8.8"
-      sources."pug-error-2.1.0"
-      sources."pug-lexer-5.0.1"
-      sources."punycode-2.3.1"
-      sources."queue-microtask-1.2.3"
-      sources."resolve-1.22.8"
-      sources."resolve-from-4.0.0"
-      sources."reusify-1.0.4"
-      sources."rimraf-3.0.2"
-      sources."run-parallel-1.2.0"
-      sources."semver-7.6.3"
-      sources."set-function-length-1.2.2"
-      sources."shebang-command-2.0.0"
-      sources."shebang-regex-3.0.0"
-      sources."sprintf-js-1.0.3"
-      sources."strip-ansi-6.0.1"
-      sources."strip-json-comments-3.1.1"
-      sources."supports-color-7.2.0"
-      sources."supports-preserve-symlinks-flag-1.0.0"
-      sources."text-table-0.2.0"
-      sources."tslib-1.14.1"
-      (sources."tslint-6.1.3" // {
-        dependencies = [
-          sources."ansi-styles-3.2.1"
-          sources."argparse-1.0.10"
-          sources."chalk-2.4.2"
-          sources."color-convert-1.9.3"
-          sources."color-name-1.1.3"
-          sources."escape-string-regexp-1.0.5"
-          sources."has-flag-3.0.0"
-          sources."js-yaml-3.14.1"
-          sources."semver-5.7.2"
-          sources."supports-color-5.5.0"
-        ];
-      })
-      sources."tsutils-2.29.0"
-      sources."type-check-0.4.0"
-      sources."type-fest-0.20.2"
-      sources."typescript-4.9.5"
-      sources."uri-js-4.4.1"
-      sources."util-deprecate-1.0.2"
-      sources."vue-eslint-parser-9.4.3"
-      sources."which-2.0.2"
-      sources."word-wrap-1.2.5"
-      sources."wrappy-1.0.2"
-      sources."xml-name-validator-4.0.0"
-      sources."yocto-queue-0.1.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Vue Language Server";
-      homepage = "https://github.com/vuejs/vetur/tree/master/server";
-      license = "MIT";
     };
     production = true;
     bypassCache = true;
