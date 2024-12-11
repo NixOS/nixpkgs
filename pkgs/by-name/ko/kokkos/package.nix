@@ -9,13 +9,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "kokkos";
-  version = "4.4.01";
+  version = "4.5.00";
 
   src = fetchFromGitHub {
     owner = "kokkos";
     repo = "kokkos";
     rev = finalAttrs.version;
-    hash = "sha256-VpUbvSQ6PQhhm9ovj97U9XEdbfro9K+LSmeSiNpqHuI=";
+    hash = "sha256-4b26N7W++gIEPGgExsnyDjF+mD4jF0hGFTroqqVrfys=";
   };
 
   nativeBuildInputs = [
