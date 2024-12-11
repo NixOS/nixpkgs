@@ -24332,6 +24332,12 @@
     github = "peterablehmann";
     githubId = 36541313;
   };
+  xiaoxiangmoe = {
+    name = "ZHAO JinXiang";
+    email = "xiaoxiangmoe@gmail.com";
+    github = "xiaoxiangmoe";
+    githubId = 8111351;
+  };
   xinyangli = {
     email = "lixinyang411@gmail.com";
     matrix = "@me:xinyang.life";
