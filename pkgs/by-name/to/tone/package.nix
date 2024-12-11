@@ -4,6 +4,7 @@
   buildDotnetModule,
   ffmpeg-full,
   dotnetCorePackages,
+  versionCheckHook,
 }:
 
 buildDotnetModule rec {
@@ -28,6 +29,9 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
   dotnet-runtime = dotnetCorePackages.sdk_6_0;
   runtimeDeps = [ ffmpeg-full ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     homepage = "https://github.com/sandreas/tone";
