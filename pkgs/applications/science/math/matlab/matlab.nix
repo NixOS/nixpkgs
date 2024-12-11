@@ -19,6 +19,7 @@ stdenvNoCC.mkDerivation (self: {
   matlabBins = [
     "matlab"
     "mex"
+    "mlint"
   ];
 
   dontUnpack = true;
@@ -82,12 +83,20 @@ stdenvNoCC.mkDerivation (self: {
         launcherFor =
           name:
           writeShellScriptBin name ''
-            exec ${self.env}/bin/matlab-env ${self.unwrapped}/bin/${name} "''${@}"
+            for prefix in ${self.unwrapped}/bin ${self.unwrapped}/bin/glnxa64; do
+              exe="$prefix/${name}"
+              if [[ -f "$exe" ]]; then
+                exec ${self.env}/bin/matlab-env "$exe" "''${@}"
+              fi
+            done
+
+            echo "couldn't find MATLAB binary ${name}"
+            exit 1
           '';
       in
       lib.concatMapStringsSep "\n" (name: ''
-        if [ ! -f ${self.unwrapped}/bin/${name} ]; then
-          echo "MATLAB binary ${name} does not exist!"
+        if [ ! -f ${self.unwrapped}/bin/${name} ] && [ ! -f ${self.unwrapped}/bin/glnxa64/${name} ]; then
+          echo "couldn't find MATLAB binary ${name}"
           exit 1
         fi
         ln -sv ${lib.getExe (launcherFor name)} $out/bin/${name}
@@ -206,6 +215,16 @@ stdenvNoCC.mkDerivation (self: {
           libxcb
           ;
       };
+
+    runScript = lib.getExe (
+      writeShellScriptBin "matlab-env" ''
+        if [[ "$1" = "" ]]; then
+          exec "$SHELL"
+        else
+          exec "''${@}"
+        fi
+      ''
+    );
   };
 
   passthru.unwrapped = self.unwrapped;
