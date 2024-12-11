@@ -55,6 +55,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
     mainProgram = "wt";
-    maintainers = with lib.maintainers; [ jiriks74 ];
+    maintainers = with lib.maintainers; [
+      jiriks74
+      mateusauler
+    ];
   };
 })
