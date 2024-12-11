@@ -19042,7 +19042,7 @@ with pkgs;
 
   sieveshell = with python3.pkgs; toPythonApplication managesieve;
 
-  sunshine = callPackage ../servers/sunshine { };
+  sunshine = callPackage ../by-name/su/sunshine/package.nix { };
 
   jami = qt6Packages.callPackage ../applications/networking/instant-messengers/jami {
     # TODO: remove once `udev` is `systemdMinimal` everywhere.
