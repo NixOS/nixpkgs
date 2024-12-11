@@ -26,7 +26,7 @@
 
 buildPythonPackage rec {
   pname = "safety";
-  version = "3.2.9";
+  version = "3.2.11";
 
   disabled = pythonOlder "3.7";
 
@@ -36,7 +36,7 @@ buildPythonPackage rec {
     owner = "pyupio";
     repo = "safety";
     rev = "refs/tags/${version}";
-    hash = "sha256-etA/S/i87w4ihsqQo5JJjt6hWC7Jt9/q8vhqyo+DTek=";
+    hash = "sha256-ekJ0o+KWS8Fih1M/scboGEjETX0/2Uh6h/zne4h+3wI=";
   };
 
   postPatch = ''
@@ -54,7 +54,6 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [
-    "dparse"
     "filelock"
   ];
 

@@ -5829,6 +5829,12 @@
     githubId = 129093;
     name = "Desmond O. Chang";
   };
+  dod-101 = {
+    email = "david.thievon@proton.me";
+    github = "DOD-101";
+    githubId = 131907205;
+    name = "David Thievon";
+  };
   domenkozar = {
     email = "domen@dev.si";
     github = "domenkozar";
@@ -16347,6 +16353,13 @@
     name = "Oaksoaj";
     github = "oaksoaj";
     githubId = 103952141;
+  };
+  ob7 = {
+    name = "ob7";
+    email = "dev@ob7.us";
+    github = "ob7";
+    githubId = 6877929;
+    keys = [ { fingerprint = "5C1C 0251 FA85 8C62 0E96  7AC5 2766 5625 0571 34E4"; } ];
   };
   obadz = {
     email = "obadz-nixos@obadz.com";
