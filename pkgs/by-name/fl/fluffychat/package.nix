@@ -23,13 +23,13 @@ in
 flutter324.buildFlutterApplication (
   rec {
     pname = "fluffychat-${targetFlutterPlatform}";
-    version = "1.22.1";
+    version = "1.23.0";
 
     src = fetchFromGitHub {
       owner = "krille-chan";
       repo = "fluffychat";
       rev = "refs/tags/v${version}";
-      hash = "sha256-biFoRcMss3JVrMoilc8BzJ+R6f+e4RYpZ5dbxDpnfTk=";
+      hash = "sha256-T187GK0hBTRLGgUw23dNSzql6VZssreS84NbgCwf558=";
     };
 
     inherit pubspecLock;
