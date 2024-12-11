@@ -5,6 +5,7 @@
   fetchFromGitHub,
   versionCheckHook,
   nix-update-script,
+  nixosTests,
 }:
 buildGoModule rec {
   pname = "nezha-agent";
@@ -60,6 +61,7 @@ buildGoModule rec {
 
   passthru = {
     updateScript = nix-update-script { };
+    tests = { inherit (nixosTests) nezha; };
   };
 
   meta = {
