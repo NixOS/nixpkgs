@@ -113,7 +113,7 @@ let
             (lib.optionalString gzip.enable ''
               echo -n "Precompressing static files with Gzip …"
               find ${appDir}/public -type f ${findTextFileNames} -print0 \
-                | xargs -0 -n 1 -P $NIX_BUILD_CORES ${pkgs.writeShellScript "movim_precompress_broti" ''
+                | xargs -0 -n 1 -P $NIX_BUILD_CORES ${pkgs.writeShellScript "movim_precompress_gzip" ''
                     file="$1"
                     ${lib.getExe gzip.package} -c -${builtins.toString gzip.compressionLevel} $file > $file.gz
                   ''}
