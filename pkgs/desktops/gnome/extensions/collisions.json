@@ -20,8 +20,16 @@
     "batterytime@typeof.pw",
     "batime@martin.zurowietz.de"
   ],
+  "nepali-calendar": [
+    "nepali-date@biplab",
+    "nepali-calendar-gs-extension@subashghimire.info.np"
+  ],
   "power-profile-indicator": [
     "power-profile-indicator@laux.wtf",
     "power-profile@fthx"
+  ],
+  "fullscreen-to-empty-workspace": [
+    "fullscreen-to-empty-workspace@aiono.dev",
+    "fullscreen-to-empty-workspace2@corgijan.dev"
   ]
 }
