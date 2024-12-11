@@ -14,7 +14,6 @@
   lv2,
   pkg-config,
 }:
-
 stdenv.mkDerivation rec {
   pname = "calf";
   version = "0.90.3";
@@ -32,6 +31,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   nativeBuildInputs = [ pkg-config ];
+
   buildInputs = [
     cairo
     expat
@@ -45,12 +45,12 @@ stdenv.mkDerivation rec {
     lv2
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://calf-studio-gear.org";
     description = "Set of high quality open source audio plugins for musicians";
-    license = licenses.lgpl2;
+    license = lib.licenses.lgpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "calfjackhost";
   };
 }
