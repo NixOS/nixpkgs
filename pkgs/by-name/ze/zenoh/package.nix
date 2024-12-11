@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "zenoh";
-  version = "1.0.3";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "eclipse-zenoh";
     repo = "zenoh";
     rev = version;
-    hash = "sha256-3k266sIP3A76HlFGUax4XIVQqwCKSvShJuBIuNWKJ2c=";
+    hash = "sha256-Ydmd3eCXn+svMak1I5LU4rJNhzEEc2MiG5MoSMNOJ00=";
   };
 
-  cargoHash = "sha256-Ny7kLFJveibDmi48a5KS0GKumX4RUAkoeh66tx9oR5g=";
+  cargoHash = "sha256-AjMgnZ+GJPGMQsyeOQGyXpVrdw2zb7B9/KXWKlvKT1Q=";
 
   cargoBuildFlags = [
     "--workspace"
@@ -72,6 +72,12 @@ rustPlatform.buildRustPackage rec {
     # thread 'openclose_udp_only_connect_with_interface_restriction' panicked at io/zenoh-transport/tests/unicast_openclose.rs:802:63:
     # index out of bounds: the len is 0 but the index is 0
     "--skip openclose_udp_only_listen_with_interface_restriction"
+
+    # These tests require a network interface and fail in the sandbox
+    "--skip openclose_quic_only_listen_with_interface_restriction"
+    "--skip openclose_quic_only_connect_with_interface_restriction"
+    "--skip openclose_tls_only_connect_with_interface_restriction"
+    "--skip openclose_tls_only_listen_with_interface_restriction"
   ];
 
   passthru.tests.version = testers.testVersion {
