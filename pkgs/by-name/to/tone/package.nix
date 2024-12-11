@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, buildDotnetModule, ffmpeg-full, dotnetCorePackages }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDotnetModule,
+  ffmpeg-full,
+  dotnetCorePackages,
+}:
 
 buildDotnetModule rec {
   pname = "tone";
