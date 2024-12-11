@@ -601,12 +601,12 @@ in rec {
   session-wizard = mkTmuxPlugin rec {
     pluginName = "session-wizard";
     rtpFilePath = "session-wizard.tmux";
-    version = "1.3.1";
+    version = "1.4.0";
     src = pkgs.fetchFromGitHub {
       owner = "27medkamal";
       repo = "tmux-session-wizard";
       rev = "V${version}";
-      sha256 = "sha256-nJaC5aX+cR/+ks3I/lW/tUnVG0CrEYfsIjPDisgMrTE=";
+      sha256 = "sha256-mLpZQSo8nildawsPxGwkcETNwlRq6O1pfy/VusMNMaw=";
     };
     meta = with lib; {
       homepage = "https://github.com/27medkamal/tmux-session-wizard";
