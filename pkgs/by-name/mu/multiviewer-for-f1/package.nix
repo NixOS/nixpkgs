@@ -1,46 +1,18 @@
-{
-  stdenvNoCC,
-  fetchurl,
-  lib,
-  makeWrapper,
-  autoPatchelfHook,
-  dpkg,
-  alsa-lib,
-  at-spi2-atk,
-  cairo,
-  cups,
-  dbus,
-  expat,
-  ffmpeg,
-  glib,
-  gtk3,
-  libdrm,
-  libudev0-shim,
-  libxkbcommon,
-  mesa,
-  nspr,
-  nss,
-  pango,
-  xorg,
-  writeScript
-}:
-let
-  id = "203624820";
-in
-stdenvNoCC.mkDerivation rec {
+{ stdenvNoCC, fetchurl, lib, makeWrapper, autoPatchelfHook, dpkg, alsa-lib
+, at-spi2-atk, cairo, cups, dbus, expat, ffmpeg, glib, gtk3, libdrm
+, libudev0-shim, libxkbcommon, mesa, nspr, nss, pango, xorg, writeScript }:
+let id = "203624820";
+in stdenvNoCC.mkDerivation rec {
   pname = "multiviewer-for-f1";
   version = "1.36.2";
 
   src = fetchurl {
-    url = "https://releases.multiviewer.dev/download/${id}/multiviewer-for-f1_${version}_amd64.deb";
+    url =
+      "https://releases.multiviewer.dev/download/${id}/multiviewer-for-f1_${version}_amd64.deb";
     sha256 = "sha256-b9Sx5Zcn+zQ9yFwrosHp1bTENByhBUU3VJfZA2HPoPU=";
   };
 
-  nativeBuildInputs = [
-    dpkg
-    makeWrapper
-    autoPatchelfHook
-  ];
+  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook ];
 
   buildInputs = [
     alsa-lib
