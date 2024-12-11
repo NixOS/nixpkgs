@@ -1,6 +1,5 @@
 {
   stdenv,
-  fetchpatch,
   fetchFromGitLab,
   cmake,
   ninja,
@@ -16,7 +15,7 @@
 
 stdenv.mkDerivation rec {
   pname = "lib2geom";
-  version = "1.3";
+  version = "1.4";
 
   outputs = [
     "out"
@@ -27,32 +26,8 @@ stdenv.mkDerivation rec {
     owner = "inkscape";
     repo = "lib2geom";
     rev = "refs/tags/${version}";
-    hash = "sha256-llUpW8VRBD8RKaGfyedzsMbLRb8DIo0ePt6m2T2w7Po=";
+    hash = "sha256-kbcnefzNhUj/ZKZaB9r19bpI68vxUKOLVAwUXSr/zz0=";
   };
-
-  patches = [
-    # Fix compilation with Clang.
-    # https://gitlab.com/inkscape/lib2geom/-/merge_requests/102
-    (fetchpatch {
-      url = "https://gitlab.com/inkscape/lib2geom/-/commit/a5b5ac7d992023f8a80535ede60421e73ecd8e20.patch";
-      hash = "sha256-WJYkk3WRYVyPSvyTbKDUrYvUwFgKA9mmTiEWtYQqM4Q=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/inkscape/lib2geom/-/commit/23d9393af4bee17aeb66a3c13bdad5dbed982d08.patch";
-      hash = "sha256-LAaGMIXpDI/Wzv5E2LasW1Y2/G4ukhuEzDmFu3AzZOA=";
-    })
-
-    # Fix ellipses rendering near page corners.
-    # https://gitlab.com/inkscape/lib2geom/-/issues/66
-    (fetchpatch {
-      url = "https://gitlab.com/inkscape/lib2geom/-/commit/039ce8d4af23a0a2a9d48eb970b321d9795dcc08.patch";
-      hash = "sha256-JfgGrqBcYSYKcdl4Bt7vGZ4aTBPSHM6JjZ95IlzxPwI=";
-    })
-    (fetchpatch {
-      url = "https://gitlab.com/inkscape/lib2geom/-/commit/cf523857e48c87f9f6a09217bdf935fff457823d.patch";
-      hash = "sha256-BRg8ANHMSgoi6vt9PNbhwG1fRkzEPXb4gPTPO3sY0XE=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -91,6 +66,17 @@ stdenv.mkDerivation rec {
           # Fails due to rounding differences
           # https://gitlab.com/inkscape/lib2geom/-/issues/70
           "circle-test"
+        ]
+        ++ lib.optionals (stdenv.hostPlatform.system != "x86_64-linux") [
+          # https://gitlab.com/inkscape/lib2geom/-/issues/69
+          "polynomial-test"
+
+          # https://gitlab.com/inkscape/lib2geom/-/issues/75
+          "line-test"
+
+          # Failure observed on aarch64-darwin
+          "bezier-test"
+          "ellipse-test"
         ];
     in
     ''

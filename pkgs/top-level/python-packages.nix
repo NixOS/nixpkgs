@@ -3058,8 +3058,6 @@ self: super: with self; {
 
   deap = callPackage ../development/python-modules/deap { };
 
-  debian = callPackage ../development/python-modules/debian { };
-
   debianbts = callPackage ../development/python-modules/debianbts { };
 
   debian-inspector = callPackage ../development/python-modules/debian-inspector { };
@@ -5575,6 +5573,8 @@ self: super: with self; {
   grep-ast = callPackage ../development/python-modules/grep-ast { };
 
   greynoise = callPackage ../development/python-modules/greynoise { };
+
+  groq = callPackage ../development/python-modules/groq { };
 
   growattserver = callPackage ../development/python-modules/growattserver { };
 
@@ -9362,6 +9362,8 @@ self: super: with self; {
 
   python-bugzilla = callPackage ../development/python-modules/python-bugzilla { };
 
+  python-debian = callPackage ../development/python-modules/python-debian { };
+
   python-hcl2 = callPackage ../development/python-modules/python-hcl2 { };
 
   python-lorem = callPackage ../development/python-modules/python-lorem { };
@@ -10228,6 +10230,8 @@ self: super: with self; {
   pwinput = callPackage ../development/python-modules/pwinput { };
 
   pybars3 = callPackage ../development/python-modules/pybars3 { };
+
+  pyembroidery = callPackage ../development/python-modules/pyembroidery { };
 
   pymeta3 = callPackage ../development/python-modules/pymeta3 { };
 
