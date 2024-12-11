@@ -3,9 +3,12 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
-  Security,
+  darwin,
 }:
 
+let
+  inherit (darwin.apple_sdk.frameworks) Security;
+in
 rustPlatform.buildRustPackage rec {
   pname = "agg";
   version = "1.4.3";
@@ -14,8 +17,10 @@ rustPlatform.buildRustPackage rec {
     owner = "asciinema";
     repo = "agg";
     rev = "v${version}";
-    sha256 = "sha256-WCUYnveTWWQOzhIViMkSnyQ6vgLs5HDLWa/xvfZMh3A=";
+    hash = "sha256-WCUYnveTWWQOzhIViMkSnyQ6vgLs5HDLWa/xvfZMh3A=";
   };
+
+  strictDeps = true;
 
   cargoLock = {
     lockFile = ./Cargo.lock;
