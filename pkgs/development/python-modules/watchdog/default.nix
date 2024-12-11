@@ -30,12 +30,15 @@ buildPythonPackage rec {
 
   optional-dependencies.watchmedo = [ pyyaml ];
 
-  nativeCheckInputs = [
-    flaky
-    pytest-cov-stub
-    pytest-timeout
-    pytestCheckHook
-  ] ++ optional-dependencies.watchmedo ++ lib.optionals (pythonOlder "3.13") [ eventlet ];
+  nativeCheckInputs =
+    [
+      flaky
+      pytest-cov-stub
+      pytest-timeout
+      pytestCheckHook
+    ]
+    ++ optional-dependencies.watchmedo
+    ++ lib.optionals (pythonOlder "3.13") [ eventlet ];
 
   postPatch = ''
     substituteInPlace setup.cfg \
