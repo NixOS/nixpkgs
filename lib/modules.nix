@@ -1287,6 +1287,7 @@ let
         mkRenamedOptionModule (getPathForOp "from") (getPathForOp "to")
     else if existsInSpec "original" || existsInSpec "alias" then
       assert (lib.assertMsg (existsInSpec "original" && existsInSpec "alias") "The rename spec provided to doRename must contain `original` and `alias`.");
+      # TODO alias since?
       mkAliasOptionModule (getPathForOp "original") (getPathForOp "alias")
     else if existsInSpec "remove" then
       mkRemovedOptionModule (getPathForOp "remove") extra
