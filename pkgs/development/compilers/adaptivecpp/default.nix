@@ -80,22 +80,6 @@ stdenv.mkDerivation (finalAttrs: {
   # this hardening option breaks rocm builds
   hardeningDisable = [ "zerocallusedregs" ];
 
-  postFixup =
-    ''
-      wrapProgram $out/bin/syclcc-clang \
-        --prefix PATH : ${
-          lib.makeBinPath [
-            python3
-            lld
-          ]
-        } \
-        --add-flags "-L${llvmPackages.openmp}/lib" \
-        --add-flags "-I${llvmPackages.openmp.dev}/include" \
-    ''
-    + lib.optionalString rocmSupport ''
-      --add-flags "--rocm-device-lib-path=${rocmPackages.rocm-device-libs}/amdgcn/bitcode"
-    '';
-
   passthru = {
     # For tests
     inherit (finalAttrs) nativeBuildInputs buildInputs;

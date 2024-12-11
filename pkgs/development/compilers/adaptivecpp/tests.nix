@@ -2,9 +2,11 @@
   lib,
   stdenv,
   adaptivecpp,
-  # after cursory testing it seems like this isn't really useful, but if errors pop up, maybe look into restricting the targets
-  targetsBuild ? null,
-  targetsRun ? null,
+  # within the nix sandbox, the tests will likely be unable to access the gpu.
+  # for now we just test omp by default as a sanity check,
+  # however the bulk of work in acpp focuses on the generic target, so we want to switch to that.
+  targetsBuild ? "omp",
+  targetsRun ? "omp",
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "${adaptivecpp.pname}-tests";
