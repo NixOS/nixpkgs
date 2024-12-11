@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation (
     };
   in
   {
-    pname = "affine";
+    pname = "affine-bin";
     version = "0.17.5";
     src = fetchurl {
       url = "https://github.com/toeverything/AFFiNE/releases/download/v${finalAttrs.version}/affine-${finalAttrs.version}-stable-linux-x64.zip";
