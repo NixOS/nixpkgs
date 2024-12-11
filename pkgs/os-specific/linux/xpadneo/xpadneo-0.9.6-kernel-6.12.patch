@@ -1,0 +1,20 @@
+--- a/hid-xpadneo.c
++++ b/hid-xpadneo.c
+@@ -713,5 +713,9 @@
+ }
+ 
++#if LINUX_VERSION_CODE < KERNEL_VERSION(6,12,0)
+ static u8 *xpadneo_report_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *rsize)
++#else
++static const u8 *xpadneo_report_fixup(struct hid_device *hdev, u8 *rdesc, unsigned int *rsize)
++#endif
+ {
+ 	struct xpadneo_devdata *xdata = hid_get_drvdata(hdev);
+--- a/xpadneo.h
++++ b/xpadneo.h
+@@ -13,4 +13,5 @@
+ 
+ #include <linux/hid.h>
++#include <linux/version.h>
+ 
+ #include "hid-ids.h"

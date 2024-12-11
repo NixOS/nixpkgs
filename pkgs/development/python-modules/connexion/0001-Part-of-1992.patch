@@ -1,0 +1,25 @@
+From 10c3d787cc9c7fb31c6cc7074e9ce00dfeb6bb85 Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Thu, 14 Nov 2024 16:16:17 +0800
+Subject: [PATCH] Part of 1992
+
+---
+ tests/decorators/test_validation.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tests/decorators/test_validation.py b/tests/decorators/test_validation.py
+index bece403..d7e0984 100644
+--- a/tests/decorators/test_validation.py
++++ b/tests/decorators/test_validation.py
+@@ -78,7 +78,7 @@ def test_invalid_type(monkeypatch):
+     logger = MagicMock()
+     monkeypatch.setattr("connexion.validators.parameter.logger", logger)
+     result = ParameterValidator.validate_parameter(
+-        "formdata", 20, {"type": "string", "name": "foo"}
++        "formdata", 20, {"name": "foo", "type": "string"}
+     )
+     expected_result = """20 is not of type 'string'
+ 
+-- 
+2.47.0
+
