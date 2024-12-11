@@ -5,6 +5,7 @@
 , nix-update-script
 , runCommand
 , which
+, installShellFiles
 , rustPlatform
 , emscripten
 , Security
@@ -116,7 +117,7 @@ rustPlatform.buildRustPackage {
   buildInputs =
     lib.optionals stdenv.hostPlatform.isDarwin [ Security CoreServices ];
   nativeBuildInputs =
-    [ which ]
+    [ which installShellFiles ]
     ++ lib.optionals webUISupport [ emscripten ];
 
   patches = lib.optionals webUISupport [
@@ -150,6 +151,11 @@ rustPlatform.buildRustPackage {
     PREFIX=$out make install
     ${lib.optionalString (!enableShared) "rm $out/lib/*.so{,.*}"}
     ${lib.optionalString (!enableStatic) "rm $out/lib/*.a"}
+  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd tree-sitter \
+      --bash <($out/bin/tree-sitter complete --shell bash) \
+      --fish <($out/bin/tree-sitter complete --shell fish) \
+      --zsh <($out/bin/tree-sitter complete --shell zsh)
   '';
 
   # test result: FAILED. 120 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
