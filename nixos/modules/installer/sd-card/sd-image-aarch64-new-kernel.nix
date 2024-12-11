@@ -1,7 +1,8 @@
 { pkgs, ... }:
 
 {
-  imports = [ ./sd-image-aarch64.nix ];
-
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  imports = [
+    ../../profiles/new-kernel.nix
+    ./sd-image-aarch64.nix
+  ];
 }
