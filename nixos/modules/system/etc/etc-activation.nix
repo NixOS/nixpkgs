@@ -15,6 +15,7 @@
       system.activationScripts.etc = lib.stringAfter [
         "users"
         "groups"
+        "specialfs"
       ] config.system.build.etcActivationCommands;
     }
 
