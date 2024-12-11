@@ -11,23 +11,18 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "agg";
-  version = "1.4.3";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "asciinema";
     repo = "agg";
     rev = "v${version}";
-    hash = "sha256-WCUYnveTWWQOzhIViMkSnyQ6vgLs5HDLWa/xvfZMh3A=";
+    hash = "sha256-bCE59NeITaCwgajgyXgP6jxtV7aPihPaZ/Uzh39Po1k=";
   };
 
   strictDeps = true;
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "avt-0.8.0" = "sha256-5IN8P/2UWJ2EmkbbTSGWECTqiD8TeOd8LgwLZ+W2z90=";
-    };
-  };
+  cargoHash = "sha256-K472Qrsi2FIEOxFMi5CDgau2ODU0P3VDQEz/cwzmKiM=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     Security
