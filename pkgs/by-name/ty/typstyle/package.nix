@@ -8,17 +8,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typstyle";
-  version = "0.12.9";
+  version = "0.12.10";
 
   src = fetchFromGitHub {
     owner = "Enter-tainer";
     repo = "typstyle";
     tag = "v${version}";
-    hash = "sha256-iKtOE/JP77NsYMYPuMJtMMp2qryS4es4IlircekMhbc=";
+    hash = "sha256-nrsfp0T4QYLZw5F5R4iTewUjlZOErc/15c0O6O9BFBE=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-p6S8YRysEyLCo+082AtwFHYzv+p8JjWhvcWPInGYmvQ=";
+  cargoHash = "sha256-gPsZRdksX+7sZWK7V/q17oZmN2kgQkApC66/3KowDCI=";
 
   # Disabling tests requiring network access
   checkFlags = [
