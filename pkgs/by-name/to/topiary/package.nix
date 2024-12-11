@@ -5,6 +5,7 @@
   fetchFromGitHub,
   iconv,
   installShellFiles,
+  versionCheckHook,
   nix-update-script,
 }:
 
@@ -20,6 +21,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   nativeBuildInputs = [ installShellFiles ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-bk5993v0wn/emzJKvxaPBYjqCmP0BpOuFMga7ZOyqXg=";
@@ -64,6 +66,9 @@ rustPlatform.buildRustPackage rec {
         --fish <($out/bin/topiary completion fish) \
         --zsh <($out/bin/topiary completion zsh)
     '';
+
+  doInstallCheck = true;
+  versionCheckProgramArg = [ "--version" ];
 
   passthru.updateScript = nix-update-script { };
 
