@@ -88,7 +88,7 @@ writeScript "update-${pname}" ''
     done
   done
   cat >> $tmpfile <<EOF
-      ];
+    ];
   }
   EOF
 
