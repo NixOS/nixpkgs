@@ -10519,6 +10519,18 @@
     githubId = 1476865;
     name = "jigglycrumb";
   };
+  jiriks74 = {
+    name = "Jiří Štefka";
+    email = "jiri@stefka.eu";
+    github = "jiriks74";
+    githubId = 54378412;
+    matrix = "@jiriks74:matrix.org";
+    keys = [
+      {
+        fingerprint = "563AC7887FD6414714A6ACAC1D5E30D3DB2264DE";
+      }
+    ];
+  };
   jirkamarsik = {
     email = "jiri.marsik89@gmail.com";
     github = "jirkamarsik";
