@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
       tar -xzpf "${builtins.elemAt srcs 2}" -C recognize/node_modules/@tensorflow/tfjs-node/deps
     '';
 
-  patchPhase = ''
+  postPatch = ''
     # Make it clear we are not reading the node in settings
     sed -i "/'node_binary'/s:'""':'Nix Controled':" recognize/lib/Service/SettingsService.php
 
