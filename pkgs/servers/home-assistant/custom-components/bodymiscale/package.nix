@@ -22,7 +22,7 @@ buildHomeAssistantComponent rec {
     substituteInPlace custom_components/bodymiscale/manifest.json --replace-fail 'cachetools==5.3.0' 'cachetools>=5.3.0'
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     cachetools
   ];
 

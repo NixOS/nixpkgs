@@ -17,7 +17,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-uhyUQebAx4g1PT/urbyx8EZNFE9vIY0bUAKmgCwY3aQ=";
   };
 
-  propagatedBuildInputs = [ pysmartthings ];
+  dependencies = [ pysmartthings ];
 
   meta = with lib; {
     description = "HomeAssistant integration for Samsung Soundbars";

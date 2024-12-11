@@ -18,7 +18,7 @@ buildHomeAssistantComponent {
     hash = "sha256-KqbP6TpH9B0/AjtsW5TcWSNgUhND+w8rO6X8fHqtsDI=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     garminconnect
     tzlocal
   ];

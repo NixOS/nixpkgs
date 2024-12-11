@@ -29,7 +29,7 @@ buildHomeAssistantComponent rec {
     })
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiofiles
     broadlink
   ];
