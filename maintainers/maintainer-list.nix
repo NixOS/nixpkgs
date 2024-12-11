@@ -12595,6 +12595,12 @@
     githubId = 29217594;
     name = "Brian Leung";
   };
+  levigross = {
+    email = "levi@levigross.com";
+    github = "levigross";
+    githubId = 80920;
+    name = "Levi Gross";
+  };
   lewo = {
     email = "lewo@abesis.fr";
     matrix = "@lewo:matrix.org";
