@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "cymem";
-  version = "2.0.8";
+  version = "2.0.10";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "cymem";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-e4lgV39lwC2Goqmd8Jjra+znuCpxsv2IsRXfFbQkGN8=";
+    tag = "release-v${version}";
+    hash = "sha256-lMbovEIYdXYQvLeVaCm8KfYaQ2TFSAi6picu7Ju9peg=";
   };
 
   build-system = [
