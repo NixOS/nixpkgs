@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "ciso8601";
   version = "2.3.2";
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "closeio";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     hash = "sha256-oVnQ0vHhWs8spfOnJOgTJ6MAHcY8VGZHZ0E/T8JsKqE=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -33,6 +33,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Fast ISO8601 date time parser for Python written in C";
     homepage = "https://github.com/closeio/ciso8601";
+    changelog = "https://github.com/closeio/ciso8601/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ mic92 ];
   };
