@@ -19,11 +19,11 @@ assert usePam -> pam != null;
 
 stdenv.mkDerivation rec {
   pname = "libcap";
-  version = "2.70";
+  version = "2.73";
 
   src = fetchurl {
     url = "mirror://kernel/linux/libs/security/linux-privs/libcap2/${pname}-${version}.tar.xz";
-    sha256 = "sha256-I6bviq2vHj6HX2M7stEWz++JUtunvHxWmxNFjhlSsw8=";
+    hash = "sha256-ZAX2CJz0zdjCcVQM2ZBlTXjdCxmJstm9og+TOnWnlaU=";
   };
 
   outputs = [ "out" "dev" "lib" "man" "doc" ]
