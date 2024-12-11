@@ -6,9 +6,8 @@
   installShellFiles,
   stdenv,
   apple-sdk_11,
-  bottom,
+  versionCheckHook,
   nix-update-script,
-  testers,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -46,13 +45,16 @@ rustPlatform.buildRustPackage rec {
     HOME=$(mktemp -d)
   '';
 
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/btm";
+
   BTM_GENERATE = true;
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = bottom;
-    };
   };
 
   meta = {
