@@ -10519,6 +10519,18 @@
     githubId = 1476865;
     name = "jigglycrumb";
   };
+  jiriks74 = {
+    name = "Jiří Štefka";
+    email = "jiri@stefka.eu";
+    github = "jiriks74";
+    githubId = 54378412;
+    matrix = "@jiriks74:matrix.org";
+    keys = [
+      {
+        fingerprint = "563AC7887FD6414714A6ACAC1D5E30D3DB2264DE";
+      }
+    ];
+  };
   jirkamarsik = {
     email = "jiri.marsik89@gmail.com";
     github = "jirkamarsik";
@@ -13773,6 +13785,17 @@
     github = "materusPL";
     githubId = 28183516;
     name = "Mateusz Słodkowicz";
+  };
+  mateusauler = {
+    email = "mateus@auler.dev";
+    github = "mateusauler";
+    githubId = 24767687;
+    name = "Mateus Auler";
+    keys = [
+      {
+        fingerprint = "A09D C093 3C37 4BFC 2B5A  269F 80A5 D62F 6EB7 D9F0";
+      }
+    ];
   };
   math-42 = {
     email = "matheus.4200@gmail.com";

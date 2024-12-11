@@ -9,16 +9,16 @@
 
 buildGoModule rec {
   pname = "ocm";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "openshift-online";
     repo = "ocm-cli";
     rev = "v${version}";
-    sha256 = "sha256-cKXC7+Hn+74ukHG7iN4QwIv9vuPXm8FKyaKPD62S5ck=";
+    sha256 = "sha256-RuGUIG58cyyWvHD/0T7xwtzFy9XJUmavkQg4MRAHQqQ=";
   };
 
-  vendorHash = "sha256-uj4xmNZViag+j4YavFjDvc/ClMBb99DhwlcKzvGWQ7c=";
+  vendorHash = "sha256-qkTh+tkU6MXBJkX0XwktRCMjoySe1/9uWHFGTc7ozRM=";
 
   # Strip the final binary.
   ldflags = [
