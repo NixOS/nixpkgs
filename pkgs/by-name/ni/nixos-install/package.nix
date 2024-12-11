@@ -7,6 +7,7 @@
   jq,
   nixos-enter,
   util-linuxMinimal,
+  nixosTests,
 }:
 substituteAll {
   name = "nixos-install";
@@ -28,6 +29,8 @@ substituteAll {
   postInstall = ''
     installManPage ${./nixos-install.8}
   '';
+
+  passthru.tests.installer-simpleUefiSystemdBoot = nixosTests.installer.simpleUefiSystemdBoot;
 
   meta = {
     description = "Install bootloader and NixOS";
