@@ -6,7 +6,7 @@
 }:
 
 buildHomeAssistantComponent rec {
-  owner = "presto8";
+  owner = "magico13";
   domain = "emporia_vue";
   version = "0.8.3";
 
