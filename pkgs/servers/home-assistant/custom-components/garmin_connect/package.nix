@@ -9,7 +9,7 @@
 buildHomeAssistantComponent {
   owner = "cyberjunky";
   domain = "garmin_connect";
-  version = "unstable-2024-08-31";
+  version = "0.2.22";
 
   src = fetchFromGitHub {
     owner = "cyberjunky";
