@@ -102,7 +102,7 @@ pkgs.stdenv.mkDerivation {
 
     if [ ${builtins.toString compressImage} ]; then
       echo "Compressing image"
-      zstd -v --no-progress ./$img -o $out
+      zstd -T$NIX_BUILD_CORES -v --no-progress ./$img -o $out
     fi
   '';
 }
