@@ -60,7 +60,7 @@
   branch ? lib.versions.majorMinor version,
   version,
   vendor ? "nixos",
-  upstreamVersion,
+  upstreamVersion ? version,
   withFlask ? false,
   withSeaBIOS ? true,
   withOVMF ? true,
