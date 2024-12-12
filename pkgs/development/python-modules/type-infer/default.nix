@@ -30,7 +30,7 @@ in
 buildPythonPackage rec {
   pname = "type-infer";
   version = "0.0.20";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -41,11 +41,14 @@ buildPythonPackage rec {
     hash = "sha256-F+gfA7ofrbMEE5SrVt9H3s2mZKQLyr6roNUmL4EMJbI=";
   };
 
-  pythonRelaxDeps = [ "psutil" ];
+  pythonRelaxDeps = [
+    "psutil"
+    "py3langid"
+  ];
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     colorlog
     dataclasses-json
     langid
