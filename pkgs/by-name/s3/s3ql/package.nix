@@ -27,7 +27,6 @@ python3.pkgs.buildPythonApplication rec {
     apsw
     cryptography
     defusedxml
-    dugong
     google-auth
     google-auth-oauthlib
     pyfuse3
