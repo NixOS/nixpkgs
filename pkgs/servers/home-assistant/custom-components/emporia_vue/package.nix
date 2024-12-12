@@ -21,9 +21,9 @@ buildHomeAssistantComponent rec {
     pyemvue
   ];
 
-  postPatch = ''
-    substituteInPlace custom_components/emporia_vue/manifest.json --replace-fail 'pyemvue==0.17.1' 'pyemvue>=0.17.1'
-  '';
+  ignoreVersionRequirement = [
+    "pyemvue"
+  ];
 
   dontBuild = true;
 
