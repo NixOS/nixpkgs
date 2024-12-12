@@ -18,7 +18,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocsolver";
-  version = "6.2.4";
+  version = "6.3.0";
 
   outputs = [
     "out"
@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocSOLVER";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-JNmQ/txJJPw0A4GGBWooA04OEsKSoXp7yrrQ+iZC6Zc=";
+    hash = "sha256-oExWcnQKcg9OVU1ebNNYQ4KKjC1EPoAZT/9TM3WLFHU=";
   };
 
   nativeBuildInputs = [

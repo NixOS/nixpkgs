@@ -16,7 +16,7 @@ let
   rocmUpdateScript = callPackage ./update.nix { };
 in rec {
   ## ROCm ##
-  llvm = recurseIntoAttrs (callPackage ./llvm/default.nix { inherit rocmUpdateScript rocm-device-libs rocm-runtime rocm-thunk clr; });
+  llvm = recurseIntoAttrs (callPackage ./llvm/default.nix { inherit rocmUpdateScript rocm-device-libs rocm-runtime clr; });
 
   rocm-core = callPackage ./rocm-core {
     inherit rocmUpdateScript;
@@ -24,11 +24,6 @@ in rec {
   };
 
   rocm-cmake = callPackage ./rocm-cmake {
-    inherit rocmUpdateScript;
-    stdenv = llvm.rocmClangStdenv;
-  };
-
-  rocm-thunk = callPackage ./rocm-thunk {
     inherit rocmUpdateScript;
     stdenv = llvm.rocmClangStdenv;
   };
@@ -45,7 +40,7 @@ in rec {
   };
 
   rocm-runtime = callPackage ./rocm-runtime {
-    inherit rocmUpdateScript rocm-device-libs rocm-thunk;
+    inherit rocmUpdateScript rocm-device-libs;
     stdenv = llvm.rocmClangStdenv;
   };
 
@@ -101,7 +96,7 @@ in rec {
 
   # Needs GCC
   rocprofiler = callPackage ./rocprofiler {
-    inherit rocmUpdateScript clr rocm-core rocm-thunk rocm-device-libs roctracer rocdbgapi rocm-smi hsa-amd-aqlprofile-bin stdenv;
+    inherit rocmUpdateScript clr rocm-core rocm-device-libs roctracer rocdbgapi rocm-smi hsa-amd-aqlprofile-bin stdenv;
     inherit (llvm) clang;
   };
 
@@ -454,7 +449,6 @@ in rec {
         rocm-runtime
         clr
         clr.icd
-        rocm-thunk
         rocm-opencl-runtime
       ];
     };
@@ -481,7 +475,6 @@ in rec {
         llvm.clang
         llvm.mlir
         llvm.openmp
-        rocm-thunk
         rocm-runtime
         rocm-hip-runtime
       ];

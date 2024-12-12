@@ -6,13 +6,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hip-common";
-  version = "6.2.4";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "HIP";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-hjfEmMcTduAy3BlfoWdrzzfDNNbPgOZqXvkzpGrw4CE=";
+    hash = "sha256-Nhz/0VD539Qn3o/fM4aIS4Y+R3PJY8uz1iY8Hq8xPgI=";
   };
 
   dontConfigure = true;

@@ -8,7 +8,6 @@
 , clang
 , clr
 , rocm-core
-, rocm-thunk
 , rocm-device-libs
 , roctracer
 , rocdbgapi
@@ -31,7 +30,6 @@ let
 
     paths = [
       rocm-core
-      rocm-thunk
       rocm-device-libs
       roctracer
       rocdbgapi
@@ -46,13 +44,13 @@ let
   };
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocprofiler";
-  version = "6.2.4";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocprofiler";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-oxJ5QtO3pjcretuSl/eeaBw7JR37Jdo9MEphnNh1laU=";
+    hash = "sha256-pqQFeyAP016smrK+ttuwjQW5YuzX3Lz288yKWSFeN0M=";
   };
 
   patches = [

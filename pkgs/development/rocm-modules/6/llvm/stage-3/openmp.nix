@@ -7,7 +7,6 @@
 , clang-unwrapped
 , rocm-device-libs
 , rocm-runtime
-, rocm-thunk
 , perl
 , elfutils
 , libdrm
@@ -25,7 +24,6 @@ callPackage ../base.nix rec {
   extraBuildInputs = [
     rocm-device-libs
     rocm-runtime
-    rocm-thunk
     elfutils
     libdrm
     numactl

@@ -37,7 +37,7 @@ let
   ]));
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocdbgapi";
-  version = "6.2.4";
+  version = "6.3.0";
 
   outputs = [
     "out"

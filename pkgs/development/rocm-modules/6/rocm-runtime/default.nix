@@ -7,7 +7,6 @@
 , cmake
 , xxd
 , rocm-device-libs
-, rocm-thunk
 , elfutils
 , libdrm
 , numactl
@@ -17,7 +16,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-runtime";
-  version = "6.2.4";
+  version = "6.3.0";
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -35,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    rocm-thunk
     elfutils
     libdrm
     numactl

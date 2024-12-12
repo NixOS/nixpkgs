@@ -33,7 +33,7 @@ let
     else throw "Unsupported ROCm LLVM platform";
 in stdenv.mkDerivation (finalAttrs: {
   pname = "rocmlir${suffix}";
-  version = "6.2.4";
+  version = "6.3.0";
 
   outputs = [
     "out"
@@ -45,7 +45,7 @@ in stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocMLIR";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-AOJBYUU9lQ07RzV3AQJPXs8DNdp2zqiaPqs8JhuQzuk=";
+    hash = "sha256-I0bdpx2bpeehWrcwfefrxXn/5Wp2zimgDXxm4YDNRZo=";
   };
 
   nativeBuildInputs = [

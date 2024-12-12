@@ -23,14 +23,14 @@
 # FIXME: Move to rocmPackages_common
 buildPythonPackage rec {
   pname = "rocm-docs-core";
-  version = "1.9.1";
+  version = "1.11.0";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocm-docs-core";
     rev = "v${version}";
-    hash = "sha256-6tcDAsNEXqSA75GvIMs0SIfbPCALGTS9QCIMaYXkQqg=";
+    hash = "sha256-JDpwR56vcCJgCTOM3RsK6KygZTLylQtDcZ+0W93lAAk=";
   };
 
   buildInputs = [ setuptools ];
