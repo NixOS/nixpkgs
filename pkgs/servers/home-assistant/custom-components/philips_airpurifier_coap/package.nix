@@ -19,13 +19,13 @@ buildHomeAssistantComponent rec {
     hash = "sha256-yoaph/R3c4j+sXEC02Hv+ixtuif70/y6Gag5NBpKFLs=";
   };
 
-  postPatch = ''
-    substituteInPlace custom_components/philips_airpurifier_coap/manifest.json --replace-fail 'getmac==0.9.4' 'getmac>=0.9.4'
-  '';
-
   dependencies = [
     aioairctrl
     getmac
+  ];
+
+  ignoreVersionRequirement = [
+    "getmac"
   ];
 
   meta = {

@@ -56,6 +56,5 @@ buildPythonPackage ({
     description = "Buildbot Worker Daemon";
     maintainers = teams.buildbot.members;
     license = licenses.gpl2;
-    broken = stdenv.hostPlatform.isDarwin; # https://hydra.nixos.org/build/243534318/nixlog/6
   };
 })

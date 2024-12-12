@@ -8,7 +8,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "deltachat-cursed";
-  version = "0.9.0";
+  version = "0.10.0";
 
   pyproject = true;
 
@@ -16,7 +16,7 @@ python3.pkgs.buildPythonApplication rec {
     owner = "adbenitez";
     repo = "deltachat-cursed";
     rev = "v${version}";
-    hash = "sha256-z4JKe5soR4FdIn8hugxtnxQr/9V8m8a7QRzE1liIexc=";
+    hash = "sha256-KCPIZf/8Acp9syFN1IHbf8hQrjk0yzniff+dVSSM/Ro=";
   };
 
   build-system = with python3.pythonOnBuildForHost.pkgs; [
@@ -27,9 +27,7 @@ python3.pkgs.buildPythonApplication rec {
   dependencies = with python3.pkgs; [
     appdirs
     deltachat2
-    emoji
-    notify-py
-    setuptools # for pkg_resources
+    urwid
     urwid-readline
   ];
 

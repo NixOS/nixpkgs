@@ -17,7 +17,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-OGCAJsAsnUjwaLR8lCBdU+ghVOGFF0mT73t5JtcngUA=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     requests
   ];
 

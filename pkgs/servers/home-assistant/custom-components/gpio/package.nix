@@ -18,7 +18,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-JyyJPI0lbZLJj+016WgS1KXU5rnxUmRMafel4/wKsYk=";
   };
 
-  propagatedBuildInputs = [ libgpiod ];
+  dependencies = [ libgpiod ];
 
   meta = with lib; {
     description = "Home Assistant GPIO custom integration";

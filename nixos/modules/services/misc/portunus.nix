@@ -120,7 +120,7 @@ in
       package = lib.mkOption {
         type = lib.types.package;
         default = pkgs.openldap;
-        defaultText = lib.literalExpression "pkgs.openldap.override { libxcrypt = pkgs.libxcrypt-legacy; }";
+        defaultText = lib.literalExpression "pkgs.openldap";
         description = "The OpenLDAP package to use.";
       };
 

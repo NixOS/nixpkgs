@@ -19,7 +19,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-mcxXBnVGrlVxbSi+IwmGJiWqy5PlQmHQl+hgW6i7NFc=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     charset-normalizer
     pycountry
     xmltodict

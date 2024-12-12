@@ -6,24 +6,24 @@
 }:
 
 buildHomeAssistantComponent rec {
-  owner = "presto8";
+  owner = "magico13";
   domain = "emporia_vue";
-  version = "0.8.3";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "magico13";
     repo = "ha-emporia-vue";
     rev = "v${version}";
-    hash = "sha256-6NrRuBjpulT66pVUfW9ujULL5HSzfgyic1pKEBRupNA=";
+    hash = "sha256-bUfFRcVu/i6yp9BbfM3d6J8TBT3X35HNk0tr00JIwC8=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyemvue
   ];
 
-  postPatch = ''
-    substituteInPlace custom_components/emporia_vue/manifest.json --replace-fail 'pyemvue==0.17.1' 'pyemvue>=0.17.1'
-  '';
+  ignoreVersionRequirement = [
+    "pyemvue"
+  ];
 
   dontBuild = true;
 
