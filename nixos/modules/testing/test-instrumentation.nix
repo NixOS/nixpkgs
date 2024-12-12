@@ -20,6 +20,7 @@ let
         export DISPLAY=:0.0
 
         if [[ -e /etc/profile ]]; then
+            # shellcheck source=/dev/null
             source /etc/profile
         fi
 
@@ -45,7 +46,7 @@ let
         # we can also run non-NixOS guests during tests. This, however, is
         # mostly futureproofing as the test instrumentation is still very
         # tightly coupled to NixOS.
-        PS1= exec ${pkgs.coreutils}/bin/env bash --norc /dev/hvc0
+        PS1="" exec ${pkgs.coreutils}/bin/env bash --norc /dev/hvc0
       '';
       serviceConfig.KillSignal = "SIGHUP";
   };
