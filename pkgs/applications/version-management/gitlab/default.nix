@@ -174,6 +174,7 @@ let
     FOSS_ONLY = !gitlabEnterprise;
 
     SKIP_YARN_INSTALL = 1;
+    NODE_OPTIONS = "--max-old-space-size=8192";
 
     configurePhase = ''
       runHook preConfigure

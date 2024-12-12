@@ -28,24 +28,17 @@
 stdenv.mkDerivation rec {
   pname = "openvpn3";
   # also update openvpn3-core
-  version = "23";
+  version = "24";
 
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "openvpn3-linux";
     rev = "refs/tags/v${version}";
-    hash = "sha256-5gkutqyUPZDwRPzSFdUXg2G5mtQKbdhZu8xnNAdXoF0=";
+    hash = "sha256-e3NRLrznTEolTzMO+kGEh48MCrcEr8p7JG3hG889aK4=";
     # `openvpn3-core` is a submodule.
     # TODO: make it into a separate package
     fetchSubmodules = true;
   };
-
-  patches = [
-    # Merged in upstream, will land in v24
-    # https://github.com/OpenVPN/openvpn3-linux/commit/75abb7dc9366ba85fb1a144d88f02a1e8a62f538
-    ./0001-build-reduce-hardcode-in-asio_path.patch
-    ./0002-build-allow-installation-directories-customization.patch
-  ];
 
   postPatch = ''
     echo '#define OPENVPN_VERSION "3.git:unknown:unknown"
@@ -106,7 +99,7 @@ stdenv.mkDerivation rec {
     (lib.mesonOption "dbus_policy_dir" "${placeholder "out"}/share/dbus-1/system.d")
     (lib.mesonOption "dbus_system_service_dir" "${placeholder "out"}/share/dbus-1/system-services")
     (lib.mesonOption "systemd_system_unit_dir" "${placeholder "out"}/lib/systemd/system")
-    (lib.mesonOption "create_statedir" "disabled")
+    (lib.mesonOption "create_statedir" "false")
     (lib.mesonOption "sharedstatedir" "/etc")
   ];
 
