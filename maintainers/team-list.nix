@@ -459,7 +459,7 @@ with lib.maintainers;
       getchoo
     ];
     scope = "Maintain GNOME Circle applications.";
-    shortname = "GNOME Circle";
+    shortName = "GNOME Circle";
   };
 
   graalvm-ce = {
