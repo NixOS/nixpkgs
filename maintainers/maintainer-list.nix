@@ -11324,6 +11324,11 @@
     githubId = 7183441;
     name = "Justin Lovinger";
   };
+  justinrubek = {
+    github = "justinrubek";
+    githubId = 25621857;
+    name = "Justin Rubek";
+  };
   justinwoo = {
     email = "moomoowoo@gmail.com";
     github = "justinwoo";
@@ -13879,6 +13884,12 @@
     github = "MatthewCroughan";
     githubId = 26458780;
     name = "Matthew Croughan";
+  };
+  matthewdargan = {
+    email = "matthewdargan57@gmail.com";
+    githubId = 18505904;
+    github = "matthewdargan";
+    name = "Matthew Dargan";
   };
   matthew-levan = {
     email = "matthew@coeli.network";
