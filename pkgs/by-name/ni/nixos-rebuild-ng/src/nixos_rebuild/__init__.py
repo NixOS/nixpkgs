@@ -9,18 +9,13 @@ from subprocess import CalledProcessError, run
 from typing import assert_never
 
 from . import nix
+from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
 from .models import Action, BuildAttr, Flake, NRError, Profile
 from .process import Remote, cleanup_ssh
 from .utils import Args, LogFormatter
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
-
-# Build-time flags
-# Strings to avoid breaking standalone (e.g.: `python -m nixos_rebuild`) usage
-EXECUTABLE = "@executable@"
-WITH_REEXEC = "@withReexec@"
-WITH_SHELL_FILES = "@withShellFiles@"
 
 
 def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentParser]]:
@@ -187,7 +182,7 @@ def parse_args(
     }
 
     if args.help or args.action is None:
-        if WITH_SHELL_FILES == "true":
+        if WITH_SHELL_FILES:
             r = run(["man", "8", EXECUTABLE], check=False)
             parser.exit(r.returncode)
         else:
@@ -281,6 +276,9 @@ def reexec(
 def execute(argv: list[str]) -> None:
     args, args_groups = parse_args(argv)
 
+    if not WITH_NIX_2_18:
+        logger.warning("you're using Nix <2.18, some features will not work correctly")
+
     atexit.register(cleanup_ssh)
 
     common_flags = vars(args_groups["common_flags"])
@@ -303,7 +301,7 @@ def execute(argv: list[str]) -> None:
     # Re-exec to a newer version of the script before building to ensure we get
     # the latest fixes
     if (
-        WITH_REEXEC == "true"
+        WITH_REEXEC
         and can_run
         and not args.fast
         and not os.environ.get("_NIXOS_REBUILD_REEXEC")

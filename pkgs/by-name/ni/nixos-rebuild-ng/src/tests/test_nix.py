@@ -112,7 +112,6 @@ def test_remote_build(mock_run: Any, monkeypatch: Any) -> None:
                 extra_env={
                     "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh opts"])
                 },
-                remote=None,
             ),
             call(
                 ["nix-store", "--realise", Path("/path/to/file"), "--build"],
@@ -166,7 +165,6 @@ def test_remote_build_flake(mock_run: Any, monkeypatch: Any) -> None:
                 extra_env={
                     "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh opts"])
                 },
-                remote=None,
             ),
             call(
                 [
@@ -185,37 +183,66 @@ def test_remote_build_flake(mock_run: Any, monkeypatch: Any) -> None:
     )
 
 
-@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-def test_copy_closure(mock_run: Any, monkeypatch: Any) -> None:
+def test_copy_closure(monkeypatch: Any) -> None:
     closure = Path("/path/to/closure")
-    n.copy_closure(closure, None)
-    mock_run.assert_not_called()
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, None)
+        mock_run.assert_not_called()
 
     target_host = m.Remote("user@target.host", [], None)
     build_host = m.Remote("user@build.host", [], None)
-
-    n.copy_closure(closure, target_host)
-    mock_run.assert_called_with(
-        ["nix-copy-closure", "--to", "user@target.host", closure],
-        extra_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
-        remote=None,
-    )
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, target_host)
+        mock_run.assert_called_with(
+            ["nix-copy-closure", "--to", "user@target.host", closure],
+            extra_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
+        )
 
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-opt")
-    n.copy_closure(closure, None, build_host)
-    mock_run.assert_called_with(
-        ["nix-copy-closure", "--from", "user@build.host", closure],
-        extra_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-opt"])},
-        remote=None,
-    )
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, None, build_host)
+        mock_run.assert_called_with(
+            ["nix-copy-closure", "--from", "user@build.host", closure],
+            extra_env={
+                "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-opt"])
+            },
+        )
 
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-target-opt")
-    n.copy_closure(closure, target_host, build_host)
-    mock_run.assert_called_with(
-        ["nix-copy-closure", "--to", "user@target.host", closure],
-        remote=build_host,
-        extra_env={"NIX_SSHOPTS": "--ssh build-target-opt"},
-    )
+    monkeypatch.setattr(n, "WITH_NIX_2_18", True)
+    extra_env = {
+        "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-target-opt"])
+    }
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, target_host, build_host)
+        mock_run.assert_called_with(
+            [
+                "nix",
+                "copy",
+                "--from",
+                "ssh://user@build.host",
+                "--to",
+                "ssh://user@target.host",
+                closure,
+            ],
+            extra_env=extra_env,
+        )
+
+    monkeypatch.setattr(n, "WITH_NIX_2_18", False)
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, target_host, build_host)
+        mock_run.assert_has_calls(
+            [
+                call(
+                    ["nix-copy-closure", "--from", "user@build.host", closure],
+                    extra_env=extra_env,
+                ),
+                call(
+                    ["nix-copy-closure", "--to", "user@target.host", closure],
+                    extra_env=extra_env,
+                ),
+            ]
+        )
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
