@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -17,18 +18,24 @@ buildGoModule rec {
 
   vendorHash = "sha256-D4TJ8bIahv05cE6gvF6LmcU2RzV2krjtU8t8wD6R/lY=";
 
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
   ldflags = [
     "-s"
     "-w"
     "-X=github.com/lima-vm/sshocker/pkg/version.Version=${version}"
   ];
 
+  doInstallCheck = true;
+
+  versionCheckProgramArg = [ "--version" ];
+
   meta = with lib; {
     description = "Tool for SSH, reverse sshfs and port forwarder";
-    mainProgram = "sshocker";
     homepage = "https://github.com/lima-vm/sshocker";
     changelog = "https://github.com/lima-vm/sshocker/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = with maintainers; [ fab ];
+    mainProgram = "sshocker";
   };
 }
