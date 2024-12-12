@@ -1,5 +1,5 @@
 { lib, stdenv, makeWrapper, buildEnv
-, bash, breezy, coreutils, cvs, findutils, gawk, git, git-lfs, gnused, mercurial, nix, subversion
+, bash, breezy, coreutils, cvs, findutils, gawk, git, git-lfs, gnused, mercurial, lix, subversion
 }:
 
 let mkPrefetchScript = tool: src: deps:
@@ -15,7 +15,7 @@ let mkPrefetchScript = tool: src: deps:
     installPhase = ''
       install -vD ${src} $out/bin/$name;
       wrapProgram $out/bin/$name \
-        --prefix PATH : ${lib.makeBinPath (deps ++ [ gnused nix ])} \
+        --prefix PATH : ${lib.makeBinPath (deps ++ [ gnused lix ])} \
         --set HOME /homeless-shelter
     '';
 
