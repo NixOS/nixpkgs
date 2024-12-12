@@ -46,11 +46,11 @@ stdenv.mkDerivation rec {
     ))
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Time games of over-the-board chess";
     homepage = "https://gitlab.gnome.org/World/chess-clock";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "chess-clock";
-    maintainers = with maintainers; [ michaelgrahamevans ] ++ lib.teams.gnome-circle.members;
+    maintainers = lib.teams.gnome-circle.members;
   };
 }

@@ -37,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     libportal
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/cassidyjames/clairvoyant/releases/tag/${finalAttrs.version}";
     description = "Ask questions, get psychic answers";
     homepage = "https://github.com/cassidyjames/clairvoyant";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "com.github.cassidyjames.clairvoyant";
-    maintainers = with maintainers; [ michaelgrahamevans ] ++ lib.teams.gnome-circle.members;
+    maintainers = lib.teams.gnome-circle.members;
   };
 })
