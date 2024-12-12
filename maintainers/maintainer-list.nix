@@ -15895,7 +15895,7 @@
   nikolaizombie1 = {
     name = "Fabio J. Matos Nieves";
     email = "fabio.matos999@gmail.com";
-    githubId = "70602908";
+    githubId = 70602908;
     github = "nikolaizombie1";
   };
   nikstur = {
