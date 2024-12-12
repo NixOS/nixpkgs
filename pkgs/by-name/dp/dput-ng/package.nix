@@ -30,7 +30,7 @@ python3.pkgs.buildPythonApplication {
     sphinx
     coverage
     xdg
-    debian
+    python-debian
   ];
 
   postInstall = ''
