@@ -19,7 +19,7 @@ let
     in
     makeTest {
       name = "postgresql-wal-receiver-${package.name}";
-      meta.maintainers = with lib.maintainers; [ pacien ];
+      meta.maintainers = with lib.maintainers; [ euxane ];
 
       nodes.machine =
         { ... }:

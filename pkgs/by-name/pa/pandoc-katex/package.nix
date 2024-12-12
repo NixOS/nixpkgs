@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     ];
     maintainers = with maintainers; [
       minijackson
-      pacien
+      euxane
     ];
     mainProgram = "pandoc-katex";
   };

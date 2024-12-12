@@ -44,6 +44,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/ploomber/core";
     changelog = "https://github.com/ploomber/core/blob/${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ pacien ];
+    maintainers = with maintainers; [ euxane ];
   };
 }
