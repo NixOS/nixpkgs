@@ -112,7 +112,7 @@ stdenv.mkDerivation rec {
     cd -
 
     # Test tfjs returns exit code 0
-    ${nodejs}/bin/node src/test_libtensorflow.js
+    node src/test_libtensorflow.js
     cd ..
   '';
   installPhase = ''
