@@ -91,7 +91,7 @@ in
       ];
       substitutions = {
         inherit (rust.envVars) rustTargetPlatformSpec setEnv;
-        pythonInterpreter = builtins.elemAt (builtins.match "([0-9]+\.[0-9]+)\.*" python3.version) 0;
+        pythonInterpreter = lib.versions.majorMinor pythonOnBuildForHost.version;
       };
     } ./maturin-build-hook.sh) {};
 
