@@ -176,6 +176,5 @@ buildPythonApplication rec {
     changelog = "https://github.com/buildbot/buildbot/releases/tag/v${version}";
     maintainers = teams.buildbot.members;
     license = licenses.gpl2Only;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

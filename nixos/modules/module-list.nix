@@ -395,6 +395,7 @@
   ./services/audio/jack.nix
   ./services/audio/jmusicbot.nix
   ./services/audio/liquidsoap.nix
+  ./services/audio/marytts.nix
   ./services/audio/mopidy.nix
   ./services/audio/mpd.nix
   ./services/audio/mpdscribble.nix

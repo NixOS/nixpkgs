@@ -30,7 +30,7 @@ buildHomeAssistantComponent {
 
   dontBuild = true;
 
-  propagatedBuildInputs = [
+  dependencies = [
     govee-led-wez
   ];
 

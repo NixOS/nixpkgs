@@ -17,7 +17,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-O1NxT7u27xLydPqEqH72laU0tlYVrMPo0TwWIVNJ+0Q=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     omnikinverter
   ];
 

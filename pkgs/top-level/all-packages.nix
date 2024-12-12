@@ -11563,8 +11563,10 @@ with pkgs;
     inherit (home-assistant.python.pkgs) callPackage;
     directory = ../servers/home-assistant/custom-components;
   });
-  home-assistant-custom-lovelace-modules = lib.recurseIntoAttrs
-    (callPackage ../servers/home-assistant/custom-lovelace-modules {});
+  home-assistant-custom-lovelace-modules = lib.recurseIntoAttrs (lib.packagesFromDirectoryRecursive {
+    inherit callPackage;
+    directory = ../servers/home-assistant/custom-lovelace-modules;
+  });
 
   home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
 

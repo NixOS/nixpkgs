@@ -17,7 +17,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-PY3udPgvsaXdDRh4+NQmVlqhERswcMpaJTq5azaUFf4=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     beautifulsoup4
   ];
 

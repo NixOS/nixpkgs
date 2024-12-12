@@ -4856,6 +4856,8 @@ self: super: with self; {
 
   glyphtools = callPackage ../development/python-modules/glyphtools { };
 
+  fnllm = callPackage ../development/python-modules/fnllm { };
+
   foobot-async = callPackage ../development/python-modules/foobot-async { };
 
   foolscap = callPackage ../development/python-modules/foolscap { };
@@ -10511,6 +10513,8 @@ self: super: with self; {
   pyiskra = callPackage ../development/python-modules/pyiskra { };
 
   pyisy = callPackage ../development/python-modules/pyisy { };
+
+  pyituran = callPackage ../development/python-modules/pyituran { };
 
   pyixapi = callPackage ../development/python-modules/pyixapi { };
 
