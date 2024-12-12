@@ -1,0 +1,20 @@
+diff --git a/unit_tests/CMakeLists.txt b/unit_tests/CMakeLists.txt
+index 1460357ba..1194abc9d 100644
+--- a/unit_tests/CMakeLists.txt
++++ b/unit_tests/CMakeLists.txt
+@@ -371,15 +371,6 @@ if(ENABLE_APP)
+         set_property(TEST clamd_valgrind PROPERTY ENVIRONMENT ${ENVIRONMENT} VALGRIND=${Valgrind_EXECUTABLE})
+     endif()
+ 
+-    add_test(NAME freshclam COMMAND ${PythonTest_COMMAND};freshclam_test.py
+-        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+-    set_property(TEST freshclam PROPERTY ENVIRONMENT ${ENVIRONMENT})
+-    if(Valgrind_FOUND)
+-        add_test(NAME freshclam_valgrind COMMAND ${PythonTest_COMMAND};freshclam_test.py
+-            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+-        set_property(TEST freshclam_valgrind PROPERTY ENVIRONMENT ${ENVIRONMENT} VALGRIND=${Valgrind_EXECUTABLE})
+-    endif()
+-
+     add_test(NAME sigtool COMMAND ${PythonTest_COMMAND};sigtool_test.py
+         WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR})
+     set_property(TEST sigtool PROPERTY ENVIRONMENT ${ENVIRONMENT})

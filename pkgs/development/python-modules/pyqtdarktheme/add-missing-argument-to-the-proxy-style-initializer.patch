@@ -1,0 +1,25 @@
+From 816afb6a3a6a340ae2a2a06dc054dd8e65ff9d8f Mon Sep 17 00:00:00 2001
+From: Pavel Sobolev <paveloom@riseup.net>
+Date: Mon, 30 Oct 2023 20:42:31 +0300
+Subject: [PATCH] Add missing argument to the `proxy_style` initializer.
+
+---
+ qdarktheme/_proxy_style.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/qdarktheme/_proxy_style.py b/qdarktheme/_proxy_style.py
+index b1fb358..f04f01e 100644
+--- a/qdarktheme/_proxy_style.py
++++ b/qdarktheme/_proxy_style.py
+@@ -14,7 +14,7 @@ class QDarkThemeStyle(QProxyStyle):
+
+     def __init__(self):
+         """Initialize style proxy."""
+-        super().__init__()
++        super().__init__(None)
+
+     def standardIcon(  # noqa: N802
+         self, standard_icon: QStyle.StandardPixmap, option: QStyleOption | None, widget
+--
+2.42.0
+

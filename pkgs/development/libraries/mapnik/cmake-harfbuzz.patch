@@ -1,0 +1,26 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index ffb86d4ac..1775b986f 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -177,19 +177,8 @@ endif()
+ 
+ mapnik_find_package(Freetype REQUIRED)
+ 
+-# try to find harfbuzz with the native configuration and fallback to our "own" FindHarfBuzz
+-mapnik_find_package(harfbuzz CONFIG QUIET)
+-if(harfbuzz_FOUND)
+-    message(STATUS "Found harfbuzz native cmake")
+-    list(APPEND MAPNIK_OPTIONAL_LIBS harfbuzz::harfbuzz)
+-else()
+-    # Use pkg-config when harfbuzz is not found.
+-    # It might be possible that in future version harfbuzz could only be found via pkg-config.
+-    # harfbuzz related discussion: https://github.com/harfbuzz/harfbuzz/issues/2653
+-    message(STATUS "harfbuzz not found via cmake. Searching via pkg-config...")
+-    mapnik_pkg_check_modules(harfbuzz REQUIRED IMPORTED_TARGET harfbuzz>=${HARFBUZZ_MIN_VERSION})
+-    list(APPEND MAPNIK_OPTIONAL_LIBS PkgConfig::harfbuzz)
+-endif()
++pkg_check_modules(harfbuzz REQUIRED IMPORTED_TARGET harfbuzz)
++list(APPEND MAPNIK_OPTIONAL_LIBS PkgConfig::harfbuzz)
+ 
+ if(USE_EXTERNAL_MAPBOX_GEOMETRY)
+     # this is used to provide a way to specify include dirs with CACHE VARIABLES
