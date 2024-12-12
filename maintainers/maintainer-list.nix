@@ -6997,6 +6997,12 @@
     githubId = 57543709;
     name = "Chris O'Brien";
   };
+  euxane = {
+    name = "euxane";
+    email = "r9uhdi.nixpkgs@euxane.net";
+    github = "pacien";
+    githubId = 1449319;
+  };
   evalexpr = {
     name = "Jonathan Wilkins";
     email = "nixos@wilkins.tech";
@@ -17036,12 +17042,6 @@
     github = "Pablo1107";
     githubId = 17091659;
     name = "Pablo Andres Dealbera";
-  };
-  pacien = {
-    email = "b4gx3q.nixpkgs@pacien.net";
-    github = "pacien";
-    githubId = 1449319;
-    name = "Pacien Tran-Girard";
   };
   pacman99 = {
     email = "pachum99@gmail.com";
