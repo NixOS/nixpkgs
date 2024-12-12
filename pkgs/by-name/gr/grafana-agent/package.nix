@@ -17,21 +17,21 @@
 # FIXME: unpin when fixed upstream
 buildGo122Module rec {
   pname = "grafana-agent";
-  version = "0.43.3";
+  version = "0.43.4";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = "agent";
     rev = "v${version}";
-    hash = "sha256-10H3qcvjbmwKL06u+gCxfAdn1z6HaJ/8sWoVa2/ojnA=";
+    hash = "sha256-VmGxe2bwp7It1Po+6kLia952PcT2MIg60qp3V/uRvUM=";
   };
 
-  vendorHash = "sha256-NtFdrdDnuLT5CSax81smNnZxe+I9OouwVyIANyTNzF8=";
+  vendorHash = "sha256-aFGxRw0l56tO3NxpzAKKj8fl4Uj4tSVWqCK3YcZjjMc=";
   proxyVendor = true; # darwin/linux hash mismatch
 
   frontendYarnOfflineCache = fetchYarnDeps {
     yarnLock = src + "/internal/web/ui/yarn.lock";
-    hash = "sha256-bnJL7W7VfJIrJKvRt9Q6kdEyjLH/IJoCi0TENxz7SUE=";
+    hash = "sha256-kThqcjQ7qdSSs6bItSfLSW1WXpEYEA9BSLmyRfeCLyw=";
   };
 
   ldflags = let

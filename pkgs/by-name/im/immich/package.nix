@@ -197,6 +197,10 @@ buildNpmPackage' {
     npm config delete cache
     npm prune --omit=dev
 
+    # remove build artifacts that bloat the closure
+    rm -r node_modules/bcrypt/{build-tmp-napi-v3,node_modules/node-addon-api,src,test}
+    rm -r node_modules/msgpackr-extract/build
+
     mkdir -p $out/build
     mv package.json package-lock.json node_modules dist resources $out/
     ln -s ${web} $out/build/www

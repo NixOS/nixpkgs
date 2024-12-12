@@ -1,14 +1,21 @@
 {
   lib,
+  stdenv,
+  callPackage,
   installShellFiles,
   mkShell,
   nix,
+  nixosTests,
   python3,
   python3Packages,
   runCommand,
   scdoc,
   withNgSuffix ? true,
+  withReexec ? false,
   withShellFiles ? true,
+  # Very long tmp dirs lead to "too long for Unix domain socket"
+  # SSH ControlPath errors. Especially macOS sets long TMPDIR paths.
+  withTmpdir ? if stdenv.hostPlatform.isDarwin then "/tmp" else null,
 }:
 let
   executable = if withNgSuffix then "nixos-rebuild-ng" else "nixos-rebuild";
@@ -48,6 +55,7 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     substituteInPlace nixos_rebuild/__init__.py \
       --subst-var-by executable ${executable} \
+      --subst-var-by withReexec ${lib.boolToString withReexec} \
       --subst-var-by withShellFiles ${lib.boolToString withShellFiles}
 
     substituteInPlace pyproject.toml \
@@ -68,6 +76,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   pytestFlagsArray = [ "-vv" ];
+
+  makeWrapperArgs = lib.optionals (withTmpdir != null) [
+    "--set TMPDIR ${withTmpdir}"
+  ];
 
   passthru =
     let
@@ -90,20 +102,28 @@ python3Packages.buildPythonApplication rec {
         '';
       };
 
-      # NOTE: this is a passthru test rather than a build-time test because we
-      # want to keep the build closures small
-      tests.ci = runCommand "${pname}-ci" { nativeBuildInputs = [ python-with-pkgs ]; } ''
-        export RUFF_CACHE_DIR="$(mktemp -d)"
+      tests = {
+        inherit (nixosTests)
+          nixos-rebuild-install-bootloader-ng
+          nixos-rebuild-specialisations-ng
+          nixos-rebuild-target-host-ng
+          ;
+        repl = callPackage ./tests/repl.nix { };
+        # NOTE: this is a passthru test rather than a build-time test because we
+        # want to keep the build closures small
+        linters = runCommand "${pname}-linters" { nativeBuildInputs = [ python-with-pkgs ]; } ''
+          export RUFF_CACHE_DIR="$(mktemp -d)"
 
-        echo -e "\x1b[32m## run mypy\x1b[0m"
-        mypy ${src}
-        echo -e "\x1b[32m## run ruff\x1b[0m"
-        ruff check ${src}
-        echo -e "\x1b[32m## run ruff format\x1b[0m"
-        ruff format --check ${src}
+          echo -e "\x1b[32m## run mypy\x1b[0m"
+          mypy ${src}
+          echo -e "\x1b[32m## run ruff\x1b[0m"
+          ruff check ${src}
+          echo -e "\x1b[32m## run ruff format\x1b[0m"
+          ruff format --check ${src}
 
-        touch $out
-      '';
+          touch $out
+        '';
+      };
     };
 
   meta = {

@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "wishlist";
-  version = "0.15.0";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "charmbracelet";
     repo = "wishlist";
     rev = "v${version}";
-    sha256 = "sha256-LozGwgm/LGOzCa+zKC77NX40etzT4PDeuw3yh1QMmMY=";
+    sha256 = "sha256-53fojA+gdvpSVNjx6QncH16F8/x+lpY5SkNs7obW2XQ=";
   };
 
-  vendorHash = "sha256-QdMS1C8I3Ul5q6HQOw7+alinPo0yIZ4s7yIxQ/poEik=";
+  vendorHash = "sha256-VB515IK9ZJYC08EmShOPbLKU0fHZ16Dw+c5hiZ7mW8Q=";
 
   doCheck = false;
 

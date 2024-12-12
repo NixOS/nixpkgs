@@ -44,6 +44,9 @@ an attempt of the rewrite.
 
 ## How to use
 
+If you want to use `nixos-rebuild-ng` without replacing `nixos-rebuild`, add to
+your NixOS configuration:
+
 ```nix
 { pkgs, ... }:
 {
@@ -53,16 +56,29 @@ an attempt of the rewrite.
 
 And use `nixos-rebuild-ng` instead of `nixos-rebuild`.
 
+If you want to completely replace `nixos-rebuild` with `nixos-rebuild-ng`, add
+to your NixOS configuration:
+
+```nix
+{ ... }:
+{
+  system.rebuild.enableNg = true;
+}
+```
+
+This will set `config.system.build.nixos-rebuild` to `nixos-rebuild-ng`, so
+all tools that expect it in that location should work.
+
 ## Development
 
 Run:
 
 ```console
-nix-build -A nixos-rebuild-ng.tests.ci
+nix-build -A nixos-rebuild-ng -A nixos-rebuild-ng.tests.linters
 ```
 
-The command above will run the unit tests and linters, and also check if the
-code is formatted. However, sometimes is more convenient to run just a few
+The command above will build, run the unit tests and linters, and also check if
+the code is formatted. However, sometimes is more convenient to run just a few
 tests to debug, in this case you can run:
 
 ```console
@@ -85,32 +101,14 @@ ruff check --fix .
 ruff format .
 ```
 
-## Current caveats
+## Caveats
 
-- For now we will install it in `nixos-rebuild-ng` path by default, to avoid
-  conflicting with the current `nixos-rebuild`. This means you can keep both in
-  your system at the same time, but it also means that a few things like bash
-  completion are broken right now (since it looks at `nixos-rebuild` binary)
 - Bugs in the profile manipulation can cause corruption of your profile that
   may be difficult to fix, so right now I only recommend using
   `nixos-rebuild-ng` if you are testing in a VM or in a filesystem with
   snapshots like btrfs or ZFS. Those bugs are unlikely to be unfixable but the
   errors can be difficult to understand. If you want to go anyway,
   `nix-collect-garbage -d` and `nix store repair` are your friends
-
-## TODO
-
-- [x] Remote host/builders (via SSH)
-- [x] Improve nix arguments handling (e.g.: `nixFlags` vs `copyFlags` in the
-  old `nixos-rebuild`)
-- [x] `_NIXOS_REBUILD_REEXEC`
-- [ ] Port `nixos-rebuild.passthru.tests`
-- [ ] Change module system to allow easier opt-in, like
-  `system.switch.enableNg` for `switch-to-configuration-ng`
-- [x] Improve documentation
-- [x] `nixos-rebuild repl`
-- [x] Generate tab completion via [`shtab`](https://docs.iterative.ai/shtab/)
-- [x] Reduce build closure
 
 ## TODON'T
 

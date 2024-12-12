@@ -89,7 +89,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Manage your bibliographies using the BibTeX format";
     homepage = "https://apps.gnome.org/app/org.gnome.World.Citations";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ benediktbroich ];
+    maintainers = with maintainers; [ benediktbroich ] ++ lib.teams.gnome-circle.members;
     platforms = platforms.unix;
     mainProgram = "citations";
   };

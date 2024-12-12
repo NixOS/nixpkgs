@@ -361,6 +361,7 @@ pkgs/development/python-modules/buildcatrust/ @ajs124 @lukegb @mweinelt
 # nim
 /doc/languages-frameworks/nim.section.md  @ehmry
 /pkgs/build-support/build-nim-package.nix @ehmry
+/pkgs/build-support/build-nim-sbom.nix    @ehmry
 /pkgs/top-level/nim-overrides.nix         @ehmry
 
 # terraform providers
