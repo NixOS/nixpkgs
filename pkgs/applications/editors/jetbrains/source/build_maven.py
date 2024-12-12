@@ -41,11 +41,8 @@ def add_libraries(root_path: str, hashes: list[dict[str, str]], projects_to_proc
         add_entries(sources, targets, hashes)
 
     modules_xml = parse(open(root_path+"/modules.xml").read())
-    for entry in modules_xml["project"]["component"]:
-        if entry["@name"] != "ProjectModuleManager":
-            continue
-        for module in entry["modules"]["module"]:
-            projects_to_process.append(module["@filepath"])
+    for module in modules_xml["project"]["component"]["modules"]["module"]:
+        projects_to_process.append(module["@filepath"])
 
 
 def add_iml(path: str, hashes: list[dict[str, str]], projects_to_process: list[str]):
