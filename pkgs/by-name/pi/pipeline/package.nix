@@ -18,6 +18,7 @@
   blueprint-compiler,
   sqlite,
   clapper,
+  gettext,
   gst_all_1,
   gtuber,
   glib-networking,
@@ -69,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     gst_all_1.gst-plugins-base
     (gst_all_1.gst-plugins-good.override { gtkSupport = true; })
     gst_all_1.gst-plugins-bad
+    gettext
     gtuber
     glib-networking # For GIO_EXTRA_MODULES. Fixes "TLS support is not available"
   ];
