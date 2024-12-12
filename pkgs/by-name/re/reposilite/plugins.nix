@@ -40,10 +40,10 @@ makeScopeWithSplicing' {
       ) { };
     }
     // builtins.mapAttrs (name: hash: self.fetchPlugin { inherit name hash; }) {
-      checksum = "sha256-ocvjjcrZW8I7hMdWiUn36XEbx3TqNYi0okemo9zWelA=";
-      groovy = "sha256-2NSTaivUAUMnAPHNqTNHWGqA8AF8jU9CE2ab9VGIFLo=";
-      migration = "sha256-+BfbLEy2gc81HVCyI2JREIIYMirKwPV48shMBAMbWlU=";
-      prometheus = "sha256-aukYUIS6S37ut9h+gO/JLrBUX/6RND5BhLqsrArxSUo=";
-      swagger = "sha256-zD2ihVEfQeH3S1df3o2gF19kGIODW2yIRWCGbk4npJY=";
+      checksum = "sha256-k9JWyDj7wMB8kLihqR7gB5N//NKxTrDWoFQ4Jt422I0=";
+      groovy = "sha256-iwlLMHh9A6WIHYo4sN2TIISif9pWbe6i1Hofd4D3BsI=";
+      migration = "sha256-0p4DQeaCH/i2e8MESPIbOgaSPF0pHIbs1rXiZcSCJso=";
+      prometheus = "sha256-bCJvTQPXW3mydOqz5Tug6MyIEonrRiJ9NkIYy9OviDc=";
+      swagger = "sha256-akKRMibzA4UtGpwcHvmjXKPLzpA2pcGPpaBkDsdvcK0=";
     };
 }
