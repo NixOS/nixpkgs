@@ -169,7 +169,7 @@ let
           inherit (sbom) components;
         });
 
-      passthru = {
+      passthru = passthru // {
         inherit sbom properties nimBin;
       };
     };
