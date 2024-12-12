@@ -7,17 +7,18 @@
   pkg-config,
   curlWithGnuTls,
   libev,
+  libunwind,
   sqlite,
 }:
 
 stdenv.mkDerivation rec {
   pname = "clboss";
-  version = "0.14.0";
+  version = "0.14.1";
 
   # The release tarball includes the pre-generated file `commit_hash.h` that is required for building
   src = fetchzip {
     url = "https://github.com/ZmnSCPxj/clboss/releases/download/v${version}/clboss-v${version}.tar.gz";
-    hash = "sha256-Qp8br4ZxiqaxFZ6Tb+wFpqp2APmnU9QdNkM8MyGAtrw=";
+    hash = "sha256-JMbNHEI0j78LJYsBZ/Z4qvEdRqgQtWG1HlGW3SBXUCg=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +26,7 @@ stdenv.mkDerivation rec {
     autoreconfHook
     pkg-config
     libev
+    libunwind
     curlWithGnuTls
     sqlite
   ];
