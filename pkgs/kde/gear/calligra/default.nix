@@ -1,9 +1,9 @@
 {
   mkKdeDerivation,
   lib,
-  fetchurl,
   boost,
   eigen,
+  gsl,
   imath,
   libetonyek,
   libgit2,
@@ -19,20 +19,17 @@
   poppler,
   qtkeychain,
   qtsvg,
+  qtwebengine,
+  shared-mime-info,
 }:
 
-mkKdeDerivation rec {
+mkKdeDerivation {
   pname = "calligra";
-  version = "4.0.1";
-
-  src = fetchurl {
-    url = "mirror://kde/stable/calligra/calligra-${version}.tar.xz";
-    hash = "sha256-1AH15z9PG9wLNUjqGlCwrBd4we3jCmozWUTtf72I2V8=";
-  };
 
   extraBuildInputs = [
     boost
     eigen
+    gsl
     imath
     libetonyek
     libgit2
@@ -46,11 +43,13 @@ mkKdeDerivation rec {
     poppler
     qtkeychain
     qtsvg
+    qtwebengine
   ];
 
   extraNativeBuildInputs = [
     perl
     pkg-config
+    shared-mime-info
   ];
 
   # Recommended by the upstream packaging instructions. RELEASE_BUILD disables
@@ -66,10 +65,6 @@ mkKdeDerivation rec {
       ebzzry
       zraexy
       sigmasquadron
-    ];
-    license = with lib.licenses; [
-      gpl2
-      lgpl2
     ];
     mainProgram = "calligralauncher";
   };
