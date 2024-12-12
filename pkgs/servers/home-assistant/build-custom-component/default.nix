@@ -42,7 +42,6 @@ home-assistant.python.pkgs.buildPythonPackage (
     nativeCheckInputs =
       with home-assistant.python.pkgs;
       [
-        importlib-metadata
         manifestRequirementsCheckHook
         packaging
       ]
