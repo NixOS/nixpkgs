@@ -30,18 +30,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pipeline";
-  version = "2.0.3";
+  version = "2.1.0";
 
   src = fetchFromGitLab {
     owner = "schmiddi-on-mobile";
     repo = "pipeline";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-1HNhcWNJsWik58Ho3+y4cHRRpHDug1zfumrMZA836DI=";
+    hash = "sha256-jAwVJjRU/Fq386XW4eQhiAe4IQUtQuYp35J2KSUNogY=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) src;
-    hash = "sha256-IwZu+ho4N74VCR0TFEGmogRbr2OdAtvH396nBHpUx7s=";
+    hash = "sha256-VGWt7t5r0cDrO2WXpBqYM15HDfSRQ2MbSUWzdfU9JjA=";
   };
 
   nativeBuildInputs = [
