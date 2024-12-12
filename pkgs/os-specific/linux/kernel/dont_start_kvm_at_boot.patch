@@ -1,0 +1,13 @@
+diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+index de2c11dae231..00ea4b86ad24 100644
+--- a/virt/kvm/kvm_main.c
++++ b/virt/kvm/kvm_main.c
+@@ -5428,7 +5428,7 @@ static struct miscdevice kvm_dev = {
+ };
+ 
+ #ifdef CONFIG_KVM_GENERIC_HARDWARE_ENABLING
+-static bool enable_virt_at_load = true;
++static bool enable_virt_at_load = false;
+ module_param(enable_virt_at_load, bool, 0444);
+ 
+ __visible bool kvm_rebooting;

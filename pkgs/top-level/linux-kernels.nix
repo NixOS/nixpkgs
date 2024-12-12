@@ -194,6 +194,7 @@ in {
       kernelPatches = [
         kernelPatches.bridge_stp_helper
         kernelPatches.request_key_helper
+        kernelPatches.dont_start_kvm_at_boot
       ];
     };
 

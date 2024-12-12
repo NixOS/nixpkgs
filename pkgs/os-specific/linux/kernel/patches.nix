@@ -23,6 +23,11 @@
     patch = ./bridge-stp-helper.patch;
   };
 
+  dont_start_kvm_at_boot = {
+    name = "dont_start_kvm_at_boot";
+    patch = ./dont_start_kvm_at_boot.patch;
+  };
+
   # Reverts the buggy commit causing https://bugzilla.kernel.org/show_bug.cgi?id=217802
   dell_xps_regression = {
     name = "dell_xps_regression";
