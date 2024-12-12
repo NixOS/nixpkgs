@@ -45,7 +45,7 @@ let
 
   unvanquished-binary-deps = stdenv.mkDerivation rec {
     # DISCLAIMER: this is selected binary crap from the NaCl SDK
-    name = "unvanquished-binary-deps";
+    pname = "unvanquished-binary-deps";
     version = binary-deps-version;
 
     src = fetchzip {
@@ -95,7 +95,8 @@ let
   };
 
   fhsEnv = buildFHSEnv {
-    name = "unvanquished-fhs-wrapper";
+    pname = "unvanquished-fhs-wrapper";
+    inherit version;
 
     targetPkgs = pkgs: [ libstdcpp-preload-for-unvanquished-nacl ];
   };

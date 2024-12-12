@@ -4413,8 +4413,6 @@ with pkgs;
 
   mtr-gui = callPackage ../tools/networking/mtr { withGtk = true; };
 
-  multipass = qt6Packages.callPackage ../tools/virtualization/multipass { };
-
   multitran = recurseIntoAttrs (let callPackage = newScope pkgs.multitran; in {
     multitrandata = callPackage ../tools/text/multitran/data { };
 
