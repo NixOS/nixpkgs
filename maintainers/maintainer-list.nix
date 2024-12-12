@@ -7604,6 +7604,12 @@
     github = "frectonz";
     githubId = 53809656;
   };
+  fred441a = {
+    name = "Frederik Hansen";
+    email = "frederik@altofte.dk";
+    github = "fred441a";
+    githubId = 10808098;
+  };
   fredeb = {
     email = "im@fredeb.dev";
     github = "FredeEB";
