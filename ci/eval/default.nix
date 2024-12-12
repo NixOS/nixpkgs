@@ -49,7 +49,7 @@ let
         export NIX_STATE_DIR=$(mktemp -d)
         mkdir $out
         export GC_INITIAL_HEAP_SIZE=4g
-        command time -v \
+        command time -f "Attribute eval done [%MKB max resident, %Es elapsed] %C" \
           nix-instantiate --eval --strict --json --show-trace \
             "$src/pkgs/top-level/release-attrpaths-superset.nix" \
             -A paths \
