@@ -22,6 +22,10 @@ home-assistant.python.pkgs.buildPythonPackage (
     pname = "${owner}/${domain}";
     inherit version format;
 
+    buildPhase = ''
+      true
+    '';
+
     installPhase = ''
       runHook preInstall
 
@@ -34,7 +38,9 @@ home-assistant.python.pkgs.buildPythonPackage (
       fi
 
       # optionally copy sentences, if they exist
-      cp -r ./custom_sentences/ $out/ || true
+      if [[ -d ./custom_sentences ]]; then
+        cp -r ./custom_sentences/ $out/
+      fi
 
       runHook postInstall
     '';
