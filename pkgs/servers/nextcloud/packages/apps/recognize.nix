@@ -3,7 +3,7 @@
   fetchurl,
   lib,
   nodejs,
-  python311,
+  python3,
   util-linux,
   ffmpeg,
 
@@ -99,7 +99,7 @@ stdenv.mkDerivation rec {
     nodejs
     nodejs.pkgs.node-pre-gyp
     nodejs.pkgs.node-gyp
-    python311
+    python3
     util-linux
   ];
   buildPhase = lib.optionalString useLibTensorflow ''
