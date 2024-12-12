@@ -94,5 +94,6 @@ stdenv.mkDerivation rec {
     ];
     platforms = [ "i686-linux" ];
     maintainers = with lib.maintainers; [ onny ];
+    mainProgram = "acroread";
   };
 }
