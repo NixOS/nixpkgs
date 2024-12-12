@@ -2,7 +2,7 @@
 
 [Glycin](https://gitlab.gnome.org/GNOME/glycin) is a library for sandboxed and extendable image loading.
 
-For most applications using it, individual image formats are loaded through binaries provided by `glycin-loaders`. The paths of these loaders must be injected into the environment, e.g. using [`wrapGAppsHook`](#ssec-gnome-hooks).
+[]{#libglycin-setup-hook} For most applications using it, individual image formats are loaded through binaries provided by `glycin-loaders`. The paths of these loaders must be injected into the environment, e.g. using [`wrapGAppsHook`](#ssec-gnome-hooks). `libglycin.setupHook` will do that.
 
 []{#libglycin-patch-vendor-hook} Additionally, for Rust projects `glycin` Rust crate itself requires a patch to become self-contained. `libglycin.patchVendorHook` will do that. This is not needed for projects using the ELF library from `libglycin` package.
 
@@ -27,11 +27,10 @@ rustPlatform.buildRustPackage {
     libglycin.patchVendorHook
   ];
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
-    )
-  '';
+  buildInputs = [
+    libglycin.setupHook
+    glycin-loaders
+  ];
 
   # ...
 }
@@ -42,3 +41,7 @@ rustPlatform.buildRustPackage {
 ### `glycinCargoDepsPath` {#glycin-cargo-deps-path}
 
 Path to a directory containing the `glycin` crate to patch. Defaults to the crate directory created by `cargoSetupHook`, or `./vendor/`.
+
+### `dontWrapGlycinLoaders` {#glycin-dont-wrap}
+
+Disable adding the Glycin loaders path `XDG_DATA_DIRS` with `wrapGAppsHook`.

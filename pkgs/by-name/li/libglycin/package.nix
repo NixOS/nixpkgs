@@ -38,6 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
     "devdoc"
   ];
 
+  setupHook = ./path-hook.sh;
+
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
