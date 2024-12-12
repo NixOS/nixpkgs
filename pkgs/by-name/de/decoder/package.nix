@@ -47,6 +47,6 @@ stdenv.mkDerivation rec {
     mainProgram = "decoder";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ Luflosi ];
+    maintainers = with maintainers; [ Luflosi ] ++ lib.teams.gnome-circle.members;
   };
 }

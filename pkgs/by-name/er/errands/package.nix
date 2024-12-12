@@ -65,9 +65,12 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/mrvladus/Errands";
     license = lib.licenses.mit;
     mainProgram = "errands";
-    maintainers = with lib.maintainers; [
-      luftmensch-luftmensch
-      sund3RRR
-    ];
+    maintainers =
+      with lib.maintainers;
+      [
+        luftmensch-luftmensch
+        sund3RRR
+      ]
+      ++ lib.teams.gnome-circle.members;
   };
 }

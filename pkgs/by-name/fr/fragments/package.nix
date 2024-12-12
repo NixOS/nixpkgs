@@ -70,10 +70,12 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/Fragments";
     description = "Easy to use BitTorrent client for the GNOME desktop environment";
-    maintainers = with maintainers; [
-      emilytrau
-      aleksana
-    ];
+    maintainers =
+      with maintainers;
+      [
+        emilytrau
+      ]
+      ++ lib.teams.gnome-circle.members;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "fragments";
