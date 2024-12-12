@@ -766,7 +766,7 @@
     }
   },
   "ungoogled-chromium": {
-    "version": "131.0.6778.108",
+    "version": "131.0.6778.139",
     "deps": {
       "depot_tools": {
         "rev": "20b9bdcace7ed561d6a75728c85373503473cb6b",
@@ -777,16 +777,16 @@
         "hash": "sha256-a8yCdBsl0nBMPS+pCLwrkAvQNP/THx/z/GySyOgx4Jk="
       },
       "ungoogled-patches": {
-        "rev": "131.0.6778.108-1",
-        "hash": "sha256-xFtxgZRbtG8qxvTyt++wa69dQvr61K29mTubkxoI1Y8="
+        "rev": "131.0.6778.139-1",
+        "hash": "sha256-6ehqckNitebDNEiY9qgbk8XMLADhpayxodpSFjlUDTA="
       },
       "npmHash": "sha256-b1l8SwjAfoColoa3zhTMPEF/rRuxzT3ATHE77rWU5EA="
     },
     "DEPS": {
       "src": {
         "url": "https://chromium.googlesource.com/chromium/src.git",
-        "rev": "3b014839fbc4fb688b2f5af512d6ce312ad208b1",
-        "hash": "sha256-ypzu3LveMFcOFm7+JlaERjzs3SK/n9+sfm5wOKB8/zw=",
+        "rev": "c35bbcbd7c2775a12a3f320e05ac0022939b1a8a",
+        "hash": "sha256-oJ4y9W51RMiUk40Uz8b3LJH0kMD5GMDG2V//Tng4/4A=",
         "recompress": true
       },
       "src/third_party/clang-format/script": {
@@ -1126,8 +1126,8 @@
       },
       "src/third_party/icu": {
         "url": "https://chromium.googlesource.com/chromium/deps/icu.git",
-        "rev": "4239b1559d11d4fa66c100543eda4161e060311e",
-        "hash": "sha256-7568UHNDOzyTCLy3TAwxZLUrKfB6A1yKA0wVZQJjKoI="
+        "rev": "ba7ed88cc5ffa428a82a0f787dd61031aa5ef4ca",
+        "hash": "sha256-WtCoxcbEkkZayB6kXdQEhZ7/ue+ka6cguhFbpeWUBJA="
       },
       "src/third_party/jsoncpp/source": {
         "url": "https://chromium.googlesource.com/external/github.com/open-source-parsers/jsoncpp.git",
@@ -1526,8 +1526,8 @@
       },
       "src/v8": {
         "url": "https://chromium.googlesource.com/v8/v8.git",
-        "rev": "e38771cb283b9689683c5ac0b5831dd89f8ec690",
-        "hash": "sha256-csSDnepYxil0R3PD/LVxW7JBcasOKG4l6q6vj8zHV/I="
+        "rev": "b97fcc24b3523da5e389d2a6d76857f134be09c5",
+        "hash": "sha256-5Es9Zot/DH+UKq3+aCgeQC+Llgj7/lmPXUYvar/hX7I="
       }
     }
   }
