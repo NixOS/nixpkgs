@@ -173,6 +173,17 @@ in {
       enable = lib.mkEnableOption "protontricks, a simple wrapper for running Winetricks commands for Proton-enabled games";
       package = lib.mkPackageOption pkgs "protontricks" { };
     };
+
+    # FIXME This and probably some other config of the steam module should be a
+    # generic setting in a config.gaming module rather than steam specifically
+    increaseMMapLimit = lib.mkEnableOption ''
+      a higher limit for memory maps. Some games may require this and Proton recommends setting this.
+
+      The limit gets set to (practically) infinite as the Proton documentation recommends:
+
+      https://github.com/ValveSoftware/Proton/wiki/Requirements#increasing-the-maximum-number-of-memory-map-areas-a-process-may-have
+    ''
+    // lib.mkOption { default = true; };
   };
 
   config = lib.mkIf cfg.enable {
@@ -227,6 +238,8 @@ in {
         allowedTCPPorts = [ 27040 ]; # Data transfers
       })
     ];
+
+    boot.kernel.sysctl."vm.max_map_count" = lib.mkIf cfg.increaseMMapLimit (lib.mkDefault 2147483642);
   };
 
   meta.maintainers = lib.teams.steam.members;
