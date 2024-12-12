@@ -14,6 +14,7 @@ let hb = mkCoqDerivation {
     { case = isEq "8.11";         out = "0.10.0"; }
   ] null;
   release."1.7.1".sha256  = "sha256-MCmOzMh/SBTFAoPbbIQ7aqd3hMcSMpAKpiZI7dbRaGs=";
+  release."1.7.0".sha256  = "sha256-WqSeuJhmqicJgXw/xGjGvbRzfyOK7rmkVRb6tPDTAZg=";
   release."1.6.0".sha256  = "sha256-E8s20veOuK96knVQ7rEDSt8VmbtYfPgItD0dTY/mckg=";
   release."1.5.0".sha256  = "sha256-Lia3o156Pbe8rDHOA1IniGYsG5/qzZkzDKdHecfmS+c=";
   release."1.4.0".sha256  = "sha256-tOed9UU3kMw6KWHJ5LVLUFEmzHx1ImutXQvZ0ldW9rw=";
