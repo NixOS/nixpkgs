@@ -56,7 +56,13 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
 
     copy_flags = argparse.ArgumentParser(add_help=False)
     copy_flags.add_argument(
-        "--use-substitutes", "--substitute-on-destination", "-s", action="store_true"
+        "--use-substitutes",
+        "--substitute-on-destination",
+        "-s",
+        action="store_true",
+        # `-s` is the destination since it has the same meaning in
+        # `nix-copy-closure` and `nix copy`
+        dest="s",
     )
 
     sub_parsers = {

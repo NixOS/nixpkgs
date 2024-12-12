@@ -1,5 +1,5 @@
 import logging
-from typing import TypeAlias, override
+from typing import TypeAlias, assert_never, override
 
 Args: TypeAlias = bool | str | list[str] | int | None
 
@@ -25,6 +25,8 @@ def dict_to_flags(d: dict[str, Args]) -> list[str]:
         match value:
             case None | False | 0 | []:
                 continue
+            case True if len(key) == 1:
+                flags.append(f"-{key}")
             case True:
                 flags.append(flag)
             case int():
@@ -36,4 +38,6 @@ def dict_to_flags(d: dict[str, Args]) -> list[str]:
                 flags.append(flag)
                 for v in value:
                     flags.append(v)
+            case _:
+                assert_never(value)
     return flags

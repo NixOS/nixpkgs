@@ -9,6 +9,7 @@ def test_dict_to_flags() -> None:
             "test_flag_3": "value",
             "test_flag_4": ["v1", "v2"],
             "test_flag_5": None,
+            "t": True,
             "verbose": 5,
         }
     )
@@ -19,6 +20,7 @@ def test_dict_to_flags() -> None:
         "--test-flag-4",
         "v1",
         "v2",
+        "-t",
         "-vvvvv",
     ]
     r2 = u.dict_to_flags({"verbose": 0, "empty_list": []})
