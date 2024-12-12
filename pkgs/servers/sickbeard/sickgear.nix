@@ -17,13 +17,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "sickgear";
-  version = "3.32.11";
+  version = "3.32.13";
 
   src = fetchFromGitHub {
     owner = "SickGear";
     repo = "SickGear";
     rev = "release_${version}";
-    hash = "sha256-hsjJhzQY9lhvreE547zgRTRBKdNOmvJWPsOLw02U7WY=";
+    hash = "sha256-eEkO1LjKeCzyMQL5lhH3GkQ+dutAjYlYE3dPADoXZEM=";
   };
 
   patches = [
