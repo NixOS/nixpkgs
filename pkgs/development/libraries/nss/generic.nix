@@ -210,7 +210,7 @@ stdenv.mkDerivation rec {
 
   passthru.tests =
     lib.optionalAttrs (lib.versionOlder version nss_latest.version) {
-      inherit (nixosTests) firefox-esr-115;
+      inherit (nixosTests) firefox-esr;
     }
     // lib.optionalAttrs (lib.versionAtLeast version nss_latest.version) {
       inherit (nixosTests) firefox;
