@@ -3,111 +3,118 @@
 # enabled in the initrd.  Its primary use is in the NixOS installation
 # CDs.
 
-{ pkgs, lib,... }:
+{ config, lib, pkgs, ... }:
 let
   platform = pkgs.stdenv.hostPlatform;
 in
 {
 
-  # The initrd has to contain any module that might be necessary for
-  # supporting the most important parts of HW like drives.
-  boot.initrd.availableKernelModules =
-    [ # SATA/PATA support.
-      "ahci"
+  options = {
+    hardware.enableAllHardware = lib.mkEnableOption "Enable support for most hardware";
+  };
 
-      "ata_piix"
+  config = lib.mkIf config.hardware.enableAllHardware {
 
-      "sata_inic162x" "sata_nv" "sata_promise" "sata_qstor"
-      "sata_sil" "sata_sil24" "sata_sis" "sata_svw" "sata_sx4"
-      "sata_uli" "sata_via" "sata_vsc"
+    # The initrd has to contain any module that might be necessary for
+    # supporting the most important parts of HW like drives.
+    boot.initrd.availableKernelModules =
+      [ # SATA/PATA support.
+        "ahci"
 
-      "pata_ali" "pata_amd" "pata_artop" "pata_atiixp" "pata_efar"
-      "pata_hpt366" "pata_hpt37x" "pata_hpt3x2n" "pata_hpt3x3"
-      "pata_it8213" "pata_it821x" "pata_jmicron" "pata_marvell"
-      "pata_mpiix" "pata_netcell" "pata_ns87410" "pata_oldpiix"
-      "pata_pcmcia" "pata_pdc2027x" "pata_qdi" "pata_rz1000"
-      "pata_serverworks" "pata_sil680" "pata_sis"
-      "pata_sl82c105" "pata_triflex" "pata_via"
-      "pata_winbond"
+        "ata_piix"
 
-      # SCSI support (incomplete).
-      "3w-9xxx" "3w-xxxx" "aic79xx" "aic7xxx" "arcmsr" "hpsa"
+        "sata_inic162x" "sata_nv" "sata_promise" "sata_qstor"
+        "sata_sil" "sata_sil24" "sata_sis" "sata_svw" "sata_sx4"
+        "sata_uli" "sata_via" "sata_vsc"
 
-      # USB support, especially for booting from USB CD-ROM
-      # drives.
-      "uas"
+        "pata_ali" "pata_amd" "pata_artop" "pata_atiixp" "pata_efar"
+        "pata_hpt366" "pata_hpt37x" "pata_hpt3x2n" "pata_hpt3x3"
+        "pata_it8213" "pata_it821x" "pata_jmicron" "pata_marvell"
+        "pata_mpiix" "pata_netcell" "pata_ns87410" "pata_oldpiix"
+        "pata_pcmcia" "pata_pdc2027x" "pata_qdi" "pata_rz1000"
+        "pata_serverworks" "pata_sil680" "pata_sis"
+        "pata_sl82c105" "pata_triflex" "pata_via"
+        "pata_winbond"
 
-      # SD cards.
-      "sdhci_pci"
+        # SCSI support (incomplete).
+        "3w-9xxx" "3w-xxxx" "aic79xx" "aic7xxx" "arcmsr" "hpsa"
 
-      # NVMe drives
-      "nvme"
+        # USB support, especially for booting from USB CD-ROM
+        # drives.
+        "uas"
 
-      # Firewire support.  Not tested.
-      "ohci1394" "sbp2"
+        # SD cards.
+        "sdhci_pci"
 
-      # Virtio (QEMU, KVM etc.) support.
-      "virtio_net" "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console"
+        # NVMe drives
+        "nvme"
 
-      # VMware support.
-      "mptspi" "vmxnet3" "vsock"
-    ] ++ lib.optional platform.isx86 "vmw_balloon"
-    ++ lib.optionals (pkgs.stdenv.hostPlatform.isi686 || pkgs.stdenv.hostPlatform.isx86_64) [
-      "vmw_vmci" "vmwgfx" "vmw_vsock_vmci_transport"
+        # Firewire support.  Not tested.
+        "ohci1394" "sbp2"
 
-      # Hyper-V support.
-      "hv_storvsc"
-    ] ++ lib.optionals pkgs.stdenv.hostPlatform.isAarch [
-      # Allwinner support
-      # Required for early KMS
-      "sun4i-drm"
-      "sun8i-mixer" # Audio, but required for kms
+        # Virtio (QEMU, KVM etc.) support.
+        "virtio_net" "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_scsi" "virtio_balloon" "virtio_console"
 
-      # PWM for the backlight
-      "pwm-sun4i"
+        # VMware support.
+        "mptspi" "vmxnet3" "vsock"
+      ] ++ lib.optional platform.isx86 "vmw_balloon"
+      ++ lib.optionals (pkgs.stdenv.hostPlatform.isi686 || pkgs.stdenv.hostPlatform.isx86_64) [
+        "vmw_vmci" "vmwgfx" "vmw_vsock_vmci_transport"
 
-      # Broadcom
-      "vc4"
-    ] ++ lib.optionals pkgs.stdenv.hostPlatform.isAarch64 [
-      # Most of the following falls into two categories:
-      #  - early KMS / early display
-      #  - early storage (e.g. USB) support
+        # Hyper-V support.
+        "hv_storvsc"
+      ] ++ lib.optionals pkgs.stdenv.hostPlatform.isAarch [
+        # Allwinner support
+        # Required for early KMS
+        "sun4i-drm"
+        "sun8i-mixer" # Audio, but required for kms
 
-      # Broadcom
+        # PWM for the backlight
+        "pwm-sun4i"
 
-      "pcie-brcmstb"
+        # Broadcom
+        "vc4"
+      ] ++ lib.optionals pkgs.stdenv.hostPlatform.isAarch64 [
+        # Most of the following falls into two categories:
+        #  - early KMS / early display
+        #  - early storage (e.g. USB) support
 
-      # Rockchip
-      "dw-hdmi"
-      "dw-mipi-dsi"
-      "rockchipdrm"
-      "rockchip-rga"
-      "phy-rockchip-pcie"
-      "pcie-rockchip-host"
+        # Broadcom
 
-      # Misc. uncategorized hardware
+        "pcie-brcmstb"
 
-      # Used for some platform's integrated displays
-      "panel-simple"
-      "pwm-bl"
+        # Rockchip
+        "dw-hdmi"
+        "dw-mipi-dsi"
+        "rockchipdrm"
+        "rockchip-rga"
+        "phy-rockchip-pcie"
+        "pcie-rockchip-host"
 
-      # Power supply drivers, some platforms need them for USB
-      "axp20x-ac-power"
-      "axp20x-battery"
-      "pinctrl-axp209"
-      "mp8859"
+        # Misc. uncategorized hardware
 
-      # USB drivers
-      "xhci-pci-renesas"
+        # Used for some platform's integrated displays
+        "panel-simple"
+        "pwm-bl"
 
-      # Reset controllers
-      "reset-raspberrypi" # Triggers USB chip firmware load.
+        # Power supply drivers, some platforms need them for USB
+        "axp20x-ac-power"
+        "axp20x-battery"
+        "pinctrl-axp209"
+        "mp8859"
 
-      # Misc "weak" dependencies
-      "analogix-dp"
-      "analogix-anx6345" # For DP or eDP (e.g. integrated display)
-    ];
+        # USB drivers
+        "xhci-pci-renesas"
 
-  # Include lots of firmware.
-  hardware.enableRedistributableFirmware = true;
+        # Reset controllers
+        "reset-raspberrypi" # Triggers USB chip firmware load.
+
+        # Misc "weak" dependencies
+        "analogix-dp"
+        "analogix-anx6345" # For DP or eDP (e.g. integrated display)
+      ];
+
+    # Include lots of firmware.
+    hardware.enableRedistributableFirmware = true;
+  };
 }
