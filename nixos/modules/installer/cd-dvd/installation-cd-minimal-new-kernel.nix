@@ -1,7 +1,8 @@
 { pkgs, ... }:
 
 {
-  imports = [ ./installation-cd-minimal.nix ];
-
-  boot.kernelPackages = pkgs.linuxPackages_latest;
+  imports = [
+    ../../profiles/new-kernel.nix
+    ./installation-cd-minimal.nix
+  ];
 }
