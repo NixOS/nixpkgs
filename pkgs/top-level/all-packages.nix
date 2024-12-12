@@ -12134,7 +12134,6 @@ with pkgs;
   tt-rss = callPackage ../servers/tt-rss { };
   inherit (callPackages ../servers/web-apps/matomo {})
     matomo
-    matomo_5
     matomo-beta;
 
   unpackerr = callPackage ../servers/unpackerr {
