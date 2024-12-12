@@ -13,20 +13,18 @@
 buildPythonPackage rec {
   pname = "deal-solver";
   version = "0.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "life4";
-    repo = pname;
+    repo = "deal-solver";
     rev = "refs/tags/${version}";
     hash = "sha256-DAOeQLFR/JED32uJSW7W9+Xx5f1Et05W8Fp+Vm7sfZo=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
   # z3 does not provide a dist-info, so python-runtime-deps-check will fail
   pythonRemoveDeps = [ "z3-solver" ];
@@ -40,7 +38,7 @@ buildPythonPackage rec {
       --replace "\"--cov-fail-under=100\"," ""
   '';
 
-  propagatedBuildInputs = [
+  dependencies = [
     z3-solver
     astroid
   ] ++ z3-solver.requiredPythonModules;
