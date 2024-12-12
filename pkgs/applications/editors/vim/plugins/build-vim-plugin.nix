@@ -20,6 +20,7 @@
       path ? ".",
       addonInfo ? null,
       meta ? { },
+      doCheck ? true,
       ...
     }@attrs:
     let
@@ -30,6 +31,7 @@
 
           __structuredAttrs = true;
           inherit
+            doCheck
             unpackPhase
             configurePhase
             buildPhase
