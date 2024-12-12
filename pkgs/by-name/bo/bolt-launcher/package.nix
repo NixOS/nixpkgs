@@ -162,7 +162,7 @@ let
   });
 in
 buildFHSEnv {
-  inherit (bolt) name version;
+  inherit (bolt) pname version;
 
   targetPkgs =
     pkgs:
@@ -198,7 +198,7 @@ buildFHSEnv {
     ln -s ${bolt}/share/icons/hicolor/256x256/apps/*.png $out/share/icons/hicolor/256x256/apps/
   '';
 
-  runScript = "${bolt.name}";
+  runScript = "${bolt.pname}";
 
   meta = {
     homepage = "https://github.com/Adamcake/Bolt";
@@ -209,6 +209,6 @@ buildFHSEnv {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ nezia ];
     platforms = lib.platforms.linux;
-    mainProgram = "${bolt.name}";
+    mainProgram = "${bolt.pname}";
   };
 }
