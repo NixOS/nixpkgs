@@ -64,10 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
 
-  nativeBuildInputs =
-    lib.optionals withMakeWrapper [ makeWrapper ]
+  nativeBuildInputs = [ bison flex pkg-config ]
+    ++ lib.optionals withMakeWrapper [ makeWrapper ]
     ++ lib.optionals withDNSTAP [ protobufc ]
-    ++ [ pkg-config flex ]
     ++ lib.optionals withPythonModule [ swig ];
 
   buildInputs = [ openssl nettle expat libevent ]
@@ -120,8 +119,6 @@ stdenv.mkDerivation (finalAttrs: {
   in ''
     sed -E '/CONFCMDLINE/ s;${storeDir}/[a-z0-9]{32}-;${storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-;g' -i config.h
   '';
-
-  nativeCheckInputs = [ bison ];
 
   doCheck = true;
 
