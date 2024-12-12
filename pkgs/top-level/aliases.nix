@@ -874,10 +874,10 @@ mapAliases {
       fonts.packages = [
         ...
         pkgs.nerd-fonts._0xproto
-        pkgs.nerd-fonts.droid_sans_mono
+        pkgs.nerd-fonts.droid-sans-mono
       ]
     or for all fonts
-      font.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts)
+      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts)
   ''; # Added 2024-11-09
   newlibCross = newlib; # Added 2024-09-06
   newlib-nanoCross = newlib-nano; # Added 2024-09-06
