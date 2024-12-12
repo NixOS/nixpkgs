@@ -2324,6 +2324,24 @@
   "setup-hook-gdk-pixbuf": [
     "index.html#setup-hook-gdk-pixbuf"
   ],
+  "glycin-loaders-hook": [
+    "index.html#glycin-loaders-hook"
+  ],
+  "glycin-loaders-hook-example-code-snippet": [
+    "index.html#glycin-loaders-hook-example-code-snippet"
+  ],
+  "glycin-loaders-hook-variables-controlling": [
+    "index.html#glycin-loaders-hook-variables-controlling"
+  ],
+  "glycin-cargo-deps-path": [
+    "index.html#glycin-cargo-deps-path"
+  ],
+  "dont-patch-glycin": [
+    "index.html#dont-patch-glycin"
+  ],
+  "dont-wrap-glycin": [
+    "index.html#dont-wrap-glycin"
+  ],
   "ghc": [
     "index.html#ghc"
   ],
@@ -3031,6 +3049,9 @@
   ],
   "ssec-gnome-hooks-gst-grl-plugins": [
     "index.html#ssec-gnome-hooks-gst-grl-plugins"
+  ],
+  "ssec-gnome-hooks-glycin-loaders": [
+    "index.html#ssec-gnome-hooks-glycin-loaders"
   ],
   "ssec-gnome-updating": [
     "index.html#ssec-gnome-updating"

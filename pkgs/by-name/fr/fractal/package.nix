@@ -51,14 +51,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./disable-debug.patch
   ];
 
-  # Dirty approach to add patches after cargoSetupPostUnpackHook
-  # We should eventually use a cargo vendor patch hook instead
-  preConfigure = ''
-    pushd ../$(stripHash $cargoDeps)/glycin-2.*
-      patch -p3 < ${glycin-loaders.passthru.glycinPathsPatch}
-    popd
-  '';
-
   nativeBuildInputs = [
     glib
     grass-sass
@@ -77,6 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     glib
+    glycin-loaders
     gtk4
     gtksourceview5
     lcms2
@@ -95,12 +88,6 @@ stdenv.mkDerivation (finalAttrs: {
     gst-plugins-good
     gst-plugins-rs
   ]);
-
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
-    )
-  '';
 
   passthru = {
     updateScript = nix-update-script { };

@@ -17,6 +17,7 @@ cmake.section.md
 desktop-file-utils.section.md
 gdk-pixbuf.section.md
 ghc.section.md
+glycin-loaders.section.md
 gnome.section.md
 haredo.section.md
 installShellFiles.section.md
