@@ -11,13 +11,13 @@
 
 mkDerivation rec {
   pname = "spotify-qt";
-  version = "3.11";
+  version = "3.12";
 
   src = fetchFromGitHub {
     owner = "kraxarn";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-Dm+ELHtYZGSzJSrERtvpuuV5cVZ9ah9WQ0iTTJqGqVg=";
+    sha256 = "sha256-j9g2fq12gsue0pc/fLoCAtDlwwlbCVJ65kxPiTJTqvk=";
   };
 
   buildInputs = [
