@@ -1,5 +1,6 @@
 import logging
 import os
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from importlib.resources import files
 from pathlib import Path
@@ -337,9 +338,8 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
     Will be formatted in a way that is expected by the output of
     `nixos-rebuild list-generations --json`.
     """
-    generations = get_generations(profile)
-    result = []
-    for generation in reversed(generations):
+
+    def get_generation_info(generation: Generation) -> GenerationJson:
         generation_path = (
             profile.path.parent / f"{profile.path.name}-{generation.id}-link"
         )
@@ -367,19 +367,24 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
             logger.debug("could not get configuration revision: %s", ex)
             configuration_revision = "Unknown"
 
-        result.append(
-            GenerationJson(
-                generation=generation.id,
-                date=generation.timestamp,
-                nixosVersion=nixos_version,
-                kernelVersion=kernel_version,
-                configurationRevision=configuration_revision,
-                specialisations=specialisations,
-                current=generation.current,
-            )
+        return GenerationJson(
+            generation=generation.id,
+            date=generation.timestamp,
+            nixosVersion=nixos_version,
+            kernelVersion=kernel_version,
+            configurationRevision=configuration_revision,
+            specialisations=specialisations,
+            current=generation.current,
         )
 
-    return result
+    # This can be surprisingly slow, especially with lots of generations,
+    # but it is basically IO work so we can run in parallel
+    with ThreadPoolExecutor() as executor:
+        return sorted(
+            executor.map(get_generation_info, get_generations(profile)),
+            key=lambda x: x["generation"],
+            reverse=True,
+        )
 
 
 def repl(attr: str, build_attr: BuildAttr, **nix_flags: Args) -> None:
