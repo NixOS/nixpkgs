@@ -12,7 +12,7 @@ from . import nix
 from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
 from .models import Action, BuildAttr, Flake, NRError, Profile
 from .process import Remote, cleanup_ssh
-from .utils import Args, LogFormatter
+from .utils import Args, LogFormatter, tabulate
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -448,8 +448,6 @@ def execute(argv: list[str]) -> None:
             if args.json:
                 print(json.dumps(generations, indent=2))
             else:
-                from tabulate import tabulate
-
                 headers = {
                     "generation": "Generation",
                     "date": "Build-date",
@@ -459,17 +457,7 @@ def execute(argv: list[str]) -> None:
                     "specialisations": "Specialisation",
                     "current": "Current",
                 }
-                # Not exactly the same format as legacy nixos-rebuild but close
-                # enough
-                table = tabulate(
-                    generations,
-                    headers=headers,
-                    tablefmt="plain",
-                    numalign="left",
-                    stralign="left",
-                    disable_numparse=True,
-                )
-                print(table)
+                print(tabulate(generations, headers=headers))
         case Action.REPL:
             if flake:
                 nix.repl_flake("toplevel", flake, **flake_build_flags)

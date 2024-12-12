@@ -35,10 +35,6 @@ python3Packages.buildPythonApplication rec {
     setuptools
   ];
 
-  dependencies = with python3Packages; [
-    tabulate
-  ];
-
   nativeBuildInputs = lib.optionals withShellFiles [
     installShellFiles
     python3Packages.shtab
@@ -94,9 +90,6 @@ python3Packages.buildPythonApplication rec {
           mypy
           pytest
           ruff
-          types-tabulate
-          # dependencies
-          tabulate
         ]
       );
     in
