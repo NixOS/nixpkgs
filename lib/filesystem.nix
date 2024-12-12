@@ -364,13 +364,14 @@ in
       ...
     }:
     let
+      inherit (lib) concatMapAttrs removeSuffix;
       inherit (lib.path) append;
       defaultPath = append directory "package.nix";
     in
     if pathExists defaultPath then
       # if `${directory}/package.nix` exists, call it directly
       callPackage defaultPath {}
-    else lib.concatMapAttrs (name: type:
+    else concatMapAttrs (name: type:
       # otherwise, for each directory entry
       let path = append directory name; in
       if type == "directory" then {
@@ -381,7 +382,7 @@ in
         };
       } else if type == "regular" && hasSuffix ".nix" name then {
         # call .nix files
-        "${lib.removeSuffix ".nix" name}" = callPackage path {};
+        "${removeSuffix ".nix" name}" = callPackage path {};
       } else if type == "regular" then {
         # ignore non-nix files
       } else throw ''
