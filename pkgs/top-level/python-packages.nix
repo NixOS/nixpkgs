@@ -461,6 +461,8 @@ self: super: with self; {
 
   aiotankerkoenig = callPackage ../development/python-modules/aiotankerkoenig { };
 
+  aiotarfile = callPackage ../development/python-modules/aiotarfile { };
+
   aiotractive = callPackage ../development/python-modules/aiotractive { };
 
   aiounifi = callPackage ../development/python-modules/aiounifi { };
