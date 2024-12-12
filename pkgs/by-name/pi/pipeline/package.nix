@@ -38,13 +38,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-1HNhcWNJsWik58Ho3+y4cHRRpHDug1zfumrMZA836DI=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "clapper-0.1.0" = "sha256-IFFqfSq2OpzfopQXSYfnJ68HGLY+rvcLqk7NTdDd+28=";
-      "piped-openapi-sdk-1.0.0" = "sha256-UFzMYYqCzO6KyJvjvK/hBJtz3FOuSC2gWjKp72WFEGk=";
-      "pipeline-api-0.1.0" = "sha256-h094ZAJOqX9QC1EUAtzIVztudhndXglkYLcFbH/mpqQ=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    hash = "sha256-IwZu+ho4N74VCR0TFEGmogRbr2OdAtvH396nBHpUx7s=";
   };
 
   nativeBuildInputs = [
