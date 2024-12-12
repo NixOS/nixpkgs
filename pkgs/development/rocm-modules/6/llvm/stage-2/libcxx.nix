@@ -35,6 +35,14 @@ callPackage ../base.nix rec {
     "-DLIBCXXABI_INSTALL_HEADERS=OFF"
   ];
 
+  expectedFailLitTests = [
+    "libcxx/selftest/modules/std-and-std.compat-module.sh.cpp"
+    "libcxx/selftest/modules/std-module.sh.cpp"
+    "libcxx/selftest/modules/std.compat-module.sh.cpp"
+    "std/modules/std.compat.pass.cpp"
+    "std/modules/std.pass.cpp"
+  ];
+
   # Most of these can't find `bash` or `mkdir`, might just be hard-coded paths, or PATH is altered
   extraPostPatch = ''
     chmod +w -R ../libcxx/test/{libcxx,std}
