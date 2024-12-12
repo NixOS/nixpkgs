@@ -138,6 +138,7 @@ let
             boozedog
           ]
           ++ teams.flyingcircus.members;
+        knownVulnerabilities = lib.optional (lib.versionOlder finalAttrs.version "5.0") "Support for Matomo 4 ended on 2024-12-19. It is recommended to upgrade to `matomo_5` instead.";
       };
     });
 in
