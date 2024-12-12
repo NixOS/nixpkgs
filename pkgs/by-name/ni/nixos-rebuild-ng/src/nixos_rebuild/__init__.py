@@ -82,6 +82,9 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     )
     main_parser.add_argument("--help", "-h", action="store_true", help="Show manpage")
     main_parser.add_argument(
+        "--debug", action="store_true", help="Enable debug logging"
+    )
+    main_parser.add_argument(
         "--file", "-f", help="Enable and build the NixOS system from the specified file"
     )
     main_parser.add_argument(
@@ -198,8 +201,8 @@ def parse_args(
     def parser_warn(msg: str) -> None:
         print(f"{parser.prog}: warning: {msg}", file=sys.stderr)
 
-    # This flag affects both nix and this script
-    if args.verbose:
+    # verbose affects both nix commands and this script, debug only this script
+    if args.verbose or args.debug:
         logger.setLevel(logging.DEBUG)
 
     # https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/nixos-rebuild/nixos-rebuild.sh#L56
