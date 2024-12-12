@@ -9,17 +9,16 @@ buildHomeAssistantComponent rec {
   domain = "alarmo";
   version = "1.10.4";
 
-  postInstall = ''
-    cd $out/custom_components/alarmo/frontend
-    ls . | grep -v dist | xargs rm -rf
-  '';
-
   src = fetchFromGitHub {
     owner = "nielsfaber";
     repo = "alarmo";
     rev = "refs/tags/v${version}";
     hash = "sha256-/hNzGPckLHUX0mrBF3ugAXstrOc1mWdati+nRJCwldc=";
   };
+
+  postPatch = ''
+    find ./custom_components/alarmo/frontend -mindepth 1 -maxdepth 1 ! -name "dist" -exec rm -rf {} \;
+  '';
 
   meta = with lib; {
     changelog = "https://github.com/nielsfaber/alarmo/releases/tag/v${version}";
