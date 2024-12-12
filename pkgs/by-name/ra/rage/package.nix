@@ -4,6 +4,9 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
+  pkg-config,
+  fuse,
+  fuse3,
   darwin,
 }:
 
@@ -20,13 +23,19 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Nhm6xn7Upc9m+sTU9Pw3NGdpvwHvb4JGN6CQuMykILo=";
 
+  buildFeatures = lib.lists.optional stdenv.hostPlatform.isUnix "mount";
+
   nativeBuildInputs = [
     installShellFiles
-  ];
+  ] ++ lib.lists.optional stdenv.hostPlatform.isUnix pkg-config;
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isUnix [
+      (if stdenv.hostPlatform.isDarwin then fuse else fuse3)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Foundation
+    ];
 
   # cargo test has an x86-only dependency
   doCheck = stdenv.hostPlatform.isx86;
