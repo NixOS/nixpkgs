@@ -9,7 +9,7 @@
   rustc,
   rustPlatform,
   libiconv,
-  python3
+  python3,
 }:
 
 buildPythonPackage rec {
