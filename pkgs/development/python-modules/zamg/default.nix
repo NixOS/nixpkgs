@@ -1,9 +1,13 @@
 {
   lib,
   aiohttp,
+  aresponses,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
+  pytestCheckHook,
   pythonOlder,
 }:
 
@@ -25,10 +29,20 @@ buildPythonPackage rec {
 
   dependencies = [ aiohttp ];
 
-  # Module has no tests
-  doCheck = false;
+  nativeCheckInputs = [
+    aresponses
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "zamg" ];
+
+  disabledTests = [
+    # Tests are outdated
+    "test_update_fail_3"
+    "test_properties_fail_2"
+  ];
 
   meta = with lib; {
     description = "Library to read weather data from ZAMG Austria";
