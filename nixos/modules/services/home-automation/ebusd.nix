@@ -156,7 +156,11 @@ in
 
   config =
     let
-      usesDev = hasPrefix "/" cfg.device;
+      usesDev = lib.any (prefix: lib.hasPrefix prefix cfg.device) [
+        "/"
+        "ens:/"
+        "enh:/"
+      ];
     in
     mkIf cfg.enable {
       systemd.services.ebusd = {
@@ -201,12 +205,14 @@ in
 
           # Hardening
           CapabilityBoundingSet = "";
-          DeviceAllow = optionals usesDev [ cfg.device ];
+          DeviceAllow = lib.optionals usesDev [
+            (lib.removePrefix "ens:" (lib.removePrefix "enh:" cfg.device))
+          ];
           DevicePolicy = "closed";
           LockPersonality = true;
           MemoryDenyWriteExecute = false;
           NoNewPrivileges = true;
-          PrivateDevices = usesDev;
+          PrivateDevices = !usesDev;
           PrivateUsers = true;
           PrivateTmp = true;
           ProtectClock = true;
