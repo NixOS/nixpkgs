@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "fnllm";
-  version = "0.0.11";
+  version = "0.0.12";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-EiCP+HyipL6mpmjb3wjXUr+VRJ9ZO9qsegppNM7gVEk=";
+    hash = "sha256-qWZ//i1Xd6vWp3TlZz+TNJQGb1Ym8/edn4BV8e5wkjM=";
   };
 
   build-system = [ hatchling ];
