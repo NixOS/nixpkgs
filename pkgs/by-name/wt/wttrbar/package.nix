@@ -9,13 +9,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wttrbar";
-  version = "0.11.2";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "bjesus";
     repo = "wttrbar";
     rev = version;
-    hash = "sha256-FJexqBzsLeaF7iWWwcenRINpMRtkpThxLWlMEectjfQ=";
+    hash = "sha256-+M0s6v9ULf+D2pPOE8KlHoyV+jBMbPsAXpYxGjms5DY=";
   };
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
     ]
   );
 
-  cargoHash = "sha256-4pcMcCxidNY4EIvYWGa/cfovRGHMEIcVfJWiMG/8aog=";
+  cargoHash = "sha256-UwDaf4osH9Kj1cF2BYbyuv9HmmPGxTB/ynNBAuwa5fs=";
 
   passthru.updateScript = nix-update-script { };
 
