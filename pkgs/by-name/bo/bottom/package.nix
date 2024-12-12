@@ -2,11 +2,12 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  autoAddDriverRunpath,
   installShellFiles,
   stdenv,
-  darwin,
-  bottom,
-  testers,
+  apple-sdk_11,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,20 +16,21 @@ rustPlatform.buildRustPackage rec {
 
   src = fetchFromGitHub {
     owner = "ClementTsang";
-    repo = pname;
-    rev = version;
+    repo = "bottom";
+    tag = version;
     hash = "sha256-hm0Xfd/iW+431HflvZErjzeZtSdXVb/ReoNIeETJ5Ik=";
   };
 
   cargoHash = "sha256-FQbJx6ijX8kE4qxT7OQ7FwxLKJB5/moTKhBK0bfvBas=";
 
-  nativeBuildInputs = [ installShellFiles ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Foundation
+  nativeBuildInputs = [
+    autoAddDriverRunpath
+    installShellFiles
   ];
 
-  doCheck = false;
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_11
+  ];
 
   postInstall = ''
     installManPage target/tmp/bottom/manpage/btm.1
@@ -39,21 +41,32 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 desktop/bottom.desktop -t $out/share/applications
   '';
 
+  preCheck = ''
+    HOME=$(mktemp -d)
+  '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/btm";
+
   BTM_GENERATE = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = bottom;
+  passthru = {
+    updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
+    changelog = "https://github.com/ClementTsang/bottom/blob/${version}/CHANGELOG.md";
     description = "Cross-platform graphical process/system monitor with a customizable interface";
     homepage = "https://github.com/ClementTsang/bottom";
-    changelog = "https://github.com/ClementTsang/bottom/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    mainProgram = "btm";
+    maintainers = with lib.maintainers; [
       berbiche
       figsoda
+      gepbird
     ];
-    mainProgram = "btm";
   };
 }
