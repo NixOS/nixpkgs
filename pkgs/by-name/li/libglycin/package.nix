@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
+  makeSetupHook,
   meson,
   ninja,
   pkg-config,
@@ -18,6 +19,8 @@
   gnome,
   replaceVars,
   bubblewrap,
+  jq,
+  moreutils,
   common-updater-scripts,
   _experimental-update-script-combinators,
   buildPackages,
@@ -127,6 +130,19 @@ stdenv.mkDerivation (finalAttrs: {
     glycin3PathsPatch = replaceVars ./fix-glycin-3-paths.patch {
       bwrap = "${bubblewrap}/bin/bwrap";
     };
+
+    patchVendorHook =
+      makeSetupHook
+        {
+          name = "glycinPatchVendorHook";
+        }
+        (
+          replaceVars ./patch-vendor-hook.sh {
+            bwrap = "${bubblewrap}/bin/bwrap";
+            jq = "${jq}/bin/jq";
+            sponge = "${moreutils}/bin/sponge";
+          }
+        );
   };
 
   meta = {
