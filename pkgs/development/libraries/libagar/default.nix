@@ -4,50 +4,36 @@
   fetchurl,
   pkg-config,
   libtool,
-  perl,
-  bsdbuild,
   gettext,
-  mandoc,
   libpng,
   libjpeg,
-  libXinerama,
   freetype,
   SDL,
   libGL,
-  libsndfile,
-  portaudio,
+  xorg,
   libmysqlclient,
   fontconfig,
+  perl,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "libagar";
-  version = "1.5.0";
+  version = "1.7.0";
 
   src = fetchurl {
-    url = "http://stable.hypertriton.com/agar/agar-${finalAttrs.version}.tar.gz";
-    sha256 = "001wcqk5z67qg0raw9zlwmv62drxiwqykvsbk10q2mrc6knjsd42";
+    url = "https://stable.hypertriton.com/agar/agar-${finalAttrs.version}.tar.gz";
+    hash = "sha256-FzE9IjteqU+foDA93YLtyO4OfMF5U984pe5rZ8uElEY=";
   };
 
   preConfigure = ''
-    substituteInPlace configure.in \
-      --replace '_BSD_SOURCE' '_DEFAULT_SOURCE'
-    cat configure.in | ${bsdbuild}/bin/mkconfigure > configure
+    substituteInPlace configure \
+      --replace-fail '_BSD_SOURCE' '_DEFAULT_SOURCE'
   '';
 
   configureFlags = [
-    "--with-libtool=${libtool}/bin/libtool"
-    "--enable-nls=yes"
-    "--with-gettext=${gettext}"
+    "--enable-nls=no"
     "--with-jpeg=${libjpeg.dev}"
     "--with-gl=${libGL}"
     "--with-mysql=${libmysqlclient}"
-    "--with-manpages=yes"
-  ];
-
-  outputs = [
-    "out"
-    "devdoc"
   ];
 
   nativeBuildInputs = [
@@ -57,26 +43,22 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    bsdbuild
     perl
-    libXinerama
+    xorg.libXinerama
     SDL
     libGL
     libmysqlclient
-    mandoc
-    freetype.dev
+    freetype
     libpng
-    libjpeg.dev
+    libjpeg
     fontconfig
-    portaudio
-    libsndfile
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Cross-platform GUI toolkit";
     homepage = "http://libagar.org/index.html";
-    license = with licenses; bsd3;
-    maintainers = with maintainers; [ ramkromberg ];
-    platforms = with platforms; linux;
+    license = with lib.licenses; [ bsd3 ];
+    maintainers = with lib.maintainers; [ ramkromberg ];
+    platforms = lib.platforms.linux;
   };
 })
