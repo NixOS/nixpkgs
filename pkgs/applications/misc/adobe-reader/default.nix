@@ -93,5 +93,6 @@ stdenv.mkDerivation rec {
       "See: https://www.cvedetails.com/product/497/Adobe-Acrobat-Reader.html?vendor_id=53"
     ];
     platforms = [ "i686-linux" ];
+    maintainers = with lib.maintainers; [ onny ];
   };
 }
