@@ -440,6 +440,7 @@ in
           isSystemUser = true;
           group = cfg.group;
         };
+      } // lib.optionalAttrs (cfg.nginx != null) {
         "${config.services.nginx.user}".extraGroups = [ cfg.group ];
       };
       groups = {
