@@ -9,33 +9,28 @@ let
   cfg = config.services.couchdb;
   opt = options.services.couchdb;
 
-  optionsConfigFile = pkgs.writeText "couchdb.ini" (
-    ''
-      [couchdb]
-      database_dir = ${cfg.databaseDir}
-      uri_file = ${cfg.uriFile}
-      view_index_dir = ${cfg.viewIndexDir}
-    ''
-    + (
-      lib.optionalString (cfg.adminPass != null) ''
-        [admins]
-        ${cfg.adminUser} = ${cfg.adminPass}
-      ''
-      + ''
-        [chttpd]
-      ''
-    )
-    + ''
-      port = ${toString cfg.port}
-      bind_address = ${cfg.bindAddress}
+  baseConfig = {
+    couchdb = {
+      database_dir = cfg.databaseDir;
+      uri_file = cfg.uriFile;
+      view_index_dir = cfg.viewIndexDir;
+    };
+    chttpd = {
+      port = cfg.port;
+      bind_address = cfg.bindAddress;
+    };
+    log = {
+      file = cfg.logFile;
+    };
+  };
+  adminConfig = lib.optionalAttrs (cfg.adminPass != null) {
+    admins = {
+      "${cfg.adminUser}" = cfg.adminPass;
+    };
+  };
+  appConfig = lib.recursiveUpdate (lib.recursiveUpdate baseConfig adminConfig) cfg.extraConfig;
 
-      [log]
-      file = ${cfg.logFile}
-    ''
-    + (lib.optionalString (cfg.extraConfig != "") ''
-      ${cfg.extraConfig}
-    '')
-  );
+  optionsConfigFile = pkgs.writeText "couchdb.ini" (lib.generators.toINI { } appConfig);
 
   # we are actually specifying 5 configuration files:
   # 1. the preinstalled default.ini
@@ -150,11 +145,9 @@ in
       };
 
       extraConfig = lib.mkOption {
-        type = lib.types.lines;
-        default = "";
-        description = ''
-          Extra configuration. Overrides any other configuration.
-        '';
+        type = lib.types.attrs;
+        default = { };
+        description = "Extra configuration options for CouchDB";
       };
       extraConfigFiles = lib.mkOption {
         type = lib.types.listOf lib.types.path;
