@@ -8,6 +8,9 @@
 , openssl
 , qt5
 , zlib
+
+, trackerSearch ? true
+, python3
 }:
 
 stdenv.mkDerivation rec {
@@ -34,6 +37,12 @@ stdenv.mkDerivation rec {
     libtorrent-rasterbar
     qt5.qtbase
     qt5.qttools
+  ] ++ lib.optionals trackerSearch [
+    python3
+  ];
+
+  qtWrapperArgs = lib.optionals trackerSearch [
+    "--prefix PATH : ${lib.makeBinPath [ python3 ]}"
   ];
 
   meta = {
