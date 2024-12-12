@@ -274,7 +274,7 @@ in
               chmod --recursive 0755 /.rw-etc
             ''}
 
-            tmpMetadataMount=$(TMPDIR="" mktemp --tmpdir=/tmp --directory -t nixos-etc-metadata.XXXXXXXXXX)
+            tmpMetadataMount=$(TMPDIR="/run" mktemp --directory -t nixos-etc-metadata.XXXXXXXXXX)
             mount --type erofs -o ro ${config.system.build.etcMetadataImage} $tmpMetadataMount
 
             # There was no previous /etc mounted. This happens when we're called
@@ -287,7 +287,7 @@ in
               # Mount the new /etc overlay to a temporary private mount.
               # This needs the indirection via a private bind mount because you
               # cannot move shared mounts.
-              tmpEtcMount=$(TMPDIR="" mktemp --tmpdir=/tmp --directory -t nixos-etc.XXXXXXXXXX)
+              tmpEtcMount=$(TMPDIR="/run" mktemp --directory -t nixos-etc.XXXXXXXXXX)
               mount --bind --make-private $tmpEtcMount $tmpEtcMount
               mount --type overlay overlay \
                 --options lowerdir=$tmpMetadataMount::${config.system.build.etcBasedir},${etcOverlayOptions} \
@@ -341,7 +341,7 @@ in
             # mounts. So we'll just find all mounts of type erofs and filter on the
             # name of the mountpoint.
             findmnt --type erofs --list --kernel --output TARGET | while read -r mountPoint; do
-              if [[ "$mountPoint" =~ ^/tmp/nixos-etc-metadata\..{10}$ &&
+              if [[ ("$mountPoint" =~ ^/run/nixos-etc-metadata\..{10}$ || "$mountPoint" =~ ^/run/nixos-etc-metadata$ ) &&
                     "$mountPoint" != "$tmpMetadataMount" ]]; then
                 umount --lazy "$mountPoint"
                 rmdir "$mountPoint"
