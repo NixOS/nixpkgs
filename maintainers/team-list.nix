@@ -537,6 +537,16 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  jetbrains = {
+    members = [
+      edwtjo
+      leona
+      theCapypara
+    ];
+    shortName = "Jetbrains";
+    scope = "Maintainers of the Jetbrains IDEs in nixpkgs";
+  };
+
   jitsi = {
     members = [
       cleeyv
