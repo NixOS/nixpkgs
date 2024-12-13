@@ -1,4 +1,4 @@
-{ jdk11, jdk17, jdk21 }:
+{ jdk17, jdk21 }:
 
 rec {
   gen =
