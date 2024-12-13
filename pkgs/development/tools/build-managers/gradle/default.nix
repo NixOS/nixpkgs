@@ -118,6 +118,7 @@ rec {
       fixupPhase =
         let
           arch = if stdenv.hostPlatform.is64bit then "amd64" else "i386";
+          newFileEvents = toString (lib.versionAtLeast version "8.12");
         in
         ''
           . ${./patching.sh}
@@ -137,10 +138,17 @@ rec {
 
           # The file-events library _seems_ to follow the native-platform version, but
           # we won’t assume that.
-          fileEventsVersion="$(extractVersion file-events $out/lib/gradle/lib/file-events-*.jar)"
-          autoPatchelfInJar \
-            $out/lib/gradle/lib/file-events-linux-${arch}-''${fileEventsVersion}.jar \
-            "${lib.getLib stdenv.cc.cc}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ]}"
+          if [ -n "${newFileEvents}" ]; then
+            fileEventsVersion="$(extractVersion gradle-fileevents $out/lib/gradle/lib/gradle-fileevents-*.jar)"
+            autoPatchelfInJar \
+              $out/lib/gradle/lib/gradle-fileevents-''${fileEventsVersion}.jar \
+              "${lib.getLib stdenv.cc.cc}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ]}"
+          else
+            fileEventsVersion="$(extractVersion file-events $out/lib/gradle/lib/file-events-*.jar)"
+            autoPatchelfInJar \
+              $out/lib/gradle/lib/file-events-linux-${arch}-''${fileEventsVersion}.jar \
+              "${lib.getLib stdenv.cc.cc}/lib64:${lib.makeLibraryPath [ stdenv.cc.cc ]}"
+          fi
 
           # The scanner doesn't pick up the runtime dependency in the jar.
           # Manually add a reference where it will be found.
