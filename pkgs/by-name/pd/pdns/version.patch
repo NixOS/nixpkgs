@@ -1,0 +1,13 @@
+diff --git a/pdns/version.cc b/pdns/version.cc
+index d8f5d40..1368481 100644
+--- a/pdns/version.cc
++++ b/pdns/version.cc
+@@ -155,7 +155,7 @@ void showBuildConfiguration()
+ #ifdef PDNS_CONFIG_ARGS
+ #define double_escape(s) #s
+ #define escape_quotes(s) double_escape(s)
+-  g_log<<Logger::Warning<<"Configured with: "<<escape_quotes(PDNS_CONFIG_ARGS)<<endl;
++  g_log<<Logger::Warning<<"Configured with: "<<"redacted"<<endl;
+ #undef escape_quotes
+ #undef double_escape
+ #endif
