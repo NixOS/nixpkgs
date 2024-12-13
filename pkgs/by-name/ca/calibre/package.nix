@@ -35,11 +35,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "calibre";
-  version = "7.21.0";
+  version = "7.22.0";
 
   src = fetchurl {
     url = "https://download.calibre-ebook.com/${finalAttrs.version}/calibre-${finalAttrs.version}.tar.xz";
-    hash = "sha256-61Nbclkt59sh8VHh3uRw0GvlDjlyOz1jrsFMMIuzPLE=";
+    hash = "sha256-RmCte6tok0F/ts5cacAFBksNYfnLylY4JCmTyb+6IUk=";
   };
 
   patches = [
@@ -117,6 +117,7 @@ stdenv.mkDerivation (finalAttrs: {
         netifaces
         pillow
         pychm
+        pykakasi
         pyqt-builder
         pyqt6
         python
