@@ -22,6 +22,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-xWqyQl3peB/ENReMcDHzIdKXXCYOJYbhhG8tcSh36dY=";
   };
 
+  patches = [
+    # https://code.videolan.org/rist/librist/-/issues/192
+    ./no-brew-darwin.diff
+  ];
+
   nativeBuildInputs = [
     meson
     ninja
