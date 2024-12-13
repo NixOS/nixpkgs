@@ -17,11 +17,20 @@ buildDotnetModule rec {
     hash = "sha256-noIu5LV0yva94Kmdr39zb0kKXDaIrQ8DIplCj3aTIbQ=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.runtime_8_0;
+  dotnetFlags = [ "-p:RuntimeFrameworkVersion=${dotnet-runtime.version}" ];
 
   nugetDeps = ./deps.nix;
 
   executables = [ "VrcAdvert" ];
+
+  postPatch = ''
+    substituteInPlace VrcAdvert.csproj \
+      --replace-fail 'net6.0' 'net8.0'
+    substituteInPlace global.json \
+      --replace-fail '6.0.0' '8.0.0'
+  '';
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [
