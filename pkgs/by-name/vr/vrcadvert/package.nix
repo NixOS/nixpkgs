@@ -7,13 +7,13 @@
 }:
 
 buildDotnetModule rec {
-  pname = "VrcAdvert";
+  pname = "vrcadvert";
   version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "VrcAdvert";
-    rev = "v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-noIu5LV0yva94Kmdr39zb0kKXDaIrQ8DIplCj3aTIbQ=";
   };
 
