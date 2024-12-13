@@ -46,7 +46,9 @@ let
           "mirror://apache/hadoop/common/hadoop-${finalAttrs.version}/hadoop-${finalAttrs.version}"
           + lib.optionalString stdenv.hostPlatform.isAarch64 "-aarch64"
           + ".tar.gz";
-        inherit (platformAttrs.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}")) hash;
+        inherit (platformAttrs.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}"))
+          hash
+          ;
       };
       doCheck = true;
 
@@ -101,9 +103,12 @@ let
           # hadoop 3.3+ depends on protobuf 3.18, 3.2 depends on 3.8
           find $out/lib/native -name 'libhdfspp.so*' | \
             xargs -r -n1 patchelf --replace-needed libprotobuf.so.${
-              if (lib.versionAtLeast finalAttrs.version "3.4.1") then "32"
-              else if (lib.versionAtLeast finalAttrs.version "3.3") then "18"
-              else "8"
+              if (lib.versionAtLeast finalAttrs.version "3.4.1") then
+                "32"
+              else if (lib.versionAtLeast finalAttrs.version "3.3") then
+                "18"
+              else
+                "8"
             } libprotobuf.so
 
           patchelf --replace-needed libcrypto.so.1.1 libcrypto.so \
