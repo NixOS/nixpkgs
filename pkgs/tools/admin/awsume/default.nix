@@ -44,7 +44,7 @@ buildPythonApplication rec {
   postInstall = ''
     installShellCompletion --cmd awsume \
       --bash <(PYTHONPATH=./awsume/configure ${python3}/bin/python3 -c"import autocomplete; print(autocomplete.SCRIPTS['bash'])") \
-      --zsh <(PYTHONPATH=./awsume/configure ${python3}/bin/python3 -c"import autocomplete; print(autocomplete.SCRIPTS['zsh'])") \
+      --zsh <(PYTHONPATH=./awsume/configure ${python3}/bin/python3 -c"import autocomplete; print(autocomplete.ZSH_AUTOCOMPLETE_FUNCTION)") \
       --fish <(PYTHONPATH=./awsume/configure ${python3}/bin/python3 -c"import autocomplete; print(autocomplete.SCRIPTS['fish'])") \
 
     rm -f $out/bin/awsume.bat
