@@ -29,6 +29,8 @@ buildDotnetModule rec {
   ];
   versionCheckProgram = "${placeholder "out"}/bin/VrcAdvert";
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Advertise your OSC app through OSCQuery";
     homepage = "https://github.com/galister/VrcAdvert";
