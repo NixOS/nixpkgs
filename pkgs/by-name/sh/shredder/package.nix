@@ -15,7 +15,7 @@ buildGoModule {
   meta = with lib; {
     description = "Secure file deletion for the paranoid ones";
     homepage = "https://github.com/NewDawn0/shredder";
-    maintainers = with maintainers; [NewDawn0];
+    maintainers = with maintainers; [ NewDawn0 ];
     license = licenses.mit;
   };
 }

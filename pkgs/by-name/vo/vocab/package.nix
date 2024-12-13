@@ -7,8 +7,8 @@
 python3Packages.buildPythonPackage {
   name = "vocab";
   version = "1.0.0";
-  propagagedBuildInputs = [translate];
-  buildInputs = with python3Packages; [setuptools];
+  propagagedBuildInputs = [ translate ];
+  buildInputs = with python3Packages; [ setuptools ];
   src = fetchFromGitHub {
     owner = "NewDawn0";
     repo = "vocab";
@@ -19,7 +19,7 @@ python3Packages.buildPythonPackage {
   meta = with lib; {
     description = "Learn vocabulary efficiently using the CLI";
     homepage = "https://github.com/NewDawn0/vocab";
-    maintainers = with maintainers; [NewDawn0];
+    maintainers = with maintainers; [ NewDawn0 ];
     license = licenses.mit;
   };
 }

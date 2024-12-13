@@ -18,7 +18,7 @@ buildGoModule {
   meta = with lib; {
     description = "Create forms and send notifications from the CLI";
     homepage = "https://github.com/NewDawn0/notify";
-    maintainers = with maintainers; [NewDawn0];
+    maintainers = with maintainers; [ NewDawn0 ];
     license = licenses.mit;
   };
 }

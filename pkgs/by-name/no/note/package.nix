@@ -19,7 +19,7 @@ buildGoModule {
   meta = with lib; {
     description = "A tool for taking temporary notes";
     homepage = "https://github.com/NewDawn0/note";
-    maintainers = with maintainers; [NewDawn0];
+    maintainers = with maintainers; [ NewDawn0 ];
     license = licenses.mit;
   };
 }

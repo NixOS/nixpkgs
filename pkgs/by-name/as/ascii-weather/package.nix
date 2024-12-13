@@ -15,7 +15,11 @@ stdenv.mkDerivation {
     rev = "70bf111647d064c3fcd0fe672b9fa697f4d060e4";
     hash = "sha256-Dcosx6iEnvFCMrmUS7gSLg8re5zl1BXWX/Nu6hr4Pgw=";
   };
-  buildInputs = [gcc gnumake ncurses];
+  buildInputs = [
+    gcc
+    gnumake
+    ncurses
+  ];
   buildPhase = "make build";
   installPhase = ''
     mkdir -p $out/bin
@@ -25,7 +29,7 @@ stdenv.mkDerivation {
     description = "An ascii screensaver displaying different weather types";
     homepage = "https://github.com/NewDawn0/asciiWeather";
     license = licenses.mit;
-    maintainers = [NewDawn0];
+    maintainers = [ NewDawn0 ];
     platforms = platforms.all;
   };
 }

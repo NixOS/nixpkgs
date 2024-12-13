@@ -25,12 +25,15 @@ stdenv.mkDerivation {
   shellHook = ''
     source $out/lib/SOURCE_ME.sh
   '';
-  buildInputs = [gcc gnumake];
+  buildInputs = [
+    gcc
+    gnumake
+  ];
   buildPhase = "make build";
   meta = with lib; {
     description = "A fast way to go up relative directories";
     homepage = "https://github.com/NewDawn0/up";
-    maintainers = with maintainers; [NewDawn0];
+    maintainers = with maintainers; [ NewDawn0 ];
     license = licenses.mit;
   };
 }

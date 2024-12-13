@@ -4,7 +4,8 @@
   lib,
   rustPlatform,
   stdenv,
-}: let
+}:
+let
   src = fetchFromGitHub {
     owner = "NewDawn0";
     repo = "dirStack";
@@ -14,30 +15,30 @@
   meta = with lib; {
     description = "A cd quicklist";
     homepage = "https://github.com/NewDawn0/dirStack";
-    maintainers = with maintainers; [NewDawn0];
+    maintainers = with maintainers; [ NewDawn0 ];
     license = licenses.mit;
   };
   pkg = rustPlatform.buildRustPackage {
     inherit meta src;
     pname = "dirStack";
     version = "1.0.0";
-    propagatedBuildInputs = [fzf];
+    propagatedBuildInputs = [ fzf ];
     cargoLock.lockFile = "${src}/Cargo.lock";
   };
 in
-  stdenv.mkDerivation {
-    inherit meta;
-    name = "dirStack-wrapped";
-    version = "1.0.0";
-    phases = ["installPhase"];
-    installPhase = ''
-      mkdir -p $out/bin $out/lib
-      cp ${pkg}/bin/dirStack $out/bin/
-      echo "#!/usr/bin/env bash" > $out/lib/SOURCE_ME.sh
-      $out/bin/dirStack --init >> $out/lib/SOURCE_ME.sh
-      chmod +x $out/lib/SOURCE_ME.sh
-    '';
-    shellHook = ''
-      source $out/lib/SOURCE_ME.sh
-    '';
-  }
+stdenv.mkDerivation {
+  inherit meta;
+  name = "dirStack-wrapped";
+  version = "1.0.0";
+  phases = [ "installPhase" ];
+  installPhase = ''
+    mkdir -p $out/bin $out/lib
+    cp ${pkg}/bin/dirStack $out/bin/
+    echo "#!/usr/bin/env bash" > $out/lib/SOURCE_ME.sh
+    $out/bin/dirStack --init >> $out/lib/SOURCE_ME.sh
+    chmod +x $out/lib/SOURCE_ME.sh
+  '';
+  shellHook = ''
+    source $out/lib/SOURCE_ME.sh
+  '';
+}

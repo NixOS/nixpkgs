@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     rev = "6b6d3b991706247af90f3f72c67238144f77a928";
     hash = "sha256-/JRG5qZlEOUJ/R37bl8x8okwlVLjlXUcSg7VMkulY0M=";
   };
-  buildInputs = [zig];
+  buildInputs = [ zig ];
   buildPhase = ''
     export LIBRARY_PATH=/usr/lib
     export DYLD_LIBRARY_PATH=/usr/lib
@@ -28,7 +28,7 @@ stdenv.mkDerivation {
     description = "A cheatsheet for ansi escape codes";
     homepage = "https://github.com/NewDawn0/ansi";
     license = licenses.mit;
-    maintainers = [NewDawn0];
+    maintainers = [ NewDawn0 ];
     platforms = platforms.all;
   };
 }
