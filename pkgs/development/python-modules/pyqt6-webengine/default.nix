@@ -26,6 +26,10 @@ buildPythonPackage rec {
     hash = "sha256-ZARepiK2pBiCwrGPVa6XFLhmCs/walTpEOtygiwvP/I=";
   };
 
+  patches = [
+    ./qvariant.patch
+  ];
+
   # fix include path and increase verbosity
   postPatch = ''
     sed -i \
