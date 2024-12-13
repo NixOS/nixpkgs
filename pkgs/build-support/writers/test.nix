@@ -1,6 +1,8 @@
 {
   haskellPackages,
   lib,
+  guile-lib,
+  akkuPackages,
   nodePackages,
   perlPackages,
   python3Packages,
@@ -26,6 +28,8 @@ let
     writeFish
     writeFishBin
     writeFSharp
+    writeGuile
+    writeGuileBin
     writeHaskell
     writeHaskellBin
     writeJS
@@ -106,6 +110,12 @@ recurseIntoAttrs {
     babashka = expectSuccessBin (
       writeBabashkaBin "test-writers-babashka-bin" { } ''
         (println "success")
+      ''
+    );
+
+    guile = expectSuccessBin (
+      writeGuileBin "test-writers-guile-bin" { } ''
+        (display "success\n")
       ''
     );
 
@@ -247,6 +257,51 @@ recurseIntoAttrs {
       writeBabashka "test-writers-babashka" { } ''
         (println "success")
       ''
+    );
+
+    guile = expectSuccess (
+      writeGuile "test-writers-guile"
+        {
+          libraries = [ guile-lib ];
+          srfi = [ 1 ];
+        }
+        ''
+          (use-modules (unit-test))
+          (assert-true (= (second '(1 2 3))
+                       2))
+          (display "success\n")
+        ''
+    );
+
+    guileR6RS = expectSuccess (
+      writeGuile "test-writers-guile-r6rs"
+        {
+          r6rs = true;
+          libraries = with akkuPackages; [ r6rs-slice ];
+        }
+        ''
+          (import (rnrs base (6))
+                  (rnrs io simple (6))
+                  (slice))
+          (assert (equal? (slice '(1 2 3) 0 2)
+                          '(1 2)))
+          (display "success\n")
+        ''
+    );
+
+    guileR7RS = expectSuccess (
+      writeGuile "test-writers-guile-r7rs"
+        {
+          r7rs = true;
+        }
+        ''
+          (import (scheme write)
+                  (srfi 1))
+          (unless (= (second '(1 2 3))
+                     2)
+                  (error "The value should be 2."))
+          (display "success\n")
+        ''
     );
 
     haskell = expectSuccess (
