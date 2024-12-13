@@ -7584,6 +7584,8 @@ self: super: with self; {
 
   llm = callPackage ../development/python-modules/llm { };
 
+  llm-gguf = callPackage ../development/python-modules/llm-gguf { };
+
   llmx = callPackage ../development/python-modules/llmx { };
 
   llvmlite = callPackage ../development/python-modules/llvmlite {
