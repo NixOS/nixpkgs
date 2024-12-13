@@ -69,13 +69,13 @@ stdenv.mkDerivation (finalAttrs: {
     stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
   ) "-Wno-error=incompatible-function-pointer-types";
 
-  meta = with lib; {
+  meta = {
     changelog = "https://gitlab.com/adhami3310/Switcheroo/-/releases/v${finalAttrs.version}";
     description = "App for converting images between different formats";
     homepage = "https://apps.gnome.org/Converter/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "switcheroo";
-    maintainers = with maintainers; [ michaelgrahamevans ] ++ lib.teams.gnome-circle.members;
-    platforms = platforms.unix;
+    maintainers = lib.teams.gnome-circle.members;
+    platforms = lib.platforms.unix;
   };
 })

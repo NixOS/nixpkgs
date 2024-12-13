@@ -4,7 +4,7 @@ with lib;
 
 let
   cfg = config.services.bookstack;
-  bookstack = pkgs.bookstack.override {
+  bookstack = cfg.package.override {
     dataDir = cfg.dataDir;
   };
   db = cfg.database;
@@ -33,8 +33,9 @@ in {
   ];
 
   options.services.bookstack = {
-
     enable = mkEnableOption "BookStack";
+
+    package = mkPackageOption pkgs "bookstack" { };
 
     user = mkOption {
       default = "bookstack";
