@@ -170,7 +170,6 @@ let
 
       ${optionalString cfg.recommendedOptimisation ''
         # optimisation
-        sendfile on;
         tcp_nopush on;
         tcp_nodelay on;
         keepalive_timeout 65;
@@ -373,11 +372,16 @@ let
           ''}
         '';
 
+        # sendfile works well with kTLS/SSL_sendfile() from openssl but not with http2
+        # https://mailman.nginx.org/pipermail/nginx-devel/2021-December/014601.html
+        # https://mailman.nginx.org/pipermail/nginx-devel/2021-December/014603.html
+        sendfile = lib.optionalString (cfg.recommendedOptimisation && !(hasSSL && vhost.http2)) "sendfile on;";
+
       in ''
         ${optionalString vhost.forceSSL ''
           server {
             ${concatMapStringsSep "\n" listenString redirectListen}
-
+            ${sendfile}
             server_name ${vhost.serverName} ${concatStringsSep " " vhost.serverAliases};
 
             location / {
