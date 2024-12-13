@@ -28,23 +28,19 @@ in
     port = lib.mkOption {
       default = 12849;
       type = lib.types.port;
-      description = ''
-        Listen on this port.
-      '';
+      description = "Listen on this port.";
     };
 
     dataDir = lib.mkOption {
       type = lib.types.path;
       default = "/var/lib/nostr-rs-relay";
-      description = lib.mdDoc "Directory for SQLite files.";
+      description = "Directory for SQLite files.";
     };
 
     settings = lib.mkOption {
       inherit (settingsFormat) type;
       default = { };
-      description = lib.mdDoc ''
-        See https://git.sr.ht/~gheartsfield/nostr-rs-relay/#configuration for documentation.
-      '';
+      description = "See https://git.sr.ht/~gheartsfield/nostr-rs-relay/#configuration for documentation.";
     };
   };
 
