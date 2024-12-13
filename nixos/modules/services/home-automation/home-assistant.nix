@@ -43,7 +43,9 @@ let
   # secrets or includes, by naively unquoting strings with leading bangs
   # and at least one space-separated parameter.
   # https://www.home-assistant.io/docs/configuration/secrets/
-  renderYAMLFile = fn: yaml: pkgs.runCommandLocal fn { } ''
+  renderYAMLFile = fn: yaml: pkgs.runCommand fn {
+    preferLocalBuilds = true;
+  } ''
     cp ${format.generate fn yaml} $out
     sed -i -e "s/'\!\([a-z_]\+\) \(.*\)'/\!\1 \2/;s/^\!\!/\!/;" $out
   '';

@@ -26,13 +26,8 @@ buildDotnetModule (finalAttrs: rec {
       --replace-fail TargetFrameworks TargetFramework \
   '';
 
-  dotnet-sdk =
-    with dotnetCorePackages;
-    combinePackages [
-      sdk_8_0
-      sdk_9_0
-    ];
-  dotnet-runtime = dotnetCorePackages.sdk_9_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.sdk_8_0;
 
   projectFile = "src/FsAutoComplete/FsAutoComplete.fsproj";
   executables = [ "fsautocomplete" ];

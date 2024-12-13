@@ -195,6 +195,7 @@ buildGoModule rec {
       bendlas
       adamcstephens
       marie
+      pyrox0
     ];
     broken = stdenv.hostPlatform.isDarwin;
     mainProgram = "gitea";
