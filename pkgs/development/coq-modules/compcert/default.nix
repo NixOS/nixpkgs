@@ -42,7 +42,7 @@ let
       lib.switch coq.version [
         {
           case = range "8.14" "8.20";
-          out = "3.14";
+          out = "3.15";
         }
         {
           case = isEq "8.13";
@@ -67,6 +67,7 @@ let
       "3.13".sha256 = "sha256-ZedxgEPr1ZgKIcyhQ6zD1l2xr6RDNNUYq/4ZyR6ojM4=";
       "3.13.1".sha256 = "sha256-ldXbuzVB0Z+UVTd5S4yGSg6oRYiKbXLMmUZcQsJLcns=";
       "3.14".sha256 = "sha256-QXJMpp/BaPiK5okHeo2rcmXENToXKjB51UqljMHTDgw=";
+      "3.15".sha256 = "sha256-QFTueGZd0hAWUj+c5GZL/AyNpfN4FuJiIzCICmwRXJ8=";
     };
 
     strictDeps = true;
