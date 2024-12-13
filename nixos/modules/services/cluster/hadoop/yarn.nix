@@ -196,14 +196,18 @@ in
             "yarn.nodemanager.resource.cpu-vcores" = resource.cpuVCores;
             "yarn.nodemanager.resource.memory-mb" = resource.memoryMB;
           })
-          (lib.mkIf useCGroups {
+          (lib.mkIf useCGroups ( lib.warnIf (lib.versionOlder cfg.package.version "3.5.0") ''
+            hadoop < 3.5.0 does not support cgroup v2
+            setting `services.hadoop.yarn.nodemanager.useCGroups = false` is recommended
+            see: https://issues.apache.org/jira/browse/YARN-11669
+          '' {
             "yarn.nodemanager.linux-container-executor.cgroups.hierarchy" = "/hadoop-yarn";
             "yarn.nodemanager.linux-container-executor.resources-handler.class" =
               "org.apache.hadoop.yarn.server.nodemanager.util.CgroupsLCEResourcesHandler";
             "yarn.nodemanager.linux-container-executor.cgroups.mount" = "true";
             "yarn.nodemanager.linux-container-executor.cgroups.mount-path" =
               "/run/wrappers/yarn-nodemanager/cgroup";
-          })
+          }))
         ];
 
       networking.firewall.allowedTCPPortRanges = [
