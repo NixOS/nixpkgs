@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
       lgpl3Plus
       bsd3
     ];
-    homepage = "https://libvdwxc.org/";
+    homepage = "https://libvdwxc.materialsmodeling.org/";
     platforms = platforms.unix;
     maintainers = [ maintainers.sheepforce ];
   };
