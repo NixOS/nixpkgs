@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "globalprotect-openconnect";
-  version = "1.4.9";
+  version = "2.3.9";
 
   src = fetchurl {
     url = "https://github.com/yuezk/GlobalProtect-openconnect/releases/download/v${version}/globalprotect-openconnect-${version}.tar.gz";
-    hash = "sha256-vhvVKESLbqHx3XumxbIWOXIreDkW3yONDMXMHxhjsvk=";
+    hash = "sha256-dKRDeNYPDVMA4hHxCuoc+87ns3iJSWm6neBfdn58/zw=";
   };
 
   nativeBuildInputs = [
