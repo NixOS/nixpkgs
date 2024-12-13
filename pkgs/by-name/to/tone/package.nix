@@ -20,7 +20,7 @@ buildDotnetModule rec {
 
   projectFile = "tone/tone.csproj";
   executables = [ "tone" ];
-  nugetDeps = ./nuget-deps.nix;
+  nugetDeps = ./deps.nix;
 
   dotnetInstallFlags = [
     "-p:PublishSingleFile=false"
@@ -32,6 +32,8 @@ buildDotnetModule rec {
 
   doInstallCheck = true;
   nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://github.com/sandreas/tone";
