@@ -70,14 +70,6 @@ stdenv.mkDerivation rec {
     cp -r doc/html "$out/share/doc/libftdi1/"
   '';
 
-  postFixup = optionalString cppSupport ''
-    # This gets misassigned to the C++ version's path for some reason
-    for fileToFix in $out/{bin/libftdi1-config,lib/pkgconfig/libftdi1.pc}; do
-      substituteInPlace $fileToFix \
-        --replace "$out/include/libftdipp1" "$out/include/libftdi1"
-    done
-  '';
-
   meta = with lib; {
     description = "Library to talk to FTDI chips using libusb";
     homepage = "https://www.intra2net.com/en/developer/libftdi/";
