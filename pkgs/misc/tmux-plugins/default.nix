@@ -864,6 +864,7 @@ in rec {
 
   weather = mkTmuxPlugin {
     pluginName = "weather";
+    rtpFilePath = "tmux-weather.tmux";
     version = "unstable-2020-02-08";
     src = fetchFromGitHub {
       owner = "xamut";

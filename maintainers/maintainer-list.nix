@@ -12348,6 +12348,12 @@
     github = "lachrymaLF";
     githubId = 13716477;
   };
+  lactose = {
+    name = "lactose";
+    email = "lactose@allthingslinux.com";
+    github = "juuyokka";
+    githubId = 15185244;
+  };
   lafrenierejm = {
     email = "joseph@lafreniere.xyz";
     github = "lafrenierejm";
@@ -15573,10 +15579,11 @@
     name = "Nathan Yong";
   };
   natsukagami = {
-    email = "natsukagami@gmail.com";
+    name = "Natsu Kagami";
+    email = "nki@nkagami.me";
+    matrix = "@nki:m.nkagami.me";
     github = "natsukagami";
     githubId = 9061737;
-    name = "Natsu Kagami";
     keys = [ { fingerprint = "5581 26DC 886F E14D 501D  B0F2 D6AD 7B57 A992 460C"; } ];
   };
   natsukium = {

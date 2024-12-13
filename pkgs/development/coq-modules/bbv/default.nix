@@ -2,6 +2,7 @@
   lib,
   mkCoqDerivation,
   coq,
+  stdlib,
   version ? null,
 }:
 
@@ -23,6 +24,8 @@ mkCoqDerivation {
     "1.5".sha256 = "sha256-8/VPsfhNpuYpLmLC/hWszDhgvS6n8m7BRxUlea8PSUw=";
   };
   releaseRev = v: "v${v}";
+
+  propagatedBuildInputs = [ stdlib ];
 
   meta = {
     description = "An implementation of bitvectors in Coq.";
