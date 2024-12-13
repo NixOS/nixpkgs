@@ -10815,6 +10815,8 @@ self: super: with self; {
 
   ply = callPackage ../development/python-modules/ply { };
 
+  plyara = callPackage ../development/python-modules/plyara { };
+
   plyer = callPackage ../development/python-modules/plyer { };
 
   plyfile = callPackage ../development/python-modules/plyfile { };
