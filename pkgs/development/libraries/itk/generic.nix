@@ -58,6 +58,13 @@ let
     rev = "bb896868fc6480835495d0da4356d5db009592a6";
     hash = "sha256-MfaIA0xxA/pzUBSwnAevr17iR23Bo5iQO2cSyknS3o4=";
   };
+
+  rtkSrc = fetchFromGitHub {
+    owner = "RTKConsortium";
+    repo = "RTK";
+    rev = "583288b1898dedcfb5e4d602e31020b452971383";
+    hash = "sha256-1ItsLCRwRzGDSRe4xUDg09Hksu1nKichbWuM0YSVkbM=";
+  };
 in
 
 stdenv.mkDerivation {
@@ -86,6 +93,7 @@ stdenv.mkDerivation {
     ln -sr ${itkGenericLabelInterpolatorSrc} Modules/External/ITKGenericLabelInterpolator
     ln -sr ${itkAdaptiveDenoisingSrc} Modules/External/ITKAdaptiveDenoising
     ln -sr ${itkSimpleITKFiltersSrc} Modules/External/ITKSimpleITKFilters
+    ln -sr ${rtkSrc} Modules/Remote/RTK
   '';
 
   cmakeFlags =
@@ -108,6 +116,7 @@ stdenv.mkDerivation {
       "-DModule_MGHIO=ON"
       "-DModule_AdaptiveDenoising=ON"
       "-DModule_GenericLabelInterpolator=ON"
+      "-DModule_RTK=ON"
     ]
     ++ lib.optionals enablePython [
       "-DITK_WRAP_PYTHON=ON"

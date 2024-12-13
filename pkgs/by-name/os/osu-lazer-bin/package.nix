@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchurl,
   fetchzip,
   appimageTools,
@@ -10,26 +10,26 @@
 
 let
   pname = "osu-lazer-bin";
-  version = "2024.1115.3";
+  version = "2024.1208.0";
 
   src =
     {
       aarch64-darwin = fetchzip {
         url = "https://github.com/ppy/osu/releases/download/${version}/osu.app.Apple.Silicon.zip";
-        hash = "sha256-dw+bfuei0Wbk3UNVKZRahZxxsJObTyzJOYEMXYJyUNE=";
+        hash = "sha256-OgXKJ09OMqeD2ZdNBbEluEyR0bbBllprSAHaIXCtLSA=";
         stripRoot = false;
       };
       x86_64-darwin = fetchzip {
         url = "https://github.com/ppy/osu/releases/download/${version}/osu.app.Intel.zip";
-        hash = "sha256-EQA2HhoN52VdZsvq8IyocV4zRupVRfdyPpXF3nxZ8rM=";
+        hash = "sha256-3W6F2ThYTOVKa9/zTA/6X0uMoPy1SYulIYfYw+D7FR8=";
         stripRoot = false;
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/ppy/osu/releases/download/${version}/osu.AppImage";
-        hash = "sha256-kwZHy0FfOUFIWvyOj0ghlQz05U+Lnzl5TgC4T6bhm7o=";
+        hash = "sha256-gRUr7jf0+Xbfz8FurPk/o7F67TYisdNySNzVWEMb1es=";
       };
     }
-    .${stdenv.system} or (throw "osu-lazer-bin: ${stdenv.system} is unsupported.");
+    .${stdenvNoCC.system} or (throw "osu-lazer-bin: ${stdenvNoCC.system} is unsupported.");
 
   meta = {
     description = "Rhythm is just a *click* away (AppImage version for score submission and multiplayer, and binary distribution for Darwin systems)";
@@ -55,8 +55,8 @@ let
 
   passthru.updateScript = ./update.sh;
 in
-if stdenv.hostPlatform.isDarwin then
-  stdenv.mkDerivation {
+if stdenvNoCC.isDarwin then
+  stdenvNoCC.mkDerivation {
     inherit
       pname
       version
@@ -99,7 +99,7 @@ else
 
         install -m 444 -D ${contents}/osu!.desktop -t $out/share/applications
         for i in 16 32 48 64 96 128 256 512 1024; do
-          install -D ${contents}/osu!.png $out/share/icons/hicolor/''${i}x$i/apps/osu!.png
+          install -D ${contents}/osu.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
         done
       '';
   }

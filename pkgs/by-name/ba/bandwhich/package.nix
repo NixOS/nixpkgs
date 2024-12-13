@@ -3,43 +3,31 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  Security,
   installShellFiles,
+
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "bandwhich";
-  version = "0.23.0";
+  version = "0.23.1";
 
   src = fetchFromGitHub {
     owner = "imsnif";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-8PUtlhy8rsQw3TqgpxWiVettGhncHetWCZcrDXjsR5M=";
+    hash = "sha256-gXPX5drVXsfkssPMdhqIpFsYNSbelE9mKwO+nGEy4Qs=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "packet-builder-0.7.0" = "sha256-KxNrnLZ/z3JJ3E1pCTJF9tNXI7XYNRc6ooTUz3avpjw=";
-    };
-  };
-
-  checkFlags = [
-    # failing in upstream CI
-    "--skip=tests::cases::ui::layout_under_50_width_under_50_height"
-  ];
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-bsyEEbwBTDcIOc+PRkZqcfqcDgQnchuVy8a8eSZZUHU=";
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.Security;
 
   # 10 passed; 47 failed https://hydra.nixos.org/build/148943783/nixlog/1
   doCheck = !stdenv.hostPlatform.isDarwin;
-
-  postPatch = ''
-    ln --force -s ${./Cargo.lock} Cargo.lock
-  '';
 
   preConfigure = ''
     export BANDWHICH_GEN_DIR=_shell-files
@@ -53,7 +41,7 @@ rustPlatform.buildRustPackage rec {
       --zsh $BANDWHICH_GEN_DIR/_bandwhich
   '';
 
-  meta = with lib; {
+  meta = {
     description = "CLI utility for displaying current network utilization";
     longDescription = ''
       bandwhich sniffs a given network interface and records IP packet size, cross
@@ -64,12 +52,12 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://github.com/imsnif/bandwhich";
     changelog = "https://github.com/imsnif/bandwhich/blob/${src.rev}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       Br1ght0ne
       figsoda
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
     mainProgram = "bandwhich";
   };
 }
