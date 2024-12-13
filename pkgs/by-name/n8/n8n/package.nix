@@ -7,7 +7,6 @@
   pnpm,
   python3,
   node-gyp,
-  cacert,
   xcbuild,
   libkrb5,
   libmongocrypt,
@@ -22,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
-    rev = "n8n@${finalAttrs.version}";
+    tag = "n8n@${finalAttrs.version}";
     hash = "sha256-GIA2y81nuKWe1zuZQ99oczQtQWStyT1Qh3bZ1oe8me4=";
   };
 
@@ -35,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm.configHook
     python3 # required to build sqlite3 bindings
     node-gyp # required to build sqlite3 bindings
-    cacert # required for rustls-native-certs (dependency of turbo build tool)
     makeWrapper
   ] ++ lib.optional stdenv.hostPlatform.isDarwin [ xcbuild ];
 
@@ -95,7 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       Easily automate tasks across different services.
     '';
     homepage = "https://n8n.io";
-    changelog = "https://github.com/n8n-io/n8n/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/n8n-io/n8n/releases/tag/n8n@${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       gepbird
     ];
