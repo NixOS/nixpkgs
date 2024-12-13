@@ -11,13 +11,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oscavmgr";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "oscavmgr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mOa9eUI/p0ErePza6wXy1jUcHg5Q9tvC7/lThQabU94=";
+    hash = "sha256-05dNBzf1f92bVNLbRaUB6KUae+wY3V8mUxDgAb+g1T4=";
   };
 
   cargoLock = {
