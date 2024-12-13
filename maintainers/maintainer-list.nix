@@ -3198,6 +3198,13 @@
     githubId = 355401;
     name = "Brian Hicks";
   };
+  brianmay = {
+    name = "Brian May";
+    email = "brian@linuxpenguins.xyz";
+    github = "brianmay";
+    githubId = 112729;
+    keys = [ { fingerprint = "D636 5126 A92D B560 C627  ACED 1784 577F 811F 6EAC"; } ];
+  };
   brianmcgee = {
     name = "Brian McGee";
     email = "brian@41north.dev";
