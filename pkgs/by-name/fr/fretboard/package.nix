@@ -62,14 +62,14 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/bragefuglseth/fretboard/releases/tag/v${finalAttrs.version}";
     description = "Look up guitar chords";
     homepage = "https://apps.gnome.org/Fretboard/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "fretboard";
-    maintainers = with maintainers; [ michaelgrahamevans ] ++ lib.teams.gnome-circle.members;
-    platforms = platforms.unix;
+    maintainers = lib.teams.gnome-circle.members;
+    platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin;
   };
 })
