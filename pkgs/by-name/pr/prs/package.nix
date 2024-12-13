@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage rec {
       lgpl3Only # lib
       gpl3Only # everything else
     ];
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ colemickens ];
     mainProgram = "prs";
   };
 }
