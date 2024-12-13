@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
   buildInputs =
     [ freetype ]
-    ++ lib.optional (stdenv.targetPlatform.useLLVM or false) (
+    ++ lib.optional (stdenv.targetPlatform.toolchain == "llvm") (
       llvmPackages.compiler-rt.override {
         doFakeLibgcc = true;
       }

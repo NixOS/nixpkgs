@@ -66,7 +66,11 @@ let
   # `parsed` is inferred from args, both because there are two options with one
   # clearly preferred, and to prevent cycles. A simpler fixed point where the RHS
   # always just used `final.*` would fail on both counts.
-  elaborate = systemOrArgs: let
+  elaborate = systemOrArgs:
+    assert lib.assertMsg (systemOrArgs ? useLLVM == false) "elaborate cannot contain the deprecated useLLVM attribute";
+    assert lib.assertMsg (systemOrArgs ? useArocc == false) "elaborate cannot contain the deprecated useArocc attribute";
+    assert lib.assertMsg (systemOrArgs ? useZig == false) "elaborate cannot contain the deprecated useZig attribute";
+    let
     allArgs = systemToAttrs systemOrArgs;
 
     # Those two will always be derived from "config", if given, so they should NOT
@@ -91,7 +95,21 @@ let
         && final.parsed.kernel == platform.parsed.kernel;
       isCompatible = _: throw "2022-05-23: isCompatible has been removed in favor of canExecute, refer to the 22.11 changelog for details";
       # Derived meta-data
-      useLLVM = final.isFreeBSD || final.isOpenBSD;
+
+      toolchain =
+        /**/ if final.isDarwin then "apple"
+        else if final.isFreeBSD || final.isOpenBSD then "llvm"
+        else "gnu";
+
+      cc = if final.toolchain == "apple" || final.toolchain == "llvm" then
+        "clang"
+      else "gcc";
+
+      bintools = if final.toolchain == "bintools" then
+        "llvm"
+      else if final.toolchain == "apple" then
+        "apple"
+      else "gnu";
 
       libc =
         /**/ if final.isDarwin                then "libSystem"
@@ -119,8 +137,8 @@ let
       # independently, so we are just doing `linker` and keeping `useLLVM` for
       # now.
       linker =
-        /**/ if final.useLLVM or false      then "lld"
-        else if final.isDarwin              then "cctools"
+        /**/ if final.toolchain == "llvm" then "lld"
+        else if final.toolchain == "apple" then "cctools"
         # "bfd" and "gold" both come from GNU binutils. The existence of Gold
         # is why we use the more obscure "bfd" and not "binutils" for this
         # choice.

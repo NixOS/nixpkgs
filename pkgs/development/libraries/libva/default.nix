@@ -69,7 +69,7 @@ stdenv.mkDerivation (finalAttrs: {
       {
         NIX_LDFLAGS = "--undefined-version";
       }
-    // lib.optionalAttrs (stdenv.targetPlatform.useLLVM or false) {
+    // lib.optionalAttrs (stdenv.targetPlatform.toolchain == "llvm") {
       NIX_CFLAGS_COMPILE = "-DHAVE_SECURE_GETENV";
     };
 

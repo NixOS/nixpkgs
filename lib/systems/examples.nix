@@ -79,7 +79,7 @@ rec {
     androidNdkVersion = "26";
     libc = "bionic";
     useAndroidPrebuilt = false;
-    useLLVM = true;
+    toolchain = "llvm";
   };
 
   pogoplug4 = {
@@ -330,19 +330,19 @@ rec {
     config = "aarch64-w64-mingw32";
     libc = "ucrt";
     rust.rustcTarget = "aarch64-pc-windows-gnullvm";
-    useLLVM = true;
+    toolchain = "llvm";
   };
 
   # BSDs
 
   aarch64-freebsd = {
     config = "aarch64-unknown-freebsd";
-    useLLVM = true;
+    toolchain = "llvm";
   };
 
   x86_64-freebsd = {
     config = "x86_64-unknown-freebsd";
-    useLLVM = true;
+    toolchain = "llvm";
   };
 
   x86_64-netbsd = {
@@ -352,12 +352,12 @@ rec {
   # this is broken and never worked fully
   x86_64-netbsd-llvm = {
     config = "x86_64-unknown-netbsd";
-    useLLVM = true;
+    toolchain = "llvm";
   };
 
   x86_64-openbsd = {
     config = "x86_64-unknown-openbsd";
-    useLLVM = true;
+    toolchain = "llvm";
   };
 
   #
@@ -366,13 +366,13 @@ rec {
 
   wasi32 = {
     config = "wasm32-unknown-wasi";
-    useLLVM = true;
+    toolchain = "llvm";
   };
 
   wasm32-unknown-none = {
     config = "wasm32-unknown-none";
     rust.rustcTarget = "wasm32-unknown-unknown";
-    useLLVM = true;
+    toolchain = "llvm";
   };
 
   # Ghcjs

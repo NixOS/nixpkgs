@@ -629,7 +629,7 @@ let
       clang =
         if stdenv.targetPlatform.libc == null then
           tools.clangNoLibc
-        else if stdenv.targetPlatform.useLLVM or false then
+        else if stdenv.targetPlatform.toolchain == "llvm" then
           tools.clangUseLLVM
         else if (pkgs.targetPackages.stdenv or args.stdenv).cc.isGNU then
           tools.libstdcxxClang
@@ -781,7 +781,7 @@ let
                 echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
                 echo "-L${targetLlvmLibraries.libunwind}/lib" >> $out/nix-support/cc-ldflags
               ''
-              + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false) ''
+              + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.toolchain == "llvm") ''
                 echo "-lunwind" >> $out/nix-support/cc-ldflags
               ''
               + lib.optionalString stdenv.targetPlatform.isWasm ''
@@ -803,7 +803,7 @@ let
             ++ lib.optional (
               !stdenv.targetPlatform.isWasm
               && !stdenv.targetPlatform.isFreeBSD
-              && stdenv.targetPlatform.useLLVM or false
+              && stdenv.targetPlatform.toolchain == "llvm"
             ) "-lunwind"
             ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
           nixSupport.cc-ldflags = lib.optionals (
@@ -836,7 +836,7 @@ let
                 echo "--unwindlib=libunwind" >> $out/nix-support/cc-cflags
                 echo "-L${targetLlvmLibraries.libunwind}/lib" >> $out/nix-support/cc-ldflags
               ''
-              + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.useLLVM or false) ''
+              + lib.optionalString (!stdenv.targetPlatform.isWasm && stdenv.targetPlatform.toolchain == "llvm") ''
                 echo "-lunwind" >> $out/nix-support/cc-ldflags
               ''
               + lib.optionalString stdenv.targetPlatform.isWasm ''
@@ -858,7 +858,7 @@ let
             ++ lib.optional (
               !stdenv.targetPlatform.isWasm
               && !stdenv.targetPlatform.isFreeBSD
-              && stdenv.targetPlatform.useLLVM or false
+              && stdenv.targetPlatform.toolchain == "llvm"
             ) "-lunwind"
             ++ lib.optional stdenv.targetPlatform.isWasm "-fno-exceptions";
           nixSupport.cc-ldflags = lib.optionals (
@@ -1084,7 +1084,7 @@ let
               # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
               if args.stdenv.hostPlatform.isDarwin then
                 overrideCC darwin.bootstrapStdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
-              else if args.stdenv.hostPlatform.useLLVM or false then
+              else if args.stdenv.hostPlatform.toolchain == "llvm" then
                 overrideCC args.stdenv buildLlvmTools.clangWithLibcAndBasicRtAndLibcxx
               else
                 args.stdenv;
@@ -1093,7 +1093,7 @@ let
             patches = compiler-rtPatches;
             inherit stdenv;
           }
-          // lib.optionalAttrs (stdenv.hostPlatform.useLLVM or false) {
+          // lib.optionalAttrs (stdenv.hostPlatform.toolchain == "llvm") {
             libxcrypt = (libxcrypt.override { inherit stdenv; }).overrideAttrs (old: {
               configureFlags = old.configureFlags ++ [ "--disable-symvers" ];
             });
@@ -1102,7 +1102,7 @@ let
 
         compiler-rt-no-libc = callPackage ./compiler-rt {
           patches = compiler-rtPatches;
-          doFakeLibgcc = stdenv.hostPlatform.useLLVM or false;
+          doFakeLibgcc = stdenv.hostPlatform.toolchain == "llvm";
           stdenv =
             # Darwin needs to use a bootstrap stdenv to avoid an infinite recursion when cross-compiling.
             if stdenv.hostPlatform.isDarwin then

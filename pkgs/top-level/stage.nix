@@ -206,8 +206,7 @@ let
       # This is currently not possible when compiling natively,
       # so we don't need to check hostPlatform != buildPlatform.
       crossSystem = stdenv.hostPlatform // {
-        useLLVM = true;
-        linker = "lld";
+        toolchain = "llvm";
       };
     };
 
@@ -234,7 +233,8 @@ let
       # This is currently not possible when compiling natively,
       # so we don't need to check hostPlatform != buildPlatform.
       crossSystem = stdenv.hostPlatform // {
-        useArocc = true;
+        toolchain = "llvm";
+        cc = "arocc";
         linker = "lld";
       };
     };
@@ -249,7 +249,8 @@ let
       # This is currently not possible when compiling natively,
       # so we don't need to check hostPlatform != buildPlatform.
       crossSystem = stdenv.hostPlatform // {
-        useZig = true;
+        toolchain = "llvm";
+        cc = "zig";
         linker = "lld";
       };
     };

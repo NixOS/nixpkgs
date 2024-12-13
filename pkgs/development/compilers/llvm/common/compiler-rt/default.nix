@@ -33,7 +33,7 @@
 
 let
 
-  useLLVM = stdenv.hostPlatform.useLLVM or false;
+  useLLVM = stdenv.hostPlatform.toolchain == "llvm";
   bareMetal = stdenv.hostPlatform.parsed.kernel.name == "none";
   haveLibc = stdenv.cc.libc != null;
   # TODO: Make this account for GCC having libstdcxx, which will help

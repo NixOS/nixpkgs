@@ -121,7 +121,7 @@ let
   useGccForLibs = useCcForLibs
     && libcxx == null
     && !targetPlatform.isDarwin
-    && !(targetPlatform.useLLVM or false)
+    && !(targetPlatform.toolchain == "llvm")
     && !(targetPlatform.useAndroidPrebuilt or false)
     && !(targetPlatform.isiOS or false)
     && gccForLibs != null;
@@ -514,7 +514,7 @@ stdenvNoCC.mkDerivation {
     + optionalString (isClang
                       && targetPlatform.isLinux
                       && !(targetPlatform.useAndroidPrebuilt or false)
-                      && !(targetPlatform.useLLVM or false)
+                      && !(targetPlatform.toolchain == "llvm")
                       && gccForLibs != null) (''
       echo "--gcc-toolchain=${gccForLibs}" >> $out/nix-support/cc-cflags
 

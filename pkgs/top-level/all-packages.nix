@@ -61,7 +61,7 @@ with pkgs;
       # thing to to create an earlier thing (leading to infinite recursion) and
       # we also would still respect the stage arguments choices for these
       # things.
-      (if stdenvNoCC.hostPlatform.isDarwin || stdenvNoCC.hostPlatform.useLLVM or false
+      (if stdenvNoCC.hostPlatform.isDarwin || stdenvNoCC.hostPlatform.toolchain == "llvm"
        then overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoCompilerRt
        else gccCrossLibcStdenv)
     else mkStdenvNoLibs stdenv;
@@ -69,7 +69,7 @@ with pkgs;
   stdenvNoLibc =
     if stdenvNoCC.hostPlatform != stdenvNoCC.buildPlatform
     then
-      (if stdenvNoCC.hostPlatform.isDarwin || stdenvNoCC.hostPlatform.useLLVM or false
+      (if stdenvNoCC.hostPlatform.isDarwin || stdenvNoCC.hostPlatform.toolchain == "llvm"
        then overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoLibc
        else gccCrossLibcStdenv)
     else mkStdenvNoLibs stdenv;
@@ -5951,7 +5951,7 @@ with pkgs;
           # temporarily disabled due to breakage;
           # see https://github.com/NixOS/nixpkgs/pull/243249
           && !stdenv.targetPlatform.isWindows
-          && !(stdenv.targetPlatform.useLLVM or false)
+          && !(stdenv.targetPlatform.toolchain == "llvm")
         ;
       };
       bintools = binutilsNoLibc;
@@ -7711,11 +7711,13 @@ with pkgs;
   # In other words, try to only use this in wrappers, and only use those
   # wrappers from the next stage.
   bintools-unwrapped = let
-    inherit (stdenv.targetPlatform) linker;
-  in     if linker == "lld"     then llvmPackages.bintools-unwrapped
-    else if linker == "cctools" then darwin.binutils-unwrapped
-    else if linker == "bfd"     then binutils-unwrapped
-    else if linker == "gold"    then binutils-unwrapped.override { enableGoldDefault = true; }
+    # We should remove the linker inherit and solely go off of bintools in the future.
+    # The linker should be specified inside package build systems (cmake, meson, etc).
+    inherit (stdenv.targetPlatform) linker bintools;
+  in     if linker == "lld" || bintools == "llvm"      then llvmPackages.bintools-unwrapped
+    else if linker == "cctools" || bintools == "apple" then darwin.binutils-unwrapped
+    else if linker == "bfd" || bintools == "gnu"       then binutils-unwrapped
+    else if linker == "gold"                           then binutils-unwrapped.override { enableGoldDefault = true; }
     else null;
   bintoolsNoLibc = wrapBintoolsWith {
     bintools = bintools-unwrapped;
@@ -9028,7 +9030,7 @@ with pkgs;
     else libcCrossChooser stdenv.targetPlatform.libc;
 
   threadsCross =
-    lib.optionalAttrs (stdenv.targetPlatform.isMinGW && !(stdenv.targetPlatform.useLLVM or false)) {
+    lib.optionalAttrs (stdenv.targetPlatform.isMinGW && stdenv.targetPlatform.toolchain != "llvm") {
       # other possible values: win32 or posix
       model = "mcf";
       # For win32 or posix set this to null
@@ -9494,7 +9496,7 @@ with pkgs;
   libcomps = callPackage ../tools/package-management/libcomps { python = python3; };
 
   libcxxrt = callPackage ../development/libraries/libcxxrt {
-    stdenv = if stdenv.hostPlatform.useLLVM or false
+    stdenv = if stdenv.hostPlatform.toolchain == "llvm"
              then overrideCC stdenv buildPackages.llvmPackages.tools.clangNoLibcxx
              else stdenv;
   };
@@ -11989,7 +11991,7 @@ with pkgs;
 
   busybox = callPackage ../os-specific/linux/busybox {
     # Fixes libunwind from being dynamically linked to a static binary.
-    stdenv = if (stdenv.targetPlatform.useLLVM or false) then
+    stdenv = if stdenv.targetPlatform.toolchain == "llvm" then
       overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx
     else stdenv;
   };

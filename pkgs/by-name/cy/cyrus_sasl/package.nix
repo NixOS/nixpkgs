@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
       "--enable-shared"
     ]
     ++ lib.optional enableLdap "--with-ldap=${openldap.dev}"
-    ++ lib.optionals (stdenv.targetPlatform.useLLVM or false) [
+    ++ lib.optionals (stdenv.targetPlatform.toolchain == "llvm") [
       "--disable-sample"
       "CFLAGS=-DTIME_WITH_SYS_TIME"
     ];

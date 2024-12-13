@@ -31,7 +31,7 @@ let
   runtimes = [ "libcxx" ] ++ lib.optional (cxxabi == null) "libcxxabi";
 
   # Note: useLLVM is likely false for Darwin but true under pkgsLLVM
-  useLLVM = stdenv.hostPlatform.useLLVM or false;
+  useLLVM = stdenv.hostPlatform.toolchain == "llvm";
 
   src' = if monorepoSrc != null then
     runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
