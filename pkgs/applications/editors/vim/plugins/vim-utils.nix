@@ -488,34 +488,37 @@ rec {
 
   toVimPlugin =
     drv:
-    drv.overrideAttrs (finalAttrs: oldAttrs: {
-      name = "vimplugin-${oldAttrs.name}";
-      # dont move the "doc" folder since vim expects it
-      forceShare = [
-        "man"
-        "info"
-      ];
-
-      nativeBuildInputs =
-        oldAttrs.nativeBuildInputs or [ ]
-        ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-          vimGenDocHook
+    drv.overrideAttrs (
+      finalAttrs: oldAttrs: {
+        name = "vimplugin-${oldAttrs.name}";
+        # dont move the "doc" folder since vim expects it
+        forceShare = [
+          "man"
+          "info"
         ];
 
-      doCheck = oldAttrs.doCheck or true;
+        nativeBuildInputs =
+          oldAttrs.nativeBuildInputs or [ ]
+          ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+            vimGenDocHook
+          ];
 
-      nativeCheckInputs =
-        oldAttrs.nativeCheckInputs or [ ]
-        ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ([
-          vimCommandCheckHook ]
-        ++ lib.optional (finalAttrs.finalPackage ? nvimRequireCheck) neovimRequireCheckHook
-        )
-        ;
+        doCheck = oldAttrs.doCheck or true;
 
-      passthru = (oldAttrs.passthru or { }) // {
-        vimPlugin = true;
-      };
-    });
+        nativeCheckInputs =
+          oldAttrs.nativeCheckInputs or [ ]
+          ++ lib.optionals (stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
+            [
+              vimCommandCheckHook
+            ]
+            ++ lib.optional (finalAttrs.finalPackage ? nvimRequireCheck) neovimRequireCheckHook
+          );
+
+        passthru = (oldAttrs.passthru or { }) // {
+          vimPlugin = true;
+        };
+      }
+    );
 }
 // lib.optionalAttrs config.allowAliases {
   vimWithRC = throw "vimWithRC was removed, please use vim.customize instead";
