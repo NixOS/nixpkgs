@@ -18,11 +18,15 @@ buildDotnetModule rec {
     hash = "sha256-m3TS9H6cbEAHn6PvYQDMzdKdnOnDSM4lxCTdHBCXLV4=";
   };
 
-  selfContainedBuild = true;
-
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.sdk_9_0;
   projectFile = "UI.Console/UI.Console.csproj";
   nugetDeps = ./deps.nix;
+
+  postPatch = ''
+    substituteInPlace UI.Console/UI.Console.csproj \
+      --replace-fail 'net6.0' 'net9.0'
+  '';
 
   preConfigureNuGet = ''
     # This should really be in the upstream nuget.config
