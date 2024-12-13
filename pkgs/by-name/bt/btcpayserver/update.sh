@@ -5,7 +5,7 @@ scriptDir=$(cd "${BASH_SOURCE[0]%/*}" && pwd)
 cd "$scriptDir"
 
 echo "Updating nbxplorer"
-../nbxplorer/update.sh
+../../nb/nbxplorer/update.sh
 echo
 echo "Updating btcpayserver"
-../nbxplorer/util/update-common.sh btcpayserver deps.nix
+../../nb/nbxplorer/util/update-common.sh btcpayserver deps.nix
