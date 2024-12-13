@@ -93,5 +93,8 @@ in
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ felixzieger ];
+  meta.maintainers = with lib.maintainers; [
+    felixzieger
+    jb55
+  ];
 }
