@@ -4022,6 +4022,12 @@
     githubId = 7467038;
     name = "Chris Hammill";
   };
+  cfl4g = {
+    email = "martinlynge@gmail.com";
+    github = "mlh-csis";
+    githubId = 1171892;
+    name = "Martin Lynge Hansen";
+  };
   cfouche = {
     email = "chaddai.fouche@gmail.com";
     github = "Chaddai";
