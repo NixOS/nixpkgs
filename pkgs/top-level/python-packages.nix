@@ -6501,6 +6501,8 @@ self: super: with self; {
 
   jaconv = callPackage ../development/python-modules/jaconv { };
 
+  jack-client = callPackage ../development/python-modules/jack-client { };
+
   jaeger-client = callPackage ../development/python-modules/jaeger-client { };
 
   jalali-core = callPackage ../development/python-modules/jalali-core { };
@@ -10442,6 +10444,8 @@ self: super: with self; {
   });
 
   pyaehw4a1 = callPackage ../development/python-modules/pyaehw4a1 { };
+
+  pyalsa = callPackage ../development/python-modules/pyalsa { };
 
   pyalsaaudio = callPackage ../development/python-modules/pyalsaaudio { };
 
