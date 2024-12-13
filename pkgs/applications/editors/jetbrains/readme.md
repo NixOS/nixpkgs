@@ -20,7 +20,7 @@ To test the build process of every IDE (as well as the process for adding plugin
  - Source builds need a bit more effort, as they **aren't automated at the moment**:
    - Find the build of the stable release you want to target (usually different for pycharm and idea, should have three components)
    - I find this at https://jetbrains.com/updates/updates.xml (search for `product name="`, then `fullNumber`)
-   - Update the `buildVer` field in source/default.nix
+   - Update the `version` & `buildNumber` fields in source/default.nix
    - Empty the `ideaHash`, `androidHash`, `jpsHash` and `restarterHash` (only `ideaHash` and `restarterHash` changes on a regular basis) fields and try to build to get the new hashes
    - Run `nix build .#jetbrains.(idea/pycharm)-community-src.src.src`, then `./source/build_maven.py source/idea_maven_artefacts.json result/`
    - Update `source/brokenPlugins.json` (from https://plugins.jetbrains.com/files/brokenPlugins.json)

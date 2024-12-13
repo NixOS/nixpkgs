@@ -17,7 +17,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "udiskie";
-  version = "2.5.3";
+  version = "2.5.7";
 
   pyproject = true;
 
@@ -25,7 +25,7 @@ python3Packages.buildPythonApplication rec {
     owner = "coldfix";
     repo = "udiskie";
     rev = "v${version}";
-    hash = "sha256-asrVQR0d+5l76COsXp88srtGZQHU+AwbP3HwDiwRlnE=";
+    hash = "sha256-ndoTVeF6iTe4+aqFDRaLUEaBavgCWHzULXeG3Kj3ptY=";
   };
 
   patches = [

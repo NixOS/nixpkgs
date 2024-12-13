@@ -71,7 +71,7 @@ let
     touch $out
   '';
 
-  groupAccessAvailable = versionAtLeast postgresql.version "11.0";
+  groupAccessAvailable = versionAtLeast cfg.finalPackage.version "11.0";
 
   extensionNames = map getName postgresql.installedExtensions;
   extensionInstalled = extension: elem extension extensionNames;
@@ -111,6 +111,17 @@ in
 
       package = mkPackageOption pkgs "postgresql" {
         example = "postgresql_15";
+      };
+
+      finalPackage = mkOption {
+        type = types.package;
+        readOnly = true;
+        default = postgresql;
+        defaultText = "with config.services.postgresql; package.withPackages extensions";
+        description = ''
+          The postgresql package that will effectively be used in the system.
+          It consists of the base package with plugins applied to it.
+        '';
       };
 
       checkConfig = mkOption {
@@ -583,7 +594,7 @@ in
 
     users.groups.postgres.gid = config.ids.gids.postgres;
 
-    environment.systemPackages = [ postgresql ];
+    environment.systemPackages = [ cfg.finalPackage ];
 
     environment.pathsToLink = [
       "/share/postgresql"
@@ -601,7 +612,7 @@ in
 
       environment.PGDATA = cfg.dataDir;
 
-      path = [ postgresql ];
+      path = [ cfg.finalPackage ];
 
       preStart = ''
         if ! test -e ${cfg.dataDir}/PG_VERSION; then
@@ -682,7 +693,7 @@ in
           # receiving systemd's SIGINT.
           TimeoutSec = 120;
 
-          ExecStart = "${postgresql}/bin/postgres";
+          ExecStart = "${cfg.finalPackage}/bin/postgres";
 
           # Hardening
           CapabilityBoundingSet = [ "" ];
@@ -733,7 +744,6 @@ in
 
       unitConfig.RequiresMountsFor = "${cfg.dataDir}";
     };
-
   };
 
   meta.doc = ./postgresql.md;

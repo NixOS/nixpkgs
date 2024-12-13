@@ -60,10 +60,12 @@ stdenv.mkDerivation rec {
     homepage = "https://apps.gnome.org/Raider";
     license = licenses.gpl3Plus;
     mainProgram = "raider";
-    maintainers = with maintainers; [
-      benediktbroich
-      aleksana
-    ];
+    maintainers =
+      with maintainers;
+      [
+        benediktbroich
+      ]
+      ++ lib.teams.gnome-circle.members;
     platforms = platforms.unix;
   };
 }

@@ -108,6 +108,6 @@ crystal.buildCrystalPackage rec {
     homepage = "https://github.com/GeopJr/Collision";
     license = licenses.bsd2;
     mainProgram = "collision";
-    maintainers = with maintainers; [ sund3RRR ];
+    maintainers = with maintainers; [ sund3RRR ] ++ lib.teams.gnome-circle.members;
   };
 }

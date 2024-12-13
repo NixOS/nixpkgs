@@ -15,7 +15,7 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libquotient";
-  version = "0.8.2";
+  version = "0.9.1";
 
   outputs = [
     "out"
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     owner = "quotient-im";
     repo = "libQuotient";
     rev = version;
-    hash = "sha256-6sR/80r9qW9kMYqIi2FeXgb6M795XKzpvyE6eTaBsjA=";
+    hash = "sha256-R9ms3sYGdHaYKUMnZyBjw5KCik05k93vlvXMRtAXh5Y=";
   };
 
   nativeBuildInputs = [ cmake ];

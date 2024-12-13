@@ -16,7 +16,7 @@ let
         - ${blue}lib${reset}      Nixpkgs library functions
         - other module arguments
 
-        - ${blue}flake${reset}    Flake outputs, inputs and source info of ${flake_path}
+        - ${blue}flake${reset}    Flake outputs, inputs and source info of ${flake}
 
     Use tab completion to browse around ${blue}config${reset}.
 

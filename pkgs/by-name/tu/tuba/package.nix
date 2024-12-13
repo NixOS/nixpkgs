@@ -112,10 +112,12 @@ stdenv.mkDerivation rec {
     mainProgram = "dev.geopjr.Tuba";
     license = lib.licenses.gpl3Only;
     changelog = "https://github.com/GeopJr/Tuba/releases/tag/v${version}";
-    maintainers = with lib.maintainers; [
-      chuangzhu
-      aleksana
-      donovanglover
-    ];
+    maintainers =
+      with lib.maintainers;
+      [
+        chuangzhu
+        donovanglover
+      ]
+      ++ lib.teams.gnome-circle.members;
   };
 }

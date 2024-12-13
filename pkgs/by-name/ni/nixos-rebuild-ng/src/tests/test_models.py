@@ -43,6 +43,12 @@ def test_flake_parse() -> None:
     assert m.Flake.parse(".#attr") == m.Flake(Path("."), "nixosConfigurations.attr")
     assert m.Flake.parse("#attr") == m.Flake(Path("."), "nixosConfigurations.attr")
     assert m.Flake.parse(".") == m.Flake(Path("."), "nixosConfigurations.default")
+    assert m.Flake.parse("path:/to/flake#attr") == m.Flake(
+        "path:/to/flake", "nixosConfigurations.attr"
+    )
+    assert m.Flake.parse("github:user/repo/branch") == m.Flake(
+        "github:user/repo/branch", "nixosConfigurations.default"
+    )
 
 
 def test_flake_to_attr() -> None:

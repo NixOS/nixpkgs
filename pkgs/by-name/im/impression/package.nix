@@ -66,7 +66,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/adhami3310/Impression";
     license = lib.licenses.gpl3Only;
     mainProgram = "impression";
-    maintainers = with lib.maintainers; [ dotlambda ];
+    maintainers = with lib.maintainers; [ dotlambda ] ++ lib.teams.gnome-circle.members;
     platforms = lib.platforms.linux;
   };
 })
