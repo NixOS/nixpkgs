@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "muparser";
-  version = "2.3.4";
+  version = "2.3.5";
 
   src = fetchFromGitHub {
     owner = "beltoforion";
     repo = "muparser";
     rev = "v${version}";
-    hash = "sha256-hutmmhw7BHAwbDKBiK+3Yw833GL0rPGlVjlO7XzTii0=";
+    hash = "sha256-CE3xgJr2RNsNMrj8Cf6xd/pD9M1OlHEclTW6xZV5X30=";
   };
 
   postPatch = ''
