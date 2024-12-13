@@ -3,6 +3,7 @@
   dotnetCorePackages,
   fetchFromGitHub,
   lib,
+  versionCheckHook,
 }:
 
 buildDotnetModule rec {
@@ -21,6 +22,12 @@ buildDotnetModule rec {
   nugetDeps = ./deps.nix;
 
   executables = [ "VrcAdvert" ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/VrcAdvert";
 
   meta = {
     description = "Advertise your OSC app through OSCQuery";
