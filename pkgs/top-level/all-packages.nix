@@ -8480,6 +8480,8 @@ with pkgs;
 
   mypy-protobuf = with python3Packages; toPythonApplication mypy-protobuf;
 
+  basedmypy = with python3Packages; toPythonApplication basedmypy;
+
   ### DEVELOPMENT / LIBRARIES
 
   abseil-cpp_202103 = callPackage ../development/libraries/abseil-cpp/202103.nix {
