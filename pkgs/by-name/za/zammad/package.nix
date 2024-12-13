@@ -159,7 +159,6 @@ stdenvNoCC.mkDerivation {
       "aarch64-linux"
     ];
     maintainers = with maintainers; [
-      n0emis
       taeer
       netali
     ];
