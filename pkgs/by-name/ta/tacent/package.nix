@@ -33,5 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ PopeRigby ];
     platforms = lib.platforms.linux;
+    badPlatforms = [
+      # /build/source/UnitTests/Src/UnitTests.cpp:149:15: error: 'Rule' is not a member of 'tUnitTest'
+      "aarch64-linux"
+    ];
   };
 })
