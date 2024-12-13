@@ -20,7 +20,7 @@ logger.setLevel(logging.INFO)
 
 def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentParser]]:
     common_flags = argparse.ArgumentParser(add_help=False)
-    common_flags.add_argument("--verbose", "-v", action="count", default=0)
+    common_flags.add_argument("--verbose", "-v", action="count", dest="v", default=0)
     common_flags.add_argument("--max-jobs", "-j")
     common_flags.add_argument("--cores")
     common_flags.add_argument("--log-format")
@@ -202,7 +202,7 @@ def parse_args(
         print(f"{parser.prog}: warning: {msg}", file=sys.stderr)
 
     # verbose affects both nix commands and this script, debug only this script
-    if args.verbose or args.debug:
+    if args.v or args.debug:
         logger.setLevel(logging.DEBUG)
 
     # https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/nixos-rebuild/nixos-rebuild.sh#L56

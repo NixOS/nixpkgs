@@ -10,7 +10,8 @@ def test_dict_to_flags() -> None:
             "test_flag_4": ["v1", "v2"],
             "test_flag_5": None,
             "t": True,
-            "verbose": 5,
+            "v": 5,
+            "verbose": 2,
         }
     )
     assert r1 == [
@@ -22,6 +23,8 @@ def test_dict_to_flags() -> None:
         "v2",
         "-t",
         "-vvvvv",
+        "--verbose",
+        "--verbose",
     ]
     r2 = u.dict_to_flags({"verbose": 0, "empty_list": []})
     assert r2 == []
