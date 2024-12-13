@@ -95,13 +95,14 @@ stdenv.mkDerivation rec {
     ln -s ${ffmpeg}/bin/ffmpeg recognize/node_modules/ffmpeg-static/ffmpeg
   '';
 
-  buildInputs = [
+  nativeBuildInputs = lib.optionals useLibTensorflow [
     nodejs
     nodejs.pkgs.node-pre-gyp
     nodejs.pkgs.node-gyp
     python3
     util-linux
   ];
+
   buildPhase = lib.optionalString useLibTensorflow ''
     cd recognize
 
