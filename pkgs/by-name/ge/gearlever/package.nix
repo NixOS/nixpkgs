@@ -21,14 +21,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "gearlever";
-  version = "2.1.0";
+  version = "2.3.2";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "mijorus";
     repo = "gearlever";
-    rev = "refs/tags/${version}";
-    hash = "sha256-OpNzJwEjLni/vG1RtRSH29wovMRwKzJn+Vep1vZDEFM=";
+    tag = version;
+    hash = "sha256-w+tCOMDNm99cAtA9AmADBc6dP4y5KDDP8iiRZS+5upQ=";
   };
 
   postPatch =
@@ -47,6 +47,8 @@ python3Packages.buildPythonApplication rec {
     + ''
       substituteInPlace src/AppDetails.py \
         --replace-fail "sandbox_sh(['arch'])" '"${stdenv.hostPlatform.uname.processor}"'
+      substituteInPlace src/models/UpdateManager.py \
+        --replace-fail "terminal.sandbox_sh(['arch'])" '"${stdenv.hostPlatform.uname.processor}"'
     '';
 
   nativeBuildInputs = [
