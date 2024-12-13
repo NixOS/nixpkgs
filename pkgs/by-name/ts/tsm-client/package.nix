@@ -44,7 +44,7 @@
 # point to this derivations `/dsmi_dir` directory symlink.
 # Other environment variables might be necessary,
 # depending on local configuration or usage; see:
-# https://www.ibm.com/docs/en/storage-protect/8.1.24?topic=solaris-set-api-environment-variables
+# https://www.ibm.com/docs/en/storage-protect/8.1.25?topic=solaris-set-api-environment-variables
 
 let
 
@@ -91,10 +91,10 @@ let
 
   unwrapped = stdenv.mkDerivation (finalAttrs: {
     name = "tsm-client-${finalAttrs.version}-unwrapped";
-    version = "8.1.24.0";
+    version = "8.1.25.0";
     src = fetchurl {
       url = mkSrcUrl finalAttrs.version;
-      hash = "sha512-TqTDE2oJK/Wu/MNYUCqxmOE6asAqDLz4GtdcFZuKqvfT8pJUCYKz9yjRPIrM3u2XfLH0wDq+Q8ER4ui680mswA==";
+      hash = "sha512-OPNjSMnWJ/8Ogy9O0wG0H4cEbYiOwyCVzkWhpG00v/Vm0LDxLzPteMnMOyH8L1egIDhy7lmQYSzI/EC4WWUDDA==";
     };
     inherit meta passthru;
 
