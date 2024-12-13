@@ -14,9 +14,8 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "TechnitiumSoftware";
     repo = "DnsServer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oEsJ4P0eUXhIsXCkY3ciJaGmElu745nNiBtlDXpSb6k=";
-    name = "${pname}-${version}";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
