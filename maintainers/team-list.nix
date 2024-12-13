@@ -457,6 +457,7 @@ with lib.maintainers;
       aleksana
       dawidd6
       getchoo
+      michaelgrahamevans
     ];
     scope = "Maintain GNOME Circle applications.";
     shortName = "GNOME Circle";
