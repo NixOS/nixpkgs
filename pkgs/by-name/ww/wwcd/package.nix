@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromSourcehut
-, autoreconfHook
-, pkg-config
-, check
+{
+  stdenv,
+  lib,
+  fetchFromSourcehut,
+  autoreconfHook,
+  pkg-config,
+  check,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,9 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    autoreconfHook pkg-config check
+    autoreconfHook
+    pkg-config
+    check
   ];
 
   autoreconfFlags = [ "-if" ];

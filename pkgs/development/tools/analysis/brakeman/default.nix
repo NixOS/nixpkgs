@@ -1,4 +1,9 @@
-{ lib, ruby, bundlerApp, bundlerUpdateScript }:
+{
+  lib,
+  ruby,
+  bundlerApp,
+  bundlerUpdateScript,
+}:
 
 bundlerApp rec {
   pname = "brakeman";

@@ -1,6 +1,12 @@
-{ lib, buildGoModule, coreutils, libtensorflow, src, version
-, pkg-config
-, vips
+{
+  lib,
+  buildGoModule,
+  coreutils,
+  libtensorflow,
+  src,
+  version,
+  pkg-config,
+  vips,
 }:
 
 buildGoModule rec {

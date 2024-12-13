@@ -1,15 +1,16 @@
-{ lib
-, boost
-, fetchFromGitHub
-, installShellFiles
-, mkDerivation
-, muparser
-, pkg-config
-, qmake
-, qtbase
-, qtsvg
-, qttools
-, runtimeShell
+{
+  lib,
+  boost,
+  fetchFromGitHub,
+  installShellFiles,
+  mkDerivation,
+  muparser,
+  pkg-config,
+  qmake,
+  qtbase,
+  qtsvg,
+  qttools,
+  runtimeShell,
 }:
 
 mkDerivation rec {
@@ -49,7 +50,6 @@ mkDerivation rec {
     substituteInPlace librecad/src/main/qc_applicationwindow.cpp \
       --replace __DATE__ 0
   '';
-
 
   installPhase = ''
     runHook preInstall

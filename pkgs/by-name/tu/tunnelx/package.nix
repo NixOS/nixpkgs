@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, jdk
-, jre
-, survex
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  jdk,
+  jre,
+  survex,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

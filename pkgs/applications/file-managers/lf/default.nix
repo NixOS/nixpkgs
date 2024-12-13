@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -20,7 +21,11 @@ buildGoModule rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  ldflags = [ "-s" "-w" "-X main.gVersion=r${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.gVersion=r${version}"
+  ];
 
   # Force the use of the pure-go implementation of the os/user library.
   # Relevant issue: https://github.com/gokcehan/lf/issues/191

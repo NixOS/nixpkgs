@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "django-pglock";
-  version = "1.6.0";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Opus10";
     repo = "django-pglock";
-    rev = "refs/tags/${version}";
-    hash = "sha256-KCB00W3sUyEERgK/DfDPl051uFkc0IRdbOJusUVs5SA=";
+    tag = version;
+    hash = "sha256-7PBZvI4OTDIZjjLWnfOwGAdEJr3D6snmR20hPboLvXc=";
   };
 
   build-system = [ poetry-core ];

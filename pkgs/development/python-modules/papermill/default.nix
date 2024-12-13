@@ -69,12 +69,16 @@ buildPythonPackage rec {
     s3 = [ boto3 ];
   };
 
-  nativeCheckInputs = [
-    ipykernel
-    moto
-    pytest-mock
-    pytestCheckHook
-  ] ++ optional-dependencies.azure ++ optional-dependencies.s3 ++ optional-dependencies.gcs;
+  nativeCheckInputs =
+    [
+      ipykernel
+      moto
+      pytest-mock
+      pytestCheckHook
+    ]
+    ++ optional-dependencies.azure
+    ++ optional-dependencies.s3
+    ++ optional-dependencies.gcs;
 
   preCheck = ''
     export HOME=$(mktemp -d)

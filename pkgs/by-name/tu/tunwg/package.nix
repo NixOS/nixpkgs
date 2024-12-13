@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -16,7 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-5BJFAnsmx6lbGQTx/6dIdcsETsllCr6C3wPbB2Gvj5Y=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Secure private tunnel to your local servers";

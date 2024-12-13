@@ -1,9 +1,24 @@
 # This file has been autogenerate with cabal2nix.
 # Update via ./update.sh
-{ mkDerivation, base, bytestring, cmdargs, directory, fetchzip
-, file-embed, filepath, lib, megaparsec, mtl, parser-combinators
-, pretty-simple, safe-exceptions, scientific, text, transformers
-, unix
+{
+  mkDerivation,
+  base,
+  bytestring,
+  cmdargs,
+  directory,
+  fetchzip,
+  file-embed,
+  filepath,
+  lib,
+  megaparsec,
+  mtl,
+  parser-combinators,
+  pretty-simple,
+  safe-exceptions,
+  scientific,
+  text,
+  transformers,
+  unix,
 }:
 mkDerivation {
   pname = "nixfmt";
@@ -15,12 +30,26 @@ mkDerivation {
   isLibrary = true;
   isExecutable = true;
   libraryHaskellDepends = [
-    base megaparsec mtl parser-combinators pretty-simple scientific
-    text transformers
+    base
+    megaparsec
+    mtl
+    parser-combinators
+    pretty-simple
+    scientific
+    text
+    transformers
   ];
   executableHaskellDepends = [
-    base bytestring cmdargs directory file-embed filepath
-    safe-exceptions text transformers unix
+    base
+    bytestring
+    cmdargs
+    directory
+    file-embed
+    filepath
+    safe-exceptions
+    text
+    transformers
+    unix
   ];
   jailbreak = true;
   homepage = "https://github.com/NixOS/nixfmt";

@@ -1,17 +1,17 @@
-{ lib, fetchFromGitHub, buildDunePackage, logs, num }:
+{ lib, fetchFromGitHub, buildDunePackage, logs, zarith }:
 
 buildDunePackage rec {
   pname = "ocplib-simplex";
-  version = "0.5";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
-    owner = "OCamlPro-Iguernlala";
+    owner = "OCamlPro";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-sy5QUmghG28tXlwbKWx3PpBGTtzXarTSzd1WLSYyvbc=";
+    hash = "sha256-fLTht+TlyJIsIAsRLmmkFKsnbSeW3BgyAyURFdnGfko=";
   };
 
-  propagatedBuildInputs = [ logs num ];
+  propagatedBuildInputs = [ logs zarith ];
 
   doCheck = true;
 

@@ -1,11 +1,17 @@
-{ lib, pkgs, config, ... }:
+{
+  lib,
+  pkgs,
+  config,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.plausible;
 
-in {
+in
+{
   options.services.plausible = {
     enable = mkEnableOption "plausible";
 
@@ -13,7 +19,9 @@ in {
 
     database = {
       clickhouse = {
-        setup = mkEnableOption "creating a clickhouse instance" // { default = true; };
+        setup = mkEnableOption "creating a clickhouse instance" // {
+          default = true;
+        };
         url = mkOption {
           default = "http://localhost:8123/default";
           type = types.str;
@@ -23,7 +31,9 @@ in {
         };
       };
       postgres = {
-        setup = mkEnableOption "creating a postgresql instance" // { default = true; };
+        setup = mkEnableOption "creating a postgresql instance" // {
+          default = true;
+        };
         dbname = mkOption {
           default = "plausible";
           type = types.str;
@@ -44,7 +54,11 @@ in {
     server = {
       disableRegistration = mkOption {
         default = true;
-        type = types.enum [true false "invite_only"];
+        type = types.enum [
+          true
+          false
+          "invite_only"
+        ];
         description = ''
           Whether to prohibit creating an account in plausible's UI or allow on `invite_only`.
         '';
@@ -136,11 +150,33 @@ in {
   };
 
   imports = [
-    (mkRemovedOptionModule [ "services" "plausible" "releaseCookiePath" ] "Plausible uses no distributed Erlang features, so this option is no longer necessary and was removed")
-    (mkRemovedOptionModule [ "services" "plausible" "adminUser" "name" ] "Admin user is now created using first start wizard")
-    (mkRemovedOptionModule [ "services" "plausible" "adminUser" "email" ] "Admin user is now created using first start wizard")
-    (mkRemovedOptionModule [ "services" "plausible" "adminUser" "passwordFile" ] "Admin user is now created using first start wizard")
-    (mkRemovedOptionModule [ "services" "plausible" "adminUser" "activate" ] "Admin user is now created using first start wizard")
+    (mkRemovedOptionModule [ "services" "plausible" "releaseCookiePath" ]
+      "Plausible uses no distributed Erlang features, so this option is no longer necessary and was removed"
+    )
+    (mkRemovedOptionModule [
+      "services"
+      "plausible"
+      "adminUser"
+      "name"
+    ] "Admin user is now created using first start wizard")
+    (mkRemovedOptionModule [
+      "services"
+      "plausible"
+      "adminUser"
+      "email"
+    ] "Admin user is now created using first start wizard")
+    (mkRemovedOptionModule [
+      "services"
+      "plausible"
+      "adminUser"
+      "passwordFile"
+    ] "Admin user is now created using first start wizard")
+    (mkRemovedOptionModule [
+      "services"
+      "plausible"
+      "adminUser"
+      "activate"
+    ] "Admin user is now created using first start wizard")
   ];
 
   config = mkIf cfg.enable {
@@ -160,75 +196,82 @@ in {
           inherit (cfg.package.meta) description;
           documentation = [ "https://plausible.io/docs/self-hosting" ];
           wantedBy = [ "multi-user.target" ];
-          after = optional cfg.database.clickhouse.setup "clickhouse.service"
-          ++ optionals cfg.database.postgres.setup [
+          after =
+            optional cfg.database.clickhouse.setup "clickhouse.service"
+            ++ optionals cfg.database.postgres.setup [
               "postgresql.service"
               "plausible-postgres.service"
             ];
-          requires = optional cfg.database.clickhouse.setup "clickhouse.service"
+          requires =
+            optional cfg.database.clickhouse.setup "clickhouse.service"
             ++ optionals cfg.database.postgres.setup [
               "postgresql.service"
               "plausible-postgres.service"
             ];
 
-          environment = {
-            # NixOS specific option to avoid that it's trying to write into its store-path.
-            # See also https://github.com/lau/tzdata#data-directory-and-releases
-            STORAGE_DIR = "/var/lib/plausible/elixir_tzdata";
+          environment =
+            {
+              # NixOS specific option to avoid that it's trying to write into its store-path.
+              # See also https://github.com/lau/tzdata#data-directory-and-releases
+              STORAGE_DIR = "/var/lib/plausible/elixir_tzdata";
 
-            # Configuration options from
-            # https://plausible.io/docs/self-hosting-configuration
-            PORT = toString cfg.server.port;
-            LISTEN_IP = cfg.server.listenAddress;
+              # Configuration options from
+              # https://plausible.io/docs/self-hosting-configuration
+              PORT = toString cfg.server.port;
+              LISTEN_IP = cfg.server.listenAddress;
 
-            # Note [plausible-needs-no-erlang-distributed-features]:
-            # Plausible does not use, and does not plan to use, any of
-            # Erlang's distributed features, see:
-            #     https://github.com/plausible/analytics/pull/1190#issuecomment-1018820934
-            # Thus, disable distribution for improved simplicity and security:
-            #
-            # When distribution is enabled,
-            # Elixir spwans the Erlang VM, which will listen by default on all
-            # interfaces for messages between Erlang nodes (capable of
-            # remote code execution); it can be protected by a cookie; see
-            # https://erlang.org/doc/reference_manual/distributed.html#security).
-            #
-            # It would be possible to restrict the interface to one of our choice
-            # (e.g. localhost or a VPN IP) similar to how we do it with `listenAddress`
-            # for the Plausible web server; if distribution is ever needed in the future,
-            # https://github.com/NixOS/nixpkgs/pull/130297 shows how to do it.
-            #
-            # But since Plausible does not use this feature in any way,
-            # we just disable it.
-            RELEASE_DISTRIBUTION = "none";
-            # Additional safeguard, in case `RELEASE_DISTRIBUTION=none` ever
-            # stops disabling the start of EPMD.
-            ERL_EPMD_ADDRESS = "127.0.0.1";
+              # Note [plausible-needs-no-erlang-distributed-features]:
+              # Plausible does not use, and does not plan to use, any of
+              # Erlang's distributed features, see:
+              #     https://github.com/plausible/analytics/pull/1190#issuecomment-1018820934
+              # Thus, disable distribution for improved simplicity and security:
+              #
+              # When distribution is enabled,
+              # Elixir spwans the Erlang VM, which will listen by default on all
+              # interfaces for messages between Erlang nodes (capable of
+              # remote code execution); it can be protected by a cookie; see
+              # https://erlang.org/doc/reference_manual/distributed.html#security).
+              #
+              # It would be possible to restrict the interface to one of our choice
+              # (e.g. localhost or a VPN IP) similar to how we do it with `listenAddress`
+              # for the Plausible web server; if distribution is ever needed in the future,
+              # https://github.com/NixOS/nixpkgs/pull/130297 shows how to do it.
+              #
+              # But since Plausible does not use this feature in any way,
+              # we just disable it.
+              RELEASE_DISTRIBUTION = "none";
+              # Additional safeguard, in case `RELEASE_DISTRIBUTION=none` ever
+              # stops disabling the start of EPMD.
+              ERL_EPMD_ADDRESS = "127.0.0.1";
 
-            DISABLE_REGISTRATION = if isBool cfg.server.disableRegistration then boolToString cfg.server.disableRegistration else cfg.server.disableRegistration;
+              DISABLE_REGISTRATION =
+                if isBool cfg.server.disableRegistration then
+                  boolToString cfg.server.disableRegistration
+                else
+                  cfg.server.disableRegistration;
 
-            RELEASE_TMP = "/var/lib/plausible/tmp";
-            # Home is needed to connect to the node with iex
-            HOME = "/var/lib/plausible";
+              RELEASE_TMP = "/var/lib/plausible/tmp";
+              # Home is needed to connect to the node with iex
+              HOME = "/var/lib/plausible";
 
-            DATABASE_URL = "postgresql:///${cfg.database.postgres.dbname}?host=${cfg.database.postgres.socket}";
-            CLICKHOUSE_DATABASE_URL = cfg.database.clickhouse.url;
+              DATABASE_URL = "postgresql:///${cfg.database.postgres.dbname}?host=${cfg.database.postgres.socket}";
+              CLICKHOUSE_DATABASE_URL = cfg.database.clickhouse.url;
 
-            BASE_URL = cfg.server.baseUrl;
+              BASE_URL = cfg.server.baseUrl;
 
-            MAILER_EMAIL = cfg.mail.email;
-            SMTP_HOST_ADDR = cfg.mail.smtp.hostAddr;
-            SMTP_HOST_PORT = toString cfg.mail.smtp.hostPort;
-            SMTP_RETRIES = toString cfg.mail.smtp.retries;
-            SMTP_HOST_SSL_ENABLED = boolToString cfg.mail.smtp.enableSSL;
+              MAILER_EMAIL = cfg.mail.email;
+              SMTP_HOST_ADDR = cfg.mail.smtp.hostAddr;
+              SMTP_HOST_PORT = toString cfg.mail.smtp.hostPort;
+              SMTP_RETRIES = toString cfg.mail.smtp.retries;
+              SMTP_HOST_SSL_ENABLED = boolToString cfg.mail.smtp.enableSSL;
 
-            SELFHOST = "true";
-          } // (optionalAttrs (cfg.mail.smtp.user != null) {
-            SMTP_USER_NAME = cfg.mail.smtp.user;
-          });
+              SELFHOST = "true";
+            }
+            // (optionalAttrs (cfg.mail.smtp.user != null) {
+              SMTP_USER_NAME = cfg.mail.smtp.user;
+            });
 
-          path = [ cfg.package ]
-            ++ optional cfg.database.postgres.setup config.services.postgresql.package;
+          path = [ cfg.package ] ++ optional cfg.database.postgres.setup config.services.postgresql.package;
           script = ''
             # Elixir does not start up if `RELEASE_COOKIE` is not set,
             # even though we set `RELEASE_DISTRIBUTION=none` so the cookie should be unused.
@@ -236,8 +279,9 @@ in {
             export RELEASE_COOKIE=$(tr -dc A-Za-z0-9 < /dev/urandom | head -c 20)
             export SECRET_KEY_BASE="$(< $CREDENTIALS_DIRECTORY/SECRET_KEY_BASE )"
 
-            ${lib.optionalString (cfg.mail.smtp.passwordFile != null)
-              ''export SMTP_USER_PWD="$(< $CREDENTIALS_DIRECTORY/SMTP_USER_PWD )"''}
+            ${lib.optionalString (
+              cfg.mail.smtp.passwordFile != null
+            ) ''export SMTP_USER_PWD="$(< $CREDENTIALS_DIRECTORY/SMTP_USER_PWD )"''}
 
             ${lib.optionalString cfg.database.postgres.setup ''
               # setup
@@ -255,9 +299,13 @@ in {
             PrivateTmp = true;
             WorkingDirectory = "/var/lib/plausible";
             StateDirectory = "plausible";
-            LoadCredential = [
-              "SECRET_KEY_BASE:${cfg.server.secretKeybaseFile}"
-            ] ++ lib.optionals (cfg.mail.smtp.passwordFile != null) [ "SMTP_USER_PWD:${cfg.mail.smtp.passwordFile}"];
+            LoadCredential =
+              [
+                "SECRET_KEY_BASE:${cfg.server.secretKeybaseFile}"
+              ]
+              ++ lib.optionals (cfg.mail.smtp.passwordFile != null) [
+                "SMTP_USER_PWD:${cfg.mail.smtp.passwordFile}"
+              ];
           };
         };
       }

@@ -1,4 +1,9 @@
-{ lib, fetchurl, appimageTools, imagemagick }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+  imagemagick,
+}:
 
 let
   pname = "chain-desktop-wallet";
@@ -10,7 +15,8 @@ let
   };
 
   appimageContents = appimageTools.extractType2 { inherit pname version src; };
-in appimageTools.wrapType2 rec {
+in
+appimageTools.wrapType2 rec {
   inherit pname version src;
 
   extraInstallCommands = ''

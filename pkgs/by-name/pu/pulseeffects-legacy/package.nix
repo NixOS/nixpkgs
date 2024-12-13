@@ -1,37 +1,39 @@
-{ lib, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, itstool
-, python3
-, libxml2
-, desktop-file-utils
-, wrapGAppsHook3
-, gst_all_1
-, pulseaudio
-, gtk3
-, glib
-, glibmm
-, gtkmm3
-, lilv
-, lv2
-, serd
-, sord
-, sratom
-, libbs2b
-, libsamplerate
-, libsndfile
-, libebur128
-, rnnoise
-, boost
-, dbus
-, fftwFloat
-, calf
-, zita-convolver
-, zam-plugins
-, rubberband
-, lsp-plugins
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  itstool,
+  python3,
+  libxml2,
+  desktop-file-utils,
+  wrapGAppsHook3,
+  gst_all_1,
+  pulseaudio,
+  gtk3,
+  glib,
+  glibmm,
+  gtkmm3,
+  lilv,
+  lv2,
+  serd,
+  sord,
+  sratom,
+  libbs2b,
+  libsamplerate,
+  libsndfile,
+  libebur128,
+  rnnoise,
+  boost,
+  dbus,
+  fftwFloat,
+  calf,
+  zita-convolver,
+  zam-plugins,
+  rubberband,
+  lsp-plugins,
 }:
 
 let
@@ -43,7 +45,8 @@ let
     rubberband # pitch shifting
     zam-plugins # maximizer
   ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "pulseeffects";
   version = "4.8.7";
 
@@ -75,7 +78,11 @@ in stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-base # gst-fft
     gst_all_1.gst-plugins-good # pulsesrc
     gst_all_1.gst-plugins-bad
-    lilv lv2 serd sord sratom
+    lilv
+    lv2
+    serd
+    sord
+    sratom
     libbs2b
     libebur128
     libsamplerate

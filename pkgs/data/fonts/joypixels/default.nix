@@ -1,23 +1,27 @@
-{ lib, stdenv
-, fetchurl
-, config
-, acceptLicense ? config.joypixels.acceptLicense or false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  config,
+  acceptLicense ? config.joypixels.acceptLicense or false,
 }:
 
 let
   inherit (stdenv.hostPlatform.parsed) kernel;
 
-  systemSpecific = {
-    darwin = rec {
-      systemTag =  "nix-darwin";
-      capitalized = systemTag;
-      fontFile = "JoyPixels-SBIX.ttf";
+  systemSpecific =
+    {
+      darwin = rec {
+        systemTag = "nix-darwin";
+        capitalized = systemTag;
+        fontFile = "JoyPixels-SBIX.ttf";
+      };
+    }
+    .${kernel.name} or rec {
+      systemTag = "nixos";
+      capitalized = "NixOS";
+      fontFile = "joypixels-android.ttf";
     };
-  }.${kernel.name} or rec {
-    systemTag = "nixos";
-    capitalized = "NixOS";
-    fontFile = "joypixels-android.ttf";
-  };
 
   joypixels-free-license = with systemSpecific; {
     spdxId = "LicenseRef-JoyPixels-Free";
@@ -65,13 +69,17 @@ stdenv.mkDerivation rec {
   pname = "joypixels";
   version = "9.0.0";
 
-  src = assert !acceptLicense -> throwLicense;
-    with systemSpecific; fetchurl {
+  src =
+    assert !acceptLicense -> throwLicense;
+    with systemSpecific;
+    fetchurl {
       name = fontFile;
       url = "https://cdn.joypixels.com/distributions/${systemTag}/font/${version}/${fontFile}";
-      sha256 = {
-        darwin = "sha256-muUxXzz8BePyPsiZocYvM0ebM1H+u84ysN5YUvsMLiU=";
-      }.${kernel.name} or "sha256-pmGsVgYSK/c5OlhOXhNlRBs/XppMXmsHcZeSmIkuED4=";
+      sha256 =
+        {
+          darwin = "sha256-muUxXzz8BePyPsiZocYvM0ebM1H+u84ysN5YUvsMLiU=";
+        }
+        .${kernel.name} or "sha256-pmGsVgYSK/c5OlhOXhNlRBs/XppMXmsHcZeSmIkuED4=";
     };
 
   dontUnpack = true;
@@ -93,12 +101,14 @@ stdenv.mkDerivation rec {
       available upon request).
     '';
     homepage = "https://www.joypixels.com/fonts";
-    hydraPlatforms = []; # Just a binary file download, nothing to cache.
+    hydraPlatforms = [ ]; # Just a binary file download, nothing to cache.
     license =
       let
         free-license = joypixels-free-license;
         appendix = joypixels-license-appendix;
-      in with systemSpecific; {
+      in
+      with systemSpecific;
+      {
         spdxId = "LicenseRef-JoyPixels-Free-with-${capitalized}-Appendix";
         fullName = "${free-license.fullName} with ${appendix.fullName}";
         url = free-license.url;
@@ -106,7 +116,10 @@ stdenv.mkDerivation rec {
         free = false;
         redistributable = true;
       };
-    maintainers = with maintainers; [ toonn jtojnar ];
+    maintainers = with maintainers; [
+      toonn
+      jtojnar
+    ];
     # Not quite accurate since it's a font, not a program, but clearly
     # indicates we're not actually building it from source.
     sourceProvenance = [ sourceTypes.binaryNativeCode ];

@@ -1,36 +1,44 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, pandoc
-, pkg-config
-, openssl
-, installShellFiles
-, copyDesktopItems
-, makeDesktopItem
-, nix-update-script
-, testers
-, writeText
-, runCommand
-, fend
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pandoc,
+  pkg-config,
+  openssl,
+  installShellFiles,
+  copyDesktopItems,
+  makeDesktopItem,
+  nix-update-script,
+  testers,
+  writeText,
+  runCommand,
+  fend,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "fend";
-  version = "1.5.3";
+  version = "1.5.5";
 
   src = fetchFromGitHub {
     owner = "printfn";
     repo = "fend";
     rev = "v${version}";
-    hash = "sha256-mokBvBJlqvrherpZ+qMy86CXESXlaC6Qh3LISmmfR0Q=";
+    hash = "sha256-yRNfkP6DgXK1pLq50D9dMbbJaOX4ouQACJrfP5XrAJs=";
   };
 
-  cargoHash = "sha256-+8rXZ+xX2fqm0+tFnyQK9HXa/ZuIcbvtzVrB5cOUCp4=";
+  cargoHash = "sha256-y2H1BghzVvU/1WtAa4Yy2G9liKNbnyaufn5HbApwERA=";
 
-  nativeBuildInputs = [ pandoc installShellFiles pkg-config copyDesktopItems ];
-  buildInputs = [ pkg-config openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.Security ];
+  nativeBuildInputs = [
+    pandoc
+    installShellFiles
+    pkg-config
+    copyDesktopItems
+  ];
+
+  buildInputs = [
+    pkg-config
+    openssl
+  ];
 
   postBuild = ''
     patchShebangs --build ./documentation/build.sh
@@ -60,7 +68,11 @@ rustPlatform.buildRustPackage rec {
       icon = "fend";
       exec = "fend";
       terminal = true;
-      categories = [ "Utility" "Calculator" "ConsoleOnly" ];
+      categories = [
+        "Utility"
+        "Calculator"
+        "ConsoleOnly"
+      ];
     })
   ];
 
@@ -85,7 +97,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/printfn/fend";
     changelog = "https://github.com/printfn/fend/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ djanatyn liff ];
+    maintainers = with maintainers; [
+      djanatyn
+      liff
+    ];
     mainProgram = "fend";
   };
 }

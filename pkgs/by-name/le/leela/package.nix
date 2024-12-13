@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, poppler }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  poppler,
+}:
 
 stdenv.mkDerivation {
   pname = "leela";
@@ -14,7 +20,10 @@ stdenv.mkDerivation {
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ poppler ];
 
-  installFlags = [ "PREFIX=$(out)" "MANDIR=$(out)/share/man" ];
+  installFlags = [
+    "PREFIX=$(out)"
+    "MANDIR=$(out)/share/man"
+  ];
 
   meta = {
     description = "CLI frontend to the poppler-glib library of PDF tools";

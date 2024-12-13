@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, perl
-, installShellFiles
-, libpcap
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  installShellFiles,
+  libpcap,
 }:
 
 stdenv.mkDerivation rec {

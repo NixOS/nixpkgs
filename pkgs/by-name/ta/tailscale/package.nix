@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, buildGo123Module
-, fetchFromGitHub
-, fetchpatch
-, makeWrapper
-, getent
-, iproute2
-, iptables
-, shadow
-, procps
-, nixosTests
-, installShellFiles
-, tailscale-nginx-auth
+{
+  lib,
+  stdenv,
+  buildGo123Module,
+  fetchFromGitHub,
+  fetchpatch,
+  makeWrapper,
+  getent,
+  iproute2,
+  iptables,
+  shadow,
+  procps,
+  nixosTests,
+  installShellFiles,
+  tailscale-nginx-auth,
 }:
 
 let
@@ -21,7 +22,10 @@ buildGo123Module {
   pname = "tailscale";
   inherit version;
 
-  outputs = [ "out" "derper" ];
+  outputs = [
+    "out"
+    "derper"
+  ];
 
   src = fetchFromGitHub {
     owner = "tailscale";
@@ -41,11 +45,16 @@ buildGo123Module {
 
   vendorHash = "sha256-0VB7q9HKd5/QKaWBMpCYycRRiNTWCEjUMc3g3z6agc8=";
 
-  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ makeWrapper ] ++ [ installShellFiles ];
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [ makeWrapper ] ++ [
+    installShellFiles
+  ];
 
   CGO_ENABLED = 0;
 
-  subPackages = [ "cmd/derper" "cmd/tailscaled" ];
+  subPackages = [
+    "cmd/derper"
+    "cmd/tailscaled"
+  ];
 
   ldflags = [
     "-w"
@@ -60,22 +69,32 @@ buildGo123Module {
 
   doCheck = false;
 
-  postInstall = ''
-    ln -s $out/bin/tailscaled $out/bin/tailscale
-    moveToOutput "bin/derper" "$derper"
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-    wrapProgram $out/bin/tailscaled \
-      --prefix PATH : ${lib.makeBinPath [ iproute2 iptables getent shadow ]} \
-      --suffix PATH : ${lib.makeBinPath [ procps ]}
-    sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
-    install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
-  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    local INSTALL="$out/bin/tailscale"
-    installShellCompletion --cmd tailscale \
-      --bash <($out/bin/tailscale completion bash) \
-      --fish <($out/bin/tailscale completion fish) \
-      --zsh <($out/bin/tailscale completion zsh)
-  '';
+  postInstall =
+    ''
+      ln -s $out/bin/tailscaled $out/bin/tailscale
+      moveToOutput "bin/derper" "$derper"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      wrapProgram $out/bin/tailscaled \
+        --prefix PATH : ${
+          lib.makeBinPath [
+            iproute2
+            iptables
+            getent
+            shadow
+          ]
+        } \
+        --suffix PATH : ${lib.makeBinPath [ procps ]}
+      sed -i -e "s#/usr/sbin#$out/bin#" -e "/^EnvironmentFile/d" ./cmd/tailscaled/tailscaled.service
+      install -D -m0444 -t $out/lib/systemd/system ./cmd/tailscaled/tailscaled.service
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      local INSTALL="$out/bin/tailscale"
+      installShellCompletion --cmd tailscale \
+        --bash <($out/bin/tailscale completion bash) \
+        --fish <($out/bin/tailscale completion fish) \
+        --zsh <($out/bin/tailscale completion zsh)
+    '';
 
   passthru.tests = {
     inherit (nixosTests) headscale;
@@ -88,6 +107,11 @@ buildGo123Module {
     changelog = "https://github.com/tailscale/tailscale/releases/tag/v${version}";
     license = licenses.bsd3;
     mainProgram = "tailscale";
-    maintainers = with maintainers; [ mbaillie jk mfrw pyrox0 ];
+    maintainers = with maintainers; [
+      mbaillie
+      jk
+      mfrw
+      pyrox0
+    ];
   };
 }

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, tpm2-tss
-, autoreconfHook
-, autoconf-archive
-, pkg-config
-, qrencode
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  tpm2-tss,
+  autoreconfHook,
+  autoconf-archive,
+  pkg-config,
+  qrencode,
 }:
 
 stdenv.mkDerivation rec {

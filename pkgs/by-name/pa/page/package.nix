@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, fetchpatch, installShellFiles }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "page";

@@ -1,4 +1,5 @@
-import ./make-test-python.nix ({ lib, pkgs, ... }:
+import ./make-test-python.nix (
+  { lib, pkgs, ... }:
 
   let
     nodes = {
@@ -29,4 +30,5 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
           )
           machine.shutdown()
     '';
-  })
+  }
+)

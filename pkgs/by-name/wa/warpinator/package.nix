@@ -1,38 +1,41 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, gobject-introspection
-, meson
-, ninja
-, python3
-, gtk3
-, gdk-pixbuf
-, xapp
-, wrapGAppsHook3
-, gettext
-, polkit
-, glib
-, gitUpdater
-, bubblewrap
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  gobject-introspection,
+  meson,
+  ninja,
+  python3,
+  gtk3,
+  gdk-pixbuf,
+  xapp,
+  wrapGAppsHook3,
+  gettext,
+  polkit,
+  glib,
+  gitUpdater,
+  bubblewrap,
 }:
 
 let
-  pythonEnv = python3.withPackages (pp: with pp; [
-    grpcio-tools
-    protobuf
-    pygobject3
-    setproctitle
-    python-xapp
-    zeroconf
-    grpcio
-    setuptools
-    cryptography
-    pynacl
-    netifaces
-    netaddr
-    ifaddr
-    qrcode
-  ]);
+  pythonEnv = python3.withPackages (
+    pp: with pp; [
+      grpcio-tools
+      protobuf
+      pygobject3
+      setproctitle
+      python-xapp
+      zeroconf
+      grpcio
+      setuptools
+      cryptography
+      pynacl
+      netifaces
+      netaddr
+      ifaddr
+      qrcode
+    ]
+  );
 in
 stdenv.mkDerivation rec {
   pname = "warpinator";

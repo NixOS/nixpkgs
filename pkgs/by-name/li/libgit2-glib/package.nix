@@ -1,26 +1,31 @@
-{ stdenv
-, lib
-, fetchurl
-, gnome
-, meson
-, ninja
-, pkg-config
-, vala
-, libssh2
-, gtk-doc
-, gobject-introspection
-, gi-docgen
-, libgit2
-, glib
-, python3
-, fetchpatch
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gnome,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libssh2,
+  gtk-doc,
+  gobject-introspection,
+  gi-docgen,
+  libgit2,
+  glib,
+  python3,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgit2-glib";
   version = "1.2.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

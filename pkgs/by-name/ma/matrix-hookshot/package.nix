@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, makeWrapper
-, matrix-sdk-crypto-nodejs
-, mkYarnPackage
-, cargo
-, rustPlatform
-, rustc
-, napi-rs-cli
-, pkg-config
-, nodejs
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  makeWrapper,
+  matrix-sdk-crypto-nodejs,
+  mkYarnPackage,
+  cargo,
+  rustPlatform,
+  rustc,
+  napi-rs-cli,
+  pkg-config,
+  nodejs,
+  openssl,
 }:
 
 let
@@ -42,7 +43,8 @@ mkYarnPackage rec {
   };
 
   packageResolutions = {
-    "@matrix-org/matrix-sdk-crypto-nodejs" = "${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs";
+    "@matrix-org/matrix-sdk-crypto-nodejs" =
+      "${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs";
   };
 
   extraBuildInputs = [ openssl ];

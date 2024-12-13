@@ -1,18 +1,49 @@
-{ lib, stdenv, autoPatchelfHook, makeDesktopItem, copyDesktopItems, wrapGAppsHook3, fetchurl
-, alsa-lib, at-spi2-atk, at-spi2-core, atk, cairo, cups
-, gtk3, nss, glib, nspr, gdk-pixbuf, libdrm, mesa
-, libX11, libXScrnSaver, libXcomposite, libXcursor, libXdamage, libXext
-, libXfixes, libXi, libXrandr, libXrender, libXtst, libxcb, libxshmfence, pango
-, gcc-unwrapped, udev
+{
+  lib,
+  stdenv,
+  autoPatchelfHook,
+  makeDesktopItem,
+  copyDesktopItems,
+  wrapGAppsHook3,
+  fetchurl,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  gtk3,
+  nss,
+  glib,
+  nspr,
+  gdk-pixbuf,
+  libdrm,
+  mesa,
+  libX11,
+  libXScrnSaver,
+  libXcomposite,
+  libXcursor,
+  libXdamage,
+  libXext,
+  libXfixes,
+  libXi,
+  libXrandr,
+  libXrender,
+  libXtst,
+  libxcb,
+  libxshmfence,
+  pango,
+  gcc-unwrapped,
+  udev,
 }:
 
 stdenv.mkDerivation rec {
   pname = "snapmaker-luban";
-  version = "4.10.2";
+  version = "4.14.0";
 
   src = fetchurl {
     url = "https://github.com/Snapmaker/Luban/releases/download/v${version}/snapmaker-luban-${version}-linux-x64.tar.gz";
-    sha256 = "sha256-unxI0L8pcF6iWWa57GpYv/aYsApKAKfRaes3uXE7izM=";
+    hash = "sha256-/cJxVhY9zJdsg8l+BxJDr53/Lsz4JMBGMIS2HD6NXvM=";
   };
 
   nativeBuildInputs = [
@@ -42,10 +73,33 @@ stdenv.mkDerivation rec {
   ];
 
   libPath = lib.makeLibraryPath [
-    stdenv.cc.cc alsa-lib atk at-spi2-atk at-spi2-core cairo cups
-    gdk-pixbuf glib gtk3 libX11 libXcomposite libxshmfence
-    libXcursor libXdamage libXext libXfixes libXi libXrandr libXrender
-    libXtst nspr nss libxcb pango libXScrnSaver udev
+    stdenv.cc.cc
+    alsa-lib
+    atk
+    at-spi2-atk
+    at-spi2-core
+    cairo
+    cups
+    gdk-pixbuf
+    glib
+    gtk3
+    libX11
+    libXcomposite
+    libxshmfence
+    libXcursor
+    libXdamage
+    libXext
+    libXfixes
+    libXi
+    libXrandr
+    libXrender
+    libXtst
+    nspr
+    nss
+    libxcb
+    pango
+    libXScrnSaver
+    udev
   ];
 
   autoPatchelfIgnoreMissingDeps = [
@@ -83,16 +137,19 @@ stdenv.mkDerivation rec {
       icon = "snapmaker-luban";
       desktopName = "Snapmaker Luban";
       genericName = meta.description;
-      categories = [ "Office" "Printing" ];
+      categories = [
+        "Office"
+        "Printing"
+      ];
     })
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Snapmaker Luban is an easy-to-use 3-in-1 software tailor-made for Snapmaker machines";
     homepage = "https://github.com/Snapmaker/Luban";
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    license = licenses.gpl3;
-    maintainers = [ maintainers.simonkampe ];
+    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
+    license = lib.licenses.gpl3;
+    maintainers = with lib.maintainers; [ simonkampe ];
     platforms = [ "x86_64-linux" ];
     knownVulnerabilities = [ "CVE-2023-5217" ];
   };

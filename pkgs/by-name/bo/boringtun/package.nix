@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "boringtun";

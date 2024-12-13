@@ -1,7 +1,8 @@
-{ lib
-, mkYarnPackage
-, fetchFromGitHub
-, fetchYarnDeps
+{
+  lib,
+  mkYarnPackage,
+  fetchFromGitHub,
+  fetchYarnDeps,
 }:
 
 mkYarnPackage rec {
@@ -42,7 +43,10 @@ mkYarnPackage rec {
     changelog = "https://github.com/near/near-cli/blob/${src.rev}/CHANGELOG.md";
     description = "General purpose command line tools for interacting with NEAR Protocol";
     homepage = "https://github.com/near/near-cli";
-    license = with lib.licenses; [ asl20 mit ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     mainProgram = "near";
     maintainers = with lib.maintainers; [ ekleog ];
   };

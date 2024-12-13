@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchgit }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+}:
 
 stdenv.mkDerivation {
   pname = "opkg-utils";

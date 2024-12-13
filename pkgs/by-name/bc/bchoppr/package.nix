@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cairo, libX11, lv2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cairo,
+  libX11,
+  lv2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bchoppr";
@@ -13,7 +21,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ cairo libX11 lv2 ];
+  buildInputs = [
+    cairo
+    libX11
+    lv2
+  ];
 
   installFlags = [ "PREFIX=$(out)" ];
 

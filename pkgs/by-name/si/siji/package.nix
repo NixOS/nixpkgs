@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, libfaketime, xorg }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libfaketime,
+  xorg,
+}:
 
 stdenv.mkDerivation rec {
   pname = "siji";
@@ -11,7 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "1408g4nxwdd682vjqpmgv0cp0bfnzzzwls62cjs9zrds16xa9dpf";
   };
 
-  nativeBuildInputs = [ libfaketime xorg.fonttosfnt xorg.mkfontscale ];
+  nativeBuildInputs = [
+    libfaketime
+    xorg.fonttosfnt
+    xorg.mkfontscale
+  ];
 
   buildPhase = ''
     # compress pcf fonts
@@ -32,7 +42,10 @@ stdenv.mkDerivation rec {
     mkfontdir "$bdf/share/fonts/misc"
   '';
 
-  outputs = [ "out" "bdf" ];
+  outputs = [
+    "out"
+    "bdf"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/stark/siji";

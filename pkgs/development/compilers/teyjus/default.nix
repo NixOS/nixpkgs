@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, buildDunePackage, flex, bison }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  flex,
+  bison,
+}:
 
 buildDunePackage rec {
   pname = "teyjus";
@@ -13,7 +19,10 @@ buildDunePackage rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ flex bison ];
+  nativeBuildInputs = [
+    flex
+    bison
+  ];
 
   hardeningDisable = [ "format" ];
 

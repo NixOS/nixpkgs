@@ -6,7 +6,7 @@
   mock,
   pytest-cov-stub,
   pytest-xdist,
-  pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mozillavpn";
-  version = "2.24.1";
+  version = "2.24.3";
   src = fetchFromGitHub {
     owner = "mozilla-mobile";
     repo = "mozilla-vpn-client";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-X2rtHAZ9vbWjuOmD3B/uPasUQ1Q+b4SkNqk4MqGMaYo=";
+    hash = "sha256-GRt0diDt8bEeMfDwiEtYyR+20/bJAVcDal9eGfvk340=";
   };
   patches = [
     # Fix build errors from deprecated `QByteArray::count()`, `QVariant::type()`, `QEventPoint::pos()` (#9961)

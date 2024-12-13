@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, wayfire
-, wf-config
-, wayland
-, pango
-, libinput
-, libxkbcommon
-, librsvg
-, libGL
-, xcbutilwm
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  wayfire,
+  wf-config,
+  wayland,
+  pango,
+  libinput,
+  libxkbcommon,
+  librsvg,
+  libGL,
+  xcbutilwm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

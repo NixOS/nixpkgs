@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gitUpdater
-, cmake
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitUpdater,
+  cmake,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

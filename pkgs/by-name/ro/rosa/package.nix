@@ -1,4 +1,13 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, installShellFiles, testers, rosa, nix-update-script }:
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  rosa,
+  nix-update-script,
+}:
 
 buildGoModule rec {
   pname = "rosa";
@@ -12,7 +21,10 @@ buildGoModule rec {
   };
   vendorHash = null;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
@@ -25,8 +37,7 @@ buildGoModule rec {
       skippedTests = [
         "TestCluster"
         "TestRhRegionCommand"
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ "TestCache" ];
+      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "TestCache" ];
     in
     [ "-skip=^${lib.concatStringsSep "$|^" skippedTests}$" ];
 

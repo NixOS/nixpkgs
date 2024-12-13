@@ -2071,8 +2071,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.246.1233"; # compatible with vscode ^1.95
-          hash = "sha256-Pz46qTCGtn7q7UqCzwkQbuEEkH6tKxZV1HKSUs9WA8M=";
+          version = "1.251.0"; # compatible with vscode ^1.96
+          hash = "sha256-nv6lTPTPcggwMgO8a4KAF0W7gpou1399f/axnH0sS4s=";
         };
 
         meta = {
@@ -2089,8 +2089,8 @@ let
           publisher = "github";
           name = "copilot-chat";
           # Verify which version is available with nix run nixpkgs#vsce -- show github.copilot-chat --json
-          version = "0.23.2024102903"; # compatible with vscode ^1.95
-          hash = "sha256-FGvB+b24i23bdhpJpCQDvIHqqFvCJrWAKnX6fJgkr2E=";
+          version = "0.24.2024121201"; # compatible with vscode ^1.96
+          hash = "sha256-v3wdodDzYalz927KqqpL4IqEqLRmx1CLWdGBvZgNmpE=";
         };
         meta = {
           description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";
@@ -2312,8 +2312,8 @@ let
         mktplcRef = {
           name = "haskell";
           publisher = "haskell";
-          version = "2.2.2";
-          hash = "sha256-zWdIVdz+kZg7KZQ7LeBCB4aB9wg8dUbkWfzGlM0Fq7Q=";
+          version = "2.4.4";
+          hash = "sha256-O7tfZ1bQmlMgZGoWuECjSno6DLCO0+CCteRhT6PjZBY=";
         };
         meta = {
           license = lib.licenses.mit;
@@ -2706,8 +2706,8 @@ let
         mktplcRef = {
           name = "nix-ide";
           publisher = "jnoortheen";
-          version = "0.3.1";
-          hash = "sha256-05oMDHvFM/dTXB6T3rcDK3EiNG2T0tBN9Au9b+Bk7rI=";
+          version = "0.3.5";
+          hash = "sha256-hiyFZVsZkxpc2Kh0zi3NGwA/FUbetAS9khWxYesxT4s=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/jnoortheen.nix-ide/changelog";

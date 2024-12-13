@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, fcitx5
-, fcitx5-qt
-, gettext
-, qtbase
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  fcitx5,
+  fcitx5-qt,
+  gettext,
+  qtbase,
 }:
 
 stdenv.mkDerivation rec {

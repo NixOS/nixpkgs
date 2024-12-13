@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, buildPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  buildPackages,
   # libkcapi offers multiple tools. They can be disabled for minimization.
-, kcapi-test ? true
-, kcapi-speed ? true
-, kcapi-hasher ? true
-, kcapi-rngapp ? true
-, kcapi-encapp ? true
-, kcapi-dgstapp ? true
+  kcapi-test ? true,
+  kcapi-speed ? true,
+  kcapi-hasher ? true,
+  kcapi-rngapp ? true,
+  kcapi-encapp ? true,
+  kcapi-dgstapp ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,19 +36,24 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   configureFlags =
-    lib.optional kcapi-test "--enable-kcapi-test" ++
-    lib.optional kcapi-speed "--enable-kcapi-speed" ++
-    lib.optional kcapi-hasher "--enable-kcapi-hasher" ++
-    lib.optional kcapi-rngapp "--enable-kcapi-rngapp" ++
-    lib.optional kcapi-encapp "--enable-kcapi-encapp" ++
-    lib.optional kcapi-dgstapp "--enable-kcapi-dgstapp"
-  ;
+    lib.optional kcapi-test "--enable-kcapi-test"
+    ++ lib.optional kcapi-speed "--enable-kcapi-speed"
+    ++ lib.optional kcapi-hasher "--enable-kcapi-hasher"
+    ++ lib.optional kcapi-rngapp "--enable-kcapi-rngapp"
+    ++ lib.optional kcapi-encapp "--enable-kcapi-encapp"
+    ++ lib.optional kcapi-dgstapp "--enable-kcapi-dgstapp";
 
   meta = {
     homepage = "http://www.chronox.de/libkcapi.html";
     description = "Linux Kernel Crypto API User Space Interface Library";
-    license = with lib.licenses; [ bsd3 gpl2Only ];
+    license = with lib.licenses; [
+      bsd3
+      gpl2Only
+    ];
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ orichter thillux ];
+    maintainers = with lib.maintainers; [
+      orichter
+      thillux
+    ];
   };
 }

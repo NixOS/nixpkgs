@@ -1,32 +1,45 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, autoreconfHook
-, libintl
-, python
-, gettext
-, ncurses
-, findXMLCatalogs
-, libiconv
-# Python limits cross-compilation to an allowlist of host OSes.
-# https://github.com/python/cpython/blob/dfad678d7024ab86d265d84ed45999e031a03691/configure.ac#L534-L562
-, pythonSupport ? enableShared &&
-    (stdenv.hostPlatform == stdenv.buildPlatform || stdenv.hostPlatform.isCygwin || stdenv.hostPlatform.isLinux || stdenv.hostPlatform.isWasi)
-, icuSupport ? false
-, icu
-, enableShared ? !stdenv.hostPlatform.isMinGW && !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
-, gnome
-, testers
-, enableHttp ? false
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  autoreconfHook,
+  libintl,
+  python,
+  gettext,
+  ncurses,
+  findXMLCatalogs,
+  libiconv,
+  # Python limits cross-compilation to an allowlist of host OSes.
+  # https://github.com/python/cpython/blob/dfad678d7024ab86d265d84ed45999e031a03691/configure.ac#L534-L562
+  pythonSupport ?
+    enableShared
+    && (
+      stdenv.hostPlatform == stdenv.buildPlatform
+      || stdenv.hostPlatform.isCygwin
+      || stdenv.hostPlatform.isLinux
+      || stdenv.hostPlatform.isWasi
+    ),
+  icuSupport ? false,
+  icu,
+  enableShared ? !stdenv.hostPlatform.isMinGW && !stdenv.hostPlatform.isStatic,
+  enableStatic ? !enableShared,
+  gnome,
+  testers,
+  enableHttp ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libxml2";
   version = "2.13.4";
 
-  outputs = [ "bin" "dev" "out" "devdoc" ]
+  outputs =
+    [
+      "bin"
+      "dev"
+      "out"
+      "devdoc"
+    ]
     ++ lib.optional pythonSupport "py"
     ++ lib.optional (enableStatic && enableShared) "static";
   outputMan = "bin";
@@ -43,23 +56,30 @@ stdenv.mkDerivation (finalAttrs: {
     autoreconfHook
   ];
 
-  buildInputs = lib.optionals pythonSupport [
-    python
-  ] ++ lib.optionals (pythonSupport && python?isPy2 && python.isPy2) [
-    gettext
-  ] ++ lib.optionals (pythonSupport && python?isPy3 && python.isPy3) [
-    ncurses
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonSupport && python?isPy2 && python.isPy2) [
-    libintl
-  ];
+  buildInputs =
+    lib.optionals pythonSupport [
+      python
+    ]
+    ++ lib.optionals (pythonSupport && python ? isPy2 && python.isPy2) [
+      gettext
+    ]
+    ++ lib.optionals (pythonSupport && python ? isPy3 && python.isPy3) [
+      ncurses
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && pythonSupport && python ? isPy2 && python.isPy2) [
+      libintl
+    ];
 
-  propagatedBuildInputs = [
-    findXMLCatalogs
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ] ++ lib.optionals icuSupport [
-    icu
-  ];
+  propagatedBuildInputs =
+    [
+      findXMLCatalogs
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ]
+    ++ lib.optionals icuSupport [
+      icu
+    ];
 
   configureFlags = [
     "--exec-prefix=${placeholder "dev"}"
@@ -77,9 +97,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   enableParallelBuilding = true;
 
-  doCheck =
-    (stdenv.hostPlatform == stdenv.buildPlatform) &&
-    stdenv.hostPlatform.libc != "musl";
+  doCheck = (stdenv.hostPlatform == stdenv.buildPlatform) && stdenv.hostPlatform.libc != "musl";
   preCheck = lib.optional stdenv.hostPlatform.isDarwin ''
     export DYLD_LIBRARY_PATH="$PWD/.libs:$DYLD_LIBRARY_PATH"
   '';
@@ -92,12 +110,14 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace python/libxml2mod.la --replace-fail "$dev/${python.sitePackages}" "$py/${python.sitePackages}"
   '';
 
-  postFixup = ''
-    moveToOutput bin/xml2-config "$dev"
-    moveToOutput lib/xml2Conf.sh "$dev"
-  '' + lib.optionalString (enableStatic && enableShared) ''
-    moveToOutput lib/libxml2.a "$static"
-  '';
+  postFixup =
+    ''
+      moveToOutput bin/xml2-config "$dev"
+      moveToOutput lib/xml2Conf.sh "$dev"
+    ''
+    + lib.optionalString (enableStatic && enableShared) ''
+      moveToOutput lib/libxml2.a "$static"
+    '';
 
   passthru = {
     inherit pythonSupport;

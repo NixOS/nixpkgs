@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, pkg-config
-, httplib
-, qtbase
-, qtimageformats
-, qtwebengine
-, qtx11extras
-, libarchive
-, libXdmcp
-, libpthreadstubs
-, wrapQtAppsHook
-, xcbutilkeysyms
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  pkg-config,
+  httplib,
+  qtbase,
+  qtimageformats,
+  qtwebengine,
+  qtx11extras,
+  libarchive,
+  libXdmcp,
+  libpthreadstubs,
+  wrapQtAppsHook,
+  xcbutilkeysyms,
 }:
 
 let
@@ -47,8 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtimageformats
     qtwebengine
     xcbutilkeysyms
-  ]
-  ++ lib.optionals isQt5 [ qtx11extras ];
+  ] ++ lib.optionals isQt5 [ qtx11extras ];
 
   cmakeFlags = [
     (lib.cmakeBool "ZEAL_RELEASE_BUILD" true)
@@ -63,7 +63,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://zealdocs.org/";
     changelog = "https://github.com/zealdocs/zeal/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ peterhoeg AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      peterhoeg
+      AndersonTorres
+    ];
     mainProgram = "zeal";
     inherit (qtbase.meta) platforms;
   };

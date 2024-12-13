@@ -53,7 +53,7 @@ import ../make-test-python.nix (
       res = machine.succeed("""
         curl -f -H 'Cookie: immich_access_token=%s' http://localhost:2283/api/jobs
       """ % token)
-      assert json.loads(res)["backupDatabase"]["jobCounts"]["active"] == 1
+      assert sum(json.loads(res)["backupDatabase"]["jobCounts"].values()) >= 1
       machine.wait_until_succeeds("ls /var/lib/immich/backups/*.sql.gz")
     '';
   }

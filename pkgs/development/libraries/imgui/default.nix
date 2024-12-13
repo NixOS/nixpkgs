@@ -15,7 +15,8 @@
   vulkan-loader,
 
   # NOTE: Not coming from vcpkg
-  IMGUI_LINK_GLVND ? !stdenv.hostPlatform.isWindows && (IMGUI_BUILD_OPENGL2_BINDING || IMGUI_BUILD_OPENGL3_BINDING),
+  IMGUI_LINK_GLVND ?
+    !stdenv.hostPlatform.isWindows && (IMGUI_BUILD_OPENGL2_BINDING || IMGUI_BUILD_OPENGL3_BINDING),
 
   # The intent is to mirror vcpkg's flags[^1],
   # but we only actually support Linux and glfw3 until someone contributes the rest
@@ -33,8 +34,7 @@
   IMGUI_BUILD_OPENGL3_BINDING ?
     IMGUI_BUILD_SDL2_BINDING || IMGUI_BUILD_GLFW_BINDING || IMGUI_BUILD_GLUT_BINDING,
   IMGUI_BUILD_OSX_BINDING ? stdenv.hostPlatform.isDarwin,
-  IMGUI_BUILD_SDL2_BINDING ?
-    !IMGUI_BUILD_GLFW_BINDING && !stdenv.hostPlatform.isDarwin,
+  IMGUI_BUILD_SDL2_BINDING ? !IMGUI_BUILD_GLFW_BINDING && !stdenv.hostPlatform.isDarwin,
   IMGUI_BUILD_SDL2_RENDERER_BINDING ? IMGUI_BUILD_SDL2_BINDING,
   IMGUI_BUILD_VULKAN_BINDING ? false,
   IMGUI_BUILD_WIN32_BINDING ? false,

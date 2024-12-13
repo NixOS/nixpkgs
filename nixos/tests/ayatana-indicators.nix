@@ -79,8 +79,7 @@ in
     let
       runCommandOverServiceList = list: command: lib.strings.concatMapStringsSep "\n" command list;
 
-      runCommandOverAyatanaIndicators = runCommandOverServiceList
-        nodes.machine.systemd.user.targets.ayatana-indicators.wants;
+      runCommandOverAyatanaIndicators = runCommandOverServiceList nodes.machine.systemd.user.targets.ayatana-indicators.wants;
 
       runCommandOverLomiriIndicators = runCommandOverServiceList nodes.machine.systemd.user.targets.lomiri-indicators.wants;
     in

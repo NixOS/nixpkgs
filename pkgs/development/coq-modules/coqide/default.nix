@@ -1,19 +1,21 @@
-{ lib
-, makeDesktopItem
-, copyDesktopItems
-, wrapGAppsHook3
-, glib
-, adwaita-icon-theme
-, mkCoqDerivation
-, coq
-, version ? null }:
+{
+  lib,
+  makeDesktopItem,
+  copyDesktopItems,
+  wrapGAppsHook3,
+  glib,
+  adwaita-icon-theme,
+  mkCoqDerivation,
+  coq,
+  version ? null,
+}:
 
 mkCoqDerivation rec {
   pname = "coqide";
   inherit version;
 
   inherit (coq) src;
-  release."${coq.version}" = {};
+  release."${coq.version}" = { };
 
   defaultVersion = if lib.versions.isGe "8.14" coq.version then coq.version else null;
 
@@ -50,7 +52,13 @@ mkCoqDerivation rec {
       icon = "coq";
       desktopName = "CoqIDE";
       comment = "Graphical interface for the Coq proof assistant";
-      categories = [ "Development" "Science" "Math" "IDE" "GTK" ];
+      categories = [
+        "Development"
+        "Science"
+        "Math"
+        "IDE"
+        "GTK"
+      ];
     })
   ];
 

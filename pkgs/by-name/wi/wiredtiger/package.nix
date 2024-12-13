@@ -1,12 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, libtool
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  automake,
+  autoconf,
+  libtool,
 
-# Optional Dependencies
-, lz4 ? null, snappy ? null, zlib ? null, bzip2 ? null, db ? null
-, gperftools ? null, leveldb ? null
+  # Optional Dependencies
+  lz4 ? null,
+  snappy ? null,
+  zlib ? null,
+  bzip2 ? null,
+  db ? null,
+  gperftools ? null,
+  leveldb ? null,
 }:
 
 let
-  shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
+  shouldUsePkg =
+    pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
   optLz4 = shouldUsePkg lz4;
   optSnappy = shouldUsePkg snappy;
@@ -27,23 +39,35 @@ stdenv.mkDerivation rec {
     sha256 = "04j2zw8b9jym43r682rh4kpdippxx7iw3ry16nxlbybzar9kgk83";
   };
 
-  nativeBuildInputs = [ automake autoconf libtool ];
-  buildInputs = [ optLz4 optSnappy optZlib optBzip2 optDb optGperftools optLeveldb ];
+  nativeBuildInputs = [
+    automake
+    autoconf
+    libtool
+  ];
+  buildInputs = [
+    optLz4
+    optSnappy
+    optZlib
+    optBzip2
+    optDb
+    optGperftools
+    optLeveldb
+  ];
 
   configureFlags = [
-    (lib.withFeature   false                   "attach")
-    (lib.withFeatureAs true                    "builtins" "")
-    (lib.enableFeature (optBzip2 != null)      "bzip2")
-    (lib.enableFeature false                   "diagnostic")
-    (lib.enableFeature false                   "java")
-    (lib.enableFeature (optLeveldb != null)    "leveldb")
-    (lib.enableFeature false                   "python")
-    (lib.enableFeature (optSnappy != null)     "snappy")
-    (lib.enableFeature (optLz4 != null)        "lz4")
+    (lib.withFeature false "attach")
+    (lib.withFeatureAs true "builtins" "")
+    (lib.enableFeature (optBzip2 != null) "bzip2")
+    (lib.enableFeature false "diagnostic")
+    (lib.enableFeature false "java")
+    (lib.enableFeature (optLeveldb != null) "leveldb")
+    (lib.enableFeature false "python")
+    (lib.enableFeature (optSnappy != null) "snappy")
+    (lib.enableFeature (optLz4 != null) "lz4")
     (lib.enableFeature (optGperftools != null) "tcmalloc")
-    (lib.enableFeature (optZlib != null)       "zlib")
-    (lib.withFeatureAs (optDb != null)         "berkeleydb" optDb)
-    (lib.withFeature   false                   "helium")
+    (lib.enableFeature (optZlib != null) "zlib")
+    (lib.withFeatureAs (optDb != null) "berkeleydb" optDb)
+    (lib.withFeature false "helium")
   ];
 
   preConfigure = ''

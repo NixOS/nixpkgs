@@ -1,19 +1,20 @@
-{ bash
-, bc
-, coreutils
-, fetchFromGitHub
-, ffmpeg
-, findutils
-, gawk
-, gnugrep
-, gnused
-, jq
-, lame
-, lib
-, mediainfo
-, mp4v2
-, ncurses
-, resholve
+{
+  bash,
+  bc,
+  coreutils,
+  fetchFromGitHub,
+  ffmpeg,
+  findutils,
+  gawk,
+  gnugrep,
+  gnused,
+  jq,
+  lame,
+  lib,
+  mediainfo,
+  mp4v2,
+  ncurses,
+  resholve,
 }:
 
 resholve.mkDerivation rec {

@@ -1,12 +1,13 @@
-{ pkgs
-, lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, dpkg
-, makeWrapper
-, wrapGAppsHook3
-, ...
+{
+  pkgs,
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  dpkg,
+  makeWrapper,
+  wrapGAppsHook3,
+  ...
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "figma-linux";
@@ -24,32 +25,35 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs = with pkgs;[
-    alsa-lib
-    at-spi2-atk
-    cairo
-    cups.lib
-    dbus.lib
-    expat
-    gdk-pixbuf
-    glib
-    gtk3
-    libdrm
-    libxkbcommon
-    mesa
-    nspr
-    nss
-    pango
-  ] ++ (with pkgs.xorg; [
-    libX11
-    libXcomposite
-    libXdamage
-    libXext
-    libXfixes
-    libXrandr
-    libxcb
-    libxshmfence
-  ]);
+  buildInputs =
+    with pkgs;
+    [
+      alsa-lib
+      at-spi2-atk
+      cairo
+      cups.lib
+      dbus.lib
+      expat
+      gdk-pixbuf
+      glib
+      gtk3
+      libdrm
+      libxkbcommon
+      mesa
+      nspr
+      nss
+      pango
+    ]
+    ++ (with pkgs.xorg; [
+      libX11
+      libXcomposite
+      libXdamage
+      libXext
+      libXfixes
+      libXrandr
+      libxcb
+      libxshmfence
+    ]);
 
   runtimeDependencies = with pkgs; [ eudev ];
 
@@ -86,7 +90,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Figma-Linux/figma-linux";
     platforms = [ "x86_64-linux" ];
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ercao kashw2 ];
+    maintainers = with maintainers; [
+      ercao
+      kashw2
+    ];
     mainProgram = "figma-linux";
   };
 })

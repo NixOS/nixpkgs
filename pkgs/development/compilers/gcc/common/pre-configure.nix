@@ -1,15 +1,19 @@
-{ lib
-, stdenv
-, version, buildPlatform, hostPlatform, targetPlatform
-, gnat-bootstrap ? null
-, langAda ? false
-, langFortran
-, langJit ? false
-, langGo
-, withoutTargetLibc
-, enableShared
-, enableMultilib
-, pkgsBuildTarget
+{
+  lib,
+  stdenv,
+  version,
+  buildPlatform,
+  hostPlatform,
+  targetPlatform,
+  gnat-bootstrap ? null,
+  langAda ? false,
+  langFortran,
+  langJit ? false,
+  langGo,
+  withoutTargetLibc,
+  enableShared,
+  enableMultilib,
+  pkgsBuildTarget,
 }:
 
 assert langAda -> gnat-bootstrap != null;
@@ -19,7 +23,8 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
   export LDFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $LDFLAGS_FOR_TARGET"
   export CXXFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CXXFLAGS_FOR_TARGET"
   export CFLAGS_FOR_TARGET="-Wl,-rpath,$prefix/lib/amd64 $CFLAGS_FOR_TARGET"
-'' + lib.optionalString langAda ''
+''
++ lib.optionalString langAda ''
   export PATH=${gnat-bootstrap}/bin:$PATH
 ''
 
@@ -28,9 +33,12 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # buildPlatform and emit code for the targetPlatform.  The compiler
 # which is built alongside gfortran in this configuration doesn't
 # meet that need: it runs on the hostPlatform.
-+ lib.optionalString (langFortran && (with stdenv; buildPlatform != hostPlatform && hostPlatform == targetPlatform)) ''
-  export GFORTRAN_FOR_TARGET=${pkgsBuildTarget.gfortran}/bin/${stdenv.targetPlatform.config}-gfortran
-''
++
+  lib.optionalString
+    (langFortran && (with stdenv; buildPlatform != hostPlatform && hostPlatform == targetPlatform))
+    ''
+      export GFORTRAN_FOR_TARGET=${pkgsBuildTarget.gfortran}/bin/${stdenv.targetPlatform.config}-gfortran
+    ''
 
 # NOTE 2020/3/18: This environment variable prevents configure scripts from
 # detecting the presence of aligned_alloc on Darwin.  There are many facts that
@@ -61,11 +69,13 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 #    compilation even if the configure scripts did not check header presence.
 #
 + lib.optionalString (buildPlatform.isDarwin) ''
-    export build_configargs=ac_cv_func_aligned_alloc=no
-'' + lib.optionalString (hostPlatform.isDarwin) ''
-    export host_configargs=ac_cv_func_aligned_alloc=no
-'' + lib.optionalString (targetPlatform.isDarwin) ''
-    export target_configargs=ac_cv_func_aligned_alloc=no
+  export build_configargs=ac_cv_func_aligned_alloc=no
+''
++ lib.optionalString (hostPlatform.isDarwin) ''
+  export host_configargs=ac_cv_func_aligned_alloc=no
+''
++ lib.optionalString (targetPlatform.isDarwin) ''
+  export target_configargs=ac_cv_func_aligned_alloc=no
 ''
 
 # In order to properly install libgccjit on macOS Catalina, strip(1)
@@ -79,20 +89,26 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 # HACK: if host and target config are the same, but the platforms are
 # actually different we need to convince the configure script that it
 # is in fact building a cross compiler although it doesn't believe it.
-+ lib.optionalString (targetPlatform.config == hostPlatform.config && targetPlatform != hostPlatform) ''
-  substituteInPlace configure --replace is_cross_compiler=no is_cross_compiler=yes
-''
++
+  lib.optionalString (targetPlatform.config == hostPlatform.config && targetPlatform != hostPlatform)
+    ''
+      substituteInPlace configure --replace is_cross_compiler=no is_cross_compiler=yes
+    ''
 
 # Normally (for host != target case) --without-headers automatically
 # enables 'inhibit_libc=true' in gcc's gcc/configure.ac. But case of
 # gcc->clang or dynamic->static "cross"-compilation manages to evade it: there
 # hostPlatform != targetPlatform, hostPlatform.config == targetPlatform.config.
 # We explicitly inhibit libc headers use in this case as well.
-+ lib.optionalString (targetPlatform != hostPlatform &&
-                      withoutTargetLibc &&
-                      targetPlatform.config == hostPlatform.config) ''
-  export inhibit_libc=true
-''
++
+  lib.optionalString
+    (
+      targetPlatform != hostPlatform && withoutTargetLibc && targetPlatform.config == hostPlatform.config
+    )
+    ''
+      export inhibit_libc=true
+    ''
 
-+ lib.optionalString (targetPlatform != hostPlatform && withoutTargetLibc && enableShared)
-  (import ./libgcc-buildstuff.nix { inherit lib stdenv; })
++ lib.optionalString (targetPlatform != hostPlatform && withoutTargetLibc && enableShared) (
+  import ./libgcc-buildstuff.nix { inherit lib stdenv; }
+)

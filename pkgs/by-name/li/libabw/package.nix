@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchurl, boost, doxygen, gperf, pkg-config, librevenge, libxml2, perl, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  boost,
+  doxygen,
+  gperf,
+  pkg-config,
+  librevenge,
+  libxml2,
+  perl,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libabw";
@@ -16,7 +28,15 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ boost doxygen gperf librevenge libxml2 perl zlib ];
+  buildInputs = [
+    boost
+    doxygen
+    gperf
+    librevenge
+    libxml2
+    perl
+    zlib
+  ];
 
   meta = with lib; {
     homepage = "https://wiki.documentfoundation.org/DLP/Libraries/libabw";

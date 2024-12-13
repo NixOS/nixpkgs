@@ -25,7 +25,6 @@ buildPythonPackage rec {
     hash = "sha256-He301TJ1bzWub0DZ6Ro/Xc+JMtJBbyygVpWjPY6RMbA=";
   };
 
-
   pythonRelaxDeps = [ "docutils" ];
 
   propagatedBuildInputs = [

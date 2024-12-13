@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 let
 
   name = "headphones";
@@ -53,7 +59,6 @@ in
     };
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
@@ -73,14 +78,14 @@ in
     };
 
     systemd.services.headphones = {
-        description = "Headphones Server";
-        wantedBy    = [ "multi-user.target" ];
-        after = [ "network.target" ];
-        serviceConfig = {
-          User = cfg.user;
-          Group = cfg.group;
-          ExecStart = "${pkgs.headphones}/bin/headphones --datadir ${cfg.dataDir} --config ${cfg.configFile} --host ${cfg.host} --port ${toString cfg.port}";
-        };
+      description = "Headphones Server";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+      serviceConfig = {
+        User = cfg.user;
+        Group = cfg.group;
+        ExecStart = "${pkgs.headphones}/bin/headphones --datadir ${cfg.dataDir} --config ${cfg.configFile} --host ${cfg.host} --port ${toString cfg.port}";
+      };
     };
   };
 }

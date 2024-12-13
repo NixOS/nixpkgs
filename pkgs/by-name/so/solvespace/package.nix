@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapGAppsHook3
-, at-spi2-core
-, cairo
-, dbus
-, eigen
-, freetype
-, fontconfig
-, glew
-, gtkmm3
-, json_c
-, libdatrie
-, libepoxy
-, libGLU
-, libpng
-, libselinux
-, libsepol
-, libspnav
-, libthai
-, libxkbcommon
-, pangomm
-, pcre
-, util-linuxMinimal # provides libmount
-, xorg
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapGAppsHook3,
+  at-spi2-core,
+  cairo,
+  dbus,
+  eigen,
+  freetype,
+  fontconfig,
+  glew,
+  gtkmm3,
+  json_c,
+  libdatrie,
+  libepoxy,
+  libGLU,
+  libpng,
+  libselinux,
+  libsepol,
+  libspnav,
+  libthai,
+  libxkbcommon,
+  pangomm,
+  pcre,
+  util-linuxMinimal, # provides libmount
+  xorg,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {

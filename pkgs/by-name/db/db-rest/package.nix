@@ -1,9 +1,10 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, nodejs_18
-, nix-update-script
-, nixosTests
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  nodejs_18,
+  nix-update-script,
+  nixosTests,
 }:
 buildNpmPackage rec {
   pname = "db-rest";

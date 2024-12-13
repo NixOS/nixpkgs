@@ -1,9 +1,10 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, alsa-lib
-, libjack2
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  alsa-lib,
+  libjack2,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +22,10 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ alsa-lib libjack2 ];
+  buildInputs = [
+    alsa-lib
+    libjack2
+  ];
 
   # There is no tests
   doCheck = false;

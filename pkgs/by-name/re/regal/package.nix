@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   name = "regal";
@@ -14,7 +18,8 @@ buildGoModule rec {
   vendorHash = "sha256-BvGzoATrMmtquO7fipNQkaQv8HpZs0sNK0EF/RzFTPU=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/styrainc/regal/pkg/version.Version=${version}"
     "-X github.com/styrainc/regal/pkg/version.Commit=${version}"
   ];

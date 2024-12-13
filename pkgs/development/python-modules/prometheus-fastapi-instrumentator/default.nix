@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, pythonOlder
-, pytestCheckHook
-, devtools
-, fastapi
-, httpx
-, poetry-core
-, prometheus-client
-, requests
-, starlette
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pythonOlder,
+  pytestCheckHook,
+  devtools,
+  fastapi,
+  httpx,
+  poetry-core,
+  prometheus-client,
+  requests,
+  starlette,
 }:
 
 buildPythonPackage rec {
@@ -49,8 +50,11 @@ buildPythonPackage rec {
     description = "Instrument FastAPI with Prometheus metrics";
     homepage = "https://github.com/trallnag/prometheus-fastapi-instrumentator";
     changelog = "https://github.com/trallnag/prometheus-fastapi-instrumentator/blob/${src.rev}/CHANGELOG.md";
-    license = with lib.licenses; [ isc bsd3 ];
+    license = with lib.licenses; [
+      isc
+      bsd3
+    ];
     maintainers = with lib.maintainers; [ bcdarwin ];
-    platforms = lib.platforms.linux;  # numerous test failures on Darwin
+    platforms = lib.platforms.linux; # numerous test failures on Darwin
   };
 }

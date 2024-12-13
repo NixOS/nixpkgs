@@ -1,7 +1,25 @@
-{ lib, fetchFromGitHub, nix-update-script, mkDerivation
-, qtbase, qtsvg, qtserialport, qtwebengine, qtmultimedia, qttools
-, qtconnectivity, qtcharts, libusb-compat-0_1, gsl, blas
-, bison, flex, zlib, qmake, makeDesktopItem, wrapQtAppsHook
+{
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
+  mkDerivation,
+  qtbase,
+  qtsvg,
+  qtserialport,
+  qtwebengine,
+  qtmultimedia,
+  qttools,
+  qtconnectivity,
+  qtcharts,
+  libusb-compat-0_1,
+  gsl,
+  blas,
+  bison,
+  flex,
+  zlib,
+  qmake,
+  makeDesktopItem,
+  wrapQtAppsHook,
 }:
 
 let
@@ -14,7 +32,8 @@ let
     comment = "Performance software for cyclists, runners and triathletes";
     categories = [ "Utility" ];
   };
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "golden-cheetah";
   version = "3.7-DEV2408";
 
@@ -39,7 +58,12 @@ in mkDerivation rec {
     gsl
     blas
   ];
-  nativeBuildInputs = [ flex wrapQtAppsHook qmake bison ];
+  nativeBuildInputs = [
+    flex
+    wrapQtAppsHook
+    qmake
+    bison
+  ];
 
   patches = [
     # allow building with bison 3.7
@@ -50,7 +74,12 @@ in mkDerivation rec {
 
   NIX_LDFLAGS = "-lz -lgsl -lblas";
 
-  qtWrapperArgs = [ "--prefix" "LD_LIBRARY_PATH" ":" "${zlib.out}/lib" ];
+  qtWrapperArgs = [
+    "--prefix"
+    "LD_LIBRARY_PATH"
+    ":"
+    "${zlib.out}/lib"
+  ];
 
   preConfigure = ''
     cp src/gcconfig.pri.in src/gcconfig.pri

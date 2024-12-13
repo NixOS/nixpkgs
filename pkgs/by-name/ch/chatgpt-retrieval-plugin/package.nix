@@ -1,9 +1,10 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
-, python3
-, nix-update-script
-, dasel
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  python3,
+  nix-update-script,
+  dasel,
 }:
 
 python3Packages.buildPythonApplication {

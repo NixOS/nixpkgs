@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, bzip2
-, cjson
-, cmake
-, curl
-, docutils
-, fetchFromGitHub
-, libarchive
-, libev
-, libgccjit
-, libssh
-, lz4
-, openssl
-, systemd
-, zlib
-, zstd
+{
+  lib,
+  stdenv,
+  bzip2,
+  cjson,
+  cmake,
+  curl,
+  docutils,
+  fetchFromGitHub,
+  libarchive,
+  libev,
+  libgccjit,
+  libssh,
+  lz4,
+  openssl,
+  systemd,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {

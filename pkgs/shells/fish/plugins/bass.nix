@@ -1,4 +1,9 @@
-{ lib, buildFishPlugin, fetchFromGitHub, python3 }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+  python3,
+}:
 
 buildFishPlugin rec {
   pname = "bass";

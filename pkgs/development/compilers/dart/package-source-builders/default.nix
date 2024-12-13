@@ -1,6 +1,7 @@
 { callPackage }:
 
 {
+  file_picker = callPackage ./file_picker { };
   flutter_secure_storage_linux = callPackage ./flutter-secure-storage-linux { };
   flutter_volume_controller = callPackage ./flutter_volume_controller { };
   fvp = callPackage ./fvp { };
@@ -16,4 +17,5 @@
   sqlite3_flutter_libs = callPackage ./sqlite3_flutter_libs { };
   system_tray = callPackage ./system-tray { };
   super_native_extensions = callPackage ./super_native_extensions { };
+  xdg_directories = callPackage ./xdg_directories { };
 }

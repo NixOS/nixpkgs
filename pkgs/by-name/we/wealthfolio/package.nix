@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   cargo-tauri,
-  libsoup,
+  libsoup_3,
   nodejs,
   openssl,
   pkg-config,
@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    libsoup
+    libsoup_3
     openssl
     webkitgtk_4_1
   ];

@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, llvmPackages, getconf }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  llvmPackages,
+  getconf,
+}:
 
 buildGoModule {
   pname = "gllvm";
@@ -13,10 +19,13 @@ buildGoModule {
 
   vendorHash = null;
 
-  nativeCheckInputs = with llvmPackages; [
-    clang
-    llvm
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ getconf ];
+  nativeCheckInputs =
+    with llvmPackages;
+    [
+      clang
+      llvm
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ getconf ];
 
   meta = with lib; {
     homepage = "https://github.com/SRI-CSL/gllvm";

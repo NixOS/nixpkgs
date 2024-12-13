@@ -99,7 +99,8 @@ let
   };
 
   fhs = buildFHSEnv {
-    name = "SVPManager";
+    pname = "SVPManager";
+    inherit (svp-dist) version;
     targetPkgs = pkgs: libraries;
     runScript = "${svp-dist}/opt/SVPManager";
     unshareUser = false;

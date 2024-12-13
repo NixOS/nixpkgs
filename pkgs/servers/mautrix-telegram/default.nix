@@ -1,8 +1,9 @@
-{ lib
-, python3
-, fetchPypi
-, fetchFromGitHub
-, withE2BE ? true
+{
+  lib,
+  python3,
+  fetchPypi,
+  fetchFromGitHub,
+  withE2BE ? true,
 }:
 
 let
@@ -37,38 +38,43 @@ python.pkgs.buildPythonPackage rec {
 
   patches = [ ./0001-Re-add-entrypoint.patch ];
 
-  propagatedBuildInputs = with python.pkgs; ([
-    ruamel-yaml
-    python-magic
-    commonmark
-    aiohttp
-    yarl
-    (mautrix.override { withOlm = withE2BE; })
-    tulir-telethon
-    asyncpg
-    mako
-    setuptools
-    # speedups
-    cryptg
-    aiodns
-    brotli
-    # qr_login
-    pillow
-    qrcode
-    # formattednumbers
-    phonenumbers
-    # metrics
-    prometheus-client
-    # sqlite
-    aiosqlite
-    # proxy support
-    pysocks
-  ] ++ lib.optionals withE2BE [
-    # e2be
-    python-olm
-    pycryptodome
-    unpaddedbase64
-  ]);
+  propagatedBuildInputs =
+    with python.pkgs;
+    (
+      [
+        ruamel-yaml
+        python-magic
+        commonmark
+        aiohttp
+        yarl
+        (mautrix.override { withOlm = withE2BE; })
+        tulir-telethon
+        asyncpg
+        mako
+        setuptools
+        # speedups
+        cryptg
+        aiodns
+        brotli
+        # qr_login
+        pillow
+        qrcode
+        # formattednumbers
+        phonenumbers
+        # metrics
+        prometheus-client
+        # sqlite
+        aiosqlite
+        # proxy support
+        pysocks
+      ]
+      ++ lib.optionals withE2BE [
+        # e2be
+        python-olm
+        pycryptodome
+        unpaddedbase64
+      ]
+    );
 
   # has no tests
   doCheck = false;
@@ -78,7 +84,11 @@ python.pkgs.buildPythonPackage rec {
     description = "Matrix-Telegram hybrid puppeting/relaybot bridge";
     license = licenses.agpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ nyanloutre ma27 nickcao ];
+    maintainers = with maintainers; [
+      nyanloutre
+      ma27
+      nickcao
+    ];
     mainProgram = "mautrix-telegram";
   };
 }

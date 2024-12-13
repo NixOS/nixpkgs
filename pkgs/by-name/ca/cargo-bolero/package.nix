@@ -1,17 +1,29 @@
-{ lib, rustPlatform, fetchCrate, libbfd, libopcodes, libunwind, nix-update-script }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  libbfd,
+  libopcodes,
+  libunwind,
+  nix-update-script,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-bolero";
-  version = "0.11.2";
+  version = "0.12.0";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-Xcu91CbIDBLSojWQJjvdFWJiqjMteAxF105lemCAipk=";
+    hash = "sha256-ta0H6V7Zg/Jnu3973eYJXGwwQcqZnDTlsmWAHkQr2EA=";
   };
 
-  cargoHash = "sha256-QLtf42Il+XHWeaUdh8jNNWU1sXaVe82sYOKiHLoXw2M=";
+  cargoHash = "sha256-5F72vjEu0qrE3fYPbiw/UFUUnAZcEBcuhDkuqqCBbrM=";
 
-  buildInputs = [ libbfd libopcodes libunwind ];
+  buildInputs = [
+    libbfd
+    libopcodes
+    libunwind
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wayland
-, libxkbcommon
-, fontconfig
-, makeWrapper
-, grim
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wayland,
+  libxkbcommon,
+  fontconfig,
+  makeWrapper,
+  grim,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "watershot";
@@ -21,9 +22,17 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-481E5/mUeeoaZ0N//tRWCyV8/sRRP6VdB06gB1whgzU=";
 
-  nativeBuildInputs = [ pkg-config wayland makeWrapper ];
+  nativeBuildInputs = [
+    pkg-config
+    wayland
+    makeWrapper
+  ];
 
-  buildInputs = [ wayland fontconfig libxkbcommon ];
+  buildInputs = [
+    wayland
+    fontconfig
+    libxkbcommon
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/watershot \

@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cntr";
@@ -20,7 +25,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Mic92/cntr";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ mic92 sigmasquadron ];
+    maintainers = with maintainers; [
+      mic92
+      sigmasquadron
+    ];
     mainProgram = "cntr";
   };
 }

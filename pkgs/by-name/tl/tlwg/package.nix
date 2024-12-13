@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, autoconf-archive, fontforge }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  autoconf-archive,
+  fontforge,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tlwg";
@@ -11,14 +18,22 @@ stdenv.mkDerivation rec {
     sha256 = "hWiH5KJnYTdcrm+Kzn9HUQry8ry3SKzjA6/0536kCLQ=";
   };
 
-  nativeBuildInputs = [ autoreconfHook autoconf-archive ];
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
+  ];
 
   buildInputs = [ fontforge ];
 
   meta = with lib; {
     description = "Collection of Thai scalable fonts available under free licenses";
     homepage = "https://linux.thai.net/projects/fonts-tlwg";
-    license = with licenses; [ gpl2 publicDomain lppl13c free ];
+    license = with licenses; [
+      gpl2
+      publicDomain
+      lppl13c
+      free
+    ];
     maintainers = [ maintainers.yrashk ];
   };
 }

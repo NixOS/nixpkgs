@@ -12,16 +12,16 @@
 
 buildGoModule rec {
   pname = "hugo";
-  version = "0.139.0";
+  version = "0.139.3";
 
   src = fetchFromGitHub {
     owner = "gohugoio";
     repo = "hugo";
     rev = "refs/tags/v${version}";
-    hash = "sha256-UXOZCiwYpMnJsNSO7y3CsB8nmPxtBErYYl8YwWO3Hts=";
+    hash = "sha256-bUqLVM1jQ6LVsnDIP2NanmmEFe3mDUt446kH9I0aZQI=";
   };
 
-  vendorHash = "sha256-qhiCZMSLRnLbyHplcaPn/BGJ3Lv8O8eEvCuIHwA4sMs=";
+  vendorHash = "sha256-LwXrCYGlWe6dOdPTh3YKhJDUID6e+OUOfDYtYxYnx/Y=";
 
   checkFlags = [
     # Workaround for "failed to load modules"

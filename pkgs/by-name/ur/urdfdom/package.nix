@@ -1,5 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, pkg-config, validatePkgConfig
-, tinyxml-2, console-bridge, urdfdom-headers }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  validatePkgConfig,
+  tinyxml-2,
+  console-bridge,
+  urdfdom-headers,
+}:
 
 stdenv.mkDerivation rec {
   pname = "urdfdom";
@@ -20,8 +30,15 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ cmake pkg-config validatePkgConfig ];
-  buildInputs = [ tinyxml-2 console-bridge ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    validatePkgConfig
+  ];
+  buildInputs = [
+    tinyxml-2
+    console-bridge
+  ];
   propagatedBuildInputs = [ urdfdom-headers ];
 
   meta = with lib; {

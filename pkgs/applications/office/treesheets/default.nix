@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, wrapGAppsHook3
-, makeWrapper
-, wxGTK32
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  wrapGAppsHook3,
+  makeWrapper,
+  wxGTK32,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +32,9 @@ stdenv.mkDerivation rec {
     wxGTK32
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${builtins.replaceStrings [ "unstable-" ] [ "" ] version}\"";
+  env.NIX_CFLAGS_COMPILE = "-DPACKAGE_VERSION=\"${
+    builtins.replaceStrings [ "unstable-" ] [ "" ] version
+  }\"";
 
   postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/{Applications,bin}

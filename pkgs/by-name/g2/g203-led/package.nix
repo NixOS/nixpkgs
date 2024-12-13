@@ -1,6 +1,8 @@
-{ lib, stdenv
-, fetchFromGitHub
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
 }:
 stdenv.mkDerivation rec {
   pname = "g203-led";
@@ -13,9 +15,11 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    (python3.withPackages (ps: with ps; [
-      pyusb
-    ]))
+    (python3.withPackages (
+      ps: with ps; [
+        pyusb
+      ]
+    ))
   ];
 
   postPatch = ''

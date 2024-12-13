@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, vala
-, gtk3
-, wayland-scanner
-, wayland
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  vala,
+  gtk3,
+  wayland-scanner,
+  wayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +23,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SHKAYmdev08oRB/V6UpfSFqYwplF59IaNSOoWcACPig=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     meson

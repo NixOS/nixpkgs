@@ -78,6 +78,13 @@ in
         description = "HTTP listen port.";
       };
 
+      turnAddress = mkOption {
+        type = types.str;
+        default = "auto";
+        example = "127.0.0.1:1194";
+        description = "Built-in TURN server listen address and port. Set to \"\" to disable.";
+      };
+
       staticDir = mkOption {
         type = types.str;
         default = "${cfg.package.static}/static";
@@ -145,6 +152,8 @@ in
           WorkingDirectory = cfg.stateDir;
           ExecStart = ''${cfg.package}/bin/galene \
           ${optionalString (cfg.insecure) "-insecure"} \
+          -http ${cfg.httpAddress}:${cfg.httpPort} \
+          -turn ${cfg.turnAddress} \
           -data ${cfg.dataDir} \
           -groups ${cfg.groupsDir} \
           -recordings ${cfg.recordingsDir} \

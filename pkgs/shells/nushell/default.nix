@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, rustPlatform
-, openssl
-, zlib
-, zstd
-, pkg-config
-, python3
-, xorg
-, Libsystem
-, AppKit
-, Security
-, nghttp2
-, libgit2
-, withDefaultFeatures ? true
-, additionalFeatures ? (p: p)
-, testers
-, nushell
-, nix-update-script
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  openssl,
+  zlib,
+  zstd,
+  pkg-config,
+  python3,
+  xorg,
+  Libsystem,
+  AppKit,
+  Security,
+  nghttp2,
+  libgit2,
+  withDefaultFeatures ? true,
+  additionalFeatures ? (p: p),
+  testers,
+  nushell,
+  nix-update-script,
 }:
 
 let
@@ -37,19 +38,32 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-omC/qcpgy65Md1MC0QGUVCRVNl9sWlFcCRxdS4aeU+g=";
 
-  nativeBuildInputs = [ pkg-config ]
+  nativeBuildInputs =
+    [ pkg-config ]
     ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ python3 ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ rustPlatform.bindgenHook ];
 
-  buildInputs = [ openssl zstd ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ zlib Libsystem Security ]
+  buildInputs =
+    [
+      openssl
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      zlib
+      Libsystem
+      Security
+    ]
     ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isLinux) [ xorg.libX11 ]
-    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [ AppKit nghttp2 libgit2 ];
+    ++ lib.optionals (withDefaultFeatures && stdenv.hostPlatform.isDarwin) [
+      AppKit
+      nghttp2
+      libgit2
+    ];
 
   buildNoDefaultFeatures = !withDefaultFeatures;
   buildFeatures = additionalFeatures [ ];
 
-  doCheck = ! stdenv.hostPlatform.isDarwin; # Skip checks on darwin. Failing tests since 0.96.0
+  doCheck = !stdenv.hostPlatform.isDarwin; # Skip checks on darwin. Failing tests since 0.96.0
 
   checkPhase = ''
     runHook preCheck
@@ -79,7 +93,11 @@ rustPlatform.buildRustPackage {
     description = "Modern shell written in Rust";
     homepage = "https://www.nushell.sh/";
     license = licenses.mit;
-    maintainers = with maintainers; [ Br1ght0ne johntitor joaquintrinanes ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      johntitor
+      joaquintrinanes
+    ];
     mainProgram = "nu";
   };
 }

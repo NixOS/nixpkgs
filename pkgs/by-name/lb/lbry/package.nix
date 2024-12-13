@@ -1,4 +1,8 @@
-{ lib, fetchurl, appimageTools}:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+}:
 
 appimageTools.wrapAppImage rec {
   pname = "lbry-desktop";

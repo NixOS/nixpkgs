@@ -1,21 +1,41 @@
-{ lib, stdenv, fetchurl, pkg-config, libevent, openssl, zlib, torsocks
-, libseccomp, systemd, libcap, xz, zstd, scrypt, nixosTests
-, writeShellScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libevent,
+  openssl,
+  zlib,
+  torsocks,
+  libseccomp,
+  systemd,
+  libcap,
+  xz,
+  zstd,
+  scrypt,
+  nixosTests,
+  writeShellScript,
 
-# for update.nix
-, writeScript
-, common-updater-scripts
-, bash
-, coreutils
-, curl
-, gnugrep
-, gnupg
-, gnused
-, nix
+  # for update.nix
+  writeScript,
+  common-updater-scripts,
+  bash,
+  coreutils,
+  curl,
+  gnugrep,
+  gnupg,
+  gnused,
+  nix,
 }:
 let
   tor-client-auth-gen = writeShellScript "tor-client-auth-gen" ''
-    PATH="${lib.makeBinPath [coreutils gnugrep openssl]}"
+    PATH="${
+      lib.makeBinPath [
+        coreutils
+        gnugrep
+        openssl
+      ]
+    }"
     pem="$(openssl genpkey -algorithm x25519)"
 
     printf private_key=descriptor:x25519:
@@ -37,11 +57,26 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-m68mw4eiggs5QtpXIUbm63fCvGaGKvYpfNAqB05vuig=";
   };
 
-  outputs = [ "out" "geoip" ];
+  outputs = [
+    "out"
+    "geoip"
+  ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libevent openssl zlib xz zstd scrypt ] ++
-    lib.optionals stdenv.hostPlatform.isLinux [ libseccomp systemd libcap ];
+  buildInputs =
+    [
+      libevent
+      openssl
+      zlib
+      xz
+      zstd
+      scrypt
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libseccomp
+      systemd
+      libcap
+    ];
 
   patches = [ ./disable-monotonic-timer-tests.patch ];
 
@@ -51,12 +86,13 @@ stdenv.mkDerivation rec {
     # https://gitlab.torproject.org/tpo/onion-services/onion-support/-/wikis/Documentation/PoW-FAQ#compiling-c-tor-with-the-pow-defense
     [ "--enable-gpl" ]
     ++
-    # cross compiles correctly but needs the following
-    lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ]
+      # cross compiles correctly but needs the following
+      lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [ "--disable-tool-name-check" ]
     ++
-    # sandbox is broken on aarch64-linux https://gitlab.torproject.org/tpo/core/tor/-/issues/40599
-    lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [ "--disable-seccomp" ]
-  ;
+      # sandbox is broken on aarch64-linux https://gitlab.torproject.org/tpo/core/tor/-/issues/40599
+      lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+        "--disable-seccomp"
+      ];
 
   NIX_CFLAGS_LINK = lib.optionalString stdenv.cc.isGNU "-lgcc_s";
 
@@ -95,7 +131,7 @@ stdenv.mkDerivation rec {
         gnugrep
         gnused
         nix
-      ;
+        ;
     };
   };
 
@@ -113,10 +149,16 @@ stdenv.mkDerivation rec {
       the TCP protocol.
     '';
 
-    license = with licenses; [ bsd3 gpl3Only ];
+    license = with licenses; [
+      bsd3
+      gpl3Only
+    ];
 
-    maintainers = with maintainers;
-      [ thoughtpolice joachifm prusnak ];
+    maintainers = with maintainers; [
+      thoughtpolice
+      joachifm
+      prusnak
+    ];
     platforms = platforms.unix;
   };
 }

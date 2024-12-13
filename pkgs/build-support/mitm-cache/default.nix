@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, callPackage
-, rustPlatform
-, substituteAll
-, openssl
-, Security
-, python3Packages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  callPackage,
+  rustPlatform,
+  substituteAll,
+  openssl,
+  Security,
+  python3Packages,
 }:
 
 rustPlatform.buildRustPackage rec {

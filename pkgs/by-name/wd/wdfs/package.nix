@@ -1,4 +1,13 @@
-{lib, stdenv, fetchurl, glib, neon, fuse, autoreconfHook, pkg-config}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  neon,
+  fuse,
+  autoreconfHook,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wdfs-fuse";
@@ -8,8 +17,15 @@ stdenv.mkDerivation rec {
     url = "http://noedler.de/projekte/wdfs/wdfs-${version}.tar.gz";
     sha256 = "fcf2e1584568b07c7f3683a983a9be26fae6534b8109e09167e5dff9114ba2e5";
   };
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [fuse glib neon];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    fuse
+    glib
+    neon
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Fix the build on macOS with macFUSE installed. Needs autoreconfHook to

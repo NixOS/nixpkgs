@@ -6,14 +6,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "docify";
-  version = "1.0.0";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "AThePeanut4";
     repo = "docify";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pt35Kw0kaZsIGTutXPhjdp8czGtWrSUFWMV3NyFQ/NM=";
+    hash = "sha256-pENahqprTf6weP6qi9CyeQPdNOqr9c/q7j6GO9Lq3N4=";
   };
 
   build-system = with python3Packages; [

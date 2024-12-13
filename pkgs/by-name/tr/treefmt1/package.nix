@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "treefmt";
   version = "0.6.1";

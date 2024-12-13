@@ -2,31 +2,33 @@ let
   withGold = platform: platform.isElf && !platform.isRiscV && !platform.isLoongArch64;
 in
 
-{ stdenv
-, autoconf269, automake, libtool
-, bison
-, buildPackages
-, fetchFromGitHub
-, fetchurl
-, gettext
-, lib
-, noSysDirs
-, perl
-, zlib
-, CoreServices
+{
+  stdenv,
+  autoconf269,
+  automake,
+  libtool,
+  bison,
+  buildPackages,
+  fetchFromGitHub,
+  fetchurl,
+  gettext,
+  lib,
+  noSysDirs,
+  perl,
+  zlib,
+  CoreServices,
 
-, enableGold ? withGold stdenv.targetPlatform
-, enableGoldDefault ? false
-, enableShared ? !stdenv.hostPlatform.isStatic
+  enableGold ? withGold stdenv.targetPlatform,
+  enableGoldDefault ? false,
+  enableShared ? !stdenv.hostPlatform.isStatic,
   # WARN: Enabling all targets increases output size to a multiple.
-, withAllTargets ? false
+  withAllTargets ? false,
 }:
 
 # WARN: configure silently disables ld.gold if it's unsupported, so we need to
 # make sure that intent matches result ourselves.
 assert enableGold -> withGold stdenv.targetPlatform;
 assert enableGoldDefault -> enableGold;
-
 
 let
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
@@ -53,7 +55,6 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     # Make binutils output deterministic by default.
     ./deterministic.patch
-
 
     # Breaks nm BSD flag detection, heeds an upstream fix:
     #   https://sourceware.org/PR29547
@@ -85,57 +86,73 @@ stdenv.mkDerivation (finalAttrs: {
     ./windres-locate-gcc.patch
   ];
 
-  outputs = [ "out" "info" "man" "dev" ]
-  # Ideally we would like to always install 'lib' into a separate
-  # target. Unfortunately cross-compiled binutils installs libraries
-  # across both `$lib/lib/` and `$out/$target/lib` with a reference
-  # from $out to $lib. Probably a binutils bug: all libraries should go
-  # to $lib as binutils does not build target libraries. Let's make our
-  # life slightly simpler by installing everything into $out for
-  # cross-binutils.
-  ++ lib.optionals (targetPlatform == hostPlatform) [ "lib" ];
+  outputs =
+    [
+      "out"
+      "info"
+      "man"
+      "dev"
+    ]
+    # Ideally we would like to always install 'lib' into a separate
+    # target. Unfortunately cross-compiled binutils installs libraries
+    # across both `$lib/lib/` and `$out/$target/lib` with a reference
+    # from $out to $lib. Probably a binutils bug: all libraries should go
+    # to $lib as binutils does not build target libraries. Let's make our
+    # life slightly simpler by installing everything into $out for
+    # cross-binutils.
+    ++ lib.optionals (targetPlatform == hostPlatform) [ "lib" ];
 
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   # texinfo was removed here in https://github.com/NixOS/nixpkgs/pull/210132
   # to reduce rebuilds during stdenv bootstrap.  Please don't add it back without
   # checking the impact there first.
-  nativeBuildInputs = [
-    bison
-    perl
-  ]
-  ++ lib.optionals buildPlatform.isDarwin [ autoconf269 automake gettext libtool ]
-  ;
+  nativeBuildInputs =
+    [
+      bison
+      perl
+    ]
+    ++ lib.optionals buildPlatform.isDarwin [
+      autoconf269
+      automake
+      gettext
+      libtool
+    ];
 
-  buildInputs = [ zlib gettext ] ++ lib.optionals hostPlatform.isDarwin [ CoreServices ];
+  buildInputs = [
+    zlib
+    gettext
+  ] ++ lib.optionals hostPlatform.isDarwin [ CoreServices ];
 
   inherit noSysDirs;
 
-  preConfigure = (lib.optionalString buildPlatform.isDarwin ''
-    for i in */configure.ac; do
-      pushd "$(dirname "$i")"
-      echo "Running autoreconf in $PWD"
-      # autoreconf doesn't work, don't know why
-      # autoreconf ''${autoreconfFlags:---install --force --verbose}
-      autoconf
-      popd
-    done
-  '') + ''
-    # Clear the default library search path.
-    if test "$noSysDirs" = "1"; then
-        echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
-    fi
+  preConfigure =
+    (lib.optionalString buildPlatform.isDarwin ''
+      for i in */configure.ac; do
+        pushd "$(dirname "$i")"
+        echo "Running autoreconf in $PWD"
+        # autoreconf doesn't work, don't know why
+        # autoreconf ''${autoreconfFlags:---install --force --verbose}
+        autoconf
+        popd
+      done
+    '')
+    + ''
+      # Clear the default library search path.
+      if test "$noSysDirs" = "1"; then
+          echo 'NATIVE_LIB_DIRS=' >> ld/configure.tgt
+      fi
 
-    # Use symlinks instead of hard links to save space ("strip" in the
-    # fixup phase strips each hard link separately).
-    for i in binutils/Makefile.in gas/Makefile.in ld/Makefile.in gold/Makefile.in; do
-        sed -i "$i" -e 's|ln |ln -s |'
-    done
+      # Use symlinks instead of hard links to save space ("strip" in the
+      # fixup phase strips each hard link separately).
+      for i in binutils/Makefile.in gas/Makefile.in ld/Makefile.in gold/Makefile.in; do
+          sed -i "$i" -e 's|ln |ln -s |'
+      done
 
-    # autoreconfHook is not included for all targets.
-    # Call it here explicitly as well.
-    ${finalAttrs.postAutoreconf}
-  '';
+      # autoreconfHook is not included for all targets.
+      # Call it here explicitly as well.
+      ${finalAttrs.postAutoreconf}
+    '';
 
   postAutoreconf = ''
     # As we regenerated configure build system tries hard to use
@@ -155,67 +172,91 @@ stdenv.mkDerivation (finalAttrs: {
   # LONG_MIN. The configure test itself succeeds but the compiler issues a
   # warning about -static-libgcc being unused.
   env.NIX_CFLAGS_COMPILE =
-    if (hostPlatform.isDarwin || hostPlatform.isFreeBSD)
-    then "-Wno-string-plus-int -Wno-deprecated-declarations"
-    else "-static-libgcc";
+    if (hostPlatform.isDarwin || hostPlatform.isFreeBSD) then
+      "-Wno-string-plus-int -Wno-deprecated-declarations"
+    else
+      "-static-libgcc";
 
-  hardeningDisable = [ "format" "pie" ];
+  hardeningDisable = [
+    "format"
+    "pie"
+  ];
 
-  configurePlatforms = [ "build" "host" "target" ];
+  configurePlatforms = [
+    "build"
+    "host"
+    "target"
+  ];
 
-  configureFlags = [
-    "--enable-64-bit-bfd"
-    "--with-system-zlib"
+  configureFlags =
+    [
+      "--enable-64-bit-bfd"
+      "--with-system-zlib"
 
-    "--enable-deterministic-archives"
-    "--disable-werror"
-    "--enable-fix-loongson2f-nop"
+      "--enable-deterministic-archives"
+      "--disable-werror"
+      "--enable-fix-loongson2f-nop"
 
-    # Turn on --enable-new-dtags by default to make the linker set
-    # RUNPATH instead of RPATH on binaries.  This is important because
-    # RUNPATH can be overridden using LD_LIBRARY_PATH at runtime.
-    "--enable-new-dtags"
+      # Turn on --enable-new-dtags by default to make the linker set
+      # RUNPATH instead of RPATH on binaries.  This is important because
+      # RUNPATH can be overridden using LD_LIBRARY_PATH at runtime.
+      "--enable-new-dtags"
 
-    # force target prefix. Some versions of binutils will make it empty if
-    # `--host` and `--target` are too close, even if Nixpkgs thinks the
-    # platforms are different (e.g. because not all the info makes the
-    # `config`). Other versions of binutils will always prefix if `--target` is
-    # passed, even if `--host` and `--target` are the same. The easiest thing
-    # for us to do is not leave it to chance, and force the program prefix to be
-    # what we want it to be.
-    "--program-prefix=${targetPrefix}"
+      # force target prefix. Some versions of binutils will make it empty if
+      # `--host` and `--target` are too close, even if Nixpkgs thinks the
+      # platforms are different (e.g. because not all the info makes the
+      # `config`). Other versions of binutils will always prefix if `--target` is
+      # passed, even if `--host` and `--target` are the same. The easiest thing
+      # for us to do is not leave it to chance, and force the program prefix to be
+      # what we want it to be.
+      "--program-prefix=${targetPrefix}"
 
-    # Unconditionally disable:
-    # - musl target needs porting: https://sourceware.org/PR29477
-    "--disable-gprofng"
+      # Unconditionally disable:
+      # - musl target needs porting: https://sourceware.org/PR29477
+      "--disable-gprofng"
 
-    # By default binutils searches $libdir for libraries. This brings in
-    # libbfd and libopcodes into a default visibility. Drop default lib
-    # path to force users to declare their use of these libraries.
-    "--with-lib-path=:"
-  ]
-  ++ lib.optionals withAllTargets [ "--enable-targets=all" ]
-  ++ lib.optionals enableGold [
-    "--enable-gold${lib.optionalString enableGoldDefault "=default"}"
-    "--enable-plugins"
-  ] ++ (if enableShared
-      then [ "--enable-shared" "--disable-static" ]
-      else [ "--disable-shared" "--enable-static" ])
-  ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17") [
-      # lld17+ passes `--no-undefined-version` by default and makes this a hard
-      # error; libctf.ver version script references symbols that aren't present.
-      #
-      # This is fixed upstream and can be removed with the future release of 2.43.
-      # For now we allow this with `--undefined-version`:
-      "LDFLAGS=-Wl,--undefined-version"
-  ])
-  ;
+      # By default binutils searches $libdir for libraries. This brings in
+      # libbfd and libopcodes into a default visibility. Drop default lib
+      # path to force users to declare their use of these libraries.
+      "--with-lib-path=:"
+    ]
+    ++ lib.optionals withAllTargets [ "--enable-targets=all" ]
+    ++ lib.optionals enableGold [
+      "--enable-gold${lib.optionalString enableGoldDefault "=default"}"
+      "--enable-plugins"
+    ]
+    ++ (
+      if enableShared then
+        [
+          "--enable-shared"
+          "--disable-static"
+        ]
+      else
+        [
+          "--disable-shared"
+          "--enable-static"
+        ]
+    )
+    ++ (lib.optionals (stdenv.cc.bintools.isLLVM && lib.versionAtLeast stdenv.cc.bintools.version "17")
+      [
+        # lld17+ passes `--no-undefined-version` by default and makes this a hard
+        # error; libctf.ver version script references symbols that aren't present.
+        #
+        # This is fixed upstream and can be removed with the future release of 2.43.
+        # For now we allow this with `--undefined-version`:
+        "LDFLAGS=-Wl,--undefined-version"
+      ]
+    );
 
   # Fails
   doCheck = false;
 
   # Break dependency on pkgsBuildBuild.gcc when building a cross-binutils
-  stripDebugList = if stdenv.hostPlatform != stdenv.targetPlatform then "bin lib ${stdenv.hostPlatform.config}" else null;
+  stripDebugList =
+    if stdenv.hostPlatform != stdenv.targetPlatform then
+      "bin lib ${stdenv.hostPlatform.config}"
+    else
+      null;
 
   # INFO: Otherwise it fails with:
   # `./sanity.sh: line 36: $out/bin/size: not found`
@@ -255,7 +296,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://www.gnu.org/software/binutils/";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ericson2314 lovesegfault ];
+    maintainers = with maintainers; [
+      ericson2314
+      lovesegfault
+    ];
     platforms = platforms.unix;
 
     # INFO: Give binutils a lower priority than gcc-wrapper to prevent a

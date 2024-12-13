@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, fetchurl, ctypes, integers, result }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ctypes,
+  integers,
+  result,
+}:
 
 buildDunePackage rec {
   pname = "unix-errno";
@@ -11,12 +18,19 @@ buildDunePackage rec {
     sha256 = "sha256-LWqbyGcxs6f/FcOPo3JYR3U+AL0JHeWCiGjuYhxxrWU=";
   };
 
-  propagatedBuildInputs = [ ctypes integers result ];
+  propagatedBuildInputs = [
+    ctypes
+    integers
+    result
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/xapi-project/ocaml-unix-errno"; # This is the repo used in the opam package
     description = "Unix errno types, maps, and support for OCaml";
-    license = with licenses; [ isc lgpl21Only ]; # All the files indicate ISC, but there's an LGPL LICENSE file
+    license = with licenses; [
+      isc
+      lgpl21Only
+    ]; # All the files indicate ISC, but there's an LGPL LICENSE file
     maintainers = with maintainers; [ dandellion ];
   };
 }

@@ -1,4 +1,11 @@
-{ lib, stdenv, makeWrapper, fetchFromGitHub, gawk, installShellFiles }:
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  fetchFromGitHub,
+  gawk,
+  installShellFiles,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lynis";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-K3+E3ODXti88wGE3trxZYTKPe7tYfPI85C/5jXea2uw=";
   };
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   postPatch = ''
     grep -rl '/usr/local/lynis' ./ | xargs sed -i "s@/usr/local/lynis@$out/share/lynis@g"

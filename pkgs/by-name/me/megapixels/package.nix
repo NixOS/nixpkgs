@@ -1,30 +1,39 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, glib
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, feedbackd
-, gtk4
-, libepoxy
-, xorg
-, zbar
-, tiffSupport ? true
-, libraw
-, jpgSupport ? true
-, graphicsmagick
-, exiftool
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  glib,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  feedbackd,
+  gtk4,
+  libepoxy,
+  xorg,
+  zbar,
+  tiffSupport ? true,
+  libraw,
+  jpgSupport ? true,
+  graphicsmagick,
+  exiftool,
 }:
 
 assert jpgSupport -> tiffSupport;
 
 let
-  inherit (lib) makeBinPath optional optionals optionalString;
+  inherit (lib)
+    makeBinPath
+    optional
+    optionals
+    optionalString
+    ;
   runtimePath = makeBinPath (
     optional tiffSupport libraw
-    ++ optionals jpgSupport [ graphicsmagick exiftool ]
+    ++ optionals jpgSupport [
+      graphicsmagick
+      exiftool
+    ]
   );
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -77,7 +86,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.com/megapixels-org/Megapixels";
     changelog = "https://gitlab.com/megapixels-org/Megapixels/-/tags/${finalAttrs.version}";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ dotlambda Luflosi ];
+    maintainers = with maintainers; [
+      dotlambda
+      Luflosi
+    ];
     platforms = platforms.linux;
     mainProgram = "megapixels";
   };

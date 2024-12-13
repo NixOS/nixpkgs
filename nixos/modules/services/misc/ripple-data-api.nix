@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.rippleDataApi;
 
@@ -29,7 +34,8 @@ let
     };
   };
 
-in {
+in
+{
   options = {
     services.rippleDataApi = {
       enable = lib.mkEnableOption "ripple data api";
@@ -43,7 +49,10 @@ in {
       importMode = lib.mkOption {
         description = "Ripple data api import mode.";
         default = "liveOnly";
-        type = lib.types.enum ["live" "liveOnly"];
+        type = lib.types.enum [
+          "live"
+          "liveOnly"
+        ];
       };
 
       minLedger = lib.mkOption {
@@ -133,7 +142,11 @@ in {
     services.redis.enable = lib.mkDefault true;
 
     systemd.services.ripple-data-api = {
-      after = [ "couchdb.service" "redis.service" "ripple-data-api-importer.service" ];
+      after = [
+        "couchdb.service"
+        "redis.service"
+        "ripple-data-api-importer.service"
+      ];
       wantedBy = [ "multi-user.target" ];
 
       environment = {
@@ -161,32 +174,36 @@ in {
         LOG_FILE = "/dev/null";
       };
 
-      serviceConfig = let
-        importMode =
-          if cfg.minLedger != null && cfg.maxLedger != null then
-            "${toString cfg.minLedger} ${toString cfg.maxLedger}"
-          else
-            cfg.importMode;
-      in {
-        ExecStart = "${pkgs.ripple-data-api}/bin/importer ${importMode} debug";
-        Restart = "always";
-        User = "ripple-data-api";
-      };
+      serviceConfig =
+        let
+          importMode =
+            if cfg.minLedger != null && cfg.maxLedger != null then
+              "${toString cfg.minLedger} ${toString cfg.maxLedger}"
+            else
+              cfg.importMode;
+        in
+        {
+          ExecStart = "${pkgs.ripple-data-api}/bin/importer ${importMode} debug";
+          Restart = "always";
+          User = "ripple-data-api";
+        };
 
       preStart = lib.mkMerge [
         (lib.mkIf (cfg.couchdb.create) ''
-          HOST="http://${lib.optionalString (cfg.couchdb.pass != "") "${cfg.couchdb.user}:${cfg.couchdb.pass}@"}${cfg.couchdb.host}:${toString cfg.couchdb.port}"
+          HOST="http://${
+            lib.optionalString (cfg.couchdb.pass != "") "${cfg.couchdb.user}:${cfg.couchdb.pass}@"
+          }${cfg.couchdb.host}:${toString cfg.couchdb.port}"
           curl -X PUT $HOST/${cfg.couchdb.db} || true
         '')
         "${pkgs.ripple-data-api}/bin/update-views"
       ];
     };
 
-    users.users.ripple-data-api =
-      { description = "Ripple data api user";
-        isSystemUser = true;
-        group = "ripple-data-api";
-      };
-    users.groups.ripple-data-api = {};
+    users.users.ripple-data-api = {
+      description = "Ripple data api user";
+      isSystemUser = true;
+      group = "ripple-data-api";
+    };
+    users.groups.ripple-data-api = { };
   };
 }

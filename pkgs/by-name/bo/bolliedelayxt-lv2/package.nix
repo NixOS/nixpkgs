@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, lv2 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  lv2,
+}:
 
-stdenv.mkDerivation  rec {
+stdenv.mkDerivation rec {
   pname = "bolliedelayxt.lv2";
   version = "unstable-2017-11-02";
 

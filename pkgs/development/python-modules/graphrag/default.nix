@@ -12,6 +12,7 @@
   datashaper,
   devtools,
   environs,
+  fnllm,
   graspologic,
   json-repair,
   lancedb,
@@ -39,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "graphrag";
-  version = "0.5.0";
+  version = "0.9.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "graphrag";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QK6ZdBDSSKi/WUsDQeEY5JfxgsmW/vK7yDfjMseAO/k=";
+    hash = "sha256-LD7cfea8uyCYVMhsHXQBHho7jiwEmlqYrrfZs/7oeyc=";
   };
 
   build-system = [
@@ -65,6 +66,7 @@ buildPythonPackage rec {
     datashaper
     devtools
     environs
+    fnllm
     graspologic
     json-repair
     lancedb

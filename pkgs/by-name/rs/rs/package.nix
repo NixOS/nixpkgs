@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, installShellFiles
-, libbsd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  installShellFiles,
+  libbsd,
 }:
 
 stdenv.mkDerivation rec {

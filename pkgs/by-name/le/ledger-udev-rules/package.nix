@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation {
   pname = "ledger-udev-rules";
@@ -22,7 +26,10 @@ stdenv.mkDerivation {
   meta = with lib; {
     description = "udev rules for Ledger devices";
     license = licenses.asl20;
-    maintainers = with maintainers; [ asymmetric toasteruwu ];
+    maintainers = with maintainers; [
+      asymmetric
+      toasteruwu
+    ];
     platforms = platforms.linux;
     homepage = "https://github.com/LedgerHQ/udev-rules";
   };

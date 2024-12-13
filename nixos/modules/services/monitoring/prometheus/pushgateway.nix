@@ -1,9 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.prometheus.pushgateway;
 
   cmdlineArgs =
-       opt "web.listen-address" cfg.web.listen-address
+    opt "web.listen-address" cfg.web.listen-address
     ++ opt "web.telemetry-path" cfg.web.telemetry-path
     ++ opt "web.external-url" cfg.web.external-url
     ++ opt "web.route-prefix" cfg.web.route-prefix
@@ -13,9 +18,10 @@ let
     ++ opt "log.format" cfg.log.format
     ++ cfg.extraFlags;
 
-  opt = k : v : lib.optional (v != null) ''--${k}="${v}"'';
+  opt = k: v: lib.optional (v != null) ''--${k}="${v}"'';
 
-in {
+in
+{
   options = {
     services.prometheus.pushgateway = {
       enable = lib.mkEnableOption "Prometheus Pushgateway";
@@ -73,7 +79,15 @@ in {
       };
 
       log.level = lib.mkOption {
-        type = lib.types.nullOr (lib.types.enum ["debug" "info" "warn" "error" "fatal"]);
+        type = lib.types.nullOr (
+          lib.types.enum [
+            "debug"
+            "info"
+            "warn"
+            "error"
+            "fatal"
+          ]
+        );
         default = null;
         description = ''
           Only log messages with the given severity or above.
@@ -95,7 +109,7 @@ in {
 
       extraFlags = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         description = ''
           Extra commandline options when launching the Pushgateway.
         '';
@@ -135,18 +149,20 @@ in {
       {
         assertion = !lib.hasPrefix "/" cfg.stateDir;
         message =
-          "The option services.prometheus.pushgateway.stateDir" +
-          " shouldn't be an absolute directory." +
-          " It should be a directory relative to /var/lib.";
+          "The option services.prometheus.pushgateway.stateDir"
+          + " shouldn't be an absolute directory."
+          + " It should be a directory relative to /var/lib.";
       }
     ];
     systemd.services.pushgateway = {
       wantedBy = [ "multi-user.target" ];
-      after    = [ "network.target" ];
+      after = [ "network.target" ];
       serviceConfig = {
-        ExecStart = "${cfg.package}/bin/pushgateway" +
-          lib.optionalString (lib.length cmdlineArgs != 0) (" \\\n  " +
-            lib.concatStringsSep " \\\n  " cmdlineArgs);
+        ExecStart =
+          "${cfg.package}/bin/pushgateway"
+          + lib.optionalString (lib.length cmdlineArgs != 0) (
+            " \\\n  " + lib.concatStringsSep " \\\n  " cmdlineArgs
+          );
 
         CapabilityBoundingSet = [ "" ];
         DeviceAllow = [ "" ];
@@ -174,9 +190,12 @@ in {
         ProtectKernelLogs = true;
         ProtectControlGroups = true;
 
-        Restart  = "always";
+        Restart = "always";
 
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;

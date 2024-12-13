@@ -1,4 +1,12 @@
-{lib, stdenv, fetchurl, SDL, SDL_image, libGLU, libGL} :
+{
+  lib,
+  stdenv,
+  fetchurl,
+  SDL,
+  SDL_image,
+  libGLU,
+  libGL,
+}:
 
 stdenv.mkDerivation rec {
   pname = "kobodeluxe";
@@ -8,7 +16,12 @@ stdenv.mkDerivation rec {
     sha256 = "0f7b910a399d985437564af8c5d81d6dcf22b96b26b01488d72baa6a6fdb5c2c";
   };
 
-  buildInputs = [ SDL SDL_image libGLU libGL ];
+  buildInputs = [
+    SDL
+    SDL_image
+    libGLU
+    libGL
+  ];
 
   prePatch = ''
     sed -e 's/char \*tok/const char \*tok/' -i graphics/window.cpp

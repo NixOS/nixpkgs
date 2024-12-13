@@ -1,11 +1,12 @@
-{ lib
-, mkXfceDerivation
-, vala
-, libxfce4util
-, libxfce4ui
-, gtk3
-, glib
-, libmpd
+{
+  lib,
+  mkXfceDerivation,
+  vala,
+  libxfce4util,
+  libxfce4ui,
+  gtk3,
+  glib,
+  libmpd,
 }:
 
 mkXfceDerivation rec {

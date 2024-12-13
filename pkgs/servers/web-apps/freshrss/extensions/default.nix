@@ -1,8 +1,9 @@
-{ config
-, lib
-, fetchFromGitHub
-, fetchFromGitLab
-, callPackage
+{
+  config,
+  lib,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  callPackage,
 }:
 
 let
@@ -133,6 +134,7 @@ let
 
   toFix = lib.foldl' (lib.flip lib.extends) baseExtensions overlays;
 in
-(lib.fix toFix) // {
+(lib.fix toFix)
+// {
   inherit buildFreshRssExtension;
 }

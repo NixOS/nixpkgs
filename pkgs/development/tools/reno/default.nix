@@ -30,7 +30,7 @@ python3Packages.buildPythonApplication rec {
     dulwich
     pbr
     pyyaml
-    setuptools  # required for finding pkg_resources at runtime
+    setuptools # required for finding pkg_resources at runtime
   ];
 
   nativeCheckInputs = with python3Packages; [
@@ -79,6 +79,11 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "reno";
     homepage = "https://docs.openstack.org/reno/latest";
     license = licenses.asl20;
-    maintainers = teams.openstack.members ++ (with maintainers; [ drewrisinger guillaumekoenig ]);
+    maintainers =
+      teams.openstack.members
+      ++ (with maintainers; [
+        drewrisinger
+        guillaumekoenig
+      ]);
   };
 }

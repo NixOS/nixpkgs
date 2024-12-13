@@ -1,8 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, alsa-lib
-, libX11
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  alsa-lib,
+  libX11,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +20,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ alsa-lib libX11 ];
+  buildInputs = [
+    alsa-lib
+    libX11
+  ];
 
   installPhase = ''
     runHook preInstall

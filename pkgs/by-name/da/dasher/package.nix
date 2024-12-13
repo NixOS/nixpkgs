@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, autoreconfHook
-, pkg-config
-, wrapGAppsHook3
-, glib
-, gtk3
-, expat
-, itstool
-, gnome-doc-utils
-, which
-, at-spi2-core
-, dbus
-, libxslt
-, libxml2
-, speechSupport ? true
-, speechd-minimal
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  autoreconfHook,
+  pkg-config,
+  wrapGAppsHook3,
+  glib,
+  gtk3,
+  expat,
+  itstool,
+  gnome-doc-utils,
+  which,
+  at-spi2-core,
+  dbus,
+  libxslt,
+  libxml2,
+  speechSupport ? true,
+  speechd-minimal,
 }:
 
 stdenv.mkDerivation {

@@ -1,16 +1,17 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, pkg-config
-, fontconfig
-, xorg
-, libxkbcommon
-, wayland
-, libGL
-, openssl
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  pkg-config,
+  fontconfig,
+  xorg,
+  libxkbcommon,
+  wayland,
+  libGL,
+  openssl,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,24 +27,28 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-fMovzaP+R0CUwJy1HKATH2tPrIPwzGtubF1WHUoQDRY=";
 
-  nativeBuildInputs = [
-    installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    pkg-config
-  ];
+  nativeBuildInputs =
+    [
+      installShellFiles
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      pkg-config
+    ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    fontconfig
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-    xorg.libxcb
-    wayland
-    libxkbcommon
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.AppKit
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      fontconfig
+      xorg.libXcursor
+      xorg.libXi
+      xorg.libXrandr
+      xorg.libxcb
+      wayland
+      libxkbcommon
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.AppKit
+    ];
 
   checkFlags = lib.optionals stdenv.hostPlatform.isDarwin [
     # time out on darwin
@@ -60,7 +65,12 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/inlyne \
-      --add-rpath ${lib.makeLibraryPath [ libGL xorg.libX11 ]}
+      --add-rpath ${
+        lib.makeLibraryPath [
+          libGL
+          xorg.libX11
+        ]
+      }
   '';
 
   meta = with lib; {

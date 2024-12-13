@@ -31,14 +31,14 @@
 
 buildPythonPackage rec {
   pname = "accelerate";
-  version = "1.1.0";
+  version = "1.2.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "accelerate";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-GBNe4zomy8dmfvYrk/9Q77Z6r+JJA+2dgAhJx2opqAc=";
+    tag = "v${version}";
+    hash = "sha256-EH/WiEm2ILJBG7kuUOVmLs4eFiQ3xT8pFC+EhAJs6Q0=";
   };
 
   buildInputs = [ llvmPackages.openmp ];
@@ -108,7 +108,7 @@ buildPythonPackage rec {
       # requires ptxas from cudatoolkit, which is unfree
       "test_dynamo_extract_model"
     ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # RuntimeError: 'accelerate-launch /nix/store/a7vhm7b74a7bmxc35j26s9iy1zfaqjs...
       "test_accelerate_test"
       "test_init_trackers"

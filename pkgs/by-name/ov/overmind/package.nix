@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, tmux, which, makeWrapper }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  tmux,
+  which,
+  makeWrapper,
+}:
 
 buildGoModule rec {
   pname = "overmind";
@@ -7,7 +14,12 @@ buildGoModule rec {
   nativeBuildInputs = [ makeWrapper ];
 
   postInstall = ''
-    wrapProgram "$out/bin/overmind" --prefix PATH : "${lib.makeBinPath [ tmux which ]}"
+    wrapProgram "$out/bin/overmind" --prefix PATH : "${
+      lib.makeBinPath [
+        tmux
+        which
+      ]
+    }"
   '';
 
   src = fetchFromGitHub {

@@ -215,3 +215,9 @@ adb9714bd909df283c66bbd641bd631ff50a4260
 
 # treewide: incus packages
 9ab59bb5fb943ad6740f64f5a79eae9642fb8211
+
+# treewide nixfmt reformat pass 1, master, staging and staging-next
+4f0dadbf38ee4cf4cc38cbc232b7708fddf965bc
+667d42c00d566e091e6b9a19b365099315d0e611
+84d4f874c2bac9f3118cb6907d7113b3318dcb5e
+

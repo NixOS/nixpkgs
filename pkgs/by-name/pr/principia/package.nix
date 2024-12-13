@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  wrapGAppsHook3,
 
-, curl
-, freetype
-, glew
-, gtk3
-, libGL
-, libjpeg
-, libpng
-, SDL2
-, SDL2_gfx
-, SDL2_image
-, SDL2_mixer
-, SDL2_ttf
+  curl,
+  freetype,
+  glew,
+  gtk3,
+  libGL,
+  libjpeg,
+  libpng,
+  SDL2,
+  SDL2_gfx,
+  SDL2_image,
+  SDL2_mixer,
+  SDL2_ttf,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,7 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   meta = with lib; {
-    changelog = "https://principia-web.se/wiki/Changelog#${lib.replaceStrings ["."] ["-"] finalAttrs.version}";
+    changelog = "https://principia-web.se/wiki/Changelog#${
+      lib.replaceStrings [ "." ] [ "-" ] finalAttrs.version
+    }";
     description = "Physics-based sandbox game";
     mainProgram = "principia";
     homepage = "https://principia-web.se/";

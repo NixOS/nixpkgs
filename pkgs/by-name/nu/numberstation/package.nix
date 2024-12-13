@@ -1,16 +1,17 @@
-{ lib
-, python3
-, fetchFromSourcehut
-, desktop-file-utils
-, glib
-, gobject-introspection
-, gtk3
-, libhandy
-, librsvg
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook3
+{
+  lib,
+  python3,
+  fetchFromSourcehut,
+  desktop-file-utils,
+  glib,
+  gobject-introspection,
+  gtk3,
+  libhandy,
+  librsvg,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
 }:
 
 python3.pkgs.buildPythonApplication rec {

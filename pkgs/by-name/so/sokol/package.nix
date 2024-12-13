@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation {
   pname = "sokol";
@@ -32,4 +36,3 @@ stdenv.mkDerivation {
     maintainers = with maintainers; [ jonnybolton ];
   };
 }
-

@@ -475,6 +475,46 @@ def test_execute_build(mock_run: Any, tmp_path: Path) -> None:
 
 
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
+def test_execute_test_flake(mock_run: Any, tmp_path: Path) -> None:
+    config_path = tmp_path / "test"
+    config_path.touch()
+    mock_run.side_effect = [
+        # nixos_build_flake
+        CompletedProcess([], 0, str(config_path)),
+        # switch_to_configuration
+        CompletedProcess([], 0),
+    ]
+
+    nr.execute(
+        ["nixos-rebuild", "test", "--flake", "github:user/repo#hostname", "--fast"]
+    )
+
+    assert mock_run.call_count == 2
+    mock_run.assert_has_calls(
+        [
+            call(
+                [
+                    "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
+                    "build",
+                    "--print-out-paths",
+                    "github:user/repo#nixosConfigurations.hostname.config.system.build.toplevel",
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [config_path / "bin/switch-to-configuration", "test"],
+                check=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+        ]
+    )
+
+
+@patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
 @patch(get_qualified_name(nr.nix.Path.exists, nr.nix), autospec=True, return_value=True)
 @patch(get_qualified_name(nr.nix.Path.mkdir, nr.nix), autospec=True)
 def test_execute_test_rollback(

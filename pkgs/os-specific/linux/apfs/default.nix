@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, kernel
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  nixosTests,
 }:
 
 let

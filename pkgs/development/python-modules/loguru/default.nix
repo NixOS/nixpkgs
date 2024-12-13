@@ -7,7 +7,7 @@
   freezegun,
   pytestCheckHook,
   pythonOlder,
-  pytest-xdist
+  pytest-xdist,
 }:
 
 buildPythonPackage rec {

@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, cmake
-, fetchFromGitHub
-, boost
+{
+  stdenv,
+  lib,
+  cmake,
+  fetchFromGitHub,
+  boost,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,4 +37,3 @@ stdenv.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, makeWrapper, mono, gtk2, curl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  mono,
+  gtk2,
+  curl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ckan";
@@ -14,7 +22,10 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ makeWrapper ];
   buildInputs = [ mono ];
 
-  libraries = lib.makeLibraryPath [ gtk2 curl ];
+  libraries = lib.makeLibraryPath [
+    gtk2
+    curl
+  ];
 
   dontBuild = true;
 
@@ -30,7 +41,10 @@ stdenv.mkDerivation rec {
     mainProgram = "ckan";
     homepage = "https://github.com/KSP-CKAN/CKAN";
     license = licenses.mit;
-    maintainers = with maintainers; [ Baughn ymarkus ];
+    maintainers = with maintainers; [
+      Baughn
+      ymarkus
+    ];
     platforms = platforms.all;
   };
 }

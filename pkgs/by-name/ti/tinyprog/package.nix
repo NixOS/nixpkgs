@@ -1,9 +1,11 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
-with python3Packages; buildPythonApplication rec {
+with python3Packages;
+buildPythonApplication rec {
   pname = "tinyprog";
   # `python setup.py --version` from repo checkout
   version = "1.0.24.dev114+g${lib.substring 0 7 src.rev}";

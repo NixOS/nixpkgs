@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, udev, darwin }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  udev,
+  darwin,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libserialport";
@@ -10,7 +17,8 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = lib.optional stdenv.hostPlatform.isLinux udev
+  buildInputs =
+    lib.optional stdenv.hostPlatform.isLinux udev
     ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.IOKit;
 
   meta = with lib; {

@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, pkg-config, libsecret }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  libsecret,
+}:
 
 buildGoModule rec {
   pname = "protonmail-bridge";
@@ -23,7 +29,9 @@ buildGoModule rec {
   '';
 
   ldflags =
-    let constants = "github.com/ProtonMail/proton-bridge/v3/internal/constants"; in
+    let
+      constants = "github.com/ProtonMail/proton-bridge/v3/internal/constants";
+    in
     [
       "-X ${constants}.Version=${version}"
       "-X ${constants}.Revision=${src.rev}"
@@ -52,6 +60,9 @@ buildGoModule rec {
       To work, use secret-service freedesktop.org API (e.g. Gnome keyring) or pass.
     '';
     mainProgram = "protonmail-bridge";
-    maintainers = with lib.maintainers; [ mrfreezeex daniel-fahey ];
+    maintainers = with lib.maintainers; [
+      mrfreezeex
+      daniel-fahey
+    ];
   };
 }

@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, Security
-, testers
-, igrep
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  Security,
+  testers,
+  igrep,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,7 +24,10 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   passthru.tests = {
-    version = testers.testVersion { package = igrep; command = "ig --version"; };
+    version = testers.testVersion {
+      package = igrep;
+      command = "ig --version";
+    };
   };
 
   meta = with lib; {

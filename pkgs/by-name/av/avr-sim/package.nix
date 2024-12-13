@@ -27,9 +27,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-7MgUzMs+l+3RVUbORAWyU1OUpgrKIeWhS+ObgRJtOHc=";
   };
 
-  nativeBuildInputs = [lazarus fpc];
+  nativeBuildInputs = [
+    lazarus
+    fpc
+  ];
 
-  buildInputs = [pango cairo glib atk gtk2 libX11 gdk-pixbuf];
+  buildInputs = [
+    pango
+    cairo
+    glib
+    atk
+    gtk2
+    libX11
+    gdk-pixbuf
+  ];
 
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";
 
@@ -56,6 +67,6 @@ stdenv.mkDerivation rec {
     homepage = "http://www.avr-asm-tutorial.net/avr_sim/index_en.html";
     license = licenses.unfree;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ameer];
+    maintainers = with maintainers; [ ameer ];
   };
 }

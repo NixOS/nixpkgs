@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, fetchurl
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  fetchurl,
 }:
 
 # This file is responsible for fetching the sage source and adding necessary patches.
@@ -32,23 +33,25 @@ stdenv.mkDerivation rec {
 
   # Patches needed because of particularities of nix or the way this is packaged.
   # The goal is to upstream all of them and get rid of this list.
-  nixPatches = [
-    # Parallelize docubuild using subprocesses, fixing an isolation issue. See
-    # https://groups.google.com/forum/#!topic/sage-packaging/YGOm8tkADrE
-    ./patches/sphinx-docbuild-subprocesses.patch
+  nixPatches =
+    [
+      # Parallelize docubuild using subprocesses, fixing an isolation issue. See
+      # https://groups.google.com/forum/#!topic/sage-packaging/YGOm8tkADrE
+      ./patches/sphinx-docbuild-subprocesses.patch
 
-    # After updating smypow to (https://github.com/sagemath/sage/issues/3360)
-    # we can now set the cache dir to be within the .sage directory. This is
-    # not strictly necessary, but keeps us from littering in the user's HOME.
-    ./patches/sympow-cache.patch
-  ] ++ lib.optionals (stdenv.cc.isClang) [
-    # https://github.com/NixOS/nixpkgs/pull/264126
-    # Dead links in python sysconfig cause LLVM linker warnings, leading to cython doctest failures.
-    ./patches/silence-linker.patch
+      # After updating smypow to (https://github.com/sagemath/sage/issues/3360)
+      # we can now set the cache dir to be within the .sage directory. This is
+      # not strictly necessary, but keeps us from littering in the user's HOME.
+      ./patches/sympow-cache.patch
+    ]
+    ++ lib.optionals (stdenv.cc.isClang) [
+      # https://github.com/NixOS/nixpkgs/pull/264126
+      # Dead links in python sysconfig cause LLVM linker warnings, leading to cython doctest failures.
+      ./patches/silence-linker.patch
 
-    # Stack overflows during doctests; this does not change functionality.
-    ./patches/disable-singular-doctest.patch
-  ];
+      # Stack overflows during doctests; this does not change functionality.
+      ./patches/disable-singular-doctest.patch
+    ];
 
   # Since sage unfortunately does not release bugfix releases, packagers must
   # fix those bugs themselves. This is for critical bugfixes, where "critical"
@@ -78,7 +81,10 @@ stdenv.mkDerivation rec {
   patches = nixPatches ++ bugfixPatches ++ packageUpgradePatches;
 
   # do not create .orig backup files if patch applies with fuzz
-  patchFlags = [ "--no-backup-if-mismatch" "-p1" ];
+  patchFlags = [
+    "--no-backup-if-mismatch"
+    "-p1"
+  ];
 
   postPatch = ''
     # Make sure sage can at least be imported without setting any environment

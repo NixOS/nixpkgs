@@ -35,7 +35,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   dependencies = [
     aiohttp
     auth0-python

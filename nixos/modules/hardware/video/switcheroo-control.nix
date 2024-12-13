@@ -1,8 +1,14 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.switcherooControl;
-in {
+in
+{
   options.services.switcherooControl = {
     enable = lib.mkEnableOption "switcheroo-control, a D-Bus service to check the availability of dual-GPU";
     package = lib.mkPackageOption pkgs "switcheroo-control" { };

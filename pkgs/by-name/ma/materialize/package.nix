@@ -93,14 +93,14 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "materialize";
-  version = "0.84.2";
-  MZ_DEV_BUILD_SHA = "9f8cf75b461d288335cb6a7a73aaa670bab4a466";
+  version = "0.87.2";
+  MZ_DEV_BUILD_SHA = "000000000000000000000000000000000000000000000000000";
 
   src = fetchFromGitHub {
     owner = "MaterializeInc";
     repo = "materialize";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-+cvTCiTbuaPYPIyDxQlMWdJA5/6cbMoiTcSmjj5KPjs=";
+    tag = "v${version}";
+    hash = "sha256-EHhN+avUxzwKU48MubiMM40W9J93yZlNqV+xeP44dl0=";
     fetchSubmodules = true;
   };
 
@@ -123,7 +123,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-EHVuwVYPZKaoP3GYtJpYJaKG3CLsy9CWuEmajF4P7Qc=";
+  cargoHash = "sha256-+OREisZ/vw3Oi5MNCYn7u06pZKtf+2trlGyn//uAGws=";
 
   nativeBuildInputs =
     [
@@ -156,16 +156,19 @@ rustPlatform.buildRustPackage rec {
   # Skip tests that use the network
   checkFlags = [
     "--exact"
-    "--skip test_client"
-    "--skip test_client_errors"
-    "--skip test_client_all_subjects"
-    "--skip test_client_subject_and_references"
-    "--skip test_no_block"
-    "--skip test_safe_mode"
-    "--skip test_tls"
+    "--skip=test_client"
+    "--skip=test_client_errors"
+    "--skip=test_client_all_subjects"
+    "--skip=test_client_subject_and_references"
+    "--skip=test_no_block"
+    "--skip=test_safe_mode"
+    "--skip=test_tls"
   ];
 
-  cargoBuildFlags = [ "--bin environmentd --bin clusterd" ];
+  cargoBuildFlags = [
+    "--bin=clusterd"
+    "--bin=environmentd"
+  ];
 
   postInstall = ''
     install --mode=444 -D ./misc/dist/materialized.service $out/etc/systemd/system/materialized.service
@@ -186,11 +189,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://materialize.com";
     description = "Streaming SQL materialized view engine for real-time applications";
     license = lib.licenses.bsl11;
-    platforms = [
-      "x86_64-linux"
-      "x86_64-darwin"
-      "aarch64-linux"
-    ];
+    platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ petrosagg ];
     mainProgram = "environmentd";
   };

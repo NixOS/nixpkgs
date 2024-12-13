@@ -1,6 +1,10 @@
-{ lib, stdenv, fetchFromGitHub
-, alsa-lib, caps,
-  ladspaH
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  caps,
+  ladspaH,
 }:
 
 stdenv.mkDerivation rec {

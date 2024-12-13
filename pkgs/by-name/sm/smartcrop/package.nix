@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule {
@@ -16,7 +17,10 @@ buildGoModule {
 
   vendorHash = "sha256-ov3dHF/NxqxWPaVzddaJSjz3boLpZtIPtvP1iNBtiTc=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Find good image crops for arbitrary crop sizes";

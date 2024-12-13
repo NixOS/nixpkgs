@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitLab
-, pkg-config
-, nettle
-, openssl
-, sqlite
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitLab,
+  pkg-config,
+  nettle,
+  openssl,
+  sqlite,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, guile
-, libevent
-, pkg-config
-, texinfo
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  guile,
+  libevent,
+  pkg-config,
+  texinfo,
 }:
 
 stdenv.mkDerivation rec {

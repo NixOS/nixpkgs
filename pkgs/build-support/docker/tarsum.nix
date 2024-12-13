@@ -1,4 +1,9 @@
-{ stdenv, go, docker, nixosTests }:
+{
+  stdenv,
+  go,
+  docker,
+  nixosTests,
+}:
 
 stdenv.mkDerivation {
   name = "tarsum";

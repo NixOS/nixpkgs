@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, eks-node-viewer }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  eks-node-viewer,
+}:
 
 buildGoModule rec {
   pname = "eks-node-viewer";

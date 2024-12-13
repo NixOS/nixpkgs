@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, cppunit
-, libiconv
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  cppunit,
+  libiconv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpp-utilities";
-  version = "5.26.1";
+  version = "5.27.0";
 
   src = fetchFromGitHub {
     owner = "Martchus";
     repo = "cpp-utilities";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-ft8gusZ6We3nEAOwccGrUidxpO5tdWR5VNDQ/r5l2P8=";
+    sha256 = "sha256-pjEWTNcZwcrKUsXXHia8aLSCw7R8aEr6GBvD7yiYFXo=";
   };
 
   nativeBuildInputs = [ cmake ];
@@ -23,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
     libiconv # needed on Darwin, see https://github.com/Martchus/cpp-utilities/issues/4
   ];
 
-  cmakeFlags = ["-DBUILD_SHARED_LIBS=ON"];
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ];
 
   # Otherwise, tests fail since the resulting shared object libc++utilities.so is only available in PWD of the make files
   preCheck = ''

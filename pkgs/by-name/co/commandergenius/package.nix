@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, SDL2
-, SDL2_image
-, pkg-config
-, libvorbis
-, libGL
-, boost
-, cmake
-, zlib
-, curl
-, SDL2_mixer
-, SDL2_ttf
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  SDL2,
+  SDL2_image,
+  pkg-config,
+  libvorbis,
+  libGL,
+  boost,
+  cmake,
+  zlib,
+  curl,
+  SDL2_mixer,
+  SDL2_ttf,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +27,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-sWnx2UdnuuLcTxhuXhfG2ssnFvuGi9kOBrpc4jiKgTs=";
   };
 
-  buildInputs = [ SDL2 SDL2_image SDL2_mixer SDL2_ttf libGL boost libvorbis zlib curl python3 ];
+  buildInputs = [
+    SDL2
+    SDL2_image
+    SDL2_mixer
+    SDL2_ttf
+    libGL
+    boost
+    libvorbis
+    zlib
+    curl
+    python3
+  ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_PREFIX=${placeholder "out"}"
@@ -37,7 +49,10 @@ stdenv.mkDerivation rec {
     "DESTDIR=${placeholder "out"}"
   ];
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
   postPatch = ''
     NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE $(sdl2-config --cflags)"

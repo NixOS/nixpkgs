@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, gtk-doc, gettext
-, pkg-config, glib, libxml2, gobject-introspection, gnome-common, unzip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  gtk-doc,
+  gettext,
+  pkg-config,
+  glib,
+  libxml2,
+  gobject-introspection,
+  gnome-common,
+  unzip,
 }:
 
 stdenv.mkDerivation rec {
@@ -44,13 +56,24 @@ stdenv.mkDerivation rec {
     cp "${language_subtag_registry}" data/language-subtag-registry
   '';
 
-  configureFlags =
-    lib.optional
-      (stdenv.hostPlatform.libc == "glibc")
-      "--with-locale-alias=${stdenv.cc.libc}/share/locale/locale.alias";
+  configureFlags = lib.optional (
+    stdenv.hostPlatform.libc == "glibc"
+  ) "--with-locale-alias=${stdenv.cc.libc}/share/locale/locale.alias";
 
-  buildInputs = [ gettext glib libxml2 gnome-common ];
-  nativeBuildInputs = [ autoreconfHook gtk-doc gettext pkg-config unzip gobject-introspection ];
+  buildInputs = [
+    gettext
+    glib
+    libxml2
+    gnome-common
+  ];
+  nativeBuildInputs = [
+    autoreconfHook
+    gtk-doc
+    gettext
+    pkg-config
+    unzip
+    gobject-introspection
+  ];
 
   meta = with lib; {
     description = "Interface library to access tags for identifying languages";

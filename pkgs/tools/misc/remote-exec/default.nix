@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchpatch
-, fetchFromGitHub
-, buildPythonApplication
-, click
-, pydantic
-, toml
-, watchdog
-, pytestCheckHook
-, pytest-cov-stub
-, rsync
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchFromGitHub,
+  buildPythonApplication,
+  click,
+  pydantic,
+  toml,
+  watchdog,
+  pytestCheckHook,
+  pytest-cov-stub,
+  rsync,
 }:
 
 buildPythonApplication rec {

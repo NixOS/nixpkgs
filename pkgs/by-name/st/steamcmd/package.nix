@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchurl, steam-run, bash, coreutils
-, steamRoot ? "~/.local/share/Steam"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  steam-run,
+  bash,
+  coreutils,
+  steamRoot ? "~/.local/share/Steam",
 }:
 
 stdenv.mkDerivation {
@@ -18,7 +24,10 @@ stdenv.mkDerivation {
     sourceRoot=.
   '';
 
-  buildInputs = [ bash steam-run ];
+  buildInputs = [
+    bash
+    steam-run
+  ];
 
   dontBuild = true;
 

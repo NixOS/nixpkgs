@@ -1,12 +1,19 @@
-{ stdenv, lib, fetchzip, makeWrapper, nodejs, writeScript }:
+{
+  stdenv,
+  lib,
+  fetchzip,
+  makeWrapper,
+  nodejs,
+  writeScript,
+}:
 
 stdenv.mkDerivation {
   pname = "heroku";
-  version = "9.3.0";
+  version = "9.5.0";
 
   src = fetchzip {
-    url = "https://cli-assets.heroku.com/versions/9.3.0/65eb66a/heroku-v9.3.0-65eb66a-linux-x64.tar.xz";
-    hash = "sha256-4k/HLSB4o1BnzG7dPW20ejSFYmJ8o9eVrJWCdXrqC/Q=";
+    url = "https://cli-assets.heroku.com/versions/9.5.0/61bf905/heroku-v9.5.0-61bf905-linux-x64.tar.xz";
+    hash = "sha256-zEWGh7azao/8otrcFt5wZDWRMxGosHF+QfUH/pr0bmM=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -39,7 +46,10 @@ stdenv.mkDerivation {
     homepage = "https://devcenter.heroku.com/articles/heroku-cli";
     description = "Everything you need to get started using Heroku";
     mainProgram = "heroku";
-    maintainers = with lib.maintainers; [ aflatter mirdhyn ];
+    maintainers = with lib.maintainers; [
+      aflatter
+      mirdhyn
+    ];
     license = lib.licenses.mit;
     platforms = with lib.platforms; unix;
   };

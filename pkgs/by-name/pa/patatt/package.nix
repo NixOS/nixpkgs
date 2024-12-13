@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "patatt";
@@ -24,6 +28,9 @@ python3Packages.buildPythonApplication rec {
       DKIM email signature standard to include cryptographic
       signatures via the X-Developer-Signature email header.
     '';
-    maintainers = with maintainers; [ qyliss yoctocell ];
+    maintainers = with maintainers; [
+      qyliss
+      yoctocell
+    ];
   };
 }

@@ -8,14 +8,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "jrnl";
-  version = "4.1";
+  version = "4.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "jrnl-org";
     repo = "jrnl";
     rev = "refs/tags/v${version}";
-    hash = "sha256-DtujXSDJWnOrHjVgJEJNKJMhSrNBHlR2hvHeHLSIF2o=";
+    hash = "sha256-x0JoYJzD6RnuHbRsQMgrhHsNW6nVEVeoDjtPop2eg+w=";
   };
 
   postPatch = ''

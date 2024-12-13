@@ -128,7 +128,9 @@ let
         "systemd-modules-load.service"
         "systemd-ask-password-console.service"
       ] ++ lib.optional (config.boot.initrd.clevis.useTang) "network-online.target";
-      requiredBy = getPoolMounts prefix pool ++ [ "zfs-import.target" ];
+      requiredBy = let
+        noauto = lib.all (fs: lib.elem "noauto" fs.options) (getPoolFilesystems pool);
+      in getPoolMounts prefix pool ++ lib.optional (!noauto) "zfs-import.target";
       before = getPoolMounts prefix pool ++ [ "shutdown.target" "zfs-import.target" ];
       conflicts = [ "shutdown.target" ];
       unitConfig = {

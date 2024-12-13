@@ -160,6 +160,8 @@
   ./programs/bash/blesh.nix
   ./programs/bash/ls-colors.nix
   ./programs/bash/undistract-me.nix
+  ./programs/bazecor.nix
+  ./programs/bat.nix
   ./programs/bcc.nix
   ./programs/benchexec.nix
   ./programs/browserpass.nix
@@ -205,6 +207,7 @@
   ./programs/gdk-pixbuf.nix
   ./programs/geary.nix
   ./programs/git.nix
+  ./programs/git-worktree-switcher.nix
   ./programs/gnome-disks.nix
   ./programs/gnome-terminal.nix
   ./programs/gnupg.nix
@@ -392,6 +395,7 @@
   ./services/audio/jack.nix
   ./services/audio/jmusicbot.nix
   ./services/audio/liquidsoap.nix
+  ./services/audio/marytts.nix
   ./services/audio/mopidy.nix
   ./services/audio/mpd.nix
   ./services/audio/mpdscribble.nix
@@ -620,6 +624,7 @@
   ./services/hardware/sane_extra_backends/brscan4.nix
   ./services/hardware/sane_extra_backends/brscan5.nix
   ./services/hardware/sane_extra_backends/dsseries.nix
+  ./services/hardware/scanservjs.nix
   ./services/hardware/spacenavd.nix
   ./services/hardware/supergfxd.nix
   ./services/hardware/tcsd.nix
@@ -1026,6 +1031,7 @@
   ./services/networking/coredns.nix
   ./services/networking/corerad.nix
   ./services/networking/coturn.nix
+  ./services/networking/crab-hole.nix
   ./services/networking/create_ap.nix
   ./services/networking/croc.nix
   ./services/networking/dae.nix
@@ -1286,6 +1292,7 @@
   ./services/networking/wg-quick.nix
   ./services/networking/wgautomesh.nix
   ./services/networking/wireguard.nix
+  ./services/networking/wireguard-networkd.nix
   ./services/networking/wpa_supplicant.nix
   ./services/networking/wstunnel.nix
   ./services/networking/x2goserver.nix
@@ -1469,6 +1476,7 @@
   ./services/web-apps/jirafeau.nix
   ./services/web-apps/jitsi-meet.nix
   ./services/web-apps/kasmweb/default.nix
+  ./services/web-apps/kanboard.nix
   ./services/web-apps/kavita.nix
   ./services/web-apps/keycloak.nix
   ./services/web-apps/kimai.nix
@@ -1758,6 +1766,7 @@
   ./virtualisation/virtualbox-host.nix
   ./virtualisation/vmware-guest.nix
   ./virtualisation/vmware-host.nix
+  ./virtualisation/waagent.nix
   ./virtualisation/waydroid.nix
   ./virtualisation/xe-guest-utilities.nix
   ./virtualisation/xen-dom0.nix

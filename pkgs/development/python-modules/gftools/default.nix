@@ -61,14 +61,14 @@ let
 in
 buildPythonPackage rec {
   pname = "gftools";
-  version = "0.9.74";
+  version = "0.9.76";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "googlefonts";
     repo = "gftools";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AIE2b2BgW4LYtnS76t4vu6B2POmqKgMzLLqRs9K40Gg=";
+    tag = "v${version}";
+    hash = "sha256-UQcQiPStkXKYAy6yK7K8sjkQiABVuqcGllOYyxUjxfA=";
   };
 
   postPatch = ''
@@ -126,47 +126,50 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  dependencies = [
-    absl-py
-    afdko
-    axisregistry
-    babelfont
-    beautifulsoup4
-    brotli
-    bumpfontversion
-    font-v
-    fontfeatures
-    fontmake
-    fonttools
-    gflanguages
-    gfsubsets
-    glyphsets
-    glyphslib
-    jinja2
-    nanoemoji
-    networkx
-    ninja
-    ots-python
-    packaging
-    pillow
-    protobuf
-    pygit2
-    pygithub
-    pyyaml
-    requests
-    rich
-    ruamel-yaml
-    setuptools
-    skia-pathops
-    statmake
-    strictyaml
-    tabulate
-    ttfautohint-py
-    ufomerge
-    unidecode
-    vharfbuzz
-    vttlib
-  ] ++ fonttools.optional-dependencies.ufo ++ fontmake.optional-dependencies.json;
+  dependencies =
+    [
+      absl-py
+      afdko
+      axisregistry
+      babelfont
+      beautifulsoup4
+      brotli
+      bumpfontversion
+      font-v
+      fontfeatures
+      fontmake
+      fonttools
+      gflanguages
+      gfsubsets
+      glyphsets
+      glyphslib
+      jinja2
+      nanoemoji
+      networkx
+      ninja
+      ots-python
+      packaging
+      pillow
+      protobuf
+      pygit2
+      pygithub
+      pyyaml
+      requests
+      rich
+      ruamel-yaml
+      setuptools
+      skia-pathops
+      statmake
+      strictyaml
+      tabulate
+      ttfautohint-py
+      ufomerge
+      unidecode
+      vharfbuzz
+      vttlib
+    ]
+    ++ fonttools.optional-dependencies.ufo
+    ++ fontmake.optional-dependencies.json;
 
   optional-dependencies = {
     qa = [

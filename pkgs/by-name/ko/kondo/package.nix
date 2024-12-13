@@ -1,4 +1,10 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, installShellFiles }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "kondo";

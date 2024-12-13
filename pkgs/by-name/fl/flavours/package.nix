@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, libiconv, installShellFiles }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  libiconv,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "flavours";
@@ -29,7 +36,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Misterio77/flavours";
     changelog = "https://github.com/Misterio77/flavours/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ moni misterio77 ];
+    maintainers = with maintainers; [
+      moni
+      misterio77
+    ];
     mainProgram = "flavours";
   };
 }

@@ -1,10 +1,17 @@
-{ stdenv, lib, fetchurl, fetchzip, jre, makeWrapper }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchzip,
+  jre,
+  makeWrapper,
+}:
 
 let
-translation-file = fetchurl {
-  url = "https://gitlab.com/bmwinger/tr-patcher/-/raw/master/lib/Translation.txt?inline=false";
-  sha256 = "136zd2s73b4n1w2n34wxi656bm448748nn3y7a64fd89ysg9n7n8";
-};
+  translation-file = fetchurl {
+    url = "https://gitlab.com/bmwinger/tr-patcher/-/raw/master/lib/Translation.txt?inline=false";
+    sha256 = "136zd2s73b4n1w2n34wxi656bm448748nn3y7a64fd89ysg9n7n8";
+  };
 in
 stdenv.mkDerivation rec {
   pname = "tr-patcher";

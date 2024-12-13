@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ensureNewerSourcesForZipFilesHook
-, pkg-config
-, scons
-, glibmm
-, libpulseaudio
-, libao
-, speechd-minimal
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ensureNewerSourcesForZipFilesHook,
+  pkg-config,
+  scons,
+  glibmm,
+  libpulseaudio,
+  libao,
+  speechd-minimal,
 }:
 
 stdenv.mkDerivation rec {

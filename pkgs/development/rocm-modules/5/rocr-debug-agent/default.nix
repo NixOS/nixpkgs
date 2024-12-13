@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, clr
-, git
-, rocdbgapi
-, elfutils
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  clr,
+  git,
+  rocdbgapi,
+  elfutils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -54,6 +55,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ ncsa ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

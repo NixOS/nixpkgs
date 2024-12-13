@@ -1,5 +1,8 @@
-{ fetchurl, lib, stdenv
-, CoreServices
+{
+  fetchurl,
+  lib,
+  stdenv,
+  CoreServices,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +15,9 @@ stdenv.mkDerivation rec {
   };
 
   # fortify breaks the libcompat vsnprintf implementation
-  hardeningDisable = lib.optionals (stdenv.hostPlatform.isMusl && (stdenv.hostPlatform != stdenv.buildPlatform)) [ "fortify" ];
+  hardeningDisable = lib.optionals (
+    stdenv.hostPlatform.isMusl && (stdenv.hostPlatform != stdenv.buildPlatform)
+  ) [ "fortify" ];
 
   # Test can randomly fail: https://hydra.nixos.org/build/7243912
   doCheck = false;

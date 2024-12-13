@@ -1,7 +1,8 @@
-{ fetchFromGitHub
-, stdenvNoCC
-, lib
-, bash
+{
+  fetchFromGitHub,
+  stdenvNoCC,
+  lib,
+  bash,
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "steam-play-none";
@@ -14,7 +15,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   };
   buildInputs = [ bash ];
   strictDeps = true;
-  outputs = [ "out" "steamcompattool" ];
+  outputs = [
+    "out"
+    "steamcompattool"
+  ];
   installPhase = ''
     runHook preInstall
 
@@ -36,7 +40,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/Scrumplex/Steam-Play-None";
     license = lib.licenses.cc0;
-    maintainers = with lib.maintainers; [ matthewcroughan Scrumplex ];
+    maintainers = with lib.maintainers; [
+      matthewcroughan
+      Scrumplex
+    ];
     platforms = [ "x86_64-linux" ];
   };
 })

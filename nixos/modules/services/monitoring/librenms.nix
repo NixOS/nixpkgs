@@ -14,6 +14,7 @@ let
     log_errors = on
     post_max_size = 100M
     upload_max_filesize = 100M
+    memory_limit = ${toString cfg.settings.php_memory_limit}M
     date.timezone = "${config.time.timeZone}"
   '';
   phpIni = pkgs.runCommand "php.ini"
@@ -101,11 +102,21 @@ in
       '';
     };
 
+    enableLocalBilling = mkOption {
+      type = types.bool;
+      default = true;
+      description = ''
+        Enable billing Cron-Jobs on the local instance. Enabled by default, but you may disable it
+        on some nodes within a distributed poller setup. See [the docs](https://docs.librenms.org/Extensions/Distributed-Poller/#discovery)
+        for more informations about billing with distributed pollers.
+      '';
+    };
+
     useDistributedPollers = mkOption {
       type = types.bool;
       default = false;
       description = ''
-        Enables (distributed pollers)[https://docs.librenms.org/Extensions/Distributed-Poller/]
+        Enables [distributed pollers](https://docs.librenms.org/Extensions/Distributed-Poller/)
         for this LibreNMS instance. This will enable a local `rrdcached` and `memcached` server.
 
         To use this feature, make sure to configure your firewall that the distributed pollers
@@ -118,7 +129,7 @@ in
         type = types.bool;
         default = false;
         description = ''
-          Configure this LibreNMS instance as a (distributed poller)[https://docs.librenms.org/Extensions/Distributed-Poller/].
+          Configure this LibreNMS instance as a [distributed poller](https://docs.librenms.org/Extensions/Distributed-Poller/).
           This will disable all web features and just configure the poller features.
           Use the `mysql` database of your main LibreNMS instance in the database settings.
         '';
@@ -146,6 +157,10 @@ in
         default = false;
         description = ''
           Enable distributed billing on this poller.
+
+          Note: according to [the docs](https://docs.librenms.org/Extensions/Distributed-Poller/#discovery),
+          billing should only be calculated on a single node per poller group. You can disable billing on
+          some nodes with the `services.librenms.enableLocalBilling` option.
         '';
       };
 
@@ -376,6 +391,9 @@ in
       # enable fast ping by default
       "ping_rrd_step" = 60;
 
+      # set default memory limit to 1G
+      "php_memory_limit" = lib.mkDefault 1024;
+
       # one minute polling
       "rrd.step" = if cfg.enableOneMinutePolling then 60 else 300;
       "rrd.heartbeat" = if cfg.enableOneMinutePolling then 120 else 600;
@@ -496,7 +514,7 @@ in
     systemd.services.librenms-setup = {
       description = "Preparation tasks for LibreNMS";
       before = [ "phpfpm-librenms.service" ];
-      after = [ "systemd-tmpfiles-setup.service" ]
+      after = [ "systemd-tmpfiles-setup.service" "network.target" ]
         ++ (lib.optional (cfg.database.host == "localhost") "mysql.service");
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ package configFile ];
@@ -609,8 +627,6 @@ in
           "${if cfg.enableOneMinutePolling then "*" else "*/5"} * * * * ${cfg.user} ${env} ${package}/cronic ${package}/poller-wrapper.py ${toString cfg.pollerThreads}"
           "* * * * * ${cfg.user} ${env} ${package}/alerts.php >> /dev/null 2>&1"
 
-          "*/5 * * * * ${cfg.user} ${env} ${package}/poll-billing.php >> /dev/null 2>&1"
-          "01 * * * * ${cfg.user} ${env} ${package}/billing-calculate.php >> /dev/null 2>&1"
           "*/5 * * * * ${cfg.user} ${env} ${package}/check-services.php >> /dev/null 2>&1"
 
           # extra: fast ping
@@ -621,6 +637,9 @@ in
           "19 0 * * * ${cfg.user} ${env} ${package}/daily.sh notifications >> /dev/null 2>&1"
           "19 0 * * * ${cfg.user} ${env} ${package}/daily.sh peeringdb >> /dev/null 2>&1"
           "19 0 * * * ${cfg.user} ${env} ${package}/daily.sh mac_oui >> /dev/null 2>&1"
+        ] ++ lib.optionals cfg.enableLocalBilling [
+          "*/5 * * * * ${cfg.user} ${env} ${package}/poll-billing.php >> /dev/null 2>&1"
+          "01 * * * * ${cfg.user} ${env} ${package}/billing-calculate.php >> /dev/null 2>&1"
         ];
     };
 
@@ -659,5 +678,5 @@ in
 
   };
 
-  meta.maintainers = lib.teams.wdz.members;
+  meta.maintainers = with lib.maintainers; [ netali ] ++ lib.teams.wdz.members;
 }

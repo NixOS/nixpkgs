@@ -10,7 +10,7 @@
   gdk-pixbuf,
   glib,
   gst_all_1,
-  libsoup,
+  libsoup_3,
   webkitgtk_4_1,
   xdotool,
 }:
@@ -106,7 +106,7 @@ else
     buildInputs = [
       xdotool
       glib
-      libsoup
+      libsoup_3
       webkitgtk_4_1
       gdk-pixbuf
       gst_all_1.gst-plugins-ugly

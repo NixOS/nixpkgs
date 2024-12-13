@@ -1,25 +1,26 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, nix-update-script
-, go
-, testers
-, pulsarctl
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
+  go,
+  testers,
+  pulsarctl,
 }:
 
 buildGoModule rec {
   pname = "pulsarctl";
-  version = "2.11.1.3";
+  version = "4.0.0.8";
 
   src = fetchFromGitHub {
     owner = "streamnative";
     repo = "pulsarctl";
     rev = "v${version}";
-    hash = "sha256-sztjHw3su8KAV/zZcJqPWhjblINa8nYCN5Dzhn6X07w=";
+    hash = "sha256-+td/kQlP978Tuuop0qGFrnRXMZXSa53GRuwwfyUOOmg=";
   };
 
-  vendorHash = "sha256-NQ8zvrW6lBF1js+WI2PPvXhv4YRS2IBT6S4vDoE1BFc=";
+  vendorHash = "sha256-wNUTJn7Ar+GlePEhdr6xeolAiltJdAoIs5o5uDo8Ibs=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -33,7 +34,9 @@ buildGoModule rec {
         GoVersion = "go${go.version}";
       };
     in
-    (lib.mapAttrsToList (k: v: "-X github.com/streamnative/pulsarctl/pkg/cmdutils.${k}=${v}") buildVars);
+    (lib.mapAttrsToList (
+      k: v: "-X github.com/streamnative/pulsarctl/pkg/cmdutils.${k}=${v}"
+    ) buildVars);
 
   excludedPackages = [
     "./pkg/test"

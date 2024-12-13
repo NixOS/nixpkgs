@@ -29,7 +29,7 @@
 , pkg-config
 , postgresql
 , proj
-, python311Packages
+, python3Packages
 , readline
 , sqlite
 , wxGTK32
@@ -37,10 +37,6 @@
 , zstd
 }:
 
-let
-  pyPackages = python311Packages;
-
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "grass";
   version = "8.4.0";
@@ -62,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     geos # for `geos-config`
     netcdf # for `nc-config`
     pkg-config
-  ] ++ (with pyPackages; [ python-dateutil numpy wxpython ]);
+  ] ++ (with python3Packages; [ python-dateutil numpy wxpython ]);
 
   buildInputs = [
     blas
@@ -139,7 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
   postInstall = ''
     wrapProgram $out/bin/grass \
     --set PYTHONPATH $PYTHONPATH \
-    --set GRASS_PYTHON ${pyPackages.python.interpreter} \
+    --set GRASS_PYTHON ${python3Packages.python.interpreter} \
     --suffix LD_LIBRARY_PATH ':' '${gdal}/lib'
     ln -s $out/grass*/lib $out/lib
     ln -s $out/grass*/include $out/include

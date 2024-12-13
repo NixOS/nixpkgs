@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -37,7 +38,11 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/kamiyaa/joshuto";
     changelog = "https://github.com/kamiyaa/joshuto/releases/tag/${src.rev}";
     license = licenses.lgpl3Only;
-    maintainers = with maintainers; [ figsoda totoroot xrelkd ];
+    maintainers = with maintainers; [
+      figsoda
+      totoroot
+      xrelkd
+    ];
     mainProgram = "joshuto";
   };
 }

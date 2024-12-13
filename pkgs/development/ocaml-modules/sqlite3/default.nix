@@ -1,4 +1,11 @@
-{ lib, fetchurl, sqlite, pkg-config, buildDunePackage, dune-configurator }:
+{
+  lib,
+  fetchurl,
+  sqlite,
+  pkg-config,
+  buildDunePackage,
+  dune-configurator,
+}:
 
 buildDunePackage rec {
   pname = "sqlite3";
@@ -12,14 +19,18 @@ buildDunePackage rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ dune-configurator sqlite ];
+  buildInputs = [
+    dune-configurator
+    sqlite
+  ];
 
   meta = with lib; {
     homepage = "http://mmottl.github.io/sqlite3-ocaml/";
     description = "OCaml bindings to the SQLite 3 database access library";
     license = licenses.mit;
     maintainers = with maintainers; [
-      maggesi vbgl
+      maggesi
+      vbgl
     ];
   };
 }

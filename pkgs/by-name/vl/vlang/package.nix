@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, glfw, freetype, openssl, makeWrapper, upx, boehmgc, xorg, binaryen, darwin }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glfw,
+  freetype,
+  openssl,
+  makeWrapper,
+  upx,
+  boehmgc,
+  xorg,
+  binaryen,
+  darwin,
+}:
 
 let
   version = "0.4.8";
@@ -19,13 +32,15 @@ let
     };
 
     # patch the ptrace reference for darwin
-    installPhase = lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace v.c \
-        --replace "#include <sys/ptrace.h>" "${ptraceSubstitution}"
-    '' + ''
-      mkdir -p $out
-      cp v.c $out/
-    '';
+    installPhase =
+      lib.optionalString stdenv.hostPlatform.isDarwin ''
+        substituteInPlace v.c \
+          --replace "#include <sys/ptrace.h>" "${ptraceSubstitution}"
+      ''
+      + ''
+        mkdir -p $out
+        cp v.c $out/
+      '';
   };
   # Required for vdoc.
   markdown = fetchFromGitHub {
@@ -49,21 +64,27 @@ stdenv.mkDerivation {
     hash = "sha256-V4f14TcuKW8unzlo6i/tE6MzSb3HAll478OU2LxiTPQ=";
   };
 
-  propagatedBuildInputs = [ glfw freetype openssl ]
-    ++ lib.optional stdenv.hostPlatform.isUnix upx;
+  propagatedBuildInputs = [
+    glfw
+    freetype
+    openssl
+  ] ++ lib.optional stdenv.hostPlatform.isUnix upx;
 
   nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [
-    binaryen
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    xorg.libX11
-    xorg.libXau
-    xorg.libXdmcp
-    xorg.xorgproto
-  ];
+  buildInputs =
+    [
+      binaryen
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Cocoa
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      xorg.libX11
+      xorg.libXau
+      xorg.libXdmcp
+      xorg.xorgproto
+    ];
 
   makeFlags = [
     "local=1"
@@ -102,7 +123,10 @@ stdenv.mkDerivation {
     homepage = "https://vlang.io/";
     description = "Simple, fast, safe, compiled language for developing maintainable software";
     license = licenses.mit;
-    maintainers = with maintainers; [ Madouura delta231 ];
+    maintainers = with maintainers; [
+      Madouura
+      delta231
+    ];
     mainProgram = "v";
     platforms = platforms.all;
   };

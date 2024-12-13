@@ -1,8 +1,13 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.plikd;
 
-  format = pkgs.formats.toml {};
+  format = pkgs.formats.toml { };
   plikdCfg = format.generate "plikd.cfg" cfg.settings;
 in
 {
@@ -18,7 +23,7 @@ in
 
       settings = lib.mkOption {
         type = format.type;
-        default = {};
+        default = { };
         description = ''
           Configuration for plikd, see <https://github.com/root-gg/plik/blob/master/server/plikd.cfg>
           for supported values.
@@ -33,7 +38,7 @@ in
       ListenAddress = "localhost";
       DataBackend = "file";
       DataBackendConfig = {
-         Directory = "/var/lib/plikd";
+        Directory = "/var/lib/plikd";
       };
       MetadataBackendConfig = {
         Driver = "sqlite3";

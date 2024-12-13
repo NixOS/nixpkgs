@@ -1,19 +1,20 @@
-{ lib
-, buildPlatform
-, hostPlatform
-, fetchurl
-, bash
-, tinycc
-, binutils
-, gnumake
-, gnupatch
-, gnused
-, gnugrep
-, gawk
-, diffutils
-, findutils
-, gnutar
-, gzip
+{
+  lib,
+  buildPlatform,
+  hostPlatform,
+  fetchurl,
+  bash,
+  tinycc,
+  binutils,
+  gnumake,
+  gnupatch,
+  gnused,
+  gnugrep,
+  gawk,
+  diffutils,
+  findutils,
+  gnutar,
+  gzip,
 }:
 let
   pname = "gcc";
@@ -52,94 +53,97 @@ let
     ./no-system-headers.patch
   ];
 in
-bash.runCommand "${pname}-${version}" {
-  inherit pname version;
+bash.runCommand "${pname}-${version}"
+  {
+    inherit pname version;
 
-  nativeBuildInputs = [
-    tinycc.compiler
-    binutils
-    gnumake
-    gnupatch
-    gnused
-    gnugrep
-    gawk
-    diffutils
-    findutils
-    gnutar
-    gzip
-  ];
+    nativeBuildInputs = [
+      tinycc.compiler
+      binutils
+      gnumake
+      gnupatch
+      gnused
+      gnugrep
+      gawk
+      diffutils
+      findutils
+      gnutar
+      gzip
+    ];
 
-  passthru.tests.get-version = result:
-    bash.runCommand "${pname}-get-version-${version}" {} ''
-      ${result}/bin/gcc --version
-      mkdir $out
-    '';
+    passthru.tests.get-version =
+      result:
+      bash.runCommand "${pname}-get-version-${version}" { } ''
+        ${result}/bin/gcc --version
+        mkdir $out
+      '';
 
-  meta = with lib; {
-    description = "GNU Compiler Collection, version ${version}";
-    homepage = "https://gcc.gnu.org";
-    license = licenses.gpl3Plus;
-    maintainers = teams.minimal-bootstrap.members;
-    platforms = platforms.unix;
-  };
-} ''
-  # Unpack
-  tar xzf ${src}
-  tar xzf ${ccSrc}
-  tar xzf ${gmp}
-  tar xzf ${mpfr}
-  tar xzf ${mpc}
-  cd gcc-${version}
+    meta = with lib; {
+      description = "GNU Compiler Collection, version ${version}";
+      homepage = "https://gcc.gnu.org";
+      license = licenses.gpl3Plus;
+      maintainers = teams.minimal-bootstrap.members;
+      platforms = platforms.unix;
+    };
+  }
+  ''
+    # Unpack
+    tar xzf ${src}
+    tar xzf ${ccSrc}
+    tar xzf ${gmp}
+    tar xzf ${mpfr}
+    tar xzf ${mpc}
+    cd gcc-${version}
 
-  ln -s ../gmp-${gmpVersion} gmp
-  ln -s ../mpfr-${mpfrVersion} mpfr
-  ln -s ../mpc-${mpcVersion} mpc
+    ln -s ../gmp-${gmpVersion} gmp
+    ln -s ../mpfr-${mpfrVersion} mpfr
+    ln -s ../mpc-${mpcVersion} mpc
 
-  # Patch
-  ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
+    # Patch
+    ${lib.concatMapStringsSep "\n" (f: "patch -Np1 -i ${f}") patches}
 
-  # Configure
-  export CC="tcc -B ${tinycc.libs}/lib"
-  export C_INCLUDE_PATH="${tinycc.libs}/include:$(pwd)/mpfr/src"
-  export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
+    # Configure
+    export CC="tcc -B ${tinycc.libs}/lib"
+    export C_INCLUDE_PATH="${tinycc.libs}/include:$(pwd)/mpfr/src"
+    export CPLUS_INCLUDE_PATH="$C_INCLUDE_PATH"
 
-  # Avoid "Link tests are not allowed after GCC_NO_EXECUTABLES"
-  export lt_cv_shlibpath_overrides_runpath=yes
-  export ac_cv_func_memcpy=yes
-  export ac_cv_func_strerror=yes
+    # Avoid "Link tests are not allowed after GCC_NO_EXECUTABLES"
+    export lt_cv_shlibpath_overrides_runpath=yes
+    export ac_cv_func_memcpy=yes
+    export ac_cv_func_strerror=yes
 
-  bash ./configure \
-    --prefix=$out \
-    --build=${buildPlatform.config} \
-    --host=${hostPlatform.config} \
-    --with-native-system-header-dir=${tinycc.libs}/include \
-    --with-build-sysroot=${tinycc.libs}/include \
-    --disable-bootstrap \
-    --disable-decimal-float \
-    --disable-libatomic \
-    --disable-libcilkrts \
-    --disable-libgomp \
-    --disable-libitm \
-    --disable-libmudflap \
-    --disable-libquadmath \
-    --disable-libsanitizer \
-    --disable-libssp \
-    --disable-libvtv \
-    --disable-lto \
-    --disable-lto-plugin \
-    --disable-multilib \
-    --disable-plugin \
-    --disable-threads \
-    --enable-languages=c \
-    --enable-static \
-    --disable-shared \
-    --enable-threads=single \
-    --disable-libstdcxx-pch \
-    --disable-build-with-cxx
+    bash ./configure \
+      --prefix=$out \
+      --build=${buildPlatform.config} \
+      --host=${hostPlatform.config} \
+      --with-native-system-header-dir=${tinycc.libs}/include \
+      --with-build-sysroot=${tinycc.libs}/include \
+      --disable-bootstrap \
+      --disable-decimal-float \
+      --disable-libatomic \
+      --disable-libcilkrts \
+      --disable-libgomp \
+      --disable-libitm \
+      --disable-libmudflap \
+      --disable-libquadmath \
+      --disable-libsanitizer \
+      --disable-libssp \
+      --disable-libvtv \
+      --disable-lto \
+      --disable-lto-plugin \
+      --disable-multilib \
+      --disable-plugin \
+      --disable-threads \
+      --enable-languages=c \
+      --enable-static \
+      --disable-shared \
+      --enable-threads=single \
+      --disable-libstdcxx-pch \
+      --disable-build-with-cxx
 
-  # Build
-  make -j $NIX_BUILD_CORES
+    # Build
+    make -j $NIX_BUILD_CORES
 
-  # Install
-  make -j $NIX_BUILD_CORES install
-''
+    # Install
+    make -j $NIX_BUILD_CORES install
+  ''

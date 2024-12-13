@@ -1,27 +1,34 @@
-{ fdupes
-, buildFHSEnv
-, fetchzip
-, icoutils
-, imagemagick
-, jdk17
-, lib
-, makeDesktopItem
-, stdenvNoCC
+{
+  fdupes,
+  buildFHSEnv,
+  fetchzip,
+  icoutils,
+  imagemagick,
+  jdk21,
+  lib,
+  makeDesktopItem,
+  stdenvNoCC,
 }:
 
 let
   iconame = "STM32CubeMX";
   package = stdenvNoCC.mkDerivation rec {
     pname = "stm32cubemx";
-    version = "6.12.1";
+    version = "6.13.0";
 
     src = fetchzip {
-      url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${builtins.replaceStrings ["."] [""] version}-lin.zip";
-      hash = "sha256-6VDvvKx68U47soBUWiaBuDu6enINLDhJd0he7sSCzeg=";
+      url = "https://sw-center.st.com/packs/resource/library/stm32cube_mx_v${
+        builtins.replaceStrings [ "." ] [ "" ] version
+      }-lin.zip";
+      hash = "sha256-ypZVVPmAsApaccWl7ZtAECwphD2SUUiVNC2DYC5rYb4=";
       stripRoot = false;
     };
 
-    nativeBuildInputs = [ fdupes icoutils imagemagick ];
+    nativeBuildInputs = [
+      fdupes
+      icoutils
+      imagemagick
+    ];
     desktopItem = makeDesktopItem {
       name = "STM32CubeMX";
       exec = "stm32cubemx";
@@ -45,7 +52,7 @@ let
 
       cat << EOF > $out/bin/${pname}
       #!${stdenvNoCC.shell}
-      ${jdk17}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX "\$@"
+      ${jdk21}/bin/java -jar $out/opt/STM32CubeMX/STM32CubeMX "\$@"
       EOF
       chmod +x $out/bin/${pname}
 
@@ -78,38 +85,41 @@ let
       homepage = "https://www.st.com/en/development-tools/stm32cubemx.html";
       sourceProvenance = with sourceTypes; [ binaryBytecode ];
       license = licenses.unfree;
-      maintainers = with maintainers; [ angaz wucke13 ];
+      maintainers = with maintainers; [
+        angaz
+        wucke13
+      ];
       platforms = [ "x86_64-linux" ];
     };
   };
-  in
-  buildFHSEnv {
-    inherit (package) pname version meta;
-    runScript = "${package.outPath}/bin/stm32cubemx";
-    targetPkgs = pkgs:
-      with pkgs; [
-        alsa-lib
-        at-spi2-atk
-        cairo
-        cups
-        dbus
-        expat
-        glib
-        gtk3
-        libdrm
-        libGL
-        libudev0-shim
-        libxkbcommon
-        mesa
-        nspr
-        nss
-        pango
-        xorg.libX11
-        xorg.libxcb
-        xorg.libXcomposite
-        xorg.libXdamage
-        xorg.libXext
-        xorg.libXfixes
-        xorg.libXrandr
-      ];
+in
+buildFHSEnv {
+  inherit (package) pname version meta;
+  runScript = "${package.outPath}/bin/stm32cubemx";
+  targetPkgs =
+    pkgs: with pkgs; [
+      alsa-lib
+      at-spi2-atk
+      cairo
+      cups
+      dbus
+      expat
+      glib
+      gtk3
+      libdrm
+      libGL
+      libudev0-shim
+      libxkbcommon
+      mesa
+      nspr
+      nss
+      pango
+      xorg.libX11
+      xorg.libxcb
+      xorg.libXcomposite
+      xorg.libXdamage
+      xorg.libXext
+      xorg.libXfixes
+      xorg.libXrandr
+    ];
 }

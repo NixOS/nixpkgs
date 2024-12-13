@@ -47,7 +47,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   dependencies = [
     deprecated
     matplotlib-inline

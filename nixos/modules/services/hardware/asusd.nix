@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.asusd;
@@ -55,9 +60,9 @@ in
       };
 
       fanCurvesConfig = lib.mkOption {
-      type = lib.types.nullOr lib.types.str;
-      default = null;
-      description = ''
+        type = lib.types.nullOr lib.types.str;
+        default = null;
+        description = ''
           The content of /etc/asusd/fan_curves.ron.
           See https://asus-linux.org/asusctl/#fan-curves.
         '';
@@ -79,10 +84,12 @@ in
 
     environment.etc =
       let
-        maybeConfig = name: cfg: lib.mkIf (cfg != null) {
-          source = pkgs.writeText name cfg;
-          mode = "0644";
-        };
+        maybeConfig =
+          name: cfg:
+          lib.mkIf (cfg != null) {
+            source = pkgs.writeText name cfg;
+            mode = "0644";
+          };
       in
       {
         "asusd/anime.ron" = maybeConfig "anime.ron" cfg.animeConfig;

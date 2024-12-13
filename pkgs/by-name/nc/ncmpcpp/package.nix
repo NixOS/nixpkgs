@@ -52,15 +52,17 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    boost
-    libmpdclient
-    ncurses
-    readline
-    libiconv
-    icu
-    curl
-  ] ++ lib.optional visualizerSupport fftw
+  buildInputs =
+    [
+      boost
+      libmpdclient
+      ncurses
+      readline
+      libiconv
+      icu
+      curl
+    ]
+    ++ lib.optional visualizerSupport fftw
     ++ lib.optional taglibSupport taglib;
 
   preConfigure =
@@ -73,7 +75,7 @@ stdenv.mkDerivation rec {
         --replace-fail "std=c++20" "std=c++17"
     '';
 
-  meta =  {
+  meta = {
     description = "Featureful ncurses based MPD client inspired by ncmpc";
     homepage = "https://rybczak.net/ncmpcpp/";
     changelog = "https://github.com/ncmpcpp/ncmpcpp/blob/${version}/CHANGELOG.md";

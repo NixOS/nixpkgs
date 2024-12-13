@@ -1,9 +1,10 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitLab
-, gitUpdater
-, testers
-, cmake
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  testers,
+  cmake,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -37,7 +38,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Notification and ringtone sound effects for Lomiri";
     homepage = "https://gitlab.com/ubports/development/core/lomiri-sounds";
-    license = with licenses; [ cc-by-30 cc0 cc-by-sa-30 cc-by-40 ];
+    license = with licenses; [
+      cc-by-30
+      cc0
+      cc-by-sa-30
+      cc-by-40
+    ];
     maintainers = teams.lomiri.members;
     platforms = platforms.all;
     pkgConfigModules = [

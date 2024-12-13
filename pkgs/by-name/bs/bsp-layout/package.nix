@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, git
-, bc
-, bspwm
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  git,
+  bc,
+  bspwm,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7bBVWJdgAnXLWzjQGZxVqhku2rsxX2kMxU4xkI9/DHE=";
   };
 
-  nativeBuildInputs = [ makeWrapper git bc ];
+  nativeBuildInputs = [
+    makeWrapper
+    git
+    bc
+  ];
   buildInputs = [ bspwm ];
 
   makeFlags = [ "PREFIX=$(out)" ];

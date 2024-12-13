@@ -1,7 +1,8 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
 }:
 
 buildDotnetModule rec {
@@ -28,7 +29,10 @@ buildDotnetModule rec {
 
   meta = with lib; {
     description = "Minimalist UTXO tracker for HD Cryptocurrency Wallets";
-    maintainers = with maintainers; [ kcalvinalvin erikarvstedt ];
+    maintainers = with maintainers; [
+      kcalvinalvin
+      erikarvstedt
+    ];
     license = licenses.mit;
     platforms = platforms.linux ++ platforms.darwin;
     mainProgram = "nbxplorer";

@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchurl
-, checksumType ? "built-in"
-, libmhash ? null
-, openssl ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  checksumType ? "built-in",
+  libmhash ? null,
+  openssl ? null,
 }:
 
 assert checksumType == "mhash" -> libmhash != null;
@@ -15,8 +18,9 @@ stdenv.mkDerivation rec {
     "--with-checksum=${checksumType}"
   ];
 
-  buildInputs = lib.optional (checksumType == "mhash") libmhash
-             ++ lib.optional (checksumType == "openssl") openssl;
+  buildInputs =
+    lib.optional (checksumType == "mhash") libmhash
+    ++ lib.optional (checksumType == "openssl") openssl;
 
   src = fetchurl {
     urls = [

@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, libpng, perl, perlPackages, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  libpng,
+  perl,
+  perlPackages,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "icoutils";
@@ -17,8 +27,14 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook makeWrapper ];
-  buildInputs = [ libpng perl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    makeWrapper
+  ];
+  buildInputs = [
+    libpng
+    perl
+  ];
   propagatedBuildInputs = [ perlPackages.LWP ];
 
   # Fixes build failures on Darwin. These should be defined in `TargetConditional.h`, but it’s failing anyway.

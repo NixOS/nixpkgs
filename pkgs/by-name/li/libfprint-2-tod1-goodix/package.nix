@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchgit, libfprint-tod }:
+{
+  stdenv,
+  lib,
+  fetchgit,
+  libfprint-tod,
+}:
 
 stdenv.mkDerivation {
   pname = "libfprint-2-tod1-goodix";

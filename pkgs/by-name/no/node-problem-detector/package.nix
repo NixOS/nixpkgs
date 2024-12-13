@@ -1,4 +1,10 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, systemd }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  systemd,
+}:
 
 buildGoModule rec {
   pname = "node-problem-detector";
@@ -19,8 +25,9 @@ buildGoModule rec {
   # The binary is dynamically linked against systemd libraries, making it a
   # Linux-only feature. See 'ENABLE_JOURNALD' upstream:
   # https://github.com/kubernetes/node-problem-detector/blob/master/Makefile
-  subPackages = [ "cmd/nodeproblemdetector" ] ++
-    lib.optionals stdenv.hostPlatform.isLinux [ "cmd/logcounter" ];
+  subPackages = [
+    "cmd/nodeproblemdetector"
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "cmd/logcounter" ];
 
   preBuild = ''
     export CGO_ENABLED=${if stdenv.hostPlatform.isLinux then "1" else "0"}

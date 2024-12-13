@@ -2,6 +2,45 @@
   "book-nixos-manual": [
     "index.html#book-nixos-manual"
   ],
+  "module-services-crab-hole": [
+    "index.html#module-services-crab-hole"
+  ],
+  "module-services-crab-hole-api": [
+    "index.html#module-services-crab-hole-api"
+  ],
+  "module-services-crab-hole-configuration": [
+    "index.html#module-services-crab-hole-configuration"
+  ],
+  "module-services-crab-hole-dnssec": [
+    "index.html#module-services-crab-hole-dnssec"
+  ],
+  "module-services-crab-hole-downstream": [
+    "index.html#module-services-crab-hole-downstream"
+  ],
+  "module-services-crab-hole-https": [
+    "index.html#module-services-crab-hole-https"
+  ],
+  "module-services-crab-hole-invalid-config": [
+    "index.html#module-services-crab-hole-invalid-config"
+  ],
+  "module-services-crab-hole-permission-error": [
+    "index.html#module-services-crab-hole-permission-error"
+  ],
+  "module-services-crab-hole-quic": [
+    "index.html#module-services-crab-hole-quic"
+  ],
+  "module-services-crab-hole-tls": [
+    "index.html#module-services-crab-hole-tls"
+  ],
+  "module-services-crab-hole-troubleshooting": [
+    "index.html#module-services-crab-hole-troubleshooting"
+  ],
+  "module-services-crab-hole-udp": [
+    "index.html#module-services-crab-hole-udp"
+  ],
+  "module-services-crab-hole-upstream-options": [
+    "index.html#module-services-crab-hole-upstream-options"
+  ],
   "preface": [
     "index.html#preface"
   ],
@@ -1843,6 +1882,12 @@
   ],
   "sec-release-25.05-notable-changes": [
     "release-notes.html#sec-release-25.05-notable-changes"
+  ],
+  "sec-release-25.05-lib": [
+    "release-notes.html#sec-release-25.05-lib"
+  ],
+  "sec-release-25.05-lib-breaking": [
+    "release-notes.html#sec-release-25.05-lib-breaking"
   ],
   "sec-release-24.11": [
     "release-notes.html#sec-release-24.11"

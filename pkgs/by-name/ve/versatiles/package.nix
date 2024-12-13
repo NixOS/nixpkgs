@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "versatiles";
-  version = "0.13.0"; # When updating: Replace with current version
+  version = "0.14.5"; # When updating: Replace with current version
 
   src = fetchFromGitHub {
     owner = "versatiles-org";
     repo = "versatiles-rs";
     rev = "refs/tags/v${version}"; # When updating: Replace with long commit hash of new version
-    hash = "sha256-6HuBKRvt6P4GpFaIiYsGO/8wcjML2UDdUFoYvIM/Z0k="; # When updating: Use `lib.fakeHash` for recomputing the hash once. Run: 'nix-build -A versatiles'. Swap with new hash and proceed.
+    hash = "sha256-ejMqTMGLbVr/Aaqw8U0ojV43N6t0GeWdYIcP0guAsO0="; # When updating: Use `lib.fakeHash` for recomputing the hash once. Run: 'nix-build -A versatiles'. Swap with new hash and proceed.
   };
 
-  cargoHash = "sha256-7kJf6BHNRfLDFRZp8Q2M2ZGXH0NzG/QBqw5/s20AIm4="; # When updating: Same as above
+  cargoHash = "sha256-2C/oPB48CTX7i4xoF1iegrpNvaSMkIbVeEyy/WteKqM="; # When updating: Same as above
 
   # Testing only necessary for the `bins` and `lib` features
   cargoTestFlags = [

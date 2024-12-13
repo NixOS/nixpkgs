@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchCrate, stdenv, Security }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  stdenv,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-rdme";

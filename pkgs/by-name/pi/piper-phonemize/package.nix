@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
 
-# build
-, cmake
-, pkg-config
+  # build
+  cmake,
+  pkg-config,
 
-# runtime
-, espeak-ng
-, onnxruntime
+  # runtime
+  espeak-ng,
+  onnxruntime,
 }:
 
 let

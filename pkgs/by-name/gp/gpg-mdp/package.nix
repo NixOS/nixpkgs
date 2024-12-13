@@ -1,13 +1,22 @@
-{ fetchurl, fetchpatch, lib, stdenv, ncurses, gnupg }:
+{
+  fetchurl,
+  fetchpatch,
+  lib,
+  stdenv,
+  ncurses,
+  gnupg,
+}:
 
-let version = "0.7.4";
-in stdenv.mkDerivation {
+let
+  version = "0.7.4";
+in
+stdenv.mkDerivation {
   # mdp renamed to gpg-mdp because there is a mdp package already.
   pname = "gpg-mdp";
   inherit version;
   meta = {
     homepage = "https://tamentis.com/projects/mdp/";
-    license = [lib.licenses.isc];
+    license = [ lib.licenses.isc ];
     description = "Manage your passwords with GnuPG and a text editor";
   };
   src = fetchurl {

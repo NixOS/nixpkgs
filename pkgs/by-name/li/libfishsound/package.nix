@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, libvorbis, speex, flac, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libvorbis,
+  speex,
+  flac,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libfishsound";
@@ -9,7 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "1iz7mn6hw2wg8ljaw74f4g2zdj68ib88x4vjxxg3gjgc5z75f2rf";
   };
 
-  propagatedBuildInputs = [ libvorbis speex flac ];
+  propagatedBuildInputs = [
+    libvorbis
+    speex
+    flac
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 

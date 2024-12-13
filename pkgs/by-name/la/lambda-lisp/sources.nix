@@ -4,7 +4,8 @@ let
   # Archive of "https://justine.lol/lambda/";
   justineLolArchive = "https://web.archive.org/web/20230614065521if_/https://justine.lol/lambda/";
 in
-{ fetchFromGitHub, fetchurl }: {
+{ fetchFromGitHub, fetchurl }:
+{
   inherit blcVersion;
   inherit lambdaLispVersion;
 

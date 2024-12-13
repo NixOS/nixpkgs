@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, python3, runtimeShell }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  runtimeShell,
+}:
 
 stdenv.mkDerivation rec {
   pname = "enjarify";

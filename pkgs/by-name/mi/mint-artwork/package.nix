@@ -1,8 +1,9 @@
-{ stdenv
-, lib
-, fetchurl
-, glib
-, nixos-artwork
+{
+  stdenv,
+  lib,
+  fetchurl,
+  glib,
+  nixos-artwork,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +42,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/linuxmint/mint-artwork";
     description = "Artwork for the cinnamon desktop";
-    license = with licenses; [ gpl3Plus cc-by-40 ]; # from debian/copyright
+    license = with licenses; [
+      gpl3Plus
+      cc-by-40
+    ]; # from debian/copyright
     platforms = platforms.linux;
     maintainers = teams.cinnamon.members;
   };

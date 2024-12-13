@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "kube-router";
-  version = "2.2.2";
+  version = "2.3.0";
 
   src = fetchFromGitHub {
     owner = "cloudnativelabs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-ABSjF3Wd7Ue/c+j2BvjB0UgAMccGUgJsj33JHMG8ijs=";
+    hash = "sha256-eyO8eMlxWobUQBuswh4kM07kJV3fsRz4gTeP/tIR3aM=";
   };
 
-  vendorHash = "sha256-sIWRODIV3iJ5FdVjVwesqfbYivOlqZAvPSYa38vhCMA=";
+  vendorHash = "sha256-KmAMGKm+cFGRMD1Nyn9/CHv9vUvflAiLJcro08GIGtw=";
 
   CGO_ENABLED = 0;
 

@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, gosu }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  gosu,
+}:
 
 buildGoModule rec {
   pname = "gosu";
@@ -13,7 +19,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-fygLYSO0kpMFJd6WQp/uLYkELkyaOPZ9V8BrJcIcMuU=";
 
-  ldflags = [ "-d" "-s" "-w" ];
+  ldflags = [
+    "-d"
+    "-s"
+    "-w"
+  ];
 
   passthru.tests.version = testers.testVersion {
     package = gosu;

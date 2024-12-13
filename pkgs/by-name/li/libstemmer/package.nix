@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, perl, buildPackages }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  buildPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libstemmer";
@@ -13,12 +19,14 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ perl ];
 
-  prePatch = ''
-    patchShebangs .
-  '' + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    substituteInPlace GNUmakefile \
-      --replace './snowball' '${lib.getBin buildPackages.libstemmer}/bin/snowball'
-  '';
+  prePatch =
+    ''
+      patchShebangs .
+    ''
+    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      substituteInPlace GNUmakefile \
+        --replace './snowball' '${lib.getBin buildPackages.libstemmer}/bin/snowball'
+    '';
 
   makeTarget = "libstemmer.a";
 

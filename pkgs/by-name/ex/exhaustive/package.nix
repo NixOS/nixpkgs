@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 
 buildGoModule rec {
@@ -17,7 +18,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-DyN2z6+lA/163k6TTQZ+ypm9s2EV93zvSo/yKQZXvCg=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   passthru = {
     updateScript = nix-update-script { };

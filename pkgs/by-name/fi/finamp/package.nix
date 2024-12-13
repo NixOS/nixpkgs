@@ -1,11 +1,11 @@
-{ lib
-, flutter327
-, mpv-unwrapped
-, xdg-user-dirs
-, patchelf
-, fetchFromGitHub
-, copyDesktopItems
-, makeDesktopItem
+{
+  lib,
+  flutter327,
+  mpv-unwrapped,
+  patchelf,
+  fetchFromGitHub,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 let
   version = "0.9.12-beta";
@@ -21,7 +21,10 @@ flutter327.buildFlutterApplication {
   };
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
-  nativeBuildInputs = [ patchelf copyDesktopItems ];
+  nativeBuildInputs = [
+    patchelf
+    copyDesktopItems
+  ];
   buildInputs = [ mpv-unwrapped ];
 
   gitHashes = {
@@ -33,32 +36,32 @@ flutter327.buildFlutterApplication {
   };
 
   postFixup = ''
-    patchelf $out/app/$pname/finamp --add-needed libisar.so --add-needed libmpv.so --add-rpath ${lib.makeLibraryPath [ mpv-unwrapped ]}
+    patchelf $out/app/$pname/finamp --add-needed libisar.so --add-needed libmpv.so --add-rpath ${
+      lib.makeLibraryPath [ mpv-unwrapped ]
+    }
   '';
 
   postInstall = ''
     install -Dm644 $src/assets/icon/icon_foreground.svg $out/share/icons/hicolor/scalable/apps/finamp.svg
   '';
 
-  extraWrapProgramArgs = ''
-    --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
-  '';
-
-  desktopItems = [(makeDesktopItem {
-    name = "Finamp";
-    desktopName = "Finamp";
-    genericName = "Music Player";
-    exec = "finamp";
-    icon = "finamp";
-    startupWMClass = "finamp";
-    comment = "An open source Jellyfin music player";
-    categories = [
-      "AudioVideo"
-      "Audio"
-      "Player"
-      "Music"
-    ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "Finamp";
+      desktopName = "Finamp";
+      genericName = "Music Player";
+      exec = "finamp";
+      icon = "finamp";
+      startupWMClass = "finamp";
+      comment = "An open source Jellyfin music player";
+      categories = [
+        "AudioVideo"
+        "Audio"
+        "Player"
+        "Music"
+      ];
+    })
+  ];
 
   meta = {
     description = "Open source Jellyfin music player";

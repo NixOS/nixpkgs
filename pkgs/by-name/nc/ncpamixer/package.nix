@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, cmake, ncurses, libpulseaudio, pandoc, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  cmake,
+  ncurses,
+  libpulseaudio,
+  pandoc,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ncpamixer";
@@ -15,19 +25,28 @@ stdenv.mkDerivation rec {
     ./remove_dynamic_download.patch
   ];
 
-  postPatch = let
-    PandocMan = fetchurl {
-      url = "https://github.com/rnpgp/cmake-modules/raw/387084811ee01a69911fe86bcc644b7ed8ad6304/PandocMan.cmake";
-      hash = "sha256-KI55Yc2IuQtmbptqkk6Hzr75gIE/uQdUbQsm/fDpaWg=";
-    };
-  in ''
-    substituteInPlace src/CMakeLists.txt \
-      --replace "include(PandocMan)" "include(${PandocMan})"
-  '';
+  postPatch =
+    let
+      PandocMan = fetchurl {
+        url = "https://github.com/rnpgp/cmake-modules/raw/387084811ee01a69911fe86bcc644b7ed8ad6304/PandocMan.cmake";
+        hash = "sha256-KI55Yc2IuQtmbptqkk6Hzr75gIE/uQdUbQsm/fDpaWg=";
+      };
+    in
+    ''
+      substituteInPlace src/CMakeLists.txt \
+        --replace "include(PandocMan)" "include(${PandocMan})"
+    '';
 
-  nativeBuildInputs = [ cmake pandoc pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pandoc
+    pkg-config
+  ];
 
-  buildInputs = [ ncurses libpulseaudio ];
+  buildInputs = [
+    ncurses
+    libpulseaudio
+  ];
 
   configurePhase = ''
     make PREFIX=$out USE_WIDE=1 RELEASE=1 build/Makefile

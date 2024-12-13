@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, withPcre2 ? stdenv.hostPlatform.isLinux
-, pcre2
-, testers
-, rare-regex
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  withPcre2 ? stdenv.hostPlatform.isLinux,
+  pcre2,
+  testers,
+  rare-regex,
 }:
 
 buildGoModule rec {

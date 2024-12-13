@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   inherit (pkgs) mariadb gzip;
@@ -53,7 +58,7 @@ in
       };
 
       databases = lib.mkOption {
-        default = [];
+        default = [ ];
         type = lib.types.listOf lib.types.str;
         description = ''
           List of database names to dump.
@@ -97,15 +102,18 @@ in
       };
     };
 
-    services.mysql.ensureUsers = [{
-      name = cfg.user;
-      ensurePermissions = with lib;
-        let
-          privs = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES";
-          grant = db: lib.nameValuePair "${db}.*" privs;
-        in
+    services.mysql.ensureUsers = [
+      {
+        name = cfg.user;
+        ensurePermissions =
+          with lib;
+          let
+            privs = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES";
+            grant = db: lib.nameValuePair "${db}.*" privs;
+          in
           lib.listToAttrs (map grant cfg.databases);
-    }];
+      }
+    ];
 
     systemd = {
       timers.mysql-backup = {

@@ -11,6 +11,7 @@
   xcbuild,
   nixosTests,
   nix-update-script,
+  yq-go,
 }:
 
 let
@@ -20,13 +21,13 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "38.105.2";
+  version = "39.42.4";
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-gF8bxzNF1AUJJDxFdNfa+sr/TP0S4uLCXyu3tjRuBjc=";
+    tag = finalAttrs.version;
+    hash = "sha256-M1QzvYMrs39ELc2tkazwDPbCPHqfqzde2hbMvg34m0A=";
   };
 
   postPatch = ''
@@ -39,11 +40,12 @@ stdenv'.mkDerivation (finalAttrs: {
     nodejs
     pnpm_9.configHook
     python3
+    yq-go
   ] ++ lib.optional stdenv'.hostPlatform.isDarwin xcbuild;
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-AdNleEe1wVBfhhoM6xit06ql1xEz/TLhZ7qpofwQ874=";
+    hash = "sha256-14E1v2HLFdbkxFnSPQnuwb+zyPXaczAp1Ab0EC65luc=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;
@@ -51,6 +53,9 @@ stdenv'.mkDerivation (finalAttrs: {
   buildPhase =
     ''
       runHook preBuild
+
+      # relax nodejs version
+      yq '.engines.node = "${nodejs.version}"' -i package.json
 
       pnpm build
       pnpm prune --prod --ignore-scripts

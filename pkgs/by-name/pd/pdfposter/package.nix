@@ -1,4 +1,8 @@
-{ lib, python3, fetchPypi }:
+{
+  lib,
+  python3,
+  fetchPypi,
+}:
 let
   localPython = python3.override {
     self = localPython;
@@ -17,7 +21,8 @@ let
     };
   };
 in
-with localPython.pkgs; buildPythonApplication rec {
+with localPython.pkgs;
+buildPythonApplication rec {
   pname = "pdfposter";
   version = "0.8.1";
   format = "setuptools";

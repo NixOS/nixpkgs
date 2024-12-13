@@ -1,13 +1,14 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitHub
-, numpy
-, scipy
-, ase
-, joblib
-, sparse
-, pybind11
-, scikit-learn
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitHub,
+  numpy,
+  scipy,
+  ase,
+  joblib,
+  sparse,
+  pybind11,
+  scikit-learn,
 }:
 
 buildPythonPackage rec {

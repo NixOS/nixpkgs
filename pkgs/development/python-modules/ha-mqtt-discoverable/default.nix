@@ -29,7 +29,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   dependencies = [
     gitlike-commands
     paho-mqtt

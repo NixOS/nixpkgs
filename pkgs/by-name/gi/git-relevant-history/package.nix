@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, python3, git, git-filter-repo }:
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  git,
+  git-filter-repo,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "git-relevant-history";
@@ -10,7 +16,8 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-46a6TR1Hi3Lg2DTmOp1aV5Uhd4IukTojZkA3TVbTnRY=";
   };
   propagatedBuildInputs = [
-    git git-filter-repo
+    git
+    git-filter-repo
     python3.pkgs.docopt
   ];
 

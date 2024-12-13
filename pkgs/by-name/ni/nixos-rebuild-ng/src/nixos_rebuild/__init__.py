@@ -16,6 +16,12 @@ from .utils import Args, LogFormatter
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
+# Build-time flags
+# Strings to avoid breaking standalone (e.g.: `python -m nixos_rebuild`) usage
+EXECUTABLE = "@executable@"
+WITH_REEXEC = "@withReexec@"
+WITH_SHELL_FILES = "@withShellFiles@"
+
 
 def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentParser]]:
     common_flags = argparse.ArgumentParser(add_help=False)
@@ -30,6 +36,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     common_flags.add_argument("--option", nargs=2)
 
     common_build_flags = argparse.ArgumentParser(add_help=False)
+    common_build_flags.add_argument("--builders")
     common_build_flags.add_argument("--include", "-I")
     common_build_flags.add_argument("--quiet", action="store_true")
     common_build_flags.add_argument("--print-build-logs", "-L", action="store_true")
@@ -72,30 +79,101 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         add_help=False,
         allow_abbrev=False,
     )
-    main_parser.add_argument("--help", "-h", action="store_true")
-    main_parser.add_argument("--file", "-f")
-    main_parser.add_argument("--attr", "-A")
-    main_parser.add_argument("--flake", nargs="?", const=True)
-    main_parser.add_argument("--no-flake", dest="flake", action="store_false")
-    main_parser.add_argument("--install-bootloader", action="store_true")
-    main_parser.add_argument("--install-grub", action="store_true")  # deprecated
-    main_parser.add_argument("--profile-name", "-p", default="system")
-    main_parser.add_argument("--specialisation", "-c")
-    main_parser.add_argument("--rollback", action="store_true")
-    main_parser.add_argument("--upgrade", action="store_true")
-    main_parser.add_argument("--upgrade-all", action="store_true")
-    main_parser.add_argument("--json", action="store_true")
-    main_parser.add_argument("--sudo", action="store_true")
-    main_parser.add_argument("--ask-sudo-password", action="store_true")
-    main_parser.add_argument("--use-remote-sudo", action="store_true")  # deprecated
-    main_parser.add_argument("--no-ssh-tty", action="store_true")  # deprecated
-    main_parser.add_argument("--fast", action="store_true")
-    main_parser.add_argument("--build-host")
-    main_parser.add_argument("--target-host")
-    main_parser.add_argument("--no-build-nix", action="store_true")  # deprecated
+    main_parser.add_argument("--help", "-h", action="store_true", help="Show manpage")
+    main_parser.add_argument(
+        "--file", "-f", help="Enable and build the NixOS system from the specified file"
+    )
+    main_parser.add_argument(
+        "--attr",
+        "-A",
+        help="Enable and build the NixOS system from nix file and use the "
+        + "specified attribute path from file specified by the --file option",
+    )
+    main_parser.add_argument(
+        "--flake",
+        nargs="?",
+        const=True,
+        help="Build the NixOS system from the specified flake",
+    )
+    main_parser.add_argument(
+        "--no-flake",
+        dest="flake",
+        action="store_false",
+        help="Do not imply --flake if /etc/nixos/flake.nix exists",
+    )
+    main_parser.add_argument(
+        "--install-bootloader",
+        action="store_true",
+        help="Causes the boot loader to be (re)installed on the device specified "
+        + "by the relevant configuration options",
+    )
+    main_parser.add_argument(
+        "--install-grub",
+        action="store_true",
+        help="Deprecated, use '--install-bootloader' instead",
+    )
+    main_parser.add_argument(
+        "--profile-name",
+        "-p",
+        default="system",
+        help="Use nix profile /nix/var/nix/profiles/system-profiles/<profile-name>",
+    )
+    main_parser.add_argument(
+        "--specialisation", "-c", help="Activates given specialisation"
+    )
+    main_parser.add_argument(
+        "--rollback",
+        action="store_true",
+        help="Roll back to the previous configuration",
+    )
+    main_parser.add_argument(
+        "--upgrade",
+        action="store_true",
+        help="Update the root user's channel named 'nixos' before rebuilding "
+        + "the system and channels which have a file named '.update-on-nixos-rebuild'",
+    )
+    main_parser.add_argument(
+        "--upgrade-all",
+        action="store_true",
+        help="Same as --upgrade, but updates all root user's channels",
+    )
+    main_parser.add_argument(
+        "--json",
+        action="store_true",
+        help="JSON output, only implemented for 'list-generations' right now",
+    )
+    main_parser.add_argument(
+        "--ask-sudo-password",
+        action="store_true",
+        help="Asks for sudo password for remote activation, implies --sudo",
+    )
+    main_parser.add_argument(
+        "--sudo", action="store_true", help="Prefixes activation commands with sudo"
+    )
+    main_parser.add_argument(
+        "--use-remote-sudo",
+        action="store_true",
+        help="Deprecated, use '--sudo' instead",
+    )
+    main_parser.add_argument("--no-ssh-tty", action="store_true", help="Deprecated")
+    main_parser.add_argument(
+        "--fast",
+        action="store_true",
+        help="Skip possibly expensive operations",
+    )
+    main_parser.add_argument("--build-host", help="Specifies host to perform the build")
+    main_parser.add_argument(
+        "--target-host", help="Specifies host to activate the configuration"
+    )
+    main_parser.add_argument("--no-build-nix", action="store_true", help="Deprecated")
     main_parser.add_argument("action", choices=Action.values(), nargs="?")
 
     return main_parser, sub_parsers
+
+
+# For shtab to generate completions
+def get_main_parser() -> argparse.ArgumentParser:
+    return get_parser()[0]
 
 
 def parse_args(
@@ -107,6 +185,14 @@ def parse_args(
         group: parser.parse_known_args(argv[1:])[0]
         for group, parser in sub_parsers.items()
     }
+
+    if args.help or args.action is None:
+        if WITH_SHELL_FILES == "true":
+            r = run(["man", "8", EXECUTABLE], check=False)
+            parser.exit(r.returncode)
+        else:
+            parser.print_help()
+            parser.exit()
 
     def parser_warn(msg: str) -> None:
         print(f"{parser.prog}: warning: {msg}", file=sys.stderr)
@@ -121,10 +207,6 @@ def parse_args(
 
     if args.ask_sudo_password:
         args.sudo = True
-
-    if args.help or args.action is None:
-        r = run(["man", "8", "nixos-rebuild"], check=False)
-        parser.exit(r.returncode)
 
     # TODO: use deprecated=True in Python >=3.13
     if args.install_grub:
@@ -172,30 +254,21 @@ def reexec(
     flake_build_flags: dict[str, Args],
 ) -> None:
     drv = None
+    attr = "config.system.build.nixos-rebuild"
     try:
         # Need to set target_host=None, to avoid connecting to remote
         if flake := Flake.from_arg(args.flake, None):
-            drv = nix.build_flake(
-                "pkgs.nixos-rebuild-ng",
-                flake,
-                **flake_build_flags,
-                no_link=True,
-            )
+            drv = nix.build_flake(attr, flake, **flake_build_flags, no_link=True)
         else:
-            drv = nix.build(
-                "pkgs.nixos-rebuild-ng",
-                BuildAttr.from_arg(args.attr, args.file),
-                **build_flags,
-                no_out_link=True,
-            )
+            build_attr = BuildAttr.from_arg(args.attr, args.file)
+            drv = nix.build(attr, build_attr, **build_flags, no_out_link=True)
     except CalledProcessError:
         logger.warning("could not find a newer version of nixos-rebuild")
 
     if drv:
-        new = drv / "bin/nixos-rebuild-ng"
+        new = drv / f"bin/{EXECUTABLE}"
         current = Path(argv[0])
-        # Disable re-exec during development
-        if current.name != "__main__.py" and new != current:
+        if new != current:
             logging.debug(
                 "detected newer version of script, re-exec'ing, current=%s, new=%s",
                 argv[0],
@@ -230,7 +303,7 @@ def execute(argv: list[str]) -> None:
     # Re-exec to a newer version of the script before building to ensure we get
     # the latest fixes
     if (
-        False  # disabled until we introduce `config.system.build.nixos-rebuild-ng`
+        WITH_REEXEC == "true"
         and can_run
         and not args.fast
         and not os.environ.get("_NIXOS_REBUILD_REEXEC")

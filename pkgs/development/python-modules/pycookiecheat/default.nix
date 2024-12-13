@@ -36,7 +36,6 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-
   dependencies = [
     cryptography
     keyring

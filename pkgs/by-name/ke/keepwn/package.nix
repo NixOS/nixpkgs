@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "keepwn";
-  version = "0.4";
+  version = "0.5";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Orange-Cyberdefense";
     repo = "KeePwn";
-    rev = "refs/tags/${version}";
-    hash = "sha256-AkqBC65XrMt4V5KgzLepnQoqpdvbrtWLY3DmVuy8Zck=";
+    tag = version;
+    hash = "sha256-z2+l7zOexcqbwkrdmB3EcYIjnGlproINF51Pcpp7Nz4=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

@@ -1,30 +1,29 @@
-{ lib
-, callPackage
-, nixosTests
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, rpmextract
-, libxcrypt-legacy
-, zlib
-, lvm2  # LVM image backup and restore functions (optional)
-, acl  # EXT2/EXT3/XFS ACL support (optional)
-, gnugrep
-, procps
-, jdk  # Java GUI (needed for `enableGui`)
-, buildEnv
-, makeWrapper
-, enableGui ? false  # enables Java GUI `dsmj`
-# path to `dsm.sys` configuration files
-, dsmSysCli ? "/etc/tsm-client/cli.dsm.sys"
-, dsmSysApi ? "/etc/tsm-client/api.dsm.sys"
+{
+  lib,
+  callPackage,
+  nixosTests,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  rpmextract,
+  libxcrypt-legacy,
+  zlib,
+  lvm2, # LVM image backup and restore functions (optional)
+  acl, # EXT2/EXT3/XFS ACL support (optional)
+  gnugrep,
+  procps,
+  jdk, # Java GUI (needed for `enableGui`)
+  buildEnv,
+  makeWrapper,
+  enableGui ? false, # enables Java GUI `dsmj`
+  # path to `dsm.sys` configuration files
+  dsmSysCli ? "/etc/tsm-client/cli.dsm.sys",
+  dsmSysApi ? "/etc/tsm-client/api.dsm.sys",
 }:
-
 
 # For an explanation of optional packages
 # (features provided by them, version limits), see
 # https://www.ibm.com/support/pages/node/660813#Version%208.1
-
 
 # IBM Tivoli Storage Manager Client uses a system-wide
 # client system-options file `dsm.sys` and expects it
@@ -47,7 +46,6 @@
 # depending on local configuration or usage; see:
 # https://www.ibm.com/docs/en/storage-protect/8.1.24?topic=solaris-set-api-environment-variables
 
-
 # The newest version of TSM client should be discoverable by
 # going to the `downloadPage` (see `meta` below).
 # Find the "Backup-archive client" table on that page.
@@ -60,7 +58,6 @@
 # check the big `.tar` file.
 #
 # (as of 2023-07-01)
-
 
 let
 
@@ -89,18 +86,21 @@ let
   };
 
   passthru.tests = {
-    test-cli = callPackage ./test-cli.nix {};
+    test-cli = callPackage ./test-cli.nix { };
     test-gui = nixosTests.tsm-client-gui;
   };
 
-  mkSrcUrl = version:
+  mkSrcUrl =
+    version:
     let
       major = lib.versions.major version;
       minor = lib.versions.minor version;
       patch = lib.versions.patch version;
       fixup = lib.lists.elemAt (lib.versions.splitVersion version) 3;
     in
-      "https://public.dhe.ibm.com/storage/tivoli-storage-management/${if fixup=="0" then "maintenance" else "patches"}/client/v${major}r${minor}/Linux/LinuxX86/BA/v${major}${minor}${patch}/${version}-TIV-TSMBAC-LinuxX86.tar";
+    "https://public.dhe.ibm.com/storage/tivoli-storage-management/${
+      if fixup == "0" then "maintenance" else "patches"
+    }/client/v${major}r${minor}/Linux/LinuxX86/BA/v${major}${minor}${patch}/${version}-TIV-TSMBAC-LinuxX86.tar";
 
   unwrapped = stdenv.mkDerivation (finalAttrs: {
     name = "tsm-client-${finalAttrs.version}-unwrapped";
@@ -164,17 +164,27 @@ let
     '';
   });
 
-  binPath = lib.makeBinPath ([ acl gnugrep procps ]
-    ++ lib.optional enableGui jdk);
+  binPath = lib.makeBinPath (
+    [
+      acl
+      gnugrep
+      procps
+    ]
+    ++ lib.optional enableGui jdk
+  );
 
 in
 
 buildEnv {
   name = "tsm-client-${unwrapped.version}";
-  meta = meta // lib.attrsets.optionalAttrs enableGui {
-    mainProgram = "dsmj";
+  meta =
+    meta
+    // lib.attrsets.optionalAttrs enableGui {
+      mainProgram = "dsmj";
+    };
+  passthru = passthru // {
+    inherit unwrapped;
   };
-  passthru = passthru // { inherit unwrapped; };
   paths = [ unwrapped ];
   nativeBuildInputs = [ makeWrapper ];
   pathsToLink = [

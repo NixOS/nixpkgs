@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage {
     license = licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       purrpurrn
-      jappie3 /* upstream dev */
+      jappie3 # upstream dev
     ];
     mainProgram = "wayfreeze";
     platforms = platforms.linux;

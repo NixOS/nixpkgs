@@ -1,18 +1,20 @@
-{ lib, stdenv
-, cmake
-, fetchurl
-, perl
-, zlib
-, groff
-, withBzip2 ? false
-, bzip2
-, withLZMA ? false
-, xz
-, withOpenssl ? false
-, openssl
-, withZstd ? false
-, zstd
-, testers
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchurl,
+  perl,
+  zlib,
+  groff,
+  withBzip2 ? false,
+  bzip2,
+  withLZMA ? false,
+  xz,
+  withOpenssl ? false,
+  openssl,
+  withZstd ? false,
+  zstd,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,11 +26,20 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-wOb6UqYroR79MCYikNxpcJR67zLgzClO5Q6QBc6sCSo=";
   };
 
-  outputs = [ "out" "dev" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "man"
+  ];
 
-  nativeBuildInputs = [ cmake perl groff ];
+  nativeBuildInputs = [
+    cmake
+    perl
+    groff
+  ];
   propagatedBuildInputs = [ zlib ];
-  buildInputs = lib.optionals withLZMA [ xz ]
+  buildInputs =
+    lib.optionals withLZMA [ xz ]
     ++ lib.optionals withBzip2 [ bzip2 ]
     ++ lib.optionals withOpenssl [ openssl ]
     ++ lib.optionals withZstd [ zstd ];

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, makeDesktopItem, SDL2, SDL2_net }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeDesktopItem,
+  SDL2,
+  SDL2_net,
+}:
 
 stdenv.mkDerivation rec {
   pname = "maelstrom";
@@ -16,7 +23,10 @@ stdenv.mkDerivation rec {
     ./c++17-fixes.diff
   ];
 
-  buildInputs = [ SDL2 SDL2_net ];
+  buildInputs = [
+    SDL2
+    SDL2_net
+  ];
 
   postInstall = ''
     mkdir -p $out/bin

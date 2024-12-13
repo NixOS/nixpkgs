@@ -1,10 +1,18 @@
-{ lib, stdenv, fetchurl, curl, hdf5, netcdf, eccodes, python3
-, # build, install and link to a CDI library [default=no]
-  enable_cdi_lib ? false
-, # build a completely statically linked CDO binary
-  enable_all_static ? stdenv.hostPlatform.isStatic
-, # Use CXX as default compiler [default=no]
-  enable_cxx ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  curl,
+  hdf5,
+  netcdf,
+  eccodes,
+  python3,
+  # build, install and link to a CDI library [default=no]
+  enable_cdi_lib ? false,
+  # build a completely statically linked CDO binary
+  enable_all_static ? stdenv.hostPlatform.isStatic,
+  # Use CXX as default compiler [default=no]
+  enable_cxx ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,21 +20,27 @@ stdenv.mkDerivation rec {
   version = "2.4.2";
 
   # Dependencies
-  buildInputs = [ curl netcdf hdf5 python3 ];
+  buildInputs = [
+    curl
+    netcdf
+    hdf5
+    python3
+  ];
 
   src = fetchurl {
     url = "https://code.mpimet.mpg.de/attachments/download/29481/${pname}-${version}.tar.gz";
     sha256 = "sha256-TfH+K4+S9Uwn6585nt+rQNkyIAWmcyyhUk71wWJ6xOc=";
   };
 
- configureFlags = [
-    "--with-netcdf=${netcdf}"
-    "--with-hdf5=${hdf5}"
-    "--with-eccodes=${eccodes}"
-  ]
-   ++ lib.optional enable_cdi_lib "--enable-cdi-lib"
-   ++ lib.optional enable_all_static "--enable-all-static"
-   ++ lib.optional enable_cxx "--enable-cxx";
+  configureFlags =
+    [
+      "--with-netcdf=${netcdf}"
+      "--with-hdf5=${hdf5}"
+      "--with-eccodes=${eccodes}"
+    ]
+    ++ lib.optional enable_cdi_lib "--enable-cdi-lib"
+    ++ lib.optional enable_all_static "--enable-all-static"
+    ++ lib.optional enable_cxx "--enable-cxx";
 
   # address error: 'TARGET_OS_MACCATALYST' is not defined,
   # evaluates to 0 [-Werror,-Wundef-prefix=TARGET_OS_]

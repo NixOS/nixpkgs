@@ -1,4 +1,12 @@
-{lib, stdenv, fetchurl, libX11, libxcb, pkg-config, xcbutil}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  libxcb,
+  pkg-config,
+  xcbutil,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libstartup-notification";
@@ -13,7 +21,11 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libX11 libxcb xcbutil ];
+  buildInputs = [
+    libX11
+    libxcb
+    xcbutil
+  ];
 
   meta = {
     homepage = "https://www.freedesktop.org/software/startup-notification";

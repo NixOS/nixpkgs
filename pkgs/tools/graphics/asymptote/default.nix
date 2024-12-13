@@ -1,19 +1,50 @@
-{ lib, stdenv, fetchurl
-, autoreconfHook, bison, glm, flex, wrapQtAppsHook, cmake, pkg-config
-, libglut, ghostscriptX, imagemagick, fftw, eigen, libtirpc
-, boehmgc, libGLU, libGL, ncurses, readline, gsl, libsigsegv
-, python3, qtbase, qtsvg, boost
-, zlib, perl, curl
-, texinfo
-, texliveSmall
-, darwin
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
+  bison,
+  glm,
+  flex,
+  wrapQtAppsHook,
+  cmake,
+  pkg-config,
+  libglut,
+  ghostscriptX,
+  imagemagick,
+  fftw,
+  eigen,
+  libtirpc,
+  boehmgc,
+  libGLU,
+  libGL,
+  ncurses,
+  readline,
+  gsl,
+  libsigsegv,
+  python3,
+  qtbase,
+  qtsvg,
+  boost,
+  zlib,
+  perl,
+  curl,
+  texinfo,
+  texliveSmall,
+  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   version = "2.92";
   pname = "asymptote";
 
-  outputs = [ "out" "man" "info" "doc" "tex" ];
+  outputs = [
+    "out"
+    "man"
+    "info"
+    "doc"
+    "tex"
+  ];
 
   src = fetchurl {
     url = "mirror://sourceforge/asymptote/${finalAttrs.version}/asymptote-${finalAttrs.version}.src.tgz";
@@ -24,32 +55,72 @@ stdenv.mkDerivation (finalAttrs: {
   texContainer = null;
   texdocContainer = null;
 
-  nativeBuildInputs = [
-    autoreconfHook
-    bison
-    flex
-    bison
-    texinfo
-    wrapQtAppsHook
-    cmake
-    pkg-config
-  ] ++ lib.optional (finalAttrs.texContainer == null || finalAttrs.texdocContainer == null)
-    (texliveSmall.withPackages (ps: with ps; [ epsf cm-super ps.texinfo media9 ocgx2 collection-latexextra ]));
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      bison
+      flex
+      bison
+      texinfo
+      wrapQtAppsHook
+      cmake
+      pkg-config
+    ]
+    ++ lib.optional (finalAttrs.texContainer == null || finalAttrs.texdocContainer == null) (
+      texliveSmall.withPackages (
+        ps: with ps; [
+          epsf
+          cm-super
+          ps.texinfo
+          media9
+          ocgx2
+          collection-latexextra
+        ]
+      )
+    );
 
   buildInputs = [
-    ghostscriptX imagemagick fftw eigen
-    boehmgc ncurses readline gsl libsigsegv
-    zlib perl curl qtbase qtsvg boost
-    (python3.withPackages (ps: with ps; [ cson numpy pyqt5 ]))
+    ghostscriptX
+    imagemagick
+    fftw
+    eigen
+    boehmgc
+    ncurses
+    readline
+    gsl
+    libsigsegv
+    zlib
+    perl
+    curl
+    qtbase
+    qtsvg
+    boost
+    (python3.withPackages (
+      ps: with ps; [
+        cson
+        numpy
+        pyqt5
+      ]
+    ))
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ libtirpc ];
 
-  propagatedBuildInputs = [
-    glm
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libglut libGLU libGL
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    OpenGL GLUT Cocoa
-  ]);
+  propagatedBuildInputs =
+    [
+      glm
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libglut
+      libGLU
+      libGL
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        OpenGL
+        GLUT
+        Cocoa
+      ]
+    );
 
   dontWrapQtApps = true;
 
@@ -75,7 +146,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # do not use bundled libgc.so
-  configureFlags = [ "--enable-gc=system" ]
+  configureFlags =
+    [ "--enable-gc=system" ]
     # TODO add open_memstream to enable XDR/V3D on Darwin (requires memstream or >=10.13 Apple SDK)
     ++ lib.optional stdenv.hostPlatform.isDarwin "--enable-xdr=no";
 
@@ -126,7 +198,7 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelInstalling = false;
 
   meta = with lib; {
-    description =  "Tool for programming graphics intended to replace Metapost";
+    description = "Tool for programming graphics intended to replace Metapost";
     license = licenses.gpl3Plus;
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux ++ platforms.darwin;

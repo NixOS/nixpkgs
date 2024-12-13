@@ -1,7 +1,8 @@
-{ config
-, pkgs
-, lib
-, ...
+{
+  config,
+  pkgs,
+  lib,
+  ...
 }:
 
 let
@@ -73,12 +74,26 @@ in
         example = [
           {
             Developer = [
-              { Github = [{ abbr = "GH"; href = "https://github.com/"; }]; }
+              {
+                Github = [
+                  {
+                    abbr = "GH";
+                    href = "https://github.com/";
+                  }
+                ];
+              }
             ];
           }
           {
             Entertainment = [
-              { YouTube = [{ abbr = "YT"; href = "https://youtube.com/"; }]; }
+              {
+                YouTube = [
+                  {
+                    abbr = "YT";
+                    href = "https://youtube.com/";
+                  }
+                ];
+              }
             ];
           }
         ];
@@ -183,20 +198,22 @@ in
       # then default to "unmanaged" configuration which is manually updated in
       # var/lib/homepage-dashboard. This is to maintain backwards compatibility, and should be
       # deprecated in a future release.
-      managedConfig = !(
-        cfg.bookmarks == [ ] &&
-        cfg.customCSS == "" &&
-        cfg.customJS == "" &&
-        cfg.docker == { } &&
-        cfg.kubernetes == { } &&
-        cfg.services == [ ] &&
-        cfg.settings == { } &&
-        cfg.widgets == [ ]
-      );
+      managedConfig =
+        !(
+          cfg.bookmarks == [ ]
+          && cfg.customCSS == ""
+          && cfg.customJS == ""
+          && cfg.docker == { }
+          && cfg.kubernetes == { }
+          && cfg.services == [ ]
+          && cfg.settings == { }
+          && cfg.widgets == [ ]
+        );
 
       configDir = if managedConfig then "/etc/homepage-dashboard" else "/var/lib/homepage-dashboard";
 
-      msg = "using unmanaged configuration for homepage-dashboard is deprecated and will be removed"
+      msg =
+        "using unmanaged configuration for homepage-dashboard is deprecated and will be removed"
         + " in 24.05. please see the NixOS documentation for `services.homepage-dashboard' and add"
         + " your bookmarks, services, widgets, and other configuration using the options provided.";
     in
@@ -209,7 +226,8 @@ in
 
         "homepage-dashboard/bookmarks.yaml".source = settingsFormat.generate "bookmarks.yaml" cfg.bookmarks;
         "homepage-dashboard/docker.yaml".source = settingsFormat.generate "docker.yaml" cfg.docker;
-        "homepage-dashboard/kubernetes.yaml".source = settingsFormat.generate "kubernetes.yaml" cfg.kubernetes;
+        "homepage-dashboard/kubernetes.yaml".source =
+          settingsFormat.generate "kubernetes.yaml" cfg.kubernetes;
         "homepage-dashboard/services.yaml".source = settingsFormat.generate "services.yaml" cfg.services;
         "homepage-dashboard/settings.yaml".source = settingsFormat.generate "settings.yaml" cfg.settings;
         "homepage-dashboard/widgets.yaml".source = settingsFormat.generate "widgets.yaml" cfg.widgets;

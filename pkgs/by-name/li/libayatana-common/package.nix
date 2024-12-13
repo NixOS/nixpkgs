@@ -1,17 +1,18 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gitUpdater
-, testers
-, cmake
-, glib
-, gobject-introspection
-, gtest
-, intltool
-, lomiri
-, pkg-config
-, systemd
-, vala
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  testers,
+  cmake,
+  glib,
+  gobject-introspection,
+  gtest,
+  intltool,
+  lomiri,
+  pkg-config,
+  systemd,
+  vala,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

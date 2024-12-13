@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, freetype
-, libemf2svg
-, librevenge
-, libvisio
-, libwmf
-, libxml2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  freetype,
+  libemf2svg,
+  librevenge,
+  libvisio,
+  libwmf,
+  libxml2,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +23,14 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libxml2 freetype librevenge libvisio libwmf libemf2svg ];
+  buildInputs = [
+    libxml2
+    freetype
+    librevenge
+    libvisio
+    libwmf
+    libemf2svg
+  ];
 
   cmakeFlags = [
     # file RPATH_CHANGE could not write new RPATH

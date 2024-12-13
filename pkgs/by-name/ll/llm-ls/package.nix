@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, libiconv
-, darwin
-, testers
-, llm-ls
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  libiconv,
+  darwin,
+  testers,
+  llm-ls,
 }:
 
 let
@@ -40,11 +41,13 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    libiconv
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [
+      libiconv
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   passthru.tests.version = testers.testVersion {
     package = llm-ls;

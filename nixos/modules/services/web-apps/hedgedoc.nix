@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib) mkOption types literalExpression;
@@ -9,20 +14,26 @@ let
   # versionAtLeast statement remains set to 21.03 for backwards compatibility.
   # See https://github.com/NixOS/nixpkgs/pull/108899 and
   # https://github.com/NixOS/rfcs/blob/master/rfcs/0080-nixos-release-schedule.md.
-  name = if lib.versionAtLeast config.system.stateVersion "21.03" then
-    "hedgedoc"
-  else
-    "codimd";
+  name = if lib.versionAtLeast config.system.stateVersion "21.03" then "hedgedoc" else "codimd";
 
   settingsFormat = pkgs.formats.json { };
 in
 {
-  meta.maintainers = with lib.maintainers; [ SuperSandro2000 h7x4 ];
+  meta.maintainers = with lib.maintainers; [
+    SuperSandro2000
+    h7x4
+  ];
 
   imports = [
     (lib.mkRenamedOptionModule [ "services" "codimd" ] [ "services" "hedgedoc" ])
-    (lib.mkRenamedOptionModule [ "services" "hedgedoc" "configuration" ] [ "services" "hedgedoc" "settings" ])
-    (lib.mkRenamedOptionModule [ "services" "hedgedoc" "groups" ] [ "users" "users" "hedgedoc" "extraGroups" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "hedgedoc" "configuration" ]
+      [ "services" "hedgedoc" "settings" ]
+    )
+    (lib.mkRenamedOptionModule
+      [ "services" "hedgedoc" "groups" ]
+      [ "users" "users" "hedgedoc" "extraGroups" ]
+    )
     (lib.mkRemovedOptionModule [ "services" "hedgedoc" "workDir" ] ''
       This option has been removed in favor of systemd managing the state directory.
 
@@ -110,7 +121,10 @@ in
             defaultText = literalExpression ''
               with config.services.hedgedoc.settings; [ host ] ++ lib.optionals (domain != null) [ domain ]
             '';
-            example = [ "localhost" "hedgedoc.org" ];
+            example = [
+              "localhost"
+              "hedgedoc.org"
+            ];
             description = ''
               List of domains to whitelist.
             '';

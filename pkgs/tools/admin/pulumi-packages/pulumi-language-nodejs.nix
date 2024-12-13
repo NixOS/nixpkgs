@@ -1,6 +1,7 @@
-{ buildGoModule
-, pulumi
-, nodejs
+{
+  buildGoModule,
+  pulumi,
+  nodejs,
 }:
 buildGoModule rec {
   inherit (pulumi) version src;

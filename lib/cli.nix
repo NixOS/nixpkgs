@@ -9,7 +9,6 @@ rec {
 
     `toGNUCommandLineShell` returns an escaped shell string.
 
-
     # Inputs
 
     `options`
@@ -19,7 +18,6 @@ rec {
     `attrs`
 
     : The attributes to transform into arguments.
-
 
     # Examples
     :::{.example}
@@ -40,14 +38,12 @@ rec {
 
     :::
   */
-  toGNUCommandLineShell =
-    options: attrs: lib.escapeShellArgs (toGNUCommandLine options attrs);
+  toGNUCommandLineShell = options: attrs: lib.escapeShellArgs (toGNUCommandLine options attrs);
 
   /**
     Automatically convert an attribute set to a list of command-line options.
 
     `toGNUCommandLine` returns a list of string arguments.
-
 
     # Inputs
 
@@ -76,7 +72,6 @@ rec {
     : How to format a list value to a command list;
     By default the option name is repeated for each value and `mkOption` is applied to the values themselves.
 
-
     `mkOption`
 
     : How to format any remaining value to a command list;
@@ -88,7 +83,6 @@ rec {
     : How to separate an option from its flag;
     By default, there is no separator, so option `-c` and value `5` would become ["-c" "5"].
     This is useful if the command requires equals, for example, `-c=5`.
-
 
     # Examples
     :::{.example}
@@ -116,33 +110,39 @@ rec {
 
     :::
   */
-  toGNUCommandLine = {
-    mkOptionName ?
-      k: if builtins.stringLength k == 1
-          then "-${k}"
-          else "--${k}",
+  toGNUCommandLine =
+    {
+      mkOptionName ? k: if builtins.stringLength k == 1 then "-${k}" else "--${k}",
 
-    mkBool ? k: v: lib.optional v (mkOptionName k),
+      mkBool ? k: v: lib.optional v (mkOptionName k),
 
-    mkList ? k: v: lib.concatMap (mkOption k) v,
+      mkList ? k: v: lib.concatMap (mkOption k) v,
 
-    mkOption ?
-      k: v: if v == null
-            then []
-            else if optionValueSeparator == null then
-              [ (mkOptionName k) (lib.generators.mkValueStringDefault {} v) ]
-            else
-              [ "${mkOptionName k}${optionValueSeparator}${lib.generators.mkValueStringDefault {} v}" ],
+      mkOption ?
+        k: v:
+        if v == null then
+          [ ]
+        else if optionValueSeparator == null then
+          [
+            (mkOptionName k)
+            (lib.generators.mkValueStringDefault { } v)
+          ]
+        else
+          [ "${mkOptionName k}${optionValueSeparator}${lib.generators.mkValueStringDefault { } v}" ],
 
-    optionValueSeparator ? null
+      optionValueSeparator ? null,
     }:
     options:
-      let
-        render = k: v:
-          if      builtins.isBool v then mkBool k v
-          else if builtins.isList v then mkList k v
-          else mkOption k v;
+    let
+      render =
+        k: v:
+        if builtins.isBool v then
+          mkBool k v
+        else if builtins.isList v then
+          mkList k v
+        else
+          mkOption k v;
 
-      in
-        builtins.concatLists (lib.mapAttrsToList render options);
+    in
+    builtins.concatLists (lib.mapAttrsToList render options);
 }

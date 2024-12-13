@@ -1,4 +1,3 @@
-
 # This derivation confirms that the version of hpack used by stack in Nixpkgs
 # is the exact same version as the upstream stack release.
 #
@@ -11,21 +10,24 @@
 # This test is written as a fixed-output derivation, because we need to access
 # accesses the internet to download the upstream stack release.
 
-{ cacert, curl, lib, stack, stdenv }:
+{
+  cacert,
+  curl,
+  lib,
+  stack,
+  stdenv,
+}:
 
 let
   # Find the hpack derivation that is a dependency of stack.  Throw exception
   # if hpack cannot be found.
   hpack =
-    lib.findFirst
-      (v: v.pname or "" == "hpack")
-      (throw "could not find stack's hpack dependency")
+    lib.findFirst (v: v.pname or "" == "hpack") (throw "could not find stack's hpack dependency")
       stack.passthru.getCabalDeps.executableHaskellDepends;
 
   # This is a statically linked version of stack, so it should be usable within
   # the Nixpkgs builder (at least on x86_64-linux).
-  stackDownloadUrl =
-    "https://github.com/commercialhaskell/stack/releases/download/v${stack.version}/stack-${stack.version}-linux-x86_64.tar.gz";
+  stackDownloadUrl = "https://github.com/commercialhaskell/stack/releases/download/v${stack.version}/stack-${stack.version}-linux-x86_64.tar.gz";
 
   # This test code has been explicitly pulled out of the derivation below so
   # that it can be hashed and added to the `name` of the derivation.  This is
@@ -127,18 +129,23 @@ stdenv.mkDerivation {
   outputHashMode = "flat";
   outputHashAlgo = "sha256";
 
-  nativeBuildInputs = [ curl stack ];
+  nativeBuildInputs = [
+    curl
+    stack
+  ];
 
   impureEnvVars = lib.fetchers.proxyImpureEnvVars;
 
-  buildCommand = ''
-    # Make sure curl can access HTTPS sites, like GitHub.
-    #
-    # Note that we absolutely don't want the Nix store path of the cacert
-    # derivation in the testScript, because we don't want to rebuild this
-    # derivation when only the cacert derivation changes.
-    export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
-  '' + testScript;
+  buildCommand =
+    ''
+      # Make sure curl can access HTTPS sites, like GitHub.
+      #
+      # Note that we absolutely don't want the Nix store path of the cacert
+      # derivation in the testScript, because we don't want to rebuild this
+      # derivation when only the cacert derivation changes.
+      export SSL_CERT_FILE="${cacert}/etc/ssl/certs/ca-bundle.crt"
+    ''
+    + testScript;
 
   meta = with lib; {
     description = "Test that the stack in Nixpkgs uses the same version of Hpack as the upstream stack release";

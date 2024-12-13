@@ -1,6 +1,8 @@
-{ lib
-, appimageTools
-, fetchurl }:
+{
+  lib,
+  appimageTools,
+  fetchurl,
+}:
 
 appimageTools.wrapType2 rec {
   pname = "clockify";
@@ -12,8 +14,10 @@ appimageTools.wrapType2 rec {
   };
 
   extraInstallCommands =
-    let appimageContents = appimageTools.extract { inherit pname version src; };
-    in ''
+    let
+      appimageContents = appimageTools.extract { inherit pname version src; };
+    in
+    ''
       install -Dm 444 ${appimageContents}/clockify.desktop -t $out/share/applications
       install -Dm 444 ${appimageContents}/clockify.png -t $out/share/pixmaps
 

@@ -34,7 +34,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-
   dependencies = [
     appdirs
     certifi

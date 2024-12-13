@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, frrSource
-, frrVersion
+{
+  lib,
+  stdenv,
+  frrSource,
+  frrVersion,
 
   # build time
-, autoreconfHook
-, flex
-, bison
-, pkg-config
-, elfutils
-, perl
-, python3
+  autoreconfHook,
+  flex,
+  bison,
+  pkg-config,
+  elfutils,
+  perl,
+  python3,
 
 }:
 
@@ -28,11 +29,13 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    python3
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
-    elfutils
-  ];
+  buildInputs =
+    [
+      python3
+    ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform elfutils) [
+      elfutils
+    ];
 
   configureFlags = [
     "--enable-clippy-only"
@@ -53,7 +56,10 @@ stdenv.mkDerivation rec {
       to support cross-compiling, because it needs to be compiled with the build system toolchain
       and not the target host one.
     '';
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
     maintainers = with maintainers; [ thillux ];
     platforms = platforms.unix;
   };

@@ -1,28 +1,32 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, libjpeg
-, libpng
-, libmng
-, lcms1
-, libtiff
-, openexr
-, libGL
-, libX11
-, pkg-config
-, OpenGL
-, runtimeShell
-, withXorg ? true
-, testers
-, mesa
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  libjpeg,
+  libpng,
+  libmng,
+  lcms1,
+  libtiff,
+  openexr,
+  libGL,
+  libX11,
+  pkg-config,
+  OpenGL,
+  runtimeShell,
+  withXorg ? true,
+  testers,
+  mesa,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libdevil";
   version = "1.8.0";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://sourceforge/openil/DevIL-${finalAttrs.version}.tar.gz";
@@ -31,13 +35,30 @@ stdenv.mkDerivation (finalAttrs: {
 
   sourceRoot = "DevIL/DevIL";
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ libjpeg libpng libmng lcms1 libtiff openexr ]
-    ++ lib.optionals withXorg [ libX11 libGL ]
+  buildInputs =
+    [
+      libjpeg
+      libpng
+      libmng
+      lcms1
+      libtiff
+      openexr
+    ]
+    ++ lib.optionals withXorg [
+      libX11
+      libGL
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ OpenGL ];
 
-  configureFlags = [ "--enable-ILU" "--enable-ILUT" ];
+  configureFlags = [
+    "--enable-ILU"
+    "--enable-ILUT"
+  ];
 
   CXXFLAGS = lib.optionalString stdenv.cc.isClang "-Wno-register";
 

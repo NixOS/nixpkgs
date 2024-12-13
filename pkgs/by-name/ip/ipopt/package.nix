@@ -1,13 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, blas
-, lapack
-, gfortran
-, enableAMPL ? true, libamplsolver
-, enableMUMPS ? true, mumps, mpi
-, enableSPRAL ? true, spral
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  blas,
+  lapack,
+  gfortran,
+  enableAMPL ? true,
+  libamplsolver,
+  enableMUMPS ? true,
+  mumps,
+  mpi,
+  enableSPRAL ? true,
+  spral,
 }:
 
 assert (!blas.isILP64) && (!lapack.isILP64);
@@ -23,23 +28,40 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-ZuiZZMq7NzOm6CCJgMBgEWs8PEfM3pVr2yOWbS42l8U=";
   };
 
-  CXXDEFS = [ "-DHAVE_RAND" "-DHAVE_CSTRING" "-DHAVE_CSTDIO" ];
-
-  configureFlags = lib.optionals enableAMPL [
-    "--with-asl-cflags=-I${libamplsolver}/include"
-    "--with-asl-lflags=-lamplsolver"
-  ] ++ lib.optionals enableMUMPS [
-    "--with-mumps-cflags=-I${mumps}/include"
-    "--with-mumps-lflags=-ldmumps"
-  ] ++ lib.optionals enableSPRAL [
-    "--with-spral-cflags=-I${spral}/include"
-    "--with-spral-lflags=-lspral"
+  CXXDEFS = [
+    "-DHAVE_RAND"
+    "-DHAVE_CSTRING"
+    "-DHAVE_CSTDIO"
   ];
 
-  nativeBuildInputs = [ pkg-config gfortran ];
-  buildInputs = [ blas lapack ]
+  configureFlags =
+    lib.optionals enableAMPL [
+      "--with-asl-cflags=-I${libamplsolver}/include"
+      "--with-asl-lflags=-lamplsolver"
+    ]
+    ++ lib.optionals enableMUMPS [
+      "--with-mumps-cflags=-I${mumps}/include"
+      "--with-mumps-lflags=-ldmumps"
+    ]
+    ++ lib.optionals enableSPRAL [
+      "--with-spral-cflags=-I${spral}/include"
+      "--with-spral-lflags=-lspral"
+    ];
+
+  nativeBuildInputs = [
+    pkg-config
+    gfortran
+  ];
+  buildInputs =
+    [
+      blas
+      lapack
+    ]
     ++ lib.optionals enableAMPL [ libamplsolver ]
-    ++ lib.optionals enableMUMPS [ mumps mpi ]
+    ++ lib.optionals enableMUMPS [
+      mumps
+      mpi
+    ]
     ++ lib.optionals enableSPRAL [ spral ];
 
   enableParallelBuilding = true;

@@ -34,12 +34,15 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies = [
-    platformdirs
-    markdown-it-py
-    rich
-    typing-extensions
-  ] ++ markdown-it-py.optional-dependencies.plugins ++ markdown-it-py.optional-dependencies.linkify;
+  dependencies =
+    [
+      platformdirs
+      markdown-it-py
+      rich
+      typing-extensions
+    ]
+    ++ markdown-it-py.optional-dependencies.plugins
+    ++ markdown-it-py.optional-dependencies.linkify;
 
   optional-dependencies = {
     syntax = [

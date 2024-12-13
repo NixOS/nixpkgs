@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, fluxbox
-, gnused
-, makeWrapper
-, perlPackages
-, substituteAll
-, xorg
-, wrapGAppsHook3
-, gitUpdater
+{
+  lib,
+  fetchFromGitHub,
+  fluxbox,
+  gnused,
+  makeWrapper,
+  perlPackages,
+  substituteAll,
+  xorg,
+  wrapGAppsHook3,
+  gitUpdater,
 }:
 
 perlPackages.buildPerlPackage rec {

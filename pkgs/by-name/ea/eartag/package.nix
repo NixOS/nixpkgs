@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, libadwaita
-, gettext
-, glib
-, gobject-introspection
-, desktop-file-utils
-, appstream
-, appstream-glib
-, gtk4
-, librsvg
-, python3Packages
-, blueprint-compiler
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  libadwaita,
+  gettext,
+  glib,
+  gobject-introspection,
+  desktop-file-utils,
+  appstream,
+  appstream-glib,
+  gtk4,
+  librsvg,
+  python3Packages,
+  blueprint-compiler,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -80,6 +81,6 @@ python3Packages.buildPythonApplication rec {
     # being incorrectly identified as unfree software.
     license = licenses.mit;
     mainProgram = "eartag";
-    maintainers = with maintainers; [ foo-dogsquared ];
+    maintainers = with maintainers; [ foo-dogsquared ] ++ lib.teams.gnome-circle.members;
   };
 }

@@ -1,4 +1,12 @@
-{ mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio, knewstuff }:
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  ki18n,
+  kio,
+  knewstuff,
+}:
 
 mkDerivation {
   pname = "kturtle";

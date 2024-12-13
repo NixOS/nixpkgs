@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, aws-rotate-key }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  aws-rotate-key,
+}:
 
 buildGoModule rec {
   pname = "aws-rotate-key";
@@ -13,7 +19,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-gXtTd7lU9m9rO1w7Fx8o/s45j63h6GtUZrjOzFI4Q/o=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   passthru.tests.version = testers.testVersion {
     package = aws-rotate-key;

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,22 +23,26 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "trivialautovarinit" ];
 
-  cmakeFlags = [
-    "-DCATCH_DEVELOPMENT_BUILD=ON"
-    "-DCATCH_BUILD_TESTING=${if doCheck then "ON" else "OFF"}"
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && doCheck) [
-    # test has a faulty path normalization technique that won't work in
-    # our darwin build environment https://github.com/catchorg/Catch2/issues/1691
-    "-DCMAKE_CTEST_ARGUMENTS=-E;ApprovalTests"
-  ];
+  cmakeFlags =
+    [
+      "-DCATCH_DEVELOPMENT_BUILD=ON"
+      "-DCATCH_BUILD_TESTING=${if doCheck then "ON" else "OFF"}"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && doCheck) [
+      # test has a faulty path normalization technique that won't work in
+      # our darwin build environment https://github.com/catchorg/Catch2/issues/1691
+      "-DCMAKE_CTEST_ARGUMENTS=-E;ApprovalTests"
+    ];
 
-  env = lib.optionalAttrs stdenv.hostPlatform.isx86_32 {
-    # Tests fail on x86_32 if compiled with x87 floats: https://github.com/catchorg/Catch2/issues/2796
-    NIX_CFLAGS_COMPILE = "-msse2 -mfpmath=sse";
-  } // lib.optionalAttrs (stdenv.hostPlatform.isRiscV || stdenv.hostPlatform.isAarch32) {
-    # Build failure caused by -Werror: https://github.com/catchorg/Catch2/issues/2808
-    NIX_CFLAGS_COMPILE = "-Wno-error=cast-align";
-  };
+  env =
+    lib.optionalAttrs stdenv.hostPlatform.isx86_32 {
+      # Tests fail on x86_32 if compiled with x87 floats: https://github.com/catchorg/Catch2/issues/2796
+      NIX_CFLAGS_COMPILE = "-msse2 -mfpmath=sse";
+    }
+    // lib.optionalAttrs (stdenv.hostPlatform.isRiscV || stdenv.hostPlatform.isAarch32) {
+      # Build failure caused by -Werror: https://github.com/catchorg/Catch2/issues/2808
+      NIX_CFLAGS_COMPILE = "-Wno-error=cast-align";
+    };
 
   doCheck = true;
 

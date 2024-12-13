@@ -4,6 +4,7 @@
   fetchFromGitHub,
   beautifulsoup4,
   extruct,
+  isodate,
   language-tags,
   regex,
   requests,
@@ -33,6 +34,7 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     beautifulsoup4
     extruct
+    isodate
     language-tags
     regex
     requests

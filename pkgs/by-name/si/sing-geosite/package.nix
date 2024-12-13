@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, substituteAll
-, v2ray-domain-list-community
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  substituteAll,
+  v2ray-domain-list-community,
 }:
 
 let

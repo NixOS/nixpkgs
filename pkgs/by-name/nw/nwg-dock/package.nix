@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, gtk3
-, gtk-layer-shell
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  gtk3,
+  gtk-layer-shell,
 }:
 
 buildGoModule rec {
@@ -19,10 +20,16 @@ buildGoModule rec {
 
   vendorHash = "sha256-paRcBQwg2uGouMRX5XF++OyN8Y0JyucXLN0G5O0j3qA=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gtk3 gtk-layer-shell ];
+  buildInputs = [
+    gtk3
+    gtk-layer-shell
+  ];
 
   meta = with lib; {
     description = "GTK3-based dock for sway";

@@ -439,7 +439,6 @@ let self = {
     };
 
     inputs = [ curl geoip libmodsecurity libxml2 lmdb yajl ];
-    disableIPC = true;
 
     meta = with lib; {
       description = "Open source, cross platform web application firewall (WAF)";

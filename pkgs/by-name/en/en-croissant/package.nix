@@ -12,7 +12,7 @@
   makeBinaryWrapper,
 
   openssl,
-  libsoup,
+  libsoup_2_4,
   webkitgtk_4_0,
   gst_all_1,
   apple-sdk_11,
@@ -54,7 +54,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
       openssl
-      libsoup
+      libsoup_2_4
       webkitgtk_4_0
       gst_all_1.gstreamer
       gst_all_1.gst-plugins-base

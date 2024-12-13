@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libtool
-, pkg-config
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libtool,
+  pkg-config,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,7 +38,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://blake2.net/";
     pkgConfigModules = [ "libb2" ];
     platforms = platforms.all;
-    maintainers = with maintainers; [ dfoxfranke dotlambda ];
+    maintainers = with maintainers; [
+      dfoxfranke
+      dotlambda
+    ];
     license = licenses.cc0;
   };
 })

@@ -67,6 +67,7 @@ mapAliases ({
 
   insert_dylib = throw "'darwin.insert_dylib' has been renamed to 'insert-dylib'"; # added 2024-04-04
   ios-deploy = throw "'darwin.ios-deploy' has been renamed to 'ios-deploy'"; # added 2024-11-28
+  iproute2mac = lib.warnOnInstantiate "darwin.iproute2mac has been renamed to iproute2mac" pkgs.iproute2mac; # added 2024-12-08
 
   ### L ###
 

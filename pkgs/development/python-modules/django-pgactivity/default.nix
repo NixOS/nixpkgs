@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "django-pgactivity";
-  version = "1.5.0";
+  version = "1.7.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Opus10";
     repo = "django-pgactivity";
-    rev = "refs/tags/${version}";
-    hash = "sha256-jOpm/vYy3Ubi+NfvARH19ozZMUgyGD/ZztqxKNvAoLQ=";
+    tag = version;
+    hash = "sha256-XJDnNMhkoaRQBVsAdDqnFjOobUHi/RaMQZJnI61MuVI=";
   };
 
   build-system = [ poetry-core ];

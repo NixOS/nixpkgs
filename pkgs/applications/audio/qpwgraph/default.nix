@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cmake
-, pkg-config
-, wrapQtAppsHook
-, qtbase
-, qtsvg
-, qtwayland
-, alsa-lib
-, pipewire
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  pkg-config,
+  wrapQtAppsHook,
+  qtbase,
+  qtsvg,
+  qtwayland,
+  alsa-lib,
+  pipewire,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,9 +24,19 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-jB2mMLwJ1e/fIsf1R9Wd0stwp/RQH6f9pkF1qQX72Aw=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    wrapQtAppsHook
+  ];
 
-  buildInputs = [ qtbase qtsvg qtwayland alsa-lib pipewire ];
+  buildInputs = [
+    qtbase
+    qtsvg
+    qtwayland
+    alsa-lib
+    pipewire
+  ];
 
   cmakeFlags = [ "-DCONFIG_WAYLAND=ON" ];
 
@@ -39,7 +50,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://gitlab.freedesktop.org/rncbc/qpwgraph";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ kanashimia exi Scrumplex ];
+    maintainers = with maintainers; [
+      kanashimia
+      exi
+      Scrumplex
+    ];
     mainProgram = "qpwgraph";
   };
 })

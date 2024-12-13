@@ -67,7 +67,12 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/rafaelmardojai/blanket";
     license = lib.licenses.gpl3Plus;
     mainProgram = "blanket";
-    maintainers = with lib.maintainers; [ onny ];
+    maintainers =
+      with lib.maintainers;
+      [
+        onny
+      ]
+      ++ lib.teams.gnome-circle.members;
     platforms = lib.platforms.linux;
   };
 }

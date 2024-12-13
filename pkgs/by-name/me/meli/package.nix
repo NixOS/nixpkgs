@@ -1,30 +1,31 @@
-{ stdenv
-, lib
-, fetchzip
-, fetchpatch
-, rustPlatform
+{
+  stdenv,
+  lib,
+  fetchzip,
+  fetchpatch,
+  rustPlatform,
 
-# native build inputs
-, pkg-config
-, installShellFiles
-, makeWrapper
-, mandoc
-, rustfmt
-, file
+  # native build inputs
+  pkg-config,
+  installShellFiles,
+  makeWrapper,
+  mandoc,
+  rustfmt,
+  file,
 
-# build inputs
-, openssl
-, dbus
-, sqlite
+  # build inputs
+  openssl,
+  dbus,
+  sqlite,
 
-# runtime deps
-, gpgme
-, gnum4
+  # runtime deps
+  gpgme,
+  gnum4,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "meli";
-  version = "0.8.9";
+  version = "0.8.10";
 
   src = fetchzip {
     urls = [
@@ -32,13 +33,13 @@ rustPlatform.buildRustPackage rec {
       "https://codeberg.org/meli/meli/archive/v${version}.tar.gz"
       "https://github.com/meli/meli/archive/refs/tags/v${version}.tar.gz"
     ];
-    hash = "sha256-zFsKL9F6PGoYjxFfFs2Bkdm2ZCeJtnTygkgCL7AXl9o=";
+    hash = "sha256-MGnCX/6pnKNxDEqCcVWTl/fteMypk+N2PrJYRMP0sL0=";
   };
 
-  cargoHash = "sha256-us/jlsRbg0Y6FwznbRZeqK1TwwgL1uBwBdyneyvdI6Q=";
+  cargoHash = "sha256-w0fxh3c54Hcczc9NW8heewrRFx7UZnQqAHiQWZ43wKw=";
 
   # Needed to get openssl-sys to use pkg-config
-  OPENSSL_NO_VENDOR=1;
+  OPENSSL_NO_VENDOR = 1;
 
   nativeBuildInputs = [
     pkg-config
@@ -81,7 +82,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "meli";
     homepage = "https://meli.delivery";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ _0x4A6F matthiasbeyer ];
+    maintainers = with maintainers; [
+      _0x4A6F
+      matthiasbeyer
+    ];
     platforms = platforms.linux ++ platforms.darwin;
   };
 }

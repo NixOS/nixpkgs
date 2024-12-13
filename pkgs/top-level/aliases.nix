@@ -427,6 +427,7 @@ mapAliases {
   gcj = gcj6; # Added 2024-09-13
   gcj6 = throw "gcj6 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-09-13
   gcolor2 = throw "'gcolor2' has been removed due to lack of maintenance upstream and depending on gtk2. Consider using 'gcolor3' or 'eyedropper' instead"; # Added 2024-09-15
+  geos_3_11 = throw "geos_3_11 has been removed from nixpgks. Please use a more recent 'geos' instead.";
   gfortran48 = throw "'gfortran48' has been removed from nixpkgs"; # Added 2024-09-10
   gfortran49 = throw "'gfortran49' has been removed from nixpkgs"; # Added 2024-09-11
   gfortran7 = throw "gfortran7 has been removed from Nixpkgs, as it is unmaintained and obsolete"; # Added 2024-11-20
@@ -660,6 +661,7 @@ mapAliases {
   librewolf-wayland = librewolf; # Added 2022-11-15
   libseat = throw "'libseat' has been renamed to/replaced by 'seatd'"; # Converted to throw 2024-10-17
   libsForQt515 = libsForQt5; # Added 2022-11-24
+  libsoup = lib.warnOnInstantiate "‘libsoup’ has been renamed to ‘libsoup_2_4’" libsoup_2_4; # Added 2024-12-02
   libstdcxx5 = throw "libstdcxx5 is severly outdated and has been removed"; # Added 2024-11-24
   libtensorflow-bin = libtensorflow; # Added 2022-09-25
   libtorrentRasterbar = throw "'libtorrentRasterbar' has been renamed to/replaced by 'libtorrent-rasterbar'"; # Converted to throw 2024-10-17
@@ -872,10 +874,10 @@ mapAliases {
       fonts.packages = [
         ...
         pkgs.nerd-fonts._0xproto
-        pkgs.nerd-fonts.droid_sans_mono
+        pkgs.nerd-fonts.droid-sans-mono
       ]
     or for all fonts
-      font.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts)
+      fonts.packages = [ ... ] ++ builtins.filter lib.attrsets.isDerivation (builtins.attrValues pkgs.nerd-fonts)
   ''; # Added 2024-11-09
   newlibCross = newlib; # Added 2024-09-06
   newlib-nanoCross = newlib-nano; # Added 2024-09-06
@@ -1410,6 +1412,7 @@ mapAliases {
   xmlada = gnatPackages.xmlada; # Added 2024-02-25
   xmr-stak = throw "xmr-stak has been removed from nixpkgs because it was broken"; # Added 2024-07-15
   xmake-core-sv = throw "'xmake-core-sv' has been removed, use 'libsv' instead"; # Added 2024-10-10
+  xournal = throw "'xournal' has been removed due to lack of activity upstream and depending on gnome2. Consider using 'xournalpp' instead."; # Added 2024-12-06
   xonsh-unwrapped = python3Packages.xonsh; # Added 2024-06-18
   xprite-editor = throw "'xprite-editor' has been removed due to lack of maintenance upstream. Consider using 'pablodraw' or 'aseprite' instead"; # Added 2024-09-14
   xulrunner = firefox-unwrapped; # Added 2023-11-03

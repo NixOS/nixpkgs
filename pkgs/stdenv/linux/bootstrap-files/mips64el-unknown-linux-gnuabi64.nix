@@ -18,7 +18,7 @@
     sha256 = "sha256-sTE58ofjqAqX3Xtq1g9wDxzIe6Vo//GHbicfqJoivDI=";
     executable = true;
   };
-  bootstrapTools =import <nix/fetchurl.nix> {
+  bootstrapTools = import <nix/fetchurl.nix> {
     url = "http://tarballs.nixos.org/stdenv-linux/mips64el/ef3fe254f3c59455386bc92fe84164f9679b92b1/bootstrap-tools.tar.xz";
     sha256 = "sha256-tTgjeXpd2YgnfP4JvRuO0bXd2j8GqzBcd57JI3wH9x0=";
   };

@@ -1,24 +1,29 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, vala
-, gi-docgen
-, glib
-, gssdp_1_6
-, libsoup_3
-, libxml2
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  vala,
+  gi-docgen,
+  glib,
+  gssdp_1_6,
+  libsoup_3,
+  libxml2,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gupnp";
   version = "1.6.7";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gupnp/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -53,7 +58,8 @@ stdenv.mkDerivation rec {
 
   mesonCheckFlags = [
     # The service-proxy test takes 28s on ofborg, which is too close to the time limit.
-    "--timeout-multiplier" "2"
+    "--timeout-multiplier"
+    "2"
   ];
 
   postFixup = ''

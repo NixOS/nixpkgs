@@ -20,25 +20,35 @@
 , sqlite
 , wayland
 , zbar
+, glycin-loaders
 }:
 
 stdenv.mkDerivation rec {
   pname = "authenticator";
-  version = "4.4.0";
+  version = "4.5.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "Authenticator";
     rev = version;
-    hash = "sha256-LNYhUDV5nM46qx29xXE6aCEdBo7VnwT61YgAW0ZXW30=";
+    hash = "sha256-g4+ntBuAEH9sj61CiS5t95nMfCgaWJTgiwRXtwrUTs0=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-ntkKH4P3Ui2NZSVy87hGAsRA1GDRwoK9UnA/nFjyLnA=";
+    hash = "sha256-XNAC1eA+11gAvMRu95huRM+YHdsrg5Sqpzb6F3Rgu5U=";
   };
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      # vp8enc preset
+      --prefix GST_PRESET_PATH : "${gst_all_1.gst-plugins-good}/share/gstreamer-1.0/presets"
+      # See https://gitlab.gnome.org/sophie-h/glycin/-/blob/0.1.beta.2/glycin/src/config.rs#L44
+      --prefix XDG_DATA_DIRS : "${glycin-loaders}/share"
+    )
+  '';
 
   nativeBuildInputs = [
     appstream-glib
@@ -59,6 +69,8 @@ stdenv.mkDerivation rec {
     gst_all_1.gstreamer
     gst_all_1.gst-plugins-base
     (gst_all_1.gst-plugins-bad.override { enableZbar = true; })
+    gst_all_1.gst-plugins-good
+    gst_all_1.gst-plugins-rs
     gtk4
     libadwaita
     openssl
@@ -73,7 +85,7 @@ stdenv.mkDerivation rec {
     mainProgram = "authenticator";
     homepage = "https://gitlab.gnome.org/World/Authenticator";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ austinbutler ];
+    maintainers = with lib.maintainers; [ austinbutler ] ++ lib.teams.gnome-circle.members;
     platforms = lib.platforms.linux;
   };
 }

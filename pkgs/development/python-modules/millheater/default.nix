@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "millheater";
-  version = "0.12.0";
+  version = "012.2";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -18,8 +18,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Danielhiversen";
     repo = "pymill";
-    rev = "refs/tags/${version}";
-    hash = "sha256-8PrTypJuWNuFz1NZLuyqOpWFsN5OLshj7S10YgcGusQ=";
+    tag = version;
+    hash = "sha256-tR6MZIgCazGcXRIaSXyDYIEp+kD6xyrpOXORbi8LV7E=";
   };
 
   build-system = [ setuptools ];

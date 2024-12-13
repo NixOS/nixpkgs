@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, kernel }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+}:
 
 stdenv.mkDerivation rec {
   name = "it87-${version}-${kernel.version}";
@@ -31,7 +36,10 @@ stdenv.mkDerivation rec {
     description = "Patched module for IT87xx superio chip sensors support";
     homepage = "https://github.com/hannesha/it87";
     license = licenses.gpl2Plus;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     maintainers = teams.lumiguide.members;
   };
 }

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, util-linux, bash, substituteAll }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  util-linux,
+  bash,
+  substituteAll,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bcache-tools";

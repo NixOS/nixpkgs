@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, libmpdclient
-, ncurses
-, pcre
-, pkg-config
-, taglib
-, curl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  libmpdclient,
+  ncurses,
+  pcre,
+  pkg-config,
+  taglib,
+  curl,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,8 +33,17 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libmpdclient ncurses pcre taglib curl ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libmpdclient
+    ncurses
+    pcre
+    taglib
+    curl
+  ];
 
   postInstall = ''
     mkdir -p $out/etc

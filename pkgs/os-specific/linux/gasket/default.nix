@@ -3,7 +3,7 @@
   lib,
   fetchFromGitHub,
   fetchpatch2,
-  kernel
+  kernel,
 }:
 
 stdenv.mkDerivation rec {
@@ -41,7 +41,10 @@ stdenv.mkDerivation rec {
   installFlags = [ "INSTALL_MOD_PATH=${placeholder "out"}" ];
   installTargets = [ "modules_install" ];
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
   meta = with lib; {

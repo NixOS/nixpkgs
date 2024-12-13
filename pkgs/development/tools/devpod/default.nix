@@ -9,7 +9,7 @@
 , installShellFiles
 , jq
 , libayatana-appindicator
-, libsoup
+, libsoup_2_4
 , makeDesktopItem
 , mkYarnPackage
 , openssl
@@ -141,7 +141,7 @@ rec {
       ];
 
       buildInputs = [
-        libsoup
+        libsoup_2_4
         openssl
       ] ++ lib.optionals stdenv.hostPlatform.isLinux [
         gtk3

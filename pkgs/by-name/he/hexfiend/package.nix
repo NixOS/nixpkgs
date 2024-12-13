@@ -1,11 +1,13 @@
-{ stdenv, lib, fetchurl, undmg, nix-update-script }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  undmg,
+  nix-update-script,
+}:
 
 let
-  urlSuffix = version: if lib.versions.patch == 0 then
-    lib.versions.majorMinor version
-  else
-    version
-  ;
+  urlSuffix = version: if lib.versions.patch == 0 then lib.versions.majorMinor version else version;
 in
 stdenv.mkDerivation rec {
   pname = "hexfiend";

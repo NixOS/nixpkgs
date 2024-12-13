@@ -399,10 +399,10 @@
     "desktop_webview_window": {
       "dependency": "direct main",
       "description": {
-        "path": ".",
-        "ref": "no_texture",
-        "resolved-ref": "109f1739727a71d8da60696143f5af91061faab2",
-        "url": "https://github.com/Predidit/linux_webview_window.git"
+        "path": "packages/desktop_webview_window",
+        "ref": "main",
+        "resolved-ref": "2aa8d449881974182d033df9635cf7c198d2553a",
+        "url": "https://github.com/kodjodevf/desktop_webview_window.git"
       },
       "source": "git",
       "version": "0.2.4"
@@ -441,11 +441,11 @@
       "dependency": "transitive",
       "description": {
         "name": "equatable",
-        "sha256": "c2b87cb7756efdf69892005af546c56c0b5037f54d2a88269b4f347a505e3ca2",
+        "sha256": "567c64b3cb4cf82397aac55f4f0cbd3ca20d77c6c03bedbc4ceaddc08904aef7",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.5"
+      "version": "2.0.7"
     },
     "exception_templates": {
       "dependency": "transitive",
@@ -836,11 +836,11 @@
       "dependency": "direct main",
       "description": {
         "name": "go_router",
-        "sha256": "8ae664a70174163b9f65ea68dd8673e29db8f9095de7b5cd00e167c621f4fef5",
+        "sha256": "8660b74171fafae4aa8202100fa2e55349e078281dadc73a241eb8e758534d9d",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "14.6.0"
+      "version": "14.6.1"
     },
     "google_fonts": {
       "dependency": "direct main",
@@ -1379,11 +1379,11 @@
       "dependency": "transitive",
       "description": {
         "name": "path_provider_android",
-        "sha256": "c464428172cb986b758c6d1724c603097febb8fb855aa265aeecc9280c294d4a",
+        "sha256": "8c4967f8b7cb46dc914e178daa29813d83ae502e0529d7b0478330616a691ef7",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.2.12"
+      "version": "2.2.14"
     },
     "path_provider_foundation": {
       "dependency": "transitive",
@@ -1788,11 +1788,11 @@
       "dependency": "transitive",
       "description": {
         "name": "shelf_web_socket",
-        "sha256": "073c147238594ecd0d193f3456a5fe91c4b0abbcc68bf5cd95b36c4e194ac611",
+        "sha256": "cc36c297b52866d203dbf9332263c94becc2fe0ceaa9681d07b6ef9807023b67",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.0"
+      "version": "2.0.1"
     },
     "sky_engine": {
       "dependency": "transitive",

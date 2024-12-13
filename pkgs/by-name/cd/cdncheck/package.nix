@@ -19,7 +19,6 @@ buildGoModule rec {
 
   subPackages = [ "cmd/cdncheck/" ];
 
-
   ldflags = [
     "-s"
     "-w"

@@ -1,16 +1,35 @@
-{ lib, stdenv, SDL, SDL2, fetchurl, gzip, libvorbis, libmad, flac, libopus, opusfile, libogg, libxmp
-, Cocoa, CoreAudio, CoreFoundation, IOKit, OpenGL
-, copyDesktopItems, makeDesktopItem, pkg-config
-, useSDL2 ? stdenv.hostPlatform.isDarwin # TODO: CoreAudio fails to initialize with SDL 1.x for some reason.
+{
+  lib,
+  stdenv,
+  SDL,
+  SDL2,
+  fetchurl,
+  gzip,
+  libvorbis,
+  libmad,
+  flac,
+  libopus,
+  opusfile,
+  libogg,
+  libxmp,
+  Cocoa,
+  CoreAudio,
+  CoreFoundation,
+  IOKit,
+  OpenGL,
+  copyDesktopItems,
+  makeDesktopItem,
+  pkg-config,
+  useSDL2 ? stdenv.hostPlatform.isDarwin, # TODO: CoreAudio fails to initialize with SDL 1.x for some reason.
 }:
 
 stdenv.mkDerivation rec {
   pname = "quakespasm";
-  version = "0.96.0";
+  version = "0.96.3";
 
   src = fetchurl {
     url = "mirror://sourceforge/quakespasm/quakespasm-${version}.tar.gz";
-    sha256 = "sha256-Sa4lLALB3xpMGVjpKnzGl1OBEJcLOHDcFGEFsO0wwOw=";
+    sha256 = "sha256-tXjWzkpPf04mokRY8YxLzI04VK5iUuuZgu6B2V5QGA4=";
   };
 
   sourceRoot = "${pname}-${version}/Quake";
@@ -30,32 +49,47 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    gzip libvorbis libmad flac libopus opusfile libogg libxmp
-    (if useSDL2 then SDL2 else SDL)
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Cocoa CoreAudio IOKit OpenGL
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && useSDL2) [
-    CoreFoundation
-  ];
+  buildInputs =
+    [
+      gzip
+      libvorbis
+      libmad
+      flac
+      libopus
+      opusfile
+      libogg
+      libxmp
+      (if useSDL2 then SDL2 else SDL)
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Cocoa
+      CoreAudio
+      IOKit
+      OpenGL
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && useSDL2) [
+      CoreFoundation
+    ];
 
-  buildFlags = [
-    "DO_USERDIRS=1"
-    # Makefile defaults, set here to enforce consistency on Darwin build
-    "USE_CODEC_WAVE=1"
-    "USE_CODEC_MP3=1"
-    "USE_CODEC_VORBIS=1"
-    "USE_CODEC_FLAC=1"
-    "USE_CODEC_OPUS=1"
-    "USE_CODEC_MIKMOD=0"
-    "USE_CODEC_UMX=0"
-    "USE_CODEC_XMP=1"
-    "MP3LIB=mad"
-    "VORBISLIB=vorbis"
-  ] ++ lib.optionals useSDL2 [
-    "SDL_CONFIG=sdl2-config"
-    "USE_SDL2=1"
-  ];
+  buildFlags =
+    [
+      "DO_USERDIRS=1"
+      # Makefile defaults, set here to enforce consistency on Darwin build
+      "USE_CODEC_WAVE=1"
+      "USE_CODEC_MP3=1"
+      "USE_CODEC_VORBIS=1"
+      "USE_CODEC_FLAC=1"
+      "USE_CODEC_OPUS=1"
+      "USE_CODEC_MIKMOD=0"
+      "USE_CODEC_UMX=0"
+      "USE_CODEC_XMP=1"
+      "MP3LIB=mad"
+      "VORBISLIB=vorbis"
+    ]
+    ++ lib.optionals useSDL2 [
+      "SDL_CONFIG=sdl2-config"
+      "USE_SDL2=1"
+    ];
 
   makefile = if (stdenv.hostPlatform.isDarwin) then "Makefile.darwin" else "Makefile";
 

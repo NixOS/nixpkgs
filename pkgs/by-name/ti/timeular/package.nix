@@ -1,6 +1,7 @@
-{ lib
-, fetchurl
-, appimageTools
+{
+  lib,
+  fetchurl,
+  appimageTools,
 }:
 
 let
@@ -15,7 +16,8 @@ let
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
-in appimageTools.wrapType2 rec {
+in
+appimageTools.wrapType2 rec {
   inherit pname version src;
 
   extraPkgs = pkgs: [ pkgs.libsecret ];

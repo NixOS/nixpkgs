@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 buildGoModule rec {
@@ -18,7 +19,8 @@ buildGoModule rec {
   vendorHash = "sha256-d7kkdiGMT3bN1dfNo8m+zp3VY8kaZM2BWO3B3iAdUQY=";
 
   ldflags = [
-    "-w" "-s"
+    "-w"
+    "-s"
     "-X github.com/prometheus/common/version.Branch=master"
     "-X github.com/prometheus/common/version.BuildDate=unknown"
     "-X github.com/prometheus/common/version.Revision=${src.rev}"

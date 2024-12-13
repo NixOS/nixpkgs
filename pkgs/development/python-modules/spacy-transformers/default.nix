@@ -34,7 +34,6 @@ buildPythonPackage rec {
     cython
   ];
 
-
   dependencies = [
     spacy
     numpy

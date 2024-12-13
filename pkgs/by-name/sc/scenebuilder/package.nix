@@ -1,12 +1,13 @@
-{ lib
-, jdk21
-, maven
-, fetchFromGitHub
-, makeDesktopItem
-, copyDesktopItems
-, glib
-, makeWrapper
-, wrapGAppsHook3
+{
+  lib,
+  jdk21,
+  maven,
+  fetchFromGitHub,
+  makeDesktopItem,
+  copyDesktopItems,
+  glib,
+  makeWrapper,
+  wrapGAppsHook3,
 }:
 
 let
@@ -80,7 +81,11 @@ maven.buildMavenPackage rec {
       icon = "scenebuilder";
       comment = "A visual, drag'n'drop, layout tool for designing JavaFX application user interfaces.";
       desktopName = "Scene Builder";
-      mimeTypes = [ "application/java" "application/java-vm" "application/java-archive" ];
+      mimeTypes = [
+        "application/java"
+        "application/java-vm"
+        "application/java-archive"
+      ];
       categories = [ "Development" ];
     })
   ];
@@ -99,4 +104,3 @@ maven.buildMavenPackage rec {
     ];
   };
 }
-

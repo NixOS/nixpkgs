@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, apple-sdk_11
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  apple-sdk_11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,7 +34,13 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-spellcheck";
     homepage = "https://github.com/drahnr/cargo-spellcheck";
     changelog = "https://github.com/drahnr/cargo-spellcheck/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ newam matthiasbeyer ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      newam
+      matthiasbeyer
+    ];
   };
 }

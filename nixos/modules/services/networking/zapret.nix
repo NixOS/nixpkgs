@@ -214,7 +214,6 @@ in
   );
 
   meta.maintainers = with lib.maintainers; [
-    voronind
     nishimara
   ];
 }

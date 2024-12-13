@@ -1,12 +1,14 @@
-{ lib, stdenv
-, fetchFromGitHub
-, aws-c-cal
-, aws-c-common
-, aws-c-compression
-, aws-c-io
-, cmake
-, nix
-, s2n-tls
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  aws-c-cal,
+  aws-c-common,
+  aws-c-compression,
+  aws-c-io,
+  cmake,
+  nix,
+  s2n-tls,
 }:
 
 stdenv.mkDerivation rec {

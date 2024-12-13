@@ -1,4 +1,13 @@
-{ lib, stdenv, bsdbuild, libagar, perl, libjpeg, libpng, openssl }:
+{
+  lib,
+  stdenv,
+  bsdbuild,
+  libagar,
+  perl,
+  libjpeg,
+  libpng,
+  openssl,
+}:
 
 stdenv.mkDerivation {
   pname = "libagar-test";
@@ -20,7 +29,14 @@ stdenv.mkDerivation {
 
   configureFlags = [ "--with-agar=${libagar}" ];
 
-  buildInputs = [ perl bsdbuild libagar libjpeg libpng openssl ];
+  buildInputs = [
+    perl
+    bsdbuild
+    libagar
+    libjpeg
+    libpng
+    openssl
+  ];
 
   meta = with lib; {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);

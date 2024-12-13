@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "typos";
-  version = "1.28.1";
+  version = "1.28.2";
 
   src = fetchFromGitHub {
     owner = "crate-ci";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-a3EInGYsVt5vmAovT+FSWtNIRY/5ckWvDOZi1EV0ZsU=";
+    hash = "sha256-6qu5Xe0lDT8u21VxU9lqs2BTre7BRa7+qNf8oukzTmc=";
   };
 
-  cargoHash = "sha256-8Y7DZCQakP6gsXXA294gz8SlZROoKATJfxLY8ITlIf8=";
+  cargoHash = "sha256-lC0K56eslfePdZfP75Lz6XRh3LORsAPShC15ZFj/UG4=";
 
   passthru = {
     tests.version = testers.testVersion { package = typos; };

@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, camlp-streams
-, alcotest
-, qcheck
-, qcheck-alcotest
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  camlp-streams,
+  alcotest,
+  qcheck,
+  qcheck-alcotest,
 }:
 
 buildDunePackage rec {
@@ -23,7 +24,11 @@ buildDunePackage rec {
 
   propagatedBuildInputs = [ camlp-streams ];
 
-  checkInputs = [ alcotest qcheck qcheck-alcotest ];
+  checkInputs = [
+    alcotest
+    qcheck
+    qcheck-alcotest
+  ];
   doCheck = true;
 
   meta = with lib; {

@@ -1,4 +1,9 @@
-{ appimageTools, makeWrapper, fetchurl, lib }:
+{
+  appimageTools,
+  makeWrapper,
+  fetchurl,
+  lib,
+}:
 
 let
   pname = "notable";
@@ -24,7 +29,10 @@ appimageTools.wrapType2 rec {
 
   nativeBuildInputs = [ makeWrapper ];
 
-  extraPkgs = pkgs: [ pkgs.at-spi2-atk pkgs.at-spi2-core ];
+  extraPkgs = pkgs: [
+    pkgs.at-spi2-atk
+    pkgs.at-spi2-core
+  ];
 
   extraInstallCommands = ''
     install -m 444 -D ${appimageContents}/notable.desktop $out/share/applications/notable.desktop

@@ -35,7 +35,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-
   dependencies = [
     aiofiles
     aiohttp

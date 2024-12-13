@@ -1,6 +1,5 @@
 {
   fetchurl,
-  fetchpatch,
   runCommand,
   lib,
   stdenv,
@@ -69,7 +68,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mutter";
-  version = "47.1";
+  version = "47.3";
 
   outputs = [
     "out"
@@ -80,22 +79,15 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "mirror://gnome/sources/mutter/${lib.versions.major finalAttrs.version}/mutter-${finalAttrs.version}.tar.xz";
-    hash = "sha256-kFR0oyzZmzQ0LNaedLsBlxs4fi+iI2G22ZrdEJQJ3ck=";
+    hash = "sha256-dkIa9vkFCc/fGrhR1e5YJx4n6Uqo99tSHVqgba6mxWA=";
   };
-
-  patches = [
-    # Fix cursor positioning
-    # https://gitlab.gnome.org/GNOME/mutter/-/issues/3696
-    (fetchpatch {
-      url = "https://gitlab.gnome.org/GNOME/mutter/-/commit/5bcaa7c80b7640e2da6135cdff83eba77c202407.patch";
-      hash = "sha256-+LDTZRagBltarGvHtTI94mA70DrkonuqA+ibLkjvZ50=";
-    })
-  ];
 
   mesonFlags = [
     "-Degl_device=true"
     "-Dinstalled_tests=false" # TODO: enable these
     "-Dtests=disabled"
+    # For NVIDIA proprietary driver up to 470.
+    # https://src.fedoraproject.org/rpms/mutter/pull-request/49
     "-Dwayland_eglstream=true"
     "-Dprofiler=true"
     "-Dxwayland_path=${lib.getExe xwayland}"

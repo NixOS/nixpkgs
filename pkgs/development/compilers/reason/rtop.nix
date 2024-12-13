@@ -1,4 +1,10 @@
-{ buildDunePackage, reason, cppo, utop, makeWrapper }:
+{
+  buildDunePackage,
+  reason,
+  cppo,
+  utop,
+  makeWrapper,
+}:
 
 buildDunePackage {
   pname = "rtop";
@@ -9,7 +15,10 @@ buildDunePackage {
     cppo
   ];
 
-  propagatedBuildInputs = [ reason utop ];
+  propagatedBuildInputs = [
+    reason
+    utop
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/rtop \

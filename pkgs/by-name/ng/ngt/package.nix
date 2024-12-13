@@ -1,8 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, llvmPackages
-, enableAVX ? stdenv.hostPlatform.avxSupport
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  llvmPackages,
+  enableAVX ? stdenv.hostPlatform.avxSupport,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,7 +21,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ cmake ];
   buildInputs = [ llvmPackages.openmp ];
 
-  NIX_ENFORCE_NO_NATIVE = ! enableAVX;
+  NIX_ENFORCE_NO_NATIVE = !enableAVX;
   __AVX2__ = if enableAVX then 1 else 0;
 
   meta = with lib; {

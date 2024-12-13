@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, libtool
-, libxml2
-, minizip
-, pcsclite
-, opensc
-, openssl
-, xercesc
-, pkg-config
-, xsd
-, zlib
-, xmlsec
-, xxd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  libtool,
+  libxml2,
+  minizip,
+  pcsclite,
+  opensc,
+  openssl,
+  xercesc,
+  pkg-config,
+  xsd,
+  zlib,
+  xmlsec,
+  xxd,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-0G7cjJEgLJ24SwHRznKJ18cRY0m50lr6HXstfbYq9f8=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config xxd ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    xxd
+  ];
 
   buildInputs = [
     libxml2
@@ -39,7 +44,12 @@ stdenv.mkDerivation rec {
     xmlsec
   ];
 
-  outputs = [ "out" "lib" "dev" "bin" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+    "bin"
+  ];
 
   # This wants to link to ${CMAKE_DL_LIBS} (ltdl), and there doesn't seem to be
   # a way to tell CMake where this should be pulled from.

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, python3, perl, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  python3,
+  perl,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "meme-suite";
@@ -10,7 +17,10 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [ zlib ];
-  nativeBuildInputs = [ perl python3 ];
+  nativeBuildInputs = [
+    perl
+    python3
+  ];
 
   meta = with lib; {
     description = "Motif-based sequence analysis tools";

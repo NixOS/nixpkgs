@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, curl, postgresql, buildPostgresqlExtension }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  postgresql,
+  buildPostgresqlExtension,
+}:
 
 buildPostgresqlExtension rec {
   pname = "pgsql-http";

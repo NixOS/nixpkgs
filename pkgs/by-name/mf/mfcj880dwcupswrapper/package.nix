@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, mfcj880dwlpr, makeWrapper, bash }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  mfcj880dwlpr,
+  makeWrapper,
+  bash,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mfcj880dw-cupswrapper";
@@ -14,7 +21,11 @@ stdenv.mkDerivation rec {
     bash # shebang
   ];
 
-  makeFlags = [ "-C" "brcupsconfig" "all" ];
+  makeFlags = [
+    "-C"
+    "brcupsconfig"
+    "all"
+  ];
 
   installPhase = ''
     runHook preInstall
@@ -33,7 +44,7 @@ stdenv.mkDerivation rec {
     ln -s ${mfcj880dwlpr}/lib/cups/filter/brother_lpdwrapper_mfcj880dw $out/lib/cups/filter/brother_lpdwrapper_mfcj880dw
 
     runHook postInstall
-    '';
+  '';
 
   meta = with lib; {
     homepage = "http://www.brother.com/";
