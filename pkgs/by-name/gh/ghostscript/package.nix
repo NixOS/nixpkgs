@@ -113,6 +113,8 @@ stdenv.mkDerivation rec {
     sed "s@^ZLIBDIR=.*@ZLIBDIR=${zlib.dev}/include@" -i configure.ac
 
     autoconf
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
+    export DARWIN_LDFLAGS_SO_PREFIX=$out/lib/
   '';
 
   configureFlags = [
@@ -145,14 +147,6 @@ stdenv.mkDerivation rec {
     mkdir -p $fonts/share/fonts
     cp -rv ${fonts}/* "$fonts/share/fonts/"
     ln -s "$fonts/share/fonts" "$out/share/ghostscript/fonts"
-  '';
-
-  # dynamic library name only contains major version number, eg. '10'
-  dylib_version = lib.versions.major version;
-  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    for file in $out/bin/{gs,gsc,gsx}; do
-      install_name_tool -change libgs.$dylib_version.dylib $out/lib/libgs.$dylib_version.dylib $file
-    done
   '';
 
   # validate dynamic linkage
