@@ -15804,6 +15804,15 @@
     githubId = 7845120;
     name = "Alex Martens";
   };
+  NewDawn0 = {
+    name = "Tom Suter";
+    email = "newdawn.v0.0+nixpkgs@gmail.com";
+    github = "NewDawn0";
+    githubId = 92283105;
+    keys = [{
+      fingerprint = "4E9A 21D3 494C DA43 7B0E  C24D F407 CF2A 2834 53F3";
+    }];
+  };
   nezia = {
     email = "anthony@nezia.dev";
     github = "nezia1";
