@@ -12,14 +12,14 @@
   zenity,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "tacentview";
   version = "1.0.46";
 
   src = fetchFromGitHub {
     owner = "bluescan";
     repo = "tacentview";
-    tag = "v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-d4A26p1hmkYEZ+h6kRbHHr4QmAc3PMe3qYdkeKIRGkU=";
   };
 
@@ -61,10 +61,10 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Image and texture viewer";
     homepage = "https://github.com/bluescan/tacentview";
-    changelog = "https://github.com/bluescan/tacentview/releases/tag/v${version}";
+    changelog = "https://github.com/bluescan/tacentview/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.isc;
     maintainers = with lib.maintainers; [ PopeRigby ];
     mainProgram = "tacentview";
     platforms = with lib.platforms; linux ++ windows;
   };
-}
+})
