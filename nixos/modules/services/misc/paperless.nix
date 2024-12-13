@@ -70,10 +70,7 @@ let
     ProtectKernelModules = true;
     ProtectKernelTunables = true;
     ProtectProc = "invisible";
-    # Don't restrict ProcSubset because django-q requires read access to /proc/stat
-    # to query CPU and memory information.
-    # Note that /proc only contains processes of user `paperless`, so this is safe.
-    # ProcSubset = "pid";
+    ProcSubset = "pid";
     RestrictAddressFamilies = [ "AF_UNIX" "AF_INET" "AF_INET6" ];
     RestrictNamespaces = true;
     RestrictRealtime = true;
