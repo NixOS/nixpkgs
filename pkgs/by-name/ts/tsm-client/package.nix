@@ -23,7 +23,7 @@
 
 # For an explanation of optional packages
 # (features provided by them, version limits), see
-# https://www.ibm.com/support/pages/node/660813#Version%208.1
+# https://web.archive.org/web/20240118051918/https://www.ibm.com/support/pages/node/660813#Version%208.1
 
 # IBM Tivoli Storage Manager Client uses a system-wide
 # client system-options file `dsm.sys` and expects it
@@ -46,24 +46,11 @@
 # depending on local configuration or usage; see:
 # https://www.ibm.com/docs/en/storage-protect/8.1.24?topic=solaris-set-api-environment-variables
 
-# The newest version of TSM client should be discoverable by
-# going to the `downloadPage` (see `meta` below).
-# Find the "Backup-archive client" table on that page.
-# Look for "Download Documents" of the latest release.
-# Follow the "Download Information" link.
-# Look for the "Linux x86_64 ..." rows in the table at
-# the bottom of the page and follow their "HTTPS" links (one
-# link per row -- each link might point to the latest release).
-# In the directory listings to show up,
-# check the big `.tar` file.
-#
-# (as of 2023-07-01)
-
 let
 
   meta = {
     homepage = "https://www.ibm.com/products/storage-protect";
-    downloadPage = "https://www.ibm.com/support/pages/ibm-storage-protect-downloads-latest-fix-packs-and-interim-fixes";
+    downloadPage = "https://www.ibm.com/support/fixcentral/swg/selectFixes?product=ibm/StorageSoftware/IBM+Spectrum+Protect";
     platforms = [ "x86_64-linux" ];
     mainProgram = "dsmc";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
