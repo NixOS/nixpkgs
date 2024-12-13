@@ -1,7 +1,8 @@
 {
-  stdenv,
   lib,
+  stdenv,
   fetchFromGitHub,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,9 +16,19 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-v05wqlG7Utq1b7ctvDY9MCdjHVVZZNNzuHaIBwuRjEE=";
   };
 
+  nativeBuildInputs = [ installShellFiles ];
+
   installPhase = ''
     mkdir -p $out/bin
     cp ${finalAttrs.pname} $out/bin/
+
+    runHook postInstall
+  '';
+
+  postInstall = ''
+    installShellCompletion \
+      --bash ${./ks-completion.bash} \
+      --zsh --name _ks ${./ks-completion.zsh}
   '';
 
   meta = {
