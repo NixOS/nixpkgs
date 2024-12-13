@@ -39,6 +39,7 @@ buildPythonApplication rec {
   postPatch = ''
     patchShebangs shell_scripts
     substituteInPlace shell_scripts/{awsume,awsume.fish} --replace "awsumepy" "$out/bin/awsumepy"
+    substituteInPlace awsume/configure/autocomplete.py --replace-fail "awsume-autocomplete" "$out/bin/awsume-autocomplete"
   '';
 
   postInstall = ''
