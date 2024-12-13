@@ -17,6 +17,7 @@
   libdbi,
   libdbiDrivers,
   libofx,
+  libsecret,
   libxml2,
   libxslt,
   makeWrapper,
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
       libdbi
       libdbiDrivers
       libofx
+      libsecret
       libxml2
       libxslt
       swig
