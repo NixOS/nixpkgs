@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoBuildFlags = [
     "--no-default-features"
-    "--features=alias,backend-gpgme,clipboard,notify,select-fzf-bin,select-skim-bin,tomb,totp"
+    "--features=alias,backend-gpgme,clipboard,notify,select-fzf-bin,select-skim,tomb,totp"
   ];
 
   buildInputs = [
