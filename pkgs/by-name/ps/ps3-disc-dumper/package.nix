@@ -9,24 +9,21 @@
 
 buildDotnetModule rec {
   pname = "ps3-disc-dumper";
-  version = "3.2.3";
+  version = "4.2.5";
 
   src = fetchFromGitHub {
     owner = "13xforever";
     repo = "ps3-disc-dumper";
     rev = "refs/tags/v${version}";
-    hash = "sha256-m3TS9H6cbEAHn6PvYQDMzdKdnOnDSM4lxCTdHBCXLV4=";
+    hash = "sha256-ax2Q1VodzktXSdZBvO1fys+xigk/jzbMWHxqoLIKE7w=";
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.sdk_9_0;
-  projectFile = "UI.Console/UI.Console.csproj";
+  dotnetFlags = [ "-p:TargetFramework=net9.0" ];
+  buildType = "Linux";
+  projectFile = "UI.Avalonia/UI.Avalonia.csproj";
   nugetDeps = ./deps.nix;
-
-  postPatch = ''
-    substituteInPlace UI.Console/UI.Console.csproj \
-      --replace-fail 'net6.0' 'net9.0'
-  '';
 
   preConfigureNuGet = ''
     # This should really be in the upstream nuget.config
