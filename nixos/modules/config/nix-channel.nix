@@ -42,7 +42,7 @@ in
         };
       };
 
-      nixPath = mkOption {
+      settings.nix-path = mkOption {
         type = types.listOf types.str;
         default =
           if cfg.channel.enable then
@@ -80,8 +80,11 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  imports = [
+    (lib.mkRenamedOptionModule [ "nix" "nixPath" ] [ "nix" "settings" "nix-path" ])
+  ];
 
+  config = mkIf cfg.enable {
     environment.extraInit = mkIf cfg.channel.enable ''
       if [ -e "$HOME/.nix-defexpr/channels" ]; then
         export NIX_PATH="$HOME/.nix-defexpr/channels''${NIX_PATH:+:$NIX_PATH}"
@@ -95,7 +98,7 @@ in
     # NIX_PATH has a non-empty default according to Nix docs, so we don't unset
     # it when empty.
     environment.sessionVariables = {
-      NIX_PATH = cfg.nixPath;
+      NIX_PATH = cfg.settings.nix-path;
     };
 
     systemd.tmpfiles.rules = lib.mkIf cfg.channel.enable [
