@@ -18373,6 +18373,12 @@
     githubId = 39039420;
     name = "Quinn Dougherty";
   };
+  quinneden = {
+    name = "Quinn Edenfield";
+    email = "address@example.org";
+    github = "quinneden";
+    githubId = 125415641;
+  };
   quodlibetor = {
     email = "quodlibetor@gmail.com";
     github = "quodlibetor";
