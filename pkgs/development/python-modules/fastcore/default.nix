@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "fastcore";
-  version = "1.7.25";
+  version = "1.7.26";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
