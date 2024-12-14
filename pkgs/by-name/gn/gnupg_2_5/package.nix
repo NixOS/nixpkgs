@@ -37,7 +37,7 @@ let
   oldPath = "../../../tools/security/gnupg";
 in
 stdenv.mkDerivation rec {
-  pname = "gnupg_2_5";
+  pname = "gnupg";
   version = "2.5.2";
 
   src = fetchurl {
