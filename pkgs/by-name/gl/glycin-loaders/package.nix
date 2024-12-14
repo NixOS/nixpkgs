@@ -2,8 +2,6 @@
   stdenv,
   lib,
   fetchurl,
-  substituteAll,
-  bubblewrap,
   cairo,
   cargo,
   git,
@@ -19,6 +17,11 @@
   ninja,
   pkg-config,
   rustc,
+
+  makeSetupHook,
+  bubblewrap,
+  jq,
+  moreutils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,14 +32,6 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnome/sources/glycin/${lib.versions.majorMinor finalAttrs.version}/glycin-${finalAttrs.version}.tar.xz";
     hash = "sha256-Qccr4eybpV2pDIL8GFc7dC3/WCsJr8N7RWXEfpnMj/Q=";
   };
-
-  patches = [
-    # Fix paths in glycin library.
-    # Not actually needed for this package since we are only building loaders
-    # and this patch is relevant just to apps that use the loaders
-    # but apply it here to ensure the patch continues to apply.
-    finalAttrs.passthru.glycinPathsPatch
-  ];
 
   nativeBuildInputs = [
     cargo
@@ -70,20 +65,27 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "glycin";
     };
 
-    glycinPathsPatch = substituteAll {
-      src = ./fix-glycin-paths.patch;
-      bwrap = "${bubblewrap}/bin/bwrap";
-    };
+    patchHook = makeSetupHook {
+      name = "glycin-loader-patch-hook";
+      propagatedBuildInputs = [
+        jq
+        moreutils
+      ];
+      substitutions = {
+        bwrap = lib.getExe bubblewrap;
+        glycinloaders = finalAttrs.finalPackage;
+      };
+    } ./hook.sh;
   };
 
-  meta = with lib; {
+  meta = {
     description = "Glycin loaders for several formats";
     homepage = "https://gitlab.gnome.org/sophie-h/glycin";
-    maintainers = teams.gnome.members;
-    license = with licenses; [
+    maintainers = lib.teams.gnome.members;
+    license = with lib.licenses; [
       mpl20 # or
       lgpl21Plus
     ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
   };
 })
