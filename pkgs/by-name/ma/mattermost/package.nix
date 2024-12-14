@@ -73,7 +73,7 @@ buildGoModule rec {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--version-regex" "^v(9\.11\.[0-9]+)$" ];
+      extraArgs = [ "--version-regex" "^v(9\\.11\\.[0-9]+)$" ];
     };
     tests.mattermost = nixosTests.mattermost;
   };
