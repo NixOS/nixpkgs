@@ -1,21 +1,21 @@
 {
   lib,
   fetchFromGitHub,
-  flutter,
+  flutter327,
   webkitgtk_4_1,
   pkg-config,
   copyDesktopItems,
   makeDesktopItem,
 }:
-flutter.buildFlutterApplication rec {
+flutter327.buildFlutterApplication rec {
   pname = "venera";
-  version = "1.0.8";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "venera-app";
     repo = "venera";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zkV2EnTFjrP/XGH55htJVhC+njcatuto3/0FoayR2zc=";
+    tag = "v${version}";
+    hash = "sha256-wahQ3SCuPCloJ7eB8U051aSLHXf8FyQv+fEq58fonj4=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -60,7 +60,7 @@ flutter.buildFlutterApplication rec {
   ];
 
   extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : "$out/app/${pname}/lib"
+    --prefix LD_LIBRARY_PATH : "$out/app/venera/lib"
   '';
 
   postInstall = ''
