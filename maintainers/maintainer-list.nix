@@ -7199,6 +7199,14 @@
     githubId = 345808;
     name = "Jakub Okoński";
   };
+  fauxmight = {
+    email = "nix@ivories.org";
+    matrix = "@fauxmight:matrix.ivories.org";
+    github = "fauxmight";
+    githubId = 53975399;
+    name = "A Frederick Christensen";
+    keys = [ { fingerprint = "5A49 F4F9 3EDC 21E9 B7CC  4E94 9EEF 4142 5355 8AC4"; } ];
+  };
   fbeffa = {
     email = "beffa@fbengineering.ch";
     github = "fedeinthemix";
@@ -9677,6 +9685,13 @@
     githubId = 37965;
     name = "Léo Stefanesco";
   };
+  inexcode = {
+    name = "Inex Code";
+    email = "nixpkgs@inex.dev";
+    matrix = "@inexcode:inex.rocks";
+    github = "inexcode";
+    githubId = 13254627;
+  };
   infinidoge = {
     name = "Infinidoge";
     email = "infinidoge@inx.moe";
@@ -11847,6 +11862,12 @@
     name = "Kira Bruneau";
     github = "kira-bruneau";
     githubId = 382041;
+  };
+  kiranshila = {
+    email = "me@kiranshila.com";
+    name = "Kiran Shila";
+    github = "kiranshila";
+    githubId = 6305359;
   };
   kirelagin = {
     email = "kirelagin@gmail.com";
@@ -23004,6 +23025,12 @@
     github = "tsowell";
     githubId = 4044033;
     name = "Thomas Sowell";
+  };
+  TsubakiDev = {
+    email = "i@tsubakidev.cc";
+    github = "TsubakiDev";
+    githubId = 132794625;
+    name = "Daniel Wang";
   };
   ttrei = {
     email = "reinis.taukulis@gmail.com";
