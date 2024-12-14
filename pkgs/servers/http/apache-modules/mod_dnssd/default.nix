@@ -9,7 +9,10 @@ stdenv.mkDerivation rec {
     sha256 = "2cd171d76eba398f03c1d5bcc468a1756f4801cd8ed5bd065086e4374997c5aa";
   };
 
-  configureFlags = [ "--disable-lynx" ];
+  configureFlags = [
+    "--disable-lynx"
+    "--with-apxs=${lib.getDev apacheHttpd}/bin"
+  ];
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [ apacheHttpd avahi apr ];
