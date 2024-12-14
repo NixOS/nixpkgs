@@ -1,20 +1,26 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, dconf
-, telepathy-glib
-, python3
-, libxslt
-, makeWrapper
-, autoreconfHook
-, gtk-doc
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  dconf,
+  telepathy-glib,
+  python3,
+  libxslt,
+  makeWrapper,
+  autoreconfHook,
+  gtk-doc,
 }:
 
 stdenv.mkDerivation rec {
   pname = "telepathy-mission-control";
   version = "5.16.6";
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "https://telepathy.freedesktop.org/releases/${pname}/${pname}-${version}.tar.gz";
@@ -25,14 +31,16 @@ stdenv.mkDerivation rec {
     python3
   ]; # ToDo: optional stuff missing
 
-  nativeBuildInputs = [
-    pkg-config
-    libxslt
-    makeWrapper
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-    autoreconfHook
-    gtk-doc
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      libxslt
+      makeWrapper
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      autoreconfHook
+      gtk-doc
+    ];
 
   propagatedBuildInputs = [
     telepathy-glib

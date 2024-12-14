@@ -1,7 +1,9 @@
-{ lib, stdenv
-, autoreconfHook
-, intltool
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  intltool,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,7 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-u+buByJ7w1VHs4fGWNRy2EDFYheztbzpFga3tS6PnKk=";
   };
 
-  nativeBuildInputs = [ autoreconfHook intltool ];
+  nativeBuildInputs = [
+    autoreconfHook
+    intltool
+  ];
 
   meta = with lib; {
     description = "Monitor database for DDCcontrol";

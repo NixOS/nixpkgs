@@ -1,15 +1,16 @@
-{ stdenv
-, a2ps
-, lib
-, fetchurl
-, dpkg
-, makeWrapper
-, coreutils
-, file
-, gawk
-, ghostscript
-, gnused
-, pkgsi686Linux
+{
+  stdenv,
+  a2ps,
+  lib,
+  fetchurl,
+  dpkg,
+  makeWrapper,
+  coreutils,
+  file,
+  gawk,
+  ghostscript,
+  gnused,
+  pkgsi686Linux,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,30 +39,36 @@ stdenv.mkDerivation rec {
     patchelf --set-interpreter ${pkgsi686Linux.glibc.out}/lib/ld-linux.so.2 $dir/lpd/brmfc5890cnfilter
 
     wrapProgram $dir/inf/setupPrintcapij \
-      --prefix PATH : ${lib.makeBinPath [
-        coreutils
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+        ]
+      }
 
     substituteInPlace $dir/lpd/filtermfc5890cn \
       --replace "/usr/" "$out/usr/"
 
     wrapProgram $dir/lpd/filtermfc5890cn \
-      --prefix PATH : ${lib.makeBinPath [
-        a2ps
-        coreutils
-        file
-        ghostscript
-        gnused
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          a2ps
+          coreutils
+          file
+          ghostscript
+          gnused
+        ]
+      }
 
     substituteInPlace $dir/lpd/psconvertij2 \
       --replace '`which gs`' "${ghostscript}/bin/gs"
 
     wrapProgram $dir/lpd/psconvertij2 \
-      --prefix PATH : ${lib.makeBinPath [
-        gnused
-        gawk
-      ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          gnused
+          gawk
+        ]
+      }
   '';
 
   meta = with lib; {
@@ -70,6 +77,9 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     maintainers = with maintainers; [ martinramm ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }

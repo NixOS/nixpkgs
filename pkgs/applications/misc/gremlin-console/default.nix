@@ -1,4 +1,10 @@
-{ fetchzip, lib, stdenv, makeWrapper, openjdk }:
+{
+  fetchzip,
+  lib,
+  stdenv,
+  makeWrapper,
+  openjdk,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gremlin-console";

@@ -14,13 +14,25 @@ let
     mapAttrsToList
     nameValuePair
     ;
-  inherit (lib.lists) concatMap concatLists;
+  inherit (lib.lists) concatMap concatLists filter;
   inherit (lib.modules) mkIf;
   inherit (lib.options) literalExpression mkOption;
   inherit (lib.strings) hasInfix;
-  inherit (lib.trivial) flip;
+  inherit (lib.trivial) flip pipe;
 
   removeNulls = filterAttrs (_: v: v != null);
+
+  privateKeyCredential = interfaceName: "wireguard-${interfaceName}-private-key";
+  presharedKeyCredential =
+    interfaceName: peer: "wireguard-${interfaceName}-${peer.name}-preshared-key";
+
+  interfaceCredentials =
+    interfaceName: interface:
+    [ "${privateKeyCredential interfaceName}:${interface.privateKeyFile}" ]
+    ++ pipe interface.peers [
+      (filter (peer: peer.presharedKeyFile != null))
+      (map (peer: "${presharedKeyCredential interfaceName peer}:${peer.presharedKeyFile}"))
+    ];
 
   generateNetdev =
     name: interface:
@@ -31,20 +43,20 @@ let
         MTUBytes = interface.mtu;
       };
       wireguardConfig = removeNulls {
-        PrivateKeyFile = interface.privateKeyFile;
+        PrivateKey = "@${privateKeyCredential name}";
         ListenPort = interface.listenPort;
         FirewallMark = interface.fwMark;
         RouteTable = if interface.allowedIPsAsRoutes then interface.table else null;
         RouteMetric = interface.metric;
       };
-      wireguardPeers = map generateWireguardPeer interface.peers;
+      wireguardPeers = map (generateWireguardPeer name) interface.peers;
     };
 
   generateWireguardPeer =
-    peer:
+    interfaceName: peer:
     removeNulls {
       PublicKey = peer.publicKey;
-      PresharedKeyFile = peer.presharedKeyFile;
+      PresharedKey = "@${presharedKeyCredential interfaceName peer}";
       AllowedIPs = peer.allowedIPs;
       Endpoint = peer.endpoint;
       PersistentKeepalive = peer.persistentKeepalive;
@@ -129,7 +141,7 @@ in
     #
     # socketNamespace and interfaceNamespace can be implemented once networkd
     # supports setting a netdev's namespace. See:
-    # https://github.com/systemd/systemd/issues/11629
+    # https://github.com/systemd/systemd/issues/11103
     # https://github.com/systemd/systemd/pull/14915
 
     assertions = concatLists (
@@ -202,6 +214,8 @@ in
     };
 
     systemd.timers = mapAttrs' generateRefreshTimer refreshEnabledInterfaces;
-    systemd.services = mapAttrs' generateRefreshService refreshEnabledInterfaces;
+    systemd.services = (mapAttrs' generateRefreshService refreshEnabledInterfaces) // {
+      systemd-networkd.serviceConfig.LoadCredential = mapAttrsToList interfaceCredentials cfg.interfaces;
+    };
   };
 }

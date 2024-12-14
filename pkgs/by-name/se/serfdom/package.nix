@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -21,12 +22,11 @@ buildGoModule rec {
 
   # These values are expected by version/version.go
   # https://github.com/hashicorp/serf/blob/7faa1b06262f70780c3c35ac25a4c96d754f06f3/version/version.go#L8-L22
-  ldflags = lib.mapAttrsToList
-    (n: v: "-X github.com/hashicorp/serf/version.${n}=${v}") {
-      GitCommit = rev;
-      Version = version;
-      VersionPrerelease = "";
-    };
+  ldflags = lib.mapAttrsToList (n: v: "-X github.com/hashicorp/serf/version.${n}=${v}") {
+    GitCommit = rev;
+    Version = version;
+    VersionPrerelease = "";
+  };
 
   # There are no tests for cmd/serf.
   doCheck = false;

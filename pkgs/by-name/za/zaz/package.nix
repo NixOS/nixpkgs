@@ -1,14 +1,16 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, SDL
-, SDL_image
-, libgbm
-, libtheora
-, libvorbis
-, libogg
-, ftgl
-, freetype
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  SDL,
+  SDL_image,
+  libgbm,
+  libtheora,
+  libvorbis,
+  libogg,
+  ftgl,
+  freetype,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

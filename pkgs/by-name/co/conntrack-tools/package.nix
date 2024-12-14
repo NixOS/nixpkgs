@@ -1,7 +1,19 @@
-{ fetchurl, lib, stdenv, flex, bison, pkg-config, libmnl, libnfnetlink
-, libnetfilter_conntrack, libnetfilter_queue, libnetfilter_cttimeout
-, libnetfilter_cthelper, libtirpc
-, systemdSupport ? true, systemd
+{
+  fetchurl,
+  lib,
+  stdenv,
+  flex,
+  bison,
+  pkg-config,
+  libmnl,
+  libnfnetlink,
+  libnetfilter_conntrack,
+  libnetfilter_queue,
+  libnetfilter_cttimeout,
+  libnetfilter_cthelper,
+  libtirpc,
+  systemdSupport ? true,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,13 +25,24 @@ stdenv.mkDerivation rec {
     hash = "sha256-BnZ39MX2VkgZ547TqdSomAk16pJz86uyKkIOowq13tY=";
   };
 
-  buildInputs = [
-    libmnl libnfnetlink libnetfilter_conntrack libnetfilter_queue
-    libnetfilter_cttimeout libnetfilter_cthelper libtirpc
-  ] ++ lib.optionals systemdSupport [
-    systemd
+  buildInputs =
+    [
+      libmnl
+      libnfnetlink
+      libnetfilter_conntrack
+      libnetfilter_queue
+      libnetfilter_cttimeout
+      libnetfilter_cthelper
+      libtirpc
+    ]
+    ++ lib.optionals systemdSupport [
+      systemd
+    ];
+  nativeBuildInputs = [
+    flex
+    bison
+    pkg-config
   ];
-  nativeBuildInputs = [ flex bison pkg-config ];
 
   configureFlags = [
     (lib.enableFeature systemdSupport "systemd")

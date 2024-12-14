@@ -1,14 +1,15 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, gnome-menus
-, gtk3
-, intltool
-, gobject-introspection
-, wrapGAppsHook3
-, nix-update-script
-, testers
-, menulibre
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  gnome-menus,
+  gtk3,
+  intltool,
+  gobject-introspection,
+  wrapGAppsHook3,
+  nix-update-script,
+  testers,
+  menulibre,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -114,22 +114,27 @@ in
   config = lib.mkIf cfg.enable {
     environment = {
       systemPackages = [ finalPackage ];
-      etc."ananicy.d".source = pkgs.runCommandLocal "ananicyfiles" { } ''
-        mkdir -p $out
-        # ananicy-cpp does not include rules or settings on purpose
-        if [[ -d "${cfg.rulesProvider}/etc/ananicy.d/00-default" ]]; then
-          cp -r ${cfg.rulesProvider}/etc/ananicy.d/* $out
-        else
-          cp -r ${cfg.rulesProvider}/* $out
-        fi
+      etc."ananicy.d".source =
+        pkgs.runCommand "ananicyfiles"
+          {
+            preferLocalBuild = true;
+          }
+          ''
+            mkdir -p $out
+            # ananicy-cpp does not include rules or settings on purpose
+            if [[ -d "${cfg.rulesProvider}/etc/ananicy.d/00-default" ]]; then
+              cp -r ${cfg.rulesProvider}/etc/ananicy.d/* $out
+            else
+              cp -r ${cfg.rulesProvider}/* $out
+            fi
 
-        # configured through .setings
-        rm -f $out/ananicy.conf
-        cp ${configFile} $out/ananicy.conf
-        ${lib.optionalString (cfg.extraRules != [ ]) "cp ${extraRules} $out/nixRules.rules"}
-        ${lib.optionalString (cfg.extraTypes != [ ]) "cp ${extraTypes} $out/nixTypes.types"}
-        ${lib.optionalString (cfg.extraCgroups != [ ]) "cp ${extraCgroups} $out/nixCgroups.cgroups"}
-      '';
+            # configured through .setings
+            rm -f $out/ananicy.conf
+            cp ${configFile} $out/ananicy.conf
+            ${lib.optionalString (cfg.extraRules != [ ]) "cp ${extraRules} $out/nixRules.rules"}
+            ${lib.optionalString (cfg.extraTypes != [ ]) "cp ${extraTypes} $out/nixTypes.types"}
+            ${lib.optionalString (cfg.extraCgroups != [ ]) "cp ${extraCgroups} $out/nixCgroups.cgroups"}
+          '';
     };
 
     # ananicy and ananicy-cpp have different default settings

@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchzip
-, pkg-config
-, libressl
+{
+  lib,
+  stdenv,
+  fetchzip,
+  pkg-config,
+  libressl,
 }:
 
 stdenv.mkDerivation rec {

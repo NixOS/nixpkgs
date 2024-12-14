@@ -1,16 +1,17 @@
-{ config
-, lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, autoconf
-, automake
-, libpulseaudio
-, libtool
-, pkg-config
-, portaudio
-, which
-, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
+{
+  config,
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  autoconf,
+  automake,
+  libpulseaudio,
+  libtool,
+  pkg-config,
+  portaudio,
+  which,
+  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,19 +33,22 @@ stdenv.mkDerivation (finalAttrs: {
     which
   ];
 
-  buildInputs = [
-    portaudio
-  ]
-  ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
-  ++ lib.optional pulseaudioSupport libpulseaudio;
+  buildInputs =
+    [
+      portaudio
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux alsa-lib
+    ++ lib.optional pulseaudioSupport libpulseaudio;
 
   # touch ChangeLog to avoid below error on darwin:
   # Makefile.am: error: required file './ChangeLog.md' not found
-  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    touch ChangeLog
-  '' + ''
-    ./autogen.sh
-  '';
+  preConfigure =
+    lib.optionalString stdenv.hostPlatform.isDarwin ''
+      touch ChangeLog
+    ''
+    + ''
+      ./autogen.sh
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/espeak-ng/pcaudiolib";

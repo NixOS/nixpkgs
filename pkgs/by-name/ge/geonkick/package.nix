@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitLab, cmake, pkg-config, libsndfile, rapidjson
-, libjack2, lv2, libX11, cairo, openssl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  pkg-config,
+  libsndfile,
+  rapidjson,
+  libjack2,
+  lv2,
+  libX11,
+  cairo,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "geonkick";
@@ -12,9 +24,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-bqdqAr4NX5WZ6zp0Kq7GFHiy/JkBvDvzuZz7jxtru0Q=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ libsndfile rapidjson libjack2 lv2 libX11 cairo openssl ];
+  buildInputs = [
+    libsndfile
+    rapidjson
+    libjack2
+    lv2
+    libX11
+    cairo
+    openssl
+  ];
 
   # Without this, the lv2 ends up in
   # /nix/store/$HASH/nix/store/$HASH/lib/lv2

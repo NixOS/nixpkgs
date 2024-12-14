@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, installShellFiles
-, pkg-config
-, perl
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
+  pkg-config,
+  perl,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +22,11 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-GptaDa8NjCcWg5OsyujIgxGH4egWGBVVTLaYp4fqP3Q=";
 
-  nativeBuildInputs = [ installShellFiles pkg-config perl ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    perl
+  ];
 
   buildInputs = [ openssl ];
 
@@ -41,7 +46,10 @@ rustPlatform.buildRustPackage rec {
     description = "Publish Rust crates from CI with a Release PR";
     homepage = "https://release-plz.ieni.dev";
     changelog = "https://github.com/MarcoIeni/release-plz/blob/release-plz-v${version}/CHANGELOG.md";
-    license = with lib.licenses; [ asl20 mit ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     maintainers = with lib.maintainers; [ dannixon ];
     mainProgram = "release-plz";
     broken = stdenv.hostPlatform.isDarwin;

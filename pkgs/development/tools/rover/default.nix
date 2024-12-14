@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, pkg-config
-, rustPlatform
-, openssl
-, darwin
-, stdenv
+{
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  rustPlatform,
+  openssl,
+  darwin,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,13 +21,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-Rf4kRXYW+WAF1rM7o8PmXBLgp/YyA8y/TqbZL22VOqI=";
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.CoreServices
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.CoreServices
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   nativeBuildInputs = [
     pkg-config
@@ -57,6 +60,9 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rover";
     homepage = "https://www.apollographql.com/docs/rover";
     license = licenses.mit;
-    maintainers = [ maintainers.ivanbrennan maintainers.aaronarinder ];
+    maintainers = [
+      maintainers.ivanbrennan
+      maintainers.aaronarinder
+    ];
   };
 }

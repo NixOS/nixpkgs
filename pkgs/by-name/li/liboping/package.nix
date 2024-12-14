@@ -1,4 +1,11 @@
-{ stdenv, fetchurl, fetchpatch, ncurses ? null, perl ? null, lib }:
+{
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  ncurses ? null,
+  perl ? null,
+  lib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "liboping";
@@ -23,10 +30,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString
-    stdenv.cc.isGNU "-Wno-error=format-truncation";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=format-truncation";
 
-  buildInputs = [ ncurses perl ];
+  buildInputs = [
+    ncurses
+    perl
+  ];
 
   configureFlags = lib.optional (perl == null) "--with-perl-bindings=no";
 

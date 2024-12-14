@@ -1,8 +1,9 @@
-{ lib
-, buildGraalvmNativeImage
-, fetchurl
-, testers
-, zprint
+{
+  lib,
+  buildGraalvmNativeImage,
+  fetchurl,
+  testers,
+  zprint,
 }:
 
 buildGraalvmNativeImage rec {

@@ -1,11 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, unittestCheckHook
-, six
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  unittestCheckHook,
+  six,
+  stdenv,
 }:
-
 
 buildPythonPackage rec {
   pname = "more-itertools";

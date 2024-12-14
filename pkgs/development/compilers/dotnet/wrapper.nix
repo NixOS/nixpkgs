@@ -22,7 +22,18 @@
 type: unwrapped:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "${unwrapped.pname}-wrapped";
-  inherit (unwrapped) version meta;
+  inherit (unwrapped) version;
+
+  meta = {
+    description = "${unwrapped.meta.description or "dotnet"} (wrapper)";
+    mainProgram = "dotnet";
+    inherit (unwrapped.meta)
+      homepage
+      license
+      maintainers
+      platforms
+      ;
+  };
 
   src = unwrapped;
   dontUnpack = true;

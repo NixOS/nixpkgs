@@ -21,8 +21,8 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''
-      mv $out/bin/src $out/bin/tt
-      installManPage tt.1.gz
+    mv $out/bin/src $out/bin/tt
+    installManPage tt.1.gz
   '';
 
   meta = {

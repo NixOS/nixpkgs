@@ -1,23 +1,26 @@
-{ lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, qtbase
-, qtsvg
-, qtwayland
-, gnuradioMinimal
-, thrift
-, mpir
-, fftwFloat
-, alsa-lib
-, libjack2
-, wrapGAppsHook3
-, wrapQtAppsHook
-# drivers (optional):
-, rtl-sdr
-, hackrf
-, pulseaudioSupport ? true, libpulseaudio
-, portaudioSupport ? false, portaudio
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  qtbase,
+  qtsvg,
+  qtwayland,
+  gnuradioMinimal,
+  thrift,
+  mpir,
+  fftwFloat,
+  alsa-lib,
+  libjack2,
+  wrapGAppsHook3,
+  wrapQtAppsHook,
+  # drivers (optional):
+  rtl-sdr,
+  hackrf,
+  pulseaudioSupport ? true,
+  libpulseaudio,
+  portaudioSupport ? false,
+  portaudio,
 }:
 
 assert pulseaudioSupport -> libpulseaudio != null;
@@ -42,38 +45,43 @@ gnuradioMinimal.pkgs.mkDerivation rec {
     wrapQtAppsHook
     wrapGAppsHook3
   ];
-  buildInputs = [
-    gnuradioMinimal.unwrapped.logLib
-    mpir
-    fftwFloat
-    alsa-lib
-    libjack2
-    gnuradioMinimal.unwrapped.boost
-    qtbase
-    qtsvg
-    qtwayland
-    gnuradioMinimal.pkgs.osmosdr
-    rtl-sdr
-    hackrf
-  ] ++ lib.optionals (gnuradioMinimal.hasFeature "gr-ctrlport") [
-    thrift
-    gnuradioMinimal.unwrapped.python.pkgs.thrift
-  ] ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
+  buildInputs =
+    [
+      gnuradioMinimal.unwrapped.logLib
+      mpir
+      fftwFloat
+      alsa-lib
+      libjack2
+      gnuradioMinimal.unwrapped.boost
+      qtbase
+      qtsvg
+      qtwayland
+      gnuradioMinimal.pkgs.osmosdr
+      rtl-sdr
+      hackrf
+    ]
+    ++ lib.optionals (gnuradioMinimal.hasFeature "gr-ctrlport") [
+      thrift
+      gnuradioMinimal.unwrapped.python.pkgs.thrift
+    ]
+    ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
     ++ lib.optionals portaudioSupport [ portaudio ];
 
   cmakeFlags =
     let
       audioBackend =
-        if pulseaudioSupport
-        then "Pulseaudio"
-        else if portaudioSupport
-        then "Portaudio"
-        else "Gr-audio";
-    in [
+        if pulseaudioSupport then
+          "Pulseaudio"
+        else if portaudioSupport then
+          "Portaudio"
+        else
+          "Gr-audio";
+    in
+    [
       "-DLINUX_AUDIO_BACKEND=${audioBackend}"
     ];
 
-   # Prevent double-wrapping, inject wrapper args manually instead.
+  # Prevent double-wrapping, inject wrapper args manually instead.
   dontWrapGApps = true;
   preFixup = ''
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
@@ -92,7 +100,10 @@ gnuradioMinimal.pkgs.mkDerivation rec {
     # Some of the code comes from the Cutesdr project, with a BSD license, but
     # it's currently unknown which version of the BSD license that is.
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;  # should work on Darwin / macOS too
-    maintainers = with maintainers; [ bjornfor fpletz ];
+    platforms = platforms.linux; # should work on Darwin / macOS too
+    maintainers = with maintainers; [
+      bjornfor
+      fpletz
+    ];
   };
 }

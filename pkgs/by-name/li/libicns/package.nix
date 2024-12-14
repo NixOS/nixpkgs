@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchgit, autoreconfHook, pkg-config, libpng, openjpeg, zlib }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  pkg-config,
+  libpng,
+  openjpeg,
+  zlib,
+}:
 
 stdenv.mkDerivation {
   pname = "libicns";
@@ -11,13 +20,24 @@ stdenv.mkDerivation {
     hash = "sha256-YeO0rlTujDNmrdJ3DRyl3TORswF2KFKA+wVUxJo8Dno";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libpng openjpeg zlib ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libpng
+    openjpeg
+    zlib
+  ];
 
   meta = with lib; {
     description = "Library for manipulation of the Mac OS icns resource format";
     homepage = "https://icns.sourceforge.io";
-    license = with licenses; [ gpl2 lgpl2 lgpl21 ];
+    license = with licenses; [
+      gpl2
+      lgpl2
+      lgpl21
+    ];
     platforms = platforms.unix;
   };
 }

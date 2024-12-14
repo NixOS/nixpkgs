@@ -1,14 +1,15 @@
-{ stdenv
-, fetchFromGitHub
-, pkg-config
-, glib
-, pandoc
-, systemd
-, libyaml
-, python3
-, libuuid
-, bash-completion
-, lib
+{
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  glib,
+  pandoc,
+  systemd,
+  libyaml,
+  python3,
+  libuuid,
+  bash-completion,
+  lib,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +33,14 @@ stdenv.mkDerivation rec {
     systemd
     glib
     libyaml
-    (python3.withPackages (p: with p; [ pyyaml netifaces dbus-python rich ]))
+    (python3.withPackages (
+      p: with p; [
+        pyyaml
+        netifaces
+        dbus-python
+        rich
+      ]
+    ))
     libuuid
     bash-completion
   ];

@@ -12,7 +12,7 @@
 
 { lib, ncurses, graphviz, lua, fetchzip,
   mkCoqDerivation, withDoc ? false, single ? false,
-  coq, hierarchy-builder, version ? null }@args:
+  coq, hierarchy-builder, stdlib, version ? null }@args:
 
 let
   repo  = "math-comp";
@@ -78,7 +78,7 @@ let
         mlPlugin = lib.versions.isLe "8.6" coq.coq-version;
         nativeBuildInputs = lib.optionals withDoc [ graphviz lua ];
         buildInputs = [ ncurses ];
-        propagatedBuildInputs = mathcomp-deps;
+        propagatedBuildInputs = [ stdlib ] ++ mathcomp-deps;
 
         buildFlags = lib.optional withDoc "doc";
 

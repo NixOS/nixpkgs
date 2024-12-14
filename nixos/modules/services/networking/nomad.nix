@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.services.nomad;
@@ -132,12 +137,14 @@ in
       after = [ "network-online.target" ];
       restartTriggers = [ config.environment.etc."nomad.json".source ];
 
-      path = cfg.extraPackages ++ (with pkgs; [
-        # Client mode requires at least the following:
-        coreutils
-        iproute2
-        iptables
-      ]);
+      path =
+        cfg.extraPackages
+        ++ (with pkgs; [
+          # Client mode requires at least the following:
+          coreutils
+          iproute2
+          iptables
+        ]);
 
       serviceConfig = mkMerge [
         {
@@ -145,15 +152,16 @@ in
           ExecReload = "${pkgs.coreutils}/bin/kill -HUP $MAINPID";
           ExecStart =
             let
-              pluginsDir = pkgs.symlinkJoin
-                {
-                  name = "nomad-plugins";
-                  paths = cfg.extraSettingsPlugins;
-                };
+              pluginsDir = pkgs.symlinkJoin {
+                name = "nomad-plugins";
+                paths = cfg.extraSettingsPlugins;
+              };
             in
-            "${cfg.package}/bin/nomad agent -config=/etc/nomad.json -plugin-dir=${pluginsDir}/bin" +
-            concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths +
-            concatMapStrings (key: " -config=\${CREDENTIALS_DIRECTORY}/${key}") (lib.attrNames cfg.credentials);
+            "${cfg.package}/bin/nomad agent -config=/etc/nomad.json -plugin-dir=${pluginsDir}/bin"
+            + concatMapStrings (path: " -config=${path}") cfg.extraSettingsPaths
+            + concatMapStrings (key: " -config=\${CREDENTIALS_DIRECTORY}/${key}") (
+              lib.attrNames cfg.credentials
+            );
           KillMode = "process";
           KillSignal = "SIGINT";
           LimitNOFILE = 65536;

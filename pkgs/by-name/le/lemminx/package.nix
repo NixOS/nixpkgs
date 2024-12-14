@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, jdk_headless
-, jre_minimal
-, maven
-, writeScript
-, lemminx
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  jdk_headless,
+  jre_minimal,
+  maven,
+  writeScript,
+  lemminx,
 }:
 
 let

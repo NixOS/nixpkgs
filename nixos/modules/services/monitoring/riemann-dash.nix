@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
 
   cfg = config.services.riemann-dash;
@@ -14,7 +19,8 @@ let
     exec ${pkgs.riemann-dash}/bin/riemann-dash ${conf}
   '';
 
-in {
+in
+{
 
   options = {
 

@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, chromium, makeWrapper }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  chromium,
+  makeWrapper,
+}:
 
 buildGoModule rec {
   pname = "grafana-kiosk";

@@ -67,10 +67,10 @@ let
     '';
   };
 
-  vmwareFHSUserEnv = name: buildFHSEnv {
-    inherit name;
+  vmwareFHSUserEnv = pname: buildFHSEnv {
+    inherit pname version;
 
-    runScript = "${vmwareHorizonClientFiles}/bin/${name}_wrapper";
+    runScript = "${vmwareHorizonClientFiles}/bin/${pname}_wrapper";
 
     targetPkgs = pkgs: with pkgs; [
       at-spi2-atk

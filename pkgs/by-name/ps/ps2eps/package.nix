@@ -1,11 +1,11 @@
-{ lib
-, fetchFromGitHub
-, perlPackages
-, replaceVars
-, ghostscript
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  perlPackages,
+  replaceVars,
+  ghostscript,
+  installShellFiles,
 }:
-
 
 perlPackages.buildPerlPackage rec {
   pname = "ps2eps";
@@ -44,7 +44,10 @@ perlPackages.buildPerlPackage rec {
   '';
 
   # Override buildPerlPackage's outputs setting
-  outputs = ["out" "man"];
+  outputs = [
+    "out"
+    "man"
+  ];
   installPhase = ''
     runHook preInstall
 

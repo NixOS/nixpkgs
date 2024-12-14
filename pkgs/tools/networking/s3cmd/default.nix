@@ -1,4 +1,10 @@
-{ lib, buildPythonApplication, fetchFromGitHub, python-magic, python-dateutil }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  python-magic,
+  python-dateutil,
+}:
 
 buildPythonApplication rec {
   pname = "s3cmd";
@@ -11,7 +17,10 @@ buildPythonApplication rec {
     sha256 = "sha256-cxwf6+9WFt3U7+JdKRgZxFElD+Dgf2P2VyejHVoiDJk=";
   };
 
-  propagatedBuildInputs = [ python-magic python-dateutil ];
+  propagatedBuildInputs = [
+    python-magic
+    python-dateutil
+  ];
 
   dontUseSetuptoolsCheck = true;
 

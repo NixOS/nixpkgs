@@ -1,15 +1,16 @@
-{ stdenv
-, coreutils
-, lib
-, installShellFiles
-, zlib
-, autoPatchelfHook
-, fetchurl
-, makeWrapper
-, callPackage
-, jre
-, testers
-, scala-cli
+{
+  stdenv,
+  coreutils,
+  lib,
+  installShellFiles,
+  zlib,
+  autoPatchelfHook,
+  fetchurl,
+  makeWrapper,
+  callPackage,
+  jre,
+  testers,
+  scala-cli,
 }:
 
 let
@@ -21,16 +22,24 @@ let
 in
 stdenv.mkDerivation {
   inherit pname version;
-  nativeBuildInputs = [ installShellFiles makeWrapper ]
-    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ] ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook;
   buildInputs =
     assert lib.assertMsg (lib.versionAtLeast jre.version "17.0.0") ''
       scala-cli requires Java 17 or newer, but ${jre.name} is ${jre.version}
     '';
-    [ coreutils zlib stdenv.cc.cc ];
+    [
+      coreutils
+      zlib
+      stdenv.cc.cc
+    ];
   src =
     let
-      asset = assets."${stdenv.hostPlatform.system}" or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
+      asset =
+        assets."${stdenv.hostPlatform.system}"
+          or (throw "Unsupported platform ${stdenv.hostPlatform.system}");
     in
     fetchurl {
       url = "https://github.com/Virtuslab/scala-cli/releases/download/v${version}/${asset.asset}";
@@ -54,19 +63,21 @@ stdenv.mkDerivation {
   # We need to call autopatchelf before generating completions
   dontAutoPatchelf = true;
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    autoPatchelf $out
-  '' + ''
-    # hack to ensure the completion function looks right
-    # as $0 is used to generate the compdef directive
-    mkdir temp
-    cp $out/bin/.scala-cli-wrapped temp/scala-cli
-    PATH="./temp:$PATH"
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      autoPatchelf $out
+    ''
+    + ''
+      # hack to ensure the completion function looks right
+      # as $0 is used to generate the compdef directive
+      mkdir temp
+      cp $out/bin/.scala-cli-wrapped temp/scala-cli
+      PATH="./temp:$PATH"
 
-    installShellCompletion --cmd scala-cli \
-      --bash <(scala-cli completions bash) \
-      --zsh <(scala-cli completions zsh)
-  '';
+      installShellCompletion --cmd scala-cli \
+        --bash <(scala-cli completions bash) \
+        --zsh <(scala-cli completions zsh)
+    '';
 
   meta = with lib; {
     homepage = "https://scala-cli.virtuslab.org";

@@ -1,4 +1,13 @@
-{ lib, fetchurl, stdenv, zlib, ncurses, libiconv, apple-sdk_11, darwinMinVersionHook }:
+{
+  lib,
+  fetchurl,
+  stdenv,
+  zlib,
+  ncurses,
+  libiconv,
+  apple-sdk_11,
+  darwinMinVersionHook,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fnc";
@@ -9,14 +18,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-npS+sOxF0S/9TuFjtEFlev0HpIOsaP6zmcfopPNUehk=";
   };
 
-  buildInputs = [ libiconv ncurses zlib apple-sdk_11 (darwinMinVersionHook "11.0") ];
+  buildInputs = [
+    libiconv
+    ncurses
+    zlib
+    apple-sdk_11
+    (darwinMinVersionHook "11.0")
+  ];
 
   makeFlags = [ "PREFIX=$(out)" ];
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isGNU [
-    # Needed with GCC 12
-    "-Wno-error=maybe-uninitialized"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isGNU [
+      # Needed with GCC 12
+      "-Wno-error=maybe-uninitialized"
+    ]
+  );
 
   preInstall = ''
     mkdir -p $out/bin

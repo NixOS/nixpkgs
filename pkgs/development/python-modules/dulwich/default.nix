@@ -51,15 +51,13 @@ buildPythonPackage rec {
     paramiko = [ paramiko ];
   };
 
-  nativeCheckInputs =
-    [
-      gevent
-      geventhttpclient
-      git
-      glibcLocales
-      pytestCheckHook
-    ]
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs = [
+    gevent
+    geventhttpclient
+    git
+    glibcLocales
+    pytestCheckHook
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [ "tests" ];
 

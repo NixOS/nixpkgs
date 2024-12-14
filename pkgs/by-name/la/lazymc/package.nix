@@ -1,10 +1,10 @@
 {
-  lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
-, nix-update-script
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  darwin,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,7 +35,10 @@ rustPlatform.buildRustPackage rec {
     description = "Remote wake-up daemon for minecraft servers";
     homepage = "https://github.com/timvisee/lazymc";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ h7x4 dandellion ];
+    maintainers = with maintainers; [
+      h7x4
+      dandellion
+    ];
     platforms = platforms.unix;
     mainProgram = "lazymc";
   };

@@ -1,6 +1,7 @@
-{ lib
-, fetchgit
-, php
+{
+  lib,
+  fetchgit,
+  php,
 }:
 
 php.buildComposerProject2 (finalAttrs: {

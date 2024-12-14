@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libusbp
-, cmake
-, pkg-config
-, qt5
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libusbp,
+  cmake,
+  pkg-config,
+  qt5,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

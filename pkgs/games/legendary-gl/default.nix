@@ -1,10 +1,11 @@
-{ lib
-, gitUpdater
-, fetchFromGitHub
-, buildPythonApplication
-, pythonOlder
-, requests
-, filelock
+{
+  lib,
+  gitUpdater,
+  fetchFromGitHub,
+  buildPythonApplication,
+  pythonOlder,
+  requests,
+  filelock,
 }:
 
 buildPythonApplication rec {

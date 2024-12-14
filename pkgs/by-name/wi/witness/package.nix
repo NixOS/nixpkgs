@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 
-# testing
-, testers
-, witness
+  # testing
+  testers,
+  witness,
 }:
 
 buildGoModule rec {
@@ -66,6 +67,9 @@ buildGoModule rec {
     homepage = "https://github.com/testifysec/witness";
     changelog = "https://github.com/testifysec/witness/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fkautz jk ];
+    maintainers = with maintainers; [
+      fkautz
+      jk
+    ];
   };
 }

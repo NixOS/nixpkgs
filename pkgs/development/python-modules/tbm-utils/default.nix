@@ -51,7 +51,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   propagatedBuildInputs = [
     attrs
     pendulum

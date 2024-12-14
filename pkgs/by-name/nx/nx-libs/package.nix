@@ -1,7 +1,18 @@
-{ lib, stdenv, autoconf, automake, fetchFromGitHub, fetchpatch
-, libjpeg_turbo
-, libpng, libtool, libxml2, pkg-config, which, xorg
-, libtirpc
+{
+  lib,
+  stdenv,
+  autoconf,
+  automake,
+  fetchFromGitHub,
+  fetchpatch,
+  libjpeg_turbo,
+  libpng,
+  libtool,
+  libxml2,
+  pkg-config,
+  which,
+  xorg,
+  libtirpc,
 }:
 stdenv.mkDerivation rec {
   pname = "nx-libs";
@@ -21,12 +32,33 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ autoconf automake libtool pkg-config which
-    xorg.gccmakedep xorg.imake ];
-  buildInputs = [ libjpeg_turbo libpng libxml2 xorg.fontutil
-    xorg.libXcomposite xorg.libXdamage xorg.libXdmcp xorg.libXext xorg.libXfont2
-    xorg.libXinerama xorg.libXpm xorg.libXrandr xorg.libXtst xorg.pixman
-    xorg.xkbcomp xorg.xkeyboardconfig libtirpc
+  nativeBuildInputs = [
+    autoconf
+    automake
+    libtool
+    pkg-config
+    which
+    xorg.gccmakedep
+    xorg.imake
+  ];
+  buildInputs = [
+    libjpeg_turbo
+    libpng
+    libxml2
+    xorg.fontutil
+    xorg.libXcomposite
+    xorg.libXdamage
+    xorg.libXdmcp
+    xorg.libXext
+    xorg.libXfont2
+    xorg.libXinerama
+    xorg.libXpm
+    xorg.libXrandr
+    xorg.libXtst
+    xorg.pixman
+    xorg.xkbcomp
+    xorg.xkeyboardconfig
+    libtirpc
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [ "-I${libtirpc.dev}/include/tirpc" ];
@@ -44,7 +76,7 @@ stdenv.mkDerivation rec {
     substituteInPlace nx-X11/config/cf/Imake.tmpl --replace "clq" "cq"
   '';
 
-  PREFIX=""; # Don't install to $out/usr/local
+  PREFIX = ""; # Don't install to $out/usr/local
   installPhase = ''
     make DESTDIR="$out" install
     # See:

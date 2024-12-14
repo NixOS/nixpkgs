@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, bison
-, boost
-, fetchFromGitHub
-, flex
-, libffi
-, makeWrapper
-, pkg-config
-, python3
-, readline
-, symlinkJoin
-, tcl
-, iverilog
-, zlib
-, yosys
-, yosys-bluespec
-, yosys-ghdl
-, yosys-symbiflow
-, enablePython ? true # enable python binding
+{
+  stdenv,
+  lib,
+  bison,
+  boost,
+  fetchFromGitHub,
+  flex,
+  libffi,
+  makeWrapper,
+  pkg-config,
+  python3,
+  readline,
+  symlinkJoin,
+  tcl,
+  iverilog,
+  zlib,
+  yosys,
+  yosys-bluespec,
+  yosys-ghdl,
+  yosys-symbiflow,
+  enablePython ? true, # enable python binding
 }:
 
 # NOTE: as of late 2020, yosys has switched to an automation robot that
@@ -47,14 +48,17 @@ let
   #        fasm
   #        bluespec
   #     ]);
-  withPlugins = plugins:
+  withPlugins =
+    plugins:
     let
       paths = lib.closePropagation plugins;
-      module_flags = with builtins; concatStringsSep " "
-        (map (n: "--add-flags -m --add-flags ${n.plugin}") plugins);
-    in lib.appendToName "with-plugins" ( symlinkJoin {
+      module_flags =
+        with builtins;
+        concatStringsSep " " (map (n: "--add-flags -m --add-flags ${n.plugin}") plugins);
+    in
+    lib.appendToName "with-plugins" (symlinkJoin {
       inherit (yosys) name;
-      paths = paths ++ [ yosys ] ;
+      paths = paths ++ [ yosys ];
       nativeBuildInputs = [ makeWrapper ];
       postBuild = ''
         wrapProgram $out/bin/yosys \
@@ -65,7 +69,7 @@ let
 
   allPlugins = {
     bluespec = yosys-bluespec;
-    ghdl     = yosys-ghdl;
+    ghdl = yosys-ghdl;
   } // (yosys-symbiflow);
 
   boost_python = boost.override {
@@ -73,15 +77,16 @@ let
     python = python3;
   };
 
-in stdenv.mkDerivation (finalAttrs: {
-  pname   = "yosys";
+in
+stdenv.mkDerivation (finalAttrs: {
+  pname = "yosys";
   version = "0.47";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
-    repo  = "yosys";
-    rev   = "refs/tags/${finalAttrs.version}";
-    hash  = "sha256-9u9aAPTZyt9vzZwryor3GRCGzs/mu2/XtM0XzV7uHfk=";
+    repo = "yosys";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-9u9aAPTZyt9vzZwryor3GRCGzs/mu2/XtM0XzV7uHfk=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -99,18 +104,24 @@ in stdenv.mkDerivation (finalAttrs: {
   };
 
   enableParallelBuilding = true;
-  nativeBuildInputs = [ pkg-config bison flex ];
+  nativeBuildInputs = [
+    pkg-config
+    bison
+    flex
+  ];
   propagatedBuildInputs = [
     tcl
     readline
     libffi
     zlib
-    (python3.withPackages (pp: with pp; [
-      click
-    ]))
+    (python3.withPackages (
+      pp: with pp; [
+        click
+      ]
+    ))
   ] ++ lib.optional enablePython boost_python;
 
-  makeFlags = [ "PREFIX=${placeholder "out"}"];
+  makeFlags = [ "PREFIX=${placeholder "out"}" ];
 
   patches = [
     ./plugin-search-dirs.patch
@@ -124,19 +135,21 @@ in stdenv.mkDerivation (finalAttrs: {
     patchShebangs tests ./misc/yosys-config.in
   '';
 
-  preBuild = ''
-    chmod -R u+w .
-    make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
+  preBuild =
+    ''
+      chmod -R u+w .
+      make config-${if stdenv.cc.isClang or false then "clang" else "gcc"}
 
-    if ! grep -q "YOSYS_VER := $version" Makefile; then
-      echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (allegedly ${finalAttrs.version}), failing."
-      exit 1
-    fi
-  '' + lib.optionalString enablePython ''
-    echo "ENABLE_PYOSYS := 1" >> Makefile.conf
-    echo "PYTHON_DESTDIR := $out/${python3.sitePackages}" >> Makefile.conf
-    echo "BOOST_PYTHON_LIB := -lboost_python${lib.versions.major python3.version}${lib.versions.minor python3.version}" >> Makefile.conf
-  '';
+      if ! grep -q "YOSYS_VER := $version" Makefile; then
+        echo "ERROR: yosys version in Makefile isn't equivalent to version of the nix package (allegedly ${finalAttrs.version}), failing."
+        exit 1
+      fi
+    ''
+    + lib.optionalString enablePython ''
+      echo "ENABLE_PYOSYS := 1" >> Makefile.conf
+      echo "PYTHON_DESTDIR := $out/${python3.sitePackages}" >> Makefile.conf
+      echo "BOOST_PYTHON_LIB := -lboost_python${lib.versions.major python3.version}${lib.versions.minor python3.version}" >> Makefile.conf
+    '';
 
   preCheck = ''
     # autotest.sh automatically compiles a utility during startup if it's out of date.
@@ -157,9 +170,13 @@ in stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "Open RTL synthesis framework and tools";
-    homepage    = "https://yosyshq.net/yosys/";
-    license     = licenses.isc;
-    platforms   = platforms.all;
-    maintainers = with maintainers; [ shell thoughtpolice Luflosi ];
+    homepage = "https://yosyshq.net/yosys/";
+    license = licenses.isc;
+    platforms = platforms.all;
+    maintainers = with maintainers; [
+      shell
+      thoughtpolice
+      Luflosi
+    ];
   };
 })

@@ -1,4 +1,11 @@
-{ stdenv, fetchurl, which, diffutils, gnupatch, gnutar }:
+{
+  stdenv,
+  fetchurl,
+  which,
+  diffutils,
+  gnupatch,
+  gnutar,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tla";
@@ -13,7 +20,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ which ];
 
-  propagatedBuildInputs = [ diffutils gnupatch gnutar ];
+  propagatedBuildInputs = [
+    diffutils
+    gnupatch
+    gnutar
+  ];
 
   # Instead of GNU Autoconf, tla uses Tom Lord's now
   # defunct `package-framework'.

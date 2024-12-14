@@ -1,17 +1,18 @@
-{ buildFHSEnv
-, electron_24
-, fetchFromGitHub
-, fetchYarnDeps
-, fetchurl
-, fixup-yarn-lock
-, git
-, lib
-, makeDesktopItem
-, nodejs_18
-, stdenvNoCC
-, util-linux
-, yarn
-, zip
+{
+  buildFHSEnv,
+  electron_24,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  fetchurl,
+  fixup-yarn-lock,
+  git,
+  lib,
+  makeDesktopItem,
+  nodejs_18,
+  stdenvNoCC,
+  util-linux,
+  yarn,
+  zip,
 }:
 
 let
@@ -42,16 +43,21 @@ let
 
   electronDummyMirror = "https://electron.invalid/";
   electronDummyDir = "nix";
-  electronDummyFilename =
-    builtins.baseNameOf (builtins.head (electron.src.urls));
-  electronDummyHash =
-    builtins.hashString "sha256" "${electronDummyMirror}${electronDummyDir}";
+  electronDummyFilename = builtins.baseNameOf (builtins.head (electron.src.urls));
+  electronDummyHash = builtins.hashString "sha256" "${electronDummyMirror}${electronDummyDir}";
 
   unwrapped = stdenvNoCC.mkDerivation {
     pname = "${pname}-unwrapped";
     inherit version src;
 
-    nativeBuildInputs = [ fixup-yarn-lock git nodejs util-linux yarn zip ];
+    nativeBuildInputs = [
+      fixup-yarn-lock
+      git
+      nodejs
+      util-linux
+      yarn
+      zip
+    ];
 
     configurePhase = ''
       export HOME=$TMPDIR
@@ -92,7 +98,11 @@ let
     exec = "electron-fiddle %U";
     icon = "electron-fiddle";
     startupNotify = true;
-    categories = [ "GNOME" "GTK" "Utility" ];
+    categories = [
+      "GNOME"
+      "GTK"
+      "Utility"
+    ];
     mimeTypes = [ "x-scheme-handler/electron-fiddle" ];
   };
 
@@ -108,7 +118,8 @@ buildFHSEnv {
     cp "${desktopItem}/share/applications"/*.desktop "$out/share/applications/"
   '';
 
-  targetPkgs = pkgs:
+  targetPkgs =
+    pkgs:
     with pkgs;
     map lib.getLib [
       # for electron-fiddle itself

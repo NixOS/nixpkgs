@@ -2,7 +2,8 @@
 let
   pname = "quivira";
   version = "4.1";
-in fetchurl {
+in
+fetchurl {
   name = "${pname}-${version}";
   url = "http://www.quivira-font.com/files/Quivira.otf";
 

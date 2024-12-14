@@ -1,14 +1,18 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hwdata";
-  version = "0.389";
+  version = "0.390";
 
   src = fetchFromGitHub {
     owner = "vcrhonek";
     repo = "hwdata";
     rev = "v${version}";
-    hash = "sha256-w8rN9T0GwElkLmNLzROQtd7CdY0DcuCRUWxFtA2ekJc=";
+    hash = "sha256-DexmtBKe1rrmvHMVk8P20hBLfdP1x6CWx/F1s4lDnK4=";
   };
 
   configureFlags = [ "--datadir=${placeholder "out"}/share" ];

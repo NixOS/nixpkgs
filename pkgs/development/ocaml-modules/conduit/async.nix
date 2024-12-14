@@ -1,5 +1,14 @@
-{ buildDunePackage, async, ppx_sexp_conv, ppx_here, uri, conduit
-, core, ipaddr, ipaddr-sexp, sexplib0
+{
+  buildDunePackage,
+  async,
+  ppx_sexp_conv,
+  ppx_here,
+  uri,
+  conduit,
+  core,
+  ipaddr,
+  ipaddr-sexp,
+  sexplib0,
 }:
 
 buildDunePackage {
@@ -9,7 +18,10 @@ buildDunePackage {
     src
     ;
 
-  buildInputs = [ ppx_sexp_conv ppx_here ];
+  buildInputs = [
+    ppx_sexp_conv
+    ppx_here
+  ];
 
   propagatedBuildInputs = [
     async

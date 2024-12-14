@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchurl, libiconv, bash, updateAutotoolsGnuConfigScriptsHook
+{
+  stdenv,
+  lib,
+  fetchurl,
+  libiconv,
+  bash,
+  updateAutotoolsGnuConfigScriptsHook,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -21,58 +27,69 @@ stdenv.mkDerivation rec {
     ./0001-msginit-Do-not-use-POT-Creation-Date.patch
   ];
 
-  outputs = [ "out" "man" "doc" "info" ];
+  outputs = [
+    "out"
+    "man"
+    "doc"
+    "info"
+  ];
 
   LDFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-lm -lmd -lmp -luutil -lnvpair -lnsl -lidmap -lavl -lsec";
 
-  configureFlags = [
-     "--disable-csharp"
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    # On cross building, gettext supposes that the wchar.h from libc
-    # does not fulfill gettext needs, so it tries to work with its
-    # own wchar.h file, which does not cope well with the system's
-    # wchar.h and stddef.h (gcc-4.3 - glibc-2.9)
-    "gl_cv_func_wcwidth_works=yes"
-  ];
+  configureFlags =
+    [
+      "--disable-csharp"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      # On cross building, gettext supposes that the wchar.h from libc
+      # does not fulfill gettext needs, so it tries to work with its
+      # own wchar.h file, which does not cope well with the system's
+      # wchar.h and stddef.h (gcc-4.3 - glibc-2.9)
+      "gl_cv_func_wcwidth_works=yes"
+    ];
 
-  postPatch = ''
-    # Older versions of gettext come with a copy of `extern-inline.m4` that is not compatible with clang 18.
-    # When a project uses gettext + autoreconfPhase, autoreconfPhase will invoke `autopoint -f`, which will
-    # replace whatever (probably compatible) version of `extern-inline.m4` with one that probalby won’t work
-    # because `autopoint` will copy the autoconf macros from the project’s required version of gettext.
-    # Fixing this requires replacing all the older copies of the problematic file with a new one.
-    #
-    # This is ugly, but it avoids requiring workarounds in every package using gettext and autoreconfPhase.
-    declare -a oldFiles=($(tar tf gettext-tools/misc/archive.dir.tar | grep '^gettext-0\.[19].*/extern-inline.m4'))
-    oldFilesDir=$(mktemp -d)
-    for oldFile in "''${oldFiles[@]}"; do
-      mkdir -p "$oldFilesDir/$(dirname "$oldFile")"
-      cp gettext-tools/gnulib-m4/extern-inline.m4 "$oldFilesDir/$oldFile"
-    done
-    tar uf gettext-tools/misc/archive.dir.tar -C "$oldFilesDir" "''${oldFiles[@]}"
+  postPatch =
+    ''
+      # Older versions of gettext come with a copy of `extern-inline.m4` that is not compatible with clang 18.
+      # When a project uses gettext + autoreconfPhase, autoreconfPhase will invoke `autopoint -f`, which will
+      # replace whatever (probably compatible) version of `extern-inline.m4` with one that probalby won’t work
+      # because `autopoint` will copy the autoconf macros from the project’s required version of gettext.
+      # Fixing this requires replacing all the older copies of the problematic file with a new one.
+      #
+      # This is ugly, but it avoids requiring workarounds in every package using gettext and autoreconfPhase.
+      declare -a oldFiles=($(tar tf gettext-tools/misc/archive.dir.tar | grep '^gettext-0\.[19].*/extern-inline.m4'))
+      oldFilesDir=$(mktemp -d)
+      for oldFile in "''${oldFiles[@]}"; do
+        mkdir -p "$oldFilesDir/$(dirname "$oldFile")"
+        cp gettext-tools/gnulib-m4/extern-inline.m4 "$oldFilesDir/$oldFile"
+      done
+      tar uf gettext-tools/misc/archive.dir.tar -C "$oldFilesDir" "''${oldFiles[@]}"
 
-    substituteAllInPlace gettext-runtime/src/gettext.sh.in
-    substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
-    substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
-    substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
-  '' + lib.optionalString stdenv.hostPlatform.isCygwin ''
-    sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
-    sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
-  '' + lib.optionalString stdenv.hostPlatform.isMinGW ''
-    sed -i "s/@GNULIB_CLOSE@/1/" */*/unistd.in.h
-  '';
+      substituteAllInPlace gettext-runtime/src/gettext.sh.in
+      substituteInPlace gettext-tools/projects/KDE/trigger --replace "/bin/pwd" pwd
+      substituteInPlace gettext-tools/projects/GNOME/trigger --replace "/bin/pwd" pwd
+      substituteInPlace gettext-tools/src/project-id --replace "/bin/pwd" pwd
+    ''
+    + lib.optionalString stdenv.hostPlatform.isCygwin ''
+      sed -i -e "s/\(cldr_plurals_LDADD = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
+      sed -i -e "s/\(libgettextsrc_la_LDFLAGS = \)/\\1..\/gnulib-lib\/libxml_rpl.la /" gettext-tools/src/Makefile.in
+    ''
+    + lib.optionalString stdenv.hostPlatform.isMinGW ''
+      sed -i "s/@GNULIB_CLOSE@/1/" */*/unistd.in.h
+    '';
 
   strictDeps = true;
   nativeBuildInputs = [
     updateAutotoolsGnuConfigScriptsHook
   ];
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isMinGW) [
-    bash
-  ]
-  ++ lib.optionals (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isCygwin) [
-    # HACK, see #10874 (and 14664)
-    libiconv
-  ];
+  buildInputs =
+    lib.optionals (!stdenv.hostPlatform.isMinGW) [
+      bash
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isCygwin) [
+      # HACK, see #10874 (and 14664)
+      libiconv
+    ];
 
   setupHooks = [
     ../../../build-support/setup-hooks/role.bash

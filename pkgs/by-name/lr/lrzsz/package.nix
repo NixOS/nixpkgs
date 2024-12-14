@@ -1,4 +1,10 @@
-{ lib, stdenv, gettext, fetchurl, fetchpatch }:
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lrzsz";

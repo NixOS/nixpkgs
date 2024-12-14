@@ -595,6 +595,7 @@ in {
             plugins = ["python3"];
             home = webEnv;
             http = "127.0.0.1:18507";
+            buffer-size = 8192;
           }
           // (if cfg.serve.virtualRoot == "/"
             then { module = "mailman_web.wsgi:application"; }

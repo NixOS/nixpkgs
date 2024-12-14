@@ -1,8 +1,9 @@
-{ lib
-, buildGraalvmNativeImage
-, fetchurl
-, testers
-, jet
+{
+  lib,
+  buildGraalvmNativeImage,
+  fetchurl,
+  testers,
+  jet,
 }:
 
 buildGraalvmNativeImage rec {

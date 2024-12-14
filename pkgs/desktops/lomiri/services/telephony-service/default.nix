@@ -5,6 +5,7 @@
   fetchpatch,
   gitUpdater,
   nixosTests,
+  runCommand,
   ayatana-indicator-messages,
   bash,
   cmake,
@@ -73,6 +74,23 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/commit/3a387670ed13041db069068292b1f41229e79583.patch";
       hash = "sha256-b7gxzr6Mmtogclq3hR7a/zl+816H2wmJqv3oHjUJggw=";
     })
+
+    # Remove when version > 0.5.3
+    # Patched to be compatible with pre-rename code
+    (runCommand "0004-lomiri-telephony-service-Fix-NotificationInterface-regeneration-backported.patch"
+      {
+        src = fetchpatch {
+          name = "0004-lomiri-telephony-service-Fix-NotificationInterface-regeneration.patch";
+          url = "https://gitlab.com/ubports/development/core/lomiri-telephony-service/-/commit/9533ce1a9495e5c11e9b78fc0166e903e19519b4.patch";
+          hash = "sha256-3rsZ08bz2CxKpcwYWCCd6f7gJ22v9jl7Lg7JPnWz50A=";
+        };
+      }
+      ''
+        cp $src $out
+        substituteInPlace $out \
+          --replace-fail 'lomiritelephony' 'telephony'
+      ''
+    )
   ];
 
   postPatch =

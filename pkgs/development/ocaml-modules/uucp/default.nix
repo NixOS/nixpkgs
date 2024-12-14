@@ -1,4 +1,16 @@
-{ lib, stdenv, fetchurl, ocaml, findlib, ocamlbuild, topkg, uchar, uutf, uunf, uucd }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  ocaml,
+  findlib,
+  ocamlbuild,
+  topkg,
+  uchar,
+  uutf,
+  uunf,
+  uucd,
+}:
 
 let
   pname = "uucp";
@@ -8,47 +20,57 @@ let
   doCheck = true;
 in
 
-if lib.versionOlder ocaml.version minimalOCamlVersion
-then builtins.throw "${pname} needs at least OCaml ${minimalOCamlVersion}"
+if lib.versionOlder ocaml.version minimalOCamlVersion then
+  builtins.throw "${pname} needs at least OCaml ${minimalOCamlVersion}"
 else
 
-stdenv.mkDerivation {
+  stdenv.mkDerivation {
 
-  name = "ocaml${ocaml.version}-${pname}-${version}";
+    name = "ocaml${ocaml.version}-${pname}-${version}";
 
-  src = fetchurl {
-    url = "${webpage}/releases/${pname}-${version}.tbz";
-    hash = "sha256-5//UGI4u3OROYdxtwz9K2vCTzYiN16mOyEFhUQWtgEQ=";
-  };
+    src = fetchurl {
+      url = "${webpage}/releases/${pname}-${version}.tbz";
+      hash = "sha256-5//UGI4u3OROYdxtwz9K2vCTzYiN16mOyEFhUQWtgEQ=";
+    };
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild topkg ];
-  buildInputs = [ topkg uutf uunf uucd ];
+    nativeBuildInputs = [
+      ocaml
+      findlib
+      ocamlbuild
+      topkg
+    ];
+    buildInputs = [
+      topkg
+      uutf
+      uunf
+      uucd
+    ];
 
-  propagatedBuildInputs = [ uchar ];
+    propagatedBuildInputs = [ uchar ];
 
-  strictDeps = true;
+    strictDeps = true;
 
-  buildPhase = ''
-    runHook preBuild
-    ${topkg.buildPhase} --with-cmdliner false --tests ${lib.boolToString doCheck}
-    runHook postBuild
-  '';
+    buildPhase = ''
+      runHook preBuild
+      ${topkg.buildPhase} --with-cmdliner false --tests ${lib.boolToString doCheck}
+      runHook postBuild
+    '';
 
-  inherit (topkg) installPhase;
+    inherit (topkg) installPhase;
 
-  inherit doCheck;
-  checkPhase = ''
-    runHook preCheck
-    ${topkg.run} test
-    runHook postCheck
-  '';
-  checkInputs = [ uucd ];
+    inherit doCheck;
+    checkPhase = ''
+      runHook preCheck
+      ${topkg.run} test
+      runHook postCheck
+    '';
+    checkInputs = [ uucd ];
 
-  meta = with lib; {
-    description = "OCaml library providing efficient access to a selection of character properties of the Unicode character database";
-    homepage = webpage;
-    inherit (ocaml.meta) platforms;
-    license = licenses.bsd3;
-    maintainers = [ maintainers.vbgl ];
-  };
-}
+    meta = with lib; {
+      description = "OCaml library providing efficient access to a selection of character properties of the Unicode character database";
+      homepage = webpage;
+      inherit (ocaml.meta) platforms;
+      license = licenses.bsd3;
+      maintainers = [ maintainers.vbgl ];
+    };
+  }

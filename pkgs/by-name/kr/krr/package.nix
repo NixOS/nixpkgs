@@ -1,8 +1,9 @@
-{ lib
-, python3
-, fetchFromGitHub
-, testers
-, krr
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  testers,
+  krr,
 }:
 
 python3.pkgs.buildPythonPackage rec {

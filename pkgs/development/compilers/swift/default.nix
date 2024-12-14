@@ -1,11 +1,12 @@
-{ lib
-, pkgs
-, newScope
-, darwin
-, llvmPackages
-, llvmPackages_15
-, overrideCC
-, overrideLibcxx
+{
+  lib,
+  pkgs,
+  newScope,
+  darwin,
+  llvmPackages,
+  llvmPackages_15,
+  overrideCC,
+  overrideLibcxx,
 }:
 
 let
@@ -54,13 +55,17 @@ let
       useSwiftDriver = false;
     };
 
-    Dispatch = if stdenv.hostPlatform.isDarwin
-      then null # part of apple-sdk
-      else callPackage ./libdispatch { swift = swiftNoSwiftDriver; };
+    Dispatch =
+      if stdenv.hostPlatform.isDarwin then
+        null # part of apple-sdk
+      else
+        callPackage ./libdispatch { swift = swiftNoSwiftDriver; };
 
-    Foundation = if stdenv.hostPlatform.isDarwin
-      then null # part of apple-sdk
-      else callPackage ./foundation { swift = swiftNoSwiftDriver; };
+    Foundation =
+      if stdenv.hostPlatform.isDarwin then
+        null # part of apple-sdk
+      else
+        callPackage ./foundation { swift = swiftNoSwiftDriver; };
 
     # TODO: Apple distributes a binary XCTest with Xcode, but it is not part of
     # CLTools (or SUS), so would have to figure out how to fetch it. The binary
@@ -98,4 +103,5 @@ let
 
   };
 
-in self
+in
+self

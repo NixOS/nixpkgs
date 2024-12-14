@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, nlohmann_json
-, libtoxcore
-, libsodium
-, libcap
-, zeromq
-, systemd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  nlohmann_json,
+  libtoxcore,
+  libsodium,
+  libcap,
+  zeromq,
+  systemd,
 }:
 
 stdenv.mkDerivation {
@@ -21,8 +22,17 @@ stdenv.mkDerivation {
     sha256 = "sha256-UncU0cpoyy9Z0TCChGmaHpyhW9ctz32gU7n3hgpOEwU=";
   };
 
-  buildInputs = [ libtoxcore nlohmann_json libsodium zeromq ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ libcap systemd ];
+  buildInputs =
+    [
+      libtoxcore
+      nlohmann_json
+      libsodium
+      zeromq
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libcap
+      systemd
+    ];
 
   nativeBuildInputs = [ cmake ];
 
@@ -37,7 +47,12 @@ stdenv.mkDerivation {
     description = "Powerful tool that allows one to make tunneled point to point connections over Tox";
     homepage = "https://github.com/cleverca22/toxvpn";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ cleverca22 craigem obadz toonn ];
+    maintainers = with maintainers; [
+      cleverca22
+      craigem
+      obadz
+      toonn
+    ];
     platforms = platforms.unix;
   };
 }

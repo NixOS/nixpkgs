@@ -1,4 +1,10 @@
-{ config, pkgs, lib, utils, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  utils,
+  ...
+}:
 let
   cfg = config.services.sonarr;
 in

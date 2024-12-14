@@ -1,6 +1,7 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
 }:
 
 let
@@ -41,7 +42,8 @@ let
       cp -r . "$out"
     '';
   };
-in buildNpmPackage rec {
+in
+buildNpmPackage rec {
   pname = "perlnavigator";
   inherit version src;
 

@@ -1,7 +1,26 @@
-{ stdenv, lib, fetchurl, gnumake, libnetfilter_acct, libnetfilter_conntrack
-, libnetfilter_log, libmnl, libnfnetlink, automake, autoconf, autogen, libtool
-, postgresql, libmysqlclient, sqlite
-, pkg-config, libpcap, linuxdoc-tools, autoreconfHook, nixosTests }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gnumake,
+  libnetfilter_acct,
+  libnetfilter_conntrack,
+  libnetfilter_log,
+  libmnl,
+  libnfnetlink,
+  automake,
+  autoconf,
+  autogen,
+  libtool,
+  postgresql,
+  libmysqlclient,
+  sqlite,
+  pkg-config,
+  libpcap,
+  linuxdoc-tools,
+  autoreconfHook,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   version = "2.0.8";
@@ -12,7 +31,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-Tq1sOXDD9X+h6J/i18xIO6b+K9GwhwFSHgs6/WZ98pE=";
   };
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   postPatch = ''
     substituteInPlace ulogd.8 --replace "/usr/share/doc" "$doc/share/doc"

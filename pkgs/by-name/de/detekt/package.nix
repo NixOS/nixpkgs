@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre_headless, testers }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre_headless,
+  testers,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "detekt";
   version = "1.23.7";

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitLab, makeWrapper, gcc, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  makeWrapper,
+  gcc,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "icmake";
@@ -10,7 +17,6 @@ stdenv.mkDerivation rec {
     repo = "icmake";
     owner = "fbb-git";
   };
-
 
   setSourceRoot = ''
     sourceRoot=$(echo */icmake)

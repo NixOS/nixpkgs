@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.xtreemfs;
@@ -7,13 +12,15 @@ let
 
   home = cfg.homeDir;
 
-  startupScript = class: configPath: pkgs.writeScript "xtreemfs-osd.sh" ''
-    #! ${pkgs.runtimeShell}
-    JAVA_HOME="${pkgs.jdk}"
-    JAVADIR="${xtreemfs}/share/java"
-    JAVA_CALL="$JAVA_HOME/bin/java -ea -cp $JAVADIR/XtreemFS.jar:$JAVADIR/BabuDB.jar:$JAVADIR/Flease.jar:$JAVADIR/protobuf-java-2.5.0.jar:$JAVADIR/Foundation.jar:$JAVADIR/jdmkrt.jar:$JAVADIR/jdmktk.jar:$JAVADIR/commons-codec-1.3.jar"
-    $JAVA_CALL ${class} ${configPath}
-  '';
+  startupScript =
+    class: configPath:
+    pkgs.writeScript "xtreemfs-osd.sh" ''
+      #! ${pkgs.runtimeShell}
+      JAVA_HOME="${pkgs.jdk}"
+      JAVADIR="${xtreemfs}/share/java"
+      JAVA_CALL="$JAVA_HOME/bin/java -ea -cp $JAVADIR/XtreemFS.jar:$JAVADIR/BabuDB.jar:$JAVADIR/Flease.jar:$JAVADIR/protobuf-java-2.5.0.jar:$JAVADIR/Foundation.jar:$JAVADIR/jdmkrt.jar:$JAVADIR/jdmktk.jar:$JAVADIR/commons-codec-1.3.jar"
+      $JAVA_CALL ${class} ${configPath}
+    '';
 
   dirReplicationConfig = pkgs.writeText "xtreemfs-dir-replication-plugin.properties" ''
     babudb.repl.backupDir = ${home}/server-repl-dir
@@ -69,7 +76,7 @@ let
     ${cfg.osd.extraConfig}
   '';
 
-  optionalDir = lib.optionals cfg.dir.enable ["xtreemfs-dir.service"];
+  optionalDir = lib.optionals cfg.dir.enable [ "xtreemfs-dir.service" ];
 
   systemdOptionalDependencies = {
     after = [ "network.target" ] ++ optionalDir;
@@ -139,7 +146,13 @@ in
           '';
         };
         syncMode = lib.mkOption {
-          type = lib.types.enum [ "ASYNC" "SYNC_WRITE_METADATA" "SYNC_WRITE" "FDATASYNC" "FSYNC" ];
+          type = lib.types.enum [
+            "ASYNC"
+            "SYNC_WRITE_METADATA"
+            "SYNC_WRITE"
+            "FDATASYNC"
+            "FSYNC"
+          ];
           default = "FSYNC";
           example = "FDATASYNC";
           description = ''
@@ -265,7 +278,13 @@ in
         };
         syncMode = lib.mkOption {
           default = "FSYNC";
-          type = lib.types.enum [ "ASYNC" "SYNC_WRITE_METADATA" "SYNC_WRITE" "FDATASYNC" "FSYNC" ];
+          type = lib.types.enum [
+            "ASYNC"
+            "SYNC_WRITE_METADATA"
+            "SYNC_WRITE"
+            "FDATASYNC"
+            "FSYNC"
+          ];
           example = "FDATASYNC";
           description = ''
             The sync mode influences how operations are committed to the disk
@@ -443,23 +462,22 @@ in
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ xtreemfs ];
 
-    users.users.xtreemfs =
-      { uid = config.ids.uids.xtreemfs;
-        description = "XtreemFS user";
-        createHome = true;
-        home = home;
-      };
+    users.users.xtreemfs = {
+      uid = config.ids.uids.xtreemfs;
+      description = "XtreemFS user";
+      createHome = true;
+      home = home;
+    };
 
-    users.groups.xtreemfs =
-      { gid = config.ids.gids.xtreemfs;
-      };
+    users.groups.xtreemfs = {
+      gid = config.ids.gids.xtreemfs;
+    };
 
     systemd.services.xtreemfs-dir = lib.mkIf cfg.dir.enable {
       description = "XtreemFS-DIR Server";
@@ -471,21 +489,27 @@ in
       };
     };
 
-    systemd.services.xtreemfs-mrc = lib.mkIf cfg.mrc.enable ({
-      description = "XtreemFS-MRC Server";
-      serviceConfig = {
-        User = "xtreemfs";
-        ExecStart = "${startupScript "org.xtreemfs.mrc.MRC" mrcConfig}";
-      };
-    } // systemdOptionalDependencies);
+    systemd.services.xtreemfs-mrc = lib.mkIf cfg.mrc.enable (
+      {
+        description = "XtreemFS-MRC Server";
+        serviceConfig = {
+          User = "xtreemfs";
+          ExecStart = "${startupScript "org.xtreemfs.mrc.MRC" mrcConfig}";
+        };
+      }
+      // systemdOptionalDependencies
+    );
 
-    systemd.services.xtreemfs-osd = lib.mkIf cfg.osd.enable ({
-      description = "XtreemFS-OSD Server";
-      serviceConfig = {
-        User = "xtreemfs";
-        ExecStart = "${startupScript "org.xtreemfs.osd.OSD" osdConfig}";
-      };
-    } // systemdOptionalDependencies);
+    systemd.services.xtreemfs-osd = lib.mkIf cfg.osd.enable (
+      {
+        description = "XtreemFS-OSD Server";
+        serviceConfig = {
+          User = "xtreemfs";
+          ExecStart = "${startupScript "org.xtreemfs.osd.OSD" osdConfig}";
+        };
+      }
+      // systemdOptionalDependencies
+    );
 
   };
 

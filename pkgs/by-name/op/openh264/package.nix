@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, gtest
-, meson
-, nasm
-, ninja
-, pkg-config
-, stdenv
-, windows
+{
+  lib,
+  fetchFromGitHub,
+  gtest,
+  meson,
+  nasm,
+  ninja,
+  pkg-config,
+  stdenv,
+  windows,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +21,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-K8p94P4XO6bUWCJuT6jR5Kmz3lamNDyclGWgsV6Lf9I=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   postPatch = ''
     substituteInPlace meson.build --replace-fail "'-Werror'," ""
@@ -33,11 +37,13 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    gtest
-  ] ++ lib.optionals stdenv.hostPlatform.isWindows [
-    windows.pthreads
-  ];
+  buildInputs =
+    [
+      gtest
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isWindows [
+      windows.pthreads
+    ];
 
   strictDeps = true;
 
@@ -48,9 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
     license = with lib.licenses; [ bsd2 ];
     maintainers = with lib.maintainers; [ AndersonTorres ];
     # See meson.build
-    platforms = lib.platforms.windows ++ lib.intersectLists
-      (lib.platforms.x86 ++ lib.platforms.arm ++ lib.platforms.aarch64 ++
-       lib.platforms.loongarch64 ++ lib.platforms.riscv64)
-      (lib.platforms.linux ++ lib.platforms.darwin);
+    platforms =
+      lib.platforms.windows
+      ++ lib.intersectLists (
+        lib.platforms.x86
+        ++ lib.platforms.arm
+        ++ lib.platforms.aarch64
+        ++ lib.platforms.loongarch64
+        ++ lib.platforms.riscv64
+      ) (lib.platforms.linux ++ lib.platforms.darwin);
   };
 })

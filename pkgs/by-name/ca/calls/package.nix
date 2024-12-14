@@ -1,49 +1,55 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, libhandy
-, libsecret
-, modemmanager
-, gtk3
-, gom
-, gsound
-, feedbackd
-, callaudiod
-, evolution-data-server
-, glib
-, folks
-, desktop-file-utils
-, appstream-glib
-, libpeas
-, dbus
-, vala
-, wrapGAppsHook3
-, xvfb-run
-, gtk-doc
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, docutils
-, gst_all_1
-, sofia_sip
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  libadwaita,
+  libsecret,
+  modemmanager,
+  gtk4,
+  gom,
+  gsound,
+  feedbackd,
+  callaudiod,
+  evolution-data-server-gtk4,
+  folks,
+  desktop-file-utils,
+  appstream-glib,
+  libpeas2,
+  dbus,
+  vala,
+  wrapGAppsHook4,
+  xvfb-run,
+  gtk-doc,
+  bubblewrap,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  docutils,
+  gst_all_1,
+  shared-mime-info,
+  sofia_sip,
+  writeShellScriptBin,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "calls";
-  version = "46.3";
+  version = "47.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
-    repo = pname;
-    rev = "v${version}";
+    repo = "calls";
+    rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-J1wuhAXPCvLWzPqMU4alVFFpHoCAzX3wVOP3Bw0wW/o=";
+    hash = "sha256-HzQz5jmlXwUHLXC6nhHCa8E8zczaA89YxteZgxSV0YY=";
   };
 
-  outputs = [ "out" "devdoc" ];
+  outputs = [
+    "out"
+    "devdoc"
+  ];
 
   nativeBuildInputs = [
     meson
@@ -52,7 +58,7 @@ stdenv.mkDerivation rec {
     desktop-file-utils
     appstream-glib
     vala
-    wrapGAppsHook3
+    wrapGAppsHook4
     gtk-doc
     docbook-xsl-nons
     docbook_xml_dtd_43
@@ -61,9 +67,9 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     modemmanager
-    libhandy
+    libadwaita
     libsecret
-    evolution-data-server
+    evolution-data-server-gtk4 # UI part not needed, using gtk4 variant (over the default of gtk3) to reduce closure.
     folks
     gom
     gsound
@@ -74,32 +80,42 @@ stdenv.mkDerivation rec {
     gst_all_1.gst-plugins-ugly
     feedbackd
     callaudiod
-    gtk3
-    libpeas
+    gtk4
+    libpeas2
     sofia_sip
   ];
 
   nativeCheckInputs = [
+    (writeShellScriptBin "dbus-run-session" ''
+      # tests invoke `dbus-run-session` directly, but without the necessary `--config-file` argument
+      exec ${lib.getExe' dbus "dbus-run-session"} --config-file=${dbus}/share/dbus-1/session.conf "$@"
+    '')
+    bubblewrap
     dbus
+    shared-mime-info
     xvfb-run
   ];
 
-  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
-
   mesonFlags = [
-    "-Dgtk_doc=true"
+    (lib.mesonBool "gtk_doc" true)
+    (lib.mesonBool "tests" finalAttrs.finalPackage.doCheck)
   ];
 
-  # Disable until tests are fixed upstream https://gitlab.gnome.org/GNOME/calls/-/issues/258
-  doCheck = false;
+  strictDeps = true;
+  doCheck = true;
+
+  preFixup = ''
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${shared-mime-info}/share")
+  '';
 
   checkPhase = ''
     runHook preCheck
-    NO_AT_BRIDGE=1 \
-    XDG_DATA_DIRS=${folks}/share/gsettings-schemas/${folks.name} \
-    xvfb-run -s '-screen 0 800x600x24' dbus-run-session \
-      --config-file=${dbus}/share/dbus-1/session.conf \
-      meson test --print-errorlogs
+
+    HOME=$(mktemp -d) \
+    xvfb-run -s '-screen 0 800x600x24' \
+      bwrap --unshare-uts --hostname 127.0.0.1 --dev-bind / / \
+      meson test --no-rebuild --print-errorlogs
+
     runHook postCheck
   '';
 
@@ -112,4 +128,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "gnome-calls";
   };
-}
+})

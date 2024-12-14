@@ -1,21 +1,22 @@
-{ lib
-, fetchFromGitHub
-, gitUpdater
-, gtk-layer-shell
-, gtk3
-, libxkbcommon
-, meson
-, ninja
-, pkg-config
-, scdoc
-, stdenv
-, wayland
-, wayland-protocols
-# gtk-layer-shell fails to cross-compile due to a hard dependency
-# on gobject-introspection.
-# Disable it when cross-compiling since it's an optional dependency.
-# This disables transparency support.
-, withGtkLayerShell ? (stdenv.buildPlatform == stdenv.hostPlatform)
+{
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  gtk-layer-shell,
+  gtk3,
+  libxkbcommon,
+  meson,
+  ninja,
+  pkg-config,
+  scdoc,
+  stdenv,
+  wayland,
+  wayland-protocols,
+  # gtk-layer-shell fails to cross-compile due to a hard dependency
+  # on gobject-introspection.
+  # Disable it when cross-compiling since it's an optional dependency.
+  # This disables transparency support.
+  withGtkLayerShell ? (stdenv.buildPlatform == stdenv.hostPlatform),
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -29,7 +30,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-/tYZy56ku68ziSOhy6Dex9RGy+blkU6CN2ze76y7718=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   depsBuildBuild = [
     pkg-config
@@ -42,14 +46,16 @@ stdenv.mkDerivation (finalAttrs: {
     scdoc
   ];
 
-  buildInputs = [
-    gtk3
-    libxkbcommon
-    wayland
-    wayland-protocols
-  ] ++ lib.optionals withGtkLayerShell [
-    gtk-layer-shell
-  ];
+  buildInputs =
+    [
+      gtk3
+      libxkbcommon
+      wayland
+      wayland-protocols
+    ]
+    ++ lib.optionals withGtkLayerShell [
+      gtk-layer-shell
+    ];
 
   strictDeps = true;
 

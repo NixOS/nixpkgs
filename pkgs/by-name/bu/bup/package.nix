@@ -15,7 +15,7 @@
 assert par2Support -> par2cmdline != null;
 
 let
-  version = "0.33.4";
+  version = "0.33.5";
 
   pythonDeps =
     with python3.pkgs;
@@ -38,7 +38,7 @@ stdenv.mkDerivation {
     repo = "bup";
     owner = "bup";
     rev = version;
-    hash = "sha256-9rWzHONcu4W/JcnDUGPbuGksroODbhdL6bNF+3Dd2ag=";
+    hash = "sha256-5CaH7aZTmGgQwXpyORG2/Ne/8uPlGXl7mkzokLhWExU=";
   };
 
   buildInputs = [
@@ -62,12 +62,16 @@ stdenv.mkDerivation {
     "LIBDIR=$(out)/lib/bup"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang
-    "-Wno-error=implicit-function-declaration -Wno-error=implicit-int";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=implicit-function-declaration -Wno-error=implicit-int";
 
   postInstall = ''
     wrapProgram $out/bin/bup \
-      --prefix PATH : ${lib.makeBinPath [ git par2cmdline ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          git
+          par2cmdline
+        ]
+      } \
       --prefix NIX_PYTHONPATH : ${lib.makeSearchPathOutput "lib" python3.sitePackages pythonDeps}
   '';
 

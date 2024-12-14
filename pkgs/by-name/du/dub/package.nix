@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, curl
-, ldc
-, libevent
-, rsync
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  curl,
+  ldc,
+  libevent,
+  rsync,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,7 +25,11 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs test
   '';
 
-  nativeBuildInputs = [ ldc libevent rsync ];
+  nativeBuildInputs = [
+    ldc
+    libevent
+    rsync
+  ];
   buildInputs = [ curl ];
 
   buildPhase = ''
@@ -154,6 +159,12 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     mainProgram = "dub";
     maintainers = with maintainers; [ jtbx ];
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
   };
 })

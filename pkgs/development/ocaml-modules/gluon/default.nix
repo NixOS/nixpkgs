@@ -1,11 +1,12 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, bytestring
-, config
-, libc
-, rio
-, uri
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  bytestring,
+  config,
+  libc,
+  rio,
+  uri,
 }:
 
 buildDunePackage rec {
@@ -38,5 +39,3 @@ buildDunePackage rec {
     maintainers = [ ];
   };
 }
-
-

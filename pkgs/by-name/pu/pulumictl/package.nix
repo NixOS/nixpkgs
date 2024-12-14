@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "pulumictl";
@@ -14,7 +18,9 @@ buildGoModule rec {
   vendorHash = "sha256-Wktr3TXSIIzbkiT3Gk5i4K58gahnxySi6ht30li+Z0o=";
 
   ldflags = [
-    "-s" "-w" "-X=github.com/pulumi/pulumictl/pkg/version.Version=${src.rev}"
+    "-s"
+    "-w"
+    "-X=github.com/pulumi/pulumictl/pkg/version.Version=${src.rev}"
   ];
 
   subPackages = [ "cmd/pulumictl" ];

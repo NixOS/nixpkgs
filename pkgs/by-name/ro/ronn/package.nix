@@ -1,4 +1,12 @@
-{ stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper, groff, callPackage }:
+{
+  stdenv,
+  lib,
+  bundlerEnv,
+  bundlerUpdateScript,
+  makeWrapper,
+  groff,
+  callPackage,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ronn";
@@ -34,7 +42,10 @@ stdenv.mkDerivation rec {
     mainProgram = "ronn";
     homepage = "https://github.com/apjanke/ronn-ng";
     license = licenses.mit;
-    maintainers = with maintainers; [ zimbatm nicknovitski ];
+    maintainers = with maintainers; [
+      zimbatm
+      nicknovitski
+    ];
     platforms = env.ruby.meta.platforms;
   };
 }

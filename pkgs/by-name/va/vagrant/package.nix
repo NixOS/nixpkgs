@@ -1,6 +1,16 @@
-{ stdenv, lib, fetchurl, buildRubyGem, bundlerEnv, ruby, libarchive
-, libguestfs, qemu, writeText, withLibvirt ? stdenv.hostPlatform.isLinux
-, openssl
+{
+  stdenv,
+  lib,
+  fetchurl,
+  buildRubyGem,
+  bundlerEnv,
+  ruby,
+  libarchive,
+  libguestfs,
+  qemu,
+  writeText,
+  withLibvirt ? stdenv.hostPlatform.isLinux,
+  openssl,
 }:
 
 let
@@ -18,15 +28,18 @@ let
     inherit ruby;
     gemfile = writeText "Gemfile" "";
     lockfile = writeText "Gemfile.lock" "";
-    gemset = lib.recursiveUpdate (import ./gemset.nix) ({
-      vagrant = {
-        source = {
-          type = "url";
-          inherit url hash;
+    gemset = lib.recursiveUpdate (import ./gemset.nix) (
+      {
+        vagrant = {
+          source = {
+            type = "url";
+            inherit url hash;
+          };
+          inherit version;
         };
-        inherit version;
-      };
-    } // lib.optionalAttrs withLibvirt (import ./gemset_libvirt.nix));
+      }
+      // lib.optionalAttrs withLibvirt (import ./gemset_libvirt.nix)
+    );
 
     # This replaces the gem symlinks with directories, resolving this
     # error when running vagrant (I have no idea why):
@@ -42,7 +55,8 @@ let
     '';
   };
 
-in buildRubyGem rec {
+in
+buildRubyGem rec {
   name = "${gemName}-${version}";
   gemName = "vagrant";
   inherit version;
@@ -75,34 +89,39 @@ in buildRubyGem rec {
   #   - qemu: Make 'qemu-img' available for 'vagrant package'
   postInstall =
     let
-      pathAdditions = lib.makeSearchPath "bin"
-        (map (x: lib.getBin x) ([
-          libarchive
-        ] ++ lib.optionals withLibvirt [
-          libguestfs
-          qemu
-        ]));
-    in ''
-    wrapProgram "$out/bin/vagrant" \
-      --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}" \
-      --prefix PATH ':' ${pathAdditions} \
-      --set-default VAGRANT_CHECKPOINT_DISABLE 1
+      pathAdditions = lib.makeSearchPath "bin" (
+        map (x: lib.getBin x) (
+          [
+            libarchive
+          ]
+          ++ lib.optionals withLibvirt [
+            libguestfs
+            qemu
+          ]
+        )
+      );
+    in
+    ''
+      wrapProgram "$out/bin/vagrant" \
+        --set GEM_PATH "${deps}/lib/ruby/gems/${ruby.version.libDir}" \
+        --prefix PATH ':' ${pathAdditions} \
+        --set-default VAGRANT_CHECKPOINT_DISABLE 1
 
-    mkdir -p "$out/vagrant-plugins/plugins.d"
-    echo '{}' > "$out/vagrant-plugins/plugins.json"
+      mkdir -p "$out/vagrant-plugins/plugins.d"
+      echo '{}' > "$out/vagrant-plugins/plugins.json"
 
-    # install bash completion
-    mkdir -p $out/share/bash-completion/completions/
-    cp -av contrib/bash/completion.sh $out/share/bash-completion/completions/vagrant
-    # install zsh completion
-    mkdir -p $out/share/zsh/site-functions/
-    cp -av contrib/zsh/_vagrant $out/share/zsh/site-functions/
-  '' +
-  lib.optionalString withLibvirt ''
-    substitute ${./vagrant-libvirt.json.in} $out/vagrant-plugins/plugins.d/vagrant-libvirt.json \
-      --subst-var-by ruby_version ${ruby.version} \
-      --subst-var-by vagrant_version ${version}
-  '';
+      # install bash completion
+      mkdir -p $out/share/bash-completion/completions/
+      cp -av contrib/bash/completion.sh $out/share/bash-completion/completions/vagrant
+      # install zsh completion
+      mkdir -p $out/share/zsh/site-functions/
+      cp -av contrib/zsh/_vagrant $out/share/zsh/site-functions/
+    ''
+    + lib.optionalString withLibvirt ''
+      substitute ${./vagrant-libvirt.json.in} $out/vagrant-plugins/plugins.d/vagrant-libvirt.json \
+        --subst-var-by ruby_version ${ruby.version} \
+        --subst-var-by vagrant_version ${version}
+    '';
 
   installCheckPhase = ''
     HOME="$(mktemp -d)" $out/bin/vagrant init --output - > /dev/null

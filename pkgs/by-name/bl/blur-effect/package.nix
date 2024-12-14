@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, cmake, gdk-pixbuf, libGL, libgbm }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  gdk-pixbuf,
+  libGL,
+  libgbm,
+}:
 
 stdenv.mkDerivation rec {
   pname = "blur-effect";

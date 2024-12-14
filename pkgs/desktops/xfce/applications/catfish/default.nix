@@ -1,17 +1,18 @@
-{ lib
-, fetchFromGitLab
-, gitUpdater
-, file
-, which
-, intltool
-, gobject-introspection
-, findutils
-, xdg-utils
-, dconf
-, gtk3
-, python3Packages
-, xfconf
-, wrapGAppsHook3
+{
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  file,
+  which,
+  intltool,
+  gobject-introspection,
+  findutils,
+  xdg-utils,
+  dconf,
+  gtk3,
+  python3Packages,
+  xfconf,
+  wrapGAppsHook3,
 }:
 
 python3Packages.buildPythonApplication rec {

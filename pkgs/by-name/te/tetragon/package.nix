@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, go
-, llvm_16
-, clang_16
-, bash
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  go,
+  llvm_16,
+  clang_16,
+  bash,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -62,13 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description      = "Real-time, eBPF-based Security Observability and Runtime Enforcement tool";
-    homepage         = "https://github.com/cilium/tetragon";
-    license          = licenses.asl20;
-    mainProgram      = "tetragon";
-    maintainers      = with maintainers; [ gangaram ];
-    platforms        = platforms.linux;
+    description = "Real-time, eBPF-based Security Observability and Runtime Enforcement tool";
+    homepage = "https://github.com/cilium/tetragon";
+    license = licenses.asl20;
+    mainProgram = "tetragon";
+    maintainers = with maintainers; [ gangaram ];
+    platforms = platforms.linux;
     sourceProvenance = with sourceTypes; [ fromSource ];
   };
 })
-

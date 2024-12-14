@@ -4,7 +4,7 @@
   stdenv,
   libiconv,
   updateAutotoolsGnuConfigScriptsHook,
-  darwin
+  darwin,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libunistring";
-  version = "1.2";
+  version = "1.3";
 
   src = fetchurl {
     url = "mirror://gnu/libunistring/libunistring-${finalAttrs.version}.tar.gz";
-    hash = "sha256-/W1WYvpwZIfEg0mnWLV7wUnOlOxsMGJOyf3Ec86rvI4=";
+    hash = "sha256-jqjM+GwJ3YAcjKwZh46ATlT3B89piENxEw0gveaDhrc=";
   };
 
   outputs = [

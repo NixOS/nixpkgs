@@ -1,9 +1,10 @@
-{ lib
-, openssl
-, rsync
-, python3
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  openssl,
+  rsync,
+  python3,
+  fetchFromGitHub,
+  nixosTests,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -33,7 +34,12 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    ''--prefix PATH ':' "${lib.makeBinPath [ openssl rsync ]}"''
+    ''--prefix PATH ':' "${
+      lib.makeBinPath [
+        openssl
+        rsync
+      ]
+    }"''
   ];
 
   doCheck = false;

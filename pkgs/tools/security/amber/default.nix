@@ -1,18 +1,24 @@
-{ lib, stdenv, rustPlatform, fetchFromGitHub, Security }:
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   # Renaming it to amber-secret because another package named amber exists
   pname = "amber-secret";
-  version = "0.1.6";
+  version = "0.1.7";
 
   src = fetchFromGitHub {
     owner = "fpco";
     repo = "amber";
     rev = "v${version}";
-    sha256 = "sha256-FoERgkyFCZ1nU01LXpzrqz9eJ9a16L/t+9g8jsABHK4=";
+    sha256 = "sha256-nduSnDhLvHpZD7Y1zeZC4nNL7P1qfLWc0yMpsdqrKHM=";
   };
 
-  cargoHash = "sha256-Joy+SO1zR78Eh5eK2bxyT0l3hCuLX/J3u/UvN+++6vg=";
+  cargoHash = "sha256-DxTsbJ51TUMvc/NvsUYhRG9OxxEGrWfEPYCOYaG9PXo=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 

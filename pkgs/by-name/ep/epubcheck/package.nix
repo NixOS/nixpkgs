@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchzip
-, jre, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  jre,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "epubcheck";
@@ -36,7 +41,12 @@ stdenv.mkDerivation rec {
     description = "Validation tool for EPUB";
     mainProgram = "epubcheck";
     sourceProvenance = with sourceTypes; [ binaryBytecode ];
-    license = with licenses; [ asl20 bsd3 mpl10 w3c ];
+    license = with licenses; [
+      asl20
+      bsd3
+      mpl10
+      w3c
+    ];
     platforms = platforms.all;
     maintainers = with maintainers; [ eadwu ];
   };

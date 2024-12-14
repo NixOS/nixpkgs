@@ -1,14 +1,16 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, ibus
-, gtk3
-, m17n_lib
-, m17n_db
-, gettext
-, python3
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  ibus,
+  gtk3,
+  m17n_lib,
+  m17n_db,
+  gettext,
+  python3,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

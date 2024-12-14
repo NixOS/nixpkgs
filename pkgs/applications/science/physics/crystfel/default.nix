@@ -1,38 +1,39 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, fetchpatch
-, fetchzip
-, cmake
-, lz4
-, gfortran
-, bzip2
-, hdf5
-, gsl
-, unzip
-, makeWrapper
-, zlib
-, meson
-, ninja
-, pandoc
-, eigen
-, pkg-config
-, wrapGAppsHook3
-, flex
-, bison
-, doxygen
-, opencl-headers
-, ncurses
-, msgpack
-, fftw
-, zeromq
-, ocl-icd
-, gtk3
-, gdk-pixbuf
-, argp-standalone
-, withGui ? true
-, withBitshuffle ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  fetchpatch,
+  fetchzip,
+  cmake,
+  lz4,
+  gfortran,
+  bzip2,
+  hdf5,
+  gsl,
+  unzip,
+  makeWrapper,
+  zlib,
+  meson,
+  ninja,
+  pandoc,
+  eigen,
+  pkg-config,
+  wrapGAppsHook3,
+  flex,
+  bison,
+  doxygen,
+  opencl-headers,
+  ncurses,
+  msgpack,
+  fftw,
+  zeromq,
+  ocl-icd,
+  gtk3,
+  gdk-pixbuf,
+  argp-standalone,
+  withGui ? true,
+  withBitshuffle ? true,
 }:
 
 let
@@ -43,8 +44,14 @@ let
       url = "https://ftp.ccp4.ac.uk/opensource/libccp4-${version}.tar.gz";
       hash = "sha256-y4E66GYSoIZjKd6rfO6W6sVz2BvlskA0HUD5rVMi/y0=";
     };
-    nativeBuildInputs = [ meson ninja ];
-    buildInputs = [ hdf5 gsl ];
+    nativeBuildInputs = [
+      meson
+      ninja
+    ];
+    buildInputs = [
+      hdf5
+      gsl
+    ];
 
     configureFlags = [ "FFLAGS=-fallow-argument-mismatch" ];
 
@@ -75,14 +82,17 @@ let
       version = "7.4.0";
       src =
         if stdenv.hostPlatform.isDarwin then
-          fetchurl
-            {
-              url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${builtins.replaceStrings [ "." ] [ "" ] version}/pre-built/mosflm-osx-64-noX11.zip";
-              sha256 = "1da5wimv3kl8bccp49j69vh8gi28cn7axg59lrmb38s68c618h7j";
-            }
+          fetchurl {
+            url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${
+              builtins.replaceStrings [ "." ] [ "" ] version
+            }/pre-built/mosflm-osx-64-noX11.zip";
+            sha256 = "1da5wimv3kl8bccp49j69vh8gi28cn7axg59lrmb38s68c618h7j";
+          }
         else
           fetchurl {
-            url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${builtins.replaceStrings [ "." ] [ "" ] version}/pre-built/mosflm-linux-64-noX11.zip";
+            url = "https://www.mrc-lmb.cam.ac.uk/mosflm/mosflm/ver${
+              builtins.replaceStrings [ "." ] [ "" ] version
+            }/pre-built/mosflm-linux-64-noX11.zip";
             hash = "sha256:1f2qins5kaz5v6mkaclncqpirx3mlz177ywm13py9p6s9mk99g32";
           };
       mosflmBinary = if stdenv.hostPlatform.isDarwin then "bin/mosflm" else "mosflm-linux-64-noX11";
@@ -94,7 +104,10 @@ let
 
       dontBuild = true;
 
-      nativeBuildInputs = [ unzip makeWrapper ];
+      nativeBuildInputs = [
+        unzip
+        makeWrapper
+      ];
 
       sourceRoot = ".";
 
@@ -115,7 +128,11 @@ let
       hash = "sha256-/uZlBwAINSoYqgLQFTMz8rS1Rpadu79JkO6Bu/+Nx9E=";
     };
 
-    nativeBuildInputs = [ meson pkg-config ninja ];
+    nativeBuildInputs = [
+      meson
+      pkg-config
+      ninja
+    ];
     buildInputs = [ eigen ];
   };
 
@@ -127,7 +144,11 @@ let
       hash = "sha256-v/SCJiHAV05Lc905y/dE8uBXlW+lLX9wau4XORYdbQg=";
     };
 
-    nativeBuildInputs = [ meson pkg-config ninja ];
+    nativeBuildInputs = [
+      meson
+      pkg-config
+      ninja
+    ];
     buildInputs = [ eigen ];
   };
 
@@ -139,7 +160,11 @@ let
       hash = "sha256-EaihnW7p//ecgMn+KKlfmBeXrnAqs+HdhN+ovuSrtiQ=";
     };
 
-    nativeBuildInputs = [ meson ninja pkg-config ];
+    nativeBuildInputs = [
+      meson
+      ninja
+      pkg-config
+    ];
     buildInputs = [ eigen ];
   };
 
@@ -161,7 +186,11 @@ let
     ];
 
     nativeBuildInputs = [ cmake ];
-    buildInputs = [ hdf5 lz4 bzip2 ];
+    buildInputs = [
+      hdf5
+      lz4
+      bzip2
+    ];
 
     cmakeFlags = [
       "-DENABLE_BITSHUFFLE_PLUGIN=yes"
@@ -191,27 +220,40 @@ stdenv.mkDerivation rec {
     url = "https://www.desy.de/~twhite/crystfel/crystfel-${version}.tar.gz";
     sha256 = "sha256-vZuN9dYnowySC/OX0EZB0mbhoBOyRiOWfX9d6sl1lKQ=";
   };
-  nativeBuildInputs = [ meson pkg-config ninja flex bison doxygen opencl-headers makeWrapper ]
-    ++ lib.optionals withGui [ wrapGAppsHook3 ];
-  buildInputs = [
-    hdf5
-    gsl
-    ncurses
-    msgpack
-    fftw
-    fdip
-    zeromq
-    ocl-icd
-    libccp4
-    mosflm
-    pinkIndexer
-    xgandalf
-    pandoc
-  ] ++ lib.optionals withGui [ gtk3 gdk-pixbuf ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    argp-standalone
-  ]
-  ++ lib.optionals withBitshuffle [ hdf5-external-filter-plugins ];
+  nativeBuildInputs = [
+    meson
+    pkg-config
+    ninja
+    flex
+    bison
+    doxygen
+    opencl-headers
+    makeWrapper
+  ] ++ lib.optionals withGui [ wrapGAppsHook3 ];
+  buildInputs =
+    [
+      hdf5
+      gsl
+      ncurses
+      msgpack
+      fftw
+      fdip
+      zeromq
+      ocl-icd
+      libccp4
+      mosflm
+      pinkIndexer
+      xgandalf
+      pandoc
+    ]
+    ++ lib.optionals withGui [
+      gtk3
+      gdk-pixbuf
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      argp-standalone
+    ]
+    ++ lib.optionals withBitshuffle [ hdf5-external-filter-plugins ];
 
   patches = [
     # on darwin at least, we need to link to a separate argp library;

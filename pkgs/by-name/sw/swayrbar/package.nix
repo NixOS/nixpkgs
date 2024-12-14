@@ -1,4 +1,11 @@
-{ lib, fetchFromSourcehut, rustPlatform, makeWrapper, withPulseaudio ? false, pulseaudio }:
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+  makeWrapper,
+  withPulseaudio ? false,
+  pulseaudio,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "swayrbar";
@@ -32,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://git.sr.ht/~tsdh/swayr#a-idswayrbarswayrbara";
     license = with licenses; [ gpl3Plus ];
     platforms = platforms.linux;
-    maintainers = with maintainers; [];
+    maintainers = with maintainers; [ ];
     mainProgram = "swayrbar";
   };
 }

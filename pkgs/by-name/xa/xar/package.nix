@@ -84,7 +84,8 @@ stdenv.mkDerivation (finalAttrs: {
       xz
       e2fsprogs
     ]
-    ++ lib.optional stdenv.hostPlatform.isLinux acl ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
+    ++ lib.optional stdenv.hostPlatform.isLinux acl
+    ++ lib.optional stdenv.hostPlatform.isMusl musl-fts;
 
   passthru =
     let

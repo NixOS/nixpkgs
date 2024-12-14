@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, doctest
-, nlohmann_json
-, libuuid
-, xtl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  doctest,
+  nlohmann_json,
+  libuuid,
+  xtl,
 }:
 
 stdenv.mkDerivation rec {

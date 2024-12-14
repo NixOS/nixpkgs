@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, writeText
-, dataPath ? "/var/lib/snappymail"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  writeText,
+  dataPath ? "/var/lib/snappymail",
 }:
 
 stdenv.mkDerivation rec {

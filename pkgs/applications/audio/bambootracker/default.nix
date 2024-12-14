@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gitUpdater
-, pkg-config
-, qmake
-, qt5compat ? null
-, qtbase
-, qttools
-, qtwayland
-, rtaudio_6
-, rtmidi
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gitUpdater,
+  pkg-config,
+  qmake,
+  qt5compat ? null,
+  qtbase,
+  qttools,
+  qtwayland,
+  rtaudio_6,
+  rtmidi,
+  wrapQtAppsHook,
 }:
 
 assert lib.versionAtLeast qtbase.version "6.0" -> qt5compat != null;
@@ -41,24 +42,29 @@ stdenv.mkDerivation (finalAttrs: {
     wrapQtAppsHook
   ];
 
-  buildInputs = [
-    qtbase
-    rtaudio_6
-    rtmidi
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    qtwayland
-  ] ++ lib.optionals (lib.versionAtLeast qtbase.version "6.0") [
-    qt5compat
-  ];
+  buildInputs =
+    [
+      qtbase
+      rtaudio_6
+      rtmidi
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      qtwayland
+    ]
+    ++ lib.optionals (lib.versionAtLeast qtbase.version "6.0") [
+      qt5compat
+    ];
 
-  qmakeFlags = [
-    "CONFIG+=system_rtaudio"
-    "CONFIG+=system_rtmidi"
-  ] ++ lib.optionals (stdenv.cc.isClang || (lib.versionAtLeast qtbase.version "6.0")) [
-    # Clang is extra-strict about some deprecations
-    # Latest Qt6 deprecated QCheckBox::stateChanged(int)
-    "CONFIG+=no_warnings_are_errors"
-  ];
+  qmakeFlags =
+    [
+      "CONFIG+=system_rtaudio"
+      "CONFIG+=system_rtmidi"
+    ]
+    ++ lib.optionals (stdenv.cc.isClang || (lib.versionAtLeast qtbase.version "6.0")) [
+      # Clang is extra-strict about some deprecations
+      # Latest Qt6 deprecated QCheckBox::stateChanged(int)
+      "CONFIG+=no_warnings_are_errors"
+    ];
 
   postConfigure = "make qmake_all";
 

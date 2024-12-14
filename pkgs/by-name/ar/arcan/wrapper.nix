@@ -1,8 +1,9 @@
-{ arcan
-, makeWrapper
-, symlinkJoin
-, appls ? [ ]
-, name ? "arcan-wrapped"
+{
+  arcan,
+  makeWrapper,
+  symlinkJoin,
+  appls ? [ ],
+  name ? "arcan-wrapped",
 }:
 
 symlinkJoin rec {

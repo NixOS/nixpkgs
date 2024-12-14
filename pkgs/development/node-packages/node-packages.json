@@ -217,7 +217,6 @@
 , "vega-cli"
 , "vega-lite"
 , "vercel"
-, "vls"
 , "vscode-json-languageserver"
 , "wavedrom-cli"
 , "webpack"

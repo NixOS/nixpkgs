@@ -1,9 +1,17 @@
-{ lib, stdenv, requireFile, unzip, makeDesktopItem, SDL2, SDL2_mixer, libogg, libvorbis }:
+{
+  lib,
+  stdenv,
+  requireFile,
+  unzip,
+  makeDesktopItem,
+  SDL2,
+  SDL2_mixer,
+  libogg,
+  libvorbis,
+}:
 
 let
-  arch = if stdenv.system == "x86_64-linux"
-    then "x86_64"
-    else "x86";
+  arch = if stdenv.system == "x86_64-linux" then "x86_64" else "x86";
 
   desktopItem = makeDesktopItem {
     desktopName = "World of Goo";
@@ -36,8 +44,14 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [ unzip ];
   sourceRoot = pname;
 
-  libPath = lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc SDL2 SDL2_mixer
-    libogg libvorbis ];
+  libPath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    stdenv.cc.libc
+    SDL2
+    SDL2_mixer
+    libogg
+    libvorbis
+  ];
 
   unpackPhase = ''
     # The game is distributed as a shell script, with a tar of mojosetup, and a
@@ -68,7 +82,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://worldofgoo.com";
     license = licenses.unfree;
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
     maintainers = with maintainers; [ jcumming ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };

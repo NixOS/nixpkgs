@@ -1,43 +1,46 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, writeShellScriptBin
-, cmake
-, wrapQtAppsHook
-, pkg-config
-, qmake
-, curl
-, grantlee
-, hidapi
-, libgit2
-, libssh2
-, libusb1
-, libxml2
-, libxslt
-, libzip
-, zlib
-, qtbase
-, qtconnectivity
-, qtlocation
-, qtsvg
-, qttools
-, qtwebengine
-, libXcomposite
-, bluez
-, writeScript
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  writeShellScriptBin,
+  cmake,
+  wrapQtAppsHook,
+  pkg-config,
+  qmake,
+  curl,
+  grantlee,
+  hidapi,
+  libgit2,
+  libssh2,
+  libusb1,
+  libxml2,
+  libxslt,
+  libzip,
+  zlib,
+  qtbase,
+  qtconnectivity,
+  qtlocation,
+  qtsvg,
+  qttools,
+  qtwebengine,
+  libXcomposite,
+  bluez,
+  writeScript,
 }:
 
 let
   version = "6.0.5231";
 
-  subsurfaceSrc = (fetchFromGitHub {
-    owner = "Subsurface";
-    repo = "subsurface";
-    rev = "38a0050ac33566dfd34bf94cf1d7ac66034e4118";
-    hash = "sha256-6fNcBF/Ep2xs2z83ZQ09XNb/ZkhK1nUNLChV1x8qh0Y=";
-    fetchSubmodules = true;
-  });
+  subsurfaceSrc = (
+    fetchFromGitHub {
+      owner = "Subsurface";
+      repo = "subsurface";
+      rev = "38a0050ac33566dfd34bf94cf1d7ac66034e4118";
+      hash = "sha256-6fNcBF/Ep2xs2z83ZQ09XNb/ZkhK1nUNLChV1x8qh0Y=";
+      fetchSubmodules = true;
+    }
+  );
 
   libdc = stdenv.mkDerivation {
     pname = "libdivecomputer-ssrf";
@@ -47,9 +50,17 @@ let
 
     sourceRoot = "${subsurfaceSrc.name}/libdivecomputer";
 
-    nativeBuildInputs = [ autoreconfHook pkg-config ];
+    nativeBuildInputs = [
+      autoreconfHook
+      pkg-config
+    ];
 
-    buildInputs = [ zlib libusb1 bluez hidapi ];
+    buildInputs = [
+      zlib
+      libusb1
+      bluez
+      hidapi
+    ];
 
     enableParallelBuilding = true;
 
@@ -75,7 +86,11 @@ let
 
     nativeBuildInputs = [ qmake ];
 
-    buildInputs = [ qtbase qtlocation libXcomposite ];
+    buildInputs = [
+      qtbase
+      qtlocation
+      libXcomposite
+    ];
 
     dontWrapQtApps = true;
 
@@ -130,7 +145,11 @@ stdenv.mkDerivation {
     qtwebengine
   ];
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+    pkg-config
+  ];
 
   cmakeFlags = [
     "-DLIBDC_FROM_PKGCONFIG=ON"

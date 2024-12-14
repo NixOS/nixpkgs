@@ -1,25 +1,31 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, udev
-, glib
-, glibcLocales
-, umockdev
-, gnome
-, vala
-, gobject-introspection
-, buildPackages
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  udev,
+  glib,
+  glibcLocales,
+  umockdev,
+  gnome,
+  vala,
+  gobject-introspection,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libgudev";
   version = "238";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/libgudev/${lib.versions.majorMinor finalAttrs.version}/libgudev-${finalAttrs.version}.tar.xz";
@@ -40,15 +46,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    pkg-config
-    meson
-    ninja
-    glib # for glib-mkenums needed during the build
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-    vala
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      meson
+      ninja
+      glib # for glib-mkenums needed during the build
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      vala
+    ];
 
   buildInputs = [
     udev

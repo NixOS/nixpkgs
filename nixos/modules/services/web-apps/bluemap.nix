@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.bluemap;
   format = pkgs.formats.hocon { };
@@ -7,20 +12,21 @@ let
   webappConfig = format.generate "webapp.conf" cfg.webappSettings;
   webserverConfig = format.generate "webserver.conf" cfg.webserverSettings;
 
-  mapsFolder = pkgs.linkFarm "maps"
-    (lib.attrsets.mapAttrs' (name: value:
-      lib.nameValuePair "${name}.conf"
-        (format.generate "${name}.conf" value))
-      cfg.maps);
+  mapsFolder = pkgs.linkFarm "maps" (
+    lib.attrsets.mapAttrs' (
+      name: value: lib.nameValuePair "${name}.conf" (format.generate "${name}.conf" value)
+    ) cfg.maps
+  );
 
-  addonsFolder = pkgs.linkFarm "addons"
-    (lib.attrsets.mapAttrs' (name: value: lib.nameValuePair "${name}.jar" value) cfg.addons);
+  addonsFolder = pkgs.linkFarm "addons" (
+    lib.attrsets.mapAttrs' (name: value: lib.nameValuePair "${name}.jar" value) cfg.addons
+  );
 
-  storageFolder = pkgs.linkFarm "storage"
-    (lib.attrsets.mapAttrs' (name: value:
-      lib.nameValuePair "${name}.conf"
-        (format.generate "${name}.conf" value))
-      cfg.storage);
+  storageFolder = pkgs.linkFarm "storage" (
+    lib.attrsets.mapAttrs' (
+      name: value: lib.nameValuePair "${name}.conf" (format.generate "${name}.conf" value)
+    ) cfg.storage
+  );
 
   configFolder = pkgs.linkFarm "bluemap-config" {
     "maps" = mapsFolder;
@@ -33,9 +39,13 @@ let
   };
 
   inherit (lib) mkOption;
-in {
+in
+{
   imports = [
-    (lib.mkRenamedOptionModule [ "services" "bluemap" "resourcepacks" ] [ "services" "bluemap" "packs" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "bluemap" "resourcepacks" ]
+      [ "services" "bluemap" "packs" ]
+    )
   ];
 
   options.services.bluemap = {
@@ -146,15 +156,17 @@ in {
     };
 
     maps = mkOption {
-      type = lib.types.attrsOf (lib.types.submodule {
-        freeformType = format.type;
-        options = {
-          world = lib.mkOption {
-            type = lib.types.path;
-            description = "Path to world folder containing the dimension to render";
+      type = lib.types.attrsOf (
+        lib.types.submodule {
+          freeformType = format.type;
+          options = {
+            world = lib.mkOption {
+              type = lib.types.path;
+              description = "Path to world folder containing the dimension to render";
+            };
           };
-        };
-      });
+        }
+      );
       default = {
         "overworld" = {
           world = "${cfg.defaultWorld}";
@@ -248,16 +260,21 @@ in {
     };
 
     storage = mkOption {
-      type = lib.types.attrsOf (lib.types.submodule {
-        freeformType = format.type;
-        options = {
-          storage-type = mkOption {
-            type = lib.types.enum [ "FILE" "SQL" ];
-            description = "Type of storage config";
-            default = "FILE";
+      type = lib.types.attrsOf (
+        lib.types.submodule {
+          freeformType = format.type;
+          options = {
+            storage-type = mkOption {
+              type = lib.types.enum [
+                "FILE"
+                "SQL"
+              ];
+              description = "Type of storage config";
+              default = "FILE";
+            };
           };
-        };
-      });
+        }
+      );
       description = ''
         Where the rendered map will be stored.
         Unless you are doing something advanced you should probably leave this alone and configure webRoot instead.
@@ -287,16 +304,16 @@ in {
     };
   };
 
-
   config = lib.mkIf cfg.enable {
-    assertions =
-      [ { assertion = config.services.bluemap.eula;
-          message = ''
-            You have enabled bluemap but have not accepted minecraft's EULA.
-            You can achieve this through setting `services.bluemap.eula = true`
-          '';
-        }
-      ];
+    assertions = [
+      {
+        assertion = config.services.bluemap.eula;
+        message = ''
+          You have enabled bluemap but have not accepted minecraft's EULA.
+          You can achieve this through setting `services.bluemap.eula = true`
+        '';
+      }
+    ];
 
     services.bluemap.coreSettings.accept-download = cfg.eula;
 
@@ -336,6 +353,9 @@ in {
   };
 
   meta = {
-    maintainers = with lib.maintainers; [ dandellion h7x4 ];
+    maintainers = with lib.maintainers; [
+      dandellion
+      h7x4
+    ];
   };
 }

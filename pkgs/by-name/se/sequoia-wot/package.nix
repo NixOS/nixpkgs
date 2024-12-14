@@ -30,15 +30,18 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs = [
-    openssl
-    sqlite
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.SystemConfiguration
-    # See comment near sequoia-openpgp/crypto- buildFeatures
-  ] ++ lib.optionals (!stdenv.targetPlatform.isWindows) [
-    nettle
-  ];
+  buildInputs =
+    [
+      openssl
+      sqlite
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.SystemConfiguration
+      # See comment near sequoia-openpgp/crypto- buildFeatures
+    ]
+    ++ lib.optionals (!stdenv.targetPlatform.isWindows) [
+      nettle
+    ];
 
   buildFeatures = [
     # Upstream uses the sequoia-openpgp crate, which doesn't force you to use a
@@ -48,10 +51,11 @@ rustPlatform.buildRustPackage rec {
     # propagate this logic here as well.
     #
     # [1]: https://crates.io/crates/sequoia-openpgp#user-content-intermediate-crate
-    (if stdenv.targetPlatform.isWindows then
-      "sequoia-openpgp/crypto-cng"
-    else
-      "sequoia-openpgp/crypto-nettle"
+    (
+      if stdenv.targetPlatform.isWindows then
+        "sequoia-openpgp/crypto-cng"
+      else
+        "sequoia-openpgp/crypto-nettle"
     )
   ];
 
@@ -84,7 +88,10 @@ rustPlatform.buildRustPackage rec {
     description = "Rust CLI tool for authenticating bindings and exploring a web of trust";
     homepage = "https://gitlab.com/sequoia-pgp/sequoia-wot";
     license = lib.licenses.gpl2Only;
-    maintainers = with lib.maintainers; [ doronbehar Cryolitia ];
+    maintainers = with lib.maintainers; [
+      doronbehar
+      Cryolitia
+    ];
     mainProgram = "sq-wot";
   };
 }

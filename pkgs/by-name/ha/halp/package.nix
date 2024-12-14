@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, stdenv
-, darwin
-, unixtools
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  stdenv,
+  darwin,
+  unixtools,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -73,7 +74,10 @@ rustPlatform.buildRustPackage rec {
     description = "CLI tool to get help with CLI tools";
     homepage = "https://github.com/orhun/halp";
     changelog = "https://github.com/orhun/halp/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ figsoda ];
     mainProgram = "halp";
   };

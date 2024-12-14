@@ -1,4 +1,12 @@
-{lib, stdenv, fetchpatch, fetchurl, libpng, perl, gettext }:
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchurl,
+  libpng,
+  perl,
+  gettext,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xcftools";
@@ -9,7 +17,11 @@ stdenv.mkDerivation rec {
     sha256 = "19i0x7yhlw6hd2gp013884zchg63yzjdj4hpany011il0n26vgqy";
   };
 
-  buildInputs = [ libpng perl gettext ];
+  buildInputs = [
+    libpng
+    perl
+    gettext
+  ];
 
   patches = [
     (fetchpatch {

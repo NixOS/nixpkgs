@@ -1,4 +1,9 @@
-{ stdenv, lib, cmake, fetchFromGitHub }:
+{
+  stdenv,
+  lib,
+  cmake,
+  fetchFromGitHub,
+}:
 stdenv.mkDerivation (finalAttrs: {
   pname = "clangbuildanalyzer";
   version = "1.5.0";

@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, boost
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
 }:
-
 
 stdenv.mkDerivation rec {
   pname = "zug";
@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
     rm BUILD
   '';
   meta = with lib; {
-    homepage    = "https://github.com/arximboldi/zug";
+    homepage = "https://github.com/arximboldi/zug";
     description = "library for functional interactive c++ programs";
     maintainers = with maintainers; [ nek0 ];
-    license     = licenses.boost;
+    license = licenses.boost;
   };
 }

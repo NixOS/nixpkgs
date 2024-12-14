@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 let
   majorVersion = "0";
@@ -31,7 +35,10 @@ stdenvNoCC.mkDerivation {
       but with hairline serifs in the style of a Didone.
     '';
     platforms = platforms.all;
-    maintainers = with maintainers; [ leenaars minijackson ];
+    maintainers = with maintainers; [
+      leenaars
+      minijackson
+    ];
     license = licenses.cc0;
   };
 }

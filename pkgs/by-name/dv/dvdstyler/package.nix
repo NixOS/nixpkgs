@@ -1,36 +1,41 @@
-{ lib
-, stdenv
-, fetchurl
-, bison
-, cdrtools
-, docbook_xml_dtd_412
-, docbook-xsl-nons
-, dvdauthor
-, dvdplusrwtools
-, ffmpeg
-, flex
-, fontconfig
-, gettext
-, glib
-, gobject-introspection
-, libexif
-, libjpeg
-, pkg-config
-, wrapGAppsHook3
-, wxGTK32
-, wxSVG
-, xine-ui
-, xmlto
-, zip
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+  cdrtools,
+  docbook_xml_dtd_412,
+  docbook-xsl-nons,
+  dvdauthor,
+  dvdplusrwtools,
+  ffmpeg,
+  flex,
+  fontconfig,
+  gettext,
+  glib,
+  gobject-introspection,
+  libexif,
+  libjpeg,
+  pkg-config,
+  wrapGAppsHook3,
+  wxGTK32,
+  wxSVG,
+  xine-ui,
+  xmlto,
+  zip,
 
-, dvdisasterSupport ? true, dvdisaster ? null
-, udevSupport ? true, udev ? null
-, dbusSupport ? true, dbus ? null
+  dvdisasterSupport ? true,
+  dvdisaster ? null,
+  udevSupport ? true,
+  udev ? null,
+  dbusSupport ? true,
+  dbus ? null,
 }:
 
 let
   inherit (lib) optionals makeBinPath;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "dvdstyler";
   version = "3.3b4";
 
@@ -51,38 +56,42 @@ in stdenv.mkDerivation rec {
     xmlto
     zip
   ];
-  buildInputs = [
-    cdrtools
-    dvdauthor
-    dvdplusrwtools
-    ffmpeg
-    fontconfig
-    glib
-    libexif
-    libjpeg
-    wxSVG
-    wxGTK32
-    xine-ui
- ]
-  ++ optionals dvdisasterSupport [ dvdisaster ]
-  ++ optionals udevSupport [ udev ]
-  ++ optionals dbusSupport [ dbus ];
-
-  enableParallelBuilding = true;
-
-  preFixup = let
-    binPath = makeBinPath ([
+  buildInputs =
+    [
       cdrtools
       dvdauthor
       dvdplusrwtools
-    ] ++ optionals dvdisasterSupport [ dvdisaster ]);
+      ffmpeg
+      fontconfig
+      glib
+      libexif
+      libjpeg
+      wxSVG
+      wxGTK32
+      xine-ui
+    ]
+    ++ optionals dvdisasterSupport [ dvdisaster ]
+    ++ optionals udevSupport [ udev ]
+    ++ optionals dbusSupport [ dbus ];
+
+  enableParallelBuilding = true;
+
+  preFixup =
+    let
+      binPath = makeBinPath (
+        [
+          cdrtools
+          dvdauthor
+          dvdplusrwtools
+        ]
+        ++ optionals dvdisasterSupport [ dvdisaster ]
+      );
     in
     ''
       gappsWrapperArgs+=(
         --prefix PATH : "${binPath}"
       )
-   '';
-
+    '';
 
   meta = with lib; {
     homepage = "https://www.dvdstyler.org/";

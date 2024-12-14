@@ -1,5 +1,13 @@
-{ lib, fetchFromGitHub, rustPlatform, qt5, git, cmake
-, pkg-config, makeWrapper }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  qt5,
+  git,
+  cmake,
+  pkg-config,
+  makeWrapper,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "panopticon";
@@ -12,14 +20,18 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1zv87nqhrzsxx0m891df4vagzssj3kblfv9yp7j96dw0vn9950qa";
   };
 
-  nativeBuildInputs = [ cmake pkg-config makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    makeWrapper
+  ];
   propagatedBuildInputs = with qt5; [
-     qt5.qtbase
-     qtdeclarative
-     qtsvg
-     qtquickcontrols2
-     qtgraphicaleffects
-     git
+    qt5.qtbase
+    qtdeclarative
+    qtsvg
+    qtquickcontrols2
+    qtgraphicaleffects
+    git
   ];
 
   dontWrapQtApps = true;
@@ -33,7 +45,7 @@ rustPlatform.buildRustPackage rec {
     mv $out/bin/${pname} $out/share/${pname}
     chmod +x $out/share/${pname}
     makeWrapper $out/share/${pname}/${pname} $out/bin/${pname}
-     '';
+  '';
 
   meta = with lib; {
     description = "Libre cross-platform disassembler";

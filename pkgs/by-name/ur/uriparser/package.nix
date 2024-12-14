@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, cmake, gtest }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  gtest,
+}:
 
 stdenv.mkDerivation rec {
   pname = "uriparser";

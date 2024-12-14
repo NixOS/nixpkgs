@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-yKHAZpELuUD7wlM3Mi7XvxbKgdU1QxD9hsvIFcj3twE=";
 
-  nativeBuildInputs = [openssl];
+  nativeBuildInputs = [ openssl ];
 
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
@@ -30,6 +30,6 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/fuyufjh/heygpt/releases/tag/v${version}";
     license = licenses.mit;
     mainProgram = "heygpt";
-    maintainers = with maintainers; [aldoborrero];
+    maintainers = with maintainers; [ aldoborrero ];
   };
 }

@@ -366,7 +366,8 @@ def repl_flake(attr: str, flake: Flake, **flake_flags: Args) -> None:
     expr = Template(
         files(__package__).joinpath(FLAKE_REPL_TEMPLATE).read_text()
     ).substitute(
-        flake_path=flake.path,
+        flake=flake,
+        flake_path=flake.path.resolve() if isinstance(flake.path, Path) else flake.path,
         flake_attr=flake.attr,
         bold="\033[1m",
         blue="\033[34;1m",

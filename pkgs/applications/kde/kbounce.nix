@@ -1,4 +1,13 @@
-{ mkDerivation, lib, extra-cmake-modules, libkdegames, kconfig, kcrash, kio, ki18n }:
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  libkdegames,
+  kconfig,
+  kcrash,
+  kio,
+  ki18n,
+}:
 
 mkDerivation {
   pname = "kbounce";

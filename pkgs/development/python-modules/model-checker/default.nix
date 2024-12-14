@@ -26,7 +26,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-
   dependencies = [
     tqdm
     z3-solver

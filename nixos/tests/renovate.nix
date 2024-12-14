@@ -2,7 +2,10 @@ import ./make-test-python.nix (
   { pkgs, ... }:
   {
     name = "renovate";
-    meta.maintainers = with pkgs.lib.maintainers; [ marie natsukium ];
+    meta.maintainers = with pkgs.lib.maintainers; [
+      marie
+      natsukium
+    ];
 
     nodes.machine =
       { config, ... }:

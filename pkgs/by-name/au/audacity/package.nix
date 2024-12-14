@@ -62,13 +62,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "audacity";
-  version = "3.7.0";
+  version = "3.7.1";
 
   src = fetchFromGitHub {
     owner = "audacity";
     repo = "audacity";
     rev = "Audacity-${finalAttrs.version}";
-    hash = "sha256-jwsn/L9e1ViWLOh8Xc4lTS9FhanD4GK0BllCwtPamZc=";
+    hash = "sha256-QKydqpkqG7znBEdtVEayC2SyNGU8tQX6AfxdeJN8tDg=";
   };
 
   postPatch =

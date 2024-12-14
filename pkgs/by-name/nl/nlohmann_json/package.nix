@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
 }:
 let
   testData = fetchFromGitHub {
@@ -10,7 +11,8 @@ let
     rev = "v3.1.0";
     hash = "sha256-bG34W63ew7haLnC82A3lS7bviPDnApLipaBjJAjLcVk=";
   };
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "nlohmann_json";
   version = "3.11.3";
 

@@ -1,4 +1,13 @@
-{ fetchurl, lib, stdenv, makeDesktopItem, makeWrapper, unzip, jre, copyDesktopItems }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  makeDesktopItem,
+  makeWrapper,
+  unzip,
+  jre,
+  copyDesktopItems,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gpsprune";
@@ -11,7 +20,10 @@ stdenv.mkDerivation rec {
 
   dontUnpack = true;
 
-  nativeBuildInputs = [ makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    makeWrapper
+    copyDesktopItems
+  ];
   buildInputs = [ jre ];
 
   desktopItems = [
@@ -22,7 +34,10 @@ stdenv.mkDerivation rec {
       desktopName = "GpsPrune";
       genericName = "GPS Data Editor";
       comment = meta.description;
-      categories = [ "Education" "Geoscience" ];
+      categories = [
+        "Education"
+        "Geoscience"
+      ];
       mimeTypes = [
         "application/gpx+xml"
         "application/vnd.google-earth.kml+xml"

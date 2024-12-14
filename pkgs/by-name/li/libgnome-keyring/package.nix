@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, glib, dbus, libgcrypt, pkg-config, intltool, gobject-introspection, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  dbus,
+  libgcrypt,
+  pkg-config,
+  intltool,
+  gobject-introspection,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -10,11 +20,22 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-xMF4+7BfcqzEhNIt2wVo91MsQJsKE+BlE/9UuR6Ud4M=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   strictDeps = true;
-  propagatedBuildInputs = [ glib gobject-introspection dbus libgcrypt ];
-  nativeBuildInputs = [ pkg-config intltool ];
+  propagatedBuildInputs = [
+    glib
+    gobject-introspection
+    dbus
+    libgcrypt
+  ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ];
 
   configureFlags = [
     # not ideal to use -config scripts but it's not possible switch it to pkg-config
@@ -35,7 +56,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Framework for managing passwords and other secrets";
     homepage = "https://gitlab.gnome.org/Archive/libgnome-keyring";
     changelog = "https://gitlab.gnome.org/Archive/libgnome-keyring/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
-    license = with lib.licenses; [ gpl2Plus lgpl2Plus ];
+    license = with lib.licenses; [
+      gpl2Plus
+      lgpl2Plus
+    ];
     pkgConfigModules = [ "gnome-keyring-1" ];
     platforms = lib.platforms.unix;
     maintainers = [ ];

@@ -8,6 +8,7 @@
   fido2,
   qrcode,
   python,
+  fetchpatch,
 }:
 
 buildPythonPackage rec {
@@ -21,6 +22,16 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-O8po7VevqyHlP2isnNnLbpgfs1p4sFezxIZKMTgnwuY=";
   };
+
+  patches = [
+    # Fix for tests.tests.FIDO2Test.test_origin_https
+    # https://github.com/xi/django-mfa3/issues/24
+    (fetchpatch {
+      url = "https://github.com/xi/django-mfa3/commit/49003746783e32cd60e55c4593bef5d7e709c4bd.patch";
+      hash = "sha256-D3fPURAB+RC16fSd2COpCIcmjZW/1h92GOOhRczSVec=";
+      name = "test_origin_https_fix.patch";
+    })
+  ];
 
   build-system = [ setuptools ];
 
@@ -36,9 +47,7 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "qrcode" ];
 
   checkPhase = ''
-    # Disable failing test test_origin_https
-    # https://github.com/xi/django-mfa3/issues/24
-    ${python.interpreter} -m django test --settings tests.settings -k "not test_origin_https"
+    ${python.interpreter} -m django test --settings tests.settings
   '';
 
   meta = {

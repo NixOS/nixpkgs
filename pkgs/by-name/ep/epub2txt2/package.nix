@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "epub2txt2";
@@ -11,7 +15,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-YFaXkcIdat2cn1ITYFyG1hxbbepqcxvyJ6ZzDo4dVYI=";
   };
 
-  makeFlags = [ "CC:=$(CC)" "PREFIX:=$(out)" ];
+  makeFlags = [
+    "CC:=$(CC)"
+    "PREFIX:=$(out)"
+  ];
 
   meta = {
     description = "Simple command-line utility for Linux, for extracting text from EPUB documents";

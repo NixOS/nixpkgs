@@ -1,10 +1,27 @@
-{ stdenv, lib, fetchFromGitHub
-, cmake, wrapQtAppsHook, perl
-, flatbuffers, protobuf, mbedtls
-, alsa-lib, hidapi, libcec, libusb1
-, libX11, libxcb, libXrandr, python3
-, qtbase, qtserialport, qtsvg, qtx11extras
-, withRPiDispmanx ? false, libraspberrypi
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  wrapQtAppsHook,
+  perl,
+  flatbuffers,
+  protobuf,
+  mbedtls,
+  alsa-lib,
+  hidapi,
+  libcec,
+  libusb1,
+  libX11,
+  libxcb,
+  libXrandr,
+  python3,
+  qtbase,
+  qtserialport,
+  qtsvg,
+  qtx11extras,
+  withRPiDispmanx ? false,
+  libraspberrypi,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,32 +39,35 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  buildInputs = [
-    alsa-lib
-    hidapi
-    libusb1
-    libX11
-    libxcb
-    libXrandr
-    flatbuffers
-    protobuf
-    mbedtls
-    python3
-    qtbase
-    qtserialport
-    qtsvg
-    qtx11extras
-  ] ++ lib.optional stdenv.hostPlatform.isLinux libcec
+  buildInputs =
+    [
+      alsa-lib
+      hidapi
+      libusb1
+      libX11
+      libxcb
+      libXrandr
+      flatbuffers
+      protobuf
+      mbedtls
+      python3
+      qtbase
+      qtserialport
+      qtsvg
+      qtx11extras
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux libcec
     ++ lib.optional withRPiDispmanx libraspberrypi;
 
   nativeBuildInputs = [
-    cmake wrapQtAppsHook
+    cmake
+    wrapQtAppsHook
   ] ++ lib.optional stdenv.hostPlatform.isDarwin perl; # for macos bundle
 
-  patchPhase =  ''
+  patchPhase = ''
     patchShebangs test/testrunner.sh
     patchShebangs src/hyperiond/CMakeLists.txt
-  '' ;
+  '';
 
   cmakeFlags = [
     "-DENABLE_DEPLOY_DEPENDENCIES=OFF"
@@ -67,7 +87,10 @@ stdenv.mkDerivation rec {
     description = "Opensource Bias or Ambient Lighting implementation";
     homepage = "https://github.com/hyperion-project/hyperion.ng";
     license = licenses.mit;
-    maintainers = with maintainers; [ algram kazenyuk ];
+    maintainers = with maintainers; [
+      algram
+      kazenyuk
+    ];
     platforms = platforms.unix;
   };
 }

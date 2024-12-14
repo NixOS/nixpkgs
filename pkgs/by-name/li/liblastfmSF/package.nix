@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, pkg-config, curl, openssl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  curl,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "liblastfm-SF";
@@ -6,7 +13,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = [ curl openssl ];
+  propagatedBuildInputs = [
+    curl
+    openssl
+  ];
 
   src = fetchurl {
     url = "mirror://sourceforge/liblastfm/libclastfm-${version}.tar.gz";

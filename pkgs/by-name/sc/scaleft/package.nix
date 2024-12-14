@@ -1,20 +1,31 @@
-{ lib, stdenv, fetchurl, rpmextract, patchelf, testers, scaleft }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  rpmextract,
+  patchelf,
+  testers,
+  scaleft,
+}:
 
 stdenv.mkDerivation rec {
   pname = "scaleft";
   version = "1.80.1";
 
-  src =
-    fetchurl {
-      url = "https://dist.scaleft.com/repos/rpm/stable/centos/9/x86_64/1.80.1/scaleft-client-tools-${version}-1.x86_64.rpm";
-      sha256 = "sha256-QrkqAgkplFF6Tp6FWKb2TJaqeOw8ec4zd9pymDP2IyY=";
-    };
+  src = fetchurl {
+    url = "https://dist.scaleft.com/repos/rpm/stable/centos/9/x86_64/1.80.1/scaleft-client-tools-${version}-1.x86_64.rpm";
+    sha256 = "sha256-QrkqAgkplFF6Tp6FWKb2TJaqeOw8ec4zd9pymDP2IyY=";
+  };
 
-  nativeBuildInputs = [ patchelf rpmextract ];
+  nativeBuildInputs = [
+    patchelf
+    rpmextract
+  ];
 
-  libPath =
-    lib.makeLibraryPath
-       [ stdenv.cc stdenv.cc.cc ];
+  libPath = lib.makeLibraryPath [
+    stdenv.cc
+    stdenv.cc.cc
+  ];
 
   buildCommand = ''
     mkdir -p $out/bin/

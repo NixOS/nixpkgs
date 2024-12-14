@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, makeWrapper
-, alsa-lib
-, lame
-, openssl
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  makeWrapper,
+  alsa-lib,
+  lame,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {

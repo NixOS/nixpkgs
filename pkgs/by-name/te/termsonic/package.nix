@@ -3,7 +3,7 @@
   buildGoModule,
   fetchzip,
   pkg-config,
-  alsa-lib
+  alsa-lib,
 }:
 buildGoModule rec {
   name = "termsonic";

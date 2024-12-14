@@ -4,65 +4,74 @@
 
 # Vendored from:
 #   https://raw.githubusercontent.com/NixOS/ofborg/74f38efa7ef6f0e8e71ec3bfc675ae4fb57d7491/ofborg/src/outpaths.nix
-{ checkMeta
-, includeBroken ? true  # set this to false to exclude meta.broken packages from the output
-, path ? ./../..
+{
+  checkMeta,
+  includeBroken ? true, # set this to false to exclude meta.broken packages from the output
+  path ? ./../..,
 
-# used by pkgs/top-level/release-attrnames-superset.nix
-, attrNamesOnly ? false
+  # used by pkgs/top-level/release-attrnames-superset.nix
+  attrNamesOnly ? false,
 
-# Set this to `null` to build for builtins.currentSystem only
-, systems ? import ../../ci/supportedSystems.nix
+  # Set this to `null` to build for builtins.currentSystem only
+  systems ? import ../../ci/supportedSystems.nix,
 }:
 let
   lib = import (path + "/lib");
-  hydraJobs = import (path + "/pkgs/top-level/release.nix")
-    # Compromise: accuracy vs. resources needed for evaluation.
-    {
-      inherit attrNamesOnly;
-      supportedSystems =
-        if systems == null
-        then [ builtins.currentSystem ]
-        else systems;
-      nixpkgsArgs = {
-        config = {
-          allowAliases = false;
-          allowBroken = includeBroken;
-          allowUnfree = false;
-          allowInsecurePredicate = x: true;
-          checkMeta = checkMeta;
+  hydraJobs =
+    import (path + "/pkgs/top-level/release.nix")
+      # Compromise: accuracy vs. resources needed for evaluation.
+      {
+        inherit attrNamesOnly;
+        supportedSystems = if systems == null then [ builtins.currentSystem ] else systems;
+        nixpkgsArgs = {
+          config = {
+            allowAliases = false;
+            allowBroken = includeBroken;
+            allowUnfree = false;
+            allowInsecurePredicate = x: true;
+            checkMeta = checkMeta;
 
-          handleEvalIssue = reason: errormsg:
-            let
-              fatalErrors = [
-                "unknown-meta"
-                "broken-outputs"
-              ];
-            in
-            if builtins.elem reason fatalErrors
-            then abort errormsg
-            # hydra does not build unfree packages, so tons of them are broken yet not marked meta.broken.
-            else if !includeBroken && builtins.elem reason [ "broken" "unfree" ]
-            then throw "broken"
-            else if builtins.elem reason [ "unsupported" ]
-            then throw "unsupported"
-            else true;
+            handleEvalIssue =
+              reason: errormsg:
+              let
+                fatalErrors = [
+                  "unknown-meta"
+                  "broken-outputs"
+                ];
+              in
+              if builtins.elem reason fatalErrors then
+                abort errormsg
+              # hydra does not build unfree packages, so tons of them are broken yet not marked meta.broken.
+              else if
+                !includeBroken
+                && builtins.elem reason [
+                  "broken"
+                  "unfree"
+                ]
+              then
+                throw "broken"
+              else if builtins.elem reason [ "unsupported" ] then
+                throw "unsupported"
+              else
+                true;
 
-          inHydra = true;
+            inHydra = true;
+          };
         };
       };
-    };
   recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
 
   # hydraJobs leaves recurseForDerivations as empty attrmaps;
   # that would break nix-env and we also need to recurse everywhere.
-  tweak = lib.mapAttrs
-    (name: val:
-      if name == "recurseForDerivations" then true
-      else if lib.isAttrs val && val.type or null != "derivation"
-      then recurseIntoAttrs (tweak val)
-      else val
-    );
+  tweak = lib.mapAttrs (
+    name: val:
+    if name == "recurseForDerivations" then
+      true
+    else if lib.isAttrs val && val.type or null != "derivation" then
+      recurseIntoAttrs (tweak val)
+    else
+      val
+  );
 
   # Some of these contain explicit references to platform(s) we want to avoid;
   # some even (transitively) depend on ~/.nixpkgs/config.nix (!)

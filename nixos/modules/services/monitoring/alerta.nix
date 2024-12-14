@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.alerta;
 
@@ -53,7 +58,10 @@ in
     corsOrigins = lib.mkOption {
       type = lib.types.listOf lib.types.str;
       description = "List of URLs that can access the API for Cross-Origin Resource Sharing (CORS)";
-      default = [ "http://localhost" "http://localhost:5000" ];
+      default = [
+        "http://localhost"
+        "http://localhost:5000"
+      ];
     };
 
     authenticationRequired = lib.mkOption {

@@ -32,7 +32,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-
   dependencies = [
     google-ai-generativelanguage
     google-api-core

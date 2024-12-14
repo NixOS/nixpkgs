@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchCrate
-, pkg-config
-, openssl
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  openssl,
+  darwin,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "sea-orm-cli";
@@ -17,15 +18,19 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
 
   cargoHash = "sha256-r5nqzu79z/XdrqvaJ+5ylZI6tC/SKTzmoOSgkbAaPn4=";
 
   meta = with lib; {
     homepage = "https://www.sea-ql.org/SeaORM";
     description = " Command line utility for SeaORM";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ traxys ];
   };
 }

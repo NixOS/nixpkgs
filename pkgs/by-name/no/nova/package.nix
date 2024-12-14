@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "nova";
@@ -13,7 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-v3ld3bHpVWNJgQ6K5iS7q8QV4ft4RE42wKi+f4++yqY=";
 
-  ldflags = [ "-X main.version=${version}" "-s" "-w" ];
+  ldflags = [
+    "-X main.version=${version}"
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Find outdated or deprecated Helm charts running in your cluster";

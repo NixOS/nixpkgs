@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, m17n_db
-, autoreconfHook
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  m17n_db,
+  autoreconfHook,
+  pkg-config,
 }:
 stdenv.mkDerivation rec {
   pname = "m17n-lib";
@@ -18,7 +19,8 @@ stdenv.mkDerivation rec {
 
   # reconf needed to sucesfully cross-compile
   nativeBuildInputs = [
-    autoreconfHook pkg-config
+    autoreconfHook
+    pkg-config
     # requires m17n-db tool at build time
     m17n_db
   ];

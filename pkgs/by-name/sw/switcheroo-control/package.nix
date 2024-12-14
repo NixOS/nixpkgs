@@ -1,12 +1,13 @@
-{ lib
-, ninja
-, meson
-, fetchFromGitLab
-, systemd
-, libgudev
-, pkg-config
-, glib
-, python3Packages
+{
+  lib,
+  ninja,
+  meson,
+  fetchFromGitLab,
+  systemd,
+  libgudev,
+  pkg-config,
+  glib,
+  python3Packages,
 }:
 
 python3Packages.buildPythonApplication rec {

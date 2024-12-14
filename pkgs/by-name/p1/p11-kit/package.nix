@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, libtasn1
-, libxslt
-, docbook-xsl-nons
-, docbook_xml_dtd_43
-, gettext
-, libffi
-, libintl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  libtasn1,
+  libxslt,
+  docbook-xsl-nons,
+  docbook_xml_dtd_43,
+  gettext,
+  libffi,
+  libintl,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  outputs = [ "out" "bin" "dev" ];
+  outputs = [
+    "out"
+    "bin"
+    "dev"
+  ];
 
   strictDeps = true;
 
@@ -51,13 +56,15 @@ stdenv.mkDerivation rec {
     (lib.mesonBool "man" true)
     (lib.mesonEnable "systemd" false)
     (lib.mesonOption "bashcompdir" "${placeholder "bin"}/share/bash-completion/completions")
-    (lib.mesonOption "trust_paths" (lib.concatStringsSep ":" [
-      "/etc/ssl/trust-source" # p11-kit trust source
-      "/etc/ssl/certs/ca-certificates.crt" # NixOS + Debian/Ubuntu/Arch/Gentoo...
-      "/etc/pki/tls/certs/ca-bundle.crt" # Fedora/CentOS
-      "/var/lib/ca-certificates/ca-bundle.pem" # openSUSE
-      "/etc/ssl/cert.pem" # Darwin/macOS
-    ]))
+    (lib.mesonOption "trust_paths" (
+      lib.concatStringsSep ":" [
+        "/etc/ssl/trust-source" # p11-kit trust source
+        "/etc/ssl/certs/ca-certificates.crt" # NixOS + Debian/Ubuntu/Arch/Gentoo...
+        "/etc/pki/tls/certs/ca-bundle.crt" # Fedora/CentOS
+        "/var/lib/ca-certificates/ca-bundle.pem" # openSUSE
+        "/etc/ssl/cert.pem" # Darwin/macOS
+      ]
+    ))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;

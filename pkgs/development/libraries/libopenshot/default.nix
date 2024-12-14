@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, cmake
-, cppzmq
-, doxygen
-, ffmpeg
-, imagemagick
-, jsoncpp
-, libopenshot-audio
-, llvmPackages
-, pkg-config
-, python3
-, qtbase
-, qtmultimedia
-, swig
-, zeromq
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  cmake,
+  cppzmq,
+  doxygen,
+  ffmpeg,
+  imagemagick,
+  jsoncpp,
+  libopenshot-audio,
+  llvmPackages,
+  pkg-config,
+  python3,
+  qtbase,
+  qtmultimedia,
+  swig,
+  zeromq,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,21 +42,24 @@ stdenv.mkDerivation (finalAttrs: {
     swig
   ];
 
-  buildInputs = [
-    cppzmq
-    ffmpeg
-    imagemagick
-    jsoncpp
-    libopenshot-audio
-    python3
-    qtbase
-    qtmultimedia
-    zeromq
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    llvmPackages.openmp
-  ];
+  buildInputs =
+    [
+      cppzmq
+      ffmpeg
+      imagemagick
+      jsoncpp
+      libopenshot-audio
+      python3
+      qtbase
+      qtmultimedia
+      zeromq
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      llvmPackages.openmp
+    ];
 
   strictDeps = true;
 

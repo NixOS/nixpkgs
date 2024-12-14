@@ -35,8 +35,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ]
-  ++ optional-dependencies.arrays;
+  ] ++ optional-dependencies.arrays;
 
   pythonImportsCheck = [ "uncertainties" ];
 

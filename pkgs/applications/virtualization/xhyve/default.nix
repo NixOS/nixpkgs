@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, Hypervisor, vmnet, xpc, libobjc, zlib }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  Hypervisor,
+  vmnet,
+  xpc,
+  libobjc,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xhyve";
@@ -11,7 +20,13 @@ stdenv.mkDerivation rec {
     sha256 = "1pjdg4ppy6qh3vr1ls5zyw3jzcvwny9wydnmfpadwij1hvns7lj3";
   };
 
-  buildInputs = [ Hypervisor vmnet xpc libobjc zlib ];
+  buildInputs = [
+    Hypervisor
+    vmnet
+    xpc
+    libobjc
+    zlib
+  ];
 
   # Don't use git to determine version
   prePatch = ''
@@ -19,8 +34,10 @@ stdenv.mkDerivation rec {
       --replace 'shell git describe --abbrev=6 --dirty --always --tags' "$version"
   '';
 
-
-  makeFlags = [ "CFLAGS+=-Wno-shift-sign-overflow" ''CFLAGS+=-DVERSION=\"${version}\"'' ];
+  makeFlags = [
+    "CFLAGS+=-Wno-shift-sign-overflow"
+    ''CFLAGS+=-DVERSION=\"${version}\"''
+  ];
 
   installPhase = ''
     mkdir -p $out/bin

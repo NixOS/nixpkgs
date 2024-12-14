@@ -1,15 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, boost
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "quantlib";
   version = "1.36";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "lballabio";

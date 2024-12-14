@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, qmake
-, qtbase
-, pkg-config
-, sigutils
-, fftwSinglePrec
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  pkg-config,
+  sigutils,
+  fftwSinglePrec,
 }:
 
 stdenv.mkDerivation rec {
@@ -46,6 +47,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/BatchDrake/SuWidgets";
     license = licenses.gpl3;
     platforms = platforms.all;
-    maintainers = with maintainers; [ polygon oxapentane ];
+    maintainers = with maintainers; [
+      polygon
+      oxapentane
+    ];
   };
 }

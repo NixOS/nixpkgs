@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, libclthreads, libX11, libXft, xorg, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libclthreads,
+  libX11,
+  libXft,
+  xorg,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libclxclient";
@@ -9,7 +18,12 @@ stdenv.mkDerivation rec {
     sha256 = "10bq6fy8d3pr1x2x3xx9qhf2hdxrwdgvg843a2y6lx70y1jfj0c5";
   };
 
-  buildInputs = [ libclthreads libX11 libXft xorg.xorgproto ];
+  buildInputs = [
+    libclthreads
+    libX11
+    libXft
+    xorg.xorgproto
+  ];
 
   nativeBuildInputs = [ pkg-config ];
 

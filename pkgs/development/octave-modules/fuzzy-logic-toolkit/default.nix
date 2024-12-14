@@ -1,6 +1,7 @@
-{ buildOctavePackage
-, lib
-, fetchFromGitHub
+{
+  buildOctavePackage,
+  lib,
+  fetchFromGitHub,
 }:
 
 buildOctavePackage rec {

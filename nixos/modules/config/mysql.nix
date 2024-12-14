@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.users.mysql;
 in
@@ -79,16 +84,26 @@ in
             passwordCrypt = lib.mkOption {
               example = "2";
               type = lib.types.enum [
-                "0" "plain"
-                "1" "Y"
-                "2" "mysql"
-                "3" "md5"
-                "4" "sha1"
-                "5" "drupal7"
-                "6" "joomla15"
-                "7" "ssha"
-                "8" "sha512"
-                "9" "sha256"
+                "0"
+                "plain"
+                "1"
+                "Y"
+                "2"
+                "mysql"
+                "3"
+                "md5"
+                "4"
+                "sha1"
+                "5"
+                "drupal7"
+                "6"
+                "joomla15"
+                "7"
+                "ssha"
+                "8"
+                "sha512"
+                "9"
+                "sha256"
               ];
               description = ''
                 The method to encrypt the user's password:
@@ -119,7 +134,14 @@ in
               '';
             };
             cryptDefault = lib.mkOption {
-              type = lib.types.nullOr (lib.types.enum [ "md5" "sha256" "sha512" "blowfish" ]);
+              type = lib.types.nullOr (
+                lib.types.enum [
+                  "md5"
+                  "sha256"
+                  "sha512"
+                  "blowfish"
+                ]
+              );
               default = null;
               example = "blowfish";
               description = "The default encryption method to use for `passwordCrypt = 1`.";
@@ -358,64 +380,81 @@ in
       group = "root";
       mode = "0600";
       # password will be added from password file in systemd oneshot
-      text = ''
-        users.host=${cfg.host}
-        users.db_user=${cfg.user}
-        users.database=${cfg.database}
-        users.table=${cfg.pam.table}
-        users.user_column=${cfg.pam.userColumn}
-        users.password_column=${cfg.pam.passwordColumn}
-        users.password_crypt=${cfg.pam.passwordCrypt}
-        users.disconnect_every_operation=${if cfg.pam.disconnectEveryOperation then "1" else "0"}
-        verbose=${if cfg.pam.verbose then "1" else "0"}
-      '' + lib.optionalString (cfg.pam.cryptDefault != null) ''
-        users.use_${cfg.pam.cryptDefault}=1
-      '' + lib.optionalString (cfg.pam.where != null) ''
-        users.where_clause=${cfg.pam.where}
-      '' + lib.optionalString (cfg.pam.statusColumn != null) ''
-        users.status_column=${cfg.pam.statusColumn}
-      '' + lib.optionalString (cfg.pam.updateTable != null) ''
-        users.update_table=${cfg.pam.updateTable}
-      '' + lib.optionalString cfg.pam.logging.enable ''
-        log.enabled=true
-        log.table=${cfg.pam.logging.table}
-        log.message_column=${cfg.pam.logging.msgColumn}
-        log.pid_column=${cfg.pam.logging.pidColumn}
-        log.user_column=${cfg.pam.logging.userColumn}
-        log.host_column=${cfg.pam.logging.hostColumn}
-        log.rhost_column=${cfg.pam.logging.rHostColumn}
-        log.time_column=${cfg.pam.logging.timeColumn}
-      '';
+      text =
+        ''
+          users.host=${cfg.host}
+          users.db_user=${cfg.user}
+          users.database=${cfg.database}
+          users.table=${cfg.pam.table}
+          users.user_column=${cfg.pam.userColumn}
+          users.password_column=${cfg.pam.passwordColumn}
+          users.password_crypt=${cfg.pam.passwordCrypt}
+          users.disconnect_every_operation=${if cfg.pam.disconnectEveryOperation then "1" else "0"}
+          verbose=${if cfg.pam.verbose then "1" else "0"}
+        ''
+        + lib.optionalString (cfg.pam.cryptDefault != null) ''
+          users.use_${cfg.pam.cryptDefault}=1
+        ''
+        + lib.optionalString (cfg.pam.where != null) ''
+          users.where_clause=${cfg.pam.where}
+        ''
+        + lib.optionalString (cfg.pam.statusColumn != null) ''
+          users.status_column=${cfg.pam.statusColumn}
+        ''
+        + lib.optionalString (cfg.pam.updateTable != null) ''
+          users.update_table=${cfg.pam.updateTable}
+        ''
+        + lib.optionalString cfg.pam.logging.enable ''
+          log.enabled=true
+          log.table=${cfg.pam.logging.table}
+          log.message_column=${cfg.pam.logging.msgColumn}
+          log.pid_column=${cfg.pam.logging.pidColumn}
+          log.user_column=${cfg.pam.logging.userColumn}
+          log.host_column=${cfg.pam.logging.hostColumn}
+          log.rhost_column=${cfg.pam.logging.rHostColumn}
+          log.time_column=${cfg.pam.logging.timeColumn}
+        '';
     };
 
     environment.etc."libnss-mysql.cfg" = {
       mode = "0600";
       user = config.services.nscd.user;
       group = config.services.nscd.group;
-      text = lib.optionalString (cfg.nss.getpwnam != null) ''
-        getpwnam ${cfg.nss.getpwnam}
-      '' + lib.optionalString (cfg.nss.getpwuid != null) ''
-        getpwuid ${cfg.nss.getpwuid}
-      '' + lib.optionalString (cfg.nss.getspnam != null) ''
-        getspnam ${cfg.nss.getspnam}
-      '' + lib.optionalString (cfg.nss.getpwent != null) ''
-        getpwent ${cfg.nss.getpwent}
-      '' + lib.optionalString (cfg.nss.getspent != null) ''
-        getspent ${cfg.nss.getspent}
-      '' + lib.optionalString (cfg.nss.getgrnam != null) ''
-        getgrnam ${cfg.nss.getgrnam}
-      '' + lib.optionalString (cfg.nss.getgrgid != null) ''
-        getgrgid ${cfg.nss.getgrgid}
-      '' + lib.optionalString (cfg.nss.getgrent != null) ''
-        getgrent ${cfg.nss.getgrent}
-      '' + lib.optionalString (cfg.nss.memsbygid != null) ''
-        memsbygid ${cfg.nss.memsbygid}
-      '' + lib.optionalString (cfg.nss.gidsbymem != null) ''
-        gidsbymem ${cfg.nss.gidsbymem}
-      '' + ''
-        host ${cfg.host}
-        database ${cfg.database}
-      '';
+      text =
+        lib.optionalString (cfg.nss.getpwnam != null) ''
+          getpwnam ${cfg.nss.getpwnam}
+        ''
+        + lib.optionalString (cfg.nss.getpwuid != null) ''
+          getpwuid ${cfg.nss.getpwuid}
+        ''
+        + lib.optionalString (cfg.nss.getspnam != null) ''
+          getspnam ${cfg.nss.getspnam}
+        ''
+        + lib.optionalString (cfg.nss.getpwent != null) ''
+          getpwent ${cfg.nss.getpwent}
+        ''
+        + lib.optionalString (cfg.nss.getspent != null) ''
+          getspent ${cfg.nss.getspent}
+        ''
+        + lib.optionalString (cfg.nss.getgrnam != null) ''
+          getgrnam ${cfg.nss.getgrnam}
+        ''
+        + lib.optionalString (cfg.nss.getgrgid != null) ''
+          getgrgid ${cfg.nss.getgrgid}
+        ''
+        + lib.optionalString (cfg.nss.getgrent != null) ''
+          getgrent ${cfg.nss.getgrent}
+        ''
+        + lib.optionalString (cfg.nss.memsbygid != null) ''
+          memsbygid ${cfg.nss.memsbygid}
+        ''
+        + lib.optionalString (cfg.nss.gidsbymem != null) ''
+          gidsbymem ${cfg.nss.gidsbymem}
+        ''
+        + ''
+          host ${cfg.host}
+          database ${cfg.database}
+        '';
     };
 
     environment.etc."libnss-mysql-root.cfg" = {

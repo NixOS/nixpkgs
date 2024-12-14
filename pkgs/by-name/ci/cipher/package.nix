@@ -1,17 +1,20 @@
-{ lib, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, vala
-, pkg-config
-, pantheon
-, python3
-, gettext
-, glib
-, gtk3
-, libgee
-, wrapGAppsHook3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  pantheon,
+  python3,
+  gettext,
+  glib,
+  gtk3,
+  libgee,
+  wrapGAppsHook3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cipher";

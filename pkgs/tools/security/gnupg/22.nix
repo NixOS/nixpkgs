@@ -1,11 +1,31 @@
-{ lib, stdenv, fetchurl, buildPackages
-, pkg-config, texinfo
-, gettext, libassuan, libgcrypt, libgpg-error, libiconv, libksba, npth
-, adns, bzip2, gnutls, libusb1, openldap, readline, sqlite, zlib
-, enableMinimal ? false
-, withPcsc ? !enableMinimal, pcsclite
-, guiSupport ? stdenv.hostPlatform.isDarwin, pinentry
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildPackages,
+  pkg-config,
+  texinfo,
+  gettext,
+  libassuan,
+  libgcrypt,
+  libgpg-error,
+  libiconv,
+  libksba,
+  npth,
+  adns,
+  bzip2,
+  gnutls,
+  libusb1,
+  openldap,
+  readline,
+  sqlite,
+  zlib,
+  enableMinimal ? false,
+  withPcsc ? !enableMinimal,
+  pcsclite,
+  guiSupport ? stdenv.hostPlatform.isDarwin,
+  pinentry,
+  nixosTests,
 }:
 
 assert guiSupport -> !enableMinimal;
@@ -20,12 +40,30 @@ stdenv.mkDerivation rec {
   };
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [ pkg-config texinfo ];
-  buildInputs = [
-    gettext libassuan libgcrypt libgpg-error libiconv libksba npth
-  ] ++ lib.optionals (!enableMinimal) [
-    adns bzip2 gnutls libusb1 openldap readline sqlite zlib
+  nativeBuildInputs = [
+    pkg-config
+    texinfo
   ];
+  buildInputs =
+    [
+      gettext
+      libassuan
+      libgcrypt
+      libgpg-error
+      libiconv
+      libksba
+      npth
+    ]
+    ++ lib.optionals (!enableMinimal) [
+      adns
+      bzip2
+      gnutls
+      libusb1
+      openldap
+      readline
+      sqlite
+      zlib
+    ];
 
   patches = [
     ./fix-libusb-include-path.patch
@@ -34,50 +72,58 @@ stdenv.mkDerivation rec {
     ./22-allow-import-of-previously-known-keys-even-without-UI.patch
   ];
 
-  postPatch = ''
-    sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' configure doc/dirmngr.texi doc/gnupg.info-1
-    # Fix broken SOURCE_DATE_EPOCH usage - remove on the next upstream update
-    sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.am
-    sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.in
-    '' + lib.optionalString (stdenv.hostPlatform.isLinux && withPcsc) ''
+  postPatch =
+    ''
+      sed -i 's,hkps://hkps.pool.sks-keyservers.net,hkps://keys.openpgp.org,g' configure doc/dirmngr.texi doc/gnupg.info-1
+      # Fix broken SOURCE_DATE_EPOCH usage - remove on the next upstream update
+      sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.am
+      sed -i 's/$SOURCE_DATE_EPOCH/''${SOURCE_DATE_EPOCH}/' doc/Makefile.in
+    ''
+    + lib.optionalString (stdenv.hostPlatform.isLinux && withPcsc) ''
       sed -i 's,"libpcsclite\.so[^"]*","${lib.getLib pcsclite}/lib/libpcsclite.so",g' scd/scdaemon.c
     '';
 
-  configureFlags = [
-    "--with-libgpg-error-prefix=${libgpg-error.dev}"
-    "--with-libgcrypt-prefix=${libgcrypt.dev}"
-    "--with-libassuan-prefix=${libassuan.dev}"
-    "--with-ksba-prefix=${libksba.dev}"
-    "GPGRT_CONFIG=${lib.getDev libgpg-error}/bin/gpgrt-config"
-  ]
-  ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${pinentry.binaryPath or "bin/pinentry"}"
-  ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-ccid-driver";
+  configureFlags =
+    [
+      "--with-libgpg-error-prefix=${libgpg-error.dev}"
+      "--with-libgcrypt-prefix=${libgcrypt.dev}"
+      "--with-libassuan-prefix=${libassuan.dev}"
+      "--with-ksba-prefix=${libksba.dev}"
+      "GPGRT_CONFIG=${lib.getDev libgpg-error}/bin/gpgrt-config"
+    ]
+    ++ lib.optional guiSupport "--with-pinentry-pgm=${pinentry}/${
+      pinentry.binaryPath or "bin/pinentry"
+    }"
+    ++ lib.optional stdenv.hostPlatform.isDarwin "--disable-ccid-driver";
 
-  postInstall = if enableMinimal
-  then ''
-    rm -r $out/{libexec,sbin,share}
-    for f in $(find $out/bin -type f -not -name gpg)
-    do
-      rm $f
-    done
-  '' else ''
-    mkdir -p $out/lib/systemd/user
-    for f in doc/examples/systemd-user/*.{service,socket} ; do
-      substitute $f $out/lib/systemd/user/$(basename $f) \
-        --replace /usr/bin $out/bin
-    done
+  postInstall =
+    if enableMinimal then
+      ''
+        rm -r $out/{libexec,sbin,share}
+        for f in $(find $out/bin -type f -not -name gpg)
+        do
+          rm $f
+        done
+      ''
+    else
+      ''
+        mkdir -p $out/lib/systemd/user
+        for f in doc/examples/systemd-user/*.{service,socket} ; do
+          substitute $f $out/lib/systemd/user/$(basename $f) \
+            --replace /usr/bin $out/bin
+        done
 
-    # add gpg2 symlink to make sure git does not break when signing commits
-    ln -s $out/bin/gpg $out/bin/gpg2
+        # add gpg2 symlink to make sure git does not break when signing commits
+        ln -s $out/bin/gpg $out/bin/gpg2
 
-    # Make libexec tools available in PATH
-    for f in $out/libexec/; do
-      if [[ "$(basename $f)" == "gpg-wks-client" ]]; then continue; fi
-      ln -s $f $out/bin/$(basename $f)
-    done
+        # Make libexec tools available in PATH
+        for f in $out/libexec/; do
+          if [[ "$(basename $f)" == "gpg-wks-client" ]]; then continue; fi
+          ln -s $f $out/bin/$(basename $f)
+        done
 
-    ln -s -t $out/bin $out/libexec/*
-  '';
+        ln -s -t $out/bin $out/libexec/*
+      '';
 
   enableParallelBuilding = true;
 

@@ -20,7 +20,10 @@ buildPythonPackage rec {
   };
 
   build-system = [ poetry-core ];
-  dependencies = [ crossandra dahlia ];
+  dependencies = [
+    crossandra
+    dahlia
+  ];
 
   meta = with lib; {
     changelog = "https://github.com/samarium-lang/samarium/blob/${src.rev}/CHANGELOG.md";

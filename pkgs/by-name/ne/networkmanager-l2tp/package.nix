@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, substituteAll
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, gtk3
-, gtk4
-, networkmanager
-, ppp
-, xl2tpd
-, strongswan
-, libsecret
-, withGnome ? true
-, libnma
-, libnma-gtk4
-, glib
-, openssl
-, nss
+{
+  stdenv,
+  lib,
+  substituteAll,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  gtk3,
+  gtk4,
+  networkmanager,
+  ppp,
+  xl2tpd,
+  strongswan,
+  libsecret,
+  withGnome ? true,
+  libnma,
+  libnma-gtk4,
+  glib,
+  openssl,
+  nss,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,19 +44,21 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    networkmanager
-    ppp
-    glib
-    openssl
-    nss
-  ] ++ lib.optionals withGnome [
-    gtk3
-    gtk4
-    libsecret
-    libnma
-    libnma-gtk4
-  ];
+  buildInputs =
+    [
+      networkmanager
+      ppp
+      glib
+      openssl
+      nss
+    ]
+    ++ lib.optionals withGnome [
+      gtk3
+      gtk4
+      libsecret
+      libnma
+      libnma-gtk4
+    ];
 
   configureFlags = [
     "--with-gnome=${if withGnome then "yes" else "no"}"
@@ -75,6 +78,9 @@ stdenv.mkDerivation rec {
     inherit (networkmanager.meta) platforms;
     homepage = "https://github.com/nm-l2tp/network-manager-l2tp";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ abbradar obadz ];
+    maintainers = with maintainers; [
+      abbradar
+      obadz
+    ];
   };
 }

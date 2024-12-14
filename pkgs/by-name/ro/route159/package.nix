@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 let
   majorVersion = "1";
@@ -26,7 +30,10 @@ stdenvNoCC.mkDerivation {
     homepage = "http://dotcolon.net/font/route159/";
     description = "Weighted sans serif font";
     platforms = platforms.all;
-    maintainers = with maintainers; [ leenaars minijackson ];
+    maintainers = with maintainers; [
+      leenaars
+      minijackson
+    ];
     license = licenses.ofl;
   };
 }

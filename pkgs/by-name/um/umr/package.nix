@@ -1,21 +1,22 @@
-{ lib
-, stdenv
+{
+  lib,
+  stdenv,
 
-, fetchFromGitLab
+  fetchFromGitLab,
 
-, cmake
-, pkg-config
+  cmake,
+  pkg-config,
 
-, libdrm
-, libgbm
-, libpciaccess
-, llvmPackages
-, nanomsg
-, ncurses
-, SDL2
-, bash-completion
+  libdrm,
+  libgbm,
+  libpciaccess,
+  llvmPackages,
+  nanomsg,
+  ncurses,
+  SDL2,
+  bash-completion,
 
-, nix-update-script
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -55,5 +56,5 @@ stdenv.mkDerivation rec {
     license = licenses.mit;
     maintainers = with maintainers; [ Flakebi ];
     platforms = platforms.linux;
- };
+  };
 }

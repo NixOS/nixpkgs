@@ -142,10 +142,10 @@ in
           (mkIf (cfg.passwordSalt != null) "WAKAPI_PASSWORD_SALT=${cfg.passwordSalt}")
           (mkIf (cfg.smtpPassword != null) "WAKAPI_MAIL_SMTP_PASS=${cfg.smtpPassword}")
         ];
-        EnvironmentFile = [
-          (optional (cfg.passwordSaltFile != null) cfg.passwordSaltFile)
-          (optional (cfg.smtpPasswordFile != null) cfg.smtpPasswordFile)
-        ];
+
+        EnvironmentFile =
+          (lib.optional (cfg.passwordSaltFile != null) cfg.passwordSaltFile)
+          ++ (lib.optional (cfg.smtpPasswordFile != null) cfg.smtpPasswordFile);
 
         User = config.users.users.wakapi.name;
         Group = config.users.users.wakapi.group;

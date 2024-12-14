@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, autoreconfHook
-, hfst-ospell
-, fetchFromGitHub
-, pkg-config
-, python3
+{
+  stdenv,
+  lib,
+  autoreconfHook,
+  hfst-ospell,
+  fetchFromGitHub,
+  pkg-config,
+  python3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

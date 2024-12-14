@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchCrate, stdenv, apple-sdk_11 }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  stdenv,
+  apple-sdk_11,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "vimv-rs";

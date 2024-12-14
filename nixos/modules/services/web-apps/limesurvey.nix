@@ -1,9 +1,28 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
 
-  inherit (lib) mkDefault mkEnableOption mkForce mkIf mkMerge mkOption mkPackageOption;
-  inherit (lib) literalExpression mapAttrs optional optionalString types;
+  inherit (lib)
+    mkDefault
+    mkEnableOption
+    mkForce
+    mkIf
+    mkMerge
+    mkOption
+    mkPackageOption
+    ;
+  inherit (lib)
+    literalExpression
+    mapAttrs
+    optional
+    optionalString
+    types
+    ;
 
   cfg = config.services.limesurvey;
   fpm = config.services.phpfpm.pools.limesurvey;
@@ -12,9 +31,17 @@ let
   group = config.services.httpd.group;
   stateDir = "/var/lib/limesurvey";
 
-  configType = with types; oneOf [ (attrsOf configType) str int bool ] // {
-    description = "limesurvey config type (str, int, bool or attribute set thereof)";
-  };
+  configType =
+    with types;
+    oneOf [
+      (attrsOf configType)
+      str
+      int
+      bool
+    ]
+    // {
+      description = "limesurvey config type (str, int, bool or attribute set thereof)";
+    };
 
   limesurveyConfig = pkgs.writeText "config.php" ''
     <?php
@@ -84,14 +111,22 @@ in
 
     database = {
       type = mkOption {
-        type = types.enum [ "mysql" "pgsql" "odbc" "mssql" ];
+        type = types.enum [
+          "mysql"
+          "pgsql"
+          "odbc"
+          "mssql"
+        ];
         example = "pgsql";
         default = "mysql";
         description = "Database engine to use.";
       };
 
       dbEngine = mkOption {
-        type = types.enum [ "MyISAM" "InnoDB" ];
+        type = types.enum [
+          "MyISAM"
+          "InnoDB"
+        ];
         default = "InnoDB";
         description = "Database storage engine to use.";
       };
@@ -134,10 +169,12 @@ in
       socket = mkOption {
         type = types.nullOr types.path;
         default =
-          if mysqlLocal then "/run/mysqld/mysqld.sock"
-          else if pgsqlLocal then "/run/postgresql"
-          else null
-        ;
+          if mysqlLocal then
+            "/run/mysqld/mysqld.sock"
+          else if pgsqlLocal then
+            "/run/postgresql"
+          else
+            null;
         defaultText = literalExpression "/run/mysqld/mysqld.sock";
         description = "Path to the unix socket file to use for authentication.";
       };
@@ -170,7 +207,13 @@ in
     };
 
     poolConfig = mkOption {
-      type = with types; attrsOf (oneOf [ str int bool ]);
+      type =
+        with types;
+        attrsOf (oneOf [
+          str
+          int
+          bool
+        ]);
       default = {
         "pm" = "dynamic";
         "pm.max_children" = 32;
@@ -187,7 +230,7 @@ in
 
     config = mkOption {
       type = configType;
-      default = {};
+      default = { };
       description = ''
         LimeSurvey configuration. Refer to
         <https://manual.limesurvey.org/Optional_settings>
@@ -201,19 +244,24 @@ in
   config = mkIf cfg.enable {
 
     assertions = [
-      { assertion = cfg.database.createLocally -> cfg.database.type == "mysql";
+      {
+        assertion = cfg.database.createLocally -> cfg.database.type == "mysql";
         message = "services.limesurvey.createLocally is currently only supported for database type 'mysql'";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.user == user;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.user == user;
         message = "services.limesurvey.database.user must be set to ${user} if services.limesurvey.database.createLocally is set true";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.socket != null;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.socket != null;
         message = "services.limesurvey.database.socket must be set if services.limesurvey.database.createLocally is set to true";
       }
-      { assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
+      {
+        assertion = cfg.database.createLocally -> cfg.database.passwordFile == null;
         message = "a password cannot be specified if services.limesurvey.database.createLocally is set to true";
       }
-      { assertion = cfg.encryptionKey != null || cfg.encryptionKeyFile != null;
+      {
+        assertion = cfg.encryptionKey != null || cfg.encryptionKeyFile != null;
         message = ''
           You must set `services.limesurvey.encryptionKeyFile` to a file containing a 32-character uppercase hex string.
 
@@ -221,7 +269,8 @@ in
           in the LimeSurvey interface and create backups before filling the key.
         '';
       }
-      { assertion = cfg.encryptionNonce != null || cfg.encryptionNonceFile != null;
+      {
+        assertion = cfg.encryptionNonce != null || cfg.encryptionNonceFile != null;
         message = ''
           You must set `services.limesurvey.encryptionNonceFile` to a file containing a 24-character uppercase hex string.
 
@@ -235,10 +284,15 @@ in
       runtimePath = "${stateDir}/tmp/runtime";
       components = {
         db = {
-          connectionString = "${cfg.database.type}:dbname=${cfg.database.name};host=${if pgsqlLocal then cfg.database.socket else cfg.database.host};port=${toString cfg.database.port}" +
-            optionalString mysqlLocal ";socket=${cfg.database.socket}";
+          connectionString =
+            "${cfg.database.type}:dbname=${cfg.database.name};host=${
+              if pgsqlLocal then cfg.database.socket else cfg.database.host
+            };port=${toString cfg.database.port}"
+            + optionalString mysqlLocal ";socket=${cfg.database.socket}";
           username = cfg.database.user;
-          password = mkIf (cfg.database.passwordFile != null) "file_get_contents(\"${toString cfg.database.passwordFile}\");";
+          password = mkIf (
+            cfg.database.passwordFile != null
+          ) "file_get_contents(\"${toString cfg.database.passwordFile}\");";
           tablePrefix = "limesurvey_";
         };
         assetManager.basePath = "${stateDir}/tmp/assets";
@@ -250,7 +304,9 @@ in
       config = {
         tempdir = "${stateDir}/tmp";
         uploaddir = "${stateDir}/upload";
-        force_ssl = mkIf (cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL) "on";
+        force_ssl = mkIf (
+          cfg.virtualHost.addSSL || cfg.virtualHost.forceSSL || cfg.virtualHost.onlySSL
+        ) "on";
         config.defaultlang = "en";
       };
     };
@@ -260,7 +316,8 @@ in
       package = mkDefault pkgs.mariadb;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
-        { name = cfg.database.user;
+        {
+          name = cfg.database.user;
           ensurePermissions = {
             "${cfg.database.name}.*" = "SELECT, CREATE, INSERT, UPDATE, DELETE, ALTER, DROP, INDEX";
           };
@@ -289,8 +346,18 @@ in
         chown ${user}:${group} "${stateDir}/credentials/encryption_nonce"
       '';
       LoadCredential = [
-        "encryption_key:${if cfg.encryptionKeyFile != null then cfg.encryptionKeyFile else pkgs.writeText "key" cfg.encryptionKey}"
-        "encryption_nonce:${if cfg.encryptionNonceFile != null then cfg.encryptionNonceFile else pkgs.writeText "nonce" cfg.encryptionKey}"
+        "encryption_key:${
+          if cfg.encryptionKeyFile != null then
+            cfg.encryptionKeyFile
+          else
+            pkgs.writeText "key" cfg.encryptionKey
+        }"
+        "encryption_nonce:${
+          if cfg.encryptionNonceFile != null then
+            cfg.encryptionNonceFile
+          else
+            pkgs.writeText "nonce" cfg.encryptionKey
+        }"
       ];
     };
 
@@ -298,36 +365,39 @@ in
       enable = true;
       adminAddr = mkDefault cfg.virtualHost.adminAddr;
       extraModules = [ "proxy_fcgi" ];
-      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [ cfg.virtualHost {
-        documentRoot = mkForce "${cfg.package}/share/limesurvey";
-        extraConfig = ''
-          Alias "/tmp" "${stateDir}/tmp"
-          <Directory "${stateDir}">
-            AllowOverride all
-            Require all granted
-            Options -Indexes +FollowSymlinks
-          </Directory>
+      virtualHosts.${cfg.virtualHost.hostName} = mkMerge [
+        cfg.virtualHost
+        {
+          documentRoot = mkForce "${cfg.package}/share/limesurvey";
+          extraConfig = ''
+            Alias "/tmp" "${stateDir}/tmp"
+            <Directory "${stateDir}">
+              AllowOverride all
+              Require all granted
+              Options -Indexes +FollowSymlinks
+            </Directory>
 
-          Alias "/upload" "${stateDir}/upload"
-          <Directory "${stateDir}/upload">
-            AllowOverride all
-            Require all granted
-            Options -Indexes
-          </Directory>
+            Alias "/upload" "${stateDir}/upload"
+            <Directory "${stateDir}/upload">
+              AllowOverride all
+              Require all granted
+              Options -Indexes
+            </Directory>
 
-          <Directory "${cfg.package}/share/limesurvey">
-            <FilesMatch "\.php$">
-              <If "-f %{REQUEST_FILENAME}">
-                SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
-              </If>
-            </FilesMatch>
+            <Directory "${cfg.package}/share/limesurvey">
+              <FilesMatch "\.php$">
+                <If "-f %{REQUEST_FILENAME}">
+                  SetHandler "proxy:unix:${fpm.socket}|fcgi://localhost/"
+                </If>
+              </FilesMatch>
 
-            AllowOverride all
-            Options -Indexes
-            DirectoryIndex index.php
-          </Directory>
-        '';
-      } ];
+              AllowOverride all
+              Options -Indexes
+              DirectoryIndex index.php
+            </Directory>
+          '';
+        }
+      ];
     };
 
     systemd.tmpfiles.rules = [
@@ -356,13 +426,25 @@ in
         Group = group;
         Type = "oneshot";
         LoadCredential = [
-          "encryption_key:${if cfg.encryptionKeyFile != null then cfg.encryptionKeyFile else pkgs.writeText "key" cfg.encryptionKey}"
-          "encryption_nonce:${if cfg.encryptionNonceFile != null then cfg.encryptionNonceFile else pkgs.writeText "nonce" cfg.encryptionKey}"
+          "encryption_key:${
+            if cfg.encryptionKeyFile != null then
+              cfg.encryptionKeyFile
+            else
+              pkgs.writeText "key" cfg.encryptionKey
+          }"
+          "encryption_nonce:${
+            if cfg.encryptionNonceFile != null then
+              cfg.encryptionNonceFile
+            else
+              pkgs.writeText "nonce" cfg.encryptionKey
+          }"
         ];
       };
     };
 
-    systemd.services.httpd.after = optional mysqlLocal "mysql.service" ++ optional pgsqlLocal "postgresql.service";
+    systemd.services.httpd.after =
+      optional mysqlLocal "mysql.service"
+      ++ optional pgsqlLocal "postgresql.service";
 
     users.users.${user} = {
       group = group;

@@ -5,40 +5,66 @@
   pythonOlder,
 
   # build time
-  astropy-extension-helpers,
   cython,
+  extension-helpers,
   setuptools,
   setuptools-scm,
 
-  # testing
-  pytestCheckHook,
-  stdenv,
-  pytest-xdist,
-  pytest-astropy,
-
-  # runtime
+  # dependencies
   astropy-iers-data,
   numpy,
   packaging,
   pyerfa,
   pyyaml,
+
+  # optional-depedencies
+  scipy,
+  matplotlib,
+  ipython,
+  ipywidgets,
+  ipykernel,
+  pandas,
+  certifi,
+  dask,
+  h5py,
+  pyarrow,
+  beautifulsoup4,
+  html5lib,
+  sortedcontainers,
+  pytz,
+  jplephem,
+  mpmath,
+  asdf,
+  asdf-astropy,
+  bottleneck,
+  fsspec,
+  s3fs,
+
+  # testing
+  pytestCheckHook,
+  stdenv,
+  pytest-xdist,
+  pytest-astropy-header,
+  pytest-astropy,
+  threadpoolctl,
+
 }:
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "6.1.4";
+  version = "7.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-NhVY4rCTqZvr5p8f1H+shqGSYHpMFu05ugqACyq2DDQ=";
+    hash = "sha256-6S18n+6G6z34cU5d1Bu/nxY9ND4aGD2Vv2vQnkMTyUA=";
   };
 
   build-system = [
-    astropy-extension-helpers
     cython
+    extension-helpers
     setuptools
     setuptools-scm
   ];
@@ -51,11 +77,54 @@ buildPythonPackage rec {
     pyyaml
   ];
 
+  optional-dependencies = lib.fix (self: {
+    recommended = [
+      scipy
+      matplotlib
+    ];
+    ipython = [
+      ipython
+    ];
+    jupyter = [
+      ipywidgets
+      ipykernel
+      # ipydatagrid
+      pandas
+    ] ++ self.ipython;
+    all =
+      [
+        certifi
+        dask
+        h5py
+        pyarrow
+        beautifulsoup4
+        html5lib
+        sortedcontainers
+        pytz
+        jplephem
+        mpmath
+        asdf
+        asdf-astropy
+        bottleneck
+        fsspec
+        s3fs
+      ]
+      ++ self.recommended
+      ++ self.ipython
+      ++ self.jupyter
+      ++ dask.optional-dependencies.array
+      ++ fsspec.optional-dependencies.http;
+  });
+
   nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
+    pytest-astropy-header
     pytest-astropy
-  ];
+    threadpoolctl
+  ] ++ optional-dependencies.recommended;
+
+  pythonImportsCheck = [ "astropy" ];
 
   # Not running it inside the build directory. See:
   # https://github.com/astropy/astropy/issues/15316#issuecomment-1722190547
@@ -64,8 +133,12 @@ buildPythonPackage rec {
     export HOME="$(mktemp -d)"
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
   '';
-  pythonImportsCheck = [ "astropy" ];
+
   disabledTests = [
+    # tests for all availability of all optional deps
+    "test_basic_testing_completeness"
+    "test_all_included"
+
     # May fail due to parallelism, see:
     # https://github.com/astropy/astropy/issues/15441
     "TestUnifiedOutputRegistry"

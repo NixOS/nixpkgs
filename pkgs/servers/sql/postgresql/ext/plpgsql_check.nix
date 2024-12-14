@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, postgresql, postgresqlTestExtension, buildPostgresqlExtension }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  postgresql,
+  postgresqlTestExtension,
+  buildPostgresqlExtension,
+}:
 
 buildPostgresqlExtension (finalAttrs: {
   pname = "plpgsql-check";

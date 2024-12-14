@@ -1,17 +1,18 @@
-{ lib
-, resholve
-, fetchFromGitHub
+{
+  lib,
+  resholve,
+  fetchFromGitHub,
 
   # Runtime dependencies
-, coreutils
-, dnsutils
-, gawk
-, gnugrep
-, gvproxy
-, iproute2
-, iptables
-, iputils
-, wget
+  coreutils,
+  dnsutils,
+  gawk,
+  gnugrep,
+  gvproxy,
+  iproute2,
+  iptables,
+  iputils,
+  wget,
 }:
 
 let

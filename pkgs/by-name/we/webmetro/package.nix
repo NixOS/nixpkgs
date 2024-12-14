@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, rustPlatform }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "webmetro";
@@ -16,12 +20,12 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Simple relay server for broadcasting a WebM stream";
     longDescription = ''
-    Webmetro is a simple relay server for broadcasting a WebM stream
-    from one uploader to many downloaders, via HTTP.
-    The initialization segment is remembered, so that viewers can join
-    mid-stream.  Cluster timestamps are rewritten to be monotonic, so multiple
-    (compatibly-encoded) webm files can be chained together without
-    clients needing to reconnect.
+      Webmetro is a simple relay server for broadcasting a WebM stream
+      from one uploader to many downloaders, via HTTP.
+      The initialization segment is remembered, so that viewers can join
+      mid-stream.  Cluster timestamps are rewritten to be monotonic, so multiple
+      (compatibly-encoded) webm files can be chained together without
+      clients needing to reconnect.
     '';
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ leenaars ];

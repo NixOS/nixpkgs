@@ -2,6 +2,7 @@
   lib,
   runCommand,
   writeShellScript,
+  writeText,
   linkFarm,
   time,
   procps,
@@ -48,7 +49,7 @@ let
         export NIX_STATE_DIR=$(mktemp -d)
         mkdir $out
         export GC_INITIAL_HEAP_SIZE=4g
-        command time -v \
+        command time -f "Attribute eval done [%MKB max resident, %Es elapsed] %C" \
           nix-instantiate --eval --strict --json --show-trace \
             "$src/pkgs/top-level/release-attrpaths-superset.nix" \
             -A paths \
@@ -246,24 +247,15 @@ let
           jq -s from_entries > $out/stats.json
       '';
 
-  compare =
-    { beforeResultDir, afterResultDir }:
-    runCommand "compare"
-      {
-        nativeBuildInputs = [
-          jq
-        ];
-      }
-      ''
-        mkdir $out
-        jq -n -f ${./compare.jq} \
-          --slurpfile before ${beforeResultDir}/outpaths.json \
-          --slurpfile after ${afterResultDir}/outpaths.json \
-          > $out/changed-paths.json
-
-        jq -r -f ${./generate-step-summary.jq} < $out/changed-paths.json > $out/step-summary.md
-        # TODO: Compare eval stats
-      '';
+  compare = import ./compare {
+    inherit
+      lib
+      jq
+      runCommand
+      writeText
+      supportedSystems
+      ;
+  };
 
   full =
     {

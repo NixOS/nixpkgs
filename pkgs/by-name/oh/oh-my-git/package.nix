@@ -1,28 +1,29 @@
-{ lib
-, autoPatchelfHook
-, copyDesktopItems
-, fetchFromGitHub
-, makeDesktopItem
-, stdenv
-, alsa-lib
-, gcc-unwrapped
-, git
-, godot3-export-templates
-, godot3-headless
-, libGLU
-, libX11
-, libXcursor
-, libXext
-, libXfixes
-, libXi
-, libXinerama
-, libXrandr
-, libXrender
-, libglvnd
-, libpulseaudio
-, perl
-, zlib
-, udev # for libudev
+{
+  lib,
+  autoPatchelfHook,
+  copyDesktopItems,
+  fetchFromGitHub,
+  makeDesktopItem,
+  stdenv,
+  alsa-lib,
+  gcc-unwrapped,
+  git,
+  godot3-export-templates,
+  godot3-headless,
+  libGLU,
+  libX11,
+  libXcursor,
+  libXext,
+  libXfixes,
+  libXi,
+  libXinerama,
+  libXrandr,
+  libXrender,
+  libglvnd,
+  libpulseaudio,
+  perl,
+  zlib,
+  udev, # for libudev
 }:
 
 stdenv.mkDerivation rec {
@@ -129,7 +130,7 @@ stdenv.mkDerivation rec {
     description = "Interactive Git learning game";
     mainProgram = "oh-my-git";
     license = with licenses; [ blueOak100 ];
-    platforms   = [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ jojosch ];
   };
 }

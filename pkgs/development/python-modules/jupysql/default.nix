@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -36,15 +37,15 @@
 
 buildPythonPackage rec {
   pname = "jupysql";
-  version = "0.10.13";
+  version = "0.10.16";
 
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ploomber";
     repo = "jupysql";
-    rev = "refs/tags/${version}";
-    hash = "sha256-vNuMGHFkatJS5KjxaOBwZ7JolIDAdYqGq3JNKSV2fKE=";
+    tag = version;
+    hash = "sha256-TIISiGvspRG0d/4nEyi8Tiu0y80D1Rf8puDEkGIeA08=";
   };
 
   pythonRelaxDeps = [ "sqlalchemy" ];
@@ -81,32 +82,34 @@ buildPythonPackage rec {
     psutil
   ] ++ optional-dependencies.dev;
 
-  disabledTests = [
-    # AttributeError: 'DataFrame' object has no attribute 'frame_equal'
-    "test_resultset_polars_dataframe"
-    # all of these are broken with later versions of duckdb; see
-    # https://github.com/ploomber/jupysql/issues/1030
-    "test_resultset_getitem"
-    "test_resultset_dict"
-    "test_resultset_len"
-    "test_resultset_dicts"
-    "test_resultset_dataframe"
-    "test_resultset_csv"
-    "test_resultset_str"
-    "test_resultset_repr_html_when_feedback_is_2"
-    "test_resultset_repr_html_with_reduced_feedback"
-    "test_invalid_operation_error"
-    "test_resultset_config_autolimit_dict"
-    # fails due to strict warnings
-    "test_calling_legacy_plotting_functions_displays_warning"
-  ];
+  disabledTests =
+    [
+      # AttributeError: 'DataFrame' object has no attribute 'frame_equal'
+      "test_resultset_polars_dataframe"
+      # all of these are broken with later versions of duckdb; see
+      # https://github.com/ploomber/jupysql/issues/1030
+      "test_resultset_getitem"
+      "test_resultset_dict"
+      "test_resultset_len"
+      "test_resultset_dicts"
+      "test_resultset_dataframe"
+      "test_resultset_csv"
+      "test_resultset_str"
+      "test_resultset_repr_html_when_feedback_is_2"
+      "test_resultset_repr_html_with_reduced_feedback"
+      "test_invalid_operation_error"
+      "test_resultset_config_autolimit_dict"
+      # fails due to strict warnings
+      "test_calling_legacy_plotting_functions_displays_warning"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # Fatal Python error: Aborted (in matplotlib)
+      "test_no_errors_with_stored_query"
+    ];
 
   disabledTestPaths = [
     # require docker
     "src/tests/integration"
-
-    # require network access
-    "src/tests/test_telemetry.py"
 
     # want to download test data from the network
     "src/tests/test_parse.py"

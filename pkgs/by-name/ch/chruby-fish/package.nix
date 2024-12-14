@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchFromGitHub, chruby }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  chruby,
+}:
 
 stdenv.mkDerivation rec {
   pname = "chruby-fish";

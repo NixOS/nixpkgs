@@ -1,13 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, libgpg-error
-, enableCapabilities ? false, libcap
-, buildPackages
-# for passthru.tests
-, gnupg
-, libotr
-, rsyslog
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libgpg-error,
+  enableCapabilities ? false,
+  libcap,
+  buildPackages,
+  # for passthru.tests
+  gnupg,
+  libotr,
+  rsyslog,
 }:
 
 assert enableCapabilities -> stdenv.hostPlatform.isLinux;
@@ -21,7 +23,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-aJaRVQH5UeI9AtywRTRpwswiqk13oAH/c6JkfC0p590=";
   };
 
-  outputs = [ "out" "dev" "info" ];
+  outputs = [
+    "out"
+    "dev"
+    "info"
+  ];
   outputBin = "dev";
 
   # The CPU Jitter random number generator must not be compiled with
@@ -31,17 +37,22 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  buildInputs = [ libgpg-error ]
-    ++ lib.optional enableCapabilities libcap;
+  buildInputs = [ libgpg-error ] ++ lib.optional enableCapabilities libcap;
 
   strictDeps = true;
 
-  configureFlags = [ "--with-libgpg-error-prefix=${libgpg-error.dev}" ]
-      ++ lib.optional (stdenv.hostPlatform.isMusl || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)) "--disable-asm"; # for darwin see https://dev.gnupg.org/T5157
+  configureFlags =
+    [ "--with-libgpg-error-prefix=${libgpg-error.dev}" ]
+    ++ lib.optional (
+      stdenv.hostPlatform.isMusl || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
+    ) "--disable-asm"; # for darwin see https://dev.gnupg.org/T5157
 
   # Necessary to generate correct assembly when compiling for aarch32 on
   # aarch64
-  configurePlatforms = [ "host" "build" ];
+  configurePlatforms = [
+    "host"
+    "build"
+  ];
 
   postConfigure = ''
     sed -i configure \
@@ -50,11 +61,13 @@ stdenv.mkDerivation rec {
 
   # Make sure libraries are correct for .pc and .la files
   # Also make sure includes are fixed for callers who don't use libgpgcrypt-config
-  postFixup = ''
-    sed -i 's,#include <gpg-error.h>,#include "${libgpg-error.dev}/include/gpg-error.h",g' "$dev/include/gcrypt.h"
-  '' + lib.optionalString enableCapabilities ''
-    sed -i 's,\(-lcap\),-L${libcap.lib}/lib \1,' $out/lib/libgcrypt.la
-  '';
+  postFixup =
+    ''
+      sed -i 's,#include <gpg-error.h>,#include "${libgpg-error.dev}/include/gpg-error.h",g' "$dev/include/gcrypt.h"
+    ''
+    + lib.optionalString enableCapabilities ''
+      sed -i 's,\(-lcap\),-L${libcap.lib}/lib \1,' $out/lib/libgcrypt.la
+    '';
 
   doCheck = true;
 

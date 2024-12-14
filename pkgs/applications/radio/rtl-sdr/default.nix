@@ -1,16 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libusb1
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libusb1,
 }:
 let
-  generic = { version, pname, src, meta }:
+  generic =
+    {
+      version,
+      pname,
+      src,
+      meta,
+    }:
     stdenv.mkDerivation {
       inherit version pname src;
-      nativeBuildInputs = [ pkg-config cmake ];
+      nativeBuildInputs = [
+        pkg-config
+        cmake
+      ];
       propagatedBuildInputs = [ libusb1 ];
 
       cmakeFlags = lib.optionals stdenv.hostPlatform.isLinux [
@@ -31,7 +41,11 @@ let
         inherit (meta) longDescription homepage;
         description = "Software to turn the RTL2832U into a SDR receiver";
         license = licenses.gpl2Plus;
-        maintainers = with maintainers; [ bjornfor skovati Tungsten842 ];
+        maintainers = with maintainers; [
+          bjornfor
+          skovati
+          Tungsten842
+        ];
         platforms = platforms.unix;
         mainProgram = "rtl_sdr";
       };

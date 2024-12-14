@@ -14,7 +14,12 @@
 
 let
   inherit (lib)
-    concatMapStringsSep concatStrings escape head replaceStrings;
+    concatMapStringsSep
+    concatStrings
+    escape
+    head
+    replaceStrings
+    ;
 
   mkPrimitive = t: v: {
     _type = "gvariant";
@@ -48,7 +53,6 @@ rec {
 
   /**
     Check if a value is a GVariant value
-
 
     # Inputs
 
@@ -115,7 +119,6 @@ rec {
     Returns the GVariant value that most closely matches the given Nix value.
     If no GVariant value can be found unambiguously then error is thrown.
 
-
     # Inputs
 
     `v`
@@ -128,7 +131,8 @@ rec {
     mkValue :: Any -> gvariant
     ```
   */
-  mkValue = v:
+  mkValue =
+    v:
     if builtins.isBool v then
       mkBoolean v
     else if builtins.isFloat v then
@@ -141,13 +145,17 @@ rec {
       v
     else if builtins.isInt v then
       let
-        validConstructors = builtins.filter ({ min, max, ... }: (min == null || min <= v) && (max == null || v <= max)) intConstructors;
+        validConstructors = builtins.filter (
+          { min, max, ... }: (min == null || min <= v) && (max == null || v <= max)
+        ) intConstructors;
       in
       throw ''
         The GVariant type for number “${builtins.toString v}” is unclear.
         Please wrap the value with one of the following, depending on the value type in GSettings schema:
 
-        ${lib.concatMapStringsSep "\n" ({ name, type, ...}: "- `lib.gvariant.${name}` for `${type}`") validConstructors}
+        ${lib.concatMapStringsSep "\n" (
+          { name, type, ... }: "- `lib.gvariant.${name}` for `${type}`"
+        ) validConstructors}
       ''
     else if builtins.isAttrs v then
       throw "Cannot construct GVariant value from an attribute set. If you want to construct a dictionary, you will need to create an array containing items constructed with `lib.gvariant.mkDictionaryEntry`."
@@ -156,7 +164,6 @@ rec {
 
   /**
     Returns the GVariant array from the given type of the elements and a Nix list.
-
 
     # Inputs
 
@@ -181,21 +188,21 @@ rec {
 
     :::
   */
-  mkArray = elems:
+  mkArray =
+    elems:
     let
       vs = map mkValue (lib.throwIf (elems == [ ]) "Please create empty array with mkEmptyArray." elems);
-      elemType = lib.throwIfNot (lib.all (t: (head vs).type == t) (map (v: v.type) vs))
-        "Elements in a list should have same type."
-        (head vs).type;
+      elemType = lib.throwIfNot (lib.all (t: (head vs).type == t) (
+        map (v: v.type) vs
+      )) "Elements in a list should have same type." (head vs).type;
     in
-    mkPrimitive (type.arrayOf elemType) vs // {
-      __toString = self:
-        "@${self.type} [${concatMapStringsSep "," toString self.value}]";
+    mkPrimitive (type.arrayOf elemType) vs
+    // {
+      __toString = self: "@${self.type} [${concatMapStringsSep "," toString self.value}]";
     };
 
   /**
     Returns the GVariant array from the given empty Nix list.
-
 
     # Inputs
 
@@ -220,15 +227,16 @@ rec {
 
     :::
   */
-  mkEmptyArray = elemType: mkPrimitive (type.arrayOf elemType) [ ] // {
-    __toString = self: "@${self.type} []";
-  };
-
+  mkEmptyArray =
+    elemType:
+    mkPrimitive (type.arrayOf elemType) [ ]
+    // {
+      __toString = self: "@${self.type} []";
+    };
 
   /**
     Returns the GVariant variant from the given Nix value. Variants are containers
     of different GVariant type.
-
 
     # Inputs
 
@@ -255,15 +263,18 @@ rec {
 
     :::
   */
-  mkVariant = elem:
-    let gvarElem = mkValue elem;
-    in mkPrimitive type.variant gvarElem // {
+  mkVariant =
+    elem:
+    let
+      gvarElem = mkValue elem;
+    in
+    mkPrimitive type.variant gvarElem
+    // {
       __toString = self: "<${toString self.value}>";
     };
 
   /**
     Returns the GVariant dictionary entry from the given key and value.
-
 
     # Inputs
 
@@ -297,20 +308,19 @@ rec {
     :::
   */
   mkDictionaryEntry =
-    name:
-    value:
+    name: value:
     let
       name' = mkValue name;
       value' = mkValue value;
       dictionaryType = type.dictionaryEntryOf name'.type value'.type;
     in
-    mkPrimitive dictionaryType { inherit name value; } // {
+    mkPrimitive dictionaryType { inherit name value; }
+    // {
       __toString = self: "@${self.type} {${name'},${value'}}";
     };
 
   /**
     Returns the GVariant maybe from the given element type.
-
 
     # Inputs
 
@@ -328,18 +338,16 @@ rec {
     mkMaybe :: gvariant.type -> Any -> gvariant
     ```
   */
-  mkMaybe = elemType: elem:
-    mkPrimitive (type.maybeOf elemType) elem // {
-      __toString = self:
-        if self.value == null then
-          "@${self.type} nothing"
-        else
-          "just ${toString self.value}";
+  mkMaybe =
+    elemType: elem:
+    mkPrimitive (type.maybeOf elemType) elem
+    // {
+      __toString =
+        self: if self.value == null then "@${self.type} nothing" else "just ${toString self.value}";
     };
 
   /**
     Returns the GVariant nothing from the given element type.
-
 
     # Inputs
 
@@ -358,7 +366,6 @@ rec {
   /**
     Returns the GVariant just from the given Nix value.
 
-
     # Inputs
 
     `elem`
@@ -371,11 +378,15 @@ rec {
     mkJust :: Any -> gvariant
     ```
   */
-  mkJust = elem: let gvarElem = mkValue elem; in mkMaybe gvarElem.type gvarElem;
+  mkJust =
+    elem:
+    let
+      gvarElem = mkValue elem;
+    in
+    mkMaybe gvarElem.type gvarElem;
 
   /**
     Returns the GVariant tuple from the given Nix list.
-
 
     # Inputs
 
@@ -389,19 +400,19 @@ rec {
     mkTuple :: [Any] -> gvariant
     ```
   */
-  mkTuple = elems:
+  mkTuple =
+    elems:
     let
       gvarElems = map mkValue elems;
       tupleType = type.tupleOf (map (e: e.type) gvarElems);
     in
-    mkPrimitive tupleType gvarElems // {
-      __toString = self:
-        "@${self.type} (${concatMapStringsSep "," toString self.value})";
+    mkPrimitive tupleType gvarElems
+    // {
+      __toString = self: "@${self.type} (${concatMapStringsSep "," toString self.value})";
     };
 
   /**
     Returns the GVariant boolean from the given Nix bool value.
-
 
     # Inputs
 
@@ -415,14 +426,15 @@ rec {
     mkBoolean :: Bool -> gvariant
     ```
   */
-  mkBoolean = v:
-    mkPrimitive type.boolean v // {
+  mkBoolean =
+    v:
+    mkPrimitive type.boolean v
+    // {
       __toString = self: if self.value then "true" else "false";
     };
 
   /**
     Returns the GVariant string from the given Nix string value.
-
 
     # Inputs
 
@@ -436,15 +448,18 @@ rec {
     mkString :: String -> gvariant
     ```
   */
-  mkString = v:
-    let sanitize = s: replaceStrings [ "\n" ] [ "\\n" ] (escape [ "'" "\\" ] s);
-    in mkPrimitive type.string v // {
+  mkString =
+    v:
+    let
+      sanitize = s: replaceStrings [ "\n" ] [ "\\n" ] (escape [ "'" "\\" ] s);
+    in
+    mkPrimitive type.string v
+    // {
       __toString = self: "'${sanitize self.value}'";
     };
 
   /**
     Returns the GVariant object path from the given Nix string value.
-
 
     # Inputs
 
@@ -458,8 +473,10 @@ rec {
     mkObjectpath :: String -> gvariant
     ```
   */
-  mkObjectpath = v:
-    mkPrimitive type.string v // {
+  mkObjectpath =
+    v:
+    mkPrimitive type.string v
+    // {
       __toString = self: "objectpath '${escape [ "'" ] self.value}'";
     };
 
@@ -499,7 +516,6 @@ rec {
   /**
     Returns the GVariant int32 from the given Nix int value.
 
-
     # Inputs
 
     `v`
@@ -512,8 +528,10 @@ rec {
     mkInt32 :: Int -> gvariant
     ```
   */
-  mkInt32 = v:
-    mkPrimitive type.int32 v // {
+  mkInt32 =
+    v:
+    mkPrimitive type.int32 v
+    // {
       __toString = self: toString self.value;
     };
 
@@ -553,7 +571,6 @@ rec {
   /**
     Returns the GVariant double from the given Nix float value.
 
-
     # Inputs
 
     `v`
@@ -566,8 +583,10 @@ rec {
     mkDouble :: Float -> gvariant
     ```
   */
-  mkDouble = v:
-    mkPrimitive type.double v // {
+  mkDouble =
+    v:
+    mkPrimitive type.double v
+    // {
       __toString = self: toString self.value;
     };
 }

@@ -1,12 +1,28 @@
-{ fetchFromGitHub, lib, stdenv, makeWrapper, openssl, perl, perlPackages, pkg-config }:
-
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  makeWrapper,
+  openssl,
+  perl,
+  perlPackages,
+  pkg-config,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "amtterm";
   version = "1.7-1-unstable-2023-10-27";
 
-  buildInputs = (with perlPackages; [ perl SOAPLite ]) ++ [ openssl ];
-  nativeBuildInputs = [ makeWrapper pkg-config ];
+  buildInputs =
+    (with perlPackages; [
+      perl
+      SOAPLite
+    ])
+    ++ [ openssl ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
 
   src = fetchFromGitHub {
     owner = "kraxel";
@@ -15,10 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-JwS2agmJJ6VcGLkNbkFRb5bzKV8el1DMDjalmLnOdE8=";
   };
 
-  makeFlags = [ "prefix=$(out)" "STRIP=" "USE_OPENSSL=1" ];
+  makeFlags = [
+    "prefix=$(out)"
+    "STRIP="
+    "USE_OPENSSL=1"
+  ];
 
-  postInstall =
-    "wrapProgram $out/bin/amttool --prefix PERL5LIB : $PERL5LIB";
+  postInstall = "wrapProgram $out/bin/amttool --prefix PERL5LIB : $PERL5LIB";
 
   meta = {
     description = "Intel AMT® SoL client + tools";

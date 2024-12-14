@@ -1,8 +1,24 @@
-{ stdenv, lib, fetchFromGitHub
-, autoreconfHook, autoconf-archive, pkg-config, doxygen, perl
-, openssl, json_c, curl, libgcrypt
-, cmocka, uthash, swtpm, iproute2, procps, which
-, libuuid, libtpms
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  autoconf-archive,
+  pkg-config,
+  doxygen,
+  perl,
+  openssl,
+  json_c,
+  curl,
+  libgcrypt,
+  cmocka,
+  uthash,
+  swtpm,
+  iproute2,
+  procps,
+  which,
+  libuuid,
+  libtpms,
 }:
 let
   # Avoid a circular dependency on Linux systems (systemd depends on tpm2-tss,
@@ -24,23 +40,43 @@ stdenv.mkDerivation rec {
     hash = "sha256-BP28utEUI9g1VNv3lCXuiKrDtEImFQxxZfIjLiE3Wr8=";
   };
 
-  outputs = [ "out" "man" "dev" ];
-
-  nativeBuildInputs = [
-    autoreconfHook autoconf-archive pkg-config doxygen perl
+  outputs = [
+    "out"
+    "man"
+    "dev"
   ];
 
-  buildInputs = [
-    openssl json_c curl libgcrypt uthash libuuid libtpms
-  ]
-  # cmocka is checked in the configure script
-  # when unit and/or integration testing is enabled
-  # cmocka doesn't build with pkgsStatic, and we don't need it anyway
-  # when tests are not run
-  ++ lib.optional doInstallCheck cmocka;
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
+    pkg-config
+    doxygen
+    perl
+  ];
+
+  buildInputs =
+    [
+      openssl
+      json_c
+      curl
+      libgcrypt
+      uthash
+      libuuid
+      libtpms
+    ]
+    # cmocka is checked in the configure script
+    # when unit and/or integration testing is enabled
+    # cmocka doesn't build with pkgsStatic, and we don't need it anyway
+    # when tests are not run
+    ++ lib.optional doInstallCheck cmocka;
 
   nativeInstallCheckInputs = [
-    cmocka which openssl procps_pkg iproute2 swtpm
+    cmocka
+    which
+    openssl
+    procps_pkg
+    iproute2
+    swtpm
   ];
 
   strictDeps = true;
@@ -65,20 +101,21 @@ stdenv.mkDerivation rec {
     ./no-shadow.patch
   ];
 
-  postPatch = ''
-    patchShebangs script
-    substituteInPlace src/tss2-tcti/tctildr-dl.c \
-      --replace-fail '@PREFIX@' $out/lib/
-    substituteInPlace ./test/unit/tctildr-dl.c \
-      --replace-fail '@PREFIX@' $out/lib/
-    substituteInPlace ./bootstrap \
-      --replace-fail 'git describe --tags --always --dirty' 'echo "${version}"'
-    for src in src/tss2-tcti/tcti-libtpms.c test/unit/tcti-libtpms.c; do
-      substituteInPlace "$src" \
-        --replace-fail '"libtpms.so"' '"${libtpms.out}/lib/libtpms.so"' \
-        --replace-fail '"libtpms.so.0"' '"${libtpms.out}/lib/libtpms.so.0"'
-    done
-  ''
+  postPatch =
+    ''
+      patchShebangs script
+      substituteInPlace src/tss2-tcti/tctildr-dl.c \
+        --replace-fail '@PREFIX@' $out/lib/
+      substituteInPlace ./test/unit/tctildr-dl.c \
+        --replace-fail '@PREFIX@' $out/lib/
+      substituteInPlace ./bootstrap \
+        --replace-fail 'git describe --tags --always --dirty' 'echo "${version}"'
+      for src in src/tss2-tcti/tcti-libtpms.c test/unit/tcti-libtpms.c; do
+        substituteInPlace "$src" \
+          --replace-fail '"libtpms.so"' '"${libtpms.out}/lib/libtpms.so"' \
+          --replace-fail '"libtpms.so.0"' '"${libtpms.out}/lib/libtpms.so.0"'
+      done
+    ''
     # tcti tests rely on mocking function calls, which appears not to be supported
     # on clang
     + lib.optionalString stdenv.cc.isClang ''

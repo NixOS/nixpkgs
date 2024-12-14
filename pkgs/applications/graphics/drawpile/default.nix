@@ -1,45 +1,47 @@
-{ stdenv
-, lib
-, mkDerivation
-, fetchFromGitHub
-, cargo
-, extra-cmake-modules
-, rustc
-, rustPlatform
+{
+  stdenv,
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cargo,
+  extra-cmake-modules,
+  rustc,
+  rustPlatform,
 
-# common deps
-, karchive
-, qtwebsockets
+  # common deps
+  karchive,
+  qtwebsockets,
 
-# client deps
-, qtbase
-, qtkeychain
-, qtmultimedia
-, qtsvg
-, qttools
-, libsecret
+  # client deps
+  qtbase,
+  qtkeychain,
+  qtmultimedia,
+  qtsvg,
+  qttools,
+  libsecret,
 
-# optional client deps
-, giflib
-, kdnssd
-, libvpx
-, miniupnpc
+  # optional client deps
+  giflib,
+  kdnssd,
+  libvpx,
+  miniupnpc,
 
-# optional server deps
-, libmicrohttpd
-, libsodium
-, withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
-, systemd ? null
+  # optional server deps
+  libmicrohttpd,
+  libsodium,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd ? null,
 
-# options
-, buildClient ? true
-, buildServer ? true
-, buildServerGui ? true # if false builds a headless server
-, buildExtraTools ? false
+  # options
+  buildClient ? true,
+  buildServer ? true,
+  buildServerGui ? true, # if false builds a headless server
+  buildExtraTools ? false,
 }:
 
-assert lib.assertMsg (buildClient || buildServer || buildExtraTools)
-  "You must specify at least one of buildClient, buildServer, or buildExtraTools.";
+assert lib.assertMsg (
+  buildClient || buildServer || buildExtraTools
+) "You must specify at least one of buildClient, buildServer, or buildExtraTools.";
 
 let
   clientDeps = [
@@ -62,7 +64,8 @@ let
     libsodium # ext-auth support
   ] ++ lib.optional withSystemd systemd;
 
-in mkDerivation rec {
+in
+mkDerivation rec {
   pname = "drawpile";
   version = "2.2.1";
 
@@ -85,12 +88,13 @@ in mkDerivation rec {
     rustPlatform.cargoSetupHook
   ];
 
-  buildInputs = [
-    karchive
-    qtwebsockets
-  ]
-  ++ lib.optionals buildClient clientDeps
-  ++ lib.optionals buildServer serverDeps;
+  buildInputs =
+    [
+      karchive
+      qtwebsockets
+    ]
+    ++ lib.optionals buildClient clientDeps
+    ++ lib.optionals buildServer serverDeps;
 
   cmakeFlags = [
     (lib.cmakeFeature "INITSYS" (lib.optionalString withSystemd "systemd"))
@@ -100,17 +104,20 @@ in mkDerivation rec {
     (lib.cmakeBool "TOOLS" buildExtraTools)
   ];
 
-  meta = {
-    description = "Collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
-    homepage = "https://drawpile.net/";
-    downloadPage = "https://drawpile.net/download/";
-    license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ fgaz ];
-    platforms = lib.platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
-  } // lib.optionalAttrs buildServer {
-    mainProgram = "drawpile-srv";
-  } // lib.optionalAttrs buildClient {
-    mainProgram = "drawpile";
-  };
+  meta =
+    {
+      description = "Collaborative drawing program that allows multiple users to sketch on the same canvas simultaneously";
+      homepage = "https://drawpile.net/";
+      downloadPage = "https://drawpile.net/download/";
+      license = lib.licenses.gpl3Plus;
+      maintainers = with lib.maintainers; [ fgaz ];
+      platforms = lib.platforms.unix;
+      broken = stdenv.hostPlatform.isDarwin;
+    }
+    // lib.optionalAttrs buildServer {
+      mainProgram = "drawpile-srv";
+    }
+    // lib.optionalAttrs buildClient {
+      mainProgram = "drawpile";
+    };
 }

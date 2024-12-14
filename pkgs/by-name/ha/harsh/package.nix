@@ -1,17 +1,18 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "harsh";
-  version = "0.10.4";
+  version = "0.10.6";
 
   src = fetchFromGitHub {
     owner = "wakatara";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-njFKmskbOvsIqtakOEvHZS20WSQTXtk+1u6N0Av/uXI=";
+    hash = "sha256-yOF+SZaUOkZnU0uYrsvClpPvKO64cFFB9qmOPoh6ZcA=";
   };
 
   vendorHash = "sha256-hdPkiF1HHuIl6KbilPre6tAqSnYPhYhrxBEj3Ayy2AY=";

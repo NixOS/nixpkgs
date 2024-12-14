@@ -1,16 +1,17 @@
-{ lib
-, mkXfceDerivation
-, gtk3
-, thunar
-, exo
-, libxfce4util
-, intltool
-, gettext
+{
+  lib,
+  mkXfceDerivation,
+  gtk3,
+  thunar,
+  exo,
+  libxfce4util,
+  intltool,
+  gettext,
 }:
 
 mkXfceDerivation {
   category = "thunar-plugins";
-  pname  = "thunar-archive-plugin";
+  pname = "thunar-archive-plugin";
   version = "0.5.2";
   odd-unstable = false;
 

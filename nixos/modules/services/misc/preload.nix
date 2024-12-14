@@ -1,8 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.preload;
-in {
-  meta = { maintainers = pkgs.preload.meta.maintainers; };
+in
+{
+  meta = {
+    maintainers = pkgs.preload.meta.maintainers;
+  };
 
   options.services.preload = {
     enable = lib.mkEnableOption "preload";

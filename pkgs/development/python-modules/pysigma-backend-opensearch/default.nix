@@ -33,7 +33,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   dependencies = [
     pysigma
     pysigma-backend-elasticsearch

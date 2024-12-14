@@ -3,7 +3,7 @@
 bundlerApp {
   pname = "3llo";
 
-  gemdir  = ./.;
+  gemdir = ./.;
 
   exes = [ "3llo" ];
 

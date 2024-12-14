@@ -1,17 +1,18 @@
-{ buildPythonPackage
-, lib
-, fetchFromGitLab
+{
+  buildPythonPackage,
+  lib,
+  fetchFromGitLab,
 
-, isPy3k
-, isPyPy
+  isPy3k,
+  isPyPy,
 
-, openpaperwork-core
-, pillow
-, pygobject3
-, distro
-, setuptools-scm
+  openpaperwork-core,
+  pillow,
+  pygobject3,
+  distro,
+  setuptools-scm,
 
-, pkgs
+  pkgs,
 }:
 
 buildPythonPackage rec {
@@ -54,7 +55,10 @@ buildPythonPackage rec {
     description = "Reusable GTK components of Paperwork";
     homepage = "https://openpaper.work/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ aszlig symphorien ];
+    maintainers = with lib.maintainers; [
+      aszlig
+      symphorien
+    ];
     platforms = lib.platforms.linux;
   };
 }

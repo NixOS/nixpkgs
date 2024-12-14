@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, python3
-, fetchFromGitHub
-, fetchPypi
-, curl
-, wget
-, git
-, ripgrep
-, single-file-cli
-, postlight-parser
-, readability-extractor
-, chromium
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+  fetchPypi,
+  curl,
+  wget,
+  git,
+  ripgrep,
+  single-file-cli,
+  postlight-parser,
+  readability-extractor,
+  chromium,
 }:
 
 let
@@ -34,7 +35,9 @@ let
             "CVE-2022-28346"
           ];
         };
-        dependencies = (old.dependencies or [ ]) ++ (lib.optionals (python.pythonAtLeast "3.12") [ python.pkgs.distutils ]);
+        dependencies =
+          (old.dependencies or [ ])
+          ++ (lib.optionals (python.pythonAtLeast "3.12") [ python.pkgs.distutils ]);
       });
       django-extensions = super.django-extensions.overridePythonAttrs (old: rec {
         version = "3.1.5";
@@ -82,27 +85,37 @@ python.pkgs.buildPythonApplication rec {
     yt-dlp
   ];
 
-  makeWrapperArgs = [
-    "--set USE_NODE True" # used through dependencies, not needed explicitly
-    "--set READABILITY_BINARY ${lib.meta.getExe readability-extractor}"
-    "--set MERCURY_BINARY ${lib.meta.getExe postlight-parser}"
-    "--set CURL_BINARY ${lib.meta.getExe curl}"
-    "--set RIPGREP_BINARY ${lib.meta.getExe ripgrep}"
-    "--set WGET_BINARY ${lib.meta.getExe wget}"
-    "--set GIT_BINARY ${lib.meta.getExe git}"
-    "--set YOUTUBEDL_BINARY ${lib.meta.getExe python.pkgs.yt-dlp}"
-    "--set SINGLEFILE_BINARY ${lib.meta.getExe single-file-cli}"
-  ] ++ (if (lib.meta.availableOn stdenv.hostPlatform chromium) then [
-    "--set CHROME_BINARY ${chromium}/bin/chromium-browser"
-  ] else [
-    "--set-default USE_CHROME False"
-  ]);
+  makeWrapperArgs =
+    [
+      "--set USE_NODE True" # used through dependencies, not needed explicitly
+      "--set READABILITY_BINARY ${lib.meta.getExe readability-extractor}"
+      "--set MERCURY_BINARY ${lib.meta.getExe postlight-parser}"
+      "--set CURL_BINARY ${lib.meta.getExe curl}"
+      "--set RIPGREP_BINARY ${lib.meta.getExe ripgrep}"
+      "--set WGET_BINARY ${lib.meta.getExe wget}"
+      "--set GIT_BINARY ${lib.meta.getExe git}"
+      "--set YOUTUBEDL_BINARY ${lib.meta.getExe python.pkgs.yt-dlp}"
+      "--set SINGLEFILE_BINARY ${lib.meta.getExe single-file-cli}"
+    ]
+    ++ (
+      if (lib.meta.availableOn stdenv.hostPlatform chromium) then
+        [
+          "--set CHROME_BINARY ${chromium}/bin/chromium-browser"
+        ]
+      else
+        [
+          "--set-default USE_CHROME False"
+        ]
+    );
 
   meta = with lib; {
     description = "Open source self-hosted web archiving";
     homepage = "https://archivebox.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ siraben viraptor ];
+    maintainers = with maintainers; [
+      siraben
+      viraptor
+    ];
     platforms = platforms.unix;
   };
 }

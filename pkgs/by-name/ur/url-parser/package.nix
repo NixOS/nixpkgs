@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -19,8 +20,10 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X" "main.BuildVersion=${version}"
-    "-X" "main.BuildDate=1970-01-01"
+    "-X"
+    "main.BuildVersion=${version}"
+    "-X"
+    "main.BuildDate=1970-01-01"
   ];
 
   meta = with lib; {

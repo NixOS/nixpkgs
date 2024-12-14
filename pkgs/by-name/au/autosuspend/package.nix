@@ -1,7 +1,8 @@
-{ lib
-, dbus
-, fetchFromGitHub
-, python3
+{
+  lib,
+  dbus,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -61,7 +62,10 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://autosuspend.readthedocs.io";
     changelog = "https://github.com/languitar/autosuspend/releases/tag/v${version}";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ bzizou anthonyroussel ];
+    maintainers = with maintainers; [
+      bzizou
+      anthonyroussel
+    ];
     mainProgram = "autosuspend";
     platforms = platforms.linux;
   };

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, openssl
-, libevent
-, pkg-config
-, libprom
-, libpromhttp
-, libmicrohttpd
-, sqlite
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  libevent,
+  pkg-config,
+  libprom,
+  libpromhttp,
+  libmicrohttpd,
+  sqlite,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, meson, ninja }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  meson,
+  ninja,
+}:
 
 stdenv.mkDerivation {
   pname = "parson";
@@ -11,7 +17,10 @@ stdenv.mkDerivation {
     hash = "sha256-IEmCa0nauUzG+zcLpr++ySD7i21zVJh/35r9RaQkok0=";
   };
 
-  nativeBuildInputs = [ meson ninja ];
+  nativeBuildInputs = [
+    meson
+    ninja
+  ];
 
   meta = {
     description = "Lightweight JSON library written in C";

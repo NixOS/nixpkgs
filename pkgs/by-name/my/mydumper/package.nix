@@ -1,37 +1,73 @@
-{ lib, stdenv, fetchFromGitHub
-, cmake, pkg-config, sphinx, python3Packages
-, glib, pcre, pcre2, util-linux
-, libsysprof-capture, libmysqlclient, libressl
-, zlib, zstd
-, libselinux, libsepol
-, nix-update-script, testers, versionCheckHook, mydumper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  sphinx,
+  python3Packages,
+  glib,
+  pcre,
+  pcre2,
+  util-linux,
+  libsysprof-capture,
+  libmysqlclient,
+  libressl,
+  zlib,
+  zstd,
+  libselinux,
+  libsepol,
+  nix-update-script,
+  testers,
+  versionCheckHook,
+  mydumper,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mydumper";
-  version = "0.16.9-1";
+  version = "0.17.0-1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-f/NuDyicLG0RUl/ePGYa/4B2wAZ+roVLMc+kWkNxd+Q=";
+    hash = "sha256-ZLLctIBbw95iQ1LpBEGZBNlBxQy2oyductmOQXckN2Q=";
     # as of mydumper v0.16.5-1, mydumper extracted its docs into a submodule
     fetchSubmodules = true;
   };
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
-  nativeBuildInputs = [ cmake pkg-config sphinx python3Packages.furo ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    sphinx
+    python3Packages.furo
+  ];
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   doInstallCheck = true;
 
-  buildInputs = [
-    glib pcre pcre2 util-linux
-    libmysqlclient libressl libsysprof-capture
-    zlib zstd
-  ] ++ lib.optionals stdenv.isLinux [ libselinux libsepol ];
+  buildInputs =
+    [
+      glib
+      pcre
+      pcre2
+      util-linux
+      libmysqlclient
+      libressl
+      libsysprof-capture
+      zlib
+      zstd
+    ]
+    ++ lib.optionals stdenv.isLinux [
+      libselinux
+      libsepol
+    ];
 
   cmakeFlags = [
     "-DBUILD_DOCS=ON"
@@ -78,6 +114,9 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/mydumper/mydumper/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     platforms = lib.platforms.unix;
-    maintainers = with maintainers; [ izorkin michaelglass ];
+    maintainers = with maintainers; [
+      izorkin
+      michaelglass
+    ];
   };
 }

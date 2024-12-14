@@ -1,8 +1,15 @@
-{ lib, stdenv, fetchurl, gfortran, arpack, spooles, blas, lapack }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gfortran,
+  arpack,
+  spooles,
+  blas,
+  lapack,
+}:
 
-assert (blas.isILP64 == lapack.isILP64 &&
-        blas.isILP64 == arpack.isILP64 &&
-        !blas.isILP64);
+assert (blas.isILP64 == lapack.isILP64 && blas.isILP64 == arpack.isILP64 && !blas.isILP64);
 
 stdenv.mkDerivation rec {
   pname = "calculix";
@@ -15,7 +22,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ gfortran ];
 
-  buildInputs = [ arpack spooles blas lapack ];
+  buildInputs = [
+    arpack
+    spooles
+    blas
+    lapack
+  ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-I${spooles}/include/spooles"

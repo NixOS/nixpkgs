@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, swig
-, lua
-, elastix
-, itk
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  swig,
+  lua,
+  elastix,
+  itk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

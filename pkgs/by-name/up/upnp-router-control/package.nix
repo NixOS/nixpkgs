@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchzip
-, desktop-file-utils
-, intltool
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook3
-, gssdp_1_6
-, gtk3
-, gupnp_1_6
+{
+  lib,
+  stdenv,
+  fetchzip,
+  desktop-file-utils,
+  intltool,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
+  gssdp_1_6,
+  gtk3,
+  gupnp_1_6,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

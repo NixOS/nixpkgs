@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, automake
-, autoconf
-, libtool
-, readline
-, mkTclDerivation
-, tk
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  automake,
+  autoconf,
+  libtool,
+  readline,
+  mkTclDerivation,
+  tk,
 }:
 
 mkTclDerivation rec {

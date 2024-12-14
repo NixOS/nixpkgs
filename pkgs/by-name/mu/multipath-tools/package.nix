@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, coreutils
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  coreutils,
 
-, perl
-, pkg-config
+  perl,
+  pkg-config,
 
-, json_c
-, libaio
-, liburcu
-, linuxHeaders
-, lvm2
-, readline
-, systemd
-, util-linuxMinimal
+  json_c,
+  libaio,
+  liburcu,
+  linuxHeaders,
+  lvm2,
+  readline,
+  systemd,
+  util-linuxMinimal,
 
-, cmocka
-, nixosTests
+  cmocka,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {

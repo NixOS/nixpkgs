@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, help2man
-, lz4
-, lzo
-, nixosTests
-, which
-, xz
-, zlib
-, zstd
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  help2man,
+  lz4,
+  lzo,
+  nixosTests,
+  which,
+  xz,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,14 +30,21 @@ stdenv.mkDerivation rec {
   ];
 
   strictDeps = true;
-  nativeBuildInputs = [ which ]
+  nativeBuildInputs =
+    [ which ]
     # when cross-compiling help2man cannot run the cross-compiled binary
     ++ lib.optionals (stdenv.hostPlatform == stdenv.buildPlatform) [ help2man ];
-  buildInputs = [ zlib xz zstd lz4 lzo ];
+  buildInputs = [
+    zlib
+    xz
+    zstd
+    lz4
+    lzo
+  ];
 
   preBuild = ''
     cd squashfs-tools
-  '' ;
+  '';
 
   installFlags = [
     "INSTALL_DIR=${placeholder "out"}/bin"

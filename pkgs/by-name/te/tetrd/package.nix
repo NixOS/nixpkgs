@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, makeWrapper
-, c-ares
-, ffmpeg
-, libevent
-, libvpx
-, libxslt
-, xorg
-, minizip
-, nss
-, re2
-, snappy
-, libnotify
-, libappindicator-gtk3
-, libappindicator
-, udev
-, libgbm
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  makeWrapper,
+  c-ares,
+  ffmpeg,
+  libevent,
+  libvpx,
+  libxslt,
+  xorg,
+  minizip,
+  nss,
+  re2,
+  snappy,
+  libnotify,
+  libappindicator-gtk3,
+  libappindicator,
+  udev,
+  libgbm,
 }:
 
 stdenv.mkDerivation rec {

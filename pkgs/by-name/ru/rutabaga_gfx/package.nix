@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchgit
-, fetchpatch
-, cargo
-, pkg-config
-, rustPlatform
-, aemu
-, gfxstream
-, libdrm
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fetchpatch,
+  cargo,
+  pkg-config,
+  rustPlatform,
+  aemu,
+  gfxstream,
+  libdrm,
+  libiconv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,13 +42,22 @@ stdenv.mkDerivation (finalAttrs: {
     ./darwin-install.patch
   ];
 
-  nativeBuildInputs = [ cargo pkg-config rustPlatform.cargoSetupHook ];
-  buildInputs = [ libiconv ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform gfxstream) ([
-    aemu
-    gfxstream
-  ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [
-    libdrm
-  ]);
+  nativeBuildInputs = [
+    cargo
+    pkg-config
+    rustPlatform.cargoSetupHook
+  ];
+  buildInputs =
+    [ libiconv ]
+    ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform gfxstream) (
+      [
+        aemu
+        gfxstream
+      ]
+      ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform libdrm) [
+        libdrm
+      ]
+    );
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) src;
@@ -55,8 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTargetSpec;
-  "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" =
-    "${stdenv.cc.targetPrefix}cc";
+  "CARGO_TARGET_${stdenv.hostPlatform.rust.cargoEnvVarTarget}_LINKER" = "${stdenv.cc.targetPrefix}cc";
 
   postConfigure = ''
     cd rutabaga_gfx/ffi

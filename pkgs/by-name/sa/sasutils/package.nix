@@ -1,4 +1,10 @@
-{ lib, python3Packages, fetchFromGitHub, installShellFiles, sg3_utils }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  installShellFiles,
+  sg3_utils,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "sasutils";

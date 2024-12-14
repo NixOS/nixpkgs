@@ -4,7 +4,8 @@
   fetchFromGitHub,
   nix-update-script,
   callPackage,
-  testers, xunit-viewer,
+  testers,
+  xunit-viewer,
 }:
 let
   version = "10.6.1";

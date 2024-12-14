@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, pkg-config,
-  gtk-engine-murrine, gtk3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  pkg-config,
+  gtk-engine-murrine,
+  gtk3,
 }:
 
 stdenv.mkDerivation {
@@ -13,9 +20,17 @@ stdenv.mkDerivation {
     sha256 = "005b66whyxba3403yzykpnlkz0q4m154pxpb4jzcny3fggy9r70s";
   };
 
-  nativeBuildInputs = [ autoconf automake pkg-config gtk3 ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    pkg-config
+    gtk3
+  ];
 
-  propagatedUserEnvPkgs = [ gtk-engine-murrine gtk3 ];
+  propagatedUserEnvPkgs = [
+    gtk-engine-murrine
+    gtk3
+  ];
 
   buildPhase = ''
     ./autogen.sh --prefix=$out

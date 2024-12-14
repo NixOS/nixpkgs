@@ -22,7 +22,7 @@
   libXinerama,
 }:
 
-stdenv.mkDerivation (finalAttrs:{
+stdenv.mkDerivation (finalAttrs: {
   pname = "methane";
   version = "2.1.0";
 

@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, boost
-, glib
-, libGL
-, libinput
-, librsvg
-, libxkbcommon
-, udev
-, wayfire
-, xcbutilwm
-, mate
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  boost,
+  glib,
+  libGL,
+  libinput,
+  librsvg,
+  libxkbcommon,
+  udev,
+  wayfire,
+  xcbutilwm,
+  mate,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

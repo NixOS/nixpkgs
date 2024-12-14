@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitea
-, installShellFiles
-, pkg-config
-, pcsclite
-, dbus
-, testers
-, openpgp-card-tools
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitea,
+  installShellFiles,
+  pkg-config,
+  pcsclite,
+  dbus,
+  testers,
+  openpgp-card-tools,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,9 +25,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-G5+lVK41hbzy/Ltc0EKoUfqF0M1OYu679jyVjYKJmn0=";
 
-  nativeBuildInputs = [ installShellFiles pkg-config rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    rustPlatform.bindgenHook
+  ];
 
-  buildInputs = [ pcsclite dbus ];
+  buildInputs = [
+    pcsclite
+    dbus
+  ];
 
   passthru = {
     tests.version = testers.testVersion {
@@ -44,7 +52,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Tool for inspecting and configuring OpenPGP cards";
     homepage = "https://codeberg.org/openpgp-card/openpgp-card-tools";
-    license = with licenses ;[ asl20 /* OR */ mit ];
+    license = with licenses; [
+      asl20 # OR
+      mit
+    ];
     maintainers = with maintainers; [ nickcao ];
     mainProgram = "oct";
   };

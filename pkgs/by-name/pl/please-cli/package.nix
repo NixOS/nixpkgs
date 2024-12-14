@@ -1,11 +1,12 @@
-{ lib
-, curl
-, fetchFromGitHub
-, jq
-, makeBinaryWrapper
-, please-cli
-, stdenv
-, testers
+{
+  lib,
+  curl,
+  fetchFromGitHub,
+  jq,
+  makeBinaryWrapper,
+  please-cli,
+  stdenv,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +26,12 @@ stdenv.mkDerivation (finalAttrs: {
     runHook preInstall
     install -Dm555 please.sh "$out/bin/please"
     wrapProgram $out/bin/please \
-      --prefix PATH : ${lib.makeBinPath [ curl jq ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          curl
+          jq
+        ]
+      }
     runHook postInstall
   '';
 

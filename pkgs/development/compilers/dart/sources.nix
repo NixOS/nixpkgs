@@ -1,5 +1,8 @@
-let version = "3.5.4"; in
-{ fetchurl }: {
+let
+  version = "3.5.4";
+in
+{ fetchurl }:
+{
   versionUsed = version;
   "${version}-x86_64-darwin" = fetchurl {
     url = "https://storage.googleapis.com/dart-archive/channels/stable/release/${version}/sdk/dartsdk-macos-x64-release.zip";

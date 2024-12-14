@@ -1,24 +1,37 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
   cfg = config.services.rss-bridge;
 
   poolName = "rss-bridge";
 
-  cfgHalf = lib.mapAttrsRecursive (path: value: let
-    envName = lib.toUpper ("RSSBRIDGE_" + lib.concatStringsSep "_" path);
-    envValue = if lib.isList value then
-      lib.concatStringsSep "," value
-    else if lib.isBool value then
-      lib.boolToString value
-    else
-      toString value;
-  in if (value != null) then "fastcgi_param \"${envName}\" \"${envValue}\";" else null) cfg.config;
+  cfgHalf = lib.mapAttrsRecursive (
+    path: value:
+    let
+      envName = lib.toUpper ("RSSBRIDGE_" + lib.concatStringsSep "_" path);
+      envValue =
+        if lib.isList value then
+          lib.concatStringsSep "," value
+        else if lib.isBool value then
+          lib.boolToString value
+        else
+          toString value;
+    in
+    if (value != null) then "fastcgi_param \"${envName}\" \"${envValue}\";" else null
+  ) cfg.config;
   cfgEnv = lib.concatStringsSep "\n" (lib.collect lib.isString cfgHalf);
 in
 {
   imports = [
-    (mkRenamedOptionModule [ "services" "rss-bridge" "whitelist" ] [ "services" "rss-bridge" "config" "system" "enabled_bridges" ])
+    (mkRenamedOptionModule
+      [ "services" "rss-bridge" "whitelist" ]
+      [ "services" "rss-bridge" "config" "system" "enabled_bridges" ]
+    )
   ];
 
   options = {
@@ -70,7 +83,7 @@ in
 
       config = mkOption {
         type = types.submodule {
-          freeformType = (pkgs.formats.ini {}).type;
+          freeformType = (pkgs.formats.ini { }).type;
           options = {
             system = {
               enabled_bridges = mkOption {
@@ -131,10 +144,10 @@ in
 
     systemd.tmpfiles.settings.rss-bridge = {
       "${cfg.config.FileCache.path}".d = {
-          mode = "0750";
-          user = cfg.user;
-          group = cfg.group;
-        };
+        mode = "0750";
+        user = cfg.user;
+        group = cfg.group;
+      };
     };
 
     services.nginx = mkIf (cfg.virtualHost != null) {

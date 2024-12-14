@@ -1,29 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, pkg-config
-, libtasn1, openssl, fuse, glib, libseccomp, json-glib
-, libtpms
-, unixtools, expect, socat
-, gnutls
-, perl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  libtasn1,
+  openssl,
+  fuse,
+  glib,
+  libseccomp,
+  json-glib,
+  libtpms,
+  unixtools,
+  expect,
+  socat,
+  gnutls,
+  perl,
 
-# Tests
-, python3, which
-, nixosTests
+  # Tests
+  python3,
+  which,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "swtpm";
-  version = "0.8.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "stefanberger";
     repo = "swtpm";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-48/BOzGPoKr/BGEXFo3FXWr6ZoPB+ixZIvv78g6L294=";
+    hash = "sha256-IeFrS67qStklaTgM0d3F8Xt8upm2kEawT0ZPFD7JKnk=";
   };
 
   patches = [
@@ -37,7 +46,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    pkg-config unixtools.netstat expect socat
+    pkg-config
+    unixtools.netstat
+    expect
+    socat
     perl # for pod2man
     python3
     autoreconfHook
@@ -47,21 +59,27 @@ stdenv.mkDerivation (finalAttrs: {
     which
   ];
 
-  buildInputs = [
-    libtpms
-    openssl libtasn1
-    glib json-glib
-    gnutls
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    fuse
-    libseccomp
-  ];
+  buildInputs =
+    [
+      libtpms
+      openssl
+      libtasn1
+      glib
+      json-glib
+      gnutls
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      fuse
+      libseccomp
+    ];
 
-  configureFlags = [
-    "--localstatedir=/var"
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "--with-cuse"
-  ];
+  configureFlags =
+    [
+      "--localstatedir=/var"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "--with-cuse"
+    ];
 
   postPatch = ''
     patchShebangs tests/*
@@ -97,12 +115,19 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace tests/test_swtpm_setup_create_cert --replace \
         '$CERTTOOL' \
         'LC_ALL=C.UTF-8 $CERTTOOL'
+
+    substituteInPlace tests/test_tpm2_swtpm_cert --replace \
+        'certtool' \
+        'LC_ALL=C.UTF-8 certtool'
   '';
 
   doCheck = true;
   enableParallelBuilding = true;
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   passthru.tests = { inherit (nixosTests) systemd-cryptenroll; };
 

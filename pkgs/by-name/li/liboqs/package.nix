@@ -41,7 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   dontFixCmake = true; # fix CMake file will give an error
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = with lib; {
     description = "C library for prototyping and experimenting with quantum-resistant cryptography";

@@ -1,15 +1,17 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, cctools
-, makeWrapper
-, mesa
-, python3
-, runCommand
-, vulkan-headers
-, vulkan-loader
-, vulkan-validation-layers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  cctools,
+  makeWrapper,
+  mesa,
+  python3,
+  runCommand,
+  vulkan-headers,
+  vulkan-loader,
+  vulkan-validation-layers,
 }:
 let
   # From https://github.com/google/amber/blob/main/DEPS
@@ -65,17 +67,22 @@ stdenv.mkDerivation (finalAttrs: {
     vulkan-loader
   ];
 
-  nativeBuildInputs = [
-    cmake
-    makeWrapper
-    pkg-config
-    python3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    cctools
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      makeWrapper
+      pkg-config
+      python3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      cctools
+    ];
 
   # Tests are disabled so we do not have to pull in googletest and more dependencies
-  cmakeFlags = [ "-DAMBER_SKIP_TESTS=ON" "-DAMBER_DISABLE_WERROR=ON" ];
+  cmakeFlags = [
+    "-DAMBER_SKIP_TESTS=ON"
+    "-DAMBER_DISABLE_WERROR=ON"
+  ];
 
   prePatch = ''
     cp -r ${glslang}/ third_party/glslang
@@ -95,48 +102,54 @@ stdenv.mkDerivation (finalAttrs: {
       --suffix VK_LAYER_PATH : ${vulkan-validation-layers}/share/vulkan/explicit_layer.d
   '';
 
-  passthru.tests.lavapipe = runCommand "vulkan-cts-tests-lavapipe" {
-    nativeBuildInputs = [ finalAttrs.finalPackage mesa.llvmpipeHook ];
-  } ''
-    cat > test.amber <<EOF
-    #!amber
-    # Simple amber compute shader.
+  passthru.tests.lavapipe =
+    runCommand "vulkan-cts-tests-lavapipe"
+      {
+        nativeBuildInputs = [
+          finalAttrs.finalPackage
+          mesa.llvmpipeHook
+        ];
+      }
+      ''
+        cat > test.amber <<EOF
+        #!amber
+        # Simple amber compute shader.
 
-    SHADER compute kComputeShader GLSL
-    #version 450
+        SHADER compute kComputeShader GLSL
+        #version 450
 
-    layout(binding = 3) buffer block {
-      uvec2 values[];
-    };
+        layout(binding = 3) buffer block {
+          uvec2 values[];
+        };
 
-    void main() {
-      values[gl_WorkGroupID.x + gl_WorkGroupID.y * gl_NumWorkGroups.x] =
-                    gl_WorkGroupID.xy;
-    }
-    END  # shader
+        void main() {
+          values[gl_WorkGroupID.x + gl_WorkGroupID.y * gl_NumWorkGroups.x] =
+                        gl_WorkGroupID.xy;
+        }
+        END  # shader
 
-    BUFFER kComputeBuffer DATA_TYPE vec2<int32> SIZE 524288 FILL 0
+        BUFFER kComputeBuffer DATA_TYPE vec2<int32> SIZE 524288 FILL 0
 
-    PIPELINE compute kComputePipeline
-      ATTACH kComputeShader
-      BIND BUFFER kComputeBuffer AS storage DESCRIPTOR_SET 0 BINDING 3
-    END  # pipeline
+        PIPELINE compute kComputePipeline
+          ATTACH kComputeShader
+          BIND BUFFER kComputeBuffer AS storage DESCRIPTOR_SET 0 BINDING 3
+        END  # pipeline
 
-    RUN kComputePipeline 256 256 1
+        RUN kComputePipeline 256 256 1
 
-    # Four corners
-    EXPECT kComputeBuffer IDX 0 EQ 0 0
-    EXPECT kComputeBuffer IDX 2040 EQ 255 0
-    EXPECT kComputeBuffer IDX 522240 EQ 0 255
-    EXPECT kComputeBuffer IDX 524280 EQ 255 255
+        # Four corners
+        EXPECT kComputeBuffer IDX 0 EQ 0 0
+        EXPECT kComputeBuffer IDX 2040 EQ 255 0
+        EXPECT kComputeBuffer IDX 522240 EQ 0 255
+        EXPECT kComputeBuffer IDX 524280 EQ 255 255
 
-    # Center
-    EXPECT kComputeBuffer IDX 263168 EQ 128 128
-    EOF
+        # Center
+        EXPECT kComputeBuffer IDX 263168 EQ 128 128
+        EOF
 
-    amber test.amber
-    touch $out
-  '';
+        amber test.amber
+        touch $out
+      '';
 
   meta = with lib; {
     description = "Multi-API shader test framework";

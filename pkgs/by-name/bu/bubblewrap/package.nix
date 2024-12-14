@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, docbook_xsl
-, libxslt
-, meson
-, ninja
-, pkg-config
-, bash-completion
-, libcap
-, libselinux
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  docbook_xsl,
+  libxslt,
+  meson,
+  ninja,
+  pkg-config,
+  bash-completion,
+  libcap,
+  libselinux,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchCrate
-, rustPlatform
-, pkg-config
-, openssl
-, CoreServices
+{
+  lib,
+  stdenv,
+  fetchCrate,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  CoreServices,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,11 +23,13 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    CoreServices
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreServices
+    ];
 
   # Stop downloading from the Internet to
   # generate the Chrome Devtools Protocol
@@ -44,6 +47,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/HollowMan6/mdbook-pdf";
     changelog = "https://github.com/HollowMan6/mdbook-pdf/releases/tag/v${version}";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ hollowman6 matthiasbeyer ];
+    maintainers = with maintainers; [
+      hollowman6
+      matthiasbeyer
+    ];
   };
 }

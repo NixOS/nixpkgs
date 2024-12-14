@@ -1,8 +1,13 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.vmagent;
-  settingsFormat = pkgs.formats.yaml {};
+  settingsFormat = pkgs.formats.yaml { };
 
   startCLIList =
     [
@@ -23,17 +28,34 @@ let
     settingsFormat.generate "prometheusConfig.yaml" cfg.prometheusConfig
   );
 
-  checkedConfig = file:
-    pkgs.runCommand "checked-config" {nativeBuildInputs = [cfg.package];} ''
+  checkedConfig =
+    file:
+    pkgs.runCommand "checked-config" { nativeBuildInputs = [ cfg.package ]; } ''
       ln -s ${file} $out
       ${lib.escapeShellArgs startCLIList} -promscrape.config=${file} -dryRun
     '';
-in {
+in
+{
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "vmagent" "dataDir" ] "dataDir has been deprecated in favor of systemd provided CacheDirectory")
-    (lib.mkRemovedOptionModule [ "services" "vmagent" "user" ] "user has been deprecated in favor of systemd DynamicUser")
-    (lib.mkRemovedOptionModule [ "services" "vmagent" "group" ] "group has been deprecated in favor of systemd DynamicUser")
-    (lib.mkRenamedOptionModule [ "services" "vmagent" "remoteWriteUrl" ] [ "services" "vmagent" "remoteWrite" "url" ])
+    (lib.mkRemovedOptionModule [
+      "services"
+      "vmagent"
+      "dataDir"
+    ] "dataDir has been deprecated in favor of systemd provided CacheDirectory")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "vmagent"
+      "user"
+    ] "user has been deprecated in favor of systemd DynamicUser")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "vmagent"
+      "group"
+    ] "group has been deprecated in favor of systemd DynamicUser")
+    (lib.mkRenamedOptionModule
+      [ "services" "vmagent" "remoteWriteUrl" ]
+      [ "services" "vmagent" "remoteWrite" "url" ]
+    )
   ];
 
   options.services.vmagent = {
@@ -90,7 +112,7 @@ in {
 
     extraArgs = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [];
+      default = [ ];
       description = ''
         Extra args to pass to `vmagent`. See the docs:
         <https://docs.victoriametrics.com/vmagent.html#advanced-usage>
@@ -115,7 +137,7 @@ in {
         CacheDirectory = "vmagent";
         ExecStart = lib.escapeShellArgs (
           startCLIList
-          ++ lib.optionals (cfg.prometheusConfig != {}) ["-promscrape.config=${prometheusConfigYml}"]
+          ++ lib.optionals (cfg.prometheusConfig != { }) [ "-promscrape.config=${prometheusConfigYml}" ]
         );
         LoadCredential = lib.optional (cfg.remoteWrite.basicAuthPasswordFile != null) [
           "remote_write_basic_auth_password:${cfg.remoteWrite.basicAuthPasswordFile}"

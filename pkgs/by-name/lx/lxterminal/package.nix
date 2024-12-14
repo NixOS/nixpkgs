@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, automake, autoconf, intltool, pkg-config, gtk3, vte, wrapGAppsHook3
-, libxslt, docbook_xml_dtd_412, docbook_xsl, libxml2, findXMLCatalogs, nixosTests
-, pcre2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  automake,
+  autoconf,
+  intltool,
+  pkg-config,
+  gtk3,
+  vte,
+  wrapGAppsHook3,
+  libxslt,
+  docbook_xml_dtd_412,
+  docbook_xsl,
+  libxml2,
+  findXMLCatalogs,
+  nixosTests,
+  pcre2,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,11 +35,23 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    automake autoconf intltool pkg-config wrapGAppsHook3
-    libxslt docbook_xml_dtd_412 docbook_xsl libxml2 findXMLCatalogs
+    automake
+    autoconf
+    intltool
+    pkg-config
+    wrapGAppsHook3
+    libxslt
+    docbook_xml_dtd_412
+    docbook_xsl
+    libxml2
+    findXMLCatalogs
   ];
 
-  buildInputs = [ gtk3 vte pcre2 ];
+  buildInputs = [
+    gtk3
+    vte
+    pcre2
+  ];
 
   patches = [
     ./respect-xml-catalog-files-var.patch

@@ -1,5 +1,10 @@
-{ stdenv, fetchFromGitHub, lib, zlib, pcre
-, gnutls
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  zlib,
+  pcre,
+  gnutls,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,7 +18,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-AfWw9CMBAzTTsrZXDEoOdpvUofIQfLCW7hRgSb7LB00=";
   };
 
-  buildInputs = [ zlib pcre gnutls ];
+  buildInputs = [
+    zlib
+    pcre
+    gnutls
+  ];
 
   preConfigure = ''
     cd src
@@ -21,10 +30,10 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "Free MUD client for macOS, Linux and Windows";
-    homepage    = "https://tintin.mudhalla.net/index.php";
-    license     = licenses.gpl3Plus;
+    homepage = "https://tintin.mudhalla.net/index.php";
+    license = licenses.gpl3Plus;
     maintainers = with maintainers; [ abathur ];
     mainProgram = "tt++";
-    platforms   = platforms.unix;
+    platforms = platforms.unix;
   };
 }

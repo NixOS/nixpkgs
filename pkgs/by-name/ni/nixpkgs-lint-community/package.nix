@@ -1,6 +1,7 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,6 +23,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/nix-community/nixpkgs-lint";
     changelog = "https://github.com/nix-community/nixpkgs-lint/releases/tag/${src.rev}";
     license = licenses.mit;
-    maintainers = with maintainers; [ artturin figsoda ];
+    maintainers = with maintainers; [
+      artturin
+      figsoda
+    ];
   };
 }

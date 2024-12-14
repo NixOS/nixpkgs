@@ -1,5 +1,17 @@
-{ lib, stdenv, fetchFromGitHub, cmake, ninja, automaticcomponenttoolkit
-, pkg-config, libzip, gtest, openssl, libuuid, libossp_uuid }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  automaticcomponenttoolkit,
+  pkg-config,
+  libzip,
+  gtest,
+  openssl,
+  libuuid,
+  libossp_uuid,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lib3mf";
@@ -14,9 +26,16 @@ stdenv.mkDerivation rec {
 
   patches = [ ./upgrade-to-cpp-14.patch ];
 
-  nativeBuildInputs = [ cmake ninja pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+  ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   cmakeFlags = [
     "-DCMAKE_INSTALL_INCLUDEDIR=include/lib3mf"
@@ -27,7 +46,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    libzip gtest openssl
+    libzip
+    gtest
+    openssl
   ] ++ (if stdenv.hostPlatform.isDarwin then [ libossp_uuid ] else [ libuuid ]);
 
   postPatch = ''

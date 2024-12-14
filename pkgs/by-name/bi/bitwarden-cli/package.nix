@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, nodejs_20
-, fetchFromGitHub
-, cctools
-, nix-update-script
-, nixosTests
-, perl
-, xcbuild
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  nodejs_20,
+  fetchFromGitHub,
+  cctools,
+  nix-update-script,
+  nixosTests,
+  perl,
+  xcbuild,
 }:
 
 buildNpmPackage rec {
@@ -49,12 +50,30 @@ buildNpmPackage rec {
 
   npmFlags = [ "--legacy-peer-deps" ];
 
+  postConfigure = ''
+    # we want to build everything from source
+    shopt -s globstar
+    rm -r node_modules/**/prebuilds
+    shopt -u globstar
+  '';
+
+  postBuild = ''
+    # remove build artifacts that bloat the closure
+    shopt -s globstar
+    rm -r node_modules/**/{*.target.mk,binding.Makefile,config.gypi,Makefile,Release/.deps}
+    shopt -u globstar
+  '';
+
   passthru = {
     tests = {
       vaultwarden = nixosTests.vaultwarden.sqlite;
     };
     updateScript = nix-update-script {
-      extraArgs = [ "--commit" "--version=stable" "--version-regex=^cli-v(.*)$" ];
+      extraArgs = [
+        "--commit"
+        "--version=stable"
+        "--version-regex=^cli-v(.*)$"
+      ];
     };
   };
 

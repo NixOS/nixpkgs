@@ -33,13 +33,16 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # check references to `compiler_features` in Makefile on update
-  buildFeatures = [
-    "cranelift"
-    "wasmer-artifact-create"
-    "static-artifact-create"
-    "wasmer-artifact-load"
-    "static-artifact-load"
-  ] ++ lib.optional withLLVM "llvm" ++ lib.optional withSinglepass "singlepass";
+  buildFeatures =
+    [
+      "cranelift"
+      "wasmer-artifact-create"
+      "static-artifact-create"
+      "wasmer-artifact-load"
+      "static-artifact-load"
+    ]
+    ++ lib.optional withLLVM "llvm"
+    ++ lib.optional withSinglepass "singlepass";
 
   cargoBuildFlags = [
     "--manifest-path"

@@ -1,24 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, pkg-config
-, libva
-, libpciaccess
-, intel-gmmlib
-, libdrm
-, enableX11 ? stdenv.hostPlatform.isLinux
-, libX11
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  pkg-config,
+  libva,
+  libpciaccess,
+  intel-gmmlib,
+  libdrm,
+  enableX11 ? stdenv.hostPlatform.isLinux,
+  libX11,
   # for passhtru.tests
-, pkgsi686Linux
+  pkgsi686Linux,
 }:
 
 stdenv.mkDerivation rec {
   pname = "intel-media-driver";
   version = "24.3.4";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchFromGitHub {
     owner = "intel";
@@ -43,12 +47,21 @@ stdenv.mkDerivation rec {
     "-DMEDIA_BUILD_FATAL_WARNINGS=OFF"
   ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString (stdenv.hostPlatform.system == "i686-linux") "-D_FILE_OFFSET_BITS=64";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.hostPlatform.system == "i686-linux"
+  ) "-D_FILE_OFFSET_BITS=64";
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ libva libpciaccess intel-gmmlib libdrm ]
-    ++ lib.optional enableX11 libX11;
+  buildInputs = [
+    libva
+    libpciaccess
+    intel-gmmlib
+    libdrm
+  ] ++ lib.optional enableX11 libX11;
 
   postFixup = lib.optionalString enableX11 ''
     patchelf --set-rpath "$(patchelf --print-rpath $out/lib/dri/iHD_drv_video.so):${lib.makeLibraryPath [ libX11 ]}" \
@@ -68,7 +81,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/intel/media-driver";
     changelog = "https://github.com/intel/media-driver/releases/tag/intel-media-${version}";
-    license = with licenses; [ bsd3 mit ];
+    license = with licenses; [
+      bsd3
+      mit
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ SuperSandro2000 ];
   };

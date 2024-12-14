@@ -34,21 +34,23 @@ buildPythonPackage rec {
     hash = "sha256-gFSrAl3QGoJEJfvTTvLQgViPPjeJ6BfvgEwgLLo+uAA=";
   };
 
-  # fixes empty version string
-  # analog to https://github.com/NixOS/nixpkgs/pull/171200
   patches = [ ./pep-621.patch ];
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
-    setuptools
   ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "redis"
+  ];
+
+  dependencies = [
     django-picklefield
     arrow
     blessed
     django
     future
+    setuptools # for pkg_resources
   ];
 
   nativeCheckInputs = [

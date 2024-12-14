@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchYarnDeps, yarnConfigHook, nixosTests, writeText, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  yarnConfigHook,
+  nixosTests,
+  writeText,
+  python3,
+}:
 
 let
   pname = "powerdns-admin";
@@ -14,11 +23,49 @@ let
 
   pythonDeps = with python.pkgs; [
     distutils
-    flask flask-assets flask-login flask-sqlalchemy flask-migrate flask-seasurf flask-mail flask-session flask-session-captcha flask-sslify
-    mysqlclient psycopg2 sqlalchemy
-    certifi cffi configobj cryptography bcrypt requests python-ldap pyotp qrcode dnspython
-    gunicorn itsdangerous python3-saml pytz rcssmin rjsmin authlib bravado-core
-    lima lxml passlib pyasn1 pytimeparse pyyaml jinja2 itsdangerous webcolors werkzeug zipp zxcvbn
+    flask
+    flask-assets
+    flask-login
+    flask-sqlalchemy
+    flask-migrate
+    flask-seasurf
+    flask-mail
+    flask-session
+    flask-session-captcha
+    flask-sslify
+    mysqlclient
+    psycopg2
+    sqlalchemy
+    certifi
+    cffi
+    configobj
+    cryptography
+    bcrypt
+    requests
+    python-ldap
+    pyotp
+    qrcode
+    dnspython
+    gunicorn
+    itsdangerous
+    python3-saml
+    pytz
+    rcssmin
+    rjsmin
+    authlib
+    bravado-core
+    lima
+    lxml
+    passlib
+    pyasn1
+    pytimeparse
+    pyyaml
+    jinja2
+    itsdangerous
+    webcolors
+    werkzeug
+    zipp
+    zxcvbn
   ];
 
   all_patches = [
@@ -62,7 +109,8 @@ let
     assets.register('js_main', 'generated/main.js')
     assets.register('css_main', 'generated/main.css')
   '';
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version src;
 
   nativeBuildInputs = [ python.pkgs.wrapPython ];
@@ -121,6 +169,9 @@ in stdenv.mkDerivation {
     mainProgram = "powerdns-admin";
     homepage = "https://github.com/PowerDNS-Admin/PowerDNS-Admin";
     license = licenses.mit;
-    maintainers = with maintainers; [ Flakebi zhaofengli ];
+    maintainers = with maintainers; [
+      Flakebi
+      zhaofengli
+    ];
   };
 }

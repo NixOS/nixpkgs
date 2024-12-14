@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -85,7 +90,7 @@ in
 
         extraTargets = mkOption {
           type = types.listOf types.str;
-          default = [];
+          default = [ ];
           example = [ "display-manager.service" ];
           description = ''
             Other targets to lock the screen just before.
@@ -103,7 +108,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable (mkMerge [
@@ -115,31 +119,35 @@ in
       systemd.services.physlock = {
         enable = true;
         description = "Physlock";
-        wantedBy = optional cfg.lockOn.suspend   "suspend.target"
-                ++ optional cfg.lockOn.hibernate "hibernate.target"
-                ++ cfg.lockOn.extraTargets;
-        before   = optional cfg.lockOn.suspend   "systemd-suspend.service"
-                ++ optional cfg.lockOn.hibernate "systemd-hibernate.service"
-                ++ optional (cfg.lockOn.hibernate || cfg.lockOn.suspend) "systemd-suspend-then-hibernate.service"
-                ++ cfg.lockOn.extraTargets;
+        wantedBy =
+          optional cfg.lockOn.suspend "suspend.target"
+          ++ optional cfg.lockOn.hibernate "hibernate.target"
+          ++ cfg.lockOn.extraTargets;
+        before =
+          optional cfg.lockOn.suspend "systemd-suspend.service"
+          ++ optional cfg.lockOn.hibernate "systemd-hibernate.service"
+          ++ optional (cfg.lockOn.hibernate || cfg.lockOn.suspend) "systemd-suspend-then-hibernate.service"
+          ++ cfg.lockOn.extraTargets;
         serviceConfig = {
           Type = "forking";
-          ExecStart = "${pkgs.physlock}/bin/physlock -d${optionalString cfg.muteKernelMessages "m"}${optionalString cfg.disableSysRq "s"}${optionalString (cfg.lockMessage != "") " -p \"${cfg.lockMessage}\""}";
+          ExecStart = "${pkgs.physlock}/bin/physlock -d${optionalString cfg.muteKernelMessages "m"}${optionalString cfg.disableSysRq "s"}${
+            optionalString (cfg.lockMessage != "") " -p \"${cfg.lockMessage}\""
+          }";
         };
       };
 
-      security.pam.services.physlock = {};
+      security.pam.services.physlock = { };
 
     }
 
     (mkIf cfg.allowAnyUser {
 
-      security.wrappers.physlock =
-        { setuid = true;
-          owner = "root";
-          group = "root";
-          source = "${pkgs.physlock}/bin/physlock";
-        };
+      security.wrappers.physlock = {
+        setuid = true;
+        owner = "root";
+        group = "root";
+        source = "${pkgs.physlock}/bin/physlock";
+      };
 
     })
   ]);

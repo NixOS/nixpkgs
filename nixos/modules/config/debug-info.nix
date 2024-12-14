@@ -25,7 +25,6 @@
 
   };
 
-
   config = lib.mkIf config.environment.enableDebugInfo {
 
     # FIXME: currently disabled because /lib is already in

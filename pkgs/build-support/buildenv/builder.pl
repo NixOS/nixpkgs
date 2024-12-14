@@ -240,6 +240,7 @@ for my $pkg (@{decode_json $pkgs}) {
     for my $path (@{$pkg->{paths}}) {
         addPkg($path,
                $ENV{"ignoreCollisions"} eq "1",
+               $ENV{"ignoreSingleFileOutputs"} eq "1",
                $ENV{"checkCollisionContents"} eq "1",
                $pkg->{priority})
            if -e $path;
@@ -256,7 +257,7 @@ while (scalar(keys %postponed) > 0) {
     my @pkgDirs = keys %postponed;
     %postponed = ();
     foreach my $pkgDir (sort @pkgDirs) {
-        addPkg($pkgDir, 2, $ENV{"checkCollisionContents"} eq "1", $priorityCounter++);
+        addPkg($pkgDir, 2, $ENV{"ignoreSingleFileOutputs"} eq "1", $ENV{"checkCollisionContents"} eq "1", $priorityCounter++);
     }
 }
 
@@ -268,6 +269,7 @@ if ($extraPathsFilePath) {
         chomp $line;
         addPkg($line,
                $ENV{"ignoreCollisions"} eq "1",
+               $ENV{"ignoreSingleFileOutputs"} eq "1",
                $ENV{"checkCollisionContents"} eq "1",
                1000)
             if -d $line;

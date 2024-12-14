@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchurl
-, perlPackages
-, makeWrapper
-, wrapGAppsHook3
-, cairo
-, dblatex
-, gnumake
-, gobject-introspection
-, graphicsmagick
-, gsettings-desktop-schemas
-, gtk3
-, hicolor-icon-theme
-, libnotify
-, librsvg
-, libxslt
-, netpbm
-, opencv
-, pango
-, perl
-, pkg-config
-, poppler
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perlPackages,
+  makeWrapper,
+  wrapGAppsHook3,
+  cairo,
+  dblatex,
+  gnumake,
+  gobject-introspection,
+  graphicsmagick,
+  gsettings-desktop-schemas,
+  gtk3,
+  hicolor-icon-theme,
+  libnotify,
+  librsvg,
+  libxslt,
+  netpbm,
+  opencv,
+  pango,
+  perl,
+  pkg-config,
+  poppler,
 }:
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "auto-multiple-choice";
@@ -71,23 +72,26 @@ stdenv.mkDerivation (finalAttrs: rec {
   postFixup = ''
     wrapProgram $out/bin/auto-multiple-choice \
     ''${makeWrapperArgs[@]} \
-    --prefix PERL5LIB : "${with perlPackages; makeFullPerlPath [
-      ArchiveZip
-      DBDSQLite
-      Cairo
-      CairoGObject
-      DBI
-      Glib
-      GlibObjectIntrospection
-      Gtk3
-      LocaleGettext
-      OpenOfficeOODoc
-      PerlMagick
-      TextCSV
-      XMLParser
-      XMLSimple
-      XMLWriter
-    ]}:"$out/share/perl5 \
+    --prefix PERL5LIB : "${
+      with perlPackages;
+      makeFullPerlPath [
+        ArchiveZip
+        DBDSQLite
+        Cairo
+        CairoGObject
+        DBI
+        Glib
+        GlibObjectIntrospection
+        Gtk3
+        LocaleGettext
+        OpenOfficeOODoc
+        PerlMagick
+        TextCSV
+        XMLParser
+        XMLSimple
+        XMLWriter
+      ]
+    }:"$out/share/perl5 \
     --prefix XDG_DATA_DIRS : "$out/share:$XDG_ICON_DIRS:$GSETTINGS_SCHEMAS_PATH" \
     --prefix PATH : "$out/bin" \
     --set TEXINPUTS ":.:$out/tex/latex"
@@ -100,39 +104,41 @@ stdenv.mkDerivation (finalAttrs: rec {
     gobject-introspection
   ];
 
-  buildInputs = [
-    cairo
-    cairo.dev
-    dblatex
-    gnumake
-    graphicsmagick
-    gsettings-desktop-schemas
-    gtk3
-    hicolor-icon-theme
-    libnotify
-    librsvg
-    libxslt
-    netpbm
-    opencv
-    pango
-    poppler
-  ] ++ (with perlPackages; [
-    perl
-    ArchiveZip
-    Cairo
-    CairoGObject
-    DBDSQLite
-    DBI
-    Glib
-    GlibObjectIntrospection
-    Gtk3
-    LocaleGettext
-    PerlMagick
-    TextCSV
-    XMLParser
-    XMLSimple
-    XMLWriter
-  ]);
+  buildInputs =
+    [
+      cairo
+      cairo.dev
+      dblatex
+      gnumake
+      graphicsmagick
+      gsettings-desktop-schemas
+      gtk3
+      hicolor-icon-theme
+      libnotify
+      librsvg
+      libxslt
+      netpbm
+      opencv
+      pango
+      poppler
+    ]
+    ++ (with perlPackages; [
+      perl
+      ArchiveZip
+      Cairo
+      CairoGObject
+      DBDSQLite
+      DBI
+      Glib
+      GlibObjectIntrospection
+      Gtk3
+      LocaleGettext
+      PerlMagick
+      TextCSV
+      XMLParser
+      XMLSimple
+      XMLWriter
+    ]);
 
   passthru = {
     tlType = "run";

@@ -1,55 +1,68 @@
-{ mkDerivation
-, lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, makeWrapper
-, xdg-utils
-, dbus
-, getconf
-, glibc
-, libXrandr
-, libX11
-, libXext
-, libXdamage
-, libXtst
-, libSM
-, libXfixes
-, coreutils
-, wrapQtAppsHook
-, icu63
-, nss
-, minizip
+{
+  mkDerivation,
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  makeWrapper,
+  xdg-utils,
+  dbus,
+  getconf,
+  glibc,
+  libXrandr,
+  libX11,
+  libXext,
+  libXdamage,
+  libXtst,
+  libSM,
+  libXfixes,
+  coreutils,
+  wrapQtAppsHook,
+  icu63,
+  nss,
+  minizip,
 }:
 
 mkDerivation rec {
   pname = "teamviewer";
   # teamviewer itself has not development files but the dev output removes propagated other dev outputs from runtime
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
   version = "15.54.3";
 
   src =
     let
-       base_url = "https://dl.teamviewer.com/download/linux/version_${lib.versions.major version}x";
+      base_url = "https://dl.teamviewer.com/download/linux/version_${lib.versions.major version}x";
     in
-      {
-       x86_64-linux = fetchurl {
-          url = "${base_url}/teamviewer_${version}_amd64.deb";
-          hash = "sha256-41zVX2svomcRKu2ow1A/EeKojBIpABO4o2EZxappzgo=";
-       };
-       aarch64-linux = fetchurl {
-          url = "${base_url}/teamviewer_${version}_arm64.deb";
-          hash = "sha256-wuQYWeYgXW54/5dpiGzJxZ9JZDlUgFgCKq8Z4xV2HlI=";
-       };
-      }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    {
+      x86_64-linux = fetchurl {
+        url = "${base_url}/teamviewer_${version}_amd64.deb";
+        hash = "sha256-41zVX2svomcRKu2ow1A/EeKojBIpABO4o2EZxappzgo=";
+      };
+      aarch64-linux = fetchurl {
+        url = "${base_url}/teamviewer_${version}_arm64.deb";
+        hash = "sha256-wuQYWeYgXW54/5dpiGzJxZ9JZDlUgFgCKq8Z4xV2HlI=";
+      };
+    }
+    .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   unpackPhase = ''
     ar x $src
     tar xf data.tar.*
   '';
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper wrapQtAppsHook ];
-  buildInputs = [ minizip icu63 nss ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    minizip
+    icu63
+    nss
+  ];
 
   installPhase = ''
     mkdir -p $out/share/teamviewer $out/bin $out/share/applications
@@ -106,8 +119,25 @@ mkDerivation rec {
   '';
 
   makeWrapperArgs = [
-    "--prefix PATH : ${lib.makeBinPath [ getconf coreutils ]}"
-    "--prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [ libXrandr libX11 libXext libXdamage libXtst libSM libXfixes dbus icu63 ]}"
+    "--prefix PATH : ${
+      lib.makeBinPath [
+        getconf
+        coreutils
+      ]
+    }"
+    "--prefix LD_LIBRARY_PATH : ${
+      lib.makeLibraryPath [
+        libXrandr
+        libX11
+        libXext
+        libXdamage
+        libXtst
+        libSM
+        libXfixes
+        dbus
+        icu63
+      ]
+    }"
   ];
 
   postFixup = ''
@@ -128,6 +158,10 @@ mkDerivation rec {
     license = licenses.unfree;
     description = "Desktop sharing application, providing remote support and online meetings";
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ jagajaga jraygauthier gador ];
+    maintainers = with maintainers; [
+      jagajaga
+      jraygauthier
+      gador
+    ];
   };
 }

@@ -1,11 +1,19 @@
-{ lib, stdenv, fetchurl, kernel, alsa-lib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  kernel,
+  alsa-lib,
+}:
 
 let
-  bits =
-    if stdenv.hostPlatform.is64bit then "64"
-    else "32";
+  bits = if stdenv.hostPlatform.is64bit then "64" else "32";
 
-  libpath = lib.makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc alsa-lib ];
+  libpath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    stdenv.cc.libc
+    alsa-lib
+  ];
 
 in
 stdenv.mkDerivation rec {
@@ -25,7 +33,10 @@ stdenv.mkDerivation rec {
     export INSTALL_MOD_PATH="$out"
   '';
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
 
   makeFlags = [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"

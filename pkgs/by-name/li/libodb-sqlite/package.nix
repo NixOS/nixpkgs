@@ -1,16 +1,22 @@
-{ lib, stdenv
-, build2
-, fetchurl
-, libodb
-, sqlite
-, enableShared ? !stdenv.hostPlatform.isStatic
-, enableStatic ? !enableShared
+{
+  lib,
+  stdenv,
+  build2,
+  fetchurl,
+  libodb,
+  sqlite,
+  enableShared ? !stdenv.hostPlatform.isStatic,
+  enableStatic ? !enableShared,
 }:
 stdenv.mkDerivation rec {
   pname = "libodb-sqlite";
   version = "2.5.0-b.27";
 
-  outputs = [ "out" "dev" "doc" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+  ];
 
   src = fetchurl {
     url = "https://pkg.cppget.org/1/beta/odb/libodb-sqlite-${version}.tar.gz";

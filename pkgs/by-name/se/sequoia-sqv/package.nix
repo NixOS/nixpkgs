@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitLab
-, nettle
-, nix-update-script
-, rustPlatform
-, pkg-config
-, installShellFiles
+{
+  lib,
+  fetchFromGitLab,
+  nettle,
+  nix-update-script,
+  rustPlatform,
+  pkg-config,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {

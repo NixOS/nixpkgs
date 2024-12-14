@@ -1,8 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, python3, wrapQtAppsHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  wrapQtAppsHook,
+}:
 
 let
   inherit (python3.pkgs) wrapPython pyqt5;
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "convertall";
   version = "0.8.0";
 
@@ -13,7 +20,11 @@ in stdenv.mkDerivation rec {
     sha256 = "02xxasgbjbivsbhyfpn3cpv52lscdx5kc95s6ns1dvnmdg0fpng0";
   };
 
-  nativeBuildInputs = [ python3 wrapPython wrapQtAppsHook ];
+  nativeBuildInputs = [
+    python3
+    wrapPython
+    wrapQtAppsHook
+  ];
 
   propagatedBuildInputs = [ pyqt5 ];
 

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchsvn, cmake, libusb-compat-0_1, libftdi }:
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  cmake,
+  libusb-compat-0_1,
+  libftdi,
+}:
 
 # The xc3sprog project doesn't seem to make proper releases, they only put out
 # prebuilt binary subversion snapshots on sourceforge.
@@ -14,7 +21,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libusb-compat-0_1 libftdi ];
+  buildInputs = [
+    libusb-compat-0_1
+    libftdi
+  ];
 
   cmakeFlags = [
     # file RPATH_CHANGE could not write new RPATH

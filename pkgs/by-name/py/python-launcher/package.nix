@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, python3 }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  python3,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "python-launcher";

@@ -1,4 +1,11 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, kubectl, installShellFiles }:
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  kubectl,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "kubecolor";
@@ -13,7 +20,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-b99HAM1vsncq9Q5XJiHZHyv7bjQs6GGyNAMONmGpxms=";
 
-  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
+  ];
 
   subPackages = [
     "."
@@ -45,6 +56,10 @@ buildGoModule rec {
     homepage = "https://github.com/kubecolor/kubecolor";
     changelog = "https://github.com/kubecolor/kubecolor/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ivankovnatsky SuperSandro2000 applejag ];
+    maintainers = with maintainers; [
+      ivankovnatsky
+      SuperSandro2000
+      applejag
+    ];
   };
 }

@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, SDL2
-, SDL2_gfx
-, SDL2_image
-, SDL2_ttf
-, busybox
-, curl
-, findutils
-, geoclue2-with-demo-agent
-, gpsd
-, jq
-, makeWrapper
-, ncurses
-, pkg-config
-, util-linux
-, xwininfo
-, zenity
-, zig_0_12
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  SDL2,
+  SDL2_gfx,
+  SDL2_image,
+  SDL2_ttf,
+  busybox,
+  curl,
+  findutils,
+  geoclue2-with-demo-agent,
+  gpsd,
+  jq,
+  makeWrapper,
+  ncurses,
+  pkg-config,
+  util-linux,
+  xwininfo,
+  zenity,
+  zig_0_12,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -62,17 +63,19 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail " ls " " ls -a " #circumvent wrapping for script detection
     for program in $out/bin/* ; do
       wrapProgram $program \
-        --suffix PATH : $out/bin:${lib.makeBinPath ([
-          busybox
-          curl
-          findutils
-          gpsd
-          jq
-          ncurses
-          util-linux
-          xwininfo
-          zenity
-        ])}
+        --suffix PATH : $out/bin:${
+          lib.makeBinPath ([
+            busybox
+            curl
+            findutils
+            gpsd
+            jq
+            ncurses
+            util-linux
+            xwininfo
+            zenity
+          ])
+        }
     done
   '';
 
@@ -92,7 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
       more.
     '';
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ sikmir McSinyx laalsaas ];
+    maintainers = with lib.maintainers; [
+      sikmir
+      McSinyx
+      laalsaas
+    ];
     platforms = lib.platforms.linux;
   };
 })

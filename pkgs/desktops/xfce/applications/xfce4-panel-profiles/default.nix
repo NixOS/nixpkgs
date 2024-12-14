@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gettext
-, gobject-introspection
-, intltool
-, wrapGAppsHook3
-, glib
-, gtk3
-, libxfce4ui
-, python3
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gettext,
+  gobject-introspection,
+  intltool,
+  wrapGAppsHook3,
+  glib,
+  gtk3,
+  libxfce4ui,
+  python3,
+  gitUpdater,
 }:
 
 let

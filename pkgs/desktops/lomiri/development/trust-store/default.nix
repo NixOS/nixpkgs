@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, gitUpdater
-, testers
-, boost
-, cmake
-, cmake-extras
-, dbus
-, dbus-cpp
-, doxygen
-, gettext
-, glog
-, graphviz
-, gtest
-, libapparmor
-, newt
-, pkg-config
-, process-cpp
-, properties-cpp
-, qtbase
-, qtdeclarative
-, validatePkgConfig
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  gitUpdater,
+  testers,
+  boost,
+  cmake,
+  cmake-extras,
+  dbus,
+  dbus-cpp,
+  doxygen,
+  gettext,
+  glog,
+  graphviz,
+  gtest,
+  libapparmor,
+  newt,
+  pkg-config,
+  process-cpp,
+  properties-cpp,
+  qtbase,
+  qtdeclarative,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -41,18 +42,20 @@ stdenv.mkDerivation (finalAttrs: {
     "bin"
   ];
 
-  postPatch = ''
-    # pkg-config patching hook expects prefix variable
-    substituteInPlace data/trust-store.pc.in \
-      --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
-      --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
+  postPatch =
+    ''
+      # pkg-config patching hook expects prefix variable
+      substituteInPlace data/trust-store.pc.in \
+        --replace-fail 'libdir=''${exec_prefix}' 'libdir=''${prefix}' \
+        --replace-fail 'includedir=''${exec_prefix}' 'includedir=''${prefix}'
 
-    substituteInPlace src/core/trust/terminal_agent.h \
-      --replace-fail '/bin/whiptail' '${lib.getExe' newt "whiptail"}'
-  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    substituteInPlace CMakeLists.txt \
-      --replace-fail 'add_subdirectory(tests)' ""
-  '';
+      substituteInPlace src/core/trust/terminal_agent.h \
+        --replace-fail '/bin/whiptail' '${lib.getExe' newt "whiptail"}'
+    ''
+    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail 'add_subdirectory(tests)' ""
+    '';
 
   strictDeps = true;
 

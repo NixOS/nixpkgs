@@ -86,14 +86,17 @@ buildPythonPackage rec {
       ]
       ++ fastapi-cli.optional-dependencies.standard
       ++ uvicorn.optional-dependencies.standard;
-    standard = [
-      fastapi-cli
-      httpx
-      jinja2
-      python-multipart
-      email-validator
-      uvicorn
-    ] ++ fastapi-cli.optional-dependencies.standard ++ uvicorn.optional-dependencies.standard;
+    standard =
+      [
+        fastapi-cli
+        httpx
+        jinja2
+        python-multipart
+        email-validator
+        uvicorn
+      ]
+      ++ fastapi-cli.optional-dependencies.standard
+      ++ uvicorn.optional-dependencies.standard;
   };
 
   nativeCheckInputs =

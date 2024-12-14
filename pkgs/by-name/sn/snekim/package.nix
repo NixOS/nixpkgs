@@ -1,4 +1,8 @@
-{ lib, buildNimPackage, fetchFromGitea }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitea,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "snekim";

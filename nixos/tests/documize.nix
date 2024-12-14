@@ -1,62 +1,67 @@
-import ./make-test-python.nix ({ pkgs, lib, ...} : {
-  name = "documize";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ ];
-  };
-
-  nodes.machine = { pkgs, ... }: {
-    environment.systemPackages = [ pkgs.jq ];
-
-    services.documize = {
-      enable = true;
-      port = 3000;
-      dbtype = "postgresql";
-      db = "host=localhost port=5432 sslmode=disable user=documize password=documize dbname=documize";
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
+  {
+    name = "documize";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ ];
     };
 
-    systemd.services.documize-server = {
-      after = [ "postgresql.service" ];
-      requires = [ "postgresql.service" ];
-    };
+    nodes.machine =
+      { pkgs, ... }:
+      {
+        environment.systemPackages = [ pkgs.jq ];
 
-    services.postgresql = {
-      enable = true;
-      initialScript = pkgs.writeText "psql-init" ''
-        CREATE ROLE documize WITH LOGIN PASSWORD 'documize';
-        CREATE DATABASE documize WITH OWNER documize;
-      '';
-    };
-  };
+        services.documize = {
+          enable = true;
+          port = 3000;
+          dbtype = "postgresql";
+          db = "host=localhost port=5432 sslmode=disable user=documize password=documize dbname=documize";
+        };
 
-  testScript = ''
-    start_all()
+        systemd.services.documize-server = {
+          after = [ "postgresql.service" ];
+          requires = [ "postgresql.service" ];
+        };
 
-    machine.wait_for_unit("documize-server.service")
-    machine.wait_for_open_port(3000)
+        services.postgresql = {
+          enable = true;
+          initialScript = pkgs.writeText "psql-init" ''
+            CREATE ROLE documize WITH LOGIN PASSWORD 'documize';
+            CREATE DATABASE documize WITH OWNER documize;
+          '';
+        };
+      };
 
-    dbhash = machine.succeed(
-        "curl -f localhost:3000 | grep 'property=\"dbhash' | grep -Po 'content=\"\\K[^\"]*'"
-    )
+    testScript = ''
+      start_all()
 
-    dbhash = dbhash.strip()
+      machine.wait_for_unit("documize-server.service")
+      machine.wait_for_open_port(3000)
 
-    machine.succeed(
-        (
-            "curl -X POST"
-            " --data 'dbname=documize'"
-            " --data 'dbhash={}'"
-            " --data 'title=NixOS'"
-            " --data 'message=Docs'"
-            " --data 'firstname=Bob'"
-            " --data 'lastname=Foobar'"
-            " --data 'email=bob.foobar@nixos.org'"
-            " --data 'password=verysafe'"
-            " -f localhost:3000/api/setup"
-        ).format(dbhash)
-    )
+      dbhash = machine.succeed(
+          "curl -f localhost:3000 | grep 'property=\"dbhash' | grep -Po 'content=\"\\K[^\"]*'"
+      )
 
-    machine.succeed(
-        'test "$(curl -f localhost:3000/api/public/meta | jq ".title" | xargs echo)" = "NixOS"'
-    )
-  '';
-})
+      dbhash = dbhash.strip()
+
+      machine.succeed(
+          (
+              "curl -X POST"
+              " --data 'dbname=documize'"
+              " --data 'dbhash={}'"
+              " --data 'title=NixOS'"
+              " --data 'message=Docs'"
+              " --data 'firstname=Bob'"
+              " --data 'lastname=Foobar'"
+              " --data 'email=bob.foobar@nixos.org'"
+              " --data 'password=verysafe'"
+              " -f localhost:3000/api/setup"
+          ).format(dbhash)
+      )
+
+      machine.succeed(
+          'test "$(curl -f localhost:3000/api/public/meta | jq ".title" | xargs echo)" = "NixOS"'
+      )
+    '';
+  }
+)

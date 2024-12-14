@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "der-ascii";
@@ -12,7 +16,10 @@ buildGoModule rec {
   };
   vendorHash = null;
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = ''
@@ -21,7 +28,11 @@ buildGoModule rec {
     '';
     homepage = "https://github.com/google/der-ascii";
     license = licenses.asl20;
-    maintainers = with maintainers; [ alexshpilkin cpu hawkw ];
+    maintainers = with maintainers; [
+      alexshpilkin
+      cpu
+      hawkw
+    ];
     mainProgram = "ascii2der"; # has stable output, unlike its inverse
   };
 }

@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitLab, kernel, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  kernel,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ddcci-driver";

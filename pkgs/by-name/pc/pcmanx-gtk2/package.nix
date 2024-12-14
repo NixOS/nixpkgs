@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, gtk2, libXft, intltool, automake, autoconf, libtool, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk2,
+  libXft,
+  intltool,
+  automake,
+  autoconf,
+  libtool,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pcmanx-gtk2";
@@ -11,8 +22,17 @@ stdenv.mkDerivation rec {
     sha256 = "0fbwd149wny67rfhczz4cbh713a1qnswjiz7b6c2bxfcwh51f9rc";
   };
 
-  nativeBuildInputs = [ pkg-config automake autoconf intltool ];
-  buildInputs = [ gtk2 libXft libtool ];
+  nativeBuildInputs = [
+    pkg-config
+    automake
+    autoconf
+    intltool
+  ];
+  buildInputs = [
+    gtk2
+    libXft
+    libtool
+  ];
 
   preConfigure = ''
     ./autogen.sh

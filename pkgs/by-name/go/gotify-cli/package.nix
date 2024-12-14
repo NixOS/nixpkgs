@@ -1,4 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "gotify-cli";
@@ -18,7 +22,9 @@ buildGoModule rec {
   '';
 
   ldflags = [
-    "-X main.Version=${version}" "-X main.Commit=${version}" "-X main.BuildDate=1970-01-01"
+    "-X main.Version=${version}"
+    "-X main.Commit=${version}"
+    "-X main.BuildDate=1970-01-01"
   ];
 
   meta = with lib; {

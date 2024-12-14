@@ -2,6 +2,7 @@
 , stdenv
 , lib
 , fetchFromGitHub
+, fetchpatch2
 , Foundation
 , abseil-cpp_202401
 , cmake
@@ -116,6 +117,12 @@ effectiveStdenv.mkDerivation rec {
     # TODO: Check if it can be dropped after 1.19.0
     # https://github.com/microsoft/onnxruntime/commit/b522df0ae477e59f60acbe6c92c8a64eda96cace
     ./update-re2.patch
+    # fix `error: template-id not allowed for constructor in C++20`
+    (fetchpatch2 {
+      name = "suppress-gcc-warning-in-TreeEnsembleAggregator.patch";
+      url = "https://github.com/microsoft/onnxruntime/commit/10883d7997ed4b53f989a49bd4387c5769fbd12f.patch?full_index=1";
+      hash = "sha256-NgvuCHE7axaUtZIjtQvDpagr+QtHdyL7xXkPQwZbhvY=";
+    })
   ] ++ lib.optionals cudaSupport [
     # We apply the referenced 1064.patch ourselves to our nix dependency.
     #  FIND_PACKAGE_ARGS for CUDA was added in https://github.com/microsoft/onnxruntime/commit/87744e5 so it might be possible to delete this patch after upgrading to 1.17.0

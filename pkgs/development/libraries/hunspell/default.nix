@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, ncurses, readline, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+  readline,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.7.2";
@@ -11,9 +18,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-x2FXxnVIqsf5/UEQcvchAndXBv/3mW8Z55djQAFgNA8=";
   };
 
-  outputs = [ "bin" "dev" "out" "man" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+  ];
 
-  buildInputs = [ ncurses readline ];
+  buildInputs = [
+    ncurses
+    readline
+  ];
   nativeBuildInputs = [ autoreconfHook ];
 
   patches = [
@@ -26,7 +41,10 @@ stdenv.mkDerivation rec {
 
   autoreconfFlags = [ "-vfi" ];
 
-  configureFlags = [ "--with-ui" "--with-readline" ];
+  configureFlags = [
+    "--with-ui"
+    "--with-readline"
+  ];
 
   hardeningDisable = [ "format" ];
 
@@ -54,7 +72,11 @@ stdenv.mkDerivation rec {
         * Delphi, Java (JNA, JNI), Perl, .NET, Python, Ruby ([1], [2]), UNO.
     '';
     platforms = platforms.all;
-    license = with licenses; [ gpl2 lgpl21 mpl11 ];
+    license = with licenses; [
+      gpl2
+      lgpl21
+      mpl11
+    ];
     maintainers = [ ];
   };
 }

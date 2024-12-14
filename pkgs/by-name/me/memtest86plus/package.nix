@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "memtest86+";
@@ -30,7 +34,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.memtest.org/";
     description = "Tool to detect memory errors";
     license = lib.licenses.gpl2Only;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     maintainers = [ lib.maintainers.LunNova ];
   };
 })

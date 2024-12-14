@@ -36,7 +36,10 @@ buildDubPackage rec {
     changelog = "https://github.com/CyberShadow/btdu/releases/tag/${src.rev}";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ atila cybershadow ];
+    maintainers = with maintainers; [
+      atila
+      cybershadow
+    ];
     mainProgram = "btdu";
   };
 }

@@ -1,16 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, deadbeef
-, autoreconfHook
-, pkg-config
-, glib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  deadbeef,
+  autoreconfHook,
+  pkg-config,
+  glib,
 }:
 
 let
   pname = "deadbeef-mpris2-plugin";
   version = "1.16";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchFromGitHub {

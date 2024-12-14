@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, rustPlatform, pkg-config }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "itm-tools";
@@ -29,7 +34,13 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Tools for analyzing ITM traces";
     homepage = "https://github.com/japaric/itm-tools";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ hh sb0 ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [
+      hh
+      sb0
+    ];
   };
 }

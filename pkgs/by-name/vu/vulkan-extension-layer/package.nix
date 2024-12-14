@@ -1,4 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, writeText, vulkan-headers, vulkan-utility-libraries,  jq, libX11, libXrandr, libxcb, wayland }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  writeText,
+  vulkan-headers,
+  vulkan-utility-libraries,
+  jq,
+  libX11,
+  libXrandr,
+  libxcb,
+  wayland,
+}:
 
 stdenv.mkDerivation rec {
   pname = "vulkan-extension-layer";
@@ -11,9 +25,20 @@ stdenv.mkDerivation rec {
     hash = "sha256-pBpHYxJq36FrHsvpaMJvX0IKTvAh0R86qR7/vn6EBCw=";
   };
 
-  nativeBuildInputs = [ cmake pkg-config jq ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    jq
+  ];
 
-  buildInputs = [ vulkan-headers vulkan-utility-libraries libX11 libXrandr libxcb wayland ];
+  buildInputs = [
+    vulkan-headers
+    vulkan-utility-libraries
+    libX11
+    libXrandr
+    libxcb
+    wayland
+  ];
 
   # Help vulkan-loader find the validation layers
   setupHook = writeText "setup-hook" ''
@@ -39,6 +64,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/KhronosGroup/Vulkan-ExtensionLayer/";
     platforms = platforms.linux;
     license = licenses.asl20;
-    maintainers = [];
+    maintainers = [ ];
   };
 }
