@@ -48,6 +48,7 @@ stdenv.mkDerivation {
     ./no-pam-service.patch
     ./no-default-config.patch
     ./fix-absolute-paths.patch
+    ./fix-boost-includes.patch
   ];
 
   nativeBuildInputs = [
