@@ -28,7 +28,8 @@ let
 
   # Specifying --(dis|en)able-elf-hack on a platform for which it's not implemented will give `--disable-elf-hack is not available in this configuration`
   # This is declared here because it's used in the default value of elfhackSupport
-  isElfhackPlatform = stdenv: stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64;
+  isElfhackPlatform = stdenv: stdenv.hostPlatform.isElf &&
+    (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64);
 in
 
 { lib
