@@ -7199,6 +7199,14 @@
     githubId = 345808;
     name = "Jakub Okoński";
   };
+  fauxmight = {
+    email = "nix@ivories.org";
+    matrix = "@fauxmight:matrix.ivories.org";
+    github = "fauxmight";
+    githubId = 53975399;
+    name = "A Frederick Christensen";
+    keys = [ { fingerprint = "5A49 F4F9 3EDC 21E9 B7CC  4E94 9EEF 4142 5355 8AC4"; } ];
+  };
   fbeffa = {
     email = "beffa@fbengineering.ch";
     github = "fedeinthemix";
