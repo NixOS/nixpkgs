@@ -1,11 +1,13 @@
 {
-  buildPythonApplication,
-  nix,
-  makeWrapper,
-  python3Packages,
   lib,
+  buildPythonApplication,
+  makeWrapper,
+  nix,
   nix-prefetch-git,
   nurl,
+  python3Packages,
+  vimPluginsUpdater,
+  writeShellScript,
 
   # optional
   neovim-unwrapped,
@@ -46,6 +48,11 @@ buildPythonApplication {
 
   shellHook = ''
     export PYTHONPATH=pkgs/applications/editors/vim/plugins:maintainers/scripts/pluginupdate-py:$PYTHONPATH
+  '';
+
+  passthru.updateScript = writeShellScript "updateScript" ''
+    # don't saturate the update bot connection
+    ${lib.getExe vimPluginsUpdater} --proc 2 update
   '';
 
   meta.mainProgram = "vim-plugins-updater";
