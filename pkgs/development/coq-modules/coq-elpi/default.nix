@@ -3,6 +3,7 @@
   mkCoqDerivation,
   which,
   coq,
+  stdlib,
   version ? null,
 }:
 
@@ -163,6 +164,7 @@ in
   propagatedBuildInputs = [
     coq.ocamlPackages.findlib
     elpi
+    stdlib
   ];
 
   meta = {

@@ -121,7 +121,9 @@ fi
 
 sourceUrl="docker://$imageName@$imageDigest"
 
-tmpPath="$(mktemp -d "${TMPDIR:-/tmp}/skopeo-copy-tmp-XXXXXXXX")"
+# nix>=2.20 rejects adding symlinked paths to the store, so use realpath
+# to resolve to a physical path. https://github.com/NixOS/nix/issues/11941
+tmpPath="$(realpath "$(mktemp -d --tmpdir skopeo-copy-tmp-XXXXXXXX)")"
 trap "rm -rf \"$tmpPath\"" EXIT
 
 tmpFile="$tmpPath/$(get_name $finalImageName $finalImageTag)"

@@ -1,55 +1,76 @@
-{ lib
-, stdenv
-, fetchCrate
-, rustPlatform
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  nix-update-script,
+  runtimeShell,
+  rustPlatform,
+  skim,
+  testers,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "skim";
-  version = "0.10.4";
+  version = "0.15.0";
 
-  src = fetchCrate {
-    inherit pname version;
-    hash = "sha256-C2yK+SO8Tpw3BxXXu1jeDzYJ2548RZa7NFWaE0SdNJ0=";
+  outputs = [
+    "out"
+    "man"
+    "vim"
+  ];
+
+  src = fetchFromGitHub {
+    owner = "skim-rs";
+    repo = "skim";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-Y/MVjwpNyYXjQWB3s8WRblCukBr0z81k3gf3bf58KGE=";
   };
-
-  nativeBuildInputs = [ installShellFiles ];
-
-  outputs = [ "out" "vim" ];
-
-  cargoHash = "sha256-jBcgoWbmBOgU7M71lr4OXOe2S6NAXl+I8D+ZtT45Vos=";
 
   postPatch = ''
     sed -i -e "s|expand('<sfile>:h:h')|'$out'|" plugin/skim.vim
   '';
 
-  postInstall = ''
-    install -D -m 555 bin/sk-tmux -t $out/bin
+  cargoHash = "sha256-llpNnZdIFHCmyyVla+tZOgpMTavu/m3ZGFZaS5EbiVo=";
 
-    install -D -m 444 plugin/skim.vim -t $vim/plugin
+  nativeBuildInputs = [ installShellFiles ];
 
-    install -D -m 444 shell/* -t $out/share/skim
-
-    installManPage man/man1/*
-
-    cat <<SCRIPT > $out/bin/sk-share
-    #! ${stdenv.shell}
+  postBuild = ''
+    cat <<SCRIPT > sk-share
+    #! ${runtimeShell}
     # Run this script to find the skim shared folder where all the shell
     # integration scripts are living.
     echo $out/share/skim
     SCRIPT
-    chmod +x $out/bin/sk-share
   '';
 
-  # https://github.com/lotabout/skim/issues/440
-  doCheck = !stdenv.hostPlatform.isAarch64;
+  postInstall = ''
+    installBin bin/sk-tmux
+    install -D -m 444 plugin/skim.vim -t $vim/plugin
+    install -D -m 444 shell/* -t $out/share/skim
 
-  meta = with lib; {
+    installBin sk-share
+    installManPage $(find man -type f)
+  '';
+
+  # Doc tests are broken on aarch64
+  # https://github.com/lotabout/skim/issues/440
+  cargoTestFlags = lib.optional stdenv.hostPlatform.isAarch64 "--all-targets";
+
+  passthru = {
+    tests.version = testers.testVersion { package = skim; };
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Command-line fuzzy finder written in Rust";
     homepage = "https://github.com/lotabout/skim";
-    license = licenses.mit;
+    changelog = "https://github.com/skim-rs/skim/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      dywedir
+      getchoo
+    ];
     mainProgram = "sk";
-    maintainers = with maintainers; [ dywedir ];
   };
 }
