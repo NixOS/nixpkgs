@@ -2739,7 +2739,6 @@ in
   };
 
   roslyn-nvim = super.roslyn-nvim.overrideAttrs {
-    dependencies = [ self.nvim-lspconfig ];
     nvimRequireCheck = "roslyn";
   };
 
