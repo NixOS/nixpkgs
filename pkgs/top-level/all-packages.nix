@@ -770,7 +770,9 @@ with pkgs;
     cutoffPackages = [ newDependency ];
   };
 
-  replaceVars = callPackage ../build-support/replace-vars { };
+  replaceVarsWith = callPackage ../build-support/replace-vars/replace-vars-with.nix { };
+
+  replaceVars = callPackage ../build-support/replace-vars/replace-vars.nix { };
 
   replaceDirectDependencies = callPackage ../build-support/replace-direct-dependencies.nix { };
 
