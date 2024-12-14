@@ -45,13 +45,12 @@ in
     };
 
     systemd.services.weechat = {
-      environment.WEECHAT_HOME = cfg.root;
       serviceConfig = {
         User = "weechat";
         Group = "weechat";
         RemainAfterExit = "yes";
       };
-      script = "exec ${config.security.wrapperDir}/screen -Dm -S ${cfg.sessionName} ${cfg.binary}";
+      script = "exec ${config.security.wrapperDir}/screen -Dm -S ${cfg.sessionName} ${cfg.binary} --dir ${cfg.root}";
       wantedBy = [ "multi-user.target" ];
       wants = [ "network.target" ];
     };
