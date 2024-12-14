@@ -376,6 +376,9 @@ in
           compass = {
             enable = cfg.enableCompass;
           };
+          static-source = {
+            inherit (cfg.staticSource) enable;
+          };
         }
         // lib.mapAttrs' appConfigToINICompatible cfg.appConfig
       );
@@ -389,12 +392,6 @@ in
         enableWifi = lib.mkDefault false;
         enableCompass = lib.mkDefault false;
       };
-
-      environment.etc."geoclue/conf.d/static.conf".text = ''
-        # Position is configured in /etc/geolocation
-        [static-source]
-        enable=true
-      '';
 
       environment.etc.geolocation = {
         user = lib.mkDefault "geoclue";
