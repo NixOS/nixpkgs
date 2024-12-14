@@ -42,7 +42,7 @@ let
   };
 in
 vimUtils.buildVimPlugin {
-  pname = "avante-nvim";
+  pname = "avante.nvim";
   inherit version src;
 
   dependencies = with vimPlugins; [
