@@ -4583,6 +4583,8 @@ self: super: with self; {
 
   first = callPackage ../development/python-modules/first { };
 
+  fish-speech = callPackage ../development/python-modules/fish-speech { };
+
   fissix = callPackage ../development/python-modules/fissix { };
 
   fitbit = callPackage ../development/python-modules/fitbit { };
