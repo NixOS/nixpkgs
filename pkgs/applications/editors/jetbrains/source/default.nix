@@ -3,23 +3,23 @@
 
 {
   idea-community = callPackage ./build.nix {
-    version = "2024.1.3";
-    buildNumber = "241.17890.1";
+    version = "2024.3.1";
+    buildNumber = "243.22562.145";
     buildType = "idea";
-    ideaHash = "sha256-jWFnewxRkriSmV6CgGX1r//uaErMINfx3Z+JpkE34jk=";
-    androidHash = "sha256-hX2YdRYNRg0guskNiYfxdl9osgZojRen82IhgA6G0Eo=";
-    jpsHash = "sha256-Abr7L1FyqzRoUSDtsJs3cTEdkhORY5DzsQnOo5irVRI=";
-    restarterHash = "sha256-XdjyuJUQMvhC0fl6sMj0sRWlqgUb3ZgBmKKXcD3egkk=";
+    ideaHash = "sha256-So55gxse7TU05F2c1pe/2BPjZ6xNlCi0Lhaxm+45w/M=";
+    androidHash = "sha256-2ZLTh3mwrIWOqn1UHqAVibG5JvfvxinqDna/EGxd0Ds=";
+    jpsHash = "sha256-p3AEHULhVECIicyhCYNkxeQoMAorrbvoIj7jcqxYD2s=";
+    restarterHash = "sha256-m6HK4kxtAlN6EaszI/xpkVYDaY8W3Qn9FGWgvaW/UYI=";
     mvnDeps = ./idea_maven_artefacts.json;
   };
   pycharm-community = callPackage ./build.nix {
-    version = "2024.1.3";
-    buildNumber = "241.17890.14";
+    version = "2024.3";
+    buildNumber = "243.21565.199";
     buildType = "pycharm";
-    ideaHash = "sha256-tTB91/RHEWP/ZILPNFAbolVBLvgjLXTdD/uF/pdJ22Y=";
-    androidHash = "sha256-hX2YdRYNRg0guskNiYfxdl9osgZojRen82IhgA6G0Eo=";
-    jpsHash = "sha256-Abr7L1FyqzRoUSDtsJs3cTEdkhORY5DzsQnOo5irVRI=";
-    restarterHash = "sha256-TbTIz9pc5wqL54TAMRoQ/9Ax/qsDp+r+h5jn2ub0hes=";
-    mvnDeps = ./idea_maven_artefacts.json;
+    ideaHash = "sha256-NohKF30k3aSYgDUPKrhE2CZmjzT8TK0zw++0Low1OfM=";
+    androidHash = "sha256-H1JegxX6sj7XG0EdZhtzL92GupCCoIq4akgK9t06nXM=";
+    jpsHash = "sha256-p3AEHULhVECIicyhCYNkxeQoMAorrbvoIj7jcqxYD2s=";
+    restarterHash = "sha256-CnTYpYx6SoT6XaS79cm0QpIijIiPKpFh4LfiPJkByXA=";
+    mvnDeps = ./pycharm_maven_artefacts.json;
   };
 }
