@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  substituteAll,
+  replaceVars,
   PodParser,
 }:
 
@@ -22,8 +22,7 @@ stdenv.mkDerivation {
 
   patches = [
     # The script requires a special Perl environment.
-    (substituteAll {
-      src = ./libpath.patch;
+    (replaceVars ./libpath.patch {
       env = PodParser;
     })
   ];

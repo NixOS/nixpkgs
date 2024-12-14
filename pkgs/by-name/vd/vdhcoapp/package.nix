@@ -5,7 +5,7 @@
   nodejs,
   ffmpeg,
   callPackage,
-  substituteAll,
+  replaceVars,
   makeWrapper,
   toml2json,
   jq,
@@ -32,8 +32,7 @@ buildNpmPackage rec {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./ffmpeg-filepicker.patch;
+    (replaceVars ./ffmpeg-filepicker.patch {
       inherit ffmpeg;
       filepicker = lib.getExe (callPackage ./filepicker.nix { });
     })
