@@ -1,14 +1,5 @@
-{ autoreconfHook
-, fetchgit
-, lib
-, stdenv
-, gettext
-, npth
-, libgpg-error
-, buildPackages
-, gitUpdater
-, texinfo
-}:
+{ autoreconfHook, fetchgit, lib, stdenv, gettext, npth, libgpg-error
+, buildPackages, gitUpdater, texinfo }:
 
 stdenv.mkDerivation rec {
   pname = "libassuan";
@@ -21,18 +12,11 @@ stdenv.mkDerivation rec {
     name = "${pname}-${version}";
   };
 
-  outputs = [
-    "out"
-    "dev"
-    "info"
-  ];
+  outputs = [ "out" "dev" "info" ];
   outputBin = "dev"; # libassuan-config
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
-  nativeBuildInputs = [
-    autoreconfHook
-    texinfo
-  ];
+  nativeBuildInputs = [ autoreconfHook texinfo ];
   buildInputs = [ npth gettext ];
 
   configureFlags = [
@@ -67,7 +51,8 @@ stdenv.mkDerivation rec {
       provided.
     '';
     homepage = "https://gnupg.org/software/libassuan/";
-    changelog = "https://dev.gnupg.org/source/libassuan/browse/master/NEWS;libassuan-${version}";
+    changelog =
+      "https://dev.gnupg.org/source/libassuan/browse/master/NEWS;libassuan-${version}";
     license = licenses.lgpl2Plus;
     platforms = platforms.all;
     maintainers = [ ];
