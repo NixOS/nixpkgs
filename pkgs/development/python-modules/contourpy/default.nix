@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  python,
   pythonOlder,
 
   # build
@@ -38,6 +39,12 @@ let
       rev = "refs/tags/v${version}";
       hash = "sha256-QvAIV2Y8H3oPZCF5yaqy2KWfs7aMyRX6aAU5t8E9Vpo=";
     };
+
+    # prevent unnecessary references to the build python when cross compiling
+    postPatch = ''
+      substituteInPlace lib/contourpy/util/_build_config.py.in \
+        --replace-fail '@python_path@' "${python.interpreter}"
+    '';
 
     nativeBuildInputs = [
       meson
