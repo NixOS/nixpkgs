@@ -18838,4 +18838,8 @@ with pkgs;
   biblioteca = callPackage ../by-name/bi/biblioteca/package.nix {
     webkitgtk = webkitgtk_6_0;
   };
+
+
+  # FIXME: remove qgis-unwrapped
+  qgis-unwrapped =  libsForQt5.callPackage ../applications/gis/qgis/unwrapped.nix {withGrass = false; withServer = false; withWebKit = false;};
 }

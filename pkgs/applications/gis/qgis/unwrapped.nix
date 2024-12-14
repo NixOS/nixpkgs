@@ -27,6 +27,7 @@
 , ninja
 , openssl
 , pdal
+, perl
 , postgresql
 , proj
 , protobuf
@@ -45,6 +46,9 @@
 , qwt
 , sqlite
 , txt2tags
+, xfontsel
+, xorg
+, xvfb-run
 , zstd
 }:
 
@@ -60,6 +64,8 @@ let
   };
 
   pythonBuildInputs = with py.pkgs; [
+    # FIXME: remove not needed packages
+    # See: https://github.com/qgis/QGIS/blob/master/.docker/qgis3-qt5-build-deps.dockerfile
     chardet
     gdal
     jinja2
@@ -155,7 +161,10 @@ in mkDerivation rec {
   cmakeFlags = [
     "-DWITH_3D=True"
     "-DWITH_PDAL=True"
-    "-DENABLE_TESTS=False"
+    "-DENABLE_TESTS=True"
+    "-DHAS_KDE_QT5_PDF_TRANSFORM_FIX=True"
+    "-DHAS_KDE_QT5_SMALL_CAPS_FIX=True"
+    "-DHAS_KDE_QT5_FONT_STRETCH_FIX=True"
     "-DQT_PLUGINS_DIR=${qtbase}/${qtbase.qtPluginPrefix}"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
     ++ lib.optional withServer [
@@ -184,6 +193,42 @@ in mkDerivation rec {
         --prefix PATH : ${lib.makeBinPath [ grass ]}
     done
   '';
+
+
+  doCheck = true;
+
+  # List of build dependencies:
+  # https://github.com/qgis/QGIS/blob/master/.docker/qgis3-qt5-build-deps.dockerfile
+  nativeCheckInputs = [
+    wrapQtAppsHook
+    python3.pkgs.nose2
+    python3.pkgs.mock
+    (perl.withPackages(p: [ p.YAMLTiny ]))  # required for tests/code_layout/sipify
+    qtbase
+    xfontsel
+    xorg.xauth
+    xvfb-run
+  ];
+
+  preCheck = ''
+    export QT_PLUGIN_PATH="${qtbase}/${qtbase.qtPluginPrefix}"
+    export QT_QPA_PLATFORM_PLUGIN_PATH=${qtbase.bin}/lib/qt-${qtbase.version}/plugins/platforms
+    export QGIS_PREFIX_PATH="output"
+  '';
+
+  checkPhase = ''
+    runHook preCheck
+    xvfb-run -a -n 1 -s '-screen 0 1280x1024x24 -dpi 96' ctest --label-exclude POSTGRES --exclude-regex '^(${lib.concatStringsSep "|" disabledTests})$'
+    runHook postCheck
+  '';
+
+  # List of excluded tests:
+  # https://github.com/qgis/QGIS/blob/master/.ci/test_blocklist_qt5.txt
+  # List of flaky tests:
+  # https://github.com/qgis/QGIS/blob/master/.ci/test_flaky.txt
+  disabledTests = [
+
+];
 
   meta = with lib; {
     description = "Free and Open Source Geographic Information System";
