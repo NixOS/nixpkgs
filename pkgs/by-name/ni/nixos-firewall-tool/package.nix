@@ -24,6 +24,7 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     installBin nixos-firewall-tool
+    installManPage nixos-firewall-tool.1
     installShellCompletion nixos-firewall-tool.{bash,fish}
   '';
 
