@@ -1,15 +1,16 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, setuptools-scm
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "multivolumefile";
   version = "0.2.3";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
@@ -29,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://codeberg.org/miurahr/multivolume";
     description = "Library to provide a file-object wrapping multiple files as virtually like as a single file";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ByteSudoer ];
+    maintainers = with maintainers; [ PopeRigby ];
   };
 }
