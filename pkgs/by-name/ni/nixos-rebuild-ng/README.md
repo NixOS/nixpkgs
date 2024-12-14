@@ -136,11 +136,6 @@ not possible to fix, please open an issue and we can discuss a solution.
   machine. `nixos-rebuild` silently ignored those flags, so this
   [may cause some issues](https://github.com/NixOS/nixpkgs/pull/363922) for
   wrappers
-- For now we are not supporting `build-vm` or `build-vm-with-bootloader` with
-  `--build-host` anymore. Support for this should be easy to add if you have
-  a use case, the only reason is that this is not supported is because in the
-  original the result would not be symlinked in the current directory, making
-  it kind useless (unless you looked at the result in `/nix/store`)
 
 ## Caveats
 

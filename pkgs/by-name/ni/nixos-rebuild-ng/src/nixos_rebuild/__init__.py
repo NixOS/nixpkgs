@@ -240,6 +240,8 @@ def parse_args(
         Action.BUILD.value,
         Action.DRY_BUILD.value,
         Action.DRY_ACTIVATE.value,
+        Action.BUILD_VM.value,
+        Action.BUILD_VM_WITH_BOOTLOADER.value,
     ):
         parser.error(
             f"--target-host/--build-host is not supported with '{args.action}'"
@@ -337,13 +339,21 @@ def execute(argv: list[str]) -> None:
             | Action.BUILD
             | Action.DRY_BUILD
             | Action.DRY_ACTIVATE
+            | Action.BUILD_VM
+            | Action.BUILD_VM_WITH_BOOTLOADER
         ):
             logger.info("building the system configuration...")
 
-            attr = "config.system.build.toplevel"
             dry_run = action == Action.DRY_BUILD
             no_link = action in (Action.SWITCH, Action.BOOT)
             rollback = bool(args.rollback)
+            match action:
+                case Action.BUILD_VM:
+                    attr = "config.system.build.vm"
+                case Action.BUILD_VM_WITH_BOOTLOADER:
+                    attr = "config.system.build.vmWithBootLoader"
+                case _:
+                    attr = "config.system.build.toplevel"
 
             match (action, rollback, build_host, flake):
                 case (Action.SWITCH | Action.BOOT, True, _, _):
@@ -413,6 +423,7 @@ def execute(argv: list[str]) -> None:
                         target_host=target_host,
                         sudo=args.sudo,
                     )
+
             if action in (Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE):
                 nix.switch_to_configuration(
                     path_to_config,
@@ -422,23 +433,12 @@ def execute(argv: list[str]) -> None:
                     specialisation=args.specialisation,
                     install_bootloader=args.install_bootloader,
                 )
-        case Action.BUILD_VM | Action.BUILD_VM_WITH_BOOTLOADER:
-            logger.info("building the system configuration...")
-            attr = "vm" if action == Action.BUILD_VM else "vmWithBootLoader"
-            if flake:
-                path_to_config = nix.build_flake(
-                    f"config.system.build.{attr}",
-                    flake,
-                    **flake_build_flags,
+            elif action in (Action.BUILD_VM, Action.BUILD_VM_WITH_BOOTLOADER):
+                # If you get `not-found`, please open an issue
+                vm_path = next(path_to_config.glob("bin/run-*-vm"), "not-found")
+                print(
+                    f"Done. The virtual machine can be started by running '{vm_path}'"
                 )
-            else:
-                path_to_config = nix.build(
-                    f"config.system.build.{attr}",
-                    build_attr,
-                    **build_flags,
-                )
-            vm_path = next(path_to_config.glob("bin/run-*-vm"), "./result/bin/run-*-vm")
-            print(f"Done. The virtual machine can be started by running '{vm_path}'")
         case Action.EDIT:
             nix.edit(flake, **flake_build_flags)
         case Action.DRY_RUN:
