@@ -63,17 +63,17 @@ stdenv.mkDerivation rec {
         #    https://github.com/NixOS/nixpkgs/issues/214945 discusses this issue.
         #
         # As a temporary fix, we disabled these tests when using clang stdenv
-        lib.optionals stdenv.cc.isClang [ "CIRCT :: Target/ExportSystemC/.*\.mlir" ]
+        lib.optionals stdenv.cc.isClang [ "CIRCT :: Target/ExportSystemC/.*\\.mlir" ]
         # Disable some tests on x86_64-darwin
         ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
           # These test seem to pass on hydra (rosetta) but not on x86_64-darwin machines
-          "CIRCT :: Target/ExportSMTLIB/.*\.mlir"
-          "CIRCT :: circt-bmc/.*\.mlir"
+          "CIRCT :: Target/ExportSMTLIB/.*\\.mlir"
+          "CIRCT :: circt-bmc/.*\\.mlir"
           # These tests were having issues on rosetta
-          "CIRCT :: Dialect/.*/Reduction/.*\.mlir"
-          "CIRCT :: Dialect/SMT/.*\.mlir"
-          "CIRCT :: circt-as-dis/.*\.mlir"
-          "CIRCT :: circt-reduce/.*\.mlir"
+          "CIRCT :: Dialect/.*/Reduction/.*\\.mlir"
+          "CIRCT :: Dialect/SMT/.*\\.mlir"
+          "CIRCT :: circt-as-dis/.*\\.mlir"
+          "CIRCT :: circt-reduce/.*\\.mlir"
           "CIRCT :: circt-test/basic.mlir"
         ];
     in
