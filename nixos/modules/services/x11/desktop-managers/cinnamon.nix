@@ -220,13 +220,6 @@ in
       programs.bash.vteIntegration = mkDefault true;
       programs.zsh.vteIntegration = mkDefault true;
 
-      # Qt application style
-      qt = {
-        enable = mkDefault true;
-        style = mkDefault "gtk2";
-        platformTheme = mkDefault "gtk2";
-      };
-
       # Default Fonts
       fonts.packages = with pkgs; [
         dejavu_fonts # Default monospace font in LMDE 6+
