@@ -126,7 +126,6 @@ py.pkgs.buildPythonApplication rec {
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       minijackson
-      n0emis
       raitobezarius
     ];
   };
