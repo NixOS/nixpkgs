@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "argcomplete";
-  version = "3.5.1";
+  version = "3.5.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,15 +18,8 @@ buildPythonPackage rec {
     owner = "kislyuk";
     repo = "argcomplete";
     rev = "refs/tags/v${version}";
-    hash = "sha256-um8iFzEHExTRV1BAl86/XKLc7vmf2Ws1dB83agfvoec=";
+    hash = "sha256-Tihb61LGTZ8tKrKKlxZ8scII2+pgzDHUkwVn54zlrug=";
   };
-
-  patches = [
-    # fixes issues with python3Packages.traitlets tests
-    # https://git.launchpad.net/ubuntu/+source/python-argcomplete/tree/debian/patches/python-3.13-compat.patch?h=ubuntu/plucky
-    # https://github.com/kislyuk/argcomplete/pull/513
-    ./python-3.13-compat.patch
-  ];
 
   build-system = [
     setuptools
