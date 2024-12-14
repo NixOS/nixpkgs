@@ -1,34 +1,44 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-
-, setuptools
+{
+  buildPythonPackage,
+  fetchFromGitHub,
+  lib,
+  pkgs,
+  pypaInstallHook,
+  setuptoolsBuildHook,
 }:
 
 buildPythonPackage rec {
   pname = "pyzstd";
-  version = "0.16.0";
-
-  format = "pyproject";
+  version = "0.16.2";
+  # There is a pyproject.toml, but we want to dynamically link zstd, which can
+  # only be done through a setup.py argument
+  pyproject = false;
 
   src = fetchFromGitHub {
-    repo = "pyzstd";
     owner = "Rogdham";
-    rev = "${version}";
-    fetchSubmodules = true;
-    hash = "sha256-//SeXs65Qcrbdyj3Ilk8XYUIgpwTej0Eaxv711g+3m8=";
+    repo = "pyzstd";
+    rev = "refs/tags/${version}";
+    hash = "sha256-Az+0m1XUFxExBZK8bcjK54Zt2d5ZlAKRMZRdr7rPcss=";
   };
 
-  build-system = [
-    setuptools
+  nativeBuildInputs = [
+    pypaInstallHook
+    setuptoolsBuildHook
+  ];
+
+  buildInputs = [ pkgs.zstd ];
+
+  setupPyBuildFlags = [
+    "--dynamic-link-zstd"
   ];
 
   pythonImportsCheck = [ "pyzstd" ];
 
-  meta = with lib; {
-    homepage = "https://github.com/Rogdham/pyzstd";
+  meta = {
     description = "Python bindings to Zstandard (zstd) compression library";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ ByteSudoer ];
+    homepage = "https://pyzstd.readthedocs.io";
+    changelog = "https://github.com/Rogdham/pyzstd/blob/${version}/CHANGELOG.md";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ PopeRigby ];
   };
 }
