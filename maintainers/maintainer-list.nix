@@ -21250,6 +21250,12 @@
     github = "srounce";
     githubId = 60792;
   };
+  srv6d = {
+    name = "Marvin Vogt";
+    github = "SRv6d";
+    githubId = 18124752;
+    email = "m@rvinvogt.com";
+  };
   Srylax = {
     name = "Srylax";
     email = "srylax+nixpkgs@srylax.dev";
