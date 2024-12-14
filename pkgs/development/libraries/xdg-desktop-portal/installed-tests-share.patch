@@ -1,0 +1,9 @@
+diff --git a/tests/share/applications/meson.build b/tests/share/applications/meson.build
+index d56b633..3ad3371 100644
+--- a/tests/share/applications/meson.build
++++ b/tests/share/applications/meson.build
+@@ -1,2 +1,2 @@
+-configure_file(input: 'furrfix.desktop', output: '@PLAINNAME@', copy: true)
+-configure_file(input: 'mimeinfo.cache', output: '@PLAINNAME@', copy: true)
++configure_file(input: 'furrfix.desktop', output: '@PLAINNAME@', copy: true, install: enable_installed_tests, install_dir: installed_tests_data_dir / 'share' / 'applications')
++configure_file(input: 'mimeinfo.cache', output: '@PLAINNAME@', copy: true, install: enable_installed_tests, install_dir: installed_tests_data_dir / 'share' / 'applications')

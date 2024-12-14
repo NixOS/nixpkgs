@@ -1,0 +1,11 @@
+--- a/cairocffi/test_cairo.py	2016-09-01 07:52:33.303180302 +0200
++++ b/cairocffi/test_cairo.py	2016-09-01 09:06:19.595701944 +0200
+@@ -998,7 +998,7 @@
+ 
+     font = ScaledFont(ToyFontFace('monospace'))
+     _, _, _, _, x_advance_mono, y_advance = font.text_extents('i' * 10)
+-    assert x_advance_mono > x_advance
++    assert x_advance_mono >= x_advance
+     assert y_advance == 0
+     # Not much we can test:
+     # The toy font face was "materialized" into a specific backend.

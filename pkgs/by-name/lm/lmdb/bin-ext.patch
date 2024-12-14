@@ -1,0 +1,21 @@
+diff --git a/libraries/liblmdb/Makefile b/libraries/liblmdb/Makefile
+index 612484e..2e6b562 100644
+--- a/libraries/liblmdb/Makefile
++++ b/libraries/liblmdb/Makefile
+@@ -27,6 +27,7 @@ CFLAGS	= $(THREADS) $(OPT) $(W) $(XCFLAGS)
+ LDLIBS	=
+ SOLIBS	=
+ SOEXT	= .so
++BINEXT  =
+ prefix	= /usr/local
+ exec_prefix = $(prefix)
+ bindir = $(exec_prefix)/bin
+@@ -49,7 +50,7 @@ install: $(ILIBS) $(IPROGS) $(IHDRS)
+ 	mkdir -p $(DESTDIR)$(libdir)
+ 	mkdir -p $(DESTDIR)$(includedir)
+ 	mkdir -p $(DESTDIR)$(mandir)/man1
+-	for f in $(IPROGS); do cp $$f $(DESTDIR)$(bindir); done
++	for f in $(IPROGS); do cp $$f$(BINEXT) $(DESTDIR)$(bindir); done
+ 	for f in $(ILIBS); do cp $$f $(DESTDIR)$(libdir); done
+ 	for f in $(IHDRS); do cp $$f $(DESTDIR)$(includedir); done
+ 	for f in $(IDOCS); do cp $$f $(DESTDIR)$(mandir)/man1; done

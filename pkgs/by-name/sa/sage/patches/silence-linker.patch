@@ -1,0 +1,27 @@
+From 06d3bb5d8ef007bbcd71ee157fd97cd69557383b Mon Sep 17 00:00:00 2001
+From: George Huebner <george@feyor.sh>
+Date: Sat, 20 Jul 2024 18:46:04 -0500
+Subject: [PATCH] sage.cython: silence linker
+
+(Nix+LLVM specific issue) "ld: warning: directory not found" causes
+any cython doctest to fail and is annoying, so I told ld to shut up.
+---
+ src/sage/misc/cython.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/sage/misc/cython.py b/src/sage/misc/cython.py
+index 545e1227b0..c5f4b69221 100644
+--- a/src/sage/misc/cython.py
++++ b/src/sage/misc/cython.py
+@@ -339,7 +339,7 @@ def cython(filename, verbose=0, compile_message=False,
+     Cython.Compiler.Options.pre_import = "sage.all" if sage_namespace else None
+ 
+     extra_compile_args = ['-w']  # no warnings
+-    extra_link_args = []
++    extra_link_args = ['-w']
+ 
+     ext = Extension(name,
+                     sources=[pyxfile],
+-- 
+2.44.1
+
