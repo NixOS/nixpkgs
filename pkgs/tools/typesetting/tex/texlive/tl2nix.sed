@@ -25,6 +25,9 @@ $a}
 
   # extract short description
   /^shortdesc (.+)$/{
+    # escape special characters ", \, ${
+    s/\\/\\\\/g # escape backslashes
+    s/\$\{/\\${/g # escape '${'
     s/"/\\"/g # escape quotes
     s/^shortdesc (.+)/  shortdesc = "\1";/p
   }
