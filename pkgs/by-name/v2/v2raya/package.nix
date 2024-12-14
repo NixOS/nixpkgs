@@ -87,12 +87,12 @@ buildGoModule {
       --prefix XDG_DATA_DIRS ":" ${assetsDir}/share
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Linux web GUI client of Project V which supports V2Ray, Xray, SS, SSR, Trojan and Pingtunnel";
     homepage = "https://github.com/v2rayA/v2rayA";
     mainProgram = "v2rayA";
-    license = licenses.agpl3Only;
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ ChaosAttractor ];
+    license = lib.licenses.agpl3Only;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ ChaosAttractor ];
   };
 }
