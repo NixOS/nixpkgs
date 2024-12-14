@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  gcc,
   coreutils,
   python3Packages,
 }:
@@ -9,42 +8,41 @@
 python3Packages.buildPythonApplication rec {
   pname = "compiledb";
   version = "0.10.1";
-  format = "setuptools";
+  pyproject = true;
+
+  build-system = [ python3Packages.setuptools ];
 
   src = fetchFromGitHub {
     owner = "nickdiego";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "0qricdgqzry7j3rmgwyd43av3c2kxpzkh6f9zcqbzrjkn78qbpd4";
+    repo = "compiledb";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-pN2F0bFT5r8w+8kZOP/tU7Cx1SDN81fzkMfnj19jMWM=";
   };
 
-  # fix the tests
-  patchPhase = ''
-    substituteInPlace tests/data/multiple_commands_oneline.txt \
-                      --replace /bin/echo ${coreutils}/bin/echo
-  '';
-
-  nativeCheckInputs = [
-    python3Packages.pytest
-    gcc
-    coreutils
-  ];
-
-  propagatedBuildInputs = with python3Packages; [
+  dependencies = with python3Packages; [
     click
     bashlex
     shutilwhich
   ];
 
-  checkPhase = ''
-    pytest
+  # fix the tests
+  patchPhase = ''
+    substituteInPlace tests/data/multiple_commands_oneline.txt \
+        --replace-fail "/bin/echo" "${coreutils}/bin/echo"
   '';
 
-  meta = with lib; {
+  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
+
+  doCheck = true;
+
+  meta = {
     description = "Tool for generating Clang's JSON Compilation Database files";
     mainProgram = "compiledb";
-    license = licenses.gpl3;
+    license = lib.licenses.gpl3Plus;
     homepage = "https://github.com/nickdiego/compiledb";
-    maintainers = with maintainers; [ multun ];
+    maintainers = with lib.maintainers; [
+      sigmanificient
+      multun
+    ];
   };
 }
