@@ -1,11 +1,13 @@
 {
   buildNpmPackage,
   fetchFromGitHub,
+  fetchurl,
   lib,
   makeBinaryWrapper,
   nixosTests,
   nodejs,
   rdfind,
+  unzip,
 }:
 
 let
@@ -59,6 +61,17 @@ let
     }
   ];
 
+  x2t_version = "v7.3+1";
+  x2t = fetchurl {
+    url = "https://github.com/cryptpad/onlyoffice-x2t-wasm/releases/download/${x2t_version}/x2t.zip";
+    hash = "sha256-hrbxrI8RC1pBatGZ76TAiVfUbZid7+eRuXk6lmz7OgQ=";
+  };
+  x2t_install = ''
+    local X2T_DIR=$out_cryptpad/www/common/onlyoffice/dist/x2t
+    unzip ${x2t} -d "$X2T_DIR"
+    echo "${x2t_version}" > "$X2T_DIR"/.version
+  '';
+
 in
 buildNpmPackage {
   inherit version;
@@ -76,6 +89,7 @@ buildNpmPackage {
   nativeBuildInputs = [
     makeBinaryWrapper
     rdfind
+    unzip
   ];
 
   patches = [
@@ -106,6 +120,7 @@ buildNpmPackage {
     # install OnlyOffice (install-onlyoffice.sh without network)
     mkdir -p "$out_cryptpad/www/common/onlyoffice/dist"
     ${lib.concatMapStringsSep "\n" onlyoffice_install onlyoffice_versions}
+    ${x2t_install}
     rdfind -makehardlinks true -makeresultsfile false "$out_cryptpad/www/common/onlyoffice/dist"
 
     # cryptpad assumes it runs in the source directory and also outputs
