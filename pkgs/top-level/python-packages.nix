@@ -7671,6 +7671,8 @@ self: super: with self; {
 
   loqedapi = callPackage ../development/python-modules/loqedapi { };
 
+  loralib = callPackage ../development/python-modules/loralib { };
+
   losant-rest = callPackage ../development/python-modules/losant-rest { };
 
   lottie = callPackage ../development/python-modules/lottie { };
