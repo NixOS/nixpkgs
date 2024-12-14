@@ -8,7 +8,7 @@
 
 buildPostgresqlExtension {
   pname = "tsearch-extras";
-  version = "0.4";
+  version = "0.3";
 
   src = fetchFromGitHub {
     owner = "zulip";
