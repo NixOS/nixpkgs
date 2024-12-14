@@ -2548,8 +2548,6 @@ self: super: with self; {
 
   commonmark = callPackage ../development/python-modules/commonmark { };
 
-  compiledb = callPackage ../development/python-modules/compiledb { };
-
   complycube = callPackage ../development/python-modules/complycube { };
 
   compreffor = callPackage ../development/python-modules/compreffor { };

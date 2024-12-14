@@ -1,16 +1,12 @@
 {
   lib,
-  buildPythonPackage,
   fetchFromGitHub,
-  pytest,
-  bashlex,
-  click,
-  shutilwhich,
   gcc,
   coreutils,
+  python3Packages,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "compiledb";
   version = "0.10.1";
   format = "setuptools";
@@ -29,11 +25,12 @@ buildPythonPackage rec {
   '';
 
   nativeCheckInputs = [
-    pytest
+    python3Packages.pytest
     gcc
     coreutils
   ];
-  propagatedBuildInputs = [
+
+  propagatedBuildInputs = with python3Packages; [
     click
     bashlex
     shutilwhich
