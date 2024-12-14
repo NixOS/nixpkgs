@@ -3,7 +3,6 @@
   apple-sdk_15,
   bison,
   bluez,
-  fetchFromGitHub,
   flex,
   mkAppleDerivation,
   stdenv,
@@ -91,6 +90,8 @@ mkAppleDerivation {
   postPatch = ''
     substituteInPlace libpcap/Makefile.in \
       --replace-fail '@PLATFORM_C_SRC@' '@PLATFORM_C_SRC@ pcap-darwin.c pcap-util.c pcapng.c'
+    substituteInPlace libpcap/pcap/pcap.h \
+      --replace-fail '#if PRIVATE' '#if 1'
   '';
 
   configureFlags = [

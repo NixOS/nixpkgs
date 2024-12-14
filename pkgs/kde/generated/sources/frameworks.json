@@ -335,9 +335,9 @@
     "hash": "sha256-PpwGmOezkrERDAFtYyvOIbMvgeZa39ooW20B1tbrRGk="
   },
   "solid": {
-    "version": "6.9.0",
-    "url": "mirror://kde/stable/frameworks/6.9/solid-6.9.0.tar.xz",
-    "hash": "sha256-jbJUBJhpeEfuf5Ov5MMHMg8s/uJvvfygEzv4ys/qQvU="
+    "version": "6.9.1",
+    "url": "mirror://kde/stable/frameworks/6.9/solid-6.9.1.tar.xz",
+    "hash": "sha256-JU1WLaZhGhXx9hfnr7eNRwJFW4nKld4dup9rmSgyA2c="
   },
   "sonnet": {
     "version": "6.9.0",

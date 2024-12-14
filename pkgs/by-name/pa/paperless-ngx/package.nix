@@ -161,9 +161,12 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    # pytest-xdist makes the tests flaky
+    # pytest-xdist with to many threads makes the tests flaky
+    if (( $NIX_BUILD_CORES > 4)); then
+      NIX_BUILD_CORES=4
+    fi
     substituteInPlace src/setup.cfg \
-      --replace-fail "--numprocesses auto --maxprocesses=16" ""
+      --replace-fail "--numprocesses auto --maxprocesses=16" "--numprocesses $NIX_BUILD_CORES"
   '';
 
   nativeBuildInputs = [
@@ -277,8 +280,12 @@ python.pkgs.buildPythonApplication rec {
     pytest-httpx
     pytest-mock
     pytest-rerunfailures
+    pytest-xdist
     pytestCheckHook
   ];
+
+  # manually managed in postPatch
+  dontUsePytestXdist = false;
 
   pytestFlagsArray = [
     "src"

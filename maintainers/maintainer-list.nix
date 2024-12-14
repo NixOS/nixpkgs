@@ -3276,6 +3276,13 @@
     githubId = 355401;
     name = "Brian Hicks";
   };
+  brianmay = {
+    name = "Brian May";
+    email = "brian@linuxpenguins.xyz";
+    github = "brianmay";
+    githubId = 112729;
+    keys = [ { fingerprint = "D636 5126 A92D B560 C627  ACED 1784 577F 811F 6EAC"; } ];
+  };
   brianmcgee = {
     name = "Brian McGee";
     email = "brian@41north.dev";
@@ -13662,6 +13669,12 @@
     githubId = 34819524;
     name = "Marcel";
   };
+  MarchCraft = {
+    email = "felix@dienilles.de";
+    github = "MarchCraft";
+    githubId = 30194994;
+    name = "Felix Nilles";
+  };
   marcovergueira = {
     email = "vergueira.marco@gmail.com";
     github = "marcovergueira";
@@ -20423,6 +20436,12 @@
     githubId = 23130178;
     name = "夜坂雅";
     keys = [ { fingerprint = "3237 D49E 8F81 5A45 2133  64EA 4FF3 5790 F405 53A9"; } ];
+  };
+  shadows_withal = {
+    email = "shadows@with.al";
+    github = "shadows-withal";
+    githubId = 6445316;
+    name = "liv";
   };
   shahrukh330 = {
     email = "shahrukh330@gmail.com";
