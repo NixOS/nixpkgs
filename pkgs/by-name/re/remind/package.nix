@@ -55,6 +55,7 @@ tcl.mkTclDerivation rec {
     description = "Sophisticated calendar and alarm program for the console";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [
+      afh
       raskin
       kovirobi
     ];
