@@ -71,7 +71,9 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
-  nativeBuildInputs = [ cmake makeWrapper pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [ cmake makeWrapper pkg-config wrapGAppsHook3 wxGTK ];
+
+  strictDeps = true;
 
   # disable installation of the python scripting interface
   cmakeFlags = [ "-DBUILD_HSI:BOOl=OFF" ];
@@ -89,7 +91,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    homepage = "http://hugin.sourceforge.net/";
+    homepage = "https://hugin.sourceforge.io/";
     description = "Toolkit for stitching photographs and assembling panoramas, together with an easy to use graphical front end";
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ hrdinka ];
