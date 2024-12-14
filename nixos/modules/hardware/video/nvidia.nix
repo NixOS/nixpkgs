@@ -274,6 +274,14 @@ in
           config.hardware.nvidia.open == true || lib.versionAtLeast config.hardware.nvidia.package.version "555"
         '';
       };
+
+      videoAcceleration =
+        (lib.mkEnableOption ''
+          Whether video acceleration (VA-API) should be enabled.
+        '')
+        // {
+          default = true;
+        };
     };
   };
 
@@ -504,9 +512,7 @@ in
             "egl/egl_external_platform.d".source = "/run/opengl-driver/share/egl/egl_external_platform.d/";
           };
 
-          hardware.graphics = {
-            extraPackages = [ pkgs.nvidia-vaapi-driver ];
-          };
+          hardware.graphics.extraPackages = lib.optional cfg.videoAcceleration pkgs.nvidia-vaapi-driver;
 
           environment.systemPackages =
             lib.optional cfg.nvidiaSettings nvidia_x11.settings
