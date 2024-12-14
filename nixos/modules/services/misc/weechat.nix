@@ -12,6 +12,8 @@ in
   options.services.weechat = {
     enable = lib.mkEnableOption "weechat";
 
+    package = lib.mkPackageOption pkgs "weechat" { };
+
     root = lib.mkOption {
       description = "Weechat state directory.";
       type = lib.types.path;
@@ -27,9 +29,9 @@ in
     binary = lib.mkOption {
       type = lib.types.path;
       description = "Binary to execute.";
-      default = "${pkgs.weechat}/bin/weechat";
-      defaultText = lib.literalExpression ''"''${pkgs.weechat}/bin/weechat"'';
-      example = lib.literalExpression ''"''${pkgs.weechat}/bin/weechat-headless"'';
+      default = "${cfg.package}/bin/weechat";
+      defaultText = lib.literalExpression ''"''${cfg.package}/bin/weechat"'';
+      example = lib.literalExpression ''"''${cfg.package}/bin/weechat-headless"'';
     };
   };
 
