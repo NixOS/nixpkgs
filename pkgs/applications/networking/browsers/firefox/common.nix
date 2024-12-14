@@ -408,7 +408,7 @@ buildStdenv.mkDerivation {
      "--enable-lto=cross" # Cross-Language LTO
      "--enable-linker=lld"
   ]
-  ++ lib.optional (isElfhackPlatform stdenv) (if elfhackSupport then ["--enable-elf-hack"] else ["--disable-elf-hack"])
+  ++ lib.optional (isElfhackPlatform stdenv) (enableFeature elfhackSupport "elf-hack")
   ++ lib.optional (!drmSupport) "--disable-eme"
   ++ lib.optional (allowAddonSideload) "--allow-addon-sideload"
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
