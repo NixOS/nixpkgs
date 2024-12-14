@@ -29,9 +29,18 @@ in
     binary = lib.mkOption {
       type = lib.types.path;
       description = "Binary to execute.";
-      default = "${cfg.package}/bin/weechat";
+      default =
+        if (!cfg.headless) then "${cfg.package}/bin/weechat" else "${cfg.package}/bin/weechat-headless";
       defaultText = lib.literalExpression ''"''${cfg.package}/bin/weechat"'';
       example = lib.literalExpression ''"''${cfg.package}/bin/weechat-headless"'';
+    };
+
+    headless = lib.mkOption {
+      type = lib.types.bool;
+      default = false;
+      description = ''
+        Allows specifying if weechat should run in TUI or headless mode.
+      '';
     };
   };
 
@@ -56,18 +65,22 @@ in
 
     systemd.services.weechat = {
       serviceConfig = {
+        Type = "simple";
         User = "weechat";
         Group = "weechat";
+        ExecStart = lib.mkIf (cfg.headless) "${cfg.binary} --dir ${cfg.root} --stdout";
         StateDirectory = lib.mkIf (cfg.root == "/var/lib/weechat") "weechat";
         StateDirectoryMode = 750;
         RemainAfterExit = "yes";
       };
-      script = "exec ${config.security.wrapperDir}/screen -Dm -S ${cfg.sessionName} ${cfg.binary} --dir ${cfg.root}";
+      script =
+        lib.mkIf (!cfg.headless)
+          "exec ${config.security.wrapperDir}/screen -Dm -S ${cfg.sessionName} ${cfg.binary} --dir ${cfg.root}";
       wantedBy = [ "multi-user.target" ];
       wants = [ "network.target" ];
     };
 
-    security.wrappers.screen = {
+    security.wrappers.screen = lib.mkIf (!cfg.headless) {
       setuid = true;
       owner = "root";
       group = "root";
