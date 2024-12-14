@@ -97,8 +97,8 @@ in
   serif = makeSuperOTC {
     family = "serif";
     description = "serif";
-    rev = "2.001R";
-    hash = "sha256-ULdrtPLtzsgfZEHWkr4ebC/FSROHBWJJVD+PzdIJ6Og=";
+    rev = "2.003R";
+    hash = "sha256-buaJq1eJSuNa9gSnPpXDcr2gMGYQ/6F5pHCOjNR6eV8=";
     zip = ".zip";
     prefix = "01_";
   };
@@ -126,15 +126,15 @@ in
 
   serif-vf-otf = makeVariable {
     family = "serif";
-    version = "2.002";
-    hash = "sha256-8sD4bU6w7HBm4vBuPAjcjpxN2rtEJugAw+X0bAOcmjA=";
+    version = "2.003";
+    hash = "sha256-a6295Ukha9QY5ByMr2FUy13j5gZ1itnezvfJWmJjqt0=";
     format = "otf";
   };
 
   serif-vf-ttf = makeVariable {
     family = "serif";
-    version = "2.002";
-    hash = "sha256-dmTZFRsD55WCOg2+sqd8bkmTSnSNn5xUYf0PgzIvzww=";
+    version = "2.003";
+    hash = "sha256-F+FUQunfyAEBVV10lZxC3dzGTWhHgHzpTO8CjC3n4WY=";
     format = "ttf";
   };
 }
