@@ -6871,6 +6871,8 @@ self: super: with self; {
 
   kaldi-active-grammar = callPackage ../development/python-modules/kaldi-active-grammar { };
 
+  kaldiio = callPackage ../development/python-modules/kaldiio { };
+
   kaleido = callPackage ../development/python-modules/kaleido { };
 
   kalshi-python = callPackage ../development/python-modules/kalshi-python {};
