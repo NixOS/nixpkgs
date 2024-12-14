@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "pyqt6-charts";
-  version = "6.7.0";
+  version = "6.8.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "PyQt6_Charts";
     inherit version;
-    hash = "sha256-xPfPNpko978DLk4z9xjTuP5m2hdtSVn+MHNalw2G81w=";
+    hash = "sha256-+GcFuHQOMEFmfOIRrqogW3UOtrr0yQj04/bcjHINEPE=";
   };
 
   # fix include path and increase verbosity
