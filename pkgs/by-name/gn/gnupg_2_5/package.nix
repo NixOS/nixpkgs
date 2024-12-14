@@ -11,7 +11,6 @@ let
   libassuan = libassuan_3;
   pinentry =
     if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gtk2;
-  oldPath = "../../../tools/security/gnupg";
 in stdenv.mkDerivation rec {
   pname = "gnupg";
   version = "2.5.2";
@@ -37,11 +36,11 @@ in stdenv.mkDerivation rec {
     ] ++ lib.optionals withTpm2Tss [ tpm2-tss ];
 
   patches = [
-    "${oldPath}/fix-libusb-include-path.patch"
-    "${oldPath}/tests-add-test-cases-for-import-without-uid.patch"
-    "${oldPath}/accept-subkeys-with-a-good-revocation-but-no-self-sig.patch"
-    "${oldPath}/24-allow-import-of-previously-known-keys-even-without-UI.patch"
-    "${oldPath}/24-revert-rfc4880bis-defaults.patch"
+    ../../../tools/security/gnupg/fix-libusb-include-path.patch
+    ../../../tools/security/gnupg/tests-add-test-cases-for-import-without-uid.patch
+    ../../../tools/security/gnupg/accept-subkeys-with-a-good-revocation-but-no-self-sig.patch
+    ../../../tools/security/gnupg/24-allow-import-of-previously-known-keys-even-without-UI.patch
+    ../../../tools/security/gnupg/24-revert-rfc4880bis-defaults.patch
   ];
 
   postPatch = ''
