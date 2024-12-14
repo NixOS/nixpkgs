@@ -2,6 +2,7 @@
   lib,
   mkCoqDerivation,
   coq,
+  stdlib,
   version ? null,
 }:
 
@@ -60,6 +61,8 @@ mkCoqDerivation {
       releaseRev
       ;
   };
+
+  propagatedBuildInputs = [ stdlib ];
 
   mlPlugin = true;
 

@@ -1,9 +1,10 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, zlib
-, openssl
-, dotnetCorePackages
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  zlib,
+  openssl,
+  dotnetCorePackages,
 }:
 
 buildDotnetModule rec {
@@ -13,15 +14,19 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "13xforever";
     repo = "ps3-disc-dumper";
-    rev = "v${version}";
-    sha256 = "sha256-m3TS9H6cbEAHn6PvYQDMzdKdnOnDSM4lxCTdHBCXLV4=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-m3TS9H6cbEAHn6PvYQDMzdKdnOnDSM4lxCTdHBCXLV4=";
   };
 
-  selfContainedBuild = true;
-
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_9_0;
+  dotnet-runtime = dotnetCorePackages.sdk_9_0;
   projectFile = "UI.Console/UI.Console.csproj";
   nugetDeps = ./deps.nix;
+
+  postPatch = ''
+    substituteInPlace UI.Console/UI.Console.csproj \
+      --replace-fail 'net6.0' 'net9.0'
+  '';
 
   preConfigureNuGet = ''
     # This should really be in the upstream nuget.config
@@ -34,12 +39,17 @@ buildDotnetModule rec {
     openssl
   ];
 
-  meta = with lib; {
-    homepage = "https://github.com/13xforever/ps3-disc-dumper";
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     description = "Handy utility to make decrypted PS3 disc dumps";
-    license = licenses.mit;
-    maintainers = with maintainers; [ evanjs ];
-    platforms = [ "x86_64-linux" ];
+    homepage = "https://github.com/13xforever/ps3-disc-dumper";
+    license = lib.licenses.mit;
     mainProgram = "ps3-disc-dumper";
+    maintainers = with lib.maintainers; [
+      evanjs
+      gepbird
+    ];
+    platforms = [ "x86_64-linux" ];
   };
 }

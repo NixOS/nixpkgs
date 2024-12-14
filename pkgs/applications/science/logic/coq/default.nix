@@ -228,16 +228,17 @@ self = stdenv.mkDerivation {
     mainProgram = "coqide";
   };
 }; in
-if coqAtLeast "8.17" then self.overrideAttrs(_: {
+if coqAtLeast "8.17" then self.overrideAttrs(_: let
+  init-stdlib-package = if coqAtLeast "8.21" then "rocq-core" else "coq-stdlib"; in {
   buildPhase = ''
     runHook preBuild
     make dunestrap
-    dune build -p coq-core,coq-stdlib,coq,coqide-server${lib.optionalString buildIde ",coqide"} -j $NIX_BUILD_CORES
+    dune build -p coq-core,${init-stdlib-package},coqide-server${lib.optionalString buildIde ",coqide"} -j $NIX_BUILD_CORES
     runHook postBuild
   '';
   installPhase = ''
     runHook preInstall
-    dune install --prefix $out coq-core coq-stdlib coq coqide-server${lib.optionalString buildIde " coqide"}
+    dune install --prefix $out coq-core ${init-stdlib-package} coqide-server${lib.optionalString buildIde " coqide"}
     runHook postInstall
   '';
 }) else self

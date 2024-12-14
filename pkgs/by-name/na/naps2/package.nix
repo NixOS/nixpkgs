@@ -26,7 +26,19 @@ buildDotnetModule rec {
 
   executables = [ "naps2" ];
 
-  dotnet-sdk = with dotnetCorePackages; combinePackages [ sdk_6_0 sdk_8_0 ];
+  dotnet-sdk =
+    with dotnetCorePackages;
+    sdk_8_0
+    // {
+      inherit
+        (combinePackages [
+          sdk_8_0
+          sdk_6_0
+        ])
+        packages
+        targetPackages
+        ;
+    };
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
   selfContainedBuild = true;
   runtimeDeps = [
