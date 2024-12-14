@@ -185,6 +185,10 @@ let
         })
       ] ++ nixpkgsArgs.overlays or [] ++ prevArgs.overlays or [];
     });
+    # This is always cross.
+    mkCrossPkgs = name: crossAttrs: mkPkgs name (prevArgs: {
+      crossSystem = (lib.systems.systemToAttrs (lib.defaultTo prevArgs.localSystem prevArgs.crossSystem or null)) // crossAttrs;
+    });
   in self: super: {
     # This maps each entry in lib.systems.examples to its own package
     # set. Each of these will contain all packages cross compiled for
@@ -195,35 +199,26 @@ let
                               nixpkgsFun (prevArgs: { crossSystem = (lib.systems.systemToAttrs (lib.defaultTo { } prevArgs.crossSystem or null)) // crossSystem; }))
                               lib.systems.examples;
 
-    pkgsLLVM = mkPkgs "pkgsLLVM" (prevArgs: {
-      # Bootstrap a cross stdenv using the LLVM toolchain.
-      # This is currently not possible when compiling natively,
-      # so we don't need to check whether we are cross already.
-      crossSystem = (lib.systems.systemToAttrs (lib.defaultTo prevArgs.localSystem prevArgs.crossSystem or null)) // {
-        useLLVM = true;
-        linker = "lld";
-      };
-    });
+    # Bootstrap a cross stdenv using the LLVM toolchain.
+    # This is currently not possible when compiling natively.
+    pkgsLLVM = mkCrossPkgs "pkgsLLVM" {
+      useLLVM = true;
+      linker = "lld";
+    };
 
-    pkgsArocc = mkPkgs "pkgsArocc" (prevArgs: {
-      # Bootstrap a cross stdenv using the Aro C compiler.
-      # This is currently not possible when compiling natively,
-      # so we don't need to check whether we are cross already.
-      crossSystem = (lib.systems.systemToAttrs (lib.defaultTo prevArgs.localSystem prevArgs.crossSystem or null)) // {
-        useArocc = true;
-        linker = "lld";
-      };
-    });
+    # Bootstrap a cross stdenv using the Aro C compiler.
+    # This is currently not possible when compiling natively.
+    pkgsArocc = mkCrossPkgs "pkgsArocc" {
+      useArocc = true;
+      linker = "lld";
+    };
 
-    pkgsZig = mkPkgs "pkgsZig" (prevArgs: {
-      # Bootstrap a cross stdenv using the Zig toolchain.
-      # This is currently not possible when compiling natively,
-      # so we don't need to check whether we are cross already.
-      crossSystem = (lib.systems.systemToAttrs (lib.defaultTo prevArgs.localSystem prevArgs.crossSystem or null)) // {
-        useZig = true;
-        linker = "lld";
-      };
-    });
+    # Bootstrap a cross stdenv using the Zig toolchain.
+    # This is currently not possible when compiling natively.
+    pkgsZig = mkCrossPkgs "pkgsZig" {
+      useZig = true;
+      linker = "lld";
+    };
 
     # All packages built with the Musl libc. This will override the
     # default GNU libc on Linux systems. Non-Linux systems are not
@@ -271,14 +266,12 @@ let
 
     # Fully static packages.
     # Currently uses Musl on Linux (couldn’t get static glibc to work).
-    pkgsStatic = mkPkgs "pkgsStatic" (prevArgs: {
-      crossSystem = (lib.systems.systemToAttrs (lib.defaultTo prevArgs.localSystem prevArgs.crossSystem or null)) // {
-        isStatic = true;
-      } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
-        config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
-      } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
-        gcc = { abi = "elfv2"; } // stdenv.hostPlatform.gcc or {};
-      };
+    pkgsStatic = mkCrossPkgs "pkgsStatic" ({
+      isStatic = true;
+    } // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
+    } // lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") {
+      gcc = { abi = "elfv2"; } // stdenv.hostPlatform.gcc or {};
     });
 
     pkgsExtraHardening = mkPkgs "pkgsExtraHardening" (_: {
