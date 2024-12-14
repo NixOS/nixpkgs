@@ -13357,6 +13357,8 @@ self: super: with self; {
 
   pytorch-pfn-extras = callPackage ../development/python-modules/pytorch-pfn-extras { };
 
+  pytorch-wpe = callPackage ../development/python-modules/pytorch-wpe { };
+
   pytraccar = callPackage ../development/python-modules/pytraccar { };
 
   pytradfri = callPackage ../development/python-modules/pytradfri { };
