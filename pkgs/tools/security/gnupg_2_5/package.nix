@@ -5,7 +5,7 @@
 , pkg-config
 , texinfo
 , gettext
-, libassuan
+, libassuan_3
 , libgcrypt
 , libgpg-error
 , libiconv
@@ -23,16 +23,22 @@
 , withPcsc ? !enableMinimal
 , pcsclite
 , guiSupport ? stdenv.hostPlatform.isDarwin
-, pinentry
+, pinentry_mac
+, pinentry-gtk2
 , withTpm2Tss ? !stdenv.hostPlatform.isDarwin && !enableMinimal
 , tpm2-tss
 , nixosTests
 }:
 
 assert guiSupport -> !enableMinimal;
+let
+  libassuan = libassuan_3;
 
+  pinentry = if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gtk2;
+
+in
 stdenv.mkDerivation rec {
-  pname = "gnupg";
+  pname = "gnupg_2_5";
   version = "2.5.2";
 
   src = fetchurl {

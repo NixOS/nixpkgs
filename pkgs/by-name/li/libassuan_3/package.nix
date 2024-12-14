@@ -11,7 +11,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "libassuan";
+  pname = "libassuan_3";
   version = "3.0.1";
 
   src = fetchgit {
