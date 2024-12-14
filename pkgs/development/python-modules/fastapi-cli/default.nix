@@ -1,8 +1,16 @@
-{ lib, buildPythonPackage, fetchFromGitHub, pdm-backend, typer, fastapi, uvicorn
-,
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  pdm-backend,
+  typer,
+  fastapi,
+  uvicorn,
 
-# checks
-pytestCheckHook, rich, }:
+  # checks
+  pytestCheckHook,
+  rich,
+}:
 
 let
   self = buildPythonPackage rec {
@@ -19,19 +27,22 @@ let
 
     build-system = [ pdm-backend ];
 
-    dependencies = [ typer uvicorn ]
-      ++ ((uvicorn.optional-dependencies or { }).standard or [ ]);
+    dependencies = [
+      typer
+      uvicorn
+    ] ++ ((uvicorn.optional-dependencies or { }).standard or [ ]);
 
     optional-dependencies = {
-      standard = [ uvicorn ]
-        ++ ((uvicorn.optional-dependencies or { }).standard or [ ]);
+      standard = [ uvicorn ] ++ ((uvicorn.optional-dependencies or { }).standard or [ ]);
     };
     doCheck = false;
 
     passthru.tests.pytest = self.overridePythonAttrs { doCheck = true; };
 
-    nativeCheckInputs = [ pytestCheckHook rich ]
-      ++ optional-dependencies.standard;
+    nativeCheckInputs = [
+      pytestCheckHook
+      rich
+    ] ++ optional-dependencies.standard;
 
     # coverage
     disabledTests = [ "test_script" ];
@@ -39,11 +50,9 @@ let
     pythonImportsCheck = [ "fastapi_cli" ];
 
     meta = with lib; {
-      description =
-        "Run and manage FastAPI apps from the command line with FastAPI CLI";
+      description = "Run and manage FastAPI apps from the command line with FastAPI CLI";
       homepage = "https://github.com/tiangolo/fastapi-cli";
-      changelog =
-        "https://github.com/tiangolo/fastapi-cli/releases/tag/${version}";
+      changelog = "https://github.com/tiangolo/fastapi-cli/releases/tag/${version}";
       mainProgram = "fastapi";
       license = licenses.mit;
       maintainers = [ ];
@@ -53,4 +62,5 @@ let
       priority = 10;
     };
   };
-in self
+in
+self
