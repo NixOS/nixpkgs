@@ -515,6 +515,8 @@ let
       # we need to reintroduce `outputSpecified` to get the expected behavior e.g. of lib.get*
       llvm = tools.libllvm;
 
+      tblgen = callPackage ./tblgen.nix { };
+
       libclang = callPackage ./clang {
         patches =
           [
