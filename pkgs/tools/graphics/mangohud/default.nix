@@ -6,18 +6,18 @@
 , substituteAll
 , coreutils
 , curl
-, glxinfo
 , gnugrep
 , gnused
 , xdg-utils
 , dbus
 , hwdata
 , mangohud32
-, addOpenGLRunpath
+, addDriverRunpath
 , appstream
 , git
 , glslang
 , mako
+, mesa-demos
 , meson
 , ninja
 , pkg-config
@@ -107,15 +107,17 @@ stdenv.mkDerivation (finalAttrs: {
   outputs = [ "out" "doc" "man" ];
 
   # Unpack subproject sources
-  postUnpack = ''(
-    cd "$sourceRoot/subprojects"
-    ${lib.optionalString finalAttrs.finalPackage.doCheck ''
-      cp -R --no-preserve=mode,ownership ${cmocka.src} cmocka
-    ''}
-    cp -R --no-preserve=mode,ownership ${implot.src} implot-${implot.version}
-    cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
-    cp -R --no-preserve=mode,ownership ${vulkan-headers.src} Vulkan-Headers-${vulkan-headers.version}
-  )'';
+  postUnpack = ''
+    (
+      cd "$sourceRoot/subprojects"
+      ${lib.optionalString finalAttrs.finalPackage.doCheck ''
+        cp -R --no-preserve=mode,ownership ${cmocka.src} cmocka
+      ''}
+      cp -R --no-preserve=mode,ownership ${implot.src} implot-${implot.version}
+      cp -R --no-preserve=mode,ownership ${imgui.src} imgui-${imgui.version}
+      cp -R --no-preserve=mode,ownership ${vulkan-headers.src} Vulkan-Headers-${vulkan-headers.version}
+    )
+  '';
 
   patches = [
     # Add @libraryPath@ template variable to fix loading the preload
@@ -131,9 +133,9 @@ stdenv.mkDerivation (finalAttrs: {
       path = lib.makeBinPath [
         coreutils
         curl
-        glxinfo
         gnugrep
         gnused
+        mesa-demos
         xdg-utils
       ];
 
@@ -171,7 +173,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addDriverRunpath
     git
     glslang
     mako
@@ -232,10 +234,10 @@ stdenv.mkDerivation (finalAttrs: {
         --replace "VK_LAYER_MANGOHUD_overlay" "VK_LAYER_MANGOHUD_overlay_${toString stdenv.hostPlatform.parsed.cpu.bits}"
     '' + ''
       # Add OpenGL driver and libXNVCtrl paths to RUNPATH to support NVIDIA cards
-      addOpenGLRunpath "$out/lib/mangohud/libMangoHud.so"
+      addDriverRunpath "$out/lib/mangohud/libMangoHud.so"
       patchelf --add-rpath ${libXNVCtrl}/lib "$out/lib/mangohud/libMangoHud.so"
     '' + lib.optionalString gamescopeSupport ''
-      addOpenGLRunpath "$out/bin/mangoapp"
+      addDriverRunpath "$out/bin/mangoapp"
     '' + lib.optionalString finalAttrs.finalPackage.doCheck ''
       # libcmocka.so is only used for tests
       rm "$out/lib/libcmocka.so"

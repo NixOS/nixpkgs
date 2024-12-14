@@ -12,6 +12,7 @@ import tempfile
 
 class CalledProcessError(Exception):
     process: asyncio.subprocess.Process
+    stderr: Optional[bytes]
 
 class UpdateFailedException(Exception):
     pass
@@ -19,20 +20,23 @@ class UpdateFailedException(Exception):
 def eprint(*args, **kwargs):
     print(*args, file=sys.stderr, **kwargs)
 
-async def check_subprocess(*args, **kwargs):
+async def check_subprocess_output(*args, **kwargs):
     """
-    Emulate check argument of subprocess.run function.
+    Emulate check and capture_output arguments of subprocess.run function.
     """
     process = await asyncio.create_subprocess_exec(*args, **kwargs)
-    returncode = await process.wait()
+    # We need to use communicate() instead of wait(), as the OS pipe buffers
+    # can fill up and cause a deadlock.
+    stdout, stderr = await process.communicate()
 
-    if returncode != 0:
+    if process.returncode != 0:
         error = CalledProcessError()
         error.process = process
+        error.stderr = stderr
 
         raise error
 
-    return process
+    return stdout
 
 async def run_update_script(nixpkgs_root: str, merge_lock: asyncio.Lock, temp_dir: Optional[Tuple[str, str]], package: Dict, keep_going: bool):
     worktree: Optional[str] = None
@@ -43,7 +47,7 @@ async def run_update_script(nixpkgs_root: str, merge_lock: asyncio.Lock, temp_di
         worktree, _branch = temp_dir
 
         # Ensure the worktree is clean before update.
-        await check_subprocess('git', 'reset', '--hard', '--quiet', 'HEAD', cwd=worktree)
+        await check_subprocess_output('git', 'reset', '--hard', '--quiet', 'HEAD', cwd=worktree)
 
         # Update scripts can use $(dirname $0) to get their location but we want to run
         # their clones in the git worktree, not in the main nixpkgs repo.
@@ -52,7 +56,7 @@ async def run_update_script(nixpkgs_root: str, merge_lock: asyncio.Lock, temp_di
     eprint(f" - {package['name']}: UPDATING ...")
 
     try:
-        update_process = await check_subprocess(
+        update_info = await check_subprocess_output(
             'env',
             f"UPDATE_NIX_NAME={package['name']}",
             f"UPDATE_NIX_PNAME={package['pname']}",
@@ -63,8 +67,6 @@ async def run_update_script(nixpkgs_root: str, merge_lock: asyncio.Lock, temp_di
             stderr=asyncio.subprocess.PIPE,
             cwd=worktree,
         )
-        update_info = await update_process.stdout.read()
-
         await merge_changes(merge_lock, package, update_info, temp_dir)
     except KeyboardInterrupt as e:
         eprint('Cancelling…')
@@ -74,10 +76,9 @@ async def run_update_script(nixpkgs_root: str, merge_lock: asyncio.Lock, temp_di
         eprint()
         eprint(f"--- SHOWING ERROR LOG FOR {package['name']} ----------------------")
         eprint()
-        stderr = await e.process.stderr.read()
-        eprint(stderr.decode('utf-8'))
+        eprint(e.stderr.decode('utf-8'))
         with open(f"{package['pname']}.log", 'wb') as logfile:
-            logfile.write(stderr)
+            logfile.write(e.stderr)
         eprint()
         eprint(f"--- SHOWING ERROR LOG FOR {package['name']} ----------------------")
 
@@ -91,22 +92,24 @@ def make_worktree() -> Generator[Tuple[str, str], None, None]:
         target_directory = f'{wt}/nixpkgs'
 
         subprocess.run(['git', 'worktree', 'add', '-b', branch_name, target_directory])
-        yield (target_directory, branch_name)
-        subprocess.run(['git', 'worktree', 'remove', '--force', target_directory])
-        subprocess.run(['git', 'branch', '-D', branch_name])
+        try:
+            yield (target_directory, branch_name)
+        finally:
+            subprocess.run(['git', 'worktree', 'remove', '--force', target_directory])
+            subprocess.run(['git', 'branch', '-D', branch_name])
 
 async def commit_changes(name: str, merge_lock: asyncio.Lock, worktree: str, branch: str, changes: List[Dict]) -> None:
     for change in changes:
         # Git can only handle a single index operation at a time
         async with merge_lock:
-            await check_subprocess('git', 'add', *change['files'], cwd=worktree)
+            await check_subprocess_output('git', 'add', *change['files'], cwd=worktree)
             commit_message = '{attrPath}: {oldVersion} -> {newVersion}'.format(**change)
             if 'commitMessage' in change:
                 commit_message = change['commitMessage']
             elif 'commitBody' in change:
                 commit_message = commit_message + '\n\n' + change['commitBody']
-            await check_subprocess('git', 'commit', '--quiet', '-m', commit_message, cwd=worktree)
-            await check_subprocess('git', 'cherry-pick', branch)
+            await check_subprocess_output('git', 'commit', '--quiet', '-m', commit_message, cwd=worktree)
+            await check_subprocess_output('git', 'cherry-pick', branch)
 
 async def check_changes(package: Dict, worktree: str, update_info: str):
     if 'commit' in package['supportedFeatures']:
@@ -127,12 +130,12 @@ async def check_changes(package: Dict, worktree: str, update_info: str):
 
         if 'newVersion' not in changes[0]:
             attr_path = changes[0]['attrPath']
-            obtain_new_version_process = await check_subprocess('nix-instantiate', '--expr', f'with import ./. {{}}; lib.getVersion {attr_path}', '--eval', '--strict', '--json', stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=worktree)
-            changes[0]['newVersion'] = json.loads((await obtain_new_version_process.stdout.read()).decode('utf-8'))
+            obtain_new_version_output = await check_subprocess_output('nix-instantiate', '--expr', f'with import ./. {{}}; lib.getVersion {attr_path}', '--eval', '--strict', '--json', stdout=asyncio.subprocess.PIPE, stderr=asyncio.subprocess.PIPE, cwd=worktree)
+            changes[0]['newVersion'] = json.loads(obtain_new_version_output.decode('utf-8'))
 
         if 'files' not in changes[0]:
-            changed_files_process = await check_subprocess('git', 'diff', '--name-only', 'HEAD', stdout=asyncio.subprocess.PIPE, cwd=worktree)
-            changed_files = (await changed_files_process.stdout.read()).splitlines()
+            changed_files_output = await check_subprocess_output('git', 'diff', '--name-only', 'HEAD', stdout=asyncio.subprocess.PIPE, cwd=worktree)
+            changed_files = changed_files_output.splitlines()
             changes[0]['files'] = changed_files
 
             if len(changed_files) == 0:
@@ -174,8 +177,8 @@ async def start_updates(max_workers: int, keep_going: bool, commit: bool, packag
         # Do not create more workers than there are packages.
         num_workers = min(max_workers, len(packages))
 
-        nixpkgs_root_process = await check_subprocess('git', 'rev-parse', '--show-toplevel', stdout=asyncio.subprocess.PIPE)
-        nixpkgs_root = (await nixpkgs_root_process.stdout.read()).decode('utf-8').strip()
+        nixpkgs_root_output = await check_subprocess_output('git', 'rev-parse', '--show-toplevel', stdout=asyncio.subprocess.PIPE)
+        nixpkgs_root = nixpkgs_root_output.decode('utf-8').strip()
 
         # Set up temporary directories when using auto-commit.
         for i in range(num_workers):
@@ -207,7 +210,7 @@ async def start_updates(max_workers: int, keep_going: bool, commit: bool, packag
             eprint(e)
             sys.exit(1)
 
-def main(max_workers: int, keep_going: bool, commit: bool, packages_path: str) -> None:
+def main(max_workers: int, keep_going: bool, commit: bool, packages_path: str, skip_prompt: bool) -> None:
     with open(packages_path) as f:
         packages = json.load(f)
 
@@ -217,7 +220,8 @@ def main(max_workers: int, keep_going: bool, commit: bool, packages_path: str) -
         eprint(f" - {package['name']}")
     eprint()
 
-    confirm = input('Press Enter key to continue...')
+    confirm = '' if skip_prompt else input('Press Enter key to continue...')
+
     if confirm == '':
         eprint()
         eprint('Running update for:')
@@ -236,12 +240,13 @@ parser.add_argument('--max-workers', '-j', dest='max_workers', type=int, help='N
 parser.add_argument('--keep-going', '-k', dest='keep_going', action='store_true', help='Do not stop after first failure')
 parser.add_argument('--commit', '-c', dest='commit', action='store_true', help='Commit the changes')
 parser.add_argument('packages', help='JSON file containing the list of package names and their update scripts')
+parser.add_argument('--skip-prompt', '-s', dest='skip_prompt', action='store_true', help='Do not stop for prompts')
 
 if __name__ == '__main__':
     args = parser.parse_args()
 
     try:
-        main(args.max_workers, args.keep_going, args.commit, args.packages)
+        main(args.max_workers, args.keep_going, args.commit, args.packages, args.skip_prompt)
     except KeyboardInterrupt as e:
         # Let’s cancel outside of the main loop too.
         sys.exit(130)

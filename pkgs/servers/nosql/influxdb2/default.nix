@@ -1,15 +1,16 @@
-{ buildGoModule
-, fetchFromGitHub
-, fetchurl
-, fetchpatch
-, go-bindata
-, lib
-, perl
-, pkg-config
-, rustPlatform
-, stdenv
-, libiconv
-, nixosTests
+{
+  buildGoModule,
+  fetchFromGitHub,
+  fetchurl,
+  fetchpatch,
+  go-bindata,
+  lib,
+  perl,
+  pkg-config,
+  rustPlatform,
+  stdenv,
+  libiconv,
+  nixosTests,
 }:
 
 let
@@ -53,7 +54,7 @@ let
     sourceRoot = "${src.name}/libflux";
     cargoHash = "sha256-O+t4f4P5291BuyARH6Xf3LejMFEQEBv+qKtyjHRhclA=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
-    buildInputs = lib.optional stdenv.isDarwin libiconv;
+    buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
     pkgcfg = ''
       Name: flux
       Version: ${libflux_version}
@@ -62,25 +63,35 @@ let
       Libs: -L/out/lib -lflux -lpthread
     '';
     passAsFile = [ "pkgcfg" ];
-    postInstall = ''
-      mkdir -p $out/include $out/pkgconfig
-      cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
-      substitute $pkgcfgPath $out/pkgconfig/flux.pc \
-        --replace /out $out
-    '' + lib.optionalString stdenv.isDarwin ''
-      install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
-    '';
+    postInstall =
+      ''
+        mkdir -p $out/include $out/pkgconfig
+        cp -r $NIX_BUILD_TOP/source/libflux/include/influxdata $out/include
+        substitute $pkgcfgPath $out/pkgconfig/flux.pc \
+          --replace /out $out
+      ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
+        install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
+      '';
   };
 
-in buildGoModule {
+in
+buildGoModule {
   pname = "influxdb";
   version = version;
   inherit src;
 
-  nativeBuildInputs = [ go-bindata pkg-config perl ];
+  nativeBuildInputs = [
+    go-bindata
+    pkg-config
+    perl
+  ];
 
   vendorHash = "sha256-3Vf8BCrOwliXrH+gmZ4RJ1YBEbqL0Szx2prW3ie9CNg=";
-  subPackages = [ "cmd/influxd" "cmd/telemetryd" ];
+  subPackages = [
+    "cmd/influxd"
+    "cmd/telemetryd"
+  ];
 
   PKG_CONFIG_PATH = "${flux}/pkgconfig";
 
@@ -116,7 +127,10 @@ in buildGoModule {
 
   tags = [ "assets" ];
 
-  ldflags = [ "-X main.commit=v${version}" "-X main.version=${version}" ];
+  ldflags = [
+    "-X main.commit=v${version}"
+    "-X main.version=${version}"
+  ];
 
   passthru.tests = { inherit (nixosTests) influxdb2; };
 

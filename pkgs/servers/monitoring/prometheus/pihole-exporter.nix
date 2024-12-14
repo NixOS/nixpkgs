@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "pihole-exporter";
@@ -18,6 +22,6 @@ buildGoModule rec {
     mainProgram = "pihole-exporter";
     homepage = "https://github.com/eko/pihole-exporter";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

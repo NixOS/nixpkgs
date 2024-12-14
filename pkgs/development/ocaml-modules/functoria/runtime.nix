@@ -1,4 +1,9 @@
-{ lib, buildDunePackage, fetchurl, cmdliner }:
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  cmdliner,
+}:
 
 buildDunePackage rec {
   pname = "functoria-runtime";
@@ -14,8 +19,8 @@ buildDunePackage rec {
   propagatedBuildInputs = [ cmdliner ];
 
   meta = with lib; {
-    homepage    = "https://github.com/mirage/functoria";
-    license     = licenses.isc;
+    homepage = "https://github.com/mirage/functoria";
+    license = licenses.isc;
     description = "Runtime support library for functoria-generated code";
     maintainers = [ maintainers.sternenseemann ];
   };

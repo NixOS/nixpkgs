@@ -55,7 +55,7 @@ buildPythonPackage rec {
     url-normalize
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     dynamodb = [
       boto3
       botocore
@@ -68,18 +68,21 @@ buildPythonPackage rec {
     yaml = [ pyyaml ];
   };
 
-  nativeCheckInputs = [
-    psutil
-    pytestCheckHook
-    pytest-rerunfailures
-    pytest-xdist
-    requests-mock
-    responses
-    rich
-    tenacity
-    time-machine
-    timeout-decorator
-  ] ++ passthru.optional-dependencies.json ++ passthru.optional-dependencies.security;
+  nativeCheckInputs =
+    [
+      psutil
+      pytestCheckHook
+      pytest-rerunfailures
+      pytest-xdist
+      requests-mock
+      responses
+      rich
+      tenacity
+      time-machine
+      timeout-decorator
+    ]
+    ++ optional-dependencies.json
+    ++ optional-dependencies.security;
 
   preCheck = ''
     export HOME=$(mktemp -d);

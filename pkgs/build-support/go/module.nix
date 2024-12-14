@@ -1,90 +1,98 @@
 { go, cacert, git, lib, stdenv }:
 
 { name ? "${args'.pname}-${args'.version}"
+  # The source used to build the derivation.
 , src
+  # Native build inputs used for the derivation.
 , nativeBuildInputs ? [ ]
 , passthru ? { }
 , patches ? [ ]
 
-  # A function to override the goModules derivation
-, overrideModAttrs ? (_oldAttrs: { })
+  # A function to override the `goModules` derivation.
+, overrideModAttrs ? (finalAttrs: previousAttrs: { })
 
-  # path to go.mod and go.sum directory
+  # Directory to the `go.mod` and `go.sum` relative to the `src`.
 , modRoot ? "./"
 
-  # vendorHash is the SRI hash of the vendored dependencies
-  #
-  # if vendorHash is null, then we won't fetch any dependencies and
-  # rely on the vendor folder within the source.
+  # The SRI hash of the vendored dependencies.
+  # If `vendorHash` is `null`, no dependencies are fetched and
+  # the build relies on the vendor folder within the source.
 , vendorHash ? throw (
     if args'?vendorSha256 then
       "buildGoModule: Expect vendorHash instead of vendorSha256"
     else
       "buildGoModule: vendorHash is missing"
   )
+
   # Whether to delete the vendor folder supplied with the source.
 , deleteVendor ? false
+
   # Whether to fetch (go mod download) and proxy the vendor directory.
   # This is useful if your code depends on c code and go mod tidy does not
   # include the needed sources to build or if any dependency has case-insensitive
   # conflicts which will produce platform dependant `vendorHash` checksums.
 , proxyVendor ? false
 
-  # We want parallel builds by default
+  # We want parallel builds by default.
 , enableParallelBuilding ? true
 
   # Do not enable this without good reason
-  # IE: programs coupled with the compiler
+  # IE: programs coupled with the compiler.
 , allowGoReference ? false
 
+  # Go env. variable to enable CGO.
 , CGO_ENABLED ? go.CGO_ENABLED
 
+  # Meta data for the final derivation.
 , meta ? { }
 
-  # Not needed with buildGoModule
-, goPackagePath ? ""
-
+  # Go linker flags.
 , ldflags ? [ ]
-
+  # Go build flags.
 , GOFLAGS ? [ ]
 
-  # needed for buildFlags{,Array} warning
-, buildFlags ? ""
-, buildFlagsArray ? ""
+  # Needed for buildFlags{,Array} warning
+, buildFlags ? "" # deprecated
+, buildFlagsArray ? "" # deprecated
 
 , ...
 }@args':
 
-assert goPackagePath != "" -> throw "`goPackagePath` is not needed with `buildGoModule`";
-
 let
-  args = removeAttrs args' [ "overrideModAttrs" "vendorSha256" "vendorHash" ];
+  args = removeAttrs args' [ "overrideModAttrs" ];
 
   GO111MODULE = "on";
   GOTOOLCHAIN = "local";
 
-  goModules = if (vendorHash == null) then "" else
+in
+(stdenv.mkDerivation (finalAttrs:
+  args
+  // {
+
+  inherit modRoot vendorHash deleteVendor proxyVendor;
+  goModules = if (finalAttrs.vendorHash == null) then "" else
   (stdenv.mkDerivation {
-    name = "${name}-go-modules";
+    name = "${finalAttrs.name or "${finalAttrs.pname}-${finalAttrs.version}"}-go-modules";
 
-    nativeBuildInputs = (args.nativeBuildInputs or [ ]) ++ [ go git cacert ];
+    nativeBuildInputs = (finalAttrs.nativeBuildInputs or [ ]) ++ [ go git cacert ];
 
-    inherit (args) src;
+    inherit (finalAttrs) src modRoot;
     inherit (go) GOOS GOARCH;
     inherit GO111MODULE GOTOOLCHAIN;
 
-    # The following inheritence behavior is not trivial to expect, and some may
+    # The following inheritance behavior is not trivial to expect, and some may
     # argue it's not ideal. Changing it may break vendor hashes in Nixpkgs and
     # out in the wild. In anycase, it's documented in:
-    # doc/languages-frameworks/go.section.md
-    prePatch = args.prePatch or "";
-    patches = args.patches or [ ];
-    patchFlags = args.patchFlags or [ ];
-    postPatch = args.postPatch or "";
-    preBuild = args.preBuild or "";
-    postBuild = args.modPostBuild or "";
-    sourceRoot = args.sourceRoot or "";
-    env = args.env or { };
+    # doc/languages-frameworks/go.section.md.
+    prePatch = finalAttrs.prePatch or "";
+    patches = finalAttrs.patches or [ ];
+    patchFlags = finalAttrs.patchFlags or [ ];
+    postPatch = finalAttrs.postPatch or "";
+    preBuild = finalAttrs.preBuild or "";
+    postBuild = finalAttrs.modPostBuild or "";
+    sourceRoot = finalAttrs.sourceRoot or "";
+    setSourceRoot = finalAttrs.setSourceRoot or "";
+    env = finalAttrs.env or { };
 
     impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ [
       "GIT_PROXY_COMMAND"
@@ -96,13 +104,13 @@ let
       runHook preConfigure
       export GOCACHE=$TMPDIR/go-cache
       export GOPATH="$TMPDIR/go"
-      cd "${modRoot}"
+      cd "$modRoot"
       runHook postConfigure
     '';
 
     buildPhase = args.modBuildPhase or (''
       runHook preBuild
-    '' + lib.optionalString deleteVendor ''
+    '' + lib.optionalString finalAttrs.deleteVendor ''
       if [ ! -d vendor ]; then
         echo "vendor folder does not exist, 'deleteVendor' is not needed"
         exit 10
@@ -115,7 +123,8 @@ let
         exit 10
       fi
 
-      ${if proxyVendor then ''
+      export GIT_SSL_CAINFO=$NIX_SSL_CERT_FILE
+      ${if finalAttrs.proxyVendor then ''
         mkdir -p "''${GOPATH}/pkg/mod/cache/download"
         go mod download
       '' else ''
@@ -133,7 +142,7 @@ let
     installPhase = args.modInstallPhase or ''
       runHook preInstall
 
-      ${if proxyVendor then ''
+      ${if finalAttrs.proxyVendor then ''
         rm -rf "''${GOPATH}/pkg/mod/cache/download/sumdb"
         cp -r --reflink=auto "''${GOPATH}/pkg/mod/cache/download" $out
       '' else ''
@@ -151,20 +160,20 @@ let
     dontFixup = true;
 
     outputHashMode = "recursive";
-    outputHash = vendorHash;
-    # Handle empty vendorHash; avoid
-    # error: empty hash requires explicit hash algorithm
-    outputHashAlgo = if vendorHash == "" then "sha256" else null;
-  }).overrideAttrs overrideModAttrs;
+    outputHash = finalAttrs.vendorHash;
+    # Handle empty `vendorHash`; avoid error:
+    # empty hash requires explicit hash algorithm.
+    outputHashAlgo = if finalAttrs.vendorHash == "" then "sha256" else null;
+    # in case an overlay clears passthru by accident, don't fail evaluation
+  }).overrideAttrs (finalAttrs.passthru.overrideModAttrs or overrideModAttrs);
 
-  package = stdenv.mkDerivation (args // {
     nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
     inherit (go) GOOS GOARCH;
 
     GOFLAGS = GOFLAGS
       ++ lib.warnIf (lib.any (lib.hasPrefix "-mod=") GOFLAGS) "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in GOFLAGS"
-        (lib.optional (!proxyVendor) "-mod=vendor")
+        (lib.optional (!finalAttrs.proxyVendor) "-mod=vendor")
       ++ lib.warnIf (builtins.elem "-trimpath" GOFLAGS) "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
         (lib.optional (!allowGoReference) "-trimpath");
     inherit CGO_ENABLED enableParallelBuilding GO111MODULE GOTOOLCHAIN;
@@ -180,12 +189,12 @@ let
       export GOPROXY=off
       export GOSUMDB=off
       cd "$modRoot"
-    '' + lib.optionalString (vendorHash != null) ''
-      ${if proxyVendor then ''
-        export GOPROXY=file://${goModules}
+    '' + lib.optionalString (finalAttrs.vendorHash != null) ''
+      ${if finalAttrs.proxyVendor then ''
+        export GOPROXY="file://$goModules"
       '' else ''
         rm -rf vendor
-        cp -r --reflink=auto ${goModules} vendor
+        cp -r --reflink=auto "$goModules" vendor
       ''}
     '' + ''
 
@@ -218,8 +227,7 @@ let
       buildGoDir() {
         local cmd="$1" dir="$2"
 
-        . $TMPDIR/buildFlagsArray
-
+        declare -ga buildFlagsArray
         declare -a flags
         flags+=($buildFlags "''${buildFlagsArray[@]}")
         flags+=(''${tags:+-tags=''${tags// /,}})
@@ -258,11 +266,6 @@ let
         buildFlagsArray+=(-x)
       fi
 
-      if [ ''${#buildFlagsArray[@]} -ne 0 ]; then
-        declare -p buildFlagsArray > $TMPDIR/buildFlagsArray
-      else
-        touch $TMPDIR/buildFlagsArray
-      fi
       if [ -z "$enableParallelBuilding" ]; then
           export NIX_BUILD_CORES=1
       fi
@@ -312,12 +315,17 @@ let
 
     disallowedReferences = lib.optional (!allowGoReference) go;
 
-    passthru = passthru // { inherit go goModules vendorHash; };
+    passthru = {
+      inherit go;
+      # Canonicallize `overrideModAttrs` as an attribute overlay.
+      # `passthru.overrideModAttrs` will be overridden
+      # when users want to override `goModules`.
+      overrideModAttrs = lib.toExtension overrideModAttrs;
+    } // passthru;
 
     meta = {
-      # Add default meta information
+      # Add default meta information.
       platforms = go.meta.platforms or lib.platforms.all;
     } // meta;
-  });
-in
-package
+  }
+))

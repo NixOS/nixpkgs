@@ -6,9 +6,8 @@
 
 { config, lib, pkgs, ... }:
 
-with lib;
-
 let
+  inherit (lib) mkDefault mkIf;
   cfg = config.ec2;
 in
 
@@ -107,5 +106,5 @@ in
     # (e.g. it depends on GTK).
     services.udisks2.enable = false;
   };
-  meta.maintainers = with maintainers; [ arianvp ];
+  meta.maintainers = with lib.maintainers; [ arianvp ];
 }

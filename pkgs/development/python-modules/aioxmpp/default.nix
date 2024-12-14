@@ -14,7 +14,6 @@
   pytestCheckHook,
   pythonAtLeast,
   pythonOlder,
-  pythonRelaxDepsHook,
   pytz,
   setuptools,
   sortedcollections,
@@ -40,8 +39,6 @@ buildPythonPackage rec {
   ];
 
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     aiosasl
@@ -70,21 +67,23 @@ buildPythonPackage rec {
 
   disabledTestPaths = [ "benchmarks" ];
 
-  disabledTests = [
-    # AttributeError: 'zoneinfo.ZoneInfo' object has no attribute 'normalize'
-    "test_convert_field_datetime_default_locale"
-  ] ++ lib.optionals (pythonAtLeast "3.12") [
-    # asyncio issues
-    "test_is_abstract"
-    "Testbackground"
-    "TestCapturingXSO"
-    "Testcheck_x509"
-    "TestClient"
-    "TestIntegerType"
-    "TestStanzaStream"
-    "TestStanzaToken"
-    "TestXMLStream"
-  ];
+  disabledTests =
+    [
+      # AttributeError: 'zoneinfo.ZoneInfo' object has no attribute 'normalize'
+      "test_convert_field_datetime_default_locale"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # asyncio issues
+      "test_is_abstract"
+      "Testbackground"
+      "TestCapturingXSO"
+      "Testcheck_x509"
+      "TestClient"
+      "TestIntegerType"
+      "TestStanzaStream"
+      "TestStanzaToken"
+      "TestXMLStream"
+    ];
 
   meta = {
     description = "Pure-python XMPP library for asyncio";

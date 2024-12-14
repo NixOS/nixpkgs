@@ -5,16 +5,18 @@
 }:
 buildGoModule rec {
   pname = "termshot";
-  version = "0.2.7";
+  version = "0.2.12";
 
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "termshot";
     rev = "v${version}";
-    hash = "sha256-Sxp6abYq0MrqtqDdpffSBdZB3/EyIMF9Ixsc7IgW5hI=";
+    hash = "sha256-ua2tFyOjLeqOpipLoSisASqwjqGEFdkxd2qHybZ1VDU=";
   };
 
-  vendorHash = "sha256-jzDbA1iN+1dbTVgKw228TuCV3eeAVmHFDiHd2qF/80E=";
+  vendorHash = "sha256-JweKjKvShiimFHQwRtoVuongWqqGIPcPz77qEVNec+M=";
+
+  patches = [ ./go-mod.patch ];
 
   ldflags = [
     "-s"
@@ -26,7 +28,7 @@ buildGoModule rec {
     description = "Creates screenshots based on terminal command output";
     homepage = "https://github.com/homeport/termshot";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [defelo];
+    maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "termshot";
   };
 }

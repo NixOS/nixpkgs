@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
 }:
 
 buildGoModule rec {
@@ -12,7 +13,7 @@ buildGoModule rec {
     owner = "chmouel";
     repo = "gosmee";
     rev = "v${version}";
-    sha256 = "sha256-UnGzPkbw7x8l1+9xEXFiJZFzJT5yu7MCgPKkKzaFqkk=";
+    hash = "sha256-UnGzPkbw7x8l1+9xEXFiJZFzJT5yu7MCgPKkKzaFqkk=";
   };
   vendorHash = null;
 
@@ -33,6 +34,9 @@ buildGoModule rec {
     description = "Command line server and client for webhooks deliveries (and https://smee.io)";
     homepage = "https://github.com/chmouel/gosmee";
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ vdemeester chmouel ];
+    maintainers = with lib.maintainers; [
+      vdemeester
+      chmouel
+    ];
   };
 }

@@ -38,6 +38,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/pytest-dev/pytest-repeat";
     changelog = "https://github.com/pytest-dev/pytest-repeat/blob/v${version}/CHANGES.rst";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

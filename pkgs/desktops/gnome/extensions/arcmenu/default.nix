@@ -1,14 +1,22 @@
-{ lib, stdenv, fetchFromGitLab, glib, gettext, substituteAll, gnome-menus }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  glib,
+  gettext,
+  substituteAll,
+  gnome-menus,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gnome-shell-extension-arcmenu";
-  version = "55";
+  version = "63";
 
   src = fetchFromGitLab {
     owner = "arcmenu";
     repo = "ArcMenu";
     rev = "v${version}";
-    sha256 = "sha256-xLKvcrZkqcj7aHiv9JumLWSP5LbajITAyopCIwGqpkE=";
+    hash = "sha256-XlDkdNINTnUAqr2bxL0u2tHWfiggqT1oOryED7sG/vs=";
   };
 
   patches = [
@@ -19,7 +27,8 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    glib gettext
+    glib
+    gettext
   ];
 
   makeFlags = [ "INSTALLBASE=${placeholder "out"}/share/gnome-shell/extensions" ];

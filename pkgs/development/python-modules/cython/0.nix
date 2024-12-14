@@ -24,8 +24,8 @@ let
     # Some tests in the test suite isn't working on aarch64. Disable them for
     # now until upstream finds a workaround.
     # Upstream issue here: https://github.com/cython/cython/issues/2308
-    ++ lib.optionals stdenv.isAarch64 [ "numpy_memoryview" ]
-    ++ lib.optionals stdenv.isi686 [
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [ "numpy_memoryview" ]
+    ++ lib.optionals stdenv.hostPlatform.isi686 [
       "future_division"
       "overflow_check_longlong"
     ];
@@ -77,17 +77,15 @@ buildPythonPackage rec {
     export HOME="$NIX_BUILD_TOP"
     ${python.interpreter} runtests.py -j$NIX_BUILD_CORES \
       --no-code-style \
-      ${
-        lib.optionalString (
-          builtins.length excludedTests != 0
-        ) ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''
-      }
+      ${lib.optionalString (
+        builtins.length excludedTests != 0
+      ) ''--exclude="(${builtins.concatStringsSep "|" excludedTests})"''}
   '';
 
   # https://github.com/cython/cython/issues/2785
   # Temporary solution
   doCheck = false;
-  # doCheck = !stdenv.isDarwin;
+  # doCheck = !stdenv.hostPlatform.isDarwin;
 
   # force regeneration of generated code in source distributions
   # https://github.com/cython/cython/issues/5089

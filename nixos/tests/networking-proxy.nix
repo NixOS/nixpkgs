@@ -3,68 +3,73 @@
 # TODO: use a real proxy node and put this test into networking.nix
 # TODO: test whether nix tools work as expected behind a proxy
 
-let default-config = {
-        imports = [ ./common/user-account.nix ];
+let
+  default-config = {
+    imports = [ ./common/user-account.nix ];
 
-        services.xserver.enable = false;
+    services.xserver.enable = false;
 
-      };
-in import ./make-test-python.nix ({ pkgs, ...} : {
-  name = "networking-proxy";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [  ];
   };
-
-  nodes = {
-    # no proxy
-    machine =
-      { ... }:
-
-      default-config;
-
-    # proxy default
-    machine2 =
-      { ... }:
-
-      default-config // {
-        networking.proxy.default = "http://user:pass@host:port";
-      };
-
-    # specific proxy options
-    machine3 =
-      { ... }:
-
-      default-config //
-      {
-        networking.proxy = {
-          # useless because overridden by the next options
-          default = "http://user:pass@host:port";
-          # advanced proxy setup
-          httpProxy = "123-http://user:pass@http-host:port";
-          httpsProxy = "456-http://user:pass@https-host:port";
-          rsyncProxy = "789-http://user:pass@rsync-host:port";
-          ftpProxy = "101112-http://user:pass@ftp-host:port";
-          noProxy = "131415-127.0.0.1,localhost,.localdomain";
-        };
-      };
-
-    # mix default + proxy options
-    machine4 =
-      { ... }:
-
-      default-config // {
-        networking.proxy = {
-          # open for all *_proxy env var
-          default = "000-http://user:pass@default-host:port";
-          # except for those 2
-          rsyncProxy = "123-http://user:pass@http-host:port";
-          noProxy = "131415-127.0.0.1,localhost,.localdomain";
-        };
-      };
+in
+import ./make-test-python.nix (
+  { pkgs, ... }:
+  {
+    name = "networking-proxy";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ ];
     };
 
-  testScript =
-    ''
+    nodes = {
+      # no proxy
+      machine =
+        { ... }:
+
+        default-config;
+
+      # proxy default
+      machine2 =
+        { ... }:
+
+        default-config
+        // {
+          networking.proxy.default = "http://user:pass@host:port";
+        };
+
+      # specific proxy options
+      machine3 =
+        { ... }:
+
+        default-config
+        // {
+          networking.proxy = {
+            # useless because overridden by the next options
+            default = "http://user:pass@host:port";
+            # advanced proxy setup
+            httpProxy = "123-http://user:pass@http-host:port";
+            httpsProxy = "456-http://user:pass@https-host:port";
+            rsyncProxy = "789-http://user:pass@rsync-host:port";
+            ftpProxy = "101112-http://user:pass@ftp-host:port";
+            noProxy = "131415-127.0.0.1,localhost,.localdomain";
+          };
+        };
+
+      # mix default + proxy options
+      machine4 =
+        { ... }:
+
+        default-config
+        // {
+          networking.proxy = {
+            # open for all *_proxy env var
+            default = "000-http://user:pass@default-host:port";
+            # except for those 2
+            rsyncProxy = "123-http://user:pass@http-host:port";
+            noProxy = "131415-127.0.0.1,localhost,.localdomain";
+          };
+        };
+    };
+
+    testScript = ''
       from typing import Dict, Optional
 
 
@@ -131,4 +136,5 @@ in import ./make-test-python.nix ({ pkgs, ...} : {
           assert "000" in env["ftp_proxy"]
           assert "131415" in env["no_proxy"]
     '';
-})
+  }
+)

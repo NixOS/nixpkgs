@@ -1,13 +1,22 @@
-{ lib, stdenv, fetchurl, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
 
-# Optional Dependencies
-, alsa-lib ? null, db ? null, libuuid ? null, libffado ? null, celt ? null
+  # Optional Dependencies
+  alsa-lib ? null,
+  db ? null,
+  libuuid ? null,
+  libffado ? null,
+  celt ? null,
 
-, testers
+  testers,
 }:
 
 let
-  shouldUsePkg = pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
+  shouldUsePkg =
+    pkg: if pkg != null && lib.meta.availableOn stdenv.hostPlatform pkg then pkg else null;
 
   optAlsaLib = shouldUsePkg alsa-lib;
   optDb = shouldUsePkg db;
@@ -29,16 +38,24 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ optAlsaLib optDb optLibffado optCelt ];
+  buildInputs = [
+    optAlsaLib
+    optDb
+    optLibffado
+    optCelt
+  ];
   propagatedBuildInputs = [ optLibuuid ];
 
   passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "JACK audio connection kit";
     homepage = "https://jackaudio.org";
-    license = with licenses; [ gpl2 lgpl21 ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl21
+    ];
     pkgConfigModules = [ "jack" ];
     platforms = platforms.unix;
   };

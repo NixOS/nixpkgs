@@ -4,8 +4,7 @@
   fetchFromGitHub,
   fetchpatch,
   pythonOlder,
-  pytestCheckHook,
-  pythonRelaxDepsHook,
+  pytest7CheckHook,
   poetry-core,
   jsonschema,
   numpy,
@@ -16,7 +15,7 @@
 buildPythonPackage rec {
   pname = "pydicom-seg";
   version = "0.4.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
@@ -39,19 +38,16 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "jsonschema" ];
 
-  nativeBuildInputs = [
-    poetry-core
-    pythonRelaxDepsHook
-  ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jsonschema
     numpy
     pydicom
     simpleitk
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytest7CheckHook ];
 
   pythonImportsCheck = [ "pydicom_seg" ];
 

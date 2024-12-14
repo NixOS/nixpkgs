@@ -1,4 +1,13 @@
-{ lib, stdenv, qtbase, qtdeclarative, fetchFromGitHub, cmake, pkg-config, box2d }:
+{
+  lib,
+  stdenv,
+  qtbase,
+  qtdeclarative,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  box2d,
+}:
 
 let
   inherit (lib) cmakeBool;
@@ -12,7 +21,7 @@ let
       rev = "v${version}";
       hash = "sha256-Z2J17YMzQNZqABIa5eyJDT7BWfXveymzs+DWsrklPIs=";
     };
-    sourceRoot = "source/Box2D";
+    sourceRoot = "${src.name}/Box2D";
     cmakeFlags = old.cmakeFlags or [ ] ++ [
       (cmakeBool "BOX2D_INSTALL" true)
       (cmakeBool "BOX2D_BUILD_SHARED" true)
@@ -34,9 +43,16 @@ stdenv.mkDerivation {
 
   dontWrapQtApps = true;
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
 
-  buildInputs = [ box2d' qtbase qtdeclarative ];
+  buildInputs = [
+    box2d'
+    qtbase
+    qtdeclarative
+  ];
 
   cmakeFlags = [
     (cmakeBool "USE_SYSTEM_BOX2D" true)

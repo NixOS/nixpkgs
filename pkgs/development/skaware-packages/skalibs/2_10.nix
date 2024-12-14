@@ -7,7 +7,12 @@ skawarePackages.buildPackage {
 
   description = "Set of general-purpose C programming libraries";
 
-  outputs = [ "lib" "dev" "doc" "out" ];
+  outputs = [
+    "lib"
+    "dev"
+    "doc"
+    "out"
+  ];
 
   configureFlags = [
     # assume /dev/random works

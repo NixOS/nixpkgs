@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, rustPlatform, libxcb, python3 }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  libxcb,
+  python3,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "i3wsr";
@@ -11,7 +17,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-Mq4TpQDiIYePUS3EwBfOe2+QmvF6+WEDK12WahbuhSU=";
   };
 
-  cargoSha256 = "sha256-hybvzHwHM0rQwgZfQpww/w9wQDW5h9P2KSjpAScVTBo=";
+  cargoHash = "sha256-hybvzHwHM0rQwgZfQpww/w9wQDW5h9P2KSjpAScVTBo=";
 
   nativeBuildInputs = [ python3 ];
   buildInputs = [ libxcb ];

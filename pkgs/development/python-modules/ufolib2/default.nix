@@ -32,7 +32,7 @@ buildPythonPackage rec {
     fonttools
   ] ++ fonttools.optional-dependencies.ufo;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     lxml = [ lxml ];
     converters = [ cattrs ];
     json = [
@@ -47,7 +47,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "ufoLib2" ];
 
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     description = "Library to deal with UFO font sources";
     homepage = "https://github.com/fonttools/ufoLib2";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

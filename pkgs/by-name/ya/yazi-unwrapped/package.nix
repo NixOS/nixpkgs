@@ -1,32 +1,33 @@
-{ rustPlatform
-, fetchFromGitHub
-, lib
+{
+  rustPlatform,
+  fetchFromGitHub,
+  lib,
 
-, installShellFiles
-, stdenv
-, Foundation
-, rust-jemalloc-sys
-
-, nix-update-script
+  installShellFiles,
+  stdenv,
+  Foundation,
+  rust-jemalloc-sys,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "yazi";
-  version = "0.2.5";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "sxyazi";
     repo = "yazi";
     rev = "v${version}";
-    hash = "sha256-RwkgJX4naD3t97ce4Zg/VWJ41QiVFFqDW5nHpyMtISY=";
+    hash = "sha256-YKP+9EfLiXbVivKWWL+arx+2Ek+XydS2VjGy3DncD8s=";
   };
 
-  cargoHash = "sha256-qnbinuTuaPiD7ib3aCJzSwuA4s3naFzi+txqX7jkHIo=";
+  cargoHash = "sha256-vH2ihp/X6W1OQfYwMT2vpn8c1PKaX9Uf1Tp2HvQl+o8=";
 
   env.YAZI_GEN_COMPLETIONS = true;
+  env.VERGEN_GIT_SHA = "Nixpkgs";
+  env.VERGEN_BUILD_DATE = "2024-12-11";
 
   nativeBuildInputs = [ installShellFiles ];
-  buildInputs = [ rust-jemalloc-sys ] ++ lib.optionals stdenv.isDarwin [ Foundation ];
+  buildInputs = [ rust-jemalloc-sys ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Foundation ];
 
   postInstall = ''
     installShellCompletion --cmd yazi \
@@ -38,13 +39,20 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 assets/logo.png $out/share/pixmaps/yazi.png
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript.command = [ ./update.sh ];
 
   meta = {
     description = "Blazing fast terminal file manager written in Rust, based on async I/O";
     homepage = "https://github.com/sxyazi/yazi";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ xyenon matthiasbeyer linsui eljamm ];
+    maintainers = with lib.maintainers; [
+      eljamm
+      khaneliman
+      linsui
+      matthiasbeyer
+      uncenter
+      xyenon
+    ];
     mainProgram = "yazi";
   };
 }

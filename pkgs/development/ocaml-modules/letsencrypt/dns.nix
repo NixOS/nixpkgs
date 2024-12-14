@@ -1,17 +1,16 @@
-{ lib
-, buildDunePackage
-, letsencrypt
-, logs
-, fmt
-, lwt
-, dns
-, dns-tsig
-, domain-name
+{
+  buildDunePackage,
+  letsencrypt,
+  logs,
+  fmt,
+  lwt,
+  dns,
+  dns-tsig,
+  domain-name,
 }:
 
 buildDunePackage {
   pname = "letsencrypt-dns";
-  duneVersion = "3";
   minimalOCamlVersion = "4.08";
 
   inherit (letsencrypt)

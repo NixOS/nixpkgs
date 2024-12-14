@@ -1,26 +1,34 @@
 {
   lib,
   buildPythonPackage,
-  pythonRelaxDepsHook,
   fetchPypi,
+  setuptools,
   grpcio,
   protobuf,
 }:
 
+# This package should be updated together with the main grpc package and other
+# related python grpc packages.
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-channelz";
-  version = "1.62.2";
-  format = "setuptools";
+  version = "1.67.0";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-bkrCxD12skXF9m2Y9SPbCHhrGGEoplXubyCjCn5o5Pk=";
+    pname = "grpcio_channelz";
+    inherit version;
+    hash = "sha256-F2Jfq6lOYn4RsjP9Ay21G67F6HkGeY3SIEk26Z0BWnE=";
   };
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-  pythonRelaxDeps = [ "grpcio" ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "grpcio"
+    "protobuf"
+  ];
+
+  dependencies = [
     grpcio
     protobuf
   ];

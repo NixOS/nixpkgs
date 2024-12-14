@@ -26,6 +26,6 @@ buildPythonPackage rec {
     description = "Shorthand syntax for building OrderedDicts";
     homepage = "https://github.com/epsy/od";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

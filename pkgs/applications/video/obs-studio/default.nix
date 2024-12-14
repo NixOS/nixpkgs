@@ -1,9 +1,11 @@
 { config
+, uthash
 , lib
 , stdenv
+, nv-codec-headers-12
 , fetchFromGitHub
 , fetchpatch
-, addOpenGLRunpath
+, addDriverRunpath
 , cmake
 , fdk_aac
 , ffmpeg
@@ -27,19 +29,18 @@
 , wrapGAppsHook3
 , scriptingSupport ? true
 , luajit
-, swig4
+, swig
 , python3
-, alsaSupport ? stdenv.isLinux
+, alsaSupport ? stdenv.hostPlatform.isLinux
 , alsa-lib
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
+, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
 , libpulseaudio
 , libcef
 , pciutils
-, pipewireSupport ? stdenv.isLinux
+, pipewireSupport ? stdenv.hostPlatform.isLinux
 , withFdk ? true
 , pipewire
 , libdrm
-, libajantv2
 , librist
 , libva
 , srt
@@ -48,6 +49,8 @@
 , nlohmann_json
 , websocketpp
 , asio
+, decklinkSupport ? false
+, blackmagic-desktop-video
 , libdatachannel
 , libvpl
 , qrcodegencpp
@@ -60,15 +63,17 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "30.1.2";
+  version = "30.2.3";
 
   src = fetchFromGitHub {
     owner = "obsproject";
-    repo = finalAttrs.pname;
+    repo = "obs-studio";
     rev = finalAttrs.version;
-    sha256 = "sha256-M4IINBoYrgkM37ykb4boHyWP8AxwMX0b7IAeeNIw9Qo=";
+    hash = "sha256-4bAzW62xX9apKOAJyn3iys1bFdHj4re2reMZtlGsn5s=";
     fetchSubmodules = true;
   };
+
+  separateDebugInfo = true;
 
   patches = [
     # Lets obs-browser build against CEF 90.1.0+
@@ -82,16 +87,31 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-yRSw4VWDwMwysDB3Hw/tsmTjEQUhipvrVRQcZkbtuoI=";
       includes = [ "*/CompilerConfig.cmake" ];
     })
+
+    (fetchpatch {
+      name = "qt-6.8.patch";
+      url = "https://github.com/obsproject/obs-websocket/commit/d9befb9e0a4898695eef5ccbc91a4fac02027854.patch";
+      extraPrefix = "plugins/obs-websocket/";
+      stripLen = 1;
+      hash = "sha256-7SDBRr9G40b9DfbgdaYJxTeiDSLUfVixtMtM3cLTVZs=";
+    })
+
+    # Fix lossless audio, ffmpeg 7,1 compatibility issue
+    (fetchpatch {
+      name = "fix-lossless-audio.patch";
+      url = "https://github.com/obsproject/obs-studio/commit/dfc3a69c5276edf84c933035ff2a7e278fa13c9a.patch";
+      hash = "sha256-wiF3nolBpZKp7LR7NloNfJ+v4Uq/nBgwCVoKZX+VEMA=";
+    })
   ];
 
   nativeBuildInputs = [
-    addOpenGLRunpath
+    addDriverRunpath
     cmake
     pkg-config
     wrapGAppsHook3
     wrapQtAppsHook
   ]
-  ++ optional scriptingSupport swig4;
+  ++ optional scriptingSupport swig;
 
   buildInputs = [
     curl
@@ -111,7 +131,6 @@ stdenv.mkDerivation (finalAttrs: {
     libvlc
     mbedtls
     pciutils
-    libajantv2
     librist
     libva
     srt
@@ -122,6 +141,8 @@ stdenv.mkDerivation (finalAttrs: {
     libdatachannel
     libvpl
     qrcodegencpp
+    uthash
+    nv-codec-headers-12
   ]
   ++ optionals scriptingSupport [ luajit python3 ]
   ++ optional alsaSupport alsa-lib
@@ -153,10 +174,13 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "ENABLE_ALSA" alsaSupport)
     (lib.cmakeBool "ENABLE_PULSEAUDIO" pulseaudioSupport)
     (lib.cmakeBool "ENABLE_PIPEWIRE" pipewireSupport)
+    (lib.cmakeBool "ENABLE_AJA" false) # TODO: fix linking against libajantv2
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=deprecated-declarations"
     "-Wno-error=sign-compare" # https://github.com/obsproject/obs-studio/issues/10200
+    "-Wno-error=stringop-overflow="
   ];
 
   dontWrapGApps = true;
@@ -165,6 +189,8 @@ stdenv.mkDerivation (finalAttrs: {
       xorg.libX11
       libvlc
       libGL
+    ] ++ optionals decklinkSupport [
+      blackmagic-desktop-video
     ];
   in ''
     # Remove libcef before patchelf, otherwise it will fail
@@ -176,9 +202,9 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
-    addOpenGLRunpath $out/lib/lib*.so
-    addOpenGLRunpath $out/lib/obs-plugins/*.so
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
+    addDriverRunpath $out/lib/lib*.so
+    addDriverRunpath $out/lib/obs-plugins/*.so
 
     # Link libcef again after patchelfing other libs
     ln -s ${libcef}/lib/* $out/lib/obs-plugins/
@@ -194,7 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ eclairevoyant jb55 materus fpletz ];
+    maintainers = with maintainers; [ jb55 materus fpletz ];
     license = with licenses; [ gpl2Plus ] ++ optional withFdk fraunhofer-fdk;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     mainProgram = "obs";

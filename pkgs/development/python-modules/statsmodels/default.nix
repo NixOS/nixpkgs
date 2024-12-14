@@ -16,19 +16,19 @@
 
 buildPythonPackage rec {
   pname = "statsmodels";
-  version = "0.14.2";
+  version = "0.14.3";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iQVQFHrTqBzaJPC6GlxAIa3BYBCAvQDhka581v7s1q0=";
+    hash = "sha256-7PNQJkP6k6q+XwvfI477WWCVF8TWCoEWMtMfzc6GwtI=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0rc1,<3" "numpy"
+      --replace-fail "numpy>=2.0.0,<3" "numpy"
   '';
 
   build-system = [
@@ -38,6 +38,13 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
   ];
+
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=implicit-function-declaration"
+      "-Wno-error=int-conversion"
+    ];
+  };
 
   dependencies = [
     numpy
@@ -57,7 +64,5 @@ buildPythonPackage rec {
     homepage = "https://www.github.com/statsmodels/statsmodels";
     changelog = "https://github.com/statsmodels/statsmodels/releases/tag/v${version}";
     license = licenses.bsd3;
-    # Fails at build time
-    broken = stdenv.isDarwin;
   };
 }

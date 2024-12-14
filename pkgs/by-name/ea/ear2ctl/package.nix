@@ -1,4 +1,11 @@
-{ lib, rustPlatform, fetchFromGitLab, pkg-config, dbus }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+  pkg-config,
+  dbus,
+  nix-update-script,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "ear2ctl";
@@ -16,6 +23,8 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [ dbus ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Linux controller for the Nothing Ear (2)";

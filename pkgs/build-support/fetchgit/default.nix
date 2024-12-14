@@ -10,13 +10,19 @@
     appendShort = lib.optionalString ((builtins.match "[a-f0-9]*" rev) != null) "-${short}";
   in "${if matched == null then base else builtins.head matched}${appendShort}";
 in
-lib.makeOverridable (
-{ url, rev ? "HEAD", sha256 ? "", hash ? "", leaveDotGit ? deepClone
+lib.makeOverridable (lib.fetchers.withNormalizedHash { } (
+# NOTE Please document parameter additions or changes in
+#   doc/build-helpers/fetchers.chapter.md
+{ url
+, tag ? null
+, rev ? null
+, leaveDotGit ? deepClone
+, outputHash ? lib.fakeHash, outputHashAlgo ? null
 , fetchSubmodules ? true, deepClone ? false
 , branchName ? null
 , sparseCheckout ? []
 , nonConeMode ? false
-, name ? urlToName url rev
+, name ? null
 , # Shell code executed after the file has been fetched
   # successfully. This can do things like check or transform the file.
   postFetch ? ""
@@ -56,35 +62,46 @@ lib.makeOverridable (
 assert deepClone -> leaveDotGit;
 assert nonConeMode -> (sparseCheckout != []);
 
-if hash != "" && sha256 != "" then
-  throw "Only one of sha256 or hash can be set"
-else if builtins.isString sparseCheckout then
+let
+  revWithTag =
+    let
+      warningMsg = "fetchgit requires one of either `rev` or `tag` to be provided (not both).";
+      otherIsNull = other: lib.assertMsg (other == null) warningMsg;
+    in
+    if tag != null then
+      assert (otherIsNull rev);
+      "refs/tags/${tag}"
+    else if rev != null then
+      assert (otherIsNull tag);
+      rev
+    else
+      # FIXME fetching HEAD if no rev or tag is provided is problematic at best
+      "HEAD";
+in
+
+if builtins.isString sparseCheckout then
   # Changed to throw on 2023-06-04
   throw "Please provide directories/patterns for sparse checkout as a list of strings. Passing a (multi-line) string is not supported any more."
 else
 stdenvNoCC.mkDerivation {
-  inherit name;
+  name = if name != null then name else urlToName url revWithTag;
+
   builder = ./builder.sh;
   fetcher = ./nix-prefetch-git;
 
-  nativeBuildInputs = [ git ]
+  nativeBuildInputs = [ git cacert ]
     ++ lib.optionals fetchLFS [ git-lfs ];
 
-  outputHashAlgo = if hash != "" then null else "sha256";
+  inherit outputHash outputHashAlgo;
   outputHashMode = "recursive";
-  outputHash = if hash != "" then
-    hash
-  else if sha256 != "" then
-    sha256
-  else
-    lib.fakeSha256;
 
   # git-sparse-checkout(1) says:
   # > When the --stdin option is provided, the directories or patterns are read
   # > from standard in as a newline-delimited list instead of from the arguments.
   sparseCheckout = builtins.concatStringsSep "\n" sparseCheckout;
 
-  inherit url rev leaveDotGit fetchLFS fetchSubmodules deepClone branchName nonConeMode postFetch;
+  inherit url leaveDotGit fetchLFS fetchSubmodules deepClone branchName nonConeMode postFetch;
+  rev = revWithTag;
 
   postHook = if netrcPhase == null then null else ''
     ${netrcPhase}
@@ -93,8 +110,6 @@ stdenvNoCC.mkDerivation {
     export NETRC=$PWD/.netrc
     export HOME=$PWD
   '';
-
-  GIT_SSL_CAINFO = "${cacert}/etc/ssl/certs/ca-bundle.crt";
 
   impureEnvVars = lib.fetchers.proxyImpureEnvVars ++ netrcImpureEnvVars ++ [
     "GIT_PROXY_COMMAND" "NIX_GIT_SSL_CAINFO" "SOCKS_SERVER"
@@ -107,4 +122,4 @@ stdenvNoCC.mkDerivation {
     gitRepoUrl = url;
   };
 }
-)
+))

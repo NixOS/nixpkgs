@@ -5,17 +5,18 @@
   requests,
   yt-dlp,
   pytestCheckHook,
+  nix-update-script,
 }:
 
 buildPythonApplication rec {
   pname = "gallery-dl";
-  version = "1.27.1";
+  version = "1.28.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "gallery_dl";
-    hash = "sha256-S1RF0FNJ/oKTwq9SXXIOnqBIViGIYBVuxPjV/6fbeV8=";
+    hash = "sha256-1UxLZZoDJsaiPqb+zaiWb9TyQIknKlrz6RN21B0sNe4=";
   };
 
   propagatedBuildInputs = [
@@ -24,6 +25,11 @@ buildPythonApplication rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # requires network access
+    "test_init"
+  ];
 
   pytestFlagsArray = [
     # requires network access
@@ -35,6 +41,8 @@ buildPythonApplication rec {
   ];
 
   pythonImportsCheck = [ "gallery_dl" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Command-line program to download image-galleries and -collections from several image hosting sites";

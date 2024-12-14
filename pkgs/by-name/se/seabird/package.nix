@@ -1,29 +1,30 @@
-{ lib
-, buildGo122Module
-, copyDesktopItems
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook4
-, gobject-introspection
-, gtk4
-, gtksourceview5
-, libadwaita
-, libxml2
-, vte-gtk4
+{
+  lib,
+  buildGoModule,
+  copyDesktopItems,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook4,
+  gobject-introspection,
+  gtk4,
+  gtksourceview5,
+  libadwaita,
+  libxml2,
+  vte-gtk4,
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "seabird";
-  version = "0.3.2";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "getseabird";
     repo = "seabird";
     rev = "v${version}";
-    hash = "sha256-MZEgzTwaBNXLimSj/vXR624DCJ7i2W5lYUdVxqvFii0=";
+    hash = "sha256-y+QIBqU3kAxedhWLnu07m9HQOCgHfOvVscIxxWtUcZo=";
   };
 
-  vendorHash = "sha256-g7qKI78VeDUu8yafrk2llCIirW/1uxfx6urVLRexsPE=";
+  vendorHash = "sha256-4o9z4XjtW7kNHAb8L0kuq9rgQzTwvAAXcl6+RIGjmqI=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -40,7 +41,10 @@ buildGo122Module rec {
     vte-gtk4
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   enableParallelBuilding = true;
 

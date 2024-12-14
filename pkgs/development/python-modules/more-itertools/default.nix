@@ -10,12 +10,12 @@
 
 buildPythonPackage rec {
   pname = "more-itertools";
-  version = "10.2.0";
+  version = "10.5.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-j8y0gMQ9PpmgAIdjTAbdArDVD78IizgN5aQaAV7COeE=";
+    hash = "sha256-VIK/73hJwl3Dxt1Tphc65HldoqQagPrqZwDZ9YRsXaY=";
   };
 
   nativeBuildInputs = [ flit-core ];
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     changelog = "https://more-itertools.readthedocs.io/en/stable/versions.html";
     description = "Expansion of the itertools module";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

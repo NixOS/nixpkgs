@@ -7,7 +7,6 @@
   fetchpatch,
   packaging,
   poetry-core,
-  pythonRelaxDepsHook,
   pythonOlder,
   structlog,
 }:
@@ -42,8 +41,6 @@ buildPythonPackage rec {
   ];
 
   pythonRelaxDeps = [ "structlog" ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   build-system = [ poetry-core ];
 

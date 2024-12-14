@@ -29,12 +29,15 @@ let
       "example/example.csproj"
     ];
     nugetDeps = ./deps.nix;
+    dotnet-sdk = dotnetCorePackages.sdk_6_0;
   };
 in
 buildPythonPackage {
   inherit pname version src;
 
   format = "pyproject";
+
+  buildInputs = dotnetCorePackages.sdk_6_0.packages ++ dotnet-build.nugetDeps;
 
   nativeBuildInputs = [
     setuptools
@@ -59,13 +62,11 @@ buildPythonPackage {
   preConfigure = ''
     dotnet restore "netfx_loader/ClrLoader.csproj" \
       -p:ContinuousIntegrationBuild=true \
-      -p:Deterministic=true \
-      --source "${dotnet-build.nuget-source}"
+      -p:Deterministic=true
 
     dotnet restore "example/example.csproj" \
       -p:ContinuousIntegrationBuild=true \
-      -p:Deterministic=true \
-      --source "${dotnet-build.nuget-source}"
+      -p:Deterministic=true
   '';
 
   passthru.fetch-deps = dotnet-build.fetch-deps;

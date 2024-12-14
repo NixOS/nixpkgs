@@ -41,6 +41,6 @@ buildPythonPackage rec {
     mainProgram = "pipdate";
     homepage = "https://github.com/nschloe/pipdate";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

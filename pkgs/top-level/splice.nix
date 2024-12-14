@@ -119,7 +119,6 @@ let
       pkgsTargetTarget
       buildPackages pkgs targetPackages
       ;
-    inherit (pkgs.stdenv) buildPlatform targetPlatform hostPlatform;
   };
 
   splicedPackagesWithXorg = splicedPackages // builtins.removeAttrs splicedPackages.xorg [
@@ -128,6 +127,15 @@ let
     "overrideScope"
     "packages"
   ];
+
+  packagesWithXorg = pkgs // builtins.removeAttrs pkgs.xorg [
+    "callPackage"
+    "newScope"
+    "overrideScope"
+    "packages"
+  ];
+
+  pkgsForCall = if actuallySplice then splicedPackagesWithXorg else packagesWithXorg;
 
 in
 
@@ -139,9 +147,9 @@ in
   # `newScope' for sets of packages in `pkgs' (see e.g. `gnome' below).
   callPackage = pkgs.newScope { };
 
-  callPackages = lib.callPackagesWith splicedPackagesWithXorg;
+  callPackages = lib.callPackagesWith pkgsForCall;
 
-  newScope = extra: lib.callPackageWith (splicedPackagesWithXorg // extra);
+  newScope = extra: lib.callPackageWith (pkgsForCall // extra);
 
   # prefill 2 fields of the function for convenience
   makeScopeWithSplicing = lib.makeScopeWithSplicing splicePackages pkgs.newScope;
@@ -170,5 +178,5 @@ in
 
   # Haskell package sets need this because they reimplement their own
   # `newScope`.
-  __splicedPackages = splicedPackages // { recurseForDerivations = false; };
+  __splicedPackages = if actuallySplice then splicedPackages // { recurseForDerivations = false; } else pkgs;
 }

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   pythonOlder,
+  setuptools,
   fetchFromGitHub,
   bleach,
   mt-940,
@@ -12,25 +13,31 @@
 }:
 
 buildPythonPackage rec {
-  version = "4.0.0";
+  version = "4.2.3";
   pname = "fints";
-  disabled = pythonOlder "3.6";
+  pyproject = true;
 
-  format = "setuptools";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "raphaelm";
     repo = "python-fints";
-    rev = "v${version}";
-    hash = "sha256-SREprcrIdeKVpL22IViexwiKmFfbT2UbKEmxtVm6iu0=";
+    tag = "v${version}";
+    hash = "sha256-QR5/mAll6vuP+hJo/oguynLLsGawhTQNaU6TCgww9yM=";
   };
 
-  propagatedBuildInputs = [
-    requests
-    mt-940
-    sepaxml
+  pythonRemoveDeps = [ "enum-tools" ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     bleach
+    mt-940
+    requests
+    sepaxml
   ];
+
+  pythonImportsCheck = [ "fints" ];
 
   nativeCheckInputs = [
     pytestCheckHook

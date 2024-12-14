@@ -1,10 +1,11 @@
-{ lib
-, derivationWithMeta
-, src
-, hex0
-, version
-, platforms
-, stage0Arch
+{
+  lib,
+  derivationWithMeta,
+  src,
+  hex0,
+  version,
+  platforms,
+  stage0Arch,
 }:
 derivationWithMeta {
   inherit version;
@@ -23,4 +24,3 @@ derivationWithMeta {
     inherit platforms;
   };
 }
-

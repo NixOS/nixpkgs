@@ -1,19 +1,21 @@
-{ lib
-, stdenv
-, fetchgit
-, fetchFromGitHub
-, cmake
-, curl
-, nasm
-, libopenmpt
-, game-music-emu
-, libpng
-, SDL2
-, SDL2_mixer
-, zlib
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchgit,
+  fetchFromGitHub,
+  cmake,
+  curl,
+  nasm,
+  libopenmpt,
+  game-music-emu,
+  libGLU,
+  libpng,
+  SDL2,
+  SDL2_mixer,
+  zlib,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -80,6 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
     ./thirdparty.patch
   ];
 
+  postPatch = ''
+    substituteInPlace ./src/sdl/ogl_sdl.c \
+      --replace libGLU.so.1 ${libGLU}/lib/libGLU.so.1
+  '';
+
   desktopItems = [
     (makeDesktopItem rec {
       name = "Sonic Robo Blast 2";
@@ -114,7 +121,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.srb2.org/";
     platforms = platforms.linux;
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ zeratax donovanglover ];
+    maintainers = with maintainers; [
+      zeratax
+      donovanglover
+    ];
     mainProgram = "srb2";
   };
 })

@@ -1,15 +1,16 @@
-{ lib
-, boost
-, fetchFromGitHub
-, installShellFiles
-, mkDerivation
-, muparser
-, pkg-config
-, qmake
-, qtbase
-, qtsvg
-, qttools
-, runtimeShell
+{
+  lib,
+  boost,
+  fetchFromGitHub,
+  installShellFiles,
+  mkDerivation,
+  muparser,
+  pkg-config,
+  qmake,
+  qtbase,
+  qtsvg,
+  qttools,
+  runtimeShell,
 }:
 
 mkDerivation rec {
@@ -50,7 +51,6 @@ mkDerivation rec {
       --replace __DATE__ 0
   '';
 
-
   installPhase = ''
     runHook preInstall
 
@@ -72,7 +72,7 @@ mkDerivation rec {
     description = "2D CAD package based on Qt";
     homepage = "https://librecad.org";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ viric ];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

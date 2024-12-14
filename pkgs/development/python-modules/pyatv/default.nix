@@ -18,7 +18,6 @@
   pytest-httpserver,
   pytest-timeout,
   pytestCheckHook,
-  pythonRelaxDepsHook,
   pythonAtLeast,
   pythonOlder,
   requests,
@@ -26,12 +25,13 @@
   srptools,
   stdenv,
   tabulate,
+  tinytag,
   zeroconf,
 }:
 
 buildPythonPackage rec {
   pname = "pyatv";
-  version = "0.14.5";
+  version = "0.16.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -40,12 +40,12 @@ buildPythonPackage rec {
     owner = "postlund";
     repo = "pyatv";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Uykj9MIUFcZyTWOBjUhL9+qItbnpwtuTd2Cx5jI7Wtw=";
+    hash = "sha256-yjPbSTmHoKnVwNArZw5mGf3Eh4Ei1+DkY9y2XRRy4YA=";
   };
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest-runner" ""
+      --replace-fail "pytest-runner" ""
   '';
 
   pythonRelaxDeps = [
@@ -63,12 +63,9 @@ buildPythonPackage rec {
     "zeroconf"
   ];
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools
-  ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     async-timeout
     chacha20poly1305-reuseable
@@ -81,6 +78,7 @@ buildPythonPackage rec {
     requests
     srptools
     tabulate
+    tinytag
     zeroconf
   ];
 
@@ -95,15 +93,11 @@ buildPythonPackage rec {
   ];
 
   disabledTests =
-    [
-      # https://github.com/postlund/pyatv/issues/2307
-      "test_zeroconf_service_published"
-    ]
-    ++ lib.optionals (pythonAtLeast "3.12") [
+    lib.optionals (pythonAtLeast "3.12") [
       # https://github.com/postlund/pyatv/issues/2365
       "test_simple_dispatch"
     ]
-    ++ lib.optionals (stdenv.isDarwin) [
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin) [
       # tests/protocols/raop/test_raop_functional.py::test_stream_retransmission[raop_properties2-2-True] - assert False
       "test_stream_retransmission"
     ];

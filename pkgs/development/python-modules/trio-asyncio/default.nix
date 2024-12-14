@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "trio-asyncio";
-  version = "0.14.1";
+  version = "0.15.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "python-trio";
     repo = "trio-asyncio";
     rev = "refs/tags/v${version}";
-    hash = "sha256-634fcYAn5J1WW71J/USAMkJaZI8JmKoQneQEhz2gYFc=";
+    hash = "sha256-6c+4sGEpCVC8wxBg+dYgkOwRAUOi/DTITrDx3M2koyE=";
   };
 
   postPatch = ''
@@ -45,6 +45,8 @@ buildPythonPackage rec {
     # RuntimeWarning: Can't run the Python asyncio tests because they're not installed
     "-W"
     "ignore::RuntimeWarning"
+    "-W"
+    "ignore::DeprecationWarning"
   ];
 
   nativeCheckInputs = [

@@ -3,39 +3,41 @@
   lib,
   writeShellScript,
   fetchFromGitHub,
-  pcre,
-  unstableGitUpdater
+  unstableGitUpdater,
 }:
+
 picom.overrideAttrs (previousAttrs: {
   pname = "picom-pijulius";
-  version = "8.2-unstable-2024-06-13";
+  version = "8.2-unstable-2024-12-05";
 
   src = fetchFromGitHub {
     owner = "pijulius";
     repo = "picom";
-    rev = "a0e818855daba0d2f11a298f7fd238f8a6049167";
-    hash = "sha256-w1SWYhPfFGX2EumEe8UBZA3atW4jvW54GsMYLGg59Ys=";
+    rev = "9b7d7bdaee0c697f416e3d6b41f1453aeaa07c78";
+    hash = "sha256-9HCtbRwDrjB/i89O5igPdyxHo8AKiznltrjTdBjenlk=";
   };
 
-  buildInputs = (previousAttrs.buildInputs or [ ]) ++ [ pcre ];
-
-  meta = {
-    inherit (previousAttrs.meta)
-      license
-      platforms
-      mainProgram
-      longDescription
-      ;
-
-    description = "Pijulius's picom fork with extensive animation support";
-    homepage = "https://github.com/pijulius/picom";
-    maintainers = with lib.maintainers; [ YvesStraten ];
-  };
+  dontVersionCheck = true;
 
   passthru.updateScript = unstableGitUpdater {
     tagFormat = "v([A-Z]+)([a-z]+)|v([1-9]).([1-9])|v([1-9])-rc([1-9])";
     tagConverter = writeShellScript "picom-pijulius-tag-converter.sh" ''
-sed -e 's/v//g' -e 's/([A-Z])([a-z])+/8.2/g' -e 's/-rc([1-9])|-rc//g' -e 's/0/8.2/g'
-'';
+      sed -e 's/v//g' -e 's/([A-Z])([a-z])+/8.2/g' -e 's/-rc([1-9])|-rc//g' -e 's/0/8.2/g'
+    '';
+  };
+
+  meta = {
+    inherit (previousAttrs.meta)
+      license
+      longDescription
+      mainProgram
+      platforms
+      ;
+
+    description = "Pijulius's picom fork with extensive animation support";
+    homepage = "https://github.com/pijulius/picom";
+    maintainers = with lib.maintainers; [
+      YvesStraten
+    ];
   };
 })

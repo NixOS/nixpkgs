@@ -1,13 +1,19 @@
-{ lib, stdenv, fetchurl, kernel, alsa-lib }:
-
-with lib;
+{
+  lib,
+  stdenv,
+  fetchurl,
+  kernel,
+  alsa-lib,
+}:
 
 let
-  bits =
-    if stdenv.is64bit then "64"
-    else "32";
+  bits = if stdenv.hostPlatform.is64bit then "64" else "32";
 
-  libpath = makeLibraryPath [ stdenv.cc.cc stdenv.cc.libc alsa-lib ];
+  libpath = lib.makeLibraryPath [
+    stdenv.cc.cc
+    stdenv.cc.libc
+    alsa-lib
+  ];
 
 in
 stdenv.mkDerivation rec {
@@ -27,7 +33,10 @@ stdenv.mkDerivation rec {
     export INSTALL_MOD_PATH="$out"
   '';
 
-  hardeningDisable = [ "pic" "format" ];
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
 
   makeFlags = [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
@@ -56,7 +65,7 @@ stdenv.mkDerivation rec {
       "$out"/bin/mwcap-info
   '';
 
-  meta = {
+  meta = with lib; {
     homepage = "https://www.magewell.com/";
     description = "Linux driver for the Magewell Pro Capture family";
     license = licenses.unfreeRedistributable;

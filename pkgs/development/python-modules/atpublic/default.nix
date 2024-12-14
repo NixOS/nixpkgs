@@ -1,47 +1,38 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitLab,
   pytestCheckHook,
   pythonOlder,
   hatchling,
   sybil,
-  typing-extensions,
 }:
 
 buildPythonPackage rec {
   pname = "atpublic";
-  version = "4.1.0";
-  format = "pyproject";
+  version = "5.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.6";
+  disabled = pythonOlder "3.8";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-0cjNkxr3Rh9tGLxgYzg+hlTZ6e8Z1Y7m3AHoUVu/Vd8=";
+  src = fetchFromGitLab {
+    owner = "warsaw";
+    repo = "public";
+    rev = "refs/tags/${version}";
+    hash = "sha256-cqum+4hREu0jO9iFoUUzfzn597BoMAhG+aanwnh8hb8=";
   };
 
-  nativeBuildInputs = [ hatchling ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ typing-extensions ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     pytestCheckHook
     sybil
   ];
 
-  pytestFlagsArray = [
-    # TypeError: FixtureManager.getfixtureclosure() missing 1 required positional argument: 'ignore_args'
-    "--ignore=docs/using.rst"
-  ];
-
-  postPatch = ''
-    sed -i '/cov=public/d' pyproject.toml
-  '';
-
   pythonImportsCheck = [ "public" ];
 
   meta = with lib; {
+    changelog = "https://gitlab.com/warsaw/public/-/blob/${version}/docs/NEWS.rst";
     description = "Python decorator and function which populates a module's __all__ and globals";
     homepage = "https://public.readthedocs.io/";
     longDescription = ''

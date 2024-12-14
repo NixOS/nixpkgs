@@ -1,10 +1,11 @@
-{ batteries
-, buildDunePackage
-, cohttp-lwt-unix
-, fetchFromGitHub
-, lib
-, logs
-, yojson
+{
+  batteries,
+  buildDunePackage,
+  cohttp-lwt-unix,
+  fetchFromGitHub,
+  lib,
+  logs,
+  yojson,
 }:
 
 buildDunePackage rec {
@@ -33,6 +34,6 @@ buildDunePackage rec {
     description = "OCaml library implementing the Telegram bot API";
     homepage = "https://github.com/nv-vn/TelegraML/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

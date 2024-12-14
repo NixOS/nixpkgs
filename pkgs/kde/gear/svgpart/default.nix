@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "svgpart";
 
-  extraBuildInputs = [qtsvg];
+  extraBuildInputs = [ qtsvg ];
 }

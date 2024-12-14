@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gnunet";
-  version = "0.21.2";
+  version = "0.22.1";
 
   src = fetchurl {
     url = "mirror://gnu/gnunet/gnunet-${version}.tar.gz";
-    hash = "sha256-jCNRJo6bi6KtKIuLM3zjmfecGOP/2WCAP07V3n3an6E=";
+    hash = "sha256-gWsgufvA4tLWosnpAYPdAIs4yJOWfjYj4E11/Ezgr6o=";
   };
 
   enableParallelBuilding = true;
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
     homepage = "https://gnunet.org/";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ pstn vrthra ];
+    maintainers = with maintainers; [ pstn ];
     platforms = platforms.unix;
     changelog = "https://git.gnunet.org/gnunet.git/tree/ChangeLog?h=v${version}";
   };

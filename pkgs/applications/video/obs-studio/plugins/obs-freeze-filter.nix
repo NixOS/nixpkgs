@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, obs-studio
-, qtbase
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  obs-studio,
+  qtbase,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,12 +15,15 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "exeldro";
     repo = "obs-freeze-filter";
     rev = finalAttrs.version;
-    sha256 = "sha256-CaHBTfdk8VFjmiclG61elj35glQafgz5B4ENo+7J35o=";
+    hash = "sha256-CaHBTfdk8VFjmiclG61elj35glQafgz5B4ENo+7J35o=";
     fetchSubmodules = true;
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ obs-studio qtbase ];
+  buildInputs = [
+    obs-studio
+    qtbase
+  ];
 
   postInstall = ''
     rm -rf "$out/share"

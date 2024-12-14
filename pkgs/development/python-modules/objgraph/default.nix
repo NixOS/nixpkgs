@@ -8,12 +8,13 @@
   python,
   pythonOlder,
   substituteAll,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "objgraph";
   version = "3.6.1";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7" || isPyPy;
 
@@ -29,7 +30,11 @@ buildPythonPackage rec {
     })
   ];
 
-  passthru.optional-dependencies = {
+  build-system = [
+    setuptools
+  ];
+
+  optional-dependencies = {
     ipython = [ graphviz ];
   };
 

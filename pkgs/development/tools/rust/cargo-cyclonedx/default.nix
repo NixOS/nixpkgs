@@ -1,40 +1,43 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, Security
-, SystemConfiguration
-, CoreFoundation
-, curl
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  Security,
+  SystemConfiguration,
+  CoreFoundation,
+  curl,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-cyclonedx";
-  version = "0.5.3";
+  version = "0.5.6";
 
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-rust-cargo";
     rev = "${pname}-${version}";
-    hash = "sha256-Hq5yEYikov/+/Vgf4Bn0b23+K6yqefrJOoEbC0YdnFY=";
+    hash = "sha256-SWPOLZdkzV8bHJwa37BVQ+D4/wGaGC8fZAzv+EFqzTc=";
   };
 
-  cargoHash = "sha256-Q6Qanjfu5rIIZw4KeZo0kHJML5aq+12Lkn7CTscK8yE=";
+  cargoHash = "sha256-SEDi4MOul9lMqsjovhAGG/GJbNxLravTudk59h6sFkU=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-    SystemConfiguration
-    CoreFoundation
-    curl
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      SystemConfiguration
+      CoreFoundation
+      curl
+    ];
 
   meta = with lib; {
     description = "Creates CycloneDX Software Bill of Materials (SBOM) from Rust (Cargo) projects";

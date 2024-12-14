@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   dependencies = [ pysendfile ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     ssl = [ pyopenssl ];
   };
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/giampaolo/pyftpdlib/";
     changelog = "https://github.com/giampaolo/pyftpdlib/blob/release-${version}/HISTORY.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "ftpbench";
   };
 }

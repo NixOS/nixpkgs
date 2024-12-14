@@ -1,32 +1,33 @@
-{ stdenv
-, lib
-, fetchurl
-, gnome
-, cmake
-, gettext
-, intltool
-, pkg-config
-, evolution-data-server
-, evolution
-, gtk3
-, libsoup_3
-, libical
-, json-glib
-, libmspack
-, webkitgtk_4_1
-, substituteAll
-, _experimental-update-script-combinators
-, glib
-, makeHardcodeGsettingsPatch
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gnome,
+  cmake,
+  gettext,
+  intltool,
+  pkg-config,
+  evolution-data-server,
+  evolution,
+  gtk3,
+  libsoup_3,
+  libical,
+  json-glib,
+  libmspack,
+  webkitgtk_4_1,
+  substituteAll,
+  _experimental-update-script-combinators,
+  glib,
+  makeHardcodeGsettingsPatch,
 }:
 
 stdenv.mkDerivation rec {
   pname = "evolution-ews";
-  version = "3.52.2";
+  version = "3.54.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-qVUPG1PUdANt0jmWJ7MRjrO4QxhBztwO3yFFewlhkUE=";
+    hash = "sha256-77UZ2inoIX58t3dNQ9BGJiSMO+WKGUbIpjwyDl2IPNQ=";
   };
 
   patches = [

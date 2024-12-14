@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonRelaxDepsHook,
   installShellFiles,
   libnitrokey,
   flit-core,
@@ -17,21 +16,21 @@
   python-dateutil,
   pyusb,
   requests,
-  spsdk,
   tqdm,
   tlv8,
   typing-extensions,
-  pyserial,
-  protobuf,
   click-aliases,
   semver,
   nethsm,
   importlib-metadata,
+  nitrokey,
+  pyscard,
+  asn1crypto,
 }:
 
 let
   pname = "pynitrokey";
-  version = "0.4.47";
+  version = "0.6.0";
   mainProgram = "nitropy";
 in
 
@@ -41,10 +40,14 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-WOHDskGAZGhiU48JGV0yDhWIpFELFLHhn9g5sbchKKg=";
+    hash = "sha256-pY6ATORZDPGRnkN6dse1s/DzQRpplDbPAGUHU4E7U9M=";
   };
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [ installShellFiles ];
+
+  build-system = [ flit-core ];
+
+  dependencies = [
     certifi
     cffi
     click
@@ -56,22 +59,16 @@ buildPythonPackage {
     python-dateutil
     pyusb
     requests
-    spsdk
     tqdm
     tlv8
     typing-extensions
-    pyserial
-    protobuf
     click-aliases
     semver
     nethsm
     importlib-metadata
-  ];
-
-  nativeBuildInputs = [
-    flit-core
-    installShellFiles
-    pythonRelaxDepsHook
+    nitrokey
+    pyscard
+    asn1crypto
   ];
 
   pythonRelaxDeps = true;

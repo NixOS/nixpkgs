@@ -2,31 +2,34 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  geopandas,
+
+  # build-system
+  setuptools-scm,
+
+  # dependencies
   matplotlib,
   mizani,
   pandas,
   patsy,
-  pytestCheckHook,
-  pythonOlder,
-  scikit-misc,
   scipy,
-  setuptools-scm,
   statsmodels,
+
+  # tests
+  geopandas,
+  pytestCheckHook,
+  scikit-misc,
 }:
 
 buildPythonPackage rec {
   pname = "plotnine";
-  version = "0.13.6";
+  version = "0.14.3";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "plotnine";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/yxRYK3ZTrYj+l3TQhFllyICnJjCZPd4ebNurCLZAYg=";
+    hash = "sha256-hGgPW40PEkOV1Z7gaqHtbx1ybdtEFYyz8fYUBMZchmU=";
   };
 
   postPatch = ''
@@ -105,11 +108,11 @@ buildPythonPackage rec {
     "tests/test_lint_and_format.py"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Grammar of graphics for Python";
     homepage = "https://plotnine.readthedocs.io/";
     changelog = "https://github.com/has2k1/plotnine/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

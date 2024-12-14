@@ -4,25 +4,28 @@
   fetchFromGitHub,
   pythonOlder,
   setuptools-scm,
+  backports-tarfile,
 }:
 
 buildPythonPackage rec {
   pname = "jaraco-context";
-  version = "4.3.0";
-  format = "pyproject";
+  version = "6.0.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.context";
     rev = "refs/tags/v${version}";
-    hash = "sha256-YdbkpKv7k62uyhmjKoxeA9uf5BWnRD/rK+z46FJN4xk=";
+    hash = "sha256-WXZX2s9Qehp0F3bSv2c5lGxhhn6HKFkABbtYKizG1/8=";
   };
 
   pythonNamespaces = [ "jaraco" ];
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
+
+  dependencies = lib.optionals (pythonOlder "3.12") [ backports-tarfile ];
 
   # Module has no tests
   doCheck = false;

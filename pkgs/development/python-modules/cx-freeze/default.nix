@@ -1,46 +1,51 @@
 {
   lib,
   buildPythonPackage,
+  distutils,
   fetchPypi,
   pythonOlder,
   ncurses,
-  importlib-metadata,
+  packaging,
   setuptools,
+  filelock,
   wheel,
   patchelf,
 }:
 
 buildPythonPackage rec {
   pname = "cx-freeze";
-  version = "6.15.16";
+  version = "7.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.11";
 
   src = fetchPypi {
-    pname = "cx_Freeze";
+    pname = "cx_freeze";
     inherit version;
-    hash = "sha256-xjmRiG/ypTGfjw0HwDSaa74aZbXzIPi5JDiI5jyaSiI=";
+    hash = "sha256-6bLEvWjr9PuZtq8v8oHA5TewSa7pSIBcxKAo4XGKvGo=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    sed -i /patchelf/d pyproject.toml
+    # Build system requirements
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools>=70.1,<75" "setuptools"
+  '';
+
+  build-system = [
     setuptools
     wheel
   ];
 
-  propagatedBuildInputs = [
-    importlib-metadata # upstream has this for 3.8 as well
-    ncurses
+  buildInputs = [ ncurses ];
+
+  dependencies = [
+    distutils
+    filelock
+    packaging
     setuptools
+    wheel
   ];
-
-  postPatch = ''
-    # timestamp need to come after 1980 for zipfiles and nix store is set to epoch
-    substituteInPlace cx_Freeze/freezer.py \
-      --replace "st.st_mtime" "time.time()"
-
-    sed -i /patchelf/d pyproject.toml
-  '';
 
   makeWrapperArgs = [
     "--prefix"
@@ -49,7 +54,7 @@ buildPythonPackage rec {
     (lib.makeBinPath [ patchelf ])
   ];
 
-  # fails to find Console even though it exists on python 3.x
+  # Fails to find Console even though it exists on python 3.x
   doCheck = false;
 
   meta = with lib; {
@@ -57,7 +62,7 @@ buildPythonPackage rec {
     homepage = "https://marcelotduarte.github.io/cx_Freeze/";
     changelog = "https://github.com/marcelotduarte/cx_Freeze/releases/tag/${version}";
     license = licenses.psfl;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "cxfreeze";
   };
 }

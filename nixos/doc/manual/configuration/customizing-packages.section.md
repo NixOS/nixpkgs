@@ -33,8 +33,8 @@ Unfortunately, Nixpkgs currently lacks a way to query available package configur
 ::: {.note}
 For example, many packages come with extensions one might add.
 Examples include:
-- [`passExtensions.pass-otp`](https://search.nixos.org/packages/query=passExtensions.pass-otp)
-- [`python310Packages.requests`](https://search.nixos.org/packages/query=python310Packages.requests)
+- [`passExtensions.pass-otp`](https://search.nixos.org/packages?query=passExtensions.pass-otp)
+- [`python312Packages.requests`](https://search.nixos.org/packages?query=python312Packages.requests)
 
 You can use them like this:
 ```nix

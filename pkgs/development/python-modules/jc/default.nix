@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "jc";
-  version = "1.25.3";
+  version = "1.25.4";
   format = "setuptools";
   disabled = pythonOlder "3.6";
 
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "kellyjonbrazil";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-yp5533CzqJ++G6nHip1281ZkB4JyfLb3inR9BwDkxSs=";
+    hash = "sha256-9006FoIGUpmb+tC2d6jLsYpKUPM5OEXxK1ztAREwZ1E=";
   };
 
   propagatedBuildInputs = [

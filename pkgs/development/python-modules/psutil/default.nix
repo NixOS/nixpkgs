@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "psutil";
-  version = "5.9.8";
+  version = "6.0.0";
   format = "setuptools";
 
   inherit stdenv;
@@ -21,7 +21,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-a+Em4yJUht/yhqj7mgYkalJT9MfFO0depfWsk05kGUw=";
+    hash = "sha256-j6rk8xC22Wn6JsoFRTOLIfc8axXbfEqNk0pUgvqoGPI=";
   };
 
   postPatch = ''
@@ -34,14 +34,14 @@ buildPythonPackage rec {
 
   buildInputs =
     # workaround for https://github.com/NixOS/nixpkgs/issues/146760
-    lib.optionals (stdenv.isDarwin && stdenv.isx86_64) [ CoreFoundation ]
-    ++ lib.optionals stdenv.isDarwin [ IOKit ];
+    lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ CoreFoundation ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   # Segfaults on darwin:
   # https://github.com/giampaolo/psutil/issues/1715
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   # In addition to the issues listed above there are some that occure due to
   # our sandboxing which we can work around by disabling some tests:
@@ -72,6 +72,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/giampaolo/psutil";
     changelog = "https://github.com/giampaolo/psutil/blob/release-${version}/HISTORY.rst";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

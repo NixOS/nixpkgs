@@ -1,7 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, buildEnv, makeWrapper, copyDesktopItems, makeDesktopItem
-, SDL2, libGL, curl
-, openalSupport ? true, openal
-, Cocoa, OpenAL
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildEnv,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
+  SDL2,
+  libGL,
+  curl,
+  openalSupport ? true,
+  openal,
+  Cocoa,
+  OpenAL,
 }:
 
 let
@@ -9,29 +20,49 @@ let
 
   games = import ./games.nix { inherit stdenv lib fetchFromGitHub; };
 
-  wrapper = import ./wrapper.nix { inherit stdenv lib buildEnv makeWrapper yquake2 copyDesktopItems makeDesktopItem; };
+  wrapper = import ./wrapper.nix {
+    inherit
+      stdenv
+      lib
+      buildEnv
+      makeWrapper
+      yquake2
+      copyDesktopItems
+      makeDesktopItem
+      ;
+  };
 
   yquake2 = stdenv.mkDerivation rec {
     pname = "yquake2";
-    version = "8.30";
+    version = "8.41";
 
     src = fetchFromGitHub {
       owner = "yquake2";
       repo = "yquake2";
-      rev = "QUAKE2_${builtins.replaceStrings ["."] ["_"] version}";
-      sha256 = "sha256-2x/qxrhvy+An/HitmWAhmwuDJ2djMeTsLhAtijuvbzE=";
+      rev = "QUAKE2_${builtins.replaceStrings [ "." ] [ "_" ] version}";
+      sha256 = "sha256-8xvY8XYZJa/gAVcxR+ffpE8naUTbGyM8AyAdpG6nKtA=";
     };
 
-    postPatch = ''
-      substituteInPlace src/client/curl/qcurl.c \
-        --replace "\"libcurl.so.3\", \"libcurl.so.4\"" "\"${curl.out}/lib/libcurl.so\", \"libcurl.so.3\", \"libcurl.so.4\""
-    '' + lib.optionalString (openalSupport && !stdenv.isDarwin) ''
-      substituteInPlace Makefile \
-        --replace "\"libopenal.so.1\"" "\"${openal}/lib/libopenal.so.1\""
-    '';
+    postPatch =
+      ''
+        substituteInPlace src/client/curl/qcurl.c \
+          --replace "\"libcurl.so.3\", \"libcurl.so.4\"" "\"${curl.out}/lib/libcurl.so\", \"libcurl.so.3\", \"libcurl.so.4\""
+      ''
+      + lib.optionalString (openalSupport && !stdenv.hostPlatform.isDarwin) ''
+        substituteInPlace Makefile \
+          --replace "\"libopenal.so.1\"" "\"${openal}/lib/libopenal.so.1\""
+      '';
 
-    buildInputs = [ SDL2 libGL curl ]
-      ++ lib.optionals stdenv.isDarwin [ Cocoa OpenAL ]
+    buildInputs =
+      [
+        SDL2
+        libGL
+        curl
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        Cocoa
+        OpenAL
+      ]
       ++ lib.optional openalSupport openal;
 
     makeFlags = [
@@ -57,25 +88,31 @@ let
       runHook postInstall
     '';
 
-    desktopItems = [ (makeDesktopItem {
-      name = "yquake2";
-      exec = "yquake2";
-      icon = "yamagi-quake2";
-      desktopName = "yquake2";
-      comment = "Yamagi Quake II client";
-      categories = [ "Game" "Shooter" ];
-    })];
+    desktopItems = [
+      (makeDesktopItem {
+        name = "yquake2";
+        exec = "yquake2";
+        icon = "yamagi-quake2";
+        desktopName = "yquake2";
+        comment = "Yamagi Quake II client";
+        categories = [
+          "Game"
+          "Shooter"
+        ];
+      })
+    ];
 
     meta = with lib; {
       description = "Yamagi Quake II client";
       homepage = "https://www.yamagi.org/quake2/";
-      license = licenses.gpl2;
+      license = licenses.gpl2Plus;
       platforms = platforms.unix;
       maintainers = with maintainers; [ tadfisher ];
     };
   };
 
-in {
+in
+{
   inherit yquake2;
 
   yquake2-ctf = wrapper {

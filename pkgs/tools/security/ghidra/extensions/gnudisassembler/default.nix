@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, buildGhidraExtension
-, ghidra
-, flex
-, bison
-, texinfo
-, perl
-, zlib
-, xcbuild
+{
+  lib,
+  stdenv,
+  fetchurl,
+  buildGhidraExtension,
+  ghidra,
+  flex,
+  bison,
+  texinfo,
+  perl,
+  zlib,
+  xcbuild,
 }:
 
 let
@@ -41,13 +42,10 @@ buildGhidraExtension {
     bison
     texinfo
     perl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    xcbuild
-  ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
-  buildInputs = [
-    zlib
-  ];
+  buildInputs = [ zlib ];
+  gradleBuildTask = "assemble";
 
   installPhase = ''
     runHook preInstall

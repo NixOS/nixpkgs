@@ -7,7 +7,6 @@
   readthedocs-sphinx-ext,
   sphinxcontrib-jquery,
   pytestCheckHook,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -31,8 +30,6 @@ buildPythonPackage rec {
     sphinx
     sphinxcontrib-jquery
   ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   nativeCheckInputs = [
     pytestCheckHook

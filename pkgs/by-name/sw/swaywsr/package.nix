@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, rustPlatform, libxcb, python3 }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  libxcb,
+  python3,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "swaywsr";

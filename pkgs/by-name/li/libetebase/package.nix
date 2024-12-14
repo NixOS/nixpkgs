@@ -1,11 +1,12 @@
-{ rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, lib
-, stdenv
-, testers
-, libetebase
+{
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  lib,
+  stdenv,
+  testers,
+  libetebase,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "libetebase";
@@ -38,7 +39,7 @@ rustPlatform.buildRustPackage rec {
     description = "A C library for Etebase";
     homepage = "https://www.etebase.com/";
     license = licenses.bsd3;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ laalsaas ];
     pkgConfigModules = [ "etebase" ];
   };

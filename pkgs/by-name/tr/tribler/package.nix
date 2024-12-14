@@ -3,7 +3,7 @@
   stdenv,
   fetchurl,
   fetchPypi,
-  python3,
+  python311,
   makeWrapper,
   libtorrent-rasterbar-1_2_x,
   qt5,
@@ -11,6 +11,8 @@
 }:
 
 let
+  # libtorrent-rasterbar-1_2_x requires python311
+  python3 = python311;
   libtorrent = (python3.pkgs.toPythonModule (libtorrent-rasterbar-1_2_x)).python;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -75,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       # requirements.txt
       pillow
       pyqt5
-      #pyqt5-sip
+      pyqt5-sip
       pyqtgraph
       pyqtwebengine
     ]);
@@ -116,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl21Plus;
     maintainers = with lib.maintainers; [
       xvapx
-      viric
+
       mkg20001
     ];
     platforms = lib.platforms.linux;

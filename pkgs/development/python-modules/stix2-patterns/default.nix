@@ -1,5 +1,6 @@
 {
   lib,
+  antlr4_9,
   antlr4-python3-runtime,
   buildPythonPackage,
   fetchFromGitHub,
@@ -23,29 +24,16 @@ buildPythonPackage rec {
     hash = "sha256-lFgnvI5a7U7/Qj4Pqjr3mx4TNDnC2/Ru7tVG7VggR7Y=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace-fail "antlr4-python3-runtime~=" "antlr4-python3-runtime>="
-  '';
-
   build-system = [ setuptools ];
 
   dependencies = [
-    antlr4-python3-runtime
+    (antlr4-python3-runtime.override { antlr4 = antlr4_9; })
     six
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "stix2patterns" ];
-
-  disabledTestPaths = [
-    # Exception: Could not deserialize ATN with version  (expected 4)
-    "stix2patterns/test/v20/test_inspector.py"
-    "stix2patterns/test/v21/test_inspector.py"
-    "stix2patterns/test/v20/test_validator.py"
-    "stix2patterns/test/v21/test_validator.py"
-  ];
 
   meta = with lib; {
     description = "Validate patterns used to express cyber observable content in STIX Indicators";

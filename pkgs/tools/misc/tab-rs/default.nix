@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, IOKit }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  IOKit,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "tab-rs";
@@ -11,9 +17,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "1crj0caimin667f9kz34c0sm77892dmqaf1kxryqakqm75az5wfr";
   };
 
-  cargoSha256 = "0v5vkxr2sncw4r4pwvk0jbk4as7zwwfvjk2cpj9872zp07s35a77";
+  cargoHash = "sha256-56gy9AH3i4OSvExMuR3n/2hF5pJgbn5JJpxZLXKfu2w=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ IOKit ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
 
   # many tests are failing
   doCheck = false;
@@ -22,8 +28,8 @@ rustPlatform.buildRustPackage rec {
     description = "Intuitive, config-driven terminal multiplexer designed for software & systems engineers";
     homepage = "https://github.com/austinjones/tab-rs";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     mainProgram = "tab";
-    broken = (stdenv.isDarwin && stdenv.isAarch64); # Added 2023-11-13
+    broken = (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64); # Added 2023-11-13
   };
 }

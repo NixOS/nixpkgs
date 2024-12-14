@@ -1,15 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, pkg-config
-, expat
-, fontconfig
-, freetype
-, libGL
-, xorg
-, darwin
-, AppKit
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  stdenv,
+  pkg-config,
+  expat,
+  fontconfig,
+  freetype,
+  libGL,
+  xorg,
+  AppKit,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,23 +23,25 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-k0WQu1n1sAHVor58jr060vD5/2rDrt1k5zzJlrK9WrU=";
   };
 
-  cargoSha256 = "sha256-OQZPOiMTpoWabxHa3TJG8L3zq8WxMeFttw8xggSXsMA=";
+  cargoHash = "sha256-OQZPOiMTpoWabxHa3TJG8L3zq8WxMeFttw8xggSXsMA=";
 
-  nativeBuildInputs = lib.optionals stdenv.isLinux [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isLinux [
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.isLinux [
-    expat
-    fontconfig
-    freetype
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXi
-    xorg.libXrandr
-  ] ++ lib.optionals stdenv.isDarwin [
-    AppKit
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      expat
+      fontconfig
+      freetype
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXi
+      xorg.libXrandr
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+    ];
 
   postInstall = ''
     install -Dm444 assets/epick.desktop -t $out/share/applications
@@ -47,7 +49,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 assets/icon.png $out/share/icons/hicolor/48x48/apps/epick.png
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf $out/bin/epick --add-rpath ${lib.makeLibraryPath [ libGL ]}
   '';
 

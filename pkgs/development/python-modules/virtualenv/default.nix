@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonOlder,
-  isPy27,
   isPyPy,
   cython,
   distlib,
@@ -22,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "virtualenv";
-  version = "20.25.3";
+  version = "20.26.6";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-e7VUu9/qrMM0n6YU6lv/asMA/HwzXp+s86O8/HA/Rb4=";
+    hash = "sha256-KArt4JoqXDF+QJoAEC5wd8ZDLFo48O+TjmQ4BaetLEg=";
   };
 
   nativeBuildInputs = [
@@ -88,6 +87,6 @@ buildPythonPackage rec {
     homepage = "http://www.virtualenv.org";
     changelog = "https://github.com/pypa/virtualenv/blob/${version}/docs/changelog.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

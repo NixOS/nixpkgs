@@ -1,9 +1,10 @@
 # Env to update Gemfile.lock / gemset.nix
-
-with import <nixpkgs> {};
-stdenv.mkDerivation {
+{
+  pkgs ? import ../../../../.. { },
+}:
+pkgs.stdenv.mkDerivation {
   name = "env";
-  buildInputs = [
+  buildInputs = with pkgs; [
     ruby.devEnv
     gnumake
     bundix

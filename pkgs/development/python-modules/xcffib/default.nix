@@ -32,7 +32,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     xorg.xeyes
-    xorg.xorgserver
+    xorg.xvfb
   ];
 
   preCheck = ''

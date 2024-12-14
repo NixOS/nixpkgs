@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "redis";
-  version = "5.0.3";
+  version = "5.1.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SXO650RMD77WSga4dEb3k2HLfk7BU4wCLWlu16UBVYA=";
+    hash = "sha256-9smXUh/tuuUzhzB8XQv3hNmswo2fHQWKvqxWbsTb7XI=";
   };
 
   propagatedBuildInputs = [
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     typing-extensions
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     hiredis = [ hiredis ];
     ocsp = [
       cryptography

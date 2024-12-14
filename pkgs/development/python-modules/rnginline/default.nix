@@ -3,7 +3,6 @@
   fetchPypi,
   buildPythonPackage,
   poetry-core,
-  pythonRelaxDepsHook,
   lxml,
   docopt-ng,
   typing-extensions,
@@ -30,8 +29,6 @@ buildPythonPackage rec {
   ];
 
   build-system = [ poetry-core ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     docopt-ng

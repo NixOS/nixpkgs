@@ -1,4 +1,8 @@
-{ lib, mkDiscoursePlugin, fetchFromGitHub }:
+{
+  lib,
+  mkDiscoursePlugin,
+  fetchFromGitHub,
+}:
 
 mkDiscoursePlugin {
   name = "discourse-checklist";
@@ -12,6 +16,6 @@ mkDiscoursePlugin {
     homepage = "https://github.com/discourse/discourse-checklist";
     maintainers = with maintainers; [ ryantm ];
     license = licenses.gpl2Only;
-    description = "Simple checklist rendering plugin for discourse ";
+    description = "Simple checklist rendering plugin for discourse";
   };
 }

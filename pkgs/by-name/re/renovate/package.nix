@@ -7,10 +7,11 @@
   overrideSDK,
   pnpm_9,
   python3,
-  renovate,
   testers,
   xcbuild,
   nixosTests,
+  nix-update-script,
+  yq-go,
 }:
 
 let
@@ -20,13 +21,13 @@ let
 in
 stdenv'.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "37.393.0";
+  version = "39.42.4";
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-YgxcGNMgmwrausdR7kvG1NiyQPn0FcCq/isf9qUDCFY=";
+    tag = finalAttrs.version;
+    hash = "sha256-M1QzvYMrs39ELc2tkazwDPbCPHqfqzde2hbMvg34m0A=";
   };
 
   postPatch = ''
@@ -39,11 +40,12 @@ stdenv'.mkDerivation (finalAttrs: {
     nodejs
     pnpm_9.configHook
     python3
+    yq-go
   ] ++ lib.optional stdenv'.hostPlatform.isDarwin xcbuild;
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-Zbe561q6xDKDIN+E/2eyQMz2GtpPvJEv2pAauMa+8pE=";
+    hash = "sha256-14E1v2HLFdbkxFnSPQnuwb+zyPXaczAp1Ab0EC65luc=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;
@@ -51,6 +53,9 @@ stdenv'.mkDerivation (finalAttrs: {
   buildPhase =
     ''
       runHook preBuild
+
+      # relax nodejs version
+      yq '.engines.node = "${nodejs.version}"' -i package.json
 
       pnpm build
       pnpm prune --prod --ignore-scripts
@@ -88,14 +93,18 @@ stdenv'.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    version = testers.testVersion { package = renovate; };
-    vm-test = nixosTests.renovate;
+  passthru = {
+    tests = {
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
+      vm-test = nixosTests.renovate;
+    };
+    updateScript = nix-update-script { };
   };
 
   meta = {
     description = "Cross-platform Dependency Automation by Mend.io";
     homepage = "https://github.com/renovatebot/renovate";
+    changelog = "https://github.com/renovatebot/renovate/releases/tag/${finalAttrs.version}";
     license = lib.licenses.agpl3Only;
     maintainers = with lib.maintainers; [
       marie

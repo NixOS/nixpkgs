@@ -7,7 +7,6 @@
   wrapGAppsHook4,
   blueprint-compiler,
   desktop-file-utils,
-  appstream-glib,
   python3Packages,
   glib,
   gtk4,
@@ -54,7 +53,7 @@ python3Packages.buildPythonApplication rec {
   postPatch = ''
     patchShebangs build-aux/meson/postinstall.py
     substituteInPlace build-aux/meson/postinstall.py \
-      --replace gtk-update-icon-cache gtk4-update-icon-cache
+      --replace-fail gtk-update-icon-cache gtk4-update-icon-cache
   '';
 
   dontWrapGApps = true;
@@ -68,7 +67,12 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/rafaelmardojai/blanket";
     license = lib.licenses.gpl3Plus;
     mainProgram = "blanket";
-    maintainers = with lib.maintainers; [ onny ];
+    maintainers =
+      with lib.maintainers;
+      [
+        onny
+      ]
+      ++ lib.teams.gnome-circle.members;
     platforms = lib.platforms.linux;
   };
 }

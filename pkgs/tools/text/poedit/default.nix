@@ -1,22 +1,60 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, libtool, gettext, pkg-config, wxGTK32,
-  boost, icu, lucenepp, asciidoc, libxslt, xmlto, gtk3, gtkspell3, pugixml,
-  nlohmann_json, hicolor-icon-theme, wrapGAppsHook3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  gettext,
+  pkg-config,
+  wxGTK32,
+  boost,
+  icu,
+  lucenepp,
+  asciidoc,
+  libxslt,
+  xmlto,
+  gtk3,
+  gtkspell3,
+  pugixml,
+  nlohmann_json,
+  hicolor-icon-theme,
+  wrapGAppsHook3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "poedit";
-  version = "3.4.2";
+  version = "3.4.4";
 
   src = fetchFromGitHub {
     owner = "vslavik";
     repo = "poedit";
     rev = "v${version}-oss";
-    hash = "sha256-CfCWfKRzeGGk8/B0BLauO4Xb88/Si1ezvcGKeURgC9o=";
+    hash = "sha256-SZjsJQYJCXQendzQ2Tobg+IgkWL6lFX5YnMfruPt7UA=";
   };
 
-  nativeBuildInputs = [ autoconf automake asciidoc wrapGAppsHook3
-    libxslt xmlto boost libtool pkg-config ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+    asciidoc
+    wrapGAppsHook3
+    libxslt
+    xmlto
+    boost
+    libtool
+    pkg-config
+  ];
 
-  buildInputs = [ lucenepp nlohmann_json wxGTK32 icu pugixml gtk3 gtkspell3 hicolor-icon-theme ];
+  buildInputs = [
+    lucenepp
+    nlohmann_json
+    wxGTK32
+    icu
+    pugixml
+    gtk3
+    gtkspell3
+    hicolor-icon-theme
+  ];
 
   propagatedBuildInputs = [ gettext ];
 
@@ -47,6 +85,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ dasj19 ];
     # configure: error: GTK+ build of wxWidgets is required
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

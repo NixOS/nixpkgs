@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "plemoljp-nf";
@@ -12,8 +16,8 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm444 PlemolJPConsole_NF/*.ttf -t $out/share/fonts/truetype/${pname}-console
-    install -Dm444 PlemolJP35Console_NF/*.ttf -t $out/share/fonts/truetype/${pname}-35console
+    install -Dm444 PlemolJPConsole_NF/*.ttf -t $out/share/fonts/truetype/plemoljp-nf-console
+    install -Dm444 PlemolJP35Console_NF/*.ttf -t $out/share/fonts/truetype/plemoljp-nf-35console
 
     runHook postInstall
   '';

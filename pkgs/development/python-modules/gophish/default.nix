@@ -10,7 +10,6 @@
   pyparsing,
   python-dateutil,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   setuptools,
   six,
@@ -34,8 +33,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = true;
 
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     appdirs

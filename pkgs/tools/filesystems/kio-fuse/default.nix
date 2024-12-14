@@ -1,10 +1,11 @@
-{ lib
-, mkDerivation
-, fetchgit
-, cmake
-, extra-cmake-modules
-, kio
-, fuse3
+{
+  lib,
+  mkDerivation,
+  fetchgit,
+  cmake,
+  extra-cmake-modules,
+  kio,
+  fuse3,
 }:
 
 mkDerivation rec {
@@ -13,13 +14,19 @@ mkDerivation rec {
 
   src = fetchgit {
     url = "https://invent.kde.org/system/kio-fuse.git";
-    sha256 = "sha256-xVeDNkSeHCk86L07lPVokSgHNkye2tnLoCkdw4g2Jv0=";
+    hash = "sha256-xVeDNkSeHCk86L07lPVokSgHNkye2tnLoCkdw4g2Jv0=";
     rev = "v${version}";
   };
 
-  nativeBuildInputs = [ cmake extra-cmake-modules ];
+  nativeBuildInputs = [
+    cmake
+    extra-cmake-modules
+  ];
 
-  buildInputs = [ kio fuse3 ];
+  buildInputs = [
+    kio
+    fuse3
+  ];
 
   meta = with lib; {
     description = "FUSE Interface for KIO";

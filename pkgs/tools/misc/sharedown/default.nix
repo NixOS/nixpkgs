@@ -1,19 +1,20 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, ffmpeg
-, yt-dlp
-, libsecret
-, python3
-, pkg-config
-, nodejs
-, electron
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, yarn2nix-moretea
-, fetchYarnDeps
-, chromium
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  ffmpeg,
+  yt-dlp,
+  libsecret,
+  python3,
+  pkg-config,
+  nodejs,
+  electron,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  yarn2nix-moretea,
+  fetchYarnDeps,
+  chromium,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -22,7 +23,7 @@ stdenvNoCC.mkDerivation rec {
 
   src = fetchFromGitHub {
     owner = "kylon";
-    repo = pname;
+    repo = "Sharedown";
     rev = version;
     sha256 = "sha256-llQt3m/qu7v5uQIfA1yxl2JZiFafk6sPgcvrIpQy/DI=";
   };
@@ -39,7 +40,10 @@ stdenvNoCC.mkDerivation rec {
       icon = "Sharedown";
       comment = "An Application to save your Sharepoint videos for offline usage.";
       desktopName = "Sharedown";
-      categories = [ "Network" "Archiving" ];
+      categories = [
+        "Network"
+        "Archiving"
+      ];
     })
   ];
 
@@ -53,7 +57,7 @@ stdenvNoCC.mkDerivation rec {
       ]);
 
       modules = yarn2nix-moretea.mkYarnModules rec {
-        name = "${pname}-modules-${version}";
+        name = "Sharedown-modules-${version}";
         inherit pname version;
 
         yarnFlags = [ "--production" ];

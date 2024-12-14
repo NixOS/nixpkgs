@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "gtfocli";
-  version = "0.0.4";
+  version = "0.0.5";
 
   src = fetchFromGitHub {
     owner = "cmd-tools";
     repo = "gtfocli";
     rev = "refs/tags/${version}";
-    hash = "sha256-fSk/OyeUffYZOkHXM1m/a9traDxdllYBieMEfsv910Q=";
+    hash = "sha256-yvL9H9yOiYTaWtm5cj9A8y+kKXLQgLqUMu9JMnm1llI=";
   };
 
-  vendorHash = "sha256-yhN2Ve4mBw1HoC3zXYz+M8+2CimLGduG9lGTXi+rPNw=";
+  vendorHash = "sha256-M1/XTY4ihkPNDiCv87I+kPgsTPU+sCqdnRoP09iVFu4=";
 
   ldflags = [
     "-s"

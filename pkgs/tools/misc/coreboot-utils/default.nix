@@ -1,47 +1,83 @@
-{ lib, stdenv, fetchgit, pkg-config, zlib, pciutils, openssl, coreutils, acpica-tools, makeWrapper, gnugrep, gnused, file, buildEnv }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  pkg-config,
+  zlib,
+  pciutils,
+  openssl,
+  coreutils,
+  acpica-tools,
+  makeWrapper,
+  gnugrep,
+  gnused,
+  file,
+  buildEnv,
+}:
 
 let
-  version = "24.05";
+  version = "24.08";
 
-  commonMeta = with lib; {
+  commonMeta = {
     description = "Various coreboot-related tools";
     homepage = "https://www.coreboot.org";
-    license = with licenses; [ gpl2Only gpl2Plus ];
-    maintainers = with maintainers; [ felixsinger jmbaur ];
-    platforms = platforms.linux;
+    license = with lib.licenses; [
+      gpl2Only
+      gpl2Plus
+    ];
+    maintainers = with lib.maintainers; [
+      felixsinger
+      jmbaur
+    ];
+    platforms = lib.platforms.linux;
   };
 
-  generic = { pname, path ? "util/${pname}", ... }@args: stdenv.mkDerivation ({
-    inherit pname version;
+  generic =
+    {
+      pname,
+      path ? "util/${pname}",
+      ...
+    }@args:
+    stdenv.mkDerivation (
+      {
+        inherit pname version;
 
-    src = fetchgit {
-      url = "https://review.coreboot.org/coreboot";
-      rev = version;
-      hash = "sha256-Fq3tZje6QoMskxqWd61OstgI9Sj25yijf8S3LiTJuYc=";
-    };
+        src = fetchgit {
+          url = "https://review.coreboot.org/coreboot";
+          rev = version;
+          hash = "sha256-BwuoBuWKHTnSwV8ubm5NqcddgxP5OMXuTl3zmwwKEsg=";
+        };
 
-    enableParallelBuilding = true;
+        enableParallelBuilding = true;
 
-    postPatch = ''
-      substituteInPlace 3rdparty/vboot/Makefile --replace 'ar qc ' '$$AR qc '
-      cd ${path}
-      patchShebangs .
-    '';
+        postPatch = ''
+          substituteInPlace 3rdparty/vboot/Makefile --replace 'ar qc ' '$$AR qc '
+          cd ${path}
+          patchShebangs .
+        '';
 
-    makeFlags = [
-      "INSTALL=install"
-      "PREFIX=${placeholder "out"}"
-    ];
+        makeFlags = [
+          "INSTALL=install"
+          "PREFIX=${placeholder "out"}"
+        ];
 
-    meta = commonMeta // args.meta;
-  } // (removeAttrs args [ "meta" ]));
+        meta = commonMeta // args.meta;
+      }
+      // (removeAttrs args [ "meta" ])
+    );
 
   utils = {
     msrtool = generic {
       pname = "msrtool";
       meta.description = "Dump chipset-specific MSR registers";
-      meta.platforms = [ "x86_64-linux" "i686-linux" ];
-      buildInputs = [ pciutils zlib ];
+      meta.platforms = [
+        "x86_64-linux"
+        "i686-linux"
+      ];
+      buildInputs = [
+        pciutils
+        zlib
+      ];
       preConfigure = "export INSTALL=install";
     };
     cbmem = generic {
@@ -55,8 +91,14 @@ let
     intelmetool = generic {
       pname = "intelmetool";
       meta.description = "Dump interesting things about Management Engine";
-      meta.platforms = [ "x86_64-linux" "i686-linux" ];
-      buildInputs = [ pciutils zlib ];
+      meta.platforms = [
+        "x86_64-linux"
+        "i686-linux"
+      ];
+      buildInputs = [
+        pciutils
+        zlib
+      ];
     };
     cbfstool = generic {
       pname = "cbfstool";
@@ -70,20 +112,35 @@ let
     superiotool = generic {
       pname = "superiotool";
       meta.description = "User-space utility to detect Super I/O of a mainboard and provide detailed information about the register contents of the Super I/O";
-      meta.platforms = [ "x86_64-linux" "i686-linux" ];
-      buildInputs = [ pciutils zlib ];
+      meta.platforms = [
+        "x86_64-linux"
+        "i686-linux"
+      ];
+      buildInputs = [
+        pciutils
+        zlib
+      ];
     };
     ectool = generic {
       pname = "ectool";
       meta.description = "Dump the RAM of a laptop's Embedded/Environmental Controller (EC)";
-      meta.platforms = [ "x86_64-linux" "i686-linux" ];
+      meta.platforms = [
+        "x86_64-linux"
+        "i686-linux"
+      ];
       preInstall = "mkdir -p $out/sbin";
     };
     inteltool = generic {
       pname = "inteltool";
       meta.description = "Provides information about Intel CPU/chipset hardware configuration (register contents, MSRs, etc)";
-      meta.platforms = [ "x86_64-linux" "i686-linux" ];
-      buildInputs = [ pciutils zlib ];
+      meta.platforms = [
+        "x86_64-linux"
+        "i686-linux"
+      ];
+      buildInputs = [
+        pciutils
+        zlib
+      ];
     };
     amdfwtool = generic {
       pname = "amdfwtool";
@@ -113,19 +170,30 @@ let
       '';
       postFixup = ''
         wrapProgram $out/bin/acpidump-all \
-          --set PATH ${lib.makeBinPath [ coreutils acpica-tools gnugrep gnused file ]}
+          --set PATH ${
+            lib.makeBinPath [
+              coreutils
+              acpica-tools
+              gnugrep
+              gnused
+              file
+            ]
+          }
       '';
     };
   };
 
 in
-utils // {
-  coreboot-utils = (buildEnv {
-    name = "coreboot-utils-${version}";
-    paths = lib.filter (lib.meta.availableOn stdenv.hostPlatform) (lib.attrValues utils);
-    postBuild = "rm -rf $out/sbin";
-  }) // {
-    inherit version;
-    meta = commonMeta;
-  };
+utils
+// {
+  coreboot-utils =
+    (buildEnv {
+      name = "coreboot-utils-${version}";
+      paths = lib.filter (lib.meta.availableOn stdenv.hostPlatform) (lib.attrValues utils);
+      postBuild = "rm -rf $out/sbin";
+    })
+    // {
+      inherit version;
+      meta = commonMeta;
+    };
 }

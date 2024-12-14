@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kxmlgui";
 
-  extraBuildInputs = [qttools];
+  extraBuildInputs = [ qttools ];
 }

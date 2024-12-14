@@ -12,19 +12,19 @@
 
 buildPythonPackage rec {
   pname = "platformdirs";
-  version = "4.2.0";
-  format = "pyproject";
+  version = "4.3.6";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "platformdirs";
+    repo = "platformdirs";
     rev = "refs/tags/${version}";
-    hash = "sha256-DjRqOIkyhkA3Z1gl2o78R4kp23qJBj+pRmDBld8AbDI=";
+    hash = "sha256-Zo1fEqiUbrI3pbVp3ndjV8gd+sbcGgUm1PJhQudmiMQ=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatchling
     hatch-vcs
   ];

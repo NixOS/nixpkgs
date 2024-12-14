@@ -1,30 +1,31 @@
-{ mkDerivation
-, lib
-, fetchFromGitHub
-, libGLU
-, qtbase
-, qtscript
-, qtxmlpatterns
-, lib3ds
-, bzip2
-, muparser
-, eigen
-, glew
-, gmp
-, levmar
-, qhull
-, cmake
-, cgal
-, boost
-, mpfr
-, xercesc
-, tbb
-, embree
-, vcg
-, libigl
-, corto
-, openctm
-, structuresynth
+{
+  mkDerivation,
+  lib,
+  fetchFromGitHub,
+  libGLU,
+  qtbase,
+  qtscript,
+  qtxmlpatterns,
+  lib3ds,
+  bzip2,
+  muparser,
+  eigen,
+  glew,
+  gmp,
+  levmar,
+  qhull,
+  cmake,
+  cgal,
+  boost,
+  mpfr,
+  xercesc,
+  tbb,
+  embree,
+  vcg,
+  libigl,
+  corto,
+  openctm,
+  structuresynth,
 }:
 
 mkDerivation rec {
@@ -95,7 +96,7 @@ mkDerivation rec {
     mainProgram = "meshlab";
     homepage = "https://www.meshlab.net/";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ viric ];
+    maintainers = [ ];
     platforms = with lib.platforms; linux;
   };
 }

@@ -6,5 +6,8 @@
 mkKdeDerivation {
   pname = "kclock";
 
-  extraBuildInputs = [qtsvg qtmultimedia];
+  extraBuildInputs = [
+    qtsvg
+    qtmultimedia
+  ];
 }

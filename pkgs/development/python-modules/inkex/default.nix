@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   inkscape,
   poetry-core,
@@ -12,6 +13,7 @@
   pyparsing,
   pyserial,
   scour,
+  tinycss2,
   gobject-introspection,
   pytestCheckHook,
   gtk3,
@@ -33,6 +35,7 @@ buildPythonPackage {
     numpy
     pygobject3
     pyserial
+    tinycss2
   ];
 
   pythonImportsCheck = [ "inkex" ];
@@ -50,10 +53,16 @@ buildPythonPackage {
     scour
   ];
 
-  disabledTests = [
-    "test_extract_multiple"
-    "test_lookup_and"
-  ];
+  disabledTests =
+    [
+      "test_extract_multiple"
+      "test_lookup_and"
+    ]
+    ++ lib.optional stdenv.hostPlatform.isDarwin [
+      "test_image_extract"
+      "test_path_number_nodes"
+      "test_plotter" # Hangs
+    ];
 
   disabledTestPaths = [
     # Fatal Python error: Segmentation fault
@@ -68,8 +77,7 @@ buildPythonPackage {
     cd share/extensions
 
     substituteInPlace pyproject.toml \
-      --replace-fail 'scour = "^0.37"' 'scour = ">=0.37"' \
-      --replace-fail 'lxml = "^4.5.0"' 'lxml = "^4.5.0 || ^5.0.0"'
+      --replace-fail 'scour = "^0.37"' 'scour = ">=0.37"'
   '';
 
   meta = {

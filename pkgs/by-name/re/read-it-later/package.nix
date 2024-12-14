@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, rustPlatform
-, meson
-, ninja
-, pkg-config
-, rustc
-, cargo
-, wrapGAppsHook4
-, desktop-file-utils
-, libxml2
-, libadwaita
-, openssl
-, libsoup_3
-, webkitgtk_6_0
-, sqlite
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  rustPlatform,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
+  cargo,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libxml2,
+  libadwaita,
+  openssl,
+  libsoup_3,
+  webkitgtk_6_0,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
-    repo = pname;
+    repo = "read-it-later";
     rev = version;
     hash = "sha256-A8u1fecJAsVlordgZmUJt/KZWxx6EWMhfdayKWHTTFY=";
   };
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
     cargo
     wrapGAppsHook4
     desktop-file-utils
-    libxml2.bin #xmllint
+    libxml2.bin # xmllint
   ];
 
   buildInputs = [
@@ -58,6 +59,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Simple Wallabag client with basic features to manage articles";
     homepage = "https://gitlab.gnome.org/World/read-it-later";
+    changelog = "https://gitlab.gnome.org/World/read-it-later/-/releases/${src.rev}";
     license = licenses.gpl3Plus;
     mainProgram = "read-it-later";
     maintainers = with maintainers; [ aleksana ];

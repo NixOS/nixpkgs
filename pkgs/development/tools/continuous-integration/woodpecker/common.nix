@@ -1,7 +1,7 @@
 { lib, fetchzip }:
 let
-  version = "2.6.0";
-  srcHash = "sha256-SuTizOHsj1t4WovbOX5MuMZixbPo7TyCnD6nnf62/H4=";
+  version = "2.8.0";
+  srcHash = "sha256-0aYEZaLFPLyGoHplyGZsn4xerUlYi00aLfgkqO2Yb2E=";
   # The tarball contains vendored dependencies
   vendorHash = null;
 in
@@ -21,8 +21,8 @@ in
         mv -- "$f" "woodpecker"
         # Issue a warning to the user if they call the deprecated executable
         cat >woodpecker-cli << EOF
-    #/bin/sh
-    echo 'WARNING: calling `woodpecker-cli` is deprecated, use `woodpecker` instead.' >&2
+    #!/bin/sh
+    echo 'WARNING: calling \`woodpecker-cli\` is deprecated, use \`woodpecker\` instead.' >&2
     $out/bin/woodpecker "\$@"
     EOF
         chmod +x woodpecker-cli
@@ -44,6 +44,10 @@ in
     homepage = "https://woodpecker-ci.org/";
     changelog = "https://github.com/woodpecker-ci/woodpecker/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ambroisie techknowlogick adamcstephens ];
+    maintainers = with maintainers; [
+      ambroisie
+      techknowlogick
+      adamcstephens
+    ];
   };
 }

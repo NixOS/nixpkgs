@@ -3,19 +3,20 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  fetchpatch2,
   setuptools,
   aiohttp,
   incremental,
+  packaging,
   systembridgemodels,
   pytest-aiohttp,
   pytest-socket,
   pytestCheckHook,
+  syrupy,
 }:
 
 buildPythonPackage rec {
   pname = "systembridgeconnector";
-  version = "4.0.4";
+  version = "4.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -24,26 +25,28 @@ buildPythonPackage rec {
     owner = "timmo001";
     repo = "system-bridge-connector";
     rev = "refs/tags/${version}";
-    hash = "sha256-Guh9qbRLp+b2SuFgBx7jf16vRShuHJBi3WOVn9Akce8=";
+    hash = "sha256-AzAN7reBAI4atEFutgFrdQHFy/Qc90PQxwSaHaftn5Q=";
   };
 
-  patches = [
-    (fetchpatch2 {
-      url = "https://github.com/timmo001/system-bridge-connector/commit/25aa172775ee983dc4a29b8dda880aefbad70040.patch";
-      hash = "sha256-PedW1S1gZmWkS4sJBqSAx3aoA1KppYS5Xlhoaxqkcd4=";
-    })
-  ];
-
   postPatch = ''
+    substituteInPlace requirements_setup.txt \
+      --replace-fail ">=" " #"
+
     substituteInPlace systembridgeconnector/_version.py \
       --replace-fail ", dev=0" ""
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    incremental
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "incremental" ];
+
+  dependencies = [
     aiohttp
     incremental
+    packaging
     systembridgemodels
   ];
 
@@ -53,12 +56,15 @@ buildPythonPackage rec {
     pytest-aiohttp
     pytest-socket
     pytestCheckHook
+    syrupy
   ];
 
   disabledTests = [
-    # ConnectionClosedException: Connection closed to server
-    "test_get_files"
+    "test_get_data"
+    "test_wait_for_response_timeout"
   ];
+
+  pytestFlagsArray = [ "--snapshot-warn-unused" ];
 
   meta = {
     changelog = "https://github.com/timmo001/system-bridge-connector/releases/tag/${version}";

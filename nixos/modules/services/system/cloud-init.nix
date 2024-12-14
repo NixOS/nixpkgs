@@ -1,22 +1,29 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.cloud-init;
-  path = with pkgs; [
-    cloud-init
-    iproute2
-    nettools
-    openssh
-    shadow
-    util-linux
-    busybox
-  ]
-  ++ optional cfg.btrfs.enable btrfs-progs
-  ++ optional cfg.ext4.enable e2fsprogs
-  ++ optional cfg.xfs.enable xfsprogs
-  ;
+  path =
+    with pkgs;
+    [
+      cloud-init
+      iproute2
+      nettools
+      openssh
+      shadow
+      util-linux
+      busybox
+    ]
+    ++ optional cfg.btrfs.enable btrfs-progs
+    ++ optional cfg.ext4.enable e2fsprogs
+    ++ optional cfg.xfs.enable xfsprogs
+    ++ cfg.extraPackages;
   hasFs = fsName: lib.any (fs: fs.fsType == fsName) (lib.attrValues config.fileSystems);
   settingsFormat = pkgs.formats.yaml { };
   cfgfile = settingsFormat.generate "cloud.cfg" cfg.settings;
@@ -76,6 +83,14 @@ in
         description = ''
           Allow the cloud-init service to configure network interfaces
           through systemd-networkd.
+        '';
+      };
+
+      extraPackages = mkOption {
+        type = types.listOf types.package;
+        default = [ ];
+        description = ''
+          List of additional packages to be available within cloud-init jobs.
         '';
       };
 
@@ -157,13 +172,9 @@ in
     };
 
     environment.etc."cloud/cloud.cfg" =
-      if cfg.config == "" then
-        { source = cfgfile; }
-      else
-        { text = cfg.config; }
-    ;
+      if cfg.config == "" then { source = cfgfile; } else { text = cfg.config; };
 
-    systemd.network.enable = cfg.network.enable;
+    systemd.network.enable = mkIf cfg.network.enable true;
 
     systemd.services.cloud-init-local = {
       description = "Initial cloud-init job (pre-networking)";
@@ -171,7 +182,10 @@ in
       # In certain environments (AWS for example), cloud-init-local will
       # first configure an IP through DHCP, and later delete it.
       # This can cause race conditions with anything else trying to set IP through DHCP.
-      before = [ "systemd-networkd.service" "dhcpcd.service" ];
+      before = [
+        "systemd-networkd.service"
+        "dhcpcd.service"
+      ];
       path = path;
       serviceConfig = {
         Type = "oneshot";
@@ -191,8 +205,14 @@ in
         "sshd.service"
         "sshd-keygen.service"
       ];
-      after = [ "network-online.target" "cloud-init-local.service" ];
-      before = [ "sshd.service" "sshd-keygen.service" ];
+      after = [
+        "network-online.target"
+        "cloud-init-local.service"
+      ];
+      before = [
+        "sshd.service"
+        "sshd-keygen.service"
+      ];
       requires = [ "network.target" ];
       path = path;
       serviceConfig = {
@@ -208,7 +228,10 @@ in
       description = "Apply the settings specified in cloud-config";
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" "cloud-config.target" ];
+      after = [
+        "network-online.target"
+        "cloud-config.target"
+      ];
 
       path = path;
       serviceConfig = {
@@ -224,7 +247,11 @@ in
       description = "Execute cloud user/final scripts";
       wantedBy = [ "multi-user.target" ];
       wants = [ "network-online.target" ];
-      after = [ "network-online.target" "cloud-config.service" "rc-local.service" ];
+      after = [
+        "network-online.target"
+        "cloud-config.service"
+        "rc-local.service"
+      ];
       requires = [ "cloud-config.target" ];
       path = path;
       serviceConfig = {
@@ -238,7 +265,10 @@ in
 
     systemd.targets.cloud-config = {
       description = "Cloud-config availability";
-      requires = [ "cloud-init-local.service" "cloud-init.service" ];
+      requires = [
+        "cloud-init-local.service"
+        "cloud-init.service"
+      ];
     };
   };
 

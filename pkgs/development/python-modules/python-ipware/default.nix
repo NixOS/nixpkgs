@@ -3,12 +3,13 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  unittestCheckHook,
   setuptools,
+  unittestCheckHook,
 }:
+
 buildPythonPackage rec {
   pname = "python-ipware";
-  version = "2.0.0";
+  version = "3.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -16,15 +17,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "un33k";
     repo = "python-ipware";
-    rev = "v${version}";
-    hash = "sha256-j43uAcb1dyKe/SHQLLR+QJS6hKGB5qxjb9NiJaUPj8Y=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-S8/HbRztYGzrpLQRTHcvO7Zv3mNn/0+y5PNBYLpd++E=";
   };
 
-  nativeBuildInputs = [ setuptools ];
-
-  pythonImportsCheck = [ "python_ipware" ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ unittestCheckHook ];
+
+  pythonImportsCheck = [ "python_ipware" ];
 
   meta = with lib; {
     description = "Python package for server applications to retrieve client's IP address";

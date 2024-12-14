@@ -1088,10 +1088,13 @@ in
       storePaths = [
         "${config.boot.initrd.systemd.package}/bin/systemd-cryptsetup"
         "${config.boot.initrd.systemd.package}/lib/systemd/system-generators/systemd-cryptsetup-generator"
+      ] ++ lib.optionals config.boot.initrd.systemd.tpm2.enable [
+        "${config.boot.initrd.systemd.package}/lib/cryptsetup/libcryptsetup-token-systemd-tpm2.so"
       ];
 
     };
     # We do this because we need the udev rules from the package
+    services.lvm.enable = true;
     boot.initrd.services.lvm.enable = true;
 
     boot.initrd.preFailCommands = mkIf (!config.boot.initrd.systemd.enable) postCommands;

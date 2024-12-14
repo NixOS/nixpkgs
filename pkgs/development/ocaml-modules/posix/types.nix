@@ -1,4 +1,4 @@
-{ lib, buildDunePackage, posix-base }:
+{ buildDunePackage, posix-base }:
 
 buildDunePackage {
   pname = "posix-types";

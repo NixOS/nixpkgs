@@ -8,11 +8,16 @@
   gnused,
   autoPatchelfHook,
   wrapGAppsHook3,
+  gtk3,
+  glib,
+  webkitgtk_4_0,
+  glib-networking,
+  override_xmx ? "1024m",
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "24.1.1";
+  version = "24.3.0";
 
   src =
     let
@@ -25,10 +30,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-33W7uDxzfAQ5gH10sI4IbzmHl8SxQLYj88C/BGOoRks=";
-        aarch64-linux = "sha256-ZAr9vymCdLFAYiXEXtT+97x1tY5mrbr2N6INj4Bp4Nk=";
-        x86_64-darwin = "sha256-dgOtufARRVmwtXl+csmr2sMBzDvq+5XRotOQrTz8jys=";
-        aarch64-darwin = "sha256-R5TQJq+sRUFHH8EuaXgeSJUOnhepbCJLTUmO0FMOgzE=";
+        x86_64-linux = "sha256-7tmz6ThT6oH2eMRl5XTf1+nr/ufDlp4BvGyKFICiTRw=";
+        aarch64-linux = "sha256-idnTeh37Ew6fg1gdJaoFF+wpgoShcJZokmWsid6g3ow=";
+        x86_64-darwin = "sha256-P1XseM1Al7y1JFVe/8VCIE84nMT4l9KF+Ik+rHjrv20=";
+        aarch64-darwin = "sha256-Xl4D8qTwB0tccuXqon4DApOOM95swxbfwSTD8gqc7jo=";
       };
     in
     fetchurl {
@@ -36,22 +41,27 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       inherit hash;
     };
 
-  sourceRoot = lib.optional stdenvNoCC.isDarwin "dbeaver.app";
+  sourceRoot = lib.optional stdenvNoCC.hostPlatform.isDarwin "DBeaver.app";
 
   nativeBuildInputs =
     [ makeWrapper ]
-    ++ lib.optionals (!stdenvNoCC.isDarwin) [
+    ++ lib.optionals (!stdenvNoCC.hostPlatform.isDarwin) [
       gnused
       wrapGAppsHook3
       autoPatchelfHook
     ]
-    ++ lib.optionals stdenvNoCC.isDarwin [ undmg ];
+    ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [ undmg ];
 
   dontConfigure = true;
   dontBuild = true;
 
+  prePatch = ''
+    substituteInPlace ${lib.optionalString stdenvNoCC.hostPlatform.isDarwin "Contents/Eclipse/"}dbeaver.ini \
+      --replace-fail '-Xmx1024m' '-Xmx${override_xmx}'
+  '';
+
   installPhase =
-    if !stdenvNoCC.isDarwin then
+    if !stdenvNoCC.hostPlatform.isDarwin then
       ''
         runHook preInstall
 
@@ -59,7 +69,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         cp -r * $out/opt/dbeaver
         makeWrapper $out/opt/dbeaver/dbeaver $out/bin/dbeaver \
           --prefix PATH : "${openjdk17}/bin" \
-          --set JAVA_HOME "${openjdk17.home}"
+          --set JAVA_HOME "${openjdk17.home}" \
+          --prefix GIO_EXTRA_MODULES : "${glib-networking}/lib/gio/modules" \
+          --prefix LD_LIBRARY_PATH : "$out/lib:${
+            lib.makeLibraryPath [
+              gtk3
+              glib
+              webkitgtk_4_0
+              glib-networking
+            ]
+          }"
 
         mkdir -p $out/share/icons/hicolor/256x256/apps
         ln -s $out/opt/dbeaver/dbeaver.png $out/share/icons/hicolor/256x256/apps/dbeaver.png

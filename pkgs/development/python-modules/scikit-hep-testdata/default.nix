@@ -1,32 +1,33 @@
 {
   lib,
-  fetchFromGitHub,
-  pythonAtLeast,
   buildPythonPackage,
-  importlib-resources,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools-scm,
+
+  # dependencies
   pyyaml,
   requests,
-  setuptools-scm,
-  pythonOlder,
+  pythonAtLeast,
+  importlib-resources,
 }:
 
 buildPythonPackage rec {
   pname = "scikit-hep-testdata";
-  version = "0.4.45";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.6";
+  version = "0.5.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "scikit-hep";
-    repo = pname;
+    repo = "scikit-hep-testdata";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Kpn7Z+LJPZ9rNxQLXFtACJvfpRdDs58cy+1QlbbODLA=";
+    hash = "sha256-FIv3yC5Q3H1RXl0n32YH1UqaZiMuWHNcMPTSKLN+IkA=";
   };
 
-  nativeBuildInputs = [ setuptools-scm ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     pyyaml
     requests
   ] ++ lib.optionals (!pythonAtLeast "3.9") [ importlib-resources ];
@@ -37,11 +38,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "skhep_testdata" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/scikit-hep/scikit-hep-testdata";
     description = "Common package to provide example files (e.g., ROOT) for testing and developing packages against";
     changelog = "https://github.com/scikit-hep/scikit-hep-testdata/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

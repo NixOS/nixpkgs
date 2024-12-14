@@ -1,21 +1,24 @@
-{ lib
-, buildFHSEnv
-, sparrow-unwrapped
+{
+  buildFHSEnv,
+  sparrow-unwrapped,
 }:
 
 buildFHSEnv {
-  name = "sparrow-desktop";
+  pname = "sparrow-desktop";
+  inherit (sparrow-unwrapped) version;
 
   runScript = "${sparrow-unwrapped}/bin/sparrow-desktop";
 
-  targetPkgs = pkgs: with pkgs; [
-    sparrow-unwrapped
-    pcsclite
-  ];
+  targetPkgs =
+    pkgs: with pkgs; [
+      sparrow-unwrapped
+      pcsclite
+    ];
 
-  multiPkgs = pkgs: with pkgs; [
-    pcsclite
-  ];
+  multiPkgs =
+    pkgs: with pkgs; [
+      pcsclite
+    ];
 
   extraInstallCommands = ''
     mkdir -p $out/share

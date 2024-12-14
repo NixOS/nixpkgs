@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  bash,
   imagemagick,
   makeWrapper,
 }:
@@ -18,7 +17,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [makeWrapper];
+  nativeBuildInputs = [ makeWrapper ];
 
   makeFlags = [
     "PREFIX=${placeholder "out"}"
@@ -26,7 +25,7 @@ stdenvNoCC.mkDerivation rec {
 
   postInstall = ''
     wrapProgram "$out/bin/yunfaavatar" \
-      --prefix PATH : "${lib.makeBinPath [imagemagick]}"
+      --prefix PATH : "${lib.makeBinPath [ imagemagick ]}"
   '';
 
   meta = with lib; {
@@ -34,7 +33,7 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://github.com/yunfachi/yunfaAvatar";
     license = licenses.mit;
     platforms = platforms.all;
-    maintainers = with maintainers; [yunfachi];
+    maintainers = with maintainers; [ yunfachi ];
     mainProgram = "yunfaavatar";
   };
 }

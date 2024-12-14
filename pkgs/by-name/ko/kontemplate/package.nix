@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchgit
+{
+  lib,
+  buildGoModule,
+  fetchgit,
 }:
 buildGoModule {
   pname = "kontemplate";
@@ -8,7 +9,7 @@ buildGoModule {
 
   src = fetchgit {
     url = "https://code.tvl.fyi/depot.git";
-    sha256 = "sha256-Cv/y1Tj+hUKP0gi9ceS1Gml1WRYbUGSeWfJfXyX6dLA=";
+    hash = "sha256-Cv/y1Tj+hUKP0gi9ceS1Gml1WRYbUGSeWfJfXyX6dLA=";
     rev = "b16ddb54b0327606cec2df220eaabb1328e18e3e";
   };
 
@@ -21,7 +22,10 @@ buildGoModule {
     mainProgram = "kontemplate";
     homepage = "https://code.tvl.fyi/about/ops/kontemplate";
     license = lib.licenses.gpl3;
-    maintainers = with lib.maintainers; [ mbode tazjin ];
+    maintainers = with lib.maintainers; [
+      mbode
+      tazjin
+    ];
     platforms = lib.platforms.unix;
 
     longDescription = ''

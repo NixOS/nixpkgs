@@ -1,14 +1,19 @@
-{ lib, fetchFromGitHub, ocamlPackages, menhir }:
+{
+  lib,
+  fetchFromGitHub,
+  ocamlPackages,
+  menhir,
+}:
 
 ocamlPackages.buildDunePackage rec {
   pname = "obelisk";
-  version = "0.6.0";
+  version = "0.7.0";
   duneVersion = "3";
   src = fetchFromGitHub {
     owner = "Lelio-Brun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "1jjaqa2b7msl9qd3x7j34vdh1s9alq8hbvzk8a5srb4yyfyim15b";
+    sha256 = "sha256-M/pQvuS8hlpeqd6QBDTHQzqIVFIqGUfj0igVPW2Xwwc=";
   };
 
   strictDeps = true;

@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pick";
-  version = "2.3.2";
+  version = "2.4.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "wong2";
     repo = "pick";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6bkV9XEum5kbANqv/Xth+taCUl4nmuWskucq4jmV+Lc=";
+    hash = "sha256-SnH37n0MCjO60IU6kUPxJkIC5vBCVGZXBhFfwvRI/tQ=";
   };
 
   build-system = [ poetry-core ];

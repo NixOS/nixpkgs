@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, Security
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  Security,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,17 +19,19 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-k/cBCc7DywyBbAzCRCHdrOVmo+QVCsSgDn8hcyTIUI8=";
   };
 
-  cargoSha256 = "sha256-vqzXpSPBwY7m/Fdob0mHH0OXnzyQwFk7x2kk9Tgez3M=";
+  cargoHash = "sha256-vqzXpSPBwY7m/Fdob0mHH0OXnzyQwFk7x2kk9Tgez3M=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    Security
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+    ];
 
   meta = with lib; {
     description = "Tool to convert Hikvision camera events to MQTT";

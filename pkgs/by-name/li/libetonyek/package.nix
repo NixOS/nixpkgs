@@ -12,6 +12,7 @@
 , librevenge
 , libxml2
 , mdds
+, zlib
 }:
 
 stdenv.mkDerivation rec {
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     librevenge
     libxml2
     mdds
+    zlib
   ];
 
   configureFlags = ["--with-mdds=2.1"];

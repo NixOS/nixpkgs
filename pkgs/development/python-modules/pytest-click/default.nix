@@ -32,6 +32,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Stranger6667/pytest-click";
     changelog = "https://github.com/Stranger6667/pytest-click/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

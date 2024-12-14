@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, itstool
-, libxml2
-, gtk3
-, openssl
-, gnome
-, gobject-introspection
-, vala
-, libgee
-, fetchpatch
-, autoreconfHook
-, gtk-doc
-, autoconf-archive
-, yelp-tools
-, mysqlSupport ? false
-, libmysqlclient
-, postgresSupport ? false
-, postgresql
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  intltool,
+  itstool,
+  libxml2,
+  gtk3,
+  openssl,
+  gnome,
+  gobject-introspection,
+  vala,
+  libgee,
+  fetchpatch,
+  autoreconfHook,
+  gtk-doc,
+  autoconf-archive,
+  yelp-tools,
+  mysqlSupport ? false,
+  libmysqlclient,
+  postgresSupport ? false,
+  postgresql,
 }:
 
 stdenv.mkDerivation rec {
@@ -56,15 +57,18 @@ stdenv.mkDerivation rec {
     yelp-tools
   ];
 
-  buildInputs = [
-    gtk3
-    openssl
-    libgee
-  ] ++ lib.optionals mysqlSupport [
-    libmysqlclient
-  ] ++ lib.optionals postgresSupport [
-    postgresql
-  ];
+  buildInputs =
+    [
+      gtk3
+      openssl
+      libgee
+    ]
+    ++ lib.optionals mysqlSupport [
+      libmysqlclient
+    ]
+    ++ lib.optionals postgresSupport [
+      postgresql
+    ];
 
   propagatedBuildInputs = [
     libxml2
@@ -79,8 +83,10 @@ stdenv.mkDerivation rec {
     # as mentioned in https://github.com/GNOME/libgda/blob/95eeca4b0470f347c645a27f714c62aa6e59f820/libgda/sqlite/README#L31,
     # which references the paper https://web.archive.org/web/20100610151539/http://lattice.umiacs.umd.edu/files/functions_tr.pdf
     # See also https://github.com/Homebrew/homebrew-core/blob/104f9ecd02854a82372b64d63d41356555378a52/Formula/libgda.rb
-    "--enable-system-sqlite=${if stdenv.isDarwin then "no" else "yes"}"
+    "--enable-system-sqlite=${if stdenv.hostPlatform.isDarwin then "no" else "yes"}"
   ];
+
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
 
   enableParallelBuilding = true;
 

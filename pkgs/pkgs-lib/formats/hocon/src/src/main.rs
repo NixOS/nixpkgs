@@ -77,12 +77,12 @@ fn parse_special_types(o: &Map<String, Value>) -> Option<HOCONValue> {
                     .get("value")
                     .expect("Missing value for substitution")
                     .as_str()
-                    .unwrap_or_else(|| panic!("Substition value is not a string: {:?}", o));
+                    .unwrap_or_else(|| panic!("Substitution value is not a string: {:?}", o));
                 let required = o
                     .get("required")
                     .unwrap_or(&Value::Bool(false))
                     .as_bool()
-                    .unwrap_or_else(|| panic!("Substition value is not a string: {:?}", o));
+                    .unwrap_or_else(|| panic!("Substitution value is not a string: {:?}", o));
 
                 debug_assert!(!value.contains('}'));
 

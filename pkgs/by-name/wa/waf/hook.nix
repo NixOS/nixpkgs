@@ -1,8 +1,6 @@
-{ lib
-, stdenv
-, pkgs
-, makeSetupHook
-, waf
+{
+  makeSetupHook,
+  waf,
 }:
 
 makeSetupHook {

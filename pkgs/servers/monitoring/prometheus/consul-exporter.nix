@@ -1,20 +1,21 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
   pname = "consul_exporter";
-  version = "0.12.0";
+  version = "0.13.0";
 
   src = fetchFromGitHub {
     owner = "prometheus";
     repo = "consul_exporter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-qLc0CG+N3OF1V6rJQCWDxIrsU0lHoskMNUbwsx8pcPs=";
+    hash = "sha256-2X1nJIUwp7kqqz/D3x4bq6vHg1N8zC9AWCn02qsAyAQ=";
   };
 
-  vendorHash = "sha256-G7Gf3igUnDID9hTuvIHd7syii2+3dPAlewsW8yKNJvs=";
+  vendorHash = "sha256-z9+WrJDgjQYf4G90sdqY+SOGJa/r5Ie9GFVrihbaGGU=";
 
   ldflags = [
     "-s"

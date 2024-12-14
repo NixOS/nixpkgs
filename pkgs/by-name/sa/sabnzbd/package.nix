@@ -1,61 +1,85 @@
-{ lib, stdenv
-, coreutils
-, fetchFromGitHub
-, python3
-, par2cmdline-turbo
-, unzip
-, unrar
-, p7zip
-, util-linux
-, makeWrapper
-, nixosTests
+{
+  lib,
+  stdenv,
+  coreutils,
+  fetchFromGitHub,
+  fetchPypi,
+  python3,
+  par2cmdline-turbo,
+  unzip,
+  unrar,
+  p7zip,
+  util-linux,
+  makeWrapper,
+  nixosTests,
 }:
 
 let
-  pythonEnv = python3.withPackages(ps: with ps; [
-    apprise
-    babelfish
-    cffi
-    chardet
-    cheetah3
-    cheroot
-    cherrypy
-    configobj
-    cryptography
-    feedparser
-    guessit
-    jaraco-classes
-    jaraco-collections
-    jaraco-context
-    jaraco-functools
-    jaraco-text
-    more-itertools
-    notify2
-    orjson
-    portend
-    puremagic
-    pycparser
-    pysocks
-    python-dateutil
-    pytz
-    rebulk
-    sabctools
-    sabyenc3
-    sgmllib3k
-    six
-    tempora
-    zc-lockfile
-  ]);
-  path = lib.makeBinPath [ coreutils par2cmdline-turbo unrar unzip p7zip util-linux ];
-in stdenv.mkDerivation rec {
-  version = "4.3.2";
+  sabctoolsVersion = "8.2.5";
+  sabctoolsHash = "sha256-ZEC813/JpGPEFL+nXKFAXFfUrrhECCIqONe27LwS00g=";
+
+  pythonEnv = python3.withPackages (
+    ps: with ps; [
+      apprise
+      babelfish
+      cffi
+      chardet
+      cheetah3
+      cheroot
+      cherrypy
+      configobj
+      cryptography
+      feedparser
+      guessit
+      jaraco-classes
+      jaraco-collections
+      jaraco-context
+      jaraco-functools
+      jaraco-text
+      more-itertools
+      notify2
+      orjson
+      portend
+      puremagic
+      pycparser
+      pysocks
+      python-dateutil
+      pytz
+      rebulk
+      # sabnzbd requires a specific version of sabctools
+      (sabctools.overridePythonAttrs (old: {
+        version = sabctoolsVersion;
+        src = fetchPypi {
+          pname = "sabctools";
+          version = sabctoolsVersion;
+          hash = sabctoolsHash;
+        };
+      }))
+      sabyenc3
+      sgmllib3k
+      six
+      tempora
+      zc-lockfile
+    ]
+  );
+  path = lib.makeBinPath [
+    coreutils
+    par2cmdline-turbo
+    unrar
+    unzip
+    p7zip
+    util-linux
+  ];
+in
+stdenv.mkDerivation rec {
+  version = "4.3.3";
   pname = "sabnzbd";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = version;
-    sha256 = "sha256-EJf5yTyGbWqS9qaCWdxnJqaSFzVu3h5N3CGGzAEsBtI=";
+    hash = "sha256-WJ58OawPSICCWMWQ042T4OmK5UBRZRU5tnLYxGPbDPc=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -74,8 +98,9 @@ in stdenv.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.tests = {
-    smoke-test = nixosTests.sabnzbd;
+  passthru = {
+    tests.smoke-test = nixosTests.sabnzbd;
+    updateScript = ./update.sh;
   };
 
   meta = with lib; {
@@ -83,7 +108,10 @@ in stdenv.mkDerivation rec {
     homepage = "https://sabnzbd.org";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with lib.maintainers; [ jojosch adamcstephens ];
+    maintainers = with lib.maintainers; [
+      jojosch
+      adamcstephens
+    ];
     mainProgram = "sabnzbd";
   };
 }

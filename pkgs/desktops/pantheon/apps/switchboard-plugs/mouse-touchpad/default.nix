@@ -1,32 +1,33 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, substituteAll
-, meson
-, ninja
-, pkg-config
-, vala
-, libgee
-, libxml2
-, granite
-, gtk3
-, switchboard
-, gnome-settings-daemon
-, glib
-, gala # needed for gestures support
-, touchegg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  substituteAll,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libgee,
+  libxml2,
+  granite7,
+  gtk4,
+  switchboard,
+  gnome-settings-daemon,
+  glib,
+  gala, # needed for gestures support
+  touchegg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-mouse-touchpad";
-  version = "7.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-iXkNdUMHa0IF2FLn34/6G4w3m53GRZun8yzc8dxAg20=";
+    sha256 = "sha256-aOJnjHCyc1tSyF7AuW5nXUXcvzBnZ+pwU91Mk+veusg=";
   };
 
   patches = [
@@ -46,8 +47,8 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gala
     glib
-    granite
-    gtk3
+    granite7
+    gtk4
     libgee
     libxml2
     gnome-settings-daemon

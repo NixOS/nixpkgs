@@ -1,16 +1,14 @@
 {
-  stdenv,
   lib,
   fetchFromGitHub,
   buildPythonPackage,
-  python3Packages,
   pybind11,
   cmake,
   xcbuild,
   zsh,
-  darwin,
   blas,
   lapack,
+  setuptools,
 }:
 
 let
@@ -30,13 +28,13 @@ let
 in
 buildPythonPackage rec {
   pname = "mlx";
-  version = "0.6.0";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "ml-explore";
     repo = "mlx";
     rev = "refs/tags/v${version}";
-    hash = "sha256-FihdI+3ACKMJfPT2POjTRdtkXs7x+KiQpdpo3RcczBE=";
+    hash = "sha256-eFKjCrutqrmhZKzRrLq5nYl0ieqLvoXpbnTxA1NEhWo=";
   };
 
   pyproject = true;
@@ -71,7 +69,8 @@ buildPythonPackage rec {
     zsh
     gguf-tools
     nlohmann_json
-  ] ++ (with python3Packages; [ setuptools ]);
+    setuptools
+  ];
 
   buildInputs = [
     blas

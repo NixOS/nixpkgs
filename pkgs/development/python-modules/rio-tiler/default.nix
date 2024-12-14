@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pytestCheckHook,
   pythonOlder,
 
@@ -22,15 +23,15 @@
 
 buildPythonPackage rec {
   pname = "rio-tiler";
-  version = "6.6.1";
+  version = "7.2.2";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "cogeotiff";
     repo = "rio-tiler";
-    rev = version;
-    hash = "sha256-MR6kyoGM3uXt6JiIEfGcsmTmxqlLxUF9Wn+CFuK5LtQ=";
+    rev = "refs/tags/${version}";
+    hash = "sha256-uVLizNkUL7wGF0vFjPXb2iW9ILVkJcbDssXtp3E8ubE=";
   };
 
   build-system = [ hatchling ];
@@ -61,5 +62,8 @@ buildPythonPackage rec {
     homepage = "https://cogeotiff.github.io/rio-tiler/";
     license = licenses.bsd3;
     maintainers = lib.teams.geospatial.members;
+    # Tests broken with gdal 3.10
+    # https://github.com/cogeotiff/rio-tiler/issues/769
+    broken = true;
   };
 }

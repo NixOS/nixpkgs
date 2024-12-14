@@ -11,17 +11,17 @@ linkFarm "zig-packages" [
     };
   }
   {
+    name = "122083317b028705b5d27be12976feebf17066a4e51802b3b5e9f970bec580e433e1";
+    path = fetchzip {
+      url = "https://codeberg.org/ifreund/zig-wlroots/archive/v0.18.1.tar.gz";
+      hash = "sha256-fru44ZCuDpd8fc5qp80oAcQO3Jwy3ouywWURhltek+U=";
+    };
+  }
+  {
     name = "12209db20ce873af176138b76632931def33a10539387cba745db72933c43d274d56";
     path = fetchzip {
       url = "https://codeberg.org/ifreund/zig-pixman/archive/v0.2.0.tar.gz";
       hash = "sha256-zcfZEMnipWDPuptl9UN0PoaJDjy2EHc7Wwi4GQq3hkY=";
-    };
-  }
-  {
-    name = "1220c65ab884c236cc950b564c70f6cd04046d86485ee76e0cde886cef7438021b4f";
-    path = fetchzip {
-      url = "https://codeberg.org/ifreund/zig-wlroots/archive/v0.17.1.tar.gz";
-      hash = "sha256-rVI/tJD3cx8b+nGTG5u08/RYoI179oDY7AY0riTntA0=";
     };
   }
   {

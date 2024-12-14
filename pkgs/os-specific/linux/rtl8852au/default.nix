@@ -1,18 +1,31 @@
-{ lib, stdenv, fetchFromGitHub, kernel, bc, nukeReferences }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  bc,
+  nukeReferences,
+}:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rtl8852au";
-  version = "${kernel.version}-unstable-2024-04-16";
+  version = "${kernel.version}-unstable-2024-05-06";
 
   src = fetchFromGitHub {
     owner = "lwfinger";
     repo = "rtl8852au";
-    rev = "5894bc6fed2bcaa525d13fcee1edada8aba67f2b";
-    hash = "sha256-R4Yb/jbh3nMgM41ByFjtkCMbsh/mmMRJ7CcvCRUvKu8=";
+    rev = "865ab0fa91471d595c283d2f3db323f7f15455f5";
+    hash = "sha256-c2dpnZS6a0waL1khB9ZEglTwJIBsyRebTMig1B4A0xU=";
   };
 
-  nativeBuildInputs = [ bc nukeReferences ] ++ kernel.moduleBuildDependencies;
-  hardeningDisable = [ "pic" "format" ];
+  nativeBuildInputs = [
+    bc
+    nukeReferences
+  ] ++ kernel.moduleBuildDependencies;
+  hardeningDisable = [
+    "pic"
+    "format"
+  ];
 
   postPatch = ''
     substituteInPlace ./Makefile \
@@ -23,13 +36,15 @@ stdenv.mkDerivation {
       --replace-fail /lib/modules "${kernel.dev}/lib/modules"
   '';
 
-  makeFlags = [
-    "ARCH=${stdenv.hostPlatform.linuxArch}"
-    ("CONFIG_PLATFORM_I386_PC=" + (if stdenv.hostPlatform.isx86 then "y" else "n"))
-    ("CONFIG_PLATFORM_ARM_RPI=" + (if stdenv.hostPlatform.isAarch then "y" else "n"))
-  ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-    "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
-  ];
+  makeFlags =
+    [
+      "ARCH=${stdenv.hostPlatform.linuxArch}"
+      ("CONFIG_PLATFORM_I386_PC=" + (if stdenv.hostPlatform.isx86 then "y" else "n"))
+      ("CONFIG_PLATFORM_ARM_RPI=" + (if stdenv.hostPlatform.isAarch then "y" else "n"))
+    ]
+    ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+      "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+    ];
 
   preInstall = ''
     mkdir -p "$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
@@ -49,4 +64,4 @@ stdenv.mkDerivation {
     platforms = platforms.linux;
     maintainers = with maintainers; [ lonyelon ];
   };
-}
+})

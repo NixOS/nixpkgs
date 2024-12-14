@@ -1,4 +1,12 @@
-{ lib, buildDunePackage, atdgen, re, reason, pastel, src }:
+{
+  lib,
+  buildDunePackage,
+  atdgen,
+  re,
+  reason,
+  pastel,
+  src,
+}:
 
 buildDunePackage {
   inherit src;
@@ -22,6 +30,6 @@ buildDunePackage {
     downloadPage = "https://github.com/reasonml/reason-native/tree/master/src/refmterr";
     homepage = "https://reason-native.com/docs/refmterr/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

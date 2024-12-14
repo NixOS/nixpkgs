@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchurl, libX11, libSM, SDL, libGLU, libGL, expat, SDL_ttf
-, SDL_image, zlib, libXxf86misc }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
+  libSM,
+  SDL,
+  libGLU,
+  libGL,
+  expat,
+  SDL_ttf,
+  SDL_image,
+  zlib,
+  libXxf86misc,
+}:
 stdenv.mkDerivation rec {
   pname = "xpilot-ng";
   version = "4.7.3";
@@ -8,7 +21,16 @@ stdenv.mkDerivation rec {
     sha256 = "02a7pnp88kh88fzda5q8mzlckk6y9r5fw47j00h26wbsfly0k1zj";
   };
   buildInputs = [
-    libX11 libSM SDL SDL_ttf SDL_image libGLU libGL expat zlib libXxf86misc
+    libX11
+    libSM
+    SDL
+    SDL_ttf
+    SDL_image
+    libGLU
+    libGL
+    expat
+    zlib
+    libXxf86misc
   ];
   meta = with lib; {
     description = "Multiplayer X11 space combat game";

@@ -1,0 +1,23 @@
+From b3980cf4c8766815e4c13ee1695cebfbf473a2e6 Mon Sep 17 00:00:00 2001
+From: Pavel Sobolev <contact@paveloom.dev>
+Date: Sun, 14 Jul 2024 11:30:11 +0300
+Subject: [PATCH] Import `setuptools` before importing `distutils`.
+
+---
+ gdist/__init__.py | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/gdist/__init__.py b/gdist/__init__.py
+index 71814af49..a54aac653 100644
+--- a/gdist/__init__.py
++++ b/gdist/__init__.py
+@@ -31,6 +31,7 @@ Also supports setuptools but needs to be imported after setuptools
+ (which does some monkey patching)
+ """
+
++import setuptools
+ import sys
+
+ from distutils.core import setup
+--
+2.45.2

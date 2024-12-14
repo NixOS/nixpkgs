@@ -56,6 +56,6 @@ buildPythonPackage rec {
     mainProgram = "parfive";
     homepage = "https://parfive.readthedocs.io/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

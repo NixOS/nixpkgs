@@ -1,15 +1,17 @@
-{ lib
-, cmake
-, fetchFromGitHub
-, freeglut
-, libGL
-, libheif
-, libjpeg
-, pkg-config
-, stdenv
-, enableHEIFCodec ? true
-, enableJPGCodec ? true
-, enableOpenGL ? true
+{
+  lib,
+  cmake,
+  fetchFromGitHub,
+  libglut,
+  libGL,
+  libheif,
+  libjpeg,
+  darwin,
+  pkg-config,
+  stdenv,
+  enableHEIFCodec ? true,
+  enableJPGCodec ? true,
+  enableOpenGL ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,22 +25,35 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-YliWVuNEtq/Rgra+WnorSOFoAYwYmPmPRv0r734FJ1c=";
   };
 
-  outputs = [ "out" "dev" "doc" "lib" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "lib"
+    "man"
+  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  buildInputs = [
-  ] ++ lib.optionals enableHEIFCodec [
-    libheif
-  ] ++ lib.optionals enableJPGCodec [
-    libjpeg
-  ] ++ lib.optionals enableOpenGL [
-    freeglut
-    libGL
-  ];
+  buildInputs =
+    [
+    ]
+    ++ lib.optionals enableHEIFCodec [
+      libheif
+    ]
+    ++ lib.optionals enableJPGCodec [
+      libjpeg
+    ]
+    ++ lib.optionals enableOpenGL [
+      libglut
+      libGL
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Cocoa
+    ];
 
   # Since "build" already exists and is populated, cmake tries to use it,
   # throwing uncomprehensible error messages...
@@ -54,6 +69,14 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   strictDeps = true;
+
+  # The value of __STDC_VERSION__ cannot be automatically determined when cross-compiling
+  # https://github.com/jasper-software/jasper/blob/87668487/CMakeLists.txt#L415
+  # workaround taken from
+  # https://github.com/openembedded/meta-openembedded/blob/907b9c0a/meta-oe/recipes-graphics/jasper/jasper_4.1.1.bb#L16
+  preConfigure = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    cmakeFlagsArray+=(-DJAS_STDC_VERSION="$(echo __STDC_VERSION__ | $CXX -E -P -)")
+  '';
 
   meta = {
     homepage = "https://jasper-software.github.io/jasper/";
@@ -77,11 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = with lib.licenses; [ mit ];
     mainProgram = "jasper";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.unix;
-    # The value of __STDC_VERSION__ cannot be automatically determined when
-    # cross-compiling.
-    broken = stdenv.buildPlatform != stdenv.hostPlatform;
   };
 })
 # TODO: investigate opengl support

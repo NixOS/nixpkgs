@@ -1,14 +1,15 @@
-{ lib
-, stdenvNoCC
-, fetchzip
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "arcticons-sans";
-  version = "0.580";
+  version = "0.590";
 
   src = fetchzip {
-    hash = "sha256-BRyYHOuz7zxD1zD4L4DmI9dFhGePmGFDqYmS0DIbvi8=";
+    hash = "sha256-0iSkTfUMgrKi6LF+9KAihPus0biGuOFsYN51ydYAF5E=";
     url = "https://github.com/arcticons-team/arcticons-font/archive/refs/tags/${finalAttrs.version}.zip";
   };
 

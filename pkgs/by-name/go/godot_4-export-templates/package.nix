@@ -9,5 +9,5 @@ fetchzip {
   pname = "export_templates";
   extension = "zip";
   url = "https://github.com/godotengine/godot/releases/download/${godot_4.version}/Godot_v${godot_4.version}_export_templates.tpz";
-  hash = "sha256-eomGLH9lbZhl7VtHTWjJ5mxVt0Yg8LfnAnpqoCksPgs=";
+  hash = "sha256-XRnKii+eexIkbGf7bqc42SR0NBULFvgMdOpSRNNk6kg=";
 }

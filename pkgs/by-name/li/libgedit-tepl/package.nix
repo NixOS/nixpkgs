@@ -1,6 +1,6 @@
 { stdenv
 , lib
-, fetchFromGitHub
+, fetchFromGitLab
 , meson
 , mesonEmulatorHook
 , ninja
@@ -18,15 +18,17 @@
 
 stdenv.mkDerivation rec {
   pname = "libgedit-tepl";
-  version = "6.10.0";
+  version = "6.12.0";
 
   outputs = [ "out" "dev" "devdoc" ];
 
-  src = fetchFromGitHub {
-    owner = "gedit-technology";
+  src = fetchFromGitLab {
+    domain = "gitlab.gnome.org";
+    group = "World";
+    owner = "gedit";
     repo = "libgedit-tepl";
     rev = version;
-    hash = "sha256-lGmOaDNu+iqwpeaP0AL28exoTqx1j03Z8gdhTBgk1i8=";
+    hash = "sha256-s3b7wj6b2SM0+i0vXUDDhnspgPcsRAsA5kLblh0orJE=";
   };
 
   strictDeps = true;
@@ -54,7 +56,7 @@ stdenv.mkDerivation rec {
   ];
 
   meta = with lib; {
-    homepage = "https://github.com/gedit-technology/libgedit-tepl";
+    homepage = "https://gitlab.gnome.org/World/gedit/libgedit-tepl";
     description = "Text editor product line";
     maintainers = with maintainers; [ manveru bobby285271 ];
     license = licenses.lgpl3Plus;

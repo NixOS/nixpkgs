@@ -1,4 +1,12 @@
-{ lib, stdenv, coreutils, jq, python3, nix, xz }:
+{
+  lib,
+  stdenv,
+  coreutils,
+  jq,
+  python3,
+  nix,
+  xz,
+}:
 
 # This function is for creating a flat-file binary cache, i.e. the kind created by
 # nix copy --to file:///some/path and usable as a substituter (with the file:// prefix).
@@ -6,8 +14,9 @@
 # For example, in the Nixpkgs repo:
 # nix-build -E 'with import ./. {}; mkBinaryCache { rootPaths = [hello]; }'
 
-{ name ? "binary-cache"
-, rootPaths
+{
+  name ? "binary-cache",
+  rootPaths,
 }:
 
 stdenv.mkDerivation {
@@ -19,7 +28,13 @@ stdenv.mkDerivation {
 
   preferLocalBuild = true;
 
-  nativeBuildInputs = [ coreutils jq python3 nix xz ];
+  nativeBuildInputs = [
+    coreutils
+    jq
+    python3
+    nix
+    xz
+  ];
 
   buildCommand = ''
     mkdir -p $out/nar

@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, buildNpmPackage
-, fetchFromGitHub
-, darwin
-, remarshal
-, ttfautohint-nox
+{
+  stdenv,
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  cctools,
+  remarshal,
+  ttfautohint-nox,
   # Custom font set options.
   # See https://typeof.net/Iosevka/customizer
   # Can be a raw TOML string, or a Nix attrset.
@@ -34,7 +35,7 @@
   #     italic.i = "tailed";
   #   };
   # }
-, privateBuildPlan ? null
+  privateBuildPlan ? null,
   # Extra parameters. Can be used for ligature mapping.
   # It must be a raw TOML string.
 
@@ -45,9 +46,9 @@
   #   featureTag = 'XHS0'
   #   sequence = "+>"
   # '';
-, extraParameters ? null
+  extraParameters ? null,
   # Custom font set name. Required if any custom settings above.
-, set ? null
+  set ? null,
 }:
 
 assert (privateBuildPlan != null) -> set != null;
@@ -55,24 +56,26 @@ assert (extraParameters != null) -> set != null;
 
 buildNpmPackage rec {
   pname = "Iosevka${toString set}";
-  version = "30.3.1";
+  version = "32.1.0";
 
   src = fetchFromGitHub {
     owner = "be5invis";
     repo = "iosevka";
     rev = "v${version}";
-    hash = "sha256-qT7wk8xIGFC44T1W5En9fbebJnwq/3tnwoT87nkmMmY=";
+    hash = "sha256-bLB85rla5hN62EGOSVkW6FZM0+U2hkg50LMg2NsMXkU=";
   };
 
-  npmDepsHash = "sha256-VguAsHX1eWivSd5UhkY0+Pvrh4xxqDn87PI2klC+Xfk=";
+  npmDepsHash = "sha256-lBLz/BsSVh6szJxunoTj31oxB/3yqd1oWjSzTmQFGv8=";
 
-  nativeBuildInputs = [
-    remarshal
-    ttfautohint-nox
-  ] ++ lib.optionals stdenv.isDarwin [
-    # libtool
-    darwin.cctools
-  ];
+  nativeBuildInputs =
+    [
+      remarshal
+      ttfautohint-nox
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # libtool
+      cctools
+    ];
 
   buildPlan =
     if builtins.isAttrs privateBuildPlan then
@@ -81,30 +84,34 @@ buildNpmPackage rec {
       privateBuildPlan;
 
   inherit extraParameters;
-  passAsFile = [ "extraParameters" ] ++ lib.optionals
-    (
-      !(builtins.isString privateBuildPlan
-        && lib.hasPrefix builtins.storeDir privateBuildPlan)
+  passAsFile =
+    [ "extraParameters" ]
+    ++ lib.optionals (
+      !(builtins.isString privateBuildPlan && lib.hasPrefix builtins.storeDir privateBuildPlan)
     ) [ "buildPlan" ];
 
   configurePhase = ''
-      runHook preConfigure
-      ${lib.optionalString (builtins.isAttrs privateBuildPlan) ''
-        remarshal -i "$buildPlanPath" -o private-build-plans.toml -if json -of toml
-      ''}
-      ${lib.optionalString (builtins.isString privateBuildPlan
-    && (!lib.hasPrefix builtins.storeDir privateBuildPlan)) ''
-          cp "$buildPlanPath" private-build-plans.toml
-        ''}
-      ${lib.optionalString (builtins.isString privateBuildPlan
-    && (lib.hasPrefix builtins.storeDir privateBuildPlan)) ''
-          cp "$buildPlan" private-build-plans.toml
-        ''}
-      ${lib.optionalString (extraParameters != null) ''
-        echo -e "\n" >> params/parameters.toml
-        cat "$extraParametersPath" >> params/parameters.toml
-      ''}
-      runHook postConfigure
+    runHook preConfigure
+    ${lib.optionalString (builtins.isAttrs privateBuildPlan) ''
+      remarshal -i "$buildPlanPath" -o private-build-plans.toml -if json -of toml
+    ''}
+    ${lib.optionalString
+      (builtins.isString privateBuildPlan && (!lib.hasPrefix builtins.storeDir privateBuildPlan))
+      ''
+        cp "$buildPlanPath" private-build-plans.toml
+      ''
+    }
+    ${lib.optionalString
+      (builtins.isString privateBuildPlan && (lib.hasPrefix builtins.storeDir privateBuildPlan))
+      ''
+        cp "$buildPlan" private-build-plans.toml
+      ''
+    }
+    ${lib.optionalString (extraParameters != null) ''
+      echo -e "\n" >> params/parameters.toml
+      cat "$extraParametersPath" >> params/parameters.toml
+    ''}
+    runHook postConfigure
   '';
 
   buildPhase = ''
@@ -138,7 +145,6 @@ buildNpmPackage rec {
     maintainers = with maintainers; [
       ttuegel
       rileyinman
-      AluisioASG
       lunik1
     ];
   };

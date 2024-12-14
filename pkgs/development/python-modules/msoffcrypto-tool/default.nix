@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "msoffcrypto-tool";
-  version = "5.4.1";
+  version = "5.4.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "nolze";
     repo = "msoffcrypto-tool";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BVm4hMKvvNI3bJ82t4NIRcx8o8mgQgoulIerDwoVIT0=";
+    hash = "sha256-nwCjgcZqD0hptHC0WqIodHC5m/JHYyUdfEngIoXzNqA=";
   };
 
   build-system = [ poetry-core ];

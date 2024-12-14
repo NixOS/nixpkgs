@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
@@ -18,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "borb";
-  version = "2.1.23";
+  version = "2.1.25";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -27,8 +28,16 @@ buildPythonPackage rec {
     owner = "jorisschellekens";
     repo = "borb";
     rev = "refs/tags/v${version}";
-    hash = "sha256-cpih7ijoT4dEdoFjh6qQcnzjWd2zusv4tNgPyrIghvg=";
+    hash = "sha256-eVxpcYL3ZgwidkSt6tUav3Bkne4lo1QCshdUFqkA0wI=";
   };
+
+  # ModuleNotFoundError: No module named '_decimal'
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    grep -Rl 'from _decimal' tests/ | while read -r test_file; do
+      substituteInPlace "$test_file" \
+        --replace-fail 'from _decimal' 'from decimal'
+    done
+  '';
 
   build-system = [ setuptools ];
 
@@ -63,11 +72,11 @@ buildPythonPackage rec {
     "tests/license/"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Library for reading, creating and manipulating PDF files in Python";
     homepage = "https://borbpdf.com/";
     changelog = "https://github.com/jorisschellekens/borb/releases/tag/v${version}";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ ];
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ getchoo ];
   };
 }

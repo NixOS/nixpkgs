@@ -1,5 +1,10 @@
-{ lib, fetchurl, buildDunePackage
-, mdx, ounit2, qcheck-core
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  mdx,
+  ounit2,
+  qcheck-core,
 }:
 
 buildDunePackage rec {
@@ -15,7 +20,10 @@ buildDunePackage rec {
 
   doCheck = true;
   nativeCheckInputs = [ mdx.bin ];
-  checkInputs = [ ounit2 qcheck-core ];
+  checkInputs = [
+    ounit2
+    qcheck-core
+  ];
 
   meta = {
     homepage = "https://github.com/c-cube/sequence";

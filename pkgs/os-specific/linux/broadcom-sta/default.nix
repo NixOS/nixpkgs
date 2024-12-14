@@ -1,78 +1,105 @@
-{ lib, stdenv, fetchurl, kernel }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  fetchpatch2,
+  kernel,
+}:
 
 let
   version = "6.30.223.271";
   hashes = {
-    i686-linux   = "1kaqa2dw3nb8k23ffvx46g8jj3wdhz8xa6jp1v3wb35cjfr712sg";
-    x86_64-linux = "1gj485qqr190idilacpxwgqyw21il03zph2rddizgj7fbd6pfyaz";
+    i686-linux = "sha256-T4twspOsjMXHDlca1dGHjQ8p0TOkb+eGmGjZwZtQWM0=";
+    x86_64-linux = "sha256-X3l3TVvuyPdja1nA+wegMQju8eP9MkVjiyCFjHFBRL4=";
   };
 
   arch = lib.optionalString (stdenv.hostPlatform.system == "x86_64-linux") "_64";
-  tarballVersion = lib.replaceStrings ["."] ["_"] version;
+  tarballVersion = lib.replaceStrings [ "." ] [ "_" ] version;
   tarball = "hybrid-v35${arch}-nodebug-pcoem-${tarballVersion}.tar.gz";
+
+  rpmFusionPatches = fetchFromGitHub {
+    owner = "rpmfusion";
+    repo = "wl-kmod";
+    rev = "a04330284bfc38fd91eade6f8b28fa63cfcdc95e";
+    hash = "sha256-c72Pr/v+nxZPLEeNKbWnSpbH3gqYZaTgzMO9PlYQkf0=";
+  };
+  patchset = [
+    "wl-kmod-001_wext_workaround.patch"
+    "wl-kmod-002_kernel_3.18_null_pointer.patch"
+    "wl-kmod-003_gcc_4.9_remove_TIME_DATE_macros.patch"
+    "wl-kmod-004_kernel_4.3_rdtscl_to_rdtsc.patch"
+    "wl-kmod-005_kernel_4.7_IEEE80211_BAND_to_NL80211_BAND.patch"
+    "wl-kmod-006_gcc_6_fix_indentation_warnings.patch"
+    "wl-kmod-007_kernel_4.8_add_cfg80211_scan_info_struct.patch"
+    "wl-kmod-008_fix_kernel_warnings.patch"
+    "wl-kmod-009_kernel_4.11_remove_last_rx_in_net_device_struct.patch"
+    "wl-kmod-010_kernel_4.12_add_cfg80211_roam_info_struct.patch"
+    "wl-kmod-011_kernel_4.14_new_kernel_read_function_prototype.patch"
+    "wl-kmod-012_kernel_4.15_new_timer.patch"
+    "wl-kmod-013_gcc8_fix_bounds_check_warnings.patch"
+    "wl-kmod-014_kernel_read_pos_increment_fix.patch"
+    "wl-kmod-015_kernel_5.1_get_ds_removed.patch"
+    "wl-kmod-016_fix_unsupported_mesh_point.patch"
+    "wl-kmod-017_fix_gcc_fallthrough_warning.patch"
+    "wl-kmod-018_kernel_5.6_adaptations.patch"
+    "wl-kmod-019_kernel_5.9_segment_eq_removed.patch"
+    "wl-kmod-020_kernel_5.10_get_set_fs_removed.patch"
+    "wl-kmod-021_kernel_5.17_adaptation.patch"
+    "wl-kmod-022_kernel_5.18_adaptation.patch"
+    "wl-kmod-023_kernel_6.0_adaptation.patch"
+    "wl-kmod-024_kernel_6.1_adaptation.patch"
+    "wl-kmod-025_kernel_6.5_adaptation.patch"
+    "wl-kmod-026_kernel_6.10_fix_empty_body_in_if_warning.patch"
+    "wl-kmod-027_wpa_supplicant-2.11_add_max_scan_ie_len.patch"
+  ];
 in
 stdenv.mkDerivation {
   name = "broadcom-sta-${version}-${kernel.version}";
 
   src = fetchurl {
     url = "https://docs.broadcom.com/docs-and-downloads/docs/linux_sta/${tarball}";
-    sha256 = hashes.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+    hash =
+      hashes.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
   hardeningDisable = [ "pic" ];
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
 
-  patches = [
-    ./i686-build-failure.patch
-    ./license.patch
-    ./linux-4.7.patch
-    # source: https://git.archlinux.org/svntogit/community.git/tree/trunk/004-linux48.patch?h=packages/broadcom-wl-dkms
-    ./linux-4.8.patch
-    # source: https://aur.archlinux.org/cgit/aur.git/tree/linux411.patch?h=broadcom-wl
-    ./linux-4.11.patch
-    # source: https://aur.archlinux.org/cgit/aur.git/tree/linux412.patch?h=broadcom-wl
-    ./linux-4.12.patch
-    ./linux-4.15.patch
-    ./linux-5.1.patch
-    # source: https://salsa.debian.org/Herrie82-guest/broadcom-sta/-/commit/247307926e5540ad574a17c062c8da76990d056f
-    ./linux-5.6.patch
-    # source: https://gist.github.com/joanbm/5c640ac074d27fd1d82c74a5b67a1290
-    ./linux-5.9.patch
-    # source: https://github.com/archlinux/svntogit-community/blob/33b4bd2b9e30679b03f5d7aa2741911d914dcf94/trunk/012-linux517.patch
-    ./linux-5.17.patch
-    # source: https://github.com/archlinux/svntogit-community/blob/2e1fd240f9ce06f500feeaa3e4a9675e65e6b967/trunk/013-linux518.patch
-    ./linux-5.18.patch
-    # source: https://gist.github.com/joanbm/207210d74637870c01ef5a3c262a597d
-    ./linux-6.0.patch
-    # source: https://gist.github.com/joanbm/94323ea99eff1e1d1c51241b5b651549
-    ./linux-6.1.patch
-    ./pedantic-fix.patch
-    ./null-pointer-fix.patch
-    ./gcc.patch
+  patches = map (patch: "${rpmFusionPatches}/${patch}") patchset ++ [
+    # Fix for Kernel 6.12 and later (5f60d5f6bbc1)
+    (fetchpatch2 {
+      url = "https://gist.githubusercontent.com/joanbm/20db669eed4d8367a457780747be8cb9/raw/5536ba1354b6b97013530e7345d3bf29e92225b1/broadcom-wl-fix-linux-6.12.patch";
+      hash = "sha256-Y5VgWp0m5tNp8lxDhIg7IodbqyUsJVHHiVIFgP9ioHE=";
+    })
   ];
 
   makeFlags = [ "KBASE=${kernel.dev}/lib/modules/${kernel.modDirVersion}" ];
 
   unpackPhase = ''
+    runHook preUnpack
     sourceRoot=broadcom-sta
     mkdir "$sourceRoot"
     tar xvf "$src" -C "$sourceRoot"
+    runHook postUnpack
   '';
 
   installPhase = ''
+    runHook preInstall
     binDir="$out/lib/modules/${kernel.modDirVersion}/kernel/net/wireless/"
     docDir="$out/share/doc/broadcom-sta/"
     mkdir -p "$binDir" "$docDir"
     cp wl.ko "$binDir"
     cp lib/LICENSE.txt "$docDir"
+    runHook postInstall
   '';
 
   meta = {
     description = "Kernel module driver for some Broadcom's wireless cards";
     homepage = "http://www.broadcom.com/support/802.11/linux_sta.php";
     license = lib.licenses.unfreeRedistributable;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
     platforms = lib.platforms.linux;
   };
 }

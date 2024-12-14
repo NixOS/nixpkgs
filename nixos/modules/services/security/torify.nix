@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 with lib;
 let
 
@@ -7,8 +12,8 @@ let
   torify = pkgs.writeTextFile {
     name = "tsocks";
     text = ''
-        #!${pkgs.runtimeShell}
-        TSOCKS_CONF_FILE=${pkgs.writeText "tsocks.conf" cfg.tsocks.config} LD_PRELOAD="${pkgs.tsocks}/lib/libtsocks.so $LD_PRELOAD" "$@"
+      #!${pkgs.runtimeShell}
+      TSOCKS_CONF_FILE=${pkgs.writeText "tsocks.conf" cfg.tsocks.config} LD_PRELOAD="${pkgs.tsocks}/lib/libtsocks.so $LD_PRELOAD" "$@"
     '';
     executable = true;
     destination = "/bin/tsocks";
@@ -66,11 +71,11 @@ in
 
   config = mkIf cfg.tsocks.enable {
 
-    environment.systemPackages = [ torify ];  # expose it to the users
+    environment.systemPackages = [ torify ]; # expose it to the users
 
     services.tor.tsocks.config = ''
-      server = ${toString(head (splitString ":" cfg.tsocks.server))}
-      server_port = ${toString(tail (splitString ":" cfg.tsocks.server))}
+      server = ${toString (head (splitString ":" cfg.tsocks.server))}
+      server_port = ${toString (tail (splitString ":" cfg.tsocks.server))}
 
       local = 127.0.0.0/255.128.0.0
       local = 127.128.0.0/255.192.0.0

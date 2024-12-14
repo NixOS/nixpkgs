@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "twitchapi";
-  version = "4.2.0";
+  version = "4.3.1";
 
   disabled = pythonOlder "3.7";
 
@@ -21,12 +21,20 @@ buildPythonPackage rec {
     owner = "Teekeks";
     repo = "pyTwitchAPI";
     rev = "refs/tags/v${version}";
-    hash = "sha256-QAxLYujnsudaiz9UepwrBA835Pct5h4VcE9ZrbkwMmg=";
+    hash = "sha256-pXbrI4WbId6nYbDSpF9cYnQBOkbNGvzW6/opCztZ1ck=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  postPatch = ''
+    sed -i "/document_enum/d" twitchAPI/type.py
+  '';
 
-  propagatedBuildInputs = [
+  pythonRemoveDeps = [
+    "enum-tools"
+  ];
+
+  build-system = [ setuptools ];
+
+  dependencies = [
     aiohttp
     python-dateutil
     typing-extensions

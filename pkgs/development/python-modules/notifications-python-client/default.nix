@@ -16,8 +16,8 @@
 
 buildPythonPackage rec {
   pname = "notifications-python-client";
-  version = "9.1.0";
-  format = "setuptools";
+  version = "10.0.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
@@ -30,12 +30,12 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace setup.py \
-      --replace "pytest-runner" ""
+      --replace-fail "pytest-runner" ""
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     docopt
     pyjwt
     requests
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     description = "Python client for the GOV.UK Notify API";
     homepage = "https://github.com/alphagov/notifications-python-client";
     changelog = "https://github.com/alphagov/notifications-python-client/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

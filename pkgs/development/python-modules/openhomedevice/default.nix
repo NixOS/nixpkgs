@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "openhomedevice";
-  version = "2.2";
+  version = "2.3.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "bazwilliams";
     repo = "openhomedevice";
     rev = "refs/tags/${version}";
-    hash = "sha256-GGp7nKFH01m1KW6yMkKlAdd26bDi8JDWva6OQ0CWMIw=";
+    hash = "sha256-u05aciRFCnqMJRClUMApAPDLpXOKn4wUTLgvR7BVZTA=";
   };
 
   build-system = [ setuptools ];

@@ -5,11 +5,9 @@
   twisted,
   passlib,
   pyparsing,
-  service-identity,
   six,
   zope-interface,
   pythonOlder,
-  python,
 }:
 
 buildPythonPackage rec {
@@ -46,6 +44,6 @@ buildPythonPackage rec {
     description = "Pure-Python Twisted library for LDAP";
     homepage = "https://github.com/twisted/ldaptor";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

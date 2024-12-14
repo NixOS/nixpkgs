@@ -35,14 +35,14 @@
 
 buildPythonPackage rec {
   pname = "jupyter-server";
-  version = "2.14.1";
+  version = "2.14.2";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "jupyter_server";
     inherit version;
-    hash = "sha256-ElWNFY7HoGU7+WzCcrx6154BJ9UDuYLtFEOZNGaU9yY=";
+    hash = "sha256-ZglQIaqWOM7SdsJIsdgYYuTFDyktV1kgu+lg3hxWsSs=";
   };
 
   nativeBuildInputs = [
@@ -72,7 +72,7 @@ buildPythonPackage rec {
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/299427
-  stripExclude = lib.optionals stdenv.isDarwin [ "favicon.ico" ];
+  stripExclude = lib.optionals stdenv.hostPlatform.isDarwin [ "favicon.ico" ];
 
   nativeCheckInputs = [
     ipykernel
@@ -102,13 +102,13 @@ buildPythonPackage rec {
       # test is presumable broken in sandbox
       "test_authorized_requests"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # attempts to use trashcan, build env doesn't allow this
       "test_delete"
       # Insufficient access privileges for operation
       "test_regression_is_hidden"
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       # Failed: DID NOT RAISE <class 'tornado.web.HTTPError'>
       "test_copy_big_dir"
     ];

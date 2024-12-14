@@ -7,7 +7,7 @@ stdenv.mkDerivation rec {
     owner = "Chatterino";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-c3Vhzes54xLjKV0Of7D1eFpQvIWJwcUBXvLT2p6VwBE=";
+    hash = "sha256-c3Vhzes54xLjKV0Of7D1eFpQvIWJwcUBXvLT2p6VwBE=";
     fetchSubmodules = true;
   };
   nativeBuildInputs = [ cmake pkg-config qt6.wrapQtAppsHook ];
@@ -20,11 +20,11 @@ stdenv.mkDerivation rec {
     boost
     openssl
     libsecret
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qt6.qtwayland
   ];
   cmakeFlags = [ "-DBUILD_WITH_QT6=ON" ];
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p "$out/Applications"
     mv bin/chatterino.app "$out/Applications/"
   '' + ''

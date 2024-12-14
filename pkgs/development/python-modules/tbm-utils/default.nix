@@ -10,7 +10,6 @@
   pprintpp,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   wrapt,
 }:
 
@@ -52,8 +51,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
-
   propagatedBuildInputs = [
     attrs
     pendulum
@@ -63,14 +60,14 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  disabledTests = lib.optionals stdenv.isDarwin [
+  disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Skip on macOS because /etc/localtime is accessed through the pendulum
     # library, which is not allowed in a sandboxed build.
     "test_create_parser_filter_dates"
     "test_parse_args"
   ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     # Skip on macOS because /etc/localtime is accessed through the pendulum
     # library, which is not allowed in a sandboxed build.
     "tests/test_datetime.py"
@@ -84,6 +81,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/thebigmunch/tbm-utils";
     changelog = "https://github.com/thebigmunch/tbm-utils/blob/${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

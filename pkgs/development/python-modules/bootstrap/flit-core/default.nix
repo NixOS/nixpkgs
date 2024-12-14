@@ -1,5 +1,4 @@
 {
-  lib,
   stdenv,
   python,
   flit-core,
@@ -14,7 +13,7 @@ stdenv.mkDerivation rec {
     meta
     ;
 
-  sourceRoot = "${src.name}/flit_core";
+  postPatch = "cd flit_core";
 
   buildPhase = ''
     runHook preBuild

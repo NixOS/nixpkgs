@@ -16,7 +16,7 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     AudioToolbox
     AudioUnit
     CoreServices
@@ -33,6 +33,6 @@ buildPythonPackage rec {
     description = "Utilities and Python modules for handling audio";
     homepage = "https://audiotools.sourceforge.net/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

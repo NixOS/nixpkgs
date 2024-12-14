@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, openssl
-, zlib
-, zstd
-, icu
-, cyrus_sasl
-, snappy
-, darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  openssl,
+  zlib,
+  zstd,
+  icu,
+  cyrus_sasl,
+  snappy,
+  darwin,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mongoc";
-  version = "1.27.3";
+  version = "1.29.0";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-c-driver";
     rev = "refs/tags/${version}";
-    hash = "sha256-j/Z1fwP7Lt1izRmSxAqnWDX7ehD7QQWXERUIdyPpwMU=";
+    hash = "sha256-367qk0u81jnNA/9ruCo9wUWnCPrNjLhp9x62iEpCmE4=";
   };
 
   nativeBuildInputs = [
@@ -28,16 +29,18 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-    zlib
-    zstd
-    icu
-    cyrus_sasl
-    snappy
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.Security
-  ];
+  buildInputs =
+    [
+      openssl
+      zlib
+      zstd
+      icu
+      cyrus_sasl
+      snappy
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk_11_0.frameworks.Security
+    ];
 
   cmakeFlags = [
     "-DBUILD_VERSION=${version}"

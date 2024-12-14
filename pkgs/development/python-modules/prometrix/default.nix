@@ -11,7 +11,6 @@
   poetry-core,
   prometheus-api-client,
   pydantic,
-  pythonRelaxDepsHook,
   requests,
 }:
 
@@ -34,8 +33,6 @@ buildPythonPackage rec {
   ];
 
   build-system = [ poetry-core ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     boto3

@@ -7,12 +7,12 @@ let
   cfg = config.programs.fish;
 
   fishAbbrs = lib.concatStringsSep "\n" (
-    lib.mapAttrsFlatten (k: v: "abbr -ag ${k} ${lib.escapeShellArg v}")
+    lib.mapAttrsToList (k: v: "abbr -ag ${k} ${lib.escapeShellArg v}")
       cfg.shellAbbrs
   );
 
   fishAliases = lib.concatStringsSep "\n" (
-    lib.mapAttrsFlatten (k: v: "alias ${k} ${lib.escapeShellArg v}")
+    lib.mapAttrsToList (k: v: "alias ${k} ${lib.escapeShellArg v}")
       (lib.filterAttrs (k: v: v != null) cfg.shellAliases)
   );
 
@@ -33,7 +33,8 @@ let
     '';
 
   babelfishTranslate = path: name:
-    pkgs.runCommandLocal "${name}.fish" {
+    pkgs.runCommand "${name}.fish" {
+      preferLocalBuild = true;
       nativeBuildInputs = [ pkgs.babelfish ];
     } "babelfish < ${path} > $out;";
 
@@ -258,12 +259,14 @@ in
             preferLocalBuild = true;
             allowSubstitutes = false;
           };
-          generateCompletions = package: pkgs.runCommandLocal
+          generateCompletions = package: pkgs.runCommand
             ( with lib.strings; let
                 storeLength = stringLength storeDir + 34; # Nix' StorePath::HashLen + 2 for the separating slash and dash
                 pathName = substring storeLength (stringLength package - storeLength) package;
               in (package.name or pathName) + "_fish-completions")
-            ( { inherit package; } //
+            ( { inherit package;
+                preferLocalBuild = true;
+              } //
               lib.optionalAttrs (package ? meta.priority) { meta.priority = package.meta.priority; })
             ''
               mkdir -p $out
@@ -313,5 +316,5 @@ in
     '';
 
   };
-
+  meta.maintainers = with lib.maintainers; [ sigmasquadron ];
 }

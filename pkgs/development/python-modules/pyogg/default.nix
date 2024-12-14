@@ -9,11 +9,9 @@
   libopus,
   opusfile,
   substituteAll,
-  python,
 }:
 
 buildPythonPackage rec {
-
   pname = "pyogg";
   version = "0.6.14a1";
 
@@ -30,7 +28,7 @@ buildPythonPackage rec {
     libopus
   ];
 
-  propagatedBuidInputs = [
+  propagatedBuildInputs = [
     libvorbis
     flac
     libogg

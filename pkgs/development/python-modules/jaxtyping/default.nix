@@ -1,11 +1,12 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
+
+  # build-system
   hatchling,
-  pythonRelaxDepsHook,
-  typeguard,
+
+  # tests
   cloudpickle,
   equinox,
   ipython,
@@ -19,28 +20,19 @@
 let
   self = buildPythonPackage rec {
     pname = "jaxtyping";
-    version = "0.2.31";
+    version = "0.2.36";
     pyproject = true;
-
-    disabled = pythonOlder "3.9";
 
     src = fetchFromGitHub {
       owner = "google";
       repo = "jaxtyping";
       rev = "refs/tags/v${version}";
-      hash = "sha256-kuGFzp8sDLq6J/qq8ap3lD3n1pABHurXcbRUtDQyWwE=";
+      hash = "sha256-TXhHh6Nka9TOnfFPaNyHmLdTkhzyFEY0mLSfoDf9KQc=";
     };
 
-    build-system = [
-      hatchling
-      pythonRelaxDepsHook
-    ];
+    build-system = [ hatchling ];
 
-    dependencies = [
-      typeguard
-    ];
-
-    pythonRelaxDeps = [ "typeguard" ];
+    pythonImportsCheck = [ "jaxtyping" ];
 
     nativeCheckInputs = [
       cloudpickle
@@ -63,8 +55,6 @@ let
         catchConflicts = false;
       };
     };
-
-    pythonImportsCheck = [ "jaxtyping" ];
 
     meta = {
       description = "Type annotations and runtime checking for JAX arrays and PyTrees";

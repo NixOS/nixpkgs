@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -22,15 +23,17 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [
     poetry-core
-    pythonRelaxDepsHook
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    beautifulsoup4
-    publicsuffix2
-    redis
-    tornado
-  ] ++ redis.optional-dependencies.hiredis;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      beautifulsoup4
+      publicsuffix2
+      redis
+      tornado
+    ]
+    ++ redis.optional-dependencies.hiredis;
 
   # Project has no tests
   doCheck = false;

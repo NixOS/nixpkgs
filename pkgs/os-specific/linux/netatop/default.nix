@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, kernel, kmod, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  kernel,
+  kmod,
+  zlib,
+}:
 
 let
   version = "3.1";
@@ -13,7 +20,10 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = kernel.moduleBuildDependencies;
-  buildInputs = [ kmod zlib ];
+  buildInputs = [
+    kmod
+    zlib
+  ];
 
   hardeningDisable = [ "pic" ];
   env.NIX_CFLAGS_COMPILE = toString [ "-Wno-error=implicit-fallthrough" ];
@@ -51,6 +61,6 @@ stdenv.mkDerivation {
     homepage = "https://www.atoptool.nl/downloadnetatop.php";
     license = lib.licenses.gpl2Only;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ viric ];
+    maintainers = [ ];
   };
 }

@@ -1,20 +1,23 @@
 {
   lib,
   buildPythonPackage,
-  pythonRelaxDepsHook,
   fetchPypi,
   grpcio,
   protobuf,
 }:
 
+# This package should be updated together with the main grpc package and other
+# related python grpc packages.
+# nixpkgs-update: no auto update
 buildPythonPackage rec {
   pname = "grpcio-health-checking";
-  version = "1.62.2";
+  version = "1.67.0";
   format = "setuptools";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-pE0eoeFRC1xiJl2toE2GYhuxSR113ph3E8nA6gBcEKg=";
+    pname = "grpcio_health_checking";
+    inherit version;
+    hash = "sha256-PepxXVboJQ/wW6Se9RF/g2skD/N5vkY2DCbO/ZydsRo=";
   };
 
   propagatedBuildInputs = [
@@ -22,7 +25,6 @@ buildPythonPackage rec {
     protobuf
   ];
 
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
   pythonRelaxDeps = [ "grpcio" ];
 
   pythonImportsCheck = [ "grpc_health" ];

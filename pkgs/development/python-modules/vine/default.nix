@@ -1,7 +1,6 @@
 {
   lib,
   buildPythonPackage,
-  case,
   fetchPypi,
   pytestCheckHook,
   pythonOlder,
@@ -20,7 +19,6 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    case
     pytestCheckHook
   ];
 

@@ -90,9 +90,9 @@ let
       xmlRev = "980b1af13acc31660dce632f913c968f52e2b275";
     };
     "50.13" = {
-      dfHackRelease = "50.13-r1.1";
-      hash = "sha256-FiXanXflszTr4ogz+EoDAUxzE2U9ODeZIJJ1u6Xm4Mo=";
-      xmlRev = "3507715fd07340de5a6c47064220f6e17343e5d5";
+      dfHackRelease = "50.13-r3";
+      hash = "sha256-WbkJ8HmLT5GdZgDmcuFh+1uzhloKM9um0b9YO//uR7Y=";
+      xmlRev = "f0530a22149606596e97e3e17d941df3aafe29b9";
     };
   };
 

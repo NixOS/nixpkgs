@@ -21,7 +21,7 @@ update_vscodium () {
   ARCHIVE_FMT=$4
   VSCODIUM_URL="https://github.com/VSCodium/vscodium/releases/download/${VSCODIUM_VER}/VSCodium-${ARCH}-${VSCODIUM_VER}.${ARCHIVE_FMT}"
   VSCODIUM_SHA256=$(nix-prefetch-url ${VSCODIUM_URL})
-  sed -i "s/${ARCH_LONG} = \".\{52\}\"/${ARCH_LONG} = \"${VSCODIUM_SHA256}\"/" "$ROOT/vscodium.nix"
+  sed -i "s/${ARCH_LONG} = \"[0-9a-fA-F]\{40,64\}\"/${ARCH_LONG} = \"${VSCODIUM_SHA256}\"/" "$ROOT/vscodium.nix"
 }
 
 # VSCodium

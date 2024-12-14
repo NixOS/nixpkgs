@@ -45,14 +45,14 @@ let
 
   pname = "slack";
 
-  x86_64-darwin-version = "4.38.121";
-  x86_64-darwin-sha256 = "1w0s6j8z8961sv4y00jxpy5gjlj0dswyxs15c7isb26ii11nn1i2";
+  x86_64-darwin-version = "4.41.98";
+  x86_64-darwin-sha256 = "1bg62139y4y1m4a6fq67d1kn7yjnzaqjffx0v7srf3097k8p304x";
 
-  x86_64-linux-version = "4.38.125";
-  x86_64-linux-sha256 = "sha256-BJeFXZ8STbMCmGvYRoFsfsyIpGukQkuwv0m2NzE+89c=";
+  x86_64-linux-version = "4.41.98";
+  x86_64-linux-sha256 = "0gdnpgp1vc96asx8079ka9fckg7dahrnwk8amwwq36apmssvjz4q";
 
-  aarch64-darwin-version = "4.38.121";
-  aarch64-darwin-sha256 = "161z947p7a2d7584hybl77chab8y027cqpph2hd2s4b5k6bchkj5";
+  aarch64-darwin-version = "4.41.98";
+  aarch64-darwin-sha256 = "0nlwdzby9hwsx8vp4bsbjidh61zmdgs791xb5mk7xzigjkg33xga";
 
   version = {
     x86_64-darwin = x86_64-darwin-version;
@@ -65,15 +65,15 @@ let
     base = "https://downloads.slack-edge.com";
   in {
     x86_64-darwin = fetchurl {
-      url = "${base}/releases/macos/${version}/prod/x64/Slack-${version}-macOS.dmg";
+      url = "${base}/desktop-releases/mac/universal/${version}/Slack-${version}-macOS.dmg";
       sha256 = x86_64-darwin-sha256;
     };
     x86_64-linux = fetchurl {
-      url = "${base}/releases/linux/${version}/prod/x64/slack-desktop-${version}-amd64.deb";
+      url = "${base}/desktop-releases/linux/x64/${version}/slack-desktop-${version}-amd64.deb";
       sha256 = x86_64-linux-sha256;
     };
     aarch64-darwin = fetchurl {
-      url = "${base}/releases/macos/${version}/prod/arm64/Slack-${version}-macOS.dmg";
+      url = "${base}/desktop-releases/mac/arm64/${version}/Slack-${version}-macOS.dmg";
       sha256 = aarch64-darwin-sha256;
     };
   }.${system} or throwSystem;
@@ -138,7 +138,7 @@ let
       xorg.libXtst
       xorg.libxkbfile
       xorg.libxshmfence
-    ] + ":${stdenv.cc.cc.lib}/lib64";
+    ] + ":${lib.getLib stdenv.cc.cc}/lib64";
 
     buildInputs = [
       gtk3 # needed for GSETTINGS_SCHEMAS_PATH
@@ -174,7 +174,7 @@ let
       makeWrapper $out/lib/slack/slack $out/bin/slack \
         --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
         --suffix PATH : ${lib.makeBinPath [xdg-utils]} \
-        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer}}"
+        --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations,WebRTCPipeWireCapturer --enable-wayland-ime=true}}"
 
       # Fix the desktop link
       substituteInPlace $out/share/applications/slack.desktop \
@@ -207,6 +207,6 @@ let
     '';
   };
 in
-if stdenv.isDarwin
+if stdenv.hostPlatform.isDarwin
 then darwin
 else linux

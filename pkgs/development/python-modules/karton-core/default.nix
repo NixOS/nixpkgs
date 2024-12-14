@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "karton-core";
-  version = "5.4.0";
+  version = "5.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "CERT-Polska";
     repo = "karton";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4IU4ttJdh5BU79076kbQOtzqzeQ3/Xb9Qd6Bh9iNXrA=";
+    hash = "sha256-KaEXBNGcJN88gIv7suKcr1pK4ih/QbByxEy3nZFlIgk=";
   };
 
   build-system = [ setuptools ];

@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
     owner = "clickable";
     repo = "clickable";
     rev = "v${version}";
-    sha256 = "sha256-MFzpeiWeqJ0MG8ouwRkYXD1e6Nsxshmz1NSzCIBRjZ0=";
+    hash = "sha256-MFzpeiWeqJ0MG8ouwRkYXD1e6Nsxshmz1NSzCIBRjZ0=";
   };
 
   propagatedBuildInputs = with python3Packages; [
@@ -67,7 +67,7 @@ python3Packages.buildPythonApplication rec {
     ++
     # There are no docker images available for the aarch64 architecutre
     # which are required for tests.
-    lib.optionals stdenv.isAarch64 [
+    lib.optionals stdenv.hostPlatform.isAarch64 [
       "test_arch"
       "test_restricted_arch"
     ];

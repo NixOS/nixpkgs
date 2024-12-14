@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, buildDunePackage
-, fetchFromGitHub
-, menhir
-, menhirLib
+{
+  lib,
+  stdenv,
+  buildDunePackage,
+  fetchFromGitHub,
+  menhir,
+  menhirLib,
 }:
 
 buildDunePackage rec {
@@ -20,7 +21,7 @@ buildDunePackage rec {
   };
 
   # ./configure: cannot execute: required file not found
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchShebangs configure
   '';
 

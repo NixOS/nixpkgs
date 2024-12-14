@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "backports-datetime-fromisoformat";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "movermeyer";
     repo = "backports.datetime_fromisoformat";
     rev = "refs/tags/v${version}";
-    hash = "sha256-c3LCTOKva99+x96iLHNnL1e1Ft1M1CsjQX+nEqAlXUs=";
+    hash = "sha256-v9Njic7zN2bv1lQgdbJNeZLF3VXcC9A4UoE/znLF0gM=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -42,6 +42,6 @@ buildPythonPackage rec {
     description = "Backport of Python 3.11's datetime.fromisoformat";
     homepage = "https://github.com/movermeyer/backports.datetime_fromisoformat";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

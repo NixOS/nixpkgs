@@ -7,7 +7,7 @@
   pytest,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pytest-fixture-config";
   version = "1.7.1-unstable-2022-10-03";
   pyproject = true;
@@ -19,7 +19,11 @@ buildPythonPackage rec {
     hash = "sha256-huN3RzwtfVf4iMJ96VRP/ldOxTUlUMF1wJIdbcGXHn4=";
   };
 
-  sourceRoot = "${src.name}/pytest-fixture-config";
+  patches = [ ./setuptools-72.0-compat.patch ];
+
+  postPatch = ''
+    cd pytest-fixture-config
+  '';
 
   nativeBuildInputs = [
     setuptools

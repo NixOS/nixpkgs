@@ -1,7 +1,9 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.blocky;
 
@@ -10,9 +12,11 @@ let
 in
 {
   options.services.blocky = {
-    enable = mkEnableOption "blocky, a fast and lightweight DNS proxy as ad-blocker for local network with many features";
+    enable = lib.mkEnableOption "blocky, a fast and lightweight DNS proxy as ad-blocker for local network with many features";
 
-    settings = mkOption {
+    package = lib.mkPackageOption pkgs "blocky" { };
+
+    settings = lib.mkOption {
       type = format.type;
       default = { };
       description = ''
@@ -23,14 +27,14 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.blocky = {
       description = "A DNS proxy and ad-blocker for the local network";
       wantedBy = [ "multi-user.target" ];
 
       serviceConfig = {
         DynamicUser = true;
-        ExecStart = "${pkgs.blocky}/bin/blocky --config ${configFile}";
+        ExecStart = "${lib.getExe cfg.package} --config ${configFile}";
         Restart = "on-failure";
 
         AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];

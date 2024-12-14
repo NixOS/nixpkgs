@@ -7,10 +7,9 @@
   # build time
   astropy-extension-helpers,
   cython,
-  jinja2,
-  oldest-supported-numpy,
+  setuptools,
   setuptools-scm,
-  wheel,
+
   # testing
   pytestCheckHook,
   stdenv,
@@ -27,26 +26,29 @@
 
 buildPythonPackage rec {
   pname = "astropy";
-  version = "6.0.1";
+  version = "6.1.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8"; # according to setup.cfg
+  disabled = pythonOlder "3.10";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ial13jVtBgjnTx9JNEL7Osu7eoW3OeB0RguwNAAUs5w=";
+    hash = "sha256-NhVY4rCTqZvr5p8f1H+shqGSYHpMFu05ugqACyq2DDQ=";
   };
 
-  nativeBuildInputs = [
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy>=2.0.0"  "numpy"
+  '';
+
+  build-system = [
     astropy-extension-helpers
     cython
-    jinja2
-    oldest-supported-numpy
+    setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     astropy-iers-data
     numpy
     packaging
@@ -73,17 +75,18 @@ buildPythonPackage rec {
     # https://github.com/astropy/astropy/issues/15441
     "TestUnifiedOutputRegistry"
 
-    # fail due to pytest>=8
-    # https://github.com/astropy/astropy/issues/15960#issuecomment-1913654471
-    "test_distortion_header"
-
     # flaky
     "test_timedelta_conversion"
     # More flaky tests, see: https://github.com/NixOS/nixpkgs/issues/294392
     "test_sidereal_lon_independent"
     "test_timedelta_full_precision_arithmetic"
     "test_datetime_to_timedelta"
-  ] ++ lib.optionals stdenv.isDarwin [ "test_sidereal_lat_independent" ];
+
+    "test_datetime_difference_agrees_with_timedelta_no_hypothesis"
+
+    # SAMPProxyError 1: 'Timeout expired!'
+    "TestStandardProfile.test_main"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "test_sidereal_lat_independent" ];
 
   meta = {
     description = "Astronomy/Astrophysics library for Python";

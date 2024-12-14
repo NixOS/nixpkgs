@@ -1,4 +1,10 @@
-{ lib, maven, fetchFromGitHub, makeWrapper, jre }:
+{
+  lib,
+  maven,
+  fetchFromGitHub,
+  makeWrapper,
+  jre,
+}:
 
 maven.buildMavenPackage rec {
   pname = "kotlin-interactive-shell";
@@ -11,7 +17,7 @@ maven.buildMavenPackage rec {
     hash = "sha256-3DTyo7rPswpEVzFkcprT6FD+ITGJ+qCXFKXEGoCK+oE=";
   };
 
-  mvnHash = "sha256-m1o0m0foqJhEzWjC9behBeld5HT08WClcZN2xc3fZrI=";
+  mvnHash = "sha256-UHtvBVw35QBwgCD+nSduR0924ANAOfwrr/a4qPEYsrM=";
   mvnParameters = "compile";
 
   nativeBuildInputs = [ makeWrapper ];

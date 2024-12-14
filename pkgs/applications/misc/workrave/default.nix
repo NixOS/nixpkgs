@@ -1,36 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapGAppsHook3
-, autoconf
-, autoconf-archive
-, automake
-, gettext
-, intltool
-, libtool
-, pkg-config
-, libICE
-, libSM
-, libXScrnSaver
-, libXtst
-, gobject-introspection
-, glib
-, glibmm
-, gtkmm3
-, atk
-, pango
-, pangomm
-, cairo
-, cairomm
-, dbus
-, dbus-glib
-, gdome2
-, gstreamer
-, gst-plugins-base
-, gst-plugins-good
-, libsigcxx
-, boost
-, jinja2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapGAppsHook3,
+  autoconf,
+  autoconf-archive,
+  automake,
+  gettext,
+  intltool,
+  libtool,
+  pkg-config,
+  libICE,
+  libSM,
+  libXScrnSaver,
+  libXtst,
+  gobject-introspection,
+  glib,
+  glibmm,
+  gtkmm3,
+  atk,
+  pango,
+  pangomm,
+  cairo,
+  cairomm,
+  dbus,
+  dbus-glib,
+  gdome2,
+  gstreamer,
+  gst-plugins-base,
+  gst-plugins-good,
+  libsigcxx,
+  boost,
+  jinja2,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,8 +41,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "workrave";
     owner = "rcaelers";
-    rev = with lib;
-      "v" + concatStringsSep "_" (splitVersion version);
+    rev = "v" + lib.concatStringsSep "_" (lib.splitVersion version);
     sha256 = "sha256-U39zr8XGIDbyY480bla2yTaRQLP3wMrL8RLWjlTa5uY=";
   };
 
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
 
   meta = with lib; {
-    broken = (stdenv.isLinux && stdenv.isAarch64);
+    broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);
     description = "Program to help prevent Repetitive Strain Injury";
     mainProgram = "workrave";
     longDescription = ''

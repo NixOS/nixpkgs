@@ -3,7 +3,6 @@
   blockdiag,
   buildPythonPackage,
   fetchFromGitHub,
-  pynose,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -27,11 +26,9 @@ buildPythonPackage rec {
 
   dependencies = [ blockdiag ];
 
-  nativeCheckInputs = [
-    pynose
-    pytestCheckHook
-  ];
+  patches = [ ./fix_test_generate.patch ];
 
+  nativeCheckInputs = [ pytestCheckHook ];
   pytestFlagsArray = [ "src/seqdiag/tests/" ];
 
   pythonImportsCheck = [ "seqdiag" ];

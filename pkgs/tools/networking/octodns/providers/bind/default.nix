@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, octodns
-, pytestCheckHook
-, pythonOlder
-, dnspython
-, setuptools
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  octodns,
+  pytestCheckHook,
+  pythonOlder,
+  dnspython,
+  setuptools,
 }:
 
 buildPythonPackage rec {
@@ -44,6 +45,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/octodns/octodns-bind";
     changelog = "https://github.com/octodns/octodns-bind/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -8,7 +8,7 @@
   cargo,
   rustc,
   # provided as callPackage input to enable easier overrides through overlays
-  cargoHash ? "sha256-Y0aG8NgiDTbDYgh8hMxfwSCHFh8f7PGABxw10m07dgs=",
+  cargoHash ? "sha256-xF0tqJ//BacdfyCYvCuhg7bEjQh/RadBrRDfSVGdGXE=",
   qcoro,
 }:
 mkKdeDerivation rec {
@@ -28,5 +28,10 @@ mkKdeDerivation rec {
     rustc
   ];
 
-  extraBuildInputs = [qtsvg qtwebengine corrosion qcoro];
+  extraBuildInputs = [
+    qtsvg
+    qtwebengine
+    corrosion
+    qcoro
+  ];
 }

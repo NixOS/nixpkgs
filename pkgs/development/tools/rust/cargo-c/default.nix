@@ -1,35 +1,44 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, pkg-config
-, curl
-, openssl
-, stdenv
-, CoreFoundation
-, libiconv
-, Security
-, rav1e
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  pkg-config,
+  curl,
+  openssl,
+  stdenv,
+  CoreFoundation,
+  libiconv,
+  Security,
+  rav1e,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-c";
-  version = "0.9.31";
+  version = "0.10.2";
 
   src = fetchCrate {
     inherit pname;
     # this version may need to be updated along with package version
-    version = "${version}+cargo-0.78.0";
-    hash = "sha256-RqwUV3e02GykYH/pWHjoent+gix+CD+t3yAQxqUmo54=";
+    version = "${version}+cargo-0.80.0";
+    hash = "sha256-ltxd4n3oo8ZF/G/zmR4FSVtNOkxwCjDv6PdxkmWxZ+8=";
   };
 
-  cargoHash = "sha256-SfKDlcN+PW1twJu3YbmMsQOtFh6JHncAhdrVg+tweAE=";
+  cargoHash = "sha256-UfhIz87s0CLUDbIpWMPzGQ7qVmh14GuiFoquauSbTOw=";
 
-  nativeBuildInputs = [ pkg-config (lib.getDev curl) ];
-  buildInputs = [ openssl curl ] ++ lib.optionals stdenv.isDarwin [
-    CoreFoundation
-    libiconv
-    Security
+  nativeBuildInputs = [
+    pkg-config
+    (lib.getDev curl)
   ];
+  buildInputs =
+    [
+      openssl
+      curl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreFoundation
+      libiconv
+      Security
+    ];
 
   # Ensure that we are avoiding build of the curl vendored in curl-sys
   doInstallCheck = stdenv.hostPlatform.libc == "glibc";

@@ -3,7 +3,6 @@
   blockdiag,
   fetchFromGitHub,
   buildPythonPackage,
-  pynose,
   pytestCheckHook,
   setuptools,
   pythonOlder,
@@ -23,14 +22,13 @@ buildPythonPackage rec {
     hash = "sha256-uKrdkXpL5YBr953sRsHknYg+2/WwrZmyDf8BMA2+0tU=";
   };
 
+  patches = [ ./fix_test_generate.patch ];
+
   build-system = [ setuptools ];
 
   dependencies = [ blockdiag ];
 
-  nativeCheckInputs = [
-    pynose
-    pytestCheckHook
-  ];
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [ "src/nwdiag/tests/" ];
 

@@ -2,11 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
-  pydantic,
-  requests,
   pytestCheckHook,
-  pytest-asyncio,
   setuptools,
 }:
 

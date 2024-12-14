@@ -27,14 +27,15 @@
 
 buildPythonPackage rec {
   pname = "google-auth";
-  version = "2.29.0";
+  version = "2.35.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-Zy3/My0HMidVD/x0V4aKxCGNbFALFV/mzBfSsTYCw2A=";
+    pname = "google_auth";
+    inherit version;
+    hash = "sha256-9MZO1OAejotkbvNMAY+L8zON8MjjfYs7ukDn9XSjJ4o=";
   };
 
   nativeBuildInputs = [ setuptools ];
@@ -45,7 +46,7 @@ buildPythonPackage rec {
     rsa
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [
       aiohttp
       requests
@@ -75,16 +76,16 @@ buildPythonPackage rec {
       pytestCheckHook
       responses
     ]
-    ++ passthru.optional-dependencies.aiohttp
-    ++ passthru.optional-dependencies.enterprise_cert
-    ++ passthru.optional-dependencies.reauth;
+    ++ optional-dependencies.aiohttp
+    ++ optional-dependencies.enterprise_cert
+    ++ optional-dependencies.reauth;
 
   pythonImportsCheck = [
     "google.auth"
     "google.oauth2"
   ];
 
-  disabledTestPaths = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  disabledTestPaths = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     # Disable tests using pyOpenSSL as it does not build on M1 Macs
     "tests/transport/test__mtls_helper.py"
     "tests/transport/test_requests.py"
@@ -103,6 +104,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/googleapis/google-auth-library-python";
     changelog = "https://github.com/googleapis/google-auth-library-python/blob/v${version}/CHANGELOG.md";
     license = licenses.asl20;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

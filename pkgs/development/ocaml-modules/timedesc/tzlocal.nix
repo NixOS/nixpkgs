@@ -1,6 +1,6 @@
-{ lib
-, buildDunePackage
-, timedesc
+{
+  buildDunePackage,
+  timedesc,
 }:
 
 buildDunePackage {

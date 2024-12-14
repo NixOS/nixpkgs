@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, runCommandLocal }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  runCommandLocal,
+  mbrola-voices,
+}:
 
 let
   pname = "mbrola";
@@ -10,20 +16,6 @@ let
     platforms = platforms.all;
     description = "Speech synthesizer based on the concatenation of diphones";
     homepage = "https://github.com/numediart/MBROLA";
-  };
-
-  # Very big (0.65 G) so kept as a fixed-output derivation to limit "duplicates".
-  voices = fetchFromGitHub {
-    owner = "numediart";
-    repo = "MBROLA-voices";
-    rev = "fe05a0ccef6a941207fd6aaad0b31294a1f93a51";  # using latest commit
-    sha256 = "1w0y2xjp9rndwdjagp2wxh656mdm3d6w9cs411g27rjyfy1205a0";
-
-    name = "${pname}-voices-${version}";
-    meta = meta // {
-      description = "Speech synthesizer based on the concatenation of diphones (voice files)";
-      homepage = "https://github.com/numediart/MBROLA-voices";
-    };
   };
 
   bin = stdenv.mkDerivation {
@@ -40,6 +32,10 @@ let
     # required for cross compilation
     makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
+    env = lib.optionalAttrs stdenv.cc.isGNU {
+      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+    };
+
     installPhase = ''
       runHook preInstall
       install -D Bin/mbrola $out/bin/mbrola
@@ -53,14 +49,12 @@ let
   };
 
 in
-  runCommandLocal
-    "${pname}-${version}"
-    {
-      inherit pname version meta;
-    }
-    ''
-      mkdir -p "$out/share/mbrola"
-      ln -s '${voices}/data' "$out/share/mbrola/voices"
-      ln -s '${bin}/bin' "$out/"
-    ''
-
+runCommandLocal "${pname}-${version}"
+  {
+    inherit pname version meta;
+  }
+  ''
+    mkdir -p "$out/share/mbrola"
+    ln -s '${mbrola-voices}/data' "$out/share/mbrola/voices"
+    ln -s '${bin}/bin' "$out/"
+  ''

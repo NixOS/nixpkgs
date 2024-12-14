@@ -1,9 +1,10 @@
-{ lib
-, stdenvNoCC
-, rustPlatform
-, fetchFromGitHub
-, Foundation
-, DiskArbitration
+{
+  lib,
+  stdenvNoCC,
+  rustPlatform,
+  fetchFromGitHub,
+  Foundation,
+  DiskArbitration,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,9 +19,9 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-I8mzOUvm72KLLBumpgn9gNyx9FKvUrB4ze1iM1+OA18=";
   };
 
-  cargoSha256 = "sha256-rfN4QERs1H1G7ZZim//78vlxbYfU4Cx7SYYUz/QLKeU=";
+  cargoHash = "sha256-rfN4QERs1H1G7ZZim//78vlxbYfU4Cx7SYYUz/QLKeU=";
 
-  buildInputs = lib.optionals stdenvNoCC.isDarwin [
+  buildInputs = lib.optionals stdenvNoCC.hostPlatform.isDarwin [
     Foundation
     DiskArbitration
   ];

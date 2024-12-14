@@ -41,6 +41,6 @@ buildPythonPackage rec {
     mainProgram = "readmdict";
     homepage = "https://github.com/ffreemt/readmdict";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

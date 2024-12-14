@@ -1,72 +1,86 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libgit2
-, openssl
-, zlib
-, stdenv
-, darwin
-, nix-update-script
-, testers
-, tinymist
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libgit2,
+  openssl,
+  zlib,
+  versionCheckHook,
+  nix-update-script,
+  vscode-extensions,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "tinymist";
   # Please update the corresponding vscode extension when updating
   # this derivation.
-  version = "0.11.12";
+  version = "0.12.10";
 
   src = fetchFromGitHub {
     owner = "Myriad-Dreamin";
     repo = "tinymist";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hqTVfEKaAG18JpUZajm0XaoX6kw26aE37T/kfoNNxk8=";
+    tag = "v${version}";
+    hash = "sha256-y+H1Q8TJa7XinVcsgZ9XCyeIUqQzvIAjlkgjia9rNso=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "typst-0.11.1" = "sha256-VDwyTKrtzmjMhVCp/GnZrgL6P6dLyKlLNA+LhoXBDl0=";
-      "typst-syntax-0.7.0" = "sha256-yrtOmlFAKOqAmhCP7n0HQCOQpU3DWyms5foCdUb9QTg=";
-      "typstfmt_lib-0.2.7" = "sha256-LBYsTCjZ+U+lgd7Z3H1sBcWwseoHsuepPd66bWgfvhI=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-Fvd8PqT64HseoIIhsWittN6Trp2i4ravIc+ETwiY+xQ=";
 
-  nativeBuildInputs = [
-    pkg-config
-  ];
+  nativeBuildInputs = [ pkg-config ];
 
   buildInputs = [
     libgit2
     openssl
     zlib
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk_11_0.frameworks.CoreFoundation
-    darwin.apple_sdk_11_0.frameworks.CoreServices
-    darwin.apple_sdk_11_0.frameworks.Security
-    darwin.apple_sdk_11_0.frameworks.SystemConfiguration
   ];
 
   checkFlags = [
     "--skip=e2e"
+
+    # Require internet access
+    "--skip=docs::package::tests::cetz"
+    "--skip=docs::package::tests::tidy"
+    "--skip=docs::package::tests::touying"
+
+    # Tests are flaky for unclear reasons since the 0.12.3 release
+    # Reported upstream: https://github.com/Myriad-Dreamin/tinymist/issues/868
+    "--skip=analysis::expr_tests::scope"
+    "--skip=analysis::post_type_check_tests::test"
+    "--skip=analysis::type_check_tests::test"
+    "--skip=completion::tests::test_pkgs"
+    "--skip=folding_range::tests::test"
+    "--skip=goto_definition::tests::test"
+    "--skip=hover::tests::test"
+    "--skip=inlay_hint::tests::smart"
+    "--skip=prepare_rename::tests::prepare"
+    "--skip=references::tests::test"
+    "--skip=rename::tests::test"
+    "--skip=semantic_tokens_full::tests::test"
   ];
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "-V" ];
+  doInstallCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      command = "${meta.mainProgram} -V";
-      package = tinymist;
+    tests = {
+      vscode-extension = vscode-extensions.myriad-dreamin.tinymist;
     };
   };
 
   meta = {
-    changelog = "https://github.com/Myriad-Dreamin/tinymist/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/Myriad-Dreamin/tinymist/blob/v${version}/CHANGELOG.md";
     description = "Tinymist is an integrated language service for Typst";
     homepage = "https://github.com/Myriad-Dreamin/tinymist";
     license = lib.licenses.asl20;
     mainProgram = "tinymist";
-    maintainers = with lib.maintainers; [ lampros ];
+    maintainers = with lib.maintainers; [
+      GaetanLepage
+      lampros
+    ];
   };
 }

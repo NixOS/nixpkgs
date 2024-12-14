@@ -9,7 +9,6 @@
   phonenumbers,
   pydantic,
   pythonOlder,
-  pythonRelaxDepsHook,
   qrcode,
   setuptools-scm,
   twilio,
@@ -30,14 +29,14 @@ buildPythonPackage rec {
     hash = "sha256-Sr7L3ioeofyADHb1NSgs0GmVbzX7rro7yhhG9Gq6GJE=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
-    setuptools-scm
+  build-system = [ setuptools-scm ];
+
+  pythonRelaxDeps = [
+    "django-phonenumber-field"
+    "qrcode"
   ];
 
-  pythonRelaxDeps = [ "django-phonenumber-field" ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     django
     django-formtools
     django-otp
@@ -45,7 +44,7 @@ buildPythonPackage rec {
     qrcode
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     call = [ twilio ];
     sms = [ twilio ];
     webauthn = [

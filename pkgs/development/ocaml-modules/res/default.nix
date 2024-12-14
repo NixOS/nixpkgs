@@ -1,14 +1,18 @@
-{ lib , fetchurl , buildDunePackage }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+}:
 
 buildDunePackage rec {
   pname = "res";
-  version = "5.0.1";
+  version = "5.0.2";
 
   minimalOCamlVersion = "4.08";
 
   src = fetchurl {
     url = "https://github.com/mmottl/res/releases/download/${version}/res-${version}.tbz";
-    hash = "sha256-rSrDMQBfnbWAr2LuajP3fveOtOwLyRbKPkaTKsnocQ4=";
+    hash = "sha256-hQxRETCYxy7ZHah5cg+XHtH3wCj/ofq1VHxsPHu91FU=";
   };
 
   doCheck = true;
@@ -21,4 +25,3 @@ buildDunePackage rec {
     maintainers = with lib.maintainers; [ sixstring982 ];
   };
 }
-

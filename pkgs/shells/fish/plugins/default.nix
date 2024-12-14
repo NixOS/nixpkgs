@@ -21,10 +21,14 @@ lib.makeScope newScope (self: with self; {
 
   fifc = callPackage ./fifc.nix { };
 
+  fish-bd = callPackage ./fish-bd.nix { };
+
   # Fishtape 2.x and 3.x aren't compatible,
   # but both versions are used in the tests of different other plugins.
   fishtape = callPackage ./fishtape.nix { };
   fishtape_3 = callPackage ./fishtape_3.nix { };
+
+  fish-you-should-use = callPackage ./fish-you-should-use.nix { };
 
   foreign-env = callPackage ./foreign-env { };
 
@@ -50,11 +54,15 @@ lib.makeScope newScope (self: with self; {
 
   plugin-git = callPackage ./plugin-git.nix { };
 
+  plugin-sudope = callPackage ./plugin-sudope.nix { };
+
   puffer = callPackage ./puffer.nix { };
 
   pure = callPackage ./pure.nix { };
 
   sdkman-for-fish = callPackage ./sdkman-for-fish.nix { };
+
+  spark = callPackage ./spark.nix { };
 
   sponge = callPackage ./sponge.nix { };
 

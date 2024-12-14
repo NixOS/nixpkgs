@@ -19,6 +19,6 @@ buildPythonPackage rec {
     mainProgram = "mpyq";
     homepage = "https://github.com/eagleflo/mpyq";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

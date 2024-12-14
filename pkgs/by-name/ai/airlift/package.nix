@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchPypi
-, kubernetes-helm
-, kind
-, docker
+{
+  lib,
+  python3,
+  fetchPypi,
+  kubernetes-helm,
+  kind,
+  docker,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -27,7 +28,6 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeBuildInputs = [
     python3.pkgs.poetry-core
-    python3.pkgs.pythonRelaxDepsHook
   ];
 
   buildInputs = [

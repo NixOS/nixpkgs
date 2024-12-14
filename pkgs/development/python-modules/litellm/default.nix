@@ -7,6 +7,7 @@
   backoff,
   buildPythonPackage,
   click,
+  cryptography,
   fastapi,
   fastapi-sso,
   fetchFromGitHub,
@@ -14,11 +15,14 @@
   gunicorn,
   importlib-metadata,
   jinja2,
+  jsonschema,
   openai,
   orjson,
   poetry-core,
   prisma,
+  pydantic,
   pyjwt,
+  pynacl,
   python-dotenv,
   python-multipart,
   pythonOlder,
@@ -26,7 +30,6 @@
   requests,
   resend,
   rq,
-  streamlit,
   tiktoken,
   tokenizers,
   uvicorn,
@@ -34,7 +37,7 @@
 
 buildPythonPackage rec {
   pname = "litellm";
-  version = "1.40.6";
+  version = "1.52.16";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -43,12 +46,8 @@ buildPythonPackage rec {
     owner = "BerriAI";
     repo = "litellm";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mXrLhgOETrkwHYSJSmEPvFwZiO0kx9FmXlTJN2WZ8WI=";
+    hash = "sha256-WDD7jsFajzBTQCsB1235n3bMQXzOoh98BOBXLVvG/zQ=";
   };
-
-  postPatch = ''
-    rm -rf dist
-  '';
 
   build-system = [ poetry-core ];
 
@@ -57,17 +56,20 @@ buildPythonPackage rec {
     click
     importlib-metadata
     jinja2
+    jsonschema
     openai
-    requests
+    pydantic
     python-dotenv
+    requests
     tiktoken
     tokenizers
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     proxy = [
       apscheduler
       backoff
+      cryptography
       fastapi
       fastapi-sso
       gunicorn
@@ -83,15 +85,14 @@ buildPythonPackage rec {
       azure-keyvault-secrets
       google-cloud-kms
       prisma
+      pynacl
       resend
-      streamlit
     ];
   };
 
-  # the import check phase fails trying to do a network request to openai
-  # pythonImportsCheck = [ "litellm" ];
+  pythonImportsCheck = [ "litellm" ];
 
-  # no tests
+  # access network
   doCheck = false;
 
   meta = with lib; {

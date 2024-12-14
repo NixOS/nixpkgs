@@ -9,8 +9,10 @@
 , enableStatic ? stdenv.hostPlatform.isStatic
 , withCxx ? !stdenv.hostPlatform.useAndroidPrebuilt
 , mouseSupport ? false, gpm
+, withTermlib ? false
 , unicodeSupport ? true
 , testers
+, binlore
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -37,6 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optional (!withCxx) "--without-cxx"
     ++ lib.optional (abiVersion == "5") "--with-abi-version=5"
     ++ lib.optional stdenv.hostPlatform.isNetBSD "--enable-rpath"
+    ++ lib.optional withTermlib "--with-termlib"
     ++ lib.optionals stdenv.hostPlatform.isWindows [
       "--enable-sp-funcs"
       "--enable-term-driver"
@@ -64,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   ]);
 
   # Only the C compiler, and explicitly not C++ compiler needs this flag on solaris:
-  CFLAGS = lib.optionalString stdenv.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
+  CFLAGS = lib.optionalString stdenv.hostPlatform.isSunOS "-D_XOPEN_SOURCE_EXTENDED";
 
   strictDeps = true;
 
@@ -76,7 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     ncurses
   ];
 
-  buildInputs = lib.optional (mouseSupport && stdenv.isLinux) gpm;
+  buildInputs = lib.optional (mouseSupport && stdenv.hostPlatform.isLinux) gpm;
 
   preConfigure = ''
     export PKG_CONFIG_LIBDIR="$dev/lib/pkgconfig"
@@ -89,7 +92,7 @@ stdenv.mkDerivation (finalAttrs: {
       "--with-pkg-config-libdir=$PKG_CONFIG_LIBDIR"
     )
   ''
-  + lib.optionalString stdenv.isSunOS ''
+  + lib.optionalString stdenv.hostPlatform.isSunOS ''
     sed -i -e '/-D__EXTENSIONS__/ s/-D_XOPEN_SOURCE=\$cf_XOPEN_SOURCE//' \
            -e '/CPPFLAGS="$CPPFLAGS/s/ -D_XOPEN_SOURCE_EXTENDED//' \
         configure
@@ -101,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = false;
 
   postFixup = let
-    abiVersion-extension = if stdenv.isDarwin then "${abiVersion}.$dylibtype" else "$dylibtype.${abiVersion}"; in
+    abiVersion-extension = if stdenv.hostPlatform.isDarwin then "${abiVersion}.$dylibtype" else "$dylibtype.${abiVersion}"; in
   ''
     # Determine what suffixes our libraries have
     suffix="$(awk -F': ' 'f{print $3; f=0} /default library suffix/{f=1}' config.log)"
@@ -178,6 +181,17 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = lib.optionalString (!stdenv.hostPlatform.isCygwin && !enableStatic) ''
     rm "$out"/lib/*.a
+  '';
+
+  # I'm not very familiar with ncurses, but it looks like most of the
+  # exec here will run hard-coded executables. There's one that is
+  # dynamic, but it looks like it only comes from executing a terminfo
+  # file, so I think it isn't going to be under user control via CLI?
+  # Happy to have someone help nail this down in either direction!
+  # The "capability" is 'iprog', and I could only find 1 real example:
+  # https://invisible-island.net/ncurses/terminfo.ti.html#tic-linux-s
+  passthru.binlore.out = binlore.synthesize ncurses ''
+    execer cannot bin/{reset,tput,tset}
   '';
 
   meta = with lib; {

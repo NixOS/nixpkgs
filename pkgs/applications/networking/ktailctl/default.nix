@@ -1,43 +1,45 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, buildGoModule
-, cmake
-, extra-cmake-modules
-, git
-, go
-, wrapQtAppsHook
-, qtbase
-, qtdeclarative
-, qtsvg
-, qtwayland
-, kconfig
-, kcoreaddons
-, kguiaddons
-, ki18n
-, kirigami
-, kirigami-addons
-, knotifications
-, nlohmann_json
-, qqc2-desktop-style
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  buildGo123Module,
+  cmake,
+  extra-cmake-modules,
+  git,
+  go_1_23,
+  wrapQtAppsHook,
+  qtbase,
+  qtdeclarative,
+  qtsvg,
+  qtwayland,
+  kconfig,
+  kcoreaddons,
+  kguiaddons,
+  ki18n,
+  kirigami,
+  kirigami-addons,
+  knotifications,
+  nlohmann_json,
+  qqc2-desktop-style,
 }:
 
 let
-  version = "0.16.2";
+  version = "0.18.2";
 
   src = fetchFromGitHub {
     owner = "f-koehler";
     repo = "KTailctl";
     rev = "v${version}";
-    hash = "sha256-rnuh0+i6W9ipSM61MXd9dTlIkdGUHMjtvElW/4S2YCg=";
+    hash = "sha256-nxYgpIUNgWhWnrd5rqSH2r1QKhWPJwxlIQl6F9PmjpU=";
   };
 
-  goDeps = (buildGoModule {
-    pname = "ktailctl-go-wrapper";
-    inherit src version;
-    modRoot = "src/wrapper";
-    vendorHash = "sha256-GD+G+7b8GBwR3OrRPJbGJVom+kLC67VvlGFIA0S7UF8=";
-  }).goModules;
+  goDeps =
+    (buildGo123Module {
+      pname = "ktailctl-go-wrapper";
+      inherit src version;
+      modRoot = "src/wrapper";
+      vendorHash = "sha256-UjgHfR+MJ8ROqOPIM0ZkqgFGVEkw8gKYlVQ6oxoIcgE=";
+    }).goModules;
 in
 stdenv.mkDerivation {
   pname = "ktailctl";
@@ -61,7 +63,7 @@ stdenv.mkDerivation {
     cmake
     extra-cmake-modules
     git
-    go
+    go_1_23
     wrapQtAppsHook
   ];
 

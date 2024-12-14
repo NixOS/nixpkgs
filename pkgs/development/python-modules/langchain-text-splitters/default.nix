@@ -2,25 +2,29 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   poetry-core,
+
+  # dependencies
   langchain-core,
+
+  # tests
+  httpx,
   pytest-asyncio,
   pytestCheckHook,
-  pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "langchain-text-splitters";
-  version = "0.2.1";
+  version = "0.3.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langchain";
     rev = "refs/tags/langchain-text-splitters==${version}";
-    hash = "sha256-5le+P+7iGjrTetnTHiJilqtc7G7kJbZnEsUgFyF2aQ8=";
+    hash = "sha256-TaK8lnPxKUqwvKLtQIfzg2l8McQ1fd0g9vocHM0+kjY=";
   };
 
   sourceRoot = "${src.name}/libs/text-splitters";
@@ -32,6 +36,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "langchain_text_splitters" ];
 
   nativeCheckInputs = [
+    httpx
     pytest-asyncio
     pytestCheckHook
   ];
@@ -43,10 +48,13 @@ buildPythonPackage rec {
   };
 
   meta = {
-    description = "Build context-aware reasoning applications";
+    changelog = "https://github.com/langchain-ai/langchain/releases/tag/langchain-text-splitters==${version}";
+    description = "LangChain utilities for splitting into chunks a wide variety of text documents";
     homepage = "https://github.com/langchain-ai/langchain/tree/master/libs/text-splitters";
-    changelog = "https://github.com/langchain-ai/langchain/releases/tag/${src.rev}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fab ];
+    maintainers = with lib.maintainers; [
+      fab
+      sarahec
+    ];
   };
 }

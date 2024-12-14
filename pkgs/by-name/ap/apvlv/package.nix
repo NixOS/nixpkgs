@@ -15,13 +15,12 @@
   libxml2,
   libxshmfence,
   man,
-  nix-update-script,
   pcre,
   pkg-config,
   poppler,
   stdenv,
   testers,
-  webkitgtk,
+  webkitgtk_4_0,
   wrapGAppsHook3,
 }:
 
@@ -62,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxshmfence # otherwise warnings in compilation
     pcre
     poppler
-    webkitgtk
+    webkitgtk_4_0
   ];
 
   installPhase = ''
@@ -107,7 +106,10 @@ stdenv.mkDerivation (finalAttrs: {
       with Vim-like behaviour.
     '';
     mainProgram = "apvlv";
-    maintainers = with lib.maintainers; [ ardumont anthonyroussel ];
+    maintainers = with lib.maintainers; [
+      ardumont
+      anthonyroussel
+    ];
     platforms = lib.platforms.linux;
   };
 })

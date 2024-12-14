@@ -1,29 +1,30 @@
-{ lib
-, fetchFromGitHub
-, gtk3
-, pythonPackages
-, glibcLocales
-, intltool
-, gexiv2
-, pango
-, gobject-introspection
-, wrapGAppsHook3
-, gettext
+{
+  lib,
+  fetchFromGitHub,
+  gtk3,
+  pythonPackages,
+  glibcLocales,
+  intltool,
+  gexiv2,
+  pango,
+  gobject-introspection,
+  wrapGAppsHook3,
+  gettext,
   # Optional packages:
-, enableOSM ? true
-, osm-gps-map
-, glib-networking
-, enableGraphviz ? true
-, graphviz
-, enableGhostscript ? true
-, ghostscript
+  enableOSM ? true,
+  osm-gps-map,
+  glib-networking,
+  enableGraphviz ? true,
+  graphviz,
+  enableGhostscript ? true,
+  ghostscript,
 }:
 
 let
   inherit (pythonPackages) buildPythonApplication pythonOlder;
 in
 buildPythonApplication rec {
-  version = "5.2.2";
+  version = "5.2.3";
   pname = "gramps";
   pyproject = true;
 
@@ -33,7 +34,7 @@ buildPythonApplication rec {
     owner = "gramps-project";
     repo = "gramps";
     rev = "refs/tags/v${version}";
-    hash = "sha256-umyc5G4p0GSEQEtq6sPUgtq1waNL1OW7iLxnf5dGcLc=";
+    hash = "sha256-DfKKB+rgMGQ8HTqhCp11UTYLj3Fdd0B0v4a922GJ8L8=";
   };
 
   patches = [
@@ -59,14 +60,21 @@ buildPythonApplication rec {
     pythonPackages.lxml
   ];
 
-  buildInputs = [ gtk3 pango gexiv2 ]
+  buildInputs =
+    [
+      gtk3
+      pango
+      gexiv2
+    ]
     # Map support
-    ++ lib.optionals enableOSM [ osm-gps-map glib-networking ]
+    ++ lib.optionals enableOSM [
+      osm-gps-map
+      glib-networking
+    ]
     # Graphviz support
     ++ lib.optional enableGraphviz graphviz
     # Ghostscript support
-    ++ lib.optional enableGhostscript ghostscript
-  ;
+    ++ lib.optional enableGhostscript ghostscript;
 
   propagatedBuildInputs = with pythonPackages; [
     berkeleydb
@@ -74,7 +82,6 @@ buildPythonApplication rec {
     pygobject3
     pycairo
   ];
-
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -97,7 +104,11 @@ buildPythonApplication rec {
     description = "Genealogy software";
     mainProgram = "gramps";
     homepage = "https://gramps-project.org";
-    maintainers = with maintainers; [ jk pinpox tomasajt ];
+    maintainers = with maintainers; [
+      jk
+      pinpox
+      tomasajt
+    ];
     changelog = "https://github.com/gramps-project/gramps/blob/${src.rev}/ChangeLog";
     longDescription = ''
       Every person has their own story but they are also part of a collective

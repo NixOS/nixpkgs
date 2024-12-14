@@ -1,4 +1,10 @@
-{ pkgs, lib, fetchFromGitHub, gerbilPackages, mariadb-connector-c, ... }:
+{
+  pkgs,
+  lib,
+  fetchFromGitHub,
+  mariadb-connector-c,
+  ...
+}:
 
 {
   pname = "gerbil-mysql";
@@ -21,9 +27,9 @@
 
   meta = with lib; {
     description = "MySQL bindings for Gerbil";
-    homepage    = "https://github.com/mighty-gerbils/gerbil-mysql";
-    license     = licenses.asl20;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/mighty-gerbils/gerbil-mysql";
+    license = licenses.asl20;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ fare ];
   };
 

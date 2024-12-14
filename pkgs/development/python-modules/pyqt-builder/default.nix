@@ -6,27 +6,25 @@
   setuptools,
   setuptools-scm,
   sip,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "pyqt-builder";
-  version = "1.16.0";
-  format = "pyproject";
+  version = "1.17.0";
+  pyproject = true;
 
   src = fetchPypi {
-    pname = "PyQt-builder";
+    pname = "pyqt_builder";
     inherit version;
-    hash = "sha256-R7vSz6VDACAQj59AMB4WbL6pi27z5TlTNQvdTGsxqxg=";
+    hash = "sha256-/ODpI0bSpCllJbetnwK3TqQl8mIQOQrg0+TKCMMc9Mw=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     sip
   ];
@@ -38,7 +36,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "PEP 517 compliant build system for PyQt";
-    homepage = "https://pypi.org/project/PyQt-builder/";
+    homepage = "https://github.com/Python-PyQt/PyQt-builder";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ nrdxp ];
   };

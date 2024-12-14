@@ -1,4 +1,10 @@
-{ pkgs, lib, fetchFromGitHub, gerbilPackages, leveldb, ... }:
+{
+  pkgs,
+  lib,
+  fetchFromGitHub,
+  leveldb,
+  ...
+}:
 
 {
   pname = "gerbil-leveldb";
@@ -21,9 +27,9 @@
 
   meta = with lib; {
     description = "LevelDB bindings for Gerbil";
-    homepage    = "https://github.com/mighty-gerbils/gerbil-leveldb";
-    license     = licenses.asl20;
-    platforms   = platforms.unix;
+    homepage = "https://github.com/mighty-gerbils/gerbil-leveldb";
+    license = licenses.asl20;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ fare ];
   };
 

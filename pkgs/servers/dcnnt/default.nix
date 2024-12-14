@@ -1,4 +1,9 @@
-{ buildPythonApplication, fetchPypi, lib, pycryptodome }:
+{
+  buildPythonApplication,
+  fetchPypi,
+  lib,
+  pycryptodome,
+}:
 
 buildPythonApplication rec {
   pname = "dcnnt";
@@ -6,7 +11,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-73ZLgb5YcXlAOjbKLVv8oqgS6pstBdJxa7LFUgIHpUE=";
+    hash = "sha256-73ZLgb5YcXlAOjbKLVv8oqgS6pstBdJxa7LFUgIHpUE=";
   };
 
   propagatedBuildInputs = [

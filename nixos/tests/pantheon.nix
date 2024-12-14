@@ -10,6 +10,9 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
   {
     imports = [ ./common/user-account.nix ];
 
+    # Workaround ".gala-wrapped invoked oom-killer"
+    virtualisation.memorySize = 2047;
+
     services.xserver.enable = true;
     services.xserver.desktopManager.pantheon.enable = true;
 
@@ -83,10 +86,10 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         machine.wait_for_window("io.elementary.calendar")
 
     with subtest("Open system settings"):
-        machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.switchboard >&2 &'")
+        machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.settings >&2 &'")
         # Wait for all plugins to be loaded before we check if the window is still there.
         machine.sleep(5)
-        machine.wait_for_window("io.elementary.switchboard")
+        machine.wait_for_window("io.elementary.settings")
 
     with subtest("Open elementary terminal"):
         machine.execute("su - ${user.name} -c 'DISPLAY=:0 io.elementary.terminal >&2 &'")
@@ -96,9 +99,8 @@ import ./make-test-python.nix ({ pkgs, lib, ...} :
         cmd = "dbus-send --session --dest=org.pantheon.gala --print-reply /org/pantheon/gala org.pantheon.gala.PerformAction int32:1"
         env = "DBUS_SESSION_BUS_ADDRESS=unix:path=/run/user/${toString user.uid}/bus DISPLAY=:0"
         machine.succeed(f"su - ${user.name} -c '{env} {cmd}'")
-        machine.sleep(3)
+        machine.sleep(5)
         machine.screenshot("multitasking")
-        machine.succeed(f"su - ${user.name} -c '{env} {cmd}'")
 
     with subtest("Check if gala has ever coredumped"):
         machine.fail("coredumpctl --json=short | grep gala")

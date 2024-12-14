@@ -1,0 +1,25 @@
+# Original: https://github.com/netdata/netdata/pull/17240
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index f37cbd18a..6db4c9f52 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -134,6 +134,7 @@ mark_as_advanced(DEFAULT_FEATURE_STATE)
+ # High-level features
+ option(ENABLE_ACLK "Enable Netdata Cloud support (ACLK)" ${DEFAULT_FEATURE_STATE})
+ option(ENABLE_CLOUD "Enable Netdata Cloud by default at runtime" ${DEFAULT_FEATURE_STATE})
++option(ENABLE_DASHBOARD_V2 "enable dashboard v2" True)
+ option(ENABLE_ML "Enable machine learning features" ${DEFAULT_FEATURE_STATE})
+ option(ENABLE_DBENGINE "Enable dbengine metrics storage" True)
+
+@@ -2946,7 +2947,9 @@ endif()
+ #
+
+ include(src/web/gui/v1/dashboard_v1.cmake)
+-include(src/web/gui/v2/dashboard_v2.cmake)
++if(ENABLE_DASHBOARD_V2)
++        include(src/web/gui/v2/dashboard_v2.cmake)
++endif()
+ include(src/web/gui/gui.cmake)
+
+ function(cat IN_FILE OUT_FILE)

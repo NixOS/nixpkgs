@@ -1,21 +1,25 @@
-{ lib
-, stdenv
-, fetchurl
-, libX11
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "worker";
-  version = "5.0.2";
+  version = "5.1.0";
 
   src = fetchurl {
     url = "http://www.boomerangsworld.de/cms/worker/downloads/worker-${finalAttrs.version}.tar.gz";
-    hash = "sha256-k4HgIXuy0q72pHhGU+AuIwCUNMH/icasEXWIFc/w5Mo=";
+    hash = "sha256-Tff/1I9RZYo2oXGsnrGeSs69W9nPu7OFDwF1Bg6R01s=";
   };
 
   buildInputs = [ libX11 ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 

@@ -13,7 +13,8 @@
 , udev
 , wayland
 , wayland-protocols
-, wlroots_0_17
+, wayland-scanner
+, wlroots_0_18
 , xwayland
 , zig_0_13
 , withManpages ? true
@@ -22,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "river";
-  version = "0.3.3";
+  version = "0.3.6";
 
   outputs = [ "out" ] ++ lib.optionals withManpages [ "man" ];
 
@@ -32,14 +33,14 @@ stdenv.mkDerivation (finalAttrs: {
     repo = "river";
     rev = "refs/tags/v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-DYaxtYJLZQqE2SyPfWec/zXsZKRnxK2QNgOkM7GJkLI=";
+    hash = "sha256-bLUotGbKHlMxNn8kC613cFp41qTXoxtwo0O4mZQLl7w=";
   };
 
   deps = callPackage ./build.zig.zon.nix { };
 
   nativeBuildInputs = [
     pkg-config
-    wayland
+    wayland-scanner
     xwayland
     zig_0_13.hook
   ]
@@ -52,8 +53,9 @@ stdenv.mkDerivation (finalAttrs: {
     libxkbcommon
     pixman
     udev
+    wayland
     wayland-protocols
-    wlroots_0_17
+    wlroots_0_18
   ] ++ lib.optional xwaylandSupport libX11;
 
   dontConfigure = true;

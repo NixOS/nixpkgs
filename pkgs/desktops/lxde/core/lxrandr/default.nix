@@ -1,12 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, intltool
-, gtk2
-, libX11
-, xrandr
-, withGtk3 ? false, gtk3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  intltool,
+  gtk2,
+  libX11,
+  xrandr,
+  withGtk3 ? false,
+  gtk3,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +22,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = lib.optional withGtk3 "--enable-gtk3";
 
-  nativeBuildInputs = [ pkg-config intltool ];
+  nativeBuildInputs = [
+    pkg-config
+    intltool
+  ];
   buildInputs = [
     libX11
     xrandr

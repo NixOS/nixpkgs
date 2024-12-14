@@ -1,27 +1,42 @@
-{ lib, stdenv, fetchurl, pkg-config, zlib, kmod, which
-, hwdata
-, static ? stdenv.hostPlatform.isStatic
-, IOKit
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  zlib,
+  kmod,
+  which,
+  hwdata,
+  static ? stdenv.hostPlatform.isStatic,
+  IOKit,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pciutils";
-  version = "3.12.0"; # with release-date database
+  version = "3.13.0"; # with release-date database
 
-  src = fetchurl {
-    url = "mirror://kernel/software/utils/pciutils/pciutils-${version}.tar.xz";
-    hash = "sha256-8YXRFtX/mbeXSX786PGfHujMxaZouXoVnj0TRy9nQVQ=";
+  src = fetchFromGitHub {
+    owner = "pciutils";
+    repo = "pciutils";
+    rev = "v${version}";
+    hash = "sha256-buhq7SN6eH+sckvT5mJ8eP4C1EP/4CUFt3gooJohJW0=";
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ which zlib ]
+  buildInputs =
+    [
+      which
+      zlib
+    ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [ kmod ];
 
   preConfigure = lib.optionalString (!stdenv.cc.isGNU) ''
     substituteInPlace Makefile --replace 'CC=$(CROSS_COMPILE)gcc' ""
   '';
+
+  enableParallelBuilding = true;
 
   makeFlags = [
     "SHARED=${if static then "no" else "yes"}"
@@ -32,7 +47,10 @@ stdenv.mkDerivation rec {
     "DNS=yes"
   ];
 
-  installTargets = [ "install" "install-lib" ];
+  installTargets = [
+    "install"
+    "install-lib"
+  ];
 
   postInstall = ''
     # Remove update-pciids as it won't work on nixos

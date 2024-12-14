@@ -7,7 +7,6 @@
 
   # Native build inputs
   cython,
-  pythonRelaxDepsHook,
   which,
 
   # Propagated build inputs
@@ -53,13 +52,13 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cython
-    pythonRelaxDepsHook
     which
   ];
 
   pythonRelaxDeps = [
     "hydra-core"
     "omegaconf"
+    "torchaudio"
   ];
 
   propagatedBuildInputs = [

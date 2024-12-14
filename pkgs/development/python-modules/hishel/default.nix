@@ -18,16 +18,16 @@
 
 buildPythonPackage rec {
   pname = "hishel";
-  version = "0.0.29";
+  version = "0.1.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "karpetrosyan";
     repo = "hishel";
     rev = "refs/tags/${version}";
-    hash = "sha256-3RUbHVbnfC0L9u6/VMKK2BhTuc2y5kD83Cn8dQ24kQQ=";
+    hash = "sha256-V8QiBnOz5l/vjTFf9gKjxth4YsGCYuADlbwiWc7VFds=";
   };
 
   build-system = [
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   dependencies = [ httpx ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     redis = [ redis ];
     s3 = [ boto3 ];
     sqlite = [ anysqlite ];
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     trio
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "hishel" ];
 

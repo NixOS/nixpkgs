@@ -1,19 +1,27 @@
-{ buildGo122Module, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "helm-diff";
-  version = "3.9.8";
+  version = "3.9.12";
 
   src = fetchFromGitHub {
     owner = "databus23";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-HGQTnvtL9hksy0B9U6jK8kkyoc3g0lmuBRV3vsg9Yao=";
+    hash = "sha256-fHL5YlqDS4taQNgqgYYttq/6Q5kQhp/hvtqMRCKPt70=";
   };
 
-  vendorHash = "sha256-4bYepEVeVg+X0WicktE8BorwgsLGh2cZUn8rgfMExpk=";
+  vendorHash = "sha256-7amqt5FIgnDtaybyur3t01BuuQXPdFptDBfqhX6jPIE=";
 
-  ldflags = [ "-s" "-w" "-X github.com/databus23/helm-diff/v3/cmd.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/databus23/helm-diff/v3/cmd.Version=${version}"
+  ];
 
   # NOTE: Remove the install and upgrade hooks.
   postPatch = ''

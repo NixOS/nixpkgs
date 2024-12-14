@@ -3,35 +3,32 @@
   rustPlatform,
   fetchFromGitHub,
   stdenv,
-  darwin,
   help2man,
   openssl,
   pkg-config,
   installShellFiles,
 }:
 let
-  version = "0.10.0";
+  version = "0.10.0-1";
   src = fetchFromGitHub {
     owner = "obreitwi";
     repo = "asfa";
     rev = "v${version}";
-    hash = "sha256-MnhnwtZmPFhOuiqNiaxJnPu88JOdlpvyVy0YGphblBc=";
+    hash = "sha256-ARdUlACxmbjmOTuNW2oiVUcfd5agR4rcp9aMQYUAYsw=";
   };
 in
 rustPlatform.buildRustPackage {
   pname = "asfa";
   inherit version src;
 
-  cargoHash = "sha256-/bRBP/NzcNOXl/nANeOYouUAo3NNbtbV9fxIJrNajYQ=";
+  cargoHash = "sha256-pzCTqVUo3LEpR3hmTPKDwvgtUJZ+tsArbi0HDlY2Cy8=";
 
   outputs = [
     "out"
     "man"
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [ darwin.apple_sdk.frameworks.SystemConfiguration ];
+  buildInputs = [ openssl ];
 
   nativeBuildInputs = [
     help2man

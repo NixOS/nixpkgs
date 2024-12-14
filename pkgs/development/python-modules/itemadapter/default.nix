@@ -3,19 +3,22 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "itemadapter";
-  version = "0.9.0";
-  format = "setuptools";
+  version = "0.10.0";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-5PlYpra29YMfogc3MBADGgvX7QQp3dCbUZecARR1yv0=";
+    hash = "sha256-JlXIxQ8ahAXJ+nS4zcTaf+xUHKIXvIIbkKzIRRyYqdI=";
   };
+
+  build-system = [ setuptools ];
 
   # Infinite recursion with Scrapy
   doCheck = false;
@@ -27,6 +30,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/scrapy/itemadapter";
     changelog = "https://github.com/scrapy/itemadapter/raw/v${version}/Changelog.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

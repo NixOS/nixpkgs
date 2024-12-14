@@ -8,7 +8,6 @@
   requests,
   setuptools,
   pytestCheckHook,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -28,8 +27,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "geojson" ];
 
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     geojson

@@ -3,6 +3,7 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   future,
   numpy,
@@ -16,18 +17,20 @@
 buildPythonPackage rec {
   pname = "batchgenerators";
   version = "0.25";
-  format = "setuptools";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "MIC-DKFZ";
-    repo = pname;
+    repo = "batchgenerators";
     rev = "v${version}";
     hash = "sha256-L2mWH2t8PN9o1M67KDdl1Tj2ZZ02MY4icsJY2VNrj3A=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     future
     numpy
     pillow
@@ -38,10 +41,7 @@ buildPythonPackage rec {
   ];
 
   # see https://github.com/MIC-DKFZ/batchgenerators/pull/78
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace '"unittest2",' ""
-  '';
+  pythonRemoveDeps = [ "unittest2" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

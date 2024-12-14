@@ -45,7 +45,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "touchosc";
-  version = "1.3.3.207";
+  version = "1.3.6.216";
 
   suffix = {
     aarch64-linux = "linux-arm64";
@@ -56,9 +56,9 @@ stdenv.mkDerivation rec {
   src = fetchurl {
     url = "https://hexler.net/pub/${pname}/${pname}-${version}-${suffix}.deb";
     hash = {
-      aarch64-linux = "sha256-peEO5haVHXvCT+F48UiKdgwuccqBuZACEXnepB4dcvY=";
-      armv7l-linux  = "sha256-uQNoEye/Jd3T6pLJY2sN7hkTQl3AAilG5Vr9G61vFRM=";
-      x86_64-linux  = "sha256-+/r9gRK8HyynlJ1syC2VQ6VboPEzsVNqEVrQfNLeEv0=";
+      aarch64-linux = "sha256-GV2j6WBvclr5/T9GtLspbLm2UDfyPJUu6Bau43mi4ZM=";
+      armv7l-linux  = "sha256-tqGM1/faPjmHoHuefYJ+M/P/7SVTMcLnxCnwSFIiFhM=";
+      x86_64-linux  = "sha256-P/D5JijtSr1vP1Hccl8COj9i6B7bgWcHLTrBfKj1jlA=";
     }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
   };
 
@@ -71,7 +71,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    stdenv.cc.cc.lib
+    (lib.getLib stdenv.cc.cc)
     alsa-lib
   ];
 
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     description = "Next generation modular control surface";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     platforms = [ "aarch64-linux" "armv7l-linux" "x86_64-linux" ];
     mainProgram = "TouchOSC";
   };

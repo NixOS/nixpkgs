@@ -8,7 +8,6 @@
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   requests,
   setuptools,
   setuptools-scm,
@@ -37,8 +36,6 @@ buildPythonPackage rec {
     setuptools
     setuptools-scm
   ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     aiohttp

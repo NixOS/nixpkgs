@@ -1,18 +1,23 @@
 {
   lib,
-  stdenv,
+  buildPythonPackage,
   fetchFromGitHub,
   cmake,
   ninja,
-  python,
   scikit-build,
   pytest,
   numpy,
 }:
 
-stdenv.mkDerivation rec {
+buildPythonPackage rec {
   pname = "segyio";
   version = "1.9.12";
+  pyproject = false; # Built with cmake
+
+  patches = [
+    # https://github.com/equinor/segyio/pull/570
+    ./add_missing_cstdint.patch
+  ];
 
   postPatch = ''
     # Removing unecessary build dependency
@@ -34,11 +39,9 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     cmake
     ninja
-    python
     scikit-build
   ];
 
-  doCheck = true;
   # I'm not modifying the checkPhase nor adding a pytestCheckHook because the pytest is called
   # within the cmake test phase
   nativeCheckInputs = [

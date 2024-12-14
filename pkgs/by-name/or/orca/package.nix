@@ -1,40 +1,41 @@
-{ lib
-, pkg-config
-, fetchurl
-, meson
-, ninja
-, wrapGAppsHook3
-, gobject-introspection
-, gettext
-, yelp-tools
-, itstool
-, python3
-, gtk3
-, gnome
-, substituteAll
-, at-spi2-atk
-, at-spi2-core
-, dbus
-, xkbcomp
-, procps
-, lsof
-, coreutils
-, gsettings-desktop-schemas
-, speechd
-, brltty
-, liblouis
-, gst_all_1
+{
+  lib,
+  pkg-config,
+  fetchurl,
+  meson,
+  ninja,
+  wrapGAppsHook3,
+  gobject-introspection,
+  gettext,
+  yelp-tools,
+  itstool,
+  python3,
+  gtk3,
+  gnome,
+  substituteAll,
+  at-spi2-atk,
+  at-spi2-core,
+  dbus,
+  xkbcomp,
+  procps,
+  lsof,
+  coreutils,
+  gsettings-desktop-schemas,
+  speechd-minimal,
+  brltty,
+  liblouis,
+  gst_all_1,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "orca";
-  version = "46.1";
+  version = "47.2";
 
   format = "other";
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-z2deNQwYrA+ilDbGVZ0dqXX3///vqAjr5HbY+enRERQ=";
+    hash = "sha256-XmevNX9xmOoApEOByrTE+U5oJtbtgAZo85QWziqrjlo=";
   };
 
   patches = [
@@ -65,7 +66,7 @@ python3.pkgs.buildPythonApplication rec {
     brltty
     liblouis
     psutil
-    speechd
+    speechd-minimal
     gst-python
     setproctitle
   ];
@@ -98,6 +99,7 @@ python3.pkgs.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://orca.gnome.org/";
+    changelog = "https://gitlab.gnome.org/GNOME/orca/-/blob/main/NEWS";
     description = "Screen reader";
     mainProgram = "orca";
     longDescription = ''

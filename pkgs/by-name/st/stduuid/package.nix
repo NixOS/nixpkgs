@@ -1,6 +1,14 @@
-{ stdenv, cmake, fetchFromGitHub, fetchpatch, lib }: let
+{
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+}:
+let
   version = "1.2.3";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "stduuid";
   inherit version;
 

@@ -1,4 +1,11 @@
-{ lib, buildDunePackage, reason, console, pastel, src }:
+{
+  lib,
+  buildDunePackage,
+  reason,
+  console,
+  pastel,
+  src,
+}:
 
 buildDunePackage {
   inherit src;
@@ -20,6 +27,6 @@ buildDunePackage {
     downloadPage = "https://github.com/reasonml/reason-native/tree/master/src/pastel-console";
     homepage = "https://reason-native.com/docs/pastel/console";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

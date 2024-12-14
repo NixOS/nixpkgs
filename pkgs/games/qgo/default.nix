@@ -1,10 +1,11 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, qmake
-, qtbase
-, qtmultimedia
-, qttools
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qmake,
+  qtbase,
+  qtmultimedia,
+  qttools,
 }:
 
 mkDerivation {
@@ -27,7 +28,7 @@ mkDerivation {
       Chinese, "囲碁(Yi Go)" in Japanese, "바둑(Baduk)" in Korean.
     '';
     homepage = "https://github.com/pzorin/qgo";
-    license = licenses.gpl2;
+    license = licenses.gpl2Plus;
     maintainers = with maintainers; [ zalakain ];
   };
 
@@ -42,6 +43,12 @@ mkDerivation {
   postPatch = ''
     sed -i 's|@out@|'"''${out}"'|g' src/src.pro src/defines.h
   '';
-  nativeBuildInputs = [ qmake qttools ];
-  buildInputs = [ qtbase qtmultimedia ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+  ];
+  buildInputs = [
+    qtbase
+    qtmultimedia
+  ];
 }

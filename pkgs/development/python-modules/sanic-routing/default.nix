@@ -33,6 +33,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sanic-org/sanic-routing";
     changelog = "https://github.com/sanic-org/sanic-routing/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
   };
 }

@@ -1,27 +1,29 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
-, pkg-config
-, installShellFiles
-, util-linux
-, hexdump
-, autoSignDarwinBinariesHook
-, wrapQtAppsHook ? null
-, boost
-, libevent
-, miniupnpc
-, zeromq
-, zlib
-, db48
-, sqlite
-, qrencode
-, qtbase ? null
-, qttools ? null
-, python3
-, nixosTests
-, withGui
-, withWallet ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch2,
+  autoreconfHook,
+  pkg-config,
+  installShellFiles,
+  util-linux,
+  hexdump,
+  autoSignDarwinBinariesHook,
+  wrapQtAppsHook ? null,
+  boost,
+  libevent,
+  miniupnpc,
+  zeromq,
+  zlib,
+  db48,
+  sqlite,
+  qrencode,
+  qtbase ? null,
+  qttools ? null,
+  python3,
+  nixosTests,
+  withGui,
+  withWallet ? true,
 }:
 
 let
@@ -33,63 +35,86 @@ let
 in
 stdenv.mkDerivation rec {
   pname = if withGui then "bitcoin" else "bitcoind";
-  version = "27.1";
+  version = "28.0";
 
   src = fetchurl {
     urls = [
       "https://bitcoincore.org/bin/bitcoin-core-${version}/bitcoin-${version}.tar.gz"
     ];
     # hash retrieved from signed SHA256SUMS
-    sha256 = "0c1051fd921b8fae912f5c2dfd86b085ab45baa05cd7be4585b10b4d1818f3da";
+    sha256 = "700ae2d1e204602eb07f2779a6e6669893bc96c0dca290593f80ff8e102ff37f";
   };
 
   nativeBuildInputs =
-    [ autoreconfHook pkg-config installShellFiles ]
-    ++ lib.optionals stdenv.isLinux [ util-linux ]
-    ++ lib.optionals stdenv.isDarwin [ hexdump ]
-    ++ lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [ autoSignDarwinBinariesHook ]
+    [
+      autoreconfHook
+      pkg-config
+      installShellFiles
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ util-linux ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ hexdump ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      autoSignDarwinBinariesHook
+    ]
     ++ lib.optionals withGui [ wrapQtAppsHook ];
 
-  buildInputs = [ boost libevent miniupnpc zeromq zlib ]
+  buildInputs =
+    [
+      boost
+      libevent
+      miniupnpc
+      zeromq
+      zlib
+    ]
     ++ lib.optionals withWallet [ sqlite ]
     # building with db48 (for legacy descriptor wallet support) is broken on Darwin
-    ++ lib.optionals (withWallet && !stdenv.isDarwin) [ db48 ]
-    ++ lib.optionals withGui [ qrencode qtbase qttools ];
+    ++ lib.optionals (withWallet && !stdenv.hostPlatform.isDarwin) [ db48 ]
+    ++ lib.optionals withGui [
+      qrencode
+      qtbase
+      qttools
+    ];
 
-  postInstall = ''
-    installShellCompletion --bash contrib/completions/bash/bitcoin-cli.bash
-    installShellCompletion --bash contrib/completions/bash/bitcoind.bash
-    installShellCompletion --bash contrib/completions/bash/bitcoin-tx.bash
+  postInstall =
+    ''
+      installShellCompletion --bash contrib/completions/bash/bitcoin-cli.bash
+      installShellCompletion --bash contrib/completions/bash/bitcoind.bash
+      installShellCompletion --bash contrib/completions/bash/bitcoin-tx.bash
 
-    installShellCompletion --fish contrib/completions/fish/bitcoin-cli.fish
-    installShellCompletion --fish contrib/completions/fish/bitcoind.fish
-    installShellCompletion --fish contrib/completions/fish/bitcoin-tx.fish
-    installShellCompletion --fish contrib/completions/fish/bitcoin-util.fish
-    installShellCompletion --fish contrib/completions/fish/bitcoin-wallet.fish
-  '' + lib.optionalString withGui ''
-    installShellCompletion --fish contrib/completions/fish/bitcoin-qt.fish
+      installShellCompletion --fish contrib/completions/fish/bitcoin-cli.fish
+      installShellCompletion --fish contrib/completions/fish/bitcoind.fish
+      installShellCompletion --fish contrib/completions/fish/bitcoin-tx.fish
+      installShellCompletion --fish contrib/completions/fish/bitcoin-util.fish
+      installShellCompletion --fish contrib/completions/fish/bitcoin-wallet.fish
+    ''
+    + lib.optionalString withGui ''
+      installShellCompletion --fish contrib/completions/fish/bitcoin-qt.fish
 
-    install -Dm644 ${desktop} $out/share/applications/bitcoin-qt.desktop
-    substituteInPlace $out/share/applications/bitcoin-qt.desktop --replace "Icon=bitcoin128" "Icon=bitcoin"
-    install -Dm644 share/pixmaps/bitcoin256.png $out/share/pixmaps/bitcoin.png
-  '';
+      install -Dm644 ${desktop} $out/share/applications/bitcoin-qt.desktop
+      substituteInPlace $out/share/applications/bitcoin-qt.desktop --replace "Icon=bitcoin128" "Icon=bitcoin"
+      install -Dm644 share/pixmaps/bitcoin256.png $out/share/pixmaps/bitcoin.png
+    '';
 
-  preConfigure = lib.optionalString stdenv.isDarwin ''
+  preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
     export MACOSX_DEPLOYMENT_TARGET=10.13
   '';
 
-  configureFlags = [
-    "--with-boost-libdir=${boost.out}/lib"
-    "--disable-bench"
-  ] ++ lib.optionals (!doCheck) [
-    "--disable-tests"
-    "--disable-gui-tests"
-  ] ++ lib.optionals (!withWallet) [
-    "--disable-wallet"
-  ] ++ lib.optionals withGui [
-    "--with-gui=qt5"
-    "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
-  ];
+  configureFlags =
+    [
+      "--with-boost-libdir=${boost.out}/lib"
+      "--disable-bench"
+    ]
+    ++ lib.optionals (!doCheck) [
+      "--disable-tests"
+      "--disable-gui-tests"
+    ]
+    ++ lib.optionals (!withWallet) [
+      "--disable-wallet"
+    ]
+    ++ lib.optionals withGui [
+      "--with-gui=qt5"
+      "--with-qt-bindir=${qtbase.dev}/bin:${qttools.dev}/bin"
+    ];
 
   nativeCheckInputs = [ python3 ];
 
@@ -118,7 +143,10 @@ stdenv.mkDerivation rec {
     homepage = "https://bitcoin.org/en/";
     downloadPage = "https://bitcoincore.org/bin/bitcoin-core-${version}/";
     changelog = "https://bitcoincore.org/en/releases/${version}/";
-    maintainers = with maintainers; [ prusnak roconnor ];
+    maintainers = with maintainers; [
+      prusnak
+      roconnor
+    ];
     license = licenses.mit;
     platforms = platforms.unix;
   };

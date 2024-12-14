@@ -1,19 +1,19 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook3
-, atk
-, cairo
-, gdk-pixbuf
-, glib
-, gtk3
-, pango
-, stdenv
-, darwin
-, wayland
-, gtk-layer-shell
-, unstableGitUpdater
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook3,
+  atk,
+  cairo,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  pango,
+  stdenv,
+  wayland,
+  gtk-layer-shell,
+  unstableGitUpdater,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -46,9 +46,6 @@ rustPlatform.buildRustPackage rec {
     gtk3
     gtk-layer-shell
     pango
-  ] ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ] ++ lib.optionals stdenv.isLinux [
     wayland
   ];
 
@@ -59,7 +56,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postInstall = ''
-    install -Dm444 anyrun/res/style.css examples/config.ron -t $out/share/doc/${pname}/examples/
+    install -Dm444 anyrun/res/style.css examples/config.ron -t $out/share/doc/anyrun/examples/
   '';
 
   passthru.updateScript = unstableGitUpdater { };
@@ -68,7 +65,11 @@ rustPlatform.buildRustPackage rec {
     description = "Wayland-native, highly customizable runner";
     homepage = "https://github.com/kirottu/anyrun";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ eclairevoyant NotAShelf ];
+    maintainers = with lib.maintainers; [
+      khaneliman
+      NotAShelf
+    ];
     mainProgram = "anyrun";
+    platforms = lib.platforms.linux;
   };
 }

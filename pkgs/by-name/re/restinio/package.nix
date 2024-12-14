@@ -21,31 +21,38 @@ assert !with_boost_asio -> asio != null;
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "restinio";
-  version = "0.7.2";
+  version = "0.7.3";
 
   src = fetchFromGitHub {
     owner = "Stiffstream";
     repo = "restinio";
     rev = "v.${finalAttrs.version}";
-    hash = "sha256-Nv/VVdHciCv+DsVu3MqfXeAa8Ef+qi6c1OaTAVrYUg0=";
+    hash = "sha256-heVdo0MtsWi/r9yse+/FZ55lhiunyEdwB3UkOOY5Vj0=";
   };
 
   strictDeps = true;
 
   nativeBuildInputs = [ cmake ];
 
-  propagatedBuildInputs = [
-    expected-lite
-    fmt
-    llhttp
-    openssl
-    pcre2
-    zlib
-  ] ++ (if with_boost_asio then [
-    boost
-  ] else [
-    asio
-  ]);
+  propagatedBuildInputs =
+    [
+      expected-lite
+      fmt
+      llhttp
+      openssl
+      pcre2
+      zlib
+    ]
+    ++ (
+      if with_boost_asio then
+        [
+          boost
+        ]
+      else
+        [
+          asio
+        ]
+    );
 
   checkInputs = [
     catch2_3
@@ -70,6 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Cross-platform, efficient, customizable, and robust asynchronous HTTP(S)/WebSocket server C++ library";
     homepage = "https://github.com/Stiffstream/restinio";
+    changelog = "https://github.com/Stiffstream/restinio/releases/tag/${finalAttrs.src.rev}";
     license = licenses.bsd3;
     platforms = platforms.all;
     maintainers = with maintainers; [ tobim ];

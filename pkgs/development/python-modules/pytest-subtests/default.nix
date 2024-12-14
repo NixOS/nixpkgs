@@ -17,14 +17,15 @@
 
 buildPythonPackage rec {
   pname = "pytest-subtests";
-  version = "0.12.1";
+  version = "0.13.1";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-1mBdy4hkfgt8GInQJ/jvHBfXosYJJ+v9wJx7DYEgR20=";
+    pname = "pytest_subtests";
+    inherit version;
+    hash = "sha256-mJ448PHAG8fGsuBNt9n9hZ2zXXfCwaQwyDGnDL8/3i0=";
   };
 
   nativeBuildInputs = [

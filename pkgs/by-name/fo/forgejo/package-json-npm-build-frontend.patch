@@ -1,14 +1,12 @@
 diff --git a/package.json b/package.json
-index b50c52cf43..d6aafb8775 100644
+index 0abf6fe8b9..9d6ae0fdff 100644
 --- a/package.json
 +++ b/package.json
-@@ -98,5 +98,8 @@
-   },
-   "browserslist": [
-     "defaults"
--  ]
-+  ],
+@@ -1,4 +1,7 @@
+ {
 +  "scripts": {
 +    "build": "node_modules/.bin/webpack"
-+  }
- }
++  },
+   "type": "module",
+   "engines": {
+     "node": ">= 18.0.0"

@@ -51,13 +51,13 @@
   freezegun,
   # , label-studio-sdk
   mypy,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-mock,
   vcrpy,
   grpcio,
 }:
 let
-  version = "0.14.8";
+  version = "0.16.11";
   optional-dependencies = {
     huggingflace = [
       langdetect
@@ -99,8 +99,8 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "Unstructured-IO";
     repo = "unstructured";
-    rev = "refs/tags/${version}";
-    hash = "sha256-cZBoGKjIWHJxbG6sDbkjJJt3nSYjrha+Lz9RFdq6d0c=";
+    tag = version;
+    hash = "sha256-+I5eXG/ICmYPDTavDnyLlopIvoABjdDwOyfotrNs6qs=";
   };
 
   propagatedBuildInputs = [
@@ -137,13 +137,13 @@ buildPythonPackage {
     click
     freezegun
     mypy
-    pytest-cov
+    pytest-cov-stub
     pytest-mock
     vcrpy
     grpcio
   ];
 
-  passthru.optional-dependencies = optional-dependencies;
+  optional-dependencies = optional-dependencies;
 
   meta = with lib; {
     description = "Open source libraries and APIs to build custom preprocessing pipelines for labeling, training, or production machine learning pipelines";

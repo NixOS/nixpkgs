@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, libxkbcommon
-, pango
-, which
-, git
-, cairo
-, libxcb
-, xcbutil
-, xcbutilwm
-, xcbutilxrm
-, xcb-util-cursor
-, libstartup_notification
-, bison
-, flex
-, librsvg
-, check
-, glib
-, buildPackages
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  libxkbcommon,
+  pango,
+  which,
+  git,
+  cairo,
+  libxcb,
+  xcbutil,
+  xcbutilwm,
+  xcbutilxrm,
+  xcb-util-cursor,
+  libstartup_notification,
+  bison,
+  flex,
+  librsvg,
+  check,
+  glib,
+  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +33,7 @@ stdenv.mkDerivation rec {
     repo = "rofi";
     rev = version;
     fetchSubmodules = true;
-    sha256 = "sha256-3XFusKeckagEPfbLtt1xAVTEfn1Qebdi/Iq1AYbHCR4=";
+    hash = "sha256-3XFusKeckagEPfbLtt1xAVTEfn1Qebdi/Iq1AYbHCR4=";
   };
 
   preConfigure = ''
@@ -41,8 +42,18 @@ stdenv.mkDerivation rec {
     sed -i 's/~root/~nobody/g' test/helper-expand.c
   '';
 
-  depsBuildBuild = [ buildPackages.stdenv.cc pkg-config glib ];
-  nativeBuildInputs = [ meson ninja pkg-config flex bison ];
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+    pkg-config
+    glib
+  ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    flex
+    bison
+  ];
   buildInputs = [
     libxkbcommon
     pango

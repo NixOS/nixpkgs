@@ -1,4 +1,13 @@
-{ lib, mkDerivation, fetchFromGitHub, cmake, qttools, wrapQtAppsHook, qtbase, qtsvg }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  cmake,
+  qttools,
+  wrapQtAppsHook,
+  qtbase,
+  qtsvg,
+}:
 
 mkDerivation rec {
   pname = "tbe";
@@ -18,8 +27,15 @@ mkDerivation rec {
     substituteInPlace i18n/CMakeLists.txt --replace qt5_create_translation qt_add_translation
   '';
 
-  nativeBuildInputs = [ cmake qttools wrapQtAppsHook ];
-  buildInputs = [ qtbase qtsvg ];
+  nativeBuildInputs = [
+    cmake
+    qttools
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    qtbase
+    qtsvg
+  ];
   strictDeps = true;
 
   installPhase = ''
@@ -35,6 +51,6 @@ mkDerivation rec {
     homepage = "http://the-butterfly-effect.org/";
     maintainers = [ maintainers.raskin ];
     platforms = platforms.linux;
-    license = licenses.gpl2;
+    license = licenses.gpl2Only;
   };
 }

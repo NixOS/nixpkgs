@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, kernel, kmod }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kmod,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fanout";
@@ -19,13 +26,18 @@ stdenv.mkDerivation rec {
     ./remove_auto_mknod.patch
   ];
 
-  hardeningDisable = [ "format" "pic" ];
+  hardeningDisable = [
+    "format"
+    "pic"
+  ];
 
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 
   makeFlags = kernel.makeFlags ++ [
     "KERNELDIR=${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
+
+  passthru.tests = { inherit (nixosTests) fanout; };
 
   meta = with lib; {
     description = "Kernel-based publish-subscribe system";

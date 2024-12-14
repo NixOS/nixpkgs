@@ -1,8 +1,8 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

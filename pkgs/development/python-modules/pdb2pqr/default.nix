@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  pythonRelaxDepsHook,
   mmcif-pdbx,
   numpy,
   propka,
@@ -25,8 +24,6 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-He301TJ1bzWub0DZ6Ro/Xc+JMtJBbyygVpWjPY6RMbA=";
   };
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "docutils" ];
 

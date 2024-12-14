@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, libcap
-, openssl
-, pkg-config
-, rustPlatform
-, Security
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  libcap,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  Security,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,7 +22,7 @@ rustPlatform.buildRustPackage rec {
     sha256 = "sha256-SKgb/N249s0+Rb59moBT/MeFb4zAAElCMQJto0diyUk=";
   };
 
-  cargoSha256 = "sha256-rSHuKy86iJNLAKSVcb7fn7A/cc75EOc97jGI14EaC6k=";
+  cargoHash = "sha256-rSHuKy86iJNLAKSVcb7fn7A/cc75EOc97jGI14EaC6k=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -32,7 +33,7 @@ rustPlatform.buildRustPackage rec {
     libcap
     zlib
     openssl
-  ] ++ lib.optional stdenv.isDarwin Security;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   postInstall = ''
     installManPage docs/${pname}.1

@@ -6,7 +6,6 @@
   poetry-core,
   pytest,
   pythonOlder,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -23,8 +22,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ poetry-core ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "pytest" ];
 

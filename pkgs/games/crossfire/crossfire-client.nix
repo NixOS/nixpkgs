@@ -1,8 +1,28 @@
-{ stdenv, lib, fetchsvn
-, cmake, pkg-config, perl, vala
-, gtk2, pcre, zlib, libpng, fribidi, harfbuzzFull, xorg, util-linux, curl
-, SDL, SDL_image, SDL_mixer, libselinux, libsepol
-, version, rev, sha256
+{
+  stdenv,
+  lib,
+  fetchsvn,
+  cmake,
+  pkg-config,
+  perl,
+  vala,
+  gtk2,
+  pcre,
+  zlib,
+  libpng,
+  fribidi,
+  harfbuzzFull,
+  xorg,
+  util-linux,
+  curl,
+  SDL,
+  SDL_image,
+  SDL_mixer,
+  libselinux,
+  libsepol,
+  version,
+  rev,
+  sha256,
 }:
 
 stdenv.mkDerivation rec {
@@ -15,10 +35,28 @@ stdenv.mkDerivation rec {
     rev = "r${rev}";
   };
 
-  nativeBuildInputs = [ cmake pkg-config perl vala ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    perl
+    vala
+  ];
   buildInputs = [
-    gtk2 pcre zlib libpng fribidi harfbuzzFull xorg.libpthreadstubs
-    xorg.libXdmcp curl SDL SDL_image SDL_mixer util-linux libselinux libsepol
+    gtk2
+    pcre
+    zlib
+    libpng
+    fribidi
+    harfbuzzFull
+    xorg.libpthreadstubs
+    xorg.libXdmcp
+    curl
+    SDL
+    SDL_image
+    SDL_mixer
+    util-linux
+    libselinux
+    libsepol
   ];
   hardeningDisable = [ "format" ];
 

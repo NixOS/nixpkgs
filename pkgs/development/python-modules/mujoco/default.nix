@@ -1,19 +1,28 @@
 {
-  absl-py,
-  buildPythonPackage,
-  cmake,
-  etils,
-  fetchPypi,
-  glfw,
   lib,
-  mujoco,
-  numpy,
-  perl,
-  pybind11,
-  pyopengl,
-  python,
-  setuptools,
   stdenv,
+  buildPythonPackage,
+  fetchPypi,
+
+  # nativeBuildInputs
+  cmake,
+
+  # build-system
+  setuptools,
+
+  # buildInputs
+  mujoco,
+  pybind11,
+
+  # dependencies
+  absl-py,
+  etils,
+  glfw,
+  numpy,
+  pyopengl,
+
+  perl,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -28,19 +37,21 @@ buildPythonPackage rec {
   # in the project's CI.
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-fPiIdSbwcedBHcAs4c1mXjm0tgg/3/Sf4TSKgtIxRlE=";
+    hash = "sha256-kl7+5cMvaAaILEARKs5KPtdLE7Kv8J7NddZnj6oLwk8=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    setuptools
-  ];
+  nativeBuildInputs = [ cmake ];
+
   dontUseCmakeConfigure = true;
+
+  build-system = [ setuptools ];
+
   buildInputs = [
     mujoco
     pybind11
   ];
-  propagatedBuildInputs = [
+
+  dependencies = [
     absl-py
     etils
     glfw

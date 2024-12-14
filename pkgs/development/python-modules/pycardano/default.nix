@@ -2,12 +2,12 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   # Python deps
   blockfrost-python,
   cachetools,
   cbor2,
   cose,
+  docker,
   ecpy,
   frozendict,
   frozenlist,
@@ -34,7 +34,7 @@ let
 in
 buildPythonPackage rec {
   pname = "pycardano";
-  version = "0.10.0";
+  version = "0.11.1";
 
   format = "pyproject";
 
@@ -42,16 +42,15 @@ buildPythonPackage rec {
     owner = "Python-Cardano";
     repo = "pycardano";
     rev = "v${version}";
-    hash = "sha256-LP/W8IC2del476fGFq10VMWwMrbAoCCcZOngA8unBM0=";
+    hash = "sha256-OWm6ztt3s3DUbxDZqpvwTO6XwdY/57AI6Bc6x6kxH7k=";
   };
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     blockfrost-python
     cachetools
     cbor2
     cose_0_9_dev8
+    docker
     ecpy
     frozendict
     frozenlist

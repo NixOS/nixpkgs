@@ -7,23 +7,24 @@
 , gobject-introspection
 , meson
 , ninja
+, vala
 , gjs
 , glib
 , lua5_1
 , python3
-, spidermonkey_115
+, spidermonkey_128
 , gnome
 }:
 
 stdenv.mkDerivation rec {
   pname = "libpeas";
-  version = "2.0.2";
+  version = "2.0.5";
 
   outputs = [ "out" "dev" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-8w3/7WPKL0BHe0DhccCjH4DZFCW6Hh5HMg7mQlSA7MM=";
+    hash = "sha256-N28vc9cxtU4T3bqx2Rtjgs9qmAUk3vRN9irdFUid5t0=";
   };
 
   patches = [
@@ -46,6 +47,7 @@ stdenv.mkDerivation rec {
     meson
     ninja
     pkg-config
+    vala
   ];
 
   buildInputs = [
@@ -55,7 +57,7 @@ stdenv.mkDerivation rec {
     lua5_1.pkgs.lgi
     python3
     python3.pkgs.pygobject3
-    spidermonkey_115
+    spidermonkey_128
   ];
 
   propagatedBuildInputs = [
@@ -65,6 +67,7 @@ stdenv.mkDerivation rec {
 
   mesonFlags = [
     "-Dgtk_doc=true"
+    "-Dvapi=true"
   ];
 
   postPatch = ''

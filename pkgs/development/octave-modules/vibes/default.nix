@@ -1,7 +1,8 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, vibes
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  vibes,
 }:
 
 buildOctavePackage rec {
@@ -19,7 +20,10 @@ buildOctavePackage rec {
 
   meta = with lib; {
     homepage = "https://octave.sourceforge.io/vibes/index.html";
-    license = with licenses; [ gpl3Plus mit ];
+    license = with licenses; [
+      gpl3Plus
+      mit
+    ];
     maintainers = with maintainers; [ KarlJoad ];
     description = "Easily display results (boxes, pavings) from interval methods";
     longDescription = ''

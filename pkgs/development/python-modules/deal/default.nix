@@ -9,6 +9,7 @@
   hypothesis,
   marshmallow,
   pygments,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   sphinx,
@@ -31,15 +32,6 @@ buildPythonPackage rec {
     hash = "sha256-4orpoYfPGSvquhg9w63uUe8QbBa2RUpxaEJ9uy28+fU=";
   };
 
-  postPatch = ''
-    # don't do coverage
-    substituteInPlace pyproject.toml \
-      --replace-fail '"--cov-fail-under=100",' "" \
-      --replace-fail '"--cov=deal",' "" \
-      --replace-fail '"--cov-report=html",' "" \
-      --replace-fail '"--cov-report=term-missing:skip-covered",' ""
-  '';
-
   build-system = [ flit-core ];
 
   dependencies = [
@@ -53,6 +45,7 @@ buildPythonPackage rec {
     docstring-parser
     hypothesis
     marshmallow
+    pytest-cov-stub
     pytestCheckHook
     sphinx
     urllib3

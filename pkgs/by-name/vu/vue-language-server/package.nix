@@ -6,14 +6,14 @@
 
 buildNpmPackage rec {
   pname = "vue-language-server";
-  version = "2.0.24";
+  version = "2.1.10";
 
   src = fetchurl {
     url = "https://registry.npmjs.org/@vue/language-server/-/language-server-${version}.tgz";
-    hash = "sha256-uEYDg4Sybqodb2/w2mmZqi0uWffBzSSTvttcNWt01MI=";
+    hash = "sha256-xf8EzFGNelC0ebW2jYUBWBZ/tYUHMenv1WlGbpvIVhY=";
   };
 
-  npmDepsHash = "sha256-6idBvR+Ua6uwwX4doB1X8ERqgBI5bJ6e9G13JhPUFP4=";
+  npmDepsHash = "sha256-mbHNdTe2OUu64rZ9/8MWmiSG8RxNcjduT2Wm6znS830=";
 
   postPatch = ''
     ln -s ${./package-lock.json} package-lock.json

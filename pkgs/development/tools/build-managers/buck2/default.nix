@@ -1,5 +1,11 @@
-{ fetchurl, lib, stdenv, zstd
-, testers, buck2 # for passthru.tests
+{
+  fetchurl,
+  lib,
+  stdenv,
+  zstd,
+  installShellFiles,
+  testers,
+  buck2, # for passthru.tests
 }:
 
 # NOTE (aseipp): buck2 uses a precompiled binary build for good reason — the
@@ -38,43 +44,51 @@ let
   buildHashes = builtins.fromJSON (builtins.readFile ./hashes.json);
 
   # our version of buck2; this should be a git tag
-  version = "2024-05-15";
+  version = "2024-10-15";
 
   # the platform-specific, statically linked binary — which is also
   # zstd-compressed
   src =
     let
-      suffix = {
-        # map our platform name to the rust toolchain suffix
-        # NOTE (aseipp): must be synchronized with update.sh!
-        x86_64-darwin  = "x86_64-apple-darwin";
-        aarch64-darwin = "aarch64-apple-darwin";
-        x86_64-linux   = "x86_64-unknown-linux-musl";
-        aarch64-linux  = "aarch64-unknown-linux-musl";
-      }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
+      suffix =
+        {
+          # map our platform name to the rust toolchain suffix
+          # NOTE (aseipp): must be synchronized with update.sh!
+          x86_64-darwin = "x86_64-apple-darwin";
+          aarch64-darwin = "aarch64-apple-darwin";
+          x86_64-linux = "x86_64-unknown-linux-musl";
+          aarch64-linux = "aarch64-unknown-linux-musl";
+        }
+        ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
       name = "buck2-${version}-${suffix}.zst";
       hash = buildHashes."${stdenv.hostPlatform.system}";
       url = "https://github.com/facebook/buck2/releases/download/${version}/buck2-${suffix}.zst";
-    in fetchurl { inherit name url hash; };
+    in
+    fetchurl { inherit name url hash; };
 
   # compatible version of buck2 prelude; this is exported via passthru.prelude
   # for downstream consumers to use when they need to automate any kind of
   # tooling
   prelude-src =
     let
-      prelude-hash = "4e9e6d50b8b461564a7e351ff60b87fe59d7e53b";
+      prelude-hash = "615f852ad43a901d8a09b2cbbb3aefff61626c52";
       name = "buck2-prelude-${version}.tar.gz";
       hash = buildHashes."_prelude";
       url = "https://github.com/facebook/buck2-prelude/archive/${prelude-hash}.tar.gz";
-    in fetchurl { inherit name url hash; };
+    in
+    fetchurl { inherit name url hash; };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "buck2";
   version = "unstable-${version}"; # TODO (aseipp): kill 'unstable' once a non-prerelease is made
   inherit src;
 
-  nativeBuildInputs = [ zstd ];
+  nativeBuildInputs = [
+    installShellFiles
+    zstd
+  ];
 
   doCheck = true;
   dontConfigure = true;
@@ -86,6 +100,12 @@ in stdenv.mkDerivation {
   installPhase = ''
     mkdir -p $out/bin
     install -D buck2 $out/bin/buck2
+  '';
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    installShellCompletion --cmd buck2 \
+      --bash <( $out/bin/buck2 completion bash ) \
+      --fish <( $out/bin/buck2 completion fish ) \
+      --zsh <( $out/bin/buck2 completion zsh )
   '';
 
   passthru = {
@@ -109,12 +129,17 @@ in stdenv.mkDerivation {
     description = "Fast, hermetic, multi-language build system";
     homepage = "https://buck2.build";
     changelog = "https://github.com/facebook/buck2/releases/tag/${version}";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     mainProgram = "buck2";
     maintainers = with maintainers; [ thoughtpolice ];
     platforms = [
-      "x86_64-linux" "aarch64-linux"
-      "x86_64-darwin" "aarch64-darwin"
+      "x86_64-linux"
+      "aarch64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
     ];
   };
 }

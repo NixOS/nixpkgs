@@ -49,6 +49,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/zopefoundation/ZConfig";
     changelog = "https://github.com/zopefoundation/ZConfig/blob/${version}/CHANGES.rst";
     license = licenses.zpl20;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

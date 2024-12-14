@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, doxygen
-, glib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  doxygen,
+  glib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,6 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ doronbehar ];
     platforms = platforms.all;
     # Getting DARWIN_NULL related errors
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })

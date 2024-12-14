@@ -29,6 +29,6 @@ buildPythonPackage rec {
     description = "Matrices describing affine transformation of the plane";
     license = licenses.bsd3;
     homepage = "https://github.com/rasterio/affine";
-    maintainers = with maintainers; [ mredaelli ];
+    maintainers = with maintainers; [ ];
   };
 }

@@ -2,9 +2,14 @@
   mkKdeDerivation,
   qtwebengine,
   qttools,
+  libxslt,
 }:
 mkKdeDerivation {
   pname = "mailcommon";
 
-  extraBuildInputs = [qtwebengine qttools];
+  extraNativeBuildInputs = [ libxslt ];
+  extraBuildInputs = [
+    qtwebengine
+    qttools
+  ];
 }

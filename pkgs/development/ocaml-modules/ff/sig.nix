@@ -1,4 +1,9 @@
-{ lib, fetchFromGitLab, buildDunePackage, zarith }:
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  zarith,
+}:
 
 buildDunePackage rec {
   pname = "ff-sig";
@@ -7,7 +12,7 @@ buildDunePackage rec {
     owner = "nomadic-labs";
     repo = "cryptography/ocaml-ff";
     rev = version;
-    sha256 = "sha256-IoUH4awMOa1pm/t8E5io87R0TZsAxJjGWaXhXjn/w+Y=";
+    hash = "sha256-IoUH4awMOa1pm/t8E5io87R0TZsAxJjGWaXhXjn/w+Y=";
   };
 
   duneVersion = "3";

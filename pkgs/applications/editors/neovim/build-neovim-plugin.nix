@@ -11,13 +11,15 @@ in
   # function to create vim plugin from lua packages that are already packaged in
   # luaPackages
   {
-    # the lua attribute name that matches this vim plugin. Both should be equal
-    # in the majority of cases but we make it possible to have different attribute names
-    luaAttr ? (normalizeName attrs.pname)
+    # the lua derivation to convert into a neovim plugin
+     luaAttr ? (lua.pkgs.${normalizeName attrs.pname})
     , ...
   }@attrs:
     let
-      originalLuaDrv = lua.pkgs.${luaAttr};
+      originalLuaDrv = if (lib.typeOf luaAttr == "string") then
+        lib.warn "luaAttr as string is deprecated since September 2024. Pass a lua derivation directly ( e.g., `buildNeovimPlugin { luaAttr = lua.pkgs.plenary-nvim; }`)" lua.pkgs.${normalizeName luaAttr}
+        else luaAttr;
+
 
       luaDrv = originalLuaDrv.overrideAttrs (oa: {
         version = attrs.version or oa.version;

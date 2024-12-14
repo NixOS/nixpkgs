@@ -1,16 +1,18 @@
-{ lib
-, stdenv
-, callPackage
-, cmake
-, ninja
-, swift
-, Foundation
-, DarwinTools
+{
+  lib,
+  stdenv,
+  callPackage,
+  cmake,
+  ninja,
+  swift,
+  Foundation,
+  DarwinTools,
 }:
 
 let
   sources = callPackage ../sources.nix { };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "swift-corelibs-xctest";
 
   inherit (sources) version;
@@ -18,11 +20,14 @@ in stdenv.mkDerivation {
 
   outputs = [ "out" ];
 
-  nativeBuildInputs = [ cmake ninja swift ]
-    ++ lib.optional stdenv.isDarwin DarwinTools; # sw_vers
+  nativeBuildInputs = [
+    cmake
+    ninja
+    swift
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin DarwinTools; # sw_vers
   buildInputs = [ Foundation ];
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # On Darwin only, Swift uses arm64 as cpu arch.
     substituteInPlace cmake/modules/SwiftSupport.cmake \
       --replace '"aarch64" PARENT_SCOPE' '"arm64" PARENT_SCOPE'
@@ -34,9 +39,9 @@ in stdenv.mkDerivation {
     export MACOSX_DEPLOYMENT_TARGET=10.12
   '';
 
-  cmakeFlags = lib.optional stdenv.isDarwin "-DUSE_FOUNDATION_FRAMEWORK=ON";
+  cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin "-DUSE_FOUNDATION_FRAMEWORK=ON";
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # Darwin normally uses the Xcode version of XCTest. Installing
     # swift-corelibs-xctest is probably not officially supported, but we have
     # no alternative. Fix up the installation here.
@@ -50,6 +55,6 @@ in stdenv.mkDerivation {
     homepage = "https://github.com/apple/swift-corelibs-xctest";
     platforms = lib.platforms.all;
     license = lib.licenses.asl20;
-    maintainers = with lib.maintainers; [ dtzWill trepetti dduan trundle stephank ];
+    maintainers = lib.teams.swift.members;
   };
 }

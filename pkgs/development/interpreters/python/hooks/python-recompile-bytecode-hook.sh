@@ -6,7 +6,7 @@ echo "Sourcing python-recompile-bytecode-hook.sh"
 # Note this effectively duplicates `python-remove-bin-bytecode`, but long-term
 # this hook should be removed again.
 
-pythonRecompileBytecodePhase () {
+pythonRecompileBytecodePhase() {
     # TODO: consider other outputs than $out
 
     items="$(find "$out" -name "@bytecodeName@")"
@@ -20,5 +20,5 @@ pythonRecompileBytecodePhase () {
 }
 
 if [ -z "${dontUsePythonRecompileBytecode-}" ]; then
-    postPhases+=" pythonRecompileBytecodePhase"
+    appendToVar postPhases pythonRecompileBytecodePhase
 fi

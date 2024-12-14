@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "pyhanko-certvalidator";
-  version = "0.26.3";
+  version = "0.26.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -26,17 +26,12 @@ buildPythonPackage rec {
     owner = "MatthiasValvekens";
     repo = "certvalidator";
     rev = "refs/tags/v${version}";
-    hash = "sha256-uUmsWiN182g+kxrCny7UNLDHdAdqKk64w6vnjmGBNjM=";
+    hash = "sha256-+/3n+v/8Tpqt7UoOrBi4S84N6Jioay7e2j+SvKJeoLA=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace ', "pytest-runner",' ""
-  '';
+  build-system = [ setuptools ];
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     asn1crypto
     cryptography
     oscrypto
@@ -49,26 +44,6 @@ buildPythonPackage rec {
     freezegun
     pytest-asyncio
     pytestCheckHook
-  ];
-
-  disabledTestPaths = [
-    # Requests
-    "tests/test_crl_client.py"
-  ];
-
-  disabledTests = [
-    # Look for nonexisting certificates
-    "test_basic_certificate_validator_tls"
-    # Failed to fetch OCSP response from http://ocsp.digicert.com
-    "test_fetch_ocsp_aiohttp"
-    "test_fetch_ocsp_requests"
-    "test_fetch_ocsp_err_requests"
-    # Unable to build a validation path for the certificate "%s" - no issuer matching "%s" was found
-    "test_revocation_mode_hard_aiohttp_autofetch"
-    # The path could not be validated because no revocation information could be found for intermediate certificate 1
-    "test_revocation_mode_hard"
-    # ValueError: Hash algorithm not known for ed448
-    "test_ed"
   ];
 
   pythonImportsCheck = [ "pyhanko_certvalidator" ];

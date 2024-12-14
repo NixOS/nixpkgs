@@ -1,11 +1,9 @@
 {
-  stdenv,
   lib,
   allpairspy,
   buildPythonPackage,
   fetchPypi,
   pyparsing,
-  pythonRelaxDepsHook,
   robotframework,
   setuptools,
 }:
@@ -22,7 +20,6 @@ buildPythonPackage rec {
   };
 
   nativeBuildInputs = [
-    pythonRelaxDepsHook
     setuptools
   ];
 

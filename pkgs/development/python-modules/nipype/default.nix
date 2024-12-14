@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  pythonRelaxDepsHook,
   # python dependencies
   click,
   python-dateutil,
@@ -30,12 +29,10 @@
   simplejson,
   traits,
   xvfbwrapper,
-  codecov,
   # other dependencies
   which,
   bash,
   glibcLocales,
-  callPackage,
   # causes Python packaging conflict with any package requiring rdflib,
   # so use the unpatched rdflib by default (disables Nipype provenance tracking);
   # see https://github.com/nipy/nipype/issues/2888:
@@ -57,8 +54,6 @@ buildPythonPackage rec {
     substituteInPlace nipype/interfaces/base/tests/test_core.py \
       --replace "/usr/bin/env bash" "${bash}/bin/bash"
   '';
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   pythonRelaxDeps = [ "traits" ];
 
@@ -86,7 +81,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pybids
-    codecov
     glibcLocales
     mock
     pytest
@@ -96,7 +90,7 @@ buildPythonPackage rec {
   ];
 
   # checks on darwin inspect memory which doesn't work in build environment
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   # ignore tests which incorrect fail to detect xvfb
   checkPhase = ''
     LC_ALL="en_US.UTF-8" pytest nipype/tests -k 'not display and not test_no_et_multiproc'

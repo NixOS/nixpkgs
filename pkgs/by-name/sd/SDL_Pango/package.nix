@@ -8,7 +8,7 @@
   pkg-config,
   stdenv,
   # Boolean flags
-  enableSdltest ? (!stdenv.isDarwin),
+  enableSdltest ? (!stdenv.hostPlatform.isDarwin),
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,8 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://sdlpango.sourceforge.net/";
     description = "Connects the Pango rendering engine to SDL";
     license = lib.licenses.lgpl21Plus;
-    maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ puckipedia ]);
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ puckipedia ]);
     inherit (SDL.meta) platforms;
   };
 })

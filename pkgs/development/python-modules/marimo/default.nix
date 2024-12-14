@@ -2,49 +2,59 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonOlder,
-  setuptools,
-  black,
+
+  # build-system
+  hatchling,
+
+  # dependencies
   click,
   docutils,
   itsdangerous,
   jedi,
   markdown,
+  narwhals,
+  packaging,
   psutil,
   pygments,
   pymdown-extensions,
+  ruff,
   starlette,
   tomlkit,
   uvicorn,
   websockets,
   pyyaml,
-  pytestCheckHook,
+
+  # tests
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "marimo";
-  version = "0.6.25";
+  version = "0.9.27";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
+  # The github archive does not include the static assets
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-zv1mlaR/3nRhZBjjcXaOSR574NE2um48DqHhHirRfSU=";
+    hash = "sha256-vs1miLjM/xRrnFYpHte65CfDt4ZRoCKjFMClWukIWZY=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
+
+  pythonRelaxDeps = [ "websockets" ];
 
   dependencies = [
-    black
     click
     docutils
     itsdangerous
     jedi
     markdown
+    narwhals
+    packaging
     psutil
     pygments
     pymdown-extensions
+    ruff
     starlette
     tomlkit
     uvicorn
@@ -52,17 +62,21 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
   pythonImportsCheck = [ "marimo" ];
 
-  meta = with lib; {
+  # The pypi archive does not contain tests so we do not use `pytestCheckHook`
+  nativeCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+
+  meta = {
     description = "Reactive Python notebook that's reproducible, git-friendly, and deployable as scripts or apps";
     homepage = "https://github.com/marimo-team/marimo";
     changelog = "https://github.com/marimo-team/marimo/releases/tag/${version}";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     mainProgram = "marimo";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       akshayka
       dmadisetti
     ];

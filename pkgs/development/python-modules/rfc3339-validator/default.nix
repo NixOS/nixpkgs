@@ -32,6 +32,6 @@ buildPythonPackage rec {
     description = "RFC 3339 validator for Python";
     homepage = "https://github.com/naimetti/rfc3339-validator";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
   };
 }

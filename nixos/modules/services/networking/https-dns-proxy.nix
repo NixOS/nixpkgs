@@ -1,27 +1,48 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
     concatStringsSep
-    mkEnableOption mkIf mkOption types;
+    mkEnableOption
+    mkIf
+    mkOption
+    types
+    ;
 
   cfg = config.services.https-dns-proxy;
 
   providers = {
     cloudflare = {
-      ips = [ "1.1.1.1" "1.0.0.1" ];
+      ips = [
+        "1.1.1.1"
+        "1.0.0.1"
+      ];
       url = "https://cloudflare-dns.com/dns-query";
     };
     google = {
-      ips = [ "8.8.8.8" "8.8.4.4" ];
+      ips = [
+        "8.8.8.8"
+        "8.8.4.4"
+      ];
       url = "https://dns.google/dns-query";
     };
     quad9 = {
-      ips = [ "9.9.9.9" "149.112.112.112" ];
+      ips = [
+        "9.9.9.9"
+        "149.112.112.112"
+      ];
       url = "https://dns.quad9.net/dns-query";
     };
     opendns = {
-      ips = [ "208.67.222.222" "208.67.220.220" ];
+      ips = [
+        "208.67.222.222"
+        "208.67.220.220"
+      ];
       url = "https://doh.opendns.com/dns-query";
     };
     custom = {
@@ -31,13 +52,12 @@ let
 
   defaultProvider = "quad9";
 
-  providerCfg =
-    concatStringsSep " " [
-      "-b"
-      (concatStringsSep "," providers."${cfg.provider.kind}".ips)
-      "-r"
-      providers."${cfg.provider.kind}".url
-    ];
+  providerCfg = concatStringsSep " " [
+    "-b"
+    (concatStringsSep "," providers."${cfg.provider.kind}".ips)
+    "-r"
+    providers."${cfg.provider.kind}".url
+  ];
 
 in
 {

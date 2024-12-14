@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, cmake
-, pkg-config
-, glib
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  cmake,
+  pkg-config,
+  glib,
+  fetchFromGitHub,
 }:
 stdenv.mkDerivation rec {
   pname = "g3kb-switch";
@@ -12,7 +13,7 @@ stdenv.mkDerivation rec {
     owner = "lyokha";
     repo = "g3kb-switch";
     rev = version;
-    sha256 = "sha256-kTJfV0xQmWuxibUlfC1qJX2J2nrZ4wimdf/nGciQq0Y=";
+    hash = "sha256-kTJfV0xQmWuxibUlfC1qJX2J2nrZ4wimdf/nGciQq0Y=";
   };
 
   nativeBuildInputs = [
@@ -25,6 +26,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://github.com/lyokha/g3kb-switch";
+    changelog = "https://github.com/lyokha/g3kb-switch/releases/tag/${src.rev}";
     description = "CLI keyboard layout switcher for GNOME Shell";
     mainProgram = "g3kb-switch";
     license = licenses.bsd2;

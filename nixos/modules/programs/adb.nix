@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 {
   meta.maintainers = [ lib.maintainers.mic92 ];
@@ -22,6 +27,6 @@
   config = lib.mkIf config.programs.adb.enable {
     services.udev.packages = [ pkgs.android-udev-rules ];
     environment.systemPackages = [ pkgs.android-tools ];
-    users.groups.adbusers = {};
+    users.groups.adbusers = { };
   };
 }

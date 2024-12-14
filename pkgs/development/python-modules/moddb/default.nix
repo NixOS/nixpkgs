@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonRelaxDepsHook,
   beautifulsoup4,
   pyrate-limiter,
   requests,
@@ -20,8 +19,6 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-2t5QQAmSLOrdNCl0XdsFPdP2UF10/qq69DovqeQ1Vt8=";
   };
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     beautifulsoup4

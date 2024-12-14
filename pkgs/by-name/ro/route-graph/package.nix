@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, graphviz
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  graphviz,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -25,17 +26,15 @@ python3.pkgs.buildPythonApplication rec {
     poetry-core
   ];
 
-  nativeBuildInputs = with python3.pkgs; [
-    pythonRelaxDepsHook
-  ];
-
-  propagatedBuildInputs = [
-    graphviz
-  ] ++ (with python3.pkgs; [
-    scapy
-    typer
-    typing-extensions
-  ] ++ typer.optional-dependencies.all);
+  propagatedBuildInputs =
+    [
+      graphviz
+    ]
+    ++ (with python3.pkgs; [
+      scapy
+      typer
+      typing-extensions
+    ]);
 
   # Project has no tests
   doCheck = false;

@@ -1,44 +1,46 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, autoconf
-, automake
-, kerberos
-, openldap
-, popt
-, sasl
-, curl
-, xmlrpc_c
-, ding-libs
-, p11-kit
-, gettext
-, nspr
-, nss
-, _389-ds-base
-, svrcore
-, libuuid
-, talloc
-, tevent
-, samba
-, libunistring
-, libverto
-, libpwquality
-, systemd
-, python3
-, bind
-, sssd
-, jre
-, rhino
-, lesscpy
-, jansson
-, runtimeShell
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  autoconf,
+  automake,
+  kerberos,
+  openldap,
+  popt,
+  sasl,
+  curl,
+  xmlrpc_c,
+  ding-libs,
+  p11-kit,
+  gettext,
+  nspr,
+  nss,
+  _389-ds-base,
+  svrcore,
+  libuuid,
+  talloc,
+  tevent,
+  samba,
+  libunistring,
+  libverto,
+  libpwquality,
+  systemd,
+  python3,
+  bind,
+  sssd,
+  jre,
+  rhino,
+  lesscpy,
+  jansson,
+  runtimeShell,
 }:
 
 let
   pathsPy = ./paths.py;
 
   pythonInputs = with python3.pkgs; [
+    distutils
     six
     python-ldap
     dnspython

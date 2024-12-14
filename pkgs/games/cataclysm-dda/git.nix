@@ -1,10 +1,10 @@
-{ stdenv, lib, callPackage, CoreFoundation, fetchFromGitHub, fetchpatch, pkgs, wrapCDDA, attachPkgs
+{ lib, callPackage, CoreFoundation, fetchFromGitHub, fetchpatch, pkgs, wrapCDDA, attachPkgs
 , tiles ? true, Cocoa
 , debug ? false
 , useXdgDir ? false
-, version ? "2022-08-20"
-, rev ? "f65b2bc4c6dea24bd9a993b8df146e5698e7e36f"
-, sha256 ? "sha256-00Tp9OmsM39PYwAJXKKRS9zmn7KsGQ9s1eVmEqghkpw="
+, version ? "2024-07-28"
+, rev ? "bfeb1fffc4179fed242a042f24b1c97f6cfaff3d"
+, sha256 ? "sha256-IodXEA+pWfDdR9huRXieP3+J3WZJO19C8PUPT18dFBw="
 }:
 
 let
@@ -24,20 +24,7 @@ let
 
     patches = [
       # Unconditionally look for translation files in $out/share/locale
-      ./locale-path.patch
-      # Fixes for failing build with GCC 13, remove on updating next release after 0.G
-      (fetchpatch {
-        url = "https://sources.debian.org/data/main/c/cataclysm-dda/0.G-4/debian/patches/gcc13-dangling-reference-warning.patch";
-        hash = "sha256-9nPbyz49IYBOVHqr7jzCIyS8z/SQgpK4EjEz1fruIPE=";
-      })
-      (fetchpatch {
-        url = "https://sources.debian.org/data/main/c/cataclysm-dda/0.G-4/debian/patches/gcc13-cstdint.patch";
-        hash = "sha256-8IBW2OzAHVgEJZoViQ490n37sl31hA55ePuqDL/lil0=";
-      })
-      (fetchpatch {
-        url = "https://sources.debian.org/data/main/c/cataclysm-dda/0.G-4/debian/patches/gcc13-keyword-requires.patch";
-        hash = "sha256-8yvHh0YKC7AC/qzia7AZAfMewMC0RiSepMXpOkMXRd8=";
-      })
+      ./locale-path-git.patch
     ];
 
     makeFlags = common.makeFlags ++ [

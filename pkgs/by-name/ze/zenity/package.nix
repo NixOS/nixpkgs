@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, fetchurl
-, help2man
-, meson
-, ninja
-, pkg-config
-, libxml2
-, gnome
-, gtk4
-, gettext
-, libadwaita
-, itstool
-, wrapGAppsHook4
+{
+  stdenv,
+  lib,
+  fetchurl,
+  help2man,
+  meson,
+  ninja,
+  pkg-config,
+  libxml2,
+  gnome,
+  gtk4,
+  gettext,
+  libadwaita,
+  itstool,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zenity";
-  version = "4.0.1";
+  version = "4.0.3";
 
   src = fetchurl {
     url = "mirror://gnome/sources/zenity/${lib.versions.majorMinor finalAttrs.version}/zenity-${finalAttrs.version}.tar.xz";
-    sha256 = "DC9TeBOxD3KEcNnQXWyVcT2yUS+clQluHoWxpnOWBeY=";
+    hash = "sha256-tCnZe4e9nOf7cqwLeN9TRyXYrTmBfdympMou5TgbCN4=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "zenity";
     description = "Tool to display dialogs from the commandline and shell scripts";
     homepage = "https://gitlab.gnome.org/GNOME/zenity";
+    changelog = "https://gitlab.gnome.org/GNOME/zenity/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.lgpl21Plus;
     platforms = platforms.unix;
     maintainers = teams.gnome.members;

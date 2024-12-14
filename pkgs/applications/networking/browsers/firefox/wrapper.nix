@@ -15,9 +15,10 @@
 , mesa # firefox wants gbm for drm+dmabuf
 , cups
 , pciutils
+, vulkan-loader
 , sndio
 , libjack2
-, speechd
+, speechd-minimal
 , removeReferencesTo
 }:
 
@@ -50,8 +51,9 @@ let
     # https://mozilla.github.io/policy-templates/
     , extraPolicies ? {}
     , extraPoliciesFiles ? []
-    , libName ? browser.libName or "firefox" # Important for tor package or the like
+    , libName ? browser.libName or applicationName # Important for tor package or the like
     , nixExtensions ? null
+    , hasMozSystemDirPatch ? (lib.hasPrefix "firefox" pname && !lib.hasSuffix "-bin" pname)
     }:
 
     let
@@ -86,7 +88,10 @@ let
                 else [])
        );
 
-      libs =   lib.optionals stdenv.isLinux [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils ]
+       libs = lib.optionals stdenv.hostPlatform.isLinux (
+            [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils vulkan-loader ]
+            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
+       )
             ++ lib.optional pipewireSupport pipewire
             ++ lib.optional ffmpegSupport ffmpeg
             ++ lib.optional gssSupport libkrb5
@@ -98,7 +103,6 @@ let
             ++ lib.optional sndioSupport sndio
             ++ lib.optional jackSupport libjack2
             ++ lib.optional smartcardSupport opensc
-            ++ lib.optional (cfg.speechSynthesisSupport or true) speechd
             ++ pkcs11Modules
             ++ gtk_modules;
       gtk_modules = [ libcanberra-gtk3 ];
@@ -318,12 +322,18 @@ let
             ${lib.optionalString (!xdg-utils.meta.broken) "--suffix PATH ':' \"${xdg-utils}/bin\""} \
             --suffix PATH ':' "$out/bin" \
             --set MOZ_APP_LAUNCHER "${launcherName}" \
+        '' + lib.optionalString hasMozSystemDirPatch ''
             --set MOZ_SYSTEM_DIR "$out/lib/mozilla" \
+        '' + ''
             --set MOZ_LEGACY_PROFILES 1 \
             --set MOZ_ALLOW_DOWNGRADE 1 \
             --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
             --suffix XDG_DATA_DIRS : '${adwaita-icon-theme}/share' \
             --set-default MOZ_ENABLE_WAYLAND 1 \
+        '' + lib.optionalString (!hasMozSystemDirPatch) ''
+            ${lib.optionalString (allNativeMessagingHosts != []) "--run \"mkdir -p \\\${MOZ_HOME:-~/.mozilla}/native-messaging-hosts\""} \
+            ${lib.concatMapStringsSep " " (ext: "--run \"ln -sfLt \\\${MOZ_HOME:-~/.mozilla}/native-messaging-hosts ${ext}/lib/mozilla/native-messaging-hosts/*\"") allNativeMessagingHosts} \
+        '' + ''
             "''${oldWrapperArgs[@]}"
         #############################
         #                           #
@@ -346,10 +356,12 @@ let
 
         install -D -t $out/share/applications $desktopItem/share/applications/*
 
+      '' + lib.optionalString hasMozSystemDirPatch ''
         mkdir -p $out/lib/mozilla/native-messaging-hosts
         for ext in ${toString allNativeMessagingHosts}; do
             ln -sLt $out/lib/mozilla/native-messaging-hosts $ext/lib/mozilla/native-messaging-hosts/*
         done
+      '' + ''
 
         mkdir -p $out/lib/mozilla/pkcs11-modules
         for ext in ${toString pkcs11Modules}; do
@@ -421,7 +433,7 @@ let
         inherit (browser.meta) description;
         mainProgram = launcherName;
         hydraPlatforms = [];
-        priority = (browser.meta.priority or 0) - 1; # prefer wrapper over the package
+        priority = (browser.meta.priority or lib.meta.defaultPriority) - 1; # prefer wrapper over the package
       };
     };
 in lib.makeOverridable wrapper

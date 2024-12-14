@@ -3,22 +3,22 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonAtLeast,
   pythonOlder,
 
   # build-system
+  distutils,
   setuptools,
 
   # native dependencies
   openldap,
   cyrus_sasl,
 
-  # dependencies
   pyasn1,
   pyasn1-modules,
 
   # tests
   pytestCheckHook,
+  jaraco-functools,
 }:
 
 buildPythonPackage rec {
@@ -26,7 +26,7 @@ buildPythonPackage rec {
   version = "3.4.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.6" || pythonAtLeast "3.12"; # requires distutils
+  disabled = pythonOlder "3.6";
 
   src = fetchFromGitHub {
     owner = "python-ldap";
@@ -35,7 +35,10 @@ buildPythonPackage rec {
     hash = "sha256-v1cWoRGxbvvFnHqnwoIfmiQQcxfaA8Bf3+M5bE5PtuU=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [
+    distutils
+    setuptools
+  ];
 
   buildInputs = [
     openldap
@@ -47,7 +50,10 @@ buildPythonPackage rec {
     pyasn1-modules
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    jaraco-functools
+    pytestCheckHook
+  ];
 
   preCheck = ''
     # Needed by tests to setup a mockup ldap server.
@@ -62,13 +68,14 @@ buildPythonPackage rec {
     "test_tls_ext_noca"
   ];
 
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
-    changelog = "https://github.com/python-ldap/python-ldap/releases/tag/python-ldap-${version}";
     description = "Python modules for implementing LDAP clients";
     downloadPage = "https://github.com/python-ldap/python-ldap";
     homepage = "https://www.python-ldap.org/";
+    changelog = "https://github.com/python-ldap/python-ldap/releases/tag/python-ldap-${version}";
     license = licenses.psfl;
+    maintainers = [ ];
   };
 }

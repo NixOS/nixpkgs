@@ -1,51 +1,52 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, arcan
-, audit
-, dbus
-, libepoxy
-, fontutil
-, libGL
-, libX11
-, libXau
-, libXdmcp
-, libXfont2
-, libdrm
-, libgcrypt
-, libmd
-, libselinux
-, libtirpc
-, libxcb
-, libxkbfile
-, libxshmfence
-, mesa
-, meson
-, nettle
-, ninja
-, openssl
-, pixman
-, pkg-config
-, systemd
-, xcbutil
-, xcbutilwm
-, xcbutilimage
-, xkbcomp
-, xkeyboard_config
-, xorgproto
-, xtrans
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  arcan,
+  audit,
+  dbus,
+  libepoxy,
+  fontutil,
+  libGL,
+  libX11,
+  libXau,
+  libXdmcp,
+  libXfont2,
+  libdrm,
+  libgcrypt,
+  libmd,
+  libselinux,
+  libtirpc,
+  libxcb,
+  libxkbfile,
+  libxshmfence,
+  mesa,
+  meson,
+  nettle,
+  ninja,
+  openssl,
+  pixman,
+  pkg-config,
+  systemd,
+  xcbutil,
+  xcbutilwm,
+  xcbutilimage,
+  xkbcomp,
+  xkeyboard_config,
+  xorgproto,
+  xtrans,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalPackages: {
   pname = "xarcan";
-  version = "0-unstable-2024-05-11";
+  version = "0-unstable-2024-08-26";
 
   src = fetchFromGitHub {
     owner = "letoram";
     repo = "xarcan";
-    rev = "ecc4d0a6408dfeb19934e3bfd4c382b0862c03b4";
-    hash = "sha256-PmaoeemQpin5NN8I6JYOumP+PrzkyTYrqAyxxwBO9K0=";
+    rev = "5672116f627de492fb4df0b33d36b78041cd3931";
+    hash = "sha256-xZX6uLs/H/wONKrUnYxSynHK7CL7FDfzWvSjtXxT8es=";
   };
 
   nativeBuildInputs = [
@@ -106,9 +107,9 @@ stdenv.mkDerivation (finalPackages: {
     "--with-xkb-path=${xkeyboard_config}/share/X11/xkb"
   ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
-  meta =  {
+  meta = {
     homepage = "https://github.com/letoram/letoram";
     description = "Patched Xserver that bridges connections to Arcan";
     mainProgram = "Xarcan";

@@ -1,17 +1,20 @@
 {
   lib,
+  aiohttp,
+  aioresponses,
   async-timeout,
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
+  hatchling,
   http-ece,
-  poetry-core,
+  myst-parser,
   protobuf,
   pytest-asyncio,
   pytest-mock,
+  pytest-socket,
   pytestCheckHook,
   pythonOlder,
-  requests,
   requests-mock,
   sphinx,
   sphinx-autodoc-typehints,
@@ -21,16 +24,16 @@
 
 buildPythonPackage rec {
   pname = "firebase-messaging";
-  version = "0.2.1";
+  version = "0.4.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "sdb9696";
     repo = "firebase-messaging";
     rev = "refs/tags/${version}";
-    hash = "sha256-8e+S12ZMqAmK7OR7O45QsRa0UKQq6cngeaqz2ugi6iY=";
+    hash = "sha256-duUqDioIBo2QQP/4VGGwklDt4F8pDm/sHrvOx4wcTWQ=";
   };
 
   outputs = [
@@ -38,20 +41,28 @@ buildPythonPackage rec {
     "doc"
   ];
 
-  nativeBuildInputs = [
-    poetry-core
-    sphinxHook
-  ] ++ passthru.optional-dependencies.docs;
+  build-system = [
+    hatchling
+  ];
 
-  propagatedBuildInputs = [
+  nativeBuildInputs = [
+    sphinxHook
+  ] ++ optional-dependencies.docs;
+
+  pythonRelaxDeps = [
+    "http-ece"
+  ];
+
+  dependencies = [
+    aiohttp
     cryptography
     http-ece
     protobuf
-    requests
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     docs = [
+      myst-parser
       sphinx
       sphinx-autodoc-typehints
       sphinx-rtd-theme
@@ -61,10 +72,12 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "firebase_messaging" ];
 
   nativeCheckInputs = [
+    aioresponses
     async-timeout
     requests-mock
     pytest-asyncio
     pytest-mock
+    pytest-socket
     pytestCheckHook
   ];
 
@@ -73,6 +86,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/sdb9696/firebase-messaging";
     changelog = "https://github.com/sdb9696/firebase-messaging/releases/tag/${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

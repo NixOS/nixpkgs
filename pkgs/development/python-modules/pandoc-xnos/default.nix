@@ -21,6 +21,8 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [ setuptools ];
 
+  pythonRelaxDeps = [ "psutil" ];
+
   propagatedBuildInputs = [
     pandocfilters
     psutil

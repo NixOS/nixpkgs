@@ -1,12 +1,21 @@
-{ lib, stdenv, fetchurl, p7zip
-, nss, nspr, libusb1
-, qtbase, qtmultimedia, qtserialport, cups
-, autoPatchelfHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  p7zip,
+  nss,
+  nspr,
+  libusb1,
+  qtbase,
+  qtmultimedia,
+  qtserialport,
+  cups,
+  autoPatchelfHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lightburn";
-  version = "1.6.03";
+  version = "1.6.04";
 
   nativeBuildInputs = [
     p7zip
@@ -15,12 +24,17 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://github.com/LightBurnSoftware/deployment/releases/download/${version}/LightBurn-Linux64-v${version}.7z";
-    sha256 = "sha256-yMxCe9Bu5llAUrTLG8R+1HX65rs9fhhoVG79vxDzeWY=";
+    sha256 = "sha256-3dvLUfOczysRC8Ou6aQHzzmJs2rwtKAvfrwpQ4VMB/M=";
   };
 
   buildInputs = [
-    nss nspr libusb1
-    qtbase qtmultimedia qtserialport cups
+    nss
+    nspr
+    libusb1
+    qtbase
+    qtmultimedia
+    qtserialport
+    cups
   ];
 
   unpackPhase = ''

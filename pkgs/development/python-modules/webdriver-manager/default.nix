@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "webdriver-manager";
-  version = "4.0.1";
+  version = "4.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
     owner = "SergeyPirogov";
     repo = "webdriver_manager";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PdUlloJ4DncnktKQHofn/OLVrgSVyWhaeEEhl3Hgjek=";
+    hash = "sha256-ZmrQa/2vPwYgSvY3ZUvilg4RizVXpu5hvJJBQVXkK8E=";
   };
 
   __darwinAllowLocalNetworking = true;

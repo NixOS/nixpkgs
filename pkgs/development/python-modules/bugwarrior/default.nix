@@ -7,7 +7,7 @@
   twiggy,
   requests,
   offtrac,
-  bugzilla,
+  python-bugzilla,
   taskw,
   python-dateutil,
   pytz,
@@ -39,7 +39,7 @@ buildPythonPackage rec {
     twiggy
     requests
     offtrac
-    bugzilla
+    python-bugzilla
     taskw
     python-dateutil
     pytz

@@ -1,11 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   pythonOlder,
 
   # build-system
-  setuptools,
+  flit-core,
 
   # dependencies
   flask,
@@ -20,20 +20,21 @@
 
 buildPythonPackage rec {
   pname = "flask-login";
-  version = "0.6.3";
+  version = "0.7.0dev0-2024-06-18";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
-  src = fetchPypi {
-    pname = "Flask-Login";
-    inherit version;
-    hash = "sha256-XiPRSmB+8SgGxplZC4nQ8ODWe67sWZ11lHv5wUczAzM=";
+  src = fetchFromGitHub {
+    owner = "maxcountryman";
+    repo = "flask-login";
+    rev = "30675c56b651389d47b47eeb1ad114decb35b8fc";
+    hash = "sha256-mIEYZnYWerjCetQuV2HRcmerMh2uLWNvHV7tfo5j4PU=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ flit-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     flask
     werkzeug
   ];

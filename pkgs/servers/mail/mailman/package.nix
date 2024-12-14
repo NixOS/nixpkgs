@@ -1,10 +1,11 @@
-{ lib
-, fetchpatch
-, python3
-, fetchPypi
-, postfix
-, lynx
-, nixosTests
+{
+  lib,
+  fetchpatch,
+  python3,
+  fetchPypi,
+  postfix,
+  lynx,
+  nixosTests,
 }:
 
 with python3.pkgs;
@@ -12,6 +13,8 @@ with python3.pkgs;
 buildPythonPackage rec {
   pname = "mailman";
   version = "3.3.9";
+  pyproject = true;
+
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
@@ -19,7 +22,11 @@ buildPythonPackage rec {
     hash = "sha256-GblXI6IwkLl+V1gEbMAe1baVyZOHMaYaYITXcTkp2Mo=";
   };
 
-  propagatedBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
+    setuptools
+  ];
+
+  dependencies = with python3.pkgs; [
     aiosmtpd
     alembic
     authheaders

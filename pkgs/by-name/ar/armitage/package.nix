@@ -1,15 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, jdk11
-, gradle_6
-, perl
-, metasploit
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, writeDarwinBundle
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  jdk11,
+  gradle_8,
+  metasploit,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  writeDarwinBundle,
 }:
 
 let
@@ -44,32 +44,21 @@ let
       url = "https://gitlab.com/kalilinux/packages/armitage/-/raw/042beb7494a10227761ecb3ddabf4019bbb78681/debian/patches/fix-meterpreter.patch";
       hash = "sha256-p4fs5xFdC2apW0U8x8u9S4p5gq3Eiv+0E4CGccQZYKY=";
     })
+    # Update for Gradle 8 (https://github.com/r00t0v3rr1d3/armitage/pull/1)
+    ./gradle-8.patch
   ];
 
-  deps = stdenv.mkDerivation {
-    pname = "${pname}-deps";
-    inherit version src patches;
-    nativeBuildInputs = [ gradle_6 perl ];
-    buildPhase = ''
-      export GRADLE_USER_HOME=$(mktemp -d)
-      gradle --no-daemon assemble
-    '';
-    # perl code mavenizes pathes (com.squareup.okio/okio/1.13.0/a9283170b7305c8d92d25aff02a6ab7e45d06cbe/okio-1.13.0.jar -> com/squareup/okio/okio/1.13.0/okio-1.13.0.jar)
-    installPhase = ''
-      find $GRADLE_USER_HOME -type f -regex '.*\.\(jar\|pom\)' \
-        | perl -pe 's#(.*/([^/]+)/([^/]+)/([^/]+)/[0-9a-f]{30,40}/([^/\s]+))$# ($x = $2) =~ tr|\.|/|; "install -Dm444 $1 \$out/$x/$3/$4/$5" #e' \
-        | sh
-      rm -rf $out/tmp
-    '';
-    outputHashAlgo = "sha256";
-    outputHashMode = "recursive";
-    outputHash = "sha256-6o3HlBfmpjpmMeiRydOme6fJc8caq8EBRVf3nJq9vqo=";
-  };
+  # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
+  gradle = gradle_8;
+
 in
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version src patches;
-
-  __darwinAllowLocalNetworking = true;
+  inherit
+    pname
+    version
+    src
+    patches
+    ;
 
   desktopItems = [
     (makeDesktopItem {
@@ -78,32 +67,31 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "armitage";
       icon = "armitage";
       comment = finalAttrs.meta.description;
-      categories = [ "Network" "Security" ];
+      categories = [
+        "Network"
+        "Security"
+      ];
       startupNotify = false;
     })
   ];
 
-  nativeBuildInputs = [
-    jdk11
-    gradle_6
-    makeWrapper
-    copyDesktopItems
-  ] ++ lib.optionals stdenv.isDarwin [
-    writeDarwinBundle
-  ];
+  nativeBuildInputs =
+    [
+      jdk11
+      gradle
+      makeWrapper
+      copyDesktopItems
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      writeDarwinBundle
+    ];
 
-  buildPhase = ''
-    runHook preBuild
+  mitmCache = gradle.fetchDeps {
+    inherit pname;
+    data = ./deps.json;
+  };
 
-    export GRADLE_USER_HOME=$(mktemp -d)
-    substituteInPlace armitage/build.gradle \
-      --replace 'mavenCentral()' 'mavenLocal(); maven { url uri("${deps}") }'
-    substituteInPlace cortana/build.gradle \
-      --replace 'mavenCentral()' 'mavenLocal(); maven { url uri("${deps}") }'
-    gradle --offline --no-daemon assemble
-
-    runHook postBuild
-  '';
+  __darwinAllowLocalNetworking = true;
 
   installPhase = ''
     runHook preInstall
@@ -113,18 +101,28 @@ stdenv.mkDerivation (finalAttrs: {
 
     install -Dm755 dist/unix/armitage $out/bin/armitage
     substituteInPlace $out/bin/armitage \
-      --replace "armitage.jar" "$JAR"
+      --replace-fail "armitage.jar" "$JAR"
     wrapProgram $out/bin/armitage \
-      --prefix PATH : "${lib.makeBinPath [ jdk11 metasploit ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          jdk11
+          metasploit
+        ]
+      }"
 
     install -Dm755 dist/unix/teamserver $out/bin/teamserver
     substituteInPlace $out/bin/teamserver \
-      --replace "armitage.jar" "$JAR"
+      --replace-fail "armitage.jar" "$JAR"
     wrapProgram $out/bin/teamserver \
-      --prefix PATH : "${lib.makeBinPath [ jdk11 metasploit ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          jdk11
+          metasploit
+        ]
+      }"
 
     install -Dm444 dist/unix/armitage-logo.png $out/share/pixmaps/armitage.png
-    ${lib.optionalString stdenv.isDarwin ''
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
       mkdir -p "$out/Applications/Armitage.app/Contents/MacOS"
       mkdir -p "$out/Applications/Armitage.app/Contents/Resources"
       cp dist/mac/Armitage.app/Contents/Resources/macIcon.icns $out/Applications/Armitage.app/Contents/Resources

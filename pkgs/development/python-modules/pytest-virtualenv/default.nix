@@ -12,12 +12,14 @@
   virtualenv,
 }:
 
-buildPythonPackage rec {
+buildPythonPackage {
   pname = "pytest-virtualenv";
-  inherit (pytest-fixture-config) version src;
+  inherit (pytest-fixture-config) version src patches;
   pyproject = true;
 
-  sourceRoot = "${src.name}/pytest-virtualenv";
+  postPatch = ''
+    cd pytest-virtualenv
+  '';
 
   build-system = [ setuptools ];
 

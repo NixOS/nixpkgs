@@ -1,48 +1,55 @@
-{ lib
-, stdenv
-, mkDerivation
-, fetchurl
-, freetype
-, glib
-, libGL
-, libGLU
-, libSM
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  fetchurl,
+  freetype,
+  glib,
+  libGL,
+  libGLU,
+  libSM,
 
-, libXrender
-, libX11
+  libXrender,
+  libX11,
 
-, libxcb
-, sqlite
-, zlib
-, fontconfig
-, dpkg
-, libproxy
-, libxml2
-, gst_all_1
-, dbus
-, makeWrapper
+  libxcb,
+  sqlite,
+  zlib,
+  fontconfig,
+  dpkg,
+  libproxy,
+  libxml2,
+  gst_all_1,
+  dbus,
+  makeWrapper,
 
-, cups
-, alsa-lib
+  cups,
+  alsa-lib,
 
-, xkeyboardconfig
-, autoPatchelfHook
+  xkeyboardconfig,
+  autoPatchelfHook,
 }:
 let
   arch =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "amd64"
-    else throw "Unsupported system ${stdenv.hostPlatform.system} ";
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      "amd64"
+    else
+      throw "Unsupported system ${stdenv.hostPlatform.system} ";
 in
 mkDerivation rec {
   pname = "googleearth-pro";
-  version = "7.3.4.8248";
+  version = "7.3.6.9796";
 
   src = fetchurl {
     url = "https://dl.google.com/linux/earth/deb/pool/main/g/google-earth-pro-stable/google-earth-pro-stable_${version}-r0_${arch}.deb";
-    sha256 = "1pbapi267snlrjari5k93y6kbrjsqhqxgkxxqaqv4r25az00dx6d";
+    sha256 = "sha256-Wv2jPGN7LC5T32WdX3W1BfGYrcXTNWTI1Wv+PmD0gNM=";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper autoPatchelfHook ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+    autoPatchelfHook
+  ];
   propagatedBuildInputs = [ xkeyboardconfig ];
   buildInputs = [
     dbus
@@ -72,10 +79,10 @@ mkDerivation rec {
   unpackPhase = ''
     # deb file contains a setuid binary, so 'dpkg -x' doesn't work here
     mkdir deb
-    dpkg --fsys-tarfile ${src} | tar --extract -C deb
+    dpkg --fsys-tarfile $src | tar --extract -C deb
   '';
 
-  installPhase =''
+  installPhase = ''
     runHook preInstall
 
     mkdir $out
@@ -118,8 +125,13 @@ mkDerivation rec {
     homepage = "https://www.google.com/earth/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ shamilton ];
+    maintainers = with maintainers; [
+      shamilton
+      xddxdd
+    ];
     platforms = platforms.linux;
-    knownVulnerabilities = [ "Includes vulnerable versions of bundled libraries: openssl, ffmpeg, gdal, and proj." ];
+    knownVulnerabilities = [
+      "Includes vulnerable versions of bundled libraries: openssl, ffmpeg, gdal, and proj."
+    ];
   };
 }

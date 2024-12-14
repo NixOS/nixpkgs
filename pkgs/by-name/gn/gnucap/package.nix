@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, readline
-, termcap
-, gnucap
-, callPackage
-, writeScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  readline,
+  termcap,
+  gnucap,
+  callPackage,
+  writeScript,
 }:
 
 let
@@ -13,14 +14,14 @@ let
   meta = with lib; {
     description = "Gnu Circuit Analysis Package";
     longDescription = ''
-Gnucap is a modern general purpose circuit simulator with several advantages over Spice derivatives.
-It performs nonlinear dc and transient analyses, fourier analysis, and ac analysis.
+      Gnucap is a modern general purpose circuit simulator with several advantages over Spice derivatives.
+      It performs nonlinear dc and transient analyses, fourier analysis, and ac analysis.
     '';
     homepage = "http://www.gnucap.org/";
     changelog = "https://git.savannah.gnu.org/cgit/gnucap.git/plain/NEWS?h=v${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    broken = stdenv.isDarwin; # Relies on LD_LIBRARY_PATH
+    broken = stdenv.hostPlatform.isDarwin; # Relies on LD_LIBRARY_PATH
     maintainers = [ maintainers.raboof ];
     mainProgram = "gnucap";
   };
@@ -30,7 +31,7 @@ stdenv.mkDerivation rec {
   inherit version;
 
   src = fetchurl {
-    url = "https://git.savannah.gnu.org/cgit/gnucap.git/snapshot/${pname}-${version}.tar.gz";
+    url = "https://git.savannah.gnu.org/cgit/gnucap.git/snapshot/gnucap-${version}.tar.gz";
     hash = "sha256-MUCtGw3BxGWgXgUwzklq5T1y9kjBTnFBa0/GK0hhl0E=";
   };
 
@@ -42,9 +43,11 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   inherit meta;
-} // {
-  plugins = callPackage ./plugins.nix {};
-  withPlugins = p:
+}
+// {
+  plugins = callPackage ./plugins.nix { };
+  withPlugins =
+    p:
     let
       selectedPlugins = p gnucap.plugins;
       wrapper = writeScript "gnucap" ''
@@ -55,19 +58,19 @@ stdenv.mkDerivation rec {
         ${lib.getExe gnucap}
       '';
     in
-      stdenv.mkDerivation {
-        pname = "gnucap-with-plugins";
-        inherit version;
+    stdenv.mkDerivation {
+      pname = "gnucap-with-plugins";
+      inherit version;
 
-        propagatedBuildInputs = selectedPlugins;
+      propagatedBuildInputs = selectedPlugins;
 
-        dontUnpack = true;
+      dontUnpack = true;
 
-        installPhase = ''
-          mkdir -p $out/bin
-          cp ${wrapper} $out/bin/gnucap
-        '';
+      installPhase = ''
+        mkdir -p $out/bin
+        cp ${wrapper} $out/bin/gnucap
+      '';
 
-        inherit meta;
-      };
+      inherit meta;
+    };
 }

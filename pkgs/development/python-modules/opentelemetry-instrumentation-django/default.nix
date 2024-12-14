@@ -1,5 +1,4 @@
 {
-  lib,
   buildPythonPackage,
   pythonOlder,
   django,
@@ -34,14 +33,14 @@ buildPythonPackage rec {
     opentelemetry-util-http
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     asgi = [ opentelemetry-instrumentation-asgi ];
   };
 
   nativeCheckInputs = [
     opentelemetry-test-utils
     pytestCheckHook
-  ] ++ passthru.optional-dependencies.asgi;
+  ] ++ optional-dependencies.asgi;
 
   pythonImportsCheck = [ "opentelemetry.instrumentation.django" ];
 

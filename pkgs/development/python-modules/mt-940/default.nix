@@ -41,6 +41,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/WoLpH/mt940";
     changelog = "https://github.com/wolph/mt940/releases/tag/v${version}";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

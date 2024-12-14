@@ -1,26 +1,30 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, testers
-, kitex
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  testers,
+  kitex,
 }:
 
 buildGoModule rec {
   pname = "kitex";
-  version = "0.10.1";
+  version = "0.11.3";
 
   src = fetchFromGitHub {
     owner = "cloudwego";
     repo = "kitex";
     rev = "v${version}";
-    hash = "sha256-eiwOivulPBYEK7Pmztmb2dgUytPT0hZW5BiCpovUZWw=";
+    hash = "sha256-FjFhbkEMxuBUVfytPk27mrBaAlGXZ9RPWeBy+m0bPV8=";
   };
 
-  vendorHash = "sha256-4tOi1BENGNdqo3xG7PnKbIUb/QsUFhm0wDcRYrMGC0M=";
+  vendorHash = "sha256-e98x8lSwO/u8lFbqDmbVNjVG57Y93/P0ls2UUgRvkH0=";
 
   subPackages = [ "tool/cmd/kitex" ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   postInstall = ''
     ln -s $out/bin/kitex $out/bin/protoc-gen-kitex
@@ -32,7 +36,7 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib;  {
+  meta = with lib; {
     description = "A high-performance and strong-extensibility Golang RPC framework";
     homepage = "https://github.com/cloudwego/kitex";
     license = licenses.asl20;

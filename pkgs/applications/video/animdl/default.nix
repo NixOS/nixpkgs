@@ -1,8 +1,8 @@
-{ lib,
+{
+  lib,
   buildPythonApplication,
   fetchFromGitHub,
   poetry-core,
-  pythonRelaxDepsHook,
   anchor-kr,
   anitopy,
   click,
@@ -16,7 +16,7 @@
   regex,
   rich,
   tqdm,
-  yarl
+  yarl,
 }:
 buildPythonApplication {
   pname = "animdl";
@@ -47,7 +47,6 @@ buildPythonApplication {
 
   nativeBuildInputs = [
     poetry-core
-    pythonRelaxDepsHook
   ];
   propagatedBuildInputs = [
     anchor-kr

@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "formbox";
-  version = "0.4.3";
+  version = "1.0.0";
   format = "pyproject";
   disabled = pythonOlder "3.6";
 
   src = fetchzip {
     url = "https://trong.loang.net/~cnx/formbox/snapshot/formbox-${version}.tar.gz";
-    hash = "sha256-sRu0otyeYpxot/Fyiz3wyQJsJvl8nsgIVitzT8frxLE=";
+    hash = "sha256-YS0hkmEly7SXQvMIPLmqY89ux6E951twAy7iA3K+asA=";
   };
 
   nativeBuildInputs = [ flit-core ];

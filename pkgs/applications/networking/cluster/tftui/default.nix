@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, python3
-, enableUsageTracking ? false
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
+  enableUsageTracking ? false,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -24,7 +25,6 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python3.pkgs; [
     makeWrapper
     poetry-core
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

@@ -1,19 +1,16 @@
 # This module contains the basic configuration for building a NixOS
 # installation CD.
-
 { config, lib, options, pkgs, ... }:
-
-with lib;
-
 {
   imports =
     [ ./iso-image.nix
 
       # Profiles of this basic installation CD.
-      ../../profiles/all-hardware.nix
       ../../profiles/base.nix
       ../../profiles/installation-device.nix
     ];
+
+  hardware.enableAllHardware = true;
 
   # Adds terminus_font for people with HiDPI displays
   console.packages = options.console.packages.default ++ [ pkgs.terminus_font ];
@@ -32,8 +29,8 @@ with lib;
 
   # An installation media cannot tolerate a host config defined file
   # system layout on a fresh machine, before it has been formatted.
-  swapDevices = mkImageMediaOverride [ ];
-  fileSystems = mkImageMediaOverride config.lib.isoFileSystems;
+  swapDevices = lib.mkImageMediaOverride [ ];
+  fileSystems = lib.mkImageMediaOverride config.lib.isoFileSystems;
 
   boot.postBootCommands = ''
     for o in $(</proc/cmdline); do
@@ -45,6 +42,12 @@ with lib;
       esac
     done
   '';
+
+  environment.defaultPackages = with pkgs; [
+    rsync
+  ];
+
+  programs.git.enable = lib.mkDefault true;
 
   system.stateVersion = lib.mkDefault lib.trivial.release;
 }

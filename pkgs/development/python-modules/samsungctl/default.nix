@@ -17,7 +17,7 @@ buildPythonPackage rec {
     sha256 = "0ipz3fd65rqkxlb02sql0awc3vnslrwb2pfrsnpfnf8bfgxpbh9g";
   };
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     websocket = [ websocket-client ];
     # interactive_ui requires curses package
   };

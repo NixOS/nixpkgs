@@ -1,28 +1,28 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromSourcehut
-, makeWrapper
-, scdoc
-, installShellFiles
-, xclip
-, wl-clipboard
-, xdotool
-, wtype
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+  makeWrapper,
+  scdoc,
+  installShellFiles,
+  xclip,
+  wl-clipboard,
+  xdotool,
+  wtype,
 }:
 
 buildGoModule rec {
   pname = "snippetexpanderd";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromSourcehut {
     owner = "~ianmjones";
     repo = "snippetexpander";
     rev = "v${version}";
-    hash = "sha256-iEoBri+NuFfLkARUBA+D/Fe9xk6PPV62N/YRqPv9C/A=";
+    hash = "sha256-NIMuACrq8RodtjeBbBY42VJ8xqj7fZvdQ2w/5QsjjJI=";
   };
 
-  vendorHash = "sha256-W9NkENdZRzqSAONI9QS2EI5aERK+AaPqwYwITKLwXQE=";
+  vendorHash = "sha256-2nLO/b6XQC88VXE+SewhgKpkRtIHsva+fDudgKpvZiY=";
 
   proxyVendor = true;
 
@@ -55,14 +55,21 @@ buildGoModule rec {
   postFixup = ''
     # Ensure xclip/wcopy and xdotool/wtype are available for copy and paste duties.
     wrapProgram $out/bin/snippetexpanderd \
-      --prefix PATH : ${lib.makeBinPath [ xclip wl-clipboard xdotool wtype ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          xclip
+          wl-clipboard
+          xdotool
+          wtype
+        ]
+      }
   '';
 
   meta = {
     description = "Your little expandable text snippet helper daemon";
     homepage = "https://snippetexpander.org";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ianmjones ];
+    maintainers = with lib.maintainers; [ ];
     platforms = lib.platforms.linux;
     mainProgram = "snippetexpanderd";
   };

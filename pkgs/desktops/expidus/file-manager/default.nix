@@ -1,4 +1,8 @@
-{ lib, flutter, fetchFromGitHub }:
+{
+  lib,
+  flutter,
+  fetchFromGitHub,
+}:
 flutter.buildFlutterApplication rec {
   pname = "expidus-file-manager";
   version = "0.2.1";
@@ -23,16 +27,16 @@ flutter.buildFlutterApplication rec {
 
   postInstall = ''
     rm $out/bin/file_manager
-    ln -s $out/app/file_manager $out/bin/expidus-file-manager
+    ln -s $out/app/$pname/file_manager $out/bin/expidus-file-manager
 
     mkdir -p $out/share/applications
-    mv $out/app/data/com.expidusos.file_manager.desktop $out/share/applications
+    mv $out/app/$pname/data/com.expidusos.file_manager.desktop $out/share/applications
 
     mkdir -p $out/share/icons
-    mv $out/app/data/com.expidusos.file_manager.png $out/share/icons
+    mv $out/app/$pname/data/com.expidusos.file_manager.png $out/share/icons
 
     mkdir -p $out/share/metainfo
-    mv $out/app/data/com.expidusos.file_manager.metainfo.xml $out/share/metainfo
+    mv $out/app/$pname/data/com.expidusos.file_manager.metainfo.xml $out/share/metainfo
 
     substituteInPlace "$out/share/applications/com.expidusos.file_manager.desktop" \
       --replace "Exec=file_manager" "Exec=$out/bin/expidus-file-manager" \
@@ -44,7 +48,10 @@ flutter.buildFlutterApplication rec {
     homepage = "https://expidusos.com";
     license = licenses.gpl3;
     maintainers = with maintainers; [ RossComputerGuy ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "expidus-file-manager";
   };
 }

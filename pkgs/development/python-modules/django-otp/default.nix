@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "django-otp";
-  version = "1.5.0";
+  version = "1.5.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "django-otp";
     repo = "django-otp";
     rev = "v${version}";
-    hash = "sha256-c0Yr41S1LFBzcDIK2etOP3rYcCPaThDs+XGiw4WP/ks=";
+    hash = "sha256-fn3MptdlnqY0rOLwcPhKiLfrhYvov4YVLZ58Jp/j6zc=";
   };
 
   build-system = [ hatchling ];
@@ -55,6 +55,6 @@ buildPythonPackage rec {
     changelog = "https://github.com/django-otp/django-otp/blob/${src.rev}/CHANGES.rst";
     description = "Pluggable framework for adding two-factor authentication to Django using one-time passwords";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, alsa-lib
-, freetype
-, libX11
-, libXrandr
-, libXinerama
-, libXext
-, libXcursor
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  alsa-lib,
+  freetype,
+  libX11,
+  libXrandr,
+  libXinerama,
+  libXext,
+  libXcursor,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "show-midi";
-  version = "0.9.0";
+  version = "1.0.1";
 
   src = fetchFromGitHub {
     owner = "gbevin";
     repo = "ShowMIDI";
     rev = finalAttrs.version;
-    hash = "sha256-xt2LpoiaOWAeWM/YzaKM0WGi8aHs4T7pvMw1s/P4Oj0=";
+    hash = "sha256-jANrFZqJZZMTGyNa0sIthoQzaDMdLzpGZqHfxNw8hDg=";
     fetchSubmodules = true;
   };
 
@@ -69,15 +70,17 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  desktopItems = [(makeDesktopItem {
-    name = "ShowMIDI";
-    exec = finalAttrs.meta.mainProgram;
-    comment = finalAttrs.meta.description;
-    type = "Application";
-    icon = "show-midi";
-    desktopName = "ShowMIDI";
-    categories = [ "Audio" ];
-  })];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "ShowMIDI";
+      exec = finalAttrs.meta.mainProgram;
+      comment = finalAttrs.meta.description;
+      type = "Application";
+      icon = "show-midi";
+      desktopName = "ShowMIDI";
+      categories = [ "Audio" ];
+    })
+  ];
 
   # JUCE dlopens these, make sure they are in rpath
   # Otherwise, segfault will happen

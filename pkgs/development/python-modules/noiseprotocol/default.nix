@@ -35,6 +35,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/plizonczyk/noiseprotocol/";
     changelog = "https://github.com/plizonczyk/noiseprotocol/blob/v${version}/CHANGELOG.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

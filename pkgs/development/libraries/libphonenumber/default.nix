@@ -14,13 +14,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "libphonenumber";
-  version = "8.13.39";
+  version = "8.13.48";
 
   src = fetchFromGitHub {
     owner = "google";
     repo = "libphonenumber";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-NfKdOTb/P7RXyvSiTZ/15alw9sBjqoGSOys/kcIXGWg=";
+    hash = "sha256-EFrw3pW2uLpzEDMsW251rsB5rvC31eLYQBqYOgGt1Ug=";
   };
 
   patches = [
@@ -40,7 +40,7 @@ stdenv.mkDerivation (finalAttrs: {
     boost
     icu
     protobuf
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Foundation
   ];
 

@@ -3,9 +3,9 @@
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
-  pythonRelaxDepsHook,
   installShellFiles,
   docutils,
+  setuptools,
   ansible,
   cryptography,
   importlib-resources,
@@ -31,11 +31,13 @@
 
 buildPythonPackage rec {
   pname = "ansible-core";
-  version = "2.16.5";
+  version = "2.17.6";
+  pyproject = true;
 
   src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-zdKbDsPyDDVlc1Wi9qnB0M8RMdqZzJpKNAGAGwqzbW0=";
+    pname = "ansible_core";
+    inherit version;
+    hash = "sha256-PlOXC3zr/irbObcRweL4u/y+2sgo2lHcA1ehkHBjjpU=";
   };
 
   # ansible_connection is already wrapped, so don't pass it through
@@ -51,9 +53,11 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     installShellFiles
     docutils
-  ] ++ lib.optionals (pythonOlder "3.10") [ pythonRelaxDepsHook ];
+  ];
 
-  propagatedBuildInputs =
+  build-system = [ setuptools ];
+
+  dependencies =
     [
       # depend on ansible instead of the other way around
       ansible
@@ -96,6 +100,6 @@ buildPythonPackage rec {
     description = "Radically simple IT automation";
     homepage = "https://www.ansible.com";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

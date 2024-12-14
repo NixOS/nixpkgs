@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "ankacoder";
@@ -23,7 +27,7 @@ stdenvNoCC.mkDerivation rec {
     description = "Anka/Coder fonts";
     homepage = "https://code.google.com/archive/p/anka-coder-fonts";
     license = licenses.ofl;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

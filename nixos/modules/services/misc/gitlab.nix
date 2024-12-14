@@ -9,6 +9,8 @@ let
   toml = pkgs.formats.toml {};
   yaml = pkgs.formats.yaml {};
 
+  git = cfg.packages.gitaly.git;
+
   postgresqlPackage = if config.services.postgresql.enable then
                         config.services.postgresql.package
                       else
@@ -51,7 +53,7 @@ let
     prometheus_listen_addr = "localhost:9236"
 
     [git]
-    bin_path = "${pkgs.git}/bin/git"
+    bin_path = "${git}/bin/git"
 
     [gitlab-shell]
     dir = "${cfg.packages.gitlab-shell}"
@@ -184,16 +186,15 @@ let
     MALLOC_ARENA_MAX = "2";
   } // cfg.extraEnv;
 
-  runtimeDeps = with pkgs; [
+  runtimeDeps = [ git ] ++ (with pkgs; [
     nodejs
     gzip
-    git
     gnutar
     postgresqlPackage
     coreutils
     procps
     findutils # Needed for gitlab:cleanup:orphan_job_artifact_files
-  ];
+  ]);
 
   gitlab-rake = pkgs.stdenv.mkDerivation {
     name = "gitlab-rake";
@@ -1124,7 +1125,12 @@ in {
       }
     ];
 
-    environment.systemPackages = [ pkgs.git gitlab-rake gitlab-rails cfg.packages.gitlab-shell ];
+    environment.systemPackages = [ gitlab-rake gitlab-rails cfg.packages.gitlab-shell ];
+
+    systemd.slices.system-gitlab = {
+      description = "GitLab DevOps Platform Slice";
+      documentation = [ "https://docs.gitlab.com/" ];
+    };
 
     systemd.targets.gitlab = {
       description = "Common target for all GitLab services.";
@@ -1196,6 +1202,7 @@ in {
       '';
 
       serviceConfig = {
+        Slice = "system-gitlab.slice";
         User = pgsql.superUser;
         Type = "oneshot";
         RemainAfterExit = true;
@@ -1218,6 +1225,9 @@ in {
 
       unitConfig = {
         ConditionPathExists = "!${cfg.registry.certFile}";
+      };
+      serviceConfig = {
+        Slice = "system-gitlab.slice";
       };
     };
 
@@ -1295,12 +1305,11 @@ in {
     systemd.services.gitlab-config = {
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
-      path = with pkgs; [
+      path = [ git ] ++ (with pkgs; [
         jq
         openssl
         replace-secret
-        git
-      ];
+      ]);
       serviceConfig = {
         Type = "oneshot";
         User = cfg.user;
@@ -1308,6 +1317,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
+        Slice = "system-gitlab.slice";
         RemainAfterExit = true;
 
         ExecStartPre = let
@@ -1338,7 +1348,7 @@ in {
           ln -sf ${cableYml} ${cfg.statePath}/config/cable.yml
           ln -sf ${resqueYml} ${cfg.statePath}/config/resque.yml
 
-          ${cfg.packages.gitlab-shell}/bin/install
+          ${cfg.packages.gitlab-shell}/support/make_necessary_dirs
 
           ${optionalString cfg.smtp.enable ''
               install -m u=rw ${smtpSettings} ${cfg.statePath}/config/initializers/smtp_settings.rb
@@ -1424,6 +1434,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
+        Slice = "system-gitlab.slice";
         RemainAfterExit = true;
 
         ExecStart = pkgs.writeShellScript "gitlab-db-config" ''
@@ -1458,9 +1469,8 @@ in {
         SIDEKIQ_MEMORY_KILLER_GRACE_TIME = cfg.sidekiq.memoryKiller.graceTime;
         SIDEKIQ_MEMORY_KILLER_SHUTDOWN_WAIT = cfg.sidekiq.memoryKiller.shutdownWait;
       });
-      path = with pkgs; [
+      path = [ git ] ++ (with pkgs; [
         postgresqlPackage
-        git
         ruby
         openssh
         nodejs
@@ -1473,7 +1483,7 @@ in {
         gzip
 
         procps # Sidekiq MemoryKiller
-      ];
+      ]);
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
@@ -1481,6 +1491,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "always";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
+        Slice = "system-gitlab.slice";
         ExecStart = utils.escapeSystemdExecArgs (
           [
             "${cfg.packages.gitlab}/share/gitlab/bin/sidekiq-cluster"
@@ -1500,12 +1511,11 @@ in {
       bindsTo = [ "gitlab-config.service" ];
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
-      path = with pkgs; [
+      path = [ git ] ++ (with pkgs; [
         openssh
-        git
         gzip
         bzip2
-      ];
+      ]);
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
@@ -1514,6 +1524,7 @@ in {
         Restart = "on-failure";
         WorkingDirectory = gitlabEnv.HOME;
         RuntimeDirectory = "gitaly";
+        Slice = "system-gitlab.slice";
         ExecStart = "${cfg.packages.gitaly}/bin/gitaly ${gitalyToml}";
       };
     };
@@ -1575,6 +1586,7 @@ in {
             WorkingDirectory = gitlabEnv.HOME;
             RuntimeDirectory = "gitlab-pages";
             RuntimeDirectoryMode = "0700";
+            Slice = "system-gitlab.slice";
           };
         };
 
@@ -1582,7 +1594,7 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
-      path = with pkgs; [
+      path = [ git ] ++ (with pkgs; [
         remarshal
         exiftool
         git
@@ -1590,7 +1602,7 @@ in {
         gzip
         openssh
         cfg.packages.gitlab-workhorse
-      ];
+      ]);
       serviceConfig = {
         Type = "simple";
         User = cfg.user;
@@ -1598,6 +1610,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = gitlabEnv.HOME;
+        Slice = "system-gitlab.slice";
         ExecStartPre = pkgs.writeShellScript "gitlab-workhorse-pre-start" ''
           set -o errexit -o pipefail -o nounset
           shopt -s dotglob nullglob inherit_errexit
@@ -1639,6 +1652,7 @@ in {
         Group = cfg.group;
         ExecStart = "${cfg.packages.gitlab.rubyEnv}/bin/bundle exec mail_room -c ${cfg.statePath}/config/mail_room.yml";
         WorkingDirectory = gitlabEnv.HOME;
+        Slice = "system-gitlab.slice";
       };
     };
 
@@ -1658,15 +1672,14 @@ in {
       requiredBy = [ "gitlab.target" ];
       partOf = [ "gitlab.target" ];
       environment = gitlabEnv;
-      path = with pkgs; [
+      path = [ git ] ++ (with pkgs; [
         postgresqlPackage
-        git
         openssh
         nodejs
         procps
         gnupg
         gzip
-      ];
+      ]);
       serviceConfig = {
         Type = "notify";
         User = cfg.user;
@@ -1674,6 +1687,7 @@ in {
         TimeoutSec = "infinity";
         Restart = "on-failure";
         WorkingDirectory = "${cfg.packages.gitlab}/share/gitlab";
+        Slice = "system-gitlab.slice";
         ExecStart = concatStringsSep " " [
           "${cfg.packages.gitlab.rubyEnv}/bin/bundle" "exec" "puma"
           "-e production"
@@ -1698,6 +1712,7 @@ in {
       serviceConfig = {
         User = cfg.user;
         Group = cfg.group;
+        Slice = "system-gitlab.slice";
         ExecStart = "${gitlab-rake}/bin/gitlab-rake gitlab:backup:create";
       };
     };

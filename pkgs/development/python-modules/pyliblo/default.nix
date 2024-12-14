@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchurl,
   isPyPy,
-  pythonAtLeast,
   liblo,
   cython_0,
 }:

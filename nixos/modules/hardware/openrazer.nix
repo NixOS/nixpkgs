@@ -1,7 +1,9 @@
-{ config, pkgs, lib, ... }:
-
-with lib;
-
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.hardware.openrazer;
   kernelPackages = config.boot.kernelPackages;
@@ -51,20 +53,20 @@ in
 {
   options = {
     hardware.openrazer = {
-      enable = mkEnableOption ''
+      enable = lib.mkEnableOption ''
         OpenRazer drivers and userspace daemon
       '';
 
-      verboseLogging = mkOption {
-        type = types.bool;
+      verboseLogging = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable verbose logging. Logs debug messages.
         '';
       };
 
-      syncEffectsEnabled = mkOption {
-        type = types.bool;
+      syncEffectsEnabled = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Set the sync effects flag to true so any assignment of
@@ -72,30 +74,30 @@ in
         '';
       };
 
-      devicesOffOnScreensaver = mkOption {
-        type = types.bool;
+      devicesOffOnScreensaver = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Turn off the devices when the systems screensaver kicks in.
         '';
       };
 
-      batteryNotifier = mkOption {
+      batteryNotifier = lib.mkOption {
         description = ''
           Settings for device battery notifications.
         '';
-        default = {};
-        type = types.submodule {
+        default = { };
+        type = lib.types.submodule {
           options = {
-            enable = mkOption {
-              type = types.bool;
+            enable = lib.mkOption {
+              type = lib.types.bool;
               default = true;
               description = ''
                 Mouse battery notifier.
               '';
             };
-            frequency = mkOption {
-              type = types.int;
+            frequency = lib.mkOption {
+              type = lib.types.int;
               default = 600;
               description = ''
                 How often battery notifications should be shown (in seconds).
@@ -103,8 +105,8 @@ in
               '';
             };
 
-            percentage = mkOption {
-              type = types.int;
+            percentage = lib.mkOption {
+              type = lib.types.int;
               default = 33;
               description = ''
                 At what battery percentage the device should reach before
@@ -115,8 +117,8 @@ in
         };
       };
 
-      keyStatistics = mkOption {
-        type = types.bool;
+      keyStatistics = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Collects number of keypresses per hour per key used to
@@ -124,9 +126,9 @@ in
         '';
       };
 
-      users = mkOption {
-        type = with types; listOf str;
-        default = [];
+      users = lib.mkOption {
+        type = with lib.types; listOf str;
+        default = [ ];
         description = ''
           Usernames to be added to the "openrazer" group, so that they
           can start and interact with the OpenRazer userspace daemon.
@@ -136,10 +138,13 @@ in
   };
 
   imports = [
-    (mkRenamedOptionModule [ "hardware" "openrazer" "mouseBatteryNotifier" ] [ "hardware" "openrazer" "batteryNotifier" "enable" ])
+    (lib.mkRenamedOptionModule
+      [ "hardware" "openrazer" "mouseBatteryNotifier" ]
+      [ "hardware" "openrazer" "batteryNotifier" "enable" ]
+    )
   ];
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     boot.extraModulePackages = [ kernelPackages.openrazer ];
     boot.kernelModules = drivers;
 

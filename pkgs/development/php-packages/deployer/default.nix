@@ -4,7 +4,7 @@
   php,
 }:
 
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "deployer";
   version = "7.4.0";
 
@@ -15,7 +15,7 @@ php.buildComposerProject (finalAttrs: {
     hash = "sha256-nSrW4o0Tb8H056AAjjMzbsAVvWY2z1pdWmPFZDpDr1k=";
   };
 
-  vendorHash = "sha256-BDq2uryNWC31AEAEZJL9zGaAPbhXZ6hmfpsnr4wlixE=";
+  vendorHash = "sha256-APzJQTeSNbWvF/RtfNL7XuXIY0Xa0VNbJdSggFicpSQ=";
 
   meta = {
     changelog = "https://github.com/deployphp/deployer/releases/tag/v${finalAttrs.version}";

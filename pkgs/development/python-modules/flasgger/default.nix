@@ -60,6 +60,6 @@ buildPythonPackage rec {
     description = "Easy OpenAPI specs and Swagger UI for your Flask API";
     homepage = "https://github.com/flasgger/flasgger/";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -4,9 +4,8 @@
   fetchPypi,
   pythonOlder,
   setuptools,
+  setuptools-scm,
   packaging,
-  ply,
-  toml,
   tomli,
 
   # tests
@@ -17,17 +16,20 @@
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.8.3";
+  version = "6.9.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iIVHsBi7JMNq3tUZ6T0+UT1MaqC6VbfMGv+9Rc8Qdiw=";
+    hash = "sha256-CT/Q4V2Zri+Kg91/fbqj/yUMWCp3644IRc2aytsfCTQ=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     packaging
     setuptools
   ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];

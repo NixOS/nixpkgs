@@ -1,17 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glib
-, libgcrypt
-, libintl
-, libotr
-, libtool
-, meson
-, ncurses
-, ninja
-, openssl
-, perl
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glib,
+  libgcrypt,
+  libintl,
+  libotr,
+  meson,
+  ncurses,
+  ninja,
+  openssl,
+  perl,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
@@ -52,7 +52,10 @@ stdenv.mkDerivation rec {
     mainProgram = "irssi";
     homepage = "https://irssi.org";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ fab lovek323 ];
+    maintainers = with maintainers; [
+      fab
+      lovek323
+    ];
     platforms = platforms.unix;
   };
 }

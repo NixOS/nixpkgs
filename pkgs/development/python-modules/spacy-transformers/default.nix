@@ -6,7 +6,6 @@
   fetchFromGitHub,
   setuptools,
   cython,
-  pythonRelaxDepsHook,
   spacy,
   numpy,
   transformers,
@@ -34,8 +33,6 @@ buildPythonPackage rec {
     setuptools
     cython
   ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     spacy

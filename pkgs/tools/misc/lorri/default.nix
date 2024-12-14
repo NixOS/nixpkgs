@@ -1,45 +1,53 @@
-{ lib
-, stdenv
-, pkgs
-, rustPackages
-, fetchFromGitHub
-, rustPlatform
-, writers
-, nixosTests
-, CoreServices
-, Security
+{
+  lib,
+  stdenv,
+  pkgs,
+  rustPackages,
+  fetchFromGitHub,
+  rustPlatform,
+  writers,
+  nixosTests,
+  CoreServices,
+  Security,
 }:
 
 let
   # Run `eval $(nix-build -A lorri.updater)` after updating the revision!
   # It will copy some required files if necessary.
   # Also don’t forget to run `nix-build -A lorri.tests`
-  version = "1.6.0";
-  gitRev = "1.6.0";
-  sha256 = "sha256-peelMKv9GOTPdyb1iifzlFikeayTchqaYCgeXyR5EgM=";
-  cargoSha256 = "sha256-UFAmTYnCqsQxBnCm1zMu+BcWIZMuuxvpF7poLlzC6Kg=";
+  version = "1.7.1";
+  sha256 = "sha256-dEdKMgE4Jd8CCvtGQDZNDCYOomZAV8aR7Cmtyn8RfTo=";
+  cargoHash = "sha256-+sKxKxc2DVHn54uQa8K+CKmm0A0ym9SXgtOcfRZ6R5E=";
 
-in (rustPlatform.buildRustPackage rec {
+in
+(rustPlatform.buildRustPackage rec {
   pname = "lorri";
   inherit version;
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = pname;
-    rev = gitRev;
+    rev = version;
     inherit sha256;
   };
 
-  outputs = [ "out" "man" "doc" ];
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
 
-  inherit cargoSha256;
+  inherit cargoHash;
   doCheck = false;
 
   BUILD_REV_COUNT = src.revCount or 1;
   RUN_TIME_CLOSURE = pkgs.callPackage ./runtime.nix { };
 
   nativeBuildInputs = [ rustPackages.rustfmt ];
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    CoreServices
+    Security
+  ];
 
   # copy the docs to the $man and $doc outputs
   postInstall = ''
@@ -65,9 +73,13 @@ in (rustPlatform.buildRustPackage rec {
 
   meta = with lib; {
     description = "Your project's nix-env";
-    homepage = "https://github.com/target/lorri";
+    homepage = "https://github.com/nix-community/lorri";
     license = licenses.asl20;
-    maintainers = with maintainers; [ grahamc Profpatsch ];
+    maintainers = with maintainers; [
+      grahamc
+      Profpatsch
+      nyarly
+    ];
     mainProgram = "lorri";
   };
 })

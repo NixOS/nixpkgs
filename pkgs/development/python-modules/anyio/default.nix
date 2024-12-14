@@ -6,7 +6,6 @@
   pythonOlder,
 
   # build-system
-  setuptools,
   setuptools-scm,
 
   # dependencies
@@ -26,28 +25,28 @@
   pytestCheckHook,
   trustme,
   uvloop,
+
+  # smoke tests
+  starlette,
 }:
 
 buildPythonPackage rec {
   pname = "anyio";
-  version = "4.3.0";
+  version = "4.6.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "agronholm";
-    repo = pname;
+    repo = "anyio";
     rev = "refs/tags/${version}";
-    hash = "sha256-y58DQiTD0ZKaBNf0cA3MFE+7F68Svrl+Idz6BZY7HWQ=";
+    hash = "sha256-8QLOAjQpiNtbd+YSHfqcBVdtMSGJFRevOcacZErKuso=";
   };
 
-  nativeBuildInputs = [
-    setuptools
-    setuptools-scm
-  ];
+  build-system = [ setuptools-scm ];
 
-  propagatedBuildInputs =
+  dependencies =
     [
       idna
       sniffio
@@ -57,12 +56,9 @@ buildPythonPackage rec {
       typing-extensions
     ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     trio = [ trio ];
   };
-
-  # trustme uses pyopenssl
-  doCheck = !(stdenv.isDarwin && stdenv.isAarch64);
 
   nativeCheckInputs = [
     exceptiongroup
@@ -73,7 +69,7 @@ buildPythonPackage rec {
     pytestCheckHook
     trustme
     uvloop
-  ] ++ passthru.optional-dependencies.trio;
+  ] ++ optional-dependencies.trio;
 
   pytestFlagsArray = [
     "-W"
@@ -82,10 +78,19 @@ buildPythonPackage rec {
     "'not network'"
   ];
 
-  disabledTests = lib.optionals (stdenv.isx86_64 && stdenv.isDarwin) [
-    # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
-    "test_is_block_device"
-  ];
+  disabledTests =
+    [
+      # TypeError: __subprocess_run() got an unexpected keyword argument 'umask'
+      "test_py39_arguments"
+      # AttributeError: 'module' object at __main__ has no attribute '__file__'
+      "test_nonexistent_main_module"
+      #  3 second timeout expired
+      "test_keyboardinterrupt_during_test"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # PermissionError: [Errno 1] Operation not permitted: '/dev/console'
+      "test_is_block_device"
+    ];
 
   disabledTestPaths = [
     # lots of DNS lookups
@@ -95,6 +100,10 @@ buildPythonPackage rec {
   __darwinAllowLocalNetworking = true;
 
   pythonImportsCheck = [ "anyio" ];
+
+  passthru.tests = {
+    inherit starlette;
+  };
 
   meta = with lib; {
     changelog = "https://github.com/agronholm/anyio/blob/${src.rev}/docs/versionhistory.rst";

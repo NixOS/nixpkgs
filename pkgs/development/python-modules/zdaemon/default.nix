@@ -31,6 +31,6 @@ buildPythonPackage rec {
     homepage = "https://pypi.python.org/pypi/zdaemon";
     changelog = "https://github.com/zopefoundation/zdaemon/blob/${version}/CHANGES.rst";
     license = licenses.zpl21;
-    maintainers = with maintainers; [ goibhniu ];
+    maintainers = [ ];
   };
 }

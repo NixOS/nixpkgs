@@ -1,72 +1,79 @@
 import ./make-test-python.nix (
-  { lib, ... }: {
+  { lib, ... }:
+  {
     name = "nomad";
     nodes = {
-      default_server = { pkgs, lib, ... }: {
-        networking = {
-          interfaces.eth1.ipv4.addresses = lib.mkOverride 0 [{
-            address = "192.168.1.1";
-            prefixLength = 16;
-          }];
-        };
+      default_server =
+        { pkgs, lib, ... }:
+        {
+          networking = {
+            interfaces.eth1.ipv4.addresses = lib.mkOverride 0 [
+              {
+                address = "192.168.1.1";
+                prefixLength = 16;
+              }
+            ];
+          };
 
-        environment.etc."nomad.custom.json".source =
-          (pkgs.formats.json { }).generate "nomad.custom.json" {
+          environment.etc."nomad.custom.json".source = (pkgs.formats.json { }).generate "nomad.custom.json" {
             region = "universe";
             datacenter = "earth";
           };
 
-        services.nomad = {
-          enable = true;
+          services.nomad = {
+            enable = true;
 
-          settings = {
-            server = {
-              enabled = true;
-              bootstrap_expect = 1;
+            settings = {
+              server = {
+                enabled = true;
+                bootstrap_expect = 1;
+              };
             };
+
+            extraSettingsPaths = [ "/etc/nomad.custom.json" ];
+            enableDocker = false;
+          };
+        };
+
+      custom_state_dir_server =
+        { pkgs, lib, ... }:
+        {
+          networking = {
+            interfaces.eth1.ipv4.addresses = lib.mkOverride 0 [
+              {
+                address = "192.168.1.1";
+                prefixLength = 16;
+              }
+            ];
           };
 
-          extraSettingsPaths = [ "/etc/nomad.custom.json" ];
-          enableDocker = false;
-        };
-      };
-
-      custom_state_dir_server = { pkgs, lib, ... }: {
-        networking = {
-          interfaces.eth1.ipv4.addresses = lib.mkOverride 0 [{
-            address = "192.168.1.1";
-            prefixLength = 16;
-          }];
-        };
-
-        environment.etc."nomad.custom.json".source =
-          (pkgs.formats.json { }).generate "nomad.custom.json" {
+          environment.etc."nomad.custom.json".source = (pkgs.formats.json { }).generate "nomad.custom.json" {
             region = "universe";
             datacenter = "earth";
           };
 
-        services.nomad = {
-          enable = true;
-          dropPrivileges = false;
+          services.nomad = {
+            enable = true;
+            dropPrivileges = false;
 
-          settings = {
-            data_dir = "/nomad/data/dir";
-            server = {
-              enabled = true;
-              bootstrap_expect = 1;
+            settings = {
+              data_dir = "/nomad/data/dir";
+              server = {
+                enabled = true;
+                bootstrap_expect = 1;
+              };
             };
+
+            extraSettingsPaths = [ "/etc/nomad.custom.json" ];
+            enableDocker = false;
           };
 
-          extraSettingsPaths = [ "/etc/nomad.custom.json" ];
-          enableDocker = false;
+          systemd.services.nomad.serviceConfig.ExecStartPre = "${pkgs.writeShellScript "mk_data_dir" ''
+            set -euxo pipefail
+
+            ${pkgs.coreutils}/bin/mkdir -p /nomad/data/dir
+          ''}";
         };
-
-        systemd.services.nomad.serviceConfig.ExecStartPre = "${pkgs.writeShellScript "mk_data_dir" ''
-          set -euxo pipefail
-
-          ${pkgs.coreutils}/bin/mkdir -p /nomad/data/dir
-        ''}";
-      };
     };
 
     testScript = ''

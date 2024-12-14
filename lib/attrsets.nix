@@ -5,9 +5,9 @@
 
 let
   inherit (builtins) head length;
-  inherit (lib.trivial) isInOldestRelease mergeAttrs warn warnIf;
+  inherit (lib.trivial) oldestSupportedReleaseIsAtLeast mergeAttrs warn warnIf;
   inherit (lib.strings) concatStringsSep concatMapStringsSep escapeNixIdentifier sanitizeDerivationName;
-  inherit (lib.lists) foldr foldl' concatMap elemAt all partition groupBy take foldl;
+  inherit (lib.lists) filter foldr foldl' concatMap elemAt all partition groupBy take foldl;
 in
 
 rec {
@@ -644,8 +644,7 @@ rec {
   filterAttrs =
     pred:
     set:
-    listToAttrs (concatMap (name: let v = set.${name}; in if pred name v then [(nameValuePair name v)] else []) (attrNames set));
-
+    removeAttrs set (filter (name: ! pred name set.${name}) (attrNames set));
 
   /**
     Filter an attribute set recursively by removing all attributes for
@@ -1764,6 +1763,7 @@ rec {
   /**
     Get a package output.
     If no output is found, fallback to `.out` and then to the default.
+    The function is idempotent: `getOutput "b" (getOutput "a" p) == getOutput "a" p`.
 
 
     # Inputs
@@ -1779,7 +1779,7 @@ rec {
     # Type
 
     ```
-    getOutput :: String -> Derivation -> String
+    getOutput :: String -> :: Derivation -> Derivation
     ```
 
     # Examples
@@ -1787,7 +1787,7 @@ rec {
     ## `lib.attrsets.getOutput` usage example
 
     ```nix
-    getOutput "dev" pkgs.openssl
+    "${getOutput "dev" pkgs.openssl}"
     => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev"
     ```
 
@@ -1797,6 +1797,49 @@ rec {
     if ! pkg ? outputSpecified || ! pkg.outputSpecified
       then pkg.${output} or pkg.out or pkg
       else pkg;
+
+  /**
+    Get the first of the `outputs` provided by the package, or the default.
+    This function is alligned with `_overrideFirst()` from the `multiple-outputs.sh` setup hook.
+    Like `getOutput`, the function is idempotent.
+
+    # Inputs
+
+    `outputs`
+
+    : 1\. Function argument
+
+    `pkg`
+
+    : 2\. Function argument
+
+    # Type
+
+    ```
+    getFirstOutput :: [String] -> Derivation -> Derivation
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.getFirstOutput` usage example
+
+    ```nix
+    "${getFirstOutput [ "include" "dev" ] pkgs.openssl}"
+    => "/nix/store/00000000000000000000000000000000-openssl-1.0.1r-dev"
+    ```
+
+    :::
+  */
+  getFirstOutput =
+    candidates: pkg:
+    let
+      outputs = builtins.filter (name: hasAttr name pkg) candidates;
+      output = builtins.head outputs;
+    in
+    if pkg.outputSpecified or false || outputs == [ ] then
+      pkg
+    else
+      pkg.${output};
 
   /**
     Get a package's `bin` output.
@@ -1811,7 +1854,7 @@ rec {
     # Type
 
     ```
-    getBin :: Derivation -> String
+    getBin :: Derivation -> Derivation
     ```
 
     # Examples
@@ -1819,8 +1862,8 @@ rec {
     ## `lib.attrsets.getBin` usage example
 
     ```nix
-    getBin pkgs.openssl
-    => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r"
+    "${getBin pkgs.openssl}"
+    => "/nix/store/00000000000000000000000000000000-openssl-1.0.1r"
     ```
 
     :::
@@ -1841,7 +1884,7 @@ rec {
     # Type
 
     ```
-    getLib :: Derivation -> String
+    getLib :: Derivation -> Derivation
     ```
 
     # Examples
@@ -1849,13 +1892,42 @@ rec {
     ## `lib.attrsets.getLib` usage example
 
     ```nix
-    getLib pkgs.openssl
+    "${getLib pkgs.openssl}"
     => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-lib"
     ```
 
     :::
   */
   getLib = getOutput "lib";
+
+  /**
+    Get a package's `static` output.
+    If the output does not exist, fallback to `.lib`, then to `.out`, and then to the default.
+
+    # Inputs
+
+    `pkg`
+
+    : The package whose `static` output will be retrieved.
+
+    # Type
+
+    ```
+    getStatic :: Derivation -> Derivation
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.getStatic` usage example
+
+    ```nix
+    "${lib.getStatic pkgs.glibc}"
+    => "/nix/store/00000000000000000000000000000000-glibc-2.39-52-static"
+    ```
+
+    :::
+  */
+  getStatic = getFirstOutput [ "static" "lib" "out" ];
 
 
   /**
@@ -1871,7 +1943,7 @@ rec {
     # Type
 
     ```
-    getDev :: Derivation -> String
+    getDev :: Derivation -> Derivation
     ```
 
     # Examples
@@ -1879,13 +1951,42 @@ rec {
     ## `lib.attrsets.getDev` usage example
 
     ```nix
-    getDev pkgs.openssl
+    "${getDev pkgs.openssl}"
     => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-dev"
     ```
 
     :::
   */
   getDev = getOutput "dev";
+
+  /**
+    Get a package's `include` output.
+    If the output does not exist, fallback to `.dev`, then to `.out`, and then to the default.
+
+    # Inputs
+
+    `pkg`
+
+    : The package whose `include` output will be retrieved.
+
+    # Type
+
+    ```
+    getInclude :: Derivation -> Derivation
+    ```
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.getInclude` usage example
+
+    ```nix
+    "${getInclude pkgs.openssl}"
+    => "/nix/store/00000000000000000000000000000000-openssl-1.0.1r-dev"
+    ```
+
+    :::
+  */
+  getInclude = getFirstOutput [ "include" "dev" "out" ];
 
 
   /**
@@ -1901,7 +2002,7 @@ rec {
     # Type
 
     ```
-    getMan :: Derivation -> String
+    getMan :: Derivation -> Derivation
     ```
 
     # Examples
@@ -1909,7 +2010,7 @@ rec {
     ## `lib.attrsets.getMan` usage example
 
     ```nix
-    getMan pkgs.openssl
+    "${getMan pkgs.openssl}"
     => "/nix/store/9rz8gxhzf8sw4kf2j2f1grr49w8zx5vj-openssl-1.0.1r-man"
     ```
 
@@ -1929,7 +2030,7 @@ rec {
     # Type
 
     ```
-    chooseDevOutputs :: [Derivation] -> [String]
+    chooseDevOutputs :: [Derivation] -> [Derivation]
     ```
   */
   chooseDevOutputs = builtins.map getDev;
@@ -2035,6 +2136,6 @@ rec {
     "lib.zip is a deprecated alias of lib.zipAttrsWith." zipAttrsWith;
 
   # DEPRECATED
-  cartesianProductOfSets = warnIf (isInOldestRelease 2405)
+  cartesianProductOfSets = warnIf (oldestSupportedReleaseIsAtLeast 2405)
     "lib.cartesianProductOfSets is a deprecated alias of lib.cartesianProduct." cartesianProduct;
 }

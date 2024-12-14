@@ -7,6 +7,8 @@
 , wl-clipboard
 , libnotify
 , xorg
+, makeDesktopItem
+, copyDesktopItems
 }:
 
 let
@@ -17,7 +19,7 @@ let
     leptonica
     tesseract4
     libnotify
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     wl-clipboard
   ];
 
@@ -25,7 +27,7 @@ in
 
 ps.buildPythonApplication rec {
   pname = "normcap";
-  version = "0.5.8";
+  version = "0.5.9";
   format = "pyproject";
 
   disabled = ps.pythonOlder "3.9";
@@ -34,14 +36,8 @@ ps.buildPythonApplication rec {
     owner = "dynobo";
     repo = "normcap";
     rev = "refs/tags/v${version}";
-    hash = "sha256-iMlW8oEt4OSipJaQ2XzBZeBVqiZP/C1sM0f5LYjv7/A=";
+    hash = "sha256-K8BkPRHmcJSzYPxv49a1whKpe+StK7m0ea7t2YNUESw=";
   };
-
-  postPatch = ''
-    # disable coverage testing
-    substituteInPlace pyproject.toml \
-      --replace-fail "addopts = [" "addopts_ = ["
-  '';
 
   pythonRemoveDeps = [
     "pyside6-essentials"
@@ -51,10 +47,15 @@ ps.buildPythonApplication rec {
     "shiboken6"
   ];
 
-  nativeBuildInputs = [
-    ps.pythonRelaxDepsHook
+  build-system = [
     ps.hatchling
     ps.babel
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    ps.toml
+  ];
+
+  nativeBuildInputs = [
+    copyDesktopItems
   ];
 
   dependencies = [
@@ -70,25 +71,32 @@ ps.buildPythonApplication rec {
     )
   '';
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+    mkdir -p $out/share/pixmaps
+    ln -s $out/${python3.sitePackages}/normcap/resources/icons/normcap.png $out/share/pixmaps/
+  '';
+
   nativeCheckInputs = wrapperDeps ++ [
     ps.pytestCheckHook
+    ps.pytest-cov-stub
+    ps.pytest-instafail
     ps.pytest-qt
     ps.toml
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     ps.pytest-xvfb
-    xorg.xorgserver
+    xorg.xvfb
   ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
-  '' + lib.optionalString stdenv.isLinux ''
+  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
     # setup a virtual x11 display
     export DISPLAY=:$((2000 + $RANDOM % 1000))
     Xvfb $DISPLAY -screen 5 1024x768x8 &
     xvfb_pid=$!
   '';
 
-  postCheck = lib.optionalString stdenv.isLinux ''
+  postCheck = lib.optionalString stdenv.hostPlatform.isLinux ''
     # cleanup the virtual x11 display
     sleep 0.5
     kill $xvfb_pid
@@ -107,11 +115,16 @@ ps.buildPythonApplication rec {
     "test_synchronized_capture"
     # flaky
     "test_normcap_ocr_testcases"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # requires display
+    "test_send_via_qt_tray"
+    "test_screens"
     # requires impure pbcopy
     "test_get_copy_func_with_pbcopy"
     "test_get_copy_func_without_pbcopy"
     "test_perform_pbcopy"
+    "test_pbcopy"
+    "test_copy"
     # NSXPCSharedListener endpointForReply:withListenerName:replyErrorCode:
     # while obtaining endpoint 'ClientCallsAuxiliary': Connection interrupted
     # since v5.0.0
@@ -129,20 +142,42 @@ ps.buildPythonApplication rec {
     # RuntimeError("Internal C++ object (PySide6.QtGui.QHideEvent) already deleted.")
     # AttributeError("'LoadingIndicator' object has no attribute 'timer'")
     "tests/tests_gui/test_loading_indicator.py"
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # requires a display
     "tests/integration/test_normcap.py"
     "tests/integration/test_tray_menu.py"
+    "tests/integration/test_settings_menu.py"
+    "tests/tests_clipboard/test_handlers/test_qtclipboard.py"
+    "tests/tests_gui/test_tray.py"
+    "tests/tests_gui/test_window.py"
+    "tests/tests_screengrab/"
     # failure unknown, crashes in first test with `.show()`
     "tests/tests_gui/test_loading_indicator.py"
+    "tests/tests_gui/test_menu_button.py"
+    "tests/tests_gui/test_resources.py"
+    "tests/tests_gui/test_update_check.py"
+  ];
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "com.github.dynobo.normcap";
+      desktopName = "NormCap";
+      genericName = "OCR powered screen-capture tool";
+      comment = "Extract text from an image directly into clipboard";
+      exec = "normcap";
+      icon = "normcap";
+      terminal = false;
+      categories = ["Utility" "Office"];
+      keywords = ["Text" "Extraction" "OCR"];
+    })
   ];
 
   meta = with lib; {
     description = "OCR powered screen-capture tool to capture information instead of images";
     homepage = "https://dynobo.github.io/normcap/";
+    changelog = "https://github.com/dynobo/normcap/releases/tag/v${version}";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ cafkafk pbsds ];
     mainProgram = "normcap";
-    broken = stdenv.isDarwin;
   };
 }

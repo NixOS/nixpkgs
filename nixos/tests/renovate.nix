@@ -2,7 +2,10 @@ import ./make-test-python.nix (
   { pkgs, ... }:
   {
     name = "renovate";
-    meta.maintainers = with pkgs.lib.maintainers; [ marie natsukium ];
+    meta.maintainers = with pkgs.lib.maintainers; [
+      marie
+      natsukium
+    ];
 
     nodes.machine =
       { config, ... }:
@@ -58,12 +61,12 @@ import ./make-test-python.nix (
       machine.succeed("git -C /tmp/kitty push origin")
 
       machine.succeed(f"echo '{accessToken}' > /etc/renovate-token")
-      machine.systemctl("start renovate.service")
+      machine.systemctl("start --wait renovate.service")
 
       machine.succeed("tea pulls list --repo meow/kitty | grep 'Configure Renovate'")
       machine.succeed("tea pulls merge --repo meow/kitty 1")
 
-      machine.systemctl("start renovate.service")
+      machine.systemctl("start --wait renovate.service")
     '';
   }
 )

@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "jupyterlab-server";
-  version = "2.27.2";
+  version = "2.27.3";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "jupyterlab_server";
     inherit version;
-    hash = "sha256-FcuzSdxF6VTgm6z4G5+byxCBX/Zg+yA07NdBfbOn6ic=";
+    hash = "sha256-6zbKylnnRHGYjwriXHeUVhC4h/d3JVqiH4Bl3vnlHtQ=";
   };
 
   postPatch = ''
@@ -79,16 +79,15 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [
     "jupyterlab_server"
-    "jupyterlab_server.pytest_plugin"
   ];
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Set of server components for JupyterLab and JupyterLab like applications";
     homepage = "https://github.com/jupyterlab/jupyterlab_server";
     changelog = "https://github.com/jupyterlab/jupyterlab_server/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = lib.teams.jupyter.members;
   };
 }

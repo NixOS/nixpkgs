@@ -1,23 +1,25 @@
-import ./make-test-python.nix ({ pkgs, ... }: {
-  name = "sfxr-qt";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ fgaz ];
-  };
+import ./make-test-python.nix (
+  { pkgs, ... }:
+  {
+    name = "sfxr-qt";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ fgaz ];
+    };
 
-  machine = { config, pkgs, ... }: {
-    imports = [
-      ./common/x11.nix
-    ];
+    machine =
+      { config, pkgs, ... }:
+      {
+        imports = [
+          ./common/x11.nix
+        ];
 
-    services.xserver.enable = true;
-    sound.enable = true;
-    environment.systemPackages = [ pkgs.sfxr-qt ];
-  };
+        services.xserver.enable = true;
+        environment.systemPackages = [ pkgs.sfxr-qt ];
+      };
 
-  enableOCR = true;
+    enableOCR = true;
 
-  testScript =
-    ''
+    testScript = ''
       machine.wait_for_x()
       # Add a dummy sound card, or the program won't start
       machine.execute("modprobe snd-dummy")
@@ -29,4 +31,5 @@ import ./make-test-python.nix ({ pkgs, ... }: {
       machine.wait_for_text("requency")
       machine.screenshot("screen")
     '';
-})
+  }
+)

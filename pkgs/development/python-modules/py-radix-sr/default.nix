@@ -8,14 +8,14 @@
 
 buildPythonPackage rec {
   pname = "py-radix-sr";
-  version = "1.0.1";
+  version = "1.0.2";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "SEKOIA-IO";
     repo = "py-radix";
-    rev = "v${version}";
-    hash = "sha256-aHV+NvPR4Gyk6bEpCftgBylis9rU7BWLpBMatjP4QmE=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-HeXWHdPeW3m0FMtqyHhZGhgCc706Y2xiN8hn9MFt/RM=";
   };
 
   postPatch = ''

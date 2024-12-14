@@ -1,19 +1,20 @@
-{ lib
-, buildPythonApplication
-, copyDesktopItems
-, fetchPypi
-, gobject-introspection
-, jellyfin-apiclient-python
-, jinja2
-, makeDesktopItem
-, mpv
-, pillow
-, pystray
-, python
-, python-mpv-jsonipc
-, pywebview
-, tkinter
-, wrapGAppsHook3
+{
+  lib,
+  buildPythonApplication,
+  copyDesktopItems,
+  fetchPypi,
+  gobject-introspection,
+  jellyfin-apiclient-python,
+  jinja2,
+  makeDesktopItem,
+  mpv,
+  pillow,
+  pystray,
+  python,
+  python-mpv-jsonipc,
+  pywebview,
+  tkinter,
+  wrapGAppsHook3,
 }:
 
 buildPythonApplication rec {
@@ -22,7 +23,7 @@ buildPythonApplication rec {
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "sha256-EANaNmvD8hcdGB2aoGemKvA9syS1VvIqGsP1jk0b+lE=";
+    hash = "sha256-EANaNmvD8hcdGB2aoGemKvA9syS1VvIqGsP1jk0b+lE=";
   };
 
   nativeBuildInputs = [
@@ -92,7 +93,12 @@ buildPythonApplication rec {
       exec = pname;
       icon = pname;
       desktopName = "Jellyfin MPV Shim";
-      categories = [ "Video" "AudioVideo" "TV" "Player" ];
+      categories = [
+        "Video"
+        "AudioVideo"
+        "TV"
+        "Player"
+      ];
     })
   ];
 

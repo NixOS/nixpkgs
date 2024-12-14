@@ -25,6 +25,6 @@ buildPythonPackage rec {
     description = "Library to run tornado coroutines from synchronous Python";
     homepage = "https://github.com/GoodPete/threadloop";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -3,7 +3,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
-  pythonRelaxDepsHook,
 
   # build-system
   hatchling,
@@ -21,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "pyngo";
-  version = "2.0.1";
+  version = "2.3.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -30,12 +29,11 @@ buildPythonPackage rec {
     owner = "yezz123";
     repo = "pyngo";
     rev = "refs/tags/${version}";
-    hash = "sha256-wvy1L21AnQ4JP5seAh6DWksQU2OcbYTXKcixpFryH4w=";
+    hash = "sha256-qAq5e/B/gOBt9Wj8Kfhg+uTe/Sa/Qslk2g/o0+ttIag=";
   };
 
   nativeBuildInputs = [
     hatchling
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [

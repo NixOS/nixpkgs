@@ -10,7 +10,6 @@
   poetry-core,
   pprintpp,
   pythonOlder,
-  pythonRelaxDepsHook,
   tbm-utils,
 }:
 
@@ -43,8 +42,6 @@ buildPythonPackage rec {
   ];
 
   build-system = [ poetry-core ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     attrs

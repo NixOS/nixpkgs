@@ -10,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "aiooui";
-  version = "0.1.5";
+  version = "0.1.7";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -19,7 +19,7 @@ buildPythonPackage rec {
     owner = "Bluetooth-Devices";
     repo = "aiooui";
     rev = "refs/tags/v${version}";
-    hash = "sha256-/RZ8nZatlfo3AJvg/4JgyAHtrnoj50uxbhqr+ToCTJ4=";
+    hash = "sha256-vnO3Lh+d/8mES2i4jKTH4RviURUFqb3Vj6u5sxUGf1o=";
   };
 
   postPatch = ''

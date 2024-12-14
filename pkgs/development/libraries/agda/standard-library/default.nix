@@ -1,17 +1,23 @@
-{ lib, mkDerivation, fetchFromGitHub, ghcWithPackages, nixosTests }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  ghcWithPackages,
+  nixosTests,
+}:
 
 mkDerivation rec {
   pname = "standard-library";
-  version = "2.0";
+  version = "2.1.1";
 
   src = fetchFromGitHub {
     repo = "agda-stdlib";
     owner = "agda";
     rev = "v${version}";
-    hash = "sha256-TjGvY3eqpF+DDwatT7A78flyPcTkcLHQ1xcg+MKgCoE=";
+    hash = "sha256-4HfwNAkIhk1yC/oSxZ30xilzUM5/22nzbUSqTjcW5Ng=";
   };
 
-  nativeBuildInputs = [ (ghcWithPackages (self : [ self.filemanip ])) ];
+  nativeBuildInputs = [ (ghcWithPackages (self: [ self.filemanip ])) ];
   preConfigure = ''
     runhaskell GenerateEverything.hs --include-deprecated
     # We will only build/consider Everything.agda, in particular we don't want Everything*.agda
@@ -25,6 +31,11 @@ mkDerivation rec {
     description = "Standard library for use with the Agda compiler";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with maintainers; [ jwiegley mudri alexarice turion ];
+    maintainers = with maintainers; [
+      jwiegley
+      mudri
+      alexarice
+      turion
+    ];
   };
 }

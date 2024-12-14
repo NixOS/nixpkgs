@@ -34,12 +34,12 @@ let
   cudaLibPath = lib.makeLibraryPath (
     with cudaPackages;
     [
-      cuda_cudart.lib # libcudart.so
-      cuda_cupti.lib # libcupti.so
-      cudnn.lib # libcudnn.so
-      libcufft.lib # libcufft.so
-      libcusolver.lib # libcusolver.so
-      libcusparse.lib # libcusparse.so
+      (lib.getLib cuda_cudart) # libcudart.so
+      (lib.getLib cuda_cupti) # libcupti.so
+      (lib.getLib cudnn) # libcudnn.so
+      (lib.getLib libcufft) # libcufft.so
+      (lib.getLib libcusolver) # libcusolver.so
+      (lib.getLib libcusparse) # libcusparse.so
     ]
   );
 
@@ -181,15 +181,15 @@ buildPythonPackage {
         or (throw "jaxlib-bin is not supported on ${stdenv.hostPlatform.system}")
       )
     else
-      gpuSrcs."${gpuSrcVersionString}";
+      gpuSrcs."${gpuSrcVersionString}" or (throw "jaxlib-bin: No gpuSrc for ${gpuSrcVersionString}");
 
   # Prebuilt wheels are dynamically linked against things that nix can't find.
   # Run `autoPatchelfHook` to automagically fix them.
   nativeBuildInputs =
-    lib.optionals stdenv.isLinux [ autoPatchelfHook ]
+    lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
     ++ lib.optionals cudaSupport [ autoAddDriverRunpath ];
   # Dynamic link dependencies
-  buildInputs = [ stdenv.cc.cc.lib ];
+  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
   # jaxlib contains shared libraries that open other shared libraries via dlopen
   # and these implicit dependencies are not recognized by ldd or
@@ -225,7 +225,7 @@ buildPythonPackage {
   inherit (jaxlib-build) pythonImportsCheck;
 
   meta = with lib; {
-    description = "XLA library for JAX";
+    description = "Prebuilt jaxlib backend from PyPi";
     homepage = "https://github.com/google/jax";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
@@ -238,12 +238,12 @@ buildPythonPackage {
     broken =
       !(cudaSupport -> lib.versionAtLeast cudaVersion "11.1")
       || !(cudaSupport -> lib.versionAtLeast cudaPackages.cudnn.version "8.2")
-      || !(cudaSupport -> stdenv.isLinux)
+      || !(cudaSupport -> stdenv.hostPlatform.isLinux)
       || !(cudaSupport -> (gpuSrcs ? "cuda${cudaVersion}-${pythonVersion}"))
       # Fails at pythonImportsCheckPhase:
       # ...-python-imports-check-hook.sh/nix-support/setup-hook: line 10: 28017 Illegal instruction: 4
       # /nix/store/5qpssbvkzfh73xih07xgmpkj5r565975-python3-3.11.9/bin/python3.11 -c
       # 'import os; import importlib; list(map(lambda mod: importlib.import_module(mod), os.environ["pythonImportsCheck"].split()))'
-      || (stdenv.isDarwin && stdenv.isx86_64);
+      || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64);
   };
 }

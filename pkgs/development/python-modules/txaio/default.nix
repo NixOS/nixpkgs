@@ -52,6 +52,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/crossbario/txaio";
     changelog = "https://github.com/crossbario/txaio/blob/v${version}/docs/releases.rst";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

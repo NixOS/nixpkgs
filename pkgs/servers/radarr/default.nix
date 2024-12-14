@@ -1,7 +1,7 @@
 { lib, stdenv, fetchurl, mono, libmediainfo, sqlite, curl, makeWrapper, icu, dotnet-runtime, openssl, nixosTests, zlib }:
 
 let
-  os = if stdenv.isDarwin then "osx" else "linux";
+  os = if stdenv.hostPlatform.isDarwin then "osx" else "linux";
   arch = {
     x86_64-linux = "x64";
     aarch64-linux = "arm64";
@@ -10,15 +10,15 @@ let
   }."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 
   hash = {
-    x64-linux_hash = "sha256-MlnT16a2l209uqu9DuXLwqf4yiWBn9MggqVubzg0pM4=";
-    arm64-linux_hash = "sha256-2NkklAOjpDbAXid+rayiQ+jndLluIAMEiKz0MA1Hg0k=";
-    x64-osx_hash = "sha256-OzUZsXUwE7jF4h/rCvWAY5mh97z/cUbhh6MK0ozHC+A=";
-    arm64-osx_hash = "sha256-ggNqWCixkHxhiWTYfUx9qeZ9ocTyJEEgSZJqgGOnL+Q=";
+    x64-linux_hash = "sha256-RvzAWVm2rUSL296H0FNsvGp1aCGu2xSoiQEJJM3hLRI=";
+    arm64-linux_hash = "sha256-/j7yyiUBFJHDQ+14sQYrZDeWuBqNQ6Ipo2MOVWuYYlc=";
+    x64-osx_hash = "sha256-Q5M2t7fEVYxvtTuP8C7kqe/yMTlus3pDUmbDBw14u3Q=";
+    arm64-osx_hash = "sha256-Lgdlxwb5szkz2qRDs0eup3J4M/GQ4sYHzvhIJP+0ow0=";
   }."${arch}-${os}_hash";
 
 in stdenv.mkDerivation rec {
   pname = "radarr";
-  version = "5.7.0.8882";
+  version = "5.14.0.9383";
 
   src = fetchurl {
     url = "https://github.com/Radarr/Radarr/releases/download/v${version}/Radarr.master.${version}.${os}-core-${arch}.tar.gz";

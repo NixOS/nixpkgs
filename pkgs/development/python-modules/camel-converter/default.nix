@@ -2,38 +2,37 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  hatchling,
   pydantic,
   pytestCheckHook,
+  pytest-cov-stub,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "camel-converter";
-  version = "3.1.2";
+  version = "4.0.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "sanders41";
     repo = "camel-converter";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CJbflRI3wfUmPoVuLwZDYcobESmySvnS99PdpSDhDLk=";
+    hash = "sha256-cHrMaf5PyFWacoi4t+Clow9qFAxbdn71p8ckuYMt27w=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov=camel_converter --cov-report term-missing --no-cov-on-fail" ""
-  '';
+  build-system = [ hatchling ];
 
-  build-system = [ poetry-core ];
-
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     pydantic = [ pydantic ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.pydantic;
+  nativeCheckInputs = [
+    pytestCheckHook
+    pytest-cov-stub
+  ] ++ optional-dependencies.pydantic;
 
   pythonImportsCheck = [ "camel_converter" ];
 
@@ -43,10 +42,10 @@ buildPythonPackage rec {
   ];
 
   meta = with lib; {
-    description = "Client for the Meilisearch API";
+    description = "Module to convert strings from snake case to camel case or camel case to snake case";
     homepage = "https://github.com/sanders41/camel-converter";
     changelog = "https://github.com/sanders41/camel-converter/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

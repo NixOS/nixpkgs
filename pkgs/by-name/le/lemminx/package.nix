@@ -1,12 +1,24 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, jre_headless
-, maven
-, writeScript
-, lemminx
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  jdk_headless,
+  jre_minimal,
+  maven,
+  writeScript,
+  lemminx,
 }:
 
+let
+  jre = jre_minimal.override {
+    modules = [
+      "java.base"
+      "java.logging"
+      "java.xml"
+    ];
+    jdk = jdk_headless;
+  };
+in
 maven.buildMavenPackage rec {
   pname = "lemminx";
   version = "0.27.0";
@@ -35,7 +47,8 @@ maven.buildMavenPackage rec {
     "org.junit.platform:junit-platform-launcher:1.10.0"
   ];
 
-  mvnHash = "sha256-LSnClLdAuqSyyT7O4f4aVaPBxdkkZQz60wTmqwQuzdU=";
+  mvnJdk = jdk_headless;
+  mvnHash = "sha256-jIvYUATcNUZZmZcXbUMqyHGX4CYiXqL0jkji+zrCYJY=";
 
   buildOffline = true;
 
@@ -67,7 +80,7 @@ maven.buildMavenPackage rec {
     install -Dm644 org.eclipse.lemminx/target/org.eclipse.lemminx-uber.jar \
       $out/share
 
-    makeWrapper ${jre_headless}/bin/java $out/bin/lemminx \
+    makeWrapper ${jre}/bin/java $out/bin/lemminx \
       --add-flags "-jar $out/share/org.eclipse.lemminx-uber.jar"
 
     runHook postInstall

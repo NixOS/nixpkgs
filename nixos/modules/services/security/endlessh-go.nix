@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -8,6 +13,8 @@ in
 {
   options.services.endlessh-go = {
     enable = mkEnableOption "endlessh-go service";
+
+    package = mkPackageOption pkgs "endlessh-go" { };
 
     listenAddress = mkOption {
       type = types.str;
@@ -57,7 +64,10 @@ in
     extraOptions = mkOption {
       type = with types; listOf str;
       default = [ ];
-      example = [ "-conn_type=tcp4" "-max_clients=8192" ];
+      example = [
+        "-conn_type=tcp4"
+        "-max_clients=8192"
+      ];
       description = ''
         Additional command line options to pass to the endlessh-go daemon.
       '';
@@ -85,16 +95,22 @@ in
         in
         {
           Restart = "always";
-          ExecStart = with cfg; concatStringsSep " " ([
-            "${pkgs.endlessh-go}/bin/endlessh-go"
-            "-logtostderr"
-            "-host=${listenAddress}"
-            "-port=${toString port}"
-          ] ++ optionals prometheus.enable [
-            "-enable_prometheus"
-            "-prometheus_host=${prometheus.listenAddress}"
-            "-prometheus_port=${toString prometheus.port}"
-          ] ++ extraOptions);
+          ExecStart =
+            with cfg;
+            concatStringsSep " " (
+              [
+                (lib.getExe cfg.package)
+                "-logtostderr"
+                "-host=${listenAddress}"
+                "-port=${toString port}"
+              ]
+              ++ optionals prometheus.enable [
+                "-enable_prometheus"
+                "-prometheus_host=${prometheus.listenAddress}"
+                "-prometheus_port=${toString prometheus.port}"
+              ]
+              ++ extraOptions
+            );
           DynamicUser = true;
           RootDirectory = rootDirectory;
           BindReadOnlyPaths = [ builtins.storeDir ];
@@ -121,17 +137,22 @@ in
           ProtectProc = "noaccess";
           ProcSubset = "pid";
           RemoveIPC = true;
-          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
           SystemCallArchitectures = "native";
-          SystemCallFilter = [ "@system-service" "~@privileged" ];
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+          ];
         };
     };
 
-    networking.firewall.allowedTCPPorts = with cfg;
-      optionals openFirewall [ port prometheus.port ];
+    networking.firewall.allowedTCPPorts = with cfg; optionals openFirewall [ port ];
   };
 
   meta.maintainers = with maintainers; [ azahi ];

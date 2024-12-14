@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, rustPlatform
-, pkg-config
-, git
-, openssl
-, Security
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  rustPlatform,
+  pkg-config,
+  git,
+  openssl,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -17,7 +18,7 @@ rustPlatform.buildRustPackage rec {
     owner = "MightyPork";
     repo = "group-actor";
     rev = "v${version}";
-    sha256 = "sha256-NMqoYUNN2ntye9mNC3KAAc0DBg+QY7+6/DASwHPexY0=";
+    hash = "sha256-NMqoYUNN2ntye9mNC3KAAc0DBg+QY7+6/DASwHPexY0=";
     forceFetchGit = true; # Archive generation is disabled on this gitea instance
     leaveDotGit = true; # git command in build.rs
   };
@@ -41,7 +42,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = [
     openssl
-  ] ++ lib.optional stdenv.isDarwin Security;
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
   meta = with lib; {
     homepage = "https://git.ondrovo.com/MightyPork/group-actor#fedi-groups";

@@ -1,4 +1,10 @@
-{ lib, buildKodiAddon, fetchFromGitHub, addonUpdateScript, kodi, inputstreamhelper }:
+{
+  lib,
+  buildKodiAddon,
+  fetchFromGitHub,
+  kodi,
+  inputstreamhelper,
+}:
 
 buildKodiAddon rec {
   pname = "sendtokodi";
@@ -13,7 +19,10 @@ buildKodiAddon rec {
   };
 
   patches = [
-    ./use-packaged-deps.patch
+    # Unconditionally depend on packaged yt-dlp. This removes the ability to
+    # use youtube_dl, which is unmaintained and considered vulnerable (see
+    # CVE-2024-38519).
+    ./use-packaged-yt-dlp.patch
   ];
 
   propagatedBuildInputs = [
@@ -26,14 +35,14 @@ buildKodiAddon rec {
   '';
 
   passthru = {
-    # Instead of the vendored libraries, we propagate youtube-dl and yt-dlp via
-    # the Python path.
-    pythonPath = with kodi.pythonPackages; makePythonPath [ youtube-dl yt-dlp ];
+    # Instead of the vendored libraries, we propagate yt-dlp via the Python
+    # path.
+    pythonPath = with kodi.pythonPackages; makePythonPath [ yt-dlp ];
   };
 
   meta = with lib; {
     homepage = "https://github.com/firsttris/plugin.video.sendtokodi";
-    description = "Plays various stream sites on Kodi using youtube-dl";
+    description = "Plays various stream sites on Kodi using yt-dlp";
     license = licenses.mit;
     maintainers = teams.kodi.members ++ [ maintainers.pks ];
   };

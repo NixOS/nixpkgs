@@ -4,16 +4,11 @@
   capstone,
   stdenv,
   setuptools,
-  pythonAtLeast,
 }:
 
 buildPythonPackage rec {
   pname = "capstone";
   version = lib.getVersion capstone;
-  format = "setuptools";
-
-  # distutils usage
-  disabled = pythonAtLeast "3.12";
 
   src = capstone.src;
   sourceRoot = "${src.name}/bindings/python";
@@ -28,7 +23,7 @@ buildPythonPackage rec {
 
   # aarch64 only available from MacOS SDK 11 onwards, so fix the version tag.
   # otherwise, bdist_wheel may detect "macosx_10_6_arm64" which doesn't make sense.
-  setupPyBuildFlags = lib.optionals (stdenv.isDarwin && stdenv.isAarch64) [
+  setupPyBuildFlags = lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
     "--plat-name"
     "macosx_11_0"
   ];
@@ -37,8 +32,10 @@ buildPythonPackage rec {
 
   checkPhase = ''
     mv capstone capstone.hidden
-    patchShebangs test_*
-    make check
+    pushd tests
+      patchShebangs test_*
+      make -f ../Makefile check
+    popd
   '';
 
   meta = with lib; {

@@ -1,24 +1,25 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, unzip
-, alsa-lib
-, gcc-unwrapped
-, git
-, godot3-export-templates
-, godot3-headless
-, libGLU
-, libX11
-, libXcursor
-, libXext
-, libXfixes
-, libXi
-, libXinerama
-, libXrandr
-, libXrender
-, libglvnd
-, libpulseaudio
-, zlib
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  unzip,
+  alsa-lib,
+  gcc-unwrapped,
+  git,
+  godot3-export-templates,
+  godot3-headless,
+  libGLU,
+  libX11,
+  libXcursor,
+  libXext,
+  libXfixes,
+  libXi,
+  libXinerama,
+  libXrandr,
+  libXrender,
+  libglvnd,
+  libpulseaudio,
+  zlib,
 }:
 
 stdenv.mkDerivation {
@@ -29,7 +30,7 @@ stdenv.mkDerivation {
     owner = "gapophustu";
     repo = "4D-Minesweeper";
     rev = "db176d8aa5981a597bbae6a1a74aeebf0f376df4";
-    sha256 = "sha256-A5QKqCo9TTdzmK13WRSAfkrkeUqHc4yQCzy4ZZ9uX2M=";
+    hash = "sha256-A5QKqCo9TTdzmK13WRSAfkrkeUqHc4yQCzy4ZZ9uX2M=";
   };
 
   nativeBuildInputs = [
@@ -82,8 +83,8 @@ stdenv.mkDerivation {
     homepage = "https://github.com/gapophustu/4D-Minesweeper";
     description = "4D Minesweeper game written in Godot";
     license = licenses.mpl20;
-    platforms   = platforms.linux;
-    maintainers = with maintainers; [];
+    platforms = platforms.linux;
+    maintainers = [ ];
     mainProgram = "4d-minesweeper";
   };
 }

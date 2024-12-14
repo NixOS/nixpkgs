@@ -1,8 +1,5 @@
 {
-  lib,
-  stdenv,
   buildPythonPackage,
-  callPackage,
   horizon-eda,
   mesa,
   pycairo,
@@ -36,13 +33,13 @@ buildPythonPackage {
 
   nativeBuildInputs = base.nativeBuildInputs;
 
-  buildFlags = [ "pymodule" ];
+  ninjaFlags = [ "horizon.so" ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/${python.sitePackages}
-    cp build/horizon.so $out/${python.sitePackages}
+    cp horizon.so $out/${python.sitePackages}
 
     runHook postInstall
   '';

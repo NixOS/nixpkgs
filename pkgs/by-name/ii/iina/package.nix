@@ -28,6 +28,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   passthru.updateScript = nix-update-script { };
 
   meta = {
+    changelog = "https://github.com/iina/iina/releases/tag/v${finalAttrs.version}";
     description = "Modern media player for macOS";
     homepage = "https://iina.io/";
     license = lib.licenses.gpl3;

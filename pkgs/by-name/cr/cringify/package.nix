@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, python3
-, testers
-, cringify
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  python3,
+  testers,
+  cringify,
 }:
 
 rustPlatform.buildRustPackage rec {

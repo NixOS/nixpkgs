@@ -1,29 +1,30 @@
-{ stdenv
-, lib
-, fetchurl
-, gjs
-, glib
-, gobject-introspection
-, gtk3
-, gtk4
-, gcr_4
-, libadwaita
-, meson
-, ninja
-, pango
-, pkg-config
-, vala
-, desktop-file-utils
-, wrapGAppsHook3
+{
+  stdenv,
+  lib,
+  fetchurl,
+  gjs,
+  glib,
+  gobject-introspection,
+  gtk3,
+  gtk4,
+  gcr_4,
+  libadwaita,
+  meson,
+  ninja,
+  pango,
+  pkg-config,
+  vala,
+  desktop-file-utils,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  version = "45.1";
+  version = "45.2";
   pname = "gpaste";
 
   src = fetchurl {
     url = "https://www.imagination-land.org/files/gpaste/GPaste-${finalAttrs.version}.tar.xz";
-    hash = "sha256-yYLoHn3/2xlefBeErnydNfkvtJva8/9f9JHhfschBpQ=";
+    hash = "sha256-2WC0FGPQisY3YH4EgJcR/Re69fJznUD1KlCGljivyEE=";
   };
 
   patches = [
@@ -79,6 +80,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     homepage = "https://github.com/Keruspe/GPaste";
+    changelog = "https://github.com/Keruspe/GPaste/blob/v${finalAttrs.version}/NEWS";
     description = "Clipboard management system with GNOME integration";
     mainProgram = "gpaste-client";
     license = licenses.bsd2;

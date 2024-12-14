@@ -4,6 +4,7 @@
   php,
   pcre2,
   fetchFromGitHub,
+  fetchpatch,
 }:
 
 let
@@ -21,6 +22,14 @@ buildPecl {
   };
 
   buildInputs = [ pcre2 ];
+
+  patches = [
+    # Allow building for PHP 8.4
+    (fetchpatch {
+      url = "https://github.com/krakjoe/pcov/commit/7d764c7c2555e8287351961d72be3ebec4d8743f.patch";
+      sha256 = "sha256-5wIHrrCwUXQpPdUg+3Kwyop5yvOzQQ3qc4pQXU8q2OM=";
+    })
+  ];
 
   meta = with lib; {
     changelog = "https://github.com/krakjoe/pcov/releases/tag/v${version}";

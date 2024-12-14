@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -71,8 +76,8 @@ in
       font = {
         package = mkOption {
           type = types.package;
-          default = pkgs.ubuntu_font_family;
-          defaultText = literalExpression "pkgs.ubuntu_font_family";
+          default = pkgs.ubuntu-classic;
+          defaultText = literalExpression "pkgs.ubuntu-classic";
           description = ''
             The package path that contains the font given in the name option.
           '';

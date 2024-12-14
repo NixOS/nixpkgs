@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "pluthon";
-  version = "0.4.6";
+  version = "1.0.0";
 
   format = "pyproject";
 
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "OpShin";
     repo = "pluthon";
     rev = version;
-    hash = "sha256-ZmBkbglSbBfVhA4yP0tJdwpJiFpJ7vX0A321ldQF0lA=";
+    hash = "sha256-IYpkb/RXRu53HoeVKik7Jog5FyXwrWItrxSla9dN0s4=";
   };
 
   propagatedBuildInputs = [

@@ -32,7 +32,7 @@ buildPythonPackage rec {
     pyjwt
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     python-jose = [ python-jose ];
     crypto = [ cryptography ];
   };

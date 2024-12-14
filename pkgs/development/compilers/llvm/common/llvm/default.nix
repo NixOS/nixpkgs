@@ -4,7 +4,6 @@
 , pkgsBuildBuild
 , pollyPatches ? []
 , patches ? []
-, polly_src ? null
 , src ? null
 , monorepoSrc ? null
 , runCommand
@@ -17,6 +16,7 @@
   # TODO: Can this memory corruption bug still occur?
   # <https://github.com/llvm/llvm-project/issues/61350>
 , enableGoldPlugin ? libbfd.hasPluginAPI
+, ld64
 , libbfd
 , libpfm
 , libxml2
@@ -28,26 +28,31 @@
 , sysctl
 , buildLlvmTools
 , debugVersion ? false
-, doCheck ? !stdenv.isAarch32 && (if lib.versionOlder release_version "15" then stdenv.isLinux else true)
-  && (!stdenv.isx86_32 /* TODO: why */) && (!stdenv.hostPlatform.isMusl)
+, doCheck ? !stdenv.hostPlatform.isAarch32 && (if lib.versionOlder release_version "15" then stdenv.hostPlatform.isLinux else true)
+  && (!stdenv.hostPlatform.isx86_32 /* TODO: why */) && (!stdenv.hostPlatform.isMusl)
   && !(stdenv.hostPlatform.isPower64 && stdenv.hostPlatform.isBigEndian)
   && (stdenv.hostPlatform == stdenv.buildPlatform)
 , enableManpages ? false
 , enableSharedLibraries ? !stdenv.hostPlatform.isStatic
-, enablePFM ? stdenv.isLinux /* PFM only supports Linux */
+, enablePFM ? stdenv.hostPlatform.isLinux /* PFM only supports Linux */
   # broken for Ampere eMAG 8180 (c2.large.arm on Packet) #56245
   # broken for the armv7l builder
   && !stdenv.hostPlatform.isAarch
 , enablePolly ? lib.versionAtLeast release_version "14"
 , enableTerminfo ? true
+, devExtraCmakeFlags ? []
 }:
 
 let
   inherit (lib) optional optionals optionalString;
 
+  # Is there a better way to do this? Darwin wants to disable tests in the first
+  # LLVM rebuild, but overriding doesn’t work when building libc++, libc++abi,
+  # and libunwind. It also wants to disable LTO in the first rebuild.
+  isDarwinBootstrap = lib.getName stdenv == "bootstrap-stage-xclang-stdenv-darwin";
+
   # Used when creating a version-suffixed symlink of libLLVM.dylib
-  shortVersion = with lib;
-    concatStringsSep "." (take 1 (splitString "." release_version));
+  shortVersion = lib.concatStringsSep "." (lib.take 1 (lib.splitString "." release_version));
 
   # Ordinarily we would just the `doCheck` and `checkDeps` functionality
   # `mkDerivation` gives us to manage our test dependencies (instead of breaking
@@ -66,22 +71,26 @@ let
   #
   # So, we "manually" assemble one python derivation for the package to depend
   # on, taking into account whether checks are enabled or not:
-  python = if doCheck then
+  python = if doCheck && !isDarwinBootstrap then
     # Note that we _explicitly_ ask for a python interpreter for our host
     # platform here; the splicing that would ordinarily take care of this for
     # us does not seem to work once we use `withPackages`.
     let
-      checkDeps = ps: with ps; [ psutil ];
+      checkDeps = ps: [ ps.psutil ];
     in pkgsBuildBuild.targetPackages.python3.withPackages checkDeps
   else python3;
 
   pname = "llvm";
 
+  # TODO: simplify versionAtLeast condition for cmake and third-party via rebuild
   src' = if monorepoSrc != null then
     runCommand "${pname}-src-${version}" {} (''
       mkdir -p "$out"
+    '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"
+    '' + ''
       cp -r ${monorepoSrc}/${pname} "$out"
+    '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/third-party "$out"
     '' + lib.optionalString enablePolly ''
       chmod u+w "$out/${pname}/tools"
@@ -91,16 +100,20 @@ let
   patches' = patches ++ lib.optionals enablePolly pollyPatches;
 in
 
-stdenv.mkDerivation (rec {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   src = src';
   patches = patches';
 
-  sourceRoot = if lib.versionOlder release_version "13" then null
-    else "${src.name}/${pname}";
+  sourceRoot = "${finalAttrs.src.name}/${pname}";
 
   outputs = [ "out" "lib" "dev" "python" ];
+
+  hardeningDisable = [
+    "trivialautovarinit"
+    "shadowstack"
+  ];
 
   nativeBuildInputs = [ cmake ]
     ++ (lib.optional (lib.versionAtLeast release_version "15") ninja)
@@ -121,7 +134,7 @@ stdenv.mkDerivation (rec {
   propagatedBuildInputs = (lib.optional (lib.versionAtLeast release_version "14" || stdenv.buildPlatform == stdenv.hostPlatform) ncurses)
     ++ [ zlib ];
 
-  postPatch = optionalString stdenv.isDarwin (''
+  postPatch = optionalString stdenv.hostPlatform.isDarwin (''
     substituteInPlace cmake/modules/AddLLVM.cmake \
       --replace 'set(_install_name_dir INSTALL_NAME_DIR "@rpath")' "set(_install_name_dir)" \
       --replace 'set(_install_rpath "@loader_path/../''${CMAKE_INSTALL_LIBDIR}''${LLVM_LIBDIR_SUFFIX}" ''${extra_libdir})' ""
@@ -162,7 +175,7 @@ stdenv.mkDerivation (rec {
       --replace "PhysicalFileSystemWorkingDirFailure" "DISABLED_PhysicalFileSystemWorkingDirFailure"
   ''))) +
     # dup of above patch with different conditions
-    optionalString (stdenv.isDarwin && stdenv.hostPlatform.isx86 && lib.versionAtLeast release_version "15") (optionalString (lib.versionOlder release_version "16") ''
+    optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86 && lib.versionAtLeast release_version "15") (optionalString (lib.versionOlder release_version "16") ''
     substituteInPlace test/ExecutionEngine/Interpreter/intrinsics.ll \
       --replace "%roundeven32 = call float @llvm.roundeven.f32(float 0.000000e+00)" "" \
       --replace "%roundeven64 = call double @llvm.roundeven.f64(double 0.000000e+00)" ""
@@ -262,7 +275,7 @@ stdenv.mkDerivation (rec {
     # It seems to reference /usr/local/lib/libfile.a, which is clearly a problem.
     # 2. This test fails for the same reason it fails on MacOS, but the fix is
     # not trivial to apply.
-    optionalString stdenv.isFreeBSD ''
+    optionalString stdenv.hostPlatform.isFreeBSD ''
     rm test/tools/llvm-libtool-darwin/L-and-l.test
     rm test/ExecutionEngine/Interpreter/intrinsics.ll
   '' + ''
@@ -313,12 +326,12 @@ stdenv.mkDerivation (rec {
     )
   '';
 
-  # E.g. mesa.drivers use the build-id as a cache key (see #93946):
-  LDFLAGS = optionalString (enableSharedLibraries && !stdenv.isDarwin) "-Wl,--build-id=sha1";
+  # E.g. Mesa uses the build-id as a cache key (see #93946):
+  LDFLAGS = optionalString (enableSharedLibraries && !stdenv.hostPlatform.isDarwin) "-Wl,--build-id=sha1";
 
   cmakeBuildType = if debugVersion then "Debug" else "Release";
 
-  cmakeFlags = with stdenv; let
+  cmakeFlags = let
     # These flags influence llvm-config's BuildVariables.inc in addition to the
     # general build. We need to make sure these are also passed via
     # CROSS_TOOLCHAIN_FLAGS_NATIVE when cross-compiling or llvm-config-native
@@ -337,13 +350,13 @@ stdenv.mkDerivation (rec {
     ];
   in flagsForLlvmConfig ++ [
     "-DLLVM_INSTALL_UTILS=ON"  # Needed by rustc
-    "-DLLVM_BUILD_TESTS=${if doCheck then "ON" else "OFF"}"
+    "-DLLVM_BUILD_TESTS=${if finalAttrs.finalPackage.doCheck then "ON" else "OFF"}"
     "-DLLVM_ENABLE_FFI=ON"
     "-DLLVM_HOST_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_DEFAULT_TARGET_TRIPLE=${stdenv.hostPlatform.config}"
     "-DLLVM_ENABLE_DUMP=ON"
     (lib.cmakeBool "LLVM_ENABLE_TERMINFO" enableTerminfo)
-  ] ++ optionals (!doCheck) [
+  ] ++ optionals (!finalAttrs.finalPackage.doCheck) [
     "-DLLVM_INCLUDE_TESTS=OFF"
   ] ++ optionals stdenv.hostPlatform.isStatic [
     # Disables building of shared libs, -fPIC is still injected by cc-wrapper
@@ -362,7 +375,7 @@ stdenv.mkDerivation (rec {
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
   ] ++ optionals (enableGoldPlugin) [
     "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
-  ] ++ optionals isDarwin [
+  ] ++ optionals stdenv.hostPlatform.isDarwin [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"
   ] ++ optionals ((stdenv.hostPlatform != stdenv.buildPlatform) && !(stdenv.buildPlatform.canExecute stdenv.hostPlatform)) [
@@ -395,7 +408,7 @@ stdenv.mkDerivation (rec {
         nativeInstallFlags
       ])
     )
-  ];
+  ] ++ devExtraCmakeFlags;
 
   postInstall = ''
     mkdir -p $python/share
@@ -411,17 +424,19 @@ stdenv.mkDerivation (rec {
     substituteInPlace "$dev/lib/cmake/llvm/LLVMConfig.cmake" \
       --replace 'set(LLVM_BINARY_DIR "''${LLVM_INSTALL_PREFIX}")' 'set(LLVM_BINARY_DIR "'"$lib"'")'
   '')
-  + optionalString (stdenv.isDarwin && enableSharedLibraries && lib.versionOlder release_version "18") ''
+  + optionalString (stdenv.hostPlatform.isDarwin && enableSharedLibraries && lib.versionOlder release_version "18") ''
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${shortVersion}.dylib
   ''
-  + optionalString (stdenv.isDarwin && enableSharedLibraries) ''
+  + optionalString (stdenv.hostPlatform.isDarwin && enableSharedLibraries) ''
     ln -s $lib/lib/libLLVM.dylib $lib/lib/libLLVM-${release_version}.dylib
   ''
-  + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) ''
+  + optionalString (stdenv.buildPlatform != stdenv.hostPlatform) (if stdenv.buildPlatform.canExecute stdenv.hostPlatform then ''
+    ln -s $dev/bin/llvm-config $dev/bin/llvm-config-native
+  '' else ''
     cp NATIVE/bin/llvm-config $dev/bin/llvm-config-native
-  '';
+  '');
 
-  inherit doCheck;
+  doCheck = !isDarwinBootstrap && doCheck;
 
   checkTarget = "check-all";
 
@@ -476,19 +491,8 @@ stdenv.mkDerivation (rec {
 
   postPatch = null;
   postInstall = null;
-})) // lib.optionalAttrs (lib.versionOlder release_version "13") {
-  inherit polly_src;
-
-  unpackPhase = ''
-    unpackFile $src
-    mv llvm-${release_version}* llvm
-    sourceRoot=$PWD/llvm
-  '' + optionalString enablePolly ''
-    unpackFile $polly_src
-    mv polly-* $sourceRoot/tools/polly
-  '';
-} // lib.optionalAttrs (lib.versionAtLeast release_version "13") {
-  nativeCheckInputs = [ which ] ++ lib.optional (stdenv.isDarwin && lib.versionAtLeast release_version "15") sysctl;
+})) // lib.optionalAttrs (lib.versionAtLeast release_version "13") {
+  nativeCheckInputs = [ which ] ++ lib.optional (stdenv.hostPlatform.isDarwin && lib.versionAtLeast release_version "15") sysctl;
 } // lib.optionalAttrs (lib.versionOlder release_version "15") {
   # hacky fix: created binaries need to be run before installation
   preBuild = ''
@@ -535,6 +539,4 @@ stdenv.mkDerivation (rec {
     check_version minor ${minor}
     check_version patch ${patch}
   '';
-} // lib.optionalAttrs (lib.versionOlder release_version "17" || lib.versionAtLeast release_version "18") {
-  hardeningDisable = [ "trivialautovarinit" ];
 })

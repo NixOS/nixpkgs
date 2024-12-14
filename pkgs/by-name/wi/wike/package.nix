@@ -1,19 +1,21 @@
-{ lib
-, fetchFromGitHub
-, python3
-, meson
-, ninja
-, pkg-config
-, appstream-glib
-, desktop-file-utils
-, gobject-introspection
-, wrapGAppsHook4
-, glib
-, gtk4
-, librsvg
-, libadwaita
-, glib-networking
-, webkitgtk_6_0
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  meson,
+  ninja,
+  pkg-config,
+  pkgsCross,
+  appstream-glib,
+  desktop-file-utils,
+  gobject-introspection,
+  wrapGAppsHook4,
+  glib,
+  gtk4,
+  librsvg,
+  libadwaita,
+  glib-networking,
+  webkitgtk_6_0,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -62,14 +64,20 @@ python3.pkgs.buildPythonApplication rec {
   dontWrapGApps = true;
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
+
+    patchShebangs --update $out/share/wike/wike-sp
   '';
+
+  passthru = {
+    tests.cross = pkgsCross.aarch64-multiplatform.wike;
+  };
 
   meta = with lib; {
     description = "Wikipedia Reader for the GNOME Desktop";
     homepage = "https://github.com/hugolabe/Wike";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ samalws ];
+    maintainers = with maintainers; [ samalws ] ++ lib.teams.gnome-circle.members;
     mainProgram = "wike";
   };
 }

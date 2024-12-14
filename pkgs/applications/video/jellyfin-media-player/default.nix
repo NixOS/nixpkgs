@@ -21,7 +21,7 @@
 , qtwebchannel
 , qtwebengine
 , qtx11extras
-, withDbus ? stdenv.isLinux
+, withDbus ? stdenv.hostPlatform.isLinux
 }:
 
 mkDerivation rec {
@@ -51,9 +51,9 @@ mkDerivation rec {
     qtwebchannel
     qtwebengine
     qtx11extras
-  ] ++ lib.optionals stdenv.isLinux [
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     qtwayland
-  ] ++ lib.optionals stdenv.isDarwin [
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Cocoa
     CoreAudio
     CoreFoundation
@@ -74,14 +74,9 @@ mkDerivation rec {
     "-DLINUX_X11POWER=ON"
   ];
 
-  postInstall = lib.optionalString stdenv.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/bin $out/Applications
     mv "$out/Jellyfin Media Player.app" $out/Applications
-
-    # move web-client resources
-    mv $out/Resources/* "$out/Applications/Jellyfin Media Player.app/Contents/Resources/"
-    rmdir $out/Resources
-
     ln -s "$out/Applications/Jellyfin Media Player.app/Contents/MacOS/Jellyfin Media Player" $out/bin/jellyfinmediaplayer
   '';
 
@@ -89,7 +84,7 @@ mkDerivation rec {
     homepage = "https://github.com/jellyfin/jellyfin-media-player";
     description = "Jellyfin Desktop Client based on Plex Media Player";
     license = with licenses; [ gpl2Only mit ];
-    platforms = [ "aarch64-linux" "x86_64-linux" "x86_64-darwin" ];
+    platforms = [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
     maintainers = with maintainers; [ jojosch kranzes ];
     mainProgram = "jellyfinmediaplayer";
   };

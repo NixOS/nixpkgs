@@ -1,30 +1,46 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  poetry-core,
-  protobuf,
+  rustPlatform,
   pytestCheckHook,
+  libiconv,
 }:
 
 buildPythonPackage rec {
   pname = "biliass";
-  version = "1.3.7";
-  format = "pyproject";
-
-  disabled = pythonOlder "3.7";
+  version = "2.1.1";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "yutto-dev";
-    repo = "biliass";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-Opb4rlGe+LDJZs3F7e/NZYfuMtHEWUZeMm8VZQfEzKI=";
+    repo = "yutto";
+    rev = "refs/tags/biliass@${version}";
+    hash = "sha256-Pn6z4iDxNcLVoY4xk7v0zc8hmajWEaOYFDEw5HEYxl4=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  sourceRoot = "source/packages/biliass";
+  cargoRoot = "rust";
 
-  propagatedBuildInputs = [ protobuf ];
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit
+      pname
+      version
+      src
+      ;
+    sourceRoot = "${sourceRoot}/${cargoRoot}";
+    hash = "sha256-7jv/Q98qyn2xnv4rNK9ifGhxo9n3X90iF9CTyqc6sHU=";
+  };
+
+  nativeBuildInputs = with rustPlatform; [
+    cargoSetupHook
+    maturinBuildHook
+  ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libiconv
+  ];
 
   doCheck = false; # test artifacts missing
 

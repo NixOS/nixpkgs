@@ -39,7 +39,7 @@ buildPythonPackage {
     ''
       stestr run -e <(echo "
     ''
-    + lib.optionalString stdenv.isAarch64 ''
+    + lib.optionalString stdenv.hostPlatform.isAarch64 ''
       openstack.tests.unit.cloud.test_baremetal_node.TestBaremetalNode.test_node_set_provision_state_with_retries
       openstack.tests.unit.cloud.test_role_assignment.TestRoleAssignment.test_grant_role_user_domain_exists
       openstack.tests.unit.cloud.test_volume_backups.TestVolumeBackups.test_delete_volume_backup_force
@@ -54,6 +54,12 @@ buildPythonPackage {
       openstack.tests.unit.cloud.test_image.TestImage.test_create_image_task
       openstack.tests.unit.image.v2.test_proxy.TestImageProxy.test_wait_for_task_error_396
       openstack.tests.unit.image.v2.test_proxy.TestImageProxy.test_wait_for_task_wait
+      openstack.tests.unit.image.v2.test_proxy.TestTask.test_wait_for_task_error_396
+      openstack.tests.unit.image.v2.test_proxy.TestTask.test_wait_for_task_wait
+      openstack.tests.unit.test_resource.TestWaitForDelete.test_callback
+      openstack.tests.unit.test_resource.TestWaitForDelete.test_callback_without_progress
+      openstack.tests.unit.test_resource.TestWaitForDelete.test_status
+      openstack.tests.unit.test_resource.TestWaitForDelete.test_success_not_found
       openstack.tests.unit.test_resource.TestWaitForStatus.test_callback
       openstack.tests.unit.test_resource.TestWaitForStatus.test_status_fails
       openstack.tests.unit.test_resource.TestWaitForStatus.test_status_fails_different_attribute

@@ -16,17 +16,21 @@
 
 buildPythonPackage rec {
   pname = "mailsuite";
-  version = "1.9.15";
+  version = "1.9.18";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-R4nAphydamZojQR7pro5Y3dZg3nYK0+X5lFBMJUpCfw=";
+    hash = "sha256-3rK5PgcAOKVvZbFT7PaZX9lhU8yKpPQozvh2F8mTkfA=";
   };
 
   nativeBuildInputs = [ hatchling ];
+
+  pythonRelaxDeps = [
+    "mail-parser"
+  ];
 
   propagatedBuildInputs = [
     dnspython

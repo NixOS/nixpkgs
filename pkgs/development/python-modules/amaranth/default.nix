@@ -4,6 +4,7 @@
   pythonOlder,
   fetchFromGitHub,
   pdm-backend,
+  jschon,
   pyvcd,
   jinja2,
   importlib-resources,
@@ -12,7 +13,7 @@
 
   # for tests
   pytestCheckHook,
-  symbiyosys,
+  sby,
   yices,
   yosys,
 }:
@@ -20,23 +21,29 @@
 buildPythonPackage rec {
   pname = "amaranth";
   format = "pyproject";
-  version = "0.4.5";
+  version = "0.5.3";
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "amaranth-lang";
     repo = "amaranth";
     rev = "refs/tags/v${version}";
-    hash = "sha256-g9dn6gUTdFHz9GMWHERsRLWHoI3E7vjuQDK0usbZO7g=";
+    hash = "sha256-lPQw7fAVM7URdyC/9c/UIYsRxVXrLjvHODvhYBdlkkg=";
   };
 
-  nativeBuildInputs = [
-    git
-    pdm-backend
-  ];
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail \
+        "pdm-backend~=2.3.0" \
+        "pdm-backend>=2.3.0"
+  '';
+
+  nativeBuildInputs = [ git ];
+  build-system = [ pdm-backend ];
 
   dependencies =
     [
+      jschon
       jinja2
       pyvcd
     ]
@@ -45,7 +52,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    symbiyosys
+    sby
     yices
     yosys
   ];

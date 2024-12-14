@@ -1,27 +1,26 @@
-{ buildPythonPackage
-, python
-, pythonRelaxDepsHook
-, lib
-, gfortran
-, fetchgit
-, cmake
-, ninja
-, networkx
-, numpy
-, pandas
-, scipy
-, tqdm
-, joblib
-, numba
-, ase
-, scikit-build
-, dscribe
-, pyyaml
-, pytestCheckHook
+{
+  buildPythonPackage,
+  lib,
+  gfortran,
+  fetchgit,
+  cmake,
+  ninja,
+  networkx,
+  numpy,
+  pandas,
+  scipy,
+  tqdm,
+  joblib,
+  numba,
+  ase,
+  scikit-build,
+  dscribe,
+  pyyaml,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  name = "MolBar";
+  pname = "MolBar";
   version = "1.1.1";
 
   src = fetchgit {
@@ -34,7 +33,6 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     gfortran
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "networkx" ];

@@ -1,4 +1,9 @@
-{ lib, python3, fetchFromGitHub, clang-unwrapped }:
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  clang-unwrapped,
+}:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "whatstyle";
@@ -16,7 +21,9 @@ python3.pkgs.buildPythonApplication rec {
     substituteInPlace ${pname}.py --replace 0.1.6 ${version}
   '';
 
-  nativeCheckInputs = [ clang-unwrapped /* clang-format */ ];
+  nativeCheckInputs = [
+    clang-unwrapped # clang-format
+  ];
 
   doCheck = false; # 3 or 4 failures depending on version, haven't investigated.
 
@@ -25,7 +32,7 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "whatstyle";
     homepage = "https://github.com/mikr/whatstyle";
     license = licenses.mit;
-    maintainers = with maintainers; [ dtzWill ];
+    maintainers = [ ];
     platforms = platforms.all;
   };
 }

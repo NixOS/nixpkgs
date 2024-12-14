@@ -63,7 +63,7 @@ buildPythonPackage rec {
   '';
 
   # Too many failures due to attempting to connect to com.apple.fonts daemon
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   meta = with lib; {
     description = "Simple Python interface for Graphviz";

@@ -47,6 +47,6 @@ buildPythonPackage rec {
     '';
     homepage = "https://github.com/kvas-it/pytest-console-scripts";
     license = licenses.mit;
-    maintainers = with maintainers; [ AluisioASG ];
+    maintainers = [ ];
   };
 }

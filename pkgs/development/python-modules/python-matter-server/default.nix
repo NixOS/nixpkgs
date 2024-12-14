@@ -8,14 +8,12 @@
 
   # build
   setuptools,
-  pythonRelaxDepsHook,
 
   # propagates
   aiohttp,
   aiorun,
   async-timeout,
   coloredlogs,
-  dacite,
   orjson,
   home-assistant-chip-clusters,
 
@@ -25,6 +23,7 @@
   zeroconf,
 
   # tests
+  aioresponses,
   python,
   pytest,
   pytest-aiohttp,
@@ -56,7 +55,7 @@ in
 
 buildPythonPackage rec {
   pname = "python-matter-server";
-  version = "6.1.0";
+  version = "6.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -65,7 +64,7 @@ buildPythonPackage rec {
     owner = "home-assistant-libs";
     repo = "python-matter-server";
     rev = "refs/tags/${version}";
-    hash = "sha256-sY/FaMZ3p/AC63t1ku1Khgqi71G7u2O+ZPTuMPHFkuk=";
+    hash = "sha256-g+97a/X0FSapMLfdW6iNf1akkHGLqCmHYimQU/M6loo=";
   };
 
   patches = [
@@ -83,7 +82,6 @@ buildPythonPackage rec {
 
   build-system = [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [ "home-assistant-chip-clusters" ];
@@ -93,7 +91,6 @@ buildPythonPackage rec {
     aiorun
     async-timeout
     coloredlogs
-    dacite
     orjson
     home-assistant-chip-clusters
   ];
@@ -107,6 +104,7 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    aioresponses
     pytest-aiohttp
     pytestCheckHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
@@ -118,12 +116,6 @@ buildPythonPackage rec {
     ''
       export PYTHONPATH=${pythonEnv}/${python.sitePackages}
     '';
-
-  pytestFlagsArray = [
-    # Upstream theymselves limit the test scope
-    # https://github.com/home-assistant-libs/python-matter-server/blob/main/.github/workflows/test.yml#L65
-    "tests/server"
-  ];
 
   meta = with lib; {
     changelog = "https://github.com/home-assistant-libs/python-matter-server/releases/tag/${version}";

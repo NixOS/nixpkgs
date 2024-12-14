@@ -6,7 +6,6 @@
   fetchFromGitHub,
   jinja2,
   mako,
-  nose,
   pyramid,
   pyramid-mako,
   pytestCheckHook,
@@ -35,7 +34,6 @@ buildPythonPackage rec {
     django
     jinja2
     mako
-    nose
     tornado
     pyramid
     pyramid-mako

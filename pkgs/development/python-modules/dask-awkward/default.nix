@@ -1,44 +1,45 @@
 {
   lib,
-  awkward,
   buildPythonPackage,
-  cachetools,
-  dask,
-  dask-histogram,
-  distributed,
   fetchFromGitHub,
+
+  # build-system
   hatch-vcs,
   hatchling,
+
+  # dependencies
+  awkward,
+  cachetools,
+  dask,
+  typing-extensions,
+
+  # optional-dependencies
+  pyarrow,
+
+  # checks
+  dask-histogram,
+  distributed,
   hist,
   pandas,
-  pyarrow,
   pytestCheckHook,
-  pythonOlder,
-  pythonRelaxDepsHook,
-  typing-extensions,
   uproot,
 }:
 
 buildPythonPackage rec {
   pname = "dask-awkward";
-  version = "2024.6.0";
+  version = "2024.9.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-awkward";
     rev = "refs/tags/${version}";
-    hash = "sha256-m/KvPo4IGn19sA5RcA/+OhLMCDBU+9BbMQtK3gHOoEc=";
+    hash = "sha256-4CwixPj0bJHVjnwZ7fPkRdiDHs8/IzvNlwSPynXvcAo=";
   };
-
-  pythonRelaxDeps = [ "awkward" ];
 
   build-system = [
     hatch-vcs
     hatchling
-    pythonRelaxDepsHook
   ];
 
   dependencies = [
@@ -48,7 +49,7 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     io = [ pyarrow ];
   };
 
@@ -59,7 +60,7 @@ buildPythonPackage rec {
     pandas
     pytestCheckHook
     uproot
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "dask_awkward" ];
 
@@ -70,6 +71,8 @@ buildPythonPackage rec {
     "test_from_text"
     # ValueError: not a ROOT file: first four bytes...
     "test_basic_root_works"
+    # Flaky. https://github.com/dask-contrib/dask-awkward/issues/506.
+    "test_distance_behavior"
   ];
 
   __darwinAllowLocalNetworking = true;

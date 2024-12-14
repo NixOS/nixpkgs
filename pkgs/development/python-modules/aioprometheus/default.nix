@@ -34,7 +34,7 @@ buildPythonPackage rec {
     quantile-python
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     aiohttp = [ aiohttp ];
     starlette = [ starlette ];
     quart = [ quart ];
@@ -46,7 +46,7 @@ buildPythonPackage rec {
     httpx
     fastapi
     uvicorn
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "aioprometheus" ];
 

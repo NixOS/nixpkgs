@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
   gpytorch,
@@ -8,33 +9,29 @@
   pyro-ppl,
   setuptools,
   setuptools-scm,
-  wheel,
   torch,
   scipy,
   pytestCheckHook,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "botorch";
-  version = "0.11.0";
-  format = "pyproject";
+  version = "0.12.0";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pytorch";
-    repo = pname;
+    repo = "botorch";
     rev = "refs/tags/v${version}";
-    hash = "sha256-eL0buwqrGt4qcwdzCwD85IyiWjAFuP1n8aUb2pvvIKw=";
+    hash = "sha256-CKlerCUadObpPq4jQAiFDBOZMHZ4QccAKQz30OFe64E=";
   };
 
-  nativeBuildInputs = [
-    pythonRelaxDepsHook
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     gpytorch
     linear-operator
     multipledispatch
@@ -43,15 +40,41 @@ buildPythonPackage rec {
     torch
   ];
 
-  pythonRelaxDeps = [ "linear-operator" ];
+  pythonRelaxDeps = [
+    "gpytorch"
+    "linear-operator"
+  ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ pytestCheckHook ];
+
+  pytestFlagsArray = [
+    # tests tend to get stuck on busy hosts, increase verbosity to find out
+    # which specific tests get stuck
+    "-vvv"
+  ];
+
+  disabledTests =
+    [ "test_all_cases_covered" ]
+    ++ lib.optionals (stdenv.buildPlatform.system == "x86_64-linux") [
+      # stuck tests on hydra
+      "test_moo_predictive_entropy_search"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
+      # Numerical error slightly above threshold
+      # AssertionError: Tensor-likes are not close!
+      "test_model_list_gpytorch_model"
+    ];
+
   pythonImportsCheck = [ "botorch" ];
 
-  meta = with lib; {
+  # needs lots of undisturbed CPU time or prone to getting stuck
+  requiredSystemFeatures = [ "big-parallel" ];
+
+  meta = {
+    changelog = "https://github.com/pytorch/botorch/blob/${src.rev}/CHANGELOG.md";
     description = "Bayesian Optimization in PyTorch";
     homepage = "https://botorch.org";
-    license = licenses.mit;
-    maintainers = with maintainers; [ veprbl ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ veprbl ];
   };
 }

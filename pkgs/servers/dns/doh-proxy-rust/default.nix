@@ -1,18 +1,29 @@
-{ lib, rustPlatform, fetchCrate, stdenv, Security, libiconv, nixosTests }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  stdenv,
+  Security,
+  libiconv,
+  nixosTests,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "doh-proxy-rust";
-  version = "0.9.9";
+  version = "0.9.11";
 
   src = fetchCrate {
     inherit version;
     crateName = "doh-proxy";
-    sha256 = "sha256-KvEayC+aY8aC5fSVIV9urNwLJcIfDMaAU+XdlGSmYRI=";
+    hash = "sha256-h2LwxqyyBPAXRr6XOmcLEmbet063kkM1ledULp3M2ek=";
   };
 
-  cargoHash = "sha256-eoC90ht9cbMLkPN3S4jxZipbFoZDTU7pIr6GRagGlJE=";
+  cargoHash = "sha256-eXPAn2ziSdciZa6YrOIa7y7Lms681X+yVAD9HrvsZHg=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security libiconv ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    Security
+    libiconv
+  ];
 
   passthru.tests = { inherit (nixosTests) doh-proxy-rust; };
 

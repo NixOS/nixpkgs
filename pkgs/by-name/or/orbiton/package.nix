@@ -1,43 +1,52 @@
-{ lib, stdenv, buildGo122Module, fetchFromGitHub, installShellFiles, makeWrapper, pkg-config
-, withGui ? true, vte
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  pkg-config,
+  withGui ? true,
+  vte,
 }:
 
-buildGo122Module rec {
+buildGoModule rec {
   pname = "orbiton";
-  version = "2.65.12";
+  version = "2.68.4";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "orbiton";
     rev = "v${version}";
-    hash = "sha256-1KVw2dj//6vwUUj1jVWe2J/9F6J8BQsvCAEbJZnW26c=";
+    hash = "sha256-VEYeC3gtjBxkDYH/fEsdKtIInB8E2pcHokinspdj10Q=";
   };
 
   vendorHash = null;
 
-  postPatch = lib.optionalString stdenv.isDarwin ''
-    substituteInPlace Makefile \
-      --replace "-Wl,--as-needed" ""
-
-    # Requires impure pbcopy and pbpaste
-    substituteInPlace v2/pbcopy_test.go \
-      --replace TestPBcopy SkipTestPBcopy
-  '';
-
-  nativeBuildInputs = [ installShellFiles makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+    pkg-config
+  ];
 
   buildInputs = lib.optional withGui vte;
 
   preBuild = "cd v2";
 
-  postInstall = ''
-    cd ..
-    installManPage o.1
-    mv $out/bin/{orbiton,o}
-  '' + lib.optionalString withGui ''
-    make install-gui PREFIX=$out
-    wrapProgram $out/bin/og --prefix PATH : $out/bin
-  '';
+  checkFlags = [
+    "-skip=TestPBcopy" # Requires impure pbcopy and pbpaste
+  ];
+
+  postInstall =
+    ''
+      cd ..
+      installManPage o.1
+      mv $out/bin/{orbiton,o}
+    ''
+    + lib.optionalString withGui ''
+      make install-gui PREFIX=$out
+      wrapProgram $out/bin/og --prefix PATH : $out/bin
+    '';
 
   meta = with lib; {
     description = "Config-free text editor and IDE limited to VT100";

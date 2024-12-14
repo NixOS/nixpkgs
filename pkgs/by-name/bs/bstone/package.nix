@@ -1,10 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, gcc12Stdenv
-, SDL2
-, libGL
+{
+  lib,
+  fetchFromGitHub,
+  cmake,
+  gcc12Stdenv,
+  SDL2,
+  libGL,
 }:
 
 gcc12Stdenv.mkDerivation (finalAttrs: {
@@ -42,6 +42,6 @@ gcc12Stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with lib.maintainers; [ keenanweaver ];
     mainProgram = "bstone";
-    platforms = lib.platforms.linux; #TODO: macOS / Darwin support
+    platforms = lib.platforms.linux; # TODO: macOS / Darwin support
   };
 })

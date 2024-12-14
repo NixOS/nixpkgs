@@ -1,5 +1,16 @@
-{ lib, stdenv, fetchFromGitHub, autoconf, automake, intltool, pkg-config,
-gtk3, connman, openconnect, wrapGAppsHook3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  intltool,
+  pkg-config,
+  gtk3,
+  connman,
+  openconnect,
+  wrapGAppsHook3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "connman-gtk";
@@ -9,7 +20,7 @@ stdenv.mkDerivation rec {
     owner = "jgke";
     repo = "connman-gtk";
     rev = "v${version}";
-    sha256 = "09k0hx5hxpbykvslv12l2fq9pxdwpd311mxj038hbqzjghcyidyr";
+    hash = "sha256-2bfoGXzy4wXRALLXEEa7vPWbsBNUhE31nn7dDkuHYCY=";
   };
 
   nativeBuildInputs = [

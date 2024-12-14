@@ -1,5 +1,17 @@
-{ version, sha256, installFiles }:
-{ lib, mkDerivation, fetchFromGitHub, qtbase, qmake, cmake, zip }:
+{
+  version,
+  sha256,
+  installFiles,
+}:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  qtbase,
+  qmake,
+  cmake,
+  zip,
+}:
 
 mkDerivation rec {
   passthru = {
@@ -18,7 +30,11 @@ mkDerivation rec {
   };
 
   buildInputs = [ qtbase ];
-  nativeBuildInputs = [ qmake cmake zip ];
+  nativeBuildInputs = [
+    qmake
+    cmake
+    zip
+  ];
 
   dontConfigure = true;
   buildPhase = ''
@@ -34,7 +50,7 @@ mkDerivation rec {
     description = "UEFI firmware image viewer and editor";
     homepage = "https://github.com/LongSoft/uefitool";
     license = licenses.bsd2;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
     # uefitool supposedly works on other platforms, but their build script only works on linux in nixpkgs
     platforms = platforms.linux;
   };

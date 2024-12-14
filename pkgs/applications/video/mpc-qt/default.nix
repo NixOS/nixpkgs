@@ -1,24 +1,25 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, qmake
-, qttools
-, qtbase
-, mpv
-, wrapQtAppsHook
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  qmake,
+  qttools,
+  qtbase,
+  mpv,
+  wrapQtAppsHook,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "mpc-qt";
-  version = "23.12";
+  version = "24.06";
 
   src = fetchFromGitHub {
     owner = "mpc-qt";
     repo = "mpc-qt";
     rev = "v${version}";
-    hash = "sha256-v22o5QtCY9Z8bPoIkwypG0oTBEPqPFeKZ8cWO+pKCD0=";
+    hash = "sha256-kEG7B99io3BGjN94nEX1pN10Bcjj21rb46Vcn2OtpN8=";
   };
 
   nativeBuildInputs = [
@@ -51,7 +52,7 @@ stdenv.mkDerivation rec {
     homepage = "https://mpc-qt.github.io";
     license = licenses.gpl2;
     platforms = platforms.unix;
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     maintainers = with maintainers; [ romildo ];
     mainProgram = "mpc-qt";
   };

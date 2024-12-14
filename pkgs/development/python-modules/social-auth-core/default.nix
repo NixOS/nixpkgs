@@ -44,7 +44,7 @@ buildPythonPackage rec {
     requests-oauthlib
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     openidconnect = [ python-jose ];
     saml = [
       lxml
@@ -56,7 +56,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     httpretty
-  ] ++ lib.flatten (lib.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # Disable checking the code coverage
   prePatch = ''
@@ -75,6 +75,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-social-auth/social-core";
     changelog = "https://github.com/python-social-auth/social-core/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ n0emis ];
+    maintainers = with maintainers; [ ];
   };
 }

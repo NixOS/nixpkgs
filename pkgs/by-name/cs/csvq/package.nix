@@ -1,4 +1,10 @@
-{ buildGoModule, fetchFromGitHub, testers, lib, csvq }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  lib,
+  csvq,
+}:
 
 buildGoModule rec {
   pname = "csvq";
@@ -8,7 +14,7 @@ buildGoModule rec {
     owner = "mithrandie";
     repo = "csvq";
     rev = "v${version}";
-    sha256 = "sha256-1UK+LSMKryoUf2UWbGt8MU3zs5hH2WdpA2v/jBaIHYE=";
+    hash = "sha256-1UK+LSMKryoUf2UWbGt8MU3zs5hH2WdpA2v/jBaIHYE=";
   };
 
   vendorHash = "sha256-byBYp+iNnnsAXR+T3XmdwaeeBG8oB1EgNkDabzgUC98=";

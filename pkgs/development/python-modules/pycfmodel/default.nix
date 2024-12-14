@@ -6,7 +6,6 @@
   pydantic,
   pytestCheckHook,
   pythonOlder,
-  pythonRelaxDepsHook,
   setuptools,
 }:
 
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "pydantic" ];
 
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [ pydantic ];
 

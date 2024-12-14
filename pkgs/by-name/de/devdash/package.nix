@@ -1,12 +1,12 @@
 {
-  lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
-, coreutils
+  lib,
+  buildGo122Module,
+  fetchFromGitHub,
+  nix-update-script,
+  coreutils,
 }:
 
-buildGoModule rec {
+buildGo122Module rec {
   pname = "devdash";
   version = "0.5.0";
 

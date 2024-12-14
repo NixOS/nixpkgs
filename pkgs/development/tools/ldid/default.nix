@@ -1,12 +1,12 @@
-{ lib
-, stdenv
-, callPackage
-, fetchgit
-, libplist
-, libxml2
-, openssl
-, CoreFoundation
-, Security
+{
+  lib,
+  stdenv,
+  fetchgit,
+  libplist,
+  libxml2,
+  openssl,
+  CoreFoundation,
+  Security,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,28 +16,32 @@ stdenv.mkDerivation rec {
   src = fetchgit {
     url = "git://git.saurik.com/ldid.git";
     rev = "v${version}";
-    sha256 = "sha256-RM5pU3mrgyvwNfWKNvCT3UYVGKtVhD7ifgp8fq9xXiM=";
+    hash = "sha256-RM5pU3mrgyvwNfWKNvCT3UYVGKtVhD7ifgp8fq9xXiM=";
   };
 
   strictDeps = true;
 
-  buildInputs = [
-    libplist
-    libxml2
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    CoreFoundation
-    Security
-  ];
+  buildInputs =
+    [
+      libplist
+      libxml2
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      CoreFoundation
+      Security
+    ];
 
-  NIX_LDFLAGS = [
-    "-lcrypto"
-    "-lplist-2.0"
-    "-lxml2"
-  ] ++ lib.optionals stdenv.isDarwin [
-    "-framework CoreFoundation"
-    "-framework Security"
-  ];
+  NIX_LDFLAGS =
+    [
+      "-lcrypto"
+      "-lplist-2.0"
+      "-lxml2"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-framework CoreFoundation"
+      "-framework Security"
+    ];
 
   buildPhase = ''
     runHook preBuild

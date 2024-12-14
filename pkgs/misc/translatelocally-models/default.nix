@@ -1,9 +1,23 @@
-{ lib, stdenvNoCC, fetchurl }:
-
 let
   modelSpecs = (builtins.fromJSON (builtins.readFile ./models.json));
+in
+
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+}:
+
+let
   withCodeAsKey = f: { code, ... }@attrs: lib.nameValuePair code (f attrs);
-  mkModelPackage = { name, code, version, url, checksum }:
+  mkModelPackage =
+    {
+      name,
+      code,
+      version,
+      url,
+      checksum,
+    }:
     stdenvNoCC.mkDerivation {
       pname = "translatelocally-model-${code}";
       version = toString version;
@@ -30,14 +44,10 @@ let
         license = lib.licenses.cc-by-sa-40;
       };
     };
-  allModelPkgs =
-    lib.listToAttrs (map (withCodeAsKey mkModelPackage) modelSpecs);
+  allModelPkgs = lib.listToAttrs (map (withCodeAsKey mkModelPackage) modelSpecs);
 
-in allModelPkgs // {
-  is-en-tiny = allModelPkgs.is-en-tiny.overrideAttrs (super: {
-    # missing model https://github.com/XapaJIaMnu/translateLocally/issues/147
-    meta = super.meta // { broken = true; };
-  });
-} // {
+in
+allModelPkgs
+// {
   passthru.updateScript = ./update.sh;
 }

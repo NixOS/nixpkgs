@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Arbitrary-lookahead parser";
     homepage = "https://github.com/erikrose/parsimonious";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

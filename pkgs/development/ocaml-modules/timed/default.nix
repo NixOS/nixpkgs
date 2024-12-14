@@ -1,7 +1,7 @@
-{ lib
-, fetchFromGitHub
-, ocaml
-, buildDunePackage
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
 }:
 
 buildDunePackage rec {

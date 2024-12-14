@@ -37,6 +37,8 @@ buildPythonPackage rec {
     hash = "sha256-BJw1Gg3FO2R6WWKjkrpxDN4fTMTug5AIj0SNq1gEbBY=";
   };
 
+  pythonRelaxDeps = [ "defusedxml" ];
+
   nativeBuildInputs = [ poetry-core ];
 
   patches = [

@@ -1,23 +1,24 @@
-{ lib
-, fetchurl
-, gdk-pixbuf
-, gobject-introspection
-, gtk3
-, libnotify
-, libsecret
-, networkmanager
-, python3Packages
-, wrapGAppsHook3
+{
+  lib,
+  fetchurl,
+  gdk-pixbuf,
+  gobject-introspection,
+  gtk3,
+  libnotify,
+  libsecret,
+  networkmanager,
+  python3Packages,
+  wrapGAppsHook3,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "eduvpn-client";
-  version = "4.3.1";
+  version = "4.4.0";
   format = "pyproject";
 
   src = fetchurl {
     url = "https://github.com/eduvpn/python-${pname}/releases/download/${version}/python-${pname}-${version}.tar.xz";
-    hash = "sha256-8k5ZbbN2OvoFFq0nn+fftQfQJbGhb2MEvZNokMXegr0=";
+    hash = "sha256-IHRIjryAIeGcFqz5BMWsE0/gClaSmnwWhjc1f1c69vk=";
   };
 
   nativeBuildInputs = [
@@ -49,7 +50,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://github.com/eduvpn/python-eduvpn-client";
     license = licenses.gpl3Plus;
     mainProgram = "eduvpn-gui";
-    maintainers = with maintainers; [ benneti jwijenbergh ];
+    maintainers = with maintainers; [
+      benneti
+      jwijenbergh
+    ];
     platforms = platforms.linux;
   };
 }

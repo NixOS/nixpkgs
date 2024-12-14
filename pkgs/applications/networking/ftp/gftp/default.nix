@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, gettext
-, gtk
-, intltool
-, libtool
-, ncurses
-, openssl
-, pkg-config
-, readline
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  gettext,
+  gtk,
+  intltool,
+  libtool,
+  ncurses,
+  openssl,
+  pkg-config,
+  readline,
 }:
 
 stdenv.mkDerivation rec {

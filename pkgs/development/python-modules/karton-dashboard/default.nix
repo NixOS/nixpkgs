@@ -8,7 +8,6 @@
   networkx,
   prometheus-client,
   pythonOlder,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -31,8 +30,6 @@ buildPythonPackage rec {
     "networkx"
     "prometheus-client"
   ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   propagatedBuildInputs = [
     flask

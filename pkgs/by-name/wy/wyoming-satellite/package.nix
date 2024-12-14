@@ -1,6 +1,7 @@
-{ lib
-, python3Packages
-, fetchFromGitHub
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -17,7 +18,6 @@ python3Packages.buildPythonApplication rec {
 
   nativeBuildInputs = with python3Packages; [
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRelaxDeps = [
@@ -31,7 +31,7 @@ python3Packages.buildPythonApplication rec {
     zeroconf
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     silerovad = with python3Packages; [
       pysilero-vad
     ];
@@ -48,7 +48,6 @@ python3Packages.buildPythonApplication rec {
     pytest-asyncio
     pytestCheckHook
   ];
-
 
   meta = with lib; {
     description = "Remote voice satellite using Wyoming protocol";

@@ -1,22 +1,30 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.opensnitch;
-  format = pkgs.formats.json {};
+  format = pkgs.formats.json { };
 
-  predefinedRules = flip mapAttrs cfg.rules (name: cfg: {
-    file = pkgs.writeText "rule" (builtins.toJSON cfg);
-  });
+  predefinedRules = flip mapAttrs cfg.rules (
+    name: cfg: {
+      file = pkgs.writeText "rule" (builtins.toJSON cfg);
+    }
+  );
 
-in {
+in
+{
   options = {
     services.opensnitch = {
       enable = mkEnableOption "Opensnitch application firewall";
 
       rules = mkOption {
-        default = {};
+        default = { };
         example = literalExpression ''
           {
             "tor" = {
@@ -73,7 +81,10 @@ in {
             };
 
             DefaultAction = mkOption {
-              type = types.enum [ "allow" "deny" ];
+              type = types.enum [
+                "allow"
+                "deny"
+              ];
               description = ''
                 Default action whether to block or allow application internet
                 access.
@@ -88,14 +99,25 @@ in {
             };
 
             ProcMonitorMethod = mkOption {
-              type = types.enum [ "ebpf" "proc" "ftrace" "audit" ];
+              type = types.enum [
+                "ebpf"
+                "proc"
+                "ftrace"
+                "audit"
+              ];
               description = ''
                 Which process monitoring method to use.
               '';
             };
 
             LogLevel = mkOption {
-              type = types.enum [ 0 1 2 3 4 ];
+              type = types.enum [
+                0
+                1
+                2
+                3
+                4
+              ];
               description = ''
                 Default log level from 0 to 4 (debug, info, important, warning,
                 error).
@@ -103,7 +125,10 @@ in {
             };
 
             Firewall = mkOption {
-              type = types.enum [ "iptables" "nftables" ];
+              type = types.enum [
+                "iptables"
+                "nftables"
+              ];
               description = ''
                 Which firewall backend to use.
               '';
@@ -129,7 +154,11 @@ in {
 
             Ebpf.ModulesPath = mkOption {
               type = types.path;
-              default = if cfg.settings.ProcMonitorMethod == "ebpf" then "${config.boot.kernelPackages.opensnitch-ebpf}/etc/opensnitchd" else null;
+              default =
+                if cfg.settings.ProcMonitorMethod == "ebpf" then
+                  "${config.boot.kernelPackages.opensnitch-ebpf}/etc/opensnitchd"
+                else
+                  null;
               defaultText = literalExpression ''
                 if cfg.settings.ProcMonitorMethod == "ebpf" then
                   "\\$\\{config.boot.kernelPackages.opensnitch-ebpf\\}/etc/opensnitchd"
@@ -163,7 +192,13 @@ in {
   config = mkIf cfg.enable {
 
     # pkg.opensnitch is referred to elsewhere in the module so we don't need to worry about it being garbage collected
-    services.opensnitch.settings = mapAttrs (_: v: mkDefault v) (builtins.fromJSON (builtins.unsafeDiscardStringContext (builtins.readFile "${pkgs.opensnitch}/etc/opensnitchd/default-config.json")));
+    services.opensnitch.settings = mapAttrs (_: v: mkDefault v) (
+      builtins.fromJSON (
+        builtins.unsafeDiscardStringContext (
+          builtins.readFile "${pkgs.opensnitch}/etc/opensnitchd/default-config.json"
+        )
+      )
+    );
 
     systemd = {
       packages = [ pkgs.opensnitch ];
@@ -175,25 +210,33 @@ in {
             "${pkgs.opensnitch}/bin/opensnitchd --config-file ${format.generate "default-config.json" cfg.settings}"
           ];
         };
-        preStart = mkIf (cfg.rules != {}) (let
-          rules = flip mapAttrsToList predefinedRules (file: content: {
-          inherit (content) file;
-          local = "${cfg.settings.Rules.Path}/${file}.json";
-        });
-        in ''
-          # Remove all firewall rules from rules path (configured with
-          # cfg.settings.Rules.Path) that are symlinks to a store-path, but aren't
-          # declared in `cfg.rules` (i.e. all networks that were "removed" from
-          # `cfg.rules`).
-          find ${cfg.settings.Rules.Path} -type l -lname '${builtins.storeDir}/*' ${optionalString (rules != {}) ''
-            -not \( ${concatMapStringsSep " -o " ({ local, ... }:
-              "-name '${baseNameOf local}*'")
-            rules} \) \
-          ''} -delete
-          ${concatMapStrings ({ file, local }: ''
-            ln -sf '${file}' "${local}"
-          '') rules}
-        '');
+        preStart = mkIf (cfg.rules != { }) (
+          let
+            rules = flip mapAttrsToList predefinedRules (
+              file: content: {
+                inherit (content) file;
+                local = "${cfg.settings.Rules.Path}/${file}.json";
+              }
+            );
+          in
+          ''
+            # Remove all firewall rules from rules path (configured with
+            # cfg.settings.Rules.Path) that are symlinks to a store-path, but aren't
+            # declared in `cfg.rules` (i.e. all networks that were "removed" from
+            # `cfg.rules`).
+            find ${cfg.settings.Rules.Path} -type l -lname '${builtins.storeDir}/*' ${
+              optionalString (rules != { }) ''
+                -not \( ${concatMapStringsSep " -o " ({ local, ... }: "-name '${baseNameOf local}*'") rules} \) \
+              ''
+            } -delete
+            ${concatMapStrings (
+              { file, local }:
+              ''
+                ln -sf '${file}' "${local}"
+              ''
+            ) rules}
+          ''
+        );
       };
       tmpfiles.rules = [
         "d ${cfg.settings.Rules.Path} 0750 root root - -"
@@ -205,4 +248,3 @@ in {
 
   meta.maintainers = with lib.maintainers; [ onny ];
 }
-

@@ -1,14 +1,12 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, cmake
-, gitMinimal
-, pkg-config
-, libusb1
-, openssl
-, DarwinTools
-, AppKit
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  cmake,
+  gitMinimal,
+  pkg-config,
+  libusb1,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,9 +32,12 @@ rustPlatform.buildRustPackage rec {
     # https://github.com/probe-rs/probe-rs/pull/2492
     gitMinimal
     pkg-config
-  ] ++ lib.optionals stdenv.isDarwin [ DarwinTools ];
+  ];
 
-  buildInputs = [ libusb1 openssl ] ++ lib.optionals stdenv.isDarwin [ AppKit ];
+  buildInputs = [
+    libusb1
+    openssl
+  ];
 
   checkFlags = [
     # require a physical probe
@@ -63,7 +64,13 @@ rustPlatform.buildRustPackage rec {
     description = "CLI tool for on-chip debugging and flashing of ARM chips";
     homepage = "https://probe.rs/";
     changelog = "https://github.com/probe-rs/probe-rs/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ xgroleau newam ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      xgroleau
+      newam
+    ];
   };
 }

@@ -1,35 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, kwindowsystem
-, layer-shell-qt
-, libXdmcp
-, liblxqt
-, libpthreadstubs
-, libqtxdg
-, lxqt-build-tools
-, pkg-config
-, procps
-, qtbase
-, qtsvg
-, qttools
-, qtwayland
-, qtxdg-tools
-, wrapQtAppsHook
-, xdg-user-dirs
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  kwindowsystem,
+  layer-shell-qt,
+  libXdmcp,
+  liblxqt,
+  libpthreadstubs,
+  libqtxdg,
+  lxqt-build-tools,
+  pkg-config,
+  procps,
+  qtbase,
+  qtsvg,
+  qttools,
+  qtwayland,
+  qtxdg-tools,
+  wrapQtAppsHook,
+  xdg-user-dirs,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lxqt-session";
-  version = "2.0.0";
+  version = "2.1.0";
 
   src = fetchFromGitHub {
     owner = "lxqt";
     repo = pname;
     rev = version;
-    hash = "sha256-IgpGtIVTcSs0O3jEniIuyIAyKBSkwN/jpGL6yZg3AVo=";
+    hash = "sha256-t3odaG9znMohROutoEquJ7JYsvPQPjPxOik+WD8WGSA=";
   };
 
   nativeBuildInputs = [

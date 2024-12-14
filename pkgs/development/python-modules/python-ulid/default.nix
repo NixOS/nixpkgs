@@ -6,13 +6,14 @@
   hatch-fancy-pypi-readme,
   hatch-vcs,
   hatchling,
+  pydantic,
   freezegun,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
   pname = "python-ulid";
-  version = "2.2.0";
+  version = "2.7.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -21,19 +22,23 @@ buildPythonPackage rec {
     owner = "mdomke";
     repo = "python-ulid";
     rev = "refs/tags/${version}";
-    hash = "sha256-d5jCPxWUOfw/OCtbA9Db9+s1D5DAdL+vbPR8zavgbbo=";
+    hash = "sha256-Z9rYqekhrYa8ab17AVmKyObvq4HTOij7+LMlvRSqUQM=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     hatch-fancy-pypi-readme
     hatch-vcs
     hatchling
   ];
 
+  optional-dependencies = {
+    pydantic = [ pydantic ];
+  };
+
   nativeCheckInputs = [
     freezegun
     pytestCheckHook
-  ];
+  ] ++ optional-dependencies.pydantic;
 
   pythonImportsCheck = [ "ulid" ];
 

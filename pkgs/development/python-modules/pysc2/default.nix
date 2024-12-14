@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   absl-py,
-  enum34,
   future,
   mock,
   mpyq,
@@ -40,7 +39,6 @@ buildPythonPackage {
 
   propagatedBuildInputs = [
     absl-py
-    enum34
     future
     mock
     mpyq
@@ -59,6 +57,6 @@ buildPythonPackage {
     homepage = "https://github.com/deepmind/pysc2";
     license = lib.licenses.asl20;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ ];
+    maintainers = [ ];
   };
 }

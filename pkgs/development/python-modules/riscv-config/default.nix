@@ -7,7 +7,6 @@
   pyyaml,
   ruamel-yaml,
   setuptools,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
@@ -27,8 +26,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = [ "pyyaml" ];
 
   build-system = [ setuptools ];
-
-  nativeBuildInputs = [ pythonRelaxDepsHook ];
 
   dependencies = [
     cerberus

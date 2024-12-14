@@ -39,6 +39,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/Azure/azure-sdk-for-python/tree/main/sdk/synapse/azure-mgmt-synapse";
     changelog = "https://github.com/Azure/azure-sdk-for-python/blob/azure-mgmt-synapse_${version}/sdk/synapse/azure-mgmt-synapse/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ ];
+    maintainers = [ ];
   };
 }

@@ -6,16 +6,16 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "phive";
-  version = "0.15.2";
+  version = "0.15.3";
 
   src = fetchFromGitHub {
     owner = "phar-io";
     repo = "phive";
     rev = finalAttrs.version;
-    hash = "sha256-K/YZOGANcefjfdFY1XYEQknm0bPRorlRnNGC7dEegZ0=";
+    hash = "sha256-6vNhmIDE3kwZGMrDnGNGVV6/lb32Yb3ooWDYOC7SUcs=";
   };
 
-  vendorHash = "sha256-0fJ+SyicvVONJ4FkOFTkBTekDAOjBfaLo0dZ2DYlGJU=";
+  vendorHash = "sha256-iBNH4n4AVE47CYmwO6s6WBAuRe7JzzvoNruYfVbxPck=";
 
   meta = {
     changelog = "https://github.com/phar-io/phive/releases/tag/${finalAttrs.version}";

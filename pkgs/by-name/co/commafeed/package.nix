@@ -1,5 +1,6 @@
 {
   lib,
+  biome,
   buildNpmPackage,
   fetchFromGitHub,
   jre,
@@ -9,13 +10,13 @@
   writeText,
 }:
 let
-  version = "4.3.3";
+  version = "4.6.0";
 
   src = fetchFromGitHub {
     owner = "Athou";
     repo = "commafeed";
     rev = version;
-    hash = "sha256-y0gTmtlDg7sdunG1ne/3WkFx2KQkTGRlfYpXBHFFh2o=";
+    hash = "sha256-Qc2l/CSVK+8k7b3RZA8hQsGTq29OvkDMbMzHcnPm/yE=";
   };
 
   frontend = buildNpmPackage {
@@ -25,7 +26,9 @@ let
 
     sourceRoot = "${src.name}/commafeed-client";
 
-    npmDepsHash = "sha256-fye7MPWXUeFCMgcnesspd1giGG/ZldiOv00fjtXZSb4=";
+    npmDepsHash = "sha256-bQShz6dmE9IZ9to5Z2DScncc/WVJnX1tRCm8XQJNmiU=";
+
+    nativeBuildInputs = [ biome ];
 
     installPhase = ''
       runHook preInstall
@@ -49,7 +52,7 @@ maven.buildMavenPackage {
 
   pname = "commafeed";
 
-  mvnHash = "sha256-YnEDJf4GeyiXxOh8tZZTZdLOJrisG6lmShXU97ueGNE=";
+  mvnHash = "sha256-7nm8Cz05Qa44TMC0ioklvKAXQnE9J2wUDZFXLQt2A1w=";
 
   mvnParameters = lib.escapeShellArgs [
     "-Dskip.installnodenpm"

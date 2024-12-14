@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, aws-c-common, nix, openssl, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  aws-c-common,
+  nix,
+  openssl,
+  Security,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-cal";
@@ -6,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchFromGitHub {
     owner = "awslabs";
-    repo = finalAttrs.pname;
+    repo = "aws-c-cal";
     rev = "v${finalAttrs.version}";
     hash = "sha256-RrUJz3IqwbBJ8NuJTIWqK33FlJHolcaid55PT2EhO24=";
   };
@@ -18,7 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ aws-c-common openssl ];
+  buildInputs = [
+    aws-c-common
+    openssl
+  ];
 
   propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
@@ -31,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = with lib; {
-    description = "AWS Crypto Abstraction Layer ";
+    description = "AWS Crypto Abstraction Layer";
     homepage = "https://github.com/awslabs/aws-c-cal";
     license = licenses.asl20;
     platforms = platforms.unix;

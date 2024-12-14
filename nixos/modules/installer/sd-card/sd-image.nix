@@ -29,7 +29,6 @@ in
   imports = [
     (mkRemovedOptionModule [ "sdImage" "bootPartitionID" ] "The FAT partition for SD image now only holds the Raspberry Pi firmware files. Use firmwarePartitionID to configure that partition's ID.")
     (mkRemovedOptionModule [ "sdImage" "bootSize" ] "The boot files for SD image have been moved to the main ext4 partition. The FAT partition now only holds the Raspberry Pi firmware files. Changing its size may not be required.")
-    ../../profiles/all-hardware.nix
   ];
 
   options.sdImage = {
@@ -150,9 +149,20 @@ in
         Whether to configure the sd image to expand it's partition on boot.
       '';
     };
+
+    nixPathRegistrationFile = mkOption {
+      type = types.str;
+      default = "/nix-path-registration";
+      description = ''
+        Location of the file containing the input for nix-store --load-db once the machine has booted.
+        If overriding fileSystems."/" then you should to set this to the root mount + /nix-path-registration
+      '';
+    };
   };
 
   config = {
+    hardware.enableAllHardware = true;
+
     fileSystems = {
       "/boot/firmware" = {
         device = "/dev/disk/by-label/${config.sdImage.firmwarePartitionName}";
@@ -209,7 +219,7 @@ in
         # type=b is 'W95 FAT32', type=83 is 'Linux'.
         # The "bootable" partition is where u-boot will look file for the bootloader
         # information (dtbs, extlinux.conf file).
-        sfdisk $img <<EOF
+        sfdisk --no-reread --no-tell-kernel $img <<EOF
             label: dos
             label-id: ${config.sdImage.firmwarePartitionID}
 
@@ -255,11 +265,8 @@ in
       '';
     }) {};
 
-    boot.postBootCommands = lib.mkIf config.sdImage.expandOnBoot ''
-      # On the first boot do some maintenance tasks
-      if [ -f /nix-path-registration ]; then
-        set -euo pipefail
-        set -x
+    boot.postBootCommands = let
+      expandOnBoot = lib.optionalString config.sdImage.expandOnBoot ''
         # Figure out device names for the boot device and root filesystem.
         rootPart=$(${pkgs.util-linux}/bin/findmnt -n -o SOURCE /)
         bootDevice=$(lsblk -npo PKNAME $rootPart)
@@ -269,16 +276,25 @@ in
         echo ",+," | sfdisk -N$partNum --no-reread $bootDevice
         ${pkgs.parted}/bin/partprobe
         ${pkgs.e2fsprogs}/bin/resize2fs $rootPart
+      '';
+      nixPathRegistrationFile = config.sdImage.nixPathRegistrationFile;
+    in ''
+      # On the first boot do some maintenance tasks
+      if [ -f ${nixPathRegistrationFile} ]; then
+        set -euo pipefail
+        set -x
+
+        ${expandOnBoot}
 
         # Register the contents of the initial Nix store
-        ${config.nix.package.out}/bin/nix-store --load-db < /nix-path-registration
+        ${config.nix.package.out}/bin/nix-store --load-db < ${nixPathRegistrationFile}
 
         # nixos-rebuild also requires a "system" profile and an /etc/NIXOS tag.
         touch /etc/NIXOS
         ${config.nix.package.out}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
 
         # Prevents this from running on later boots.
-        rm -f /nix-path-registration
+        rm -f ${nixPathRegistrationFile}
       fi
     '';
   };

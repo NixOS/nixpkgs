@@ -1,14 +1,20 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "typodermic-public-domain";
-  version = "2022-11";
+  version = "2024-04";
 
   src = fetchzip {
-    url =
-      "https://typodermicfonts.com/wp-content/uploads/2022/11/typodermic-public-domain-2022-11.zip";
-    hash = "sha256-2hqpehQ4zxSvsw2dtom/fkMAayJKNvOdYs+c+rrvJKw=";
-    curlOptsList = [ "--user-agent" "Mozilla/5.0" ]; # unbreak their wordpress
+    url = "https://typodermicfonts.com/wp-content/uploads/2024/04/typodermic-public-domain-2024-04.zip";
+    hash = "sha256-grAAU/yL/Q1EyZtrvcgrB6bcXMZoNs7suVYaKibqBOE=";
+    curlOptsList = [
+      "--user-agent"
+      "Mozilla/5.0"
+    ]; # unbreak their wordpress
     stripRoot = false;
   };
 
@@ -26,5 +32,6 @@ stdenvNoCC.mkDerivation {
     description = "Vintage Typodermic fonts";
     maintainers = with lib.maintainers; [ ehmry ];
     license = lib.licenses.cc0;
+    platforms = lib.platforms.all;
   };
 }

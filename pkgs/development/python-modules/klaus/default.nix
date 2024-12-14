@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   isPy3k,
   flask,
   pygments,
@@ -30,6 +31,15 @@ buildPythonPackage rec {
     substituteInPlace runtests.sh \
       --replace "mkdir -p \$builddir" "mkdir -p \$builddir && pwd"
   '';
+
+  # TODO: remove in next version
+  patches = [
+    (fetchpatch {
+      name = "distutils.patch";
+      url = "https://github.com/jonashaag/klaus/commit/d50d2aab97fd86c11f3b5a4c1ecbcf1e085f395f.patch";
+      hash = "sha256-gJ/ksm96VRNgqIBp+PX/ljzdfQJYbwTBmZaF2Ctu7Fc=";
+    })
+  ];
 
   propagatedBuildInputs = [
     flask
