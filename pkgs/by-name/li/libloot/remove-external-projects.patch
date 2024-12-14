@@ -1,0 +1,115 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 3698be1d..da36292e 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -3,7 +3,6 @@ if(POLICY CMP0135)
+     cmake_policy(SET CMP0135 NEW)
+ endif()
+ project(libloot)
+-include(ExternalProject)
+ include(FetchContent)
+ include(CMakePackageConfigHelpers)
+ include(GNUInstallDirs)
+@@ -77,76 +76,16 @@ if(NOT DEFINED ESPLUGIN_URL)
+     set(ESPLUGIN_HASH "SHA256=d9deea7581bcd823bcc2ce6903a7c711404b6b80242c47d93f70ec79b9ab59b7")
+ endif()
+ 
+-ExternalProject_Add(esplugin
+-    PREFIX "external"
+-    URL ${ESPLUGIN_URL}
+-    URL_HASH ${ESPLUGIN_HASH}
+-    CONFIGURE_COMMAND ""
+-    BUILD_IN_SOURCE 1
+-    BUILD_COMMAND cargo build --release --manifest-path ffi/Cargo.toml --target ${RUST_TARGET} &&
+-        cbindgen ffi/ -o ffi/include/esplugin.hpp
+-    COMMAND ${CMAKE_COMMAND} -E rm -r "target/${RUST_TARGET}/release/deps" "target/release"
+-    INSTALL_COMMAND ""
+-    BUILD_BYPRODUCTS "<SOURCE_DIR>/target/${RUST_TARGET}/release/${CMAKE_STATIC_LIBRARY_PREFIX}esplugin_ffi${CMAKE_STATIC_LIBRARY_SUFFIX}")
+-ExternalProject_Get_Property(esplugin SOURCE_DIR)
+-set(ESPLUGIN_INCLUDE_DIRS "${SOURCE_DIR}/ffi/include")
+-set(ESPLUGIN_LIBRARIES "${SOURCE_DIR}/target/${RUST_TARGET}/release/${CMAKE_STATIC_LIBRARY_PREFIX}esplugin_ffi${CMAKE_STATIC_LIBRARY_SUFFIX}")
+-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+-    set(ESPLUGIN_LIBRARIES ${ESPLUGIN_LIBRARIES} userenv ntdll)
+-else()
+-    set(ESPLUGIN_LIBRARIES ${ESPLUGIN_LIBRARIES} dl)
+-endif()
+-
+ if(NOT DEFINED LIBLOADORDER_URL)
+     set(LIBLOADORDER_URL "https://github.com/Ortham/libloadorder/archive/refs/tags/17.0.1.tar.gz")
+     set(LIBLOADORDER_HASH "SHA256=36d90eb5cd53cbbf9d04de7ead561d69ea6aadcf3363d425a3c8370dc566c1b6")
+ endif()
+ 
+-ExternalProject_Add(libloadorder
+-    PREFIX "external"
+-    URL ${LIBLOADORDER_URL}
+-    URL_HASH ${LIBLOADORDER_HASH}
+-    CONFIGURE_COMMAND ""
+-    BUILD_IN_SOURCE 1
+-    BUILD_COMMAND cargo build --release --manifest-path ffi/Cargo.toml --target ${RUST_TARGET} &&
+-        cbindgen ffi/ -l c++ -o ffi/include/libloadorder.hpp
+-    COMMAND ${CMAKE_COMMAND} -E rm -r "target/${RUST_TARGET}/release/deps" "target/release"
+-    INSTALL_COMMAND ""
+-    BUILD_BYPRODUCTS "<SOURCE_DIR>/target/${RUST_TARGET}/release/${CMAKE_STATIC_LIBRARY_PREFIX}loadorder_ffi${CMAKE_STATIC_LIBRARY_SUFFIX}")
+-ExternalProject_Get_Property(libloadorder SOURCE_DIR)
+-set(LIBLOADORDER_INCLUDE_DIRS "${SOURCE_DIR}/ffi/include")
+-set(LIBLOADORDER_LIBRARIES "${SOURCE_DIR}/target/${RUST_TARGET}/release/${CMAKE_STATIC_LIBRARY_PREFIX}loadorder_ffi${CMAKE_STATIC_LIBRARY_SUFFIX}")
+-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+-    set(LIBLOADORDER_LIBRARIES ${LIBLOADORDER_LIBRARIES} ntdll propsys userenv windowsapp)
+-else()
+-    set(LIBLOADORDER_LIBRARIES ${LIBLOADORDER_LIBRARIES} dl)
+-endif()
+-
+ if(NOT DEFINED LOOT_CONDITION_INTERPRETER_URL)
+     set(LOOT_CONDITION_INTERPRETER_URL "https://github.com/loot/loot-condition-interpreter/archive/refs/tags/4.0.1.tar.gz")
+     set(LOOT_CONDITION_INTERPRETER_HASH "SHA256=12bf0b108e4734baa3634e98cd7952a9411352539be3ec270aeee97c1b8db92f")
+ endif()
+ 
+-ExternalProject_Add(loot-condition-interpreter
+-    PREFIX "external"
+-    URL ${LOOT_CONDITION_INTERPRETER_URL}
+-    URL_HASH ${LOOT_CONDITION_INTERPRETER_HASH}
+-    CONFIGURE_COMMAND ""
+-    BUILD_IN_SOURCE 1
+-    BUILD_COMMAND cargo build --release --manifest-path ffi/Cargo.toml --target ${RUST_TARGET} &&
+-        cbindgen ffi/ -o ffi/include/loot_condition_interpreter.h
+-    COMMAND ${CMAKE_COMMAND} -E rm -r "target/${RUST_TARGET}/release/deps" "target/release"
+-    INSTALL_COMMAND ""
+-    BUILD_BYPRODUCTS "<SOURCE_DIR>/target/${RUST_TARGET}/release/${CMAKE_STATIC_LIBRARY_PREFIX}loot_condition_interpreter_ffi${CMAKE_STATIC_LIBRARY_SUFFIX}")
+-ExternalProject_Get_Property(loot-condition-interpreter SOURCE_DIR)
+-set(LCI_INCLUDE_DIRS "${SOURCE_DIR}/ffi/include")
+-set(LCI_LIBRARIES "${SOURCE_DIR}/target/${RUST_TARGET}/release/${CMAKE_STATIC_LIBRARY_PREFIX}loot_condition_interpreter_ffi${CMAKE_STATIC_LIBRARY_SUFFIX}")
+-if(CMAKE_SYSTEM_NAME STREQUAL "Windows")
+-    set(LCI_LIBRARIES ${LCI_LIBRARIES} userenv)
+-else()
+-    set(LCI_LIBRARIES ${LCI_LIBRARIES} dl)
+-endif()
+-
+ FetchContent_Declare(
+     spdlog
+     URL "https://github.com/gabime/spdlog/archive/v1.14.1.tar.gz"
+@@ -285,10 +224,6 @@ set(LIBLOOT_ALL_SOURCES
+ 
+ # Build API.
+ add_library(loot ${LIBLOOT_ALL_SOURCES})
+-add_dependencies(loot
+-    esplugin
+-    libloadorder
+-    loot-condition-interpreter)
+ target_link_libraries(loot PRIVATE
+     Boost::headers
+     ${ESPLUGIN_LIBRARIES}
+diff --git a/cmake/tests.cmake b/cmake/tests.cmake
+index c94c6305..d288d4eb 100644
+--- a/cmake/tests.cmake
++++ b/cmake/tests.cmake
+@@ -107,10 +107,6 @@ set(LIBLOOT_INTERFACE_TESTS_ALL_SOURCES
+ 
+ # Build tests.
+ add_executable(libloot_internals_tests ${LIBLOOT_INTERNALS_TESTS_ALL_SOURCES})
+-add_dependencies(libloot_internals_tests
+-    esplugin
+-    libloadorder
+-    loot-condition-interpreter)
+ target_link_libraries(libloot_internals_tests PRIVATE
+     Boost::headers
+     ${ESPLUGIN_LIBRARIES}
