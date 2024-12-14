@@ -3549,6 +3549,14 @@ with pkgs;
   gnupg24 = callPackage ../tools/security/gnupg/24.nix {
     pinentry = if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gtk2;
   };
+
+    libassuan_3_0 = callPackage ../by-name/li/libassuan/3.0.nix { };
+
+  gnupg25 = callPackage ../tools/security/gnupg/25.nix {
+    libassuan = libassuan_3_0;
+    pinentry = if stdenv.hostPlatform.isDarwin then pinentry_mac else pinentry-gtk2;
+  };
+
   gnupg = gnupg24;
 
   gnuplot = libsForQt5.callPackage ../tools/graphics/gnuplot {
