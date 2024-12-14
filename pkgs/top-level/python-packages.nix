@@ -17589,6 +17589,8 @@ self: super: with self; {
 
   vector = callPackage ../development/python-modules/vector { };
 
+  vector-quantize-pytorch = callPackage ../development/python-modules/vector-quantize-pytorch { };
+
   vehicle = callPackage ../development/python-modules/vehicle { };
 
   vega = callPackage ../development/python-modules/vega { };
