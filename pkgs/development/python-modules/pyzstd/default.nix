@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Rogdham";
     repo = "pyzstd";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Az+0m1XUFxExBZK8bcjK54Zt2d5ZlAKRMZRdr7rPcss=";
   };
 

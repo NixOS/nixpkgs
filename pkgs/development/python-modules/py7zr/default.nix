@@ -14,6 +14,7 @@
   setuptools-scm,
   texttable,
 }:
+
 buildPythonPackage rec {
   pname = "py7zr";
   version = "0.22.0";
@@ -44,10 +45,10 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "py7zr" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/miurahr/py7zr";
     description = "7zip in python3 with ZStandard, PPMd, LZMA2, LZMA1, Delta, BCJ, BZip2";
-    license = licenses.gpl2Only;
-    maintainers = with maintainers; [ PopeRigby ];
+    license = lib.licenses.gpl2Only;
+    maintainers = with lib.maintainers; [ PopeRigby ];
   };
 }

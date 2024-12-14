@@ -22,14 +22,14 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  pythonImportsCheck = [ "multivolumefile" ];
-
   doCheck = true;
 
-  meta = with lib; {
+  pythonImportsCheck = [ "multivolumefile" ];
+
+  meta = {
     homepage = "https://codeberg.org/miurahr/multivolume";
     description = "Library to provide a file-object wrapping multiple files as virtually like as a single file";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ PopeRigby ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ PopeRigby ];
   };
 }

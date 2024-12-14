@@ -27,10 +27,10 @@ buildPythonPackage rec {
     "lzma"
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/miurahr/pybcj";
     description = "BCJ(Branch-Call-Jump) filter for python";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ PopeRigby ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ PopeRigby ];
   };
 }

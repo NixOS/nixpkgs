@@ -24,11 +24,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyppmd" ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://codeberg.org/miurahr/pyppmd";
     description = "PPMd compression/decompression library";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ PopeRigby ];
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ PopeRigby ];
   };
 
 }
