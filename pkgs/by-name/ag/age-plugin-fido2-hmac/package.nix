@@ -24,16 +24,16 @@ let
 in
 buildGoModule rec {
   pname = "age-plugin-fido2-hmac";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "olastor";
     repo = "age-plugin-fido2-hmac";
     rev = "v${version}";
-    hash = "sha256-P2gNOZeuODWEb/puFe6EA1wW3pc0xgM567qe4FKbFXg=";
+    hash = "sha256-q77j+b0GDJhkCDLJYfIH2ZXqiwTC+ZM8CqXFv11UFaE=";
   };
 
-  vendorHash = "sha256-h4/tyq9oZt41IfRJmmsLHUpJiPJ7YuFu59ccM7jHsFo=";
+  vendorHash = "sha256-wNJnpCg5fmzGe45r7LDpr9OBujTzenFhFlxvSj/URbY=";
 
   ldflags = [
     "-s"
