@@ -11,13 +11,13 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "libassuan_3";
+  pname = "libassuan";
   version = "3.0.1";
 
   src = fetchgit {
     url = "git://git.gnupg.org/libassuan.git";
     rev = "69069bc63e6b1152e34e39bc322132fd4fd7284d";
-    sha256 = "sha256-chCOvSzkkUnO1h/BKzcuNyiDTVcnt63tRJ9e/smDjcQ=";
+    sha256 = "sha256-VPIjnate9TB0guadj30dy2wTpeLkY5y65WRLr1IiY0Y=";
     name = "${pname}-${version}";
   };
 
