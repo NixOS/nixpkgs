@@ -30,14 +30,11 @@ let
     dependencies = [
       typer
       uvicorn
-    ] ++ uvicorn.optional-dependencies.standard;
+    ] ++ ((uvicorn.optional-dependencies or { }).standard or []);
 
     optional-dependencies = {
-      standard = [
-        uvicorn
-      ] ++ uvicorn.optional-dependencies.standard;
+      standard = [ uvicorn ] ++ ((uvicorn.optional-dependencies or { }).standard or []);
     };
-
     doCheck = false;
 
     passthru.tests.pytest = self.overridePythonAttrs { doCheck = true; };
