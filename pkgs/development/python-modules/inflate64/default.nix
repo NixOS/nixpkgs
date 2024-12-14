@@ -1,9 +1,9 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-
-, setuptools
-, setuptools-scm
+{
+  buildPythonPackage,
+  fetchPypi,
+  lib,
+  setuptools,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +14,6 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-
     hash = "sha256-MniCe4A88Aah3yUfPhM3TH0m23eeWjMynMEXibgEvC0=";
   };
   build-system = [
@@ -28,7 +27,7 @@ buildPythonPackage rec {
     homepage = "https://codeberg.org/miurahr/inflate64";
     description = "Compress and decompress with Enhanced Deflate compression algorithm";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ByteSudoer ];
+    maintainers = with lib.maintainers; [ PopeRigby ];
   };
 
 }
