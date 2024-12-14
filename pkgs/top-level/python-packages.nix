@@ -10215,6 +10215,8 @@ self: super: with self; {
     alembic = pkgs.alembic;
   };
 
+  ormsgpack = callPackage ../development/python-modules/ormsgpack { };
+
   outlines = callPackage ../development/python-modules/outlines { };
 
   overly = callPackage ../development/python-modules/overly { };
