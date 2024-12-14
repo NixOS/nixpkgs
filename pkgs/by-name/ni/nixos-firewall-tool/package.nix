@@ -24,6 +24,7 @@ stdenvNoCC.mkDerivation rec {
 
   installPhase = ''
     installBin nixos-firewall-tool
+    installShellCompletion nixos-firewall-tool.{bash,fish}
   '';
 
   # Skip shellcheck if GHC is not available, see writeShellApplication.
