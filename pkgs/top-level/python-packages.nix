@@ -10209,6 +10209,8 @@ self: super: with self; {
 
   openapi-core = callPackage ../development/python-modules/openapi-core { };
 
+  opencc-python-reimplemented = callPackage ../development/python-modules/opencc-python-reimplemented { };
+
   opentype-feature-freezer = callPackage ../development/python-modules/opentype-feature-freezer { };
 
   openusd = callPackage ../development/python-modules/openusd {
