@@ -22612,6 +22612,12 @@
     github = "thilobillerbeck";
     githubId = 7442383;
   };
+  thiloho = {
+    name = "Thilo Hohlt";
+    email = "thilo.hohlt@tutanota.com";
+    github = "thiloho";
+    githubId = 123883702;
+  };
   thinnerthinker = {
     name = "thinnerthinker";
     github = "thinnerthinker";
