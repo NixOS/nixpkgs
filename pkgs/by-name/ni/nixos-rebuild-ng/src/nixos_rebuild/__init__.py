@@ -404,10 +404,14 @@ def execute(argv: list[str]) -> None:
                         dry_run=dry_run,
                         **build_flags,
                     )
-                case m:
+                case never:
                     # should never happen, but mypy is not smart enough to
                     # handle this with assert_never
-                    raise NRError(f"invalid match for build: {m}")
+                    # https://github.com/python/mypy/issues/16650
+                    # https://github.com/python/mypy/issues/16722
+                    raise AssertionError(
+                        f"expected code to be unreachable, but got: {never}"
+                    )
 
             if not rollback:
                 nix.copy_closure(
