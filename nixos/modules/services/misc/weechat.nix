@@ -44,10 +44,22 @@ in
       };
     };
 
+    systemd.tmpfiles.settings."weechat" = {
+      "${cfg.root}" = lib.mkIf (cfg.root != "/var/lib/weechat") {
+        d = {
+          user = "weechat";
+          group = "weechat";
+          mode = "750";
+        };
+      };
+    };
+
     systemd.services.weechat = {
       serviceConfig = {
         User = "weechat";
         Group = "weechat";
+        StateDirectory = lib.mkIf (cfg.root == "/var/lib/weechat") "weechat";
+        StateDirectoryMode = 750;
         RemainAfterExit = "yes";
       };
       script = "exec ${config.security.wrapperDir}/screen -Dm -S ${cfg.sessionName} ${cfg.binary} --dir ${cfg.root}";
