@@ -4,23 +4,26 @@
   pkgs,
   ...
 }:
+
 let
   cfg = config.services.weechat;
 in
-
 {
   options.services.weechat = {
     enable = lib.mkEnableOption "weechat";
+
     root = lib.mkOption {
       description = "Weechat state directory.";
       type = lib.types.str;
       default = "/var/lib/weechat";
     };
+
     sessionName = lib.mkOption {
       description = "Name of the `screen` session for weechat.";
       default = "weechat-screen";
       type = lib.types.str;
     };
+
     binary = lib.mkOption {
       type = lib.types.path;
       description = "Binary to execute.";
