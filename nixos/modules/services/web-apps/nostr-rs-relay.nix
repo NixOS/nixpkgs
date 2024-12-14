@@ -21,7 +21,7 @@ let
 in
 {
   options.services.nostr-rs-relay = {
-    enable = lib.mkEnableOption { };
+    enable = lib.mkEnableOption "nostr-rs-relay";
 
     package = lib.mkPackageOption pkgs "nostr-rs-relay" { };
 
