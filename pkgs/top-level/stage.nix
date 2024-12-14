@@ -231,6 +231,12 @@ let
               ++ overlays;
           }
         );
+      # This is only cross when we are already cross, otherwise local.
+      mkHybridPkgs =
+        name: hybridAttrs:
+        mkPkgs name {
+          ${if isNative then "localSystem" else "crossSystem"} = stdenv.hostPlatform.override hybridAttrs;
+        };
     in
     self: super: {
       # This maps each entry in lib.systems.examples to its own package
@@ -287,10 +293,8 @@ let
       # supported. 32-bit is also not supported.
       pkgsMusl =
         if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then
-          mkPkgs "pkgsMusl" {
-            ${if isNative then "localSystem" else "crossSystem"} = stdenv.hostPlatform.override {
-              config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
-            };
+          mkHybridPkgs "pkgsMusl" {
+            config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
           }
         else
           throw "Musl libc only supports 64-bit Linux systems.";
@@ -299,15 +303,13 @@ let
       # Used by wine, firefox with debugging version of Flash, ...
       pkgsi686Linux =
         if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then
-          mkPkgs "pkgsi686Linux" {
-            ${if isNative then "localSystem" else "crossSystem"} = stdenv.hostPlatform.override {
-              config = lib.systems.parse.tripleFromSystem (
-                stdenv.hostPlatform.parsed
-                // {
-                  cpu = lib.systems.parse.cpuTypes.i686;
-                }
-              );
-            };
+          mkHybridPkgs "pkgsi686Linux" {
+            config = lib.systems.parse.tripleFromSystem (
+              stdenv.hostPlatform.parsed
+              // {
+                cpu = lib.systems.parse.cpuTypes.i686;
+              }
+            );
           }
         else
           throw "i686 Linux package set can only be used with the x86 family.";
@@ -315,15 +317,13 @@ let
       # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
       pkgsx86_64Darwin =
         if stdenv.hostPlatform.isDarwin then
-          mkPkgs "pkgsx86_64Darwin" {
-            ${if isNative then "localSystem" else "crossSystem"} = stdenv.hostPlatform.override {
-              config = lib.systems.parse.tripleFromSystem (
-                stdenv.buildPlatform.parsed
-                // {
-                  cpu = lib.systems.parse.cpuTypes.x86_64;
-                }
-              );
-            };
+          mkHybridPkgs "pkgsx86_64Darwin" {
+            config = lib.systems.parse.tripleFromSystem (
+              stdenv.hostPlatform.parsed
+              // {
+                cpu = lib.systems.parse.cpuTypes.x86_64;
+              }
+            );
           }
         else
           throw "x86_64 Darwin package set can only be used on Darwin systems.";
@@ -335,9 +335,9 @@ let
         if stdenv.hostPlatform.isLinux then
           self
         else
-          mkPkgs "pkgsLinux" {
-            ${if isNative then "localSystem" else "crossSystem"} =
-              lib.systems.elaborate "${stdenv.hostPlatform.parsed.cpu.name}-linux";
+          mkHybridPkgs "pkgsLinux" {
+            config = lib.systems.parse.tripleFromSystem (lib.systems.elaborate "${stdenv.hostPlatform.parsed.cpu.name}-linux")
+            .parsed;
           };
 
       # Fully static packages.
