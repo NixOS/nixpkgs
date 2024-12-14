@@ -6,6 +6,7 @@
   doxygen,
   boost,
   eigen,
+  jrl-cmakemodules,
   assimp,
   octomap,
   qhull,
@@ -15,15 +16,14 @@
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "hpp-fcl";
-  version = "2.4.5";
+  pname = "coal";
+  version = "3.0.0";
 
   src = fetchFromGitHub {
-    owner = "humanoid-path-planner";
-    repo = "hpp-fcl";
-    rev = "v${finalAttrs.version}";
-    fetchSubmodules = true;
-    hash = "sha256-0OORdtT7vMpvK3BPJvtvuLcz0+bfu1+nVvzs3y+LyQw=";
+    owner = "coal-library";
+    repo = "coal";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-7LfeBQX9k0HY/muIl3FNq3xQv66KnwV9BChi0LxFcAQ=";
   };
 
   strictDeps = true;
@@ -41,8 +41,9 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs =
     [
       assimp
-      qhull
+      jrl-cmakemodules
       octomap
+      qhull
       zlib
     ]
     ++ lib.optionals (!pythonSupport) [
@@ -55,13 +56,17 @@ stdenv.mkDerivation (finalAttrs: {
     ];
 
   cmakeFlags = [
-    (lib.cmakeBool "HPP_FCL_HAS_QHULL" true)
+    (lib.cmakeBool "COAL_BACKWARD_COMPATIBILITY_WITH_HPP_FCL" true)
+    (lib.cmakeBool "COAL_HAS_QHULL" true)
     (lib.cmakeBool "INSTALL_DOCUMENTATION" true)
     (lib.cmakeBool "BUILD_PYTHON_INTERFACE" pythonSupport)
   ];
 
   doCheck = true;
-  pythonImportsCheck = [ "hppfcl" ];
+  pythonImportsCheck = [
+    "coal"
+    "hppfcl"
+  ];
 
   outputs = [
     "dev"
@@ -74,8 +79,9 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    description = "Extension of the Flexible Collision Library";
-    homepage = "https://github.com/humanoid-path-planner/hpp-fcl";
+    description = "Collision Detection Library, previously hpp-fcl";
+    homepage = "https://github.com/coal-library/coal";
+    changelog = "https://github.com/coal-library/coal/releases/tag/${finalAttrs.src.tag}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ nim65s ];
     platforms = lib.platforms.unix;
