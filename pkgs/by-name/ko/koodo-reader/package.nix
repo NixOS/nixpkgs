@@ -15,13 +15,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "koodo-reader";
-  version = "1.6.7";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "troyeguo";
     repo = "koodo-reader";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZHRU8dJjKQFLIB1t2VK/COy6a3nShUeWR8iAM9YJdto=";
+    hash = "sha256-RtEL4ZVtNSqQShgHpjd1O/wgsXJOvceV+NhIWqexVAI=";
   };
 
   offlineCache = fetchYarnDeps {

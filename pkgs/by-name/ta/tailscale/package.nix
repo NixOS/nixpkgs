@@ -53,6 +53,7 @@ buildGo123Module {
 
   subPackages = [
     "cmd/derper"
+    "cmd/derpprobe"
     "cmd/tailscaled"
   ];
 
@@ -73,6 +74,7 @@ buildGo123Module {
     ''
       ln -s $out/bin/tailscaled $out/bin/tailscale
       moveToOutput "bin/derper" "$derper"
+      moveToOutput "bin/derpprobe" "$derper"
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       wrapProgram $out/bin/tailscaled \

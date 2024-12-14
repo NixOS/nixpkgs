@@ -10,8 +10,9 @@ with lib;
     ./netboot.nix
 
     # Profiles of this basic netboot media
-    ../../profiles/all-hardware.nix
     ../../profiles/base.nix
     ../../profiles/installation-device.nix
   ];
+
+  hardware.enableAllHardware = true;
 }
