@@ -37,9 +37,7 @@ in
     users = {
       groups.weechat = { };
       users.weechat = {
-        createHome = true;
         group = "weechat";
-        home = cfg.root;
         isSystemUser = true;
       };
     };
