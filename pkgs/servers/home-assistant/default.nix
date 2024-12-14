@@ -272,16 +272,6 @@ let
         };
       });
 
-      python-linkplay = super.python-linkplay.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.20";
-        src = fetchFromGitHub {
-          owner = "Velleman";
-          repo = "python-linkplay";
-          tag = "v${version}";
-          hash = "sha256-UIWubFLHtf43co/aYXh3rxkjLJ77E+Sgkx25UFC5vcg=";
-        };
-      });
-
       # newer versions require pydantic>=2
       python-on-whales = super.python-on-whales.overridePythonAttrs (oldAttrs: rec {
         version = "0.72.0";
@@ -461,7 +451,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.12.2";
+  hassVersion = "2024.12.3";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -482,13 +472,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-jkIXvU5mPNp/sWtbVVN+SwydiHAkfkhjQ9s0SoqZhYY=";
+    hash = "sha256-vsN5FR/XCMGLxOrKS4Zx35fSucDG7WzG27HCj6mAAIQ=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-72f40oVVgjf6XDCwkcZteuPjm/seoN651+wv3AlZDec=";
+    hash = "sha256-VgobmCK4RITzUuIWbOc5mzzIJh4vLnmRMEzfR8k0uy4=";
   };
 
   build-system = with python.pkgs; [
