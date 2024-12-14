@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch2,
   meson,
   ninja,
   pkg-config,
@@ -54,6 +55,15 @@ stdenv.mkDerivation rec {
     url = "https://gitlab.freedesktop.org/wayland/weston/-/releases/${version}/downloads/weston-${version}.tar.xz";
     hash = "sha256-qBUFBbEmpZ33gf6MMMjm+H2nAT4XkDnrhEpbu8x8ebM=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      # vnc: Allow neatvnc in version 0.9.0
+      # https://gitlab.freedesktop.org/wayland/weston/-/merge_requests/1649
+      url = "https://gitlab.freedesktop.org/wayland/weston/-/commit/b4386289d614f26e89e1c6eb17e048826e925ed1.patch";
+      hash = "sha256-mkIOup44C9Kp42tFMXz8Sis4URmPi4t605MQG672nJU=";
+    })
+  ];
 
   depsBuildBuild = [ pkg-config ];
   nativeBuildInputs = [
