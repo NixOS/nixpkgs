@@ -23020,6 +23020,12 @@
     githubId = 4044033;
     name = "Thomas Sowell";
   };
+  TsubakiDev = {
+    email = "i@tsubakidev.cc";
+    github = "TsubakiDev";
+    githubId = 132794625;
+    name = "Daniel Wang";
+  };
   ttrei = {
     email = "reinis.taukulis@gmail.com";
     github = "ttrei";
