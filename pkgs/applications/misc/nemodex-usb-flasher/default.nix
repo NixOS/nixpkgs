@@ -1,7 +1,7 @@
 { pkgs ? import (builtins.fetchTarball {
   url = "https://nixos.org/channels/nixos-24.05/nixexprs.tar.xz";
   sha256 = "06g8b0ga935dnziyzhxznwcx1vb2clc84hcxwrcqb26lgjgwsgbf";
-}) {} }:
+}) { } }:
 
 pkgs.stdenv.mkDerivation {
   pname = "nemodex-usb-flasher";
@@ -9,10 +9,7 @@ pkgs.stdenv.mkDerivation {
 
   src = ./.;
 
-  nativeBuildInputs = [
-    pkgs.python3
-    pkgs.makeWrapper
-  ];
+  nativeBuildInputs = [ pkgs.python3 pkgs.makeWrapper ];
 
   buildInputs = [
     pkgs.python3Packages.tkinter
