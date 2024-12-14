@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  fetchurl,
   cairo,
   expat,
   fftwSinglePrec,
@@ -13,15 +12,18 @@
   libglade,
   lv2,
   pkg-config,
+  fetchFromGitHub,
+  cmake,
 }:
-
 stdenv.mkDerivation rec {
   pname = "calf";
-  version = "0.90.3";
+  version = "0.90.4";
 
-  src = fetchurl {
-    url = "https://calf-studio-gear.org/files/${pname}-${version}.tar.gz";
-    sha256 = "17x4hylgq4dn9qycsdacfxy64f5cv57n2qgkvsdp524gnqzw4az3";
+  src = fetchFromGitHub {
+    owner = "calf-studio-gear";
+    repo = "calf";
+    tag = version;
+    hash = "sha256-E9H2YG1HAhIN+zJxDKIJTkJapbNz8h9dfd5YfZp9Zp0=";
   };
 
   outputs = [
@@ -31,7 +33,11 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+
   buildInputs = [
     cairo
     expat
@@ -45,12 +51,12 @@ stdenv.mkDerivation rec {
     lv2
   ];
 
-  meta = with lib; {
+  meta = {
     homepage = "https://calf-studio-gear.org";
     description = "Set of high quality open source audio plugins for musicians";
-    license = licenses.lgpl2;
+    license = lib.licenses.lgpl2;
     maintainers = [ ];
-    platforms = platforms.linux;
+    platforms = lib.platforms.linux;
     mainProgram = "calfjackhost";
   };
 }
