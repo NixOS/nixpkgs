@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "waydabber";
     repo = "betterdisplaycli";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rfJDoPzIsBaKkGhgsGciErAoDycMDojxjYnT+oQZjnA=";
   };
 
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/waydabber/betterdisplaycli";
     license = lib.licenses.mit;
     mainProgram = "betterdisplaycli";
-    maintainers = [ ];
-    platforms = [ "aarch64-darwin" ];
+    maintainers = [ lib.maintainers.quinneden ];
+    platforms = [ "darwin" ];
   };
 })
