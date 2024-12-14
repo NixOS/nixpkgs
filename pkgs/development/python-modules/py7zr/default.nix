@@ -1,31 +1,28 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-
-, setuptools
-, setuptools-scm
-
-
-, brotli
-, inflate64
-, multivolumefile
-, psutil
-, pybcj
-, pycryptodomex
-, pyppmd
-, pyzstd
-, texttable
-
+{
+  brotli,
+  buildPythonPackage,
+  fetchPypi,
+  inflate64,
+  lib,
+  multivolumefile,
+  psutil,
+  pybcj,
+  pycryptodomex,
+  pyppmd,
+  pyzstd,
+  setuptools,
+  setuptools-scm,
+  texttable,
 }:
 buildPythonPackage rec {
   pname = "py7zr";
-  version = "0.21.1";
+  version = "0.22.0";
 
-  format = "pyproject";
+  pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-3t6O2LezKzWGrEdto6SCtp3UMyKUIL8PYsSVQEtyx5k=";
+    hash = "sha256-xseupZE1NRhAA7c5OEkPmk2EGFmOUz+cqZHTuORaE54=";
   };
 
   build-system = [
@@ -51,6 +48,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/miurahr/py7zr";
     description = "7zip in python3 with ZStandard, PPMd, LZMA2, LZMA1, Delta, BCJ, BZip2";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ ByteSudoer ];
+    maintainers = with maintainers; [ PopeRigby ];
   };
 }
