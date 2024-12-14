@@ -14,7 +14,7 @@ in
 
     root = lib.mkOption {
       description = "Weechat state directory.";
-      type = lib.types.str;
+      type = lib.types.path;
       default = "/var/lib/weechat";
     };
 
