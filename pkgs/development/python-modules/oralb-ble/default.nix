@@ -32,9 +32,9 @@ buildPythonPackage rec {
       --replace-fail " --cov=oralb_ble --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bleak
     bleak-retry-connector
     bluetooth-data-tools
@@ -58,7 +58,7 @@ buildPythonPackage rec {
     description = "Library for Oral B BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/oralb-ble";
     changelog = "https://github.com/Bluetooth-Devices/oralb-ble/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
