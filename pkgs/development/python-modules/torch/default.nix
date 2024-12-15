@@ -2,8 +2,12 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchFromGitLab,
+  fetchFromGitea,
   buildPythonPackage,
   python,
+  runCommand,
+  writeShellScript,
   config,
   cudaSupport ? config.cudaSupport,
   cudaPackages,
@@ -219,6 +223,27 @@ let
     "Rocm support is currently broken because `rocmPackages.hipblaslt` is unpackaged. (2024-06-09)" =
       rocmSupport;
   };
+
+  git-unroll = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "gm6k";
+    repo = "git-unroll";
+    rev = "96bf24f2af153310ec59979c123a8cefda8636db";
+    hash = "sha256-BTlq2Pm4l/oypBzKKpxExVPyQ0CcAP8llUnl/fd3DUU=";
+  };
+
+  unroll-src = writeShellScript "unroll-src" ''
+    echo "{
+      version,
+      fetchFromGitLab,
+      fetchFromGitHub,
+      runCommand,
+    }:
+    assert version == "'"'$1'"'";"
+    ${git-unroll}/unroll https://github.com/pytorch/pytorch v$1
+    echo
+    echo "# Update using: unroll-src [version]"
+  '';
 in
 buildPythonPackage rec {
   pname = "torch";
@@ -234,12 +259,13 @@ buildPythonPackage rec {
   ];
   cudaPropagateToOutput = "cxxdev";
 
-  src = fetchFromGitHub {
-    owner = "pytorch";
-    repo = "pytorch";
-    rev = "refs/tags/v${version}";
-    fetchSubmodules = true;
-    hash = "sha256-17lgAcqJN+vir+Zvffy5cXRmNjd5Y80ev8b8pOj9F+g=";
+  src = callPackage ./src.nix {
+    inherit
+      version
+      fetchFromGitHub
+      fetchFromGitLab
+      runCommand
+      ;
   };
 
   patches =
@@ -676,6 +702,7 @@ buildPythonPackage rec {
       cudaPackages
       rocmSupport
       rocmPackages
+      unroll-src
       ;
     cudaCapabilities = if cudaSupport then supportedCudaCapabilities else [ ];
     # At least for 1.10.2 `torch.fft` is unavailable unless BLAS provider is MKL. This attribute allows for easy detection of its availability.
