@@ -4,7 +4,7 @@
   fetchFromGitHub,
   cmake,
   ninja,
-  llvm_18,
+  llvm_19,
   curl,
   tzdata,
   lit,
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
       ldcBootstrap
       lit
       lit.python
-      llvm_18.dev
+      llvm_19.dev
       makeWrapper
       ninja
       unzip
