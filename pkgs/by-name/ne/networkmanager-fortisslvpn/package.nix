@@ -37,11 +37,14 @@ stdenv.mkDerivation rec {
     ./support-ppp-2.5.0.patch
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoreconfHook
     gettext
     pkg-config
     file
+    glib
   ];
 
   buildInputs = [
