@@ -4,7 +4,6 @@
   autoPatchelfHook,
   makeWrapper,
   lib,
-  copyDesktopItems,
   libnotify,
   libX11,
   libXScrnSaver,
@@ -71,9 +70,15 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out
     cp -r usr/* $out/
 
-    makeWrapper $out/share/eusoft-eudic/eudic $out/bin/eudic
+    makeWrapper $out/share/eusoft-eudic/eudic $out/bin/eudic \
+      --inherit-argv0
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/share/applications/eusoft-eudic.desktop \
+      --replace-fail '/usr/share/eusoft-eudic/AppRun' 'eudic'
   '';
 
   meta = {

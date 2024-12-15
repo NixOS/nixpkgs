@@ -4,7 +4,7 @@
   lib,
 }:
 let
-  version = "0.3.0";
+  version = "0.4.0";
 in
 buildGoModule {
   pname = "wush";
@@ -14,10 +14,10 @@ buildGoModule {
     owner = "coder";
     repo = "wush";
     rev = "v${version}";
-    hash = "sha256-2mFe1p15HRyy86pw5LoBtiW9lKrw/N9V81/jkiT4jo4=";
+    hash = "sha256-0yICcexo5OZ7iNuZaKzWcWjZ34dY24GPosXIz9WlbK8=";
   };
 
-  vendorHash = "sha256-Po1DDKP9ekScRDGMjCXZr9HUUwFenQx3bzIZrNI+ctY=";
+  vendorHash = "sha256-LVqj27e2OcF+XBb6glTV5Zrw3W/vbtG7D7TmjcMQcnw=";
 
   ldflags = [
     "-s -w -X main.version=${version}"

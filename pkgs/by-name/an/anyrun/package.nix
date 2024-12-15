@@ -10,24 +10,23 @@
   glib,
   gtk3,
   pango,
-  stdenv,
   wayland,
   gtk-layer-shell,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "anyrun";
-  version = "0-unstable-2023-12-01";
+  version = "0-unstable-2024-11-08";
 
   src = fetchFromGitHub {
     owner = "kirottu";
     repo = "anyrun";
-    rev = "e14da6c37337ffa3ee1bc66965d58ef64c1590e5";
-    hash = "sha256-hI9+KBShsSfvWX7bmRa/1VI20WGat3lDXmbceMZzMS4=";
+    rev = "d2017f224b2bfd7e33573c7070e7c3e2960c7dcc";
+    hash = "sha256-L1hLXf4IDZ0KoXbFiSNNZJ7IrReEr/J+CLt6Rl4Ea3M=";
   };
 
-  cargoHash = "sha256-apOQc9Z6YANoaeKcbNxBfAv7mmGFB+CagrYRPgC5wLY=";
+  cargoHash = "sha256-DgUNSRr2Hs+GeYeR2ex8WiwotmT12G1cjSvQVK2py3c=";
 
   strictDeps = true;
   enableParallelBuilding = true;
@@ -59,7 +58,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 anyrun/res/style.css examples/config.ron -t $out/share/doc/anyrun/examples/
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Wayland-native, highly customizable runner";

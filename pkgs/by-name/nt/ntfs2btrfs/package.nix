@@ -2,10 +2,13 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nix-update-script,
+
   cmake,
+  pkg-config,
+
   fmt,
   lzo,
-  pkg-config,
   zlib,
   zstd,
 }:
@@ -32,6 +35,8 @@ stdenv.mkDerivation rec {
     zlib
     zstd
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "CLI tool which does in-place conversion of Microsoft's NTFS filesystem to the open-source filesystem Btrfs";
