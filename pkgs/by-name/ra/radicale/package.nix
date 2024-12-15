@@ -7,14 +7,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "radicale";
-  version = "3.3.1";
+  version = "3.3.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Kozea";
     repo = "Radicale";
     rev = "refs/tags/v${version}";
-    hash = "sha256-vHg5faXx7ILiI3tpQ38yxF96DzS7EZCSRHfIW9QbI9Q=";
+    hash = "sha256-KRVByUXiTx5sX7LDgtOlVky8UH5HThaaldvOpeeHd7k=";
   };
 
   build-system = with python3.pkgs; [
