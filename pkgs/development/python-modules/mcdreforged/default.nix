@@ -16,6 +16,7 @@
   pathspec,
   pytestCheckHook,
   versionCheckHook,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
@@ -52,6 +53,8 @@ buildPythonPackage rec {
   ];
 
   versionCheckProgramArg = [ "--version" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Rewritten version of MCDaemon, a python tool to control your Minecraft server";
