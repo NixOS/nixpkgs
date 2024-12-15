@@ -117,10 +117,10 @@ in {
 
     services.flakeAutoUpgrade = mkOption {
 
-      description = (mdDoc ''
+      description = ''
         This add an systemd service NAME,
         which automatically updates an flake and builds it
-      '');
+      '';
       default = { };
       type = types.attrsOf (types.submodule (
 
@@ -128,23 +128,23 @@ in {
           options = {
             remote = mkOption {
               type = types.nullOr types.str;
-              description = lib.mdDoc "Remote to fetch from";
+              description = "Remote to fetch from";
             };
 
             credentials = mkOption {
               default = null;
-              description = lib.mdDoc "credentials to access the remote";
+              description = "credentials to access the remote";
               type = types.nullOr (types.submodule {
                 options = {
                   user = mkOption {
                     default = null;
                     type = types.nullOr types.str;
-                    description = lib.mdDoc "User to authenticate with";
+                    description = "User to authenticate with";
                   };
                   passwordFile = mkOption {
                     default = null;
                     type = types.nullOr types.path;
-                    description = lib.mdDoc
+                    description =
                       "File which contains the password or access token to connect to the remote";
                   };
                 };
@@ -152,17 +152,17 @@ in {
             };
             ssh = mkOption {
               default = null;
-              description = lib.mdDoc "ssh option for ssh remote";
+              description = "ssh option for ssh remote";
               type = types.nullOr (types.submodule {
                 options = {
                   key = mkOption {
                     type = types.path;
-                    description = lib.mdDoc
+                    description =
                       "path to ssh key with access to the remote repository";
                   };
                   hostKey = mkOption {
                     type = types.str;
-                    description = lib.mdDoc
+                    description =
                       "name of host and its public key for fingerprint";
                   };
                 };
@@ -171,17 +171,17 @@ in {
             gitCryptKeyFile = mkOption {
               default = null;
               type = types.nullOr types.path;
-              description = lib.mdDoc "Path of git-crypt key for decryption";
+              description = "Path of git-crypt key for decryption";
             };
             updateBranch = mkOption {
               type = types.str;
-              description = lib.mdDoc "The branch which should be updated";
+              description = "The branch which should be updated";
             };
             mainBranch = mkOption {
               default = "main";
               type = types.str;
               description =
-                lib.mdDoc "The branch which should be merged before update";
+                "The branch which should be merged before update";
             };
             buildAttributes = mkOption {
               type = with types;
@@ -192,37 +192,37 @@ in {
                       options = {
                         attr = mkOption {
                           type = str;
-                          description = lib.mdDoc "Attribute to build";
+                          description = "Attribute to build";
                         };
                         onFail = mkOption {
                           type =
                             listOf (oneOf [ str (submodule attrWithFallback) ]);
                           description =
-                            lib.mdDoc "Attributes to build if attr failed";
+                            "Attributes to build if attr failed";
                         };
                       };
                     };
                   in attrWithFallback))
                 ]);
-              description = lib.mdDoc "Attributes to build.";
+              description = "Attributes to build.";
             };
             updateFlake = mkOption {
               default = true;
               type = types.bool;
               description =
-                lib.mdDoc "Wether to update the flake before building";
+                "Wether to update the flake before building";
             };
 
             updateScript = mkOption {
               default = "";
               type = types.str;
-              description = lib.mdDoc "Command to update the config";
+              description = "Command to update the config";
             };
 
             failLogInCommitMsg = mkOption {
               default = false;
               type = types.bool;
-              description = lib.mdDoc ''
+              description = ''
                 Wether to append a list of the failed `buildAttributes` to the commit message
               '';
             };
@@ -230,7 +230,7 @@ in {
             postCommands = mkOption {
               default = "";
               type = types.str;
-              description = lib.mdDoc ''
+              description = ''
                 Commands to be executed after the update
                 This can use fail.log, which stores a list of the failed `buildAttributes`, to see which builds failed
               '';
@@ -240,7 +240,7 @@ in {
               type = types.str;
               default = "04:40";
               example = "daily";
-              description = lib.mdDoc ''
+              description = ''
                 How often or when upgrade occurs. For most desktop and server systems
                 a sufficient upgrade frequency is once a day.
 
@@ -253,7 +253,7 @@ in {
               default = "0";
               type = types.str;
               example = "45min";
-              description = lib.mdDoc ''
+              description = ''
                 Add a randomized delay before each automatic upgrade.
                 The delay will be chosen between zero and this value.
                 This value must be a time span in the format specified by
@@ -265,7 +265,7 @@ in {
               default = false;
               type = types.bool;
               example = true;
-              description = lib.mdDoc ''
+              description = ''
                 Takes a boolean argument. If true, the time when the service
                 unit was last triggered is stored on disk. When the timer is
                 activated, the service unit is triggered immediately if it
