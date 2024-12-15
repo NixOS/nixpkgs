@@ -23,10 +23,7 @@ stdenv.mkDerivation {
     cacheDir=$(mktemp -d)
     zig build --global-cache-dir $cacheDir
   '';
-  installPhase = ''
-    mkdir -p $out/bin
-    cp zig-out/bin/ansi $out/bin
-  '';
+  installPhase = "install -D zig-out/bin/ansi -t $out/bin";
   meta = {
     description = "A quick reference guide for ANSI escape codes";
     longDescription = ''

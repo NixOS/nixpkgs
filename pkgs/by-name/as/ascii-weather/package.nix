@@ -13,10 +13,8 @@ gccStdenv.mkDerivation {
     rev = "70bf111647d064c3fcd0fe672b9fa697f4d060e4";
     hash = "sha256-Dcosx6iEnvFCMrmUS7gSLg8re5zl1BXWX/Nu6hr4Pgw=";
   };
-  installPhase = ''
-    mkdir -p $out/bin
-    cp ascii-weather $out/bin
-  '';
+  buildInputs = [ ncurses ];
+  installPhase = "install -D ascii-weather -t $out/bin";
   meta = {
     description = "An ASCII-based screensaver that shows various weather conditions";
     longDescription = ''

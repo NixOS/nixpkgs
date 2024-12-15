@@ -2,18 +2,11 @@
   fetchFromGitHub,
   fzf,
   lib,
+  runtimeShell,
   rustPlatform,
   stdenv,
 }:
 let
-  src = fetchFromGitHub {
-    owner = "NewDawn0";
-    repo = "dirStack";
-    rev = "8ef0f19ae366868fb046f6acb0d396bc8436ef31";
-    hash = "sha256-mzw3uDZ0eM81WJM0YNcOlMHs4fNMUBgwxS6VBSS+VS8=";
-  };
-  meta = with lib; {
-    description = "A cd quicklist";
   version = "1.0.0";
   meta = {
     description = "A fast directory navigation tool with a quicklist";
@@ -29,19 +22,28 @@ let
   pkg = rustPlatform.buildRustPackage {
     inherit meta version;
     pname = "dirStack";
+    src = fetchFromGitHub {
+      owner = "NewDawn0";
+      repo = "dirStack";
+      rev = "8ef0f19ae366868fb046f6acb0d396bc8436ef31";
+      hash = "sha256-mzw3uDZ0eM81WJM0YNcOlMHs4fNMUBgwxS6VBSS+VS8=";
+    };
+    cargoHash = "sha256-y3ELhG4877X6Cysg9NMaD/QC3SfPBdk2Vh1QeHF1+pU=";
     propagatedBuildInputs = [ fzf ];
-    cargoLock.lockFile = "${src}/Cargo.lock";
   };
 in
 stdenv.mkDerivation {
   inherit meta version;
   pname = "dirStack-wrapped";
+  src = null;
+  dontUnpack = true;
+  dontBuild = true;
+  dontConfigure = true;
   installPhase = ''
-    mkdir -p $out/bin $out/lib
-    cp ${pkg}/bin/dirStack $out/bin/
-    echo "#!/usr/bin/env bash" > $out/lib/SOURCE_ME.sh
+    install -D ${pkg}/bin/dirStack -t $out/bin
+    mkdir -p $out/lib
+    echo "#!/${runtimeShell}" > $out/lib/SOURCE_ME.sh
     $out/bin/dirStack --init >> $out/lib/SOURCE_ME.sh
-    chmod +x $out/lib/SOURCE_ME.sh
   '';
   shellHook = ''
     source $out/lib/SOURCE_ME.sh

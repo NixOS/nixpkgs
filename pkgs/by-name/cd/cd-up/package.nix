@@ -1,11 +1,11 @@
 {
   fetchFromGitHub,
   lib,
+  runtimeShell,
   gccStdenv,
 }:
 gccStdenv.mkDerivation {
   pname = "up-core";
-  name = "up";
   version = "1.0.0";
   src = fetchFromGitHub {
     owner = "NewDawn0";
@@ -14,11 +14,10 @@ gccStdenv.mkDerivation {
     hash = "sha256-Ll6gHuWh2s7ke9Vqlw0H3tdKHIuvIC13TGHHKllEQ54=";
   };
   installPhase = ''
-    mkdir -p $out/bin $out/lib
-    cp up-core $out/bin
-    echo "#!/usr/bin/env bash" > $out/lib/SOURCE_ME.sh
+    install -D up-core -t $out/bin
+    mkdir -p $out/lib
+    echo "#!/${runtimeShell}" > $out/lib/SOURCE_ME.sh
     $out/bin/up-core --init >> $out/lib/SOURCE_ME.sh
-    chmod +x $out/lib/SOURCE_ME.sh
   '';
   shellHook = ''
     source $out/lib/SOURCE_ME.sh

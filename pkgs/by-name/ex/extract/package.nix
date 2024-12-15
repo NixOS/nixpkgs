@@ -29,10 +29,7 @@ stdenv.mkDerivation {
     unzip
     zstd
   ];
-  installPhase = ''
-    mkdir -p "$out/bin";
-    cp "${src}/ex" $out/bin/ex
-  '';
+  installPhase = "install -D -m 755 ${src}/ex -t $out/bin";
   meta = {
     description = "A command-line wrapper for extracting common archive formats";
     longDescription = ''
