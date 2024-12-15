@@ -12,10 +12,21 @@
         Additionally to installing `k3b` enabling this will
         add `setuid` wrappers in `/run/wrappers/bin`
         for both `cdrdao` and `cdrecord`. On first
-        run you must manually configure the path of `cdrdae` and
+        run you must manually configure the path of `cdrdao` and
         `cdrecord` to correspond to the appropriate paths under
         `/run/wrappers/bin` in the "Setup External Programs" menu.
       '';
+    };
+
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.kdePackages.k3b;
+      description = "k3b package to use";
+      defaultText = lib.literalExpression "pkgs.kdePackages.k3b";
+      relatedPackages = [
+        "kdePackages.k3b"
+        "libsForQt5.k3b"
+      ];
     };
   };
 
@@ -23,7 +34,7 @@
   config = lib.mkIf config.programs.k3b.enable {
 
     environment.systemPackages = with pkgs; [
-      k3b
+      config.programs.k3b.package
       dvdplusrwtools
       cdrdao
       cdrtools
