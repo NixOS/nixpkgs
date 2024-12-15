@@ -23,11 +23,15 @@ rustPlatform.buildRustPackage {
   buildInputs = [
     libiconv
   ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.SystemConfiguration;
-
-  meta = with lib; {
-    description = "A cli translator using Google Translate";
+  meta = {
+    description = "A command-line translator powered by Google Translate";
+    longDescription = ''
+      This command-line tool leverages Google Translate to translate text quickly between languages.
+      It can be used to translate command-line output, allowing users to work with any language from the terminal.
+    '';
     homepage = "https://github.com/NewDawn0/tl";
-    license = licenses.mit;
-    maintainers = with maintainers; [ NewDawn0 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ NewDawn0 ];
+    platforms = lib.platforms.all;
   };
 }

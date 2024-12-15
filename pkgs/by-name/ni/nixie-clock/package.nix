@@ -17,11 +17,16 @@ rustPlatform.buildRustPackage {
   inherit src;
 
   cargoLock.lockFile = "${src}/Cargo.lock";
+  meta = {
+    description = "A CLI clock that displays time in a Nixie tube style";
+    longDescription = ''
+      A unique command-line clock that displays the current time using Nixie tube-style digits.
+      This charming design adds a vintage touch to your terminal while providing an accurate clock.
+    '';
 
-  meta = with lib; {
-    description = "A commandline clock inside nixie tubes";
     homepage = "https://github.com/NewDawn0/nixie-clock";
-    maintainers = with maintainers; [ NewDawn0 ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ NewDawn0 ];
+    platforms = lib.platforms.all;
   };
 }

@@ -14,9 +14,16 @@ let
   };
   meta = with lib; {
     description = "A cd quicklist";
+  meta = {
+    description = "A fast directory navigation tool with a quicklist";
+    longDescription = ''
+      This utility allows you to change directories quickly using a user defined list of frequently used paths.
+      It reduces the time spent on navigation and enhances workflow efficiency.
+    '';
     homepage = "https://github.com/NewDawn0/dirStack";
-    maintainers = with maintainers; [ NewDawn0 ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ NewDawn0 ];
+    platforms = lib.platforms.all;
   };
   pkg = rustPlatform.buildRustPackage {
     inherit meta src;

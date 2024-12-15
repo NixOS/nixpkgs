@@ -33,10 +33,15 @@ stdenv.mkDerivation {
     mkdir -p "$out/bin";
     cp "${src}/ex" $out/bin/ex
   '';
-  meta = with lib; {
-    description = "A wrapper around extracting common archive formats";
+  meta = {
+    description = "A command-line wrapper for extracting common archive formats";
+    longDescription = ''
+      This tool wraps around popular archive extraction commands, providing a simple interface to extract files from formats like ZIP, TAR, and more.
+      It streamlines file extraction for most pouplar archive formats.
+    '';
     homepage = "https://github.com/NewDawn0/ex";
-    license = licenses.mit;
-    maintainers = [ NewDawn0 ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ NewDawn0 ];
+    platforms = lib.platforms.all;
   };
 }

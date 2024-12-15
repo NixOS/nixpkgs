@@ -17,11 +17,14 @@ rustPlatform.buildRustPackage {
   inherit src;
 
   cargoLock.lockFile = "${src}/Cargo.lock";
-
-  meta = with lib; {
-    description = "An extensible project generator";
-    homepage = "https://github.com/NewDawn0/gen";
-    maintainers = with maintainers; [ NewDawn0 ];
-    license = licenses.mit;
+  meta = {
+    description = "A flexible tool for generating customizable project templates";
+    longDescription = ''
+      This extensible project generator allows you to quickly set up new projects with customizable templates.
+      Ideal for users who want to automate the creation of project skeletons with personalized settings.
+    '';
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ NewDawn0 ];
+    platforms = lib.platforms.all;
   };
 }

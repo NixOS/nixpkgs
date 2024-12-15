@@ -24,11 +24,15 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp zig-out/bin/ansi $out/bin
   '';
-  meta = with lib; {
-    description = "A cheatsheet for ansi escape codes";
+  meta = {
+    description = "A quick reference guide for ANSI escape codes";
+    longDescription = ''
+      A handy cheatsheet for quickly looking up ANSI escape codes.
+      Perfect for developers working with terminal color codes and text formatting.
+    '';
     homepage = "https://github.com/NewDawn0/ansi";
-    license = licenses.mit;
-    maintainers = [ NewDawn0 ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ NewDawn0 ];
+    platforms = lib.platforms.all;
   };
 }

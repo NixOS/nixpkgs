@@ -30,10 +30,14 @@ stdenv.mkDerivation {
     gnumake
   ];
   buildPhase = "make build";
-  meta = with lib; {
-    description = "A fast way to go up relative directories";
+  meta = {
+    description = "A tool to navigate up directories more swiftly";
+    longDescription = ''
+      This utility allows you to move up relative directories with ease, enhancing efficiency when working in nested file systems. It simplifies navigation with fewer keystrokes.
+    '';
     homepage = "https://github.com/NewDawn0/up";
-    maintainers = with maintainers; [ NewDawn0 ];
-    license = licenses.mit;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ NewDawn0 ];
+    platmors = lib.platforms.all;
   };
 }

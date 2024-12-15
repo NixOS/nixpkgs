@@ -25,11 +25,15 @@ stdenv.mkDerivation {
     mkdir -p $out/bin
     cp ascii-weather $out/bin
   '';
-  meta = with lib; {
-    description = "An ascii screensaver displaying different weather types";
+  meta = {
+    description = "An ASCII-based screensaver that shows various weather conditions";
+    longDescription = ''
+      This screensaver uses ASCII art to display different weather types.
+      It's a creative and simple way to keep your terminal lively while providing weather updates.
+    '';
     homepage = "https://github.com/NewDawn0/asciiWeather";
-    license = licenses.mit;
-    maintainers = [ NewDawn0 ];
-    platforms = platforms.all;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ NewDawn0 ];
+    platforms = lib.platforms.all;
   };
 }
