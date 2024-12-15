@@ -138,7 +138,7 @@ let
 
     meta = with lib; {
       homepage = "https://nordpass.com/";
-      description = "A secure and simple password manager for a stress-free online experience";
+      description = "Secure and simple password manager for a stress-free online experience";
       license = licenses.unfree;
       mainProgram = "nordpass";
       maintainers = with maintainers; [ coconnor ];
