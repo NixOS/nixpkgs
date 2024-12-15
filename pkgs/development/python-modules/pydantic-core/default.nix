@@ -13,7 +13,6 @@
   pytest-timeout,
   pytest-mock,
   dirty-equals,
-  python,
 }:
 
 let
@@ -36,9 +35,6 @@ let
       name = "${pname}-${version}";
       hash = "sha256-kY+XSiwfh1ao0vvqz1M23CONeh/T8uN8YpHf/GOphTk=";
     };
-
-    # Fixes cross compilation to aarch64-linux
-    maturinBuildFlags = [ "--interpreter ${python.executable}" ];
 
     nativeBuildInputs = [
       cargo
