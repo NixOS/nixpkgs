@@ -10754,6 +10754,12 @@
     githubId = 54179289;
     name = "Jason Miller";
   };
+  jmir = {
+    email = "joel@miramon.de";
+    github = "jmir1";
+    githubId = 43830312;
+    name = "Joël Miramon";
+  };
   jn-sena = {
     email = "jn-sena@proton.me";
     github = "jn-sena";
@@ -12699,6 +12705,12 @@
     github = "leungbk";
     githubId = 29217594;
     name = "Brian Leung";
+  };
+  levigross = {
+    email = "levi@levigross.com";
+    github = "levigross";
+    githubId = 80920;
+    name = "Levi Gross";
   };
   lewo = {
     email = "lewo@abesis.fr";
@@ -23241,6 +23253,13 @@
     matrix = "@uku:m.uku.moe";
     github = "uku3lig";
     githubId = 61147779;
+  };
+  ulinja = {
+    email = "julian@lobbes.dev";
+    github = "ulinja";
+    githubId = 56582668;
+    name = "Julian Lobbes";
+    keys = [ { fingerprint = "24D9 B20A 65C2 DFB9 8E6A  754C 8EC4 6A5E 6743 3524"; } ];
   };
   ulrikstrid = {
     email = "ulrik.strid@outlook.com";

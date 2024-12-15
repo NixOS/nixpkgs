@@ -112,7 +112,6 @@ def test_remote_build(mock_run: Any, monkeypatch: Any) -> None:
                 extra_env={
                     "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh opts"])
                 },
-                remote=None,
             ),
             call(
                 ["nix-store", "--realise", Path("/path/to/file"), "--build"],
@@ -166,7 +165,6 @@ def test_remote_build_flake(mock_run: Any, monkeypatch: Any) -> None:
                 extra_env={
                     "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh opts"])
                 },
-                remote=None,
             ),
             call(
                 [
@@ -185,37 +183,66 @@ def test_remote_build_flake(mock_run: Any, monkeypatch: Any) -> None:
     )
 
 
-@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-def test_copy_closure(mock_run: Any, monkeypatch: Any) -> None:
+def test_copy_closure(monkeypatch: Any) -> None:
     closure = Path("/path/to/closure")
-    n.copy_closure(closure, None)
-    mock_run.assert_not_called()
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, None)
+        mock_run.assert_not_called()
 
     target_host = m.Remote("user@target.host", [], None)
     build_host = m.Remote("user@build.host", [], None)
-
-    n.copy_closure(closure, target_host)
-    mock_run.assert_called_with(
-        ["nix-copy-closure", "--to", "user@target.host", closure],
-        extra_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
-        remote=None,
-    )
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, target_host)
+        mock_run.assert_called_with(
+            ["nix-copy-closure", "--to", "user@target.host", closure],
+            extra_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
+        )
 
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-opt")
-    n.copy_closure(closure, None, build_host)
-    mock_run.assert_called_with(
-        ["nix-copy-closure", "--from", "user@build.host", closure],
-        extra_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-opt"])},
-        remote=None,
-    )
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, None, build_host)
+        mock_run.assert_called_with(
+            ["nix-copy-closure", "--from", "user@build.host", closure],
+            extra_env={
+                "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-opt"])
+            },
+        )
 
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-target-opt")
-    n.copy_closure(closure, target_host, build_host)
-    mock_run.assert_called_with(
-        ["nix-copy-closure", "--to", "user@target.host", closure],
-        remote=build_host,
-        extra_env={"NIX_SSHOPTS": "--ssh build-target-opt"},
-    )
+    monkeypatch.setattr(n, "WITH_NIX_2_18", True)
+    extra_env = {
+        "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-target-opt"])
+    }
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, target_host, build_host)
+        mock_run.assert_called_with(
+            [
+                "nix",
+                "copy",
+                "--from",
+                "ssh://user@build.host",
+                "--to",
+                "ssh://user@target.host",
+                closure,
+            ],
+            extra_env=extra_env,
+        )
+
+    monkeypatch.setattr(n, "WITH_NIX_2_18", False)
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, target_host, build_host)
+        mock_run.assert_has_calls(
+            [
+                call(
+                    ["nix-copy-closure", "--from", "user@build.host", closure],
+                    extra_env=extra_env,
+                ),
+                call(
+                    ["nix-copy-closure", "--to", "user@target.host", closure],
+                    extra_env=extra_env,
+                ),
+            ]
+        )
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
@@ -262,14 +289,14 @@ def test_get_nixpkgs_rev() -> None:
         mock_run.assert_called_with(
             ["git", "-C", path, "rev-parse", "--short", "HEAD"],
             check=False,
-            stdout=PIPE,
+            capture_output=True,
         )
 
     expected_calls = [
         call(
             ["git", "-C", path, "rev-parse", "--short", "HEAD"],
             check=False,
-            stdout=PIPE,
+            capture_output=True,
         ),
         call(
             ["git", "-C", path, "diff", "--quiet"],
@@ -300,7 +327,7 @@ def test_get_nixpkgs_rev() -> None:
         mock_run.assert_has_calls(expected_calls)
 
 
-def test_get_generations_from_nix_store(tmp_path: Path) -> None:
+def test_get_generations(tmp_path: Path) -> None:
     nixos_path = tmp_path / "nixos-system"
     nixos_path.mkdir()
 
@@ -310,20 +337,17 @@ def test_get_generations_from_nix_store(tmp_path: Path) -> None:
     (tmp_path / "system-3-link").symlink_to(nixos_path)
     (tmp_path / "system-2-link").symlink_to(nixos_path)
 
-    assert n.get_generations(
-        m.Profile("system", tmp_path / "system"),
-        using_nix_env=False,
-    ) == [
+    assert n.get_generations(m.Profile("system", tmp_path / "system")) == [
         m.Generation(id=1, current=False, timestamp=ANY),
         m.Generation(id=2, current=True, timestamp=ANY),
         m.Generation(id=3, current=False, timestamp=ANY),
     ]
 
 
-@patch(
-    get_qualified_name(n.run_wrapper, n),
-    autospec=True,
-    return_value=CompletedProcess(
+def test_get_generations_from_nix_env(tmp_path: Path) -> None:
+    path = tmp_path / "test"
+    path.touch()
+    return_value = CompletedProcess(
         [],
         0,
         stdout=textwrap.dedent("""\
@@ -331,17 +355,40 @@ def test_get_generations_from_nix_store(tmp_path: Path) -> None:
         2083   2024-11-07 22:59:41
         2084   2024-11-07 23:54:17   (current)
         """),
-    ),
-)
-def test_get_generations_from_nix_env(mock_run: Any, tmp_path: Path) -> None:
-    path = tmp_path / "test"
-    path.touch()
+    )
 
-    assert n.get_generations(m.Profile("system", path), using_nix_env=True) == [
-        m.Generation(id=2082, current=False, timestamp="2024-11-07 22:58:56"),
-        m.Generation(id=2083, current=False, timestamp="2024-11-07 22:59:41"),
-        m.Generation(id=2084, current=True, timestamp="2024-11-07 23:54:17"),
-    ]
+    with patch(
+        get_qualified_name(n.run_wrapper, n), autospec=True, return_value=return_value
+    ) as mock_run:
+        assert n.get_generations_from_nix_env(m.Profile("system", path)) == [
+            m.Generation(id=2082, current=False, timestamp="2024-11-07 22:58:56"),
+            m.Generation(id=2083, current=False, timestamp="2024-11-07 22:59:41"),
+            m.Generation(id=2084, current=True, timestamp="2024-11-07 23:54:17"),
+        ]
+        mock_run.assert_called_with(
+            ["nix-env", "-p", path, "--list-generations"],
+            stdout=PIPE,
+            remote=None,
+            sudo=False,
+        )
+
+    remote = m.Remote("user@host", [], "password")
+    with patch(
+        get_qualified_name(n.run_wrapper, n), autospec=True, return_value=return_value
+    ) as mock_run:
+        assert n.get_generations_from_nix_env(
+            m.Profile("system", path), remote, True
+        ) == [
+            m.Generation(id=2082, current=False, timestamp="2024-11-07 22:58:56"),
+            m.Generation(id=2083, current=False, timestamp="2024-11-07 22:59:41"),
+            m.Generation(id=2084, current=True, timestamp="2024-11-07 23:54:17"),
+        ]
+        mock_run.assert_called_with(
+            ["nix-env", "-p", path, "--list-generations"],
+            stdout=PIPE,
+            remote=remote,
+            sudo=True,
+        )
 
 
 @patch(

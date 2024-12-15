@@ -67,12 +67,12 @@ def test_parse_args() -> None:
         ]
     )
     assert nr.logger.level == logging.DEBUG
-    assert r2.verbose == 3
+    assert r2.v == 3
     assert r2.flake is False
     assert r2.action == "dry-build"
     assert r2.file == "foo"
     assert r2.attr == "bar"
-    assert g2["common_flags"].verbose == 3
+    assert g2["common_flags"].v == 3
 
 
 @patch.dict(nr.process.os.environ, {}, clear=True)
@@ -109,7 +109,7 @@ def test_execute_nix_boot(mock_run: Any, tmp_path: Path) -> None:
             call(
                 ["git", "-C", nixpkgs_path, "rev-parse", "--short", "HEAD"],
                 check=False,
-                stdout=PIPE,
+                capture_output=True,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(

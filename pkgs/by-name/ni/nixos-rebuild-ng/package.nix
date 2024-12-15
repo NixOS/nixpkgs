@@ -19,6 +19,11 @@
 }:
 let
   executable = if withNgSuffix then "nixos-rebuild-ng" else "nixos-rebuild";
+  # This version is kind of arbitrary, we use some features that were
+  # implemented in newer versions of Nix, but not necessary 2.18.
+  # However, Lix is a fork of Nix 2.18, so this looks like a good version
+  # to cut specific functionality.
+  withNix218 = lib.versionAtLeast nix.version "2.18";
 in
 python3Packages.buildPythonApplication rec {
   pname = "nixos-rebuild-ng";
@@ -28,10 +33,6 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [
     setuptools
-  ];
-
-  dependencies = with python3Packages; [
-    tabulate
   ];
 
   nativeBuildInputs = lib.optionals withShellFiles [
@@ -53,8 +54,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    substituteInPlace nixos_rebuild/__init__.py \
+    substituteInPlace nixos_rebuild/constants.py \
       --subst-var-by executable ${executable} \
+      --subst-var-by withNix218 ${lib.boolToString withNix218} \
       --subst-var-by withReexec ${lib.boolToString withReexec} \
       --subst-var-by withShellFiles ${lib.boolToString withShellFiles}
 
@@ -88,9 +90,6 @@ python3Packages.buildPythonApplication rec {
           mypy
           pytest
           ruff
-          types-tabulate
-          # dependencies
-          tabulate
         ]
       );
     in

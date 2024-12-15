@@ -379,6 +379,18 @@ stdenvNoCC.mkDerivation {
     ''
 
     ##
+    ## LLVM ranlab lacks -t option that libtool expects. We can just
+    ## skip it
+    ##
+
+    + optionalString (isLLVM && targetPlatform.isOpenBSD) ''
+      rm $out/bin/${targetPrefix}ranlib
+      wrap \
+        ${targetPrefix}ranlib ${./llvm-ranlib-wrapper.sh} \
+        "${bintools_bin}/bin/${targetPrefix}ranlib"
+    ''
+
+    ##
     ## Extra custom steps
     ##
     + extraBuildCommands;

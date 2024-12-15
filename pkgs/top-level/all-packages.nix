@@ -3902,10 +3902,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit;
   };
 
-  juicefs = callPackage ../tools/filesystems/juicefs {
-    buildGoModule = buildGo122Module;
-  };
-
   jogl = callPackage ../by-name/jo/jogl/package.nix {
     stdenv = if stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64 then overrideSDK stdenv "11.0" else stdenv;
   };

@@ -17,6 +17,7 @@ nvidia_x11: sha256:
 , libXxf86vm
 , libvdpau
 , librsvg
+, libglvnd
 , wrapGAppsHook3
 , addDriverRunpath
 , withGtk2 ? false
@@ -76,6 +77,12 @@ let
       license = lib.licenses.mit;
     };
   };
+
+  runtimeDependencies = [
+    libglvnd libXrandr libXv
+  ];
+
+  runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
 
 in
 
@@ -143,7 +150,7 @@ stdenv.mkDerivation {
 
   binaryName = if withGtk3 then ".nvidia-settings-wrapped" else "nvidia-settings";
   postFixup = ''
-    patchelf --set-rpath "$(patchelf --print-rpath $out/bin/$binaryName):$out/lib:${libXv}/lib" \
+    patchelf --set-rpath "$(patchelf --print-rpath $out/bin/$binaryName):$out/lib:${runtimeLibraryPath}" \
       $out/bin/$binaryName
 
     addDriverRunpath $out/bin/$binaryName
