@@ -9,8 +9,8 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "NewDawn0";
     repo = "note";
-    rev = "e1876e4c7aec769ea3b3296d7df25175ba899652";
-    hash = "sha256-mdQjtXRxh5oCz0ThsnnsujcO97yu0K8TaX6jefOpR6g=";
+    rev = "v1.0.0";
+    hash = "sha256-ISYagWOW5EnjtP4oOO9Dia0oPexlgvul/yllrHeZceQ=";
   };
   vendorHash = "sha256-kzMvksDjhqKlHvBwl0spOApFKHKM7lm0WG2hifP6+Ro=";
   meta = {

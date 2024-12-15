@@ -12,10 +12,10 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "NewDawn0";
     repo = "tl";
-    rev = "2e104c44e7afeda9d310acbcad1abb6f2571179a";
-    sha256 = "sha256-WFTB2cQxR8wvdwSzA1yLkEjahrjUWXcJy7tkpRjerBQ=";
+    rev = "v1.0.0";
+    sha256 = "sha256-6oKz68UIRLRB7l5Am9+GNHswJKIrV/31dhkLRPC6dhE=";
   };
-  cargoHash = "sha256-8XnIFAWMkpiCsEsg7FrRrqrLYzHVA38RmDYt9L6NfCk=";
+  cargoHash = "sha256-QEEqkcsJulZtMpVZXqy5D187nA+ksRya8ggPB9YWILU=";
   buildInputs = [
     libiconv
   ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk.frameworks.SystemConfiguration;

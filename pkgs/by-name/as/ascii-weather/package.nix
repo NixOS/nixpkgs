@@ -10,8 +10,8 @@ gccStdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "NewDawn0";
     repo = "asciiWeather";
-    rev = "70bf111647d064c3fcd0fe672b9fa697f4d060e4";
-    hash = "sha256-Dcosx6iEnvFCMrmUS7gSLg8re5zl1BXWX/Nu6hr4Pgw=";
+    rev = "v1.0.0";
+    hash = "sha256-8ntnVMQWeEO47gjP4G/GMCQ7NlsdjBsXU0+LMC6fr+U=";
   };
   buildInputs = [ ncurses ];
   installPhase = "install -D ascii-weather -t $out/bin";

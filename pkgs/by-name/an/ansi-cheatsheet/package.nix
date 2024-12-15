@@ -10,8 +10,8 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "NewDawn0";
     repo = "ansi";
-    rev = "6b6d3b991706247af90f3f72c67238144f77a928";
-    hash = "sha256-/JRG5qZlEOUJ/R37bl8x8okwlVLjlXUcSg7VMkulY0M=";
+    rev = "v1.0.0";
+    hash = "sha256-0ahM9eZInPNSA6K463Ul4ot2PPplBNI2ypBRwfG6Lpo=";
   };
   buildInputs = [ zig ];
   buildPhase = ''

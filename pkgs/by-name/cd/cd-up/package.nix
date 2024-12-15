@@ -10,8 +10,8 @@ gccStdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "NewDawn0";
     repo = "up";
-    rev = "1be487a84782bc62593326c35160fa782e2e7d7a";
-    hash = "sha256-Ll6gHuWh2s7ke9Vqlw0H3tdKHIuvIC13TGHHKllEQ54=";
+    rev = "v1.0.0";
+    hash = "sha256-gLIkwNFxXkGCQiRTri0EJZSRC7xbvhUwaCmTQDqs2B8=";
   };
   installPhase = ''
     install -D up-core -t $out/bin

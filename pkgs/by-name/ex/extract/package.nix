@@ -13,8 +13,8 @@ let
   src = fetchFromGitHub {
     owner = "NewDawn0";
     repo = "ex";
-    rev = "136389950b0f60de5c84b5535663c237da7f0908";
-    hash = "sha256-XDCBlaWTreKd3R10njsrhv7j0/OIsco7tcFjeG85mpE=";
+    rev = "v1.0.0";
+    hash = "sha256-Zk4DGs/KZXr1CJ4VKJGqru4SM5eXHh5m5NbOuoAhZeE=";
   };
 in
 stdenv.mkDerivation {

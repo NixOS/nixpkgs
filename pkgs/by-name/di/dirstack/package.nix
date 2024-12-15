@@ -25,10 +25,10 @@ let
     src = fetchFromGitHub {
       owner = "NewDawn0";
       repo = "dirStack";
-      rev = "8ef0f19ae366868fb046f6acb0d396bc8436ef31";
-      hash = "sha256-mzw3uDZ0eM81WJM0YNcOlMHs4fNMUBgwxS6VBSS+VS8=";
+      rev = "v1.0.0";
+      hash = "sha256-TeHldruUsG49o0tXm26prSmGTmBiRRkL7q7VZghrsXM=";
     };
-    cargoHash = "sha256-y3ELhG4877X6Cysg9NMaD/QC3SfPBdk2Vh1QeHF1+pU=";
+    cargoHash = "sha256-ismRyvNGqWkACVwz7+2EFh114DevtwWGtdbB/w4Yqz8=";
     propagatedBuildInputs = [ fzf ];
   };
 in

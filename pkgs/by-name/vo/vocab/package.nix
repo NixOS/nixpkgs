@@ -12,8 +12,8 @@ python3Packages.buildPythonPackage {
   src = fetchFromGitHub {
     owner = "NewDawn0";
     repo = "vocab";
-    rev = "e1c11d2570b5f9e8d1a18652391cb6ab7623c574";
-    hash = "sha256-3aPc+ivec8M+iD8ZDL+rWJrL+2jVhmcp2Bdc9jxpi3Y=";
+    rev = "v1.0.0";
+    hash = "sha256-M/eRS19Epn003UGGqF7mpGwm0l4cPWizbgYGZ9lxCE4=";
   };
   meta = {
     description = "An efficient CLI-based tool for vocabulary learning";
