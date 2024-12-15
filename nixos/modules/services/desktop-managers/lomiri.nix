@@ -95,6 +95,7 @@ in
             lomiri-gallery-app
             lomiri-history-service
             lomiri-mediaplayer-app
+            lomiri-music-app
             lomiri-polkit-agent
             lomiri-schemas # exposes some required dbus interfaces
             lomiri-session # wrappers to properly launch the session
