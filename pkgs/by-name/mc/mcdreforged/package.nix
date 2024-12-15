@@ -8,7 +8,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "mcdreforged";
-  version = "2.13.2";
+  version = "2.14.0";
   pyproject = true;
 
   src = fetchFromGitHub {
@@ -31,6 +31,7 @@ python3.pkgs.buildPythonApplication rec {
     resolvelib
     ruamel-yaml
     typing-extensions
+    pathspec
   ];
 
   nativeCheckInputs = [ python3.pkgs.pytestCheckHook ];
