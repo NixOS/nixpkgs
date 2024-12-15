@@ -4,6 +4,7 @@
   fetchFromGitHub,
   dotnetCorePackages,
   nix-update-script,
+  technitium-dns-server,
 }:
 buildDotnetModule rec {
   pname = "technitium-dns-server-library";
