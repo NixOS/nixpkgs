@@ -2,9 +2,9 @@
 
 
 let
-  inherit (lib) mkIf mkMerge nameValuePair optionalString types mkOption mapAttrs';
+  inherit (lib) mkIf mkMerge nameValuePair optionalString types mkOption mapAttrs' getExe;
   nixCommand =
-    "${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes'";
+    "${getExe pkgs.nix} --extra-experimental-features 'nix-command flakes'";
   mkBuilds = attrs: lib.concatMapStrings mkBuild attrs;
   mkBuild = attr:
     if builtins.typeOf attr == "string" then ''
@@ -26,7 +26,7 @@ let
         (mkIf (cfg.ssh != null) {
           GIT_SSH_COMMAND = let
             knownHostsFile = pkgs.writeText "knownHostsFile" cfg.ssh.hostKey;
-          in "${pkgs.openssh}/bin/ssh -i $CREDENTIALS_DIRECTORY/sshKey -o GlobalKnownHostsFile=${knownHostsFile}";
+          in "${getExe pkgs.openssh} -i $CREDENTIALS_DIRECTORY/sshKey -o GlobalKnownHostsFile=${knownHostsFile}";
         })
         (mkIf (cfg.credentials != null) {
           GIT_ASKPASS = pkgs.writeShellScript "askpass" ''
@@ -72,36 +72,36 @@ let
       ];
       script = ''
         if [ ! -d repo ]; then
-          ${pkgs.git}/bin/git clone ${cfg.remote} repo
+          ${getExe pkgs.git} clone ${cfg.remote} repo
           cd repo || exit
         else
           cd repo || exit
-          ${pkgs.git}/bin/git fetch
+          ${getExe pkgs.git} fetch
         fi
         ${optionalString (cfg.gitCryptKeyFile != null) ''
-          ${pkgs.git-crypt}/bin/git-crypt unlock ${cfg.gitCryptKeyFile}
+          ${getExe pkgs.git-crypt} unlock ${cfg.gitCryptKeyFile}
         ''}
         rm -f ./*.log
-        if ${pkgs.git}/bin/git checkout ${cfg.updateBranch};
+        if ${getExe pkgs.git} checkout ${cfg.updateBranch};
         then
           # We don't pull because a force push could have happend in the meantime
-          ${pkgs.git}/bin/git reset --hard origin/${cfg.updateBranch} || true
+          ${getExe pkgs.git} reset --hard origin/${cfg.updateBranch} || true
         else
-          ${pkgs.git}/bin/git checkout -b ${cfg.updateBranch}
+          ${getExe pkgs.git} checkout -b ${cfg.updateBranch}
         fi
-        ${pkgs.git}/bin/git merge origin/${cfg.mainBranch} || true
+        ${getExe pkgs.git} merge origin/${cfg.mainBranch} || true
         ${optionalString cfg.updateFlake ''
           ${nixCommand} flake update --commit-lock-file
         ''}
         ${cfg.updateScript}
         ${mkBuilds cfg.buildAttributes}
         ${optionalString cfg.failLogInCommitMsg ''
-          oldmessage=$(${pkgs.git}/bin/git log -n1 --pretty=%B)
-          faillog=$(cat fail.log | ${pkgs.gawk}/bin/awk '{print $0 " failed"}')
-          ${pkgs.git}/bin/git commit --amend -m "$(echo $oldmessage; printf "\n\n"; echo $faillog)"
+          oldmessage=$(${getExe pkgs.git} log -n1 --pretty=%B)
+          faillog=$(cat fail.log | ${getExe pkgs.gawk} '{print $0 " failed"}')
+          ${getExe pkgs.git} commit --amend -m "$(echo $oldmessage; printf "\n\n"; echo $faillog)"
         ''}
         ${cfg.postCommands}
-        ${pkgs.git}/bin/git push || ${pkgs.git}/bin/git push --set-upstream origin ${cfg.updateBranch}
+        ${getExe pkgs.git} push || ${getExe pkgs.git} push --set-upstream origin ${cfg.updateBranch}
       '';
       startAt = cfg.dates;
     };
