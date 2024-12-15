@@ -5,13 +5,13 @@
 }:
 
 let
-  version = "1.4.4";
+  version = "1.4.5";
 
   src = fetchFromGitLab {
     owner = "coolercontrol";
     repo = "coolercontrol";
     rev = version;
-    hash = "sha256-9l10X4uDv3KJz582QQMhqh38bwDtQVHm9HdAVNC6Kfg=";
+    hash = "sha256-lRw5IcSrLM6aUajt2Ny1IUuGYcAjY1oUDZENyz0wVJI=";
   };
 
   meta = {
