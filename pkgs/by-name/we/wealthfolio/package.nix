@@ -11,6 +11,7 @@
   rustPlatform,
   webkitgtk_4_1,
   wrapGAppsHook3,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,6 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     webkitgtk_4_1
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A Beautiful Private and Secure Desktop Investment Tracking Application";
