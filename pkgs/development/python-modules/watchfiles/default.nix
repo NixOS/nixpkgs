@@ -14,6 +14,7 @@
   pytestCheckHook,
   CoreServices,
   libiconv,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -34,6 +35,9 @@ buildPythonPackage rec {
     lockFile = ./Cargo.lock;
     outputHashes."notify-6.1.1" = "sha256-lT3R5ZQpjx52NVMEKTTQI90EWT16YnbqphqvZmNpw/I=";
   };
+
+  # Fixes cross compilation to aarch64-linux
+  maturinBuildFlags = [ "--interpreter ${python.executable}" ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices
