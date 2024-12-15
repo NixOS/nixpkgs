@@ -1,11 +1,9 @@
 {
   fetchFromGitHub,
-  gcc,
-  gnumake,
   lib,
-  stdenv,
+  gccStdenv,
 }:
-stdenv.mkDerivation {
+gccStdenv.mkDerivation {
   pname = "up-core";
   name = "up";
   version = "1.0.0";
@@ -25,11 +23,6 @@ stdenv.mkDerivation {
   shellHook = ''
     source $out/lib/SOURCE_ME.sh
   '';
-  buildInputs = [
-    gcc
-    gnumake
-  ];
-  buildPhase = "make build";
   meta = {
     description = "A tool to navigate up directories more swiftly";
     longDescription = ''
