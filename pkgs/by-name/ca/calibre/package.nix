@@ -25,7 +25,7 @@
   poppler-utils,
   python3Packages,
   qt6,
-  speechd-minimal,
+  speechd,
   sqlite,
   xdg-utils,
   wrapGAppsHook3,
@@ -146,7 +146,7 @@ stdenv.mkDerivation (finalAttrs: {
     ))
     xdg-utils
   ]
-  ++ lib.optional speechSupport speechd-minimal;
+  ++ lib.optional speechSupport speechd;
 
   installPhase = ''
     runHook preInstall
@@ -197,6 +197,7 @@ stdenv.mkDerivation (finalAttrs: {
         wrapProgram $program \
           ''${qtWrapperArgs[@]} \
           ''${gappsWrapperArgs[@]} \
+          --prefix PYTHONPATH : $PYTHONPATH \
           --prefix PATH : ${
             lib.makeBinPath [
               libjpeg
