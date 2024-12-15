@@ -29,10 +29,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/intel/vpl-gpu-rt";
     changelog = "https://github.com/intel/vpl-gpu-rt/releases/tag/${src.rev}";
     license = [ lib.licenses.mit ];
-    platforms = lib.platforms.linux;
-    # CMake adds x86 specific compiler flags in <source>/builder/FindGlobals.cmake
-    # NOTE: https://github.com/oneapi-src/oneVPL-intel-gpu/issues/303
-    broken = !stdenv.hostPlatform.isx86;
+    platforms = [ "x86_64-linux" ];
     maintainers = with lib.maintainers; [ evanrichter pjungkamp ];
   };
 }

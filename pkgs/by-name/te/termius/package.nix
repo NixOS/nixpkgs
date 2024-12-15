@@ -15,8 +15,8 @@
 
 stdenv.mkDerivation rec {
   pname = "termius";
-  version = "9.8.5";
-  revision = "208";
+  version = "9.9.0";
+  revision = "211";
 
   src = fetchurl {
     # find the latest version with
@@ -26,7 +26,7 @@ stdenv.mkDerivation rec {
     # and the sha512 with
     # curl -H 'X-Ubuntu-Series: 16' https://api.snapcraft.io/api/v1/snaps/details/termius-app | jq '.download_sha512' -r
     url = "https://api.snapcraft.io/api/v1/snaps/download/WkTBXwoX81rBe3s3OTt3EiiLKBx2QhuS_${revision}.snap";
-    hash = "sha512-Kdw3TiVDX3vXxlNxBT2Lhg0QMjO712XVFF7RqaYVZ//iirk+DLGgkefMJC5sN/Y0Fc1Vciw0AazpXxbtkL8n2Q==";
+    hash = "sha512-7oaVWe0H4y3tiSD8Cgj14fEaJQj3ekoczJjv5JvrU5I9ylRoe8XHNqD0MwOYFIpICyyKfoj0UonyVgggGLUq5A==";
   };
 
   desktopItem = makeDesktopItem {
