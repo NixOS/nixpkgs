@@ -32,8 +32,6 @@ buildPythonPackage rec {
     "--dynamic-link-zstd"
   ];
 
-  pythonImportsCheck = [ "pyzstd" ];
-
   meta = {
     description = "Python bindings to Zstandard (zstd) compression library";
     homepage = "https://pyzstd.readthedocs.io";

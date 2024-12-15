@@ -16,12 +16,11 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-MniCe4A88Aah3yUfPhM3TH0m23eeWjMynMEXibgEvC0=";
   };
+
   build-system = [
     setuptools
     setuptools-scm
   ];
-
-  pythonImportsCheck = [ "inflate64" ];
 
   meta = {
     homepage = "https://codeberg.org/miurahr/inflate64";

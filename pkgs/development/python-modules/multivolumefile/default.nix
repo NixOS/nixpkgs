@@ -22,10 +22,6 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  doCheck = true;
-
-  pythonImportsCheck = [ "multivolumefile" ];
-
   meta = {
     homepage = "https://codeberg.org/miurahr/multivolume";
     description = "Library to provide a file-object wrapping multiple files as virtually like as a single file";

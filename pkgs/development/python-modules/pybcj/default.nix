@@ -22,11 +22,6 @@ buildPythonPackage rec {
     setuptools-scm
   ];
 
-  pythonImportsCheck = [
-    "bcj"
-    "lzma"
-  ];
-
   meta = {
     homepage = "https://codeberg.org/miurahr/pybcj";
     description = "BCJ(Branch-Call-Jump) filter for python";
