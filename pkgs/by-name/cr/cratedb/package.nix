@@ -11,7 +11,7 @@
 let
   # Wants at least Java 22
   jdk = openjdk23;
-  version = "5.9.3";
+  version = "5.9.5";
 in
 maven.buildMavenPackage {
   pname = "cratedb";
@@ -21,7 +21,7 @@ maven.buildMavenPackage {
     owner = "crate";
     repo = "crate";
     tag = version;
-    hash = "sha256-k+b11pU6ct1s6FEKW3j8kNl+3hYTb+SutcjBI6VKI5s=";
+    hash = "sha256-T72Cy/jU8l68Res85bcZysRB81IqUF4eqgRxW7TJ+6Q=";
   };
 
   nativeBuildInputs = [
@@ -33,7 +33,7 @@ maven.buildMavenPackage {
     (replaceVars ./fix-poms.patch { inherit jdk; })
   ];
 
-  mvnHash = "sha256-u24+hYGY+zE93IhMTqj+Bdzuks6yFFA1uSk/Ya5mxLc=";
+  mvnHash = "sha256-D5cVCx++99DJWX5UHgJydDDYCYmH1cKQ3EAKktFz+gE=";
   mvnJdk = jdk;
 
   installPhase = ''
