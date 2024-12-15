@@ -266,68 +266,72 @@ def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
         return None
 
 
-def _parse_generation_from_nix_store(path: Path, profile: Profile) -> Generation:
-    entry_id = path.name.split("-")[1]
-    current = path.name == profile.path.readlink().name
-    timestamp = datetime.fromtimestamp(path.stat().st_ctime).strftime(
-        "%Y-%m-%d %H:%M:%S"
-    )
-
-    return Generation(
-        id=int(entry_id),
-        timestamp=timestamp,
-        current=current,
-    )
-
-
-def _parse_generation_from_nix_env(line: str) -> Generation:
-    parts = line.split()
-
-    entry_id = parts[0]
-    timestamp = f"{parts[1]} {parts[2]}"
-    current = "(current)" in parts
-
-    return Generation(
-        id=int(entry_id),
-        timestamp=timestamp,
-        current=current,
-    )
-
-
-def get_generations(
-    profile: Profile,
-    target_host: Remote | None = None,
-    using_nix_env: bool = False,
-    sudo: bool = False,
-) -> list[Generation]:
+def get_generations(profile: Profile) -> list[Generation]:
     """Get all NixOS generations from profile.
 
     Includes generation ID (e.g.: 1, 2), timestamp (e.g.: when it was created)
     and if this is the current active profile or not.
-
-    If `lock_profile = True` this command will need root to run successfully.
     """
     if not profile.path.exists():
         raise NRError(f"no profile '{profile.name}' found")
 
-    result = []
-    if using_nix_env:
-        # Using `nix-env --list-generations` needs root to lock the profile
-        # TODO: do we actually need to lock profile for e.g.: rollback?
-        # https://github.com/NixOS/nix/issues/5144
-        r = run_wrapper(
-            ["nix-env", "-p", profile.path, "--list-generations"],
-            stdout=PIPE,
-            remote=target_host,
-            sudo=sudo,
+    def parse_path(path: Path, profile: Profile) -> Generation:
+        entry_id = path.name.split("-")[1]
+        current = path.name == profile.path.readlink().name
+        timestamp = datetime.fromtimestamp(path.stat().st_ctime).strftime(
+            "%Y-%m-%d %H:%M:%S"
         )
-        for line in r.stdout.splitlines():
-            result.append(_parse_generation_from_nix_env(line))
-    else:
-        assert not target_host, "target_host is not supported when using_nix_env=False"
-        for p in profile.path.parent.glob("system-*-link"):
-            result.append(_parse_generation_from_nix_store(p, profile))
-    return sorted(result, key=lambda d: d.id)
+
+        return Generation(
+            id=int(entry_id),
+            timestamp=timestamp,
+            current=current,
+        )
+
+    return sorted(
+        [parse_path(p, profile) for p in profile.path.parent.glob("system-*-link")],
+        key=lambda d: d.id,
+    )
+
+
+def get_generations_from_nix_env(
+    profile: Profile,
+    target_host: Remote | None = None,
+    sudo: bool = False,
+) -> list[Generation]:
+    """Get all NixOS generations from profile with nix-env. Needs root.
+
+    Includes generation ID (e.g.: 1, 2), timestamp (e.g.: when it was created)
+    and if this is the current active profile or not.
+    """
+    if not profile.path.exists():
+        raise NRError(f"no profile '{profile.name}' found")
+
+    # Using `nix-env --list-generations` needs root to lock the profile
+    r = run_wrapper(
+        ["nix-env", "-p", profile.path, "--list-generations"],
+        stdout=PIPE,
+        remote=target_host,
+        sudo=sudo,
+    )
+
+    def parse_line(line: str) -> Generation:
+        parts = line.split()
+
+        entry_id = parts[0]
+        timestamp = f"{parts[1]} {parts[2]}"
+        current = "(current)" in parts
+
+        return Generation(
+            id=int(entry_id),
+            timestamp=timestamp,
+            current=current,
+        )
+
+    return sorted(
+        [parse_line(line) for line in r.stdout.splitlines()],
+        key=lambda d: d.id,
+    )
 
 
 def list_generations(profile: Profile) -> list[GenerationJson]:
@@ -437,11 +441,8 @@ def rollback_temporary_profile(
     sudo: bool,
 ) -> Path | None:
     "Rollback a temporary Nix profile, like one created by `nixos-rebuild test`."
-    generations = get_generations(
-        profile,
-        target_host=target_host,
-        using_nix_env=True,
-        sudo=sudo,
+    generations = get_generations_from_nix_env(
+        profile, target_host=target_host, sudo=sudo
     )
     previous_gen_id = None
     for generation in generations:

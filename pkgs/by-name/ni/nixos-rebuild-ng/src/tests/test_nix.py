@@ -327,7 +327,7 @@ def test_get_nixpkgs_rev() -> None:
         mock_run.assert_has_calls(expected_calls)
 
 
-def test_get_generations_from_nix_store(tmp_path: Path) -> None:
+def test_get_generations(tmp_path: Path) -> None:
     nixos_path = tmp_path / "nixos-system"
     nixos_path.mkdir()
 
@@ -337,20 +337,17 @@ def test_get_generations_from_nix_store(tmp_path: Path) -> None:
     (tmp_path / "system-3-link").symlink_to(nixos_path)
     (tmp_path / "system-2-link").symlink_to(nixos_path)
 
-    assert n.get_generations(
-        m.Profile("system", tmp_path / "system"),
-        using_nix_env=False,
-    ) == [
+    assert n.get_generations(m.Profile("system", tmp_path / "system")) == [
         m.Generation(id=1, current=False, timestamp=ANY),
         m.Generation(id=2, current=True, timestamp=ANY),
         m.Generation(id=3, current=False, timestamp=ANY),
     ]
 
 
-@patch(
-    get_qualified_name(n.run_wrapper, n),
-    autospec=True,
-    return_value=CompletedProcess(
+def test_get_generations_from_nix_env(tmp_path: Path) -> None:
+    path = tmp_path / "test"
+    path.touch()
+    return_value = CompletedProcess(
         [],
         0,
         stdout=textwrap.dedent("""\
@@ -358,17 +355,40 @@ def test_get_generations_from_nix_store(tmp_path: Path) -> None:
         2083   2024-11-07 22:59:41
         2084   2024-11-07 23:54:17   (current)
         """),
-    ),
-)
-def test_get_generations_from_nix_env(mock_run: Any, tmp_path: Path) -> None:
-    path = tmp_path / "test"
-    path.touch()
+    )
 
-    assert n.get_generations(m.Profile("system", path), using_nix_env=True) == [
-        m.Generation(id=2082, current=False, timestamp="2024-11-07 22:58:56"),
-        m.Generation(id=2083, current=False, timestamp="2024-11-07 22:59:41"),
-        m.Generation(id=2084, current=True, timestamp="2024-11-07 23:54:17"),
-    ]
+    with patch(
+        get_qualified_name(n.run_wrapper, n), autospec=True, return_value=return_value
+    ) as mock_run:
+        assert n.get_generations_from_nix_env(m.Profile("system", path)) == [
+            m.Generation(id=2082, current=False, timestamp="2024-11-07 22:58:56"),
+            m.Generation(id=2083, current=False, timestamp="2024-11-07 22:59:41"),
+            m.Generation(id=2084, current=True, timestamp="2024-11-07 23:54:17"),
+        ]
+        mock_run.assert_called_with(
+            ["nix-env", "-p", path, "--list-generations"],
+            stdout=PIPE,
+            remote=None,
+            sudo=False,
+        )
+
+    remote = m.Remote("user@host", [], "password")
+    with patch(
+        get_qualified_name(n.run_wrapper, n), autospec=True, return_value=return_value
+    ) as mock_run:
+        assert n.get_generations_from_nix_env(
+            m.Profile("system", path), remote, True
+        ) == [
+            m.Generation(id=2082, current=False, timestamp="2024-11-07 22:58:56"),
+            m.Generation(id=2083, current=False, timestamp="2024-11-07 22:59:41"),
+            m.Generation(id=2084, current=True, timestamp="2024-11-07 23:54:17"),
+        ]
+        mock_run.assert_called_with(
+            ["nix-env", "-p", path, "--list-generations"],
+            stdout=PIPE,
+            remote=remote,
+            sudo=True,
+        )
 
 
 @patch(
