@@ -277,8 +277,8 @@ cfgfirefox = """  # Install firefox.
 """
 
 cfgautologin = """  # Enable automatic login for the user.
-  services.xserver.displayManager.autoLogin.enable = true;
-  services.xserver.displayManager.autoLogin.user = "@@username@@";
+  services.displayManager.autoLogin.enable = true;
+  services.displayManager.autoLogin.user = "@@username@@";
 
 """
 
