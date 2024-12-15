@@ -117,6 +117,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://download.mikrotik.com/routeros/winbox/${finalAttrs.version}/CHANGELOG";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
+    platforms = [ "x86_64-linux" ];
     mainProgram = "WinBox";
     maintainers = with lib.maintainers; [
       Scrumplex
