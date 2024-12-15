@@ -117,7 +117,12 @@ in {
 
     services.flakeAutoUpgrade = mkOption {
 
-      description = "Enables a systemd timer to automatically update a flake and build it.";
+      description = ''
+         Adding a systemd timer to automatically update a flake
+         from a given branch on a given remote and build it.
+         After the build the updated flake will be pushed to a given
+         branch of the remote.
+      '';
       default = { };
       type = types.attrsOf (types.submodule (
 
