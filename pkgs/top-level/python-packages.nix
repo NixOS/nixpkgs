@@ -15249,6 +15249,8 @@ self: super: with self; {
 
   splinter = callPackage ../development/python-modules/splinter { };
 
+  splunk-sdk = callPackage ../development/python-modules/splunk-sdk { };
+
   spotifyaio = callPackage ../development/python-modules/spotifyaio { };
 
   spotipy = callPackage ../development/python-modules/spotipy { };
