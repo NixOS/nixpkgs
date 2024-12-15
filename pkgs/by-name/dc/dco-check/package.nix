@@ -22,11 +22,11 @@ python3.pkgs.buildPythonApplication rec {
   ];
   nativeCheckInputs = with python3.pkgs; [ pytestCheckHook ];
 
-  meta = with lib; {
+  meta = {
     description = "Simple DCO check script to be used in any CI";
     homepage = "https://github.com/christophebedard/dco-check";
-    license = with licenses; [ asl20 ];
-    maintainers = with maintainers; [ embr ];
+    license = with lib.licenses; [ asl20 ];
+    maintainers = with lib.maintainers; [ embr ];
     mainProgram = "dco-check";
   };
 }
