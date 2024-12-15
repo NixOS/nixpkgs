@@ -1,0 +1,20 @@
+diff --git a/crates/genemichaels/src/main.rs b/crates/genemichaels/src/main.rs
+index 724b38a..2fb23d0 100644
+--- a/crates/genemichaels/src/main.rs
++++ b/crates/genemichaels/src/main.rs
+@@ -348,10 +348,11 @@ impl FormatPool {
+                     log.log_with(loga::INFO, "Skipping due to skip comment", ea!());
+                     return Ok(());
+                 }
+-                fs::write(
+-                    &file,
+-                    process_file_contents(log, &config, &source).context("Error doing formatting")?.as_bytes(),
+-                ).context("Error writing formatted code back")?;
++                let processed = process_file_contents(log, &config, &source).context("Error doing formatting")?;
++                if source != processed {
++                    log.log_with(loga::INFO, "Writing newly file", ea!());
++                    fs::write(&file, processed.as_bytes()).context("Error writing formatted code back")?;
++                }
+                 return Ok(());
+             }).stack_context(log, "Error formatting file");
+             match res {
