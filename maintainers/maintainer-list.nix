@@ -23242,6 +23242,13 @@
     github = "uku3lig";
     githubId = 61147779;
   };
+  ulinja = {
+    email = "julian@lobbes.dev";
+    github = "ulinja";
+    githubId = 56582668;
+    name = "Julian Lobbes";
+    keys = [ { fingerprint = "24D9 B20A 65C2 DFB9 8E6A  754C 8EC4 6A5E 6743 3524"; } ];
+  };
   ulrikstrid = {
     email = "ulrik.strid@outlook.com";
     github = "ulrikstrid";
