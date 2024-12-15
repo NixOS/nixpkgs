@@ -7996,6 +7996,8 @@ self: super: with self; {
 
   mccabe = callPackage ../development/python-modules/mccabe { };
 
+  mcdreforged = callPackage ../development/python-modules/mcdreforged { };
+
   mcstatus = callPackage ../development/python-modules/mcstatus { };
 
   mcuuid = callPackage ../development/python-modules/mcuuid { };
