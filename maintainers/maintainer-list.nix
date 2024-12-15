@@ -22358,6 +22358,12 @@
     githubId = 3105057;
     name = "Jan Beinke";
   };
+  thelissimus = {
+    name = "Kei";
+    email = "thelissimus@tuta.io";
+    github = "thelissimus";
+    githubId = 70096720;
+  };
   themaxmur = {
     name = "Maxim Muravev";
     email = "muravjev.mak@yandex.ru";
