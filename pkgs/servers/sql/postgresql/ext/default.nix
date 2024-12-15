@@ -89,8 +89,6 @@ in {
 
     timescaledb_toolkit = super.callPackage ./timescaledb_toolkit.nix { };
 
-    tsearch_extras = super.callPackage ./tsearch_extras.nix { };
-
     tds_fdw = super.callPackage ./tds_fdw.nix { };
 
     pgrouting = super.callPackage ./pgrouting.nix { };
