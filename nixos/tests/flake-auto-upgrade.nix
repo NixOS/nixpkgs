@@ -2,6 +2,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
 
   let
     inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
+    inherit (lib) getExe;
 
     aliceProjectName = "project";
     alicePassword = "password";
@@ -14,8 +15,8 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
         case $@ in
           *\ flake\ *)
             echo "newline" >> ./fakeFlake
-            ${pkgs.git}/bin/git add ./fakeFlake
-            ${pkgs.git}/bin/git commit -m "Add fake flake"
+            ${getExe pkgs.git} add ./fakeFlake
+            ${getExe pkgs.git} commit -m "Add fake flake"
             ;;
           *\ build\ *attr1*)
             if [ ! -f failFile ]
@@ -132,21 +133,21 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     testScript = { nodes, ... }: ''
       start_all()
       gitweb.wait_for_unit("lighttpd.service")
-      gitweb.succeed("${pkgs.git}/bin/git init --bare ${repohome} -b main")
-      gitweb.succeed("${pkgs.git}/bin/git clone ${repohome}")
+      gitweb.succeed("${getExe pkgs.git} init --bare ${repohome} -b main")
+      gitweb.succeed("${getExe pkgs.git} clone ${repohome}")
       # set the main branch
-      gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git checkout -b main")
+      gitweb.succeed("${getExe pkgs.git} --git-dir ./git/.git checkout -b main")
       # we can only bush a branch if it contains a commit
       gitweb.succeed("echo \"dummy content\" > ./file")
       gitweb.succeed("echo \"file filter=git-crypt diff=git-crypt\" > ./.gitattributes")
-      gitweb.succeed("cd git; ${pkgs.git-crypt}/bin/git-crypt unlock ${
+      gitweb.succeed("cd git; ${getExe pkgs.git-crypt} unlock ${
         ./gitCryptKey
       }")
-      gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git add file")
-      gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git add .gitattributes")
-      gitweb.succeed("${pkgs.git}/bin/git config --global user.email \"<>\"")
-      gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git commit -m \"Initial commit\"")
-      gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git push --set-upstream origin main")
+      gitweb.succeed("${getExe pkgs.git} --git-dir ./git/.git add file")
+      gitweb.succeed("${getExe pkgs.git} --git-dir ./git/.git add .gitattributes")
+      gitweb.succeed("${getExe pkgs.git} config --global user.email \"<>\"")
+      gitweb.succeed("${getExe pkgs.git} --git-dir ./git/.git commit -m \"Initial commit\"")
+      gitweb.succeed("${getExe pkgs.git} --git-dir ./git/.git push --set-upstream origin main")
       gitweb.wait_for_open_port(22)
       gitweb.wait_for_open_port(80)
       builder.wait_for_unit("multi-user.target")
@@ -158,7 +159,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
       builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-ssh/repo/result1")
       # git-crypt file is encrypted
       builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-ssh/repo/file")
-      assert "data" in builder.succeed("${pkgs.file}/bin/file /var/lib/flake-auto-upgrade-ssh/repo/file")
+      assert "data" in builder.succeed("${getExe pkgs.file} /var/lib/flake-auto-upgrade-ssh/repo/file")
       # change own for lighttpd
       gitweb.succeed("chown lighttpd:lighttpd -R ${repohome}")
       builder.systemctl("start flake-auto-upgrade-http")
@@ -171,7 +172,7 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
       builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/result4")
       # git-crypt file is decrypted
       builder.wait_until_succeeds("stat /var/lib/flake-auto-upgrade-http/repo/file")
-      assert "ASCII text" in builder.succeed("${pkgs.file}/bin/file /var/lib/flake-auto-upgrade-http/repo/file")
+      assert "ASCII text" in builder.succeed("${getExe pkgs.file} /var/lib/flake-auto-upgrade-http/repo/file")
       # make build of attr1 fail
       builder.succeed("touch /var/lib/flake-auto-upgrade-http/repo/failFile")
       builder.sleep(1)
@@ -183,9 +184,9 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
       # flake is changed again
       assert "3 /var/lib/flake-auto-upgrade-http/repo/fakeFlake" in builder.succeed("wc -l /var/lib/flake-auto-upgrade-http/repo/fakeFlake")
       # Build failure is recorded in the commit message
-      gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git fetch")
-      gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git checkout update")
-      assert "attr1 failed" in gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git log")
-      assert "attr2 failed" in gitweb.succeed("${pkgs.git}/bin/git --git-dir ./git/.git log")
+      gitweb.succeed("${getExe pkgs.git} --git-dir ./git/.git fetch")
+      gitweb.succeed("${getExe pkgs.git} --git-dir ./git/.git checkout update")
+      assert "attr1 failed" in gitweb.succeed("${getExe pkgs.git} --git-dir ./git/.git log")
+      assert "attr2 failed" in gitweb.succeed("${getExe pkgs.git} --git-dir ./git/.git log")
     '';
   })
