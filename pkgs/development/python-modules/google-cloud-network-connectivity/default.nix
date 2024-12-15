@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-network-connectivity";
-  version = "2.5.1";
+  version = "2.6.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "google_cloud_network_connectivity";
-    hash = "sha256-n/E8kTwQrs/sdP9I374ieVc1CDt72a3rg+60Kf6TEqk=";
+    hash = "sha256-tEO50cklPrVOT6gUZ1uvTzyLx4XrysnPvDbD2Wgj7ZI=";
   };
 
   build-system = [ setuptools ];
