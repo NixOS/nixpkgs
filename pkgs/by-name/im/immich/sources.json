@@ -17,6 +17,10 @@
     "open-api/typescript-sdk": {
       "npmDepsHash": "sha256-GtqS59I+By1u6WcR+lDj2HKXVwh7jw5/N6MRdUctlaM=",
       "version": "1.122.3"
+    },
+    "geonames": {
+      "timestamp": "20241215052013",
+      "hash": "sha256-Gv85Y5KAkeqNU8iMMKwepI5o14Z0s5aQbLJVxhtjY14="
     }
   }
 }
