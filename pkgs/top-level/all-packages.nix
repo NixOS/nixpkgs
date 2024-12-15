@@ -4835,6 +4835,8 @@ with pkgs;
 
   pakcs = callPackage ../development/compilers/pakcs { };
 
+  pandoc_3_5 = callPackage ../by-name/pa/pandoc/package.nix { selectPandocCLI = (p: p.pandoc-cli_3_5); };
+
   paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
 
   parallel = callPackage ../tools/misc/parallel { };
@@ -16586,10 +16588,6 @@ with pkgs;
     protobuf = protobuf_21;
     withGui = false;
   };
-
-  btcpayserver = callPackage ../applications/blockchains/btcpayserver { };
-
-  btcpayserver-altcoins = callPackage ../applications/blockchains/btcpayserver { altcoinSupport = true; };
 
   cryptop = python3.pkgs.callPackage ../applications/blockchains/cryptop { };
 
