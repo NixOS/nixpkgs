@@ -3,7 +3,7 @@
   makeScopeWithSplicing',
 }:
 makeScopeWithSplicing' {
-  otherSplices = generateSplicesForMkScope;
+  otherSplices = generateSplicesForMkScope "reposilitePlugins";
   f =
     self:
     {

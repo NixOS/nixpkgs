@@ -7952,6 +7952,13 @@
     githubId = 1851962;
     name = "Galen Huntington";
   };
+  gale-username = {
+    name = "gale";
+    email = "git@galewebsite.com";
+    github = "gale-username";
+    githubId = 168143489;
+    keys = [ { fingerprint = "1234 3726 9042 01F3 CE07  59BF A3B6 1E91 5508 F702"; } ];
+  };
   gamb = {
     email = "adam.gamble@pm.me";
     github = "gamb";
@@ -9666,6 +9673,12 @@
     github = "imuli";
     githubId = 4085046;
     name = "Imuli";
+  };
+  imurx = {
+    email = "imurx@proton.me";
+    github = "imurx";
+    githubId = 3698237;
+    name = "ImUrX";
   };
   inclyc = {
     email = "i@lyc.dev";
@@ -22458,6 +22471,11 @@
     email = "thilo.billerbeck@officerent.de";
     github = "thilobillerbeck";
     githubId = 7442383;
+  };
+  thinnerthinker = {
+    name = "thinnerthinker";
+    github = "thinnerthinker";
+    githubId = 144260188;
   };
   thled = {
     name = "Thomas Le Duc";

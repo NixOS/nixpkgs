@@ -138,7 +138,7 @@ let
     s:
     mutFirstChar lib.toLower (lib.concatMapStrings (mutFirstChar lib.toUpper) (lib.splitString "-" s));
 
-  # finds the images archive for the desired architecture, aborts in case no suitable archive is found
+  # finds the images archive for the desired architecture, throws in case no suitable archive is found
   findImagesArchive =
     arch:
     let
@@ -146,17 +146,17 @@ let
     in
     lib.findFirst (
       n: lib.hasInfix arch n
-    ) (abort "k3s: no airgap images for ${arch} available") imagesVersionsNames;
+    ) (throw "k3s: no airgap images for ${arch} available") imagesVersionsNames;
 
   # a shortcut that provides the images archive for the host platform. Currently only supports
-  # aarch64 (arm64) and x86_64 (amd64), aborts on other architectures.
+  # aarch64 (arm64) and x86_64 (amd64), throws on other architectures.
   airgapImages = fetchurl (
     if stdenv.hostPlatform.isAarch64 then
       imagesVersions.${findImagesArchive "arm64"}
     else if stdenv.hostPlatform.isx86_64 then
       imagesVersions.${findImagesArchive "amd64"}
     else
-      abort "k3s: airgap images cannot be found automatically for architecture ${stdenv.hostPlatform.linuxArch}, consider using an image archive with an explicit architecture."
+      throw "k3s: airgap images cannot be found automatically for architecture ${stdenv.hostPlatform.linuxArch}, consider using an image archive with an explicit architecture."
   );
 
   # so, k3s is a complicated thing to package
