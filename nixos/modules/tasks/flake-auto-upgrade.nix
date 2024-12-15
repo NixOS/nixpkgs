@@ -1,11 +1,11 @@
 { config, lib, pkgs, ... }:
 
-with lib;
 
 let
+  inherit (lib) mkIf mkMerge nameValuePair optionalString types mkOption mapAttrs';
   nixCommand =
     "${pkgs.nix}/bin/nix --extra-experimental-features 'nix-command flakes'";
-  mkBuilds = attrs: concatMapStrings mkBuild attrs;
+  mkBuilds = attrs: lib.concatMapStrings mkBuild attrs;
   mkBuild = attr:
     if builtins.typeOf attr == "string" then ''
       if ! ${nixCommand} build .#${attr};
@@ -78,7 +78,7 @@ let
           cd repo || exit
           ${pkgs.git}/bin/git fetch
         fi
-        ${lib.optionalString (cfg.gitCryptKeyFile != null) ''
+        ${optionalString (cfg.gitCryptKeyFile != null) ''
           ${pkgs.git-crypt}/bin/git-crypt unlock ${cfg.gitCryptKeyFile}
         ''}
         rm -f ./*.log
@@ -90,12 +90,12 @@ let
           ${pkgs.git}/bin/git checkout -b ${cfg.updateBranch}
         fi
         ${pkgs.git}/bin/git merge origin/${cfg.mainBranch} || true
-        ${lib.optionalString cfg.updateFlake ''
+        ${optionalString cfg.updateFlake ''
           ${nixCommand} flake update --commit-lock-file
         ''}
         ${cfg.updateScript}
         ${mkBuilds cfg.buildAttributes}
-        ${lib.optionalString cfg.failLogInCommitMsg ''
+        ${optionalString cfg.failLogInCommitMsg ''
           oldmessage=$(${pkgs.git}/bin/git log -n1 --pretty=%B)
           faillog=$(cat fail.log | ${pkgs.gawk}/bin/awk '{print $0 " failed"}')
           ${pkgs.git}/bin/git commit --amend -m "$(echo $oldmessage; printf "\n\n"; echo $faillog)"
