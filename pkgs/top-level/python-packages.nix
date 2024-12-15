@@ -14001,6 +14001,8 @@ self: super: with self; {
 
   reuse = callPackage ../development/python-modules/reuse { };
 
+  reverse-geocode = callPackage ../development/python-modules/reverse-geocode { };
+
   rfc3339 = callPackage ../development/python-modules/rfc3339 { };
 
   rfc3339-validator = callPackage ../development/python-modules/rfc3339-validator { };
