@@ -40,6 +40,13 @@ in
         description = "Log level";
       };
 
+      nextcloudUrl = lib.mkOption {
+        type = lib.types.str;
+        default = "http${lib.optionalString cfgN.https "s"}://${cfgN.hostName}";
+        defaultText = lib.literalExpression ''"http''${lib.optionalString config.services.nextcloud.https "s"}://''${config.services.nextcloud.hostName}"'';
+        description = "Configure the nextcloud URL notify_push tries to connect to.";
+      };
+
       bendDomainToLocalhost = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -71,66 +78,62 @@ in
     );
 
   config = lib.mkIf cfg.enable {
-    systemd.services.nextcloud-notify_push =
-      let
-        nextcloudUrl = "http${lib.optionalString cfgN.https "s"}://${cfgN.hostName}";
-      in
-      {
-        description = "Push daemon for Nextcloud clients";
-        documentation = [ "https://github.com/nextcloud/notify_push" ];
-        after = [
-          "phpfpm-nextcloud.service"
-          "redis-nextcloud.service"
-        ];
-        wantedBy = [ "multi-user.target" ];
-        environment = {
-          NEXTCLOUD_URL = nextcloudUrl;
-          SOCKET_PATH = cfg.socketPath;
-          DATABASE_PREFIX = cfg.dbtableprefix;
-          LOG = cfg.logLevel;
-        };
-        postStart = ''
-          ${cfgN.occ}/bin/nextcloud-occ notify_push:setup ${nextcloudUrl}/push
-        '';
-        script =
-          let
-            dbType = if cfg.dbtype == "pgsql" then "postgresql" else cfg.dbtype;
-            dbUser = lib.optionalString (cfg.dbuser != null) cfg.dbuser;
-            dbPass = lib.optionalString (cfg.dbpassFile != null) ":$DATABASE_PASSWORD";
-            dbHostHasPrefix = prefix: lib.hasPrefix prefix (toString cfg.dbhost);
-            isPostgresql = dbType == "postgresql";
-            isMysql = dbType == "mysql";
-            isSocket = (isPostgresql && dbHostHasPrefix "/") || (isMysql && dbHostHasPrefix "localhost:/");
-            dbHost = lib.optionalString (cfg.dbhost != null) (
-              if isSocket then lib.optionalString isMysql "@localhost" else "@${cfg.dbhost}"
-            );
-            dbOpts = lib.optionalString (cfg.dbhost != null && isSocket) (
-              if isPostgresql then
-                "?host=${cfg.dbhost}"
-              else if isMysql then
-                "?socket=${lib.removePrefix "localhost:" cfg.dbhost}"
-              else
-                throw "unsupported dbtype"
-            );
-            dbName = lib.optionalString (cfg.dbname != null) "/${cfg.dbname}";
-            dbUrl = "${dbType}://${dbUser}${dbPass}${dbHost}${dbName}${dbOpts}";
-          in
-          lib.optionalString (dbPass != "") ''
-            export DATABASE_PASSWORD="$(<"${cfg.dbpassFile}")"
-          ''
-          + ''
-            export DATABASE_URL="${dbUrl}"
-            exec ${cfg.package}/bin/notify_push '${cfgN.datadir}/config/config.php'
-          '';
-        serviceConfig = {
-          User = "nextcloud";
-          Group = "nextcloud";
-          RuntimeDirectory = [ "nextcloud-notify_push" ];
-          Restart = "on-failure";
-          RestartSec = "5s";
-          Type = "notify";
-        };
+    systemd.services.nextcloud-notify_push = {
+      description = "Push daemon for Nextcloud clients";
+      documentation = [ "https://github.com/nextcloud/notify_push" ];
+      after = [
+        "phpfpm-nextcloud.service"
+        "redis-nextcloud.service"
+      ];
+      wantedBy = [ "multi-user.target" ];
+      environment = {
+        NEXTCLOUD_URL = cfg.nextcloudUrl;
+        SOCKET_PATH = cfg.socketPath;
+        DATABASE_PREFIX = cfg.dbtableprefix;
+        LOG = cfg.logLevel;
       };
+      postStart = ''
+        ${cfgN.occ}/bin/nextcloud-occ notify_push:setup ${cfg.nextcloudUrl}/push
+      '';
+      script =
+        let
+          dbType = if cfg.dbtype == "pgsql" then "postgresql" else cfg.dbtype;
+          dbUser = lib.optionalString (cfg.dbuser != null) cfg.dbuser;
+          dbPass = lib.optionalString (cfg.dbpassFile != null) ":$DATABASE_PASSWORD";
+          dbHostHasPrefix = prefix: lib.hasPrefix prefix (toString cfg.dbhost);
+          isPostgresql = dbType == "postgresql";
+          isMysql = dbType == "mysql";
+          isSocket = (isPostgresql && dbHostHasPrefix "/") || (isMysql && dbHostHasPrefix "localhost:/");
+          dbHost = lib.optionalString (cfg.dbhost != null) (
+            if isSocket then lib.optionalString isMysql "@localhost" else "@${cfg.dbhost}"
+          );
+          dbOpts = lib.optionalString (cfg.dbhost != null && isSocket) (
+            if isPostgresql then
+              "?host=${cfg.dbhost}"
+            else if isMysql then
+              "?socket=${lib.removePrefix "localhost:" cfg.dbhost}"
+            else
+              throw "unsupported dbtype"
+          );
+          dbName = lib.optionalString (cfg.dbname != null) "/${cfg.dbname}";
+          dbUrl = "${dbType}://${dbUser}${dbPass}${dbHost}${dbName}${dbOpts}";
+        in
+        lib.optionalString (dbPass != "") ''
+          export DATABASE_PASSWORD="$(<"${cfg.dbpassFile}")"
+        ''
+        + ''
+          export DATABASE_URL="${dbUrl}"
+          exec ${cfg.package}/bin/notify_push '${cfgN.datadir}/config/config.php'
+        '';
+      serviceConfig = {
+        User = "nextcloud";
+        Group = "nextcloud";
+        RuntimeDirectory = [ "nextcloud-notify_push" ];
+        Restart = "on-failure";
+        RestartSec = "5s";
+        Type = "notify";
+      };
+    };
 
     networking.hosts = lib.mkIf cfg.bendDomainToLocalhost {
       "127.0.0.1" = [ cfgN.hostName ];
