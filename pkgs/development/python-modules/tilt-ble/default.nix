@@ -13,20 +13,20 @@
 buildPythonPackage rec {
   pname = "tilt-ble";
   version = "0.2.4";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
+    repo = "tilt-ble";
     rev = "refs/tags/v${version}";
     hash = "sha256-ok9XWx47hcke535480NORfS1pSagaOJvMR48lYTa/Tg=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bluetooth-sensor-state-data
     home-assistant-bluetooth
     sensor-state-data
@@ -45,7 +45,7 @@ buildPythonPackage rec {
     description = "Library for Tilt BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/tilt-ble";
     changelog = "https://github.com/Bluetooth-Devices/tilt-ble/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
