@@ -10754,6 +10754,12 @@
     githubId = 54179289;
     name = "Jason Miller";
   };
+  jmir = {
+    email = "joel@miramon.de";
+    github = "jmir1";
+    githubId = 43830312;
+    name = "Joël Miramon";
+  };
   jn-sena = {
     email = "jn-sena@proton.me";
     github = "jn-sena";
