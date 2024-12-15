@@ -20,7 +20,7 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
-    repo = pname;
+    repo = "mopeka-iot-ble";
     rev = "refs/tags/v${version}";
     hash = "sha256-CKLC0p66JapE9qNePE11ttoGMVd4kA7g28kA+pYLXCE=";
   };
@@ -30,9 +30,9 @@ buildPythonPackage rec {
       --replace " --cov=mopeka_iot_ble --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bluetooth-data-tools
     bluetooth-sensor-state-data
     home-assistant-bluetooth
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     description = "Library for Mopeka IoT BLE devices";
     homepage = "https://github.com/bluetooth-devices/mopeka-iot-ble";
     changelog = "https://github.com/Bluetooth-Devices/mopeka-iot-ble/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
