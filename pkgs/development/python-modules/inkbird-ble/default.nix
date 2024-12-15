@@ -14,20 +14,20 @@
 buildPythonPackage rec {
   pname = "inkbird-ble";
   version = "0.5.8";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
+    repo = "inkbird-ble";
     rev = "refs/tags/v${version}";
     hash = "sha256-cUqU4XaY7CORhzy0AGjXI5c5ka+PnF4cHdyopyEBcLo=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bluetooth-data-tools
     bluetooth-sensor-state-data
     home-assistant-bluetooth
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     description = "Library for Inkbird BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/inkbird-ble";
     changelog = "https://github.com/Bluetooth-Devices/inkbird-ble/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
