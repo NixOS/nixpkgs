@@ -87,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     substituteInPlace "$out/share/heroic/flatpak/com.heroicgameslauncher.hgl.desktop" \
+      --replace-fail "StartupWMClass=Heroic" "StartupWMClass=heroic" \
       --replace-fail "Exec=heroic-run" "Exec=heroic"
     mkdir -p "$out/share/applications" "$out/share/icons/hicolor/scalable/apps"
     ln -s "$out/share/heroic/flatpak/com.heroicgameslauncher.hgl.desktop" "$out/share/applications"
