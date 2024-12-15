@@ -117,10 +117,7 @@ in {
 
     services.flakeAutoUpgrade = mkOption {
 
-      description = ''
-        This add an systemd service NAME,
-        which automatically updates an flake and builds it
-      '';
+      description = "Enables a systemd timer to automatically update a flake and build it.";
       default = { };
       type = types.attrsOf (types.submodule (
 
