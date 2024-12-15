@@ -7,6 +7,7 @@
   openxr-loader,
   pkg-config,
   rustPlatform,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,6 +32,9 @@ rustPlatform.buildRustPackage rec {
     openssl
     openxr-loader
   ];
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
 
   postPatch = ''
     alvr_session=$(echo $cargoDepsCopy/alvr_session-*/)
