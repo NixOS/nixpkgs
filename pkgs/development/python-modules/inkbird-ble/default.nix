@@ -6,6 +6,7 @@
   fetchFromGitHub,
   home-assistant-bluetooth,
   poetry-core,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   sensor-state-data,
@@ -34,12 +35,10 @@ buildPythonPackage rec {
     sensor-state-data
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=inkbird_ble --cov-report=term-missing:skip-covered" ""
-  '';
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "inkbird_ble" ];
 
