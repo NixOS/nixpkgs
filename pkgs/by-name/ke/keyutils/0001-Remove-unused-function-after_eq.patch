@@ -1,0 +1,28 @@
+From 59d91e57d103fb4686d2f45ee3c688878244367a Mon Sep 17 00:00:00 2001
+From: Christian Kampka <christian@kampka.net>
+Date: Tue, 24 Nov 2020 22:12:40 +0100
+Subject: [PATCH] Remove unused function 'after_eq'
+
+---
+ keyctl_watch.c | 5 -----
+ 1 file changed, 5 deletions(-)
+
+diff --git a/keyctl_watch.c b/keyctl_watch.c
+index a70a19a..c4ca7f7 100644
+--- a/keyctl_watch.c
++++ b/keyctl_watch.c
+@@ -47,11 +47,6 @@ static struct watch_notification_filter filter = {
+ 	},
+ };
+ 
+-static inline bool after_eq(unsigned int a, unsigned int b)
+-{
+-        return (signed int)(a - b) >= 0;
+-}
+-
+ static void consumer_term(int sig)
+ {
+ 	consumer_stop = 1;
+-- 
+2.28.0
+

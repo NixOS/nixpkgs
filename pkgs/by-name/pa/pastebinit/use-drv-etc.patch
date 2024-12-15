@@ -1,0 +1,13 @@
+diff --git a/pastebinit b/pastebinit
+index 4e5f9ce..fe06bd3 100755
+--- a/pastebinit
++++ b/pastebinit
+@@ -91,7 +91,7 @@ try:
+         # Files found later override files found earlier.
+         pastebind = {}
+         confdirs = []
+-        for confdir in ['/usr/share', '/usr/local/share'] \
++        for confdir in ['@etc@', '/usr/share', '/usr/local/share'] \
+                 + list(reversed(os.environ.get('XDG_DATA_DIRS', '').split(':'))) \
+                 + list(reversed(os.environ.get('XDG_CONFIG_DIRS', '').split(':'))) \
+                 + ['/etc', '/usr/local/etc',

@@ -1,0 +1,139 @@
+diff --git a/Makefile b/Makefile
+index a648e72..0387ac1 100644
+--- a/Makefile
++++ b/Makefile
+@@ -1,5 +1,5 @@
+-CC = `wx-config --cxx`
+-LDFLAGS = `wx-config --libs` -Lunrar -lunrar -Lunzip -lminiunzip
++WX_CC = `wx-config --cxx`
++LDFLAGS = `wx-config --libs` -Lunrar -lunrar -Lunzip -lminiunzip -lz
+ INSTALL = install
+ INSTALL_PROGRAM = $(INSTALL)
+ prefix = /usr/local
+@@ -13,7 +13,7 @@ OBJS = $(patsubst %.cpp,%.o,$(wildcard src/*.cpp))
+ all: comical
+ 
+ comical: $(OBJS) unrar/libunrar.a unzip/libminiunzip.a
+-	$(CC) -o $@ $(OBJS) $(LDFLAGS)
++	$(WX_CC) -o $@ $(OBJS) $(LDFLAGS)
+ 
+ $(OBJS):
+ 	$(MAKE) -C src
+diff --git a/src/ComicalApp.cpp b/src/ComicalApp.cpp
+index 0c004cd..667e75e 100644
+--- a/src/ComicalApp.cpp
++++ b/src/ComicalApp.cpp
+@@ -28,6 +28,7 @@
+ #include "ComicalApp.h"
+ #include "ComicalFrame.h"
+ #include <wx/log.h>
++#include <wx/icon.h>
+ 
+ #if !defined(__WXMAC__) && !defined(__WXCOCOA__) && !defined(__WXMSW__) && !defined(__WXPM__)
+ #include "../Comical Icons/comical.xpm"
+diff --git a/src/ComicalCanvas.cpp b/src/ComicalCanvas.cpp
+index 75da72f..febce50 100644
+--- a/src/ComicalCanvas.cpp
++++ b/src/ComicalCanvas.cpp
+@@ -792,11 +792,11 @@ void ComicalCanvas::OnKeyDown(wxKeyEvent& event)
+ 	
+ 	switch(event.GetKeyCode()) {
+ 
+-	case WXK_PRIOR:
++	case WXK_PAGEUP:
+ 		PrevPageTurn();
+ 		break;
+ 
+-	case WXK_NEXT:
++	case WXK_PAGEDOWN:
+ 		NextPageTurn();
+ 		break;
+ 
+diff --git a/src/ComicalFrame.cpp b/src/ComicalFrame.cpp
+index 2256be8..154fd6d 100644
+--- a/src/ComicalFrame.cpp
++++ b/src/ComicalFrame.cpp
+@@ -240,7 +240,7 @@ ComicalFrame::ComicalFrame(const wxString& title, const wxPoint& pos, const wxSi
+ 	toolbarSizer->AddSpacer(10);
+ 	toolbarSizer->Add(toolBarNav, 0, wxALIGN_CENTER, 0);
+ 	toolbarSizer->AddSpacer(10);
+-	toolbarSizer->Add(labelRight, 1, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL, 0);
++	toolbarSizer->Add(labelRight, 1, wxALIGN_CENTER_VERTICAL, 0);
+ 	toolbarSizer->Layout();
+ 	bookPanelSizer->Add(toolbarSizer, 0, wxEXPAND, 0);
+ 	frameSizer->Add(bookPanelSizer, 1, wxEXPAND);
+@@ -279,12 +279,12 @@ void ComicalFrame::OnClose(wxCloseEvent& event)
+ 
+ 	wxRect frameDim = GetRect();
+ 	config->Write(wxT("CacheLength"), (int) cacheLen);
+-	config->Write(wxT("Zoom"), zoom);
++	config->Write(wxT("Zoom"), (int) zoom);
+ 	config->Write(wxT("ZoomLevel"), zoomLevel);
+ 	config->Write(wxT("FitOnlyOversize"), fitOnlyOversize);
+-	config->Write(wxT("Filter"), filter);
+-	config->Write(wxT("Mode"), mode);
+-	config->Write(wxT("Direction"), direction);
++	config->Write(wxT("Filter"), (int) filter);
++	config->Write(wxT("Mode"), (int) mode);
++	config->Write(wxT("Direction"), (int) direction);
+ 	config->Write(wxT("FrameWidth"), frameDim.width);
+ 	config->Write(wxT("FrameHeight"), frameDim.height);
+ 	config->Write(wxT("FrameX"), frameDim.x);
+@@ -309,7 +309,7 @@ void ComicalFrame::OnOpen(wxCommandEvent& event)
+ {
+ 	wxString cwd;
+ 	config->Read(wxT("CWD"), &cwd);
+-	wxString filename = wxFileSelector(wxT("Open a Comic Book"), cwd, wxT(""), wxT(""), wxT("Comic Books (*.cbr,*.cbz,*.rar,*.zip)|*.cbr;*.CBR;*.cbz;*.CBZ;*.rar;*.RAR;*.zip;*.ZIP"), wxOPEN | wxCHANGE_DIR | wxFILE_MUST_EXIST, this);
++	wxString filename = wxFileSelector(wxT("Open a Comic Book"), cwd, wxT(""), wxT(""), wxT("Comic Books (*.cbr,*.cbz,*.rar,*.zip)|*.cbr;*.CBR;*.cbz;*.CBZ;*.rar;*.RAR;*.zip;*.ZIP"), wxFD_OPEN | wxFD_CHANGE_DIR | wxFD_FILE_MUST_EXIST, this);
+ 
+ 	if (!filename.empty())
+ 		OpenFile(filename);
+diff --git a/src/ComicalManager.cpp b/src/ComicalManager.cpp
+index 12d8334..b10d8fa 100644
+--- a/src/ComicalManager.cpp
++++ b/src/ComicalManager.cpp
+@@ -27,7 +27,7 @@
+ 
+ #include "ComicalManager.h"
+ 
+-ComicalManager::ComicalManager(ComicalFrame *_frame) : wxDocManager(wxDEFAULT_DOCMAN_FLAGS, false), frame(_frame)
++ComicalManager::ComicalManager(ComicalFrame *_frame) : wxDocManager(0, false), frame(_frame)
+ {
+ }
+ 
+diff --git a/src/Makefile b/src/Makefile
+index 2a7dc3b..e0a9874 100644
+--- a/src/Makefile
++++ b/src/Makefile
+@@ -1,3 +1,4 @@
++WX_CC = `wx-config --cxx`
+ INCLUDE = -I../unrar -I../unzip
+ CFLAGS = -O2 -Wall -pipe
+ CPPFLAGS = `wx-config --cxxflags` $(CFLAGS) -D_UNIX $(INCLUDE)
+@@ -21,11 +22,11 @@ all: $(OBJS)
+ 	@echo -e "};\n\n#endif" >> $@
+ 
+ %.o : %.cpp
+-	$(CC) $(CPPFLAGS) -c -o $*.o $<
++	$(WX_CC) $(CPPFLAGS) -c -o $*.o $<
+ 
+ %.d : %.cpp
+ 	@set -e; rm -f $@; \
+-	 $(CC) -MM -MG $(CPPFLAGS) -MT '$*.o' $< > $@.$$$$; \
++	 $(WX_CC) -MM -MG $(CPPFLAGS) -MT '$*.o' $< > $@.$$$$; \
+ 	 sed 's,\($*\)\.o[ :]*,\1.o $@ : ,g' < $@.$$$$ > $@; \
+ 	 rm -f $@.$$$$
+ 
+diff --git a/unzip/unzip.h b/unzip/unzip.h
+index b247937..5bb6a69 100644
+--- a/unzip/unzip.h
++++ b/unzip/unzip.h
+@@ -50,7 +50,7 @@ extern "C" {
+ #endif
+ 
+ #ifndef _ZLIB_H
+-#include "zlib.h"
++#include <zlib.h>
+ #endif
+ 
+ #ifndef _ZLIBIOAPI_H

@@ -1,0 +1,44 @@
+diff -ur a/mplex/main.cpp b/mplex/main.cpp
+--- a/mplex/main.cpp	2021-09-05 02:14:13.029372000 -0400
++++ b/mplex/main.cpp	2023-09-23 08:47:07.683450627 -0400
+@@ -50,7 +50,7 @@
+ #include "multiplexor.hpp"
+ 
+ 
+-using std::auto_ptr;
++using std::unique_ptr;
+ 
+ 
+ /*************************************************************************
+@@ -138,7 +138,7 @@
+ void 
+ FileOutputStream::NextSegment( )
+ {
+-    auto_ptr<char> prev_filename_buf( new char[strlen(cur_filename)+1] );
++    unique_ptr<char> prev_filename_buf( new char[strlen(cur_filename)+1] );
+     char *prev_filename = prev_filename_buf.get();
+ 	fclose(strm);
+ 	++segment_num;
+diff -ur a/utils/fastintfns.h b/utils/fastintfns.h
+--- a/utils/fastintfns.h	2021-09-05 02:14:13.033372000 -0400
++++ b/utils/fastintfns.h	2023-09-23 08:44:40.147112973 -0400
+@@ -2,12 +2,17 @@
+  *
+  * WARNING: Assumes 2's complement arithmetic.
+  */
+-static inline int intmax( register int x, register int y )
++#ifdef __cplusplus
++#define REGISTER
++#else
++#define REGISTER register
++#endif
++static inline int intmax( REGISTER int x, REGISTER int y )
+ {
+ 	return x < y ? y : x;
+ }
+ 
+-static inline int intmin( register int x, register int y )
++static inline int intmin( REGISTER int x, REGISTER int y )
+ {
+ 	return x < y ? x : y;
+ }

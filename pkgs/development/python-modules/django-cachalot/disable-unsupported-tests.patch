@@ -1,0 +1,65 @@
+diff --git a/cachalot/tests/models.py b/cachalot/tests/models.py
+index 8c48640..817602c 100644
+--- a/cachalot/tests/models.py
++++ b/cachalot/tests/models.py
+@@ -77,11 +77,6 @@ class PostgresModel(Model):
+     date_range = DateRangeField(null=True, blank=True)
+     datetime_range = DateTimeRangeField(null=True, blank=True)
+ 
+-    class Meta:
+-        # Tests schema name in table name.
+-        db_table = '"public"."cachalot_postgresmodel"'
+-
+-
+ class UnmanagedModel(Model):
+     name = CharField(max_length=50)
+ 
+diff --git a/settings.py b/settings.py
+index 19d7560..7095367 100644
+--- a/settings.py
++++ b/settings.py
+@@ -8,18 +8,9 @@ DATABASES = {
+         'ENGINE': 'django.db.backends.sqlite3',
+         'NAME': 'cachalot.sqlite3',
+     },
+-    'postgresql': {
+-        'ENGINE': 'django.db.backends.postgresql',
+-        'NAME': 'cachalot',
+-        'USER': 'cachalot',
+-        'PASSWORD': 'password',
+-        'HOST': '127.0.0.1',
+-    },
+-    'mysql': {
+-        'ENGINE': 'django.db.backends.mysql',
+-        'NAME': 'cachalot',
+-        'USER': 'root',
+-        'HOST': '127.0.0.1',
++    'test': {
++        'ENGINE': 'django.db.backends.sqlite3',
++        'NAME': ':memory:',
+     },
+ }
+ if 'MYSQL_PASSWORD' in os.environ:
+@@ -36,22 +27,6 @@ DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+ DATABASE_ROUTERS = ['cachalot.tests.db_router.PostgresRouter']
+ 
+ CACHES = {
+-    'redis': {
+-        'BACKEND': 'django_redis.cache.RedisCache',
+-        'LOCATION': 'redis://127.0.0.1:6379/0',
+-        'OPTIONS': {
+-            # Since we are using both Python 2 & 3 in tests, we need to use
+-            # a compatible pickle version to avoid unpickling errors when
+-            # running a Python 2 test after a Python 3 test.
+-            'PICKLE_VERSION': 2,
+-        },
+-    },
+-    'memcached': {
+-        'BACKEND': 'django.core.cache.backends.memcached.'
+-                   + ('PyMemcacheCache' if __DJ_V[0] > 2
+-                      and (__DJ_V[1] > 1 or __DJ_V[0] > 3) else 'MemcachedCache'),
+-        'LOCATION': '127.0.0.1:11211',
+-    },
+     'locmem': {
+         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+         'OPTIONS': {
