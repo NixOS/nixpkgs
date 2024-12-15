@@ -15,8 +15,7 @@
   typing-extensions,
   pathspec,
   pytestCheckHook,
-  testers,
-  mcdreforged,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -47,11 +46,12 @@ buildPythonPackage rec {
     pathspec
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    versionCheckHook
+  ];
 
-  passthru.tests = {
-    version = testers.testVersion { package = mcdreforged; };
-  };
+  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     description = "Rewritten version of MCDaemon, a python tool to control your Minecraft server";
