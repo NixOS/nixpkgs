@@ -109,7 +109,7 @@ def test_execute_nix_boot(mock_run: Any, tmp_path: Path) -> None:
             call(
                 ["git", "-C", nixpkgs_path, "rev-parse", "--short", "HEAD"],
                 check=False,
-                stdout=PIPE,
+                capture_output=True,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(

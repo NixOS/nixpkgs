@@ -289,14 +289,14 @@ def test_get_nixpkgs_rev() -> None:
         mock_run.assert_called_with(
             ["git", "-C", path, "rev-parse", "--short", "HEAD"],
             check=False,
-            stdout=PIPE,
+            capture_output=True,
         )
 
     expected_calls = [
         call(
             ["git", "-C", path, "rev-parse", "--short", "HEAD"],
             check=False,
-            stdout=PIPE,
+            capture_output=True,
         ),
         call(
             ["git", "-C", path, "diff", "--quiet"],

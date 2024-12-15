@@ -246,7 +246,8 @@ def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
         r = run_wrapper(
             ["git", "-C", nixpkgs_path, "rev-parse", "--short", "HEAD"],
             check=False,
-            stdout=PIPE,
+            # https://github.com/NixOS/nixpkgs/issues/365222
+            capture_output=True,
         )
     except FileNotFoundError:
         # Git is not included in the closure so we need to check
