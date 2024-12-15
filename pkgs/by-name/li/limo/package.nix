@@ -6,6 +6,7 @@
   cmake,
   pkg-config,
 
+  hicolor-icon-theme,
   jsoncpp,
   libarchive,
   libcpr,
@@ -44,6 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
+      hicolor-icon-theme
       jsoncpp
       libarchive
       libcpr
