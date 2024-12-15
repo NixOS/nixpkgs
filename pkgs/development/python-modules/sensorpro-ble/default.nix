@@ -5,6 +5,7 @@
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   sensor-state-data,
@@ -24,11 +25,6 @@ buildPythonPackage rec {
     hash = "sha256-Zqa6qa0Jw79Iu4VEw6KN0GsZcC1X7OpiYUiyT4zwKyY=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=sensorpro_ble --cov-report=term-missing:skip-covered" ""
-  '';
-
   build-system = [ poetry-core ];
 
   dependencies = [
@@ -37,7 +33,10 @@ buildPythonPackage rec {
     sensor-state-data
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "sensorpro_ble" ];
 
