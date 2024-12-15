@@ -14,13 +14,13 @@
 buildPythonPackage rec {
   pname = "rapt-ble";
   version = "0.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "sairon";
-    repo = pname;
+    repo = "rapt-ble";
     rev = "refs/tags/v${version}";
     hash = "sha256-ozZwVgTV/xYl1nXLiybcPs6DQKocNdbxTEYDfYyQuvY=";
   };
@@ -30,9 +30,9 @@ buildPythonPackage rec {
       --replace " --cov=rapt_ble --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bluetooth-data-tools
     bluetooth-sensor-state-data
     home-assistant-bluetooth
@@ -47,7 +47,7 @@ buildPythonPackage rec {
     description = "Library for RAPT Pill hydrometer BLE devices";
     homepage = "https://github.com/sairon/rapt-ble";
     changelog = "https://github.com/sairon/rapt-ble/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
