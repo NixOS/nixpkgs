@@ -13,6 +13,7 @@
   slurp,
   wl-clipboard,
   bash,
+  nix-update-script,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -56,6 +57,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         ]
       }"
   '';
+
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = with lib; {
     description = "Helper for screenshots within Hyprland, based on grimshot";
