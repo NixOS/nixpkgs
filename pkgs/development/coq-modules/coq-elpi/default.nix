@@ -167,6 +167,10 @@ in
     stdlib
   ];
 
+  preConfigure = ''
+    make elpi/dune || true
+  '';
+
   meta = {
     description = "Coq plugin embedding ELPI";
     maintainers = [ lib.maintainers.cohencyril ];

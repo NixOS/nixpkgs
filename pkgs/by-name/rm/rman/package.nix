@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-error=incompatible-function-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   doCheck = false; # "check" target is probably meant to do "installcheck" or something
 

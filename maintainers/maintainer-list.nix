@@ -1982,6 +1982,13 @@
     githubId = 11493130;
     name = "Asbjørn Olling";
   };
+  ascii17 = {
+    name = "Allen Conlon";
+    email = "software@conlon.dev";
+    github = "a1994sc";
+    githubId = 1966320;
+    keys = [ { fingerprint = "E1F3 9B80 47A5 1EB9 01F8 C385 7FE3 F668 49737 F37"; } ];
+  };
   asciimoth = {
     name = "Andrew";
     email = "ascii@moth.contact";
@@ -15125,6 +15132,12 @@
     github = "MortenMunk";
     githubId = 92527083;
     name = "Morten Munk";
+  };
+  morxemplum = {
+    email = "morxemplum@outlook.com";
+    github = "Morxemplum";
+    githubId = 44561540;
+    name = "Synth Morxemplum";
   };
   MostAwesomeDude = {
     email = "cds@corbinsimpson.com";

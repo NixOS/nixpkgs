@@ -1,7 +1,6 @@
 {
   stdenvNoCC,
   lib,
-  makeWrapper,
   fetchFromGitHub,
   coreutils,
   gnused,
@@ -11,18 +10,14 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "bash-env-json";
-  version = "0.9.1";
+  version = "0.9.2";
 
   src = fetchFromGitHub {
     owner = "tesujimath";
     repo = "bash-env-json";
     rev = finalAttrs.version;
-    hash = "sha256-cZEkYOr9z6yLPA4PSo6+hogaqb1vhWaYi/rp4asfsbM=";
+    hash = "sha256-EYro4pMILnQFpXpFjdzSDuudhqC2EvysYMUmIOvesgo=";
   };
-
-  nativeBuildInputs = [
-    makeWrapper
-  ];
 
   installPhase = ''
     runHook preInstall
@@ -33,13 +28,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   '';
 
   postFixup = ''
-    wrapProgram $out/bin/bash-env-json --prefix PATH : ${
-      lib.makeBinPath [
-        coreutils
-        gnused
-        jq
-      ]
-    }
+    substituteInPlace $out/bin/bash-env-json --replace-fail " env " " ${lib.getExe' coreutils "env"} "
+    substituteInPlace $out/bin/bash-env-json --replace-fail " jq " " ${lib.getExe jq} "
+    substituteInPlace $out/bin/bash-env-json --replace-fail " mktemp " " ${lib.getExe' coreutils "mktemp"} "
+    substituteInPlace $out/bin/bash-env-json --replace-fail " rm " " ${lib.getExe' coreutils "rm"} "
+    substituteInPlace $out/bin/bash-env-json --replace-fail " sed " " ${lib.getExe gnused} "
+    substituteInPlace $out/bin/bash-env-json --replace-fail " touch " " ${lib.getExe' coreutils "touch"} "
   '';
 
   passthru.updateScript = nix-update-script { };
