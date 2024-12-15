@@ -64,7 +64,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Helper for screenshots within Hyprland, based on grimshot";
     license = licenses.mit;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ donovanglover ];
+    maintainers = with maintainers; [
+      donovanglover
+      khaneliman
+    ];
     mainProgram = "grimblast";
   };
 })
