@@ -75,6 +75,7 @@ stdenv.mkDerivation {
 
   runtimeDependencies = map lib.getLib [
     systemd
+    libkrb5
   ];
 
   installPhase = ''
@@ -84,8 +85,8 @@ stdenv.mkDerivation {
     cp -r opt $out/opt
     cp -r usr/share $out/share
     substituteInPlace $out/share/applications/qq.desktop \
-      --replace "/opt/QQ/qq" "$out/bin/qq" \
-      --replace "/usr/share" "$out/share"
+      --replace-fail "/opt/QQ/qq" "$out/bin/qq" \
+      --replace-fail "/usr/share" "$out/share"
     makeShellWrapper $out/opt/QQ/qq $out/bin/qq \
       --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH" \
       --prefix LD_PRELOAD : "${lib.makeLibraryPath [ libssh2 ]}/libssh2.so.1" \

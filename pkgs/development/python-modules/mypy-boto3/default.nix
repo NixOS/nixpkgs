@@ -338,8 +338,8 @@ rec {
       "sha256-qycjnRcrEJ2P3dpciMVFPno1wz3tEJ6pa6z8TlLwTME=";
 
   mypy-boto3-connect =
-    buildMypyBoto3Package "connect" "1.35.78"
-      "sha256-9pN4rQDj8ZIqYFNlA2OC0dEK6jsxX6ctlOzBXmd9Gho=";
+    buildMypyBoto3Package "connect" "1.35.80"
+      "sha256-IwT8MYh7Pgqqvq1oe2OrT+yJQi8fzkBnBn3mmyxgsV8=";
 
   mypy-boto3-connect-contact-lens =
     buildMypyBoto3Package "connect-contact-lens" "1.35.0"
@@ -414,8 +414,8 @@ rec {
       "sha256-yJ3ApQy6xeEdxNcRQG5mekfK1aP7FPdR79TfbRZkESo=";
 
   mypy-boto3-dms =
-    buildMypyBoto3Package "dms" "1.35.45"
-      "sha256-+15k+ChWuPK+fBeSbYtraNugtJOI1mcjDU45ohDLauM=";
+    buildMypyBoto3Package "dms" "1.35.80"
+      "sha256-Dam4Arrqj9mZH1F6ErOjX/CpfaWce+SODUz71c8g3hQ=";
 
   mypy-boto3-docdb =
     buildMypyBoto3Package "docdb" "1.35.0"
@@ -574,8 +574,8 @@ rec {
       "sha256-RJEZBr3yU/lGEainrpidLsdYBvVOPMq3cIaIpsTAziQ=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.35.74"
-      "sha256-Hgqsz+kwzH6i0Q+9dDkUVYuYBxe6X/5R7P5ZtbIBfvs=";
+    buildMypyBoto3Package "glue" "1.35.80"
+      "sha256-49t5o9j5sEKGEBoGQibQTgNl4Ab07VggRFFtg1jvAWY=";
 
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.35.0"
@@ -594,8 +594,8 @@ rec {
       "sha256-U0sYInE/1XsjwQCxmcYLVvmEQf4R6drtdSqTr0b+3OM=";
 
   mypy-boto3-guardduty =
-    buildMypyBoto3Package "guardduty" "1.35.72"
-      "sha256-khmU1gjVuni8d1qUVIETdPhQBEyqtMOuf/HfOkWtY10=";
+    buildMypyBoto3Package "guardduty" "1.35.80"
+      "sha256-cwT+8WyMNeHw4R4FrNCNpdSjFjI5yb8aKOaOU15IlYA=";
 
   mypy-boto3-health =
     buildMypyBoto3Package "health" "1.35.67"
@@ -1150,8 +1150,8 @@ rec {
       "sha256-n4arbk3VN6P/7abnM5yhgOQFdLJwioOdyx2ILcc6Mag=";
 
   mypy-boto3-route53domains =
-    buildMypyBoto3Package "route53domains" "1.35.0"
-      "sha256-pM5+b6he5Gp9DuD2Uz/x+SYmVzxhZIh/gJ626S9I19g=";
+    buildMypyBoto3Package "route53domains" "1.35.80"
+      "sha256-2zkKRakpeh2MwVeg3LLJ0QhKt+p4kGBVeUXXueFI5zM=";
 
   mypy-boto3-route53resolver =
     buildMypyBoto3Package "route53resolver" "1.35.63"
