@@ -181,7 +181,15 @@ let
 
   # Convenience attributes for instantitating package sets. Each of
   # these will instantiate a new version of allPackages.
-  otherPackageSets = self: super: {
+  otherPackageSets = let
+    mkPkgs = name: nixpkgsArgs: nixpkgsFun (nixpkgsArgs // {
+      overlays = [
+        (self': super': {
+          "${name}" = super';
+        })
+      ] ++ nixpkgsArgs.overlays or [] ++ overlays;
+    });
+  in self: super: {
     # This maps each entry in lib.systems.examples to its own package
     # set. Each of these will contain all packages cross compiled for
     # that target system. For instance, pkgsCross.raspberryPi.hello,
@@ -191,12 +199,7 @@ let
                               nixpkgsFun { inherit crossSystem; })
                               lib.systems.examples;
 
-    pkgsLLVM = nixpkgsFun {
-      overlays = [
-        (self': super': {
-          pkgsLLVM = super';
-        })
-      ] ++ overlays;
+    pkgsLLVM = mkPkgs "pkgsLLVM" {
       # Bootstrap a cross stdenv using the LLVM toolchain.
       # This is currently not possible when compiling natively,
       # so we don't need to check hostPlatform != buildPlatform.
@@ -206,10 +209,7 @@ let
       };
     };
 
-    pkgsLLVMLibc = nixpkgsFun {
-      overlays = [ (self': super': {
-        pkgsLLVMLibc = super';
-      })] ++ overlays;
+    pkgsLLVMLibc = mkPkgs "pkgsLLVMLibc" {
       # Bootstrap a cross stdenv using LLVM libc.
       # This is currently not possible when compiling natively,
       # so we don't need to check hostPlatform != buildPlatform.
@@ -219,12 +219,7 @@ let
       };
     };
 
-    pkgsArocc = nixpkgsFun {
-      overlays = [
-        (self': super': {
-          pkgsArocc = super';
-        })
-      ] ++ overlays;
+    pkgsArocc = mkPkgs "pkgsArocc" {
       # Bootstrap a cross stdenv using the Aro C compiler.
       # This is currently not possible when compiling natively,
       # so we don't need to check hostPlatform != buildPlatform.
@@ -234,12 +229,7 @@ let
       };
     };
 
-    pkgsZig = nixpkgsFun {
-      overlays = [
-        (self': super': {
-          pkgsZig = super';
-        })
-      ] ++ overlays;
+    pkgsZig = mkPkgs "pkgsZig" {
       # Bootstrap a cross stdenv using the Zig toolchain.
       # This is currently not possible when compiling natively,
       # so we don't need to check hostPlatform != buildPlatform.
@@ -252,10 +242,7 @@ let
     # All packages built with the Musl libc. This will override the
     # default GNU libc on Linux systems. Non-Linux systems are not
     # supported. 32-bit is also not supported.
-    pkgsMusl = if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then nixpkgsFun {
-      overlays = [ (self': super': {
-        pkgsMusl = super';
-      })] ++ overlays;
+    pkgsMusl = if stdenv.hostPlatform.isLinux && stdenv.buildPlatform.is64bit then mkPkgs "pkgsMusl" {
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
         config = lib.systems.parse.tripleFromSystem (makeMuslParsedPlatform stdenv.hostPlatform.parsed);
@@ -264,10 +251,7 @@ let
 
     # All packages built for i686 Linux.
     # Used by wine, firefox with debugging version of Flash, ...
-    pkgsi686Linux = if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then nixpkgsFun {
-      overlays = [ (self': super': {
-        pkgsi686Linux = super';
-      })] ++ overlays;
+    pkgsi686Linux = if stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isx86 then mkPkgs "pkgsi686Linux" {
       ${if stdenv.hostPlatform == stdenv.buildPlatform
         then "localSystem" else "crossSystem"} = {
         config = lib.systems.parse.tripleFromSystem (stdenv.hostPlatform.parsed // {
@@ -277,10 +261,7 @@ let
     } else throw "i686 Linux package set can only be used with the x86 family.";
 
     # x86_64-darwin packages for aarch64-darwin users to use with Rosetta for incompatible packages
-    pkgsx86_64Darwin = if stdenv.hostPlatform.isDarwin then nixpkgsFun {
-      overlays = [ (self': super': {
-        pkgsx86_64Darwin = super';
-      })] ++ overlays;
+    pkgsx86_64Darwin = if stdenv.hostPlatform.isDarwin then mkPkgs "pkgsx86_64Darwin" {
       localSystem = {
         config = lib.systems.parse.tripleFromSystem (stdenv.hostPlatform.parsed // {
           cpu = lib.systems.parse.cpuTypes.x86_64;
@@ -290,20 +271,16 @@ let
 
     # If already linux: the same package set unaltered
     # Otherwise, return a natively built linux package set for the current cpu architecture string.
-    # (ABI and other details will be set to the default for the cpu/os pair)
     pkgsLinux =
       if stdenv.hostPlatform.isLinux
       then self
-      else nixpkgsFun {
+      else mkPkgs "pkgsLinux" {
         localSystem = lib.systems.elaborate "${stdenv.hostPlatform.parsed.cpu.name}-linux";
       };
 
     # Fully static packages.
     # Currently uses Musl on Linux (couldn’t get static glibc to work).
-    pkgsStatic = nixpkgsFun ({
-      overlays = [ (self': super': {
-        pkgsStatic = super';
-      })] ++ overlays;
+    pkgsStatic = mkPkgs "pkgsStatic" {
       crossSystem = {
         isStatic = true;
         config = lib.systems.parse.tripleFromSystem (
@@ -314,12 +291,11 @@ let
         gcc = lib.optionalAttrs (stdenv.hostPlatform.system == "powerpc64-linux") { abi = "elfv2"; } //
           stdenv.hostPlatform.gcc or {};
       };
-    });
+    };
 
-    pkgsExtraHardening = nixpkgsFun {
+    pkgsExtraHardening = mkPkgs "pkgsExtraHardening" {
       overlays = [
         (self': super': {
-          pkgsExtraHardening = super';
           stdenv = super'.withDefaultHardeningFlags (
             super'.stdenv.cc.defaultHardeningFlags ++ [
               "shadowstack"
@@ -338,7 +314,7 @@ let
           pcre-cpp = super'.pcre-cpp.override { enableJit = false; };
           pcre16 = super'.pcre16.override { enableJit = false; };
         })
-      ] ++ overlays;
+      ];
     };
 
     # Extend the package set with zero or more overlays. This preserves
