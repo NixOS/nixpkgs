@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   buildPythonPackage,
   fetchFromGitHub,
@@ -24,7 +25,7 @@ buildPythonPackage rec {
 
   postPatch = ''
     substituteInPlace src/python/ttfautohint/__init__.py \
-      --replace-fail 'find_library("ttfautohint")' '"${lib.getLib ttfautohint}/lib/libttfautohint.so"'
+      --replace-fail 'find_library("ttfautohint")' '"${lib.getLib ttfautohint}/lib/libttfautohint${stdenv.hostPlatform.extensions.sharedLibrary}"'
   '';
 
   env.TTFAUTOHINTPY_BUNDLE_DLL = false;
