@@ -15,8 +15,11 @@ stdenv.mkDerivation {
   };
   buildInputs = [ zig ];
   buildPhase = ''
-    export LIBRARY_PATH=/usr/lib
-    export DYLD_LIBRARY_PATH=/usr/lib
+    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # On Darwin the executable needs to link to libSystem found in /usr/lib/
+      export LIBRARY_PATH=/usr/lib
+      export DYLD_LIBRARY_PATH=/usr/lib
+    ''}
     cacheDir=$(mktemp -d)
     zig build --global-cache-dir $cacheDir
   '';
