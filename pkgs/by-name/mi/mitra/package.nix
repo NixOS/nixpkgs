@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   useFetchCargoVendor = true;
   cargoHash = "sha256-LEqrR5+20up23/lqSj5Ruqch5tnKEhAeMBQZ+nSDeZM=";
 
-  # MEMO: mitra v3.11.0 tests failed with cargo option, "--offline"
+  # require running database
   doCheck = false;
 
   RUSTFLAGS = [
