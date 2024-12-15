@@ -1,11 +1,12 @@
 {
   lib,
   async-timeout,
-  bleak,
   bleak-retry-connector,
+  bleak,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -24,11 +25,6 @@ buildPythonPackage rec {
     hash = "sha256-wQnE2hNT0UOnPJbHq1eayIO8g0XRZvEH6V19DL6RqoA=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=ld2410_ble --cov-report=term-missing:skip-covered" ""
-  '';
-
   build-system = [ poetry-core ];
 
   dependencies = [
@@ -37,7 +33,10 @@ buildPythonPackage rec {
     bleak-retry-connector
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "ld2410_ble" ];
 
