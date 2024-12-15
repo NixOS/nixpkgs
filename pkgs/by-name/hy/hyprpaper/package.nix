@@ -1,8 +1,7 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
-  fetchpatch,
   cmake,
   cairo,
   expat,
@@ -12,6 +11,7 @@
   libdatrie,
   libGL,
   libjpeg,
+  libjxl,
   libselinux,
   libsepol,
   libthai,
@@ -27,26 +27,19 @@
   wayland-scanner,
   hyprwayland-scanner,
   hyprutils,
+  hyprgraphics,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprpaper";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprpaper";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-HIK7XJWQCM0BAnwW5uC7P0e7DAkVTy5jlxQ0NwoSy4M=";
+    hash = "sha256-bXWLq/0Ji13CM4uX4tnBgWpvRysh4H3N1OC1t6d1Sfc=";
   };
-
-  patches = [
-    # CMakeLists: look for wayland.xml protocol in wayland-scanner pkgdata
-    (fetchpatch {
-      url = "https://github.com/hyprwm/hyprpaper/commit/6c6e54faa84d2de94d2321eda43a8a669ebf3312.patch";
-      hash = "sha256-Ns7HlUPVgBDIocZRGR6kIW58Mt92kJPQRMSKTvp6Vik=";
-    })
-  ];
 
   nativeBuildInputs = [
     cmake
@@ -64,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     libdatrie
     libGL
     libjpeg
+    libjxl
     libselinux
     libsepol
     libthai
@@ -76,11 +70,12 @@ stdenv.mkDerivation (finalAttrs: {
     wayland
     wayland-protocols
     hyprutils
+    hyprgraphics
   ];
 
   prePatch = ''
     substituteInPlace src/main.cpp \
-      --replace GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
+      --replace-fail GIT_COMMIT_HASH '"${finalAttrs.src.rev}"'
   '';
 
   meta = with lib; {
@@ -93,7 +88,7 @@ stdenv.mkDerivation (finalAttrs: {
       wozeparrot
     ];
     inherit (wayland.meta) platforms;
-    broken = stdenv.hostPlatform.isDarwin;
+    broken = gcc14Stdenv.hostPlatform.isDarwin;
     mainProgram = "hyprpaper";
   };
 })

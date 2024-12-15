@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -11,8 +11,9 @@
   xcur2png,
   tomlplusplus,
   nix-update-script,
+  fetchpatch,
 }:
-stdenv.mkDerivation (finalAttrs: {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprcursor";
   version = "0.1.10";
 
@@ -43,6 +44,14 @@ stdenv.mkDerivation (finalAttrs: {
     "lib"
   ];
 
+  patches = [
+    # NOTE: remove after next release
+    (fetchpatch {
+      name = "001-add-fstream-include";
+      url = "https://github.com/hyprwm/hyprcursor/commit/c18572a92eb39e4921b4f4c2bca8521b6f701b58.patch";
+      hash = "sha256-iHRRd/18xEAgvJgmZeSzMp53s+zdIpuaP/sayRfcft4=";
+    })
+  ];
   passthru.updateScript = nix-update-script { };
 
   meta = {
