@@ -13,9 +13,9 @@
 buildPythonPackage rec {
   pname = "sensirion-ble";
   version = "0.1.1";
-  format = "pyproject";
+  pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "akx";
@@ -29,9 +29,9 @@ buildPythonPackage rec {
       --replace " --cov=sensirion_ble --cov-report=term-missing:skip-covered" ""
   '';
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bluetooth-data-tools
     bluetooth-sensor-state-data
     home-assistant-bluetooth
