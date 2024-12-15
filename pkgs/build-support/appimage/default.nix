@@ -203,7 +203,6 @@ rec {
       # libraries not on the upstream include list, but nevertheless expected
       # by at least one appimage
       libtool.lib # for Synfigstudio
-      xorg.libxshmfence # for apple-music-electron
       at-spi2-core
       pciutils # for FreeCAD
       pipewire # immersed-vr wayland support
