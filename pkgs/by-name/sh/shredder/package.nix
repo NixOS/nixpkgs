@@ -4,7 +4,8 @@
   lib,
 }:
 buildGoModule {
-  name = "shredder";
+  pname = "shredder";
+  version = "1.0.0";
   src = fetchFromGitHub {
     owner = "NewDawn0";
     repo = "shredder";

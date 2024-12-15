@@ -14,6 +14,7 @@ let
   };
   meta = with lib; {
     description = "A cd quicklist";
+  version = "1.0.0";
   meta = {
     description = "A fast directory navigation tool with a quicklist";
     longDescription = ''
@@ -26,18 +27,15 @@ let
     platforms = lib.platforms.all;
   };
   pkg = rustPlatform.buildRustPackage {
-    inherit meta src;
+    inherit meta version;
     pname = "dirStack";
-    version = "1.0.0";
     propagatedBuildInputs = [ fzf ];
     cargoLock.lockFile = "${src}/Cargo.lock";
   };
 in
 stdenv.mkDerivation {
-  inherit meta;
-  name = "dirStack-wrapped";
-  version = "1.0.0";
-  phases = [ "installPhase" ];
+  inherit meta version;
+  pname = "dirStack-wrapped";
   installPhase = ''
     mkdir -p $out/bin $out/lib
     cp ${pkg}/bin/dirStack $out/bin/

@@ -4,9 +4,8 @@
   lib,
 }:
 buildGoModule {
-  name = "note";
+  pname = "note";
   version = "1.0.0";
-
   src = fetchFromGitHub {
     owner = "NewDawn0";
     repo = "note";

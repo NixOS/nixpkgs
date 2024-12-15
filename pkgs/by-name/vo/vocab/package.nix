@@ -5,7 +5,7 @@
   translate,
 }:
 python3Packages.buildPythonPackage {
-  name = "vocab";
+  pname = "vocab";
   version = "1.0.0";
   propagagedBuildInputs = [ translate ];
   buildInputs = with python3Packages; [ setuptools ];
