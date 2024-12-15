@@ -6501,8 +6501,6 @@ self: super: with self; {
 
   jaconv = callPackage ../development/python-modules/jaconv { };
 
-  jaeger-client = callPackage ../development/python-modules/jaeger-client { };
-
   jalali-core = callPackage ../development/python-modules/jalali-core { };
 
   jamo = callPackage ../development/python-modules/jamo { };
@@ -9694,8 +9692,6 @@ self: super: with self; {
     python3Packages = self;
     enablePython = true;
   });
-
-  opentracing = callPackage ../development/python-modules/opentracing { };
 
   opentsne = callPackage ../development/python-modules/opentsne { };
 
