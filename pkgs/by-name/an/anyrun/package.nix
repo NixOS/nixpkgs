@@ -10,13 +10,12 @@
   glib,
   gtk3,
   pango,
-  stdenv,
   wayland,
   gtk-layer-shell,
-  unstableGitUpdater,
+  nix-update-script,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "anyrun";
   version = "0-unstable-2023-12-01";
 
@@ -59,7 +58,7 @@ rustPlatform.buildRustPackage rec {
     install -Dm444 anyrun/res/style.css examples/config.ron -t $out/share/doc/anyrun/examples/
   '';
 
-  passthru.updateScript = unstableGitUpdater { };
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
 
   meta = {
     description = "Wayland-native, highly customizable runner";
