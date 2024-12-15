@@ -7,6 +7,8 @@
   home-assistant-bluetooth,
   mac-vendor-lookup,
   poetry-core,
+  pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -25,11 +27,6 @@ buildPythonPackage rec {
     hash = "sha256-1liSWxduYpjIMu7226EH4bsc7gca5g/fyL79W4ZMdU4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail " --cov=ibeacon_ble --cov-report=term-missing:skip-covered" ""
-  '';
-
   build-system = [ poetry-core ];
 
   dependencies = [
@@ -39,7 +36,11 @@ buildPythonPackage rec {
     mac-vendor-lookup
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-asyncio
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "ibeacon_ble" ];
 
