@@ -8,13 +8,13 @@
 
 buildPostgresqlExtension rec {
   pname = "pg_partman";
-  version = "5.2.1";
+  version = "5.2.2";
 
   src = fetchFromGitHub {
     owner = "pgpartman";
     repo = pname;
     rev = "refs/tags/v${version}";
-    sha256 = "sha256-DdF1UwfeAM4tlcvdXaiz28JA2UwNwPpXnSw5D9eZDlQ=";
+    sha256 = "sha256-+T+JOGVOyxJH+mb0IhCJbSh+5DDlhaXvagy8C4lQizo=";
   };
 
   meta = with lib; {
