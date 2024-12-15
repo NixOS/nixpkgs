@@ -39,6 +39,7 @@ stdenv.mkDerivation {
     intltool
     autoreconfHook
     pkg-config
+    glib
   ];
 
   buildInputs =
