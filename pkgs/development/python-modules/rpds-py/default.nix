@@ -9,7 +9,6 @@
   rustc,
   rustPlatform,
   libiconv,
-  python,
 }:
 
 buildPythonPackage rec {
@@ -30,8 +29,6 @@ buildPythonPackage rec {
     name = "${pname}-${version}";
     hash = "sha256-5vbR2EbrAPJ8pb78tj/+r9nOWgQDT5aO/LUQI4kAGjU=";
   };
-
-  maturinBuildFlags = [ "--interpreter ${python.executable}" ];
 
   nativeBuildInputs = [
     rustPlatform.cargoSetupHook
