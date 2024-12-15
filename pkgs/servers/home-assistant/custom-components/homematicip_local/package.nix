@@ -3,6 +3,7 @@
   buildHomeAssistantComponent,
   fetchFromGitHub,
   hahomematic,
+  home-assistant,
 }:
 
 buildHomeAssistantComponent rec {
@@ -16,6 +17,13 @@ buildHomeAssistantComponent rec {
     rev = "refs/tags/${version}";
     hash = "sha256-1ssmaX6G03i9KYgjCRMZqOG2apEZ0069fQnmVy2BVhA=";
   };
+
+  postPatch = ''
+    min_ha_version="$(sed -nr 's/^HMIP_LOCAL_MIN_HA_VERSION.*= "([0-9.]+)"$/\1/p' custom_components/homematicip_local/const.py)"
+    test \
+      "$(printf '%s\n' "$min_ha_version" "${home-assistant.version}" | sort -V | head -n1)" = "$min_ha_version" \
+      || (echo "error: only Home Assistant >= $min_ha_version is supported" && exit 1)
+  '';
 
   dependencies = [
     hahomematic
