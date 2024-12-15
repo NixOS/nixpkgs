@@ -4,7 +4,6 @@ import ./make-test-python.nix ({ lib, pkgs, ... }:
     inherit (import ./ssh-keys.nix pkgs) snakeOilPrivateKey snakeOilPublicKey;
     inherit (lib) getExe;
 
-    aliceProjectName = "project";
     alicePassword = "password";
     aliceUsername = "alice";
     repohome = "/var/www/git/";
