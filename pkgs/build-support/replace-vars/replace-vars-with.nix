@@ -111,9 +111,9 @@ let
       in
       ''
         runHook preCheck
-        if grep -Pqe ${regex} "$out"; then
-          echo The following look like unsubstituted Nix identifiers that remain in "$out":
-          grep -Poe ${regex} "$out"
+        if grep -Pqe ${regex} "$target"; then
+          echo The following look like unsubstituted Nix identifiers that remain in "$target":
+          grep -Poe ${regex} "$target"
           echo Use the more precise '`substitute`' function if this check is in error.
           exit 1
         fi
