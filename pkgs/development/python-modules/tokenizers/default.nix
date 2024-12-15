@@ -5,7 +5,6 @@
   fetchurl,
   buildPythonPackage,
   fetchFromGitHub,
-  python,
 
   # nativeBuildInputs
   pkg-config,
@@ -95,7 +94,6 @@ buildPythonPackage rec {
   };
 
   sourceRoot = "${src.name}/bindings/python";
-  maturinBuildFlags = [ "--interpreter ${python.executable}" ];
 
   nativeBuildInputs = [
     pkg-config
