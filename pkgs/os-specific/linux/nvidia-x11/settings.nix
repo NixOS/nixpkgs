@@ -79,7 +79,7 @@ let
   };
 
   runtimeDependencies = [
-    libglvnd libXrandr
+    libglvnd libXrandr libXv
   ];
 
   runtimeLibraryPath = lib.makeLibraryPath runtimeDependencies;
@@ -150,7 +150,7 @@ stdenv.mkDerivation {
 
   binaryName = if withGtk3 then ".nvidia-settings-wrapped" else "nvidia-settings";
   postFixup = ''
-    patchelf --set-rpath "$(patchelf --print-rpath $out/bin/$binaryName):$out/lib:${libXv}/lib:${runtimeLibraryPath}" \
+    patchelf --set-rpath "$(patchelf --print-rpath $out/bin/$binaryName):$out/lib:${runtimeLibraryPath}" \
       $out/bin/$binaryName
 
     addDriverRunpath $out/bin/$binaryName
