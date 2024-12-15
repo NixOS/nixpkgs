@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "'^(\d*\.\d*\.\d*)$'"
+        "'^(\\d*\\.\\d*\\.\\d*)$'"
       ];
     };
   };
