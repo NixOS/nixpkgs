@@ -18,7 +18,7 @@
   qtbase,
   qttools,
   qtwayland,
-  sdbus-cpp,
+  sdbus-cpp_2,
   slurp,
   systemd,
   wayland,
@@ -27,13 +27,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal-hyprland";
-  version = "1.3.6";
+  version = "1.3.8";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-1DGktDtSWIJpnDbVoj/qpvJSH5zg6JbOfuh6xqZMap0=";
+    hash = "sha256-V+CvM2UBJ6KjXD+B7T6vy8EYwLvLX88tZb8KP73MPSo=";
   };
 
   depsBuildBuild = [
@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
     qtbase
     qttools
     qtwayland
-    sdbus-cpp
+    sdbus-cpp_2
     systemd
     wayland
     wayland-protocols
