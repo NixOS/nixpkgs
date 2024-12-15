@@ -1,0 +1,13 @@
+Fixes cross compilation to aarch64-linux by reverting
+https://github.com/nodejs/node/pull/43200
+
+--- old/configure.py
++++ new/configure.py
+@@ -1236,7 +1236,6 @@
+ 
+   # Enable branch protection for arm64
+   if target_arch == 'arm64':
+-    o['cflags']+=['-msign-return-address=all']
+     o['variables']['arm_fpu'] = options.arm_fpu or 'neon'
+ 
+   if options.node_snapshot_main is not None:
