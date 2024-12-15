@@ -4,7 +4,6 @@
   fetchurl,
   buildPythonPackage,
   fetchFromGitHub,
-  python,
 
   # nativeBuildInputs
   cargo,
@@ -92,7 +91,6 @@ buildPythonPackage rec {
   };
 
   sourceRoot = "${src.name}/bindings/python";
-  maturinBuildFlags = [ "--interpreter ${python.executable}" ];
 
   nativeBuildInputs = [
     cargo
