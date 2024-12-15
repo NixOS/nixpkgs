@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "python-box";
-  version = "7.2.0";
+  version = "7.3.0";
   format = "setuptools";
 
   disabled = pythonOlder "3.8";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cdgriffith";
     repo = "Box";
-    rev = "refs/tags/${version}";
-    hash = "sha256-5aORpuh0ezA3mUEpAPANDkdeN8ujNRfCUCV5qamMk68=";
+    tag = version;
+    hash = "sha256-0vUPXZEyolI03N5RQ5GKTvSHUuFpimHZwQAYwGHJydU=";
   };
 
   nativeBuildInputs = [
