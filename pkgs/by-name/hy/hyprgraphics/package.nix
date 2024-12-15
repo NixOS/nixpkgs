@@ -4,18 +4,24 @@
   fetchFromGitHub,
   cmake,
   pkg-config,
+  cairo,
+  file,
   hyprutils,
+  libjpeg,
+  libjxl,
+  libwebp,
+  pixman,
 }:
 
 gcc14Stdenv.mkDerivation (finalAttrs: {
-  pname = "hyprlang";
-  version = "0.6.0";
+  pname = "hyprgraphics";
+  version = "0.1.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
-    repo = "hyprlang";
+    repo = "hyprgraphics";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-oj8V4kvzor5AOStzj4/B4W1ZIObAPxT9K4NfXx7dyKE=";
+    hash = "sha256-FFLJzFTyNhS7tBEEECx0B8Ye/bpmxhFVEKlECgMLc6c=";
   };
 
   nativeBuildInputs = [
@@ -24,7 +30,13 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    cairo
+    file
     hyprutils
+    libjpeg
+    libjxl
+    libwebp
+    pixman
   ];
 
   outputs = [
@@ -40,8 +52,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
-      iogamaster
-      fufexan
+      khaneliman
     ];
   };
 })
