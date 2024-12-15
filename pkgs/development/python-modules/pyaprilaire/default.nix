@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pyaprilaire";
-  version = "0.7.4";
+  version = "0.7.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "chamberlain2007";
     repo = "pyaprilaire";
-    rev = "refs/tags/${version}";
-    hash = "sha256-+/yQO0JF2nkxaM71iNj6ODB8raM9s4qiLLi6/borcr4=";
+    tag = version;
+    hash = "sha256-7jTV0F7g6IMsBUYk1GMakyvQ66k7glOUNWv6tdKjdnQ=";
   };
 
   build-system = [ setuptools ];
