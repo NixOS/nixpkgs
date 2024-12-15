@@ -16755,6 +16755,11 @@
     githubId = 33826198;
     name = "Philipp Arras";
   };
+  parth = {
+    github = "parth";
+    githubId = 821972;
+    name = "Parth Mehrotra";
+  };
   pashashocky = {
     email = "pashashocky@gmail.com";
     github = "pashashocky";
