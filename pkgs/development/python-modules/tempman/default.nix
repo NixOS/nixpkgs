@@ -3,7 +3,8 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
-  wheel,
+  pytestCheckHook,
+  gitUpdater,
 }:
 
 buildPythonPackage rec {
@@ -14,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mwilliamson";
     repo = "python-tempman";
-    rev = version;
+    tag = version;
     hash = "sha256-EHTnlT3vcmyjyyS3QCJXjAuZqOEc0i11rEb6zfX6rDY=";
   };
 
@@ -23,14 +24,14 @@ buildPythonPackage rec {
       --replace-fail 'read("README")' '""'
   '';
 
-  build-system = [
-    setuptools
-    wheel
-  ];
+  build-system = [ setuptools ];
 
-  pythonImportsCheck = [
-    "tempman"
-  ];
+  pythonImportsCheck = [ "tempman" ];
+
+  # Disabling tests, they rely on dependencies that are outdated and not supported
+  doCheck = false;
+
+  passthru.updateScripts = gitUpdater { };
 
   meta = {
     description = "Create and clean up temporary directories";
