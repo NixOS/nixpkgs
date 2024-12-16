@@ -41,7 +41,7 @@ buildDotnetModule rec {
     changelog = "https://github.com/sandreas/tone/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ jvanbruegge ];
-    platforms = lib.platforms.linux;
+    platforms = with lib.platforms; linux ++ darwin ++ windows;
     mainProgram = "tone";
   };
 }
