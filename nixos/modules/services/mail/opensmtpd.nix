@@ -132,14 +132,14 @@ in
         procEnv = pkgs.buildEnv {
           name = "opensmtpd-procs";
           paths = [ cfg.package ] ++ cfg.procPackages;
-          pathsToLink = [ "/libexec/opensmtpd" ];
+          pathsToLink = [ "/libexec/smtpd" ];
         };
       in
       {
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
         serviceConfig.ExecStart = "${cfg.package}/sbin/smtpd -d -f ${conf} ${args}";
-        environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/opensmtpd";
+        environment.OPENSMTPD_PROC_PATH = "${procEnv}/libexec/smtpd";
       };
   };
 }
