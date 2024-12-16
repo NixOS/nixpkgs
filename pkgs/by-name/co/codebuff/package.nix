@@ -5,15 +5,15 @@
 }:
 
 buildNpmPackage rec {
-  pname = "manicode";
-  version = "1.0.99";
+  pname = "codebuff";
+  version = "1.0.119";
 
   src = fetchzip {
-    url = "https://registry.npmjs.org/manicode/-/manicode-${version}.tgz";
-    hash = "sha256-LVTh8yOfP92zGSdxLpThC+U9E8cBjoL0+iMQOldNO8A=";
+    url = "https://registry.npmjs.org/codebuff/-/codebuff-${version}.tgz";
+    hash = "sha256-nIjNwvEhlgmfj3d0XEyMBWWNy+kh8iS4SEOZ9u8PWZQ=";
   };
 
-  npmDepsHash = "sha256-MAm/FE8M6BBDZD5Fy2k6GcM5Qv35jNeUwHcemmbUj/A=";
+  npmDepsHash = "sha256-fO4rjRY31hOWuBnAeDKMSM5wbpPxLa93QQ3DPRCe/ig=";
 
   postPatch = ''
     cp ${./package-lock.json} package-lock.json
@@ -25,10 +25,10 @@ buildNpmPackage rec {
 
   meta = {
     description = "Use natural language to edit your codebase and run commands from your terminal faster";
-    homepage = "https://manicode.ai";
-    downloadPage = "https://www.npmjs.com/package/manicode";
+    homepage = "https://codebuff.ai";
+    downloadPage = "https://www.npmjs.com/package/codebuff";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.malo ];
-    mainProgram = "manicode";
+    mainProgram = "codebuff";
   };
 }
