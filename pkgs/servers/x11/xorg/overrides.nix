@@ -1020,26 +1020,10 @@ self: super:
     meta = attrs.meta // { mainProgram = "xinit"; };
   });
 
-  xf86videointel = super.xf86videointel.overrideAttrs (attrs: {
-    # the update script only works with released tarballs :-/
-    name = "xf86-video-intel-2021-01-15";
-    src = fetchFromGitLab {
-      domain = "gitlab.freedesktop.org";
-      group = "xorg";
-      owner = "driver";
-      repo = "xf86-video-intel";
-      rev = "31486f40f8e8f8923ca0799aea84b58799754564";
-      sha256 = "sha256-nqT9VZDb2kAC72ot9UCdwEkM1uuP9NriJePulzrdZlM=";
-    };
-    buildInputs = attrs.buildInputs ++ [ xorg.libXScrnSaver xorg.libXv xorg.pixman xorg.utilmacros ];
-    nativeBuildInputs = attrs.nativeBuildInputs ++ [autoreconfHook ];
-    configureFlags = [ "--with-default-dri=3" "--enable-tools" ];
-    patches = [ ./use_crocus_and_iris.patch ];
-
-    meta = attrs.meta // {
-      platforms = ["i686-linux" "x86_64-linux"];
-    };
-  });
+  xf86videointel = throw ''
+    xf86videointel has been removed as the package is unmaintained and the driver is no longer functional.
+    Please remove "intel" from `services.xserver.videoDrivers` and switch to the "modesetting" driver.
+  ''; # Added 2024-12-16;
 
   xf86videoopenchrome = super.xf86videoopenchrome.overrideAttrs (attrs: {
     buildInputs = attrs.buildInputs ++ [ xorg.libXv ];
