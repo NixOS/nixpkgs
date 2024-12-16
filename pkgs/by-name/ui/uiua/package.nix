@@ -1,4 +1,6 @@
 {
+  uiua_versionType ? "stable",
+
   lib,
   stdenv,
   rustPlatform,
@@ -11,12 +13,15 @@
   webcamSupport ? false,
 
   runCommand,
-
-  unstable ? false,
 }:
 
 let
-  versionInfo = import (if unstable then ./unstable.nix else ./stable.nix);
+  versionInfo =
+    {
+      "stable" = import ./stable.nix;
+      "unstable" = import ./unstable.nix;
+    }
+    .${uiua_versionType};
 in
 
 # buildRustPackage doesn't support finalAttrs, so we can't use finalPackage for the tests
