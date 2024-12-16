@@ -39,8 +39,8 @@ let
   snakeOilPublicKey = sshKeys.snakeOilPublicKey;
 
 in {
-  ec2-nixops = makeEc2Test {
-    name         = "nixops-userdata";
+  ec2-userdata = makeEc2Test {
+    name         = "ec2-userdata";
     meta.timeout = 600;
     inherit image;
     sshPublicKey = snakeOilPublicKey; # That's right folks! My user's key is also the host key!

@@ -291,7 +291,7 @@ in {
   dublin-traceroute = handleTest ./dublin-traceroute.nix {};
   earlyoom = handleTestOn ["x86_64-linux"] ./earlyoom.nix {};
   early-mount-options = handleTest ./early-mount-options.nix {};
-  ec2-nixops = (handleTest ./ec2.nix {}).ec2-nixops;
+  ec2-userdata = (handleTest ./ec2.nix {}).ec2-userdata;
   ecryptfs = handleTest ./ecryptfs.nix {};
   fscrypt = handleTest ./fscrypt.nix {};
   fastnetmon-advanced = runTest ./fastnetmon-advanced.nix;
