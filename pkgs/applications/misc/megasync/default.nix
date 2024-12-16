@@ -31,6 +31,7 @@
   sqlite,
   unzip,
   wget,
+  xorg,
   zlib,
   qt5,
 }:
@@ -120,6 +121,10 @@ mkDerivation rec {
     (lib.cmakeBool "USE_FREEIMAGE" false) # freeimage is insecure
     (lib.cmakeBool "ENABLE_DESIGN_TOKENS_IMPORTER" false) # cannot be fetched
   ];
+
+  postInstall = ''
+    wrapProgram $out/bin/megasync --prefix PATH : ${lib.makeBinPath [ xorg.xrdb ]}
+  '';
 
   meta = with lib; {
     description = "Easy automated syncing between your computers and your MEGA Cloud Drive";
