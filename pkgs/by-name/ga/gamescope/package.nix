@@ -186,6 +186,7 @@ stdenv.mkDerivation (finalAttrs: {
       Scrumplex
       zhaofengli
       k900
+      Gliczy
     ];
     platforms = lib.platforms.linux;
     mainProgram = "gamescope";
