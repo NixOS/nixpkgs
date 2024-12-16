@@ -10149,6 +10149,8 @@ self: super: with self; {
 
   pipetools = callPackage ../development/python-modules/pipetools { };
 
+  piqp = callPackage ../development/python-modules/piqp { };
+
   pg8000 = callPackage ../development/python-modules/pg8000 { };
 
   pgcli = callPackage ../development/python-modules/pgcli { };
