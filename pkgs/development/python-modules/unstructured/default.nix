@@ -182,7 +182,8 @@ buildPythonPackage {
     wrapt
   ];
 
-  optional-dependencies = {
+  optional-dependencies = rec {
+    all-docs = csv ++ docx ++ epub ++ pdf ++ req-markdown ++ odt ++ org ++ pptx ++ xlsx;
     csv = [
       numpy
       pandas
@@ -196,7 +197,7 @@ buildPythonPackage {
       typing-extensions
     ];
     epub = [ pypandoc ];
-    markdown = [
+    req-markdown = [
       importlib-metadata
       markdown
       zipp
@@ -207,9 +208,12 @@ buildPythonPackage {
       python-docx
       typing-extensions
     ];
+    org = [
+      pypandoc
+    ];
     paddleocr = [
       opencv-python
-      paddlepaddle
+      # paddlepaddle # 3.12 not supported for now
       pdf2image
       # unstructured-paddleocr
     ];
