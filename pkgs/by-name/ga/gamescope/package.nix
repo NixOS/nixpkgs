@@ -39,8 +39,8 @@
   enableWsi ? true,
 }:
 let
-  joshShaders = fetchFromGitHub {
-    owner = "Joshua-Ashton";
+  frogShaders = fetchFromGitHub {
+    owner = "misyltoad";
     repo = "GamescopeShaders";
     rev = "v0.1";
     hash = "sha256-gR1AeAHV/Kn4ntiEDUSPxASLMFusV6hgSGrTbMCBUZA=";
@@ -171,7 +171,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Install ReShade shaders
     mkdir -p $out/share/gamescope/reshade
-    cp -r ${joshShaders}/* $out/share/gamescope/reshade/
+    cp -r ${frogShaders}/* $out/share/gamescope/reshade/
   '';
 
   passthru.updateScript = nix-update-script { };
