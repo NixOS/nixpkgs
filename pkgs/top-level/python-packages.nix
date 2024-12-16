@@ -7869,6 +7869,8 @@ self: super: with self; {
 
   markdownify  = callPackage ../development/python-modules/markdownify { };
 
+  markitdown  = callPackage ../development/python-modules/markitdown { };
+
   marko = callPackage ../development/python-modules/marko { };
 
   markupsafe = callPackage ../development/python-modules/markupsafe { };
