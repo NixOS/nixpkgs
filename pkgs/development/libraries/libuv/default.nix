@@ -127,12 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
           # can enable on upgrade from 1.49.2
           "udp_mmsg"
         ]
-        ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-          # fail on macos < 10.15 (starting in libuv 1.47.0)
-          "fs_write_alotof_bufs_with_offset"
-          "fs_write_multiple_bufs"
-          "fs_read_bufs"
-        ]
         ++ lib.optionals stdenv.hostPlatform.isAarch32 [
           # I observe this test failing with some regularity on ARMv7:
           # https://github.com/libuv/libuv/issues/1871
