@@ -19,13 +19,13 @@ let
 in
 buildBazelPackage rec {
   pname = "bant";
-  version = "0.1.8";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "hzeller";
     repo = "bant";
     rev = "v${version}";
-    hash = "sha256-CMqh2v6Y/jvrDC2M4Q+pC0FkNJ95gbGTR1UC6zviwV4=";
+    hash = "sha256-TIVbf5qZNohZAFugi/E7m1Sgekn82/qqtx8jSHo75Js=";
   };
 
   bazelFlags = [
@@ -40,8 +40,8 @@ buildBazelPackage rec {
   fetchAttrs = {
     hash =
       {
-        aarch64-linux = "sha256-2QMg/Ko3HgqKhI2g4PZ+UWOujDACLZHxyec1zAm58yg=";
-        x86_64-linux = "sha256-SfQ6dlC+JVYXIpuvMNyQJkY6+zq8Md2+LsiRstJWMdY=";
+        aarch64-linux = "sha256-8pLgn67kwVNdqhUXYsdi7OsArCZZmW55UPzUBlIyBbk=";
+        x86_64-linux = "sha256-dUNdvSJA3SlIIRWmhaq3Hu0+84mBBhxbU/eBDXIv/iI=";
       }
       .${system} or (throw "No hash for system: ${system}");
   };

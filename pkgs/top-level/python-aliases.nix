@@ -169,6 +169,7 @@ mapAliases ({
   django-mysql = throw "django-mysql has been removed, since it was an unused leaf package"; # added 2024-07-02
   django_nose = django-nose; # added 2023-07-25
   django-nose = throw "django-nose has been removed since it has not been maintained and there are no dependent packages"; # added 2024-05-21
+  django-q = throw "django-q has been removed because it is unmaintained and was unused"; # added 2024-12-13
   django_reversion = django-reversion; # added 2022-06-18
   django_polymorphic = django-polymorphic; # added 2022-05-24
   django_redis = django-redis; # added 2021-10-11

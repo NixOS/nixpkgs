@@ -50,9 +50,15 @@ let
 
   # The geodata website is not versioned, so we use the internet archive
   geodata =
+    let
+      inherit (sources.components.geonames) timestamp;
+      date =
+        "${lib.substring 0 4 timestamp}-${lib.substring 4 2 timestamp}-${lib.substring 6 2 timestamp}T"
+        + "${lib.substring 8 2 timestamp}:${lib.substring 10 2 timestamp}:${lib.substring 12 2 timestamp}Z";
+    in
     runCommand "immich-geodata"
       {
-        outputHash = "sha256-imqSfzXaEMNo9T9tZr80sr/89n19kiFc8qwidFzRUaY=";
+        outputHash = sources.components.geonames.hash;
         outputHashMode = "recursive";
         nativeBuildInputs = [
           cacert
@@ -64,15 +70,15 @@ let
       }
       ''
         mkdir $out
-        url="https://web.archive.org/web/20240724153050/http://download.geonames.org/export/dump"
+        url="https://web.archive.org/web/${timestamp}/http://download.geonames.org/export/dump"
         curl -Lo ./cities500.zip "$url/cities500.zip"
         curl -Lo $out/admin1CodesASCII.txt "$url/admin1CodesASCII.txt"
         curl -Lo $out/admin2Codes.txt "$url/admin2Codes.txt"
         curl -Lo $out/ne_10m_admin_0_countries.geojson \
-          https://raw.githubusercontent.com/nvkelso/natural-earth-vector/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_10m_admin_0_countries.geojson
+          https://github.com/nvkelso/natural-earth-vector/raw/ca96624a56bd078437bca8184e78163e5039ad19/geojson/ne_10m_admin_0_countries.geojson
 
         unzip ./cities500.zip -d $out/
-        echo "2024-07-24T15:30:50Z" > $out/geodata-date.txt
+        echo "${date}" > $out/geodata-date.txt
       '';
 
   src = fetchFromGitHub {
@@ -241,7 +247,10 @@ buildNpmPackage' {
   meta = {
     description = "Self-hosted photo and video backup solution";
     homepage = "https://immich.app/";
-    license = lib.licenses.agpl3Only;
+    license = with lib.licenses; [
+      agpl3Only
+      cc-by-40 # geonames
+    ];
     maintainers = with lib.maintainers; [
       dotlambda
       jvanbruegge

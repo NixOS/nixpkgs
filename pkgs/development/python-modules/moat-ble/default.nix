@@ -5,6 +5,7 @@
   fetchFromGitHub,
   home-assistant-bluetooth,
   poetry-core,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   sensor-state-data,
@@ -13,31 +14,29 @@
 buildPythonPackage rec {
   pname = "moat-ble";
   version = "0.1.1";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
+    repo = "moat-ble";
     rev = "refs/tags/v${version}";
     hash = "sha256-dy1Fm0Z1PUsPY8QTiXUcWSi+csFnTUsobSkA92m06QI=";
   };
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     bluetooth-sensor-state-data
     home-assistant-bluetooth
     sensor-state-data
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=moat_ble --cov-report=term-missing:skip-covered" ""
-  '';
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "moat_ble" ];
 
@@ -45,7 +44,7 @@ buildPythonPackage rec {
     description = "Library for Moat BLE devices";
     homepage = "https://github.com/Bluetooth-Devices/moat-ble";
     changelog = "https://github.com/Bluetooth-Devices/moat-ble/releases/tag/v${version}";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }
