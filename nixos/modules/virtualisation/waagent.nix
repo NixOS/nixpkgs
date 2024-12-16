@@ -31,7 +31,7 @@ let
       attrsOf (
         either atom (attrsOf atom)
         // {
-          description = atom.description + "or an attribute set of them";
+          description = atom.description + " or an attribute set of them";
         }
       );
     generate =
