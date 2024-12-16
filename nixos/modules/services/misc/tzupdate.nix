@@ -12,6 +12,25 @@ in {
         update the timezone.
       '';
     };
+
+    package = lib.mkPackageOption pkgs "tzupdate" {};
+
+    timer.enable = lib.mkOption {
+      type = lib.types.bool;
+      default = true;
+      description = ''
+        Enable the tzupdate timer to update the timezone automatically.
+      '';
+    };
+
+    timer.interval = lib.mkOption {
+      type = lib.types.str;
+      default = "hourly";
+      description = ''
+        The interval at which the tzupdate timer should run. See
+        {manpage}`systemd.time(7)` to understand the format.
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -29,12 +48,23 @@ in {
       wants = [ "network-online.target" ];
       after = [ "network-online.target" ];
       script = ''
-        timedatectl set-timezone "$(${lib.getExe pkgs.tzupdate} --print-only)"
+        timedatectl set-timezone "$(${lib.getExe cfg.package} --print-only)"
       '';
 
       serviceConfig = {
         Type = "oneshot";
       };
+    };
+
+    systemd.timers.tzupdate = {
+      enable = cfg.timer.enable;
+      interval = cfg.timer.interval;
+      timerConfig = {
+        OnStartupSec = "30s";
+        OnCalendar = cfg.timer.interval;
+        Persistent = true;
+      };
+      wantedBy = [ "timers.target" ];
     };
   };
 
