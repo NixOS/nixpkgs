@@ -5,6 +5,7 @@ from typing import Any
 from unittest.mock import ANY, call, patch
 
 import pytest
+import uuid
 
 import nixos_rebuild.models as m
 import nixos_rebuild.nix as n
@@ -73,14 +74,27 @@ def test_build_flake(mock_run: Any) -> None:
     )
 
 
-@patch(
-    get_qualified_name(n.run_wrapper, n),
-    autospec=True,
-    return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
-)
-def test_remote_build(mock_run: Any, monkeypatch: Any) -> None:
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+@patch(get_qualified_name(n.uuid4, n), autospec=True)
+def test_remote_build(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
     build_host = m.Remote("user@host", [], None)
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
+
+    def run_wrapper_side_effect(args, **kwargs):  # type: ignore
+        if args[0] == "nix-instantiate":
+            return CompletedProcess([], 0, stdout=" \n/path/to/file\n ")
+        elif args[0] == "mktemp":
+            return CompletedProcess([], 0, stdout=" \n/tmp/tmpdir\n ")
+        elif args[0] == "nix-store":
+            return CompletedProcess([], 0, stdout=" \n/tmp/tmpdir/00000000000000000000000000000000\n ")
+        elif args[0] == "readlink":
+            return CompletedProcess([], 0, stdout=" \n/path/to/config\n ")
+        else:
+            return CompletedProcess([], 0)
+
+    mock_run.side_effect = run_wrapper_side_effect
+    mock_uuid4.return_value = uuid.UUID(int=0)
+
     assert n.remote_build(
         "config.system.build.toplevel",
         m.BuildAttr("<nixpkgs/nixos>", "preAttr"),
@@ -88,7 +102,8 @@ def test_remote_build(mock_run: Any, monkeypatch: Any) -> None:
         build_flags={"build": True},
         instantiate_flags={"inst": True},
         copy_flags={"copy": True},
-    ) == Path("/path/to/file")
+    ) == Path("/path/to/config")
+
     mock_run.assert_has_calls(
         [
             call(
@@ -97,6 +112,8 @@ def test_remote_build(mock_run: Any, monkeypatch: Any) -> None:
                     "<nixpkgs/nixos>",
                     "--attr",
                     "preAttr.config.system.build.toplevel",
+                    "--add-root",
+                    n.tmpdir.TMPDIR_PATH / "00000000000000000000000000000000",
                     "--inst",
                 ],
                 stdout=PIPE,
@@ -114,10 +131,28 @@ def test_remote_build(mock_run: Any, monkeypatch: Any) -> None:
                 },
             ),
             call(
-                ["nix-store", "--realise", Path("/path/to/file"), "--build"],
+                ["mktemp", "-d", "-t", "nixos-rebuild.XXXXX"],
                 remote=build_host,
                 stdout=PIPE,
             ),
+            call(
+                [
+                    "nix-store",
+                    "--realise",
+                    Path("/path/to/file"),
+                    "--add-root",
+                    Path("/tmp/tmpdir/00000000000000000000000000000000"),
+                    "--build",
+                ],
+                remote=build_host,
+                stdout=PIPE,
+            ),
+            call(
+                ["readlink", "-f", "/tmp/tmpdir/00000000000000000000000000000000"],
+                remote=build_host,
+                stdout=PIPE,
+            ),
+            call(["rm", "-rf", Path("/tmp/tmpdir")], remote=build_host, check=False),
         ]
     )
 
