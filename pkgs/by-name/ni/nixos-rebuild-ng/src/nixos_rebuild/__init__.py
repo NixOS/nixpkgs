@@ -8,7 +8,7 @@ from pathlib import Path
 from subprocess import CalledProcessError, run
 from typing import assert_never
 
-from . import nix
+from . import nix, tmpdir
 from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
 from .models import Action, BuildAttr, Flake, NRError, Profile
 from .process import Remote, cleanup_ssh
@@ -280,7 +280,10 @@ def reexec(
                 argv[0],
                 new,
             )
+            # Manually call clean-up functions since os.execve() will replace
+            # the process immediately
             cleanup_ssh()
+            tmpdir.TMPDIR.cleanup()
             os.execve(new, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
 
 
