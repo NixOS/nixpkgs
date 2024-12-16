@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
       libxml2
       libffi
       boost
+      python3
       llvmPackages.openmp
       llvmPackages.libclang.dev
       llvmPackages.llvm
