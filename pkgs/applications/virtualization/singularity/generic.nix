@@ -25,7 +25,7 @@ in
   lib,
   buildGoModule,
   runCommandLocal,
-  substituteAll,
+  replaceVars,
   # Native build inputs
   addDriverRunpath,
   makeWrapper,
@@ -109,8 +109,7 @@ in
   inherit pname version src;
 
   patches = lib.optionals (projectName == "apptainer") [
-    (substituteAll {
-      src = ./apptainer/0001-ldCache-patch-for-driverLink.patch;
+    (replaceVars ./apptainer/0001-ldCache-patch-for-driverLink.patch {
       inherit (addDriverRunpath) driverLink;
     })
   ];

@@ -2,7 +2,7 @@
 , stdenv
 , fetchurl
 , perl
-, substituteAll
+, replaceVars
 , coreutils
 , gnugrep
 }:
@@ -22,8 +22,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./nosetuid.patch
-    (substituteAll {
-      src = ./cat-grep-sort-wc.patch;
+    (replaceVars ./cat-grep-sort-wc.patch {
       coreutils = "${coreutils}/bin/";
       gnugrep = "${gnugrep}/bin/";
     })

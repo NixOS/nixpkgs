@@ -11,7 +11,7 @@
   libadwaita,
   gtk4,
   pango,
-  substituteAll,
+  replaceVars,
 }:
 let
   gtk4' = gtk4.override { x11Support = true; };
@@ -33,8 +33,7 @@ crystal.buildCrystalPackage rec {
     # 1) fixed gi-crystal binding generator command
     # 2) fixed docset generator command
     # 3) added commands to build gschemas and update icon-cache
-    (substituteAll {
-      src = ./make.patch;
+    (replaceVars ./make.patch {
       inherit crystal;
     })
     # added chmod +w for copied docs to prevent error:

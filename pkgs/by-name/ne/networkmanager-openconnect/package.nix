@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  substituteAll,
+  replaceVars,
   glib,
   libxml2,
   openconnect,
@@ -32,8 +32,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit kmod openconnect;
     })
   ];

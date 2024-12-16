@@ -25,7 +25,7 @@
   pythonSupport ? false,
   python ? null,
   numpy ? null,
-  substituteAll,
+  replaceVars,
 }:
 
 let
@@ -130,10 +130,11 @@ stdenv.mkDerivation rec {
         hash = "sha256-ZegTvp0tTHlopQv+UzHDigs6XLkP2VfqLCWXl6aKJSI=";
       })
     ]
-    ++ lib.optional pythonSupport (substituteAll {
-      src = ./python.patch;
-      inherit (python.sourceVersion) major minor; # Should be changed in case of PyPy
-    });
+    ++ lib.optional pythonSupport (
+      replaceVars ./python.patch {
+        inherit (python.sourceVersion) major minor; # Should be changed in case of PyPy
+      }
+    );
 
   postPatch = ''
     substituteInPlace src/caffe/util/io.cpp --replace \

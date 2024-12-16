@@ -47,6 +47,7 @@ let
       coq-haskell = callPackage ../development/coq-modules/coq-haskell { };
       coq-lsp = callPackage ../development/coq-modules/coq-lsp {};
       coq-record-update = callPackage ../development/coq-modules/coq-record-update { };
+      coq-tactical = callPackage ../development/coq-modules/coq-tactical {};
       coqeal = callPackage ../development/coq-modules/coqeal (
         (lib.optionalAttrs (lib.versions.range "8.13" "8.14" self.coq.coq-version) {
           bignums = self.bignums.override { version = "${self.coq.coq-version}.0"; };

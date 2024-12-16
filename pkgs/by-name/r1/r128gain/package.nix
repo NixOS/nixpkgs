@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   gitUpdater,
-  substituteAll,
+  replaceVars,
   ffmpeg,
   python3Packages,
   sox,
@@ -20,8 +20,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./ffmpeg-location.patch;
+    (replaceVars ./ffmpeg-location.patch {
       inherit ffmpeg;
     })
   ];

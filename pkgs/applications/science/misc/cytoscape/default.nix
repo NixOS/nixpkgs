@@ -4,7 +4,7 @@
   fetchurl,
   jre,
   makeWrapper,
-  substituteAll,
+  replaceVars,
   coreutils,
 }:
 
@@ -20,8 +20,7 @@ stdenv.mkDerivation rec {
   patches = [
     # By default, gen_vmoptions.sh tries to store custom options in $out/share
     # at run time. This patch makes sure $HOME is used instead.
-    (substituteAll {
-      src = ./gen_vmoptions_to_homedir.patch;
+    (replaceVars ./gen_vmoptions_to_homedir.patch {
       inherit coreutils;
     })
   ];

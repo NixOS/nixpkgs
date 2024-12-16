@@ -1,7 +1,7 @@
 {
   stdenv,
   elvish,
-  substituteAll,
+  replaceVars,
 }:
 
 stdenv.mkDerivation {
@@ -14,8 +14,7 @@ stdenv.mkDerivation {
 
   buildCommand = ''
     elvish ${
-      substituteAll {
-        src = ./expect-version.elv;
+      replaceVars ./expect-version.elv {
         inherit (elvish) version;
       }
     }

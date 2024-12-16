@@ -2,7 +2,7 @@
   lib,
   multiStdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   pkgsi686Linux,
   dbus,
   meson,
@@ -99,8 +99,7 @@ multiStdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Hard code bitbridge & runtime dependencies
-    (substituteAll {
-      src = ./hardcode-dependencies.patch;
+    (replaceVars ./hardcode-dependencies.patch {
       libdbus = dbus.lib;
       libxcb32 = pkgsi686Linux.xorg.libxcb;
       inherit wine;
