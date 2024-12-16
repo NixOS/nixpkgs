@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  substituteAll,
+  replaceVars,
   pkg-config,
   autoreconfHook,
   gobject-introspection,
@@ -47,9 +47,8 @@ let
     hash = "sha256-Hzxr3SVmGoouGBU2VdbwbwKMHZwwjWnI7P13Z6LQxao=";
   };
 
-  hplipState = substituteAll {
+  hplipState = replaceVars ./hplip.state {
     inherit version;
-    src = ./hplip.state;
   };
 
   hplipPlatforms = {

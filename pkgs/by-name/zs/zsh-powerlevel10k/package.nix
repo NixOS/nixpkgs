@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   gitstatus,
   bash,
 }:
@@ -36,8 +36,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ bash ];
 
   patches = [
-    (substituteAll {
-      src = ./gitstatusd.patch;
+    (replaceVars ./gitstatusd.patch {
       gitstatusdPath = "${gitstatus'}/bin/gitstatusd";
     })
   ];

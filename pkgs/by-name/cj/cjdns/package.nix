@@ -11,7 +11,7 @@
   nixosTests,
   libsodium,
   pkg-config,
-  substituteAll,
+  replaceVars,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,8 +26,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./system-libsodium.patch;
+    (replaceVars ./system-libsodium.patch {
       libsodium_include_dir = "${libsodium.dev}/include";
     })
   ];

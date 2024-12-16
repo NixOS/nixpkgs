@@ -7,7 +7,7 @@
   libnotify,
   wrapGAppsHook3,
   gobject-introspection,
-  substituteAll,
+  replaceVars,
 }:
 
 python3Packages.buildPythonPackage rec {
@@ -40,8 +40,7 @@ python3Packages.buildPythonPackage rec {
 
   postPatch =
     let
-      setup = substituteAll {
-        src = ./setup.py;
+      setup = replaceVars ./setup.py {
         desc = meta.description; # "description" is reserved
         inherit pname version;
       };

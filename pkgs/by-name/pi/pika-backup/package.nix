@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitLab,
   rustPlatform,
-  substituteAll,
+  replaceVars,
   cargo,
   desktop-file-utils,
   git,
@@ -39,8 +39,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./borg-path.patch;
+    (replaceVars ./borg-path.patch {
       borg = lib.getExe borgbackup;
     })
   ];

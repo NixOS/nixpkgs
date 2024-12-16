@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchpatch,
-  substituteAll,
+  replaceVars,
   buildEnv,
   fetchFromGitHub,
   python3Packages,
@@ -20,8 +20,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./libpath.patch;
+    (replaceVars ./libpath.patch {
       env = "${
         buildEnv {
           name = "wee-slack-env";

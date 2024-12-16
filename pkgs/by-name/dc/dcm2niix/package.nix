@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   cmake,
   openjpeg,
   yaml-cpp,
@@ -34,8 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = lib.optionals withCloudflareZlib [
-    (substituteAll {
-      src = ./dont-fetch-external-libs.patch;
+    (replaceVars ./dont-fetch-external-libs.patch {
       inherit cloudflareZlib;
     })
   ];

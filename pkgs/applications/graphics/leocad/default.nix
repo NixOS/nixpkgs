@@ -6,7 +6,7 @@
   povray,
   qmake,
   qttools,
-  substituteAll,
+  replaceVars,
   zlib,
 }:
 
@@ -43,8 +43,7 @@ mkDerivation rec {
   propagatedBuildInputs = [ povray ];
 
   patches = [
-    (substituteAll {
-      src = ./povray.patch;
+    (replaceVars ./povray.patch {
       inherit povray;
     })
   ];

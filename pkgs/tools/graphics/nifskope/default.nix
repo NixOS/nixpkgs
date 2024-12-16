@@ -5,7 +5,7 @@
   qmake,
   qtbase,
   qttools,
-  substituteAll,
+  replaceVars,
   libGLU,
   wrapQtAppsHook,
   fetchpatch,
@@ -25,8 +25,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./external-lib-paths.patch
-    (substituteAll {
-      src = ./qttools-bins.patch;
+    (replaceVars ./qttools-bins.patch {
       qttools = "${qttools.dev}/bin";
     })
     (fetchpatch {

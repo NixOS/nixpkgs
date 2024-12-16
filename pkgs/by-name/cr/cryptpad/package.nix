@@ -1,11 +1,15 @@
 {
+  bash,
   buildNpmPackage,
   fetchFromGitHub,
+  fetchpatch,
+  fetchurl,
   lib,
   makeBinaryWrapper,
   nixosTests,
   nodejs,
   rdfind,
+  unzip,
 }:
 
 let
@@ -54,10 +58,21 @@ let
     }
     {
       subdir = "v7";
-      rev = "9d8b914a";
-      hash = "sha256-M+rPJ/Xo2olhqB5ViynGRaesMLLfG/1ltUoLnepMPnM=";
+      rev = "e1267803";
+      hash = "sha256-iIds0GnCHAyeIEdSD4aCCgDtnnwARh3NE470CywseS0=";
     }
   ];
+
+  x2t_version = "v7.3+1";
+  x2t = fetchurl {
+    url = "https://github.com/cryptpad/onlyoffice-x2t-wasm/releases/download/${x2t_version}/x2t.zip";
+    hash = "sha256-hrbxrI8RC1pBatGZ76TAiVfUbZid7+eRuXk6lmz7OgQ=";
+  };
+  x2t_install = ''
+    local X2T_DIR=$out_cryptpad/www/common/onlyoffice/dist/x2t
+    unzip ${x2t} -d "$X2T_DIR"
+    echo "${x2t_version}" > "$X2T_DIR"/.version
+  '';
 
 in
 buildNpmPackage {
@@ -76,12 +91,20 @@ buildNpmPackage {
   nativeBuildInputs = [
     makeBinaryWrapper
     rdfind
+    unzip
+    bash
   ];
 
   patches = [
     # fix httpSafePort setting
     # https://github.com/cryptpad/cryptpad/pull/1571
     ./0001-env.js-fix-httpSafePort-handling.patch
+    # https://github.com/cryptpad/cryptpad/pull/1740
+    (fetchpatch {
+      name = "Add `--check`, `--rdfind`, `--no-rdfind` options to `install-onlyoffice.sh`";
+      url = "https://github.com/cryptpad/cryptpad/commit/f38668735e777895db2eadd3413cff386fb12c0c.patch";
+      hash = "sha256-J4AK1XIa3q+/lD74p2c9O7jt0VEtofTmfAaQNU71sp8=";
+    })
   ];
 
   # cryptpad build tries to write in cache dir
@@ -106,7 +129,12 @@ buildNpmPackage {
     # install OnlyOffice (install-onlyoffice.sh without network)
     mkdir -p "$out_cryptpad/www/common/onlyoffice/dist"
     ${lib.concatMapStringsSep "\n" onlyoffice_install onlyoffice_versions}
-    rdfind -makehardlinks true -makeresultsfile false "$out_cryptpad/www/common/onlyoffice/dist"
+    ${x2t_install}
+    # Run upstream's `install-onlyoffice.sh` script in `--check` mode to
+    # verify that we've installed the correct versions of the various
+    # OnlyOffice components.
+    patchShebangs --build $out_cryptpad/install-onlyoffice.sh
+    $out_cryptpad/install-onlyoffice.sh --accept-license --check --rdfind
 
     # cryptpad assumes it runs in the source directory and also outputs
     # its state files there, which is not exactly great for us.
