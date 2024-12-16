@@ -8,16 +8,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "kmon";
-  version = "1.6.5";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "orhun";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-1OsQT3RMNLQMjr4aA2u5knp/HhOUOJ/oZYHG/+cTQFQ=";
+    sha256 = "sha256-+pzVSCmK4Ex0CA94PtP2A+tW4p88THQlkhEhdOA4jdg=";
   };
 
-  cargoHash = "sha256-9xRlm5pWWRRPq6MMwiMADmm8Bg2FqKNSfv7tm1ONiiQ=";
+  cargoHash = "sha256-s7/WuV4tTA06yRcvJMrEFXcemy/9ia5ZVRS5LDj/oXY=";
 
   nativeBuildInputs = [ installShellFiles ];
 
