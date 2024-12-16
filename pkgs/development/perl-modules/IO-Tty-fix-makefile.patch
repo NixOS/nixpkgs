@@ -1,0 +1,13 @@
+diff --git a/Makefile.PL b/Makefile.PL
+index eaf47e0..32766d7 100644
+--- a/Makefile.PL
++++ b/Makefile.PL
+@@ -146,7 +146,7 @@ extern "C"
+ /* We use char because int might match the return type of a gcc2
+    builtin and then its argument prototype would still apply.  */
+ char $f ();
+-char (*f) ();
++char f;
+ 
+ #ifdef F77_DUMMY_MAIN
+ #  ifdef __cplusplus
