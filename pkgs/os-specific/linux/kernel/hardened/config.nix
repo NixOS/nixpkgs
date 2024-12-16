@@ -38,6 +38,8 @@ assert (lib.versionAtLeast version "4.9");
   DEBUG_PLIST = whenAtLeast "5.2" yes;
   DEBUG_SG = yes;
   DEBUG_VIRTUAL = yes;
+  # Set in common config as whenAtLeast "6.12" yes; Currently errors during config
+  SCHED_CLASS_EXT = whenAtLeast "6.12" (option yes);
   SCHED_STACK_END_CHECK = yes;
 
   REFCOUNT_FULL = whenOlder "5.4.208" yes;
@@ -116,4 +118,7 @@ assert (lib.versionAtLeast version "4.9");
 
   # not needed for less than a decade old glibc versions
   LEGACY_VSYSCALL_NONE = yes;
+
+  RUST = option yes; # Yes currently erros on 6.12
+  DRM_PANIC_SCREEN_QR_CODE = whenAtLeast "6.12" (option yes);
 }
