@@ -64,10 +64,13 @@ in
             '';
           };
           options.db_name = lib.mkOption {
-            type = with lib.types; either path str;
+            type = with lib.types; nullOr (either path str);
             default = "${stateDir}/biboumi.sqlite";
             description = ''
               The name of the database to use.
+
+              Set it to null and use [credentialsFile](#opt-services.biboumi.credentialsFile)
+              if you do not want this connection string to go into the Nix store.
             '';
             example = "postgresql://user:secret@localhost";
           };
