@@ -19,18 +19,18 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hieroglyphic";
-  version = "1.1.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "FineFindus";
     repo = "Hieroglyphic";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-8UUFatJwtxqumhHd0aiPk6nKsaaF/jIIqMFxXye0X8U=";
+    hash = "sha256-bRxG+NHwHPJ2J/zTFks6M/Uy7XQ0cm8FBzlBC4yORm4=";
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-JHlvSo5wl0G9yF9KIwFXILu7T0Pv6f6JC0Q90wfuD94=";
+    hash = "sha256-8vo6pV04M8+FYzFpG4zcJAkOu2BcHzkPsiu9/2IQCmM=";
   };
 
   nativeBuildInputs = [
