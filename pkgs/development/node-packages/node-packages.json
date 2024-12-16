@@ -3,7 +3,6 @@
 , "@antfu/ni"
 , "@babel/cli"
 , "@commitlint/cli"
-, "@commitlint/config-conventional"
 , "@microsoft/rush"
 , "@shopify/cli"
 , "@tailwindcss/aspect-ratio"
