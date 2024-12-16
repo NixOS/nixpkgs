@@ -19,17 +19,21 @@ buildPythonPackage rec {
     hash = "sha256-UJIbCcsQzKmFeH8gvfxFVN4ovT7eCnSHBsCCooInm/E=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [ pyyaml ];
+  dependencies = [
+    pyyaml
+  ];
 
   pythonImportsCheck = [ "pyngrok" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python wrapper for ngrok";
     homepage = "https://github.com/alexdlaird/pyngrok";
     changelog = "https://github.com/alexdlaird/pyngrok/blob/${version}/CHANGELOG.md";
-    license = licenses.mit;
-    maintainers = with maintainers; [ wegank ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ wegank ];
   };
 }
