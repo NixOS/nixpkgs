@@ -28,30 +28,6 @@ let
         # (see testing/test-instrumentation.nix) and is incompatible with
         # the configuration in virtualisation/amazon-image.nix.
         systemd.services."serial-getty@ttyS0".enable = mkForce false;
-
-        # Needed by nixos-rebuild due to the lack of network
-        # access. Determined by trial and error.
-        system.extraDependencies = with pkgs; ( [
-          # Needed for a nixos-rebuild.
-          busybox
-          cloud-utils
-          desktop-file-utils
-          libxslt.bin
-          mkinitcpio-nfs-utils
-          stdenv
-          stdenvNoCC
-          texinfo
-          unionfs-fuse
-          xorg.lndir
-
-          # These are used in the configure-from-userdata tests
-          # for EC2. Httpd and valgrind are requested by the
-          # configuration.
-          apacheHttpd
-          apacheHttpd.doc
-          apacheHttpd.man
-          valgrind.doc
-        ]);
       }
     ];
   }).config;
@@ -63,7 +39,7 @@ let
   snakeOilPublicKey = sshKeys.snakeOilPublicKey;
 
 in {
-  boot-ec2-nixops = makeEc2Test {
+  ec2-nixops = makeEc2Test {
     name         = "nixops-userdata";
     meta.timeout = 600;
     inherit image;
@@ -109,51 +85,6 @@ in {
       machine.shutdown()
       machine.start()
       machine.wait_for_file("/etc/ec2-metadata/user-data")
-    '';
-  };
-
-  boot-ec2-config = makeEc2Test {
-    name         = "config-userdata";
-    meta.broken = true; # amazon-init wants to download from the internet while building the system
-    inherit image;
-    sshPublicKey = snakeOilPublicKey;
-
-    # ### https://nixos.org/channels/nixos-unstable nixos
-    userData = ''
-      { pkgs, ... }:
-
-      {
-        imports = [
-          <nixpkgs/nixos/modules/virtualisation/amazon-image.nix>
-          <nixpkgs/nixos/modules/testing/test-instrumentation.nix>
-          <nixpkgs/nixos/modules/profiles/qemu-guest.nix>
-        ];
-        environment.etc.testFile = {
-          text = "whoa";
-        };
-
-        networking.hostName = "ec2-test-vm"; # required by services.httpd
-
-        services.httpd = {
-          enable = true;
-          adminAddr = "test@example.org";
-          virtualHosts.localhost.documentRoot = "''${pkgs.valgrind.doc}/share/doc/valgrind/html";
-        };
-        networking.firewall.allowedTCPPorts = [ 80 ];
-      }
-    '';
-    script = ''
-      machine.start()
-
-      # amazon-init must succeed. if it fails, make the test fail
-      # immediately instead of timing out in wait_for_file.
-      machine.wait_for_unit("amazon-init.service")
-
-      machine.wait_for_file("/etc/testFile")
-      assert "whoa" in machine.succeed("cat /etc/testFile")
-
-      machine.wait_for_unit("httpd.service")
-      assert "Valgrind" in machine.succeed("curl http://localhost")
     '';
   };
 }
