@@ -26,7 +26,8 @@ in
 
       settings = lib.mkOption {
         description = ''
-          See [biboumi 8.5](https://lab.louiz.org/louiz/biboumi/blob/8.5/doc/biboumi.1.rst)
+          See [biboumi 9.0](https://doc.biboumi.louiz.org/9.0/admin.html#configuration)
+
           for documentation.
         '';
         default = { };
