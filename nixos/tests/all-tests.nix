@@ -217,6 +217,7 @@ in {
   coder = handleTest ./coder.nix {};
   collectd = handleTest ./collectd.nix {};
   commafeed = handleTest ./commafeed.nix {};
+  conduwuit = runTest ./matrix/conduwuit.nix;
   connman = handleTest ./connman.nix {};
   consul = handleTest ./consul.nix {};
   consul-template = handleTest ./consul-template.nix {};
@@ -1147,6 +1148,7 @@ in {
   watchdogd = handleTest ./watchdogd.nix {};
   webhook = runTest ./webhook.nix;
   weblate = handleTest ./web-apps/weblate.nix {};
+  whisparr = handleTest ./whisparr.nix {};
   wiki-js = handleTest ./wiki-js.nix {};
   wine = handleTest ./wine.nix {};
   wireguard = handleTest ./wireguard {};

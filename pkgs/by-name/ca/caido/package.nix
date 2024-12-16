@@ -15,14 +15,14 @@ let
     "cli"
     "desktop"
   ];
-  version = "0.43.1";
+  version = "0.44.1";
   cli = fetchurl {
     url = "https://caido.download/releases/v${version}/caido-cli-v${version}-linux-x86_64.tar.gz";
-    hash = "sha256-6thdJf6UCzeKOgjPTkK4FsgbQ2u6Eu+tnHihXJPMEUQ=";
+    hash = "sha256-h8pqR74UcFp9eYiDB6+xck4uUs8qh/yE3LBuoUzmchs=";
   };
   desktop = fetchurl {
     url = "https://caido.download/releases/v${version}/caido-desktop-v${version}-linux-x86_64.AppImage";
-    hash = "sha256-HEx+RFWF+qfFut5n1ZxKQHjSTGq5EbXAupPJ+5H5LQ0=";
+    hash = "sha256-GKhjTTPXtZ7jMFdKKDUsT1pZsj2+Kmn3Au++sAsV6U8=";
   };
   appimageContents = appimageTools.extractType2 {
     inherit pname version;

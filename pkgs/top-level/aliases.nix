@@ -876,7 +876,8 @@ mapAliases {
   nextcloud27Packages = throw "Nextcloud27 is EOL!"; # Added 2024-06-25
   nagiosPluginsOfficial = monitoring-plugins;
   neochat = libsForQt5.kdeGear.neochat; # added 2022-05-10
-  nerdfonts = throw ''nerdfonts has been separated into individual font packages under the namespace nerd-fonts.
+  nerdfonts = throw ''
+    nerdfonts has been separated into individual font packages under the namespace nerd-fonts.
     For example change:
       fonts.packages = [
         ...
@@ -1039,7 +1040,7 @@ mapAliases {
   tex-match = throw "'tex-match' has been removed due to lack of maintenance upstream. Consider using 'hieroglyphic' instead"; # Added 2024-09-24
   texinfo5 = throw "'texinfo5' has been removed from nixpkgs"; # Added 2024-09-10
   timescaledb = postgresqlPackages.timescaledb;
-  tsearch_extras = postgresqlPackages.tsearch_extras;
+  tsearch_extras = throw "'tsearch_extras' has been removed from nixpkgs"; # Added 2024-12-15
 
   postgresql_12 = throw "postgresql_12 has been removed since it reached its EOL upstream"; # Added 2024-11-14
   postgresql_12_jit = throw "postgresql_12 has been removed since it reached its EOL upstream"; # Added 2024-11-14

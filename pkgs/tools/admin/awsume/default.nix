@@ -9,6 +9,7 @@
   psutil,
   pluggy,
   pyyaml,
+  setuptools,
 }:
 
 buildPythonApplication rec {
@@ -32,6 +33,7 @@ buildPythonApplication rec {
     psutil
     pluggy
     pyyaml
+    setuptools
   ];
 
   postPatch = ''

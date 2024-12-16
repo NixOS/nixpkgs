@@ -716,6 +716,7 @@
   ./services/matrix/appservice-discord.nix
   ./services/matrix/appservice-irc.nix
   ./services/matrix/conduit.nix
+  ./services/matrix/conduwuit.nix
   ./services/matrix/dendrite.nix
   ./services/matrix/hebbot.nix
   ./services/matrix/hookshot.nix
@@ -885,6 +886,7 @@
   ./services/misc/wastebin.nix
   ./services/misc/weechat.nix
   ./services/misc/workout-tracker.nix
+  ./services/misc/whisparr.nix
   ./services/misc/xmrig.nix
   ./services/misc/zoneminder.nix
   ./services/misc/zookeeper.nix

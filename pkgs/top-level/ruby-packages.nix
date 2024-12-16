@@ -727,6 +727,16 @@
     };
     version = "1.0.6";
   };
+  csv = {
+    groups = ["default"];
+    platforms = [];
+    source = {
+      remotes = ["https://rubygems.org"];
+      sha256 = "sha256-C70d79wxE0q+/tAnpjmzcjwnU4YhUPTD7mHKtxsg1n0=";
+      type = "gem";
+    };
+    version = "3.3.0";
+  };
   curb = {
     groups = ["default"];
     platforms = [];
@@ -2554,10 +2564,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "1vg2chy1cfmdj6c1gryl8zvjhhmb3plwgyh1jfnpq4fnfqv7asrk";
+      sha256 = "sha256-gYhvU+6JGfMwqjAHbTINiO75vIWq4idTdrSvsAfGkmA=";
       type = "gem";
     };
-    version = "3.0.1";
+    version = "3.1.0";
   };
   opus-ruby = {
     dependencies = ["ffi"];
@@ -2597,10 +2607,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "04gq05mgy3v8gac0dk8ldr59865vbjhkzna51w8wh900512lakyq";
+      sha256 = "sha256-Gf4ySW/iE1UP5TWm6/oXsi9lo654hrfa7LBY+nZSTaw=";
       type = "gem";
     };
-    version = "1.1.2";
+    version = "2.0.1";
   };
   pango = {
     dependencies = ["cairo-gobject" "gobject-introspection"];
@@ -2635,14 +2645,15 @@
     version = "3.3.0.5";
   };
   paru = {
+    dependencies = ["csv"];
     groups = ["default"];
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "10jiv4c28bdvp4r98s042ilzks8wx36qw5a4byragwa1fzwy87va";
+      sha256 = "sha256-Q0iafTt/9NuoAyxm2U6mWq9J4v1QR0D73ERsqnbIYOs=";
       type = "gem";
     };
-    version = "1.2.0";
+    version = "1.4.1";
   };
   pastel = {
     dependencies = ["tty-color"];
