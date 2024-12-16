@@ -5,6 +5,9 @@
   ...
 }:
 
+let
+  cfg = config.programs.espanso.capdacoverride;
+in
 {
   meta = {
     maintainers = with lib.maintainers; [ pitkling ];
@@ -13,8 +16,7 @@
   options = {
     programs.espanso.capdacoverride = {
       enable = (lib.mkEnableOption "espanso-wayland overlay with DAC_OVERRIDE capability") // {
-        default = false;
-        extraDescription = ''
+        description = ''
           Creates an espanso binary with the DAC_OVERRIDE capability (via `security.wrappers`) and overlays `pkgs.espanso-wayland` such that self-forks call the capability-enabled binary.
           Required for `pkgs.espanso-wayland` to work correctly if not run with root privileges.
         '';
@@ -35,9 +37,6 @@
   };
 
   config =
-    let
-      cfg = config.programs.espanso.capdacoverride;
-    in
     lib.mkIf cfg.enable {
       nixpkgs.overlays = [
         (final: prev: {
@@ -50,7 +49,7 @@
       ];
 
       security.wrappers."${pkgs.espanso-wayland.meta.mainProgram}" = {
-        source = "${lib.getExe pkgs.espanso-wayland}";
+        source = lib.getExe pkgs.espanso-wayland;
         capabilities = "cap_dac_override+p";
         owner = "root";
         group = "root";
