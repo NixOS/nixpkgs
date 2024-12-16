@@ -5,6 +5,7 @@
   fetchFromGitHub,
   pkg-config,
 
+  libffi,
   audioSupport ? true,
   alsa-lib,
   webcamSupport ? false,
@@ -33,9 +34,14 @@ rustPlatform.buildRustPackage rec {
     lib.optionals (webcamSupport || stdenv.hostPlatform.isDarwin) [ rustPlatform.bindgenHook ]
     ++ lib.optionals audioSupport [ pkg-config ];
 
-  buildInputs = lib.optionals (audioSupport && stdenv.hostPlatform.isLinux) [ alsa-lib ];
+  buildInputs =
+    [ libffi ] # we force dynamic linking our own libffi below
+    ++ lib.optionals (audioSupport && stdenv.hostPlatform.isLinux) [ alsa-lib ];
 
-  buildFeatures = lib.optional audioSupport "audio" ++ lib.optional webcamSupport "webcam";
+  buildFeatures =
+    [ "libffi/system" ] # force libffi to be linked dynamically instead of rebuilding it
+    ++ lib.optional audioSupport "audio"
+    ++ lib.optional webcamSupport "webcam";
 
   passthru.updateScript = versionInfo.updateScript;
   passthru.tests.run = runCommand "uiua-test-run" { nativeBuildInputs = [ uiua ]; } ''
