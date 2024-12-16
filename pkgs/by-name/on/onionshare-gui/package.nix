@@ -1,7 +1,7 @@
 {
   python3Packages,
   onionshare,
-  substituteAll,
+  replaceVars,
   meek,
   obfs4,
   snowflake,
@@ -23,8 +23,7 @@ python3Packages.buildPythonApplication rec {
 
   patches = [
     # hardcode store paths of dependencies
-    (substituteAll {
-      src = ./fix-paths-gui.patch;
+    (replaceVars ./fix-paths-gui.patch {
       inherit
         meek
         obfs4

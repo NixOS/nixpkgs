@@ -3,7 +3,7 @@
   buildNimPackage,
   fetchFromGitHub,
   nixosTests,
-  substituteAll,
+  replaceVars,
   unstableGitUpdater,
 }:
 
@@ -22,8 +22,7 @@ buildNimPackage (
     lockFile = ./lock.json;
 
     patches = [
-      (substituteAll {
-        src = ./nitter-version.patch;
+      (replaceVars ./nitter-version.patch {
         inherit (finalAttrs) version;
         inherit (finalAttrs.src) rev;
         url = builtins.replaceStrings [ "archive" ".tar.gz" ] [ "commit" "" ] finalAttrs.src.url;

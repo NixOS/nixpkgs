@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildGo123Module,
-  substituteAll,
+  replaceVars,
   pandoc,
   nodejs,
   pnpm_9,
@@ -51,8 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     vendorHash = "sha256-uK++FoWCoeb05TyUhh0PK+wkTmzTko0K7oLodoGAWt8=";
 
     patches = [
-      (substituteAll {
-        src = ./set-pandoc-path.patch;
+      (replaceVars ./set-pandoc-path.patch {
         pandoc_path = lib.getExe pandoc;
       })
     ];

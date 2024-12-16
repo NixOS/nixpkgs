@@ -3,7 +3,7 @@
 , fetchFromGitLab
 , fetchFromGitHub
 , fetchurl
-, substituteAll
+, replaceVars
 , coreutils
 , curl
 , gnugrep
@@ -127,8 +127,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Hard code dependencies. Can't use makeWrapper since the Vulkan
     # layer can be used without the mangohud executable by setting MANGOHUD=1.
-    (substituteAll {
-      src = ./hardcode-dependencies.patch;
+    (replaceVars ./hardcode-dependencies.patch {
 
       path = lib.makeBinPath [
         coreutils
