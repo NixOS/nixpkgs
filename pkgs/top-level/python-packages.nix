@@ -5847,6 +5847,8 @@ self: super: with self; {
 
   highspy = callPackage ../development/python-modules/highspy { };
 
+  hightime = callPackage ../development/python-modules/hightime { };
+
   hid = callPackage ../development/python-modules/hid {
     inherit (pkgs) hidapi;
   };
