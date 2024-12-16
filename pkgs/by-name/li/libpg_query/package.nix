@@ -4,16 +4,18 @@
   fetchFromGitHub,
   which,
   squawk,
+  protobufc,
+  xxHash,
 }:
 stdenv.mkDerivation rec {
   pname = "libpg_query";
-  version = "16-5.1.0";
+  version = "17-6.0.0";
 
   src = fetchFromGitHub {
     owner = "pganalyze";
     repo = "libpg_query";
-    rev = version;
-    hash = "sha256-X48wjKdgkAc4wUubQ5ip1zZYiCKzQJyQTgGvO/pOY3I=";
+    tag = version;
+    hash = "sha256-hwF3kowuMmc1eXMdvhoCpBxT6++wp29MRYhy4S5Jhfg=";
   };
 
   nativeBuildInputs = [ which ];
@@ -24,9 +26,19 @@ stdenv.mkDerivation rec {
   ];
 
   installPhase = ''
-    install -Dm644 -t $out/lib libpg_query.a
-    install -Dm644 -t $out/include pg_query.h
-    install -Dm644 -t $out/lib libpg_query${stdenv.hostPlatform.extensions.sharedLibrary}
+    runHook preInstall
+
+    install -Dm644 libpg_query.a -t $out/lib
+    install -Dm644 libpg_query${stdenv.hostPlatform.extensions.sharedLibrary} -t $out/lib
+    cp -r src/include $out/include
+    cp -r src/postgres/include/* $out/include
+    cp -r protobuf $out/include/protobuf
+    ln -s ${protobufc.dev}/include/protobuf-c $out/include/protobuf-c
+    cp -r ${protobufc.dev}/include/protobuf-c/* $out/include
+    ln -s ${xxHash}/include $out/include/xxhash
+    install -Dm644 pg_query.h -t $out/include
+
+    runHook postInstall
   '';
 
   doCheck = true;
