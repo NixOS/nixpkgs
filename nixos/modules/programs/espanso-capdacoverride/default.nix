@@ -48,7 +48,7 @@ in
         })
       ];
 
-      security.wrappers."${pkgs.espanso-wayland.meta.mainProgram}" = {
+      security.wrappers."espanso-wayland" = {
         source = lib.getExe pkgs.espanso-wayland;
         capabilities = "cap_dac_override+p";
         owner = "root";

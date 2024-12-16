@@ -27,7 +27,7 @@ let
     };
 
     postPatch = ''
-      substitute ${wrapperLibSource} lib.c --subst-var-by to "${capDacOverrideWrapperDir}/espanso"
+      substitute ${wrapperLibSource} lib.c --subst-var-by to "${capDacOverrideWrapperDir}/espanso-wayland"
       cc -fPIC -shared lib.c -o ${wrapperLibName}
     '';
 
