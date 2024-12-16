@@ -32,6 +32,7 @@
   libdecor,
   lcms,
   lib,
+  luajit,
   makeBinaryWrapper,
   nix-update-script,
   enableExecutable ? true,
@@ -47,14 +48,14 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gamescope";
-  version = "3.15.15";
+  version = "3.16.1";
 
   src = fetchFromGitHub {
     owner = "ValveSoftware";
     repo = "gamescope";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-FiPSGzfA3YH9TED8E5hpfpd+IQGthvwsxAFXZuqVZ4Q=";
+    hash = "sha256-+0QGt4UADJmZok2LzvL+GBad0t4vVL4HXq27399zH3Y=";
   };
 
   patches = [
@@ -72,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
     patchShebangs subprojects/libdisplay-info/tool/gen-search-table.py
     # Replace gamescopereeaper with absolute path
     substituteInPlace src/Utils/Process.cpp --subst-var-by "gamescopereaper" "$out/bin/gamescopereaper"
+    patchShebangs default_scripts_install.sh
   '';
 
   mesonFlags = [
@@ -118,6 +120,7 @@ stdenv.mkDerivation (finalAttrs: {
       wayland-protocols
       vulkan-loader
       glm
+      luajit
     ]
     ++ lib.optionals enableWsi [
       vulkan-headers
