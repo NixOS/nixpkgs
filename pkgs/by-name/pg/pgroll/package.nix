@@ -3,7 +3,6 @@
   fetchFromGitHub,
   lib,
 }:
-
 buildGoModule rec {
   pname = "pgroll";
   version = "0.7.0";
@@ -20,10 +19,10 @@ buildGoModule rec {
   # Tests require a running docker daemon
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "PostgreSQL zero-downtime migrations made easy";
-    license = licenses.asl20;
+    license = lib.licenses.asl20;
     homepage = "https://github.com/xataio/pgroll";
-    maintainers = with maintainers; [ ilyakooo0 ];
+    maintainers = with lib.maintainers; [ ilyakooo0 ];
   };
 }
