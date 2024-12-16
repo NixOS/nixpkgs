@@ -19,6 +19,7 @@
   libadwaita,
   openssl,
   pango,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,6 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     pango
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Straight-forward and modern application to create bootable drives";

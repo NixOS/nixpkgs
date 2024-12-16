@@ -18,6 +18,7 @@
   gdk-pixbuf,
   libadwaita,
   Foundation,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -69,6 +70,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Foundation
     ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Censor private information";

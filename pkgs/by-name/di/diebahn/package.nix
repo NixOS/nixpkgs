@@ -19,6 +19,7 @@
   gettext,
   darwin,
   blueprint-compiler,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -74,6 +75,10 @@ stdenv.mkDerivation rec {
     GETTEXT_BIN_DIR = "${lib.getBin gettext}/bin";
     GETTEXT_INCLUDE_DIR = "${lib.getDev gettext}/include";
     GETTEXT_LIB_DIR = "${lib.getLib gettext}/lib";
+  };
+
+  passthru = {
+    updateScript = nix-update-script { };
   };
 
   meta = {

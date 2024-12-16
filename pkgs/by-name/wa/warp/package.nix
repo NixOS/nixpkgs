@@ -19,6 +19,7 @@
   libadwaita,
   zbar,
   gst_all_1,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -69,6 +70,10 @@ stdenv.mkDerivation rec {
       gst-plugins-base
       gst-plugins-bad
     ]);
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Fast and secure file transfer";

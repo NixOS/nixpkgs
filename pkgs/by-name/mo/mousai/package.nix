@@ -15,6 +15,7 @@
   libsoup_3,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   rustPlatform,
   rustc,
@@ -62,6 +63,10 @@ stdenv.mkDerivation rec {
     libpulseaudio
     libsoup_3
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Identify any songs in seconds";

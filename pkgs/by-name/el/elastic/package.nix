@@ -13,6 +13,7 @@
 , wrapGAppsHook4
 , desktop-file-utils
 , template-glib
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -44,6 +45,10 @@ stdenv.mkDerivation rec {
     gtksourceview5
     template-glib
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Design spring animations";

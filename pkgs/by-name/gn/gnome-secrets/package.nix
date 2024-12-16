@@ -14,6 +14,7 @@
   desktop-file-utils,
   appstream-glib,
   libadwaita,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -64,6 +65,10 @@ python3Packages.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Password manager for GNOME which makes use of the KeePass v.4 format";

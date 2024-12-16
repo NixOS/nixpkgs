@@ -21,6 +21,7 @@
   json-glib,
   duplicity,
   rclone,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -73,6 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${lib.makeBinPath [ rclone ]}"
     )
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Simple backup tool";

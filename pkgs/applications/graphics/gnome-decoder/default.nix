@@ -23,6 +23,7 @@
 , appstream-glib
 , desktop-file-utils
 , glycin-loaders
+, nix-update-script
 }:
 
 clangStdenv.mkDerivation rec {
@@ -79,6 +80,10 @@ clangStdenv.mkDerivation rec {
     gst-plugins-good
     gst-plugins-rs # for gtk4paintablesink
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Scan and Generate QR Codes";

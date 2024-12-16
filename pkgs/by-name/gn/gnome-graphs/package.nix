@@ -14,6 +14,7 @@
   shared-mime-info,
   libadwaita,
   libgee,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -64,6 +65,10 @@ python3Packages.buildPythonApplication rec {
       --prefix LD_LIBRARY_PATH : $out/lib
     )
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Simple, yet powerful tool that allows you to plot and manipulate your data with ease";
