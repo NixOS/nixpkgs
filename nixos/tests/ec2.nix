@@ -16,12 +16,6 @@ let
       ../modules/testing/test-instrumentation.nix
       ../modules/profiles/qemu-guest.nix
       {
-        # Hack to make the partition resizing work in QEMU.
-        boot.initrd.postDeviceCommands = mkBefore ''
-          ln -s vda /dev/xvda
-          ln -s vda1 /dev/xvda1
-        '';
-
         amazonImage.format = "qcow2";
 
         # In a NixOS test the serial console is occupied by the "backdoor"
