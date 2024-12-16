@@ -2444,8 +2444,6 @@ with pkgs;
 
   jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
 
-  jellyseerr = callPackage ../servers/jellyseerr { };
-
   juce = callPackage ../development/misc/juce {
     stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
   };
