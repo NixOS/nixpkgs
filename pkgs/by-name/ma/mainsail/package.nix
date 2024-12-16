@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "mainsail";
-  version = "2.13.0";
+  version = "2.13.1";
 
   src = fetchFromGitHub {
     owner = "mainsail-crew";
     repo = "mainsail";
     rev = "v${version}";
-    hash = "sha256-1DpGfCa1jw6PO/a1dfsA4Oo5J1NqE4vlEbF0KKbwM4w=";
+    hash = "sha256-Ugxy6bbLD0XJwKLW3YOM32GWrK9q8JsrcKGipZNZOsE=";
   };
 
-  npmDepsHash = "sha256-jOuIV6yR7hIPYRiAy5odxk8LreHiVTlZ03stwV2Nf4o=";
+  npmDepsHash = "sha256-mlF8p9s5aGjZz1nfBOOECsW/BhaP2ToQ4f6gUU9sgSI=";
 
   # Prevent Cypress binary download.
   CYPRESS_INSTALL_BINARY = 0;
