@@ -3575,7 +3575,7 @@ self: super: with self; {
 
   django-pwa = callPackage ../development/python-modules/django-pwa { };
 
-  django-q = callPackage ../development/python-modules/django-q { };
+  django-q2 = callPackage ../development/python-modules/django-q2 { };
 
   django-scheduler = callPackage ../development/python-modules/django-scheduler { };
 

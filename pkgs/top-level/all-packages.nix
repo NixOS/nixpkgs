@@ -11665,11 +11665,7 @@ with pkgs;
     nodejs = nodejs_18;
   };
 
-  mailmanPackages = callPackage ../servers/mail/mailman {
-    # Hyperkitty test fails with 3.12:
-    # https://gitlab.com/mailman/hyperkitty/-/issues/514
-    python3 = python311;
-  };
+  mailmanPackages = callPackage ../servers/mail/mailman { };
   inherit (mailmanPackages) mailman mailman-hyperkitty;
   mailman-web = mailmanPackages.web;
 
