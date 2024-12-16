@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "plotnine";
-  version = "0.14.3";
+  version = "0.14.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "has2k1";
     repo = "plotnine";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-hGgPW40PEkOV1Z7gaqHtbx1ybdtEFYyz8fYUBMZchmU=";
+    tag = "v${version}";
+    hash = "sha256-pNbnbzmY3WMCfmuvaVa0JRuyadlvnVCIx5jtni/VcVI=";
   };
 
   postPatch = ''
@@ -111,7 +111,7 @@ buildPythonPackage rec {
   meta = {
     description = "Grammar of graphics for Python";
     homepage = "https://plotnine.readthedocs.io/";
-    changelog = "https://github.com/has2k1/plotnine/releases/tag/v${version}";
+    changelog = "https://github.com/has2k1/plotnine/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ onny ];
   };
