@@ -1,0 +1,17 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    facter (4.10.0)
+      hocon (~> 1.3)
+      thor (>= 1.0.1, < 1.3)
+    hocon (1.4.0)
+    thor (1.2.2)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  facter
+
+BUNDLED WITH
+   2.5.16

@@ -1,0 +1,11 @@
+diff -Naur cproto-4.6-old/cproto.h cproto-4.6/cproto.h
+--- cproto-4.6-old/cproto.h	1998-01-18 19:49:16.000000000 -0500
++++ cproto-4.6/cproto.h	2004-03-14 00:02:32.148070032 -0500
+@@ -117,6 +117,7 @@
+     Declarator *declarator;
+     DeclaratorList decl_list;
+ } YYSTYPE;
++#define YYSTYPE_IS_DECLARED 1
+ 
+ /* Prototype styles */
+ #if OPT_LINTLIBRARY
