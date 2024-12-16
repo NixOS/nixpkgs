@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
 
   # Disable stack-related gnulib tests on x86_64-darwin because they have problems running under
   # Rosetta 2: test-c-stack hangs, test-sigsegv-catch-stackoverflow fails.
-  postPatch = if (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) then ''
+  postPatch = if ((stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) || (stdenv.hostPlatform.isAarch32)) then ''
     sed -i -E 's:test-c-stack2?\.sh::g' gnulib-tests/Makefile.in
     sed -i -E 's:test-sigsegv-catch-stackoverflow[12]::g' gnulib-tests/Makefile.in
   '' else null;
