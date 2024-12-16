@@ -123,7 +123,7 @@ class LuaEditor(pluginupdate.Editor):
     def get_update(
         self,
         input_file: str,
-        outfile: str,
+        output_file: str,
         config: FetchConfig,
         # TODO: implement support for adding/updating individual plugins
         to_update: list[str] | None,
@@ -142,7 +142,7 @@ class LuaEditor(pluginupdate.Editor):
             finally:
                 pass
 
-            self.generate_nix(results, outfile)
+            self.generate_nix(results, output_file)
 
             redirects = {}
             return redirects
