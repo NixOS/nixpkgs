@@ -87,6 +87,7 @@ rec {
         (onSystems [ "x86_64-linux" ] "nixos.tests.docker")
         (onFullSupported "nixos.tests.ecryptfs")
         (onFullSupported "nixos.tests.env")
+        (onSystems [ "x86_64-linux" "aarch64-linux" ] "nixos.tests.ec2-userdata")
 
         # Way too many manual retries required on Hydra.
         #  Apparently it's hard to track down the cause.
