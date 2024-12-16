@@ -57,6 +57,22 @@ in
     boot.initrd.availableKernelModules = [ "mptspi" ];
     boot.initrd.kernelModules = optionals pkgs.stdenv.hostPlatform.isx86 [ "vmw_pvscsi" ];
 
+    system.requiredKernelConfig =
+      with config.lib.kernelConfig;
+      [
+        (isEnabled "HYPERVISOR_GUEST")
+        (isEnabled "VMWARE_VMCI")
+        (isEnabled "VMWARE_VMCI_SOCKETS")
+        (isEnabled "VMXNET3")
+        (isEnabled "INFINIBAND_VMWARE_PVRDMA")
+      ]
+      ++ lib.optionals pkgs.stdenv.hostPlatform.isx86 [
+        (isEnabled "VMWARE_BALLOON")
+      ]
+      ++ lib.optionals (!cfg.headless) [
+        (isEnabled "FUSE_FS")
+      ];
+
     environment.systemPackages = [ cfg.package ];
 
     systemd.services.vmware = {
