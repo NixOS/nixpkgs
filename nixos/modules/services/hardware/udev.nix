@@ -162,7 +162,7 @@ let
     '';
 
   compressFirmware = firmware:
-    if config.hardware.firmwareCompression == "none" || (firmware.compressFirmware or false) == false then firmware
+    if config.hardware.firmwareCompression == "none" || (firmware.compressFirmware or true) == false then firmware
     else if config.hardware.firmwareCompression == "zstd" then pkgs.compressFirmwareZstd firmware
     else pkgs.compressFirmwareXz firmware;
 
