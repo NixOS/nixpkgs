@@ -36,23 +36,22 @@ in
     };
   };
 
-  config =
-    lib.mkIf cfg.enable {
-      nixpkgs.overlays = [
-        (final: prev: {
-          _espanso-wayland-orig = prev.espanso-wayland;
-          espanso-wayland = pkgs.callPackage ./espanso-capdacoverride.nix {
-            capDacOverrideWrapperDir = "${config.security.wrapperDir}";
-            espanso = cfg.package;
-          };
-        })
-      ];
+  config = lib.mkIf cfg.enable {
+    nixpkgs.overlays = [
+      (final: prev: {
+        _espanso-wayland-orig = prev.espanso-wayland;
+        espanso-wayland = pkgs.callPackage ./espanso-capdacoverride.nix {
+          capDacOverrideWrapperDir = "${config.security.wrapperDir}";
+          espanso = cfg.package;
+        };
+      })
+    ];
 
-      security.wrappers."espanso-wayland" = {
-        source = lib.getExe pkgs.espanso-wayland;
-        capabilities = "cap_dac_override+p";
-        owner = "root";
-        group = "root";
-      };
+    security.wrappers."espanso-wayland" = {
+      source = lib.getExe pkgs.espanso-wayland;
+      capabilities = "cap_dac_override+p";
+      owner = "root";
+      group = "root";
     };
+  };
 }
