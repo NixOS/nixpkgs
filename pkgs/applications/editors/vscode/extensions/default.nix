@@ -3246,8 +3246,8 @@ let
         mktplcRef = {
           name = "compare-folders";
           publisher = "moshfeu";
-          version = "0.24.3";
-          hash = "sha256-eaumF2BIqEYoyL7LQ0Wx3+gkkFGpWKQoN3AisI8wTQY=";
+          version = "0.25.1";
+          hash = "sha256-axNTdnSkMkFs7LSZCc7VinjbrDncsRHlRtDG9+eh2qQ=";
         };
 
         meta = {
