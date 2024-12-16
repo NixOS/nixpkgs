@@ -3,7 +3,7 @@
   runtimeShell,
   nix,
   lib,
-  substituteAll,
+  replaceVarsWith,
   nuget-to-nix,
   nixfmt-rfc-style,
   cacert,
@@ -63,12 +63,13 @@ attrs
         let
           drv = builtins.unsafeDiscardOutputDependency fetch-drv.drvPath;
 
-          innerScript = substituteAll {
+          innerScript = replaceVarsWith {
             src = ./fetch-deps.sh;
             isExecutable = true;
-            inherit cacert;
-            nugetToNix = nuget-to-nix;
-            nixfmt = nixfmt-rfc-style;
+            replacements = {
+              nugetToNix = nuget-to-nix;
+              nixfmt = nixfmt-rfc-style;
+            };
           };
 
           defaultDepsFile =
