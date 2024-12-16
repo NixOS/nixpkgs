@@ -485,6 +485,15 @@ def main() -> None:
 
     try:
         execute(sys.argv)
+    except CalledProcessError as ex:
+        if logger.level == logging.DEBUG:
+            import traceback
+
+            traceback.print_exc()
+        else:
+            print(str(ex), file=sys.stderr)
+        # Exit with the error code of the process that failed
+        sys.exit(ex.returncode)
     except (Exception, KeyboardInterrupt) as ex:
         if logger.level == logging.DEBUG:
             raise
