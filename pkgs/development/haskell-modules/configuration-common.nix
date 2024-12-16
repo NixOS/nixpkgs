@@ -2174,16 +2174,6 @@ self: super: {
   ihaskell-display = doJailbreak super.ihaskell-display;
   ihaskell-basic = doJailbreak super.ihaskell-basic;
 
-  # Fixes too strict version bounds on regex libraries
-  # Presumably to be removed at the next release
-  # Test suite doesn't support hspec 2.8
-  # https://github.com/yi-editor/yi/issues/1124
-  yi-language = appendPatch (fetchpatch {
-    url = "https://github.com/yi-editor/yi/commit/0d3bcb5ba4c237d57ce33a3dc39b63c56d890765.patch";
-    relative = "yi-language";
-    sha256 = "sha256-AVQLvul3ufxGQyoXud05qauclNanf6kunip0oJ/9lWQ=";
-  }) (dontCheck super.yi-language);
-
   # Tests need to lookup target triple x86_64-unknown-linux
   # https://github.com/llvm-hs/llvm-hs/issues/334
   llvm-hs = dontCheckIf (pkgs.stdenv.targetPlatform.system != "x86_64-linux") super.llvm-hs;
