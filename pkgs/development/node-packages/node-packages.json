@@ -2,6 +2,7 @@
   "@angular/cli"
 , "@antfu/ni"
 , "@babel/cli"
+, "@changesets/cli"
 , "@commitlint/cli"
 , "@commitlint/config-conventional"
 , "@microsoft/rush"

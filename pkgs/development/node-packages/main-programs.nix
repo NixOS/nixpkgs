@@ -9,6 +9,7 @@
   # Packages that provide a single executable.
   "@angular/cli" = "ng";
   "@babel/cli" = "babel";
+  "@changesets/cli" = "changeset";
   "@commitlint/cli" = "commitlint";
   "@gitbeaker/cli" = "gitbeaker";
   "@prisma/language-server" = "prisma-language-server";
