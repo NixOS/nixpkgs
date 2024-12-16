@@ -92,14 +92,6 @@ buildPythonPackage rec {
     export HOME=$TMPDIR
   '';
 
-  disabledTestPaths = [
-    # tries to fetch fixtures over the network
-    "tests/test_freeimage.py"
-    "tests/test_pillow.py"
-    "tests/test_spe.py"
-    "tests/test_swf.py"
-  ];
-
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # Segmentation fault
     "test_bayer_write"

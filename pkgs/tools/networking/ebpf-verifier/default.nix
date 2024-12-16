@@ -6,7 +6,7 @@
   cmake,
   catch2,
   pkg-config,
-  substituteAll,
+  replaceVars,
   yaml-cpp,
 }:
 
@@ -23,9 +23,8 @@ stdenv.mkDerivation {
   };
 
   patches = [
-    (substituteAll {
+    (replaceVars ./remove-fetchcontent-usage.patch {
       # We will download them instead of cmake's fetchContent
-      src = ./remove-fetchcontent-usage.patch;
       catch2Src = catch2.src;
     })
   ];

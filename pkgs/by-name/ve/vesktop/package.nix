@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   makeBinaryWrapper,
   makeWrapper,
   makeDesktopItem,
@@ -70,10 +70,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches =
     [ ./disable_update_checking.patch ]
-    ++ lib.optional withSystemVencord (substituteAll {
-      inherit vencord;
-      src = ./use_system_vencord.patch;
-    });
+    ++ lib.optional withSystemVencord (
+      replaceVars ./use_system_vencord.patch {
+        inherit vencord;
+      }
+    );
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;

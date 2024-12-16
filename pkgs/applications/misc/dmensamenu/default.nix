@@ -2,7 +2,7 @@
   lib,
   buildPythonApplication,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   requests,
   dmenu,
 }:
@@ -19,8 +19,7 @@ buildPythonApplication rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./dmenu-path.patch;
+    (replaceVars ./dmenu-path.patch {
       inherit dmenu;
     })
   ];

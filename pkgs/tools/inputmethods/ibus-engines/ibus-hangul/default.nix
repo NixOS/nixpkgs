@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   appstream-glib,
   gettext,
   pkg-config,
@@ -27,8 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       libhangul = "${libhangul}/lib/libhangul.so.1";
     })
   ];

@@ -58,7 +58,7 @@
 
 {
   mkDerivation,
-  substituteAll,
+  replaceVars,
   pkgs,
 }:
 {
@@ -80,8 +80,7 @@ mkDerivation {
     "buildPhase"
     "fixupPhase"
   ];
-  setupNew = substituteAll {
-    src = ../../stdenv/generic/setup.sh;
+  setupNew = replaceVars ../../stdenv/generic/setup.sh {
     inherit gcc;
   };
 

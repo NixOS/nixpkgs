@@ -3,7 +3,7 @@
 , autoreconfHook
 , neon
 , procps
-, substituteAll
+, replaceVars
 , zlib
 , wrapperDir ? "/run/wrappers/bin"
 }:
@@ -28,12 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
   patches = [
     ./fix-sysconfdir.patch
     ./disable-suid.patch
-    (substituteAll {
-      src = ./0001-umount_davfs-substitute-ps-command.patch;
+    (replaceVars ./0001-umount_davfs-substitute-ps-command.patch {
       ps = "${procps}/bin/ps";
     })
-    (substituteAll {
-      src = ./0002-Make-sure-that-the-setuid-wrapped-umount-is-invoked.patch;
+    (replaceVars ./0002-Make-sure-that-the-setuid-wrapped-umount-is-invoked.patch {
       inherit wrapperDir;
     })
   ];
