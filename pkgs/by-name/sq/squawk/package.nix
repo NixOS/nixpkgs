@@ -9,7 +9,6 @@
   rustPlatform,
   stdenv,
 }:
-
 rustPlatform.buildRustPackage rec {
   pname = "squawk";
   version = "1.0.0";
@@ -50,11 +49,11 @@ rustPlatform.buildRustPackage rec {
     "--skip=parse::tests::test_parse_sql_query_json"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Linter for PostgreSQL, focused on migrations";
-    homepage = "https://squawkhq.com/";
+    homepage = "https://squawkhq.com";
     changelog = "https://github.com/sbdchd/squawk/blob/v${version}/CHANGELOG.md";
-    license = licenses.gpl3Only;
+    license = with lib.licenses; [ gpl3Only ];
     maintainers = with lib.maintainers; [ andrewsmith ];
   };
 }
