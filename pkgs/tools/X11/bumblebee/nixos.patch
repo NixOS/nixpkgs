@@ -1,0 +1,80 @@
+diff --git a/conf/xorg.conf.nouveau b/conf/xorg.conf.nouveau
+index 87e48cb..60d6eaf 100644
+--- a/conf/xorg.conf.nouveau
++++ b/conf/xorg.conf.nouveau
+@@ -15,4 +15,5 @@ Section "Device"
+ #   This Setting is needed on Ubuntu 13.04.
+ #   BusID "PCI:01:00:0"
+ 
++@nouveauDeviceOptions@
+ EndSection
+diff --git a/conf/xorg.conf.nvidia b/conf/xorg.conf.nvidia
+index c3107f9..17072f4 100644
+--- a/conf/xorg.conf.nvidia
++++ b/conf/xorg.conf.nvidia
+@@ -29,6 +29,6 @@ Section "Device"
+     Option "ProbeAllGpus" "false"
+ 
+     Option "NoLogo" "true"
+-    Option "UseEDID" "false"
+-    Option "UseDisplayDevice" "none"
++
++@nvidiaDeviceOptions@
+ EndSection
+diff --git a/src/bbsecondary.c b/src/bbsecondary.c
+index 71a6b73..a682d8a 100644
+--- a/src/bbsecondary.c
++++ b/src/bbsecondary.c
+@@ -145,6 +145,23 @@ bool start_secondary(bool need_secondary) {
+     }
+ 
+     bb_log(LOG_INFO, "Starting X server on display %s.\n", bb_config.x_display);
++    const char mod_appends[] = X_MODULE_APPENDS;
++
++    char *mod_path;
++    int pathlen = strlen(bb_config.mod_path);
++    if (pathlen == 0) {
++      mod_path = mod_appends;
++    } else {
++      mod_path = malloc(pathlen + 1 + sizeof(mod_appends));
++      if (!mod_path) {
++        set_bb_error("Could not allocate memory for modules path\n");
++        return false;
++      }
++      strcpy(mod_path, bb_config.mod_path);
++      mod_path[pathlen] = ',';
++      strcpy(mod_path + pathlen + 1, mod_appends);
++    }
++
+     char *x_argv[] = {
+       XORG_BINARY,
+       bb_config.x_display,
+@@ -153,24 +170,24 @@ bool start_secondary(bool need_secondary) {
+       "-sharevts",
+       "-nolisten", "tcp",
+       "-noreset",
++      "-logfile", "/var/log/X.bumblebee.log",
+       "-verbose", "3",
+       "-isolateDevice", pci_id,
+-      "-modulepath", bb_config.mod_path, // keep last
++      "-modulepath", mod_path,
+       NULL
+     };
+     enum {n_x_args = sizeof(x_argv) / sizeof(x_argv[0])};
+-    if (!*bb_config.mod_path) {
+-      x_argv[n_x_args - 3] = 0; //remove -modulepath if not set
+-    }
+     //close any previous pipe, if it (still) exists
+     if (bb_status.x_pipe[0] != -1){close(bb_status.x_pipe[0]); bb_status.x_pipe[0] = -1;}
+     if (bb_status.x_pipe[1] != -1){close(bb_status.x_pipe[1]); bb_status.x_pipe[1] = -1;}
+     //create a new pipe
+     if (pipe2(bb_status.x_pipe, O_NONBLOCK | O_CLOEXEC)){
+       set_bb_error("Could not create output pipe for X");
++      if (pathlen > 0) free(mod_path);
+       return false;
+     }
+     bb_status.x_pid = bb_run_fork_ld_redirect(x_argv, bb_config.ld_path, bb_status.x_pipe[1]);
++    if (pathlen > 0) free(mod_path);
+     //close the end of the pipe that is not ours
+     if (bb_status.x_pipe[1] != -1){close(bb_status.x_pipe[1]); bb_status.x_pipe[1] = -1;}
+   }

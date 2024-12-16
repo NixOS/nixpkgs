@@ -1,0 +1,13 @@
+--- a/src/core/util_string.cpp	2014-10-27 22:52:11.875981552 +0100
++++ b/src/core/util_string.cpp	2014-10-27 22:54:18.613001994 +0100
+@@ -40,6 +40,10 @@
+ #include <linux/limits.h>
+ #endif // __PLATFORM_LINUX__
+ 
++#ifdef __PLATFORM_MACOSX__
++#include <limits.h>
++#endif // __PLATFORM_MACOSX__
++
+ #include <stdio.h>
+ using namespace std;
+ 
