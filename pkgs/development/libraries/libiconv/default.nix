@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "libiconv";
-  version = "1.17";
+  version = "1.18";
 
   src = fetchurl {
     url = "mirror://gnu/libiconv/${pname}-${version}.tar.gz";
-    sha256 = "sha256-j3QhO1YjjIWlClMp934GGYdx5w3Zpzl3n0wC9l2XExM=";
+    sha256 = "sha256-Owj19Pm064LxUacEC/1v5sb7ki7+SxZZxm6pMydpZeg=";
   };
 
   enableParallelBuilding = true;
