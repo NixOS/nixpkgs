@@ -1,5 +1,4 @@
 import argparse
-import atexit
 import json
 import logging
 import os
@@ -292,8 +291,6 @@ def execute(argv: list[str]) -> None:
 
     if not WITH_NIX_2_18:
         logger.warning("you're using Nix <2.18, some features will not work correctly")
-
-    atexit.register(cleanup_ssh)
 
     common_flags = vars(args_groups["common_flags"])
     common_build_flags = common_flags | vars(args_groups["common_build_flags"])

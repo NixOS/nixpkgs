@@ -1,3 +1,4 @@
+import atexit
 import logging
 import os
 import shlex
@@ -74,6 +75,9 @@ def cleanup_ssh() -> None:
             check=False,
             capture_output=True,
         )
+
+
+atexit.register(cleanup_ssh)
 
 
 def run_wrapper(
