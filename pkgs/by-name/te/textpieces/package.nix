@@ -28,11 +28,9 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-0bc2Q3k08ZItRH7teQCv7uQyj4Rig6LtZmO5Vu48vxo=";
   };
 
-  cargoDeps = rustPlatform.importCargoLock {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "textpieces-core-1.1.2" = "sha256-fAATzugZ4kpUqHx8H4yuNH9Weeubkp8eAHAe94rMBmA=";
-    };
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit (finalAttrs) src;
+    hash = "sha256-xthkY09nrJxI68my6nytkBY2vn4pJWbXtLM56JVlH6g=";
   };
 
   nativeBuildInputs = [
