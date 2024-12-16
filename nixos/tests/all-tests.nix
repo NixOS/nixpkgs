@@ -433,6 +433,7 @@ in {
     imports = [ ./firefox.nix ] ;
     _module.args.firefoxPackage = pkgs.floorp;
   };
+  fluent-bit = handleTest ./fluent-bit.nix {};
   fluentd = handleTest ./fluentd.nix {};
   fluidd = handleTest ./fluidd.nix {};
   fontconfig-default-fonts = handleTest ./fontconfig-default-fonts.nix {};
