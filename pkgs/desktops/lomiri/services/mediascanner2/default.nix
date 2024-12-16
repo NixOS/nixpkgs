@@ -3,6 +3,7 @@
   lib,
   fetchFromGitLab,
   gitUpdater,
+  nixosTests,
   testers,
   boost,
   cmake,
@@ -99,7 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru = {
-    tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+    tests = {
+      pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
+      # music app needs mediascanner to work properly, so it can find files
+      vm = nixosTests.lomiri-music-app;
+    };
     updateScript = gitUpdater { };
   };
 
