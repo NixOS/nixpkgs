@@ -83,7 +83,6 @@ stdenv.mkDerivation (finalAttrs: {
           "tcp_ref3"
           "tcp_ref4"
           "tcp_bind6_error_inval"
-          "tcp_bind6_error_addrinuse"
           "tcp_read_stop"
           "tcp_unexpected_read"
           "tcp_write_to_half_open_connection"
@@ -98,7 +97,6 @@ stdenv.mkDerivation (finalAttrs: {
           "tcp_open"
           "tcp_write_queue_order"
           "tcp_try_write"
-          "tcp_writealot"
           "multiple_listen"
           "delayed_accept"
           "udp_recv_in_a_row"
@@ -109,7 +107,6 @@ stdenv.mkDerivation (finalAttrs: {
           "tty_pty"
           "condvar_5"
           "hrtime"
-          "udp_multicast_join"
           # Tests that fail when sandboxing is enabled.
           "fs_event_close_in_callback"
           "fs_event_watch_dir"
