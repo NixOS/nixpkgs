@@ -67,6 +67,6 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "vulnix";
     homepage = "https://github.com/nix-community/vulnix";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ ckauhaus ];
+    maintainers = with maintainers; [ henrirosten ];
   };
 }
