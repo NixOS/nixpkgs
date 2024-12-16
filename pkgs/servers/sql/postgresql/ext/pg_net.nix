@@ -9,7 +9,7 @@
 
 buildPostgresqlExtension rec {
   pname = "pg_net";
-  version = "0.13.0";
+  version = "0.14.0";
 
   buildInputs = [ curl ];
 
@@ -17,7 +17,7 @@ buildPostgresqlExtension rec {
     owner = "supabase";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-FRaTZPCJQPYAFmsJg22hYJJ0+gH1tMdDQoCQgiqEnaA=";
+    hash = "sha256-c1pxhTyrE5j6dY+M5eKAboQNofIORS+Dccz+7HKEKQI=";
   };
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error";

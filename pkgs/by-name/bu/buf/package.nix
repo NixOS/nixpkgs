@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "buf";
-  version = "1.47.0";
+  version = "1.47.2";
 
   src = fetchFromGitHub {
     owner = "bufbuild";
     repo = "buf";
     rev = "v${version}";
-    hash = "sha256-zPpHdqhL+D7Dd5IL1bTpxfPWY6ascJAcya+8/GeYfzM=";
+    hash = "sha256-rEz39E6sid9nNV5lzXwLh/GHrz5aVl67+BKfooH3+Nk=";
   };
 
   vendorHash = "sha256-dSNmMc7iWtrItFuz341FpYWo5AyExgO7e7Fbib2gCS8=";

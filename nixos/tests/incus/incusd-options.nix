@@ -18,7 +18,7 @@ import ../make-test-python.nix (
 
     container-image-metadata = "${
       releases.incusContainerMeta.${pkgs.stdenv.hostPlatform.system}
-    }/tarball/nixos-system-${pkgs.stdenv.hostPlatform.system}.tar.xz";
+    }/tarball/nixos-image-lxc-*-${pkgs.stdenv.hostPlatform.system}.tar.xz";
     container-image-rootfs = "${
       releases.incusContainerImage.${pkgs.stdenv.hostPlatform.system}
     }/nixos-lxc-image-${pkgs.stdenv.hostPlatform.system}.squashfs";
