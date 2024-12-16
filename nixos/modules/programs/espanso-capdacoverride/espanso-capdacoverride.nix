@@ -10,7 +10,6 @@ let
   pname = "${espanso.pname}-capdacoverride";
 
   wrapperLibName = "wrapper-lib.so";
-  wrapperLibSource = "wrapper-lib.c";
 
   # On Wayland, Espanso requires the DAC_OVERRIDE capability. One can create a wrapper binary with this
   # capability using the `config.security.wrappers.<name>` framework. However, this is not enough: the
@@ -20,15 +19,16 @@ let
   wrapperLib = stdenv.mkDerivation {
     name = "${pname}-${version}-wrapper-lib";
 
-    src = builtins.path {
-      name = "${pname}-${version}-wrapper-lib-source";
-      path = ./.;
-      filter = path: type: baseNameOf path == wrapperLibSource;
-    };
+    dontUnpack = true;
 
     postPatch = ''
-      substitute ${wrapperLibSource} lib.c --subst-var-by to "${capDacOverrideWrapperDir}/espanso-wayland"
+      substitute ${./wrapper-lib.c} lib.c --subst-var-by to "${capDacOverrideWrapperDir}/espanso-wayland"
+    '';
+
+    buildPhase = ''
+      runHook preBuild
       cc -fPIC -shared lib.c -o ${wrapperLibName}
+      runHook postBuild
     '';
 
     installPhase = ''
