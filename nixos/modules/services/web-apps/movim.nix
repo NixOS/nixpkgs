@@ -62,7 +62,7 @@ let
 
         stateDirectories = /* sh */ ''
           # Symlinking in our state directories
-          rm -rf $out/.env $out/cache ${appDir}/public/cache
+          rm -rf $out/{.env,cache} ${appDir}/{log,public/cache}
           ln -s ${cfg.dataDir}/.env ${appDir}/.env
           ln -s ${cfg.dataDir}/public/cache ${appDir}/public/cache
           ln -s ${cfg.logDir} ${appDir}/log
