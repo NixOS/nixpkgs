@@ -19,7 +19,14 @@ logger.setLevel(logging.INFO)
 
 def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentParser]]:
     common_flags = argparse.ArgumentParser(add_help=False)
-    common_flags.add_argument("--verbose", "-v", action="count", dest="v", default=0)
+    common_flags.add_argument(
+        "--verbose",
+        "-v",
+        action="count",
+        dest="v",
+        default=0,
+        help="Enable verbose logging (includes nix)",
+    )
     common_flags.add_argument("--max-jobs", "-j")
     common_flags.add_argument("--cores")
     common_flags.add_argument("--log-format")
