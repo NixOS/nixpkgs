@@ -1,11 +1,11 @@
 import textwrap
+import uuid
 from pathlib import Path
 from subprocess import PIPE, CompletedProcess
 from typing import Any
 from unittest.mock import ANY, call, patch
 
 import pytest
-import uuid
 
 import nixos_rebuild.models as m
 import nixos_rebuild.nix as n
@@ -80,13 +80,17 @@ def test_remote_build(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
     build_host = m.Remote("user@host", [], None)
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
 
-    def run_wrapper_side_effect(args, **kwargs):  # type: ignore
+    def run_wrapper_side_effect(
+        args: list[str], **kwargs: Any
+    ) -> CompletedProcess[str]:
         if args[0] == "nix-instantiate":
             return CompletedProcess([], 0, stdout=" \n/path/to/file\n ")
         elif args[0] == "mktemp":
             return CompletedProcess([], 0, stdout=" \n/tmp/tmpdir\n ")
         elif args[0] == "nix-store":
-            return CompletedProcess([], 0, stdout=" \n/tmp/tmpdir/00000000000000000000000000000000\n ")
+            return CompletedProcess(
+                [], 0, stdout=" \n/tmp/tmpdir/00000000000000000000000000000000\n "
+            )
         elif args[0] == "readlink":
             return CompletedProcess([], 0, stdout=" \n/path/to/config\n ")
         else:
