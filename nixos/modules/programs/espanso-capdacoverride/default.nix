@@ -5,15 +5,14 @@
   ...
 }:
 
-with lib;
 {
   meta = {
-    maintainers = with maintainers; [ pitkling ];
+    maintainers = with lib.maintainers; [ pitkling ];
   };
 
   options = {
     programs.espanso.capdacoverride = {
-      enable = (mkEnableOption "espanso-wayland overlay with DAC_OVERRIDE capability") // {
+      enable = (lib.mkEnableOption "espanso-wayland overlay with DAC_OVERRIDE capability") // {
         default = false;
         extraDescription = ''
           Creates an espanso binary with the DAC_OVERRIDE capability (via `security.wrappers`) and overlays `pkgs.espanso-wayland` such that self-forks call the capability-enabled binary.
@@ -21,11 +20,11 @@ with lib;
         '';
       };
 
-      package = mkOption {
-        type = types.package // {
-          check = package: types.package.check package && (builtins.elem "wayland" package.buildFeatures);
+      package = lib.mkOption {
+        type = lib.types.package // {
+          check = package: lib.types.package.check package && (builtins.elem "wayland" package.buildFeatures);
           description =
-            types.package.description
+            lib.types.package.description
             + " for espanso with wayland support (`package.builtFeatures` must contain `\"wayland\"`)";
         };
         default = pkgs._espanso-wayland-orig;
@@ -39,7 +38,7 @@ with lib;
     let
       cfg = config.programs.espanso.capdacoverride;
     in
-    mkIf cfg.enable {
+    lib.mkIf cfg.enable {
       nixpkgs.overlays = [
         (final: prev: {
           _espanso-wayland-orig = prev.espanso-wayland;
@@ -51,7 +50,7 @@ with lib;
       ];
 
       security.wrappers."${pkgs.espanso-wayland.meta.mainProgram}" = {
-        source = "${getExe pkgs.espanso-wayland}";
+        source = "${lib.getExe pkgs.espanso-wayland}";
         capabilities = "cap_dac_override+p";
         owner = "root";
         group = "root";
