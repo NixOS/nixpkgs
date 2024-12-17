@@ -18,16 +18,23 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "machines-in-motion";
     repo = "mim_solvers";
-    rev = "v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XV8EJqCOTYqljZe2PQvnhIaPUOJ+bBjRIoshdeqZycA=";
   };
 
   # eigenpy is not used without python support
-  postPatch = lib.optionalString (!pythonSupport) ''
-    substituteInPlace CMakeLists.txt --replace-fail \
-      "add_project_dependency(eigenpy 2.7.10 REQUIRED)" \
-      ""
-  '';
+  postPatch =
+    lib.optionalString (!pythonSupport) ''
+      substituteInPlace CMakeLists.txt \
+        --replace-fail \
+          "add_project_dependency(eigenpy 2.7.10 REQUIRED)" \
+          ""
+    ''
+    + lib.optionalString (pythonSupport) ''
+      substituteInPlace tests/python/test_clqr_osqp.py \
+        --replace-fail "import pathlib" "import pathlib, pytest" \
+        --replace-fail "assert ddp1.qp_iters == ddp2.qp_iters" "assert pytest.approx(ddp1.qp_iters) == ddp2.qp_iters"
+    '';
 
   nativeBuildInputs = [
     cmake
@@ -40,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
       python3Packages.osqp
       python3Packages.proxsuite
       python3Packages.scipy
+      python3Packages.pytest
     ]
     ++ lib.optionals (!pythonSupport) [
       crocoddyl
