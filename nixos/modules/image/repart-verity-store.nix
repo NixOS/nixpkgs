@@ -92,7 +92,7 @@ in
     image.repart.partitions = {
       # dm-verity hash partition
       ${cfg.partitionIds.store-verity}.repartConfig = {
-        Type = partitionTypes.usr-verity;
+        Type = lib.mkDefault partitionTypes.usr-verity;
         Verity = "hash";
         VerityMatchKey = lib.mkDefault verityMatchKey;
         Label = lib.mkDefault "store-verity";
@@ -101,7 +101,7 @@ in
       ${cfg.partitionIds.store} = {
         storePaths = [ config.system.build.toplevel ];
         repartConfig = {
-          Type = partitionTypes.usr;
+          Type = lib.mkDefault partitionTypes.usr;
           Verity = "data";
           Format = lib.mkDefault "erofs";
           VerityMatchKey = lib.mkDefault verityMatchKey;
