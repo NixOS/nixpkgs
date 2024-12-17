@@ -25,7 +25,7 @@ buildPythonPackage rec {
   version = "0.19.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "python-visualization";
@@ -76,7 +76,7 @@ buildPythonPackage rec {
   meta = {
     description = "Make beautiful maps with Leaflet.js & Python";
     homepage = "https://github.com/python-visualization/folium";
-    changelog = "https://github.com/python-visualization/folium/blob/v${version}/CHANGES.txt";
+    changelog = "https://github.com/python-visualization/folium/releases/tag/${src.tag}";
     license = with lib.licenses; [ mit ];
     maintainers = lib.teams.geospatial.members;
   };
