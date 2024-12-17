@@ -48,20 +48,24 @@ stdenv.mkDerivation (finalAttrs: {
   postUnpack = ''
     export CARGO_HOME=$PWD/.cargo
   '';
-  # Test failures, see:
-  # https://github.com/GothenburgBitFactory/taskwarrior/issues/3727
   failingTests = [
+    # It would be very hard to make this test succeed, as the bash completion
+    # needs to be installed and the builder's `bash` should be aware of it.
+    # Doesn't worth the effort. See also:
+    # https://github.com/GothenburgBitFactory/taskwarrior/issues/3727
     "bash_completion.test.py"
-    "hooks.env.test.py"
-    "hooks.on-add.test.py"
-    "hooks.on-launch.test.py"
-    "hooks.on-modify.test.py"
-    "hooks.on-exit.test.py"
   ];
-  preConfigure = ''
-    substituteInPlace test/CMakeLists.txt \
-      ${lib.concatMapStringsSep "\\\n  " (t: "--replace-fail ${t} '' ") finalAttrs.failingTests}
-  '';
+  # Contains Bash and Python scripts used while testing.
+  preConfigure =
+    ''
+      # https://github.com/GothenburgBitFactory/taskwarrior/pull/3728
+      chmod -R +x test/test_hooks
+      patchShebangs test
+    ''
+    + lib.optionalString (builtins.length finalAttrs.failingTests > 0) ''
+      substituteInPlace test/CMakeLists.txt \
+        ${lib.concatMapStringsSep "\\\n  " (t: "--replace-fail ${t} '' ") finalAttrs.failingTests}
+    '';
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -79,12 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  # See:
+  # https://github.com/GothenburgBitFactory/taskwarrior/blob/v3.2.0/doc/devel/contrib/development.md#run-the-test-suite
   preCheck = ''
-    # See:
-    # https://github.com/GothenburgBitFactory/taskwarrior/blob/v3.2.0/doc/devel/contrib/development.md#run-the-test-suite
     make test_runner
-    # Otherwise all '/usr/bin/env python' shebangs are not found by ctest
-    patchShebangs test/*.py test/*/*.py
   '';
   nativeCheckInputs = [
     python3
