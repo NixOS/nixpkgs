@@ -267,6 +267,8 @@ self: super: with self; {
 
   aiohttp-jinja2 = callPackage ../development/python-modules/aiohttp-jinja2 { };
 
+  aiohttp-json-rpc = callPackage ../development/python-modules/aiohttp-json-rpc { };
+
   aiohttp-middlewares = callPackage ../development/python-modules/aiohttp-middlewares { };
 
   aiohttp-oauthlib = callPackage ../development/python-modules/aiohttp-oauthlib { };
