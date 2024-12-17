@@ -7,21 +7,23 @@
 
 buildGo123Module rec {
   pname = "traefik";
-  version = "3.2.2";
+  version = "3.2.3";
 
   # Archive with static assets for webui
   src = fetchzip {
     url = "https://github.com/traefik/traefik/releases/download/v${version}/traefik-v${version}.src.tar.gz";
-    hash = "sha256-DTgpoJvk/rxzMAIBgKJPT70WW8W/aBhOEoyw3cK+JrM=";
+    hash = "sha256-VR5pYDkM0D7is+1UfN0/8XI/a1PZzERLX2eCo8/UcNY=";
     stripRoot = false;
   };
 
-  vendorHash = "sha256-+sL0GJhWMlFdNEsRdgRJ42aGedOfn76gg70wH6/a+qQ=";
+  vendorHash = "sha256-aUNRMpno8GkKB1BDDxzD3+ogeZ9i1IWeu+x0ne4ajpA=";
 
   subPackages = [ "cmd/traefik" ];
 
+  env.CGO_ENABLED = 0;
+
   preBuild = ''
-    GOOS= GOARCH= CGO_ENABLED=0 go generate
+    GOOS= GOARCH= go generate
 
     CODENAME=$(grep -Po "CODENAME \?=\s\K.+$" Makefile)
 
