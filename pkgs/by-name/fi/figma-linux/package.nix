@@ -1,96 +1,89 @@
 {
-  pkgs,
   lib,
-  stdenv,
-  fetchurl,
-  autoPatchelfHook,
-  dpkg,
-  makeWrapper,
-  wrapGAppsHook3,
-  ...
+  stdenvNoCC,
+  fetchFromGitHub,
+  fetchNpmDeps,
+  nodejs,
+  npmHooks,
+  makeBinaryWrapper,
+  desktop-file-utils,
+  electron,
 }:
-stdenv.mkDerivation (finalAttrs: {
-  pname = "figma-linux";
+let
   version = "0.11.5";
+in
+stdenvNoCC.mkDerivation (finalAttrs: {
+  pname = "figma-linux";
+  inherit version;
 
-  src = fetchurl {
-    url = "https://github.com/Figma-Linux/figma-linux/releases/download/v${finalAttrs.version}/figma-linux_${finalAttrs.version}_linux_amd64.deb";
-    hash = "sha256-6lFeiecliyuTdnUCCbLpoQWiu5k3OPHxb+VF17GtERo=";
+  src = fetchFromGitHub {
+    owner = "Figma-Linux";
+    repo = "figma-linux";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pa0GgAmi9Os4EtZpbo0hSgr4s+WX95zLUrZR8a33TeI=";
   };
 
   nativeBuildInputs = [
-    autoPatchelfHook
-    dpkg
-    makeWrapper
-    wrapGAppsHook3
+    nodejs
+    npmHooks.npmConfigHook
+    makeBinaryWrapper
+    desktop-file-utils
   ];
 
-  buildInputs =
-    with pkgs;
-    [
-      alsa-lib
-      at-spi2-atk
-      cairo
-      cups.lib
-      dbus.lib
-      expat
-      gdk-pixbuf
-      glib
-      gtk3
-      libdrm
-      libxkbcommon
-      mesa
-      nspr
-      nss
-      pango
-    ]
-    ++ (with pkgs.xorg; [
-      libX11
-      libXcomposite
-      libXdamage
-      libXext
-      libXfixes
-      libXrandr
-      libxcb
-      libxshmfence
-    ]);
+  npmDeps = fetchNpmDeps {
+    name = "${finalAttrs.pname}-${finalAttrs.version}-npm-deps";
+    inherit (finalAttrs) src;
+    hash = "sha256-FqgcG52Nkj0wlwsHwIWTXNuIeAs7b+TPkHcg7m5D2og=";
+  };
 
-  runtimeDependencies = with pkgs; [ eudev ];
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = true;
 
-  unpackCmd = "dpkg -x $src .";
+  buildPhase = ''
+    runHook preBuild
 
-  sourceRoot = ".";
+    npm run build
 
-  # Instead of double wrapping the binary, simply pass the `gappsWrapperArgs`
-  # to `makeWrapper` directly
-  dontWrapGApps = true;
+    # The appDir is set to dist/ and node_modules/ has to be found inside it
+    mkdir -p dist/node_modules
+    ln -s node_modules/* -t dist/node_modules
+
+    npm run builder -- \
+      --dir \
+      -c.electronVersion="${electron.version}" \
+      -c.electronDist="${electron.dist}"
+
+    runHook postBuild
+  '';
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/lib && cp -r opt/figma-linux/* $_
-    mkdir -p $out/bin && ln -s $out/lib/figma-linux $_/figma-linux
+    mkdir -p $out/share/figma-linux
+    cp -r build/installers/*-unpacked/{locales,resources{,.pak}} -t $out/share/figma-linux
 
-    cp -r usr/* $out
+    makeWrapper ${lib.getExe electron} $out/bin/figma-linux \
+      --add-flags "$out/share/figma-linux/resources/app.asar" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
-    wrapProgramShell $out/bin/figma-linux \
-      "''${gappsWrapperArgs[@]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime=true}}"
+    install -D resources/figma-linux.desktop -t $out/share/applications
+    desktop-file-edit \
+      --set-key=Exec --set-value="figma-linux %U" \
+      $out/share/applications/figma-linux.desktop
+
+    install -D resources/icons/scalable.svg $out/share/icons/hicolor/scalable/apps/figma-linux.png
+    for f in 24 36 48 64 72 96 128 192 256 384 512; do
+      install -D resources/icons/''${f}x''${f}.png $out/share/icons/hicolor/''${f}x''${f}/apps/figma-linux.png
+    done
 
     runHook postInstall
   '';
 
-  postFixup = ''
-    substituteInPlace $out/share/applications/figma-linux.desktop \
-          --replace "Exec=/opt/figma-linux/figma-linux" "Exec=$out/bin/${finalAttrs.pname}"
-  '';
-
-  meta = with lib; {
+  meta = {
     description = "Unofficial Electron-based Figma desktop app for Linux";
     homepage = "https://github.com/Figma-Linux/figma-linux";
-    platforms = [ "x86_64-linux" ];
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    platforms = lib.intersectLists lib.platforms.linux electron.meta.platforms;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       ercao
       kashw2
     ];
