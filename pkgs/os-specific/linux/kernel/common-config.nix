@@ -106,6 +106,7 @@ let
       {
         CPU_FREQ_DEFAULT_GOV_SCHEDUTIL = yes;
         CPU_FREQ_GOV_SCHEDUTIL = yes;
+        PM_DEBUG = yes;
         PM_ADVANCED_DEBUG = yes;
         PM_WAKELOCKS = yes;
         POWERCAP = yes;
@@ -282,6 +283,7 @@ let
         CGROUP_BPF = option yes;
         CGROUP_NET_PRIO = yes; # Required by systemd
         IP_ROUTE_VERBOSE = yes;
+        IP_MROUTE = yes;
         IP_MROUTE_MULTIPLE_TABLES = yes;
         IP_MULTICAST = yes;
         IP_MULTIPLE_TABLES = yes;
@@ -1037,6 +1039,7 @@ let
         DRAGONRISE_FF = yes;
         GREENASIA_FF = yes;
         HOLTEK_FF = yes;
+        INPUT_JOYSTICK = yes;
         JOYSTICK_PSXPAD_SPI_FF = yes;
         LOGIG940_FF = yes;
         NINTENDO_FF = whenAtLeast "5.16" yes;
