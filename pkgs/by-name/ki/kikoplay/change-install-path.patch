@@ -1,0 +1,21 @@
+diff --git a/KikoPlay.pro b/KikoPlay.pro
+index 9fd9d70..a52e8f3 100644
+--- a/KikoPlay.pro
++++ b/KikoPlay.pro
+@@ -511,12 +511,12 @@ linux-g++* {
+ 
+ unix {
+     # Install settings
+-    target.path += /usr/bin
+-    unix:icons.path = /usr/share/pixmaps
+-    unix:desktop.path = /usr/share/applications
++    target.path += OUTPATH/bin
++    unix:icons.path = OUTPATH/share/pixmaps
++    unix:desktop.path = OUTPATH/share/applications
+     unix:icons.files = kikoplay.png kikoplay.xpm
+     unix:desktop.files = kikoplay.desktop
+-    unix:web.path = /usr/share/kikoplay/web
++    unix:web.path = OUTPATH/share/kikoplay/web
+     unix:web.files = web/*
+ 
+     INSTALLS += target icons desktop web
