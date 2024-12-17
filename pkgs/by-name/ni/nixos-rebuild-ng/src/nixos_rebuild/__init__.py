@@ -268,8 +268,9 @@ def reexec(
     drv = None
     attr = "config.system.build.nixos-rebuild"
     try:
-        # Need to set target_host=None, to avoid connecting to remote
-        if flake := Flake.from_arg(args.flake, None):
+        # Parsing the args here but ignore ask_sudo_password since it is not
+        # needed and we would end up asking sudo password twice
+        if flake := Flake.from_arg(args.flake, Remote.from_arg(args.target_host, None)):
             drv = nix.build_flake(attr, flake, **flake_build_flags, no_link=True)
         else:
             build_attr = BuildAttr.from_arg(args.attr, args.file)
