@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pynordpool";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "gjohansson-ST";
     repo = "pynordpool";
     rev = "refs/tags/v${version}";
-    hash = "sha256-JoH9ROT/npBd8BTEuynsF9gbE0jJgYLFPiwFv0s9sH4=";
+    hash = "sha256-QNPq2KKUDgxf2VQ/O+/dywLY6RcHfU2RaC2sohjVmaI=";
   };
 
   build-system = [ poetry-core ];
