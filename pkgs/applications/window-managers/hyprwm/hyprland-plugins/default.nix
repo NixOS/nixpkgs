@@ -2,13 +2,12 @@
   lib,
   callPackage,
   pkg-config,
-  gcc14Stdenv,
 }:
 let
   mkHyprlandPlugin =
     hyprland:
     args@{ pluginName, ... }:
-    gcc14Stdenv.mkDerivation (
+    hyprland.stdenv.mkDerivation (
       args
       // {
         pname = "${pluginName}";
