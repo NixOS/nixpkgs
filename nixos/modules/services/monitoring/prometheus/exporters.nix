@@ -66,6 +66,7 @@ let
     "nginxlog"
     "node"
     "nut"
+    "nvidia-gpu"
     "pgbouncer"
     "php-fpm"
     "pihole"

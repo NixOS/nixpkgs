@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   accountsservice,
   alsa-lib,
   budgie-screensaver,
@@ -60,7 +61,16 @@ stdenv.mkDerivation (finalAttrs: {
     "man"
   ];
 
-  patches = [ ./plugins.patch ];
+  patches = [
+    ./plugins.patch
+
+    # Adapt to libxfce4windowing v4.19.8
+    # https://github.com/BuddiesOfBudgie/budgie-desktop/pull/627
+    (fetchpatch {
+      url = "https://github.com/BuddiesOfBudgie/budgie-desktop/commit/ba8170b4f3108f9de28331b6a98a9d92bb0ed4de.patch";
+      hash = "sha256-T//1/NmaV81j0jiIYK7vEp8sgKCgF2i10D+Rk9qAAeE=";
+    })
+  ];
 
   nativeBuildInputs = [
     docbook-xsl-nons

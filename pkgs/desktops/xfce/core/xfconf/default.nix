@@ -8,9 +8,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "xfconf";
-  version = "4.18.3";
+  version = "4.20.0";
 
-  sha256 = "sha256-Iu/LHyk/lOvu8uJuJRDxIkabiX0vZB4H99vVKRiugVo=";
+  sha256 = "sha256-U+Sk7ubBr1ZD1GLQXlxrx0NQdhV/WpVBbnLcc94Tjcw=";
 
   nativeBuildInputs = [ gobject-introspection vala ];
 
