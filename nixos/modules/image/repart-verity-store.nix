@@ -81,7 +81,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    boot.initrd.systemd.dmVerity.enable = true;
+    boot.initrd = {
+      systemd.dmVerity.enable = true;
+      supportedFilesystems = {
+        ${config.image.repart.partitions.${cfg.partitionIds.store}.repartConfig.Format} =
+          lib.mkDefault true;
+      };
+    };
 
     image.repart.partitions = {
       # dm-verity hash partition
