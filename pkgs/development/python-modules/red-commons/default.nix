@@ -1,10 +1,11 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, flit-core
-, black
-, flake8
-, isort
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  flit-core,
+  black,
+  flake8,
+  isort,
 }:
 
 buildPythonPackage rec {
