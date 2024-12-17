@@ -1083,7 +1083,6 @@ let
         BLK_DEV_INITRD = yes;
 
         # Allows debugging systems that get stuck during suspend/resume
-        PM_TRACE = yes;
         PM_TRACE_RTC = lib.mkIf stdenv.hostPlatform.isx86 yes;
 
         ACCESSIBILITY = yes; # Accessibility support
