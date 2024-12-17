@@ -207,13 +207,13 @@
     "vendorHash": "sha256-IQ2zYe1eqq+LIhcHBxGGzcPRs4Atmipn++ERYvLNmvg="
   },
   "ccloud": {
-    "hash": "sha256-bGyVfB9eenE6QZZw0bAxnve0KW0ZQ54slTaaWZXDBOc=",
+    "hash": "sha256-Dpx0eugcHCJV8GNPqjxx4P9ohgJgB10DTnHr+CeN/iQ=",
     "homepage": "https://registry.terraform.io/providers/sapcc/ccloud",
     "owner": "sapcc",
     "repo": "terraform-provider-ccloud",
-    "rev": "v1.6.6",
+    "rev": "v1.6.7",
     "spdx": "MPL-2.0",
-    "vendorHash": "sha256-uftDCqDU0HeDj7rjAevulsFCVFFQt3eg8vcFM9YJrow="
+    "vendorHash": "sha256-OqbnkuEy9w6F1DxmlYhRNYhBaYhWV0FtMK4wdwSybh8="
   },
   "checkly": {
     "hash": "sha256-4J7pwtlAa920RXF6ZoSoi03qA15NBzUlXQCZRErI2Co=",
