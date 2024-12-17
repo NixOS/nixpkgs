@@ -30,6 +30,10 @@ let
       libsForQt5.qt5ct
       qt6Packages.qt6ct
     ];
+    whitesur = [
+      qwhitesurgtkdecorations
+      qwhitesurgtkdecorations-qt6
+    ];
   };
 
   stylePackages = with pkgs; {
@@ -131,6 +135,10 @@ in
             "qt6Packages"
             "qt6gtk2"
           ]
+          [
+            "qwhitesurgtkdecorations"
+            "qwhitesurgtkdecorations-qt6"
+          ]
         ];
         description = ''
           Selects the platform theme to use for Qt applications.
@@ -143,6 +151,7 @@ in
              application.
           - `qt5ct`: Use Qt style set using the [qt5ct](https://sourceforge.net/projects/qt5ct/)
              and [qt6ct](https://github.com/trialuser02/qt6ct) applications.
+          - 'whitesur': Use WhitesurGTK theme with [qwhitesurgtkdecorations](https://github.com/FengZhongShaoNian/QWhiteSurGtkDecorations)
         '';
       };
 
