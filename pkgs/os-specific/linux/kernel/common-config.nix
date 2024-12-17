@@ -1375,7 +1375,7 @@ let
 
             # Add debug interfaces for CMA
             CMA_DEBUGFS = yes;
-            CMA_SYSFS = yes;
+            CMA_SYSFS = whenAtLeast "5.13" yes;
 
             # https://docs.kernel.org/arch/arm/mem_alignment.html
             # tldr:
