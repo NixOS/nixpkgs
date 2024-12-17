@@ -7,6 +7,7 @@
   carto,
   gdal,
   hanazono,
+  nixosTests,
   noto-fonts,
   python3,
   runCommand,
@@ -167,6 +168,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     };
 
     tests = {
+      inherit (nixosTests) nik4;
       inherit (finalAttrs.finalPackage.passthru) fonts;
 
       # Check that we generated the exact same files as the pre-generated ones

@@ -2,6 +2,7 @@
   lib,
   fetchFromGitHub,
 
+  nixosTests,
   python3Packages,
 }:
 
@@ -25,6 +26,10 @@ python3Packages.buildPythonPackage rec {
   ];
 
   strictDeps = true;
+
+  passthru.tests = {
+    inherit (nixosTests) nik4;
+  };
 
   meta = {
     changelog = "https://github.com/Zverik/Nik4/releases/tag/v${version}";
