@@ -23,7 +23,7 @@ let
   pname = "clang";
 
   src' = if monorepoSrc != null then
-    runCommand "${pname}-src-${version}" {} (''
+    runCommand "${pname}-src-${version}" { inherit (monorepoSrc) passthru; } (''
       mkdir -p "$out"
     '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"

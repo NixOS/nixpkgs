@@ -32,7 +32,7 @@
 let
   src' =
     if monorepoSrc != null then
-      runCommand "lldb-src-${version}" { } (''
+      runCommand "lldb-src-${version}" { inherit (monorepoSrc) passthru; } (''
         mkdir -p "$out"
       '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
         cp -r ${monorepoSrc}/cmake "$out"

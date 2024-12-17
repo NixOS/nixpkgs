@@ -56,7 +56,7 @@ let
       apple-sdk.override { enableBootstrap = true; };
 
   src' = if monorepoSrc != null then
-    runCommand "${baseName}-src-${version}" {} (''
+    runCommand "${baseName}-src-${version}" { inherit (monorepoSrc) passthru; } (''
       mkdir -p "$out"
     '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
       cp -r ${monorepoSrc}/cmake "$out"
