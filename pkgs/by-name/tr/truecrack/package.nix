@@ -1,7 +1,12 @@
-{ lib, gccStdenv, fetchFromGitLab, cudatoolkit
-, config
-, cudaSupport ? config.cudaSupport
-, pkg-config }:
+{
+  lib,
+  gccStdenv,
+  fetchFromGitLab,
+  cudatoolkit,
+  config,
+  cudaSupport ? config.cudaSupport,
+  pkg-config,
+}:
 
 gccStdenv.mkDerivation rec {
   pname = "truecrack";
@@ -14,11 +19,16 @@ gccStdenv.mkDerivation rec {
     sha256 = "+Rw9SfaQtO1AJO6UVVDMCo8DT0dYEbv7zX8SI+pHCRQ=";
   };
 
-  configureFlags = (if cudaSupport then [
-    "--with-cuda=${cudatoolkit}"
-  ] else [
-    "--enable-cpu"
-  ]);
+  configureFlags = (
+    if cudaSupport then
+      [
+        "--with-cuda=${cudatoolkit}"
+      ]
+    else
+      [
+        "--enable-cpu"
+      ]
+  );
 
   nativeBuildInputs = [
     pkg-config

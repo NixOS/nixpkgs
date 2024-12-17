@@ -1429,6 +1429,11 @@ with pkgs;
     withWayland = true;
   };
 
+  shadps4 = callPackage ../by-name/sh/shadps4/package.nix {
+    # relies on std::sinf & co, which was broken in GCC until GCC 14: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=79700
+    stdenv = gcc14Stdenv;
+  };
+
   snes9x-gtk = snes9x.override {
     withGtk = true;
   };
@@ -1439,10 +1444,6 @@ with pkgs;
   zsnes2 = pkgsi686Linux.callPackage ../applications/emulators/zsnes/2.x.nix { };
 
   ### APPLICATIONS/EMULATORS/BSNES
-
-  ares = darwin.apple_sdk_11_0.callPackage ../applications/emulators/bsnes/ares { };
-
-  bsnes-hd = darwin.apple_sdk_11_0.callPackage ../applications/emulators/bsnes/bsnes-hd { };
 
   ### APPLICATIONS/EMULATORS/DOLPHIN-EMU
 
@@ -1994,10 +1995,6 @@ with pkgs;
 
   axel = callPackage ../tools/networking/axel {
     libssl = openssl;
-  };
-
-  bandwhich = callPackage ../tools/networking/bandwhich {
-    inherit (darwin.apple_sdk.frameworks) Security;
   };
 
   base16-builder = callPackage ../misc/base16-builder { };
@@ -4421,8 +4418,6 @@ with pkgs;
 
   mtr-gui = callPackage ../tools/networking/mtr { withGtk = true; };
 
-  multipass = qt6Packages.callPackage ../tools/virtualization/multipass { };
-
   multitran = recurseIntoAttrs (let callPackage = newScope pkgs.multitran; in {
     multitrandata = callPackage ../tools/text/multitran/data { };
 
@@ -4749,6 +4744,8 @@ with pkgs;
   pagefind = libsForQt5.callPackage ../applications/misc/pagefind { };
 
   pakcs = callPackage ../development/compilers/pakcs { };
+
+  pandoc_3_5 = callPackage ../by-name/pa/pandoc/package.nix { selectPandocCLI = (p: p.pandoc-cli_3_5); };
 
   paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
 
@@ -5110,9 +5107,7 @@ with pkgs;
 
   ruby-lsp = rubyPackages.ruby-lsp;
 
-  ruplacer = callPackage ../tools/text/ruplacer {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  ruplacer = callPackage ../tools/text/ruplacer { };
 
   rust-motd = callPackage ../tools/misc/rust-motd {
     inherit (darwin.apple_sdk.frameworks) Security;
@@ -5611,6 +5606,7 @@ with pkgs;
   unbound-full = unbound.override {
     python = python3;
     withSystemd = true;
+    withDynlibModule = true;
     withPythonModule = true;
     withDoH = true;
     withECS = true;
@@ -6729,6 +6725,7 @@ with pkgs;
   nim-unwrapped-2 = nim-unwrapped-2_2;
 
   buildNimPackage = callPackage ../build-support/build-nim-package.nix { };
+  buildNimSbom = callPackage ../build-support/build-nim-sbom.nix { };
   nimOverrides = callPackage ./nim-overrides.nix { };
 
   nextpnrWithGui = libsForQt5.callPackage ../by-name/ne/nextpnr/package.nix {
@@ -9632,10 +9629,6 @@ with pkgs;
 
   lcms = lcms2;
 
-  lib2geom = callPackage ../development/libraries/lib2geom {
-    stdenv = if stdenv.cc.isClang then llvmPackages_13.stdenv else stdenv;
-  };
-
   libacr38u = callPackage ../tools/security/libacr38u {
     inherit (darwin.apple_sdk.frameworks) IOKit;
   };
@@ -10665,6 +10658,10 @@ with pkgs;
   librdf_redland = callPackage ../development/libraries/librdf/redland.nix { };
   redland = librdf_redland; # added 2018-04-25
 
+  renovate = callPackage ../by-name/re/renovate/package.nix {
+    nodejs = nodejs_22;
+  };
+
   qradiolink = callPackage ../applications/radio/qradiolink {
     protobuf = protobuf_21;
   };
@@ -11605,8 +11602,10 @@ with pkgs;
     inherit (home-assistant.python.pkgs) callPackage;
     directory = ../servers/home-assistant/custom-components;
   });
-  home-assistant-custom-lovelace-modules = lib.recurseIntoAttrs
-    (callPackage ../servers/home-assistant/custom-lovelace-modules {});
+  home-assistant-custom-lovelace-modules = lib.recurseIntoAttrs (lib.packagesFromDirectoryRecursive {
+    inherit callPackage;
+    directory = ../servers/home-assistant/custom-lovelace-modules;
+  });
 
   home-assistant-cli = callPackage ../servers/home-assistant/cli.nix { };
 
@@ -12566,7 +12565,13 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  pam = if stdenv.hostPlatform.isLinux then linux-pam else openpam;
+  pam =
+    if stdenv.hostPlatform.isLinux then
+      linux-pam
+    else if stdenv.hostPlatform.isFreeBSD then
+      freebsd.libpam
+    else
+      openpam;
 
   # pam_bioapi ( see http://www.thinkwiki.org/wiki/How_to_enable_the_fingerprint_reader )
 
@@ -15227,9 +15232,6 @@ with pkgs;
 
   pure-maps = libsForQt5.callPackage ../applications/misc/pure-maps { };
 
-  qbittorrent = qt6Packages.callPackage ../applications/networking/p2p/qbittorrent {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
   qbittorrent-nox = qbittorrent.override { guiSupport = false; };
 
   qcad = libsForQt5.callPackage ../applications/misc/qcad { };
@@ -15493,7 +15495,7 @@ with pkgs;
 
   sommelier = callPackage ../applications/window-managers/sommelier { };
 
-  spotify-qt = libsForQt5.callPackage ../applications/audio/spotify-qt { };
+  spotify-qt = qt6Packages.callPackage ../applications/audio/spotify-qt { };
 
   squishyball = callPackage ../applications/audio/squishyball {
     ncurses = ncurses5;
@@ -16520,31 +16522,13 @@ with pkgs;
   enyo-launcher = libsForQt5.callPackage ../games/doom-ports/enyo-launcher { };
 
   slade = callPackage ../games/doom-ports/slade {
-    wxGTK = (wxGTK32.overrideAttrs {
-      patches = [
-       (fetchpatch { # required to run slade 3.2.4 on wxGTK 3.2.4, see PR #266945
-         url = "https://github.com/wxWidgets/wxWidgets/commit/425d9455e8307c1267a79d47d77e3dafeb4d86de.patch";
-         excludes = [ "docs/changes.txt" ];
-         revert = true;
-         hash = "sha256-6LOYLDLtVCHxNdHAWv3zhlCsljIpi//RJb9XVLGD5hM=";
-       })
-     ];
-    }).override {
+    wxGTK = wxGTK32.override {
       withWebKit = true;
     };
   };
 
   sladeUnstable = callPackage ../games/doom-ports/slade/git.nix {
-    wxGTK = (wxGTK32.overrideAttrs {
-      patches = [
-       (fetchpatch { # required to run sladeUnstable unstable-2023-09-30 on wxGTK 3.2.4, see PR #266945
-         url = "https://github.com/wxWidgets/wxWidgets/commit/425d9455e8307c1267a79d47d77e3dafeb4d86de.patch";
-         excludes = [ "docs/changes.txt" ];
-         revert = true;
-         hash = "sha256-6LOYLDLtVCHxNdHAWv3zhlCsljIpi//RJb9XVLGD5hM=";
-       })
-     ];
-    }).override {
+    wxGTK = wxGTK32.override {
       withWebKit = true;
     };
   };
@@ -17859,14 +17843,7 @@ with pkgs;
   gplates = libsForQt5.callPackage ../applications/science/misc/gplates { };
 
   golly = callPackage ../applications/science/misc/golly {
-    wxGTK = wxGTK32.overrideAttrs (x: {
-      configureFlags = x.configureFlags ++ [
-        "--enable-webrequest"
-      ];
-      buildInputs = x.buildInputs ++ [
-        curl
-      ];
-    });
+    wxGTK = wxGTK32;
   };
 
   megam = callPackage ../applications/science/misc/megam {
@@ -18267,7 +18244,7 @@ with pkgs;
     ({ inherit pkgs lib; } // attrs);
 
   nix-eval-jobs = callPackage ../tools/package-management/nix-eval-jobs {
-    nix = nixVersions.nix_2_24;
+    nix = nixVersions.nix_2_25;
   };
 
   nix-delegate = haskell.lib.compose.justStaticExecutables haskellPackages.nix-delegate;
@@ -18807,8 +18784,6 @@ with pkgs;
   fac-build = callPackage ../development/tools/build-managers/fac {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
-
-  bottom = darwin.apple_sdk_11_0.callPackage ../tools/system/bottom { };
 
   cagebreak = callPackage ../applications/window-managers/cagebreak {
     wlroots = wlroots_0_17;

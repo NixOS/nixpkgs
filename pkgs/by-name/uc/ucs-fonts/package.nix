@@ -1,5 +1,10 @@
-{ lib, stdenv, fetchurl, bdftopcf
-, libfaketime, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bdftopcf,
+  libfaketime,
+  xorg,
 }:
 
 stdenv.mkDerivation {
@@ -23,10 +28,12 @@ stdenv.mkDerivation {
 
   sourceRoot = ".";
 
-  nativeBuildInputs =
-    [ bdftopcf libfaketime xorg.fonttosfnt
-      xorg.mkfontscale
-    ];
+  nativeBuildInputs = [
+    bdftopcf
+    libfaketime
+    xorg.fonttosfnt
+    xorg.mkfontscale
+  ];
 
   buildPhase = ''
     for i in *.bdf; do
@@ -49,7 +56,10 @@ stdenv.mkDerivation {
     mkfontdir "$bdf/share/fonts/misc"
   '';
 
-  outputs = [ "out" "bdf" ];
+  outputs = [
+    "out"
+    "bdf"
+  ];
 
   meta = with lib; {
     homepage = "https://www.cl.cam.ac.uk/~mgk25/ucs-fonts.html";

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, gmp }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gmp,
+}:
 
 stdenv.mkDerivation {
   pname = "lrs";

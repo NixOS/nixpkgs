@@ -1,38 +1,39 @@
-{ lib
-, stdenv
-, fetchzip
-, makeWrapper
-, alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, cairo
-, cups
-, dbus
-, expat
-, fontconfig
-, freetype
-, gdk-pixbuf
-, glib
-, gtk3
-, libGL
-, libappindicator-gtk3
-, libdrm
-, libnotify
-, libpulseaudio
-, libuuid
-, libxcb
-, libxkbcommon
-, libxshmfence
-, mesa
-, nspr
-, nss
-, pango
-, systemd
-, udev
-, unzip
-, xdg-utils
-, xorg
+{
+  lib,
+  stdenv,
+  fetchzip,
+  makeWrapper,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  fontconfig,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  libGL,
+  libappindicator-gtk3,
+  libdrm,
+  libnotify,
+  libpulseaudio,
+  libuuid,
+  libxcb,
+  libxkbcommon,
+  libxshmfence,
+  mesa,
+  nspr,
+  nss,
+  pango,
+  systemd,
+  udev,
+  unzip,
+  xdg-utils,
+  xorg,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "bloodhound";
@@ -91,7 +92,10 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3 # needed for GSETTINGS_SCHEMAS_PATH
   ];
 
-  nativeBuildInputs = [ makeWrapper unzip ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+  ];
 
   dontBuild = true;
 
@@ -107,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     makeWrapper $out/lib/BloodHound/BloodHound $out/bin/BloodHound \
       --prefix XDG_DATA_DIRS : $GSETTINGS_SCHEMAS_PATH \
-      --suffix PATH : ${lib.makeBinPath [xdg-utils]} \
+      --suffix PATH : ${lib.makeBinPath [ xdg-utils ]} \
       --append-flags "--in-process-gpu" # fix for sandbox issues
 
     runHook postInstall

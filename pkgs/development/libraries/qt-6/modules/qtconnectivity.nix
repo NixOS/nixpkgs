@@ -1,10 +1,11 @@
-{ qtModule
-, lib
-, stdenv
-, qtbase
-, qtdeclarative
-, bluez
-, pkg-config
+{
+  qtModule,
+  lib,
+  stdenv,
+  qtbase,
+  qtdeclarative,
+  bluez,
+  pkg-config,
 }:
 
 qtModule {

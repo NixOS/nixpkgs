@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchzip
-, python3
-, config
-, acceptLicense ? config.input-fonts.acceptLicense or false
-, parallel
-, writeShellApplication
+{
+  lib,
+  stdenv,
+  fetchzip,
+  python3,
+  config,
+  acceptLicense ? config.input-fonts.acceptLicense or false,
+  parallel,
+  writeShellApplication,
 }:
 
 let
@@ -47,28 +48,30 @@ stdenv.mkDerivation rec {
       stripRoot = false;
 
       # Reset the timestamp to release date for determinism.
-      postFetch = let
-        ttf-fixup = writeShellApplication {
-          name = "ttf-fixup";
-          runtimeInputs = [ python3.pkgs.fonttools ];
-          text = ''
-            if [ $# != 1 ]; then
-              echo "Usage: $0 <file.ttf>: Resets timestamp on <file.ttf> for determinism" >&2
-              exit 1
-            fi
+      postFetch =
+        let
+          ttf-fixup = writeShellApplication {
+            name = "ttf-fixup";
+            runtimeInputs = [ python3.pkgs.fonttools ];
+            text = ''
+              if [ $# != 1 ]; then
+                echo "Usage: $0 <file.ttf>: Resets timestamp on <file.ttf> for determinism" >&2
+                exit 1
+              fi
 
-            ttf_file="$1"
-            ttx_file=$(dirname "$ttf_file")/$(basename "$ttf_file" .ttf).ttx
-            ttx "$ttf_file"
-            rm "$ttf_file"
-            touch -m -t ${builtins.replaceStrings [ "-" ] [ "" ] releaseDate}0000 "$ttx_file"
-            ttx --recalc-timestamp "$ttx_file"
-            rm "$ttx_file"
-          '';
-        };
-      in ''
-        find $out/Input_Fonts -type f -name '*.ttf' -print0 | ${lib.getExe parallel} -0 -j $NIX_BUILD_CORES ${lib.getExe ttf-fixup} {}
-      '';
+              ttf_file="$1"
+              ttx_file=$(dirname "$ttf_file")/$(basename "$ttf_file" .ttf).ttx
+              ttx "$ttf_file"
+              rm "$ttf_file"
+              touch -m -t ${builtins.replaceStrings [ "-" ] [ "" ] releaseDate}0000 "$ttx_file"
+              ttx --recalc-timestamp "$ttx_file"
+              rm "$ttx_file"
+            '';
+          };
+        in
+        ''
+          find $out/Input_Fonts -type f -name '*.ttf' -print0 | ${lib.getExe parallel} -0 -j $NIX_BUILD_CORES ${lib.getExe ttf-fixup} {}
+        '';
     };
 
   dontConfigure = true;

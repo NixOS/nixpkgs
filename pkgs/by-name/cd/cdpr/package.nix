@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libpcap }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libpcap,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cdpr";

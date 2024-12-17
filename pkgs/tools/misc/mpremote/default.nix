@@ -1,11 +1,12 @@
-{ lib
-, buildPythonApplication
-, fetchFromGitHub
-, hatchling
-, hatch-requirements-txt
-, hatch-vcs
-, pyserial
-, importlib-metadata
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  hatchling,
+  hatch-requirements-txt,
+  hatch-vcs,
+  pyserial,
+  importlib-metadata,
 }:
 buildPythonApplication rec {
   pname = "mpremote";

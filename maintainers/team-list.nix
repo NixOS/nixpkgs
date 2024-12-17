@@ -134,6 +134,24 @@ with lib.maintainers;
     shortName = "c3d2";
   };
 
+  categorization = {
+    members = [
+      aleksana
+      fgaz
+      getpsyched
+      lyndeno
+      natsukium
+      philiptaron
+      pyrotelekinetic
+      raskin
+      sigmasquadron
+      tomodachi94
+    ];
+    githubTeams = [ "categorization" ];
+    scope = "Maintain the categorization system in Nixpkgs, per RFC 146. This team has authority over all categorization issues in Nixpkgs.";
+    shortName = "Categorization";
+  };
+
   cinnamon = {
     members = [
       bobby285271
@@ -432,6 +450,17 @@ with lib.maintainers;
     scope = "Maintain GNOME desktop environment and platform.";
     shortName = "GNOME";
     enableFeatureFreezePing = true;
+  };
+
+  gnome-circle = {
+    members = [
+      aleksana
+      dawidd6
+      getchoo
+      michaelgrahamevans
+    ];
+    scope = "Maintain GNOME Circle applications.";
+    shortName = "GNOME Circle";
   };
 
   graalvm-ce = {

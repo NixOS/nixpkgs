@@ -3223,14 +3223,23 @@
   "manifest-file-via-maven-plugin": [
     "index.html#manifest-file-via-maven-plugin"
   ],
-  "nim": [
-    "index.html#nim"
+  "sec-language-nim": [
+    "index.html#sec-language-nim"
+  ],
+  "buildNimPackage": [
+    "index.html#buildNimPackage"
   ],
   "buildnimpackage-parameters": [
     "index.html#buildnimpackage-parameters"
   ],
   "nim-lockfiles": [
     "index.html#nim-lockfiles"
+  ],
+  "buildNimSbom": [
+    "index.html#buildNimSbom"
+  ],
+  "generating-nim-sboms": [
+    "index.html#generating-nim-sboms"
   ],
   "nim-overrides": [
     "index.html#nim-overrides"

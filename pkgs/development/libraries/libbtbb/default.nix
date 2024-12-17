@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, cmake, CoreServices }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  CoreServices,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libbtbb";

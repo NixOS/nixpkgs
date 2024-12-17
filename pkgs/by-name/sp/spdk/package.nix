@@ -1,23 +1,25 @@
-{ lib, stdenv
-, fetchFromGitHub
-, ncurses
-, python3
-, cunit
-, dpdk
-, fuse3
-, libaio
-, libbsd
-, libuuid
-, numactl
-, openssl
-, pkg-config
-, zlib
-, zstd
-, libpcap
-, libnl
-, elfutils
-, jansson
-, ensureNewerSourcesForZipFilesHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ncurses,
+  python3,
+  cunit,
+  dpdk,
+  fuse3,
+  libaio,
+  libbsd,
+  libuuid,
+  numactl,
+  openssl,
+  pkg-config,
+  zlib,
+  zstd,
+  libpcap,
+  libnl,
+  elfutils,
+  jansson,
+  ensureNewerSourcesForZipFilesHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -91,7 +93,7 @@ stdenv.mkDerivation rec {
     description = "Set of libraries for fast user-mode storage";
     homepage = "https://spdk.io/";
     license = licenses.bsd3;
-    platforms =  [ "x86_64-linux" ];
+    platforms = [ "x86_64-linux" ];
     maintainers = with maintainers; [ orivej ];
   };
 }

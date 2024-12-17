@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchgit, postgresql, buildPostgresqlExtension }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  postgresql,
+  buildPostgresqlExtension,
+}:
 
 buildPostgresqlExtension rec {
   pname = "smlar-unstable";

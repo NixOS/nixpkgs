@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, unstableGitUpdater
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  unstableGitUpdater,
 }:
 
 buildGoModule {
@@ -17,9 +18,12 @@ buildGoModule {
 
   vendorHash = "sha256-8grdJuV8aSETsJr2VazC/3ctfnGh3UgjOWD4/xf3uC8=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Golang linter to check whether HTTP response body is closed and a re-use of TCP connection is not blocked";

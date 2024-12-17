@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchurl
-, imake
-, gccmakedep
-, libX11
-, libXaw
-, libXext
-, libXmu
-, libXt
+{
+  lib,
+  stdenv,
+  fetchurl,
+  imake,
+  gccmakedep,
+  libX11,
+  libXaw,
+  libXext,
+  libXmu,
+  libXt,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,8 +25,17 @@ stdenv.mkDerivation rec {
     ./xxgdb-pty.patch
   ];
 
-  nativeBuildInputs = [ imake gccmakedep ];
-  buildInputs = [ libX11 libXaw libXext libXmu libXt ];
+  nativeBuildInputs = [
+    imake
+    gccmakedep
+  ];
+  buildInputs = [
+    libX11
+    libXaw
+    libXext
+    libXmu
+    libXt
+  ];
 
   preConfigure = ''
     mkdir build

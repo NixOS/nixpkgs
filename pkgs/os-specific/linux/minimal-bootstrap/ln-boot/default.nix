@@ -1,6 +1,7 @@
-{ lib
-, kaem
-, mes
+{
+  lib,
+  kaem,
+  mes,
 }:
 let
   pname = "ln-boot";
@@ -8,21 +9,23 @@ let
 
   src = ./ln.c;
 in
-kaem.runCommand "${pname}-${version}" {
-  inherit pname version;
+kaem.runCommand "${pname}-${version}"
+  {
+    inherit pname version;
 
-  meta = with lib; {
-    description = "Basic tool for creating symbolic links";
-    license = licenses.mit;
-    maintainers = teams.minimal-bootstrap.members;
-    mainProgram = "ln";
-    platforms = platforms.unix;
-  };
-} ''
-  mkdir -p ''${out}/bin
-  ${mes.compiler}/bin/mes --no-auto-compile -e main ${mes.srcPost.bin}/bin/mescc.scm -- \
-    -L ${mes.libs}/lib \
-    -lc+tcc \
-    -o ''${out}/bin/ln \
-    ${src}
-''
+    meta = with lib; {
+      description = "Basic tool for creating symbolic links";
+      license = licenses.mit;
+      maintainers = teams.minimal-bootstrap.members;
+      mainProgram = "ln";
+      platforms = platforms.unix;
+    };
+  }
+  ''
+    mkdir -p ''${out}/bin
+    ${mes.compiler}/bin/mes --no-auto-compile -e main ${mes.srcPost.bin}/bin/mescc.scm -- \
+      -L ${mes.libs}/lib \
+      -lc+tcc \
+      -o ''${out}/bin/ln \
+      ${src}
+  ''

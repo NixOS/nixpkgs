@@ -1,6 +1,7 @@
-{ fetchFromGitHub
-, lib
-, python3
+{
+  fetchFromGitHub,
+  lib,
+  python3,
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "pypi-mirror";

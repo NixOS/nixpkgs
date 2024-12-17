@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitHub, dbus, pkg-config}:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  dbus,
+  pkg-config,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "nofi";
@@ -20,7 +26,10 @@ rustPlatform.buildRustPackage rec {
     description = "Interruption-free notification system for Linux";
     homepage = "https://github.com/ellsclytn/nofi/";
     changelog = "https://github.com/ellsclytn/nofi/raw/v${version}/CHANGELOG.md";
-    license = [ licenses.asl20 /* or */ licenses.mit ];
+    license = [
+      licenses.asl20 # or
+      licenses.mit
+    ];
     mainProgram = "nofi";
     maintainers = [ maintainers.magnetophon ];
   };

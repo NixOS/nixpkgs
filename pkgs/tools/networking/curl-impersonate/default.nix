@@ -15,11 +15,11 @@ symlinkJoin rec {
   ];
 
   passthru = {
-    curl-impersonate-ff = callPackage ./firefox {};
-    curl-impersonate-chrome = callPackage ./chrome {};
+    curl-impersonate-ff = callPackage ./firefox { };
+    curl-impersonate-chrome = callPackage ./chrome { };
 
     inherit (passthru.curl-impersonate-chrome) src;
 
-    tests = {inherit (nixosTests) curl-impersonate;};
+    tests = { inherit (nixosTests) curl-impersonate; };
   };
 }

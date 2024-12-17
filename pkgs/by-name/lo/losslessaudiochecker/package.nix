@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, autoPatchelfHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+}:
 
 stdenv.mkDerivation {
   pname = "losslessaudiochecker";

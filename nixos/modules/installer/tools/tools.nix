@@ -45,6 +45,11 @@ let
 
   nixos-install = pkgs.nixos-install.override { nix = config.nix.package; };
   nixos-rebuild = pkgs.nixos-rebuild.override { nix = config.nix.package; };
+  nixos-rebuild-ng = pkgs.nixos-rebuild-ng.override {
+    nix = config.nix.package;
+    withNgSuffix = false;
+    withReexec = true;
+  };
 
   defaultConfigTemplate = ''
     # Edit this configuration file to define what should be installed on
@@ -214,6 +219,13 @@ in
     '';
   };
 
+  options.system.rebuild.enableNg = lib.mkEnableOption "" // {
+    description = ''
+      Whether to use ‘nixos-rebuild-ng’ in place of ‘nixos-rebuild’, the
+      Python-based re-implementation of the original in Bash.
+    '';
+  };
+
   imports = let
     mkToolModule = { name, package ? pkgs.${name} }: { config, ... }: {
       options.system.tools.${name}.enable = lib.mkEnableOption "${name} script" // {
@@ -240,7 +252,11 @@ in
 
     # These may be used in auxiliary scripts (ie not part of toplevel), so they are defined unconditionally.
     system.build = {
-      inherit nixos-generate-config nixos-install nixos-rebuild;
+      inherit nixos-generate-config nixos-install;
+      nixos-rebuild =
+        if config.system.rebuild.enableNg
+          then nixos-rebuild-ng
+          else nixos-rebuild;
       nixos-option = lib.warn "Accessing nixos-option through `config.system.build` is deprecated, use `pkgs.nixos-option` instead." pkgs.nixos-option;
       nixos-enter = lib.warn "Accessing nixos-enter through `config.system.build` is deprecated, use `pkgs.nixos-enter` instead." pkgs.nixos-enter;
     };

@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, boost
-, zlib
-, libX11
-, libICE
-, libSM
-, libpng
-, libjpeg
-, libtiff
-, pkg-config
-, SDL2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  boost,
+  zlib,
+  libX11,
+  libICE,
+  libSM,
+  libpng,
+  libjpeg,
+  libtiff,
+  pkg-config,
+  SDL2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

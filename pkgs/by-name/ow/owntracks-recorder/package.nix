@@ -1,17 +1,18 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, mosquitto
-, curl
-, openssl
-, lmdb
-, lua
-, libsodium
-, libuuid
-, libconfig
-, testers
-, owntracks-recorder
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  mosquitto,
+  curl,
+  openssl,
+  lmdb,
+  lua,
+  libsodium,
+  libuuid,
+  libconfig,
+  testers,
+  owntracks-recorder,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

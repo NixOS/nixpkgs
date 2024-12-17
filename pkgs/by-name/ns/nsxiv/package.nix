@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, giflib
-, imlib2
-, libXft
-, libexif
-, libwebp
-, libinotify-kqueue
-, conf ? null
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  giflib,
+  imlib2,
+  libXft,
+  libexif,
+  libwebp,
+  libinotify-kqueue,
+  conf ? null,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-UWaet7hVtgfuWTiNY4VcsMWTfS6L9r5w1fb/0dWz8SI=";
   };
 
-  outputs = [ "out" "man" "doc" ];
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
 
   buildInputs = [
     giflib

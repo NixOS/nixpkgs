@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   imcfg = config.i18n.inputMethod;
 in
@@ -8,8 +13,8 @@ in
 
     environment.variables = {
       GTK_IM_MODULE = "nabi";
-      QT_IM_MODULE  = "nabi";
-      XMODIFIERS    = "@im=nabi";
+      QT_IM_MODULE = "nabi";
+      XMODIFIERS = "@im=nabi";
     };
 
     services.xserver.displayManager.sessionCommands = "${pkgs.nabi}/bin/nabi &";

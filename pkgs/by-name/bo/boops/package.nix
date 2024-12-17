@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, xorg, cairo, lv2, libsndfile, pkg-config }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  xorg,
+  cairo,
+  lv2,
+  libsndfile,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "boops";
@@ -13,7 +22,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
   buildInputs = [
-    xorg.libX11 cairo lv2 libsndfile
+    xorg.libX11
+    cairo
+    lv2
+    libsndfile
   ];
 
   installFlags = [ "PREFIX=$(out)" ];

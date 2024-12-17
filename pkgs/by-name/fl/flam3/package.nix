@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libjpeg
-, libpng
-, libxml2
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libjpeg,
+  libpng,
+  libxml2,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {

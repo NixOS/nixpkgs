@@ -1,15 +1,16 @@
-{ lib
-, autoreconfHook
-, bison
-, flex
-, foma
-, fetchFromGitHub
-, gettext
-, icu
-, stdenv
-, swig
-, pkg-config
-, zlib
+{
+  lib,
+  autoreconfHook,
+  bison,
+  flex,
+  foma,
+  fetchFromGitHub,
+  gettext,
+  icu,
+  stdenv,
+  swig,
+  pkg-config,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

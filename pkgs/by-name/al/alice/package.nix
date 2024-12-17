@@ -1,13 +1,22 @@
-{ lib, stdenv, fetchzip }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 
 stdenv.mkDerivation (attrs: {
   pname = "Alice";
   version = "2.003";
 
-  outputs = [ "out" "woff2" ];
+  outputs = [
+    "out"
+    "woff2"
+  ];
 
   src = fetchzip {
-    url = with attrs; "https://github.com/cyrealtype/${pname}/releases/download/v${version}/${pname}-v${version}.zip";
+    url =
+      with attrs;
+      "https://github.com/cyrealtype/${pname}/releases/download/v${version}/${pname}-v${version}.zip";
     stripRoot = false;
     hash = "sha256-p+tE3DECfJyBIPyafGZ8jDYQ1lPb+iAnEwLyaUy7DW0=";
   };

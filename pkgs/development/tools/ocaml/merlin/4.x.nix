@@ -1,32 +1,35 @@
-{ lib
-, substituteAll
-, fetchurl
-, ocaml
-, dune_3
-, buildDunePackage
-, yojson
-, csexp
-, merlin-lib
-, dot-merlin-reader
-, jq
-, menhir
-, menhirLib
-, menhirSdk
+{
+  lib,
+  substituteAll,
+  fetchurl,
+  ocaml,
+  dune_3,
+  buildDunePackage,
+  yojson,
+  csexp,
+  merlin-lib,
+  dot-merlin-reader,
+  jq,
+  menhir,
+  menhirLib,
+  menhirSdk,
   # Each releases of Merlin support a limited range of versions of OCaml.
-, version ? {
-    "4.12.0" = "4.7-412";
-    "4.12.1" = "4.7-412";
-    "4.13.0" = "4.7-413";
-    "4.13.1" = "4.7-413";
-    "4.14.0" = "4.17.1-414";
-    "4.14.1" = "4.17.1-414";
-    "4.14.2" = "4.17.1-414";
-    "5.0.0" = "4.14-500";
-    "5.1.0" = "4.17.1-501";
-    "5.1.1" = "4.17.1-501";
-    "5.2.0" = "5.2.1-502";
-    "5.2.1" = "5.2.1-502";
-  }."${ocaml.version}"
+  version ?
+    {
+      "4.12.0" = "4.7-412";
+      "4.12.1" = "4.7-412";
+      "4.13.0" = "4.7-413";
+      "4.13.1" = "4.7-413";
+      "4.14.0" = "4.17.1-414";
+      "4.14.1" = "4.17.1-414";
+      "4.14.2" = "4.17.1-414";
+      "5.0.0" = "4.14-500";
+      "5.1.0" = "4.17.1-501";
+      "5.1.1" = "4.17.1-501";
+      "5.2.0" = "5.2.1-502";
+      "5.2.1" = "5.2.1-502";
+    }
+    ."${ocaml.version}",
 }:
 
 let
@@ -53,16 +56,17 @@ buildDunePackage {
     sha256 = hashes."${version}";
   };
 
-  patches = let
-    old-patch = lib.versionOlder version "4.17";
-  in
-  [
-    (substituteAll {
-      src = if old-patch then ./fix-paths.patch else ./fix-paths2.patch;
-      dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
-      dune = "${dune_3}/bin/dune";
-    })
-  ];
+  patches =
+    let
+      old-patch = lib.versionOlder version "4.17";
+    in
+    [
+      (substituteAll {
+        src = if old-patch then ./fix-paths.patch else ./fix-paths2.patch;
+        dot_merlin_reader = "${dot-merlin-reader}/bin/dot-merlin-reader";
+        dune = "${dune_3}/bin/dune";
+      })
+    ];
 
   strictDeps = true;
 
@@ -73,9 +77,7 @@ buildDunePackage {
   buildInputs = [
     dot-merlin-reader
     yojson
-    (if lib.versionAtLeast version "4.7-414"
-     then merlin-lib
-     else csexp)
+    (if lib.versionAtLeast version "4.7-414" then merlin-lib else csexp)
     menhirSdk
     menhirLib
   ];
@@ -92,6 +94,9 @@ buildDunePackage {
     description = "Editor-independent tool to ease the development of programs in OCaml";
     homepage = "https://github.com/ocaml/merlin";
     license = licenses.mit;
-    maintainers = [ maintainers.vbgl maintainers.sternenseemann ];
+    maintainers = [
+      maintainers.vbgl
+      maintainers.sternenseemann
+    ];
   };
 }

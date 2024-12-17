@@ -1,9 +1,9 @@
-{ lib
-, pkgs
+{
+  lib,
+  pkgs,
 }:
 
-lib.makeScope pkgs.newScope (self:
-{
+lib.makeScope pkgs.newScope (self: {
   buildGraalvm = self.callPackage ./buildGraalvm.nix;
 
   buildGraalvmProduct = self.callPackage ./buildGraalvmProduct.nix;

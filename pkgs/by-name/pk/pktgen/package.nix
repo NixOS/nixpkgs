@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, ninja
-, pkg-config
-, dpdk
-, libbsd
-, libpcap
-, lua5_3
-, numactl
-, util-linux
-, gtk2
-, which
-, withGtk ? false
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  ninja,
+  pkg-config,
+  dpdk,
+  libbsd,
+  libpcap,
+  lua5_3,
+  numactl,
+  util-linux,
+  gtk2,
+  which,
+  withGtk ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,13 +27,24 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-eujVEU+XkxF1kIGQJoBW3oXXNSqBEzx6mwR2XYoHinM=";
   };
 
-  nativeBuildInputs = [ meson ninja pkg-config ];
-
-  buildInputs = [
-    dpdk libbsd libpcap lua5_3 numactl which
-  ] ++ lib.optionals withGtk [
-    gtk2
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
   ];
+
+  buildInputs =
+    [
+      dpdk
+      libbsd
+      libpcap
+      lua5_3
+      numactl
+      which
+    ]
+    ++ lib.optionals withGtk [
+      gtk2
+    ];
 
   RTE_SDK = dpdk;
   GUI = lib.optionalString withGtk "true";
@@ -58,7 +70,7 @@ stdenv.mkDerivation rec {
     description = "Traffic generator powered by DPDK";
     homepage = "http://dpdk.org/";
     license = licenses.bsdOriginal;
-    platforms =  platforms.linux;
+    platforms = platforms.linux;
     maintainers = [ maintainers.abuibrahim ];
   };
 }

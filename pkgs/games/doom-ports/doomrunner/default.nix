@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, qtbase
-, qmake
-, makeDesktopItem
-, wrapQtAppsHook
-, imagemagick
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  qtbase,
+  qmake,
+  makeDesktopItem,
+  wrapQtAppsHook,
+  imagemagick,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +21,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   buildInputs = [ qtbase ];
-  nativeBuildInputs = [ qmake wrapQtAppsHook imagemagick ];
+  nativeBuildInputs = [
+    qmake
+    wrapQtAppsHook
+    imagemagick
+  ];
 
   makeFlags = [
     "INSTALL_ROOT=${placeholder "out"}"

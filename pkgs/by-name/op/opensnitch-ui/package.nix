@@ -1,8 +1,9 @@
-{ python311Packages
-, fetchFromGitHub
-, nix-update-script
-, qt5
-, lib
+{
+  python311Packages,
+  fetchFromGitHub,
+  nix-update-script,
+  qt5,
+  lib,
 }:
 
 python311Packages.buildPythonApplication rec {

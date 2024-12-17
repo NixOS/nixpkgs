@@ -1,4 +1,17 @@
-{ stdenv, lib, rel, addonDir, buildKodiBinaryAddon, fetchFromGitHub, pugixml, glib, nspr, nss, gtest, rapidjson }:
+{
+  stdenv,
+  lib,
+  rel,
+  addonDir,
+  buildKodiBinaryAddon,
+  fetchFromGitHub,
+  pugixml,
+  glib,
+  nspr,
+  nss,
+  gtest,
+  rapidjson,
+}:
 let
   bento4 = fetchFromGitHub {
     owner = "xbmc";
@@ -26,13 +39,25 @@ buildKodiBinaryAddon rec {
 
   extraNativeBuildInputs = [ gtest ];
 
-  extraBuildInputs = [ pugixml rapidjson ];
+  extraBuildInputs = [
+    pugixml
+    rapidjson
+  ];
 
-  extraRuntimeDependencies = [ glib nspr nss (lib.getLib stdenv.cc.cc) ];
+  extraRuntimeDependencies = [
+    glib
+    nspr
+    nss
+    (lib.getLib stdenv.cc.cc)
+  ];
 
-  extraInstallPhase = let n = namespace; in ''
-    ${lib.optionalString stdenv.hostPlatform.isAarch64 "ln -s $out/lib/addons/${n}/libcdm_aarch64_loader.so $out/${addonDir}/${n}/libcdm_aarch64_loader.so"}
-  '';
+  extraInstallPhase =
+    let
+      n = namespace;
+    in
+    ''
+      ${lib.optionalString stdenv.hostPlatform.isAarch64 "ln -s $out/lib/addons/${n}/libcdm_aarch64_loader.so $out/${addonDir}/${n}/libcdm_aarch64_loader.so"}
+    '';
 
   meta = with lib; {
     homepage = "https://github.com/xbmc/inputstream.adaptive";

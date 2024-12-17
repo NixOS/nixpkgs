@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, libmnl
-, pkg-config
-, writeScript
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libmnl,
+  pkg-config,
+  writeScript,
 }:
 
 stdenv.mkDerivation rec {

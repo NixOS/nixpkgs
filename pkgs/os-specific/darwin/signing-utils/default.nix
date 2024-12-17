@@ -1,6 +1,7 @@
-{ stdenvNoCC
-, sigtool
-, cctools
+{
+  stdenvNoCC,
+  sigtool,
+  cctools,
 }:
 
 let

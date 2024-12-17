@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, libsixel
-, withSixel ? false
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  libsixel,
+  withSixel ? false,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -28,7 +29,10 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line application to view images from the terminal written in Rust";
     homepage = "https://github.com/atanunq/viu";
     license = licenses.mit;
-    maintainers = with maintainers; [ chuangzhu sigmanificient ];
+    maintainers = with maintainers; [
+      chuangzhu
+      sigmanificient
+    ];
     mainProgram = "viu";
   };
 }

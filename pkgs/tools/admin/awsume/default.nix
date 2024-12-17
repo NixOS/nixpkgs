@@ -1,13 +1,14 @@
-{ lib
-, python3
-, installShellFiles
-, buildPythonApplication
-, fetchFromGitHub
-, boto3
-, colorama
-, psutil
-, pluggy
-, pyyaml
+{
+  lib,
+  python3,
+  installShellFiles,
+  buildPythonApplication,
+  fetchFromGitHub,
+  boto3,
+  colorama,
+  psutil,
+  pluggy,
+  pyyaml,
 }:
 
 buildPythonApplication rec {
@@ -46,7 +47,6 @@ buildPythonApplication rec {
 
     rm -f $out/bin/awsume.bat
   '';
-
 
   doCheck = false;
 

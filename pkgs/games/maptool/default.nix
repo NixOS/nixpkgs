@@ -1,14 +1,15 @@
-{ lib
-, copyDesktopItems
-, fetchurl
-, ffmpeg
-, gitUpdater
-, jre
-, libarchive
-, makeDesktopItem
-, openjfx
-, stdenvNoCC
-, wrapGAppsHook3
+{
+  lib,
+  copyDesktopItems,
+  fetchurl,
+  ffmpeg,
+  gitUpdater,
+  jre,
+  libarchive,
+  makeDesktopItem,
+  openjfx,
+  stdenvNoCC,
+  wrapGAppsHook3,
 }:
 let
   pname = "maptool";
@@ -32,7 +33,15 @@ let
     platforms = [ "x86_64-linux" ];
   };
 
-  javafxModules = [ "base" "controls" "media" "swing" "web" "fxml" "graphics" ];
+  javafxModules = [
+    "base"
+    "controls"
+    "media"
+    "swing"
+    "web"
+    "fxml"
+    "graphics"
+  ];
 
   appClasspath = "share/${pname}";
 
@@ -41,11 +50,12 @@ let
       "${openjfx}/modules_src/javafx.${mod}/module-info.java"
       "${openjfx}/modules/javafx.${mod}"
       "${openjfx}/modules_libs/javafx.${mod}"
-    ]) javafxModules ++
-    [ "$out/${appClasspath}/*" ];
+    ]) javafxModules
+    ++ [ "$out/${appClasspath}/*" ];
 
   jvmArgs = [
-    "-cp" (lib.concatStringsSep ":" classpath)
+    "-cp"
+    (lib.concatStringsSep ":" classpath)
     "-Xss8M"
     "-Dsun.java2d.d3d=false"
     "-Dfile.encoding=UTF-8"
@@ -72,7 +82,12 @@ let
   rdnsName = "net.rptools.maptool";
 in
 stdenvNoCC.mkDerivation {
-  inherit pname version src meta;
+  inherit
+    pname
+    version
+    src
+    meta
+    ;
 
   dontUnpack = true;
   dontConfigure = true;

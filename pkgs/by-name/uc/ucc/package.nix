@@ -1,11 +1,18 @@
-{ stdenv, lib, fetchFromGitHub, libtool, automake, autoconf, ucx
-, config
-, enableCuda ? config.cudaSupport
-, cudaPackages
-, enableAvx ? stdenv.hostPlatform.avxSupport
-, enableSse41 ? stdenv.hostPlatform.sse4_1Support
-, enableSse42 ? stdenv.hostPlatform.sse4_2Support
-} :
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libtool,
+  automake,
+  autoconf,
+  ucx,
+  config,
+  enableCuda ? config.cudaSupport,
+  cudaPackages,
+  enableAvx ? stdenv.hostPlatform.avxSupport,
+  enableSse41 ? stdenv.hostPlatform.sse4_1Support,
+  enableSse42 ? stdenv.hostPlatform.sse4_2Support,
+}:
 
 stdenv.mkDerivation rec {
   pname = "ucc";
@@ -18,7 +25,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-xcJLYktkxNK2ewWRgm8zH/dMaIoI+9JexuswXi7MpAU=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   enableParallelBuilding = true;
 
@@ -30,25 +40,31 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  nativeBuildInputs = [ libtool automake autoconf ]
-    ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
-  buildInputs = [ ucx ]
+  nativeBuildInputs = [
+    libtool
+    automake
+    autoconf
+  ] ++ lib.optionals enableCuda [ cudaPackages.cuda_nvcc ];
+  buildInputs =
+    [ ucx ]
     ++ lib.optionals enableCuda [
       cudaPackages.cuda_cccl
       cudaPackages.cuda_cudart
     ];
 
-
-  preConfigure = ''
-    ./autogen.sh
-  '' + lib.optionalString enableCuda ''
-    configureFlagsArray+=( "--with-nvcc-gencode=${builtins.concatStringsSep " " cudaPackages.cudaFlags.gencode}" )
-  '';
-  configureFlags = [ ]
-   ++ lib.optional enableSse41 "--with-sse41"
-   ++ lib.optional enableSse42 "--with-sse42"
-   ++ lib.optional enableAvx "--with-avx"
-   ++ lib.optional enableCuda "--with-cuda=${cudaPackages.cuda_cudart}";
+  preConfigure =
+    ''
+      ./autogen.sh
+    ''
+    + lib.optionalString enableCuda ''
+      configureFlagsArray+=( "--with-nvcc-gencode=${builtins.concatStringsSep " " cudaPackages.cudaFlags.gencode}" )
+    '';
+  configureFlags =
+    [ ]
+    ++ lib.optional enableSse41 "--with-sse41"
+    ++ lib.optional enableSse42 "--with-sse42"
+    ++ lib.optional enableAvx "--with-avx"
+    ++ lib.optional enableCuda "--with-cuda=${cudaPackages.cuda_cudart}";
 
   postInstall = ''
     find $out/lib/ -name "*.la" -exec rm -f \{} \;

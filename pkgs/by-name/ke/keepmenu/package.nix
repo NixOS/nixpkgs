@@ -1,10 +1,11 @@
-{ dmenu
-, fetchFromGitHub
-, lib
-, python3Packages
-, xdotool
-, xsel
-, xvfb-run
+{
+  dmenu,
+  fetchFromGitHub,
+  lib,
+  python3Packages,
+  xdotool,
+  xsel,
+  xvfb-run,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -29,7 +30,12 @@ python3Packages.buildPythonApplication rec {
     pynput
   ];
 
-  nativeCheckInputs = [ dmenu xdotool xsel xvfb-run ];
+  nativeCheckInputs = [
+    dmenu
+    xdotool
+    xsel
+    xvfb-run
+  ];
 
   postPatch = ''
     substituteInPlace tests/keepmenu-config.ini tests/tests.py \

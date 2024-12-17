@@ -22,6 +22,9 @@ melpaBuild {
     homepage = "https://www.emacswiki.org/emacs/IsearchPlus";
     description = "Search text- or overlay-property contexts";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ leungbk AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      leungbk
+      AndersonTorres
+    ];
   };
 }

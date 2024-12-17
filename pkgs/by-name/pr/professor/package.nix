@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, eigen
-, makeWrapper
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  eigen,
+  makeWrapper,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,13 +22,15 @@ stdenv.mkDerivation rec {
     '';
   };
 
-  postPatch = ''
-    substituteInPlace Makefile \
-      --replace-fail 'pip install ' 'pip install --prefix $(out) '
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace Makefile \
-      --replace-fail '-shared -o' '-shared -install_name "$(out)/$@" -o'
-  '';
+  postPatch =
+    ''
+      substituteInPlace Makefile \
+        --replace-fail 'pip install ' 'pip install --prefix $(out) '
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      substituteInPlace Makefile \
+        --replace-fail '-shared -o' '-shared -install_name "$(out)/$@" -o'
+    '';
 
   nativeBuildInputs = [
     python3.pkgs.cython

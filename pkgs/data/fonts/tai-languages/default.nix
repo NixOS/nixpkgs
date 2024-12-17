@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchurl }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+}:
 
 {
   tai-ahom = stdenvNoCC.mkDerivation rec {

@@ -1,9 +1,11 @@
-{ lib, stdenv
-, fetchzip
-, autoreconfHook
-, pkg-config
-, glib
-, dbus
+{
+  lib,
+  stdenv,
+  fetchzip,
+  autoreconfHook,
+  pkg-config,
+  glib,
+  dbus,
 }:
 
 stdenv.mkDerivation rec {

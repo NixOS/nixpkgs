@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, autoreconfHook
-, makeWrapper
-, fetchFromGitHub
-, ncurses
-, parted
-, pkg-config
-, libconfig
-, hdparm
-, smartmontools
-, dmidecode
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  makeWrapper,
+  fetchFromGitHub,
+  ncurses,
+  parted,
+  pkg-config,
+  libconfig,
+  hdparm,
+  smartmontools,
+  dmidecode,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,7 +38,13 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/nwipe \
-      --prefix PATH : ${lib.makeBinPath [ hdparm smartmontools dmidecode ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          hdparm
+          smartmontools
+          dmidecode
+        ]
+      }
   '';
 
   enableParallelBuilding = true;
@@ -47,7 +54,10 @@ stdenv.mkDerivation rec {
     mainProgram = "nwipe";
     homepage = "https://github.com/martijnvanbrummelen/nwipe";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ vifino woffs ];
+    maintainers = with maintainers; [
+      vifino
+      woffs
+    ];
     platforms = platforms.linux;
   };
 }

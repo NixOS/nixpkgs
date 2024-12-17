@@ -1,25 +1,26 @@
-{ stdenv
-, fetchurl
-, alsa-lib
-, cairo
-, dpkg
-, ffmpeg
-, freetype
-, gdk-pixbuf
-, glib
-, gtk3
-, lib
-, libglvnd
-, libjack2
-, libjpeg
-, libxkbcommon
-, makeWrapper
-, pipewire
-, pulseaudio
-, wrapGAppsHook3
-, xdg-utils
-, xorg
-, zlib
+{
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  cairo,
+  dpkg,
+  ffmpeg,
+  freetype,
+  gdk-pixbuf,
+  glib,
+  gtk3,
+  lib,
+  libglvnd,
+  libjack2,
+  libjpeg,
+  libxkbcommon,
+  makeWrapper,
+  pipewire,
+  pulseaudio,
+  wrapGAppsHook3,
+  xdg-utils,
+  xorg,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +32,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-gtQ1mhXk0AqGidZk5TCzSR58pD1JJoELMBmELtqyb4U=";
   };
 
-  nativeBuildInputs = [ dpkg makeWrapper wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    dpkg
+    makeWrapper
+    wrapGAppsHook3
+  ];
 
   dontBuild = true;
   dontWrapGApps = true; # we only want $gappsWrapperArgs here
@@ -110,7 +115,11 @@ stdenv.mkDerivation rec {
     homepage = "https://www.bitwig.com/";
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers = with maintainers; [ bfortz michalrus mrVanDalo ];
+    maintainers = with maintainers; [
+      bfortz
+      michalrus
+      mrVanDalo
+    ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

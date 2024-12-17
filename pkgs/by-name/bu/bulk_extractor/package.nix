@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, exiv2
-, flex
-, libewf
-, libxml2
-, openssl
-, zlib
-, pkg-config
-, python310
-, re2
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  exiv2,
+  flex,
+  libewf,
+  libxml2,
+  openssl,
+  zlib,
+  pkg-config,
+  python310,
+  re2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

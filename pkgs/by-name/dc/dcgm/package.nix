@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoAddDriverRunpath
-, catch2
-, cmake
-, ninja
-, cudaPackages_11_8
-, cudaPackages_12
-, boost
-, fmt_9
-, git
-, jsoncpp
-, libevent
-, plog
-, python3
-, symlinkJoin
-, tclap_1_4
-, yaml-cpp
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoAddDriverRunpath,
+  catch2,
+  cmake,
+  ninja,
+  cudaPackages_11_8,
+  cudaPackages_12,
+  boost,
+  fmt_9,
+  git,
+  jsoncpp,
+  libevent,
+  plog,
+  python3,
+  symlinkJoin,
+  tclap_1_4,
+  yaml-cpp,
 }:
 let
   # DCGM depends on 2 different versions of CUDA at the same time.
@@ -29,18 +30,20 @@ let
 
   # Select needed redist packages from cudaPackages
   # C.f. https://github.com/NVIDIA/DCGM/blob/7e1012302679e4bb7496483b32dcffb56e528c92/dcgmbuild/scripts/0080_cuda.sh#L24-L39
-  getCudaPackages = p: with p; [
-    cuda_cccl
-    cuda_cudart
-    cuda_nvcc
-    cuda_nvml_dev
-    libcublas
-    libcufft
-    libcurand
-  ];
+  getCudaPackages =
+    p: with p; [
+      cuda_cccl
+      cuda_cudart
+      cuda_nvcc
+      cuda_nvml_dev
+      libcublas
+      libcufft
+      libcurand
+    ];
 
   # Builds CMake flags to add CUDA paths for include and lib.
-  mkCudaFlags = cudaPackages:
+  mkCudaFlags =
+    cudaPackages:
     let
       version = cudaPackages.cudaMajorVersion;
       # The DCGM CMake assumes that the folder containing cuda.h contains all headers, so we must
@@ -49,16 +52,20 @@ let
         name = "cuda-headers-combined-${version}";
         paths = lib.map (pkg: "${lib.getInclude pkg}/include") (getCudaPackages cudaPackages);
       };
-    in [
+    in
+    [
       (lib.cmakeFeature "CUDA${version}_INCLUDE_DIR" "${headers}")
       (lib.cmakeFeature "CUDA${version}_LIBS" "${cudaPackages.cuda_cudart.stubs}/lib/stubs/libcuda.so")
       (lib.cmakeFeature "CUDA${version}_STATIC_LIBS" "${lib.getLib cudaPackages.cuda_cudart}/lib/libcudart.so")
-      (lib.cmakeFeature "CUDA${version}_STATIC_CUBLAS_LIBS" (lib.concatStringsSep ";" [
-        "${lib.getLib cudaPackages.libcublas}/lib/libcublas.so"
-        "${lib.getLib cudaPackages.libcublas}/lib/libcublasLt.so"
-      ]))
+      (lib.cmakeFeature "CUDA${version}_STATIC_CUBLAS_LIBS" (
+        lib.concatStringsSep ";" [
+          "${lib.getLib cudaPackages.libcublas}/lib/libcublas.so"
+          "${lib.getLib cudaPackages.libcublas}/lib/libcublasLt.so"
+        ]
+      ))
     ];
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "dcgm";
   version = "3.3.9"; # N.B: If you change this, be sure prometheus-dcgm-exporter supports this version.
 

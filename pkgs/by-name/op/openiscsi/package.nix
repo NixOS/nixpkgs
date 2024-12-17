@@ -1,17 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, meson
-, pkg-config
-, ninja
-, perl
-, util-linux
-, open-isns
-, openssl
-, kmod
-, systemd
-, runtimeShell
-, nixosTests }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  meson,
+  pkg-config,
+  ninja,
+  perl,
+  util-linux,
+  open-isns,
+  openssl,
+  kmod,
+  systemd,
+  runtimeShell,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "open-iscsi";
@@ -62,6 +64,9 @@ stdenv.mkDerivation rec {
     license = licenses.gpl2Plus;
     homepage = "https://www.open-iscsi.com";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ cleverca22 zaninime ];
+    maintainers = with maintainers; [
+      cleverca22
+      zaninime
+    ];
   };
 }

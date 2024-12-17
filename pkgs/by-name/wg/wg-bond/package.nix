@@ -1,4 +1,10 @@
-{ lib, rustPlatform, fetchFromGitLab, wireguard-tools, makeWrapper }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+  wireguard-tools,
+  makeWrapper,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "wg-bond";
   version = "0.2.0";
@@ -14,9 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ makeWrapper ];
   postInstall = ''
-    wrapProgram $out/bin/wg-bond --set PATH ${
-      lib.makeBinPath [ wireguard-tools ]
-    }
+    wrapProgram $out/bin/wg-bond --set PATH ${lib.makeBinPath [ wireguard-tools ]}
   '';
 
   meta = with lib; {

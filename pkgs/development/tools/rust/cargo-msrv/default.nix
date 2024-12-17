@@ -1,14 +1,15 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, rustup
-, openssl
-, stdenv
-, libiconv
-, Security
-, makeWrapper
-, gitUpdater
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  rustup,
+  openssl,
+  stdenv,
+  libiconv,
+  Security,
+  makeWrapper,
+  gitUpdater,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,11 +35,19 @@ rustPlatform.buildRustPackage rec {
   # Integration tests fail
   doCheck = false;
 
-  buildInputs = if stdenv.hostPlatform.isDarwin
-    then [ libiconv Security ]
-    else [ openssl ];
+  buildInputs =
+    if stdenv.hostPlatform.isDarwin then
+      [
+        libiconv
+        Security
+      ]
+    else
+      [ openssl ];
 
-  nativeBuildInputs = [ pkg-config makeWrapper ];
+  nativeBuildInputs = [
+    pkg-config
+    makeWrapper
+  ];
 
   # Depends at run-time on having rustup in PATH
   postInstall = ''
@@ -49,7 +58,13 @@ rustPlatform.buildRustPackage rec {
     description = "Cargo subcommand \"msrv\": assists with finding your minimum supported Rust version (MSRV)";
     mainProgram = "cargo-msrv";
     homepage = "https://github.com/foresterre/cargo-msrv";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ otavio matthiasbeyer ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      otavio
+      matthiasbeyer
+    ];
   };
 }

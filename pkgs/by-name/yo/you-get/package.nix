@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchPypi
-, substituteAll
-, ffmpeg
-, installShellFiles
+{
+  lib,
+  python3,
+  fetchPypi,
+  substituteAll,
+  ffmpeg,
+  installShellFiles,
 }:
 
 python3.pkgs.buildPythonApplication rec {

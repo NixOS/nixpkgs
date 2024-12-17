@@ -1,7 +1,10 @@
-{ lib, stdenv, fetchurl
-, enableStatic ? stdenv.hostPlatform.isStatic
-, writeScript
-, testers
+{
+  lib,
+  stdenv,
+  fetchurl,
+  enableStatic ? stdenv.hostPlatform.isStatic,
+  writeScript,
+  testers,
 }:
 
 # Note: this package is used for bootstrapping fetchurl, and thus
@@ -14,12 +17,20 @@ stdenv.mkDerivation (finalAttrs: {
   version = "5.6.3";
 
   src = fetchurl {
-    url = with finalAttrs; "https://github.com/tukaani-project/xz/releases/download/v${version}/xz-${version}.tar.xz";
+    url =
+      with finalAttrs;
+      "https://github.com/tukaani-project/xz/releases/download/v${version}/xz-${version}.tar.xz";
     hash = "sha256-2wWQYptvD6NudK6l+XMdxvjfBoznt7r6RTAYMqXuvDo=";
   };
 
   strictDeps = true;
-  outputs = [ "bin" "dev" "out" "man" "doc" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "man"
+    "doc"
+  ];
 
   configureFlags = lib.optional enableStatic "--disable-shared";
 
@@ -78,7 +89,10 @@ stdenv.mkDerivation (finalAttrs: {
       create 30 % smaller output than gzip and 15 % smaller output than
       bzip2.
     '';
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
     maintainers = with maintainers; [ sander ];
     platforms = platforms.all;
     pkgConfigModules = [ "liblzma" ];

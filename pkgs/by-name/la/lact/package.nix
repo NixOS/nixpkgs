@@ -1,15 +1,16 @@
-{ lib
-, rustPlatform
-, stdenv
-, fetchFromGitHub
-, blueprint-compiler
-, pkg-config
-, wrapGAppsHook4
-, gdk-pixbuf
-, gtk4
-, libdrm
-, vulkan-loader
-, coreutils
+{
+  lib,
+  rustPlatform,
+  stdenv,
+  fetchFromGitHub,
+  blueprint-compiler,
+  pkg-config,
+  wrapGAppsHook4,
+  gdk-pixbuf,
+  gtk4,
+  libdrm,
+  vulkan-loader,
+  coreutils,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -62,14 +63,19 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postFixup = lib.optionalString stdenv.targetPlatform.isElf ''
-    patchelf $out/bin/.lact-wrapped --add-needed libvulkan.so --add-rpath ${lib.makeLibraryPath [ vulkan-loader ]}
+    patchelf $out/bin/.lact-wrapped --add-needed libvulkan.so --add-rpath ${
+      lib.makeLibraryPath [ vulkan-loader ]
+    }
   '';
 
   meta = {
     description = "Linux GPU Configuration Tool for AMD and NVIDIA";
     homepage = "https://github.com/ilya-zlobintsev/LACT";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ figsoda atemu ];
+    maintainers = with lib.maintainers; [
+      figsoda
+      atemu
+    ];
     platforms = lib.platforms.linux;
     mainProgram = "lact";
   };

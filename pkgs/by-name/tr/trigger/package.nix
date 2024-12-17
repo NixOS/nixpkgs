@@ -1,5 +1,21 @@
-{ lib, fetchurl, stdenv, runtimeShell, SDL2, freealut, SDL2_image, openal, physfs
-, zlib, libGLU, libGL, glew, tinyxml-2, copyDesktopItems, makeDesktopItem }:
+{
+  lib,
+  fetchurl,
+  stdenv,
+  runtimeShell,
+  SDL2,
+  freealut,
+  SDL2_image,
+  openal,
+  physfs,
+  zlib,
+  libGLU,
+  libGL,
+  glew,
+  tinyxml-2,
+  copyDesktopItems,
+  makeDesktopItem,
+}:
 
 stdenv.mkDerivation rec {
   pname = "trigger-rally";
@@ -56,7 +72,10 @@ stdenv.mkDerivation rec {
       icon = "trigger";
       desktopName = "Trigger";
       comment = "Fast-paced 3D single-player rally racing game";
-      categories = [ "Game" "ActionGame" ];
+      categories = [
+        "Game"
+        "ActionGame"
+      ];
     })
   ];
 

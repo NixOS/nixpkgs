@@ -1,17 +1,18 @@
-{ lib
-, mkDerivation
-, fetchFromGitHub
-, fetchurl
-, povray
-, qmake
-, qttools
-, substituteAll
-, zlib
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fetchurl,
+  povray,
+  qmake,
+  qttools,
+  substituteAll,
+  zlib,
 }:
 
 /*
-To use aditional parts libraries
-set the variable LEOCAD_LIB=/path/to/libs/ or use option -l /path/to/libs/
+  To use aditional parts libraries
+  set the variable LEOCAD_LIB=/path/to/libs/ or use option -l /path/to/libs/
 */
 
 let
@@ -32,7 +33,10 @@ mkDerivation rec {
     sha256 = "1ifbxngkbmg6d8vv08amxbnfvlyjdwzykrjp98lbwvgb0b843ygq";
   };
 
-  nativeBuildInputs = [ qmake qttools ];
+  nativeBuildInputs = [
+    qmake
+    qttools
+  ];
 
   buildInputs = [ zlib ];
 

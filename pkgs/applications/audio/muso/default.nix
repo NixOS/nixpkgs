@@ -1,5 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform
-, pkg-config, wrapGAppsHook3, CoreServices
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  wrapGAppsHook3,
+  CoreServices,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -13,7 +19,10 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-09DWUER0ZWQuwfE3sjov2GjJNI7coE3D3E5iUy9mlSE=";
   };
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook3
+  ];
   buildInputs = lib.optional stdenv.hostPlatform.isDarwin CoreServices;
 
   preConfigure = ''

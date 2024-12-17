@@ -1,4 +1,8 @@
-{ python3Packages, fetchFromGitHub, lib }:
+{
+  python3Packages,
+  fetchFromGitHub,
+  lib,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "pg_activity";

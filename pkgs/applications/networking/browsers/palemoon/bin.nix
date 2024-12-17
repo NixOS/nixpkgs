@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchzip
-, alsa-lib
-, autoPatchelfHook
-, copyDesktopItems
-, dbus-glib
-, ffmpeg
-, gtk2-x11
-, withGTK3 ? true
-, gtk3
-, libglvnd
-, libXt
-, libpulseaudio
-, makeDesktopItem
-, wrapGAppsHook3
-, writeScript
-, testers
+{
+  stdenv,
+  lib,
+  fetchzip,
+  alsa-lib,
+  autoPatchelfHook,
+  copyDesktopItems,
+  dbus-glib,
+  ffmpeg,
+  gtk2-x11,
+  withGTK3 ? true,
+  gtk3,
+  libglvnd,
+  libXt,
+  libpulseaudio,
+  makeDesktopItem,
+  wrapGAppsHook3,
+  writeScript,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,76 +35,80 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    alsa-lib
-    dbus-glib
-    gtk2-x11
-    libXt
-    (lib.getLib stdenv.cc.cc)
-  ] ++ lib.optionals withGTK3 [
-    gtk3
-  ];
+  buildInputs =
+    [
+      alsa-lib
+      dbus-glib
+      gtk2-x11
+      libXt
+      (lib.getLib stdenv.cc.cc)
+    ]
+    ++ lib.optionals withGTK3 [
+      gtk3
+    ];
 
-  desktopItems = [(makeDesktopItem rec {
-    name = "palemoon-bin";
-    desktopName = "Pale Moon Web Browser";
-    comment = "Browse the World Wide Web";
-    keywords = [
-      "Internet"
-      "WWW"
-      "Browser"
-      "Web"
-      "Explorer"
-    ];
-    exec = "palemoon %u";
-    terminal = false;
-    type = "Application";
-    icon = "palemoon";
-    categories = [
-      "Network"
-      "WebBrowser"
-    ];
-    mimeTypes = [
-      "text/html"
-      "text/xml"
-      "application/xhtml+xml"
-      "application/xml"
-      "application/rss+xml"
-      "application/rdf+xml"
-      "image/gif"
-      "image/jpeg"
-      "image/png"
-      "x-scheme-handler/http"
-      "x-scheme-handler/https"
-      "x-scheme-handler/ftp"
-      "x-scheme-handler/chrome"
-      "video/webm"
-      "application/x-xpinstall"
-    ];
-    startupNotify = true;
-    startupWMClass = "Pale moon";
-    extraConfig = {
-      X-MultipleArgs = "false";
-    };
-    actions = {
-      "NewTab" = {
-        name = "Open new tab";
-        exec = "palemoon -new-tab https://start.palemoon.org";
+  desktopItems = [
+    (makeDesktopItem rec {
+      name = "palemoon-bin";
+      desktopName = "Pale Moon Web Browser";
+      comment = "Browse the World Wide Web";
+      keywords = [
+        "Internet"
+        "WWW"
+        "Browser"
+        "Web"
+        "Explorer"
+      ];
+      exec = "palemoon %u";
+      terminal = false;
+      type = "Application";
+      icon = "palemoon";
+      categories = [
+        "Network"
+        "WebBrowser"
+      ];
+      mimeTypes = [
+        "text/html"
+        "text/xml"
+        "application/xhtml+xml"
+        "application/xml"
+        "application/rss+xml"
+        "application/rdf+xml"
+        "image/gif"
+        "image/jpeg"
+        "image/png"
+        "x-scheme-handler/http"
+        "x-scheme-handler/https"
+        "x-scheme-handler/ftp"
+        "x-scheme-handler/chrome"
+        "video/webm"
+        "application/x-xpinstall"
+      ];
+      startupNotify = true;
+      startupWMClass = "Pale moon";
+      extraConfig = {
+        X-MultipleArgs = "false";
       };
-      "NewWindow" = {
-        name = "Open new window";
-        exec = "palemoon -new-window";
+      actions = {
+        "NewTab" = {
+          name = "Open new tab";
+          exec = "palemoon -new-tab https://start.palemoon.org";
+        };
+        "NewWindow" = {
+          name = "Open new window";
+          exec = "palemoon -new-window";
+        };
+        "NewPrivateWindow" = {
+          name = "Open new private window";
+          exec = "palemoon -private-window";
+        };
+        "ProfileManager" = {
+          name = "Open the Profile Manager";
+          exec = "palemoon --ProfileManager";
+        };
       };
-      "NewPrivateWindow" = {
-        name = "Open new private window";
-        exec = "palemoon -private-window";
-      };
-      "ProfileManager" = {
-        name = "Open the Profile Manager";
-        exec = "palemoon --ProfileManager";
-      };
-    };
-  })];
+    })
+  ];
 
   dontConfigure = true;
   dontBuild = true;
@@ -138,33 +143,42 @@ stdenv.mkDerivation (finalAttrs: {
   preFixup = ''
     # Make optional dependencies available
     gappsWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
-        ffmpeg
-        libglvnd
-        libpulseaudio
-      ]}"
+      --prefix LD_LIBRARY_PATH : "${
+        lib.makeLibraryPath [
+          ffmpeg
+          libglvnd
+          libpulseaudio
+        ]
+      }"
     )
     wrapGApp $out/lib/palemoon/palemoon
   '';
 
   passthru = {
-    sources = let
-      urlRegionVariants = buildVariant: map
-        (region: "https://rm-${region}.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-${buildVariant}.tar.xz")
-        [
-          "eu"
-          "us"
-        ];
-    in {
-      gtk3 = fetchzip {
-        urls = urlRegionVariants "gtk3";
-        hash = "sha256-TlmDsZKHolTS+y+1BymyY49+AvqUv8zmUXCGNHCRPL0=";
+    sources =
+      let
+        urlRegionVariants =
+          buildVariant:
+          map
+            (
+              region:
+              "https://rm-${region}.palemoon.org/release/palemoon-${finalAttrs.version}.linux-x86_64-${buildVariant}.tar.xz"
+            )
+            [
+              "eu"
+              "us"
+            ];
+      in
+      {
+        gtk3 = fetchzip {
+          urls = urlRegionVariants "gtk3";
+          hash = "sha256-TlmDsZKHolTS+y+1BymyY49+AvqUv8zmUXCGNHCRPL0=";
+        };
+        gtk2 = fetchzip {
+          urls = urlRegionVariants "gtk2";
+          hash = "sha256-f6vLHbpmvVfkjZr7x0DiCFoGGvfxHfFZ3KTagq2Mwp4=";
+        };
       };
-      gtk2 = fetchzip {
-        urls = urlRegionVariants "gtk2";
-        hash = "sha256-f6vLHbpmvVfkjZr7x0DiCFoGGvfxHfFZ3KTagq2Mwp4=";
-      };
-    };
 
     tests.version = testers.testVersion {
       package = finalAttrs.finalPackage;
@@ -216,6 +230,6 @@ stdenv.mkDerivation (finalAttrs: {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     mainProgram = "palemoon";
     platforms = [ "x86_64-linux" ];
-    hydraPlatforms = [];
+    hydraPlatforms = [ ];
   };
 })

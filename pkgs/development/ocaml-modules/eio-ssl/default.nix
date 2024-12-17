@@ -1,8 +1,9 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, eio
-, ssl
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  eio,
+  ssl,
 }:
 
 buildDunePackage rec {
@@ -14,7 +15,10 @@ buildDunePackage rec {
     hash = "sha256-m4CiUQtXVSMfLthbDsAftpiOsr24I5IGiU1vv7Rz8go=";
   };
 
-  propagatedBuildInputs = [ eio ssl ];
+  propagatedBuildInputs = [
+    eio
+    ssl
+  ];
 
   meta = {
     homepage = "https://github.com/anmonteiro/eio-ssl";

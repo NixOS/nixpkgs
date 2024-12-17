@@ -1,15 +1,21 @@
-{ pkgs, config, lib, ... }:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 
 let
   cfg = config.services.mympd;
-in {
+in
+{
   options = {
 
     services.mympd = {
 
       enable = lib.mkEnableOption "MyMPD server";
 
-      package = lib.mkPackageOption pkgs "mympd" {};
+      package = lib.mkPackageOption pkgs "mympd" { };
 
       openFirewall = lib.mkOption {
         type = lib.types.bool;
@@ -30,7 +36,15 @@ in {
 
       settings = lib.mkOption {
         type = lib.types.submodule {
-          freeformType = with lib.types; attrsOf (nullOr (oneOf [ str bool int ]));
+          freeformType =
+            with lib.types;
+            attrsOf (
+              nullOr (oneOf [
+                str
+                bool
+                int
+              ])
+            );
           options = {
             http_port = lib.mkOption {
               type = lib.types.port;
@@ -76,9 +90,11 @@ in {
         mkdir -p "$config_dir"
 
         ${pipe cfg.settings [
-          (mapAttrsToList (name: value: ''
-            echo -n "${if isBool value then boolToString value else toString value}" > "$config_dir/${name}"
-            ''))
+          (mapAttrsToList (
+            name: value: ''
+              echo -n "${if isBool value then boolToString value else toString value}" > "$config_dir/${name}"
+            ''
+          ))
           (concatStringsSep "\n")
         ]}
       '';

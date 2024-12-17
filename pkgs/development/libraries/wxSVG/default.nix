@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, cairo
-, expat
-, ffmpeg
-, libexif
-, pango
-, pkg-config
-, wxGTK
-, darwin
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cairo,
+  expat,
+  ffmpeg,
+  libexif,
+  pango,
+  pkg-config,
+  wxGTK,
+  darwin,
 }:
 
 let

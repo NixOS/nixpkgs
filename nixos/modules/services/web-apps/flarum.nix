@@ -1,26 +1,34 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 
 with lib;
 
 let
   cfg = config.services.flarum;
 
-  flarumInstallConfig = pkgs.writeText "config.json" (builtins.toJSON {
-    debug = false;
-    offline = false;
+  flarumInstallConfig = pkgs.writeText "config.json" (
+    builtins.toJSON {
+      debug = false;
+      offline = false;
 
-    baseUrl = cfg.baseUrl;
-    databaseConfiguration = cfg.database;
-    adminUser = {
-      username = cfg.adminUser;
-      password = cfg.initialAdminPassword;
-      email = cfg.adminEmail;
-    };
-    settings = {
-      forum_title = cfg.forumTitle;
-    };
-  });
-in {
+      baseUrl = cfg.baseUrl;
+      databaseConfiguration = cfg.database;
+      adminUser = {
+        username = cfg.adminUser;
+        password = cfg.initialAdminPassword;
+        email = cfg.adminEmail;
+      };
+      settings = {
+        forum_title = cfg.forumTitle;
+      };
+    }
+  );
+in
+{
   options.services.flarum = {
     enable = mkEnableOption "Flarum discussion platform";
 
@@ -83,7 +91,13 @@ in {
     };
 
     database = mkOption rec {
-      type = with types; attrsOf (oneOf [str bool int]);
+      type =
+        with types;
+        attrsOf (oneOf [
+          str
+          bool
+          int
+        ]);
       description = "MySQL database parameters";
       default = {
         # the database driver; i.e. MySQL; MariaDB...
@@ -125,7 +139,7 @@ in {
       homeMode = "755";
       group = cfg.group;
     };
-    users.groups.${cfg.group} = {};
+    users.groups.${cfg.group} = { };
 
     services.phpfpm.pools.flarum = {
       user = cfg.user;
@@ -164,7 +178,7 @@ in {
     services.mysql = mkIf cfg.enable {
       enable = true;
       package = pkgs.mariadb;
-      ensureDatabases = [cfg.database.database];
+      ensureDatabases = [ cfg.database.database ];
       ensureUsers = [
         {
           name = cfg.database.username;
@@ -184,35 +198,41 @@ in {
 
     systemd.services.flarum-install = {
       description = "Flarum installation";
-      requiredBy = ["phpfpm-flarum.service"];
-      before = ["phpfpm-flarum.service"];
-      requires = ["mysql.service"];
-      after = ["mysql.service"];
+      requiredBy = [ "phpfpm-flarum.service" ];
+      before = [ "phpfpm-flarum.service" ];
+      requires = [ "mysql.service" ];
+      after = [ "mysql.service" ];
       serviceConfig = {
         Type = "oneshot";
         User = cfg.user;
         Group = cfg.group;
       };
-      path = [config.services.phpfpm.phpPackage];
-      script = ''
-        mkdir -p ${cfg.stateDir}/{extensions,public/assets/avatars}
-        mkdir -p ${cfg.stateDir}/storage/{cache,formatter,sessions,views}
-        cd ${cfg.stateDir}
-        cp -f ${cfg.package}/share/php/flarum/{extend.php,site.php,flarum} .
-        ln -sf ${cfg.package}/share/php/flarum/vendor .
-        ln -sf ${cfg.package}/share/php/flarum/public/index.php public/
-      '' + optionalString (cfg.createDatabaseLocally && cfg.database.driver == "mysql") ''
-        if [ ! -f config.php ]; then
-          php flarum install --file=${flarumInstallConfig}
-        fi
-      '' + ''
-        if [ -f config.php ]; then
-          php flarum migrate
-          php flarum cache:clear
-        fi
-      '';
+      path = [ config.services.phpfpm.phpPackage ];
+      script =
+        ''
+          mkdir -p ${cfg.stateDir}/{extensions,public/assets/avatars}
+          mkdir -p ${cfg.stateDir}/storage/{cache,formatter,sessions,views}
+          cd ${cfg.stateDir}
+          cp -f ${cfg.package}/share/php/flarum/{extend.php,site.php,flarum} .
+          ln -sf ${cfg.package}/share/php/flarum/vendor .
+          ln -sf ${cfg.package}/share/php/flarum/public/index.php public/
+        ''
+        + optionalString (cfg.createDatabaseLocally && cfg.database.driver == "mysql") ''
+          if [ ! -f config.php ]; then
+            php flarum install --file=${flarumInstallConfig}
+          fi
+        ''
+        + ''
+          if [ -f config.php ]; then
+            php flarum migrate
+            php flarum cache:clear
+          fi
+        '';
     };
   };
 
-  meta.maintainers = with lib.maintainers; [ fsagbuya jasonodoom ];
+  meta.maintainers = with lib.maintainers; [
+    fsagbuya
+    jasonodoom
+  ];
 }

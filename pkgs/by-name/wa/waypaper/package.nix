@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchFromGitHub
-, gobject-introspection
-, wrapGAppsHook3
-, killall
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  gobject-introspection,
+  wrapGAppsHook3,
+  killall,
 }:
 
 python3.pkgs.buildPythonApplication rec {

@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, installShellFiles
-, pkg-config
-, withNativeTls ? true
-, stdenv
-, darwin
-, openssl
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  installShellFiles,
+  pkg-config,
+  withNativeTls ? true,
+  stdenv,
+  darwin,
+  openssl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,10 +25,17 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = lib.optional withNativeTls "native-tls";
 
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
-  buildInputs = lib.optionals withNativeTls
-    (if stdenv.hostPlatform.isDarwin then [ darwin.apple_sdk.frameworks.SystemConfiguration ] else [ openssl ]);
+  buildInputs = lib.optionals withNativeTls (
+    if stdenv.hostPlatform.isDarwin then
+      [ darwin.apple_sdk.frameworks.SystemConfiguration ]
+    else
+      [ openssl ]
+  );
 
   # Get openssl-sys to use pkg-config
   OPENSSL_NO_VENDOR = 1;
@@ -59,7 +67,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/ducaale/xh";
     changelog = "https://github.com/ducaale/xh/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda aaronjheng ];
+    maintainers = with maintainers; [
+      figsoda
+      aaronjheng
+    ];
     mainProgram = "xh";
   };
 }

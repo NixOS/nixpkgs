@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, makeWrapper
-, python3Packages
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  makeWrapper,
+  python3Packages,
 }:
 
 stdenv.mkDerivation rec {
@@ -11,7 +12,7 @@ stdenv.mkDerivation rec {
   version = "5.0-1.1.2";
 
   src = fetchurl {
-    url =  "mirror://sourceforge/bashdb/${pname}-${version}.tar.bz2";
+    url = "mirror://sourceforge/bashdb/${pname}-${version}.tar.bz2";
     sha256 = "sha256-MBdtKtKMWwCy4tIcXqGu+PuvQKj52fcjxnxgUx87czA=";
   };
 

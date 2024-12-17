@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, cmake, eigen, libccd, octomap }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  eigen,
+  libccd,
+  octomap,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fcl";
@@ -12,9 +20,16 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  propagatedBuildInputs = [ eigen libccd octomap ];
+  propagatedBuildInputs = [
+    eigen
+    libccd
+    octomap
+  ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   meta = with lib; {
     description = "Flexible Collision Library";

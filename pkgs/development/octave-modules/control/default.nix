@@ -1,9 +1,11 @@
-{ buildOctavePackage
-, lib
-, fetchFromGitHub
-, gfortran
-, lapack, blas
-, autoreconfHook
+{
+  buildOctavePackage,
+  lib,
+  fetchFromGitHub,
+  gfortran,
+  lapack,
+  blas,
+  autoreconfHook,
 }:
 
 buildOctavePackage rec {
@@ -35,7 +37,8 @@ buildOctavePackage rec {
   ];
 
   buildInputs = [
-    lapack blas
+    lapack
+    blas
   ];
 
   meta = with lib; {

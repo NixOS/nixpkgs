@@ -1,9 +1,10 @@
-{ mkXfceDerivation
-, lib
-, intltool
-, libxfce4ui
-, xfce4-panel
-, gettext
+{
+  mkXfceDerivation,
+  lib,
+  intltool,
+  libxfce4ui,
+  xfce4-panel,
+  gettext,
 }:
 
 mkXfceDerivation {

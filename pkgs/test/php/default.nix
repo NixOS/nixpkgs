@@ -1,30 +1,33 @@
-{ lib
-, php
-, runCommand
+{
+  lib,
+  php,
+  runCommand,
 }:
 
 let
-  runTest = name: body: runCommand name { } ''
-    testFailed=
-    checking() {
-      echo -n "Checking $1... " > /dev/stderr
-    }
-    ok() {
-      echo ok > /dev/stderr
-    }
-    nok() {
-      echo fail > /dev/stderr
-      testFailed=1
-    }
+  runTest =
+    name: body:
+    runCommand name { } ''
+      testFailed=
+      checking() {
+        echo -n "Checking $1... " > /dev/stderr
+      }
+      ok() {
+        echo ok > /dev/stderr
+      }
+      nok() {
+        echo fail > /dev/stderr
+        testFailed=1
+      }
 
-    ${body}
+      ${body}
 
-    if test -n "$testFailed"; then
-      exit 1
-    fi
+      if test -n "$testFailed"; then
+        exit 1
+      fi
 
-    touch $out
-  '';
+      touch $out
+    '';
 
   check = cond: if cond then "ok" else "nok";
 in
@@ -42,12 +45,13 @@ in
 
   overrideAttrs-preserves-enabled-extensions =
     let
-      customPhp =
-        (php.withExtensions ({ all, ... }: [ all.imagick ])).overrideAttrs (attrs: {
-          postInstall = attrs.postInstall or "" + ''
+      customPhp = (php.withExtensions ({ all, ... }: [ all.imagick ])).overrideAttrs (attrs: {
+        postInstall =
+          attrs.postInstall or ""
+          + ''
             touch "$out/oApee-was-here"
           '';
-        });
+      });
     in
     runTest "php-test-overrideAttrs-preserves-enabled-extensions" ''
       php="${customPhp}"
@@ -66,20 +70,29 @@ in
 
   unwrapped-overrideAttrs-stacks =
     let
-      customPhp =
-        lib.pipe php.unwrapped [
-          (pkg: pkg.overrideAttrs (attrs: {
-            postInstall = attrs.postInstall or "" + ''
-              touch "$out/oAs-first"
-            '';
-          }))
+      customPhp = lib.pipe php.unwrapped [
+        (
+          pkg:
+          pkg.overrideAttrs (attrs: {
+            postInstall =
+              attrs.postInstall or ""
+              + ''
+                touch "$out/oAs-first"
+              '';
+          })
+        )
 
-          (pkg: pkg.overrideAttrs (attrs: {
-            postInstall = attrs.postInstall or "" + ''
-              touch "$out/oAs-second"
-            '';
-          }))
-        ];
+        (
+          pkg:
+          pkg.overrideAttrs (attrs: {
+            postInstall =
+              attrs.postInstall or ""
+              + ''
+                touch "$out/oAs-second"
+              '';
+          })
+        )
+      ];
     in
     runTest "php-test-unwrapped-overrideAttrs-stacks" ''
       checking "if first override remained"
@@ -91,20 +104,29 @@ in
 
   wrapped-overrideAttrs-stacks =
     let
-      customPhp =
-        lib.pipe php [
-          (pkg: pkg.overrideAttrs (attrs: {
-            postInstall = attrs.postInstall or "" + ''
-              touch "$out/oAs-first"
-            '';
-          }))
+      customPhp = lib.pipe php [
+        (
+          pkg:
+          pkg.overrideAttrs (attrs: {
+            postInstall =
+              attrs.postInstall or ""
+              + ''
+                touch "$out/oAs-first"
+              '';
+          })
+        )
 
-          (pkg: pkg.overrideAttrs (attrs: {
-            postInstall = attrs.postInstall or "" + ''
-              touch "$out/oAs-second"
-            '';
-          }))
-        ];
+        (
+          pkg:
+          pkg.overrideAttrs (attrs: {
+            postInstall =
+              attrs.postInstall or ""
+              + ''
+                touch "$out/oAs-second"
+              '';
+          })
+        )
+      ];
     in
     runTest "php-test-wrapped-overrideAttrs-stacks" ''
       checking "if first override remained"

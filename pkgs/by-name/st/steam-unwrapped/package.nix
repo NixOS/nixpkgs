@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, bash }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bash,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "steam-unwrapped";
@@ -10,7 +15,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Gia5182s4J4E3Ia1EeC5kjJX9mSltsr+b+1eRtEXtPk=";
   };
 
-  makeFlags = [ "DESTDIR=$(out)" "PREFIX=" ];
+  makeFlags = [
+    "DESTDIR=$(out)"
+    "PREFIX="
+  ];
 
   postInstall = ''
     rm $out/bin/steamdeps

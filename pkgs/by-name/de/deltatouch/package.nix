@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, cmake
-, intltool
-, libdeltachat
-, lomiri
-, qt5
-, quirc
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  cmake,
+  intltool,
+  libdeltachat,
+  lomiri,
+  qt5,
+  quirc,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -21,7 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-HVq6eiy2ufFg96oXwnSpv7fMDL1haWyIelBzFd7pfk0=";
     fetchSubmodules = true;
   };
-
 
   nativeBuildInputs = [
     qt5.wrapQtAppsHook

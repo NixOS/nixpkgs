@@ -1,11 +1,12 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, qca-qt5
-, kauth
-, kio
-, polkit-qt
-, util-linux
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  qca-qt5,
+  kauth,
+  kio,
+  polkit-qt,
+  util-linux,
 }:
 
 mkDerivation rec {
@@ -38,7 +39,15 @@ mkDerivation rec {
   meta = with lib; {
     description = "KDE Partition Manager core library";
     homepage = "https://invent.kde.org/system/kpmcore";
-    license = with licenses; [ cc-by-40 cc0 gpl3Plus mit ];
-    maintainers = with maintainers; [ peterhoeg oxalica ];
+    license = with licenses; [
+      cc-by-40
+      cc0
+      gpl3Plus
+      mit
+    ];
+    maintainers = with maintainers; [
+      peterhoeg
+      oxalica
+    ];
   };
 }

@@ -197,66 +197,7 @@ in
     ];
   };
 
-  avante-nvim = super.avante-nvim.overrideAttrs (
-    oldAttrs:
-    let
-      avante-nvim-lib = rustPlatform.buildRustPackage {
-        pname = "avante-nvim-lib";
-        inherit (oldAttrs) version src;
-
-        cargoHash = "sha256-PApZwqlu7GgCEvdTZVm1uB6ny6KSje1rL4Bzjt+iKF4=";
-
-        nativeBuildInputs = [
-          pkg-config
-        ];
-
-        buildInputs = [
-          openssl
-        ];
-
-        buildFeatures = [ "luajit" ];
-
-        checkFlags = [
-          # Disabled because they access the network.
-          "--skip=test_hf"
-          "--skip=test_public_url"
-          "--skip=test_roundtrip"
-        ];
-      };
-    in
-    {
-      dependencies = with self; [
-        dressing-nvim
-        nui-nvim
-        nvim-treesitter
-        plenary-nvim
-      ];
-
-      postInstall =
-        let
-          ext = stdenv.hostPlatform.extensions.sharedLibrary;
-        in
-        ''
-          mkdir -p $out/build
-          ln -s ${avante-nvim-lib}/lib/libavante_repo_map${ext} $out/build/avante_repo_map${ext}
-          ln -s ${avante-nvim-lib}/lib/libavante_templates${ext} $out/build/avante_templates${ext}
-          ln -s ${avante-nvim-lib}/lib/libavante_tokenizers${ext} $out/build/avante_tokenizers${ext}
-        '';
-
-      doInstallCheck = true;
-      nvimRequireCheck = "avante";
-
-      meta = {
-        description = "Neovim plugin designed to emulate the behaviour of the Cursor AI IDE";
-        homepage = "https://github.com/yetone/avante.nvim";
-        license = lib.licenses.asl20;
-        maintainers = with lib.maintainers; [
-          ttrei
-          aarnphm
-        ];
-      };
-    }
-  );
+  avante-nvim = callPackage ./avante-nvim { };
 
   aw-watcher-vim = super.aw-watcher-vim.overrideAttrs {
     patches = [

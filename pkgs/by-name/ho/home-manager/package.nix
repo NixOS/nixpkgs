@@ -1,19 +1,20 @@
-{ lib
-, bash
-, coreutils
-, fetchFromGitHub
-, findutils
-, gettext
-, gnused
-, inetutils
-, installShellFiles
-, jq
-, less
-, ncurses
-, nixos-option
-, stdenvNoCC
-, unixtools
-, unstableGitUpdater
+{
+  lib,
+  bash,
+  coreutils,
+  fetchFromGitHub,
+  findutils,
+  gettext,
+  gnused,
+  inetutils,
+  installShellFiles,
+  jq,
+  less,
+  ncurses,
+  nixos-option,
+  stdenvNoCC,
+  unixtools,
+  unstableGitUpdater,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {

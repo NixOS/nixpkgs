@@ -35,7 +35,10 @@ buildPythonPackage rec {
   ];
 
   makeWrapperArgs = [
-    "--prefix" "PYTHONPATH" ":" "$PYTHONPATH"
+    "--prefix"
+    "PYTHONPATH"
+    ":"
+    "$PYTHONPATH"
   ];
 
   pythonRelaxDeps = [

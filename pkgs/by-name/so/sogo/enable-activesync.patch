@@ -5,7 +5,7 @@
  #import <NGExtensions/NSObject+Logs.h>
  
 -#include <wbxml/wbxml.h>
-+#include <libwbxml-1.0/wbxml/wbxml.h>
++#include <libwbxml-1.1/wbxml/wbxml.h>
  
  #define WBXMLDEBUG 0
  

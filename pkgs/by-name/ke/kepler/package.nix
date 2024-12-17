@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, darwin
-, fetchFromGitHub
-, openssl
-, pkg-config
-, postgresql
-, rustPlatform
-, zstd
+{
+  lib,
+  stdenv,
+  darwin,
+  fetchFromGitHub,
+  openssl,
+  pkg-config,
+  postgresql,
+  rustPlatform,
+  zstd,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,13 +27,15 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-    postgresql
-    zstd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  buildInputs =
+    [
+      openssl
+      postgresql
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+    ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;

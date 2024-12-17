@@ -1,11 +1,12 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, makeWrapper
-, go
-, testers
-, terraform-plugin-docs
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  makeWrapper,
+  go,
+  testers,
+  terraform-plugin-docs,
+  nix-update-script,
 }:
 
 buildGoModule rec {

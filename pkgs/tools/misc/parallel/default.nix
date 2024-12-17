@@ -1,4 +1,14 @@
-{ fetchurl, lib, stdenv, perl, makeWrapper, procps, coreutils, gawk, buildPackages }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  perl,
+  makeWrapper,
+  procps,
+  coreutils,
+  gawk,
+  buildPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "parallel";
@@ -9,11 +19,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-Gp51L0LBfKELwH0KY6LKbtzuUyKC5V0rNL2d0UyXilg=";
   };
 
-  outputs = [ "out" "man" "doc" ];
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
 
   strictDeps = true;
-  nativeBuildInputs = [ makeWrapper perl ];
-  buildInputs = [ perl procps ];
+  nativeBuildInputs = [
+    makeWrapper
+    perl
+  ];
+  buildInputs = [
+    perl
+    procps
+  ];
 
   postPatch = lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     substituteInPlace Makefile.in \
@@ -26,7 +46,14 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/parallel \
-      --prefix PATH : "${lib.makeBinPath [ procps perl coreutils gawk ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          procps
+          perl
+          coreutils
+          gawk
+        ]
+      }"
   '';
 
   doCheck = true;
@@ -53,7 +80,10 @@ stdenv.mkDerivation rec {
     homepage = "https://www.gnu.org/software/parallel/";
     license = licenses.gpl3Plus;
     platforms = platforms.all;
-    maintainers = with maintainers; [ pSub tomberek ];
+    maintainers = with maintainers; [
+      pSub
+      tomberek
+    ];
     mainProgram = "parallel";
   };
 }

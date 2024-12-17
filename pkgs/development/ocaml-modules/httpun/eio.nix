@@ -1,6 +1,7 @@
-{ buildDunePackage
-, httpun
-, gluten-eio
+{
+  buildDunePackage,
+  httpun,
+  gluten-eio,
 }:
 
 buildDunePackage {
@@ -8,7 +9,10 @@ buildDunePackage {
 
   inherit (httpun) src version;
 
-  propagatedBuildInputs = [ gluten-eio httpun ];
+  propagatedBuildInputs = [
+    gluten-eio
+    httpun
+  ];
 
   meta = httpun.meta // {
     description = "EIO support for httpun";

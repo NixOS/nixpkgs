@@ -8,6 +8,10 @@ writeShellApplication {
   meta = with lib; {
     description = "Temporarily manipulate the NixOS firewall";
     license = licenses.mit;
-    maintainers = with maintainers; [ clerie rvfg garyguo ];
+    maintainers = with maintainers; [
+      clerie
+      rvfg
+      garyguo
+    ];
   };
 }

@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, woodpecker-plugin-git
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  woodpecker-plugin-git,
 }:
 
 buildGoModule rec {

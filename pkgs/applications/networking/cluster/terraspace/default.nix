@@ -1,11 +1,19 @@
-{ stdenv, lib, bundlerEnv, bundlerUpdateScript, makeWrapper, ruby }:
+{
+  stdenv,
+  lib,
+  bundlerEnv,
+  bundlerUpdateScript,
+  makeWrapper,
+  ruby,
+}:
 let
   rubyEnv = bundlerEnv {
     inherit ruby;
     name = "terraspace";
-    gemdir  = ./.;
+    gemdir = ./.;
   };
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "terraspace";
   version = (import ./gemset.nix).terraspace.version;
 
@@ -25,9 +33,9 @@ in stdenv.mkDerivation {
   meta = with lib; {
     description = "Terraform framework that provides an organized structure, and keeps your code DRY";
     mainProgram = "terraspace";
-    homepage    = "https://github.com/boltops-tools/terraspace";
-    license     = licenses.asl20;
-    platforms   = ruby.meta.platforms;
+    homepage = "https://github.com/boltops-tools/terraspace";
+    license = licenses.asl20;
+    platforms = ruby.meta.platforms;
     maintainers = with maintainers; [ mislavzanic ];
   };
 }

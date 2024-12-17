@@ -1,15 +1,27 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gengetopt, m4, gnupg
-, git, perl, autoconf, automake, help2man }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gengetopt,
+  m4,
+  gnupg,
+  git,
+  perl,
+  autoconf,
+  automake,
+  help2man,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mmv";
-  version = "2.8";
+  version = "2.10";
 
   src = fetchFromGitHub {
     owner = "rrthomas";
     repo = "mmv";
     rev = "v${version}";
-    hash = "sha256-2RxVGSanuSSNzKX5Hgo7QelfGmaG9wF0fvklqrrGszg=";
+    hash = "sha256-h+hdrIQz+7jKdMdJtWhBbZgvmNTIOr7Q38nhfAWC+G4=";
     fetchSubmodules = true;
   };
 
@@ -17,7 +29,17 @@ stdenv.mkDerivation rec {
     ./bootstrap
   '';
 
-  nativeBuildInputs = [ gengetopt m4 git gnupg perl autoconf automake help2man pkg-config ];
+  nativeBuildInputs = [
+    gengetopt
+    m4
+    git
+    gnupg
+    perl
+    autoconf
+    automake
+    help2man
+    pkg-config
+  ];
 
   enableParallelBuilding = true;
 

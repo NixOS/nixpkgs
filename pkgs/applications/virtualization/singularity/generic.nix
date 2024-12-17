@@ -209,16 +209,14 @@ in
     # Patching the hard-coded defaultPath by prefixing the packages in defaultPathInputs
     ${lib.concatMapAttrsStringSep "\n" (fileName: originalDefaultPaths: ''
       substituteInPlace ${lib.escapeShellArg fileName} \
-        ${
-          lib.concatMapStringsSep " \\\n  " (
-            originalDefaultPath:
-            lib.concatStringsSep " " [
-              "--replace-fail"
-              (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
-              (addShellDoubleQuotes ''$systemDefaultPath''${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}''${inputsDefaultPath:+:}$inputsDefaultPath'')
-            ]
-          ) originalDefaultPaths
-        }
+        ${lib.concatMapStringsSep " \\\n  " (
+          originalDefaultPath:
+          lib.concatStringsSep " " [
+            "--replace-fail"
+            (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
+            (addShellDoubleQuotes ''$systemDefaultPath''${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}''${inputsDefaultPath:+:}$inputsDefaultPath'')
+          ]
+        ) originalDefaultPaths}
     '') sourceFilesWithDefaultPaths}
 
     substituteInPlace internal/pkg/util/gpu/nvidia.go \

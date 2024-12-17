@@ -1,7 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, perlPackages }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  perlPackages,
+}:
 
-let version = "2.02";
-in stdenv.mkDerivation {
+let
+  version = "2.02";
+in
+stdenv.mkDerivation {
   pname = "cloc";
   inherit version;
 
@@ -24,7 +32,11 @@ in stdenv.mkDerivation {
     RegexpCommon
   ];
 
-  makeFlags = [ "prefix=" "DESTDIR=$(out)" "INSTALL=install" ];
+  makeFlags = [
+    "prefix="
+    "DESTDIR=$(out)"
+    "INSTALL=install"
+  ];
 
   postFixup = "wrapProgram $out/bin/cloc --prefix PERL5LIB : $PERL5LIB";
 

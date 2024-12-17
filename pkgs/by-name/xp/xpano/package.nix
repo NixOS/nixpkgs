@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, ninja
-, opencv
-, SDL2
-, gtk3
-, catch2_3
-, spdlog
-, exiv2
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  ninja,
+  opencv,
+  SDL2,
+  gtk3,
+  catch2_3,
+  spdlog,
+  exiv2,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

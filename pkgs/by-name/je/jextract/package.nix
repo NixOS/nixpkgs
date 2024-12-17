@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeBinaryWrapper
-, gradle
-, jdk23
-, llvmPackages
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeBinaryWrapper,
+  gradle,
+  jdk23,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation {
@@ -48,7 +49,10 @@ stdenv.mkDerivation {
     homepage = "https://github.com/openjdk/jextract";
     platforms = jdk23.meta.platforms;
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ jlesquembre sharzy ];
+    maintainers = with maintainers; [
+      jlesquembre
+      sharzy
+    ];
     # Not yet updated for JDK 23
     broken = true;
   };

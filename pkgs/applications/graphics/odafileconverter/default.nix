@@ -1,13 +1,26 @@
-{ lib, stdenv, mkDerivation, dpkg, fetchurl, qtbase }:
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  dpkg,
+  fetchurl,
+  qtbase,
+}:
 
 let
   # To obtain the version you will need to run the following command:
   #
   # dpkg-deb -I ${odafileconverter.src} | grep Version
   version = "21.11.0.0";
-  rpath = "$ORIGIN:${lib.makeLibraryPath [ stdenv.cc.cc qtbase ]}";
+  rpath = "$ORIGIN:${
+    lib.makeLibraryPath [
+      stdenv.cc.cc
+      qtbase
+    ]
+  }";
 
-in mkDerivation {
+in
+mkDerivation {
   pname = "oda-file-converter";
   inherit version;
   nativeBuildInputs = [ dpkg ];

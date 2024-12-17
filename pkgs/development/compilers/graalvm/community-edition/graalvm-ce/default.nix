@@ -1,7 +1,8 @@
-{ stdenv
-, fetchurl
-, graalvmCEPackages
-, useMusl ? false
+{
+  stdenv,
+  fetchurl,
+  graalvmCEPackages,
+  useMusl ? false,
 }:
 
 graalvmCEPackages.buildGraalvm {

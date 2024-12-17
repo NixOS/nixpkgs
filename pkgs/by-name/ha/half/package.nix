@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchzip }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+}:
 
 stdenv.mkDerivation rec {
   version = "2.2.0";

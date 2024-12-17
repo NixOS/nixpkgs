@@ -1,24 +1,26 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, expat
-, fmt_11
-, proj
-, bzip2
-, cli11
-, zlib
-, boost
-, postgresql
-, python3
-, withLuaJIT ? false
-, lua
-, luajit
-, libosmium
-, nlohmann_json
-, opencv
-, potrace
-, protozero
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  expat,
+  fmt_11,
+  proj,
+  bzip2,
+  cli11,
+  zlib,
+  boost,
+  postgresql,
+  python3,
+  withLuaJIT ? false,
+  lua,
+  luajit,
+  libosmium,
+  nlohmann_json,
+  opencv,
+  potrace,
+  protozero,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,22 +41,29 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [
-    boost
-    bzip2
-    cli11
-    expat
-    fmt_11
-    libosmium
-    nlohmann_json
-    opencv
-    postgresql
-    potrace
-    proj
-    protozero
-    (python3.withPackages (p: with p; [ psycopg2 pyosmium ]))
-    zlib
-  ] ++ lib.optional withLuaJIT luajit
+  buildInputs =
+    [
+      boost
+      bzip2
+      cli11
+      expat
+      fmt_11
+      libosmium
+      nlohmann_json
+      opencv
+      postgresql
+      potrace
+      proj
+      protozero
+      (python3.withPackages (
+        p: with p; [
+          psycopg2
+          pyosmium
+        ]
+      ))
+      zlib
+    ]
+    ++ lib.optional withLuaJIT luajit
     ++ lib.optional (!withLuaJIT) lua;
 
   cmakeFlags = [
@@ -73,6 +82,11 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://osm2pgsql.org";
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
-    maintainers = lib.teams.geospatial.members ++ (with lib.maintainers; [ jglukasik das-g ]);
+    maintainers =
+      lib.teams.geospatial.members
+      ++ (with lib.maintainers; [
+        jglukasik
+        das-g
+      ]);
   };
 })

@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation rec {
   pname = "emilua-this-thread";
-  version = "1.0.0";
+  version = "1.0.1";
 
   src = fetchFromGitLab {
     owner = "emilua";
     repo = "this-thread";
     rev = "v${version}";
-    hash = "sha256-JmAe69heZ406LE2aaSxQXJYu/iv1cS90KHecQJYoiKQ=";
+    hash = "sha256-AvvRHy5llxkYt7aRO0KepCX032hhxhOr/c680VBrnBQ=";
   };
 
   buildInputs = [

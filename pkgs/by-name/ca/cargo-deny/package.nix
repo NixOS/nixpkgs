@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, zstd
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  zstd,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,12 +25,14 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    zstd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   env = {
     ZSTD_SYS_USE_PKG_CONFIG = true;
@@ -43,7 +46,14 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-deny";
     homepage = "https://github.com/EmbarkStudios/cargo-deny";
     changelog = "https://github.com/EmbarkStudios/cargo-deny/blob/${version}/CHANGELOG.md";
-    license = with licenses; [ asl20 /* or */ mit ];
-    maintainers = with maintainers; [ figsoda matthiasbeyer jk ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with maintainers; [
+      figsoda
+      matthiasbeyer
+      jk
+    ];
   };
 }

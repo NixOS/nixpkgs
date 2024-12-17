@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, pkg-config, btrfs-progs, lvm2 }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  btrfs-progs,
+  lvm2,
+}:
 
 buildGoModule rec {
   pname = "dockle";
@@ -14,7 +21,10 @@ buildGoModule rec {
   vendorHash = "sha256-+AtvnplvPWkUwmxfB7rjYcLTQibQsObFT1QRR0FXAe0=";
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ btrfs-progs lvm2 ];
+  buildInputs = [
+    btrfs-progs
+    lvm2
+  ];
 
   ldflags = [
     "-s"

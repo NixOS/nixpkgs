@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 let
@@ -19,7 +20,10 @@ buildGoModule {
 
   vendorHash = "sha256-5s96L9KWeiS//21mQMn8ka82Uk4rMbq/8I+l67HTSA8=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = {
     description = "High-Performance, Low-Memory, Lightweight, Extensible Minecraft Reverse Proxy";
@@ -34,4 +38,3 @@ buildGoModule {
     mainProgram = "gate";
   };
 }
-

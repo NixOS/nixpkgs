@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchCrate
-, jq
-, moreutils
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+  jq,
+  moreutils,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -50,7 +51,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "samply";
     homepage = "https://github.com/mstange/samply";
     changelog = "https://github.com/mstange/samply/releases/tag/samply-v${version}";
-    license = with licenses; [ asl20 mit ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

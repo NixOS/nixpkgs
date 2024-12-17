@@ -1,4 +1,11 @@
-{ libsmbios, lib, stdenv, autoreconfHook, fetchFromGitHub, fetchpatch }:
+{
+  libsmbios,
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation {
   pname = "netperf";

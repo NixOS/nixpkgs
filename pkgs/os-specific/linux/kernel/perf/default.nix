@@ -1,43 +1,44 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, kernel
-, elfutils
-, python3
-, perl
-, newt
-, slang
-, asciidoc
-, xmlto
-, makeWrapper
-, docbook_xsl
-, docbook_xml_dtd_45
-, libxslt
-, flex
-, bison
-, pkg-config
-, libunwind
-, binutils-unwrapped
-, libiberty
-, audit
-, libbfd
-, libbfd_2_38
-, libopcodes
-, libopcodes_2_38
-, libpfm
-, libtraceevent
-, openssl
-, systemtap
-, numactl
-, zlib
-, babeltrace
-, withGtk ? false
-, gtk2
-, withZstd ? true
-, zstd
-, withLibcap ? true
-, libcap
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  kernel,
+  elfutils,
+  python3,
+  perl,
+  newt,
+  slang,
+  asciidoc,
+  xmlto,
+  makeWrapper,
+  docbook_xsl,
+  docbook_xml_dtd_45,
+  libxslt,
+  flex,
+  bison,
+  pkg-config,
+  libunwind,
+  binutils-unwrapped,
+  libiberty,
+  audit,
+  libbfd,
+  libbfd_2_38,
+  libopcodes,
+  libopcodes_2_38,
+  libpfm,
+  libtraceevent,
+  openssl,
+  systemtap,
+  numactl,
+  zlib,
+  babeltrace,
+  withGtk ? false,
+  gtk2,
+  withZstd ? true,
+  zstd,
+  withLibcap ? true,
+  libcap,
 }:
 let
   d3-flame-graph-templates = stdenv.mkDerivation rec {
@@ -59,48 +60,61 @@ stdenv.mkDerivation {
   pname = "perf-linux";
   inherit (kernel) version src;
 
-  patches = lib.optionals (lib.versionAtLeast kernel.version "5.10") [
-    # fix wrong path to dmesg
-    ./fix-dmesg-path.diff
-  ] ++ lib.optionals (lib.versions.majorMinor kernel.version == "6.10") [
-    (fetchpatch {
-      url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=0f0e1f44569061e3dc590cd0b8cb74d8fd53706b";
-      hash = "sha256-9u/zhbsDgwOr4T4k9td/WJYRuSHIfbtfS+oNx8nbOlM=";
-    })
-    (fetchpatch {
-      url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=366e17409f1f17ad872259ce4a4f8a92beb4c4ee";
-      hash = "sha256-NZK1u40qvMwWcgkgJPGpEax2eMo9xHrCQxSYYOK0rbo=";
-    })
-    (fetchpatch {
-      url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=1d302f626c2a23e4fd05bb810eff300e8f2174fd";
-      hash = "sha256-KhCmof8LkyTcBBpfMEtolL3m3kmC5rukKzQvufVKCdI=";
-    })
-  ];
+  patches =
+    lib.optionals (lib.versionAtLeast kernel.version "5.10") [
+      # fix wrong path to dmesg
+      ./fix-dmesg-path.diff
+    ]
+    ++ lib.optionals (lib.versions.majorMinor kernel.version == "6.10") [
+      (fetchpatch {
+        url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=0f0e1f44569061e3dc590cd0b8cb74d8fd53706b";
+        hash = "sha256-9u/zhbsDgwOr4T4k9td/WJYRuSHIfbtfS+oNx8nbOlM=";
+      })
+      (fetchpatch {
+        url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=366e17409f1f17ad872259ce4a4f8a92beb4c4ee";
+        hash = "sha256-NZK1u40qvMwWcgkgJPGpEax2eMo9xHrCQxSYYOK0rbo=";
+      })
+      (fetchpatch {
+        url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=1d302f626c2a23e4fd05bb810eff300e8f2174fd";
+        hash = "sha256-KhCmof8LkyTcBBpfMEtolL3m3kmC5rukKzQvufVKCdI=";
+      })
+    ];
 
-  postPatch = ''
-    # Linux scripts
-    patchShebangs scripts
-    patchShebangs tools/perf/check-headers.sh
-  '' + lib.optionalString (lib.versionAtLeast kernel.version "6.3") ''
-    # perf-specific scripts
-    patchShebangs tools/perf/pmu-events
-  '' + ''
-    cd tools/perf
+  postPatch =
+    ''
+      # Linux scripts
+      patchShebangs scripts
+      patchShebangs tools/perf/check-headers.sh
+    ''
+    + lib.optionalString (lib.versionAtLeast kernel.version "6.3") ''
+      # perf-specific scripts
+      patchShebangs tools/perf/pmu-events
+    ''
+    + ''
+      cd tools/perf
 
-    for x in util/build-id.c util/dso.c; do
-      substituteInPlace $x --replace /usr/lib/debug /run/current-system/sw/lib/debug
-    done
+      for x in util/build-id.c util/dso.c; do
+        substituteInPlace $x --replace /usr/lib/debug /run/current-system/sw/lib/debug
+      done
 
-  '' + lib.optionalString (lib.versionAtLeast kernel.version "5.8") ''
-    substituteInPlace scripts/python/flamegraph.py \
-      --replace "/usr/share/d3-flame-graph/d3-flamegraph-base.html" \
-      "${d3-flame-graph-templates}/share/d3-flame-graph/d3-flamegraph-base.html"
+    ''
+    + lib.optionalString (lib.versionAtLeast kernel.version "5.8") ''
+      substituteInPlace scripts/python/flamegraph.py \
+        --replace "/usr/share/d3-flame-graph/d3-flamegraph-base.html" \
+        "${d3-flame-graph-templates}/share/d3-flame-graph/d3-flamegraph-base.html"
 
-  '' + lib.optionalString (lib.versionAtLeast kernel.version "6.0") ''
-    patchShebangs pmu-events/jevents.py
-  '';
+    ''
+    + lib.optionalString (lib.versionAtLeast kernel.version "6.0") ''
+      patchShebangs pmu-events/jevents.py
+    '';
 
-  makeFlags = [ "prefix=$(out)" "WERROR=0" "ASCIIDOC8=1" ] ++ kernel.makeFlags
+  makeFlags =
+    [
+      "prefix=$(out)"
+      "WERROR=0"
+      "ASCIIDOC8=1"
+    ]
+    ++ kernel.makeFlags
     ++ lib.optional (!withGtk) "NO_GTK2=1"
     ++ lib.optional (!withZstd) "NO_LIBZSTD=1"
     ++ lib.optional (!withLibcap) "NO_LIBCAP=1";
@@ -123,32 +137,46 @@ stdenv.mkDerivation {
     python3
   ];
 
-  buildInputs = [
-    elfutils
-    newt
-    slang
-    libtraceevent
-    libunwind
-    zlib
-    openssl
-    numactl
-    python3
-    perl
-    babeltrace
-  ] ++ (if (lib.versionAtLeast kernel.version "5.19")
-  then [ libbfd libopcodes ]
-  else [ libbfd_2_38 libopcodes_2_38 ])
-  ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform systemtap) systemtap.stapBuild
-  ++ lib.optional withGtk gtk2
-  ++ lib.optional withZstd zstd
-  ++ lib.optional withLibcap libcap
-  ++ lib.optional (lib.versionAtLeast kernel.version "5.8") libpfm
-  ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3.pkgs.setuptools
-  # Python 3.12 no longer includes distutils, not needed for 6.0 and newer.
-  ++ lib.optional (!(lib.versionAtLeast kernel.version "6.0") && lib.versionAtLeast python3.version "3.12") [
-    python3.pkgs.distutils
-    python3.pkgs.packaging
-  ];
+  buildInputs =
+    [
+      elfutils
+      newt
+      slang
+      libtraceevent
+      libunwind
+      zlib
+      openssl
+      numactl
+      python3
+      perl
+      babeltrace
+    ]
+    ++ (
+      if (lib.versionAtLeast kernel.version "5.19") then
+        [
+          libbfd
+          libopcodes
+        ]
+      else
+        [
+          libbfd_2_38
+          libopcodes_2_38
+        ]
+    )
+    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform systemtap) systemtap.stapBuild
+    ++ lib.optional withGtk gtk2
+    ++ lib.optional withZstd zstd
+    ++ lib.optional withLibcap libcap
+    ++ lib.optional (lib.versionAtLeast kernel.version "5.8") libpfm
+    ++ lib.optional (lib.versionAtLeast kernel.version "6.0") python3.pkgs.setuptools
+    # Python 3.12 no longer includes distutils, not needed for 6.0 and newer.
+    ++
+      lib.optional
+        (!(lib.versionAtLeast kernel.version "6.0") && lib.versionAtLeast python3.version "3.12")
+        [
+          python3.pkgs.distutils
+          python3.pkgs.packaging
+        ];
 
   env.NIX_CFLAGS_COMPILE = toString [
     "-Wno-error=cpp"
@@ -159,7 +187,10 @@ stdenv.mkDerivation {
 
   doCheck = false; # requires "sparse"
 
-  installTargets = [ "install" "install-man" ];
+  installTargets = [
+    "install"
+    "install-man"
+  ];
 
   # TODO: Add completions based on perf-completion.sh
   postInstall = ''
@@ -174,7 +205,12 @@ stdenv.mkDerivation {
     # The embedded Python interpreter will search PATH to calculate the Python path configuration(Should be fixed by upstream).
     # Add python.interpreter to PATH for now.
     wrapProgram $out/bin/perf \
-      --prefix PATH : ${lib.makeBinPath [ binutils-unwrapped python3 ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          binutils-unwrapped
+          python3
+        ]
+      }
   '';
 
   meta = with lib; {

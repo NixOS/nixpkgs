@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, libusb1, pkg-config, pmutils, udev} :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libusb1,
+  pkg-config,
+  pmutils,
+  udev,
+}:
 
 let
   version = "2.1.1";
@@ -22,7 +30,11 @@ stdenv.mkDerivation {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libusb1 pmutils udev ];
+  buildInputs = [
+    libusb1
+    pmutils
+    udev
+  ];
 
   # shell thing didn't work so i replaced it using nix
   prePatch = ''

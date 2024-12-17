@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, unzip, fetchpatch }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  fetchpatch,
+}:
 
 stdenv.mkDerivation rec {
   pname = "chntpw";

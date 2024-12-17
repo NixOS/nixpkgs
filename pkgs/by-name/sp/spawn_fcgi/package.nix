@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchsvn, autoconf, automake }:
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  autoconf,
+  automake,
+}:
 
 stdenv.mkDerivation rec {
   pname = "spawn-fcgi";
@@ -9,17 +15,20 @@ stdenv.mkDerivation rec {
     sha256 = "07r6nwbg4881mdgp0hqh80c4x9wb7jg6cgc84ghwhfbd2abc2iq5";
   };
 
-  nativeBuildInputs = [ automake autoconf ];
+  nativeBuildInputs = [
+    automake
+    autoconf
+  ];
 
   preConfigure = ''
     ./autogen.sh
   '';
 
   meta = with lib; {
-    homepage    = "https://redmine.lighttpd.net/projects/spawn-fcgi";
+    homepage = "https://redmine.lighttpd.net/projects/spawn-fcgi";
     description = "Provides an interface to external programs that support the FastCGI interface";
     mainProgram = "spawn-fcgi";
-    license     = licenses.bsd3;
+    license = licenses.bsd3;
     maintainers = [ ];
     platforms = with platforms; unix;
   };

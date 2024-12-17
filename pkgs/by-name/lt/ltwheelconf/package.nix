@@ -1,4 +1,10 @@
-{ lib, stdenv, libusb1, pkg-config, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  libusb1,
+  pkg-config,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation {
   pname = "ltwheelconf";

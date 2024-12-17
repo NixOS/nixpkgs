@@ -1,4 +1,10 @@
-{ fetchurl, lib, stdenv, zstd, directoryListingUpdater }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  zstd,
+  directoryListingUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "diffstat";

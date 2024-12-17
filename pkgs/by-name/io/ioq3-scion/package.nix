@@ -1,4 +1,10 @@
-{ ioquake3, fetchFromGitHub, pan-bindings, libsodium, lib }:
+{
+  ioquake3,
+  fetchFromGitHub,
+  pan-bindings,
+  libsodium,
+  lib,
+}:
 ioquake3.overrideAttrs (old: {
   pname = "ioq3-scion";
   version = "unstable-2024-03-03";

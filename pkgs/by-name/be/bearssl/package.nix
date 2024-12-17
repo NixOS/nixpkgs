@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bearssl";
@@ -9,7 +13,12 @@ stdenv.mkDerivation rec {
     sha256 = "057zhgy9w4y8z2996r0pq5k2k39lpvmmvz4df8db8qa9f6hvn1b7";
   };
 
-  outputs = [ "bin" "lib" "dev" "out" ];
+  outputs = [
+    "bin"
+    "lib"
+    "dev"
+    "out"
+  ];
 
   enableParallelBuilding = true;
 

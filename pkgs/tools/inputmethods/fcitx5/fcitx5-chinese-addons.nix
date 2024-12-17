@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitHub
-, cmake
-, extra-cmake-modules
-, boost
-, libime
-, fcitx5
-, fcitx5-qt
-, fcitx5-lua
-, qtwebengine
-, opencc
-, curl
-, fmt
-, qtbase
-, luaSupport ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitHub,
+  cmake,
+  extra-cmake-modules,
+  boost,
+  libime,
+  fcitx5,
+  fcitx5-qt,
+  fcitx5-lua,
+  qtwebengine,
+  opencc,
+  curl,
+  fmt,
+  qtbase,
+  luaSupport ? true,
 }:
 
 let
@@ -73,7 +74,10 @@ stdenv.mkDerivation rec {
     description = "Addons related to Chinese, including IME previous bundled inside fcitx4";
     mainProgram = "scel2org5";
     homepage = "https://github.com/fcitx/fcitx5-chinese-addons";
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
     maintainers = with maintainers; [ poscat ];
     platforms = platforms.linux;
   };

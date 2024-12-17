@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, gtk-engine-murrine }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gtk-engine-murrine,
+}:
 
 stdenv.mkDerivation {
   pname = "omni-gtk-theme";

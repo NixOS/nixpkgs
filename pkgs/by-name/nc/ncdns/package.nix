@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchpatch
-, buildGoModule
-, fetchFromGitHub
-, nixosTests
-, libcap
-, go
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+  libcap,
+  go,
 }:
 
 let
@@ -83,7 +84,7 @@ buildGoModule {
 
   buildInputs = [ libcap ];
 
-  patches = [./fix-tpl-path.patch ];
+  patches = [ ./fix-tpl-path.patch ];
 
   # Put in our own lockfiles
   postPatch = ''

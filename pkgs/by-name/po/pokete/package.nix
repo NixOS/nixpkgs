@@ -1,9 +1,10 @@
-{ lib
-, python3
-, fetchFromGitHub
-, testers
-, pokete
-, faketty
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  testers,
+  pokete,
+  faketty,
 }:
 
 python3.pkgs.buildPythonApplication rec {

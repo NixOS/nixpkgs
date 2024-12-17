@@ -1,7 +1,19 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, autoreconfHook
-, gnutls, c-ares, libxml2, sqlite, zlib, libssh2
-, cppunit, sphinx
-, Security, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  autoreconfHook,
+  gnutls,
+  c-ares,
+  libxml2,
+  sqlite,
+  zlib,
+  libssh2,
+  cppunit,
+  sphinx,
+  Security,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,12 +28,28 @@ stdenv.mkDerivation rec {
   };
 
   strictDeps = true;
-  nativeBuildInputs = [ pkg-config autoreconfHook sphinx ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    sphinx
+  ];
 
-  buildInputs = [ gnutls c-ares libxml2 sqlite zlib libssh2 ] ++
-    lib.optional stdenv.hostPlatform.isDarwin Security;
+  buildInputs = [
+    gnutls
+    c-ares
+    libxml2
+    sqlite
+    zlib
+    libssh2
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin Security;
 
-  outputs = [ "bin" "dev" "out" "doc" "man" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "doc"
+    "man"
+  ];
 
   configureFlags = [
     "--with-ca-bundle=/etc/ssl/certs/ca-certificates.crt"
@@ -49,6 +77,10 @@ stdenv.mkDerivation rec {
     mainProgram = "aria2c";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ Br1ght0ne koral timhae ];
+    maintainers = with maintainers; [
+      Br1ght0ne
+      koral
+      timhae
+    ];
   };
 }

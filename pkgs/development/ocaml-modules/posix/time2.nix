@@ -1,4 +1,10 @@
-{ lib, buildDunePackage, posix-base, posix-types, unix-errno }:
+{
+  lib,
+  buildDunePackage,
+  posix-base,
+  posix-types,
+  unix-errno,
+}:
 
 buildDunePackage {
   pname = "posix-time2";
@@ -7,7 +13,11 @@ buildDunePackage {
 
   duneVersion = "3";
 
-  propagatedBuildInputs = [ posix-base posix-types unix-errno ];
+  propagatedBuildInputs = [
+    posix-base
+    posix-types
+    unix-errno
+  ];
 
   doCheck = true;
 

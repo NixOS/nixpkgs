@@ -84,13 +84,16 @@ llvmPackages.stdenv.mkDerivation (finalAttrs: {
       --replace-fail '[build_bpftool' "['${misbehaviorBash}', build_bpftool"
   '';
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    jq
-    pkg-config
-    zstd
-  ] ++ bpftools.buildInputs ++ bpftools.nativeBuildInputs;
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      jq
+      pkg-config
+      zstd
+    ]
+    ++ bpftools.buildInputs
+    ++ bpftools.nativeBuildInputs;
 
   buildInputs = [
     elfutils

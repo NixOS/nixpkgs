@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchurl, dpkg, autoPatchelfHook }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  autoPatchelfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mblock-mlink";

@@ -1,9 +1,10 @@
-{ lib
-, stdenvNoCC
-, hiawatha
-, curl
-, mbedtls
-, enableTls
+{
+  lib,
+  stdenvNoCC,
+  hiawatha,
+  curl,
+  mbedtls,
+  enableTls,
 }:
 
 stdenvNoCC.mkDerivation {

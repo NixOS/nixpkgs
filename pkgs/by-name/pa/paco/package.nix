@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, fetchpatch }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fetchpatch,
+}:
 
 buildGoModule rec {
   pname = "paco";
@@ -23,7 +28,10 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Simple compiled programming language";

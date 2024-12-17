@@ -1,4 +1,10 @@
-{ stdenv, fetchFromGitHub, lib, cmake, expat }:
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  cmake,
+  expat,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libwbxml";

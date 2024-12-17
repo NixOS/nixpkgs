@@ -1,17 +1,23 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, carapace }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  carapace,
+}:
 
 buildGoModule rec {
   pname = "carapace";
-  version = "1.0.7";
+  version = "1.1.0";
 
   src = fetchFromGitHub {
     owner = "carapace-sh";
     repo = "carapace-bin";
     rev = "v${version}";
-    hash = "sha256-ryFnccCSgQ0qEf3oRPmIO98fx2BlkK2dEFvNk2m9qSo=";
+    hash = "sha256-UUWZ/ZI8GTwvS8811Uzc8CjBsM/9ALxJLSFnzEE5pi4=";
   };
 
-  vendorHash = "sha256-biJN+WjNK/Fjjd3+ihZcFCu75fup3g9R6lIa6qHco5I=";
+  vendorHash = "sha256-Fd1tbeBfbGnhOfowas2lF90TwjoRwOuk5xx9GhYEiRc=";
 
   ldflags = [
     "-s"

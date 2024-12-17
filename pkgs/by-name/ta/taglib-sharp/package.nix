@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, which, pkg-config, mono }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  which,
+  pkg-config,
+  mono,
+}:
 
 stdenv.mkDerivation rec {
   pname = "taglib-sharp";
@@ -11,7 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "12pk4z6ag8w7kj6vzplrlasq5lwddxrww1w1ya5ivxrfki15h5cp";
   };
 
-  nativeBuildInputs = [ pkg-config autoreconfHook which ];
+  nativeBuildInputs = [
+    pkg-config
+    autoreconfHook
+    which
+  ];
   buildInputs = [ mono ];
 
   dontStrip = true;

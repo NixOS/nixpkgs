@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, binutils-unwrapped, patchelf, asterisk }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  binutils-unwrapped,
+  patchelf,
+  asterisk,
+}:
 stdenv.mkDerivation rec {
   pname = "asterisk-module-sccp";
   version = "4.3.5";
@@ -14,7 +21,10 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-asterisk=${asterisk}" ];
 
-  installFlags = [ "DESTDIR=/build/dest" "DATAROOTDIR=/build/dest" ];
+  installFlags = [
+    "DESTDIR=/build/dest"
+    "DATAROOTDIR=/build/dest"
+  ];
 
   postInstall = ''
     mkdir -p "$out"

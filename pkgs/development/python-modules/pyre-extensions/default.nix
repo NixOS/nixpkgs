@@ -19,7 +19,7 @@ buildPythonPackage {
 
   src = fetchPypi {
     inherit version;
-    pname = "pyre_extensions";  # changed pname on 0.0.31?
+    pname = "pyre_extensions"; # changed pname on 0.0.31?
     hash = "sha256-lFgG3TMCeFbPbkHJxK2s/6srVpk/h2L/TqeCb5XbBIE=";
   };
 

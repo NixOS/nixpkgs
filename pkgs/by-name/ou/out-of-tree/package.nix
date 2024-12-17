@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchgit, qemu, podman, makeWrapper }:
+{
+  lib,
+  buildGoModule,
+  fetchgit,
+  qemu,
+  podman,
+  makeWrapper,
+}:
 
 buildGoModule rec {
   pname = "out-of-tree";
@@ -18,7 +25,12 @@ buildGoModule rec {
 
   postFixup = ''
     wrapProgram $out/bin/out-of-tree \
-      --prefix PATH : "${lib.makeBinPath [ qemu podman ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          qemu
+          podman
+        ]
+      }"
   '';
 
   meta = with lib; {

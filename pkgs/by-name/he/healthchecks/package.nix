@@ -1,8 +1,9 @@
-{ lib
-, writeText
-, fetchFromGitHub
-, nixosTests
-, python3
+{
+  lib,
+  writeText,
+  fetchFromGitHub,
+  nixosTests,
+  python3,
 }:
 let
   py = python3.override {
@@ -14,14 +15,14 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "healthchecks";
-  version = "3.7";
+  version = "3.8";
   format = "other";
 
   src = fetchFromGitHub {
     owner = "healthchecks";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    sha256 = "sha256-pPO1ktPeiXKNryUe74Zeqd7q92yDs3kplEkwEfuvNh8=";
+    tag = "v${version}";
+    sha256 = "sha256-RVmIaobts6GT1I4pc5/kZblbo6CwwQ33m3xBruSXZss=";
   };
 
   propagatedBuildInputs = with py.pkgs; [
@@ -65,14 +66,14 @@ py.pkgs.buildPythonApplication rec {
 
     STATIC_ROOT = os.getenv("STATIC_ROOT")
 
-    ${lib.concatLines (map
-      (secret: ''
+    ${lib.concatLines (
+      map (secret: ''
         ${secret}_FILE = os.getenv("${secret}_FILE")
         if ${secret}_FILE:
             with open(${secret}_FILE, "r") as file:
                 ${secret} = file.readline()
-      '')
-      secrets)}
+      '') secrets
+    )}
   '';
 
   installPhase = ''

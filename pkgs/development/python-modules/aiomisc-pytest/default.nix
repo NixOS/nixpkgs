@@ -23,7 +23,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   pythonRelaxDeps = [ "pytest" ];
 
   buildInputs = [ pytest ];

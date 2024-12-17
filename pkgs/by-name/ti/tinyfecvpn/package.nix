@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tinyfecvpn";

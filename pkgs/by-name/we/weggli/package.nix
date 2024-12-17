@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, testers
-, weggli
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  testers,
+  weggli,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,6 +31,9 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/weggli-rs/weggli/releases/tag/v${version}";
     mainProgram = "weggli";
     license = licenses.asl20;
-    maintainers = with maintainers; [ arturcygan mfrw ];
+    maintainers = with maintainers; [
+      arturcygan
+      mfrw
+    ];
   };
 }

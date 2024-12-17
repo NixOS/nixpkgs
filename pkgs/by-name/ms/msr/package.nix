@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchzip
-, installShellFiles
+{
+  lib,
+  stdenv,
+  fetchzip,
+  installShellFiles,
 }:
 
 stdenv.mkDerivation rec {
@@ -36,6 +37,9 @@ stdenv.mkDerivation rec {
     mainProgram = "msr";
     license = licenses.bsd0;
     maintainers = with maintainers; [ AndersonTorres ];
-    platforms = [ "i686-linux" "x86_64-linux" ];
+    platforms = [
+      "i686-linux"
+      "x86_64-linux"
+    ];
   };
 }

@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, bash, coreutils, gdb, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  bash,
+  coreutils,
+  gdb,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "procdump";
@@ -22,7 +31,11 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [ zlib ];
-  buildInputs = [ bash coreutils gdb ];
+  buildInputs = [
+    bash
+    coreutils
+    gdb
+  ];
 
   postPatch = ''
     substituteInPlace src/CoreDumpWriter.c \

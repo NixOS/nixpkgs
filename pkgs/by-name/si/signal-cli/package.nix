@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchurl, makeWrapper, openjdk21_headless, libmatthew_java, dbus, dbus_java }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  makeWrapper,
+  openjdk21_headless,
+  libmatthew_java,
+  dbus,
+  dbus_java,
+}:
 
 stdenv.mkDerivation rec {
   pname = "signal-cli";
@@ -10,24 +19,35 @@ stdenv.mkDerivation rec {
     hash = "sha256-libAHGRdOinL48riMwKtacI5YlRw8JGoqOynVUCGyeA=";
   };
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ libmatthew_java dbus dbus_java ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libmatthew_java
+    dbus
+    dbus_java
+  ];
   nativeBuildInputs = [ makeWrapper ];
 
-  installPhase = ''
-    mkdir -p $out/bin
-    cp -r lib $out/lib
-    cp bin/signal-cli $out/bin/signal-cli
-  '' + (if stdenv.hostPlatform.isLinux then ''
-    makeWrapper ${openjdk21_headless}/bin/java $out/bin/signal-cli \
-      --set JAVA_HOME "${openjdk21_headless}" \
-      --add-flags "-classpath '$out/lib/*:${libmatthew_java}/lib/jni'" \
-      --add-flags "-Djava.library.path=${libmatthew_java}/lib/jni:${dbus_java}/share/java/dbus:$out/lib" \
-      --add-flags "org.asamk.signal.Main"
-  '' else ''
-    wrapProgram $out/bin/signal-cli \
-      --prefix PATH : ${lib.makeBinPath [ openjdk21_headless ]} \
-      --set JAVA_HOME ${openjdk21_headless}
-  '');
+  installPhase =
+    ''
+      mkdir -p $out/bin
+      cp -r lib $out/lib
+      cp bin/signal-cli $out/bin/signal-cli
+    ''
+    + (
+      if stdenv.hostPlatform.isLinux then
+        ''
+          makeWrapper ${openjdk21_headless}/bin/java $out/bin/signal-cli \
+            --set JAVA_HOME "${openjdk21_headless}" \
+            --add-flags "-classpath '$out/lib/*:${libmatthew_java}/lib/jni'" \
+            --add-flags "-Djava.library.path=${libmatthew_java}/lib/jni:${dbus_java}/share/java/dbus:$out/lib" \
+            --add-flags "org.asamk.signal.Main"
+        ''
+      else
+        ''
+          wrapProgram $out/bin/signal-cli \
+            --prefix PATH : ${lib.makeBinPath [ openjdk21_headless ]} \
+            --set JAVA_HOME ${openjdk21_headless}
+        ''
+    );
 
   # Execution in the macOS (10.13) sandbox fails with
   # dyld: Library not loaded: /System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa

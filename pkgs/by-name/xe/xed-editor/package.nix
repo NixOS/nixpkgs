@@ -1,21 +1,22 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, libxml2
-, libpeas
-, glib
-, gtk3
-, gtksourceview4
-, gspell
-, xapp
-, pkg-config
-, python3
-, meson
-, ninja
-, versionCheckHook
-, wrapGAppsHook3
-, intltool
-, itstool
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libxml2,
+  libpeas,
+  glib,
+  gtk3,
+  gtksourceview4,
+  gspell,
+  xapp,
+  pkg-config,
+  python3,
+  meson,
+  ninja,
+  versionCheckHook,
+  wrapGAppsHook3,
+  intltool,
+  itstool,
 }:
 
 stdenv.mkDerivation rec {
@@ -64,7 +65,10 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/xed";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ tu-maurice bobby285271 ];
+    maintainers = with maintainers; [
+      tu-maurice
+      bobby285271
+    ];
     mainProgram = "xed";
   };
 }

@@ -1,35 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, glib
-, expat
-, pam
-, meson
-, mesonEmulatorHook
-, ninja
-, perl
-, python3
-, gettext
-, duktape
-, gobject-introspection
-, libxslt
-, docbook-xsl-nons
-, dbus
-, docbook_xml_dtd_412
-, gtk-doc
-, coreutils
-, fetchpatch
-, useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal
-, systemdMinimal
-, elogind
-, buildPackages
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
-# A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
-# Not yet investigated; it may be due to the "Make netgroup support optional"
-# patch not updating the tests correctly yet, or doing something wrong,
-# or being unrelated to that.
-, doCheck ? (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl)
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  glib,
+  expat,
+  pam,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  perl,
+  python3,
+  gettext,
+  duktape,
+  gobject-introspection,
+  libxslt,
+  docbook-xsl-nons,
+  dbus,
+  docbook_xml_dtd_412,
+  gtk-doc,
+  coreutils,
+  fetchpatch,
+  useSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
+  systemdMinimal,
+  elogind,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
+  # A few tests currently fail on musl (polkitunixusertest, polkitunixgrouptest, polkitidentitytest segfault).
+  # Not yet investigated; it may be due to the "Make netgroup support optional"
+  # patch not updating the tests correctly yet, or doing something wrong,
+  # or being unrelated to that.
+  doCheck ? (stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl),
 }:
 
 let
@@ -40,7 +43,11 @@ stdenv.mkDerivation rec {
   pname = "polkit";
   version = "124";
 
-  outputs = [ "bin" "dev" "out" ]; # small man pages in $bin
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+  ]; # small man pages in $bin
 
   # Tarballs do not contain subprojects.
   src = fetchFromGitHub {
@@ -69,34 +76,39 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    glib
-    pkg-config
-    gettext
-    meson
-    ninja
-    perl
+  nativeBuildInputs =
+    [
+      glib
+      pkg-config
+      gettext
+      meson
+      ninja
+      perl
 
-    # man pages
-    libxslt
-    docbook-xsl-nons
-    docbook_xml_dtd_412
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-    gtk-doc
-  ] ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+      # man pages
+      libxslt
+      docbook-xsl-nons
+      docbook_xml_dtd_412
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      gtk-doc
+    ]
+    ++ lib.optionals (withIntrospection && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
-  buildInputs = [
-    expat
-    pam
-    dbus
-    duktape
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # On Linux, fall back to elogind when systemd support is off.
-    (if useSystemd then systemdMinimal else elogind)
-  ];
+  buildInputs =
+    [
+      expat
+      pam
+      dbus
+      duktape
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # On Linux, fall back to elogind when systemd support is off.
+      (if useSystemd then systemdMinimal else elogind)
+    ];
 
   propagatedBuildInputs = [
     glib # in .pc Requires
@@ -104,44 +116,49 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = [
     dbus
-    (python3.pythonOnBuildForHost.withPackages (pp: with pp; [
-      dbus-python
-      (python-dbusmock.overridePythonAttrs (attrs: {
-        # Avoid dependency cycle.
-        doCheck = false;
-      }))
-    ]))
+    (python3.pythonOnBuildForHost.withPackages (
+      pp: with pp; [
+        dbus-python
+        (python-dbusmock.overridePythonAttrs (attrs: {
+          # Avoid dependency cycle.
+          doCheck = false;
+        }))
+      ]
+    ))
   ];
 
-  env = {
-    PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
-    PKG_CONFIG_SYSTEMD_SYSUSERS_DIR = "${placeholder "out"}/lib/sysusers.d";
+  env =
+    {
+      PKG_CONFIG_SYSTEMD_SYSTEMDSYSTEMUNITDIR = "${placeholder "out"}/lib/systemd/system";
+      PKG_CONFIG_SYSTEMD_SYSUSERS_DIR = "${placeholder "out"}/lib/sysusers.d";
 
-    # HACK: We want to install policy files files to $out/share but polkit
-    # should read them from /run/current-system/sw/share on a NixOS system.
-    # Similarly for config files in /etc.
-    # With autotools, it was possible to override Make variables
-    # at install time but Meson does not support this
-    # so we need to convince it to install all files to a temporary
-    # location using DESTDIR and then move it to proper one in postInstall.
-    DESTDIR = "dest";
-  } // lib.optionalAttrs stdenv.cc.isGNU {
-    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
-  };
+      # HACK: We want to install policy files files to $out/share but polkit
+      # should read them from /run/current-system/sw/share on a NixOS system.
+      # Similarly for config files in /etc.
+      # With autotools, it was possible to override Make variables
+      # at install time but Meson does not support this
+      # so we need to convince it to install all files to a temporary
+      # location using DESTDIR and then move it to proper one in postInstall.
+      DESTDIR = "dest";
+    }
+    // lib.optionalAttrs stdenv.cc.isGNU {
+      NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+    };
 
-  mesonFlags = [
-    "--datadir=${system}/share"
-    "--sysconfdir=/etc"
-    "-Dpolkitd_user=polkituser" #TODO? <nixos> config.ids.uids.polkituser
-    "-Dos_type=redhat" # only affects PAM includes
-    "-Dintrospection=${lib.boolToString withIntrospection}"
-    "-Dtests=${lib.boolToString doCheck}"
-    "-Dgtk_doc=${lib.boolToString withIntrospection}"
-    "-Dman=true"
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    "-Dsession_tracking=${if useSystemd then "libsystemd-login" else "libelogind"}"
-  ];
-
+  mesonFlags =
+    [
+      "--datadir=${system}/share"
+      "--sysconfdir=/etc"
+      "-Dpolkitd_user=polkituser" # TODO? <nixos> config.ids.uids.polkituser
+      "-Dos_type=redhat" # only affects PAM includes
+      "-Dintrospection=${lib.boolToString withIntrospection}"
+      "-Dtests=${lib.boolToString doCheck}"
+      "-Dgtk_doc=${lib.boolToString withIntrospection}"
+      "-Dman=true"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      "-Dsession_tracking=${if useSystemd then "libsystemd-login" else "libelogind"}"
+    ];
 
   inherit doCheck;
 

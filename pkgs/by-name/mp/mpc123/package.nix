@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, gettext
-, libao
-, libmpcdec
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  gettext,
+  libao,
+  libmpcdec,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

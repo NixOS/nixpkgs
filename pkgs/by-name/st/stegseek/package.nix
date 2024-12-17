@@ -1,11 +1,13 @@
-{ lib, stdenv
-, cmake
-, fetchFromGitHub
-, libjpeg
-, libmcrypt
-, libmhash
-, libtool
-, zlib
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  libjpeg,
+  libmcrypt,
+  libmhash,
+  libtool,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {

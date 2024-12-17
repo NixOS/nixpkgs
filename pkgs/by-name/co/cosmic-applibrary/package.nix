@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, rustPlatform
-, just
-, pkg-config
-, makeBinaryWrapper
-, libxkbcommon
-, wayland
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  rustPlatform,
+  just,
+  pkg-config,
+  makeBinaryWrapper,
+  libxkbcommon,
+  wayland,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-applibrary";

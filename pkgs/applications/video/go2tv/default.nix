@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, Carbon
-, Cocoa
-, Kernel
-, UserNotifications
-, xorg
-, libglvnd
-, pkg-config
-, withGui ? true
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  Carbon,
+  Cocoa,
+  Kernel,
+  UserNotifications,
+  xorg,
+  libglvnd,
+  pkg-config,
+  withGui ? true,
 }:
 
 buildGoModule rec {
@@ -27,16 +28,23 @@ buildGoModule rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    xorg.libX11
-    xorg.libXcursor
-    xorg.libXrandr
-    xorg.libXinerama
-    xorg.libXi
-    xorg.libXext
-    xorg.libXxf86vm
-    libglvnd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa Kernel UserNotifications ];
+  buildInputs =
+    [
+      xorg.libX11
+      xorg.libXcursor
+      xorg.libXrandr
+      xorg.libXinerama
+      xorg.libXi
+      xorg.libXext
+      xorg.libXxf86vm
+      libglvnd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      Cocoa
+      Kernel
+      UserNotifications
+    ];
 
   ldflags = [
     "-s"

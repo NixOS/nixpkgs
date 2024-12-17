@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, installShellFiles, rustPlatform, Security }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  rustPlatform,
+  Security,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "jwt-cli";

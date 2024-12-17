@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, memstreamHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  memstreamHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hyx";

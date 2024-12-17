@@ -1,4 +1,9 @@
-{ lib, fetchFromGitHub, rustPlatform, wfa2-lib }:
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  wfa2-lib,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "biodiff";

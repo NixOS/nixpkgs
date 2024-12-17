@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -33,7 +34,7 @@ python3.pkgs.buildPythonApplication rec {
     description = "Command-line tool for vulnerability detection";
     homepage = "https://github.com/Latrodect/wss-repo-vulnerability-search-manager";
     license = licenses.mit;
-    maintainers = with maintainers; [ fab];
+    maintainers = with maintainers; [ fab ];
     mainProgram = "serpant";
   };
 }

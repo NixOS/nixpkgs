@@ -1,7 +1,8 @@
-{ stdenv
-, mlton
-, lib
-, fetchFromGitHub
+{
+  stdenv,
+  mlton,
+  lib,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,4 +40,3 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/dbohdan/initool/releases/tag/v${version}";
   };
 }
-

@@ -11,8 +11,7 @@ alephone.makeWrapper rec {
   };
 
   meta = {
-    description =
-      "30 level Marathon scenario, plus 225 secret levels for many extra hours of gameplay";
+    description = "30 level Marathon scenario, plus 225 secret levels for many extra hours of gameplay";
     homepage = "https://lochnits.com/marathon/yuge/";
   };
 }

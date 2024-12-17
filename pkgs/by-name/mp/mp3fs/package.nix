@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, flac
-, fuse
-, lame
-, libid3tag
-, libvorbis
-, autoreconfHook
-, pkg-config
-, pandoc
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  flac,
+  fuse,
+  lame,
+  libid3tag,
+  libvorbis,
+  autoreconfHook,
+  pkg-config,
+  pandoc,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,8 +29,18 @@ stdenv.mkDerivation rec {
       --replace "osxfuse_version()" "fuse_version()"
   '';
 
-  buildInputs = [ flac fuse lame libid3tag libvorbis ];
-  nativeBuildInputs = [ autoreconfHook pkg-config pandoc ];
+  buildInputs = [
+    flac
+    fuse
+    lame
+    libid3tag
+    libvorbis
+  ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    pandoc
+  ];
 
   enableParallelBuilding = true;
 

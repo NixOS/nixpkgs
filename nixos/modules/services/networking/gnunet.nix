@@ -1,35 +1,39 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.gnunet;
 
   stateDir = "/var/lib/gnunet";
 
-  configFile = with cfg;
-    ''
-      [PATHS]
-      GNUNET_HOME = ${stateDir}
-      GNUNET_RUNTIME_DIR = /run/gnunet
-      GNUNET_USER_RUNTIME_DIR = /run/gnunet
-      GNUNET_DATA_HOME = ${stateDir}/data
+  configFile = with cfg; ''
+    [PATHS]
+    GNUNET_HOME = ${stateDir}
+    GNUNET_RUNTIME_DIR = /run/gnunet
+    GNUNET_USER_RUNTIME_DIR = /run/gnunet
+    GNUNET_DATA_HOME = ${stateDir}/data
 
-      [ats]
-      WAN_QUOTA_IN = ${toString load.maxNetDownBandwidth} b
-      WAN_QUOTA_OUT = ${toString load.maxNetUpBandwidth} b
+    [ats]
+    WAN_QUOTA_IN = ${toString load.maxNetDownBandwidth} b
+    WAN_QUOTA_OUT = ${toString load.maxNetUpBandwidth} b
 
-      [datastore]
-      QUOTA = ${toString fileSharing.quota} MB
+    [datastore]
+    QUOTA = ${toString fileSharing.quota} MB
 
-      [transport-udp]
-      PORT = ${toString udp.port}
-      ADVERTISED_PORT = ${toString udp.port}
+    [transport-udp]
+    PORT = ${toString udp.port}
+    ADVERTISED_PORT = ${toString udp.port}
 
-      [transport-tcp]
-      PORT = ${toString tcp.port}
-      ADVERTISED_PORT = ${toString tcp.port}
+    [transport-tcp]
+    PORT = ${toString tcp.port}
+    ADVERTISED_PORT = ${toString tcp.port}
 
-      ${extraOptions}
-    '';
+    ${extraOptions}
+  '';
 
 in
 
@@ -63,7 +67,7 @@ in
       udp = {
         port = lib.mkOption {
           type = lib.types.port;
-          default = 2086;  # assigned by IANA
+          default = 2086; # assigned by IANA
           description = ''
             The UDP port for use by GNUnet.
           '';
@@ -73,7 +77,7 @@ in
       tcp = {
         port = lib.mkOption {
           type = lib.types.port;
-          default = 2086;  # assigned by IANA
+          default = 2086; # assigned by IANA
           description = ''
             The TCP port for use by GNUnet.
           '';
@@ -125,7 +129,6 @@ in
 
   };
 
-
   ###### implementation
 
   config = lib.mkIf config.services.gnunet.enable {
@@ -149,7 +152,10 @@ in
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       restartTriggers = [ config.environment.etc."gnunet.conf".source ];
-      path = [ cfg.package pkgs.miniupnpc ];
+      path = [
+        cfg.package
+        pkgs.miniupnpc
+      ];
       serviceConfig.ExecStart = "${cfg.package}/lib/gnunet/libexec/gnunet-service-arm -c /etc/gnunet.conf";
       serviceConfig.User = "gnunet";
       serviceConfig.UMask = "0007";

@@ -1,62 +1,71 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, pkg-config
-, cmake
-, rocm-cmake
-, clr
-, clang-tools-extra
-, openmp
-, rocblas
-, rocmlir
-, composable_kernel
-, miopengemm
-, miopen
-, protobuf
-, half
-, nlohmann_json
-, msgpack
-, sqlite
-, oneDNN_2
-, blaze
-, cppcheck
-, rocm-device-libs
-, texliveSmall
-, doxygen
-, sphinx
-, docutils
-, ghostscript
-, python3Packages
-, buildDocs ? false
-, buildTests ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  pkg-config,
+  cmake,
+  rocm-cmake,
+  clr,
+  clang-tools-extra,
+  openmp,
+  rocblas,
+  rocmlir,
+  composable_kernel,
+  miopengemm,
+  miopen,
+  protobuf,
+  half,
+  nlohmann_json,
+  msgpack,
+  sqlite,
+  oneDNN_2,
+  blaze,
+  cppcheck,
+  rocm-device-libs,
+  texliveSmall,
+  doxygen,
+  sphinx,
+  docutils,
+  ghostscript,
+  python3Packages,
+  buildDocs ? false,
+  buildTests ? false,
 }:
 
 let
-  latex = lib.optionalAttrs buildDocs (texliveSmall.withPackages (ps: with ps; [
-    latexmk
-    tex-gyre
-    fncychap
-    wrapfig
-    capt-of
-    framed
-    needspace
-    tabulary
-    varwidth
-    titlesec
-    epstopdf
-  ]));
-in stdenv.mkDerivation (finalAttrs: {
+  latex = lib.optionalAttrs buildDocs (
+    texliveSmall.withPackages (
+      ps: with ps; [
+        latexmk
+        tex-gyre
+        fncychap
+        wrapfig
+        capt-of
+        framed
+        needspace
+        tabulary
+        varwidth
+        titlesec
+        epstopdf
+      ]
+    )
+  );
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "migraphx";
   version = "5.7.1";
 
-  outputs = [
-    "out"
-  ] ++ lib.optionals buildDocs [
-    "doc"
-  ] ++ lib.optionals buildTests [
-    "test"
-  ];
+  outputs =
+    [
+      "out"
+    ]
+    ++ lib.optionals buildDocs [
+      "doc"
+    ]
+    ++ lib.optionals buildTests [
+      "test"
+    ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -65,22 +74,24 @@ in stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-lg3pxHBpwqxBvdOQgE44YKLuumhkVF6b3Xx4+cw7jNQ=";
   };
 
-  nativeBuildInputs = [
-    pkg-config
-    cmake
-    rocm-cmake
-    clr
-    clang-tools-extra
-    python3Packages.python
-  ] ++ lib.optionals buildDocs [
-    latex
-    doxygen
-    sphinx
-    docutils
-    ghostscript
-    python3Packages.sphinx-rtd-theme
-    python3Packages.breathe
-  ];
+  nativeBuildInputs =
+    [
+      pkg-config
+      cmake
+      rocm-cmake
+      clr
+      clang-tools-extra
+      python3Packages.python
+    ]
+    ++ lib.optionals buildDocs [
+      latex
+      doxygen
+      sphinx
+      docutils
+      ghostscript
+      python3Packages.sphinx-rtd-theme
+      python3Packages.breathe
+    ];
 
   buildInputs = [
     openmp
@@ -113,28 +124,31 @@ in stdenv.mkDerivation (finalAttrs: {
     "-DCMAKE_INSTALL_INCLUDEDIR=include"
   ];
 
-  postPatch = ''
-    # We need to not use hipcc and define the CXXFLAGS manually due to `undefined hidden symbol: tensorflow:: ...`
-    export CXXFLAGS+="--rocm-path=${clr} --rocm-device-lib-path=${rocm-device-libs}/amdgcn/bitcode"
-    patchShebangs tools
+  postPatch =
+    ''
+      # We need to not use hipcc and define the CXXFLAGS manually due to `undefined hidden symbol: tensorflow:: ...`
+      export CXXFLAGS+="--rocm-path=${clr} --rocm-device-lib-path=${rocm-device-libs}/amdgcn/bitcode"
+      patchShebangs tools
 
-    # `error: '__clang_hip_runtime_wrapper.h' file not found [clang-diagnostic-error]`
-    substituteInPlace CMakeLists.txt \
-      --replace "set(MIGRAPHX_TIDY_ERRORS ALL)" ""
+      # `error: '__clang_hip_runtime_wrapper.h' file not found [clang-diagnostic-error]`
+      substituteInPlace CMakeLists.txt \
+        --replace "set(MIGRAPHX_TIDY_ERRORS ALL)" ""
 
-    # JIT library was removed from composable_kernel...
-    # https://github.com/ROCm/composable_kernel/issues/782
-    substituteInPlace src/targets/gpu/CMakeLists.txt \
-      --replace " COMPONENTS jit_library" "" \
-      --replace " composable_kernel::jit_library" "" \
-      --replace "if(WIN32)" "if(TRUE)"
-  '' + lib.optionalString (!buildDocs) ''
-    substituteInPlace CMakeLists.txt \
-      --replace "add_subdirectory(doc)" ""
-  '' + lib.optionalString (!buildTests) ''
-    substituteInPlace CMakeLists.txt \
-      --replace "add_subdirectory(test)" ""
-  '';
+      # JIT library was removed from composable_kernel...
+      # https://github.com/ROCm/composable_kernel/issues/782
+      substituteInPlace src/targets/gpu/CMakeLists.txt \
+        --replace " COMPONENTS jit_library" "" \
+        --replace " composable_kernel::jit_library" "" \
+        --replace "if(WIN32)" "if(TRUE)"
+    ''
+    + lib.optionalString (!buildDocs) ''
+      substituteInPlace CMakeLists.txt \
+        --replace "add_subdirectory(doc)" ""
+    ''
+    + lib.optionalString (!buildTests) ''
+      substituteInPlace CMakeLists.txt \
+        --replace "add_subdirectory(test)" ""
+    '';
 
   # Unfortunately, it seems like we have to call make on this manually
   preInstall = lib.optionalString buildDocs ''
@@ -145,14 +159,16 @@ in stdenv.mkDerivation (finalAttrs: {
     cd -
   '';
 
-  postInstall = lib.optionalString buildDocs ''
-    mv ../doc/html $out/share/doc/migraphx
-    mv ../doc/pdf/MIGraphX.pdf $out/share/doc/migraphx
-  '' + lib.optionalString buildTests ''
-    mkdir -p $test/bin
-    mv bin/test_* $test/bin
-    patchelf $test/bin/test_* --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE"
-  '';
+  postInstall =
+    lib.optionalString buildDocs ''
+      mv ../doc/html $out/share/doc/migraphx
+      mv ../doc/pdf/MIGraphX.pdf $out/share/doc/migraphx
+    ''
+    + lib.optionalString buildTests ''
+      mkdir -p $test/bin
+      mv bin/test_* $test/bin
+      patchelf $test/bin/test_* --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE"
+    '';
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
@@ -166,6 +182,8 @@ in stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

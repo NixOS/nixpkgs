@@ -1,7 +1,20 @@
-{ lib, mkDerivation, fetchFromGitHub, fftw, qtbase, qtmultimedia, qmake, itstool, wrapQtAppsHook
-, alsaSupport ? true, alsa-lib ? null
-, jackSupport ? false, libjack2 ? null
-, portaudioSupport ? false, portaudio ? null }:
+{
+  lib,
+  mkDerivation,
+  fetchFromGitHub,
+  fftw,
+  qtbase,
+  qtmultimedia,
+  qmake,
+  itstool,
+  wrapQtAppsHook,
+  alsaSupport ? true,
+  alsa-lib ? null,
+  jackSupport ? false,
+  libjack2 ? null,
+  portaudioSupport ? false,
+  portaudio ? null,
+}:
 
 assert alsaSupport -> alsa-lib != null;
 assert jackSupport -> libjack2 != null;
@@ -18,8 +31,17 @@ mkDerivation rec {
     sha256 = "1q062pfwz2vr9hbfn29fv54ip3jqfd9r99nhpr8w7mn1csy38azx";
   };
 
-  nativeBuildInputs = [ qmake itstool wrapQtAppsHook ];
-  buildInputs = [ fftw qtbase qtmultimedia ]
+  nativeBuildInputs = [
+    qmake
+    itstool
+    wrapQtAppsHook
+  ];
+  buildInputs =
+    [
+      fftw
+      qtbase
+      qtmultimedia
+    ]
     ++ lib.optionals alsaSupport [ alsa-lib ]
     ++ lib.optionals jackSupport [ libjack2 ]
     ++ lib.optionals portaudioSupport [ portaudio ];

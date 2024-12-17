@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -16,7 +17,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-2RCIZS8oawaXtAYZDiLgNsco9llWCxNwQcA67F51rag=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   meta = with lib; {
     description = "Command-line tool that continuously monitors certificate transparency (CT) logs for newly issued SSL/TLS certificates";
@@ -26,4 +30,3 @@ buildGoModule rec {
     mainProgram = "gungnir";
   };
 }
-

@@ -7,7 +7,7 @@
 , cmake
 , desktopToDarwinBundle
 , fetchurl
-, fetchpatch
+, fd
 , gettext
 , ghostscript
 , glib
@@ -27,7 +27,6 @@
 , librevenge
 , librsvg
 , libsigcxx
-, libsoup_2_4
 , libvisio
 , libwpg
 , libXft
@@ -40,40 +39,43 @@
 , popt
 , potrace
 , python3
+, runCommand
 , substituteAll
 , wrapGAppsHook3
 , libepoxy
 , zlib
+, yq
 }:
 let
   python3Env = python3.withPackages
     (ps: with ps; [
+      # List taken almost verbatim from the output of nix-build -A inkscape.passthru.pythonDependencies
       appdirs
       beautifulsoup4
       cachecontrol
-    ]
-    # CacheControl requires extra runtime dependencies for FileCache
-    # https://gitlab.com/inkscape/extras/extension-manager/-/commit/9a4acde6c1c028725187ff5972e29e0dbfa99b06
-    ++ cachecontrol.optional-dependencies.filecache
-    ++ [
-      numpy
+      cssselect
+      filelock
+      inkex
       lxml
+      numpy
       packaging
       pillow
-      scour
+      pygobject3
       pyparsing
       pyserial
       requests
-      pygobject3
-    ] ++ inkex.propagatedBuildInputs);
+      scour
+      tinycss2
+      zstandard
+    ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "inkscape";
-  version = "1.3.2";
+  version = "1.4";
 
   src = fetchurl {
-    url = "https://inkscape.org/release/inkscape-${version}/source/archive/xz/dl/inkscape-${version}.tar.xz";
-    sha256 = "sha256-29GETcRD/l4Q0+mohxROX7ciOFL/8ZHPte963qsOCGs=";
+    url = "https://inkscape.org/release/inkscape-${finalAttrs.version}/source/archive/xz/dl/inkscape-${finalAttrs.version}.tar.xz";
+    sha256 = "sha256-xZqFRTtpmt3rzVHB3AdoTdlqEMiuxxaxlVHbUFYuE/U=";
   };
 
   # Inkscape hits the ARGMAX when linking on macOS. It appears to be
@@ -87,28 +89,12 @@ stdenv.mkDerivation rec {
       src = ./fix-python-paths.patch;
       # Python is used at run-time to execute scripts,
       # e.g., those from the "Effects" menu.
-      python3 = "${python3Env}/bin/python";
+      python3 = lib.getExe python3Env;
     })
     (substituteAll {
       # Fix path to ps2pdf binary
       src = ./fix-ps2pdf-path.patch;
       inherit ghostscript;
-    })
-
-    # Fix build with libxml2 2.12
-    # https://gitlab.com/inkscape/inkscape/-/merge_requests/6089
-    (fetchpatch {
-      url = "https://gitlab.com/inkscape/inkscape/-/commit/694d8ae43d06efff21adebf377ce614d660b24cd.patch";
-      hash = "sha256-9IXJzpZbNU5fnt7XKgqCzUDrwr08qxGwo8TqnL+xc6E=";
-    })
-
-    # Improve distribute along path precision
-    # https://gitlab.com/inkscape/extensions/-/issues/580
-    (fetchpatch {
-      url = "https://gitlab.com/inkscape/extensions/-/commit/c576043c195cd044bdfc975e6367afb9b655eb14.patch";
-      extraPrefix = "share/extensions/";
-      stripLen = 1;
-      hash = "sha256-D9HxBx8RNkD7hHuExJqdu3oqlrXX6IOUw9m9Gx6+Dr8=";
     })
   ];
 
@@ -119,7 +105,7 @@ stdenv.mkDerivation rec {
 
     # double-conversion is a dependency of 2geom
     substituteInPlace CMakeScripts/DefineDependsandFlags.cmake \
-      --replace 'find_package(DoubleConversion REQUIRED)' ""
+      --replace-fail 'find_package(DoubleConversion REQUIRED)' ""
   '';
 
   nativeBuildInputs = [
@@ -155,7 +141,6 @@ stdenv.mkDerivation rec {
     librevenge
     librsvg # for loading icons
     libsigcxx
-    libsoup_2_4
     libvisio
     libwpg
     libXft
@@ -182,14 +167,34 @@ stdenv.mkDerivation rec {
     done
   '';
 
-  passthru.tests.ps2pdf-plugin = callPackage ./test-ps2pdf-plugin.nix { };
+  passthru = {
+    tests = {
+      ps2pdf-plugin = callPackage ./test-ps2pdf-plugin.nix { };
+      inherit (python3.pkgs) inkex;
+    };
 
-  meta = with lib; {
+    pythonDependencies = runCommand "python-dependency-list" {
+      nativeBuildInputs = [
+        fd
+        yq
+      ];
+      inherit (finalAttrs) src;
+    } ''
+      unpackPhase
+      tomlq --slurp 'map(.tool.poetry.dependencies | to_entries | map(.key)) | flatten | map(ascii_downcase) | unique' $(fd pyproject.toml) > "$out"
+    '';
+  };
+
+  meta = {
     description = "Vector graphics editor";
     homepage = "https://www.inkscape.org";
-    license = licenses.gpl3Plus;
-    maintainers = [ maintainers.jtojnar ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [
+      jtojnar
+      x123
+      Luflosi
+    ];
+    platforms = lib.platforms.all;
     mainProgram = "inkscape";
     longDescription = ''
       Inkscape is a feature-rich vector graphics editor that edits
@@ -198,4 +203,4 @@ stdenv.mkDerivation rec {
       If you want to import .eps files install ps2edit.
     '';
   };
-}
+})

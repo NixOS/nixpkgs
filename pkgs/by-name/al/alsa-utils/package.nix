@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, directoryListingUpdater
-, fetchurl
-, alsa-lib
-, alsa-plugins
-, gettext
-, makeWrapper
-, ncurses
-, libsamplerate
-, pciutils
-, procps
-, which
-, fftw
-, pipewire
-, withPipewireLib ? true
-, symlinkJoin
+{
+  lib,
+  stdenv,
+  directoryListingUpdater,
+  fetchurl,
+  alsa-lib,
+  alsa-plugins,
+  gettext,
+  makeWrapper,
+  ncurses,
+  libsamplerate,
+  pciutils,
+  procps,
+  which,
+  fftw,
+  pipewire,
+  withPipewireLib ? true,
+  symlinkJoin,
 }:
 
 let
@@ -24,9 +25,7 @@ let
   # This is necessary because ALSA_PLUGIN_DIR must reference only one directory.
   plugin-dir = symlinkJoin {
     name = "all-plugins";
-    paths = map
-      (path: "${path}/lib/alsa-lib")
-      plugin-packages;
+    paths = map (path: "${path}/lib/alsa-lib") plugin-packages;
   };
 in
 stdenv.mkDerivation rec {
@@ -38,16 +37,33 @@ stdenv.mkDerivation rec {
     hash = "sha256-mLxmd9DAB0AGZ5BRgiMkoKsIea6lWKj2i1EXgNMM2SQ=";
   };
 
-  nativeBuildInputs = [ gettext makeWrapper ];
-  buildInputs = [ alsa-lib ncurses libsamplerate fftw ];
+  nativeBuildInputs = [
+    gettext
+    makeWrapper
+  ];
+  buildInputs = [
+    alsa-lib
+    ncurses
+    libsamplerate
+    fftw
+  ];
 
-  configureFlags = [ "--disable-xmlto" "--with-udev-rules-dir=$(out)/lib/udev/rules.d" ];
+  configureFlags = [
+    "--disable-xmlto"
+    "--with-udev-rules-dir=$(out)/lib/udev/rules.d"
+  ];
 
   installFlags = [ "ASOUND_STATE_DIR=$(TMPDIR)/dummy" ];
 
   postFixup = ''
     mv $out/bin/alsa-info.sh $out/bin/alsa-info
-    wrapProgram $out/bin/alsa-info --prefix PATH : "${lib.makeBinPath [ which pciutils procps ]}"
+    wrapProgram $out/bin/alsa-info --prefix PATH : "${
+      lib.makeBinPath [
+        which
+        pciutils
+        procps
+      ]
+    }"
     wrapProgram $out/bin/aplay --set-default ALSA_PLUGIN_DIR ${plugin-dir}
   '';
 

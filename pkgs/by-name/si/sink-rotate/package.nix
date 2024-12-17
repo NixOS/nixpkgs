@@ -1,9 +1,10 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pipewire
-, wireplumber
-, makeWrapper
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pipewire,
+  wireplumber,
+  makeWrapper,
 }:
 let
   version = "2.2.0";
@@ -38,4 +39,3 @@ rustPlatform.buildRustPackage {
     platforms = platforms.linux;
   };
 }
-

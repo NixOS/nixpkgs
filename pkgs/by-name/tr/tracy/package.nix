@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, capstone
-, darwin
-, dbus
-, freetype
-, glfw
-, hicolor-icon-theme
-, pkg-config
-, tbb
+  capstone,
+  darwin,
+  dbus,
+  freetype,
+  glfw,
+  hicolor-icon-theme,
+  pkg-config,
+  tbb,
 
-, withWayland ? stdenv.hostPlatform.isLinux
-, libxkbcommon
-, wayland
+  withWayland ? stdenv.hostPlatform.isLinux,
+  libxkbcommon,
+  wayland,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,36 +28,49 @@ stdenv.mkDerivation rec {
     hash = "sha256-DN1ExvQ5wcIUyhMAfiakFbZkDsx+5l8VMtYGvSdboPA=";
   };
 
-  patches = lib.optionals (stdenv.hostPlatform.isDarwin && !(lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11")) [
-    ./0001-remove-unifiedtypeidentifiers-framework
-  ];
+  patches =
+    lib.optionals
+      (stdenv.hostPlatform.isDarwin && !(lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11"))
+      [
+        ./0001-remove-unifiedtypeidentifiers-framework
+      ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    capstone
-    freetype
-    glfw
-  ] ++ lib.optionals (stdenv.hostPlatform.isLinux && withWayland) [
-    libxkbcommon
-    wayland
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    dbus
-    hicolor-icon-theme
-    tbb
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.Carbon
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11") [
-    darwin.apple_sdk.frameworks.UniformTypeIdentifiers
-  ];
+  buildInputs =
+    [
+      capstone
+      freetype
+      glfw
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && withWayland) [
+      libxkbcommon
+      wayland
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      dbus
+      hicolor-icon-theme
+      tbb
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.Carbon
+    ]
+    ++
+      lib.optionals
+        (stdenv.hostPlatform.isDarwin && lib.versionAtLeast stdenv.hostPlatform.darwinMinVersion "11")
+        [
+          darwin.apple_sdk.frameworks.UniformTypeIdentifiers
+        ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([ ]
+  env.NIX_CFLAGS_COMPILE = toString (
+    [ ]
     # Apple's compiler finds a format string security error on
     # ../../../server/TracyView.cpp:649:34, preventing building.
     ++ lib.optional stdenv.hostPlatform.isDarwin "-Wno-format-security"
     ++ lib.optional stdenv.hostPlatform.isLinux "-ltbb"
-    ++ lib.optional stdenv.cc.isClang "-faligned-allocation");
+    ++ lib.optional stdenv.cc.isClang "-faligned-allocation"
+  );
 
   buildPhase = ''
     runHook preBuild
@@ -72,35 +86,38 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    install -D -m 0755 capture/build/unix/capture-release $out/bin/capture
-    install -D -m 0755 csvexport/build/unix/csvexport-release $out/bin/tracy-csvexport
-    install -D -m 0755 import-chrome/build/unix/import-chrome-release $out/bin/import-chrome
-    install -D -m 0755 library/unix/libtracy-release.so $out/lib/libtracy.so
-    install -D -m 0755 profiler/build/unix/Tracy-release $out/bin/tracy
-    install -D -m 0755 update/build/unix/update-release $out/bin/update
+      install -D -m 0755 capture/build/unix/capture-release $out/bin/capture
+      install -D -m 0755 csvexport/build/unix/csvexport-release $out/bin/tracy-csvexport
+      install -D -m 0755 import-chrome/build/unix/import-chrome-release $out/bin/import-chrome
+      install -D -m 0755 library/unix/libtracy-release.so $out/lib/libtracy.so
+      install -D -m 0755 profiler/build/unix/Tracy-release $out/bin/tracy
+      install -D -m 0755 update/build/unix/update-release $out/bin/update
 
-    mkdir -p $out/include/Tracy/client
-    mkdir -p $out/include/Tracy/common
-    mkdir -p $out/include/Tracy/tracy
+      mkdir -p $out/include/Tracy/client
+      mkdir -p $out/include/Tracy/common
+      mkdir -p $out/include/Tracy/tracy
 
-    cp -p public/client/*.{h,hpp} $out/include/Tracy/client
-    cp -p public/common/*.{h,hpp} $out/include/Tracy/common
-    cp -p public/tracy/*.{h,hpp} $out/include/Tracy/tracy
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-    substituteInPlace extra/desktop/tracy.desktop \
-      --replace Exec=/usr/bin/tracy Exec=tracy
+      cp -p public/client/*.{h,hpp} $out/include/Tracy/client
+      cp -p public/common/*.{h,hpp} $out/include/Tracy/common
+      cp -p public/tracy/*.{h,hpp} $out/include/Tracy/tracy
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      substituteInPlace extra/desktop/tracy.desktop \
+        --replace Exec=/usr/bin/tracy Exec=tracy
 
-    install -D -m 0644 extra/desktop/application-tracy.xml $out/share/mime/packages/application-tracy.xml
-    install -D -m 0644 extra/desktop/tracy.desktop $out/share/applications/tracy.desktop
-    install -D -m 0644 icon/application-tracy.svg $out/share/icons/hicolor/scalable/apps/application-tracy.svg
-    install -D -m 0644 icon/icon.png $out/share/icons/hicolor/256x256/apps/tracy.png
-    install -D -m 0644 icon/icon.svg $out/share/icons/hicolor/scalable/apps/tracy.svg
-  '' + ''
-    runHook postInstall
-  '';
+      install -D -m 0644 extra/desktop/application-tracy.xml $out/share/mime/packages/application-tracy.xml
+      install -D -m 0644 extra/desktop/tracy.desktop $out/share/applications/tracy.desktop
+      install -D -m 0644 icon/application-tracy.svg $out/share/icons/hicolor/scalable/apps/application-tracy.svg
+      install -D -m 0644 icon/icon.png $out/share/icons/hicolor/256x256/apps/tracy.png
+      install -D -m 0644 icon/icon.svg $out/share/icons/hicolor/scalable/apps/tracy.svg
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -change libcapstone.4.dylib ${capstone}/lib/libcapstone.4.dylib $out/bin/tracy
@@ -112,6 +129,10 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.bsd3;
     mainProgram = "tracy";
-    maintainers = with maintainers; [ mpickering nagisa paveloom ];
+    maintainers = with maintainers; [
+      mpickering
+      nagisa
+      paveloom
+    ];
   };
 }

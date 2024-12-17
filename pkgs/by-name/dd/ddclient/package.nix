@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, perlPackages, autoreconfHook, perl, curl }:
+{
+  lib,
+  fetchFromGitHub,
+  perlPackages,
+  autoreconfHook,
+  perl,
+  curl,
+}:
 
 let
   myPerl = perl.withPackages (ps: [ ps.JSONPP ]);
@@ -22,7 +29,10 @@ perlPackages.buildPerlPackage rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ curl myPerl ];
+  buildInputs = [
+    curl
+    myPerl
+  ];
 
   # Prevent ddclient from picking up build time perl which is implicitly added
   # by buildPerlPackage.

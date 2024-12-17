@@ -1,11 +1,12 @@
-{ lib
-, fetchurl
-, nettools
-, openssl
-, readline
-, stdenv
-, which
-, buildPackages
+{
+  lib,
+  fetchurl,
+  nettools,
+  openssl,
+  readline,
+  stdenv,
+  which,
+  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -24,13 +25,19 @@ stdenv.mkDerivation rec {
       --replace /sbin/ifconfig ifconfig
   '';
 
-  buildInputs = [ openssl readline ];
+  buildInputs = [
+    openssl
+    readline
+  ];
 
   hardeningEnable = [ "pie" ];
 
   enableParallelBuilding = true;
 
-  nativeCheckInputs = [ which nettools ];
+  nativeCheckInputs = [
+    which
+    nettools
+  ];
   doCheck = false; # fails a bunch, hangs
 
   passthru.tests = lib.optionalAttrs stdenv.buildPlatform.isLinux {

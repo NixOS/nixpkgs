@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -42,8 +47,10 @@ in
     # Show manual login card.
     services.xserver.displayManager.lightdm.extraSeatDefaults = "greeter-show-manual-login=true";
 
-    environment.etc."lightdm/io.elementary.greeter.conf".source = "${pkgs.pantheon.elementary-greeter}/etc/lightdm/io.elementary.greeter.conf";
-    environment.etc."wingpanel.d/io.elementary.greeter.allowed".source = "${pkgs.pantheon.elementary-default-settings}/etc/wingpanel.d/io.elementary.greeter.allowed";
+    environment.etc."lightdm/io.elementary.greeter.conf".source =
+      "${pkgs.pantheon.elementary-greeter}/etc/lightdm/io.elementary.greeter.conf";
+    environment.etc."wingpanel.d/io.elementary.greeter.allowed".source =
+      "${pkgs.pantheon.elementary-default-settings}/etc/wingpanel.d/io.elementary.greeter.allowed";
 
   };
 }

@@ -16,17 +16,18 @@
   xorg,
   udev,
   vulkan-loader,
+  nativeWayland ? false,
 }:
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2024.1115.3";
+  version = "2024.1208.0";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
-    rev = version;
-    hash = "sha256-AZN/zgHV6ydImOd1zUjYqXJqq5o0XGnvNvTTL/mIrHg=";
+    tag = version;
+    hash = "sha256-cMPVtzoTxIUVZNNAqF+H0873ZsXGluFEXwNDp7zOq8c=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
@@ -69,10 +70,11 @@ buildDotnetModule rec {
     runHook preFixup
 
     wrapProgram $out/bin/osu! \
+      ${lib.optionalString nativeWayland "--set SDL_VIDEODRIVER wayland"} \
       --set OSU_EXTERNAL_UPDATE_PROVIDER 1
 
     for i in 16 32 48 64 96 128 256 512 1024; do
-      install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu!.png
+      install -D ./assets/lazer.png $out/share/icons/hicolor/''${i}x$i/apps/osu.png
     done
 
     ln -sft $out/lib/${pname} ${SDL2}/lib/libSDL2${stdenvNoCC.hostPlatform.extensions.sharedLibrary}
@@ -86,7 +88,7 @@ buildDotnetModule rec {
       desktopName = "osu!";
       name = "osu";
       exec = "osu!";
-      icon = "osu!";
+      icon = "osu";
       comment = "Rhythm is just a *click* away (no score submission or multiplayer, see osu-lazer-bin)";
       type = "Application";
       categories = [ "Game" ];

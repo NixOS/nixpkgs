@@ -1,17 +1,24 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libunibreak";
   version = "6.1";
 
-  src = let
-      rev_version = lib.replaceStrings ["."] ["_"] version;
-  in fetchFromGitHub {
-    owner = "adah1972";
-    repo = pname;
-    rev = "libunibreak_${rev_version}";
-    sha256 = "sha256-8yheb+XSvc1AqITjSutF+/4OWb4+7hweedKzhKJcE1Y=";
-  };
+  src =
+    let
+      rev_version = lib.replaceStrings [ "." ] [ "_" ] version;
+    in
+    fetchFromGitHub {
+      owner = "adah1972";
+      repo = pname;
+      rev = "libunibreak_${rev_version}";
+      sha256 = "sha256-8yheb+XSvc1AqITjSutF+/4OWb4+7hweedKzhKJcE1Y=";
+    };
 
   nativeBuildInputs = [ autoreconfHook ];
 

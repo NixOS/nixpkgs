@@ -1,5 +1,13 @@
-{ lib, stdenv, buildGoModule, fetchFromGitHub, installShellFiles, makeWrapper, pkg-config
-, withGui ? true, vte
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  pkg-config,
+  withGui ? true,
+  vte,
 }:
 
 buildGoModule rec {
@@ -15,7 +23,11 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  nativeBuildInputs = [ installShellFiles makeWrapper pkg-config ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+    pkg-config
+  ];
 
   buildInputs = lib.optional withGui vte;
 
@@ -25,14 +37,16 @@ buildGoModule rec {
     "-skip=TestPBcopy" # Requires impure pbcopy and pbpaste
   ];
 
-  postInstall = ''
-    cd ..
-    installManPage o.1
-    mv $out/bin/{orbiton,o}
-  '' + lib.optionalString withGui ''
-    make install-gui PREFIX=$out
-    wrapProgram $out/bin/og --prefix PATH : $out/bin
-  '';
+  postInstall =
+    ''
+      cd ..
+      installManPage o.1
+      mv $out/bin/{orbiton,o}
+    ''
+    + lib.optionalString withGui ''
+      make install-gui PREFIX=$out
+      wrapProgram $out/bin/og --prefix PATH : $out/bin
+    '';
 
   meta = with lib; {
     description = "Config-free text editor and IDE limited to VT100";

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libsaneUDevRuleNumber ? "49" }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libsaneUDevRuleNumber ? "49",
+}:
 
 stdenv.mkDerivation rec {
   pname = "brother-udev-rule-type1";

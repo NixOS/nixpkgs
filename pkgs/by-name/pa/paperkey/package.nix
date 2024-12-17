@@ -1,4 +1,8 @@
-{ fetchurl, lib, stdenv }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "paperkey";
@@ -30,6 +34,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.jabberwocky.com/software/paperkey/";
     license = licenses.gpl2Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ AndersonTorres peterhoeg ];
+    maintainers = with maintainers; [
+      AndersonTorres
+      peterhoeg
+    ];
   };
 }

@@ -1,4 +1,9 @@
-{ stdenvNoCC, lib, fetchFromGitHub, bash }:
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  bash,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "kubectl-node-shell";

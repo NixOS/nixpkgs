@@ -34,16 +34,16 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "${basename}-bin";
-  version = "2.4.1";
+  version = "2.5.3";
 
   src = {
     x86_64-linux = fetchurl {
       url = "https://github.com/streamlink/${basename}/releases/download/v${version}/${basename}-v${version}-linux64.tar.gz";
-      hash = "sha256-uzD61Q1XIthAwoJHb0H4sTdYkUj0qGeGs1h0XFeV03E=";
+      hash = "sha256-ue5Ehj/dLOIJNJVq0Pd6EbA1hkVPz5m+3chVvEXaH6U=";
     };
     i686-linux = fetchurl {
       url = "https://github.com/streamlink/${basename}/releases/download/v${version}/${basename}-v${version}-linux32.tar.gz";
-      hash = "sha256-akJEd94PmH9YeBud+l5+5QpbnzXAD0jDBKJM4h/t2EA=";
+      hash = "sha256-y252QhVsRakngdApOHgegMMhs61KTxL9gfPjBjaSKOI=";
     };
   }.${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
 

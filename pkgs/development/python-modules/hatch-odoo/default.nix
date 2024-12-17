@@ -20,7 +20,7 @@ buildPythonPackage rec {
     sha256 = "sha256-I3jaiG0Xu8B34q30p7zTs+FeBXUQiPKTAJLSVxE9gYE=";
   };
 
-  buildInputs = [hatch-vcs];
+  buildInputs = [ hatch-vcs ];
 
   propagatedBuildInputs =
     [
@@ -35,6 +35,6 @@ buildPythonPackage rec {
     description = "A hatch plugin to develop and package Odoo projects";
     homepage = "https://github.com/acsone/hatch-odoo";
     license = licenses.mit;
-    maintainers = with maintainers; [yajo];
+    maintainers = with maintainers; [ yajo ];
   };
 }

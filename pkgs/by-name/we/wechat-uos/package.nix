@@ -1,49 +1,50 @@
-{ stdenvNoCC
-, stdenv
-, lib
-, fetchurl
-, dpkg
-, nss
-, nspr
-, xorg
-, pango
-, zlib
-, atkmm
-, libdrm
-, libxkbcommon
-, xcbutilwm
-, xcbutilimage
-, xcbutilkeysyms
-, xcbutilrenderutil
-, mesa
-, alsa-lib
-, wayland
-, atk
-, qt6
-, at-spi2-atk
-, at-spi2-core
-, dbus
-, cups
-, gtk3
-, libxml2
-, cairo
-, freetype
-, fontconfig
-, vulkan-loader
-, gdk-pixbuf
-, libexif
-, ffmpeg
-, pulseaudio
-, systemd
-, libuuid
-, expat
-, bzip2
-, glib
-, libva
-, libGL
-, libnotify
-, buildFHSEnv
-, writeShellScript
+{
+  stdenvNoCC,
+  stdenv,
+  lib,
+  fetchurl,
+  dpkg,
+  nss,
+  nspr,
+  xorg,
+  pango,
+  zlib,
+  atkmm,
+  libdrm,
+  libxkbcommon,
+  xcbutilwm,
+  xcbutilimage,
+  xcbutilkeysyms,
+  xcbutilrenderutil,
+  mesa,
+  alsa-lib,
+  wayland,
+  atk,
+  qt6,
+  at-spi2-atk,
+  at-spi2-core,
+  dbus,
+  cups,
+  gtk3,
+  libxml2,
+  cairo,
+  freetype,
+  fontconfig,
+  vulkan-loader,
+  gdk-pixbuf,
+  libexif,
+  ffmpeg,
+  pulseaudio,
+  systemd,
+  libuuid,
+  expat,
+  bzip2,
+  glib,
+  libva,
+  libGL,
+  libnotify,
+  buildFHSEnv,
+  writeShellScript,
 }:
 let
   # zerocallusedregs hardening breaks WeChat
@@ -132,12 +133,12 @@ let
 
   sources = import ./sources.nix;
 
-  wechat = stdenvNoCC.mkDerivation
-    rec {
-      pname = "wechat-uos";
-      version = sources.version;
+  wechat = stdenvNoCC.mkDerivation rec {
+    pname = "wechat-uos";
+    version = sources.version;
 
-      src = {
+    src =
+      {
         x86_64-linux = fetchurl {
           url = sources.amd64_url;
           hash = sources.amd64_hash;
@@ -150,41 +151,49 @@ let
           url = sources.loongarch64_url;
           hash = sources.loongarch64_hash;
         };
-      }.${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
+      }
+      .${stdenv.system} or (throw "${pname}-${version}: ${stdenv.system} is unsupported.");
 
-      nativeBuildInputs = [ dpkg ];
+    nativeBuildInputs = [ dpkg ];
 
-      unpackPhase = ''
-        runHook preUnpack
+    unpackPhase = ''
+      runHook preUnpack
 
-        dpkg -x $src ./wechat-uos
+      dpkg -x $src ./wechat-uos
 
-        runHook postUnpack
-      '';
+      runHook postUnpack
+    '';
 
-      # Use ln for license to prevent being garbage collection
-      installPhase = ''
-        runHook preInstall
-        mkdir -p $out
+    # Use ln for license to prevent being garbage collection
+    installPhase = ''
+      runHook preInstall
+      mkdir -p $out
 
-        cp -r wechat-uos/* $out
+      cp -r wechat-uos/* $out
 
-        runHook postInstall
-      '';
+      runHook postInstall
+    '';
 
-      meta = with lib; {
-        description = "Messaging app";
-        homepage = "https://weixin.qq.com/";
-        license = licenses.unfree;
-        platforms = [ "x86_64-linux" "aarch64-linux" "loongarch64-linux" ];
-        sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-        maintainers = with maintainers; [ pokon548 xddxdd ];
-        mainProgram = "wechat-uos";
-      };
+    meta = with lib; {
+      description = "Messaging app";
+      homepage = "https://weixin.qq.com/";
+      license = licenses.unfree;
+      platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+        "loongarch64-linux"
+      ];
+      sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+      maintainers = with maintainers; [
+        pokon548
+        xddxdd
+      ];
+      mainProgram = "wechat-uos";
     };
+  };
 in
 buildFHSEnv {
-  inherit (wechat) name meta;
+  inherit (wechat) pname version meta;
   runScript = writeShellScript "wechat-uos-launcher" ''
     export QT_QPA_PLATFORM=xcb
     export QT_AUTO_SCREEN_SCALE_FACTOR=1
@@ -207,8 +216,6 @@ buildFHSEnv {
     cp -r ${wechat.outPath}/opt/apps/com.tencent.wechat/entries/applications/com.tencent.wechat.desktop $out/share/applications
     cp -r ${wechat.outPath}/opt/apps/com.tencent.wechat/entries/icons/* $out/share/icons/
 
-    mv $out/bin/$name $out/bin/wechat-uos
-
     substituteInPlace $out/share/applications/com.tencent.wechat.desktop \
       --replace-quiet 'Exec=/usr/bin/wechat' "Exec=$out/bin/wechat-uos --"
   '';
@@ -216,5 +223,10 @@ buildFHSEnv {
 
   passthru.updateScript = ./update.sh;
 
-  extraOutputsToInstall = [ "usr" "var/lib/uos" "var/uos" "etc" ];
+  extraOutputsToInstall = [
+    "usr"
+    "var/lib/uos"
+    "var/uos"
+    "etc"
+  ];
 }

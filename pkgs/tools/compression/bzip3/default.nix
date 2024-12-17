@@ -1,16 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "bzip3";
   version = "1.4.0";
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+  ];
 
   src = fetchFromGitHub {
     owner = "kspalaiologos";

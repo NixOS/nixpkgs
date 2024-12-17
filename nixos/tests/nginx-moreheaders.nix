@@ -2,26 +2,28 @@ import ./make-test-python.nix {
   name = "nginx-more-headers";
 
   nodes = {
-    webserver = { pkgs, ... }: {
-      services.nginx = {
-        enable = true;
+    webserver =
+      { pkgs, ... }:
+      {
+        services.nginx = {
+          enable = true;
 
-        virtualHosts.test = {
-          locations = {
-            "/".return = "200 blub";
-            "/some" =  {
-              return = "200 blub";
-              extraConfig = ''
-                more_set_headers "Referrer-Policy: no-referrer";
-              '';
+          virtualHosts.test = {
+            locations = {
+              "/".return = "200 blub";
+              "/some" = {
+                return = "200 blub";
+                extraConfig = ''
+                  more_set_headers "Referrer-Policy: no-referrer";
+                '';
+              };
             };
+            extraConfig = ''
+              more_set_headers "X-Powered-By: nixos";
+            '';
           };
-          extraConfig = ''
-            more_set_headers "X-Powered-By: nixos";
-          '';
         };
       };
-    };
   };
 
   testScript = ''

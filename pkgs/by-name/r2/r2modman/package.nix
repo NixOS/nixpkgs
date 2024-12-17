@@ -1,26 +1,27 @@
-{ lib
-, stdenv
-, yarn
-, fetchYarnDeps
-, fixup-yarn-lock
-, nodejs
-, electron
-, fetchFromGitHub
-, nix-update-script
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  yarn,
+  fetchYarnDeps,
+  fixup-yarn-lock,
+  nodejs,
+  electron,
+  fetchFromGitHub,
+  nix-update-script,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "r2modman";
-  version = "3.1.54";
+  version = "3.1.55";
 
   src = fetchFromGitHub {
     owner = "ebkr";
     repo = "r2modmanPlus";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-hsaFtQW/awhnBFS6xqDtRvzkzr/afzojYecgglsc3K8=";
+    hash = "sha256-gFQzZUuKEMcD34OlRuNNA2edzs2tQXm8hl3r6PIEUrE=";
   };
 
   offlineCache = fetchYarnDeps {
@@ -99,7 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
       desktopName = "r2modman";
       comment = finalAttrs.meta.description;
       categories = [ "Game" ];
-      keywords = [ "launcher" "mod manager" "thunderstore" ];
+      keywords = [
+        "launcher"
+        "mod manager"
+        "thunderstore"
+      ];
     })
   ];
 
@@ -111,7 +116,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/ebkr/r2modmanPlus";
     license = lib.licenses.mit;
     mainProgram = "r2modman";
-    maintainers = with lib.maintainers; [ aidalgol huantian ];
+    maintainers = with lib.maintainers; [
+      aidalgol
+      huantian
+    ];
     inherit (electron.meta) platforms;
   };
 })

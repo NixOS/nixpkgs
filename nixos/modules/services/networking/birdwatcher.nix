@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.birdwatcher;
 in
@@ -10,7 +15,10 @@ in
       flags = lib.mkOption {
         default = [ ];
         type = lib.types.listOf lib.types.str;
-        example = [ "-worker-pool-size 16" "-6" ];
+        example = [
+          "-worker-pool-size 16"
+          "-6"
+        ];
         description = ''
           Flags to append to the program call
         '';
@@ -69,8 +77,10 @@ in
   };
 
   config =
-    let flagsStr = lib.escapeShellArgs cfg.flags;
-    in lib.mkIf cfg.enable {
+    let
+      flagsStr = lib.escapeShellArgs cfg.flags;
+    in
+    lib.mkIf cfg.enable {
       environment.etc."birdwatcher/birdwatcher.conf".source = pkgs.writeTextFile {
         name = "birdwatcher.conf";
         text = cfg.settings;

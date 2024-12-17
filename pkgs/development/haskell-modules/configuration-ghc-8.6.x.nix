@@ -39,7 +39,11 @@ self: super: {
   stm = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
-  terminfo = if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then null else doDistribute self.terminfo_0_4_1_6;
+  terminfo =
+    if pkgs.stdenv.hostPlatform == pkgs.stdenv.buildPlatform then
+      null
+    else
+      doDistribute self.terminfo_0_4_1_6;
   text = null;
   time = null;
   transformers = null;
@@ -61,7 +65,7 @@ self: super: {
   unordered-containers = dontCheck super.unordered-containers;
 
   # Test suite does not compile.
-  data-clist = doJailbreak super.data-clist;  # won't cope with QuickCheck 2.12.x
+  data-clist = doJailbreak super.data-clist; # won't cope with QuickCheck 2.12.x
   dates = doJailbreak super.dates; # base >=4.9 && <4.12
   Diff = dontCheck super.Diff;
   equivalence = dontCheck super.equivalence; # test suite doesn't compile https://github.com/pa-ba/equivalence/issues/5

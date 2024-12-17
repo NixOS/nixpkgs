@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, fetchpatch, SDL, ncurses, libtcod, makeDesktopItem }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  SDL,
+  ncurses,
+  libtcod,
+  makeDesktopItem,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "brogue";
@@ -26,7 +35,11 @@ stdenv.mkDerivation (finalAttrs: {
     rm -rf src/libtcod*
   '';
 
-  buildInputs = [ SDL ncurses libtcod ];
+  buildInputs = [
+    SDL
+    ncurses
+    libtcod
+  ];
 
   desktopItem = makeDesktopItem {
     name = "brogue";
@@ -35,7 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     comment = "Brave the Dungeons of Doom!";
     icon = "brogue";
     exec = "brogue";
-    categories = [ "Game" "AdventureGame" ];
+    categories = [
+      "Game"
+      "AdventureGame"
+    ];
   };
 
   installPhase = ''
@@ -47,14 +63,20 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   # fix crash; shouldn’t be a security risk because it’s an offline game
-  hardeningDisable = [ "stackprotector" "fortify" ];
+  hardeningDisable = [
+    "stackprotector"
+    "fortify"
+  ];
 
   meta = with lib; {
     description = "Roguelike game";
     mainProgram = "brogue";
     homepage = "https://sites.google.com/site/broguegame/";
     license = licenses.agpl3Plus;
-    maintainers =  with maintainers; [ AndersonTorres fgaz ];
+    maintainers = with maintainers; [
+      AndersonTorres
+      fgaz
+    ];
     platforms = [ "x86_64-linux" ];
   };
 })

@@ -1,6 +1,18 @@
-{ stdenv, fetchurl, pkg-config, darwin, lib
-, zlib, ghostscript, imagemagick, plotutils, gd
-, libjpeg, libwebp, libiconv, makeWrapper
+{
+  stdenv,
+  fetchurl,
+  pkg-config,
+  darwin,
+  lib,
+  zlib,
+  ghostscript,
+  imagemagick,
+  plotutils,
+  gd,
+  libjpeg,
+  libwebp,
+  libiconv,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,12 +24,31 @@ stdenv.mkDerivation rec {
     hash = "sha256-RZdlq3NssQ+VVKesAsXqfzVcbC6fz9IXYRx9UQKxB2s=";
   };
 
-  outputs = [ "out" "dev" ];
-  nativeBuildInputs = [ makeWrapper pkg-config ];
-  buildInputs = [ zlib ghostscript imagemagick plotutils gd libjpeg libwebp ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin (with darwin.apple_sdk.frameworks; [
-    libiconv ApplicationServices
-  ]);
+  outputs = [
+    "out"
+    "dev"
+  ];
+  nativeBuildInputs = [
+    makeWrapper
+    pkg-config
+  ];
+  buildInputs =
+    [
+      zlib
+      ghostscript
+      imagemagick
+      plotutils
+      gd
+      libjpeg
+      libwebp
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
+      with darwin.apple_sdk.frameworks;
+      [
+        libiconv
+        ApplicationServices
+      ]
+    );
 
   # '@LIBPNG_LDFLAGS@' is no longer substituted by autoconf (the code is commented out)
   # so we need to remove it from the pkg-config file as well

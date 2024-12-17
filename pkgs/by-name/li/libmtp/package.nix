@@ -1,15 +1,16 @@
-{ stdenv
-, autoconf
-, automake
-, fetchFromGitHub
-, fetchpatch
-, gettext
-, lib
-, libiconv
-, libtool
-, libusb1
-, pkg-config
-, buildPackages
+{
+  stdenv,
+  autoconf,
+  automake,
+  fetchFromGitHub,
+  fetchpatch,
+  gettext,
+  lib,
+  libiconv,
+  libtool,
+  libusb1,
+  pkg-config,
+  buildPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -31,7 +32,11 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  outputs = [ "bin" "dev" "out" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+  ];
 
   nativeBuildInputs = [
     autoconf
@@ -49,11 +54,16 @@ stdenv.mkDerivation rec {
 
   configureFlags = [ "--with-udev=${placeholder "out"}/lib/udev" ];
 
-  configurePlatforms = [ "build" "host" ];
-
-  makeFlags = lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    "MTP_HOTPLUG=${buildPackages.libmtp}/bin/mtp-hotplug"
+  configurePlatforms = [
+    "build"
+    "host"
   ];
+
+  makeFlags =
+    lib.optionals (stdenv.hostPlatform.isLinux && !stdenv.buildPlatform.canExecute stdenv.hostPlatform)
+      [
+        "MTP_HOTPLUG=${buildPackages.libmtp}/bin/mtp-hotplug"
+      ];
 
   enableParallelBuilding = true;
 

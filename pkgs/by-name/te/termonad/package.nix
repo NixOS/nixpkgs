@@ -1,8 +1,15 @@
-{ stdenv, haskellPackages, makeWrapper, packages ? (pkgSet: []), nixosTests }:
+{
+  stdenv,
+  haskellPackages,
+  makeWrapper,
+  packages ? (pkgSet: [ ]),
+  nixosTests,
+}:
 
 let
   termonadEnv = haskellPackages.ghcWithPackages (self: [ self.termonad ] ++ packages self);
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "termonad-with-packages";
   inherit (termonadEnv) version;
 

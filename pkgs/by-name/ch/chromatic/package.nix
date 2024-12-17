@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, meson
-, ninja
-, pkg-config
-, rustc
-, cargo
-, wrapGAppsHook4
-, desktop-file-utils
-, libxml2
-, libadwaita
-, portaudio
-, libpulseaudio
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
+  cargo,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  libxml2,
+  libadwaita,
+  portaudio,
+  libpulseaudio,
 }:
 
 stdenv.mkDerivation rec {

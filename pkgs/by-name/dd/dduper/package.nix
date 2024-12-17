@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchpatch, fetchFromGitHub, btrfs-progs, python3 }:
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchFromGitHub,
+  btrfs-progs,
+  python3,
+}:
 
 let
   btrfsProgsPatched = btrfs-progs.overrideAttrs {
@@ -9,10 +16,12 @@ let
       })
     ];
   };
-  py3 = python3.withPackages (ps: with ps; [
-    prettytable
-    numpy
-  ]);
+  py3 = python3.withPackages (
+    ps: with ps; [
+      prettytable
+      numpy
+    ]
+  );
 in
 stdenv.mkDerivation rec {
   pname = "dduper";

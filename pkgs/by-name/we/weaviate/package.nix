@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -18,7 +19,11 @@ buildGoModule rec {
 
   subPackages = [ "cmd/weaviate-server" ];
 
-  ldflags = [ "-w" "-extldflags" "-static" ];
+  ldflags = [
+    "-w"
+    "-extldflags"
+    "-static"
+  ];
 
   postInstall = ''
     ln -s $out/bin/weaviate-server $out/bin/weaviate

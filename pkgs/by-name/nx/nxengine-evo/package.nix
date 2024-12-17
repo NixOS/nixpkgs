@@ -61,18 +61,21 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -e "s,/usr/share/,$out/share/," src/ResourceManager.cpp
   '';
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    cd ..
-    mkdir -p $out/bin/ $out/share/nxengine/
-    install bin/* $out/bin/
-  '' + ''
-    cp -r ${finalAttrs.finalPackage.assets}/share/nxengine/data $out/share/nxengine/data
-    chmod -R a=r,a+X $out/share/nxengine/data
-  '' + ''
-    runHook postInstall
-  '';
+      cd ..
+      mkdir -p $out/bin/ $out/share/nxengine/
+      install bin/* $out/bin/
+    ''
+    + ''
+      cp -r ${finalAttrs.finalPackage.assets}/share/nxengine/data $out/share/nxengine/data
+      chmod -R a=r,a+X $out/share/nxengine/data
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   passthru = {
     assets = callPackage ./assets.nix { };

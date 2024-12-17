@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitea
-, pkg-config
-, xz
+{
+  lib,
+  rustPlatform,
+  fetchFromGitea,
+  pkg-config,
+  xz,
 }:
 
 rustPlatform.buildRustPackage rec {

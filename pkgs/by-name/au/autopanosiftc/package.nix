@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, cmake, libpng, libtiff, libjpeg, panotools, libxml2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  libpng,
+  libtiff,
+  libjpeg,
+  panotools,
+  libxml2,
+}:
 
 stdenv.mkDerivation rec {
   pname = "autopano-sift-C";
@@ -10,7 +20,13 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libpng libtiff libjpeg panotools libxml2 ];
+  buildInputs = [
+    libpng
+    libtiff
+    libjpeg
+    panotools
+    libxml2
+  ];
 
   patches = [
     (fetchurl {

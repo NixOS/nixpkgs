@@ -1,7 +1,19 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
-  inherit (lib) mkEnableOption mkPackageOption mkOption types mkIf maintainers;
+  inherit (lib)
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    types
+    mkIf
+    maintainers
+    ;
 
   cfg = config.security.isolate;
   configFile = pkgs.writeText "isolate-config.cf" ''

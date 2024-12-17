@@ -1,10 +1,11 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, stdenv
-, darwin
-, alsa-lib
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  stdenv,
+  darwin,
+  alsa-lib,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -25,11 +26,13 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AudioUnit
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.AudioUnit
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ];
 
   meta = with lib; {
     description = "Cross-platform music live coding in terminal";

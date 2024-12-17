@@ -18,14 +18,17 @@ python3Packages.buildPythonApplication rec {
 
   build-system = with python3Packages; [ poetry-core ];
 
-  dependencies = with python3Packages; [
-    chardet
-    cyclonedx-python-lib
-    packageurl-python
-    pip-requirements-parser
-    packaging
-    tomli
-  ] ++ cyclonedx-python-lib.optional-dependencies.validation;
+  dependencies =
+    with python3Packages;
+    [
+      chardet
+      cyclonedx-python-lib
+      packageurl-python
+      pip-requirements-parser
+      packaging
+      tomli
+    ]
+    ++ cyclonedx-python-lib.optional-dependencies.validation;
 
   pythonImportsCheck = [ "cyclonedx" ];
 

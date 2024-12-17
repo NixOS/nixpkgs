@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-man";
@@ -21,4 +25,3 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [ matthiasbeyer ];
   };
 }
-

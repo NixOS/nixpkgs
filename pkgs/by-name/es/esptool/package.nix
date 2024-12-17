@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, softhsm
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  softhsm,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -42,11 +43,14 @@ python3Packages.buildPythonApplication rec {
     hsm = [ python-pkcs11 ];
   };
 
-  nativeCheckInputs = with python3Packages; [
-    pyelftools
-    pytestCheckHook
-    softhsm
-  ] ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs =
+    with python3Packages;
+    [
+      pyelftools
+      pytestCheckHook
+      softhsm
+    ]
+    ++ lib.flatten (lib.attrValues optional-dependencies);
 
   # tests mentioned in `.github/workflows/test_esptool.yml`
   checkPhase = ''
@@ -71,7 +75,13 @@ python3Packages.buildPythonApplication rec {
     description = "ESP8266 and ESP32 serial bootloader utility";
     homepage = "https://github.com/espressif/esptool";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ dezgeg dotlambda ] ++ teams.lumiguide.members;
+    maintainers =
+      with maintainers;
+      [
+        dezgeg
+        dotlambda
+      ]
+      ++ teams.lumiguide.members;
     platforms = with platforms; linux ++ darwin;
     mainProgram = "esptool.py";
   };

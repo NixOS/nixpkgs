@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildPostgresqlExtension
-, fetchFromGitHub
-, perl
-, perlPackages
-, postgresql
-, postgresqlTestHook
-, which
+{
+  lib,
+  stdenv,
+  buildPostgresqlExtension,
+  fetchFromGitHub,
+  perl,
+  perlPackages,
+  postgresql,
+  postgresqlTestHook,
+  which,
 }:
 
 buildPostgresqlExtension (finalAttrs: {
@@ -20,13 +21,21 @@ buildPostgresqlExtension (finalAttrs: {
     sha256 = "sha256-YgvfLGF7pLVcCKD66NnWAydDxtoYHH1DpLiYTEKHJ0E=";
   };
 
-  nativeBuildInputs = [ postgresql perl perlPackages.TAPParserSourceHandlerpgTAP which ];
+  nativeBuildInputs = [
+    postgresql
+    perl
+    perlPackages.TAPParserSourceHandlerpgTAP
+    which
+  ];
 
   passthru.tests.extension = stdenv.mkDerivation {
     name = "pgtap-test";
     dontUnpack = true;
     doCheck = true;
-    nativeCheckInputs = [ postgresqlTestHook (postgresql.withPackages (_: [ finalAttrs.finalPackage ])) ];
+    nativeCheckInputs = [
+      postgresqlTestHook
+      (postgresql.withPackages (_: [ finalAttrs.finalPackage ]))
+    ];
     passAsFile = [ "sql" ];
     sql = ''
       CREATE EXTENSION pgtap;

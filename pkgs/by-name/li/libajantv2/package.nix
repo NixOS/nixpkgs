@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, ninja
-, pkg-config
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  pkg-config,
 }:
 
 # Warning: We are aware that the upstream changed and there are new releases,
@@ -20,7 +21,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-h5PKWMwqTeI5/EaTWkjYojuvDU0FyMpzIjWB98UOJwc=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     cmake

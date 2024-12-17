@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchFromGitHub
-, cmake
-, boost
-, eigen
-, hdf5
-, mpiSupport ? hdf5.mpiSupport
-, mpi ? hdf5.mpi
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  boost,
+  eigen,
+  hdf5,
+  mpiSupport ? hdf5.mpiSupport,
+  mpi ? hdf5.mpi,
 }:
 
 assert mpiSupport -> mpi != null;
@@ -23,7 +25,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ cmake ];
 
-  buildInputs = [ boost eigen hdf5 ];
+  buildInputs = [
+    boost
+    eigen
+    hdf5
+  ];
 
   passthru = {
     inherit mpiSupport mpi;
@@ -35,8 +41,7 @@ stdenv.mkDerivation rec {
     "-DHIGHFIVE_EXAMPLES=OFF"
     "-DHIGHFIVE_UNIT_TESTS=OFF"
     "-DHIGHFIVE_USE_INSTALL_DEPS=ON"
-  ]
-  ++ (lib.optionals mpiSupport [ "-DHIGHFIVE_PARALLEL_HDF5=ON" ]);
+  ] ++ (lib.optionals mpiSupport [ "-DHIGHFIVE_PARALLEL_HDF5=ON" ]);
 
   meta = with lib; {
     description = "Header-only C++ HDF5 interface";

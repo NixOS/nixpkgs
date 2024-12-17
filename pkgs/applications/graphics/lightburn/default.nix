@@ -1,7 +1,16 @@
-{ lib, stdenv, fetchurl, p7zip
-, nss, nspr, libusb1
-, qtbase, qtmultimedia, qtserialport, cups
-, autoPatchelfHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  p7zip,
+  nss,
+  nspr,
+  libusb1,
+  qtbase,
+  qtmultimedia,
+  qtserialport,
+  cups,
+  autoPatchelfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,8 +28,13 @@ stdenv.mkDerivation rec {
   };
 
   buildInputs = [
-    nss nspr libusb1
-    qtbase qtmultimedia qtserialport cups
+    nss
+    nspr
+    libusb1
+    qtbase
+    qtmultimedia
+    qtserialport
+    cups
   ];
 
   unpackPhase = ''

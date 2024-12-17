@@ -1,15 +1,16 @@
-{ mkDerivation
-, lib
-, extra-cmake-modules
-, kactivities
-, plasma-framework
-, kwindowsystem
-, networkmanager-qt
-, libksysguard
-, encfs
-, cryfs
-, fuse
-, gocryptfs
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kactivities,
+  plasma-framework,
+  kwindowsystem,
+  networkmanager-qt,
+  libksysguard,
+  encfs,
+  cryfs,
+  fuse,
+  gocryptfs,
 }:
 
 mkDerivation {

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, botan2, sqlite, libobjc, Security }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  botan2,
+  sqlite,
+  libobjc,
+  Security,
+}:
 
 stdenv.mkDerivation rec {
 
@@ -18,10 +26,15 @@ stdenv.mkDerivation rec {
     "--localstatedir=$out/var"
   ];
 
-  propagatedBuildInputs =
-    lib.optionals stdenv.hostPlatform.isDarwin [ libobjc Security ];
+  propagatedBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    libobjc
+    Security
+  ];
 
-  buildInputs = [ botan2 sqlite ];
+  buildInputs = [
+    botan2
+    sqlite
+  ];
 
   postInstall = "rm -rf $out/var";
 

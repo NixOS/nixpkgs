@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, perlPackages
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perlPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -14,7 +15,11 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   nativeBuildInputs = [ perlPackages.perl ];
-  buildInputs = with perlPackages; [ perl IOStringy TestOutput ];
+  buildInputs = with perlPackages; [
+    perl
+    IOStringy
+    TestOutput
+  ];
 
   doCheck = true;
 

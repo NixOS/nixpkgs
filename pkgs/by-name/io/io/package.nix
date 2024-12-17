@@ -1,7 +1,37 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, cmake, zlib, sqlite, gmp, libffi, cairo,
-  ncurses, freetype, libGLU, libGL, libpng, libtiff, libjpeg, readline, libsndfile,
-  libxml2, libglut, libsamplerate, pcre, libevent, libedit, yajl,
-  python3, openssl, glfw, pkg-config, libpthreadstubs, libXdmcp, libmemcached
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  zlib,
+  sqlite,
+  gmp,
+  libffi,
+  cairo,
+  ncurses,
+  freetype,
+  libGLU,
+  libGL,
+  libpng,
+  libtiff,
+  libjpeg,
+  readline,
+  libsndfile,
+  libxml2,
+  libglut,
+  libsamplerate,
+  pcre,
+  libevent,
+  libedit,
+  yajl,
+  python3,
+  openssl,
+  glfw,
+  pkg-config,
+  libpthreadstubs,
+  libXdmcp,
+  libmemcached,
 }:
 
 stdenv.mkDerivation {
@@ -28,11 +58,33 @@ stdenv.mkDerivation {
   ];
 
   buildInputs = [
-    zlib sqlite gmp libffi cairo ncurses freetype
-    libGLU libGL libpng libtiff libjpeg readline libsndfile libxml2
-    libglut libsamplerate pcre libevent libedit yajl
-    glfw openssl libpthreadstubs libXdmcp
-    libmemcached python3
+    zlib
+    sqlite
+    gmp
+    libffi
+    cairo
+    ncurses
+    freetype
+    libGLU
+    libGL
+    libpng
+    libtiff
+    libjpeg
+    readline
+    libsndfile
+    libxml2
+    libglut
+    libsamplerate
+    pcre
+    libevent
+    libedit
+    yajl
+    glfw
+    openssl
+    libpthreadstubs
+    libXdmcp
+    libmemcached
+    python3
   ];
 
   preConfigure = ''

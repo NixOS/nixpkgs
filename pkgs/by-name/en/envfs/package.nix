@@ -1,4 +1,9 @@
-{ rustPlatform, lib, fetchFromGitHub, nixosTests }:
+{
+  rustPlatform,
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+}:
 rustPlatform.buildRustPackage rec {
   pname = "envfs";
   version = "1.0.6";

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.security.please;
   ini = pkgs.formats.ini { };
@@ -79,15 +84,20 @@ in
         rule = ".*";
         require_pass = cfg.wheelNeedsPassword;
       };
-      wheel_edit_as_any = wheel_run_as_any // { type = "edit"; };
-      wheel_list_as_any = wheel_run_as_any // { type = "list"; };
+      wheel_edit_as_any = wheel_run_as_any // {
+        type = "edit";
+      };
+      wheel_list_as_any = wheel_run_as_any // {
+        type = "list";
+      };
     };
 
     environment = {
       systemPackages = [ cfg.package ];
 
-      etc."please.ini".source = ini.generate "please.ini"
-        (cfg.settings // (rec {
+      etc."please.ini".source = ini.generate "please.ini" (
+        cfg.settings
+        // (rec {
           # The "root" user is allowed to do anything by default and this cannot
           # be overridden.
           root_run_as_any = {
@@ -97,9 +107,14 @@ in
             rule = ".*";
             require_pass = false;
           };
-          root_edit_as_any = root_run_as_any // { type = "edit"; };
-          root_list_as_any = root_run_as_any // { type = "list"; };
-        }));
+          root_edit_as_any = root_run_as_any // {
+            type = "edit";
+          };
+          root_list_as_any = root_run_as_any // {
+            type = "list";
+          };
+        })
+      );
     };
 
     security.pam.services.please = {

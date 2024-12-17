@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, buildPythonApplication
-, setuptools
-, setuptools-scm
-, wheel
-, nss
-, nix-update-script
-, stdenv
+{
+  lib,
+  fetchFromGitHub,
+  buildPythonApplication,
+  setuptools,
+  setuptools-scm,
+  wheel,
+  nss,
+  nix-update-script,
+  stdenv,
 }:
 
 buildPythonApplication rec {

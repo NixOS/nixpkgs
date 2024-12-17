@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 
 python3Packages.buildPythonPackage rec {
   pname = "mpfshell-unstable";
@@ -12,7 +16,9 @@ python3Packages.buildPythonPackage rec {
   };
 
   propagatedBuildInputs = with python3Packages; [
-    pyserial colorama websocket-client
+    pyserial
+    colorama
+    websocket-client
   ];
 
   doCheck = false;

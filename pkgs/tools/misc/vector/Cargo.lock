@@ -10748,7 +10748,7 @@ dependencies = [
 
 [[package]]
 name = "vector"
-version = "0.43.0"
+version = "0.43.1"
 dependencies = [
  "apache-avro",
  "approx",
@@ -11320,9 +11320,9 @@ checksum = "6a02e4885ed3bc0f2de90ea6dd45ebcbb66dacffe03547fadbb0eeae2770887d"
 
 [[package]]
 name = "vrl"
-version = "0.20.0"
+version = "0.20.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f6c66f9aa77c64c2f05d8786763098171f8631b736778c922ace99333b909781"
+checksum = "ea6f5f954461e21cacc090537e49f1023c34b6d10e12030b40ca1821a43aca68"
 dependencies = [
  "aes",
  "aes-siv",

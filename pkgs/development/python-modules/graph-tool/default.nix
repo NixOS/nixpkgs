@@ -4,7 +4,6 @@
   fetchurl,
   stdenv,
 
-  autoreconfHook,
   boost185,
   cairomm,
   cgal,
@@ -34,26 +33,19 @@ let
 in
 buildPythonPackage rec {
   pname = "graph-tool";
-  version = "2.78";
+  version = "2.80";
   format = "other";
 
   src = fetchurl {
     url = "https://downloads.skewed.de/graph-tool/graph-tool-${version}.tar.bz2";
-    hash = "sha256-gG9TWKRJISOowRIXI1/ROTIwrVwhxFtMOextXqN6KiU=";
+    hash = "sha256-wacOB12+co+tJdw/WpqVl4gKbW/2hDW5HSHwtE742+Y=";
   };
 
-  # Remove error messages about tput during build process without adding ncurses,
-  # and replace unavailable git commit hash and date.
   postPatch = ''
-    substituteInPlace configure.ac \
+    # remove error messages about tput during build process without adding ncurses
+    substituteInPlace configure \
       --replace-fail 'tput setaf $1' : \
-      --replace-fail 'tput sgr0' : \
-      --replace-fail \
-        "\"esyscmd(git show | head -n 1 | sed 's/commit //' |  grep -o -e '.\{8\}' | head -n 1 |tr -d '\n')\"" \
-        '["(nixpkgs-${version})"]' \
-      --replace-fail \
-        "\"esyscmd(git log -1 | head -n 3 | grep 'Date:' | sed s/'Date:   '// | tr -d '\n')\"" \
-        '["(unavailable)"]'
+      --replace-fail 'tput sgr0' :
   '';
 
   configureFlags = [
@@ -64,10 +56,7 @@ buildPythonPackage rec {
 
   enableParallelBuilding = true;
 
-  build-system = [
-    autoreconfHook
-    pkg-config
-  ];
+  build-system = [ pkg-config ];
 
   # https://graph-tool.skewed.de/installation.html#manual-compilation
   dependencies = [

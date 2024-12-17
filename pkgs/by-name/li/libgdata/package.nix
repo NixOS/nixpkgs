@@ -1,29 +1,35 @@
-{ lib, stdenv
-, fetchurl
-, pkg-config
-, meson
-, ninja
-, nixosTests
-, vala
-, gettext
-, libxml2
-, glib
-, json-glib
-, gcr
-, gnome-online-accounts
-, gobject-introspection
-, gnome
-, p11-kit
-, openssl
-, uhttpmock
-, libsoup_2_4
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  nixosTests,
+  vala,
+  gettext,
+  libxml2,
+  glib,
+  json-glib,
+  gcr,
+  gnome-online-accounts,
+  gobject-introspection,
+  gnome,
+  p11-kit,
+  openssl,
+  uhttpmock,
+  libsoup_2_4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libgdata";
   version = "0.18.1";
 
-  outputs = [ "out" "dev" "installedTests" ];
+  outputs = [
+    "out"
+    "dev"
+    "installedTests"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";

@@ -1,16 +1,17 @@
-{ lib
-, cmake
-, fetchFromGitHub
-, libglut
-, libGL
-, libheif
-, libjpeg
-, darwin
-, pkg-config
-, stdenv
-, enableHEIFCodec ? true
-, enableJPGCodec ? true
-, enableOpenGL ? true
+{
+  lib,
+  cmake,
+  fetchFromGitHub,
+  libglut,
+  libGL,
+  libheif,
+  libjpeg,
+  darwin,
+  pkg-config,
+  stdenv,
+  enableHEIFCodec ? true,
+  enableJPGCodec ? true,
+  enableOpenGL ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -24,24 +25,35 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-YliWVuNEtq/Rgra+WnorSOFoAYwYmPmPRv0r734FJ1c=";
   };
 
-  outputs = [ "out" "dev" "doc" "lib" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "lib"
+    "man"
+  ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
   ];
 
-  buildInputs = [
-  ] ++ lib.optionals enableHEIFCodec [
-    libheif
-  ] ++ lib.optionals enableJPGCodec [
-    libjpeg
-  ] ++ lib.optionals enableOpenGL [
-    libglut
-    libGL
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Cocoa
-  ];
+  buildInputs =
+    [
+    ]
+    ++ lib.optionals enableHEIFCodec [
+      libheif
+    ]
+    ++ lib.optionals enableJPGCodec [
+      libjpeg
+    ]
+    ++ lib.optionals enableOpenGL [
+      libglut
+      libGL
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Cocoa
+    ];
 
   # Since "build" already exists and is populated, cmake tries to use it,
   # throwing uncomprehensible error messages...

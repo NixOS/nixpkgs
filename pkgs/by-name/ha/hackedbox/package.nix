@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, freetype
-, fribidi
-, imlib2
-, libX11
-, libXext
-, libXft
-, libXinerama
-, libXpm
-, libXrandr
-, libXrender
-, pkg-config
-, xorgproto
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  freetype,
+  fribidi,
+  imlib2,
+  libX11,
+  libXext,
+  libXft,
+  libXinerama,
+  libXpm,
+  libXrandr,
+  libXrender,
+  pkg-config,
+  xorgproto,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

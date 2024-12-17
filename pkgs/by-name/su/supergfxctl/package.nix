@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitLab
-, pkg-config
-, systemd
+{
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+  pkg-config,
+  systemd,
 }:
 
 rustPlatform.buildRustPackage rec {
