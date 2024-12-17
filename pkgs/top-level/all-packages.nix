@@ -10665,7 +10665,7 @@ with pkgs;
   qgnomeplatform-qt6 = qt6Packages.callPackage ../development/libraries/qgnomeplatform {
     useQt6 = true;
   };
-  
+
   qwhitesurgtkdecorations-qt6 = callPackage ../by-name/qw/qwhitesurgtkdecorations/package.nix {
     useQt6 = true;
   };
