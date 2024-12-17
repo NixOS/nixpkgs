@@ -12,11 +12,11 @@
 
 stdenv.mkDerivation rec {
   pname = "bigloo";
-  version = "4.4b";
+  version = "4.5b";
 
   src = fetchurl {
     url = "ftp://ftp-sop.inria.fr/indes/fp/Bigloo/bigloo-${version}.tar.gz";
-    sha256 = "sha256-oxOSJwKWmwo7PYAwmeoFrKaYdYvmvQquWXyutolc488=";
+    sha256 = "sha256-hk1SXuan/zOf2ajJc8xGv5piOjgn2Ev7bgSikiNwfaU=";
   };
 
   nativeBuildInputs = [
