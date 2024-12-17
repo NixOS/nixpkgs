@@ -98,7 +98,7 @@ in
         WorkingDirectory = "/var/lib/automx2";
       };
       unitConfig = {
-        Description = "MUA configuration service";
+        Description = "Service to automatically configure mail clients";
         Documentation = "https://rseichter.github.io/automx2/";
       };
       wantedBy = [ "multi-user.target" ];
