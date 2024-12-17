@@ -199,6 +199,7 @@ lib.warnIf (useHardenedMalloc != null)
             "x-scheme-handler/http"
             "x-scheme-handler/https"
           ];
+          startupWMClass = "Tor Browser";
         })
       ];
 
