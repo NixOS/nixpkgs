@@ -17241,6 +17241,8 @@ self: super: with self; {
 
   types-ipaddress = callPackage ../development/python-modules/types-ipaddress { };
 
+  types-jinja2 = callPackage ../development/python-modules/types-jinja2 { };
+
   types-lxml = callPackage ../development/python-modules/types-lxml { };
 
   types-markdown = callPackage ../development/python-modules/types-markdown { };
