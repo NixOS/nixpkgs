@@ -12638,6 +12638,11 @@
     github = "lenivaya";
     githubId = 49302467;
   };
+  lennartrth = {
+    name = "Lennart rth";
+    github = "lennart-rth";
+    githubId = 80266866;
+  };
   lenny = {
     name = "Lenny.";
     matrix = "lenny@flipdot.org";
