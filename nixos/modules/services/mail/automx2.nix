@@ -93,6 +93,7 @@ in
         }/bin/flask run --host=127.0.0.1 --port=${toString cfg.port}";
         Restart = "always";
         StateDirectory = "automx2";
+        DynamicUser = true;
         User = "automx2";
         WorkingDirectory = "/var/lib/automx2";
       };
@@ -101,14 +102,6 @@ in
         Documentation = "https://rseichter.github.io/automx2/";
       };
       wantedBy = [ "multi-user.target" ];
-    };
-
-    users = {
-      groups.automx2 = { };
-      users.automx2 = {
-        group = "automx2";
-        isSystemUser = true;
-      };
     };
   };
 
