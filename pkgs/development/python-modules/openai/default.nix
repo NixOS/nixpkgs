@@ -21,6 +21,7 @@
   numpy,
   pandas,
   pandas-stubs,
+  websockets,
 
   # check deps
   pytestCheckHook,
@@ -35,7 +36,7 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.57.4";
+  version = "1.58.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -44,7 +45,7 @@ buildPythonPackage rec {
     owner = "openai";
     repo = "openai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-djYvHEIieJPak8EY7c5hhMhTzxm/Prc4RSfrFjzHqI4=";
+    hash = "sha256-QK0NNMJM4sj4u8nlNPBBQpqV0pBYUMcSwKqhna5q10c=";
   };
 
   build-system = [
@@ -61,13 +62,16 @@ buildPythonPackage rec {
     sniffio
     tqdm
     typing-extensions
-  ];
+  ] ++ optional-dependencies.realtime;
 
   optional-dependencies = {
     datalib = [
       numpy
       pandas
       pandas-stubs
+    ];
+    realtime = [
+      websockets
     ];
   };
 
