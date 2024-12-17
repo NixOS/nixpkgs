@@ -5846,6 +5846,8 @@ self: super: with self; {
 
   highspy = callPackage ../development/python-modules/highspy { };
 
+  hightime = callPackage ../development/python-modules/hightime { };
+
   hid = callPackage ../development/python-modules/hid {
     inherit (pkgs) hidapi;
   };
@@ -14008,6 +14010,8 @@ self: super: with self; {
   returns = callPackage ../development/python-modules/returns { };
 
   reuse = callPackage ../development/python-modules/reuse { };
+
+  reverse-geocode = callPackage ../development/python-modules/reverse-geocode { };
 
   rfc3339 = callPackage ../development/python-modules/rfc3339 { };
 

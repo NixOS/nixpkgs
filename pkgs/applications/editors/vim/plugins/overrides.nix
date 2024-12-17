@@ -1292,9 +1292,7 @@ in
   };
 
   hex-nvim = super.hex-nvim.overrideAttrs {
-    postPatch = ''
-      substituteInPlace lua/hex.lua --replace xxd ${xxd}/bin/xxd
-    '';
+    runtimeDeps = [ xxd ];
     nvimRequireCheck = "hex";
   };
 

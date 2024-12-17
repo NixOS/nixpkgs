@@ -14,7 +14,12 @@ let
     mapAttrsToList
     nameValuePair
     ;
-  inherit (lib.lists) concatMap concatLists filter;
+  inherit (lib.lists)
+    concatMap
+    concatLists
+    filter
+    flatten
+    ;
   inherit (lib.modules) mkIf;
   inherit (lib.options) literalExpression mkOption;
   inherit (lib.strings) hasInfix;
@@ -215,7 +220,9 @@ in
 
     systemd.timers = mapAttrs' generateRefreshTimer refreshEnabledInterfaces;
     systemd.services = (mapAttrs' generateRefreshService refreshEnabledInterfaces) // {
-      systemd-networkd.serviceConfig.LoadCredential = mapAttrsToList interfaceCredentials cfg.interfaces;
+      systemd-networkd.serviceConfig.LoadCredential = flatten (
+        mapAttrsToList interfaceCredentials cfg.interfaces
+      );
     };
   };
 }
