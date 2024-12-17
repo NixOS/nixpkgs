@@ -5,6 +5,7 @@
   hyprland,
   ninja,
   mkHyprlandPlugin,
+  nix-update-script,
 }:
 mkHyprlandPlugin hyprland rec {
   pluginName = "hyprsplit";
@@ -21,6 +22,8 @@ mkHyprlandPlugin hyprland rec {
     meson
     ninja
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     homepage = "https://github.com/shezdy/hyprsplit";
