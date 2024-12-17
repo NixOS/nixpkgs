@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   versionCheckHook,
+  makeWrapper,
 }:
 
 buildGoModule rec {
@@ -17,6 +18,8 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-QFcA/m41l0QCmKSGN5SB7KPdRja+7bGfcqqqHg//OXU=";
+
+  nativeBuildInputs = [ makeWrapper ];
 
   proxyVendor = true;
 
@@ -33,6 +36,8 @@ buildGoModule rec {
 
   postInstall = ''
     rm $out/bin/{generate,snifftest}
+
+    wrapProgram $out/bin/trufflehog --add-flags --no-update
   '';
 
   doInstallCheck = true;
