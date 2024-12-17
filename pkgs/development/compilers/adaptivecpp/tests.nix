@@ -39,4 +39,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   installPhase = "touch $out";
+
+  # currently fails to build
+  # see https://logs.ofborg.org/?key=nixos/nixpkgs.360893&attempt_id=3b1feb45-0b7d-4cf1-8e38-917afcc12c67
+  meta.broken = stdenv.isDarwin;
 })
