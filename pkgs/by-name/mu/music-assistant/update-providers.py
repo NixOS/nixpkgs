@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ jinja2 mashumaro orjson aiofiles packaging ])" -p pyright ruff isort
+#!nix-shell -i python3 -p "python3.withPackages (ps: with ps; [ jinja2 mashumaro orjson aiofiles packaging ])" -p pyright ruff isort nixfmt-rfc-style
 import asyncio
 import json
 import os.path
@@ -196,18 +196,21 @@ def resolve_providers(manifests) -> Set:
     return providers
 
 
-def render(version: str, providers: Set):
-    path = os.path.join(ROOT, "pkgs/by-name/mu/music-assistant/providers.nix")
+def render(outpath: str, version: str, providers: Set):
     env = Environment()
     template = env.from_string(TEMPLATE)
-    template.stream(version=version, providers=providers).dump(path)
+    template.stream(version=version, providers=providers).dump(outpath)
 
 
 async def main():
     version: str = cast(str, await Nix.eval("music-assistant.version"))
     manifests = await get_provider_manifests(version)
-    providers = resolve_providers(manifests)
-    render(version, providers)
+    providers = await resolve_providers(manifests)
+
+    outpath = os.path.join(ROOT, "pkgs/by-name/mu/music-assistant/providers.nix")
+    render(outpath, version, providers)
+
+    run_sync(["nixfmt", outpath])
 
 
 if __name__ == "__main__":
