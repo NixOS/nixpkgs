@@ -84,7 +84,7 @@ let
   src = fetchFromGitHub {
     owner = "immich-app";
     repo = "immich";
-    rev = "v${version}";
+    tag = "v${version}";
     inherit (sources) hash;
   };
 
@@ -135,7 +135,7 @@ let
     src = fetchFromGitHub {
       owner = "nodejs";
       repo = "node-addon-api";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-k3v8lK7uaEJvcaj1sucTjFZ6+i5A6w/0Uj9rYlPhjCE=";
     };
     installPhase = ''
@@ -245,6 +245,7 @@ buildNpmPackage' {
   };
 
   meta = {
+    changelog = "https://github.com/immich-app/immich/releases/tag/${src.tag}";
     description = "Self-hosted photo and video backup solution";
     homepage = "https://immich.app/";
     license = with lib.licenses; [
