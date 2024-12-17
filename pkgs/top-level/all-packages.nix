@@ -15949,8 +15949,6 @@ with pkgs;
       else null;
   };
 
-  viper4linux-gui = libsForQt5.callPackage ../applications/audio/viper4linux-gui { };
-
   vlc-bin-universal = vlc-bin.override { variant = "universal"; };
 
   libvlc = vlc.override {

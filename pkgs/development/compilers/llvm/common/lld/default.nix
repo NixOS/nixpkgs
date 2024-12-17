@@ -18,7 +18,7 @@ let
   pname = "lld";
   src' =
     if monorepoSrc != null then
-      runCommand "lld-src-${version}" {} (''
+      runCommand "lld-src-${version}" { inherit (monorepoSrc) passthru; } (''
         mkdir -p "$out"
       '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
         cp -r ${monorepoSrc}/cmake "$out"
