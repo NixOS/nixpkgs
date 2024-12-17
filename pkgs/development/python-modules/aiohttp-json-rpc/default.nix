@@ -1,9 +1,10 @@
-{ lib
-, buildPythonPackage
-, fetchPypi
-, setuptools
-, wheel
-, aiohttp
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  setuptools,
+  wheel,
+  aiohttp,
 }:
 
 buildPythonPackage rec {
