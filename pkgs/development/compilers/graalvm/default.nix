@@ -18,5 +18,6 @@ lib.makeScope pkgs.newScope (self: {
   truffleruby = self.callPackage ./community-edition/truffleruby { };
 
   graalvm-oracle_22 = self.callPackage ./graalvm-oracle { version = "22"; };
+  graalvm-oracle_17 = self.callPackage ./graalvm-oracle { version = "17"; };
   graalvm-oracle = self.graalvm-oracle_22;
 })
