@@ -48,7 +48,9 @@ tcl.mkTclDerivation rec {
     "-DHAVE_UNSETENV"
   ]);
 
-  passthru.updateScript = gitUpdater { };
+  passthru.updateScript = gitUpdater {
+    ignoredVersions = "-BETA";
+  };
 
   meta = with lib; {
     homepage = "https://dianne.skoll.ca/projects/remind/";
