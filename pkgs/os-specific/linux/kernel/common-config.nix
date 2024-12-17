@@ -686,6 +686,7 @@ let
       NFSD_V4 = yes;
       NFSD_V4_SECURITY_LABEL = yes;
 
+      NFS_FS = module;
       NFS_FSCACHE = yes;
       NFS_SWAP = yes;
       NFS_V3_ACL = yes;
