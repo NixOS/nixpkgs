@@ -2930,6 +2930,30 @@ buildLuarocksPackage {
   };
 }) {};
 
+plc = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl, luaOlder }:
+buildLuarocksPackage {
+  pname = "plc";
+  version = "0.5-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/plc-0.5-1.rockspec";
+    sha256 = "11b7kw1m74wr1fyvmkp2ilib9zllgkzj6v13grxi6gx2qnnjdhfy";
+  }).outPath;
+  src = fetchFromGitHub {
+    owner = "philanc";
+    repo = "plc";
+    rev = "v0.5";
+    hash = "sha256-CkilV3zSi20icLZrJjdFmF8rZx7vRz2lhxiSAVuJDqA=";
+  };
+
+  disabled = luaOlder "5.3";
+
+  meta = {
+    homepage = "http://github.com/philanc/plc";
+    description = "Pure Lua Crypto";
+    license.fullName = "MIT/X11";
+  };
+}) {};
+
 plenary-nvim = callPackage({ buildLuarocksPackage, fetchFromGitHub, luaAtLeast, luaOlder, luassert }:
 buildLuarocksPackage {
   pname = "plenary.nvim";

@@ -123,6 +123,7 @@ nvim-cmp,https://raw.githubusercontent.com/hrsh7th/nvim-cmp/main/nvim-cmp-scm-1.
 nvim-nio,,,,,,mrcjkb
 pathlib.nvim,,,,,,
 penlight,,,,,,alerque
+plc,,,,,5.3,
 plenary.nvim,https://raw.githubusercontent.com/nvim-lua/plenary.nvim/master/plenary.nvim-scm-1.rockspec,,,,5.1,
 psl,,,,0.3,,
 rapidjson,,,,,,
