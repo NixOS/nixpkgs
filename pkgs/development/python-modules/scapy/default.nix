@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "scapy";
-  version = "2.6.0";
+  version = "2.6.1";
   format = "setuptools";
 
   disabled = isPyPy;
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "secdev";
     repo = "scapy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-k/wfY5nq/txdiqj5gyHT9FSjnFzazDBawE3+aNe9zrQ=";
+    hash = "sha256-m2L30aEpPp9cfW652yd+0wFkNlMij6FF1RzWZbwJ79A=";
   };
 
   patches = [ ./find-library.patch ];
