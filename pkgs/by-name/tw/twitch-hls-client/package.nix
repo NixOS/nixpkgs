@@ -30,5 +30,6 @@ rustPlatform.buildRustPackage {
     license = licenses.gpl3Only;
     maintainers = with maintainers; [ lenivaya ];
     mainProgram = "twitch-hls-client";
+    sourceProvenance = with lib.sourceTypes; [ fromSource ];
   };
 }
