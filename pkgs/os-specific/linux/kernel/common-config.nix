@@ -754,7 +754,7 @@ let
         # This does not have any effect if a program does not support it
         SECURITY_LANDLOCK = whenAtLeast "5.13" yes;
 
-        DEVKMEM = whenOlder "5.13" no; # Disable /dev/kmem
+        DEVKMEM = lib.mkIf (!stdenv.hostPlatform.isAarch64) (whenOlder "5.13" no); # Disable /dev/kmem
 
         USER_NS = yes; # Support for user namespaces
 
