@@ -65,7 +65,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     description = "IgH EtherCAT Master for Linux";
     homepage = "https://etherlab.org/ethercat";
-    changelog = "https://gitlab.com/etherlab.org/ethercat/-/blob/1.6-devel/NEWS";
+    changelog = "https://gitlab.com/etherlab.org/ethercat/-/blob/${finalAttrs.version}/NEWS";
     license = lib.licenses.gpl2Plus;
     maintainers = [ lib.maintainers.stv0g ];
     platforms = lib.platforms.linux;
