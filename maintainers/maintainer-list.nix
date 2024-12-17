@@ -20921,6 +20921,12 @@
     githubId = 216167;
     name = "Steve Jones";
   };
+  sjhaleprogrammer = {
+    email = "samworlds1231337@gmail.com";
+    github = "sjhaleprogrammer";
+    githubId = 60676867;
+    name = "Samuel Hale";
+  };
   sjmackenzie = {
     email = "setori88@gmail.com";
     github = "sjmackenzie";
