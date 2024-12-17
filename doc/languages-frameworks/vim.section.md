@@ -241,7 +241,7 @@ It accepts a single string for a module, or a list of module strings to test.
 - `nvimRequireCheck = MODULE;`
 - `nvimRequireCheck = [ MODULE1 MODULE2 ];`
 
-When `neovimRequireCheck` is not specified, we will search the plugin's directory for lua modules to attempt loading. This quick smoke test can catch obvious dependency errors that might be missed.
+When `nvimRequireCheck` is not specified, we will search the plugin's directory for lua modules to attempt loading. This quick smoke test can catch obvious dependency errors that might be missed.
 The check hook will fail the build if any failures are detected to encourage inspecting the logs to identify potential issues.
 
 If you would like to only check a specific module, this can be manually added through plugin definition overrides in the [overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vim/plugins/overrides.nix).
