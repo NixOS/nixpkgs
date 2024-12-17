@@ -13827,6 +13827,8 @@ self: super: with self; {
 
   red-black-tree-mod = callPackage ../development/python-modules/red-black-tree-mod { };
 
+  red-commons = callPackage ../development/python-modules/red-commons { };
+
   redbaron = callPackage ../development/python-modules/redbaron { };
 
   redis = callPackage ../development/python-modules/redis { };
