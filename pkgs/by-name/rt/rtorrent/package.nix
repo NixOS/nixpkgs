@@ -8,7 +8,6 @@
   fetchFromGitHub,
   fetchpatch,
   installShellFiles,
-  libsigcxx,
   libtool,
   libtorrent,
   ncurses,
@@ -49,7 +48,6 @@ stdenv.mkDerivation rec {
   buildInputs = [
     cppunit
     curl
-    libsigcxx
     libtool
     libtorrent
     ncurses
