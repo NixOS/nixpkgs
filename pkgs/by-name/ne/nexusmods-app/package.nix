@@ -97,7 +97,7 @@ buildDotnetModule (finalAttrs: {
       size=''${i}x''${i}
       dir=$out/share/icons/hicolor/$size/apps
       mkdir -p $dir
-      convert -background none -resize $size $icon $dir/com.nexusmods.app.png
+      magick -background none $icon -resize $size $dir/com.nexusmods.app.png
     done
   '';
 
