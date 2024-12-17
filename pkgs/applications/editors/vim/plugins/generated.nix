@@ -1254,6 +1254,18 @@ final: prev:
     meta.homepage = "https://github.com/giuxtaposition/blink-cmp-copilot/";
   };
 
+  blink-compat = buildVimPlugin {
+    pname = "blink.compat";
+    version = "2024-12-03";
+    src = fetchFromGitHub {
+      owner = "Saghen";
+      repo = "blink.compat";
+      rev = "73249d35c8737b614bed64c2f33277387035f8ec";
+      sha256 = "151lqk78g3zwbwr7d0yvlxc3zbwyh9776nl779r7fx7ap4dm0vj1";
+    };
+    meta.homepage = "https://github.com/Saghen/blink.compat/";
+  };
+
   block-nvim = buildVimPlugin {
     pname = "block.nvim";
     version = "2023-10-10";
