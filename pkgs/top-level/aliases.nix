@@ -1426,6 +1426,7 @@ mapAliases {
   ### Y ###
 
   yacc = throw "'yacc' has been renamed to/replaced by 'bison'"; # Converted to throw 2024-10-17
+  yesplaymusic = throw "YesPlayMusic has been removed as it was broken, unmaintained, and used deprecated Node and Electron versions"; # Added 2024-12-13
   yafaray-core = libyafaray; # Added 2022-09-23
   youtrack_2022_3 = throw "'youtrack_2022_3' has been removed as it was deprecated. Please update to the 'youtrack' package."; # Added 2024-10-17
   yrd = throw "'yrd' has been removed, as it was broken and unmaintained"; # added 2024-05-27
