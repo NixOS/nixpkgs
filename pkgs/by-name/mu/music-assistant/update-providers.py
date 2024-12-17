@@ -49,6 +49,7 @@ ROOT: Final = (
     .strip()
 )
 
+PACKAGE_SET = "music-assistant.python.pkgs"
 PACKAGE_MAP = {
     "git+https://github.com/MarvinSchenkel/pytube.git": "pytube",
 }
@@ -167,6 +168,11 @@ def resolve_package_attribute(package: str) -> str:
     return matches.pop()
 
 
+async def get_package_version(package: str) -> str:
+    version = cast(str, await Nix.eval(f"{PACKAGE_SET}.{package}.version"))
+    return version
+
+
 @dataclass
 class Provider:
     domain: str
@@ -180,7 +186,8 @@ class Provider:
         return hash(self.domain)
 
 
-def resolve_providers(manifests) -> Set:
+async def resolve_providers(manifests) -> Set:
+    errors = []
     providers = set()
     for manifest in manifests:
         provider = Provider(manifest.domain)
@@ -188,15 +195,26 @@ def resolve_providers(manifests) -> Set:
             # allow substituting requirement specifications that packaging cannot parse
             if requirement in PACKAGE_MAP:
                 requirement = PACKAGE_MAP[requirement]
+
             requirement = Requirement(requirement)
             try:
-                provider.available.append(resolve_package_attribute(requirement.name))
+                attr = resolve_package_attribute(requirement.name)
+                provider.available.append(attr)
             except TooManyMatches as ex:
                 print(ex, file=sys.stderr)
                 provider.missing.append(requirement.name)
+                continue
             except NoMatch:
                 provider.missing.append(requirement.name)
+                continue
+
+            version = await get_package_version(attr)
+            if version not in requirement.specifier:
+                errors.append(f"{requirement} not satisifed by version {version}")
         providers.add(provider)
+    if errors:
+        print("\n - ", end="")
+        print("\n - ".join(errors))
     return providers
 
 
