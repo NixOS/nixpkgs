@@ -4618,6 +4618,8 @@ self: super: with self; {
 
   flake8-polyfill = callPackage ../development/python-modules/flake8-polyfill { };
 
+  flake8-quotes = callPackage ../development/python-modules/flake8-quotes { };
+
   flaky = callPackage ../development/python-modules/flaky { };
 
   flametree = callPackage ../development/python-modules/flametree { };
