@@ -18935,6 +18935,12 @@
     githubId = 93167100;
     keys = [ { fingerprint = "9075 CEF8 9850 D261 6599  641A A2C9 36D5 B88C 139C"; } ];
   };
+  renpenguin = {
+    email = "redpenguin777@yahoo.com";
+    github = "renpenguin";
+    githubId = 79577742;
+    name = "ren";
+  };
   renzo = {
     email = "renzocarbonara@gmail.com";
     github = "k0001";
