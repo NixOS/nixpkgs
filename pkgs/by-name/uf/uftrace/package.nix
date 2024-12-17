@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "uftrace";
-  version = "0.16";
+  version = "0.17";
 
   src = fetchFromGitHub {
     owner = "namhyung";
     repo = "uftrace";
     rev = "v${version}";
-    sha256 = "sha256-JuBwyE6JH3CpJH863LbnWELUIIEKVaAcz8h8beeABGQ=";
+    sha256 = "sha256-xx/eABF1q5uZYDGWUQc1YO6qCqR7J2mCHHQTBsHxMVw=";
   };
 
   nativeBuildInputs = [
