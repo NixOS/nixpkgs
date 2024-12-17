@@ -88,16 +88,14 @@ def test_remote_build(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
         elif args[0] == "mktemp":
             return CompletedProcess([], 0, stdout=" \n/tmp/tmpdir\n ")
         elif args[0] == "nix-store":
-            return CompletedProcess(
-                [], 0, stdout=" \n/tmp/tmpdir/00000000000000000000000000000000\n "
-            )
+            return CompletedProcess([], 0, stdout=" \n/tmp/tmpdir/config\n ")
         elif args[0] == "readlink":
             return CompletedProcess([], 0, stdout=" \n/path/to/config\n ")
         else:
             return CompletedProcess([], 0)
 
     mock_run.side_effect = run_wrapper_side_effect
-    mock_uuid4.return_value = uuid.UUID(int=0)
+    mock_uuid4.side_effect = [uuid.UUID(int=1), uuid.UUID(int=2)]
 
     assert n.remote_build(
         "config.system.build.toplevel",
@@ -117,7 +115,7 @@ def test_remote_build(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
                     "--attr",
                     "preAttr.config.system.build.toplevel",
                     "--add-root",
-                    n.tmpdir.TMPDIR_PATH / "00000000000000000000000000000000",
+                    n.tmpdir.TMPDIR_PATH / "00000000000000000000000000000001",
                     "--inst",
                 ],
                 stdout=PIPE,
@@ -145,14 +143,14 @@ def test_remote_build(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
                     "--realise",
                     Path("/path/to/file"),
                     "--add-root",
-                    Path("/tmp/tmpdir/00000000000000000000000000000000"),
+                    Path("/tmp/tmpdir/00000000000000000000000000000002"),
                     "--build",
                 ],
                 remote=build_host,
                 stdout=PIPE,
             ),
             call(
-                ["readlink", "-f", "/tmp/tmpdir/00000000000000000000000000000000"],
+                ["readlink", "-f", "/tmp/tmpdir/config"],
                 remote=build_host,
                 stdout=PIPE,
             ),

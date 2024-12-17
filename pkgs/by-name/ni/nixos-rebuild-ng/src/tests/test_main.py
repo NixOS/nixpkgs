@@ -83,9 +83,7 @@ def test_execute_nix_boot(mock_run: Any, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
 
-    def run_wrapper_side_effect(
-        args: list[str], **kwargs: Any
-    ) -> CompletedProcess[str]:
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == "nix-instantiate":
             return CompletedProcess([], 0, str(nixpkgs_path))
         elif args[0] == "git" and "rev-parse" in args:
@@ -95,7 +93,7 @@ def test_execute_nix_boot(mock_run: Any, tmp_path: Path) -> None:
         else:
             return CompletedProcess([], 0)
 
-    mock_run.side_effect = run_wrapper_side_effect
+    mock_run.side_effect = run_side_effect
 
     nr.execute(["nixos-rebuild", "boot", "--no-flake", "-vvv", "--fast"])
 
@@ -158,15 +156,13 @@ def test_execute_nix_switch_flake(mock_run: Any, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
 
-    def run_wrapper_side_effect(
-        args: list[str], **kwargs: Any
-    ) -> CompletedProcess[str]:
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == "nix":
             return CompletedProcess([], 0, str(config_path))
         else:
             return CompletedProcess([], 0)
 
-    mock_run.side_effect = run_wrapper_side_effect
+    mock_run.side_effect = run_side_effect
 
     nr.execute(
         [
@@ -231,15 +227,13 @@ def test_execute_nix_switch_flake_target_host(
     config_path = tmp_path / "test"
     config_path.touch()
 
-    def run_wrapper_side_effect(
-        args: list[str], **kwargs: Any
-    ) -> CompletedProcess[str]:
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == "nix":
             return CompletedProcess([], 0, str(config_path))
         else:
             return CompletedProcess([], 0)
 
-    mock_run.side_effect = run_wrapper_side_effect
+    mock_run.side_effect = run_side_effect
 
     nr.execute(
         [
@@ -322,9 +316,7 @@ def test_execute_nix_switch_flake_build_host(
     config_path = tmp_path / "test"
     config_path.touch()
 
-    def run_wrapper_side_effect(
-        args: list[str], **kwargs: Any
-    ) -> CompletedProcess[str]:
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == "nix" and "eval" in args:
             return CompletedProcess([], 0, str(config_path))
         if args[0] == "ssh" and "nix" in args:
@@ -332,7 +324,7 @@ def test_execute_nix_switch_flake_build_host(
         else:
             return CompletedProcess([], 0)
 
-    mock_run.side_effect = run_wrapper_side_effect
+    mock_run.side_effect = run_side_effect
 
     nr.execute(
         [
@@ -483,15 +475,13 @@ def test_execute_test_flake(mock_run: Any, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
 
-    def run_wrapper_side_effect(
-        args: list[str], **kwargs: Any
-    ) -> CompletedProcess[str]:
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == "nix":
             return CompletedProcess([], 0, str(config_path))
         else:
             return CompletedProcess([], 0)
 
-    mock_run.side_effect = run_wrapper_side_effect
+    mock_run.side_effect = run_side_effect
 
     nr.execute(
         ["nixos-rebuild", "test", "--flake", "github:user/repo#hostname", "--fast"]
@@ -530,9 +520,7 @@ def test_execute_test_rollback(
     mock_path_exists: Any,
     mock_run: Any,
 ) -> None:
-    def run_wrapper_side_effect(
-        args: list[str], **kwargs: Any
-    ) -> CompletedProcess[str]:
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
         if args[0] == "nix-env":
             return CompletedProcess(
                 [],
@@ -546,7 +534,7 @@ def test_execute_test_rollback(
         else:
             return CompletedProcess([], 0)
 
-    mock_run.side_effect = run_wrapper_side_effect
+    mock_run.side_effect = run_side_effect
 
     nr.execute(
         ["nixos-rebuild", "test", "--rollback", "--profile-name", "foo", "--fast"]
