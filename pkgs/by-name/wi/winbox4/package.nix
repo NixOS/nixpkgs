@@ -18,12 +18,12 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "winbox";
-  version = "4.0beta12";
+  version = "4.0beta14";
 
   src = fetchurl {
     name = "WinBox_Linux-${finalAttrs.version}.zip";
     url = "https://download.mikrotik.com/routeros/winbox/${finalAttrs.version}/WinBox_Linux.zip";
-    hash = "sha256-zmGJr6HQ5/KWOKUJ0iPqRuhQ0/PpVwKsGPcoeklzg2I=";
+    hash = "sha256-QfjF36OMP8fH6R2jIOOWFtheySYGiqtjA7Q4nV3EdZU=";
   };
 
   sourceRoot = ".";
@@ -117,6 +117,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     changelog = "https://download.mikrotik.com/routeros/winbox/${finalAttrs.version}/CHANGELOG";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
+    platforms = [ "x86_64-linux" ];
     mainProgram = "WinBox";
     maintainers = with lib.maintainers; [
       Scrumplex
