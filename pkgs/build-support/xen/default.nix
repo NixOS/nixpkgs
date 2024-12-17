@@ -61,6 +61,7 @@
   version,
   vendor ? "nixos",
   upstreamVersion ? version,
+  withGenericPatches ? true,
   withFlask ? false,
   withSeaBIOS ? true,
   withOVMF ? true,
@@ -114,10 +115,14 @@ let
     util-linux.bin
     which
   ];
+
+  genericPatches = [ ./0001-dm-relative-path-checking.patch ];
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  inherit pname version patches;
+  inherit pname version;
+
+  patches = optionals withGenericPatches genericPatches ++ patches;
 
   outputs = [
     "out"
