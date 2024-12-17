@@ -129,6 +129,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--with-fuse=fuse3"
   ] ++ lib.optional (!withX) "--without-x";
 
+  NIX_LDFLAGS = "-L${pam}/lib -lpam";
+
   enableParallelBuilding = true;
 
   preConfigure = ''
