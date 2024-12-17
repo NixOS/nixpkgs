@@ -30,7 +30,7 @@ let
       '') else src;
 
   postPatch = lib.optionalString (lib.versionOlder release_version "14") ''
-    substituteInPlace MachO/CMakeLists.txt --replace \
+    substituteInPlace MachO/CMakeLists.txt --replace-fail \
       '(''${LLVM_MAIN_SRC_DIR}/' '(../'
   '';
 in
