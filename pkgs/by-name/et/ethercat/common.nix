@@ -1,10 +1,13 @@
 {
-  lib,
-  fetchFromGitLab,
-  stdenv,
-  gitUpdater,
   autoreconfHook,
+  fetchFromGitLab,
+  gitUpdater,
+  lib,
+  nixosTests,
   pkg-config,
+  stdenv,
+
+  # Options
   withDocs ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -60,7 +63,12 @@ stdenv.mkDerivation (finalAttrs: {
   enableParallelBuilding = true;
   separateDebugInfo = true;
 
-  passthru.updateScript = gitUpdater { };
+  passthru = {
+    updateScript = gitUpdater { };
+    tests = {
+      inherit (nixosTests) ethercat;
+    };
+  };
 
   meta = {
     description = "IgH EtherCAT Master for Linux";
