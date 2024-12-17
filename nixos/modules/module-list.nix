@@ -83,6 +83,7 @@
   ./hardware/mcelog.nix
   ./hardware/network/ath-user-regd.nix
   ./hardware/network/b43.nix
+  ./hardware/network/ethercat.nix
   ./hardware/network/eg25-manager.nix
   ./hardware/network/intel-2200bg.nix
   ./hardware/new-lg4ff.nix
