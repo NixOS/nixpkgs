@@ -58,7 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    dbus # used for checks and pkg-config to install dbus service/s
     docbook-xsl-nons # for goa-daemon.xml
     gettext
     gi-docgen
@@ -73,6 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
+      dbus
       gcr_4
       glib
       glib-networking
