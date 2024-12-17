@@ -85,8 +85,8 @@
   })
   (fetchNuGet {
     pname = "CliWrap";
-    version = "3.6.7";
-    hash = "sha256-9j3GILP25inLJoQe0E8sF8egVt8ISqEQBGdIShev4Mk=";
+    version = "3.7.0";
+    hash = "sha256-hXClLGuhscCrcBaymrp57Prh4m8Qe0vdE4S2ErIM13w=";
   })
   (fetchNuGet {
     pname = "DialogHost.Avalonia";
@@ -180,13 +180,13 @@
   })
   (fetchNuGet {
     pname = "Semi.Avalonia";
-    version = "11.2.1.1";
-    hash = "sha256-SG3MQHk1J/ktdRn1GXF3AOXvhgl3S6hcIwhmFU4sWU4=";
+    version = "11.2.1.2";
+    hash = "sha256-64eayKF+P3qrUZIOOVliqnZ8zK7ZCCxFz1RkD5kJSxM=";
   })
   (fetchNuGet {
     pname = "Semi.Avalonia.DataGrid";
-    version = "11.2.1.1";
-    hash = "sha256-LH1Yjg9JkFdH8VEYXXBaKi9jvjCAXYoJkTWCJEoIMHM=";
+    version = "11.2.1.2";
+    hash = "sha256-zEEmBjgksVgv9qwnKAFfDhDkrHphKe1/836Ax1gyazc=";
   })
   (fetchNuGet {
     pname = "SkiaSharp";
@@ -289,6 +289,11 @@
     hash = "sha256-e56+FgxEHqV3SGQx0ZAqzlscPxNUPXJ8Ls9rtqET1S4=";
   })
   (fetchNuGet {
+    pname = "System.CodeDom";
+    version = "9.0.0";
+    hash = "sha256-578lcBgswW0eM16r0EnJzfGodPx86RxxFoZHc2PSzsw=";
+  })
+  (fetchNuGet {
     pname = "System.Collections.Immutable";
     version = "8.0.0";
     hash = "sha256-F7OVjKNwpqbUh8lTidbqJWYi476nsq9n+6k0+QVRo3w=";
@@ -307,6 +312,11 @@
     pname = "System.IO.Pipelines";
     version = "8.0.0";
     hash = "sha256-LdpB1s4vQzsOODaxiKstLks57X9DTD5D6cPx8DE1wwE=";
+  })
+  (fetchNuGet {
+    pname = "System.Management";
+    version = "9.0.0";
+    hash = "sha256-UyLO5dgNVC7rBT1S6o/Ix6EQGlVTSWUQtVC+/cyTkfQ=";
   })
   (fetchNuGet {
     pname = "System.Memory";
