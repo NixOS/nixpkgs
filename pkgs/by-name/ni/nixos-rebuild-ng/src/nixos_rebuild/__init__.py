@@ -275,7 +275,7 @@ def reexec(
             build_attr = BuildAttr.from_arg(args.attr, args.file)
             drv = nix.build(attr, build_attr, **build_flags, no_out_link=True)
     except CalledProcessError:
-        logger.warning("could not find a newer version of nixos-rebuild")
+        logger.warning("could not build a newer version of nixos-rebuild")
 
     if drv:
         new = drv / f"bin/{EXECUTABLE}"
