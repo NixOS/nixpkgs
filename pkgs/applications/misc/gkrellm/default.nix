@@ -85,7 +85,6 @@ stdenv.mkDerivation rec {
 
     homepage = "http://gkrellm.srcbox.net";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ khumba ];
     platforms = platforms.linux;
   };
 }
