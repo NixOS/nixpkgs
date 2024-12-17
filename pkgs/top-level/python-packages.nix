@@ -17245,6 +17245,8 @@ self: super: with self; {
 
   types-markdown = callPackage ../development/python-modules/types-markdown { };
 
+  types-markupsafe = callPackage ../development/python-modules/types-markupsafe { };
+
   types-mock = callPackage ../development/python-modules/types-mock { };
 
   types-pillow = callPackage ../development/python-modules/types-pillow { };
