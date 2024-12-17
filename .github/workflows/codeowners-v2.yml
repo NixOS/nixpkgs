@@ -34,6 +34,7 @@ env:
 
 jobs:
   get-merge-commit:
+    if: github.actor != 'mergify[bot]' || !startsWith(github.head_ref, 'mergify/merge-queue/')
     uses: ./.github/workflows/get-merge-commit.yml
 
   # Check that code owners is valid
