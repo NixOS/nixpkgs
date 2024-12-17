@@ -2,14 +2,31 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  harlequin,
-  testers,
   nix-update-script,
   versionCheckHook,
   glibcLocales,
   withPostgresAdapter ? true,
   withBigQueryAdapter ? true,
 }:
+let
+  # Temporarily use textual 0.82 until harlequin is updated for 0.86
+  # https://github.com/NixOS/nixpkgs/issues/364867
+  textual_0_82 = (
+    python3Packages.textual.overrideAttrs (old: rec {
+      version = "0.82.0";
+
+      src = fetchFromGitHub {
+        owner = "Textualize";
+        repo = "textual";
+        rev = "refs/tags/v${version}";
+        hash = "sha256-belpoXQ+CkTchK+FjI/Ur8v4cNgzX39xLdNfPCwaU6E=";
+      };
+      disabledTests = old.disabledTests ++ [
+        "test_selection"
+      ];
+    })
+  );
+in
 python3Packages.buildPythonApplication rec {
   pname = "harlequin";
   version = "1.25.2";
@@ -22,7 +39,10 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-ov9pMvFzJAMfOM7JeSgnp6dZ424GiRaH7W5OCKin9Jk=";
   };
 
-  pythonRelaxDeps = [ "textual" ];
+  pythonRelaxDeps = [
+    "textual"
+    "numpy"
+  ];
 
   build-system = with python3Packages; [ poetry-core ];
 
@@ -40,9 +60,18 @@ python3Packages.buildPythonApplication rec {
       questionary
       rich-click
       sqlfmt
-      textual
-      textual-fastdatatable
-      textual-textarea
+      textual_0_82
+      (textual-fastdatatable.override {
+        textual = textual_0_82;
+      })
+      (
+        (textual-textarea.override {
+          textual = textual_0_82;
+        }).overrideAttrs
+        (_: {
+          disabledTestPaths = [ "tests/functional_tests" ];
+        })
+      )
       tomlkit
     ]
     ++ lib.optionals withPostgresAdapter [ harlequin-postgres ]
