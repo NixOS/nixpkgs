@@ -6,7 +6,7 @@
   setuptools,
   fetchFromGitHub,
   mock,
-  numpy,
+  numpy_1,
   scipy,
   smart-open,
   pyemd,
@@ -34,13 +34,13 @@ buildPythonPackage rec {
 
   build-system = [
     cython
-    oldest-supported-numpy
+    (oldest-supported-numpy.override { numpy = numpy_1; })
     setuptools
   ];
 
   dependencies = [
     smart-open
-    numpy
+    numpy_1
     scipy
   ];
 
@@ -50,9 +50,7 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  pythonRelaxDeps = [
-    "scipy"
-  ];
+  pythonRelaxDeps = [ "scipy" ];
 
   pythonImportsCheck = [ "gensim" ];
 
