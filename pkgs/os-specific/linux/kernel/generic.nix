@@ -60,7 +60,8 @@ lib.makeOverridable ({ # The kernel source tarball.
   # symbolic name and `patch' is the actual patch.  The patch may
   # optionally be compressed with gzip or bzip2.
   kernelPatches ? []
-, ignoreConfigErrors ? stdenv.hostPlatform.linux-kernel.name != "pc"
+, ignoreConfigErrors ?
+  !lib.elem stdenv.hostPlatform.linux-kernel.name [ "aarch64-multiplatform" "pc" ]
 , extraMeta ? {}
 
 , isZen      ? false
