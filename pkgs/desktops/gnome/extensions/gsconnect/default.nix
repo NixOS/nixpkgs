@@ -78,10 +78,8 @@ stdenv.mkDerivation rec {
 
     # TODO: do not include every typelib everywhere
     # for example, we definitely do not need nautilus
-    for file in src/extension.js src/prefs.js; do
-      substituteInPlace "$file" \
-        --subst-var-by typelibPath "$GI_TYPELIB_PATH"
-    done
+    substituteInPlace src/__nix-prepend-search-paths.js \
+      --subst-var-by typelibPath "$GI_TYPELIB_PATH"
 
     # slightly janky fix for gsettings_schemadir being removed
     substituteInPlace data/config.js.in \
