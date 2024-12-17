@@ -25,6 +25,7 @@
 , nspr
 , xorg
 , streamlink
+, buildPackages
 }:
 let
   basename = "streamlink-twitch-gui";
@@ -79,7 +80,7 @@ stdenv.mkDerivation rec {
     libXScrnSaver
     libXtst
     makeWrapper
-    wrapGAppsHook3
+    (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
   ];
 
   buildInputs = [ streamlink ];
@@ -107,6 +108,7 @@ stdenv.mkDerivation rec {
     gappsWrapperArgs+=(
       --add-flags "--no-version-check" \
       --prefix LD_LIBRARY_PATH : ${runtimeLibs} \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--enable-features=UseOzonePlatform --ozone-platform=wayland --enable-wayland-ime=true}}" \
       --prefix PATH : ${runtimeBins}
     )
   '';
