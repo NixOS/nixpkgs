@@ -22,18 +22,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "taskwarrior";
-  version = "3.2.0-unstable-2024-12-17";
+  version = "3.2.0-unstable-2024-12-18";
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
-    rev = "cc505e488184e958bcaedad6fed86f91d128e6bd";
-    hash = "sha256-M9pRoilxTHppX/efvppBI+QiPYXBEkvWxiEnodjqryk=";
+    rev = "dcbe916286792e6f5d2d3af3baab79918ebc5f71";
+    hash = "sha256-jma1BYZugMH+JiX5Xu6VI8ZFn4FBr1NxbNrOHX0bFk0=";
     fetchSubmodules = true;
   };
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${finalAttrs.pname}-${finalAttrs.version}-cargo-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-QPnW+FWbsjvjQr5CRuOGLIaUWSGItlFDwLEtZfRbihA="; # For fetchCargoTarball with name arguments
+    hash = "sha256-yaIjtwZuYqyiXHxq4NDuZC9aE+mYpovXygxWENf6v1o=";
   };
 
   postPatch = ''
@@ -58,8 +58,6 @@ stdenv.mkDerivation (finalAttrs: {
   # Contains Bash and Python scripts used while testing.
   preConfigure =
     ''
-      # https://github.com/GothenburgBitFactory/taskwarrior/pull/3728
-      chmod -R +x test/test_hooks
       patchShebangs test
     ''
     + lib.optionalString (builtins.length finalAttrs.failingTests > 0) ''
