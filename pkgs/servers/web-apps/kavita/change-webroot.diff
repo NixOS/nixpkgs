@@ -1,0 +1,79 @@
+diff --git a/API/Controllers/FallbackController.cs b/API/Controllers/FallbackController.cs
+index 0c92547..d54abb9 100644
+--- a/API/Controllers/FallbackController.cs
++++ b/API/Controllers/FallbackController.cs
+@@ -22,7 +22,7 @@ public class FallbackController : Controller
+ 
+     public PhysicalFileResult Index()
+     {
+-        return PhysicalFile(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html"), "text/HTML");
++        return PhysicalFile(Path.Combine("@webroot@", "index.html"), "text/HTML");
+     }
+ }
+ 
+diff --git a/API/Services/DirectoryService.cs b/API/Services/DirectoryService.cs
+index 8c6c796..711f315 100644
+--- a/API/Services/DirectoryService.cs
++++ b/API/Services/DirectoryService.cs
+@@ -120,7 +120,7 @@ public class DirectoryService : IDirectoryService
+         ExistOrCreate(SiteThemeDirectory);
+         FaviconDirectory = FileSystem.Path.Join(FileSystem.Directory.GetCurrentDirectory(), "config", "favicons");
+         ExistOrCreate(FaviconDirectory);
+-        LocalizationDirectory = FileSystem.Path.Join(FileSystem.Directory.GetCurrentDirectory(), "I18N");
++        LocalizationDirectory = FileSystem.Path.Join("@out@/lib/kavita-backend", "I18N");
+         CustomizedTemplateDirectory = FileSystem.Path.Join(FileSystem.Directory.GetCurrentDirectory(), "config", "templates");
+         ExistOrCreate(CustomizedTemplateDirectory);
+         TemplateDirectory = FileSystem.Path.Join(FileSystem.Directory.GetCurrentDirectory(), "EmailTemplates");
+diff --git a/API/Services/LocalizationService.cs b/API/Services/LocalizationService.cs
+index ab3ad3d..f1a068b 100644
+--- a/API/Services/LocalizationService.cs
++++ b/API/Services/LocalizationService.cs
+@@ -52,8 +52,7 @@ public class LocalizationService : ILocalizationService
+         else
+         {
+             _localizationDirectoryUi = directoryService.FileSystem.Path.Join(
+-                directoryService.FileSystem.Directory.GetCurrentDirectory(),
+-                "wwwroot", "assets/langs");
++                "@webroot@", "assets/langs");
+         }
+ 
+         _cacheOptions = new MemoryCacheEntryOptions()
+diff --git a/API/Startup.cs b/API/Startup.cs
+index 7e3857c..84c466b 100644
+--- a/API/Startup.cs
++++ b/API/Startup.cs
+@@ -36,6 +36,7 @@ using Microsoft.AspNetCore.StaticFiles;
+ using Microsoft.EntityFrameworkCore;
+ using Microsoft.Extensions.Configuration;
+ using Microsoft.Extensions.DependencyInjection;
++using Microsoft.Extensions.FileProviders;
+ using Microsoft.Extensions.Hosting;
+ using Microsoft.Extensions.Logging;
+ using Microsoft.Net.Http.Headers;
+@@ -314,9 +315,6 @@ public class Startup
+         app.UsePathBase(basePath);
+         if (!env.IsDevelopment())
+         {
+-            // We don't update the index.html in local as we don't serve from there
+-            UpdateBaseUrlInIndex(basePath);
+-
+             // Update DB with what's in config
+             var dataContext = serviceProvider.GetRequiredService<DataContext>();
+             var setting = dataContext.ServerSetting.SingleOrDefault(x => x.Key == ServerSettingKey.BaseUrl);
+@@ -360,6 +358,7 @@ public class Startup
+ 
+         app.UseStaticFiles(new StaticFileOptions
+         {
++            FileProvider = new PhysicalFileProvider("@webroot@"),
+             // bcmap files needed for PDF reader localizations (https://github.com/Kareadita/Kavita/issues/2970)
+             ContentTypeProvider = new FileExtensionContentTypeProvider
+             {
+@@ -439,7 +438,7 @@ public class Startup
+         try
+         {
+             var htmlDoc = new HtmlDocument();
+-            var indexHtmlPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "index.html");
++            var indexHtmlPath = Path.Combine("@webroot@", "index.html");
+             htmlDoc.Load(indexHtmlPath);
+ 
+             var baseNode = htmlDoc.DocumentNode.SelectSingleNode("/html/head/base");
