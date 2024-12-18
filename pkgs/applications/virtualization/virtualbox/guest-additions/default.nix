@@ -14,10 +14,6 @@
 let
   virtualBoxNixGuestAdditionsBuilder = callPackage ./builder.nix { };
 
-  # Forced to 1.18; vboxvideo doesn't seem to provide any newer ABI,
-  # and nixpkgs doesn't support older ABIs anymore.
-  xserverABI = "118";
-
   # Specifies how to patch binaries to make sure that libraries loaded using
   # dlopen are found. We grep binaries for specific library names and patch
   # RUNPATH in matching binaries to contain the needed library paths.
