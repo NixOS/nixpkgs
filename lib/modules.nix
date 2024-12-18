@@ -1266,12 +1266,34 @@ let
 
   /**
 
-    # Spec is an attrpath spec, extra is an additional argument, depending on the action
-
     A modern version of `lib.modules.doRename` that is used using attrpath
     declarations as defined in `lib.modules.associateWithAttrPath`.
 
     # Inputs
+
+    `spec`
+
+    : An attrpath specification consumable by
+      `lib.attrsets.associateWithAttrPath`. It should contain either:
+      - "from" and "to" to perform a rename
+      - "original" and "alias" to create an alias
+      - "remove" to remove a module
+
+    `extra`
+
+    : An additional piece of data passed to the function depending on the function:
+
+      - rename: The release number of the first release where the rename should
+        be in effect
+      - alias: The date since which the alias exists
+      - remove: Instructions for the user on what to do about the removal
+
+    null can be passed if you do not wish to pass extra data.
+
+    Please see the documentation for `lib.mkRenamedOptionModuleWith`,
+    `lib.mkAliasOptionModule` and `lib.mkRemovedOptionModule` for more
+    information on the individual operations.
+
   */
   doRename2 = spec: extra:
     let
@@ -1280,17 +1302,19 @@ let
       getPathForOp = op: attrPaths.${op};
     in
     if existsInSpec "to" || existsInSpec "from" then
-      assert (lib.assertMsg (existsInSpec "to" && existsInSpec "from") "You must provide doRename with `to` and `from` or a rename spec.");
+      assert (lib.assertMsg (existsInSpec "to" && existsInSpec "from") "You must provide doRename2 with `from` and `to` to perform a rename.");
       if extra != null then
         mkRenamedOptionModuleWith (getPathForOp "from") (getPathForOp "to") extra
       else
         mkRenamedOptionModule (getPathForOp "from") (getPathForOp "to")
     else if existsInSpec "original" || existsInSpec "alias" then
-      assert (lib.assertMsg (existsInSpec "original" && existsInSpec "alias") "The rename spec provided to doRename must contain `original` and `alias`.");
-      # TODO alias since?
+      assert (lib.assertMsg (existsInSpec "original" && existsInSpec "alias") "You must provide doRename2 with `original` and `from` to create an alias.");
       mkAliasOptionModule (getPathForOp "original") (getPathForOp "alias")
+      # Psyche! `extra` isn't actually used for aliases. This makes the function
+      # implementation simpler and nudges callers to provide useful information
+      # at the call site.
     else if existsInSpec "remove" then
-      mkRemovedOptionModule (getPathForOp "remove") extra
+      mkRemovedOptionModule (getPathForOp "remove") (if extra != null then extra else "")
     else
       abort "doRename2 was called without a valid rename specification. (Check for typos!)";
 
