@@ -507,8 +507,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "ade0b9d",
-        "resolved-ref": "ade0b9d67331118c13a2b836684858e251512373",
+        "ref": "1657f62fe7545ac43a339e0a5ee2b82bacd81e9f",
+        "resolved-ref": "1657f62fe7545ac43a339e0a5ee2b82bacd81e9f",
         "url": "https://github.com/wgh136/flutter_qjs"
       },
       "source": "git",
@@ -538,8 +538,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "3315082b9f7055655610e4f6f136b69e48228c05",
-        "resolved-ref": "3315082b9f7055655610e4f6f136b69e48228c05",
+        "ref": "7637b8b67d0a831f3cd7e702b8173e300880d32e",
+        "resolved-ref": "7637b8b67d0a831f3cd7e702b8173e300880d32e",
         "url": "https://github.com/pkuislm/flutter_saf.git"
       },
       "source": "git",
@@ -554,12 +554,11 @@
     "flutter_to_arch": {
       "dependency": "direct dev",
       "description": {
-        "path": ".",
-        "ref": "HEAD",
-        "resolved-ref": "15bfead0380fda79b0256b37c73b886b0882f1bf",
-        "url": "https://github.com/wgh136/flutter_to_arch"
+        "name": "flutter_to_arch",
+        "sha256": "656cffc182b05af38aa96a1115931620b8865c4b0cfe00813b26fcff0875f2ab",
+        "url": "https://pub.dev"
       },
-      "source": "git",
+      "source": "hosted",
       "version": "1.0.0"
     },
     "flutter_to_debian": {
@@ -782,8 +781,8 @@
       "dependency": "direct main",
       "description": {
         "path": ".",
-        "ref": "d1c96cd6503103b3270dfe2f320d4a1c93780f53",
-        "resolved-ref": "d1c96cd6503103b3270dfe2f320d4a1c93780f53",
+        "ref": "9a784b193af5d55b2a35e58fa390bda3e4f35d00",
+        "resolved-ref": "9a784b193af5d55b2a35e58fa390bda3e4f35d00",
         "url": "https://github.com/venera-app/lodepng_flutter"
       },
       "source": "git",
@@ -1401,17 +1400,16 @@
     "zip_flutter": {
       "dependency": "direct main",
       "description": {
-        "path": ".",
-        "ref": "HEAD",
-        "resolved-ref": "d5721f1fd8179ee4a5db59f932ae7c89d94e12a0",
-        "url": "https://github.com/wgh136/zip_flutter"
+        "name": "zip_flutter",
+        "sha256": "955b53d58709fcd9feefbed3d41b5522bc5273e677603e9fc67017a81e568d24",
+        "url": "https://pub.dev"
       },
-      "source": "git",
-      "version": "0.0.1"
+      "source": "hosted",
+      "version": "0.0.5"
     }
   },
   "sdks": {
     "dart": ">=3.6.0 <4.0.0",
-    "flutter": ">=3.27.0"
+    "flutter": ">=3.27.1"
   }
 }
