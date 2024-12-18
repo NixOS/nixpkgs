@@ -307,8 +307,8 @@ stdenv.mkDerivation (finalAttrs: {
       ; do
       echo "PATCH: $f"
       substituteInPlace $f \
-        --replace-fail 'Starting llvm::' 'Starting {{.*}}' \
-        --replace-fail 'Finished llvm::' 'Finished {{.*}}'
+        --replace-quiet 'Starting llvm::' 'Starting {{.*}}' \
+        --replace-quiet 'Finished llvm::' 'Finished {{.*}}'
     done
   '' +
     # gcc-13 fix
