@@ -137,7 +137,7 @@ stdenv.mkDerivation rec {
     description = "Diablo build for modern operating systems";
     mainProgram = "devilutionx";
     longDescription = "In order to play this game a copy of diabdat.mpq is required. Place a copy of diabdat.mpq in ~/.local/share/diasurgical/devilution before executing the game.";
-    license = licenses.unlicense;
+    license = licenses.sustainableUse;
     maintainers = with maintainers; [
       karolchmist
       aanderse
