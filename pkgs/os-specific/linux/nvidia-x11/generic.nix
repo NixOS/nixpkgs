@@ -28,6 +28,7 @@
 , postInstall ? null
 , broken ? false
 , brokenOpen ? broken
+, brokenEFANVPeerMem ? (broken || brokenOpen)
 }@args:
 
 { lib
@@ -246,6 +247,12 @@ let
             broken = brokenOpen;
           })
           openSha256;
+        efa-nv-peermem = lib.mapNullable
+          (nvidia-open: callPackage ../efa/nv-peermem.nix {
+            inherit nvidia-open;
+            broken = brokenEFANVPeerMem;
+          })
+          self.open;
         settings =
           if useSettings then
             (if settings32Bit then pkgsi686Linux.callPackage else callPackage) (import ./settings.nix self settingsSha256)
