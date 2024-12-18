@@ -1858,11 +1858,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libxshmfence = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libxshmfence";
-    version = "1.3.2";
+    version = "1.3.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libxshmfence-1.3.2.tar.xz";
-      sha256 = "0vv0c7rjf6nd1afbal4c4ralallarak1v3ss3gcjdca0pibz43c7";
+      url = "mirror://xorg/individual/lib/libxshmfence-1.3.3.tar.xz";
+      sha256 = "046y7zn8agp8kdr1lg11yyvpx90i9sjf77h25jhgx5msd84xz96l";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
