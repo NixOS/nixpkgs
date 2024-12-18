@@ -43,7 +43,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     executables = [ "API" ];
 
     projectFile = "API/API.csproj";
-    nugetDeps = ./nuget-deps.nix;
+    nugetDeps = ./nuget-deps.json;
     dotnet-sdk = dotnetCorePackages.sdk_8_0;
     dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
   };
