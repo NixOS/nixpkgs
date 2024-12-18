@@ -89,6 +89,12 @@ in
       type = lib.types.bool;
       description = "Whether to verbose logging for guest services.";
     };
+
+    vboxsf = lib.mkOption {
+      default = true;
+      type = lib.types.bool;
+      description = "Whether to load vboxsf";
+    };
   };
 
   ###### implementation
@@ -106,11 +112,6 @@ in
         environment.systemPackages = [ kernel.virtualboxGuestAdditions ];
 
         boot.extraModulePackages = [ kernel.virtualboxGuestAdditions ];
-
-        boot.supportedFilesystems = [ "vboxsf" ];
-        boot.initrd.supportedFilesystems = [ "vboxsf" ];
-
-        users.groups.vboxsf.gid = config.ids.gids.vboxsf;
 
         systemd.services.virtualbox = {
           description = "VirtualBox Guest Services";
@@ -135,6 +136,12 @@ in
 
         systemd.user.services.virtualboxClientVmsvga = mkVirtualBoxUserService "--vmsvga-session" cfg.verbose;
       }
+      (lib.mkIf cfg.vboxsf {
+        boot.supportedFilesystems = [ "vboxsf" ];
+        boot.initrd.supportedFilesystems = [ "vboxsf" ];
+
+        users.groups.vboxsf.gid = config.ids.gids.vboxsf;
+      })
       (lib.mkIf cfg.clipboard {
         systemd.user.services.virtualboxClientClipboard = mkVirtualBoxUserService "--clipboard" cfg.verbose;
       })
