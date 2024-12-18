@@ -35,6 +35,7 @@ stdenv.mkDerivation {
   '';
 
   meta = {
+    maintainers = with lib.maintainers; [ ahoneybun ];
     license = [ lib.licenses.gpl2Plus ];
     platforms = [
       "i686-linux"
