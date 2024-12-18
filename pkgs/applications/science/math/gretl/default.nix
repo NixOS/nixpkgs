@@ -15,6 +15,7 @@
   openblas,
   readline,
   pkg-config,
+  llvmPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -39,11 +40,13 @@ stdenv.mkDerivation (finalAttrs: {
     mpfr
     openblas
     readline
-  ];
+  ] ++ lib.optionals stdenv.cc.isClang [ llvmPackages.openmp ];
 
   nativeBuildInputs = [
     pkg-config
   ];
+
+  env.NIX_LDFLAGS = lib.optionalString stdenv.cc.isClang "-lomp";
 
   enableParallelBuilding = true;
   # Missing install depends:
