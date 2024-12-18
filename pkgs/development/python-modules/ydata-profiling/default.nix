@@ -104,7 +104,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Create HTML profiling reports from Pandas DataFrames";
     homepage = "https://ydata-profiling.ydata.ai";
-    changelog = "https://github.com/ydataai/ydata-profiling/releases/tag/${version}";
+    changelog = "https://github.com/ydataai/ydata-profiling/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ bcdarwin ];
     mainProgram = "ydata_profiling";
