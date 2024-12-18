@@ -103,8 +103,6 @@ buildDotnetModule rec {
     popd
   '';
 
-  passthru.updateScript = ./updater.sh;
-
   meta = with lib; {
     homepage = "https://ryujinx.org/";
     changelog = "https://github.com/Ryujinx/Ryujinx/wiki/Changelog";
