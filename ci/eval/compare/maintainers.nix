@@ -92,7 +92,7 @@ let
     builtins.map (
       pkg:
       builtins.map (maintainer: {
-        handle = lib.toLower maintainer.github;
+        id = maintainer.githubId;
         packageName = pkg.name;
         dueToFiles = pkg.filenames;
       }) pkg.maintainers
@@ -103,9 +103,9 @@ let
     ping: collector:
     collector
     // {
-      "${ping.handle}" = [
+      "${toString ping.id}" = [
         { inherit (ping) packageName dueToFiles; }
-      ] ++ (collector."${ping.handle}" or [ ]);
+      ] ++ (collector."${toString ping.id}" or [ ]);
     }
   ) { } listToPing;
 
