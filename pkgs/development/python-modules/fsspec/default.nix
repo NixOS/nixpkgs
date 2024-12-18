@@ -26,6 +26,7 @@
   pyarrow,
   pygit2,
   s3fs,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -90,11 +91,8 @@ buildPythonPackage rec {
     pytest-mock
     pytest-vcr
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   __darwinAllowLocalNetworking = true;
 

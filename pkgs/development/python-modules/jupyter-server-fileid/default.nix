@@ -9,6 +9,7 @@
   click,
   pytest-jupyter,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -43,9 +44,9 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME=$TEMPDIR
-  '';
+  nativeCheckInputs = [
+    tmpdirAsHomeHook
+  ];
 
   __darwinAllowLocalNetworking = true;
 

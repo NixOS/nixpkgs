@@ -20,6 +20,7 @@
   setuptools-scm,
   setuptools,
   tabulate,
+  tmpdirAsHomeHook,
   typer,
 }:
 
@@ -61,11 +62,10 @@ buildPythonPackage rec {
     pytest-mock
     pytest-test-utils
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     git config --global user.email "nobody@example.com"
     git config --global user.name "Nobody"
   '';

@@ -8,6 +8,7 @@
   misoc,
   pytest-plt,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage {
@@ -27,11 +28,8 @@ buildPythonPackage {
     misoc
     pytest-plt
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTestPaths = [
     # require linien-server which is not packaged

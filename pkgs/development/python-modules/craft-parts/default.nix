@@ -16,10 +16,11 @@
   requests-mock,
   hypothesis,
   jsonschema,
-  git,
+  gitMinimal,
   squashfsTools,
   setuptools-scm,
   stdenv,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -57,7 +58,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "craft_parts" ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     hypothesis
     jsonschema
     pytest-check
@@ -66,13 +67,10 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
     squashfsTools
+    tmpdirAsHomeHook
   ];
 
   pytestFlagsArray = [ "tests/unit" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     # Relies upon paths not present in Nix (like /bin/bash)

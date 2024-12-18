@@ -9,6 +9,7 @@
   pybind11,
   pytest-xdist,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 let
@@ -40,14 +41,9 @@ buildPythonPackage rec {
     rm tmp
   '';
 
-  # The source files are compiled at runtime and cached at the
-  # $HOME/.cache folder, so for the check phase it is needed to
-  # have a temporary home. This is also the reason ninja is not
-  # needed at the nativeBuildInputs, since it will only be used
-  # at runtime.
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeBuildInputs = [
+    tmpdirAsHomeHook
+  ];
 
   propagatedBuildInputs = [
     torch

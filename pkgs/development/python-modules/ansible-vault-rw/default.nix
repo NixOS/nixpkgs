@@ -11,6 +11,7 @@
 
   # tests
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -28,16 +29,13 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ ansible-core ];
 
-  # Otherwise tests will fail to create directory
-  # Permission denied: '/homeless-shelter'
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   # no tests in sdist, no 2.1.0 tag on git
   doCheck = false;
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    tmpdirAsHomeHook
+    pytestCheckHook
+  ];
 
   meta = with lib; {
     description = "This project aim to R/W an ansible-vault yaml file";

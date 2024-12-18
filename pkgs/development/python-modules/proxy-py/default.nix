@@ -18,6 +18,7 @@
   pythonOlder,
   requests,
   setuptools-scm,
+  tmpdirAsHomeHook,
   typing-extensions,
 }:
 
@@ -60,13 +61,10 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     requests
+    tmpdirAsHomeHook
   ];
 
   __darwinAllowLocalNetworking = true;
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   disabledTests = [
     # Test requires network access

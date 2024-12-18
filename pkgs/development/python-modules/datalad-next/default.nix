@@ -16,6 +16,7 @@
   unzip,
   versioneer,
   webdavclient3,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -50,10 +51,6 @@ buildPythonPackage rec {
     more-itertools
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
     webdavclient3
@@ -62,6 +59,7 @@ buildPythonPackage rec {
     datalad
     openssh
     unzip
+    tmpdirAsHomeHook
   ];
 
   disabledTests = [

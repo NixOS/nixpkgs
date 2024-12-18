@@ -17,7 +17,7 @@
   pyerfa,
   pyyaml,
 
-  # optional-depedencies
+  # optional-dependencies
   scipy,
   matplotlib,
   ipython,
@@ -47,7 +47,7 @@
   pytest-astropy-header,
   pytest-astropy,
   threadpoolctl,
-
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -126,6 +126,7 @@ buildPythonPackage rec {
     pytest-astropy-header
     pytest-astropy
     threadpoolctl
+    tmpdirAsHomeHook
   ] ++ optional-dependencies.recommended;
 
   pythonImportsCheck = [ "astropy" ];
@@ -136,7 +137,6 @@ buildPythonPackage rec {
   # https://github.com/astropy/astropy/issues/15316#issuecomment-1722190547
   preCheck = ''
     cd "$out"
-    export HOME="$(mktemp -d)"
     export OMP_NUM_THREADS=$(( $NIX_BUILD_CORES / 4 ))
   '';
 

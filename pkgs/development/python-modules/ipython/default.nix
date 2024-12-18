@@ -39,6 +39,7 @@
   pytest-asyncio,
   pytestCheckHook,
   testpath,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -84,8 +85,6 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "IPython" ];
 
   preCheck = ''
-    export HOME=$TMPDIR
-
     # doctests try to fetch an image from the internet
     substituteInPlace pyproject.toml \
       --replace-fail '"--ipdoctest-modules",' '"--ipdoctest-modules", "--ignore=IPython/core/display.py",'
@@ -96,6 +95,7 @@ buildPythonPackage rec {
     pytest-asyncio
     pytestCheckHook
     testpath
+    tmpdirAsHomeHook
   ];
 
   disabledTests =

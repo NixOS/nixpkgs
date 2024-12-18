@@ -15,6 +15,7 @@
   scipy,
   setuptools-scm,
   setuptools,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -50,13 +51,10 @@ buildPythonPackage rec {
     pytest-astropy
     pytestCheckHook
     scipy
+    tmpdirAsHomeHook
   ];
 
   pythonImportsCheck = [ "asdf_astropy" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   meta = with lib; {
     description = "Extension library for ASDF to provide support for Astropy";

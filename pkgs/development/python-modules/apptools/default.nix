@@ -10,6 +10,7 @@
   pythonOlder,
   setuptools,
   tables,
+  tmpdirAsHomeHook,
   traits,
   traitsui,
 }:
@@ -46,11 +47,10 @@ buildPythonPackage rec {
     preferences = [ configobj ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME=$TMP
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "apptools" ];
 

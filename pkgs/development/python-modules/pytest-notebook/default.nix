@@ -15,6 +15,7 @@
   pytest-cov-stub,
   pytest-regressions,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -57,11 +58,8 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-regressions
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME="$TEMP"
-  '';
 
   disabledTests = [
     "test_diff_to_string"

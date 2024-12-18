@@ -9,7 +9,7 @@
   pytest-cov-stub,
   pytest-mock,
   freezegun,
-  git,
+  gitMinimal,
   jinja2,
   binaryornot,
   click,
@@ -19,6 +19,7 @@
   pyyaml,
   arrow,
   rich,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -48,7 +49,8 @@ buildPythonPackage rec {
     pytest-cov-stub
     pytest-mock
     freezegun
-    git
+    gitMinimal
+    tmpdirAsHomeHook
   ];
 
   dependencies = [
@@ -64,10 +66,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "cookiecutter.main" ];
-
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
 
   disabledTests = [
     # messes with $PYTHONPATH

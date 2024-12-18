@@ -10,6 +10,7 @@
   playwright,
   setuptools,
   setuptools-scm,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -44,13 +45,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     playwright
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   pythonImportsCheck = [ "pycookiecheat" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     # Tests want to use playwright executable

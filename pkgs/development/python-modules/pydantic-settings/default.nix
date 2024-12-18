@@ -9,6 +9,7 @@
   pytestCheckHook,
   pytest-examples,
   pytest-mock,
+  tmpdirAsHomeHook,
 }:
 
 let
@@ -39,16 +40,13 @@ let
       pytestCheckHook
       pytest-examples
       pytest-mock
+      tmpdirAsHomeHook
     ];
 
     disabledTests = [
       # expected to fail
       "test_docs_examples[docs/index.md:212-246]"
     ];
-
-    preCheck = ''
-      export HOME=$TMPDIR
-    '';
 
     # ruff is a dependency of pytest-examples which is required to run the tests.
     # We do not want all of the downstream packages that depend on pydantic-settings to also depend on ruff.

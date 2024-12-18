@@ -18,6 +18,7 @@
   astropy-helpers,
   setuptools,
   isPy3k,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -51,7 +52,10 @@ buildPythonPackage rec {
     substituteInPlace setup.cfg --replace "auto_use = True" "auto_use = False"
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   checkInputs = [
     matplotlib
@@ -71,7 +75,6 @@ buildPythonPackage rec {
   # Tests must be run in the build directory. The tests create files
   # in $HOME/.astropy so we need to set HOME to $TMPDIR.
   preCheck = ''
-    export HOME=$TMPDIR
     cd build/lib
   '';
 

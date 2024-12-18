@@ -32,6 +32,7 @@
   pyro-ppl,
   #, pystan (not packaged)
   pytestCheckHook,
+  tmpdirAsHomeHook,
   torchvision,
   zarr,
 }:
@@ -78,13 +79,10 @@ buildPythonPackage rec {
     pyro-ppl
     # pystan (not packaged)
     pytestCheckHook
+    tmpdirAsHomeHook
     torchvision
     zarr
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   pytestFlagsArray = [ "arviz/tests/base_tests/" ];
 

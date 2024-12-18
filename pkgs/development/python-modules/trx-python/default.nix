@@ -10,6 +10,7 @@
   numpy,
   pytestCheckHook,
   psutil,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -41,11 +42,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     psutil
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   pytestFlagsArray = [ "trx/tests" ];
 

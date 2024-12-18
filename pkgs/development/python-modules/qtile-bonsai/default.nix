@@ -12,6 +12,7 @@
   pyvirtualdisplay,
   pytestCheckHook,
   qtile,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -43,11 +44,8 @@ buildPythonPackage rec {
     xcffib
     qtile
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTestPaths = [
     # Needs a running DBUS

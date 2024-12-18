@@ -22,6 +22,7 @@
   pillow,
   withPostgresql ? true,
   psycopg2,
+  tmpdirAsHomeHook,
   unittestCheckHook,
 }:
 
@@ -64,10 +65,12 @@ buildPythonPackage rec {
     ++ passlib.optional-dependencies.argon2
     ++ lib.optional withPostgresql psycopg2;
 
-  nativeCheckInputs = [ unittestCheckHook ];
+  nativeCheckInputs = [
+    tmpdirAsHomeHook
+    unittestCheckHook
+  ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     export TRYTOND_DATABASE_URI="sqlite://"
     export DB_NAME=":memory:";
   '';

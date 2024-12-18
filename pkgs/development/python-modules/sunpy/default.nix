@@ -26,6 +26,7 @@
   scipy,
   setuptools-scm,
   sqlalchemy,
+  tmpdirAsHomeHook,
   tqdm,
   zeep,
 }:
@@ -90,6 +91,7 @@ buildPythonPackage rec {
       pytest-astropy
       pytest-mock
       pytestCheckHook
+      tmpdirAsHomeHook
     ]
     ++ optional-dependencies.asdf
     ++ optional-dependencies.database
@@ -104,10 +106,6 @@ buildPythonPackage rec {
 
   # darwin has write permission issues
   doCheck = stdenv.hostPlatform.isLinux;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     "rst"

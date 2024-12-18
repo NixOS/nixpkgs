@@ -44,6 +44,7 @@
   # tests
   pytest-xdist,
   pytestCheckHook,
+  tmpdirAsHomeHook,
   p7zip,
   curl,
   httpretty,
@@ -123,10 +124,6 @@ buildPythonPackage rec {
          --bash <($out/bin/datalad shell-completion) \
          --zsh  <($out/bin/datalad shell-completion)
     wrapProgram $out/bin/datalad --prefix PYTHONPATH : "$PYTHONPATH"
-  '';
-
-  preCheck = ''
-    export HOME=$TMPDIR
   '';
 
   # tests depend on apps in $PATH which only will get installed after the test
@@ -228,6 +225,7 @@ buildPythonPackage rec {
     git-annex
     curl
     httpretty
+    tmpdirAsHomeHook
   ];
 
   pytestFlagsArray = [

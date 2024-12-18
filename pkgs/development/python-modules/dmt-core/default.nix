@@ -19,6 +19,7 @@
   scipy,
   semver,
   setuptools,
+  tmpdirAsHomeHook,
   verilogae,
 }:
 
@@ -58,12 +59,9 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     reprint
+    tmpdirAsHomeHook
     verilogae
   ];
-
-  preConfigure = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [
     "DMT.core"

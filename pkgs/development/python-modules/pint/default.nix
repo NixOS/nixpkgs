@@ -21,6 +21,7 @@
   numpy,
   matplotlib,
   uncertainties,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -60,13 +61,10 @@ buildPythonPackage rec {
     pytest-subtests
     pytest-benchmark
     matplotlib
+    tmpdirAsHomeHook
   ];
 
   pytestFlagsArray = [ "--benchmark-disable" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   meta = {
     changelog = "https://github.com/hgrecco/pint/blob/${version}/CHANGES";

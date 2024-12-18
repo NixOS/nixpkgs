@@ -9,6 +9,7 @@
   requests-mock,
   rich,
   setuptools,
+  tmpdirAsHomeHook,
   tomli,
   urllib3,
 }:
@@ -42,11 +43,8 @@ buildPythonPackage rec {
     fixtures
     pytestCheckHook
     requests-mock
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "podman" ];
 

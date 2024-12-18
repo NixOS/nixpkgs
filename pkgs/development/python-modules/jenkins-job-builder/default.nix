@@ -13,6 +13,7 @@
   setuptools,
   testtools,
   pytest-mock,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -26,9 +27,9 @@ buildPythonPackage rec {
     hash = "sha256-G+DVRd6o3GwTdFNnJkotIidrxexJZSdgCGXTA4KnJJA=";
   };
 
-  postPatch = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeBuildInputs = [
+    tmpdirAsHomeHook
+  ];
 
   dependencies = [
     pbr

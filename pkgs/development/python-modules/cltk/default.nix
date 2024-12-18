@@ -25,6 +25,7 @@
 
   # tests
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 buildPythonPackage rec {
   pname = "cltk";
@@ -73,11 +74,8 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   # Most of tests fail as they require local files to be present and also internet access
   doCheck = false;

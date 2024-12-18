@@ -27,6 +27,7 @@
   # tests
   pytestCheckHook,
   fsspec,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -81,6 +82,7 @@ buildPythonPackage rec {
       fsspec
       psutil
       pytestCheckHook
+      tmpdirAsHomeHook
     ]
     ++ fsspec.optional-dependencies.github
     ++ lib.flatten (builtins.attrValues optional-dependencies);
@@ -89,7 +91,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     export IMAGEIO_USERDIR="$TMP"
-    export HOME=$TMPDIR
   '';
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [

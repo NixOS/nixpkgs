@@ -11,6 +11,7 @@
   pathspec,
   pyproject-metadata,
   scikit-build-core,
+  tmpdirAsHomeHook,
 
   # dependencies
   llvmPackages,
@@ -55,6 +56,7 @@ buildPythonPackage rec {
     pathspec
     pyproject-metadata
     scikit-build-core
+    tmpdirAsHomeHook
   ] ++ lib.optionals cudaSupport [ cudaPackages.cuda_nvcc ];
 
   dontUseCmakeConfigure = true;
@@ -79,10 +81,6 @@ buildPythonPackage rec {
   pypaBuildFlags =
     lib.optionals gpuSupport [ "--config-setting=cmake.define.USE_GPU=ON" ]
     ++ lib.optionals cudaSupport [ "--config-setting=cmake.define.USE_CUDA=ON" ];
-
-  postConfigure = ''
-    export HOME=$(mktemp -d)
-  '';
 
   optional-dependencies = {
     arrow = [

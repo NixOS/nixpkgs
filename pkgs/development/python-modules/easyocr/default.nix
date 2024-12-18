@@ -14,6 +14,7 @@
   scikit-image,
   scipy,
   shapely,
+  tmpdirAsHomeHook,
   torch,
   torchvision,
   python,
@@ -60,10 +61,13 @@ buildPythonPackage rec {
     torchvision
   ];
 
+  nativeCheckInputs = [
+    tmpdirAsHomeHook
+  ];
+
   checkPhase = ''
     runHook preCheck
 
-    export HOME="$(mktemp -d)"
     pushd unit_test
     ${python.interpreter} run_unit_test.py --easyocr "$out/${python.sitePackages}/easyocr"
     popd

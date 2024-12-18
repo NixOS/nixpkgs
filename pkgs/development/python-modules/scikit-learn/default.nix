@@ -19,6 +19,7 @@
   pillow,
   joblib,
   threadpoolctl,
+  tmpdirAsHomeHook,
   pythonOlder,
 }:
 
@@ -68,6 +69,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
+    tmpdirAsHomeHook
   ];
 
   env.LC_ALL = "en_US.UTF-8";
@@ -103,7 +105,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     cd $TMPDIR
-    export HOME=$TMPDIR
     export OMP_NUM_THREADS=1
   '';
 

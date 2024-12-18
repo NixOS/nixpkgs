@@ -12,6 +12,7 @@
   pytest-parallel,
   pytestCheckHook,
   pythonOlder,
+  tmpdirAsHomeHook,
   types-pillow,
   wand,
 }:
@@ -41,10 +42,6 @@ buildPythonPackage rec {
     wand
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = [
     ghostscript
     jupyterlab
@@ -53,6 +50,7 @@ buildPythonPackage rec {
     pandas-stubs
     pytest-parallel
     pytestCheckHook
+    tmpdirAsHomeHook
     types-pillow
   ];
 

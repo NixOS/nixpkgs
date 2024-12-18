@@ -20,6 +20,7 @@
   flaky,
   pexpect,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -64,11 +65,8 @@ buildPythonPackage rec {
     flaky
     pexpect
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   disabledTests = [
     # Flaky: pexpect.exceptions.TIMEOUT: Timeout exceeded

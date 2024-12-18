@@ -12,6 +12,7 @@
   pytestCheckHook,
   pythonOlder,
   setuptools,
+  tmpdirAsHomeHook,
   tqdm,
 }:
 
@@ -42,13 +43,12 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   pythonImportsCheck = [ "yabadaba" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   meta = with lib; {
     description = "Abstraction layer allowing for common interactions with databases and records";

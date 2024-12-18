@@ -16,6 +16,7 @@
   pythonOlder,
   requests,
   setuptools,
+  tmpdirAsHomeHook,
   tomli,
   tomlkit,
   typing-extensions,
@@ -57,6 +58,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytest7CheckHook
     requests
+    tmpdirAsHomeHook
     typing-extensions
   ];
 
@@ -71,10 +73,6 @@ buildPythonPackage rec {
   ];
 
   dontUseSetuptoolsCheck = true;
-
-  preCheck = ''
-    export HOME=$TEMPDIR
-  '';
 
   disabledTestPaths = [
     "tests/benchmark"

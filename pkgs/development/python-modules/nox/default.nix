@@ -9,6 +9,7 @@
   packaging,
   pytestCheckHook,
   pythonOlder,
+  tmpdirAsHomeHook,
   tomli,
   tox,
   uv,
@@ -55,11 +56,10 @@ buildPythonPackage rec {
     uv = [ uv ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   pythonImportsCheck = [ "nox" ];
 

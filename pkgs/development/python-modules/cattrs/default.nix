@@ -19,6 +19,7 @@
   pythonAtLeast,
   pythonOlder,
   pyyaml,
+  tmpdirAsHomeHook,
   tomlkit,
   typing-extensions,
   ujson,
@@ -77,6 +78,7 @@ buildPythonPackage rec {
     pytest-xdist
     pytestCheckHook
     pyyaml
+    tmpdirAsHomeHook
     tomlkit
     typing-extensions
     ujson
@@ -88,10 +90,6 @@ buildPythonPackage rec {
     substituteInPlace tests/test_preconf.py \
       --replace-fail "from orjson import dumps as orjson_dumps" "" \
       --replace-fail "from orjson import loads as orjson_loads" ""
-  '';
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
   '';
 
   disabledTestPaths = [

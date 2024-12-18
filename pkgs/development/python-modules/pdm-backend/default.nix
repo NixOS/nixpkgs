@@ -9,10 +9,11 @@
 
   # tests
   editables,
-  git,
+  gitMinimal,
   mercurial,
   pytestCheckHook,
   setuptools,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -35,17 +36,16 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     editables
-    git
+    gitMinimal
     mercurial
     pytestCheckHook
     setuptools
+    tmpdirAsHomeHook
   ];
 
   preCheck = ''
     unset PDM_BUILD_SCM_VERSION
 
-    # tests require a configured git identity
-    export HOME=$TMPDIR
     git config --global user.name nixbld
     git config --global user.email nixbld@localhost
   '';

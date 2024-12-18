@@ -11,6 +11,7 @@
   pytest-timeout,
   pytestCheckHook,
   pythonOlder,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -42,11 +43,8 @@ buildPythonPackage rec {
     pytest-mock
     pytest-timeout
     pytestCheckHook
+    tmpdirAsHomeHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME=$TMP
-  '';
 
   disabledTests = [
     # broken in nix env

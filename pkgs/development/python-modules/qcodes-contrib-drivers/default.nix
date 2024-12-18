@@ -13,6 +13,7 @@
   pytest-mock,
   pyvisa-sim,
   stdenv,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -28,6 +29,10 @@ buildPythonPackage rec {
     tag = "v${version}";
     sha256 = "sha256-/W5oC5iqYifMR3/s7aSQ2yTJNmkemkc0KVxIU0Es3zY=";
   };
+
+  nativeBuildInputs = [
+    tmpdirAsHomeHook
+  ];
 
   build-system = [
     setuptools
@@ -58,10 +63,6 @@ buildPythonPackage rec {
       # AssertionError: assert ['outp:trig4:...9999996', ...] == ['outp:trig4:...t 0.266', ...]
       "test_stability_diagram_external"
     ];
-
-  postInstall = ''
-    export HOME="$TMPDIR"
-  '';
 
   meta = {
     description = "User contributed drivers for QCoDeS";

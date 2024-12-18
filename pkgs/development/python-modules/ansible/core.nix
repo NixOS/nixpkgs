@@ -6,6 +6,7 @@
   installShellFiles,
   docutils,
   setuptools,
+  tmpdirAsHomeHook,
   ansible,
   cryptography,
   importlib-resources,
@@ -53,6 +54,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     installShellFiles
     docutils
+    tmpdirAsHomeHook
   ];
 
   build-system = [ setuptools ];
@@ -87,7 +89,6 @@ buildPythonPackage rec {
   pythonRelaxDeps = lib.optionals (pythonOlder "3.10") [ "importlib-resources" ];
 
   postInstall = ''
-    export HOME="$(mktemp -d)"
     packaging/cli-doc/build.py man --output-dir=man
     installManPage man/*
   '';

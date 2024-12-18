@@ -13,6 +13,7 @@
   pythonOlder,
   rich,
   shellingham,
+  tmpdirAsHomeHook,
   typing-extensions,
 }:
 
@@ -50,14 +51,11 @@ buildPythonPackage rec {
       pytest-sugar
       pytest-xdist
       pytestCheckHook
+      tmpdirAsHomeHook
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       procps
     ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   disabledTests =
     [

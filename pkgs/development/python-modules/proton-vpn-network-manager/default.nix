@@ -15,6 +15,7 @@
   pytest-asyncio,
   pytestCheckHook,
   pytest-cov-stub,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -65,12 +66,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
     pytest-asyncio
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    # Needed for Permission denied: '/homeless-shelter'
-    export HOME=$(mktemp -d)
-  '';
 
   meta = {
     description = "Provides the necessary functionality for other ProtonVPN components to interact with NetworkManager";

@@ -10,6 +10,7 @@
   pytestCheckHook,
   pytest-timeout,
   setuptools,
+  tmpdirAsHomeHook,
   tomlkit,
 }:
 
@@ -45,13 +46,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-timeout
+    tmpdirAsHomeHook
   ];
 
   pytestFlagsArray = [ "-Wignore::DeprecationWarning" ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     # disable tests depending on network connection

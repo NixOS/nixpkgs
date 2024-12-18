@@ -9,6 +9,7 @@
   six,
   testresources,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -33,11 +34,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     testresources
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   pythonImportsCheck = [
     "launchpadlib"

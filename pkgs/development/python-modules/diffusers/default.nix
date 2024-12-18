@@ -32,6 +32,7 @@
   requests-mock,
   scipy,
   sentencepiece,
+  tmpdirAsHomeHook,
   torchsde,
   transformers,
   pythonAtLeast,
@@ -100,6 +101,7 @@ buildPythonPackage rec {
     requests-mock
     scipy
     sentencepiece
+    tmpdirAsHomeHook
     torchsde
     transformers
   ] ++ optional-dependencies.torch;
@@ -128,7 +130,6 @@ buildPythonPackage rec {
       '';
     in
     ''
-      export HOME=$TMPDIR
       cat ${conftestSkipNetworkErrors} >> tests/conftest.py
     '';
 

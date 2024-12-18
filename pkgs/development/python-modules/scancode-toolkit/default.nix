@@ -51,6 +51,7 @@
   setuptools,
   spdx-tools,
   text-unidecode,
+  tmpdirAsHomeHook,
   toml,
   typecode,
   typecode-libmagic,
@@ -70,6 +71,10 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-o+c2aB9oAI5xyHj2xtQowSP4Wjq6RAAmasXjrzXR5ko=";
   };
+
+  nativeBuildInputs = [
+    tmpdirAsHomeHook
+  ];
 
   dontConfigure = true;
 
@@ -130,12 +135,6 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.9") [ zipp ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  # Importing scancode needs a writeable home, and preCheck happens in between
-  # pythonImportsCheckPhase and pytestCheckPhase.
-  postInstall = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "scancode" ];
 

@@ -3,7 +3,7 @@
   stdenv,
   auditwheel,
   buildPythonPackage,
-  git,
+  gitMinimal,
   greenlet,
   fetchFromGitHub,
   pyee,
@@ -14,6 +14,7 @@
   playwright-driver,
   nixosTests,
   nodejs,
+  tmpdirAsHomeHook,
 }:
 
 let
@@ -44,7 +45,6 @@ buildPythonPackage rec {
 
   postPatch = ''
     # if setuptools_scm is not listing files via git almost all python files are excluded
-    export HOME=$(mktemp -d)
     git init .
     git add -A .
     git config --global user.email "nixpkgs"
@@ -71,9 +71,10 @@ buildPythonPackage rec {
   '';
 
   nativeBuildInputs = [
-    git
+    gitMinimal
     setuptools-scm
     setuptools
+    tmpdirAsHomeHook
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ auditwheel ];
 
   pythonRelaxDeps = [

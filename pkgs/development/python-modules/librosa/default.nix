@@ -31,6 +31,7 @@
   pytestCheckHook,
   resampy,
   samplerate,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -97,11 +98,8 @@ buildPythonPackage rec {
     pytestCheckHook
     resampy
     samplerate
+    tmpdirAsHomeHook
   ] ++ optional-dependencies.matplotlib;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests =
     [

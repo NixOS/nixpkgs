@@ -27,6 +27,7 @@
   expecttest,
   hypothesis,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -80,12 +81,12 @@ buildPythonPackage rec {
     expecttest
     hypothesis
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   pythonImportsCheck = [ "fairseq" ];
 
   preCheck = ''
-    export HOME=$TMPDIR
     cd tests
   '';
 

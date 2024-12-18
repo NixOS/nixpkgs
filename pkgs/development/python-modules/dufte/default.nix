@@ -7,6 +7,7 @@
   matplotlib,
   numpy,
   pytestCheckHook,
+  tmpdirAsHomeHook,
   setuptools,
 }:
 
@@ -31,13 +32,15 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     mkdir -p $HOME/.config/matplotlib
     echo "backend: ps" > $HOME/.config/matplotlib/matplotlibrc
     ln -s $HOME/.config/matplotlib $HOME/.matplotlib
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   pythonImportsCheck = [ "dufte" ];
 

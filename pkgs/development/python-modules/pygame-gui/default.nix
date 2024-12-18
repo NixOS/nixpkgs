@@ -9,6 +9,7 @@
   pygame-ce,
   python-i18n,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -36,10 +37,12 @@ buildPythonPackage rec {
       --replace-fail "xsel" "${lib.getExe pkgs.xsel}"
   '';
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   preCheck = ''
-    export HOME=$TMPDIR
     export SDL_VIDEODRIVER=dummy
   '';
 

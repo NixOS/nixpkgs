@@ -24,6 +24,7 @@
   rich,
   tomlkit,
   gradio,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -76,13 +77,13 @@ buildPythonPackage rec {
     rich
     tomlkit
     gradio.sans-reverse-dependencies
+    tmpdirAsHomeHook
   ];
   # ensuring we don't propagate this intermediate build
   disallowedReferences = [ gradio.sans-reverse-dependencies ];
 
   # Add a pytest hook skipping tests that access network, marking them as "Expected fail" (xfail).
   preCheck = ''
-    export HOME=$TMPDIR
     cat ${./conftest-skip-network-errors.py} >> test/conftest.py
   '';
 

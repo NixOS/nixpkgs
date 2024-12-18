@@ -13,6 +13,7 @@
   tensorflow,
   threadpoolctl,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -50,11 +51,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pandas
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   disabledTestPaths = [
     # require tensorflow and keras, but we don't want to

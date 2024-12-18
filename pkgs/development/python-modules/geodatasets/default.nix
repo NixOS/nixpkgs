@@ -9,6 +9,7 @@
   pooch,
   pyogrio,
   setuptools-scm,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -32,11 +33,8 @@ buildPythonPackage rec {
     geopandas
     pyogrio
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   pytestFlagsArray = [
     # disable tests which require network access

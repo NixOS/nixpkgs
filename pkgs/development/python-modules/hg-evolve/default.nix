@@ -3,6 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   mercurial,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -15,13 +16,14 @@ buildPythonPackage rec {
     hash = "sha256-Jun1gZYZXv8nuJBnberK1bcTPTLCDgGGd543OeOEVOs=";
   };
 
-  nativeCheckInputs = [ mercurial ];
+  nativeCheckInputs = [
+    mercurial
+    tmpdirAsHomeHook
+  ];
 
   checkPhase = ''
     runHook preCheck
 
-    export TESTTMP=$(mktemp -d)
-    export HOME=$TESTTMP
     cat <<EOF >$HOME/.hgrc
     [extensions]
     evolve =
@@ -30,8 +32,8 @@ buildPythonPackage rec {
 
     # Shipped tests use the mercurial testing framework, and produce inconsistent results.
     # Do a quick smoke-test to see if things do what we expect.
-    hg init $TESTTMP/repo
-    pushd $TESTTMP/repo
+    hg init $HOME/repo
+    pushd $HOME/repo
     touch a
     hg add a
     hg commit -m "init a"

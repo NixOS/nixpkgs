@@ -17,6 +17,7 @@
   pytools,
   setuptools,
   typing-extensions,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -33,6 +34,10 @@ buildPythonPackage rec {
     hash = "sha256-mU8vXEPR88QpJpzXZlZdDhMtlwIx5YpeYhXU8Vw2T9g=";
     fetchSubmodules = true; # submodule at `loopy/target/c/compyte`
   };
+
+  nativeBuildInputs = [
+    tmpdirAsHomeHook
+  ];
 
   build-system = [ setuptools ];
 
@@ -51,10 +56,6 @@ buildPythonPackage rec {
     pytools
     typing-extensions
   ];
-
-  postConfigure = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "loopy" ];
 

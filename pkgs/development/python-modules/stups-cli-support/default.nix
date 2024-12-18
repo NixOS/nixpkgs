@@ -8,6 +8,7 @@
   requests,
   pytestCheckHook,
   isPy3k,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -31,9 +32,10 @@ buildPythonPackage rec {
     requests
   ];
 
-  preCheck = "export HOME=$TEMPDIR";
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   meta = with lib; {
     description = "Helper library for all STUPS command line tools";

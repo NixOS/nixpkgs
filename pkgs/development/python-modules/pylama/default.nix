@@ -14,6 +14,7 @@
   setuptools,
   pylint,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 let
@@ -55,11 +56,8 @@ let
     nativeCheckInputs = [
       pylint
       pytestCheckHook
+      tmpdirAsHomeHook
     ];
-
-    preCheck = ''
-      export HOME=$TEMP
-    '';
 
     disabledTests = [
       "test_quotes" # FIXME package pylama-quotes

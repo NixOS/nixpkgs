@@ -9,6 +9,7 @@
   pytest,
   pytest-cov-stub,
   isPy3k,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -30,13 +31,10 @@ buildPythonPackage rec {
     stups-zign
   ];
 
-  preCheck = "
-    export HOME=$TEMPDIR
-  ";
-
   nativeCheckInputs = [
     pytest
     pytest-cov-stub
+    tmpdirAsHomeHook
   ];
 
   meta = with lib; {

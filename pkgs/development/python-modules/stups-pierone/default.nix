@@ -9,6 +9,7 @@
   pytestCheckHook,
   hypothesis,
   pythonOlder,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -35,13 +36,10 @@ buildPythonPackage rec {
     stups-zign
   ];
 
-  preCheck = ''
-    export HOME=$TEMPDIR
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
     hypothesis
+    tmpdirAsHomeHook
   ];
 
   pythonImportsCheck = [ "pierone" ];

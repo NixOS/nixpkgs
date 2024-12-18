@@ -11,6 +11,7 @@
   pyyaml,
   setuptools,
   setuptools-scm,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -43,11 +44,10 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   disabledTests = [
     # Network access

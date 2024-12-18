@@ -22,6 +22,7 @@
   pytest-timeout,
   rangehttpserver,
   scikit-hep-testdata,
+  tmpdirAsHomeHook,
   xxhash,
 }:
 
@@ -58,11 +59,8 @@ buildPythonPackage rec {
     pytest-timeout
     rangehttpserver
     scikit-hep-testdata
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
 
   disabledTests =
     [

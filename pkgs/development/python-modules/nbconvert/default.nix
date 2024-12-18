@@ -24,6 +24,7 @@
   ipykernel,
   ipywidgets,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 let
@@ -75,15 +76,12 @@ buildPythonPackage rec {
     traitlets
   ] ++ lib.optionals (pythonOlder "3.10") [ importlib-metadata ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = [
     flaky
     ipykernel
     ipywidgets
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   pytestFlagsArray = [

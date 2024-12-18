@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -21,12 +22,10 @@ buildPythonPackage rec {
     hash = "sha256-NsImnD+erhpakQnl1neuHfSKiV6ipNBMPGKMDM0gwWc=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
-  # override $HOME directory:
-  #   error: [Errno 13] Permission denied: '/homeless-shelter'
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/csingley/ofxtools";

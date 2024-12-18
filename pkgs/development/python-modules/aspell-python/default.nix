@@ -8,6 +8,7 @@
   pytestCheckHook,
   pythonAtLeast,
   setuptools,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -28,11 +29,13 @@ buildPythonPackage rec {
 
   buildInputs = [ aspell ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   preCheck = ''
     export ASPELL_CONF="dict-dir ${aspellDicts.en}/lib/aspell"
-    export HOME=$(mktemp -d)
   '';
 
   pytestFlagsArray = [ "test/unittests.py" ];

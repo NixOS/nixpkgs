@@ -5,6 +5,7 @@
   click,
   pytestCheckHook,
   pytest-click,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -25,11 +26,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-click
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   pythonImportsCheck = [ "click_shell" ];
-
-  preCheck = "export HOME=$(mktemp -d)";
 
   meta = with lib; {
     description = "Extension to click that easily turns your click app into a shell utility";

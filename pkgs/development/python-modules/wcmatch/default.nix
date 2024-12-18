@@ -5,6 +5,7 @@
   hatchling,
   pytestCheckHook,
   bracex,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -21,18 +22,17 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [ bracex ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   disabledTests = [ "TestTilde" ];
 
   pythonImportsCheck = [ "wcmatch" ];
 
   meta = with lib; {
-    description = "Wilcard File Name matching library";
+    description = "Wildcard File Name matching library";
     homepage = "https://github.com/facelessuser/wcmatch";
     license = licenses.mit;
     maintainers = [ ];

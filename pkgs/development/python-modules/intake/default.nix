@@ -26,6 +26,8 @@
   setuptools,
   setuptools-scm,
   tornado,
+  addBinToPathHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -60,8 +62,10 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     intake-parquet
     pytestCheckHook
+    tmpdirAsHomeHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   optional-dependencies = {
@@ -83,11 +87,6 @@ buildPythonPackage rec {
   };
 
   __darwinAllowLocalNetworking = true;
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-    export PATH="$PATH:$out/bin";
-  '';
 
   disabledTestPaths = [
     # Missing plusins

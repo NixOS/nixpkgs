@@ -9,6 +9,7 @@
   pythonOlder,
   scikit-learn,
   scipy,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -32,11 +33,13 @@ buildPythonPackage rec {
     persim
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   preCheck = ''
     # specifically needed for darwin
-    export HOME=$(mktemp -d)
     mkdir -p $HOME/.matplotlib
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
   '';

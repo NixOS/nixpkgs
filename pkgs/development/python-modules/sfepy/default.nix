@@ -20,6 +20,7 @@
   openssh,
   pyvista,
   pytest,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -70,11 +71,13 @@ buildPythonPackage rec {
     rm sfepy/tests/test_quadratures.py
   '';
 
-  nativeCheckInputs = [ pytest ];
+  nativeCheckInputs = [
+    pytest
+    tmpdirAsHomeHook
+  ];
 
   checkPhase = ''
     export OMPI_MCA_plm_rsh_agent=${openssh}/bin/ssh
-    export HOME=$TMPDIR
     mv sfepy sfepy.hidden
     mkdir -p $HOME/.matplotlib
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc

@@ -14,6 +14,7 @@
   datalad,
   pytestCheckHook,
   pytest-qt,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage {
@@ -41,15 +42,12 @@ buildPythonPackage {
 
   pythonRemoveDeps = [ "applescript" ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
     pytest-qt
     git
     git-annex
+    tmpdirAsHomeHook
   ];
 
   pythonImportsCheck = [ "datalad_gooey" ];

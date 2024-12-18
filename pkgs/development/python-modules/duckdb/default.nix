@@ -12,6 +12,7 @@
   pybind11,
   setuptools-scm,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -60,6 +61,7 @@ buildPythonPackage rec {
     google-cloud-storage
     psutil
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   # test flags from .github/workflows/Python.yml
@@ -86,7 +88,6 @@ buildPythonPackage rec {
 
   # remove duckdb dir to prevent import confusion by pytest
   preCheck = ''
-    export HOME="$(mktemp -d)"
     rm -rf duckdb
   '';
 

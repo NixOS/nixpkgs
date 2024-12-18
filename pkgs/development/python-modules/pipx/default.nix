@@ -12,7 +12,8 @@
   pythonOlder,
   tomli,
   userpath,
-  git,
+  gitMinimal,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -48,12 +49,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    git
+    gitMinimal
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pytestFlagsArray = [
     "--ignore=tests/test_install_all_packages.py"

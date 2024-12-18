@@ -3,10 +3,11 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   pytestCheckHook,
   pythonOlder,
   ruamel-yaml,
+  tmpdirAsHomeHook,
   tomli,
 }:
 
@@ -27,8 +28,9 @@ buildPythonPackage rec {
   propagatedBuildInputs = [ ruamel-yaml ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   # Note: this is not likely to ever work on Darwin
@@ -38,8 +40,6 @@ buildPythonPackage rec {
   # the tests require a functional git installation which requires a valid HOME
   # directory.
   preCheck = ''
-    export HOME="$(mktemp -d)"
-
     git config --global user.name "Nix Builder"
     git config --global user.email "nix-builder@nixos.org"
     git init .

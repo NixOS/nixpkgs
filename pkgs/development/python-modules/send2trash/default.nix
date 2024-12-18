@@ -5,6 +5,7 @@
   fetchFromGitHub,
   setuptools,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -23,11 +24,10 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   meta = with lib; {
     description = "Send file to trash natively under macOS, Windows and Linux";

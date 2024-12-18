@@ -7,6 +7,7 @@
   requests,
   segno,
   setuptools,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -31,11 +32,10 @@ buildPythonPackage rec {
     qr = [ segno ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME=$TEMP
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   pythonImportsCheck = [ "fritzconnection" ];
 

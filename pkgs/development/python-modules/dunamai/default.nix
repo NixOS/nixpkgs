@@ -7,7 +7,9 @@
   importlib-metadata,
   packaging,
   pytestCheckHook,
-  git,
+  gitMinimal,
+  addBinToPathHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -30,16 +32,15 @@ buildPythonPackage rec {
 
   # needs to be able to run dunami from PATH
   preCheck = ''
-    export PATH=$PATH:$out/bin
-    export HOME=$(mktemp -d)
-
     git config --global user.email "nobody@example.com"
     git config --global user.name "Nobody"
   '';
 
   nativeCheckInputs = [
-    git
+    addBinToPathHook
+    gitMinimal
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   disabledTests = [

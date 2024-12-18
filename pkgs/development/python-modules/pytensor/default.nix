@@ -26,6 +26,7 @@
   pytestCheckHook,
   tensorflow-probability,
   pythonAtLeast,
+  tmpdirAsHomeHook,
 
   nix-update-script,
 }:
@@ -41,6 +42,10 @@ buildPythonPackage rec {
     tag = "rel-${version}";
     hash = "sha256-pREyBedkF9MW7g3Bctnk8C9vVbRTsLLreldxlqDdHVI=";
   };
+
+  nativeBuildInputs = [
+    tmpdirAsHomeHook
+  ];
 
   pythonRelaxDeps = [
     "scipy"
@@ -70,10 +75,6 @@ buildPythonPackage rec {
     pytestCheckHook
     tensorflow-probability
   ];
-
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "pytensor" ];
 

@@ -9,6 +9,7 @@
   citeproc-py,
   looseversion,
   requests,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -38,13 +39,10 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    tmpdirAsHomeHook
     vcrpy
   ];
   disabledTests = [ "test_import_doi" ]; # tries to access network
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "duecredit" ];
 

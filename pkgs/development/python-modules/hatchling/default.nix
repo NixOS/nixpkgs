@@ -16,6 +16,7 @@
   build,
   python,
   requests,
+  tmpdirAsHomeHook,
   virtualenv,
 }:
 
@@ -51,12 +52,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     build
     requests
+    tmpdirAsHomeHook
     virtualenv
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   checkPhase = ''
     runHook preCheck

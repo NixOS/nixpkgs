@@ -20,6 +20,7 @@
   pythonAtLeast,
   pythonOlder,
   scipy,
+  tmpdirAsHomeHook,
   typing-extensions,
 }:
 
@@ -37,6 +38,10 @@ buildPythonPackage rec {
     rev = "refs/tags/rel-${version}";
     hash = "sha256-V34uP50TfH6cLU7nWOx+8oXY1QawtaoIaKQpbLnz7eo=";
   };
+
+  nativeBuildInputs = [
+    tmpdirAsHomeHook
+  ];
 
   build-system = [
     cython
@@ -67,10 +72,6 @@ buildPythonPackage rec {
     substituteInPlace pyproject.toml \
       --replace-fail "--durations=50" "" \
       --replace-fail "hatch-vcs >=0.3.0,<0.4.0" "hatch-vcs"
-  '';
-
-  preBuild = ''
-    export HOME=$(mktemp -d)
   '';
 
   pythonImportsCheck = [ "aesara" ];

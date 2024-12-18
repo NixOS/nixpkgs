@@ -8,6 +8,7 @@
   traitlets,
   pip,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 
   # Reverse dependency
   sage,
@@ -39,11 +40,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pip
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   pytestFlagsArray = [
     # suppress pytest.PytestUnraisableExceptionWarning: Exception ignored in: <socket.socket fd=-1, family=AddressFamily.AF_UNIX, type=SocketKind.SOCK_STREAM, proto=0>

@@ -36,6 +36,7 @@
   safetensors,
   sentencepiece,
   tiktoken,
+  tmpdirAsHomeHook,
   torch,
   tqdm,
   transformers,
@@ -130,14 +131,11 @@ buildPythonPackage rec {
     safetensors
     sentencepiece
     tiktoken
+    tmpdirAsHomeHook
     torch
     tqdm
     transformers
   ] ++ networkx.optional-dependencies.extra;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests =
     [

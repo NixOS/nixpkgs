@@ -6,6 +6,7 @@
   poetry-core,
   pymongo,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -40,16 +41,15 @@ buildPythonPackage rec {
 
   dependencies = [ pymongo ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   disabledTestPaths = [
     # new test with insufficient monkey patching, try to remove on next bump
     "tests/unit/test_mongod.py"
   ];
-
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
 
   pythonImportsCheck = [ "pymongo_inmemory" ];
 

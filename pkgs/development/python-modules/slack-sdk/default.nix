@@ -12,6 +12,7 @@
   pytestCheckHook,
   setuptools,
   sqlalchemy,
+  tmpdirAsHomeHook,
   websocket-client,
   websockets,
 }:
@@ -52,11 +53,8 @@ buildPythonPackage rec {
     psutil
     pytest-asyncio
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     # Requires internet access (to slack API)

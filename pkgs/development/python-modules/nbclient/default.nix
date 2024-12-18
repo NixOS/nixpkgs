@@ -14,6 +14,7 @@
   pytestCheckHook,
   pythonOlder,
   testpath,
+  tmpdirAsHomeHook,
   traitlets,
   xmltodict,
 }:
@@ -53,12 +54,9 @@ let
       pytest-asyncio
       pytestCheckHook
       testpath
+      tmpdirAsHomeHook
       xmltodict
     ];
-
-    preCheck = ''
-      export HOME=$(mktemp -d)
-    '';
 
     passthru.tests = {
       check = nbclient.overridePythonAttrs (_: {

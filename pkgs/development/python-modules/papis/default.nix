@@ -33,6 +33,7 @@
   pytestCheckHook,
   sphinx,
   sphinx-click,
+  tmpdirAsHomeHook,
 }:
 buildPythonPackage rec {
   pname = "papis";
@@ -83,11 +84,8 @@ buildPythonPackage rec {
     pytestCheckHook
     sphinx
     sphinx-click
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   pytestFlagsArray = [
     "papis"

@@ -11,6 +11,7 @@
   pillow,
   pytestCheckHook,
   pythonOlder,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -45,13 +46,10 @@ buildPythonPackage rec {
     parameterized
     pillow
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   env.EINOPS_TEST_BACKENDS = "numpy";
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   pythonImportsCheck = [ "einops" ];
 

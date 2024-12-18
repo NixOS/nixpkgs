@@ -23,6 +23,8 @@
   pytest-xdist,
   pytestCheckHook,
   versionCheckHook,
+  addBinToPathHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -51,19 +53,15 @@ buildPythonPackage rec {
   ] ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
   nativeCheckInputs = [
+    addBinToPathHook
     jupyter-client
     notebook
     pytest-xdist
     pytestCheckHook
     versionCheckHook
+    tmpdirAsHomeHook
   ];
   versionCheckProgramArg = [ "--version" ];
-
-  preCheck = ''
-    # Tests that use a Jupyter notebook require $HOME to be writable
-    export HOME=$(mktemp -d);
-    export PATH=$out/bin:$PATH;
-  '';
 
   disabledTestPaths = [
     # Requires the `git` python module

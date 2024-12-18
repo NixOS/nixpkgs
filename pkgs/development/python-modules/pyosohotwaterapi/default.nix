@@ -7,6 +7,7 @@
   numpy,
   pythonOlder,
   setuptools,
+  tmpdirAsHomeHook,
   unasync,
   urllib3,
 }:
@@ -25,6 +26,10 @@ buildPythonPackage rec {
     hash = "sha256-7FLGmmndrFqSl4oC8QFIYNlFJPr+xbiZG5ZRt4vx8+s=";
   };
 
+  nativeBuildInputs = [
+    tmpdirAsHomeHook
+  ];
+
   # https://github.com/osohotwateriot/apyosohotwaterapi/pull/3
   pythonRemoveDeps = [ "pre-commit" ];
 
@@ -39,10 +44,6 @@ buildPythonPackage rec {
     numpy
     urllib3
   ];
-
-  preBuild = ''
-    export HOME=$(mktemp -d)
-  '';
 
   # Module has no tests
   doCheck = false;

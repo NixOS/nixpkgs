@@ -25,6 +25,7 @@
   tenacity,
   time-machine,
   timeout-decorator,
+  tmpdirAsHomeHook,
   ujson,
   urllib3,
   url-normalize,
@@ -80,13 +81,10 @@ buildPythonPackage rec {
       tenacity
       time-machine
       timeout-decorator
+      tmpdirAsHomeHook
     ]
     ++ optional-dependencies.json
     ++ optional-dependencies.security;
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   pytestFlagsArray = [
     # Integration tests require local DBs

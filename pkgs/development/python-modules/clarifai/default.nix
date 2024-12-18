@@ -18,6 +18,7 @@
   setuptools,
   tabulate,
   tqdm,
+  tmpdirAsHomeHook,
   tritonclient,
 }:
 
@@ -62,11 +63,10 @@ buildPythonPackage rec {
     all = [ pycocotools ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   disabledTests = [
     # Test requires network access and API key

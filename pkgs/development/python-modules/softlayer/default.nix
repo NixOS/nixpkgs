@@ -23,6 +23,7 @@
   sphinx,
   testtools,
   tkinter,
+  tmpdirAsHomeHook,
   zeep,
 }:
 
@@ -65,14 +66,9 @@ buildPythonPackage rec {
     sphinx
     testtools
     tkinter
+    tmpdirAsHomeHook
     zeep
   ];
-
-  # Otherwise soap_tests.py will fail to create directory
-  # Permission denied: '/homeless-shelter'
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pytestFlagsArray = lib.optionals stdenv.hostPlatform.isDarwin [
     # SoftLayer.exceptions.TransportError: TransportError(0): ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))

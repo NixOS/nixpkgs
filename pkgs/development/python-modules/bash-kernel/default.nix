@@ -8,6 +8,7 @@
   pexpect,
   bashInteractive,
   substituteAll,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -28,16 +29,15 @@ buildPythonPackage rec {
     })
   ];
 
-  nativeBuildInputs = [ flit-core ];
+  nativeBuildInputs = [
+    flit-core
+    tmpdirAsHomeHook
+  ];
 
   propagatedBuildInputs = [
     ipykernel
     pexpect
   ];
-
-  preBuild = ''
-    export HOME=$TMPDIR
-  '';
 
   postInstall = ''
     ${python.pythonOnBuildForHost.interpreter} -m bash_kernel.install --prefix $out

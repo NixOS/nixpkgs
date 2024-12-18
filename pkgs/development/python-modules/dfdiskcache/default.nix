@@ -7,6 +7,7 @@
   simplesqlite,
   typing-extensions,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -29,12 +30,10 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  preCheck = ''
-    # Needed for Permission denied: '/homeless-shelter'
-    export HOME=$(mktemp -d)
-  '';
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
   pythonImportsCheck = [ "dfdiskcache" ];
 
   meta = with lib; {

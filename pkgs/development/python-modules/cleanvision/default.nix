@@ -21,6 +21,7 @@
   datasets,
   psutil,
   pytestCheckHook,
+  tmpdirAsHomeHook,
   torchvision,
 }:
 
@@ -55,12 +56,9 @@ buildPythonPackage rec {
     datasets
     psutil
     pytestCheckHook
+    tmpdirAsHomeHook
     torchvision
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     # Requires accessing s3 (online)

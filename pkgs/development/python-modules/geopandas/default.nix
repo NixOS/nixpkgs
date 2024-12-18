@@ -23,6 +23,7 @@
   psycopg,
   pyarrow,
   sqlalchemy,
+  tmpdirAsHomeHook,
   xyzservices,
 }:
 
@@ -73,13 +74,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     rtree
+    tmpdirAsHomeHook
   ] ++ optional-dependencies.all;
 
   doCheck = !stdenv.hostPlatform.isDarwin;
-
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
 
   disabledTests = [
     # Requires network access

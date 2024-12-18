@@ -17,6 +17,7 @@
   pkg-config,
   setuptools,
   xcbuild,
+  tmpdirAsHomeHook,
 
   # buildInputs
   # Upstream has support for using Darwin's Accelerate package. However this
@@ -97,6 +98,10 @@ buildPythonPackage {
       --replace-fail "pybind11>=2.12.0,<2.13.0" "pybind11>=2.12.0" \
   '';
 
+  nativeBuildInputs = [
+    tmpdirAsHomeHook
+  ];
+
   build-system =
     [
       cython
@@ -155,7 +160,7 @@ buildPythonPackage {
       # library where these files are cached. See also:
       # https://github.com/scipy/scipy/pull/18518#issuecomment-1562350648 And at:
       # https://github.com/scipy/scipy/pull/17965#issuecomment-1560759962
-      export XDG_CACHE_HOME=$PWD; export HOME=$(mktemp -d); mkdir scipy-data
+      export XDG_CACHE_HOME=$PWD; mkdir scipy-data
     ''
     + (lib.concatStringsSep "\n" (
       lib.mapAttrsToList (

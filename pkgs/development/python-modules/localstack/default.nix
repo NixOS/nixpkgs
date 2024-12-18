@@ -21,6 +21,7 @@
   setuptools,
   setuptools-scm,
   tailer,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -64,13 +65,16 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "localstack" ];
 
+  nativeCheckInputs = [
+    tmpdirAsHomeHook
+  ];
+
   # Test suite requires boto, which has been removed from nixpkgs
   # Just do minimal test, buildPythonPackage maps checkPhase
   # to installCheckPhase, so we can test that entrypoint point works.
   checkPhase = ''
     runHook preCheck
 
-    export HOME=$(mktemp -d)
     $out/bin/localstack --version
 
     runHook postCheck

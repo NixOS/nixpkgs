@@ -18,6 +18,7 @@
   scipy,
   setuptools-scm,
   shapely,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -52,11 +53,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     geodatasets
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   # requires network access
   disabledTestPaths = [

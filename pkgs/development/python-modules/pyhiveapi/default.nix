@@ -11,6 +11,7 @@
   aiohttp,
   pyquery,
   loguru,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -35,6 +36,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     setuptools
     unasync
+    tmpdirAsHomeHook
   ];
 
   propagatedBuildInputs = [
@@ -48,11 +50,6 @@ buildPythonPackage rec {
 
   # tests are not functional yet
   doCheck = false;
-
-  postBuild = ''
-    # pyhiveapi accesses $HOME upon importing
-    export HOME=$TMPDIR
-  '';
 
   pythonImportsCheck = [ "pyhiveapi" ];
 

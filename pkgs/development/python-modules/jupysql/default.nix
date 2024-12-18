@@ -33,6 +33,7 @@
   # tests
   pytestCheckHook,
   psutil,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -80,6 +81,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     psutil
+    tmpdirAsHomeHook
   ] ++ optional-dependencies.dev;
 
   disabledTests =
@@ -121,11 +123,6 @@ buildPythonPackage rec {
     # require js2py (which is unmaintained and insecure)
     "src/tests/test_widget.py"
   ];
-
-  preCheck = ''
-    # tests need to write temp data
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "sql" ];
 

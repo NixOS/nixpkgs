@@ -27,6 +27,7 @@
   setuptools,
   tenacity,
   tqdm,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -75,14 +76,11 @@ buildPythonPackage rec {
       moto
       pytest-mock
       pytestCheckHook
+      tmpdirAsHomeHook
     ]
     ++ optional-dependencies.azure
     ++ optional-dependencies.s3
     ++ optional-dependencies.gcs;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "papermill" ];
 

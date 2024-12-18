@@ -12,6 +12,7 @@
   pyvex,
   setuptools,
   sortedcontainers,
+  tmpdirAsHomeHook,
 }:
 
 let
@@ -52,11 +53,13 @@ buildPythonPackage rec {
     sortedcontainers
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   # Place test binaries in the right location (location is hard-coded in the tests)
   preCheck = ''
-    export HOME=$TMPDIR
     cp -r ${binaries} $HOME/binaries
   '';
 

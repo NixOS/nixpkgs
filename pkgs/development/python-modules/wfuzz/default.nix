@@ -14,6 +14,7 @@
   setuptools,
   six,
   fetchpatch2,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -58,11 +59,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     netaddr
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTestPaths = [
     # The tests are requiring a local web server

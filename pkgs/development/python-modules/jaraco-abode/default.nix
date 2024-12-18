@@ -21,6 +21,7 @@
   requests-toolbelt,
   setuptools,
   setuptools-scm,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -62,13 +63,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     requests-mock
+    tmpdirAsHomeHook
   ];
 
   pythonImportsCheck = [ "jaraco.abode" ];
-
-  preCheck = ''
-    export HOME=$TEMP
-  '';
 
   disabledTests = [
     "_cookie_string"

@@ -17,6 +17,7 @@
   pytest-timeout,
   pytestCheckHook,
   time-machine,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -49,11 +50,8 @@ buildPythonPackage rec {
     pytest-mock
     pytest-timeout
     pytestCheckHook
+    tmpdirAsHomeHook
   ] ++ lib.optionals (!isPyPy) [ time-machine ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTestPaths = [
     # Ignore tests which require network access

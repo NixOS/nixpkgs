@@ -11,6 +11,7 @@
   pytestCheckHook,
   pythonOlder,
   termcolor,
+  tmpdirAsHomeHook,
   wireshark-cli,
 }:
 
@@ -54,12 +55,9 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     py
     pytestCheckHook
+    tmpdirAsHomeHook
     wireshark-cli
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests =
     [

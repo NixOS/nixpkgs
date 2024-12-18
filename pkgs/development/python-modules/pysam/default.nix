@@ -12,6 +12,7 @@
   pytestCheckHook,
   setuptools,
   samtools,
+  tmpdirAsHomeHook,
   zlib,
 }:
 
@@ -57,10 +58,10 @@ buildPythonPackage rec {
     pytestCheckHook
     bcftools
     htslib
+    tmpdirAsHomeHook
   ];
 
   preCheck = ''
-    export HOME=$TMPDIR
     make -C tests/pysam_data
     make -C tests/cbcf_data
     make -C tests/tabix_data

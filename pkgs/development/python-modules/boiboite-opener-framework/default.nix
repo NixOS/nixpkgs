@@ -7,6 +7,7 @@
   pythonOlder,
   scapy,
   setuptools,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -32,11 +33,10 @@ buildPythonPackage rec {
     scapy
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   # Race condition, https://github.com/secdev/scapy/pull/4558
   # pythonImportsCheck = [ "bof" ];

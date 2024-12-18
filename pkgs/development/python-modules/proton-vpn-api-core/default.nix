@@ -15,6 +15,7 @@
   distro,
   pytestCheckHook,
   pytest-cov-stub,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -28,6 +29,10 @@ buildPythonPackage rec {
     rev = "v${version}";
     hash = "sha256-ldIslr2qiwClQW6rWNbEAAkUbdJfCzvUIkCuoajP2M4=";
   };
+
+  nativeBuildInputs = [
+    tmpdirAsHomeHook
+  ];
 
   build-system = [
     setuptools
@@ -58,11 +63,6 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
   ];
-
-  postInstall = ''
-    # Needed for Permission denied: '/homeless-shelter'
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = [
     # Permission denied: '/run'

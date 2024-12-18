@@ -10,6 +10,7 @@
   requests-mock,
   six,
   sqlalchemy,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -37,11 +38,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     requests-mock
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "proxy_db" ];
 

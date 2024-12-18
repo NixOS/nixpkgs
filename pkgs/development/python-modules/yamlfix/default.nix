@@ -11,6 +11,7 @@
   pythonOlder,
   ruyaml,
   setuptools,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -42,11 +43,8 @@ buildPythonPackage rec {
     pytest-freezegun
     pytest-xdist
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "yamlfix" ];
 

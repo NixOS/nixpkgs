@@ -8,6 +8,7 @@
   pytestCheckHook,
   pytest-cov-stub,
   pyyaml,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -52,11 +53,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
     pyyaml
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
 
   meta = with lib; {
     description = "Simple hierarchical configuration for Python packages";

@@ -17,6 +17,7 @@
   pytestCheckHook,
   pythonOlder,
   traitlets,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -54,11 +55,8 @@ buildPythonPackage rec {
     pytest-jupyter
     pytest-tornasync
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   disabledTestPaths = [
     "jupyterlab_git/tests/test_handlers.py"

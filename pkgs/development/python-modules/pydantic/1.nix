@@ -10,6 +10,7 @@
   pythonAtLeast,
   pythonOlder,
   setuptools,
+  tmpdirAsHomeHook,
   typing-extensions,
   libxcrypt,
 }:
@@ -45,6 +46,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-mock
     pytest7CheckHook
+    tmpdirAsHomeHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
   pytestFlagsArray = [
@@ -52,10 +54,6 @@ buildPythonPackage rec {
     "-W"
     "ignore::pytest.PytestReturnNotNoneWarning"
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTests = lib.optionals (pythonAtLeast "3.12") [
     # depends on distuils

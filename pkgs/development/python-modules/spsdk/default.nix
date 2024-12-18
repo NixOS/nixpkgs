@@ -40,6 +40,7 @@
   pytestCheckHook,
   voluptuous,
   versionCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -61,6 +62,10 @@ buildPythonPackage rec {
     substituteInPlace setup.py \
       --replace-fail "setuptools>=72.1,<74" "setuptools"
   '';
+
+  nativeBuildInputs = [
+    tmpdirAsHomeHook
+  ];
 
   build-system = [
     setuptools
@@ -109,10 +114,6 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "spsdk" ];
-
-  preInstallCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
 
   nativeCheckInputs = [
     ipykernel

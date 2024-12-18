@@ -6,6 +6,7 @@
   pip,
   pkgs,
   stevedore,
+  tmpdirAsHomeHook,
   virtualenv,
   virtualenv-clone,
   python,
@@ -21,8 +22,9 @@ buildPythonPackage rec {
     hash = "sha256-ES5+o0qaPOkKrqVBgvDTr+9NGpE+63XpiiY7SXjNc8Y=";
   };
 
-  # pip depend on $HOME setting
-  preConfigure = "export HOME=$TMPDIR";
+  nativeBuildInputs = [
+    tmpdirAsHomeHook
+  ];
 
   buildInputs = [
     pbr

@@ -18,6 +18,7 @@
   geopandas,
   pytestCheckHook,
   scikit-misc,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -52,11 +53,8 @@ buildPythonPackage rec {
     geopandas
     pytestCheckHook
     scikit-misc
+    tmpdirAsHomeHook
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "plotnine" ];
 

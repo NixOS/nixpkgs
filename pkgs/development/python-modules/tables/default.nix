@@ -19,6 +19,7 @@
   python,
   pytest,
   py-cpuinfo,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -82,10 +83,12 @@ buildPythonPackage rec {
     "--blosc2=${lib.getDev blosc2.c-blosc2}"
   ];
 
-  nativeCheckInputs = [ pytest ];
+  nativeCheckInputs = [
+    pytest
+    tmpdirAsHomeHook
+  ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     cd ..
   '';
 

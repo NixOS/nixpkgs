@@ -13,6 +13,7 @@
 
   # Check inputs
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 let
   pname = "sacrebleu";
@@ -43,17 +44,16 @@ buildPythonPackage {
     lxml
   ];
 
-  checkInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   disabledTestPaths = [
     # require network access
     "test/test_api.py"
     "test/test_dataset.py"
   ];
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "sacrebleu" ];
 

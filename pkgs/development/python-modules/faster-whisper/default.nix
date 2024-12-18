@@ -15,6 +15,7 @@
 
   # tests
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -51,11 +52,10 @@ buildPythonPackage rec {
   # all tests require downloads
   doCheck = false;
 
-  nativeCheckInputs = [ pytestCheckHook ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   meta = with lib; {
     changelog = "https://github.com/SYSTRAN/faster-whisper/releases/tag/${src.tag}";

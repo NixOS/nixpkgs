@@ -23,6 +23,7 @@
   # tests
   pytestCheckHook,
   scipy,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -55,13 +56,10 @@ buildPythonPackage rec {
     tqdm
   ] ++ lib.optionals (lib.meta.availableOn stdenv.hostPlatform triton) [ triton ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
     scipy
+    tmpdirAsHomeHook
   ];
 
   disabledTests = [

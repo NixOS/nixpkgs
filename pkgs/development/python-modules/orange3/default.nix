@@ -14,6 +14,7 @@
   qt5,
   recommonmark,
   sphinx,
+  tmpdirAsHomeHook,
 
   # dependencies
   baycomp,
@@ -176,8 +177,11 @@ let
         name = "${self.name}-tests";
         inherit (self) src;
 
+        nativeCheckInputs = [
+          tmpdirAsHomeHook
+        ];
+
         preCheck = ''
-          export HOME=$(mktemp -d)
           export QT_PLUGIN_PATH="${qt5.qtbase.bin}/${qt5.qtbase.qtPluginPrefix}"
           export QT_QPA_PLATFORM_PLUGIN_PATH="${qt5.qtbase.bin}/lib/qt-${qt5.qtbase.version}/plugins";
           export QT_QPA_PLATFORM=offscreen

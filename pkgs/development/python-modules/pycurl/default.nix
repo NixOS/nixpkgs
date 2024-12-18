@@ -11,6 +11,7 @@
   flaky,
   flask,
   setuptools,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -51,6 +52,7 @@ buildPythonPackage rec {
     flaky
     flask
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   __darwinAllowLocalNetworking = true;
@@ -59,10 +61,6 @@ buildPythonPackage rec {
     # don't pick up the tests directory below examples/
     "tests"
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   disabledTests =
     [

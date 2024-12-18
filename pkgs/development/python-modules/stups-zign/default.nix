@@ -8,6 +8,7 @@
   stups-cli-support,
   pytestCheckHook,
   isPy3k,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -38,11 +39,10 @@ buildPythonPackage rec {
     stups-cli-support
   ];
 
-  preCheck = "
-    export HOME=$TEMPDIR
-  ";
-
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytestCheckHook
+    tmpdirAsHomeHook
+  ];
 
   meta = with lib; {
     description = "OAuth2 token management command line utility";

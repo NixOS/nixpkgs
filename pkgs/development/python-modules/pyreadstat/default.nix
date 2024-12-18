@@ -10,6 +10,7 @@
   pythonOlder,
   readstat,
   setuptools,
+  tmpdirAsHomeHook,
   zlib,
 }:
 
@@ -41,9 +42,9 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyreadstat" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
+  nativeCheckInputs = [
+    tmpdirAsHomeHook
+  ];
 
   checkPhase = ''
     runHook preCheck

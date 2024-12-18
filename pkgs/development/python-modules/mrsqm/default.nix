@@ -11,6 +11,7 @@
   pip,
   setuptools,
   pytestCheckHook,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -33,7 +34,10 @@ buildPythonPackage rec {
 
   buildInputs = [ fftw ];
 
-  nativeBuildInputs = [ cython ];
+  nativeBuildInputs = [
+    cython
+    tmpdirAsHomeHook
+  ];
 
   dependencies = [
     pandas
@@ -47,10 +51,6 @@ buildPythonPackage rec {
       --replace-fail "'pytest-runner'" ""
     substituteInPlace pyproject.toml \
       --replace-fail "numpy==" "numpy>="
-  '';
-
-  preBuild = ''
-    export HOME=$(mktemp -d)
   '';
 
   nativeCheckInputs = [

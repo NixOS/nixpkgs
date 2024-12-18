@@ -8,6 +8,7 @@
   pytestCheckHook,
   pythonOlder,
   stdiomask,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -33,6 +34,7 @@ buildPythonPackage rec {
     cryptography
     pytest-asyncio
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   postPatch = ''
@@ -41,10 +43,6 @@ buildPythonPackage rec {
   '';
 
   __darwinAllowLocalNetworking = true;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "subarulink" ];
 

@@ -18,6 +18,7 @@
   requests-mock,
   ruamel-yaml,
   strict-rfc3339,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -61,11 +62,8 @@ buildPythonPackage rec {
     pytestCheckHook
     requests-mock
     strict-rfc3339
+    tmpdirAsHomeHook
   ] ++ optional-dependencies.openapi;
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pytestFlagsArray = [
     "-W"

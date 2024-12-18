@@ -16,6 +16,7 @@
   torchvision,
   tqdm,
   fetchpatch,
+  tmpdirAsHomeHook,
 }:
 let
   MobileNetV3 = fetchurl {
@@ -63,11 +64,10 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytest-mock
     pytestCheckHook
+    tmpdirAsHomeHook
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     # Checks with CNN are preloaded to avoid downloads in the check phase
     mkdir -p $HOME/.cache/torch/hub/checkpoints/
     ln -s ${MobileNetV3} $HOME/.cache/torch/hub/checkpoints/${MobileNetV3.name}

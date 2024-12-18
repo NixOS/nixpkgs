@@ -20,6 +20,7 @@
   pyformlang,
   requests,
   tiktoken,
+  tmpdirAsHomeHook,
   torch,
   uvicorn,
 }:
@@ -64,6 +65,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
+    tmpdirAsHomeHook
     torch
   ];
 
@@ -88,10 +90,6 @@ buildPythonPackage rec {
     # require network access
     "tests/library/test_gen.py"
   ];
-
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
 
   pythonImportsCheck = [ "guidance" ];
 

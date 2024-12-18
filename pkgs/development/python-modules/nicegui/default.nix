@@ -30,6 +30,7 @@
   pywebview,
   requests,
   setuptools,
+  tmpdirAsHomeHook,
   typing-extensions,
   urllib3,
   uvicorn,
@@ -101,12 +102,9 @@ buildPythonPackage rec {
     pytest-asyncio
     pytest-selenium
     pytestCheckHook
+    tmpdirAsHomeHook
     webdriver-manager
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   pythonImportsCheck = [ "nicegui" ];
 

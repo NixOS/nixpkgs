@@ -18,6 +18,7 @@
   pytest-xdist,
   pytestCheckHook,
   responses,
+  tmpdirAsHomeHook,
   uvicorn,
 }:
 
@@ -52,10 +53,6 @@ buildPythonPackage rec {
     ];
   };
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   nativeCheckInputs = [
     aria2
     fastapi
@@ -63,6 +60,7 @@ buildPythonPackage rec {
     pytestCheckHook
     responses
     psutil
+    tmpdirAsHomeHook
     uvicorn
   ] ++ optional-dependencies.tui;
 

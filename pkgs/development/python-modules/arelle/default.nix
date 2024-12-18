@@ -40,6 +40,7 @@
 
   pytestCheckHook,
   boto3,
+  tmpdirAsHomeHook,
 }:
 
 buildPythonPackage rec {
@@ -120,11 +121,8 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     boto3
+    tmpdirAsHomeHook
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
-
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   disabledTestPaths =
     [
