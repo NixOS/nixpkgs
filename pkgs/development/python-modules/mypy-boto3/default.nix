@@ -1370,8 +1370,8 @@ rec {
       "sha256-pRyowqpW9cqiZe0aCDvcJAqIaRkEhG8DFRxP89daIPo=";
 
   mypy-boto3-transfer =
-    buildMypyBoto3Package "transfer" "1.35.72"
-      "sha256-1lLzmlLLKOVAWu49Sc6QdWkpJ+nC/yX5VMgQORhVjew=";
+    buildMypyBoto3Package "transfer" "1.35.84"
+      "sha256-T0ezy1Tea/pMqnv6Xo+LswIrQUfcijKY0z6y6xH294g=";
 
   mypy-boto3-translate =
     buildMypyBoto3Package "translate" "1.35.0"
