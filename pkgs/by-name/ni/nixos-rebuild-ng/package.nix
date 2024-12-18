@@ -6,11 +6,13 @@
   mkShell,
   nix,
   nixosTests,
+  nix-output-monitor,
   python3,
   python3Packages,
   runCommand,
   scdoc,
   withNgSuffix ? true,
+  withNom ? false,
   withReexec ? false,
   withShellFiles ? true,
   # Very long tmp dirs lead to "too long for Unix domain socket"
@@ -41,22 +43,27 @@ python3Packages.buildPythonApplication rec {
     scdoc
   ];
 
-  propagatedBuildInputs = [
-    # Make sure that we use the Nix package we depend on, not something
-    # else from the PATH for nix-{env,instantiate,build}. This is
-    # important, because NixOS defaults the architecture of the rebuilt
-    # system to the architecture of the nix-* binaries used. So if on an
-    # amd64 system the user has an i686 Nix package in her PATH, then we
-    # would silently downgrade the whole system to be i686 NixOS on the
-    # next reboot.
-    # The binary will be included in the wrapper for Python.
-    nix
-  ];
+  propagatedBuildInputs =
+    [
+      # Make sure that we use the Nix package we depend on, not something
+      # else from the PATH for nix-{env,instantiate,build}. This is
+      # important, because NixOS defaults the architecture of the rebuilt
+      # system to the architecture of the nix-* binaries used. So if on an
+      # amd64 system the user has an i686 Nix package in her PATH, then we
+      # would silently downgrade the whole system to be i686 NixOS on the
+      # next reboot.
+      # The binary will be included in the wrapper for Python.
+      nix
+    ]
+    ++ lib.optionals withNom [
+      nix-output-monitor
+    ];
 
   postPatch = ''
     substituteInPlace nixos_rebuild/constants.py \
       --subst-var-by executable ${executable} \
       --subst-var-by withNix218 ${lib.boolToString withNix218} \
+      --subst-var-by withNom ${lib.boolToString withNom} \
       --subst-var-by withReexec ${lib.boolToString withReexec} \
       --subst-var-by withShellFiles ${lib.boolToString withShellFiles}
 

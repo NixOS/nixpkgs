@@ -32,6 +32,7 @@ logger = logging.getLogger(__name__)
 def build(
     attr: str,
     build_attr: BuildAttr,
+    nom: bool = False,
     **build_flags: Args,
 ) -> Path:
     """Build NixOS attribute using classic Nix.
@@ -39,7 +40,7 @@ def build(
     Returns the built attribute as path.
     """
     run_args = [
-        "nix-build",
+        "nom-build" if nom else "nix-build",
         build_attr.path,
         "--attr",
         build_attr.to_attr(attr),
@@ -52,15 +53,17 @@ def build(
 def build_flake(
     attr: str,
     flake: Flake,
+    nom: bool = False,
     **flake_build_flags: Args,
 ) -> Path:
     """Build NixOS attribute using Flakes.
 
     Returns the built attribute as path.
     """
+    flake_flags = FLAKE_FLAGS if not nom else []
     run_args = [
-        "nix",
-        *FLAKE_FLAGS,
+        "nom" if nom else "nix",
+        *flake_flags,
         "build",
         "--print-out-paths",
         flake.to_attr(attr),

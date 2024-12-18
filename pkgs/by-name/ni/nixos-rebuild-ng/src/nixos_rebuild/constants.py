@@ -5,5 +5,6 @@ EXECUTABLE = "@executable@"
 # Use either `== "true"` if the default (e.g.: `python -m nixos_rebuld`) is
 # `False` or `!= "false"` if the default is `True`
 WITH_NIX_2_18 = "@withNix218@" != "false"  # type: ignore
+WITH_NOM = "@withNom@" == "true"
 WITH_REEXEC = "@withReexec@" == "true"  # type: ignore
 WITH_SHELL_FILES = "@withShellFiles@" == "true"  # type: ignore

@@ -8,7 +8,13 @@ from subprocess import CalledProcessError, run
 from typing import assert_never
 
 from . import nix, tmpdir
-from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
+from .constants import (
+    EXECUTABLE,
+    WITH_NIX_2_18,
+    WITH_NOM,
+    WITH_REEXEC,
+    WITH_SHELL_FILES,
+)
 from .models import Action, BuildAttr, Flake, NRError, Profile
 from .process import Remote, cleanup_ssh
 from .utils import Args, LogFormatter, tabulate
@@ -176,6 +182,10 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         "--target-host", help="Specifies host to activate the configuration"
     )
     main_parser.add_argument("--no-build-nix", action="store_true", help="Deprecated")
+    build_graph_choices = ["nix", "nom"] if WITH_NOM else ["nix"]
+    main_parser.add_argument(
+        "--build-graph", choices=build_graph_choices, help="Build graph to print"
+    )
     main_parser.add_argument("action", choices=Action.values(), nargs="?")
 
     return main_parser, sub_parsers
@@ -305,6 +315,7 @@ def execute(argv: list[str]) -> None:
     build_flags = common_build_flags | vars(args_groups["classic_build_flags"])
     flake_build_flags = common_build_flags | vars(args_groups["flake_build_flags"])
     copy_flags = common_flags | vars(args_groups["copy_flags"])
+    nom = args.build_graph == "nom"
 
     if args.upgrade or args.upgrade_all:
         nix.upgrade_channels(bool(args.upgrade_all))
@@ -391,6 +402,7 @@ def execute(argv: list[str]) -> None:
                     path_to_config = nix.build_flake(
                         attr,
                         flake,
+                        nom=nom,
                         no_link=no_link,
                         dry_run=dry_run,
                         **flake_build_flags,
@@ -408,6 +420,7 @@ def execute(argv: list[str]) -> None:
                     path_to_config = nix.build(
                         attr,
                         build_attr,
+                        nom=nom,
                         no_out_link=no_link,
                         dry_run=dry_run,
                         **build_flags,
