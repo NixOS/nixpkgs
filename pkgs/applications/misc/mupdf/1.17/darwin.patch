@@ -1,0 +1,30 @@
+diff -ruN mupdf-1.14.0-source.orig/Makerules mupdf-1.14.0-source/Makerules
+--- mupdf-1.14.0-source.orig/Makerules	2018-11-02 06:57:12.114012496 +0100
++++ mupdf-1.14.0-source/Makerules	2018-11-02 10:11:56.717232992 +0100
+@@ -80,13 +80,6 @@
+   HAVE_GLUT := yes
+   SYS_GLUT_CFLAGS := -Wno-deprecated-declarations
+   SYS_GLUT_LIBS := -framework GLUT -framework OpenGL
+-  CC = xcrun cc
+-  AR = xcrun ar
+-  LD = xcrun ld
+-  RANLIB = xcrun ranlib
+-
+-else ifeq ($(OS),Linux)
+-  HAVE_OBJCOPY := yes
+ 
+   ifeq ($(shell pkg-config --exists freetype2 && echo yes),yes)
+ 	SYS_FREETYPE_CFLAGS := $(shell pkg-config --cflags freetype2)
+@@ -119,12 +112,6 @@
+ 	SYS_CURL_LIBS := $(shell pkg-config --libs libcurl)
+   endif
+ 
+-  HAVE_GLUT := yes
+-  ifeq ($(HAVE_GLUT),yes)
+-	SYS_GLUT_CFLAGS :=
+-	SYS_GLUT_LIBS := -lglut -lGL
+-  endif
+-
+   HAVE_X11 := $(shell pkg-config --exists x11 xext && echo yes)
+   ifeq ($(HAVE_X11),yes)
+ 	X11_CFLAGS := $(shell pkg-config --cflags x11 xext)

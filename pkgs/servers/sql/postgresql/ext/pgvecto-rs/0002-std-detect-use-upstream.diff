@@ -1,0 +1,25 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index a52b978..092bc1d 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2788,7 +2788,7 @@ checksum = "a8f112729512f8e442d81f95a8a7ddf2b7c6b8a1a6f509a95864142b30cab2d3"
+ [[package]]
+ name = "std_detect"
+ version = "0.1.5"
+-source = "git+https://github.com/tensorchord/stdarch.git?branch=avx512fp16#db0cdbc9b02074bfddabfd23a4a681f21640eada"
++source = "git+https://github.com/rust-lang/stdarch.git?branch=master#d2b1a070afc72d9ba4df80e055109ede5fc0a81f"
+ dependencies = [
+  "cfg-if",
+  "libc",
+diff --git a/crates/detect/Cargo.toml b/crates/detect/Cargo.toml
+index b3ac782..c671c6a 100644
+--- a/crates/detect/Cargo.toml
++++ b/crates/detect/Cargo.toml
+@@ -4,6 +4,6 @@ version.workspace = true
+ edition.workspace = true
+ 
+ [dependencies]
+-std_detect = { git = "https://github.com/tensorchord/stdarch.git", branch = "avx512fp16" }
++std_detect = { git = "https://github.com/rust-lang/stdarch.git", branch = "master" }
+ ctor = "0.2.6"
+ rustix.workspace = true

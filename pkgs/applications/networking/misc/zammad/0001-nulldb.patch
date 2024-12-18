@@ -1,0 +1,15 @@
+diff --git a/config/application.rb b/config/application.rb
+index d85a17491..90ea5e387 100644
+--- a/config/application.rb
++++ b/config/application.rb
+@@ -3,6 +3,7 @@
+ require_relative 'boot'
+ 
+ require 'rails/all'
++require 'nulldb'
+ require_relative '../lib/zammad/safe_mode'
+ 
+ # DO NOT REMOVE THIS LINE - see issue #2037
+diff --git a/db/schema.rb b/db/schema.rb
+new file mode 100644
+index 000000000..e69de29bb

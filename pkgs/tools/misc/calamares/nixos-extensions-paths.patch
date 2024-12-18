@@ -1,0 +1,45 @@
+diff --git a/src/calamares/main.cpp b/src/calamares/main.cpp
+index e0491e5f9..faf272016 100644
+--- a/src/calamares/main.cpp
++++ b/src/calamares/main.cpp
+@@ -132,6 +132,7 @@ main( int argc, char* argv[] )
+ #endif
+ 
+     std::unique_ptr< KDSingleApplication > possiblyUnique;
++    Calamares::setNixosDirs();
+     const bool is_debug = handle_args( a );
+     if ( !is_debug )
+     {
+diff --git a/src/libcalamares/utils/Dirs.cpp b/src/libcalamares/utils/Dirs.cpp
+index c42768a08..bac98645a 100644
+--- a/src/libcalamares/utils/Dirs.cpp
++++ b/src/libcalamares/utils/Dirs.cpp
+@@ -114,6 +114,14 @@ setXdgDirs()
+     s_haveExtraDirs = !( s_extraConfigDirs.isEmpty() && s_extraDataDirs.isEmpty() );
+ }
+ 
++void
++setNixosDirs()
++{
++    s_extraConfigDirs << "/run/current-system/sw/share/calamares/";
++    s_extraDataDirs << "/run/current-system/sw/share/calamares/";
++    s_haveExtraDirs = !( s_extraConfigDirs.isEmpty() && s_extraDataDirs.isEmpty() ); 
++}
++
+ QStringList
+ extraConfigDirs()
+ {
+diff --git a/src/libcalamares/utils/Dirs.h b/src/libcalamares/utils/Dirs.h
+index d0edd7a4f..26bd16b4e 100644
+--- a/src/libcalamares/utils/Dirs.h
++++ b/src/libcalamares/utils/Dirs.h
+@@ -50,6 +50,9 @@ DLLEXPORT bool isAppDataDirOverridden();
+ /** @brief Setup extra config and data dirs from the XDG variables.
+  */
+ DLLEXPORT void setXdgDirs();
++/** @brief Setup extra config and data dirs fir NixOS.
++ */
++DLLEXPORT void setNixosDirs();
+ /** @brief Are any extra directories configured? */
+ DLLEXPORT bool haveExtraDirs();
+ /** @brief XDG_CONFIG_DIRS, each guaranteed to end with / */

@@ -1,0 +1,7 @@
+{
+  "branch": "main",
+  "commit_hash": "918d8340afd652b011b937d29d5eea0be08467f5",
+  "commit_message": "flake.lock: update",
+  "date": "2024-06-25",
+  "tag": "v0.41.2"
+}
