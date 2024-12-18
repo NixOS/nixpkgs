@@ -1389,6 +1389,17 @@ work as intended in cases with multiple outputs or when binaries are located in
 directories like `sbin/`. These caveats should be considered when using this
 hook, as they might introduce unexpected behavior in some specific cases.
 
+### `writable-tmpdir-as-home.sh` {#writable-tmpdir-as-home.sh}
+
+This setup hook ensures that the directory specified by the `HOME` environment
+variable is writable. If it is not, the hook assigns `HOME` to a writable
+directory (in `.home` in `$NIX_BUILD_TOP`). This adjustment is necessary for
+certain packages that require write access to a home directory. This hook can
+be added to any phase.
+
+By setting `HOME` to a writable directory, this setup hook prevents failures in
+packages that attempt to write to the home directory.
+
 ### Bintools Wrapper and hook {#bintools-wrapper}
 
 The Bintools Wrapper wraps the binary utilities for a bunch of miscellaneous purposes. These are GNU Binutils when targeting Linux, and a mix of cctools and GNU binutils for Darwin. \[The “Bintools” name is supposed to be a compromise between “Binutils” and “cctools” not denoting any specific implementation.\] Specifically, the underlying bintools package, and a C standard library (glibc or Darwin’s libSystem, just for the dynamic loader) are all fed in, and dependency finding, hardening (see below), and purity checks for each are handled by the Bintools Wrapper. Packages typically depend on CC Wrapper, which in turn (at run time) depends on the Bintools Wrapper.
