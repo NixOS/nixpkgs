@@ -14182,6 +14182,8 @@ with pkgs;
     singularity-overriden-nixos
     ;
 
+  postrunner = callPackage ../applications/misc/postrunner { };
+
   slack = callPackage ../applications/networking/instant-messengers/slack { };
 
   sosreport = python3Packages.callPackage ../applications/logging/sosreport { };
