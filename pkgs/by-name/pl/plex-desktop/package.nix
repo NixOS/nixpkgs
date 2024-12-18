@@ -140,6 +140,17 @@ buildFHSEnv {
   runScript = writeShellScript "plex-desktop.sh" ''
     # Widevine won't download unless this directory exists.
     mkdir -p $HOME/.cache/plex/
+
+    # Copy the sqlite plugin database on first run.
+    PLEX_DB="$HOME/.local/share/plex/Plex Media Server/Plug-in Support/Databases"
+    if [[ ! -d "$PLEX_DB" ]]; then
+      mkdir -p "$PLEX_DB"
+      cp "${plex-desktop}/resources/com.plexapp.plugins.library.db" "$PLEX_DB"
+    fi
+
+    # db files should have write access.
+    chmod --recursive 750 "$PLEX_DB"
+
     PLEX_USR_PATH=${lib.makeSearchPath "usr/lib/x86_64-linux-gnu" [ plex-desktop ]}
 
     set -o allexport
