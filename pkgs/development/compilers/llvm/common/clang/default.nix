@@ -103,16 +103,6 @@ let
       moveToOutput "lib/libclang.*" "$lib"
       moveToOutput "lib/libclang-cpp.*" "$lib"
     '' + (if lib.versionOlder release_version "15" then ''
-      substituteInPlace $out/lib/cmake/clang/ClangTargets-release.cmake \
-          --replace-fail "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
-          --replace-fail "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
-    '' else ''
-      substituteInPlace $dev/lib/cmake/clang/ClangTargets-release.cmake \
-          --replace-fail "\''${_IMPORT_PREFIX}/lib/libclang." "$lib/lib/libclang." \
-          --replace-fail "\''${_IMPORT_PREFIX}/lib/libclang-cpp." "$lib/lib/libclang-cpp."
-    '') + ''
-
-    '' + (if lib.versionOlder release_version "15" then ''
       mkdir -p $python/bin $python/share/{clang,scan-view}
     '' else ''
       mkdir -p $python/bin $python/share/clang/
