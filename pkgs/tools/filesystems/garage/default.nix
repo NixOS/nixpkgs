@@ -129,14 +129,12 @@ rec {
     hash = "sha256-2ZaxenwaVGYYUjUJaGgnGpZNQprQV9+Jns2sXM6cowk=";
     cargoHash = "sha256-ittesFz1GUGipQecsmMA+GEaVoUY+C9DtEvsO0HFNCc=";
     cargoPatches = [ ./update-time.patch ];
-    broken = stdenv.hostPlatform.isDarwin;
   };
 
   garage_1_1_0 = generic {
     version = "1.1.0";
     hash = "sha256-ysf/GYR39trXTPRdw8uB6E4YDp4nAR8dbU9k9rQTxz0=";
     cargoHash = "sha256-SkDr/e9YZ3raTGucaiv/RV2zF9tEDIeqZeri6Xk3xEU=";
-    broken = stdenv.hostPlatform.isDarwin;
   };
 
   garage_0_8 = garage_0_8_7;
