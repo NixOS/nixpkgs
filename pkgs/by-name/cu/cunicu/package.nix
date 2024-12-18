@@ -4,6 +4,7 @@
   buildGoModule,
   fetchFromGitHub,
   installShellFiles,
+  versionCheckHook,
   protobuf,
   protoc-gen-go,
   protoc-gen-go-grpc,
@@ -28,6 +29,10 @@ buildGoModule rec {
     protoc-gen-go-grpc
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
   CGO_ENABLED = 0;
 
   # These packages contain networking dependent tests which fail in the sandbox
@@ -42,6 +47,9 @@ buildGoModule rec {
     "-X cunicu.li/cunicu/pkg/buildinfo.Version=${version}"
     "-X cunicu.li/cunicu/pkg/buildinfo.BuiltBy=Nix"
   ];
+
+  doInstallCheck = true;
+  versionCheckProgramArg = "version";
 
   preBuild = ''
     go generate ./...
