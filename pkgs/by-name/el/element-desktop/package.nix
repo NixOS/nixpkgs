@@ -13,9 +13,7 @@
   element-web,
   sqlcipher,
   callPackage,
-  Security,
-  AppKit,
-  CoreServices,
+  darwin,
   desktopToDarwinBundle,
   useKeytar ? true,
   # command line arguments which are always set
@@ -23,11 +21,11 @@
 }:
 
 let
-  pinData = import ./pin.nix;
+  pinData = import ./element-desktop-pin.nix;
   inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
   executableName = "element-desktop";
-  keytar = callPackage ./keytar { inherit Security AppKit; };
-  seshat = callPackage ./seshat { inherit CoreServices; };
+  keytar = callPackage ./keytar { inherit (darwin.apple_sdk.frameworks) Security AppKit; };
+  seshat = callPackage ./seshat { inherit (darwin.apple_sdk.frameworks) CoreServices; };
   electron = electron_33;
 in
 stdenv.mkDerivation (
@@ -146,6 +144,7 @@ stdenv.mkDerivation (
     '';
 
     passthru = {
+      # run with: nix-shell ./maintainers/scripts/update.nix --argstr package element-desktop
       updateScript = ./update.sh;
 
       # TL;DR: keytar is optional while seshat isn't.

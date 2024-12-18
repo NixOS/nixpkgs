@@ -321,7 +321,7 @@ mapAliases {
   edUnstable = throw "edUnstable was removed; use ed instead"; # Added 2024-07-01
   elasticsearch7Plugins = elasticsearchPlugins;
 
-  # Electron
+  element-desktop-wayland = throw "element-desktop-wayland has been removed. Consider setting NIXOS_OZONE_WL=1 via 'environment.sessionVariables' instead"; # Added 2024-12-17
 
 
   elixir_ls = elixir-ls; # Added 2023-03-20
