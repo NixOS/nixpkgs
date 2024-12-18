@@ -31,5 +31,6 @@ rustPlatform.buildRustPackage {
     maintainers = with maintainers; [ lenivaya ];
     mainProgram = "twitch-hls-client";
     sourceProvenance = with lib.sourceTypes; [ fromSource ];
+    platforms = platforms.all;
   };
 }
