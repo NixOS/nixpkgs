@@ -877,6 +877,7 @@ let
           "IAID"
           "RequestBroadcast"
           "RouteMetric"
+          "RapidCommit"
           "RouteTable"
           "RouteMTUBytes"
           "ListenPort"
@@ -906,6 +907,7 @@ let
         (assertInt "IAID")
         (assertValueOneOf "RequestBroadcast" boolValues)
         (assertInt "RouteMetric")
+        (assertValueOneOf "RapidCommit" boolValues)
         (assertInt "RouteTable")
         (assertRange "RouteTable" 0 4294967295)
         (assertByteFormat "RouteMTUBytes")
