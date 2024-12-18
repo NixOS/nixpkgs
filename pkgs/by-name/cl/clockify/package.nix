@@ -22,13 +22,13 @@ appimageTools.wrapType2 rec {
       install -Dm 444 ${appimageContents}/clockify.png -t $out/share/pixmaps
 
       substituteInPlace $out/share/applications/clockify.desktop \
-        --replace 'Exec=AppRun' 'Exec=${pname}'
+        --replace-fail 'Exec=AppRun' 'Exec=${pname}'
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Free time tracker and timesheet app that lets you track work hours across projects";
     homepage = "https://clockify.me";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     maintainers = [ ];
     mainProgram = "clockify";
     platforms = [ "x86_64-linux" ];
