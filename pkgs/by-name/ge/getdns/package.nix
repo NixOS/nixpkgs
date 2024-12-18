@@ -8,6 +8,8 @@
   openssl,
   unbound,
   yq,
+
+  enableStubOnly ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,8 +36,9 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     libidn2
     openssl
-    unbound
-  ];
+  ] ++ lib.optional (!enableStubOnly) unbound;
+
+  cmakeFlags = [ (lib.strings.cmakeBool "ENABLE_STUB_ONLY" enableStubOnly) ];
 
   # https://github.com/getdnsapi/getdns/issues/517
   postPatch = ''
