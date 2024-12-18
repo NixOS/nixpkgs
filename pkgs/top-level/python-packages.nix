@@ -17253,9 +17253,13 @@ self: super: with self; {
 
   types-ipaddress = callPackage ../development/python-modules/types-ipaddress { };
 
+  types-jinja2 = callPackage ../development/python-modules/types-jinja2 { };
+
   types-lxml = callPackage ../development/python-modules/types-lxml { };
 
   types-markdown = callPackage ../development/python-modules/types-markdown { };
+
+  types-markupsafe = callPackage ../development/python-modules/types-markupsafe { };
 
   types-mock = callPackage ../development/python-modules/types-mock { };
 
@@ -17296,6 +17300,8 @@ self: super: with self; {
   types-ujson = callPackage ../development/python-modules/types-ujson { };
 
   types-urllib3 = callPackage ../development/python-modules/types-urllib3 { };
+
+  types-xxhash = callPackage ../development/python-modules/types-xxhash { };
 
   typesentry = callPackage ../development/python-modules/typesentry { };
 
