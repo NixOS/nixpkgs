@@ -4,13 +4,13 @@
 
 stdenv.mkDerivation rec {
   pname = "convfont";
-  version = "1.0";
+  version = "1.2";
 
   src = fetchFromGitHub {
     owner = "drdnar";
     repo = pname;
-    rev = "v20190438";
-    sha256 = "1lj24yq5gj9hxhy1srk73521q95zyqzkws0q4v271hf5wmqaxa2f";
+    rev = "a4f90539165ef15e391ad8cf26a14d4876072dc8";
+    sha256 = "sha256-xDn29/HETeao0cwvt2LohA37sGQQ20gtBdYr20vA04A=";
   };
 
   makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Converts font for use with FontLibC";
     homepage = "https://github.com/drdnar/convfont";
-    license = licenses.wtfpl;
+    license = lib.licenses.unfree;
     maintainers = with maintainers; [ clevor ];
     platforms = platforms.all;
     mainProgram = "convfont";
