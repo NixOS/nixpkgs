@@ -1023,6 +1023,7 @@
   ./services/networking/centrifugo.nix
   ./services/networking/cgit.nix
   ./services/networking/charybdis.nix
+  ./services/networking/chirpstack.nix
   ./services/networking/chisel-server.nix
   ./services/networking/cjdns.nix
   ./services/networking/clatd.nix

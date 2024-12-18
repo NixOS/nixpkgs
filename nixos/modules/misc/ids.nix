@@ -356,6 +356,7 @@ in
       localtimed = 325;
       automatic-timezoned = 326;
       whisparr = 328;
+      chirpstack = 329;
 
       # When adding a uid, make sure it doesn't match an existing gid.
       #
@@ -685,6 +686,7 @@ in
       automatic-timezoned = 326;
       uinput = 327;
       whisparr = 328;
+      chirpstack = 329;
 
       # When adding a gid, make sure it doesn't match an existing
       # uid. Users and groups with the same name should have equal
