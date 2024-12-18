@@ -39,6 +39,10 @@ stdenv.mkDerivation rec {
     runHook postBuild
   '';
 
+  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
+    "-Wno-error=implicit-const-int-float-conversion"
+  ]);
+
   installPhase = ''
     runHook preInstall
 
