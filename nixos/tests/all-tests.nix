@@ -140,6 +140,7 @@ in {
   atop = handleTest ./atop.nix {};
   atticd = runTest ./atticd.nix;
   atuin = handleTest ./atuin.nix {};
+  audio-plugins = handleTest ./audio-plugins.nix {};
   audiobookshelf = handleTest ./audiobookshelf.nix {};
   auth-mysql = handleTest ./auth-mysql.nix {};
   authelia = handleTest ./authelia.nix {};
