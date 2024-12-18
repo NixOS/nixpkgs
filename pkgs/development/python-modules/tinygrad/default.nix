@@ -130,10 +130,6 @@ buildPythonPackage rec {
     transformers
   ] ++ networkx.optional-dependencies.extra;
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests =
     [
       # Fixed in https://github.com/tinygrad/tinygrad/pull/7792

@@ -44,10 +44,6 @@ buildPythonPackage rec {
     pkgs.gitMinimal
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   disabledTests = [
     # Tests are failing for various reasons. Needs to be adjusted with the next update
     "test_basic"

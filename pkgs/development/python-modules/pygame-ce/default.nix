@@ -123,7 +123,6 @@ buildPythonPackage rec {
     };
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     # No audio or video device in test environment
     export SDL_VIDEODRIVER=dummy
     export SDL_AUDIODRIVER=disk

@@ -61,7 +61,6 @@ buildPythonPackage rec {
 
   # Configuration so that the tests work
   preCheck = ''
-    export HOME=$(mktemp -d)
     export GNUPGHOME=pypass/tests/gnupg
     ${git}/bin/git config --global user.email "nix-builder@nixos.org"
     ${git}/bin/git config --global user.name "Nix Builder"

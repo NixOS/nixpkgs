@@ -35,10 +35,6 @@ buildPythonPackage rec {
     testresources
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   pythonImportsCheck = [
     "launchpadlib"
     "launchpadlib.apps"

@@ -61,10 +61,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  preCheck = ''
-    export PATH="$out/bin:$PATH"
-  '';
-
   pythonImportsCheck = [ "jupyter_events" ];
 
   meta = with lib; {

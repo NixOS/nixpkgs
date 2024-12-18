@@ -74,7 +74,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     export FONTCONFIG_FILE=${fontconfig.out}/etc/fonts/fonts.conf
-    export HOME=$TMPDIR
   '';
 
   pytestFlagsArray = [

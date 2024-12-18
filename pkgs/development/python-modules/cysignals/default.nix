@@ -31,11 +31,6 @@ buildPythonPackage rec {
   doCheck = false;
   checkTarget = "check-install";
 
-  preCheck = ''
-    # Make sure cysignals-CSI is in PATH
-    export PATH="$out/bin:$PATH"
-  '';
-
   propagatedBuildInputs =
     [ cython ]
     ++ lib.optionals pariSupport [

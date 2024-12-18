@@ -67,10 +67,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   pythonImportsCheck = [ "sigstore" ];
 
   disabledTests = [

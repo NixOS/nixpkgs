@@ -29,10 +29,6 @@ buildPythonPackage {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTestPaths = [
     # require linien-server which is not packaged
     "tests/test_algorithm_selection.py"

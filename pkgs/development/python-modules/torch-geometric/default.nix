@@ -150,10 +150,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests =
     [
       # TODO: try to re-enable when triton will have been updated to 3.0

@@ -25,11 +25,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests" ];
 
-  # A test needs the HOME directory to be different from $TMPDIR.
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests =
     [
       # Disable tests that fail on Hydra

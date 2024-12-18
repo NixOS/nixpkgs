@@ -45,10 +45,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   disabledTests = [
     # Network access
     "test_validate_ping"

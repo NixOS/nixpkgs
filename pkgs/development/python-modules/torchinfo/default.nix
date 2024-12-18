@@ -43,10 +43,6 @@ buildPythonPackage rec {
     transformers
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests = [
     # Skip as it downloads pretrained weights (require network access)
     "test_eval_order_doesnt_matter"

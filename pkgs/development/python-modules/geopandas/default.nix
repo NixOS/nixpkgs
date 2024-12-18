@@ -77,10 +77,6 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   disabledTests = [
     # Requires network access
     "test_read_file_url"

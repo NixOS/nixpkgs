@@ -50,8 +50,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     cd tests
-
-    PATH=$PATH:$out/bin
   '';
 
   disabledTestPaths = [ "testfiles" ];

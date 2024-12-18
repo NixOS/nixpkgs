@@ -29,10 +29,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   dependencies = [
     cryptography
     requests

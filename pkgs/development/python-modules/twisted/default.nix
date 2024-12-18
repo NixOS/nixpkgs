@@ -204,15 +204,12 @@ buildPythonPackage rec {
       !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
     ) optional-dependencies.tls;
 
-  preCheck = ''
-    export SOURCE_DATE_EPOCH=315532800
-    export PATH=$out/bin:$PATH
-  '';
-
   checkPhase = ''
     runHook preCheck
-    # race conditions when running in paralell
+
+    # race conditions when running in parallel
     ${python.interpreter} -m twisted.trial -j1 twisted
+
     runHook postCheck
   '';
 

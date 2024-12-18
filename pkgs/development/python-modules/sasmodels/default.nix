@@ -52,10 +52,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.full;
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   pythonImportsCheck = [ "sasmodels" ];
 
   meta = with lib; {

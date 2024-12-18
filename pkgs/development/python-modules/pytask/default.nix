@@ -63,11 +63,6 @@ buildPythonPackage rec {
     syrupy
   ];
 
-  # The test suite runs the installed command for e2e tests
-  preCheck = ''
-    export PATH="$PATH:$out/bin";
-  '';
-
   disabledTests = [
     # This accesses the network
     "test_download_file"

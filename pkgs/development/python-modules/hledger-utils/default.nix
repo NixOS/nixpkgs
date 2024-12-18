@@ -51,10 +51,6 @@ buildPythonPackage rec {
     perl
   ];
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
   meta = with lib; {
     description = "Utilities extending hledger";
     homepage = "https://gitlab.com/nobodyinperson/hledger-utils";

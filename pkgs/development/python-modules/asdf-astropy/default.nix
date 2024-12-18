@@ -54,10 +54,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "asdf_astropy" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   meta = with lib; {
     description = "Extension library for ASDF to provide support for Astropy";
     homepage = "https://github.com/astropy/asdf-astropy";

@@ -90,10 +90,6 @@ buildPythonPackage rec {
       --replace-fail "from orjson import loads as orjson_loads" ""
   '';
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   disabledTestPaths = [
     # Don't run benchmarking tests
     "bench"

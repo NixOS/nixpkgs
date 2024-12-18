@@ -41,10 +41,6 @@ buildPythonPackage rec {
     pytest-click
   ];
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
   pythonImportsCheck = [ "x_wr_timezone" ];
 
   meta = {

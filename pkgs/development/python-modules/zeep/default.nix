@@ -82,10 +82,6 @@ buildPythonPackage rec {
     "test_password_digest"
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   meta = with lib; {
     changelog = "https://github.com/mvantellingen/python-zeep/releases/tag/${version}";
     description = "Python SOAP client";

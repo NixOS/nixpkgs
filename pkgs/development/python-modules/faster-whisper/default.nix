@@ -54,10 +54,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   meta = with lib; {
     changelog = "https://github.com/SYSTRAN/faster-whisper/releases/tag/v${version}";
     description = "Faster Whisper transcription with CTranslate2";

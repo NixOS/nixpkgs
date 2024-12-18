@@ -34,10 +34,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyomo" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   disabledTestPaths = [
     # Don't test the documentation and the examples
     "doc/"

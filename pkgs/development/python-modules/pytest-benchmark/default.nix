@@ -57,11 +57,6 @@ buildPythonPackage rec {
     pytest-xdist
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  preCheck = ''
-    export PATH="$out/bin:$PATH"
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests =
     lib.optionals (pythonOlder "3.12") [
       # AttributeError: 'PluginImportFixer' object has no attribute 'find_spec'

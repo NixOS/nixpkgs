@@ -97,8 +97,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
-    export PATH=$PATH:$out/bin
-
     # Remove build artifacts to prevent them from messing with the tests
     rm -rf _skbuild
   '';

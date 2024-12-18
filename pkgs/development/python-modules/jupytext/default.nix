@@ -50,12 +50,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    # Tests that use a Jupyter notebook require $HOME to be writable
-    export HOME=$(mktemp -d);
-    export PATH=$out/bin:$PATH;
-  '';
-
   disabledTestPaths = [ "tests/external" ];
 
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [

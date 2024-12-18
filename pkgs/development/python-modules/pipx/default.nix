@@ -51,10 +51,6 @@ buildPythonPackage rec {
     git
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   pytestFlagsArray = [
     "--ignore=tests/test_install_all_packages.py"
     # start local pypi server and use in tests

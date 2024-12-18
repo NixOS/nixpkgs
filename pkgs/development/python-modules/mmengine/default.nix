@@ -83,13 +83,10 @@ buildPythonPackage rec {
   ];
 
   preCheck =
-    ''
-      export HOME=$(mktemp -d)
-    ''
     # Otherwise, the backprop hangs forever. More precisely, this exact line:
     # https://github.com/open-mmlab/mmengine/blob/02f80e8bdd38f6713e04a872304861b02157905a/tests/test_runner/test_activation_checkpointing.py#L46
     # Solution suggested in https://github.com/pytorch/pytorch/issues/91547#issuecomment-1370011188
-    + ''
+    ''
       export MKL_NUM_THREADS=1
     '';
 

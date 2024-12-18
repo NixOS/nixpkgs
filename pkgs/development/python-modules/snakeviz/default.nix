@@ -38,10 +38,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "snakeviz" ];
 
-  preCheck = ''
-    export PATH="$PATH:$out/bin";
-  '';
-
   meta = with lib; {
     description = "Browser based viewer for profiling data";
     mainProgram = "snakeviz";

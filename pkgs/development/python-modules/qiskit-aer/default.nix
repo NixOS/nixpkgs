@@ -134,7 +134,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     # Tests include a compiled "circuit" which is auto-built in $HOME
-    export HOME=$(mktemp -d)
     # move tests b/c by default try to find (missing) cython-ized code in /build/source dir
     cp -r $TMP/$sourceRoot/test $HOME
 

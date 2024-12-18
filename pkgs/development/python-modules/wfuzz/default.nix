@@ -60,10 +60,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTestPaths = [
     # The tests are requiring a local web server
     "tests/test_acceptance.py"

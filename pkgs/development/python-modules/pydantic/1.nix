@@ -53,10 +53,6 @@ buildPythonPackage rec {
     "ignore::pytest.PytestReturnNotNoneWarning"
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests = lib.optionals (pythonAtLeast "3.12") [
     # depends on distuils
     "test_cython_function_untouched"

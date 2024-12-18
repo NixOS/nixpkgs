@@ -71,7 +71,6 @@ buildPythonPackage rec {
   # Tests must be run in the build directory. The tests create files
   # in $HOME/.astropy so we need to set HOME to $TMPDIR.
   preCheck = ''
-    export HOME=$TMPDIR
     cd build/lib
   '';
 

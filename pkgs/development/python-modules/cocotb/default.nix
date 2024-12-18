@@ -62,7 +62,6 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    export PATH=$out/bin:$PATH
     mv cocotb cocotb.hidden
   '';
 

@@ -23,10 +23,6 @@ buildPythonPackage rec {
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   meta = with lib; {

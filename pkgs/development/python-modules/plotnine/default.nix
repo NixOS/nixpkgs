@@ -54,10 +54,6 @@ buildPythonPackage rec {
     scikit-misc
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   pythonImportsCheck = [ "plotnine" ];
 
   disabledTests = [

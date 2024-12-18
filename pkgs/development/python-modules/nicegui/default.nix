@@ -104,10 +104,6 @@ buildPythonPackage rec {
     webdriver-manager
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   pythonImportsCheck = [ "nicegui" ];
 
   # chromedriver release doesn't seems to be supported, try with next release

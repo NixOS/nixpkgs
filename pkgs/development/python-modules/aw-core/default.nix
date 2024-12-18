@@ -55,11 +55,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''
-    # Fake home folder for tests that write to $HOME
-    export HOME="$TMPDIR"
-  '';
-
   pythonImportsCheck = [ "aw_core" ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };

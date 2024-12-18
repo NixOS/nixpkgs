@@ -50,11 +50,6 @@ buildPythonPackage rec {
   # https://github.com/xolox/python-capturer/issues/10 is released.
   doCheck = !stdenv.hostPlatform.isDarwin;
 
-  preCheck = ''
-    # Required for the CLI test
-    PATH=$PATH:$out/bin
-  '';
-
   disabledTests = [
     "test_plain_text_output_format"
     "test_auto_install"

@@ -34,10 +34,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   # Race condition, https://github.com/secdev/scapy/pull/4558
   # pythonImportsCheck = [ "bof" ];
 

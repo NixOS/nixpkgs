@@ -29,11 +29,6 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  preCheck = ''
-    # Needed for Permission denied: '/homeless-shelter'
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = [ pytestCheckHook ];
   pythonImportsCheck = [ "dfdiskcache" ];
 

@@ -48,11 +48,6 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  # The tests need to find and call the installed staticjinja executable
-  preCheck = ''
-    export PATH="$PATH:$out/bin";
-  '';
-
   passthru.tests = {
     version = testers.testVersion { package = staticjinja; };
     minimal-template = callPackage ./test-minimal-template { };

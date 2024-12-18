@@ -84,10 +84,6 @@ buildPythonPackage rec {
     botocore = [ botocore ];
   };
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
   pytestFlagsArray = [
     "--asyncio-mode=auto"
     "-m 'not online'"

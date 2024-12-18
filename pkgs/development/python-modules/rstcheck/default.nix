@@ -51,11 +51,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "rstcheck" ];
 
-  preCheck = ''
-    # The tests need to find and call the rstcheck executable
-    export PATH="$PATH:$out/bin";
-  '';
-
   meta = with lib; {
     description = "Checks syntax of reStructuredText and code blocks nested within it";
     homepage = "https://github.com/myint/rstcheck";

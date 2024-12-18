@@ -26,10 +26,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''
-    export PATH="$PATH:$out/bin";
-  '';
-
   pythonImportsCheck = [ "tololib" ];
 
   # Network discovery doesn't work in the sandbox for darwin

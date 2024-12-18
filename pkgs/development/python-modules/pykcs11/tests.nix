@@ -23,7 +23,6 @@ buildPythonPackage {
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     export PYKCS11LIB=${softhsm}/lib/softhsm/libsofthsm2.so
     export SOFTHSM2_CONF=$HOME/softhsm2.conf
     echo "directories.tokendir = $HOME/tokens" > $HOME/softhsm2.conf

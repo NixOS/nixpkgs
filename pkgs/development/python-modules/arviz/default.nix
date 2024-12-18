@@ -82,10 +82,6 @@ buildPythonPackage rec {
     zarr
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   pytestFlagsArray = [ "arviz/tests/base_tests/" ];
 
   disabledTests = [

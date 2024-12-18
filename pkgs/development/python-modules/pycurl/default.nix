@@ -60,10 +60,6 @@ buildPythonPackage rec {
     "tests"
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   disabledTests =
     [
       # tests that require network access

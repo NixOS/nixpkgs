@@ -39,10 +39,6 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   pythonImportsCheck = [ "proxy_db" ];
 
   meta = with lib; {

@@ -45,10 +45,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTestPaths = [
     # Needs a running DBUS
     "tests/integration/test_layout.py"

@@ -61,12 +61,6 @@ buildPythonPackage rec {
     "rich"
   ];
 
-  # The tests want to write a configuration file
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    mkdir -p $HOME
-  '';
-
   pythonImportsCheck = [ "censys" ];
 
   meta = with lib; {

@@ -54,10 +54,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   pythonImportsCheck = [ "dask_yarn" ];
 
   disabledTests = [

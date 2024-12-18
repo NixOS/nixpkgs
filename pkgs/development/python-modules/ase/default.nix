@@ -74,10 +74,6 @@ buildPythonPackage rec {
     "test_fix_scaled" # Did not raise UserWarning
   ] ++ lib.optionals (pythonAtLeast "3.12") [ "test_info_calculators" ];
 
-  preCheck = ''
-    export PATH="$out/bin:$PATH"
-  '';
-
   pythonImportsCheck = [ "ase" ];
 
   meta = with lib; {

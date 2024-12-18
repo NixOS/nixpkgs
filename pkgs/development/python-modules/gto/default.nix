@@ -64,8 +64,6 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     git config --global user.email "nobody@example.com"
     git config --global user.name "Nobody"
   '';

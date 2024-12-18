@@ -54,10 +54,6 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  preCheck = ''
-    export HOME="$(mktemp -d)"
-  '';
-
   meta = with lib; {
     description = "Simple hierarchical configuration for Python packages";
     homepage = "https://github.com/shaypal5/birch";

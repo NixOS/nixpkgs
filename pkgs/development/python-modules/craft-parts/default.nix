@@ -70,10 +70,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests/unit" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests = [
     # Relies upon paths not present in Nix (like /bin/bash)
     "test_run_builtin_build"

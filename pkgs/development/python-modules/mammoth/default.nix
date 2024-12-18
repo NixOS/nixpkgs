@@ -41,10 +41,6 @@ buildPythonPackage rec {
     tempman
   ];
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
   passthru.updateScripts = gitUpdater { };
 
   meta = {

@@ -68,12 +68,6 @@ buildPythonPackage rec {
     zeep
   ];
 
-  # Otherwise soap_tests.py will fail to create directory
-  # Permission denied: '/homeless-shelter'
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   pytestFlagsArray = lib.optionals stdenv.hostPlatform.isDarwin [
     # SoftLayer.exceptions.TransportError: TransportError(0): ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
     "--deselect=tests/CLI/modules/hardware/hardware_basic_tests.py::HardwareCLITests"

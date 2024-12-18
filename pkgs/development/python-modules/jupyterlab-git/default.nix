@@ -56,10 +56,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   disabledTestPaths = [
     "jupyterlab_git/tests/test_handlers.py"
     # PyPI doesn't ship all required files for the tests

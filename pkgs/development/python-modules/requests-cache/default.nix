@@ -84,10 +84,6 @@ buildPythonPackage rec {
     ++ optional-dependencies.json
     ++ optional-dependencies.security;
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   pytestFlagsArray = [
     # Integration tests require local DBs
     "tests/unit"

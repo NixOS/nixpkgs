@@ -48,10 +48,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycookiecheat" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests = [
     # Tests want to use playwright executable
     "test_fake_cookie"

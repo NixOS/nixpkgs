@@ -44,11 +44,6 @@ buildPythonPackage rec {
     )
   '';
 
-  preCheck = ''
-    HOME=$TMPDIR
-    export PATH=$PATH:$out/bin
-  '';
-
   pytestFlagsArray = [
     "--ignore=tests/benchmark/" # requires pytest-benchmark
     "--ignore=tests/integration/" # pulls in 10 other packages

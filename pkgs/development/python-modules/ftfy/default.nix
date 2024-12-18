@@ -40,10 +40,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
   meta = with lib; {
     changelog = "https://github.com/rspeer/python-ftfy/blob/${src.rev}/CHANGELOG.md";
     description = "Given Unicode text, make its representation consistent and possibly less broken";

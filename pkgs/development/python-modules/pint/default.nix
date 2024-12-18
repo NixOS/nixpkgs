@@ -64,10 +64,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "--benchmark-disable" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   meta = {
     changelog = "https://github.com/hgrecco/pint/blob/${version}/CHANGES";
     description = "Physical quantities module";

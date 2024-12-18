@@ -57,10 +57,6 @@ buildPythonPackage rec {
     toml
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   pythonImportsCheck = [ "aws_adfs" ];
 
   meta = with lib; {

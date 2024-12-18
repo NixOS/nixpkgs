@@ -49,10 +49,6 @@ buildPythonPackage rec {
     "test_builder_priority"
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   __darwinAllowLocalNetworking = true;
 
   meta = with lib; {

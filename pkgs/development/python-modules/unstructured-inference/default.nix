@@ -62,10 +62,6 @@ buildPythonPackage rec {
   # This dependency needs to be updated properly
   doCheck = false;
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests = [
     # not sure why this fails
     "test_get_path_oob_move_deeply_nested"

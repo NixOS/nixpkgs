@@ -49,10 +49,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "-Wignore::DeprecationWarning" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests = [
     # disable tests depending on network connection
     "test_develop"

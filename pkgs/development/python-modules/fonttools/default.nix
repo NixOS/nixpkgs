@@ -90,11 +90,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "fontTools" ];
 
-  preCheck = ''
-    # tests want to execute the "fonttools" executable from $PATH
-    export PATH="$out/bin:$PATH"
-  '';
-
   # Timestamp tests have timing issues probably related
   # to our file timestamp normalization
   disabledTests = [

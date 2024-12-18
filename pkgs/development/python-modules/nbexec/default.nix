@@ -43,10 +43,6 @@ buildPythonPackage {
     ipykernel
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   unittestFlagsArray = [
     "-s"
     "test"

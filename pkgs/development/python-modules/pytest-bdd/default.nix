@@ -39,10 +39,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''
-    export PATH=$PATH:$out/bin
-  '';
-
   pythonImportsCheck = [ "pytest_bdd" ];
 
   meta = with lib; {

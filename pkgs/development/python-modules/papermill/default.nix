@@ -80,10 +80,6 @@ buildPythonPackage rec {
     ++ optional-dependencies.s3
     ++ optional-dependencies.gcs;
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   pythonImportsCheck = [ "papermill" ];
 
   disabledTests =

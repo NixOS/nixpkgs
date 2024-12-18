@@ -46,10 +46,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "yabadaba" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   meta = with lib; {
     description = "Abstraction layer allowing for common interactions with databases and records";
     homepage = "https://github.com/usnistgov/yabadaba";

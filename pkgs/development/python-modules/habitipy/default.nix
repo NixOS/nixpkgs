@@ -36,10 +36,6 @@ buildPythonPackage rec {
     responses
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   disabledTests = [
     # network access
     "test_content_cache"

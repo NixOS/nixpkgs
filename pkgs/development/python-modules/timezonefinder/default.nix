@@ -46,11 +46,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "timezonefinder" ];
 
-  preCheck = ''
-    # Some tests need the CLI on the PATH
-    export PATH=$out/bin:$PATH
-  '';
-
   meta = with lib; {
     changelog = "https://github.com/jannikmi/timezonefinder/blob/${version}/CHANGELOG.rst";
     description = "Module for finding the timezone of any point on earth (coordinates) offline";

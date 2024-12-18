@@ -26,11 +26,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-    export PATH=$out/bin:$PATH
-  '';
-
   pythonImportsCheck = [ "xdoctest" ];
 
   meta = with lib; {

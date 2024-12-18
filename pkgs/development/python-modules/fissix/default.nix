@@ -29,10 +29,6 @@ buildPythonPackage {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   pythonImportsCheck = [ "fissix" ];
 
   meta = {

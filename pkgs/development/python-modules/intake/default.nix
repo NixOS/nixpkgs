@@ -84,11 +84,6 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-    export PATH="$PATH:$out/bin";
-  '';
-
   disabledTestPaths = [
     # Missing plusins
     "intake/catalog/tests/test_alias.py"

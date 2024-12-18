@@ -47,10 +47,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "gplaycli" ];
 
-  preCheck = ''
-    export PATH="$PATH:$out/bin";
-  '';
-
   disabledTests = [
     "test_alter_token"
     "test_another_device"

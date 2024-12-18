@@ -85,7 +85,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytest ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     cd ..
   '';
 

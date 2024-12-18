@@ -47,11 +47,6 @@ buildPythonPackage rec {
   # an instance of aw-server running in order to function.
   pytestFlagsArray = [ "tests/test_requestqueue.py" ];
 
-  preCheck = ''
-    # Fake home folder for tests that write to $HOME
-    export HOME="$TMPDIR"
-  '';
-
   pythonImportsCheck = [ "aw_client" ];
 
   passthru.updateScript = gitUpdater { rev-prefix = "v"; };

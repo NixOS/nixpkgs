@@ -60,7 +60,6 @@ buildPythonPackage rec {
   # This is due to the Cython-compiled modules not being in the correct location
   # of the source tree.
   preCheck = ''
-    export HOME=$(mktemp -d);
     export OMP_NUM_THREADS=$NIX_BUILD_CORES
     mkdir -p test && cd test
   '';

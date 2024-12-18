@@ -125,10 +125,6 @@ buildPythonPackage rec {
     ln -s ${test-data}/* $sourceRoot/tests/data/
   '';
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   pythonImportsCheck = [ "tokenizers" ];
 
   disabledTests = [

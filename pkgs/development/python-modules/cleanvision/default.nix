@@ -58,10 +58,6 @@ buildPythonPackage rec {
     torchvision
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests = [
     # Requires accessing s3 (online)
     "test_s3_dataset"

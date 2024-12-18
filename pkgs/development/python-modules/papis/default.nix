@@ -85,10 +85,6 @@ buildPythonPackage rec {
     sphinx-click
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   pytestFlagsArray = [
     "papis"
     "tests"

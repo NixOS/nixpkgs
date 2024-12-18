@@ -69,10 +69,6 @@ buildPythonPackage rec {
       --replace "xarray >=0.9.6" "xarray"
   '';
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   pytestFlagsArray = [ "datashader" ];
 
   disabledTests = [

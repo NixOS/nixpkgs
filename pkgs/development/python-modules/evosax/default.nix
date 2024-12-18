@@ -54,10 +54,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "evosax" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = [
     # brax
     # gymnax

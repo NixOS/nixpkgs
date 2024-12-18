@@ -74,9 +74,6 @@ buildPythonPackage rec {
     # disable checking coverage
     substituteInPlace pyproject.toml \
         --replace-fail "--cov escpos --cov-report=xml" ""
-
-    # allow tests to find the cli executable
-    export PATH="$out/bin:$PATH"
   '';
 
   nativeCheckInputs = [

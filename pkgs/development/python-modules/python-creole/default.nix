@@ -57,10 +57,6 @@ buildPythonPackage rec {
     textile
   ];
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
   disabledTests = [
     # macro didn't expect argument
     "test_macro_wrong_arguments_quite"

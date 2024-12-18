@@ -41,10 +41,6 @@ buildPythonPackage rec {
     wand
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = [
     ghostscript
     jupyterlab

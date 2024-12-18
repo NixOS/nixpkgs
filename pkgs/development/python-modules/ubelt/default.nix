@@ -47,10 +47,6 @@ buildPythonPackage rec {
     xdoctest
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   disabledTests = lib.optionals stdenv.hostPlatform.isDarwin [
     # fail due to sandbox environment
     "CacheStamp.expired"

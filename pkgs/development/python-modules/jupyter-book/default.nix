@@ -89,10 +89,6 @@ buildPythonPackage rec {
     texsoup
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   disabledTests = [
     # touch the network
     "test_create_from_cookiecutter"

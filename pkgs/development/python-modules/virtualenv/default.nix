@@ -51,10 +51,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.optionals (!isPyPy) [ time-machine ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTestPaths = [
     # Ignore tests which require network access
     "tests/unit/create/test_creator.py"

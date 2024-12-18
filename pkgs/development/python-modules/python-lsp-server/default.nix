@@ -127,10 +127,6 @@ buildPythonPackage rec {
     "test_jedi_completion_with_fuzzy_enabled"
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   pythonImportsCheck = [
     "pylsp"
     "pylsp.python_lsp"

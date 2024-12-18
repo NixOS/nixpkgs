@@ -75,10 +75,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   # Most of tests fail as they require local files to be present and also internet access
   doCheck = false;
 
