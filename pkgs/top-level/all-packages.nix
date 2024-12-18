@@ -6118,6 +6118,15 @@ with pkgs;
 
   gcc_latest = gcc14;
 
+  gcc_offload = wrapCC (gcc.cc.override {
+    enableOffload = true;
+  });
+
+  gcc_amd = wrapCC (gcc.cc.override {
+    offloadTarget = "amdgcn-amdhsa";
+    withoutTargetLibc = true;
+  });
+
   libgccjit = gcc.cc.override {
     name = "libgccjit";
     langFortran = false;

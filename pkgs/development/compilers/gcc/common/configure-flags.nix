@@ -9,6 +9,8 @@
 
 , enableLTO
 , enableMultilib
+, enableOffload
+, offloadTarget
 , enablePlugin
 , disableGdbPlugin ? !enablePlugin
 , enableShared
@@ -161,6 +163,7 @@ let
       "--without-included-gettext"
       "--with-system-zlib"
       "--enable-static"
+      (lib.optionals enableOffload [ "--enable-offload-targets=amdgcn-amdhsa" ] )
       "--enable-languages=${
         lib.concatStringsSep ","
           (  lib.optional langC        "c"
@@ -208,7 +211,9 @@ let
     ++ import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; }
     ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
     ++ lib.optional disableBootstrap' "--disable-bootstrap"
-
+    ++ lib.optionals (offloadTarget == "amdgcn-amdhsa") [
+      "--target=amdgcn-amdhsa" "--enable-as-accelerator-for=x86_64-pc-linux-gnu"
+    ]
     # Platform-specific flags
     ++ lib.optional (targetPlatform == hostPlatform && targetPlatform.isx86_32) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"
     ++ lib.optional targetPlatform.isNetBSD "--disable-libssp" # Provided by libc.

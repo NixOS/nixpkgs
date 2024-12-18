@@ -13,9 +13,11 @@
 , staticCompiler ? false
 , enableShared ? stdenv.targetPlatform.hasSharedLibraries
 , enableLTO ? stdenv.hostPlatform.hasSharedLibraries
+, enableOffload ? false
+, offloadTarget ? ""
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
-, gmp, mpfr, libmpc, gettext, which, patchelf, binutils
+, gmp, mpfr, libmpc, gettext, which, patchelf, binutils, newlib
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
 , libucontext ? null
@@ -111,6 +113,8 @@ let
         disableBootstrap
         disableGdbPlugin
         enableLTO
+        enableOffload
+        offloadTarget
         enableMultilib
         enablePlugin
         enableShared
@@ -152,6 +156,7 @@ let
         threadsCross
         which
         zlib
+        newlib
       ;
     };
 
@@ -356,6 +361,8 @@ pipe ((callFile ./common/builder.nix {}) ({
   '';
 } // optionalAttrs enableMultilib {
   dontMoveLib64 = true;
+} // optionalAttrs (offloadTarget == "amdgcn-amdhsa") {
+  newlibSrc = newlib.src;
 }
 ))
 ([
