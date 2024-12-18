@@ -33,21 +33,19 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "juce";
-  version = "8.0.3";
+  version = "8.0.4";
 
   src = fetchFromGitHub {
     owner = "juce-framework";
     repo = "juce";
     rev = finalAttrs.version;
-    hash = "sha256-faD1iI9cQ2v3YisbMDtk2lRELR7eDTz3JP0K0p1vmEU=";
+    hash = "sha256-iAueT+yHwUUHOzqfK5zXEZQ0GgOKJ9q9TyRrVfWdewc=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "juce-6.1.2-cmake_install.patch";
-      url = "https://gitlab.archlinux.org/archlinux/packaging/packages/juce/-/raw/4e6d34034b102af3cd762a983cff5dfc09e44e91/juce-6.1.2-cmake_install.patch";
-      hash = "sha256-fr2K/dH0Zam5QKS63zos7eq9QLwdr+bvQL5ZxScagVU=";
-    })
+    # Adapted from https://gitlab.archlinux.org/archlinux/packaging/packages/juce/-/raw/4e6d34034b102af3cd762a983cff5dfc09e44e91/juce-6.1.2-cmake_install.patch
+    # for Juce 8.0.4.
+    ./juce-8.0.4-cmake_install.patch
   ];
 
   nativeBuildInputs = [
