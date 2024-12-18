@@ -2,12 +2,17 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  makeWrapper,
   perl,
   perlPackages,
-  runtimeShell,
 }:
 
-stdenv.mkDerivation rec {
+let
+  perlDeps = [
+    perlPackages.ParseWin32Registry
+  ];
+in
+stdenv.mkDerivation {
   pname = "regripper";
   version = "0-unstable-2024-11-02";
 
@@ -18,26 +23,24 @@ stdenv.mkDerivation rec {
     hash = "sha256-dW3Gr4HQH484i47Bg+CEnBYoGQQRMBJr88+YeuU+iV4=";
   };
 
+  nativeBuildInputs = [ makeWrapper ];
+
   propagatedBuildInputs = [
     perl
-    perlPackages.ParseWin32Registry
-  ];
+  ] ++ perlDeps;
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/{bin,share}
 
-    rm -r *.md *.exe *.bat *.dll
+    rm -r *.md *.exe *.bat *.dll *.zip
 
     cp -aR . "$out/share/regripper/"
 
-    cat > "$out/bin/regripper" << EOF
-    #!${runtimeShell}
-    exec ${perl}/bin/perl $out/share/regripper/rip.pl "\$@"
-    EOF
-
-    chmod u+x  "$out/bin/regripper"
+    makeWrapper ${perl}/bin/perl $out/bin/regripper \
+      --add-flags "$out/share/regripper/rip.pl" \
+      --set PERL5LIB ${perlPackages.makeFullPerlPath perlDeps}
 
     runHook postInstall
   '';
