@@ -24,12 +24,19 @@ let
     # Check if the display environment is ready, otherwise fail
     preStart = "${pkgs.bash}/bin/bash -c \"if [ -z $DISPLAY ]; then exit 1; fi\"";
     serviceConfig = {
-      ExecStart = "@${kernel.virtualboxGuestAdditions}/bin/VBoxClient --foreground ${serviceArgs}";
+      ExecStart = "@${kernel.virtualboxGuestAdditions}/bin/VBoxClient --verbose --foreground ${serviceArgs}";
       # Wait after a failure, hoping that the display environment is ready after waiting
       RestartSec = 2;
       Restart = "always";
     };
   };
+
+  mkVirtualBoxUserX11OnlyService =
+    serviceArgs:
+    (mkVirtualBoxUserService serviceArgs)
+    // {
+      unitConfig.ConditionEnvironment = "XDG_SESSION_TYPE=x11";
+    };
 in
 {
   imports = [
@@ -123,7 +130,7 @@ in
         systemd.user.services.virtualboxClientClipboard = mkVirtualBoxUserService "--clipboard";
       })
       (lib.mkIf cfg.seamless {
-        systemd.user.services.virtualboxClientSeamless = mkVirtualBoxUserService "--seamless";
+        systemd.user.services.virtualboxClientSeamless = mkVirtualBoxUserX11OnlyService "--seamless";
       })
       (lib.mkIf cfg.dragAndDrop {
         systemd.user.services.virtualboxClientDragAndDrop = mkVirtualBoxUserService "--draganddrop";

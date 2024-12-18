@@ -8,6 +8,8 @@
   zlib,
   patchelf,
   makeWrapper,
+  wayland,
+  libX11,
 }:
 let
   virtualBoxNixGuestAdditionsBuilder = callPackage ./builder.nix { };
@@ -31,6 +33,18 @@ let
     {
       name = "libXrandr.so";
       pkg = xorg.libXrandr;
+    }
+    {
+      name = "libwayland-client.so";
+      pkg = wayland;
+    }
+    {
+      name = "libX11.so";
+      pkg = libX11;
+    }
+    {
+      name = "libXt.so";
+      pkg = xorg.libXt;
     }
   ];
 in
