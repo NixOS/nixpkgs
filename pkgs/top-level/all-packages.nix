@@ -866,6 +866,13 @@ with pkgs;
     name = "setup-debug-info-dirs-hook";
   } ../build-support/setup-hooks/setup-debug-info-dirs.sh;
 
+  tmpdirAsHomeHook = callPackage (
+    { makeSetupHook }:
+    makeSetupHook {
+      name = "tmpdir-as-home-hook";
+    } ../build-support/setup-hooks/tmpdir-as-home.sh
+  ) { };
+
   useOldCXXAbi = makeSetupHook {
     name = "use-old-cxx-abi-hook";
   } ../build-support/setup-hooks/use-old-cxx-abi.sh;
