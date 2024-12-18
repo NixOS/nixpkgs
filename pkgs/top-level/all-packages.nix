@@ -2290,6 +2290,10 @@ with pkgs;
 
   electronplayer = callPackage ../applications/video/electronplayer/electronplayer.nix { };
 
+  element-web = callPackage ../by-name/el/element-web/package.nix {
+    conf = config.element-web.conf or { };
+  };
+
   elm-github-install = callPackage ../tools/package-management/elm-github-install { };
 
   espanso-wayland = espanso.override {
