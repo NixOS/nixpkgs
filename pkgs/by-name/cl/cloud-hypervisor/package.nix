@@ -45,6 +45,8 @@ rustPlatform.buildRustPackage rec {
     "--bins"
     "--lib" # Integration tests require root.
     "--exclude"
+    "hypervisor" # /dev/kvm
+    "--exclude"
     "net_util" # /dev/net/tun
     "--exclude"
     "vmm" # /dev/kvm

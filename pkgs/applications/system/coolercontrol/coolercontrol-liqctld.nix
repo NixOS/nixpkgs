@@ -14,9 +14,7 @@ python3.pkgs.buildPythonApplication {
   sourceRoot = "${src.name}/coolercontrol-liqctld";
   format = "pyproject";
 
-  nativeBuildInputs = with python3.pkgs; [
-    setuptools
-  ];
+  nativeBuildInputs = with python3.pkgs; [ setuptools ];
 
   propagatedBuildInputs = with python3.pkgs; [
     liquidctl
@@ -28,7 +26,7 @@ python3.pkgs.buildPythonApplication {
   postInstall = ''
     install -Dm444 "${src}/packaging/systemd/coolercontrol-liqctld.service" -t "$out/lib/systemd/system"
     substituteInPlace "$out/lib/systemd/system/coolercontrol-liqctld.service" \
-      --replace '/usr/bin' "$out/bin"
+      --replace-fail '/usr/bin' "$out/bin"
   '';
 
   meta = meta // {
