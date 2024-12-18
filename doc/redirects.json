@@ -830,6 +830,9 @@
   "add-bin-to-path.sh": [
     "index.html#add-bin-to-path.sh"
   ],
+  "writable-tmpdir-as-home.sh": [
+    "index.html#writable-tmpdir-as-home.sh"
+  ],
   "bintools-wrapper": [
     "index.html#bintools-wrapper"
   ],
