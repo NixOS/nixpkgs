@@ -3,7 +3,6 @@
   R,
   rstudio,
   makeWrapper,
-  wrapQtAppsHook,
   recommendedPackages,
   packages,
   fontconfig,
@@ -14,7 +13,7 @@ runCommand (rstudio.name + "-wrapper")
     preferLocalBuild = true;
     allowSubstitutes = false;
 
-    nativeBuildInputs = [ (if rstudio.server then makeWrapper else wrapQtAppsHook) ];
+    nativeBuildInputs = [ makeWrapper ];
     dontWrapQtApps = true;
 
     buildInputs =
@@ -56,7 +55,7 @@ runCommand (rstudio.name + "-wrapper")
       else
         ''
           ln -s ${rstudio}/share $out
-          makeQtWrapper ${rstudio}/bin/rstudio $out/bin/rstudio \
+          makeWrapper ${rstudio}/bin/rstudio $out/bin/rstudio \
             --set R_PROFILE_USER $out/$fixLibsR
         ''
     )
