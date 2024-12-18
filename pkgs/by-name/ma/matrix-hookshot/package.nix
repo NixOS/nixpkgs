@@ -79,6 +79,8 @@ mkYarnPackage rec {
 
   doDist = false;
 
+  passthru.updateScript = ./update.sh;
+
   meta = with lib; {
     description = "Bridge between Matrix and multiple project management services, such as GitHub, GitLab and JIRA";
     mainProgram = "matrix-hookshot";
