@@ -104,6 +104,6 @@ stdenv.mkDerivation rec {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
-    maintainers = with maintainers; [ ilian orivej uniquepointer viraptor ];
+    maintainers = with maintainers; [ atinba ilian orivej uniquepointer viraptor ];
   };
 }
