@@ -1,35 +1,42 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   dpkg,
   fetchurl,
-  qtbase,
+  qt6,
+  libGL,
 }:
 
 let
-  # To obtain the version you will need to run the following command:
-  #
-  # dpkg-deb -I ${odafileconverter.src} | grep Version
-  version = "21.11.0.0";
   rpath = "$ORIGIN:${
     lib.makeLibraryPath [
       stdenv.cc.cc
-      qtbase
+      qt6.qtbase
+      libGL
     ]
   }";
 
 in
-mkDerivation {
+stdenv.mkDerivation rec {
   pname = "oda-file-converter";
-  inherit version;
-  nativeBuildInputs = [ dpkg ];
+  # To obtain the version you will need to run the following command:
+  #
+  # dpkg-deb -I ${odafileconverter.src} | grep Version
+  version = "25.11.0.0";
 
   src = fetchurl {
     # NB: this URL is not stable (i.e. the underlying file and the corresponding version will change over time)
-    url = "https://web.archive.org/web/20201206221727if_/https://download.opendesign.com/guestfiles/Demo/ODAFileConverter_QT5_lnxX64_7.2dll_21.11.deb";
-    sha256 = "10027a3ab18efd04ca75aa699ff550eca3bdfe6f7084460d3c00001bffb50070";
+    url = "https://web.archive.org/web/20241212154957/https://www.opendesign.com/guestfiles/get?filename=ODAFileConverter_QT6_lnxX64_8.3dll_25.11.deb";
+    hash = "sha256-lykCOT9gmXZ3vGmak8mvrIMBEmGMJ/plmE3vkk9EjYo=";
   };
+
+  buildInputs = [
+    qt6.qtbase
+  ];
+  nativeBuildInputs = [
+    dpkg
+    qt6.wrapQtAppsHook
+  ];
 
   installPhase = ''
     mkdir -p $out/bin $out/lib
@@ -45,7 +52,7 @@ mkDerivation {
     wrapQtApp $out/libexec/ODAFileConverter
     mv $out/libexec/ODAFileConverter $out/bin
 
-    find $out/libexec -type f -executable | while read file; do
+    find $out/libexec -not -path "*/doc/*" -not -path "*/translations/*" -type f -executable | while read file; do
       echo "patching $file"
       patchelf --set-rpath '${rpath}' $file
     done
@@ -56,7 +63,10 @@ mkDerivation {
     homepage = "https://www.opendesign.com/guestfiles/oda_file_converter";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    maintainers = with maintainers; [ nagisa ];
+    maintainers = with maintainers; [
+      nagisa
+      konradmalik
+    ];
     platforms = [ "x86_64-linux" ];
     mainProgram = "ODAFileConverter";
   };

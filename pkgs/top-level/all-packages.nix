@@ -2607,7 +2607,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) AppKit Security;
   };
 
-  odafileconverter = libsForQt5.callPackage ../applications/graphics/odafileconverter { };
+  odafileconverter = callPackage ../applications/graphics/odafileconverter { };
 
   pastel = callPackage ../applications/misc/pastel {
     inherit (darwin.apple_sdk.frameworks) Security;
