@@ -13,11 +13,11 @@ assert (blas.isILP64 == lapack.isILP64 && blas.isILP64 == arpack.isILP64 && !bla
 
 stdenv.mkDerivation rec {
   pname = "calculix-ccx";
-  version = "2.19";
+  version = "2.22";
 
   src = fetchurl {
     url = "http://www.dhondt.de/ccx_${version}.src.tar.bz2";
-    sha256 = "01vdy9sns58hkm39z6d0r5y7gzqf5z493d18jin9krqib1l6jnn7";
+    hash = "sha256-OpTcx3WjH1cCKXNLNB1rBjAevcdZhj35Aci5vxhUwLw=";
   };
 
   nativeBuildInputs = [ gfortran ];
@@ -43,15 +43,19 @@ stdenv.mkDerivation rec {
   '';
 
   installPhase = ''
+    runHook preInstall
+
     install -Dm0755 ccx_${version} $out/bin/ccx
+
+    runHook postInstall
   '';
 
-  meta = with lib; {
-    homepage = "http://www.calculix.de/";
+  meta = {
+    homepage = "http://www.calculix.de";
     description = "Three-dimensional structural finite element program";
     mainProgram = "ccx";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ gebner ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ gebner ];
+    platforms = lib.platforms.unix;
   };
 }
