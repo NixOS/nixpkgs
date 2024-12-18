@@ -1,5 +1,4 @@
 import argparse
-import atexit
 import json
 import logging
 import os
@@ -8,7 +7,7 @@ from pathlib import Path
 from subprocess import CalledProcessError, run
 from typing import assert_never
 
-from . import nix
+from . import nix, tmpdir
 from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
 from .models import Action, BuildAttr, Flake, NRError, Profile
 from .process import Remote, cleanup_ssh
@@ -20,7 +19,14 @@ logger.setLevel(logging.INFO)
 
 def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentParser]]:
     common_flags = argparse.ArgumentParser(add_help=False)
-    common_flags.add_argument("--verbose", "-v", action="count", dest="v", default=0)
+    common_flags.add_argument(
+        "--verbose",
+        "-v",
+        action="count",
+        dest="v",
+        default=0,
+        help="Enable verbose logging (includes nix)",
+    )
     common_flags.add_argument("--max-jobs", "-j")
     common_flags.add_argument("--cores")
     common_flags.add_argument("--log-format")
@@ -262,14 +268,15 @@ def reexec(
     drv = None
     attr = "config.system.build.nixos-rebuild"
     try:
-        # Need to set target_host=None, to avoid connecting to remote
-        if flake := Flake.from_arg(args.flake, None):
+        # Parsing the args here but ignore ask_sudo_password since it is not
+        # needed and we would end up asking sudo password twice
+        if flake := Flake.from_arg(args.flake, Remote.from_arg(args.target_host, None)):
             drv = nix.build_flake(attr, flake, **flake_build_flags, no_link=True)
         else:
             build_attr = BuildAttr.from_arg(args.attr, args.file)
             drv = nix.build(attr, build_attr, **build_flags, no_out_link=True)
     except CalledProcessError:
-        logger.warning("could not find a newer version of nixos-rebuild")
+        logger.warning("could not build a newer version of nixos-rebuild")
 
     if drv:
         new = drv / f"bin/{EXECUTABLE}"
@@ -280,7 +287,10 @@ def reexec(
                 argv[0],
                 new,
             )
+            # Manually call clean-up functions since os.execve() will replace
+            # the process immediately
             cleanup_ssh()
+            tmpdir.TMPDIR.cleanup()
             os.execve(new, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
 
 
@@ -289,8 +299,6 @@ def execute(argv: list[str]) -> None:
 
     if not WITH_NIX_2_18:
         logger.warning("you're using Nix <2.18, some features will not work correctly")
-
-    atexit.register(cleanup_ssh)
 
     common_flags = vars(args_groups["common_flags"])
     common_build_flags = common_flags | vars(args_groups["common_build_flags"])
@@ -478,6 +486,15 @@ def main() -> None:
 
     try:
         execute(sys.argv)
+    except CalledProcessError as ex:
+        if logger.level == logging.DEBUG:
+            import traceback
+
+            traceback.print_exc()
+        else:
+            print(str(ex), file=sys.stderr)
+        # Exit with the error code of the process that failed
+        sys.exit(ex.returncode)
     except (Exception, KeyboardInterrupt) as ex:
         if logger.level == logging.DEBUG:
             raise

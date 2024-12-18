@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "webexpythonsdk";
-  version = "2.0.1";
+  version = "2.0.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.10";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
-    owner = "CiscoDevNet";
+    owner = "WebexCommunity";
     repo = "WebexPythonSDK";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ENAUUicVO/Br7k+RFHCGzQ7BIG0CP7jTYM3tzs5EAZQ=";
+    tag = "v${version}";
+    hash = "sha256-sqyfFnGZ4W2h/sHY3J+XH4TbbTkrlx9/x9NGKPzHhKo=";
   };
 
   build-system = [
