@@ -7,6 +7,7 @@ let
     then pkgs.qt6Packages.fcitx5-with-addons.override { inherit (cfg) addons; }
     else pkgs.libsForQt5.fcitx5-with-addons.override { inherit (cfg) addons; };
   settingsFormat = pkgs.formats.ini { };
+  settingsFormatWithGlobalSection = pkgs.formats.iniWithGlobalSection { };
 in
 {
   options = {
@@ -65,7 +66,7 @@ in
           };
           default = { };
           description = ''
-            The global options in `config` file in ini format.
+            The global options in `config` file in INI format.
           '';
         };
         inputMethod = lib.mkOption {
@@ -74,17 +75,27 @@ in
           };
           default = { };
           description = ''
-            The input method configure in `profile` file in ini format.
+            The input method configure in `profile` file in INI format.
           '';
         };
         addons = lib.mkOption {
-          type = with lib.types; (attrsOf anything);
+          type = with lib.types; (attrsOf settingsFormatWithGlobalSection.type);
           default = { };
           description = ''
-            The addon configures in `conf` folder in ini format with global sections.
+            The addon configures in `conf` folder in INI format with global sections.
             Each item is written to the corresponding file.
           '';
           example = lib.literalExpression "{ pinyin.globalSection.EmojiEnabled = \"True\"; }";
+        };
+        tables = lib.mkOption {
+          type = with lib.types; (attrsOf settingsFormat.type);
+          default = { };
+          description = ''
+            The configuration for tables, used for input methods that map sequences of key presses
+            into characters, in INI format.
+            Each item is written to the corresponding file.
+          '';
+          example = literalExpression ''{ cangjie5.MatchingKey = "z"; }'';
         };
       };
       ignoreUserConfig = lib.mkOption {
@@ -120,18 +131,18 @@ in
     environment.etc =
       let
         optionalFile = p: f: v: lib.optionalAttrs (v != { }) {
-          "xdg/fcitx5/${p}".text = f v;
+          "xdg/fcitx5/${p}".source = f.generate p v;
         };
       in
       lib.attrsets.mergeAttrsList [
-        (optionalFile "config" (lib.generators.toINI { }) cfg.settings.globalOptions)
-        (optionalFile "profile" (lib.generators.toINI { }) cfg.settings.inputMethod)
+        (optionalFile "config" settingsFormat cfg.settings.globalOptions)
+        (optionalFile "profile" settingsFormat cfg.settings.inputMethod)
         (lib.concatMapAttrs
-          (name: value: optionalFile
-            "conf/${name}.conf"
-            (lib.generators.toINIWithGlobalSection { })
-            value)
+          (name: optionalFile "conf/${name}.conf" settingsFormatWithGlobalSection)
           cfg.settings.addons)
+        (lib.concatMapAttrs
+          (name: optionalFile "table/${name}.conf" settingsFormat)
+          cfg.settings.tables)
       ];
 
     environment.variables = {
