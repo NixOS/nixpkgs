@@ -49,14 +49,6 @@ stdenv.mkDerivation rec {
     zstd
   ];
 
-  installPhase = ''
-    runHook preInstall
-
-    install -Dm555 -t "$out/bin" src/pgbackrest
-
-    runHook postInstall
-  '';
-
   meta = with lib; {
     description = "Reliable PostgreSQL backup & restore";
     homepage = "https://pgbackrest.org/";
