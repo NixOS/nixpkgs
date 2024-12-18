@@ -1,0 +1,45 @@
+{
+  "name": "@fsouza/prettierd",
+  "version": "0.25.3",
+  "description": "prettier, as a daemon",
+  "bin": {
+    "prettierd": "./bin/prettierd"
+  },
+  "scripts": {
+    "prepare": "yarn build",
+    "build": "tsc -b",
+    "run": "node bin/prettierd",
+    "start": "node bin/prettierd start",
+    "prettier:check": "prettier --check .",
+    "prettier:fix": "prettier --write ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fsouza/prettierd.git"
+  },
+  "author": "Francisco Souza",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fsouza/prettierd/issues"
+  },
+  "homepage": "https://github.com/fsouza/prettierd",
+  "devDependencies": {
+    "@types/node": "^20.12.7",
+    "@types/prettier": "^3.0.0",
+    "typescript": "^5.4.5"
+  },
+  "dependencies": {
+    "core_d": "^6.1.0",
+    "prettier": "^3.2.5"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "LICENSE",
+    "README.md"
+  ],
+  "optionalDependencies": {
+    "@babel/parser": "^7.24.4",
+    "@typescript-eslint/typescript-estree": "^7.6.0"
+  }
+}

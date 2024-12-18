@@ -1,0 +1,19 @@
+diff -Naurd x/tensorflow/workspace2.bzl y/tensorflow/workspace2.bzl
+--- x/tensorflow/workspace2.bzl	2023-09-16 20:44:02.266422132 +0000
++++ y/tensorflow/workspace2.bzl	2023-09-16 20:50:40.370998305 +0000
+@@ -469,6 +469,7 @@
+         system_link_files = {
+             "//third_party/systemlibs:protobuf.bzl": "protobuf.bzl",
+             "//third_party/systemlibs:protobuf_deps.bzl": "protobuf_deps.bzl",
++            "//third_party/systemlibs:protobuf.python.BUILD": "python/BUILD",
+         },
+         urls = tf_mirror_urls("https://github.com/protocolbuffers/protobuf/archive/v3.21.9.zip"),
+     )
+diff -Naurd x/third_party/systemlibs/protobuf.python.BUILD y/third_party/systemlibs/protobuf.python.BUILD
+--- x/third_party/systemlibs/protobuf.python.BUILD	1970-01-01 00:00:00.000000000 +0000
++++ y/third_party/systemlibs/protobuf.python.BUILD	2023-09-16 20:49:12.514890584 +0000
+@@ -0,0 +1,4 @@
++cc_library(
++    name = "proto_api",
++    visibility = ["//visibility:public"]
++)

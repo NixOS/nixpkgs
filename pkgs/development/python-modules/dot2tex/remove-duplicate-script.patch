@@ -1,0 +1,34 @@
+From 98a0fbd0c4e13df98b8fb69c241665ab774fda2e Mon Sep 17 00:00:00 2001
+From: Theodore Ni <3806110+tjni@users.noreply.github.com>
+Date: Fri, 11 Aug 2023 21:58:14 -0700
+Subject: [PATCH] Remove script with same name as entry point
+
+---
+ dot2tex/dot2tex | 5 -----
+ setup.py        | 1 -
+ 2 files changed, 6 deletions(-)
+ delete mode 100644 dot2tex/dot2tex
+
+diff --git a/dot2tex/dot2tex b/dot2tex/dot2tex
+deleted file mode 100644
+index 278c0b3..0000000
+--- a/dot2tex/dot2tex
++++ /dev/null
+@@ -1,5 +0,0 @@
+-#!/usr/bin/env python
+-from .dot2tex import main
+-
+-if __name__ == '__main__':
+-    main()
+diff --git a/setup.py b/setup.py
+index d05db37..67a3ee8 100644
+--- a/setup.py
++++ b/setup.py
+@@ -21,7 +21,6 @@
+       author_email='kjellmf@gmail.com',
+       url="https://github.com/kjellmf/dot2tex",
+       py_modules=['dot2tex.dot2tex', 'dot2tex.dotparsing'],
+-      scripts=['dot2tex/dot2tex'],
+       classifiers=[
+           'Development Status :: 4 - Beta',
+           'Environment :: Console',
