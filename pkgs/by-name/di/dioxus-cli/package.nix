@@ -14,14 +14,14 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "dioxus-cli";
-  version = "0.6.0";
+  version = "0.6.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-0Kg2/+S8EuMYZQaK4Ao+mbS7K48VhVWjPL+LnoVJMSw=";
+    hash = "sha256-mQnSduf8SHYyUs6gHfI+JAvpRxYQA1DiMlvNofImElU=";
   };
 
-  cargoHash = "sha256-RMo6q/GSAV1bCMWtR+wu9xGKCgz/Ie6t/8oirBly/LQ=";
+  cargoHash = "sha256-UDV9odeXVGxC27+2LN+amrDoxzTR4tkKfX92U62J5BI=";
   buildFeatures = [ "optimizations" ];
 
   nativeBuildInputs = [
@@ -38,6 +38,7 @@ rustPlatform.buildRustPackage rec {
   checkFlags = [
     # requires network access
     "--skip=serve::proxy::test"
+    "--skip=wasm_bindgen::test"
   ];
 
   passthru = {
