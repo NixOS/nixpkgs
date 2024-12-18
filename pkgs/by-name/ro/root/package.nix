@@ -81,6 +81,9 @@ stdenv.mkDerivation rec {
     pkg-config
     git
   ];
+  propagatedBuildInputs = [
+    nlohmann_json # link interface of target "ROOT::ROOTEve"
+  ];
   buildInputs =
     [
       davix
@@ -98,7 +101,6 @@ stdenv.mkDerivation rec {
       libxml2
       llvm_18
       lz4
-      nlohmann_json
       openblas
       openssl
       patchRcPathCsh
