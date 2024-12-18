@@ -1538,11 +1538,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXrender = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libXrender";
-    version = "0.9.11";
+    version = "0.9.12";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXrender-0.9.11.tar.xz";
-      sha256 = "096whakny5h16nlwz80z0l2nxigpsarl35mm5xqgzlc37ad7alxw";
+      url = "mirror://xorg/individual/lib/libXrender-0.9.12.tar.xz";
+      sha256 = "15qv3lbxyx61x55lwmafpy8idb836is82i1213bchfcblj6i4cmq";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
