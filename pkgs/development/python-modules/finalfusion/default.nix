@@ -41,11 +41,15 @@ buildPythonPackage rec {
   '';
 
   checkPhase = ''
+    runHook preCheck
+
     # Regular unit tests.
     pytest
 
     # Integration tests for command-line utilities.
-    PATH=$PATH:$out/bin tests/integration/all.sh
+    tests/integration/all.sh
+
+    runHook postCheck
   '';
 
   meta = with lib; {

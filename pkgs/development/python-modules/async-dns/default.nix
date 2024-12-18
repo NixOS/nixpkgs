@@ -23,10 +23,13 @@ buildPythonPackage rec {
   nativeBuildInputs = [ poetry-core ];
 
   checkPhase = ''
-    export HOME=$TMPDIR
+    runHook preCheck
+
     # Test needs network access
     rm -r tests/resolver
     ${python.interpreter} -m unittest
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "async_dns" ];

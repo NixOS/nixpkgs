@@ -67,8 +67,6 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    # Cython cache lies in home directory
-    export HOME=$(mktemp -d)
     cd $HOME && ${python.interpreter} -c "import brian2;assert brian2.test()"
     runHook postCheck
   '';

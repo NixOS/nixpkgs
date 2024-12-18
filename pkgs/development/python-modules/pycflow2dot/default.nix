@@ -29,9 +29,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pycflow2dot" ];
   checkPhase = ''
+    runHook preCheck
+
     cd tests
-    export PATH=$out/bin:$PATH
     make all
+
+    runHook postCheck
   '';
 
   meta = with lib; {

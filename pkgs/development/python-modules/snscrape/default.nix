@@ -49,8 +49,11 @@ buildPythonPackage rec {
 
   # There are no tests; make sure the executable works.
   checkPhase = ''
-    export PATH=$PATH:$out/bin
+    runHook preCheck
+
     snscrape --help
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "snscrape" ];

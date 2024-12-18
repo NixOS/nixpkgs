@@ -54,9 +54,12 @@ buildPythonPackage rec {
   doCheck = false;
 
   checkPhase = ''
+    runHook preCheck
+
     cd ../../examples
-    export HOME=$TEMPDIR
     ${python.interpreter} run_all.py
+
+    runHook postCheck
   '';
 
   meta = with lib; {

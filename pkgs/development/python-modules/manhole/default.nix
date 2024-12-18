@@ -32,16 +32,17 @@ buildPythonPackage rec {
     process-tests
   ];
   checkPhase = ''
+    runHook preCheck
+
     # Based on its tox.ini
     export PYTHONUNBUFFERED=yes
     export PYTHONPATH=.:tests:$PYTHONPATH
 
-    # The tests use manhole-cli
-    export PATH="$PATH:$out/bin"
-
     # test_uwsgi fails with:
     # http.client.RemoteDisconnected: Remote end closed connection without response
     py.test -vv -k "not test_uwsgi"
+
+    runHook postCheck
   '';
 
   meta = with lib; {

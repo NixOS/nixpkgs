@@ -80,9 +80,10 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
+    runHook preCheck
+
     # Tests expect these applications available as such.
     mkdir -p bin
-    export PATH="$PWD/bin:$PATH"
     printf '#!${bash}/bin/bash\nexec ${python.interpreter} -m tempest.cmd.main "$@"\n' > bin/tempest
     printf '#!${bash}/bin/bash\nexec ${python.interpreter} -m tempest.cmd.subunit_describe_calls "$@"\n' > bin/subunit-describe-calls
     chmod +x bin/*
@@ -90,6 +91,8 @@ buildPythonPackage rec {
     stestr --test-path tempest/tests run -e <(echo "
       tempest.tests.lib.cli.test_execute.TestExecute.test_execute_with_prefix
     ")
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "tempest" ];
