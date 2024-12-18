@@ -29,18 +29,16 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "bottles-unwrapped";
-  version = "51.11";
+  version = "51.13";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
     rev = version;
-    sha256 = "sha256-uS3xmTu+LrVFX93bYcJvYjl6179d3IjpxLKrOXn8Z8Y=";
+    hash = "sha256-ZcUevGY81H3ATTk390ojBp/4zBE2Lui7Qa+Qe8B0XL4=";
   };
 
-  patches = [
-    ./vulkan_icd.patch
-  ];
+  patches = [ ./vulkan_icd.patch ];
 
   # https://github.com/bottlesdevs/Bottles/wiki/Packaging
   nativeBuildInputs = [
@@ -107,7 +105,7 @@ python3Packages.buildPythonApplication rec {
   passthru.updateScript = gitUpdater { };
 
   meta = with lib; {
-    description = "An easy-to-use wineprefix manager";
+    description = "Easy-to-use wineprefix manager";
     homepage = "https://usebottles.com/";
     downloadPage = "https://github.com/bottlesdevs/Bottles/releases";
     license = licenses.gpl3Only;
