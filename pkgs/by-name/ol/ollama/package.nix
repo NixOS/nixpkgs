@@ -223,6 +223,9 @@ goBuild {
           inherit version;
           package = ollama;
         };
+        hasCudaObjects = cudaPackages.hasCudaObjects {
+          package = ollama-cuda;
+        };
       }
       // lib.optionalAttrs stdenv.hostPlatform.isLinux {
         inherit ollama-rocm ollama-cuda;
