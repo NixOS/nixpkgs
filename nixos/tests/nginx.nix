@@ -126,12 +126,18 @@ import ./make-test-python.nix ({ pkgs, ... }: {
         webserver.fail(
             "${reloadWithErrorsSystem}/bin/switch-to-configuration test >&2"
         )
-        webserver.succeed("[[ $(systemctl is-failed nginx-config-reload) == failed ]]")
-        webserver.succeed("[[ $(systemctl is-failed nginx) == active ]]")
-        # just to make sure operation is idempotent. During development I had a situation
-        # when first time it shows error, but stops showing it on subsequent rebuilds
-        webserver.fail(
-            "${reloadWithErrorsSystem}/bin/switch-to-configuration test >&2"
-        )
+        webserver.succeed("[[ $(systemctl is-active nginx) == active ]]")
+        webserver.fail("systemctl reload nginx.service")
+        webserver.succeed("[[ $(systemctl is-active nginx) == active ]]")
+
+        # TODO: make `reloadTriggers` idempotent
+        #       Would be a change to `switch-to-configuration[-ng]` so it taints services
+        #       who's reload failed, and retries on next activation if the service didn't
+        #       change (in addition to normal reload/restart logic).
+        # # just to make sure operation is idempotent. During development I had a situation
+        # # when first time it shows error, but stops showing it on subsequent rebuilds
+        # webserver.succeed(
+        #     "${reloadWithErrorsSystem}/bin/switch-to-configuration test >&2"
+        # )
   '';
 })

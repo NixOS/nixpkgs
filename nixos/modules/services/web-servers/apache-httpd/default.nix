@@ -645,7 +645,7 @@ in
     ] ++ map (name: mkCertOwnershipAssertion {
       cert = config.security.acme.certs.${name};
       groups = config.users.groups;
-      services = [ config.systemd.services.httpd ] ++ lib.optional (vhostCertNames != []) config.systemd.services.httpd-config-reload;
+      services = [ config.systemd.services.httpd ];
     }) vhostCertNames;
 
     warnings =
@@ -665,10 +665,9 @@ in
       wwwrun.gid = config.ids.gids.wwwrun;
     };
 
-    security.acme.certs = let
-      acmePairs = map (hostOpts: let
+    security.acme.certs = lib.mkMerge (map (hostOpts: let
         hasRoot = hostOpts.acmeRoot != null;
-      in nameValuePair hostOpts.hostName {
+      in { ${hostOpts.hostName} = {
         group = mkDefault cfg.group;
         # if acmeRoot is null inherit config.security.acme
         # Since config.security.acme.certs.<cert>.webroot's own default value
@@ -680,9 +679,14 @@ in
         # Use the vhost-specific email address if provided, otherwise let
         # security.acme.email or security.acme.certs.<cert>.email be used.
         email = mkOverride 2000 (if hostOpts.adminAddr != null then hostOpts.adminAddr else cfg.adminAddr);
+      };
       # Filter for enableACME-only vhosts. Don't want to create dud certs
-      }) (filter (hostOpts: hostOpts.useACMEHost == null) acmeEnabledVhosts);
-    in listToAttrs acmePairs;
+    }) (filter (vhostConfig: vhostConfig.useACMEHost == null) acmeEnabledVhosts)
+    ++ map (certName: {
+      ${certName} = {
+        reloadServices = [ "httpd.service" ];
+      };
+    }) vhostCertNames);
 
     # httpd requires a stable path to the configuration file for reloads
     environment.etc."httpd/httpd.conf".source = cfg.configFile;
@@ -747,7 +751,7 @@ in
         ];
 
     systemd.services.httpd = {
-        description = "Apache HTTPD";
+        description = "Apache HTTP Daemon";
         wantedBy = [ "multi-user.target" ];
         wants = concatLists (map (certName: [ "acme-finished-${certName}.target" ]) vhostCertNames);
         after = [ "network.target" ]
@@ -787,33 +791,5 @@ in
           AmbientCapabilities = [ "CAP_NET_BIND_SERVICE" ];
         };
       };
-
-    # postRun hooks on cert renew can't be used to restart Apache since renewal
-    # runs as the unprivileged acme user. sslTargets are added to wantedBy + before
-    # which allows the acme-finished-$cert.target to signify the successful updating
-    # of certs end-to-end.
-    systemd.services.httpd-config-reload = let
-      sslServices = map (certName: "acme-${certName}.service") vhostCertNames;
-      sslTargets = map (certName: "acme-finished-${certName}.target") vhostCertNames;
-    in mkIf (vhostCertNames != []) {
-      wantedBy = sslServices ++ [ "multi-user.target" ];
-      # Before the finished targets, after the renew services.
-      # This service might be needed for HTTP-01 challenges, but we only want to confirm
-      # certs are updated _after_ config has been reloaded.
-      before = sslTargets;
-      after = sslServices;
-      restartTriggers = [ cfg.configFile ];
-      # Block reloading if not all certs exist yet.
-      # Happens when config changes add new vhosts/certs.
-      unitConfig.ConditionPathExists = map (certName: certs.${certName}.directory + "/fullchain.pem") vhostCertNames;
-      serviceConfig = {
-        Type = "oneshot";
-        TimeoutSec = 60;
-        ExecCondition = "/run/current-system/systemd/bin/systemctl -q is-active httpd.service";
-        ExecStartPre = "${pkg}/bin/httpd -f /etc/httpd/httpd.conf -t";
-        ExecStart = "/run/current-system/systemd/bin/systemctl reload httpd.service";
-      };
-    };
-
   };
 }

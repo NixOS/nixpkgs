@@ -108,12 +108,6 @@
             };
           });
         };
-
-        # Used to determine if service reload was triggered
-        systemd.targets."test-renew-${server}" = {
-          wants = [ "acme-${server}-http.example.test.service" ];
-          after = [ "acme-${server}-http.example.test.service" "${server}-config-reload.service" ];
-        };
       }
       specialConfig
       extraConfig
@@ -650,7 +644,7 @@ in {
               f"test $(stat -L -c '%a %U %G' /var/lib/acme/a.example.test/*.pem | tee /dev/stderr | grep '640 acme {group}' | wc -l) -eq 5"
           )
           # Will succeed if nginx can load the certs
-          webserver.succeed("systemctl start nginx-config-reload.service")
+          webserver.succeed("systemctl reload nginx.service")
 
       with subtest("Correctly implements OCSP stapling"):
           switch_to(webserver, "ocsp_stapling")
@@ -739,8 +733,9 @@ in {
               webserver.succeed(f"systemctl clean acme-{test_domain}.service --what=state")
               webserver.succeed(f"systemctl start acme-selfsigned-{test_domain}.service")
               check_issuer(webserver, test_domain, "minica")
-              webserver.succeed(f"systemctl start {server}-config-reload.service")
-              webserver.succeed(f"systemctl start test-renew-{server}.target")
+              webserver.succeed(f"systemctl reload {server}.service")
+              check_issuer(webserver, test_domain, "minica")
+              webserver.succeed(f"systemctl start acme-{test_domain}.service")
               check_issuer(webserver, test_domain, "pebble")
               check_connection(client, test_domain)
 
