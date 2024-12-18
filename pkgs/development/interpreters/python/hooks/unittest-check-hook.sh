@@ -5,6 +5,13 @@ unittestCheckPhase() {
     echo "Executing unittestCheckPhase"
     runHook preCheck
 
+    export HOME=$(mktemp -d)
+
+    # If the path $out/bin exists, add it to the PATH environment variable
+    if [ -d "$out/bin" ]; then
+        export PATH="$out/bin${PATH:+:}$PATH"
+    fi
+
     eval "@pythonCheckInterpreter@ -m unittest discover $unittestFlagsArray"
 
     runHook postCheck
