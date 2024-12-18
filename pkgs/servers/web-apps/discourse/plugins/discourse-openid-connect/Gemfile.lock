@@ -1,0 +1,37 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ast (2.4.1)
+    parallel (1.19.2)
+    parser (2.7.2.0)
+      ast (~> 2.4.1)
+    rainbow (3.0.0)
+    regexp_parser (1.8.1)
+    rexml (3.2.5)
+    rubocop (0.93.0)
+      parallel (~> 1.10)
+      parser (>= 2.7.1.5)
+      rainbow (>= 2.2.2, < 4.0)
+      regexp_parser (>= 1.8)
+      rexml
+      rubocop-ast (>= 0.6.0)
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 1.4.0, < 2.0)
+    rubocop-ast (0.7.1)
+      parser (>= 2.7.1.5)
+    rubocop-discourse (2.3.2)
+      rubocop (>= 0.69.0)
+      rubocop-rspec (>= 1.39.0)
+    rubocop-rspec (1.43.2)
+      rubocop (~> 0.87)
+    ruby-progressbar (1.10.1)
+    unicode-display_width (1.7.0)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  rubocop-discourse
+
+BUNDLED WITH
+   2.1.4

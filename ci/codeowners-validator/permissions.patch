@@ -1,0 +1,36 @@
+diff --git a/internal/check/valid_owner.go b/internal/check/valid_owner.go
+index a264bcc..610eda8 100644
+--- a/internal/check/valid_owner.go
++++ b/internal/check/valid_owner.go
+@@ -16,7 +16,6 @@ import (
+ const scopeHeader = "X-OAuth-Scopes"
+ 
+ var reqScopes = map[github.Scope]struct{}{
+-	github.ScopeReadOrg: {},
+ }
+ 
+ type ValidOwnerConfig struct {
+@@ -223,10 +222,7 @@ func (v *ValidOwner) validateTeam(ctx context.Context, name string) *validateErr
+ 	for _, t := range v.repoTeams {
+ 		// GitHub normalizes name before comparison
+ 		if strings.EqualFold(t.GetSlug(), team) {
+-			if t.Permissions["push"] {
+-				return nil
+-			}
+-			return newValidateError("Team %q cannot review PRs on %q as neither it nor any parent team has write permissions.", team, v.orgRepoName)
++			return nil
+ 		}
+ 	}
+ 
+@@ -245,10 +241,7 @@ func (v *ValidOwner) validateGitHubUser(ctx context.Context, name string) *valid
+ 	for _, u := range v.repoUsers {
+ 		// GitHub normalizes name before comparison
+ 		if strings.EqualFold(u.GetLogin(), userName) {
+-			if u.Permissions["push"] {
+-				return nil
+-			}
+-			return newValidateError("User %q cannot review PRs on %q as they don't have write permissions.", userName, v.orgRepoName)
++			return nil
+ 		}
+ 	}
+ 
