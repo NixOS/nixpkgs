@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  nixosTests,
   yarnConfigHook,
   yarnBuildHook,
   fetchYarnDeps,
@@ -248,7 +249,12 @@ rustPlatform.buildRustPackage {
     "--skip test::test_integration"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      inherit (nixosTests) chirpstack;
+    };
+  };
 
   meta = with lib; {
     description = "LoRaWAN Network Server";
