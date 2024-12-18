@@ -2,27 +2,20 @@
   lib,
   mopidy,
   python3Packages,
-  fetchPypi,
+  fetchurl,
   fetchpatch,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "Mopidy-Local";
-  version = "3.2.1";
+  version = "3.3.0";
 
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "18w39mxpv8p17whd6zfw5653d21q138f8xd6ili6ks2g2dbm25i9";
+  # We can't use fetchPypi here because the name of the file does not match the
+  # name of the package.
+  src = fetchurl {
+    url = "https://files.pythonhosted.org/packages/02/c5/d099a05df7d6b0687071aa7d2d7a3499802b3b4b641531cd46ec8e6e7035/mopidy_local-3.3.0.tar.gz";
+    sha256 = "cba6ed6c693952255a9f5efcc7b77d8eae4e4e728c6ee9621efd1a471b992b7a";
   };
-
-  patches = [
-    # Fix tests with newer Mopidy versions >=3.4.0 -- mopidy/mopidy-local#69
-    (fetchpatch {
-      name = "update-tests-for-mopidy-3.4.0.patch";
-      url = "https://github.com/mopidy/mopidy-local/commit/f2c198f8eb253f62100afc58f652e73a76d5a090.patch";
-      hash = "sha256-jrlZc/pd00S5q9nOfV1OXu+uP/SvH+Xbi7U52aZajj4=";
-    })
-  ];
 
   propagatedBuildInputs = [
     mopidy
