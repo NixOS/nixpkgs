@@ -84,11 +84,29 @@
   "org/openjfx#javafx-base/17/linux": {
    "jar": "sha256-JDzahjaTFMNLsQvgAj88mFaCNcpN7UpZ4Hgd1kC8SWI="
   },
+  "org/openjfx#javafx-base/17/linux-aarch64": {
+   "jar": "sha256-VpZzo52A7LSvD6ZtjdY5dKBAxGhfHwD1a/m+FNke5Dg="
+  },
+  "org/openjfx#javafx-base/17/mac": {
+   "jar": "sha256-11nPga0/qMIESAgMHq8drmDjfnDD2qTosMtbdQXfQDM="
+  },
+  "org/openjfx#javafx-base/17/mac-aarch64": {
+   "jar": "sha256-DIOY+UOTZuom1n6BVDnj2CebaqWZqyycrLRlb/qIHjg="
+  },
   "org/openjfx#javafx-controls/17": {
    "pom": "sha256-6UfbVFcEn1pKxmiSa2QUtLCRglYerVymiyNSTg4cwD8="
   },
   "org/openjfx#javafx-controls/17/linux": {
    "jar": "sha256-pa085GMw/aiPjx4/ue8E1kR2O6C2mpXkl66JTjWdrQg="
+  },
+  "org/openjfx#javafx-controls/17/linux-aarch64": {
+   "jar": "sha256-IfMJAHqsbBKYYUHfGBf2d3n5WsM5Ee4lGxAGhBUqTvg="
+  },
+  "org/openjfx#javafx-controls/17/mac": {
+   "jar": "sha256-oH+WTR6TpUkZ0n24vx4I7TLFcwn9CIl+IGuXGIyWGiM="
+  },
+  "org/openjfx#javafx-controls/17/mac-aarch64": {
+   "jar": "sha256-NtdHe5GuuV1l9B58d5uXrvC19CrCYVhIYNfwPwqE1uo="
   },
   "org/openjfx#javafx-fxml/17": {
    "pom": "sha256-5+IA5aFv3qbIDne2IhWyVMt9thHEy9K9jGtVeLt39oE="
@@ -96,11 +114,29 @@
   "org/openjfx#javafx-fxml/17/linux": {
    "jar": "sha256-pkXtb3SSd3px+3c/IPO1OuIh9U0Fnl3p0dD2cmyam68="
   },
+  "org/openjfx#javafx-fxml/17/linux-aarch64": {
+   "jar": "sha256-tsq+SetXA3yaTPg9UMkTXMzpUmgZgLjvhsszptrBZTA="
+  },
+  "org/openjfx#javafx-fxml/17/mac": {
+   "jar": "sha256-caydrtrb/C5mVzmFwRrmH9y3nhBpEZaHZqt1y7EKhLA="
+  },
+  "org/openjfx#javafx-fxml/17/mac-aarch64": {
+   "jar": "sha256-WCBAk5mAff/pahKUoUZJIx+E3qUvxMQxqLlcXKsz9xk="
+  },
   "org/openjfx#javafx-graphics/17": {
    "pom": "sha256-3RVlTvq6FiyolcdAxqA7vUEu8XNwyMcOq9j6PTUer+I="
   },
   "org/openjfx#javafx-graphics/17/linux": {
    "jar": "sha256-YIAnF9iwTwE25rLNS5BGiQBSVml3328MF/dT+0eJ/aY="
+  },
+  "org/openjfx#javafx-graphics/17/linux-aarch64": {
+   "jar": "sha256-DzmFQ+ZDshVPi96ir1bXR2hIncysLzlAcCnpLaPub1o="
+  },
+  "org/openjfx#javafx-graphics/17/mac": {
+   "jar": "sha256-Dzx9x1v3G9PgnsBAQ+a88LwnCKX9JeM4TpXWXCTe6pc="
+  },
+  "org/openjfx#javafx-graphics/17/mac-aarch64": {
+   "jar": "sha256-g/4n/hqq9NjcL27nLG3eBCy0j0tQkhOvndk8PwxCBTc="
   },
   "org/openjfx#javafx/17": {
    "pom": "sha256-Mc+sHCBGlsqDJZzWCcK2kks3dBR+MOM9vEX+kKHnuww="
