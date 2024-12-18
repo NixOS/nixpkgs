@@ -12,7 +12,7 @@
 assert (blas.isILP64 == lapack.isILP64 && blas.isILP64 == arpack.isILP64 && !blas.isILP64);
 
 stdenv.mkDerivation rec {
-  pname = "calculix";
+  pname = "calculix-ccx";
   version = "2.19";
 
   src = fetchurl {
@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
   ];
 
   patches = [
-    ./calculix.patch
+    ./calculix-ccx.patch
   ];
 
   postPatch = ''

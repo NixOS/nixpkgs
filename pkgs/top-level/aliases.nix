@@ -186,6 +186,7 @@ mapAliases {
   ### C ###
 
   caffeWithCuda = throw "caffeWithCuda has been removed, as it was broken and required CUDA 10"; # Added 2024-11-20
+  calculix = calculix-ccx; # Added 2024-12-18
   calligra = kdePackages.calligra; # Added 2024-09-27
   callPackage_i686 = pkgsi686Linux.callPackage;
   cask = emacs.pkgs.cask; # Added 2022-11-12
