@@ -10,13 +10,13 @@
 }:
 buildDotnetModule (finalAttrs: rec {
   pname = "ilspycmd";
-  version = "8.0";
+  version = "9.0-preview3";
 
   src = fetchFromGitHub {
     owner = "icsharpcode";
     repo = "ILSpy";
     rev = "v${version}";
-    hash = "sha256-ERBYXgpBRXISfqBSBEydEQuD/5T1dvJ+wNg2U5pKip4=";
+    hash = "sha256-7cPXFaEKr76GtqcNsKx7tstRUeTpSTF8ggxbyEnQa9M=";
   };
 
   nativeBuildInputs =
@@ -31,8 +31,7 @@ buildDotnetModule (finalAttrs: rec {
   # bash: warning: setlocale: LC_ALL: cannot change locale (en_US.UTF-8)
   env.LOCALE_ARCHIVE = lib.optionalString stdenv.hostPlatform.isLinux "${glibcLocales}/lib/locale/locale-archive";
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
   projectFile = "ICSharpCode.ILSpyCmd/ICSharpCode.ILSpyCmd.csproj";
   nugetDeps = ./deps.json;
