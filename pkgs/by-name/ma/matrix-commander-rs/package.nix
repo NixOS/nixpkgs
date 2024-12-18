@@ -6,22 +6,26 @@
   openssl,
   pkg-config,
   rustPlatform,
+  perl,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "matrix-commander-rs";
-  version = "0.4.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander-rs";
     tag = "v${version}";
-    hash = "sha256-UoqddgXrwaKtIE0cuAFkfrgmvLIDRpGjl5jBQvh9mdI=";
+    hash = "sha256-eEkSdr6qHLUBp4natvq7uMbcqxDOTJAE1vEPWLE3KKM=";
   };
 
-  cargoHash = "sha256-cMXnMCiMeM4Tykquco7G3kcZC2xxoDl+uWqrQLFp1VM=";
+  cargoHash = "sha256-lMS034ZwalVaxKflRIFYGuG01lYTOpj1qgPskk47NE4=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    perl
+  ];
 
   buildInputs =
     [ openssl ]
