@@ -1095,6 +1095,7 @@ in {
   tsm-client-gui = handleTest ./tsm-client-gui.nix {};
   ttyd = handleTest ./web-servers/ttyd.nix {};
   txredisapi = handleTest ./txredisapi.nix {};
+  tun2socks = handleTest ./tun2socks.nix {};
   tuptime = handleTest ./tuptime.nix {};
   turbovnc-headless-server = handleTest ./turbovnc-headless-server.nix {};
   turn-rs = handleTest ./turn-rs.nix {};
