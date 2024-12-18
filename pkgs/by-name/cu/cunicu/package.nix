@@ -34,7 +34,7 @@ buildGoModule rec {
     versionCheckHook
   ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   # These packages contain networking dependent tests which fail in the sandbox
   excludedPackages = [

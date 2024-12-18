@@ -20,7 +20,7 @@ buildGoModule rec {
     "."
   ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   # We do not supply the build time as the build wouldn't be reproducible otherwise.
   ldflags = [

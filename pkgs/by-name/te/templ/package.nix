@@ -19,7 +19,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/templ" ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

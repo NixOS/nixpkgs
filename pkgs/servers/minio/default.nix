@@ -45,7 +45,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   tags = [ "kqueue" ];
 

@@ -9,7 +9,7 @@ buildGo123Module {
   pname = "tailscale-nginx-auth";
   inherit (tailscale) version src vendorHash;
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   subPackages = [ "cmd/nginx-auth" ];
 

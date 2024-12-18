@@ -22,7 +22,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-utHQzXjtdnshUsYDQEQY2qoQGZsnfXXPj3A9VsDj0vQ=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   outputs = [ "out" "man" ];
 

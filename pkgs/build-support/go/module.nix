@@ -40,9 +40,6 @@
   # IE: programs coupled with the compiler.
 , allowGoReference ? false
 
-  # Go env. variable to enable CGO.
-, CGO_ENABLED ? go.CGO_ENABLED
-
   # Meta data for the final derivation.
 , meta ? { }
 
@@ -59,11 +56,12 @@
 }@args':
 
 let
-  args = removeAttrs args' [ "overrideModAttrs" ];
-
-  GO111MODULE = "on";
-  GOTOOLCHAIN = "local";
-
+  args = removeAttrs args' [
+    "overrideModAttrs"
+    # Compatibility layer to the directly-specified CGO_ENABLED.
+    # TODO(@ShamrockLee): Remove after Nixpkgs 25.05 branch-off
+    "CGO_ENABLED"
+  ];
 in
 (stdenv.mkDerivation (finalAttrs:
   args
@@ -77,8 +75,6 @@ in
     nativeBuildInputs = (finalAttrs.nativeBuildInputs or [ ]) ++ [ go git cacert ];
 
     inherit (finalAttrs) src modRoot;
-    inherit (go) GOOS GOARCH;
-    inherit GO111MODULE GOTOOLCHAIN;
 
     # The following inheritance behavior is not trivial to expect, and some may
     # argue it's not ideal. Changing it may break vendor hashes in Nixpkgs and
@@ -169,14 +165,33 @@ in
 
     nativeBuildInputs = [ go ] ++ nativeBuildInputs;
 
+  env = args.env or { } // {
     inherit (go) GOOS GOARCH;
+
+    GO111MODULE = "on";
+    GOTOOLCHAIN = "local";
+
+    CGO_ENABLED = args.env.CGO_ENABLED or (
+      if args'?CGO_ENABLED then
+        # Compatibility layer to the CGO_ENABLED attribute not specified as env.CGO_ENABLED
+        # TODO(@ShamrockLee): Remove and convert to
+        # CGO_ENABLED = args.env.CGO_ENABLED or go.CGO_ENABLED
+        # after the Nixpkgs 25.05 branch-off.
+        lib.warn
+          "${finalAttrs.finalPackage.meta.position}: buildGoModule: specify CGO_ENABLED with env.CGO_ENABLED instead."
+          args'.CGO_ENABLED
+      else
+        go.CGO_ENABLED
+    );
+  };
 
     GOFLAGS = GOFLAGS
       ++ lib.warnIf (lib.any (lib.hasPrefix "-mod=") GOFLAGS) "use `proxyVendor` to control Go module/vendor behavior instead of setting `-mod=` in GOFLAGS"
         (lib.optional (!finalAttrs.proxyVendor) "-mod=vendor")
       ++ lib.warnIf (builtins.elem "-trimpath" GOFLAGS) "`-trimpath` is added by default to GOFLAGS by buildGoModule when allowGoReference isn't set to true"
         (lib.optional (!allowGoReference) "-trimpath");
-    inherit CGO_ENABLED enableParallelBuilding GO111MODULE GOTOOLCHAIN;
+
+  inherit enableParallelBuilding;
 
     # If not set to an explicit value, set the buildid empty for reproducibility.
     ldflags = ldflags ++ lib.optional (!lib.any (lib.hasPrefix "-buildid=") ldflags) "-buildid=";

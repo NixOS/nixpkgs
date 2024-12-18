@@ -17,7 +17,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-unIyU60IrbiKDIjUf9F2pqqGNIA4gFp5XyQlvx6+xxQ=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [ "-s" "-w" ];
 

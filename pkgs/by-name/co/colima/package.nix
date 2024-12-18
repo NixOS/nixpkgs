@@ -41,7 +41,7 @@ buildGoModule rec {
   # https://hydra.nixos.org/build/212378003/log
   excludedPackages = "gvproxy";
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   preConfigure = ''
     ldflags="-s -w -X github.com/abiosoft/colima/config.appVersion=${version} \

@@ -17,7 +17,7 @@ buildGoModule rec {
   vendorHash = "sha256-8sZGnoP7l09ZzLJqq8TUCquTOPF0qiwZcFhojUnnEIY=";
 
   # based on https://github.com/wader/jq-lsp/blob/master/.goreleaser.yml
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
