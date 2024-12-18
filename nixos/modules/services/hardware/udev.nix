@@ -434,10 +434,9 @@ in
     '';
 
     systemd.services.systemd-udevd = {
-        restartTriggers = [ config.environment.etc."udev/rules.d".source ];
-        notSocketActivated = true;
-      };
-
+      restartTriggers = [ config.environment.etc."udev/rules.d".source ];
+      notSocketActivated = true;
+    };
   };
 
   imports = [
