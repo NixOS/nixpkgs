@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander-rs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-UoqddgXrwaKtIE0cuAFkfrgmvLIDRpGjl5jBQvh9mdI=";
   };
 
@@ -30,12 +30,12 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI-based Matrix client app for sending and receiving";
     homepage = "https://github.com/8go/matrix-commander-rs";
     changelog = "https://github.com/8go/matrix-commander-rs/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "matrix-commander-rs";
   };
 }
