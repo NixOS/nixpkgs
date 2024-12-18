@@ -14386,8 +14386,6 @@ with pkgs;
     singularity-overriden-nixos
     ;
 
-  slack = callPackage ../applications/networking/instant-messengers/slack { };
-
   sosreport = python3Packages.callPackage ../applications/logging/sosreport { };
 
   inherit (callPackages ../development/libraries/wlroots {})
