@@ -827,6 +827,9 @@
   "set-source-date-epoch-to-latest.sh": [
     "index.html#set-source-date-epoch-to-latest.sh"
   ],
+  "add-bin-to-path.sh": [
+    "index.html#add-bin-to-path.sh"
+  ],
   "bintools-wrapper": [
     "index.html#bintools-wrapper"
   ],
