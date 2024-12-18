@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildGoModule,
   versionCheckHook,
+  makeWrapper,
 }:
 
 buildGoModule rec {
@@ -17,6 +18,8 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-M8qasSqn0NdQOk7/Sq0NhK/YFMjJSrPRF61h5k3MPB0=";
+
+  nativeBuildInputs = [ makeWrapper ];
 
   proxyVendor = true;
 
@@ -33,6 +36,8 @@ buildGoModule rec {
 
   postInstall = ''
     rm $out/bin/{generate,snifftest}
+
+    wrapProgram $out/bin/trufflehog --add-flags --no-update
   '';
 
   doInstallCheck = true;
@@ -44,6 +49,9 @@ buildGoModule rec {
     homepage = "https://github.com/trufflesecurity/trufflehog";
     changelog = "https://github.com/trufflesecurity/trufflehog/releases/tag/v${version}";
     license = with licenses; [ agpl3Only ];
-    maintainers = with maintainers; [ fab ];
+    maintainers = with maintainers; [
+      fab
+      sarcasticadmin
+    ];
   };
 }
