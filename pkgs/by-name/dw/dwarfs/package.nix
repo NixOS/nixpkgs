@@ -25,16 +25,19 @@
   xxHash,
   utf8cpp,
   zstd,
+  parallel-hashmap,
+  nlohmann_json,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "dwarfs";
-  version = "0.9.10";
+  version = "0.10.2";
+
   src = fetchFromGitHub {
     owner = "mhx";
     repo = "dwarfs";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-uyYNs+fDV5BfQwfX9Wi3BwiKjSDQHAKRJ1+UvS/fHoE=";
+    hash = "sha256-wQ+6jSf/RWAI7cSRMb1zG09kOiyMM5xiy8yS6tl1ybI=";
   };
 
   cmakeFlags = [
@@ -44,16 +47,9 @@ stdenv.mkDerivation (finalAttrs: {
     # a submodule, see: https://github.com/mhx/dwarfs/issues/188#issuecomment-1907657083
     "-DPREFER_SYSTEM_GTEST=ON"
 
-    # These should no longer be necessary with a version > 0.9.10:
-    # * https://github.com/mhx/dwarfs/commit/593b22a8a90eb66c0898ae06f097f32f4bf3dfd4
-    # * https://github.com/mhx/dwarfs/commit/6e9608b2b01be13e41e6b728aae537c14c00ad82
-    # * https://github.com/mhx/dwarfs/commit/ce4bee1ad63c666da57d2cdae9fd65214d8dab7f
-    "-DPREFER_SYSTEM_LIBFMT=ON"
-    "-DPREFER_SYSTEM_ZSTD=ON"
-    "-DPREFER_SYSTEM_XXHASH=ON"
+    "-DWITH_LEGACY_FUSE=ON"
 
-    # may be added under an option in the future
-    # "-DWITH_LEGACY_FUSE=ON"
+    "-DENABLE_STACKTRACE=OFF"
 
     "-DWITH_TESTS=ON"
   ];
@@ -80,6 +76,8 @@ stdenv.mkDerivation (finalAttrs: {
     xxHash
     utf8cpp
     zstd
+    parallel-hashmap
+    nlohmann_json
 
     # folly
     double-conversion
@@ -115,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/mhx/dwarfs";
     changelog = "https://github.com/mhx/dwarfs/blob/v${finalAttrs.version}/CHANGES.md";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ lib.maintainers.luftmensch-luftmensch ];
+    maintainers = with lib.maintainers; [ luftmensch-luftmensch ];
     platforms = lib.platforms.linux;
   };
 })
