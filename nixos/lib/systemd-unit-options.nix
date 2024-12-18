@@ -540,7 +540,7 @@ in rec {
         default = false;
         description = ''
           If set, a changed unit is never assumed to be
-          socket-activated on configuration activation, even if
+          socket-activated on configuration switch, even if
           it might have associated socket units. Instead, the unit
           will be restarted (or stopped/started) as if it had no
           associated sockets.
