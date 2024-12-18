@@ -286,7 +286,7 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     updateScript = gitUpdater {
       rev-prefix = "v";
-      ignoredVersions = "pre";
+      ignoredVersions = "(*-pre|0.999999.0|0.9999-temporary)";
     };
     fhs = fhs { };
     fhsWithPackages = f: fhs { additionalPkgs = f; };
