@@ -27,6 +27,7 @@ let
             "mime_guess-2.0.4" = "sha256-KSw0YUTGqNEWY9pMvQplUGajJgoP2BRwVX6qZPpB2rI=";
           };
         };
+        _0_9_0-dev_5 = _0_8_22;
         _0_9_0-dev_3 = _0_8_22;
         _0_8_24 = _0_8_22;
         _0_8_21 = _0_8_22;

@@ -17,16 +17,29 @@
 , nixosTests
 }:
 
+let
+  par2TurboSrc = fetchFromGitHub {
+    owner = "nzbgetcom";
+    repo = "par2cmdline-turbo";
+    rev = "v1.1.1-nzbget-20241128"; # from cmake/par2-turbo.cmake
+    hash = "sha256-YBv61DAUWgf4jGQciTsGX7SAC2oZZ6h/lnJgJ40gMZE=";
+  };
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nzbget";
-  version = "24.3";
+  version = "24.5";
 
   src = fetchFromGitHub {
     owner = "nzbgetcom";
     repo = "nzbget";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Gci9bVjmewoEii6OiOuRpLgEBEKApmMmlA5v3OedCo4=";
+    hash = "sha256-HftzgdG6AjCyJVMV2btjBRLJLQ0wc1f8FJzGDWrdxR4=";
   };
+
+  patches = [
+    # remove git usage for fetching modified+vendored par2cmdline-turbo
+    ./remove-git-usage.patch
+  ];
 
   nativeBuildInputs = [ cmake pkg-config ];
 
@@ -42,6 +55,12 @@ stdenv.mkDerivation (finalAttrs: {
     openssl
     zlib
   ];
+
+  preConfigure = ''
+    mkdir -p build/par2-turbo/src
+    cp -r ${par2TurboSrc} build/par2-turbo/src/par2-turbo
+    chmod -R u+w build/par2-turbo/src/par2-turbo
+  '';
 
   postPatch = ''
     substituteInPlace daemon/util/Util.cpp \
