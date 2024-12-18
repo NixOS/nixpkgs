@@ -165,7 +165,7 @@ jobs:
           runId=$(jq .id <<< "$run")
           conclusion=$(jq -r .conclusion <<< "$run")
 
-          while [[ "$conclusion" == null ]]; do
+          while [[ "$conclusion" == null || "$conclusion" == "" ]]; do
             echo "Workflow not done, waiting 10 seconds before checking again"
             sleep 10
             conclusion=$(gh api /repos/"$REPOSITORY"/actions/runs/"$runId" --jq '.conclusion')
