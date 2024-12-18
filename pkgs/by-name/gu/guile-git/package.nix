@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "guile-git";
-  version = "0.8.0";
+  version = "0.9.0";
 
   src = fetchFromGitLab {
     owner = "guile-git";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-EZ2uGyk1K2YCl/U7EzTKri6CEe8CGDRy4pNRVjp7ZZY=";
+    hash = "sha256-lFBoA1VBJRHcZkP3h2gnlXQrMjDFWS4jl9RlF8VVf/Q=";
   };
 
   strictDeps = true;
