@@ -117,6 +117,10 @@ The root directory of the Go module that contains the `go.mod` file.
 
 Defaults to `./`, which is the root of `src`.
 
+### `goFlags` {#var-go-goFlags}
+
+A string list of flags to form the environment variable `GOFLAGS` at the beginning of `buildPhase` and `checkPhase`, overridable via `overrideAttrs`.
+
 ### `ldflags` {#var-go-ldflags}
 
 A string list of flags to pass to the Go linker tool via the `-ldflags` argument of `go build`. Possible values can be retrieved by running `go tool link --help`.
