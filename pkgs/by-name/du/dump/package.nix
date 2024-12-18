@@ -21,5 +21,6 @@ stdenv.mkDerivation rec {
     description = "Linux Ext2 filesystem dump/restore utilities";
     license = licenses.bsd3;
     maintainers = with maintainers; [ ];
+    platforms = platforms.linux;
   };
 }
