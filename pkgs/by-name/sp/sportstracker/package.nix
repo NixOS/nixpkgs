@@ -11,10 +11,14 @@
 }:
 
 let
-  jdkWithJFX = jdk21.override {
-    enableJavaFX = true;
-    openjfx21 = openjfx21.override { withWebKit = true; };
-  };
+  jdkWithJFX =
+    if jdk21.pname == "openjdk" then
+      jdk21.override {
+        enableJavaFX = true;
+        openjfx21 = openjfx21.override { withWebKit = true; };
+      }
+    else
+      throw "bad jdk variant";
 in
 maven.buildMavenPackage rec {
   pname = "sportstracker";
