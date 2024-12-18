@@ -95,7 +95,10 @@ rec {
     src = "${sources}/aw-qt";
 
     pyproject = true;
-    build-system = [ python3Packages.poetry-core ];
+    build-system = [
+      python3Packages.poetry-core
+      python3Packages.setuptools
+    ];
 
     dependencies = with python3Packages; [
       aw-core
