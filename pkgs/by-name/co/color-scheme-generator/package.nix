@@ -2,7 +2,9 @@
   rustPlatform,
   fetchFromGitHub,
   lib,
-  perl,
+  openssl,
+  sqlite,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +20,15 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-A8ld2c8ZcqaZN29Fz085FQy8UpugIDMOKT01r+SfCcc=";
 
-  nativeBuildInputs = [ perl ];
+  nativeBuildInputs = [ pkg-config ];
+  buildInputs = [
+    openssl
+    sqlite
+  ];
+
+  env = {
+    OPENSSL_NO_VENDOR = 1;
+  };
 
   meta = {
     description = "Quickly generate color schemes for waybar from an image.";
