@@ -28,6 +28,7 @@
   parallel-hashmap,
   nlohmann_json,
   libdwarf,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -106,6 +107,11 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     in
     "-${lib.concatStringsSep ":" disabledTests}";
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "--version" ];
+  versionCheckProgram = "${placeholder "out"}/bin/dwarfs";
 
   meta = {
     description = "Fast high compression read-only file system";
