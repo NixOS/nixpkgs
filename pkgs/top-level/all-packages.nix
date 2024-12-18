@@ -16772,7 +16772,7 @@ with pkgs;
     openjfx = openjfx21;
   };
 
-  manaplus = callPackage ../games/manaplus { stdenv = gcc11Stdenv; };
+  manaplus = callPackage ../games/manaplus { };
 
   mindustry-wayland = callPackage ../by-name/mi/mindustry/package.nix {
     enableWayland = true;
