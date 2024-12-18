@@ -135,5 +135,7 @@ stdenv.mkDerivation rec {
       This app goes through your media collection and adds fitting tags, automatically categorizing your photos and music.
     '';
     homepage = "https://apps.nextcloud.com/apps/recognize";
+    description = "Smart media tagging for Nextcloud: recognizes faces, objects, landscapes, music genres";
+    changelog = "https://github.com/nextcloud/recognize/blob/v${version}/CHANGELOG.md";
   };
 }
