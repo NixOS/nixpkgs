@@ -1,5 +1,6 @@
 {
   fetchFromGitHub,
+  fetchpatch,
   fetchPypi,
   python3,
 }:
@@ -18,9 +19,6 @@ let
         };
         nativeBuildInputs = with pySelf; [
           setuptools
-        ];
-        pythonRelaxDeps = [
-          "werkzeug"
         ];
         propagatedBuildInputs = with pySelf; [
           aiohttp
@@ -95,6 +93,41 @@ let
       # apache-airflow doesn't work with sqlalchemy 2.x
       # https://github.com/apache/airflow/issues/28723
       sqlalchemy = pySuper.sqlalchemy_1_4;
+
+      werkzeug = pySuper.werkzeug.overridePythonAttrs (o: rec {
+        version = "2.2.3";
+        pyproject = null;
+        format = "setuptools";
+
+        src = fetchPypi {
+          pname = "Werkzeug";
+          inherit version;
+          hash = "sha256-LhzMlBfU2jWLnebxdOOsCUOR6h1PvvLWZ4ZdgZ39Cv4=";
+        };
+
+        patches = [
+          (fetchpatch {
+            url = "https://github.com/pallets/werkzeug/commit/4e5bdca7f8227d10cae828f8064fb98190ace4aa.patch";
+            hash = "sha256-83doVvfdpymlAB0EbfrHmuoKE5B2LJbFq+AY2xGpnl4=";
+          })
+        ];
+
+        nativeBuildInputs = [];
+
+        propagatedBuildInputs = with pySelf; [
+          markupsafe
+        ] ++ lib.optionals (!stdenv.isDarwin) [
+          # watchdog requires macos-sdk 10.13+
+          watchdog
+        ];
+
+        nativeCheckInputs = with pySelf; [
+          ephemeral-port-reserve
+          pytest-timeout
+          pytest-xprocess
+          pytestCheckHook
+        ];
+      });
 
       apache-airflow = pySelf.callPackage ./python-package.nix { };
     };
