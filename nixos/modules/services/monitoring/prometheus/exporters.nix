@@ -76,6 +76,7 @@ let
     "process"
     "pve"
     "py-air-control"
+    "redfish"
     "redis"
     "restic"
     "rspamd"
