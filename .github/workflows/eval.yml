@@ -267,11 +267,18 @@ jobs:
               -f "labels[]=$toAdd"
           done < <(comm -13 before after)
 
+          # maintainers.json contains GitHub IDs. Look up handles to request reviews from.
+          # There appears to be no API to request reviews based on GitHub IDs
+          jq -r 'keys[]' comparison/maintainers.json \
+            | while read -r id; do gh api /user/"$id"; done \
+            | jq -s '{ reviewers: map(.login) }' \
+            > reviewers.json
+
           # Request reviewers from maintainers of changed output paths
           GH_TOKEN=${{ steps.app-token.outputs.token }} gh api \
             --method POST \
             /repos/${{ github.repository }}/pulls/${{ github.event.number }}/requested_reviewers \
-            --input <(jq '{ reviewers: keys }' comparison/maintainers.json)
+            --input reviewers.json
 
         env:
           GH_TOKEN: ${{ github.token }}
