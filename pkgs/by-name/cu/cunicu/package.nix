@@ -8,6 +8,7 @@
   protobuf,
   protoc-gen-go,
   protoc-gen-go-grpc,
+  nix-update-script,
 }:
 buildGoModule rec {
   pname = "cunicu";
@@ -50,6 +51,8 @@ buildGoModule rec {
 
   doInstallCheck = true;
   versionCheckProgramArg = "version";
+
+  passthru.updateScript = nix-update-script { };
 
   preBuild = ''
     go generate ./...
