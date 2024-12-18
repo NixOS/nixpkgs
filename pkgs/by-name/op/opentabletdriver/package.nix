@@ -39,7 +39,7 @@ buildDotnetModule rec {
     "OpenTabletDriver.Daemon"
     "OpenTabletDriver.UX.Gtk"
   ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   executables = [
     "OpenTabletDriver.Console"
