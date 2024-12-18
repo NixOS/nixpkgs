@@ -29,12 +29,14 @@ buildDotnetModule rec {
     owner = "icsharpcode";
     repo = "AvaloniaILSpy";
     rev = "v${version}";
-    sha256 = "cCQy5cSpJNiVZqgphURcnraEM0ZyXGhzJLb5AThNfPQ=";
+    hash = "sha256-cCQy5cSpJNiVZqgphURcnraEM0ZyXGhzJLb5AThNfPQ=";
   };
 
   patches = [
     # Remove dead nuget package source
     ./remove-broken-sources.patch
+    # Upgrade project to .NET 8.0
+    ./dotnet-8-upgrade.patch
   ];
 
   nativeBuildInputs =
@@ -84,8 +86,7 @@ buildDotnetModule rec {
       ln -s $out/bin/ILSpy $out/Applications/ILSpy.app/Contents/MacOS/ILSpy
     '';
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  dotnet-runtime = dotnetCorePackages.runtime_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
   projectFile = "ILSpy/ILSpy.csproj";
   nugetDeps = ./deps.json;
