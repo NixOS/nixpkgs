@@ -22,18 +22,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "taskwarrior";
-  version = "3.2.0-unstable-2024-12-17";
+  version = "3.2.0-unstable-2024-12-18";
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
-    rev = "cc505e488184e958bcaedad6fed86f91d128e6bd";
-    hash = "sha256-M9pRoilxTHppX/efvppBI+QiPYXBEkvWxiEnodjqryk=";
+    rev = "dcbe916286792e6f5d2d3af3baab79918ebc5f71";
+    hash = "sha256-jma1BYZugMH+JiX5Xu6VI8ZFn4FBr1NxbNrOHX0bFk0=";
     fetchSubmodules = true;
   };
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${finalAttrs.pname}-${finalAttrs.version}-cargo-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-QPnW+FWbsjvjQr5CRuOGLIaUWSGItlFDwLEtZfRbihA="; # For fetchCargoTarball with name arguments
+    hash = "sha256-yaIjtwZuYqyiXHxq4NDuZC9aE+mYpovXygxWENf6v1o=";
   };
 
   postPatch = ''
@@ -48,20 +48,22 @@ stdenv.mkDerivation (finalAttrs: {
   postUnpack = ''
     export CARGO_HOME=$PWD/.cargo
   '';
-  # Test failures, see:
-  # https://github.com/GothenburgBitFactory/taskwarrior/issues/3727
   failingTests = [
+    # It would be very hard to make this test succeed, as the bash completion
+    # needs to be installed and the builder's `bash` should be aware of it.
+    # Doesn't worth the effort. See also:
+    # https://github.com/GothenburgBitFactory/taskwarrior/issues/3727
     "bash_completion.test.py"
-    "hooks.env.test.py"
-    "hooks.on-add.test.py"
-    "hooks.on-launch.test.py"
-    "hooks.on-modify.test.py"
-    "hooks.on-exit.test.py"
   ];
-  preConfigure = ''
-    substituteInPlace test/CMakeLists.txt \
-      ${lib.concatMapStringsSep "\\\n  " (t: "--replace-fail ${t} '' ") finalAttrs.failingTests}
-  '';
+  # Contains Bash and Python scripts used while testing.
+  preConfigure =
+    ''
+      patchShebangs test
+    ''
+    + lib.optionalString (builtins.length finalAttrs.failingTests > 0) ''
+      substituteInPlace test/CMakeLists.txt \
+        ${lib.concatMapStringsSep "\\\n  " (t: "--replace-fail ${t} '' ") finalAttrs.failingTests}
+    '';
 
   strictDeps = true;
   nativeBuildInputs = [
@@ -79,12 +81,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+  # See:
+  # https://github.com/GothenburgBitFactory/taskwarrior/blob/v3.2.0/doc/devel/contrib/development.md#run-the-test-suite
   preCheck = ''
-    # See:
-    # https://github.com/GothenburgBitFactory/taskwarrior/blob/v3.2.0/doc/devel/contrib/development.md#run-the-test-suite
     make test_runner
-    # Otherwise all '/usr/bin/env python' shebangs are not found by ctest
-    patchShebangs test/*.py test/*/*.py
   '';
   nativeCheckInputs = [
     python3
