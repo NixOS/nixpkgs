@@ -23,6 +23,7 @@ _nixos-rebuild_ \[--verbose] [--max-jobs MAX_JOBS] [--cores CORES] [--log-format
 	\[--no-build-output] [--use-substitutes] [--help] [--file FILE] [--attr ATTR] [--flake [FLAKE]] [--no-flake] [--install-bootloader] [--profile-name PROFILE_NAME]++
 	\[--specialisation SPECIALISATION] [--rollback] [--upgrade] [--upgrade-all] [--json] [--ask-sudo-password] [--sudo] [--fast]++
 	\[--build-host BUILD_HOST] [--target-host TARGET_HOST]++
+	\[--build-graph {nix,nom}]
 	\[{switch,boot,test,build,edit,repl,dry-build,dry-run,dry-activate,build-vm,build-vm-with-bootloader,list-generations}]
 
 # DESCRIPTION
@@ -277,6 +278,10 @@ It must be one of the following:
 	Do not imply *--flake* if _/etc/nixos/flake.nix exists_. With this
 	option, it is possible to build non-flake NixOS configurations even if
 	the current NixOS systems uses flakes.
+
+*--build-graph* _{nix,nom}_
+	When set to _nom_, it will use _nix-output-monitor_ instead of _nix_
+	to show the progress of the build process.
 
 In addition, *nixos-rebuild* accepts following options from nix commands that
 the tool calls:
