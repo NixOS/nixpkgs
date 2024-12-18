@@ -9,7 +9,7 @@ let
   cfg = config.virtualisation.virtualbox.guest;
   kernel = config.boot.kernelPackages;
 
-  mkVirtualBoxUserService = serviceArgs: {
+  mkVirtualBoxUserService = serviceArgs: verbose: {
     description = "VirtualBox Guest User Services ${serviceArgs}";
 
     wantedBy = [ "graphical-session.target" ];
@@ -24,7 +24,10 @@ let
     # Check if the display environment is ready, otherwise fail
     preStart = "${pkgs.bash}/bin/bash -c \"if [ -z $DISPLAY ]; then exit 1; fi\"";
     serviceConfig = {
-      ExecStart = "@${kernel.virtualboxGuestAdditions}/bin/VBoxClient --verbose --foreground ${serviceArgs}";
+      ExecStart =
+        "@${kernel.virtualboxGuestAdditions}/bin/VBoxClient"
+        + (lib.strings.optionalString verbose " --verbose")
+        + " --foreground ${serviceArgs}";
       # Wait after a failure, hoping that the display environment is ready after waiting
       RestartSec = 2;
       Restart = "always";
@@ -32,8 +35,8 @@ let
   };
 
   mkVirtualBoxUserX11OnlyService =
-    serviceArgs:
-    (mkVirtualBoxUserService serviceArgs)
+    serviceArgs: verbose:
+    (mkVirtualBoxUserService serviceArgs verbose)
     // {
       unitConfig.ConditionEnvironment = "XDG_SESSION_TYPE=x11";
     };
@@ -80,6 +83,12 @@ in
       type = lib.types.bool;
       description = "Whether to enable drag and drop support.";
     };
+
+    verbose = lib.mkOption {
+      default = false;
+      type = lib.types.bool;
+      description = "Whether to verbose logging for guest services.";
+    };
   };
 
   ###### implementation
@@ -124,16 +133,16 @@ in
           SUBSYSTEM=="misc", KERNEL=="vboxguest", TAG+="systemd"
         '';
 
-        systemd.user.services.virtualboxClientVmsvga = mkVirtualBoxUserService "--vmsvga-session";
+        systemd.user.services.virtualboxClientVmsvga = mkVirtualBoxUserService "--vmsvga-session" cfg.verbose;
       }
       (lib.mkIf cfg.clipboard {
-        systemd.user.services.virtualboxClientClipboard = mkVirtualBoxUserService "--clipboard";
+        systemd.user.services.virtualboxClientClipboard = mkVirtualBoxUserService "--clipboard" cfg.verbose;
       })
       (lib.mkIf cfg.seamless {
-        systemd.user.services.virtualboxClientSeamless = mkVirtualBoxUserX11OnlyService "--seamless";
+        systemd.user.services.virtualboxClientSeamless = mkVirtualBoxUserX11OnlyService "--seamless" cfg.verbose;
       })
       (lib.mkIf cfg.dragAndDrop {
-        systemd.user.services.virtualboxClientDragAndDrop = mkVirtualBoxUserService "--draganddrop";
+        systemd.user.services.virtualboxClientDragAndDrop = mkVirtualBoxUserService "--draganddrop" cfg.verbose;
       })
     ]
   );
