@@ -12837,6 +12837,13 @@
     githubId = 101508537;
     name = "Yuchen He";
   };
+  lilioid = {
+    name = "Lilly";
+    email = "li@lly.sh";
+    matrix = "@17sell:mafiasi.de";
+    github = "lilioid";
+    githubId = 12398140;
+  };
   LilleAila = {
     name = "Olai";
     email = "olai@olai.dev";
