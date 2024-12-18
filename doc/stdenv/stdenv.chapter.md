@@ -1375,6 +1375,20 @@ This hook only runs when compiling for Linux.
 
 This sets `SOURCE_DATE_EPOCH` to the modification time of the most recent file.
 
+### `add-bin-to-path.sh` {#add-bin-to-path.sh}
+
+This setup hook checks if the `bin/` directory exists in the `$out` output path
+and, if so, adds it to the `PATH` environment variable. This ensures that
+executables located in `$out/bin` are accessible.
+
+This hook is particularly useful during testing, as it allows packages to locate their executables without requiring manual modifications to the `PATH`.
+
+**Note**: This hook is specifically designed for the `$out/bin` directory only
+and does not handle and support other paths like `$sourceRoot/bin`. It may not
+work as intended in cases with multiple outputs or when binaries are located in
+directories like `sbin/`. These caveats should be considered when using this
+hook, as they might introduce unexpected behavior in some specific cases.
+
 ### Bintools Wrapper and hook {#bintools-wrapper}
 
 The Bintools Wrapper wraps the binary utilities for a bunch of miscellaneous purposes. These are GNU Binutils when targeting Linux, and a mix of cctools and GNU binutils for Darwin. \[The “Bintools” name is supposed to be a compromise between “Binutils” and “cctools” not denoting any specific implementation.\] Specifically, the underlying bintools package, and a C standard library (glibc or Darwin’s libSystem, just for the dynamic loader) are all fed in, and dependency finding, hardening (see below), and purity checks for each are handled by the Bintools Wrapper. Packages typically depend on CC Wrapper, which in turn (at run time) depends on the Bintools Wrapper.
