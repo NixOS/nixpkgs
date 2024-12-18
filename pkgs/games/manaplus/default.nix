@@ -29,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-OVmCqK8undrBKgY5bB2spezmYwWXnmrPlSpV5euortc=";
   };
 
+  # The unstable version has this commit that fixes missing <cstdint> include:
+  # https://gitlab.com/manaplus/manaplus/-/commit/63912a8a6bfaecdb6b40d2a89191a2fb5af32906
   patches = [
     # https://gitlab.com/manaplus/manaplus/-/issues/33
     ./0001-libxml2-const-ptr-and-missing-include.patch
@@ -60,8 +62,9 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   configureFlags = [
-    "--with-sdl2"
-    "--without-dyecmd"
+    (lib.withFeature true "sdl2")
+    (lib.withFeature false "dyecmd")
+    (lib.withFeature false "internalsdlgfx")
   ];
 
   enableParallelBuilding = true;
