@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchurl
-, curl
-, fftw
-, gmp
-, gnuplot
-, gtk3
-, gtksourceview3
-, json-glib
-, lapack
-, libxml2
-, mpfr
-, openblas
-, readline
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  curl,
+  fftw,
+  gmp,
+  gnuplot,
+  gtk3,
+  gtksourceview3,
+  json-glib,
+  lapack,
+  libxml2,
+  mpfr,
+  openblas,
+  readline,
+  pkg-config,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
