@@ -21,7 +21,7 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
   dotnetFlags = [ "-p:RuntimeFrameworkVersion=${dotnet-runtime.version}" ];
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   executables = [ "VrcAdvert" ];
 

@@ -19,7 +19,7 @@ buildDotnetModule rec {
   buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
   projectFile = "inklecate/inklecate.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   executables = [ "inklecate" ];
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
