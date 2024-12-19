@@ -10827,6 +10827,8 @@ self: super: with self; {
 
   python-idzip = callPackage ../development/python-modules/python-idzip { };
 
+  python-yakh = callPackage ../development/python-modules/python-yakh { };
+
   pythonfinder = callPackage ../development/python-modules/pythonfinder { };
 
   pytomorrowio = callPackage ../development/python-modules/pytomorrowio { };
