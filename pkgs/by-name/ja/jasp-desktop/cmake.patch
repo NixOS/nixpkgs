@@ -1,0 +1,46 @@
+diff --git a/Tools/CMake/Libraries.cmake b/Tools/CMake/Libraries.cmake
+index cc4681a..f484013 100644
+--- a/Tools/CMake/Libraries.cmake
++++ b/Tools/CMake/Libraries.cmake
+@@ -67,7 +67,7 @@ if((NOT LibArchive_FOUND) AND (NOT WIN32))
+   endif()
+ endif()
+ 
+-set(Boost_USE_STATIC_LIBS ON)
++add_definitions(-DBOOST_LOG_DYN_LINK)
+ find_package(
+   Boost 1.78 REQUIRED
+   COMPONENTS filesystem
+@@ -178,10 +178,10 @@ if(LINUX)
+     set(LIBREADSTAT_INCLUDE_DIRS /app/include)
+     set(LIBREADSTAT_LIBRARY_DIRS /app/lib)
+   else()
+-    set(LIBREADSTAT_INCLUDE_DIRS /usr/local/include /usr/include)
++    set(LIBREADSTAT_INCLUDE_DIRS @readstat@/include /usr/include)
+     # The last two library paths handle the two most common multiarch cases.
+     # Other multiarch-compliant paths may come up but should be rare.
+-    set(LIBREADSTAT_LIBRARY_DIRS /usr/local/lib /usr/lib /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu)
++    set(LIBREADSTAT_LIBRARY_DIRS @readstat@/lib /usr/lib /usr/lib/x86_64-linux-gnu /usr/lib/aarch64-linux-gnu)
+   endif()
+ 
+   message(CHECK_START "Looking for libreadstat.so")
+diff --git a/Tools/CMake/Programs.cmake b/Tools/CMake/Programs.cmake
+index dbd089d..ef6857a 100644
+--- a/Tools/CMake/Programs.cmake
++++ b/Tools/CMake/Programs.cmake
+@@ -39,6 +39,7 @@ endif()
+ 
+ # ------ Linux Tools/Programs
+ 
++#[[
+ if(LINUX)
+ 
+   message(CHECK_START "Looking for 'gfortran'")
+@@ -81,6 +82,7 @@ if(LINUX)
+   endif()
+ 
+ endif()
++]]#
+ 
+ # ----------------------
+ 
