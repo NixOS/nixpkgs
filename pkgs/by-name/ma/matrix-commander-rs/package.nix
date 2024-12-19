@@ -6,22 +6,26 @@
   openssl,
   pkg-config,
   rustPlatform,
+  perl,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "matrix-commander-rs";
-  version = "0.4.1";
+  version = "0.10.0";
 
   src = fetchFromGitHub {
     owner = "8go";
     repo = "matrix-commander-rs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-UoqddgXrwaKtIE0cuAFkfrgmvLIDRpGjl5jBQvh9mdI=";
+    tag = "v${version}";
+    hash = "sha256-eEkSdr6qHLUBp4natvq7uMbcqxDOTJAE1vEPWLE3KKM=";
   };
 
-  cargoHash = "sha256-cMXnMCiMeM4Tykquco7G3kcZC2xxoDl+uWqrQLFp1VM=";
+  cargoHash = "sha256-lMS034ZwalVaxKflRIFYGuG01lYTOpj1qgPskk47NE4=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    perl
+  ];
 
   buildInputs =
     [ openssl ]
@@ -30,12 +34,12 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.SystemConfiguration
     ];
 
-  meta = with lib; {
+  meta = {
     description = "CLI-based Matrix client app for sending and receiving";
     homepage = "https://github.com/8go/matrix-commander-rs";
     changelog = "https://github.com/8go/matrix-commander-rs/releases/tag/v${version}";
-    license = licenses.gpl3Only;
-    maintainers = with maintainers; [ fab ];
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [ fab ];
     mainProgram = "matrix-commander-rs";
   };
 }
