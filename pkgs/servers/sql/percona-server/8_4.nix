@@ -51,11 +51,11 @@ assert !(withJemalloc && withTcmalloc);
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "percona-server";
-  version = "8.4.2-2";
+  version = "8.4.3-3";
 
   src = fetchurl {
     url = "https://downloads.percona.com/downloads/Percona-Server-${lib.versions.majorMinor finalAttrs.version}/Percona-Server-${finalAttrs.version}/source/tarball/percona-server-${finalAttrs.version}.tar.gz";
-    hash = "sha256-KdaF2+vZfWf6fW8HWi+c97SHW+WqmlcpdPzUUgX94EY=";
+    hash = "sha256-37W0b8zYKErToJBU+aYtCmQjorcDtvuG0YbOwJzuZgo=";
   };
 
   nativeBuildInputs = [
