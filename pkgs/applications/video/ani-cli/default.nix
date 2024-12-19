@@ -1,20 +1,24 @@
-{ fetchFromGitHub
-, makeWrapper
-, stdenvNoCC
-, lib
-, gnugrep
-, gnused
-, curl
-, catt
-, syncplay
-, ffmpeg
-, fzf
-, aria2
-, withMpv ? true, mpv
-, withVlc ? false, vlc
-, withIina ? false, iina
-, chromecastSupport ? false
-, syncSupport ? false
+{
+  fetchFromGitHub,
+  makeWrapper,
+  stdenvNoCC,
+  lib,
+  gnugrep,
+  gnused,
+  curl,
+  catt,
+  syncplay,
+  ffmpeg,
+  fzf,
+  aria2,
+  withMpv ? true,
+  mpv,
+  withVlc ? false,
+  vlc,
+  withIina ? false,
+  iina,
+  chromecastSupport ? false,
+  syncSupport ? false,
 }:
 
 assert withMpv || withVlc || withIina;
