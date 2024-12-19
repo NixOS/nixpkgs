@@ -12,6 +12,7 @@ import ./make-test-python.nix (
         services.moosefs.master = {
           enable = true;
           openFirewall = true;
+          autoInit = true;
           exports = [
             "* / rw,alldirs,admin,maproot=0:0"
             "* . rw"
@@ -76,8 +77,6 @@ import ./make-test-python.nix (
       # prepare master server
       master.start()
       master.wait_for_unit("multi-user.target")
-      master.succeed("mfsmaster-init")
-      master.succeed("systemctl restart mfs-master")
       master.wait_for_unit("mfs-master.service")
 
       metalogger.wait_for_unit("mfs-metalogger.service")
