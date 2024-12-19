@@ -1,0 +1,192 @@
+[
+  {
+    "pname": "AtkSharp",
+    "version": "3.24.24.34",
+    "sha256": "1jn1vgi9xm0jp7769k6sbdi8d273kigjrsh93i6s4c03hqxv7cqs"
+  },
+  {
+    "pname": "CairoSharp",
+    "version": "3.24.24.34",
+    "sha256": "0pydn1k0cam1gclg9sc1sbnmbyzh28qlc5qanyxcylwghink3kgz"
+  },
+  {
+    "pname": "Eto.Forms",
+    "version": "2.7.1",
+    "sha256": "1hzbdnmn5znycfi0mvqa5k5mz9gasy58qzwa7fjmlkwj8ab87l9r"
+  },
+  {
+    "pname": "Eto.Platform.Gtk",
+    "version": "2.7.1",
+    "sha256": "09iz85s728jy5qg7y30qvqw5rpsr3yxffrchk1avryk87ky1ysys"
+  },
+  {
+    "pname": "GdkSharp",
+    "version": "3.24.24.34",
+    "sha256": "0r0x0yib7chwsyrbpvicrfwldwqx5lyqq4p86zaxpmzd6zdaj0x5"
+  },
+  {
+    "pname": "GioSharp",
+    "version": "3.24.24.34",
+    "sha256": "02hxvgjd4w9jpzbkk7qf9q9bkvyp5hfzwxfqp10vg5lpl9yl3xpx"
+  },
+  {
+    "pname": "GLibSharp",
+    "version": "3.24.24.34",
+    "sha256": "0kvp033fgdwc8p2abfp5z9pzq66cvwbnjfvr4v4bkpy5s5h181kq"
+  },
+  {
+    "pname": "GtkSharp",
+    "version": "3.24.24.34",
+    "sha256": "0028hzmmqyfx87qqmaf9cgb5psn7gkbmqvixcid67x1d6mzxjicb"
+  },
+  {
+    "pname": "LibGit2Sharp",
+    "version": "0.27.0",
+    "sha256": "0n8crafpp4jq74km45wlm3jm0h96ggvqxy26wrz55azgjpk6p1gz"
+  },
+  {
+    "pname": "LibGit2Sharp.NativeBinaries",
+    "version": "2.0.319",
+    "sha256": "0xm6np8y182v5246imnkw1fj2sx8x2nl3568kkm3razcgb0y5xlf"
+  },
+  {
+    "pname": "log4net",
+    "version": "2.0.15",
+    "sha256": "1iq1rd0z0m15ln247jjrimj3avq50vh6njvw4x158r5v6nz093nb"
+  },
+  {
+    "pname": "Microsoft.NETCore.Platforms",
+    "version": "1.1.0",
+    "sha256": "08vh1r12g6ykjygq5d3vq09zylgb84l63k49jc4v8faw9g93iqqm"
+  },
+  {
+    "pname": "Microsoft.NETCore.Platforms",
+    "version": "5.0.0",
+    "sha256": "0mwpwdflidzgzfx2dlpkvvnkgkr2ayaf0s80737h4wa35gaj11rc"
+  },
+  {
+    "pname": "Microsoft.Win32.Registry",
+    "version": "5.0.0",
+    "sha256": "102hvhq2gmlcbq8y2cb7hdr2dnmjzfp2k3asr1ycwrfacwyaak7n"
+  },
+  {
+    "pname": "Microsoft.Win32.SystemEvents",
+    "version": "6.0.0",
+    "sha256": "0c6pcj088g1yd1vs529q3ybgsd2vjlk5y1ic6dkmbhvrp5jibl9p"
+  },
+  {
+    "pname": "NETStandard.Library",
+    "version": "2.0.3",
+    "sha256": "1fn9fxppfcg4jgypp2pmrpr6awl3qz1xmnri0cygpkwvyx27df1y"
+  },
+  {
+    "pname": "PangoSharp",
+    "version": "3.24.24.34",
+    "sha256": "1r0h14cklglfpv1lhv93cxmzi2w7d5s03gzpq3j5dmrz43flg9zw"
+  },
+  {
+    "pname": "System.Buffers",
+    "version": "4.4.0",
+    "sha256": "183f8063w8zqn99pv0ni0nnwh7fgx46qzxamwnans55hhs2l0g19"
+  },
+  {
+    "pname": "System.Buffers",
+    "version": "4.5.1",
+    "sha256": "04kb1mdrlcixj9zh1xdi5as0k0qi8byr5mi3p3jcxx72qz93s2y3"
+  },
+  {
+    "pname": "System.ComponentModel.Annotations",
+    "version": "5.0.0",
+    "sha256": "021h7x98lblq9avm1bgpa4i31c2kgsa7zn4sqhxf39g087ar756j"
+  },
+  {
+    "pname": "System.Configuration.ConfigurationManager",
+    "version": "4.5.0",
+    "sha256": "1frpy24mn6q7hgwayj98kkx89z861f5dmia4j6zc0a2ydgx8x02c"
+  },
+  {
+    "pname": "System.Configuration.ConfigurationManager",
+    "version": "6.0.0",
+    "sha256": "0sqapr697jbb4ljkq46msg0xx1qpmc31ivva6llyz2wzq3mpmxbw"
+  },
+  {
+    "pname": "System.Drawing.Common",
+    "version": "6.0.0",
+    "sha256": "02n8rzm58dac2np8b3xw8ychbvylja4nh6938l5k2fhyn40imlgz"
+  },
+  {
+    "pname": "System.Memory",
+    "version": "4.5.0",
+    "sha256": "1layqpcx1q4l805fdnj2dfqp6ncx2z42ca06rgsr6ikq4jjgbv30"
+  },
+  {
+    "pname": "System.Memory",
+    "version": "4.5.4",
+    "sha256": "14gbbs22mcxwggn0fcfs1b062521azb9fbb7c113x0mq6dzq9h6y"
+  },
+  {
+    "pname": "System.Numerics.Vectors",
+    "version": "4.4.0",
+    "sha256": "0rdvma399070b0i46c4qq1h2yvjj3k013sqzkilz4bz5cwmx1rba"
+  },
+  {
+    "pname": "System.Runtime.CompilerServices.Unsafe",
+    "version": "4.5.0",
+    "sha256": "17labczwqk3jng3kkky73m0jhi8wc21vbl7cz5c0hj2p1dswin43"
+  },
+  {
+    "pname": "System.Runtime.CompilerServices.Unsafe",
+    "version": "4.5.3",
+    "sha256": "1afi6s2r1mh1kygbjmfba6l4f87pi5sg13p4a48idqafli94qxln"
+  },
+  {
+    "pname": "System.Security.AccessControl",
+    "version": "4.5.0",
+    "sha256": "1wvwanz33fzzbnd2jalar0p0z3x0ba53vzx1kazlskp7pwyhlnq0"
+  },
+  {
+    "pname": "System.Security.AccessControl",
+    "version": "5.0.0",
+    "sha256": "17n3lrrl6vahkqmhlpn3w20afgz09n7i6rv0r3qypngwi7wqdr5r"
+  },
+  {
+    "pname": "System.Security.AccessControl",
+    "version": "6.0.0",
+    "sha256": "0a678bzj8yxxiffyzy60z2w1nczzpi8v97igr4ip3byd2q89dv58"
+  },
+  {
+    "pname": "System.Security.Cryptography.ProtectedData",
+    "version": "4.5.0",
+    "sha256": "11qlc8q6b7xlspayv07718ibzvlj6ddqqxkvcbxv5b24d5kzbrb7"
+  },
+  {
+    "pname": "System.Security.Cryptography.ProtectedData",
+    "version": "6.0.0",
+    "sha256": "05kd3a8w7658hjxq9vvszxip30a479fjmfq4bq1r95nrsvs4hbss"
+  },
+  {
+    "pname": "System.Security.Permissions",
+    "version": "4.5.0",
+    "sha256": "192ww5rm3c9mirxgl1nzyrwd18am3izqls0hzm0fvcdjl5grvbhm"
+  },
+  {
+    "pname": "System.Security.Permissions",
+    "version": "6.0.0",
+    "sha256": "0jsl4xdrkqi11iwmisi1r2f2qn5pbvl79mzq877gndw6ans2zhzw"
+  },
+  {
+    "pname": "System.Security.Principal.Windows",
+    "version": "4.5.0",
+    "sha256": "0rmj89wsl5yzwh0kqjgx45vzf694v9p92r4x4q6yxldk1cv1hi86"
+  },
+  {
+    "pname": "System.Security.Principal.Windows",
+    "version": "5.0.0",
+    "sha256": "1mpk7xj76lxgz97a5yg93wi8lj0l8p157a5d50mmjy3gbz1904q8"
+  },
+  {
+    "pname": "System.Windows.Extensions",
+    "version": "6.0.0",
+    "sha256": "1wy9pq9vn1bqg5qnv53iqrbx04yzdmjw4x5yyi09y3459vaa1sip"
+  }
+]

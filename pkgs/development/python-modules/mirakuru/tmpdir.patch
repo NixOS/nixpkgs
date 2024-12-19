@@ -1,0 +1,19 @@
+--- a/tests/executors/test_unixsocket_executor.py
++++ b/tests/executors/test_unixsocket_executor.py
+@@ -4,6 +4,7 @@ Some of these tests run ``nc``: when running Debian, make sure the
+ ``netcat-openbsd`` package is used, not ``netcat-traditional``.
+ """
+ 
++import os
+ import sys
+ 
+ import pytest
+@@ -12,7 +13,7 @@ from mirakuru import TimeoutExpired
+ from mirakuru.unixsocket import UnixSocketExecutor
+ from tests import TEST_SOCKET_SERVER_PATH
+ 
+-SOCKET_PATH = "/tmp/mirakuru.sock"
++SOCKET_PATH = os.path.join(os.getenv("TMPDIR", "/tmp"), "mirakuru.sock")
+ 
+ SOCKET_SERVER_CMD = f"{sys.executable} {TEST_SOCKET_SERVER_PATH} {SOCKET_PATH}"
+ 

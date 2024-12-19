@@ -1,0 +1,10 @@
+--- zip30/timezone.c	2024-05-21 05:14:55.959957517 +0000
++++ zip30/timezone.c	2024-05-21 05:15:14.852006815 +0000
+@@ -41,6 +41,7 @@
+ #include "timezone.h"
+ #include <ctype.h>
+ #include <errno.h>
++#include <time.h>
+
+ #ifdef IZTZ_DEFINESTDGLOBALS
+ long timezone = 0;

@@ -1,0 +1,15 @@
+diff --git a/Cargo.toml b/Cargo.toml
+index 6f6199ab26..c3f92db9d8 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -68,8 +68,8 @@ panic = "abort"
+ libudev-sys = { path = "dom/webauthn/libudev-sys" }
+ packed_simd = { git = "https://github.com/hsivonen/packed_simd", rev="3541e3818fdc7c2a24f87e3459151a4ce955a67a" }
+ rlbox_lucet_sandbox = { git = "https://github.com/PLSysSec/rlbox_lucet_sandbox/", rev="d510da5999a744c563b0acd18056069d1698273f" }
+-nix = { git = "https://github.com/shravanrn/nix/", branch = "r0.13.1", rev="4af6c367603869a30fddb5ffb0aba2b9477ba92e" }
+-spirv_cross = { git = "https://github.com/kvark/spirv_cross", branch = "wgpu3", rev = "20191ad2f370afd6d247edcb9ff9da32d3bedb9c" }
++nix = { git = "https://github.com/shravanrn/nix/", branch = "r0.13.1" }
++spirv_cross = { git = "https://github.com/kvark/spirv_cross", branch = "wgpu3" }
+ # failure's backtrace feature might break our builds, see bug 1608157.
+ failure = { git = "https://github.com/badboy/failure", rev = "64af847bc5fdcb6d2438bec8a6030812a80519a5" }
+ failure_derive = { git = "https://github.com/badboy/failure", rev = "64af847bc5fdcb6d2438bec8a6030812a80519a5" }

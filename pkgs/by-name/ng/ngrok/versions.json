@@ -1,0 +1,38 @@
+{
+  "linux-386": {
+    "sys": "linux-386",
+    "url": "https://bin.equinox.io/a/cPMgrL2ncCb/ngrok-v3-3.18.1-linux-386",
+    "sha256": "f0b85d6a2f7ab3bd48186100e0f619acd18d4bdf56df2cd7044e6b35745c17a4",
+    "version": "3.18.1"
+  },
+  "linux-amd64": {
+    "sys": "linux-amd64",
+    "url": "https://bin.equinox.io/a/gnpHP5YLEsK/ngrok-v3-3.18.1-linux-amd64",
+    "sha256": "7d0a1f40bfb10fd7304081dcc27d7b8d2bed86f39cd46825c07679d8c888975f",
+    "version": "3.18.1"
+  },
+  "linux-arm": {
+    "sys": "linux-arm",
+    "url": "https://bin.equinox.io/a/mke1muTU2zp/ngrok-v3-3.18.1-linux-arm",
+    "sha256": "6e7b4723a3a2c936157e4ec7be0bcbf95b49c672223ba0621d54165e8009fd78",
+    "version": "3.18.1"
+  },
+  "linux-arm64": {
+    "sys": "linux-arm64",
+    "url": "https://bin.equinox.io/a/jYPr353ESuj/ngrok-v3-3.18.1-linux-arm64",
+    "sha256": "0dbdfdf94b3acb777741e9eeeb27a256cb1975b7d366d1ba404804b863b8fcbb",
+    "version": "3.18.1"
+  },
+  "darwin-amd64": {
+    "sys": "darwin-amd64",
+    "url": "https://bin.equinox.io/a/iTdNrZisjJj/ngrok-v3-3.18.1-darwin-amd64",
+    "sha256": "9a1319caf566ee7f85c1a9b2982ee95c08bd549e90d56ac99ef863d5da92b4a4",
+    "version": "3.18.1"
+  },
+  "darwin-arm64": {
+    "sys": "darwin-arm64",
+    "url": "https://bin.equinox.io/a/6wGwyzYTbRX/ngrok-v3-3.18.1-darwin-arm64",
+    "sha256": "9cc3fee7d81157e6bc645f160f6aa5562577c4b9f72db8675143e16d07703816",
+    "version": "3.18.1"
+  }
+}

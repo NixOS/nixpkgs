@@ -1,0 +1,34 @@
+diff --git a/build.py b/build.py
+index 48bc757d..88b9ed9b 100644
+--- a/build.py
++++ b/build.py
+@@ -1,6 +1,5 @@
+ from scripts import configs
+ from scripts.configs import path_define
+-from scripts.services import publish_service, info_service, template_service, image_service
+ from scripts.services.font_service import DesignContext, FontContext
+ from scripts.utils import fs_util
+ 
+@@ -21,21 +20,6 @@ def main():
+             font_context.make_pcf()
+             font_context.make_otc()
+             font_context.make_ttc()
+-            publish_service.make_release_zips(font_config, width_mode)
+-            info_service.make_info_file(design_context, width_mode)
+-            info_service.make_alphabet_txt_file(design_context, width_mode)
+-            template_service.make_alphabet_html_file(design_context, width_mode)
+-        template_service.make_demo_html_file(design_context)
+-        image_service.make_preview_image_file(font_config)
+-    template_service.make_index_html_file()
+-    template_service.make_playground_html_file()
+-    image_service.make_readme_banner()
+-    image_service.make_github_banner()
+-    image_service.make_itch_io_banner()
+-    image_service.make_itch_io_background()
+-    image_service.make_itch_io_cover()
+-    image_service.make_afdian_cover()
+-
+ 
+ if __name__ == '__main__':
+     main()
+

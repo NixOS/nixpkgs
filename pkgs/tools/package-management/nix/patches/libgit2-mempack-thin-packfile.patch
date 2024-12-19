@@ -1,0 +1,282 @@
+commit 9bacade4a3ef4b6b26e2c02f549eef0e9eb9eaa2
+Author: Robert Hensing <robert@roberthensing.nl>
+Date:   Sun Aug 18 20:20:36 2024 +0200
+
+    Add unoptimized git_mempack_write_thin_pack
+
+diff --git a/include/git2/sys/mempack.h b/include/git2/sys/mempack.h
+index 17da590a3..3688bdd50 100644
+--- a/include/git2/sys/mempack.h
++++ b/include/git2/sys/mempack.h
+@@ -44,6 +44,29 @@ GIT_BEGIN_DECL
+  */
+ GIT_EXTERN(int) git_mempack_new(git_odb_backend **out);
+ 
++/**
++ * Write a thin packfile with the objects in the memory store.
++ *
++ * A thin packfile is a packfile that does not contain its transitive closure of
++ * references. This is useful for efficiently distributing additions to a
++ * repository over the network, but also finds use in the efficient bulk
++ * addition of objects to a repository, locally.
++ *
++ * This operation performs the (shallow) insert operations into the
++ * `git_packbuilder`, but does not write the packfile to disk;
++ * see `git_packbuilder_write_buf`.
++ *
++ * It also does not reset the memory store; see `git_mempack_reset`.
++ *
++ * @note This function may or may not write trees and blobs that are not
++ *       referenced by commits. Currently everything is written, but this
++ *       behavior may change in the future as the packer is optimized.
++ *
++ * @param backend The mempack backend
++ * @param pb The packbuilder to use to write the packfile
++ */
++GIT_EXTERN(int) git_mempack_write_thin_pack(git_odb_backend *backend, git_packbuilder *pb);
++
+ /**
+  * Dump all the queued in-memory writes to a packfile.
+  *
+diff --git a/src/libgit2/odb_mempack.c b/src/libgit2/odb_mempack.c
+index 6f27f45f8..0b61e2b66 100644
+--- a/src/libgit2/odb_mempack.c
++++ b/src/libgit2/odb_mempack.c
+@@ -132,6 +132,35 @@ cleanup:
+ 	return err;
+ }
+ 
++int git_mempack_write_thin_pack(git_odb_backend *backend, git_packbuilder *pb)
++{
++	struct memory_packer_db *db = (struct memory_packer_db *)backend;
++	const git_oid *oid;
++	size_t iter = 0;
++	int err = -1;
++
++	/* TODO: Implement the recency heuristics.
++	    For this it probably makes sense to only write what's referenced
++		through commits, an option I've carved out for you in the docs.
++	    wrt heuristics: ask your favorite LLM to translate https://git-scm.com/docs/pack-heuristics/en
++		to actual normal reference documentation. */
++	while (true) {
++		err = git_oidmap_iterate(NULL, db->objects, &iter, &oid);
++		if (err == GIT_ITEROVER) {
++			err = 0;
++			break;
++		}
++		if (err != 0)
++			return err;
++
++		err = git_packbuilder_insert(pb, oid, NULL);
++		if (err != 0)
++			return err;
++	}
++
++	return 0;
++}
++
+ int git_mempack_dump(
+ 	git_buf *pack,
+ 	git_repository *repo,
+diff --git a/tests/libgit2/mempack/thinpack.c b/tests/libgit2/mempack/thinpack.c
+new file mode 100644
+index 000000000..604a4dda2
+--- /dev/null
++++ b/tests/libgit2/mempack/thinpack.c
+@@ -0,0 +1,196 @@
++#include "clar_libgit2.h"
++#include "git2/indexer.h"
++#include "git2/odb_backend.h"
++#include "git2/tree.h"
++#include "git2/types.h"
++#include "git2/sys/mempack.h"
++#include "git2/sys/odb_backend.h"
++#include "util.h"
++
++static git_repository *_repo;
++static git_odb_backend * _mempack_backend;
++
++void test_mempack_thinpack__initialize(void)
++{
++	git_odb *odb;
++
++	_repo = cl_git_sandbox_init_new("mempack_thinpack_repo");
++	
++	cl_git_pass(git_mempack_new(&_mempack_backend));
++    cl_git_pass(git_repository_odb(&odb, _repo));
++    cl_git_pass(git_odb_add_backend(odb, _mempack_backend, 999));
++	git_odb_free(odb);
++}
++
++void _mempack_thinpack__cleanup(void)
++{
++	cl_git_sandbox_cleanup();
++}
++
++/*
++	Generating a packfile for an unchanged repo works and produces an empty packfile.
++	Even if we allow this scenario to be detected, it shouldn't misbehave if the 
++	application is unaware of it.
++*/
++void test_mempack_thinpack__empty(void)
++{
++	git_packbuilder *pb;
++	int version;
++	int n;
++	git_buf buf = GIT_BUF_INIT;
++
++	git_packbuilder_new(&pb, _repo);
++
++	cl_git_pass(git_mempack_write_thin_pack(_mempack_backend, pb));
++	cl_git_pass(git_packbuilder_write_buf(&buf, pb));
++	cl_assert_in_range(12, buf.size, 1024 /* empty packfile is >0 bytes, but certainly not that big */);
++	cl_assert(buf.ptr[0] == 'P');
++	cl_assert(buf.ptr[1] == 'A');
++	cl_assert(buf.ptr[2] == 'C');
++	cl_assert(buf.ptr[3] == 'K');
++	version = (buf.ptr[4] << 24) | (buf.ptr[5] << 16) | (buf.ptr[6] << 8) | buf.ptr[7];
++	/*  Subject to change. https://git-scm.com/docs/pack-format: Git currently accepts version number 2 or 3 but generates version 2 only.*/
++	cl_assert_equal_i(2, version);
++	n = (buf.ptr[8] << 24) | (buf.ptr[9] << 16) | (buf.ptr[10] << 8) | buf.ptr[11];
++	cl_assert_equal_i(0, n);
++	git_buf_dispose(&buf);
++
++	git_packbuilder_free(pb);
++}
++
++#define LIT_LEN(x) x, sizeof(x) - 1
++
++/*
++	Check that git_mempack_write_thin_pack produces a thin packfile.
++*/
++void test_mempack_thinpack__thin(void)
++{
++	/* Outline:
++	   - Create tree 1
++	   - Flush to packfile A
++	   - Create tree 2
++	   - Flush to packfile B
++
++	   Tree 2 has a new blob and a reference to a blob from tree 1.
++
++	   Expectation:
++	   - Packfile B is thin and does not contain the objects from packfile A
++	*/
++
++	
++	git_oid oid_blob_1;
++	git_oid oid_blob_2;
++	git_oid oid_blob_3;
++	git_oid oid_tree_1;
++	git_oid oid_tree_2;
++	git_treebuilder *tb;
++
++	git_packbuilder *pb;
++	git_buf buf = GIT_BUF_INIT;
++	git_indexer *indexer;
++	git_indexer_progress stats;
++	char pack_dir_path[1024];
++
++	char sbuf[1024];
++	const char * repo_path;
++	const char * pack_name_1;
++	const char * pack_name_2;
++	git_str pack_path_1 = GIT_STR_INIT;
++	git_str pack_path_2 = GIT_STR_INIT;
++	git_odb_backend * pack_odb_backend_1;
++	git_odb_backend * pack_odb_backend_2;
++
++
++    cl_assert_in_range(0, snprintf(pack_dir_path, sizeof(pack_dir_path), "%s/objects/pack", git_repository_path(_repo)), sizeof(pack_dir_path));
++
++	/* Create tree 1 */
++
++	cl_git_pass(git_blob_create_from_buffer(&oid_blob_1, _repo, LIT_LEN("thinpack blob 1")));
++	cl_git_pass(git_blob_create_from_buffer(&oid_blob_2, _repo, LIT_LEN("thinpack blob 2")));
++
++
++	cl_git_pass(git_treebuilder_new(&tb, _repo, NULL));
++	cl_git_pass(git_treebuilder_insert(NULL, tb, "blob1", &oid_blob_1, GIT_FILEMODE_BLOB));
++	cl_git_pass(git_treebuilder_insert(NULL, tb, "blob2", &oid_blob_2, GIT_FILEMODE_BLOB));
++	cl_git_pass(git_treebuilder_write(&oid_tree_1, tb));
++
++	/* Flush */
++
++	cl_git_pass(git_packbuilder_new(&pb, _repo));
++	cl_git_pass(git_mempack_write_thin_pack(_mempack_backend, pb));
++	cl_git_pass(git_packbuilder_write_buf(&buf, pb));
++	cl_git_pass(git_indexer_new(&indexer, pack_dir_path, 0, NULL, NULL));
++	cl_git_pass(git_indexer_append(indexer, buf.ptr, buf.size, &stats));
++	cl_git_pass(git_indexer_commit(indexer, &stats));
++	pack_name_1 = strdup(git_indexer_name(indexer));
++	cl_assert(pack_name_1);
++	git_buf_dispose(&buf);
++	git_mempack_reset(_mempack_backend);
++	git_indexer_free(indexer);
++	git_packbuilder_free(pb);
++
++	/* Create tree 2 */
++
++	cl_git_pass(git_treebuilder_clear(tb));
++	/* blob 1 won't be used, but we add it anyway to test that just "declaring" an object doesn't
++	   necessarily cause its inclusion in the next thin packfile. It must only be included if new. */
++	cl_git_pass(git_blob_create_from_buffer(&oid_blob_1, _repo, LIT_LEN("thinpack blob 1")));
++	cl_git_pass(git_blob_create_from_buffer(&oid_blob_3, _repo, LIT_LEN("thinpack blob 3")));
++	cl_git_pass(git_treebuilder_insert(NULL, tb, "blob1", &oid_blob_1, GIT_FILEMODE_BLOB));
++	cl_git_pass(git_treebuilder_insert(NULL, tb, "blob3", &oid_blob_3, GIT_FILEMODE_BLOB));
++	cl_git_pass(git_treebuilder_write(&oid_tree_2, tb));
++
++	/* Flush */
++
++	cl_git_pass(git_packbuilder_new(&pb, _repo));
++	cl_git_pass(git_mempack_write_thin_pack(_mempack_backend, pb));
++	cl_git_pass(git_packbuilder_write_buf(&buf, pb));
++	cl_git_pass(git_indexer_new(&indexer, pack_dir_path, 0, NULL, NULL));
++	cl_git_pass(git_indexer_append(indexer, buf.ptr, buf.size, &stats));
++	cl_git_pass(git_indexer_commit(indexer, &stats));
++	pack_name_2 = strdup(git_indexer_name(indexer));
++	cl_assert(pack_name_2);
++	git_buf_dispose(&buf);
++	git_mempack_reset(_mempack_backend);
++	git_indexer_free(indexer);
++	git_packbuilder_free(pb);
++	git_treebuilder_free(tb);
++
++	/* Assertions */
++
++	assert(pack_name_1);
++	assert(pack_name_2);
++
++	repo_path = git_repository_path(_repo);
++
++	snprintf(sbuf, sizeof(sbuf), "objects/pack/pack-%s.pack", pack_name_1);
++	git_str_joinpath(&pack_path_1, repo_path, sbuf);
++	snprintf(sbuf, sizeof(sbuf), "objects/pack/pack-%s.pack", pack_name_2);
++	git_str_joinpath(&pack_path_2, repo_path, sbuf);
++
++	/* If they're the same, something definitely went wrong. */
++	cl_assert(strcmp(pack_name_1, pack_name_2) != 0);
++
++	cl_git_pass(git_odb_backend_one_pack(&pack_odb_backend_1, pack_path_1.ptr));
++	cl_assert(pack_odb_backend_1->exists(pack_odb_backend_1, &oid_blob_1));
++	cl_assert(pack_odb_backend_1->exists(pack_odb_backend_1, &oid_blob_2));
++	cl_assert(!pack_odb_backend_1->exists(pack_odb_backend_1, &oid_blob_3));
++	cl_assert(pack_odb_backend_1->exists(pack_odb_backend_1, &oid_tree_1));
++	cl_assert(!pack_odb_backend_1->exists(pack_odb_backend_1, &oid_tree_2));
++
++	cl_git_pass(git_odb_backend_one_pack(&pack_odb_backend_2, pack_path_2.ptr));
++	/* blob 1 is already in the packfile 1, so packfile 2 must not include it, in order to be _thin_. */
++	cl_assert(!pack_odb_backend_2->exists(pack_odb_backend_2, &oid_blob_1));
++	cl_assert(!pack_odb_backend_2->exists(pack_odb_backend_2, &oid_blob_2));
++	cl_assert(pack_odb_backend_2->exists(pack_odb_backend_2, &oid_blob_3));
++	cl_assert(!pack_odb_backend_2->exists(pack_odb_backend_2, &oid_tree_1));
++	cl_assert(pack_odb_backend_2->exists(pack_odb_backend_2, &oid_tree_2));
++
++	pack_odb_backend_1->free(pack_odb_backend_1);
++	pack_odb_backend_2->free(pack_odb_backend_2);
++	free((void *)pack_name_1);
++	free((void *)pack_name_2);
++	git_str_dispose(&pack_path_1);
++	git_str_dispose(&pack_path_2);
++
++}

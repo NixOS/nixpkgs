@@ -1,0 +1,19 @@
+Add forward declarations.
+
+--- fastcap/src/mulSetup.c.orig	2015-07-22 13:55:21.592119775 +0200
++++ fastcap/src/mulSetup.c	2015-07-22 14:08:50.157688209 +0200
+@@ -35,6 +35,14 @@
+ 
+ #include "mulGlobal.h"
+ 
++static getnbrs(ssystem*);
++static linkcubes(ssystem*);
++static setMaxq(ssystem*);
++static getAllInter(ssystem*);
++static set_vector_masks(ssystem*);
++static indexkid(ssystem*, cube*, int*, int*);
++static int placeq(int, ssystem*, charge*);
++
+ cube *cstack[1024];		/* Stack used in several routines. */
+ 
+ /*

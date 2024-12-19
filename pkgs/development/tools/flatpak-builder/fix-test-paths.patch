@@ -1,0 +1,111 @@
+--- a/tests/libtest.sh
++++ b/tests/libtest.sh
+@@ -301,7 +301,7 @@
+ }
+ 
+ skip_without_python2 () {
+-    if ! test -f /usr/bin/python2 || ! /usr/bin/python2 -c "import sys; sys.exit(0 if sys.version_info >= (2, 7) else 1)" ; then
++    if ! test -f @python2@/bin/python2 || ! @python2@/bin/python2 -c "import sys; sys.exit(0 if sys.version_info >= (2, 7) else 1)" ; then
+         echo "1..0 # SKIP this test requires /usr/bin/python2 (2.7) support"
+         exit 0
+     fi
+--- a/tests/make-test-runtime.sh
++++ b/tests/make-test-runtime.sh
+@@ -26,6 +26,7 @@
+ PATH="$PATH:/usr/sbin:/sbin"
+ 
+ # Add bash and dependencies
++mkdir -p ${DIR}/nix/store
+ mkdir -p ${DIR}/usr/bin
+ mkdir -p ${DIR}/usr/lib
+ ln -s ../lib ${DIR}/usr/lib64
+@@ -35,73 +36,28 @@
+ else
+     cp `which ldconfig` ${DIR}/usr/bin
+ fi
+-LIBS=`mktemp`
+-BINS=`mktemp`
+-
+-add_bin() {
+-    local f=$1
+-    shift
+-
+-    if grep -qFe "${f}" $BINS; then
+-        # Already handled
+-        return 0
+-    fi
+-
+-    echo $f >> $BINS
+-
+-    # Add library dependencies
+-    (ldd "${f}" | sed "s/.* => //"  | awk '{ print $1}' | grep ^/ | sort -u -o $LIBS $LIBS -)  || true
+-
+-    local shebang=$(sed -n '1s/^#!\([^ ]*\).*/\1/p' "${f}")
+-    if [ x$shebang != x ]; then
+-        add_bin "$shebang"
+-    fi
+-}
+ 
+ for i in $@; do
+-    I=`which $i`
+-    add_bin $I
+-    if test $i == python2; then
+-        mkdir -p ${DIR}/usr/lib/python2.7/lib-dynload
+-        # This is a hardcoded minimal set of modules we need in the current tests.
+-        # Pretty hacky stuff. Add modules as needed.
+-        PYDIR=/usr/lib/python2.7
+-        if test -d /usr/lib64/python2.7; then PYDIR=/usr/lib64/python2.7; fi
+-        for py in site os stat posixpath genericpath warnings \
+-                       linecache types UserDict abc _abcoll \
+-                       _weakrefset copy_reg traceback sysconfig \
+-                       re sre_compile sre_parse sre_constants \
+-                       _sysconfigdata ; do
+-            cp ${PYDIR}/$py.py ${DIR}/usr/lib/python2.7
+-        done
+-        # These might not exist, depending how Python was configured; and the
+-        # part after ${so} might be "module" or ".x86_64-linux-gnu" or
+-        # something else
+-        for so in _locale strop ; do
+-            cp ${PYDIR}/lib-dynload/${so}*.so ${DIR}/usr/lib/python2.7/lib-dynload || :
+-        done
+-        for plat in $( cd ${PYDIR} && echo plat-* ); do
+-            test -e ${PYDIR}/${plat} || continue
+-            mkdir -p ${DIR}/usr/lib/python2.7/${plat}
+-            cp ${PYDIR}/${plat}/*.py ${DIR}/usr/lib/python2.7/${plat}/
+-        done
+-    fi
+-done
+-for i in `cat $BINS`; do
+-    echo Adding binary $i 1>&2
+-    cp "$i" ${DIR}/usr/bin/
+-done
+-for i in `cat $LIBS`; do
+-    echo Adding library $i 1>&2
+-    cp "$i" ${DIR}/usr/lib/
++    I=$(readlink -f $(which $i))
++    requisites=$(nix-store --query --requisites "$I")
++    for r in $requisites; do
++        # a single store item can be needed by multiple paths, no need to copy it again
++        if [ ! -e ${DIR}/$r ]; then
++            cp -r $r ${DIR}/$r
++        fi
++    done
++    ln -s $I ${DIR}/usr/bin/$i
+ done
+ ln -s bash ${DIR}/usr/bin/sh
+ 
+-# We copy the C.UTF8 locale and call it en_US. Its a bit of a lie, but
+-# the real en_US locale is often not available, because its in the
+-# local archive.
++mv ${DIR}/nix/store ${DIR}/usr/store # files outside /usr are not permitted, we will have to replace /nix/store with /usr/store
++chmod -R u+w ${DIR} # nix store has read-only directories which would cause problems during clean-up, files need to be writable for sed
++find ${DIR} -type f -print0 | xargs -0 sed -i 's~/nix/store/~/usr/store/~g' # replace hardcoded paths
++find ${DIR} -type l | xargs -I '{}' sh -c 'tg="$(readlink "$1")"; newtg="${tg#/nix/store/}"; if [ "$tg" != "$newtg" ]; then ln -fs "/usr/store/$newtg" "$1"; fi' -- '{}' # replace symlink targets
++
++# We copy the whole locale archive because we do not have C.UTF8 locale
+ mkdir -p ${DIR}/usr/lib/locale/
+-cp -r /usr/lib/locale/C.* ${DIR}/usr/lib/locale/en_US
++cp @glibcLocales@/lib/locale/locale-archive ${DIR}/usr/lib/locale/locale-archive
+ 
+ if [ x$COLLECTION_ID != x ]; then
+     collection_args=--collection-id=${COLLECTION_ID}
