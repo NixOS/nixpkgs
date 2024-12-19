@@ -22,7 +22,7 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "taskwarrior";
-  version = "3.2.0-unstable-2024-12-18";
+  version = "3.3.0";
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   cargoDeps = rustPlatform.fetchCargoTarball {
     name = "${finalAttrs.pname}-${finalAttrs.version}-cargo-deps";
     inherit (finalAttrs) src;
-    hash = "sha256-yaIjtwZuYqyiXHxq4NDuZC9aE+mYpovXygxWENf6v1o=";
+    hash = "sha256-mzmrbsUuIjUVuNEa33EgtOTl9r+0xYj2WkKqFjxX1oU=";
   };
 
   postPatch = ''
