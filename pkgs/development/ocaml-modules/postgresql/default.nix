@@ -2,7 +2,7 @@
 
 buildDunePackage rec {
   pname = "postgresql";
-  version = "5.0.0";
+  version = "5.1.3";
 
   useDune2 = true;
 
@@ -12,7 +12,7 @@ buildDunePackage rec {
     owner = "mmottl";
     repo = "postgresql-ocaml";
     rev = version;
-    sha256 = "1i4pnh2v00i0s7s9pcwz1x6s4xcd77d08gjjkvy0fmda6mqq6ghn";
+    sha256 = "sha256-XyOA7q6r+3osmaQpz61YmMBh0STN6Jdf5gbGX25SYA4=";
   };
 
   nativeBuildInputs = [ postgresql ];
