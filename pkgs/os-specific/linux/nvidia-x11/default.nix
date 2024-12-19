@@ -100,20 +100,7 @@ rec {
   };
 
   # data center driver compatible with current default cudaPackages
-  dc = dc_520;
-  dc_520 = generic rec {
-    version = "520.61.05";
-    url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
-    sha256_64bit = "sha256-EPYWZwOur/6iN/otDMrNDpNXr1mzu8cIqQl8lXhQlzU==";
-    fabricmanagerSha256 = "sha256-o8Kbmkg7qczKQclaGvEyXNzEOWq9ZpQZn9syeffnEiE==";
-    useSettings = false;
-    usePersistenced = false;
-    useFabricmanager = true;
-
-    patches = [ rcu_patch ];
-
-    broken = kernel.kernelAtLeast "6.5";
-  };
+  dc = dc_565;
 
   dc_535 = generic rec {
     version = "535.154.05";
@@ -126,6 +113,17 @@ rec {
     useFabricmanager = true;
 
     patches = [ rcu_patch ];
+  };
+
+  dc_565 = generic rec {
+    version = "565.57.01";
+    url = "https://us.download.nvidia.com/tesla/${version}/NVIDIA-Linux-x86_64-${version}.run";
+    sha256_64bit = "sha256-buvpTlheOF6IBPWnQVLfQUiHv4GcwhvZW3Ks0PsYLHo=";
+    persistencedSha256 = "sha256-hdszsACWNqkCh8G4VBNitDT85gk9gJe1BlQ8LdrYIkg=";
+    fabricmanagerSha256 = "sha256-umhyehddbQ9+xhhoiKC7SOSVxscA5pcnqvkQOOLIdsM=";
+    useSettings = false;
+    usePersistenced = true;
+    useFabricmanager = true;
   };
 
   # Update note:
