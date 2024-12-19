@@ -304,7 +304,7 @@ in
               message = "You cannot configure both X11 and Data Center drivers at the same time.";
             }
             {
-              assertion = cfg.open != null;
+              assertion = cfg.open != null || cfg.datacenter.enable;
               message = ''
                 You must configure `hardware.nvidia.open` on NVIDIA driver versions >= 560.
                 It is suggested to use the open source kernel modules on Turing or later GPUs (RTX series, GTX 16xx), and the closed source modules otherwise.
