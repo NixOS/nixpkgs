@@ -35,15 +35,21 @@ stdenvNoCC.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  runtimeDependencies =
-    let player = []
-        ++ lib.optional withMpv mpv
-        ++ lib.optional withVlc vlc
-        ++ lib.optional withIina iina;
-    in [ gnugrep gnused curl fzf ffmpeg aria2 ]
-      ++ player
-      ++ lib.optional chromecastSupport catt
-      ++ lib.optional syncSupport syncplay;
+  runtimeDependencies =    
+    let
+      player = [ ] ++ lib.optional withMpv mpv ++ lib.optional withVlc vlc ++ lib.optional withIina iina;
+    in
+    [
+      gnugrep
+      gnused
+      curl
+      fzf
+      ffmpeg
+      aria2
+    ]
+    ++ player
+    ++ lib.optional chromecastSupport catt
+    ++ lib.optional syncSupport syncplay;
 
   installPhase = ''
     runHook preInstall
