@@ -36,6 +36,7 @@ stdenv.mkDerivation rec {
     asciidoctor
     cmake
     gfortran
+    hamlib_4 # rigctl
     libtool
     pkg-config
     qttools
@@ -52,6 +53,8 @@ stdenv.mkDerivation rec {
     qtserialport
     boost
   ];
+
+  strictDeps = true;
 
   meta = with lib; {
     description = "Weak-signal digital communication modes for amateur radio";
