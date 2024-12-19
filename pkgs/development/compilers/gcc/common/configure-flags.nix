@@ -10,7 +10,6 @@
 , enableLTO
 , enableMultilib
 , enableOffload
-, offloadTarget
 , enablePlugin
 , disableGdbPlugin ? !enablePlugin
 , enableShared
@@ -55,10 +54,10 @@ let
 
   crossConfigureFlags =
     # Ensure that -print-prog-name is able to find the correct programs.
-    [
+    (lib.optionals (targetPlatform.config != "amdgcn-amdhsa") [
       "--with-as=${if targetPackages.stdenv.cc.bintools.isLLVM then binutils else targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-as"
       "--with-ld=${targetPackages.stdenv.cc.bintools}/bin/${targetPlatform.config}-ld"
-    ]
+    ])
     ++ (if withoutTargetLibc then [
       "--disable-libssp"
       "--disable-nls"
@@ -163,7 +162,6 @@ let
       "--without-included-gettext"
       "--with-system-zlib"
       "--enable-static"
-      (lib.optionals enableOffload [ "--enable-offload-targets=amdgcn-amdhsa" ] )
       "--enable-languages=${
         lib.concatStringsSep ","
           (  lib.optional langC        "c"
@@ -180,7 +178,7 @@ let
           )
       }"
     ]
-
+    ++ lib.optional enableOffload "--enable-offload-targets=amdgcn-amdhsa"
     ++ (if (enableMultilib || targetPlatform.isAvr)
       then ["--enable-multilib" "--disable-libquadmath"]
       else ["--disable-multilib"])
@@ -211,8 +209,8 @@ let
     ++ import ../common/platform-flags.nix { inherit (stdenv)  targetPlatform; inherit lib; }
     ++ lib.optionals (targetPlatform != hostPlatform) crossConfigureFlags
     ++ lib.optional disableBootstrap' "--disable-bootstrap"
-    ++ lib.optionals (offloadTarget == "amdgcn-amdhsa") [
-      "--target=amdgcn-amdhsa" "--enable-as-accelerator-for=x86_64-pc-linux-gnu"
+    ++ lib.optionals (targetPlatform.config == "amdgcn-amdhsa") [
+      "--target=amdgcn--amdhsa" "--enable-as-accelerator-for=x86_64-pc-linux-gnu"
     ]
     # Platform-specific flags
     ++ lib.optional (targetPlatform == hostPlatform && targetPlatform.isx86_32) "--with-arch=${stdenv.hostPlatform.parsed.cpu.name}"

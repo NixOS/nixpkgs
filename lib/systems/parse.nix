@@ -163,6 +163,8 @@ rec {
     msp430   = { bits = 16; significantByte = littleEndian; family = "msp430"; };
     avr      = { bits = 8; family = "avr"; };
 
+    amdgcn   = { bits = 64; significantByte = littleEndian; family = "amdgcn"; };
+
     vc4      = { bits = 32; significantByte = littleEndian; family = "vc4"; };
 
     or1k     = { bits = 32; significantByte = bigEndian; family = "or1k"; };
@@ -338,6 +340,7 @@ rec {
     ghcjs    = { execFormat = unknown; families = { }; };
     genode   = { execFormat = elf;     families = { }; };
     mmixware = { execFormat = unknown; families = { }; };
+    amdhsa   = { execFormat = unknown; families = { }; };
   } // { # aliases
     # 'darwin' is the kernel for all of them. We choose macOS by default.
     darwin = kernels.macos;

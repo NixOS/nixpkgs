@@ -17,6 +17,7 @@ rec {
 
     # See llvm/cmake/config-ix.cmake.
     platforms =
+      ["amdgcn-amdhsa" ]++
       lib.platforms.aarch64 ++
       lib.platforms.arm ++
       lib.platforms.mips ++

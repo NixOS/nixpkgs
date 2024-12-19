@@ -14,7 +14,6 @@
 , enableShared ? stdenv.targetPlatform.hasSharedLibraries
 , enableLTO ? stdenv.hostPlatform.hasSharedLibraries
 , enableOffload ? false
-, offloadTarget ? ""
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
 , gmp, mpfr, libmpc, gettext, which, patchelf, binutils, newlib
@@ -114,7 +113,6 @@ let
         disableGdbPlugin
         enableLTO
         enableOffload
-        offloadTarget
         enableMultilib
         enablePlugin
         enableShared
@@ -361,7 +359,7 @@ pipe ((callFile ./common/builder.nix {}) ({
   '';
 } // optionalAttrs enableMultilib {
   dontMoveLib64 = true;
-} // optionalAttrs (offloadTarget == "amdgcn-amdhsa") {
+} // optionalAttrs (targetPlatform.config == "amdgcn-amdhsa") {
   newlibSrc = newlib.src;
 }
 ))

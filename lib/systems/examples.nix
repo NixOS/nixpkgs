@@ -167,6 +167,11 @@ rec {
     config = "avr";
   };
 
+  amdgcn = {
+    config = "amdgcn-amdhsa";
+    libc = "newlib";
+  };
+
   vc4 = {
     config = "vc4-elf";
     libc = "newlib";

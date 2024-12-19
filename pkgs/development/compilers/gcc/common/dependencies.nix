@@ -55,7 +55,9 @@ in
   # same for all gcc's
   depsBuildTarget =
     (
-      if hostPlatform == buildPlatform then
+      if (targetPlatform.config == "amdgcn-amdhsa") then
+        [ ]
+      else if hostPlatform == buildPlatform then
         [
           targetPackages.stdenv.cc.bintools # newly-built gcc will be used
         ]
@@ -75,7 +77,7 @@ in
       libmpc
     ]
     ++ optionals (lib.versionAtLeast version "10") [ libxcrypt ]
-    ++ [
+    ++ optionals (targetPlatform.config != "amdgcn-amdhsa") [
       targetPackages.stdenv.cc.bintools # For linking code at run-time
     ]
     ++ optionals (isl != null) [ isl ]
