@@ -3,6 +3,8 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
+  fetchpatch,
+
   # build-system
   setuptools,
   # dependencies
@@ -30,6 +32,14 @@ buildPythonPackage rec {
     rev = "refs/tags/${version}";
     hash = "sha256-0YsGu8JuYrb6lWuC3RQ4jCkulxxFpnd0eaRajCwtFHo=";
   };
+
+  patches = [
+    # https://github.com/corteva/rioxarray/issues/836
+    (fetchpatch {
+      url = "https://github.com/corteva/rioxarray/commit/6294b7468587b8c243ee4f561a90ca8de90ea0f1.patch";
+      hash = "sha256-0IvDAr17ymMN1J2vC1U3z/2N1Np1RaRjCAODZthQz8g=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
