@@ -151,6 +151,7 @@ in
       }:
       {
         virtualisation.useDefaultFilesystems = false;
+        virtualisation.mountHostNixStore = false;
         virtualisation.fileSystems = {
           "/" = {
             device = "/dev/disk/by-partlabel/created-root";
