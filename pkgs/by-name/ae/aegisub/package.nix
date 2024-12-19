@@ -2,11 +2,11 @@
   lib,
   alsa-lib,
   boost,
+  curl,
   meson,
   config,
   expat,
   fetchFromGitHub,
-  fetchpatch,
   ffmpeg,
   ffms,
   fftw,
@@ -28,7 +28,6 @@
   portaudio,
   python3,
   stdenv,
-  vapoursynth-bestsource,
   wrapGAppsHook3,
   wxGTK,
   zlib,
@@ -43,13 +42,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aegisub";
-  version = "feature_12";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
-    owner = "arch1t3cht";
+    owner = "TypesettingTools";
     repo = "aegisub";
-    rev = finalAttrs.version;
-    hash = "sha256-P+0aUeFsjke3Jj/QtGJRdaS0negYSnhiuf5QCw2Of5Q=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HvBbHUWKUFpne7Dj8CB2V9agBSBbB24BXnnYWUjHSDI=";
   };
 
   nativeBuildInputs = [
@@ -64,6 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     boost
+    curl
     expat
     ffmpeg
     ffms
@@ -76,7 +76,6 @@ stdenv.mkDerivation (finalAttrs: {
     libGL
     libass
     libuchardet
-    vapoursynth-bestsource
     wxGTK
     zlib
   ]
@@ -94,11 +93,11 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonEnable "portaudio" portaudioSupport)
 
     (lib.mesonEnable "avisynth" false)
-    # TODO: Requires upstream changes to allow using system VapourSynth.
-    (lib.mesonEnable "vapoursynth" false)
 
     (lib.mesonEnable "hunspell" spellcheckSupport)
 
+    (lib.mesonBool "build_osx_bundle" stdenv.hostPlatform.isDarwin)
+    (lib.mesonBool "enable_update_checker" false)
     (lib.mesonBool "system_luajit" (!useBundledLuaJIT))
   ];
 
@@ -116,6 +115,10 @@ stdenv.mkDerivation (finalAttrs: {
     # system version?
     substituteInPlace meson.build \
       --replace-fail "subdir('tests')" "# subdir('tests')"
+
+    # https://github.com/TypesettingTools/Aegisub/issues/191
+    substituteInPlace src/dialog_colorpicker.cpp \
+      --replace-fail "NSUInteger" "size_t"
   '';
 
   # Inject the version, per the AUR package:
@@ -127,9 +130,15 @@ stdenv.mkDerivation (finalAttrs: {
     EOF
   '';
 
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv Aegisub.app $out/Applications
+    makeWrapper $out/Applications/Aegisub.app/Contents/MacOS/aegisub $out/bin/aegisub
+  '';
+
   meta = {
-    homepage = "https://github.com/arch1t3cht/Aegisub";
-    description = "Advanced subtitle editor; arch1t3cht's fork";
+    homepage = "https://github.com/TypesettingTools/Aegisub";
+    description = "Advanced subtitle editor";
     longDescription = ''
       Aegisub is a free, cross-platform open source tool for creating and
       modifying subtitles. Aegisub makes it quick and easy to time subtitles to
@@ -144,7 +153,5 @@ stdenv.mkDerivation (finalAttrs: {
     mainProgram = "aegisub";
     maintainers = with lib.maintainers; [ wegank ];
     platforms = lib.platforms.unix;
-    # No native wxWidgets and VapourSynth is broken.
-    badPlatforms = lib.platforms.darwin;
   };
 })
