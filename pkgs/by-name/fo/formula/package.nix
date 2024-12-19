@@ -25,10 +25,10 @@ buildDotnetModule (finalAttrs: {
   projectFile = "Src/CommandLine/CommandLine.csproj";
 
   postFixup =
-    lib.optionalString stdenvNoCC.isLinux ''
+    lib.optionalString stdenvNoCC.hostPlatform.isLinux ''
       mv $out/bin/CommandLine $out/bin/formula
     ''
-    + lib.optionalString stdenvNoCC.isDarwin ''
+    + lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
       makeWrapper ${dotnetCorePackages.runtime_8_0}/bin/dotnet $out/bin/formula \
         --add-flags "$out/lib/formula-dotnet/CommandLine.dll" \
         --prefix DYLD_LIBRARY_PATH : $out/lib/formula-dotnet/runtimes/macos/native
