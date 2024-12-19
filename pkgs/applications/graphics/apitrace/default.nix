@@ -13,6 +13,7 @@
   libglvnd,
   gtest,
   brotli,
+  enableGui ? true,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,17 +33,23 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libX11
     procps
-    python3
     libdwarf
-    qtbase
     gtest
     brotli
+  ] ++ lib.optionals enableGui [
+    qtbase
   ];
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    python3
+  ] ++ lib.optionals enableGui [
     wrapQtAppsHook
+  ];
+
+  cmakeFlags = [
+    (lib.cmakeBool "ENABLE_GUI" enableGui)
   ];
 
   # Don't automatically wrap all binaries, I prefer to explicitly only wrap
@@ -83,6 +90,7 @@ stdenv.mkDerivation rec {
       patchelf --set-rpath "${lib.makeLibraryPath [ libglvnd ]}:$(patchelf --print-rpath $i)" $i
     done
 
+  '' + lib.optionalString enableGui ''
     wrapQtApp $out/bin/qapitrace
   '';
 
