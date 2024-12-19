@@ -516,6 +516,9 @@ mapAliases {
   gprbuild-boot = gnatPackages.gprbuild-boot; # Added 2024-02-25;
 
   gqview = throw "'gqview' has been removed due to lack of maintenance upstream and depending on gtk2. Consider using 'gthumb' instead";
+  graalvmCEPackages = graalvmPackages; # Added 2024-08-10
+  graalvm-ce = graalvmPackages.graalvm-ce; # Added 2024-08-10
+  graalvm-oracle = graalvmPackages.graalvm-oracle; # Added 2024-12-17
   grafana_reporter = grafana-reporter; # Added 2024-06-09
   grapefruit = throw "'grapefruit' was removed due to being blocked by Roblox, rendering the package useless"; # Added 2024-08-23
   graylog-3_3 = throw "graylog 3.x is EOL. Please consider downgrading nixpkgs if you need an upgrade from 3.x to latest series."; # Added 2023-10-09
