@@ -757,7 +757,8 @@ let
                 pkgs.mypy
                 pkgs.bootspec
               ]
-              ++ optionals clevisTest [ pkgs.klibc ];
+              ++ optionals clevisTest [ pkgs.klibc ]
+              ++ optional systemdStage1 pkgs.chroot-realpath;
 
             nix.settings = {
               substituters = mkForce [ ];
