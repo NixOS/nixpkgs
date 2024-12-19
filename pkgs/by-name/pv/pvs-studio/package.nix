@@ -13,7 +13,7 @@
 
 stdenv.mkDerivation rec {
   pname = "pvs-studio";
-  version = "7.33.85330.89";
+  version = "7.34.87460.207";
 
   src =
     let
@@ -22,12 +22,12 @@ stdenv.mkDerivation rec {
     in
     fetchzip {
       url = selectSystem {
-        x86_64-darwin = "https://web.archive.org/web/20241115155106/https://cdn.pvs-studio.com/pvs-studio-7.33.85330.89-macos.tgz";
-        x86_64-linux = "https://web.archive.org/web/20241115155538/https://cdn.pvs-studio.com/pvs-studio-7.33.85330.89-x86_64.tgz";
+        x86_64-darwin = "https://web.archive.org/web/20241115155106/https://cdn.pvs-studio.com/pvs-studio-7.34.87460.207-macos.tgz";
+        x86_64-linux = "https://web.archive.org/web/20241115155538/https://cdn.pvs-studio.com/pvs-studio-7.34.87460.207-x86_64.tgz";
       };
       hash = selectSystem {
         x86_64-darwin = "sha256-jhfW+uBexzYzzf3JVqRYqtDjE5+OoT3RcuRPJEOEs18=";
-        x86_64-linux = "sha256-rJQc8B2B7J0bcEI00auwIO/4PH2YMkuzSK/OyAnhdBA=";
+        x86_64-linux = "sha256-ghgUkjSH0p38OBjdGNWFVGkLgy/JSxpLKfrAt+sZpus=";
       };
     };
 
