@@ -1,77 +1,89 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
-, gtk4
-, libadwaita
-, pkg-config
-, wrapGAppsHook4
-, glib
-, shared-mime-info
-, gdk-pixbuf
-, blueprint-compiler
-, python3
-, ffmpeg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  gettext,
+  itstool,
+  ninja,
+  yelp-tools,
+  pkg-config,
+  libnick,
+  boost,
+  glib,
+  shared-mime-info,
+  gtk4,
+  libadwaita,
+  wrapGAppsHook4,
+  libxmlxx5,
+  blueprint-compiler,
+  yt-dlp,
+  ffmpeg,
+  aria2,
+  nix-update-script,
 }:
 
-buildDotnetModule rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "parabolic";
-  version = "2024.5.0";
+  version = "2024.11.1";
 
   src = fetchFromGitHub {
     owner = "NickvisionApps";
     repo = "Parabolic";
-    rev = version;
-    hash = "sha256-awbCn7W7RUSuEByXxLGrsmYjmxCrwywhhrMJq/iM1Uc=";
-    fetchSubmodules = true;
+    rev = "${finalAttrs.version}";
+    hash = "sha256-Vm5QVmPc0uipLlDy5Wn9S7HQ/0rLg0wVk0XdWRECQDY=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
-  pythonEnv = python3.withPackages(ps: with ps; [ yt-dlp ]);
-
-  projectFile = "NickvisionTubeConverter.GNOME/NickvisionTubeConverter.GNOME.csproj";
-  nugetDeps = ./deps.json;
-  executables = "NickvisionTubeConverter.GNOME";
-
-   nativeBuildInputs = [
+  nativeBuildInputs = [
+    cmake
+    gettext
+    itstool
+    ninja
+    yelp-tools
     pkg-config
     wrapGAppsHook4
+    blueprint-compiler
     glib
     shared-mime-info
-    gdk-pixbuf
-    blueprint-compiler
   ];
 
-  buildInputs = [ gtk4 libadwaita ];
-
-  runtimeDeps = [
+  buildInputs = [
+    libnick
+    boost
+    glib
     gtk4
     libadwaita
-    glib
-    gdk-pixbuf
+    libxmlxx5
   ];
 
-  postPatch = ''
-    substituteInPlace NickvisionTubeConverter.Shared/Linux/org.nickvision.tubeconverter.desktop.in --replace '@EXEC@' "NickvisionTubeConverter.GNOME"
+  cmakeFlags = [
+    (lib.cmakeFeature "UI_PLATFORM" "gnome")
+  ];
+
+  preFixup = ''
+    gappsWrapperArgs+=(
+      --prefix PATH : ${
+        lib.makeBinPath [
+          aria2
+          ffmpeg
+          yt-dlp
+        ]
+      }
+    )
   '';
 
-  postInstall = ''
-    install -Dm444 NickvisionTubeConverter.Shared/Resources/org.nickvision.tubeconverter.svg -t $out/share/icons/hicolor/scalable/apps/
-    install -Dm444 NickvisionTubeConverter.Shared/Resources/org.nickvision.tubeconverter-symbolic.svg -t $out/share/icons/hicolor/symbolic/apps/
-    install -Dm444 NickvisionTubeConverter.Shared/Linux/org.nickvision.tubeconverter.desktop.in -T $out/share/applications/org.nickvision.tubeconverter.desktop
-  '';
-
-  makeWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ pythonEnv ffmpeg ]}" ];
-
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "Download web video and audio";
+    description = "Graphical frontend for yt-dlp to download video and audio";
     homepage = "https://github.com/NickvisionApps/Parabolic";
-    license = licenses.mit;
-    maintainers = with maintainers; [ ewuuwe ];
-    mainProgram = "NickvisionTubeConverter.GNOME";
+    license = licenses.gpl3Plus;
+    maintainers = with maintainers; [
+      ewuuwe
+      normalcea
+      getchoo
+    ];
+    mainProgram = "org.nickvision.tubeconverter";
     platforms = platforms.linux;
   };
-}
+})
