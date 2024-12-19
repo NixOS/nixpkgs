@@ -121,6 +121,7 @@ in
         ]
         ++ optional (cfg.options.calibreLibrary != null) "config_calibre_dir = '${cfg.options.calibreLibrary}'"
         ++ optional cfg.options.enableBookConversion "config_converterpath = '${pkgs.calibre}/bin/ebook-convert'"
+        ++ optional cfg.options.enableBookConversion "config_binariesdir = '${pkgs.calibre}/bin/'"
         ++ optional cfg.options.enableKepubify "config_kepubifypath = '${pkgs.kepubify}/bin/kepubify'"
       );
     in
