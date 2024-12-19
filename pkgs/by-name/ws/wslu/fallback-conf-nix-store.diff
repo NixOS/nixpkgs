@@ -1,0 +1,22 @@
+diff --git a/src/wslu-header b/src/wslu-header
+index 5f33925..159c6af 100644
+--- a/src/wslu-header
++++ b/src/wslu-header
+@@ -169,11 +169,17 @@ if [ -f "$HOME/.config/wslu/conf" ]; then
+ 	debug_echo "$HOME/.config/wslu/conf found, sourcing"
+ 	source "$HOME/.config/wslu/conf"
+ fi
++
+ if [ -f "$HOME/.wslurc" ]; then
+ 	debug_echo "$HOME/.wslurc found, sourcing"
+ 	source "$HOME/.wslurc"
+ fi
+ 
++if [ -f "@out@/share/wslu/conf" ]; then
++	debug_echo "@out@/share/wslu/conf found, sourcing"
++	source "@out@/share/wslu/conf"
++fi
++
+ # functions
+ 
+ function help {

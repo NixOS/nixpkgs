@@ -1,0 +1,13 @@
+diff --git a/opt/simulator/resources/firmware/start_qemu.sh b/opt/simulator/resources/firmware/start_qemu.sh
+index cfdad8b..64fba99 100644
+--- a/opt/simulator/resources/firmware/start_qemu.sh
++++ b/opt/simulator/resources/firmware/start_qemu.sh
+@@ -75,6 +75,8 @@ fi
+ host_os=$(uname -s)
+ echo "Host OS type : \"$(uname -v)\"."
+ if [ "$host_os" = "Linux" ]; then
++    export GDK_BACKEND=x11
++
+     qemu_bin="qemu_linux/qemu-system-arm"
+     check_file_exists "$qemu_bin"
+

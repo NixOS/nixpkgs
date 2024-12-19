@@ -1,0 +1,21 @@
+commit 410e98569c87469672086d4144f7ca0f2ee08fb7
+Author: Michael Hoang <enzime@users.noreply.github.com>
+Date:   Sun May 21 00:13:37 2023 +1000
+
+    Allow project to be built with just `pip`
+---
+ pyproject.toml | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index 10ed786..574e42a 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,3 +1,7 @@
++[build-system]
++requires = ["poetry-core"]
++build-backend = "poetry.core.masonry.api"
++
+ [tool.poetry]
+ name = "kitti3"
+ version = "0.5.1"

@@ -1,0 +1,21 @@
+diff --git i/librubyfmt/build.rs w/librubyfmt/build.rs
+index 296b749..941a4ca 100644
+--- i/librubyfmt/build.rs
++++ w/librubyfmt/build.rs
+@@ -166,6 +166,7 @@ fn run_configure(ruby_checkout_path: &Path) -> Output {
+         command
+             .arg("--target=aarch64-unknown-linux-gnu")
+             .arg("--host=x86_64")
++            .arg("--disable-werror")
+             .env("CC", "aarch64-linux-gnu-gcc")
+             .env("AR", "aarch64-linux-gnu-ar")
+             .env("RANLIB", "aarch64-linux-gnu-ranlib");
+diff --git i/librubyfmt/src/lib.rs w/librubyfmt/src/lib.rs
+index 9b94b5f..b78e99f 100644
+--- i/librubyfmt/src/lib.rs
++++ w/librubyfmt/src/lib.rs
+@@ -1,4 +1,3 @@
+-#![deny(warnings, missing_copy_implementations)]
+ #![allow(clippy::upper_case_acronyms, clippy::enum_variant_names)]
+ 
+ use serde::de::value;

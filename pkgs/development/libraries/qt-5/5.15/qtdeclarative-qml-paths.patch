@@ -1,0 +1,33 @@
+diff --git a/src/qml/qml/qqmlimport.cpp b/src/qml/qml/qqmlimport.cpp
+index 289f11d006..9b0a48c6c7 100644
+--- a/src/qml/qml/qqmlimport.cpp
++++ b/src/qml/qml/qqmlimport.cpp
+@@ -1897,17 +1897,22 @@ QQmlImportDatabase::QQmlImportDatabase(QQmlEngine *e)
+     addImportPath(installImportsPath);
+ 
+     // env import paths
+-    if (Q_UNLIKELY(!qEnvironmentVariableIsEmpty("QML2_IMPORT_PATH"))) {
+-        const QString envImportPath = qEnvironmentVariable("QML2_IMPORT_PATH");
++    auto addEnvImportPath = [this](const char *var) {
+ #if defined(Q_OS_WIN)
+         QLatin1Char pathSep(';');
+ #else
+         QLatin1Char pathSep(':');
+ #endif
+-        QStringList paths = envImportPath.split(pathSep, Qt::SkipEmptyParts);
+-        for (int ii = paths.count() - 1; ii >= 0; --ii)
+-            addImportPath(paths.at(ii));
+-    }
++        if (Q_UNLIKELY(!qEnvironmentVariableIsEmpty(var))) {
++            const QString envImportPath = qEnvironmentVariable(var);
++            QStringList paths = envImportPath.split(pathSep, Qt::SkipEmptyParts);
++            for (int ii = paths.count() - 1; ii >= 0; --ii)
++                addImportPath(paths.at(ii));
++        }
++    };
++
++    addEnvImportPath("QML2_IMPORT_PATH");
++    addEnvImportPath("NIXPKGS_QT5_QML_IMPORT_PATH");
+ 
+     addImportPath(QStringLiteral("qrc:/qt-project.org/imports"));
+     addImportPath(QCoreApplication::applicationDirPath());

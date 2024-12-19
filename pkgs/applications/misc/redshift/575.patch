@@ -1,0 +1,51 @@
+From 467156efccc5e36a36bec8c0b64cc5a70f14d5ed Mon Sep 17 00:00:00 2001
+From: Yana Timoshenko <yana@riseup.net>
+Date: Tue, 16 Jan 2018 11:43:46 +0000
+Subject: [PATCH] Fix Autoconf script
+
+gettext/intltool macros are not used correctly, see:
+https://bugs.launchpad.net/inkscape/+bug/1418943
+---
+ bootstrap    | 6 +-----
+ configure.ac | 5 +----
+ 2 files changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/bootstrap b/bootstrap
+index 0599cf5..40b1dca 100755
+--- a/bootstrap
++++ b/bootstrap
+@@ -1,7 +1,3 @@
+ #!/bin/sh
+ 
+-# change to root directory
+-cd $(dirname "$0")
+-
+-autopoint --force && \
+-	AUTOPOINT="intltoolize --automake --copy" autoreconf --force --install --verbose
++autoreconf --force --install && intltoolize
+diff --git a/configure.ac b/configure.ac
+index be0b51a..a2e7c42 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -17,6 +17,7 @@ AC_PROG_OBJC # For macOS support modules
+ AC_LANG([C])
+ 
+ AC_PROG_INTLTOOL([0.50])
++AC_SUBST(LIBINTL)
+ 
+ AC_CANONICAL_HOST
+ 
+@@ -51,10 +52,6 @@ AC_COMPILE_IFELSE([AC_LANG_PROGRAM([])], [
+ ])
+ AC_LANG_POP([Objective C])
+ 
+-# Checks for libraries.
+-AM_GNU_GETTEXT_VERSION([0.17])
+-AM_GNU_GETTEXT([external])
+-
+ GETTEXT_PACKAGE=redshift
+ AC_SUBST(GETTEXT_PACKAGE)
+ AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Package name for gettext])
+-- 
+2.15.1
+

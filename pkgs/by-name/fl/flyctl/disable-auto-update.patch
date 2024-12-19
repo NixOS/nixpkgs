@@ -1,0 +1,25 @@
+From a46bc88829282032ab1d68ef6d67d25421ab8d32 Mon Sep 17 00:00:00 2001
+From: Gabriel Simmer <g@gmem.ca>
+Date: Fri, 21 Jul 2023 08:16:52 +0100
+Subject: [PATCH] Disable auto update
+
+---
+ internal/config/config.go | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/internal/config/config.go b/internal/config/config.go
+index 04583ca5..1b085b55 100644
+--- a/internal/config/config.go
++++ b/internal/config/config.go
+@@ -173,7 +173,7 @@ func (cfg *Config) applyFile(path string) (err error) {
+ 		SyntheticsAgent bool   `yaml:"synthetics_agent"`
+ 	}
+ 	w.SendMetrics = true
+-	w.AutoUpdate = true
++	w.AutoUpdate = false
+ 	w.SyntheticsAgent = true
+ 
+ 	if err = unmarshal(path, &w); err == nil {
+-- 
+2.45.2
+

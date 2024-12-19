@@ -1,0 +1,9 @@
+--- a/trace/meson.build	2020-02-15 16:34:58.698832000 +0100
++++ b/trace/meson.build	2020-02-15 16:39:05.359952802 +0100
+@@ -4,5 +4,5 @@
+     dependencies : libdl,
+     version : '1.0.0',
+     install : true,
+-    install_dir : moduledir,
++    install_dir : get_option('prefix') + '/lib/libvdpau',
+ )

@@ -1,0 +1,14 @@
+source "https://rubygems.org"
+
+gem "rails", "~> 7.0.0"
+gem "propshaft"
+gem "puma"
+gem "pg"
+gem "activerecord-nulldb-adapter", require: false
+
+# See also https://github.com/ankane/pghero/blob/v3.3.4/guides/Rails.md
+gem "pghero"
+gem "pg_query"
+gem "aws-sdk-cloudwatch"
+gem "google-apis-monitoring_v3"
+gem "azure_mgmt_monitor"

@@ -1,0 +1,11 @@
+--- a/build.rs
++++ b/build.rs
+@@ -34,7 +34,7 @@ fn main() -> io::Result<()> {
+             format!("{}\nv{} \\1;31m(beta debug build!)\\0m\n\\1;4;34m{}\\0m", tagline, version_string(), url)
+         }
+         else if is_development_version() {
+-            format!("{}\nv{} [{}] built on {} \\1;31m(beta-release!)\\0m\n\\1;4;34m{}\\0m", tagline, version_string(), git_hash(), build_date(), url)
++            format!("{}\nv{} [nixpkgs] \\1;31m(beta-release!)\\0m\n\\1;4;34m{}\\0m", tagline, version_string(),  url)
+         }
+         else {
+             format!("{}\nv{}\n\\1;4;34m{}\\0m", tagline, version_string(), url)

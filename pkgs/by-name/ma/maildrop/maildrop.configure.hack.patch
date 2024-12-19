@@ -1,0 +1,13 @@
+--- a/maildrop/configure	2012-09-06 01:52:13.000000000 +0100
++++ b/maildrop/configure	2013-01-04 03:00:57.095628327 +0000
+@@ -17562,8 +17562,8 @@
+ check_spooldir() {
+   if test "$CHECKED_SPOOLDIR" != 1
+   then
+-     get_spooldir
+-     MBOX_DIR="$SPOOLDIR"
++     MBOX_DIR="/var/spool/mail"
++     MBOX_RESET_GID=0
+      CHECKED_SPOOLDIR=1
+   fi
+ }

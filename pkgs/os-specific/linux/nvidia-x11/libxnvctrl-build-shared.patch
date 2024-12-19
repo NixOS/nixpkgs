@@ -1,0 +1,21 @@
+--- a/src/libXNVCtrl/xnvctrl.mk
++++ b/src/libXNVCtrl/xnvctrl.mk
+@@ -39,6 +39,8 @@
+ 
+ LIBXNVCTRL = $(OUTPUTDIR)/libXNVCtrl.a
+ 
++LIBXNVCTRL_SHARED = $(OUTPUTDIR)/libXNVCtrl.so
++
+ LIBXNVCTRL_SRC = $(XNVCTRL_DIR)/NVCtrl.c
+ 
+ LIBXNVCTRL_OBJ = $(call BUILD_OBJECT_LIST,$(LIBXNVCTRL_SRC))
+@@ -47,3 +49,9 @@
+ 
+ $(LIBXNVCTRL) : $(LIBXNVCTRL_OBJ)
+ 	$(call quiet_cmd,AR) ru $@ $(LIBXNVCTRL_OBJ)
++
++$(LIBXNVCTRL_SHARED): $(LIBXNVCTRL_OBJ)
++	$(RM) $@ $@.*
++	$(CC) -shared -Wl,-soname=$(@F).0 -o $@.0.0.0 $(LDFLAGS) $^ -lXext -lX11
++	ln -s $(@F).0.0.0 $@.0
++	ln -s $(@F).0 $@

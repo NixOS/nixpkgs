@@ -1,0 +1,21 @@
+--- a/src/jdk.jlink/share/classes/jdk/tools/jlink/internal/plugins/LegalNoticeFilePlugin.java
++++ b/src/jdk.jlink/share/classes/jdk/tools/jlink/internal/plugins/LegalNoticeFilePlugin.java
+@@ -112,18 +112,6 @@
+             .filter(e -> Arrays.equals(e.contentBytes(), entry.contentBytes()))
+             .findFirst();
+         if (!otarget.isPresent()) {
+-            if (errorIfNotSameContent) {
+-                // all legal notices of the same file name are expected
+-                // to contain the same content
+-                Optional<ResourcePoolEntry> ores =
+-                    entries.stream().filter(e -> e.linkedTarget() == null)
+-                           .findAny();
+-
+-                if (ores.isPresent()) {
+-                    throw new PluginException(ores.get().path() + " " +
+-                        entry.path() + " contain different content");
+-                }
+-            }
+             entries.add(entry);
+         } else {
+             entries.add(ResourcePoolEntry.createSymLink(entry.path(),
