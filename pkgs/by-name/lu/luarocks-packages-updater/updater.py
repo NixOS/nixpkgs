@@ -21,8 +21,28 @@ from pathlib import Path
 import pluginupdate
 from pluginupdate import FetchConfig, update_plugins
 
+
+class ColoredFormatter(logging.Formatter):
+    # Define color codes
+    COLORS = {
+        "DEBUG": "\033[94m",  # Blue
+        "INFO": "\033[92m",  # Green
+        "WARNING": "\033[93m",  # Yellow
+        "ERROR": "\033[91m",  # Red
+        "CRITICAL": "\033[95m",  # Magenta
+    }
+    RESET = "\033[0m"
+
+    def format(self, record):
+        log_color = self.COLORS.get(record.levelname, self.RESET)
+        record.msg = f"{log_color}{record.msg}{self.RESET}"
+        return super().format(record)
+
+
+handler = logging.StreamHandler()
+handler.setFormatter(ColoredFormatter("%(levelname)s: %(message)s"))
 log = logging.getLogger()
-log.addHandler(logging.StreamHandler())
+log.handlers = [handler]
 
 ROOT = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))).parent.parent  # type: ignore
 
@@ -127,7 +147,7 @@ class LuaEditor(pluginupdate.Editor):
         config: FetchConfig,
         # TODO: implement support for adding/updating individual plugins
         to_update: list[str] | None,
-        ):
+    ):
         if to_update is not None:
             raise NotImplementedError("For now, lua updater doesn't support updating individual packages.")
         _prefetch = generate_pkg_nix
