@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "secrets-extractor";
-  version = "1.0.1";
+  version = "1.0.2";
 
   src = fetchFromGitHub {
     owner = "Xenios91";
     repo = "Secrets-Extractor";
     rev = "v${version}";
-    hash = "sha256-cwEG0cXlyhrUSQAuZ/5KVqJtez13GvZghabsooXCM/U=";
+    hash = "sha256-xtxhatxNK9bRnT1R/5BJkTcubO58sg5ssrziLYvw6mQ=";
   };
 
-  vendorHash = "sha256-KhAaBNSpFu7LAWiHCWD1OssexW9N96ArDb7Oo1AaiWI=";
+  vendorHash = "sha256-1NfeFw8v6F00CZe8a3qdk/TrUBNi2wr9PvwIsZzkDSk=";
 
   buildInputs = [
     libpcap
