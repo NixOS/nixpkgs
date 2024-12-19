@@ -1,8 +1,10 @@
 {
   lib,
   stdenv,
-  buildGoModule,
-  buildNpmPackage,
+  buildGoModule2,
+  fetchNpmDeps,
+  npmHooks,
+  nodejs,
   fetchFromGitHub,
   cacert,
   unzip,
@@ -20,14 +22,14 @@
   apple-sdk_11,
 }:
 
-buildGoModule rec {
+buildGoModule2 (finalAttrs: {
   pname = "gcs";
   version = "5.28.1";
 
   src = fetchFromGitHub {
     owner = "richardwilkes";
     repo = "gcs";
-    rev = "refs/tags/v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
 
     nativeBuildInputs = [
       cacert
@@ -46,33 +48,35 @@ buildGoModule rec {
     hash = "sha256-ArJ+GveG2Y1PYeCuIFJoQ3eVyqvAi4HEeAEd4X03yu4=";
   };
 
-  modPostBuild = ''
-    chmod +w vendor/github.com/richardwilkes/pdf
-    sed -i 's|-lmupdf[^ ]* |-lmupdf |g' vendor/github.com/richardwilkes/pdf/pdf.go
-  '';
-
-  vendorHash = "sha256-EmAGkQ+GHzVbSq/nPu0awL79jRmZuMHheBWwanfEgGI=";
-
-  frontend = buildNpmPackage {
-    name = "${pname}-${version}-frontend";
-
-    inherit src;
-    sourceRoot = "${src.name}/server/frontend";
-    npmDepsHash = "sha256-LqOH3jhp4Mx7JGYSjF29kVUny3xNn7oX0qCYi79SH4w=";
-
-    installPhase = ''
-      runHook preInstall
-      mkdir -p $out
-      cp -r dist $out/dist
-      runHook postInstall
+  overrideModAttrs = {
+    postBuild = ''
+      chmod +w vendor/github.com/richardwilkes/pdf
+      sed -i 's|-lmupdf[^ ]* |-lmupdf |g' vendor/github.com/richardwilkes/pdf/pdf.go
     '';
   };
 
-  postPatch = ''
-    cp -r ${frontend}/dist server/frontend/dist
-  '';
+  vendorHash = "sha256-EmAGkQ+GHzVbSq/nPu0awL79jRmZuMHheBWwanfEgGI=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    npmHooks.npmConfigHook
+    nodejs
+  ];
+
+  npmRoot = "server/frontend";
+
+  npmDeps = fetchNpmDeps {
+    name = "gcs-${finalAttrs.version}-frontend-npm-deps";
+    inherit (finalAttrs) src;
+    sourceRoot = "${finalAttrs.src.name}/${finalAttrs.npmRoot}";
+    hash = "sha256-LqOH3jhp4Mx7JGYSjF29kVUny3xNn7oX0qCYi79SH4w=";
+  };
+
+  preBuild = ''
+    pushd "$npmRoot"
+    npm run build
+    popd
+  '';
 
   buildInputs =
     [
@@ -98,7 +102,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/richardwilkes/toolbox/cmdline.AppVersion=${version}"
+    "-X github.com/richardwilkes/toolbox/cmdline.AppVersion=${finalAttrs.version}"
   ];
 
   installPhase = ''
@@ -108,7 +112,7 @@ buildGoModule rec {
   '';
 
   meta = {
-    changelog = "https://github.com/richardwilkes/gcs/releases/tag/v${version}";
+    changelog = "https://github.com/richardwilkes/gcs/releases/tag/v${finalAttrs.version}";
     description = "Stand-alone, interactive, character sheet editor for the GURPS 4th Edition roleplaying game system";
     homepage = "https://gurpscharactersheet.com/";
     license = lib.licenses.mpl20;
@@ -118,4 +122,4 @@ buildGoModule rec {
     # incompatible vendor/github.com/richardwilkes/unison/internal/skia/libskia_linux.a
     broken = stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64;
   };
-}
+})

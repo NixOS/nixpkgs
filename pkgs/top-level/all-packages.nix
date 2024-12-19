@@ -11230,6 +11230,14 @@ with pkgs;
     go = buildPackages.go_1_23;
   };
 
+  fetchGoModVendor = callPackage ../build-support/go/vendor.nix {
+    go = buildPackages.go;
+  };
+
+  buildGoModule2 = callPackage ../build-support/go/module2.nix {
+    go = buildPackages.go;
+  };
+
   ### DEVELOPMENT / HARE
 
   hareHook = callPackage ../by-name/ha/hare/hook.nix { };
