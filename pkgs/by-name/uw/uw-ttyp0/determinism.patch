@@ -1,0 +1,13 @@
+diff --git a/Makefile.in b/Makefile.in
+index b9736cd..5740412 100644
+--- a/Makefile.in
++++ b/Makefile.in
+@@ -76,7 +76,7 @@ bdf : $(bdf)
+ 
+ genpcf/%.pcf.gz : genbdf/%.bdf
+ 	$(BDFTOPCF) $< > $(@:.pcf.gz=.pcf)
+-	gzip -9 -f $(@:.pcf.gz=.pcf)
++	gzip -n -9 -f $(@:.pcf.gz=.pcf)
+ 
+ genbdf/t0-11-uni.bdf : bdf/t0-11.bdf bdf/t0-12.bdf VARIANTS.dat mgl/unicode.mgl
+ 	$(MKSHALLOW) bdf/t0-12.bdf | cat - bdf/t0-11.bdf | $(BDFMANGLE) - VARIANTS.dat mgl/unicode.mgl > $@

@@ -1,0 +1,31 @@
+From 8823e48b055b7e574c08069048ba21ffa4393699 Mon Sep 17 00:00:00 2001
+From: Daniel Fullmer <danielrf12@gmail.com>
+Date: Fri, 21 Feb 2020 21:52:00 -0500
+Subject: [PATCH] Don't use file timestamp in cache filename
+
+Every file in the nix store has a timestamp of "1", meaning that the
+filename would remain constant even when changing zoneminder versions.
+This would mean that newer versions would use the existing symlink to an
+older version of the source file.  We replace SRC_HASH in nix with a
+hash of the source used to build zoneminder to ensure this filename is
+unique.
+---
+ web/includes/functions.php | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/web/includes/functions.php b/web/includes/functions.php
+index 89d2cc8ad..52cbb6f38 100644
+--- a/web/includes/functions.php
++++ b/web/includes/functions.php
+@@ -1941,7 +1941,8 @@ function cache_bust($file) {
+   $parts = pathinfo($file);
+   global $css;
+   $dirname = str_replace('/', '_', $parts['dirname']);
+-  $cacheFile = $dirname.'_'.$parts['filename'].'-'.$css.'-'.filemtime($file).'.'.$parts['extension'];
++  $srcHash = '@srcHash@';
++  $cacheFile = $dirname.'_'.$parts['filename'].'-'.$css.'-'.$srcHash.'.'.$parts['extension'];
+   if ( file_exists(ZM_DIR_CACHE.'/'.$cacheFile) or symlink(ZM_PATH_WEB.'/'.$file, ZM_DIR_CACHE.'/'.$cacheFile) ) {
+     return 'cache/'.$cacheFile;
+   } else {
+-- 
+2.32.0
