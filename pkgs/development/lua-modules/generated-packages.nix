@@ -387,6 +387,30 @@ buildLuarocksPackage {
   };
 }) {};
 
+datafile = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl, luaOlder }:
+buildLuarocksPackage {
+  pname = "datafile";
+  version = "0.10-1";
+  knownRockspec = (fetchurl {
+    url    = "mirror://luarocks/datafile-0.10-1.rockspec";
+    sha256 = "0qj9m5qv84rqg9k981bnsvrbnmd1d6zqvl30471w0bx5w88zidyk";
+  }).outPath;
+  src = fetchFromGitHub {
+    owner = "hishamhm";
+    repo = "datafile";
+    rev = "v0.10";
+    hash = "sha256-l0jrSHkcvAeF5/HUXIV0wGLmmTNINXsQ05EjT/YFgw4=";
+  };
+
+  disabled = luaOlder "5.1";
+
+  meta = {
+    homepage = "http://github.com/hishamhm/datafile";
+    description = "A library for handling paths when loading data files";
+    license.fullName = "MIT/X11";
+  };
+}) {};
+
 digestif = callPackage({ buildLuarocksPackage, fetchFromGitHub, fetchurl, lpeg, luaOlder, luafilesystem }:
 buildLuarocksPackage {
   pname = "digestif";
