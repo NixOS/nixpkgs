@@ -21,7 +21,7 @@ buildDotnetModule rec {
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   projectFile = "Scarab/Scarab.csproj";
   testProjectFile = "Scarab.Tests/Scarab.Tests.csproj";
   executables = [ "Scarab" ];

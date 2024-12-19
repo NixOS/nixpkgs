@@ -22,7 +22,7 @@ buildDotnetModule rec {
   };
 
   projectFile = "NAPS2.App.Gtk/NAPS2.App.Gtk.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   executables = [ "naps2" ];
 

@@ -30,7 +30,7 @@ buildGoModule rec {
 
   # require network/login
   doCheck = false;
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   postInstall = ''
     install -dm755 $out/helm-dt/bin

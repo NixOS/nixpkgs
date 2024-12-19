@@ -22,7 +22,7 @@ buildGoModule rec {
   proxyVendor = true; # darwin/linux hash mismatch
   vendorHash = "sha256-YwFq0KxUctU3ElZBo/b68pyp4lJnFGL9ClKIwUzdngM=";
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   ldflags = [
     "-s"

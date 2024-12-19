@@ -142,7 +142,7 @@ buildDotnetModule (finalAttrs: {
     "src/Runner.Sdk/Runner.Sdk.csproj"
     "src/Runner.Plugins/Runner.Plugins.csproj"
   ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   doCheck = true;
 

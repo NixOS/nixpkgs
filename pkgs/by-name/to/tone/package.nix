@@ -20,7 +20,7 @@ buildDotnetModule rec {
 
   projectFile = "tone/tone.csproj";
   executables = [ "tone" ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   dotnetInstallFlags = [
     "-p:PublishSingleFile=false"

@@ -2,7 +2,6 @@
   lib,
   buildPythonPackage,
   pythonAtLeast,
-  fetchpatch,
   meson,
   ninja,
   pkg-config,
@@ -64,12 +63,6 @@ buildPythonPackage {
   patches = [
     # Add multicharge to the meson deps; otherwise we get missing mod_multicharge errors
     ./0001-fix-multicharge-dep-needed-for-static-compilation.patch
-
-    # Toml-f 0.4.0 compatibility https://github.com/tblite/tblite/pull/108
-    (fetchpatch {
-      url = "https://github.com/tblite/tblite/commit/e4255519b58a5198a5fa8f3073bef1c78a4bbdbe.diff";
-      hash = "sha256-BMwYsdWfK+vG3BFgzusLYfwo0WXrYSPxJoEJIyOvbPg=";
-    })
   ];
 
   format = "other";

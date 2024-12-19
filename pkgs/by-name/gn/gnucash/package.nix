@@ -30,12 +30,12 @@
 
 stdenv.mkDerivation rec {
   pname = "gnucash";
-  version = "5.9";
+  version = "5.10";
 
   # raw source code doesn't work out of box; fetchFromGitHub not usable
   src = fetchurl {
     url = "https://github.com/Gnucash/gnucash/releases/download/${version}/gnucash-${version}.tar.bz2";
-    hash = "sha256-W+LlNk/DZGT8Msdo4qtGCmMPdNtq631EJm49q5giL9A=";
+    hash = "sha256-eJ2fNpjuW4ZyAnmjo+EOd0QhDhLFJa5/A9MvpwQHrZM=";
   };
 
   nativeBuildInputs = [
@@ -80,12 +80,6 @@ stdenv.mkDerivation rec {
     ./0003-remove-valgrind.patch
     # this patch makes gnucash exec the Finance::Quote wrapper directly
     ./0004-exec-fq-wrapper.patch
-    # this patch fixes gnucah-cli -Q dump, remove on next release
-    (fetchpatch2 {
-      name = "0005-fix-quote-report.patch";
-      url = "https://github.com/Gnucash/gnucash/commit/711554ecd5505004aee4808519d9d8e4e4ed7c9a.patch?full_index=1";
-      hash = "sha256-uRaUdSJu2LnYVp/3DqrK0rTnCpr7oZRtrgTPbKAHThk=";
-    })
   ];
 
   # this needs to be an environment variable and not a cmake flag to suppress

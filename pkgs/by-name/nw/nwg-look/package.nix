@@ -40,7 +40,7 @@ buildGoModule rec {
     gtk3
   ];
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   postInstall = ''
     mkdir -p $out/share

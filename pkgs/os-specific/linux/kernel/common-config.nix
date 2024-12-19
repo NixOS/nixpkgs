@@ -1328,6 +1328,17 @@ let
 
             # Enable LEDS to display link-state status of PHY devices (i.e. eth lan/wan interfaces)
             LED_TRIGGER_PHY = yes;
+
+            # Required for various hardware features on Chrome OS devices
+            CHROME_PLATFORMS = yes;
+            CHROMEOS_TBMC = module;
+            CROS_EC = module;
+            CROS_EC_I2C = module;
+            CROS_EC_SPI = module;
+            CROS_EC_LPC = module;
+            CROS_EC_ISHTP = module;
+            CROS_KBD_LED_BACKLIGHT = module;
+            TCG_TIS_SPI_CR50 = whenAtLeast "5.5" yes;
           }
       //
         lib.optionalAttrs
@@ -1380,25 +1391,6 @@ let
             # this instruction is required to build a native armv7 nodejs on an
             # aarch64-linux builder, for example
             CP15_BARRIER_EMULATION = lib.mkIf (stdenv.hostPlatform.system == "aarch64-linux") yes;
-          }
-      //
-        lib.optionalAttrs
-          (stdenv.hostPlatform.system == "x86_64-linux" || stdenv.hostPlatform.system == "aarch64-linux")
-          {
-            # Required for various hardware features on Chrome OS devices
-            CHROME_PLATFORMS = yes;
-            CHROMEOS_TBMC = module;
-
-            CROS_EC = module;
-
-            CROS_EC_I2C = module;
-            CROS_EC_SPI = module;
-            CROS_EC_LPC = module;
-            CROS_EC_ISHTP = module;
-
-            CROS_KBD_LED_BACKLIGHT = module;
-
-            TCG_TIS_SPI_CR50 = whenAtLeast "5.5" yes;
           }
       // lib.optionalAttrs (stdenv.hostPlatform.system == "x86_64-linux") {
         CHROMEOS_LAPTOP = module;
