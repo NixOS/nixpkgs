@@ -7,7 +7,7 @@ latest_linux_version=$(curl -L --silent https://slack.com/downloads/linux | sed 
 latest_mac_version=$(curl -L --silent https://slack.com/downloads/mac | sed -n 's/.*Version \([0-9\.]\+\).*/\1/p')
 
 nixpkgs="$(git rev-parse --show-toplevel)"
-slack_nix="$nixpkgs/pkgs/applications/networking/instant-messengers/slack/default.nix"
+slack_nix="$nixpkgs/pkgs/by-name/sl/slack/package.nix"
 nixpkgs_linux_version=$(cat "$slack_nix" | sed -n 's/.*x86_64-linux-version = \"\([0-9\.]\+\)\";.*/\1/p')
 nixpkgs_mac_version=$(cat "$slack_nix" | sed -n 's/.*x86_64-darwin-version = \"\([0-9\.]\+\)\";.*/\1/p')
 nixpkgs_mac_arm_version=$(cat "$slack_nix" | sed -n 's/.*aarch64-darwin-version = \"\([0-9\.]\+\)\";.*/\1/p')
