@@ -43,6 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     # libc++abi 11 has an `#include <version>`, this picks up files name
     # `version` in the project's include paths
     ./rename-version.patch
+    ./static.patch
   ];
 
   postPatch = ''
