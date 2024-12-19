@@ -29,7 +29,7 @@ stdenvNoCC.mkDerivation {
   '';
 
   meta = with lib; {
-    description = "A slightly better history for zsh";
+    description = "Slightly better history for zsh";
     homepage = "https://github.com/larkery/zsh-histdb";
     license = licenses.mit;
     maintainers = with maintainers; [ luochen1990 ];
