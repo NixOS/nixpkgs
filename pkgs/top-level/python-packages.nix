@@ -10293,6 +10293,8 @@ self: super: with self; {
 
   pick = callPackage ../development/python-modules/pick { };
 
+  pickpack = callPackage ../development/python-modules/pickpack { };
+
   pickleshare = callPackage ../development/python-modules/pickleshare { };
 
   picobox = callPackage ../development/python-modules/picobox { };
