@@ -19,7 +19,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/kbld" ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-X=carvel.dev/kbld/pkg/kbld/version.Version=${version}"

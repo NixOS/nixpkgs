@@ -23,7 +23,7 @@ buildGoModule rec {
     "-X github.com/bitrise-io/bitrise/version.Commit=${src.rev}"
     "-X github.com/bitrise-io/bitrise/version.BuildNumber=0"
   ];
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   passthru.updateScript = nix-update-script { };
 

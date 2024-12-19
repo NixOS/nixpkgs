@@ -22,7 +22,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-X 'github.com/lintingzhen/commitizen-go/cmd.revision=${commit_revision}'"

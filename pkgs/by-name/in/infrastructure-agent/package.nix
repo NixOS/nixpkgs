@@ -24,7 +24,7 @@ buildGoModule rec {
     "-X main.gitCommit=${src.rev}"
   ];
 
-  CGO_ENABLED = if stdenv.hostPlatform.isDarwin then "1" else "0";
+  env.CGO_ENABLED = if stdenv.hostPlatform.isDarwin then "1" else "0";
 
   subPackages = [
     "cmd/newrelic-infra"

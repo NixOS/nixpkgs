@@ -1,7 +1,9 @@
 { grafana-loki }:
 
-grafana-loki.overrideAttrs (o: {
+grafana-loki.overrideAttrs (previousAttrs: {
   pname = "promtail";
   subPackages = [ "clients/cmd/promtail" ];
-  CGO_ENABLED = 1;
+  env = previousAttrs.env or { } // {
+    CGO_ENABLED = 1;
+  };
 })
