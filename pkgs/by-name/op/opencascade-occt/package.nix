@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchurl
+, fetchpatch
 , cmake
 , ninja
 , tcl
@@ -23,6 +24,15 @@ stdenv.mkDerivation rec {
     url = "https://git.dev.opencascade.org/gitweb/?p=occt.git;a=snapshot;h=${commit};sf=tgz";
     hash = "sha256-AGMZqTLLjXbzJFW/RSTsohAGV8sMxlUmdU/Y2oOzkk8=";
   };
+
+  patches = [
+    # fix compilation on darwin against latest version of freetype
+    # https://gitlab.freedesktop.org/freetype/freetype/-/merge_requests/330
+    (fetchpatch {
+      url = "https://github.com/Open-Cascade-SAS/OCCT/commit/7236e83dcc1e7284e66dc61e612154617ef715d6.diff";
+      hash = "sha256-NoC2mE3DG78Y0c9UWonx1vmXoU4g5XxFUT3eVXqLU60=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
