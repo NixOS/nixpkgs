@@ -32,7 +32,7 @@ buildGoModule rec {
 
     # disable binary-only rpi camera support
     substituteInPlace internal/staticsources/rpicamera/camera_disabled.go \
-      --replace-fail '!linux || (!arm && !arm64)' 'linux'
+      --replace-fail '!linux || (!arm && !arm64)' 'linux || !linux'
     substituteInPlace internal/staticsources/rpicamera/{component,camera,params_serialize,pipe}.go \
       --replace-fail '(linux && arm) || (linux && arm64)' 'linux && !linux'
     substituteInPlace internal/staticsources/rpicamera/component_32.go \
