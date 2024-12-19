@@ -1,0 +1,171 @@
+diff --git a/src/core/nm-firewall-utils.c b/src/core/nm-firewall-utils.c
+index b6b2b0d721..bc1ad8996e 100644
+--- a/src/core/nm-firewall-utils.c
++++ b/src/core/nm-firewall-utils.c
+@@ -13,12 +13,14 @@
+ #include "libnm-platform/nm-platform.h"
+ 
+ #include "nm-config.h"
++#include "nm-utils.h"
+ #include "NetworkManagerUtils.h"
+ 
+ /*****************************************************************************/
+ 
+-static const struct {
++static struct {
+     const char *name;
++    const char *binary;
+     const char *path;
+ } FirewallBackends[] = {
+     [NM_FIREWALL_BACKEND_NONE - 1] =
+@@ -28,11 +30,13 @@ static const struct {
+     [NM_FIREWALL_BACKEND_NFTABLES - 1] =
+         {
+             .name = "nftables",
++            .binary = "nft",
+             .path = NFT_PATH,
+         },
+     [NM_FIREWALL_BACKEND_IPTABLES - 1] =
+         {
+             .name = "iptables",
++            .binary = "iptables",
+             .path = IPTABLES_PATH,
+         },
+ };
+@@ -213,7 +217,7 @@ _share_iptables_call_v(const char *const *argv)
+ }
+ 
+ #define _share_iptables_call(...) \
+-    _share_iptables_call_v(NM_MAKE_STRV("" IPTABLES_PATH "", "--wait", "2", __VA_ARGS__))
++    _share_iptables_call_v(NM_MAKE_STRV(FirewallBackends[NM_FIREWALL_BACKEND_IPTABLES-1].path, "--wait", "2", __VA_ARGS__))
+ 
+ static gboolean
+ _share_iptables_chain_op(const char *table, const char *chain, const char *op)
+@@ -598,7 +602,7 @@ nm_firewall_nft_call(GBytes             *stdin_buf,
+     g_subprocess_launcher_set_environ(subprocess_launcher, NM_STRV_EMPTY());
+ 
+     call_data->subprocess = g_subprocess_launcher_spawnv(subprocess_launcher,
+-                                                         NM_MAKE_STRV(NFT_PATH, "-f", "-"),
++                                                         NM_MAKE_STRV(FirewallBackends[NM_FIREWALL_BACKEND_NFTABLES-1].path, "-f", "-"),
+                                                          &error);
+ 
+     if (!call_data->subprocess) {
+@@ -1013,9 +1017,9 @@ nm_firewall_config_apply_sync(NMFirewallConfig *self, gboolean up)
+ static NMFirewallBackend
+ _firewall_backend_detect(void)
+ {
+-    if (g_file_test(NFT_PATH, G_FILE_TEST_IS_EXECUTABLE))
++    if (nm_utils_find_helper(FirewallBackends[NM_FIREWALL_BACKEND_NFTABLES - 1].binary, NULL, NULL) != NULL)
+         return NM_FIREWALL_BACKEND_NFTABLES;
+-    if (g_file_test(IPTABLES_PATH, G_FILE_TEST_IS_EXECUTABLE))
++    if (nm_utils_find_helper(FirewallBackends[NM_FIREWALL_BACKEND_IPTABLES - 1].binary, NULL, NULL) != NULL)
+         return NM_FIREWALL_BACKEND_IPTABLES;
+ 
+     return NM_FIREWALL_BACKEND_NFTABLES;
+@@ -1030,9 +1034,10 @@ nm_firewall_utils_get_backend(void)
+ again:
+     b = g_atomic_int_get(&backend);
+     if (b == NM_FIREWALL_BACKEND_UNKNOWN) {
+-        gs_free char *conf_value = NULL;
+-        gboolean      detect;
+-        int           i;
++        gs_free char    *conf_value = NULL;
++        gboolean        detect;
++        const char      *path_value = NULL;
++        int             i;
+ 
+         conf_value =
+             nm_config_data_get_value(NM_CONFIG_GET_DATA_ORIG,
+@@ -1053,6 +1058,19 @@ again:
+         if (detect)
+             b = _firewall_backend_detect();
+ 
++        nm_log_dbg(LOGD_SHARING, "firewall: trying to find %s (%s) backend.",
++                   FirewallBackends[b - 1].name, FirewallBackends[b - 1].binary);
++
++        path_value = nm_utils_find_helper(FirewallBackends[b - 1].binary,
++                                         NULL,
++                                         NULL);
++
++        if (path_value == NULL) {
++            g_atomic_int_set(&backend, NM_FIREWALL_BACKEND_NONE);
++        } else {
++            FirewallBackends[b - 1].path = path_value;
++        }
++
+         nm_assert(NM_IN_SET(b,
+                             NM_FIREWALL_BACKEND_NONE,
+                             NM_FIREWALL_BACKEND_IPTABLES,
+@@ -1062,18 +1080,12 @@ again:
+             goto again;
+ 
+         nm_log_dbg(LOGD_SHARING,
+-                   "firewall: use %s backend%s%s%s%s%s%s%s",
++                   "firewall: use %s backend%s%s%s",
+                    FirewallBackends[b - 1].name,
+                    NM_PRINT_FMT_QUOTED(FirewallBackends[b - 1].path,
+                                        " (",
+                                        FirewallBackends[b - 1].path,
+                                        ")",
+-                                       ""),
+-                   detect ? " (detected)" : "",
+-                   NM_PRINT_FMT_QUOTED(detect && conf_value,
+-                                       " (invalid setting \"",
+-                                       conf_value,
+-                                       "\")",
+                                        ""));
+     }
+ 
+diff --git a/src/libnm-core-impl/nm-utils.c b/src/libnm-core-impl/nm-utils.c
+index 06a96318ab..cda89ba96a 100644
+--- a/src/libnm-core-impl/nm-utils.c
++++ b/src/libnm-core-impl/nm-utils.c
+@@ -3647,10 +3647,31 @@ nm_utils_file_search_in_paths(const char                       *progname,
+                               gpointer                          user_data,
+                               GError                          **error)
+ {
++    const char          *path_env  = NULL;
++    gs_free const char **env_paths = NULL;
++    gs_free const char **all_paths = NULL;
++    size_t               paths_len;
++    size_t               env_paths_len;
++    guint                i;
++
+     g_return_val_if_fail(!error || !*error, NULL);
+     g_return_val_if_fail(progname && progname[0] && !strchr(progname, '/'), NULL);
+     g_return_val_if_fail(file_test_flags || predicate, NULL);
+ 
++    path_env  = g_getenv("PATH");
++    env_paths = nm_strsplit_set_full(path_env, ":", NM_STRSPLIT_SET_FLAGS_STRSTRIP);
++
++    paths_len     = g_strv_length((char **) paths);
++    env_paths_len = g_strv_length((char **) env_paths);
++
++    all_paths = g_new(const char *, (env_paths_len + paths_len + 1));
++
++    for (i = 0; i < env_paths_len; i++)
++        all_paths[i] = env_paths[i];
++    for (i = 0; i < paths_len; i++)
++        all_paths[env_paths_len + i] = paths[i];
++    all_paths[env_paths_len + i] = NULL;
++
+     /* Only consider @try_first if it is a valid, absolute path. This makes
+      * it simpler to pass in a path from configure checks. */
+     if (try_first && try_first[0] == '/'
+@@ -3658,12 +3679,13 @@ nm_utils_file_search_in_paths(const char                       *progname,
+         && (!predicate || predicate(try_first, user_data)))
+         return g_intern_string(try_first);
+ 
+-    if (paths && paths[0]) {
++    if (all_paths && all_paths[0]) {
+         nm_auto_str_buf NMStrBuf strbuf =
+             NM_STR_BUF_INIT(NM_UTILS_GET_NEXT_REALLOC_SIZE_104, FALSE);
++        const char **ptr = all_paths;
+ 
+-        for (; *paths; paths++) {
+-            const char *path = *paths;
++        for (; *ptr; ptr++) {
++            const char *path = *ptr;
+             const char *s;
+ 
+             if (!path[0])

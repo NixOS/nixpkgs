@@ -10,13 +10,9 @@
 , polkit
 , gnutls
 , ppp
-, dhcpcd
-, iptables
-, nftables
 , python3
 , vala
 , libgcrypt
-, dnsmasq
 , bluez5
 , readline
 , libselinux
@@ -30,7 +26,6 @@
 , libsoup_2_4
 , ethtool
 , gnused
-, iputils
 , kmod
 , jansson
 , elfutils
@@ -40,7 +35,6 @@
 , docbook_xml_dtd_412
 , docbook_xml_dtd_42
 , docbook_xml_dtd_43
-, openconnect
 , curl
 , meson
 , mesonEmulatorHook
@@ -53,6 +47,7 @@
 , systemd
 , udev
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd
+, withModemManager ? true
 }:
 
 let
@@ -93,12 +88,8 @@ stdenv.mkDerivation rec {
     # Features
     # Allow using iwd when configured to do so
     "-Diwd=true"
-    "-Dpppd=${ppp}/bin/pppd"
-    "-Diptables=${iptables}/bin/iptables"
-    "-Dnft=${nftables}/bin/nft"
-    "-Dmodem_manager=true"
+    (lib.mesonBool "modem_manager" withModemManager)
     "-Dnmtui=true"
-    "-Ddnsmasq=${dnsmasq}/bin/dnsmasq"
     "-Dqt=false"
 
     # Handlers
@@ -107,7 +98,6 @@ stdenv.mkDerivation rec {
     # DHCP clients
     # ISC DHCP client has reached it's end of life, so stop using it
     "-Ddhclient=no"
-    "-Ddhcpcd=${dhcpcd}/bin/dhcpcd"
     "-Ddhcpcanon=no"
 
     # Miscellaneous
@@ -124,9 +114,13 @@ stdenv.mkDerivation rec {
   patches = [
     (substituteAll {
       src = ./fix-paths.patch;
-      inherit iputils openconnect ethtool gnused systemd;
+      inherit ethtool gnused;
       inherit runtimeShell;
     })
+
+    # Enables searching for needed binaries in PATH instead of hard-coding
+    # binary locations at runtime.
+    ./env-paths.patch
 
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
@@ -146,15 +140,15 @@ stdenv.mkDerivation rec {
     ppp
     libndp
     curl
-    mobile-broadband-provider-info
-    bluez5
-    dnsmasq
-    modemmanager
     readline
     newt
     libsoup_2_4
     jansson
     dbus # used to get directory paths with pkg-config during configuration
+  ] ++ lib.optionals withModemManager [
+    mobile-broadband-provider-info
+    bluez5
+    modemmanager
   ];
 
   propagatedBuildInputs = [ gnutls libgcrypt ];
