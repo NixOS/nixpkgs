@@ -307,7 +307,7 @@ import ../make-test-python.nix (
         ) "" initVariants
       )
       + lib.optionalString canTestVm (
-        lib.foldl (
+        (lib.foldl (
           acc: variant:
           acc
           # python
@@ -362,7 +362,17 @@ import ../make-test-python.nix (
 
             cleanup()
           ''
-        ) "" initVariants
+        ) "" initVariants)
+        +
+          # python
+          ''
+            with subtest("Can launch CSM virtual machine"):
+                machine.succeed("incus init csm --vm --empty -c security.csm=true -c security.secureboot=false")
+                machine.succeed("incus start csm")
+
+
+            cleanup()
+          ''
       )
       +
         lib.optionalString featureUser # python
