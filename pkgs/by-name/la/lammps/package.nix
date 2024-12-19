@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  cudaPackages,
   fetchFromGitHub,
   libpng,
   gzip,
@@ -44,9 +45,27 @@
   extraCmakeFlags ? { },
   # Extra `buildInputs` - meant for packages that require more inputs
   extraBuildInputs ? [ ],
+  # If false, the `stdenv` argument will be used no matter what is the state of
+  # extraCmakeFlags.GPU_API or config.cudaSupport . See logic for stdenv' below.
+  overrideStdenv ? true,
+# NOTE we intentionally don't support a general purpose `config.cudaSupport`
+# flag (that can be set globally for a Nixpkgs evaluation), as it makes the
+# logic of `buildInputs` and `cmakeFlags` too complicated.
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+let
+  # Ease adding CUDA support. See:
+  # https://github.com/lammps/lammps/issues/4420
+  stdenv' =
+    # Technically this is needed only if packages.GPU is true, but there is no
+    # reason for anyone to not set it if they don't also set
+    # extraCmakeFlags.GPU_API to `"cuda"`.
+    if overrideStdenv && (extraCmakeFlags.GPU_API or "opencl") == "cuda" then
+      cudaPackages.backendStdenv
+    else
+      stdenv;
+in
+stdenv'.mkDerivation (finalAttrs: {
   # LAMMPS has weird versioning convention. Updates should go smoothly with:
   # nix-update --commit lammps --version-regex 'stable_(.*)'
   version = "29Aug2024_update1";
