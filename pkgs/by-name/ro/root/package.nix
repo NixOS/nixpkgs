@@ -56,7 +56,7 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.34.00";
+  version = "6.34.02";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -64,7 +64,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-87APPblTgpyEkCnDnXZgqVZGivJH79lG6JByEBeWqwM=";
+    hash = "sha256-FmvsVi5CDhd6rzEz+j+wn4Ls3avoouGQY0W61EJRP5Q=";
   };
 
   clad_src = fetchgit {
