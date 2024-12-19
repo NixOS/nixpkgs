@@ -33,25 +33,28 @@ stdenv.mkDerivation (finalAttrs: {
   # redact configure flags from version output to reduce closure size
   patches = [ ./version.patch ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [
-    boost
-    mariadb-connector-c
-    postgresql
-    lua
-    openldap
-    sqlite
-    protobuf
-    geoip
-    yaml-cpp
-    libsodium
-    curl
-    unixODBC
-    openssl
-    systemd
-    lmdb
-    tinycdb
-  ];
+  buildInputs =
+    [
+      boost
+      mariadb-connector-c
+      postgresql
+      lua
+      openldap
+      sqlite
+      protobuf
+      geoip
+      yaml-cpp
+      libsodium
+      curl
+      unixODBC
+      openssl
+      lmdb
+    ]
+    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform systemd) systemd
+    ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform tinycdb) tinycdb;
 
   configureFlags = [
     (lib.enableFeature stdenv.hostPlatform.is32bit "experimental-64bit-time_t-support-on-glibc")
@@ -61,26 +64,29 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.enableFeature true "reproducible")
     (lib.enableFeature true "tools")
     (lib.enableFeature true "ixfrdist")
-    (lib.enableFeature true "systemd")
+    (lib.enableFeature (lib.meta.availableOn stdenv.hostPlatform systemd) "systemd")
     (lib.withFeature true "libsodium")
     (lib.withFeature true "sqlite3")
     (lib.withFeatureAs true "libcrypto" (lib.getDev openssl))
     (lib.withFeatureAs true "modules" "")
     (lib.withFeatureAs true "dynmodules" (
-      lib.concatStringsSep " " [
-        "bind"
-        "geoip"
-        "gmysql"
-        "godbc"
-        "gpgsql"
-        "gsqlite3"
-        "ldap"
-        "lmdb"
-        "lua2"
-        "pipe"
-        "remote"
-        "tinydns"
-      ]
+      lib.concatStringsSep " " (
+        [
+          "bind"
+          "geoip"
+          "gmysql"
+          "godbc"
+          "gpgsql"
+          "gsqlite3"
+          "ldap"
+          "lmdb"
+          "lua2"
+          "pipe"
+          "remote"
+        ]
+        # tinydns only compiles on Linux because of a required dependency.
+        ++ lib.optional (lib.meta.availableOn stdenv.hostPlatform tinycdb) "tinydns"
+      )
     ))
     "sysconfdir=/etc/pdns"
   ];
@@ -103,7 +109,6 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Authoritative DNS server";
     homepage = "https://www.powerdns.com";
     platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
     license = licenses.gpl2Only;
     maintainers = with maintainers; [
       mic92
