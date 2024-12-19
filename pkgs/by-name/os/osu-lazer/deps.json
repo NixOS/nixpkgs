@@ -651,8 +651,8 @@
   },
   {
     "pname": "ppy.osu.Game.Resources",
-    "version": "2024.1202.0",
-    "hash": "sha256-OwsEEF4WSH7HQ5HOl3EB36RJ19stn966DtmfnOtpBJk="
+    "version": "2024.1219.1",
+    "hash": "sha256-KyZeNkTissfZAusvWYUdZ3+YujrcTfkZDyzt99i4fkg="
   },
   {
     "pname": "ppy.osuTK.NS20",
