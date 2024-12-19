@@ -8569,6 +8569,8 @@ self: super: with self; {
 
   myfitnesspal = callPackage ../development/python-modules/myfitnesspal { };
 
+  mygene = callPackage ../development/python-modules/mygene { };
+
   mygpoclient = callPackage ../development/python-modules/mygpoclient { };
 
   myhdl = callPackage ../development/python-modules/myhdl {
