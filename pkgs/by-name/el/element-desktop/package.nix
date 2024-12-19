@@ -13,7 +13,6 @@
   element-web,
   sqlcipher,
   callPackage,
-  darwin,
   desktopToDarwinBundle,
   useKeytar ? true,
   # command line arguments which are always set
@@ -24,8 +23,8 @@ let
   pinData = import ./element-desktop-pin.nix;
   inherit (pinData.hashes) desktopSrcHash desktopYarnHash;
   executableName = "element-desktop";
-  keytar = callPackage ./keytar { inherit (darwin.apple_sdk.frameworks) Security AppKit; };
-  seshat = callPackage ./seshat { inherit (darwin.apple_sdk.frameworks) CoreServices; };
+  keytar = callPackage ./keytar { };
+  seshat = callPackage ./seshat { };
   electron = electron_33;
 in
 stdenv.mkDerivation (
