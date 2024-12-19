@@ -329,20 +329,6 @@ let
       };
   };
 
-  lldbPlugins = lib.makeExtensible (
-    lldbPlugins:
-    let
-      callPackage = newScope (
-        lldbPlugins
-        // {
-          inherit stdenv;
-          inherit (tools) lldb;
-        }
-      );
-    in
-    lib.recurseIntoAttrs { llef = callPackage ./lldb-plugins/llef.nix { }; }
-  );
-
   tools = lib.makeExtensible (
     tools:
     let
@@ -667,6 +653,14 @@ let
             }
           );
       };
+
+      lldbPlugins = lib.makeExtensible (
+        lldbPlugins:
+        let
+          callPackage = newScope ( lldbPlugins // tools // args // metadata );
+        in
+        lib.recurseIntoAttrs { llef = callPackage ./lldb-plugins/llef.nix { }; }
+      );
 
       lldb = callPackage ./lldb.nix (
         {
@@ -1224,7 +1218,7 @@ let
   noExtend = extensible: lib.attrsets.removeAttrs extensible [ "extend" ];
 in
 {
-  inherit tools libraries lldbPlugins;
+  inherit tools libraries;
   inherit (metadata) release_version;
 }
 // (noExtend libraries)
