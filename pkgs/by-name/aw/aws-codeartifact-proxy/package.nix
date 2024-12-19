@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "aws-codeartifact-proxy";
-  version = "0.5.1";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "sktan";
     repo = "aws-codeartifact-proxy";
     rev = "v${version}";
-    hash = "sha256-289iYPI8J64nRa0PTf47/FQAEqA+rTzalz6S71vFLzs=";
+    hash = "sha256-+P0AIg5m7nePy+Yd445nVfLVxya80Om9lJTPKZeTshc=";
   };
   sourceRoot = "${src.name}/src";
 
