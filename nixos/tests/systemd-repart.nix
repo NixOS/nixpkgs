@@ -22,7 +22,7 @@ let
     shutil.copyfile("${machine.system.build.diskImage}/nixos.img", tmp_disk_image.name)
 
     subprocess.run([
-      "${machine.config.virtualisation.qemu.package}/bin/qemu-img",
+      "${machine.virtualisation.qemu.package}/bin/qemu-img",
       "resize",
       "-f",
       "raw",
