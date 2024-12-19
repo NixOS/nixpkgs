@@ -14,9 +14,9 @@
 }:
 stdenv.mkDerivation (self: {
   pname = "srm-cuarzo";
-  version = "0.10.0-1";
+  version = "0.11.0-1";
   rev = "v${self.version}";
-  hash = "sha256-qkJVVoGU07wwcPsrIJi1gkl0uJaZM42kAX8PFQ68HDM=";
+  hash = "sha256-9fs29Us2/Z6d4u0XHKaFUrjxuSDcp9zj+cyIlhAn0Eg=";
 
   src = fetchFromGitHub {
     inherit (self) rev hash;
