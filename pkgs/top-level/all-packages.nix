@@ -3524,7 +3524,7 @@ with pkgs;
   };
   dapl-native = callPackage ../development/interpreters/dzaima-apl {
     buildNativeImage = true;
-    jdk = graalvm-ce;
+    jdk = graalvmPackages.graalvm-ce;
   };
 
   gnucap-full = gnucap.withPlugins(p: [ p.verilog ]);
@@ -6521,10 +6521,9 @@ with pkgs;
   openjdk = jdk;
   openjdk_headless = jdk_headless;
 
-  graalvmCEPackages = recurseIntoAttrs (callPackage ../development/compilers/graalvm/community-edition { });
-  graalvm-ce = graalvmCEPackages.graalvm-ce;
+  graalvmPackages = recurseIntoAttrs (callPackage ../development/compilers/graalvm { });
   buildGraalvmNativeImage = (callPackage ../build-support/build-graalvm-native-image {
-    graalvmDrv = graalvm-ce;
+    graalvmDrv = graalvmPackages.graalvm-ce;
   }).override;
 
   openshot-qt = libsForQt5.callPackage ../applications/video/openshot-qt {
@@ -7158,7 +7157,7 @@ with pkgs;
 
   dbqn-native = dbqn.override {
     buildNativeImage = true;
-    jdk = graalvm-ce;
+    jdk = graalvmPackages.graalvm-ce;
   };
 
   cliscord = callPackage ../misc/cliscord {
