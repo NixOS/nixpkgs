@@ -40,6 +40,8 @@ let
 
       cubical = callPackage ../development/libraries/agda/cubical { };
 
+      cubical-mini = callPackage ../development/libraries/agda/cubical-mini { };
+
       functional-linear-algebra = callPackage ../development/libraries/agda/functional-linear-algebra { };
 
       generic = callPackage ../development/libraries/agda/generic { };
