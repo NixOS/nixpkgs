@@ -18,13 +18,13 @@
 
 flutter.buildFlutterApplication rec {
   pname = "flet-client-flutter";
-  version = "0.24.1";
+  version = "0.25.2";
 
   src = fetchFromGitHub {
     owner = "flet-dev";
     repo = "flet";
     rev = "v${version}";
-    hash = "sha256-cT1cWxMVpZ0fXoIaJpW96ifQKNe7+PLUXjIFJ3ALdyo=";
+    hash = "sha256-bD44MCRZPXB/xuw2vBCzNbRNSVgdc4GyyWg3F2adxKk=";
   };
 
   sourceRoot = "${src.name}/client";
