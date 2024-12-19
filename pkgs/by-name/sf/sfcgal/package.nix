@@ -29,7 +29,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ cmake ];
 
-  patches = [ ./cmake-fix.patch ];
+  patches = [
+    # https://gitlab.com/sfcgal/SFCGAL/-/merge_requests/384
+    ./cmake-fix.patch
+  ];
 
   meta = {
     description = "C++ wrapper library around CGAL with the aim of supporting ISO 191007:2013 and OGC Simple Features for 3D operations";
