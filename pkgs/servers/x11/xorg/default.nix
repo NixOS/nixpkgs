@@ -1818,11 +1818,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libxcvt = callPackage ({ stdenv, pkg-config, fetchurl, meson, ninja, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libxcvt";
-    version = "0.1.2";
+    version = "0.1.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libxcvt-0.1.2.tar.xz";
-      sha256 = "0f6vf47lay9y288n8yg9ckjgz5ypn2hnp03ipp7javkr8h2njq85";
+      url = "mirror://xorg/individual/lib/libxcvt-0.1.3.tar.xz";
+      sha256 = "009f8kr53cv7lzsg4507cgnk9vxyrm8lgnnn6vx7vpk7hy59jad9";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
