@@ -97,6 +97,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     updateScript = gnome.updateScript {
+      attrPath = "libsoup_2_4";
       packageName = pname;
       versionPolicy = "odd-unstable";
       freeze = true;
