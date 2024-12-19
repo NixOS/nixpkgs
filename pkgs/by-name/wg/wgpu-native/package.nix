@@ -12,6 +12,7 @@
 rustPlatform.buildRustPackage rec {
   pname = "wgpu-native";
   version = "22.1.0.5";
+  WGPU_NATIVE_VERSION = "v${version}";
 
   src = fetchFromGitHub {
     owner = "gfx-rs";
