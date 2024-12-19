@@ -35,7 +35,7 @@ stdenvNoCC.mkDerivation rec {
   };
 
   nativeBuildInputs = [ makeWrapper ];
-  runtimeDependencies =    
+  runtimeDependencies =
     let
       player = [ ] ++ lib.optional withMpv mpv ++ lib.optional withVlc vlc ++ lib.optional withIina iina;
     in
