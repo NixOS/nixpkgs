@@ -66,7 +66,6 @@
   name,
   buildInputs ? [ ],
   propagatedBuildInputs ? [ ],
-  gcc ? stdenv.cc,
   extraCmds ? "",
   cleanupCmds ? "",
   shell ? "${pkgs.bashInteractive}/bin/bash --norc",
@@ -80,9 +79,7 @@ mkDerivation {
     "buildPhase"
     "fixupPhase"
   ];
-  setupNew = replaceVars ../../stdenv/generic/setup.sh {
-    inherit gcc;
-  };
+  setupNew = ../../stdenv/generic/setup.sh;
 
   buildPhase =
     let
