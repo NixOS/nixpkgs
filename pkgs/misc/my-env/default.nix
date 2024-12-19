@@ -66,7 +66,6 @@
   name,
   buildInputs ? [ ],
   propagatedBuildInputs ? [ ],
-  gcc ? stdenv.cc,
   extraCmds ? "",
   cleanupCmds ? "",
   shell ? "${pkgs.bashInteractive}/bin/bash --norc",
