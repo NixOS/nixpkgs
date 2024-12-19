@@ -1,6 +1,6 @@
 {
   lib,
-  stdenv,
+  stdenvNoCC,
   fetchFromGitHub,
   buildDotnetModule,
   dotnetCorePackages,
@@ -25,16 +25,14 @@ buildDotnetModule (finalAttrs: {
   projectFile = "Src/CommandLine/CommandLine.csproj";
 
   postFixup =
-    if stdenv.hostPlatform.isLinux then
-      ''
-        mv $out/bin/CommandLine $out/bin/formula
-      ''
-    else
-      lib.optionalString stdenv.hostPlatform.isDarwin ''
-        makeWrapper ${dotnetCorePackages.runtime_8_0}/bin/dotnet $out/bin/formula \
-          --add-flags "$out/lib/formula-dotnet/CommandLine.dll" \
-          --prefix DYLD_LIBRARY_PATH : $out/lib/formula-dotnet/runtimes/macos/native
-      '';
+    lib.optionalString stdenvNoCC.isLinux ''
+      mv $out/bin/CommandLine $out/bin/formula
+    ''
+    + lib.optionalString stdenvNoCC.isDarwin ''
+      makeWrapper ${dotnetCorePackages.runtime_8_0}/bin/dotnet $out/bin/formula \
+        --add-flags "$out/lib/formula-dotnet/CommandLine.dll" \
+        --prefix DYLD_LIBRARY_PATH : $out/lib/formula-dotnet/runtimes/macos/native
+    '';
 
   passthru.updateScript = unstableGitUpdater { url = finalAttrs.meta.homepage; };
 
