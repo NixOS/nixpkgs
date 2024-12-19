@@ -80,9 +80,7 @@ mkDerivation {
     "buildPhase"
     "fixupPhase"
   ];
-  setupNew = replaceVars ../../stdenv/generic/setup.sh {
-    inherit gcc;
-  };
+  setupNew = ../../stdenv/generic/setup.sh;
 
   buildPhase =
     let
