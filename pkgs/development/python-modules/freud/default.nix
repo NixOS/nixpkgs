@@ -73,8 +73,12 @@ buildPythonPackage rec {
     matplotlib
     sympy
   ];
-  disabledTests = lib.optionals stdenv.hostPlatform.isAarch64 [
+  disabledTests = [
     # https://github.com/glotzerlab/freud/issues/961
+    #
+    # For x86_64-linux, see:
+    #
+    # https://github.com/glotzerlab/freud/issues/961#issuecomment-2553344968
     "test_docstring"
   ];
   # On top of cd $out due to https://github.com/NixOS/nixpkgs/issues/255262 ,
