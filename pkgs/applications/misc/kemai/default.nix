@@ -2,51 +2,50 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
-  cmake,
+
+  # buildInputs
+  libXScrnSaver,
   magic-enum,
-  range-v3,
-  spdlog,
+
+  # nativeBuildInputs
   qtbase,
   qtconnectivity,
-  qttools,
   qtlanguageserver,
+  qttools,
+  range-v3,
+  spdlog,
   qtwayland,
+
+  # nativeBuildInputs
+  cmake,
   wrapQtAppsHook,
-  libXScrnSaver,
+
+  # passthru
   nix-update-script,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "kemai";
-  version = "0.10.0";
+  version = "0.11.1";
 
   src = fetchFromGitHub {
     owner = "AlexandrePTJ";
     repo = "kemai";
-    rev = version;
-    hash = "sha256-wclBAgeDyAIw/nGF6lzIwbwdoZMBTu+tjxsnIxIkODM=";
+    tag = finalAttrs.version;
+    hash = "sha256-2Cyrd0fKaEHkDaKF8lFwuoLvl6553rp3ET2xLUUrTnk=";
   };
 
-  patches = [
-    # Backport the fix for an issue where LICENSE.txt ends up in /bin
-    # Remove in next release
-    (fetchpatch {
-      url = "https://github.com/AlexandrePTJ/kemai/commit/e279679dd7308efebe004252d168d7308f3b99ce.patch";
-      hash = "sha256-5cmRRMVATf4ul4HhaQKiE0yTN2qd+MfNFQzGTLLpOyg=";
-    })
-  ];
-
   buildInputs = [
-    qtbase
-    qtconnectivity
-    qttools
-    qtlanguageserver
     libXScrnSaver
     magic-enum
+    qtbase
+    qtconnectivity
+    qtlanguageserver
+    qttools
     range-v3
     spdlog
   ] ++ lib.optional stdenv.hostPlatform.isLinux qtwayland;
+
   cmakeFlags = [
     "-DFETCHCONTENT_FULLY_DISCONNECTED=ON"
     "-DFETCHCONTENT_QUIET=OFF"
@@ -62,13 +61,14 @@ stdenv.mkDerivation rec {
     updateScript = nix-update-script { };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Kimai desktop client written in QT6";
     homepage = "https://github.com/AlexandrePTJ/kemai";
-    license = licenses.mit;
-    maintainers = with maintainers; [ poelzi ];
-    platforms = platforms.unix;
-    broken = stdenv.hostPlatform.isDarwin;
+    changelog = "https://github.com/AlexandrePTJ/kemai/blob/${finalAttrs.src.tag}/CHANGELOG.md";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ poelzi ];
+    platforms = lib.platforms.unix;
+    badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
     mainProgram = "Kemai";
   };
-}
+})
