@@ -7,7 +7,7 @@
 let
   version = "3.1.0";
 in
-python3.pkgs.buildPythonApplication {
+python3.pkgs.buildPythonApplication rec {
   pname = "inkstitch";
   inherit version;
   pyproject = false; # Uses a Makefile (yikes)
@@ -54,10 +54,26 @@ python3.pkgs.buildPythonApplication {
     runHook preInstall
 
     mkdir -p $out/share/inkscape/extensions
-    cp -a inx $out/share/inkscape/extensions/inkstitch
+    cp -a . $out/share/inkscape/extensions/inkstitch
 
     runHook postInstall
   '';
+
+  patches = [
+    ./0001-force-frozen-true.patch
+    ./0002-plugin-invocation-use-python-script-as-entrypoint.patch
+  ];
+
+  postPatch =
+    let
+      pyEnv = python3.withPackages (_: dependencies);
+    in
+    ''
+      # Add shebang with python dependencies
+      substituteInPlace lib/inx/utils.py --replace-fail ' interpreter="python"' ""
+      sed -i -e '1i#!${pyEnv.interpreter}' inkstitch.py
+      chmod a+x inkstitch.py
+    '';
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
