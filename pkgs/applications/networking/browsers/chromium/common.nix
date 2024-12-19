@@ -222,9 +222,10 @@ let
         name = "source.tar.zstd";
         downloadToTemp = false;
         passthru.unpack = true;
+        nativeBuildInputs = [ zstd ];
         postFetch = ''
           tar \
-            --use-compress-program="${lib.getExe zstd} -T$NIX_BUILD_CORES" \
+            --use-compress-program="zstd -T$NIX_BUILD_CORES" \
             --sort=name \
             --mtime="1970-01-01" \
             --owner=root --group=root \
