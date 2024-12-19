@@ -16,16 +16,16 @@
 
 buildNpmPackage rec {
   pname = "basedpyright";
-  version = "1.22.1";
+  version = "1.23.1";
 
   src = fetchFromGitHub {
     owner = "detachhead";
     repo = "basedpyright";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vf4N0JwjFJKqpYT5pUBiTdvVmWhLqZJ7lE4ryyjEOW8=";
+    tag = "v${version}";
+    hash = "sha256-w3QcvAHwEM1kdRY/780yr2kQQ2tCEvNeLHBm9bgAjMI=";
   };
 
-  npmDepsHash = "sha256-dkDAdLqp2OqUPaOujgZSZtVZPD/PTOazGcTZ4X7lWvI=";
+  npmDepsHash = "sha256-cEpBeEjOdArnLekS5uUk9OrsACZrvY63i8pYYvDSnbI=";
   npmWorkspace = "packages/pyright";
 
   preBuild = ''
@@ -94,7 +94,7 @@ buildNpmPackage rec {
   };
 
   meta = {
-    changelog = "https://github.com/detachhead/basedpyright/releases/tag/${version}";
+    changelog = "https://github.com/detachhead/basedpyright/releases/tag/${src.tag}";
     description = "Type checker for the Python language";
     homepage = "https://github.com/detachhead/basedpyright";
     license = lib.licenses.mit;

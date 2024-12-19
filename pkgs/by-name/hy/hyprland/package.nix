@@ -100,6 +100,10 @@ customStdenv.mkDerivation (finalAttrs: {
 
     # Remove extra @PREFIX@ to fix pkg-config paths
     sed -i "s#@PREFIX@/##g" hyprland.pc.in
+
+    substituteInPlace protocols/meson.build --replace-fail \
+      "wayland_scanner = dependency('wayland-scanner')" \
+      "wayland_scanner = dependency('wayland-scanner', native: true)"
   '';
 
   # variables used by generateVersion.sh script, and shown in `hyprctl version`
@@ -172,6 +176,7 @@ customStdenv.mkDerivation (finalAttrs: {
   mesonBuildType = if debug then "debugoptimized" else "release";
 
   dontStrip = debug;
+  strictDeps = true;
 
   mesonFlags = concatLists [
     (mapAttrsToList mesonEnable {

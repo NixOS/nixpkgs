@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "melange";
-  version = "0.17.3";
+  version = "0.18.1";
 
   src = fetchFromGitHub {
     owner = "chainguard-dev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-26p73aPrjZ2+VdNwI8cDOIQgLgtqPgJ+pZd+2eaxapo=";
+    hash = "sha256-VVEmW2NqSqJYvBTGkfgvBzViTKgIj1uWi5F0X1ztN1E=";
     # populate values that require us to use git. By doing this in postFetch we
     # can delete .git afterwards and maintain better reproducibility of the src.
     leaveDotGit = true;
@@ -25,7 +25,7 @@ buildGoModule rec {
     '';
   };
 
-  vendorHash = "sha256-nmfzWRX6TGv080sxf1j8ZG/w+uOrLsqOLfk0ooz/muQ=";
+  vendorHash = "sha256-5d6T6MUeKPypjHwe1efK8rAujz/uIxEanMWeGhYvbc0=";
 
   subPackages = [ "." ];
 

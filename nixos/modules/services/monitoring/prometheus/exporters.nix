@@ -76,6 +76,7 @@ let
     "process"
     "pve"
     "py-air-control"
+    "rasdaemon"
     "redis"
     "restic"
     "rspamd"
