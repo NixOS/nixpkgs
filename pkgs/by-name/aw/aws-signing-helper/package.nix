@@ -6,13 +6,13 @@
 }:
 buildGoModule rec {
   pname = "aws-signing-helper";
-  version = "1.3.0";
+  version = "1.4.0";
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "rolesanywhere-credential-helper";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-vY8ZJnNV5xt8qxp2sCLYoavcggjS/+LHJysREtCgCJE=";
+    rev = "v${version}";
+    hash = "sha256-CIUhO+5gMIknB3NwYwaBbtZEkW2x/U2Bi9Qbqn9bLuc=";
   };
   vendorHash = "sha256-QKKgBIocJoGbfs78PxNBLBi4KTDPtSuhzvsb6OBhNWQ=";
 
@@ -22,8 +22,6 @@ buildGoModule rec {
     go test ./cmd/...
     runHook postCheck
   '';
-
-  nativeBuildInputs = [ bash ];
 
   postInstall = ''
     mv $out/bin/rolesanywhere-credential-helper $out/bin/aws_signing_helper
