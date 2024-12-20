@@ -108,6 +108,10 @@ let
       name = "OVMF_VARS.4MB.ms.fd";
       path = "${pkgs.OVMFFull.fd}/FV/${ovmf-prefix}_VARS.fd";
     }
+    {
+      name = "seabios.bin";
+      path = "${pkgs.seabios-qemu}/share/seabios/bios.bin";
+    }
   ];
 
   environment = lib.mkMerge [
