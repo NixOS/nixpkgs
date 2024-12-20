@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     description = "GSM Base Station Controller";
     homepage = "https://projects.osmocom.org/projects/osmobsc";
     license = lib.licenses.agpl3Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
     mainProgram = "osmo-bsc";
   };
