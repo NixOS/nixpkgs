@@ -130,6 +130,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "astropy" ];
 
+  __darwinAllowLocalNetworking = true;
+
   # Not running it inside the build directory. See:
   # https://github.com/astropy/astropy/issues/15316#issuecomment-1722190547
   preCheck = ''
