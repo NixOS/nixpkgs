@@ -4,6 +4,8 @@
   fetchFromGitHub,
   fetchpatch,
 
+  hatchling,
+
   coqpit,
   fsspec,
   torch,
@@ -17,31 +19,23 @@
 }:
 
 let
-  pname = "trainer";
-  version = "0.0.36";
+  pname = "coqui-tts-trainer";
+  version = "0.2.0";
 in
 buildPythonPackage {
   inherit pname version;
   format = "pyproject";
 
   src = fetchFromGitHub {
-    owner = "coqui-ai";
-    repo = "Trainer";
+    owner = "idiap";
+    repo = "coqui-ai-Trainer";
     rev = "refs/tags/v${version}";
-    hash = "sha256-z6TOzWqE3NytkdG3nUzh9GpFVGQEXFyzSQ8gvdB4wiw=";
+    hash = "sha256-zm8BTfXvfwuWpmHFcSxuu+/V4bKanSBU2dniQboVdLY=";
   };
 
-  patches = [
-    (fetchpatch {
-      name = "add-support-for-python312.patch";
-      hash = "sha256-V5RPn/2pGKzQrf/SIRU3imo6nBhpBEJpI7HsFYbVZj4=";
-      url = "https://github.com/coqui-ai/Trainer/commit/0278012c7e6f5972b656d11757add4ab89f6d272.patch";
-    })
+  nativeBuildInputs = [
+    hatchling
   ];
-
-  postPatch = ''
-    sed -i 's/^protobuf.*/protobuf/' requirements.txt
-  '';
 
   propagatedBuildInputs = [
     coqpit
@@ -65,8 +59,8 @@ buildPythonPackage {
 
   meta = with lib; {
     description = "General purpose model trainer, as flexible as it gets";
-    homepage = "https://github.com/coqui-ai/Trainer";
-    changelog = "https://github.com/coqui-ai/Trainer/releases/tag/v${version}";
+    homepage = "https://github.com/idiap/coqui-ai-Trainer";
+    changelog = "https://github.com/idiap/coqui-ai-Trainer/releases/tag/v${version}";
     license = licenses.asl20;
     maintainers = teams.tts.members;
   };
