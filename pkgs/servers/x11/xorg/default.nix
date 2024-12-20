@@ -1178,11 +1178,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXau = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libXau";
-    version = "1.0.11";
+    version = "1.0.12";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXau-1.0.11.tar.xz";
-      sha256 = "1sxv56rql3vsb14za0hgr07mipgvvcw48910srmky32pyn135ypk";
+      url = "mirror://xorg/individual/lib/libXau-1.0.12.tar.xz";
+      sha256 = "1yy0gx3psxyjcj284xhh44labav7b5zs7gcrks9xi6nklggy9l3l";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
