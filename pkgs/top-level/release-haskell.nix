@@ -80,6 +80,7 @@ let
     ghc983
     ghc984
     ghc9101
+    ghc9121
   ];
 
   # packagePlatforms applied to `haskell.packages.*`

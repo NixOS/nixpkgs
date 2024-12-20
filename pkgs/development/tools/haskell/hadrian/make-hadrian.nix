@@ -37,9 +37,18 @@
 }:
 
 let
+  bootPkgs' = if lib.versionAtLeast ghcVersion "9.12" then
+    bootPkgs.extend (final: prev: {
+      # See https://gitlab.haskell.org/ghc/ghc/-/commit/7890f2d8526dd90584eaa181ab10bd30d90e6743
+      directory = final.directory_1_3_9_0;
+      # Depends on directory
+      process = final.process_1_6_25_0;
+    })
+  else
+    bootPkgs;
   callPackage' =
     f: args:
-    bootPkgs.callPackage f (
+    bootPkgs'.callPackage f (
       {
         inherit ghcSrc ghcVersion;
       }
@@ -64,6 +73,6 @@ callPackage' ./hadrian.nix (
   }
   // lib.optionalAttrs (lib.versionAtLeast ghcVersion "9.11") {
     # See https://gitlab.haskell.org/ghc/ghc/-/commit/145a6477854d4003a07573d5e7ffa0c9a64ae29c
-    Cabal = bootPkgs.Cabal_3_14_0_0;
+    Cabal = bootPkgs'.Cabal_3_14_0_0;
   }
 )
