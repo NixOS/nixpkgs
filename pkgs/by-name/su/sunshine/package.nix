@@ -68,6 +68,10 @@ stdenv'.mkDerivation rec {
     # fix(upnp): support newer miniupnpc library (#2782)
     # Manually cherry-picked on to 0.23.1.
     ./0001-fix-upnp-support-newer-miniupnpc-library-2782.patch
+
+    # port of https://github.com/LizardByte/Sunshine/commit/e90b71ce62b7744bb18ffc7823b1e895786ffb0a
+    # remove on update
+    ./boost-186.patch
   ];
 
   # build webui

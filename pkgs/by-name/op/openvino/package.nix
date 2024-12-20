@@ -58,14 +58,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "openvino";
-  version = "2024.5.0";
+  version = "2024.6.0";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-qRa6vTwTEWiSH57HThT2oGhJqhHwFLIqNsU1eCSLwLs=";
+    hash = "sha256-GmbRuFM5L60vQNJLCkva1NzBWWKXK674xjMUpME4o4c=";
   };
 
   outputs = [
