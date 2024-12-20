@@ -1,0 +1,48 @@
+diff --git a/bin/lsrc.in b/bin/lsrc.in
+index fcf5fbe..119d659 100755
+--- a/bin/lsrc.in
++++ b/bin/lsrc.in
+@@ -1,6 +1,6 @@
+ #!@SHELL@
+ 
+-: ${RCM_LIB:=$(dirname "$0")/../share/rcm}
++RCM_LIB=@rcm@/share/rcm
+ . "$RCM_LIB/rcm.sh"
+ 
+ pushdir() {
+diff --git a/bin/mkrc.in b/bin/mkrc.in
+index da22a63..a6bb0ad 100755
+--- a/bin/mkrc.in
++++ b/bin/mkrc.in
+@@ -1,6 +1,6 @@
+ #!@SHELL@
+ 
+-: ${RCM_LIB:=$(dirname "$0")/../share/rcm}
++RCM_LIB=@rcm@/share/rcm
+ . "$RCM_LIB/rcm.sh"
+ 
+ destination() {
+diff --git a/bin/rcdn.in b/bin/rcdn.in
+index ae7aad8..c210599 100755
+--- a/bin/rcdn.in
++++ b/bin/rcdn.in
+@@ -1,6 +1,6 @@
+ #!@SHELL@
+ 
+-: ${RCM_LIB:=$(dirname "$0")/../share/rcm}
++RCM_LIB=@rcm@/share/rcm
+ . "$RCM_LIB/rcm.sh"
+ 
+ remove_link() {
+diff --git a/bin/rcup.in b/bin/rcup.in
+index bdae664..2076f53 100755
+--- a/bin/rcup.in
++++ b/bin/rcup.in
+@@ -1,6 +1,6 @@
+ #!@SHELL@
+ 
+-: ${RCM_LIB:=$(dirname "$0")/../share/rcm}
++RCM_LIB=@rcm@/share/rcm
+ . "$RCM_LIB/rcm.sh"
+ 
+ print_ln_v() {

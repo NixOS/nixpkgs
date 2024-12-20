@@ -1,0 +1,15 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index c4cd4b2c2a..e983b21353 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1319,10 +1319,6 @@ if(BUILD_SHARED_LIBS)
+     DIRECTORY ${PROJECT_SOURCE_DIR}/cmake/Modules_CUDA_fix
+     DESTINATION share/cmake/Caffe2/
+     COMPONENT dev)
+-  install(
+-    FILES ${PROJECT_SOURCE_DIR}/cmake/Modules/FindCUDAToolkit.cmake
+-    DESTINATION share/cmake/Caffe2/
+-    COMPONENT dev)
+   install(
+     FILES ${PROJECT_SOURCE_DIR}/cmake/Modules/FindCUSPARSELT.cmake
+     DESTINATION share/cmake/Caffe2/

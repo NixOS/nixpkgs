@@ -1,0 +1,21 @@
+diff --git a/setup.py b/setup.py
+index 245c1dd..fdc17ab 100755
+--- a/setup.py
++++ b/setup.py
+@@ -7,16 +7,12 @@ from mnamer.__version__ import VERSION
+ with open("readme.md", "r", encoding="utf8") as fp:
+     LONG_DESCRIPTION = fp.read()
+ 
+-with open("requirements.txt", "r", encoding="utf8") as fp:
+-    REQUIREMENTS = fp.read().splitlines()
+-
+ setup(
+     author="Jessy Williams",
+     author_email="jessy@jessywilliams.com",
+     description="A media file organiser",
+     entry_points={"console_scripts": ["mnamer=mnamer.__main__:main"]},
+     include_package_data=True,
+-    install_requires=REQUIREMENTS,
+     license="MIT",
+     long_description=LONG_DESCRIPTION,
+     long_description_content_type="text/markdown",
