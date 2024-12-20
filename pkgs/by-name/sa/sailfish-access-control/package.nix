@@ -5,7 +5,9 @@
   gitUpdater,
   testers,
   glib,
+  libsForQt5,
   pkg-config,
+  qt6Packages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,9 +53,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gitUpdater { };
-    tests.pkg-config = testers.hasPkgConfigModules {
-      package = finalAttrs.finalPackage;
-      versionCheck = true;
+    tests = {
+      pkg-config = testers.hasPkgConfigModules {
+        package = finalAttrs.finalPackage;
+        versionCheck = true;
+      };
+      qt5 = libsForQt5.sailfish-access-control-plugin;
+      qt6 = qt6Packages.sailfish-access-control-plugin;
     };
   };
 
