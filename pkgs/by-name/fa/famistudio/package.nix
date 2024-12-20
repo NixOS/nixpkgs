@@ -1,5 +1,5 @@
 {
-  stdenv,
+  stdenvNoCC,
   lib,
   buildDotnetModule,
   dotnetCorePackages,
@@ -17,12 +17,12 @@
 
 let
   csprojName =
-    if stdenv.hostPlatform.isLinux then
+    if stdenvNoCC.hostPlatform.isLinux then
       "FamiStudio.Linux"
-    else if stdenv.hostPlatform.isDarwin then
+    else if stdenvNoCC.hostPlatform.isDarwin then
       "FamiStudio.Mac"
     else
-      throw "Don't know how to build FamiStudio for ${stdenv.hostPlatform.system}";
+      throw "Don't know how to build FamiStudio for ${stdenvNoCC.hostPlatform.system}";
 in
 buildDotnetModule (finalAttrs: {
   pname = "famistudio";
@@ -37,7 +37,7 @@ buildDotnetModule (finalAttrs: {
 
   postPatch =
     let
-      libname = library: "${library}${stdenv.hostPlatform.extensions.sharedLibrary}";
+      libname = library: "${library}${stdenvNoCC.hostPlatform.extensions.sharedLibrary}";
       buildNativeWrapper =
         args:
         callPackage ./build-native-wrapper.nix (
@@ -50,7 +50,7 @@ buildDotnetModule (finalAttrs: {
       nativeWrapperToReplaceFormat =
         args:
         let
-          libPrefix = lib.optionalString stdenv.hostPlatform.isLinux "lib";
+          libPrefix = lib.optionalString stdenvNoCC.hostPlatform.isLinux "lib";
         in
         {
           package = buildNativeWrapper args;
@@ -71,14 +71,14 @@ buildDotnetModule (finalAttrs: {
             ourName = "librtmidi";
           }
         ]
-        ++ lib.optionals stdenv.hostPlatform.isLinux [
+        ++ lib.optionals stdenvNoCC.hostPlatform.isLinux [
           {
             package = openal;
             expectedName = "libopenal32";
             ourName = "libopenal";
           }
         ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
           {
             package = portaudio;
             expectedName = "libportaudio.2";
@@ -133,7 +133,7 @@ buildDotnetModule (finalAttrs: {
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
   dotnetFlags = [ "-p:TargetFramework=net8.0" ];
 
-  runtimeDeps = lib.optionals stdenv.hostPlatform.isLinux [
+  runtimeDeps = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     libglvnd
   ];
 
