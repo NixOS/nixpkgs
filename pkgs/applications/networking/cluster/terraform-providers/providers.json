@@ -205,7 +205,7 @@
     "rev": "v1.8.0",
     "spdx": "Apache-2.0",
     "vendorHash": "sha256-A6/YN/iFxdfGjYO8Pum5nWysGmEeLaxgFPe8zaoPfjA="
-  },  
+  },
   "buildkite": {
     "hash": "sha256-ogwUk5zYE3tdJB8zylkPpzfnUgmAhFQ4K0Vj3Jl0aog=",
     "homepage": "https://registry.terraform.io/providers/buildkite/buildkite",
