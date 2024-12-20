@@ -4590,6 +4590,8 @@ self: super: with self; {
 
   first = callPackage ../development/python-modules/first { };
 
+  fish-speech = callPackage ../development/python-modules/fish-speech { };
+
   fissix = callPackage ../development/python-modules/fissix { };
 
   fitbit = callPackage ../development/python-modules/fitbit { };
@@ -4958,6 +4960,8 @@ self: super: with self; {
   ftputil = callPackage ../development/python-modules/ftputil { };
 
   fugashi = callPackage ../development/python-modules/fugashi { };
+
+  funasr = callPackage ../development/python-modules/funasr { };
 
   func-timeout = callPackage ../development/python-modules/func-timeout { };
 
@@ -6877,6 +6881,8 @@ self: super: with self; {
 
   kaldi-active-grammar = callPackage ../development/python-modules/kaldi-active-grammar { };
 
+  kaldiio = callPackage ../development/python-modules/kaldiio { };
+
   kaleido = callPackage ../development/python-modules/kaleido { };
 
   kalshi-python = callPackage ../development/python-modules/kalshi-python {};
@@ -7028,6 +7034,8 @@ self: super: with self; {
   kubernetes = callPackage ../development/python-modules/kubernetes { };
 
   kubernetes-asyncio = callPackage ../development/python-modules/kubernetes-asyncio { };
+
+  kui = callPackage ../development/python-modules/kui { };
 
   kurbopy = callPackage ../development/python-modules/kurbopy { };
 
@@ -7678,6 +7686,8 @@ self: super: with self; {
   looseversion = callPackage ../development/python-modules/looseversion { };
 
   loqedapi = callPackage ../development/python-modules/loqedapi { };
+
+  loralib = callPackage ../development/python-modules/loralib { };
 
   losant-rest = callPackage ../development/python-modules/losant-rest { };
 
@@ -8345,6 +8355,8 @@ self: super: with self; {
   moderngl = callPackage ../development/python-modules/moderngl { };
 
   moderngl-window = callPackage ../development/python-modules/moderngl-window { };
+
+  modelscope = callPackage ../development/python-modules/modelscope { };
 
   modestmaps = callPackage ../development/python-modules/modestmaps { };
 
@@ -10225,11 +10237,15 @@ self: super: with self; {
 
   openapi-core = callPackage ../development/python-modules/openapi-core { };
 
+  opencc-python-reimplemented = callPackage ../development/python-modules/opencc-python-reimplemented { };
+
   opentype-feature-freezer = callPackage ../development/python-modules/opentype-feature-freezer { };
 
   openusd = callPackage ../development/python-modules/openusd {
     alembic = pkgs.alembic;
   };
+
+  ormsgpack = callPackage ../development/python-modules/ormsgpack { };
 
   outlines = callPackage ../development/python-modules/outlines { };
 
@@ -13381,6 +13397,8 @@ self: super: with self; {
 
   pytorch-pfn-extras = callPackage ../development/python-modules/pytorch-pfn-extras { };
 
+  pytorch-wpe = callPackage ../development/python-modules/pytorch-wpe { };
+
   pytraccar = callPackage ../development/python-modules/pytraccar { };
 
   pytradfri = callPackage ../development/python-modules/pytradfri { };
@@ -14175,6 +14193,8 @@ self: super: with self; {
 
   roonapi = callPackage ../development/python-modules/roonapi { };
 
+  rootutils = callPackage ../development/python-modules/rootutils { };
+
   rope = callPackage ../development/python-modules/rope { };
 
   ropgadget = callPackage ../development/python-modules/ropgadget { };
@@ -14700,6 +14720,8 @@ self: super: with self; {
   sigstore-rekor-types = callPackage ../development/python-modules/sigstore-rekor-types { };
 
   sigtools = callPackage ../development/python-modules/sigtools { };
+
+  silero-vad = callPackage ../development/python-modules/silero-vad { };
 
   simanneal = callPackage ../development/python-modules/simanneal { };
 
@@ -16212,6 +16234,8 @@ self: super: with self; {
     rocmSupport = false;
   };
 
+  torch-complex = callPackage ../development/python-modules/torch-complex/default.nix { };
+
   torch-tb-profiler = callPackage ../development/python-modules/torch-tb-profiler/default.nix { };
 
   torchaudio = callPackage ../development/python-modules/torchaudio { };
@@ -17626,6 +17650,8 @@ self: super: with self; {
   vdirsyncer = callPackage ../development/python-modules/vdirsyncer { };
 
   vector = callPackage ../development/python-modules/vector { };
+
+  vector-quantize-pytorch = callPackage ../development/python-modules/vector-quantize-pytorch { };
 
   vehicle = callPackage ../development/python-modules/vehicle { };
 
