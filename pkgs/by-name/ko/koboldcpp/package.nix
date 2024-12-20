@@ -8,6 +8,7 @@
   addDriverRunpath,
 
   apple-sdk_12,
+  darwinMinVersionHook,
 
   koboldLiteSupport ? true,
 
@@ -61,7 +62,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [ tk ]
     ++ finalAttrs.pythonInputs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_12
+      (darwinMinVersionHook "10.15")
+    ]
     ++ lib.optionals cublasSupport [
       cudaPackages.libcublas
       cudaPackages.cuda_nvcc
