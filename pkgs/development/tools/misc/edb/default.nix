@@ -1,6 +1,6 @@
 {
   lib,
-  mkDerivation,
+  stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
@@ -9,26 +9,32 @@
   double-conversion,
   graphviz,
   qtxmlpatterns,
+  qttools,
+  qtbase,
+  wrapQtAppsHook,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "edb";
-  version = "1.4.0";
+  version = "1.5.0";
 
   src = fetchFromGitHub {
     owner = "eteran";
     repo = "edb-debugger";
-    rev = version;
+    tag = finalAttrs.version;
     fetchSubmodules = true;
-    hash = "sha256-1Q0eZS05L4sxzcPvEFdEaobO7JYHRu98Yf+n3ZnBi+E=";
+    hash = "sha256-ALhA/odVwUQHKuOZ1W/i/6L7da/yitdpBsx2kz2ySQE=";
   };
 
   nativeBuildInputs = [
     cmake
     pkg-config
+    wrapQtAppsHook
+    qttools
   ];
 
   buildInputs = [
+    qtbase
     boost.dev
     capstone_4
     double-conversion
@@ -36,19 +42,15 @@ mkDerivation rec {
     qtxmlpatterns
   ];
 
-  postPatch = ''
-    # Remove CMAKE_INSTALL_PREFIX from DEFAULT_PLUGIN_PATH otherwise the nix store path will appear twice.
-    substituteInPlace ./src/CMakeLists.txt --replace \
-        '-DDEFAULT_PLUGIN_PATH=\"''${CMAKE_INSTALL_PREFIX}/''${CMAKE_INSTALL_LIBDIR}/edb\"' \
-        '-DDEFAULT_PLUGIN_PATH=\"''${CMAKE_INSTALL_LIBDIR}/edb\"'
+  cmakeFlags = [
+    (lib.cmakeFeature "DEFAULT_PLUGIN_DIR" "${placeholder "out"}/lib/edb")
+  ];
 
+  postPatch = ''
     # The build script checks for the presence of .git to determine whether
     # submodules were fetched and will throw an error if it's not there.
     # Avoid using leaveDotGit in the fetchFromGitHub options as it is non-deterministic.
     mkdir -p src/qhexview/.git lib/gdtoa-desktop/.git
-
-    # Change default optional terminal program path to one that is more likely to work on NixOS.
-    substituteInPlace ./src/Configuration.cpp --replace "/usr/bin/xterm" "xterm";
   '';
 
   meta = with lib; {
@@ -62,4 +64,4 @@ mkDerivation rec {
     ];
     platforms = [ "x86_64-linux" ];
   };
-}
+})
