@@ -21,10 +21,7 @@
 # related packages that are managed in the GHC source tree. Its main job is to
 # expose all possible compile time customization in a common interface and
 # take care of all differences between Hadrian versions.
-{
-  bootPkgs,
-  lib,
-}:
+{ bootPkgs, lib }:
 
 {
   # GHC source tree and version to build hadrian & friends from.
@@ -37,30 +34,24 @@
 }:
 
 let
-  bootPkgs' = if lib.versionAtLeast ghcVersion "9.12" then
-    bootPkgs.extend (final: prev: {
-      # See https://gitlab.haskell.org/ghc/ghc/-/commit/7890f2d8526dd90584eaa181ab10bd30d90e6743
-      directory = final.directory_1_3_9_0;
-      # Depends on directory
-      process = final.process_1_6_25_0;
-    })
-  else
-    bootPkgs;
-  callPackage' =
-    f: args:
-    bootPkgs'.callPackage f (
-      {
-        inherit ghcSrc ghcVersion;
-      }
-      // args
-    );
+  bootPkgs' =
+    if lib.versionAtLeast ghcVersion "9.12" then
+      bootPkgs.extend (
+        final: prev: {
+          # See https://gitlab.haskell.org/ghc/ghc/-/commit/7890f2d8526dd90584eaa181ab10bd30d90e6743
+          directory = final.directory_1_3_9_0;
+          # Depends on directory
+          process = final.process_1_6_25_0;
+        }
+      )
+    else
+      bootPkgs;
+  callPackage' = f: args: bootPkgs'.callPackage f ({ inherit ghcSrc ghcVersion; } // args);
 
   ghc-platform = callPackage' ./ghc-platform.nix { };
-  ghc-toolchain = callPackage' ./ghc-toolchain.nix {
-    inherit ghc-platform;
-  };
-in
+  ghc-toolchain = callPackage' ./ghc-toolchain.nix { inherit ghc-platform; };
 
+in
 callPackage' ./hadrian.nix (
   {
     inherit userSettings;
