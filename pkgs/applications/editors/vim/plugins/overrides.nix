@@ -4,6 +4,7 @@
   # nixpkgs functions
   buildGoModule,
   buildVimPlugin,
+  callPackage,
   fetchFromGitHub,
   fetchFromSourcehut,
   fetchpatch,
@@ -14,7 +15,6 @@
   fetchYarnDeps,
   mkYarnModules,
   python3,
-  rustPlatform,
   # Misc dependencies
   arrow-cpp,
   coc-clangd,
@@ -35,10 +35,11 @@
   languagetool,
   llvmPackages,
   meson,
-  notmuch,
   neovim-unwrapped,
   nim1,
   nodePackages,
+  nodejs,
+  notmuch,
   openscad,
   parinfer-rust,
   phpactor,
@@ -56,15 +57,14 @@
   typescript,
   vim,
   which,
-  xkb-switch,
-  ycmd,
-  zoxide,
-  nodejs,
   xdotool,
+  xkb-switch,
   xorg,
   xxd,
+  ycmd,
   zathura,
   zenity,
+  zoxide,
   zsh,
   # codeium-nvim dependencies
   codeium,
@@ -78,25 +78,14 @@
   cmake,
   icu,
   ncurses,
-  # nvim-treesitter dependencies
-  callPackage,
   # Preview-nvim dependencies
   md-tui,
-  darwin,
   # sved dependencies
   glib,
   gobject-introspection,
   wrapGAppsHook3,
   writeText,
-  # sniprun dependencies
-  bashInteractive,
-  coreutils,
   curl,
-  gnugrep,
-  gnused,
-  makeWrapper,
-  procps,
-  pkg-config,
   # vim-agda dependencies
   agda,
   # vim-go dependencies
