@@ -519,12 +519,6 @@ rec {
       containing the rest of the attrpath declaration or a string which
       terminates the attrpath declaration.
 
-    # Type
-
-    ```
-    TODO
-    ```
-
     # Examples
     :::{.example}
     ## `lib.attrsets.associateWithAttrPath'` usage example
@@ -548,74 +542,86 @@ rec {
     else
       combine (associateWithAttrPath' pack combine currentPath) remaining;
 
-  # This function associates arbitrary strings with attribute paths in the form
-  # of a list of name-value pairs consumable by `builtins.listToAttrs`.
-  #
-  # To declare the attribute paths, you simply declare an attrset with
-  # (optionally) nested attributes that describe the paths and set the final
-  # attributes equal to the strings which you want to associate the paths with.
-  #
-  # This also works with paths that require quoting; simply quote your
-  # specification's attributes as usual.
-  #
-  # {
-  #   foo.bar = "somestring";
-  #   foo.baz = "otherstring";
-  #   any.path."can.be".expressed.here = "otherstring";
-  # }
-  #
-  # results in:
-  #
-  # [
-  #   {
-  #     name = "somestring";
-  #     value = [ "foo" "bar" ];
-  #   }
-  #   {
-  #     name = "otherstring";
-  #     value = [ "foo" "baz" ];
-  #   }
-  #   {
-  #     name = "otherstring";
-  #     value = [ "any" "path" "can.be" "expressed" "here" ];
-  #   }
-  # ]
-  # TODO document arguments
-  #
-  # Each strings can be associated with multiple attribute paths.
-  #
-  # In most cases, you'd typically use the singular variant of this function.
+  /**
+    This function associates arbitrary strings with attribute paths in the form
+    of a list of name-value pairs consumable by `builtins.listToAttrs`.
+
+    To declare the attribute paths, you simply declare an attrset with
+    (optionally) nested attributes that describe the paths and set the final
+    attributes equal to the strings which you want to associate the paths with.
+
+    This also works with paths that require quoting; simply quote your
+    specification's attributes as usual.
+
+    Each string can be associated with multiple attribute paths, resulting in
+    multiple list elements with the same name.
+
+    In most cases, you'd typically use the singular variant of this function.
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.associateWithAttrPathMultiple` usage example
+
+    ```Nix
+    lib.attrsets.associateWithAttrPathMultiple {
+      foo.bar = "somestring";
+      foo.baz = "otherstring";
+      any.path."can.be".expressed.here = "otherstring";
+    }
+    =>
+    [
+      {
+        name = "somestring";
+        value = [ "foo" "bar" ];
+      }
+      {
+        name = "otherstring";
+        value = [ "foo" "baz" ];
+      }
+      {
+        name = "otherstring";
+        value = [ "any" "path" "can.be" "expressed" "here" ];
+      }
+    ]
+    ```
+    :::
+  */
   associateWithAttrPathMultiple = associateWithAttrPath' (name: path: [ (nameValuePair name path) ]) (
     recursor: remaining: concatMap (next: recursor next remaining.${next}) (attrNames remaining)
   );
 
-  # This function associates arbitrary strings with attribute paths in the form
-  # of an attrset.
-  #
-  # To declare the attribute paths, you simply declare an attrset with
-  # (optionally) nested attributes that describe the paths and set the final
-  # attributes equal to the strings which you want to associate the paths with.
-  #
-  # This also works with paths that require quoting; simply quote your
-  # specification's attributes as usual.
-  #
-  # Example:
-  #
-  # {
-  #   foo.bar = "from";
-  #   foo."bar.baz" = "to";
-  # }
-  #
-  # Results in:
-  #
-  # {
-  #   from = [ "foo" "bar" ];
-  #   to = [ "foo" "bar.baz" ];
-  # }
-  #
-  # The same string MUST NOT be associated with multiple attribute paths. This
-  # results in undefined behaviour. Use associateWithAttrPath' instead if you
-  # need to handle multiple instances of the same string.
+  /**
+    This function associates arbitrary strings with attribute paths in the form
+    of an attrset.
+
+    To declare the attribute paths, you simply declare an attrset with
+    (optionally nested) attributes that describe the paths and set the final
+    attributes equal to the strings which you want to associate the paths with.
+
+    This also works with paths that require quoting; simply quote your
+    specification's attributes as usual.
+
+    # Examples
+    :::{.example}
+    ## `lib.attrsets.associateWithAttrPath` usage example
+
+    ```Nix
+    lib.attrsets.associateWithAttrPath {
+      foo.bar = "from";
+      foo."bar.baz" = "to";
+    }
+    =>
+    {
+      from = [ "foo" "bar" ];
+      to = [ "foo" "bar.baz" ];
+    }
+    ```
+    :::
+
+    The same string MUST NOT be associated with multiple attribute paths. This
+    results in undefined behaviour. Use associateWithAttrPath' instead if you
+    need to handle multiple instances of the same string.
+  */
   associateWithAttrPath = associateWithAttrPath' (name: path: { ${name} = path; }) (
     recursor: remaining: concatMapAttrs recursor remaining
   ) [ ] null;
