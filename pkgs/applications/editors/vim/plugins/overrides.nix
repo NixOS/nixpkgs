@@ -72,9 +72,6 @@
   zsh,
   # codeium-nvim dependencies
   codeium,
-  # codesnap-nvim dependencies
-  clang,
-  libuv,
   # command-t dependencies
   getconf,
   ruby,
@@ -678,62 +675,7 @@ in
       nvimRequireCheck = "codeium";
     };
 
-  codesnap-nvim =
-    let
-      version = "1.6.1";
-      src = fetchFromGitHub {
-        owner = "mistricky";
-        repo = "codesnap.nvim";
-        rev = "refs/tags/v${version}";
-        hash = "sha256-OmSgrTYDtNb2plMyzjVvxGrfXB/lGKDpUQhpRqKfAMA=";
-      };
-      codesnap-lib = rustPlatform.buildRustPackage {
-        pname = "codesnap-lib";
-        inherit version src;
-
-        sourceRoot = "${src.name}/generator";
-
-        cargoHash = "sha256-6n37n8oHIHrz3S1+40nuD0Ud3l0iNgXig1ZwrgsnYTI=";
-
-        nativeBuildInputs = [
-          pkg-config
-          rustPlatform.bindgenHook
-        ];
-
-        buildInputs =
-          [
-            libuv.dev
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            darwin.apple_sdk.frameworks.AppKit
-          ];
-      };
-    in
-    buildVimPlugin {
-      pname = "codesnap.nvim";
-      inherit version src;
-
-      # - Remove the shipped pre-built binaries
-      # - Copy the resulting binary from the codesnap-lib derivation
-      # Note: the destination should be generator.so, even on darwin
-      # https://github.com/mistricky/codesnap.nvim/blob/main/scripts/build_generator.sh
-      postInstall =
-        let
-          extension = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
-        in
-        ''
-          rm -r $out/lua/*.so
-          cp ${codesnap-lib}/lib/libgenerator.${extension} $out/lua/generator.so
-        '';
-
-      doInstallCheck = true;
-      nvimRequireCheck = "codesnap";
-
-      meta = {
-        homepage = "https://github.com/mistricky/codesnap.nvim/";
-        changelog = "https://github.com/mistricky/codesnap.nvim/releases/tag/v${version}";
-      };
-    };
+  codesnap-nvim = callPackage ./codesnap-nvim { };
 
   codewindow-nvim = super.codewindow-nvim.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
