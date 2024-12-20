@@ -41,9 +41,6 @@ stdenv.mkDerivation rec {
     gsl
     cairo
     double-conversion
-  ];
-
-  nativeCheckInputs = [
     gtest
   ];
 
