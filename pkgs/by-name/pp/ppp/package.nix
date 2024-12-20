@@ -73,16 +73,16 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) pppd;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ppp.samba.org";
     description = "Point-to-point implementation to provide Internet connections over serial lines";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsdOriginal
       publicDomain
       gpl2Only
       lgpl2
     ];
-    platforms = platforms.linux;
-    maintainers = with maintainers; [ stv0g ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ stv0g ];
   };
 }
