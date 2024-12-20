@@ -8373,6 +8373,10 @@ self: super: with self; {
 
   monotonic = callPackage ../development/python-modules/monotonic { };
 
+  monotonic-alignment-search =
+    callPackage ../development/python-modules/monotonic-alignment-search
+      { };
+
   monty = callPackage ../development/python-modules/monty { };
 
   monzopy = callPackage ../development/python-modules/monzopy { };
