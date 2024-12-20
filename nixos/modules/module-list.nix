@@ -1173,6 +1173,7 @@
   ./services/networking/nixops-dns.nix
   ./services/networking/nncp.nix
   ./services/networking/nntp-proxy.nix
+  ./services/networking/nm-file-secret-agent.nix
   ./services/networking/nomad.nix
   ./services/networking/nsd.nix
   ./services/networking/ntopng.nix
@@ -1419,6 +1420,7 @@
   ./services/video/wivrn.nix
   ./services/wayland/cage.nix
   ./services/wayland/hypridle.nix
+  ./services/web-apps/actual.nix
   ./services/web-apps/akkoma.nix
   ./services/web-apps/agorakit.nix
   ./services/web-apps/alps.nix

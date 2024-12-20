@@ -17,7 +17,6 @@
   rustPlatform,
   # Misc dependencies
   arrow-cpp,
-  Cocoa,
   coc-clangd,
   coc-css,
   coc-diagnostic,
@@ -27,10 +26,8 @@
   deno,
   direnv,
   duckdb,
-  fish,
   fzf,
   gawk,
-  git,
   himalaya,
   htop,
   jq,
@@ -43,7 +40,6 @@
   nim1,
   nodePackages,
   openscad,
-  pandoc,
   parinfer-rust,
   phpactor,
   ranger,
@@ -72,9 +68,6 @@
   zsh,
   # codeium-nvim dependencies
   codeium,
-  # codesnap-nvim dependencies
-  clang,
-  libuv,
   # command-t dependencies
   getconf,
   ruby,
@@ -85,14 +78,10 @@
   cmake,
   icu,
   ncurses,
-  # LanguageClient-neovim dependencies
-  CoreFoundation,
-  CoreServices,
   # nvim-treesitter dependencies
   callPackage,
   # Preview-nvim dependencies
   md-tui,
-  # sg.nvim dependencies
   darwin,
   # sved dependencies
   glib,
@@ -107,8 +96,6 @@
   gnused,
   makeWrapper,
   procps,
-  # sg-nvim dependencies
-  openssl,
   pkg-config,
   # vim-agda dependencies
   agda,
@@ -685,62 +672,7 @@ in
       nvimRequireCheck = "codeium";
     };
 
-  codesnap-nvim =
-    let
-      version = "1.6.1";
-      src = fetchFromGitHub {
-        owner = "mistricky";
-        repo = "codesnap.nvim";
-        rev = "refs/tags/v${version}";
-        hash = "sha256-OmSgrTYDtNb2plMyzjVvxGrfXB/lGKDpUQhpRqKfAMA=";
-      };
-      codesnap-lib = rustPlatform.buildRustPackage {
-        pname = "codesnap-lib";
-        inherit version src;
-
-        sourceRoot = "${src.name}/generator";
-
-        cargoHash = "sha256-6n37n8oHIHrz3S1+40nuD0Ud3l0iNgXig1ZwrgsnYTI=";
-
-        nativeBuildInputs = [
-          pkg-config
-          rustPlatform.bindgenHook
-        ];
-
-        buildInputs =
-          [
-            libuv.dev
-          ]
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            darwin.apple_sdk.frameworks.AppKit
-          ];
-      };
-    in
-    buildVimPlugin {
-      pname = "codesnap.nvim";
-      inherit version src;
-
-      # - Remove the shipped pre-built binaries
-      # - Copy the resulting binary from the codesnap-lib derivation
-      # Note: the destination should be generator.so, even on darwin
-      # https://github.com/mistricky/codesnap.nvim/blob/main/scripts/build_generator.sh
-      postInstall =
-        let
-          extension = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
-        in
-        ''
-          rm -r $out/lua/*.so
-          cp ${codesnap-lib}/lib/libgenerator.${extension} $out/lua/generator.so
-        '';
-
-      doInstallCheck = true;
-      nvimRequireCheck = "codesnap";
-
-      meta = {
-        homepage = "https://github.com/mistricky/codesnap.nvim/";
-        changelog = "https://github.com/mistricky/codesnap.nvim/releases/tag/v${version}";
-      };
-    };
+  codesnap-nvim = callPackage ./codesnap-nvim { };
 
   codewindow-nvim = super.codewindow-nvim.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
@@ -850,54 +782,7 @@ in
     nvimRequireCheck = "coq";
   };
 
-  cord-nvim =
-    let
-      version = "0-unstable-2024-09-26";
-      src = fetchFromGitHub {
-        owner = "vyfor";
-        repo = "cord.nvim";
-        rev = "a26b00d58c42174aadf975917b49cec67650545f";
-        hash = "sha256-jUxBvWnj0+axuw2SZ2zLzlhZS0tu+Bk8+wHtXENofkw=";
-      };
-      extension = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
-      rustPackage = rustPlatform.buildRustPackage {
-        pname = "cord.nvim-rust";
-        inherit version src;
-
-        cargoHash = "sha256-M5mTdBACTaUVZhPpMOf1KQ3BcQpEoD2isAKRn+iAWjc=";
-
-        installPhase =
-          let
-            cargoTarget = stdenv.hostPlatform.rust.cargoShortTarget;
-          in
-          ''
-            install -D target/${cargoTarget}/release/libcord.${extension} $out/lib/cord.${extension}
-          '';
-      };
-    in
-    buildVimPlugin {
-      pname = "cord.nvim";
-      inherit version src;
-
-      nativeBuildInputs = [
-        rustPackage
-      ];
-
-      buildPhase = ''
-        install -D ${rustPackage}/lib/cord.${extension} cord.${extension}
-      '';
-
-      installPhase = ''
-        install -D cord $out/lua/cord.${extension}
-      '';
-
-      doInstallCheck = true;
-      nvimRequireCheck = "cord";
-
-      meta = {
-        homepage = "https://github.com/vyfor/cord.nvim";
-      };
-    };
+  cord-nvim = callPackage ./cord-nvim { };
 
   cornelis = super.cornelis.overrideAttrs {
     dependencies = [ self.vim-textobj-user ];
@@ -1405,42 +1290,7 @@ in
     nvimRequireCheck = "kulala";
   };
 
-  LanguageClient-neovim =
-    let
-      version = "0.1.161";
-      LanguageClient-neovim-src = fetchFromGitHub {
-        owner = "autozimu";
-        repo = "LanguageClient-neovim";
-        rev = version;
-        sha256 = "Z9S2ie9RxJCIbmjSV/Tto4lK04cZfWmK3IAy8YaySVI=";
-      };
-      LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
-        pname = "LanguageClient-neovim-bin";
-        inherit version;
-        src = LanguageClient-neovim-src;
-
-        cargoHash = "sha256-H34UqJ6JOwuSABdOup5yKeIwFrGc83TUnw1ggJEx9o4=";
-        buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
-
-        # FIXME: Use impure version of CoreFoundation because of missing symbols.
-        #   Undefined symbols for architecture x86_64: "_CFURLResourceIsReachable"
-        preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-          export NIX_LDFLAGS="-F${CoreFoundation}/Library/Frameworks -framework CoreFoundation $NIX_LDFLAGS"
-        '';
-      };
-    in
-    buildVimPlugin {
-      pname = "LanguageClient-neovim";
-      inherit version;
-      src = LanguageClient-neovim-src;
-
-      propagatedBuildInputs = [ LanguageClient-neovim-bin ];
-
-      preFixup = ''
-        substituteInPlace "$out"/autoload/LanguageClient.vim \
-          --replace "let l:path = s:root . '/bin/'" "let l:path = '${LanguageClient-neovim-bin}' . '/bin/'"
-      '';
-    };
+  LanguageClient-neovim = callPackage ./LanguageClient-neovim { };
 
   LazyVim = super.LazyVim.overrideAttrs {
     # Any other dependency is optional
@@ -1767,40 +1617,7 @@ in
     ];
   };
 
-  moveline-nvim =
-    let
-      version = "2024-07-25";
-      src = fetchFromGitHub {
-        owner = "willothy";
-        repo = "moveline.nvim";
-        rev = "9f67f4b9e752a87eea8205f0279f261a16c733d8";
-        sha256 = "sha256-B4t5+Q4Urx5bGm8glNpYkHhpp/rAhz+lDd2EpWFUYoY=";
-      };
-      moveline-lib = rustPlatform.buildRustPackage {
-        inherit src version;
-        pname = "moveline-lib";
-        cargoHash = "sha256-e9QB4Rfm+tFNrLAHN/nYUQ5PiTET8knQQIQkMH3UFkU=";
-      };
-    in
-    buildVimPlugin {
-      inherit src version;
-      pname = "moveline-nvim";
-      preInstall = ''
-        mkdir -p lua
-        ln -s ${moveline-lib}/lib/libmoveline.so lua/moveline.so
-      '';
-      meta = {
-        description = "Neovim plugin for moving lines up and down";
-        homepage = "https://github.com/willothy/moveline.nvim";
-        license = lib.licenses.mit;
-        maintainers = with lib.maintainers; [ redxtech ];
-        badPlatforms = [
-          "aarch64-darwin"
-          "x86_64-darwin"
-        ];
-      };
-      nvimRequireCheck = "moveline";
-    };
+  moveline-nvim = callPackage ./moveline-nvim { };
 
   multicursors-nvim = super.multicursors-nvim.overrideAttrs {
     dependencies = with self; [
@@ -2746,45 +2563,7 @@ in
     dependencies = [ self.nui-nvim ];
   };
 
-  sg-nvim = super.sg-nvim.overrideAttrs (
-    old:
-    let
-      sg-nvim-rust = rustPlatform.buildRustPackage {
-        pname = "sg-nvim-rust";
-        inherit (old) version src;
-
-        cargoHash = "sha256-7Bo0DSRqxA7kgNuyuWw24r3PsP92y9h98SHFtIhG+Gs=";
-
-        nativeBuildInputs = [ pkg-config ];
-
-        buildInputs =
-          [ openssl ]
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            darwin.apple_sdk.frameworks.Security
-            darwin.apple_sdk.frameworks.SystemConfiguration
-          ];
-
-        prePatch = ''
-          rm .cargo/config.toml
-        '';
-
-        env.OPENSSL_NO_VENDOR = true;
-
-        cargoBuildFlags = [ "--workspace" ];
-
-        # tests are broken
-        doCheck = false;
-      };
-    in
-    {
-      dependencies = [ self.plenary-nvim ];
-      postInstall = ''
-        mkdir -p $out/target/debug
-        ln -s ${sg-nvim-rust}/{bin,lib}/* $out/target/debug
-      '';
-      nvimRequireCheck = "sg";
-    }
-  );
+  sg-nvim = callPackage ./sg-nvim { };
 
   skim = buildVimPlugin {
     pname = "skim";
@@ -2847,62 +2626,7 @@ in
     ];
   };
 
-  sniprun =
-    let
-      version = "1.3.16";
-      src = fetchFromGitHub {
-        owner = "michaelb";
-        repo = "sniprun";
-        rev = "refs/tags/v${version}";
-        hash = "sha256-2rVeBUkdLXUiHkd8slyiLTYQBKwgMQvIi/uyCToVBYA=";
-      };
-      sniprun-bin = rustPlatform.buildRustPackage {
-        pname = "sniprun-bin";
-        inherit version src;
-
-        buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-          darwin.apple_sdk.frameworks.Security
-        ];
-
-        cargoHash = "sha256-eZcWS+DWec0V9G6hBnZRUNcb3uZeSiBhn4Ed9KodFV8=";
-
-        nativeBuildInputs = [ makeWrapper ];
-
-        postInstall = ''
-          wrapProgram $out/bin/sniprun \
-            --prefix PATH ${
-              lib.makeBinPath [
-                bashInteractive
-                coreutils
-                curl
-                gnugrep
-                gnused
-                procps
-              ]
-            }
-        '';
-
-        doCheck = false;
-      };
-    in
-    buildVimPlugin {
-      pname = "sniprun";
-      inherit version src;
-
-      patches = [ ./patches/sniprun/fix-paths.patch ];
-      postPatch = ''
-        substituteInPlace lua/sniprun.lua --replace '@sniprun_bin@' ${sniprun-bin}
-      '';
-
-      propagatedBuildInputs = [ sniprun-bin ];
-
-      meta = {
-        homepage = "https://github.com/michaelb/sniprun/";
-        changelog = "https://github.com/michaelb/sniprun/blob/v${version}/CHANGELOG.md";
-        maintainers = with lib.maintainers; [ GaetanLepage ];
-      };
-      nvimRequireCheck = "sniprun";
-    };
+  sniprun = callPackage ./sniprun { };
 
   # The GitHub repository returns 404, which breaks the update script
   Spacegray-vim = buildVimPlugin {
@@ -3373,10 +3097,6 @@ in
     dependencies = [ self.tlib_vim ];
   };
 
-  vim-addon-manager = super.vim-addon-manager.overrideAttrs {
-    buildInputs = lib.optional stdenv.hostPlatform.isDarwin Cocoa;
-  };
-
   vim-addon-mru = super.vim-addon-mru.overrideAttrs {
     dependencies = with self; [
       vim-addon-other
@@ -3578,23 +3298,7 @@ in
     '';
   };
 
-  vim-markdown-composer =
-    let
-      vim-markdown-composer-bin = rustPlatform.buildRustPackage {
-        pname = "vim-markdown-composer-bin";
-        inherit (super.vim-markdown-composer) src version;
-        cargoHash = "sha256-Vie8vLTplhaVU4E9IohvxERfz3eBpd62m8/1Ukzk8e4=";
-        # tests require network access
-        doCheck = false;
-      };
-    in
-    super.vim-markdown-composer.overrideAttrs {
-      preFixup = ''
-        substituteInPlace "$out"/after/ftplugin/markdown/composer.vim \
-          --replace "s:plugin_root . '/target/release/markdown-composer'" \
-          "'${vim-markdown-composer-bin}/bin/markdown-composer'"
-      '';
-    };
+  vim-markdown-composer = callPackage ./vim-markdown-composer { };
 
   vim-matchup = super.vim-matchup.overrideAttrs {
     # Optional treesitter integration

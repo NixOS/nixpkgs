@@ -20,6 +20,11 @@
     "hash": "sha256-b8LCEIZCLJdYcJXQqI3TGDmkLrmLhz84eoTq+qP5xvU="
   },
   {
+    "pname": "DiffPlex",
+    "version": "1.7.2",
+    "hash": "sha256-Vsn81duAmPIPkR40h5bEz7hgtF5Kt5nAAGhQZrQbqxE="
+  },
+  {
     "pname": "Eto.Forms",
     "version": "2.5.10",
     "hash": "sha256-51NkW/COGLiGl/+niLJaPJY+ypG1a1OXw65HMunj4bQ="
