@@ -264,7 +264,7 @@ in
 stdenv.mkDerivation (
   if withMono then
     dotnetCorePackages.addNuGetDeps {
-      nugetDeps = ./deps.nix;
+      nugetDeps = ./deps.json;
       overrideFetchAttrs = old: rec {
         runtimeIds = map (system: dotnetCorePackages.systemToDotnetRid system) old.meta.platforms;
         buildInputs =

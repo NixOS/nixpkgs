@@ -21,7 +21,7 @@ buildDotnetModule rec {
   };
 
   projectFile = "src/Jackett.Server/Jackett.Server.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
   dotnet-sdk = dotnetCorePackages.sdk_8_0;

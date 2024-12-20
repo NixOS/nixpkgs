@@ -12,7 +12,7 @@ buildDotnetModule rec {
   };
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  nugetDeps = ./nuget.nix;
+  nugetDeps = ./nuget.json;
   projectFile = "Src/CommandLine/CommandLine.csproj";
 
   postFixup = if stdenv.hostPlatform.isLinux then ''

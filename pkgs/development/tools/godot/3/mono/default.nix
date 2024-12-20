@@ -29,7 +29,7 @@
       buildInputs = base.buildInputs ++ [
         (mkNugetDeps {
           name = "deps";
-          nugetDeps = import ./deps.nix;
+          sourceFile = ./deps.json;
         })
       ];
 
