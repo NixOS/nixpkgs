@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, installShellFiles, testers, nix-update-script, nb }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  nix-update-script,
+  nb,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nb";

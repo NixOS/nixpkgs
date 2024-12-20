@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, libtool }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libtool,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libxmi";

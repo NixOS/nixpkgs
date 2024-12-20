@@ -7,7 +7,7 @@
   pkg-config,
   wayland-protocols,
   wayland-scanner,
-  wayland
+  wayland,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,19 +1,20 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libbsd
-, libevent
-, libjpeg
-, libdrm
-, pkg-config
-, janus-gateway
-, glib
-, alsa-lib
-, speex
-, jansson
-, libopus
-, nixosTests
-, withJanus ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libbsd,
+  libevent,
+  libjpeg,
+  libdrm,
+  pkg-config,
+  janus-gateway,
+  glib,
+  alsa-lib,
+  speex,
+  jansson,
+  libopus,
+  nixosTests,
+  withJanus ? true,
 }:
 stdenv.mkDerivation rec {
   pname = "ustreamer";
@@ -26,31 +27,35 @@ stdenv.mkDerivation rec {
     hash = "sha256-iaCgPHgklk7tbhJhQmyjKggb1bMWBD+Zurgfk9sCQ3E=";
   };
 
-  buildInputs = [
-    libbsd
-    libevent
-    libjpeg
-    libdrm
-  ] ++ lib.optionals withJanus [
-    janus-gateway
-    glib
-    alsa-lib
-    jansson
-    speex
-    libopus
-  ];
+  buildInputs =
+    [
+      libbsd
+      libevent
+      libjpeg
+      libdrm
+    ]
+    ++ lib.optionals withJanus [
+      janus-gateway
+      glib
+      alsa-lib
+      jansson
+      speex
+      libopus
+    ];
 
   nativeBuildInputs = [ pkg-config ];
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "WITH_V4P=1"
-  ] ++ lib.optionals withJanus [
-    "WITH_JANUS=1"
-    # Workaround issues with Janus C Headers
-    # https://github.com/pikvm/ustreamer/blob/793f24c4/docs/h264.md#fixing-janus-c-headers
-    "CFLAGS=-I${lib.getDev janus-gateway}/include/janus"
-  ];
+  makeFlags =
+    [
+      "PREFIX=${placeholder "out"}"
+      "WITH_V4P=1"
+    ]
+    ++ lib.optionals withJanus [
+      "WITH_JANUS=1"
+      # Workaround issues with Janus C Headers
+      # https://github.com/pikvm/ustreamer/blob/793f24c4/docs/h264.md#fixing-janus-c-headers
+      "CFLAGS=-I${lib.getDev janus-gateway}/include/janus"
+    ];
 
   enableParallelBuilding = true;
 
@@ -67,7 +72,10 @@ stdenv.mkDerivation rec {
       screencast hardware data with the highest resolution and FPS possible.
     '';
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ tfc matthewcroughan ];
+    maintainers = with maintainers; [
+      tfc
+      matthewcroughan
+    ];
     platforms = platforms.linux;
   };
 }

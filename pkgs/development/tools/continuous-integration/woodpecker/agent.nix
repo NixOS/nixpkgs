@@ -4,7 +4,13 @@ let
 in
 buildGoModule {
   pname = "woodpecker-agent";
-  inherit (common) version src ldflags postInstall vendorHash;
+  inherit (common)
+    version
+    src
+    ldflags
+    postInstall
+    vendorHash
+    ;
 
   subPackages = "cmd/agent";
 

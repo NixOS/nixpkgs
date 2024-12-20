@@ -1,8 +1,12 @@
-{ interpreter, writeText, runCommand }:
+{
+  interpreter,
+  writeText,
+  runCommand,
+}:
 
 let
 
-  pythonEnv = interpreter.withPackages(ps: [
+  pythonEnv = interpreter.withPackages (ps: [
     ps.tkinter
   ]);
 
@@ -11,7 +15,8 @@ let
     print(tkinter)
   '';
 
-in runCommand "${interpreter.name}-tkinter-test" {} ''
+in
+runCommand "${interpreter.name}-tkinter-test" { } ''
   ${pythonEnv}/bin/python ${pythonScript}
   touch $out
 ''

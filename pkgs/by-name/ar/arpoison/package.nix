@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchzip, libnet }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  libnet,
+}:
 
 stdenv.mkDerivation rec {
   pname = "arpoison";

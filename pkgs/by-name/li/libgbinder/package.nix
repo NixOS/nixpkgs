@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchFromGitHub, pkg-config, glib, libglibutil }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  glib,
+  libglibutil,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libgbinder";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-CnoxWzouOX8OLzJx3nVl0u2L8fObESzj4Q0Z1KH7Tg4=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     pkg-config
@@ -35,7 +45,10 @@ stdenv.mkDerivation rec {
     "INSTALL_PKGCONFIG_DIR=$(dev)/lib/pkgconfig"
   ];
 
-  installTargets = [ "install" "install-dev" ];
+  installTargets = [
+    "install"
+    "install-dev"
+  ];
 
   postInstall = ''
     sed -i -e "s@includedir=/usr@includedir=$dev@g" $dev/lib/pkgconfig/$pname.pc

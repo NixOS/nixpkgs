@@ -1,8 +1,9 @@
-{ fetchFromSourcehut
-, installShellFiles
-, lib
-, python3
-, stdenv
+{
+  fetchFromSourcehut,
+  installShellFiles,
+  lib,
+  python3,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,21 +1,22 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, which
-, makeWrapper
-, rsync
-, installShellFiles
-, runtimeShell
-, kubectl
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  which,
+  makeWrapper,
+  rsync,
+  installShellFiles,
+  runtimeShell,
+  kubectl,
+  nixosTests,
 
-, components ? [
+  components ? [
     "cmd/kubelet"
     "cmd/kube-apiserver"
     "cmd/kube-controller-manager"
     "cmd/kube-proxy"
     "cmd/kube-scheduler"
-  ]
+  ],
 }:
 
 buildGoModule rec {
@@ -33,15 +34,27 @@ buildGoModule rec {
 
   doCheck = false;
 
-  nativeBuildInputs = [ makeWrapper which rsync installShellFiles ];
+  nativeBuildInputs = [
+    makeWrapper
+    which
+    rsync
+    installShellFiles
+  ];
 
-  outputs = [ "out" "man" "pause" ];
+  outputs = [
+    "out"
+    "man"
+    "pause"
+  ];
 
   patches = [ ./fixup-addonmanager-lib-path.patch ];
 
-  WHAT = lib.concatStringsSep " " ([
-    "cmd/kubeadm"
-  ] ++ components);
+  WHAT = lib.concatStringsSep " " (
+    [
+      "cmd/kubeadm"
+    ]
+    ++ components
+  );
 
   buildPhase = ''
     runHook preBuild
@@ -90,5 +103,7 @@ buildGoModule rec {
     platforms = platforms.linux;
   };
 
-  passthru.tests = nixosTests.kubernetes // { inherit kubectl; };
+  passthru.tests = nixosTests.kubernetes // {
+    inherit kubectl;
+  };
 }

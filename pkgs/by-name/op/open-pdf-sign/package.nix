@@ -1,9 +1,10 @@
-{ fetchurl
-, jre
-, lib
-, makeBinaryWrapper
-, nix-update-script
-, stdenv
+{
+  fetchurl,
+  jre,
+  lib,
+  makeBinaryWrapper,
+  nix-update-script,
+  stdenv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

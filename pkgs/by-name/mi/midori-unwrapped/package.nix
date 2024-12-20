@@ -1,21 +1,23 @@
-{ lib, stdenv
-, fetchurl
-, cmake
-, ninja
-, pkg-config
-, intltool
-, vala
-, wrapGAppsHook3
-, gcr
-, libpeas
-, gtk3
-, webkitgtk_4_0
-, sqlite
-, gsettings-desktop-schemas
-, libsoup_2_4
-, glib-networking
-, json-glib
-, libarchive
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  ninja,
+  pkg-config,
+  intltool,
+  vala,
+  wrapGAppsHook3,
+  gcr,
+  libpeas,
+  gtk3,
+  webkitgtk_4_0,
+  sqlite,
+  gsettings-desktop-schemas,
+  libsoup_2_4,
+  glib-networking,
+  json-glib,
+  libarchive,
 }:
 
 stdenv.mkDerivation rec {
@@ -59,6 +61,9 @@ stdenv.mkDerivation rec {
     homepage = "https://www.midori-browser.org/";
     license = with licenses; [ lgpl21Plus ];
     platforms = with platforms; linux;
-    maintainers = with maintainers; [ raskin ramkromberg ];
+    maintainers = with maintainers; [
+      raskin
+      ramkromberg
+    ];
   };
 }

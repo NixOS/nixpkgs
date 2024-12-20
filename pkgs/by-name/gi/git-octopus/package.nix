@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, git, perl, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  git,
+  perl,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "git-octopus";
@@ -11,7 +18,12 @@ stdenv.mkDerivation rec {
   # perl provides shasum
   postInstall = ''
     for f in $out/bin/*; do
-      wrapProgram $f --prefix PATH : ${lib.makeBinPath [ git perl ]}
+      wrapProgram $f --prefix PATH : ${
+        lib.makeBinPath [
+          git
+          perl
+        ]
+      }
     done
   '';
 
@@ -27,6 +39,6 @@ stdenv.mkDerivation rec {
     description = "Continuous merge workflow";
     license = licenses.lgpl3;
     platforms = platforms.unix;
-    maintainers = [maintainers.mic92];
+    maintainers = [ maintainers.mic92 ];
   };
 }

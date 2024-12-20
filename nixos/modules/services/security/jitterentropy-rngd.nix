@@ -1,11 +1,15 @@
-{ lib, config, pkgs, ... }:
+{
+  lib,
+  config,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.jitterentropy-rngd;
 in
 {
   options.services.jitterentropy-rngd = {
-    enable =
-      lib.mkEnableOption "jitterentropy-rngd service configuration";
+    enable = lib.mkEnableOption "jitterentropy-rngd service configuration";
     package = lib.mkPackageOption pkgs "jitterentropy-rngd" { };
   };
 

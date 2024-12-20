@@ -1,20 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, dleyna-connector-dbus
-, dleyna-core
-, gssdp
-, gupnp
-, gupnp-av
-, gupnp-dlna
-, libsoup_2_4
-, makeWrapper
-, docbook-xsl-nons
-, libxslt
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  dleyna-connector-dbus,
+  dleyna-core,
+  gssdp,
+  gupnp,
+  gupnp-av,
+  gupnp-dlna,
+  libsoup_2_4,
+  makeWrapper,
+  docbook-xsl-nons,
+  libxslt,
 }:
 
 stdenv.mkDerivation rec {

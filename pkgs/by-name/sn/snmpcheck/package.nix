@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchurl, ruby }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  ruby,
+}:
 
 let
   rubyEnv = ruby.withPackages (ps: [ ps.snmp ]);

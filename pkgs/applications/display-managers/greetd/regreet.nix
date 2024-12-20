@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, wrapGAppsHook4
-, glib
-, gtk4
-, pango
-, librsvg
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  wrapGAppsHook4,
+  glib,
+  gtk4,
+  pango,
+  librsvg,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,8 +25,16 @@ rustPlatform.buildRustPackage rec {
 
   buildFeatures = [ "gtk4_8" ];
 
-  nativeBuildInputs = [ pkg-config wrapGAppsHook4 ];
-  buildInputs = [ glib gtk4 pango librsvg ];
+  nativeBuildInputs = [
+    pkg-config
+    wrapGAppsHook4
+  ];
+  buildInputs = [
+    glib
+    gtk4
+    pango
+    librsvg
+  ];
 
   meta = with lib; {
     description = "Clean and customizable greeter for greetd";

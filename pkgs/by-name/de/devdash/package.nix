@@ -1,9 +1,9 @@
 {
-  lib
-, buildGo122Module
-, fetchFromGitHub
-, nix-update-script
-, coreutils
+  lib,
+  buildGo122Module,
+  fetchFromGitHub,
+  nix-update-script,
+  coreutils,
 }:
 
 buildGo122Module rec {

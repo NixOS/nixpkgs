@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,12 +15,13 @@ stdenv.mkDerivation rec {
     hash = "sha256-r5UT8z8vvFZDffsl6CqBXuvBaZ/sl1WLxJi26CxkpAw=";
   };
 
-  preBuild = ''
-    sed -i s/gcc/${stdenv.cc.targetPrefix}gcc/g Makefile
-  ''
-  + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
-    sed -i s/-m64//g Makefile
-  '';
+  preBuild =
+    ''
+      sed -i s/gcc/${stdenv.cc.targetPrefix}gcc/g Makefile
+    ''
+    + lib.optionalString (!stdenv.hostPlatform.isx86_64) ''
+      sed -i s/-m64//g Makefile
+    '';
 
   installPhase = ''
     runHook preInstall
@@ -38,7 +40,10 @@ stdenv.mkDerivation rec {
     license = lib.licenses.gpl2Only;
     # djenrandom uses x86 specific instructions, therefore we can only compile for the x86 architechture
     platforms = lib.platforms.x86;
-    maintainers = with lib.maintainers; [ orichter thillux ];
+    maintainers = with lib.maintainers; [
+      orichter
+      thillux
+    ];
     mainProgram = "djenrandom";
   };
 }

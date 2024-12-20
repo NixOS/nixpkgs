@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cmake
-, doxygen
-, graphviz
-, arpa2common
-, arpa2cm
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  doxygen,
+  graphviz,
+  arpa2common,
+  arpa2cm,
 }:
 
 stdenv.mkDerivation rec {

@@ -1,6 +1,15 @@
-{ lib, buildDunePackage, fetchurl
-, mirage-flow, cstruct, logs, ke, lwt
-, alcotest, alcotest-lwt, bigstringaf
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  mirage-flow,
+  cstruct,
+  logs,
+  ke,
+  lwt,
+  alcotest,
+  alcotest-lwt,
+  bigstringaf,
 }:
 
 buildDunePackage rec {

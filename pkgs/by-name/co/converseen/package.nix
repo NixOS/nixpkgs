@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, imagemagick
-, pkg-config
-, qt5
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  imagemagick,
+  pkg-config,
+  qt5,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "converseen";
-  version = "0.12.2.3";
+  version = "0.12.2.4";
 
   src = fetchFromGitHub {
     owner = "Faster3ck";
     repo = "Converseen";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-ISXEEJHE7C1gqEmhIAPuu8ibrh0Cvh7EyRKsFeDuLDE=";
+    hash = "sha256-+AYw0/hCAVMPeD9MigYO5ddfs6o6w901OJH03H8gYlw=";
   };
 
   strictDeps = true;

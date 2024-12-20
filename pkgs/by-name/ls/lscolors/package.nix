@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchCrate }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "lscolors";
@@ -20,7 +24,10 @@ rustPlatform.buildRustPackage rec {
     description = "Rust library and tool to colorize paths using LS_COLORS";
     homepage = "https://github.com/sharkdp/lscolors";
     changelog = "https://github.com/sharkdp/lscolors/releases/tag/v${version}";
-    license = with licenses; [ asl20 /* or */ mit ];
+    license = with licenses; [
+      asl20 # or
+      mit
+    ];
     maintainers = with maintainers; [ SuperSandro2000 ];
     mainProgram = "lscolors";
   };

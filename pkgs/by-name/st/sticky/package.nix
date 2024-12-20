@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gobject-introspection
-, meson
-, ninja
-, python3
-, wrapGAppsHook3
-, xapp
-, glib
-, gspell
-, gtk3
-, gitUpdater
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gobject-introspection,
+  meson,
+  ninja,
+  python3,
+  wrapGAppsHook3,
+  xapp,
+  glib,
+  gspell,
+  gtk3,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -72,6 +73,9 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/linuxmint/sticky";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ linsui bobby285271 ];
+    maintainers = with maintainers; [
+      linsui
+      bobby285271
+    ];
   };
 }

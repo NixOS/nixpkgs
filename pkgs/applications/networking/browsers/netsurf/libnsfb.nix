@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, SDL
-, pkg-config
-, buildsystem
-, uilib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  SDL,
+  pkg-config,
+  buildsystem,
+  uilib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -18,7 +19,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ SDL buildsystem ];
+  buildInputs = [
+    SDL
+    buildsystem
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"

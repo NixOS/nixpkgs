@@ -28,7 +28,10 @@ stdenv.mkDerivation (finalAttrs: {
     SDL_image
   ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 
@@ -40,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = {
     homepage = "https://github.com/erikg/vp";
     description = "SDL based picture viewer/slideshow";
-    license  = lib.licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "vp";
     maintainers = with lib.maintainers; [ AndersonTorres ];
     inherit (SDL.meta) platforms;

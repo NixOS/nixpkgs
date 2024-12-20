@@ -1,4 +1,8 @@
-{ appimageTools, fetchurl, lib }:
+{
+  appimageTools,
+  fetchurl,
+  lib,
+}:
 
 let
   pname = "station";
@@ -12,7 +16,8 @@ let
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
-in appimageTools.wrapType2 rec {
+in
+appimageTools.wrapType2 rec {
   inherit pname version src;
 
   profile = ''

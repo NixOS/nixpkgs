@@ -1,10 +1,11 @@
-{ lib
-, fetchpatch
-, python3
-, fetchPypi
-, postfix
-, lynx
-, nixosTests
+{
+  lib,
+  fetchpatch,
+  python3,
+  fetchPypi,
+  postfix,
+  lynx,
+  nixosTests,
 }:
 
 with python3.pkgs;

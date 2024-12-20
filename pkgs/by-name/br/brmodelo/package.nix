@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, ant
-, jdk8
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, strip-nondeterminism
-, stripJavaArchivesHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  ant,
+  jdk8,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  strip-nondeterminism,
+  stripJavaArchivesHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -78,7 +79,16 @@ stdenv.mkDerivation (finalAttrs: {
       exec = "brmodelo";
       icon = "brmodelo";
       comment = finalAttrs.meta.description;
-      categories = [ "Development" "Education" "Database" "2DGraphics" "ComputerScience" "DataVisualization" "Engineering" "Java" ];
+      categories = [
+        "Development"
+        "Education"
+        "Database"
+        "2DGraphics"
+        "ComputerScience"
+        "DataVisualization"
+        "Engineering"
+        "Java"
+      ];
     })
   ];
 

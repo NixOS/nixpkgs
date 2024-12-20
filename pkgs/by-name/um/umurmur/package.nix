@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, openssl, protobufc, libconfig }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  openssl,
+  protobufc,
+  libconfig,
+}:
 
 stdenv.mkDerivation rec {
   pname = "umurmur";
@@ -12,7 +20,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ openssl protobufc libconfig ];
+  buildInputs = [
+    openssl
+    protobufc
+    libconfig
+  ];
 
   # https://github.com/umurmur/umurmur/issues/176
   postPatch = ''

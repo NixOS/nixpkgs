@@ -1,19 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, bashInteractive
-, coreutils
-, installShellFiles
-, libiconv
-, mdbook
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  bashInteractive,
+  coreutils,
+  installShellFiles,
+  libiconv,
+  mdbook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "just";
   version = "1.37.0";
-  outputs = [ "out" "man" "doc" ];
+  outputs = [
+    "out"
+    "man"
+    "doc"
+  ];
 
   src = fetchFromGitHub {
     owner = "casey";
@@ -24,7 +29,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-/uWxYxczTOlUs2wOCCn5wwbGETHwIqdDI2mb/h4xVxQ=";
 
-  nativeBuildInputs = [ installShellFiles mdbook ];
+  nativeBuildInputs = [
+    installShellFiles
+    mdbook
+  ];
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   preCheck = ''
@@ -99,7 +107,10 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/casey/just/blob/${version}/CHANGELOG.md";
     description = "Handy way to save and run project-specific commands";
     license = licenses.cc0;
-    maintainers = with maintainers; [ xrelkd jk ];
+    maintainers = with maintainers; [
+      xrelkd
+      jk
+    ];
     mainProgram = "just";
   };
 }

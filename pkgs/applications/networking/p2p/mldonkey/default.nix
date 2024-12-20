@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, fetchpatch, ocamlPackages, zlib }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  ocamlPackages,
+  zlib,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mldonkey";
@@ -33,7 +40,10 @@ stdenv.mkDerivation rec {
   '';
 
   strictDeps = true;
-  nativeBuildInputs = with ocamlPackages; [ ocaml camlp4 ];
+  nativeBuildInputs = with ocamlPackages; [
+    ocaml
+    camlp4
+  ];
   buildInputs = (with ocamlPackages; [ num ]) ++ [ zlib ];
 
   meta = {

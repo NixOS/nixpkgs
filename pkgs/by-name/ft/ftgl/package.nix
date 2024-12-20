@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, doxygen
-, libglut
-, freetype
-, libGL
-, libGLU
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  doxygen,
+  libglut,
+  freetype,
+  libGL,
+  libGLU,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {

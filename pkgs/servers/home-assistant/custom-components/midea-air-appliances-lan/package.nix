@@ -1,7 +1,8 @@
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
-, midea-beautiful-air
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
+  midea-beautiful-air,
 }:
 
 buildHomeAssistantComponent rec {

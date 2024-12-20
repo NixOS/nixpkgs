@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "decode-spam-headers";
@@ -13,7 +18,10 @@ python3Packages.buildPythonApplication rec {
 
   format = "other";
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   installPhase = ''
     install -D decode-spam-headers.py $out/bin/decode-spam-headers

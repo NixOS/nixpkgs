@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, makeWrapper
-, fetchFromGitHub
-, gradle_7
-, openjdk17
+{
+  lib,
+  stdenv,
+  makeWrapper,
+  fetchFromGitHub,
+  gradle_7,
+  openjdk17,
 }:
 
 let
@@ -37,7 +38,10 @@ stdenv.mkDerivation {
 
   __darwinAllowLocalNetworking = true;
 
-  gradleFlags = [ "-x" "submodulesUpdate" ];
+  gradleFlags = [
+    "-x"
+    "submodulesUpdate"
+  ];
 
   installPhase = ''
     runHook preInstall

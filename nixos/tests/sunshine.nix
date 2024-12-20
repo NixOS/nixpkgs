@@ -1,70 +1,77 @@
-import ./make-test-python.nix ({ pkgs, lib, ... }: {
-  name = "sunshine";
-  meta = {
-    # test is flaky on aarch64
-    broken = pkgs.stdenv.hostPlatform.isAarch64;
-    maintainers = [ lib.maintainers.devusb ];
-  };
-
-  nodes.sunshine = { config, pkgs, ... }: {
-    imports = [
-      ./common/x11.nix
-    ];
-
-    services.sunshine = {
-      enable = true;
-      openFirewall = true;
-      settings = {
-        capture = "x11";
-        encoder = "software";
-        output_name = 0;
-      };
+import ./make-test-python.nix (
+  { pkgs, lib, ... }:
+  {
+    name = "sunshine";
+    meta = {
+      # test is flaky on aarch64
+      broken = pkgs.stdenv.hostPlatform.isAarch64;
+      maintainers = [ lib.maintainers.devusb ];
     };
 
-    environment.systemPackages = with pkgs; [
-      gxmessage
-    ];
+    nodes.sunshine =
+      { config, pkgs, ... }:
+      {
+        imports = [
+          ./common/x11.nix
+        ];
 
-  };
+        services.sunshine = {
+          enable = true;
+          openFirewall = true;
+          settings = {
+            capture = "x11";
+            encoder = "software";
+            output_name = 0;
+          };
+        };
 
-  nodes.moonlight = { config, pkgs, ... }: {
-    imports = [
-      ./common/x11.nix
-    ];
+        environment.systemPackages = with pkgs; [
+          gxmessage
+        ];
 
-    environment.systemPackages = with pkgs; [
-      moonlight-qt
-    ];
+      };
 
-  };
+    nodes.moonlight =
+      { config, pkgs, ... }:
+      {
+        imports = [
+          ./common/x11.nix
+        ];
 
-  enableOCR = true;
+        environment.systemPackages = with pkgs; [
+          moonlight-qt
+        ];
 
-  testScript = ''
-    # start the tests, wait for sunshine to be up
-    start_all()
-    sunshine.wait_for_open_port(48010,"localhost")
+      };
 
-    # set the admin username/password, restart sunshine
-    sunshine.execute("sunshine --creds sunshine sunshine")
-    sunshine.systemctl("restart sunshine","root")
-    sunshine.wait_for_open_port(48010,"localhost")
+    enableOCR = true;
 
-    # initiate pairing from moonlight
-    moonlight.execute("moonlight pair sunshine --pin 1234 >&2 & disown")
-    moonlight.wait_for_console_text("Executing request")
+    testScript = ''
+      # start the tests, wait for sunshine to be up
+      start_all()
+      sunshine.wait_for_open_port(48010,"localhost")
 
-    # respond to pairing request from sunshine
-    sunshine.succeed("curl --insecure -u sunshine:sunshine -d '{\"pin\": \"1234\"}' https://localhost:47990/api/pin")
+      # set the admin username/password, restart sunshine
+      sunshine.execute("sunshine --creds sunshine sunshine")
+      sunshine.systemctl("restart sunshine","root")
+      sunshine.wait_for_open_port(48010,"localhost")
 
-    # close moonlight once pairing complete
-    moonlight.send_key("kp_enter")
+      # initiate pairing from moonlight
+      moonlight.execute("moonlight pair sunshine --pin 1234 >&2 & disown")
+      moonlight.wait_for_console_text("Executing request")
 
-    # put words on the sunshine screen for moonlight to see
-    sunshine.execute("gxmessage 'hello world' -center -font 'sans 75' >&2 & disown")
+      # respond to pairing request from sunshine
+      sunshine.succeed("curl --insecure -u sunshine:sunshine -d '{\"pin\": \"1234\"}' https://localhost:47990/api/pin")
 
-    # connect to sunshine from moonlight and look for the words
-    moonlight.execute("moonlight --video-decoder software stream sunshine 'Desktop' >&2 & disown")
-    moonlight.wait_for_text("hello world")
-  '';
-})
+      # close moonlight once pairing complete
+      moonlight.send_key("kp_enter")
+
+      # put words on the sunshine screen for moonlight to see
+      sunshine.execute("gxmessage 'hello world' -center -font 'sans 75' >&2 & disown")
+
+      # connect to sunshine from moonlight and look for the words
+      moonlight.execute("moonlight --video-decoder software stream sunshine 'Desktop' >&2 & disown")
+      moonlight.wait_for_text("hello world")
+    '';
+  }
+)

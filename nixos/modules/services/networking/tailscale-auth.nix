@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   inherit (lib)
@@ -16,7 +21,7 @@ in
   options.services.tailscaleAuth = {
     enable = mkEnableOption "tailscale.nginx-auth, to authenticate users via tailscale";
 
-    package = mkPackageOption pkgs "tailscale-nginx-auth" {};
+    package = mkPackageOption pkgs "tailscale-nginx-auth" { };
 
     user = mkOption {
       type = types.str;
@@ -94,11 +99,20 @@ in
         SystemCallErrorNumber = "EPERM";
         SystemCallFilter = [
           "@system-service"
-          "~@cpu-emulation" "~@debug" "~@keyring" "~@memlock" "~@obsolete" "~@privileged" "~@setuid"
+          "~@cpu-emulation"
+          "~@debug"
+          "~@keyring"
+          "~@memlock"
+          "~@obsolete"
+          "~@privileged"
+          "~@setuid"
         ];
       };
     };
   };
 
-  meta.maintainers = with maintainers; [ dan-theriault phaer ];
+  meta.maintainers = with maintainers; [
+    dan-theriault
+    phaer
+  ];
 }

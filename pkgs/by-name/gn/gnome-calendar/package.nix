@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, libgweather
-, geoclue2
-, gettext
-, libxml2
-, gnome
-, gtk4
-, evolution-data-server-gtk4
-, libical
-, libsoup_3
-, glib
-, gsettings-desktop-schemas
-, libadwaita
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  libgweather,
+  geoclue2,
+  gettext,
+  libxml2,
+  gnome,
+  gtk4,
+  evolution-data-server-gtk4,
+  libical,
+  libsoup_3,
+  glib,
+  gsettings-desktop-schemas,
+  libadwaita,
 }:
 
 stdenv.mkDerivation rec {

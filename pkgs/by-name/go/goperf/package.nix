@@ -1,9 +1,10 @@
-{ lib
-, buildGoModule
-, fetchgit
-, writeShellScript
-, unstableGitUpdater
-, sd
+{
+  lib,
+  buildGoModule,
+  fetchgit,
+  writeShellScript,
+  unstableGitUpdater,
+  sd,
 }:
 
 buildGoModule rec {
@@ -20,7 +21,9 @@ buildGoModule rec {
 
   passthru.updateScript = writeShellScript "update-goperf" ''
     export UPDATE_NIX_ATTR_PATH=goperf
-    ${lib.escapeShellArgs (unstableGitUpdater { inherit (src) url; })}
+    ${lib.escapeShellArgs (unstableGitUpdater {
+      inherit (src) url;
+    })}
     set -x
     oldhash="$(nix-instantiate . --eval --strict -A "goperf.goModules.drvAttrs.outputHash" | cut -d'"' -f2)"
     newhash="$(nix-build -A goperf.goModules --no-out-link 2>&1 | tail -n3 | grep 'got:' | cut -d: -f2- | xargs echo || true)"

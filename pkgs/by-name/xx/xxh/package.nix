@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, python3
-, openssh
-, nixosTests
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  openssh,
+  nixosTests,
 }:
 
-python3.pkgs.buildPythonApplication rec{
+python3.pkgs.buildPythonApplication rec {
   pname = "xxh";
   version = "0.8.12";
   format = "setuptools";

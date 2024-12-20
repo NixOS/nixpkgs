@@ -1,4 +1,12 @@
-{ lib, buildPythonApplication, fetchFromGitHub, python-dotenv, pyyaml, setuptools, pypaBuildHook }:
+{
+  lib,
+  buildPythonApplication,
+  fetchFromGitHub,
+  python-dotenv,
+  pyyaml,
+  setuptools,
+  pypaBuildHook,
+}:
 
 buildPythonApplication rec {
   version = "1.2.0";
@@ -16,7 +24,10 @@ buildPythonApplication rec {
     setuptools
   ];
 
-  dependencies = [ python-dotenv pyyaml ];
+  dependencies = [
+    python-dotenv
+    pyyaml
+  ];
   propagatedBuildInputs = [ pypaBuildHook ];
 
   meta = {

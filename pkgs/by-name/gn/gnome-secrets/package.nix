@@ -1,23 +1,24 @@
-{ lib
-, meson
-, ninja
-, pkg-config
-, gettext
-, fetchFromGitLab
-, python3Packages
-, wrapGAppsHook4
-, gtk4
-, glib
-, gdk-pixbuf
-, gobject-introspection
-, desktop-file-utils
-, appstream-glib
-, libadwaita
+{
+  lib,
+  meson,
+  ninja,
+  pkg-config,
+  gettext,
+  fetchFromGitLab,
+  python3Packages,
+  wrapGAppsHook4,
+  gtk4,
+  glib,
+  gdk-pixbuf,
+  gobject-introspection,
+  desktop-file-utils,
+  appstream-glib,
+  libadwaita,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gnome-secrets";
-  version = "9.6";
+  version = "10.3";
   format = "other";
 
   src = fetchFromGitLab {
@@ -25,7 +26,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = "secrets";
     rev = version;
-    hash = "sha256-iF2AQYAwwIr/sCZUz1pdqEa74DH4y4Nts6aJj3mS2f4=";
+    hash = "sha256-UcTLngBVp5L8Y1LmBxoxPuH5Zag2YfHA2Y+ByPBkh8A=";
   };
 
   nativeBuildInputs = [
@@ -54,7 +55,7 @@ python3Packages.buildPythonApplication rec {
     pyotp
     validators
     yubico
-    zxcvbn
+    zxcvbn-rs-py
   ];
 
   # Prevent double wrapping, let the Python wrapper use the args in preFixup.

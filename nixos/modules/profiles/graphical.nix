@@ -14,5 +14,8 @@
     libinput.enable = true; # for touchpad support on many laptops
   };
 
-  environment.systemPackages = [ pkgs.mesa-demos pkgs.firefox ];
+  environment.systemPackages = [
+    pkgs.mesa-demos
+    pkgs.firefox
+  ];
 }

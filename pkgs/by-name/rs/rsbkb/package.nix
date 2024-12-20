@@ -1,12 +1,14 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, enableAppletSymlinks ? true
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  enableAppletSymlinks ? true,
 }:
 
 let
   version = "1.4";
-in rustPlatform.buildRustPackage {
+in
+rustPlatform.buildRustPackage {
   pname = "rsbkb";
   inherit version;
 

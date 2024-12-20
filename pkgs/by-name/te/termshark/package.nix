@@ -1,4 +1,10 @@
-{ lib, fetchFromGitHub, makeWrapper, buildGoModule, wireshark-cli }:
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  buildGoModule,
+  wireshark-cli,
+}:
 
 buildGoModule rec {
   pname = "termshark";

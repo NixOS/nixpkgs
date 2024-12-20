@@ -1,41 +1,52 @@
-{ stdenv, lib, fetchFromGitHub, makeWrapper, installShellFiles, bash, curl, git, writeScript }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  installShellFiles,
+  bash,
+  curl,
+  git,
+  writeScript,
+}:
 
 let
   asdfReshimFile = writeScript "asdf-reshim" ''
-#!/usr/bin/env bash
+    #!/usr/bin/env bash
 
-# asdf-vm create "shim" file like this:
-#
-#    exec $ASDF_DIR/bin/asdf exec "node" "$@"
-#
-# So we should reshim all installed versions every time shell initialized,
-# because $out always change
+    # asdf-vm create "shim" file like this:
+    #
+    #    exec $ASDF_DIR/bin/asdf exec "node" "$@"
+    #
+    # So we should reshim all installed versions every time shell initialized,
+    # because $out always change
 
-asdfDir="''${ASDF_DIR:-$HOME/.asdf}"
-asdfDataDir="''${ASDF_DATA_DIR:-$HOME/.asdf}"
+    asdfDir="''${ASDF_DIR:-$HOME/.asdf}"
+    asdfDataDir="''${ASDF_DATA_DIR:-$HOME/.asdf}"
 
-prevAsdfDirFilePath="$asdfDataDir/.nix-prev-asdf-dir-path"
+    prevAsdfDirFilePath="$asdfDataDir/.nix-prev-asdf-dir-path"
 
-if [ -r "$prevAsdfDirFilePath" ]; then
-  prevAsdfDir="$(cat "$prevAsdfDirFilePath")"
-else
-  prevAsdfDir=""
-fi
+    if [ -r "$prevAsdfDirFilePath" ]; then
+      prevAsdfDir="$(cat "$prevAsdfDirFilePath")"
+    else
+      prevAsdfDir=""
+    fi
 
-if [ "$prevAsdfDir" != "$asdfDir" ]; then
-  rm -rf "$asdfDataDir"/shims
-  "$asdfDir"/bin/asdf reshim
-  echo "$asdfDir" > "$prevAsdfDirFilePath"
-fi
+    if [ "$prevAsdfDir" != "$asdfDir" ]; then
+      rm -rf "$asdfDataDir"/shims
+      "$asdfDir"/bin/asdf reshim
+      echo "$asdfDir" > "$prevAsdfDirFilePath"
+    fi
   '';
 
   asdfPrepareFile = writeScript "asdf-prepare" ''
-ASDF_DIR="@asdfDir@"
+    ASDF_DIR="@asdfDir@"
 
-source "$ASDF_DIR/asdf.sh"
-${asdfReshimFile}
+    source "$ASDF_DIR/asdf.sh"
+    ${asdfReshimFile}
   '';
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "asdf-vm";
   version = "0.14.1";
 

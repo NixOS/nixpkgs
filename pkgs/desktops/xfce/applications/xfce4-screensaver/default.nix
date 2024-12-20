@@ -1,21 +1,22 @@
-{ mkXfceDerivation
-, gobject-introspection
-, dbus-glib
-, garcon
-, glib
-, gtk3
-, libX11
-, libXScrnSaver
-, libXrandr
-, libwnck
-, libxfce4ui
-, libxfce4util
-, libxklavier
-, pam
-, python3
-, systemd
-, xfconf
-, lib
+{
+  mkXfceDerivation,
+  gobject-introspection,
+  dbus-glib,
+  garcon,
+  glib,
+  gtk3,
+  libX11,
+  libXScrnSaver,
+  libXrandr,
+  libwnck,
+  libxfce4ui,
+  libxfce4util,
+  libxklavier,
+  pam,
+  python3,
+  systemd,
+  xfconf,
+  lib,
 }:
 
 let

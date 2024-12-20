@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchYarnDeps
-, yarnConfigHook
-, yarnBuildHook
-, nodejs
-, makeWrapper
-, makeDesktopItem
-, copyDesktopItems
-, electron
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
+  makeWrapper,
+  makeDesktopItem,
+  copyDesktopItems,
+  electron,
 }:
 
 stdenv.mkDerivation rec {

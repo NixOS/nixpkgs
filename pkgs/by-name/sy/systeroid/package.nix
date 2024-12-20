@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, linux-doc
-, xorg
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  linux-doc,
+  xorg,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,7 +35,13 @@ rustPlatform.buildRustPackage rec {
     description = "More powerful alternative to sysctl(8) with a terminal user interface";
     homepage = "https://github.com/orhun/systeroid";
     changelog = "https://github.com/orhun/systeroid/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ asl20 mit ];
-    maintainers = with maintainers; [ figsoda matthiasbeyer ];
+    license = with licenses; [
+      asl20
+      mit
+    ];
+    maintainers = with maintainers; [
+      figsoda
+      matthiasbeyer
+    ];
   };
 }

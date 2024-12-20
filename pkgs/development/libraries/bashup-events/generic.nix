@@ -1,35 +1,34 @@
 {
   # general
-  lib
-, resholve
-, bash
-, doCheck ? true
-, doInstallCheck ? true
+  lib,
+  resholve,
+  bash,
+  doCheck ? true,
+  doInstallCheck ? true,
   # variant-specific
-, variant
-, version
-, branch
-, src
-, fake ? false
-, keep
+  variant,
+  version,
+  branch,
+  src,
+  fake ? false,
+  keep,
 }:
 let
   # extracting this so that it's trivial to test in other shells
-  installCheck = shell:
-    ''
-      echo "testing bashup.events in ${shell}"
-      ${shell} <<'EOF'
-      source $out/bin/bashup.events
-      neat(){
-        echo $0: Hi from event \'test event\'. I can have both $1 and $2 arguments.
-        exit 0
-      }
-      event on "test event" @2 neat curried
-      echo event registered
-      event emit "test event" runtime
-      exit 1 # fail if emitting event didn't exit clean
-      EOF
-    '';
+  installCheck = shell: ''
+    echo "testing bashup.events in ${shell}"
+    ${shell} <<'EOF'
+    source $out/bin/bashup.events
+    neat(){
+      echo $0: Hi from event \'test event\'. I can have both $1 and $2 arguments.
+      exit 0
+    }
+    event on "test event" @2 neat curried
+    echo event registered
+    event emit "test event" runtime
+    exit 1 # fail if emitting event didn't exit clean
+    EOF
+  '';
 
 in
 resholve.mkDerivation rec {

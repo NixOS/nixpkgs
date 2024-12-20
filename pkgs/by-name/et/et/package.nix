@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, libnotify, gdk-pixbuf }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libnotify,
+  gdk-pixbuf,
+}:
 
 stdenv.mkDerivation rec {
   pname = "et";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "0i0lgmnly8n7y4y6pb10pxgxyz8s5zk26k8z1g1578v1wan01lnq";
   };
 
-  buildInputs = [ libnotify gdk-pixbuf ];
+  buildInputs = [
+    libnotify
+    gdk-pixbuf
+  ];
   nativeBuildInputs = [ pkg-config ];
 
   installPhase = ''

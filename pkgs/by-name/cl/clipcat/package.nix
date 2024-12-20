@@ -52,7 +52,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/xrelkd/clipcat";
     license = lib.licenses.gpl3Only;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
-    maintainers = with lib.maintainers; [ xrelkd bot-wxt1221 ];
+    maintainers = with lib.maintainers; [
+      xrelkd
+      bot-wxt1221
+    ];
     mainProgram = "clipcatd";
   };
 }

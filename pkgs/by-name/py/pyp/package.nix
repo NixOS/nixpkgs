@@ -1,8 +1,9 @@
-{ lib
-, bc
-, fetchFromGitHub
-, jq
-, python3
+{
+  lib,
+  bc,
+  fetchFromGitHub,
+  jq,
+  python3,
 }:
 
 let
@@ -24,12 +25,14 @@ let
       flit-core
     ];
 
-    nativeCheckInputs = (with pythonPackages; [
-      pytestCheckHook
-    ]) ++ [
-      bc
-      jq
-    ];
+    nativeCheckInputs =
+      (with pythonPackages; [
+        pytestCheckHook
+      ])
+      ++ [
+        bc
+        jq
+      ];
 
     pythonImportsCheck = [
       "pyp"
@@ -40,7 +43,7 @@ let
     preCheck = ''
       _OLD_PATH_=$PATH
       PATH=$out/bin:$PATH
-   '';
+    '';
 
     # And a cleanup!
     postCheck = ''
@@ -53,7 +56,10 @@ let
       changelog = "https://github.com/hauntsaninja/pyp/blob/${finalAttrs.version}/CHANGELOG.md";
       license = with lib.licenses; [ mit ];
       mainProgram = "pyp";
-      maintainers = with lib.maintainers; [ rmcgibbo AndersonTorres ];
+      maintainers = with lib.maintainers; [
+        rmcgibbo
+        AndersonTorres
+      ];
     };
   };
 in

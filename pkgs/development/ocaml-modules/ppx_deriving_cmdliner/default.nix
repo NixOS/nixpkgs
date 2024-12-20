@@ -1,13 +1,14 @@
-{ lib
-, buildDunePackage
-, fetchFromGitHub
-, fetchpatch
-, alcotest
-, cmdliner
-, ppx_deriving
-, ppxlib
-, result
-, gitUpdater
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  fetchpatch,
+  alcotest,
+  cmdliner,
+  ppx_deriving,
+  ppxlib,
+  result,
+  gitUpdater,
 }:
 
 buildDunePackage rec {

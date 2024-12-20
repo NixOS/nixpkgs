@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, helix
-, installShellFiles
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  helix,
+  installShellFiles,
+  rustPlatform,
 }:
 
 rustPlatform.buildRustPackage rec {

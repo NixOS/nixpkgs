@@ -1,23 +1,24 @@
-{ cargo
-, darwin
-, desktop-file-utils
-, fetchFromGitLab
-, gettext
-, glib
-, gtk4
-, gtksourceview5
-, lib
-, libadwaita
-, meson
-, ninja
-, pkg-config
-, poppler
-, rustPlatform
-, rustc
-, stdenv
-, testers
-, wrapGAppsHook4
-, clippy
+{
+  cargo,
+  darwin,
+  desktop-file-utils,
+  fetchFromGitLab,
+  gettext,
+  glib,
+  gtk4,
+  gtksourceview5,
+  lib,
+  libadwaita,
+  meson,
+  ninja,
+  pkg-config,
+  poppler,
+  rustPlatform,
+  rustc,
+  stdenv,
+  testers,
+  wrapGAppsHook4,
+  clippy,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -50,22 +51,26 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook4
   ];
 
-  buildInputs = [
-    glib
-    gtk4
-    gtksourceview5
-    libadwaita
-    poppler
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  buildInputs =
+    [
+      glib
+      gtk4
+      gtksourceview5
+      libadwaita
+      poppler
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Foundation
+    ];
 
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (lib.concatStringsSep " " [
-    "-Wno-typedef-redefinition"
-    "-Wno-unused-parameter"
-    "-Wno-missing-field-initializers"
-    "-Wno-incompatible-function-pointer-types"
-  ]);
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang (
+    lib.concatStringsSep " " [
+      "-Wno-typedef-redefinition"
+      "-Wno-unused-parameter"
+      "-Wno-missing-field-initializers"
+      "-Wno-incompatible-function-pointer-types"
+    ]
+  );
 
   doCheck = true;
 

@@ -1,37 +1,46 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, wayland-scanner
-, libGL
-, wayland
-, wayland-protocols
-, libinput
-, libxkbcommon
-, pixman
-, libcap
-, mesa
-, xorg
-, libpng
-, ffmpeg
-, hwdata
-, seatd
-, vulkan-loader
-, glslang
-, libliftoff
-, libdisplay-info
-, lcms2
-, nixosTests
-, testers
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  wayland-scanner,
+  libGL,
+  wayland,
+  wayland-protocols,
+  libinput,
+  libxkbcommon,
+  pixman,
+  libcap,
+  mesa,
+  xorg,
+  libpng,
+  ffmpeg,
+  hwdata,
+  seatd,
+  vulkan-loader,
+  glslang,
+  libliftoff,
+  libdisplay-info,
+  lcms2,
+  nixosTests,
+  testers,
 
-, enableXWayland ? true
-, xwayland ? null
+  enableXWayland ? true,
+  xwayland ? null,
 }:
 
 let
-  generic = { version, hash, extraBuildInputs ? [ ], extraNativeBuildInputs ? [ ], patches ? [ ], postPatch ? "" }:
+  generic =
+    {
+      version,
+      hash,
+      extraBuildInputs ? [ ],
+      extraNativeBuildInputs ? [ ],
+      patches ? [ ],
+      postPatch ? "",
+    }:
     stdenv.mkDerivation (finalAttrs: {
       pname = "wlroots";
       inherit version;
@@ -49,38 +58,45 @@ let
       inherit patches postPatch;
 
       # $out for the library and $examples for the example programs (in examples):
-      outputs = [ "out" "examples" ];
+      outputs = [
+        "out"
+        "examples"
+      ];
 
       strictDeps = true;
       depsBuildBuild = [ pkg-config ];
 
-      nativeBuildInputs = [ meson ninja pkg-config wayland-scanner glslang ]
-        ++ extraNativeBuildInputs;
+      nativeBuildInputs = [
+        meson
+        ninja
+        pkg-config
+        wayland-scanner
+        glslang
+      ] ++ extraNativeBuildInputs;
 
-      buildInputs = [
-        libGL
-        libcap
-        libinput
-        libpng
-        libxkbcommon
-        mesa
-        pixman
-        seatd
-        vulkan-loader
-        wayland
-        wayland-protocols
-        xorg.libX11
-        xorg.xcbutilerrors
-        xorg.xcbutilimage
-        xorg.xcbutilrenderutil
-        xorg.xcbutilwm
-      ]
-      ++ lib.optional finalAttrs.enableXWayland xwayland
-      ++ extraBuildInputs;
+      buildInputs =
+        [
+          libGL
+          libcap
+          libinput
+          libpng
+          libxkbcommon
+          mesa
+          pixman
+          seatd
+          vulkan-loader
+          wayland
+          wayland-protocols
+          xorg.libX11
+          xorg.xcbutilerrors
+          xorg.xcbutilimage
+          xorg.xcbutilrenderutil
+          xorg.xcbutilwm
+        ]
+        ++ lib.optional finalAttrs.enableXWayland xwayland
+        ++ extraBuildInputs;
 
-      mesonFlags =
-        lib.optional (!finalAttrs.enableXWayland) "-Dxwayland=disabled"
-      ;
+      mesonFlags = lib.optional (!finalAttrs.enableXWayland) "-Dxwayland=disabled";
 
       postFixup = ''
         # Install ALL example programs to $examples:
@@ -112,11 +128,18 @@ let
         changelog = "https://gitlab.freedesktop.org/wlroots/wlroots/-/tags/${version}";
         license = lib.licenses.mit;
         platforms = lib.platforms.linux;
-        maintainers = with lib.maintainers; [ primeos synthetica rewine ];
+        maintainers = with lib.maintainers; [
+          primeos
+          synthetica
+          rewine
+        ];
         pkgConfigModules = [
-          (if lib.versionOlder finalAttrs.version "0.18"
-           then "wlroots"
-           else "wlroots-${lib.versions.majorMinor finalAttrs.version}")
+          (
+            if lib.versionOlder finalAttrs.version "0.18" then
+              "wlroots"
+            else
+              "wlroots-${lib.versions.majorMinor finalAttrs.version}"
+          )
         ];
       };
     });

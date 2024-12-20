@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchpatch, fetchurl, readline, bison }:
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchurl,
+  readline,
+  bison,
+}:
 
 stdenv.mkDerivation rec {
 
@@ -35,16 +42,18 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Extensible shell with higher order functions";
     mainProgram = "es";
-    longDescription =
-      ''
-        Es is an extensible shell. The language was derived
-        from the Plan 9 shell, rc, and was influenced by
-        functional programming languages, such as Scheme,
-        and the Tcl embeddable programming language.
-      '';
+    longDescription = ''
+      Es is an extensible shell. The language was derived
+      from the Plan 9 shell, rc, and was influenced by
+      functional programming languages, such as Scheme,
+      and the Tcl embeddable programming language.
+    '';
     homepage = "http://wryun.github.io/es-shell/";
     license = licenses.publicDomain;
-    maintainers = with maintainers; [ sjmackenzie ttuegel ];
+    maintainers = with maintainers; [
+      sjmackenzie
+      ttuegel
+    ];
     platforms = platforms.all;
   };
 

@@ -1,4 +1,11 @@
-{ lib, symlinkJoin, man, prevo-tools, prevo-data, makeWrapper }:
+{
+  lib,
+  symlinkJoin,
+  man,
+  prevo-tools,
+  prevo-data,
+  makeWrapper,
+}:
 
 symlinkJoin rec {
   name = "prevo-${version}";
@@ -24,6 +31,9 @@ symlinkJoin rec {
     homepage = "https://github.com/bpeel/prevodb";
     license = lib.licenses.gpl2Only;
     mainProgram = "prevo";
-    maintainers = with lib.maintainers; [ das-g ehmry ];
+    maintainers = with lib.maintainers; [
+      das-g
+      ehmry
+    ];
   };
 }

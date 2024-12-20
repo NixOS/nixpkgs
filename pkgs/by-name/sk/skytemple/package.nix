@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, gobject-introspection
-, gtk3
-, gtksourceview4
-, webkitgtk_4_0
-, wrapGAppsHook3
-, python3Packages
+{
+  lib,
+  fetchFromGitHub,
+  gobject-introspection,
+  gtk3,
+  gtksourceview4,
+  webkitgtk_4_0,
+  wrapGAppsHook3,
+  python3Packages,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -36,25 +37,28 @@ python3Packages.buildPythonApplication rec {
     wrapGAppsHook3
   ];
 
-  dependencies = with python3Packages; [
-    cairosvg
-    natsort
-    ndspy
-    packaging
-    pycairo
-    pygal
-    psutil
-    pypresence
-    sentry-sdk
-    setuptools
-    skytemple-dtef
-    skytemple-eventserver
-    skytemple-files
-    skytemple-icons
-    skytemple-ssb-debugger
-    tilequant
-    wheel
-  ] ++ skytemple-files.optional-dependencies.spritecollab;
+  dependencies =
+    with python3Packages;
+    [
+      cairosvg
+      natsort
+      ndspy
+      packaging
+      pycairo
+      pygal
+      psutil
+      pypresence
+      sentry-sdk
+      setuptools
+      skytemple-dtef
+      skytemple-eventserver
+      skytemple-files
+      skytemple-icons
+      skytemple-ssb-debugger
+      tilequant
+      wheel
+    ]
+    ++ skytemple-files.optional-dependencies.spritecollab;
 
   doCheck = false; # there are no tests
 

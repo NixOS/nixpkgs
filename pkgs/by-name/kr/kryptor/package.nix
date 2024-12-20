@@ -1,7 +1,9 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
+  versionCheckHook,
 }:
 
 buildDotnetModule rec {
@@ -11,17 +13,24 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "samuel-lucas6";
     repo = "Kryptor";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-BxUmDzmfvRelQDHb5uLcQ2YPL7ClxZNFGm/gQoDK8t8=";
   };
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
   projectFile = "src/Kryptor.sln";
   nugetDeps = ./deps.nix;
 
-  executables = ["kryptor"];
+  executables = [ "kryptor" ];
 
-  dotnetFlags = ["-p:IncludeNativeLibrariesForSelfExtract=true"];
+  dotnetFlags = [ "-p:TargetFramework=net8.0" ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru = {
+    updateScript = ./update.sh;
+  };
 
   meta = {
     changelog = "https://github.com/samuel-lucas6/Kryptor/releases/tag/v${version}";
@@ -29,7 +38,10 @@ buildDotnetModule rec {
     homepage = "https://github.com/samuel-lucas6/Kryptor";
     license = lib.licenses.gpl3Only;
     mainProgram = "kryptor";
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = with lib.maintainers; [
+      arthsmn
+      gepbird
+    ];
     platforms = lib.platforms.all;
   };
 }

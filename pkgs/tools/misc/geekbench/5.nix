@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, autoPatchelfHook
-, addDriverRunpath
-, makeWrapper
-, ocl-icd
-, vulkan-loader
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoPatchelfHook,
+  addDriverRunpath,
+  makeWrapper,
+  ocl-icd,
+  vulkan-loader,
 }:
 
 let
@@ -26,12 +27,17 @@ stdenv.mkDerivation {
   inherit version;
   pname = "geekbench";
 
-  src = fetchurl (sources.${stdenv.system} or (throw "unsupported system ${stdenv.hostPlatform.system}"));
+  src = fetchurl (
+    sources.${stdenv.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
+  );
 
   dontConfigure = true;
   dontBuild = true;
 
-  nativeBuildInputs = [ autoPatchelfHook makeWrapper ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    makeWrapper
+  ];
 
   buildInputs = [ (lib.getLib stdenv.cc.cc) ];
 
@@ -43,11 +49,13 @@ stdenv.mkDerivation {
 
     for f in geekbench5 geekbench_${processor} ; do
       wrapProgram $out/bin/$f \
-        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [
-          addDriverRunpath.driverLink
-          ocl-icd
-          vulkan-loader
-       ]}"
+        --prefix LD_LIBRARY_PATH : "${
+          lib.makeLibraryPath [
+            addDriverRunpath.driverLink
+            ocl-icd
+            vulkan-loader
+          ]
+        }"
     done
 
     runHook postInstall

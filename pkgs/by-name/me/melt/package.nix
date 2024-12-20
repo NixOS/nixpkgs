@@ -1,4 +1,8 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "melt";
@@ -13,7 +17,11 @@ buildGoModule rec {
 
   vendorHash = "sha256-ZCHPbLjf2rTlg+Nj3v+XRW2xDN0qqhnlrF4sXNrGH/E=";
 
-  ldflags = [ "-s" "-w" "-X=main.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.Version=${version}"
+  ];
 
   meta = with lib; {
     description = "Backup and restore Ed25519 SSH keys with seed words";

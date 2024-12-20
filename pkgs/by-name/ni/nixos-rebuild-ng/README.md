@@ -107,9 +107,9 @@ ruff format .
 - [ ] Port `nixos-rebuild.passthru.tests`
 - [ ] Change module system to allow easier opt-in, like
   `system.switch.enableNg` for `switch-to-configuration-ng`
-- [ ] Improve documentation
+- [x] Improve documentation
 - [x] `nixos-rebuild repl`
-- [ ] Generate tab completion via [`shtab`](https://docs.iterative.ai/shtab/)
+- [x] Generate tab completion via [`shtab`](https://docs.iterative.ai/shtab/)
 - [x] Reduce build closure
 
 ## TODON'T

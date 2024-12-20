@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, imake, gccmakedep, libXt, libXext }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  imake,
+  gccmakedep,
+  libXt,
+  libXext,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xearth";
@@ -9,11 +17,24 @@ stdenv.mkDerivation rec {
     sha256 = "bcb1407cc35b3f6dd3606b2c6072273b6a912cbd9ed1ae22fb2d26694541309c";
   };
 
-  nativeBuildInputs = [ imake gccmakedep ];
-  buildInputs = [ libXt libXext ];
+  nativeBuildInputs = [
+    imake
+    gccmakedep
+  ];
+  buildInputs = [
+    libXt
+    libXext
+  ];
 
-  installFlags = [ "DESTDIR=$(out)/" "BINDIR=bin" "MANDIR=man/man1"];
-  installTargets = [ "install" "install.man" ];
+  installFlags = [
+    "DESTDIR=$(out)/"
+    "BINDIR=bin"
+    "MANDIR=man/man1"
+  ];
+  installTargets = [
+    "install"
+    "install.man"
+  ];
 
   meta = with lib; {
     description = "sets the X root window to an image of the Earth";
@@ -25,12 +46,12 @@ stdenv.mkDerivation rec {
       By default, xearth updates the displayed image every  five  minutes.
     '';
     maintainers = [ maintainers.mafo ];
-    license  = {
+    license = {
       fullName = "xearth license";
       url = "https://xearth.org/copyright.html";
       free = true;
     };
-    platforms=platforms.unix;
+    platforms = platforms.unix;
   };
 
 }

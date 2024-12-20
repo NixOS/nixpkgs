@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, darwin, installShellFiles }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+  installShellFiles,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "pazi";

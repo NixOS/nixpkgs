@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, ocamlPackages }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ocamlPackages,
+}:
 
 stdenv.mkDerivation {
   pname = "ledit";
@@ -27,7 +32,6 @@ stdenv.mkDerivation {
     camlp5
     camlp-streams
   ];
-
 
   meta = with lib; {
     homepage = "http://pauillac.inria.fr/~ddr/ledit/";

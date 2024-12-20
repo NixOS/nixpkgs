@@ -1,4 +1,17 @@
-{ lib, stdenv, fetchurl, pkg-config, glib, vala, libcanberra, gobject-introspection, libtool, gnome, meson, ninja }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  glib,
+  vala,
+  libcanberra,
+  gobject-introspection,
+  libtool,
+  gnome,
+  meson,
+  ninja,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gsound";
@@ -11,8 +24,18 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
   depsBuildBuild = [ pkg-config ];
-  nativeBuildInputs = [ pkg-config meson ninja gobject-introspection libtool vala ];
-  buildInputs = [ glib libcanberra ];
+  nativeBuildInputs = [
+    pkg-config
+    meson
+    ninja
+    gobject-introspection
+    libtool
+    vala
+  ];
+  buildInputs = [
+    glib
+    libcanberra
+  ];
 
   passthru = {
     updateScript = gnome.updateScript {

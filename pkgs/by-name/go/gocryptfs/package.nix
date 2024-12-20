@@ -1,12 +1,13 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, fuse
-, makeWrapper
-, openssl
-, pandoc
-, pkg-config
-, libfido2
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  fuse,
+  makeWrapper,
+  openssl,
+  pandoc,
+  pkg-config,
+  libfido2,
 }:
 
 buildGoModule rec {
@@ -38,7 +39,11 @@ buildGoModule rec {
     "-X main.BuildDate=unknown"
   ];
 
-  subPackages = [ "." "gocryptfs-xray" "contrib/statfs" ];
+  subPackages = [
+    "."
+    "gocryptfs-xray"
+    "contrib/statfs"
+  ];
 
   postBuild = ''
     pushd Documentation/
@@ -62,7 +67,11 @@ buildGoModule rec {
     description = "Encrypted overlay filesystem written in Go";
     license = licenses.mit;
     homepage = "https://nuetzlich.net/gocryptfs/";
-    maintainers = with maintainers; [ flokli offline prusnak ];
+    maintainers = with maintainers; [
+      flokli
+      offline
+      prusnak
+    ];
     platforms = platforms.unix;
   };
 }

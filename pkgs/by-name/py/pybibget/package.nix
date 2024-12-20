@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchPypi,
 }:
 
 let
@@ -13,7 +14,7 @@ let
   };
 
 in
-python3.pkgs.buildPythonApplication  {
+python3.pkgs.buildPythonApplication {
   inherit pname version src;
   pyproject = true;
 

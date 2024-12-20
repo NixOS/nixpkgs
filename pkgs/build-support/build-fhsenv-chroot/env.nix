@@ -1,13 +1,21 @@
-{ stdenv, lib, buildEnv, writeText, pkgs, pkgsi686Linux }:
+{
+  stdenv,
+  lib,
+  buildEnv,
+  writeText,
+  pkgs,
+  pkgsi686Linux,
+}:
 
-{ name
-, profile ? ""
-, targetPkgs ? pkgs: []
-, multiPkgs ? pkgs: []
-, nativeBuildInputs ? []
-, extraBuildCommands ? ""
-, extraBuildCommandsMulti ? ""
-, extraOutputsToInstall ? []
+{
+  name,
+  profile ? "",
+  targetPkgs ? pkgs: [ ],
+  multiPkgs ? pkgs: [ ],
+  nativeBuildInputs ? [ ],
+  extraBuildCommands ? "",
+  extraBuildCommandsMulti ? "",
+  extraOutputsToInstall ? [ ],
 }:
 
 # HOWTO:
@@ -28,12 +36,12 @@
 let
   is64Bit = stdenv.hostPlatform.parsed.cpu.bits == 64;
   # multi-lib glibc is only supported on x86_64
-  isMultiBuild  = multiPkgs != null && stdenv.hostPlatform.system == "x86_64-linux";
+  isMultiBuild = multiPkgs != null && stdenv.hostPlatform.system == "x86_64-linux";
   isTargetBuild = !isMultiBuild;
 
   # list of packages (usually programs) which are only be installed for the
   # host's architecture
-  targetPaths = targetPkgs pkgs ++ (if multiPkgs == null then [] else multiPkgs pkgs);
+  targetPaths = targetPkgs pkgs ++ (if multiPkgs == null then [ ] else multiPkgs pkgs);
 
   # list of packages which are installed for both x86 and x86_64 on x86_64
   # systems
@@ -43,16 +51,28 @@ let
   # these match the host's architecture, glibc_multi is used for multilib
   # builds. glibcLocales must be before glibc or glibc_multi as otherwiese
   # the wrong LOCALE_ARCHIVE will be used where only C.UTF-8 is available.
-  basePkgs = with pkgs;
-    [ glibcLocales
-      (if isMultiBuild then glibc_multi else glibc)
-      (toString gcc.cc.lib) bashInteractiveFHS coreutils less shadow su
-      gawk diffutils findutils gnused gnugrep
-      gnutar gzip bzip2 xz
-    ];
-  baseMultiPkgs = with pkgsi686Linux;
-    [ (toString gcc.cc.lib)
-    ];
+  basePkgs = with pkgs; [
+    glibcLocales
+    (if isMultiBuild then glibc_multi else glibc)
+    (toString gcc.cc.lib)
+    bashInteractiveFHS
+    coreutils
+    less
+    shadow
+    su
+    gawk
+    diffutils
+    findutils
+    gnused
+    gnugrep
+    gnutar
+    gzip
+    bzip2
+    xz
+  ];
+  baseMultiPkgs = with pkgsi686Linux; [
+    (toString gcc.cc.lib)
+  ];
 
   etcProfile = writeText "profile" ''
     export PS1='${name}-chrootenv:\u@\h:\w\$ '
@@ -92,7 +112,7 @@ let
 
   # Compose /etc for the chroot environment
   etcPkg = stdenv.mkDerivation {
-    name         = "${name}-chrootenv-etc";
+    name = "${name}-chrootenv-etc";
     buildCommand = ''
       mkdir -p $out/etc
       cd $out/etc
@@ -151,7 +171,11 @@ let
   staticUsrProfileTarget = buildEnv {
     name = "${name}-usr-target";
     paths = [ etcPkg ] ++ basePkgs ++ targetPaths;
-    extraOutputsToInstall = [ "out" "lib" "bin" ] ++ extraOutputsToInstall;
+    extraOutputsToInstall = [
+      "out"
+      "lib"
+      "bin"
+    ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
     postBuild = ''
       if [[ -d  $out/share/gsettings-schemas/ ]]; then
@@ -187,7 +211,10 @@ let
   staticUsrProfileMulti = buildEnv {
     name = "${name}-usr-multi";
     paths = baseMultiPkgs ++ multiPaths;
-    extraOutputsToInstall = [ "out" "lib" ] ++ extraOutputsToInstall;
+    extraOutputsToInstall = [
+      "out"
+      "lib"
+    ] ++ extraOutputsToInstall;
     ignoreCollisions = true;
   };
 
@@ -217,8 +244,7 @@ let
     ln -Ls ${staticUsrProfileTarget}/lib/32/ld-linux.so.2 lib/
   '';
 
-  setupLibDirs = if isTargetBuild then setupLibDirs_target
-                                  else setupLibDirs_multi;
+  setupLibDirs = if isTargetBuild then setupLibDirs_target else setupLibDirs_multi;
 
   # the target profile is the actual profile that will be used for the chroot
   setupTargetProfile = ''
@@ -244,8 +270,9 @@ let
     done
   '';
 
-in stdenv.mkDerivation {
-  name         = "${name}-fhs";
+in
+stdenv.mkDerivation {
+  name = "${name}-fhs";
   inherit nativeBuildInputs;
   buildCommand = ''
     mkdir -p $out

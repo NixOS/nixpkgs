@@ -1,11 +1,12 @@
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
-, fetchpatch2
-, govee-led-wez
-, pytest-cov-stub
-, pytest-homeassistant-custom-component
-, pytestCheckHook
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
+  fetchpatch2,
+  govee-led-wez,
+  pytest-cov-stub,
+  pytest-homeassistant-custom-component,
+  pytestCheckHook,
 }:
 
 buildHomeAssistantComponent {

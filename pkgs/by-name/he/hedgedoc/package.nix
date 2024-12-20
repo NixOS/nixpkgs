@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gitMinimal
-, cacert
-, yarn
-, makeBinaryWrapper
-, nodejs
-, python3
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gitMinimal,
+  cacert,
+  yarn,
+  makeBinaryWrapper,
+  nodejs,
+  python3,
+  nixosTests,
 }:
 
 let
@@ -45,7 +46,8 @@ let
     outputHash = "sha256-RV9xzNVE4//tPVWVaET78ML3ah+hkZ8x6mTAxe5/pdE=";
   };
 
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "hedgedoc";
   inherit version src;
 

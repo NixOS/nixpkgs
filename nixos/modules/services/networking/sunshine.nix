@@ -1,6 +1,22 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 let
-  inherit (lib) mkEnableOption mkPackageOption mkOption literalExpression mkIf mkDefault types optionals getExe;
+  inherit (lib)
+    mkEnableOption
+    mkPackageOption
+    mkOption
+    literalExpression
+    mkIf
+    mkDefault
+    types
+    optionals
+    getExe
+    ;
   inherit (utils) escapeSystemdExecArgs;
   cfg = config.services.sunshine;
 
@@ -116,8 +132,19 @@ in
     ];
 
     networking.firewall = mkIf cfg.openFirewall {
-      allowedTCPPorts = generatePorts cfg.settings.port [ (-5) 0 1 21 ];
-      allowedUDPPorts = generatePorts cfg.settings.port [ 9 10 11 13 21 ];
+      allowedTCPPorts = generatePorts cfg.settings.port [
+        (-5)
+        0
+        1
+        21
+      ];
+      allowedUDPPorts = generatePorts cfg.settings.port [
+        9
+        10
+        11
+        13
+        21
+      ];
     };
 
     boot.kernelModules = [ "uinput" ];
@@ -152,9 +179,15 @@ in
 
       serviceConfig = {
         # only add configFile if an application or a setting other than the default port is set to allow configuration from web UI
-        ExecStart = escapeSystemdExecArgs ([
-          (if cfg.capSysAdmin then "${config.security.wrapperDir}/sunshine" else "${getExe cfg.package}")
-        ] ++ optionals (cfg.applications.apps != [ ] || (builtins.length (builtins.attrNames cfg.settings) > 1 || cfg.settings.port != defaultPort)) [ "${configFile}" ]);
+        ExecStart = escapeSystemdExecArgs (
+          [
+            (if cfg.capSysAdmin then "${config.security.wrapperDir}/sunshine" else "${getExe cfg.package}")
+          ]
+          ++ optionals (
+            cfg.applications.apps != [ ]
+            || (builtins.length (builtins.attrNames cfg.settings) > 1 || cfg.settings.port != defaultPort)
+          ) [ "${configFile}" ]
+        );
         Restart = "on-failure";
         RestartSec = "5s";
       };

@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, gitUpdater, testers, prometheus-nats-exporter }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  gitUpdater,
+  testers,
+  prometheus-nats-exporter,
+}:
 
 buildGoModule rec {
   pname = "prometheus-nats-exporter";

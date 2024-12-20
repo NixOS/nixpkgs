@@ -1,57 +1,61 @@
-{ stdenv
-, lib
-, fetchurl
-, pkg-config
-, gnome
-, _experimental-update-script-combinators
-, python3
-, gobject-introspection
-, gettext
-, libsoup_3
-, libxml2
-, libsecret
-, icu
-, sqlite
-, libcanberra-gtk3
-, p11-kit
-, db
-, nspr
-, nss
-, libical
-, gperf
-, wrapGAppsHook3
-, glib-networking
-, gsettings-desktop-schemas
-, pcre
-, vala
-, cmake
-, ninja
-, libkrb5
-, openldap
-, enableOAuth2 ? stdenv.hostPlatform.isLinux
-, webkitgtk_4_1
-, webkitgtk_6_0
-, json-glib
-, glib
-, gtk3
-, gtk4
-, withGtk3 ? true
-, withGtk4 ? false
-, libphonenumber
-, libuuid
-, gnome-online-accounts
-, libgweather
-, boost
-, protobuf
-, libiconv
-, makeHardcodeGsettingsPatch
+{
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  gnome,
+  _experimental-update-script-combinators,
+  python3,
+  gobject-introspection,
+  gettext,
+  libsoup_3,
+  libxml2,
+  libsecret,
+  icu,
+  sqlite,
+  libcanberra-gtk3,
+  p11-kit,
+  db,
+  nspr,
+  nss,
+  libical,
+  gperf,
+  wrapGAppsHook3,
+  glib-networking,
+  gsettings-desktop-schemas,
+  pcre,
+  vala,
+  cmake,
+  ninja,
+  libkrb5,
+  openldap,
+  enableOAuth2 ? stdenv.hostPlatform.isLinux,
+  webkitgtk_4_1,
+  webkitgtk_6_0,
+  json-glib,
+  glib,
+  gtk3,
+  gtk4,
+  withGtk3 ? true,
+  withGtk4 ? false,
+  libphonenumber,
+  libuuid,
+  gnome-online-accounts,
+  libgweather,
+  boost,
+  protobuf,
+  libiconv,
+  makeHardcodeGsettingsPatch,
 }:
 
 stdenv.mkDerivation rec {
   pname = "evolution-data-server";
   version = "3.54.2";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/evolution-data-server/${lib.versions.majorMinor version}/evolution-data-server-${version}.tar.xz";
@@ -83,35 +87,41 @@ stdenv.mkDerivation rec {
     vala
   ];
 
-  buildInputs = [
-    glib
-    libsecret
-    libsoup_3
-    gnome-online-accounts
-    p11-kit
-    libgweather
-    icu
-    sqlite
-    libkrb5
-    openldap
-    glib-networking
-    libcanberra-gtk3
-    pcre
-    libphonenumber
-    libuuid
-    boost
-    protobuf
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ] ++ lib.optionals withGtk3 [
-    gtk3
-  ] ++ lib.optionals (withGtk3 && enableOAuth2) [
-    webkitgtk_4_1
-  ] ++ lib.optionals withGtk4 [
-    gtk4
-  ] ++ lib.optionals (withGtk4 && enableOAuth2) [
-    webkitgtk_6_0
-  ];
+  buildInputs =
+    [
+      glib
+      libsecret
+      libsoup_3
+      gnome-online-accounts
+      p11-kit
+      libgweather
+      icu
+      sqlite
+      libkrb5
+      openldap
+      glib-networking
+      libcanberra-gtk3
+      pcre
+      libphonenumber
+      libuuid
+      boost
+      protobuf
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ]
+    ++ lib.optionals withGtk3 [
+      gtk3
+    ]
+    ++ lib.optionals (withGtk3 && enableOAuth2) [
+      webkitgtk_4_1
+    ]
+    ++ lib.optionals withGtk4 [
+      gtk4
+    ]
+    ++ lib.optionals (withGtk4 && enableOAuth2) [
+      webkitgtk_6_0
+    ];
 
   propagatedBuildInputs = [
     db

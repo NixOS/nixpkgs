@@ -1,14 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, openssl
-, libiconv
-, makeWrapper
-, imagemagick
-, makeFontsConf
-}:
-stdenv.mkDerivation
 {
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  libiconv,
+  makeWrapper,
+  imagemagick,
+  makeFontsConf,
+}:
+stdenv.mkDerivation {
   pname = "sgfutils";
   version = "0.25-unstable-2017-11-27";
   src = fetchFromGitHub {
@@ -36,7 +36,7 @@ stdenv.mkDerivation
   postFixup = ''
     wrapProgram $out/bin/sgftopng \
       --prefix PATH : ${lib.makeBinPath [ imagemagick ]} \
-      --set-default FONTCONFIG_FILE ${makeFontsConf { fontDirectories = []; }}
+      --set-default FONTCONFIG_FILE ${makeFontsConf { fontDirectories = [ ]; }}
   '';
   meta = with lib; {
     homepage = "https://homepages.cwi.nl/~aeb/go/sgfutils/html/sgfutils.html";

@@ -1,7 +1,8 @@
-{ lib
-, fetchurl
-, stdenv
-, undmg
+{
+  lib,
+  fetchurl,
+  stdenv,
+  undmg,
 }:
 
 let
@@ -12,8 +13,8 @@ stdenv.mkDerivation {
   version = "2.0";
 
   src = fetchurl {
-   # Use externally archived download URL because
-   # upstream does not provide stable URLs for versioned releases
+    # Use externally archived download URL because
+    # upstream does not provide stable URLs for versioned releases
     url = "https://web.archive.org/web/${snapshot}/https://www.mothersruin.com/software/downloads/Apparency.dmg";
     hash = "sha256-XKxWxqfxy9AQneILLrN9XqLt4/k2N8yumZ5mrSvczFk=";
   };

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, ncurses, which }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  ncurses,
+  which,
+}:
 
 stdenv.mkDerivation rec {
   pname = "progress";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-riewkageSZIlwDNMjYep9Pb2q1GJ+WMXazokJGbb4bE=";
   };
 
-  nativeBuildInputs = [ pkg-config which ];
+  nativeBuildInputs = [
+    pkg-config
+    which
+  ];
   buildInputs = [ ncurses ];
 
   makeFlags = [ "PREFIX=$(out)" ];

@@ -1,14 +1,15 @@
-{ lib
-, callPackage
-, writeShellScriptBin
-, beamPackages
-, mix2nix
-, fetchFromGitHub
-, git
-, cmake
-, nixosTests
-, mobilizon-frontend
-, ...
+{
+  lib,
+  callPackage,
+  writeShellScriptBin,
+  beamPackages,
+  mix2nix,
+  fetchFromGitHub,
+  git,
+  cmake,
+  nixosTests,
+  mobilizon-frontend,
+  ...
 }:
 
 let
@@ -18,16 +19,22 @@ in
 mixRelease rec {
   inherit (common) pname version src;
 
-  nativeBuildInputs = [ git cmake ];
+  nativeBuildInputs = [
+    git
+    cmake
+  ];
 
   mixNixDeps = import ./mix.nix {
     inherit beamPackages lib;
-    overrides = (final: prev:
-      (lib.mapAttrs
-        (_: value: value.override {
+    overrides = (
+      final: prev:
+      (lib.mapAttrs (
+        _: value:
+        value.override {
           appConfigPath = src + "/config";
-        })
-        prev) // {
+        }
+      ) prev)
+      // {
         fast_html = prev.fast_html.override {
           nativeBuildInputs = [ cmake ];
         };
@@ -38,7 +45,8 @@ mixRelease rec {
             owner = "elixir-cldr";
             repo = "cldr";
             rev = "v${old.version}";
-            sha256 = assert old.version == "2.37.5";
+            sha256 =
+              assert old.version == "2.37.5";
               "sha256-T5Qvuo+xPwpgBsqHNZYnTCA4loToeBn1LKTMsDcCdYs=";
           };
           postInstall = ''
@@ -60,7 +68,10 @@ mixRelease rec {
             rev = "6e143dcde0a2854c4f0d72816b7ecab696432779";
             sha256 = "sha256-Da+/28SPZuUQBi8fQj31zmMvhMrYUaQIW4U4E+mRtMg=";
           };
-          beamDeps = with final; [ httpoison jose ];
+          beamDeps = with final; [
+            httpoison
+            jose
+          ];
         };
         icalendar = buildMix rec {
           name = "icalendar";
@@ -71,7 +82,11 @@ mixRelease rec {
             rev = "1033d922c82a7223db0ec138e2316557b70ff49f";
             sha256 = "sha256-N3bJZznNazLewHS4c2B7LP1lgxd1wev+EWVlQ7rOwfU=";
           };
-          beamDeps = with final; [ mix_test_watch ex_doc timex ];
+          beamDeps = with final; [
+            mix_test_watch
+            ex_doc
+            timex
+          ];
         };
         rajska = buildMix rec {
           name = "rajska";
@@ -82,7 +97,14 @@ mixRelease rec {
             rev = "0c036448e261e8be6a512581c592fadf48982d84";
             sha256 = "sha256-4pfply1vTAIT2Xvm3kONmrCK05xKfXFvcb8EKoSCXBE=";
           };
-          beamDeps = with final; [ ex_doc credo absinthe excoveralls hammer mock ];
+          beamDeps = with final; [
+            ex_doc
+            credo
+            absinthe
+            excoveralls
+            hammer
+            mock
+          ];
         };
         exkismet = buildMix rec {
           name = "exkismet";
@@ -93,18 +115,24 @@ mixRelease rec {
             rev = "8b5485fde00fafbde20f315bec387a77f7358334";
             sha256 = "sha256-ttgCWoBKU7VTjZJBhZNtqVF4kN7psBr/qOeR65MbTqw=";
           };
-          beamDeps = with final; [ httpoison ex_doc credo doctor dialyxir ];
+          beamDeps = with final; [
+            httpoison
+            ex_doc
+            credo
+            doctor
+            dialyxir
+          ];
         };
 
-      });
+      }
+    );
   };
 
   # Install the compiled js part
-  preBuild =
-    ''
-      cp -a "${mobilizon-frontend}/static" ./priv
-      chmod 770 -R ./priv
-    '';
+  preBuild = ''
+    cp -a "${mobilizon-frontend}/static" ./priv
+    chmod 770 -R ./priv
+  '';
 
   postBuild = ''
     mix phx.digest --no-deps-check
@@ -124,6 +152,9 @@ mixRelease rec {
     description = "Mobilizon is an online tool to help manage your events, your profiles and your groups";
     homepage = "https://joinmobilizon.org/";
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ minijackson erictapen ];
+    maintainers = with maintainers; [
+      minijackson
+      erictapen
+    ];
   };
 }

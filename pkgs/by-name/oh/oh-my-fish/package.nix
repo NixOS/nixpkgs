@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fish
-, runtimeShell
-, substituteAll
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fish,
+  runtimeShell,
+  substituteAll,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,12 +37,14 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -pv $out/bin $out/share/oh-my-fish
     cp -vr * $out/share/oh-my-fish
 
-    cp -v ${substituteAll {
-      name = "omf-install";
-      src = ./omf-install;
-      omf = placeholder "out";
-      inherit fish runtimeShell;
-    }} $out/bin/omf-install
+    cp -v ${
+      substituteAll {
+        name = "omf-install";
+        src = ./omf-install;
+        omf = placeholder "out";
+        inherit fish runtimeShell;
+      }
+    } $out/bin/omf-install
 
     chmod +x $out/bin/omf-install
     cat $out/bin/omf-install

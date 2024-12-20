@@ -1,31 +1,33 @@
-{ lib, stdenv
-, fetchFromGitHub
-, fetchurl
-, runCommand
-, cmake
-, ffmpeg
-, glslang
-, libdrm
-, libglvnd
-, libffi
-, libpng
-, libX11
-, libXau
-, libXdmcp
-, libxcb
-, makeWrapper
-, mesa
-, ninja
-, pkg-config
-, python3
-, spirv-headers
-, vulkan-headers
-, vulkan-loader
-, vulkan-utility-libraries
-, wayland
-, wayland-protocols
-, wayland-scanner
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  runCommand,
+  cmake,
+  ffmpeg,
+  glslang,
+  libdrm,
+  libglvnd,
+  libffi,
+  libpng,
+  libX11,
+  libXau,
+  libXdmcp,
+  libxcb,
+  makeWrapper,
+  mesa,
+  ninja,
+  pkg-config,
+  python3,
+  spirv-headers,
+  vulkan-headers,
+  vulkan-loader,
+  vulkan-utility-libraries,
+  wayland,
+  wayland-protocols,
+  wayland-scanner,
+  zlib,
 }:
 let
   renderdoc = fetchurl {
@@ -43,13 +45,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "vulkan-cts";
-  version = "1.3.9.0";
+  version = "1.3.10.0";
 
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "VK-GL-CTS";
     rev = "vulkan-cts-${finalAttrs.version}";
-    hash = "sha256-JCepNBVHaN4KXRcLOZ2z7toBMri90tV7kjNWHRXRESE=";
+    hash = "sha256-owa4Z/gu9+plPxeSfduS3gUk9WTOHSDoXLTBju6tTGc=";
   };
 
   prePatch = ''
@@ -122,12 +124,18 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.updateScript = ./update.sh;
-  passthru.tests.lavapipe = runCommand "vulkan-cts-tests-lavapipe" {
-    nativeBuildInputs = [ finalAttrs.finalPackage mesa.llvmpipeHook ];
-  } ''
-    deqp-vk -n dEQP-VK.api.smoke.triangle
-    touch $out
-  '';
+  passthru.tests.lavapipe =
+    runCommand "vulkan-cts-tests-lavapipe"
+      {
+        nativeBuildInputs = [
+          finalAttrs.finalPackage
+          mesa.llvmpipeHook
+        ];
+      }
+      ''
+        deqp-vk -n dEQP-VK.api.smoke.triangle
+        touch $out
+      '';
 
   meta = with lib; {
     description = "Khronos Vulkan Conformance Tests";

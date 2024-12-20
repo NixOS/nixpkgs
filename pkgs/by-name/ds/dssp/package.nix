@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, cmake
-, eigen
-, fetchFromGitHub
-, libcifpp
-, libmcfp
-, zlib
+{
+  lib,
+  stdenv,
+  cmake,
+  eigen,
+  fetchFromGitHub,
+  libcifpp,
+  libmcfp,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

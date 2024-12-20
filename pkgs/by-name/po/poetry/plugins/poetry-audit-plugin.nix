@@ -1,11 +1,12 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, poetry-core
-, poetry
-, safety
-, pytestCheckHook
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  poetry-core,
+  poetry,
+  safety,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -37,7 +38,7 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "poetry_audit_plugin" ];
 
   nativeCheckInputs = [
-    poetry  # for the executable
+    poetry # for the executable
     pytestCheckHook
   ];
 

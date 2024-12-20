@@ -1,5 +1,14 @@
-{ lib, buildDunePackage, fetchurl
-, astring, cmdliner, fmt, re, stdlib-shims, uutf, ocaml-syntax-shims
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  astring,
+  cmdliner,
+  fmt,
+  re,
+  stdlib-shims,
+  uutf,
+  ocaml-syntax-shims,
 }:
 
 buildDunePackage rec {
@@ -13,7 +22,14 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ ocaml-syntax-shims ];
 
-  propagatedBuildInputs = [ astring cmdliner fmt re stdlib-shims uutf ];
+  propagatedBuildInputs = [
+    astring
+    cmdliner
+    fmt
+    re
+    stdlib-shims
+    uutf
+  ];
 
   doCheck = true;
 

@@ -1,20 +1,30 @@
-{ lib, libnotify, gpgme, buildGoModule, fetchFromGitHub, pkg-config }:
+{
+  lib,
+  libnotify,
+  gpgme,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+}:
 
 buildGoModule rec {
   pname = "yubikey-touch-detector";
-  version = "1.11.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "maximbaz";
     repo = "yubikey-touch-detector";
     rev = version;
-    hash = "sha256-XpaCKNQpQD9dNj4EOGJ6PdjfSAxxG5dC8mIzYr7t/+I=";
+    hash = "sha256-Uh6DzDMBnTkKP1GW71TwGOfe3apDNNDUzZ5GLkPxrkE=";
   };
   vendorHash = "sha256-mhmYTicj/ihGNzeCZd1ZijWPkvxQZjBxaC5dyAU1O7U=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ libnotify gpgme ];
+  buildInputs = [
+    libnotify
+    gpgme
+  ];
 
   postInstall = ''
     install -Dm444 -t $out/share/doc/${pname} *.{md,example}

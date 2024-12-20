@@ -1,4 +1,10 @@
-{ buildEnv, lib, callPackage, makeWrapper, makeDesktopItem }:
+{
+  buildEnv,
+  lib,
+  callPackage,
+  makeWrapper,
+  makeDesktopItem,
+}:
 
 let
   description = "Action-adventure game, starring a certain quixotic frog";
@@ -12,14 +18,22 @@ let
     comment = description;
     desktopName = "Frogatto";
     genericName = "frogatto";
-    categories = [ "Game" "ArcadeGame" ];
+    categories = [
+      "Game"
+      "ArcadeGame"
+    ];
   };
   inherit (data) version;
-in buildEnv {
+in
+buildEnv {
   name = "frogatto-${version}";
 
   nativeBuildInputs = [ makeWrapper ];
-  paths = [ engine data desktopItem ];
+  paths = [
+    engine
+    data
+    desktopItem
+  ];
   pathsToLink = [
     "/bin"
     "/share/frogatto/data"
@@ -36,7 +50,10 @@ in buildEnv {
   meta = with lib; {
     homepage = "https://frogatto.com";
     description = description;
-    license = with licenses; [ cc-by-30 unfree ];
+    license = with licenses; [
+      cc-by-30
+      unfree
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ astro ];
   };

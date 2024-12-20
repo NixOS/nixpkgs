@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, ruby, zfs, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ruby,
+  zfs,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "zfstools";

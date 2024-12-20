@@ -36,7 +36,6 @@ buildPythonPackage rec {
     poetry-dynamic-versioning
   ];
 
-
   propagatedBuildInputs = [
     kitchen
     packaging

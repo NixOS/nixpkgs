@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, autoreconfHook
-, fetchFromGitHub
-, glibc
-, nixosTests
+{
+  stdenv,
+  lib,
+  autoreconfHook,
+  fetchFromGitHub,
+  glibc,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = lib.optionals (!stdenv.hostPlatform.isMusl) [ glibc glibc.static ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isMusl) [
+    glibc
+    glibc.static
+  ];
 
   enableParallelBuilding = true;
   strictDeps = true;

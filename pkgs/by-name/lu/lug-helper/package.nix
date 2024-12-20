@@ -12,12 +12,12 @@
 }:
 stdenvNoCC.mkDerivation (finalAttrs: {
   name = "lug-helper";
-  version = "3.0.1";
+  version = "3.5";
   src = fetchFromGitHub {
     owner = "starcitizen-lug";
     repo = "lug-helper";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-GL+pPyj3Qz+wmJD59kfGz80LufotPq2KdaLQCkQnCFg=";
+    hash = "sha256-yaYSm2vft55koZeB32Gta7RCjFTEec481LhrVHGGMm4=";
   };
 
   buildInputs = [
@@ -63,6 +63,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   meta = {
     description = "Script to manage and optimize Star Citizen on Linux";
     homepage = "https://github.com/starcitizen-lug/lug-helper";
+    changelog = "https://github.com/starcitizen-lug/lug-helper/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [ fuzen ];
     platforms = lib.platforms.linux;

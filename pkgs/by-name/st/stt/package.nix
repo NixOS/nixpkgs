@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchurl, autoPatchelfHook, bzip2, xz }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  bzip2,
+  xz,
+}:
 
 stdenv.mkDerivation rec {
   pname = "stt";

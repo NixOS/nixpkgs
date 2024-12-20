@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchurl
-, raspberrypifw
-, pcre
-, boost
-, freetype
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  raspberrypifw,
+  pcre,
+  boost,
+  freetype,
+  zlib,
 }:
 
 let
@@ -20,45 +21,49 @@ let
     };
 
     configurePlatforms = [ ];
-    configureFlags = [
-      "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
-    ] ++ lib.optionals stdenv.hostPlatform.isAarch32 [
-      # TODO be better with condition
-      "--cpu=arm1176jzf-s"
-    ] ++ [
-      "--disable-muxers"
-      "--enable-muxer=spdif"
-      "--enable-muxer=adts"
-      "--disable-encoders"
-      "--enable-encoder=ac3"
-      "--enable-encoder=aac"
-      "--disable-decoder=mpeg_xvmc"
-      "--disable-devices"
-      "--disable-ffprobe"
-      "--disable-ffplay"
-      "--disable-ffserver"
-      "--disable-ffmpeg"
-      "--enable-shared"
-      "--disable-doc"
-      "--enable-postproc"
-      "--enable-gpl"
-      "--enable-protocol=http"
-      "--enable-pthreads"
-      "--disable-runtime-cpudetect"
-      "--enable-pic"
-      "--disable-armv5te"
-      "--disable-neon"
-      "--enable-armv6t2"
-      "--enable-armv6"
-      "--enable-hardcoded-tables"
-      "--disable-runtime-cpudetect"
-      "--disable-debug"
-      "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
-      "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
-    ] ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
-      "--cross-prefix=${stdenv.cc.targetPrefix}"
-      "--enable-cross-compile"
-    ];
+    configureFlags =
+      [
+        "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isAarch32 [
+        # TODO be better with condition
+        "--cpu=arm1176jzf-s"
+      ]
+      ++ [
+        "--disable-muxers"
+        "--enable-muxer=spdif"
+        "--enable-muxer=adts"
+        "--disable-encoders"
+        "--enable-encoder=ac3"
+        "--enable-encoder=aac"
+        "--disable-decoder=mpeg_xvmc"
+        "--disable-devices"
+        "--disable-ffprobe"
+        "--disable-ffplay"
+        "--disable-ffserver"
+        "--disable-ffmpeg"
+        "--enable-shared"
+        "--disable-doc"
+        "--enable-postproc"
+        "--enable-gpl"
+        "--enable-protocol=http"
+        "--enable-pthreads"
+        "--disable-runtime-cpudetect"
+        "--enable-pic"
+        "--disable-armv5te"
+        "--disable-neon"
+        "--enable-armv6t2"
+        "--enable-armv6"
+        "--enable-hardcoded-tables"
+        "--disable-runtime-cpudetect"
+        "--disable-debug"
+        "--arch=${stdenv.hostPlatform.parsed.cpu.name}"
+        "--target_os=${stdenv.hostPlatform.parsed.kernel.name}"
+      ]
+      ++ lib.optionals (stdenv.hostPlatform != stdenv.buildPlatform) [
+        "--cross-prefix=${stdenv.cc.targetPrefix}"
+        "--enable-cross-compile"
+      ];
 
     enableParallelBuilding = true;
 
@@ -89,7 +94,14 @@ stdenv.mkDerivation rec {
     cp omxplayer.bin $out/bin
   '';
 
-  buildInputs = [ raspberrypifw ffmpeg pcre boost freetype zlib ];
+  buildInputs = [
+    raspberrypifw
+    ffmpeg
+    pcre
+    boost
+    freetype
+    zlib
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/huceke/omxplayer";

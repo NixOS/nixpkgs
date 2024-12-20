@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, file }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  file,
+}:
 
 stdenv.mkDerivation rec {
   pname = "openpa";
@@ -29,5 +34,5 @@ stdenv.mkDerivation rec {
       learning new assembly dialects in order improve or maintain application
       portability.
     '';
-   };
+  };
 }

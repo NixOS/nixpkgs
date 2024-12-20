@@ -1,8 +1,9 @@
-{ lib
-, stdenvNoCC
-, buildGoModule
-, fetchFromGitHub
-, dbip-country-lite
+{
+  lib,
+  stdenvNoCC,
+  buildGoModule,
+  fetchFromGitHub,
+  dbip-country-lite,
 }:
 
 let

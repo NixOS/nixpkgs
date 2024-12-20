@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, installShellFiles
-, Security
-, curl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  installShellFiles,
+  Security,
+  curl,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,8 +23,16 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-+yTX1wUfVVjsM42X0QliL+0xbzTPheADZibPh/5Czh8=";
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security curl ];
-  nativeBuildInputs = [ installShellFiles pkg-config ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      curl
+    ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+  ];
 
   # Needs network connection
   checkFlags = [

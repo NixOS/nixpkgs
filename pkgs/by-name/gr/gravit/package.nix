@@ -1,4 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, SDL, SDL_ttf, SDL_image, libSM, libICE, libGLU, libGL, libpng, lua5, autoconf, automake, mesa }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  SDL,
+  SDL_ttf,
+  SDL_image,
+  libSM,
+  libICE,
+  libGLU,
+  libGL,
+  libpng,
+  lua5,
+  autoconf,
+  automake,
+  mesa,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gravit";
@@ -21,9 +38,22 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  buildInputs = [ libGLU libGL SDL SDL_ttf SDL_image lua5 libpng libSM libICE ];
+  buildInputs = [
+    libGLU
+    libGL
+    SDL
+    SDL_ttf
+    SDL_image
+    lua5
+    libpng
+    libSM
+    libICE
+  ];
 
-  nativeBuildInputs = [ autoconf automake ];
+  nativeBuildInputs = [
+    autoconf
+    automake
+  ];
 
   preConfigure = ''
     ./autogen.sh

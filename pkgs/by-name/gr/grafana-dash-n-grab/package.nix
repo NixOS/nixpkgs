@@ -1,4 +1,8 @@
-{ buildGoModule, fetchFromGitHub, lib }:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+}:
 
 buildGoModule rec {
   pname = "grafana-dash-n-grab";
@@ -30,7 +34,6 @@ buildGoModule rec {
     homepage = "https://github.com/esnet/gdg";
     maintainers = with maintainers; teams.bitnomial.members;
     mainProgram = "gdg";
-    changelog =
-      "https://github.com/esnet/gdg/releases/tag/v${version}";
+    changelog = "https://github.com/esnet/gdg/releases/tag/v${version}";
   };
 }

@@ -1,32 +1,36 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, clr
-, rocm-device-libs
-, libxml2
-, doxygen
-, graphviz
-, gcc-unwrapped
-, libbacktrace
-, rocm-runtime
-, python3Packages
-, buildDocs ? false # Nothing seems to be generated, so not making the output
-, buildTests ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  clr,
+  rocm-device-libs,
+  libxml2,
+  doxygen,
+  graphviz,
+  gcc-unwrapped,
+  libbacktrace,
+  rocm-runtime,
+  python3Packages,
+  buildDocs ? false, # Nothing seems to be generated, so not making the output
+  buildTests ? false,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "roctracer";
   version = "5.7.1";
 
-  outputs = [
-    "out"
-  ] ++ lib.optionals buildDocs [
-    "doc"
-  ] ++ lib.optionals buildTests [
-    "test"
-  ];
+  outputs =
+    [
+      "out"
+    ]
+    ++ lib.optionals buildDocs [
+      "doc"
+    ]
+    ++ lib.optionals buildTests [
+      "test"
+    ];
 
   src = fetchFromGitHub {
     owner = "ROCm";
@@ -35,13 +39,15 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-P6QYyAjMRwFFWKF8AhbrYGe+mYVJXdbBW1or6vcobYU=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    clr
-  ] ++ lib.optionals buildDocs [
-    doxygen
-    graphviz
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      clr
+    ]
+    ++ lib.optionals buildDocs [
+      doxygen
+      graphviz
+    ];
 
   buildInputs = [
     libxml2
@@ -64,27 +70,39 @@ stdenv.mkDerivation (finalAttrs: {
     "-Wno-error=array-bounds"
   ];
 
-  postPatch = ''
-    export HIP_DEVICE_LIB_PATH=${rocm-device-libs}/amdgcn/bitcode
-  '' + lib.optionalString (!buildTests) ''
-    substituteInPlace CMakeLists.txt \
-      --replace "add_subdirectory(test)" ""
-  '';
+  postPatch =
+    ''
+      export HIP_DEVICE_LIB_PATH=${rocm-device-libs}/amdgcn/bitcode
+    ''
+    + lib.optionalString (!buildTests) ''
+      substituteInPlace CMakeLists.txt \
+        --replace "add_subdirectory(test)" ""
+    '';
 
   # Tests always fail, probably need GPU
   # doCheck = buildTests;
 
-  postInstall = lib.optionalString buildDocs ''
-    mkdir -p $doc
-  '' + lib.optionalString buildTests ''
-    mkdir -p $test/bin
-    # Not sure why this is an install target
-    find $out/test -executable -type f -exec mv {} $test/bin \;
-    rm $test/bin/{*.sh,*.py}
-    patchelf --set-rpath $out/lib:${lib.makeLibraryPath (
-      finalAttrs.buildInputs ++ [ clr gcc-unwrapped.lib rocm-runtime ])} $test/bin/*
-    rm -rf $out/test
-  '';
+  postInstall =
+    lib.optionalString buildDocs ''
+      mkdir -p $doc
+    ''
+    + lib.optionalString buildTests ''
+      mkdir -p $test/bin
+      # Not sure why this is an install target
+      find $out/test -executable -type f -exec mv {} $test/bin \;
+      rm $test/bin/{*.sh,*.py}
+      patchelf --set-rpath $out/lib:${
+        lib.makeLibraryPath (
+          finalAttrs.buildInputs
+          ++ [
+            clr
+            gcc-unwrapped.lib
+            rocm-runtime
+          ]
+        )
+      } $test/bin/*
+      rm -rf $out/test
+    '';
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
@@ -98,6 +116,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ]; # mitx11
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor clr.version || versionAtLeast finalAttrs.version "6.0.0";
+    broken =
+      versions.minor finalAttrs.version != versions.minor clr.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

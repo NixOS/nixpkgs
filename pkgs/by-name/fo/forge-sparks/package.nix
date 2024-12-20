@@ -1,20 +1,21 @@
-{ lib
-, blueprint-compiler
-, desktop-file-utils
-, fetchFromGitHub
-, gjs
-, glib
-, glib-networking
-, gtk4
-, libadwaita
-, libportal
-, libsecret
-, libsoup_3
-, meson
-, ninja
-, pkg-config
-, stdenv
-, wrapGAppsHook4
+{
+  lib,
+  blueprint-compiler,
+  desktop-file-utils,
+  fetchFromGitHub,
+  gjs,
+  glib,
+  glib-networking,
+  gtk4,
+  libadwaita,
+  libportal,
+  libsecret,
+  libsoup_3,
+  meson,
+  ninja,
+  pkg-config,
+  stdenv,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -1,22 +1,23 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, buildPackages
-, cargo
-, gettext
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
-, appstream-glib
-, desktop-file-utils
-, glib
-, gtk4
-, gdk-pixbuf
-, libadwaita
-, Foundation
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  buildPackages,
+  cargo,
+  gettext,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  appstream-glib,
+  desktop-file-utils,
+  glib,
+  gtk4,
+  gdk-pixbuf,
+  libadwaita,
+  Foundation,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -58,14 +59,16 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
   ];
 
-  buildInputs = [
-    glib
-    gtk4
-    gdk-pixbuf
-    libadwaita
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Foundation
-  ];
+  buildInputs =
+    [
+      glib
+      gtk4
+      gdk-pixbuf
+      libadwaita
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Foundation
+    ];
 
   meta = with lib; {
     description = "Censor private information";

@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, pcsclite
-, apple-sdk_11
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  pcsclite,
+  apple-sdk_11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -30,18 +31,26 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   meta = with lib; {
     description = "YubiKey plugin for age";
     mainProgram = "age-plugin-yubikey";
     homepage = "https://github.com/str4d/age-plugin-yubikey";
     changelog = "https://github.com/str4d/age-plugin-yubikey/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ kranzes vtuan10 adamcstephens ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+      kranzes
+      vtuan10
+      adamcstephens
+    ];
   };
 }

@@ -1,4 +1,11 @@
-{ lib, fetchFromGitHub, stdenv, bitlbee, autoreconfHook, pkg-config }:
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  bitlbee,
+  autoreconfHook,
+  pkg-config,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bitlbee-discord";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "00qgdvrp7hv02n0ns685igp810zxmv3adsama8601122al6x041n";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
   buildInputs = [ bitlbee ];
 
   preConfigure = ''

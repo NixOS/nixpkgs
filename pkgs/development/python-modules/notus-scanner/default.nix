@@ -34,7 +34,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   propagatedBuildInputs = [
     paho-mqtt
     psutil

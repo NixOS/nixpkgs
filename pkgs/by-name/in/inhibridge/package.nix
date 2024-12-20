@@ -22,8 +22,7 @@ rustPlatform.buildRustPackage rec {
     description = "Simple daemon that bridges freedesktop.org ScreenSaver inhibitions to systemd-inhibit";
     platforms = platforms.linux;
     license = licenses.agpl3Plus;
-    maintainers = with maintainers; [Scrumplex];
+    maintainers = with maintainers; [ Scrumplex ];
     mainProgram = "inhibridge";
   };
 }
-

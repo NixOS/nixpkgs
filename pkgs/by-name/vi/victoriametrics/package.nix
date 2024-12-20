@@ -14,13 +14,13 @@
 
 buildGoModule rec {
   pname = "VictoriaMetrics";
-  version = "1.105.0";
+  version = "1.107.0";
 
   src = fetchFromGitHub {
     owner = "VictoriaMetrics";
     repo = "VictoriaMetrics";
     rev = "v${version}";
-    hash = "sha256-cMc2CVjVTQLsY/GJht35DCapEtROPJO3j6FCCDXJPMk=";
+    hash = "sha256-OVZhjepISLVAq1HnzWwxLmAUs5Dd10FbIw6CYeNK2Ts=";
   };
 
   vendorHash = null;

@@ -1,16 +1,17 @@
-{ lib
-, bash
-, fetchFromGitHub
-, installShellFiles
-, coreutils
-, gawk
-, gnugrep
-, gnused
-, openssh
-, resholve
-, rsync
-, which
-, zfs
+{
+  lib,
+  bash,
+  fetchFromGitHub,
+  installShellFiles,
+  coreutils,
+  gawk,
+  gnugrep,
+  gnused,
+  openssh,
+  resholve,
+  rsync,
+  which,
+  zfs,
 }:
 
 resholve.mkDerivation rec {

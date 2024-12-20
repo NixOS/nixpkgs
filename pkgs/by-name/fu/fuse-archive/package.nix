@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fuse
-, libarchive
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fuse,
+  libarchive,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {

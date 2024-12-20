@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchurl
-, pkg-config
-, doxygen
-, glib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  doxygen,
+  glib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

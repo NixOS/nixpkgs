@@ -1,34 +1,38 @@
-import ./make-test-python.nix ({ pkgs, ...} :
-{
-  name = "sgt-puzzles";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ tomfitzhenry ];
-  };
-
-  nodes.machine = { ... }:
-
+import ./make-test-python.nix (
+  { pkgs, ... }:
   {
-    imports = [
-      ./common/x11.nix
-    ];
+    name = "sgt-puzzles";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ tomfitzhenry ];
+    };
 
-    services.xserver.enable = true;
-    environment.systemPackages = with pkgs; [
-      sgt-puzzles
-    ];
-  };
+    nodes.machine =
+      { ... }:
 
-  enableOCR = true;
+      {
+        imports = [
+          ./common/x11.nix
+        ];
 
-  testScript = { nodes, ... }:
-  ''
-    start_all()
-    machine.wait_for_x()
+        services.xserver.enable = true;
+        environment.systemPackages = with pkgs; [
+          sgt-puzzles
+        ];
+      };
 
-    machine.execute("mines >&2 &")
+    enableOCR = true;
 
-    machine.wait_for_window("Mines")
-    machine.wait_for_text("Marked")
-    machine.screenshot("mines")
-  '';
-})
+    testScript =
+      { nodes, ... }:
+      ''
+        start_all()
+        machine.wait_for_x()
+
+        machine.execute("mines >&2 &")
+
+        machine.wait_for_window("Mines")
+        machine.wait_for_text("Marked")
+        machine.screenshot("mines")
+      '';
+  }
+)

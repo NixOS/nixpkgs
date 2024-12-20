@@ -1,13 +1,14 @@
-{ buildPythonApplication
-, yubikey-manager
-, mss
-, zxing-cpp
-, pillow
-, poetry-core
+{
+  buildPythonApplication,
+  yubikey-manager,
+  mss,
+  zxing-cpp,
+  pillow,
+  poetry-core,
 
-, src
-, version
-, meta
+  src,
+  version,
+  meta,
 }:
 
 buildPythonApplication {

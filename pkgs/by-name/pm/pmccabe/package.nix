@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pmccabe";
@@ -19,7 +23,7 @@ stdenv.mkDerivation rec {
       -e "s,^DESTDIR =.*$,DESTDIR = $out," \
       -e "s,^INSTALL = install.*$,INSTALL = install," \
       -e "s,^all:.*$,all: \$(PROGS),"
-    '';
+  '';
 
   checkPhase = "make test";
 

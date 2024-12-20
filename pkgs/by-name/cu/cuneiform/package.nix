@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, cmake, imagemagick, testers }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  imagemagick,
+  testers,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cuneiform";
@@ -10,14 +17,14 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-  (fetchurl {
-    url = "https://raw.githubusercontent.com/archlinux/svntogit-community/a2ec92f05de006b56d16ac6a6c370d54a554861a/cuneiform/trunk/build-fix.patch";
-    sha256 = "19cmrlx4khn30qqrpyayn7bicg8yi0wpz1x1bvqqrbvr3kwldxyj";
-  })
-  (fetchurl {
-    url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-text/cuneiform/files/cuneiform-1.1.0-gcc11.patch";
-    sha256 = "14bp2f4dvlgxnpdza1rgszhkbxhp6p7lhgnb1s7c1x7vwdrx0ri7";
-  })
+    (fetchurl {
+      url = "https://raw.githubusercontent.com/archlinux/svntogit-community/a2ec92f05de006b56d16ac6a6c370d54a554861a/cuneiform/trunk/build-fix.patch";
+      sha256 = "19cmrlx4khn30qqrpyayn7bicg8yi0wpz1x1bvqqrbvr3kwldxyj";
+    })
+    (fetchurl {
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-text/cuneiform/files/cuneiform-1.1.0-gcc11.patch";
+      sha256 = "14bp2f4dvlgxnpdza1rgszhkbxhp6p7lhgnb1s7c1x7vwdrx0ri7";
+    })
   ];
 
   # Workaround build failure on -fno-common toolchains like upstream

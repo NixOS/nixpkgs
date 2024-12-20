@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, libuv
-, lz4
-, pkg-config
-, incus
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  libuv,
+  lz4,
+  pkg-config,
+  incus,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,8 +21,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-aGw/ATu8Xdjfqa0qWg8Sld9PKCmQsMtZhuNBwagER7M=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
-  buildInputs = [ libuv lz4 ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
+  buildInputs = [
+    libuv
+    lz4
+  ];
 
   enableParallelBuilding = true;
 
@@ -39,7 +46,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  outputs = [ "dev" "out" ];
+  outputs = [
+    "dev"
+    "out"
+  ];
 
   passthru = {
     inherit (incus) tests;

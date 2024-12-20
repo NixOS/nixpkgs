@@ -12,14 +12,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "fmtoy";
-  version = "0-unstable-2024-06-11";
+  version = "0-unstable-2024-11-13";
 
   src = fetchFromGitHub {
     owner = "vampirefrog";
     repo = "fmtoy";
-    rev = "17d69350dcd7e2834e69f65420e5e3a8328b7e18";
+    rev = "6bf6a72bf35afd2fb3bdf17a97553d122751e391";
     fetchSubmodules = true;
-    hash = "sha256-to842vUWEWGSQkD09Q22whrdtZpbSlwaY5LSS208sP8=";
+    hash = "sha256-aAZUCI711d0FqKYcEIiEClH3hMcUzMzXF3XflpTTrjM=";
   };
 
   postPatch = ''

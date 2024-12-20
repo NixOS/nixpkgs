@@ -1,12 +1,13 @@
-{ lib
-, mkXfceDerivation
-, glib
-, gtk3
-, thunar
-, libxfce4util
-, intltool
-, gettext
-, taglib
+{
+  lib,
+  mkXfceDerivation,
+  glib,
+  gtk3,
+  thunar,
+  libxfce4util,
+  intltool,
+  gettext,
+  taglib,
 }:
 
 mkXfceDerivation {

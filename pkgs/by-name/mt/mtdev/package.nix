@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, evdev-proto
-, gitUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  evdev-proto,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {

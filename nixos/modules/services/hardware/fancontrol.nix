@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.hardware.fancontrol;
   configFile = pkgs.writeText "fancontrol.conf" cfg.config;

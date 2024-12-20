@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -11,14 +16,19 @@ let
     mkKeyValue = generators.mkKeyValueDefault { } " = ";
   };
 
-  mkJailConfig = name: attrs:
-    optionalAttrs (name != "DEFAULT") { inherit (attrs) enabled; } //
-    optionalAttrs (attrs.filter != null) { filter = if (builtins.isString filter) then filter else name; } //
-    attrs.settings;
+  mkJailConfig =
+    name: attrs:
+    optionalAttrs (name != "DEFAULT") { inherit (attrs) enabled; }
+    // optionalAttrs (attrs.filter != null) {
+      filter = if (builtins.isString filter) then filter else name;
+    }
+    // attrs.settings;
 
-  mkFilter = name: attrs: nameValuePair "fail2ban/filter.d/${name}.conf" {
-    source = configFormat.generate "filter.d/${name}.conf" attrs.filter;
-  };
+  mkFilter =
+    name: attrs:
+    nameValuePair "fail2ban/filter.d/${name}.conf" {
+      source = configFormat.generate "filter.d/${name}.conf" attrs.filter;
+    };
 
   fail2banConf = configFormat.generate "fail2ban.local" cfg.daemonSettings;
 
@@ -30,17 +40,23 @@ let
       configFile = configFormat.generate "jail.local" (
         { INCLUDES.before = "paths-nixos.conf"; } // (mapAttrs mkJailConfig attrsJails)
       );
-      extraConfig = concatStringsSep "\n" (attrValues (mapAttrs
-        (name: def:
-          optionalString (def != "")
-            ''
+      extraConfig = concatStringsSep "\n" (
+        attrValues (
+          mapAttrs (
+            name: def:
+            optionalString (def != "") ''
               [${name}]
               ${def}
-            '')
-        strJails));
+            ''
+          ) strJails
+        )
+      );
 
     in
-    pkgs.concatText "jail.local" [ configFile (pkgs.writeText "extra-jail.local" extraConfig) ];
+    pkgs.concatText "jail.local" [
+      configFile
+      (pkgs.writeText "extra-jail.local" extraConfig)
+    ];
 
   pathsConf = pkgs.writeText "paths-nixos.conf" ''
     # NixOS
@@ -58,8 +74,14 @@ in
 {
 
   imports = [
-    (mkRemovedOptionModule [ "services" "fail2ban" "daemonConfig" ] "The daemon is now configured through the attribute set `services.fail2ban.daemonSettings`.")
-    (mkRemovedOptionModule [ "services" "fail2ban" "extraSettings" ] "The extra default configuration can now be set using `services.fail2ban.jails.DEFAULT.settings`.")
+    (mkRemovedOptionModule [
+      "services"
+      "fail2ban"
+      "daemonConfig"
+    ] "The daemon is now configured through the attribute set `services.fail2ban.daemonSettings`.")
+    (mkRemovedOptionModule [ "services" "fail2ban" "extraSettings" ]
+      "The extra default configuration can now be set using `services.fail2ban.jails.DEFAULT.settings`."
+    )
   ];
 
   ###### interface
@@ -207,7 +229,10 @@ in
       ignoreIP = mkOption {
         default = [ ];
         type = types.listOf types.str;
-        example = [ "192.168.0.0/16" "2001:DB8::42" ];
+        example = [
+          "192.168.0.0/16"
+          "2001:DB8::42"
+        ];
         description = ''
           "ignoreIP" can be a list of IP addresses, CIDR masks or DNS hosts. Fail2ban will not ban a host which
           matches an address in this list. Several addresses can be defined using space (and/or comma) separator.
@@ -261,28 +286,37 @@ in
             };
           };
         '';
-        type = with types; attrsOf (either lines (submodule ({ name, ... }: {
-          options = {
-            enabled = mkEnableOption "this jail" // {
-              default = true;
-              readOnly = name == "DEFAULT";
-            };
+        type =
+          with types;
+          attrsOf (
+            either lines (
+              submodule (
+                { name, ... }:
+                {
+                  options = {
+                    enabled = mkEnableOption "this jail" // {
+                      default = true;
+                      readOnly = name == "DEFAULT";
+                    };
 
-            filter = mkOption {
-              type = nullOr (either str configFormat.type);
+                    filter = mkOption {
+                      type = nullOr (either str configFormat.type);
 
-              default = null;
-              description = "Content of the filter used for this jail.";
-            };
+                      default = null;
+                      description = "Content of the filter used for this jail.";
+                    };
 
-            settings = mkOption {
-              inherit (settingsFormat) type;
+                    settings = mkOption {
+                      inherit (settingsFormat) type;
 
-              default = { };
-              description = "Additional settings for this jail.";
-            };
-          };
-        })));
+                      default = { };
+                      description = "Additional settings for this jail.";
+                    };
+                  };
+                }
+              )
+            )
+          );
         description = ''
           The configuration of each Fail2ban “jail”.  A jail
           consists of an action (such as blocking a port using
@@ -326,29 +360,46 @@ in
 
     environment.systemPackages = [ cfg.package ];
 
-    environment.etc = {
-      "fail2ban/fail2ban.local".source = fail2banConf;
-      "fail2ban/jail.local".source = jailConf;
-      "fail2ban/fail2ban.conf".source = "${cfg.package}/etc/fail2ban/fail2ban.conf";
-      "fail2ban/jail.conf".source = "${cfg.package}/etc/fail2ban/jail.conf";
-      "fail2ban/paths-common.conf".source = "${cfg.package}/etc/fail2ban/paths-common.conf";
-      "fail2ban/paths-nixos.conf".source = pathsConf;
-      "fail2ban/action.d".source = "${cfg.package}/etc/fail2ban/action.d/*.conf";
-      "fail2ban/filter.d".source = "${cfg.package}/etc/fail2ban/filter.d/*.conf";
-    } // (mapAttrs' mkFilter (filterAttrs (_: v: v.filter != null && !builtins.isString v.filter) attrsJails));
+    environment.etc =
+      {
+        "fail2ban/fail2ban.local".source = fail2banConf;
+        "fail2ban/jail.local".source = jailConf;
+        "fail2ban/fail2ban.conf".source = "${cfg.package}/etc/fail2ban/fail2ban.conf";
+        "fail2ban/jail.conf".source = "${cfg.package}/etc/fail2ban/jail.conf";
+        "fail2ban/paths-common.conf".source = "${cfg.package}/etc/fail2ban/paths-common.conf";
+        "fail2ban/paths-nixos.conf".source = pathsConf;
+        "fail2ban/action.d".source = "${cfg.package}/etc/fail2ban/action.d/*.conf";
+        "fail2ban/filter.d".source = "${cfg.package}/etc/fail2ban/filter.d/*.conf";
+      }
+      // (mapAttrs' mkFilter (
+        filterAttrs (_: v: v.filter != null && !builtins.isString v.filter) attrsJails
+      ));
 
     systemd.packages = [ cfg.package ];
     systemd.services.fail2ban = {
       wantedBy = [ "multi-user.target" ];
       partOf = optional config.networking.firewall.enable "firewall.service";
 
-      restartTriggers = [ fail2banConf jailConf pathsConf ];
+      restartTriggers = [
+        fail2banConf
+        jailConf
+        pathsConf
+      ];
 
-      path = [ cfg.package cfg.packageFirewall pkgs.iproute2 ] ++ cfg.extraPackages;
+      path = [
+        cfg.package
+        cfg.packageFirewall
+        pkgs.iproute2
+      ] ++ cfg.extraPackages;
 
       serviceConfig = {
         # Capabilities
-        CapabilityBoundingSet = [ "CAP_AUDIT_READ" "CAP_DAC_READ_SEARCH" "CAP_NET_ADMIN" "CAP_NET_RAW" ];
+        CapabilityBoundingSet = [
+          "CAP_AUDIT_READ"
+          "CAP_DAC_READ_SEARCH"
+          "CAP_NET_ADMIN"
+          "CAP_NET_RAW"
+        ];
         # Security
         NoNewPrivileges = true;
         # Directory
@@ -382,24 +433,30 @@ in
     # sets default values for all other jails.
     services.fail2ban.jails = mkMerge [
       {
-        DEFAULT.settings = (optionalAttrs cfg.bantime-increment.enable
-          ({ "bantime.increment" = cfg.bantime-increment.enable; } // (mapAttrs'
-            (name: nameValuePair "bantime.${name}")
-            (filterAttrs (n: v: v != null && n != "enable") cfg.bantime-increment))
-          )
-        ) // {
-          # Miscellaneous options
-          inherit (cfg) banaction maxretry bantime;
-          ignoreip = ''127.0.0.1/8 ${optionalString config.networking.enableIPv6 "::1"} ${concatStringsSep " " cfg.ignoreIP}'';
-          backend = "systemd";
-          # Actions
-          banaction_allports = cfg.banaction-allports;
-        };
+        DEFAULT.settings =
+          (optionalAttrs cfg.bantime-increment.enable (
+            {
+              "bantime.increment" = cfg.bantime-increment.enable;
+            }
+            // (mapAttrs' (name: nameValuePair "bantime.${name}") (
+              filterAttrs (n: v: v != null && n != "enable") cfg.bantime-increment
+            ))
+          ))
+          // {
+            # Miscellaneous options
+            inherit (cfg) banaction maxretry bantime;
+            ignoreip = ''127.0.0.1/8 ${optionalString config.networking.enableIPv6 "::1"} ${concatStringsSep " " cfg.ignoreIP}'';
+            backend = "systemd";
+            # Actions
+            banaction_allports = cfg.banaction-allports;
+          };
       }
 
       # Block SSH if there are too many failing connection attempts.
       (mkIf config.services.openssh.enable {
-        sshd.settings.port = mkDefault (concatMapStringsSep "," builtins.toString config.services.openssh.ports);
+        sshd.settings.port = mkDefault (
+          concatMapStringsSep "," builtins.toString config.services.openssh.ports
+        );
       })
     ];
 

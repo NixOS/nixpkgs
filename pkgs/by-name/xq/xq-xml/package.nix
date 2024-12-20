@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, xq-xml
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  xq-xml,
 }:
 
 buildGoModule rec {

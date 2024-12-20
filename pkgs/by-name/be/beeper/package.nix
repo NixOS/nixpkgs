@@ -1,19 +1,20 @@
-{ lib
-, stdenvNoCC
-, fetchurl
-, appimageTools
-, makeWrapper
-, writeShellApplication
-, curl
-, yq
-, common-updater-scripts
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  appimageTools,
+  makeWrapper,
+  writeShellApplication,
+  curl,
+  yq,
+  common-updater-scripts,
 }:
 let
   pname = "beeper";
-  version = "3.109.1";
+  version = "3.110.1";
   src = fetchurl {
-    url = "https://download.todesktop.com/2003241lzgn20jd/beeper-3.109.1-build-240923466rji1i4-x86_64.AppImage";
-    hash = "sha256-RXpoOgnoPmNID5Jx/lNxqsHsifFSS9dZzhjSu8kGtXc=";
+    url = "https://download.beeper.com/versions/3.110.1/linux/appImage/x64";
+    hash = "sha256-AwPYwA93zOxExxhkLpCUKsQC/ylKSAygdHBUjd5ZKZk=";
   };
   appimage = appimageTools.wrapType2 {
     inherit version pname src;
@@ -53,13 +54,16 @@ stdenvNoCC.mkDerivation rec {
   passthru = {
     updateScript = lib.getExe (writeShellApplication {
       name = "update-beeper";
-      runtimeInputs = [ curl yq common-updater-scripts ];
+      runtimeInputs = [
+        curl
+        yq
+        common-updater-scripts
+      ];
       text = ''
         set -o errexit
         latestLinux="$(curl -s https://download.todesktop.com/2003241lzgn20jd/latest-linux.yml)"
         version="$(echo "$latestLinux" | yq -r .version)"
-        filename="$(echo "$latestLinux" | yq -r '.files[] | .url | select(. | endswith(".AppImage"))')"
-        update-source-version beeper "$version" "" "https://download.todesktop.com/2003241lzgn20jd/$filename" --source-key=src.src
+        update-source-version beeper "$version" "" "https://download.beeper.com/versions/$version/linux/appImage/x64" --source-key=src.src
       '';
     });
   };
@@ -73,7 +77,11 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://beeper.com";
     license = licenses.unfree;
-    maintainers = with maintainers; [ jshcmpbll mjm edmundmiller ];
+    maintainers = with maintainers; [
+      jshcmpbll
+      mjm
+      edmundmiller
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

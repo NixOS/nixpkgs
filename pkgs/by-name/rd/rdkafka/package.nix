@@ -1,19 +1,39 @@
-{ lib, stdenv, fetchFromGitHub, zlib, zstd, pkg-config, python3, openssl, which, curl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
+  zstd,
+  pkg-config,
+  python3,
+  openssl,
+  which,
+  curl,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rdkafka";
-  version = "2.6.0";
+  version = "2.6.1";
 
   src = fetchFromGitHub {
     owner = "confluentinc";
     repo = "librdkafka";
     rev = "refs/tags/v${finalAttrs.version}";
-    sha256 = "sha256-QjmVu9d/wlLjt5WWyZi+WEWibfDUynHGvTwLbH36T84=";
+    sha256 = "sha256-qgy5VVB7H0FECtQR6HkTJ58vrHIU9TAFurDNuZGGgvw=";
   };
 
-  nativeBuildInputs = [ pkg-config python3 which ];
+  nativeBuildInputs = [
+    pkg-config
+    python3
+    which
+  ];
 
-  buildInputs = [ zlib zstd openssl curl ];
+  buildInputs = [
+    zlib
+    zstd
+    openssl
+    curl
+  ];
 
   env.NIX_CFLAGS_COMPILE = "-Wno-error=strict-overflow";
 

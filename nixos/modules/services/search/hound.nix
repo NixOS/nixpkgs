@@ -1,11 +1,23 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.hound;
   settingsFormat = pkgs.formats.json { };
-in {
+in
+{
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "hound" "extraGroups" ] "Use users.users.hound.extraGroups instead")
-    (lib.mkChangedOptionModule [ "services" "hound" "config" ] [ "services" "hound" "settings" ] (config: builtins.fromJSON config.services.hound.config))
+    (lib.mkRemovedOptionModule [
+      "services"
+      "hound"
+      "extraGroups"
+    ] "Use users.users.hound.extraGroups instead")
+    (lib.mkChangedOptionModule [ "services" "hound" "config" ] [ "services" "hound" "settings" ] (
+      config: builtins.fromJSON config.services.hound.config
+    ))
   ];
 
   meta.maintainers = with lib.maintainers; [ SuperSandro2000 ];

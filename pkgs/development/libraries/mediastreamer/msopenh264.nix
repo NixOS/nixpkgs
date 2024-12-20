@@ -1,9 +1,10 @@
-{ cmake
-, fetchFromGitLab
-, mediastreamer
-, openh264
-, lib
-, stdenv
+{
+  cmake,
+  fetchFromGitLab,
+  mediastreamer,
+  openh264,
+  lib,
+  stdenv,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +21,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ mediastreamer openh264 ];
+  buildInputs = [
+    mediastreamer
+    openh264
+  ];
 
   # Do not build static libraries
   cmakeFlags = [

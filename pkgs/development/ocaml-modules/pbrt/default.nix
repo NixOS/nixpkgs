@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, buildDunePackage }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+}:
 
 buildDunePackage rec {
   pname = "pbrt";
@@ -20,4 +24,3 @@ buildDunePackage rec {
     maintainers = [ maintainers.vyorkin ];
   };
 }
-

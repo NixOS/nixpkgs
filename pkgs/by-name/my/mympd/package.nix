@@ -1,29 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, libmpdclient
-, openssl
-, lua5_3
-, libid3tag
-, flac
-, pcre2
-, gzip
-, perl
-, jq
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  libmpdclient,
+  openssl,
+  lua5_3,
+  libid3tag,
+  flac,
+  pcre2,
+  gzip,
+  perl,
+  jq,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mympd";
-  version = "18.1.2";
+  version = "18.2.2";
 
   src = fetchFromGitHub {
     owner = "jcorporation";
     repo = "myMPD";
     rev = "v${finalAttrs.version}";
-    sha256 = "sha256-4BGW7jDeqwhbAi1LODeiFrmBIzv0qAMKT3IVRgYn87E=";
+    sha256 = "sha256-ztZ4AdVRQ5KCmxAIT6SSexIle6IfREGqNZLhAplPtrQ=";
   };
 
   nativeBuildInputs = [

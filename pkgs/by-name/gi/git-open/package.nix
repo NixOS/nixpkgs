@@ -1,4 +1,13 @@
-{ lib, stdenv, xdg-utils, gnugrep, fetchFromGitHub, installShellFiles, makeWrapper, pandoc }:
+{
+  lib,
+  stdenv,
+  xdg-utils,
+  gnugrep,
+  fetchFromGitHub,
+  installShellFiles,
+  makeWrapper,
+  pandoc,
+}:
 
 stdenv.mkDerivation rec {
   pname = "git-open";
@@ -11,7 +20,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-bZOknoRMkPqm1pFFFbvrHrSi90ANLEE5fLcABYHov6Q=";
   };
 
-  nativeBuildInputs = [ installShellFiles makeWrapper pandoc ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+    pandoc
+  ];
 
   buildPhase = ''
     # marked-man is broken and severly outdated.

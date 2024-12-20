@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, substituteAll
-, pkg-config
-, meson
-, ninja
-, vala
-, gtk3
-, granite
-, wingpanel
-, evolution-data-server
-, libical
-, libgee
-, libhandy
-, libxml2
-, libsoup_2_4
-, elementary-calendar
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  substituteAll,
+  pkg-config,
+  meson,
+  ninja,
+  vala,
+  gtk3,
+  granite,
+  wingpanel,
+  evolution-data-server,
+  libical,
+  libgee,
+  libhandy,
+  libxml2,
+  libsoup_2_4,
+  elementary-calendar,
 }:
 
 stdenv.mkDerivation rec {

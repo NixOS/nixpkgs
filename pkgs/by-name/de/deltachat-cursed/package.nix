@@ -1,8 +1,9 @@
-{ lib
-, python3
-, fetchFromGitHub
-, testers
-, deltachat-cursed
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  testers,
+  deltachat-cursed,
 }:
 
 python3.pkgs.buildPythonApplication rec {

@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nix-update-script }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+}:
 
 let
   pname = "erigon";
@@ -40,14 +45,24 @@ buildGoModule {
   # Enabling silkworm also breaks the build as it requires dynamically linked libraries.
   # If we need it in the future, we should consider packaging silkworm and silkworm-go
   # as depenedencies explicitly.
-  tags = [ "nosqlite" "noboltdb" "nosilkworm" ];
+  tags = [
+    "nosqlite"
+    "noboltdb"
+    "nosilkworm"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     homepage = "https://github.com/ledgerwatch/erigon/";
     description = "Ethereum node implementation focused on scalability and modularity";
-    license = with licenses; [ lgpl3Plus gpl3Plus ];
-    maintainers = with maintainers; [ d-xo happysalada ];
+    license = with licenses; [
+      lgpl3Plus
+      gpl3Plus
+    ];
+    maintainers = with maintainers; [
+      d-xo
+      happysalada
+    ];
   };
 }

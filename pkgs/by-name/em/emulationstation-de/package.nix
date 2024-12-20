@@ -1,30 +1,40 @@
 {
   lib,
   stdenv,
-  cmake,
   fetchzip,
+  fetchpatch,
+  cmake,
   pkg-config,
   alsa-lib,
   curl,
   ffmpeg,
   freeimage,
   freetype,
+  harfbuzz,
+  icu,
   libgit2,
   poppler,
   pugixml,
-  SDL2
+  SDL2,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "emulationstation-de";
-  version = "3.0.2";
+  version = "3.1.0";
 
   src = fetchzip {
     url = "https://gitlab.com/es-de/emulationstation-de/-/archive/v${finalAttrs.version}/emulationstation-de-v${finalAttrs.version}.tar.gz";
-    hash = "sha256:RGlXFybbXYx66Hpjp2N3ovK4T5VyS4w0DWRGNvbwugs=";
+    hash = "sha256-v9nOY9T5VOVLBUKoDXqwYa1iYvW42iGA+3kpPUOmHkg=";
   };
 
-  patches = [ ./001-add-nixpkgs-retroarch-cores.patch ];
+  patches = [
+    (fetchpatch {
+      name = "fix-buffer-overflow-detection-with-gcc-fortification";
+      url = "https://gitlab.com/es-de/emulationstation-de/-/commit/41fd33fdc3dacef507b987ed316aec2b0d684317.patch";
+      sha256 = "sha256-LHJ11mtBn8hRU97+Lz9ugPTTGUAxrPz7yvyxqNOAYKY=";
+    })
+    ./001-add-nixpkgs-retroarch-cores.patch
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -37,36 +47,18 @@ stdenv.mkDerivation (finalAttrs: {
     ffmpeg
     freeimage
     freetype
+    harfbuzz
+    icu
     libgit2
     poppler
     pugixml
     SDL2
   ];
 
-  installPhase = ''
-    # Binary
-    install -D ../es-de $out/bin/es-de
-
-    # Resources
-    mkdir -p $out/share/es-de/
-    cp -r ../resources/ $out/share/es-de/resources/
-
-    # Desktop file
-    mkdir -p $out/share/applications
-    cp ../es-app/assets/org.es_de.frontend.desktop $out/share/applications/
-
-    # Icon
-    mkdir -p $out/share/icons/hicolor/scalable/apps
-    cp ../es-app/assets/org.es_de.frontend.svg $out/share/icons/hicolor/scalable/apps/
-  '';
-
-  postInstall = ''
-    substituteInPlace $out/share/applications/org.es_de.frontend.desktop \
-      --replace "Exec=es-de" "Exec=$out/bin/es-de"
-  '';
+  cmakeFlags = [ (lib.cmakeBool "APPLICATION_UPDATER" false) ];
 
   meta = {
-    description = "EmulationStation Desktop Edition is a frontend for browsing and launching games from your multi-platform game collection";
+    description = "ES-DE (EmulationStation Desktop Edition) is a frontend for browsing and launching games from your multi-platform collection";
     homepage = "https://es-de.org";
     maintainers = with lib.maintainers; [ ivarmedi ];
     license = lib.licenses.mit;

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, dotnetCorePackages
-, dotnet-runtime_8
-, buildDotnetModule
-, fetchFromGitHub
-, libglvnd
-, makeDesktopItem
-, copyDesktopItems
+{
+  lib,
+  stdenv,
+  dotnetCorePackages,
+  dotnet-runtime_8,
+  buildDotnetModule,
+  fetchFromGitHub,
+  libglvnd,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 buildDotnetModule rec {

@@ -210,11 +210,11 @@
       "dependency": "direct main",
       "description": {
         "name": "canvas_danmaku",
-        "sha256": "539beee7dab73b0d01980194885730de11527ec0f96d9c4fa26ae4eac6699b7f",
+        "sha256": "8e9971dab1ebc4b29bbda95b95cc19966fef5f1e313bc3bedbcc6ce697ebc523",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "0.2.3"
+      "version": "0.2.4"
     },
     "characters": {
       "dependency": "transitive",
@@ -621,16 +621,6 @@
       "source": "hosted",
       "version": "4.0.0"
     },
-    "fvp": {
-      "dependency": "direct main",
-      "description": {
-        "name": "fvp",
-        "sha256": "3dd245cac5dfba36311cbf5834d8f275ba1f3e49a5cdcb4a98e01cb41e9a21d8",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "0.28.0"
-    },
     "glob": {
       "dependency": "transitive",
       "description": {
@@ -815,11 +805,11 @@
       "dependency": "direct main",
       "description": {
         "name": "logger",
-        "sha256": "697d067c60c20999686a0add96cf6aba723b3aa1f83ecf806a8097231529ec32",
+        "sha256": "be4b23575aac7ebf01f225a241eb7f6b5641eeaf43c6a8613510fc2f8cf187d1",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.4.0"
+      "version": "2.5.0"
     },
     "logging": {
       "dependency": "transitive",
@@ -860,6 +850,94 @@
       },
       "source": "hosted",
       "version": "0.11.1"
+    },
+    "media_kit": {
+      "dependency": "direct main",
+      "description": {
+        "path": "media_kit",
+        "ref": "main",
+        "resolved-ref": "eefa578ea41f594b8392653edff6fe8da05cc95b",
+        "url": "https://github.com/Predidit/media-kit.git"
+      },
+      "source": "git",
+      "version": "1.1.11"
+    },
+    "media_kit_libs_android_video": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "libs/android/media_kit_libs_android_video",
+        "ref": "main",
+        "resolved-ref": "eefa578ea41f594b8392653edff6fe8da05cc95b",
+        "url": "https://github.com/Predidit/media-kit.git"
+      },
+      "source": "git",
+      "version": "1.3.6"
+    },
+    "media_kit_libs_ios_video": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "libs/ios/media_kit_libs_ios_video",
+        "ref": "main",
+        "resolved-ref": "eefa578ea41f594b8392653edff6fe8da05cc95b",
+        "url": "https://github.com/Predidit/media-kit.git"
+      },
+      "source": "git",
+      "version": "1.1.4"
+    },
+    "media_kit_libs_linux": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "libs/linux/media_kit_libs_linux",
+        "ref": "main",
+        "resolved-ref": "eefa578ea41f594b8392653edff6fe8da05cc95b",
+        "url": "https://github.com/Predidit/media-kit.git"
+      },
+      "source": "git",
+      "version": "1.1.3"
+    },
+    "media_kit_libs_macos_video": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "libs/macos/media_kit_libs_macos_video",
+        "ref": "main",
+        "resolved-ref": "eefa578ea41f594b8392653edff6fe8da05cc95b",
+        "url": "https://github.com/Predidit/media-kit.git"
+      },
+      "source": "git",
+      "version": "1.1.4"
+    },
+    "media_kit_libs_video": {
+      "dependency": "direct main",
+      "description": {
+        "path": "libs/universal/media_kit_libs_video",
+        "ref": "main",
+        "resolved-ref": "eefa578ea41f594b8392653edff6fe8da05cc95b",
+        "url": "https://github.com/Predidit/media-kit.git"
+      },
+      "source": "git",
+      "version": "1.0.5"
+    },
+    "media_kit_libs_windows_video": {
+      "dependency": "direct overridden",
+      "description": {
+        "path": "libs/windows/media_kit_libs_windows_video",
+        "ref": "main",
+        "resolved-ref": "eefa578ea41f594b8392653edff6fe8da05cc95b",
+        "url": "https://github.com/Predidit/media-kit.git"
+      },
+      "source": "git",
+      "version": "1.0.10"
+    },
+    "media_kit_video": {
+      "dependency": "direct main",
+      "description": {
+        "path": "media_kit_video",
+        "ref": "main",
+        "resolved-ref": "eefa578ea41f594b8392653edff6fe8da05cc95b",
+        "url": "https://github.com/Predidit/media-kit.git"
+      },
+      "source": "git",
+      "version": "1.2.5"
     },
     "menu_base": {
       "dependency": "transitive",
@@ -1151,65 +1229,45 @@
       "source": "hosted",
       "version": "0.28.0"
     },
-    "screen_brightness": {
-      "dependency": "direct main",
+    "safe_local_storage": {
+      "dependency": "transitive",
       "description": {
-        "name": "screen_brightness",
-        "sha256": "7d4ac84ae26b37c01d6f5db7123a72db7933e1f2a2a8c369a51e08f81b3178d8",
+        "name": "safe_local_storage",
+        "sha256": "e9a21b6fec7a8aa62cc2585ff4c1b127df42f3185adbd2aca66b47abe2e80236",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.0.1"
+      "version": "2.0.1"
     },
     "screen_brightness_android": {
       "dependency": "transitive",
       "description": {
         "name": "screen_brightness_android",
-        "sha256": "8c69d3ac475e4d625e7fa682a3a51a69ff59abe5b4a9e57f6ec7d830a6c69bd6",
+        "sha256": "74455f9901ab8a1a45c9097b83855dbbb7498110cc2bc249cb5a86570dd1cf7c",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.0.1"
+      "version": "2.0.0"
     },
     "screen_brightness_ios": {
       "dependency": "transitive",
       "description": {
         "name": "screen_brightness_ios",
-        "sha256": "f08f70ca1ac3e30719764b5cfb8b3fe1e28163065018a41b3e6f243ab146c2f1",
+        "sha256": "caee02b34e0089b138a7aee35c461bd2d7c78446dd417f07613def192598ca08",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.0.1"
-    },
-    "screen_brightness_macos": {
-      "dependency": "transitive",
-      "description": {
-        "name": "screen_brightness_macos",
-        "sha256": "70c2efa4534e22b927e82693488f127dd4a0f008469fccf4f0eefe9061bbdd6a",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "1.0.1"
+      "version": "2.0.0"
     },
     "screen_brightness_platform_interface": {
       "dependency": "transitive",
       "description": {
         "name": "screen_brightness_platform_interface",
-        "sha256": "9f3ebf7f22d5487e7676fe9ddaf3fc55b6ff8057707cf6dc0121c7dfda346a16",
+        "sha256": "321e9455b0057e3647fd37700931e063739d94a8aa1b094f98133c01cb56c27b",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "1.0.1"
-    },
-    "screen_brightness_windows": {
-      "dependency": "transitive",
-      "description": {
-        "name": "screen_brightness_windows",
-        "sha256": "c8e12a91cf6dd912a48bd41fcf749282a51afa17f536c3460d8d05702fb89ffa",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "1.0.1"
+      "version": "2.0.0"
     },
     "screen_pixel": {
       "dependency": "direct main",
@@ -1365,11 +1423,11 @@
       "dependency": "transitive",
       "description": {
         "name": "shelf_web_socket",
-        "sha256": "073c147238594ecd0d193f3456a5fe91c4b0abbcc68bf5cd95b36c4e194ac611",
+        "sha256": "cc36c297b52866d203dbf9332263c94becc2fe0ceaa9681d07b6ef9807023b67",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.0.0"
+      "version": "2.0.1"
     },
     "shortid": {
       "dependency": "transitive",
@@ -1451,11 +1509,11 @@
       "dependency": "transitive",
       "description": {
         "name": "sqflite_common",
-        "sha256": "4468b24876d673418a7b7147e5a08a715b4998a7ae69227acafaab762e0e5490",
+        "sha256": "761b9740ecbd4d3e66b8916d784e581861fd3c3553eda85e167bc49fdb68f709",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "2.5.4+5"
+      "version": "2.5.4+6"
     },
     "sqflite_darwin": {
       "dependency": "transitive",
@@ -1597,6 +1655,26 @@
       "source": "hosted",
       "version": "2.2.2"
     },
+    "universal_platform": {
+      "dependency": "transitive",
+      "description": {
+        "name": "universal_platform",
+        "sha256": "64e16458a0ea9b99260ceb5467a214c1f298d647c659af1bff6d3bf82536b1ec",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "1.1.0"
+    },
+    "uri_parser": {
+      "dependency": "transitive",
+      "description": {
+        "name": "uri_parser",
+        "sha256": "ff4d2c720aca3f4f7d5445e23b11b2d15ef8af5ddce5164643f38ff962dcb270",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "3.0.0"
+    },
     "url_launcher": {
       "dependency": "direct main",
       "description": {
@@ -1697,56 +1775,6 @@
       "source": "hosted",
       "version": "2.1.4"
     },
-    "video_player": {
-      "dependency": "direct main",
-      "description": {
-        "name": "video_player",
-        "sha256": "4a8c3492d734f7c39c2588a3206707a05ee80cef52e8c7f3b2078d430c84bc17",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "2.9.2"
-    },
-    "video_player_android": {
-      "dependency": "transitive",
-      "description": {
-        "name": "video_player_android",
-        "sha256": "391e092ba4abe2f93b3e625bd6b6a6ec7d7414279462c1c0ee42b5ab8d0a0898",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "2.7.16"
-    },
-    "video_player_avfoundation": {
-      "dependency": "transitive",
-      "description": {
-        "name": "video_player_avfoundation",
-        "sha256": "cd5ab8a8bc0eab65ab0cea40304097edc46da574c8c1ecdee96f28cd8ef3792f",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "2.6.2"
-    },
-    "video_player_platform_interface": {
-      "dependency": "transitive",
-      "description": {
-        "name": "video_player_platform_interface",
-        "sha256": "229d7642ccd9f3dc4aba169609dd6b5f3f443bb4cc15b82f7785fcada5af9bbb",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "6.2.3"
-    },
-    "video_player_web": {
-      "dependency": "transitive",
-      "description": {
-        "name": "video_player_web",
-        "sha256": "881b375a934d8ebf868c7fb1423b2bfaa393a0a265fa3f733079a86536064a10",
-        "url": "https://pub.dev"
-      },
-      "source": "hosted",
-      "version": "2.3.3"
-    },
     "vm_service": {
       "dependency": "transitive",
       "description": {
@@ -1757,8 +1785,18 @@
       "source": "hosted",
       "version": "14.2.5"
     },
+    "volume_controller": {
+      "dependency": "transitive",
+      "description": {
+        "name": "volume_controller",
+        "sha256": "c71d4c62631305df63b72da79089e078af2659649301807fa746088f365cb48e",
+        "url": "https://pub.dev"
+      },
+      "source": "hosted",
+      "version": "2.0.8"
+    },
     "wakelock_plus": {
-      "dependency": "direct main",
+      "dependency": "transitive",
       "description": {
         "name": "wakelock_plus",
         "sha256": "bf4ee6f17a2fa373ed3753ad0e602b7603f8c75af006d5b9bdade263928c0484",
@@ -1841,11 +1879,11 @@
       "dependency": "transitive",
       "description": {
         "name": "webview_flutter_android",
-        "sha256": "86c2d01c37c4578ee46560109cf2e18fb271f0d080a796f09188d0952352e057",
+        "sha256": "285cedfd9441267f6cca8843458620b5fda1af75b04f5818d0441acda5d7df19",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "4.0.2"
+      "version": "4.1.0"
     },
     "webview_flutter_platform_interface": {
       "dependency": "transitive",
@@ -1861,11 +1899,11 @@
       "dependency": "transitive",
       "description": {
         "name": "webview_flutter_wkwebview",
-        "sha256": "3be297aa4ca78205abdd284cf55f168c35246c75b3079990ad8ba9d257681a30",
+        "sha256": "b7e92f129482460951d96ef9a46b49db34bd2e1621685de26e9eaafd9674e7eb",
         "url": "https://pub.dev"
       },
       "source": "hosted",
-      "version": "3.16.2"
+      "version": "3.16.3"
     },
     "webview_windows": {
       "dependency": "direct main",

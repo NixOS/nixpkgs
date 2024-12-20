@@ -1,23 +1,24 @@
-{ lib
-, buildPythonPackage
-, buildbot
-, stdenv
+{
+  lib,
+  buildPythonPackage,
+  buildbot,
+  stdenv,
 
-# patch
-, coreutils
+  # patch
+  coreutils,
 
-# propagates
-, autobahn
-, msgpack
-, twisted
+  # propagates
+  autobahn,
+  msgpack,
+  twisted,
 
-# tests
-, parameterized
-, psutil
-, setuptools-trial
+  # tests
+  parameterized,
+  psutil,
+  setuptools-trial,
 
-# passthru
-, nixosTests
+  # passthru
+  nixosTests,
 }:
 
 buildPythonPackage ({

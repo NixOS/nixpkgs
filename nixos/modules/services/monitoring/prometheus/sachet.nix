@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.prometheus.sachet;
   configFile = pkgs.writeText "sachet.yml" (builtins.toJSON cfg.configuration);
@@ -61,7 +66,10 @@ in
 
     systemd.services.sachet = {
       wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" "network-online.target" ];
+      after = [
+        "network.target"
+        "network-online.target"
+      ];
       script = ''
         ${pkgs.envsubst}/bin/envsubst -i "${configFile}" > /tmp/sachet.yaml
         exec ${pkgs.prometheus-sachet}/bin/sachet -config /tmp/sachet.yaml -listen-address ${cfg.address}:${builtins.toString cfg.port}

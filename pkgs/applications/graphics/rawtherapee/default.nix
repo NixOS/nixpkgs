@@ -1,37 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, util-linux
-, libselinux
-, libsepol
-, lerc
-, libthai
-, libdatrie
-, libxkbcommon
-, libepoxy
-, libXtst
-, wrapGAppsHook3
-, makeWrapper
-, pixman
-, libpthreadstubs
-, gtkmm3
-, libXau
-, libXdmcp
-, lcms2
-, libiptcdata
-, fftw
-, expat
-, pcre2
-, libsigcxx
-, lensfun
-, librsvg
-, libcanberra-gtk3
-, gtk-mac-integration
-, exiv2
-, libraw
-  , libjxl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  util-linux,
+  libselinux,
+  libsepol,
+  lerc,
+  libthai,
+  libdatrie,
+  libxkbcommon,
+  libepoxy,
+  libXtst,
+  wrapGAppsHook3,
+  makeWrapper,
+  pixman,
+  libpthreadstubs,
+  gtkmm3,
+  libXau,
+  libXdmcp,
+  lcms2,
+  libiptcdata,
+  fftw,
+  expat,
+  pcre2,
+  libsigcxx,
+  lensfun,
+  librsvg,
+  libcanberra-gtk3,
+  gtk-mac-integration,
+  exiv2,
+  libraw,
+  libjxl,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,54 +55,61 @@ stdenv.mkDerivation rec {
       --replace "/Applications" "${placeholder "out"}/Applications"
   '';
 
-  nativeBuildInputs = [
-    cmake
-    pkg-config
-    wrapGAppsHook3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    makeWrapper
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      pkg-config
+      wrapGAppsHook3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      makeWrapper
+    ];
 
-  buildInputs = [
-    util-linux
-    libselinux
-    libsepol
-    lerc
-    libthai
-    libdatrie
-    libxkbcommon
-    libepoxy
-    libXtst
-    pixman
-    libpthreadstubs
-    gtkmm3
-    libXau
-    libXdmcp
-    lcms2
-    libiptcdata
-    fftw
-    expat
-    pcre2
-    libsigcxx
-    lensfun
-    librsvg
-    exiv2
-    libraw
-    libjxl
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libcanberra-gtk3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    gtk-mac-integration
-  ];
+  buildInputs =
+    [
+      util-linux
+      libselinux
+      libsepol
+      lerc
+      libthai
+      libdatrie
+      libxkbcommon
+      libepoxy
+      libXtst
+      pixman
+      libpthreadstubs
+      gtkmm3
+      libXau
+      libXdmcp
+      lcms2
+      libiptcdata
+      fftw
+      expat
+      pcre2
+      libsigcxx
+      lensfun
+      librsvg
+      exiv2
+      libraw
+      libjxl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libcanberra-gtk3
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      gtk-mac-integration
+    ];
 
-  cmakeFlags = [
-    "-DPROC_TARGET_NUMBER=2"
-    "-DCACHE_NAME_SUFFIX=\"\""
-    "-DWITH_SYSTEM_LIBRAW=\"ON\""
-    "-DWITH_JXL=\"ON\""
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
-  ];
+  cmakeFlags =
+    [
+      "-DPROC_TARGET_NUMBER=2"
+      "-DCACHE_NAME_SUFFIX=\"\""
+      "-DWITH_SYSTEM_LIBRAW=\"ON\""
+      "-DWITH_JXL=\"ON\""
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-DCMAKE_OSX_DEPLOYMENT_TARGET=${stdenv.hostPlatform.darwinMinVersion}"
+    ];
 
   CMAKE_CXX_FLAGS = toString [
     "-std=c++11"
@@ -122,7 +130,10 @@ stdenv.mkDerivation rec {
     description = "RAW converter and digital photo processing software";
     homepage = "http://www.rawtherapee.com/";
     license = lib.licenses.gpl3Plus;
-    maintainers = with lib.maintainers; [ jcumming mahe ];
+    maintainers = with lib.maintainers; [
+      jcumming
+      mahe
+    ];
     platforms = with lib.platforms; unix;
   };
 }

@@ -1877,6 +1877,44 @@ runTests {
     expected = [ [ "_module" "args" ] [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
   };
 
+  testAttrsWithName = {
+    expr = let
+      eval =  evalModules {
+        modules = [
+          {
+            options = {
+              foo = lib.mkOption {
+                type = lib.types.attrsWith {
+                  placeholder = "MyCustomPlaceholder";
+                  elemType = lib.types.submodule {
+                    options.bar = lib.mkOption {
+                      type = lib.types.int;
+                      default = 42;
+                    };
+                  };
+                };
+              };
+            };
+          }
+        ];
+      };
+      opt = eval.options.foo;
+    in
+      (opt.type.getSubOptions opt.loc).bar.loc;
+    expected = [
+      "foo"
+      "<MyCustomPlaceholder>"
+      "bar"
+    ];
+  };
+
+  testShowOptionWithPlaceholder = {
+    # <name>, *, should not be escaped. It is used as a placeholder by convention.
+    # Other symbols should be escaped. `{}`
+    expr = lib.showOption ["<name>" "<myName>" "*" "{foo}"];
+    expected = "<name>.<myName>.*.\"{foo}\"";
+  };
+
   testCartesianProductOfEmptySet = {
     expr = cartesianProduct {};
     expected = [ {} ];

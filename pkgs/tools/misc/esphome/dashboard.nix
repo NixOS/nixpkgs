@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, fetchFromGitHub
-, fetchNpmDeps
+{
+  lib,
+  buildPythonPackage,
+  fetchFromGitHub,
+  fetchNpmDeps,
 
-# build-system
-, setuptools
-, nodejs
-, npmHooks
+  # build-system
+  setuptools,
+  nodejs,
+  npmHooks,
 
 }:
 

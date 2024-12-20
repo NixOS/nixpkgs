@@ -1,15 +1,15 @@
 {
   "scx": {
-    "version": "1.0.6",
-    "hash": "sha256-hE0O15/9fplKrkmdiiHRJK6DzD9XaGhBwtGPqq/sX58=",
-    "cargoHash": "sha256-K/pLWEUQyzdGDBhP5MXVOiAXCA4h0dh0S2q0SzlsSDY="
+    "version": "1.0.7",
+    "hash": "sha256-qiXgRsbYP7aPGDM8R+Z6M5klKGwFXWBONvKVLoEkW3s=",
+    "cargoHash": "sha256-0Wdr+hCkGianyuFBq9hh+cPCvqedNQq52zWtH4tEhrM="
   },
   "bpftool": {
-    "rev": "77a72987353fcae8ce330fd87d4c7afb7677a169",
-    "hash": "sha256-pItTVewlXgB97AC/WH9rW9J/eYSe2ZdBkJaAgGnDeUU="
+    "rev": "183e7010387d1fc9f08051426e9a9fbd5f8d409e",
+    "hash": "sha256-ZZly6csVWOmtLmld1fhSDUqyRgZx2gSMGXTaSASGv7c="
   },
   "libbpf": {
-    "rev": "686f600bca59e107af4040d0838ca2b02c14ff50",
-    "hash": "sha256-uIu57gFkPhBCq3RqKb6J4r5OB4X5/V9q8HqIafUc+Do="
+    "rev": "c5f22aca0f3aa855daa159b2777472b35e721804",
+    "hash": "sha256-ggGVqAkdZt28KAx+LztVIYGxj0j79hKcPKmUy8TrJy8="
   }
 }

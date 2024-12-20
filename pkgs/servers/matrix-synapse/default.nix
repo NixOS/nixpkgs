@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
-, openssl
-, libiconv
-, cargo
-, rustPlatform
-, rustc
-, nixosTests
-, callPackage
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  openssl,
+  libiconv,
+  cargo,
+  rustPlatform,
+  rustc,
+  nixosTests,
+  callPackage,
 }:
 
 let
@@ -56,52 +57,60 @@ python3.pkgs.buildPythonApplication rec {
     rustc
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      libiconv
+    ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    attrs
-    bcrypt
-    bleach
-    canonicaljson
-    cryptography
-    ijson
-    immutabledict
-    jinja2
-    jsonschema
-    matrix-common
-    msgpack
-    python-multipart
-    netaddr
-    packaging
-    phonenumbers
-    pillow
-    prometheus-client
-    pyasn1
-    pyasn1-modules
-    pydantic
-    pymacaroons
-    pyopenssl
-    pyyaml
-    service-identity
-    signedjson
-    sortedcontainers
-    treq
-    twisted
-    typing-extensions
-    unpaddedbase64
-  ]
-  ++ twisted.optional-dependencies.tls;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      attrs
+      bcrypt
+      bleach
+      canonicaljson
+      cryptography
+      ijson
+      immutabledict
+      jinja2
+      jsonschema
+      matrix-common
+      msgpack
+      python-multipart
+      netaddr
+      packaging
+      phonenumbers
+      pillow
+      prometheus-client
+      pyasn1
+      pyasn1-modules
+      pydantic
+      pymacaroons
+      pyopenssl
+      pyyaml
+      service-identity
+      signedjson
+      sortedcontainers
+      treq
+      twisted
+      typing-extensions
+      unpaddedbase64
+    ]
+    ++ twisted.optional-dependencies.tls;
 
   optional-dependencies = with python3.pkgs; {
-    postgres = if isPyPy then [
-      psycopg2cffi
-    ] else [
-      psycopg2
-    ];
+    postgres =
+      if isPyPy then
+        [
+          psycopg2cffi
+        ]
+      else
+        [
+          psycopg2
+        ];
     saml2 = [
       pysaml2
     ];
@@ -132,13 +141,15 @@ python3.pkgs.buildPythonApplication rec {
     ];
   };
 
-  nativeCheckInputs = [
-    openssl
-  ] ++ (with python3.pkgs; [
-    mock
-    parameterized
-  ])
-  ++ lib.flatten (lib.attrValues optional-dependencies);
+  nativeCheckInputs =
+    [
+      openssl
+    ]
+    ++ (with python3.pkgs; [
+      mock
+      parameterized
+    ])
+    ++ lib.flatten (lib.attrValues optional-dependencies);
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 

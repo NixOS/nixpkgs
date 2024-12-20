@@ -1,18 +1,36 @@
-{ lib, stdenv, fetchFromGitHub, autoreconfHook, pkg-config, curl, openssl, libxml2, fuse }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  curl,
+  openssl,
+  libxml2,
+  fuse,
+}:
 
 stdenv.mkDerivation rec {
   pname = "s3fs-fuse";
   version = "1.95";
 
   src = fetchFromGitHub {
-    owner  = "s3fs-fuse";
-    repo   = "s3fs-fuse";
-    rev    = "v${version}";
+    owner = "s3fs-fuse";
+    repo = "s3fs-fuse";
+    rev = "v${version}";
     sha256 = "sha256-wHszw3S+fuZRwTvJy+FkxQTR2BAvr8H924Wd4/C5heE=";
   };
 
-  buildInputs = [ curl openssl libxml2 fuse ];
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [
+    curl
+    openssl
+    libxml2
+    fuse
+  ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   configureFlags = [
     "--with-openssl"

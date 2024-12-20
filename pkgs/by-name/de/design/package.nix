@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, wrapGAppsHook4
-, appstream-glib
-, blueprint-compiler
-, desktop-file-utils
-, meson
-, ninja
-, pkg-config
-, glib
-, gjs
-, libadwaita
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  wrapGAppsHook4,
+  appstream-glib,
+  blueprint-compiler,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  glib,
+  gjs,
+  libadwaita,
 }:
 
 stdenv.mkDerivation rec {

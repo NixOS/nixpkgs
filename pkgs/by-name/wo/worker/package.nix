@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, libX11
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libX11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,7 +16,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ libX11 ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   strictDeps = true;
 

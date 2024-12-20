@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, vulkan-loader
-, addDriverRunpath
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  vulkan-loader,
+  addDriverRunpath,
 }:
 
 rustPlatform.buildRustPackage rec {

@@ -1,10 +1,11 @@
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
 
-# dependencies
-, tinytuya
-, tuya-device-sharing-sdk
+  # dependencies
+  tinytuya,
+  tuya-device-sharing-sdk,
 }:
 
 buildHomeAssistantComponent rec {

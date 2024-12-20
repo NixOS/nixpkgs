@@ -1,5 +1,6 @@
-{ buildDunePackage
-, qcheck-multicoretests-util
+{
+  buildDunePackage,
+  qcheck-multicoretests-util,
 }:
 
 buildDunePackage {

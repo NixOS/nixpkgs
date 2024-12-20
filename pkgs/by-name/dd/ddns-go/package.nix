@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -23,7 +24,7 @@ buildGoModule rec {
   # network required
   doCheck = false;
 
-  meta = with lib;{
+  meta = with lib; {
     homepage = "https://github.com/jeessy2/ddns-go";
     description = "Simple and easy to use DDNS";
     license = licenses.mit;

@@ -1,5 +1,18 @@
-{ lib, stdenv, fetchFromGitHub, cmake, lua, pkg-config, rsync,
-asciidoc, libxml2, docbook_xml_dtd_45, docbook_xsl, libxslt, apple-sdk_11 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  lua,
+  pkg-config,
+  rsync,
+  asciidoc,
+  libxml2,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  libxslt,
+  apple-sdk_11,
+}:
 
 let
   xnu = apple-sdk_11.sourceRelease "xnu";
@@ -30,11 +43,18 @@ stdenv.mkDerivation rec {
 
   dontUseCmakeBuildDir = true;
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = [
     rsync
     lua
-    asciidoc libxml2 docbook_xml_dtd_45 docbook_xsl libxslt
+    asciidoc
+    libxml2
+    docbook_xml_dtd_45
+    docbook_xsl
+    libxslt
   ] ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   meta = with lib; {

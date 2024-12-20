@@ -1,6 +1,7 @@
-{ lib
-, stdenvNoCC
-, fetchzip
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -8,7 +9,9 @@ stdenvNoCC.mkDerivation rec {
   version = "3.2";
 
   src = fetchzip {
-    url = "https://bboxtype.com/downloads/Fira/Fira_Mono_${lib.replaceStrings ["."] ["_"] version}.zip";
+    url = "https://bboxtype.com/downloads/Fira/Fira_Mono_${
+      lib.replaceStrings [ "." ] [ "_" ] version
+    }.zip";
     hash = "sha256-Ukc+K2sdSz+vUQFD8mmwJHZQ3N68oM4fk6YzGLwzAfQ=";
   };
 

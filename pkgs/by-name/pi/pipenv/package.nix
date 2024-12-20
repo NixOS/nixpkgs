@@ -1,30 +1,35 @@
-{ lib
-, stdenv
-, python3
-, fetchFromGitHub
-, installShellFiles
-, pipenv
-, runCommand
+{
+  lib,
+  stdenv,
+  python3,
+  fetchFromGitHub,
+  installShellFiles,
+  pipenv,
+  runCommand,
 }:
 
 with python3.pkgs;
 
 let
 
-  runtimeDeps = ps: with ps; [
-    certifi
-    setuptools
-    pip
-    virtualenv
-    virtualenv-clone
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isAndroid [
-    pyjnius
-  ];
+  runtimeDeps =
+    ps:
+    with ps;
+    [
+      certifi
+      setuptools
+      pip
+      virtualenv
+      virtualenv-clone
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAndroid [
+      pyjnius
+    ];
 
   pythonEnv = python3.withPackages runtimeDeps;
 
-in buildPythonApplication rec {
+in
+buildPythonApplication rec {
   pname = "pipenv";
   version = "2024.2.0";
   format = "pyproject";
@@ -78,7 +83,7 @@ in buildPythonApplication rec {
   ];
 
   passthru.tests = {
-    verify-venv-patch = runCommand "${pname}-test-verify-venv-patch" {} ''
+    verify-venv-patch = runCommand "${pname}-test-verify-venv-patch" { } ''
       export PIPENV_VENV_IN_PROJECT=1
 
       # "pipenv install" should be able to create a venv

@@ -1,17 +1,18 @@
-{ bash
-, fetchFromGitHub
-, gawk
-, git
-, lib
-, procps
-, stdenvNoCC
-, unixtools
-, unzip
-, wget
-, xdotool
-, xorg
-, yad
-, writeShellApplication
+{
+  bash,
+  fetchFromGitHub,
+  gawk,
+  git,
+  lib,
+  procps,
+  stdenvNoCC,
+  unixtools,
+  unzip,
+  wget,
+  xdotool,
+  xorg,
+  yad,
+  writeShellApplication,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -25,19 +26,24 @@ stdenvNoCC.mkDerivation {
     hash = "sha256-CGtSGAm+52t2zFsPJEsm76w+FEHhbOd9NYuerGa31tc=";
   };
 
-  outputs = [ "out" "steamcompattool" ];
+  outputs = [
+    "out"
+    "steamcompattool"
+  ];
 
   installFlags = [ "PREFIX=\${out}" ];
 
-  nativeBuildInputs = let
-    # We need a `steam` command in order to install the compat tool
-    fakeSteam = writeShellApplication {
-      name = "steam";
-      text = "exit 0";
-    };
-  in [
-    fakeSteam
-  ];
+  nativeBuildInputs =
+    let
+      # We need a `steam` command in order to install the compat tool
+      fakeSteam = writeShellApplication {
+        name = "steam";
+        text = "exit 0";
+      };
+    in
+    [
+      fakeSteam
+    ];
 
   postInstall =
     let
@@ -96,7 +102,10 @@ stdenvNoCC.mkDerivation {
     mainProgram = "steamtinkerlaunch";
     homepage = "https://github.com/sonic2kk/steamtinkerlaunch";
     license = licenses.gpl3;
-    maintainers = with maintainers; [ urandom surfaceflinger ];
+    maintainers = with maintainers; [
+      urandom
+      surfaceflinger
+    ];
     platforms = lib.platforms.linux;
   };
 }

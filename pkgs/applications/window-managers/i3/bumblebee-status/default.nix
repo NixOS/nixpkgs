@@ -1,20 +1,20 @@
-{ pkgs
-, lib
-, glibcLocales
-, python
-, fetchpatch
-, fetchFromGitHub
+{
+  pkgs,
+  lib,
+  glibcLocales,
+  python,
+  fetchpatch,
+  fetchFromGitHub,
   # Usage: bumblebee-status.override { plugins = p: [p.arandr p.bluetooth2]; };
-, plugins ? p: [ ]
+  plugins ? p: [ ],
 }:
 let
   version = "2.2.0";
 
   # { <name> = { name = "..."; propagatedBuildInputs = [ ... ]; buildInputs = [ ... ]; } }
-  allPlugins =
-    lib.mapAttrs
-      (name: value: value // { inherit name; })
-      (import ./plugins.nix { inherit pkgs python; });
+  allPlugins = lib.mapAttrs (name: value: value // { inherit name; }) (
+    import ./plugins.nix { inherit pkgs python; }
+  );
 
   # [ { name = "..."; propagatedBuildInputs = [ ... ]; buildInputs = [ ... ]; } ]
   selectedPlugins = plugins allPlugins;
@@ -42,7 +42,14 @@ python.pkgs.buildPythonPackage {
   buildInputs = lib.concatMap (p: p.buildInputs or [ ]) selectedPlugins;
   propagatedBuildInputs = lib.concatMap (p: p.propagatedBuildInputs or [ ]) selectedPlugins;
 
-  checkInputs = with python.pkgs; [ freezegun netifaces psutil pytest pytest-mock requests ];
+  checkInputs = with python.pkgs; [
+    freezegun
+    netifaces
+    psutil
+    pytest
+    pytest-mock
+    requests
+  ];
 
   checkPhase = ''
     runHook preCheck

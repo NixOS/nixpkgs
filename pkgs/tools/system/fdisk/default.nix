@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, gettext
-, guile
-, libuuid
-, parted
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gettext,
+  guile,
+  libuuid,
+  parted,
 }:
 
 stdenv.mkDerivation rec {

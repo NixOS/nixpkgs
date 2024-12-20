@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.calibre-server;
@@ -6,22 +11,33 @@ let
   documentationLink = "https://manual.calibre-ebook.com";
   generatedDocumentationLink = documentationLink + "/generated/en/calibre-server.html";
 
-  execFlags = (lib.concatStringsSep " "
-    (lib.mapAttrsToList (k: v: "${k} ${toString v}") (lib.filterAttrs (name: value: value != null) {
-      "--listen-on" = cfg.host;
-      "--port" = cfg.port;
-      "--auth-mode" = cfg.auth.mode;
-      "--userdb" = cfg.auth.userDb;
-    }) ++ [ (lib.optionalString (cfg.auth.enable == true) "--enable-auth") ] ++ cfg.extraFlags)
+  execFlags = (
+    lib.concatStringsSep " " (
+      lib.mapAttrsToList (k: v: "${k} ${toString v}") (
+        lib.filterAttrs (name: value: value != null) {
+          "--listen-on" = cfg.host;
+          "--port" = cfg.port;
+          "--auth-mode" = cfg.auth.mode;
+          "--userdb" = cfg.auth.userDb;
+        }
+      )
+      ++ [ (lib.optionalString (cfg.auth.enable == true) "--enable-auth") ]
+      ++ cfg.extraFlags
+    )
   );
 in
 
 {
   imports = [
-    (lib.mkChangedOptionModule [ "services" "calibre-server" "libraryDir" ] [ "services" "calibre-server" "libraries" ]
-      (config:
-        let libraryDir = lib.getAttrFromPath [ "services" "calibre-server" "libraryDir" ] config;
-        in [ libraryDir ]
+    (lib.mkChangedOptionModule
+      [ "services" "calibre-server" "libraryDir" ]
+      [ "services" "calibre-server" "libraries" ]
+      (
+        config:
+        let
+          libraryDir = lib.getAttrFromPath [ "services" "calibre-server" "libraryDir" ] config;
+        in
+        [ libraryDir ]
       )
     )
   ];
@@ -85,8 +101,7 @@ in
       openFirewall = lib.mkOption {
         type = lib.types.bool;
         default = false;
-        description =
-          "Open ports in the firewall for the Calibre Server web interface.";
+        description = "Open ports in the firewall for the Calibre Server web interface.";
       };
 
       auth = {
@@ -100,7 +115,11 @@ in
         };
 
         mode = lib.mkOption {
-          type = lib.types.enum [ "auto" "basic" "digest" ];
+          type = lib.types.enum [
+            "auto"
+            "basic"
+            "digest"
+          ];
           default = "auto";
           description = ''
             Choose the type of authentication used.
@@ -153,8 +172,7 @@ in
       };
     };
 
-    networking.firewall =
-      lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
+    networking.firewall = lib.mkIf cfg.openFirewall { allowedTCPPorts = [ cfg.port ]; };
 
   };
 

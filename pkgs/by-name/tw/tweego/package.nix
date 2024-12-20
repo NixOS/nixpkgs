@@ -25,7 +25,7 @@ buildGoModule rec {
     description = "Free (gratis and libre) command line compiler for Twine/Twee story formats, written in Go";
     homepage = "https://www.motoslave.net/tweego";
     license = lib.licenses.bsd2;
-    maintainers = with lib.maintainers; [chrispwill];
+    maintainers = with lib.maintainers; [ chrispwill ];
     mainProgram = "tweego";
   };
 }

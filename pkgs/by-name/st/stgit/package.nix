@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, installShellFiles
-, makeWrapper
-, asciidoc
-, docbook_xsl
-, docbook_xml_dtd_45
-, xmlto
-, curl
-, git
-, perl
-, darwin
-, libiconv
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  installShellFiles,
+  makeWrapper,
+  asciidoc,
+  docbook_xsl,
+  docbook_xml_dtd_45,
+  xmlto,
+  curl,
+  git,
+  perl,
+  darwin,
+  libiconv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,16 +30,26 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-s3PFNc1rn01X6tauRXp5B4cg3AIVSishqDFy0lP/8g8=";
 
   nativeBuildInputs = [
-    pkg-config installShellFiles makeWrapper asciidoc xmlto docbook_xsl
-    docbook_xml_dtd_45 perl
+    pkg-config
+    installShellFiles
+    makeWrapper
+    asciidoc
+    xmlto
+    docbook_xsl
+    docbook_xml_dtd_45
+    perl
   ];
   buildInputs = [ curl ];
 
-  nativeCheckInputs = [
-    git perl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.system_cmds libiconv
-  ];
+  nativeCheckInputs =
+    [
+      git
+      perl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.system_cmds
+      libiconv
+    ];
 
   postPatch = ''
     for f in Documentation/*.xsl; do
@@ -67,7 +78,11 @@ rustPlatform.buildRustPackage rec {
   checkTarget = "test";
 
   dontCargoInstall = true;
-  installTargets = [ "install" "install-man" "install-html" ];
+  installTargets = [
+    "install"
+    "install-man"
+    "install-html"
+  ];
 
   postInstall = ''
     wrapProgram $out/bin/stg --prefix PATH : ${lib.makeBinPath [ git ]}

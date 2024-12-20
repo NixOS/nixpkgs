@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, libtirpc
-, pam
-, rpcsvc-proto
-, enablePAM ? stdenv.hostPlatform.isLinux
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  libtirpc,
+  pam,
+  rpcsvc-proto,
+  enablePAM ? stdenv.hostPlatform.isLinux,
 }:
 
 rustPlatform.buildRustPackage rec {

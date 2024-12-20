@@ -1,25 +1,26 @@
-{ pname
-, channel
-, lib
-, writeScript
-, xidel
-, coreutils
-, gnused
-, gnugrep
-, curl
-, gnupg
-, runtimeShell
-, baseName ? "firefox"
-, basePath ? "pkgs/applications/networking/browsers/firefox-bin"
-, baseUrl
-, versionSuffix ? ""
+{
+  pname,
+  channel,
+  lib,
+  writeScript,
+  xidel,
+  coreutils,
+  gnused,
+  gnugrep,
+  curl,
+  gnupg,
+  runtimeShell,
+  baseName ? "firefox",
+  basePath ? "pkgs/applications/networking/browsers/firefox-bin",
+  baseUrl,
+  versionSuffix ? "",
 }:
 
 let
-  isBeta =
-    channel != "release";
+  isBeta = channel != "release";
 
-in writeScript "update-${pname}" ''
+in
+writeScript "update-${pname}" ''
   #!${runtimeShell}
   PATH=${coreutils}/bin:${gnused}/bin:${gnugrep}/bin:${xidel}/bin:${curl}/bin:${gnupg}/bin
   set -eux
@@ -48,7 +49,9 @@ in writeScript "update-${pname}" ''
            grep "^[0-9]" | \
            sort --version-sort | \
            grep -v "funnelcake" | \
-           grep -e "${lib.optionalString isBeta "b"}\([[:digit:]]\|[[:digit:]][[:digit:]]\)${versionSuffix}$" | ${lib.optionalString (!isBeta) "grep -v \"b\" |"} \
+           grep -e "${lib.optionalString isBeta "b"}\([[:digit:]]\|[[:digit:]][[:digit:]]\)${versionSuffix}$" | ${
+             lib.optionalString (!isBeta) "grep -v \"b\" |"
+           } \
            tail -1`
 
   curl --silent -o $HOME/shasums "$url$version/SHA256SUMS"

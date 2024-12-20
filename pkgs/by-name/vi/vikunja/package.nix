@@ -1,4 +1,14 @@
-{ lib, fetchFromGitHub, stdenv, nodejs, pnpm, buildGoModule, mage, writeShellScriptBin, nixosTests }:
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  nodejs,
+  pnpm,
+  buildGoModule,
+  mage,
+  writeShellScriptBin,
+  nixosTests,
+}:
 
 let
   version = "0.24.5";
@@ -16,7 +26,12 @@ let
     sourceRoot = "${finalAttrs.src.name}/frontend";
 
     pnpmDeps = pnpm.fetchDeps {
-      inherit (finalAttrs) pname version src sourceRoot;
+      inherit (finalAttrs)
+        pname
+        version
+        src
+        sourceRoot
+        ;
       hash = "sha256-D2dOyYsdsNV1ZSQdjpy6rfoix7yBACEHj/2XyHb7HWE=";
     };
 
@@ -41,10 +56,12 @@ let
   });
 
   # Injects a `t.Skip()` into a given test since there's apparently no other way to skip tests here.
-  skipTest = lineOffset: testCase: file:
+  skipTest =
+    lineOffset: testCase: file:
     let
       jumpAndAppend = lib.concatStringsSep ";" (lib.replicate (lineOffset - 1) "n" ++ [ "a" ]);
-    in ''
+    in
+    ''
       sed -i -e '/${testCase}/{
       ${jumpAndAppend} t.Skip();
       }' ${file}
@@ -65,7 +82,10 @@ buildGoModule {
         fi
       '';
     in
-    [ fakeGit mage ];
+    [
+      fakeGit
+      mage
+    ];
 
   vendorHash = "sha256-OsKejno8QGg7HzRsrftngiWGiWHFc1jDLi5mQ9/NjI4=";
 

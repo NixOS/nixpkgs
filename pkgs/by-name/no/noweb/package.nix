@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, nawk, groff, icon-lang, useIcon ? true }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nawk,
+  groff,
+  icon-lang,
+  useIcon ? true,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "noweb";
@@ -7,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "nrnrnr";
     repo = "noweb";
-    rev = "v${builtins.replaceStrings ["."] ["_"] finalAttrs.version}";
+    rev = "v${builtins.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     sha256 = "sha256-COcWyrYkheRaSr2gqreRRsz9SYRTX2PSl7km+g98ljs=";
   };
 
@@ -30,10 +38,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p "$out/lib/noweb"
   '';
 
-  makeFlags = lib.optionals useIcon [
-    "LIBSRC=icon"
-    "ICONC=icont"
-  ] ++ [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags =
+    lib.optionals useIcon [
+      "LIBSRC=icon"
+      "ICONC=icont"
+    ]
+    ++ [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   preInstall = ''
     mkdir -p "$tex/tex/latex/noweb"
@@ -46,7 +56,11 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  installTargets = [ "install-code" "install-tex" "install-elisp" ];
+  installTargets = [
+    "install-code"
+    "install-tex"
+    "install-elisp"
+  ];
 
   postInstall = ''
     substituteInPlace "$out/bin/cpif" --replace "PATH=/bin:/usr/bin" ""
@@ -69,7 +83,10 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s "$tex" "$out/share/texmf"
   '';
 
-  outputs = [ "out" "tex" ];
+  outputs = [
+    "out"
+    "tex"
+  ];
 
   passthru = {
     tlType = "run";

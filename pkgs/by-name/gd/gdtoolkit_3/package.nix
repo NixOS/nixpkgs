@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchFromGitHub
+{
+  lib,
+  python3,
+  fetchFromGitHub,
 }:
 
 let
@@ -59,14 +60,25 @@ python.pkgs.buildPythonApplication rec {
   '';
 
   # The tests are not working on NixOS
-  disabledTests = [ "test_cc_on_empty_file_succeeds" "test_cc_on_file_with_single_function_succeeds" ];
+  disabledTests = [
+    "test_cc_on_empty_file_succeeds"
+    "test_cc_on_file_with_single_function_succeeds"
+  ];
 
-  pythonImportsCheck = [ "gdtoolkit" "gdtoolkit.formatter" "gdtoolkit.linter" "gdtoolkit.parser" ];
+  pythonImportsCheck = [
+    "gdtoolkit"
+    "gdtoolkit.formatter"
+    "gdtoolkit.linter"
+    "gdtoolkit.parser"
+  ];
 
   meta = with lib; {
     description = "Independent set of tools for working with Godot's GDScript - parser, linter and formatter";
     homepage = "https://github.com/Scony/godot-gdscript-toolkit";
     license = licenses.mit;
-    maintainers = with maintainers; [ shiryel tmarkus ];
+    maintainers = with maintainers; [
+      shiryel
+      tmarkus
+    ];
   };
 }

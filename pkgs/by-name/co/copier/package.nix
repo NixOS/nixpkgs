@@ -1,7 +1,8 @@
-{ lib
-, git
-, python3
-, fetchFromGitHub
+{
+  lib,
+  git,
+  python3,
+  fetchFromGitHub,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -49,7 +50,7 @@ python3.pkgs.buildPythonApplication rec {
   ];
 
   makeWrapperArgs = [
-    "--suffix PATH : ${lib.makeBinPath [ git ] }"
+    "--suffix PATH : ${lib.makeBinPath [ git ]}"
   ];
 
   meta = with lib; {

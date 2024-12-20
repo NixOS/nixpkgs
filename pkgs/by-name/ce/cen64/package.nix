@@ -1,4 +1,13 @@
-{ lib, cmake, fetchFromGitHub, libGL, libiconv, libX11, openal, stdenv }:
+{
+  lib,
+  cmake,
+  fetchFromGitHub,
+  libGL,
+  libiconv,
+  libX11,
+  openal,
+  stdenv,
+}:
 
 stdenv.mkDerivation rec {
   pname = "cen64";
@@ -12,7 +21,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ libGL libiconv openal libX11 ];
+  buildInputs = [
+    libGL
+    libiconv
+    openal
+    libX11
+  ];
 
   installPhase = ''
     runHook preInstall

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, buildFHSEnv
-, corefonts
-, dejavu_fonts
-, dpkg
-, fetchurl
-, gcc-unwrapped
-, liberation_ttf_v1
-, writeScript
-, xorg
+{
+  lib,
+  stdenv,
+  buildFHSEnv,
+  corefonts,
+  dejavu_fonts,
+  dpkg,
+  fetchurl,
+  gcc-unwrapped,
+  liberation_ttf_v1,
+  writeScript,
+  xorg,
 }:
 
 let
@@ -17,16 +18,19 @@ let
     pname = "onlyoffice-documentserver";
     version = "8.1.3";
 
-    src = fetchurl ({
-      "aarch64-linux" = {
-        url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_arm64.deb";
-        sha256 = "sha256-+7hHz1UcnlJNhBAVaYQwK0m2tkgsfbjqY3oa8XU0yxo=";
-      };
-      "x86_64-linux" = {
-        url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_amd64.deb";
-        sha256 = "sha256-jCwcXb97Z9/ZofKLYneJxKAnaZE/Hwvm34GLQu/BoUM=";
-      };
-    }.${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}"));
+    src = fetchurl (
+      {
+        "aarch64-linux" = {
+          url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_arm64.deb";
+          sha256 = "sha256-+7hHz1UcnlJNhBAVaYQwK0m2tkgsfbjqY3oa8XU0yxo=";
+        };
+        "x86_64-linux" = {
+          url = "https://github.com/ONLYOFFICE/DocumentServer/releases/download/v${version}/onlyoffice-documentserver_amd64.deb";
+          sha256 = "sha256-jCwcXb97Z9/ZofKLYneJxKAnaZE/Hwvm34GLQu/BoUM=";
+        };
+      }
+      .${stdenv.hostPlatform.system} or (throw "unsupported system ${stdenv.hostPlatform.system}")
+    );
 
     preferLocalBuild = true;
 
@@ -150,7 +154,10 @@ let
       '';
       homepage = "https://github.com/ONLYOFFICE/DocumentServer";
       license = licenses.agpl3Plus;
-      platforms = [ "x86_64-linux" "aarch64-linux" ];
+      platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
       sourceProvenance = [ sourceTypes.binaryNativeCode ];
       maintainers = with maintainers; [ SuperSandro2000 ];
     };

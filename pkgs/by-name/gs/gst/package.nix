@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, git
-, ghq
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  git,
+  ghq,
 }:
 
 buildGoModule rec {
@@ -26,7 +27,9 @@ buildGoModule rec {
   ];
 
   ldflags = [
-    "-s" "-w" "-X=main.Version=${version}"
+    "-s"
+    "-w"
+    "-X=main.Version=${version}"
   ];
 
   doInstallCheck = true;

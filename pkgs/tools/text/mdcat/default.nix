@@ -1,15 +1,16 @@
-{ lib
-, curl
-, stdenv
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, asciidoctor
-, openssl
-, Security
-, SystemConfiguration
-, ansi2html
-, installShellFiles
+{
+  lib,
+  curl,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  asciidoctor,
+  openssl,
+  Security,
+  SystemConfiguration,
+  ansi2html,
+  installShellFiles,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -23,9 +24,20 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-gZwTvtZ5au8i0bZIMJa/mLWZRSGbik9nHlNEHMkqpa0=";
   };
 
-  nativeBuildInputs = [ pkg-config asciidoctor installShellFiles ];
-  buildInputs = [ curl openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security SystemConfiguration ];
+  nativeBuildInputs = [
+    pkg-config
+    asciidoctor
+    installShellFiles
+  ];
+  buildInputs =
+    [
+      curl
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      SystemConfiguration
+    ];
 
   cargoHash = "sha256-GcJGO5WJpyVHqcoiQUN+oRybzllbGsiiq5Yjo6Q5rOw=";
 
@@ -42,17 +54,19 @@ rustPlatform.buildRustPackage rec {
     "--skip iterm2_tests_render_md_samples_images_md"
   ];
 
-  postInstall = ''
-    installManPage $releaseDir/build/mdcat-*/out/mdcat.1
-    ln -sr $out/bin/{mdcat,mdless}
-  '' + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    for bin in mdcat mdless; do
-      installShellCompletion --cmd $bin \
-        --bash <($out/bin/$bin --completions bash) \
-        --fish <($out/bin/$bin --completions fish) \
-        --zsh <($out/bin/$bin --completions zsh)
-    done
-  '';
+  postInstall =
+    ''
+      installManPage $releaseDir/build/mdcat-*/out/mdcat.1
+      ln -sr $out/bin/{mdcat,mdless}
+    ''
+    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      for bin in mdcat mdless; do
+        installShellCompletion --cmd $bin \
+          --bash <($out/bin/$bin --completions bash) \
+          --fish <($out/bin/$bin --completions fish) \
+          --zsh <($out/bin/$bin --completions zsh)
+      done
+    '';
 
   meta = with lib; {
     description = "cat for markdown";

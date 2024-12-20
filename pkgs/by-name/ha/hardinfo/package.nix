@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchurl, which, pkg-config, gtk2, pcre, glib, libxml2
-, libsoup_2_4 ? null
+{
+  lib,
+  stdenv,
+  fetchurl,
+  which,
+  pkg-config,
+  gtk2,
+  pcre,
+  glib,
+  libxml2,
+  libsoup_2_4 ? null,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,7 +23,14 @@ stdenv.mkDerivation rec {
   # Not adding 'hostname' command, the build shouldn't depend on what the build
   # host is called.
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ which gtk2 pcre glib libxml2 libsoup_2_4 ];
+  buildInputs = [
+    which
+    gtk2
+    pcre
+    glib
+    libxml2
+    libsoup_2_4
+  ];
 
   # Fixes '#error You must compile this program without "-O"'
   hardeningDisable = [ "all" ];
@@ -45,7 +61,10 @@ stdenv.mkDerivation rec {
     description = "Display information about your hardware and operating system";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [ bjornfor ];
-    platforms = [ "x86_64-linux" "i686-linux" ]; # ARMv7 and AArch64 are unsupported
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ]; # ARMv7 and AArch64 are unsupported
     mainProgram = "hardinfo";
   };
 }

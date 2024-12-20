@@ -1,8 +1,10 @@
-{ lib, stdenv
-, fetchFromGitHub
-, libseccomp
-, perl
-, which
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libseccomp,
+  perl,
+  which,
 }:
 
 stdenv.mkDerivation {
@@ -10,9 +12,9 @@ stdenv.mkDerivation {
   version = "2017-01-23";
 
   src = fetchFromGitHub {
-    owner  = "vi";
-    repo   = "syscall_limiter";
-    rev    = "481c8c883f2e1260ebc83b352b63bf61a930a341";
+    owner = "vi";
+    repo = "syscall_limiter";
+    rev = "481c8c883f2e1260ebc83b352b63bf61a930a341";
     sha256 = "0z5arj1kq1xczgrbw1b8m9kicbv3vs9bd32wvgfr4r6ndingsp5m";
   };
 
@@ -29,9 +31,9 @@ stdenv.mkDerivation {
 
   meta = with lib; {
     description = "Start Linux programs with only selected syscalls enabled";
-    homepage    = "https://github.com/vi/syscall_limiter";
-    license     = licenses.mit;
+    homepage = "https://github.com/vi/syscall_limiter";
+    license = licenses.mit;
     maintainers = with maintainers; [ obadz ];
-    platforms   = platforms.linux;
+    platforms = platforms.linux;
   };
 }

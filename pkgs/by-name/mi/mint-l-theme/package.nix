@@ -1,9 +1,10 @@
-{ stdenvNoCC
-, lib
-, fetchFromGitHub
-, python3
-, sassc
-, sass
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  python3,
+  sassc,
+  sass,
 }:
 
 stdenvNoCC.mkDerivation rec {

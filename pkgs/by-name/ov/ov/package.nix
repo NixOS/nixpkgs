@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, pandoc
-, makeWrapper
-, testers
-, ov
+{
+  lib,
+  stdenv,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  pandoc,
+  makeWrapper,
+  testers,
+  ov,
 }:
 
 buildGoModule rec {
@@ -37,23 +38,28 @@ buildGoModule rec {
     makeWrapper
   ];
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    installShellCompletion --cmd ov \
-      --bash <($out/bin/ov --completion bash) \
-      --fish <($out/bin/ov --completion fish) \
-      --zsh <($out/bin/ov --completion zsh)
-    '' + ''
-    mkdir -p $out/share/$name
-    cp $src/ov-less.yaml $out/share/$name/less-config.yaml
-    makeWrapper $out/bin/ov $out/bin/ov-less --add-flags "--config $out/share/$name/less-config.yaml"
+  postInstall =
+    lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+      installShellCompletion --cmd ov \
+        --bash <($out/bin/ov --completion bash) \
+        --fish <($out/bin/ov --completion fish) \
+        --zsh <($out/bin/ov --completion zsh)
+    ''
+    + ''
+      mkdir -p $out/share/$name
+      cp $src/ov-less.yaml $out/share/$name/less-config.yaml
+      makeWrapper $out/bin/ov $out/bin/ov-less --add-flags "--config $out/share/$name/less-config.yaml"
 
-    mkdir -p $doc/share/doc/$name
-    pandoc -s < $src/README.md > $doc/share/doc/$name/README.html
-    mkdir -p $doc/share/$name
-    cp $src/ov.yaml $doc/share/$name/sample-config.yaml
-  '';
+      mkdir -p $doc/share/doc/$name
+      pandoc -s < $src/README.md > $doc/share/doc/$name/README.html
+      mkdir -p $doc/share/$name
+      cp $src/ov.yaml $doc/share/$name/sample-config.yaml
+    '';
 
   passthru.tests = {
     version = testers.testVersion {
@@ -67,6 +73,9 @@ buildGoModule rec {
     homepage = "https://noborus.github.io/ov";
     changelog = "https://github.com/noborus/ov/releases/tag/v${version}";
     license = licenses.mit;
-    maintainers = with maintainers; [ farcaller figsoda ];
+    maintainers = with maintainers; [
+      farcaller
+      figsoda
+    ];
   };
 }

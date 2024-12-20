@@ -1,8 +1,9 @@
-{ luarocks_bootstrap
-, fetchFromGitHub
-, unstableGitUpdater
-, nurl
-, file
+{
+  luarocks_bootstrap,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  nurl,
+  file,
 }:
 
 luarocks_bootstrap.overrideAttrs (old: {
@@ -32,7 +33,12 @@ luarocks_bootstrap.overrideAttrs (old: {
 
   # old.meta // { /* ... */ } doesn't update meta.position, which breaks the updateScript
   meta = {
-    inherit (old.meta) description license maintainers platforms;
+    inherit (old.meta)
+      description
+      license
+      maintainers
+      platforms
+      ;
     mainProgram = "luarocks";
   };
 })

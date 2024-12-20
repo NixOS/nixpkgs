@@ -1,4 +1,10 @@
-{ lib, fetchzip, tcl, tclPackages, tk, }:
+{
+  lib,
+  fetchzip,
+  tcl,
+  tclPackages,
+  tk,
+}:
 
 tcl.mkTclDerivation {
   pname = "nagelfar";

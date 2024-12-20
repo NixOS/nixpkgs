@@ -1,95 +1,120 @@
-{ lib, stdenv, fetchurl, fetchzip, unzip }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchzip,
+  unzip,
+}:
 
 rec {
 
   # A primitive builder of Eclipse plugins. This function is intended
   # to be used when building more advanced builders.
-  buildEclipsePluginBase =  { name
-                            , buildInputs ? []
-                            , passthru ? {}
-                            , ... } @ attrs:
-    stdenv.mkDerivation (attrs // {
-      name = "eclipse-plugin-" + name;
+  buildEclipsePluginBase =
+    {
+      name,
+      buildInputs ? [ ],
+      passthru ? { },
+      ...
+    }@attrs:
+    stdenv.mkDerivation (
+      attrs
+      // {
+        name = "eclipse-plugin-" + name;
 
-      buildInputs = buildInputs ++ [ unzip ];
+        buildInputs = buildInputs ++ [ unzip ];
 
-      passthru = {
-        isEclipsePlugin = true;
-      } // passthru;
-    });
+        passthru = {
+          isEclipsePlugin = true;
+        } // passthru;
+      }
+    );
 
   # Helper for the common case where we have separate feature and
   # plugin JARs.
   buildEclipsePlugin =
-    { name, srcFeature, srcPlugin ? null, srcPlugins ? [], ... } @ attrs:
-      assert srcPlugin == null -> srcPlugins != [];
-      assert srcPlugin != null -> srcPlugins == [];
+    {
+      name,
+      srcFeature,
+      srcPlugin ? null,
+      srcPlugins ? [ ],
+      ...
+    }@attrs:
+    assert srcPlugin == null -> srcPlugins != [ ];
+    assert srcPlugin != null -> srcPlugins == [ ];
 
-      let
+    let
 
-        pSrcs = if (srcPlugin != null) then [ srcPlugin ] else srcPlugins;
+      pSrcs = if (srcPlugin != null) then [ srcPlugin ] else srcPlugins;
 
-      in
+    in
 
-        buildEclipsePluginBase (attrs // {
-          srcs = [ srcFeature ] ++ pSrcs;
+    buildEclipsePluginBase (
+      attrs
+      // {
+        srcs = [ srcFeature ] ++ pSrcs;
 
-          buildCommand = ''
-            dropinDir="$out/eclipse/dropins/${name}"
+        buildCommand = ''
+          dropinDir="$out/eclipse/dropins/${name}"
 
-            mkdir -p $dropinDir/features
-            unzip ${srcFeature} -d $dropinDir/features/
+          mkdir -p $dropinDir/features
+          unzip ${srcFeature} -d $dropinDir/features/
 
-            mkdir -p $dropinDir/plugins
-            for plugin in ${toString pSrcs}; do
-              cp -v $plugin $dropinDir/plugins/$(stripHash $plugin)
-            done
-          '';
-        });
+          mkdir -p $dropinDir/plugins
+          for plugin in ${toString pSrcs}; do
+            cp -v $plugin $dropinDir/plugins/$(stripHash $plugin)
+          done
+        '';
+      }
+    );
 
   # Helper for the case where the build directory has the layout of an
   # Eclipse update site, that is, it contains the directories
   # `features` and `plugins`. All features and plugins inside these
   # directories will be installed.
-  buildEclipseUpdateSite = { name, ... } @ attrs:
-    buildEclipsePluginBase (attrs // {
-      dontBuild = true;
-      doCheck = false;
+  buildEclipseUpdateSite =
+    { name, ... }@attrs:
+    buildEclipsePluginBase (
+      attrs
+      // {
+        dontBuild = true;
+        doCheck = false;
 
-      installPhase = ''
-        dropinDir="$out/eclipse/dropins/${name}"
+        installPhase = ''
+          dropinDir="$out/eclipse/dropins/${name}"
 
-        # Install features.
-        cd features
-        for feature in *.jar; do
-          featureName=''${feature%.jar}
-          mkdir -p $dropinDir/features/$featureName
-          unzip $feature -d $dropinDir/features/$featureName
-        done
-        cd ..
+          # Install features.
+          cd features
+          for feature in *.jar; do
+            featureName=''${feature%.jar}
+            mkdir -p $dropinDir/features/$featureName
+            unzip $feature -d $dropinDir/features/$featureName
+          done
+          cd ..
 
-        # Install plugins.
-        mkdir -p $dropinDir/plugins
+          # Install plugins.
+          mkdir -p $dropinDir/plugins
 
-        # A bundle should be unpacked if the manifest matches this
-        # pattern.
-        unpackPat="Eclipse-BundleShape:\\s*dir"
+          # A bundle should be unpacked if the manifest matches this
+          # pattern.
+          unpackPat="Eclipse-BundleShape:\\s*dir"
 
-        cd plugins
-        for plugin in *.jar ; do
-          pluginName=''${plugin%.jar}
-          manifest=$(unzip -p $plugin META-INF/MANIFEST.MF)
+          cd plugins
+          for plugin in *.jar ; do
+            pluginName=''${plugin%.jar}
+            manifest=$(unzip -p $plugin META-INF/MANIFEST.MF)
 
-          if [[ $manifest =~ $unpackPat ]] ; then
-            mkdir $dropinDir/plugins/$pluginName
-            unzip $plugin -d $dropinDir/plugins/$pluginName
-          else
-            cp -v $plugin $dropinDir/plugins/
-          fi
-        done
-        cd ..
-      '';
-    });
+            if [[ $manifest =~ $unpackPat ]] ; then
+              mkdir $dropinDir/plugins/$pluginName
+              unzip $plugin -d $dropinDir/plugins/$pluginName
+            else
+              cp -v $plugin $dropinDir/plugins/
+            fi
+          done
+          cd ..
+        '';
+      }
+    );
 
   acejump = buildEclipsePlugin rec {
     name = "acejump-${version}";
@@ -465,21 +490,43 @@ rec {
 
     srcPlugins =
       let
-        fetch = { n, h }:
+        fetch =
+          { n, h }:
           fetchurl {
             url = "https://boothen.github.io/Json-Eclipse-Plugin/plugins/jsonedit-${n}_${version}.jar";
             sha256 = h;
           };
       in
-        map fetch [
-          { n = "core"; h = "0svs0aswnhl26cqw6bmw30cisx4cr50kc5njg272sy5c1dqjm1zq"; }
-          { n = "editor"; h = "1q62dinrbb18aywbvii4mlr7rxa20rdsxxd6grix9y8h9776q4l5"; }
-          { n = "folding"; h = "1qh4ijfb1gl9xza5ydi87v1kyima3a9sh7lncwdy1way3pdhln1y"; }
-          { n = "model"; h = "1pr6k2pdfdwx8jqs7gx7wzn3gxsql3sk6lnjha8m15lv4al6d4kj"; }
-          { n = "outline"; h = "1jgr2g16j3id8v367jbgd6kx6g2w636fbzmd8jvkvkh7y1jgjqxm"; }
-          { n = "preferences"; h = "027fhaqa5xbil6dmhvkbpha3pgw6dpmc2im3nlliyds57mdmdb1h"; }
-          { n = "text"; h = "0clywylyidrxlqs0n816nhgjmk1c3xl7sn904ki4q050amfy0wb2"; }
-        ];
+      map fetch [
+        {
+          n = "core";
+          h = "0svs0aswnhl26cqw6bmw30cisx4cr50kc5njg272sy5c1dqjm1zq";
+        }
+        {
+          n = "editor";
+          h = "1q62dinrbb18aywbvii4mlr7rxa20rdsxxd6grix9y8h9776q4l5";
+        }
+        {
+          n = "folding";
+          h = "1qh4ijfb1gl9xza5ydi87v1kyima3a9sh7lncwdy1way3pdhln1y";
+        }
+        {
+          n = "model";
+          h = "1pr6k2pdfdwx8jqs7gx7wzn3gxsql3sk6lnjha8m15lv4al6d4kj";
+        }
+        {
+          n = "outline";
+          h = "1jgr2g16j3id8v367jbgd6kx6g2w636fbzmd8jvkvkh7y1jgjqxm";
+        }
+        {
+          n = "preferences";
+          h = "027fhaqa5xbil6dmhvkbpha3pgw6dpmc2im3nlliyds57mdmdb1h";
+        }
+        {
+          n = "text";
+          h = "0clywylyidrxlqs0n816nhgjmk1c3xl7sn904ki4q050amfy0wb2";
+        }
+      ];
 
     propagatedBuildInputs = [ antlr-runtime_4_7 ];
 
@@ -526,10 +573,9 @@ rec {
       stripRoot = false;
       url = "https://github.com/${owner}/${repo}/archive/${rev}.zip";
       sha256 = "1xfj4j27d1h4bdf2v7f78zi8lz4zkkj7s9kskmsqx5jcs2d459yp";
-      postFetch =
-        ''
-          mv "$out/${repo}-${rev}/releases/local-repo/"* "$out/"
-        '';
+      postFetch = ''
+        mv "$out/${repo}-${rev}/releases/local-repo/"* "$out/"
+      '';
     };
 
     meta = with lib; {

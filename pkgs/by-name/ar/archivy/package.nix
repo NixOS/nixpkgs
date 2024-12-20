@@ -1,6 +1,7 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchPypi,
 }:
 
 let
@@ -32,7 +33,6 @@ buildPythonApplication rec {
     inherit pname version;
     hash = "sha256-ns1Y0DqqnTAQMEt+oBJ/P2gqKqPsX9P3/Z4561qzuns";
   };
-
 
   pythonRelaxDeps = true;
 

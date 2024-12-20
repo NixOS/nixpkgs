@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, python3
-, wireshark-cli
+{
+  lib,
+  fetchFromGitHub,
+  python3,
+  wireshark-cli,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -20,12 +21,15 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    fnvhash
-    python-magic
-  ] ++ [
-    wireshark-cli
-  ];
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      fnvhash
+      python-magic
+    ]
+    ++ [
+      wireshark-cli
+    ];
 
   # Project has no tests
   doCheck = false;

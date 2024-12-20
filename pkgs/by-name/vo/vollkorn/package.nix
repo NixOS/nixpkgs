@@ -1,11 +1,17 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "vollkorn";
   version = "4.105";
 
   src = fetchzip {
-    url = "http://vollkorn-typeface.com/download/vollkorn-${builtins.replaceStrings ["."] ["-"] version}.zip";
+    url = "http://vollkorn-typeface.com/download/vollkorn-${
+      builtins.replaceStrings [ "." ] [ "-" ] version
+    }.zip";
     stripRoot = false;
     hash = "sha256-oG79GgCwCavbMFAPakza08IPmt13Gwujrkc/NKTai7g=";
   };

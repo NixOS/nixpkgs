@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, qtbase
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  qtbase,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,7 +26,7 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  meta = with lib;{
+  meta = with lib; {
     description = "Excel file(*.xlsx) reader/writer library using Qt 5 or 6";
     homepage = "https://qtexcel.github.io/QXlsx";
     license = licenses.mit;

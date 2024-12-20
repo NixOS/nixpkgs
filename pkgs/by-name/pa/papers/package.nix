@@ -1,47 +1,52 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, meson
-, ninja
-, pkg-config
-, appstream
-, desktop-file-utils
-, gtk4
-, glib
-, pango
-, gdk-pixbuf
-, shared-mime-info
-, itstool
-, poppler
-, nautilus
-, darwin
-, djvulibre
-, libspectre
-, libarchive
-, libsecret
-, wrapGAppsHook4
-, librsvg
-, gobject-introspection
-, yelp-tools
-, gsettings-desktop-schemas
-, dbus
-, gi-docgen
-, libgxps
-, withLibsecret ? true
-, supportNautilus ? (!stdenv.hostPlatform.isDarwin)
-, libadwaita
-, exempi
-, cargo
-, rustPlatform
-, rustfmt
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  meson,
+  ninja,
+  pkg-config,
+  appstream,
+  desktop-file-utils,
+  gtk4,
+  glib,
+  pango,
+  gdk-pixbuf,
+  shared-mime-info,
+  itstool,
+  poppler,
+  nautilus,
+  darwin,
+  djvulibre,
+  libspectre,
+  libarchive,
+  libsecret,
+  wrapGAppsHook4,
+  librsvg,
+  gobject-introspection,
+  yelp-tools,
+  gsettings-desktop-schemas,
+  dbus,
+  gi-docgen,
+  libgxps,
+  withLibsecret ? true,
+  supportNautilus ? (!stdenv.hostPlatform.isDarwin),
+  libadwaita,
+  exempi,
+  cargo,
+  rustPlatform,
+  rustfmt,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "papers";
   version = "47.0";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/papers/${lib.versions.major finalAttrs.version}/papers-${finalAttrs.version}.tar.xz";
@@ -60,7 +65,12 @@ stdenv.mkDerivation (finalAttrs: {
   cargoRoot = "shell-rs";
 
   cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit (finalAttrs) src pname version cargoRoot;
+    inherit (finalAttrs)
+      src
+      pname
+      version
+      cargoRoot
+      ;
     hash = "sha256-/5IySNEUkwiQezLx4n4jlPJdqJhlcgt5bXIelUFftZI=";
   };
 
@@ -82,36 +92,43 @@ stdenv.mkDerivation (finalAttrs: {
     rustfmt
   ];
 
-  buildInputs = [
-    dbus # only needed to find the service directory
-    djvulibre
-    exempi
-    gdk-pixbuf
-    glib
-    gtk4
-    gsettings-desktop-schemas
-    libadwaita
-    libarchive
-    libgxps
-    librsvg
-    libspectre
-    pango
-    poppler
-  ] ++ lib.optionals withLibsecret [
-    libsecret
-  ] ++ lib.optionals supportNautilus [
-    nautilus
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-  ];
+  buildInputs =
+    [
+      dbus # only needed to find the service directory
+      djvulibre
+      exempi
+      gdk-pixbuf
+      glib
+      gtk4
+      gsettings-desktop-schemas
+      libadwaita
+      libarchive
+      libgxps
+      librsvg
+      libspectre
+      pango
+      poppler
+    ]
+    ++ lib.optionals withLibsecret [
+      libsecret
+    ]
+    ++ lib.optionals supportNautilus [
+      nautilus
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Foundation
+    ];
 
-  mesonFlags = [
-    "-Dps=enabled"
-  ] ++ lib.optionals (!withLibsecret) [
-    "-Dkeyring=disabled"
-  ] ++ lib.optionals (!supportNautilus) [
-    "-Dnautilus=false"
-  ];
+  mesonFlags =
+    [
+      "-Dps=enabled"
+    ]
+    ++ lib.optionals (!withLibsecret) [
+      "-Dkeyring=disabled"
+    ]
+    ++ lib.optionals (!supportNautilus) [
+      "-Dnautilus=false"
+    ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString (
     stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
@@ -122,13 +139,15 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '=papers-thumbnailer' "=$out/bin/papers-thumbnailer"
   '';
 
-  preFixup = ''
-    gappsWrapperArgs+=(
-      --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
-    )
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool -add_rpath "$out/lib" "$out/bin/papers"
-  '';
+  preFixup =
+    ''
+      gappsWrapperArgs+=(
+        --prefix XDG_DATA_DIRS : "${shared-mime-info}/share"
+      )
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      install_name_tool -add_rpath "$out/lib" "$out/bin/papers"
+    '';
 
   postFixup = ''
     # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.

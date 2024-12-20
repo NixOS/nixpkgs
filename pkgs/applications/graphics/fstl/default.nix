@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, mkDerivation, cmake }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  mkDerivation,
+  cmake,
+}:
 
 mkDerivation rec {
   pname = "fstl";

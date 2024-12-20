@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchurl
-, fltk13
-, libjpeg
-, eudev
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fltk13,
+  libjpeg,
+  eudev,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {

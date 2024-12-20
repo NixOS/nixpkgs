@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, ghostscript
-, imagemagick
-, poppler_utils
-, python3
-, tesseract5
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  ghostscript,
+  imagemagick,
+  poppler_utils,
+  python3,
+  tesseract5,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -41,12 +42,17 @@ python3.pkgs.buildPythonApplication rec {
     setuptools
   ];
 
-  makeWrapperArgs = ["--prefix" "PATH" ":" (lib.makeBinPath [
-    ghostscript
-    imagemagick
-    tesseract5
-    poppler_utils
-  ])];
+  makeWrapperArgs = [
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      ghostscript
+      imagemagick
+      tesseract5
+      poppler_utils
+    ])
+  ];
 
   # Tests fails even when ran manually on my ubuntu machine !!
   doCheck = false;

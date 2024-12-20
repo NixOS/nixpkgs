@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, file
-, openssl
-, atool
-, bat
-, chafa
-, delta
-, ffmpeg
-, ffmpegthumbnailer
-, fontforge
-, glow
-, imagemagick
-, jq
-, ueberzug
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  file,
+  openssl,
+  atool,
+  bat,
+  chafa,
+  delta,
+  ffmpeg,
+  ffmpegthumbnailer,
+  fontforge,
+  glow,
+  imagemagick,
+  jq,
+  ueberzug,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,19 +40,21 @@ stdenv.mkDerivation rec {
 
   preFixup = ''
     wrapProgram $out/bin/ctpv \
-      --prefix PATH ":" "${lib.makeBinPath [
-        atool # for archive files
-        bat
-        chafa # for image files on Wayland
-        delta # for diff files
-        ffmpeg
-        ffmpegthumbnailer
-        fontforge
-        glow # for markdown files
-        imagemagick
-        jq # for json files
-        ueberzug # for image files on X11
-      ]}";
+      --prefix PATH ":" "${
+        lib.makeBinPath [
+          atool # for archive files
+          bat
+          chafa # for image files on Wayland
+          delta # for diff files
+          ffmpeg
+          ffmpegthumbnailer
+          fontforge
+          glow # for markdown files
+          imagemagick
+          jq # for json files
+          ueberzug # for image files on X11
+        ]
+      }";
   '';
 
   meta = with lib; {

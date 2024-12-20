@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchurl
-, wrapGAppsNoGuiHook
-, meson
-, ninja
-, pkg-config
-, gnome
-, gdk-pixbuf
-, glib
-, libarchive
-, librsvg
-, libxml2
+{
+  stdenv,
+  lib,
+  fetchurl,
+  wrapGAppsNoGuiHook,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  gdk-pixbuf,
+  glib,
+  libarchive,
+  librsvg,
+  libxml2,
 }:
 
 stdenv.mkDerivation rec {

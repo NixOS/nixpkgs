@@ -1,8 +1,9 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
-, testers
-, kitex
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  testers,
+  kitex,
 }:
 
 buildGoModule rec {
@@ -20,7 +21,10 @@ buildGoModule rec {
 
   subPackages = [ "tool/cmd/kitex" ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   postInstall = ''
     ln -s $out/bin/kitex $out/bin/protoc-gen-kitex
@@ -32,7 +36,7 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib;  {
+  meta = with lib; {
     description = "A high-performance and strong-extensibility Golang RPC framework";
     homepage = "https://github.com/cloudwego/kitex";
     license = licenses.asl20;

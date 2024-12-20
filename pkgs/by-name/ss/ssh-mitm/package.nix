@@ -24,7 +24,6 @@ let
 in
 with py.pkgs;
 
-
 buildPythonApplication rec {
   pname = "ssh-mitm";
   version = "5.0.0";

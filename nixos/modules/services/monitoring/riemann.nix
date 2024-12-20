@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
 
   cfg = config.services.riemann;
@@ -8,7 +13,7 @@ let
   );
 
   riemannConfig = lib.concatStringsSep "\n" (
-    [cfg.config] ++ (map (f: ''(load-file "${f}")'') cfg.configFiles)
+    [ cfg.config ] ++ (map (f: ''(load-file "${f}")'') cfg.configFiles)
   );
 
   launcher = pkgs.writeScriptBin "riemann" ''
@@ -18,7 +23,8 @@ let
       riemann.bin ${cfg.configFile}
   '';
 
-in {
+in
+{
 
   options = {
 
@@ -34,7 +40,7 @@ in {
       };
       configFiles = lib.mkOption {
         type = with lib.types; listOf path;
-        default = [];
+        default = [ ];
         description = ''
           Extra files containing Riemann configuration. These files will be
           loaded at runtime by Riemann (with Clojure's
@@ -52,14 +58,14 @@ in {
       };
       extraClasspathEntries = lib.mkOption {
         type = with lib.types; listOf str;
-        default = [];
+        default = [ ];
         description = ''
           Extra entries added to the Java classpath when running Riemann.
         '';
       };
       extraJavaOpts = lib.mkOption {
         type = with lib.types; listOf str;
-        default = [];
+        default = [ ];
         description = ''
           Extra Java options used when launching Riemann.
         '';
@@ -77,9 +83,7 @@ in {
       group = "riemann";
     };
 
-    services.riemann.configFile = lib.mkDefault (
-      pkgs.writeText "riemann-config.clj" riemannConfig
-    );
+    services.riemann.configFile = lib.mkDefault (pkgs.writeText "riemann-config.clj" riemannConfig);
 
     systemd.services.riemann = {
       wantedBy = [ "multi-user.target" ];

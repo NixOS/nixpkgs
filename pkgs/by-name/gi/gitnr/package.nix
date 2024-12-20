@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, libxkbcommon
-, openssl
-, stdenv
-, darwin
-, wayland
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  libxkbcommon,
+  openssl,
+  stdenv,
+  darwin,
+  wayland,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -26,14 +27,17 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libxkbcommon
-    wayland
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libxkbcommon
+      wayland
+    ];
 
   # requires internet access
   doCheck = false;
@@ -43,7 +47,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/reemus-dev/gitnr";
     changelog = "https://github.com/reemus-dev/gitnr/blob/${src.rev}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ figsoda matthiasbeyer ];
+    maintainers = with maintainers; [
+      figsoda
+      matthiasbeyer
+    ];
     mainProgram = "gitnr";
   };
 }

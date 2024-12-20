@@ -1,11 +1,31 @@
-{ stdenv, runCommand, lib, fetchFromGitHub, cmake, flex, bison, systemd
-, boost, openssl, patchelf, mariadb-connector-c, postgresql, zlib, tzdata
-# Databases
-, withMysql ? true, withPostgresql ? false
-# Features
-, withChecker ? true, withCompat ? false, withLivestatus ? false
-, withNotification ? true, withPerfdata ? true, withIcingadb ? true
-, nameSuffix ? "" }:
+{
+  stdenv,
+  runCommand,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  flex,
+  bison,
+  systemd,
+  boost,
+  openssl,
+  patchelf,
+  mariadb-connector-c,
+  postgresql,
+  zlib,
+  tzdata,
+  # Databases
+  withMysql ? true,
+  withPostgresql ? false,
+  # Features
+  withChecker ? true,
+  withCompat ? false,
+  withLivestatus ? false,
+  withNotification ? true,
+  withPerfdata ? true,
+  withIcingadb ? true,
+  nameSuffix ? "",
+}:
 
 stdenv.mkDerivation rec {
   pname = "icinga2${nameSuffix}";
@@ -24,40 +44,53 @@ stdenv.mkDerivation rec {
     ./no-var-directories.patch # Prevent /var directories from being created
   ];
 
-  cmakeFlags = let
-    mkFeatureFlag = label: value: "-DICINGA2_WITH_${label}=${if value then "ON" else "OFF"}";
-  in [
-    # Paths
-    "-DCMAKE_INSTALL_SYSCONFDIR=etc"
-    "-DCMAKE_INSTALL_LOCALSTATEDIR=/var"
-    "-DCMAKE_INSTALL_FULL_SBINDIR=bin"
-    "-DICINGA2_RUNDIR=/run"
-    "-DMYSQL_INCLUDE_DIR=${mariadb-connector-c.dev}/include/mariadb"
-    "-DMYSQL_LIB=${mariadb-connector-c.out}/lib/mariadb/libmysqlclient.a"
-    "-DICINGA2_PLUGINDIR=bin"
-    "-DICINGA2_LTO_BUILD=yes"
-    # Features
-    (mkFeatureFlag "MYSQL" withMysql)
-    (mkFeatureFlag "PGSQL" withPostgresql)
-    (mkFeatureFlag "CHECKER" withChecker)
-    (mkFeatureFlag "COMPAT" withCompat)
-    (mkFeatureFlag "LIVESTATUS" withLivestatus)
-    (mkFeatureFlag "NOTIFICATION" withNotification)
-    (mkFeatureFlag "PERFDATA" withPerfdata)
-    (mkFeatureFlag "ICINGADB" withIcingadb)
-    # Misc.
-    "-DICINGA2_USER=icinga2"
-    "-DICINGA2_GROUP=icinga2"
-    "-DICINGA2_GIT_VERSION_INFO=OFF"
-    "-DUSE_SYSTEMD=ON"
+  cmakeFlags =
+    let
+      mkFeatureFlag = label: value: "-DICINGA2_WITH_${label}=${if value then "ON" else "OFF"}";
+    in
+    [
+      # Paths
+      "-DCMAKE_INSTALL_SYSCONFDIR=etc"
+      "-DCMAKE_INSTALL_LOCALSTATEDIR=/var"
+      "-DCMAKE_INSTALL_FULL_SBINDIR=bin"
+      "-DICINGA2_RUNDIR=/run"
+      "-DMYSQL_INCLUDE_DIR=${mariadb-connector-c.dev}/include/mariadb"
+      "-DMYSQL_LIB=${mariadb-connector-c.out}/lib/mariadb/libmysqlclient.a"
+      "-DICINGA2_PLUGINDIR=bin"
+      "-DICINGA2_LTO_BUILD=yes"
+      # Features
+      (mkFeatureFlag "MYSQL" withMysql)
+      (mkFeatureFlag "PGSQL" withPostgresql)
+      (mkFeatureFlag "CHECKER" withChecker)
+      (mkFeatureFlag "COMPAT" withCompat)
+      (mkFeatureFlag "LIVESTATUS" withLivestatus)
+      (mkFeatureFlag "NOTIFICATION" withNotification)
+      (mkFeatureFlag "PERFDATA" withPerfdata)
+      (mkFeatureFlag "ICINGADB" withIcingadb)
+      # Misc.
+      "-DICINGA2_USER=icinga2"
+      "-DICINGA2_GROUP=icinga2"
+      "-DICINGA2_GIT_VERSION_INFO=OFF"
+      "-DUSE_SYSTEMD=ON"
+    ];
+
+  outputs = [
+    "out"
+    "doc"
   ];
 
-  outputs = [ "out" "doc" ];
+  buildInputs = [
+    boost
+    openssl
+    systemd
+  ] ++ lib.optional withPostgresql postgresql;
 
-  buildInputs = [ boost openssl systemd ]
-    ++ lib.optional withPostgresql postgresql;
-
-  nativeBuildInputs = [ cmake flex bison patchelf ];
+  nativeBuildInputs = [
+    cmake
+    flex
+    bison
+    patchelf
+  ];
 
   doCheck = true;
   nativeCheckInputs = [ tzdata ]; # legacytimeperiod/dst needs this

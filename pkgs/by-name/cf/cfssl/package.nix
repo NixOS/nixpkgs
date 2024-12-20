@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "cfssl";
@@ -27,7 +32,8 @@ buildGoModule rec {
   doCheck = false;
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/cloudflare/cfssl/cli/version.version=v${version}"
   ];
 

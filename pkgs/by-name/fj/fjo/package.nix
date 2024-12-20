@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitea, rustPlatform, openssl, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  rustPlatform,
+  openssl,
+  pkg-config,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "fjo";

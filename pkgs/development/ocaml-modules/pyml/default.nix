@@ -1,9 +1,10 @@
-{ buildDunePackage
-, lib
-, fetchFromGitHub
-, utop
-, python3
-, stdcompat
+{
+  buildDunePackage,
+  lib,
+  fetchFromGitHub,
+  utop,
+  python3,
+  stdcompat,
 }:
 
 buildDunePackage rec {

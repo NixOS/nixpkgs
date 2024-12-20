@@ -1,6 +1,7 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
 
 buildGoModule rec {
@@ -37,4 +38,3 @@ buildGoModule rec {
     mainProgram = "hishtory";
   };
 }
-

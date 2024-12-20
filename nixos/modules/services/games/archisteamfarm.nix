@@ -221,7 +221,7 @@ in
             RestrictSUIDSGID = true;
             SecureBits = "noroot-locked";
             SystemCallArchitectures = "native";
-            SystemCallFilter = [ "@system-service" "~@privileged" ];
+            SystemCallFilter = [ "@system-service" "~@privileged" "mincore" ];
             UMask = "0077";
           }
         ];

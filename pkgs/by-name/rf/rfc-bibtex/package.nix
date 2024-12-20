@@ -1,9 +1,11 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
-with python3.pkgs; buildPythonApplication rec {
+with python3.pkgs;
+buildPythonApplication rec {
   pname = "rfc-bibtex";
   version = "0.3.2";
   format = "setuptools";

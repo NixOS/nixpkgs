@@ -23,14 +23,11 @@ python3.pkgs.buildPythonApplication rec {
 
   build-system = with python3.pkgs; [ poetry-core ];
 
-
-  dependencies =
-    with python3.pkgs;
-    [
-      pycups
-      typer
-      validators
-    ];
+  dependencies = with python3.pkgs; [
+    pycups
+    typer
+    validators
+  ];
 
   # Project has no tests
   doCheck = false;

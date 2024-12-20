@@ -1,23 +1,26 @@
-{ appimageTools
-, fetchurl
-, lib
-, makeWrapper
+{
+  appimageTools,
+  fetchurl,
+  lib,
+  makeWrapper,
 }:
 
 appimageTools.wrapType2 rec {
   pname = "lunarclient";
-  version = "3.2.26";
+  version = "3.3.1";
 
   src = fetchurl {
     url = "https://launcherupdates.lunarclientcdn.com/Lunar%20Client-${version}.AppImage";
-    hash = "sha512-g8VJCIRriUMUq+I+YjvWV9erki7jtQvIQzGWTUbdp2JNY4ix6gHesl232pk0Ypu1rQKHp3wKBhF98k2w6p7d4A==";
+    hash = "sha512-tRLT/jR6e9fwmQWAZ1OwjAOMiLy7us9WjiGpS8NBOzHO7jJ4TofSRvvSwpohr9YsnLiLnqANdlWtuabRpQhLLw==";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   extraInstallCommands =
-    let contents = appimageTools.extract { inherit pname version src; };
-    in ''
+    let
+      contents = appimageTools.extract { inherit pname version src; };
+    in
+    ''
       wrapProgram $out/bin/lunarclient \
         --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
       install -Dm444 ${contents}/lunarclient.desktop -t $out/share/applications/
@@ -33,7 +36,10 @@ appimageTools.wrapType2 rec {
     homepage = "https://www.lunarclient.com/";
     license = with licenses; [ unfree ];
     mainProgram = "lunarclient";
-    maintainers = with maintainers; [ Technical27 surfaceflinger ];
+    maintainers = with maintainers; [
+      Technical27
+      surfaceflinger
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

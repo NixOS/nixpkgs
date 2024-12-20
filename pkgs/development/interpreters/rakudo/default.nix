@@ -1,4 +1,14 @@
-{ stdenv, fetchFromGitHub, perl, icu, zlib, gmp, lib, nqp, removeReferencesTo }:
+{
+  stdenv,
+  fetchFromGitHub,
+  perl,
+  icu,
+  zlib,
+  gmp,
+  lib,
+  nqp,
+  removeReferencesTo,
+}:
 
 stdenv.mkDerivation rec {
   pname = "rakudo";
@@ -15,7 +25,12 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ removeReferencesTo ];
 
-  buildInputs = [ icu zlib gmp perl ];
+  buildInputs = [
+    icu
+    zlib
+    gmp
+    perl
+  ];
   configureScript = "perl ./Configure.pl";
   configureFlags = [
     "--backends=moar"
@@ -32,6 +47,9 @@ stdenv.mkDerivation rec {
     homepage = "https://rakudo.org";
     license = licenses.artistic2;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ thoughtpolice sgo ];
+    maintainers = with maintainers; [
+      thoughtpolice
+      sgo
+    ];
   };
 }

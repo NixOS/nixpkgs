@@ -1,5 +1,6 @@
-{ lib
-, bundlerApp
+{
+  lib,
+  bundlerApp,
 }:
 
 # Jupyter console:
@@ -30,10 +31,13 @@ let
 
     meta = {
       description = "Ruby kernel for Jupyter";
-      homepage    = "https://github.com/SciRuby/iruby";
-      license     = lib.licenses.mit;
-      maintainers = with lib.maintainers; [ costrouc thomasjm ];
-      platforms   = lib.platforms.unix;
+      homepage = "https://github.com/SciRuby/iruby";
+      license = lib.licenses.mit;
+      maintainers = with lib.maintainers; [
+        costrouc
+        thomasjm
+      ];
+      platforms = lib.platforms.unix;
     };
   };
 

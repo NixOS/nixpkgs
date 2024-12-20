@@ -1,12 +1,13 @@
-{ lib
-, buildPythonPackage
-, pythonOlder
-, fetchFromGitHub
-, setuptools
-, packaging
-, typing-extensions
-, pytestCheckHook
-, syrupy
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchFromGitHub,
+  setuptools,
+  packaging,
+  typing-extensions,
+  pytestCheckHook,
+  syrupy,
 }:
 
 buildPythonPackage rec {

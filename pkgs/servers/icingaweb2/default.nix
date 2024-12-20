@@ -1,4 +1,11 @@
-{ stdenvNoCC, lib, fetchFromGitHub, makeWrapper, php, nixosTests }:
+{
+  stdenvNoCC,
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  php,
+  nixosTests,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "icingaweb2";

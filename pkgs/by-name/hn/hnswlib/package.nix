@@ -1,13 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
 }:
 let
-  python = python3.withPackages(ps: with ps; [
-    numpy
-  ]);
+  python = python3.withPackages (
+    ps: with ps; [
+      numpy
+    ]
+  );
 in
 
 stdenv.mkDerivation (finalAttrs: {

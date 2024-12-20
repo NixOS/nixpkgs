@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchFromGitHub, nixosTests, stateDir ? "/var/lib/dolibarr" }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  nixosTests,
+  stateDir ? "/var/lib/dolibarr",
+}:
 
 stdenv.mkDerivation rec {
   pname = "dolibarr";

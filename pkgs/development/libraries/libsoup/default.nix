@@ -1,28 +1,34 @@
-{ stdenv
-, lib
-, fetchurl
-, glib
-, libxml2
-, meson
-, ninja
-, pkg-config
-, gnome
-, libsysprof-capture
-, gobject-introspection
-, vala
-, libpsl
-, brotli
-, gnomeSupport ? true
-, sqlite
-, buildPackages
-, withIntrospection ? lib.meta.availableOn stdenv.hostPlatform gobject-introspection && stdenv.hostPlatform.emulatorAvailable buildPackages
+{
+  stdenv,
+  lib,
+  fetchurl,
+  glib,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  gnome,
+  libsysprof-capture,
+  gobject-introspection,
+  vala,
+  libpsl,
+  brotli,
+  gnomeSupport ? true,
+  sqlite,
+  buildPackages,
+  withIntrospection ?
+    lib.meta.availableOn stdenv.hostPlatform gobject-introspection
+    && stdenv.hostPlatform.emulatorAvailable buildPackages,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libsoup";
   version = "2.74.3";
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
@@ -33,40 +39,46 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    glib
-  ] ++ lib.optionals withIntrospection [
-    gobject-introspection
-    vala
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      glib
+    ]
+    ++ lib.optionals withIntrospection [
+      gobject-introspection
+      vala
+    ];
 
-  buildInputs = [
-    sqlite
-    libpsl
-    glib.out
-    brotli
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libsysprof-capture
-  ];
+  buildInputs =
+    [
+      sqlite
+      libpsl
+      glib.out
+      brotli
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libsysprof-capture
+    ];
 
   propagatedBuildInputs = [
     glib
     libxml2
   ];
 
-  mesonFlags = [
-    "-Dtls_check=false" # glib-networking is a runtime dependency, not a compile-time dependency
-    "-Dgssapi=disabled"
-    "-Dvapi=${if withIntrospection then "enabled" else "disabled"}"
-    "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
-    "-Dgnome=${lib.boolToString gnomeSupport}"
-    "-Dntlm=disabled"
-  ] ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
-    "-Dsysprof=disabled"
-  ];
+  mesonFlags =
+    [
+      "-Dtls_check=false" # glib-networking is a runtime dependency, not a compile-time dependency
+      "-Dgssapi=disabled"
+      "-Dvapi=${if withIntrospection then "enabled" else "disabled"}"
+      "-Dintrospection=${if withIntrospection then "enabled" else "disabled"}"
+      "-Dgnome=${lib.boolToString gnomeSupport}"
+      "-Dntlm=disabled"
+    ]
+    ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
+      "-Dsysprof=disabled"
+    ];
 
   env.NIX_CFLAGS_COMPILE = "-lpthread";
 

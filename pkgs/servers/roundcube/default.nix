@@ -1,4 +1,12 @@
-{ fetchurl, lib, stdenv, buildEnv, roundcube, roundcubePlugins, nixosTests }:
+{
+  fetchurl,
+  lib,
+  stdenv,
+  buildEnv,
+  roundcube,
+  roundcubePlugins,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "roundcube";
@@ -22,16 +30,22 @@ stdenv.mkDerivation rec {
     rm $out/composer.json-dist
   '';
 
-  passthru.withPlugins = f: buildEnv {
-    name = "${roundcube.name}-with-plugins";
-    paths = (f roundcubePlugins) ++ [ roundcube ];
-  };
+  passthru.withPlugins =
+    f:
+    buildEnv {
+      name = "${roundcube.name}-with-plugins";
+      paths = (f roundcubePlugins) ++ [ roundcube ];
+    };
 
   passthru.tests = { inherit (nixosTests) roundcube; };
 
   meta = {
     description = "Open Source Webmail Software";
-    maintainers = with lib.maintainers; [ vskilet globin ma27 ];
+    maintainers = with lib.maintainers; [
+      vskilet
+      globin
+      ma27
+    ];
     license = lib.licenses.gpl3;
     platforms = lib.platforms.all;
   };

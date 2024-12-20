@@ -3,14 +3,14 @@ requires = ["setuptools"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "nixos-rebuild-ng"
+name = "nixos-rebuild"
 version = "0.0.0"
 
 [project.scripts]
 nixos-rebuild = "nixos_rebuild:main"
 
 [tool.setuptools.package-data]
-nixos_rebuild = ["*.template.nix"]
+nixos_rebuild = ["*.nix.template"]
 
 [tool.mypy]
 # `--strict` config, but explicit options to avoid breaking build when mypy is

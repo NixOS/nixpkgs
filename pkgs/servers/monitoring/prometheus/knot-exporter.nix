@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchPypi
-, nixosTests
+{
+  lib,
+  python3,
+  fetchPypi,
+  nixosTests,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -35,7 +36,10 @@ python3.pkgs.buildPythonApplication rec {
     description = "Prometheus exporter for Knot DNS";
     homepage = "https://gitlab.nic.cz/knot/knot-dns/-/tree/master/python/knot_exporter";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ma27 hexa ];
+    maintainers = with maintainers; [
+      ma27
+      hexa
+    ];
     mainProgram = "knot-exporter";
   };
 }

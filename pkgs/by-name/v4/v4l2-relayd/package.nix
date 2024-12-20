@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchgit
-, autoreconfHook
-, glib
-, gst_all_1
-, libtool
-, pkg-config
-, which
+{
+  lib,
+  stdenv,
+  fetchgit,
+  autoreconfHook,
+  glib,
+  gst_all_1,
+  libtool,
+  pkg-config,
+  which,
 }:
 stdenv.mkDerivation rec {
   pname = "v4l2-relayd";

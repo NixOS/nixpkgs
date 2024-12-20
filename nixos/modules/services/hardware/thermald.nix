@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.thermald;
 in
@@ -16,7 +21,7 @@ in
         '';
       };
 
-     ignoreCpuidCheck = lib.mkOption {
+      ignoreCpuidCheck = lib.mkOption {
         type = lib.types.bool;
         default = false;
         description = "Whether to ignore the cpuid check to allow running on unsupported platforms";

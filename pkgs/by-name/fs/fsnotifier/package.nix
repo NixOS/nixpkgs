@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,5 +36,5 @@ stdenv.mkDerivation rec {
     mainProgram = "fsnotifier";
     maintainers = with lib.maintainers; [ shyim ];
     platforms = lib.platforms.linux;
- };
+  };
 }

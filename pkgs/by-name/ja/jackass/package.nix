@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, fetchzip, pkg-config, wine64, enableJackAssWine64 ? false }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchzip,
+  pkg-config,
+  wine64,
+  enableJackAssWine64 ? false,
+}:
 
 let
   # equal to vst-sdk in ../oxefmsynth/default.nix
@@ -60,7 +68,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://github.com/falkTX/JackAss";
     maintainers = with maintainers; [ PowerUser64 ];
-    license = with licenses; [ mit unfree ];
+    license = with licenses; [
+      mit
+      unfree
+    ];
     platforms = platforms.linux;
   };
 })

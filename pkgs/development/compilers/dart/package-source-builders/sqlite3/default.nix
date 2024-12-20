@@ -1,7 +1,8 @@
-{ stdenv
-, lib
-, writeScript
-, sqlite
+{
+  stdenv,
+  lib,
+  writeScript,
+  sqlite,
 }:
 
 { version, src, ... }:

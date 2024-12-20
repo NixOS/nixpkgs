@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, yarr }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  yarr,
+}:
 
 buildGoModule rec {
   pname = "yarr";
@@ -15,9 +21,17 @@ buildGoModule rec {
 
   subPackages = [ "src" ];
 
-  ldflags = [ "-s" "-w" "-X main.Version=${version}" "-X main.GitHash=none" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
+    "-X main.GitHash=none"
+  ];
 
-  tags = [ "sqlite_foreign_keys" "release" ];
+  tags = [
+    "sqlite_foreign_keys"
+    "release"
+  ];
 
   postInstall = ''
     mv $out/bin/{src,yarr}

@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchurl
-, gperf
-, pkg-config
-, librevenge
-, libxml2
-, boost
-, icu
-, cppunit
-, zlib
-, liblangtag
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gperf,
+  pkg-config,
+  librevenge,
+  libxml2,
+  boost,
+  icu,
+  cppunit,
+  zlib,
+  liblangtag,
 }:
 
 stdenv.mkDerivation rec {

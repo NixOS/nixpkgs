@@ -1,29 +1,30 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, copyDesktopItems
-, gobject-introspection
-, poetry-core
-, wrapGAppsHook4
-, gtksourceview5
-, libadwaita
-, pango
-, gaphas
-, generic
-, jedi
-, pycairo
-, pillow
-, dulwich
-, pydot
-, defusedxml
-, better-exceptions
-, babel
-, pygobject3
-, tinycss2
-, gtk4
-, librsvg
-, makeDesktopItem
-, python
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  copyDesktopItems,
+  gobject-introspection,
+  poetry-core,
+  wrapGAppsHook4,
+  gtksourceview5,
+  libadwaita,
+  pango,
+  gaphas,
+  generic,
+  jedi,
+  pycairo,
+  pillow,
+  dulwich,
+  pydot,
+  defusedxml,
+  better-exceptions,
+  babel,
+  pygobject3,
+  tinycss2,
+  gtk4,
+  librsvg,
+  makeDesktopItem,
+  python,
 }:
 
 buildPythonApplication rec {

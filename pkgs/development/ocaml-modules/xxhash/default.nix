@@ -1,11 +1,12 @@
-{ lib
-, fetchFromGitHub
-, buildDunePackage
-, xxHash
-, ctypes
-, ctypes-foreign
-, dune-configurator
-, ppx_expect
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  xxHash,
+  ctypes,
+  ctypes-foreign,
+  dune-configurator,
+  ppx_expect,
 }:
 
 buildDunePackage rec {

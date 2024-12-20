@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, pipewire
-, pkg-config
-, rustPlatform
-, wayland
-, wayland-protocols
+{
+  lib,
+  fetchFromGitHub,
+  pipewire,
+  pkg-config,
+  rustPlatform,
+  wayland,
+  wayland-protocols,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "wayland-pipewire-idle-inhibit";
@@ -39,4 +40,3 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "wayland-pipewire-idle-inhibit";
   };
 }
-

@@ -34,9 +34,12 @@ let
         flakeIgnore = [ "E501" ]; # ignores PEP8's line length limit of 79 (black defaults to 88 characters)
       }
       (
-        builtins.replaceStrings [ "@NIX_STORE_VERITY@" ] [
-          partitionTypes.usr-verity
-        ] (builtins.readFile ./assert_uki_repart_match.py)
+        builtins.replaceStrings
+          [ "@NIX_STORE_VERITY@" ]
+          [
+            partitionTypes.usr-verity
+          ]
+          (builtins.readFile ./assert_uki_repart_match.py)
       );
 in
 {

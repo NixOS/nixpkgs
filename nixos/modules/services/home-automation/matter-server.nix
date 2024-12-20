@@ -1,7 +1,8 @@
-{ lib
-, pkgs
-, config
-, ...
+{
+  lib,
+  pkgs,
+  config,
+  ...
 }:
 let
   cfg = config.services.matter-server;
@@ -25,14 +26,20 @@ in
     };
 
     logLevel = lib.mkOption {
-      type = lib.types.enum [ "critical" "error" "warning" "info" "debug" ];
+      type = lib.types.enum [
+        "critical"
+        "error"
+        "warning"
+        "info"
+        "debug"
+      ];
       default = "info";
       description = "Verbosity of logs from the matter-server";
     };
 
     extraArgs = lib.mkOption {
       type = listOf str;
-      default = [];
+      default = [ ];
       description = ''
         Extra arguments to pass to the matter-server executable.
         See https://github.com/home-assistant-libs/python-matter-server?tab=readme-ov-file#running-the-development-server for options.
@@ -49,14 +56,20 @@ in
       description = "Matter Server";
       environment.HOME = storagePath;
       serviceConfig = {
-        ExecStart = (lib.concatStringsSep " " [
-          "${cfg.package}/bin/matter-server"
-          "--port" (toString cfg.port)
-          "--vendorid" vendorId
-          "--storage-path" storagePath
-          "--log-level" "${cfg.logLevel}"
-          "${lib.escapeShellArgs cfg.extraArgs}"
-        ]);
+        ExecStart = (
+          lib.concatStringsSep " " [
+            "${cfg.package}/bin/matter-server"
+            "--port"
+            (toString cfg.port)
+            "--vendorid"
+            vendorId
+            "--storage-path"
+            storagePath
+            "--log-level"
+            "${cfg.logLevel}"
+            "${lib.escapeShellArgs cfg.extraArgs}"
+          ]
+        );
         # Start with a clean root filesystem, and allowlist what the container
         # is permitted to access.
         TemporaryFileSystem = "/";
@@ -119,4 +132,3 @@ in
     };
   };
 }
-

@@ -1,8 +1,9 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, electron
-, makeWrapper
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  electron,
+  makeWrapper,
 }:
 
 buildNpmPackage rec {

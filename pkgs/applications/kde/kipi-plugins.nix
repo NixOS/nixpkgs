@@ -1,17 +1,38 @@
 {
-  mkDerivation, lib,
+  mkDerivation,
+  lib,
   extra-cmake-modules,
-  karchive, kconfig, ki18n, kiconthemes, kio, kservice, kwindowsystem, kxmlgui,
-  libkipi, qtbase, qtsvg, qtxmlpatterns
+  karchive,
+  kconfig,
+  ki18n,
+  kiconthemes,
+  kio,
+  kservice,
+  kwindowsystem,
+  kxmlgui,
+  libkipi,
+  qtbase,
+  qtsvg,
+  qtxmlpatterns,
 }:
 
 mkDerivation {
-  pname    = "kipi-plugins";
+  pname = "kipi-plugins";
 
   nativeBuildInputs = [ extra-cmake-modules ];
   buildInputs = [
-    karchive kconfig ki18n kiconthemes kio kservice kwindowsystem kxmlgui libkipi
-    qtbase qtsvg qtxmlpatterns
+    karchive
+    kconfig
+    ki18n
+    kiconthemes
+    kio
+    kservice
+    kwindowsystem
+    kxmlgui
+    libkipi
+    qtbase
+    qtsvg
+    qtxmlpatterns
   ];
 
   meta = {

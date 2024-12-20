@@ -1,34 +1,38 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-, autoconf
-, automake
-, libtool_1_5
-, makeWrapper
-, cups
-, jbigkit
-, libjpeg
-, libgcrypt
-, glib
-, gtk3
-, gdk-pixbuf
-, pango
-, cairo
-, atk
-, pkg-config
-, libxml2
-, libredirect
-, ghostscript
-, pkgs
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  autoconf,
+  automake,
+  libtool_1_5,
+  makeWrapper,
+  cups,
+  jbigkit,
+  libjpeg,
+  libgcrypt,
+  glib,
+  gtk3,
+  gdk-pixbuf,
+  pango,
+  cairo,
+  atk,
+  pkg-config,
+  libxml2,
+  libredirect,
+  ghostscript,
+  pkgs,
+  zlib,
 }:
 
 let
   system =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "intel"
-    else if stdenv.hostPlatform.system == "aarch64-linux" then "arm"
-    else throw "Unsupported platform for Canon UFR2 Drivers: ${stdenv.hostPlatform.system}";
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      "intel"
+    else if stdenv.hostPlatform.system == "aarch64-linux" then
+      "arm"
+    else
+      throw "Unsupported platform for Canon UFR2 Drivers: ${stdenv.hostPlatform.system}";
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
   libs = pkgs: lib.makeLibraryPath buildInputs;
 
@@ -43,7 +47,20 @@ let
     hash = "sha256-JQAe/avYG+9TAsH26UGai6u8/upRXwZrGBc/hd4jZe8=";
   };
 
-  buildInputs = [ cups zlib jbigkit libjpeg libgcrypt glib gtk3 libxml2 gdk-pixbuf pango cairo atk ];
+  buildInputs = [
+    cups
+    zlib
+    jbigkit
+    libjpeg
+    libgcrypt
+    glib
+    gtk3
+    libxml2
+    gdk-pixbuf
+    pango
+    cairo
+    atk
+  ];
 in
 stdenv.mkDerivation rec {
   pname = "canon-cups-ufr2";
@@ -76,7 +93,14 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  nativeBuildInputs = [ makeWrapper unzip autoconf automake libtool_1_5 pkg-config ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+    autoconf
+    automake
+    libtool_1_5
+    pkg-config
+  ];
 
   inherit buildInputs;
 

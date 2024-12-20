@@ -1,33 +1,38 @@
-{ lib
-, llvmPackages
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, ninja
-, python3
-, perl
-, nasm
-, yasm
-, nixosTests
-, darwin
-, findutils
-, libiconv
+{
+  lib,
+  llvmPackages,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  ninja,
+  python3,
+  perl,
+  nasm,
+  yasm,
+  nixosTests,
+  darwin,
+  findutils,
+  libiconv,
 
-, rustSupport ? true
+  rustSupport ? true,
 
-, corrosion
-, rustc
-, cargo
-, rustPlatform
+  corrosion,
+  rustc,
+  cargo,
+  rustPlatform,
 }:
 
 let
   inherit (llvmPackages) stdenv;
-  mkDerivation = (
-    if stdenv.hostPlatform.isDarwin
-    then darwin.apple_sdk_11_0.llvmPackages_16.stdenv
-    else llvmPackages.stdenv).mkDerivation;
-in mkDerivation rec {
+  mkDerivation =
+    (
+      if stdenv.hostPlatform.isDarwin then
+        darwin.apple_sdk_11_0.llvmPackages_16.stdenv
+      else
+        llvmPackages.stdenv
+    ).mkDerivation;
+in
+mkDerivation rec {
   pname = "clickhouse";
   version = "24.3.7.30";
 
@@ -77,46 +82,62 @@ in mkDerivation rec {
   ];
 
   strictDeps = true;
-  nativeBuildInputs = [
-    cmake
-    ninja
-    python3
-    perl
-    llvmPackages.lld
-  ] ++ lib.optionals stdenv.hostPlatform.isx86_64 [
-    nasm
-    yasm
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    llvmPackages.bintools
-    findutils
-    darwin.bootstrap_cmds
-  ] ++ lib.optionals rustSupport [
-    rustc
-    cargo
-    rustPlatform.cargoSetupHook
-  ];
+  nativeBuildInputs =
+    [
+      cmake
+      ninja
+      python3
+      perl
+      llvmPackages.lld
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isx86_64 [
+      nasm
+      yasm
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      llvmPackages.bintools
+      findutils
+      darwin.bootstrap_cmds
+    ]
+    ++ lib.optionals rustSupport [
+      rustc
+      cargo
+      rustPlatform.cargoSetupHook
+    ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
 
   # their vendored version is too old and missing this patch: https://github.com/corrosion-rs/corrosion/pull/205
-  corrosionSrc = if rustSupport then fetchFromGitHub {
-    owner = "corrosion-rs";
-    repo = "corrosion";
-    rev = "v0.3.5";
-    hash = "sha256-r/jrck4RiQynH1+Hx4GyIHpw/Kkr8dHe1+vTHg+fdRs=";
-  } else null;
-  corrosionDeps = if rustSupport then rustPlatform.fetchCargoTarball {
-    src = corrosionSrc;
-    name = "corrosion-deps";
-    preBuild = "cd generator";
-    hash = "sha256-dhUgpwSjE9NZ2mCkhGiydI51LIOClA5wwk1O3mnnbM8=";
-  } else null;
-  rustDeps = if rustSupport then rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "rust-deps";
-    preBuild = "cd rust";
-    hash = "sha256-rbEfCRB2QAZ2WBgSLYYUqeYtI4Y5d9oQ2G8/mPirIp4=";
-  } else null;
+  corrosionSrc =
+    if rustSupport then
+      fetchFromGitHub {
+        owner = "corrosion-rs";
+        repo = "corrosion";
+        rev = "v0.3.5";
+        hash = "sha256-r/jrck4RiQynH1+Hx4GyIHpw/Kkr8dHe1+vTHg+fdRs=";
+      }
+    else
+      null;
+  corrosionDeps =
+    if rustSupport then
+      rustPlatform.fetchCargoTarball {
+        src = corrosionSrc;
+        name = "corrosion-deps";
+        preBuild = "cd generator";
+        hash = "sha256-dhUgpwSjE9NZ2mCkhGiydI51LIOClA5wwk1O3mnnbM8=";
+      }
+    else
+      null;
+  rustDeps =
+    if rustSupport then
+      rustPlatform.fetchCargoTarball {
+        inherit src;
+        name = "rust-deps";
+        preBuild = "cd rust";
+        hash = "sha256-rbEfCRB2QAZ2WBgSLYYUqeYtI4Y5d9oQ2G8/mPirIp4=";
+      }
+    else
+      null;
 
   dontCargoSetupPostUnpack = true;
   postUnpack = lib.optionalString rustSupport ''
@@ -141,53 +162,62 @@ in mkDerivation rec {
     popd
   '';
 
-  postPatch = ''
-    patchShebangs src/
+  postPatch =
+    ''
+      patchShebangs src/
 
-    substituteInPlace src/Storages/System/StorageSystemLicenses.sh \
-      --replace 'git rev-parse --show-toplevel' '$src'
-    substituteInPlace utils/check-style/check-duplicate-includes.sh \
-      --replace 'git rev-parse --show-toplevel' '$src'
-    substituteInPlace utils/check-style/check-ungrouped-includes.sh \
-      --replace 'git rev-parse --show-toplevel' '$src'
-    substituteInPlace utils/list-licenses/list-licenses.sh \
-      --replace 'git rev-parse --show-toplevel' '$src'
-    substituteInPlace utils/check-style/check-style \
-      --replace 'git rev-parse --show-toplevel' '$src'
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    sed -i 's|gfind|find|' cmake/tools.cmake
-    sed -i 's|ggrep|grep|' cmake/tools.cmake
-  '' + lib.optionalString rustSupport ''
+      substituteInPlace src/Storages/System/StorageSystemLicenses.sh \
+        --replace 'git rev-parse --show-toplevel' '$src'
+      substituteInPlace utils/check-style/check-duplicate-includes.sh \
+        --replace 'git rev-parse --show-toplevel' '$src'
+      substituteInPlace utils/check-style/check-ungrouped-includes.sh \
+        --replace 'git rev-parse --show-toplevel' '$src'
+      substituteInPlace utils/list-licenses/list-licenses.sh \
+        --replace 'git rev-parse --show-toplevel' '$src'
+      substituteInPlace utils/check-style/check-style \
+        --replace 'git rev-parse --show-toplevel' '$src'
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      sed -i 's|gfind|find|' cmake/tools.cmake
+      sed -i 's|ggrep|grep|' cmake/tools.cmake
+    ''
+    + lib.optionalString rustSupport ''
 
-    pushd contrib/corrosion/generator
-    cargoDepsCopy="$corrosionDepsCopy" cargoSetupPostPatchHook
-    popd
+      pushd contrib/corrosion/generator
+      cargoDepsCopy="$corrosionDepsCopy" cargoSetupPostPatchHook
+      popd
 
-    pushd rust
-    cargoDepsCopy="$rustDepsCopy" cargoSetupPostPatchHook
-    popd
+      pushd rust
+      cargoDepsCopy="$rustDepsCopy" cargoSetupPostPatchHook
+      popd
 
-    cargoSetupPostPatchHook() { true; }
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Make sure Darwin invokes lld.ld64 not lld.
-    substituteInPlace cmake/tools.cmake \
-      --replace '--ld-path=''${LLD_PATH}' '-fuse-ld=lld'
-  '';
+      cargoSetupPostPatchHook() { true; }
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Make sure Darwin invokes lld.ld64 not lld.
+      substituteInPlace cmake/tools.cmake \
+        --replace '--ld-path=''${LLD_PATH}' '-fuse-ld=lld'
+    '';
 
-  cmakeFlags = [
-    "-DENABLE_TESTS=OFF"
-    "-DCOMPILER_CACHE=disabled"
-    "-DENABLE_EMBEDDED_COMPILER=ON"
-  ] ++
-  lib.optional (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) "-DNO_ARMV81_OR_HIGHER=1";
+  cmakeFlags =
+    [
+      "-DENABLE_TESTS=OFF"
+      "-DCOMPILER_CACHE=disabled"
+      "-DENABLE_EMBEDDED_COMPILER=ON"
+    ]
+    ++ lib.optional (
+      stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64
+    ) "-DNO_ARMV81_OR_HIGHER=1";
 
   env = {
     NIX_CFLAGS_COMPILE =
       # undefined reference to '__sync_val_compare_and_swap_16'
-      lib.optionalString stdenv.hostPlatform.isx86_64 " -mcx16" +
-      # Silence ``-Wimplicit-const-int-float-conversion` error in MemoryTracker.cpp and
-      # ``-Wno-unneeded-internal-declaration` TreeOptimizer.cpp.
-      lib.optionalString stdenv.hostPlatform.isDarwin " -Wno-implicit-const-int-float-conversion -Wno-unneeded-internal-declaration";
+      lib.optionalString stdenv.hostPlatform.isx86_64 " -mcx16"
+      +
+        # Silence ``-Wimplicit-const-int-float-conversion` error in MemoryTracker.cpp and
+        # ``-Wno-unneeded-internal-declaration` TreeOptimizer.cpp.
+        lib.optionalString stdenv.hostPlatform.isDarwin
+          " -Wno-implicit-const-int-float-conversion -Wno-unneeded-internal-declaration";
   };
 
   # https://github.com/ClickHouse/ClickHouse/issues/49988
@@ -213,7 +243,10 @@ in mkDerivation rec {
     homepage = "https://clickhouse.com";
     description = "Column-oriented database management system";
     license = licenses.asl20;
-    maintainers = with maintainers; [ orivej mbalatsko ];
+    maintainers = with maintainers; [
+      orivej
+      mbalatsko
+    ];
 
     # not supposed to work on 32-bit https://github.com/ClickHouse/ClickHouse/pull/23959#issuecomment-835343685
     platforms = lib.filter (x: (lib.systems.elaborate x).is64bit) (platforms.linux ++ platforms.darwin);

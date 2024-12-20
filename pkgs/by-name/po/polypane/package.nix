@@ -1,4 +1,8 @@
-{ lib, fetchurl, appimageTools }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+}:
 
 let
   pname = "polypane";
@@ -13,7 +17,8 @@ let
   appimageContents = appimageTools.extractType2 {
     inherit pname src version;
   };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname src version;
 
   extraPkgs = pkgs: [ pkgs.bash ];

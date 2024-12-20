@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.karma;
   yaml = pkgs.formats.yaml { };
@@ -21,13 +26,13 @@ in
 
     environment = lib.mkOption {
       type = with lib.types; attrsOf str;
-      default = {};
+      default = { };
       description = ''
         Additional environment variables to provide to karma.
       '';
       example = {
         ALERTMANAGER_URI = "https://alertmanager.example.com";
-        ALERTMANAGER_NAME= "single";
+        ALERTMANAGER_NAME = "single";
       };
     };
 
@@ -41,7 +46,7 @@ in
 
     extraOptions = lib.mkOption {
       type = with lib.types; listOf str;
-      default = [];
+      default = [ ];
       description = ''
         Extra command line options.
       '';

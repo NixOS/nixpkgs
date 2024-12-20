@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, autoreconfHook, pkg-config, jansson, openssl }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  jansson,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libjwt";
@@ -11,8 +19,14 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-0gFMeSW4gfbI6MUctcN8UuKhMDswaT8BzHTV2VuwZzc=";
   };
 
-  buildInputs = [ jansson openssl ];
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  buildInputs = [
+    jansson
+    openssl
+  ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/benmcollins/libjwt";

@@ -1,7 +1,8 @@
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
-, hahomematic
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
+  hahomematic,
 }:
 
 buildHomeAssistantComponent rec {

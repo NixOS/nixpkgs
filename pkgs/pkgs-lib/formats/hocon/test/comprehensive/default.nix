@@ -1,14 +1,24 @@
-{ lib, formats, stdenvNoCC, writeText, ... }:
+{
+  lib,
+  formats,
+  stdenvNoCC,
+  writeText,
+  ...
+}:
 let
   hocon = formats.hocon { };
 
-  include_file = (writeText "hocon-test-include.conf" ''
-    "val" = 1
-  '').overrideAttrs (_: _: {
-    outputHashAlgo = "sha256";
-    outputHashMode = "flat";
-    outputHash = "sha256-UhkJLhT3bD6znq+IdDjs/ahP19mLzrLCy/R14pVrfew=";
-  });
+  include_file =
+    (writeText "hocon-test-include.conf" ''
+      "val" = 1
+    '').overrideAttrs
+      (
+        _: _: {
+          outputHashAlgo = "sha256";
+          outputHashMode = "flat";
+          outputHash = "sha256-UhkJLhT3bD6znq+IdDjs/ahP19mLzrLCy/R14pVrfew=";
+        }
+      );
 
   expression = {
     simple_top_level_attr = "1.0";
@@ -16,8 +26,16 @@ let
     some_floaty = 29.95;
 
     array2d = [
-      [ 1 2 "a" ]
-      [ 2 1 "b" ]
+      [
+        1
+        2
+        "a"
+      ]
+      [
+        2
+        1
+        "b"
+      ]
     ];
     nasty_string = "\"@\n\\\t^*\b\f\n\0\";'''$";
 
@@ -55,29 +73,29 @@ let
 
   hocon-test-conf = hocon.generate "hocon-test.conf" expression;
 in
-  stdenvNoCC.mkDerivation {
-    name = "pkgs.formats.hocon-test-comprehensive";
+stdenvNoCC.mkDerivation {
+  name = "pkgs.formats.hocon-test-comprehensive";
 
-    dontUnpack = true;
-    dontBuild = true;
+  dontUnpack = true;
+  dontBuild = true;
 
-    doCheck = true;
-    checkPhase = ''
-      runHook preCheck
+  doCheck = true;
+  checkPhase = ''
+    runHook preCheck
 
-      diff -U3 ${./expected.txt} ${hocon-test-conf}
+    diff -U3 ${./expected.txt} ${hocon-test-conf}
 
-      runHook postCheck
-    '';
+    runHook postCheck
+  '';
 
-    installPhase = ''
-      runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-      mkdir $out
-      cp ${./expected.txt} $out/expected.txt
-      cp ${hocon-test-conf} $out/hocon-test.conf
-      cp ${hocon-test-conf.passthru.json} $out/hocon-test.json
+    mkdir $out
+    cp ${./expected.txt} $out/expected.txt
+    cp ${hocon-test-conf} $out/hocon-test.conf
+    cp ${hocon-test-conf.passthru.json} $out/hocon-test.json
 
-      runHook postInstall
-    '';
-  }
+    runHook postInstall
+  '';
+}

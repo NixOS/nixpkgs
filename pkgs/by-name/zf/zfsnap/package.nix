@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, coreutils, installShellFiles }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  coreutils,
+  installShellFiles,
+}:
 
 stdenv.mkDerivation rec {
   version = "2.0.0-beta3";

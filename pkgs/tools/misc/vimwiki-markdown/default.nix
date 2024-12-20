@@ -1,8 +1,9 @@
-{ lib
-, buildPythonApplication
-, fetchPypi
-, markdown
-, pygments
+{
+  lib,
+  buildPythonApplication,
+  fetchPypi,
+  markdown,
+  pygments,
 }:
 
 buildPythonApplication rec {
@@ -14,7 +15,7 @@ buildPythonApplication rec {
     hash = "sha256-hJl0OTE6kHucVGOxgOZBG0noYRfxma3yZSrUWEssLN4=";
   };
 
-  propagatedBuildInputs= [
+  propagatedBuildInputs = [
     markdown
     pygments
   ];

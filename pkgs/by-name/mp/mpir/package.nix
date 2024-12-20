@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchurl, m4, which, yasm, autoreconfHook, fetchpatch, buildPackages }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  m4,
+  which,
+  yasm,
+  autoreconfHook,
+  fetchpatch,
+  buildPackages,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mpir";
@@ -6,7 +16,12 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ m4 which yasm autoreconfHook ];
+  nativeBuildInputs = [
+    m4
+    which
+    yasm
+    autoreconfHook
+  ];
 
   src = fetchurl {
     url = "https://mpir.org/mpir-${version}.tar.bz2";
@@ -22,13 +37,12 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  configureFlags = [ "--enable-cxx" ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-fat" ];
+  configureFlags = [ "--enable-cxx" ] ++ lib.optionals stdenv.hostPlatform.isLinux [ "--enable-fat" ];
 
   meta = {
     description = "Highly optimised library for bignum arithmetic forked from GMP";
     license = lib.licenses.lgpl3Plus;
-    maintainers = [lib.maintainers.raskin];
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.unix;
     downloadPage = "https://mpir.org/downloads.html";
     homepage = "https://mpir.org/";

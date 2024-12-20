@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, unstableGitUpdater
-, cmake
-, zlib
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  cmake,
+  zlib,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +28,9 @@ stdenv.mkDerivation rec {
 
   # Some targets are not enabled by default
   makeFlags = [
-    "all" "optdac" "optvgm32"
+    "all"
+    "optdac"
+    "optvgm32"
   ];
 
   passthru.updateScript = unstableGitUpdater {

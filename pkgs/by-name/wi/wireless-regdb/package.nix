@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchurl, directoryListingUpdater }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  directoryListingUpdater,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "wireless-regdb";

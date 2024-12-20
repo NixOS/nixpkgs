@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "broadlink-cli";
@@ -7,8 +11,8 @@ python3Packages.buildPythonApplication rec {
   # the tools are available as part of the source distribution from GH but
   # not pypi, so we have to fetch them here.
   src = fetchFromGitHub {
-    owner  = "mjg59";
-    repo   = "python-broadlink";
+    owner = "mjg59";
+    repo = "python-broadlink";
     rev = "refs/tags/${version}";
     sha256 = "sha256-fqhi4K8Ceh8Rs0ExteCfAuVfEamFjMCjCFm6DRAJDmI=";
   };

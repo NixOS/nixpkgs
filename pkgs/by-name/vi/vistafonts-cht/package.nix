@@ -1,4 +1,9 @@
-{ lib, stdenvNoCC, fetchurl, cabextract }:
+{
+  lib,
+  stdenvNoCC,
+  fetchurl,
+  cabextract,
+}:
 
 stdenvNoCC.mkDerivation {
   pname = "vista-fonts-cht";
@@ -25,7 +30,6 @@ stdenvNoCC.mkDerivation {
     substitute ${./no-op.conf} $out/etc/fonts/conf.d/30-msjhenghei.conf \
       --subst-var-by fontname "Microsoft JhengHei"
   '';
-
 
   meta = with lib; {
     description = "TrueType fonts from Microsoft Windows Vista For Traditional Chinese (Microsoft JhengHei)";

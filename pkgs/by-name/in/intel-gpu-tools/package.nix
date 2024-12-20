@@ -1,44 +1,45 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchpatch
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchpatch,
 
-# build time
-, bison
-, docbook_xsl
-, docutils
-, flex
-, gtk-doc
-, meson
-, ninja
-, pkg-config
-, utilmacros
+  # build time
+  bison,
+  docbook_xsl,
+  docutils,
+  flex,
+  gtk-doc,
+  meson,
+  ninja,
+  pkg-config,
+  utilmacros,
 
-# runtime
-, alsa-lib
-, cairo
-, curl
-, elfutils
-, glib
-, gsl
-, json_c
-, kmod
-, libdrm
-, liboping
-, libpciaccess
-, libunwind
-, libX11
-, libXext
-, libXrandr
-, libXv
-, openssl
-, peg
-, procps
-, python3
-, udev
-, valgrind
-, xmlrpc_c
-, xorgproto
+  # runtime
+  alsa-lib,
+  cairo,
+  curl,
+  elfutils,
+  glib,
+  gsl,
+  json_c,
+  kmod,
+  libdrm,
+  liboping,
+  libpciaccess,
+  libunwind,
+  libX11,
+  libXext,
+  libXrandr,
+  libXv,
+  openssl,
+  peg,
+  procps,
+  python3,
+  udev,
+  valgrind,
+  xmlrpc_c,
+  xorgproto,
 }:
 
 stdenv.mkDerivation rec {
@@ -111,7 +112,10 @@ stdenv.mkDerivation rec {
     homepage = "https://drm.pages.freedesktop.org/igt-gpu-tools/";
     description = "Tools for development and testing of the Intel DRM driver";
     license = licenses.mit;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     maintainers = with maintainers; [ pSub ];
   };
 }

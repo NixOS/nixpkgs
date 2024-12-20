@@ -1,8 +1,33 @@
-{ lib, stdenv, fetchFromGitLab, pkg-config, meson, ninja, cmake
-, git, criterion, gtk3, libconfig, gnuplot, opencv, json-glib
-, fftwFloat, cfitsio, gsl, exiv2, librtprocess, wcslib, ffmpeg
-, libraw, libtiff, libpng, libjpeg, libheif, ffms, wrapGAppsHook3
-, curl
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  pkg-config,
+  meson,
+  ninja,
+  cmake,
+  git,
+  criterion,
+  gtk3,
+  libconfig,
+  gnuplot,
+  opencv,
+  json-glib,
+  fftwFloat,
+  cfitsio,
+  gsl,
+  exiv2,
+  librtprocess,
+  wcslib,
+  ffmpeg,
+  libraw,
+  libtiff,
+  libpng,
+  libjpeg,
+  libheif,
+  ffms,
+  wrapGAppsHook3,
+  curl,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,12 +42,34 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    meson ninja cmake pkg-config git criterion wrapGAppsHook3
+    meson
+    ninja
+    cmake
+    pkg-config
+    git
+    criterion
+    wrapGAppsHook3
   ];
 
   buildInputs = [
-    gtk3 cfitsio gsl exiv2 gnuplot opencv fftwFloat librtprocess wcslib
-    libconfig libraw libtiff libpng libjpeg libheif ffms ffmpeg json-glib
+    gtk3
+    cfitsio
+    gsl
+    exiv2
+    gnuplot
+    opencv
+    fftwFloat
+    librtprocess
+    wcslib
+    libconfig
+    libraw
+    libtiff
+    libpng
+    libjpeg
+    libheif
+    ffms
+    ffmpeg
+    json-glib
     curl
   ];
 

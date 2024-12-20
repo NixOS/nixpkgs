@@ -1,21 +1,22 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, cmake
-, pkg-config
-, apacheHttpd
-, apr
-, aprutil
-, boost
-, cairo
-, curl
-, glib
-, harfbuzz
-, icu
-, iniparser
-, libmemcached
-, mapnik
-, nix-update-script
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  cmake,
+  pkg-config,
+  apacheHttpd,
+  apr,
+  aprutil,
+  boost,
+  cairo,
+  curl,
+  glib,
+  harfbuzz,
+  icu,
+  iniparser,
+  libmemcached,
+  mapnik,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {

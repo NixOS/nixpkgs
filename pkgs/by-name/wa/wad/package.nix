@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -39,7 +40,10 @@ python3.pkgs.buildPythonApplication rec {
     '';
     homepage = "https://github.com/CERN-CERT/WAD";
     # wad is GPLv3+, wappalyzer source is MIT
-    license = with licenses; [ gpl3Plus mit ];
+    license = with licenses; [
+      gpl3Plus
+      mit
+    ];
     maintainers = with maintainers; [ fab ];
   };
 }

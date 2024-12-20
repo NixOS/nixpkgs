@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, cmake
-, libsodium
-, json_c
-, ncurses
-, libxml2
-, jq
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  cmake,
+  libsodium,
+  json_c,
+  ncurses,
+  libxml2,
+  jq,
 }:
 
 stdenv.mkDerivation rec {
@@ -38,10 +39,10 @@ stdenv.mkDerivation rec {
   ];
 
   preConfigure = ''
-   echo "${version}" > VERSION
+    echo "${version}" > VERSION
 
-    # The default buildPhase wants to create a ´build´ dir so we rename the build script to stop conflicts.
-    mv build build.sh
+     # The default buildPhase wants to create a ´build´ dir so we rename the build script to stop conflicts.
+     mv build build.sh
   '';
 
   # Some tests are expected to fail on ARM64

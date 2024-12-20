@@ -1,35 +1,40 @@
-{ lib
-, stdenv
-, fetchFromGitLab
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
   # build support
-, autoreconfHook
-, flex
-, gnulib
-, pkg-config
-, texinfo
+  autoreconfHook,
+  flex,
+  gnulib,
+  pkg-config,
+  texinfo,
   # libraries
-, brotli
-, bzip2
-, darwin
-, gpgme
-, libhsts
-, libidn2
-, libpsl
-, lzip
-, nghttp2
-, openssl
-, pcre2
-, sslSupport ? true
-, xz
-, zlib
-, zstd
+  brotli,
+  bzip2,
+  darwin,
+  gpgme,
+  libhsts,
+  libidn2,
+  libpsl,
+  lzip,
+  nghttp2,
+  openssl,
+  pcre2,
+  sslSupport ? true,
+  xz,
+  zlib,
+  zstd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "wget2";
   version = "2.1.0";
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
 
   src = fetchFromGitLab {
     owner = "gnuwget";
@@ -54,23 +59,26 @@ stdenv.mkDerivation rec {
     texinfo
   ];
 
-  buildInputs = [
-    brotli
-    bzip2
-    gpgme
-    libhsts
-    libidn2
-    libpsl
-    nghttp2
-    pcre2
-    xz
-    zlib
-    zstd
-  ] ++ lib.optionals sslSupport [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreServices
-  ];
+  buildInputs =
+    [
+      brotli
+      bzip2
+      gpgme
+      libhsts
+      libidn2
+      libpsl
+      nghttp2
+      pcre2
+      xz
+      zlib
+      zstd
+    ]
+    ++ lib.optionals sslSupport [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreServices
+    ];
 
   # TODO: include translation files
   autoreconfPhase = ''
@@ -100,7 +108,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://gitlab.com/gnuwget/wget2";
     # wget2 GPLv3+; libwget LGPLv3+
-    license = with licenses; [ gpl3Plus lgpl3Plus ];
+    license = with licenses; [
+      gpl3Plus
+      lgpl3Plus
+    ];
     maintainers = with maintainers; [ SuperSandro2000 ];
     mainProgram = "wget2";
   };

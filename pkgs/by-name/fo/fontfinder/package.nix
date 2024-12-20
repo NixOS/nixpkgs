@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cargo
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook3
-, gdk-pixbuf
-, gtk3
-, libsoup_3
-, webkitgtk_4_1
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cargo,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook3,
+  gdk-pixbuf,
+  gtk3,
+  libsoup_3,
+  webkitgtk_4_1,
 }:
 
 stdenv.mkDerivation rec {

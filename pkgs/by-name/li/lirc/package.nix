@@ -1,25 +1,31 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, pkg-config
-, help2man
-, python3
-, linuxHeaders
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  pkg-config,
+  help2man,
+  python3,
+  linuxHeaders,
 
-, alsa-lib
-, libxslt
-, systemd
-, libusb-compat-0_1
-, libftdi1
-, libICE
-, libSM
-, libX11
+  alsa-lib,
+  libxslt,
+  systemd,
+  libusb-compat-0_1,
+  libftdi1,
+  libICE,
+  libSM,
+  libX11,
 }:
 
 let
-  pythonEnv = python3.pythonOnBuildForHost.withPackages (p: with p; [ pyyaml setuptools ]);
+  pythonEnv = python3.pythonOnBuildForHost.withPackages (
+    p: with p; [
+      pyyaml
+      setuptools
+    ]
+  );
 in
 stdenv.mkDerivation rec {
   pname = "lirc";
@@ -66,9 +72,23 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  nativeBuildInputs = [ autoreconfHook help2man libxslt pythonEnv pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    help2man
+    libxslt
+    pythonEnv
+    pkg-config
+  ];
 
-  buildInputs = [ alsa-lib systemd libusb-compat-0_1 libftdi1 libICE libSM libX11 ];
+  buildInputs = [
+    alsa-lib
+    systemd
+    libusb-compat-0_1
+    libftdi1
+    libICE
+    libSM
+    libX11
+  ];
 
   DEVINPUT_HEADER = "${linuxHeaders}/include/linux/input-event-codes.h";
 

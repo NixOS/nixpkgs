@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, clang
-, cmake
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  clang,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -26,7 +27,10 @@ stdenv.mkDerivation (finalAttrs: {
     "$out/bin/highs" --version
   '';
 
-  nativeBuildInputs = [ clang cmake ];
+  nativeBuildInputs = [
+    clang
+    cmake
+  ];
 
   enableParallelBuilding = true;
 
