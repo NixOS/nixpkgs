@@ -2369,35 +2369,6 @@ in
     buildInputs = [ ripgrep ];
   };
 
-  nvim-spectre = super.nvim-spectre.overrideAttrs (
-    old:
-    let
-      spectre_oxi = rustPlatform.buildRustPackage {
-        pname = "spectre_oxi";
-        inherit (old) version src;
-        sourceRoot = "${old.src.name}/spectre_oxi";
-
-        cargoHash = "sha256-yYUbfqkICsGDKexYjfhXfpIoT1+QrZQJPpKzk+gwm+s=";
-
-        preCheck = ''
-          mkdir tests/tmp/
-        '';
-
-        checkFlags = [
-          # Flaky test (https://github.com/nvim-pack/nvim-spectre/issues/244)
-          "--skip=tests::test_replace_simple"
-        ];
-      };
-    in
-    {
-      dependencies = [ self.plenary-nvim ];
-      postInstall = ''
-        ln -s ${spectre_oxi}/lib/libspectre_oxi.* $out/lua/spectre_oxi.so
-      '';
-      nvimRequireCheck = "spectre";
-    }
-  );
-
   nvim-scissors = super.nvim-scissors.overrideAttrs {
     nvimRequireCheck = "scissors";
   };
@@ -2406,6 +2377,8 @@ in
     # Optional cmp integration
     nvimSkipModule = "snippets.utils.cmp";
   };
+
+  nvim-spectre = callPackage ./nvim-spectre { };
 
   nvim-surround = super.nvim-surround.overrideAttrs {
     # Optional treesitter integration
