@@ -51,6 +51,11 @@ python3.pkgs.buildPythonApplication {
 
   inherit dependencies;
 
+  env = {
+    # to overwrite version string
+    GITHUB_REF = version;
+    BUILD = "nixpkgs";
+  };
   makeFlags = [ "manual" ];
 
   installPhase = ''
