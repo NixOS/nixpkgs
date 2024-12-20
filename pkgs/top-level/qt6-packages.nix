@@ -54,6 +54,9 @@ makeScopeWithSplicing' {
 
   futuresql = callPackage ../development/libraries/futuresql { };
   kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
+
+  libiodata = callPackage ../development/libraries/libiodata { };
+
   libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
 
   libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
