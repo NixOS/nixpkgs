@@ -24,14 +24,14 @@ let
     else
       throw "Don't know how to build FamiStudio for ${stdenv.hostPlatform.system}";
 in
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "famistudio";
   version = "4.2.1";
 
   src = fetchFromGitHub {
     owner = "BleuBleu";
     repo = "FamiStudio";
-    rev = "refs/tags/${version}";
+    rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-WYy/6cWQg3Ayok/eAdnvlWAvdcuhy/sdlWOVvaYcPkc=";
   };
 
@@ -43,8 +43,8 @@ buildDotnetModule rec {
         callPackage ./build-native-wrapper.nix (
           args
           // {
-            inherit version src;
-            sourceRoot = "${src.name}/ThirdParty/${args.depname}";
+            inherit (finalAttrs) version src;
+            sourceRoot = "${finalAttrs.src.name}/ThirdParty/${args.depname}";
           }
         );
       nativeWrapperToReplaceFormat =
@@ -117,10 +117,10 @@ buildDotnetModule rec {
       rm FamiStudio/*.{dll,dylib,so*}
 
       # Replace copying of vendored prebuilt native libraries with copying of our native libraries
-      substituteInPlace ${projectFile} ${libraryReplaceArgs}
+      substituteInPlace ${finalAttrs.projectFile} ${libraryReplaceArgs}
 
       # Un-hardcode target platform if set
-      sed -i -e '/PlatformTarget/d' ${projectFile}
+      sed -i -e '/PlatformTarget/d' ${finalAttrs.projectFile}
 
       # Don't require a special name to be preserved, our OpenAL isn't 32-bit
       substituteInPlace FamiStudio/Source/AudioStreams/OpenALStream.cs \
@@ -168,4 +168,4 @@ buildDotnetModule rec {
     platforms = lib.platforms.unix;
     mainProgram = "FamiStudio";
   };
-}
+})
