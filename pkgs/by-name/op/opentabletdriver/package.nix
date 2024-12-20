@@ -16,6 +16,7 @@
   nixosTests,
   udev,
   wrapGAppsHook3,
+  versionCheckHook,
 }:
 
 buildDotnetModule (finalAttrs: {
@@ -113,6 +114,12 @@ buildDotnetModule (finalAttrs: {
       categories = [ "Utility" ];
     })
   ];
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/otd-daemon";
 
   passthru = {
     updateScript = ./update.sh;
