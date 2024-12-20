@@ -42,6 +42,10 @@ let
           directory = final.directory_1_3_9_0;
           # Depends on directory
           process = final.process_1_6_25_0;
+          # Disable checks to avoid infinite recursion
+          file-io = prev.file-io.override (
+            args: args // { mkDerivation = drv: args.mkDerivation (drv // { doCheck = false; }); }
+          );
         }
       )
     else
