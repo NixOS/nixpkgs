@@ -122,9 +122,11 @@ buildDotnetModule rec {
   };
 
   meta = {
+    changelog = "https://github.com/OpenTabletDriver/OpenTabletDriver/releases/tag/v${version}";
     description = "Open source, cross-platform, user-mode tablet driver";
     homepage = "https://github.com/OpenTabletDriver/OpenTabletDriver";
     license = lib.licenses.lgpl3Plus;
+    mainProgram = "otd";
     maintainers = with lib.maintainers; [
       gepbird
       thiagokokada
@@ -133,6 +135,5 @@ buildDotnetModule rec {
       "x86_64-linux"
       "aarch64-linux"
     ];
-    mainProgram = "otd";
   };
 }
