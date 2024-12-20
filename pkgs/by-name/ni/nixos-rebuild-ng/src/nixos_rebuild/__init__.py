@@ -276,7 +276,10 @@ def reexec(
             build_attr = BuildAttr.from_arg(args.attr, args.file)
             drv = nix.build(attr, build_attr, **build_flags, no_out_link=True)
     except CalledProcessError:
-        logger.warning("could not build a newer version of nixos-rebuild")
+        logger.warning(
+            "could not build a newer version of nixos-rebuild, "
+            + "using current version"
+        )
 
     if drv:
         new = drv / f"bin/{EXECUTABLE}"
@@ -284,14 +287,27 @@ def reexec(
         if new != current:
             logging.debug(
                 "detected newer version of script, re-exec'ing, current=%s, new=%s",
-                argv[0],
+                current,
                 new,
             )
             # Manually call clean-up functions since os.execve() will replace
             # the process immediately
             cleanup_ssh()
             tmpdir.TMPDIR.cleanup()
-            os.execve(new, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
+            try:
+                os.execve(new, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
+            except Exception:
+                # Possible errors that we can have here:
+                # - Missing the binary
+                # - Exec format error (e.g.: another OS/CPU arch)
+                logger.warning(
+                    "could not re-exec in a newer version of nixos-rebuild, "
+                    + "using current version"
+                )
+                logger.debug("re-exec exception", exc_info=True)
+                # We already run clean-up, let's re-exec in the current version
+                # to avoid issues
+                os.execve(current, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
 
 
 def execute(argv: list[str]) -> None:
