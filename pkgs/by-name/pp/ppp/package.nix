@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libpcap
-, libxcrypt
-, pkg-config
-, autoreconfHook
-, openssl
-, bash
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libpcap,
+  libxcrypt,
+  pkg-config,
+  autoreconfHook,
+  openssl,
+  bash,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
@@ -82,6 +83,6 @@ stdenv.mkDerivation rec {
       lgpl2
     ];
     platforms = platforms.linux;
-    maintainers = [ ];
+    maintainers = with maintainers; [ stv0g ];
   };
 }
