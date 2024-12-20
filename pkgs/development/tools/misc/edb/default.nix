@@ -12,6 +12,8 @@
   qttools,
   qtbase,
   wrapQtAppsHook,
+  testers,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,6 +54,14 @@ stdenv.mkDerivation (finalAttrs: {
     # Avoid using leaveDotGit in the fetchFromGitHub options as it is non-deterministic.
     mkdir -p src/qhexview/.git lib/gdtoa-desktop/.git
   '';
+
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "env QT_QPA_PLATFORM=minimal ${lib.getExe finalAttrs.finalPackage} --version";
+    };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Cross platform AArch32/x86/x86-64 debugger";
