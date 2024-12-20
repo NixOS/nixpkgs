@@ -3,6 +3,7 @@
   fetchFromGitHub,
   buildHomeAssistantComponent,
   aiofiles,
+  nix-update-script,
 }:
 
 buildHomeAssistantComponent rec {
@@ -20,6 +21,8 @@ buildHomeAssistantComponent rec {
   dependencies = [ aiofiles ];
 
   dontCheckManifest = true; # aiofiles version constraint mismatch
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Home Assistant integration for the SolisCloud PV Monitoring portal via SolisCloud API";
