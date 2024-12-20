@@ -273,7 +273,8 @@ let
       legacy = ''
         parted --script $diskImage -- \
           mklabel msdos \
-          mkpart primary ext4 1MiB -1
+          mkpart primary ext4 1MiB 100% \
+          print
       '';
       "legacy+gpt" = ''
         parted --script $diskImage -- \
@@ -281,7 +282,7 @@ let
           mkpart no-fs 1MB 2MB \
           set 1 bios_grub on \
           align-check optimal 1 \
-          mkpart primary ext4 2MB -1 \
+          mkpart primary ext4 2MB 100% \
           align-check optimal 2 \
           print
         ${lib.optionalString deterministic ''
@@ -296,9 +297,12 @@ let
       efi = ''
         parted --script $diskImage -- \
           mklabel gpt \
-          mkpart ESP fat32 8MiB ${bootSize} \
+          mkpart ESP fat32 8MiB $bootSizeMiB \
           set 1 boot on \
-          mkpart primary ext4 ${bootSize} -1
+          align-check optimal 1 \
+          mkpart primary ext4 $bootSizeMiB 100% \
+          align-check optimal 2 \
+          print
         ${lib.optionalString deterministic ''
           sgdisk \
           --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
@@ -312,9 +316,13 @@ let
           mklabel gpt \
           mkpart ESP fat32 8MiB 100MiB \
           set 1 boot on \
-          mkpart BOOT fat32 100MiB ${bootSize} \
+          align-check optimal 1 \
+          mkpart BOOT fat32 100MiB $bootSizeMiB \
           set 2 bls_boot on \
-          mkpart ROOT ext4 ${bootSize} -1
+          align-check optimal 2 \
+          mkpart ROOT ext4 $bootSizeMiB 100% \
+          align-check optimal 3 \
+          print
         ${lib.optionalString deterministic ''
           sgdisk \
           --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
@@ -327,11 +335,15 @@ let
       hybrid = ''
         parted --script $diskImage -- \
           mklabel gpt \
-          mkpart ESP fat32 8MiB ${bootSize} \
+          mkpart ESP fat32 8MiB $bootSizeMiB \
           set 1 boot on \
+          align-check optimal 1 \
           mkpart no-fs 0 1024KiB \
           set 2 bios_grub on \
-          mkpart primary ext4 ${bootSize} -1
+          align-check optimal 2 \
+          mkpart primary ext4 $bootSizeMiB 100% \
+          align-check optimal 3 \
+          print
         ${lib.optionalString deterministic ''
           sgdisk \
           --disk-guid=97FD5997-D90B-4AA3-8D16-C1723AEA73C \
@@ -427,6 +439,10 @@ let
       echo $(( $1 * 52 / 1000 ))
     }
 
+    round_to_nearest() {
+      echo $(( ( $1 / $2 + 1) * $2 ))
+    }
+
     mkdir $out
 
     root="$PWD/root"
@@ -496,6 +512,9 @@ let
 
     diskImage=nixos.raw
 
+    bootSize=$(round_to_nearest $(numfmt --from=iec '${bootSize}') $mebibyte)
+    bootSizeMiB=$(( bootSize / 1024 / 1024 ))MiB
+
     ${
       if diskSize == "auto" then
         ''
@@ -510,7 +529,7 @@ let
                 # represented the actual size of the boot partition. But it instead
                 # represents the offset at which it ends.
                 # So we know bootSize is the reserved space in front of the partition.
-                reservedSpace=$(( gptSpace + $(numfmt --from=iec '${bootSize}') ))
+                reservedSpace=$(( gptSpace + bootSize ))
               ''
             else if partitionTableType == "legacy+gpt" then
               ''
@@ -541,14 +560,17 @@ let
           fudge=$(compute_fudge $diskUsage)
           requiredFilesystemSpace=$(( diskUsage + fudge ))
 
-          diskSize=$(( requiredFilesystemSpace  + additionalSpace ))
+          # Round up to the nearest block size.
+          # This ensures whole $blockSize bytes block sizes in the filesystem
+          # and helps towards aligning partitions optimally.
+          requiredFilesystemSpace=$(round_to_nearest $requiredFilesystemSpace ${blockSize})
+
+          diskSize=$(( requiredFilesystemSpace + additionalSpace ))
 
           # Round up to the nearest mebibyte.
           # This ensures whole 512 bytes sector sizes in the disk image
           # and helps towards aligning partitions optimally.
-          if (( diskSize % mebibyte )); then
-            diskSize=$(( ( diskSize / mebibyte + 1) * mebibyte ))
-          fi
+          diskSize=$(round_to_nearest $diskSize $mebibyte)
 
           truncate -s "$diskSize" $diskImage
 
