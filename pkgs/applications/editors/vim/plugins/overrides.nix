@@ -17,7 +17,6 @@
   rustPlatform,
   # Misc dependencies
   arrow-cpp,
-  Cocoa,
   coc-clangd,
   coc-css,
   coc-diagnostic,
@@ -79,9 +78,6 @@
   cmake,
   icu,
   ncurses,
-  # LanguageClient-neovim dependencies
-  CoreFoundation,
-  CoreServices,
   # nvim-treesitter dependencies
   callPackage,
   # Preview-nvim dependencies
@@ -3135,10 +3131,6 @@ in
 
   vim-addon-goto-thing-at-cursor = super.vim-addon-goto-thing-at-cursor.overrideAttrs {
     dependencies = [ self.tlib_vim ];
-  };
-
-  vim-addon-manager = super.vim-addon-manager.overrideAttrs {
-    buildInputs = lib.optional stdenv.hostPlatform.isDarwin Cocoa;
   };
 
   vim-addon-mru = super.vim-addon-mru.overrideAttrs {
