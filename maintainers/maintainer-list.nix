@@ -21751,6 +21751,11 @@
     github = "sei40kr";
     githubId = 11665236;
   };
+  seiarotg = {
+    name = "SEIAROTg";
+    github = "SEIAROTg";
+    githubId = 3611446;
+  };
   seineeloquenz = {
     name = "Alexander Linder";
     github = "SeineEloquenz";
