@@ -3,7 +3,6 @@
   fetchFromGitHub,
   stdenv,
   makeWrapper,
-  gitUpdater,
   python3Packages,
   tk,
   addDriverRunpath,
