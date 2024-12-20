@@ -5,22 +5,25 @@
   vimUtils,
 }:
 let
-  version = "2024-07-25";
+  version = "0.3.1-unstable-2023-07-06";
   src = fetchFromGitHub {
     owner = "willothy";
     repo = "moveline.nvim";
-    rev = "9f67f4b9e752a87eea8205f0279f261a16c733d8";
-    hash = "sha256-B4t5+Q4Urx5bGm8glNpYkHhpp/rAhz+lDd2EpWFUYoY=";
+    rev = "570603637be8af20e97b91cf554fef29cab73ca6";
+    hash = "sha256-hq/n48JC1EgJbmb6b/1jQ8MNhbcsJD3wIYaKE1UiU30=";
   };
   moveline-lib = rustPlatform.buildRustPackage {
     inherit src version;
     pname = "moveline-lib";
 
+    # Upstream doesn't contain a cargo lock
+    cargoLock = {
+      lockFile = ./Cargo.lock;
+    };
+
     postPatch = ''
       ln -s ${./Cargo.lock} Cargo.lock
     '';
-
-    cargoHash = "sha256-e9QB4Rfm+tFNrLAHN/nYUQ5PiTET8knQQIQkMH3UFkU=";
   };
 in
 vimUtils.buildVimPlugin {
