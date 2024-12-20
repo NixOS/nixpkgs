@@ -869,6 +869,7 @@ let
           "DUIDType"
           "DUIDRawData"
           "IAID"
+          "RequestAddress"
           "RequestBroadcast"
           "RouteMetric"
           "RouteTable"
