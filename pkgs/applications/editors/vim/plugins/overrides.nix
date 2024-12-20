@@ -779,54 +779,7 @@ in
     nvimRequireCheck = "coq";
   };
 
-  cord-nvim =
-    let
-      version = "0-unstable-2024-09-26";
-      src = fetchFromGitHub {
-        owner = "vyfor";
-        repo = "cord.nvim";
-        rev = "a26b00d58c42174aadf975917b49cec67650545f";
-        hash = "sha256-jUxBvWnj0+axuw2SZ2zLzlhZS0tu+Bk8+wHtXENofkw=";
-      };
-      extension = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
-      rustPackage = rustPlatform.buildRustPackage {
-        pname = "cord.nvim-rust";
-        inherit version src;
-
-        cargoHash = "sha256-M5mTdBACTaUVZhPpMOf1KQ3BcQpEoD2isAKRn+iAWjc=";
-
-        installPhase =
-          let
-            cargoTarget = stdenv.hostPlatform.rust.cargoShortTarget;
-          in
-          ''
-            install -D target/${cargoTarget}/release/libcord.${extension} $out/lib/cord.${extension}
-          '';
-      };
-    in
-    buildVimPlugin {
-      pname = "cord.nvim";
-      inherit version src;
-
-      nativeBuildInputs = [
-        rustPackage
-      ];
-
-      buildPhase = ''
-        install -D ${rustPackage}/lib/cord.${extension} cord.${extension}
-      '';
-
-      installPhase = ''
-        install -D cord $out/lua/cord.${extension}
-      '';
-
-      doInstallCheck = true;
-      nvimRequireCheck = "cord";
-
-      meta = {
-        homepage = "https://github.com/vyfor/cord.nvim";
-      };
-    };
+  cord-nvim = callPackage ./cord-nvim { };
 
   cornelis = super.cornelis.overrideAttrs {
     dependencies = [ self.vim-textobj-user ];
