@@ -28,13 +28,13 @@ let
 in
 buildDotnetModule (finalAttrs: {
   pname = "famistudio";
-  version = "4.2.1";
+  version = "4.3.0";
 
   src = fetchFromGitHub {
     owner = "BleuBleu";
     repo = "FamiStudio";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-WYy/6cWQg3Ayok/eAdnvlWAvdcuhy/sdlWOVvaYcPkc=";
+    hash = "sha256-Ldht7w1qgLTiqbRUJJvFQgl1VW6k+14w/jz58kAeMl0=";
   };
 
   postPatch =
@@ -132,8 +132,6 @@ buildDotnetModule (finalAttrs: {
   projectFile = "FamiStudio/${csprojName}.csproj";
   nugetDeps = ./deps.json;
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
-  dotnet-runtime = dotnetCorePackages.runtime_8_0;
-  dotnetFlags = [ "-p:TargetFramework=net8.0" ];
 
   runtimeDeps = lib.optionals stdenvNoCC.hostPlatform.isLinux [
     libglvnd
