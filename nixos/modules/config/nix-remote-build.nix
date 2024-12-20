@@ -225,7 +225,7 @@ in
     };
   };
 
-  # distributedBuilds does *not* inhibit /etc/machines generation; caller may
+  # distributedBuilds does *not* inhibit /etc/nix/machines generation; caller may
   # override that nix option.
   config = mkIf cfg.enable {
     assertions =
