@@ -36,6 +36,7 @@ rustPlatform.buildRustPackage {
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;
+    BUILD_TYPE = "nixpkgs";
   };
 
   meta = {
