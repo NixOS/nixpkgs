@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   boost,
-  gfortran,
   lhapdf,
   ncurses,
   perl,
@@ -35,23 +34,26 @@ stdenv.mkDerivation rec {
     ./yoda2_support.patch
   ];
 
+  nativeBuildInputs = [
+    lhapdf # lhapdf-config
+    yoda # yoda-config
+  ] ++ lib.optional withPython python;
+
   buildInputs =
     [
       boost
-      gfortran
-      gfortran.cc.lib
       lhapdf
       yoda
     ]
     ++ lib.optional withPython python
     ++ lib.optional (withPython && python.isPy3k) ncurses;
 
+  propagatedNativeBuildInputs = lib.optional withPython [ swig ];
   propagatedBuildInputs =
     [
       zlib
     ]
     ++ lib.optional withPython [
-      swig
       python.pkgs.distutils
     ];
 
@@ -67,6 +69,8 @@ stdenv.mkDerivation rec {
   configureFlags = [
     "--with-yoda=${yoda}"
   ] ++ lib.optional withPython "--enable-pyext";
+
+  strictDeps = true;
 
   enableParallelBuilding = true;
 

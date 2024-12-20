@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  bash,
   python,
   makeWrapper,
 }:
@@ -22,7 +23,10 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs =
-    [ makeWrapper ]
+    [
+      bash
+      makeWrapper
+    ]
     ++ lib.optionals (python != null && lib.versionAtLeast python.version "3.10") [
       python.pkgs.cython
     ];
@@ -34,6 +38,8 @@ stdenv.mkDerivation rec {
     rm wrappers/python/lhapdf.cpp
   '';
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   passthru = {
@@ -41,6 +47,7 @@ stdenv.mkDerivation rec {
   };
 
   postInstall = ''
+    patchShebangs --build $out/bin/lhapdf-config
     wrapProgram $out/bin/lhapdf --prefix PYTHONPATH : "$(toPythonPath "$out")"
   '';
 
