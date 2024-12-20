@@ -53,13 +53,18 @@ stdenv.mkDerivation rec {
   buildInputs = [ boost ];
   propagatedBuildInputs = [ rdkafka ];
 
-  cmakeFlags = [
-    "-DLIBRDKAFKA_INCLUDE_DIR=${rdkafka.out}/include"
-    "-DGTEST_LIBRARY_DIR=${gtest.out}/lib"
-    "-DGTEST_INCLUDE_DIR=${gtest.dev}/include"
-    "-DRAPIDJSON_INCLUDE_DIRS=${rapidjson.out}/include"
-    "-DCMAKE_CXX_FLAGS=-Wno-uninitialized"
-  ];
+  cmakeFlags =
+    let
+      inherit (lib) cmakeFeature getLib getInclude;
+    in
+    [
+      (cmakeFeature "LIBRDKAFKA_LIBRARY_DIR" "${getLib rdkafka}/lib")
+      (cmakeFeature "LIBRDKAFKA_INCLUDE_DIR" "${getInclude rdkafka}/include")
+      (cmakeFeature "GTEST_LIBRARY_DIR" "${getLib gtest}/lib")
+      (cmakeFeature "GTEST_INCLUDE_DIR" "${getInclude gtest}/include")
+      (cmakeFeature "RAPIDJSON_INCLUDE_DIRS" "${getInclude rapidjson}/include")
+      (cmakeFeature "CMAKE_CXX_FLAGS" "-Wno-uninitialized")
+    ];
 
   checkInputs = [
     gtest
