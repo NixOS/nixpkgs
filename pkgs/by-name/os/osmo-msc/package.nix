@@ -8,7 +8,7 @@
   sqlite,
   libosmoabis,
   libosmo-netif,
-  libosmo-sccp,
+  libosmo-sigtran,
   osmo-mgw,
   osmo-hlr,
   lksctp-tools,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     sqlite
     libosmoabis
     libosmo-netif
-    libosmo-sccp
+    libosmo-sigtran
     osmo-mgw
     osmo-hlr
     lksctp-tools

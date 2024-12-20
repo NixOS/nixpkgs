@@ -7,7 +7,7 @@
   libosmocore,
   libosmoabis,
   libosmo-netif,
-  libosmo-sccp,
+  libosmo-sigtran,
   osmo-mgw,
 }:
 
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     libosmocore
     libosmoabis
     libosmo-netif
-    libosmo-sccp
+    libosmo-sigtran
     osmo-mgw
   ];
 
