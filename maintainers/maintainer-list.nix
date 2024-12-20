@@ -11190,6 +11190,14 @@
     githubId = 3267697;
     name = "Joshua Potter";
   };
+  js6pak = {
+    name = "js6pak";
+    email = "me@6pak.dev";
+    matrix = "@6pak:matrix.org";
+    github = "js6pak";
+    githubId = 35262707;
+    keys = [ { fingerprint = "66D1 1EA6 571D E4F9 16B3  B8EB 3E3C D91E B1AA FB06"; } ];
+  };
   jshcmpbll = {
     email = "me@joshuadcampbell.com";
     github = "jshcmpbll";
@@ -12018,6 +12026,11 @@
     github = "kmicklas";
     githubId = 929096;
   };
+  kmogged = {
+    name = "Kevin";
+    github = "kmogged";
+    githubId = 22965352;
+  };
   knairda = {
     email = "adrian@kummerlaender.eu";
     name = "Adrian Kummerlaender";
@@ -12836,6 +12849,13 @@
     github = "Lilacious";
     githubId = 101508537;
     name = "Yuchen He";
+  };
+  lilioid = {
+    name = "Lilly";
+    email = "li@lly.sh";
+    matrix = "@17sell:mafiasi.de";
+    github = "lilioid";
+    githubId = 12398140;
   };
   LilleAila = {
     name = "Olai";
@@ -17072,6 +17092,12 @@
     githubId = 1788628;
     name = "pandaman";
   };
+  pandanz = {
+    email = "gate.rules-5j@icloud.com";
+    github = "pandanz";
+    githubId = 32557789;
+    name = "pandanz";
+  };
   pandapip1 = {
     email = "gavinnjohn@gmail.com";
     github = "Pandapip1";
@@ -20506,6 +20532,12 @@
     githubId = 18403034;
     name = "Shaddy";
   };
+  shadowapex = {
+    email = "shadowapex@gmail.com";
+    github = "ShadowApex";
+    githubId = 376460;
+    name = "William Edwards";
+  };
   shadowrz = {
     email = "shadowrz+nixpkgs@disroot.org";
     matrix = "@shadowrz:nixos.dev";
@@ -22406,6 +22438,12 @@
     github = "thelegy";
     githubId = 3105057;
     name = "Jan Beinke";
+  };
+  thelissimus = {
+    name = "Kei";
+    email = "thelissimus@tuta.io";
+    github = "thelissimus";
+    githubId = 70096720;
   };
   themaxmur = {
     name = "Maxim Muravev";
