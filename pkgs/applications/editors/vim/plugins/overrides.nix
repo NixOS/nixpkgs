@@ -2393,7 +2393,7 @@ in
 
   playground = super.playground.overrideAttrs {
     dependencies = with self; [
-      # we need the 'query' grammer to make
+      # we need the 'query' grammar to make
       (nvim-treesitter.withPlugins (p: [ p.query ]))
     ];
     nvimRequireCheck = "nvim-treesitter-playground";
@@ -3157,7 +3157,7 @@ in
     dependencies = [ self.vim-maktaba ];
   };
 
-  # Due to case-sensitivety issues, the hash differs on Darwin systems, see:
+  # Due to case-sensitivity issues, the hash differs on Darwin systems, see:
   # https://github.com/NixOS/nixpkgs/issues/157609
   vim-colorschemes = super.vim-colorschemes.overrideAttrs (old: {
     src = old.src.overrideAttrs (srcOld: {
