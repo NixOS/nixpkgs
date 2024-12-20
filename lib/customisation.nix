@@ -30,8 +30,6 @@ let
     seq
     flatten
     deepSeq
-    warnIf
-    isInOldestRelease
     extends
     ;
   inherit (lib.strings) levenshtein levenshteinAtMost;
