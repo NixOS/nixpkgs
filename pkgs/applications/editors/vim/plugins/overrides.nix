@@ -1398,42 +1398,7 @@ in
     nvimRequireCheck = "kulala";
   };
 
-  LanguageClient-neovim =
-    let
-      version = "0.1.161";
-      LanguageClient-neovim-src = fetchFromGitHub {
-        owner = "autozimu";
-        repo = "LanguageClient-neovim";
-        rev = version;
-        sha256 = "Z9S2ie9RxJCIbmjSV/Tto4lK04cZfWmK3IAy8YaySVI=";
-      };
-      LanguageClient-neovim-bin = rustPlatform.buildRustPackage {
-        pname = "LanguageClient-neovim-bin";
-        inherit version;
-        src = LanguageClient-neovim-src;
-
-        cargoHash = "sha256-H34UqJ6JOwuSABdOup5yKeIwFrGc83TUnw1ggJEx9o4=";
-        buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
-
-        # FIXME: Use impure version of CoreFoundation because of missing symbols.
-        #   Undefined symbols for architecture x86_64: "_CFURLResourceIsReachable"
-        preConfigure = lib.optionalString stdenv.hostPlatform.isDarwin ''
-          export NIX_LDFLAGS="-F${CoreFoundation}/Library/Frameworks -framework CoreFoundation $NIX_LDFLAGS"
-        '';
-      };
-    in
-    buildVimPlugin {
-      pname = "LanguageClient-neovim";
-      inherit version;
-      src = LanguageClient-neovim-src;
-
-      propagatedBuildInputs = [ LanguageClient-neovim-bin ];
-
-      preFixup = ''
-        substituteInPlace "$out"/autoload/LanguageClient.vim \
-          --replace "let l:path = s:root . '/bin/'" "let l:path = '${LanguageClient-neovim-bin}' . '/bin/'"
-      '';
-    };
+  LanguageClient-neovim = callPackage ./LanguageClient-neovim { };
 
   LazyVim = super.LazyVim.overrideAttrs {
     # Any other dependency is optional
