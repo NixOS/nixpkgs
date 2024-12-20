@@ -2465,18 +2465,6 @@ final: prev:
     meta.homepage = "https://github.com/Exafunction/codeium.vim/";
   };
 
-  codesnap-nvim = buildVimPlugin {
-    pname = "codesnap.nvim";
-    version = "2024-09-22";
-    src = fetchFromGitHub {
-      owner = "mistricky";
-      repo = "codesnap.nvim";
-      rev = "6400480aa6cc366cbd931146c429aaa64680dab9";
-      sha256 = "1kdqh5vn837pxygz141n01zw08apcxi39xzdn5a0zhddimqn16z1";
-    };
-    meta.homepage = "https://github.com/mistricky/codesnap.nvim/";
-  };
-
   codewindow-nvim = buildVimPlugin {
     pname = "codewindow.nvim";
     version = "2024-06-05";
