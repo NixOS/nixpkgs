@@ -13,6 +13,8 @@
   openal,
   portaudio,
   rtmidi,
+  _experimental-update-script-combinators,
+  gitUpdater,
 }:
 
 let
@@ -152,7 +154,10 @@ buildDotnetModule (finalAttrs: {
       --prefix PATH : ${lib.makeBinPath [ ffmpeg ]}
   '';
 
-  passthru.updateScript = ./update.sh;
+  passthru.updateScript = _experimental-update-script-combinators.sequence [
+    (gitUpdater { }).command
+    (finalAttrs.passthru.fetch-deps)
+  ];
 
   meta = {
     homepage = "https://famistudio.org/";
