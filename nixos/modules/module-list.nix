@@ -509,6 +509,7 @@
   ./services/desktops/ayatana-indicators.nix
   ./services/desktops/bamf.nix
   ./services/desktops/blueman.nix
+  ./services/desktops/bonsaid.nix
   ./services/desktops/cpupower-gui.nix
   ./services/desktops/deepin/deepin-anything.nix
   ./services/desktops/deepin/dde-api.nix
@@ -604,6 +605,7 @@
   ./services/hardware/handheld-daemon.nix
   ./services/hardware/hddfancontrol.nix
   ./services/hardware/illum.nix
+  ./services/hardware/inputplumber.nix
   ./services/hardware/interception-tools.nix
   ./services/hardware/iptsd.nix
   ./services/hardware/irqbalance.nix
@@ -1135,6 +1137,7 @@
   ./services/networking/miredo.nix
   ./services/networking/mjpg-streamer.nix
   ./services/networking/mmsd.nix
+  ./services/networking/modemmanager.nix
   ./services/networking/monero.nix
   ./services/networking/morty.nix
   ./services/networking/mosquitto.nix
