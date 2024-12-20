@@ -53,12 +53,12 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p src/qhexview/.git lib/gdtoa-desktop/.git
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Cross platform AArch32/x86/x86-64 debugger";
     mainProgram = "edb";
     homepage = "https://github.com/eteran/edb-debugger";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [
       lihop
       maxxk
     ];
