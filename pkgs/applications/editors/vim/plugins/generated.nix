@@ -159,18 +159,6 @@ final: prev:
     meta.homepage = "https://github.com/martinda/Jenkinsfile-vim-syntax/";
   };
 
-  LanguageClient-neovim = buildVimPlugin {
-    pname = "LanguageClient-neovim";
-    version = "2022-06-07";
-    src = fetchFromGitHub {
-      owner = "autozimu";
-      repo = "LanguageClient-neovim";
-      rev = "cf6dd11baf62fb6ce18308e96c0ab43428b7c686";
-      sha256 = "0jmbxc0li4w59dzpzadq2phnfhnibggwxb3rvlmhr88dbglm0s8n";
-    };
-    meta.homepage = "https://github.com/autozimu/LanguageClient-neovim/";
-  };
-
   LanguageTool-nvim = buildVimPlugin {
     pname = "LanguageTool.nvim";
     version = "2020-10-19";
