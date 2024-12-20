@@ -146,6 +146,6 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.linux;
     mainProgram = "nvidia-container-cli";
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [ cpcloud msanft ];
   };
 }
