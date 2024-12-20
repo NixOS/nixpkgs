@@ -7692,7 +7692,7 @@
     githubId = 53809656;
   };
   fredeb = {
-    email = "im@fredeb.dev";
+    email = "frederikbraendstrup@gmail.com";
     github = "FredeEB";
     githubId = 7551358;
     name = "Frede Emil";
