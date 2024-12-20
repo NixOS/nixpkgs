@@ -39,7 +39,6 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeBuildInputs = [
-    SDL2
     autoreconfHook
     pkg-config
   ];
