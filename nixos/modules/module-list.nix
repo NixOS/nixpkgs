@@ -873,7 +873,6 @@
   ./services/misc/subsonic.nix
   ./services/misc/sundtek.nix
   ./services/misc/svnserve.nix
-  ./services/misc/synergy.nix
   ./services/misc/sysprof.nix
   ./services/misc/tabby.nix
   ./services/misc/tandoor-recipes.nix
