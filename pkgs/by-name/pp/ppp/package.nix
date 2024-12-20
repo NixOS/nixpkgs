@@ -5,6 +5,7 @@
   lib,
   libpcap,
   libxcrypt,
+  linux-pam,
   nixosTests,
   openssl,
   pkg-config,
@@ -39,6 +40,7 @@ stdenv.mkDerivation rec {
     bash
     libpcap
     libxcrypt
+    linux-pam
     openssl
     systemdMinimal
   ];
