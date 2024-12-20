@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "qutip";
-  version = "5.0.4";
+  version = "5.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-KT5Mk0w6EKTUZzGRnQ6XQPZfH5ZXVuiD+EwSflNqHNo=";
+    tag = "v${version}";
+    hash = "sha256-8P95uAalMeGXWNG8J8Rf/eg0x1K62o9rKjmDrB8KGRo=";
   };
 
   postPatch = ''
