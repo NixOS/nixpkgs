@@ -15533,13 +15533,6 @@ with pkgs;
     systemdSupport = true;
   };
 
-  synergy = libsForQt5.callPackage ../applications/misc/synergy {
-    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-    inherit (darwin.apple_sdk_11_0.frameworks) ApplicationServices Carbon Cocoa CoreServices ScreenSaver UserNotifications;
-  };
-
-  synergyWithoutGUI = synergy.override { withGUI = false; };
-
   tabbed = callPackage ../applications/window-managers/tabbed {
     # if you prefer a custom config, write the config.h in tabbed.config.h
     # and enable

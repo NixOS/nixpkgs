@@ -1269,6 +1269,8 @@ mapAliases {
   sync = taler-sync; # Added 2024-09-04
   syncthing-cli = throw "'syncthing-cli' has been renamed to/replaced by 'syncthing'"; # Converted to throw 2024-10-17
   syncthingtray-qt6 = syncthingtray; # Added 2024-03-06
+  synergy = throw "'synergy' has been removed from nixpkgs, as the repository is deleted"; # Added 2024-12-20
+  synergyWithoutGUI = throw "'synergyWithoutGUI' has been removed from nixpkgs, as the repository is deleted"; # Added 2024-12-20
 
   ### T ###
 
