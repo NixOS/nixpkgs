@@ -48,6 +48,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pytest_benchmark" ];
 
+  __darwinAllowLocalNetworking = true;
+
   nativeCheckInputs = [
     freezegun
     git
