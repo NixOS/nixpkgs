@@ -20347,6 +20347,13 @@
     githubId = 71049646;
     keys = [ { fingerprint = "8BDF DFB5 6842 2393 82A0  441B 9238 BC70 9E05 516A"; } ];
   };
+  sehqlr = {
+    name = "Sam Hatfield";
+    email = "hey@samhatfield.me";
+    matrix = "@sehqlr:matrix.org";
+    github = "sehqlr";
+    githubId = 2746852;
+  };
   sei40kr = {
     name = "Seong Yong-ju";
     email = "sei40kr@gmail.com";
