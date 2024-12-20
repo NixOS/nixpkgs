@@ -10,22 +10,25 @@
   rpcsvc-proto,
   libtirpc,
   makeWrapper,
-  substituteAll,
   removeReferencesTo,
   replaceVars,
   go,
+  applyPatches,
 }:
 let
   modprobeVersion = "550.54.14";
-  nvidia-modprobe = fetchFromGitHub {
-    owner = "NVIDIA";
-    repo = "nvidia-modprobe";
-    rev = modprobeVersion;
-    sha256 = "sha256-iBRMkvOXacs/llTtvc/ZC5i/q9gc8lMuUHxMbu8A+Kg=";
-  };
-  modprobePatch = substituteAll {
-    src = ./modprobe.patch;
-    inherit modprobeVersion;
+  nvidia-modprobe = applyPatches {
+    src = fetchFromGitHub {
+      owner = "NVIDIA";
+      repo = "nvidia-modprobe";
+      rev = modprobeVersion;
+      sha256 = "sha256-iBRMkvOXacs/llTtvc/ZC5i/q9gc8lMuUHxMbu8A+Kg=";
+    };
+    patches = [
+      (replaceVars ./modprobe.patch {
+        inherit modprobeVersion;
+      })
+    ];
   };
 in
 stdenv.mkDerivation rec {
@@ -70,7 +73,6 @@ stdenv.mkDerivation rec {
     chmod -R u+w deps/src
     pushd deps/src
 
-    patch -p0 < ${modprobePatch}
     touch nvidia-modprobe-${modprobeVersion}/.download_stamp
     popd
 
@@ -146,6 +148,9 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.linux;
     mainProgram = "nvidia-container-cli";
-    maintainers = with maintainers; [ cpcloud msanft ];
+    maintainers = with maintainers; [
+      cpcloud
+      msanft
+    ];
   };
 }
