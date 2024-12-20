@@ -30,13 +30,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "libnvidia-container";
-  version = "1.16.2";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "libnvidia-container";
     rev = "v${version}";
-    sha256 = "sha256-hX+2B+0kHiAC2lyo6kwe7DctPLJWgRdbhlc316OO3r8=";
+    sha256 = "sha256-JmJKvAOEPyjVx2Frd0tAMBjnAUTMpMh1KBt6wr5RRmk=";
   };
 
   patches = [
