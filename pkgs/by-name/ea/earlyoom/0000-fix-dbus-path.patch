@@ -1,0 +1,11 @@
+--- a/kill.c
++++ b/kill.c
+@@ -55,7 +55,7 @@ static void notify(const char* summary, const char* body)
+     }
+     // Complete command line looks like this:
+     // dbus-send --system / net.nuetzlich.SystemNotifications.Notify 'string:summary text' 'string:and body text'
+-    execl("/usr/bin/dbus-send", "dbus-send", "--system", "/", "net.nuetzlich.SystemNotifications.Notify",
++    execlp("dbus-send", "dbus-send", "--system", "/", "net.nuetzlich.SystemNotifications.Notify",
+         summary2, body2, NULL);
+     warn("notify: exec failed: %s\n", strerror(errno));
+     exit(1);

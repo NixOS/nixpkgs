@@ -1,0 +1,75 @@
+diff --git a/src/orca/debug.py b/src/orca/debug.py
+index e17e2333e..595c8489d 100644
+--- a/src/orca/debug.py
++++ b/src/orca/debug.py
+@@ -529,7 +529,7 @@ def traceit(frame, event, arg):
+     return traceit
+ 
+ def getOpenFDCount(pid):
+-    procs = subprocess.check_output([ 'lsof', '-w', '-Ff', '-p', str(pid)])
++    procs = subprocess.check_output([ '@lsof@', '-w', '-Ff', '-p', str(pid)])
+     procs = procs.decode('UTF-8').split('\n')
+     files = list(filter(lambda s: s and s[0] == 'f' and s[1:].isdigit(), procs))
+ 
+@@ -547,7 +547,7 @@ def getCmdline(pid):
+     return cmdline
+ 
+ def pidOf(procName):
+-    openFile = subprocess.Popen(f'pgrep {procName}',
++    openFile = subprocess.Popen(f'@pgrep@ {procName}',
+                                 shell=True,
+                                 stdout=subprocess.PIPE).stdout
+     pids = openFile.read()
+diff --git a/src/orca/orca_bin.py.in b/src/orca/orca_bin.py.in
+index c3b23dec2..320597ae6 100755
+--- a/src/orca/orca_bin.py.in
++++ b/src/orca/orca_bin.py.in
+@@ -63,7 +63,7 @@ class ListApps(argparse.Action):
+                 name = "[DEAD]"
+ 
+             try:
+-                cmdline = subprocess.getoutput('cat /proc/%s/cmdline' % pid)
++                cmdline = subprocess.getoutput('@cat@ /proc/%s/cmdline' % pid)
+             except Exception:
+                 cmdline = '(exception encountered)'
+             else:
+@@ -199,7 +199,7 @@ def inGraphicalDesktop():
+ def otherOrcas():
+     """Returns the pid of any other instances of Orca owned by this user."""
+ 
+-    openFile = subprocess.Popen('pgrep -u %s -x orca' % os.getuid(),
++    openFile = subprocess.Popen('@pgrep@ -u %s -x orca' % os.getuid(),
+                                 shell=True,
+                                 stdout=subprocess.PIPE).stdout
+     pids = openFile.read()
+diff --git a/src/orca/orca_modifier_manager.py b/src/orca/orca_modifier_manager.py
+index 48c0dead5..8a4a04e74 100644
+--- a/src/orca/orca_modifier_manager.py
++++ b/src/orca/orca_modifier_manager.py
+@@ -200,7 +200,7 @@ class OrcaModifierManager:
+         debug.printMessage(debug.LEVEL_INFO, msg, True)
+ 
+         self.unset_orca_modifiers(reason)
+-        p = subprocess.Popen(['xkbcomp', os.environ['DISPLAY'], '-'],
++        p = subprocess.Popen(['@xkbcomp@', os.environ['DISPLAY'], '-'],
+             stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+         self._original_xmodmap, _ = p.communicate()
+         self._create_orca_xmodmap()
+@@ -232,7 +232,7 @@ class OrcaModifierManager:
+             return
+ 
+         self._caps_lock_cleared = False
+-        p = subprocess.Popen(['xkbcomp', '-w0', '-', os.environ['DISPLAY']],
++        p = subprocess.Popen(['@xkbcomp@', '-w0', '-', os.environ['DISPLAY']],
+             stdin=subprocess.PIPE, stdout=None, stderr=None)
+         p.communicate(self._original_xmodmap)
+ 
+@@ -293,7 +293,7 @@ class OrcaModifierManager:
+         if modified:
+             msg = "ORCA MODIFIER MANAGER: Updating xmodmap"
+             debug.printMessage(debug.LEVEL_INFO, msg, True)
+-            p = subprocess.Popen(['xkbcomp', '-w0', '-', os.environ['DISPLAY']],
++            p = subprocess.Popen(['@xkbcomp@', '-w0', '-', os.environ['DISPLAY']],
+                 stdin=subprocess.PIPE, stdout=None, stderr=None)
+             p.communicate(bytes('\n'.join(lines), 'UTF-8'))
+         else:
