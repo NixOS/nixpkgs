@@ -20,7 +20,7 @@
 
   cublasSupport ? config.cudaSupport,
   # You can find a full list here: https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
-  # For example if you're on an GTX 1080 that means you're using "Pascal" and you need to pass "sm_60"
+  # For example if you're on an RTX 3060 that means you're using "Ampere" and you need to pass "sm_86"
   cudaArches ? cudaPackages.cudaFlags.realArches or [ ],
 
   clblastSupport ? stdenv.hostPlatform.isLinux,
