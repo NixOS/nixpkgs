@@ -15,7 +15,7 @@ let
 in
 py.pkgs.buildPythonApplication rec {
   pname = "netbox";
-  version = "4.1.3";
+  version = "4.1.9";
 
   format = "other";
 
@@ -23,15 +23,11 @@ py.pkgs.buildPythonApplication rec {
     owner = "netbox-community";
     repo = "netbox";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SRzkmRkniVDu6vYGa9Kd9exob/LHpGBPd+lRA/pbCFo=";
+    hash = "sha256-eq8bG3xKo1d+TU09JySfLqEnCbuR4P3W7PhJ6jJRLJ4=";
   };
 
   patches = [
     ./custom-static-root.patch
-    (fetchpatch {
-      url = "https://github.com/netbox-community/netbox/pull/17620.patch";
-      hash = "sha256-zN2zke4qlNJUbxI8mSV+zGmEv0Qtd0zSCbCXWyE1L2k=";
-    })
   ];
 
   propagatedBuildInputs =
