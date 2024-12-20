@@ -279,10 +279,9 @@ let
       "legacy+gpt" = ''
         parted --script $diskImage -- \
           mklabel gpt \
-          mkpart no-fs 1MB 2MB \
+          mkpart no-fs 1MiB 2MiB \
           set 1 bios_grub on \
-          align-check optimal 1 \
-          mkpart primary ext4 2MB 100% \
+          mkpart primary ext4 2MiB 100% \
           align-check optimal 2 \
           print
         ${lib.optionalString deterministic ''
@@ -340,7 +339,6 @@ let
           align-check optimal 1 \
           mkpart no-fs 0 1024KiB \
           set 2 bios_grub on \
-          align-check optimal 2 \
           mkpart primary ext4 $bootSizeMiB 100% \
           align-check optimal 3 \
           print
@@ -535,7 +533,7 @@ let
               ''
                 # Add the GPT at the end
                 gptSpace=$(( 512 * 34 * 1 ))
-                # And include the bios_grub partition; the ext4 partition starts at 2MB exactly.
+                # And include the bios_grub partition; the ext4 partition starts at 2MiB exactly.
                 reservedSpace=$(( gptSpace + 2 * mebibyte ))
               ''
             else if partitionTableType == "legacy" then
