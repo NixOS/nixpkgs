@@ -43,6 +43,7 @@ python3Packages.buildPythonApplication rec {
   patches =
     [
       ./vulkan_icd.patch
+      ./redirect-bugtracker.patch
       ./remove-flatpak-check.patch
       ./remove-core-tab.patch
     ]
