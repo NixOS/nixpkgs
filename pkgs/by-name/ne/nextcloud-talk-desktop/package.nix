@@ -1,8 +1,11 @@
 {
   lib,
   stdenv,
+  fetchurl,
   fetchzip,
   autoPatchelfHook,
+  copyDesktopItems,
+  makeDesktopItem,
   nss,
   cairo,
   xorg,
@@ -31,7 +34,15 @@ stdenv.mkDerivation (finalAttrs: {
     stripRoot = false;
   };
 
-  nativeBuildInputs = [ autoPatchelfHook ];
+  icon = fetchurl {
+    url = "https://raw.githubusercontent.com/nextcloud/talk-desktop/refs/tags/v1.0.0/img/icons/icon.png";
+    hash = "sha256-DteSSuxIs0ukIJrvUO/3Mrh5F2GG5UAVvGRZUuZonkg=";
+  };
+
+  nativeBuildInputs = [
+    autoPatchelfHook
+    copyDesktopItems
+  ];
 
   buildInputs =
     [
@@ -61,6 +72,18 @@ stdenv.mkDerivation (finalAttrs: {
   # Fixes `Zygote could not fork`
   runtimeDependencies = [ systemd ];
 
+  desktopItems = [
+    (makeDesktopItem {
+      type = "Application";
+      name = "nextcloud-talk-desktop";
+      desktopName = "Nextcloud Talk";
+      comment = finalAttrs.meta.description;
+      exec = finalAttrs.meta.mainProgram;
+      icon = "nextcloud-talk-desktop";
+      categories = [ "Chat" ];
+    })
+  ];
+
   preInstall = ''
     mkdir -p $out/bin
     mkdir -p $out/opt
@@ -73,6 +96,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Link the application in $out/bin away from contents of `preInstall`
     ln -s "$out/opt/Nextcloud Talk-linux-x64/Nextcloud Talk" $out/bin/nextcloud-talk-desktop
+    mkdir -p $out/share/icons/hicolor/512x512/apps
+    cp $icon $out/share/icons/hicolor/512x512/apps/nextcloud-talk-desktop.png
 
     runHook postInstall
   '';
