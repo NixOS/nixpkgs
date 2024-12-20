@@ -79,21 +79,21 @@ python3Packages.buildPythonApplication rec {
   propagatedBuildInputs =
     with python3Packages;
     [
-      pathvalidate
-      pycurl
       pyyaml
-      requests
-      pygobject3
-      patool
-      markdown
-      fvs
-      pefile
-      urllib3
+      pycurl
       chardet
-      certifi
-      idna
-      orjson
+      requests
+      markdown
       icoextract
+      patool
+      pathvalidate
+      fvs
+      orjson
+      pygobject3
+      idna
+      urllib3
+      certifi
+      pefile
     ]
     ++ [
       cabextract
