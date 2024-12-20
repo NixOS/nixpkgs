@@ -9,10 +9,6 @@
   libosmoabis,
 }:
 
-let
-  inherit (stdenv.hostPlatform) isLinux;
-in
-
 stdenv.mkDerivation rec {
   pname = "osmo-mgw";
   version = "1.13.1";

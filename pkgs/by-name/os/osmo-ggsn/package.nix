@@ -7,10 +7,6 @@
   libosmocore,
 }:
 
-let
-  inherit (stdenv.hostPlatform) isLinux;
-in
-
 stdenv.mkDerivation rec {
   pname = "osmo-ggsn";
   version = "1.12.0";

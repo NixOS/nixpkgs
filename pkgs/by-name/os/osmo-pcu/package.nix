@@ -7,10 +7,6 @@
   libosmocore,
 }:
 
-let
-  inherit (stdenv.hostPlatform) isLinux;
-in
-
 stdenv.mkDerivation rec {
   pname = "osmo-pcu";
   version = "1.5.0";

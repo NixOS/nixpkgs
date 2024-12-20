@@ -9,10 +9,6 @@
   glib,
 }:
 
-let
-  inherit (stdenv.hostPlatform) isLinux;
-in
-
 stdenv.mkDerivation rec {
   pname = "osmo-sip-connector";
   version = "1.7.0";

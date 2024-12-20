@@ -12,10 +12,6 @@
   c-ares,
 }:
 
-let
-  inherit (stdenv.hostPlatform) isLinux;
-in
-
 stdenv.mkDerivation rec {
   pname = "osmo-sgsn";
   version = "1.12.1";

@@ -14,10 +14,6 @@
   lksctp-tools,
 }:
 
-let
-  inherit (stdenv.hostPlatform) isLinux;
-in
-
 stdenv.mkDerivation rec {
   pname = "osmo-msc";
   version = "1.12.2";

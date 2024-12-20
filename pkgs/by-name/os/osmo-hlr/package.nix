@@ -9,10 +9,6 @@
   sqlite,
 }:
 
-let
-  inherit (stdenv.hostPlatform) isLinux;
-in
-
 stdenv.mkDerivation rec {
   pname = "osmo-hlr";
   version = "1.8.0";
