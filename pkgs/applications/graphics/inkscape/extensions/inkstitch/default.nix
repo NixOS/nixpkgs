@@ -6,23 +6,6 @@
 }:
 let
   version = "3.1.0";
-in
-python3.pkgs.buildPythonApplication rec {
-  pname = "inkstitch";
-  inherit version;
-  pyproject = false; # Uses a Makefile (yikes)
-
-  src = fetchFromGitHub {
-    owner = "inkstitch";
-    repo = "inkstitch";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CGhJsDRhElgemNv2BXqZr6Vi5EyBArFak7Duz545ivY=";
-  };
-
-  nativeBuildInputs = [
-    gettext
-  ];
-
   dependencies =
     with python3.pkgs;
     [
@@ -47,6 +30,26 @@ python3.pkgs.buildPythonApplication rec {
     ]
     # Inkstitch uses the builtin tomllib instead when Python >=3.11
     ++ lib.optional (pythonOlder "3.11") tomli;
+  pyEnv = python3.withPackages (_: dependencies);
+in
+python3.pkgs.buildPythonApplication {
+  pname = "inkstitch";
+  inherit version;
+  pyproject = false; # Uses a Makefile (yikes)
+
+  src = fetchFromGitHub {
+    owner = "inkstitch";
+    repo = "inkstitch";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-CGhJsDRhElgemNv2BXqZr6Vi5EyBArFak7Duz545ivY=";
+  };
+
+  nativeBuildInputs = [
+    gettext
+    pyEnv
+  ];
+
+  inherit dependencies;
 
   makeFlags = [ "manual" ];
 
@@ -64,16 +67,12 @@ python3.pkgs.buildPythonApplication rec {
     ./0002-plugin-invocation-use-python-script-as-entrypoint.patch
   ];
 
-  postPatch =
-    let
-      pyEnv = python3.withPackages (_: dependencies);
-    in
-    ''
-      # Add shebang with python dependencies
-      substituteInPlace lib/inx/utils.py --replace-fail ' interpreter="python"' ""
-      sed -i -e '1i#!${pyEnv.interpreter}' inkstitch.py
-      chmod a+x inkstitch.py
-    '';
+  postPatch = ''
+    # Add shebang with python dependencies
+    substituteInPlace lib/inx/utils.py --replace-fail ' interpreter="python"' ""
+    sed -i -e '1i#!${pyEnv.interpreter}' inkstitch.py
+    chmod a+x inkstitch.py
+  '';
 
   nativeCheckInputs = with python3.pkgs; [
     pytestCheckHook
