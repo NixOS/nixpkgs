@@ -10,15 +10,15 @@
 let
   versions = {
     matomo = {
-      version = "5.2.0";
-      hash = "sha256-0hMbcvntoOWFJ00DytkFfcP7/giqtrhmxawVNzMP2KA=";
+      version = "5.2.1";
+      hash = "sha256-5glMwwIG0Uo8bu904u40FUa+yaUlrQe1nUCkv9/ATks=";
     };
     matomo-beta = {
-      version = "5.2.0";
+      version = "5.2.1";
       # `beta` examples: "b1", "rc1", null
       # when updating: use null if stable version is >= latest beta or release candidate
       beta = null;
-      hash = "sha256-0hMbcvntoOWFJ00DytkFfcP7/giqtrhmxawVNzMP2KA=";
+      hash = "sha256-5glMwwIG0Uo8bu904u40FUa+yaUlrQe1nUCkv9/ATks=";
     };
   };
   common =
