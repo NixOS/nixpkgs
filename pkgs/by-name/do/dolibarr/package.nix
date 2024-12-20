@@ -43,6 +43,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/Dolibarr/dolibarr/releases/tag/${src.tag}";
     homepage = "https://dolibarr.org/";
     license = lib.licenses.gpl3Plus;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }
