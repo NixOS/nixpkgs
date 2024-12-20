@@ -13,18 +13,18 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "wrangler";
-  version = "3.80.1";
+  version = "3.99.0";
 
   src = fetchFromGitHub {
     owner = "cloudflare";
     repo = "workers-sdk";
     rev = "wrangler@${finalAttrs.version}";
-    hash = "sha256-9ClosoDIT+yP2dvNenHW2RSxLimOT3znXD+Pq+N6cQA=";
+    hash = "sha256-8MFzAkmNNRan1S5uMhUzPf5JSUMXEOxyP7N48YSCpj0=";
   };
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-8EItfBV2n2rnXPCTYjDZlr/tdlEn8YOdIzOsj35w5gQ=";
+    hash = "sha256-9LJG8mPeH0eHiUJZWN1jNx9QtZtw5qyDC1mJ8sIPFpc=";
   };
 
   buildInputs =
