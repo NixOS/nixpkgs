@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "jcli";
-  version = "0.0.42";
+  version = "0.0.43";
 
   src = fetchFromGitHub {
     owner = "jenkins-zh";
     repo = "jenkins-cli";
     rev = "v${version}";
-    hash = "sha256-t9NE911TjAvoCsmf9F989DNQ+s9GhgUF7cwuyHefWts=";
+    hash = "sha256-IUYkpeWZOuCF0cR664VbwvLuDBQqbTKxn9UUe6G9VEE=";
   };
 
-  vendorHash = "sha256-bmPnxFvdKU5zuMsCDboSOxP5f7NnMRwS/gN0sW7eTRA=";
+  vendorHash = "sha256-f2f/Qi6aav7LPpO9ERYkejygz0XiPQ8YrKLB63EpaoY=";
 
   ldflags = [
     "-s"
