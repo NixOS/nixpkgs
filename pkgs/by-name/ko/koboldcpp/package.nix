@@ -14,9 +14,6 @@
   config,
   cudaPackages ? { },
 
-  openblasSupport ? !stdenv.hostPlatform.isDarwin,
-  openblas,
-
   cublasSupport ? config.cudaSupport,
   # You can find a full list here: https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
   # For example if you're on an RTX 3060 that means you're using "Ampere" and you need to pass "sm_86"
@@ -65,7 +62,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
     [ tk ]
     ++ finalAttrs.pythonInputs
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
-    ++ lib.optionals openblasSupport [ openblas ]
     ++ lib.optionals cublasSupport [
       cudaPackages.libcublas
       cudaPackages.cuda_nvcc
@@ -81,7 +77,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   pythonPath = finalAttrs.pythonInputs;
 
   makeFlags = [
-    (makeBool "LLAMA_OPENBLAS" openblasSupport)
     (makeBool "LLAMA_CUBLAS" cublasSupport)
     (makeBool "LLAMA_CLBLAST" clblastSupport)
     (makeBool "LLAMA_VULKAN" vulkanSupport)
