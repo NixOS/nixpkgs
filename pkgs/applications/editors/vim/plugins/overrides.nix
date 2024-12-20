@@ -3594,23 +3594,7 @@ in
     '';
   };
 
-  vim-markdown-composer =
-    let
-      vim-markdown-composer-bin = rustPlatform.buildRustPackage {
-        pname = "vim-markdown-composer-bin";
-        inherit (super.vim-markdown-composer) src version;
-        cargoHash = "sha256-Vie8vLTplhaVU4E9IohvxERfz3eBpd62m8/1Ukzk8e4=";
-        # tests require network access
-        doCheck = false;
-      };
-    in
-    super.vim-markdown-composer.overrideAttrs {
-      preFixup = ''
-        substituteInPlace "$out"/after/ftplugin/markdown/composer.vim \
-          --replace "s:plugin_root . '/target/release/markdown-composer'" \
-          "'${vim-markdown-composer-bin}/bin/markdown-composer'"
-      '';
-    };
+  vim-markdown-composer = callPackage ./vim-markdown-composer { };
 
   vim-matchup = super.vim-matchup.overrideAttrs {
     # Optional treesitter integration
