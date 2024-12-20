@@ -1,0 +1,13 @@
+diff --git a/configure b/configure
+index c55098a..07f7c08 100755
+--- a/configure
++++ b/configure
+@@ -243,6 +243,8 @@ if test "$gcc" -eq 1 && ($cc -c $test.c) >> configure.log 2>&1; then
+         echo "If this doesn't work for you, try win32/Makefile.gcc." | tee -a configure.log
+         LDSHARED=${LDSHARED-"$cc -shared"}
+         LDSHAREDLIBC=""
++        shared_ext='.dll'
++        SHAREDLIB='libz.dll'
+         EXE='.exe' ;;
+   QNX*) # This is for QNX6. I suppose that the QNX rule below is for QNX2,QNX4
+         # (alain.bonnefoy@icbt.com)
