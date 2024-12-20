@@ -1,0 +1,60 @@
+diff --git a/Makerules b/Makerules
+index f582dc061..2da5680b6 100644
+--- a/Makerules
++++ b/Makerules
+@@ -178,39 +178,20 @@ ifneq "$(CLUSTER)" ""
+ endif
+ 
+ ifeq ($(OS),Linux)
+-    LINUX_OR_OPENBSD := yes
++    LINUX_OR_OPENBSD_OR_MACOS := yes
+ endif
+ ifeq ($(OS),OpenBSD)
+-    LINUX_OR_OPENBSD := yes
++    LINUX_OR_OPENBSD_OR_MACOS := yes
++endif
++ifeq ($(OS),MACOS)
++    LINUX_OR_OPENBSD_OR_MACOS := yes
+ endif
+ 
+ ifeq ($(OS),MINGW)
+   WINDRES := windres
+   HAVE_WIN32 := yes
+ 
+-else ifeq ($(OS),MACOS)
+-  HAVE_GLUT := yes
+-  SYS_GLUT_CFLAGS := -Wno-deprecated-declarations
+-  SYS_GLUT_LIBS := -framework GLUT -framework OpenGL
+-  CC = xcrun cc
+-  AR = xcrun ar
+-  LD = xcrun ld
+-  RANLIB = xcrun ranlib
+-
+-  ifneq ($(ARCHFLAGS),)
+-    $(warning "MacOS with ARCHFLAGS set. Assuming we are building for arm64, and setting HAVE_LIBCRYPTO to no.")
+-    HAVE_LIBCRYPTO := no
+-  else ifeq (, $(shell command -v pkg-config))
+-    $(warning "No pkg-config found, install it for proper integration of libcrypto")
+-  else
+-    HAVE_LIBCRYPTO := $(shell pkg-config --exists 'libcrypto >= 1.1.0' && echo yes)
+-    ifeq ($(HAVE_LIBCRYPTO),yes)
+-	  LIBCRYPTO_CFLAGS := $(shell pkg-config --cflags libcrypto) -DHAVE_LIBCRYPTO
+-	  LIBCRYPTO_LIBS := $(shell pkg-config --libs libcrypto)
+-    endif
+-  endif
+-
+-else ifeq ($(LINUX_OR_OPENBSD),yes)
++else ifeq ($(LINUX_OR_OPENBSD_OR_MACOS),yes)
+ 
+   ifeq ($(OS),Linux)
+     HAVE_OBJCOPY := yes
+@@ -274,6 +255,9 @@ else ifeq ($(LINUX_OR_OPENBSD),yes)
+     ifeq ($(OS),OpenBSD)
+       SYS_GLUT_CFLAGS := $(shell pkg-config --cflags glut gl)
+       SYS_GLUT_LIBS := $(shell pkg-config --libs glut gl)
++    else ifeq ($(OS),MACOS)
++      SYS_GLUT_CFLAGS := -Wno-deprecated-declarations
++      SYS_GLUT_LIBS := -framework GLUT -framework OpenGL
+     else
+       SYS_GLUT_CFLAGS :=
+       SYS_GLUT_LIBS := -lglut -lGL

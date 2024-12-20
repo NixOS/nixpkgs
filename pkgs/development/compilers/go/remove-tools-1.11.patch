@@ -1,0 +1,35 @@
+diff --git a/src/go/build/build.go b/src/go/build/build.go
+index b68a712..b60bf19 100644
+--- a/src/go/build/build.go
++++ b/src/go/build/build.go
+@@ -1708,7 +1708,7 @@ func init() {
+ }
+ 
+ // ToolDir is the directory containing build tools.
+-var ToolDir = getToolDir()
++var ToolDir = runtime.GOTOOLDIR()
+ 
+ // IsLocalImport reports whether the import path is
+ // a local import path, like ".", "..", "./foo", or "../foo".
+diff --git a/src/runtime/extern.go b/src/runtime/extern.go
+index 7171b13..18a942c 100644
+--- a/src/runtime/extern.go
++++ b/src/runtime/extern.go
+@@ -229,6 +229,17 @@ func GOROOT() string {
+ 	return sys.DefaultGoroot
+ }
+ 
++// GOTOOLDIR returns the root of the Go tree.
++// It uses the GOTOOLDIR environment variable, if set,
++// or else the root used during the Go build.
++func GOTOOLDIR() string {
++	s := gogetenv("GOTOOLDIR")
++	if s != "" {
++		return s
++	}
++	return GOROOT() + "/pkg/tool/" + GOOS + "_" + GOARCH
++}
++
+ // Version returns the Go tree's version string.
+ // It is either the commit hash and date at the time of the build or,
+ // when possible, a release tag like "go1.3".

@@ -1,0 +1,132 @@
+From 0d1e631c365944d54e87bdce39beb13b225ba8f8 Mon Sep 17 00:00:00 2001
+From: Changming Sun <chasun@microsoft.com>
+Date: Thu, 23 May 2024 14:30:15 -0700
+Subject: [PATCH] Update RE2 to the latest (#20775)
+
+Update RE2 to the latest.
+
+To keep the components up to date.
+
+(cherry picked from commit b522df0ae477e59f60acbe6c92c8a64eda96cace)
+---
+ cgmanifests/generated/cgmanifest.json |  2 +-
+ cmake/deps.txt                        |  4 +--
+ cmake/external/abseil-cpp.cmake       | 35 ++++++++++++++++++++++-----
+ cmake/external/helper_functions.cmake |  6 +++++
+ 4 files changed, 38 insertions(+), 9 deletions(-)
+
+diff --git a/cgmanifests/generated/cgmanifest.json b/cgmanifests/generated/cgmanifest.json
+index eb74178b3e..e3e9be67ae 100644
+--- a/cgmanifests/generated/cgmanifest.json
++++ b/cgmanifests/generated/cgmanifest.json
+@@ -276,7 +276,7 @@
+       "component": {
+         "type": "git",
+         "git": {
+-          "commitHash": "5723bb8950318135ed9cf4fc76bed988a087f536",
++          "commitHash": "2b354c6ad0d0479dcff68dab23fb0d1143a482c2",
+           "repositoryUrl": "https://github.com/google/re2.git"
+         },
+         "comments": "re2"
+diff --git a/cmake/deps.txt b/cmake/deps.txt
+index d213b09034..d4d19dea08 100644
+--- a/cmake/deps.txt
++++ b/cmake/deps.txt
+@@ -50,11 +50,11 @@ psimd;https://github.com/Maratyszcza/psimd/archive/072586a71b55b7f8c584153d223e9
+ pthreadpool;https://github.com/Maratyszcza/pthreadpool/archive/4fe0e1e183925bf8cfa6aae24237e724a96479b8.zip;07a0aa91dd9bf86f31b95497e00f31d8a261a4bd
+ pybind11;https://github.com/pybind/pybind11/archive/refs/tags/v2.10.1.zip;769b6aa67a77f17a770960f604b727645b6f6a13
+ pytorch_cpuinfo;https://github.com/pytorch/cpuinfo/archive/959002f82d7962a473d8bf301845f2af720e0aa4.zip;85da3caa60eb2b148613b443fbc2bfdc30689965
+-re2;https://github.com/google/re2/archive/refs/tags/2022-06-01.zip;aa77313b76e91b531ee7f3e45f004c6a502a5374
++re2;https://github.com/google/re2/archive/refs/tags/2024-05-01.tar.gz;206cfee5ee0b4c6844680ba66275e9e8faa77405
+ safeint;https://github.com/dcleblanc/SafeInt/archive/refs/tags/3.0.28.zip;23f252040ff6cb9f1fd18575b32fa8fb5928daac
+ tensorboard;https://github.com/tensorflow/tensorboard/archive/373eb09e4c5d2b3cc2493f0949dc4be6b6a45e81.zip;67b833913605a4f3f499894ab11528a702c2b381
+ cutlass;https://github.com/NVIDIA/cutlass/archive/refs/tags/v3.1.0.zip;757f90a795034a89d4f48a79d1f009f7a04c8dee
+ utf8_range;https://github.com/protocolbuffers/utf8_range/archive/72c943dea2b9240cd09efde15191e144bc7c7d38.zip;9925739c9debc0efa2adcb194d371a35b6a03156
+ extensions;https://github.com/microsoft/onnxruntime-extensions/archive/94142d8391c9791ec71c38336436319a2d4ac7a0.zip;4365ac5140338b4cb75a39944a4be276e3829b3c
+ composable_kernel;https://github.com/ROCmSoftwarePlatform/composable_kernel/archive/5356c4a943a35e74d7cdc69486afcb8703b9a59a.zip;522382c2af437e09124287e5879ab64af5b2e299
+-directx_headers;https://github.com/microsoft/DirectX-Headers/archive/refs/tags/v1.613.1.zip;47653509a3371eabb156360f42faf582f314bf2e
+\ No newline at end of file
++directx_headers;https://github.com/microsoft/DirectX-Headers/archive/refs/tags/v1.613.1.zip;47653509a3371eabb156360f42faf582f314bf2e
+diff --git a/cmake/external/abseil-cpp.cmake b/cmake/external/abseil-cpp.cmake
+index 57cfbee464..c01195c99e 100644
+--- a/cmake/external/abseil-cpp.cmake
++++ b/cmake/external/abseil-cpp.cmake
+@@ -45,10 +45,8 @@ endif()
+ 
+ # TODO: since multiple ORT's dependencies depend on Abseil, the list below would vary from version to version.
+ # We'd better to not manually manage the list.
+-set(ABSEIL_LIBS absl::base
++set(ABSEIL_LIBS
+ absl::city
+-absl::core_headers
+-absl::fixed_array
+ absl::flags
+ absl::flat_hash_map
+ absl::flat_hash_set
+@@ -60,9 +58,34 @@ absl::node_hash_set
+ absl::optional
+ absl::raw_hash_set
+ absl::raw_logging_internal
+-absl::span
+ absl::str_format
+-absl::strings
++absl::str_format_internal
++absl::bits
++absl::fixed_array
++absl::numeric_representation
++absl::utility
++absl::type_traits
++absl::string_view
++absl::core_headers
++absl::nullability
++absl::span
++absl::config
+ absl::synchronization
++absl::base
++absl::civil_time
++absl::debugging_internal
++absl::demangle_internal
++absl::graphcycles_internal
++absl::int128
++absl::kernel_timeout_internal
++absl::log_severity
++absl::malloc_internal
++absl::spinlock_wait
++absl::stacktrace
++absl::string_view
++absl::strings
++absl::strings_internal
++absl::symbolize
+ absl::throw_delegate
+-absl::time)
++absl::time
++absl::time_zone)
+\ No newline at end of file
+diff --git a/cmake/external/helper_functions.cmake b/cmake/external/helper_functions.cmake
+index 768e807b40..eefb3ba2e8 100644
+--- a/cmake/external/helper_functions.cmake
++++ b/cmake/external/helper_functions.cmake
+@@ -159,7 +159,12 @@ macro(onnxruntime_fetchcontent_makeavailable)
+       endif()
+ 
+       if(EXISTS ${__cmake_srcdir}/CMakeLists.txt)
++        set(CMAKE_SKIP_INSTALL_RULES TRUE)
++        if (__cmake_arg_SYSTEM)
++          add_subdirectory(${__cmake_srcdir} ${${__cmake_contentNameLower}_BINARY_DIR} SYSTEM)
++        else()
+           add_subdirectory(${__cmake_srcdir} ${${__cmake_contentNameLower}_BINARY_DIR} EXCLUDE_FROM_ALL)
++        endif()
+           get_property(subdir_import_targets DIRECTORY "${__cmake_srcdir}" PROPERTY BUILDSYSTEM_TARGETS)
+           foreach(subdir_target ${subdir_import_targets})
+             if(TARGET ${subdir_target})
+@@ -176,6 +181,7 @@ macro(onnxruntime_fetchcontent_makeavailable)
+               set_target_properties(${subdir_target} PROPERTIES COMPILE_WARNING_AS_ERROR OFF)
+             endif()
+           endforeach()
++          set(CMAKE_SKIP_INSTALL_RULES FALSE)
+       endif()
+ 
+       unset(__cmake_srcdir)
+-- 
+2.45.2
+

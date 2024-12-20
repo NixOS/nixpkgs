@@ -1,0 +1,48 @@
+From 9a0102fe1da038ebe08107ead991964df11b0271 Mon Sep 17 00:00:00 2001
+From: annalee <150648636+a-n-n-a-l-e-e@users.noreply.github.com>
+Date: Mon, 19 Feb 2024 03:31:20 +0000
+Subject: [PATCH] no qtgui darwin bundle
+
+---
+ qtgui/recoll.pro.in | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
+
+diff --git a/qtgui/recoll.pro.in b/qtgui/recoll.pro.in
+index a0ef314..6dbc3b5 100644
+--- a/qtgui/recoll.pro.in
++++ b/qtgui/recoll.pro.in
+@@ -180,7 +180,7 @@ windows {
+   }
+ }
+ 
+-macx: {
++if (false) {
+   QCBUILDLOC=Qt_6_4_2_for_macOS
+ 
+   # QT += webkit webkitwidgets
+@@ -375,7 +375,7 @@ macx: {
+   QMAKE_BUNDLE_DATA = APP_EXAMPLES APP_EXAMPLES_MAC APP_FILTERS APP_IMAGES APP_DOC
+ }
+ 
+-unix:!macx {
++unix {
+ 
+ VPATH = @srcdir@
+ 
+@@ -400,6 +400,13 @@ VPATH = @srcdir@
+   SOURCES += crontool.cpp \
+         rtitool.cpp
+ 
++  macx {
++    SOURCES += ../utils/closefrom.cpp \
++    ../utils/execmd.cpp \
++    ../utils/netcon.cpp \
++    ../utils/rclionice.cpp
++  }
++
+   FORMS  += crontool.ui \
+         rtitool.ui
+ 
+-- 
+2.43.0
+

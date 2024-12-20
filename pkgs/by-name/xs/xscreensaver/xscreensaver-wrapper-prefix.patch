@@ -1,0 +1,37 @@
+--- a/driver/xscreensaver.c
++++ b/driver/xscreensaver.c
+@@ -253,6 +253,8 @@
+ #undef MAX
+ #define MAX(x,y)((x)>(y)?(x):(y))
+ 
++/* Define the default wrapper prefix here, for NixOS */
++#define NIXOS_WRAPPER_PREFIX "@wrapperPrefix@"
+ 
+ /* Globals used in this file.
+  */
+@@ -632,12 +634,24 @@ handle_sigchld (Display *dpy, Bool blanked_p)
+ static void
+ hack_environment (void)
+ {
++  static const char *wrapper_path = NIXOS_WRAPPER_PREFIX;
+   static const char *def_path = DEFAULT_PATH_PREFIX;
+   const char *opath = getenv("PATH");
+   char *npath;
+   if (! opath) opath = "/bin:/usr/bin";  /* WTF */
+-  npath = (char *) malloc(strlen(def_path) + strlen(opath) + 20);
++  /* NOTE: The NixOS patch adds extra margin than what would be expected for a
++     single extra ":" PATH separator to account for UTF-32 encoding. The
++     original 20 bytes would have only accounted for UTF-16 safely (the path
++     concatenation would have needed 28 bytes of margin at minimum for UTF-32).
++   */
++  npath = (char *) malloc(strlen(wrapper_path) + strlen(def_path) + strlen(opath) + 32);
+   strcpy (npath, "PATH=");
++  if (wrapper_path && *wrapper_path)
++    {
++      strcat (npath, wrapper_path);
++      strcat (npath, ":");
++    }
++
+   strcat (npath, def_path);
+   strcat (npath, ":");
+   strcat (npath, opath);

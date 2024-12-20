@@ -1,0 +1,15 @@
+diff --git a/configure.ac b/configure.ac
+index ef07d70..2da26aa 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -27,9 +27,9 @@ if test "$have_fuse_opt_parse" = no; then
+ fi
+ AM_CONDITIONAL(FUSE_OPT_COMPAT, test "$have_fuse_opt_parse" = no)
+
+
+-AC_CHECK_FUNCS([setxattr fdatasync getline fgetln])
++AC_CHECK_FUNCS([setxattr getline fgetln])
+
+ AC_CONFIG_FILES([Makefile
+                  src/Makefile
+                  compat/Makefile])

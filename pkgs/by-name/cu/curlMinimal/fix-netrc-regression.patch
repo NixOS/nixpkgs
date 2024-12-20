@@ -1,0 +1,217 @@
+From f5c616930b5cf148b1b2632da4f5963ff48bdf88 Mon Sep 17 00:00:00 2001
+From: Daniel Stenberg <daniel@haxx.se>
+Date: Thu, 7 Nov 2024 08:52:38 +0100
+Subject: [PATCH] duphandle: also init netrc
+
+The netrc init was only done in the Curl_open, meaning that a duplicated
+handle would not get inited properly.
+
+Added test 2309 to verify. It does netrc auth with a duplicated handle.
+
+Regression from 3b43a05e000aa8f65bda513f733a
+
+Reported-by: tranzystorekk on github
+Fixes #15496
+Closes #15503
+---
+ lib/easy.c                 |  1 +
+ tests/data/Makefile.am     |  2 +-
+ tests/data/test2309        | 66 ++++++++++++++++++++++++++++++++++++++
+ tests/libtest/Makefile.inc |  5 ++-
+ tests/libtest/lib2309.c    | 66 ++++++++++++++++++++++++++++++++++++++
+ 5 files changed, 138 insertions(+), 2 deletions(-)
+ create mode 100644 tests/data/test2309
+ create mode 100644 tests/libtest/lib2309.c
+
+diff --git a/lib/easy.c b/lib/easy.c
+index d16fa8c07afec00ab6186880eff05c925da00380..ac8fab34220d9b4f1f8f9cb7bc504a5024a46cca 100644
+--- a/lib/easy.c
++++ b/lib/easy.c
+@@ -940,6 +940,7 @@ CURL *curl_easy_duphandle(CURL *d)
+     goto fail;
+ 
+   Curl_dyn_init(&outcurl->state.headerb, CURL_MAX_HTTP_HEADER);
++  Curl_netrc_init(&outcurl->state.netrc);
+ 
+   /* the connection pool is setup on demand */
+   outcurl->state.lastconnect_id = -1;
+diff --git a/tests/data/Makefile.am b/tests/data/Makefile.am
+index 02bf2ae25bfd49dce27d4cd2320a2794ba5b4212..ea5221c00fd4193e1713b1313da338f1ea6aee4f 100644
+--- a/tests/data/Makefile.am
++++ b/tests/data/Makefile.am
+@@ -255,7 +255,7 @@ test2100 \
+ test2200 test2201 test2202 test2203 test2204 test2205 \
+ \
+ test2300 test2301 test2302 test2303 test2304 test2305 test2306 test2307 \
+-test2308 \
++test2308 test2309 \
+ \
+ test2400 test2401 test2402 test2403 test2404 test2405 test2406 \
+ \
+diff --git a/tests/data/test2309 b/tests/data/test2309
+new file mode 100644
+index 0000000000000000000000000000000000000000..4ba78ee91e179c932f8bfa776d32f311512ef8e6
+--- /dev/null
++++ b/tests/data/test2309
+@@ -0,0 +1,66 @@
++<testcase>
++<info>
++<keywords>
++netrc
++HTTP
++</keywords>
++</info>
++#
++# Server-side
++<reply>
++<data crlf="yes" nocheck="yes">
++HTTP/1.1 200 OK
++Date: Tue, 09 Nov 2010 14:49:00 GMT
++Server: test-server/fake
++Last-Modified: Tue, 13 Jun 2000 12:10:00 GMT
++ETag: "21025-dc7-39462498"
++Accept-Ranges: bytes
++Content-Length: 6
++Connection: close
++Content-Type: text/html
++Funny-head: yesyes
++
++-foo-
++</data>
++</reply>
++
++#
++# Client-side
++<client>
++<server>
++http
++</server>
++<features>
++proxy
++</features>
++
++# Reproducing issue 15496
++<name>
++HTTP with .netrc using duped easy handle
++</name>
++<tool>
++lib%TESTNUMBER
++</tool>
++<command>
++http://github.com %LOGDIR/netrc%TESTNUMBER http://%HOSTIP:%HTTPPORT/
++</command>
++<file name="%LOGDIR/netrc%TESTNUMBER" >
++
++machine github.com
++
++login daniel
++password $y$j9T$WUVjiVvDbRAWafDLs6cab1$01NX.oaZKf5lw8MR2Nk9Yaxv4CqbE0IaDF.GpGxPul1
++</file>
++</client>
++
++<verify>
++<protocol>
++GET http://github.com/ HTTP/1.1
++Host: github.com
++Authorization: Basic %b64[daniel:$y$j9T$WUVjiVvDbRAWafDLs6cab1$01NX.oaZKf5lw8MR2Nk9Yaxv4CqbE0IaDF.GpGxPul1]b64%
++Accept: */*
++Proxy-Connection: Keep-Alive
++
++</protocol>
++</verify>
++</testcase>
+diff --git a/tests/libtest/Makefile.inc b/tests/libtest/Makefile.inc
+index 339a00fc4ed41e1491ea945ff9ebeb7caf058c69..8f58fd64229d5cbcebdb4949111b3c3184d82eb3 100644
+--- a/tests/libtest/Makefile.inc
++++ b/tests/libtest/Makefile.inc
+@@ -77,7 +77,7 @@ LIBTESTPROGS = libauthretry libntlmconnect libprereq                     \
+  lib1945 lib1946 lib1947 lib1948 lib1955 lib1956 lib1957 lib1958 lib1959 \
+  lib1960 lib1964 \
+  lib1970 lib1971 lib1972 lib1973 lib1974 lib1975 \
+- lib2301 lib2302 lib2304 lib2305 lib2306         lib2308 \
++ lib2301 lib2302 lib2304 lib2305 lib2306         lib2308 lib2309 \
+  lib2402 lib2404 lib2405 \
+  lib2502 \
+  lib3010 lib3025 lib3026 lib3027 \
+@@ -683,6 +683,9 @@ lib2306_LDADD = $(TESTUTIL_LIBS)
+ lib2308_SOURCES = lib2308.c $(SUPPORTFILES)
+ lib2308_LDADD = $(TESTUTIL_LIBS)
+ 
++lib2309_SOURCES = lib2309.c $(SUPPORTFILES)
++lib2309_LDADD = $(TESTUTIL_LIBS)
++
+ lib2402_SOURCES = lib2402.c $(SUPPORTFILES) $(TESTUTIL) $(WARNLESS)
+ lib2402_LDADD = $(TESTUTIL_LIBS)
+ 
+diff --git a/tests/libtest/lib2309.c b/tests/libtest/lib2309.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..11f1c1fbd886846d5901b03ba9cd0314672fec99
+--- /dev/null
++++ b/tests/libtest/lib2309.c
+@@ -0,0 +1,66 @@
++/***************************************************************************
++ *                                  _   _ ____  _
++ *  Project                     ___| | | |  _ \| |
++ *                             / __| | | | |_) | |
++ *                            | (__| |_| |  _ <| |___
++ *                             \___|\___/|_| \_\_____|
++ *
++ * Copyright (C) Daniel Stenberg, <daniel@haxx.se>, et al.
++ *
++ * This software is licensed as described in the file COPYING, which
++ * you should have received as part of this distribution. The terms
++ * are also available at https://curl.se/docs/copyright.html.
++ *
++ * You may opt to use, copy, modify, merge, publish, distribute and/or sell
++ * copies of the Software, and permit persons to whom the Software is
++ * furnished to do so, under the terms of the COPYING file.
++ *
++ * This software is distributed on an "AS IS" basis, WITHOUT WARRANTY OF ANY
++ * KIND, either express or implied.
++ *
++ * SPDX-License-Identifier: curl
++ *
++ ***************************************************************************/
++
++#include "test.h"
++#include "testtrace.h"
++
++#include <curl/curl.h>
++
++static size_t cb_ignore(char *buffer, size_t size, size_t nmemb, void *userp)
++{
++  (void)buffer;
++  (void)size;
++  (void)nmemb;
++  (void)userp;
++  return CURL_WRITEFUNC_ERROR;
++}
++
++CURLcode test(char *URL)
++{
++  CURL *curl;
++  CURL *curldupe;
++  CURLcode res = CURLE_OK;
++
++  global_init(CURL_GLOBAL_ALL);
++  curl = curl_easy_init();
++  if(curl) {
++    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, cb_ignore);
++    curl_easy_setopt(curl, CURLOPT_URL, URL);
++    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
++    curl_easy_setopt(curl, CURLOPT_PROXY, libtest_arg3);
++    curl_easy_setopt(curl, CURLOPT_NETRC, (long)CURL_NETRC_REQUIRED);
++    curl_easy_setopt(curl, CURLOPT_NETRC_FILE, libtest_arg2);
++
++    curldupe = curl_easy_duphandle(curl);
++    if(curldupe) {
++      res = curl_easy_perform(curldupe);
++      printf("Returned %d, should be %d.\n", res, CURLE_WRITE_ERROR);
++      fflush(stdout);
++      curl_easy_cleanup(curldupe);
++    }
++    curl_easy_cleanup(curl);
++  }
++  curl_global_cleanup();
++  return CURLE_OK;
++}
