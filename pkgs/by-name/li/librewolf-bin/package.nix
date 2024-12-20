@@ -6,11 +6,11 @@
 
 let
   pname = "librewolf-bin";
-  upstreamVersion = "131.0.2-1";
+  upstreamVersion = "133.0.3-1";
   version = lib.replaceStrings [ "-" ] [ "." ] upstreamVersion;
   src = fetchurl {
     url = "https://gitlab.com/api/v4/projects/24386000/packages/generic/librewolf/${upstreamVersion}/LibreWolf.x86_64.AppImage";
-    hash = "sha256-Sj3WkY3t8UHsh2v3xPaDb0IGp66YQIw9MKmmFFQCGvk=";
+    hash = "sha256-mQR1hvMcAiNI8Xhwqfy6oysJ29Dbu12RPZg8xN4zPyw=";
   };
   appimageContents = appimageTools.extract { inherit pname version src; };
 in
