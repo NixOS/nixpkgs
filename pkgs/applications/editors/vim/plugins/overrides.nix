@@ -27,10 +27,8 @@
   deno,
   direnv,
   duckdb,
-  fish,
   fzf,
   gawk,
-  git,
   himalaya,
   htop,
   jq,
@@ -43,7 +41,6 @@
   nim1,
   nodePackages,
   openscad,
-  pandoc,
   parinfer-rust,
   phpactor,
   ranger,
@@ -89,7 +86,6 @@
   callPackage,
   # Preview-nvim dependencies
   md-tui,
-  # sg.nvim dependencies
   darwin,
   # sved dependencies
   glib,
@@ -104,8 +100,6 @@
   gnused,
   makeWrapper,
   procps,
-  # sg-nvim dependencies
-  openssl,
   pkg-config,
   # vim-agda dependencies
   agda,
@@ -2648,45 +2642,7 @@ in
     dependencies = [ self.nui-nvim ];
   };
 
-  sg-nvim = super.sg-nvim.overrideAttrs (
-    old:
-    let
-      sg-nvim-rust = rustPlatform.buildRustPackage {
-        pname = "sg-nvim-rust";
-        inherit (old) version src;
-
-        cargoHash = "sha256-7Bo0DSRqxA7kgNuyuWw24r3PsP92y9h98SHFtIhG+Gs=";
-
-        nativeBuildInputs = [ pkg-config ];
-
-        buildInputs =
-          [ openssl ]
-          ++ lib.optionals stdenv.hostPlatform.isDarwin [
-            darwin.apple_sdk.frameworks.Security
-            darwin.apple_sdk.frameworks.SystemConfiguration
-          ];
-
-        prePatch = ''
-          rm .cargo/config.toml
-        '';
-
-        env.OPENSSL_NO_VENDOR = true;
-
-        cargoBuildFlags = [ "--workspace" ];
-
-        # tests are broken
-        doCheck = false;
-      };
-    in
-    {
-      dependencies = [ self.plenary-nvim ];
-      postInstall = ''
-        mkdir -p $out/target/debug
-        ln -s ${sg-nvim-rust}/{bin,lib}/* $out/target/debug
-      '';
-      nvimRequireCheck = "sg";
-    }
-  );
+  sg-nvim = callPackage ./sg-nvim { };
 
   skim = buildVimPlugin {
     pname = "skim";
