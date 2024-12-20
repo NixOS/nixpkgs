@@ -1,20 +1,26 @@
-{ lib
-, glibc
-, fetchFromGitLab
-, makeWrapper
-, buildGoModule
-, formats
-, configTemplate ? null
-, configTemplatePath ? null
-, libnvidia-container
-, autoAddDriverRunpath
+{
+  lib,
+  glibc,
+  fetchFromGitLab,
+  makeWrapper,
+  buildGoModule,
+  formats,
+  configTemplate ? null,
+  configTemplatePath ? null,
+  libnvidia-container,
+  autoAddDriverRunpath,
 }:
 
 assert configTemplate != null -> (lib.isAttrs configTemplate && configTemplatePath == null);
-assert configTemplatePath != null -> (lib.isStringLike configTemplatePath && configTemplate == null);
+assert
+  configTemplatePath != null -> (lib.isStringLike configTemplatePath && configTemplate == null);
 
 let
-  configToml = if configTemplatePath != null then configTemplatePath else (formats.toml { }).generate "config.toml" configTemplate;
+  configToml =
+    if configTemplatePath != null then
+      configTemplatePath
+    else
+      (formats.toml { }).generate "config.toml" configTemplate;
 
   # From https://gitlab.com/nvidia/container-toolkit/container-toolkit/-/blob/03cbf9c6cd26c75afef8a2dd68e0306aace80401/Makefile#L54
   cliVersionPackage = "github.com/NVIDIA/nvidia-container-toolkit/internal/info";
@@ -31,7 +37,10 @@ buildGoModule rec {
 
   };
 
-  outputs = [ "out" "tools" ];
+  outputs = [
+    "out"
+    "tools"
+  ];
 
   vendorHash = null;
 
@@ -84,22 +93,27 @@ buildGoModule rec {
         "TestDuplicateHook"
       ];
     in
-    [ "-skip" "${builtins.concatStringsSep "|" skippedTests}" ];
+    [
+      "-skip"
+      "${builtins.concatStringsSep "|" skippedTests}"
+    ];
 
-  postInstall = ''
-    wrapProgram $out/bin/nvidia-container-runtime-hook \
-      --prefix PATH : ${libnvidia-container}/bin
+  postInstall =
+    ''
+      wrapProgram $out/bin/nvidia-container-runtime-hook \
+        --prefix PATH : ${libnvidia-container}/bin
 
-    mkdir -p $tools/bin
-    mv $out/bin/{containerd,crio,docker,nvidia-toolkit,toolkit} $tools/bin
-  '' + lib.optionalString (configTemplate != null || configTemplatePath != null) ''
-    mkdir -p $out/etc/nvidia-container-runtime
+      mkdir -p $tools/bin
+      mv $out/bin/{containerd,crio,docker,nvidia-toolkit,toolkit} $tools/bin
+    ''
+    + lib.optionalString (configTemplate != null || configTemplatePath != null) ''
+      mkdir -p $out/etc/nvidia-container-runtime
 
-    cp ${configToml} $out/etc/nvidia-container-runtime/config.toml
+      cp ${configToml} $out/etc/nvidia-container-runtime/config.toml
 
-    substituteInPlace $out/etc/nvidia-container-runtime/config.toml \
-      --subst-var-by glibcbin ${lib.getBin glibc}
-  '';
+      substituteInPlace $out/etc/nvidia-container-runtime/config.toml \
+        --subst-var-by glibcbin ${lib.getBin glibc}
+    '';
 
   meta = with lib; {
     homepage = "https://gitlab.com/nvidia/container-toolkit/container-toolkit";

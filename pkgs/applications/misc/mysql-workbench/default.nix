@@ -1,46 +1,47 @@
-{ lib
-, stdenv
-, fetchurl
-, substituteAll
-, cmake
-, ninja
-, pkg-config
-, glibc
-, gtk3
-, gtkmm3
-, pcre
-, swig
-, antlr4_12
-, sudo
-, mysql
-, libxml2
-, libmysqlconnectorcpp
-, vsqlite
-, gdal
-, libiodbc
-, libpthreadstubs
-, libXdmcp
-, libuuid
-, libzip
-, libsecret
-, libssh
-, python3
-, jre
-, boost
-, libsigcxx
-, libX11
-, openssl
-, rapidjson
-, proj
-, cairo
-, libxkbcommon
-, libepoxy
-, wrapGAppsHook3
-, at-spi2-core
-, dbus
-, bash
-, coreutils
-, zstd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  replaceVars,
+  cmake,
+  ninja,
+  pkg-config,
+  glibc,
+  gtk3,
+  gtkmm3,
+  pcre,
+  swig,
+  antlr4_12,
+  sudo,
+  mysql,
+  libxml2,
+  libmysqlconnectorcpp,
+  vsqlite,
+  gdal,
+  libiodbc,
+  libpthreadstubs,
+  libXdmcp,
+  libuuid,
+  libzip,
+  libsecret,
+  libssh,
+  python3,
+  jre,
+  boost,
+  libsigcxx,
+  libX11,
+  openssl,
+  rapidjson,
+  proj,
+  cairo,
+  libxkbcommon,
+  libepoxy,
+  wrapGAppsHook3,
+  at-spi2-core,
+  dbus,
+  bash,
+  coreutils,
+  zstd,
 }:
 
 let
@@ -56,8 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-paths.patch;
+    (replaceVars ./hardcode-paths.patch {
       catchsegv = "${glibc.bin}/bin/catchsegv";
       bash = "${bash}/bin/bash";
       cp = "${coreutils}/bin/cp";
@@ -73,8 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix swig not being able to find headers
     # https://github.com/NixOS/nixpkgs/pull/82362#issuecomment-597948461
-    (substituteAll {
-      src = ./fix-swig-build.patch;
+    (replaceVars ./fix-swig-build.patch {
       cairoDev = "${cairo.dev}";
     })
 
@@ -138,16 +137,20 @@ stdenv.mkDerivation (finalAttrs: {
     zstd
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString ([
-    # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
-    "-Wno-error=deprecated-declarations"
-  ] ++ lib.optionals stdenv.hostPlatform.isAarch64 [
-    # error: narrowing conversion of '-1' from 'int' to 'char'
-    "-Wno-error=narrowing"
-  ] ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
-    # Needed with GCC 12 but problematic with some old GCCs
-    "-Wno-error=maybe-uninitialized"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      # error: 'OGRErr OGRSpatialReference::importFromWkt(char**)' is deprecated
+      "-Wno-error=deprecated-declarations"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isAarch64 [
+      # error: narrowing conversion of '-1' from 'int' to 'char'
+      "-Wno-error=narrowing"
+    ]
+    ++ lib.optionals (stdenv.cc.isGNU && lib.versionAtLeast stdenv.cc.version "12") [
+      # Needed with GCC 12 but problematic with some old GCCs
+      "-Wno-error=maybe-uninitialized"
+    ]
+  );
 
   cmakeFlags = [
     "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"

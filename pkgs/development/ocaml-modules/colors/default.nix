@@ -1,7 +1,8 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, mdx
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  mdx,
 }:
 
 buildDunePackage rec {

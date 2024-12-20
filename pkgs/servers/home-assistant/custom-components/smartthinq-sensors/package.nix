@@ -1,9 +1,10 @@
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
-, charset-normalizer
-, pycountry
-, xmltodict
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
+  charset-normalizer,
+  pycountry,
+  xmltodict,
 }:
 
 buildHomeAssistantComponent rec {
@@ -18,7 +19,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-mcxXBnVGrlVxbSi+IwmGJiWqy5PlQmHQl+hgW6i7NFc=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     charset-normalizer
     pycountry
     xmltodict

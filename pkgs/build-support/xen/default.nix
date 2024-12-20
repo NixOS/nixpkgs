@@ -60,7 +60,7 @@
   branch ? lib.versions.majorMinor version,
   version,
   vendor ? "nixos",
-  upstreamVersion,
+  upstreamVersion ? version,
   withFlask ? false,
   withSeaBIOS ? true,
   withOVMF ? true,
@@ -94,7 +94,7 @@ let
     ;
 
   # Mark versions older than minSupportedVersion as EOL.
-  minSupportedVersion = "4.16";
+  minSupportedVersion = "4.17";
 
   #TODO: fix paths instead.
   scriptEnvPath = makeSearchPathOutput "out" "bin" [

@@ -15,7 +15,7 @@
 
 buildPythonPackage rec {
   pname = "blis";
-  version = "1.0.1";
+  version = "1.0.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "explosion";
     repo = "cython-blis";
     rev = "refs/tags/release-v${version}";
-    hash = "sha256-8JaQgTda1EBiZdSrZtKwJ8e/aDENQ+dMmTiH/t1ax5I=";
+    hash = "sha256-J/EaJNmImcK4zScpbYPlQuoLyjoUkUgxUp6926P6rUQ=";
   };
 
   postPatch = ''

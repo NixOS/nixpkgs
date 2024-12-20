@@ -1,7 +1,8 @@
-{ lib
-, appimageTools
-, fetchurl
-, makeDesktopItem
+{
+  lib,
+  appimageTools,
+  fetchurl,
+  makeDesktopItem,
 }:
 
 let
@@ -13,13 +14,15 @@ let
     sha256 = "sha256-r85ZwcalBd/nCIBxOaQk7XClxj7VZtxwky4eWWm2tZ8=";
   };
 
-  desktopItem = (makeDesktopItem {
-    desktopName = "Hamsket";
-    name = pname;
-    exec = pname;
-    icon = pname;
-    categories = [ "Network" ];
-  });
+  desktopItem = (
+    makeDesktopItem {
+      desktopName = "Hamsket";
+      name = pname;
+      exec = pname;
+      icon = pname;
+      categories = [ "Network" ];
+    }
+  );
 
   appimageContents = appimageTools.extract {
     inherit pname version src;

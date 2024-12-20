@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, appstream-glib
-, blueprint-compiler
-, desktop-file-utils
-, gobject-introspection
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, gjs
-, gtk4
-, libadwaita
-, libportal-gtk4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  blueprint-compiler,
+  desktop-file-utils,
+  gobject-introspection,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  gjs,
+  gtk4,
+  libadwaita,
+  libportal-gtk4,
 }:
 
 stdenv.mkDerivation rec {
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
     description = "Choose the application to open files and links";
     homepage = "https://apps.gnome.org/Junction/";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ hqurve ];
+    maintainers = with maintainers; [ hqurve ] ++ lib.teams.gnome-circle.members;
     platforms = platforms.linux;
   };
 }

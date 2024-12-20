@@ -27,7 +27,6 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-
   dependencies = [
     cerberus
     pyyaml

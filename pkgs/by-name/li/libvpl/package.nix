@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, cmake
-, pkg-config
-, substituteAll
-, addDriverRunpath
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  replaceVars,
+  addDriverRunpath,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -28,8 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./opengl-driver-lib.patch;
+    (replaceVars ./opengl-driver-lib.patch {
       inherit (addDriverRunpath) driverLink;
     })
   ];

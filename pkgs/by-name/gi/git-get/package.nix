@@ -1,6 +1,11 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
-let config-module = "git-get/pkg/cfg";
+let
+  config-module = "git-get/pkg/cfg";
 in
 buildGoModule rec {
   pname = "git-get";

@@ -1,9 +1,11 @@
-{ lib, stdenv
-, fetchFromGitHub
-, xorg
-, pkg-config
-, wrapGAppsHook3
-, go
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  xorg,
+  pkg-config,
+  wrapGAppsHook3,
+  go,
 }:
 
 stdenv.mkDerivation rec {
@@ -35,7 +37,6 @@ stdenv.mkDerivation rec {
   makeFlags = [
     "PREFIX=${placeholder "out"}"
   ];
-
 
   meta = with lib; {
     isIbusEngine = true;

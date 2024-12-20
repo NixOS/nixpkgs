@@ -1,19 +1,20 @@
-{ stdenv
-, lib
-, config
-, fetchFromGitHub
-, testers
-, cmake
-, pkg-config
-, alsaSupport ? stdenv.hostPlatform.isLinux
-, alsa-lib
-, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
-, libpulseaudio
-, jackSupport ? true
-, libjack2
-, coreaudioSupport ? stdenv.hostPlatform.isDarwin
-, darwin
-, validatePkgConfig
+{
+  stdenv,
+  lib,
+  config,
+  fetchFromGitHub,
+  testers,
+  cmake,
+  pkg-config,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
+  alsa-lib,
+  pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux,
+  libpulseaudio,
+  jackSupport ? true,
+  libjack2,
+  coreaudioSupport ? stdenv.hostPlatform.isDarwin,
+  darwin,
+  validatePkgConfig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -35,15 +36,19 @@ stdenv.mkDerivation (finalAttrs: {
     validatePkgConfig
   ];
 
-  buildInputs = lib.optionals alsaSupport [
-    alsa-lib
-  ] ++ lib.optionals pulseaudioSupport [
-    libpulseaudio
-  ] ++ lib.optionals jackSupport [
-    libjack2
-  ] ++ lib.optionals coreaudioSupport [
-    darwin.apple_sdk.frameworks.CoreAudio
-  ];
+  buildInputs =
+    lib.optionals alsaSupport [
+      alsa-lib
+    ]
+    ++ lib.optionals pulseaudioSupport [
+      libpulseaudio
+    ]
+    ++ lib.optionals jackSupport [
+      libjack2
+    ]
+    ++ lib.optionals coreaudioSupport [
+      darwin.apple_sdk.frameworks.CoreAudio
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "RTAUDIO_API_ALSA" alsaSupport)

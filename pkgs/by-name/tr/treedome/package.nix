@@ -1,23 +1,24 @@
-{ lib
-, cargo-tauri_1
-, cmake
-, dbus
-, fetchgit
-, fetchYarnDeps
-, freetype
-, gsettings-desktop-schemas
-, gtk3
-, libsoup
-, stdenv
-, yarnConfigHook
-, yarnBuildHook
-, nodejs
-, openssl
-, pkg-config
-, rustPlatform
-, webkitgtk_4_0
-, wrapGAppsHook3
-, sqlite
+{
+  lib,
+  cargo-tauri_1,
+  cmake,
+  dbus,
+  fetchgit,
+  fetchYarnDeps,
+  freetype,
+  gsettings-desktop-schemas,
+  gtk3,
+  libsoup_2_4,
+  stdenv,
+  yarnConfigHook,
+  yarnBuildHook,
+  nodejs,
+  openssl,
+  pkg-config,
+  rustPlatform,
+  webkitgtk_4_0,
+  wrapGAppsHook3,
+  sqlite,
 }:
 
 let
@@ -95,7 +96,7 @@ rustPlatform.buildRustPackage {
     dbus
     openssl
     freetype
-    libsoup
+    libsoup_2_4
     gtk3
     webkitgtk_4_0
     gsettings-desktop-schemas

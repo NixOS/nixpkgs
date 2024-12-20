@@ -2,28 +2,68 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  artalk,
-  fetchurl,
+  nodejs,
+  pnpm_9,
   installShellFiles,
   versionCheckHook,
   stdenv,
-  testers,
   nixosTests,
 }:
-buildGoModule rec {
+
+let
   pname = "artalk";
   version = "2.9.1";
 
   src = fetchFromGitHub {
     owner = "ArtalkJS";
     repo = "artalk";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gzagE3muNpX/dwF45p11JAN9ElsGXNFQ3fCvF1QhvdU=";
   };
-  web = fetchurl {
-    url = "https://github.com/${src.owner}/${src.repo}/releases/download/v${version}/artalk_ui.tar.gz";
-    hash = "sha256-ckKC4lErKVdJuJ+pGysmMR96a9LkrCYnWB4j6VPP8OY=";
-  };
+
+  frontend = stdenv.mkDerivation (finalAttrs: {
+    pname = "${pname}-frontend";
+
+    inherit src version;
+
+    nativeBuildInputs = [
+      nodejs
+      pnpm_9.configHook
+    ];
+
+    pnpmDeps = pnpm_9.fetchDeps {
+      inherit (finalAttrs) pname version src;
+      hash = "sha256-QIfadS2gNPtH006O86EndY/Hx2ml2FoKfUXJF5qoluw=";
+    };
+
+    buildPhase = ''
+      runHook preBuild
+
+      pnpm build:all
+      pnpm build:auth
+
+      runHook postBuild
+    '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/{dist/{i18n,plugins},sidebar}
+
+      # dist
+      cp ./ui/artalk/dist/{Artalk,ArtalkLite}.{css,js} $out/dist
+      cp ./ui/artalk/dist/i18n/*.js $out/dist/i18n
+      cp ./ui/plugin-*/dist/*.js $out/dist/plugins
+
+      # sidebar
+      cp -r ./ui/artalk-sidebar/dist/* $out/sidebar
+
+      runHook postInstall
+    '';
+  });
+in
+buildGoModule {
+  inherit src pname version;
 
   vendorHash = "sha256-oAqYQzOUjly97H5L5PQ9I2SO2KqiUVxdJA+eoPrHD6Q=";
 
@@ -33,8 +73,7 @@ buildGoModule rec {
   ];
 
   preBuild = ''
-    tar -xzf ${web}
-    cp -r ./artalk_ui/* ./public
+    cp -r ${frontend}/* ./public
   '';
 
   nativeBuildInputs = [ installShellFiles ];
@@ -47,12 +86,8 @@ buildGoModule rec {
   '';
 
   doInstallCheck = true;
-
+  nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "-v";
-
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
 
   passthru.tests = {
     inherit (nixosTests) artalk;
@@ -63,10 +98,6 @@ buildGoModule rec {
     homepage = "https://github.com/ArtalkJS/Artalk";
     changelog = "https://github.com/ArtalkJS/Artalk/releases/tag/v${version}";
     license = lib.licenses.mit;
-    sourceProvenance = with lib.sourceTypes; [
-      fromSource
-      binaryBytecode
-    ];
     maintainers = with lib.maintainers; [ moraxyc ];
     mainProgram = "artalk";
   };

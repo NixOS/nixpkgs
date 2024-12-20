@@ -1,26 +1,27 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, libadwaita
-, gettext
-, glib
-, gobject-introspection
-, desktop-file-utils
-, appstream
-, appstream-glib
-, gtk4
-, librsvg
-, python3Packages
-, blueprint-compiler
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  libadwaita,
+  gettext,
+  glib,
+  gobject-introspection,
+  desktop-file-utils,
+  appstream,
+  appstream-glib,
+  gtk4,
+  librsvg,
+  python3Packages,
+  blueprint-compiler,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "eartag";
-  version = "0.6.1";
+  version = "0.6.3";
   format = "other";
 
   src = fetchFromGitLab {
@@ -28,7 +29,7 @@ python3Packages.buildPythonApplication rec {
     owner = "World";
     repo = pname;
     rev = version;
-    hash = "sha256-CAJz9p1PJxq3VDxzZEHD860xINCQF722bPaf7psNztY=";
+    hash = "sha256-eo6Vboo2Kn39M0r1OeqRFG3ug6frxzMKler5qT9KysY=";
   };
 
   postPatch = ''
@@ -80,6 +81,6 @@ python3Packages.buildPythonApplication rec {
     # being incorrectly identified as unfree software.
     license = licenses.mit;
     mainProgram = "eartag";
-    maintainers = with maintainers; [ foo-dogsquared ];
+    maintainers = with maintainers; [ foo-dogsquared ] ++ lib.teams.gnome-circle.members;
   };
 }

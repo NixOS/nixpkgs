@@ -19,31 +19,30 @@
   makeDesktopItem,
   copyDesktopItems,
 }:
-let
-  gradleBuildTask = ":desktopApp:createDistributable";
-  gradleUpdateTask = gradleBuildTask;
-  desktopItems = [
-    (makeDesktopItem {
-      name = "Keyguard";
-      exec = "Keyguard";
-      icon = "Keyguard";
-      comment = "Keyguard";
-      desktopName = "Keyguard";
-    })
-  ];
-in
-stdenv.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: rec {
   pname = "keyguard";
-  version = "1.6.4";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "AChep";
     repo = "keyguard-app";
-    rev = "81a8486ca31c86630c84c78285c49d16d7491328";
-    hash = "sha256-e0Ea2QSAMQqZRVPy5/5pblHfeG+L6oHEXHV5mepE5Z8=";
+    tag = "r20241212.2";
+    hash = "sha256-3i2+zs75Fq3wV894AkWyhj0uSw8BDDBjU/Y0+IBpnNE=";
   };
 
-  inherit gradleBuildTask gradleUpdateTask desktopItems;
+  gradleBuildTask = ":desktopApp:createDistributable";
+
+  gradleUpdateTask = gradleBuildTask;
+
+  desktopItems = [
+    (makeDesktopItem {
+      name = "keyguard";
+      exec = "Keyguard";
+      icon = "keyguard";
+      comment = "Keyguard";
+      desktopName = "Keyguard";
+    })
+  ];
 
   nativeBuildInputs = [
     gradle
@@ -84,9 +83,8 @@ stdenv.mkDerivation (finalAttrs: {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/
-    cp -a ./desktopApp/build/compose/binaries/main/app/*/* $out/
-    install -Dm0644 $out/lib/Keyguard.png $out/share/pixmaps/Keyguard.png
+    cp -r ./desktopApp/build/compose/binaries/main/app/Keyguard $out
+    install -Dm0644 $out/lib/Keyguard.png $out/share/pixmaps/keyguard.png
 
     runHook postInstall
   '';
@@ -101,7 +99,6 @@ stdenv.mkDerivation (finalAttrs: {
       fromSource
       binaryBytecode
     ];
-    platforms = lib.platforms.darwin ++ [ "x86_64-linux" ];
-    broken = stdenv.hostPlatform.isDarwin;
+    platforms = lib.platforms.linux;
   };
 })

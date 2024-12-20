@@ -1,52 +1,74 @@
-{ lib
-, stdenv
-, fetchurl
-, unzip
-, autoconf
-, automake
-, libtool_1_5
-, makeWrapper
-, cups
-, jbigkit
-, glib
-, gtk3
-, gdk-pixbuf
-, pango
-, cairo
-, atk
-, pkg-config
-, libxml2
-, libredirect
-, ghostscript
-, pkgs
-, zlib
+{
+  lib,
+  stdenv,
+  fetchurl,
+  unzip,
+  autoconf,
+  automake,
+  libtool_1_5,
+  makeWrapper,
+  cups,
+  jbigkit,
+  libjpeg,
+  libgcrypt,
+  glib,
+  gtk3,
+  gdk-pixbuf,
+  pango,
+  cairo,
+  atk,
+  pkg-config,
+  libxml2,
+  libredirect,
+  ghostscript,
+  pkgs,
+  zlib,
 }:
 
 let
   system =
-    if stdenv.hostPlatform.system == "x86_64-linux" then "intel"
-    else if stdenv.hostPlatform.system == "aarch64-linux" then "arm"
-    else throw "Unsupported platform for Canon UFR2 Drivers: ${stdenv.hostPlatform.system}";
+    if stdenv.hostPlatform.system == "x86_64-linux" then
+      "intel"
+    else if stdenv.hostPlatform.system == "aarch64-linux" then
+      "arm"
+    else
+      throw "Unsupported platform for Canon UFR2 Drivers: ${stdenv.hostPlatform.system}";
   ld64 = "${stdenv.cc}/nix-support/dynamic-linker";
   libs = pkgs: lib.makeLibraryPath buildInputs;
 
-  version = "5.90";
-  dl = "8/0100007658/40";
+  version = "6.00";
+  dl = "0/0100009240/34";
   suffix1 = "m17n";
-  suffix2 = "03";
+  suffix2 = "00";
 
   versionNoDots = builtins.replaceStrings [ "." ] [ "" ] version;
   src_canon = fetchurl {
     url = "http://gdlp01.c-wss.com/gds/${dl}/linux-UFRII-drv-v${versionNoDots}-${suffix1}-${suffix2}.tar.gz";
-    hash = "sha256-HvuRQYqkHRCwfajSJPridDcADq7VkYwBEo4qr9W5mqA=";
+    hash = "sha256-JQAe/avYG+9TAsH26UGai6u8/upRXwZrGBc/hd4jZe8=";
   };
 
-  buildInputs = [ cups zlib jbigkit glib gtk3 libxml2 gdk-pixbuf pango cairo atk ];
+  buildInputs = [
+    cups
+    zlib
+    jbigkit
+    libjpeg
+    libgcrypt
+    glib
+    gtk3
+    libxml2
+    gdk-pixbuf
+    pango
+    cairo
+    atk
+  ];
 in
 stdenv.mkDerivation rec {
   pname = "canon-cups-ufr2";
   inherit version;
   src = src_canon;
+
+  # we can't let patchelf remove unnecessary RPATHs because the driver uses dlopen to load libjpeg and libgcrypt
+  dontPatchELF = true;
 
   postUnpack = ''
     (
@@ -71,7 +93,14 @@ stdenv.mkDerivation rec {
     )
   '';
 
-  nativeBuildInputs = [ makeWrapper unzip autoconf automake libtool_1_5 pkg-config ];
+  nativeBuildInputs = [
+    makeWrapper
+    unzip
+    autoconf
+    automake
+    libtool_1_5
+    pkg-config
+  ];
 
   inherit buildInputs;
 

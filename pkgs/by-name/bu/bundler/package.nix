@@ -1,4 +1,11 @@
-{ lib, buildRubyGem, ruby, writeScript, testers, bundler }:
+{
+  lib,
+  buildRubyGem,
+  ruby,
+  writeScript,
+  testers,
+  bundler,
+}:
 
 buildRubyGem rec {
   inherit ruby;

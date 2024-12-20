@@ -1,6 +1,18 @@
-{ lib, stdenv, fetchurl, wrapGAppsHook4
-, cargo, desktop-file-utils, meson, ninja, pkg-config, rustc
-, glib, gtk4, libadwaita, libxml2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  wrapGAppsHook4,
+  cargo,
+  desktop-file-utils,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
+  glib,
+  gtk4,
+  libadwaita,
+  libxml2,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,9 +25,20 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    cargo desktop-file-utils meson ninja pkg-config rustc wrapGAppsHook4
+    cargo
+    desktop-file-utils
+    meson
+    ninja
+    pkg-config
+    rustc
+    wrapGAppsHook4
   ];
-  buildInputs = [ glib gtk4 libadwaita libxml2 ];
+  buildInputs = [
+    glib
+    gtk4
+    libadwaita
+    libxml2
+  ];
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/design/symbolic-preview";

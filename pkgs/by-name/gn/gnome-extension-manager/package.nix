@@ -1,23 +1,25 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, wrapGAppsHook4
-, libadwaita
-, meson
-, ninja
-, gettext
-, gtk4
-, appstream
-, appstream-glib
-, desktop-file-utils
-, gobject-introspection
-, blueprint-compiler
-, pkg-config
-, json-glib
-, libsoup_3
-, glib
-, libbacktrace
-, text-engine
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  wrapGAppsHook4,
+  libadwaita,
+  meson,
+  ninja,
+  gettext,
+  gtk4,
+  appstream,
+  appstream-glib,
+  desktop-file-utils,
+  gobject-introspection,
+  blueprint-compiler,
+  pkg-config,
+  json-glib,
+  libsoup_3,
+  glib,
+  libbacktrace,
+  text-engine,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -52,6 +54,14 @@ stdenv.mkDerivation rec {
     libsoup_3
     libbacktrace
     text-engine
+  ];
+
+  patches = [
+    # fix black window when opened, remove in next release
+    (fetchpatch {
+      url = "https://github.com/mjakeman/extension-manager/commit/91d1c42a30e12131dc3c5afd8a709e7db2a95b70.patch";
+      hash = "sha256-NtsJeqclUx4L3wbyQ46ZCoo4IKSu4/HoT/FD20xriZ4=";
+    })
   ];
 
   mesonFlags = [

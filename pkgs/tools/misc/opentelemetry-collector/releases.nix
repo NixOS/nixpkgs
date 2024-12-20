@@ -81,6 +81,7 @@ let
       name,
       sourceHash,
       vendorHash,
+      proxyVendor ? false,
     }:
     let
       package = buildGoModule {
@@ -92,14 +93,14 @@ let
           hash = sourceHash;
         };
 
-        inherit vendorHash;
+        inherit proxyVendor vendorHash;
 
         nativeBuildInputs = [ installShellFiles ];
 
         # upstream strongly recommends disabling CGO
         # additionally dependencies have had issues when GCO was enabled that weren't caught upstream
         # https://github.com/open-telemetry/opentelemetry-collector/blob/main/CONTRIBUTING.md#using-cgo
-        CGO_ENABLED = 0;
+        env.CGO_ENABLED = 0;
 
         ldflags = [
           "-s"
@@ -155,7 +156,8 @@ lib.recurseIntoAttrs {
   otelcol-contrib = mkDistribution {
     name = "otelcol-contrib";
     sourceHash = "sha256-1TIzfR9F6iwSwoDc08SdOWYH378Y3qjwOcQ4IDbHTWE=";
-    vendorHash = "sha256-KObLO3bXqGL1WSTKbJjg+hYJ9sYU4rn9gC/o38U1XJI=";
+    vendorHash = "sha256-AmSn2M+HkOpZ0ev6Gjb+gaeE+h70W/RtXKMqaModJPs=";
+    proxyVendor = true; # hash mismatch between linux and darwin
   };
 
   otelcol-k8s = mkDistribution {

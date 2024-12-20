@@ -79,8 +79,7 @@ in
   config = mkIf cfg.enable {
     inherit assertions;
     programs.tsmClient.enable = true;
-    programs.tsmClient.servers.${cfg.servername}.passworddir =
-      mkDefault "/var/lib/tsm-backup/password";
+    programs.tsmClient.servers.${cfg.servername}.passworddir = mkDefault "/var/lib/tsm-backup/password";
     systemd.services.tsm-backup = {
       description = "IBM Storage Protect (Tivoli Storage Manager) Backup";
       # DSM_LOG needs a trailing slash to have it treated as a directory.
@@ -94,8 +93,7 @@ in
         SuccessExitStatus = "4 8";
         # The `-se` option must come after the command.
         # The `-optfile` option suppresses a `dsm.opt`-not-found warning.
-        ExecStart =
-          "${getExe' cfgPrg.wrappedPackage "dsmc"} ${cfg.command} -se='${cfg.servername}' -optfile=/dev/null";
+        ExecStart = "${getExe' cfgPrg.wrappedPackage "dsmc"} ${cfg.command} -se='${cfg.servername}' -optfile=/dev/null";
         LogsDirectory = "tsm-backup";
         StateDirectory = "tsm-backup";
         StateDirectoryMode = "0750";
@@ -117,7 +115,7 @@ in
         RestrictNamespaces = true;
         RestrictSUIDSGID = true;
       };
-      startAt = mkIf (cfg.autoTime!=null) cfg.autoTime;
+      startAt = mkIf (cfg.autoTime != null) cfg.autoTime;
     };
   };
 

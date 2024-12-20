@@ -11,6 +11,7 @@
   libGL,
   libGLU,
   libGLX,
+  libX11,
   libXext,
   libXmu,
   libXpm,
@@ -37,12 +38,12 @@ let
 in
 
 stdenv.mkDerivation rec {
-  version = "11.2.2";
+  version = "11.3.0";
   pname = "geant4";
 
   src = fetchurl {
     url = "https://cern.ch/geant4-data/releases/geant4-v${version}.tar.gz";
-    hash = "sha256-0k9lc1uKCgOcAPlDSZHpnvEZuGxRDQ8qshFV24KjSR0=";
+    hash = "sha256-HaQxiz+W+H9NR1WKMtqyabjz/JVnCAOMKOcqGAsO+6Y=";
   };
 
   # Fix broken paths in a .pc
@@ -108,7 +109,10 @@ stdenv.mkDerivation rec {
       xercesc
       zlib
     ]
-    ++ lib.optionals enableOpenGLX11 [ libGL ]
+    ++ lib.optionals enableOpenGLX11 [
+      libGL
+      libX11
+    ]
     ++ lib.optionals enableXM [ motif ]
     ++ lib.optionals enableQt [ qt5.qtbase ];
 

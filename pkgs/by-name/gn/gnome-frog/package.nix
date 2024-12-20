@@ -1,24 +1,25 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, wrapGAppsHook4
-, meson
-, ninja
-, pkg-config
-, appstream-glib
-, desktop-file-utils
-, glib
-, gobject-introspection
-, blueprint-compiler
-, libxml2
-, libnotify
-, libadwaita
-, libportal
-, gettext
-, librsvg
-, tesseract5
-, zbar
-, gst_all_1
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  wrapGAppsHook4,
+  meson,
+  ninja,
+  pkg-config,
+  appstream-glib,
+  desktop-file-utils,
+  glib,
+  gobject-introspection,
+  blueprint-compiler,
+  libxml2,
+  libnotify,
+  libadwaita,
+  libportal,
+  gettext,
+  librsvg,
+  tesseract5,
+  zbar,
+  gst_all_1,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -89,8 +90,7 @@ python3Packages.buildPythonApplication rec {
 
   meta = with lib; {
     homepage = "https://getfrog.app/";
-    description =
-      "Intuitive text extraction tool (OCR) for GNOME desktop";
+    description = "Intuitive text extraction tool (OCR) for GNOME desktop";
     license = licenses.mit;
     mainProgram = "frog";
     maintainers = with maintainers; [ foo-dogsquared ];

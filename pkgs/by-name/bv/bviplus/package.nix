@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, fetchpatch, ncurses }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bviplus";

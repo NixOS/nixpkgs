@@ -1,39 +1,40 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, docbook_xsl
-, exempi
-, gdk-pixbuf
-, glib
-, gobject-introspection
-, gtk3
-, gtk-doc
-, itstool
-, lcms2
-, libexif
-, libjpeg
-, libpeas
-, librsvg
-, libxml2
-, meson
-, ninja
-, pkg-config
-, python3
-, wrapGAppsHook3
-, cinnamon-desktop
-, yelp-tools
-, xapp
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  docbook_xsl,
+  exempi,
+  gdk-pixbuf,
+  glib,
+  gobject-introspection,
+  gtk3,
+  gtk-doc,
+  itstool,
+  lcms2,
+  libexif,
+  libjpeg,
+  libpeas,
+  librsvg,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  wrapGAppsHook3,
+  cinnamon-desktop,
+  yelp-tools,
+  xapp,
 }:
 
 stdenv.mkDerivation rec {
   pname = "xviewer";
-  version = "3.4.6";
+  version = "3.4.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-J1IlgHKyNGJTn1sIU3q02eTgWqyeRm2leFIhtKPIdhg=";
+    hash = "sha256-hRX+vSotjhoQ/fyFdCelr9IHZGUM8xaYHNfX2vD3nq0=";
   };
 
   nativeBuildInputs = [

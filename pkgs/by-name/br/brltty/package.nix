@@ -1,7 +1,20 @@
-{ lib, stdenv, fetchurl, pkg-config, python3, bluez
-, tcl, acl, kmod, coreutils, shadow, util-linux
-, alsaSupport ? stdenv.hostPlatform.isLinux, alsa-lib
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  python3,
+  bluez,
+  tcl,
+  acl,
+  kmod,
+  coreutils,
+  shadow,
+  util-linux,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
+  alsa-lib,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,10 +26,13 @@ stdenv.mkDerivation rec {
     sha256 = "E+j2mb8UTuGx6PkAOt03hQkvf1XvEHxJEuPBT2zMpPw=";
   };
 
-  nativeBuildInputs = [ pkg-config python3.pkgs.cython python3.pkgs.setuptools tcl ];
-  buildInputs = [ bluez ]
-    ++ lib.optional alsaSupport alsa-lib
-    ++ lib.optional systemdSupport systemd;
+  nativeBuildInputs = [
+    pkg-config
+    python3.pkgs.cython
+    python3.pkgs.setuptools
+    tcl
+  ];
+  buildInputs = [ bluez ] ++ lib.optional alsaSupport alsa-lib ++ lib.optional systemdSupport systemd;
 
   meta = {
     description = "Access software for a blind person using a braille display";
@@ -49,7 +65,11 @@ stdenv.mkDerivation rec {
     "--with-updatable-directory=/var/lib/brltty"
     "--with-api-socket-path=/var/lib/BrlAPI"
   ];
-  installFlags = [ "install-systemd" "install-udev" "install-polkit" ];
+  installFlags = [
+    "install-systemd"
+    "install-udev"
+    "install-polkit"
+  ];
 
   preConfigure = ''
     substituteInPlace configure --replace /sbin/ldconfig ldconfig

@@ -2,7 +2,11 @@
 # CMake modules to link them together in a build tree. We have separate
 # derivations, so need a real install step. Here we provide our own minimal
 # CMake modules to install along with the build products.
-{ lib, stdenv, swift }:
+{
+  lib,
+  stdenv,
+  swift,
+}:
 let
 
   inherit (stdenv.hostPlatform) extensions;
@@ -20,7 +24,8 @@ let
     )
   '';
 
-in lib.mapAttrs mkInstallScript {
+in
+lib.mapAttrs mkInstallScript {
   SwiftSystem = ''
     add_library(SwiftSystem::SystemPackage STATIC IMPORTED)
     set_property(TARGET SwiftSystem::SystemPackage PROPERTY IMPORTED_LOCATION "@out@/lib/swift_static/@swiftOs@/libSystemPackage@staticLibExt@")

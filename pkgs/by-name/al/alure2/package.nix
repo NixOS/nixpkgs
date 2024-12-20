@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, cmake, openal, libvorbis, opusfile, libsndfile }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  openal,
+  libvorbis,
+  opusfile,
+  libsndfile,
+}:
 
 stdenv.mkDerivation rec {
   pname = "alure2";
@@ -12,13 +21,18 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ openal libvorbis opusfile libsndfile ];
+  buildInputs = [
+    openal
+    libvorbis
+    opusfile
+    libsndfile
+  ];
 
   meta = with lib; {
     description = "Utility library for OpenAL, providing a C++ API and managing common tasks that include file loading, caching, and streaming";
     homepage = "https://github.com/kcat/alure";
     license = licenses.zlib;
     platforms = platforms.linux;
-    maintainers  = with maintainers; [ McSinyx ];
+    maintainers = with maintainers; [ McSinyx ];
   };
 }

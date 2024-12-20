@@ -166,7 +166,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_audio"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "alvr_common",
  "alvr_session",
@@ -182,7 +182,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_client_core"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "alvr_audio",
  "alvr_common",
@@ -192,7 +192,7 @@ dependencies = [
  "android_logger",
  "app_dirs2",
  "bincode",
- "bindgen",
+ "bindgen 0.70.1",
  "cc",
  "env_logger",
  "glow",
@@ -217,7 +217,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_client_mock"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "alvr_client_core",
  "alvr_common",
@@ -230,7 +230,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_client_openxr"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "alvr_client_core",
  "alvr_common",
@@ -245,7 +245,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_common"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "anyhow",
  "backtrace",
@@ -262,7 +262,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_dashboard"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "alvr_common",
  "alvr_events",
@@ -273,15 +273,10 @@ dependencies = [
  "alvr_session",
  "bincode",
  "chrono",
- "console_error_panic_hook",
  "cros-libva",
  "eframe",
  "env_logger",
- "ewebsock",
- "futures",
- "gloo-net",
  "ico",
- "instant",
  "nvml-wrapper",
  "rand",
  "serde",
@@ -289,17 +284,15 @@ dependencies = [
  "settings-schema",
  "statrs",
  "sysinfo",
- "tungstenite 0.23.0",
+ "tungstenite 0.24.0",
  "ureq",
- "wasm-bindgen-futures",
- "wasm-logger",
  "wgpu",
  "winres",
 ]
 
 [[package]]
 name = "alvr_events"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "alvr_common",
  "alvr_packets",
@@ -310,7 +303,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_filesystem"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "dirs",
  "once_cell",
@@ -318,7 +311,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_gui_common"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "alvr_common",
  "egui",
@@ -326,7 +319,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_launcher"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "alvr_common",
  "alvr_gui_common",
@@ -346,7 +339,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_packets"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "alvr_common",
  "alvr_session",
@@ -356,7 +349,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_server_core"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "alvr_audio",
  "alvr_common",
@@ -389,7 +382,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_server_io"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "alvr_common",
  "alvr_events",
@@ -405,7 +398,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_server_openvr"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "alvr_common",
  "alvr_filesystem",
@@ -413,7 +406,7 @@ dependencies = [
  "alvr_server_core",
  "alvr_server_io",
  "alvr_session",
- "bindgen",
+ "bindgen 0.70.1",
  "cc",
  "pkg-config",
  "walkdir",
@@ -421,7 +414,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_session"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "alvr_common",
  "alvr_filesystem",
@@ -434,7 +427,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_sockets"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "alvr_common",
  "alvr_session",
@@ -447,7 +440,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_vrcompositor_wrapper"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "alvr_common",
  "alvr_filesystem",
@@ -457,11 +450,11 @@ dependencies = [
 
 [[package]]
 name = "alvr_vulkan_layer"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "alvr_common",
  "alvr_filesystem",
- "bindgen",
+ "bindgen 0.70.1",
  "cc",
  "pkg-config",
  "walkdir",
@@ -469,7 +462,7 @@ dependencies = [
 
 [[package]]
 name = "alvr_xtask"
-version = "20.11.0"
+version = "20.11.1"
 dependencies = [
  "alvr_filesystem",
  "pico-args",
@@ -1063,6 +1056,24 @@ dependencies = [
  "itertools",
  "lazy_static",
  "lazycell",
+ "proc-macro2",
+ "quote",
+ "regex",
+ "rustc-hash",
+ "shlex",
+ "syn 2.0.70",
+]
+
+[[package]]
+name = "bindgen"
+version = "0.70.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f49d8fed880d473ea71efb9bf597651e77201bdd4893efe54c9e5d65ae04ce6f"
+dependencies = [
+ "bitflags 2.6.0",
+ "cexpr",
+ "clang-sys",
+ "itertools",
  "log",
  "prettyplease",
  "proc-macro2",
@@ -1071,7 +1082,6 @@ dependencies = [
  "rustc-hash",
  "shlex",
  "syn 2.0.70",
- "which",
 ]
 
 [[package]]
@@ -1441,16 +1451,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "console_error_panic_hook"
-version = "0.1.7"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a06aeb73f470f66dcdbf7223caeebb85984942f22f1adb2a088cf9668146bbbc"
-dependencies = [
- "cfg-if",
- "wasm-bindgen",
-]
-
-[[package]]
 name = "constant_time_eq"
 version = "0.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1531,7 +1531,7 @@ version = "0.2.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7f01585027057ff5f0a5bf276174ae4c1594a2c5bde93d5f46a016d76270f5a9"
 dependencies = [
- "bindgen",
+ "bindgen 0.69.4",
 ]
 
 [[package]]
@@ -1593,14 +1593,33 @@ dependencies = [
 
 [[package]]
 name = "cros-libva"
-version = "0.0.6"
+version = "0.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0f75943ee30eb2f8b4f3beb8f047e69ecc1c91d098c344b34a0fdd8dd8b2614a"
+checksum = "1b1546af142fbf11a5cad3d1ee2ef64e4d7b69a28b244a79484024a1bc931c17"
 dependencies = [
- "bitflags 1.3.2",
+ "bitflags 2.6.0",
  "log",
  "pkg-config",
  "thiserror",
+]
+
+[[package]]
+name = "crossbeam-deque"
+version = "0.8.5"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "613f8cc01fe9cf1a3eb3d7f488fd2fa8388403e97039e2f73692932e291a770d"
+dependencies = [
+ "crossbeam-epoch",
+ "crossbeam-utils",
+]
+
+[[package]]
+name = "crossbeam-epoch"
+version = "0.9.18"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5b82ac4a3c2ca9c3460964f020e1402edd5753411d7737aa39c3714ad1b5420e"
+dependencies = [
+ "crossbeam-utils",
 ]
 
 [[package]]
@@ -2087,21 +2106,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "ewebsock"
-version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6177769715c6ec5a324acee995183b22721ea23c58e49af14a828eadec85d120"
-dependencies = [
- "document-features",
- "js-sys",
- "log",
- "tungstenite 0.21.0",
- "wasm-bindgen",
- "wasm-bindgen-futures",
- "web-sys",
-]
-
-[[package]]
 name = "exec"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2418,9 +2422,9 @@ dependencies = [
 
 [[package]]
 name = "glam"
-version = "0.28.0"
+version = "0.29.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "779ae4bf7e8421cf91c0b3b64e7e8b40b862fba4d393f59150042de7c4965a94"
+checksum = "c28091a37a5d09b555cb6628fd954da299b536433834f5b8e59eba78e0cbbf8a"
 dependencies = [
  "serde",
 ]
@@ -2430,40 +2434,6 @@ name = "glob"
 version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "d2fabcfbdc87f4758337ca535fb41a6d701b65693ce38287d856d1674551ec9b"
-
-[[package]]
-name = "gloo-net"
-version = "0.5.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "43aaa242d1239a8822c15c645f02166398da4f8b5c4bae795c1f5b44e9eee173"
-dependencies = [
- "futures-channel",
- "futures-core",
- "futures-sink",
- "gloo-utils",
- "http 0.2.12",
- "js-sys",
- "pin-project",
- "serde",
- "serde_json",
- "thiserror",
- "wasm-bindgen",
- "wasm-bindgen-futures",
- "web-sys",
-]
-
-[[package]]
-name = "gloo-utils"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0b5555354113b18c547c1d3a98fbf7fb32a9ff4f6fa112ce823a21641a0ba3aa"
-dependencies = [
- "js-sys",
- "serde",
- "serde_json",
- "wasm-bindgen",
- "web-sys",
-]
 
 [[package]]
 name = "glow"
@@ -3023,9 +2993,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "e0242819d153cba4b4b05a5a8f2a7e9bbf97b6055b2a002b395c96b5ff3c0222"
 dependencies = [
  "cfg-if",
- "js-sys",
- "wasm-bindgen",
- "web-sys",
 ]
 
 [[package]]
@@ -3268,7 +3235,7 @@ version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "bf0d9716420364790e85cbb9d3ac2c950bde16a7dd36f3209b7dfdfc4a24d01f"
 dependencies = [
- "bindgen",
+ "bindgen 0.69.4",
  "cc",
  "system-deps",
 ]
@@ -4089,8 +4056,8 @@ dependencies = [
 
 [[package]]
 name = "openxr"
-version = "0.19.0"
-source = "git+https://github.com/Ralith/openxrs#d8ea5553d52c4bbaefe2537b8d70b8752f73694d"
+version = "0.18.0"
+source = "git+https://github.com/Ralith/openxrs?rev=9270509d23dc774b43a8b7289e8adf69fcac6828#9270509d23dc774b43a8b7289e8adf69fcac6828"
 dependencies = [
  "libc",
  "libloading 0.8.4",
@@ -4100,8 +4067,8 @@ dependencies = [
 
 [[package]]
 name = "openxr-sys"
-version = "0.11.0"
-source = "git+https://github.com/Ralith/openxrs#d8ea5553d52c4bbaefe2537b8d70b8752f73694d"
+version = "0.10.0"
+source = "git+https://github.com/Ralith/openxrs?rev=9270509d23dc774b43a8b7289e8adf69fcac6828#9270509d23dc774b43a8b7289e8adf69fcac6828"
 dependencies = [
  "libc",
 ]
@@ -4275,7 +4242,7 @@ version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "849e188f90b1dda88fe2bfe1ad31fe5f158af2c98f80fb5d13726c44f3f01112"
 dependencies = [
- "bindgen",
+ "bindgen 0.69.4",
  "libspa-sys",
  "system-deps",
 ]
@@ -4540,6 +4507,26 @@ name = "rawpointer"
 version = "0.2.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "60a357793950651c4ed0f3f52338f53b2f809f32d83a07f72909fa13e4c6c1e3"
+
+[[package]]
+name = "rayon"
+version = "1.10.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b418a60154510ca1a002a752ca9714984e21e4241e804d32555251faf8b78ffa"
+dependencies = [
+ "either",
+ "rayon-core",
+]
+
+[[package]]
+name = "rayon-core"
+version = "1.12.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "1465873a3dfdaa8ae7cb14b4383657caab0b3e8a0aa9ae8e04b044854c8dfce2"
+dependencies = [
+ "crossbeam-deque",
+ "crossbeam-utils",
+]
 
 [[package]]
 name = "redox_syscall"
@@ -5340,16 +5327,16 @@ checksum = "a7065abeca94b6a8a577f9bd45aa0867a2238b74e8eb67cf10d492bc39351394"
 
 [[package]]
 name = "sysinfo"
-version = "0.30.13"
+version = "0.31.4"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0a5b4ddaee55fb2bea2bf0e5000747e5f5c0de765e5a5ff87f4cd106439f4bb3"
+checksum = "355dbe4f8799b304b05e1b0f05fc59b2a18d36645cf169607da45bde2f69a1be"
 dependencies = [
- "cfg-if",
  "core-foundation-sys",
  "libc",
+ "memchr",
  "ntapi",
- "once_cell",
- "windows 0.52.0",
+ "rayon",
+ "windows 0.54.0",
 ]
 
 [[package]]
@@ -5794,28 +5781,9 @@ dependencies = [
 
 [[package]]
 name = "tungstenite"
-version = "0.21.0"
+version = "0.24.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9ef1a641ea34f399a848dea702823bbecfb4c486f911735368f1f137cb8257e1"
-dependencies = [
- "byteorder",
- "bytes",
- "data-encoding",
- "http 1.1.0",
- "httparse",
- "log",
- "rand",
- "sha1",
- "thiserror",
- "url",
- "utf-8",
-]
-
-[[package]]
-name = "tungstenite"
-version = "0.23.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "6e2e2ce1e47ed2994fd43b04c8f618008d4cabdd5ee34027cf14f9d918edd9c8"
+checksum = "18e5b8366ee7a95b16d32197d0b2604b43a0be89dc5fac9f8e96ccafbaedda8a"
 dependencies = [
  "byteorder",
  "bytes",
@@ -6074,17 +6042,6 @@ name = "wasm-bindgen-shared"
 version = "0.2.92"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "af190c94f2773fdb3729c55b007a722abb5384da03bc0986df4c289bf5567e96"
-
-[[package]]
-name = "wasm-logger"
-version = "0.2.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "074649a66bb306c8f2068c9016395fa65d8e08d2affcbf95acf3c24c3ab19718"
-dependencies = [
- "log",
- "wasm-bindgen",
- "web-sys",
-]
 
 [[package]]
 name = "wasm-streams"

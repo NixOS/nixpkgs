@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "time";
@@ -8,6 +12,11 @@ stdenv.mkDerivation (finalAttrs: {
     url = "mirror://gnu/time/time-${finalAttrs.version}.tar.gz";
     hash = "sha256-+6zwyB5iQp3z4zvaTO44dWYE8Y4B2XczjiMwaj47Uh4=";
   };
+
+  patches = [
+    # fixes cross-compilation to riscv64-linux
+    ./time-1.9-implicit-func-decl-clang.patch
+  ];
 
   meta = {
     description = "Tool that runs programs and summarizes the system resources they use";

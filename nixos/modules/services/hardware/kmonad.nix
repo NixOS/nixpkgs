@@ -85,12 +85,10 @@ let
         (defcfg
           input  (device-file "${keyboard.device}")
           output (uinput-sink "kmonad-${keyboard.name}")
-          ${
-            lib.optionalString (keyboard.defcfg.compose.key != null) ''
-              cmp-seq ${keyboard.defcfg.compose.key}
-              cmp-seq-delay ${toString keyboard.defcfg.compose.delay}
-            ''
-          }
+          ${lib.optionalString (keyboard.defcfg.compose.key != null) ''
+            cmp-seq ${keyboard.defcfg.compose.key}
+            cmp-seq-delay ${toString keyboard.defcfg.compose.delay}
+          ''}
           fallthrough ${lib.boolToString keyboard.defcfg.fallthrough}
           allow-cmd ${lib.boolToString keyboard.defcfg.allowCommands}
         )
@@ -122,11 +120,14 @@ let
   mkService =
     keyboard:
     let
-      cmd = [
-        (lib.getExe cfg.package)
-        "--input"
-        ''device-file "${keyboard.device}"''
-      ] ++ cfg.extraArgs ++ [ "${mkCfg keyboard}" ];
+      cmd =
+        [
+          (lib.getExe cfg.package)
+          "--input"
+          ''device-file "${keyboard.device}"''
+        ]
+        ++ cfg.extraArgs
+        ++ [ "${mkCfg keyboard}" ];
     in
     lib.nameValuePair "kmonad-${keyboard.name}" {
       description = "KMonad for ${keyboard.device}";

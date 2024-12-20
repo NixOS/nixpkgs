@@ -19,7 +19,7 @@
 
 buildPythonPackage rec {
   pname = "timetagger";
-  version = "24.07.1";
+  version = "24.12.1";
   format = "setuptools";
 
   disabled = pythonOlder "3.6";
@@ -27,8 +27,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "almarklein";
     repo = pname;
-    rev = "refs/tags/v${version}";
-    hash = "sha256-zm+3vk2ZeaZjciANNVSVxDT5S2LhOAl3B4AE2RgA5Tw=";
+    tag = "v${version}";
+    hash = "sha256-d8O4wmY3eJ2HrHq6SKEoaXYAh+A+hWpN72Zfw6WyC1g=";
   };
 
   propagatedBuildInputs = [

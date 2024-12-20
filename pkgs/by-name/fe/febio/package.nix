@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchpatch2,
-  substituteAll,
+  replaceVars,
   apple-sdk_11,
   cmake,
   darwinMinVersionHook,
@@ -26,8 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # Fix library searching and installation
-    (substituteAll {
-      src = ./fix-cmake.patch;
+    (replaceVars ./fix-cmake.patch {
       so = stdenv.hostPlatform.extensions.sharedLibrary;
     })
 

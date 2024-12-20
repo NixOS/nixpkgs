@@ -7,14 +7,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pdf-parser";
-  version = "0.7.9";
+  version = "0.7.10";
   pyproject = false;
 
   src = fetchzip {
     url = "https://didierstevens.com/files/software/pdf-parser_V${
       lib.replaceStrings [ "." ] [ "_" ] version
     }.zip";
-    hash = "sha256-1mFThtTe1LKkM/MML44RgskGv3FZborNVBsTqSKanks=";
+    hash = "sha256-RhgEGue3RcALjLXKOnnXyx/0subXHNuXfDg8hbO3VDg=";
   };
 
   postPatch = ''

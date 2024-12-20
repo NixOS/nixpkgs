@@ -7,12 +7,12 @@
 
 mkDerivation rec {
   pname = "calamares";
-  version = "3.3.10";
+  version = "3.3.12";
 
   # release including submodule
   src = fetchurl {
     url = "https://github.com/calamares/calamares/releases/download/v${version}/calamares-${version}.tar.gz";
-    sha256 = "sha256-iBf8APBLNOpntyn+9WQWl+j8oQ4iR3pOwbcZlK86g5Q=";
+    sha256 = "sha256-TelcQ0Mm8+5oNIDqvGqb4j7L4BIPme987IMWdLEvMKM=";
   };
 
   # On major changes, or when otherwise required, you *must* :

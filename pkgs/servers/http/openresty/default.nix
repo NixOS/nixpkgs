@@ -1,11 +1,13 @@
-{ callPackage
-, runCommand
-, lib
-, fetchurl
-, perl
-, postgresql
-, nixosTests
-, ...
+{
+  callPackage,
+  runCommand,
+  lib,
+  fetchurl,
+  perl,
+  postgresql,
+  nixosTests,
+  withPostgres ? true,
+  ...
 }@args:
 
 callPackage ../nginx/generic.nix args rec {
@@ -21,8 +23,11 @@ callPackage ../nginx/generic.nix args rec {
   # generic.nix applies fixPatch on top of every patch defined there.
   # This allows updating the patch destination, as openresty has
   # nginx source code in a different folder.
-  fixPatch = patch:
-    let name = patch.name or (builtins.baseNameOf patch); in
+  fixPatch =
+    patch:
+    let
+      name = patch.name or (builtins.baseNameOf patch);
+    in
     runCommand "openresty-${name}" { src = patch; } ''
       substitute $src $out \
         --replace "a/" "a/bundle/nginx-${nginxVersion}/" \
@@ -37,7 +42,7 @@ callPackage ../nginx/generic.nix args rec {
     patchShebangs configure bundle/
   '';
 
-  configureFlags = [ "--with-http_postgres_module" ];
+  configureFlags = lib.optional withPostgres [ "--with-http_postgres_module" ];
 
   postInstall = ''
     ln -s $out/luajit/bin/luajit-2.1.ROLLING $out/bin/luajit-openresty
@@ -56,6 +61,9 @@ callPackage ../nginx/generic.nix args rec {
     homepage = "https://openresty.org";
     license = lib.licenses.bsd2;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ thoughtpolice lblasc ];
+    maintainers = with lib.maintainers; [
+      thoughtpolice
+      lblasc
+    ];
   };
 }

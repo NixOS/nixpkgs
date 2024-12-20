@@ -13,25 +13,41 @@
 */
 { config, lib, ... }:
 let
-  inherit (lib) mkOption mkEnableOption types doRename;
+  inherit (lib)
+    mkOption
+    mkEnableOption
+    types
+    doRename
+    ;
 in
 {
   options = {
     services.foo.enable = mkEnableOption "foo";
     services.foos = mkOption {
-      type = types.attrsOf (types.submodule {
-        options = {
-          bar = mkOption { type = types.str; };
-        };
-      });
+      type = types.attrsOf (
+        types.submodule {
+          options = {
+            bar = mkOption { type = types.str; };
+          };
+        }
+      );
       default = { };
     };
-    result = mkOption {};
+    result = mkOption { };
   };
   imports = [
     (doRename {
-      from = [ "services" "foo" "bar" ];
-      to = [ "services" "foos" "" "bar" ];
+      from = [
+        "services"
+        "foo"
+        "bar"
+      ];
+      to = [
+        "services"
+        "foos"
+        ""
+        "bar"
+      ];
       visible = true;
       warn = false;
       use = x: x;

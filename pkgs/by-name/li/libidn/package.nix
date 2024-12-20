@@ -1,5 +1,9 @@
-{ fetchurl, lib, stdenv, libiconv
-, testers
+{
+  fetchurl,
+  lib,
+  stdenv,
+  libiconv,
+  testers,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -11,7 +15,13 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-1sGZ3NgG5P4nk2DLSwg0mg05Vg7VSP/RzK3ajN7LRyM=";
   };
 
-  outputs = [ "bin" "dev" "out" "info" "devdoc" ];
+  outputs = [
+    "bin"
+    "dev"
+    "out"
+    "info"
+    "devdoc"
+  ];
 
   hardeningDisable = [ "format" ];
 

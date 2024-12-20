@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
@@ -64,10 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches =
     [ ./disable_update_checking.patch ]
-    ++ lib.optional withSystemEquicord (substituteAll {
-      inherit equicord;
-      src = ./use_system_equicord.patch;
-    });
+    ++ lib.optional withSystemEquicord (
+      replaceVars ./use_system_equicord.patch {
+        inherit equicord;
+      }
+    );
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;
@@ -110,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
       --add-flags $out/opt/Equibop/resources/app.asar \
       ${lib.optionalString withTTS "--add-flags \"--enable-speech-dispatcher\""} \
       ${lib.optionalString withMiddleClickScroll "--add-flags \"--enable-blink-features=MiddleClickAutoscroll\""} \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
   '';
 
   desktopItems = makeDesktopItem {

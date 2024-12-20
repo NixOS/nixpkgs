@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, lz4 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  lz4,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nx2elf";

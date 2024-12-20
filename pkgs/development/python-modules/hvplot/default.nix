@@ -69,6 +69,12 @@ buildPythonPackage rec {
     "hvplot/tests/testutil.py"
   ];
 
+  # need to set MPLBACKEND=agg for headless matplotlib for darwin
+  # https://github.com/matplotlib/matplotlib/issues/26292
+  preCheck = ''
+    export MPLBACKEND=agg
+  '';
+
   pythonImportsCheck = [ "hvplot.pandas" ];
 
   meta = {

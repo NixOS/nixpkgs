@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromSavannah
-, m2libc
-, which
+{
+  lib,
+  stdenv,
+  fetchFromSavannah,
+  m2libc,
+  which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

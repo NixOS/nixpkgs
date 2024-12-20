@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "niaclass";
-  version = "0.2.1";
+  version = "0.2.2";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "NiaClass";
-    rev = "refs/tags/${version}";
-    hash = "sha256-9ynnnnCrOesl7dWgX3P1aFDycH0ifDtTT4BSlq0HDj0=";
+    tag = version;
+    hash = "sha256-2VNLXVciWInkZwk9O+U+6oU+FOVQx3InV4UVgny/B6I=";
   };
 
   pythonRelaxDeps = [ "pandas" ];

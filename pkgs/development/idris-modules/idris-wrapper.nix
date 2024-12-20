@@ -1,4 +1,11 @@
-{ stdenv, lib, symlinkJoin, makeWrapper, idris-no-deps, gmp }:
+{
+  stdenv,
+  lib,
+  symlinkJoin,
+  makeWrapper,
+  idris-no-deps,
+  gmp,
+}:
 
 symlinkJoin {
   inherit (idris-no-deps) name src meta;

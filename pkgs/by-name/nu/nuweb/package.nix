@@ -1,4 +1,9 @@
-{lib, stdenv, fetchurl, texliveMedium}:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  texliveMedium,
+}:
 
 stdenv.mkDerivation rec {
 

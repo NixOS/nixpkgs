@@ -1,4 +1,10 @@
-{ buildDunePackage, dns, ipaddr, lwt, tcpip }:
+{
+  buildDunePackage,
+  dns,
+  ipaddr,
+  lwt,
+  tcpip,
+}:
 
 buildDunePackage {
   pname = "dns-mirage";

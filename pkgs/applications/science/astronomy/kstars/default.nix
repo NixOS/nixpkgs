@@ -1,38 +1,39 @@
-{ lib
-, stdenv
-, mkDerivation
-, extra-cmake-modules
-, fetchurl
-, kconfig
-, kdoctools
-, kguiaddons
-, ki18n
-, kinit
-, kiconthemes
-, kio
-, knewstuff
-, kplotting
-, kwidgetsaddons
-, kxmlgui
-, knotifyconfig
-, qtx11extras
-, qtwebsockets
-, qtkeychain
-, qtdatavis3d
-, wrapQtAppsHook
-, breeze-icons
-, libsecret
-, eigen
-, zlib
-, cfitsio
-, indi-full
-, xplanet
-, libnova
-, libraw
-, gsl
-, wcslib
-, stellarsolver
-, libxisf
+{
+  lib,
+  stdenv,
+  mkDerivation,
+  extra-cmake-modules,
+  fetchurl,
+  kconfig,
+  kdoctools,
+  kguiaddons,
+  ki18n,
+  kinit,
+  kiconthemes,
+  kio,
+  knewstuff,
+  kplotting,
+  kwidgetsaddons,
+  kxmlgui,
+  knotifyconfig,
+  qtx11extras,
+  qtwebsockets,
+  qtkeychain,
+  qtdatavis3d,
+  wrapQtAppsHook,
+  breeze-icons,
+  libsecret,
+  eigen,
+  zlib,
+  cfitsio,
+  indi-full,
+  xplanet,
+  libnova,
+  libraw,
+  gsl,
+  wcslib,
+  stellarsolver,
+  libxisf,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -97,6 +98,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ timput hjones2199 ];
+    maintainers = with maintainers; [
+      timput
+      hjones2199
+    ];
   };
 })

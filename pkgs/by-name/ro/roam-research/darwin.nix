@@ -1,4 +1,9 @@
-{ lib, stdenv, _7zz, fetchurl }:
+{
+  lib,
+  stdenv,
+  _7zz,
+  fetchurl,
+}:
 let
   common = import ./common.nix { inherit fetchurl; };
   inherit (stdenv.hostPlatform) system;
@@ -29,7 +34,10 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ dbalan ];
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
-    platforms = [ "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     mainProgram = "roam-research";
   };
 }

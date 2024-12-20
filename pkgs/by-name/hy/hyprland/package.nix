@@ -14,6 +14,7 @@
   epoll-shim,
   git,
   hyprcursor,
+  hyprgraphics,
   hyprlang,
   hyprutils,
   hyprwayland-scanner,
@@ -28,6 +29,7 @@
   pciutils,
   pkgconf,
   python3,
+  re2,
   systemd,
   tomlplusplus,
   wayland,
@@ -82,14 +84,14 @@ assert assertMsg (!hidpiXWayland)
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.45.2";
+  version = "0.46.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-1pNsLGNStCFjXiBc2zMUxKzKk45CePTf+GwKlzTmrCY=";
+    hash = "sha256-0SVRQJeKsdwaTO7pMM0MwTXyVwKNQ4m1f2mvcPnZttM=";
   };
 
   postPatch = ''
@@ -98,6 +100,10 @@ customStdenv.mkDerivation (finalAttrs: {
 
     # Remove extra @PREFIX@ to fix pkg-config paths
     sed -i "s#@PREFIX@/##g" hyprland.pc.in
+
+    substituteInPlace protocols/meson.build --replace-fail \
+      "wayland_scanner = dependency('wayland-scanner')" \
+      "wayland_scanner = dependency('wayland-scanner', native: true)"
   '';
 
   # variables used by generateVersion.sh script, and shown in `hyprctl version`
@@ -138,6 +144,7 @@ customStdenv.mkDerivation (finalAttrs: {
       cairo
       git
       hyprcursor.dev
+      hyprgraphics
       hyprlang
       hyprutils
       libGL
@@ -148,6 +155,7 @@ customStdenv.mkDerivation (finalAttrs: {
       mesa
       pango
       pciutils
+      re2
       tomlplusplus
       wayland
       wayland-protocols
@@ -168,6 +176,7 @@ customStdenv.mkDerivation (finalAttrs: {
   mesonBuildType = if debug then "debugoptimized" else "release";
 
   dontStrip = debug;
+  strictDeps = true;
 
   mesonFlags = concatLists [
     (mapAttrsToList mesonEnable {

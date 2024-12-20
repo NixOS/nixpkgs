@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, gst_all_1
-, ipu6-camera-hal
-, libdrm
-, libva
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  gst_all_1,
+  ipu6-camera-hal,
+  libdrm,
+  libva,
 }:
 
 stdenv.mkDerivation rec {

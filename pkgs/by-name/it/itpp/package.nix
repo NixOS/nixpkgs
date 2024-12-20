@@ -1,11 +1,13 @@
-{ lib, stdenv
-, fetchurl
-, cmake
-, gtest
-, blas
-, fftw
-, liblapack
-, gfortran
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  gtest,
+  blas,
+  fftw,
+  liblapack,
+  gfortran,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +19,10 @@ stdenv.mkDerivation rec {
     sha256 = "0xxqag9wi0lg78xgw7b40rp6wxqp5grqlbs9z0ifvdfzqlhpcwah";
   };
 
-  nativeBuildInputs = [ cmake gfortran ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+  ];
   buildInputs = [
     fftw
     liblapack

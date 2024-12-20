@@ -35,12 +35,6 @@ buildPythonPackage rec {
     hash = "sha256-NKx/iLuzFEu1UBuwa14x55Ab3laVAKEtX6dtoWi0dOg=";
   };
 
-  postPatch = ''
-    # don't try to load .dll files
-    cp -r --no-preserve=mode ${secp256k1.src} libsecp256k1
-    patchShebangs secp256k1/autogen.sh
-  '';
-
   build-system = [
     hatchling
     cffi

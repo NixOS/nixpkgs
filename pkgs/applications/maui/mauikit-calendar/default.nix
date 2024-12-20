@@ -1,14 +1,15 @@
-{ lib
-, mkDerivation
-, cmake
-, extra-cmake-modules
-, mauikit
-, qtquickcontrols2
-, akonadi
-, akonadi-contacts
-, akonadi-calendar
-, calendarsupport
-, eventviews
+{
+  lib,
+  mkDerivation,
+  cmake,
+  extra-cmake-modules,
+  mauikit,
+  qtquickcontrols2,
+  akonadi,
+  akonadi-contacts,
+  akonadi-calendar,
+  calendarsupport,
+  eventviews,
 }:
 
 mkDerivation {

@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoconf
-, automake
-, libtool
-, pkg-config
-, bzip2
-, libpcap
-, flex
-, bison
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoconf,
+  automake,
+  libtool,
+  pkg-config,
+  bzip2,
+  libpcap,
+  flex,
+  bison,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,7 +19,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "phaag";
     repo = "nfdump";
-    rev =  "refs/tags/v${version}";
+    rev = "refs/tags/v${version}";
     hash = "sha256-1S55WVVHczYBDGwTxGZr+ND+e4a892jkTINlvIR2xgI=";
   };
 

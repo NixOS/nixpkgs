@@ -1,29 +1,35 @@
-{ stdenv
-, lib
-, docbook-xsl-nons
-, fetchurl
-, glib
-, gobject-introspection
-, gtk-doc
-, libgudev
-, libpcap
-, meson
-, mesonEmulatorHook
-, ninja
-, pkg-config
-, python3
-, substituteAll
-, systemdMinimal
-, usbutils
-, vala
-, which
+{
+  stdenv,
+  lib,
+  docbook-xsl-nons,
+  fetchurl,
+  glib,
+  gobject-introspection,
+  gtk-doc,
+  libgudev,
+  libpcap,
+  meson,
+  mesonEmulatorHook,
+  ninja,
+  pkg-config,
+  python3,
+  substituteAll,
+  systemdMinimal,
+  usbutils,
+  vala,
+  which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "umockdev";
   version = "0.18.4";
 
-  outputs = [ "bin" "out" "dev" "devdoc" ];
+  outputs = [
+    "bin"
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchurl {
     url = "https://github.com/martinpitt/umockdev/releases/download/${finalAttrs.version}/umockdev-${finalAttrs.version}.tar.xz";
@@ -44,17 +50,19 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  nativeBuildInputs = [
-    docbook-xsl-nons
-    gobject-introspection
-    gtk-doc
-    meson
-    ninja
-    pkg-config
-    vala
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      docbook-xsl-nons
+      gobject-introspection
+      gtk-doc
+      meson
+      ninja
+      pkg-config
+      vala
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   buildInputs = [
     glib

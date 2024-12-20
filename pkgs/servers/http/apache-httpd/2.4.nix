@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchurl, fetchpatch2, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which, libxcrypt, buildPackages
+{ lib, stdenv, fetchurl, fetchpatch2, perl, zlib, apr, aprutil, pcre2, libiconv, lynx, which, libxcrypt, buildPackages, pkgsCross, runCommand
 , nixosTests
 , proxySupport ? true
 , sslSupport ? true, openssl
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ which ];
+  nativeBuildInputs = [ perl which ];
 
   buildInputs = [ perl libxcrypt zlib ] ++
     lib.optional brotliSupport brotli ++
@@ -46,6 +46,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     sed -i config.layout -e "s|installbuilddir:.*|installbuilddir: $dev/share/build|"
+    sed -i configure -e 's|perlbin=.*|perlbin="/usr/bin/env perl"|'
     sed -i support/apachectl.in -e 's|@LYNX_PATH@|${lynx}/bin/lynx|'
   '';
 
@@ -101,6 +102,10 @@ stdenv.mkDerivation rec {
       acme-integration = nixosTests.acme;
       proxy = nixosTests.proxy;
       php = nixosTests.php.httpd;
+      cross = runCommand "apacheHttpd-test-cross" { } ''
+        ${pkgsCross.aarch64-multiplatform.apacheHttpd.dev}/bin/apxs -q -n INCLUDE | grep CC=aarch64-unknown-linux-gnu-gcc > $out
+        head -n1 ${pkgsCross.aarch64-multiplatform.apacheHttpd}/bin/dbmmanage | grep '^#!${pkgsCross.aarch64-multiplatform.perl}/bin/perl$' >> $out
+      '';
     };
   };
 

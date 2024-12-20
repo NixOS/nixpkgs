@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, woodpecker-plugin-git
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  woodpecker-plugin-git,
 }:
 
 buildGoModule rec {
@@ -18,7 +19,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-wB1Uv7ZSIEHzR8z96hwXScoGA31uhoql/wwAH3Olj2E=";
 
-  CGO_ENABLED = "0";
+  env.CGO_ENABLED = "0";
 
   ldflags = [
     "-s"

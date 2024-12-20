@@ -1,48 +1,65 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.actkbd;
 
   configFile = pkgs.writeText "actkbd.conf" ''
-    ${concatMapStringsSep "\n"
-      ({ keys, events, attributes, command, ... }:
-        ''${concatMapStringsSep "+" toString keys}:${concatStringsSep "," events}:${concatStringsSep "," attributes}:${command}''
-      )
-      cfg.bindings}
+    ${lib.concatMapStringsSep "\n" (
+      {
+        keys,
+        events,
+        attributes,
+        command,
+        ...
+      }:
+      ''${
+        lib.concatMapStringsSep "+" toString keys
+      }:${lib.concatStringsSep "," events}:${lib.concatStringsSep "," attributes}:${command}''
+    ) cfg.bindings}
     ${cfg.extraConfig}
   '';
 
-  bindingCfg = { ... }: {
-    options = {
+  bindingCfg =
+    { ... }:
+    {
+      options = {
 
-      keys = mkOption {
-        type = types.listOf types.int;
-        description = "List of keycodes to match.";
+        keys = lib.mkOption {
+          type = lib.types.listOf lib.types.int;
+          description = "List of keycodes to match.";
+        };
+
+        events = lib.mkOption {
+          type = lib.types.listOf (
+            lib.types.enum [
+              "key"
+              "rep"
+              "rel"
+            ]
+          );
+          default = [ "key" ];
+          description = "List of events to match.";
+        };
+
+        attributes = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
+          default = [ "exec" ];
+          description = "List of attributes.";
+        };
+
+        command = lib.mkOption {
+          type = lib.types.str;
+          default = "";
+          description = "What to run.";
+        };
+
       };
-
-      events = mkOption {
-        type = types.listOf (types.enum ["key" "rep" "rel"]);
-        default = [ "key" ];
-        description = "List of events to match.";
-      };
-
-      attributes = mkOption {
-        type = types.listOf types.str;
-        default = [ "exec" ];
-        description = "List of attributes.";
-      };
-
-      command = mkOption {
-        type = types.str;
-        default = "";
-        description = "What to run.";
-      };
-
     };
-  };
 
 in
 
@@ -54,8 +71,8 @@ in
 
     services.actkbd = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable the {command}`actkbd` key mapping daemon.
@@ -71,9 +88,9 @@ in
         '';
       };
 
-      bindings = mkOption {
-        type = types.listOf (types.submodule bindingCfg);
-        default = [];
+      bindings = lib.mkOption {
+        type = lib.types.listOf (lib.types.submodule bindingCfg);
+        default = [ ];
         example = lib.literalExpression ''
           [ { keys = [ 113 ]; events = [ "key" ]; command = "''${pkgs.alsa-utils}/bin/amixer -q set Master toggle"; }
           ]
@@ -87,8 +104,8 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Literal contents to append to the end of actkbd configuration file.
@@ -99,18 +116,19 @@ in
 
   };
 
-
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
-    services.udev.packages = lib.singleton (pkgs.writeTextFile {
-      name = "actkbd-udev-rules";
-      destination = "/etc/udev/rules.d/61-actkbd.rules";
-      text = ''
-        ACTION=="add", SUBSYSTEM=="input", KERNEL=="event[0-9]*", ENV{ID_INPUT_KEY}=="1", TAG+="systemd", ENV{SYSTEMD_WANTS}+="actkbd@$env{DEVNAME}.service"
-      '';
-    });
+    services.udev.packages = lib.singleton (
+      pkgs.writeTextFile {
+        name = "actkbd-udev-rules";
+        destination = "/etc/udev/rules.d/61-actkbd.rules";
+        text = ''
+          ACTION=="add", SUBSYSTEM=="input", KERNEL=="event[0-9]*", ENV{ID_INPUT_KEY}=="1", TAG+="systemd", ENV{SYSTEMD_WANTS}+="actkbd@$env{DEVNAME}.service"
+        '';
+      }
+    );
 
     systemd.services."actkbd@" = {
       enable = true;

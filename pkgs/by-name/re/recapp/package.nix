@@ -1,20 +1,21 @@
-{ lib
-, python3
-, fetchFromGitHub
-, appstream-glib
-, desktop-file-utils
-, gettext
-, glib
-, gobject-introspection
-, gtk3
-, gst_all_1
-, libnotify
-, librsvg
-, meson
-, ninja
-, pkg-config
-, slop
-, wrapGAppsHook3
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  appstream-glib,
+  desktop-file-utils,
+  gettext,
+  glib,
+  gobject-introspection,
+  gtk3,
+  gst_all_1,
+  libnotify,
+  librsvg,
+  meson,
+  ninja,
+  pkg-config,
+  slop,
+  wrapGAppsHook3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -68,7 +69,12 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
-      "--prefix" "PATH" ":" "${lib.makeBinPath [ gst_all_1.gstreamer.dev slop ]}"
+      "--prefix" "PATH" ":" "${
+        lib.makeBinPath [
+          gst_all_1.gstreamer.dev
+          slop
+        ]
+      }"
     )
   '';
 

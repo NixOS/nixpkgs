@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, alsa-lib
-, cmake
-, doxygen
-, libX11
-, libXcursor
-, libXext
-, libXft
-, libXinerama
-, libXrandr
-, pkg-config
-, zlib
-, Accelerate
-, AGL
-, Cocoa
-, Foundation
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  alsa-lib,
+  cmake,
+  doxygen,
+  libX11,
+  libXcursor,
+  libXext,
+  libXft,
+  libXinerama,
+  libXrandr,
+  pkg-config,
+  zlib,
+  Accelerate,
+  AGL,
+  Cocoa,
+  Foundation,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -40,22 +41,29 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    alsa-lib
-  ] ++ (if stdenv.hostPlatform.isDarwin then [
-    Accelerate
-    AGL
-    Cocoa
-    Foundation
-    zlib
-  ] else [
-    libX11
-    libXcursor
-    libXext
-    libXft
-    libXinerama
-    libXrandr
-  ]);
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      alsa-lib
+    ]
+    ++ (
+      if stdenv.hostPlatform.isDarwin then
+        [
+          Accelerate
+          AGL
+          Cocoa
+          Foundation
+          zlib
+        ]
+      else
+        [
+          libX11
+          libXcursor
+          libXext
+          libXft
+          libXinerama
+          libXrandr
+        ]
+    );
 
   strictDeps = true;
 

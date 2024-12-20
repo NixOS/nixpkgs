@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, cmake
-, openjpeg
-, yaml-cpp
-, batchVersion ? false
-, withJpegLs ? true
-, withOpenJpeg ? true
-, withCloudflareZlib ? true
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  replaceVars,
+  cmake,
+  openjpeg,
+  yaml-cpp,
+  batchVersion ? false,
+  withJpegLs ? true,
+  withOpenJpeg ? true,
+  withCloudflareZlib ? true,
 }:
 
 let
@@ -33,27 +34,34 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = lib.optionals withCloudflareZlib [
-    (substituteAll {
-      src = ./dont-fetch-external-libs.patch;
+    (replaceVars ./dont-fetch-external-libs.patch {
       inherit cloudflareZlib;
     })
   ];
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = lib.optionals batchVersion [ yaml-cpp ]
-    ++ lib.optionals withOpenJpeg [ openjpeg openjpeg.dev ];
+  buildInputs =
+    lib.optionals batchVersion [ yaml-cpp ]
+    ++ lib.optionals withOpenJpeg [
+      openjpeg
+      openjpeg.dev
+    ];
 
-  cmakeFlags = lib.optionals batchVersion [
-    "-DBATCH_VERSION=ON"
-    "-DYAML-CPP_DIR=${yaml-cpp}/lib/cmake/yaml-cpp"
-  ] ++ lib.optionals withJpegLs [
-    "-DUSE_JPEGLS=ON"
-  ] ++ lib.optionals withOpenJpeg [
-    "-DUSE_OPENJPEG=ON"
-    "-DOpenJPEG_DIR=${openjpeg}/lib/${openjpeg.pname}-${lib.versions.majorMinor openjpeg.version}"
-  ] ++ lib.optionals withCloudflareZlib [
-    "-DZLIB_IMPLEMENTATION=Cloudflare"
-  ];
+  cmakeFlags =
+    lib.optionals batchVersion [
+      "-DBATCH_VERSION=ON"
+      "-DYAML-CPP_DIR=${yaml-cpp}/lib/cmake/yaml-cpp"
+    ]
+    ++ lib.optionals withJpegLs [
+      "-DUSE_JPEGLS=ON"
+    ]
+    ++ lib.optionals withOpenJpeg [
+      "-DUSE_OPENJPEG=ON"
+      "-DOpenJPEG_DIR=${openjpeg}/lib/${openjpeg.pname}-${lib.versions.majorMinor openjpeg.version}"
+    ]
+    ++ lib.optionals withCloudflareZlib [
+      "-DZLIB_IMPLEMENTATION=Cloudflare"
+    ];
 
   meta = {
     description = "DICOM to NIfTI converter";
@@ -64,7 +72,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.nitrc.org/projects/dcm2nii";
     changelog = "https://github.com/rordenlab/dcm2niix/releases/tag/v${finalAttrs.version}";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ashgillman rbreslow ];
+    maintainers = with lib.maintainers; [
+      ashgillman
+      rbreslow
+    ];
     platforms = lib.platforms.all;
   };
 })

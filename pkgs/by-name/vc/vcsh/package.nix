@@ -1,9 +1,11 @@
-{ lib, stdenv
-, fetchurl
-, makeWrapper
-, pkg-config
-, git
-, perlPackages
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  pkg-config,
+  git,
+  perlPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,17 +24,29 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ git ];
 
-  nativeCheckInputs = []
-    ++ (with perlPackages; [ perl ShellCommand TestMost ]);
+  nativeCheckInputs =
+    [ ]
+    ++ (with perlPackages; [
+      perl
+      ShellCommand
+      TestMost
+    ]);
 
-  outputs = [ "out" "doc" "man" ];
+  outputs = [
+    "out"
+    "doc"
+    "man"
+  ];
 
   meta = with lib; {
     description = "Version Control System for $HOME";
     homepage = "https://github.com/RichiH/vcsh";
     changelog = "https://github.com/RichiH/vcsh/blob/v${version}/changelog";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ ttuegel alerque ];
+    maintainers = with maintainers; [
+      ttuegel
+      alerque
+    ];
     platforms = platforms.unix;
     mainProgram = "vcsh";
   };

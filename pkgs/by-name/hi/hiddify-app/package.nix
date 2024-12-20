@@ -2,11 +2,9 @@
   lib,
   fetchFromGitHub,
   pkg-config,
-  flutter,
+  flutter324,
   buildGoModule,
   libayatana-appindicator,
-  stdenv,
-  fetchurl,
   makeDesktopItem,
   copyDesktopItems,
   wrapGAppsHook3,
@@ -14,12 +12,12 @@
 }:
 let
   pname = "hiddify-app";
-  version = "2.5.7-unstable-2024-10-30";
+  version = "2.5.7-unstable-2024-11-18";
   src = fetchFromGitHub {
     owner = "hiddify";
     repo = "hiddify-app";
-    rev = "0144cddf670df11d1586a0dc76483f4c4f5b4230";
-    hash = "sha256-bjZkc0H0409YxM6AGrhm6gPaKNj/9SiVs0AUPoLJX+o=";
+    rev = "9d3de0ae2ea2687f189f75fa2a9196a035a0bb32";
+    hash = "sha256-P04A14lFfgvl0kkxMsNXNaHnwfJ3AWkhrfI7VMESGHc=";
     fetchSubmodules = true;
   };
   libcore = buildGoModule rec {
@@ -55,9 +53,8 @@ let
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/bin $out/lib
-      cp ./bin/HiddifyCli $out/bin/HiddifyCli
-      cp ./lib/libcore.so $out/lib/libcore.so
+      install -Dm0755 ./bin/HiddifyCli $out/bin/HiddifyCli
+      install -Dm0755 ./lib/libcore.so $out/lib/libcore.so
 
       runHook postInstall
     '';
@@ -71,12 +68,8 @@ let
       maintainers = with lib.maintainers; [ aucub ];
     };
   };
-  sqlite-autoconf = fetchurl {
-    url = "https://sqlite.org/2024/sqlite-autoconf-3460000.tar.gz";
-    hash = "sha256-b45qezNSc3SIFvmztiu9w3Koid6HgtfwSMZTpEdBen0=";
-  };
 in
-flutter.buildFlutterApplication {
+flutter324.buildFlutterApplication {
   inherit pname version src;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
@@ -92,26 +85,6 @@ flutter.buildFlutterApplication {
     copyDesktopItems
   ];
 
-  customSourceBuilders = {
-    sqlite3_flutter_libs =
-      { version, src, ... }:
-      stdenv.mkDerivation rec {
-        pname = "sqlite3_flutter_libs";
-        inherit version src;
-        inherit (src) passthru;
-        postPatch = ''
-          substituteInPlace linux/CMakeLists.txt \
-            --replace-fail "https://sqlite.org/2024/sqlite-autoconf-3460000.tar.gz" "file://${sqlite-autoconf}"
-        '';
-        installPhase = ''
-          runHook preInstall
-          mkdir $out
-          cp -a ./* $out/
-          runHook postInstall
-        '';
-      };
-  };
-
   postPatch = ''
     substituteInPlace ./linux/my_application.cc \
       --replace-fail "./hiddify.png" "${placeholder "out"}/share/pixmaps/hiddify.png"
@@ -125,8 +98,7 @@ flutter.buildFlutterApplication {
   '';
 
   postInstall = ''
-    mkdir -p $out/share/pixmaps/
-    cp ./assets/images/source/ic_launcher_border.png $out/share/pixmaps/hiddify.png
+    install -Dm0644 ./assets/images/source/ic_launcher_border.png $out/share/pixmaps/hiddify.png
   '';
 
   desktopItems = [

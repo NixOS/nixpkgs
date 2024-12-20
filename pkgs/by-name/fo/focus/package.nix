@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libX11
-, libXinerama
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  libXinerama,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-IDiUXindzv5Ng5oCTyUlj2il/2kLvXG4YhgiYp7ZebQ=";
   };
 
-  buildInputs = [ libX11 libXinerama ];
+  buildInputs = [
+    libX11
+    libXinerama
+  ];
 
   makeFlags = [ "PREFIX=\${out}" ];
 

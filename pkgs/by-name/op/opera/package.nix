@@ -51,11 +51,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "opera";
-  version = "114.0.5282.102";
+  version = "115.0.5322.77";
 
   src = fetchurl {
     url = "${mirror}/${version}/linux/${pname}-stable_${version}_amd64.deb";
-    hash = "sha256-PBbozIdA+cfEzGIyL1P+25FZtrnd7ldctOtZYomKd/8=";
+    hash = "sha256-mMXwshT15+5R2/jCSAutO4UVFGAV2Enc4IjvUeqyCCU=";
   };
 
   nativeBuildInputs = [

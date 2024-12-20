@@ -1,4 +1,9 @@
-{ pkgs, config, lib, ...}:
+{
+  pkgs,
+  config,
+  lib,
+  ...
+}:
 let
   cfg = config.programs.mepo;
 in
@@ -25,10 +30,13 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      mepo
-    ] ++ lib.optional cfg.locationBackends.geoclue geoclue2-with-demo-agent
-    ++ lib.optional cfg.locationBackends.gpsd gpsd;
+    environment.systemPackages =
+      with pkgs;
+      [
+        mepo
+      ]
+      ++ lib.optional cfg.locationBackends.geoclue geoclue2-with-demo-agent
+      ++ lib.optional cfg.locationBackends.gpsd gpsd;
 
     services.geoclue2 = lib.mkIf cfg.locationBackends.geoclue {
       enable = true;

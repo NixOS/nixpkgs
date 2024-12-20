@@ -5,19 +5,20 @@
   fetchFromGitHub,
   installShellFiles,
   testers,
+  kubernetes-kcp,
 }:
 
 buildGoModule rec {
   pname = "kubernetes-kcp";
-  version = "0.26.0";
+  version = "0.26.1";
 
   src = fetchFromGitHub {
     owner = "kcp-dev";
     repo = "kcp";
     rev = "refs/tags/v${version}";
-    hash = "sha256-ZEgDeILo2weSAZgBsfR2EQyzym/I/+3P99b47E5Tfrw=";
+    hash = "sha256-vFwZerOW1H3qR428cSl5mnz8KthO20BWk8gUjOq1OfU=";
   };
-  vendorHash = "sha256-IONbTih48LKAiEPFNFdBkJDMI2sjHWxiqVbEJCskyio=";
+  vendorHash = "sha256-p0dfkI1YPfQpIeFzRnI+ayge7kbjXT49XuCYP6FPXTQ=";
 
   subPackages = [ "cmd/kcp" ];
 
@@ -50,6 +51,7 @@ buildGoModule rec {
   '';
 
   passthru.tests.version = testers.testVersion {
+    package = kubernetes-kcp;
     command = "kcp --version";
     # NOTE: Once the go.mod version is pulled in, the version info here needs
     # to be also updated.

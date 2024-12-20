@@ -1,30 +1,31 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, cmake
-, pkg-config
-, ninja
-, gtest
+  cmake,
+  pkg-config,
+  ninja,
+  gtest,
 
-, curl
-, freetype
-, giflib
-, libjpeg
-, libpng
-, libwebp
-, libarchive
-, pixman
-, tinyxml-2
-, zlib
-, SDL2
-, SDL2_image
-, lua
-, AppKit
-, Cocoa
-, Foundation
+  curl,
+  freetype,
+  giflib,
+  libjpeg,
+  libpng,
+  libwebp,
+  libarchive,
+  pixman,
+  tinyxml-2,
+  zlib,
+  SDL2,
+  SDL2_image,
+  lua,
+  AppKit,
+  Cocoa,
+  Foundation,
 
-, nixosTests
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,26 +47,28 @@ stdenv.mkDerivation (finalAttrs: {
     gtest
   ];
 
-  buildInputs = [
-    curl
-    freetype
-    giflib
-    libjpeg
-    libpng
-    libwebp
-    libarchive
-    pixman
-    tinyxml-2
-    zlib
-    SDL2
-    SDL2_image
-    lua
-    # no v8 due to missing libplatform and libbase
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    Cocoa
-    Foundation
-  ];
+  buildInputs =
+    [
+      curl
+      freetype
+      giflib
+      libjpeg
+      libpng
+      libwebp
+      libarchive
+      pixman
+      tinyxml-2
+      zlib
+      SDL2
+      SDL2_image
+      lua
+      # no v8 due to missing libplatform and libbase
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+      Cocoa
+      Foundation
+    ];
 
   cmakeFlags = [
     "-DWITH_DESKTOP_INTEGRATION=ON"
@@ -92,19 +95,19 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Animated sprite editor & pixel art tool, fork of Aseprite";
     license = lib.licenses.gpl2Only;
     longDescription = ''
-        LibreSprite is a program to create animated sprites. Its main features are:
+      LibreSprite is a program to create animated sprites. Its main features are:
 
-          - Sprites are composed by layers & frames (as separated concepts).
-          - Supported color modes: RGBA, Indexed (palettes up to 256 colors), and Grayscale.
-          - Load/save sequence of PNG files and GIF animations (and FLC, FLI, JPG, BMP, PCX, TGA).
-          - Export/import animations to/from Sprite Sheets.
-          - Tiled drawing mode, useful to draw patterns and textures.
-          - Undo/Redo for every operation.
-          - Real-time animation preview.
-          - Multiple editors support.
-          - Pixel-art specific tools like filled Contour, Polygon, Shading mode, etc.
-          - Onion skinning.
-      '';
+        - Sprites are composed by layers & frames (as separated concepts).
+        - Supported color modes: RGBA, Indexed (palettes up to 256 colors), and Grayscale.
+        - Load/save sequence of PNG files and GIF animations (and FLC, FLI, JPG, BMP, PCX, TGA).
+        - Export/import animations to/from Sprite Sheets.
+        - Tiled drawing mode, useful to draw patterns and textures.
+        - Undo/Redo for every operation.
+        - Real-time animation preview.
+        - Multiple editors support.
+        - Pixel-art specific tools like filled Contour, Polygon, Shading mode, etc.
+        - Onion skinning.
+    '';
     maintainers = with lib.maintainers; [ fgaz ];
     platforms = lib.platforms.all;
     # https://github.com/LibreSprite/LibreSprite/issues/308

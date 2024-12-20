@@ -1,4 +1,9 @@
-{ lib, buildGoModule, buildNpmPackage, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  buildNpmPackage,
+  fetchFromGitHub,
+}:
 let
   version = "0.20.0";
 
@@ -30,7 +35,11 @@ buildGoModule {
 
   subPackages = [ "cmd/tegola" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/go-spatial/tegola/internal/build.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/go-spatial/tegola/internal/build.Version=${version}"
+  ];
 
   preBuild = ''
     rm -rf ui/dist

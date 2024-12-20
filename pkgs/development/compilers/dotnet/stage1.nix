@@ -7,6 +7,7 @@
   tarballHash,
   depsFile,
   bootstrapSdk,
+  fallbackTargetPackages,
 }@args:
 
 let
@@ -33,8 +34,7 @@ let
 
 in
 mkPackages {
-  inherit vmr;
-  fallbackTargetPackages = bootstrapSdk.targetPackages;
+  inherit vmr fallbackTargetPackages;
 }
 // {
   stage0 = lib.dontRecurseIntoAttrs stage0;

@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   pname = "throttled";
-  version = "0.10.0";
+  version = "0.11";
 
   src = fetchFromGitHub {
     owner = "erpalma";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-0MsPp6y4r/uZB2SplKV+SAiJoxIs2jgOQmQoQQ2ZKwI=";
+    sha256 = "sha256-+3ktDkr5hvOfHcch4+mjgJqcuw24UgWTkJqTyDQumyk=";
   };
 
   nativeBuildInputs = [

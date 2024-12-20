@@ -1,4 +1,10 @@
-{ config, lib, options, pkgs, ... }:
+{
+  config,
+  lib,
+  options,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -13,7 +19,8 @@ let
     }
   '';
 
-in {
+in
+{
 
   ###### interface
 
@@ -66,6 +73,6 @@ in {
       isSystemUser = true;
       group = "peerflix";
     };
-    users.groups.peerflix = {};
+    users.groups.peerflix = { };
   };
 }

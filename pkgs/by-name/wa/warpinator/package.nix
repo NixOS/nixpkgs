@@ -1,48 +1,51 @@
-{ stdenv
-, fetchFromGitHub
-, lib
-, gobject-introspection
-, meson
-, ninja
-, python3
-, gtk3
-, gdk-pixbuf
-, xapp
-, wrapGAppsHook3
-, gettext
-, polkit
-, glib
-, gitUpdater
-, bubblewrap
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  gobject-introspection,
+  meson,
+  ninja,
+  python3,
+  gtk3,
+  gdk-pixbuf,
+  xapp,
+  wrapGAppsHook3,
+  gettext,
+  polkit,
+  glib,
+  gitUpdater,
+  bubblewrap,
 }:
 
 let
-  pythonEnv = python3.withPackages (pp: with pp; [
-    grpcio-tools
-    protobuf
-    pygobject3
-    setproctitle
-    python-xapp
-    zeroconf
-    grpcio
-    setuptools
-    cryptography
-    pynacl
-    netifaces
-    netaddr
-    ifaddr
-    qrcode
-  ]);
+  pythonEnv = python3.withPackages (
+    pp: with pp; [
+      grpcio-tools
+      protobuf
+      pygobject3
+      setproctitle
+      python-xapp
+      zeroconf
+      grpcio
+      setuptools
+      cryptography
+      pynacl
+      netifaces
+      netaddr
+      ifaddr
+      qrcode
+    ]
+  );
 in
 stdenv.mkDerivation rec {
   pname = "warpinator";
-  version = "1.8.6";
+  version = "1.8.7";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-GJp2iRB3F42pSfYd2FLpmDTZ1zqt8thdRPAHu9/ns5E=";
+    hash = "sha256-EgTz0i7Dui74xYFShkLox6ITAEAF8yYATEcQ51pc7gA=";
   };
 
   nativeBuildInputs = [

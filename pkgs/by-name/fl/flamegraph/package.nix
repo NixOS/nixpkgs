@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, perl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "FlameGraph";
@@ -13,6 +18,8 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ perl ];
 
+  strictDeps = true;
+
   installPhase = ''
     runHook preInstall
 
@@ -26,13 +33,23 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
+  nativeCheckInputs = [
+    perl
+  ];
+
   checkPhase = ''
-    patchShebangs ./test.sh
+    runHook preCheck
+    patchShebangs --build ./test.sh
     ./test.sh
+    runHook postCheck
   '';
 
   meta = with lib; {
-    license = with licenses; [ asl20 cddl gpl2Plus ];
+    license = with licenses; [
+      asl20
+      cddl
+      gpl2Plus
+    ];
     homepage = "http://www.brendangregg.com/flamegraphs.html";
     description = "Visualization for profiled code";
     mainProgram = "flamegraph.pl";

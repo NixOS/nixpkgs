@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl, perl, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  perl,
+  autoreconfHook,
+}:
 
 let
   # when upgrade znapzend, check versions of Perl libs here: https://github.com/oetiker/znapzend/blob/master/cpanfile
@@ -12,11 +19,15 @@ let
       hash = "sha256-guBqKdWemc4mC/xp77Wd7qeV2iRqY4wrQ5NRsHtsCnI=";
     };
     buildInputs = with perl.pkgs; [ ModuleBuildTiny ];
-    propagatedBuildInputs = with perl.pkgs; [ Mojolicious RoleTiny ClassMethodModifiers ];
+    propagatedBuildInputs = with perl.pkgs; [
+      Mojolicious
+      RoleTiny
+      ClassMethodModifiers
+    ];
   };
 
-  perl' = perl.withPackages (p:
-    with p; [
+  perl' = perl.withPackages (
+    p: with p; [
       ClassMethodModifiers
       ExtUtilsConfig
       ExtUtilsHelpers
@@ -25,7 +36,8 @@ let
       MojoLogClearable
       Mojolicious
       RoleTiny
-    ]);
+    ]
+  );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "znapzend";
@@ -41,7 +53,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-UvaYzzV+5mZAAwSSMzq4fjCu/mzjeSyQdwQRTZGNktM=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   buildInputs = [ perl' ];
   nativeBuildInputs = [ autoreconfHook ];
@@ -57,9 +72,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   meta = with lib; {
     description = "High performance open source ZFS backup with mbuffer and ssh support";
-    homepage    = "https://www.znapzend.org";
-    license     = licenses.gpl3;
-    maintainers = with maintainers; [ otwieracz ma27 ];
-    platforms   = platforms.all;
+    homepage = "https://www.znapzend.org";
+    license = licenses.gpl3;
+    maintainers = with maintainers; [
+      otwieracz
+      ma27
+    ];
+    platforms = platforms.all;
   };
 })

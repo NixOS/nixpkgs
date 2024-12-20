@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, testers
-, zig_0_13
-, callPackage
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  testers,
+  zig_0_13,
+  callPackage,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zf";
-  version = "0.9.2";
+  version = "0.10.2";
 
   src = fetchFromGitHub {
     owner = "natecraddock";
     repo = "zf";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-8KfzsDG9sZ/jMOusz2ydt3oytp891vKOpCUlPAwS8TE=";
+    hash = "sha256-Rsl8gAfVMeF5CLyPSrtzdgSCvEwPnBwHT4BOF9JQYYo=";
   };
 
   nativeBuildInputs = [
@@ -43,7 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
     changelog = "https://github.com/natecraddock/zf/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;
-    maintainers = with lib.maintainers; [ dit7ya figsoda mmlb ];
+    maintainers = with lib.maintainers; [
+      dit7ya
+      figsoda
+      mmlb
+    ];
     mainProgram = "zf";
   };
 })

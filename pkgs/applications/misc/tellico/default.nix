@@ -1,27 +1,28 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, mkDerivation
-, cmake
-, exempi
-, extra-cmake-modules
-, karchive
-, kdoctools
-, kfilemetadata
-, khtml
-, kitemmodels
-, knewstuff
-, kxmlgui
-, libcdio
-, libkcddb
-, libksane
-, makeWrapper
-, poppler
-, qtcharts
-, qtwebengine
-, solid
-, taglib
-, wrapQtAppsHook
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  mkDerivation,
+  cmake,
+  exempi,
+  extra-cmake-modules,
+  karchive,
+  kdoctools,
+  kfilemetadata,
+  khtml,
+  kitemmodels,
+  knewstuff,
+  kxmlgui,
+  libcdio,
+  libkcddb,
+  libksane,
+  makeWrapper,
+  poppler,
+  qtcharts,
+  qtwebengine,
+  solid,
+  taglib,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -66,7 +67,11 @@ stdenv.mkDerivation rec {
     description = "Collection management software, free and simple";
     mainProgram = "tellico";
     homepage = "https://tellico-project.org/";
-    license = with licenses; [ gpl2Only gpl3Only lgpl2Only ];
+    license = with licenses; [
+      gpl2Only
+      gpl3Only
+      lgpl2Only
+    ];
     maintainers = with maintainers; [ numkem ];
     platforms = platforms.linux;
   };

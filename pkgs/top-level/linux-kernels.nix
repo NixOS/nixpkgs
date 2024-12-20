@@ -276,6 +276,7 @@ in {
     linux_6_1_hardened = hardenedKernelFor kernels.linux_6_1 { };
     linux_6_6_hardened = hardenedKernelFor kernels.linux_6_6 { };
     linux_6_11_hardened = hardenedKernelFor kernels.linux_6_11 { };
+    linux_6_12_hardened = hardenedKernelFor kernels.linux_6_12 { };
 
   } // lib.optionalAttrs config.allowAliases {
     linux_4_14 = throw "linux 4.14 was removed because it will reach its end of life within 23.11";
@@ -374,6 +375,8 @@ in {
 
     e1000e = if lib.versionOlder kernel.version "4.10" then  callPackage ../os-specific/linux/e1000e {} else null;
 
+    iio-utils = if lib.versionAtLeast kernel.version "4.1" then callPackage ../os-specific/linux/iio-utils { } else null;
+
     intel-speed-select = if lib.versionAtLeast kernel.version "5.3" then callPackage ../os-specific/linux/intel-speed-select { } else null;
 
     ipu6-drivers = callPackage ../os-specific/linux/ipu6-drivers {};
@@ -429,8 +432,8 @@ in {
     nvidia_x11_production  = nvidiaPackages.production;
     nvidia_x11_vulkan_beta = nvidiaPackages.vulkan_beta;
     nvidia_dc              = nvidiaPackages.dc;
-    nvidia_dc_520          = nvidiaPackages.dc_520;
     nvidia_dc_535          = nvidiaPackages.dc_535;
+    nvidia_dc_565          = nvidiaPackages.dc_565;
 
     # this is not a replacement for nvidia_x11*
     # only the opensource kernel driver exposed for hydra to build
@@ -572,6 +575,8 @@ in {
 
     xpadneo = callPackage ../os-specific/linux/xpadneo { };
 
+    yt6801 = callPackage ../os-specific/linux/yt6801 { };
+
     ithc = callPackage ../os-specific/linux/ithc { };
 
     ryzen-smu = callPackage ../os-specific/linux/ryzen-smu { };
@@ -675,6 +680,7 @@ in {
     linux_6_1_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_1_hardened);
     linux_6_6_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_6_hardened);
     linux_6_11_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_11_hardened);
+    linux_6_12_hardened = recurseIntoAttrs (packagesFor kernels.linux_6_12_hardened);
 
     linux_zen = recurseIntoAttrs (packagesFor kernels.linux_zen);
     linux_lqx = recurseIntoAttrs (packagesFor kernels.linux_lqx);

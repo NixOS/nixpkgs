@@ -9,7 +9,7 @@
   python-dotenv,
   pytest-asyncio,
   croniter,
-  pynacl
+  pynacl,
 }:
 
 buildPythonPackage rec {

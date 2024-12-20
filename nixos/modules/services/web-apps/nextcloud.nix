@@ -44,10 +44,9 @@ let
     };
   };
 
-  webroot = pkgs.runCommandLocal
-    "${cfg.package.name or "nextcloud"}-with-apps"
-    { }
-    ''
+  webroot = pkgs.runCommand "${cfg.package.name or "nextcloud"}-with-apps" {
+    preferLocalBuild = true;
+  } ''
       mkdir $out
       ln -sfv "${cfg.package}"/* "$out"
       ${concatStrings

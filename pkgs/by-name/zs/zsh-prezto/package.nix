@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, unstableGitUpdater, bash }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  unstableGitUpdater,
+  bash,
+}:
 
 stdenv.mkDerivation rec {
   pname = "zsh-prezto";
@@ -25,7 +31,7 @@ stdenv.mkDerivation rec {
     cp -R ./ $out/share/zsh-prezto
   '';
 
-  passthru.updateScript = unstableGitUpdater {};
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = with lib; {
     description = "Configuration framework for Zsh";

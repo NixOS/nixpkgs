@@ -1,10 +1,11 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, cmake
-, pkg-config
-, libusb1
-, libftdi1
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  cmake,
+  pkg-config,
+  libusb1,
+  libftdi1,
 }:
 
 stdenv.mkDerivation {

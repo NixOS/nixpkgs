@@ -1,5 +1,13 @@
-{ lib, fetchFromGitHub, python3Packages, wrapGAppsHook3
-, glibcLocales, gobject-introspection, gtk3, libsoup_3, libsecret
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  wrapGAppsHook3,
+  glibcLocales,
+  gobject-introspection,
+  gtk3,
+  libsoup_3,
+  libsecret,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -18,8 +26,16 @@ python3Packages.buildPythonApplication rec {
     setuptools-scm
   ];
 
-  nativeBuildInputs = [ wrapGAppsHook3 gobject-introspection ];
-  buildInputs = [ glibcLocales gtk3 libsoup_3 libsecret ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    gobject-introspection
+  ];
+  buildInputs = [
+    glibcLocales
+    gtk3
+    libsoup_3
+    libsecret
+  ];
   propagatedBuildInputs = with python3Packages; [
     pygobject3
   ];

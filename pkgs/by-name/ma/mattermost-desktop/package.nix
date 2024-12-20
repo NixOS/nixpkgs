@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchurl
-, electron
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchurl,
+  electron,
+  makeWrapper,
 }:
 
 let
@@ -55,7 +56,7 @@ stdenv.mkDerivation {
     makeWrapper '${lib.getExe electron}' $out/bin/${pname} \
       --set-default ELECTRON_IS_DEV 0 \
       --add-flags $out/share/${pname}/app.asar \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
 
     runHook postInstall
   '';
@@ -66,7 +67,10 @@ stdenv.mkDerivation {
     homepage = "https://about.mattermost.com/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.asl20;
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     maintainers = [ maintainers.joko ];
   };
 }

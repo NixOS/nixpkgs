@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libdmtx
-, imagemagick
-, Foundation
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libdmtx,
+  imagemagick,
+  Foundation,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,10 +20,15 @@ stdenv.mkDerivation rec {
     hash = "sha256-uXzPAv6DappyHBNmsTg6qRUvtUUdP1IPOdDvIcevfco=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+  ];
 
-  buildInputs = [ libdmtx imagemagick ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin Foundation;
+  buildInputs = [
+    libdmtx
+    imagemagick
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin Foundation;
 
   meta = {
     description = "Data matrix command-line utilities";

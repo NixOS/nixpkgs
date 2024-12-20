@@ -1,12 +1,27 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.geoipupdate;
-  inherit (builtins) isAttrs isString isInt isList typeOf hashString;
+  inherit (builtins)
+    isAttrs
+    isString
+    isInt
+    isList
+    typeOf
+    hashString
+    ;
 in
 {
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "geoip-updater" ] "services.geoip-updater has been removed, use services.geoipupdate instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "geoip-updater"
+    ] "services.geoip-updater has been removed, use services.geoipupdate instead.")
   ];
 
   options = {
@@ -54,9 +69,13 @@ in
           freeformType =
             with lib.types;
             let
-              type = oneOf [str int bool];
+              type = oneOf [
+                str
+                int
+                bool
+              ];
             in
-              attrsOf (either type (listOf type));
+            attrsOf (either type (listOf type));
 
           options = {
 
@@ -149,19 +168,33 @@ in
             isSecret = v: isAttrs v && v ? _secret && isString v._secret;
             geoipupdateKeyValue = lib.generators.toKeyValue {
               mkKeyValue = lib.flip lib.generators.mkKeyValueDefault " " rec {
-                mkValueString = v:
-                  if isInt           v then toString v
-                  else if isString   v then v
-                  else if true  ==   v then "1"
-                  else if false ==   v then "0"
-                  else if isList     v then lib.concatMapStringsSep " " mkValueString v
-                  else if isSecret   v then hashString "sha256" v._secret
-                  else throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty {}) v}";
+                mkValueString =
+                  v:
+                  if isInt v then
+                    toString v
+                  else if isString v then
+                    v
+                  else if true == v then
+                    "1"
+                  else if false == v then
+                    "0"
+                  else if isList v then
+                    lib.concatMapStringsSep " " mkValueString v
+                  else if isSecret v then
+                    hashString "sha256" v._secret
+                  else
+                    throw "unsupported type ${typeOf v}: ${(lib.generators.toPretty { }) v}";
               };
             };
             secretPaths = lib.catAttrs "_secret" (lib.collect isSecret cfg.settings);
             mkSecretReplacement = file: ''
-              replace-secret ${lib.escapeShellArgs [ (hashString "sha256" file) file "/run/geoipupdate/GeoIP.conf" ]}
+              replace-secret ${
+                lib.escapeShellArgs [
+                  (hashString "sha256" file)
+                  file
+                  "/run/geoipupdate/GeoIP.conf"
+                ]
+              }
             '';
             secretReplacements = lib.concatMapStrings mkSecretReplacement secretPaths;
 
@@ -177,7 +210,7 @@ in
               ${secretReplacements}
             '';
           in
-            "+${pkgs.writeShellScript "start-pre-full-privileges" script}";
+          "+${pkgs.writeShellScript "start-pre-full-privileges" script}";
         ExecStart = "${pkgs.geoipupdate}/bin/geoipupdate -f /run/geoipupdate/GeoIP.conf";
         User = "geoip";
         DynamicUser = true;
@@ -197,8 +230,14 @@ in
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
         ProcSubset = "pid";
-        SystemCallFilter = [ "@system-service" "~@privileged" ];
-        RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~@privileged"
+        ];
+        RestrictAddressFamilies = [
+          "AF_INET"
+          "AF_INET6"
+        ];
         RestrictRealtime = true;
         RestrictNamespaces = true;
         MemoryDenyWriteExecute = true;

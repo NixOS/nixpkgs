@@ -1,4 +1,10 @@
-{ stdenv, lib, fetchurl, substituteAll, PodParser }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  replaceVars,
+  PodParser,
+}:
 
 stdenv.mkDerivation {
   pname = "multiline";
@@ -16,8 +22,7 @@ stdenv.mkDerivation {
 
   patches = [
     # The script requires a special Perl environment.
-    (substituteAll {
-      src = ./libpath.patch;
+    (replaceVars ./libpath.patch {
       env = PodParser;
     })
   ];

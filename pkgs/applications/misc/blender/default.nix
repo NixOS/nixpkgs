@@ -112,20 +112,20 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "blender";
-  version = "4.3.0";
+  version = "4.3.2";
 
   srcs = [
     (fetchzip {
       name = "source";
       url = "https://download.blender.org/source/blender-${finalAttrs.version}.tar.xz";
-      hash = "sha256-eB67wn5TXiB1+yS3ZF40uzliO/jcm55anffdJT++O24=";
+      hash = "sha256-LCU2JpQbvQ+W/jC+H8J2suh+X5sTLOG9TcE2EeHqVh4=";
     })
     (fetchgit {
       name = "assets";
       url = "https://projects.blender.org/blender/blender-assets.git";
       rev = "v${finalAttrs.version}";
       fetchLFS = true;
-      hash = "sha256-3w/SHhbwXkHp8UlCGjxvm1znT1yfuZSnXSWWRTe/C0s=";
+      hash = "sha256-B/UibETNBEUAO1pLCY6wR/Mmdk2o9YyNs6z6pV8dBJI=";
     })
   ];
 
@@ -175,8 +175,8 @@ stdenv.mkDerivation (finalAttrs: {
       "-DPYTHON_INCLUDE_DIR=${python3}/include/${python3.libPrefix}"
       "-DPYTHON_LIBPATH=${python3}/lib"
       "-DPYTHON_LIBRARY=${python3.libPrefix}"
-      "-DPYTHON_NUMPY_INCLUDE_DIRS=${python3Packages.numpy}/${python3.sitePackages}/numpy/core/include"
-      "-DPYTHON_NUMPY_PATH=${python3Packages.numpy}/${python3.sitePackages}"
+      "-DPYTHON_NUMPY_INCLUDE_DIRS=${python3Packages.numpy_1}/${python3.sitePackages}/numpy/core/include"
+      "-DPYTHON_NUMPY_PATH=${python3Packages.numpy_1}/${python3.sitePackages}"
       "-DPYTHON_VERSION=${python3.pythonVersion}"
       "-DWITH_ALEMBIC=ON"
       "-DWITH_BUILDINFO=OFF"
@@ -342,7 +342,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     [
       ps.materialx
-      ps.numpy
+      ps.numpy_1
       ps.requests
       ps.zstandard
     ]

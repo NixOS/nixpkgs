@@ -1,4 +1,14 @@
-{ lib, stdenv, autoreconfHook, pkg-config, SDL2, SDL2_mixer, SDL2_net, fetchFromGitHub, python3 }:
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  pkg-config,
+  SDL2,
+  SDL2_mixer,
+  SDL2_net,
+  fetchFromGitHub,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "crispy-doom";
@@ -16,8 +26,16 @@ stdenv.mkDerivation rec {
     for script in $(grep -lr '^#!/usr/bin/env python3$'); do patchShebangs $script; done
   '';
 
-  nativeBuildInputs = [ autoreconfHook pkg-config python3 ];
-  buildInputs = [ SDL2 SDL2_mixer SDL2_net ];
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    python3
+  ];
+  buildInputs = [
+    SDL2
+    SDL2_mixer
+    SDL2_net
+  ];
   enableParallelBuilding = true;
 
   strictDeps = true;

@@ -1,21 +1,23 @@
-{ stdenv
-, fetchurl
-, dpkg
-, lib
-, glib
-, nss
-, nspr
-, cups
-, dbus
-, libdrm
-, gtk3
-, pango
-, cairo
-, libxkbcommon
-, mesa
-, expat
-, alsa-lib
-, buildFHSEnv
+{
+  stdenv,
+  fetchurl,
+  dpkg,
+  lib,
+  glib,
+  nss,
+  nspr,
+  cups,
+  dbus,
+  libdrm,
+  gtk3,
+  pango,
+  cairo,
+  libxkbcommon,
+  mesa,
+  expat,
+  alsa-lib,
+  buildFHSEnv,
+  writeTextFile,
 }:
 
 let
@@ -44,40 +46,71 @@ let
   };
 
   typoraFHS = buildFHSEnv {
-    name = "typora-fhs";
-    targetPkgs = pkgs: (with pkgs; [
-      typoraBase
-      udev
-      alsa-lib
-      glib
-      nss
-      nspr
-      atk
-      cups
-      dbus
-      gtk3
-      libdrm
-      pango
-      cairo
-      mesa
-      expat
-      libxkbcommon
-    ]) ++ (with pkgs.xorg; [
-      libX11
-      libXcursor
-      libXrandr
-      libXcomposite
-      libXdamage
-      libXext
-      libXfixes
-      libxcb
-    ]);
+    pname = "typora-fhs";
+    inherit version;
+    targetPkgs =
+      pkgs:
+      (with pkgs; [
+        typoraBase
+        udev
+        alsa-lib
+        glib
+        nss
+        nspr
+        atk
+        cups
+        dbus
+        gtk3
+        libdrm
+        pango
+        cairo
+        mesa
+        libGL
+        expat
+        libxkbcommon
+      ])
+      ++ (with pkgs.xorg; [
+        libX11
+        libXcursor
+        libXrandr
+        libXcomposite
+        libXdamage
+        libXext
+        libXfixes
+        libxcb
+      ]);
     runScript = ''
-      Typora $*
+      Typora "$@"
     '';
   };
 
-in stdenv.mkDerivation {
+  launchScript = writeTextFile {
+    name = "typora-launcher";
+    executable = true;
+    text = ''
+      #!${stdenv.shell}
+
+      # Configuration directory setup
+      XDG_CONFIG_HOME=''${XDG_CONFIG_HOME:-~/.config}
+      TYPORA_CONFIG_DIR="$XDG_CONFIG_HOME/Typora"
+      TYPORA_DICT_DIR="$TYPORA_CONFIG_DIR/typora-dictionaries"
+
+      # Create config directories with proper permissions
+      mkdir -p "$TYPORA_DICT_DIR"
+      chmod 755 "$TYPORA_CONFIG_DIR"
+      chmod 755 "$TYPORA_DICT_DIR"
+
+      # Read user flags if they exist
+      if [ -f "$XDG_CONFIG_HOME/typora-flags.conf" ]; then
+        TYPORA_USER_FLAGS="$(sed 's/#.*//' "$XDG_CONFIG_HOME/typora-flags.conf" | tr '\n' ' ')"
+      fi
+
+      exec ${typoraFHS}/bin/typora-fhs "$@" $TYPORA_USER_FLAGS
+    '';
+  };
+
+in
+stdenv.mkDerivation {
   inherit pname version;
 
   dontUnpack = true;
@@ -87,7 +120,7 @@ in stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
     mkdir -p $out/bin
-    ln -s ${typoraFHS}/bin/typora-fhs $out/bin/typora
+    ln -s ${launchScript} $out/bin/typora
     ln -s ${typoraBase}/share/ $out
     runHook postInstall
   '';

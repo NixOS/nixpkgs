@@ -1,7 +1,8 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitea,
+  gitUpdater,
   tk,
   tclPackages,
   tcl,
@@ -17,9 +18,12 @@ tcl.mkTclDerivation rec {
   pname = "remind";
   version = "05.01.01";
 
-  src = fetchurl {
-    url = "https://dianne.skoll.ca/projects/remind/download/remind-${version}.tar.gz";
-    hash = "sha256-906V9QdFHKJ1+uXv9zrFz9swfeVr/kxgkgKkGsscUY0=";
+  src = fetchFromGitea {
+    domain = "git.skoll.ca";
+    owner = "Skollsoft-Public";
+    repo = "Remind";
+    rev = version;
+    hash = "sha256-2qsJIdBsIttgofjB9Zd566I95mxkO7BTwUNPe50+bEY=";
   };
 
   propagatedBuildInputs = lib.optionals withGui [
@@ -44,11 +48,16 @@ tcl.mkTclDerivation rec {
     "-DHAVE_UNSETENV"
   ]);
 
+  passthru.updateScript = gitUpdater {
+    ignoredVersions = "-BETA";
+  };
+
   meta = with lib; {
     homepage = "https://dianne.skoll.ca/projects/remind/";
     description = "Sophisticated calendar and alarm program for the console";
     license = licenses.gpl2Only;
     maintainers = with maintainers; [
+      afh
       raskin
       kovirobi
     ];

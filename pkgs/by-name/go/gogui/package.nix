@@ -1,15 +1,16 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, ant
-, jdk
-, jre
-, docbook-xsl-ns
-, docbook_xml_dtd_42
-, imagemagick
-, libxslt
-, stripJavaArchivesHook
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ant,
+  jdk,
+  jre,
+  docbook-xsl-ns,
+  docbook_xml_dtd_42,
+  imagemagick,
+  libxslt,
+  stripJavaArchivesHook,
+  makeWrapper,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -90,7 +91,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/Remi-Coulom/gogui";
     license = lib.licenses.gpl3Plus;
     mainProgram = "gogui";
-    maintainers = with lib.maintainers; [ cleverca22 omnipotententity ];
+    maintainers = with lib.maintainers; [
+      cleverca22
+      omnipotententity
+    ];
     platforms = lib.platforms.unix;
   };
 })

@@ -1,8 +1,9 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, substituteAll
-, stdenv
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  replaceVars,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,8 +21,7 @@ rustPlatform.buildRustPackage rec {
 
   patches = [
     # patch the binary path so tests can find the binary when `--target` is present
-    (substituteAll {
-      src = ./fix-test-binary-path.patch;
+    (replaceVars ./fix-test-binary-path.patch {
       shortTarget = stdenv.hostPlatform.rust.rustcTarget;
     })
   ];
@@ -35,7 +35,10 @@ rustPlatform.buildRustPackage rec {
     description = "Small utility to compare Rust micro-benchmarks";
     mainProgram = "cargo-benchcmp";
     homepage = "https://github.com/BurntSushi/cargo-benchcmp";
-    license = with licenses; [ mit unlicense ];
+    license = with licenses; [
+      mit
+      unlicense
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

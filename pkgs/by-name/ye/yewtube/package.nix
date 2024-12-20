@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "yewtube";
@@ -43,6 +47,9 @@ python3Packages.buildPythonApplication rec {
     mainProgram = "yt";
     homepage = "https://github.com/mps-youtube/yewtube";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ fgaz koral ];
+    maintainers = with maintainers; [
+      fgaz
+      koral
+    ];
   };
 }

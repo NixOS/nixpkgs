@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pnpm
-, nodejs
-, electron_32
-, makeWrapper
-, copyDesktopItems
-, makeDesktopItem
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pnpm,
+  nodejs,
+  electron_32,
+  makeWrapper,
+  copyDesktopItems,
+  makeDesktopItem,
+  nix-update-script,
 }:
 stdenv.mkDerivation rec {
   pname = "legcord";
@@ -20,7 +21,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-9CicqDZDetxElD36OLizyVNxkqz3rQOjAtUNTGWVwss=";
   };
 
-  nativeBuildInputs = [ pnpm.configHook nodejs makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    pnpm.configHook
+    nodejs
+    makeWrapper
+    copyDesktopItems
+  ];
 
   pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
@@ -53,7 +59,7 @@ stdenv.mkDerivation rec {
     makeShellWrapper "${lib.getExe electron_32}" "$out/bin/legcord" \
       --add-flags "$out/share/lib/legcord/resources/app.asar" \
       "''${gappsWrapperArgs[@]}" \
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime}}" \
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}" \
       --set-default ELECTRON_IS_DEV 0 \
       --inherit-argv0
 
@@ -80,8 +86,14 @@ stdenv.mkDerivation rec {
     homepage = "https://legcord.app";
     downloadPage = "https://github.com/Legcord/Legcord";
     license = licenses.osl3;
-    maintainers = with maintainers; [ wrmilling water-sucks ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    maintainers = with maintainers; [
+      wrmilling
+      water-sucks
+    ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "legcord";
   };
 }

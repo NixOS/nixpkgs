@@ -1,13 +1,22 @@
-{ lib, stdenv, fetchpatch, fetchurl, bison, perl }:
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchurl,
+  bison,
+  perl,
+}:
 
 let
   version = "0.0.6";
   debianRevision = "7";
-  debianPatch = patchname: hash: fetchpatch {
-    name = "${patchname}.patch";
-    url = "https://sources.debian.org/data/main/b/bulletml/${version}-${debianRevision}/debian/patches/${patchname}.patch";
-    sha256 = hash;
-  };
+  debianPatch =
+    patchname: hash:
+    fetchpatch {
+      name = "${patchname}.patch";
+      url = "https://sources.debian.org/data/main/b/bulletml/${version}-${debianRevision}/debian/patches/${patchname}.patch";
+      sha256 = hash;
+    };
 
   lib_src = fetchurl {
     url = "http://shinh.skr.jp/libbulletml/libbulletml-${version}.tar.bz2";
@@ -24,7 +33,10 @@ stdenv.mkDerivation {
   pname = "bulletml";
   inherit version;
 
-  srcs = [ lib_src cpp_src ];
+  srcs = [
+    lib_src
+    cpp_src
+  ];
 
   postUnpack = "mv d_cpp bulletml/";
   sourceRoot = "bulletml";
@@ -41,7 +53,10 @@ stdenv.mkDerivation {
   makeFlags = [
     "-C src"
   ];
-  nativeBuildInputs = [ bison perl ];
+  nativeBuildInputs = [
+    bison
+    perl
+  ];
   hardeningDisable = [ "format" ];
 
   installPhase = ''

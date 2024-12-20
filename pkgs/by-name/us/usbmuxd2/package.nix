@@ -1,14 +1,16 @@
-{ lib
-, clangStdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, libimobiledevice
-, libusb1
-, avahi
-, clang
-, git
-}: let
+{
+  lib,
+  clangStdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  libimobiledevice,
+  libusb1,
+  avahi,
+  clang,
+  git,
+}:
+let
 
   libgeneral = clangStdenv.mkDerivation rec {
     pname = "libgeneral";

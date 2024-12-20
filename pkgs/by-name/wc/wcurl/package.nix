@@ -1,28 +1,33 @@
 {
   stdenvNoCC,
   lib,
+  coreutils,
   curl,
-  fetchFromGitLab,
+  fetchFromGitHub,
+  gnused,
   installShellFiles,
   nix-update-script,
+  makeBinaryWrapper,
   shunit2,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "wcurl";
-  version = "2024.07.10";
+  version = "2024.12.08";
 
-  src = fetchFromGitLab {
-    domain = "salsa.debian.org";
-    owner = "debian";
+  src = fetchFromGitHub {
+    owner = "curl";
     repo = "wcurl";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-FYkG74uoXFNYT7tszDcdCPQCEG3ePOFBUgIUYpsAzb8=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-X6v03oYb/n9ALJXpx5HQojths7tv1rEftGUiQElv7aY=";
   };
 
   strictDeps = true;
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeBinaryWrapper
+  ];
 
   nativeCheckInputs = [ shunit2 ];
 
@@ -52,10 +57,21 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  postFixup = ''
+    wrapProgram $out/bin/wcurl \
+      --inherit-argv0 \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          coreutils
+          gnused
+        ]
+      }
+  '';
+
   passthru.updateScript = nix-update-script { };
 
   meta = {
-    homepage = "https://salsa.debian.org/debian/wcurl";
+    homepage = "https://curl.se/wcurl";
     description = "Simple wrapper around curl to easily download files";
     mainProgram = "wcurl";
     license = lib.licenses.curl;

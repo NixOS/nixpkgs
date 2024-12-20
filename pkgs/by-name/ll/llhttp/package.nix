@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, cmake, testers, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  testers,
+  python3,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "llhttp";
@@ -11,7 +18,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-cnEp7Ds32bqu3jeUU/rqJOr/VW3KNmJU4pmNNaTpXRs=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     cmake

@@ -45,13 +45,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "vpp";
-  version = "24.06";
+  version = "24.10";
 
   src = fetchFromGitHub {
     owner = "FDio";
     repo = "vpp";
     rev = "v${version}";
-    hash = "sha256-AbdtH3ha/Bzj9tAkp4OhjRcUZilUEt+At0LukWN2LJU=";
+    hash = "sha256-GcmblIAu/BDbqZRycmnBsHkvzJe07qB2lSfDnO7ZYtg=";
   };
 
   postPatch = ''

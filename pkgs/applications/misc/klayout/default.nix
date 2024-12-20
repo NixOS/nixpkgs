@@ -5,13 +5,13 @@
 
 mkDerivation rec {
   pname = "klayout";
-  version = "0.29.8";
+  version = "0.29.10";
 
   src = fetchFromGitHub {
     owner = "KLayout";
     repo = "klayout";
     rev = "v${version}";
-    hash = "sha256-cWLekSfyAOWI0ID9SlxN8XxHQR9oo1y5tTBn2schCtI=";
+    hash = "sha256-3YRWGIfBGgN3vlBlFoVbMWgkhoxs7OQli1qtKUXf0KA=";
   };
 
   postPatch = ''

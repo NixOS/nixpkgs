@@ -20,6 +20,7 @@ let
       lomiri-docviewer-app = callPackage ./applications/lomiri-docviewer-app { };
       lomiri-filemanager-app = callPackage ./applications/lomiri-filemanager-app { };
       lomiri-gallery-app = callPackage ./applications/lomiri-gallery-app { };
+      lomiri-mediaplayer-app = callPackage ./applications/lomiri-mediaplayer-app { };
       lomiri-system-settings-unwrapped = callPackage ./applications/lomiri-system-settings { };
       lomiri-system-settings = callPackage ./applications/lomiri-system-settings/wrapper.nix { };
       lomiri-terminal-app = callPackage ./applications/lomiri-terminal-app { };

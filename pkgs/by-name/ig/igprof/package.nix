@@ -1,4 +1,12 @@
-{lib, stdenv, fetchFromGitHub, libunwind, cmake, pcre, gdb}:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libunwind,
+  cmake,
+  pcre,
+  gdb,
+}:
 
 stdenv.mkDerivation rec {
   version = "5.9.18";
@@ -13,11 +21,20 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     substituteInPlace src/igprof --replace libigprof.so $out/lib/libigprof.so
-    '';
+  '';
 
-  buildInputs = [libunwind gdb pcre];
-  nativeBuildInputs = [cmake];
-  CXXFLAGS = ["-fPIC" "-O2" "-w" "-fpermissive"];
+  buildInputs = [
+    libunwind
+    gdb
+    pcre
+  ];
+  nativeBuildInputs = [ cmake ];
+  CXXFLAGS = [
+    "-fPIC"
+    "-O2"
+    "-w"
+    "-fpermissive"
+  ];
 
   meta = {
     broken = (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64);

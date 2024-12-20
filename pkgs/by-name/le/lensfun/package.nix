@@ -1,4 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, glib, zlib, libpng, cmake, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  glib,
+  zlib,
+  libpng,
+  cmake,
+  python3,
+}:
 
 let
   version = "0.3.4";
@@ -44,13 +54,20 @@ stdenv.mkDerivation {
     python3.pkgs.lxml # For the db converison
   ];
 
-  buildInputs = [ glib zlib libpng ];
+  buildInputs = [
+    glib
+    zlib
+    libpng
+  ];
 
   cmakeFlags = [ "-DINSTALL_HELPER_SCRIPTS=OFF" ];
 
   meta = with lib; {
     platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ flokli paperdigits ];
+    maintainers = with maintainers; [
+      flokli
+      paperdigits
+    ];
     license = lib.licenses.lgpl3;
     description = "Opensource database of photographic lenses and their characteristics";
     homepage = "https://lensfun.github.io";

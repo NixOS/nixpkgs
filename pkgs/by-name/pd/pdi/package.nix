@@ -32,13 +32,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "pdi";
-  version = "1.7.1";
+  version = "1.8.0";
 
   src = fetchFromGitHub {
     owner = "pdidev";
     repo = "pdi";
-    rev = "refs/tags/${version}-gh";
-    hash = "sha256-VTbXsUUJb/6zNyn4QXNHajgzzgjSwdW/d+bTSDcpRaE=";
+    tag = version;
+    hash = "sha256-l4vKWIitP0BqSRPxpv0UgjAOgHJ3Aecm1hT+f9BeqRA=";
   };
 
   # Current hdf5 version in nixpkgs is 1.14.4.3 which is 4 numbers long and doesn't match the 3 number regex. :')
@@ -81,8 +81,13 @@ stdenv.mkDerivation rec {
   meta = {
     description = "PDI supports loose coupling of simulation codes with data handling libraries";
     homepage = "https://pdi.dev/master/";
+    changelog = "https://github.com/pdidev/pdi/releases/tag/${src.tag}";
     license = lib.licenses.bsd3;
     mainProgram = "pdirun";
     maintainers = with lib.maintainers; [ GaetanLepage ];
+    badPlatforms = [
+      # fatal error: 'link.h' file not found
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

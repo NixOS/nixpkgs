@@ -1,11 +1,18 @@
-{ lib, fetchFromGitHub, buildGoModule, installShellFiles, symlinkJoin, stdenv }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
+  symlinkJoin,
+  stdenv,
+}:
 
 let
-  metaCommon = with lib; {
+  metaCommon = {
     description = "Command-line interface for running Temporal Server and interacting with Workflows, Activities, Namespaces, and other parts of Temporal";
     homepage = "https://docs.temporal.io/cli";
-    license = licenses.mit;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ aaronjheng ];
   };
 
   overrideModAttrs = old: {
@@ -17,22 +24,25 @@ let
 
   tctl-next = buildGoModule rec {
     pname = "tctl-next";
-    version = "1.1.1";
+    version = "1.1.2";
 
     src = fetchFromGitHub {
       owner = "temporalio";
       repo = "cli";
       rev = "v${version}";
-      hash = "sha256-KDJtCqx9Yp/zhutSElFveWYAKwJCckiM9k3FOtYTlLo=";
+      hash = "sha256-7wURMdi357w5S4s909PTUZanRzFyWM588DMY7iYWP88=";
     };
 
-    vendorHash = "sha256-Vur3e6olkC0Ewz/RDZe2AIpcIs5GqeVgJa+KO9g8X7o=";
+    vendorHash = "sha256-umGwew8RwewlYJQD1psYSd9bu67cPEiHBJkQRJGjyGY=";
 
     inherit overrideModAttrs;
 
     nativeBuildInputs = [ installShellFiles ];
 
-    excludedPackages = [ "./cmd/docgen" "./tests" ];
+    excludedPackages = [
+      "./cmd/docgen"
+      "./tests"
+    ];
 
     ldflags = [
       "-s"
@@ -80,7 +90,10 @@ let
 
     excludedPackages = [ "./cmd/copyright" ];
 
-    ldflags = [ "-s" "-w" ];
+    ldflags = [
+      "-s"
+      "-w"
+    ];
 
     preCheck = ''
       export HOME="$(mktemp -d)"
@@ -101,7 +114,7 @@ let
 in
 symlinkJoin rec {
   pname = "temporal-cli";
-  inherit (tctl) version;
+  inherit (tctl-next) version;
   name = "${pname}-${version}";
 
   paths = [

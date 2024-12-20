@@ -1,17 +1,18 @@
-{ lib
-, cargo
-, desktop-file-utils
-, fetchFromGitLab
-, glib
-, gtk4
-, libadwaita
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, stdenv
-, wrapGAppsHook4
+{
+  lib,
+  cargo,
+  desktop-file-utils,
+  fetchFromGitLab,
+  glib,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  stdenv,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -49,13 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://gitlab.gnome.org/World/design/lorem/-/releases/${finalAttrs.version}";
     description = "Generate placeholder text";
     homepage = "https://apps.gnome.org/Lorem/";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "lorem";
-    maintainers = with maintainers; [ michaelgrahamevans ];
-    platforms = platforms.linux;
+    maintainers = lib.teams.gnome-circle.members;
+    platforms = lib.platforms.linux;
   };
 })

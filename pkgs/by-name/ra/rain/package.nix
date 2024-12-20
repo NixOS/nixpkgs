@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, rain
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  rain,
 }:
 
 buildGoModule rec {
@@ -20,7 +21,10 @@ buildGoModule rec {
 
   subPackages = [ "cmd/rain" ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   passthru.tests.version = testers.testVersion {
     package = rain;

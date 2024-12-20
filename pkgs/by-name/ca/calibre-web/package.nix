@@ -35,6 +35,7 @@ python.pkgs.buildPythonApplication rec {
     flask-limiter
     flask-login
     flask-principal
+    flask-simpleldap
     flask-wtf
     iso-639
     jsonschema

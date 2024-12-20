@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  libiconv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,8 +16,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-8qrpW/gU7BvxN3nSbFWhbgu5bwsdzYZTS3w3kcwsGbU=";
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin libiconv;
 
   checkFlags = [
     # The following tests require empty CARGO_BUILD_TARGET env variable, but we

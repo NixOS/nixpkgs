@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, fetchpatch
-, python3Packages
-, zlib
-, curl
-, libdeflate
-, bash
-, coreutils
+{
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  python3Packages,
+  zlib,
+  curl,
+  libdeflate,
+  bash,
+  coreutils,
 }:
 
 python3Packages.buildPythonApplication rec {

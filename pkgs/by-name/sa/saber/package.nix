@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  flutter,
+  flutter327,
   gst_all_1,
   libunwind,
   orc,
@@ -9,15 +9,15 @@
   autoPatchelfHook,
   xorg,
 }:
-flutter.buildFlutterApplication rec {
+flutter327.buildFlutterApplication rec {
   pname = "saber";
-  version = "0.25.2";
+  version = "0.25.3";
 
   src = fetchFromGitHub {
     owner = "saber-notes";
     repo = "saber";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ExnqXpaGDlnuhBUTUjVpc5gEto2Uaqdq9P/AnVDuIBw=";
+    tag = "v${version}";
+    hash = "sha256-plBcZo67/x8KcND28jqfrwbvI9IZz8ptLZoGl2y2vW4=";
   };
 
   gitHashes = {
@@ -47,11 +47,11 @@ flutter.buildFlutterApplication rec {
 
   preFixup = ''
     # Remove libpdfrx.so's reference to the /build/ directory
-    patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" $out/app/${pname}/lib/lib*.so
+    patchelf --shrink-rpath --allowed-rpath-prefixes "$NIX_STORE" $out/app/saber/lib/lib*.so
   '';
 
   meta = {
-    description = "The cross-platform open-source app built for handwriting";
+    description = "Cross-platform open-source app built for handwriting";
     homepage = "https://github.com/saber-notes/saber";
     mainProgram = "saber";
     license = with lib.licenses; [ gpl3Plus ];

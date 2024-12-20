@@ -1,13 +1,14 @@
-{ augeas
-, buildGoModule
-, fetchFromGitHub
-, gotools
-, lib
-, libvirt
-, libxml2
-, nex
-, pkg-config
-, ragel
+{
+  augeas,
+  buildGoModule,
+  fetchFromGitHub,
+  gotools,
+  lib,
+  libvirt,
+  libxml2,
+  nex,
+  pkg-config,
+  ragel,
 }:
 buildGoModule rec {
   pname = "mgmt";
@@ -45,7 +46,6 @@ buildGoModule rec {
     pkg-config
     ragel
   ];
-
 
   ldflags = [
     "-s"

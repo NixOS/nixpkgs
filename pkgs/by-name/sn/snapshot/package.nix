@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, fetchurl
-, glycin-loaders
-, cargo
-, desktop-file-utils
-, jq
-, meson
-, moreutils
-, ninja
-, pkg-config
-, rustc
-, wrapGAppsHook4
-, glib
-, gst_all_1
-, gtk4
-, libadwaita
-, libcamera
-, libseccomp
-, pipewire
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  glycin-loaders,
+  cargo,
+  desktop-file-utils,
+  jq,
+  meson,
+  moreutils,
+  ninja,
+  pkg-config,
+  rustc,
+  wrapGAppsHook4,
+  glib,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  libcamera,
+  libseccomp,
+  pipewire,
+  gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

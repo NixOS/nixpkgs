@@ -1,13 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, autoreconfHook, nixosTests, perl }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  nixosTests,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fakechroot";
   version = "2.20.1";
 
   src = fetchFromGitHub {
-    owner  = "dex4er";
-    repo   = pname;
-    rev    = version;
+    owner = "dex4er";
+    repo = pname;
+    rev = version;
     sha256 = "0xgnwazrmrg4gm30xjxdn6sx3lhqvxahrh6gmy3yfswxc30pmg86";
   };
 
@@ -60,7 +68,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/dex4er/fakechroot";
     description = "Give a fake chroot environment through LD_PRELOAD";
     license = licenses.lgpl21;
-    maintainers = with maintainers; [offline];
+    maintainers = with maintainers; [ offline ];
     platforms = platforms.linux;
   };
 

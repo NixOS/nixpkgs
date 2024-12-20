@@ -1,21 +1,24 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.scollector;
 
-  collectors = pkgs.runCommand "collectors" { preferLocalBuild = true; }
-    ''
+  collectors = pkgs.runCommand "collectors" { preferLocalBuild = true; } ''
     mkdir -p $out
-    ${lib.concatStringsSep
-        "\n"
-        (lib.mapAttrsToList
-          (frequency: binaries:
-            "mkdir -p $out/${frequency}\n" +
-            (lib.concatStringsSep
-              "\n"
-              (map (path: "ln -s ${path} $out/${frequency}/$(basename ${path})")
-                   binaries)))
-          cfg.collectors)}
-    '';
+    ${lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (
+        frequency: binaries:
+        "mkdir -p $out/${frequency}\n"
+        + (lib.concatStringsSep "\n" (
+          map (path: "ln -s ${path} $out/${frequency}/$(basename ${path})") binaries
+        ))
+      ) cfg.collectors
+    )}
+  '';
 
   conf = pkgs.writeText "scollector.toml" ''
     Host = "${cfg.bosunHost}"
@@ -23,7 +26,8 @@ let
     ${cfg.extraConfig}
   '';
 
-in {
+in
+{
 
   options = {
 
@@ -66,7 +70,7 @@ in {
 
       collectors = lib.mkOption {
         type = with lib.types; attrsOf (listOf path);
-        default = {};
+        default = { };
         example = lib.literalExpression ''{ "0" = [ "''${postgresStats}/bin/collect-stats" ]; }'';
         description = ''
           An attribute set mapping the frequency of collection to a list of
@@ -77,7 +81,7 @@ in {
 
       extraOpts = lib.mkOption {
         type = with lib.types; listOf str;
-        default = [];
+        default = [ ];
         example = [ "-d" ];
         description = ''
           Extra scollector command line options
@@ -102,7 +106,10 @@ in {
       description = "scollector metrics collector (part of Bosun)";
       wantedBy = [ "multi-user.target" ];
 
-      path = [ pkgs.coreutils pkgs.iproute2 ];
+      path = [
+        pkgs.coreutils
+        pkgs.iproute2
+      ];
 
       serviceConfig = {
         User = cfg.user;

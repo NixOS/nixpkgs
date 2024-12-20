@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, SDL2, cmake, makeWrapper, unstableGitUpdater }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  SDL2,
+  cmake,
+  makeWrapper,
+  unstableGitUpdater,
+}:
 
 stdenv.mkDerivation rec {
   pname = "nanosaur2";

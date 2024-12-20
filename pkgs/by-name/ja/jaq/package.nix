@@ -1,33 +1,49 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, darwin
+{
+  lib,
+  stdenv,
+  rustPlatform,
+  fetchFromGitHub,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "jaq";
-  version = "1.6.0";
+  version = "2.0.1";
 
   src = fetchFromGitHub {
     owner = "01mf02";
     repo = "jaq";
-    rev = "v${version}";
-    hash = "sha256-VD10BO7bxTmD1A1AZsiEiYBsVhAKlXxdHNMmXqpvpKM=";
+    tag = "v${version}";
+    hash = "sha256-S8ELxUKU8g8+6HpM+DxINEqMDha7SgesDymhCb7T9bg=";
   };
 
-  cargoHash = "sha256-7MK0iLBpjvWE7UH5Tb3qIm2XnEVsAvBy34Ed4wHagZQ=";
+  cargoHash = "sha256-i3AxIlRY6r0zrMmZVh1l9fPiR652xjhTcwCyHCHCrL8=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
+  # This very line fails on `x86_64-darwin`: assertion failed: out.eq(ys)
+  # https://github.com/01mf02/jaq/blob/v2.0.1/jaq-json/tests/funs.rs#L118
+  postPatch = lib.optionalString (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ''
+    substituteInPlace jaq-json/tests/funs.rs \
+      --replace-fail 'give(json!(null), "2.1 % 0 | isnan", json!(true));' ""
+  '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
   ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "Jq clone focused on correctness, speed and simplicity";
     homepage = "https://github.com/01mf02/jaq";
-    changelog = "https://github.com/01mf02/jaq/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ figsoda siraben ];
+    changelog = "https://github.com/01mf02/jaq/releases/tag/v${version}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
+      figsoda
+      siraben
+    ];
     mainProgram = "jaq";
   };
 }

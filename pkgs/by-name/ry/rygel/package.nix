@@ -12,7 +12,9 @@
   libxslt,
   gobject-introspection,
   wrapGAppsHook3,
+  wrapGAppsNoGuiHook,
   python3,
+  gdk-pixbuf,
   glib,
   gssdp_1_6,
   gupnp_1_6,
@@ -21,6 +23,8 @@
   gst_all_1,
   libgee,
   libsoup_3,
+  libX11,
+  withGtk ? true,
   gtk3,
   libmediaart,
   pipewire,
@@ -29,6 +33,7 @@
   tinysparql,
   shared-mime-info,
   gnome,
+  rygel,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,12 +65,13 @@ stdenv.mkDerivation (finalAttrs: {
     libxml2
     libxslt # for xsltproc
     gobject-introspection
-    wrapGAppsHook3
+    (if withGtk then wrapGAppsHook3 else wrapGAppsNoGuiHook)
     python3
   ];
 
   buildInputs =
     [
+      gdk-pixbuf
       glib
       gssdp_1_6
       gupnp_1_6
@@ -73,14 +79,18 @@ stdenv.mkDerivation (finalAttrs: {
       gupnp-dlna
       libgee
       libsoup_3
-      gtk3
       libmediaart
       pipewire
+      # Move this to withGtk when it's not unconditionally included
+      # https://gitlab.gnome.org/GNOME/rygel/-/issues/221
+      # https://gitlab.gnome.org/GNOME/rygel/-/merge_requests/27
+      libX11
       sqlite
       systemd
       tinysparql
       shared-mime-info
     ]
+    ++ lib.optionals withGtk [ gtk3 ]
     ++ (with gst_all_1; [
       gstreamer
       gst-editing-services
@@ -95,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Dapi-docs=false"
     "--sysconfdir=/etc"
     "-Dsysconfdir_install=${placeholder "out"}/etc"
+    (lib.mesonEnable "gtk" withGtk)
   ];
 
   doCheck = true;
@@ -108,6 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "rygel";
       versionPolicy = "odd-unstable";
     };
+    noGtk = rygel.override { withGtk = false; };
   };
 
   meta = with lib; {

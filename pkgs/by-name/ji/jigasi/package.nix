@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, dpkg, jdk11, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  dpkg,
+  jdk11,
+  nixosTests,
+}:
 
 let
   pname = "jigasi";

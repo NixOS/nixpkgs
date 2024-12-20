@@ -1,18 +1,19 @@
-{ lib
-, python3Packages
-, fetchFromGitLab
-, meson
-, ninja
-, vala
-, pkg-config
-, gobject-introspection
-, blueprint-compiler
-, itstool
-, wrapGAppsHook4
-, desktop-file-utils
-, shared-mime-info
-, libadwaita
-, libgee
+{
+  lib,
+  python3Packages,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  vala,
+  pkg-config,
+  gobject-introspection,
+  blueprint-compiler,
+  itstool,
+  wrapGAppsHook4,
+  desktop-file-utils,
+  shared-mime-info,
+  libadwaita,
+  libgee,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -69,7 +70,7 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://apps.gnome.org/Graphs";
     license = licenses.gpl3Plus;
     mainProgram = "graphs";
-    maintainers = with maintainers; [ aleksana ];
+    maintainers = lib.teams.gnome-circle.members;
     platforms = platforms.linux; # locale.bindtextdomain only available on linux
   };
 }

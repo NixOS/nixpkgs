@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, curl
-, dialog
-, installShellFiles
-, perl
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  curl,
+  dialog,
+  installShellFiles,
+  perl,
+  python3,
 }:
 
 stdenv.mkDerivation rec {

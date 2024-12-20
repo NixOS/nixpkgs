@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, libosip, sqlite }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libosip,
+  sqlite,
+}:
 
 stdenv.mkDerivation rec {
   pname = "siproxd";
@@ -11,7 +17,10 @@ stdenv.mkDerivation rec {
 
   patches = [ ./cheaders.patch ];
 
-  buildInputs = [ libosip sqlite ];
+  buildInputs = [
+    libosip
+    sqlite
+  ];
 
   meta = {
     homepage = "http://siproxd.sourceforge.net/";

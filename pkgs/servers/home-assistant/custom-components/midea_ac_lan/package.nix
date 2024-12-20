@@ -1,7 +1,8 @@
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
-, pycryptodome
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
+  pycryptodome,
 }:
 
 buildHomeAssistantComponent rec {

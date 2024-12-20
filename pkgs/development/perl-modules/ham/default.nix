@@ -1,11 +1,12 @@
-{ lib
-, buildPerlPackage
-, fetchFromGitHub
-, makeWrapper
-, openssh
-, GitRepository
-, URI
-, XMLParser
+{
+  lib,
+  buildPerlPackage,
+  fetchFromGitHub,
+  makeWrapper,
+  openssh,
+  GitRepository,
+  URI,
+  XMLParser,
 }:
 
 buildPerlPackage {
@@ -22,7 +23,12 @@ buildPerlPackage {
   outputs = [ "out" ];
 
   nativeBuildInputs = [ makeWrapper ];
-  propagatedBuildInputs = [ openssh GitRepository URI XMLParser ];
+  propagatedBuildInputs = [
+    openssh
+    GitRepository
+    URI
+    XMLParser
+  ];
 
   preConfigure = ''
     patchShebangs .

@@ -1,10 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, pkg-config
-, portaudio
-, testers
-, catnip
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  pkg-config,
+  portaudio,
+  testers,
+  catnip,
 }:
 
 buildGoModule rec {

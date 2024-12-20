@@ -25,6 +25,11 @@ let
   # Rename the variables to prevent infinite recursion
   requireSigningDefault = requireSigning;
   allowAddonSideloadDefault = allowAddonSideload;
+
+  # Specifying --(dis|en)able-elf-hack on a platform for which it's not implemented will give `--disable-elf-hack is not available in this configuration`
+  # This is declared here because it's used in the default value of elfhackSupport
+  isElfhackPlatform = stdenv: stdenv.hostPlatform.isElf &&
+    (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64);
 in
 
 { lib
@@ -110,6 +115,7 @@ in
 , jemallocSupport ? !stdenv.hostPlatform.isMusl, jemalloc
 , ltoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isRiscV), overrideCC, buildPackages
 , pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
+, elfhackSupport ? isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64)
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.hostPlatform.isLinux, libpulseaudio
 , sndioSupport ? stdenv.hostPlatform.isLinux, sndio
@@ -160,6 +166,7 @@ in
 
 assert stdenv.cc.libc or null != null;
 assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "${pname}: pipewireSupport requires both wayland and webrtc support.";
+assert elfhackSupport -> isElfhackPlatform stdenv;
 
 let
   inherit (lib) enableFeature;
@@ -402,9 +409,7 @@ buildStdenv.mkDerivation {
      "--enable-lto=cross" # Cross-Language LTO
      "--enable-linker=lld"
   ]
-  # elf-hack is broken when using clang+lld:
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
-  ++ lib.optional (ltoSupport && (buildStdenv.hostPlatform.isAarch32 || buildStdenv.hostPlatform.isi686 || buildStdenv.hostPlatform.isx86_64)) "--disable-elf-hack"
+  ++ lib.optional (isElfhackPlatform stdenv) (enableFeature elfhackSupport "elf-hack")
   ++ lib.optional (!drmSupport) "--disable-eme"
   ++ lib.optional (allowAddonSideload) "--allow-addon-sideload"
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [

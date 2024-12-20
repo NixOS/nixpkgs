@@ -1,6 +1,14 @@
-{lib, stdenv, autoreconfHook, fetchFromGitHub, bison}:
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  fetchFromGitHub,
+  bison,
+}:
 
-let version = "1.1.1"; in
+let
+  version = "1.1.1";
+in
 
 stdenv.mkDerivation rec {
   pname = "tcpkali";
@@ -15,7 +23,7 @@ stdenv.mkDerivation rec {
     sed -ie '/sys\/sysctl\.h/d' src/tcpkali_syslimits.c
   '';
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ bison];
+  buildInputs = [ bison ];
   meta = {
     description = "High performance TCP and WebSocket load generator and sink";
     license = lib.licenses.bsd2;

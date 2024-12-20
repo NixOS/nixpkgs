@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchPypi }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "zfs-autobackup";
@@ -9,7 +13,6 @@ python3Packages.buildPythonApplication rec {
     pname = "zfs_autobackup";
     hash = "sha256-rvtY7fsn2K2hueAsQkaPXcwxUAgE8j+GsQFF3eJKG2o=";
   };
-
 
   propagatedBuildInputs = with python3Packages; [ colorama ];
 

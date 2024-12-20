@@ -613,13 +613,19 @@ extendDerivation
        _derivation_original_args = derivationArg.args;
 
        builder = stdenv.shell;
-       # The bash builtin `export` dumps all current environment variables,
+       # The builtin `declare -p` dumps all bash and environment variables,
        # which is where all build input references end up (e.g. $PATH for
        # binaries). By writing this to $out, Nix can find and register
        # them as runtime dependencies (since Nix greps for store paths
-       # through $out to find them)
+       # through $out to find them). Using placeholder for $out works with
+       # and without structuredAttrs.
+       # This build script does not use setup.sh or stdenv, to keep
+       # the env most pristine. This gives us a very bare bones env,
+       # hence the extra/duplicated compatibility logic and "pure bash" style.
        args = [ "-c" ''
-         export > $out
+         out="${placeholder "out"}"
+         if [ -e "$NIX_ATTRS_SH_FILE" ]; then . "$NIX_ATTRS_SH_FILE"; elif [ -f .attrs.sh ]; then . .attrs.sh; fi
+         declare -p > $out
          for var in $passAsFile; do
              pathVar="''${var}Path"
              printf "%s" "$(< "''${!pathVar}")" >> $out

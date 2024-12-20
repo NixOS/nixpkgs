@@ -1,4 +1,9 @@
-{ lib, buildPythonPackage, fetchPypi, toml }:
+{
+  lib,
+  buildPythonPackage,
+  fetchPypi,
+  toml,
+}:
 
 buildPythonPackage rec {
   pname = "setuptools_scm";

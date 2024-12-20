@@ -1,8 +1,23 @@
-{ stdenv, lib, fetchFromGitHub
-, autoreconfHook, autoconf-archive, pkg-config, doxygen, perl
-, openssl, json_c, curl, libgcrypt
-, cmocka, uthash, swtpm, iproute2, procps, which
-, libuuid
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  autoconf-archive,
+  pkg-config,
+  doxygen,
+  perl,
+  openssl,
+  json_c,
+  curl,
+  libgcrypt,
+  cmocka,
+  uthash,
+  swtpm,
+  iproute2,
+  procps,
+  which,
+  libuuid,
 }:
 let
   # Avoid a circular dependency on Linux systems (systemd depends on tpm2-tss,
@@ -24,23 +39,42 @@ stdenv.mkDerivation rec {
     hash = "sha256-BP28utEUI9g1VNv3lCXuiKrDtEImFQxxZfIjLiE3Wr8=";
   };
 
-  outputs = [ "out" "man" "dev" ];
-
-  nativeBuildInputs = [
-    autoreconfHook autoconf-archive pkg-config doxygen perl
+  outputs = [
+    "out"
+    "man"
+    "dev"
   ];
 
-  buildInputs = [
-    openssl json_c curl libgcrypt uthash libuuid
-  ]
-  # cmocka is checked in the configure script
-  # when unit and/or integration testing is enabled
-  # cmocka doesn't build with pkgsStatic, and we don't need it anyway
-  # when tests are not run
-  ++ lib.optional doInstallCheck cmocka;
+  nativeBuildInputs = [
+    autoreconfHook
+    autoconf-archive
+    pkg-config
+    doxygen
+    perl
+  ];
+
+  buildInputs =
+    [
+      openssl
+      json_c
+      curl
+      libgcrypt
+      uthash
+      libuuid
+    ]
+    # cmocka is checked in the configure script
+    # when unit and/or integration testing is enabled
+    # cmocka doesn't build with pkgsStatic, and we don't need it anyway
+    # when tests are not run
+    ++ lib.optional doInstallCheck cmocka;
 
   nativeInstallCheckInputs = [
-    cmocka which openssl procps_pkg iproute2 swtpm
+    cmocka
+    which
+    openssl
+    procps_pkg
+    iproute2
+    swtpm
   ];
 
   strictDeps = true;

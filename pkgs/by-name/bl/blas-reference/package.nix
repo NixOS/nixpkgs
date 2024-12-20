@@ -1,6 +1,11 @@
-{ lib, stdenv, fetchurl, cmake, gfortran
-# Whether to build with ILP64 interface
-, blas64 ? false
+{
+  lib,
+  stdenv,
+  fetchurl,
+  cmake,
+  gfortran,
+  # Whether to build with ILP64 interface
+  blas64 ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -14,18 +19,24 @@ stdenv.mkDerivation rec {
 
   passthru = { inherit blas64; };
 
-  nativeBuildInputs = [ cmake gfortran ];
+  nativeBuildInputs = [
+    cmake
+    gfortran
+  ];
 
-  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ]
-    ++ lib.optional blas64 "-DBUILD_INDEX64=ON";
+  cmakeFlags = [ "-DBUILD_SHARED_LIBS=ON" ] ++ lib.optional blas64 "-DBUILD_INDEX64=ON";
 
-  postInstall = let
-    canonicalExtension = if stdenv.hostPlatform.isLinux
-                       then "${stdenv.hostPlatform.extensions.sharedLibrary}.${lib.versions.major version}"
-                       else stdenv.hostPlatform.extensions.sharedLibrary;
-  in lib.optionalString blas64 ''
-    ln -s $out/lib/libblas64${canonicalExtension} $out/lib/libblas${canonicalExtension}
-  '';
+  postInstall =
+    let
+      canonicalExtension =
+        if stdenv.hostPlatform.isLinux then
+          "${stdenv.hostPlatform.extensions.sharedLibrary}.${lib.versions.major version}"
+        else
+          stdenv.hostPlatform.extensions.sharedLibrary;
+    in
+    lib.optionalString blas64 ''
+      ln -s $out/lib/libblas64${canonicalExtension} $out/lib/libblas${canonicalExtension}
+    '';
 
   preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     for fn in $(find $out/lib -name "*.so*"); do

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, ... }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  ...
+}:
 
 stdenv.mkDerivation rec {
   pname = "smarty-i18n";

@@ -1,13 +1,15 @@
-{ lib, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, pkg-config
-, rofi-unwrapped
-, libqalculate
-, glib
-, cairo
-, gobject-introspection
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  pkg-config,
+  rofi-unwrapped,
+  libqalculate,
+  glib,
+  cairo,
+  gobject-introspection,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -51,4 +53,3 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux;
   };
 }
-

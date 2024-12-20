@@ -1,16 +1,17 @@
-{ lib
-, python3
-, fetchPypi
+{
+  lib,
+  python3,
+  fetchPypi,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "pifpaf";
-  version = "3.2.1";
+  version = "3.2.3";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8SSSdXBj9Yd351Iv7TdASLCfYPnkG7h6X8rBLrArgFI=";
+    hash = "sha256-L039ZAFnYLCU52h1SczJU0T7+1gufxQlVzQr1EPCqc8=";
   };
 
   propagatedBuildInputs = with python3.pkgs; [

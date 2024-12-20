@@ -1,3 +1,7 @@
+#![deny(clippy::all)]
+#![allow(clippy::too_many_arguments)]
+#![allow(clippy::type_complexity)]
+
 use std::{
     cell::RefCell,
     collections::HashMap,
@@ -33,6 +37,7 @@ mod systemd_manager {
     #![allow(non_camel_case_types)]
     #![allow(non_snake_case)]
     #![allow(unused)]
+    #![allow(clippy::all)]
     include!(concat!(env!("OUT_DIR"), "/systemd_manager.rs"));
 }
 
@@ -41,6 +46,7 @@ mod logind_manager {
     #![allow(non_camel_case_types)]
     #![allow(non_snake_case)]
     #![allow(unused)]
+    #![allow(clippy::all)]
     include!(concat!(env!("OUT_DIR"), "/logind_manager.rs"));
 }
 
@@ -100,9 +106,9 @@ impl std::str::FromStr for Action {
     }
 }
 
-impl Into<&'static str> for &Action {
-    fn into(self) -> &'static str {
-        match self {
+impl From<&Action> for &'static str {
+    fn from(val: &Action) -> Self {
+        match val {
             Action::Switch => "switch",
             Action::Boot => "boot",
             Action::Test => "test",
@@ -122,7 +128,6 @@ fn parse_os_release() -> Result<HashMap<String, String>> {
     Ok(std::fs::read_to_string("/etc/os-release")
         .context("Failed to read /etc/os-release")?
         .lines()
-        .into_iter()
         .fold(HashMap::new(), |mut acc, line| {
             if let Some((k, v)) = line.split_once('=') {
                 acc.insert(k.to_string(), v.to_string());
@@ -190,8 +195,8 @@ struct UnitState {
 
 // Asks the currently running systemd instance via dbus which units are active. Returns a hash
 // where the key is the name of each unit and the value a hash of load, state, substate.
-fn get_active_units<'a>(
-    systemd_manager: &Proxy<'a, &LocalConnection>,
+fn get_active_units(
+    systemd_manager: &Proxy<'_, &LocalConnection>,
 ) -> Result<HashMap<String, UnitState>> {
     let units = systemd_manager
         .list_units_by_patterns(Vec::new(), Vec::new())
@@ -212,7 +217,7 @@ fn get_active_units<'a>(
                 _job_type,
                 _job_path,
             )| {
-                if following == "" && active_state != "inactive" {
+                if following.is_empty() && active_state != "inactive" {
                     Some((id, active_state, sub_state))
                 } else {
                     None
@@ -424,7 +429,7 @@ fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison
             // If the [Unit] section was removed, make sure that only keys were in it that are
             // ignored
             if section_name == "Unit" {
-                for (ini_key, _ini_val) in section_val {
+                for ini_key in section_val.keys() {
                     if !unit_section_ignores.contains_key(ini_key.as_str()) {
                         return UnitComparison::UnequalNeedsRestart;
                     }
@@ -506,7 +511,7 @@ fn compare_units(current_unit: &UnitInfo, new_unit: &UnitInfo) -> UnitComparison
     if !section_cmp.is_empty() {
         if section_cmp.keys().len() == 1 && section_cmp.contains_key("Unit") {
             if let Some(new_unit_unit) = new_unit.get("Unit") {
-                for (ini_key, _) in new_unit_unit {
+                for ini_key in new_unit_unit.keys() {
                     if !unit_section_ignores.contains_key(ini_key.as_str()) {
                         return UnitComparison::UnequalNeedsRestart;
                     } else if ini_key == "X-Reload-Triggers" {
@@ -617,7 +622,6 @@ fn handle_modified_unit(
                         sockets
                             .join(" ")
                             .split_whitespace()
-                            .into_iter()
                             .map(String::from)
                             .collect()
                     } else {
@@ -712,7 +716,6 @@ fn unrecord_unit(p: impl AsRef<Path>, unit: &str) {
             {
                 contents
                     .lines()
-                    .into_iter()
                     .filter(|line| line != &unit)
                     .for_each(|line| _ = writeln!(&mut f, "{line}"))
             }
@@ -725,7 +728,6 @@ fn map_from_list_file(p: impl AsRef<Path>) -> HashMap<String, ()> {
         .unwrap_or_default()
         .lines()
         .filter(|line| !line.is_empty())
-        .into_iter()
         .fold(HashMap::new(), |mut acc, line| {
             acc.insert(line.to_string(), ());
             acc
@@ -816,7 +818,7 @@ fn filter_units(
 ) -> HashMap<String, ()> {
     let mut res = HashMap::new();
 
-    for (unit, _) in units {
+    for unit in units.keys() {
         if !units_to_filter.contains_key(unit) {
             res.insert(unit.to_string(), ());
         }
@@ -825,7 +827,7 @@ fn filter_units(
     res
 }
 
-fn unit_is_active<'a>(conn: &LocalConnection, unit: &str) -> Result<bool> {
+fn unit_is_active(conn: &LocalConnection, unit: &str) -> Result<bool> {
     let unit_object_path = conn
         .with_proxy(
             "org.freedesktop.systemd1",
@@ -872,11 +874,11 @@ impl std::fmt::Display for Job {
     }
 }
 
-fn new_dbus_proxies<'a>(
-    conn: &'a LocalConnection,
+fn new_dbus_proxies(
+    conn: &LocalConnection,
 ) -> (
-    Proxy<'a, &'a LocalConnection>,
-    Proxy<'a, &'a LocalConnection>,
+    Proxy<'_, &LocalConnection>,
+    Proxy<'_, &LocalConnection>,
 ) {
     (
         conn.with_proxy(
@@ -1154,8 +1156,8 @@ won't take effect until you reboot the system.
         .context("Invalid regex for matching systemd unit names")?;
 
     for (unit, unit_state) in &current_active_units {
-        let current_unit_file = Path::new("/etc/systemd/system").join(&unit);
-        let new_unit_file = toplevel.join("etc/systemd/system").join(&unit);
+        let current_unit_file = Path::new("/etc/systemd/system").join(unit);
+        let new_unit_file = toplevel.join("etc/systemd/system").join(unit);
 
         let mut base_unit = unit.clone();
         let mut current_base_unit_file = current_unit_file.clone();
@@ -1163,7 +1165,7 @@ won't take effect until you reboot the system.
 
         // Detect template instances
         if let Some((Some(template_name), Some(template_instance))) =
-            template_unit_re.captures(&unit).map(|captures| {
+            template_unit_re.captures(unit).map(|captures| {
                 (
                     captures.get(1).map(|c| c.as_str()),
                     captures.get(2).map(|c| c.as_str()),
@@ -1204,11 +1206,10 @@ won't take effect until you reboot the system.
                 // changed units we stop here as well as any new dependencies (including new mounts
                 // and swap devices).  FIXME: the suspend target is sometimes active after the
                 // system has resumed, which probably should not be the case.  Just ignore it.
-                if !matches!(
+                if !(matches!(
                     unit.as_str(),
                     "suspend.target" | "hibernate.target" | "hybrid-sleep.target"
-                ) {
-                    if !(parse_systemd_bool(
+                ) || parse_systemd_bool(
                         Some(&new_unit_info),
                         "Unit",
                         "RefuseManualStart",
@@ -1219,12 +1220,11 @@ won't take effect until you reboot the system.
                         "X-OnlyManualStart",
                         false,
                     )) {
-                        units_to_start.insert(unit.to_string(), ());
-                        record_unit(START_LIST_FILE, unit);
-                        // Don't spam the user with target units that always get started.
-                        if std::env::var("STC_DISPLAY_ALL_UNITS").as_deref() != Ok("1") {
-                            units_to_filter.insert(unit.to_string(), ());
-                        }
+                    units_to_start.insert(unit.to_string(), ());
+                    record_unit(START_LIST_FILE, unit);
+                    // Don't spam the user with target units that always get started.
+                    if std::env::var("STC_DISPLAY_ALL_UNITS").as_deref() != Ok("1") {
+                        units_to_filter.insert(unit.to_string(), ());
                     }
                 }
 
@@ -1251,7 +1251,7 @@ won't take effect until you reboot the system.
                     UnitComparison::UnequalNeedsRestart => {
                         handle_modified_unit(
                             &toplevel,
-                            &unit,
+                            unit,
                             base_name,
                             &new_unit_file,
                             &new_base_unit_file,
@@ -1266,7 +1266,7 @@ won't take effect until you reboot the system.
                     }
                     UnitComparison::UnequalNeedsReload if !units_to_restart.contains_key(unit) => {
                         units_to_reload.insert(unit.clone(), ());
-                        record_unit(RELOAD_LIST_FILE, &unit);
+                        record_unit(RELOAD_LIST_FILE, unit);
                     }
                     _ => {}
                 }
@@ -1319,7 +1319,7 @@ won't take effect until you reboot the system.
 
     // Also handles swap devices.
     for (device, _) in current_swaps {
-        if new_swaps.get(&device).is_none() {
+        if !new_swaps.contains_key(&device) {
             // Swap entry disappeared, so turn it off.  Can't use "systemctl stop" here because
             // systemd has lots of alias units that prevent a stop from actually calling "swapoff".
             if *action == Action::DryActivate {
@@ -1362,7 +1362,6 @@ won't take effect until you reboot the system.
         if !units_to_stop_filtered.is_empty() {
             let mut units = units_to_stop_filtered
                 .keys()
-                .into_iter()
                 .map(String::as_str)
                 .collect::<Vec<&str>>();
             units.sort_by_key(|name| name.to_lowercase());
@@ -1372,7 +1371,6 @@ won't take effect until you reboot the system.
         if !units_to_skip.is_empty() {
             let mut units = units_to_skip
                 .keys()
-                .into_iter()
                 .map(String::as_str)
                 .collect::<Vec<&str>>();
             units.sort_by_key(|name| name.to_lowercase());
@@ -1400,7 +1398,7 @@ won't take effect until you reboot the system.
 
             // Detect template instances.
             if let Some((Some(template_name), Some(template_instance))) =
-                template_unit_re.captures(&unit).map(|captures| {
+                template_unit_re.captures(unit).map(|captures| {
                     (
                         captures.get(1).map(|c| c.as_str()),
                         captures.get(2).map(|c| c.as_str()),
@@ -1469,7 +1467,6 @@ won't take effect until you reboot the system.
         if !units_to_reload.is_empty() {
             let mut units = units_to_reload
                 .keys()
-                .into_iter()
                 .map(String::as_str)
                 .collect::<Vec<&str>>();
             units.sort_by_key(|name| name.to_lowercase());
@@ -1479,7 +1476,6 @@ won't take effect until you reboot the system.
         if !units_to_restart.is_empty() {
             let mut units = units_to_restart
                 .keys()
-                .into_iter()
                 .map(String::as_str)
                 .collect::<Vec<&str>>();
             units.sort_by_key(|name| name.to_lowercase());
@@ -1490,7 +1486,6 @@ won't take effect until you reboot the system.
         if !units_to_start_filtered.is_empty() {
             let mut units = units_to_start_filtered
                 .keys()
-                .into_iter()
                 .map(String::as_str)
                 .collect::<Vec<&str>>();
             units.sort_by_key(|name| name.to_lowercase());
@@ -1506,7 +1501,6 @@ won't take effect until you reboot the system.
         if !units_to_stop_filtered.is_empty() {
             let mut units = units_to_stop_filtered
                 .keys()
-                .into_iter()
                 .map(String::as_str)
                 .collect::<Vec<&str>>();
             units.sort_by_key(|name| name.to_lowercase());
@@ -1514,12 +1508,9 @@ won't take effect until you reboot the system.
         }
 
         for unit in units_to_stop.keys() {
-            match systemd.stop_unit(unit, "replace") {
-                Ok(job_path) => {
-                    let mut j = submitted_jobs.borrow_mut();
-                    j.insert(job_path.to_owned(), Job::Stop);
-                }
-                Err(_) => {}
+            if let Ok(job_path) = systemd.stop_unit(unit, "replace") {
+                let mut j = submitted_jobs.borrow_mut();
+                j.insert(job_path.to_owned(), Job::Stop);
             };
         }
 
@@ -1529,7 +1520,6 @@ won't take effect until you reboot the system.
     if !units_to_skip.is_empty() {
         let mut units = units_to_skip
             .keys()
-            .into_iter()
             .map(String::as_str)
             .collect::<Vec<&str>>();
         units.sort_by_key(|name| name.to_lowercase());
@@ -1572,7 +1562,7 @@ won't take effect until you reboot the system.
 
         // Detect template instances.
         if let Some((Some(template_name), Some(template_instance))) =
-            template_unit_re.captures(&unit).map(|captures| {
+            template_unit_re.captures(unit).map(|captures| {
                 (
                     captures.get(1).map(|c| c.as_str()),
                     captures.get(2).map(|c| c.as_str()),
@@ -1756,7 +1746,6 @@ won't take effect until you reboot the system.
     if !units_to_reload.is_empty() {
         let mut units = units_to_reload
             .keys()
-            .into_iter()
             .map(String::as_str)
             .collect::<Vec<&str>>();
         units.sort_by_key(|name| name.to_lowercase());
@@ -1786,7 +1775,6 @@ won't take effect until you reboot the system.
     if !units_to_restart.is_empty() {
         let mut units = units_to_restart
             .keys()
-            .into_iter()
             .map(String::as_str)
             .collect::<Vec<&str>>();
         units.sort_by_key(|name| name.to_lowercase());
@@ -1819,7 +1807,6 @@ won't take effect until you reboot the system.
     if !units_to_start_filtered.is_empty() {
         let mut units = units_to_start_filtered
             .keys()
-            .into_iter()
             .map(String::as_str)
             .collect::<Vec<&str>>();
         units.sort_by_key(|name| name.to_lowercase());
@@ -1968,7 +1955,7 @@ fn main() -> anyhow::Result<()> {
                 .unwrap_or("switch-to-configuration");
 
             let Some(Ok(action)) = args.next().map(|a| Action::from_str(&a)) else {
-                usage(&argv0);
+                usage(argv0);
             };
 
             if unsafe { nix::libc::geteuid() } == 0 {

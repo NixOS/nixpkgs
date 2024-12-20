@@ -1,6 +1,6 @@
 { callPackage, fetchurl }:
 
-callPackage ./generic.nix ( rec {
+callPackage ./generic.nix (rec {
   version = "0.9.77";
 
   src = fetchurl {

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, util-linux, bash, substituteAll }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  util-linux,
+  bash,
+  replaceVars,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bcache-tools";
@@ -26,8 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
-    (substituteAll {
-      src = ./bcache-udev-modern.patch;
+    (replaceVars ./bcache-udev-modern.patch {
       shell = "${bash}/bin/sh";
     })
     ./fix-static.patch

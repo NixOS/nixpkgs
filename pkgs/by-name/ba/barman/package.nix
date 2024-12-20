@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   python3Packages,
+  versionCheckHook,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -30,6 +31,7 @@ python3Packages.buildPythonApplication rec {
     azure-mgmt-compute
     azure-storage-blob
     boto3
+    distutils
     google-cloud-compute
     google-cloud-storage
     grpcio
@@ -41,6 +43,7 @@ python3Packages.buildPythonApplication rec {
   nativeCheckInputs = with python3Packages; [
     mock
     pytestCheckHook
+    versionCheckHook
   ];
 
   disabledTests =
@@ -57,6 +60,7 @@ python3Packages.buildPythonApplication rec {
     description = "Backup and Recovery Manager for PostgreSQL";
     homepage = "https://www.pgbarman.org/";
     changelog = "https://github.com/EnterpriseDB/barman/blob/release/${version}/NEWS";
+    mainProgram = "barman";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [ freezeboy ];
     platforms = platforms.unix;

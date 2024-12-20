@@ -1,9 +1,15 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.gobgpd;
   format = pkgs.formats.toml { };
   confFile = format.generate "gobgpd.conf" cfg.settings;
-in {
+in
+{
   options.services.gobgpd = {
     enable = lib.mkEnableOption "GoBGP Routing Daemon";
 

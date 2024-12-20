@@ -1,38 +1,42 @@
-{ lib
-, stdenv
-, fetchurl
-, glib
-, libX11
-, gst_all_1
-, libepoxy
-, pango
-, cairo
-, gdk-pixbuf
-, e2fsprogs
-, libkrb5
-, libva
-, openssl
-, pcsclite
-, gtk3
-, libselinux
-, libxml2
-, libffi
-, python3Packages
-, cpio
-, autoPatchelfHook
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchurl,
+  glib,
+  libX11,
+  gst_all_1,
+  libepoxy,
+  pango,
+  cairo,
+  gdk-pixbuf,
+  e2fsprogs,
+  libkrb5,
+  libva,
+  openssl,
+  pcsclite,
+  gtk3,
+  libselinux,
+  libxml2,
+  libffi,
+  python3Packages,
+  cpio,
+  autoPatchelfHook,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
   pname = "nice-dcv-client";
   version = "2021.2.3797-1";
-  src =
-    fetchurl {
-      url = "https://d1uj6qtbmh3dt5.cloudfront.net/2021.2/Clients/nice-dcv-viewer-${version}.el8.x86_64.rpm";
-      sha256 = "sha256-iLz25SB5v7ghkAZOMGPmpNaPihd8ikzCQS//r1xBNRU=";
-    };
+  src = fetchurl {
+    url = "https://d1uj6qtbmh3dt5.cloudfront.net/2021.2/Clients/nice-dcv-viewer-${version}.el8.x86_64.rpm";
+    sha256 = "sha256-iLz25SB5v7ghkAZOMGPmpNaPihd8ikzCQS//r1xBNRU=";
+  };
 
-  nativeBuildInputs = [ autoPatchelfHook wrapGAppsHook3 python3Packages.rpm ];
+  nativeBuildInputs = [
+    autoPatchelfHook
+    wrapGAppsHook3
+    python3Packages.rpm
+  ];
   unpackPhase = ''
     rpm2cpio $src | ${cpio}/bin/cpio -idm
   '';

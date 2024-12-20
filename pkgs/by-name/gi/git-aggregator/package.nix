@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchPypi, git }:
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  git,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-aggregator";

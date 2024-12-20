@@ -22,7 +22,18 @@
 type: unwrapped:
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "${unwrapped.pname}-wrapped";
-  inherit (unwrapped) version meta;
+  inherit (unwrapped) version;
+
+  meta = {
+    description = "${unwrapped.meta.description or "dotnet"} (wrapper)";
+    mainProgram = "dotnet";
+    inherit (unwrapped.meta)
+      homepage
+      license
+      maintainers
+      platforms
+      ;
+  };
 
   src = unwrapped;
   dontUnpack = true;
@@ -46,8 +57,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    mkdir -p "$out"/bin "$out"/share/dotnet
+    mkdir -p "$out"/bin "$out"/share
     ln -s "$src"/bin/* "$out"/bin
+    ln -s "$src"/share/dotnet "$out"/share
     runHook postInstall
   '';
 
@@ -125,8 +137,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               )
               (
                 lib.optionalString (runtime != null) ''
-                  # TODO: use runtime here
-                  export DOTNET_ROOT=${runtime.unwrapped}/share/dotnet
+                  export DOTNET_ROOT=${runtime}/share/dotnet
                 ''
                 + run
               );

@@ -1,27 +1,29 @@
-{ lib, stdenv
-, langC
-, langAda
-, langObjC
-, langObjCpp
-, langD
-, langFortran
-, langGo
-, reproducibleBuild
-, profiledCompiler
-, langJit
-, staticCompiler
-, enableShared
-, enableLTO
-, version
-, fetchpatch
-, majorVersion
-, targetPlatform
-, hostPlatform
-, noSysDirs
-, buildPlatform
-, fetchurl
-, withoutTargetLibc
-, threadsCross
+{
+  lib,
+  stdenv,
+  langC,
+  langAda,
+  langObjC,
+  langObjCpp,
+  langD,
+  langFortran,
+  langGo,
+  reproducibleBuild,
+  profiledCompiler,
+  langJit,
+  staticCompiler,
+  enableShared,
+  enableLTO,
+  version,
+  fetchpatch,
+  majorVersion,
+  targetPlatform,
+  hostPlatform,
+  noSysDirs,
+  buildPlatform,
+  fetchurl,
+  withoutTargetLibc,
+  threadsCross,
 }:
 
 let
@@ -35,7 +37,7 @@ let
   is12 = majorVersion == "12";
   is11 = majorVersion == "11";
   is10 = majorVersion == "10";
-  is9  = majorVersion == "9";
+  is9 = majorVersion == "9";
   inherit (lib) optionals optional;
 in
 
@@ -46,29 +48,40 @@ in
 #  3. Patches relevant only to gcc<12
 #
 
-
 ## 1. Patches relevant to gcc>=12 on every platform ####################################
 
-[]
+[ ]
 ++ optional (!atLeast12) ./fix-bug-80431.patch
 ++ optional (targetPlatform != hostPlatform) ./libstdc++-target.patch
 ++ optionals (noSysDirs) (
-  [(if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch)] ++
-  ({
-    "14" = [ ./13/no-sys-dirs-riscv.patch ./13/mangle-NIX_STORE-in-__FILE__.patch ];
-    "13" = [ ./13/no-sys-dirs-riscv.patch ./13/mangle-NIX_STORE-in-__FILE__.patch ];
-    "12" = [ ./no-sys-dirs-riscv.patch ./12/mangle-NIX_STORE-in-__FILE__.patch ];
-    "11" = [ ./no-sys-dirs-riscv.patch ];
-    "10" = [ ./no-sys-dirs-riscv.patch ];
-    "9"  = [ ./no-sys-dirs-riscv-gcc9.patch ];
-  }."${majorVersion}" or [])
+  [ (if atLeast12 then ./gcc-12-no-sys-dirs.patch else ./no-sys-dirs.patch) ]
+  ++ (
+    {
+      "14" = [
+        ./13/no-sys-dirs-riscv.patch
+        ./13/mangle-NIX_STORE-in-__FILE__.patch
+      ];
+      "13" = [
+        ./13/no-sys-dirs-riscv.patch
+        ./13/mangle-NIX_STORE-in-__FILE__.patch
+      ];
+      "12" = [
+        ./no-sys-dirs-riscv.patch
+        ./12/mangle-NIX_STORE-in-__FILE__.patch
+      ];
+      "11" = [ ./no-sys-dirs-riscv.patch ];
+      "10" = [ ./no-sys-dirs-riscv.patch ];
+      "9" = [ ./no-sys-dirs-riscv-gcc9.patch ];
+    }
+    ."${majorVersion}" or [ ]
+  )
 )
 ++ optional (atLeast12 && langAda) ./gnat-cflags-11.patch
-++ optional langFortran (if atLeast12 then ./gcc-12-gfortran-driving.patch else ./gfortran-driving.patch)
+++ optional langFortran (
+  if atLeast12 then ./gcc-12-gfortran-driving.patch else ./gfortran-driving.patch
+)
 ++ [ ./ppc-musl.patch ]
 ++ optional langD ./libphobos.patch
-
-
 
 ## 2. Patches relevant to gcc>=12 on specific platforms ####################################
 
@@ -112,73 +125,102 @@ in
   })
 ]
 
-
 ## Darwin
 
 # Fixes detection of Darwin on x86_64-darwin. Otherwise, GCC uses a deployment target of 10.5, which crashes ld64.
-++ optional (atLeast14 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) ../patches/14/libgcc-darwin-detection.patch
+++ optional (
+  atLeast14 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
+) ../patches/14/libgcc-darwin-detection.patch
 
 # Fix detection of bootstrap compiler Ada support (cctools as) on Nix Darwin
-++ optional (atLeast12 && stdenv.hostPlatform.isDarwin && langAda) ./ada-cctools-as-detection-configure.patch
+++ optional (
+  atLeast12 && stdenv.hostPlatform.isDarwin && langAda
+) ./ada-cctools-as-detection-configure.patch
 
 # Remove CoreServices on Darwin, as it is only needed for macOS SDK 14+
-++ optional (atLeast14 && stdenv.hostPlatform.isDarwin && langAda) ../patches/14/gcc-darwin-remove-coreservices.patch
+++ optional (
+  atLeast14 && stdenv.hostPlatform.isDarwin && langAda
+) ../patches/14/gcc-darwin-remove-coreservices.patch
 
 # Use absolute path in GNAT dylib install names on Darwin
-++ optionals (stdenv.hostPlatform.isDarwin && langAda) ({
-  "14" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
-  "13" = [ ./gnat-darwin-dylib-install-name-13.patch ];
-  "12" = [ ./gnat-darwin-dylib-install-name.patch ];
-}.${majorVersion} or [])
+++ optionals (stdenv.hostPlatform.isDarwin && langAda) (
+  {
+    "14" = [ ../patches/14/gnat-darwin-dylib-install-name-14.patch ];
+    "13" = [ ./gnat-darwin-dylib-install-name-13.patch ];
+    "12" = [ ./gnat-darwin-dylib-install-name.patch ];
+  }
+  .${majorVersion} or [ ]
+)
 
 # We only apply this patch when building a native toolchain for aarch64-darwin, as it breaks building
 # a foreign one: https://github.com/iains/gcc-12-branch/issues/18
-++ optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && buildPlatform == hostPlatform && hostPlatform == targetPlatform) ({
-  "14" = [ (fetchpatch {
-    # There are no upstream release tags in https://github.com/iains/gcc-14-branch.
-    # 04696df09633baf97cdbbdd6e9929b9d472161d3 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-14.2.0
-    name = "gcc-14-darwin-aarch64-support.patch";
-    url = "https://github.com/iains/gcc-14-branch/compare/04696df09633baf97cdbbdd6e9929b9d472161d3..gcc-14.2-darwin-r0.diff";
-    hash = "sha256-GEUz7KdGzd2WJ0gjX3Uddq2y9bWKdZpT3E9uZ09qLs4=";
-  }) ];
-  "13" = [ (fetchpatch {
-    name = "gcc-13-darwin-aarch64-support.patch";
-    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/bda0faddfbfb392e7b9c9101056b2c5ab2500508/gcc/gcc-13.3.0.diff";
-    sha256 = "sha256-RBTCBXIveGwuQGJLzMW/UexpUZdDgdXprp/G2NHkmQo=";
-  }) ];
-  "12" = [ (fetchurl {
-    name = "gcc-12-darwin-aarch64-support.patch";
-    url = "https://raw.githubusercontent.com/Homebrew/formula-patches/1ed9eaea059f1677d27382c62f21462b476b37fe/gcc/gcc-12.4.0.diff";
-    sha256 = "sha256-wOjpT79lps4TKG5/E761odhLGCphBIkCbOPiQg/D1Fw=";
-  }) ];
-  "11" = [ (fetchpatch {
-    # There are no upstream release tags in https://github.com/iains/gcc-11-branch.
-    # 5cc4c42a0d4de08715c2eef8715ad5b2e92a23b6 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-11.5.0
-    url = "https://github.com/iains/gcc-11-branch/compare/5cc4c42a0d4de08715c2eef8715ad5b2e92a23b6..gcc-11.5-darwin-r0.diff";
-    hash = "sha256-7lH+GkgkrE6nOp9PMdIoqlQNWK31s6oW+lDt1LIkadE=";
-  }) ];
-  "10" = [ (fetchpatch {
-    # There are no upstream release tags in https://github.com/iains/gcc-10-branch.
-    # d04fe55 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-10.5.0
-    url = "https://github.com/iains/gcc-10-branch/compare/d04fe5541c53cb16d1ca5c80da044b4c7633dbc6...gcc-10-5Dr0-pre-0.diff";
-    hash = "sha256-kVUHZKtYqkWIcqxHG7yAOR2B60w4KWLoxzaiFD/FWYk=";
-  }) ];
-}.${majorVersion} or [])
+++
+  optionals
+    (
+      stdenv.hostPlatform.isDarwin
+      && stdenv.hostPlatform.isAarch64
+      && buildPlatform == hostPlatform
+      && hostPlatform == targetPlatform
+    )
+    (
+      {
+        "14" = [
+          (fetchpatch {
+            # There are no upstream release tags in https://github.com/iains/gcc-14-branch.
+            # 04696df09633baf97cdbbdd6e9929b9d472161d3 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-14.2.0
+            name = "gcc-14-darwin-aarch64-support.patch";
+            url = "https://github.com/iains/gcc-14-branch/compare/04696df09633baf97cdbbdd6e9929b9d472161d3..gcc-14.2-darwin-r0.diff";
+            hash = "sha256-GEUz7KdGzd2WJ0gjX3Uddq2y9bWKdZpT3E9uZ09qLs4=";
+          })
+        ];
+        "13" = [
+          (fetchpatch {
+            name = "gcc-13-darwin-aarch64-support.patch";
+            url = "https://raw.githubusercontent.com/Homebrew/formula-patches/bda0faddfbfb392e7b9c9101056b2c5ab2500508/gcc/gcc-13.3.0.diff";
+            sha256 = "sha256-RBTCBXIveGwuQGJLzMW/UexpUZdDgdXprp/G2NHkmQo=";
+          })
+        ];
+        "12" = [
+          (fetchurl {
+            name = "gcc-12-darwin-aarch64-support.patch";
+            url = "https://raw.githubusercontent.com/Homebrew/formula-patches/1ed9eaea059f1677d27382c62f21462b476b37fe/gcc/gcc-12.4.0.diff";
+            sha256 = "sha256-wOjpT79lps4TKG5/E761odhLGCphBIkCbOPiQg/D1Fw=";
+          })
+        ];
+        "11" = [
+          (fetchpatch {
+            # There are no upstream release tags in https://github.com/iains/gcc-11-branch.
+            # 5cc4c42a0d4de08715c2eef8715ad5b2e92a23b6 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-11.5.0
+            url = "https://github.com/iains/gcc-11-branch/compare/5cc4c42a0d4de08715c2eef8715ad5b2e92a23b6..gcc-11.5-darwin-r0.diff";
+            hash = "sha256-7lH+GkgkrE6nOp9PMdIoqlQNWK31s6oW+lDt1LIkadE=";
+          })
+        ];
+        "10" = [
+          (fetchpatch {
+            # There are no upstream release tags in https://github.com/iains/gcc-10-branch.
+            # d04fe55 is the commit from https://github.com/gcc-mirror/gcc/releases/tag/releases%2Fgcc-10.5.0
+            url = "https://github.com/iains/gcc-10-branch/compare/d04fe5541c53cb16d1ca5c80da044b4c7633dbc6...gcc-10-5Dr0-pre-0.diff";
+            hash = "sha256-kVUHZKtYqkWIcqxHG7yAOR2B60w4KWLoxzaiFD/FWYk=";
+          })
+        ];
+      }
+      .${majorVersion} or [ ]
+    )
 
 # Work around newer AvailabilityInternal.h when building older versions of GCC.
-++ optionals (stdenv.hostPlatform.isDarwin) ({
-  "9" = [ ../patches/9/AvailabilityInternal.h-fixincludes.patch ];
-}.${majorVersion} or [])
-
+++ optionals (stdenv.hostPlatform.isDarwin) (
+  {
+    "9" = [ ../patches/9/AvailabilityInternal.h-fixincludes.patch ];
+  }
+  .${majorVersion} or [ ]
+)
 
 ## Windows
 
 # Obtain latest patch with ../update-mcfgthread-patches.sh
-++ optional (!atLeast13 && !withoutTargetLibc && targetPlatform.isMinGW && threadsCross.model == "mcf")
-  (./. + "/${majorVersion}/Added-mcf-thread-model-support-from-mcfgthread.patch")
-
-
-
+++ optional (
+  !atLeast13 && !withoutTargetLibc && targetPlatform.isMinGW && threadsCross.model == "mcf"
+) (./. + "/${majorVersion}/Added-mcf-thread-model-support-from-mcfgthread.patch")
 
 ##############################################################################
 ##
@@ -190,27 +232,25 @@ in
 ##
 ##############################################################################
 
-
-
-
 ## gcc 11.0 and older ##############################################################################
 
 # openjdk build fails without this on -march=opteron; is upstream in gcc12
 ++ optionals (is11) [ ./11/gcc-issue-103910.patch ]
 
-
-
 ## gcc 10.0 and older ##############################################################################
 
 ++ optional (langAda && (is9 || is10)) ./gnat-cflags.patch
-++ optional (is10 && buildPlatform.system == "aarch64-darwin" && targetPlatform != buildPlatform) (fetchpatch {
-  url = "https://raw.githubusercontent.com/richard-vd/musl-cross-make/5e9e87f06fc3220e102c29d3413fbbffa456fcd6/patches/gcc-${version}/0008-darwin-aarch64-self-host-driver.patch";
-  sha256 = "sha256-XtykrPd5h/tsnjY1wGjzSOJ+AyyNLsfnjuOZ5Ryq9vA=";
-})
+++
+  optional (is10 && buildPlatform.system == "aarch64-darwin" && targetPlatform != buildPlatform)
+    (fetchpatch {
+      url = "https://raw.githubusercontent.com/richard-vd/musl-cross-make/5e9e87f06fc3220e102c29d3413fbbffa456fcd6/patches/gcc-${version}/0008-darwin-aarch64-self-host-driver.patch";
+      sha256 = "sha256-XtykrPd5h/tsnjY1wGjzSOJ+AyyNLsfnjuOZ5Ryq9vA=";
+    })
 
 # Fix undefined symbol errors when building older versions with clang
-++ optional (!atLeast11 && stdenv.cc.isClang && stdenv.hostPlatform.isDarwin) ./clang-genconditions.patch
-
+++ optional (
+  !atLeast11 && stdenv.cc.isClang && stdenv.hostPlatform.isDarwin
+) ./clang-genconditions.patch
 
 ## gcc 9.0 and older ##############################################################################
 

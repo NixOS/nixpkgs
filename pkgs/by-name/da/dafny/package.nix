@@ -42,8 +42,8 @@ buildDotnetModule rec {
     '';
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  buildInputs = [ jdk11 ];
-  nugetDeps = ./deps.nix;
+  nativeBuildInputs = [ jdk11 ];
+  nugetDeps = ./deps.json;
 
   # Build just these projects. Building Source/Dafny.sln includes a bunch of
   # unnecessary components like tests.

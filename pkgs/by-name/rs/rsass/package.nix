@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchCrate }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rsass";
@@ -17,7 +21,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "rsass";
     homepage = "https://github.com/kaj/rsass";
     changelog = "https://github.com/kaj/rsass/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

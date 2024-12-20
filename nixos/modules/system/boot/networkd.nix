@@ -877,6 +877,7 @@ let
           "IAID"
           "RequestBroadcast"
           "RouteMetric"
+          "RapidCommit"
           "RouteTable"
           "RouteMTUBytes"
           "ListenPort"
@@ -906,6 +907,7 @@ let
         (assertInt "IAID")
         (assertValueOneOf "RequestBroadcast" boolValues)
         (assertInt "RouteMetric")
+        (assertValueOneOf "RapidCommit" boolValues)
         (assertInt "RouteTable")
         (assertRange "RouteTable" 0 4294967295)
         (assertByteFormat "RouteMTUBytes")
@@ -2844,16 +2846,11 @@ let
         ];
       };
 
-      systemd.services."systemd-network-wait-online@" = {
-        description = "Wait for Network Interface %I to be Configured";
-        conflicts = [ "shutdown.target" ];
-        requisite = [ "systemd-networkd.service" ];
-        after = [ "systemd-networkd.service" ];
-        serviceConfig = {
-          Type = "oneshot";
-          RemainAfterExit = true;
-          ExecStart = "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %I ${utils.escapeSystemdExecArgs cfg.wait-online.extraArgs}";
-        };
+      systemd.services."systemd-networkd-wait-online@" = {
+        serviceConfig.ExecStart = [
+          ""
+          "${config.systemd.package}/lib/systemd/systemd-networkd-wait-online -i %i ${utils.escapeSystemdExecArgs cfg.wait-online.extraArgs}"
+        ];
       };
 
     })
@@ -2873,6 +2870,7 @@ let
 
       systemd.additionalUpstreamSystemUnits = [
         "systemd-networkd-wait-online.service"
+        "systemd-networkd-wait-online@.service"
         "systemd-networkd.service"
         "systemd-networkd.socket"
         "systemd-networkd-persistent-storage.service"

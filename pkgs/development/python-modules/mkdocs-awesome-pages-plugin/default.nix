@@ -32,7 +32,7 @@ buildPythonPackage rec {
     natsort
   ];
 
-  nativeBuildInputs = [poetry-core];
+  nativeBuildInputs = [ poetry-core ];
 
   nativeCheckInputs = [
     pytestCheckHook
@@ -46,6 +46,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/lukasgeiter/mkdocs-awesome-pages-plugin";
     changelog = "https://github.com/lukasgeiter/mkdocs-awesome-pages-plugin/blob/v${version}/CHANGELOG";
     license = licenses.mit;
-    maintainers = with maintainers; [phaer];
+    maintainers = with maintainers; [ phaer ];
   };
 }

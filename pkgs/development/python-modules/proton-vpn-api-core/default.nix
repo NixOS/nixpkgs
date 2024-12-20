@@ -19,14 +19,14 @@
 
 buildPythonPackage rec {
   pname = "proton-vpn-api-core";
-  version = "0.36.6";
+  version = "0.38.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "ProtonVPN";
     repo = "python-proton-vpn-api-core";
     rev = "v${version}";
-    hash = "sha256-LzABTSIa7guoAYv9scSm2edxeiSS7yMfJdZnAqXHtF0=";
+    hash = "sha256-ldIslr2qiwClQW6rWNbEAAkUbdJfCzvUIkCuoajP2M4=";
   };
 
   build-system = [
@@ -80,6 +80,7 @@ buildPythonPackage rec {
     description = "Acts as a facade to the other Proton VPN components, exposing a uniform API to the available Proton VPN services";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-api-core";
     license = lib.licenses.gpl3Only;
+    platforms = lib.platforms.linux;
     maintainers = with lib.maintainers; [ sebtm ];
   };
 }

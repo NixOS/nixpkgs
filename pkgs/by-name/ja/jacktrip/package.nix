@@ -1,13 +1,16 @@
-{ lib, stdenv, fetchFromGitHub
-, pkg-config
-, help2man
-, libjack2
-, dbus
-, qt6
-, meson
-, python3
-, rtaudio
-, ninja
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  help2man,
+  libjack2,
+  dbus,
+  qt6,
+  meson,
+  python3,
+  rtaudio,
+  ninja,
 }:
 
 stdenv.mkDerivation rec {
@@ -57,7 +60,11 @@ stdenv.mkDerivation rec {
     description = "Multi-machine audio network performance over the Internet";
     mainProgram = "jacktrip";
     homepage = "https://jacktrip.github.io/jacktrip/";
-    license = with licenses; [ gpl3 lgpl3 mit ];
+    license = with licenses; [
+      gpl3
+      lgpl3
+      mit
+    ];
     maintainers = [ maintainers.iwanb ];
     platforms = platforms.linux;
   };

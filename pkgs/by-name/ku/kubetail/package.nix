@@ -1,4 +1,11 @@
-{ stdenv, fetchFromGitHub, lib, installShellFiles, makeWrapper, kubectl }:
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  installShellFiles,
+  makeWrapper,
+  kubectl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "kubetail";
@@ -11,7 +18,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-RbbZHKXRtbs42cCbw+xb8TLul6ebUeCiNclMFF39c3M=";
   };
 
-  nativeBuildInputs = [ installShellFiles makeWrapper ];
+  nativeBuildInputs = [
+    installShellFiles
+    makeWrapper
+  ];
 
   installPhase = ''
     install -Dm755 kubetail "$out/bin/kubetail"
@@ -30,7 +40,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://github.com/johanhaleby/kubetail";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kalbasit qjoly ];
+    maintainers = with maintainers; [
+      kalbasit
+      qjoly
+    ];
     platforms = platforms.all;
   };
 }

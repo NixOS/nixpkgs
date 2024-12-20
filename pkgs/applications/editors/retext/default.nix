@@ -1,16 +1,20 @@
-{ lib
-, python3
-, fetchzip
-, fetchFromGitHub
-, wrapQtAppsHook
-, qtbase
-, qttools
-, qtsvg
-, buildEnv
-, aspellDicts
+{
+  lib,
+  python3,
+  fetchzip,
+  fetchFromGitHub,
+  wrapQtAppsHook,
+  qtbase,
+  qttools,
+  qtsvg,
+  buildEnv,
+  aspellDicts,
   # Use `lib.collect lib.isDerivation aspellDicts;` to make all dictionaries
   # available.
-, enchantAspellDicts ? with aspellDicts; [ en en-computers ]
+  enchantAspellDicts ? with aspellDicts; [
+    en
+    en-computers
+  ],
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -63,10 +67,12 @@ python3.pkgs.buildPythonApplication rec {
   postInstall = ''
     makeWrapperArgs+=("''${qtWrapperArgs[@]}")
     makeWrapperArgs+=(
-      "--set" "ASPELL_CONF" "dict-dir ${buildEnv {
-        name = "aspell-all-dicts";
-        paths = map (path: "${path}/lib/aspell") enchantAspellDicts;
-      }}"
+      "--set" "ASPELL_CONF" "dict-dir ${
+        buildEnv {
+          name = "aspell-all-dicts";
+          paths = map (path: "${path}/lib/aspell") enchantAspellDicts;
+        }
+      }"
     )
 
     cp ${toolbarIcons}/* $out/${python3.pkgs.python.sitePackages}/ReText/icons

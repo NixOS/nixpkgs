@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchurl, alsa-lib, libjack2, pkg-config, libpulseaudio, xorg, copyDesktopItems, makeDesktopItem }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  alsa-lib,
+  libjack2,
+  pkg-config,
+  libpulseaudio,
+  xorg,
+  copyDesktopItems,
+  makeDesktopItem,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bristol";
@@ -9,7 +20,10 @@ stdenv.mkDerivation rec {
     sha256 = "1fi2m4gmvxdi260821y09lxsimq82yv4k5bbgk3kyc3x1nyhn7vx";
   };
 
-  nativeBuildInputs = [ pkg-config copyDesktopItems ];
+  nativeBuildInputs = [
+    pkg-config
+    copyDesktopItems
+  ];
   buildInputs = [
     alsa-lib
     libjack2
@@ -54,7 +68,10 @@ stdenv.mkDerivation rec {
     description = "Range of synthesiser, electric piano and organ emulations";
     homepage = "https://bristol.sourceforge.net";
     license = licenses.gpl3;
-    platforms = [ "x86_64-linux" "i686-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+    ];
     maintainers = [ ];
   };
 }

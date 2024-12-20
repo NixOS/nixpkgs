@@ -1,8 +1,9 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, ppxlib
-, spices
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ppxlib,
+  spices,
 }:
 
 buildDunePackage rec {

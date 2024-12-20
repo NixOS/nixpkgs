@@ -1,13 +1,14 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, bash
-, coreutils
-, gnugrep
-, gnused
-, jq
-, curl
-, makeWrapper
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  bash,
+  coreutils,
+  gnugrep,
+  gnused,
+  jq,
+  curl,
+  makeWrapper,
 }:
 stdenv.mkDerivation {
   pname = "lldap-cli";
@@ -38,7 +39,16 @@ stdenv.mkDerivation {
   installPhase = ''
     install -Dm555 lldap-cli -t $out/bin
     wrapProgram $out/bin/lldap-cli \
-      --prefix PATH : ${lib.makeBinPath [ bash coreutils gnugrep gnused jq curl ]}
+      --prefix PATH : ${
+        lib.makeBinPath [
+          bash
+          coreutils
+          gnugrep
+          gnused
+          jq
+          curl
+        ]
+      }
   '';
 
   meta = {

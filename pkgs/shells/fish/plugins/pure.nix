@@ -1,4 +1,10 @@
-{ lib, buildFishPlugin, fetchFromGitHub, git, fishtape_3 }:
+{
+  lib,
+  buildFishPlugin,
+  fetchFromGitHub,
+  git,
+  fishtape_3,
+}:
 
 buildFishPlugin rec {
   pname = "pure";

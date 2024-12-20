@@ -16,53 +16,28 @@ permissions:
   contents: read
 
 jobs:
+  get-merge-commit:
+    uses: ./.github/workflows/get-merge-commit.yml
+
   attrs:
     name: Attributes
     runs-on: ubuntu-latest
+    needs: get-merge-commit
+    # Skip this and dependent steps if the PR can't be merged
+    if: needs.get-merge-commit.outputs.mergedSha
     outputs:
-      mergedSha: ${{ steps.merged.outputs.mergedSha }}
       baseSha: ${{ steps.baseSha.outputs.baseSha }}
       systems: ${{ steps.systems.outputs.systems }}
     steps:
-      # Important: Because of `pull_request_target`, this doesn't check out the PR,
-      # but rather the base branch of the PR, which is needed so we don't run untrusted code
-      - name: Check out the ci directory of the base branch
-        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          path: base
-          sparse-checkout: ci
-      - name: Check if the PR can be merged and get the test merge commit
-        id: merged
-        env:
-          GH_TOKEN: ${{ github.token }}
-          GH_EVENT: ${{ github.event_name }}
-        run: |
-          case "$GH_EVENT" in
-            push)
-              echo "mergedSha=${{ github.sha }}" >> "$GITHUB_OUTPUT"
-              ;;
-            pull_request_target)
-              if mergedSha=$(base/ci/get-merge-commit.sh ${{ github.repository }} ${{ github.event.number }}); then
-                echo "Checking the merge commit $mergedSha"
-                echo "mergedSha=$mergedSha" >> "$GITHUB_OUTPUT"
-              else
-                # Skipping so that no notifications are sent
-                echo "Skipping the rest..."
-              fi
-              ;;
-          esac
-          rm -rf base
       - name: Check out the PR at the test merge commit
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        # Add this to _all_ subsequent steps to skip them
-        if: steps.merged.outputs.mergedSha
         with:
-          ref: ${{ steps.merged.outputs.mergedSha }}
+          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
           fetch-depth: 2
           path: nixpkgs
 
       - name: Determine base commit
-        if: github.event_name == 'pull_request_target' && steps.merged.outputs.mergedSha
+        if: github.event_name == 'pull_request_target'
         id: baseSha
         run: |
           baseSha=$(git -C nixpkgs rev-parse HEAD^1)
@@ -70,18 +45,15 @@ jobs:
 
       - name: Install Nix
         uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
-        if: steps.merged.outputs.mergedSha
 
       - name: Evaluate the list of all attributes and get the systems matrix
         id: systems
-        if: steps.merged.outputs.mergedSha
         run: |
           nix-build nixpkgs/ci -A eval.attrpathsSuperset
           echo "systems=$(<result/systems.json)" >> "$GITHUB_OUTPUT"
 
       - name: Upload the list of all attributes
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
-        if: steps.merged.outputs.mergedSha
         with:
           name: paths
           path: result/*
@@ -89,12 +61,12 @@ jobs:
   eval-aliases:
     name: Eval nixpkgs with aliases enabled
     runs-on: ubuntu-latest
-    needs: attrs
+    needs: [ attrs, get-merge-commit ]
     steps:
       - name: Check out the PR at the test merge commit
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: ${{ needs.attrs.outputs.mergedSha }}
+          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
           path: nixpkgs
 
       - name: Install Nix
@@ -107,9 +79,7 @@ jobs:
   outpaths:
     name: Outpaths
     runs-on: ubuntu-latest
-    needs: attrs
-    # Skip this and future steps if the PR can't be merged
-    if: needs.attrs.outputs.mergedSha
+    needs: [ attrs, get-merge-commit ]
     strategy:
       matrix:
         system: ${{ fromJSON(needs.attrs.outputs.systems) }}
@@ -123,7 +93,7 @@ jobs:
       - name: Check out the PR at the test merge commit
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: ${{ needs.attrs.outputs.mergedSha }}
+          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
           path: nixpkgs
 
       - name: Install Nix
@@ -141,7 +111,6 @@ jobs:
 
       - name: Upload the output paths and eval stats
         uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
-        if: needs.attrs.outputs.mergedSha
         with:
           name: intermediate-${{ matrix.system }}
           path: result/*
@@ -149,7 +118,7 @@ jobs:
   process:
     name: Process
     runs-on: ubuntu-latest
-    needs: [ outpaths, attrs ]
+    needs: [ outpaths, attrs, get-merge-commit ]
     outputs:
       baseRunId: ${{ steps.baseRunId.outputs.baseRunId }}
     steps:
@@ -162,7 +131,7 @@ jobs:
       - name: Check out the PR at the test merge commit
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
-          ref: ${{ needs.attrs.outputs.mergedSha }}
+          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
           path: nixpkgs
 
       - name: Install Nix
@@ -196,14 +165,14 @@ jobs:
           runId=$(jq .id <<< "$run")
           conclusion=$(jq -r .conclusion <<< "$run")
 
-          while [[ "$conclusion" == null ]]; do
+          while [[ "$conclusion" == null || "$conclusion" == "" ]]; do
             echo "Workflow not done, waiting 10 seconds before checking again"
             sleep 10
             conclusion=$(gh api /repos/"$REPOSITORY"/actions/runs/"$runId" --jq '.conclusion')
           done
 
           if [[ "$conclusion" != "success" ]]; then
-            echo "Workflow was not successful, cannot make comparison"
+            echo "Workflow was not successful (conclusion: $conclusion), cannot make comparison"
             exit 0
           fi
 
@@ -246,6 +215,7 @@ jobs:
     if: needs.process.outputs.baseRunId
     permissions:
       pull-requests: write
+      statuses: write
     steps:
       - name: Download process result
         uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
@@ -284,4 +254,24 @@ jobs:
         env:
           GH_TOKEN: ${{ github.token }}
           REPOSITORY: ${{ github.repository }}
+          NUMBER: ${{ github.event.number }}
+
+      - name: Add eval summary to commit statuses
+        if: ${{ github.event_name == 'pull_request_target' }}
+        run: |
+          description=$(jq -r '
+          "Package: added " + (.attrdiff.added | length | tostring) +
+          ", removed " + (.attrdiff.removed | length | tostring) +
+          ", changed " + (.attrdiff.changed | length | tostring) +
+          ", Rebuild: linux " + (.rebuildCountByKernel.linux | tostring) +
+          ", darwin " + (.rebuildCountByKernel.darwin | tostring)
+          ' <comparison/changed-paths.json)
+          target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID?pr=$NUMBER"
+          gh api --method POST \
+            -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/repos/$GITHUB_REPOSITORY/statuses/$PR_HEAD_SHA" \
+            -f "context=Eval / Summary" -f "state=success" -f "description=$description" -f "target_url=$target_url"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
           NUMBER: ${{ github.event.number }}

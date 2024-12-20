@@ -1,12 +1,13 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, boost
-, cmake
-, git
-, hyperscan
-, openssl
-, pkg-config
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  boost,
+  cmake,
+  git,
+  hyperscan,
+  openssl,
+  pkg-config,
 }:
 
 rustPlatform.buildRustPackage rec {

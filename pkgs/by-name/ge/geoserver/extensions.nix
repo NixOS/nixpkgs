@@ -1,29 +1,42 @@
 # DO *NOT* MODIFY THE LINES CONTAINING "hash = ..." OR "version = ...".
 # THEY ARE GENERATED. SEE ./update.sh.
-{ fetchzip, libjpeg, netcdf, pkgs, stdenv }:
+{
+  fetchzip,
+  libjpeg,
+  netcdf,
+  pkgs,
+  stdenv,
+}:
 
 let
-  mkGeoserverExtension = { name, version, hash, buildInputs ? [ ] }: stdenv.mkDerivation {
-    pname = "geoserver-${name}-extension";
-    inherit buildInputs version;
+  mkGeoserverExtension =
+    {
+      name,
+      version,
+      hash,
+      buildInputs ? [ ],
+    }:
+    stdenv.mkDerivation {
+      pname = "geoserver-${name}-extension";
+      inherit buildInputs version;
 
-    src = fetchzip {
-      url = "mirror://sourceforge/geoserver/GeoServer/${version}/extensions/geoserver-${version}-${name}-plugin.zip";
-      inherit hash;
-      # We expect several files.
-      stripRoot = false;
+      src = fetchzip {
+        url = "mirror://sourceforge/geoserver/GeoServer/${version}/extensions/geoserver-${version}-${name}-plugin.zip";
+        inherit hash;
+        # We expect several files.
+        stripRoot = false;
+      };
+
+      installPhase = ''
+        runHook preInstall
+
+        DIR=$out/share/geoserver/webapps/geoserver/WEB-INF/lib
+        mkdir -p $DIR
+        cp -r $src/* $DIR
+
+        runHook postInstall
+      '';
     };
-
-    installPhase = ''
-      runHook preInstall
-
-      DIR=$out/share/geoserver/webapps/geoserver/WEB-INF/lib
-      mkdir -p $DIR
-      cp -r $src/* $DIR
-
-      runHook postInstall
-    '';
-  };
 in
 
 {

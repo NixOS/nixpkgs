@@ -29,9 +29,10 @@ let
   # a wrapper that verifies that the configuration is valid
   promtoolCheck = what: name: file:
     if checkConfigEnabled then
-      pkgs.runCommandLocal
-        "${name}-${replaceStrings [" "] [""] what}-checked"
-        { nativeBuildInputs = [ cfg.package.cli ]; } ''
+      pkgs.runCommand "${name}-${replaceStrings [" "] [""] what}-checked" {
+        preferLocalBuild = true;
+        nativeBuildInputs = [ cfg.package.cli ];
+      } ''
         ln -s ${file} $out
         promtool ${what} $out
       '' else file;

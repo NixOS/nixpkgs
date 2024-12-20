@@ -18,7 +18,8 @@ let
 
   inherit (source)
     version
-    vendorHash;
+    vendorHash
+    ;
 
   src = fetchFromGitHub {
     owner = "axllent";
@@ -67,7 +68,7 @@ buildGoModule {
   pname = "mailpit";
   inherit src version vendorHash;
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

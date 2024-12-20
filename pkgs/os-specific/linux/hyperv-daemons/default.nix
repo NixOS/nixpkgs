@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  python2,
   python3,
   kernel,
   makeWrapper,
@@ -20,7 +19,7 @@ let
     inherit (kernel) src version;
 
     nativeBuildInputs = [ makeWrapper ];
-    buildInputs = [ (if lib.versionOlder version "4.19" then python2 else python3) ];
+    buildInputs = [ python3 ];
 
     # as of 4.9 compilation will fail due to -Werror=format-security
     hardeningDisable = [ "format" ];

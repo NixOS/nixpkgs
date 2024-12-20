@@ -4,7 +4,7 @@ with lib;
 
 let
 
-  inherit (pkgs) cups-pk-helper cups-filters xdg-utils;
+  inherit (pkgs) cups-pk-helper libcupsfilters cups-filters xdg-utils;
 
   cfg = config.services.printing;
   cups = cfg.package;
@@ -35,7 +35,7 @@ let
   bindir = pkgs.buildEnv {
     name = "cups-progs";
     paths =
-      [ cups.out additionalBackends cups-filters pkgs.ghostscript ]
+      [ cups.out additionalBackends libcupsfilters cups-filters pkgs.ghostscript ]
       ++ cfg.drivers;
     pathsToLink = [ "/lib" "/share/cups" "/bin" ];
     postBuild = cfg.bindirCmds;
@@ -278,6 +278,8 @@ in
         '';
       };
 
+      browsed.package = lib.mkPackageOption pkgs "cups-browsed" {};
+
       browsedConf = mkOption {
         type = types.lines;
         default = "";
@@ -436,7 +438,7 @@ in
 
         path = [ cups ];
 
-        serviceConfig.ExecStart = "${cups-filters}/bin/cups-browsed";
+        serviceConfig.ExecStart = "${cfg.browsed.package}/bin/cups-browsed";
 
         restartTriggers = [ browsedFile ];
       };

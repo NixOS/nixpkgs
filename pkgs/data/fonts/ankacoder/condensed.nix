@@ -1,4 +1,8 @@
-{ lib, stdenvNoCC, fetchzip }:
+{
+  lib,
+  stdenvNoCC,
+  fetchzip,
+}:
 
 stdenvNoCC.mkDerivation rec {
   pname = "ankacoder-condensed";
@@ -27,4 +31,3 @@ stdenvNoCC.mkDerivation rec {
     platforms = platforms.all;
   };
 }
-

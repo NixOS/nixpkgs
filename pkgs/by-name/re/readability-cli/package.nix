@@ -1,4 +1,9 @@
-{ lib, buildNpmPackage, fetchFromGitLab, installShellFiles }:
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitLab,
+  installShellFiles,
+}:
 
 buildNpmPackage rec {
   pname = "readability-cli";

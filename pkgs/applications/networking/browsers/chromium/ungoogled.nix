@@ -1,12 +1,14 @@
-{ stdenv
-, fetchFromGitHub
-, python3Packages
-, makeWrapper
-, patch
+{
+  stdenv,
+  fetchFromGitHub,
+  python3Packages,
+  makeWrapper,
+  patch,
 }:
 
-{ rev
-, hash
+{
+  rev,
+  hash,
 }:
 
 stdenv.mkDerivation {

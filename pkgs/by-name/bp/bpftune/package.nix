@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, clang
-, bpftools
-, docutils
-, libbpf
-, libcap
-, libnl
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  clang,
+  bpftools,
+  docutils,
+  libbpf,
+  libcap,
+  libnl,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {

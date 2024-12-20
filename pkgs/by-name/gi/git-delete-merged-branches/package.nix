@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchFromGitHub, git }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  git,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "git-delete-merged-branches";
@@ -16,8 +21,7 @@ python3Packages.buildPythonApplication rec {
     prompt-toolkit
   ];
 
-  nativeCheckInputs = [ git ]
-    ++ (with python3Packages; [ parameterized ]);
+  nativeCheckInputs = [ git ] ++ (with python3Packages; [ parameterized ]);
 
   meta = with lib; {
     description = "Command-line tool to delete merged Git branches";

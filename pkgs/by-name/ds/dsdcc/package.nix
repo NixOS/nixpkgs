@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, pkg-config
-, mbelib
-, serialdv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  pkg-config,
+  mbelib,
+  serialdv,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

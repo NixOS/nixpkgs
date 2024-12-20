@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "readchar";
-  version = "4.2.0";
+  version = "4.2.1";
   pyproject = true;
 
   # Don't use wheels on PyPI
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "magmax";
     repo = "python-${pname}";
     rev = "refs/tags/v${version}";
-    hash = "sha256-xha3bGuDYt4gLcK3x62ym+zCAQVyZjlV1HyKh8kHe64=";
+    hash = "sha256-r+dKGv0a7AU+Ef94AGCCJLQolLqTTxaNmqRQYkxk15s=";
   };
 
   postPatch = ''

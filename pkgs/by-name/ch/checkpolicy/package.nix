@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, bison, flex, libsepol }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bison,
+  flex,
+  libsepol,
+}:
 
 stdenv.mkDerivation rec {
   pname = "checkpolicy";
@@ -10,7 +17,10 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-/T4ZJUd9SZRtERaThmGvRMH4bw1oFGb9nwLqoGACoH8=";
   };
 
-  nativeBuildInputs = [ bison flex ];
+  nativeBuildInputs = [
+    bison
+    flex
+  ];
   buildInputs = [ libsepol ];
 
   makeFlags = [
@@ -18,7 +28,7 @@ stdenv.mkDerivation rec {
     "LIBSEPOLA=${lib.getLib libsepol}/lib/libsepol.a"
   ];
 
-  meta = removeAttrs libsepol.meta ["outputsToInstall"] // {
+  meta = removeAttrs libsepol.meta [ "outputsToInstall" ] // {
     description = "SELinux policy compiler";
   };
 }

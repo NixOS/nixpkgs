@@ -1,4 +1,9 @@
-{ stdenv, fetchurl, lib, nixosTests }:
+{
+  stdenv,
+  fetchurl,
+  lib,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "wiki-js";

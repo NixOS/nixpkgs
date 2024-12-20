@@ -12,7 +12,7 @@
   makeBinaryWrapper,
 
   openssl,
-  libsoup,
+  libsoup_2_4,
   webkitgtk_4_0,
   gst_all_1,
   apple-sdk_11,
@@ -34,15 +34,10 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-hvWXSegUWJvwCU5NLb2vqnl+FIWpCLxw96s9NUIgJTI=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "tauri-plugin-log-0.0.0" = "sha256-t+zmMMSnD9ASZZvqlhu1ah2OjCUtRXdk/xaI37uI49c=";
-      "vampirc-uci-0.11.1" = "sha256-g2JjHZoAmmZ7xsw4YnkUPRXJxsYmBqflWxCFkFEvMXQ=";
-    };
-  };
-
   cargoRoot = "src-tauri";
+
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-6cBGOdJ7jz+mOl2EEXxoLNeX9meW+ybQxAxnnHAplIc=";
 
   buildAndTestSubdir = cargoRoot;
 
@@ -59,7 +54,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs =
     lib.optionals stdenv.hostPlatform.isLinux [
       openssl
-      libsoup
+      libsoup_2_4
       webkitgtk_4_0
       gst_all_1.gstreamer
       gst_all_1.gst-plugins-base

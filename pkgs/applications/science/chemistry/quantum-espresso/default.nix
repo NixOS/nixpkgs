@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, fetchFromGitHub
-, git
-, cmake
-, gfortran
-, pkg-config
-, fftw
-, blas
-, lapack
-, scalapack
-, wannier90
-, hdf5
-, libmbd
-, libxc
-, enableMpi ? true
-, mpi
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  fetchFromGitHub,
+  git,
+  cmake,
+  gfortran,
+  pkg-config,
+  fftw,
+  blas,
+  lapack,
+  scalapack,
+  wannier90,
+  hdf5,
+  libmbd,
+  libxc,
+  enableMpi ? true,
+  mpi,
 }:
 
-assert ! blas.isILP64;
-assert ! lapack.isILP64;
+assert !blas.isILP64;
+assert !lapack.isILP64;
 
 let
   # "rev"s must exactly match the git submodule commits in the QE repo
@@ -63,13 +64,12 @@ stdenv.mkDerivation rec {
       --replace "qe_git_submodule_update(external/d3q)" "" \
       --replace "qe_git_submodule_update(external/qe-gipaw)" ""
 
-    ${builtins.toString (builtins.attrValues
-      (builtins.mapAttrs
-        (name: val: ''
+    ${builtins.toString (
+      builtins.attrValues (
+        builtins.mapAttrs (name: val: ''
           cp -r ${val}/* external/${name}/.
           chmod -R +rwx external/${name}
-        '')
-        gitSubmodules
+        '') gitSubmodules
       )
     )}
 
@@ -99,19 +99,21 @@ stdenv.mkDerivation rec {
   propagatedBuildInputs = lib.optional enableMpi mpi;
   propagatedUserEnvPkgs = lib.optional enableMpi mpi;
 
-  cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DWANNIER90_ROOT=${wannier90}"
-    "-DMBD_ROOT=${libmbd}"
-    "-DQE_ENABLE_OPENMP=ON"
-    "-DQE_ENABLE_LIBXC=ON"
-    "-DQE_ENABLE_HDF5=ON"
-    "-DQE_ENABLE_PLUGINS=pw2qmcpack"
-  ] ++ lib.optionals enableMpi [
-    "-DQE_ENABLE_MPI=ON"
-    "-DQE_ENABLE_MPI_MODULE=ON"
-    "-DQE_ENABLE_SCALAPACK=ON"
-  ];
+  cmakeFlags =
+    [
+      "-DBUILD_SHARED_LIBS=ON"
+      "-DWANNIER90_ROOT=${wannier90}"
+      "-DMBD_ROOT=${libmbd}"
+      "-DQE_ENABLE_OPENMP=ON"
+      "-DQE_ENABLE_LIBXC=ON"
+      "-DQE_ENABLE_HDF5=ON"
+      "-DQE_ENABLE_PLUGINS=pw2qmcpack"
+    ]
+    ++ lib.optionals enableMpi [
+      "-DQE_ENABLE_MPI=ON"
+      "-DQE_ENABLE_MPI_MODULE=ON"
+      "-DQE_ENABLE_SCALAPACK=ON"
+    ];
 
   meta = with lib; {
     description = "Electronic-structure calculations and materials modeling at the nanoscale";
@@ -123,7 +125,10 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.quantum-espresso.org/";
     license = licenses.gpl2;
-    platforms = [ "x86_64-linux" "x86_64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+    ];
     maintainers = [ maintainers.costrouc ];
   };
 }

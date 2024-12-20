@@ -4,9 +4,9 @@
 mkXfceDerivation {
   category = "xfce";
   pname = "exo";
-  version = "4.18.0";
+  version = "4.20.0";
 
-  sha256 = "sha256-oWlKeUD1v2qqb8vY+2Cu9VJ1iThFPVboP12m/ob5KSQ=";
+  sha256 = "sha256-mlGsFaKy96eEAYgYYqtEI4naq5ZSEe3V7nsWGAEucn0=";
 
   nativeBuildInputs = [
     libxslt
@@ -18,12 +18,8 @@ mkXfceDerivation {
     glib
     libxfce4ui
     libxfce4util
-
     (perl.withPackages(ps: with ps; [ URI ])) # for $out/lib/xfce4/exo/exo-compose-mail
   ];
-
-  # Workaround https://bugzilla.xfce.org/show_bug.cgi?id=15825
-  env.NIX_CFLAGS_COMPILE = "-I${glib.dev}/include/gio-unix-2.0";
 
   meta = with lib; {
     description = "Application library for Xfce";

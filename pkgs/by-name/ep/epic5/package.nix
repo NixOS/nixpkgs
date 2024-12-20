@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "epic5";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchurl {
     url = "https://ftp.epicsol.org/pub/epic/EPIC5-PRODUCTION/epic5-${finalAttrs.version}.tar.xz";
-    hash = "sha256-F7lnxh5Yh08HdeH9CwYH+FxktjJYwaxNQInoETUqOUU=";
+    hash = "sha256-QiD9Lx4IxbR+w0NFw5cANqN9cvu1QR45wQ87zlV8FNU=";
   };
 
   buildInputs =

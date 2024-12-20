@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, libresolv, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  libresolv,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.10";
@@ -9,9 +15,14 @@ stdenv.mkDerivation rec {
     sha256 = "089bmrjnmsga2n0r4xgw4bwbf41xdqsnmabjxhw8lngg2pns1kb4";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
-  nativeBuildInputs = [ perl /* for pod2man */ ];
+  nativeBuildInputs = [
+    perl # for pod2man
+  ];
 
   setOutputFlags = false;
 
@@ -20,7 +31,7 @@ stdenv.mkDerivation rec {
     install -Dm755 -t $man/share/man/man8 dnstracer.8
   '';
 
-  buildInputs = [] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libresolv ];
+  buildInputs = [ ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ libresolv ];
 
   NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lresolv";
 

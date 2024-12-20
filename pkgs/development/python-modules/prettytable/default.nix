@@ -2,26 +2,31 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
   hatch-vcs,
   hatchling,
+
+  # dependencies
+  wcwidth,
+
+  # tests
+  coverage,
+  pytest-cov-stub,
   pytest-lazy-fixtures,
   pytestCheckHook,
-  pythonOlder,
-  wcwidth,
 }:
 
 buildPythonPackage rec {
   pname = "prettytable";
-  version = "3.11.0";
+  version = "3.12.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "prettytable";
-    rev = "refs/tags/${version}";
-    hash = "sha256-LtphoD5gCMgWgDcFghinq9zjUD69XudEeGIToqqmVPs=";
+    tag = version;
+    hash = "sha256-RoBPmnuAOtTET898Gdm1zzPIst26GdCY5nU1PyJ+Nro=";
   };
 
   build-system = [
@@ -32,17 +37,19 @@ buildPythonPackage rec {
   dependencies = [ wcwidth ];
 
   nativeCheckInputs = [
+    coverage
+    pytest-cov-stub
     pytest-lazy-fixtures
     pytestCheckHook
   ];
 
   pythonImportsCheck = [ "prettytable" ];
 
-  meta = with lib; {
+  meta = {
     description = "Display tabular data in a visually appealing ASCII table format";
     homepage = "https://github.com/jazzband/prettytable";
     changelog = "https://github.com/jazzband/prettytable/releases/tag/${version}";
-    license = licenses.bsd3;
-    maintainers = [ ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

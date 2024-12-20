@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
+, fetchpatch
 , cmake
 , ninja
 , pkg-config
@@ -30,15 +31,23 @@ let
   };
 in stdenv.mkDerivation rec {
   pname = "organicmaps";
-  version = "2024.11.12-7";
+  version = "2024.11.27-12";
 
   src = fetchFromGitHub {
     owner = "organicmaps";
     repo = "organicmaps";
     rev = "${version}-android";
-    hash = "sha256-uA0KB9HGI0hXoD5YVOfWg3WblpGvWhgpnCVHWfLkrhs=";
+    hash = "sha256-lBEDPqxdnaajMHlf7G/d1TYYL9yPZo8AGekoKmF1ObM=";
     fetchSubmodules = true;
   };
+
+  patches = [
+    # Fix for https://github.com/organicmaps/organicmaps/issues/7838
+    (fetchpatch {
+      url = "https://github.com/organicmaps/organicmaps/commit/1caf64e315c988cd8d5196c80be96efec6c74ccc.patch";
+      hash = "sha256-k3VVRgHCFDhviHxduQMVRUUvQDgMwFHIiDZKa4BNTyk=";
+    })
+  ];
 
   postPatch = ''
     # Disable certificate check. It's dependent on time

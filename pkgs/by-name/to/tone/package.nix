@@ -1,33 +1,47 @@
-{ lib, fetchFromGitHub, buildDotnetModule, ffmpeg-full, dotnetCorePackages }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDotnetModule,
+  ffmpeg-full,
+  dotnetCorePackages,
+  versionCheckHook,
+}:
 
 buildDotnetModule rec {
   pname = "tone";
-  version = "0.1.5";
+  version = "0.2.3";
 
   src = fetchFromGitHub {
     owner = "sandreas";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-HhXyOPoDtraT7ef0kpE7SCQbvGFLrTddzS6Kdu0LxW4=";
+    repo = "tone";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-NBFAPEeUKZgyfNlvcOBS1IpktEnI+fOd9WLj0ByzpLY=";
   };
 
   projectFile = "tone/tone.csproj";
   executables = [ "tone" ];
-  nugetDeps = ./nuget-deps.nix;
+  nugetDeps = ./deps.json;
 
   dotnetInstallFlags = [
     "-p:PublishSingleFile=false"
   ];
 
-  dotnet-sdk = dotnetCorePackages.sdk_6_0;
+  dotnet-sdk = dotnetCorePackages.sdk_8_0;
+  dotnet-runtime = dotnetCorePackages.sdk_8_0;
   runtimeDeps = [ ffmpeg-full ];
 
-  meta = with lib; {
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  passthru.updateScript = ./update.sh;
+
+  meta = {
     homepage = "https://github.com/sandreas/tone";
     description = "Cross platform utility to dump and modify audio metadata for a wide variety of formats";
-    license = licenses.asl20;
-    maintainers = [ maintainers.jvanbruegge ];
-    platforms = platforms.linux;
+    changelog = "https://github.com/sandreas/tone/releases/tag/v${version}";
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ jvanbruegge jwillikers ];
+    platforms = with lib.platforms; linux ++ darwin ++ windows;
     mainProgram = "tone";
   };
 }

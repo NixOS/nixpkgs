@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchzip
-, callPackage
+{
+  lib,
+  stdenv,
+  fetchzip,
+  callPackage,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "qbe";

@@ -1,13 +1,14 @@
-{ mkDerivation
-, lib
-, fetchFromGitLab
-, qtbase
-, qtserialport
-, qtermwidget
-, cmake
-, ninja
-, libcprime
-, libcsys
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtbase,
+  qtserialport,
+  qtermwidget,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
 }:
 
 mkDerivation rec {

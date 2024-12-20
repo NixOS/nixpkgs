@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, python3, substituteAll }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  python3,
+  replaceVars,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libelfin";
@@ -12,8 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./0001-Don-t-detect-package-version-with-Git.patch;
+    (replaceVars ./0001-Don-t-detect-package-version-with-Git.patch {
       inherit version;
     })
   ];

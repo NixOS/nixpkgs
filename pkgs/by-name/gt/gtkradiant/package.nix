@@ -1,8 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, fetchsvn
-, scons, pkg-config, python3
-, glib, libxml2, gtk2, libGLU, gnome2
-, runCommand, writeScriptBin, runtimeShell
-, makeDesktopItem, copyDesktopItems
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchsvn,
+  scons,
+  pkg-config,
+  python3,
+  glib,
+  libxml2,
+  gtk2,
+  libGLU,
+  gnome2,
+  runCommand,
+  writeScriptBin,
+  runtimeShell,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 let
@@ -136,7 +149,7 @@ let
     rev = 53;
     sha256 = "sha256-IQ12fEKnq0cJxef+ddvTXcwM8lQ8nlUoMJy81XJ7ANY=";
   };
-  packs = runCommand "gtkradiant-packs" {} ''
+  packs = runCommand "gtkradiant-packs" { } ''
     mkdir -p $out
     ln -s ${q3Pack} $out/Q3Pack
     ln -s ${urtPack} $out/UrTPack
@@ -181,9 +194,11 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs =
     let
-      python = python3.withPackages (ps: with ps; [
-        urllib3
-      ]);
+      python = python3.withPackages (
+        ps: with ps; [
+          urllib3
+        ]
+      );
       svn = writeScriptBin "svn" ''
         #!${runtimeShell} -e
         if [ "$1" = checkout ]; then
@@ -200,7 +215,8 @@ stdenv.mkDerivation rec {
           exit 1
         fi
       '';
-    in [
+    in
+    [
       scons
       pkg-config
       python
@@ -208,20 +224,28 @@ stdenv.mkDerivation rec {
       copyDesktopItems
     ];
 
-  buildInputs = [ glib libxml2 gtk2 libGLU gnome2.gtkglext ];
+  buildInputs = [
+    glib
+    libxml2
+    gtk2
+    libGLU
+    gnome2.gtkglext
+  ];
 
   enableParallelBuilding = true;
 
-  desktopItems = [ (makeDesktopItem {
-    name = "gtkradiant";
-    exec = "gtkradiant";
-    desktopName = "GtkRadiant";
-    comment = meta.description;
-    categories = [ "Development" ];
-    icon = "gtkradiant";
-    # includes its own splash screen
-    startupNotify = false;
-  }) ];
+  desktopItems = [
+    (makeDesktopItem {
+      name = "gtkradiant";
+      exec = "gtkradiant";
+      desktopName = "GtkRadiant";
+      comment = meta.description;
+      categories = [ "Development" ];
+      icon = "gtkradiant";
+      # includes its own splash screen
+      startupNotify = false;
+    })
+  ];
 
   postInstall = ''
     mkdir -p $out/{bin,lib}
@@ -248,7 +272,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     description = "Level editor for idTech games";
     homepage = "https://icculus.org/gtkradiant/";
-    license = with licenses; [ gpl2Only bsdOriginal lgpl21Only ];
+    license = with licenses; [
+      gpl2Only
+      bsdOriginal
+      lgpl21Only
+    ];
     maintainers = with maintainers; [ astro ];
     platforms = platforms.unix;
   };

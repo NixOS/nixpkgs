@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchzip, libX11, libXrandr, xorgproto }:
+{
+  lib,
+  stdenv,
+  fetchzip,
+  libX11,
+  libXrandr,
+  xorgproto,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sct";
@@ -9,7 +16,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-nyYcdnCq8KcSUpc0HPCGzJI6NNrrTJLAHqPawfwPR/Q=";
   };
 
-  buildInputs = [ libX11 libXrandr xorgproto ];
+  buildInputs = [
+    libX11
+    libXrandr
+    xorgproto
+  ];
 
   preInstall = ''
     mkdir -p $out/bin $out/share/man/man1
@@ -20,7 +31,10 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://www.umaxx.net/";
     description = "Minimal utility to set display colour temperature";
-    maintainers = with maintainers; [ raskin somasis ];
+    maintainers = with maintainers; [
+      raskin
+      somasis
+    ];
     license = licenses.publicDomain;
     platforms = with platforms; linux ++ freebsd ++ openbsd;
   };

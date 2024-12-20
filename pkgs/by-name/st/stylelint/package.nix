@@ -5,7 +5,7 @@
 }:
 
 let
-  version = "16.11.0";
+  version = "16.12.0";
 in
 buildNpmPackage {
   pname = "stylelint";
@@ -15,10 +15,10 @@ buildNpmPackage {
     owner = "stylelint";
     repo = "stylelint";
     rev = version;
-    hash = "sha256-LcnKytRxIZ5Fzz0tGMM7RBke2g3zu94BjtMkMseM4qc=";
+    hash = "sha256-tFM4HR7n7GP+kawa1tcV/Hleb+IoCOKEHiKgULQySww=";
   };
 
-  npmDepsHash = "sha256-l1aP9fmXu5U9t4x5lvJoFTotDv3mLDD5mfc4eVNaZbc=";
+  npmDepsHash = "sha256-ypQBWWsQiHFsU8JG+ACbKjOjYoYyoPQ6Ws3IrNgAwsU=";
 
   dontNpmBuild = true;
 

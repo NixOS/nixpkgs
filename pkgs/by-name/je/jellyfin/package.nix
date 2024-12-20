@@ -26,7 +26,7 @@ buildDotnetModule rec {
 
   projectFile = "Jellyfin.Server/Jellyfin.Server.csproj";
   executables = [ "jellyfin" ];
-  nugetDeps = ./nuget-deps.nix;
+  nugetDeps = ./nuget-deps.json;
   runtimeDeps = [
     jellyfin-ffmpeg
     fontconfig
@@ -37,8 +37,10 @@ buildDotnetModule rec {
   dotnetBuildFlags = [ "--no-self-contained" ];
 
   makeWrapperArgs = [
-    "--add-flags" "--ffmpeg=${jellyfin-ffmpeg}/bin/ffmpeg"
-    "--add-flags" "--webdir=${jellyfin-web}/share/jellyfin-web"
+    "--add-flags"
+    "--ffmpeg=${jellyfin-ffmpeg}/bin/ffmpeg"
+    "--add-flags"
+    "--webdir=${jellyfin-web}/share/jellyfin-web"
   ];
 
   passthru.tests = {

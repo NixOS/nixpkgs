@@ -1,11 +1,12 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, jdk11
-, makeDesktopItem
-, makeWrapper
-, copyDesktopItems
-, nix-update-script
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  jdk11,
+  makeDesktopItem,
+  makeWrapper,
+  copyDesktopItems,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -30,7 +31,10 @@ stdenv.mkDerivation rec {
         "RasterGraphics"
         "ComputerScience"
       ];
-      keywords = [ "nsd" "diagrams" ];
+      keywords = [
+        "nsd"
+        "diagrams"
+      ];
     })
   ];
 
@@ -41,11 +45,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-fqvQH4DRl+R0laGOnfWgFz67JSAdUzrws4k7gmQ3S7A=";
   };
 
-  patches = [ ./makeStructorizer.patch ./makeBigJar.patch ];
+  patches = [
+    ./makeStructorizer.patch
+    ./makeBigJar.patch
+  ];
 
   strictDeps = true;
 
-  nativeBuildInputs = [ jdk11 makeWrapper copyDesktopItems ];
+  nativeBuildInputs = [
+    jdk11
+    makeWrapper
+    copyDesktopItems
+  ];
 
   buildInputs = [ jdk11 ];
 

@@ -391,7 +391,7 @@ addliga = {
 };
 addlines = {
   revision = 49326;
-  shortdesc = "A user-friendly wrapper around \enlargethispage";
+  shortdesc = "A user-friendly wrapper around \\enlargethispage";
   stripPrefix = 0;
   sha512.run = "5d0a438fceef1481633f37824b686422e5000cf232b7dd24bba0f30c8d62b583daf01a67242283f2e4fe971438c061acad2860f50ce1438ca32677d497db8b2a";
   sha512.doc = "2993c6caae1d2f230d144c9f93f7694adcb2e17d9bcd60eb3aa3144806a522258fd4c44a314d40cc767b3b069c4c929b8e458e74bebc746771b975b77bba34d2";
@@ -450,7 +450,7 @@ adfsymbols = {
 };
 adhocfilelist = {
   revision = 29349;
-  shortdesc = "'\listfiles' entries from the command line";
+  shortdesc = "'\\listfiles' entries from the command line";
   sha512.run = "57436dae1489c0f614c4b002f83d34a711398a762ac532b44b1d91a51d068462aaedb5b034923629f7630f039988452eb833d1e98af389c788091517bbee8954";
   sha512.doc = "14bde143bf3ffa3f2b972f93544089e4c0314c7696e1d711719549b7e831278c66fee0676665fe6eaaac744689d613dce159e4eee2e3f9c24dbbe602794fc62e";
   sha512.source = "15e7f652408c5975ba47131109e0d18bcb1d270e0ea630a9a3ff385e499cf3607a366e708a5ec9559d7ccc2a5e0b2d3d0f5f615142978a918b0bd1bd0218a30d";
@@ -876,7 +876,7 @@ algxpar = {
 };
 aligned-overset = {
   revision = 47290;
-  shortdesc = "Fix alignment at \overset or \underset";
+  shortdesc = "Fix alignment at \\overset or \\underset";
   stripPrefix = 0;
   sha512.run = "3998cd5515ad43e559da91bd1f25b835743299ec13fcf22ee9cb3aadc44c285f428ee701f5b27141c4d03c97b31a31e8620a2911854a1781ee5543a99073fed4";
   sha512.doc = "d44ff38fe36352e1498e12eb56652e935cfeeb9ce6af5711bebe7844b1b7ba16864c8dac3c3b5f2e2bd6fee86de38c7555d5796940b834ce1ad396f5d2cb536e";
@@ -1950,7 +1950,7 @@ ascmac = {
 };
 askinclude = {
   revision = 54725;
-  shortdesc = "Interactive use of \includeonly";
+  shortdesc = "Interactive use of \\includeonly";
   stripPrefix = 0;
   sha512.run = "828a18ff7c2d997f25b46b9ce8626a749ce1a18989a292f7f44e9eff0c28d5819e6e017398e76a6872da6498a4ff8306d8f8e701b87b80f57f455d28389f7aa8";
   sha512.doc = "a06a9170ad1637c35a25c9a0d89f3721ec350a0053cb5b85374fdb5cc67e7d4653e75c2a5f9b47d19700e3e9ab2d70e5c0c419f68715e664185bd30759dc0291";
@@ -2122,7 +2122,7 @@ asypictureb = {
 };
 atbegshi = {
   revision = 53051;
-  shortdesc = "Execute stuff at \shipout time";
+  shortdesc = "Execute stuff at \\shipout time";
   stripPrefix = 0;
   sha512.run = "7e03a9a73d8790f6603d53c11aacd01fb7108546e2d3b6ddbd5fce1e42d68ed9c23dfe41794b943eeea67ce0c598851132dd23faa95289789911cd059a8caad8";
   sha512.doc = "8f6402dd0f36d4cc4a4674c0d0b37f012a7d6e557174ca3b58a7a2b33d89475d1e47028cc39d2b77c496bfae0751275369c5f4f49cf53b8c36fb60fce47a6bd3";
@@ -2133,7 +2133,7 @@ atbegshi = {
 };
 atenddvi = {
   revision = 56922;
-  shortdesc = "Provides the \AtEndDvi command";
+  shortdesc = "Provides the \\AtEndDvi command";
   stripPrefix = 0;
   sha512.run = "49b0a69eb308e19e3ed97406fc1ded6e80f15d7787031e2b71cc41ca2e1c74c19d3f3832ae13c5f1af70abf9f2f201c9a7ef669ed2e58349a584ddc767059c54";
   sha512.doc = "d60dae681800be4495c2690f78513475d98a4480364306eb26c16c551b0e984f135aefccdcff549e6702b2b62bb185ccbdacd85dd3c12e5b20c128d9397c0e8c";
@@ -2260,7 +2260,7 @@ aurl = {
 };
 authoraftertitle = {
   revision = 55889;
-  shortdesc = "Make author, etc., available after \maketitle";
+  shortdesc = "Make author, etc., available after \\maketitle";
   stripPrefix = 0;
   sha512.run = "b7496b1ff5dc7544afa6e2181b9c86814671d42603c1f9aa08cc6d45e02dc402e225c44fe554649251b8cdb3dfd81f1b0fb245cc8ed56204d2bcad16e5e9f9bc";
   sha512.doc = "a1cda29730615ec8b81082f14462c5864033e1b4cbe0b071e5cdc6d9b5393b2e701ba6e6665963170bb99408f03c8fae38fc17aeb2de83fe9c8fbdad8273482d";
@@ -5586,7 +5586,7 @@ bmstu-iu8 = {
 };
 bnumexpr = {
   revision = 59244;
-  shortdesc = "Extends eTeX's \numexpr...\relax construct to big integers";
+  shortdesc = "Extends eTeX's \\numexpr...\\relax construct to big integers";
   stripPrefix = 0;
   sha512.run = "a868239dada7f16d52c5d16705ad796d6bc536b1943b5c0bb9538fc72242f3fdbe2cd579367e9230e20e2b3e53725ba8cf25d7d2aaca660a338d7863f4661d46";
   sha512.doc = "a367968a29bfe0d1496a8d444d6809a1ddb6f91031f1aafed30fdd2cd8ba929972554b186dfc897b273cb347f569922b7d59d3c472b385bd2ac1fadfadaa122e";
@@ -6016,7 +6016,7 @@ breakcites = {
 };
 breakurl = {
   revision = 29901;
-  shortdesc = "Line-breakable \url-like links in hyperref when compiling via dvips/ps2pdf";
+  shortdesc = "Line-breakable \\url-like links in hyperref when compiling via dvips/ps2pdf";
   stripPrefix = 0;
   sha512.run = "fa1fa9e3ac50f305ae5b82eb63997d1674b3f640f36d502a1000b439dd52dcaf6b539d153a2c7022f3a00fc0042bcfe341e850ed6b01f7058b1f8f6fd92b4d9b";
   sha512.doc = "38f7847274cbee0a6e7c536a982d0110670cf6af54bfa99718a862e1974fdd839f6ef6871cbe2c40bcd0b2a9036c806eb2b57c8adaee583ef316da367ed854f5";
@@ -6293,7 +6293,7 @@ bxjscls = {
 };
 bxnewfont = {
   revision = 44173;
-  shortdesc = "Enhanced \newfont command";
+  shortdesc = "Enhanced \\newfont command";
   stripPrefix = 0;
   sha512.run = "83775ee72fceb4de0037327561ea2f1723db89dc23ccc42245390212ae1fb849c92c75b2e7b4b23440c62086116b8f0a14b12b27f97c9277c55a7454b231826f";
   sha512.doc = "f09fde7abd39a4df52175eff90363a469270ab1385f3600e654535cc90d7b4b5ba704be734323dffca512f5942c45a9ffb5cd19a73026c224cee3be33eaa5b65";
@@ -6622,7 +6622,7 @@ captcont = {
 };
 captdef = {
   revision = 17353;
-  shortdesc = "Declare free-standing \caption commands";
+  shortdesc = "Declare free-standing \\caption commands";
   stripPrefix = 0;
   sha512.run = "c24a7d66c1daa3a9c336a8555286876aea9e969a4107c42c258f0f4c9a88070316df70e0f2a860adb6335a33e49cdd7a9ba8391255f1e1fb283bd2f6a7e7b343";
   sha512.doc = "c0a1a4584d0802eda39812d2c293fabed2487b0cedb57df622519d5857c2ef10e54e66032e9e9ee9ab81c757fb827eabf422b1bf2ab0ae6f7c22ab3aecb49a8f";
@@ -7569,7 +7569,7 @@ chifoot = {
 };
 childdoc = {
   revision = 49543;
-  shortdesc = "Directly compile \include'd child documents";
+  shortdesc = "Directly compile \\include'd child documents";
   stripPrefix = 0;
   sha512.run = "b268695b1d91b49ba6a0179124cafa5e5cfed56672424ab40cc31924c07879b4f50be47f9fe9d574f2adb3f183c71d799cde8854a2942b530c40a1e101d399ef";
   sha512.doc = "1a74059d946b82da211f5fed7cb120453049ceaf5f10841a78ff8864b41444064b223939bd2296142bde9c7bececc0ca8bed141be02431fd60f069ecab998d87";
@@ -8191,7 +8191,7 @@ cloze = {
 };
 clrdblpg = {
   revision = 47511;
-  shortdesc = "Control pagestyle of pages left blank by \cleardoublepage";
+  shortdesc = "Control pagestyle of pages left blank by \\cleardoublepage";
   stripPrefix = 0;
   sha512.run = "bdd3de3ea16cb5d24879bcf2255bbe01612f8af70f663b9ac578a4ac98910119ea96b8a5b4a59d25c0406c1b33786997ee2940da0273b025455e334b48f17b7d";
   sha512.doc = "53ba8c83224ee6573cd1549e7e425fd524b5caf65ab139b67e7de9b32bdd5c3c87f5af63c2c43696554fcc33c8bff4690373ad25582b23bf51134b9cb6301409";
@@ -15860,7 +15860,7 @@ datax = {
 };
 dateiliste = {
   revision = 27974;
-  shortdesc = "Extensions of the \listfiles concept";
+  shortdesc = "Extensions of the \\listfiles concept";
   stripPrefix = 0;
   sha512.run = "6da6a802994a06e040d43ac7fc9db0515d9273ba9d4cac061e04b05922f9eb9fecaf138eb641b3149be7b98f9139c428084b6470bc177a020386e0dc053427b6";
   sha512.doc = "53ca32cabd7e3a32d02c77beb076b08ccaa782b6a2ae249b932242987741f0e255bdc83a2b6ccc7ed2e0efbec66923798026040745152f7244984a0843c8c23d";
@@ -15893,7 +15893,7 @@ datestamp = {
 };
 datetime = {
   revision = 36650;
-  shortdesc = "Change format of \today with commands for current time";
+  shortdesc = "Change format of \\today with commands for current time";
   stripPrefix = 0;
   sha512.run = "3d033ee164d52f7085bffdc12f2062be7e94a644d9ed731b4d1b97a3a46838dabadcf6687063e165c65fc938a51a4adf8078339b720a305175d6cd6a3b889f07";
   sha512.doc = "510449d17b09d9207b76e732b5d426121888cf653f29bb3be8872b74a243596ac339f09d11a14a4a3007f8818171aab28727cd1713ee35c8908d2d168a57d9b0";
@@ -18335,7 +18335,7 @@ eepic = {
 };
 efbox = {
   revision = 33236;
-  shortdesc = "Extension of \fbox, with controllable frames and colours";
+  shortdesc = "Extension of \\fbox, with controllable frames and colours";
   stripPrefix = 0;
   sha512.run = "5091324e7f5c05385296d570027a8546db4220a24da330ab85ef5d1185772f51b4f200f63eaad0cfa3eaeafd3d055509f4ffbdf798c1139a60c5e572ea46926e";
   sha512.doc = "394387e09ecb0d497014a62fc1caedcb3e00148f6e0a9a16ae1b53efbb4d5cf749e154e4c905d197280e4ecd9bc88ea07ab7e0c004b8c30eadbe7f9f414c1345";
@@ -18377,7 +18377,7 @@ egplot = {
 };
 ehhline = {
   revision = 54676;
-  shortdesc = "Extend the \hhline command";
+  shortdesc = "Extend the \\hhline command";
   stripPrefix = 0;
   sha512.run = "759e123a2418acd7239c4b897e64c146ffb84cc1646d331acc5ca498f707b916c1392f3fb9b97d2916d745e9afcf9c630a5a94e413ecd0c17fc2a8b13f773d3b";
   sha512.doc = "79db947da1c51811e834999889c3d089e2c5077d2d21fe133f6879a87afae4e2c7fcf1f07981ef9335a6b7234f083e74e21364be3526448ebdeda6ba75815fac";
@@ -19898,7 +19898,7 @@ everypage = {
 };
 everysel = {
   revision = 57489;
-  shortdesc = "Provides hooks into \selectfont";
+  shortdesc = "Provides hooks into \\selectfont";
   stripPrefix = 0;
   sha512.run = "79b83d48e3e6eedcf1673a30c28fc06eb2ed8e3bd292d6cf914faf5ce2929795e6dd11baae3a207c796abb67ced2a2442af11c2618fd7d565696f8bfd121a0a2";
   sha512.doc = "5efdce418de6d29481a8a8a9bb89fa561e865f5628dd67ce88fd648f54a40c6a90c625700d053d741b650c568eb6b63da81b68bebf89bb618a398a223a5b08a1";
@@ -19909,7 +19909,7 @@ everysel = {
 };
 everyshi = {
   revision = 57001;
-  shortdesc = "Take action at every \shipout";
+  shortdesc = "Take action at every \\shipout";
   stripPrefix = 0;
   sha512.run = "b6219fdc669847a30ad2359d6b0888eec0980114d5385c018e9ddfd0876dc52390e1e8ffae5d2850cfa140833365c30024456bfacde6615bdbe5101e7059d52f";
   sha512.doc = "2a05f4b42c1a85b4af8fb3881d1e32d0cb8fad7070bd8eb83632b50e387083a5c8fd264b61b70416451f56a97e1c0702507bd50c534ab7baf975372d854a97a5";
@@ -20022,7 +20022,7 @@ exceltex.binfiles = [
 ];
 excludeonly = {
   revision = 17262;
-  shortdesc = "Prevent files being \include-ed";
+  shortdesc = "Prevent files being \\include-ed";
   stripPrefix = 0;
   sha512.run = "b83426d7ff334e64f8a5566fa905f1c03478ff68da5b74b85dfd6c872db7a63454f627db4e6bea48f8048da0d84bd80b269cf5cd3a5b487484dcd8f2e21c5058";
   sha512.doc = "11f1a4e7b0bfeb5728ab632756fb612b784e7a8b46e68c2e5cb3681928811d394ac0b7f508e7c655945209b1e75837d4ec1a69bcaa6b0ac8d45d66302b4bcb13";
@@ -20106,7 +20106,7 @@ exframe = {
 };
 exp-testopt = {
   revision = 15878;
-  shortdesc = "Expandable \@testopt (and related) macros";
+  shortdesc = "Expandable \\@testopt (and related) macros";
   stripPrefix = 0;
   sha512.run = "26b5af9bdd06a3bbd231b1b55c4ae8929efa06655656747b804425e802fa7d07355e510ac673590cef235cceaf88fc03e1493f4bee9c99ce2a32c32b9a3f9aca";
   sha512.doc = "f4f7cda5cc8b3f8900cb12989834e5b1702f751248f58fe65a8d65ab69eb2a4118002212eefb609e251d4437579e635173366beb471e32d07d45c5c645ca506c";
@@ -20369,7 +20369,7 @@ familytree = {
 };
 fancybox = {
   revision = 18304;
-  shortdesc = "Variants of \fbox and other games with boxes";
+  shortdesc = "Variants of \\fbox and other games with boxes";
   stripPrefix = 0;
   sha512.run = "752e26abee96dd2bbf77b30a6d98d48a1673632d5601d28bba5799e845a015357b96302f3f1d8977f0458003d3456df4694884a05ccb6124b76ca8f7fc84fcbf";
   sha512.doc = "2c3e0466198d392af57b2bda16f80589a9aa9db992272980a2e7ab9d7d1842d7e8f2980003b3b09648cfe0b9a1977562534ca54fae120bd7e4d950d25a83c0c2";
@@ -20574,7 +20574,7 @@ fbithesis = {
 };
 fbox = {
   revision = 69041;
-  shortdesc = "Extended \fbox macro from standard LaTeX";
+  shortdesc = "Extended \\fbox macro from standard LaTeX";
   stripPrefix = 0;
   sha512.run = "705a0f1f6d5009f0ac2fa1059f3029ef7bf7e8fdab6e85bddba822eb50dfcc049f94b7ff43afc97234d44f42505e1cd4e6caac1f22178949dcaea0a60e572281";
   sha512.doc = "19a61ddc64c3c5108ec05089e988a07f0e10d772bed810898bf82046922eab58a389c3816b15055b5c2e8a4d1392305a351802eaf3f1e72799c9c192eb8c1484";
@@ -20690,7 +20690,7 @@ fenetrecas = {
 };
 fenixpar = {
   revision = 24730;
-  shortdesc = "One-shot changes to token registers such as \everypar";
+  shortdesc = "One-shot changes to token registers such as \\everypar";
   stripPrefix = 0;
   sha512.run = "1b09294b430bb9ab6a4eae11549500b224514e55bb99329a4ee3d9d72ab906128063537302f672a772c02ff4372d46649656a88c4a303a9301976fc7a804387e";
   sha512.doc = "6ee02d615438e99df82f939a8104097e43802b00af2a0e7be56f329061722cfc7df0edf84c82ac73754d63a703533bd6d5b88b6e648bedbc47be712ff86ec5c8";
@@ -21500,7 +21500,7 @@ fncychap = {
 };
 fncylab = {
   revision = 52090;
-  shortdesc = "Alter the format of \label references";
+  shortdesc = "Alter the format of \\label references";
   stripPrefix = 0;
   sha512.run = "47aafab923d6455da7e63eb24e0fefa8b869efa5a04bb301000cb2eb658893927dd9f9aeb8e6919ea29e0caeca235b1883106228f6acddc667117a3ba1136974";
   sha512.doc = "a987a6efd0964bd5ab5328658e011b5c8da56b404d233c55d96541ec2f37cc72faacd934908c7346041ec8bab3866dd1f171e1c5de5eb528b0f0e80969c0bba6";
@@ -22304,7 +22304,7 @@ ftc-notebook = {
 };
 ftcap = {
   revision = 17275;
-  shortdesc = "Allows \caption at the beginning of a table-environment";
+  shortdesc = "Allows \\caption at the beginning of a table-environment";
   stripPrefix = 0;
   sha512.run = "1287e0bd63fc92ef3e3c77ae3a6113cfcca38dd63f4a90948baadd2a365c07b38631d916230baeaf550b1aeff07f9cac3a26a07301838716d8d70fcf0843953e";
   sha512.doc = "afa317f10c600c88bb96fccb0383b291e1fb7c11abba5f6bd1efb05e7d2ce117c4ece7bdf9a9ea16c71c116143aa65ba26cf7c2e1dba68f225b655d122169001";
@@ -22314,7 +22314,7 @@ ftcap = {
 };
 ftnxtra = {
   revision = 29652;
-  shortdesc = "Extend the applicability of the \footnote command";
+  shortdesc = "Extend the applicability of the \\footnote command";
   stripPrefix = 0;
   sha512.run = "df8395b996f96ed72505ef1ef7f0e8e6101d4b26059831b227344023514d377eb189961a240e83ba42ac4ef7e8086b8ffcda347290014fbb1cf1531371c20eff";
   sha512.doc = "fc16ff992e3339480a4154169665be49f51e56f361d0b1f97842c555be59485fd7edf3cf815e32642826224e188c5377fdb2ab36746cdaef7f552399a4b7119c";
@@ -23081,7 +23081,7 @@ gillius = {
 };
 gincltex = {
   revision = 64967;
-  shortdesc = "Include TeX files as graphics (.tex support for \includegraphics)";
+  shortdesc = "Include TeX files as graphics (.tex support for \\includegraphics)";
   stripPrefix = 0;
   sha512.run = "2137967697765b1167f36a858d2eda778b43ff1d681ec0d8af7963d2ab4a92448c6c1ad6933975afcc211d301cf168528e7ded7c3114c4b5ec580f42d8a7b664";
   sha512.doc = "86ee14069c5522d7c0713a532627bf29e8cf71ec4c86184377cdcd8a73dcf0f034be9e92b8ff7c2caef8310f968c956d712f3281eb6e4d36e83a3464149489b9";
@@ -23491,7 +23491,7 @@ gmdoc-enhance = {
 };
 gmiflink = {
   revision = 15878;
-  shortdesc = "Simplify usage of \hypertarget and \hyperlink";
+  shortdesc = "Simplify usage of \\hypertarget and \\hyperlink";
   stripPrefix = 0;
   sha512.run = "768353fee03e36d5f13e5ea8ca2cf0925fb5dc3c847680325a0961b78a3ed6c30859bc57de7b927cd9e782f85539c97183687755c31738e1da3cc27a08f52387";
   sha512.doc = "4fea41151ea197efdacd9e5756043b87500af8445769d0d0f69560cb94decd4f097bcdd52041706ada9b1ee7826f3c56aa30db473c472b1c74553cebb5231072";
@@ -23522,7 +23522,7 @@ gmutils = {
 };
 gmverb = {
   revision = 24288;
-  shortdesc = "A variant of LaTeX \verb, verbatim and shortvrb";
+  shortdesc = "A variant of LaTeX \\verb, verbatim and shortvrb";
   stripPrefix = 0;
   sha512.run = "18038202bca3493596925d9d7c65612434ccddde4b301134f1f57706e5d2978025fead598751e27a29d23f66ed12306e6092461aac1d9d921ce818b0a49cdfbd";
   sha512.doc = "6dfcc27b38639d4a97ed311bf7c6f1faeb1a023abc27d53e272f334b232a52aa0edc030b0c53d6587845da64097496696ceb03cbd6aa13c8ca5ac12c1772860c";
@@ -27386,7 +27386,7 @@ iftex = {
 };
 ifthenx = {
   revision = 25819;
-  shortdesc = "Extra tests for \ifthenelse";
+  shortdesc = "Extra tests for \\ifthenelse";
   stripPrefix = 0;
   sha512.run = "76235d3f8dc4e62604828beaf87327d11d4a9ff69061edf1a3ed4c874983251fba75d80973e54fb3daa2d160b27000089f4cdf1c29748124825fb4075b6f7148";
   sha512.doc = "efc4fa3b5d6e91d1d5af27846bf2652672a233537810051b2858c1c4ffacafb9771b2c3a222cea4d490e0478eef96b205c4043f4957b876b7f4d57903b26454d";
@@ -30467,7 +30467,7 @@ latexmp = {
 };
 latexpand = {
   revision = 66226;
-  shortdesc = "Expand \input and \include in a LaTeX document";
+  shortdesc = "Expand \\input and \\include in a LaTeX document";
   sha512.run = "e5b63c9aa31f3b5885b1a61503998ce949021b448199538ac385d3fe687156ce6669cd3610a7c3387592d968b0707f7122f35fd50402616470e34bb49f341bf4";
   sha512.doc = "c06bbb57bc006aebb644fc4a8edc1f89e10617c67bb77193bd2f4dc3eb7b04b55fb1f239d7d6979f9b385134f3b1e584d9f10521efe704292b7e64865f78d156";
   hasRunfiles = true;
@@ -31707,7 +31707,7 @@ longmath = {
 };
 longnamefilelist = {
   revision = 27889;
-  shortdesc = "Tidy \listfiles with long file names";
+  shortdesc = "Tidy \\listfiles with long file names";
   stripPrefix = 0;
   sha512.run = "1d16ee9c76784c5124de3abe62b6e916d0f65e979a18a721ef688a960e5d20382dc976de0b68d95c47e9651ad71a67ca97a828f1bdfba8e4a77ac084d7561386";
   sha512.doc = "d909908d763342790b8ab56d333e60d7047894472f3922a2554581a5455539845af72d3867d0a55f5a27e982aa8128ae1a948f40e106fa127f2d01156b55ccf6";
@@ -32324,7 +32324,7 @@ lua-widow-control = {
 };
 luaaddplot = {
   revision = 72350;
-  shortdesc = "An extension to pgfplots' \addplot macro";
+  shortdesc = "An extension to pgfplots' \\addplot macro";
   stripPrefix = 0;
   sha512.run = "859ca0bfd6c9c3dfb3feb406d6371c42ee336f1166db3e6401a7ee75f824e3c764a6251f4427b59c51eddfe24e6cdfcbbf3e4e943e7a594c0ff4cae77449f4bc";
   sha512.doc = "1214a866a9da5b4a73aa211e0fcc0a239edef655299867fc27c7534d4be3bcadec359776f7b75cefcc93d799765cee8eccd610d45b9d4431bddb574d6a044666";
@@ -33198,7 +33198,7 @@ makebase = {
 };
 makebox = {
   revision = 15878;
-  shortdesc = "Defines a \makebox* command";
+  shortdesc = "Defines a \\makebox* command";
   stripPrefix = 0;
   sha512.run = "918052ed5c358e12ac7ca7c93f25a43fcfa8f7ba261fdf652d7ccbbcc27e3e0f822813d8297d3b75450c443687bd97e93416624b51da61572557d6a337638bc7";
   sha512.doc = "807d495fdef601fff666acb79c7f3fa43d1aeebf8aed77bebc02f90dca4fb9c36ae1bc911a9af1009538f3d3e2c4c7f9ceb0111d091dd4c1691a1520e089a697";
@@ -33229,7 +33229,7 @@ makecirc = {
 };
 makecmds = {
   revision = 15878;
-  shortdesc = "The new \makecommand command always (re)defines a command";
+  shortdesc = "The new \\makecommand command always (re)defines a command";
   stripPrefix = 0;
   sha512.run = "fb63fdc9cc0aaa531b25417f0c23348971c306b1a93d99e7efdbbfd7c3907b50f28c67f36a88bb2a94154bcbde937e63246ece577ee2440ad4f5c2935eb25b99";
   sha512.doc = "f69dbf682df7e3089727570417be3624b496b5ad7db627b344d32b106606cab5299dd23497e137770fdfb9f940503a65e1074e06dd67e0561b36729ab6c3d428";
@@ -33284,7 +33284,7 @@ makeindex.binfiles = [
 ];
 makelabels = {
   revision = 60255;
-  shortdesc = "Add a '\makelabels' feature to KOMA-Script letter classes and package";
+  shortdesc = "Add a '\\makelabels' feature to KOMA-Script letter classes and package";
   stripPrefix = 0;
   sha512.run = "4f58301507896c2e719f2607e1e456aeb25cc78913ed02d9eaa12489aeb643e73bccaafd1f219c1c8b485d77aa64e99d64166b63e8a2c7a7c3c8cfb77ac23bc6";
   sha512.doc = "da01e167d1be1d4831c1bd0aca43472aae12a8204ab844f9964e60f57cf22312532c52cae85964f10780aaa0e4f84015f6ceee8ebfa042b184fb1ecc7c174585";
@@ -33435,7 +33435,7 @@ marginfit = {
 };
 marginfix = {
   revision = 55064;
-  shortdesc = "Patch \marginpar to avoid overfull margins";
+  shortdesc = "Patch \\marginpar to avoid overfull margins";
   stripPrefix = 0;
   sha512.run = "70dc40b9823cd82a52a7e55e5af47e5b2373fd7cf16567f6eca2bb886d3612473141435444b538f81ab9467d1b3e5ba04424b1ca47d95cc0869dea02faf82b03";
   sha512.doc = "16ab654dd8957bcf37351b7c766b787f27baddd4e73a6a4c3a07f5b1486f5ea73c9028675b5830b8dc1224eae29f50d61bb579aeecd9af4aaafaf78259bca900";
@@ -33446,7 +33446,7 @@ marginfix = {
 };
 marginnote = {
   revision = 68204;
-  shortdesc = "Notes in the margin, even where \marginpar fails";
+  shortdesc = "Notes in the margin, even where \\marginpar fails";
   stripPrefix = 0;
   sha512.run = "6643a77d01d59bc371d301e738b59957bd63cfa0fc98a554f853d1599392ceb5e88663651563445633df704bbc3ef74510ebd6150c44911314225259982f114b";
   sha512.doc = "18882e317048606324338ff765cd11e972c3dedcdbfe2407a3f9643b3efe6a7d173561726d4221618ac510a447cec7b1aa13a46ca45a091ac76e601c55c551e7";
@@ -33584,7 +33584,7 @@ mathastext = {
 };
 mathcommand = {
   revision = 59512;
-  shortdesc = "\newcommand-like commands for defining math macros";
+  shortdesc = "\\newcommand-like commands for defining math macros";
   stripPrefix = 0;
   sha512.run = "4be34084705419757f92b8f31be35a606689c25786bc5b95a0531d572ce21601881cbd7548b7d380241089d4473fbfb70debeab9b30633671b3494d66bfbb9f6";
   sha512.doc = "80191b36dd3e34193c2aff764b7ffcf274a4d9fc41b1d19fc92ac807e03809069efbcace953fdbddd481db7d6604a859eab44a2c93024ecd59968c9e24e2630f";
@@ -35873,7 +35873,7 @@ multienv = {
 };
 multiexpand = {
   revision = 45943;
-  shortdesc = "Variations on the primitive command \expandafter";
+  shortdesc = "Variations on the primitive command \\expandafter";
   stripPrefix = 0;
   sha512.run = "63f512ca5b9649c86a6936cc2407737e41afd6c6a3b4810fe81155a5b4127aecc538303e26b91f53decee900fba7946e90a46a545b3c9caafb3e0863940e0009";
   sha512.doc = "6b8a727aae2d314877df551ca5804e84be0bc530b4f09d8bfe6a9c1a4c1eb98647257beeb1813a183f0aa5422b0041443e817ce11b6db70e4129e3edc664e788";
@@ -36636,7 +36636,7 @@ newvbtm = {
 };
 newverbs = {
   revision = 64833;
-  shortdesc = "Define new versions of \verb, including short verb versions";
+  shortdesc = "Define new versions of \\verb, including short verb versions";
   stripPrefix = 0;
   sha512.run = "f2e2cd3fd2712d3333c7caa9e74a16300d7f08327b9bc7f44362570377feed31a206e6b09df15c524dcbfe39ffc54388de4fca90e180e38d28cf9cfbba79ab2e";
   sha512.doc = "7524a6e767edc5f55d96026f947e17e42f54138157bfd1851832dd139617939661ba5a4e759b4cf313990077dc9ed240c032cfe706b595af4d9a4197e519fd1f";
@@ -36667,7 +36667,7 @@ nfssext-cfr = {
 };
 nicefilelist = {
   revision = 65842;
-  shortdesc = "Provide \listfiles alignment";
+  shortdesc = "Provide \\listfiles alignment";
   stripPrefix = 0;
   sha512.run = "deaf84bd004172584e0437f3f15dacbed3d49ef6bfdba15e77e0c888bc03e35a634107469ae979b38d1e5519f4c8236cafed71c0ec46b9e7735041f234c03f96";
   sha512.doc = "efbc5965c9658e1f44182bf92f695b2d200cbdb8c5c70e23631b31603682168c0cfa5e114615483f7d897fec175267ef9d7fd0040f653e75defbe88bfb395bc5";
@@ -37025,7 +37025,7 @@ norasi-c90 = {
 };
 normalcolor = {
   revision = 40125;
-  shortdesc = "Changing \normalcolor";
+  shortdesc = "Changing \\normalcolor";
   stripPrefix = 0;
   sha512.run = "013354a5f7514f6267d57d098ca93eb48970df0ce1cb2db0c60ecf664cbcea177b934ab8f252cfb9dd4c0979417937462ef55e51502bca7f32a7de1a0e820e32";
   sha512.doc = "ca7a9c008f72aa1287092f881f9ffcbe58ed45bfc97ec3231fbeceeb007f6248629d9cf49598afe604ac8cc30a4e8117f54fe517fcbf52548add2f6ac6fdb662";
@@ -38456,7 +38456,7 @@ parsinevis = {
 };
 parskip = {
   revision = 58358;
-  shortdesc = "Layout with zero \parindent, non-zero \parskip";
+  shortdesc = "Layout with zero \\parindent, non-zero \\parskip";
   stripPrefix = 0;
   sha512.run = "2d64232f41b2607712bc67ce77ebc987502924ebaad4f799b6ae2163862a8b833a9c1a7c8871a33b4ed9fdeb74c8368897e1b831c485ab82e084fe3ff0552af3";
   sha512.doc = "759e9e8d698f8ad77ce388ec127f158a7280586338c6e56e1f9188a9a2e8106cb482f8ebc4e252749331e65ac2a771884124b16e3ea5e9ac76005439ca85876b";
@@ -38663,7 +38663,7 @@ pbibtex-manual = {
 };
 pbox = {
   revision = 24807;
-  shortdesc = "A variable-width \parbox command";
+  shortdesc = "A variable-width \\parbox command";
   stripPrefix = 0;
   sha512.run = "cf2ea3781aac3d0b8619c46513bf9894c4b4efd8ba89eefe2e5fbe4e8f82fedd3b17f64467598080a577c65cc21713671c68763ff2600ce24fb6f6ddfae83a3e";
   sha512.doc = "1955a1cd5336a7d71483f49bbc8c65426485fd38447282262b58b4633398cda0753c5574455421b19d92d5c88c599f9c227b54a7c340a35daf233a4f48a1c276";
@@ -39840,7 +39840,7 @@ pictex = {
 };
 pictex2 = {
   revision = 15878;
-  shortdesc = "Adds relative coordinates and improves the \plot command";
+  shortdesc = "Adds relative coordinates and improves the \\plot command";
   stripPrefix = 0;
   sha512.run = "26b608cc8409c62f4c0130cc032f2ca5929886fafb9d22d93aa23af5a6dee62bbde83926bccbcb4fbd3d86a43810d751eb43a2a94be9528e1639c59fb61e5446";
   hasRunfiles = true;
@@ -43825,7 +43825,7 @@ rit-fonts = {
 };
 rjlparshap = {
   revision = 15878;
-  shortdesc = "Support for use of \parshape in LaTeX";
+  shortdesc = "Support for use of \\parshape in LaTeX";
   stripPrefix = 0;
   sha512.run = "9a7f5f821635f110d9bad0015d9fdf489f836cc6ec0c101f63a3bf5bf9235d7446dad98db1325b0720bab85d68432f4cbdbc6dfc78456329a8c48b47d9212abb";
   sha512.doc = "73987b63cd565766586dff08144bb9cfab13b7251053d5f008ccb7dd3091ec9d3bbe8ed92fd8e7dddce93afd13a649e68826468b87947a036a054fea76225921";
@@ -43899,7 +43899,7 @@ robust-externalize = {
 };
 robustcommand = {
   revision = 15878;
-  shortdesc = "Declare robust command, with \newcommand checks";
+  shortdesc = "Declare robust command, with \\newcommand checks";
   stripPrefix = 0;
   sha512.run = "806f997cf6c0eceec0c8d9b8f8207014c4ab9243f8007fc688674af2fd778455a787b9cf998262fb7d0a92ba8e2ffb597d61950c22a6122ad957a62ea54d9a42";
   sha512.doc = "4d5c8a994edf816d39af12d7881793f0fda0223a3545559255674fa5a08f2d0fc9ad8ea2779b3c8bfe476966045f996b8b8f5da6fdd028188d28ae724c24a222";
@@ -45204,7 +45204,7 @@ scrlttr2copy = {
 };
 scrwfile = {
   revision = 66872;
-  shortdesc = "Use LaTeX .aux file in place of \newrite files";
+  shortdesc = "Use LaTeX .aux file in place of \\newrite files";
   stripPrefix = 0;
   sha512.run = "b4d306af1e0d3dcfa59ef14250f14125bfc4a0b9b0f3e6ab32b809f2e729cfa45e27549c8cb9c2dde2819d328c1a032eb6aae6f123f1c71efeba4c9d16611a34";
   sha512.doc = "6aab0a6af0c3f989788673c44bb8a885ddb259f0be3f69f0a32b0bdebdc8e607b32c8f8530cb99d59b1c7739b2c33446f8b7c832384d07158c90bd347704a1a3";
@@ -45336,7 +45336,7 @@ sectsty = {
 };
 seealso = {
   revision = 43595;
-  shortdesc = "Improve the performance of \see macros with makeindex";
+  shortdesc = "Improve the performance of \\see macros with makeindex";
   stripPrefix = 0;
   sha512.run = "4d52687aa57245d3be55bf486b100d61fe2e2d979447c2f123f566c3aeb13657e531ace55fe5d00eab57cebe89cfd3729a71dc7177831b5192b8c0fde452d7df";
   sha512.doc = "6baba95b6b08ef95f2966d227161ea39a4084b46371967057266ddae155b115fbe4fcf148e1afc4629e33f54d0329ebb6169f1be4fdcb801d869b212d056cc61";
@@ -45846,7 +45846,7 @@ shorttoc = {
 };
 show2e = {
   revision = 15878;
-  shortdesc = "Variants of \show for LaTeX2e";
+  shortdesc = "Variants of \\show for LaTeX2e";
   stripPrefix = 0;
   sha512.run = "702d0913a299b68bedec15c697868a70f058957dbd3a2dd2c503bc21c8a250dc7601e6348080bb394a38108bcd2f5ee67796a888183aa181c9f88a72e7666580";
   sha512.doc = "a427f7126ded4251c255fcaf2c381f7c00d0d0e55253804cbe631ac59be1bd51e7ba2ee51110af86bcee27d73698bb7baa323fef8e23a41000928b242b0be282";
@@ -46238,7 +46238,7 @@ sistyle = {
 };
 sitem = {
   revision = 22136;
-  shortdesc = "Save the optional argument of \item";
+  shortdesc = "Save the optional argument of \\item";
   stripPrefix = 0;
   sha512.run = "64a34fcf0769ed4ab4b201facc056b890a89009e1847e9ca65fb405e1c1144225e8fff59c1a906341521bba5d39e3338900a9a35aff5bb716a5aff5e6aa4d49a";
   sha512.doc = "af74d7b4f4dfce45e543494344fa32f4f4d55435034cc1b23b24b333f89d54d0b8c9d0a1247561bb7182d3841fb04b7b3531be847a6fed3db212497ef2ccec3c";
@@ -46450,7 +46450,7 @@ smartdiagram = {
 };
 smartref = {
   revision = 20311;
-  shortdesc = "Extend LaTeX's \ref capability";
+  shortdesc = "Extend LaTeX's \\ref capability";
   stripPrefix = 0;
   sha512.run = "149dd95ca0677a4e273df64a589d1424b8dd89983adf3a3ef81f8236d1b594d35b851b4255fd9f0d05b4feb82db59d816408e3ca59f2b86b73a5724a8e937367";
   sha512.doc = "07eaecd9e924e5912e8e3a3ba6479412282e1408cbb59699b9e83006768c4042b173d38da2e8dd2c707b392cb48d99e4be25985023db4de80d69450fe95a338b";
@@ -46868,7 +46868,7 @@ spreadtab = {
 };
 spverbatim = {
   revision = 15878;
-  shortdesc = "Allow line breaks within \verb and verbatim output";
+  shortdesc = "Allow line breaks within \\verb and verbatim output";
   stripPrefix = 0;
   sha512.run = "0b26e941f77264ae2db7cdcf2c4459c26601f6079e0bad24a3ea0edbd22157c324bbf50426a794655dc1aee710092cd9b662bb401838186e42657fcef5c1121f";
   sha512.doc = "245825f18ae835b984eb6474b927a579f80b6c6feefbfe02a53f8b7ea5a48023e1bdb43b39f090afe4ae42937d053cbebfec6ff97d7732d754287401a95fc641";
@@ -47795,7 +47795,7 @@ svn-multi.binfiles = [
 ];
 svn-prov = {
   revision = 64967;
-  shortdesc = "Subversion variants of \Provides... macros";
+  shortdesc = "Subversion variants of \\Provides... macros";
   stripPrefix = 0;
   sha512.run = "319bd5de2870a3c8237aa5013f7807bf3c2c5ef7fa4618a400cd5ab60ec8cb88b94510b0129862c5d98a11e2241f9790f8c84473447df8e21cbe711d52268e98";
   sha512.doc = "01cfb48533e07065f477724efe4c3fcff13691da0393a0d8a9dc9cf4b5d3e3953ce233f8331c1e5857c2259ac6dd7e4859793bb194d750f35ecf3723dd7b4b0d";
@@ -48324,7 +48324,7 @@ talos = {
 };
 tamefloats = {
   revision = 27345;
-  shortdesc = "Experimentally use \holdinginserts with LaTeX floats";
+  shortdesc = "Experimentally use \\holdinginserts with LaTeX floats";
   stripPrefix = 0;
   sha512.run = "bd45962a9caa5b098b6a6a5c0bd3fb964e13cf2744a5fc960a97910183799d532aba24d5f4774ac29eef14bf1439e285010b2e22641167c826d5a36262fc39ef";
   sha512.doc = "2b9d013fcb93682e9be0fb1758fc871b4784eef72a0892383a35073aa177ac29acfda5e54b6a919379b43a3dd0fb0b22dd44476857665efb59b2e9cf27bb679a";
@@ -49824,7 +49824,7 @@ thesis-titlepage-fhac = {
 };
 thinsp = {
   revision = 39669;
-  shortdesc = "A stretchable \thinspace for LaTeX";
+  shortdesc = "A stretchable \\thinspace for LaTeX";
   stripPrefix = 0;
   sha512.run = "ddc80b4de32524ce76fe34e8f88d01e2db18a8bbf60a718454a0303aea8082fc2e495c89c2ad0a7459ed3151e890e30a1263267f249581e24bac87113a5fd266";
   sha512.doc = "b5b50522a4a7b5f7772118d95fdf42e2f570ac35c49a8690560df27df0754a170acddd782b516fa185c0f6ef2abb3ff8a9f366370c2ad46e2e4d32dba21e634b";
@@ -50839,7 +50839,7 @@ titlepic = {
 };
 titleref = {
   revision = 18729;
-  shortdesc = "A \"\titleref\" command to cross-reference section titles";
+  shortdesc = "A \"\\titleref\" command to cross-reference section titles";
   stripPrefix = 0;
   sha512.run = "73905fbe96bc095f602339e0c943048d775bf2a89ef9de3b7149dae7b76aef04e5c77803555450d931f3a4dfef16f5e72597a4d06052d4a852623516edd978f5";
   sha512.doc = "70db133fb8a5fa38a6f0f82912d19afe84e0f68820fe62b3835a6d237582a32fe6c2ba5ad05e46f39540d52d0aafa5a88325e1050e6102164a5753fd9c68d6ad";
@@ -50859,7 +50859,7 @@ titlesec = {
 };
 titling = {
   revision = 15878;
-  shortdesc = "Control over the typesetting of the \maketitle command";
+  shortdesc = "Control over the typesetting of the \\maketitle command";
   stripPrefix = 0;
   sha512.run = "2a321a17b1ff74f57e7bf3f9d72d1b66a0623ed286c8aa75df6d55f1e62b214954ff38456f27f172789bc4cb500688656ab156609933faef67e62954d05d0ce2";
   sha512.doc = "e69af16331da73c2a61b063ca4dc4c5f70f7958c366b06e96745a2bc92397f89210ebfe598f445ff33ce7705d0f0b56fc3a46f93bcc89145d50b92d56820f61b";
@@ -51484,7 +51484,7 @@ transparent = {
 };
 transparent-io = {
   revision = 64113;
-  shortdesc = "Show for approval the filenames used in \input, \openin, or \openout";
+  shortdesc = "Show for approval the filenames used in \\input, \\openin, or \\openout";
   stripPrefix = 0;
   sha512.run = "69d27356f57d5b610fc9e6e839f6df111f6b98b8bf446327ecfba473dea6bc997cb6802ca382b3438d44de85fd5f50f82bd4e5508bfa43d08223463b5436950c";
   sha512.doc = "2e54e51744c482f98c1b35588cc934ba18e3358fc2be043459d7e16f8c85ee6aae7acf4b6c3b329cdfddcf1b3126000c6559d41d5b2c4e88d5018844717cb8eb";
@@ -51604,7 +51604,7 @@ truthtable = {
 };
 tsemlines = {
   revision = 23440;
-  shortdesc = "Support for the ancient \emline macro";
+  shortdesc = "Support for the ancient \\emline macro";
   stripPrefix = 0;
   sha512.run = "d4b6a929a403ed7fea409aa618e7ca021c2c7138a6b11c980430ba18f952ffba44df951dbc7b7f3a5ffcdace3b5f3a455eedc2a50b6e0e003ae3e17e8e7f9969";
   hasRunfiles = true;
@@ -52100,7 +52100,7 @@ ucdavisthesis = {
 };
 ucharcat = {
   revision = 38907;
-  shortdesc = "Implementation of the (new in 2015) XeTeX \Ucharcat command in lua, for LuaTeX";
+  shortdesc = "Implementation of the (new in 2015) XeTeX \\Ucharcat command in lua, for LuaTeX";
   stripPrefix = 0;
   sha512.run = "333e8f92394d89bdc3492606e467d4b664c5d87eb464e1c16ff293e3f87931c3c70308aeb523fb40f2e76e5d0aa2c1635402f40fc36ecfbb7ced98d232b8bcb5";
   sha512.doc = "b4615cefd26201509c908c2719519f927d61ad96367a612d654917819b2ac973fff85d081dad6e1d092e634388b16e83e440d3cbad4fc7c16f638f5e2853bb7f";
@@ -53331,7 +53331,7 @@ variations = {
 };
 varindex = {
   revision = 32262;
-  shortdesc = "Luxury frontend to the \index command";
+  shortdesc = "Luxury frontend to the \\index command";
   stripPrefix = 0;
   sha512.run = "fb7216b4cb06126970148788859d9c12a0626d25321cc591b2db5d7018ab2a76f5c6505d9cd47da6a3babc765dcedb6653a3ead2eea67f688cd883fe81d9f42a";
   sha512.doc = "30b9f50b7357f12774f78f0792ee0321b5ba84d2c3dff96f5f98d87cf0bb811a2fee74b2bc691fef07a80eb65e13e42b657b74efb0ee334b4f04da7bfdd0b75e";
@@ -54730,7 +54730,7 @@ xgreek = {
 };
 xhfill = {
   revision = 22575;
-  shortdesc = "Extending \hrulefill";
+  shortdesc = "Extending \\hrulefill";
   stripPrefix = 0;
   sha512.run = "cc0ea9e9d40a590444801359c455716856c807eb429aa01b460fd7566797490932bd3566a5c6f95bd6723e0b05bde1aa632b83383c8bcdeba8a455cb84ea9f1b";
   sha512.doc = "027287d941c4576d7f55a3d618e13cde5348ac072f3e546dac6f8a8814efb982f9cd0c4162866403f946d07ecba0ea8cc15543cafbdf9008d60b78d0ea3d26fd";
@@ -55014,7 +55014,7 @@ xmuthesis = {
 };
 xnewcommand = {
   revision = 15878;
-  shortdesc = "Define \global and \protected commands with \newcommand";
+  shortdesc = "Define \\global and \\protected commands with \\newcommand";
   stripPrefix = 0;
   sha512.run = "3296d6f9b580699e86ee01da444ec9b3cf7b76775f05529cc9c4dd931da5f887c914665651214a8107be612b18cb286ec039ad9ab3de520bd17090b38265d5c9";
   sha512.doc = "e03b7027a3956829823e92bd4d8a3000d8f79f26558875ea3837adc9ca4a17ce75d9d4e9136d7ebda7bdc8fbbf4a1b44fc6f71d1bfad710d2e22bba8fab24292";

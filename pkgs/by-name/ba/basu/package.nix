@@ -1,14 +1,15 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, audit
-, pkg-config
-, libcap
-, gperf
-, meson
-, ninja
-, python3
-, getent
+{
+  lib,
+  stdenv,
+  fetchFromSourcehut,
+  audit,
+  pkg-config,
+  libcap,
+  gperf,
+  meson,
+  ninja,
+  python3,
+  getent,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -22,7 +23,11 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-zIaEIIo8lJeas2gVjMezO2hr8RnMIT7iiCBilZx5lRQ=";
   };
 
-  outputs = [ "out" "dev" "lib" ];
+  outputs = [
+    "out"
+    "dev"
+    "lib"
+  ];
 
   buildInputs = [
     audit

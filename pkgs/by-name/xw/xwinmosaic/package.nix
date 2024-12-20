@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchFromGitHub, fetchpatch, gtk2, cmake, pkg-config, libXdamage }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  gtk2,
+  cmake,
+  pkg-config,
+  libXdamage,
+}:
 
 stdenv.mkDerivation rec {
   version = "0.4.2";
@@ -21,13 +30,19 @@ stdenv.mkDerivation rec {
     })
   ];
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [ gtk2 libXdamage ];
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+  ];
+  buildInputs = [
+    gtk2
+    libXdamage
+  ];
 
   meta = {
     description = "X window switcher drawing a colourful grid";
-    license = lib.licenses.bsd2 ;
-    maintainers = [lib.maintainers.raskin];
+    license = lib.licenses.bsd2;
+    maintainers = [ lib.maintainers.raskin ];
     platforms = lib.platforms.linux;
     mainProgram = "xwinmosaic";
   };

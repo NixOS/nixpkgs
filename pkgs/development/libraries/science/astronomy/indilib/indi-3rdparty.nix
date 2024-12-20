@@ -45,7 +45,7 @@ let
     owner = "indilib";
     repo = "indi-3rdparty";
     rev = "v${indilib.version}";
-    hash = "sha256-RhtdhMvseQUUFcKDuR1N5qc/86IxmQ/7owpjT+qweqc=";
+    hash = "sha256-J9WPoaULH6UXL1q1O76+IDW97ydQWkHIID6n7wvOdE4=";
   };
 
   buildIndi3rdParty =
@@ -169,6 +169,13 @@ let
 
   libasi = buildIndi3rdParty {
     pname = "libasi";
+
+    postPatch = ''
+      substituteInPlace 99-asi.rules \
+        --replace-fail "/bin/echo" "${coreutils}/bin/echo" \
+        --replace-fail "/bin/sh" "${bash}/bin/sh"
+    '';
+
     buildInputs = [
       libusb1
       (lib.getLib stdenv.cc.cc)
@@ -344,7 +351,7 @@ let
     postPatch = ''
       substituteInPlace 99-player_one_astronomy.rules \
         --replace-fail "/bin/echo" "${coreutils}/bin/echo" \
-        --replace "/bin/sh" "${bash}/bin/sh"
+        --replace-fail "/bin/sh" "${bash}/bin/sh"
     '';
 
     buildInputs = [
@@ -363,8 +370,8 @@ let
     pname = "libqhy";
 
     postPatch = ''
-      substituteInPlace --replace-fail CMakeLists.txt \
-        --replace "/lib/firmware" "lib/firmware"
+      substituteInPlace CMakeLists.txt \
+        --replace-fail "/lib/firmware" "lib/firmware"
 
       substituteInPlace 85-qhyccd.rules \
         --replace-fail "/sbin/fxload" "${fxload}/sbin/fxload" \
@@ -506,6 +513,7 @@ in
       libapogee
       zlib
     ];
+    propagatedBuildInputs = [ libapogee ];
     meta.platforms = libapogee.meta.platforms;
   };
 
@@ -529,6 +537,7 @@ in
       libusb1
       zlib
     ];
+    propagatedBuildInputs = [ libasi ];
     meta.platforms = libasi.meta.platforms;
   };
 
@@ -540,6 +549,11 @@ in
     meta.broken = true;
   };
 
+  indi-astarbox = buildIndi3rdParty {
+    pname = "indi-astarbox";
+    buildInputs = [ indilib ];
+  };
+
   indi-astroasis = buildIndi3rdParty {
     pname = "indi-astroasis";
     buildInputs = [
@@ -549,20 +563,8 @@ in
       libusb1
       zlib
     ];
+    propagatedBuildInputs = [ libastroasis ];
     meta.platforms = libastroasis.meta.platforms;
-  };
-
-  indi-astrolink4 = buildIndi3rdParty {
-    pname = "indi-astrolink4";
-    buildInputs = [ indilib ];
-  };
-
-  indi-astromechfoc = buildIndi3rdParty {
-    pname = "indi-astromechfoc";
-    buildInputs = [
-      indilib
-      zlib
-    ];
   };
 
   indi-atik = buildIndi3rdParty {
@@ -618,11 +620,6 @@ in
       libnova
       zlib
     ];
-  };
-
-  indi-dreamfocuser = buildIndi3rdParty {
-    pname = "indi-dreamfocuser";
-    buildInputs = [ indilib ];
   };
 
   indi-dsi = buildIndi3rdParty {
@@ -976,15 +973,6 @@ in
   indi-shelyak = buildIndi3rdParty {
     pname = "indi-shelyak";
     buildInputs = [ indilib ];
-  };
-
-  indi-spectracyber = buildIndi3rdParty {
-    pname = "indi-spectracyber";
-    buildInputs = [
-      indilib
-      libnova
-      zlib
-    ];
   };
 
   indi-starbook = buildIndi3rdParty {

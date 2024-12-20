@@ -30,18 +30,25 @@ stdenv.mkDerivation (finalAttrs: {
   version = "0.3.7";
 
   src = fetchFromGitHub {
-    owner = "mattkae";
+    owner = "miracle-wm-org";
     repo = "miracle-wm";
     rev = "v${finalAttrs.version}";
     hash = "sha256-31S7Mfz3LIOAmDUl6jbr3kSP2BdLaM0M4xMZ8FHhLH0=";
   };
 
   patches = [
-    # Remove when https://github.com/mattkae/miracle-wm/pull/211 merged & in release
+    # Remove when version > 0.3.7
     (fetchpatch {
-      name = "0001-miracle-wm-Dont-ignore-PKG_CONFIG_PATH.patch";
-      url = "https://github.com/mattkae/miracle-wm/commit/a9fe6ed1e7dc605f72e18cdc2d19afb3c187be3a.patch";
-      hash = "sha256-zzOwqUjyZGYIy/3BvOiedfCubrqaeglvsAzTXyq3wYU=";
+      name = "0001-miracle-wm-Dont-override-PKG_CONFIG_PATH.patch";
+      url = "https://github.com/miracle-wm-org/miracle-wm/commit/0a8809d4362e1d3abbea6e29fd1234c8fa981bfb.patch";
+      hash = "sha256-Fy/fDmV1uXRt4omxccpFkZb0vE8iHYSS9A7E+PEFBOM=";
+    })
+
+    # Remove when version > 0.3.7
+    (fetchpatch {
+      name = "0002-miracle-wm-Fix-mir-2.19-support.patch";
+      url = "https://github.com/miracle-wm-org/miracle-wm/commit/a9db8b539a5396e9df6f6f009cbabcbb053f2b05.patch";
+      hash = "sha256-VxUVpwBSHuLzs0yEQ7gStpMnHRJJtZ/Shmjb2un3qI0=";
     })
   ];
 

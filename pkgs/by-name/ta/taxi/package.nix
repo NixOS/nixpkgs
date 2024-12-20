@@ -1,20 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, gobject-introspection
-, gtk3
-, libgee
-, libhandy
-, libsecret
-, libsoup
-, meson
-, ninja
-, nix-update-script
-, pantheon
-, pkg-config
-, python3
-, vala
-, wrapGAppsHook3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  gobject-introspection,
+  gtk3,
+  libgee,
+  libhandy,
+  libsecret,
+  libsoup_2_4,
+  meson,
+  ninja,
+  nix-update-script,
+  pantheon,
+  pkg-config,
+  python3,
+  vala,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,7 +44,7 @@ stdenv.mkDerivation rec {
     libgee
     libhandy
     libsecret
-    libsoup
+    libsoup_2_4
     pantheon.granite
   ];
 

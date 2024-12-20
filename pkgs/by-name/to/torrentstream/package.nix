@@ -1,7 +1,8 @@
-{ lib
-, buildDotnetModule
-, fetchFromGitHub
-, dotnetCorePackages
+{
+  lib,
+  buildDotnetModule,
+  fetchFromGitHub,
+  dotnetCorePackages,
 }:
 
 buildDotnetModule rec {
@@ -20,7 +21,7 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   executables = [ "TorrentStream" ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   projectFile = "TorrentStream.csproj";
   selfContainedBuild = true;
 

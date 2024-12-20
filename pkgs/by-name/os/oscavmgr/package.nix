@@ -11,23 +11,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oscavmgr";
-  version = "0.4.2";
+  version = "0.4.3";
 
   src = fetchFromGitHub {
     owner = "galister";
     repo = "oscavmgr";
     rev = "refs/tags/v${version}";
-    hash = "sha256-mOa9eUI/p0ErePza6wXy1jUcHg5Q9tvC7/lThQabU94=";
+    hash = "sha256-05dNBzf1f92bVNLbRaUB6KUae+wY3V8mUxDgAb+g1T4=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "alvr_common-20.11.1" = "sha256-d4KldPii8W1HcfnMSD8Fn+IGO/a3r8747APPjRCnbe8=";
-      "openxr-0.19.0" = "sha256-kbEYoN4UvUEaZA9LJWEKx1X1r+l91GjTWs1hNXhr7cw=";
-      "settings-schema-0.2.0" = "sha256-luEdAKDTq76dMeo5kA+QDTHpRMFUg3n0qvyQ7DkId0k=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-fw26EbdCnz7KtDmCDpvfy4fjYORL2KcnhzQBJDdNEuI=";
 
   nativeBuildInputs = [
     pkg-config

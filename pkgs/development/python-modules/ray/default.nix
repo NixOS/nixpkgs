@@ -64,7 +64,7 @@
 
 let
   pname = "ray";
-  version = "2.39.0";
+  version = "2.40.0";
 in
 buildPythonPackage rec {
   inherit pname version;
@@ -75,18 +75,20 @@ buildPythonPackage rec {
   src =
     let
       pyShortVersion = "cp${builtins.replaceStrings [ "." ] [ "" ] python.pythonVersion}";
-      binary-hash = (import ./binary-hashes.nix)."${pyShortVersion}" or { };
+      binary-hashes = {
+        cp310 = "sha256-9uqxHchJD4jnjgaqZFkFslnN4foDsV6EJhVcR4K6C74=";
+        cp311 = "sha256-cXEcvywVYhP9SbD5zJMYCnukJBEAcKNL3qPcCVJ/Md8=";
+        cp312 = "sha256-Z0dVgU9WkjBsVUytvCQBWvgj3AUW40ve8kzKydemVuM=";
+      };
     in
-    fetchPypi (
-      {
-        inherit pname version format;
-        dist = pyShortVersion;
-        python = pyShortVersion;
-        abi = pyShortVersion;
-        platform = "manylinux2014_x86_64";
-      }
-      // binary-hash
-    );
+    fetchPypi {
+      inherit pname version format;
+      dist = pyShortVersion;
+      python = pyShortVersion;
+      abi = pyShortVersion;
+      platform = "manylinux2014_x86_64";
+      hash = binary-hashes.${pyShortVersion};
+    };
 
   nativeBuildInputs = [
     autoPatchelfHook

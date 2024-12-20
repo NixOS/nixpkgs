@@ -586,12 +586,12 @@ in rec {
 
   sensible = mkTmuxPlugin {
     pluginName = "sensible";
-    version = "unstable-2017-09-05";
+    version = "unstable-2022-08-14";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-sensible";
-      rev = "e91b178ff832b7bcbbf4d99d9f467f63fd1b76b5";
-      sha256 = "1z8dfbwblrbmb8sgb0k8h1q0dvfdz7gw57las8nwd5gj6ss1jyvx";
+      rev = "25cb91f42d020f675bb0a2ce3fbd3a5d96119efa";
+      sha256 = "sha256-sw9g1Yzmv2fdZFLJSGhx1tatQ+TtjDYNZI5uny0+5Hg=";
     };
     postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       sed -e 's:reattach-to-user-namespace:${pkgs.reattach-to-user-namespace}/bin/reattach-to-user-namespace:g' -i $target/sensible.tmux
@@ -601,12 +601,12 @@ in rec {
   session-wizard = mkTmuxPlugin rec {
     pluginName = "session-wizard";
     rtpFilePath = "session-wizard.tmux";
-    version = "1.3.1";
+    version = "1.4.0";
     src = pkgs.fetchFromGitHub {
       owner = "27medkamal";
       repo = "tmux-session-wizard";
       rev = "V${version}";
-      sha256 = "sha256-nJaC5aX+cR/+ks3I/lW/tUnVG0CrEYfsIjPDisgMrTE=";
+      sha256 = "sha256-mLpZQSo8nildawsPxGwkcETNwlRq6O1pfy/VusMNMaw=";
     };
     meta = with lib; {
       homepage = "https://github.com/27medkamal/tmux-session-wizard";
@@ -864,6 +864,7 @@ in rec {
 
   weather = mkTmuxPlugin {
     pluginName = "weather";
+    rtpFilePath = "tmux-weather.tmux";
     version = "unstable-2020-02-08";
     src = fetchFromGitHub {
       owner = "xamut";

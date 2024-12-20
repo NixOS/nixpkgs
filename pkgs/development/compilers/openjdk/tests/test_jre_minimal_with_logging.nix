@@ -1,7 +1,8 @@
-{ runCommand
-, callPackage
-, jdk
-, jre_minimal
+{
+  runCommand,
+  callPackage,
+  jdk,
+  jre_minimal,
 }:
 
 let
@@ -15,7 +16,7 @@ let
     };
   };
 in
-  runCommand "test" {} ''
-    ${hello-logging}/bin/hello &>/dev/stdout | grep "Hello, world!"
-    touch $out
-  ''
+runCommand "test" { } ''
+  ${hello-logging}/bin/hello &>/dev/stdout | grep "Hello, world!"
+  touch $out
+''

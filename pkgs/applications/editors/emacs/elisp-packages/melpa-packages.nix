@@ -550,6 +550,13 @@ let
           '';
         });
 
+        treemacs = super.treemacs.overrideAttrs (attrs: {
+          postPatch = (attrs.postPatch or "") + ''
+            substituteInPlace src/elisp/treemacs-customization.el \
+              --replace 'treemacs-python-executable (treemacs--find-python3)' 'treemacs-python-executable "${lib.getExe pkgs.python3}"'
+          '';
+        });
+
         treemacs-magit = super.treemacs-magit.overrideAttrs (attrs: {
           # searches for Git at build time
           nativeBuildInputs =

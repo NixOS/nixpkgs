@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchFromGitHub }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "nsh";
@@ -20,7 +24,10 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "nsh";
     homepage = "https://github.com/nuta/nsh";
     changelog = "https://github.com/nuta/nsh/raw/v${version}/docs/changelog.md";
-    license = [ licenses.cc0 /* or */ licenses.mit ];
+    license = [
+      licenses.cc0 # or
+      licenses.mit
+    ];
     maintainers = with maintainers; [ cafkafk ];
   };
 

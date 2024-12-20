@@ -1,22 +1,27 @@
-{ lib
-, stdenv
-, applyPatches
-, fetchFromGitHub
-, cmake
-, git
-, llvmPackages_14
-, spirv-llvm-translator
-, buildWithPatches ? true
+{
+  lib,
+  stdenv,
+  applyPatches,
+  fetchFromGitHub,
+  cmake,
+  git,
+  llvmPackages_14,
+  spirv-llvm-translator,
+  buildWithPatches ? true,
 }:
 
 let
-  addPatches = component: pkg: pkg.overrideAttrs (oldAttrs: {
-    postPatch = oldAttrs.postPatch or "" + ''
-      for p in ${passthru.patchesOut}/${component}/*; do
-        patch -p1 -i "$p"
-      done
-    '';
-  });
+  addPatches =
+    component: pkg:
+    pkg.overrideAttrs (oldAttrs: {
+      postPatch =
+        oldAttrs.postPatch or ""
+        + ''
+          for p in ${passthru.patchesOut}/${component}/*; do
+            patch -p1 -i "$p"
+          done
+        '';
+    });
 
   llvmPkgs = llvmPackages_14;
   inherit (llvmPkgs) llvm;
@@ -69,16 +74,18 @@ let
       ./opencl-headers-dir.patch
     ];
 
-    postPatch = ''
-      # fix not be able to find clang from PATH
-      substituteInPlace cl_headers/CMakeLists.txt \
-        --replace " NO_DEFAULT_PATH" ""
-    '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # Uses linker flags that are not supported on Darwin.
-      sed -i -e '/SET_LINUX_EXPORTS_FILE/d' CMakeLists.txt
-      substituteInPlace CMakeLists.txt \
-        --replace '-Wl,--no-undefined' ""
-    '';
+    postPatch =
+      ''
+        # fix not be able to find clang from PATH
+        substituteInPlace cl_headers/CMakeLists.txt \
+          --replace " NO_DEFAULT_PATH" ""
+      ''
+      + lib.optionalString stdenv.hostPlatform.isDarwin ''
+        # Uses linker flags that are not supported on Darwin.
+        sed -i -e '/SET_LINUX_EXPORTS_FILE/d' CMakeLists.txt
+        substituteInPlace CMakeLists.txt \
+          --replace '-Wl,--no-undefined' ""
+      '';
   };
 in
 
@@ -86,9 +93,17 @@ stdenv.mkDerivation {
   pname = "opencl-clang";
   inherit version src;
 
-  nativeBuildInputs = [ cmake git llvm.dev ];
+  nativeBuildInputs = [
+    cmake
+    git
+    llvm.dev
+  ];
 
-  buildInputs = [ libclang llvm spirv-llvm-translator' ];
+  buildInputs = [
+    libclang
+    llvm
+    spirv-llvm-translator'
+  ];
 
   cmakeFlags = [
     "-DPREFERRED_LLVM_VERSION=${lib.getVersion llvm}"

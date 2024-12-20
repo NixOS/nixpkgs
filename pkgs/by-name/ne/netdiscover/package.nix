@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, libpcap, libnet, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libpcap,
+  libnet,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation rec {
   pname = "netdiscover";
@@ -12,7 +19,10 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ autoreconfHook ];
-  buildInputs = [ libpcap libnet ];
+  buildInputs = [
+    libpcap
+    libnet
+  ];
 
   # Running update-oui-database.sh would probably make the build irreproducible
 

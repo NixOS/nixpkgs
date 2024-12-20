@@ -1,4 +1,11 @@
-{ lib, buildGoModule, fetchFromGitHub, nix-update-script, makeWrapper, monero-cli }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
+  makeWrapper,
+  monero-cli,
+}:
 
 let
   pname = "atomic-swap";
@@ -38,6 +45,9 @@ buildGoModule {
     changelog = "https://github.com/AthanorLabs/atomic-swap/releases/tag/v${version}";
     description = "ETH-XMR atomic swap implementation";
     license = with licenses; [ lgpl3Only ];
-    maintainers = with maintainers; [ happysalada lord-valen ];
+    maintainers = with maintainers; [
+      happysalada
+      lord-valen
+    ];
   };
 }

@@ -20,16 +20,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "mise";
-  version = "2024.10.8";
+  version = "2024.12.6";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "mise";
     rev = "v${version}";
-    hash = "sha256-58y7jx7gmWlccezZXP5hSzrvnq8hlZ1QakF+FMgbwcc=";
+    hash = "sha256-VAevON40XWME9L4dHCuatg0ngzNBnhMUy9OAXPdJJdk=";
   };
 
-  cargoHash = "sha256-m2Eiqyh/rGgwRgRArs3fPWoqzi1EidZd5i66yi4SuFo=";
+  cargoHash = "sha256-fmvQNmMk6QMsPRUwLnqSNuJikH0QMNjA088Kb7TzUZ4=";
 
   nativeBuildInputs = [
     installShellFiles
@@ -50,8 +50,7 @@ rustPlatform.buildRustPackage rec {
       ./src/cli/generate/snapshots/*.snap
 
     substituteInPlace ./src/test.rs \
-      --replace-fail '/usr/bin/env bash' '${lib.getExe bash}' \
-      --replace-fail '"git"' '"${lib.getExe git}"'
+      --replace-fail '/usr/bin/env bash' '${lib.getExe bash}'
 
     substituteInPlace ./src/git.rs \
       --replace-fail '"git"' '"${lib.getExe git}"'

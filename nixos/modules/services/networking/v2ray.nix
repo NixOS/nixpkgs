@@ -2,7 +2,9 @@
 
 with lib;
 
-{
+let
+  json = pkgs.formats.json { };
+in {
   options = {
 
     services.v2ray = {
@@ -32,7 +34,7 @@ with lib;
       };
 
       config = mkOption {
-        type = types.nullOr (types.attrsOf types.unspecified);
+        type = types.nullOr json.type;
         default = null;
         example = {
           inbounds = [{

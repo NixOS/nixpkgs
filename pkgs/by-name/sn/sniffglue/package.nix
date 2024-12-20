@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, libpcap
-, libseccomp
-, pkg-config
-, rustPlatform
-, stdenv
+{
+  lib,
+  fetchFromGitHub,
+  libpcap,
+  libseccomp,
+  pkg-config,
+  rustPlatform,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,11 +23,13 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [
-    libpcap
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    libseccomp
-  ];
+  buildInputs =
+    [
+      libpcap
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      libseccomp
+    ];
 
   meta = with lib; {
     description = "Secure multithreaded packet sniffer";

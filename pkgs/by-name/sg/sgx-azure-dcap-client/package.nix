@@ -1,13 +1,14 @@
-{ stdenv
-, fetchFromGitHub
-, fetchpatch
-, lib
-, curl
-, nlohmann_json
-, openssl
-, pkg-config
-, linkFarmFromDrvs
-, callPackage
+{
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  lib,
+  curl,
+  nlohmann_json,
+  openssl,
+  pkg-config,
+  linkFarmFromDrvs,
+  callPackage,
 }:
 let
   # Although those headers are also included in the source of `sgx-psw`, the `azure-dcap-client` build needs specific versions
@@ -87,7 +88,11 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Interfaces between SGX SDKs and the Azure Attestation SGX Certification Cache";
     homepage = "https://github.com/microsoft/azure-dcap-client";
-    maintainers = with lib.maintainers; [ phlip9 trundle veehaitch ];
+    maintainers = with lib.maintainers; [
+      phlip9
+      trundle
+      veehaitch
+    ];
     platforms = [ "x86_64-linux" ];
     license = [ lib.licenses.mit ];
   };

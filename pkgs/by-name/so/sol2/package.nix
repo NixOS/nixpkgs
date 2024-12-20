@@ -1,8 +1,9 @@
-{ fetchFromGitHub
-, lib
-, stdenv
-, cmake
-, lua
+{
+  fetchFromGitHub,
+  lib,
+  stdenv,
+  cmake,
+  lua,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "sol2";
@@ -14,14 +15,17 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-7QHZRudxq3hdsfEAYKKJydc4rv6lyN6UIt/2Zmaejx8=";
   };
 
-  nativeBuildInputs = [ cmake lua ];
+  nativeBuildInputs = [
+    cmake
+    lua
+  ];
 
   cmakeFlags = [
     "-DSOL2_LUA_VERSION=${lua.version}"
     "-DSOL2_BUILD_LUA=FALSE"
   ];
 
-  meta = with lib;{
+  meta = with lib; {
     description = "Lua API wrapper with advanced features and top notch performance";
     longDescription = ''
       sol2 is a C++ library binding to Lua.

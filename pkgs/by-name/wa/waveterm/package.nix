@@ -31,12 +31,10 @@
   fetchzip,
   unzip,
 }:
-
 let
-  inherit (stdenv.hostPlatform) system;
-  selectSystem = attrs: attrs.${system};
+  selectSystem = attrs: attrs.${stdenv.hostPlatform.system};
   pname = "waveterm";
-  version = "0.9.3";
+  version = "0.10.1";
   passthru.updateScript = ./update.sh;
 
   desktopItems = [
@@ -90,17 +88,17 @@ let
 
     src =
       let
-        suffix = selectSystem {
-          x86_64-linux = "waveterm-linux-x64";
-          aarch64-linux = "waveterm-linux-arm64";
+        arch = selectSystem {
+          x86_64-linux = "x64";
+          aarch64-linux = "arm64";
         };
         hash = selectSystem {
-          x86_64-linux = "sha256-zmmWQnZklnmhVrZp0F0dkVHVMW+K/VynSvbF9Zer/RE=";
-          aarch64-linux = "sha256-HRZRRUV6CVqUQYuvXBmnNcAsbZwgNDZiEf+gjdLDaPQ=";
+          x86_64-linux = "sha256-zv8ndwMt4VqsdJEEdfXzK4rnyslxF/gwnFdUu5OavNY=";
+          aarch64-linux = "sha256-6EFk1CDPeYc1KWeIxBQEsMLA9tYpnSxjG+yRg5CkGZA=";
         };
       in
       fetchzip {
-        url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/${suffix}-${version}.zip";
+        url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/waveterm-linux-${arch}-${version}.zip";
         inherit hash;
         stripRoot = false;
       };
@@ -141,13 +139,14 @@ let
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/waveterm $out/bin
-      cp -r ./* $out/waveterm/
+      mkdir $out
+      cp -r . $out/waveterm
 
       runHook postInstall
     '';
 
     preFixup = ''
+      mkdir $out/bin
       makeWrapper $out/waveterm/waveterm $out/bin/waveterm \
         --prefix LD_LIBRARY_PATH : "${
           lib.makeLibraryPath [
@@ -167,17 +166,17 @@ let
 
     src =
       let
-        suffix = selectSystem {
-          x86_64-darwin = "Wave-darwin-x64";
-          aarch64-darwin = "Wave-darwin-arm64";
+        arch = selectSystem {
+          x86_64-darwin = "x64";
+          aarch64-darwin = "arm64";
         };
         hash = selectSystem {
-          x86_64-darwin = "sha256-NSpNWUWdRkB2H5l/WnI/Xyv68h0OXX7SIKyDAq0LIJM=";
-          aarch64-darwin = "sha256-QkJMrmqrveFc2StL5gVpE78DlC1OBcEV+tY7p2nJ/6I=";
+          x86_64-darwin = "sha256-7TCDg0TU0Bx9WLwLiQRcyzrFTlmkXYQIpya2SUiEXoc=";
+          aarch64-darwin = "sha256-pVxPmTz1bCKREUOvA3Jrf7kiOI5iLzqgnutblEqc4IA=";
         };
       in
       fetchurl {
-        url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/${suffix}-${version}.zip";
+        url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/Wave-darwin-${arch}-${version}.zip";
         inherit hash;
       };
 
@@ -185,20 +184,12 @@ let
       unzip
     ];
 
-    unpackPhase = ''
-      runHook preUnpack
-
-      unzip ${src} -d ./
-
-      runHook postUnpack
-    '';
-
     sourceRoot = "Wave.app";
 
     installPhase = ''
       runHook preInstall
 
-      mkdir -p $out/Applications/Wave.app
+      mkdir -p $out/Applications
       cp -r . $out/Applications/Wave.app
 
       runHook postInstall

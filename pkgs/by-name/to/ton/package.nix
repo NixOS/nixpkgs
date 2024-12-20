@@ -1,18 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, git
-, pkg-config
-, gperf
-, libmicrohttpd
-, libsodium
-, lz4
-, openssl
-, readline
-, secp256k1
-, zlib
-, nix-update-script
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  git,
+  pkg-config,
+  gperf,
+  libmicrohttpd,
+  libsodium,
+  lz4,
+  openssl,
+  readline,
+  secp256k1,
+  zlib,
+  nix-update-script,
+  darwinMinVersionHook,
+  apple-sdk_11,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,7 +30,10 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -35,23 +41,26 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs = [
-    gperf
-    libmicrohttpd
-    libsodium
-    lz4
-    openssl
-    readline
-    secp256k1
-    zlib
-  ];
+  buildInputs =
+    [
+      gperf
+      libmicrohttpd
+      libsodium
+      lz4
+      openssl
+      readline
+      secp256k1
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
+      (darwinMinVersionHook "10.13")
+      apple-sdk_11
+    ];
 
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    # The build fails on darwin as:
-    #   error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Fully decentralized layer-1 blockchain designed by Telegram";
     homepage = "https://ton.org/";
     changelog = "https://github.com/ton-blockchain/ton/blob/v${version}/Changelog.md";

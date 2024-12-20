@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchurl, perl, coreutils }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  coreutils,
+}:
 
 stdenv.mkDerivation rec {
   pname = "berkeley_upc";

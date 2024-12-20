@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.languagetool;
   settingsFormat = pkgs.formats.javaProperties { };
@@ -27,7 +32,7 @@ in
       description = ''
         Set the Access-Control-Allow-Origin header in the HTTP response,
         used for direct (non-proxy) JavaScript-based access from browsers.
-        `null` to allow access from all sites.
+        `"*"` to allow access from all sites.
       '';
     };
 
@@ -42,7 +47,7 @@ in
           description = "Number of sentences cached.";
         };
       };
-      default = {};
+      default = { };
       description = ''
         Configuration file options for LanguageTool, see
         'languagetool-http-server --help'
@@ -77,7 +82,10 @@ in
         Group = "languagetool";
         CapabilityBoundingSet = [ "" ];
         RestrictNamespaces = [ "" ];
-        SystemCallFilter = [ "@system-service" "~ @privileged" ];
+        SystemCallFilter = [
+          "@system-service"
+          "~ @privileged"
+        ];
         ProtectHome = "yes";
         Restart = "on-failure";
         ExecStart = ''

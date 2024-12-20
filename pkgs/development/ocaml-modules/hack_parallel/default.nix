@@ -1,5 +1,12 @@
-{ lib, fetchFromGitHub, buildDunePackage, core, core_unix ? null, pkg-config
-, sqlite }:
+{
+  lib,
+  fetchFromGitHub,
+  buildDunePackage,
+  core,
+  core_unix ? null,
+  pkg-config,
+  sqlite,
+}:
 buildDunePackage rec {
   pname = "hack_parallel";
   version = "1.0.1";
@@ -33,11 +40,14 @@ buildDunePackage rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  propagatedBuildInputs = [ core core_unix sqlite ];
+  propagatedBuildInputs = [
+    core
+    core_unix
+    sqlite
+  ];
 
   meta = {
-    description =
-      "Core parallel and shared memory library used by Hack, Flow, and Pyre";
+    description = "Core parallel and shared memory library used by Hack, Flow, and Pyre";
     license = lib.licenses.mit;
     homepage = "https://github.com/rvantonder/hack_parallel";
   };

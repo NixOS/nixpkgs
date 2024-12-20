@@ -1,22 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, installShellFiles
-, coreutils
-, darwin
-, libblocksruntime
-, llvmPackages
-, libxcrypt
-, openldap
-, ninja
-, pkg-config
-, python3
-, substituteAll
-, zlib
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  installShellFiles,
+  coreutils,
+  darwin,
+  libblocksruntime,
+  llvmPackages,
+  libxcrypt,
+  openldap,
+  ninja,
+  pkg-config,
+  python3,
+  substituteAll,
+  zlib,
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) AppKit Cocoa Foundation LDAP OpenAL OpenGL;
+  inherit (darwin.apple_sdk.frameworks)
+    AppKit
+    Cocoa
+    Foundation
+    LDAP
+    OpenAL
+    OpenGL
+    ;
 in
 python3.pkgs.buildPythonApplication rec {
   pname = "meson";
@@ -86,56 +94,64 @@ python3.pkgs.buildPythonApplication rec {
     pkg-config
   ];
 
-  checkInputs = [
-    zlib
-  ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    Cocoa
-    Foundation
-    LDAP
-    OpenAL
-    OpenGL
-    openldap
-  ] ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) [
-    # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
-    llvmPackages.openmp
-    # https://github.com/mesonbuild/meson/blob/1670fca36fcb1a4fe4780e96731e954515501a35/test%20cases/frameworks/29%20blocks/meson.build
-    libblocksruntime
-  ];
+  checkInputs =
+    [
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      AppKit
+      Cocoa
+      Foundation
+      LDAP
+      OpenAL
+      OpenGL
+      openldap
+    ]
+    ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) [
+      # https://github.com/mesonbuild/meson/blob/bd3f1b2e0e70ef16dfa4f441686003212440a09b/test%20cases/common/184%20openmp/meson.build
+      llvmPackages.openmp
+      # https://github.com/mesonbuild/meson/blob/1670fca36fcb1a4fe4780e96731e954515501a35/test%20cases/frameworks/29%20blocks/meson.build
+      libblocksruntime
+    ];
 
-  checkPhase = lib.concatStringsSep "\n" ([
-    "runHook preCheck"
-    ''
-      patchShebangs 'test cases'
-      substituteInPlace \
-        'test cases/native/8 external program shebang parsing/script.int.in' \
-        'test cases/common/274 customtarget exe for test/generate.py' \
-          --replace /usr/bin/env ${coreutils}/bin/env
-    ''
-  ]
-  # Remove problematic tests
-  ++ (builtins.map (f: ''rm -vr "${f}";'') ([
-    # requires git, creating cyclic dependency
-    ''test cases/common/66 vcstag''
-    # requires glib, creating cyclic dependency
-    ''test cases/linuxlike/6 subdir include order''
-    ''test cases/linuxlike/9 compiler checks with dependencies''
-    # requires static zlib, see #66461
-    ''test cases/linuxlike/14 static dynamic linkage''
-    # Nixpkgs cctools does not have bitcode support.
-    ''test cases/osx/7 bitcode''
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # requires llvmPackages.openmp, creating cyclic dependency
-    ''test cases/common/184 openmp''
-  ] ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
-    # pch doesn't work quite right on FreeBSD, I think
-    ''test cases/common/13 pch''
-  ]))
-  ++ [
-    ''HOME="$TMPDIR" python ./run_project_tests.py''
-    "runHook postCheck"
-  ]);
+  checkPhase = lib.concatStringsSep "\n" (
+    [
+      "runHook preCheck"
+      ''
+        patchShebangs 'test cases'
+        substituteInPlace \
+          'test cases/native/8 external program shebang parsing/script.int.in' \
+          'test cases/common/274 customtarget exe for test/generate.py' \
+            --replace /usr/bin/env ${coreutils}/bin/env
+      ''
+    ]
+    # Remove problematic tests
+    ++ (builtins.map (f: ''rm -vr "${f}";'') (
+      [
+        # requires git, creating cyclic dependency
+        ''test cases/common/66 vcstag''
+        # requires glib, creating cyclic dependency
+        ''test cases/linuxlike/6 subdir include order''
+        ''test cases/linuxlike/9 compiler checks with dependencies''
+        # requires static zlib, see #66461
+        ''test cases/linuxlike/14 static dynamic linkage''
+        # Nixpkgs cctools does not have bitcode support.
+        ''test cases/osx/7 bitcode''
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        # requires llvmPackages.openmp, creating cyclic dependency
+        ''test cases/common/184 openmp''
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isFreeBSD [
+        # pch doesn't work quite right on FreeBSD, I think
+        ''test cases/common/13 pch''
+      ]
+    ))
+    ++ [
+      ''HOME="$TMPDIR" python ./run_project_tests.py''
+      "runHook postCheck"
+    ]
+  );
 
   postInstall = ''
     installShellCompletion --zsh data/shell-completions/zsh/_meson

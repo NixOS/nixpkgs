@@ -1,15 +1,21 @@
-{ lib, buildNimPackage, fetchFromGitHub, nixosTests, testers }:
+{
+  lib,
+  buildNimPackage,
+  fetchFromGitHub,
+  nixosTests,
+  testers,
+}:
 
 buildNimPackage (finalAttrs: {
   pname = "nimdow";
 
-  version = "0.7.39";
+  version = "0.7.40";
 
   src = fetchFromGitHub {
     owner = "avahe-kellenberger";
     repo = "nimdow";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-9gYlVuKDHCs6yaY1b6dJgwQUJdko6npjom4ab7nKZ7w=";
+    hash = "sha256-Q+oUmQ2ABl2nOSnHJYCrqN7dees4JBZgkb9OF4XFr5M=";
   };
 
   lockFile = ./lock.json;
@@ -35,8 +41,10 @@ buildNimPackage (finalAttrs: {
     };
   };
 
-  meta = with lib;
-    finalAttrs.src.meta // {
+  meta =
+    with lib;
+    finalAttrs.src.meta
+    // {
       description = "Nim based tiling window manager";
       platforms = platforms.linux;
       license = [ licenses.gpl2 ];

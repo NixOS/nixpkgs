@@ -1,12 +1,13 @@
-{ lib
-, SDL
-, SDL_mixer
-, fetchpatch
-, fetchurl
-, libintl
-, libpng
-, stdenv
-, zlib
+{
+  lib,
+  SDL,
+  SDL_mixer,
+  fetchpatch,
+  fetchurl,
+  libintl,
+  libpng,
+  stdenv,
+  zlib,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,7 +48,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Breakout clone from the LGames series";
     license = with lib.licenses; [ gpl2Plus ];
     mainProgram = "lbreakout2";
-    maintainers = with lib.maintainers; [ AndersonTorres ciil ];
+    maintainers = with lib.maintainers; [
+      AndersonTorres
+      ciil
+    ];
     platforms = lib.platforms.unix;
     hydraPlatforms = lib.platforms.linux; # build hangs on both Darwin platforms, needs investigation
   };

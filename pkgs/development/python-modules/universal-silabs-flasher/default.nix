@@ -43,7 +43,6 @@ buildPythonPackage rec {
       --replace-fail 'dynamic = ["version"]' 'version = "${version}"'
   '';
 
-
   build-system = [ setuptools ];
 
   pythonRelaxDeps = [

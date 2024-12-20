@@ -1,18 +1,24 @@
-{ lib, stdenv, fetchurl
-, removeReferencesTo
-, runtimeShellPackage
-, texinfo
-, interactive ? false, readline
-, autoreconfHook # no-pma fix
+{
+  lib,
+  stdenv,
+  fetchurl,
+  removeReferencesTo,
+  runtimeShellPackage,
+  texinfo,
+  interactive ? false,
+  readline,
+  autoreconfHook, # no-pma fix
 
-/* Test suite broke on:
-       stdenv.hostPlatform.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
-    || stdenv.hostPlatform.isDarwin # XXX: `locale' segfaults
-    || stdenv.hostPlatform.isSunOS  # XXX: `_backsmalls1' fails, locale stuff?
-    || stdenv.hostPlatform.isFreeBSD
-*/
-, doCheck ? (interactive && stdenv.hostPlatform.isLinux), glibcLocales ? null
-, locale ? null
+  /*
+    Test suite broke on:
+        stdenv.hostPlatform.isCygwin # XXX: `test-dup2' segfaults on Cygwin 6.1
+     || stdenv.hostPlatform.isDarwin # XXX: `locale' segfaults
+     || stdenv.hostPlatform.isSunOS  # XXX: `_backsmalls1' fails, locale stuff?
+     || stdenv.hostPlatform.isFreeBSD
+  */
+  doCheck ? (interactive && stdenv.hostPlatform.isLinux),
+  glibcLocales ? null,
+  locale ? null,
 }:
 
 assert (doCheck && stdenv.hostPlatform.isLinux) -> glibcLocales != null;
@@ -33,27 +39,34 @@ stdenv.mkDerivation rec {
   hardeningDisable = [ "pie" ];
 
   # When we do build separate interactive version, it makes sense to always include man.
-  outputs = [ "out" "info" ]
-    ++ lib.optional (!interactive) "man";
+  outputs = [
+    "out"
+    "info"
+  ] ++ lib.optional (!interactive) "man";
 
   strictDeps = true;
 
   # no-pma fix
-  nativeBuildInputs = [
-    autoreconfHook
-    texinfo
-  ] ++ lib.optionals interactive [
-    removeReferencesTo
-  ] ++ lib.optionals (doCheck && stdenv.hostPlatform.isLinux) [
-    glibcLocales
-  ];
+  nativeBuildInputs =
+    [
+      autoreconfHook
+      texinfo
+    ]
+    ++ lib.optionals interactive [
+      removeReferencesTo
+    ]
+    ++ lib.optionals (doCheck && stdenv.hostPlatform.isLinux) [
+      glibcLocales
+    ];
 
-  buildInputs = lib.optionals interactive [
-    runtimeShellPackage
-    readline
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    locale
-  ];
+  buildInputs =
+    lib.optionals interactive [
+      runtimeShellPackage
+      readline
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      locale
+    ];
 
   configureFlags = [
     (if interactive then "--with-readline=${readline.dev}" else "--without-readline")
@@ -65,15 +78,22 @@ stdenv.mkDerivation rec {
 
   inherit doCheck;
 
-  postInstall = (if interactive then ''
-    remove-references-to -t "$NIX_CC" "$out"/bin/gawkbug
-    patchShebangs --host "$out"/bin/gawkbug
-  '' else ''
-    rm "$out"/bin/gawkbug
-  '') + ''
-    rm "$out"/bin/gawk-*
-    ln -s gawk.1 "''${!outputMan}"/share/man/man1/awk.1
-  '';
+  postInstall =
+    (
+      if interactive then
+        ''
+          remove-references-to -t "$NIX_CC" "$out"/bin/gawkbug
+          patchShebangs --host "$out"/bin/gawkbug
+        ''
+      else
+        ''
+          rm "$out"/bin/gawkbug
+        ''
+    )
+    + ''
+      rm "$out"/bin/gawk-*
+      ln -s gawk.1 "''${!outputMan}"/share/man/man1/awk.1
+    '';
 
   meta = {
     homepage = "https://www.gnu.org/software/gawk/";

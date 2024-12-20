@@ -31,6 +31,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "billiard" ];
 
+  disabledTests = [
+    # time sensitive
+    "test_on_ready_counter_is_synchronized"
+  ];
+
   meta = {
     description = "Python multiprocessing fork with improvements and bugfixes";
     homepage = "https://github.com/celery/billiard";

@@ -1,24 +1,39 @@
-{ lib
-, stdenv
-, edk2
-, llvmPackages
-, util-linux
-, nasm
-, python3
+{
+  lib,
+  stdenv,
+  edk2,
+  llvmPackages,
+  util-linux,
+  nasm,
+  python3,
+  pkgsBuildHost,
 }:
 edk2.mkDerivation "ShellPkg/ShellPkg.dsc" (finalAttrs: {
   pname = "edk2-uefi-shell";
   inherit (edk2) version;
 
-  nativeBuildInputs = [ util-linux nasm python3 ]
-    ++ lib.optionals stdenv.cc.isClang [ llvmPackages.bintools llvmPackages.llvm ];
+  nativeBuildInputs =
+    [
+      util-linux
+      nasm
+      python3
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      llvmPackages.bintools
+      llvmPackages.llvm
+    ];
   strictDeps = true;
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [ "-fno-pic" "-Qunused-arguments" ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-fno-pic"
+      "-Qunused-arguments"
+    ]
+  );
 
   # Set explicitly to use Python 3 from nixpkgs. Otherwise, the build system will detect and try to
   # use `/usr/bin/python3` on Darwin when sandboxing is disabled.
-  PYTHON_COMMAND = "${lib.getBin python3}/bin/python3";
+  PYTHON_COMMAND = "${lib.getBin pkgsBuildHost.python3}/bin/python3";
 
   # We only have a .efi file in $out which shouldn't be patched or stripped
   dontPatchELF = true;
@@ -37,7 +52,10 @@ edk2.mkDerivation "ShellPkg/ShellPkg.dsc" (finalAttrs: {
     inherit (edk2.meta) license platforms;
     description = "UEFI Shell from Tianocore EFI development kit";
     homepage = "https://github.com/tianocore/tianocore.github.io/wiki/ShellPkg";
-    maintainers = with lib.maintainers; [ LunNova mjoerg ];
+    maintainers = with lib.maintainers; [
+      LunNova
+      mjoerg
+    ];
     broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
   };
 })

@@ -1,15 +1,16 @@
-{ fetchFromGitHub
-, gtk3
-, lib
-, libgee
-, libnotify
-, meson
-, ninja
-, pkg-config
-, pulseaudio
-, stdenv
-, vala
-, wrapGAppsHook3
+{
+  fetchFromGitHub,
+  gtk3,
+  lib,
+  libgee,
+  libnotify,
+  meson,
+  ninja,
+  pkg-config,
+  pulseaudio,
+  stdenv,
+  vala,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {

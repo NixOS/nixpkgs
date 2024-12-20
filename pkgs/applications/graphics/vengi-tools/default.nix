@@ -1,36 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 
-, cmake
-, pkg-config
-, ninja
-, python3
-, makeWrapper
+  cmake,
+  pkg-config,
+  ninja,
+  python3,
+  makeWrapper,
 
-, backward-cpp
-, curl
-, enet
-, freetype
-, glm
-, gtest
-, libbfd
-, libdwarf
-, libjpeg
-, libuuid
-, libuv
-, lua5_4
-, lzfse
-, opencl-headers
-, SDL2
-, SDL2_mixer
-, wayland-protocols
-, Carbon
-, CoreServices
-, OpenCL
+  backward-cpp,
+  curl,
+  enet,
+  freetype,
+  glm,
+  gtest,
+  libbfd,
+  libdwarf,
+  libjpeg,
+  libuuid,
+  libuv,
+  lua5_4,
+  lzfse,
+  opencl-headers,
+  SDL2,
+  SDL2_mixer,
+  wayland-protocols,
+  Carbon,
+  CoreServices,
+  OpenCL,
 
-, callPackage
-, nixosTests
+  callPackage,
+  nixosTests,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -52,27 +53,32 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs = [
-    libbfd
-    libdwarf
-    backward-cpp
-    curl
-    enet
-    freetype
-    glm
-    libjpeg
-    libuuid
-    libuv
-    lua5_4
-    lzfse
-    SDL2
-    SDL2_mixer
-  ] ++ lib.optional stdenv.hostPlatform.isLinux wayland-protocols
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon CoreServices OpenCL ]
+  buildInputs =
+    [
+      libbfd
+      libdwarf
+      backward-cpp
+      curl
+      enet
+      freetype
+      glm
+      libjpeg
+      libuuid
+      libuv
+      lua5_4
+      lzfse
+      SDL2
+      SDL2_mixer
+    ]
+    ++ lib.optional stdenv.hostPlatform.isLinux wayland-protocols
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      CoreServices
+      OpenCL
+    ]
     ++ lib.optional (!stdenv.hostPlatform.isDarwin) opencl-headers;
 
-  cmakeFlags =
-    lib.optional stdenv.hostPlatform.isDarwin "-DCORESERVICES_LIB=${CoreServices}";
+  cmakeFlags = lib.optional stdenv.hostPlatform.isDarwin "-DCORESERVICES_LIB=${CoreServices}";
 
   # error: "The plain signature for target_link_libraries has already been used"
   doCheck = false;
@@ -94,8 +100,8 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    voxconvert-roundtrip = callPackage ./test-voxconvert-roundtrip.nix {};
-    voxconvert-all-formats = callPackage ./test-voxconvert-all-formats.nix {};
+    voxconvert-roundtrip = callPackage ./test-voxconvert-roundtrip.nix { };
+    voxconvert-all-formats = callPackage ./test-voxconvert-all-formats.nix { };
     run-voxedit = nixosTests.vengi-tools;
   };
 
@@ -110,7 +116,10 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://mgerhardy.github.io/vengi/";
     downloadPage = "https://github.com/mgerhardy/vengi/releases";
-    license = [ licenses.mit licenses.cc-by-sa-30 ];
+    license = [
+      licenses.mit
+      licenses.cc-by-sa-30
+    ];
     maintainers = with maintainers; [ fgaz ];
     platforms = platforms.all;
     broken = stdenv.hostPlatform.isDarwin;

@@ -15,13 +15,16 @@
       };
     };
   };
-  config.weird = args@{ ... /* note the lack of a `lib` argument */ }:
-  assert args.lib == { };
-  assert args.specialArgs == { lib = { }; };
-  {
-    options.foo = lib.mkOption { };
-    config.foo = lib.mkIf true "alright";
-  };
+  config.weird =
+    args@{
+      ... # note the lack of a `lib` argument
+    }:
+    assert args.lib == { };
+    assert args.specialArgs == { lib = { }; };
+    {
+      options.foo = lib.mkOption { };
+      config.foo = lib.mkIf true "alright";
+    };
   config.result =
     assert config.weird.foo == "alright";
     "ok";

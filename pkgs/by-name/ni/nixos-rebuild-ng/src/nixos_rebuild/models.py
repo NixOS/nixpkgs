@@ -1,5 +1,3 @@
-from __future__ import annotations
-
 import platform
 import re
 import subprocess
@@ -46,10 +44,28 @@ class Action(Enum):
 
 
 @dataclass(frozen=True)
+class BuildAttr:
+    path: str | Path
+    attr: str | None
+
+    def to_attr(self, *attrs: str) -> str:
+        return f"{self.attr + '.' if self.attr else ''}{".".join(attrs)}"
+
+    @classmethod
+    def from_arg(cls, attr: str | None, file: str | None) -> Self:
+        if not (attr or file):
+            return cls("<nixpkgs/nixos>", None)
+        return cls(Path(file or "default.nix"), attr)
+
+
+@dataclass(frozen=True)
 class Flake:
-    path: Path
+    path: Path | str
     attr: str
     _re: ClassVar = re.compile(r"^(?P<path>[^\#]*)\#?(?P<attr>[^\#\"]*)$")
+
+    def to_attr(self, *attrs: str) -> str:
+        return f"{self}.{".".join(attrs)}"
 
     @override
     def __str__(self) -> str:
@@ -65,7 +81,11 @@ class Flake:
         assert m is not None, f"got no matches for {flake_str}"
         attr = m.group("attr")
         nixos_attr = f"nixosConfigurations.{attr or hostname_fn() or "default"}"
-        return cls(Path(m.group("path")), nixos_attr)
+        path = m.group("path")
+        if ":" in path:
+            return cls(path, nixos_attr)
+        else:
+            return cls(Path(path), nixos_attr)
 
     @classmethod
     def from_arg(cls, flake_arg: Any, target_host: Remote | None) -> Self | None:
@@ -74,7 +94,7 @@ class Flake:
                 try:
                     return run_wrapper(
                         ["uname", "-n"],
-                        capture_output=True,
+                        stdout=subprocess.PIPE,
                         remote=target_host,
                     ).stdout.strip()
                 except (AttributeError, subprocess.CalledProcessError):
@@ -125,7 +145,7 @@ class Profile:
     path: Path
 
     @classmethod
-    def from_name(cls, name: str = "system") -> Self:
+    def from_arg(cls, name: str) -> Self:
         match name:
             case "system":
                 return cls(name, Path("/nix/var/nix/profiles/system"))

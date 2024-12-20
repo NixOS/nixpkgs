@@ -1,9 +1,10 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, fetchpatch
-, cmake
-, doctest
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  fetchpatch,
+  cmake,
+  doctest,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,7 +26,10 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "FOONATHAN_MEMORY_BUILD_TESTS" finalAttrs.finalPackage.doCheck)

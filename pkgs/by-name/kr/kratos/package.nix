@@ -2,7 +2,7 @@
   fetchFromGitHub,
   buildGoModule,
   lib,
-  stdenv
+  stdenv,
 }:
 let
   pname = "kratos";

@@ -1,4 +1,5 @@
-{ mattermost
+{
+  mattermost,
 }:
 
 mattermost.overrideAttrs (o: {

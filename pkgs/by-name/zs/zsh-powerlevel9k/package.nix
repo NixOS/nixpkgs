@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation {
   pname = "powerlevel9k";
@@ -11,7 +15,7 @@ stdenv.mkDerivation {
   };
 
   strictDeps = true;
-  installPhase= ''
+  installPhase = ''
     install -D powerlevel9k.zsh-theme --target-directory=$out/share/zsh-powerlevel9k
     install -D functions/* --target-directory=$out/share/zsh-powerlevel9k/functions
   '';

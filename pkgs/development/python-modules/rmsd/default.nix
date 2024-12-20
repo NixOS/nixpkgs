@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "rmsd";
-  version = "1.6.0";
+  version = "1.6.1";
   format = "setuptools";
 
   propagatedBuildInputs = [ scipy ];
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-9bALeHmdw6OJGxp3aabkDfCxo4fGv2etKzpBDhmZOrI=";
+    hash = "sha256-nllfrUlviV2+5k94CiJQTnChrQVcchh1+uhxt84kncM=";
   };
 
   pythonImportsCheck = [ "rmsd" ];

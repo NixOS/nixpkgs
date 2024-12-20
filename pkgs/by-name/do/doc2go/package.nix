@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -15,7 +16,11 @@ buildGoModule rec {
   };
   vendorHash = "sha256-d5ZRMFi7GIfDHsYRNvMnDdfnGhTM1sA0WDYD2aDoEd0=";
 
-  ldflags = [ "-s" "-w" "-X main._version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main._version=${version}"
+  ];
 
   subPackages = [ "." ];
   # integration is it's own module

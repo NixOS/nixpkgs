@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchgit, cmake, qtbase }:
+{
+  lib,
+  stdenv,
+  fetchgit,
+  cmake,
+  qtbase,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libdbusmenu-qt";

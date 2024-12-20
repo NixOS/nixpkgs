@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, testers
-, trdl-client
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  trdl-client,
 }:
 
 buildGoModule rec {
@@ -22,7 +23,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/trdl" ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

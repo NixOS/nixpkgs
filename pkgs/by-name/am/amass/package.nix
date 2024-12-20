@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -42,11 +43,14 @@ buildGoModule rec {
 
       Amass ships with a set of wordlist (to be used with the amass -w flag)
       that are found under the wordlists output.
-      '';
+    '';
     homepage = "https://owasp.org/www-project-amass/";
     changelog = "https://github.com/OWASP/Amass/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kalbasit fab ];
+    maintainers = with maintainers; [
+      kalbasit
+      fab
+    ];
     mainProgram = "amass";
   };
 }

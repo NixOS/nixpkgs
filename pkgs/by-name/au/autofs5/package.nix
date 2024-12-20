@@ -1,6 +1,26 @@
-{ lib, stdenv, fetchurl, flex, bison, linuxHeaders, libtirpc, mount, umount, nfs-utils, e2fsprogs
-, libxml2, libkrb5, kmod, openldap, sssd, cyrus_sasl, openssl, rpcsvc-proto, pkgconf
-, fetchpatch, libnsl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  flex,
+  bison,
+  linuxHeaders,
+  libtirpc,
+  mount,
+  umount,
+  nfs-utils,
+  e2fsprogs,
+  libxml2,
+  libkrb5,
+  kmod,
+  openldap,
+  sssd,
+  cyrus_sasl,
+  openssl,
+  rpcsvc-proto,
+  pkgconf,
+  fetchpatch,
+  libnsl,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,7 +40,7 @@ stdenv.mkDerivation rec {
       url = "mirror://kernel/linux/daemons/autofs/v5/patches-5.2.0/autofs-5.1.9-fix-ldap_parse_page_control-check.patch";
       hash = "sha256-W757LU9r9kuzLeThif2a1olRtxNrJy5suemLS7yfbIU=";
     })
-   (fetchpatch {
+    (fetchpatch {
       url = "mirror://kernel/linux/daemons/autofs/v5/patches-5.2.0/autofs-5.1.9-fix-crash-in-make_options_string.patch";
       hash = "sha256-YjTdJ50iNhJ2UjFdrKYEFNt04z0PfmElbFa4GuSskLA=";
     })
@@ -47,10 +67,26 @@ stdenv.mkDerivation rec {
     #make install SUBDIRS="samples" # impure!
   '';
 
-  buildInputs = [ linuxHeaders libtirpc libxml2 libkrb5 kmod openldap sssd
-                  openssl cyrus_sasl rpcsvc-proto libnsl ];
+  buildInputs = [
+    linuxHeaders
+    libtirpc
+    libxml2
+    libkrb5
+    kmod
+    openldap
+    sssd
+    openssl
+    cyrus_sasl
+    rpcsvc-proto
+    libnsl
+  ];
 
-  nativeBuildInputs = [ flex bison pkgconf libnsl.dev ];
+  nativeBuildInputs = [
+    flex
+    bison
+    pkgconf
+    libnsl.dev
+  ];
 
   meta = {
     description = "Kernel-based automounter";

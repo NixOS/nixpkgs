@@ -105,10 +105,12 @@ python3Packages.buildPythonApplication {
     description = "Distraction free Markdown editor for GNU/Linux";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [
-      sternenseemann
-      aleksana
-    ];
+    maintainers =
+      with lib.maintainers;
+      [
+        sternenseemann
+      ]
+      ++ lib.teams.gnome-circle.members;
     mainProgram = "apostrophe";
   };
 }

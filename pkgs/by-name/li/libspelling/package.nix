@@ -1,33 +1,38 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, vala
-, gi-docgen
-, glib
-, gtk4
-, gtksourceview5
-, enchant
-, icu
-, libsysprof-capture
-, gnome
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  vala,
+  gi-docgen,
+  glib,
+  gtk4,
+  gtksourceview5,
+  enchant,
+  icu,
+  libsysprof-capture,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "libspelling";
-  version = "0.4.4";
+  version = "0.4.5";
 
-  outputs = [ "out" "dev" "devdoc" ];
+  outputs = [
+    "out"
+    "dev"
+    "devdoc"
+  ];
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "GNOME";
     repo = "libspelling";
     rev = version;
-    hash = "sha256-6ggegeDR4UBP2LKn6lj0pOB1Iz7MwLEf9usIB28SEMA=";
+    hash = "sha256-+WjhBg98s5RxQfd85FtMNuoVWjw9Hap9yDqnpYNAGgw=";
   };
 
   nativeBuildInputs = [

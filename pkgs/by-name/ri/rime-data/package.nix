@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, librime }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  librime,
+}:
 
 stdenv.mkDerivation {
   pname = "rime-data";

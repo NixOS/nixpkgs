@@ -17,7 +17,7 @@ buildDotnetModule rec {
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
   projectFile = "src/gei/gei.csproj";
-  nugetDeps = ./deps.nix; # File generated with `nix-build -A gh-gei.passthru.fetch-deps`.
+  nugetDeps = ./deps.json; # File generated with `nix-build -A gh-gei.passthru.fetch-deps`.
 
   meta = with lib; {
     homepage = "https://github.com/github/gh-gei";

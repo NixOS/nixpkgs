@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchFromGitHub }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+}:
 
 stdenv.mkDerivation rec {
   pname = "jitterentropy-rngd";
@@ -26,7 +30,10 @@ stdenv.mkDerivation rec {
     description = ''A random number generator, which injects entropy to the kernel'';
     homepage = "https://github.com/smuellerDD/jitterentropy-rngd";
     changelog = "https://github.com/smuellerDD/jitterentropy-rngd/releases/tag/v${version}";
-    license = [ licenses.gpl2Only licenses.bsd3 ];
+    license = [
+      licenses.gpl2Only
+      licenses.bsd3
+    ];
     platforms = platforms.linux;
     maintainers = with maintainers; [ thillux ];
     mainProgram = "jitterentropy-rngd";

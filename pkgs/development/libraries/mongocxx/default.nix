@@ -14,13 +14,13 @@ let stdenv = if pkgs.stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.std
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mongocxx";
-  version = "3.10.2";
+  version = "4.0.0";
 
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-cxx-driver";
     rev = "refs/tags/r${finalAttrs.version}";
-    hash = "sha256-nGLE0vyCe3PaNJf3duXdBfAhTdRvdeQ+OCwcaSDxi5Y=";
+    hash = "sha256-fAOOQyXJ6H4Rt8gRGJnvb5I7E505MOAjNDcFqXUdY+U=";
   };
 
   postPatch = ''

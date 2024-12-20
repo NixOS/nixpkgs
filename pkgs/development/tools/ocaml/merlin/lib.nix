@@ -1,4 +1,8 @@
-{ buildDunePackage, merlin, csexp }:
+{
+  buildDunePackage,
+  merlin,
+  csexp,
+}:
 
 buildDunePackage {
   pname = "merlin-lib";

@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, autoreconfHook
-, cxxtools
-, postgresql
-, libmysqlclient
-, sqlite
-, zlib
-, openssl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  autoreconfHook,
+  cxxtools,
+  postgresql,
+  libmysqlclient,
+  sqlite,
+  zlib,
+  openssl,
 }:
 
 stdenv.mkDerivation rec {

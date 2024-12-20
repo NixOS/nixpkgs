@@ -1,16 +1,17 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, glib
-, gtk4
-, libadwaita
-, libxkbcommon
-, wayland
-, gnome
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  glib,
+  gtk4,
+  libadwaita,
+  libxkbcommon,
+  wayland,
+  gnome,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

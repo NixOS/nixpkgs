@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, makeWrapper, git, coreutils }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  git,
+  coreutils,
+}:
 
 stdenv.mkDerivation rec {
   pname = "git-secrets";
@@ -20,7 +27,12 @@ stdenv.mkDerivation rec {
     install -m444 -Dt $out/share/man/man1 git-secrets.1
 
     wrapProgram $out/bin/git-secrets \
-      --prefix PATH : "${lib.makeBinPath [ git coreutils ]}"
+      --prefix PATH : "${
+        lib.makeBinPath [
+          git
+          coreutils
+        ]
+      }"
   '';
 
   meta = with lib; {

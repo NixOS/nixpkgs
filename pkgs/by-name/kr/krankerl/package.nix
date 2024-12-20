@@ -1,12 +1,13 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, openssl
-, dbus
-, sqlite
-, file
-, makeWrapper
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  openssl,
+  dbus,
+  sqlite,
+  file,
+  makeWrapper,
 }:
 
 rustPlatform.buildRustPackage rec {

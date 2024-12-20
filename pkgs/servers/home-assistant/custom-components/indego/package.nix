@@ -8,13 +8,13 @@
 buildHomeAssistantComponent rec {
   owner = "sander1988";
   domain = "indego";
-  version = "5.7.4";
+  version = "5.7.8";
 
   src = fetchFromGitHub {
     owner = "sander1988";
     repo = "Indego";
     rev = "refs/tags/${version}";
-    hash = "sha256-SiYjducy0NP5bF3STVzhBdnJraNjHywHfD7OmAnYmr0=";
+    hash = "sha256-7PQUsSPS+o5Vt4Do4/TXyGXAqyHJg96w8n7UMpZ0uFo=";
   };
 
   dependencies = [ pyindego ];

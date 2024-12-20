@@ -30,6 +30,9 @@ melpaBuild {
     homepage = "https://github.com/idris-community/idris2-mode";
     description = "Emacs mode for editing Idris 2 code";
     license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ wuyoli AndersonTorres ];
+    maintainers = with lib.maintainers; [
+      wuyoli
+      AndersonTorres
+    ];
   };
 }

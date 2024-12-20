@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -15,15 +20,17 @@ let
     isExecutable = true;
     inherit useHostResolvConf;
     inherit (config.system.build) earlyMountScript;
-    path = lib.makeBinPath ([
-      pkgs.coreutils
-      pkgs.util-linux
-    ] ++ lib.optional useHostResolvConf pkgs.openresolv);
-    postBootCommands = pkgs.writeText "local-cmds"
-      ''
-        ${config.boot.postBootCommands}
-        ${config.powerManagement.powerUpCommands}
-      '';
+    path = lib.makeBinPath (
+      [
+        pkgs.coreutils
+        pkgs.util-linux
+      ]
+      ++ lib.optional useHostResolvConf pkgs.openresolv
+    );
+    postBootCommands = pkgs.writeText "local-cmds" ''
+      ${config.boot.postBootCommands}
+      ${config.powerManagement.powerUpCommands}
+    '';
   };
 
 in
@@ -62,7 +69,7 @@ in
       };
 
       extraSystemdUnitPaths = mkOption {
-        default = [];
+        default = [ ];
         type = types.listOf types.str;
         description = ''
           Additional paths that get appended to the SYSTEMD_UNIT_PATH environment variable
@@ -72,7 +79,6 @@ in
     };
 
   };
-
 
   config = {
 

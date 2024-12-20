@@ -1,4 +1,15 @@
-{ lib, stdenv, fetchFromGitHub, libX11, libXScrnSaver, libXext, glib, dbus, pkg-config, systemd }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  libX11,
+  libXScrnSaver,
+  libXext,
+  glib,
+  dbus,
+  pkg-config,
+  systemd,
+}:
 
 stdenv.mkDerivation {
   pname = "lightum";

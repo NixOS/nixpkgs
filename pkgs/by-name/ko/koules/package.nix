@@ -1,14 +1,15 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchzip
-, copyDesktopItems
-, gccmakedep
-, imake
-, installShellFiles
-, libX11
-, libXext
-, makeDesktopItem
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchzip,
+  copyDesktopItems,
+  gccmakedep,
+  imake,
+  installShellFiles,
+  libX11,
+  libXext,
+  makeDesktopItem,
 }:
 
 let
@@ -26,8 +27,16 @@ stdenv.mkDerivation rec {
     hash = "sha256-w2+T/q/uvVmYO/RBACQOZ6hKi6yr1+5SjJMEbe/kohs=";
   };
 
-  nativeBuildInputs = [ imake gccmakedep installShellFiles copyDesktopItems ];
-  buildInputs = [ libX11 libXext ];
+  nativeBuildInputs = [
+    imake
+    gccmakedep
+    installShellFiles
+    copyDesktopItems
+  ];
+  buildInputs = [
+    libX11
+    libXext
+  ];
 
   # Debian maintains lots of patches for koules. Let's include all of them.
   prePatch = ''
@@ -63,7 +72,10 @@ stdenv.mkDerivation rec {
       exec = "xkoules";
       icon = "koules";
       comment = "Push your enemies away, but stay away from obstacles";
-      categories = [ "Game" "ArcadeGame" ];
+      categories = [
+        "Game"
+        "ArcadeGame"
+      ];
     })
   ];
 

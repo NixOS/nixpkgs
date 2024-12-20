@@ -1,4 +1,10 @@
-{buildGoModule, fetchFromGitHub, lib, testers, cf-vault}:
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
+  testers,
+  cf-vault,
+}:
 buildGoModule rec {
   pname = "cf-vault";
   version = "0.0.18";

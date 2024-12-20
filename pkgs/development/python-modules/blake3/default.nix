@@ -7,18 +7,19 @@
   numpy,
   pytestCheckHook,
   rustPlatform,
+  nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "blake3";
-  version = "0.4.1";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "oconnor663";
     repo = "blake3-py";
     rev = "refs/tags/${version}";
-    hash = "sha256-Ju40ea8IQMOPg9BiN47BMmr/WU8HptbqqzVI+jNGpA8=";
+    hash = "sha256-4fUCBragb4AQ75f1LEUvCiVOLYinjrg9cmJRz4TP4Vs=";
   };
 
   postPatch = ''
@@ -44,6 +45,12 @@ buildPythonPackage rec {
   ];
 
   pythonImportsCheck = [ "blake3" ];
+
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--generate-lockfile"
+    ];
+  };
 
   meta = {
     description = "Python bindings for the BLAKE3 cryptographic hash function";

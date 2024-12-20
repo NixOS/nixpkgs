@@ -1,17 +1,18 @@
-{ lib
-, fetchFromSourcehut
-, python3
-, glib
-, gobject-introspection
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook3
-, gtk3
-, atk
-, libhandy
-, libnotify
-, pango
+{
+  lib,
+  fetchFromSourcehut,
+  python3,
+  glib,
+  gobject-introspection,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook3,
+  gtk3,
+  atk,
+  libhandy,
+  libnotify,
+  pango,
 }:
 
 python3.pkgs.buildPythonApplication rec {

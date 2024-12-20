@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchFromGitHub, cmake, check, validatePkgConfig, shared ? false }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  cmake,
+  check,
+  validatePkgConfig,
+  shared ? false,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pugixml";
@@ -13,7 +21,10 @@ stdenv.mkDerivation rec {
 
   outputs = [ "out" ] ++ lib.optionals shared [ "dev" ];
 
-  nativeBuildInputs = [ cmake validatePkgConfig ];
+  nativeBuildInputs = [
+    cmake
+    validatePkgConfig
+  ];
 
   cmakeFlags = [
     "-DBUILD_TESTS=ON"

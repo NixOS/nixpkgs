@@ -79,11 +79,16 @@ stdenv.mkDerivation (
       cargo
     ] ++ nativeBuildInputs;
 
+    dontConfigure = true;
     buildPhase = ''
       runHook preBuild
 
       # Ensure deterministic Cargo vendor builds
       export SOURCE_DATE_EPOCH=1
+
+      if [ -n "''${cargoRoot-}" ]; then
+        cd "$cargoRoot"
+      fi
 
       if [[ ! -f Cargo.lock ]]; then
           echo

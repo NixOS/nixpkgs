@@ -7,11 +7,11 @@
 
 stdenv.mkDerivation rec {
   pname = "gerrit";
-  version = "3.10.3";
+  version = "3.11.0";
 
   src = fetchurl {
     url = "https://gerrit-releases.storage.googleapis.com/gerrit-${version}.war";
-    hash = "sha256-pVI5YZihvJNuaboh2dLe/Aw371rNPiGbaLUd0ALpANQ=";
+    hash = "sha256-wFUks4yGzO4obPWIIfCgL+/ZF37RDgXKvlOMSFvU5Bk=";
   };
 
   buildCommand = ''

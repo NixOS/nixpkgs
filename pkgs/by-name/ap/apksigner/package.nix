@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchgit
-, jdk_headless
-, gradle_8
-, makeWrapper
+{
+  lib,
+  stdenv,
+  fetchgit,
+  jdk_headless,
+  gradle_8,
+  makeWrapper,
 }:
 let
   # "Deprecated Gradle features were used in this build, making it incompatible with Gradle 9.0."
@@ -50,7 +51,10 @@ stdenv.mkDerivation rec {
 
   doCheck = true;
 
-  nativeBuildInputs = [ gradle makeWrapper ];
+  nativeBuildInputs = [
+    gradle
+    makeWrapper
+  ];
 
   installPhase = ''
     install -Dm444 build/libs/apksigner.jar -t $out/lib

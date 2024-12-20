@@ -1,4 +1,9 @@
-{ lib, python3Packages, fetchFromGitHub, ffmpeg }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+  ffmpeg,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "vcsi";
@@ -32,7 +37,10 @@ python3Packages.buildPythonApplication rec {
     description = "Create video contact sheets";
     homepage = "https://github.com/amietn/vcsi";
     license = licenses.mit;
-    maintainers = with maintainers; [ dandellion zopieux ];
+    maintainers = with maintainers; [
+      dandellion
+      zopieux
+    ];
     mainProgram = "vcsi";
   };
 }

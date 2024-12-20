@@ -43,7 +43,7 @@ buildFHSEnv {
   unsharePid = false;
 
   targetPkgs = pkgs: with pkgs; with xorg; [
-    libICE libSM libX11 libXcomposite libXdamage libXext libXfixes libXrender
+    libICE libSM libX11 libXcomposite libXdamage libXext libXfixes libXrender libXmu
     libXxf86vm libGL libxcb xkeyboardconfig
     curl dbus firefox-bin fontconfig freetype gcc glib gnutar libxml2 libxslt
     procps zlib mesa libxshmfence libpthreadstubs libappindicator

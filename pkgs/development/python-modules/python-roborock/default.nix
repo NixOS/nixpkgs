@@ -40,7 +40,6 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-
   propagatedBuildInputs = [
     aiohttp
     async-timeout

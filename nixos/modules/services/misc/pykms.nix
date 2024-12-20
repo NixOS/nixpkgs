@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.pykms;
   libDir = "/var/lib/pykms";
@@ -44,7 +49,14 @@ in
       };
 
       logLevel = lib.mkOption {
-        type = lib.types.enum [ "CRITICAL" "ERROR" "WARNING" "INFO" "DEBUG" "MININFO" ];
+        type = lib.types.enum [
+          "CRITICAL"
+          "ERROR"
+          "WARNING"
+          "INFO"
+          "DEBUG"
+          "MININFO"
+        ];
         default = "INFO";
         description = "How much to log";
       };
@@ -69,16 +81,20 @@ in
       serviceConfig = with pkgs; {
         DynamicUser = true;
         StateDirectory = baseNameOf libDir;
-        ExecStartPre = "${getBin pykms}/libexec/create_pykms_db.sh ${libDir}/clients.db";
-        ExecStart = lib.concatStringsSep " " ([
-          "${getBin pykms}/bin/server"
-          "--logfile=STDOUT"
-          "--loglevel=${cfg.logLevel}"
-          "--sqlite=${libDir}/clients.db"
-        ] ++ cfg.extraArgs ++ [
-          cfg.listenAddress
-          (toString cfg.port)
-        ]);
+        ExecStartPre = "${lib.getBin pykms}/libexec/create_pykms_db.sh ${libDir}/clients.db";
+        ExecStart = lib.concatStringsSep " " (
+          [
+            "${lib.getBin pykms}/bin/server"
+            "--logfile=STDOUT"
+            "--loglevel=${cfg.logLevel}"
+            "--sqlite=${libDir}/clients.db"
+          ]
+          ++ cfg.extraArgs
+          ++ [
+            cfg.listenAddress
+            (toString cfg.port)
+          ]
+        );
         ProtectHome = "tmpfs";
         WorkingDirectory = libDir;
         SyslogIdentifier = "pykms";

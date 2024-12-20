@@ -1,4 +1,8 @@
-{ lib, python3Packages, fetchFromGitHub }:
+{
+  lib,
+  python3Packages,
+  fetchFromGitHub,
+}:
 
 python3Packages.buildPythonPackage rec {
   pname = "win2xcur";
@@ -11,7 +15,10 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-OjLj+QYg8YOJzDq3Y6/uyEXlNWbPm8VA/b1yP9jT6Jo=";
   };
 
-  propagatedBuildInputs = with python3Packages; [ numpy wand ];
+  propagatedBuildInputs = with python3Packages; [
+    numpy
+    wand
+  ];
 
   meta = with lib; {
     description = "Tools that convert cursors between the Windows (*.cur, *.ani) and Xcursor format";

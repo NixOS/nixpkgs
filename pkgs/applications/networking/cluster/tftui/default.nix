@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, makeWrapper
-, python3
-, enableUsageTracking ? false
+{
+  lib,
+  fetchFromGitHub,
+  makeWrapper,
+  python3,
+  enableUsageTracking ? false,
 }:
 
 python3.pkgs.buildPythonApplication rec {

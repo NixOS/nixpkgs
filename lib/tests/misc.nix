@@ -39,6 +39,7 @@ let
     composeManyExtensions
     concatLines
     concatMapAttrs
+    concatMapAttrsStringSep
     concatMapStrings
     concatStrings
     concatStringsSep
@@ -326,6 +327,11 @@ runTests {
   testConcatStringsSep = {
     expr = concatStringsSep "," ["a" "b" "c"];
     expected = "a,b,c";
+  };
+
+  testConcatMapAttrsStringSepExamples = {
+    expr = concatMapAttrsStringSep "\n" (name: value: "${name}: foo-${value}") { a = "0.1.0"; b = "0.2.0"; };
+    expected = "a: foo-0.1.0\nb: foo-0.2.0";
   };
 
   testConcatLines = {
@@ -1869,6 +1875,44 @@ runTests {
         locs = filter (o: ! o.internal) (optionAttrSetToDocList options);
       in map (o: o.loc) locs;
     expected = [ [ "_module" "args" ] [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
+  };
+
+  testAttrsWithName = {
+    expr = let
+      eval =  evalModules {
+        modules = [
+          {
+            options = {
+              foo = lib.mkOption {
+                type = lib.types.attrsWith {
+                  placeholder = "MyCustomPlaceholder";
+                  elemType = lib.types.submodule {
+                    options.bar = lib.mkOption {
+                      type = lib.types.int;
+                      default = 42;
+                    };
+                  };
+                };
+              };
+            };
+          }
+        ];
+      };
+      opt = eval.options.foo;
+    in
+      (opt.type.getSubOptions opt.loc).bar.loc;
+    expected = [
+      "foo"
+      "<MyCustomPlaceholder>"
+      "bar"
+    ];
+  };
+
+  testShowOptionWithPlaceholder = {
+    # <name>, *, should not be escaped. It is used as a placeholder by convention.
+    # Other symbols should be escaped. `{}`
+    expr = lib.showOption ["<name>" "<myName>" "*" "{foo}"];
+    expected = "<name>.<myName>.*.\"{foo}\"";
   };
 
   testCartesianProductOfEmptySet = {

@@ -158,5 +158,5 @@ stdenvNoCC.mkDerivation {
   passthru = { inherit tests; };
   buildCommand = ''
     touch $out
-  '' + lib.concatStringsSep "\n" (lib.attrValues (lib.mapAttrs (name: t: "([[ ${lib.boolToString t.expr} == ${lib.boolToString t.expected} ]] && echo '${name} success') || (echo '${name} fail' && exit 1)") tests));
+  '' + lib.concatMapAttrsStringSep "\n" (name: t: "([[ ${lib.boolToString t.expr} == ${lib.boolToString t.expected} ]] && echo '${name} success') || (echo '${name} fail' && exit 1)") tests;
 }

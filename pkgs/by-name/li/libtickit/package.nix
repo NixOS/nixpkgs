@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, pkg-config
-, libtool
-, perl
-, libtermkey
-, unibilium
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  libtool,
+  perl,
+  libtermkey,
+  unibilium,
 }:
 let
   version = "0.4.3";

@@ -1964,6 +1964,24 @@ self: super: {
       )
     ];
 
+  # Pandoc 3.5 improves the quality of PDF rendering in Quarto >=1.6.30.
+  # https://github.com/NixOS/nixpkgs/pull/349683
+  pandoc-cli_3_5 = super.pandoc-cli_3_5.overrideScope (
+    self: super: {
+      doclayout = self.doclayout_0_5;
+      hslua-module-doclayout = self.hslua-module-doclayout_1_2_0;
+      lpeg = self.lpeg_1_1_0;
+      pandoc = self.pandoc_3_5;
+      pandoc-lua-engine = self.pandoc-lua-engine_0_3_3;
+      pandoc-server = self.pandoc-server_0_1_0_9;
+      texmath = self.texmath_0_12_8_11;
+      tls = self.tls_2_0_6;
+      toml-parser = self.toml-parser_2_0_1_0;
+      typst = self.typst_0_6;
+      typst-symbols = self.typst-symbols_0_1_6;
+    }
+  );
+
   # 2020-12-06: Restrictive upper bounds w.r.t. pandoc-types (https://github.com/owickstrom/pandoc-include-code/issues/27)
   pandoc-include-code = doJailbreak super.pandoc-include-code;
 

@@ -1,10 +1,11 @@
-{ lib
-, multiStdenv
-, fetchFromGitHub
-, libX11
-, libXxf86vm
-, xorgproto
-, unstableGitUpdater
+{
+  lib,
+  multiStdenv,
+  fetchFromGitHub,
+  libX11,
+  libXxf86vm,
+  xorgproto,
+  unstableGitUpdater,
 }:
 
 multiStdenv.mkDerivation (finalAttrs: {
@@ -18,7 +19,10 @@ multiStdenv.mkDerivation (finalAttrs: {
     hash = "sha256-ND3N1oMUjmDkF7btcFucDxKxxANL9IKf08/6Kt6LX9o=";
   };
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   buildInputs = [
     libX11

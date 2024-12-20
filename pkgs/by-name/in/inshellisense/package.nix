@@ -1,4 +1,10 @@
-{ lib, stdenv, buildNpmPackage, fetchFromGitHub, cacert }:
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  cacert,
+}:
 
 buildNpmPackage rec {
   pname = "inshellisense";
@@ -30,4 +36,3 @@ buildNpmPackage rec {
     maintainers = [ maintainers.malo ];
   };
 }
-

@@ -1,14 +1,15 @@
-{ stdenv
-, wrapCCWith
-, llvm
-, lld
-, clang-unwrapped
-, bintools
-, libc
-, libunwind
-, libcxxabi
-, libcxx
-, compiler-rt
+{
+  stdenv,
+  wrapCCWith,
+  llvm,
+  lld,
+  clang-unwrapped,
+  bintools,
+  libc,
+  libunwind,
+  libcxxabi,
+  libcxx,
+  compiler-rt,
 }:
 
 wrapCCWith rec {

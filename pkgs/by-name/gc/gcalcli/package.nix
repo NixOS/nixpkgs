@@ -2,49 +2,47 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  nix-update-script,
   python3Packages,
   libnotify,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "gcalcli";
-  version = "4.4.0";
+  version = "4.5.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "insanum";
     repo = "gcalcli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-X9sgnujHMbmrt7cpcBOvTycIKFz3G2QzNDt3me5GUrQ=";
+    hash = "sha256-FU1EHLQ+/2sOGeeGwONsrV786kHTFfMel7ocBcCe+rI=";
   };
 
-  postPatch =
-    ''
-      # dev dependencies
-      substituteInPlace pyproject.toml \
-        --replace-fail "\"google-api-python-client-stubs\"," "" \
-        --replace-fail "\"types-python-dateutil\"," "" \
-        --replace-fail "\"types-requests\"," "" \
-        --replace-fail "\"types-vobject\"," ""
-    ''
-    + lib.optionalString stdenv.hostPlatform.isLinux ''
-      substituteInPlace gcalcli/argparsers.py \
-        --replace-fail "'notify-send" "'${lib.getExe libnotify}"
-    '';
+  updateScript = nix-update-script { };
 
-  build-system = with python3Packages; [ setuptools ];
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
+    substituteInPlace gcalcli/argparsers.py \
+      --replace-fail "'notify-send" "'${lib.getExe libnotify}"
+  '';
+
+  build-system = with python3Packages; [ setuptools-scm ];
 
   dependencies = with python3Packages; [
     argcomplete
-    python-dateutil
+    babel
     gflags
-    httplib2
-    parsedatetime
-    vobject
     google-api-python-client
     google-auth-oauthlib
-    uritemplate
+    httplib2
     libnotify
+    parsedatetime
+    platformdirs
+    pydantic
+    python-dateutil
+    truststore
+    uritemplate
+    vobject
   ];
 
   nativeCheckInputs = with python3Packages; [ pytestCheckHook ];

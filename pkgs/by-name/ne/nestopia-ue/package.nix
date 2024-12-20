@@ -1,21 +1,22 @@
-{ lib
-, SDL2
-, alsa-lib
-, autoconf-archive
-, autoreconfHook
-, fetchFromGitHub
-, fltk
-, libGL
-, libGLU
-, libao
-, libarchive
-, libepoxy
-, makeWrapper
-, pkg-config
-, stdenv
-, unzip
-, wrapGAppsHook3
-, xdg-utils
+{
+  lib,
+  SDL2,
+  alsa-lib,
+  autoconf-archive,
+  autoreconfHook,
+  fetchFromGitHub,
+  fltk,
+  libGL,
+  libGLU,
+  libao,
+  libarchive,
+  libepoxy,
+  makeWrapper,
+  pkg-config,
+  stdenv,
+  unzip,
+  wrapGAppsHook3,
+  xdg-utils,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -60,10 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preFixup = ''
-     for f in $out/bin/*; do
-       wrapProgram $f \
-         --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
-     done
+    for f in $out/bin/*; do
+      wrapProgram $f \
+        --prefix XDG_DATA_DIRS : "$GSETTINGS_SCHEMAS_PATH:$out/share"
+    done
   '';
 
   meta = {

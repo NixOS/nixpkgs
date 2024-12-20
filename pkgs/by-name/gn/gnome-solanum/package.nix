@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitLab
-, rustPlatform
-, cargo
-, desktop-file-utils
-, appstream-glib
-, blueprint-compiler
-, meson
-, ninja
-, pkg-config
-, rustc
-, wrapGAppsHook4
-, python3
-, git
-, glib
-, gtk4
-, gst_all_1
-, libadwaita
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  rustPlatform,
+  cargo,
+  desktop-file-utils,
+  appstream-glib,
+  blueprint-compiler,
+  meson,
+  ninja,
+  pkg-config,
+  rustc,
+  wrapGAppsHook4,
+  python3,
+  git,
+  glib,
+  gtk4,
+  gst_all_1,
+  libadwaita,
 }:
 
 stdenv.mkDerivation rec {
@@ -68,7 +69,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/World/Solanum";
     description = "Pomodoro timer for the GNOME desktop";
-    maintainers = with maintainers; [ linsui ];
+    maintainers = with maintainers; [ linsui ] ++ lib.teams.gnome-circle.members;
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "solanum";

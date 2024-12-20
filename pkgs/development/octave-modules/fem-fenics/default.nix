@@ -1,9 +1,10 @@
-{ buildOctavePackage
-, lib
-, fetchurl
-, dolfin
-, ffc
-, pkg-config
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
+  dolfin,
+  ffc,
+  pkg-config,
 }:
 
 buildOctavePackage rec {

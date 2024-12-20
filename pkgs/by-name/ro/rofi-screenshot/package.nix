@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, libnotify
-, slop
-, ffcast
-, ffmpeg
-, xclip
-, rofi
-, coreutils
-, gnused
-, procps
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  libnotify,
+  slop,
+  ffcast,
+  ffmpeg,
+  xclip,
+  rofi,
+  coreutils,
+  gnused,
+  procps,
 }:
 
 stdenv.mkDerivation rec {
@@ -48,8 +49,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = {
-    description =
-      "Use rofi to perform various types of screenshots and screen captures";
+    description = "Use rofi to perform various types of screenshots and screen captures";
     mainProgram = "rofi-screenshot";
     homepage = "https://github.com/ceuk/rofi-screenshot";
     maintainers = with lib.maintainers; [ zopieux ];

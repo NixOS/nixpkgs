@@ -1,21 +1,21 @@
-{ lib
-, foomatic-db
-, foomatic-db-nonfree
-, buildEnv
-, foomatic-db-engine
-, stdenv
-, cups-filters
-, ghostscript
-, netpbm
-, perl
-, psutils
-, patchPpdFilesHook
-, withNonfreeDb ? false  # include foomatic-db-nonfree ppd files
+{
+  lib,
+  foomatic-db,
+  foomatic-db-nonfree,
+  buildEnv,
+  foomatic-db-engine,
+  stdenv,
+  cups-filters,
+  ghostscript,
+  netpbm,
+  perl,
+  psutils,
+  patchPpdFilesHook,
+  withNonfreeDb ? false, # include foomatic-db-nonfree ppd files
 }:
 
 let
-  foomatic-db-packages = [ foomatic-db ] ++
-    lib.lists.optional withNonfreeDb foomatic-db-nonfree;
+  foomatic-db-packages = [ foomatic-db ] ++ lib.lists.optional withNonfreeDb foomatic-db-nonfree;
 
   foomatic-db-combined = buildEnv {
     name = "foomatic-db-combined";
@@ -77,12 +77,15 @@ stdenv.mkDerivation {
   # Comments indicate the respective
   # package the command is contained in.
   ppdFileCommands = [
-    "cat" "echo"  # coreutils
-    "foomatic-rip"  # cups-filters or foomatic-filters
-    "gs"  # ghostscript
-    "pnmflip" "pnmgamma" "pnmnoraw"  # netpbm
-    "perl"  # perl
-    "psresize"  # psutils
+    "cat"
+    "echo" # coreutils
+    "foomatic-rip" # cups-filters or foomatic-filters
+    "gs" # ghostscript
+    "pnmflip"
+    "pnmgamma"
+    "pnmnoraw" # netpbm
+    "perl" # perl
+    "psresize" # psutils
     # These commands aren't packaged yet.
     # ppd files using these likely won't work.
     #"c2050" "c2070" "cjet" "lm1100"

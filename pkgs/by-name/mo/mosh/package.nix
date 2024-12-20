@@ -1,6 +1,21 @@
-{ lib, stdenv, fetchFromGitHub, zlib, protobuf, ncurses, pkg-config
-, makeWrapper, perl, openssl, autoreconfHook, openssh, bash-completion, fetchpatch
-, withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl, libutempter }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zlib,
+  protobuf,
+  ncurses,
+  pkg-config,
+  makeWrapper,
+  perl,
+  openssl,
+  autoreconfHook,
+  openssh,
+  bash-completion,
+  fetchpatch,
+  withUtempter ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl,
+  libutempter,
+}:
 
 stdenv.mkDerivation rec {
   pname = "mosh";
@@ -13,9 +28,21 @@ stdenv.mkDerivation rec {
     hash = "sha256-tlSsHu7JnXO+sorVuWWubNUNdb9X0/pCaiGG5Y0X/g8=";
   };
 
-  nativeBuildInputs = [ autoreconfHook pkg-config makeWrapper protobuf perl ];
-  buildInputs = [ protobuf ncurses zlib openssl bash-completion perl ]
-    ++ lib.optional withUtempter libutempter;
+  nativeBuildInputs = [
+    autoreconfHook
+    pkg-config
+    makeWrapper
+    protobuf
+    perl
+  ];
+  buildInputs = [
+    protobuf
+    ncurses
+    zlib
+    openssl
+    bash-completion
+    perl
+  ] ++ lib.optional withUtempter libutempter;
 
   strictDeps = true;
 
@@ -40,11 +67,10 @@ stdenv.mkDerivation rec {
       --subst-var-by mosh-client "$out/bin/mosh-client"
   '';
 
-  configureFlags = [ "--enable-completion" ]
-    ++ lib.optional withUtempter "--with-utempter";
+  configureFlags = [ "--enable-completion" ] ++ lib.optional withUtempter "--with-utempter";
 
   postInstall = ''
-      wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
+    wrapProgram $out/bin/mosh --prefix PERL5LIB : $PERL5LIB
   '';
 
   meta = with lib; {

@@ -190,6 +190,9 @@ checkConfigOutput '^420$' config.bare-submodule.deep ./declare-bare-submodule.ni
 checkConfigOutput '^2$' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix ./define-shorthandOnlyDefinesConfig-true.nix
 checkConfigError 'The option .bare-submodule.deep. in .*/declare-bare-submodule-deep-option.nix. is already declared in .*/declare-bare-submodule-deep-option-duplicate.nix' config.bare-submodule.deep ./declare-bare-submodule.nix ./declare-bare-submodule-deep-option.nix  ./declare-bare-submodule-deep-option-duplicate.nix
 
+# Check that strMatching can be merged
+checkConfigOutput '^"strMatching.*"$' options.sm.type.name ./strMatching-merge.nix
+
 # Check integer types.
 # unsigned
 checkConfigOutput '^42$' config.value ./declare-int-unsigned-value.nix ./define-value-int-positive.nix
@@ -386,6 +389,14 @@ checkConfigOutput '^true$' config.conditionalWorks ./declare-attrsOf.nix ./attrs
 checkConfigOutput '^false$' config.conditionalWorks ./declare-lazyAttrsOf.nix ./attrsOf-conditional-check.nix
 checkConfigOutput '^"empty"$' config.value.foo ./declare-lazyAttrsOf.nix ./attrsOf-conditional-check.nix
 
+# Check attrsWith type merging
+checkConfigError 'The option `mergedLazyNonLazy'\'' in `.*'\'' is already declared in `.*'\''\.' options.mergedLazyNonLazy ./lazy-attrsWith.nix
+checkConfigOutput '^11$' config.lazyResult ./lazy-attrsWith.nix
+checkConfigError 'infinite recursion encountered' config.nonLazyResult ./lazy-attrsWith.nix
+
+# AttrsWith placeholder tests
+checkConfigOutput '^"mergedName.<id>.nested"$' config.result ./name-merge-attrsWith-1.nix
+checkConfigError 'The option .mergedName. in .*\.nix. is already declared in .*\.nix' config.mergedName ./name-merge-attrsWith-2.nix
 
 # Even with multiple assignments, a type error should be thrown if any of them aren't valid
 checkConfigError 'A definition for option .* is not of type .*' \
@@ -574,6 +585,7 @@ checkConfigOutput '^38|27$' options.submoduleLine38.declarationPositions.0.line 
 checkConfigOutput '^38|27$' options.submoduleLine38.declarationPositions.1.line ./declaration-positions.nix
 # nested options work
 checkConfigOutput '^34$' options.nested.nestedLine34.declarationPositions.0.line ./declaration-positions.nix
+
 
 cat <<EOF
 ====== module tests ======

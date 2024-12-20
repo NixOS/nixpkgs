@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, requireFile
-, runCommand
-, rcu
-, testers
-, copyDesktopItems
-, desktopToDarwinBundle
-, libsForQt5
-, makeDesktopItem
-, python3Packages
-, system-config-printer
+{
+  stdenv,
+  lib,
+  requireFile,
+  runCommand,
+  rcu,
+  testers,
+  copyDesktopItems,
+  desktopToDarwinBundle,
+  libsForQt5,
+  makeDesktopItem,
+  python3Packages,
+  system-config-printer,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -18,17 +19,19 @@ python3Packages.buildPythonApplication rec {
 
   format = "other";
 
-  src = let
-    src-tarball = requireFile {
-      name = "rcu-d${version}-source.tar.gz";
-      hash = "sha256-Ywk28gJBMSSQL6jEcHE8h253KOsXIGwVOag6PBWs8kg=";
-      url = "http://www.davisr.me/projects/rcu/";
-    };
-  in runCommand "${src-tarball.name}-unpacked" {} ''
-    gunzip -ck ${src-tarball} | tar -xvf-
-    mv rcu $out
-    ln -s ${src-tarball} $out/src
-  '';
+  src =
+    let
+      src-tarball = requireFile {
+        name = "rcu-d${version}-source.tar.gz";
+        hash = "sha256-Ywk28gJBMSSQL6jEcHE8h253KOsXIGwVOag6PBWs8kg=";
+        url = "http://www.davisr.me/projects/rcu/";
+      };
+    in
+    runCommand "${src-tarball.name}-unpacked" { } ''
+      gunzip -ck ${src-tarball} | tar -xvf-
+      mv rcu $out
+      ln -s ${src-tarball} $out/src
+    '';
 
   patches = [
     ./Port-to-paramiko-3.x.patch
@@ -42,12 +45,14 @@ python3Packages.buildPythonApplication rec {
       --replace-fail 'GROUP="yourgroup"' 'GROUP="users"'
   '';
 
-  nativeBuildInputs = [
-    copyDesktopItems
-    libsForQt5.wrapQtAppsHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    desktopToDarwinBundle
-  ];
+  nativeBuildInputs =
+    [
+      copyDesktopItems
+      libsForQt5.wrapQtAppsHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      desktopToDarwinBundle
+    ];
 
   buildInputs = [
     libsForQt5.qtbase
@@ -81,64 +86,75 @@ python3Packages.buildPythonApplication rec {
   # No tests
   doCheck = false;
 
-  installPhase = ''
-    runHook preInstall
+  installPhase =
+    ''
+      runHook preInstall
 
-    mkdir -p $out/{bin,share}
-    cp -r src $out/share/rcu
+      mkdir -p $out/{bin,share}
+      cp -r src $out/share/rcu
 
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
-    install -Dm644 package_support/gnulinux/50-remarkable.rules $out/etc/udev/rules.d/50-remarkable.rules
-  '' + ''
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm644 package_support/gnulinux/50-remarkable.rules $out/etc/udev/rules.d/50-remarkable.rules
+    ''
+    + ''
 
-    # Keep source from being GC'd by linking into it
+      # Keep source from being GC'd by linking into it
 
-    for icondir in $(find icons -type d -name '[0-9]*x[0-9]*'); do
-      iconsize=$(basename $icondir)
-      mkdir -p $out/share/icons/hicolor/$iconsize/apps
-      ln -s ${src}/icons/$iconsize/rcu-icon-$iconsize.png $out/share/icons/hicolor/$iconsize/apps/rcu.png
-    done
+      for icondir in $(find icons -type d -name '[0-9]*x[0-9]*'); do
+        iconsize=$(basename $icondir)
+        mkdir -p $out/share/icons/hicolor/$iconsize/apps
+        ln -s ${src}/icons/$iconsize/rcu-icon-$iconsize.png $out/share/icons/hicolor/$iconsize/apps/rcu.png
+      done
 
-    mkdir -p $out/share/icons/hicolor/scalable/apps
-    ln -s ${src}/icons/64x64/rcu-icon-64x64.svg $out/share/icons/hicolor/scalable/apps/rcu.svg
+      mkdir -p $out/share/icons/hicolor/scalable/apps
+      ln -s ${src}/icons/64x64/rcu-icon-64x64.svg $out/share/icons/hicolor/scalable/apps/rcu.svg
 
-    mkdir -p $out/share/doc/rcu
-    for docfile in {COPYING,manual.pdf}; do
-      ln -s ${src}/manual/$docfile $out/share/doc/rcu/$docfile
-    done
+      mkdir -p $out/share/doc/rcu
+      for docfile in {COPYING,manual.pdf}; do
+        ln -s ${src}/manual/$docfile $out/share/doc/rcu/$docfile
+      done
 
-    mkdir -p $out/share/licenses/rcu
-    ln -s ${src}/COPYING $out/share/licenses/rcu/COPYING
+      mkdir -p $out/share/licenses/rcu
+      ln -s ${src}/COPYING $out/share/licenses/rcu/COPYING
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   # Manually creating wrapper, hook struggles with lack of shebang & symlink
   dontWrapPythonPrograms = true;
 
-  preFixup = ''
-    makeWrapperArgs+=(
-      "''${qtWrapperArgs[@]}"
-  '' + lib.optionalString stdenv.hostPlatform.isLinux ''
+  preFixup =
+    ''
+      makeWrapperArgs+=(
+        "''${qtWrapperArgs[@]}"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
       --prefix PATH : ${lib.makeBinPath [ system-config-printer ]}
-  '' + ''
-    )
-  '';
+    ''
+    + ''
+      )
+    '';
 
   postFixup = ''
     makeWrapper ${lib.getExe python3Packages.python} $out/bin/rcu \
       ''${makeWrapperArgs[@]} \
-      --prefix PYTHONPATH : ${python3Packages.makePythonPath (propagatedBuildInputs ++ [(placeholder "out")])} \
+      --prefix PYTHONPATH : ${
+        python3Packages.makePythonPath (propagatedBuildInputs ++ [ (placeholder "out") ])
+      } \
       --add-flags $out/share/rcu/main.py
   '';
 
   passthru = {
     tests.version = testers.testVersion {
       package = rcu;
-      version = let
-        versionSuffixPos = (lib.strings.stringLength rcu.version) - 1;
-      in
-        "d${lib.strings.substring 0 versionSuffixPos rcu.version}(${lib.strings.substring versionSuffixPos 1 rcu.version})";
+      version =
+        let
+          versionSuffixPos = (lib.strings.stringLength rcu.version) - 1;
+        in
+        "d${lib.strings.substring 0 versionSuffixPos rcu.version}(${
+          lib.strings.substring versionSuffixPos 1 rcu.version
+        })";
     };
   };
 

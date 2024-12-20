@@ -13,13 +13,14 @@
 # [0]: https://github.com/taiki-e/cargo-llvm-cov/issues/242
 # [1]: https://github.com/NixOS/nixpkgs/pull/197478
 
-{ stdenv
-, lib
-, fetchurl
-, fetchFromGitHub
-, rustPlatform
-, llvmPackages_19
-, git
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchFromGitHub,
+  rustPlatform,
+  llvmPackages_19,
+  git,
 }:
 
 let
@@ -88,8 +89,15 @@ rustPlatform.buildRustPackage {
       tools-preview` or install the `llvm-tools-preview` component using your Nix
       library (e.g. fenix or rust-overlay)
     '';
-    license = with lib.licenses; [ asl20 /* or */ mit ];
-    maintainers = with lib.maintainers; [ wucke13 matthiasbeyer CobaltCause ];
+    license = with lib.licenses; [
+      asl20 # or
+      mit
+    ];
+    maintainers = with lib.maintainers; [
+      wucke13
+      matthiasbeyer
+      CobaltCause
+    ];
 
     # The profiler runtime is (currently) disabled on non-Linux platforms
     broken = !(stdenv.hostPlatform.isLinux && !stdenv.targetPlatform.isRedox);

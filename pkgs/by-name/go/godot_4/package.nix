@@ -130,6 +130,8 @@ let
       x11 = withX11; # Compile with X11 support
 
       module_mono_enabled = withMono;
+
+      linkflags = "-Wl,--build-id";
     };
 
     enableParallelBuilding = true;
@@ -264,7 +266,7 @@ in
 stdenv.mkDerivation (
   if withMono then
     dotnetCorePackages.addNuGetDeps {
-      nugetDeps = ./deps.nix;
+      nugetDeps = ./deps.json;
       overrideFetchAttrs = old: rec {
         runtimeIds = map (system: dotnetCorePackages.systemToDotnetRid system) old.meta.platforms;
         buildInputs =

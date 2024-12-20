@@ -1,35 +1,38 @@
-{ stdenv
-, lib
-, fetchurl
-, autoPatchelfHook
-, makeShellWrapper
-, wrapGAppsHook3
-, alsa-lib
-, at-spi2-atk
-, at-spi2-core
-, atk
-, cairo
-, cups
-, dbus
-, expat
-, glib
-, gtk3
-, libsecret
-, mesa
-, nss
-, pango
-, udev
-, xdg-utils
-, xorg
+{
+  stdenv,
+  lib,
+  fetchurl,
+  autoPatchelfHook,
+  makeShellWrapper,
+  wrapGAppsHook3,
+  alsa-lib,
+  at-spi2-atk,
+  at-spi2-core,
+  atk,
+  cairo,
+  cups,
+  dbus,
+  expat,
+  glib,
+  glibc,
+  gtk3,
+  libsecret,
+  mesa,
+  musl,
+  nss,
+  pango,
+  udev,
+  xdg-utils,
+  xorg,
 }:
 
 stdenv.mkDerivation rec {
   pname = "publii";
-  version = "0.45.2";
+  version = "0.46.2";
 
   src = fetchurl {
     url = "https://getpublii.com/download/Publii-${version}.deb";
-    hash = "sha256-NGS5ovaJ6XskCimN48mqvUdoA+N9eDlIpazV0GDEs3E=";
+    hash = "sha256-evNCXIhqKi23m/J3AoAW7u21neu6+hBFzAZ9MGz4YZ4=";
   };
 
   dontConfigure = true;
@@ -52,9 +55,11 @@ stdenv.mkDerivation rec {
     dbus
     expat
     glib
+    glibc
     gtk3
     libsecret
     mesa
+    musl
     nss
     pango
     xorg.libX11
@@ -72,7 +77,7 @@ stdenv.mkDerivation rec {
 
     mv usr/share $out
     substituteInPlace $out/share/applications/Publii.desktop \
-      --replace 'Exec=/opt/Publii/Publii' 'Exec=Publii'
+      --replace-fail 'Exec=/opt/Publii/Publii' 'Exec=Publii'
 
     mv opt $out
 
@@ -97,7 +102,10 @@ stdenv.mkDerivation rec {
     homepage = "https://getpublii.com";
     changelog = "https://github.com/getpublii/publii/releases/tag/v${version}";
     license = licenses.gpl3Only;
-    maintainers = with lib.maintainers; [ urandom sebtm ];
+    maintainers = with lib.maintainers; [
+      urandom
+      sebtm
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }

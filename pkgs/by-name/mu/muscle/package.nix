@@ -1,4 +1,8 @@
-{ lib, gccStdenv, fetchFromGitHub }:
+{
+  lib,
+  gccStdenv,
+  fetchFromGitHub,
+}:
 
 gccStdenv.mkDerivation rec {
   pname = "muscle";
@@ -19,10 +23,7 @@ gccStdenv.mkDerivation rec {
 
   installPhase =
     let
-      target =
-        if gccStdenv.hostPlatform.isDarwin
-        then "Darwin"
-        else "Linux";
+      target = if gccStdenv.hostPlatform.isDarwin then "Darwin" else "Linux";
     in
     ''
       install -m755 -D ${target}/muscle $out/bin/muscle
@@ -33,6 +34,9 @@ gccStdenv.mkDerivation rec {
     mainProgram = "muscle";
     license = licenses.gpl3Plus;
     homepage = "https://www.drive5.com/muscle/";
-    maintainers = with maintainers; [ unode thyol ];
+    maintainers = with maintainers; [
+      unode
+      thyol
+    ];
   };
 }

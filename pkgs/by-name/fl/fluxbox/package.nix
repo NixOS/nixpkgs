@@ -1,8 +1,19 @@
-{ lib, stdenv, fetchurl, pkg-config
-, freetype, fribidi
-, libXext, libXft, libXpm, libXrandr, libXrender, xorgproto
-, libXinerama
-, imlib2 }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  freetype,
+  fribidi,
+  libXext,
+  libXft,
+  libXpm,
+  libXrandr,
+  libXrender,
+  xorgproto,
+  libXinerama,
+  imlib2,
+}:
 
 stdenv.mkDerivation rec {
 
@@ -25,7 +36,18 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ freetype fribidi libXext libXft libXpm libXrandr libXrender xorgproto libXinerama imlib2 ];
+  buildInputs = [
+    freetype
+    fribidi
+    libXext
+    libXft
+    libXpm
+    libXrandr
+    libXrender
+    xorgproto
+    libXinerama
+    imlib2
+  ];
 
   enableParallelBuilding = true;
 

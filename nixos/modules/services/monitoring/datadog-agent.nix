@@ -13,7 +13,13 @@ let
   // lib.optionalAttrs (cfg.ddUrl != null) { dd_url = cfg.ddUrl; }
   // lib.optionalAttrs (cfg.site != null) { site = cfg.site; }
   // lib.optionalAttrs (cfg.tags != null ) { tags = lib.concatStringsSep ", " cfg.tags; }
-  // lib.optionalAttrs (cfg.enableLiveProcessCollection) { process_config = { enabled = "true"; }; }
+  // lib.optionalAttrs (cfg.enableLiveProcessCollection) {
+    process_config = {
+      dd_agent_bin = "${datadogPkg}/bin/agent";
+      process_collection.enabled = "true";
+      container_collection.enabled = "true";
+    };
+  }
   // lib.optionalAttrs (cfg.enableTraceAgent) { apm_config = { enabled = true; }; }
   // cfg.extraConfig;
 

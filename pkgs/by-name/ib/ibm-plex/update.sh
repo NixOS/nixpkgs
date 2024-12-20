@@ -11,6 +11,7 @@ families=(
     "sans-devanagari"
     "sans-thai"
     "sans-thai-looped"
+    "sans-sc"
     "sans-tc"
     "sans-kr"
     "sans-jp"

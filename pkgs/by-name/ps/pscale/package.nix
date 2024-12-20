@@ -1,26 +1,28 @@
-{ buildGoModule
-, fetchFromGitHub
-, installShellFiles
-, lib
-, pscale
-, testers
+{
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  lib,
+  pscale,
+  testers,
 }:
 
 buildGoModule rec {
   pname = "pscale";
-  version = "0.213.0";
+  version = "0.218.0";
 
   src = fetchFromGitHub {
     owner = "planetscale";
     repo = "cli";
     rev = "v${version}";
-    sha256 = "sha256-WgivwlsT8QytB6oaB8lQASq+YQa8lbe/6PwpJUFZifU=";
+    sha256 = "sha256-9aa/Ly/QGdtgpa+p3RuxdZ/EsV81FNLqLxSWMzY55dM=";
   };
 
-  vendorHash = "sha256-R0ZabOquZQLONbW6p5xtYKLi8P3Q5JieM4EATT1a83U=";
+  vendorHash = "sha256-/BYWAE2VpHy+HTmHOz4GhstcD+Y6R0tjeF9/8+LiZT0=";
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X main.version=v${version}"
     "-X main.commit=v${version}"
     "-X main.date=unknown"
@@ -47,6 +49,9 @@ buildGoModule rec {
     changelog = "https://github.com/planetscale/cli/releases/tag/v${version}";
     homepage = "https://www.planetscale.com/";
     license = licenses.asl20;
-    maintainers = with maintainers; [ pimeys kashw2 ];
+    maintainers = with maintainers; [
+      pimeys
+      kashw2
+    ];
   };
 }

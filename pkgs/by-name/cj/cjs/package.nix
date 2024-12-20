@@ -1,47 +1,53 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, gobject-introspection
-, pkg-config
-, cairo
-, glib
-, readline
-, libsysprof-capture
-, spidermonkey_115
-, meson
-, mesonEmulatorHook
-, dbus
-, ninja
-, which
-, libxml2
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  gobject-introspection,
+  pkg-config,
+  cairo,
+  glib,
+  readline,
+  libsysprof-capture,
+  spidermonkey_115,
+  meson,
+  mesonEmulatorHook,
+  dbus,
+  ninja,
+  which,
+  libxml2,
 }:
 
 stdenv.mkDerivation rec {
   pname = "cjs";
-  version = "6.2.0";
+  version = "6.4.0";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cjs";
     rev = version;
-    hash = "sha256-/74E10txRjwN9RkjVB8M0MPYakJ659yJWanc4DC09wg=";
+    hash = "sha256-2lkIWroOo3hxu9/L/Ty7CADzVrZ0ohyHVmm65NoNlD4=";
   };
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    meson
-    ninja
-    pkg-config
-    which # for locale detection
-    libxml2 # for xml-stripblanks
-    dbus # for dbus-run-session
-    gobject-introspection
-  ] ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
-    mesonEmulatorHook
-  ];
+  nativeBuildInputs =
+    [
+      meson
+      ninja
+      pkg-config
+      which # for locale detection
+      libxml2 # for xml-stripblanks
+      dbus # for dbus-run-session
+      gobject-introspection
+    ]
+    ++ lib.optionals (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) [
+      mesonEmulatorHook
+    ];
 
   buildInputs = [
     cairo
@@ -60,9 +66,6 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     patchShebangs --build build/choose-tests-locale.sh
-
-    # https://github.com/linuxmint/cjs/issues/123
-    substituteInPlace meson.build --replace-fail "extra_args: '--warn-error'," ""
   '';
 
   meta = with lib; {

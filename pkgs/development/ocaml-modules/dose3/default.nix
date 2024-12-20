@@ -1,7 +1,16 @@
-{ lib, buildDunePackage, fetchFromGitLab
-, ocamlgraph, parmap, re, stdlib-shims
-, base64, extlib, cudf
-, ocaml, ounit
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitLab,
+  ocamlgraph,
+  parmap,
+  re,
+  stdlib-shims,
+  base64,
+  extlib,
+  cudf,
+  ocaml,
+  ounit,
 }:
 
 buildDunePackage rec {

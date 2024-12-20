@@ -59,6 +59,13 @@ let
     hash = "sha256-MfaIA0xxA/pzUBSwnAevr17iR23Bo5iQO2cSyknS3o4=";
   };
 
+  rtkSrc = fetchFromGitHub {
+    owner = "RTKConsortium";
+    repo = "RTK";
+    rev = "583288b1898dedcfb5e4d602e31020b452971383";
+    hash = "sha256-1ItsLCRwRzGDSRe4xUDg09Hksu1nKichbWuM0YSVkbM=";
+  };
+
   # remove after next swig update:
   swigUnstable = swig.overrideAttrs ({
     version = "4.2.1-unstable-2024-08-19";
@@ -99,6 +106,7 @@ stdenv.mkDerivation {
     ln -sr ${itkGenericLabelInterpolatorSrc} Modules/External/ITKGenericLabelInterpolator
     ln -sr ${itkAdaptiveDenoisingSrc} Modules/External/ITKAdaptiveDenoising
     ln -sr ${itkSimpleITKFiltersSrc} Modules/External/ITKSimpleITKFilters
+    ln -sr ${rtkSrc} Modules/Remote/RTK
   '';
 
   cmakeFlags =
@@ -121,6 +129,7 @@ stdenv.mkDerivation {
       "-DModule_MGHIO=ON"
       "-DModule_AdaptiveDenoising=ON"
       "-DModule_GenericLabelInterpolator=ON"
+      "-DModule_RTK=ON"
     ]
     ++ lib.optionals enablePython [
       "-DITK_WRAP_PYTHON=ON"

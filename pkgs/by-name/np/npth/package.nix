@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, fetchpatch, autoreconfHook, pkgsCross }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  pkgsCross,
+}:
 
 stdenv.mkDerivation rec {
   pname = "npth";

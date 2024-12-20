@@ -1,39 +1,46 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchFromGitLab
-, fetchpatch
-, cairo
-, cmake
-, boost
-, curl
-, fontconfig
-, freetype
-, lcms
-, libiconv
-, libintl
-, libjpeg
-, ninja
-, openjpeg
-, pkg-config
-, python3
-, zlib
-, withData ? true, poppler_data
-, qt5Support ? false, qt6Support ? false, qtbase ? null
-, introspectionSupport ? false, gobject-introspection ? null
-, gpgmeSupport ? false, gpgme ? null
-, utils ? false, nss ? null
-, minimal ? false
-, suffix ? "glib"
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchFromGitLab,
+  fetchpatch,
+  cairo,
+  cmake,
+  boost,
+  curl,
+  fontconfig,
+  freetype,
+  lcms,
+  libiconv,
+  libintl,
+  libjpeg,
+  ninja,
+  openjpeg,
+  pkg-config,
+  python3,
+  zlib,
+  withData ? true,
+  poppler_data,
+  qt5Support ? false,
+  qt6Support ? false,
+  qtbase ? null,
+  introspectionSupport ? false,
+  gobject-introspection ? null,
+  gpgmeSupport ? false,
+  gpgme ? null,
+  utils ? false,
+  nss ? null,
+  minimal ? false,
+  suffix ? "glib",
 
-# for passthru.tests
-, cups-filters
-, gdal
-, gegl
-, inkscape
-, pdfslicer
-, scribus
-, vips
+  # for passthru.tests
+  cups-filters,
+  gdal,
+  gegl,
+  inkscape,
+  pdfslicer,
+  scribus,
+  vips,
 }:
 
 let
@@ -55,7 +62,10 @@ stdenv.mkDerivation (finalAttrs: rec {
   pname = "poppler-${suffix}";
   version = "24.02.0"; # beware: updates often break cups-filters build, check scribus too!
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "https://poppler.freedesktop.org/poppler-${version}.tar.xz";
@@ -78,49 +88,58 @@ stdenv.mkDerivation (finalAttrs: rec {
     python3
   ];
 
-  buildInputs = [
-    boost
-    libiconv
-    libintl
-  ] ++ lib.optionals withData [
-    poppler_data
-  ];
+  buildInputs =
+    [
+      boost
+      libiconv
+      libintl
+    ]
+    ++ lib.optionals withData [
+      poppler_data
+    ];
 
   # TODO: reduce propagation to necessary libs
-  propagatedBuildInputs = [
-    zlib
-    freetype
-    fontconfig
-    libjpeg
-    openjpeg
-  ] ++ lib.optionals (!minimal) [
-    cairo
-    lcms
-    curl
-    nss
-  ] ++ lib.optionals (qt5Support || qt6Support) [
-    qtbase
-  ] ++ lib.optionals introspectionSupport [
-    gobject-introspection
-  ] ++ lib.optionals gpgmeSupport [
-    gpgme
-  ];
+  propagatedBuildInputs =
+    [
+      zlib
+      freetype
+      fontconfig
+      libjpeg
+      openjpeg
+    ]
+    ++ lib.optionals (!minimal) [
+      cairo
+      lcms
+      curl
+      nss
+    ]
+    ++ lib.optionals (qt5Support || qt6Support) [
+      qtbase
+    ]
+    ++ lib.optionals introspectionSupport [
+      gobject-introspection
+    ]
+    ++ lib.optionals gpgmeSupport [
+      gpgme
+    ];
 
-  cmakeFlags = [
-    (mkFlag true "UNSTABLE_API_ABI_HEADERS") # previously "XPDF_HEADERS"
-    (mkFlag (!minimal) "GLIB")
-    (mkFlag (!minimal) "CPP")
-    (mkFlag (!minimal) "LIBCURL")
-    (mkFlag (!minimal) "LCMS")
-    (mkFlag (!minimal) "LIBTIFF")
-    (mkFlag (!minimal) "NSS3")
-    (mkFlag utils "UTILS")
-    (mkFlag qt5Support "QT5")
-    (mkFlag qt6Support "QT6")
-    (mkFlag gpgmeSupport "GPGME")
-  ] ++ lib.optionals finalAttrs.finalPackage.doCheck [
-    "-DTESTDATADIR=${testData}"
-  ];
+  cmakeFlags =
+    [
+      (mkFlag true "UNSTABLE_API_ABI_HEADERS") # previously "XPDF_HEADERS"
+      (mkFlag (!minimal) "GLIB")
+      (mkFlag (!minimal) "CPP")
+      (mkFlag (!minimal) "LIBCURL")
+      (mkFlag (!minimal) "LCMS")
+      (mkFlag (!minimal) "LIBTIFF")
+      (mkFlag (!minimal) "NSS3")
+      (mkFlag utils "UTILS")
+      (mkFlag qt5Support "QT5")
+      (mkFlag qt6Support "QT6")
+      (mkFlag gpgmeSupport "GPGME")
+    ]
+    ++ lib.optionals finalAttrs.finalPackage.doCheck [
+      "-DTESTDATADIR=${testData}"
+    ];
   disallowedReferences = lib.optional finalAttrs.finalPackage.doCheck testData;
 
   dontWrapQtApps = true;
@@ -151,13 +170,13 @@ stdenv.mkDerivation (finalAttrs: rec {
         cups-filters
         inkscape
         scribus
-      ;
+        ;
 
       inherit
         gegl
         pdfslicer
         vips
-      ;
+        ;
       gdal = gdal.override { usePoppler = true; };
       python-poppler-qt5 = python3.pkgs.poppler-qt5;
     };

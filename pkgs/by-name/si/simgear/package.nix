@@ -1,7 +1,30 @@
-{ lib, stdenv, fetchurl, plib, libglut, xorgproto, libX11, libXext, libXi
-, libICE, libSM, libXt, libXmu, libGLU, libGL, boost179, zlib, libjpeg, freealut
-, openscenegraph, openal, expat, cmake, apr, xz
-, curl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  plib,
+  libglut,
+  xorgproto,
+  libX11,
+  libXext,
+  libXi,
+  libICE,
+  libSM,
+  libXt,
+  libXmu,
+  libGLU,
+  libGL,
+  boost179,
+  zlib,
+  libjpeg,
+  freealut,
+  openscenegraph,
+  openal,
+  expat,
+  cmake,
+  apr,
+  xz,
+  curl,
 }:
 let
   version = "2020.3.19";
@@ -17,9 +40,30 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ plib libglut xorgproto libX11 libXext libXi
-                  libICE libSM libXt libXmu libGLU libGL boost179 zlib libjpeg freealut
-                  openscenegraph openal expat apr curl xz ];
+  buildInputs = [
+    plib
+    libglut
+    xorgproto
+    libX11
+    libXext
+    libXi
+    libICE
+    libSM
+    libXt
+    libXmu
+    libGLU
+    libGL
+    boost179
+    zlib
+    libjpeg
+    freealut
+    openscenegraph
+    openal
+    expat
+    apr
+    curl
+    xz
+  ];
 
   meta = with lib; {
     description = "Simulation construction toolkit";

@@ -52,11 +52,13 @@ let
     "keylight"
     "klipper"
     "knot"
+    "libvirt"
     "lnd"
     "mail"
     "mikrotik"
     "modemmanager"
     "mongodb"
+    "mqtt"
     "mysqld"
     "nats"
     "nextcloud"
@@ -64,6 +66,7 @@ let
     "nginxlog"
     "node"
     "nut"
+    "nvidia-gpu"
     "pgbouncer"
     "php-fpm"
     "pihole"
@@ -73,6 +76,7 @@ let
     "process"
     "pve"
     "py-air-control"
+    "rasdaemon"
     "redis"
     "restic"
     "rspamd"
@@ -331,6 +335,13 @@ in
       message = ''
         Config file specified in `services.prometheus.exporters.ipmi.webConfigFile' must
           not reside within /tmp - it won't be visible to the systemd service.
+      '';
+    } {
+      assertion =
+        cfg.restic.enable -> ((cfg.restic.repository == null) != (cfg.restic.repositoryFile == null));
+      message = ''
+        Please specify either 'services.prometheus.exporters.restic.repository'
+          or 'services.prometheus.exporters.restic.repositoryFile'.
       '';
     } {
       assertion = cfg.snmp.enable -> (

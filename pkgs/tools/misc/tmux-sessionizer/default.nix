@@ -1,13 +1,14 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, rustPlatform
-, openssl
-, pkg-config
-, Security
-, testers
-, tmux-sessionizer
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  rustPlatform,
+  openssl,
+  pkg-config,
+  Security,
+  testers,
+  tmux-sessionizer,
+  installShellFiles,
 }:
 let
 
@@ -36,7 +37,10 @@ rustPlatform.buildRustPackage {
   # Needed to get openssl-sys to use pkg-config.
   OPENSSL_NO_VENDOR = 1;
 
-  nativeBuildInputs = [ pkg-config installShellFiles ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
   buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
@@ -50,7 +54,10 @@ rustPlatform.buildRustPackage {
     description = "Fastest way to manage projects as tmux sessions";
     homepage = "https://github.com/jrmoulton/tmux-sessionizer";
     license = licenses.mit;
-    maintainers = with maintainers; [ vinnymeller mrcjkb ];
+    maintainers = with maintainers; [
+      vinnymeller
+      mrcjkb
+    ];
     mainProgram = "tms";
   };
 }

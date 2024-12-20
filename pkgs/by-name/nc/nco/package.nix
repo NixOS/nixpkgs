@@ -1,16 +1,17 @@
-{ antlr2
-, coreutils
-, curl
-, fetchFromGitHub
-, flex
-, gsl
-, lib
-, libtool
-, netcdf
-, netcdfcxx4
-, stdenv
-, udunits
-, which
+{
+  antlr2,
+  coreutils,
+  curl,
+  fetchFromGitHub,
+  flex,
+  gsl,
+  lib,
+  libtool,
+  netcdf,
+  netcdfcxx4,
+  stdenv,
+  udunits,
+  which,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

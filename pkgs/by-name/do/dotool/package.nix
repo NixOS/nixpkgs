@@ -1,10 +1,11 @@
-{ lib
-, buildGoModule
-, fetchFromSourcehut
-, libxkbcommon
-, pkg-config
-, installShellFiles
-, scdoc
+{
+  lib,
+  buildGoModule,
+  fetchFromSourcehut,
+  libxkbcommon,
+  pkg-config,
+  installShellFiles,
+  scdoc,
 }:
 
 buildGoModule rec {
@@ -29,9 +30,17 @@ buildGoModule rec {
   '';
 
   buildInputs = [ libxkbcommon ];
-  nativeBuildInputs = [ installShellFiles pkg-config scdoc ];
+  nativeBuildInputs = [
+    installShellFiles
+    pkg-config
+    scdoc
+  ];
 
-  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
+  ];
 
   postInstall = ''
     mkdir -p $out/bin

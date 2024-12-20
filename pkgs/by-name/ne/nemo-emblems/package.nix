@@ -1,19 +1,20 @@
-{ python3
-, lib
-, fetchFromGitHub
-, cinnamon-translations
+{
+  python3,
+  lib,
+  fetchFromGitHub,
+  cinnamon-translations,
 }:
 
 python3.pkgs.buildPythonApplication rec {
   pname = "nemo-emblems";
-  version = "6.2.1";
+  version = "6.4.0";
 
   # nixpkgs-update: no auto update
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "nemo-extensions";
-    rev = "nemo-emblems-${version}";
-    hash = "sha256-HfWZntG+SHrzkN4fa3qYj9+fM6zF32qFquL/InoUi/k=";
+    rev = version;
+    hash = "sha256-39hWA4SNuEeaPA6D5mWMHjJDs4hYK7/ZdPkTyskvm5Y=";
   };
 
   format = "setuptools";

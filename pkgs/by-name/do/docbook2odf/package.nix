@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchurl, perlPackages, makeWrapper, zip, libxslt }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perlPackages,
+  makeWrapper,
+  zip,
+  libxslt,
+}:
 
 stdenv.mkDerivation rec {
   pname = "docbook2odf";
@@ -28,7 +36,12 @@ stdenv.mkDerivation rec {
     sed -i "s|/usr/share/docbook2odf|$out/share/docbook2odf|" "$out/bin/docbook2odf"
 
     wrapProgram "$out/bin/docbook2odf" \
-      --prefix PATH : "${lib.makeBinPath [ zip libxslt ]}" \
+      --prefix PATH : "${
+        lib.makeBinPath [
+          zip
+          libxslt
+        ]
+      }" \
       --prefix PERL5PATH : "${perlPackages.makePerlPath [ perlPackages.ImageMagick ]}"
   '';
 

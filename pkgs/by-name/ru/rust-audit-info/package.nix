@@ -1,4 +1,8 @@
-{ lib, rustPlatform, fetchCrate }:
+{
+  lib,
+  rustPlatform,
+  fetchCrate,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "rust-audit-info";
@@ -15,7 +19,10 @@ rustPlatform.buildRustPackage rec {
     description = "Command-line tool to extract the dependency trees embedded in binaries by cargo-auditable";
     mainProgram = "rust-audit-info";
     homepage = "https://github.com/rust-secure-code/cargo-auditable/tree/master/rust-audit-info";
-    license = with licenses; [ mit /* or */ asl20 ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
     maintainers = with maintainers; [ figsoda ];
   };
 }

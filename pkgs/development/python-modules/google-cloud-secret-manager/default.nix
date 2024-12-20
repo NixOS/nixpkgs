@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "google-cloud-secret-manager";
-  version = "2.21.1";
+  version = "2.22.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "google_cloud_secret_manager";
     inherit version;
-    hash = "sha256-8QTwAnUTRcujkVLO867T9Dde3wslQsi9G3cS1E/pdbY=";
+    hash = "sha256-XdlaxiQ2h/hv2AMxbAdo9QcCiVi4ouabOqCs56xlS/Q=";
   };
 
   build-system = [ setuptools ];

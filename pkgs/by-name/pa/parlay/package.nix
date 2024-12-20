@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "parlay";
-  version = "0.6.0";
+  version = "0.6.4";
 
   src = fetchFromGitHub {
     owner = "snyk";
     repo = "parlay";
     rev = "v${version}";
-    hash = "sha256-hcNNW4/+AX06vkEbauHyMP5b2y/1YNlWhgqS5Rx8sS8=";
+    hash = "sha256-g0gTsfdt1/BwWFBPyNuBf58gypdeZib6GUDPnPaFepA=";
   };
 
-  vendorHash = "sha256-Eo5MgdISiwbaJFg5XHAwe5x3D8GmgzswYmcUG4gvaQk=";
+  vendorHash = "sha256-kxN2uBXjCnyVbypDOrOAXoSa6Pb7Fmk487ael4aI9Uw=";
 
   passthru.updateScript = nix-update-script { };
 

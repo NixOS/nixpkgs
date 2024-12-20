@@ -1,10 +1,11 @@
-{ stdenv
-, callPackage
-, rocmUpdateScript
-, clang-unwrapped
-, mlir
-, graphviz
-, python3Packages
+{
+  stdenv,
+  callPackage,
+  rocmUpdateScript,
+  clang-unwrapped,
+  mlir,
+  graphviz,
+  python3Packages,
 }:
 
 callPackage ../base.nix rec {

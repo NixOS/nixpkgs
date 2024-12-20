@@ -1,18 +1,19 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch
-, autoreconfHook
-, libxcrypt
-, gssapiSupport ? false
-, libkrb5
-, freeipmiSupport ? false
-, freeipmi
-, ipv6Support ? true
-, opensslSupport ? true
-, openssl
-, trustUdsCredSupport ? false
-, udsSupport ? false
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch,
+  autoreconfHook,
+  libxcrypt,
+  gssapiSupport ? false,
+  libkrb5,
+  freeipmiSupport ? false,
+  freeipmi,
+  ipv6Support ? true,
+  opensslSupport ? true,
+  openssl,
+  trustUdsCredSupport ? false,
+  udsSupport ? false,
 }:
 
 stdenv.mkDerivation rec {
@@ -37,12 +38,17 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  buildInputs = [ libxcrypt ]
+  buildInputs =
+    [ libxcrypt ]
     ++ lib.optionals freeipmiSupport [ freeipmi ]
     ++ lib.optionals gssapiSupport [ libkrb5 ]
     ++ lib.optionals opensslSupport [ openssl ];
 
-  configureFlags = [ "--with-ccffile=/dev/null" "--with-cffile=/dev/null" ]
+  configureFlags =
+    [
+      "--with-ccffile=/dev/null"
+      "--with-cffile=/dev/null"
+    ]
     ++ lib.optionals freeipmiSupport [ "--with-freeipmi=${freeipmi}/include" ]
     ++ lib.optionals gssapiSupport [ "--with-gssapi=${libkrb5.dev}/include" ]
     ++ lib.optionals ipv6Support [ "--with-ipv6" ]

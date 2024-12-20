@@ -328,6 +328,7 @@
       - any-glob-to-any-file:
         - doc/languages-frameworks/nim.section.md
         - pkgs/build-support/build-nim-package.nix
+        - pkgs/build-support/build-nim-sbom.nix
         - pkgs/by-name/ni/nim*
         - pkgs/top-level/nim-overrides.nix
 

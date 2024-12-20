@@ -21,7 +21,6 @@
 , ninja
 , gnome
 , gspell
-, perl
 , itstool
 , desktop-file-utils
 , vala
@@ -29,13 +28,13 @@
 
 stdenv.mkDerivation rec {
   pname = "gedit";
-  version = "48.0";
+  version = "48.1";
 
   outputs = [ "out" "devdoc" ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/gedit/${lib.versions.major version}/gedit-${version}.tar.xz";
-    sha256 = "/g/vm3sHmRINuGrok6BgA2oTRFNS3tkWm6so04rPDoA=";
+    hash = "sha256-lx56wmvAo6Pe0np1Y3ckFWh9sOWgkrRUflsQpVhYswo=";
   };
 
   patches = [
@@ -50,7 +49,6 @@ stdenv.mkDerivation rec {
     libxml2
     meson
     ninja
-    perl
     pkg-config
     python3
     vala
@@ -77,9 +75,7 @@ stdenv.mkDerivation rec {
 
   postPatch = ''
     chmod +x build-aux/meson/post_install.py
-    chmod +x plugins/externaltools/scripts/gedit-tool-merge.pl
     patchShebangs build-aux/meson/post_install.py
-    patchShebangs plugins/externaltools/scripts/gedit-tool-merge.pl
   '';
 
   # Reliably fails to generate gedit-file-browser-enum-types.h in time

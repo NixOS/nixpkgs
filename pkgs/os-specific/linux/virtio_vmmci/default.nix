@@ -2,13 +2,13 @@
 
 stdenv.mkDerivation rec {
   name = "virtio_vmmci";
-  version = "0.6.0";
+  version = "0.6.2";
 
   src = fetchFromGitHub {
     owner = "voutilad";
     repo = "virtio_vmmci";
     rev = version;
-    hash = "sha256-dMh6bqlhsp/cWKqiJ9xjVI9yJj2w1ap7agKSnRjadXA=";
+    hash = "sha256-h8yu4+vTgpAD+sKa1KnVD+qubiIlkYtG2nmQnXOi/sk=";
   };
 
   hardeningDisable = [ "pic" "format" ];

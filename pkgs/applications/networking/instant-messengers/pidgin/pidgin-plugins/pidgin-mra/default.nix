@@ -1,4 +1,10 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, pidgin } :
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  pidgin,
+}:
 
 stdenv.mkDerivation rec {
   pname = "pidgin-mra";

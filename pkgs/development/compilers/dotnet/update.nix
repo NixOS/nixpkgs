@@ -18,7 +18,7 @@
 }:
 
 let
-  inherit (lib.importJSON releaseManifestFile) channel release;
+  inherit (lib.importJSON releaseManifestFile) channel tag;
 
   pkg = stdenvNoCC.mkDerivation {
     name = "update-dotnet-vmr-env";
@@ -93,15 +93,11 @@ writeScript "update-dotnet-vmr.sh" ''
       tmp="$(mktemp -d)"
       trap 'rm -rf "$tmp"' EXIT
 
-      echo ${lib.escapeShellArg (toString ./update.sh)} \
-          -o ${lib.escapeShellArg (toString bootstrapSdkFile)} --sdk foo
-
       cd "$tmp"
 
       curl -fsSL "$releaseUrl" -o release.json
-      release=$(jq -r .release release.json)
 
-      if [[ -z $tag && "$release" == "${release}" ]]; then
+      if [[ -z $tag && "$tagName" == "${tag}" ]]; then
           >&2 echo "release is already $release"
           exit
       fi

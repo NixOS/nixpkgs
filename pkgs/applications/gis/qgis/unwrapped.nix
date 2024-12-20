@@ -2,7 +2,7 @@
 , fetchFromGitHub
 , makeWrapper
 , mkDerivation
-, substituteAll
+, replaceVars
 , wrapGAppsHook3
 , wrapQtAppsHook
 
@@ -141,8 +141,7 @@ in mkDerivation rec {
     ++ pythonBuildInputs;
 
   patches = [
-    (substituteAll {
-      src = ./set-pyqt-package-dirs.patch;
+    (replaceVars ./set-pyqt-package-dirs.patch {
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
     })

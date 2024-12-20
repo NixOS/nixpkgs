@@ -1,27 +1,36 @@
 {
   lib,
-  buildGoModule,
+  buildGo122Module,
   fetchFromGitHub,
   installShellFiles,
   nix-update-script,
 }:
 
-buildGoModule rec {
+buildGo122Module rec {
   pname = "sops";
-  version = "3.9.1";
+  version = "3.9.2";
 
   src = fetchFromGitHub {
     owner = "getsops";
     repo = pname;
-    rev = "v${version}";
-    hash = "sha256-j16hSTi7fwlMu8hwHqCR0lW22VSf0swIVTF81iUYl2k=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-v35LRFYdnWigWYlDhrOgSOcCI7SUqJbJHaZvlQ6PC4I=";
   };
 
-  vendorHash = "sha256-40YESkLSKL/zFBI7ccz0ilrl9ATr74YpvRNrOpzJDew=";
+  vendorHash = "sha256-dnhrZPXZWeU98+dEaFLIdtcLWgIrh47l+WAxe+F+0/I=";
+
+  postPatch = ''
+    substituteInPlace go.mod \
+      --replace-fail "go 1.22" "go 1.22.7"
+  '';
 
   subPackages = [ "cmd/sops" ];
 
-  ldflags = [ "-s" "-w" "-X github.com/getsops/sops/v3/version.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X github.com/getsops/sops/v3/version.Version=${version}"
+  ];
 
   passthru.updateScript = nix-update-script { };
 
@@ -37,7 +46,10 @@ buildGoModule rec {
     description = "Simple and flexible tool for managing secrets";
     changelog = "https://github.com/getsops/sops/blob/v${version}/CHANGELOG.rst";
     mainProgram = "sops";
-    maintainers = with maintainers; [ Scrumplex mic92 ];
+    maintainers = with maintainers; [
+      Scrumplex
+      mic92
+    ];
     license = licenses.mpl20;
   };
 }

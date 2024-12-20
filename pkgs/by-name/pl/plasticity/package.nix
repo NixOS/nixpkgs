@@ -1,48 +1,54 @@
-{ alsa-lib
-, at-spi2-atk
-, autoPatchelfHook
-, cairo
-, cups
-, dbus
-, desktop-file-utils
-, expat
-, fetchurl
-, gdk-pixbuf
-, gtk3
-, gvfs
-, hicolor-icon-theme
-, lib
-, libdrm
-, libglvnd
-, libnotify
-, libsForQt5
-, libxkbcommon
-, mesa
-, nspr
-, nss
-, openssl
-, pango
-, rpmextract
-, stdenv
-, systemd
-, trash-cli
-, vulkan-loader
-, wrapGAppsHook3
-, xdg-utils
-, xorg
+{
+  alsa-lib,
+  at-spi2-atk,
+  autoPatchelfHook,
+  cairo,
+  cups,
+  dbus,
+  desktop-file-utils,
+  expat,
+  fetchurl,
+  gdk-pixbuf,
+  gtk3,
+  gvfs,
+  hicolor-icon-theme,
+  lib,
+  libdrm,
+  libglvnd,
+  libnotify,
+  libsForQt5,
+  libxkbcommon,
+  mesa,
+  nspr,
+  nss,
+  openssl,
+  pango,
+  rpmextract,
+  stdenv,
+  systemd,
+  trash-cli,
+  vulkan-loader,
+  wrapGAppsHook3,
+  xdg-utils,
+  xorg,
 }:
-stdenv.mkDerivation rec  {
+stdenv.mkDerivation rec {
   pname = "plasticity";
-  version = "24.2.4";
+  version = "24.2.6";
 
   src = fetchurl {
     url = "https://github.com/nkallen/plasticity/releases/download/v${version}/Plasticity-${version}-1.x86_64.rpm";
-    hash = "sha256-Pwe1CqprRXqTN93ys247TGrkd0LGKuwrfGmupIN40uU=";
+    hash = "sha256-MEw7pmaDPOxhjeIHWumCxwESZri3gdXULIc7kRh9/BM=";
   };
 
   passthru.updateScript = ./update.sh;
 
-  nativeBuildInputs = [ wrapGAppsHook3 autoPatchelfHook rpmextract mesa ];
+  nativeBuildInputs = [
+    wrapGAppsHook3
+    autoPatchelfHook
+    rpmextract
+    mesa
+  ];
 
   buildInputs = [
     alsa-lib
@@ -72,7 +78,7 @@ stdenv.mkDerivation rec  {
   runtimeDependencies = [
     systemd
     libglvnd
-    vulkan-loader #may help with nvidia users
+    vulkan-loader # may help with nvidia users
     xorg.libX11
     xorg.libxcb
     xorg.libXcomposite
@@ -96,24 +102,23 @@ stdenv.mkDerivation rec  {
     "TD_DbEntities.tx"
     "TD_DbIO.tx"
     "WipeOut.tx"
-   ];
+  ];
 
-installPhase = ''
-  runHook preInstall
+  installPhase = ''
+    runHook preInstall
 
-  mkdir $out
-  cd $out
-  rpmextract $src
-  mv $out/usr/* $out
-  rm -r $out/usr
+    mkdir $out
+    cd $out
+    rpmextract $src
+    mv $out/usr/* $out
+    rm -r $out/usr
 
-  runHook postInstall
-'';
+    runHook postInstall
+  '';
 
   #--use-gl=egl for it to use hardware rendering it seems. Otherwise there are terrible framerates
-  postInstall = ''
-    substituteInPlace share/applications/Plasticity.desktop \
-      --replace-fail 'Exec=Plasticity %U' "Exec=Plasticity --use-gl=egl %U"
+  preFixup = ''
+    gappsWrapperArgs+=(--add-flags "--use-gl=egl")
   '';
 
   meta = with lib; {

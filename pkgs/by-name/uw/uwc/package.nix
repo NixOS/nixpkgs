@@ -1,4 +1,8 @@
-{ rustPlatform, lib, fetchFromGitHub }:
+{
+  rustPlatform,
+  lib,
+  fetchFromGitHub,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "uwc";

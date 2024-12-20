@@ -1,9 +1,11 @@
-{ lib, stdenv
-, autoreconfHook
-, gengetopt
-, pkg-config
-, fetchFromGitLab
-, pari
+{
+  lib,
+  stdenv,
+  autoreconfHook,
+  gengetopt,
+  pkg-config,
+  fetchFromGitLab,
+  pari,
 }:
 
 stdenv.mkDerivation rec {

@@ -6,20 +6,19 @@
   kclvm_cli,
   kclvm,
   lib,
-  makeWrapper,
   nix-update-script,
   stdenv,
 }:
 
 buildGoModule rec {
   pname = "kcl";
-  version = "0.10.9";
+  version = "0.10.10";
 
   src = fetchFromGitHub {
     owner = "kcl-lang";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-V9HLUv018gCkzrt1mGNENZVjXCSvqEneQIgIwxawxKM=";
+    hash = "sha256-zv1YH/0JmNcWbyx9RLhyWykPbL34jnUbdy1HSZiYz3s=";
   };
 
   vendorHash = "sha256-y8KWiy6onZmYdpanXcSQDmYv51pLfo1NTdg+EaR6p0E=";
@@ -33,7 +32,6 @@ buildGoModule rec {
 
   nativeBuildInputs = [
     installShellFiles
-    makeWrapper
   ];
 
   buildInputs =
@@ -55,21 +53,19 @@ buildGoModule rec {
     done
   '';
 
+  doInstallCheck = true;
+  installCheckPhase = ''
+    runHook preInstallCheck
+    set -o pipefail
+    $out/bin/kcl --version | grep $version
+    $out/bin/kcl <(echo 'hello = "KCL"') | grep "hello: KCL"
+    runHook postInstallCheck
+  '';
+
   # By default, libs and bins are stripped. KCL will crash on darwin if they are.
   dontStrip = stdenv.hostPlatform.isDarwin;
 
-  # env vars https://github.com/kcl-lang/kcl-go/blob/main/pkg/env/env.go#L29
-  postFixup = ''
-    wrapProgram $out/bin/kcl \
-      --prefix PATH : "${
-        lib.makeBinPath [
-          kclvm
-          kclvm_cli
-        ]
-      }" \
-      --prefix KCL_LIB_HOME : "${lib.makeLibraryPath [ kclvm ]}" \
-      --prefix KCL_GO_DISABLE_INSTALL_ARTIFACT : false
-  '';
+  doCheck = true;
 
   updateScript = nix-update-script { };
 

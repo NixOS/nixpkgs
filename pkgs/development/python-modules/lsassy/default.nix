@@ -30,7 +30,6 @@ buildPythonPackage rec {
     "rich"
   ];
 
-
   build-system = [ poetry-core ];
 
   dependencies = [

@@ -1,26 +1,33 @@
-{ lib
-, stdenv
-, fetchurl
-, jdk
-, ant
-, cunit
-, ncurses
+{
+  lib,
+  stdenv,
+  fetchurl,
+  jdk,
+  ant,
+  cunit,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
   pname = "java-service-wrapper";
-  version = "3.5.59";
+  version = "3.5.60";
 
   src = fetchurl {
     url = "https://wrapper.tanukisoftware.com/download/${version}/wrapper_${version}_src.tar.gz";
-    hash = "sha256-O0fn+s3RIIriVw6sMB2nSKAGtVF0Tz6Ns4Jb9OpcbgY=";
+    hash = "sha256-h3iW4U83XAyIHDpQ+O6RC8ZQSziPu/5lEo5512PQhxc=";
   };
 
   strictDeps = true;
 
-  buildInputs = [ cunit ncurses ];
+  buildInputs = [
+    cunit
+    ncurses
+  ];
 
-  nativeBuildInputs = [ ant jdk ];
+  nativeBuildInputs = [
+    ant
+    jdk
+  ];
 
   postConfigure = ''
     substituteInPlace default.properties \
@@ -55,7 +62,11 @@ stdenv.mkDerivation rec {
     homepage = "https://wrapper.tanukisoftware.com/";
     changelog = "https://wrapper.tanukisoftware.com/doc/english/release-notes.html#${version}";
     license = licenses.gpl2Only;
-    platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "i686-linux"
+      "aarch64-linux"
+    ];
     maintainers = [ maintainers.suhr ];
     mainProgram = "wrapper";
     # Broken for Musl at 2024-01-17. Errors as:

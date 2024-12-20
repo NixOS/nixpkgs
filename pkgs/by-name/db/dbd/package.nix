@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchFromGitHub
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
 }:
 
 stdenv.mkDerivation {
@@ -14,10 +15,13 @@ stdenv.mkDerivation {
     hash = "sha256-b2yBZ2/Ab+SviKNlyZgdfiZ7GGZ1sonZnblD0i+vuFw=";
   };
 
-  makeFlags = [
-    "PREFIX=${placeholder "out"}"
-    "CC=${stdenv.cc.targetPrefix}cc"
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ "darwin" ] ++ lib.optionals (stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin) [ "unix" ];
+  makeFlags =
+    [
+      "PREFIX=${placeholder "out"}"
+      "CC=${stdenv.cc.targetPrefix}cc"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ "darwin" ]
+    ++ lib.optionals (stdenv.hostPlatform.isUnix && !stdenv.hostPlatform.isDarwin) [ "unix" ];
 
   meta = with lib; {
     description = "Netcat-clone, designed to be portable and offer strong encryption";
