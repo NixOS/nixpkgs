@@ -173,7 +173,7 @@ in
     ];
   };
 
-  avante-nvim = callPackage ./avante-nvim { };
+  avante-nvim = callPackage ./non-generated/avante-nvim { };
 
   aw-watcher-vim = super.aw-watcher-vim.overrideAttrs {
     patches = [
@@ -244,7 +244,7 @@ in
     meta.homepage = "https://github.com/sblumentritt/bitbake.vim/";
   };
 
-  blink-cmp = callPackage ./blink-cmp { };
+  blink-cmp = callPackage ./non-generated/blink-cmp { };
 
   bluloco-nvim = super.bluloco-nvim.overrideAttrs {
     dependencies = [ self.lush-nvim ];
@@ -654,7 +654,7 @@ in
       nvimRequireCheck = "codeium";
     };
 
-  codesnap-nvim = callPackage ./codesnap-nvim { };
+  codesnap-nvim = callPackage ./non-generated/codesnap-nvim { };
 
   codewindow-nvim = super.codewindow-nvim.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
@@ -764,7 +764,7 @@ in
     nvimRequireCheck = "coq";
   };
 
-  cord-nvim = callPackage ./cord-nvim { };
+  cord-nvim = callPackage ./non-generated/cord-nvim { };
 
   cornelis = super.cornelis.overrideAttrs {
     dependencies = [ self.vim-textobj-user ];
@@ -1272,7 +1272,7 @@ in
     nvimRequireCheck = "kulala";
   };
 
-  LanguageClient-neovim = callPackage ./LanguageClient-neovim { };
+  LanguageClient-neovim = callPackage ./non-generated/LanguageClient-neovim { };
 
   LazyVim = super.LazyVim.overrideAttrs {
     # Any other dependency is optional
@@ -1599,7 +1599,7 @@ in
     ];
   };
 
-  moveline-nvim = callPackage ./moveline-nvim { };
+  moveline-nvim = callPackage ./non-generated/moveline-nvim { };
 
   multicursors-nvim = super.multicursors-nvim.overrideAttrs {
     dependencies = with self; [
@@ -2181,7 +2181,7 @@ in
     nvimSkipModule = "snippets.utils.cmp";
   };
 
-  nvim-spectre = callPackage ./nvim-spectre { };
+  nvim-spectre = callPackage ./non-generated/nvim-spectre { };
 
   nvim-surround = super.nvim-surround.overrideAttrs {
     # Optional treesitter integration
@@ -2554,7 +2554,7 @@ in
     dependencies = [ self.nui-nvim ];
   };
 
-  sg-nvim = callPackage ./sg-nvim { };
+  sg-nvim = callPackage ./non-generated/sg-nvim { };
 
   skim = buildVimPlugin {
     pname = "skim";
@@ -2613,7 +2613,7 @@ in
     ];
   };
 
-  sniprun = callPackage ./sniprun { };
+  sniprun = callPackage ./non-generated/sniprun { };
 
   # The GitHub repository returns 404, which breaks the update script
   Spacegray-vim = buildVimPlugin {
@@ -3152,7 +3152,7 @@ in
     passthru.python3Dependencies = ps: with ps; [ beancount ];
   };
 
-  vim-clap = callPackage ./vim-clap { };
+  vim-clap = callPackage ./non-generated/vim-clap { };
 
   vim-codefmt = super.vim-codefmt.overrideAttrs {
     dependencies = [ self.vim-maktaba ];
@@ -3285,7 +3285,7 @@ in
     '';
   };
 
-  vim-markdown-composer = callPackage ./vim-markdown-composer { };
+  vim-markdown-composer = callPackage ./non-generated/vim-markdown-composer { };
 
   vim-matchup = super.vim-matchup.overrideAttrs {
     # Optional treesitter integration
