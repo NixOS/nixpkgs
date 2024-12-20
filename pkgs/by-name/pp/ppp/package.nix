@@ -1,14 +1,15 @@
 {
-  lib,
-  stdenv,
+  autoreconfHook,
+  bash,
   fetchFromGitHub,
+  lib,
   libpcap,
   libxcrypt,
-  pkg-config,
-  autoreconfHook,
-  openssl,
-  bash,
   nixosTests,
+  openssl,
+  pkg-config,
+  stdenv,
+  systemdMinimal,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,6 +27,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--with-openssl=${openssl.dev}"
+    "--enable-systemd"
   ];
 
   nativeBuildInputs = [
@@ -34,10 +36,11 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    bash
     libpcap
     libxcrypt
     openssl
-    bash
+    systemdMinimal
   ];
 
   postPatch = ''
