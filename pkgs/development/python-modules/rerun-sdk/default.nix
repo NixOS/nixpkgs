@@ -26,7 +26,6 @@ buildPythonPackage {
     src
     version
     cargoDeps
-    cargoPatches
     patches
     ;
 
