@@ -151,6 +151,8 @@ in (noExtraAttrs (kdeFrameworks // plasmaMobileGear // plasma5 // plasma5.thirdP
 
   libdbusmenu = callPackage ../development/libraries/libdbusmenu-qt/qt-5.5.nix { };
 
+  libiodata = callPackage ../development/libraries/libiodata { };
+
   liblastfm = callPackage ../development/libraries/liblastfm { };
 
   libopenshot = callPackage ../development/libraries/libopenshot {
