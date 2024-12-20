@@ -57,7 +57,7 @@
         )
         popd
     ''
-    + lib.optionalString (!langJit) ''
+    + lib.optionalString (!langJit && stdenv.targetPlatform.config != "amdgcn-amdhsa") ''
       ${
         # keep indentation
         ""

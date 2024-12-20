@@ -190,7 +190,7 @@ pipe ((callFile ./common/builder.nix {}) ({
 
   inherit patches;
 
-  outputs = [ "out" "man" "info" ] ++ optional (!langJit) "lib";
+  outputs = [ "out" "man" "info" ] ++ optional (!langJit && targetPlatform.config != "amdgcn-amdhsa") "lib";
 
   setOutputFlags = false;
 

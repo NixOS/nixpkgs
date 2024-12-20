@@ -6080,6 +6080,17 @@ with pkgs;
 
   gccCrossLibcStdenv = overrideCC stdenvNoCC buildPackages.gccWithoutTargetLibc;
 
+  amdgcc = pkgsCross.amdgcn.buildPackages.gcc_latest.cc.override {
+    langCC = true;
+    # enableLTO = false;
+    # enableMultilib = true;
+    withoutTargetLibc = false;
+    enableShared = false;
+    noSysDirs = false;
+    libcCross = binutilsNoLibc.libc;
+    targetPackages.stdenv.cc.bintools = binutilsNoLibc;
+  };
+
   # The GCC used to build libc for the target platform. Normal gccs will be
   # built with, and use, that cross-compiled libc.
   gccWithoutTargetLibc = assert stdenv.targetPlatform != stdenv.hostPlatform; let
@@ -6118,11 +6129,12 @@ with pkgs;
 
   gcc_latest = gcc14;
 
-  gcc_offload = wrapCC (gcc.cc.override {
-    enableOffload = true;
-  });
-
-  amdgcc = pkgsCross.amdgcn.buildPackages.gcc;
+  gcc_offload = wrapCCWith {
+    cc = gcc_latest.cc.override {
+      enableOffload = true;
+    };
+    extraCompilerB = [ amdgcc ];
+  };
 
   libgccjit = gcc.cc.override {
     name = "libgccjit";

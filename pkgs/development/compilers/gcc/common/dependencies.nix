@@ -31,11 +31,23 @@
 let
   inherit (lib) optionals;
   inherit (stdenv) buildPlatform hostPlatform targetPlatform;
+
+  ## llvm18 fails with gcc <14
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114419
+  llvmAmd = buildPackages.runCommand "${buildPackages.llvm.name}-wrapper" {} ''
+    mkdir -p $out/bin
+    for a in ar nm ranlib; do
+      ln -s ${buildPackages.llvmPackages.llvm}/bin/llvm-$a $out/bin/amdgcn-amdhsa-$a
+    done
+    ln -s ${buildPackages.llvmPackages.llvm}/bin/llvm-mc $out/bin/amdgcn-amdhsa-as
+    ln -s ${buildPackages.llvmPackages.lld}/bin/lld $out/bin/amdgcn-amdhsa-ld
+  '';
 in
 
 {
   # same for all gcc's
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [ buildPackages.stdenv.cc ] ++
+      lib.optional (targetPlatform.config == "amdgcn-amdhsa") llvmAmd;
 
   nativeBuildInputs =
     [
