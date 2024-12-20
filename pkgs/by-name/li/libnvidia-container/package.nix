@@ -45,16 +45,18 @@ stdenv.mkDerivation rec {
   patches = [
     # Locations of nvidia driver libraries are not resolved via ldconfig which
     # doesn't get used on NixOS.
-    # TODO: The latter doesn't really apply anymore.
-    # Additional support binaries like nvidia-smi
-    # are not resolved via the environment PATH but via the derivation output
-    # path.
-    (replaceVars ./fix-library-resolving.patch {
+    (replaceVars ./0001-ldcache-don-t-use-ldcache.patch {
       inherit (addDriverRunpath) driverLink;
     })
 
+    # Use both PATH and the legacy nvidia-docker paths (NixOS artifacts)
+    # for binary lookups.
+    # TODO: Remove the legacy compatibility once nvidia-docker is removed
+    # from NixOS.
+    ./0002-nvc-nvidia-docker-compatible-binary-lookups.patch
+
     # fix bogus struct declaration
-    ./inline-c-struct.patch
+    ./0003-nvc-fix-struct-declaration.patch
   ];
 
   postPatch = ''
