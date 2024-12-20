@@ -199,10 +199,7 @@ buildPythonPackage rec {
     ++ optional-dependencies.conch
     ++ optional-dependencies.http2
     ++ optional-dependencies.serial
-    # not supported on aarch64-darwin: https://github.com/pyca/pyopenssl/issues/873
-    ++ lib.optionals (
-      !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
-    ) optional-dependencies.tls;
+    ++ optional-dependencies.tls;
 
   preCheck = ''
     export SOURCE_DATE_EPOCH=315532800
