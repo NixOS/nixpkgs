@@ -705,6 +705,7 @@ let
 
     httpun-ws = callPackage ../development/ocaml-modules/httpun-ws { };
 
+    httpun-ws-lwt = callPackage ../development/ocaml-modules/httpun-ws/lwt.nix { };
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
     ### I ###
