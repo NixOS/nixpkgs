@@ -88,6 +88,7 @@ let
               else pkgs.netbsd.getent;
       darwin = pkgs.netbsd.getent;
       freebsd = pkgs.freebsd.getent;
+      openbsd = pkgs.openbsd.getent;
     };
     getopt = {
       linux = pkgs.util-linux;
