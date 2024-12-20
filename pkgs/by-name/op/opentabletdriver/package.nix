@@ -18,14 +18,14 @@
   wrapGAppsHook3,
 }:
 
-buildDotnetModule rec {
+buildDotnetModule (finalAttrs: {
   pname = "OpenTabletDriver";
   version = "0.6.5.0";
 
   src = fetchFromGitHub {
     owner = "OpenTabletDriver";
     repo = "OpenTabletDriver";
-    rev = "refs/tags/v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-ILnwHfcV/tW59TLDpAeDwJK708IQfMFBOYuqRtED0kw=";
   };
 
@@ -61,7 +61,7 @@ buildDotnetModule rec {
     udev
   ];
 
-  buildInputs = runtimeDeps;
+  buildInputs = finalAttrs.runtimeDeps;
 
   doCheck = true;
   testProjectFile = "OpenTabletDriver.Tests/OpenTabletDriver.Tests.csproj";
@@ -122,7 +122,7 @@ buildDotnetModule rec {
   };
 
   meta = {
-    changelog = "https://github.com/OpenTabletDriver/OpenTabletDriver/releases/tag/v${version}";
+    changelog = "https://github.com/OpenTabletDriver/OpenTabletDriver/releases/tag/v${finalAttrs.version}";
     description = "Open source, cross-platform, user-mode tablet driver";
     homepage = "https://github.com/OpenTabletDriver/OpenTabletDriver";
     license = lib.licenses.lgpl3Plus;
@@ -136,4 +136,4 @@ buildDotnetModule rec {
       "aarch64-linux"
     ];
   };
-}
+})
