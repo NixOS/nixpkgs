@@ -8,23 +8,23 @@
 
 let
   hlsJs = fetchurl {
-    url = "https://cdn.jsdelivr.net/npm/hls.js@v1.5.17/dist/hls.min.js";
-    hash = "sha256-SEBU6M0D0/bReB+39AK9wxjYpMUn+TOpXGJOJ8yalHA=";
+    url = "https://cdn.jsdelivr.net/npm/hls.js@v1.5.18/dist/hls.min.js";
+    hash = "sha256-X/LXFN4wvkKPx3sT4B25pLTPAV6bTWs+iGS2XT19Ptc=";
   };
 in
 buildGoModule rec {
   pname = "mediamtx";
   # check for hls.js version updates in internal/servers/hls/hlsjsdownloader/VERSION
-  version = "1.9.3";
+  version = "1.10.0";
 
   src = fetchFromGitHub {
     owner = "bluenviron";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-2qFJujfnlpmiOAmDBPl3hrbbHDOZOWFy8Yh2VOU0FEI=";
+    hash = "sha256-nz+8soxZ6lyc0saB4U3tDsTtqA0kV886M95cA3Gn3R0=";
   };
 
-  vendorHash = "sha256-6MHtYrHZF3Oo53MV1Di0wGw9Xk+2CMei2XeoI0OcKsQ=";
+  vendorHash = "sha256-Csa8G+ji/OoTItu3XbGOySqmNMVdr7QqE8SNCba8cbI=";
 
   postPatch = ''
     cp ${hlsJs} internal/servers/hls/hls.min.js
@@ -32,7 +32,7 @@ buildGoModule rec {
 
     # disable binary-only rpi camera support
     substituteInPlace internal/staticsources/rpicamera/camera_disabled.go \
-      --replace-fail '!linux || (!arm && !arm64)' 'linux'
+      --replace-fail '!linux || (!arm && !arm64)' 'linux || !linux'
     substituteInPlace internal/staticsources/rpicamera/{component,camera,params_serialize,pipe}.go \
       --replace-fail '(linux && arm) || (linux && arm64)' 'linux && !linux'
     substituteInPlace internal/staticsources/rpicamera/component_32.go \
