@@ -2,6 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  nix-update-script,
 }:
 buildGoModule {
   pname = "jjui";
@@ -19,6 +20,8 @@ buildGoModule {
   postFixup = ''
     mv $out/bin/cmd $out/bin/jjui
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "A TUI for Jujutsu VCS";
