@@ -124,6 +124,8 @@ makeScopeWithSplicing' {
 
   signond = callPackage ../development/libraries/signond {};
 
+  timed = callPackage ../applications/system/timed { };
+
   waylib = callPackage ../development/libraries/waylib { };
 
   wayqt = callPackage ../development/libraries/wayqt { };
