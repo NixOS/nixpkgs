@@ -89,7 +89,9 @@ python3Packages.buildPythonApplication rec {
       pathvalidate
       fvs
       orjson
+      pycairo
       pygobject3
+      charset-normalizer
       idna
       urllib3
       certifi
