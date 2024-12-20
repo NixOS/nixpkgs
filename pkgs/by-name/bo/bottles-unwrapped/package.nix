@@ -44,6 +44,7 @@ python3Packages.buildPythonApplication rec {
     [
       ./vulkan_icd.patch
       ./remove-flatpak-check.patch
+      ./remove-core-tab.patch
     ]
     ++ (
       if removeWarningPopup then
