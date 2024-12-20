@@ -16414,8 +16414,6 @@ with pkgs;
 
   pycoin = with python3Packages; toPythonApplication pycoin;
 
-  solana-validator = callPackage ../applications/blockchains/solana-validator { };
-
   snarkos = callPackage ../applications/blockchains/snarkos {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
