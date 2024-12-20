@@ -7,8 +7,6 @@
   oniguruma,
   openssl,
   zlib,
-  stdenv,
-  darwin,
 }:
 let
   version = "0.2.0";
@@ -29,20 +27,12 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs =
-    [
-      libgit2
-      oniguruma
-      openssl
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    libgit2
+    oniguruma
+    openssl
+    zlib
+  ];
 
   env = {
     RUSTONIG_SYSTEM_LIBONIG = true;
