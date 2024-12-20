@@ -29,6 +29,7 @@
   nixosTests,
   runCommand,
   vulkan-loader,
+  fetchpatch2,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -42,6 +43,21 @@ rustPlatform.buildRustPackage rec {
     fetchSubmodules = true;
     hash = "sha256-Az+HlnK/lRJpUSGm5UKyma1l2PaBKNCGFiaYnLECMX8=";
   };
+
+  patches = [
+    # Remove unused `fdopen` in vendored zlib, which causes compilation failures with clang 19 on Darwin.
+    # Ref: https://github.com/madler/zlib/commit/4bd9a71f3539b5ce47f0c67ab5e01f3196dc8ef9
+    ./zlib-fdopen.patch
+
+    # Fix platform check in vendored libpng with clang 19 on Darwin.
+    (fetchpatch2 {
+      url = "https://github.com/pnggroup/libpng/commit/893b8113f04d408cc6177c6de19c9889a48faa24.patch?full_index=1";
+      extraPrefix = "deps/freetype/libpng/";
+      stripLen = 1;
+      excludes = [ "deps/freetype/libpng/AUTHORS" ];
+      hash = "sha256-zW/oUo2EGcnsxAfbbbhTKGui/lwCqovyrvUnylfRQzc=";
+    })
+  ];
 
   postPatch = ''
     cp ${./Cargo.lock} Cargo.lock
