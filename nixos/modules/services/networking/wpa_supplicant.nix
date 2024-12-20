@@ -118,11 +118,12 @@ let
     {
       description = "WPA Supplicant instance" + optionalString (iface != null) " for interface ${iface}";
 
-      after = deviceUnit;
       before = [ "network.target" ];
       wants = [ "network.target" ];
-      requires = deviceUnit;
-      wantedBy = [ "multi-user.target" ];
+      after = deviceUnit;
+      bindsTo = deviceUnit;
+      upheldBy = deviceUnit;
+      wantedBy = optional (iface == null) "multi-user.target";
       stopIfChanged = false;
 
       path = [ pkgs.wpa_supplicant ];
