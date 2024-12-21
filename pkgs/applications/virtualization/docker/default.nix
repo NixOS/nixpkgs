@@ -119,16 +119,6 @@ rec {
 
       extraUserPath = lib.optionals (stdenv.hostPlatform.isLinux && !clientOnly) (lib.makeBinPath [ rootlesskit slirp4netns fuse-overlayfs ]);
 
-      patches = lib.optionals (lib.versionOlder version "23") [
-        # This patch incorporates code from a PR fixing using buildkit with the ZFS graph driver.
-        # It could be removed when a version incorporating this patch is released.
-        (fetchpatch {
-          name = "buildkit-zfs.patch";
-          url = "https://github.com/moby/moby/pull/43136.patch";
-          hash = "sha256-1WZfpVnnqFwLMYqaHLploOodls0gHF8OCp7MrM26iX8=";
-        })
-      ];
-
       postPatch = ''
         patchShebangs hack/make.sh hack/make/ hack/with-go-mod.sh
       '';
@@ -203,7 +193,7 @@ rec {
       makeWrapper pkg-config go-md2man go libtool installShellFiles
     ];
 
-    buildInputs = plugins ++ lib.optionals (lib.versionAtLeast version "23" && stdenv.hostPlatform.isLinux) [
+    buildInputs = plugins ++ lib.optionals (stdenv.hostPlatform.isLinux) [
       glibc
       glibc.static
     ];
@@ -231,7 +221,7 @@ rec {
 
     '';
 
-    outputs = ["out"] ++ lib.optional (lib.versionOlder version "23") "man";
+    outputs = ["out"];
 
     installPhase = ''
       install -Dm755 ./build/docker $out/libexec/docker/docker
@@ -252,18 +242,6 @@ rec {
       installShellCompletion --bash ./contrib/completion/bash/docker
       installShellCompletion --fish ./contrib/completion/fish/docker.fish
       installShellCompletion --zsh  ./contrib/completion/zsh/_docker
-    '' + lib.optionalString (stdenv.hostPlatform == stdenv.buildPlatform && lib.versionOlder version "23") ''
-      # Generate man pages from cobra commands
-      echo "Generate man pages from cobra"
-      mkdir -p ./man/man1
-      go build -o ./gen-manpages github.com/docker/cli/man
-      ./gen-manpages --root . --target ./man/man1
-    '' + lib.optionalString (lib.versionOlder version "23") ''
-      # Generate legacy pages from markdown
-      echo "Generate legacy manpages"
-      ./man/md2man-all.sh -q
-
-      installManPage man/*/*.[1-9]
     '';
 
     passthru = {
