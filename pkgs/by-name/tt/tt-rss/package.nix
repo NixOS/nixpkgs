@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    inherit (nixosTests) tt-rss;
+    tests = { inherit (nixosTests) tt-rss; };
     updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 
