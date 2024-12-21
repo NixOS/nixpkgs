@@ -111,8 +111,6 @@ stdenv.mkDerivation rec {
 
   strictDeps = true;
 
-  # NOTE: Remove `build-auxyaml_to_json.py` when no longer needed, see:
-  # https://gitlab.gnome.org/GNOME/geary/commit/f7f72143e0f00ca5e0e6a798691805c53976ae31#0cc1139e3347f573ae1feee5b73dbc8a8a21fcfa
   postPatch = ''
     chmod +x build-aux/git_version.py
 
