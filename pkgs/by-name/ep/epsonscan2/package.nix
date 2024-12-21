@@ -49,16 +49,17 @@ stdenv.mkDerivation {
 
   patches = [
     ./build.patch
+    ./gcc14.patch
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/flathub/net.epson.epsonscan2/master/patches/0002-Fix-crash.patch";
+      url = "https://raw.githubusercontent.com/flathub/net.epson.epsonscan2/a489ac2f8cbd03afeda86673930cc17663c31a53/patches/0002-Fix-crash.patch";
       hash = "sha256-rNsFnHq//CJcIZl0M6RLRkIY3YhnJZbikO8SeeC2ktg=";
     })
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/flathub/net.epson.epsonscan2/master/patches/0004-Fix-a-crash-on-an-OOB-container-access.patch";
+      url = "https://raw.githubusercontent.com/flathub/net.epson.epsonscan2/a489ac2f8cbd03afeda86673930cc17663c31a53/patches/0004-Fix-a-crash-on-an-OOB-container-access.patch";
       hash = "sha256-WmA8pmPSJ1xUdeBbE8Jzi6w9p96aIOm0erF3T4EQ6VA=";
     })
     (fetchpatch {
-      url = "https://raw.githubusercontent.com/flathub/net.epson.epsonscan2/master/patches/0003-Use-XDG-open-to-open-the-directory.patch";
+      url = "https://raw.githubusercontent.com/flathub/net.epson.epsonscan2/a489ac2f8cbd03afeda86673930cc17663c31a53/patches/0003-Use-XDG-open-to-open-the-directory.patch";
       hash = "sha256-H3lle1SXkkpbBkozYEwiX0z9oTUubTpB+l91utxH03M=";
     })
   ];
