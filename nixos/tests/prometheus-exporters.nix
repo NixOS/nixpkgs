@@ -422,6 +422,20 @@ let
       '';
     };
 
+    fronius = {
+      exporterConfig = {
+        enable = true;
+        symo.url = "http://localhost";
+      };
+      exporterTest = ''
+        wait_for_unit("prometheus-fronius-exporter.service")
+        wait_for_open_port(8080)
+        wait_until_succeeds(
+            "curl -sSf 'localhost:8080/metrics' | grep 'fronius_scrape_error_count'"
+        )
+      '';
+    };
+
     graphite = {
       exporterConfig = {
         enable = true;
