@@ -2062,12 +2062,6 @@ self: super: {
   # https://github.com/faylang/fay/pull/474
   fay = doJailbreak super.fay;
 
-  # Requests latest versions of crypton-connection and tls
-  darcs = super.darcs.overrideScope (self: super: {
-    crypton-connection = self.crypton-connection_0_4_2;
-    tls = self.tls_2_0_6;
-  });
-
   # Requests version 2 of tls, can be removed once it's the default
   diohsc = super.diohsc.overrideScope (self: super: {
     tls = self.tls_2_0_6;
