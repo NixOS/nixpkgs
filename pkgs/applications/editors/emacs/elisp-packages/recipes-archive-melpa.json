@@ -111119,14 +111119,15 @@
   "repo": "emacsmirror/semi",
   "unstable": {
    "version": [
-    20170314,
-    1219
+    20241125,
+    2202
    ],
    "deps": [
+    "apel",
     "flim"
    ],
-   "commit": "425098e6a57e7668ba2eeccba31f73e59c3d3a7f",
-   "sha256": "0b9cxz99l1wf9sw9d5aklvmmcklgb94njrrm6g6yp9yl07px46iw"
+   "commit": "6cffd97241d80b73133c5daf8680adb7ce954dd0",
+   "sha256": "1azr2zp5ap5d9ln1qdmc1r2jpscrvi109dq8vgfd62qmbi7lddbz"
   }
  },
  {
