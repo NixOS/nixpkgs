@@ -12,7 +12,6 @@
   pytz,
 
   # optional-dependencies
-  coreapi,
   coreschema,
   django-guardian,
   inflection,
@@ -47,7 +46,6 @@ buildPythonPackage rec {
 
   optional-dependencies = {
     complete = [
-      coreapi
       coreschema
       django-guardian
       inflection
