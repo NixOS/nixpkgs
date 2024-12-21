@@ -222,9 +222,10 @@ let
         name = "source.tar.zstd";
         downloadToTemp = false;
         passthru.unpack = true;
+        nativeBuildInputs = [ zstd ];
         postFetch = ''
           tar \
-            --use-compress-program="${lib.getExe zstd} -T$NIX_BUILD_CORES" \
+            --use-compress-program="zstd -T$NIX_BUILD_CORES" \
             --sort=name \
             --mtime="1970-01-01" \
             --owner=root --group=root \
@@ -521,6 +522,22 @@ let
           hash = "sha256-NNKzIp6NYdeZaqBLWDW/qNxiDB1VFRz7msjMXuMOrZ8=";
           excludes = [ "base/allocator/partition_allocator/src/partition_alloc/*" ];
           revert = true;
+        })
+      ]
+      ++ lib.optionals (chromiumVersionAtLeast "131" && stdenv.hostPlatform.isAarch64) [
+        # Reverts decommit pooled pages which causes random crashes of tabs on systems
+        # with page sizes different than 4k. It 'supports' runtime page sizes, but has
+        # a hardcode for aarch64 systems.
+        # https://issues.chromium.org/issues/378017037
+        (fetchpatch {
+          name = "reverted-v8-decommit-pooled-paged-by-default.patch";
+          # https://chromium-review.googlesource.com/c/v8/v8/+/5864909
+          url = "https://chromium.googlesource.com/v8/v8/+/1ab1a14ad97394d384d8dc6de51bb229625e66d6^!?format=TEXT";
+          decode = "base64 -d";
+          stripLen = 1;
+          extraPrefix = "v8/";
+          revert = true;
+          hash = "sha256-PuinMLhJ2W4KPXI5K0ujw85ENTB1wG7Hv785SZ55xnY=";
         })
       ];
 

@@ -85,8 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      incus-legacy-init = nixosTests.incus.container-legacy-init;
-      incus-systemd-init = nixosTests.incus.container-systemd-init;
+      incus-lts = nixosTests.incus-lts.container;
       lxc = nixosTests.lxc;
       lxd = nixosTests.lxd.container;
     };
