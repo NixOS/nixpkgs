@@ -72,14 +72,6 @@ let
         hash = "sha256-UEvIXzn387f9BAeBdhheStD/4M7en+rmqX8C6gstl6k=";
       })
     ];
-    qtmultimedia = lib.optionals stdenv.hostPlatform.isDarwin [
-      # build patch for qtmultimedia with xcode 15
-      (fetchpatch {
-        url = "https://raw.githubusercontent.com/Homebrew/formula-patches/3f509180/qt5/qt5-qtmultimedia-xcode15.patch";
-        stripLen = 1;
-        hash = "sha256-HrEqfmm8WbapWgLM0L4AKW8168pwT2zYI8HOJruEPSs=";
-      })
-    ];
     qtpim = [
       ## Upstream patches after the Qt6 transition that apply without problems & fix bugs
 

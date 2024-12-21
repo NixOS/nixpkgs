@@ -1242,6 +1242,7 @@ in {
       enable = true;
       enableDelete = true; # This must be true, otherwise GitLab won't manage it correctly
       package = cfg.registry.package;
+      port = cfg.registry.port;
       extraConfig = {
         auth.token = {
           realm = "http${optionalString (cfg.https == true) "s"}://${cfg.host}/jwt/auth";

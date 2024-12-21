@@ -2222,6 +2222,12 @@
     githubId = 354741;
     name = "Austin Butler";
   };
+  automathis = {
+    name = "AutoMathïs";
+    email = "automathis@protonmail.com";
+    github = "MathisFederico";
+    githubId = 60117466;
+  };
   autophagy = {
     email = "mail@autophagy.io";
     github = "autophagy";
@@ -12001,6 +12007,12 @@
     githubId = 12898828;
     keys = [ { fingerprint = "B44A DFDF F869 A66A 3FDF  DD8B 8609 A7B5 19E5 E342"; } ];
   };
+  kmatasfp = {
+    email = "el-development@protonmail.com";
+    name = "Kaur Matas";
+    github = "kmatasfp";
+    githubId = 33095685;
+  };
   kmcopper = {
     email = "kmcopper@danwin1210.me";
     name = "Kyle Copperfield";
@@ -12345,6 +12357,12 @@
     github = "kvendingoldo";
     githubId = 11614750;
     name = "Alexander Sharov";
+  };
+  kvik = {
+    email = "viktor@a-b.xyz";
+    github = "okvik";
+    githubId = 58425080;
+    name = "Viktor Pocedulić";
   };
   kwaa = {
     name = "藍+85CD";
@@ -13584,6 +13602,13 @@
     github = "maggesi";
     githubId = 1809783;
     name = "Marco Maggesi";
+  };
+  magneticflux- = {
+    email = "skaggsm333@gmail.com";
+    github = "magneticflux-";
+    githubId = 9124288;
+    name = "Mitchell Skaggs";
+    keys = [ { fingerprint = "CA2A 3324 43A7 BD99 8FCE  DFC4 4EB0 FECB 84AE 8967"; } ];
   };
   magnetophon = {
     email = "bart@magnetophon.nl";
@@ -15805,6 +15830,12 @@
     github = "neeasade";
     githubId = 3747396;
     name = "Nathan Isom";
+  };
+  negatethis = {
+    email = "negatethis@envs.net";
+    github = "negatethis";
+    githubId = 26014535;
+    name = "Negate This";
   };
   neilmayhew = {
     email = "nix@neil.mayhew.name";
@@ -23432,6 +23463,12 @@
     github = "ursi";
     githubId = 17836748;
     name = "Mason Mackaman";
+  };
+  usertam = {
+    email = "nix@usertam.dev";
+    github = "usertam";
+    githubId = 22500027;
+    name = "Samuel Tam";
   };
   uskudnik = {
     email = "urban.skudnik@gmail.com";

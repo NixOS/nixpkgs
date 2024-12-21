@@ -8,8 +8,6 @@
   pkg-config,
   libsecret,
   xcbuild,
-  Security,
-  AppKit,
   fetchNpmDeps,
   npmHooks,
 }:
@@ -36,12 +34,7 @@ stdenv.mkDerivation rec {
     npmHooks.npmConfigHook
   ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
-  buildInputs =
-    lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      AppKit
-    ];
+  buildInputs = lib.optionals (!stdenv.hostPlatform.isDarwin) [ libsecret ];
 
   npmDeps = fetchNpmDeps {
     inherit src;
