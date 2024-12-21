@@ -13677,7 +13677,7 @@
   };
   Makuru = {
     email = "makuru@makuru.org";
-    github = "makuru-dd";
+    github = "makuru-org";
     githubId = 58048293;
     name = "Makuru";
     keys = [ { fingerprint = "5B22 7123 362F DEF1 8F79  BF2B 4792 3A0F EEB5 51C7"; } ];
