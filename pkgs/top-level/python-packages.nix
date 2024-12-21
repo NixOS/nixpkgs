@@ -6474,6 +6474,7 @@ self: super: with self; {
   itk = toPythonModule (pkgs.itk.override {
     inherit python numpy;
     enablePython = true;
+    enableRtk = false;
   });
 
 
