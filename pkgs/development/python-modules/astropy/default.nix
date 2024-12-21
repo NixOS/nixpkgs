@@ -62,6 +62,10 @@ buildPythonPackage rec {
     hash = "sha256-6S18n+6G6z34cU5d1Bu/nxY9ND4aGD2Vv2vQnkMTyUA=";
   };
 
+  env = lib.optionalAttrs stdenv.cc.isClang {
+    NIX_CFLAGS_COMPILE = "-Wno-error=unused-command-line-argument";
+  };
+
   build-system = [
     cython
     extension-helpers
@@ -125,6 +129,8 @@ buildPythonPackage rec {
   ] ++ optional-dependencies.recommended;
 
   pythonImportsCheck = [ "astropy" ];
+
+  __darwinAllowLocalNetworking = true;
 
   # Not running it inside the build directory. See:
   # https://github.com/astropy/astropy/issues/15316#issuecomment-1722190547

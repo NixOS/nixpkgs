@@ -14,11 +14,12 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "catalyst-browser";
-  version = "3.9.4";
+  version = "3.9.5";
 
   src = fetchurl {
     url = "https://github.com/CatalystDevOrg/Catalyst/releases/download/v${version}/catalyst-${version}.AppImage";
-    hash = "sha256-6t1RAxmRc/1fAQT4Qnd42kh3cxgRZr74k8gwebTb0Ic=";
+    hash = "sha256-7lODV9qbl3gcJ5v/0EiJ2IgGCW7pY6RQFlMzClGt2DU=
+";
     name = "catalyst-${version}.AppImage";
   };
 
@@ -44,7 +45,7 @@ stdenv.mkDerivation rec {
     cp -a ${appimageContents}/locales $out/share/catalyst
     cp -a ${appimageContents}/catalyst.desktop $out/share/applications/catalyst.desktop
     mkdir -p $out/share/pixmaps
-    cp -r ${appimageContents}/usr/share/icons/hicolor/0x0/apps/catalyst.png $out/share/pixmaps/
+    cp -r ${appimageContents}/usr/share/icons/hicolor/1080x1080/apps/catalyst.png $out/share/pixmaps/
     asar extract ${appimageContents}/resources/app.asar resources/
     rm -rf resources/.github
     rm -rf resources/.vscode

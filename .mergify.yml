@@ -12,7 +12,6 @@ queue_rules:
       - check-success=Outpaths (x86_64-linux)
       - check-success=Process
       - check-success=Request
-      - check-success=Tag
       - check-success=editorconfig-check
       - check-success=label-pr
       - check-success=nix-files-parseable-check

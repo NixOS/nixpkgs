@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   poetry-core,
   pytestCheckHook,
   pythonOlder,
@@ -28,6 +29,15 @@ buildPythonPackage rec {
   dependencies = [
     dahlia
     ixia
+  ];
+
+  patches = [
+    # https://github.com/trag1c/oddsprout/pull/8
+    (fetchpatch2 {
+      name = "allow-periods-in-path.patch";
+      url = "https://github.com/trag1c/oddsprout/commit/59713a797e7748d48f59f92397981c93a81f2c28.patch";
+      hash = "sha256-GAIQQi5s4D6KbTSgmP2hlBizLATxtJ/hzpWqPX4O0U4=";
+    })
   ];
 
   # has one test `test_main_recursion_error`

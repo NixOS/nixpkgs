@@ -13,20 +13,140 @@ let
     packages:
     with packages;
     [
-      unstructured-api-tools
-      unstructured
-      pydantic
+      aiofiles
+      annotated-types
+      antlr4-python3-runtime
+      anyio
+      backoff
+      beautifulsoup4
+      cachetools
+      certifi
+      cffi
+      chardet
+      charset-normalizer
       click
-      ratelimit
-      requests
-      pypdf
+      coloredlogs
+      contourpy
+      cryptography
+      cycler
+      dataclasses-json
+      deprecated
+      effdet
+      emoji
+      et-xmlfile
+      eval-type-backport
+      fastapi
+      filelock
+      filetype
+      flatbuffers
+      fonttools
+      fsspec
+      google-api-core
+      google-auth
+      google-cloud-vision
+      googleapis-common-protos
+      grpcio
+      grpcio-status
+      h11
+      html5lib
+      httpcore
+      httpx
+      huggingface-hub
+      humanfriendly
+      idna
+      iopath
+      jinja2
+      joblib
+      jsonpath
+      kiwisolver
+      langdetect
+      layoutparser
+      lxml
+      markdown
+      markupsafe
+      marshmallow
+      matplotlib
+      mpmath
+      mypy-extensions
+      nest-asyncio
+      networkx
+      nltk
+      numpy
+      olefile
+      omegaconf
+      onnx
+      onnxruntime
+      opencv-python
+      openpyxl
+      packaging
+      pandas
+      pdf2image
+      pdfminer-six
+      pdfplumber
+      # pi-heif
+      pikepdf
+      pillow
+      portalocker
+      proto-plus
+      protobuf
+      psutil
+      pyasn1
+      pyasn1-modules
+      pycocotools
+      pycparser
       pycryptodome
+      pydantic
+      pydantic-core
+      pypandoc
+      pyparsing
+      pypdf
+      # pypdfium2
+      python-dateutil
+      python-docx
+      # python-iso639
+      python-magic
+      python-multipart
+      # python-oxmsg
+      python-pptx
+      pytz
+      pyyaml
+      rapidfuzz
+      ratelimit
+      regex
+      requests
+      requests-toolbelt
+      rsa
       safetensors
+      scipy
+      six
+      sniffio
+      soupsieve
+      starlette
+      sympy
+      timm
+      tokenizers
+      torch
+      torchvision
+      tqdm
+      transformers
+      typing-extensions
+      typing-inspect
+      tzdata
+      unstructured
+      # unstructured-client
+      unstructured-inference
+      # unstructured-pytesseract
+      urllib3
       uvicorn
+      webencodings
+      wrapt
+      xlrd
+      xlsxwriter
     ]
-    ++ packages.unstructured.optional-dependencies.local-inference
+    ++ google-api-core.optional-dependencies.grpc
+    ++ unstructured.optional-dependencies.all-docs
   );
-  version = "0.0.61";
+  version = "0.0.82";
   unstructured_api_nltk_data = symlinkJoin {
     name = "unstructured_api_nltk_data";
 
@@ -44,7 +164,7 @@ stdenvNoCC.mkDerivation {
     owner = "Unstructured-IO";
     repo = "unstructured-api";
     rev = version;
-    hash = "sha256-Ucd+SKIES9E5WgKJjg8Vihjc1hMrJ9e956Sb7QlQea8=";
+    hash = "sha256-mvcARpewqC25x3ZdpM8QB7SjbqGoBL/rtxi90KdKdO8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

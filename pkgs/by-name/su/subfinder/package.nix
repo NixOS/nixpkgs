@@ -19,6 +19,11 @@ buildGoModule rec {
 
   modRoot = "./v2";
 
+  patches = [
+    # Disable automatic version check
+    ./disable-update-check.patch
+  ];
+
   subPackages = [
     "cmd/subfinder/"
   ];

@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchpatch2,
   buildNpmPackage,
+  nodejs_20,
   nixosTests,
   gettext,
   python3,
@@ -97,6 +98,8 @@ let
   frontend = buildNpmPackage {
     pname = "paperless-ngx-frontend";
     inherit version src;
+
+    nodejs = nodejs_20;  # does not build with 22
 
     postPatch = ''
       cd src-ui

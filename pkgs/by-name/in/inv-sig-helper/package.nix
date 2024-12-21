@@ -15,16 +15,16 @@
 
 rustPlatform.buildRustPackage {
   pname = "inv-sig-helper";
-  version = "0-unstable-2024-12-10";
+  version = "0-unstable-2024-12-17";
 
   src = fetchFromGitHub {
     owner = "iv-org";
     repo = "inv_sig_helper";
-    rev = "ac0269f1586df5a853c4321256866bcbea89802b";
-    hash = "sha256-w8ZvNCs6xz79RjAzIVhtYRJoLzC97RYm2U1ydao3Ons=";
+    rev = "74e879b54e46831e31c09fd08fe672ca58e9cb2d";
+    hash = "sha256-Q+u09WWBwWLcLLW9XwkaYDxM3xoQmeJzi37mrdDGvRc=";
   };
 
-  cargoHash = "sha256-Y9q64ltv2QRtRUy5t40JIfwFh8ryO1D0Gdg7xO1azws=";
+  cargoHash = "sha256-qMBztc2N8HWJrrzyzY2KCW9pyv0hK6QJ8tqNdNkhTzE=";
 
   nativeBuildInputs = [
     pkg-config

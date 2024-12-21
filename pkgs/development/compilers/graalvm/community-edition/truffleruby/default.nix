@@ -2,12 +2,12 @@
   lib,
   stdenv,
   fetchurl,
-  graalvmCEPackages,
+  graalvmPackages,
   libyaml,
   openssl,
 }:
 
-graalvmCEPackages.buildGraalvmProduct {
+graalvmPackages.buildGraalvmProduct {
   src = fetchurl (import ./hashes.nix).hashes.${stdenv.system};
   version = (import ./hashes.nix).version;
 

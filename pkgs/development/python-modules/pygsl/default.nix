@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "pygsl";
-  version = "2.4.1";
+  version = "2.5.0";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "pygsl";
     repo = "pygsl";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-85j57gzvomhBX/+Dif8IoMpNE9vJvyHPFHchKRF9OQM=";
+    tag = "v${version}";
+    hash = "sha256-ym7wCCaqY1y4Q7LDaNfGoao//DcG+H/6Fmg0YZUThOU=";
   };
 
   # error: no member named 'n' in 'gsl_bspline_workspace'

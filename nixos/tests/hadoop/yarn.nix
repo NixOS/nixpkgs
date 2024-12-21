@@ -24,6 +24,7 @@ import ../make-test-python.nix (
             yarn.nodemanager = {
               enable = true;
               openFirewall = true;
+              useCGroups = false;
             };
             yarnSite = {
               "yarn.resourcemanager.hostname" = "resourcemanager";

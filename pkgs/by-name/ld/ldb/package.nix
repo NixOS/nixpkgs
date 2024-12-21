@@ -19,11 +19,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ldb";
-  version = "2.9.1";
+  version = "2.9.2";
 
   src = fetchurl {
     url = "mirror://samba/ldb/ldb-${finalAttrs.version}.tar.gz";
-    hash = "sha256-yV5Nwy3qiGS3mJnuNAyf3yi0hvRku8OLqZFRoItJP5s=";
+    hash = "sha256-0VWIQALHnbscPYZC+LEBPy5SCzru/W6WQSrexbjWy8A=";
   };
 
   outputs = [ "out" "dev" ];

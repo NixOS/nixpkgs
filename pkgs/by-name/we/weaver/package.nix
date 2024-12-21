@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "weaver";
-  version = "0.11.0";
+  version = "0.12.0";
 
   src = fetchFromGitHub {
     owner = "open-telemetry";
     repo = "weaver";
     rev = "v${version}";
-    hash = "sha256-xb6u9+cZ7p3b2S+I/mQtBfc7XsVlbeLSMHY3fhS+8/8=";
+    hash = "sha256-FBf+X0Xs3Yr9Sk5v86f2N9WOyv/rW/RSGlAYJ6UCBGY=";
   };
 
-  cargoHash = "sha256-+Swg1ROVO2lVctF7j6Nibx+WPpE2KAdZSeowinXjnmo=";
+  cargoHash = "sha256-r7l6/xeClphOI9kz/r36P0tTNHmSTKDhRL6KTVZNmvk=";
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin (
     with darwin.apple_sdk_11_0.frameworks; [ SystemConfiguration ]

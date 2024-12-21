@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   buildNpmPackage,
+  nodejs_20,
   nix-update-script,
   pkg-config,
   xcbuild,
@@ -24,6 +25,8 @@ buildNpmPackage rec {
       rev = "v${version}";
       hash = "sha256-xmy2cr6MJSen6Pok3Wde4mBcu5pM4qtGEBfqMpGdAxY=";
     };
+
+  nodejs = nodejs_20;  # does not build with 22
 
   postPatch = ''
     substituteInPlace webpack.common.js \

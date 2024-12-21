@@ -25,12 +25,12 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchgit {
     url = "https://github.com/Nexus-Mods/NexusMods.App.git";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-7o+orpXLvZa+F0wEh3nVnYMe4ZkiaVJQOWvhWdNmcSk=";
+    hash = "sha256-TcT+siZMJlOYRtiQV+RAPPfM47wewfsz7WiPFaxCUkc=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
@@ -57,7 +57,7 @@ buildDotnetModule (finalAttrs: {
     imagemagick # For resizing SVG icon in postInstall
   ];
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   mapNuGetDependencies = true;
 
   # TODO: remove .NET 8; StrawberryShake currently needs it

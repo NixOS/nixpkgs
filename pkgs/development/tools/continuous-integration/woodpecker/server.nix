@@ -14,7 +14,7 @@ buildGoModule {
 
   subPackages = "cmd/server";
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   passthru = {
     updateScript = ./update.sh;

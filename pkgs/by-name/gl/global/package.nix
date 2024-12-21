@@ -17,11 +17,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "global";
-  version = "6.6.13";
+  version = "6.6.14";
 
   src = fetchurl {
     url = "mirror://gnu/global/${pname}-${version}.tar.gz";
-    hash = "sha256-lF80lzDaAfd4VNmBHKj4AWaclGE5WimWbY2Iy2cDNHs=";
+    hash = "sha256-9uf9C2iu0pLoW7aGYWuvZVHVyUJK3N3KEdgIujGMsyA=";
   };
 
   nativeBuildInputs = [

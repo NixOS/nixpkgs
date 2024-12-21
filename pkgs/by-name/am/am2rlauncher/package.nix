@@ -58,7 +58,7 @@ buildDotnetModule {
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
   projectFile = "AM2RLauncher/AM2RLauncher.Gtk/AM2RLauncher.Gtk.csproj";
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   executables = "AM2RLauncher.Gtk";
 
   runtimeDeps = [

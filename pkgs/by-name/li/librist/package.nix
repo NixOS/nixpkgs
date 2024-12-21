@@ -22,6 +22,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-xWqyQl3peB/ENReMcDHzIdKXXCYOJYbhhG8tcSh36dY=";
   };
 
+  # avoid rebuild on Linux for now
+  patches = lib.optionals stdenv.isDarwin [
+    # https://code.videolan.org/rist/librist/-/issues/192
+    ./no-brew-darwin.diff
+  ];
+
   nativeBuildInputs = [
     meson
     ninja

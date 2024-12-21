@@ -56,10 +56,11 @@ rec {
           else
             "llvmorg-${releaseInfo.version}";
       in
-      fetchFromGitHub {
+      fetchFromGitHub rec {
         owner = "llvm";
         repo = "llvm-project";
         inherit rev sha256;
+        passthru = { inherit owner repo rev; };
       };
 
 }

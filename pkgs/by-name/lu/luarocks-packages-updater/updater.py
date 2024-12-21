@@ -21,8 +21,28 @@ from pathlib import Path
 import pluginupdate
 from pluginupdate import FetchConfig, update_plugins
 
+
+class ColoredFormatter(logging.Formatter):
+    # Define color codes
+    COLORS = {
+        "DEBUG": "\033[94m",  # Blue
+        "INFO": "\033[92m",  # Green
+        "WARNING": "\033[93m",  # Yellow
+        "ERROR": "\033[91m",  # Red
+        "CRITICAL": "\033[95m",  # Magenta
+    }
+    RESET = "\033[0m"
+
+    def format(self, record):
+        log_color = self.COLORS.get(record.levelname, self.RESET)
+        record.msg = f"{log_color}{record.msg}{self.RESET}"
+        return super().format(record)
+
+
+handler = logging.StreamHandler()
+handler.setFormatter(ColoredFormatter("%(levelname)s: %(message)s"))
 log = logging.getLogger()
-log.addHandler(logging.StreamHandler())
+log.handlers = [handler]
 
 ROOT = Path(os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))).parent.parent  # type: ignore
 
@@ -142,7 +162,15 @@ class LuaEditor(pluginupdate.Editor):
             finally:
                 pass
 
-            self.generate_nix(results, output_file)
+            successful_results = [(plug, nix_expr) for plug, nix_expr, error in results if nix_expr is not None]
+            errors = [(plug, error) for plug, nix_expr, error in results if error is not None]
+
+            self.generate_nix(successful_results, output_file)
+
+            if errors:
+                log.error("The following plugins failed to update:")
+                for plug, error in errors:
+                    log.error("%s: %s", plug.name, error)
 
             redirects = {}
             return redirects
@@ -171,39 +199,43 @@ def generate_pkg_nix(plug: LuaPlugin):
     """
     log.debug("Generating nix expression for %s", plug.name)
 
-    cmd = ["luarocks", "nix"]
+    try:
+        cmd = ["luarocks", "nix"]
 
-    if plug.maintainers:
-        cmd.append(f"--maintainers={plug.maintainers}")
+        if plug.maintainers:
+            cmd.append(f"--maintainers={plug.maintainers}")
 
-    if plug.rockspec != "":
-        if plug.ref or plug.version:
-            msg = "'version' and 'ref' will be ignored as the rockspec is hardcoded for package %s" % plug.name
-            log.warning(msg)
+        if plug.rockspec != "":
+            if plug.ref or plug.version:
+                msg = "'version' and 'ref' will be ignored as the rockspec is hardcoded for package %s" % plug.name
+                log.warning(msg)
 
-        log.debug("Updating from rockspec %s", plug.rockspec)
-        cmd.append(plug.rockspec)
+            log.debug("Updating from rockspec %s", plug.rockspec)
+            cmd.append(plug.rockspec)
 
-    # update the plugin from luarocks
-    else:
-        cmd.append(plug.name)
-        if plug.version and plug.version != "src":
-            cmd.append(plug.version)
+        # update the plugin from luarocks
+        else:
+            cmd.append(plug.name)
+            if plug.version and plug.version != "src":
+                cmd.append(plug.version)
 
-    if plug.server != "src" and plug.server:
-        cmd.append(f"--only-server={plug.server}")
+        if plug.server != "src" and plug.server:
+            cmd.append(f"--only-server={plug.server}")
 
-    if plug.luaversion:
-        cmd.append(f"--lua-version={plug.luaversion}")
-        luaver = plug.luaversion.replace(".", "")
-        if luaver := os.getenv(f"LUA_{luaver}"):
-            cmd.append(f"--lua-dir={luaver}")
+        if plug.luaversion:
+            cmd.append(f"--lua-version={plug.luaversion}")
+            luaver = plug.luaversion.replace(".", "")
+            if luaver := os.getenv(f"LUA_{luaver}"):
+                cmd.append(f"--lua-dir={luaver}")
 
-    log.debug("running %s", " ".join(cmd))
+        log.debug("running %s", " ".join(cmd))
 
-    output = subprocess.check_output(cmd, text=True)
-    output = "callPackage(" + output.strip() + ") {};\n\n"
-    return (plug, output)
+        output = subprocess.check_output(cmd, text=True)
+        output = "callPackage(" + output.strip() + ") {};\n\n"
+        return (plug, output, None)
+    except subprocess.CalledProcessError as e:
+        log.error("Failed to generate nix expression for %s: %s", plug.name, e)
+        return (plug, None, str(e))
 
 
 def main():

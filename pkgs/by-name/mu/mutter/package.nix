@@ -49,7 +49,7 @@
   libwacom,
   libSM,
   xwayland,
-  libgbm,
+  mesa,
   meson,
   gnome-settings-daemon,
   xorgserver,
@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
     gettext
     libxcvt
-    libgbm
+    mesa
     meson
     ninja
     xvfb-run

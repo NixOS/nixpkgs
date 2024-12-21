@@ -109,6 +109,10 @@ buildPythonPackage rec {
             "MulticastTests.test_multicast"
             "MulticastTests.test_multiListen"
           ];
+          "src/twisted/internet/test/test_unix.py" = [
+            # flaky?
+            "UNIXTestsBuilder.test_sendFileDescriptorTriggersPauseProducing"
+          ];
         }
         // lib.optionalAttrs (pythonAtLeast "3.12") {
           "src/twisted/trial/_dist/test/test_workerreporter.py" = [
@@ -195,10 +199,7 @@ buildPythonPackage rec {
     ++ optional-dependencies.conch
     ++ optional-dependencies.http2
     ++ optional-dependencies.serial
-    # not supported on aarch64-darwin: https://github.com/pyca/pyopenssl/issues/873
-    ++ lib.optionals (
-      !(stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64)
-    ) optional-dependencies.tls;
+    ++ optional-dependencies.tls;
 
   preCheck = ''
     export SOURCE_DATE_EPOCH=315532800

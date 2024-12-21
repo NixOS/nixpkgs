@@ -22,19 +22,19 @@
 
 stdenv.mkDerivation rec {
   pname = "vaults";
-  version = "0.7.1";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "mpobaschnig";
     repo = "Vaults";
-    rev = version;
-    hash = "sha256-jA7OeyRqc5DxkS4sMx9cIbVlZwd++aCQi09uBQik1oA=";
+    rev = "v${version}";
+    hash = "sha256-USVP/7TNdpUNx1kDsCReGYIP8gHUeij2dqy8TR4R+CE=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-l9Zer6d6kgjIUNiQ1VdQQ57caVNWfzCkdsMf79X8Ar4=";
+    hash = "sha256-h25YRqQ4Z+Af+zHITnmnwpg09V7sik88YRGbG8BZUjg=";
   };
 
   postPatch = ''

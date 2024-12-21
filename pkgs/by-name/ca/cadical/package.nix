@@ -4,7 +4,7 @@
   fetchFromGitHub,
   copyPkgconfigItems,
   makePkgconfigItem,
-  version ? "2.1.0",
+  version ? "2.1.1",
 }:
 
 stdenv.mkDerivation rec {
@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
     rev = "rel-${version}";
     hash =
       {
-        "2.1.0" = "sha256-sSvJgHxsRaJ/xHEK32fox0MFI7u+pj5ERLfNn2s8kC8=";
+        "2.1.1" = "sha256-1/qJGGyx+hGZ09pIT2uNykotaYlU8BCKArblYhHsMxo=";
         "2.0.0" = "sha256-qoeEM9SdpuFuBPeQlCzuhPLcJ+bMQkTUTGiT8QdU8rc=";
       }
       .${version};

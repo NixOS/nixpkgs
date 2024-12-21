@@ -49,7 +49,7 @@ buildDotnetModule rec {
   version = "4.13.0-3.24577.4";
   projectFile = "src/LanguageServer/${project}/${project}.csproj";
   useDotnetFromEnv = true;
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   nativeBuildInputs = [ jq ];
 

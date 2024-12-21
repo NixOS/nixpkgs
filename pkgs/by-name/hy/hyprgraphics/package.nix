@@ -52,6 +52,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.lgpl3Only;
     platforms = lib.platforms.all;
     maintainers = with lib.maintainers; [
+      fufexan
       khaneliman
     ];
   };
