@@ -126,7 +126,7 @@ in stdenv.mkDerivation (finalAttrs: {
       bluez giflib glib harfbuzz lcms2 libpthreadstubs
       ffmpeg flatbuffers fstrcmp rapidjson
       lirc
-      mesa # for libEGL
+      mesa # uses eglext_angle.h, which is not provided by glvnd
     ]
     ++ lib.optionals x11Support [
       libX11 xorgproto libXt libXmu libXext.dev libXdmcp
