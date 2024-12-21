@@ -48,15 +48,6 @@ let
       COMPRESS_OFFLINE = True
       DEBUG = False
 
-      DATABASES = {
-        "default": {
-          "ENGINE": "django.db.backends.postgresql",
-          "HOST": "/run/postgresql",
-          "NAME": "weblate",
-          "USER": "weblate",
-        }
-      }
-
       with open("${cfg.djangoSecretKeyFile}") as f:
         SECRET_KEY = f.read().rstrip("\n")
 
@@ -65,9 +56,9 @@ let
           "BACKEND": "django_redis.cache.RedisCache",
           "LOCATION": "unix://${config.services.redis.servers.weblate.unixSocket}",
           "OPTIONS": {
-              "CLIENT_CLASS": "django_redis.client.DefaultClient",
-              "PASSWORD": None,
-              "CONNECTION_POOL_KWARGS": {},
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+            "PASSWORD": None,
+            "CONNECTION_POOL_KWARGS": {},
           },
           "KEY_PREFIX": "weblate",
           "TIMEOUT": 3600,
@@ -79,7 +70,6 @@ let
           "OPTIONS": {"MAX_ENTRIES": 1000},
         }
       }
-
 
       CELERY_TASK_ALWAYS_EAGER = False
       CELERY_BROKER_URL = "redis+socket://${config.services.redis.servers.weblate.unixSocket}"
@@ -93,21 +83,32 @@ let
       OTP_WEBAUTHN_RP_NAME = SITE_TITLE
       OTP_WEBAUTHN_RP_ID = SITE_DOMAIN.split(":")[0]
       OTP_WEBAUTHN_ALLOWED_ORIGINS = [SITE_URL]
-
     ''
-    + lib.optionalString cfg.smtp.enable ''
-      ADMINS = (("Weblate Admin", "${cfg.smtp.user}"),)
-
+    + (lib.optionalString cfg.configurePostgresql ''
+      DATABASES = {
+        "default": {
+          "ENGINE": "django.db.backends.postgresql",
+          "HOST": "/run/postgresql",
+          "NAME": "weblate",
+          "USER": "weblate",
+        }
+      }
+    '')
+    + (lib.optionalString cfg.smtp.enable ''
       EMAIL_HOST = "${cfg.smtp.host}"
       EMAIL_USE_TLS = True
+      EMAIL_PORT = ${builtins.toString cfg.smtp.port}
+      SERVER_EMAIL = "${cfg.smtp.from}"
+      DEFAULT_FROM_EMAIL = "${cfg.smtp.from}"
+    '')
+    + (lib.optionalString (cfg.smtp.user != null) ''
+      ADMINS = (("Weblate Admin", "${cfg.smtp.user}"),)
       EMAIL_HOST_USER = "${cfg.smtp.user}"
-      SERVER_EMAIL = "${cfg.smtp.user}"
-      DEFAULT_FROM_EMAIL = "${cfg.smtp.user}"
-      EMAIL_PORT = 587
+    '')
+    + (lib.optionalString (cfg.smtp.passwordFile != null) ''
       with open("${cfg.smtp.passwordFile}") as f:
         EMAIL_HOST_PASSWORD = f.read().rstrip("\n")
-
-    ''
+    '')
     + cfg.extraConfig;
   settings_py =
     pkgs.runCommand "weblate_settings.py"
@@ -139,6 +140,7 @@ let
     tesseract
     licensee
     mercurial
+    openssh
   ];
 in
 {
@@ -166,6 +168,15 @@ in
         type = lib.types.path;
       };
 
+      configurePostgresql = lib.mkOption {
+        type = lib.types.bool;
+        default = true;
+        description = ''
+          Enable PostgreSQL and create a user and database for weblate.
+          The default `settings` reference this database, if you disable this option you must provide a database URL.
+        '';
+      };
+
       extraConfig = lib.mkOption {
         type = lib.types.lines;
         default = "";
@@ -176,10 +187,20 @@ in
 
       smtp = {
         enable = lib.mkEnableOption "Weblate SMTP support";
+
+        from = lib.mkOption {
+          description = "E-Mail from name.";
+          example = "weblate@example.com";
+          default = config.services.weblate.smtp.user;
+          defaultText = "config.services.weblate.smtp.user";
+          type = lib.types.str;
+        };
+
         user = lib.mkOption {
           description = "SMTP login name.";
           example = "weblate@example.org";
-          type = lib.types.str;
+          type = lib.types.nullOr lib.types.str;
+          default = null;
         };
 
         host = lib.mkOption {
@@ -188,16 +209,23 @@ in
           example = "127.0.0.1";
         };
 
+        port = lib.mkOption {
+          description = "SMTP port used when sending emails to users.";
+          type = lib.types.port;
+          default = 587;
+          example = 22;
+        };
+
         passwordFile = lib.mkOption {
           description = ''
             Location of a file containing the SMTP password.
 
             This should be a path pointing to a file with secure permissions (not /nix/store).
           '';
-          type = lib.types.path;
+          type = lib.types.nullOr lib.types.path;
+          default = null;
         };
       };
-
     };
   };
 
@@ -218,7 +246,6 @@ in
           "/media/".alias = "/var/lib/weblate/media/";
           "/".proxyPass = "http://unix:///run/weblate.socket";
         };
-
       };
     };
 
@@ -371,7 +398,7 @@ in
       unixSocketPerm = 770;
     };
 
-    services.postgresql = {
+    services.postgresql = lib.mkIf cfg.configurePostgresql {
       enable = true;
       ensureUsers = [
         {
