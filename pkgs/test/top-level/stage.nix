@@ -110,9 +110,8 @@ assert isComposable "pkgsStatic";
 assert isComposable "pkgsi686Linux";
 
 # Special cases regarding buildPlatform vs hostPlatform
-# TODO: fails
-# assert discardEvaluationErrors (pkgsCross.gnu64.pkgsMusl.stdenv.hostPlatform.isMusl);
-# assert discardEvaluationErrors (pkgsCross.gnu64.pkgsi686Linux.stdenv.hostPlatform.isx86_32);
+assert discardEvaluationErrors (pkgsCross.gnu64.pkgsMusl.stdenv.hostPlatform.isMusl);
+assert discardEvaluationErrors (pkgsCross.gnu64.pkgsi686Linux.stdenv.hostPlatform.isx86_32);
 assert discardEvaluationErrors (pkgsCross.mingwW64.pkgsLinux.stdenv.hostPlatform.isLinux);
 assert discardEvaluationErrors (
   pkgsCross.aarch64-darwin.pkgsx86_64Darwin.stdenv.hostPlatform.isx86_64

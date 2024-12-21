@@ -195,10 +195,13 @@ let
         (lib.systems.systemToAttrs (lib.defaultTo prevArgs.localSystem prevArgs.crossSystem or null)) // crossAttrs;
     });
     # This is only cross when we are already cross, otherwise local.
-    mkHybridPkgs = name: hybridAttrs: mkPkgs name (prevArgs: {
-      ${if stdenv.hostPlatform == stdenv.buildPlatform then "localSystem" else "crossSystem"} =
-        (lib.systems.systemToAttrs (lib.defaultTo prevArgs.localSystem prevArgs.crossSystem or null)) // hybridAttrs;
-    });
+    # For the case of "native cross", i.e. pkgsCross.gnu64 on a x86_64-linux system, we need to adjust **both**
+    # localSystem **and** crossSystem, otherwise they're out of sync.
+    mkHybridPkgs = name: hybridAttrs: mkPkgs name (prevArgs: let
+        newSystem = (lib.systems.systemToAttrs (lib.defaultTo prevArgs.localSystem prevArgs.crossSystem or null)) // hybridAttrs;
+      in { crossSystem = newSystem; }
+      // lib.optionalAttrs (stdenv.hostPlatform == stdenv.buildPlatform) { localSystem = newSystem; }
+    );
   in self: super: {
     # This maps each entry in lib.systems.examples to its own package
     # set. Each of these will contain all packages cross compiled for
