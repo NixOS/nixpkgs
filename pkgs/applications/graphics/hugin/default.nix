@@ -25,7 +25,7 @@
 , libXmu
 , libGLU
 , libGL
-, openexr
+, openexr_3
 , panotools
 , perlPackages
 , sqlite
@@ -63,7 +63,7 @@ stdenv.mkDerivation rec {
     libXmu
     libGLU
     libGL
-    openexr
+    openexr_3
     panotools
     sqlite
     vigra
