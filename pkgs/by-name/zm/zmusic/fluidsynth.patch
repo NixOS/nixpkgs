@@ -1,0 +1,22 @@
+diff --git a/source/mididevices/music_fluidsynth_mididevice.cpp b/source/mididevices/music_fluidsynth_mididevice.cpp
+index 1a33d3c..496d842 100644
+--- a/source/mididevices/music_fluidsynth_mididevice.cpp
++++ b/source/mididevices/music_fluidsynth_mididevice.cpp
+@@ -47,7 +47,7 @@
+ 
+ FluidConfig fluidConfig;
+ 
+-#include "../thirdparty/fluidsynth/include/fluidsynth.h"
++#include <fluidsynth.h>
+ 
+ class FluidSynthMIDIDevice : public SoftSynthMIDIDevice
+ {
+diff --git a/thirdparty/CMakeLists.txt b/thirdparty/CMakeLists.txt
+index dd791db..c59b40d 100644
+--- a/thirdparty/CMakeLists.txt
++++ b/thirdparty/CMakeLists.txt
+@@ -28,4 +28,3 @@ add_subdirectory(timidityplus)
+ add_subdirectory(wildmidi)
+ add_subdirectory(oplsynth)
+ add_subdirectory(libxmp)
+-add_subdirectory(fluidsynth/src)
