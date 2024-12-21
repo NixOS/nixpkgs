@@ -1349,7 +1349,7 @@ let
 
     ocamlformat-lib = callPackage ../development/ocaml-modules/ocamlformat/ocamlformat-lib.nix { };
 
-    ocamlformat-mlx = callPackage ../development/ocaml-modules/ocamlformat-mlx/ocamlformat-mlx.nix { };
+    ocamlformat-mlx = callPackage ../development/ocaml-modules/ocamlformat-mlx { };
 
     ocamlformat-mlx-lib = callPackage ../development/ocaml-modules/ocamlformat-mlx/lib.nix { };
 
