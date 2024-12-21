@@ -247,10 +247,14 @@ $a}
     x
 
     # change hasCatalogue default from false to true
+    /(^|\n)  hasCatalogue = true;(\n|$)/!{
+      s/$/\n  hasCatalogue = false;/M
+    }
     s/^  hasCatalogue = true;$//Mg
-    t had-catalogue
-    s/(\n?)$/\1  hasCatalogue = false;/
-    :had-catalogue
+
+    # clear empty lines
+    s/(^\n*|\n*$)//g
+    s/\n\n+/\n/g
 
     # print hold space if not empty
     /./Mp
