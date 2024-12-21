@@ -245,8 +245,12 @@ self: super: {
   # https://github.com/haskell-cryptography/HsOpenSSL/issues/93
   # https://github.com/haskell-cryptography/HsOpenSSL/issues/95
   HsOpenSSL = appendConfigureFlags [
-    "--ghc-option=-optc=-Wno-incompatible-pointer-types"
+    "--ghc-option=-optc=-Wno-error=incompatible-pointer-types"
   ] super.HsOpenSSL;
+  # Work around compilation failure with gcc >= 14
+  HsSyck = appendConfigureFlags [
+    "--ghc-option=-optc=-Wno-error=implicit-function-declaration"
+  ] super.HsSyck;
 
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
