@@ -13,7 +13,7 @@
   lib,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "lib2geom";
   version = "1.4";
 
@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "inkscape";
     repo = "lib2geom";
-    rev = "refs/tags/${version}";
+    rev = "refs/tags/${finalAttrs.version}";
     hash = "sha256-kbcnefzNhUj/ZKZaB9r19bpI68vxUKOLVAwUXSr/zz0=";
   };
 
@@ -92,4 +92,4 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [ jtojnar ];
     platforms = platforms.unix;
   };
-}
+})
