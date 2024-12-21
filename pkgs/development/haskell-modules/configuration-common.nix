@@ -2284,6 +2284,14 @@ self: super: {
   #  {-# OPTIONS_GHC -fforce-recomp -F -pgmF hspec-discover #-}
   infer-license = dontCheckIf pkgs.stdenv.hostPlatform.isStatic super.infer-license;
 
+  # Fails to build in pkgsStatic with:
+  #  Building test suite 'spec' for interpolate-0.2.1..
+  #  ghc: could not execute: hspec-discover
+  #
+  # Because of this in Spec.hs:
+  #  {-# OPTIONS_GHC -F -pgmF hspec-discover #-}
+  interpolate = dontCheckIf pkgs.stdenv.hostPlatform.isStatic super.interpolate;
+
   # BSON defaults to requiring network instead of network-bsd which is
   # required nowadays: https://github.com/mongodb-haskell/bson/issues/26
   bson = appendConfigureFlag "-f-_old_network" (super.bson.override {
