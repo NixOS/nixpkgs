@@ -20,53 +20,38 @@
   })
   (fetchNuGet {
     pname = "SabreTools.ASN1";
-    version = "1.5.0";
-    hash = "sha256-vYo3lxzFjP1MytGmR+ceMfLeSR8wxTt8JNG2j7JFKK4=";
+    version = "1.5.1";
+    hash = "sha256-J6Iw44x6DGSAWmo4q1+sTrkcIc41eEBjChYNdazhvwM=";
   })
   (fetchNuGet {
     pname = "SabreTools.Compression";
-    version = "0.6.1";
-    hash = "sha256-6EzPxtTJO2uwUBi/qr4M67YM7giXymSU8EsbdWTZWrY=";
+    version = "0.6.3";
+    hash = "sha256-ZgoJzy7QpIl5Qqlk8O4DYXpV6kIaf04zStaV8SvzJNE=";
   })
   (fetchNuGet {
     pname = "SabreTools.Hashing";
-    version = "1.4.0";
-    hash = "sha256-Kqsol001/D1WmPt/2hsxrtb+rBePXrmWmHHdC/qawt8=";
+    version = "1.4.1";
+    hash = "sha256-tCOMMhRtdW16NWi7fCkqXWls5Tb108LawDjWAqBIaLg=";
   })
   (fetchNuGet {
     pname = "SabreTools.IO";
-    version = "1.5.1";
-    hash = "sha256-ISuFfyc3R4kl5KR5ZUozKm35QLL5K+IuqCUQMHedFkc=";
-  })
-  (fetchNuGet {
-    pname = "SabreTools.IO";
-    version = "1.6.0";
-    hash = "sha256-b1H4eEff7XH0upG9GjbRW+Kwgl6+d4EENQv6r6PO40Q=";
-  })
-  (fetchNuGet {
-    pname = "SabreTools.IO";
-    version = "1.6.1";
-    hash = "sha256-Hu/paV5x06rFgTRydQ1Lsqu7EVimw6W4Z+v2UkM8W7M=";
+    version = "1.6.2";
+    hash = "sha256-RrSr9yGfqUGIu5iG0AAv0MwZ2/+9a/2XNYaPOPFsNzM=";
   })
   (fetchNuGet {
     pname = "SabreTools.Matching";
-    version = "1.5.0";
-    hash = "sha256-4YTQx+4CU/yoPfm85LRBe4daP04BTzmcHeiMNn5ugvM=";
-  })
-  (fetchNuGet {
-    pname = "SabreTools.Models";
     version = "1.5.1";
-    hash = "sha256-xOA0TyqX7ZhwnGEp0ZUW+2SheVVJmWSsUQcxr/a603U=";
+    hash = "sha256-YrcdBXJKFfoD3+S4XkoAUH4LhN1rPk5DMY6z9UwTXQ8=";
   })
   (fetchNuGet {
     pname = "SabreTools.Models";
-    version = "1.5.5";
-    hash = "sha256-6ATn7ZGL8Il/KGhRL0KhJD0dhQDU7jEwMW1c08wczMI=";
+    version = "1.5.8";
+    hash = "sha256-6Erd8nBwLVK3KVmZPAH2P58NQbinCMW98gveqoo1WL8=";
   })
   (fetchNuGet {
     pname = "SabreTools.Serialization";
-    version = "1.8.1";
-    hash = "sha256-Fmiv6E2k6TC8ezIGrUPUh/hxBrPFdktGXtgtfQ6jY7Y=";
+    version = "1.8.4";
+    hash = "sha256-LjtX79eJGeD1Bz+SWeZP/8BMGo+ZEHNnLEa3MQ2d3rU=";
   })
   (fetchNuGet {
     pname = "SharpCompress";
@@ -85,13 +70,13 @@
   })
   (fetchNuGet {
     pname = "UnshieldSharp";
-    version = "1.9.2";
-    hash = "sha256-xkg3szfT+Dc8E4HLluhuuHDZJAdqVjIy2w1bGPPv+hU=";
+    version = "1.9.4";
+    hash = "sha256-ie1OBWmOYoAx0u8gzUj+ay/K/h96XessaGMsxRlI6WM=";
   })
   (fetchNuGet {
     pname = "WiseUnpacker";
-    version = "1.5.4";
-    hash = "sha256-A2TWAS+hRzzOHwWDYOzWwAn/oGymvvG3Ok6//6jypGo=";
+    version = "1.5.6";
+    hash = "sha256-zsAEUN1/4mdl+J2Vk8kA/1XXzomiMQ72hjHgndB6ZrY=";
   })
   (fetchNuGet {
     pname = "ZstdSharp.Port";
