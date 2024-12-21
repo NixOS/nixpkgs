@@ -32,7 +32,7 @@
   libgudev,
   libwacom,
   xwayland,
-  libgbm,
+  mesa,
   meson,
   gnome-settings-daemon,
   xorgserver,
@@ -111,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
     gettext
     libxcvt
-    libgbm
+    mesa  # actually uses eglmesaext
     meson
     ninja
     xvfb-run
