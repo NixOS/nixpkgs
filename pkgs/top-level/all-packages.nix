@@ -2281,17 +2281,7 @@ with pkgs;
 
   electronplayer = callPackage ../applications/video/electronplayer/electronplayer.nix { };
 
-  element-desktop = callPackage ../applications/networking/instant-messengers/element/element-desktop.nix {
-    inherit (darwin.apple_sdk.frameworks) Security AppKit CoreServices;
-  };
-  element-desktop-wayland = writeScriptBin "element-desktop" ''
-    #!/bin/sh
-    NIXOS_OZONE_WL=1 exec ${element-desktop}/bin/element-desktop "$@"
-  '';
-
-  element-web-unwrapped = callPackage ../applications/networking/instant-messengers/element/element-web.nix { };
-
-  element-web = callPackage ../applications/networking/instant-messengers/element/element-web-wrapper.nix {
+  element-web = callPackage ../by-name/el/element-web/package.nix {
     conf = config.element-web.conf or { };
   };
 
@@ -13898,7 +13888,12 @@ with pkgs;
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix { };
+  inherit
+    ({
+      freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix { };
+    })
+    freeoffice
+    ;
 
   inherit (xorg) xlsfonts;
 
@@ -14911,7 +14906,15 @@ with pkgs;
 
   smtube = libsForQt5.callPackage ../applications/video/smtube { };
 
-  softmaker-office = callPackage ../applications/office/softmaker/softmaker_office.nix { };
+  inherit
+    ({
+      softmaker-office = callPackage ../applications/office/softmaker/softmaker-office.nix { };
+      softmaker-office-nx = callPackage ../applications/office/softmaker/softmaker-office-nx.nix { };
+    })
+    softmaker-office
+    softmaker-office-nx
+    ;
+
 
   synapse-bt = callPackage ../applications/networking/p2p/synapse-bt {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;

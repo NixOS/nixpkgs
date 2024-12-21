@@ -3,13 +3,11 @@
   stdenv,
   rustPlatform,
   fetchFromGitHub,
-  rust,
   sqlcipher,
   nodejs,
   python3,
   yarn,
   fixup-yarn-lock,
-  CoreServices,
   fetchYarnDeps,
   removeReferencesTo,
 }:
@@ -37,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     yarn
     fixup-yarn-lock
   ];
-  buildInputs = [ sqlcipher ] ++ lib.optional stdenv.hostPlatform.isDarwin CoreServices;
+  buildInputs = [ sqlcipher ];
 
   npm_config_nodedir = nodejs;
 
