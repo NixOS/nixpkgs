@@ -1010,6 +1010,18 @@ self: super: builtins.intersectAttrs super {
   postgresql-libpq-notify = dontCheck super.postgresql-libpq-notify;
   postgresql-pure = dontCheck super.postgresql-pure;
 
+  # Needs PostgreSQL db during tests
+  relocant = overrideCabal (drv: {
+    preCheck = ''
+      export postgresqlTestUserOptions="LOGIN SUPERUSER"
+      export PGDATABASE=relocant
+    '';
+    testToolDepends = drv.testToolDepends or [] ++ [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ];
+  }) super.relocant;
+
   retrie = addTestToolDepends [pkgs.git pkgs.mercurial] super.retrie;
   retrie_1_2_0_0 = addTestToolDepends [pkgs.git pkgs.mercurial] super.retrie_1_2_0_0;
   retrie_1_2_1_1 = addTestToolDepends [pkgs.git pkgs.mercurial] super.retrie_1_2_1_1;
