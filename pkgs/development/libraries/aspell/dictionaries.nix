@@ -1136,8 +1136,16 @@ rec {
 
     meta = {
       homepage = "https://web.archive.org/web/20210425104207/http://www.jpetrie.net/scientific-word-list-for-spell-checkersspelling-dictionaries/";
-      # no license is given so we have to assume it is unfree
-      license = lib.licenses.unfree;
+      # The latest working snapshot has the words "© 2021 by John Petrie and freed by copyleft under a Creative Commons License"
+      # with an image containing "SOME RIGHTS RESERVED | (CC) Creative Commons". There are no other mentions of licence anywhere I could find.
+      # The copyright date 2021 is in the time of v4.0 of CC (2014-present), and the words "freed by copyleft" leads me to believe John means to
+      # apply a Share Alike (SA) licence (CC's name for copyleft).
+      # Finally, near the bottom of the page John writes:
+      # "Please download these, copy them, share them, spread them, host them, correct them, add to them, and use them! The more such lists exist on
+      #   the internet [...], the better off every scientific writer, editor, researcher, and student is."
+      # Since scientific writing and editing are sometimes commercial, this indicates their intent to allow commercial use.
+      # So. Creative Commons, version 4, Share Alike, and NOT non-commercial, leaves us with "CC-BY-SA-4.0", fullName "Creative Commons Attribution Share Alike 4.0"; };
+      license = lib.licenses.cc-by-sa-40;
     };
 
   };
