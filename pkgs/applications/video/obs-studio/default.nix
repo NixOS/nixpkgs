@@ -2,6 +2,7 @@
 , uthash
 , lib
 , stdenv
+, ninja
 , nv-codec-headers-12
 , fetchFromGitHub
 , fetchpatch
@@ -42,6 +43,7 @@
 , pipewire
 , libdrm
 , librist
+, cjson
 , libva
 , srt
 , qtwayland
@@ -107,6 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     addDriverRunpath
     cmake
+    ninja
     pkg-config
     wrapGAppsHook3
     wrapQtAppsHook
@@ -132,6 +135,7 @@ stdenv.mkDerivation (finalAttrs: {
     mbedtls
     pciutils
     librist
+    cjson
     libva
     srt
     qtwayland
@@ -157,18 +161,25 @@ stdenv.mkDerivation (finalAttrs: {
       ln -s $i cef/Release/
       ln -s $i cef/Resources/
     done
-    ln -s ${libcef}/lib/libcef.so cef/Release/
+    ln -s ${libcef}/lib/*.so* cef/Release/
+    ln -s ${libcef}/libexec/cef/chrome-sandbox cef/Release/
     ln -s ${libcef}/lib/libcef_dll_wrapper.a cef/libcef_dll_wrapper/
     ln -s ${libcef}/include cef/
   '';
 
+  postPatch = ''
+    cp ${./CMakeUserPresets.json} ./CMakeUserPresets.json
+  '';
+
   cmakeFlags = [
+    "--preset" "nixpkgs-${if stdenv.hostPlatform.isDarwin then "darwin" else "linux"}"
     "-DOBS_VERSION_OVERRIDE=${finalAttrs.version}"
     "-Wno-dev" # kill dev warnings that are useless for packaging
     # Add support for browser source
-    "-DBUILD_BROWSER=ON"
+    "-DENABLE_BROWSER=ON"
     "-DCEF_ROOT_DIR=../../cef"
     "-DENABLE_JACK=ON"
+    "-DENABLE_WEBRTC=ON"
     (lib.cmakeBool "ENABLE_QSV11" stdenv.hostPlatform.isx86_64)
     (lib.cmakeBool "ENABLE_LIBFDK" withFdk)
     (lib.cmakeBool "ENABLE_ALSA" alsaSupport)
@@ -193,8 +204,13 @@ stdenv.mkDerivation (finalAttrs: {
       blackmagic-desktop-video
     ];
   in ''
-    # Remove libcef before patchelf, otherwise it will fail
+    # Remove cef components before patchelf, otherwise it will fail
     rm $out/lib/obs-plugins/libcef.so
+    rm $out/lib/obs-plugins/libEGL.so
+    rm $out/lib/obs-plugins/libGLESv2.so
+    rm $out/lib/obs-plugins/libvk_swiftshader.so
+    rm $out/lib/obs-plugins/libvulkan.so.1
+    rm $out/lib/obs-plugins/chrome-sandbox
 
     qtWrapperArgs+=(
       --prefix LD_LIBRARY_PATH : "$out/lib:${lib.makeLibraryPath wrapperLibraries}"
@@ -206,8 +222,9 @@ stdenv.mkDerivation (finalAttrs: {
     addDriverRunpath $out/lib/lib*.so
     addDriverRunpath $out/lib/obs-plugins/*.so
 
-    # Link libcef again after patchelfing other libs
+    # Link cef components again after patchelfing other libs
     ln -s ${libcef}/lib/* $out/lib/obs-plugins/
+    ln -s ${libcef}/libexec/cef/* $out/lib/obs-plugins/
   '';
 
   passthru.updateScript = nix-update-script { };
