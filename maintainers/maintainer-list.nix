@@ -12001,6 +12001,12 @@
     githubId = 12898828;
     keys = [ { fingerprint = "B44A DFDF F869 A66A 3FDF  DD8B 8609 A7B5 19E5 E342"; } ];
   };
+  kmatasfp = {
+    email = "el-development@protonmail.com";
+    name = "Kaur Matas";
+    github = "kmatasfp";
+    githubId = 33095685;
+  };
   kmcopper = {
     email = "kmcopper@danwin1210.me";
     name = "Kyle Copperfield";
@@ -23432,6 +23438,12 @@
     github = "ursi";
     githubId = 17836748;
     name = "Mason Mackaman";
+  };
+  usertam = {
+    email = "nix@usertam.dev";
+    github = "usertam";
+    githubId = 22500027;
+    name = "Samuel Tam";
   };
   uskudnik = {
     email = "urban.skudnik@gmail.com";
