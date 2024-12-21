@@ -44,6 +44,13 @@ buildPythonApplication rec {
       url = "https://github.com/nicolargo/glances/commit/07656fd7ff67e4b189aa14ca1645c90a580d72f1.patch";
       hash = "sha256-laE4pYGiaLqJh1CmGYkVHsFD2/4C5t0PfTLrGPVzvEs=";
     })
+    # Fixes test_105_network_plugin_method failing on aarch64-linux
+    # Remove on releases after 4.2.1
+    (fetchpatch {
+      name = "aarch64_linux-test_105_network_plugin_method.patch";
+      url = "https://github.com/nicolargo/glances/commit/d9725d623f7d459232c2eb7a4887080772982447.patch";
+      hash = "sha256-xLDAO8QmgvO9BnRbIs3nSROrJ2tIL9B/S/2vpS53hwQ=";
+    })
   ];
 
   build-system = [ setuptools ];
