@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "mcdreforged";
-  version = "2.14.0";
+  version = "2.14.2";
   pyproject = true;
 
   src = fetchFromGitHub {
