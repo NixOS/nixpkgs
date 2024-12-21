@@ -1,0 +1,29 @@
+diff --git a/src/c/_cffi_backend.c b/src/c/_cffi_backend.c
+index 537271f..9c3bf94 100644
+--- a/src/c/_cffi_backend.c
++++ b/src/c/_cffi_backend.c
+@@ -103,11 +103,11 @@
+ # define CFFI_CHECK_FFI_PREP_CIF_VAR 0
+ # define CFFI_CHECK_FFI_PREP_CIF_VAR_MAYBE 0
+ 
+-#elif defined(__APPLE__) && defined(FFI_AVAILABLE_APPLE)
++#elif defined(__APPLE__)
+ 
+-# define CFFI_CHECK_FFI_CLOSURE_ALLOC __builtin_available(macos 10.15, ios 13, watchos 6, tvos 13, *)
++# define CFFI_CHECK_FFI_CLOSURE_ALLOC 1
+ # define CFFI_CHECK_FFI_CLOSURE_ALLOC_MAYBE 1
+-# define CFFI_CHECK_FFI_PREP_CLOSURE_LOC __builtin_available(macos 10.15, ios 13, watchos 6, tvos 13, *)
++# define CFFI_CHECK_FFI_PREP_CLOSURE_LOC 1
+ # define CFFI_CHECK_FFI_PREP_CLOSURE_LOC_MAYBE 1
+-# define CFFI_CHECK_FFI_PREP_CIF_VAR __builtin_available(macos 10.15, ios 13, watchos 6, tvos 13, *)
++# define CFFI_CHECK_FFI_PREP_CIF_VAR 1
+ # define CFFI_CHECK_FFI_PREP_CIF_VAR_MAYBE 1
+@@ -6422,7 +6422,7 @@ static PyObject *b_callback(PyObject *self, PyObject *args)
+     else
+ #endif
+     {
+-#if defined(__APPLE__) && defined(FFI_AVAILABLE_APPLE) && !FFI_LEGACY_CLOSURE_API
++#if defined(__APPLE__) && !FFI_LEGACY_CLOSURE_API
+         PyErr_Format(PyExc_SystemError, "ffi_prep_closure_loc() is missing");
+         goto error;
+ #else
