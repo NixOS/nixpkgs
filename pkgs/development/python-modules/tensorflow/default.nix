@@ -607,6 +607,7 @@ let
   };
 in
 buildPythonPackage {
+  __structuredAttrs = true;
   inherit version pname;
   disabled = pythonAtLeast "3.12";
 
@@ -636,7 +637,10 @@ buildPythonPackage {
     rm $out/bin/tensorboard
   '';
 
-  setupPyGlobalFlags = [ "--project_name ${pname}" ];
+  setupPyGlobalFlags = [
+    "--project_name"
+    pname
+  ];
 
   # tensorflow/tools/pip_package/setup.py
   propagatedBuildInputs = [
