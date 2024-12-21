@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
     help2man
     makeWrapper
     ninja
-    (python3.withPackages (p: [ p.jinja2 ]))
+    (python3.pythonOnBuildForHost.withPackages (p: [ p.jinja2 ]))
     pkg-config
   ];
   buildInputs = [ fuse3 ];
@@ -68,8 +68,7 @@ stdenv.mkDerivation rec {
 
   passthru = {
     tests = {
-      incus-container-legacy-init = nixosTests.incus.container-legacy-init;
-      incus-container-systemd-init = nixosTests.incus.container-systemd-init;
+      incus-lts = nixosTests.incus-lts.container;
     };
 
     updateScript = nix-update-script { };
