@@ -83,6 +83,9 @@ buildPythonPackage rec {
     changelog = "https://github.com/ml-explore/mlx/releases/tag/v${version}";
     license = licenses.mit;
     platforms = [ "aarch64-darwin" ];
-    maintainers = with maintainers; [ viraptor ];
+    maintainers = with maintainers; [
+      viraptor
+      Gabriella439
+    ];
   };
 }
