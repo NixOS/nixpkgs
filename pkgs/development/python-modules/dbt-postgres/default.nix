@@ -16,7 +16,7 @@ buildPythonPackage rec {
   version = "1.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
@@ -24,8 +24,6 @@ buildPythonPackage rec {
     tag = "v${version}";
     hash = "sha256-lywWf78rluX17D5bcfehHd7X18tAdw3HZ65v440jETc=";
   };
-
-  env.DBT_PSYCOPG2_NAME = "psycopg2";
 
   build-system = [ hatchling ];
 
