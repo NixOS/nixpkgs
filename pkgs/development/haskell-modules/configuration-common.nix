@@ -2268,6 +2268,14 @@ self: super: {
   #  compilation failed
   hashable = dontCheckIf pkgs.stdenv.hostPlatform.isStatic super.hashable;
 
+  # Fails to build in pkgsStatic with:
+  #  Building test suite 'unliftio-spec' for unliftio-0.2.25.0..
+  #  ghc: could not execute: hspec-discover
+  #
+  # Because of this in Spec.hs:
+  #  {-# OPTIONS_GHC -F -pgmF hspec-discover #-}
+  unliftio = dontCheckIf pkgs.stdenv.hostPlatform.isStatic super.unliftio;
+
   # BSON defaults to requiring network instead of network-bsd which is
   # required nowadays: https://github.com/mongodb-haskell/bson/issues/26
   bson = appendConfigureFlag "-f-_old_network" (super.bson.override {
