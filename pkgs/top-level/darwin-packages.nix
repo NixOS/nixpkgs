@@ -277,6 +277,7 @@ makeScopeWithSplicing' {
         xcode_16
         xcode_16_1
         xcode
+        requireXcode
         ;
 
       xcodeProjectCheckHook = pkgs.makeSetupHook {
