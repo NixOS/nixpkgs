@@ -407,6 +407,9 @@ let
         # resulting LLVM IR isn't platform-independent this doesn't give you much.
         # In fact, I tried to test the result in a VM-test, but as soon as JIT was used to optimize
         # a query, postgres would coredump with `Illegal instruction`.
+        #
+        # Note: This is "host canExecute build" on purpose, since this is about the LLVM that is called
+        # to do JIT at **runtime**.
         broken = jitSupport && !stdenv.hostPlatform.canExecute stdenv.buildPlatform;
       };
     });
