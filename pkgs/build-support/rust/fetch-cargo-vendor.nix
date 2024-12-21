@@ -53,6 +53,8 @@ let
     {
       name = "${name}-vendor-staging";
 
+      impureEnvVars = lib.fetchers.proxyImpureEnvVars;
+
       nativeBuildInputs = [
         fetchCargoVendorUtil
         nix-prefetch-git
