@@ -5,9 +5,9 @@ let
 in
 {
   sublime4 = common {
-    buildVersion = "4186";
-    x64sha256 = "Rw/N2uSsMb6uMvMt9lEzBFSAvAePFTwfX09ARDX1mSs=";
-    aarch64sha256 = "6RKaSIDj0zOqjYAGb77q3+sKqmp+VFqcgODyU06ajrc=";
+    buildVersion = "4189";
+    x64sha256 = "0vEG2FfLK+93UtpYV9iWl187iN79Tozm38Vh6lbzW7A=";
+    aarch64sha256 = "ZyLnbvpyxvJfyfu663ED0Yn5M37As+jy6TREZMgSHgI=";
   } { };
 
   sublime4-dev = common {
