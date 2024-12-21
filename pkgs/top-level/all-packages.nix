@@ -3431,8 +3431,6 @@ with pkgs;
 
   uniscribe = callPackage ../tools/text/uniscribe { };
 
-  gallery-dl = python3Packages.callPackage ../applications/misc/gallery-dl { };
-
   gandi-cli = python3Packages.callPackage ../tools/networking/gandi-cli { };
 
   gaphor = python3Packages.callPackage ../tools/misc/gaphor { };
