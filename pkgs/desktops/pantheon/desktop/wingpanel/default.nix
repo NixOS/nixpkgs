@@ -14,7 +14,6 @@
 , granite
 , gettext
 , mutter
-, mesa
 , json-glib
 , elementary-gtk-theme
 , elementary-icon-theme
@@ -59,7 +58,6 @@ stdenv.mkDerivation rec {
     json-glib
     libgee
     mutter
-    mesa # for libEGL
   ];
 
   preFixup = ''
