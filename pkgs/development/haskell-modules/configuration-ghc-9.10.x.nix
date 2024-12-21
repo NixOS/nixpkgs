@@ -70,7 +70,8 @@ self: super: {
   integer-conversion = doDistribute self.integer-conversion_0_1_1;
   ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_1_20241103;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
-  http2 = self.http2_5_3_5;
+  http2 = doDistribute self.http2_5_3_5;
+  http-semantics = doDistribute self.http-semantics_0_3_0;
   lens = doDistribute self.lens_5_3_2;
   lukko = doDistribute self.lukko_0_1_2;
   network-control = super.network-control_0_1_3;
