@@ -16,7 +16,7 @@
   libGL,
 }:
 let
-  buildNumber = "1293";
+  buildNumber = "1294";
   vaqua = fetchurl {
     name = "VAqua9.jar";
     url = "https://violetlib.org/release/vaqua/9/VAqua9.jar";
@@ -61,13 +61,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "processing";
-  version = "4.3";
+  version = "4.3.1";
 
   src = fetchFromGitHub {
     owner = "processing";
     repo = "processing4";
     rev = "processing-${buildNumber}-${version}";
-    sha256 = "sha256-SzQemZ6iZ9o89/doV8YMv7DmyPSDyckJl3oyxJyfrm0=";
+    sha256 = "sha256-nshhPeDXhrvk+2oQ9BPqJTZV9a+OjxeQiO31JAxQ40g=";
   };
 
   nativeBuildInputs = [
