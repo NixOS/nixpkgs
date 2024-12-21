@@ -1078,11 +1078,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libSM = callPackage ({ stdenv, pkg-config, fetchurl, libICE, libuuid, xorgproto, xtrans, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libSM";
-    version = "1.2.4";
+    version = "1.2.5";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libSM-1.2.4.tar.xz";
-      sha256 = "113vx53k6pyxf84v5kqb7qhcldx1fi78lym77lcb2xhj9lgfbjzx";
+      url = "mirror://xorg/individual/lib/libSM-1.2.5.tar.xz";
+      sha256 = "1g10pn1zhcyc1ys8skp6p46gn6qgkif8kqdwlz1hsrzgllny3y9a";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
