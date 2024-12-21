@@ -135,7 +135,6 @@ stdenv.mkDerivation {
     homepage = "https://www.vtk.org/";
     license = licenses.bsd3;
     maintainers = with maintainers; [
-      knedlsepp
       tfmoraes
     ];
     platforms = platforms.unix;

@@ -12049,12 +12049,6 @@
     github = "svelterust";
     githubId = 85593302;
   };
-  knedlsepp = {
-    email = "josef.kemetmueller@gmail.com";
-    github = "knedlsepp";
-    githubId = 3287933;
-    name = "Josef Kemetmüller";
-  };
   knightpp = {
     email = "knightpp@proton.me";
     github = "knightpp";
