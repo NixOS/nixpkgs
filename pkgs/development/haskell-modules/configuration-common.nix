@@ -2966,6 +2966,10 @@ self: super: {
     };
   } super.haskell-to-elm;
 
+  # Overly strict upper bounds on esqueleto
+  # https://github.com/jonschoning/espial/issues/61
+  espial = doJailbreak super.espial;
+
   # https://github.com/dpwright/HaskellNet-SSL/pull/33 Use crypton-connection instead of connection
   HaskellNet-SSL = appendPatch (pkgs.fetchpatch {
     name = "HaskellNet-SSL-crypton-connection.patch";
