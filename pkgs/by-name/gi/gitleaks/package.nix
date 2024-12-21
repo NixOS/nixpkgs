@@ -5,8 +5,8 @@
   fetchFromGitHub,
   gitleaks,
   installShellFiles,
-  testers,
   nix-update-script,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -28,7 +28,10 @@ buildGoModule rec {
     "-X=github.com/zricethezav/gitleaks/v${lib.versions.major version}/cmd.Version=${version}"
   ];
 
-  nativeBuildInputs = [ installShellFiles ];
+  nativeBuildInputs = [
+    installShellFiles
+    versionCheckHook
+  ];
 
   # With v8 the config tests are blocking
   doCheck = false;
@@ -40,10 +43,7 @@ buildGoModule rec {
       --zsh <($out/bin/${pname} completion zsh)
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = gitleaks;
-    command = "${pname} version";
-  };
+  doInstallCheck = true;
 
   passthru.updateScript = nix-update-script { };
 
