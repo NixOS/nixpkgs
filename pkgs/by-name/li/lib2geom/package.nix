@@ -11,6 +11,8 @@
   double-conversion,
   gtest,
   lib,
+  inkscape,
+  pkgsCross,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -86,6 +88,17 @@ stdenv.mkDerivation (finalAttrs: {
       ctest --output-on-failure -E '^${lib.concatStringsSep "|" disabledTests}$'
       runHook postCheck
     '';
+
+  passthru = {
+    tests =
+      {
+        inherit inkscape;
+      }
+      # Make sure x86_64-linux -> aarch64-linux cross compilation works
+      // lib.optionalAttrs (stdenv.buildPlatform.system == "x86_64-linux") {
+        aarch64-cross = pkgsCross.aarch64-multiplatform.lib2geom;
+      };
+  };
 
   meta = with lib; {
     description = "Easy to use 2D geometry library in C++";
