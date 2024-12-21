@@ -58,13 +58,17 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preInstall = ''
-    echo "Removing non-deterministic files"
+    echo "Removing non-deterministic and unnecessary files"
 
-    rm -r $(find -type d -name .turbo)
+    find -type d -name .turbo -exec rm -rf {} +
     rm node_modules/.modules.yaml
     rm packages/nodes-base/dist/types/nodes.json
 
-    echo "Removed non-deterministic files"
+    pnpm --ignore-scripts prune --prod
+    find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
+    rm -rf node_modules/.pnpm/{typescript*,prettier*}
+
+    echo "Removed non-deterministic and unnecessary files"
   '';
 
   installPhase = ''
