@@ -1,30 +1,31 @@
 {
   lib,
-  buildPythonApplication,
-  fetchPypi,
-  requests,
+  fetchFromGitHub,
+  gitUpdater,
   yt-dlp,
-  pytestCheckHook,
-  nix-update-script,
+  python3Packages
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "gallery-dl";
   version = "1.28.1";
-  format = "setuptools";
+  pyproject = true;
 
-  src = fetchPypi {
-    inherit version;
-    pname = "gallery_dl";
-    hash = "sha256-1UxLZZoDJsaiPqb+zaiWb9TyQIknKlrz6RN21B0sNe4=";
+  src = fetchFromGitHub {
+    owner = "mikf";
+    repo = "gallery-dl";
+    rev = "v${version}";
+    hash = "sha256-QapWwxaH1WPy4i72E1bAd0MZAAVmvl8XUJgDcuoBX+A=";
   };
 
-  propagatedBuildInputs = [
-    requests
+  build-system = [ python3Packages.setuptools ];
+
+  dependencies = [
+    python3Packages.requests
     yt-dlp
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [ python3Packages.pytestCheckHook ];
 
   disabledTests = [
     # requires network access
@@ -42,7 +43,7 @@ buildPythonApplication rec {
 
   pythonImportsCheck = [ "gallery_dl" ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
 
   meta = {
     description = "Command-line program to download image-galleries and -collections from several image hosting sites";
@@ -50,6 +51,6 @@ buildPythonApplication rec {
     changelog = "https://github.com/mikf/gallery-dl/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl2Only;
     mainProgram = "gallery-dl";
-    maintainers = with lib.maintainers; [ dawidsowa ];
+    maintainers = [ lib.maintainers.dawidsowa lib.maintainers.lucasew ];
   };
 }
