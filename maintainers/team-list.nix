@@ -478,7 +478,6 @@ with lib.maintainers;
     members = [
       cdepillabout
       maralorn
-      ncfavier
       sternenseemann
     ];
     githubTeams = [ "haskell" ];
