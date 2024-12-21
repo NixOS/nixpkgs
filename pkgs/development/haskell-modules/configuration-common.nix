@@ -1278,7 +1278,10 @@ self: super: {
 
     # Upstream stack-3.1.1 is compiled with hpack-0.37.0, and we make sure to
     # keep the same hpack version in Nixpkgs.
-    hpack = self.hpack_0_37_0;
+    hpack = lself.hpack_0_37_0;
+
+    # stack-3.1.1 requires >= 0.10
+    pantry = lself.pantry_0_10_0;
   });
 
   # hslua has tests that break when using musl.
