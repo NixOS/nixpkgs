@@ -7,6 +7,7 @@
   pkg-config,
   mbedtls,
   udev,
+  linuxPackages,
 }:
 
 stdenv.mkDerivation rec {
@@ -57,6 +58,10 @@ stdenv.mkDerivation rec {
     Cflags: -I\''${includedir} -I\''${includedir}/ajantv2/includes -I\''${includedir}/ajantv2/src/lin -DAJALinux -DAJA_LINUX -DAJA_USE_CPLUSPLUS11 -DNDEBUG -DNTV2_USE_CPLUSPLUS11
     EOF
   '';
+
+  passthru.tests = {
+    inherit (linuxPackages) ajantv2;
+  };
 
   meta = with lib; {
     description = "AJA NTV2 Open Source Static Libs and Headers for building applications that only wish to statically link against";
