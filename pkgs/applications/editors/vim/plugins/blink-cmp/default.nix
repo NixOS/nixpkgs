@@ -7,12 +7,12 @@
   nix-update-script,
 }:
 let
-  version = "0.7.6";
+  version = "0.8.0";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-fzAqUqMx4zqN9dtTYRAibhWd5CKh2pvai9g7E/xxnE8=";
+    tag = "v${version}";
+    hash = "sha256-YUADpn3kImYqlc96R3qMKC2V+ZD3+Na0WDP63dxKKbU=";
   };
   libExt = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
