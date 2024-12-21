@@ -48,7 +48,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-D2GEOM_BUILD_SHARED=ON"
   ];
 
-  doCheck = true;
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
   # TODO: Update cmake hook to make it simpler to selectively disable cmake tests: #113829
   checkPhase =
