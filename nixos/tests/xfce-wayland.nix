@@ -23,8 +23,6 @@ import ./make-test-python.nix (
 
         services.xserver.desktopManager.xfce.enable = true;
         services.xserver.desktopManager.xfce.enableWaylandSession = true;
-        # https://gitlab.xfce.org/apps/xfce4-screensaver/-/merge_requests/28
-        services.xserver.desktopManager.xfce.enableScreensaver = false;
         environment.systemPackages = [ pkgs.wlrctl ];
       };
 
