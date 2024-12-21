@@ -4401,6 +4401,12 @@
     github = "CnTeng";
     githubId = 56501688;
   };
+  cobalt = {
+    email = "cobalt@cobalt.rocks";
+    github = "Chaostheorie";
+    githubId = 42151227;
+    name = "Cobalt";
+  };
   CobaltCause = {
     name = "Charles Hall";
     email = "charles@computer.surgery";
