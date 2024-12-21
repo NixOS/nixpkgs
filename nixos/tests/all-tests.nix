@@ -934,6 +934,7 @@ in {
   sfxr-qt = handleTest ./sfxr-qt.nix {};
   sgt-puzzles = handleTest ./sgt-puzzles.nix {};
   shadow = handleTest ./shadow.nix {};
+  shadow-immutable = handleTest ./shadow-immutable.nix {};
   shadowsocks = handleTest ./shadowsocks {};
   shattered-pixel-dungeon = handleTest ./shattered-pixel-dungeon.nix {};
   shiori = handleTest ./shiori.nix {};
