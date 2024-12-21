@@ -5448,6 +5448,12 @@
     githubId = 62989;
     name = "Demyan Rogozhin";
   };
+  Denommus = {
+    email = "yuridenommus@gmail.com";
+    github = "Denommus";
+    githubId = 721022;
+    name = "Yuri da Costa Albuquerque";
+  };
   denperidge = {
     email = "contact@denperidge.com";
     github = "Denperidge";
