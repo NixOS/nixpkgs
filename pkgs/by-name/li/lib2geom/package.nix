@@ -41,11 +41,16 @@ stdenv.mkDerivation (finalAttrs: {
     gsl
     cairo
     double-conversion
+  ];
+
+  nativeCheckInputs = [
     gtest
   ];
 
   cmakeFlags = [
     "-D2GEOM_BUILD_SHARED=ON"
+    # For cross compilation.
+    (lib.cmakeBool "2GEOM_TESTING" finalAttrs.doCheck)
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
