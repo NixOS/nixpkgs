@@ -15,8 +15,9 @@ let
     lib.filterAttrs (iface: v: v.useDHCP == true) (config.networking.interfaces or { })
   );
   doDhcp = cfg.udhcpc.enable || dhcpInterfaces != [ ];
+  doDhcp6 = cfg.udhcpc6.enable || dhcpInterfaces != [ ];
   dhcpIfShellExpr =
-    if config.networking.useDHCP || cfg.udhcpc.enable then
+    if config.networking.useDHCP || cfg.udhcpc.enable || cfg.udhcpc6.enable then
       "$(ls /sys/class/net/ | grep -v ^lo$)"
     else
       lib.concatMapStringsSep " " lib.escapeShellArg dhcpInterfaces;
@@ -48,6 +49,7 @@ let
   '';
 
   udhcpcArgs = toString cfg.udhcpc.extraArgs;
+  udhcpc6Args = toString cfg.udhcpc6.extraArgs;
 
 in
 
@@ -108,6 +110,25 @@ in
       '';
     };
 
+    boot.initrd.network.udhcpc6.enable = mkOption {
+      default = false;
+      type = types.bool;
+      description = ''
+        Enables the udhcpc6 service during stage 1 of the boot process. This
+        defaults to `false`.
+      '';
+    };
+
+    boot.initrd.network.udhcpc6.extraArgs = mkOption {
+      default = [ ];
+      type = types.listOf types.str;
+      description = ''
+        Additional command-line arguments passed verbatim to udhcpc6 if
+        {option}`boot.initrd.network.enable` and
+        {option}`boot.initrd.network.udhcpc6.enable` are enabled.
+      '';
+    };
+
     boot.initrd.network.postCommands = mkOption {
       default = "";
       type = types.lines;
@@ -141,18 +162,32 @@ in
           done
         ''
 
-        # Otherwise, use DHCP.
-        + optionalString doDhcp ''
+        + optionalString (doDhcp || doDhcp6) ''
           # Bring up all interfaces.
           for iface in ${dhcpIfShellExpr}; do
             echo "bringing up network interface $iface..."
             ip link set dev "$iface" up && ifaces="$ifaces $iface"
           done
+        ''
 
+        # Otherwise, use DHCP ..
+        + optionalString doDhcp ''
           # Acquire DHCP leases.
           for iface in ${dhcpIfShellExpr}; do
             echo "acquiring IP address via DHCP on $iface..."
             udhcpc --quit --now -i $iface -O staticroutes --script ${udhcpcScript} ${udhcpcArgs}
+          done
+        ''
+
+        # .. and/or DHCPv6
+        + optionalString doDhcp6 ''
+          # Acquire DHCP leases.
+          for iface in ${dhcpIfShellExpr}; do
+            echo 0 > /proc/sys/net/ipv6/conf/$iface/disable_ipv6
+            echo "waiting for link-local address on interface"
+            while ! ip address show $iface | grep -q fe80; do echo -n .; sleep 1; done
+            echo "acquiring IP address via DHCP on $iface..."
+            udhcpc6 --quit --now -i $iface --script ${udhcpcScript} ${udhcpc6Args}
           done
         ''
 
