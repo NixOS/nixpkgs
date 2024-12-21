@@ -6,7 +6,7 @@ import ./generic.nix {
   lts = true;
   nixUpdateExtraArgs = [
     "--version-regex"
-    "v(7\.[0-9.]+)"
+    "v(7\\.[0-9.]+)"
     "--override-filename"
     "pkgs/by-name/fo/forgejo/lts.nix"
   ];

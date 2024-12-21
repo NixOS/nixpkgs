@@ -16,7 +16,7 @@ renode.overrideAttrs (
 
     passthru.updateScript =
       let
-        versionRegex = "[0-9\.\+]+[^\+]*.";
+        versionRegex = "[0-9\\.\\+]+[^\\+]*.";
       in
       writeScript "${finalAttrs.pname}-updater" ''
         #!/usr/bin/env nix-shell
