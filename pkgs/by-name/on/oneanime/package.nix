@@ -11,7 +11,7 @@
   libepoxy,
   libpulseaudio,
   libdrm,
-  mesa,
+  libgbm,
   libva,
   libva1,
   libvdpau,
@@ -88,7 +88,7 @@ flutter324.buildFlutterApplication rec {
     libepoxy
     libpulseaudio
     libdrm
-    mesa
+    libgbm
   ];
 
   postPatch = ''
