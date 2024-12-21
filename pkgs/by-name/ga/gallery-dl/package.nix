@@ -3,7 +3,7 @@
   fetchFromGitHub,
   gitUpdater,
   yt-dlp,
-  python3Packages
+  python3Packages,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -51,6 +51,9 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/mikf/gallery-dl/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.gpl2Only;
     mainProgram = "gallery-dl";
-    maintainers = [ lib.maintainers.dawidsowa lib.maintainers.lucasew ];
+    maintainers = [
+      lib.maintainers.dawidsowa
+      lib.maintainers.lucasew
+    ];
   };
 }
