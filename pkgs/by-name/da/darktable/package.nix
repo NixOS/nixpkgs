@@ -2,121 +2,130 @@
   lib,
   stdenv,
   fetchurl,
-  libsoup_2_4,
-  graphicsmagick,
-  json-glib,
-  wrapGAppsHook3,
-  cairo,
+
+  # nativeBuildInputs
   cmake,
-  ninja,
-  curl,
-  perl,
   desktop-file-utils,
+  intltool,
+  llvmPackages,
+  ninja,
+  perl,
+  pkg-config,
+  wrapGAppsHook3,
+
+  # buildInputs
+  SDL2,
+  adwaita-icon-theme,
+  cairo,
+  curl,
   exiv2,
   glib,
   glib-networking,
-  ilmbase,
+  gmic,
+  graphicsmagick,
   gtk3,
-  intltool,
+  icu,
+  ilmbase,
+  isocodes,
+  jasper,
+  json-glib,
   lcms2,
   lensfun,
-  libX11,
+  libaom,
+  libavif,
   libexif,
   libgphoto2,
+  libheif,
   libjpeg,
+  libjxl,
   libpng,
   librsvg,
+  libsecret,
+  libsoup_2_4,
   libtiff,
-  libjxl,
-  openexr_3,
-  osm-gps-map,
-  pkg-config,
-  sqlite,
+  libwebp,
   libxslt,
+  lua,
+  openexr_3,
   openjpeg,
+  osm-gps-map,
+  pcre,
+  portmidi,
   pugixml,
+  sqlite,
+  # Linux only
   colord,
   colord-gtk,
-  libwebp,
-  libsecret,
-  adwaita-icon-theme,
-  SDL2,
+  libX11,
   ocl-icd,
-  pcre,
+  # Darwin only
   gtk-mac-integration,
-  isocodes,
-  llvmPackages,
-  gmic,
-  libavif,
-  icu,
-  jasper,
-  libheif,
-  libaom,
-  portmidi,
-  lua,
+
+  versionCheckHook,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
-  version = "4.8.1";
+  version = "5.0.0";
   pname = "darktable";
 
   src = fetchurl {
     url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    hash = "sha256-kBsOLK7Tb7hhn99MYO37jTETS5R9MFS1xm/VXDivWZE=";
+    hash = "sha256-6qE25uYku1MScoLiaq+gRBq8wYm1U3FGXh9aikk/o6E=";
   };
 
   nativeBuildInputs = [
     cmake
-    ninja
-    llvmPackages.llvm
-    pkg-config
-    intltool
-    perl
     desktop-file-utils
+    intltool
+    llvmPackages.llvm
+    ninja
+    perl
+    pkg-config
     wrapGAppsHook3
   ];
 
   buildInputs =
     [
+      SDL2
+      adwaita-icon-theme
       cairo
       curl
       exiv2
       glib
       glib-networking
+      gmic
+      graphicsmagick
       gtk3
+      icu
       ilmbase
+      isocodes
+      jasper
+      json-glib
       lcms2
       lensfun
+      libaom
+      libavif
       libexif
       libgphoto2
+      libheif
       libjpeg
+      libjxl
       libpng
       librsvg
-      libtiff
-      libjxl
-      openexr_3
-      sqlite
-      libxslt
-      libsoup_2_4
-      graphicsmagick
-      json-glib
-      openjpeg
-      pugixml
-      libwebp
       libsecret
-      SDL2
-      adwaita-icon-theme
+      libsoup_2_4
+      libtiff
+      libwebp
+      libxslt
+      lua
+      openexr_3
+      openjpeg
       osm-gps-map
       pcre
-      isocodes
-      gmic
-      libavif
-      icu
-      jasper
-      libheif
-      libaom
       portmidi
-      lua
+      pugixml
+      sqlite
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       colord
@@ -156,12 +165,23 @@ stdenv.mkDerivation rec {
       )
     '';
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  passthru.updateScript = nix-update-script {
+    rev-prefix = "release-";
+  };
+
+  meta = {
     description = "Virtual lighttable and darkroom for photographers";
     homepage = "https://www.darktable.org";
-    license = licenses.gpl3Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/darktable-org/darktable/releases/tag/release-${version}";
+    license = lib.licenses.gpl3Plus;
+    platforms = with lib.platforms; linux ++ darwin;
+    maintainers = with lib.maintainers; [
       flosse
       mrVanDalo
       paperdigits
