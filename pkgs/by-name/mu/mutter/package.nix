@@ -106,7 +106,7 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
     gettext
     libxcvt
-    mesa
+    mesa  # actually uses eglmesaext
     meson
     ninja
     xvfb-run
