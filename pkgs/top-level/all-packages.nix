@@ -13937,7 +13937,12 @@ with pkgs;
     jre = jre8; # TODO: remove override https://github.com/NixOS/nixpkgs/pull/89731
   };
 
-  freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix { };
+  inherit
+    ({
+      freeoffice = callPackage ../applications/office/softmaker/freeoffice.nix { };
+    })
+    freeoffice
+    ;
 
   inherit (xorg) xlsfonts;
 
@@ -14950,7 +14955,15 @@ with pkgs;
 
   smtube = libsForQt5.callPackage ../applications/video/smtube { };
 
-  softmaker-office = callPackage ../applications/office/softmaker/softmaker_office.nix { };
+  inherit
+    ({
+      softmaker-office = callPackage ../applications/office/softmaker/softmaker-office.nix { };
+      softmaker-office-nx = callPackage ../applications/office/softmaker/softmaker-office-nx.nix { };
+    })
+    softmaker-office
+    softmaker-office-nx
+    ;
+
 
   synapse-bt = callPackage ../applications/networking/p2p/synapse-bt {
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
