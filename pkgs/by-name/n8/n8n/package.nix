@@ -88,7 +88,10 @@ stdenv.mkDerivation (finalAttrs: {
     updateScript = ./update.sh;
   };
 
+  # this package has ~80000 files, these take too long and seem to be unnecessary
   dontStrip = true;
+  dontPatchELF = true;
+  dontRewriteSymlinks = true;
 
   meta = {
     description = "Free and source-available fair-code licensed workflow automation tool";
