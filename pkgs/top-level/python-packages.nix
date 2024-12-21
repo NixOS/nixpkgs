@@ -9114,6 +9114,8 @@ self: super: with self; {
 
   netbox-reorder-rack = callPackage ../development/python-modules/netbox-reorder-rack { };
 
+  netbox-floorplan-plugin = callPackage ../development/python-modules/netbox-floorplan-plugin { };
+
   netbox-plugin-prometheus-sd = callPackage ../development/python-modules/netbox-plugin-prometheus-sd { };
 
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
