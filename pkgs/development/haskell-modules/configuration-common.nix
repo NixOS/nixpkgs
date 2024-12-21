@@ -166,9 +166,10 @@ self: super: {
   # https://github.com/lspitzner/czipwith/issues/5
   czipwith = doJailbreak super.czipwith;
 
-  # jacinda needs latest version of alex
+  # jacinda needs latest version of alex and happy
   jacinda = super.jacinda.override {
     alex = self.alex_3_5_1_0;
+    happy = self.happy_2_1_2;
   };
 
   # 2024-07-09: rhine 1.4.* needs newer monad-schedule than stackage (and is only consumer)
