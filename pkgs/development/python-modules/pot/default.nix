@@ -19,9 +19,12 @@
   torch,
 }:
 
+let
+  isNumpy_1 = lib.strings.versionOlder numpy.version "2.0";
+in
 buildPythonPackage rec {
   pname = "pot";
-  version = "0.9.4";
+  version = "0.9.5";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -30,8 +33,10 @@ buildPythonPackage rec {
     owner = "PythonOT";
     repo = "POT";
     rev = "refs/tags/${version}";
-    hash = "sha256-Yx9hjniXebn7ZZeqou0JEsn2Yf9hyJSu/acDlM4kCCI=";
+    hash = "sha256-sEK3uhZtjVJGEN1Gs8N0AMtiEOo9Kpn/zOSWUfGc/qE=";
   };
+
+  patches = lib.optionals isNumpy_1 ./disable_legacy_numpy_printoptions_for_numpy_1.x.patch;
 
   build-system = [
     setuptools
@@ -81,18 +86,20 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  postPatch = ''
-    substituteInPlace setup.cfg \
-      --replace " --cov-report= --cov=ot" "" \
-      --replace " --durations=20" "" \
-      --replace " --junit-xml=junit-results.xml" ""
+  postPatch =
+    ''
+      substituteInPlace setup.cfg \
+        --replace-fail " --cov-report= --cov=ot" "" \
+        --replace-fail " --durations=20" "" \
+        --replace-fail " --junit-xml=junit-results.xml" ""
 
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0" "numpy"
-
-    # we don't need setup.py to find the macos sdk for us
-    sed -i '/sdk_path/d' setup.py
-  '';
+      # we don't need setup.py to find the macos sdk for us
+      sed -i '/sdk_path/d' setup.py
+    ''
+    + lib.optionalString isNumpy_1 ''
+      substituteInPlace pyproject.toml \
+        --replace-fail "numpy>=2.0.0" "numpy"
+    '';
 
   # need to run the tests with the built package next to the test directory
   preCheck = ''
