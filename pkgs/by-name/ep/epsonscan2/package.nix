@@ -124,8 +124,8 @@ stdenv.mkDerivation {
     + lib.optionalString withGui ''
       # The icon file extension is .ico but it's actually a png!
       mkdir -p $out/share/icons/hicolor/{48x48,128x128}/apps
-      magick $src/Resources/Icons/escan2_app.ico -resize 48x48 $out/share/icons/hicolor/48x48/apps/epsonscan2.png
-      magick $src/Resources/Icons/escan2_app.ico -resize 128x128 $out/share/icons/hicolor/128x128/apps/epsonscan2.png
+      magick $src/Resources/Icons/escan2_app.ico -resize 48x48 -delete 1,2,3 $out/share/icons/hicolor/48x48/apps/epsonscan2.png
+      magick $src/Resources/Icons/escan2_app.ico -resize 128x128 -delete 1,2,3 $out/share/icons/hicolor/128x128/apps/epsonscan2.png
     ''
     + lib.optionalString withNonFreePlugins ''
       ar xf ${bundle}/plugins/epsonscan2-non-free-plugin_*.deb
