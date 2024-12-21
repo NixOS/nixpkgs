@@ -164,6 +164,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "JavaScript bindings for GNOME";
     homepage = "https://gitlab.gnome.org/GNOME/gjs/blob/master/doc/Home.md";
     license = licenses.lgpl2Plus;
+    mainProgram = "gjs";
     maintainers = teams.gnome.members;
     platforms = platforms.unix;
   };
