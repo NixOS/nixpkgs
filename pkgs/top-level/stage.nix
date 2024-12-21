@@ -232,11 +232,16 @@ let
           }
         );
       # This is only cross when we are already cross, otherwise local.
+      # For the case of "native cross", i.e. pkgsCross.gnu64 on a x86_64-linux system, we need to adjust **both**
+      # localSystem **and** crossSystem, otherwise they're out of sync.
       mkHybridPkgs =
         name: hybridAttrs:
-        mkPkgs name {
-          ${if isNative then "localSystem" else "crossSystem"} = stdenv.hostPlatform.override hybridAttrs;
-        };
+        mkPkgs name (
+          let
+            newSystem = stdenv.hostPlatform.override hybridAttrs;
+          in
+          { crossSystem = newSystem; } // lib.optionalAttrs isNative { localSystem = newSystem; }
+        );
     in
     self: super: {
       # This maps each entry in lib.systems.examples to its own package
