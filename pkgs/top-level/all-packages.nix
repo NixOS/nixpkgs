@@ -16256,10 +16256,6 @@ with pkgs;
 
   your-editor = callPackage ../applications/editors/your-editor { stdenv = gccStdenv; };
 
-  youtube-dl = with python3Packages; toPythonApplication youtube-dl;
-
-  youtube-dl-light = with python3Packages; toPythonApplication youtube-dl-light;
-
   youtube-music = callPackage ../applications/audio/youtube-music {
     pnpm = pnpm_9;
   };

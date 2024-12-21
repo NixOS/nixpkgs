@@ -1436,6 +1436,8 @@ mapAliases {
   yesplaymusic = throw "YesPlayMusic has been removed as it was broken, unmaintained, and used deprecated Node and Electron versions"; # Added 2024-12-13
   yafaray-core = libyafaray; # Added 2022-09-23
   youtrack_2022_3 = throw "'youtrack_2022_3' has been removed as it was deprecated. Please update to the 'youtrack' package."; # Added 2024-10-17
+  youtube-dl = throw "`youtube-dl` has been removed as it's unmaintained since 2021, migrate to yt-dlp"; # Added 2024-12-21
+  youtube-dl-light = throw "`youtube-dl-light` has been removed as it's unmaintained since 2021, migrate to yt-dlp"; # Added 2024-12-21
   yrd = throw "'yrd' has been removed, as it was broken and unmaintained"; # added 2024-05-27
 
   ### Z ###
