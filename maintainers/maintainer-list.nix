@@ -15825,6 +15825,12 @@
     githubId = 3747396;
     name = "Nathan Isom";
   };
+  negatethis = {
+    email = "negatethis@envs.net";
+    github = "negatethis";
+    githubId = 26014535;
+    name = "Negate This";
+  };
   neilmayhew = {
     email = "nix@neil.mayhew.name";
     github = "neilmayhew";
