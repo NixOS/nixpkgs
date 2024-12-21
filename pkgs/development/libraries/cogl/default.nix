@@ -17,7 +17,7 @@
   mesa,
   automake,
   autoconf,
-  gstreamerSupport ? true,
+  gstreamerSupport ? false,
   gst_all_1,
   harfbuzz,
   OpenGL,
