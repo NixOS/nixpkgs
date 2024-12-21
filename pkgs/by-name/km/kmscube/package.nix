@@ -7,7 +7,7 @@
   libdrm,
   libX11,
   libGL,
-  mesa,
+  libgbm,
   pkg-config,
   gst_all_1,
 }:
@@ -34,7 +34,7 @@ stdenv.mkDerivation {
       libdrm
       libX11
       libGL
-      mesa
+      libgbm
     ]
     ++ (with gst_all_1; [
       gstreamer
