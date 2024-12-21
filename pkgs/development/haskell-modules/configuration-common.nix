@@ -251,6 +251,12 @@ self: super: {
   HsSyck = appendConfigureFlags [
     "--ghc-option=-optc=-Wno-error=implicit-function-declaration"
   ] super.HsSyck;
+  bindings-libcddb = appendConfigureFlags [
+    "--ghc-option=-optc=-Wno-error=incompatible-pointer-types"
+  ] super.bindings-libcddb;
+  hdf5-lite = appendConfigureFlags [
+    "--ghc-option=-optc=-Wno-error=implicit-function-declaration"
+  ] super.hdf5-lite;
 
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
