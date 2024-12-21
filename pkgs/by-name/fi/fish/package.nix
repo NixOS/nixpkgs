@@ -1,24 +1,29 @@
 {
   stdenv,
   lib,
-  fetchurl,
-  fetchpatch,
+  fetchFromGitHub,
   coreutils,
-  which,
+  glibcLocales,
   gnused,
   gnugrep,
   groff,
   gawk,
   man-db,
+  ninja,
   getent,
   libiconv,
   pcre2,
+  pkg-config,
   gettext,
   ncurses,
   python3,
+  cargo,
   cmake,
   fishPlugins,
   procps,
+  rustc,
+  rustPlatform,
+  versionCheckHook,
 
   # used to generate autocompletions from manpages and for configuration editing in the browser
   usePython ? true,
@@ -143,20 +148,27 @@ let
 
   fish = stdenv.mkDerivation rec {
     pname = "fish";
-    version = "3.7.1";
+    version = "4.0.0";
 
-    src = fetchurl {
-      # There are differences between the release tarball and the tarball GitHub
-      # packages from the tag. Specifically, it comes with a file containing its
-      # version, which is used in `build_tools/git_version_gen.sh` to determine
-      # the shell's actual version (and what it displays when running `fish
-      # --version`), as well as the local documentation for all builtins (and
-      # maybe other things).
-      url = "https://github.com/fish-shell/fish-shell/releases/download/${version}/${pname}-${version}.tar.xz";
-      hash = "sha256-YUyfVkPNB5nfOROV+mu8NklCe7g5cizjsRTTu8GjslA=";
+    src = fetchFromGitHub {
+      owner = "fish-shell";
+      repo = "fish-shell";
+      tag = version;
+      hash = "sha256-BLbL5Tj3FQQCOeX5TWXMaxCpvdzZtKe5dDQi66uU/BM=";
+    };
+
+    env.FISH_BUILD_VERSION = version;
+
+    cargoDeps = rustPlatform.fetchCargoVendor {
+      inherit src;
+      hash = "sha256-j1HCj1iZ5ZV8nfMmJq5ggPD4s+5V8IretDdoz+G3wWU=";
     };
 
     patches = [
+      # This test fails if the nix sandbox gets created on a filesystem that's
+      # mounted with the nosuid option.
+      ./disable_suid_test.patch
+
       # We don’t want to run `/usr/libexec/path_helper` on nix-darwin,
       # as it pulls in paths not tracked in the system configuration
       # and messes up the order of `$PATH`. Upstream are unfortunately
@@ -173,14 +185,12 @@ let
     # Fix FHS paths in tests
     postPatch =
       ''
-        # src/fish_tests.cpp
-        sed -i 's|/bin/ls|${coreutils}/bin/ls|' src/fish_tests.cpp
-        sed -i 's|is_potential_path(L"/usr"|is_potential_path(L"/nix"|' src/fish_tests.cpp
-        sed -i 's|L"/bin/echo"|L"${coreutils}/bin/echo"|' src/fish_tests.cpp
-        sed -i 's|L"/bin/c"|L"${coreutils}/bin/c"|' src/fish_tests.cpp
-        sed -i 's|L"/bin/ca"|L"${coreutils}/bin/ca"|' src/fish_tests.cpp
-        # disable flakey test
-        sed -i '/{TEST_GROUP("history_races"), history_tests_t::test_history_races},/d' src/fish_tests.cpp
+        sed -i 's|"/bin/ls"|"${lib.getExe' coreutils "ls"}"|' src/builtins/tests/test_tests.rs
+        sed -i 's|"/bin/echo"|"${lib.getExe' coreutils "echo"}"|' src/tests/highlight.rs
+        sed -i 's|"/bin/c"|"${lib.getExe' coreutils "c"}"|' src/tests/highlight.rs
+        sed -i 's|"/bin/ca"|"${lib.getExe' coreutils "ca"}"|' src/tests/highlight.rs
+
+        sed -i 's|/usr|/build|' src/tests/highlight.rs
 
         # tests/checks/cd.fish
         sed -i 's|/bin/pwd|${coreutils}/bin/pwd|' tests/checks/cd.fish
@@ -224,12 +234,16 @@ let
     ];
     strictDeps = true;
     nativeBuildInputs = [
+      cargo
       cmake
       gettext
+      ninja
+      pkg-config
+      rustc
+      rustPlatform.cargoSetupHook
     ];
 
     buildInputs = [
-      ncurses
       libiconv
       pcre2
     ];
@@ -255,6 +269,7 @@ let
     preConfigure =
       ''
         patchShebangs ./build_tools/git_version_gen.sh
+        patchShebangs ./tests/test_driver.py
       ''
       + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
         export CMAKE_PREFIX_PATH=
@@ -273,12 +288,30 @@ let
 
     nativeCheckInputs = [
       coreutils
+      glibcLocales
       (python3.withPackages (ps: [ ps.pexpect ]))
       procps
     ];
 
-    checkPhase = ''
-      make test
+    checkTarget = "fish_run_tests";
+    preCheck = ''
+      export TERMINFO="${ncurses}/share/terminfo"
+    '';
+
+    nativeInstallCheckInputs = [
+      versionCheckHook
+    ];
+    versionCheckProgramArg = [ "--version" ];
+    doInstallCheck = true;
+
+    # Ensure that we don't vendor libpcre2, but instead link against the one from nixpkgs
+    installCheckPhase = lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
+      runHook preInstallCheck
+
+      echo "Checking that we don't vendor pcre2"
+      ldd "$out/bin/fish" | grep ${lib.getLib pcre2}
+
+      runHook postInstallCheck
     '';
 
     postInstall =
@@ -295,8 +328,6 @@ let
                "$out/share/fish/functions/prompt_pwd.fish"
         sed -i "s|nroff|${groff}/bin/nroff|"                 \
                "$out/share/fish/functions/__fish_print_help.fish"
-        sed -e "s|clear;|${lib.getBin ncurses}/bin/clear;|"      \
-            -i "$out/share/fish/functions/fish_default_key_bindings.fish"
         sed -i "s|/usr/local/sbin /sbin /usr/sbin||"         \
                $out/share/fish/completions/{sudo.fish,doas.fish}
         sed -e "s| awk | ${gawk}/bin/awk |"                  \
@@ -366,7 +397,7 @@ let
               # if we don't set `delete=False`, the file will get cleaned up
               # automatically (leading the test to fail because there's no
               # tempfile to check)
-              ${lib.getExe gnused} -e 's@, mode="w"@, mode="w", delete=False@' -i webconfig.py
+              ${lib.getExe gnused} -e 's@delete=True,@delete=False,@' -i webconfig.py
 
               # we delete everything after the fileurl is assigned
               ${lib.getExe gnused} -e '/fileurl =/q' -i webconfig.py
