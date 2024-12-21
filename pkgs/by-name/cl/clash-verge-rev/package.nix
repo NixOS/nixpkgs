@@ -10,40 +10,27 @@
   v2ray-domain-list-community,
   copyDesktopItems,
   makeDesktopItem,
+  libsoup,
 }:
 let
   pname = "clash-verge-rev";
-  version = "1.7.7";
+  version = "2.0.2";
 
   src = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-rev";
-    rev = "v${version}";
-    hash = "sha256-5sd0CkUCV52wrBPo0IRIa1uqf2QNkjXuZhE33cZW3SY=";
+    rev = "refs/tags/v${version}";
+    hash = "sha256-QLvJO1JFHPFOsVxNi6SCu2QuJQ9hCsO1+WKOjZL944w=";
   };
 
   src-service = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-service";
-    rev = "e74e419f004275cbf35a427337d3f8c771408f07"; # no meaningful tags in this repo. The only way is updating manully every time.
-    hash = "sha256-HyRTOqPj4SnV9gktqRegxOYz9c8mQHOX+IrdZlHhYpo=";
+    rev = "8b676086f2770e213cffea08ef31b54b886f8f11"; # no meaningful tags in this repo. The only way is updating manully every time.
+    hash = "sha256-vF26Bp52y2kNHwwtBjy3Of75qJpTriqvul29KmudHww=";
   };
 
-  meta-unwrapped = {
-    description = "Clash GUI based on tauri";
-    homepage = "https://github.com/clash-verge-rev/clash-verge-rev";
-    license = lib.licenses.gpl3Only;
-    maintainers = with lib.maintainers; [
-      Guanran928
-      bot-wxt1221
-    ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
-  };
-
-  service-cargo-hash = "sha256-NBeHR6JvdCp06Ug/UEtLY2tu3iCmlsCU0x8umRbJXLU=";
+  service-cargo-hash = "sha256-pMOCifffUyBkcXC8inZFZeZVHeaOt0LAu2jZUGQ7QdM=";
 
   service = callPackage ./service.nix {
     inherit
@@ -51,8 +38,8 @@ let
       src-service
       service-cargo-hash
       pname
+      meta
       ;
-    meta = meta-unwrapped;
   };
 
   webui = callPackage ./webui.nix {
@@ -60,22 +47,24 @@ let
       version
       src
       pname
+      meta
+      npm-hash
       ;
-    meta = meta-unwrapped;
-
   };
 
-  sysproxy-hash = "sha256-TEC51s/viqXUoEH9rJev8LdC2uHqefInNcarxeogePk=";
+  npm-hash = "sha256-zsgZhLC+XUzlCUKKGAJV5MlSpWsoLmAgMwKkmAkAX9Q=";
+  vendor-hash = "sha256-fk3OdJ1CKNHkeUjquJtJgM7PDyPpQ7tssDnFZHMbQHI=";
 
   unwrapped = callPackage ./unwrapped.nix {
     inherit
       pname
       version
       src
-      sysproxy-hash
+      vendor-hash
       webui
+      meta
+      libsoup
       ;
-    meta = meta-unwrapped;
   };
 
   meta = {
@@ -87,10 +76,7 @@ let
       Guanran928
       bot-wxt1221
     ];
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
+    platforms = lib.platforms.linux;
   };
 in
 stdenv.mkDerivation {

@@ -18822,4 +18822,8 @@ with pkgs;
   libpostalWithData = callPackage ../by-name/li/libpostal/package.nix {
     withData = true;
   };
+
+  clash-verge-rev = callPackage ../by-name/cl/clash-verge-rev/package.nix {
+    libsoup = libsoup_3;
+  };
 }
