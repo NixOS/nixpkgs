@@ -34,14 +34,17 @@ let
 
   ## llvm18 fails with gcc <14
   # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=114419
-  llvmAmd = buildPackages.runCommand "${buildPackages.llvm.name}-wrapper" {} ''
-    mkdir -p $out/bin
-    for a in ar nm ranlib; do
-      ln -s ${buildPackages.llvmPackages.llvm}/bin/llvm-$a $out/bin/amdgcn-amdhsa-$a
-    done
-    ln -s ${buildPackages.llvmPackages.llvm}/bin/llvm-mc $out/bin/amdgcn-amdhsa-as
-    ln -s ${buildPackages.llvmPackages.lld}/bin/lld $out/bin/amdgcn-amdhsa-ld
-  '';
+  llvmAmd =
+    let
+      llvm = buildPackages.llvmPackages_19;
+    in buildPackages.runCommand "${llvm.llvm.name}-wrapper" {} ''
+      mkdir -p $out/bin
+      for a in ar nm ranlib; do
+        ln -s ${llvm.llvm}/bin/llvm-$a $out/bin/amdgcn-amdhsa-$a
+      done
+      ln -s ${llvm.llvm}/bin/llvm-mc $out/bin/amdgcn-amdhsa-as
+      ln -s ${llvm.lld}/bin/lld $out/bin/amdgcn-amdhsa-ld
+    '';
 in
 
 {
