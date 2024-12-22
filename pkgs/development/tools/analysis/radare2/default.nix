@@ -78,6 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     "-Duse_sys_openssl=true"
     "-Duse_sys_xxhash=true"
     "-Duse_sys_zip=true"
+    "-Duse_sys_zlib=true"
   ];
 
   enableParallelBuilding = true;
