@@ -4,17 +4,16 @@
   config,
   ...
 }:
-with lib;
 let
   cfg = config.services.usbipd;
-  device = types.submodule {
+  device = lib.types.submodule {
     options = {
-      productid = mkOption {
-        type = types.str;
+      productid = lib.mkOption {
+        type = lib.types.str;
         description = "The product id of the device";
       };
-      vendorid = mkOption {
-        type = types.str;
+      vendorid = lib.mkOption {
+        type = lib.types.str;
         description = "The vendor id of the device";
       };
     };
@@ -22,14 +21,10 @@ let
 in
 {
   options.services.usbipd = {
-    enable = mkEnableOption "usbip server";
-    kernelPackage = mkOption {
-      type = types.package;
-      default = pkgs.linuxPackages_latest.usbip;
-      description = "The kernel module package to install.";
-    };
-    devices = mkOption {
-      type = types.listOf device;
+    enable = lib.mkEnableOption "usbip server";
+    kernelPackage = lib.mkPackageOption pkgs.linuxPackages_latest "usbip" {};
+    devices = lib.mkOption {
+      type = lib.types.listOf device;
       default = [ ];
       description = "List of USB devices to watch and automatically export.";
       example = [
@@ -39,22 +34,22 @@ in
         }
       ];
     };
-    openFirewall = mkOption {
-      type = types.bool;
+    openFirewall = lib.mkOption {
+      type = lib.types.bool;
       default = true;
       description = "Open port 3240 for usbipd";
       example = false;
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     boot.extraModulePackages = [ cfg.kernelPackage ];
     boot.kernelModules = [
       "usbip-core"
       "usbip-host"
     ];
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ 3240 ];
-    services.udev.extraRules = strings.concatLines (
+    networking.firewall.allowedTCPPorts = lib.mkIf cfg.openFirewall [ 3240 ];
+    services.udev.extraRules = lib.strings.concatLines (
       (map (
         dev:
         "ACTION==\"add\", SUBSYSTEM==\"usb\", ATTRS{idProduct}==\"${dev.productid}\", ATTRS{idVendor}==\"${dev.vendorid}\", RUN+=\"${pkgs.systemd}/bin/systemctl restart usbip-${dev.vendorid}:${dev.productid}.service\""
@@ -92,13 +87,13 @@ in
         usbipd = {
           wantedBy = [ "multi-user.target" ];
           script = ''
-            ${pkgs.kmod}/bin/modprobe usbip-host usbip-core
-            exec ${cfg.kernelPackage}/bin/usbipd -D
+            ${lib.getExe' pkgs.kmod "modprobe"} usbip-host usbip-core
+            exec ${lib.getExe' cfg.kernelPackage "usbipd"} -D
           '';
           serviceConfig.Type = "forking";
         };
       };
   };
-  meta.maintainers = with maintainers; [ cbingman ];
+  meta.maintainers = with lib.maintainers; [ cbingman ];
   meta.buildDocsInSandbox = false;
 }
