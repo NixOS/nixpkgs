@@ -7,4 +7,6 @@ mkDerivation {
   buildInputs = [
     libutil
   ];
+
+  meta.mainProgram = "login";
 }
