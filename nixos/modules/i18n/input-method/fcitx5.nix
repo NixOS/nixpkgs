@@ -1,11 +1,17 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   imcfg = config.i18n.inputMethod;
   cfg = imcfg.fcitx5;
   fcitx5Package =
-    if cfg.plasma6Support
-    then pkgs.qt6Packages.fcitx5-with-addons.override { inherit (cfg) addons; }
-    else pkgs.libsForQt5.fcitx5-with-addons.override { inherit (cfg) addons; };
+    if cfg.plasma6Support then
+      pkgs.qt6Packages.fcitx5-with-addons.override { inherit (cfg) addons; }
+    else
+      pkgs.libsForQt5.fcitx5-with-addons.override { inherit (cfg) addons; };
   settingsFormat = pkgs.formats.ini { };
 in
 {
@@ -108,40 +114,46 @@ in
   config = lib.mkIf (imcfg.enable && imcfg.type == "fcitx5") {
     i18n.inputMethod.package = fcitx5Package;
 
-    i18n.inputMethod.fcitx5.addons = lib.optionals (cfg.quickPhrase != { }) [
-      (pkgs.writeTextDir "share/fcitx5/data/QuickPhrase.mb"
-        (lib.concatStringsSep "\n"
-          (lib.mapAttrsToList (name: value: "${name} ${value}") cfg.quickPhrase)))
-    ] ++ lib.optionals (cfg.quickPhraseFiles != { }) [
-      (pkgs.linkFarm "quickPhraseFiles" (lib.mapAttrs'
-        (name: value: lib.nameValuePair ("share/fcitx5/data/quickphrase.d/${name}.mb") value)
-        cfg.quickPhraseFiles))
-    ];
+    i18n.inputMethod.fcitx5.addons =
+      lib.optionals (cfg.quickPhrase != { }) [
+        (pkgs.writeTextDir "share/fcitx5/data/QuickPhrase.mb" (
+          lib.concatStringsSep "\n" (lib.mapAttrsToList (name: value: "${name} ${value}") cfg.quickPhrase)
+        ))
+      ]
+      ++ lib.optionals (cfg.quickPhraseFiles != { }) [
+        (pkgs.linkFarm "quickPhraseFiles" (
+          lib.mapAttrs' (
+            name: value: lib.nameValuePair ("share/fcitx5/data/quickphrase.d/${name}.mb") value
+          ) cfg.quickPhraseFiles
+        ))
+      ];
     environment.etc =
       let
-        optionalFile = p: f: v: lib.optionalAttrs (v != { }) {
-          "xdg/fcitx5/${p}".text = f v;
-        };
+        optionalFile =
+          p: f: v:
+          lib.optionalAttrs (v != { }) {
+            "xdg/fcitx5/${p}".text = f v;
+          };
       in
       lib.attrsets.mergeAttrsList [
         (optionalFile "config" (lib.generators.toINI { }) cfg.settings.globalOptions)
         (optionalFile "profile" (lib.generators.toINI { }) cfg.settings.inputMethod)
-        (lib.concatMapAttrs
-          (name: value: optionalFile
-            "conf/${name}.conf"
-            (lib.generators.toINIWithGlobalSection { })
-            value)
-          cfg.settings.addons)
+        (lib.concatMapAttrs (
+          name: value: optionalFile "conf/${name}.conf" (lib.generators.toINIWithGlobalSection { }) value
+        ) cfg.settings.addons)
       ];
 
-    environment.variables = {
-      XMODIFIERS = "@im=fcitx";
-      QT_PLUGIN_PATH = [ "${fcitx5Package}/${pkgs.qt6.qtbase.qtPluginPrefix}" ];
-    } // lib.optionalAttrs (!cfg.waylandFrontend) {
-      GTK_IM_MODULE = "fcitx";
-      QT_IM_MODULE = "fcitx";
-    } // lib.optionalAttrs cfg.ignoreUserConfig {
-      SKIP_FCITX_USER_PATH = "1";
-    };
+    environment.variables =
+      {
+        XMODIFIERS = "@im=fcitx";
+        QT_PLUGIN_PATH = [ "${fcitx5Package}/${pkgs.qt6.qtbase.qtPluginPrefix}" ];
+      }
+      // lib.optionalAttrs (!cfg.waylandFrontend) {
+        GTK_IM_MODULE = "fcitx";
+        QT_IM_MODULE = "fcitx";
+      }
+      // lib.optionalAttrs cfg.ignoreUserConfig {
+        SKIP_FCITX_USER_PATH = "1";
+      };
   };
 }
