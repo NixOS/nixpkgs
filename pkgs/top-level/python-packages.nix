@@ -15656,6 +15656,8 @@ self: super: with self; {
 
   synergy = callPackage ../development/python-modules/synergy { };
 
+  syne-tune = callPackage ../development/python-modules/syne-tune { };
+
   syslog-rfc5424-formatter = callPackage ../development/python-modules/syslog-rfc5424-formatter { };
 
   sysrsync = callPackage ../development/python-modules/sysrsync { };
