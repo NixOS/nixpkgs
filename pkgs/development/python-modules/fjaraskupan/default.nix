@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "fjaraskupan";
-  version = "2.3.0";
+  version = "2.3.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "elupus";
     repo = "fjaraskupan";
     rev = "refs/tags/${version}";
-    hash = "sha256-3jw42lsCwNkFptMNpnhtbrPIkZP/8lUCcMigzq8Hbc4=";
+    hash = "sha256-IKi2kaypwHdK9w+FZlWrreUXBgBgg4y3D8bSJhKHSYo=";
   };
 
   nativeBuildInputs = [ setuptools ];
