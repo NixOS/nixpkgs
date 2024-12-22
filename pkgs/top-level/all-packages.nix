@@ -4689,7 +4689,6 @@ with pkgs;
     libclang = llvmPackages_15.libclang;
     clang = clang_15;
     llvm = llvm_15;
-    openexr = openexr_3;
   };
 
   ossec-agent = callPackage ../tools/security/ossec/agent.nix { };
@@ -10343,9 +10342,8 @@ with pkgs;
 
   opencv = opencv4;
 
-  openexr = openexr_2;
-  openexr_2 = callPackage ../development/libraries/openexr { };
-  openexr_3 = callPackage ../development/libraries/openexr/3.nix { };
+  openexr = openexr_3;
+  openexr_3 = callPackage ../development/libraries/openexr/default.nix { };
 
   opencolorio = darwin.apple_sdk_11_0.callPackage ../development/libraries/opencolorio {
     inherit (darwin.apple_sdk_11_0.frameworks) Carbon GLUT Cocoa;
@@ -13143,9 +13141,7 @@ with pkgs;
 
   airwave = libsForQt5.callPackage ../applications/audio/airwave { };
 
-  alembic = callPackage ../development/libraries/alembic {
-    openexr = openexr_3;
-  };
+  alembic = callPackage ../development/libraries/alembic { };
 
   amarok = libsForQt5.callPackage ../applications/audio/amarok { };
   amarok-kf5 = amarok; # for compatibility
@@ -13267,7 +13263,6 @@ with pkgs;
   };
 
   blender = callPackage  ../applications/misc/blender {
-    openexr = openexr_3;
     python3Packages = python311Packages;
     inherit (darwin.apple_sdk.frameworks) Cocoa CoreGraphics ForceFeedback OpenAL OpenGL;
   };
@@ -15013,7 +15008,6 @@ with pkgs;
   };
 
   openimageio = darwin.apple_sdk_11_0.callPackage ../development/libraries/openimageio {
-    openexr = openexr_3;
   };
 
   open-music-kontrollers = lib.recurseIntoAttrs {
