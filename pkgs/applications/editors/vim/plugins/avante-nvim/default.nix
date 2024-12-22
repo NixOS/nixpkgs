@@ -10,18 +10,18 @@
   vimUtils,
 }:
 let
-  version = "0.0.13";
+  version = "0.0.14";
   src = fetchFromGitHub {
     owner = "yetone";
     repo = "avante.nvim";
     tag = "v${version}";
-    hash = "sha256-JTuVq5fil2bpkptpw+kj0PFOp9Rk7RpOxc0GN/blL6M=";
+    hash = "sha256-0dkPejvupXhVZY/5qT45f4LZ4MIVcz8uZam+9TmB+Yo=";
   };
   avante-nvim-lib = rustPlatform.buildRustPackage {
     pname = "avante-nvim-lib";
     inherit version src;
 
-    cargoHash = "sha256-mCQm+ZBH5KehCbpKZ2zFl34sJh4yfKmA8GMcteK5SrA=";
+    cargoHash = "sha256-80++U7CIu6QtH1jQCHCEpv2tnYOuoWSczZIUmKyrqJE=";
 
     nativeBuildInputs = [
       pkg-config
