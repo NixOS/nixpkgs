@@ -39,7 +39,6 @@
   glib-networking,
   gobject-introspection,
   gspell,
-  appstream-glib,
   libstemmer,
   libytnef,
   libhandy,
@@ -70,7 +69,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     adwaita-icon-theme
-    appstream-glib
     enchant2
     folks
     gcr
@@ -115,6 +113,11 @@ stdenv.mkDerivation rec {
     chmod +x build-aux/git_version.py
 
     patchShebangs build-aux/git_version.py
+
+    # Only used for generating .pot file
+    # https://gitlab.gnome.org/GNOME/geary/-/merge_requests/856
+    substituteInPlace meson.build \
+      --replace-fail "appstream_glib = dependency('appstream-glib', version: '>=0.7.10')" ""
 
     chmod +x desktop/geary-attach
   '';
