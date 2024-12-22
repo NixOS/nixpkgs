@@ -233,7 +233,6 @@ let
       pim-data-exporter = callPackage ./pim-data-exporter.nix {};
       pim-sieve-editor = callPackage ./pim-sieve-editor.nix {};
       pimcommon = callPackage ./pimcommon.nix {};
-      print-manager = callPackage ./print-manager.nix {};
       rocs = callPackage ./rocs.nix {};
       skanlite = callPackage ./skanlite.nix {};
       skanpage = callPackage ./skanpage.nix {};
