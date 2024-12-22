@@ -149,7 +149,6 @@ let
       kio-admin = callPackage ./kio-admin.nix {};
       kio-extras = callPackage ./kio-extras.nix {};
       kio-gdrive = callPackage ./kio-gdrive.nix {};
-      # kipi-plugins = callPackage ./kipi-plugins.nix {};
       kirigami-gallery = callPackage ./kirigami-gallery.nix {};
       kitinerary = callPackage ./kitinerary.nix {};
       kldap = callPackage ./kldap.nix {};
@@ -170,7 +169,6 @@ let
       knavalbattle = callPackage ./knavalbattle.nix {};
       knetwalk = callPackage ./knetwalk.nix {};
       knights = callPackage ./knights.nix {};
-      knotes = callPackage ./knotes.nix {};
       kolf = callPackage ./kolf.nix {};
       kollision = callPackage ./kollision.nix {};
       kolourpaint = callPackage ./kolourpaint.nix {};
@@ -216,7 +214,6 @@ let
       libkdepim = callPackage ./libkdepim.nix {};
       libkexiv2 = callPackage ./libkexiv2.nix {};
       libkgapi = callPackage ./libkgapi.nix {};
-      libkipi = callPackage ./libkipi.nix {};
       libkleo = callPackage ./libkleo.nix {};
       libkmahjongg = callPackage ./libkmahjongg.nix {};
       libkomparediff2 = callPackage ./libkomparediff2.nix {};
