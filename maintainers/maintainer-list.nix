@@ -23200,6 +23200,12 @@
     githubId = 178444;
     name = "Thomas Bereknyei";
   };
+  tombert = {
+    email = "thomas@gebert.app";
+    github = "tombert";
+    githubId = 2027925;
+    name = "Thomas Gebert";
+  };
   tomfitzhenry = {
     email = "tom@tom-fitzhenry.me.uk";
     github = "tomfitzhenry";
