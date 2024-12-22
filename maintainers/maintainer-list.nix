@@ -18382,12 +18382,6 @@
     github = "pyle";
     githubId = 7279609;
   };
-  pyrolagus = {
-    email = "pyrolagus@gmail.com";
-    github = "PyroLagus";
-    githubId = 4579165;
-    name = "Danny Bautista";
-  };
   pyrotelekinetic = {
     name = "Clover";
     email = "carter@isons.org";
