@@ -59,6 +59,7 @@ stdenv.mkDerivation rec {
     gettext
     gobject-introspection
     itstool
+    libxml2 # for xmllint for xml-stripblanks preprocessing
     meson
     ninja
     pkg-config
