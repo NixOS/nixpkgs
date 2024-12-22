@@ -22,7 +22,7 @@ in
 {
   options.services.usbipd = {
     enable = lib.mkEnableOption "usbip server";
-    kernelPackage = lib.mkPackageOption pkgs.linuxPackages_latest "usbip" {};
+    kernelPackage = lib.mkPackageOption pkgs.linuxPackages_latest "usbip" { };
     devices = lib.mkOption {
       type = lib.types.listOf device;
       default = [ ];
