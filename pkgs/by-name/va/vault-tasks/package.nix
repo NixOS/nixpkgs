@@ -5,14 +5,14 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "vault-tasks";
-  version = "0.6.1";
+  version = "0.7.0";
   src = fetchFromGitHub {
     owner = "louis-thevenet";
     repo = "vault-tasks";
     rev = "v${version}";
-    hash = "sha256-H0cfzjOtVzOEoGmj3u80hj1QlK1QEgbl9vq4otlXKew=";
+    hash = "sha256-8UIklKwTJWOc6AG8r2Iwdo19k81qg5Y6ESB3yHet6vM=";
   };
-  cargoHash = "sha256-Iezin3TguweHd9RIyFvNL4IWUtXNJbQH2KXIgaXJHgk=";
+  cargoHash = "sha256-2V+kU0LQNaAN2WbJ7hqzzLEszlXtZp2gXwvZsQBzo7I=";
 
   postInstall = "install -Dm444 desktop/vault-tasks.desktop -t $out/share/applications";
 
