@@ -46,6 +46,8 @@ mkCoqDerivation rec {
   configureScript = "./configure.sh";
   dontAddPrefix = true;
 
+  mlPlugin = true;  /* uses coq-bignums.plugin */
+
   propagatedBuildInputs = [
     bignums
     math-classes
