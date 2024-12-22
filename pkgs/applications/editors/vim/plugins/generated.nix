@@ -10677,6 +10677,18 @@ final: prev:
     meta.homepage = "https://github.com/unblevable/quick-scope/";
   };
 
+  quicker-nvim = buildVimPlugin {
+    pname = "quicker.nvim";
+    version = "2024-11-14";
+    src = fetchFromGitHub {
+      owner = "stevearc";
+      repo = "quicker.nvim";
+      rev = "049d66534d3de5920663ee1b8dd0096d70f55a67";
+      sha256 = "052bsqgjk3gh80vqpisv972d3snlf4hgmxag3hkhca5mp7zcpp2x";
+    };
+    meta.homepage = "https://github.com/stevearc/quicker.nvim/";
+  };
+
   quickfix-reflector-vim = buildVimPlugin {
     pname = "quickfix-reflector.vim";
     version = "2022-02-02";

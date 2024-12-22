@@ -2453,6 +2453,10 @@ in
     ];
   };
 
+  quicker-nvim = super.quicker-nvim.overrideAttrs {
+    nvimRequireCheck = "quicker";
+  };
+
   rainbow-delimiters-nvim = super.rainbow-delimiters-nvim.overrideAttrs {
     nvimSkipModule = [
       # rainbow-delimiters.types.lua
