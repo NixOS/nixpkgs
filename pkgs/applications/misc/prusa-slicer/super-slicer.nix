@@ -59,7 +59,7 @@ let
       # - wxScintilla is not used on macOS
       # - Partially applied upstream changes cause a bug when trying to link against a nonexistent libexpat
       postPatch =
-        super.postPatch
+        (super.postPatch or "")
         + ''
           substituteInPlace src/CMakeLists.txt \
             --replace "scintilla" "" \
