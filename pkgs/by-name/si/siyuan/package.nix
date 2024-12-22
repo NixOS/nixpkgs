@@ -142,7 +142,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     inherit (finalAttrs.kernel) goModules; # this tricks nix-update into also updating the kernel goModules FOD
-    updateScript = nix-update-script { };
+    updateScript = nix-update-script {
+      extraArgs = [
+        "--version-regex"
+        "^v(\\d+\\.\\d+\\.\\d+)$"
+      ];
+    };
   };
 
   meta = {
@@ -150,7 +155,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://b3log.org/siyuan/";
     license = lib.licenses.agpl3Plus;
     mainProgram = "siyuan";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [
+      tomasajt
+      ltrump
+    ];
     platforms = lib.attrNames platformIds;
   };
 })
