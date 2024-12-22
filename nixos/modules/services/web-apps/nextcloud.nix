@@ -85,18 +85,21 @@ let
     "-dmemory_limit=${cfg.cli.memoryLimit}"
   ]);
 
-  occ = pkgs.writeScriptBin "nextcloud-occ" ''
-    #! ${pkgs.runtimeShell}
-    cd ${webroot}
-    sudo=exec
-    if [[ "$USER" != nextcloud ]]; then
-      sudo='exec /run/wrappers/bin/sudo -u nextcloud'
-    fi
-    $sudo ${pkgs.coreutils}/bin/env \
-      NEXTCLOUD_CONFIG_DIR="${datadir}/config" \
-      ${phpCli} \
-      occ "$@"
-  '';
+  occ = pkgs.writeShellApplication {
+    name = "nextcloud-occ";
+
+    text = ''
+      cd ${webroot}
+      sudo="exec"
+      if [[ "$USER" != nextcloud ]]; then
+        sudo='exec /run/wrappers/bin/sudo -u nextcloud'
+      fi
+      $sudo ${pkgs.coreutils}/bin/env \
+        NEXTCLOUD_CONFIG_DIR="${datadir}/config" \
+        ${phpCli} \
+        occ "$@"
+    '';
+  };
 
   inherit (config.system) stateVersion;
 
@@ -965,12 +968,12 @@ in {
           in ''
             ${mkExport dbpass}
             ${mkExport adminpass}
-            ${occ}/bin/nextcloud-occ maintenance:install \
+            ${lib.getExe occ} maintenance:install \
                 ${installFlags}
           '';
           occSetTrustedDomainsCmd = concatStringsSep "\n" (imap0
             (i: v: ''
-              ${occ}/bin/nextcloud-occ config:system:set trusted_domains \
+              ${lib.getExe occ} config:system:set trusted_domains \
                 ${toString i} --value="${toString v}"
             '') ([ cfg.hostName ] ++ cfg.settings.trusted_domains));
 
@@ -1014,13 +1017,13 @@ in {
               ${occInstallCmd}
             fi
 
-            ${occ}/bin/nextcloud-occ upgrade
+            ${lib.getExe occ} upgrade
 
-            ${occ}/bin/nextcloud-occ config:system:delete trusted_domains
+            ${lib.getExe occ} config:system:delete trusted_domains
 
             ${optionalString (cfg.extraAppsEnable && cfg.extraApps != { }) ''
                 # Try to enable apps
-                ${occ}/bin/nextcloud-occ app:enable ${concatStringsSep " " (attrNames cfg.extraApps)}
+                ${lib.getExe occ} app:enable ${concatStringsSep " " (attrNames cfg.extraApps)}
             ''}
 
             ${occSetTrustedDomainsCmd}
@@ -1046,7 +1049,7 @@ in {
           after = [ "nextcloud-setup.service" ];
           serviceConfig = {
             Type = "oneshot";
-            ExecStart = "${occ}/bin/nextcloud-occ app:update --all";
+            ExecStart = "${lib.getExe occ} app:update --all";
             User = "nextcloud";
           };
           startAt = cfg.autoUpdateApps.startAt;
@@ -1055,9 +1058,9 @@ in {
           after = [ "nextcloud-setup.service" ];
           environment.NEXTCLOUD_CONFIG_DIR = "${datadir}/config";
           script = ''
-            ${occ}/bin/nextcloud-occ db:add-missing-columns
-            ${occ}/bin/nextcloud-occ db:add-missing-indices
-            ${occ}/bin/nextcloud-occ db:add-missing-primary-keys
+            ${lib.getExe occ} db:add-missing-columns
+            ${lib.getExe occ} db:add-missing-indices
+            ${lib.getExe occ} db:add-missing-primary-keys
           '';
           serviceConfig = {
             Type = "exec";
