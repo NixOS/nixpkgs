@@ -13,7 +13,6 @@ buildGoModule rec {
     hash = "sha256-xwjfY9HudxVz3xEEyRPtWysbojtan56ABBL3KgG0J/8=";
   };
   vendorHash = null;
-  outputs = [ "out" ];
   ldflags = [
     "-s -w -X main.version=${version} -X main.GitCommit= -X main.GitBranch= -X main.BuildTime="
   ];
