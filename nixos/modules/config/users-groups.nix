@@ -53,13 +53,9 @@ let
         "*"    # password unset
       ]);
 
-  overrideOrderMutable = ''
-    {option}`initialHashedPassword` -> {option}`initialPassword` -> {option}`hashedPassword` -> {option}`password` -> {option}`hashedPasswordFile`
-  '';
+  overrideOrderMutable = ''{option}`initialHashedPassword` -> {option}`initialPassword` -> {option}`hashedPassword` -> {option}`password` -> {option}`hashedPasswordFile`'';
 
-  overrideOrderImmutable = ''
-    {option}`initialHashedPassword` -> {option}`hashedPassword` -> {option}`initialPassword` -> {option}`password` -> {option}`hashedPasswordFile`
-  '';
+  overrideOrderImmutable = ''{option}`initialHashedPassword` -> {option}`hashedPassword` -> {option}`initialPassword` -> {option}`password` -> {option}`hashedPasswordFile`'';
 
   overrideOrderText = isMutable: ''
     If the option {option}`users.mutableUsers` is
@@ -1002,9 +998,7 @@ in {
         & `hashedPasswordFile` set to a non-null value.
 
         ${multiplePasswordsWarning}
-
         ${overrideOrderText cfg.mutableUsers}
-
         The values of these options are:
         ${concatMapStringsSep
           "\n"
