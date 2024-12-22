@@ -5124,10 +5124,6 @@ with pkgs;
 
   scfbuild = python3.pkgs.callPackage ../tools/misc/scfbuild { };
 
-  sd = callPackage ../tools/text/sd {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
-
   securefs = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/securefs { };
 
   segger-jlink-headless = callPackage ../by-name/se/segger-jlink/package.nix { headless = true; };

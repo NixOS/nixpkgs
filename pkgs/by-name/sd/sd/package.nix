@@ -1,10 +1,8 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
   installShellFiles,
-  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,8 +20,6 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ installShellFiles ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
-
   postInstall = ''
     installManPage gen/sd.1
 
@@ -31,12 +27,12 @@ rustPlatform.buildRustPackage rec {
     installShellCompletion --zsh gen/completions/_sd
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Intuitive find & replace CLI (sed alternative)";
     mainProgram = "sd";
     homepage = "https://github.com/chmln/sd";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       amar1729
       Br1ght0ne
     ];
