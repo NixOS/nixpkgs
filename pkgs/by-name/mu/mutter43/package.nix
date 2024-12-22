@@ -32,7 +32,7 @@
   libgudev,
   libwacom,
   xwayland,
-  libgbm,
+  mesa,
   meson,
   gnome-settings-daemon,
   xorgserver,
@@ -105,13 +105,13 @@ stdenv.mkDerivation (finalAttrs: {
     libXtst
     libcap_ng
     graphene
+    mesa  # actually uses eglmesaext
   ];
 
   nativeBuildInputs = [
     desktop-file-utils
     gettext
     libxcvt
-    libgbm
     meson
     ninja
     xvfb-run

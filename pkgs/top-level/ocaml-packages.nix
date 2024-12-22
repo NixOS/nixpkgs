@@ -1205,6 +1205,8 @@ let
 
     mlgmpidl =  callPackage ../development/ocaml-modules/mlgmpidl { };
 
+    mlx = callPackage ../development/ocaml-modules/mlx { };
+
     mm = callPackage ../development/ocaml-modules/mm { };
 
     mmap =  callPackage ../development/ocaml-modules/mmap { };

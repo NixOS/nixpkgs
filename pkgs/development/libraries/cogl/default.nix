@@ -14,10 +14,10 @@
   gobject-introspection,
   wayland,
   gnome,
-  libgbm,
+  mesa,
   automake,
   autoconf,
-  gstreamerSupport ? true,
+  gstreamerSupport ? false,
   gst_all_1,
   harfbuzz,
   OpenGL,
@@ -86,7 +86,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       wayland
-      libgbm
+      mesa  # actually uses eglmesaext
       libGL
       xorg.libXrandr
       xorg.libXfixes

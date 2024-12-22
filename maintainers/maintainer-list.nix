@@ -2222,6 +2222,12 @@
     githubId = 354741;
     name = "Austin Butler";
   };
+  automathis = {
+    name = "AutoMathïs";
+    email = "automathis@protonmail.com";
+    github = "MathisFederico";
+    githubId = 60117466;
+  };
   autophagy = {
     email = "mail@autophagy.io";
     github = "autophagy";
@@ -5442,6 +5448,12 @@
     githubId = 62989;
     name = "Demyan Rogozhin";
   };
+  Denommus = {
+    email = "yuridenommus@gmail.com";
+    github = "Denommus";
+    githubId = 721022;
+    name = "Yuri da Costa Albuquerque";
+  };
   denperidge = {
     email = "contact@denperidge.com";
     github = "Denperidge";
@@ -6984,6 +6996,12 @@
     github = "eureka-cpu";
     githubId = 57543709;
     name = "Chris O'Brien";
+  };
+  euxane = {
+    name = "euxane";
+    email = "r9uhdi.nixpkgs@euxane.net";
+    github = "pacien";
+    githubId = 1449319;
   };
   evalexpr = {
     name = "Jonathan Wilkins";
@@ -12352,6 +12370,12 @@
     githubId = 11614750;
     name = "Alexander Sharov";
   };
+  kvik = {
+    email = "viktor@a-b.xyz";
+    github = "okvik";
+    githubId = 58425080;
+    name = "Viktor Pocedulić";
+  };
   kwaa = {
     name = "藍+85CD";
     email = "kwa@kwaa.dev";
@@ -13591,6 +13615,13 @@
     githubId = 1809783;
     name = "Marco Maggesi";
   };
+  magneticflux- = {
+    email = "skaggsm333@gmail.com";
+    github = "magneticflux-";
+    githubId = 9124288;
+    name = "Mitchell Skaggs";
+    keys = [ { fingerprint = "CA2A 3324 43A7 BD99 8FCE  DFC4 4EB0 FECB 84AE 8967"; } ];
+  };
   magnetophon = {
     email = "bart@magnetophon.nl";
     github = "magnetophon";
@@ -13646,7 +13677,7 @@
   };
   Makuru = {
     email = "makuru@makuru.org";
-    github = "makuru-dd";
+    github = "makuru-org";
     githubId = 58048293;
     name = "Makuru";
     keys = [ { fingerprint = "5B22 7123 362F DEF1 8F79  BF2B 4792 3A0F EEB5 51C7"; } ];
@@ -15812,6 +15843,12 @@
     githubId = 3747396;
     name = "Nathan Isom";
   };
+  negatethis = {
+    email = "negatethis@envs.net";
+    github = "negatethis";
+    githubId = 26014535;
+    name = "Negate This";
+  };
   neilmayhew = {
     email = "nix@neil.mayhew.name";
     github = "neilmayhew";
@@ -17005,12 +17042,6 @@
     github = "Pablo1107";
     githubId = 17091659;
     name = "Pablo Andres Dealbera";
-  };
-  pacien = {
-    email = "b4gx3q.nixpkgs@pacien.net";
-    github = "pacien";
-    githubId = 1449319;
-    name = "Pacien Tran-Girard";
   };
   pacman99 = {
     email = "pachum99@gmail.com";
