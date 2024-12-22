@@ -15541,6 +15541,7 @@ with pkgs;
   };
 
   cura = libsForQt5.callPackage ../applications/misc/cura { };
+  cura-appimage = callPackage ../applications/misc/cura/appimage.nix { };
 
   curaPlugins = callPackage ../applications/misc/cura/plugins.nix { };
 
