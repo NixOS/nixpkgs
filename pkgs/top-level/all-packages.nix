@@ -3677,6 +3677,66 @@ with pkgs;
 
   gyroflow = callPackage ../applications/video/gyroflow { };
 
+  inherit ({
+    gz-cmake_3 = callPackage ../development/libraries/gz-cmake/3.nix { };
+    ignition-cmake_0 = callPackage ../development/libraries/gz-cmake/0.nix { };
+    ignition-cmake_2 = callPackage ../development/libraries/gz-cmake/2.nix { };
+  })
+    gz-cmake_3
+    ignition-cmake_0
+    ignition-cmake_2;
+
+  inherit ({
+    ignition-common_3 = callPackage ../development/libraries/gz-common/3.nix { };
+    ignition-common_4 = callPackage ../development/libraries/gz-common/4.nix { };
+  })
+    ignition-common_3
+    ignition-common_4;
+
+  inherit ({
+    ignition-fuel-tools_4 = callPackage ../development/libraries/gz-fuel-tools/4.nix { };
+    ignition-fuel-tools_7 = callPackage ../development/libraries/gz-fuel-tools/7.nix { };
+  })
+    ignition-fuel-tools_4
+    ignition-fuel-tools_7;
+
+  inherit ({
+    gz-utils_2 = callPackage ../development/libraries/gz-utils/2.nix { };
+    ignition-utils_1 = callPackage ../development/libraries/gz-utils/1.nix { };
+  })
+    gz-utils_2
+    ignition-utils_1;
+
+  inherit ({
+    gz-math_7 = callPackage ../development/libraries/gz-math/7.nix { };
+    ignition-math_4 = callPackage ../development/libraries/gz-math/4.nix { };
+    ignition-math_6 = callPackage ../development/libraries/gz-math/6.nix { };
+  })
+    gz-math_7
+    ignition-math_4
+    ignition-math_6;
+
+  inherit ({
+    ignition-msgs_5 = callPackage ../development/libraries/gz-msgs/5.nix { };
+    ignition-msgs_8 = callPackage ../development/libraries/gz-msgs/8.nix { };
+  })
+    ignition-msgs_5
+    ignition-msgs_8;
+
+  inherit ({
+    ignition-transport_8 = callPackage ../development/libraries/gz-transport/8.nix { };
+    ignition-transport_11 = callPackage ../development/libraries/gz-transport/11.nix { };
+  })
+    ignition-transport_8
+    ignition-transport_11;
+
+  inherit ({
+    ignition-tools_1 = callPackage ../development/tools/gz-tools/1.nix { };
+    gz-tools_2 = callPackage ../development/tools/gz-tools/2.nix { };
+  })
+    ignition-tools_1
+    gz-tools_2;
+
   gzip = callPackage ../tools/compression/gzip { };
 
   pdisk = callPackage ../tools/system/pdisk {
@@ -5115,6 +5175,13 @@ with pkgs;
   sd = callPackage ../tools/text/sd {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
+
+  inherit ({
+    sdformat_13 = callPackage ../development/libraries/sdformat/13.nix { };
+    sdformat_9 = callPackage ../development/libraries/sdformat/9.nix { };
+  })
+    sdformat_13
+    sdformat_9;
 
   securefs = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/securefs { };
 
