@@ -1,10 +1,8 @@
 {
   lib,
   stdenv,
-
   fetchFromGitHub,
   fetchpatch,
-
   cmake,
   ninja,
   pkg-config,
@@ -13,7 +11,6 @@
   rustPlatform,
   ensureNewerSourcesForZipFilesHook,
   removeReferencesTo,
-
   pcre2,
   openssl,
   gflags,
@@ -28,16 +25,11 @@
   cpptoml,
   apple-sdk_11,
   darwinMinVersionHook,
-
   gtest,
-
   nix-update-script,
   python3,
-
   stateDir ? "",
-}:
-
-stdenv.mkDerivation (finalAttrs: {
+}: stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
   version = "2024.11.18.00";
 
@@ -60,34 +52,29 @@ stdenv.mkDerivation (finalAttrs: {
     python3
   ];
 
-  buildInputs =
-    [
-      pcre2
-      openssl
-      gflags
-      glog
-      libevent
-      edencommon
-      folly
-      fizz
-      wangle
-      fbthrift
-      fb303
-      cpptoml
-      python3
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
-    ];
-
-  checkInputs = [
-    gtest
+  buildInputs = [
+    pcre2
+    openssl
+    gflags
+    glog
+    libevent
+    edencommon
+    folly
+    fizz
+    wangle
+    fbthrift
+    fb303
+    cpptoml
+    python3
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    apple-sdk_11
+    (darwinMinVersionHook "11.0")
   ];
+
+  checkInputs = [gtest];
 
   cmakeFlags = [
     (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
-
     (lib.cmakeFeature "WATCHMAN_STATE_DIR" stateDir)
     (lib.cmakeFeature "WATCHMAN_VERSION_OVERRIDE" finalAttrs.version)
   ];
@@ -117,13 +104,13 @@ stdenv.mkDerivation (finalAttrs: {
       fi
     done
   '';
-  
+
   postFixup = ''
     # TODO: Do this in `fmt` rather than downstream.
     remove-references-to -t ${folly.fmt.dev} $out/bin/*
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {};
 
   meta = {
     description = "Watches files and takes action when they change";
