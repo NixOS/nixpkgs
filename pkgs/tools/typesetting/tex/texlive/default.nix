@@ -44,8 +44,8 @@ let
   version = {
     # day of the snapshot being taken
     year = "2024";
-    month = "10";
-    day = "27";
+    month = "12";
+    day = "08";
     # TeX Live version
     texliveYear = 2024;
     # final (historic) release or snapshot
@@ -80,7 +80,7 @@ let
         # use last mirror for daily snapshots as texlive.tlpdb.xz changes every day
         # TODO make this less hacky
         (if version.final then mirrors else [ (lib.last mirrors) ]);
-    hash = "sha256-jB9FXLpmqYluxdxGl67C50cx9dfN2S8LQwOow4OezcQ=";
+    hash = "sha256-aAcl4Iybd91AyYNvI+OcubiLCAATlSoiYjuR1aiQT8w=";
   };
 
   tlpdbNix = runCommand "tlpdb.nix" {
@@ -159,14 +159,14 @@ let
   # these license lists should be the sorted union of the licenses of the packages the schemes contain.
   # The correctness of this collation is tested by tests.texlive.licenses
   licenses = with lib.licenses; {
-    scheme-basic = [ free gfl gpl1Only gpl2Only gpl2Plus knuth lgpl21 lppl1 lppl13c mit ofl publicDomain ];
-    scheme-bookpub = [ artistic2 asl20 bsd3 fdl13Only free gfl gpl1Only gpl2Only gpl2Plus knuth lgpl21 lppl1 lppl12 lppl13c mit ofl publicDomain ];
+    scheme-basic = [ cc-by-sa-40 free gfl gpl1Only gpl2Only gpl2Plus knuth lgpl21 lppl1 lppl13c mit ofl publicDomain ];
+    scheme-bookpub = [ artistic2 asl20 bsd3 cc-by-sa-40 fdl13Only free gfl gpl1Only gpl2Only gpl2Plus knuth lgpl21 lppl1 lppl12 lppl13c mit ofl publicDomain ];
     scheme-context = [ bsd2 bsd3 cc-by-sa-40 eupl12 free gfl gfsl gpl1Only gpl2Only gpl2Plus gpl3Only gpl3Plus knuth lgpl2 lgpl21 lppl1 lppl13c mit ofl publicDomain x11 ];
     scheme-full = [ artistic1-cl8 artistic2 asl20 bsd2 bsd3 bsdOriginal cc-by-10 cc-by-20 cc-by-30 cc-by-40 cc-by-sa-10 cc-by-sa-20 cc-by-sa-30 cc-by-sa-40 cc0 eupl12 fdl13Only free gfl gfsl gpl1Only gpl2Only gpl2Plus gpl3Only gpl3Plus isc knuth lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
     scheme-gust = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-40 cc0 eupl12 fdl13Only free gfl gfsl gpl1Only gpl2Only gpl2Plus gpl3Only gpl3Plus knuth lgpl2 lgpl21 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
     scheme-infraonly = [ gpl2Plus lgpl21 ];
     scheme-medium = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-40 cc-by-sa-20 cc-by-sa-30 cc-by-sa-40 cc0 eupl12 fdl13Only free gfl gpl1Only gpl2Only gpl2Plus gpl3Only gpl3Plus isc knuth lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
-    scheme-minimal = [ free gpl1Only gpl2Plus knuth lgpl21 lppl1 lppl13c mit ofl publicDomain ];
+    scheme-minimal = [ cc-by-sa-40 free gpl1Only gpl2Plus knuth lgpl21 lppl1 lppl13c mit ofl publicDomain ];
     scheme-small = [ asl20 cc-by-40 cc-by-sa-40 cc0 eupl12 fdl13Only free gfl gpl1Only gpl2Only gpl2Plus gpl3Only gpl3Plus knuth lgpl2 lgpl21 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
     scheme-tetex = [ artistic1-cl8 asl20 bsd2 bsd3 cc-by-30 cc-by-40 cc-by-sa-10 cc-by-sa-20 cc-by-sa-30 cc-by-sa-40 cc0 eupl12 fdl13Only free gfl gpl1Only gpl2Only gpl2Plus gpl3Only gpl3Plus isc knuth lgpl2 lgpl21 lgpl3 lppl1 lppl12 lppl13a lppl13c mit ofl publicDomain x11 ];
   };
