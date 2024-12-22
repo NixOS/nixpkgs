@@ -16,4 +16,6 @@ mkDerivation {
     mkdir -p $out/etc
     cp $BSDSRCDIR/etc/gettytab $out/etc/gettytab
   '';
+
+  meta.mainProgram = "getty";
 }
