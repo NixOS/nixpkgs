@@ -21,7 +21,7 @@ assert
 
 stdenv.mkDerivation rec {
   pname = "libportal" + lib.optionalString (variant != null) "-${variant}";
-  version = "0.8.1";
+  version = "0.9.0";
 
   outputs = [
     "out"
@@ -31,8 +31,8 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "flatpak";
     repo = "libportal";
-    rev = version;
-    sha256 = "sha256-NAkD5pAQpmAtVxsFZt74PwURv+RbGBfqENIwyxEEUSc=";
+    tag = version;
+    hash = "sha256-uKblVaJB3s01En/T3ofT8uZHHarPKAO1qyLidLZ/b/g=";
   };
 
   depsBuildBuild = [
