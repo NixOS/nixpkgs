@@ -1,9 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  buildGoModule,
-  go,
-  imagemagick,
+  buildGoModule
 }:
 buildGoModule rec {
   pname = "ahoy";
