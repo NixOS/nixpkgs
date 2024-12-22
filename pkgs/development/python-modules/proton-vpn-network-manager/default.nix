@@ -67,11 +67,6 @@ buildPythonPackage rec {
     pytest-asyncio
   ];
 
-  preCheck = ''
-    # Needed for Permission denied: '/homeless-shelter'
-    export HOME=$(mktemp -d)
-  '';
-
   meta = {
     description = "Provides the necessary functionality for other ProtonVPN components to interact with NetworkManager";
     homepage = "https://github.com/ProtonVPN/python-proton-vpn-network-manager";

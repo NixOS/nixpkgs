@@ -80,8 +80,6 @@ buildPythonPackage rec {
 
   preCheck =
     ''
-      export PATH="$PATH:$out/bin"
-
       # The top directory /build matches black's DEFAULT_EXCLUDE regex.
       # Make /build the project root for black tests to avoid excluding files.
       touch ../.git

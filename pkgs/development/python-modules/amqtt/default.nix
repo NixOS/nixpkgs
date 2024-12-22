@@ -75,11 +75,6 @@ buildPythonPackage rec {
     "tests/test_client.py"
   ];
 
-  preCheck = ''
-    # Some tests need amqtt
-    export PATH=$out/bin:$PATH
-  '';
-
   pythonImportsCheck = [ "amqtt" ];
 
   meta = with lib; {

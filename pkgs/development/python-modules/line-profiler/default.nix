@@ -48,7 +48,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     rm -r line_profiler
-    export PATH=$out/bin:$PATH
   '';
 
   pythonImportsCheck = [ "line_profiler" ];

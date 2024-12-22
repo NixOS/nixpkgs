@@ -35,11 +35,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''
-    # For test_bin_hy
-    export PATH="$out/bin:$PATH"
-  '';
-
   pythonImportsCheck = [ "hy" ];
 
   passthru = {

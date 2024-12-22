@@ -54,10 +54,6 @@ buildPythonPackage rec {
     virtualenv
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   checkPhase = ''
     runHook preCheck
     ${python.interpreter} tests/downstream/integrate.py

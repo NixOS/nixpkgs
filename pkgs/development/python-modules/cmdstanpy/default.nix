@@ -55,10 +55,6 @@ buildPythonPackage rec {
 
   pythonRelaxDeps = [ "stanio" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.all;
 
   disabledTestPaths = [

@@ -52,10 +52,6 @@ buildPythonPackage rec {
     ];
   };
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   nativeCheckInputs = [
     aria2
     fastapi

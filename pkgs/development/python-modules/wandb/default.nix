@@ -242,10 +242,6 @@ buildPythonPackage rec {
     tqdm
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTestPaths = [
     # Require docker access
     "tests/release_tests/test_launch"

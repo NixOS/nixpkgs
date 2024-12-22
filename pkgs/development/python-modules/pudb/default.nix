@@ -40,10 +40,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   pythonImportsCheck = [ "pudb" ];
 
   meta = with lib; {

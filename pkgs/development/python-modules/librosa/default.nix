@@ -92,10 +92,6 @@ buildPythonPackage rec {
     samplerate
   ] ++ optional-dependencies.matplotlib;
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   disabledTests =
     [
       # requires network access

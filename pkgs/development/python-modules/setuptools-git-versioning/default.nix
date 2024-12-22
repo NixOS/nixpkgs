@@ -47,11 +47,6 @@ buildPythonPackage rec {
     toml
   ];
 
-  preCheck = ''
-    # so that its built binary is accessible by tests
-    export PATH="$out/bin:$PATH"
-  '';
-
   # limit tests because the full suite takes several minutes to run
   pytestFlagsArray = [
     "-m"

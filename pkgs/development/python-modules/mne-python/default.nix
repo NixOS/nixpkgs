@@ -68,7 +68,6 @@ buildPythonPackage rec {
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     export MNE_SKIP_TESTING_DATASET_TESTS=true
     export MNE_SKIP_NETWORK_TESTS=1
   '';

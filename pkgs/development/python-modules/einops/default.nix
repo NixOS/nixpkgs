@@ -49,10 +49,6 @@ buildPythonPackage rec {
 
   env.EINOPS_TEST_BACKENDS = "numpy";
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   pythonImportsCheck = [ "einops" ];
 
   disabledTests = [

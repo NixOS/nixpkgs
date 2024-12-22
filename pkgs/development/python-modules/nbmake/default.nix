@@ -60,10 +60,6 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   __darwinAllowLocalNetworking = true;
 
   meta = {

@@ -56,10 +56,6 @@ buildPythonPackage rec {
     scikit-image
   ];
 
-  preCheck = ''
-    export PATH="$out/bin:$PATH"
-  '';
-
   disabledTestPaths = [
     # this test involves glymur's different ways of finding the openjpeg path on
     # fsh systems by reading an .rc file and such, and is obviated by the patch

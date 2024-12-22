@@ -118,8 +118,6 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    # Let the tests invoke 'fontbakery' command.
-    export PATH="$out/bin:$PATH"
     # font-v tests assume they are running from a git checkout, although they
     # don't care which one. Create a dummy git repo to satisfy the tests:
     git init -b main

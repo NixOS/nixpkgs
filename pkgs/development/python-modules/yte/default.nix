@@ -42,11 +42,6 @@ buildPythonPackage rec {
 
   pytestFlagsArray = [ "tests.py" ];
 
-  preCheck = ''
-    # The CLI test need yte on the PATH
-    export PATH=$out/bin:$PATH
-  '';
-
   meta = with lib; {
     description = "YAML template engine with Python expressions";
     homepage = "https://github.com/koesterlab/yte";

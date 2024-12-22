@@ -66,7 +66,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     export TZDIR=${tzdata}/${python.sitePackages}/tzdata/zoneinfo
-    export PATH=$out/bin:$PATH
   '';
 
   pythonImportsCheck = [ "bimmer_connected" ];

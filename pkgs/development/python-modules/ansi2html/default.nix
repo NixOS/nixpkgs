@@ -24,8 +24,6 @@ buildPythonPackage rec {
     wheel
   ];
 
-  preCheck = "export PATH=$PATH:$out/bin";
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "ansi2html" ];

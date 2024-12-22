@@ -24,9 +24,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
   # override $HOME directory:
   #   error: [Errno 13] Permission denied: '/homeless-shelter'
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/csingley/ofxtools";

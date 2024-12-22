@@ -127,10 +127,6 @@ buildPythonPackage rec {
     virtualenv
   ];
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH;
-  '';
-
   disabledTests = [
     # Tries to install older versions through pip
     "test_upgrade"

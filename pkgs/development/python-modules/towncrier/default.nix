@@ -38,10 +38,6 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonOlder "3.10") [ importlib-resources ]
     ++ lib.optionals (pythonOlder "3.11") [ tomli ];
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
   nativeCheckInputs = [
     git
     mock

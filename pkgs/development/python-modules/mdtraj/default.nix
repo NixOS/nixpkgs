@@ -77,7 +77,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     cd tests
-    export PATH=$out/bin:$PATH
   '';
 
   disabledTests = [

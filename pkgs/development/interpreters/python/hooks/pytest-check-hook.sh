@@ -8,6 +8,13 @@ function pytestCheckPhase() {
     echo "Executing pytestCheckPhase"
     runHook preCheck
 
+    export HOME=$(mktemp -d)
+
+    # If the path $out/bin exists, add it to the PATH environment variable
+    if [ -d "$out/bin" ]; then
+        export PATH="$out/bin${PATH:+:}$PATH"
+    fi
+
     # Compose arguments
     args=" -m pytest"
     if [ -n "$disabledTests" ]; then

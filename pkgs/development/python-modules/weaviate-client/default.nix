@@ -71,7 +71,6 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     sed -i '/raw.githubusercontent.com/,+1d' test/test_util.py
     substituteInPlace pytest.ini \
       --replace-fail "--benchmark-skip" ""

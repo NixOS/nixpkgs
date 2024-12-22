@@ -48,7 +48,6 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    export PATH="$PATH:$out/bin";
     supybot-test test -v --no-network
     runHook postCheck
   '';

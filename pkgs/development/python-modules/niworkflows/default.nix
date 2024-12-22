@@ -74,7 +74,6 @@ buildPythonPackage rec {
   env.SETUPTOOLS_SCM_PRETEND_VERSION = version;
 
   nativeCheckInputs = [ pytestCheckHook ];
-  preCheck = ''export HOME=$(mktemp -d)'';
   pytestFlagsArray = [ "niworkflows" ];
   # try to download data:
   disabledTests = [

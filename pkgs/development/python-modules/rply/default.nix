@@ -26,10 +26,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   meta = with lib; {
     description = "Python Lex/Yacc that works with RPython";
     homepage = "https://github.com/alex/rply";

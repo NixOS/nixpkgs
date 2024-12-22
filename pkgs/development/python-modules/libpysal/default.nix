@@ -54,10 +54,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   # requires network access
   disabledTestPaths = [
     "libpysal/graph/tests/test_summary.py"

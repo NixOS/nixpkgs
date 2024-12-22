@@ -221,7 +221,6 @@ let
     # so change directory where `import .test` is able to be resolved
     preCheck =
       ''
-        export HOME=$TMPDIR
         export LC_ALL="en_US.UTF-8"
         cd $out/${python.sitePackages}/pandas
       ''

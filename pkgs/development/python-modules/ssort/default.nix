@@ -31,10 +31,6 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
   meta = {
     description = "Automatically sorting python statements within a module";
     homepage = "https://github.com/bwhmather/ssort";

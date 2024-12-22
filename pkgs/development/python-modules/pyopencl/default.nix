@@ -66,8 +66,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     # https://github.com/NixOS/nixpkgs/issues/255262
     cd $out
   '';

@@ -37,10 +37,6 @@ buildPythonPackage rec {
     scipy
   ];
 
-  preCheck = ''
-    export PATH="$PATH:$out/bin";
-  '';
-
   pythonImportsCheck = [ "scooby" ];
 
   disabledTests = [

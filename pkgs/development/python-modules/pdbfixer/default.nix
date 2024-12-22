@@ -33,10 +33,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
   disabledTests = [
     # require network access
     "test_build_and_simulate"

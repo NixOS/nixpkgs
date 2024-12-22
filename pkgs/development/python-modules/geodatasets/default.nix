@@ -34,10 +34,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   pytestFlagsArray = [
     # disable tests which require network access
     "-m 'not request'"

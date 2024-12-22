@@ -169,10 +169,6 @@ buildPythonPackage rec {
   # Still quite a bit of optional dependencies missing
   doCheck = false;
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
     pytest-mock

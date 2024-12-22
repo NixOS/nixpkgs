@@ -61,10 +61,6 @@ buildPythonPackage rec {
     pytest7CheckHook
   ] ++ optional-dependencies.all;
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
   disabledTestPaths = lib.optionals (pythonAtLeast "3.12") [
     # uses distutils
     "nisext/tests/test_sexts.py"

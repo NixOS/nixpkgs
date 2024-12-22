@@ -70,10 +70,8 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    # We have to delete the source because otherwise it is used intead the installed package.
+    # We have to delete the source because otherwise it is used instead the installed package.
     rm -rf compressai
-
-    export HOME=$(mktemp -d)
   '';
 
   nativeCheckInputs = [

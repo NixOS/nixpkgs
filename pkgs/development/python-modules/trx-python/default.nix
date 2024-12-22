@@ -43,10 +43,6 @@ buildPythonPackage rec {
     psutil
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   pytestFlagsArray = [ "trx/tests" ];
 
   disabledTestPaths = [

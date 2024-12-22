@@ -81,8 +81,6 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     # Tests require access to /etc/os-release, which isn't accessible in
     # the test environment, so create a fake file, and modify the code
     # to look for it.

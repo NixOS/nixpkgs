@@ -122,11 +122,6 @@ buildPythonPackage rec {
     "src/tests/test_widget.py"
   ];
 
-  preCheck = ''
-    # tests need to write temp data
-    export HOME=$(mktemp -d)
-  '';
-
   pythonImportsCheck = [ "sql" ];
 
   meta = {

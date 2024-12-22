@@ -89,10 +89,6 @@ buildPythonPackage rec {
     "tests/library/test_gen.py"
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   pythonImportsCheck = [ "guidance" ];
 
   __darwinAllowLocalNetworking = true;

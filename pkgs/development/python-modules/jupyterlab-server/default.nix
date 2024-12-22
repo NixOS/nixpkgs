@@ -63,10 +63,6 @@ buildPythonPackage rec {
     strict-rfc3339
   ] ++ optional-dependencies.openapi;
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   pytestFlagsArray = [
     "-W"
     "ignore::DeprecationWarning"

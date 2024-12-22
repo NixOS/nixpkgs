@@ -40,10 +40,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   disabledTests =
     [
       # sensitive to platform, causes false negatives on darwin

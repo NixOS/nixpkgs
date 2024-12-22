@@ -105,10 +105,6 @@ buildPythonPackage rec {
   # darwin has write permission issues
   doCheck = stdenv.hostPlatform.isLinux;
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests = [
     "rst"
     "test_sunpy_warnings_logging"

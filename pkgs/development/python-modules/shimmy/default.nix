@@ -76,10 +76,6 @@ buildPythonPackage rec {
     "tests/test_openspiel.py"
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests = [
     # Require network access
     "test_check_env[bsuite/mnist_noise-v0]"

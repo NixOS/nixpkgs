@@ -46,7 +46,6 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    PATH=$out/bin:$PATH
     ${redis-server}/bin/redis-server &
   '';
 

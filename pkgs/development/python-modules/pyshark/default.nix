@@ -57,10 +57,6 @@ buildPythonPackage rec {
     wireshark-cli
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests =
     [
       # flaky

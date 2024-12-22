@@ -83,8 +83,6 @@ buildPythonPackage rec {
   preCheck = ''
     # ensure tests can find these
     export PMG_TEST_FILES_DIR="$(realpath ./tests/files)"
-    # some tests cover the command-line scripts
-    export PATH=$out/bin:$PATH
   '';
 
   pythonImportsCheck = [ "pymatgen" ];

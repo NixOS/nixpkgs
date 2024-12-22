@@ -93,8 +93,6 @@ buildPythonPackage rec {
   dontUseCmakeConfigure = true;
 
   preCheck = ''
-    export HOME=$(mktemp -d)
-
     # detecting source dir as a python package confuses pytest
     mv onnx/__init__.py onnx/__init__.py.hidden
   '';

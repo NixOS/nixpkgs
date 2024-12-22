@@ -70,7 +70,6 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    export HOME=$(mktemp -d)
     $out/bin/localstack --version
 
     runHook postCheck

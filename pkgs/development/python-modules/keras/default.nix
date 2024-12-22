@@ -75,10 +75,6 @@ buildPythonPackage rec {
     torch
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests =
     [
       # Tries to install the package in the sandbox

@@ -29,7 +29,6 @@ buildPythonPackage rec {
     ${python.interpreter} commonmark/tests/run_spec_tests.py
     ${python.interpreter} commonmark/tests/unit_tests.py
 
-    export PATH=$out/bin:$PATH
     cmark commonmark/tests/test.md
     cmark commonmark/tests/test.md -a
     cmark commonmark/tests/test.md -aj

@@ -59,13 +59,9 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests = [
     "test_colorize"
-    # Tests are flaky, OSError: [Errno 24] Too many open files happpens
+    # Tests are flaky, OSError: [Errno 24] Too many open files happens
     "test_answer_links_using_l_option"
     "test_answers_bing"
     "test_answers"

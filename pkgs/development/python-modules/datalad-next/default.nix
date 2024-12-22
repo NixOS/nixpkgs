@@ -50,10 +50,6 @@ buildPythonPackage rec {
     more-itertools
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
     webdavclient3

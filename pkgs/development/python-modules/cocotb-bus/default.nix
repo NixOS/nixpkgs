@@ -22,11 +22,6 @@ buildPythonPackage rec {
   # tests require cocotb, disable for now to avoid circular dependency
   doCheck = false;
 
-  # checkPhase = ''
-  #   export PATH=$out/bin:$PATH
-  #   make test
-  # '';
-
   meta = with lib; {
     description = "Pre-packaged testbenching tools and reusable bus interfaces for cocotb";
     homepage = "https://github.com/cocotb/cocotb-bus";

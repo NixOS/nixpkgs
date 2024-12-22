@@ -121,10 +121,6 @@ buildPythonPackage rec {
     "fitz"
   ];
 
-  preCheck = ''
-    export PATH="$out/bin:$PATH";
-  '';
-
   meta = {
     description = "Python bindings for MuPDF's rendering library";
     homepage = "https://github.com/pymupdf/PyMuPDF";

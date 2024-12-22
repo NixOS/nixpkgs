@@ -54,11 +54,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    export PATH="$PATH:$out/bin";
-  '';
-
   pythonImportsCheck = [ "sqlfmt" ];
 
   meta = {

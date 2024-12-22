@@ -61,14 +61,9 @@ buildPythonPackage rec {
     pytest7CheckHook
     transformers
   ];
-  preCheck =
-    ''
-      export HOME=$(mktemp -d)
-      export PATH=$out/bin:$PATH
-    ''
-    + lib.optionalString config.cudaSupport ''
-      export TRITON_PTXAS_PATH="${cudatoolkit}/bin/ptxas"
-    '';
+  preCheck = lib.optionalString config.cudaSupport ''
+    export TRITON_PTXAS_PATH="${cudatoolkit}/bin/ptxas"
+  '';
   pytestFlagsArray = [ "tests" ];
   disabledTests =
     [

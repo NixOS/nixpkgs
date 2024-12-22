@@ -71,7 +71,6 @@ buildPythonPackage rec {
     ++ lib.optionals (pythonOlder "3.10") [ eval-type-backport ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     substituteInPlace pyproject.toml \
       --replace-fail "'--benchmark-columns', 'min,mean,stddev,outliers,rounds,iterations'," "" \
       --replace-fail "'--benchmark-group-by', 'group'," "" \

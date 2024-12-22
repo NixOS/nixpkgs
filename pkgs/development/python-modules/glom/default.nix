@@ -39,11 +39,6 @@ buildPythonPackage rec {
     pyyaml
   ];
 
-  preCheck = ''
-    # test_cli.py checks the output of running "glom"
-    export PATH=$out/bin:$PATH
-  '';
-
   disabledTests =
     [
       # Test is outdated (was made for PyYAML 3.x)

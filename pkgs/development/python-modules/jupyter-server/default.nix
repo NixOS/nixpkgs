@@ -89,11 +89,6 @@ buildPythonPackage rec {
     "ignore::DeprecationWarning"
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-    export PATH=$out/bin:$PATH
-  '';
-
   disabledTests =
     [
       "test_cull_idle"

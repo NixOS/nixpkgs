@@ -92,10 +92,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   __darwinAllowLocalNetworking = true;
 
   disabledTests =

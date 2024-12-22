@@ -64,11 +64,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "correctionlib" ];
 
-  # One test requires running the produced `correctionlib` binary
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
   meta = {
     description = "Provides a well-structured JSON data format for a wide variety of ad-hoc correction factors encountered in a typical HEP analysis";
     mainProgram = "correction";

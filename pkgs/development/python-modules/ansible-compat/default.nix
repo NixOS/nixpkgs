@@ -38,7 +38,6 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     substituteInPlace test/test_runtime.py \
       --replace-fail "printenv" "${coreutils}/bin/printenv"
   '';

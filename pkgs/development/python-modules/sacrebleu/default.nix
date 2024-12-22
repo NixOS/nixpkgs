@@ -51,10 +51,6 @@ buildPythonPackage {
     "test/test_dataset.py"
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   pythonImportsCheck = [ "sacrebleu" ];
 
   meta = with lib; {

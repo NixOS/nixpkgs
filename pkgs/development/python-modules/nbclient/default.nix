@@ -56,10 +56,6 @@ let
       xmltodict
     ];
 
-    preCheck = ''
-      export HOME=$(mktemp -d)
-    '';
-
     passthru.tests = {
       check = nbclient.overridePythonAttrs (_: {
         doCheck = true;

@@ -64,10 +64,6 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   disabledTests = [
     # Test requires network access
     "http"

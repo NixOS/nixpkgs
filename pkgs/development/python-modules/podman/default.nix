@@ -44,10 +44,6 @@ buildPythonPackage rec {
     requests-mock
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   pythonImportsCheck = [ "podman" ];
 
   disabledTests = [

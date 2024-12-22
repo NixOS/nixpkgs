@@ -32,7 +32,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     export ASPELL_CONF="dict-dir ${aspellDicts.en}/lib/aspell"
-    export HOME=$(mktemp -d)
   '';
 
   pytestFlagsArray = [ "test/unittests.py" ];

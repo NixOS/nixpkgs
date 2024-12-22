@@ -55,10 +55,6 @@ buildPythonPackage rec {
       procps
     ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   disabledTests =
     [
       "test_scripts"

@@ -55,7 +55,6 @@ buildPythonApplication rec {
 
   checkPhase = ''
     runHook preCheck
-    export HOME=$(mktemp -d)
     stestr run -e <(echo "
       # Expects to be run from a git repository
       reno.tests.test_cache.TestCache.test_build_cache_db

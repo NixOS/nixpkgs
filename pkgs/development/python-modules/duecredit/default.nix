@@ -42,10 +42,6 @@ buildPythonPackage rec {
   ];
   disabledTests = [ "test_import_doi" ]; # tries to access network
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   pythonImportsCheck = [ "duecredit" ];
 
   meta = {

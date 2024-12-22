@@ -42,7 +42,6 @@ buildPythonPackage rec {
 
   preCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # specifically needed for darwin
-    export HOME=$(mktemp -d)
     mkdir -p $HOME/.matplotlib
     echo "backend: ps" > $HOME/.matplotlib/matplotlibrc
   '';

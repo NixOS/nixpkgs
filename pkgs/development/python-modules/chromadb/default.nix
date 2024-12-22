@@ -142,7 +142,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     (($(ulimit -n) < 1024)) && ulimit -n 1024
-    export HOME=$(mktemp -d)
   '';
 
   disabledTests = [

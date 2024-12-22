@@ -77,7 +77,6 @@ buildPythonPackage rec {
   ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     export GDK_PIXBUF_MODULE_FILE=${librsvg}/lib/gdk-pixbuf-2.0/2.10.0/loaders.cache
     sed -i 's#/usr/bin/sleep#sleep#' test/widget/test_snapcast.py
   '';

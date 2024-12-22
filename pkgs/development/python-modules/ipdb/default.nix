@@ -40,10 +40,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTestPaths =
     [
       # OSError: pytest: reading from stdin while output is captured!  Consider using `-s`.

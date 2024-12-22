@@ -76,7 +76,6 @@ buildPythonPackage rec {
   preCheck =
     ''
       # Some tests depends on sanic on PATH
-      PATH="$out/bin:$PATH"
       PYTHONPATH=$PWD:$PYTHONPATH
 
       # needed for relative paths for some packages

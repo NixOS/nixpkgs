@@ -63,10 +63,6 @@ buildPythonPackage rec {
     (allow mach-lookup (global-name "com.apple.FSEvents"))
   '';
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   disabledTests = [
     # Fails to install the package
     "test_hash_algos"

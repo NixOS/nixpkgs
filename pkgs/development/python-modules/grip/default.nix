@@ -52,8 +52,11 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    export PATH="$PATH:$out/bin"
+    runHook preCheck
+
     py.test -xm "not assumption"
+
+    runHook postCheck
   '';
 
   meta = with lib; {

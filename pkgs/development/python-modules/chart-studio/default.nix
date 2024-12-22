@@ -39,10 +39,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   # most tests talk to a network service, so only run ones that don't do that.
   pytestFlagsArray = [
     "chart_studio/tests/test_core"

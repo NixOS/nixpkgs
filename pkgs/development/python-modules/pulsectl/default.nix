@@ -36,10 +36,6 @@ buildPythonPackage rec {
     pulseaudio
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   meta = with lib; {
     description = "Python high-level interface and ctypes-based bindings for PulseAudio (libpulse)";
     homepage = "https://github.com/mk-fg/python-pulse-control";

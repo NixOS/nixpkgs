@@ -45,10 +45,6 @@ buildPythonPackage rec {
     git
   ];
 
-  preCheck = ''
-    export PATH=${coverage}/bin:$PATH
-  '';
-
   disabledTests = [
     # requires .git in checkout
     "test_git"

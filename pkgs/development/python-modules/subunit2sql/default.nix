@@ -37,8 +37,7 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    export PATH=$out/bin:$PATH
-    export HOME=$TMPDIR
+    runHook preCheck
 
     stestr run -e <(echo "
     subunit2sql.tests.db.test_api.TestDatabaseAPI.test_get_failing_test_ids_from_runs_by_key_value
@@ -48,6 +47,8 @@ buildPythonPackage rec {
     subunit2sql.tests.test_shell.TestMain.test_main
     subunit2sql.tests.test_shell.TestMain.test_main_with_targets
     ")
+
+    runHook postCheck
   '';
 
   pythonImportsCheck = [ "subunit2sql" ];

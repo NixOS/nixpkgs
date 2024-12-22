@@ -71,10 +71,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
   disabledTests = [
     # Requires git directory
     "test_update_docs"

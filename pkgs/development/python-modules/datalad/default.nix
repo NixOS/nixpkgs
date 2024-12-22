@@ -125,10 +125,6 @@ buildPythonPackage rec {
     wrapProgram $out/bin/datalad --prefix PYTHONPATH : "$PYTHONPATH"
   '';
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   # tests depend on apps in $PATH which only will get installed after the test
   disabledTests = [
     # No such file or directory: 'datalad'

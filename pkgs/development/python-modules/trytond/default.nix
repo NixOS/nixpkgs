@@ -67,7 +67,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [ unittestCheckHook ];
 
   preCheck = ''
-    export HOME=$(mktemp -d)
     export TRYTOND_DATABASE_URI="sqlite://"
     export DB_NAME=":memory:";
   '';

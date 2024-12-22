@@ -57,7 +57,6 @@ buildPythonPackage rec {
   ];
 
   checkPhase = ''
-    export HOME=$(mktemp -d)
     python3 -c 'import outlines'
   '';
 

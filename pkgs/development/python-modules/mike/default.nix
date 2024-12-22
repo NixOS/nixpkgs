@@ -41,10 +41,6 @@ buildPythonPackage rec {
     unittestCheckHook
   ];
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
   # Difficult to setup
   doCheck = false;
 

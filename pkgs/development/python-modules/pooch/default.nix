@@ -46,10 +46,6 @@ buildPythonPackage rec {
       xxhash = [ xxhash ];
     };
   };
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   # tries to touch network

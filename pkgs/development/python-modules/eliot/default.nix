@@ -69,11 +69,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "eliot" ];
 
-  # Tests run eliot-prettyprint in out/bin.
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
   meta = {
     homepage = "https://eliot.readthedocs.io";
     description = "Logging library that tells you why it happened";

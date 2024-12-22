@@ -86,10 +86,6 @@ buildPythonPackage rec {
     pytest-mock
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTestPaths = [ "tests/test_comments.py" ];
   disabledTests = [
     "test_iphoto_info"

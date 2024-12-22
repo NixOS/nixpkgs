@@ -66,10 +66,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   disabledTests = [
     # Flaky: pexpect.exceptions.TIMEOUT: Timeout exceeded
     "test_console_starts"

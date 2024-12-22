@@ -101,10 +101,6 @@ buildPythonPackage rec {
     ];
   };
 
-  preCheck = ''
-    export PATH=$out/bin:$PATH
-  '';
-
   nativeCheckInputs =
     [
       fakeredis

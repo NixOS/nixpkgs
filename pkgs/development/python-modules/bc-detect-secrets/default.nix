@@ -49,10 +49,6 @@ buildPythonPackage rec {
     responses
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   disabledTests = [
     # Tests are failing for various reasons (missing git repo, missing test data, etc.)
     "test_baseline_filters_out_known_secrets"

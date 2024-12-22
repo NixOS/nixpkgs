@@ -86,11 +86,6 @@ buildPythonPackage rec {
     }"
   ];
 
-  preCheck = ''
-    # make sure the built binaries (nanoemoji/maximum_color) can be found by the test
-    export PATH="$out/bin:$PATH"
-  '';
-
   meta = with lib; {
     description = "Wee tool to build color fonts";
     homepage = "https://github.com/googlefonts/nanoemoji";

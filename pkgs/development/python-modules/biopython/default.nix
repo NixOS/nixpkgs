@@ -34,7 +34,6 @@ buildPythonPackage rec {
   checkPhase = ''
     runHook preCheck
 
-    export HOME=$(mktemp -d)
     cd Tests
     python run_tests.py --offline
 

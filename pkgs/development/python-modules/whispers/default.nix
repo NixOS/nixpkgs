@@ -72,9 +72,6 @@ buildPythonPackage rec {
     # pinning test highly sensitive to semgrep version
     substituteInPlace tests/unit/test_main.py \
       --replace-fail '("--ast", 421),' ""
-
-    # Some tests need the binary available in PATH
-    export PATH=$out/bin:$PATH
   '';
 
   pythonImportsCheck = [ "whispers" ];

@@ -18,9 +18,4 @@ buildPythonPackage {
   '';
 
   nativeCheckInputs = [ stestr ];
-
-  checkPhase = ''
-    export PATH=$out/bin:$PATH
-    export HOME=$TMPDIR
-  '';
 }

@@ -42,10 +42,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export PATH="$out/bin:$PATH"
-  '';
-
   meta = {
     changelog = "https://github.com/jmaupetit/md2pdf/blob/${src.rev}/CHANGELOG.md";
     description = "Markdown to PDF conversion tool";

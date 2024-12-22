@@ -46,10 +46,6 @@ buildPythonPackage rec {
     responses
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   disabledTests = [
     # Tests require network access
     "test_default_format"

@@ -94,10 +94,6 @@ buildPythonPackage rec {
   # ImportError: cannot import name 'get_command_for' from partially initialized module 'safety.cli_util' (most likely due to a circular import)
   disabledTestPaths = [ "tests/alerts/test_utils.py" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   meta = with lib; {
     description = "Checks installed dependencies for known vulnerabilities";
     mainProgram = "safety";

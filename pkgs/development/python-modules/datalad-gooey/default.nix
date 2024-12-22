@@ -41,10 +41,6 @@ buildPythonPackage {
 
   pythonRemoveDeps = [ "applescript" ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   nativeCheckInputs = [
     pytestCheckHook
     pytest-qt

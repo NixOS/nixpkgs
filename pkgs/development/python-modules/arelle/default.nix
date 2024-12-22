@@ -122,10 +122,6 @@ buildPythonPackage rec {
     boto3
   ] ++ lib.flatten (lib.attrValues optional-dependencies);
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTestPaths =
     [
       "tests/integration_tests"

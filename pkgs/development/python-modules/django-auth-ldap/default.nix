@@ -40,7 +40,7 @@ buildPythonPackage rec {
 
   checkPhase = ''
     runHook preCheck
-    export PATH=${pkgs.openldap}/bin:${pkgs.openldap}/libexec:$PATH
+    export PATH=${pkgs.openldap}/libexec:$PATH
     ${python.interpreter} -m django test --settings tests.settings
     runHook postCheck
   '';

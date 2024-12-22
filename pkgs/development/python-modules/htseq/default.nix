@@ -51,7 +51,6 @@ buildPythonPackage rec {
 
   preCheck = ''
     rm -r src HTSeq
-    export PATH=$out/bin:$PATH
   '';
 
   passthru.updateScript = nix-update-script {

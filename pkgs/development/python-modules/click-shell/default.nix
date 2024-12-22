@@ -29,8 +29,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "click_shell" ];
 
-  preCheck = "export HOME=$(mktemp -d)";
-
   meta = with lib; {
     description = "Extension to click that easily turns your click app into a shell utility";
     longDescription = ''

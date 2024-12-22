@@ -86,10 +86,6 @@ buildPythonPackage rec {
     riden
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
-  preCheck = ''
-    export PATH="$PATH:$out/bin";
-  '';
-
   pythonImportsCheck = [ "meshtastic" ];
 
   disabledTestPaths = [

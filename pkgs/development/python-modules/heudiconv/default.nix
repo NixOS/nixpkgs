@@ -55,10 +55,6 @@ buildPythonPackage rec {
     git
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   pythonImportsCheck = [ "heudiconv" ];
 
   disabledTests = [

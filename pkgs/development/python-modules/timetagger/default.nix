@@ -43,10 +43,6 @@ buildPythonPackage rec {
     uvicorn
   ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   nativeCheckInputs = [
     nodejs
     pytestCheckHook

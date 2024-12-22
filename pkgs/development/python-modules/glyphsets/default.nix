@@ -51,10 +51,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''
-    export PATH="$out/bin:$PATH"
-  '';
-
   disabledTests = [
     # This "test" just tries to connect to PyPI and look for newer releases. Not needed.
     "test_dependencies"

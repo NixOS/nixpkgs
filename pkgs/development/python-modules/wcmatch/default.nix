@@ -23,10 +23,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d)
-  '';
-
   disabledTests = [ "TestTilde" ];
 
   pythonImportsCheck = [ "wcmatch" ];

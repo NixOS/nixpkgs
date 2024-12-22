@@ -95,10 +95,6 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  preCheck = ''
-    export HOME=$TMPDIR
-  '';
-
   disabledTests =
     [
       # requires network access

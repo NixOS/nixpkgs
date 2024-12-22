@@ -41,10 +41,6 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyreadstat" ];
 
-  preCheck = ''
-    export HOME=$(mktemp -d);
-  '';
-
   checkPhase = ''
     runHook preCheck
 

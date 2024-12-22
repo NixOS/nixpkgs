@@ -52,10 +52,6 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
-  preCheck = ''
-    export PATH="$PATH:$out/bin";
-  '';
-
   disabledTestPaths = [ "pytest_mypy_plugins/tests/test_explicit_configs.py" ];
 
   meta = with lib; {
