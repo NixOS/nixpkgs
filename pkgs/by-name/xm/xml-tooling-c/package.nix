@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation rec {
   pname = "xml-tooling-c";
-  version = "3.2.4";
+  version = "3.3.0";
 
   src = fetchgit {
     url = "https://git.shibboleth.net/git/cpp-xmltooling.git";
