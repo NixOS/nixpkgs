@@ -204,6 +204,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
               runtime = null;
               run = checkConsoleOutput "$src/bin/test";
             };
+
+            ready-to-run = mkConsoleTest {
+              name = "ready-to-run";
+              usePackageSource = true;
+              build = "dotnet publish --use-current-runtime -p:PublishReadyToRun=true -o $out/bin";
+              run = checkConsoleOutput "$src/bin/test";
+            };
           }
           // lib.optionalAttrs finalAttrs.finalPackage.hasILCompiler {
             aot = mkConsoleTest {
