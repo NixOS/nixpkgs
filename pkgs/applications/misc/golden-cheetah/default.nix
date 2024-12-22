@@ -1,25 +1,27 @@
 {
   lib,
-  fetchFromGitHub,
-  nix-update-script,
-  mkDerivation,
-  qtbase,
-  qtsvg,
-  qtserialport,
-  qtwebengine,
-  qtmultimedia,
-  qttools,
-  qtconnectivity,
-  qtcharts,
-  libusb-compat-0_1,
-  gsl,
-  blas,
+
+  R,
   bison,
+  blas,
+  fetchFromGitHub,
   flex,
-  zlib,
-  qmake,
+  gsl,
+  libusb-compat-0_1,
   makeDesktopItem,
+  mkDerivation,
+  nix-update-script,
+  qmake,
+  qtbase,
+  qtcharts,
+  qtconnectivity,
+  qtmultimedia,
+  qtserialport,
+  qtsvg,
+  qttools,
+  qtwebengine,
   wrapQtAppsHook,
+  zlib,
 }:
 
 let
@@ -45,6 +47,7 @@ mkDerivation rec {
   };
 
   buildInputs = [
+    R
     qtbase
     qtsvg
     qtserialport
