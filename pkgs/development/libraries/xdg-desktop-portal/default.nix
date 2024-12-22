@@ -29,13 +29,18 @@
   wrapGAppsHook3,
   xmlto,
   bash,
+  gst_all_1,
+  libgudev,
+  umockdev,
+  sphinx,
+  substituteAll,
   enableGeoLocation ? true,
   enableSystemd ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xdg-desktop-portal";
-  version = "1.18.4";
+  version = "1.19.1";
 
   outputs = [
     "out"
@@ -45,18 +50,17 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "flatpak";
     repo = "xdg-desktop-portal";
-    rev = finalAttrs.version;
-    hash = "sha256-o+aO7uGewDPrtgOgmp/CE2uiqiBLyo07pVCFrtlORFQ=";
+    tag = finalAttrs.version;
+    hash = "sha256-FPSgeQd8NGvX9xn+UxN9CjGrwha/zASNp+y4dW6SRlg=";
   };
 
   patches = [
     # The icon validator copied from Flatpak needs to access the gdk-pixbuf loaders
     # in the Nix store and cannot bind FHS paths since those are not available on NixOS.
-    (runCommand "icon-validator.patch" { } ''
-      # Flatpak uses a different path
-      substitute "${flatpak.icon-validator-patch}" "$out" \
-        --replace "/icon-validator/validate-icon.c" "/src/validate-icon.c"
-    '')
+    (substituteAll {
+      src = ./fix-icon-validation.patch;
+      inherit (builtins) storeDir;
+    })
 
     # Allow installing installed tests to a separate output.
     ./installed-tests-path.patch
@@ -68,10 +72,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # test tries to read /proc/cmdline, which is not intended to be accessible in the sandbox
     ./trash-test.patch
-
-    # Install files required to be in XDG_DATA_DIR of the installed tests
-    # Merged PR https://github.com/flatpak/xdg-desktop-portal/pull/1444
-    ./installed-tests-share.patch
   ];
 
   nativeBuildInputs = [
@@ -85,6 +85,18 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     wrapGAppsHook3
     xmlto
+    sphinx
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-good
+    # For document-fuse installed test.
+    (python3.withPackages (
+      pp: with pp; [
+        pygobject3
+        sphinxext-opengraph
+        sphinx-copybutton
+        furo
+      ]
+    ))
   ];
 
   buildInputs =
@@ -97,17 +109,13 @@ stdenv.mkDerivation (finalAttrs: {
       json-glib
       libportal
       pipewire
+      gst_all_1.gst-plugins-base
+      libgudev
+      umockdev
 
       # For icon validator
       gdk-pixbuf
       librsvg
-
-      # For document-fuse installed test.
-      (python3.withPackages (
-        pp: with pp; [
-          pygobject3
-        ]
-      ))
       bash
     ]
     ++ lib.optionals enableGeoLocation [
@@ -155,6 +163,9 @@ stdenv.mkDerivation (finalAttrs: {
     }
     substituteInPlace tests/test-portals.c \
       --replace-fail 'g_test_add_func ("/portal/notification/bad-arg", test_notification_bad_arg);' ""
+
+    patchShebangs src/generate-method-info.py
+    patchShebangs doc/fix-rst-dbus.py
   '';
 
   preCheck = ''
@@ -165,23 +176,22 @@ stdenv.mkDerivation (finalAttrs: {
     # be flaky. Let's disable those downstream as hydra exhibits similar
     # flakes:
     #   https://github.com/NixOS/nixpkgs/pull/270085#issuecomment-1840053951
-    export TEST_IN_CI=1
+    export XDP_TEST_IN_CI=1
+
+    export XDP_VALIDATE_SOUND_INSECURE=1 # For validate-sound: Failed to create gstreamer discoverer: Couldn't create 'uridecodebin' element
+
+    export LD_PRELOAD=$LD_PRELOAD:${lib.getLib umockdev}/lib/libumockdev-preload.so
   '';
 
   postFixup =
     let
       documentFuse = "${placeholder "installedTests"}/libexec/installed-tests/xdg-desktop-portal/test-document-fuse.py";
       testPortals = "${placeholder "installedTests"}/libexec/installed-tests/xdg-desktop-portal/test-portals";
-
     in
     ''
       if [ -x '${documentFuse}' ] ; then
         wrapGApp '${documentFuse}'
         wrapGApp '${testPortals}'
-        # (xdg-desktop-portal:995): xdg-desktop-portal-WARNING **: 21:21:55.673: Failed to get GeoClue client: Timeout was reached
-        # xdg-desktop-portal:ERROR:../tests/location.c:22:location_cb: 'res' should be TRUE
-        # https://github.com/flatpak/xdg-desktop-portal/blob/1d6dfb57067dec182b546dfb60c87aa3452c77ed/tests/location.c#L21
-        rm $installedTests/share/installed-tests/xdg-desktop-portal/test-portals-location.test
       fi
     '';
 
@@ -196,11 +206,11 @@ stdenv.mkDerivation (finalAttrs: {
     };
   };
 
-  meta = with lib; {
+  meta = {
     description = "Desktop integration portals for sandboxed apps";
-    homepage = "https://flatpak.github.io/xdg-desktop-portal/";
-    license = licenses.lgpl2Plus;
-    maintainers = with maintainers; [ jtojnar ];
-    platforms = platforms.linux;
+    homepage = "https://flatpak.github.io/xdg-desktop-portal";
+    license = lib.licenses.lgpl2Plus;
+    maintainers = with lib.maintainers; [ jtojnar ];
+    platforms = lib.platforms.linux;
   };
 })
