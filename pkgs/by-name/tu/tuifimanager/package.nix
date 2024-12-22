@@ -21,21 +21,24 @@ lib.throwIf (enableDragAndDrop && !hasDndSupport)
   python3.pkgs.buildPythonApplication
   rec {
     pname = "tuifimanager";
-    version = "5.0.0";
-    format = "pyproject";
+    version = "5.0.5";
+
+    pyproject = true;
 
     src = fetchFromGitHub {
       owner = "GiorgosXou";
       repo = "TUIFIManager";
       rev = "v.${version}";
-      hash = "sha256-2yYD1YFGoN0uj3HzcYxEs3zbwfUIDLLzvfTcZILx5h4=";
+      hash = "sha256-KwyRGNT3o/Ww+szBI+MmMMw5ZaSPT+G3xJIw5g9iBKo=";
     };
 
+    build-system = with python3.pkgs; [
+      setuptools
+      setuptools-scm
+    ];
+
     nativeBuildInputs =
-      [
-        python3.pkgs.setuptools
-        python3.pkgs.setuptools-scm
-      ]
+      [ ]
       ++ (lib.optionals enableDragAndDrop [
         qt6.wrapQtAppsHook
         makeWrapper
