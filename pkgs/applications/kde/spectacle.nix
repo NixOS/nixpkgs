@@ -10,13 +10,11 @@
   kdbusaddons,
   kdeclarative,
   kio,
-  kipi-plugins,
   knotifications,
   kscreen,
   kwidgetsaddons,
   kwindowsystem,
   kxmlgui,
-  libkipi,
   qtx11extras,
   knewstuff,
   kwayland,
@@ -54,7 +52,6 @@ mkDerivation {
     kwidgetsaddons
     kwindowsystem
     kxmlgui
-    libkipi
     qtx11extras
     xcb-util-cursor
     knewstuff
@@ -79,10 +76,6 @@ mkDerivation {
     qtWrapperArgs+=("''${gappsWrapperArgs[@]}")
   '';
 
-  propagatedUserEnvPkgs = [
-    kipi-plugins
-    libkipi
-  ];
   meta = with lib; {
     homepage = "https://apps.kde.org/spectacle/";
     description = "Screenshot capture utility";

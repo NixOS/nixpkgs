@@ -2771,12 +2771,6 @@
     "project_path": "kde/kdenetwork/kio-zeroconf",
     "repo_path": "network/kio-zeroconf"
   },
-  "kipi-plugins": {
-    "description": "Plugins extending KDE graphics apps, e.g. with import/export capabilities",
-    "name": "kipi-plugins",
-    "project_path": "kde/kdegraphics/kipi-plugins",
-    "repo_path": "graphics/kipi-plugins"
-  },
   "kirigami": {
     "description": "A QtQuick based components set",
     "name": "kirigami",
@@ -4438,12 +4432,6 @@
     "name": "libkimageannotator",
     "project_path": "playground/libs/libkimageannotator",
     "repo_path": "libraries/libkimageannotator"
-  },
-  "libkipi": {
-    "description": "Qt/C++ interface to use kipi-plugins from KDE image management programs",
-    "name": "libkipi",
-    "project_path": "kde/kdegraphics/libs/libkipi",
-    "repo_path": "graphics/libkipi"
   },
   "libkleo": {
     "description": "Library that provides cryptography support for mails",
