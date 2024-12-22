@@ -107,7 +107,7 @@ let
       escapeShellArg escapeShellArgs
       isStorePath isStringLike
       isValidPosixName toShellVar toShellVars trim trimWith
-      escapeRegex escapeURL escapeXML replaceChars lowerChars
+      escapeRegex escapeGlob escapeURL escapeXML replaceChars lowerChars
       upperChars toLower toUpper addContextFrom splitString
       removePrefix removeSuffix versionOlder versionAtLeast
       getName getVersion match split

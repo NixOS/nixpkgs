@@ -474,6 +474,24 @@ runTests {
     expected = [ "A" "B" ];
   };
 
+  testEscapeGlobEmpty = {
+    expr = strings.escapeGlob "";
+    expected = "";
+  };
+
+  testEscapeGlobExamples = {
+    expr = map strings.escapeGlob [
+      "Can you *hear* me?.txt"
+      "@(hi|hello)"
+      "alice@example.com"
+    ];
+    expected = [
+      "Can you [*]hear[*] me[?].txt"
+      "[@](hi|hello)"
+      "alice@example.com"
+    ];
+  };
+
   testEscapeShellArg = {
     expr = strings.escapeShellArg "esc'ape\nme";
     expected = "'esc'\\''ape\nme'";
