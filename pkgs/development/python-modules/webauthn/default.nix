@@ -43,11 +43,11 @@ buildPythonPackage rec {
     #"test_throws_on_bad_root_cert"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of the WebAuthn API";
     homepage = "https://github.com/duo-labs/py_webauthn";
     changelog = "https://github.com/duo-labs/py_webauthn/blob/v${version}/CHANGELOG.md";
-    license = licenses.bsd3;
+    license = lib.licenses.bsd3;
     maintainers = [ ];
   };
 }
