@@ -3,6 +3,7 @@
   fetchFromGitHub,
   rustPlatform,
   pkg-config,
+  installShellFiles,
   alsa-lib,
   libjack2,
 }:
@@ -20,12 +21,22 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-SS4BDhORiTV/HZhL3F9zwF8oBu/VFVYhF5Jzp2j0QFI=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    installShellFiles
+  ];
 
   buildInputs = [
     alsa-lib
     libjack2
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd asak \
+      --bash target/completions/asak.bash \
+      --fish target/completions/asak.fish \
+      --zsh target/completions/_asak
+  '';
 
   meta = {
     description = "Cross-platform audio recording/playback CLI tool with TUI, written in Rust";
