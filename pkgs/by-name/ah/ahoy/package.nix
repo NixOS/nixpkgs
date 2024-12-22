@@ -23,7 +23,6 @@ buildGoModule rec {
     changelog = "https://github.com/ahoy-cli/ahoy/releases/tag/${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ darwincereska ];
-    platforms = lib.platforms.linux;
     mainProgram = "ahoy";
   };
 }
