@@ -17778,6 +17778,8 @@ self: super: with self; {
 
   virtkey = callPackage ../development/python-modules/virtkey { };
 
+  virtual-glob = callPackage ../development/python-modules/virtual-glob { };
+
   virtualenv = callPackage ../development/python-modules/virtualenv { };
 
   virtualenv-clone = callPackage ../development/python-modules/virtualenv-clone { };
