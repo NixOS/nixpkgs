@@ -71,8 +71,12 @@ let
           version=''${version,,}
           mkdir -p "$out"/share/nuget/packages/"$id"
           cp -r . "$out"/share/nuget/packages/"$id"/"$version"
-          chmod +w "$out"/share/nuget/packages/"$id"/"$version"
-          echo {} > "$out"/share/nuget/packages/"$id"/"$version"/.nupkg.metadata
+          cd "$out"/share/nuget/packages/"$id"/"$version"
+          chmod +w .
+          for dir in tools runtimes/*/native; do
+            [[ ! -d "$dir" ]] || chmod -R +x "$dir"
+          done
+          echo {} > .nupkg.metadata
         )
 
         popd
