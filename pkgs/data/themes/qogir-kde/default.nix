@@ -28,13 +28,13 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "qogir-kde";
-  version = "0-unstable-2024-10-30";
+  version = "0-unstable-2024-12-21";
 
   src = fetchFromGitHub {
     owner = "vinceliuice";
     repo = pname;
-    rev = "f2fdab049c403a356a79c9c3b9d45ec4357c1649";
-    hash = "sha256-6Hl2ozxqufin0fe33HZVuofk61E8Vggyk8/XX2R+2H0=";
+    rev = "31e7bbf94e905ef40d262d2bc6063156df252470";
+    hash = "sha256-zgXwYmpD31vs2Gyg21m0MdOkwqzSn6V21Kva+nvNeVI=";
   };
 
   postPatch = ''

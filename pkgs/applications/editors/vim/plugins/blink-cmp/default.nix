@@ -7,12 +7,12 @@
   nix-update-script,
 }:
 let
-  version = "0.8.0";
+  version = "0.8.1";
   src = fetchFromGitHub {
     owner = "Saghen";
     repo = "blink.cmp";
     tag = "v${version}";
-    hash = "sha256-YUADpn3kImYqlc96R3qMKC2V+ZD3+Na0WDP63dxKKbU=";
+    hash = "sha256-hlz1t9W9CEdUw6Fgs+sDLbzX+hdkPyqbOhXKPd8NBDY=";
   };
   libExt = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
   blink-fuzzy-lib = rustPlatform.buildRustPackage {
@@ -20,7 +20,7 @@ let
     pname = "blink-fuzzy-lib";
 
     useFetchCargoVendor = true;
-    cargoHash = "sha256-XXI2jEoD6XbFNk3O8B6+aLzl1ZcJq1VinQXb+AOw8Rw=";
+    cargoHash = "sha256-t84hokb2loZ6FPPt4eN8HzgNQJrQUdiG5//ZbmlasWY=";
 
     env = {
       # TODO: remove this if plugin stops using nightly rust
