@@ -1,33 +1,31 @@
 {
   lib,
   fetchFromGitHub,
-  flutter324,
+  flutter327,
   webkitgtk_4_1,
   alsa-lib,
   libayatana-appindicator,
   autoPatchelfHook,
-  wrapGAppsHook3,
   gst_all_1,
   stdenv,
   mimalloc,
   mpv,
   mpv-unwrapped,
 }:
-flutter324.buildFlutterApplication rec {
+flutter327.buildFlutterApplication rec {
   pname = "kazumi";
-  version = "1.4.6";
+  version = "1.4.7";
 
   src = fetchFromGitHub {
     owner = "Predidit";
     repo = "Kazumi";
     tag = version;
-    hash = "sha256-NB6veMxAbG4YB6Io+HNLK/N8irF8g+Vj0r5L94JG//A=";
+    hash = "sha256-/sr2CQ9ntwfR2QCgidQE3kwBSIG+qfpSR/XhRPpmBm0=";
   };
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
   nativeBuildInputs = [
-    wrapGAppsHook3
     autoPatchelfHook
   ];
 
