@@ -14,6 +14,8 @@
   jansson,
   libopus,
   nixosTests,
+  systemdLibs,
+  withSystemd ? true,
   withJanus ? true,
 }:
 stdenv.mkDerivation rec {
@@ -34,6 +36,9 @@ stdenv.mkDerivation rec {
       libjpeg
       libdrm
     ]
+    ++ lib.optionals withSystemd [
+      systemdLibs
+    ]
     ++ lib.optionals withJanus [
       janus-gateway
       glib
@@ -49,6 +54,9 @@ stdenv.mkDerivation rec {
     [
       "PREFIX=${placeholder "out"}"
       "WITH_V4P=1"
+    ]
+    ++ lib.optionals withSystemd [
+      "WITH_SYSTEMD=1"
     ]
     ++ lib.optionals withJanus [
       "WITH_JANUS=1"
