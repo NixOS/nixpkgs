@@ -177,7 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config
       gettext
       shared-mime-info
-      valgrind
       protobufc # for protoc
       wrapGAppsNoGuiHook
       vala
@@ -212,6 +211,7 @@ stdenv.mkDerivation (finalAttrs: {
       libcbor
       libqmi
       xz # for liblzma
+      valgrind
     ]
     ++ lib.optionals haveFlashrom [
       flashrom

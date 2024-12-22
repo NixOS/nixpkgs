@@ -12,19 +12,21 @@
 
 buildPythonPackage rec {
   pname = "finetuning-scheduler";
-  version = "2.4.0";
+  version = "2.5.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "speediedan";
     repo = "finetuning-scheduler";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-uSFGZseSJv519LpaddO6yP6AsIMZutEA0Y7Yr+mEWTQ=";
+    tag = "v${version}";
+    hash = "sha256-neeSATQwAaYN1QGBUXphqqJp9lP3HG2OH4aLdt1cOho=";
   };
 
   build-system = [ setuptools ];
+
+  pythonRelaxDeps = [
+    "pytorch-lightning"
+  ];
 
   dependencies = [
     pytorch-lightning
@@ -54,10 +56,12 @@ buildPythonPackage rec {
   meta = {
     description = "PyTorch Lightning extension for foundation model experimentation with flexible fine-tuning schedules";
     homepage = "https://finetuning-scheduler.readthedocs.io";
-    changelog = "https://github.com/speediedan/finetuning-scheduler/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/speediedan/finetuning-scheduler/blob/${src.tag}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ bcdarwin ];
-    # "No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package" at import time:
-    broken = stdenv.hostPlatform.isDarwin;
+    badPlatforms = [
+      # "No module named 'torch._C._distributed_c10d'; 'torch._C' is not a package" at import time:
+      lib.systems.inspect.patterns.isDarwin
+    ];
   };
 }

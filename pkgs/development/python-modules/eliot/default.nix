@@ -74,6 +74,14 @@ buildPythonPackage rec {
     export PATH=$out/bin:$PATH
   '';
 
+  disabledTests = [
+    # Fails since dask's bump to 2024.12.2
+    # Reported upstream: https://github.com/itamarst/eliot/issues/507
+    "test_compute_logging"
+    "test_future"
+    "test_persist_logging"
+  ];
+
   meta = {
     homepage = "https://eliot.readthedocs.io";
     description = "Logging library that tells you why it happened";
