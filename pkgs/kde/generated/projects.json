@@ -3077,12 +3077,6 @@
     "project_path": "playground/office/knipptasch",
     "repo_path": "office/knipptasch"
   },
-  "knotes": {
-    "description": "Note-taking application",
-    "name": "knotes",
-    "project_path": "kde/pim/knotes",
-    "repo_path": "pim/knotes"
-  },
   "knotifications": {
     "description": "KNotifications",
     "name": "knotifications",
