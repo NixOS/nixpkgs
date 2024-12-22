@@ -19,6 +19,7 @@
   harfbuzzFull,
   icu70,
   lcms,
+  libavif,
   libdrm,
   libepoxy,
   libevent,
@@ -50,7 +51,12 @@
 }:
 let
   suffix' =
-    if lib.hasPrefix "linux" suffix then "ubuntu-22.04" + (lib.removePrefix "linux" suffix) else suffix;
+    if lib.hasPrefix "linux" suffix then
+      "ubuntu-22.04" + (lib.removePrefix "linux" suffix)
+    else if lib.hasPrefix "mac" suffix then
+      "mac-14" + (lib.removePrefix "mac" suffix)
+    else
+      suffix;
   libvpx' = libvpx.overrideAttrs (
     finalAttrs: previousAttrs: {
       version = "1.12.0";
@@ -62,74 +68,103 @@ let
       };
     }
   );
+  libavif' = libavif.overrideAttrs (
+    finalAttrs: previousAttrs: {
+      version = "0.9.3";
+      src = fetchFromGitHub {
+        owner = "AOMediaCodec";
+        repo = finalAttrs.pname;
+        rev = "v${finalAttrs.version}";
+        hash = "sha256-ME/mkaHhFeHajTbc7zhg9vtf/8XgkgSRu9I/mlQXnds=";
+      };
+      postPatch = "";
+    }
+  );
+  webkit-linux = stdenv.mkDerivation {
+    name = "playwright-webkit";
+    src = fetchzip {
+      url = "https://playwright.azureedge.net/builds/webkit/${revision}/webkit-${suffix'}.zip";
+      stripRoot = false;
+      hash =
+        {
+          x86_64-linux = "sha256-h6fX2/2GqYJAWS/uABTJgduQJxZdLS/kzwEGBRNCjxU=";
+          aarch64-linux = "sha256-b/J5oI7xTfZbZrdUtioGfw7PUEVPU5Ypld04GBdJUp0=";
+        }
+        .${system} or throwSystem;
+    };
 
-in
-stdenv.mkDerivation {
-  name = "playwright-webkit";
-  src = fetchzip {
+    nativeBuildInputs = [
+      autoPatchelfHook
+      patchelfUnstable
+      makeWrapper
+    ];
+    buildInputs = [
+      at-spi2-atk
+      cairo
+      flite
+      fontconfig.lib
+      freetype
+      glib
+      gst_all_1.gst-plugins-bad
+      gst_all_1.gst-plugins-base
+      gst_all_1.gstreamer
+      harfbuzz
+      harfbuzzFull
+      icu70
+      lcms
+      libavif'
+      libdrm
+      libepoxy
+      libevent
+      libgcc.lib
+      libgcrypt
+      libgpg-error
+      libjpeg8
+      libopus
+      libpng
+      libsoup_3
+      libtasn1
+      libwebp
+      libwpe
+      libwpe-fdo
+      libvpx'
+      libxml2
+      libxslt
+      mesa
+      sqlite
+      systemdLibs
+      wayland-scanner
+      woff2.lib
+      libxkbcommon
+      zlib
+    ];
+
+    patchelfFlags = [ "--no-clobber-old-sections" ];
+    buildPhase = ''
+      cp -R . $out
+
+      # remove unused gtk browser
+      rm -rf $out/minibrowser-gtk
+
+      wrapProgram $out/minibrowser-wpe/bin/MiniBrowser \
+        --prefix GIO_EXTRA_MODULES ":" "${glib-networking}/lib/gio/modules/"
+    '';
+  };
+  webkit-darwin = fetchzip {
     url = "https://playwright.azureedge.net/builds/webkit/${revision}/webkit-${suffix'}.zip";
     stripRoot = false;
     hash =
       {
-        x86_64-linux = "sha256-pHYGQYwu47jdOAD+/mLrP6Dd+2aDMHENddVwAu0uEfI=";
-        aarch64-linux = "sha256-0UeYWjeFnQ8yVa3juWg7Z7VF1GDbP4pJ9OUJRbv1OJw=";
+        x86_64-darwin = "sha256-4h48iOj5Y6B5eNiEFgM5CjE2C6tj+2cpuwB+EacI0vw=";
+        aarch64-darwin = "sha256-KaEEvazBJM4wJCuoqwXNTk1B/1GA3b2iAVThINyifdA=";
       }
       .${system} or throwSystem;
   };
-
-  nativeBuildInputs = [
-    autoPatchelfHook
-    patchelfUnstable
-    makeWrapper
-  ];
-  buildInputs = [
-    at-spi2-atk
-    cairo
-    flite
-    fontconfig.lib
-    freetype
-    glib
-    gst_all_1.gst-plugins-bad
-    gst_all_1.gst-plugins-base
-    gst_all_1.gstreamer
-    harfbuzz
-    harfbuzzFull
-    icu70
-    lcms
-    libdrm
-    libepoxy
-    libevent
-    libgcc.lib
-    libgcrypt
-    libgpg-error
-    libjpeg8
-    libopus
-    libpng
-    libsoup_3
-    libtasn1
-    libwebp
-    libwpe
-    libwpe-fdo
-    libvpx'
-    libxml2
-    libxslt
-    mesa
-    sqlite
-    systemdLibs
-    wayland-scanner
-    woff2.lib
-    libxkbcommon
-    zlib
-  ];
-
-  patchelfFlags = [ "--no-clobber-old-sections" ];
-  buildPhase = ''
-    cp -R . $out
-
-    # remove unused gtk browser
-    rm -rf $out/minibrowser-gtk
-
-    wrapProgram $out/minibrowser-wpe/bin/MiniBrowser \
-      --prefix GIO_EXTRA_MODULES ":" "${glib-networking}/lib/gio/modules/"
-  '';
+in
+{
+  x86_64-linux = webkit-linux;
+  aarch64-linux = webkit-linux;
+  x86_64-darwin = webkit-darwin;
+  aarch64-darwin = webkit-darwin;
 }
+.${system} or throwSystem
