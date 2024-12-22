@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "chaosprint";
     repo = "asak";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Kq1WdVcTRdz6vJxUDd0bqb2bfrNGCl611upwYploR7w=";
   };
 
@@ -27,11 +27,8 @@ rustPlatform.buildRustPackage rec {
     libjack2
   ];
 
-  # There is no tests
-  doCheck = false;
-
   meta = {
-    description = "A cross-platform audio recording/playback CLI tool with TUI, written in Rust";
+    description = "Cross-platform audio recording/playback CLI tool with TUI, written in Rust";
     homepage = "https://github.com/chaosprint/asak";
     changelog = "https://github.com/chaosprint/asak/releases/tag/v${version}";
     license = lib.licenses.mit;
