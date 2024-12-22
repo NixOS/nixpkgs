@@ -9,7 +9,8 @@ lib.makeOverridable (
   {
     owner,
     repo,
-    rev,
+    rev ? null,
+    tag ? null,
     protocol ? "https",
     domain ? "gitlab.com",
     name ? "source",
@@ -22,6 +23,12 @@ lib.makeOverridable (
     ... # For hash agility
   }@args:
 
+  assert (
+    lib.assertMsg (lib.xor (tag == null) (
+      rev == null
+    )) "fetchFromGitLab requires one of either `rev` or `tag` to be provided (not both)."
+  );
+
   let
     slug = lib.concatStringsSep "/" (
       (lib.optional (group != null) group)
@@ -31,7 +38,9 @@ lib.makeOverridable (
       ]
     );
     escapedSlug = lib.replaceStrings [ "." "/" ] [ "%2E" "%2F" ] slug;
-    escapedRev = lib.replaceStrings [ "+" "%" "/" ] [ "%2B" "%25" "%2F" ] rev;
+    escapedRev = lib.replaceStrings [ "+" "%" "/" ] [ "%2B" "%25" "%2F" ] (
+      if tag != null then "refs/tags/" + tag else rev
+    );
     passthruAttrs = removeAttrs args [
       "protocol"
       "domain"
@@ -39,6 +48,7 @@ lib.makeOverridable (
       "group"
       "repo"
       "rev"
+      "tag"
       "fetchSubmodules"
       "forceFetchGit"
       "leaveDotGit"
@@ -58,6 +68,7 @@ lib.makeOverridable (
             inherit
               rev
               deepClone
+              tag
               fetchSubmodules
               sparseCheckout
               leaveDotGit
@@ -82,6 +93,11 @@ lib.makeOverridable (
   fetcher fetcherArgs
   // {
     meta.homepage = "${protocol}://${domain}/${slug}/";
-    inherit rev owner repo;
+    inherit
+      tag
+      rev
+      owner
+      repo
+      ;
   }
 )
