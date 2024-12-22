@@ -7,6 +7,7 @@
 , pkg-config
 , wrapGAppsHook3
 , boost
+, boost183
 , cereal
 , cgal
 , curl
@@ -69,23 +70,31 @@ let
 
   patches = [
   ];
+
+  # Build requires at least Boost v1.83.  If the mainline package satisfies
+  # that, just use the mainline package, otherwise use an explicitly versioned
+  # package.
+  boost183OrBetter =
+    if lib.versionAtLeast boost.version "1.83"
+    then boost
+    else boost183;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "prusa-slicer";
-  version = "2.8.1";
+  version = "2.9.0";
   inherit patches;
 
   src = fetchFromGitHub {
     owner = "prusa3d";
     repo = "PrusaSlicer";
-    hash = "sha256-nMLZvvZLIOChCLn8A9sOph1lqWsHb00eTG8z98/l0C8=";
+    hash = "sha256-6BrmTNIiu6oI/CbKPKoFQIh1aHEVfJPIkxomQou0xKk=";
     rev = "version_${finalAttrs.version}";
   };
 
   # required for GCC 14
   # (not applicable to super-slicer fork)
   postPatch = lib.optionalString (finalAttrs.pname == "prusa-slicer") ''
-    substituteInPlace src/libslic3r/Arrange/Core/DataStoreTraits.hpp \
+    substituteInPlace src/slic3r-arrange/include/arrange/DataStoreTraits.hpp \
       --replace-fail \
       "WritableDataStoreTraits<ArrItem>::template set" \
       "WritableDataStoreTraits<ArrItem>::set"
@@ -100,7 +109,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     binutils
-    boost
+    boost183OrBetter
     cereal
     cgal
     curl
