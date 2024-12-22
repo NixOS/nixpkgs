@@ -15563,6 +15563,12 @@
     githubId = 9636071;
     name = "Myrl Hex";
   };
+  myypo = {
+    email = "nikirsmcgl@gmail.com";
+    github = "myypo";
+    githubId = 110892040;
+    name = "Mykyta Polchanov";
+  };
   mzacho = {
     email = "nixpkgs@martinzacho.net";
     github = "mzacho";
