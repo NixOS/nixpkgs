@@ -156,7 +156,7 @@ let
       updateScript = nix-update-script {
         extraArgs = [
           "--version-regex"
-          "rel\.(.*)"
+          "rel\\.(.*)"
         ];
       };
 
