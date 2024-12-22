@@ -154,5 +154,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ pacien ];
+  meta.maintainers = with maintainers; [ euxane ];
 }
