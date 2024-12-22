@@ -32,6 +32,7 @@
   gtest,
 
   nix-update-script,
+  python3,
 
   stateDir ? "",
 }:
@@ -56,6 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
     rustPlatform.cargoSetupHook
     ensureNewerSourcesForZipFilesHook
     removeReferencesTo
+    python3
   ];
 
   buildInputs =
@@ -72,6 +74,7 @@ stdenv.mkDerivation (finalAttrs: {
       fbthrift
       fb303
       cpptoml
+      python3
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_11
@@ -102,11 +105,24 @@ stdenv.mkDerivation (finalAttrs: {
     cp ${./Cargo.lock} ${finalAttrs.cargoRoot}/Cargo.lock
   '';
 
+  postInstall = ''
+    # Install Python scripts
+    mkdir -p $out/bin
+    for script in watchman/python/bin/*; do
+      if [ -f "$script" ]; then
+        install -Dm755 "$script" "$out/bin/$(basename "$script")"
+        # Update shebang to use the correct Python
+        substituteInPlace "$out/bin/$(basename "$script")" \
+          --replace "/usr/bin/env python3" "${python3}/bin/python3"
+      fi
+    done
+  '';
+  
   postFixup = ''
     # TODO: Do this in `fmt` rather than downstream.
     remove-references-to -t ${folly.fmt.dev} $out/bin/*
   '';
-
+  
   passthru.updateScript = nix-update-script { };
 
   meta = {
