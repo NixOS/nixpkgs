@@ -38,7 +38,7 @@
   libtiff,
   libwebp,
   matio,
-  openexr_3,
+  openexr,
   openjpeg,
   openslide,
   pango,
@@ -112,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
       libtiff
       libwebp
       matio
-      openexr_3
+      openexr
       openjpeg
       openslide
       pango

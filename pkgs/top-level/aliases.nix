@@ -1269,6 +1269,7 @@ mapAliases {
   opendylan_bin = throw "opendylan_bin has been removed from nixpkgs as it was broken"; # Added 2024-07-15
   openelec-dvb-firmware = throw "'openelec-dvb-firmware' has been renamed to/replaced by 'libreelec-dvb-firmware'"; # Converted to throw 2024-10-17
   openethereum = throw "openethereum development has ceased by upstream. Use alternate clients such as go-ethereum, erigon, or nethermind"; # Added 2024-05-13
+  openexr_3 = openexr; # Added 2025-03-12
   openimageio2 = openimageio; # Added 2023-01-05
   openisns = throw "'openisns' has been renamed to/replaced by 'open-isns'"; # Converted to throw 2024-10-17
   openjdk19 = throw "OpenJDK 19 was removed as it has reached its end of life"; # Added 2024-08-01
