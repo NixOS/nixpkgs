@@ -2166,6 +2166,10 @@ in
     }
   );
 
+  nvim-impairative = super.nvim-impairative.overrideAttrs {
+    nvimRequireCheck = "impairative";
+  };
+
   nvim-navic = super.nvim-navic.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
     nvimRequireCheck = "nvim-navic";
