@@ -146,21 +146,21 @@ let
     end # fenv
   '';
 
-  fish = stdenv.mkDerivation rec {
+  fish = stdenv.mkDerivation (finalAttrs: {
     pname = "fish";
     version = "4.0.0";
 
     src = fetchFromGitHub {
       owner = "fish-shell";
       repo = "fish-shell";
-      tag = version;
+      tag = finalAttrs.version;
       hash = "sha256-BLbL5Tj3FQQCOeX5TWXMaxCpvdzZtKe5dDQi66uU/BM=";
     };
 
-    env.FISH_BUILD_VERSION = version;
+    env.FISH_BUILD_VERSION = finalAttrs.version;
 
     cargoDeps = rustPlatform.fetchCargoVendor {
-      inherit src;
+      inherit (finalAttrs) src;
       hash = "sha256-j1HCj1iZ5ZV8nfMmJq5ggPD4s+5V8IretDdoz+G3wWU=";
     };
 
@@ -417,6 +417,6 @@ let
       };
       updateScript = nix-update-script { };
     };
-  };
+  });
 in
 fish
