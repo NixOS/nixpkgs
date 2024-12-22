@@ -6338,7 +6338,6 @@ broken-packages:
   - unamb-custom # failure in job https://hydra.nixos.org/build/233197458 at 2023-09-02
   - unbeliever # failure in job https://hydra.nixos.org/build/233221256 at 2023-09-02
   - unbounded-delays-units # failure in job https://hydra.nixos.org/build/233200989 at 2023-09-02
-  - unbound-generics # failure in job https://hydra.nixos.org/build/252713870 at 2024-03-16
   - unboxed-containers # failure in job https://hydra.nixos.org/build/233200384 at 2023-09-02
   - unboxed # failure in job https://hydra.nixos.org/build/233219555 at 2023-09-02
   - unboxed-references # failure in job https://hydra.nixos.org/build/233192713 at 2023-09-02

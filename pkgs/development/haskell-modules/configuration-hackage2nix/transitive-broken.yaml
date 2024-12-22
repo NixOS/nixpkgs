@@ -4016,8 +4016,6 @@ dont-distribute-packages:
  - ukrainian-phonetics-basic
  - unagi-bloomfilter
  - unbound
- - unbound-generics-unify
- - unbound-kind-generics
  - unfoldable-restricted
  - uni-events
  - uni-graphs
