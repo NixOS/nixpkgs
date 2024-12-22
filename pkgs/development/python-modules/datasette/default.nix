@@ -73,6 +73,7 @@ buildPythonPackage rec {
     platformdirs
     pluggy
     pyyaml
+    setuptools
     typing-extensions
     uvicorn
   ];
