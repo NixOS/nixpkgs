@@ -65,6 +65,12 @@
    file located in the root of the Nixpkgs repo.
 */
 {
+  darwincereska = {
+    name = "Darwin Cereska";
+    email = "darwin@durrstudios.dev";
+    github = "darwincereska";
+    githubId = 157426553;
+  }
   _0b11stan = {
     name = "Tristan Auvinet Pinaudeau";
     email = "tristan@tic.sh";
