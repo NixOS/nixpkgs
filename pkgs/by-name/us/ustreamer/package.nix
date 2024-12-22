@@ -77,5 +77,6 @@ stdenv.mkDerivation rec {
       matthewcroughan
     ];
     platforms = platforms.linux;
+    mainProgram = "ustreamer";
   };
 }
