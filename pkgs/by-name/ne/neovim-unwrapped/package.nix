@@ -18,6 +18,8 @@
   fixDarwinDylibNames,
   glibcLocales ? null,
   procps ? null,
+  versionCheckHook,
+  nix-update-script,
 
   # now defaults to false because some tests can be flaky (clipboard etc), see
   # also: https://github.com/neovim/neovim/issues/16233
@@ -102,7 +104,7 @@ stdenv.mkDerivation (
     src = fetchFromGitHub {
       owner = "neovim";
       repo = "neovim";
-      rev = "refs/tags/v${finalAttrs.version}";
+      tag = "v${finalAttrs.version}";
       hash = "sha256-nmnEyHE/HcrwK+CyJHNoLG0BqjnWleiBy0UYcJL7Ecc=";
     };
 
@@ -246,6 +248,16 @@ stdenv.mkDerivation (
 
     separateDebugInfo = true;
 
+    nativeInstallCheckInputs = [
+      versionCheckHook
+    ];
+    versionCheckProgramArg = [ "--version" ];
+    doInstallCheck = true;
+
+    passthru = {
+      updateScript = nix-update-script { };
+    };
+
     meta = {
       description = "Vim text editor fork focused on extensibility and agility";
       longDescription = ''
@@ -257,6 +269,7 @@ stdenv.mkDerivation (
         - Improve extensibility with a new plugin architecture
       '';
       homepage = "https://www.neovim.io";
+      changelog = "https://github.com/neovim/neovim/releases/tag/${finalAttrs.src.tag}";
       mainProgram = "nvim";
       # "Contributions committed before b17d96 by authors who did not sign the
       # Contributor License Agreement (CLA) remain under the Vim license.
