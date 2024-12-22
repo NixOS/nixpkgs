@@ -9298,7 +9298,7 @@ with pkgs;
 
   grantlee = libsForQt5.callPackage ../development/libraries/grantlee { };
 
-  glib = callPackage ../development/libraries/glib (let
+  glib = callPackage ../by-name/gl/glib/package.nix (let
     glib-untested = glib.overrideAttrs { doCheck = false; };
   in {
     # break dependency cycles
