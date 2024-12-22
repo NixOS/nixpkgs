@@ -12,6 +12,7 @@
   src ? null,
   stdenv,
   version,
+  clangPatches,
 }:
 
 let
@@ -60,6 +61,17 @@ let
     src = src';
     sourceRoot = "${src.name}/llvm";
 
+    postPatch = ''
+      (
+        cd ../clang
+        chmod u+rwX -R .
+        for p in ${toString clangPatches}
+        do
+          patch -p1 < $p
+        done
+      )
+    '';
+
     nativeBuildInputs = [
       cmake
       ninja
@@ -69,12 +81,16 @@ let
     cmakeFlags = [
       # Projects with tablegen-like tools.
       "-DLLVM_ENABLE_PROJECTS=${
-        lib.concatStringsSep ";" [
-          "llvm"
-          "clang"
-          "clang-tools-extra"
-          "mlir"
-        ]
+        lib.concatStringsSep ";" (
+          [
+            "llvm"
+            "clang"
+            "clang-tools-extra"
+          ]
+          ++ lib.optionals (lib.versionAtLeast release_version "16") [
+            "mlir"
+          ]
+        )
       }"
     ] ++ devExtraCmakeFlags;
 
@@ -82,13 +98,19 @@ let
     ninjaFlags =
       [
         "clang-tblgen"
-        "clang-tidy-confusable-chars-gen"
         "llvm-tblgen"
+      ]
+      ++ lib.optionals (lib.versionAtLeast release_version "15") [
+        "clang-tidy-confusable-chars-gen"
+      ]
+      ++ lib.optionals (lib.versionAtLeast release_version "16") [
         "mlir-tblgen"
       ]
-      ++ lib.optionals (lib.versionOlder release_version "20") [
-        "clang-pseudo-gen" # Removed in LLVM 20 @ ed8f78827895050442f544edef2933a60d4a7935.
-      ];
+      ++
+        lib.optionals ((lib.versionAtLeast release_version "15") && (lib.versionOlder release_version "20"))
+          [
+            "clang-pseudo-gen" # Removed in LLVM 20 @ ed8f78827895050442f544edef2933a60d4a7935.
+          ];
 
     installPhase = ''
       mkdir -p $out
