@@ -11,7 +11,6 @@ let
     attrNames
     attrValues
     concatLists
-    concatMap
     concatMapStrings
     concatStringsSep
     count
@@ -34,11 +33,9 @@ let
     mkOption
     mkPackageOption
     mkRemovedOptionModule
-    optional
     optionalAttrs
     optionalString
     optionals
-    singleton
     stringLength
     toLower
     types
