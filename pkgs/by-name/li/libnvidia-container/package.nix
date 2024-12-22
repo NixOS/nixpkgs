@@ -14,15 +14,14 @@
   replaceVars,
   go,
   applyPatches,
+  nvidia-modprobe,
 }:
 let
   modprobeVersion = "550.54.14";
-  nvidia-modprobe = applyPatches {
-    src = fetchFromGitHub {
-      owner = "NVIDIA";
-      repo = "nvidia-modprobe";
-      rev = modprobeVersion;
-      sha256 = "sha256-iBRMkvOXacs/llTtvc/ZC5i/q9gc8lMuUHxMbu8A+Kg=";
+  patchedModprobe = applyPatches {
+    src = nvidia-modprobe.src.override {
+      version = modprobeVersion;
+      hash = "sha256-iBRMkvOXacs/llTtvc/ZC5i/q9gc8lMuUHxMbu8A+Kg=";
     };
     patches = [
       (replaceVars ./modprobe.patch {
@@ -71,7 +70,7 @@ stdenv.mkDerivation rec {
       versions.mk
 
     mkdir -p deps/src/nvidia-modprobe-${modprobeVersion}
-    cp -r ${nvidia-modprobe}/* deps/src/nvidia-modprobe-${modprobeVersion}
+    cp -r ${patchedModprobe}/* deps/src/nvidia-modprobe-${modprobeVersion}
     chmod -R u+w deps/src
     pushd deps/src
 
