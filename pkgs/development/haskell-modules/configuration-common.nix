@@ -258,6 +258,9 @@ self: super: {
   hdf5-lite = appendConfigureFlags [
     "--ghc-option=-optc=-Wno-error=implicit-function-declaration"
   ] super.hdf5-lite;
+  termbox-bindings-c = appendConfigureFlags [
+    "--ghc-option=-optc=-Wno-error=implicit-function-declaration"
+  ] super.termbox-bindings-c;
 
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
