@@ -49,31 +49,13 @@ buildPythonPackage rec {
   dontStrip = true;
 
   # If this breaks, consider replacing with "${cuda_nvcc}/bin/ptxas"
-  postFixup =
-    ''
-      chmod +x "$out/${python.sitePackages}/triton/third_party/cuda/bin/ptxas"
-    ''
-    + (
-      let
-        # Bash was getting weird without linting,
-        # but basically upstream contains [cc, ..., "-lcuda", ...]
-        # and we replace it with [..., "-lcuda", "-L/run/opengl-driver/lib", "-L$stubs", ...]
-        old = [ "-lcuda" ];
-        new = [
-          "-lcuda"
-          "-L${addDriverRunpath.driverLink}"
-          "-L${cudaPackages.cuda_cudart}/lib/stubs/"
-        ];
-
-        quote = x: ''"${x}"'';
-        oldStr = lib.concatMapStringsSep ", " quote old;
-        newStr = lib.concatMapStringsSep ", " quote new;
-      in
-      ''
-        substituteInPlace $out/${python.sitePackages}/triton/common/build.py \
-          --replace '${oldStr}' '${newStr}'
-      ''
-    );
+  postFixup = ''
+    chmod +x "$out/${python.sitePackages}/triton/backends/nvidia/bin/ptxas"
+    substituteInPlace $out/${python.sitePackages}/triton/backends/nvidia/driver.py \
+      --replace \
+        'return [libdevice_dir, *libcuda_dirs()]' \
+        'return [libdevice_dir, "${addDriverRunpath.driverLink}/lib", "${cudaPackages.cuda_cudart}/lib/stubs/"]'
+  '';
 
   meta = with lib; {
     description = "Language and compiler for custom Deep Learning operations";
