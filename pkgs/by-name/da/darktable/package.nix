@@ -28,7 +28,7 @@
   librsvg,
   libtiff,
   libjxl,
-  openexr_3,
+  openexr,
   osm-gps-map,
   pkg-config,
   sqlite,
@@ -94,7 +94,7 @@ stdenv.mkDerivation rec {
       librsvg
       libtiff
       libjxl
-      openexr_3
+      openexr
       sqlite
       libxslt
       libsoup_2_4

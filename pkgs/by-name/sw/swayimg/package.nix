@@ -21,7 +21,7 @@
   libjxl,
   libexif,
   libavif,
-  openexr_3,
+  openexr,
   bash-completion,
   testers,
   nix-update-script,
@@ -71,7 +71,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjxl
     libexif
     libavif
-    openexr_3
+    openexr
   ];
 
   passthru = {
