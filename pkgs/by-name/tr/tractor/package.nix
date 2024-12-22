@@ -6,6 +6,8 @@
   gobject-introspection,
   gsettings-desktop-schemas,
   tor,
+  obfs4,
+  snowflake,
   wrapGAppsHook4,
 }:
 
@@ -38,6 +40,8 @@ python3Packages.buildPythonApplication {
 
   propagatedBuildInputs = [
     tor
+    obfs4
+    snowflake
   ];
 
   dependencies = [
@@ -51,6 +55,11 @@ python3Packages.buildPythonApplication {
   postInstall = ''
     mkdir -p "$out/share/glib-2.0/schemas"
     cp "$src/src/tractor/tractor.gschema.xml" "$out/share/glib-2.0/schemas"
+
+    substituteInPlace "$out/share/glib-2.0/schemas/tractor.gschema.xml" --replace-fail '/usr/bin/obfs4proxy' '${obfs4}/bin/lyrebird'
+    substituteInPlace "$out/share/glib-2.0/schemas/tractor.gschema.xml" --replace-fail '/usr/bin/snowflake-client' '${snowflake}/bin/client'
+    substituteInPlace "$out/share/glib-2.0/schemas/tractor.gschema.xml" --replace-fail '/usr/bin/conjure-client' 'none'
+
     glib-compile-schemas "$out/share/glib-2.0/schemas"
   '';
 
