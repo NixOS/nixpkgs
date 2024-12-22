@@ -102,7 +102,9 @@ runTest (
     test-helpers.extraTests = ''
       with subtest("non-empty redis cache"):
           # redis cache should not be empty
-          nextcloud.fail('test 0 -lt "$(redis-cli --pass secret --json KEYS "*" | jq "len")"')
+          assert nextcloud.succeed('redis-cli --pass secret --json KEYS "*" | jq length').strip() != "0", """
+            redis-cli for keys * returned 0 entries
+          """
 
       with subtest("notify-push"):
           client.execute("${lib.getExe pkgs.nextcloud-notify_push.passthru.test_client} http://nextcloud ${config.adminuser} ${config.adminpass} >&2 &")

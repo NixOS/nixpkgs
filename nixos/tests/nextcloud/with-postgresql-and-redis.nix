@@ -29,6 +29,7 @@ runTest (
           ...
         }:
         {
+          environment.systemPackages = [ pkgs.jq ];
           services.nextcloud = {
             caching = {
               apcu = false;
@@ -73,7 +74,9 @@ runTest (
 
       with subtest("Redis is used for caching"):
           # redis cache should not be empty
-          nextcloud.fail('test "[]" = "$(redis-cli --json KEYS "*")"')
+          assert nextcloud.succeed('redis-cli --json KEYS "*" | jq length').strip() != "0", """
+            redis-cli for keys * returned 0 entries
+          """
 
       with subtest("No code is returned when requesting PHP files (regression test)"):
           nextcloud.fail("curl -f http://nextcloud/nix-apps/notes/lib/AppInfo/Application.php")
