@@ -1,0 +1,29 @@
+diff --git a/impl/Cargo.lock b/impl/Cargo.lock
+index 0c963206..7db3432f 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1957,9 +1957,9 @@ dependencies = [
+ 
+ [[package]]
+ name = "rustc-serialize"
+-version = "0.3.24"
++version = "0.3.25"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "dcf128d1287d2ea9d80910b5f1120d0b8eede3fbf1abe91c40d39ea7d51e6fda"
++checksum = "fe834bc780604f4674073badbad26d7219cadfb4a2275802db12cbae17498401"
+ 
+ [[package]]
+ name = "ryu"
+diff --git a/impl/Cargo.toml b/impl/Cargo.toml
+index 9dd6dd99..a559febf 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -38,7 +38,7 @@ itertools = "0.10.0"
+ log = "0.4.13"
+ pathdiff = "0.2.0"
+ regex = "1.5.5"
+-rustc-serialize = "0.3.24"
++rustc-serialize = "0.3.25"
+ semver = { version = "1", features = ["serde"] }
+ serde = "1.0.120"
+ serde_derive = "1.0.120"

@@ -1,0 +1,13 @@
+diff --git a/src/tz.cpp b/src/tz.cpp
+index 68436c3..2bfe19e 100644
+--- a/src/tz.cpp
++++ b/src/tz.cpp
+@@ -349,7 +349,7 @@ discover_tz_dir()
+     struct stat sb;
+     using namespace std;
+ #  ifndef __APPLE__
+-    CONSTDATA auto tz_dir_default = "/usr/share/zoneinfo";
++    CONSTDATA auto tz_dir_default = "@tzdata@/share/zoneinfo";
+     CONSTDATA auto tz_dir_buildroot = "/usr/share/zoneinfo/uclibc";
+ 
+     // Check special path which is valid for buildroot with uclibc builds
