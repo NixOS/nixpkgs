@@ -5,10 +5,8 @@
 }:
 let
   password = "test";
-  password1 = "test1";
   hashedPassword = "$y$j9T$wLgKY231.8j.ciV2MfEXe1$P0k5j3bCwHgnwW0Ive3w4knrgpiA4TzhCYLAnHvDZ51"; # test
   hashedPassword1 = "$y$j9T$s8TyQJtNImvobhGM5Nlez0$3E8/O8EVGuA4sr1OQmrzi8GrRcy/AEhj454JjAn72A2"; # test
-  hashed_sha512crypt = "$6$ymzs8WINZ5wGwQcV$VC2S0cQiX8NVukOLymysTPn4v1zJoJp3NGyhnqyv/dAf4NWZsBWYveQcj6gEJr4ZUjRBRjM0Pj1L8TCQ8hUUp0"; # meow
 
   hashedPasswordFile = pkgs.writeText "hashed-password" hashedPassword1;
 in
@@ -57,7 +55,9 @@ in
     with subtest("systemd-sysusers.service contains the credentials"):
       sysusers_service = machine.succeed("systemctl cat systemd-sysusers.service")
       print(sysusers_service)
+      # Both are in the unit, but the hashed password takes precedence as shown below.
       assert "SetCredential=passwd.plaintext-password.alice:${password}" in sysusers_service
+      assert "SetCredential=passwd.hashed-password.alice:${hashedPassword}" in sysusers_service
 
     with subtest("Correct mode on the password files"):
       assert machine.succeed("stat -c '%a' /etc/passwd") == "644\n"
