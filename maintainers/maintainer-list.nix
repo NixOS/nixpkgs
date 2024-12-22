@@ -12558,6 +12558,13 @@
     githubId = 101508537;
     name = "Yuchen He";
   };
+  lilioid = {
+    name = "Lilly";
+    email = "li@lly.sh";
+    matrix = "@17sell:mafiasi.de";
+    github = "lilioid";
+    githubId = 12398140;
+  };
   LilleAila = {
     name = "Olai";
     email = "olai@olai.dev";
@@ -22882,6 +22889,12 @@
     github = "ursi";
     githubId = 17836748;
     name = "Mason Mackaman";
+  };
+  usertam = {
+    email = "nix@usertam.dev";
+    github = "usertam";
+    githubId = 22500027;
+    name = "Samuel Tam";
   };
   uskudnik = {
     email = "urban.skudnik@gmail.com";

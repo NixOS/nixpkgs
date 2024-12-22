@@ -1,17 +1,23 @@
-{ lib, stdenv, fetchurl, makeWrapper, jre }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  jre,
+}:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "alda";
-  version = "2.2.3";
+  version = "2.3.1";
 
   src_alda = fetchurl {
-    url = "https://alda-releases.nyc3.digitaloceanspaces.com/${version}/client/linux-amd64/alda";
-    hash = "sha256-cyOAXQ3ITIgy4QusjdYBNmNIzB6BzfbQEypvJbkbvWo=";
+    url = "https://alda-releases.nyc3.digitaloceanspaces.com/${finalAttrs.version}/client/linux-amd64/alda";
+    hash = "sha256-m4d3cLgqWmGMw0SM4J+7nvV/ytSoB7obMDiJCh3yboQ=";
   };
 
   src_player = fetchurl {
-    url = "https://alda-releases.nyc3.digitaloceanspaces.com/${version}/player/non-windows/alda-player";
-    hash = "sha256-HsX0mNWrusL2FaK2oK8xhmr/ai+3ZiMmrJk7oS3b93g=";
+    url = "https://alda-releases.nyc3.digitaloceanspaces.com/${finalAttrs.version}/player/non-windows/alda-player";
+    hash = "sha256-XwgOidQjnMClXPIS1JPzsVJ6c7vXwBHBAfUPX3WL8uU=";
   };
 
   dontUnpack = true;
@@ -23,18 +29,18 @@ stdenv.mkDerivation rec {
       binPath = lib.makeBinPath [ jre ];
     in
     ''
-      install -D $src_alda $out/bin/alda
-      install -D $src_player $out/bin/alda-player
+      install -D ${finalAttrs.src_alda} $out/bin/alda
+      install -D ${finalAttrs.src_player} $out/bin/alda-player
 
       wrapProgram $out/bin/alda --prefix PATH : $out/bin:${binPath}
       wrapProgram $out/bin/alda-player --prefix PATH : $out/bin:${binPath}
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Music programming language for musicians";
     homepage = "https://alda.io";
-    license = licenses.epl10;
-    maintainers = [ maintainers.ericdallo ];
+    license = lib.licenses.epl10;
+    maintainers = [ lib.maintainers.ericdallo ];
     platforms = jre.meta.platforms;
   };
-}
+})

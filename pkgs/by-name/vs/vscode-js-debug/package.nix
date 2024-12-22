@@ -59,7 +59,7 @@ buildNpmPackage rec {
   passthru.updateScript = nix-update-script {
     extraArgs = [
       "--version-regex"
-      "v((?!\d{4}\.\d\.\d{3}).*)"
+      "v((?!\\d{4}\\.\\d\\.\\d{3}).*)"
     ];
   };
 

@@ -58,7 +58,7 @@ let
         1
       ])
     ];
-    nasty_string = "\"@\n\\\t^*\b\f\n\0\";'''$";
+    nasty_string = "\"@\n\\\t^*bf\n0\";'''$";
 
     weirderTypes = {
       _includes = [ include_file ];
