@@ -17,8 +17,6 @@ buildGoModule rec {
   ldflags = [
     "-s -w -X main.version=${version} -X main.GitCommit= -X main.GitBranch= -X main.BuildTime="
   ];
-  nativeBuildInputs = [ go ];
-  buildInputs = [ imagemagick ];
   meta = {
     description = "Create self-documenting cli programs from YAML files. Easily wrap bash, grunt, npm, docker, (anything) to standardize your processes and make the lives of the people working on your project better.";
     homepage = "https://github.com/ahoy-cli/ahoy";
