@@ -1,6 +1,7 @@
 { stdenv, lib, buildPackages, fetchurl, runtimeShell
 , usePam ? !isStatic, pam ? null
 , isStatic ? stdenv.hostPlatform.isStatic
+, withGo ? go.meta.available, go
 
 # passthru.tests
 , bind
@@ -29,7 +30,11 @@ stdenv.mkDerivation rec {
   outputs = [ "out" "dev" "lib" "man" "doc" ]
     ++ lib.optional usePam "pam";
 
-  depsBuildBuild = [ buildPackages.stdenv.cc ];
+  depsBuildBuild = [
+    buildPackages.stdenv.cc
+  ] ++ lib.optionals withGo [
+    go
+  ];
 
   buildInputs = lib.optional usePam pam;
 
@@ -39,6 +44,11 @@ stdenv.mkDerivation rec {
     "BUILD_CC=$(CC_FOR_BUILD)"
     "CC:=$(CC)"
     "CROSS_COMPILE=${stdenv.cc.targetPrefix}"
+  ] ++ lib.optionals withGo [
+    "GOLANG=yes"
+    ''GOCACHE=''${TMPDIR}/go-cache''
+    "GOARCH=${go.GOARCH}"
+    "GOOS=${go.GOOS}"
   ] ++ lib.optionals isStatic [ "SHARED=no" "LIBCSTATIC=yes" ];
 
   postPatch = ''
@@ -54,6 +64,10 @@ stdenv.mkDerivation rec {
       --replace 'lib_prefix=$(exec_prefix)' "lib_prefix=$lib" \
       --replace 'inc_prefix=$(prefix)' "inc_prefix=$dev" \
       --replace 'man_prefix=$(prefix)' "man_prefix=$doc"
+  '' + lib.optionalString withGo ''
+    # disable cross compilation for artifacts which are run as part of the build
+    substituteInPlace go/Makefile \
+      --replace-fail '$(GO) run' 'GOOS= GOARCH= $(GO) run'
   '';
 
   installFlags = [ "RAISE_SETFCAP=no" ];
@@ -66,6 +80,8 @@ stdenv.mkDerivation rec {
     mkdir -p "$pam/lib/security"
     mv "$lib"/lib/security "$pam/lib"
   '';
+
+  strictDeps = true;
 
   passthru.tests = {
     inherit
