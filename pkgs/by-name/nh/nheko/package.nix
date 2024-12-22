@@ -62,6 +62,7 @@ stdenv.mkDerivation rec {
       qt6Packages.qtmultimedia
       qt6Packages.qttools
       qt6Packages.qtwayland
+      qt6Packages.qt-jdenticon
       re2
       spdlog
     ]

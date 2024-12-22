@@ -252,7 +252,6 @@ let
       '';
       maintainers = with maintainers; [
         raskin
-        knedlsepp
       ];
     };
   };

@@ -2,12 +2,12 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "luigi";
-  version = "3.5.2";
+  version = "3.6.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-0AD+am6nfJN2Z0/oegRawAw/z36+hBRlWgZjCqnbURE=";
+    hash = "sha256-QbFIUCI8YZ2QBrMKzacz51a4g/x+YIFCBVdmRxkMluM=";
   };
 
   build-system = [ python3.pkgs.setuptools ];

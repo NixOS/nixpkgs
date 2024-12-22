@@ -9,16 +9,16 @@
 
 buildNpmPackage rec {
   pname = "hsd";
-  version = "6.1.1";
+  version = "7.0.0";
 
   src = fetchFromGitHub {
     owner = "handshake-org";
     repo = "hsd";
     rev = "v${version}";
-    hash = "sha256-T57kDEQwHIyW7xVXrzjJdUcocST9ks4x3JR8yytH8P4=";
+    hash = "sha256-Rsa4LTf5lImvCwwuu0FKbBb/QLLAbR8Vce/pWEQLhS0=";
   };
 
-  npmDepsHash = "sha256-EBrCuRckBg42k6ZUoB25xObv3lULnSPNJ2nO9l/TWvA=";
+  npmDepsHash = "sha256-7zD0noREaq/VNQrf/9dOFXVOngcS6G4mHZAkyQLs/1Q=";
 
   nativeBuildInputs = [
     python3

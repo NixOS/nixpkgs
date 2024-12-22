@@ -12067,12 +12067,6 @@
     github = "svelterust";
     githubId = 85593302;
   };
-  knedlsepp = {
-    email = "josef.kemetmueller@gmail.com";
-    github = "knedlsepp";
-    githubId = 3287933;
-    name = "Josef Kemetmüller";
-  };
   knightpp = {
     email = "knightpp@proton.me";
     github = "knightpp";
@@ -18387,12 +18381,6 @@
     email = "adam@pyle.dev";
     github = "pyle";
     githubId = 7279609;
-  };
-  pyrolagus = {
-    email = "pyrolagus@gmail.com";
-    github = "PyroLagus";
-    githubId = 4579165;
-    name = "Danny Bautista";
   };
   pyrotelekinetic = {
     name = "Clover";
