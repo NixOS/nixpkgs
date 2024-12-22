@@ -260,6 +260,9 @@ self: super: {
   termbox-bindings-c = appendConfigureFlags [
     "--ghc-option=-optc=-Wno-error=implicit-function-declaration"
   ] super.termbox-bindings-c;
+  libxml-sax = appendConfigureFlags [
+    "--ghc-option=-optc=-Wno-error=implicit-function-declaration"
+  ] super.libxml-sax;
 
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
