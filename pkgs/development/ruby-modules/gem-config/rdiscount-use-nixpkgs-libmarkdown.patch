@@ -1,0 +1,14 @@
+diff --git a/ext/extconf.rb b/ext/extconf.rb
+index 30764cb..b87ac2b 100644
+--- a/ext/extconf.rb
++++ b/ext/extconf.rb
+@@ -46,4 +46,9 @@ if /mswin/.match RbConfig::CONFIG['host_os']
+   $defs.push("-Dinline=__inline")
+ end
+ 
++$srcs = %w[
++  rdiscount.c
++]
++have_library('markdown')
++
+ create_makefile('rdiscount')

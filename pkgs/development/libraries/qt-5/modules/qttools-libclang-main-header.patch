@@ -1,0 +1,34 @@
+From a1fb301a0b9b59f420454be1ebeb05ce0547da2c Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Fri, 6 Sep 2024 14:20:05 +0200
+Subject: [PATCH] Patch includedir for libclang main header
+
+---
+ src/qdoc/configure.pri | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/qdoc/configure.pri b/src/qdoc/configure.pri
+index 4f3d77603..8fe8bc439 100644
+--- a/src/qdoc/configure.pri
++++ b/src/qdoc/configure.pri
+@@ -71,7 +71,7 @@ defineTest(qtConfTest_libclang) {
+             LLVM_INSTALL_DIR = $$system("$$candidate --prefix 2>$$QMAKE_SYSTEM_NULL_DEVICE")
+             !isEmpty(LLVM_INSTALL_DIR) {
+                 CLANG_INCLUDEPATH = $$system("$$candidate --includedir 2>/dev/null")
+-                LIBCLANG_MAIN_HEADER = $$CLANG_INCLUDEPATH/clang-c/Index.h
++                LIBCLANG_MAIN_HEADER = @libclangDev@/include/clang-c/Index.h
+                 !exists($$LIBCLANG_MAIN_HEADER) {
+                     !isEmpty(LLVM_INSTALL_DIR): \
+                         qtLog("Cannot find libclang's main header file, candidate: $${LIBCLANG_MAIN_HEADER}.")
+@@ -121,7 +121,7 @@ defineTest(qtConfTest_libclang) {
+         return(false)
+     }
+ 
+-    LIBCLANG_MAIN_HEADER = $$CLANG_INCLUDEPATH/clang-c/Index.h
++    LIBCLANG_MAIN_HEADER = @libclangDev@/include/clang-c/Index.h
+     !exists($$LIBCLANG_MAIN_HEADER) {
+         !isEmpty(LLVM_INSTALL_DIR): \
+             qtLog("Cannot find libclang's main header file, candidate: $${LIBCLANG_MAIN_HEADER}.")
+-- 
+2.44.1
+
