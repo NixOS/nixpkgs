@@ -125,12 +125,6 @@
     "project_path": "kde/pim/akonadi-mime",
     "repo_path": "pim/akonadi-mime"
   },
-  "akonadi-notes": {
-    "description": "Libraries and daemons to implement note management in Akonadi",
-    "name": "akonadi-notes",
-    "project_path": "kde/pim/akonadi-notes",
-    "repo_path": "pim/akonadi-notes"
-  },
   "akonadi-phabricator-resource": {
     "description": "Synchronize your Phabricator tasks with KOrganizer",
     "name": "akonadi-phabricator-resource",

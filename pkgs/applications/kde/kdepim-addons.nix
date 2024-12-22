@@ -5,7 +5,6 @@
   extra-cmake-modules,
   shared-mime-info,
   akonadi-import-wizard,
-  akonadi-notes,
   calendarsupport,
   eventviews,
   incidenceeditor,
@@ -48,7 +47,6 @@ mkDerivation {
   ];
   buildInputs = [
     akonadi-import-wizard
-    akonadi-notes
     calendarsupport
     eventviews
     incidenceeditor

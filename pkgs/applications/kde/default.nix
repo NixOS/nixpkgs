@@ -68,7 +68,6 @@ let
       akonadi-contacts = callPackage ./akonadi-contacts.nix {};
       akonadi-import-wizard = callPackage ./akonadi-import-wizard.nix {};
       akonadi-mime = callPackage ./akonadi-mime.nix {};
-      akonadi-notes = callPackage ./akonadi-notes.nix {};
       akonadi-search = callPackage ./akonadi-search.nix {};
       akonadiconsole = callPackage ./akonadiconsole.nix {};
       akregator = callPackage ./akregator.nix {};
