@@ -29,7 +29,8 @@
   nix-update-script,
   python3,
   stateDir ? "",
-}: stdenv.mkDerivation (finalAttrs: {
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
   version = "2024.11.18.00";
 
@@ -71,7 +72,7 @@
     (darwinMinVersionHook "11.0")
   ];
 
-  checkInputs = [gtest];
+  checkInputs = [ gtest ];
 
   cmakeFlags = [
     (lib.cmakeBool "CMAKE_INSTALL_RPATH_USE_LINK_PATH" true)
@@ -110,7 +111,7 @@
     remove-references-to -t ${folly.fmt.dev} $out/bin/*
   '';
 
-  passthru.updateScript = nix-update-script {};
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Watches files and takes action when they change";
