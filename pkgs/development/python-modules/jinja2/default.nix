@@ -20,19 +20,29 @@
 
 buildPythonPackage rec {
   pname = "jinja2";
-  version = "3.1.4";
+  version = "3.1.5";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Sjruesu+cwOu3o6WSNE7i/iKQpKCqmEiqZPwrIAMs2k=";
+    hash = "sha256-j+//jcMDTie7gNZ8Zx64qbxCTA70wIJu2/8wTM7/Q7s=";
   };
 
-  nativeBuildInputs = [ flit-core ];
+  postPatch = ''
+    # Do not test with trio, it increases jinja2's dependency closure by a lot
+    # and everyone consuming these dependencies cannot rely on sphinxHook,
+    # because sphinx itself depends on jinja2.
+    substituteInPlace tests/test_async{,_filters}.py \
+      --replace-fail "import trio" "" \
+      --replace-fail ", trio.run" "" \
+      --replace-fail ", \"trio\"" ""
+  '';
 
-  propagatedBuildInputs = [ markupsafe ];
+  build-system = [ flit-core ];
+
+  dependencies = [ markupsafe ];
 
   passthru.optional-dependencies = {
     i18n = [ babel ];
