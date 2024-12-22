@@ -48,7 +48,7 @@ nixexpr() {
             { supportedSystems = cfg.systems or [ "x86_64-linux" "x86_64-darwin" ]; };
           cfg = (import $1 {}).config.rebuild-amount or {};
 
-          recurseIntoAttrs = attrs: attrs // { recurseForDerivations = true; };
+          inherit (lib) recurseIntoAttrs;
 
           # hydraJobs leaves recurseForDerivations as empty attrmaps;
           # that would break nix-env and we also need to recurse everywhere.
