@@ -32,6 +32,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
+    installManPage target/man/asak.1
+
     installShellCompletion --cmd asak \
       --bash target/completions/asak.bash \
       --fish target/completions/asak.fish \
