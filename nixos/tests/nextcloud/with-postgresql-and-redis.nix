@@ -8,10 +8,10 @@
 
 with import ../../lib/testing-python.nix { inherit system pkgs; };
 runTest (
-  { config, ... }:
+  { config, lib, ... }:
   {
     inherit name;
-    meta = with pkgs.lib.maintainers; {
+    meta = with lib.maintainers; {
       maintainers = [
         eqyiel
         ma27
@@ -68,7 +68,7 @@ runTest (
 
     test-helpers.extraTests = ''
       with subtest("notify-push"):
-          client.execute("${pkgs.lib.getExe pkgs.nextcloud-notify_push.passthru.test_client} http://nextcloud ${config.adminuser} ${config.adminpass} >&2 &")
+          client.execute("${lib.getExe pkgs.nextcloud-notify_push.passthru.test_client} http://nextcloud ${config.adminuser} ${config.adminpass} >&2 &")
           nextcloud.wait_until_succeeds("journalctl -u nextcloud-notify_push | grep -q \"Sending ping to ${config.adminuser}\"")
 
       with subtest("Redis is used for caching"):
