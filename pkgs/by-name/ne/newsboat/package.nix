@@ -99,6 +99,13 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
+  installPhase = ''
+    runHook preInstall
+    install -Dm755 newsboat $out/bin/newsboat
+    install -Dm755 podboat $out/bin/podboat
+    runHook postInstall
+  '';
+
   meta = {
     homepage = "https://newsboat.org/";
     changelog = "https://github.com/newsboat/newsboat/blob/${src.rev}/CHANGELOG.md";
