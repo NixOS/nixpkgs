@@ -194,7 +194,8 @@ let
       allowedIPs = mkOption {
         example = [ "10.192.122.3/32" "10.192.124.1/24" ];
         type = with types; listOf str;
-        description = ''List of IP (v4 or v6) addresses with CIDR masks from
+        description = ''
+        List of IP (v4 or v6) addresses with CIDR masks from
         which this peer is allowed to send incoming traffic and to which
         outgoing traffic for this peer is directed. The catch-all 0.0.0.0/0 may
         be specified for matching all IPv4 addresses, and ::/0 may be specified
@@ -205,7 +206,8 @@ let
         default = null;
         example = "demo.wireguard.io:12913";
         type = with types; nullOr str;
-        description = ''Endpoint IP or hostname of the peer, followed by a colon,
+        description = ''
+        Endpoint IP or hostname of the peer, followed by a colon,
         and then a port number of the peer.'';
       };
 
@@ -213,7 +215,8 @@ let
         default = null;
         type = with types; nullOr int;
         example = 25;
-        description = ''This is optional and is by default off, because most
+        description = ''
+        This is optional and is by default off, because most
         users will not need it. It represents, in seconds, between 1 and 65535
         inclusive, how often to send an authenticated empty packet to the peer,
         for the purpose of keeping a stateful firewall or NAT mapping valid
