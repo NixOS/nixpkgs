@@ -2601,14 +2601,19 @@ in
     nvimSkipModule = [
       # Requires setup call first
       "snacks.dashboard"
+      "snacks.debug"
+      "snacks.dim"
       "snacks.git"
+      "snacks.indent"
+      "snacks.input"
       "snacks.lazygit"
       "snacks.notifier"
+      "snacks.scratch"
+      "snacks.scroll"
       "snacks.terminal"
       "snacks.win"
       "snacks.words"
-      "snacks.debug"
-      "snacks.scratch"
+      "snacks.zen"
       # Optional trouble integration
       "trouble.sources.profiler"
     ];
