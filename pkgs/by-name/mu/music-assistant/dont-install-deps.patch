@@ -1,0 +1,36 @@
+diff --git a/music_assistant/server/helpers/util.py b/music_assistant/server/helpers/util.py
+index 3d342b73..a395fb46 100644
+--- a/music_assistant/server/helpers/util.py
++++ b/music_assistant/server/helpers/util.py
+@@ -117,30 +117,11 @@ async def load_provider_module(domain: str, requirements: list[str]) -> Provider
+     def _get_provider_module(domain: str) -> ProviderModuleType:
+         return importlib.import_module(f".{domain}", "music_assistant.server.providers")
+ 
+-    # ensure module requirements are met
+-    for requirement in requirements:
+-        if "==" not in requirement:
+-            # we should really get rid of unpinned requirements
+-            continue
+-        package_name, version = requirement.split("==", 1)
+-        installed_version = await get_package_version(package_name)
+-        if installed_version == "0.0.0":
+-            # ignore editable installs
+-            continue
+-        if installed_version != version:
+-            await install_package(requirement)
+-
+     # try to load the module
+     try:
+         return await asyncio.to_thread(_get_provider_module, domain)
+     except ImportError:
+-        # (re)install ALL requirements
+-        for requirement in requirements:
+-            await install_package(requirement)
+-    # try loading the provider again to be safe
+-    # this will fail if something else is wrong (as it should)
+-    return await asyncio.to_thread(_get_provider_module, domain)
+-
++        raise RuntimeError(f"Missing dependencies for provider {domain}.")
+ 
+ def create_tempfile():
+     """Return a (named) temporary file."""
