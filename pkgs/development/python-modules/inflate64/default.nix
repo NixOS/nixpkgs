@@ -1,6 +1,6 @@
 {
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitea,
   lib,
   setuptools,
   setuptools-scm,
@@ -8,13 +8,16 @@
 
 buildPythonPackage rec {
   pname = "inflate64";
-  version = "1.0.0";
+  version = "1.0.1";
 
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-MniCe4A88Aah3yUfPhM3TH0m23eeWjMynMEXibgEvC0=";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "miurahr";
+    repo = pname;
+    rev = "v${version}";
+    hash = "sha256-deFx8NMbGLP51CdNvmZ25LQ5FLPBb1PB3QhGhIfTMfc=";
   };
 
   build-system = [

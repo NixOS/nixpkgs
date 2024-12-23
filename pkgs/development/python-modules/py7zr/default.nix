@@ -1,7 +1,7 @@
 {
   brotli,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   inflate64,
   lib,
   multivolumefile,
@@ -18,12 +18,13 @@
 buildPythonPackage rec {
   pname = "py7zr";
   version = "0.22.0";
-
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-xseupZE1NRhAA7c5OEkPmk2EGFmOUz+cqZHTuORaE54=";
+  src = fetchFromGitHub {
+    owner = "miurahr";
+    repo = pname;
+    tag = version;
+    hash = "sha256-YR2cuHZWwqrytidAMbNvRV1/N4UZG8AMMmzcTcG9FvY=";
   };
 
   build-system = [
