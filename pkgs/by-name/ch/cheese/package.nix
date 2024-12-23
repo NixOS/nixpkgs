@@ -67,20 +67,23 @@ stdenv.mkDerivation rec {
   buildInputs = [
     adwaita-icon-theme
     clutter-gst
-    clutter-gtk
     dbus
-    gdk-pixbuf
-    glib
     gnome-desktop
     gnome-video-effects
     gst_all_1.gst-plugins-bad
     gst_all_1.gst-plugins-base
     gst_all_1.gst-plugins-good
-    gst_all_1.gstreamer
     gtk3
     libcanberra-gtk3
     librsvg
     pipewire # PipeWire provides a gstreamer plugin for using PipeWire for video
+  ];
+
+  propagatedBuildInputs = [
+    clutter-gtk
+    gdk-pixbuf
+    glib
+    gst_all_1.gstreamer
   ];
 
   preFixup = ''
