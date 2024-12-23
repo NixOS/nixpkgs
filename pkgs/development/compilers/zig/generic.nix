@@ -4,6 +4,7 @@
   fetchFromGitHub,
   cmake,
   llvmPackages,
+  targetPackages,
   libxml2,
   zlib,
   coreutils,
@@ -11,6 +12,9 @@
   version,
   hash,
   patches ? [ ],
+  overrideCC,
+  wrapCCWith,
+  wrapBintoolsWith,
 }@args:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -135,6 +139,29 @@ stdenv.mkDerivation (finalAttrs: {
 
     runHook postInstallCheck
   '';
+
+  passthru = {
+    hook = callPackage ./hook.nix { zig = finalAttrs.finalPackage; };
+
+    bintools-unwrapped = callPackage ./bintools.nix { zig = finalAttrs.finalPackage; };
+    bintools = wrapBintoolsWith { bintools = finalAttrs.finalPackage.bintools-unwrapped; };
+
+    cc-unwrapped = callPackage ./cc.nix { zig = finalAttrs.finalPackage; };
+    cc = wrapCCWith {
+      cc = finalAttrs.finalPackage.cc-unwrapped;
+      bintools = finalAttrs.finalPackage.bintools;
+      nixSupport.cc-cflags =
+        [
+          "-target"
+          "${stdenv.targetPlatform.parsed.cpu.name}-${stdenv.targetPlatform.parsed.kernel.name}-${stdenv.targetPlatform.parsed.abi.name}"
+        ]
+        ++ lib.optional (
+          stdenv.targetPlatform.isLinux && !(stdenv.targetPlatform.isStatic or false)
+        ) "-Wl,-dynamic-linker=${targetPackages.stdenv.cc.bintools.dynamicLinker}";
+    };
+
+    stdenv = overrideCC stdenv finalAttrs.finalPackage.cc;
+  };
 
   meta = {
     description = "General-purpose programming language and toolchain for maintaining robust, optimal, and reusable software";
