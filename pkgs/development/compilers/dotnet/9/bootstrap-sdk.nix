@@ -1,5 +1,6 @@
 {
   buildAspNetCore,
+  buildWindowsDesktop,
   buildNetRuntime,
   buildNetSdk,
   fetchNupkg,
@@ -13,6 +14,11 @@ let
       pname = "Microsoft.AspNetCore.App.Ref";
       version = "9.0.0-rc.2.24474.3";
       hash = "sha512-VYoUXb/87RzxdErwwqfVb8WJLl+7YL4PBxI8QY9cer25Zg85yOUxaPHLnX45QgveH1iNcEHyEr7vJW52LkyYZQ==";
+    })
+    (fetchNupkg {
+      pname = "Microsoft.WindowsDesktop.App.Ref";
+      version = "9.0.0-rc.2.24474.4";
+      hash = "sha512-WeoUwf3g/wdlyd6DB98+0y4ztWFlg3IP+yXGhV2Hy6XJJTYVELdCrDefL1L5INfozshNFI63rEUrEbItcyR2gA==";
     })
     (fetchNupkg {
       pname = "Microsoft.NETCore.DotNetAppHost";
@@ -340,6 +346,11 @@ let
         hash = "sha512-2ByJFpaf+Dm+saB+NniupfwHJVbCNuaLNX+K4pH7Bz6dUYXlcWh1ja3l6G80PYJRNziyJY8fNsLhNFBnSCA39A==";
       })
       (fetchNupkg {
+        pname = "Microsoft.WindowsDesktop.App.Runtime.win-arm64";
+        version = "9.0.0-rc.2.24474.4";
+        hash = "sha512-8679z3waMYSYVmBMB3HHwRAbow8ssM1Aau2XBmF7A1oUVvhU8Nodl51TzZmgLIT/UOSSqNYRqvPznGnPiVk6JA==";
+      })
+      (fetchNupkg {
         pname = "Microsoft.NETCore.App.Host.win-arm64";
         version = "9.0.0-rc.2.24473.5";
         hash = "sha512-tKSRJQ4E/PndHyAEKnDitBvgTnJCtzIBiw4MAim7mmdO3T3xCq3N1PP/WRST+JEMDy19tkLwClR3SqziiXPAag==";
@@ -362,6 +373,11 @@ let
         hash = "sha512-8FXl5YY++/bGTAOoAS7lK53CXyc7vzLAzfmXQ3q2s4vLvrKI3720ECDnDQS9Of9P8ZLDdMwX6SeHd4RbsLMaBg==";
       })
       (fetchNupkg {
+        pname = "Microsoft.WindowsDesktop.App.Runtime.win-x64";
+        version = "9.0.0-rc.2.24474.4";
+        hash = "sha512-kz+ygB7ZcfFXL+Je1eGw2+PQkUI+1OID32VKZ1IQ548hR1m4Dx/RVVVuYlty/bUsrUeep4lqafQwA4ZZeBf7gA==";
+      })
+      (fetchNupkg {
         pname = "Microsoft.NETCore.App.Host.win-x64";
         version = "9.0.0-rc.2.24473.5";
         hash = "sha512-P4A/HDIrDVLJBtBD9Eoy2DxofmLXji5zzOBA9ZEWioXurCU5ujFw2VhUiKY6qDedFsq6/1IyVGDNcesd42jgmQ==";
@@ -382,6 +398,11 @@ let
         pname = "Microsoft.AspNetCore.App.Runtime.win-x86";
         version = "9.0.0-rc.2.24474.3";
         hash = "sha512-xuLmBBnsSd915EIhwY4x8UP6LKvVrbTP5Stx6zn12ZE9wf0mzrp92o4zs9xdS+XFjV4sXgPdJ00ayj8vRtqaew==";
+      })
+      (fetchNupkg {
+        pname = "Microsoft.WindowsDesktop.App.Runtime.win-x86";
+        version = "9.0.0-rc.2.24474.4";
+        hash = "sha512-/CnYW1lQJ4npbgzEOOXXZcoO1bZxTmmi7uTNIZHOUFTlzaKXFtF42swUSnDThheshzHMQq87O6fmJCwCjpyzbg==";
       })
       (fetchNupkg {
         pname = "Microsoft.NETCore.App.Host.win-x86";
@@ -440,6 +461,36 @@ rec {
         url = "https://download.visualstudio.microsoft.com/download/pr/7a757e46-1c68-449e-8b1c-64293c30242d/aa10955edc95ab4419bbad34f8e4899a/aspnetcore-runtime-9.0.0-rc.2.24474.3-osx-x64.tar.gz";
         hash = "sha512-tirwJSlndP0w9g6+OKgGEviqB4Av/PHJPT2pBStGEQj+XK7DVvlczYdy6nUUhiw3mvuzwZsjyOi1OvmhhAiBPg==";
       };
+      win-arm64 = {
+        url = "https://download.visualstudio.microsoft.com/download/pr/bd6d5b35-e94d-4291-9b9f-8a9970e08346/1269b69928f4fa1158c3570a8c5d957d/aspnetcore-runtime-9.0.0-rc.2.24474.3-win-arm64.zip";
+        hash = "sha512-5O7onfbrC3nSP5PYIhtefOT11c0ptedbcwuMEh9y0Vt+zpIQJ/wnAwK7tJEw2B0VO6VHW1OhIWpOblH07GiWZg==";
+      };
+      win-x64 = {
+        url = "https://download.visualstudio.microsoft.com/download/pr/a8cc652d-ed75-4cd6-9962-979857b90ec0/f966c69fbdb3ac127baa94e2a7141d2b/aspnetcore-runtime-9.0.0-rc.2.24474.3-win-x64.zip";
+        hash = "sha512-FvPOs/rBlJtrxPf2ue3btIBvFW/FzqBgyEEYR2iNzT1W7At5rhPSteScGiJIkXlcuFtEJf3xcUF7cA+rmB6Lgg==";
+      };
+      win-x86 = {
+        url = "https://download.visualstudio.microsoft.com/download/pr/71f3df11-d883-4c21-9e41-62539b970583/4b07e65f1f12d51bbb18569897f78d5a/aspnetcore-runtime-9.0.0-rc.2.24474.3-win-x86.zip";
+        hash = "sha512-EmWUZgG1k1CgcQkmVq+8bFAeSSa4KHbalRuSPPgxVcfAq8xzWRX5fi8FlAKAcCjH+6omF4jJdpwg+IxHOMhkFQ==";
+      };
+    };
+  };
+
+  windowsdesktop_9_0 = buildWindowsDesktop {
+    version = "9.0.0-rc.2.24474.4";
+    srcs = {
+      win-arm64 = {
+        url = "https://download.visualstudio.microsoft.com/download/pr/06e5689c-c4ba-41c8-9595-c5ff65d176a0/ae5e7d82fbcb1787c32e280d52f8dc2e/windowsdesktop-runtime-9.0.0-rc.2.24474.4-win-arm64.zip";
+        hash = "sha512-3ZvytHLcB2umg0aoZqZ6hq8ZKjnhMvqRsbNThaGuSvFmz1al48zRLTOrSu+vzUOIx1Zj3oAuEEUuY96l3YB4PA==";
+      };
+      win-x64 = {
+        url = "https://download.visualstudio.microsoft.com/download/pr/e0bd3746-e35e-47f3-9304-e34b645539f6/512af162a45ed217f2967f7dd696b1a3/windowsdesktop-runtime-9.0.0-rc.2.24474.4-win-x64.zip";
+        hash = "sha512-hEniIz0q0vciFcPKqo4T3TIM6GeFAMmP/bBIP58Q2YO+6DQTiiZt6mUvrKbr+CEBnA4mO/4r5gqyy3UmajDmpQ==";
+      };
+      win-x86 = {
+        url = "https://download.visualstudio.microsoft.com/download/pr/a1d7354f-de3c-4e29-9861-9caa37d72fec/41af54ea14130ce6025bd647ef0eb74f/windowsdesktop-runtime-9.0.0-rc.2.24474.4-win-x86.zip";
+        hash = "sha512-g04JNvL85awHnDZYmGVJw9B+zpP5aqTNjrq0qaYS0JcEttPpBwGN/bz7dHYKov4VTeKRiPAFixEsIsPcHvl9uw==";
+      };
     };
   };
 
@@ -478,6 +529,18 @@ rec {
         url = "https://download.visualstudio.microsoft.com/download/pr/b9385375-2ccd-4e9f-9e4a-8d7f6d58c3d3/00e123163e6bfaae9119c5fb355f0d53/dotnet-runtime-9.0.0-rc.2.24473.5-osx-x64.tar.gz";
         hash = "sha512-TSYNygwim2QOkORVS1FhwLnZX4u5gOtT5hlAviLIMoSdMokQfhyBWMgYklh2GidpXppClrkIag1EyMEkQFMfyA==";
       };
+      win-arm64 = {
+        url = "https://download.visualstudio.microsoft.com/download/pr/bb286ecd-ae9e-4938-ab23-fcda7a10c89d/14770e7df2cca094cba4c55a8f49f499/dotnet-runtime-9.0.0-rc.2.24473.5-win-arm64.zip";
+        hash = "sha512-NNAhNAPkOon/dJkRGvWXk8H8Ix3v2YYcuZnivUt67VIhzy/THR7DuSa0K02AICS70sbNZ2wibZCsQ5LIMZUIqw==";
+      };
+      win-x64 = {
+        url = "https://download.visualstudio.microsoft.com/download/pr/433ad885-2fc1-4387-9413-d017eb9fb11c/db7a7e5df34d1bea2d25a0a34a6c12c4/dotnet-runtime-9.0.0-rc.2.24473.5-win-x64.zip";
+        hash = "sha512-vxyxj+jPf0LYT/ApdJSbJ7wxHikyDsSL13B4FfaeT/kavOcBeRli8LWaKsbT/TwF2yz0n75mUcheb/fNEUwMkQ==";
+      };
+      win-x86 = {
+        url = "https://download.visualstudio.microsoft.com/download/pr/d192fd75-02a6-47cb-a734-295d2f70624a/26500396a3603ae5e159855e13f9582b/dotnet-runtime-9.0.0-rc.2.24473.5-win-x86.zip";
+        hash = "sha512-A7xCgaLlWjey7xiFnITHOV1CeYWqsYF9s86ZXKg7tp1T6EIKDzgAXh/Fa7+T/cEgos1xAYxttfDx0l51zTDmRQ==";
+      };
     };
   };
 
@@ -515,6 +578,18 @@ rec {
       osx-x64 = {
         url = "https://download.visualstudio.microsoft.com/download/pr/33f4f5cb-7423-4930-8e4b-d96f1fd088a9/87d414df2c160713cdaeec06c62cf6a9/dotnet-sdk-9.0.100-rc.2.24474.11-osx-x64.tar.gz";
         hash = "sha512-EY+pVt0zDQ30SeFGhbNi4ut7RPvpVBuXwSXZOnjcLlMCiKO6Hro5KNMF9KC5JUyEgMC4kwQYciZnn5W9bxvHWg==";
+      };
+      win-arm64 = {
+        url = "https://download.visualstudio.microsoft.com/download/pr/f8db4312-d81d-4b4f-bcd7-5d8bea4b8d4b/1fbd8938f5e322bb64b88d17802a9023/dotnet-sdk-9.0.100-rc.2.24474.11-win-arm64.zip";
+        hash = "sha512-W8d1jQvhoj52HcUy7wSYq8PTw8g3j8BsTN4VGuaS59x/BZgphD3PX+9S0WpWGaWZtCbgVhKCYaWwIoN83K2jWw==";
+      };
+      win-x64 = {
+        url = "https://download.visualstudio.microsoft.com/download/pr/af6bbccc-1d18-4bcb-aa3a-ce76f864f977/8ecffe6494804fb6c6be93488c58eef6/dotnet-sdk-9.0.100-rc.2.24474.11-win-x64.zip";
+        hash = "sha512-mr0UfljsFm7B+wrA10mduvyCr4vIFMqDcQ9NPS43GUyEGmA/ZvJ48F3U76J662UV5jV+jn0HRAfMXeiUTVLnww==";
+      };
+      win-x86 = {
+        url = "https://download.visualstudio.microsoft.com/download/pr/f34a8c71-c150-41d7-a233-e5d35338970f/a58a721a06c0f167a4d81efe0d270b92/dotnet-sdk-9.0.100-rc.2.24474.11-win-x86.zip";
+        hash = "sha512-4eeTW1yOdjXrjXNzo652CUN4X6+j5qw5NDphTCeaDk1MDIck3bfjrzfJ2AbsEaTiQAZvwJCivVwh4jwAJ5js6A==";
       };
     };
     inherit commonPackages hostPackages targetPackages;

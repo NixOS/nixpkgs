@@ -11,6 +11,7 @@
 
 assert builtins.elem type [
   "aspnetcore"
+  "windowsdesktop"
   "runtime"
   "sdk"
 ];
@@ -29,6 +30,7 @@ assert
   stdenv,
   fetchurl,
   writeText,
+  unzip,
   autoPatchelfHook,
   makeWrapper,
   libunwind,
@@ -52,6 +54,8 @@ let
   pname =
     if type == "aspnetcore" then
       "aspnetcore-runtime"
+    else if type == "windowsdesktop" then
+      "dotnet-windowsdesktop-runtime"
     else if type == "runtime" then
       "dotnet-runtime"
     else
@@ -59,6 +63,7 @@ let
 
   descriptions = {
     aspnetcore = "ASP.NET Core Runtime ${version}";
+    windowsdesktop = ".NET Desktop Runtime ${version}";
     runtime = ".NET Runtime ${version}";
     sdk = ".NET SDK ${version}";
   };
@@ -106,7 +111,8 @@ mkWrapper type (
       [
         makeWrapper
       ]
-      ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
+      ++ lib.optional stdenv.hostPlatform.isWindows unzip
+    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
       ++ lib.optionals (type == "sdk" && stdenv.hostPlatform.isDarwin) [
         xmlstarlet
         sigtool
@@ -147,21 +153,29 @@ mkWrapper type (
     dontPatchELF = true;
     noDumpEnvVars = true;
 
-    installPhase = ''
-      runHook preInstall
+    installPhase =
+      if type == "windowsdesktop" then
+        ''
+          # windowsdesktop runtime is special (likely by accident) that it only has the single shared framework, it doesn't have the dotnet muxer binary
+          mkdir -p $out/share/dotnet
+          cp -r ./ $out/share/dotnet
+        ''
+      else
+        ''
+          runHook preInstall
 
-      mkdir -p $out/share/doc/$pname/$version
-      mv LICENSE.txt $out/share/doc/$pname/$version/
-      mv ThirdPartyNotices.txt $out/share/doc/$pname/$version/
+          mkdir -p $out/share/doc/$pname/$version
+          mv LICENSE.txt $out/share/doc/$pname/$version/
+          mv ThirdPartyNotices.txt $out/share/doc/$pname/$version/
 
-      mkdir -p $out/share/dotnet
-      cp -r ./ $out/share/dotnet
+          mkdir -p $out/share/dotnet
+          cp -r ./ $out/share/dotnet
 
-      mkdir -p $out/bin
-      ln -s $out/share/dotnet/dotnet $out/bin/dotnet
+          mkdir -p $out/bin
+          ln -s $out/share/dotnet/dotnet $out/bin/dotnet
 
-      runHook postInstall
-    '';
+          runHook postInstall
+        '';
 
     # Tell autoPatchelf about runtime dependencies.
     # (postFixup phase is run before autoPatchelfHook.)
@@ -221,7 +235,19 @@ mkWrapper type (
     meta = with lib; {
       description = builtins.getAttr type descriptions;
       homepage = "https://dotnet.github.io/";
-      license = licenses.mit;
+      license =
+        if stdenv.hostPlatform.isWindows then
+          {
+            # TODO wait for https://github.com/dotnet/runtime/issues/108905 to be resolved
+            free = false;
+            url = "https://github.com/dotnet/core/blob/main/license-information-windows.md";
+
+            # TODO both .NET Library License and Windows SDK License have a lot of restrictions on redistribution
+            # eg "use the Distributable Code in your applications and not as a standalone distribution"
+            # so I guess no redistributable = true?
+          }
+        else
+          licenses.mit;
       maintainers = with maintainers; [
         kuznero
         mdarocha

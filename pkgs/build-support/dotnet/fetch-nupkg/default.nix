@@ -8,6 +8,7 @@
   nugetPackageHook,
   callPackage,
   overrides ? callPackage ./overrides.nix { },
+  pkgsCross,
 }:
 lib.makeOverridable (
   {
@@ -81,6 +82,12 @@ lib.makeOverridable (
           binaryBytecode
           binaryNativeCode
         ];
+
+        # TODO https://github.com/dotnet/runtime/issues/108905
+        license = lib.optionals (
+          lib.hasPrefix "Microsoft.NETCore.App.Runtime.win-" pname
+          || lib.hasPrefix "Microsoft.WindowsDesktop.App.Runtime." pname
+        ) pkgsCross.mingwW64.dotnet-runtime.meta.license;
       };
     };
   in
