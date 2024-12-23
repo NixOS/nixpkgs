@@ -1341,12 +1341,12 @@ self: super: builtins.intersectAttrs super {
 
   # Test have become more fussy in >= 2.0. We need to have which available for
   # tests to succeed and the makefile no longer finds happy by itself.
-  happy_2_1_2 = overrideCabal (drv: {
+  happy_2_1_3 = overrideCabal (drv: {
     buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.which ];
     preCheck = drv.preCheck or "" + ''
       export PATH="$PWD/dist/build/happy:$PATH"
     '';
-  }) super.happy_2_1_2;
+  }) super.happy_2_1_3;
   # Additionally install documentation
   jacinda = overrideCabal (drv: {
     enableSeparateDocOutput = true;
