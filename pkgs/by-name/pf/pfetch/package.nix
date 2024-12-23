@@ -1,18 +1,18 @@
 {
-  stdenvNoCC,
   lib,
+  stdenvNoCC,
   fetchFromGitHub,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "pfetch";
-  version = "0.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
-    owner = "dylanaraps";
+    owner = "Un1q32";
     repo = "pfetch";
-    rev = version;
-    sha256 = "06z0k1naw3k052p2z7241lx92rp5m07zlr0alx8pdm6mkc3c4v8f";
+    tag = version;
+    hash = "sha256-omI1Y1UKxSkg1QUd/GHHuGBwxfNOtxqYpzPbJdG7j3A=";
   };
 
   dontBuild = true;
@@ -21,12 +21,13 @@ stdenvNoCC.mkDerivation rec {
     install -Dm755 -t $out/bin pfetch
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Pretty system information tool written in POSIX sh";
-    homepage = "https://github.com/dylanaraps/pfetch";
-    license = licenses.mit;
-    platforms = platforms.all;
-    maintainers = with maintainers; [ equirosa ];
+    homepage = "https://github.com/Un1q32/pfetch";
+    changelog = "https://github.com/Un1q32/pfetch/releases/tag/${version}";
+    license = lib.licenses.mit;
+    platforms = lib.platforms.all;
+    maintainers = with lib.maintainers; [ equirosa ];
     mainProgram = "pfetch";
   };
 }
