@@ -33,7 +33,11 @@ $a}
   }
 
   # extract hashes of *.tar.xz
-  s/^containerchecksum (.*)/  sha512.run = "\1";/p
+  /^containerchecksum (.*)/{
+    # save in holdspace, print later if hasRunfiles || hasTlpkg
+    s/^containerchecksum (.*)/  sha512.run = "\1";/
+    H
+  }
   s/^doccontainerchecksum (.*)/  sha512.doc = "\1";/p
   s/^srccontainerchecksum (.*)/  sha512.source = "\1";/p
 
@@ -152,8 +156,14 @@ $a}
       t next-file # loop if previous line matched
     s/\n/ \n/     # add space before last newline for accurate matching below
 
-    / (RELOC|texmf-dist)\//i\  hasRunfiles = true;
-    / tlpkg\//i\  hasTlpkg = true;
+    / (RELOC|texmf-dist)\//{
+      # flag existence of runtime files in hold space
+      x ; s/$/\n  hasRunfiles = true;/ ; x
+    }
+    / tlpkg\//{
+      # flag existence of tlpkg files in hold space
+      x ; s/$/\n  hasTlpkg = true;/ ; x
+    }
 
     # extract script extensions
     / texmf-dist\/scripts\/.*\.(jar|lua|py|rb|sno|tcl|texlua|tlu) /{
@@ -247,10 +257,26 @@ $a}
     x
 
     # change hasCatalogue default from false to true
+    /(^|\n)  hasCatalogue = true;(\n|$)/!{
+      s/$/\n  hasCatalogue = false;/M
+    }
     s/^  hasCatalogue = true;$//Mg
-    t had-catalogue
-    s/(\n?)$/\1  hasCatalogue = false;/
-    :had-catalogue
+
+    # change hasRunfiles default from false to (sha512 ? run)
+    /(^|\n)  hasRunfiles = true;(\n|$)/!{
+      # if no runfiles nor tlpkg, omit sha512.run altogether
+      /^  hasTlpkg = true;$/M{
+        s/$/\n  hasRunfiles = false;/M
+      }
+      /^  hasTlpkg = true;$/M!{
+        s/^  sha512.run = "[^"]*";$//M
+      }
+    }
+    s/^  hasRunfiles = true;$//Mg
+
+    # clear empty lines
+    s/(^\n*|\n*$)//g
+    s/\n\n+/\n/g
 
     # print hold space if not empty
     /./Mp

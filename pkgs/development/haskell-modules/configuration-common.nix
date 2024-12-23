@@ -245,8 +245,28 @@ self: super: {
   # https://github.com/haskell-cryptography/HsOpenSSL/issues/93
   # https://github.com/haskell-cryptography/HsOpenSSL/issues/95
   HsOpenSSL = appendConfigureFlags [
-    "--ghc-option=-optc=-Wno-incompatible-pointer-types"
+    "--ghc-option=-optc=-Wno-error=incompatible-pointer-types"
   ] super.HsOpenSSL;
+  # Work around compilation failures with gcc >= 14
+  # https://github.com/audreyt/hssyck/issues/5
+  HsSyck = appendConfigureFlags [
+    "--ghc-option=-optc=-Wno-error=implicit-function-declaration"
+  ] super.HsSyck;
+  # https://github.com/rethab/bindings-dsl/issues/46
+  bindings-libcddb = appendConfigureFlags [
+    "--ghc-option=-optc=-Wno-error=incompatible-pointer-types"
+  ] super.bindings-libcddb;
+  # https://github.com/ocramz/hdf5-lite/issues/3
+  hdf5-lite = appendConfigureFlags [
+    "--ghc-option=-optc=-Wno-error=implicit-function-declaration"
+  ] super.hdf5-lite;
+  # https://github.com/awkward-squad/termbox/issues/5
+  termbox-bindings-c = appendConfigureFlags [
+    "--ghc-option=-optc=-Wno-error=implicit-function-declaration"
+  ] super.termbox-bindings-c;
+  libxml-sax = appendConfigureFlags [
+    "--ghc-option=-optc=-Wno-error=implicit-function-declaration"
+  ] super.libxml-sax;
 
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;

@@ -4,6 +4,7 @@
   # nixpkgs functions
   buildGoModule,
   buildVimPlugin,
+  callPackage,
   fetchFromGitHub,
   fetchFromSourcehut,
   fetchpatch,
@@ -14,7 +15,6 @@
   fetchYarnDeps,
   mkYarnModules,
   python3,
-  rustPlatform,
   # Misc dependencies
   arrow-cpp,
   coc-clangd,
@@ -35,10 +35,11 @@
   languagetool,
   llvmPackages,
   meson,
-  notmuch,
   neovim-unwrapped,
   nim1,
   nodePackages,
+  nodejs,
+  notmuch,
   openscad,
   parinfer-rust,
   phpactor,
@@ -56,15 +57,14 @@
   typescript,
   vim,
   which,
-  xkb-switch,
-  ycmd,
-  zoxide,
-  nodejs,
   xdotool,
+  xkb-switch,
   xorg,
   xxd,
+  ycmd,
   zathura,
   zenity,
+  zoxide,
   zsh,
   # codeium-nvim dependencies
   codeium,
@@ -78,25 +78,14 @@
   cmake,
   icu,
   ncurses,
-  # nvim-treesitter dependencies
-  callPackage,
   # Preview-nvim dependencies
   md-tui,
-  darwin,
   # sved dependencies
   glib,
   gobject-introspection,
   wrapGAppsHook3,
   writeText,
-  # sniprun dependencies
-  bashInteractive,
-  coreutils,
   curl,
-  gnugrep,
-  gnused,
-  makeWrapper,
-  procps,
-  pkg-config,
   # vim-agda dependencies
   agda,
   # vim-go dependencies
@@ -184,7 +173,7 @@ in
     ];
   };
 
-  avante-nvim = callPackage ./avante-nvim { };
+  avante-nvim = callPackage ./non-generated/avante-nvim { };
 
   aw-watcher-vim = super.aw-watcher-vim.overrideAttrs {
     patches = [
@@ -255,7 +244,7 @@ in
     meta.homepage = "https://github.com/sblumentritt/bitbake.vim/";
   };
 
-  blink-cmp = callPackage ./blink-cmp { };
+  blink-cmp = callPackage ./non-generated/blink-cmp { };
 
   bluloco-nvim = super.bluloco-nvim.overrideAttrs {
     dependencies = [ self.lush-nvim ];
@@ -321,13 +310,13 @@ in
     preFixup =
       ''
         substituteInPlace "$out"/plugin/clang_complete.vim \
-          --replace "let g:clang_library_path = ''
+          --replace-fail "let g:clang_library_path = ''
       + "''"
       + ''
         " "let g:clang_library_path='${lib.getLib llvmPackages.libclang}/lib/libclang.so'"
 
               substituteInPlace "$out"/plugin/libclang.py \
-                --replace "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
+                --replace-fail "/usr/lib/clang" "${llvmPackages.clang.cc}/lib/clang"
       '';
   };
 
@@ -672,7 +661,7 @@ in
       nvimRequireCheck = "codeium";
     };
 
-  codesnap-nvim = callPackage ./codesnap-nvim { };
+  codesnap-nvim = callPackage ./non-generated/codesnap-nvim { };
 
   codewindow-nvim = super.codewindow-nvim.overrideAttrs {
     dependencies = [ self.nvim-treesitter ];
@@ -685,8 +674,8 @@ in
     ];
     buildPhase = ''
       substituteInPlace lua/wincent/commandt/lib/Makefile \
-        --replace '/bin/bash' 'bash' \
-        --replace xcrun ""
+        --replace-fail '/bin/bash' 'bash' \
+        --replace-fail xcrun ""
       make build
       rm ruby/command-t/ext/command-t/*.o
     '';
@@ -760,7 +749,7 @@ in
   copilot-vim = super.copilot-vim.overrideAttrs (old: {
     postInstall = ''
       substituteInPlace $out/autoload/copilot/client.vim \
-        --replace "  let node = get(g:, 'copilot_node_command', ''\'''\')" \
+        --replace-fail "  let node = get(g:, 'copilot_node_command', ''\'''\')" \
                   "  let node = get(g:, 'copilot_node_command', '${nodejs}/bin/node')"
     '';
 
@@ -782,7 +771,7 @@ in
     nvimRequireCheck = "coq";
   };
 
-  cord-nvim = callPackage ./cord-nvim { };
+  cord-nvim = callPackage ./non-generated/cord-nvim { };
 
   cornelis = super.cornelis.overrideAttrs {
     dependencies = [ self.vim-textobj-user ];
@@ -881,7 +870,7 @@ in
   denops-vim = super.denops-vim.overrideAttrs {
     postPatch = ''
       # Use Nix's Deno instead of an arbitrary install
-      substituteInPlace ./autoload/denops.vim --replace "call denops#_internal#conf#define('denops#deno', 'deno')" "call denops#_internal#conf#define('denops#deno', '${deno}/bin/deno')"
+      substituteInPlace ./autoload/denops.vim --replace-fail "call denops#_internal#conf#define('denops#deno', 'deno')" "call denops#_internal#conf#define('denops#deno', '${deno}/bin/deno')"
     '';
   };
 
@@ -930,7 +919,7 @@ in
       old.preFixup or ""
       + ''
         substituteInPlace $out/autoload/direnv.vim \
-          --replace "let s:direnv_cmd = get(g:, 'direnv_cmd', 'direnv')" \
+          --replace-fail "let s:direnv_cmd = get(g:, 'direnv_cmd', 'direnv')" \
             "let s:direnv_cmd = get(g:, 'direnv_cmd', '${lib.getBin direnv}/bin/direnv')"
       '';
   });
@@ -1027,7 +1016,7 @@ in
       ];
       configurePhase = ''
         substituteInPlace Makefile \
-          --replace \
+          --replace-fail \
             "nim c" \
             "nim c --nimcache:$TMP --path:${nimpy} --path:${binaryheap}"
       '';
@@ -1235,7 +1224,7 @@ in
 
     postPatch = ''
       substituteInPlace lua/image/magick.lua \
-        --replace @nix_magick@ ${luajitPackages.magick}
+        --replace-fail @nix_magick@ ${luajitPackages.magick}
     '';
 
     nvimRequireCheck = "image";
@@ -1285,12 +1274,12 @@ in
     buildInputs = [ curl ];
     postPatch = ''
       substituteInPlace lua/kulala/config/init.lua \
-        --replace 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
+        --replace-fail 'curl_path = "curl"' 'curl_path = "${lib.getExe curl}"'
     '';
     nvimRequireCheck = "kulala";
   };
 
-  LanguageClient-neovim = callPackage ./LanguageClient-neovim { };
+  LanguageClient-neovim = callPackage ./non-generated/LanguageClient-neovim { };
 
   LazyVim = super.LazyVim.overrideAttrs {
     # Any other dependency is optional
@@ -1577,9 +1566,9 @@ in
   minimap-vim = super.minimap-vim.overrideAttrs {
     preFixup = ''
       substituteInPlace $out/plugin/minimap.vim \
-        --replace "code-minimap" "${code-minimap}/bin/code-minimap"
+        --replace-fail "code-minimap" "${code-minimap}/bin/code-minimap"
       substituteInPlace $out/bin/minimap_generator.sh \
-        --replace "code-minimap" "${code-minimap}/bin/code-minimap"
+        --replace-fail "code-minimap" "${code-minimap}/bin/code-minimap"
     '';
 
     doInstallCheck = true;
@@ -1617,7 +1606,7 @@ in
     ];
   };
 
-  moveline-nvim = callPackage ./moveline-nvim { };
+  moveline-nvim = callPackage ./non-generated/moveline-nvim { };
 
   multicursors-nvim = super.multicursors-nvim.overrideAttrs {
     dependencies = with self; [
@@ -2199,7 +2188,7 @@ in
     nvimSkipModule = "snippets.utils.cmp";
   };
 
-  nvim-spectre = callPackage ./nvim-spectre { };
+  nvim-spectre = callPackage ./non-generated/nvim-spectre { };
 
   nvim-surround = super.nvim-surround.overrideAttrs {
     # Optional treesitter integration
@@ -2209,7 +2198,7 @@ in
   nvim-teal-maker = super.nvim-teal-maker.overrideAttrs {
     postPatch = ''
       substituteInPlace lua/tealmaker/init.lua \
-        --replace cyan ${luaPackages.cyan}/bin/cyan
+        --replace-fail cyan ${luaPackages.cyan}/bin/cyan
     '';
     vimCommandCheck = "TealBuild";
   };
@@ -2405,18 +2394,19 @@ in
       ;
     postPatch = ''
       substituteInPlace plugin/phpactor.vim \
-        --replace "g:phpactorpath = expand('<sfile>:p:h') . '/..'" "g:phpactorpath = '${phpactor}'"
+        --replace-fail "g:phpactorpath = expand('<sfile>:p:h') . '/..'" "g:phpactorpath = '${phpactor}'"
     '';
   };
 
   playground = super.playground.overrideAttrs {
     dependencies = with self; [
-      # we need the 'query' grammer to make
+      # we need the 'query' grammar to make
       (nvim-treesitter.withPlugins (p: [ p.query ]))
     ];
     nvimRequireCheck = "nvim-treesitter-playground";
   };
 
+  # TODO: runtimedeps
   plenary-nvim = super.plenary-nvim.overrideAttrs {
     postPatch = ''
       sed -Ei lua/plenary/curl.lua \
@@ -2484,7 +2474,7 @@ in
     patches = [ ./patches/ranger.nvim/fix-paths.patch ];
 
     postPatch = ''
-      substituteInPlace lua/ranger-nvim.lua --replace '@ranger@' ${ranger}/bin/ranger
+      substituteInPlace lua/ranger-nvim.lua --replace-fail '@ranger@' ${ranger}/bin/ranger
     '';
     nvimRequireCheck = "ranger-nvim";
   };
@@ -2493,8 +2483,8 @@ in
     patches = [ ./patches/aider.nvim/fix-paths.patch ];
 
     postPatch = ''
-      substituteInPlace lua/aider.lua --replace '@aider@' ${aider-chat}/bin/aider
-      substituteInPlace lua/helpers.lua --replace '@aider@' ${aider-chat}/bin/aider
+      substituteInPlace lua/aider.lua --replace-fail '@aider@' ${aider-chat}/bin/aider
+      substituteInPlace lua/helpers.lua --replace-fail '@aider@' ${aider-chat}/bin/aider
     '';
     nvimRequireCheck = "aider";
   };
@@ -2508,6 +2498,7 @@ in
   };
 
   remote-nvim-nvim = super.remote-nvim-nvim.overrideAttrs {
+    dontPatchShebangs = true;
     dependencies = with self; [
       nui-nvim
       plenary-nvim
@@ -2571,7 +2562,7 @@ in
     dependencies = [ self.nui-nvim ];
   };
 
-  sg-nvim = callPackage ./sg-nvim { };
+  sg-nvim = callPackage ./non-generated/sg-nvim { };
 
   skim = buildVimPlugin {
     pname = "skim";
@@ -2634,7 +2625,7 @@ in
     ];
   };
 
-  sniprun = callPackage ./sniprun { };
+  sniprun = callPackage ./non-generated/sniprun { };
 
   # The GitHub repository returns 404, which breaks the update script
   Spacegray-vim = buildVimPlugin {
@@ -2691,16 +2682,16 @@ in
         | grep -F 'version = "${version}"'
 
       cd vim-plugin
-      substituteInPlace ftplugin/nix.vim --replace statix ${statix}/bin/statix
-      substituteInPlace plugin/statix.vim --replace statix ${statix}/bin/statix
+      substituteInPlace ftplugin/nix.vim --replace-fail statix ${statix}/bin/statix
+      substituteInPlace plugin/statix.vim --replace-fail statix ${statix}/bin/statix
     '';
   };
 
   stylish-nvim = super.stylish-nvim.overrideAttrs {
     postPatch = ''
-      substituteInPlace lua/stylish/common/mouse_hover_handler.lua --replace xdotool ${xdotool}/bin/xdotool
-      substituteInPlace lua/stylish/components/menu.lua --replace xdotool ${xdotool}/bin/xdotool
-      substituteInPlace lua/stylish/components/menu.lua --replace xwininfo ${xorg.xwininfo}/bin/xwininfo
+      substituteInPlace lua/stylish/common/mouse_hover_handler.lua --replace-fail xdotool ${xdotool}/bin/xdotool
+      substituteInPlace lua/stylish/components/menu.lua --replace-fail xdotool ${xdotool}/bin/xdotool
+      substituteInPlace lua/stylish/components/menu.lua --replace-fail xwininfo ${xorg.xwininfo}/bin/xwininfo
     '';
     nvimRequireCheck = "stylish";
   };
@@ -2965,7 +2956,7 @@ in
 
     postPatch = ''
       substituteInPlace lua/telescope/_extensions/zoxide/config.lua \
-        --replace "zoxide query -ls" "${zoxide}/bin/zoxide query -ls"
+        --replace-fail "zoxide query -ls" "${zoxide}/bin/zoxide query -ls"
     '';
   };
 
@@ -3004,7 +2995,7 @@ in
     patches = [ ./patches/tsc.nvim/fix-path.patch ];
 
     postPatch = ''
-      substituteInPlace lua/tsc/utils.lua --replace '@tsc@' ${typescript}/bin/tsc
+      substituteInPlace lua/tsc/utils.lua --replace-fail '@tsc@' ${typescript}/bin/tsc
     '';
 
     # Unit test
@@ -3157,7 +3148,7 @@ in
   vim-agda = super.vim-agda.overrideAttrs {
     preFixup = ''
       substituteInPlace "$out"/autoload/agda.vim \
-        --replace "jobstart(['agda'" "jobstart(['${agda}/bin/agda'"
+        --replace-fail "jobstart(['agda'" "jobstart(['${agda}/bin/agda'"
     '';
   };
 
@@ -3173,13 +3164,13 @@ in
     passthru.python3Dependencies = ps: with ps; [ beancount ];
   };
 
-  vim-clap = callPackage ./vim-clap { };
+  vim-clap = callPackage ./non-generated/vim-clap { };
 
   vim-codefmt = super.vim-codefmt.overrideAttrs {
     dependencies = [ self.vim-maktaba ];
   };
 
-  # Due to case-sensitivety issues, the hash differs on Darwin systems, see:
+  # Due to case-sensitivity issues, the hash differs on Darwin systems, see:
   # https://github.com/NixOS/nixpkgs/issues/157609
   vim-colorschemes = super.vim-colorschemes.overrideAttrs (old: {
     src = old.src.overrideAttrs (srcOld: {
@@ -3201,7 +3192,7 @@ in
   vim-dasht = super.vim-dasht.overrideAttrs {
     preFixup = ''
       substituteInPlace $out/autoload/dasht.vim \
-        --replace "['dasht']" "['${dasht}/bin/dasht']"
+        --replace-fail "['dasht']" "['${dasht}/bin/dasht']"
     '';
   };
 
@@ -3302,11 +3293,11 @@ in
   vim-isort = super.vim-isort.overrideAttrs {
     postPatch = ''
       substituteInPlace ftplugin/python_vimisort.vim \
-        --replace 'import vim' 'import vim; import sys; sys.path.append("${python3.pkgs.isort}/${python3.sitePackages}")'
+        --replace-fail 'import vim' 'import vim; import sys; sys.path.append("${python3.pkgs.isort}/${python3.sitePackages}")'
     '';
   };
 
-  vim-markdown-composer = callPackage ./vim-markdown-composer { };
+  vim-markdown-composer = callPackage ./non-generated/vim-markdown-composer { };
 
   vim-matchup = super.vim-matchup.overrideAttrs {
     # Optional treesitter integration
@@ -3353,7 +3344,7 @@ in
     postPatch =
       old.postPatch or ""
       + ''
-        substituteInPlace ftplugin/haskell/stylish-haskell.vim --replace \
+        substituteInPlace ftplugin/haskell/stylish-haskell.vim --replace-fail \
           'g:stylish_haskell_command = "stylish-haskell"' \
           'g:stylish_haskell_command = "${stylish-haskell}/bin/stylish-haskell"'
       '';
@@ -3385,10 +3376,10 @@ in
     buildInputs = [ python3 ];
     patchPhase = ''
       substituteInPlace plugin/wakatime.vim \
-        --replace 'autocmd BufEnter,VimEnter' \
-                  'autocmd VimEnter' \
-        --replace 'autocmd CursorMoved,CursorMovedI' \
-                  'autocmd CursorMoved,CursorMovedI,BufEnter'
+        --replace-fail 'autocmd BufEnter,VimEnter' \
+                       'autocmd VimEnter' \
+        --replace-fail 'autocmd CursorHold,CursorHoldI' \
+                       'autocmd CursorHold,CursorHoldI,BufEnter'
     '';
   };
 
@@ -3397,17 +3388,13 @@ in
   };
 
   vim-xkbswitch = super.vim-xkbswitch.overrideAttrs {
-    patchPhase = ''
-      substituteInPlace plugin/xkbswitch.vim \
-        --replace /usr/local/lib/libxkbswitch.so ${xkb-switch}/lib/libxkbswitch.so
-    '';
     buildInputs = [ xkb-switch ];
   };
 
   vim-yapf = super.vim-yapf.overrideAttrs {
     buildPhase = ''
       substituteInPlace ftplugin/python_yapf.vim \
-        --replace '"yapf"' '"${python3.pkgs.yapf}/bin/yapf"'
+        --replace-fail '"yapf"' '"${python3.pkgs.yapf}/bin/yapf"'
     '';
   };
 
@@ -3421,8 +3408,8 @@ in
   vimacs = super.vimacs.overrideAttrs {
     buildPhase = ''
       substituteInPlace bin/vim \
-        --replace '/usr/bin/vim' 'vim' \
-        --replace '/usr/bin/gvim' 'gvim'
+        --replace-fail '/usr/bin/vim' 'vim' \
+        --replace-fail '/usr/bin/gvim' 'gvim'
       # remove unnecessary duplicated bin wrapper script
       rm -r plugin/vimacs
     '';
@@ -3458,11 +3445,12 @@ in
   vimproc-vim = super.vimproc-vim.overrideAttrs {
     buildInputs = [ which ];
 
+    # TODO: revisit
     buildPhase = ''
       substituteInPlace autoload/vimproc.vim \
-        --replace vimproc_mac.so vimproc_unix.so \
-        --replace vimproc_linux64.so vimproc_unix.so \
-        --replace vimproc_linux32.so vimproc_unix.so
+        --replace-fail vimproc_mac.so vimproc_unix.so \
+        --replace-fail vimproc_linux64.so vimproc_unix.so \
+        --replace-fail vimproc_linux32.so vimproc_unix.so
       make -f make_unix.mak
     '';
   };
@@ -3531,7 +3519,7 @@ in
   YouCompleteMe = super.YouCompleteMe.overrideAttrs {
     buildPhase = ''
       substituteInPlace plugin/youcompleteme.vim \
-        --replace "'ycm_path_to_python_interpreter', '''" \
+        --replace-fail "'ycm_path_to_python_interpreter', '''" \
         "'ycm_path_to_python_interpreter', '${python3}/bin/python3'"
 
       rm -r third_party/ycmd
@@ -3610,7 +3598,7 @@ in
 
     postPatch = ''
       substituteInPlace autoload/zoxide.vim \
-        --replace "'zoxide_executable', 'zoxide'" "'zoxide_executable', '${zoxide}/bin/zoxide'"
+        --replace-fail "'zoxide_executable', 'zoxide'" "'zoxide_executable', '${zoxide}/bin/zoxide'"
     '';
   };
 
