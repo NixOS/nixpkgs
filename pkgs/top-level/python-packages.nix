@@ -1066,6 +1066,8 @@ self: super: with self; {
 
   autopep8 = callPackage ../development/python-modules/autopep8 { };
 
+  autopxd2 = callPackage ../development/python-modules/autopxd2 { };
+
   autoslot = callPackage ../development/python-modules/autoslot { };
 
   avahi = toPythonModule (pkgs.avahi.override {
