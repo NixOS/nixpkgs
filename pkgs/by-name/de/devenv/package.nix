@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   makeBinaryWrapper,
+  installShellFiles,
   rustPlatform,
   testers,
   cachix,
@@ -56,6 +57,7 @@ rustPlatform.buildRustPackage {
   '';
 
   nativeBuildInputs = [
+    installShellFiles
     makeBinaryWrapper
     pkg-config
     sqlx-cli
