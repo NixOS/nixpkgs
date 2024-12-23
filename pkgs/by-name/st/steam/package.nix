@@ -10,6 +10,7 @@
   extraBwrapArgs ? [ ], # extra arguments to pass to bubblewrap (real default is at usage site)
   extraArgs ? "", # arguments to always pass to steam
   extraEnv ? { }, # Environment variables to pass to Steam
+  withGameSpecificLibraries ? false, # include game specific libraries
 }:
 let
   steamEnv = { name, runScript, passthru ? {}, meta ? {} }:
@@ -17,7 +18,6 @@ let
     inherit name runScript passthru meta;
 
     multiArch = true;
-    includeClosures = true;
 
     # https://gitlab.steamos.cloud/steamrt/steam-runtime-tools/-/blob/main/docs/distro-assumptions.md#command-line-tools
     targetPkgs = pkgs: with pkgs; [
@@ -45,23 +45,157 @@ let
       '')
     ] ++ extraPkgs pkgs;
 
-    # https://gitlab.steamos.cloud/steamrt/steam-runtime-tools/-/blob/main/docs/distro-assumptions.md#shared-libraries
     multiPkgs = pkgs: with pkgs; [
-      glibc
-      libxcrypt
+      # These are required by steam with proper errors
+      xorg.libXcomposite
+      xorg.libXtst
+      xorg.libXrandr
+      xorg.libXext
+      xorg.libX11
+      xorg.libXfixes
       libGL
-
-      libdrm
-      mesa  # for libgbm
-      udev
-      libudev0-shim
       libva
-      vulkan-loader
+      pipewire
 
-      networkmanager  # not documented, used for network status things in Big Picture
-                      # FIXME: figure out how to only build libnm?
-      libcap  # not documented, required by srt-bwrap
-    ] ++ extraLibraries pkgs;
+      # steamwebhelper
+      harfbuzz
+      libthai
+      pango
+
+      lsof # friends options won't display "Launch Game" without it
+      file # called by steam's setup.sh
+
+      # dependencies for mesa drivers, needed inside pressure-vessel
+      mesa.llvmPackages.llvm.lib
+      vulkan-loader
+      expat
+      wayland
+      xorg.libxcb
+      xorg.libXdamage
+      xorg.libxshmfence
+      xorg.libXxf86vm
+      elfutils
+
+      # Without these it silently fails
+      xorg.libXinerama
+      xorg.libXcursor
+      xorg.libXrender
+      xorg.libXScrnSaver
+      xorg.libXi
+      xorg.libSM
+      xorg.libICE
+      curl
+      nspr
+      nss
+      cups
+      libcap
+      SDL2
+      libusb1
+      dbus-glib
+      gsettings-desktop-schemas
+      ffmpeg
+      libudev0-shim
+
+      # Verified games requirements
+      fontconfig
+      freetype
+      xorg.libXt
+      xorg.libXmu
+      libogg
+      libvorbis
+      SDL
+      SDL2_image
+      glew110
+      libdrm
+      libidn
+      tbb
+      zlib
+
+      # SteamVR
+      udev
+      dbus
+
+      # Other things from runtime
+      glib
+      gtk2
+      bzip2
+      flac
+      libglut
+      libjpeg
+      libpng
+      libpng12
+      libsamplerate
+      libmikmod
+      libtheora
+      libtiff
+      pixman
+      speex
+      SDL_image
+      SDL_ttf
+      SDL_mixer
+      SDL2_ttf
+      SDL2_mixer
+      libappindicator-gtk2
+      libdbusmenu-gtk2
+      libindicator-gtk2
+      libcaca
+      libcanberra
+      libgcrypt
+      libunwind
+      libvpx
+      librsvg
+      xorg.libXft
+      libvdpau
+
+      # required by coreutils stuff to run correctly
+      # Steam ends up with LD_LIBRARY_PATH=/usr/lib:<bunch of runtime stuff>:<etc>
+      # which overrides DT_RUNPATH in our binaries, so it tries to dynload the
+      # very old versions of stuff from the runtime.
+      # FIXME: how do we even fix this correctly
+      attr
+      # same thing, but for Xwayland (usually via gamescope), already in the closure
+      libkrb5
+      keyutils
+    ] ++ lib.optionals withGameSpecificLibraries [
+      # Not formally in runtime but needed by some games
+      at-spi2-atk
+      at-spi2-core   # CrossCode
+      gst_all_1.gstreamer
+      gst_all_1.gst-plugins-ugly
+      gst_all_1.gst-plugins-base
+      json-glib # paradox launcher (Stellaris)
+      libxkbcommon # paradox launcher
+      libvorbis # Dead Cells
+      libxcrypt # Alien Isolation, XCOM 2, Company of Heroes 2
+      mono
+      ncurses # Crusader Kings III
+      openssl
+      xorg.xkeyboardconfig
+      xorg.libpciaccess
+      xorg.libXScrnSaver # Dead Cells
+      icu # dotnet runtime, e.g. Stardew Valley
+
+      # screeps dependencies
+      gtk3
+      zlib
+      atk
+      cairo
+      gdk-pixbuf
+
+      # Prison Architect
+      libGLU
+      libuuid
+      libbsd
+      alsa-lib
+
+      # Loop Hero
+      # FIXME: Also requires openssl_1_1, which is EOL. Either find an alternative solution, or remove these dependencies (if not needed by other games)
+      libidn2
+      libpsl
+      nghttp2.lib
+      rtmpdump
+    ]
+    ++ extraLibraries pkgs;
 
     extraInstallCommands = lib.optionalString (steam-unwrapped != null) ''
       ln -s ${steam-unwrapped}/share $out/share
