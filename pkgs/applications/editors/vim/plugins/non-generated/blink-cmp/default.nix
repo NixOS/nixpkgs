@@ -29,7 +29,7 @@ let
   };
 in
 vimUtils.buildVimPlugin {
-  pname = "blink-cmp";
+  pname = "blink.cmp";
   inherit version src;
   preInstall = ''
     mkdir -p target/release
