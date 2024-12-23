@@ -76,8 +76,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeFeature "BESPOKE_VST2_SDK_LOCATION" "${vst-sdk}/VST2_SDK")
   ];
 
+  strictDeps = true;
+
   nativeBuildInputs = [
-    python3
+    python3 # interpreter
     makeWrapper
     cmake
     pkg-config
@@ -85,7 +87,10 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
+    [
+      python3 # library
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       # List obtained from https://github.com/BespokeSynth/BespokeSynth/blob/main/azure-pipelines.yml
       libX11
       libXrandr
@@ -160,6 +165,7 @@ stdenv.mkDerivation (finalAttrs: {
       libXScrnSaver
     ])
   }";
+
   dontPatchELF = true; # needed or nix will try to optimize the binary by removing "useless" rpath
 
   meta = {
