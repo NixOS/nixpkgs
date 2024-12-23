@@ -36,6 +36,12 @@ let
       url = "https://github.com/go-vikunja/vikunja/commit/3659b7b58d4405452f3e806e12b0e3dfb4577503.patch";
       hash = "sha256-1TQFe1N3/gwbamN5ZzKgP04oRbx5x+Tlmrt8H7V/Q2A=";
     })
+    # security patch from 0.24.6
+    (fetchpatch {
+      name = "security-export-only-update-current-user-export-file-id.patch";
+      url = "https://github.com/go-vikunja/vikunja/commit/d47555e3c22108747bd45a5d142da5a47b98bb3f.patch";
+      hash = "sha256-/pvz3dgs07BVkhvks/yvdCnBduC03c+pjrK5iEmVdUA=";
+    })
   ];
 
   frontend = stdenv.mkDerivation (finalAttrs: {
