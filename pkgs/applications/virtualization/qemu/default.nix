@@ -4,7 +4,7 @@
 , sigtool
 , makeWrapper, removeReferencesTo
 , attr, libcap, libcap_ng, socat, libslirp
-, CoreServices, Cocoa, Hypervisor, Kernel, rez, setfile, vmnet
+, apple-sdk_13, rez, setfile
 , guestAgentSupport ? (with stdenv.hostPlatform; isLinux || isNetBSD || isOpenBSD || isSunOS || isWindows) && !minimal
 , numaSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAarch32 && !minimal, numactl
 , seccompSupport ? stdenv.hostPlatform.isLinux && !minimal, libseccomp
@@ -102,7 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (!minimal) [ dtc pixman vde2 lzo snappy libtasn1 gnutls nettle libslirp ]
     ++ lib.optionals (!userOnly) [ curl ]
     ++ lib.optionals ncursesSupport [ ncurses ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices Cocoa Hypervisor Kernel vmnet ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_13 ]
     ++ lib.optionals seccompSupport [ libseccomp ]
     ++ lib.optionals numaSupport [ numactl ]
     ++ lib.optionals alsaSupport [ alsa-lib ]
