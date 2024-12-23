@@ -323,7 +323,8 @@ in
           after = [ "network.target" ];
           serviceConfig = {
             Slice = "kubernetes.slice";
-            ExecStart = ''${top.package}/bin/kube-apiserver \
+            ExecStart = ''
+              ${top.package}/bin/kube-apiserver \
               --allow-privileged=${boolToString cfg.allowPrivileged} \
               --authorization-mode=${concatStringsSep "," cfg.authorizationMode} \
                 ${optionalString (elem "ABAC" cfg.authorizationMode)
