@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "ox";
-  version = "0.7.2";
+  version = "0.7.5";
 
   src = fetchFromGitHub {
     owner = "curlpipe";
     repo = pname;
     rev = version;
-    hash = "sha256-yAToibHhvHAry7WVZ5uD84CbUTp06RyZ9J12/2deM1I=";
+    hash = "sha256-1RXvnYQ5nBVAraA43Tc62E3ppmZQL0BErxwGs80p7EU=";
   };
 
-  cargoHash = "sha256-YAy5vCxcHUL0wM9+Y3GDqV/V1utL3V05heT92/zQ/X8=";
+  cargoHash = "sha256-UxxPaa+iAOS2TI/+PMf48KpETZLZOhXD4ImsqupJAxw=";
 
   passthru = {
     tests.version = testers.testVersion {
