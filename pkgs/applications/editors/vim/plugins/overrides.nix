@@ -1303,6 +1303,7 @@ in
       "lazyvim.plugins.extras.lang.svelte"
       "lazyvim.plugins.extras.lang.typescript"
       "lazyvim.plugins.init"
+      "lazyvim.plugins.ui"
       "lazyvim.plugins.xtras"
     ];
   };
