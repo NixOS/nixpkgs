@@ -5,7 +5,11 @@ let
 in
 {
   name = "lomiri-music-app-standalone";
-  meta.maintainers = lib.teams.lomiri.members;
+  meta = {
+    maintainers = lib.teams.lomiri.members;
+    # This needs a Linux VM
+    platforms = lib.platforms.linux;
+  };
 
   nodes.machine =
     { config, pkgs, ... }:
