@@ -246,6 +246,10 @@ in
 
   blink-cmp = callPackage ./non-generated/blink-cmp { };
 
+  blink-cmp-copilot = super.blink-cmp-copilot.overrideAttrs {
+    dependencies = [ self.copilot-lua ];
+  };
+
   bluloco-nvim = super.bluloco-nvim.overrideAttrs {
     dependencies = [ self.lush-nvim ];
   };
