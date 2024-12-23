@@ -235,7 +235,7 @@ in rec {
   coq_8_18 = mkCoq "8.18";
   coq_8_19 = mkCoq "8.19";
   coq_8_20 = mkCoq "8.20";
-  coq_9_0 = mkCoq "9.0";
+  coq_9_0  = mkCoq "9.0+rc1";
 
   coqPackages_8_5 = mkCoqPackages coq_8_5;
   coqPackages_8_6 = mkCoqPackages coq_8_6;
