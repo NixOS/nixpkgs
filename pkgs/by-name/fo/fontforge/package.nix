@@ -6,7 +6,8 @@
   cmake,
   uthash,
   pkg-config,
-  python,
+  makeWrapper,
+  python3,
   freetype,
   zlib,
   glib,
@@ -27,23 +28,20 @@
   withGUI ? withGTK,
   withPython ? true,
   withExtras ? true,
-  Carbon,
-  Cocoa,
-  makeWrapper,
 }:
 
 assert withGTK -> withGUI;
 
 let
-  py = python.withPackages (ps: with ps; [ setuptools ]);
+  py = python3.withPackages (ps: with ps; [ setuptools ]);
 in
 stdenv.mkDerivation rec {
   pname = "fontforge";
   version = "20230101";
 
   src = fetchFromGitHub {
-    owner = pname;
-    repo = pname;
+    owner = "fontforge";
+    repo = "fontforge";
     rev = version;
     sha256 = "sha256-/RYhvL+Z4n4hJ8dmm+jbA1Ful23ni2DbCRZC5A3+pP0=";
   };
@@ -98,15 +96,7 @@ stdenv.mkDerivation rec {
       libxml2
     ]
     ++ lib.optionals withSpiro [ libspiro ]
-    ++ lib.optionals withGUI [
-      gtk3
-      cairo
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Carbon
-      Cocoa
-    ];
+    ++ lib.optionals withGUI [ gtk3 cairo pango ];
 
   cmakeFlags =
     [ "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" ]
@@ -130,11 +120,11 @@ stdenv.mkDerivation rec {
         rm -r "$out/share/fontforge/python"
       '';
 
-  meta = with lib; {
+  meta = {
     description = "Font editor";
     homepage = "https://fontforge.github.io";
-    platforms = platforms.all;
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ erictapen ulysseszhan ];
+    platforms = lib.platforms.all;
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ erictapen ulysseszhan ];
   };
 }
