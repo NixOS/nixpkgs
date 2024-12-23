@@ -4,6 +4,7 @@
   fetchFromGitHub,
   fetchzip,
   gitUpdater,
+  apple-sdk_11,
   cmake,
   pkg-config,
   ninja,
@@ -33,13 +34,6 @@
   pcre,
   mount,
   zenity,
-  Accelerate,
-  Cocoa,
-  WebKit,
-  CoreServices,
-  CoreAudioKit,
-  IOBluetooth,
-  MetalKit,
   # It is not allowed to distribute binaries with the VST2 SDK plugin without a license
   # (the author of Bespoke has such a licence but not Nix). VST3 should work out of the box.
   # Read more in https://github.com/NixOS/nixpkgs/issues/145607
@@ -138,19 +132,8 @@ stdenv.mkDerivation (finalAttrs: {
       mount
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Accelerate
-      Cocoa
-      WebKit
-      CoreServices
-      CoreAudioKit
-      IOBluetooth
-      MetalKit
+      apple-sdk_11
     ];
-
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin (toString [
-    # Fails to find fp.h on its own
-    "-isystem ${CoreServices}/Library/Frameworks/CoreServices.framework/Versions/Current/Frameworks/CarbonCore.framework/Versions/Current/Headers/"
-  ]);
 
   postInstall =
     if stdenv.hostPlatform.isDarwin then
