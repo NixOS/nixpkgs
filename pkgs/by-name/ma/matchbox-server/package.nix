@@ -27,7 +27,7 @@ buildGoModule rec {
   ];
 
   # Disable cgo to produce a static binary
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   # Don't run Go tests
   doCheck = false;

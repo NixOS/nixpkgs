@@ -15,7 +15,7 @@
 , freebsd
 , cxxabi ? if stdenv.hostPlatform.isFreeBSD then freebsd.libcxxrt else null
 , libunwind
-, enableShared ? !stdenv.hostPlatform.isStatic
+, enableShared ? stdenv.hostPlatform.hasSharedLibraries
 , devExtraCmakeFlags ? []
 }:
 

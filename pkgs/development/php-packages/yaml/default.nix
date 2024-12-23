@@ -1,7 +1,6 @@
 {
   buildPecl,
   lib,
-  pkg-config,
   libyaml,
 }:
 
@@ -13,8 +12,7 @@ buildPecl {
 
   configureFlags = [ "--with-yaml=${libyaml.dev}" ];
 
-  nativeBuildInputs = [
-    pkg-config
+  buildInputs = [
     libyaml
   ];
 

@@ -61,7 +61,7 @@ buildPythonPackage rec {
     });
   };
 
-  pythonImportCheck = [ "djangocms_admin_style" ];
+  pythonImportsCheck = [ "djangocms_admin_style" ];
 
   meta = {
     description = "Django Theme tailored to the needs of django CMS";

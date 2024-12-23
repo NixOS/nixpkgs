@@ -20,7 +20,7 @@ buildGoModule rec {
     "-X github.com/joyrex2001/kubedock/internal/config.Version=${version}"
   ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   meta = with lib; {
     description = "Minimal implementation of the Docker API that will orchestrate containers on a Kubernetes cluster";

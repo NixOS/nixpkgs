@@ -35,7 +35,6 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    maintainers = [ maintainers.khumba ];
     license = [ licenses.gpl2Only ];
     platforms = [
       "i686-linux"

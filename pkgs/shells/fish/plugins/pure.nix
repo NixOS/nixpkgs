@@ -30,6 +30,6 @@ buildFishPlugin rec {
     description = "Pretty, minimal and fast Fish prompt, ported from zsh";
     homepage = "https://github.com/rafaelrinaldi/pure";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pacien ];
+    maintainers = with lib.maintainers; [ euxane ];
   };
 }

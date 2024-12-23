@@ -198,7 +198,7 @@ in
   meta = {
     maintainers = with lib.maintainers; [
       happysalada
-      pacien
+      euxane
       onny
     ];
   };

@@ -33,7 +33,7 @@ let
 
     vendorHash = "sha256-yam3DgY/dfwIRc7OvFltwX29x6xGlrrsK4Oj6oaGYRw=";
 
-    CGO_ENABLED = 0;
+    env.CGO_ENABLED = 0;
 
     buildPhase = ''
       runHook preBuild

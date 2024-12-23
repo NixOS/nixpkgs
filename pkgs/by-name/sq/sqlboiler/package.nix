@@ -5,13 +5,13 @@
 
 buildGoModule rec {
   pname = "sqlboiler";
-  version = "4.17.0";
+  version = "4.17.1";
 
   src = fetchFromGitHub {
     owner = "volatiletech";
     repo = "sqlboiler";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6qTbF/b6QkxkutoP80owfxjp7Y1WpbZsF6w1XSRHo3Q=";
+    hash = "sha256-hb8aMaK2iDDCEJXoNn9BLELP0J7LcJzsQdSYZe1tcjQ=";
   };
 
   vendorHash = "sha256-ZGGoTWSbGtsmrEQcZI40z6QF6qh4t3LN17Sox4KHQMA=";

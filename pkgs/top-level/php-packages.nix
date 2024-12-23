@@ -712,15 +712,6 @@ lib.makeScope pkgs.newScope (
                 #   Unknown: php_network_getaddresses: getaddrinfo for localhost failed: nodename nor servname provided
                 doCheck = !stdenv.hostPlatform.isDarwin && lib.versionOlder php.version "8.4";
                 internalDeps = [ php.extensions.session ];
-                patches =
-                  lib.optionals (lib.versionAtLeast php.version "8.3" && lib.versionOlder php.version "8.4")
-                    [
-                      # https://github.com/php/php-src/pull/16733 (fix soap test)
-                      (fetchpatch {
-                        url = "https://github.com/php/php-src/commit/5c308d61db104854e4ff84ab123e3ea56e1b4046.patch";
-                        hash = "sha256-xQ4Sg4kL0cgHYauRW2AzGgFXfcqtxeRVhI9zNh7CsoM=";
-                      })
-                    ];
               }
               {
                 name = "sockets";

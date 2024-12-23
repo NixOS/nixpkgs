@@ -10,48 +10,52 @@
   rpcsvc-proto,
   libtirpc,
   makeWrapper,
-  substituteAll,
   removeReferencesTo,
   replaceVars,
   go,
+  applyPatches,
+  nvidia-modprobe,
 }:
 let
   modprobeVersion = "550.54.14";
-  nvidia-modprobe = fetchFromGitHub {
-    owner = "NVIDIA";
-    repo = "nvidia-modprobe";
-    rev = modprobeVersion;
-    sha256 = "sha256-iBRMkvOXacs/llTtvc/ZC5i/q9gc8lMuUHxMbu8A+Kg=";
-  };
-  modprobePatch = substituteAll {
-    src = ./modprobe.patch;
-    inherit modprobeVersion;
+  patchedModprobe = applyPatches {
+    src = nvidia-modprobe.src.override {
+      version = modprobeVersion;
+      hash = "sha256-iBRMkvOXacs/llTtvc/ZC5i/q9gc8lMuUHxMbu8A+Kg=";
+    };
+    patches = [
+      (replaceVars ./modprobe.patch {
+        inherit modprobeVersion;
+      })
+    ];
   };
 in
 stdenv.mkDerivation rec {
   pname = "libnvidia-container";
-  version = "1.16.2";
+  version = "1.17.2";
 
   src = fetchFromGitHub {
     owner = "NVIDIA";
     repo = "libnvidia-container";
     rev = "v${version}";
-    sha256 = "sha256-hX+2B+0kHiAC2lyo6kwe7DctPLJWgRdbhlc316OO3r8=";
+    hash = "sha256-JmJKvAOEPyjVx2Frd0tAMBjnAUTMpMh1KBt6wr5RRmk=";
   };
 
   patches = [
     # Locations of nvidia driver libraries are not resolved via ldconfig which
     # doesn't get used on NixOS.
-    # TODO: The latter doesn't really apply anymore.
-    # Additional support binaries like nvidia-smi
-    # are not resolved via the environment PATH but via the derivation output
-    # path.
-    (replaceVars ./fix-library-resolving.patch {
+    (replaceVars ./0001-ldcache-don-t-use-ldcache.patch {
       inherit (addDriverRunpath) driverLink;
     })
 
+    # Use both PATH and the legacy nvidia-docker paths (NixOS artifacts)
+    # for binary lookups.
+    # TODO: Remove the legacy compatibility once nvidia-docker is removed
+    # from NixOS.
+    ./0002-nvc-nvidia-docker-compatible-binary-lookups.patch
+
     # fix bogus struct declaration
-    ./inline-c-struct.patch
+    ./0003-nvc-fix-struct-declaration.patch
   ];
 
   postPatch = ''
@@ -66,11 +70,10 @@ stdenv.mkDerivation rec {
       versions.mk
 
     mkdir -p deps/src/nvidia-modprobe-${modprobeVersion}
-    cp -r ${nvidia-modprobe}/* deps/src/nvidia-modprobe-${modprobeVersion}
+    cp -r ${patchedModprobe}/* deps/src/nvidia-modprobe-${modprobeVersion}
     chmod -R u+w deps/src
     pushd deps/src
 
-    patch -p0 < ${modprobePatch}
     touch nvidia-modprobe-${modprobeVersion}/.download_stamp
     popd
 
@@ -146,6 +149,9 @@ stdenv.mkDerivation rec {
     license = licenses.asl20;
     platforms = platforms.linux;
     mainProgram = "nvidia-container-cli";
-    maintainers = with maintainers; [ cpcloud ];
+    maintainers = with maintainers; [
+      cpcloud
+      msanft
+    ];
   };
 }

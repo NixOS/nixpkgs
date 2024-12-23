@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation rec {
   pname = "dolibarr";
-  version = "20.0.0";
+  version = "20.0.2";
 
   src = fetchFromGitHub {
     owner = "Dolibarr";
     repo = "dolibarr";
-    rev = version;
-    hash = "sha256-nxytzUEpEo1qeIlpbPQ4mETl5DAAP+d1bqUcYxEW26E=";
+    tag = version;
+    hash = "sha256-5OEZpBxTYXhO27ea/GBmJI9uDLRDgMNc9ehQ7mvvSrY=";
   };
 
   dontBuild = true;
@@ -23,12 +23,12 @@ stdenv.mkDerivation rec {
     find . -type f -name "*.php" -print0 | xargs -0 sed -i 's|/etc/dolibarr|${stateDir}|g'
 
     substituteInPlace htdocs/filefunc.inc.php \
-      --replace '//$conffile = ' '$conffile = ' \
-      --replace '//$conffiletoshow = ' '$conffiletoshow = '
+      --replace-fail '//$conffile = ' '$conffile = ' \
+      --replace-fail '//$conffiletoshow = ' '$conffiletoshow = '
 
     substituteInPlace htdocs/install/inc.php \
-      --replace '//$conffile = ' '$conffile = ' \
-      --replace '//$conffiletoshow = ' '$conffiletoshow = '
+      --replace-fail '//$conffile = ' '$conffile = ' \
+      --replace-fail '//$conffiletoshow = ' '$conffiletoshow = '
   '';
 
   installPhase = ''
@@ -38,10 +38,11 @@ stdenv.mkDerivation rec {
 
   passthru.tests = { inherit (nixosTests) dolibarr; };
 
-  meta = with lib; {
+  meta = {
     description = "Enterprise resource planning (ERP) and customer relationship manager (CRM) server";
+    changelog = "https://github.com/Dolibarr/dolibarr/releases/tag/${src.tag}";
     homepage = "https://dolibarr.org/";
-    license = licenses.gpl3Plus;
-    maintainers = [ ];
+    license = lib.licenses.gpl3Plus;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
   };
 }

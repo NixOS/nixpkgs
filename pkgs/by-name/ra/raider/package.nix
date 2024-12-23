@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "raider";
-  version = "3.0.1";
+  version = "3.0.2";
 
   src = fetchFromGitHub {
     owner = "ADBeveridge";
     repo = "raider";
     rev = "v${version}";
-    hash = "sha256-LkGSEUoruWfEq/ttM3LkA/UjHc3ZrlvGF44HsJLntAo=";
+    hash = "sha256-fOv4Y5kBbZazFNkPrLS3D7LMLLvT/kIYmsCezsl/fxQ=";
   };
 
   nativeBuildInputs =

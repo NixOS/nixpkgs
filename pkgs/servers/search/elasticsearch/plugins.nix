@@ -41,10 +41,10 @@ in
         if version == "7.17.16" then "sha256-wgm6N5fofs5wTM25ZT3dJkg7iDesXsc3Up419IAY9gk="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/analysis-icu";
       description = "ICU Analysis plugin integrates the Lucene ICU module into elasticsearch";
-      license = licenses.asl20;
+      license = lib.licenses.asl20;
     };
   };
 
@@ -57,10 +57,10 @@ in
         if version == "7.17.16" then "sha256-SShdBcWfm21XoVhghSSiWIhsoXzG7wz6162iOmuf5EU="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/analysis-kuromoji";
       description = "Japanese (kuromoji) Analysis plugin integrates Lucene kuromoji analysis module into Elasticsearch";
-      license = licenses.asl20;
+      license = lib.licenses.asl20;
     };
   };
 
@@ -73,10 +73,10 @@ in
         if version == "7.17.9" then "sha256-iY25apDkS6s0RoR9dVL2o/hFuUo6XhMzLjl8wDSFejk="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/vhyza/elasticsearch-analysis-lemmagen";
       description = "LemmaGen Analysis plugin provides jLemmaGen lemmatizer as Elasticsearch token filter";
-      license = licenses.asl20;
+      license = lib.licenses.asl20;
       broken = true; # Not released yet for ES 7.17.10
     };
   };
@@ -90,10 +90,28 @@ in
         if version == "7.17.16" then "sha256-S/Cp9opeLitFh2/3Qw7/MFt6GcYKufxXKD6cJSi3SaQ="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/analysis-phonetic";
       description = "Phonetic Analysis plugin integrates phonetic token filter analysis with elasticsearch";
-      license = licenses.asl20;
+      license = lib.licenses.asl20;
+    };
+  };
+
+  analysis-smartcn = esPlugin rec {
+    pluginName = "analysis-smartcn";
+    version = esVersion;
+    src = fetchurl {
+      url = "https://artifacts.elastic.co/downloads/elasticsearch-plugins/${pluginName}/${pluginName}-${version}.zip";
+      hash =
+        if version == "7.17.16" then
+          "sha256-Ym2h7Qe+L4PFhcFjsSBSfXbYoG3PgfaVKXfkaPwvuFM="
+        else
+          throw "unsupported version ${version} for plugin ${pluginName}";
+    };
+    meta = {
+      homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/analysis-smartcn";
+      description = "Smart Chinese Analysis plugin integrates Lucene Smart Chinese analysis module into Elasticsearch";
+      license = lib.licenses.asl20;
     };
   };
 
@@ -106,10 +124,10 @@ in
         if version == "7.17.16" then "sha256-hMErTLd5fXg420Olz+j6Zv7WByA1aNq9FlEgCtkYIxY="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/discovery-ec2";
       description = "EC2 discovery plugin uses the AWS API for unicast discovery";
-      license = licenses.asl20;
+      license = lib.licenses.asl20;
     };
   };
 
@@ -122,10 +140,10 @@ in
         if version == "7.17.16" then "sha256-z0gfdx98urCzdQNlVn99CmteG6jweOmUDmGJW89twtU="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/ingest-attachment";
       description = "Ingest processor that uses Apache Tika to extract contents";
-      license = licenses.asl20;
+      license = lib.licenses.asl20;
     };
   };
 
@@ -138,10 +156,10 @@ in
         if version == "7.17.16" then "sha256-TWMN8jzFjzBVTUB+zn4tJr47VMXHC8U+014BvnArK8M="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/repository-s3";
       description = "S3 repository plugin adds support for using AWS S3 as a repository for Snapshot/Restore";
-      license = licenses.asl20;
+      license = lib.licenses.asl20;
     };
   };
 
@@ -154,10 +172,10 @@ in
         if version == "7.17.16" then "sha256-hG5wy1Xw4T1NzI7pja3CejwJg002/n6YqM1/QaVSWbg="
         else throw "unsupported version ${version} for plugin ${pluginName}";
     };
-    meta = with lib; {
+    meta = {
       homepage = "https://github.com/elastic/elasticsearch/tree/master/plugins/repository-gcs";
       description = "GCS repository plugin adds support for using Google Cloud Storage as a repository for Snapshot/Restore";
-      license = licenses.asl20;
+      license = lib.licenses.asl20;
     };
   };
 
@@ -176,10 +194,10 @@ in
           hash = "sha256-j8dz7rUKWqMvT6EksoFIuGJzYcgdMipKeg2d8UtzlDI=";
         }
       else throw "unsupported version ${version} for plugin ${pluginName}";
-    meta = with lib; {
+    meta = {
       homepage = "https://search-guard.com";
       description = "Elasticsearch plugin that offers encryption, authentication, and authorisation";
-      license = licenses.asl20;
+      license = lib.licenses.asl20;
     };
   };
 }

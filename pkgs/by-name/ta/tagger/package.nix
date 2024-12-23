@@ -28,7 +28,7 @@ buildDotnetModule rec {
   projectFile = "NickvisionTagger.GNOME/NickvisionTagger.GNOME.csproj";
   dotnet-sdk = dotnet.sdk;
   dotnet-runtime = dotnet.runtime;
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   nativeBuildInputs = [
     blueprint-compiler

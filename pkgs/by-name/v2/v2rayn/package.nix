@@ -15,31 +15,26 @@
   makeDesktopItem,
   copyDesktopItems,
   bash,
+  xorg,
 }:
 buildDotnetModule rec {
   pname = "v2rayn";
-  version = "7.3.2";
+  version = "7.4.1";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
     tag = version;
-    hash = "sha256-mWfWpleUVbq6Z31oh6QoG0j9eT3d7yF6z7e4lRe6+cM=";
+    hash = "sha256-mtmuEwZy72LPYFf7hzE8TYiSh2kK6xe2CRdkOSbg2h4=";
   };
 
   projectFile = "v2rayN/v2rayN.Desktop/v2rayN.Desktop.csproj";
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   postPatch = ''
-    substituteInPlace v2rayN/AmazTool/UpgradeApp.cs \
-      --replace-fail "return AppDomain.CurrentDomain.BaseDirectory;" 'return Path.Combine(Environment.GetEnvironmentVariable("XDG_DATA_HOME") ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".local", "share"), "v2rayn");'
-    substituteInPlace v2rayN/ServiceLib/Common/Utils.cs \
-      --replace-fail "return AppDomain.CurrentDomain.BaseDirectory;" 'return Path.Combine(Environment.GetEnvironmentVariable("XDG_DATA_HOME") ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".local", "share"), "v2rayn");'
     substituteInPlace v2rayN/ServiceLib/Common/Utils.cs \
       --replace-fail "/bin/bash" "${bash}/bin/bash"
-    substituteInPlace v2rayN/ServiceLib/ServiceLib.csproj \
-      --replace-fail "0.16.20" "0.16.14"
   '';
 
   dotnetInstallFlags = [ "-p:PublishReadyToRun=false" ];
@@ -64,6 +59,16 @@ buildDotnetModule rec {
     krb5
     lttng-ust_2_12
     (lib.getLib stdenv.cc.cc)
+  ];
+
+  runtimeDeps = [
+    xorg.libX11
+    xorg.libXrandr
+    xorg.libXi
+    xorg.libICE
+    xorg.libSM
+    xorg.libXcursor
+    xorg.libXext
   ];
 
   postBuild =

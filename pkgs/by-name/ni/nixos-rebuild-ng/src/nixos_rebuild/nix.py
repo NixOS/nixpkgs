@@ -7,7 +7,9 @@ from pathlib import Path
 from string import Template
 from subprocess import PIPE, CalledProcessError
 from typing import Final
+from uuid import uuid4
 
+from . import tmpdir
 from .constants import WITH_NIX_2_18
 from .models import (
     Action,
@@ -76,24 +78,50 @@ def remote_build(
     instantiate_flags: dict[str, Args] | None = None,
     copy_flags: dict[str, Args] | None = None,
 ) -> Path:
+    # We need to use `--add-root` otherwise Nix will print this warning:
+    # > warning: you did not specify '--add-root'; the result might be removed
+    # > by the garbage collector
     r = run_wrapper(
         [
             "nix-instantiate",
             build_attr.path,
             "--attr",
             build_attr.to_attr(attr),
+            "--add-root",
+            tmpdir.TMPDIR_PATH / uuid4().hex,
             *dict_to_flags(instantiate_flags or {}),
         ],
         stdout=PIPE,
     )
-    drv = Path(r.stdout.strip())
+    drv = Path(r.stdout.strip()).resolve()
     copy_closure(drv, to_host=build_host, from_host=None, **(copy_flags or {}))
+
+    # Need a temporary directory in remote to use in `nix-store --add-root`
     r = run_wrapper(
-        ["nix-store", "--realise", drv, *dict_to_flags(build_flags or {})],
-        remote=build_host,
-        stdout=PIPE,
+        ["mktemp", "-d", "-t", "nixos-rebuild.XXXXX"], remote=build_host, stdout=PIPE
     )
-    return Path(r.stdout.strip())
+    remote_tmpdir = Path(r.stdout.strip())
+    try:
+        r = run_wrapper(
+            [
+                "nix-store",
+                "--realise",
+                drv,
+                "--add-root",
+                remote_tmpdir / uuid4().hex,
+                *dict_to_flags(build_flags or {}),
+            ],
+            remote=build_host,
+            stdout=PIPE,
+        )
+        # When you use `--add-root`, `nix-store` returns the root and not the
+        # path inside Nix store
+        r = run_wrapper(
+            ["readlink", "-f", r.stdout.strip()], remote=build_host, stdout=PIPE
+        )
+        return Path(r.stdout.strip())
+    finally:
+        run_wrapper(["rm", "-rf", remote_tmpdir], remote=build_host, check=False)
 
 
 def remote_build_flake(

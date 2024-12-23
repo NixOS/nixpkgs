@@ -6,40 +6,49 @@
   git,
   gnupg,
   gawk,
+  installShellFiles,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation {
   pname = "git-secret";
-  version = "0.5.0";
+  version = "0.5.0-unstable-2024-12-09";
 
   src = fetchFromGitHub {
     repo = "git-secret";
     owner = "sobolevn";
-    rev = "v${version}";
-    sha256 = "sha256-Vdlv3H99BZcT1O66ZCpq5olENOaUSubx58B1PQ/OlMU=";
+    rev = "fdc5e755b34569b0ad3d84a85e611afbb86c4db5";
+    hash = "sha256-SN6Xpkc8bd1yuvUMlKaXb5M1ts1JxZynVa5GHBKyOjw=";
   };
 
-  nativeBuildInputs = [ makeWrapper ];
+  nativeBuildInputs = [
+    makeWrapper
+    installShellFiles
+  ];
 
-  installPhase = ''
-    install -D git-secret $out/bin/git-secret
+  installPhase =
+    let
+      binPath = lib.makeBinPath [
+        git
+        gnupg
+        gawk
+      ];
+    in
+    ''
+      runHook preInstall
 
-    wrapProgram $out/bin/git-secret \
-      --prefix PATH : "${
-        lib.makeBinPath [
-          git
-          gnupg
-          gawk
-        ]
-      }"
+      installBin git-secret
+      wrapProgram "$out/bin/git-secret" --prefix PATH : "${binPath}"
 
-    mkdir $out/share
-    cp -r man $out/share
-  '';
+      shopt -s extglob
+      installManPage man/**/!(*.md)
+      shopt -u extglob
+
+      runHook postInstall
+    '';
 
   meta = {
     description = "Bash-tool to store your private data inside a git repository";
-    homepage = "https://git-secret.io";
+    homepage = "https://sobolevn.me/git-secret/";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.lo1tuma ];
     platforms = lib.platforms.all;
