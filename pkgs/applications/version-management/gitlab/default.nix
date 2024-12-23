@@ -24,6 +24,7 @@
   cargo,
   rustc,
   rustPlatform,
+  gcc13,
 
   # gpgme
   pkg-config,
@@ -57,6 +58,10 @@ let
     gemdir = ./rubyEnv;
     gemset = import (gemdir + "/gemset.nix") src;
     gemConfig = defaultGemConfig // {
+      # https://github.com/grpc/grpc/issues/35945
+      grpc = attrs: {
+        nativeBuildInputs = [ gcc13 ];
+      };
       gpgme = attrs: {
         nativeBuildInputs = [ pkg-config ];
       };
