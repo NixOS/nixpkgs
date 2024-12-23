@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "miurahr";
-    repo = pname;
+    repo = "inflate64";
     rev = "v${version}";
     hash = "sha256-deFx8NMbGLP51CdNvmZ25LQ5FLPBb1PB3QhGhIfTMfc=";
   };
