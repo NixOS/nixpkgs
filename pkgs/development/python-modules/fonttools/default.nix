@@ -27,7 +27,7 @@
 
 buildPythonPackage rec {
   pname = "fonttools";
-  version = "4.54.1";
+  version = "4.55.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -35,8 +35,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fonttools";
     repo = "fonttools";
-    rev = "refs/tags/${version}";
-    hash = "sha256-iYd3EiziaLR7zS0UQAje0QfShNfnhHPdH2+noCQ2yto=";
+    tag = version;
+    hash = "sha256:1y2sxzl9is3k1gmf9rvvxk9294dwbma1sh2ip56h7q1073346bv3";
   };
 
   build-system = [
@@ -53,7 +53,7 @@ buildPythonPackage rec {
           (if isPyPy then brotlicffi else brotli)
           zopfli
         ];
-        unicode = lib.optional (pythonOlder "3.11") unicodedata2;
+        unicode = lib.optional (pythonOlder "3.13") unicodedata2;
         graphite = [ lz4 ];
         interpolatable = [
           pycairo
