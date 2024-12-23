@@ -3366,8 +3366,8 @@ in
       substituteInPlace plugin/wakatime.vim \
         --replace-fail 'autocmd BufEnter,VimEnter' \
                        'autocmd VimEnter' \
-        --replace-fail 'autocmd CursorMoved,CursorMovedI' \
-                       'autocmd CursorMoved,CursorMovedI,BufEnter'
+        --replace-fail 'autocmd CursorHold,CursorHoldI' \
+                       'autocmd CursorHold,CursorHoldI,BufEnter'
     '';
   };
 
