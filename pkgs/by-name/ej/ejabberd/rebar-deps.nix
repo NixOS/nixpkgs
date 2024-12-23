@@ -44,21 +44,21 @@ let
     };
     yconf = builder {
       name = "yconf";
-      version = "1.0.16";
+      version = "1.0.17";
       src = fetchHex {
         pkg = "yconf";
-        version = "1.0.16";
-        sha256 = "sha256-6UeBMnPzhxHHsuWo5KzJpRx7voVPdEo0X2AwCzhYbIk=";
+        version = "1.0.17";
+        sha256 = "sha256-3SiSkjJBRJpGzIRXuewPsUAwcAc1pYhZVWd8c1w0GiU=";
       };
       beamDeps = [ fast_yaml ];
     };
     xmpp = builder {
       name = "xmpp";
-      version = "1.9.0";
+      version = "1.9.1";
       src = fetchHex {
         pkg = "xmpp";
-        version = "1.9.0";
-        sha256 = "sha256-wbkb50qalQOvpnZvdWR3UWkg/7/uoMJgwvoXE1X1PCc=";
+        version = "1.9.1";
+        sha256 = "sha256-0rFDGvbkwaTIv5DK8MwRzesEe4MjuH6dfkgm1JEyddw=";
       };
       beamDeps = [
         ezlib
@@ -124,11 +124,11 @@ let
     };
     p1_pgsql = builder {
       name = "p1_pgsql";
-      version = "1.1.28";
+      version = "1.1.29";
       src = fetchHex {
         pkg = "p1_pgsql";
-        version = "1.1.28";
-        sha256 = "sha256-ZVu3XfA2rOVd3OF8p0EUPELgZnxiBqwnpNy8Zfcaye8=";
+        version = "1.1.29";
+        sha256 = "sha256-pv9Y6LF0mT84ldo+piEan50MVNGm4ouzIdo7PNaLOME=";
       };
       beamDeps = [ xmpp ];
     };
@@ -154,11 +154,11 @@ let
     };
     p1_acme = builder {
       name = "p1_acme";
-      version = "1.0.24";
+      version = "1.0.25";
       src = fetchHex {
         pkg = "p1_acme";
-        version = "1.0.24";
-        sha256 = "sha256-8UUdcGWV75l6scoXFi3axY+HSsl+MVpfrb48+iYUgAI=";
+        version = "1.0.25";
+        sha256 = "sha256-p7VbR0ld20+YoV5lRR7DrUP0Y3uVXHTNaV2Y5qZF0Iw=";
       };
       beamDeps = [
         base64url
@@ -180,11 +180,11 @@ let
     };
     luerl = builder {
       name = "luerl";
-      version = "1.2.0";
+      version = "1.2.3";
       src = fetchHex {
         pkg = "luerl";
-        version = "1.2.0";
-        sha256 = "sha256-nK/U9glP8PWp0nj9gdYNPgJsggvftsrNSxvZCfIbUl0=";
+        version = "1.2.3";
+        sha256 = "sha256-G0udDKXX0oDR0nh6al7p9aISZBtiv/kVVrqlOAXfOu0=";
       };
       beamDeps = [ ];
     };
@@ -220,11 +220,11 @@ let
     };
     fast_xml = builder {
       name = "fast_xml";
-      version = "1.1.53";
+      version = "1.1.55";
       src = fetchHex {
         pkg = "fast_xml";
-        version = "1.1.53";
-        sha256 = "sha256-UGQzbW82Pu5Ql6pdxc7Ztn8FFS8ua4Ug/VDSaMKrg5w=";
+        version = "1.1.55";
+        sha256 = "sha256-g/PiOngO1fVnzexzlT8GyVuDjXCdv6hrWamKjSPJn4U=";
       };
       beamDeps = [ p1_utils ];
     };
@@ -264,11 +264,11 @@ let
     };
     eredis = builder {
       name = "eredis";
-      version = "1.2.0";
+      version = "1.7.1";
       src = fetchHex {
         pkg = "eredis";
-        version = "1.2.0";
-        sha256 = "sha256-2bWr7ywsirqPMqoBggPgs9yLEVd3OyVKsdTCACMX8eE=";
+        version = "1.7.1";
+        sha256 = "sha256-fCtUxWb+1V/u8zQcp5sBAKY0j9PxYhhLftURjSWMPME=";
       };
       beamDeps = [ ];
     };
