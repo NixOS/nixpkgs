@@ -2491,6 +2491,7 @@ in
   };
 
   remote-nvim-nvim = super.remote-nvim-nvim.overrideAttrs {
+    dontPatchShebangs = true;
     dependencies = with self; [
       nui-nvim
       plenary-nvim
