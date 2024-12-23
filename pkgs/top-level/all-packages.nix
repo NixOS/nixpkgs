@@ -18829,4 +18829,6 @@ with pkgs;
   libpostalWithData = callPackage ../by-name/li/libpostal/package.nix {
     withData = true;
   };
+
+  dotultimate = recurseIntoAttrs (callPackages ../development/tools/misc/dotultimate {});
 }
