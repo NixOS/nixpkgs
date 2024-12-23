@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "miurahr";
-    repo = pname;
+    repo = "pybcj";
     rev = "v${version}";
     hash = "sha256-ExSt7E7ZaVEa0NwAQHU0fOaXJW9jYmEUUy/1iUilGz8=";
   };
