@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
-    description = "A nushell plugin that will inspect a file and return information based on it's magic number.";
+    description = "A nushell plugin for syntax highlighting.";
     mainProgram = "nu_plugin_highlight";
     homepage = "https://github.com/cptpiepmatz/nu-plugin-highlight";
     license = licenses.mit;
