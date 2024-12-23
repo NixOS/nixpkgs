@@ -11,18 +11,14 @@
   coreutils,
   git,
   davix,
+  fftw,
   ftgl,
   gl2ps,
   glew,
   gnugrep,
   gnused,
   gsl,
-  gtest,
   lapack,
-  libX11,
-  libXpm,
-  libXft,
-  libXext,
   libGLU,
   libGL,
   libxcrypt,
@@ -30,6 +26,7 @@
   llvm_18,
   lsof,
   lz4,
+  xorg,
   xz,
   man,
   openblas,
@@ -56,7 +53,7 @@
 
 stdenv.mkDerivation rec {
   pname = "root";
-  version = "6.34.02";
+  version = "6.34.04";
 
   passthru = {
     tests = import ./tests { inherit callPackage; };
@@ -64,7 +61,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://root.cern.ch/download/root_v${version}.source.tar.gz";
-    hash = "sha256-FmvsVi5CDhd6rzEz+j+wn4Ls3avoouGQY0W61EJRP5Q=";
+    hash = "sha256-4yDFNzqOh7sptygJVMqDVa2MQpXPSSNWBvDIsgCss3Q=";
   };
 
   clad_src = fetchgit {
@@ -87,12 +84,12 @@ stdenv.mkDerivation rec {
   buildInputs =
     [
       davix
+      fftw
       ftgl
       giflib
       gl2ps
       glew
       gsl
-      gtest
       lapack
       libjpeg
       libpng
@@ -117,12 +114,12 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk.privateFrameworksHook ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
-      libX11
-      libXpm
-      libXft
-      libXext
       libGLU
       libGL
+      xorg.libX11
+      xorg.libXpm
+      xorg.libXft
+      xorg.libXext
     ];
 
   preConfigure =
@@ -135,9 +132,6 @@ stdenv.mkDerivation rec {
       substituteInPlace cmake/modules/SearchInstalledSoftware.cmake \
         --replace-fail 'set(lcgpackages ' '#set(lcgpackages '
 
-      # Make sure that clad is not downloaded when building
-      substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
-        --replace-fail 'UPDATE_COMMAND ""' 'DOWNLOAD_COMMAND "" UPDATE_COMMAND ""'
       # Make sure that clad is finding the right llvm version
       substituteInPlace interpreter/cling/tools/plugins/clad/CMakeLists.txt \
         --replace-fail '-DLLVM_DIR=''${LLVM_BINARY_DIR}' '-DLLVM_DIR=''${LLVM_CMAKE_PATH}'
@@ -151,6 +145,9 @@ stdenv.mkDerivation rec {
       # Eliminate impure reference to /System/Library/PrivateFrameworks
       substituteInPlace core/macosx/CMakeLists.txt \
         --replace-fail "-F/System/Library/PrivateFrameworks " ""
+      # Just like in libpng/12.nix to build the builtin libpng on macOS
+      substituteInPlace graf2d/asimage/src/libAfterImage/libpng/pngpriv.h \
+        --replace-fail '<fp.h>' '<math.h>'
     ''
     +
       lib.optionalString
@@ -167,6 +164,7 @@ stdenv.mkDerivation rec {
       "-DCMAKE_INSTALL_LIBDIR=lib"
       "-Dbuiltin_llvm=OFF"
       "-Dfail-on-missing=ON"
+      "-Dfftw3=ON"
       "-Dfitsio=OFF"
       "-Dgnuinstall=ON"
       "-Dmathmore=ON"
