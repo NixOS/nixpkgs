@@ -75,6 +75,6 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.prrte.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ markuskowa ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

@@ -241,10 +241,10 @@ in
         xviewer
         xreader
         xed-editor
-        xplayer
         pix
 
         # external apps shipped with linux-mint
+        celluloid
         gnome-calculator
         gnome-calendar
         gnome-screenshot
