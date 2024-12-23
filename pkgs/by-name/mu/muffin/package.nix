@@ -24,7 +24,7 @@
   libXdamage,
   libxkbcommon,
   libXtst,
-  libgbm,
+  mesa,
   meson,
   ninja,
   pipewire,
@@ -66,7 +66,6 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    libgbm
     meson
     ninja
     pkg-config
@@ -106,6 +105,7 @@ stdenv.mkDerivation rec {
     json-glib
     libXtst
     graphene
+    mesa # actually uses eglmesaext
   ];
 
   mesonFlags = [
