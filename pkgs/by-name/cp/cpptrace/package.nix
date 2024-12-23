@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [ libdwarf ];
-  propagatedBuildInputs = [ zstd ];
+  propagatedBuildInputs = [ zstd ] ++ (lib.optionals static [ libdwarf ]);
 
   cmakeFlags = [
     (lib.cmakeBool "CPPTRACE_USE_EXTERNAL_LIBDWARF" true)
@@ -51,12 +51,20 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests = {
-      findpackage-integration = callPackage ./findpackage-integration.nix {
-        src = "${finalAttrs.src}/test/findpackage-integration";
-        checkOutput = finalAttrs.finalPackage.doCheck;
+    tests =
+      let
+        mkIntegrationTest =
+          { static }:
+          callPackage ./findpackage-integration.nix {
+            src = "${finalAttrs.src}/test/findpackage-integration";
+            checkOutput = finalAttrs.finalPackage.doCheck;
+            inherit static;
+          };
+      in
+      {
+        findpackage-integration-shared = mkIntegrationTest { static = false; };
+        findpackage-integration-static = mkIntegrationTest { static = true; };
       };
-    };
   };
 
   meta = {
