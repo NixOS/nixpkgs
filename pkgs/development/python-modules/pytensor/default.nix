@@ -17,27 +17,29 @@
   numpy,
   scipy,
 
-  # checks
+  # tests
   jax,
   jaxlib,
   numba,
-  pytestCheckHook,
+  pytest-benchmark,
   pytest-mock,
+  pytestCheckHook,
   tensorflow-probability,
+  pythonAtLeast,
 
   nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "pytensor";
-  version = "2.26.3";
+  version = "2.26.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pymc-devs";
     repo = "pytensor";
-    rev = "refs/tags/rel-${version}";
-    hash = "sha256-RhicZSVkaDtIngIOvzyEQ+VMZwdV45wDk7e7bThTIh8=";
+    tag = "rel-${version}";
+    hash = "sha256-pREyBedkF9MW7g3Bctnk8C9vVbRTsLLreldxlqDdHVI=";
   };
 
   pythonRelaxDeps = [
@@ -63,8 +65,9 @@ buildPythonPackage rec {
     jax
     jaxlib
     numba
-    pytestCheckHook
+    pytest-benchmark
     pytest-mock
+    pytestCheckHook
     tensorflow-probability
   ];
 
@@ -153,6 +156,11 @@ buildPythonPackage rec {
       "test_unbroadcast"
       "test_update_equiv"
       "test_update_same"
+    ]
+    ++ lib.optionals (pythonAtLeast "3.12") [
+      # Flaky: TypeError: cannot pickle 'PyCapsule' object
+      "test_blockwise"
+      "test_blockwise_benchmark"
     ];
 
   disabledTestPaths = [
@@ -173,7 +181,7 @@ buildPythonPackage rec {
     description = "Python library to define, optimize, and efficiently evaluate mathematical expressions involving multi-dimensional arrays";
     mainProgram = "pytensor-cache";
     homepage = "https://github.com/pymc-devs/pytensor";
-    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/pymc-devs/pytensor/releases/tag/rel-${version}";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
       bcdarwin

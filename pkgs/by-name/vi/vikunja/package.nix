@@ -11,12 +11,12 @@
 }:
 
 let
-  version = "0.24.5";
+  version = "0.24.6";
   src = fetchFromGitHub {
     owner = "go-vikunja";
     repo = "vikunja";
     rev = "v${version}";
-    hash = "sha256-P5H+NfjE8wTmPD1VOI72hPi2DlDb4pCyq0nphK1VGK0=";
+    hash = "sha256-yUUZ6gPI2Bte36HzfUE6z8B/I1NlwWDSJA2pwkuzd34=";
   };
 
   frontend = stdenv.mkDerivation (finalAttrs: {

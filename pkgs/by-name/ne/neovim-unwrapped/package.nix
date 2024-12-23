@@ -235,6 +235,7 @@ stdenv.mkDerivation (
     nativeInstallCheckInputs = [
       versionCheckHook
     ];
+    versionCheckProgram = "${placeholder "out"}/bin/nvim";
     versionCheckProgramArg = [ "--version" ];
     doInstallCheck = true;
 
