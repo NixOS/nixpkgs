@@ -12272,6 +12272,12 @@
     githubId = 5759930;
     name = "Alexis Destrez";
   };
+  krovuxdev = {
+    name = "krovuxdev";
+    email = "krovuxdev@proton.me";
+    github = "krovuxdev";
+    githubId = 62192487;
+  };
   krupkat = {
     github = "krupkat";
     githubId = 6817216;
