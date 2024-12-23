@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitHub,
   fetchzip,
+  gitUpdater,
   cmake,
   pkg-config,
   ninja,
@@ -167,6 +168,10 @@ stdenv.mkDerivation (finalAttrs: {
   }";
 
   dontPatchELF = true; # needed or nix will try to optimize the binary by removing "useless" rpath
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   meta = {
     description = "Software modular synth with controllers support, scripting and VST";
