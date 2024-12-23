@@ -463,7 +463,7 @@ in {
   greetd-no-shadow = handleTest ./greetd-no-shadow.nix {};
   grocy = handleTest ./grocy.nix {};
   grow-partition = runTest ./grow-partition.nix;
-  grub = handleTest ./grub.nix {};
+  grub = import ./grub.nix { inherit pkgs runTest; };
   guacamole-server = handleTest ./guacamole-server.nix {};
   guix = handleTest ./guix {};
   gvisor = handleTest ./gvisor.nix {};
