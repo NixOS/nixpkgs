@@ -24,7 +24,13 @@ buildFHSEnv {
     ])
     ++ (
       # OpenHMD dependencies
-      pkgs.openhmd.buildInputs ++ pkgs.openhmd.nativeBuildInputs
+      (
+        pkgs.openhmd.buildInputs
+        ++ pkgs.openhmd.nativeBuildInputs
+        ++ (with pkgs; [
+          meson
+        ])
+      )
     )
     ++ (
       # OpenComposite dependencies
@@ -44,6 +50,8 @@ buildFHSEnv {
           xorg.libXrandr
           xorg.libXrender
           xorg.xorgproto
+          SDL2
+          wayland
           # Additional dependencies required for Monado WMR support
           bc
           fmt
@@ -55,6 +63,8 @@ buildFHSEnv {
           lz4.dev
           tbb
           libxkbcommon
+          boost
+          glew
         ])
       )
     )
@@ -69,6 +79,12 @@ buildFHSEnv {
         glib
         libmd
         ninja
+        glslang
+        gst_all_1.gstreamer
+        libdrm
+        openssl
+        openxr-loader
+        vulkan-loader
       ])
       ++ (with pkgs; [
         android-tools # For adb installing WiVRn APKs
