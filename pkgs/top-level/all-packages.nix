@@ -11974,7 +11974,7 @@ with pkgs;
 
   rabbitmq-server = callPackage ../by-name/ra/rabbitmq-server/package.nix rec {
     erlang = erlang_27;
-    elixir = pkgs.elixir.override { inherit erlang; };
+    elixir = elixir_1_17.override { inherit erlang; };
   };
 
   qcal = callPackage ../tools/networking/qcal/default.nix { };
