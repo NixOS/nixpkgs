@@ -426,7 +426,7 @@ rec {
     # If the part is a named placeholder of the form "<...>" don't escape it.
     # It may cause misleading escaping if somebody uses literally "<...>" in their option names.
     # This is the trade-off to allow for placeholders in option names.
-    isNamedPlaceholder = builtins.match "\<(.*)\>";
+    isNamedPlaceholder = builtins.match "<(.*)>";
     escapeOptionPart = part:
       if part == "*" || isNamedPlaceholder part != null
         then part
