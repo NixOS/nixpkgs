@@ -603,10 +603,14 @@ in
         ''
       )
       + ''
-        # clear cache after update
+        # clear cache after update and regenerate optimizations
         OLD_VERSION=$(cat ${cfg.dataDir}/version)
         if [[ $OLD_VERSION != "${package.version}" ]]; then
           rm -r ${cfg.dataDir}/cache/*
+          ${artisanWrapper}/bin/librenms-artisan view:clear
+          ${artisanWrapper}/bin/librenms-artisan optimize:clear
+          ${artisanWrapper}/bin/librenms-artisan view:cache
+          ${artisanWrapper}/bin/librenms-artisan optimize
           echo "${package.version}" > ${cfg.dataDir}/version
         fi
 
