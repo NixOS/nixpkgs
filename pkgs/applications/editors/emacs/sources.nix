@@ -146,6 +146,12 @@ in
     variant = "mainline";
     rev = "30.0.93";
     hash = "sha256-lcpB4lKD3tjvCn646hUyAskxWNCQwEJ0RX/ZddRBRRU=";
+    patches = fetchpatch: [
+      (builtins.path {
+        name = "inhibit-lexical-cookie-warning-67916.patch";
+        path = ./inhibit-lexical-cookie-warning-67916-30.patch;
+      })
+    ];
   });
 
   emacs28-macport = import ./make-emacs.nix (mkArgs {
