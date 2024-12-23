@@ -20,6 +20,7 @@
 , cctools
 , zlib
 , apple-sdk_11
+, fixDarwinDylibNames
 
 , enableVulkan ? !stdenv.hostPlatform.isDarwin
 }:
@@ -49,7 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     gn
     ninja
     python3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild cctools.libtool zlib ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    cctools.libtool
+    zlib
+    fixDarwinDylibNames
+  ];
 
   buildInputs = [
     expat
