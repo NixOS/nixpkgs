@@ -1411,6 +1411,7 @@ these in the [Hooks Reference](#chap-hooks).
 ### Compiler and Linker wrapper hooks {#compiler-linker-wrapper-hooks}
 
 If the file `${cc}/nix-support/cc-wrapper-hook` exists, it will be run at the end of the [compiler wrapper](#cc-wrapper).
+If the file `${binutils}/nix-support/ld-wrapper-hook` exists, it will be run at the end of the linker wrapper, before the linker runs.
 If the file `${binutils}/nix-support/post-link-hook` exists, it will be run at the end of the linker wrapper.
 These hooks allow a user to inject code into the wrappers.
 As an example, these hooks can be used to extract `extraBefore`, `params` and `extraAfter` which store all the command line arguments passed to the compiler and linker respectively.
