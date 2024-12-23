@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pyprobables";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "barrust";
     repo = "pyprobables";
     rev = "refs/tags/v${version}";
-    hash = "sha256-maikrZlBzhv35zPXmKqdJzAz6eZDmluLUvkOkaPTCDU=";
+    hash = "sha256-yJUYGfy+d+Xfk1DUDvBeWk0EcNPuW4DcUHx3G3jzEdc=";
   };
 
   nativeBuildInputs = [ setuptools ];
