@@ -88,6 +88,12 @@ buildPythonPackage rec {
       substituteInPlace tinygrad/runtime/autogen/hip.py \
         --replace-fail "/opt/rocm/" "${rocmPackages.clr}/"
 
+      substituteInPlace tinygrad/runtime/support/compiler_hip.py \
+        --replace-fail "/opt/rocm/include" "${rocmPackages.clr}/include"
+
+      substituteInPlace tinygrad/runtime/support/compiler_hip.py \
+        --replace-fail "/opt/rocm/llvm" "${rocmPackages.llvm.llvm}"
+
       substituteInPlace tinygrad/runtime/autogen/comgr.py \
         --replace-fail "/opt/rocm/" "${rocmPackages.rocm-comgr}/"
     '';
