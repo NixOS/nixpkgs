@@ -15335,6 +15335,10 @@ self: super: with self; {
 
   tahoma-api = callPackage ../development/python-modules/tahoma-api { };
 
+  taichi = callPackage ../development/python-modules/taichi {
+    inherit (pkgs.config) cudaSupport rocmSupport;
+  };
+
   tailer = callPackage ../development/python-modules/tailer { };
 
   tailscale = callPackage ../development/python-modules/tailscale { };
