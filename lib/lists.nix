@@ -1748,8 +1748,8 @@ rec {
     ```
     :::
   */
-  crossLists = warn
-    ''lib.crossLists is deprecated, use lib.mapCartesianProduct instead.
+  crossLists = warn ''
+    lib.crossLists is deprecated, use lib.mapCartesianProduct instead.
 
     For example, the following function call:
 

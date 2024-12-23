@@ -319,8 +319,8 @@ in
 
     system.extraSystemBuilderCmds =
       optionalString
-        config.system.copySystemConfiguration
-        ''ln -s '${import ../../../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>}' \
+        config.system.copySystemConfiguration ''
+          ln -s '${import ../../../lib/from-env.nix "NIXOS_CONFIG" <nixos-config>}' \
             "$out/configuration.nix"
         '' +
       optionalString
