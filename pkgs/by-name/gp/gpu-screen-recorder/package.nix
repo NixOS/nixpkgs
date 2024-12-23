@@ -22,6 +22,7 @@
   libXrandr,
   libXfixes,
   wrapperDir ? "/run/wrappers/bin",
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -81,6 +82,8 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${wrapperDir}" \
       --suffix PATH : "$out/bin"
   '';
+
+  passthru.updateScript = gitUpdater { url = "https://repo.dec05eba.com/gpu-screen-recorder"; };
 
   meta = {
     description = "Screen recorder that has minimal impact on system performance by recording a window using the GPU only";
