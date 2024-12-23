@@ -4,10 +4,11 @@
   coq,
   bignums,
   math-classes,
+  coq-elpi,
   version ? null,
 }:
 
-mkCoqDerivation rec {
+(mkCoqDerivation rec {
   pname = "corn";
   inherit version;
   defaultVersion =
@@ -59,4 +60,9 @@ mkCoqDerivation rec {
     description = "Coq library for constructive analysis";
     maintainers = [ maintainers.vbgl ];
   };
-}
+}).overrideAttrs
+  (o: {
+    propagatedBuildInputs =
+      o.propagatedBuildInputs
+      ++ lib.optional (lib.versions.isGt "8.19.0" o.version || o.version == "dev") coq-elpi;
+  })
