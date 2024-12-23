@@ -37,6 +37,10 @@ stdenv.mkDerivation rec {
     "-DINTERFACE64=${if blas.isILP64 then "1" else "0"}"
     "-DMPI=${if useMpi then "ON" else "OFF"}"
     "-DICB=ON"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    # prevent cmake from using Accelerate, which causes single precision tests
+    # to segfault
+    "-DBLA_VENDOR=Generic"
   ];
 
   preCheck = ''
