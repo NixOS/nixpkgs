@@ -246,6 +246,10 @@ in
 
   blink-cmp = callPackage ./non-generated/blink-cmp { };
 
+  blink-cmp-copilot = super.blink-cmp-copilot.overrideAttrs {
+    dependencies = [ self.copilot-lua ];
+  };
+
   bluloco-nvim = super.bluloco-nvim.overrideAttrs {
     dependencies = [ self.lush-nvim ];
   };
@@ -1299,6 +1303,7 @@ in
       "lazyvim.plugins.extras.lang.svelte"
       "lazyvim.plugins.extras.lang.typescript"
       "lazyvim.plugins.init"
+      "lazyvim.plugins.ui"
       "lazyvim.plugins.xtras"
     ];
   };
@@ -2203,6 +2208,14 @@ in
     vimCommandCheck = "TealBuild";
   };
 
+  nvim-tree-lua = super.nvim-tree-lua.overrideAttrs {
+    nvimSkipModule = [
+      # Meta can't be required
+      "nvim-tree._meta.api"
+      "nvim-tree._meta.api_decorator"
+    ];
+  };
+
   nvim-treesitter = super.nvim-treesitter.overrideAttrs (
     callPackage ./nvim-treesitter/overrides.nix { } self super
   );
@@ -2597,14 +2610,19 @@ in
     nvimSkipModule = [
       # Requires setup call first
       "snacks.dashboard"
+      "snacks.debug"
+      "snacks.dim"
       "snacks.git"
+      "snacks.indent"
+      "snacks.input"
       "snacks.lazygit"
       "snacks.notifier"
+      "snacks.scratch"
+      "snacks.scroll"
       "snacks.terminal"
       "snacks.win"
       "snacks.words"
-      "snacks.debug"
-      "snacks.scratch"
+      "snacks.zen"
       # Optional trouble integration
       "trouble.sources.profiler"
     ];
