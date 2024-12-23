@@ -58,21 +58,23 @@ let
   };
 
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "bespokesynth";
   version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "BespokeSynth";
-    repo = pname;
-    rev = "v${version}";
+    repo = "bespokesynth";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-vDvNm9sW9BfWloB0CA+JHTp/bfDWAP/T0hDXjoMZ3X4=";
     fetchSubmodules = true;
   };
 
   cmakeBuildType = "Release";
 
-  cmakeFlags = lib.optionals enableVST2 [ "-DBESPOKE_VST2_SDK_LOCATION=${vst-sdk}/VST2_SDK" ];
+  cmakeFlags = lib.optionals enableVST2 [
+    (lib.cmakeFeature "BESPOKE_VST2_SDK_LOCATION" "${vst-sdk}/VST2_SDK")
+  ];
 
   nativeBuildInputs = [
     python3
@@ -128,7 +130,7 @@ stdenv.mkDerivation rec {
     if stdenv.hostPlatform.isDarwin then
       ''
         mkdir -p $out/{Applications,bin}
-        mv Source/BespokeSynth_artefacts/${cmakeBuildType}/BespokeSynth.app $out/Applications/
+        mv Source/BespokeSynth_artefacts/${finalAttrs.cmakeBuildType}/BespokeSynth.app $out/Applications/
         # Symlinking confuses the resource finding about the actual location of the binary
         # Resources are looked up relative to the executed file's location
         makeWrapper $out/{Applications/BespokeSynth.app/Contents/MacOS,bin}/BespokeSynth
@@ -160,22 +162,22 @@ stdenv.mkDerivation rec {
   }";
   dontPatchELF = true; # needed or nix will try to optimize the binary by removing "useless" rpath
 
-  meta = with lib; {
+  meta = {
     description = "Software modular synth with controllers support, scripting and VST";
     homepage = "https://www.bespokesynth.com/";
     license =
-      with licenses;
+      with lib.licenses;
       [
         gpl3Plus
       ]
       ++ lib.optional enableVST2 unfree;
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       astro
       tobiasBora
       OPNA2608
       PowerUser64
     ];
     mainProgram = "BespokeSynth";
-    platforms = platforms.all;
+    platforms = lib.platforms.all;
   };
-}
+})
