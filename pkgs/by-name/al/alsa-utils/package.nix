@@ -30,11 +30,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "alsa-utils";
-  version = "1.2.12";
+  version = "1.2.13";
 
   src = fetchurl {
     url = "mirror://alsa/utils/alsa-utils-${version}.tar.bz2";
-    hash = "sha256-mLxmd9DAB0AGZ5BRgiMkoKsIea6lWKj2i1EXgNMM2SQ=";
+    hash = "sha256-FwKmsc35uj6ZbsvB3c+RceaAj1lh1QPQ8n6A7hYvHao=";
   };
 
   nativeBuildInputs = [
