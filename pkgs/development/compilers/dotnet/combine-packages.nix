@@ -1,7 +1,6 @@
 dotnetPackages:
 {
   buildEnv,
-  makeWrapper,
   lib,
   symlinkJoin,
   callPackage,
@@ -32,7 +31,6 @@ mkWrapper "sdk" (buildEnv {
     "templates"
   ];
   ignoreCollisions = true;
-  nativeBuildInputs = [ makeWrapper ];
   postBuild =
     ''
       mkdir -p "$out"/share/dotnet

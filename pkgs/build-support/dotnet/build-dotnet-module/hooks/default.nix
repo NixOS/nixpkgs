@@ -1,9 +1,9 @@
 {
+  stdenv,
   lib,
   which,
   coreutils,
   makeSetupHook,
-  zip,
   # Passed from ../default.nix
   dotnet-sdk,
   dotnet-runtime,
@@ -23,19 +23,18 @@
 
   dotnetInstallHook = makeSetupHook {
     name = "dotnet-install-hook";
-    substitutions = {
-      inherit zip;
-    };
   } ./dotnet-install-hook.sh;
 
   dotnetFixupHook = makeSetupHook {
     name = "dotnet-fixup-hook";
     substitutions = {
       dotnetRuntime = if (dotnet-runtime != null) then dotnet-runtime else null;
-      wrapperPath = lib.makeBinPath [
-        which
-        coreutils
-      ];
+      wrapperPath = lib.optionals (!stdenv.hostPlatform.isWindows) (
+        lib.makeBinPath [
+          which
+          coreutils
+        ]
+      );
     };
   } ./dotnet-fixup-hook.sh;
 }

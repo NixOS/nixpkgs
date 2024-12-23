@@ -1,14 +1,11 @@
 {
   makeSetupHook,
-  unzip,
-  zip,
-  xmlstarlet,
-  strip-nondeterminism,
+  buildPackages,
 }:
 makeSetupHook {
   name = "nuget-package-hook";
   substitutions = {
-    inherit unzip zip xmlstarlet;
-    stripNondeterminism = strip-nondeterminism;
+    inherit (buildPackages) unzip zip xmlstarlet;
+    stripNondeterminism = buildPackages.strip-nondeterminism;
   };
 } ./nuget-package-hook.sh

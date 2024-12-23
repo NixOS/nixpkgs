@@ -111,22 +111,23 @@ mkWrapper type (
     nativeBuildInputs =
       [
         makeWrapper
+        xmlstarlet
       ]
       ++ lib.optional stdenv.hostPlatform.isWindows unzip
-    ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
+      ++ lib.optional stdenv.hostPlatform.isLinux autoPatchelfHook
       ++ lib.optionals (type == "sdk" && stdenv.hostPlatform.isDarwin) [
-        xmlstarlet
         sigtool
       ];
 
-    buildInputs = [
-      stdenv.cc.cc
-      zlib
-      icu
-      libkrb5
-      curl
-      xmlstarlet
-    ] ++ lib.optional stdenv.hostPlatform.isLinux lttng-ust_2_12;
+    buildInputs =
+      lib.optionals (!stdenv.hostPlatform.isWindows) [
+        stdenv.cc.cc
+        zlib
+        icu
+        libkrb5
+        curl
+      ]
+      ++ lib.optional stdenv.hostPlatform.isLinux lttng-ust_2_12;
 
     src = fetchurl (
       srcs.${hostRid} or (throw "Missing source (url and hash) for host RID: ${hostRid}")

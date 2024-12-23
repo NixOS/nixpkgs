@@ -94,7 +94,7 @@ let
 
       platforms =
         if args ? meta.platforms then
-          lib.intersectLists args.meta.platforms dotnet-sdk.meta.platforms
+          args.meta.platforms
         else
           dotnet-sdk.meta.platforms;
 
@@ -174,7 +174,7 @@ let
               ++ (if (lib.length components) < 4 then lib.replicate (4 - (lib.length components)) "0" else [ ])
             );
 
-      makeWrapperArgs = args.makeWrapperArgs or [ ] ++ [
+      makeWrapperArgs = args.makeWrapperArgs or [ ] ++ lib.optionals (!stdenvNoCC.hostPlatform.isWindows) [
         "--prefix"
         "LD_LIBRARY_PATH"
         ":"
