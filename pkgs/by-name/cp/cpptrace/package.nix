@@ -8,6 +8,7 @@
   gtest,
   callPackage,
   zstd,
+  nix-update-script,
   static ? stdenv.hostPlatform.isStatic,
 }:
 
@@ -43,10 +44,13 @@ stdenv.mkDerivation (finalAttrs: {
   # Unit tests are flaky and hard to get right.
   doCheck = false;
 
-  passthru.tests = {
-    findpackage-integration = callPackage ./findpackage-integration.nix {
-      src = "${finalAttrs.src}/test/findpackage-integration";
-      checkOutput = finalAttrs.finalPackage.doCheck;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      findpackage-integration = callPackage ./findpackage-integration.nix {
+        src = "${finalAttrs.src}/test/findpackage-integration";
+        checkOutput = finalAttrs.finalPackage.doCheck;
+      };
     };
   };
 
