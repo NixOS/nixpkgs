@@ -78,6 +78,7 @@ let
             atemu
             shawn8901
             zzzsy
+            eljamm
           ];
           description = "Built with custom settings and new features built to provide a stable, responsive and smooth desktop experience";
           broken = stdenv.hostPlatform.isAarch64;
