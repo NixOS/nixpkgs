@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=../../../../../ -i bash -p nix wget prefetch-yarn-deps nix-prefetch-github jq
+#!nix-shell -i bash -p nix wget prefetch-yarn-deps nix-prefetch-github jq
 
 if [ "$#" -gt 1 ] || [[ "$1" == -* ]]; then
   echo "Regenerates packaging data for the element packages."
@@ -22,6 +22,8 @@ version="${version#v}"
 web_src="https://raw.githubusercontent.com/element-hq/element-web/v$version"
 web_src_hash=$(nix-prefetch-github element-hq element-web --rev v${version} | jq -r .hash)
 
+cd "$(dirname "${BASH_SOURCE[0]}")" || exit 1
+
 web_tmpdir=$(mktemp -d)
 trap 'rm -rf "$web_tmpdir"' EXIT
 
@@ -42,14 +44,22 @@ wget -q "$desktop_src/yarn.lock"
 desktop_yarn_hash=$(prefetch-yarn-deps yarn.lock)
 popd
 
-cat > pin.nix << EOF
+cat > ../element-web-unwrapped/element-web-pin.nix << EOF
+{
+  "version" = "$version";
+  "hashes" = {
+    "webSrcHash" = "$web_src_hash";
+    "webYarnHash" = "$web_yarn_hash";
+  };
+}
+EOF
+
+cat > element-desktop-pin.nix << EOF
 {
   "version" = "$version";
   "hashes" = {
     "desktopSrcHash" = "$desktop_src_hash";
     "desktopYarnHash" = "$desktop_yarn_hash";
-    "webSrcHash" = "$web_src_hash";
-    "webYarnHash" = "$web_yarn_hash";
   };
 }
 EOF

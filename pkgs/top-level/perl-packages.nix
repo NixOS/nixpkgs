@@ -942,10 +942,10 @@ with self; {
 
   Apppapersway = buildPerlPackage rec {
     pname = "App-papersway";
-    version = "1.001";
+    version = "1.004";
     src = fetchurl {
       url = "mirror://cpan/authors/id/S/SP/SPWHITTON/App-papersway-${version}.tar.gz";
-      hash = "sha256-61OMfvEhgwFbNlOFjm9p3QxDOn31jQZdN8i1nIsWlns=";
+      hash = "sha256-/RLSAM0tJEmVlzNDkTCItNZQXGb1hnllmXvEvxgh4Qo=";
     };
     buildInputs = [ AnyEvent AnyEventI3 GetoptLong JSON ];
     meta = {
@@ -15047,7 +15047,7 @@ with self; {
       url = "mirror://cpan/authors/id/M/MB/MBRADSHAW/Mail-DKIM-1.20230911.tar.gz";
       hash = "sha256-kecxcoK3JM+9LJtuZjDvFDKISLb8UgPv1w3sL7hyaMo=";
     };
-    propagatedBuildInputs = [ CryptOpenSSLRSA MailAuthenticationResults MailTools NetDNS ];
+    propagatedBuildInputs = [ CryptOpenSSLRSA CryptX MailAuthenticationResults MailTools NetDNS ];
     doCheck = false; # tries to access the domain name system
     buildInputs = [ NetDNSResolverMock TestRequiresInternet YAMLLibYAML ];
     meta = {

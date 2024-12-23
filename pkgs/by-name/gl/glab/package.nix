@@ -4,20 +4,21 @@
   fetchFromGitLab,
   installShellFiles,
   stdenv,
+  nix-update-script,
 }:
 
 buildGo123Module rec {
   pname = "glab";
-  version = "1.48.0";
+  version = "1.51.0";
 
   src = fetchFromGitLab {
     owner = "gitlab-org";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-cddXgjJR8SD/mggDzbyxp/hdffE5ZqmT9oEPaEd8ZCo=";
+    hash = "sha256-EWcoEm6DbRT0PP2qYhdwDHCkbeAG6vDVATPhX9pPfiw=";
   };
 
-  vendorHash = "sha256-quQqQRXMByUgXlnPpR2mCPhxw5AbFdHN5sBsawuHc18=";
+  vendorHash = "sha256-f6qAFeB9kshtQ2AW6OnEGSnhJYlJ2gAGRDplVmQSVNA=";
 
   ldflags = [
     "-s"
@@ -42,6 +43,8 @@ buildGo123Module rec {
       --fish <($out/bin/glab completion -s fish) \
       --zsh <($out/bin/glab completion -s zsh)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "GitLab CLI tool bringing GitLab to your command line";
