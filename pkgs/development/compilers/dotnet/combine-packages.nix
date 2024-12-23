@@ -1,7 +1,7 @@
 dotnetPackages:
 {
+  stdenv,
   buildEnv,
-  makeWrapper,
   lib,
   symlinkJoin,
   callPackage,
@@ -14,6 +14,7 @@ dotnetPackages:
 let
   cli = builtins.head dotnetPackages;
   mkWrapper = callPackage ./wrapper.nix { };
+  executableName = "dotnet${stdenv.hostPlatform.extensions.executable}";
 in
 assert lib.assertMsg ((builtins.length dotnetPackages) > 0) ''
   You must include at least one package, e.g
@@ -32,14 +33,13 @@ mkWrapper "sdk" (buildEnv {
     "templates"
   ];
   ignoreCollisions = true;
-  nativeBuildInputs = [ makeWrapper ];
   postBuild =
     ''
       mkdir -p "$out"/share/dotnet
-      cp "${cli}"/share/dotnet/dotnet $out/share/dotnet
+      cp "${cli}"/share/dotnet/${executableName} $out/share/dotnet
       cp -R "${cli}"/nix-support "$out"/
       mkdir "$out"/bin
-      ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
+      ln -s "$out"/share/dotnet/${executableName} "$out"/bin/${executableName}
     ''
     + lib.optionalString (cli ? man) ''
       ln -s ${cli.man} $man
