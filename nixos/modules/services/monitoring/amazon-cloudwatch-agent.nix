@@ -10,8 +10,16 @@ let
   tomlFormat = pkgs.formats.toml { };
   jsonFormat = pkgs.formats.json { };
 
-  commonConfigurationFile = tomlFormat.generate "common-config.toml" cfg.commonConfiguration;
-  configurationFile = jsonFormat.generate "amazon-cloudwatch-agent.json" cfg.configuration;
+  commonConfigurationFile =
+    if (cfg.commonConfigurationFile == null) then
+      (tomlFormat.generate "common-config.toml" cfg.commonConfiguration)
+    else
+      cfg.commonConfigurationFile;
+  configurationFile =
+    if (cfg.configurationFile == null) then
+      (jsonFormat.generate "amazon-cloudwatch-agent.json" cfg.configuration)
+    else
+      cfg.configurationFile;
   # See https://docs.aws.amazon.com/prescriptive-guidance/latest/implementing-logging-monitoring-cloudwatch/create-store-cloudwatch-configurations.html#store-cloudwatch-configuration-s3.
   #
   # We don't use the multiple JSON configuration files feature,
@@ -24,13 +32,30 @@ in
   options.services.amazon-cloudwatch-agent = {
     enable = lib.mkEnableOption "Amazon CloudWatch Agent";
     package = lib.mkPackageOption pkgs "amazon-cloudwatch-agent" { };
-    commonConfiguration = lib.mkOption {
-      type = tomlFormat.type;
-      default = { };
+    commonConfigurationFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
       description = ''
         Amazon CloudWatch Agent common configuration. See
         <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/install-CloudWatch-Agent-commandline-fleet.html#CloudWatch-Agent-profile-instance-first>
         for supported values.
+
+        {option}`commonConfigurationFile` takes precedence over {option}`commonConfiguration`.
+
+        Note: Restricted evaluation blocks access to paths outside the Nix store.
+        This means detecting content changes for mutable paths (i.e. not input or content-addressed) can't be done.
+        As a result, `nixos-rebuild` won't reload/restart the systemd unit when mutable path contents change.
+        `systemctl restart amazon-cloudwatch-agent.service` must be used instead.
+      '';
+      example = "/etc/amazon-cloudwatch-agent/amazon-cloudwatch-agent.json";
+    };
+    commonConfiguration = lib.mkOption {
+      type = tomlFormat.type;
+      default = { };
+      description = ''
+        See {option}`commonConfigurationFile`.
+
+        {option}`commonConfigurationFile` takes precedence over {option}`commonConfiguration`.
       '';
       example = {
         credentials = {
@@ -44,13 +69,34 @@ in
         };
       };
     };
+    configurationFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = ''
+        Amazon CloudWatch Agent configuration file. See
+        <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Agent-Configuration-File-Details.html>
+        for supported values.
+
+        The following options aren't supported:
+        * `agent.run_as_user`
+          * Use {option}`user` instead.
+
+        {option}`configurationFile` takes precedence over {option}`configuration`.
+
+        Note: Restricted evaluation blocks access to paths outside the Nix store.
+        This means detecting content changes for mutable paths (i.e. not input or content-addressed) can't be done.
+        As a result, `nixos-rebuild` won't reload/restart the systemd unit when mutable path contents change.
+        `systemctl restart amazon-cloudwatch-agent.service` must be used instead.
+      '';
+      example = "/etc/amazon-cloudwatch-agent/amazon-cloudwatch-agent.json";
+    };
     configuration = lib.mkOption {
       type = jsonFormat.type;
       default = { };
       description = ''
-        Amazon CloudWatch Agent configuration. See
-        <https://docs.aws.amazon.com/AmazonCloudWatch/latest/monitoring/CloudWatch-Agent-Configuration-File-Details.html>
-        for supported values.
+        See {option}`configurationFile`.
+
+        {option}`configurationFile` takes precedence over {option}`configuration`.
       '';
       # Subset of "CloudWatch agent configuration file: Complete examples" and "CloudWatch agent configuration file: Traces section" in the description link.
       #
@@ -110,6 +156,15 @@ in
         };
       };
     };
+    # Replaces "agent.run_as_user" from the configuration file.
+    user = lib.mkOption {
+      type = lib.types.str;
+      default = "root";
+      description = ''
+        The user that runs the Amazon CloudWatch Agent.
+      '';
+      example = "amazon-cloudwatch-agent";
+    };
     mode = lib.mkOption {
       type = lib.types.str;
       default = "auto";
@@ -122,7 +177,7 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # See https://github.com/aws/amazon-cloudwatch-agent/blob/v1.300048.1/packaging/dependencies/amazon-cloudwatch-agent.service.
+    # See https://github.com/aws/amazon-cloudwatch-agent/blob/v1.300049.1/packaging/dependencies/amazon-cloudwatch-agent.service.
     systemd.services.amazon-cloudwatch-agent = {
       description = "Amazon CloudWatch Agent";
       after = [ "network.target" ];
@@ -140,40 +195,28 @@ in
         # 3. Runs "amazon-cloudwatch-agent" with the paths to these generated files.
         #
         # Re-implementing with systemd options.
-        User = lib.attrByPath [
-          "agent"
-          "run_as_user"
-        ] "root" cfg.configuration;
+        User = cfg.user;
         RuntimeDirectory = "amazon-cloudwatch-agent";
         LogsDirectory = "amazon-cloudwatch-agent";
-        ExecStartPre = ''
-          ${cfg.package}/bin/config-translator \
-            -config ${commonConfigurationFile} \
-            -input ${configurationFile} \
-            -input-dir ${configurationDirectory} \
-            -mode ${cfg.mode} \
-            -output ''${RUNTIME_DIRECTORY}/amazon-cloudwatch-agent.toml
-        '';
-        ExecStart = ''
-          ${cfg.package}/bin/amazon-cloudwatch-agent \
-            -config ''${RUNTIME_DIRECTORY}/amazon-cloudwatch-agent.toml \
-            -envconfig ''${RUNTIME_DIRECTORY}/env-config.json \
-            -otelconfig ''${RUNTIME_DIRECTORY}/amazon-cloudwatch-agent.yaml \
-            -pidfile ''${RUNTIME_DIRECTORY}/amazon-cloudwatch-agent.pid
-        '';
+        ExecStartPre = builtins.concatStringsSep " " [
+          "${cfg.package}/bin/config-translator"
+          "-config ${commonConfigurationFile}"
+          "-input ${configurationFile}"
+          "-input-dir ${configurationDirectory}"
+          "-mode ${cfg.mode}"
+          "-output \${RUNTIME_DIRECTORY}/amazon-cloudwatch-agent.toml"
+        ];
+        ExecStart = builtins.concatStringsSep " " [
+          "${cfg.package}/bin/amazon-cloudwatch-agent"
+          "-config \${RUNTIME_DIRECTORY}/amazon-cloudwatch-agent.toml"
+          "-envconfig \${RUNTIME_DIRECTORY}/env-config.json"
+          "-otelconfig \${RUNTIME_DIRECTORY}/amazon-cloudwatch-agent.yaml"
+          "-pidfile \${RUNTIME_DIRECTORY}/amazon-cloudwatch-agent.pid"
+        ];
         KillMode = "process";
         Restart = "on-failure";
         RestartSec = 60;
       };
-      restartTriggers = [
-        cfg.package
-        commonConfigurationFile
-        configurationFile
-        configurationDirectory
-        cfg.mode
-      ];
     };
   };
-
-  meta.maintainers = pkgs.amazon-cloudwatch-agent.meta.maintainers;
 }

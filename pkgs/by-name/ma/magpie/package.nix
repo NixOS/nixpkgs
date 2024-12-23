@@ -32,7 +32,7 @@
   pipewire,
   libgudev,
   libwacom,
-  libgbm,
+  mesa,
   meson,
   nix-update-script,
   validatePkgConfig,
@@ -86,13 +86,13 @@ stdenv.mkDerivation (finalAttrs: {
     libXtst
     libcap_ng
     graphene
+    mesa # actually uses eglmesaext
   ];
 
   nativeBuildInputs = [
     desktop-file-utils
     gettext
     libxcvt
-    libgbm
     meson
     ninja
     xvfb-run
