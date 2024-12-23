@@ -4908,10 +4908,7 @@ with pkgs;
 
   pypass = with python3Packages; toPythonApplication pypass;
 
-  py-spy = darwin.apple_sdk_11_0.callPackage ../development/tools/py-spy {
-    # https://github.com/benfred/py-spy/issues/633
-    python3 = python311;
-  };
+  py-spy = darwin.apple_sdk_11_0.callPackage ../development/tools/py-spy { };
 
   pydeps = with python3Packages; toPythonApplication pydeps;
 
@@ -15172,6 +15169,8 @@ with pkgs;
   pure-maps = libsForQt5.callPackage ../applications/misc/pure-maps { };
 
   qbittorrent-nox = qbittorrent.override { guiSupport = false; };
+
+  qbittorrent-enhanced-nox = qbittorrent-enhanced.override { guiSupport = false; };
 
   qcad = libsForQt5.callPackage ../applications/misc/qcad { };
 
