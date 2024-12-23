@@ -1066,6 +1066,8 @@ self: super: with self; {
 
   autopep8 = callPackage ../development/python-modules/autopep8 { };
 
+  autopxd2 = callPackage ../development/python-modules/autopxd2 { };
+
   autoslot = callPackage ../development/python-modules/autoslot { };
 
   avahi = toPythonModule (pkgs.avahi.override {
@@ -1500,6 +1502,8 @@ self: super: with self; {
 
   base64io = callPackage ../development/python-modules/base64io { };
 
+  basedtyping = callPackage ../development/python-modules/basedtyping { };
+
   baseline = callPackage ../development/python-modules/baseline { };
 
   baselines = callPackage ../development/python-modules/baselines { };
@@ -1576,6 +1580,8 @@ self: super: with self; {
   beanhub-forms = callPackage ../development/python-modules/beanhub-forms { };
 
   beanhub-import = callPackage ../development/python-modules/beanhub-import { };
+
+  beanquery = callPackage ../development/python-modules/beanquery { };
 
   beanstalkc = callPackage ../development/python-modules/beanstalkc { };
 
@@ -2335,6 +2341,8 @@ self: super: with self; {
   cle = callPackage ../development/python-modules/cle { };
 
   clean-fid = callPackage ../development/python-modules/clean-fid { };
+
+  cleanit = callPackage ../development/python-modules/cleanit { };
 
   cleanlab = callPackage ../development/python-modules/cleanlab { };
 
@@ -6072,8 +6080,6 @@ self: super: with self; {
 
   hydra-core = callPackage ../development/python-modules/hydra-core { };
 
-  hydra-check = callPackage ../development/python-modules/hydra-check { };
-
   hydrawiser = callPackage ../development/python-modules/hydrawiser { };
 
   hydrogram = callPackage ../development/python-modules/hydrogram { };
@@ -8385,6 +8391,10 @@ self: super: with self; {
   };
 
   monotonic = callPackage ../development/python-modules/monotonic { };
+
+  monotonic-alignment-search =
+    callPackage ../development/python-modules/monotonic-alignment-search
+      { };
 
   monty = callPackage ../development/python-modules/monty { };
 
@@ -16312,6 +16322,8 @@ self: super: with self; {
   traitsui = callPackage ../development/python-modules/traitsui { };
 
   traittypes = callPackage ../development/python-modules/traittypes { };
+
+  trakit = callPackage ../development/python-modules/trakit { };
 
   trampoline = callPackage ../development/python-modules/trampoline { };
 

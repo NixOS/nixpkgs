@@ -86,6 +86,8 @@ makeScopeWithSplicing' {
 
   qtutilities = callPackage ../development/libraries/qtutilities { };
 
+  qt-jdenticon = callPackage ../development/libraries/qt-jdenticon { };
+
   quazip = callPackage ../development/libraries/quazip { };
 
   qscintilla = callPackage ../development/libraries/qscintilla { };

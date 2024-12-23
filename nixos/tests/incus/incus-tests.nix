@@ -445,7 +445,7 @@ import ../make-test-python.nix (
                 machine.succeed("incus storage volume show lvm_pool test_fs")
                 machine.succeed("incus storage volume show lvm_pool test_vol")
 
-                machine.succeed("incus create lvm1 --empty --storage zfs_pool")
+                machine.succeed("incus create lvm1 --empty --storage lvm_pool")
                 machine.succeed("incus list lvm1")
           '';
   }

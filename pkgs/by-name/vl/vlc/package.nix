@@ -253,7 +253,7 @@ stdenv.mkDerivation (finalAttrs: {
           ${freefont_ttf}/share/fonts/truetype
     ''
     # Upstream luac can't cross compile, so we have to install the lua sources
-    # instead of bytecode:
+    # instead of bytecode, which was built for buildPlatform:
     # https://www.lua.org/wshop13/Jericke.pdf#page=39
     + lib.optionalString (!stdenv.hostPlatform.canExecute stdenv.buildPlatform) ''
       substituteInPlace share/Makefile.am \

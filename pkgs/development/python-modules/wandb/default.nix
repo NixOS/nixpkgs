@@ -285,6 +285,9 @@ buildPythonPackage rec {
       "test_parse_project_path"
       "test_translates_azure_err_to_normal_err"
 
+      # tests assertion if filesystem is compressed
+      "test_artifact_file_cache_cleanup"
+
       # Tries to access a storage disk but there are none in the sandbox
       # psutil.test_disk_out() returns None
       "test_disk_in"

@@ -1583,9 +1583,7 @@ with pkgs;
   };
   termite-unwrapped = callPackage ../applications/terminal-emulators/termite { };
 
-  wezterm = darwin.apple_sdk_11_0.callPackage ../applications/terminal-emulators/wezterm {
-    inherit (darwin.apple_sdk_11_0.frameworks) Cocoa CoreGraphics Foundation UserNotifications System;
-  };
+  wezterm = callPackage ../applications/terminal-emulators/wezterm { };
 
   twine = with python3Packages; toPythonApplication twine;
 
@@ -1610,6 +1608,7 @@ with pkgs;
   android-tools = lowPrio (darwin.apple_sdk_11_0.callPackage ../tools/misc/android-tools { });
 
   angie = callPackage ../servers/http/angie {
+    zlib-ng = zlib-ng.override { withZlibCompat = true; };
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
@@ -1617,6 +1616,7 @@ with pkgs;
   };
 
   angieQuic = callPackage ../servers/http/angie {
+    zlib-ng = zlib-ng.override { withZlibCompat = true; };
     withPerl = false;
     withQuic = true;
     # We don't use `with` statement here on purpose!
@@ -1653,6 +1653,8 @@ with pkgs;
   arj = callPackage ../tools/archivers/arj {
     stdenv = gccStdenv;
   };
+
+  arpack-mpi = arpack.override { useMpi = true; };
 
   inherit (callPackages ../data/fonts/arphic {})
     arphic-ukai arphic-uming;
@@ -2120,6 +2122,8 @@ with pkgs;
                           };
 
   clevercsv = with python3Packages; toPythonApplication clevercsv;
+
+  cleanit = with python3Packages; toPythonApplication cleanit;
 
   clickgen = with python3Packages; toPythonApplication clickgen;
 
@@ -4904,10 +4908,7 @@ with pkgs;
 
   pypass = with python3Packages; toPythonApplication pypass;
 
-  py-spy = darwin.apple_sdk_11_0.callPackage ../development/tools/py-spy {
-    # https://github.com/benfred/py-spy/issues/633
-    python3 = python311;
-  };
+  py-spy = darwin.apple_sdk_11_0.callPackage ../development/tools/py-spy { };
 
   pydeps = with python3Packages; toPythonApplication pydeps;
 
@@ -5105,10 +5106,6 @@ with pkgs;
   };
 
   scfbuild = python3.pkgs.callPackage ../tools/misc/scfbuild { };
-
-  sd = callPackage ../tools/text/sd {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
 
   securefs = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/securefs { };
 
@@ -9439,8 +9436,6 @@ with pkgs;
   hunspellWithDicts = dicts: callPackage ../development/libraries/hunspell/wrapper.nix { inherit dicts; };
 
   hydra = callPackage ../by-name/hy/hydra/package.nix { nix = nixVersions.nix_2_24; };
-
-  hydra-check = with python3.pkgs; toPythonApplication hydra-check;
 
   icu-versions = callPackages ../development/libraries/icu { };
   inherit (icu-versions)
@@ -15177,6 +15172,8 @@ with pkgs;
 
   qbittorrent-nox = qbittorrent.override { guiSupport = false; };
 
+  qbittorrent-enhanced-nox = qbittorrent-enhanced.override { guiSupport = false; };
+
   qcad = libsForQt5.callPackage ../applications/misc/qcad { };
 
   qcomicbook = libsForQt5.callPackage ../applications/graphics/qcomicbook { };
@@ -16403,6 +16400,8 @@ with pkgs;
   beanhub-cli = with python3.pkgs; toPythonApplication beanhub-cli;
 
   bean-add = callPackage ../applications/office/beancount/bean-add.nix { };
+
+  beanquery = with python3.pkgs; toPythonApplication beanquery;
 
   bench =
     # TODO: Erroneous references to GHC on aarch64-darwin: https://github.com/NixOS/nixpkgs/issues/318013

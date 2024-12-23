@@ -468,8 +468,8 @@ in {
   iftop = handleTest ./iftop.nix {};
   immich = handleTest ./web-apps/immich.nix {};
   incron = handleTest ./incron.nix {};
-  incus = pkgs.recurseIntoAttrs (handleTest ./incus { lts = false; });
-  incus-lts = pkgs.recurseIntoAttrs (handleTest ./incus { });
+  incus = pkgs.recurseIntoAttrs (handleTest ./incus { lts = false; inherit system pkgs; });
+  incus-lts = pkgs.recurseIntoAttrs (handleTest ./incus { inherit system pkgs; });
   influxdb = handleTest ./influxdb.nix {};
   influxdb2 = handleTest ./influxdb2.nix {};
   initrd-network-openvpn = handleTestOn [ "x86_64-linux" "i686-linux" ] ./initrd-network-openvpn {};
@@ -797,6 +797,7 @@ in {
   pantheon = handleTest ./pantheon.nix {};
   paperless = handleTest ./paperless.nix {};
   parsedmarc = handleTest ./parsedmarc {};
+  password-option-override-ordering = handleTest ./password-option-override-ordering.nix {};
   pdns-recursor = handleTest ./pdns-recursor.nix {};
   peerflix = handleTest ./peerflix.nix {};
   peering-manager = handleTest ./web-apps/peering-manager.nix {};
@@ -1050,6 +1051,7 @@ in {
   systemd-sysupdate = runTest ./systemd-sysupdate.nix;
   systemd-sysusers-mutable = runTest ./systemd-sysusers-mutable.nix;
   systemd-sysusers-immutable = runTest ./systemd-sysusers-immutable.nix;
+  systemd-sysusers-password-option-override-ordering = runTest ./systemd-sysusers-password-option-override-ordering.nix;
   systemd-timesyncd = handleTest ./systemd-timesyncd.nix {};
   systemd-timesyncd-nscd-dnssec = handleTest ./systemd-timesyncd-nscd-dnssec.nix {};
   systemd-user-linger = handleTest ./systemd-user-linger.nix {};

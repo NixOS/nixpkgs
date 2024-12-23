@@ -276,6 +276,7 @@ mapAliases ({
   HTSeq = htseq; # added 2023-02-19
   hug = throw "hug was marked broken since 2021 and has not established compatibility with newer dependency versions. It has therefore been removed."; # added 2024-11-15
   hyperkitty = throw "Please use pkgs.mailmanPackages.hyperkitty"; # added 2022-04-29
+  hydra-check = throw "The Python package hydra-check was removed in favor of the top-level rust based pkgs.hydra-check"; # added 2022-04-29
   ihatemoney = throw "ihatemoney was removed because it is no longer maintained downstream"; # added 2023-04-08
   IMAPClient = imapclient; # added 2021-10-28
   imdbpy = throw "imdbpy has been renamed to cinemagoer"; # added 2022-08-08

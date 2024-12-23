@@ -44,12 +44,14 @@
 # clang consume much less RAM than GCC
 clangStdenv.mkDerivation rec {
   pname = "openscad-unstable";
-  version = "2024-12-06";
+  version = "2024-12-21";
   src = fetchFromGitHub {
     owner = "openscad";
     repo = "openscad";
-    rev = "fd3f465aa01b06f96c78ad525654390a83272d5e";
-    hash = "sha256-B03fEKY9dkB+zFcTsuGzZYe7V5eR5h8vp+EceNk4ZtY=";
+    rev = "30cbdf6c7214be7cc00b4cca2cef8396e1d69498";
+    hash = "sha256-wpw4JStAWNcHU6PoHGcIKAeVjtlTJsS4ZFMkTpj6xRk=";
+    # Unfortunately, we can't selectively fetch submodules. It would be good
+    # to see that we don't accidentally depend on it.
     fetchSubmodules = true; # Only really need sanitizers-cmake and MCAD
   };
 
@@ -116,6 +118,7 @@ clangStdenv.mkDerivation rec {
     "-DSNAPSHOT=ON" # nightly icons
     "-DUSE_BUILTIN_OPENCSG=OFF"
     "-DUSE_BUILTIN_MANIFOLD=OFF"
+    "-DUSE_BUILTIN_CLIPPER2=OFF"
     "-DOPENSCAD_VERSION=\"${builtins.replaceStrings [ "-" ] [ "." ] version}\""
     "-DCMAKE_UNITY_BUILD=OFF" # broken compile with unity
     # IPO
