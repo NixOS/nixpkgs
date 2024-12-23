@@ -2207,6 +2207,14 @@ in
     vimCommandCheck = "TealBuild";
   };
 
+  nvim-tree-lua = super.nvim-tree-lua.overrideAttrs {
+    nvimSkipModule = [
+      # Meta can't be required
+      "nvim-tree._meta.api"
+      "nvim-tree._meta.api_decorator"
+    ];
+  };
+
   nvim-treesitter = super.nvim-treesitter.overrideAttrs (
     callPackage ./nvim-treesitter/overrides.nix { } self super
   );
