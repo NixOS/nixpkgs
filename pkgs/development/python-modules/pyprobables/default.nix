@@ -21,7 +21,7 @@ buildPythonPackage rec {
     hash = "sha256-yJUYGfy+d+Xfk1DUDvBeWk0EcNPuW4DcUHx3G3jzEdc=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
@@ -30,7 +30,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Probabilistic data structures";
     homepage = "https://github.com/barrust/pyprobables";
-    changelog = "https://github.com/barrust/pyprobables/blob/${version}/CHANGELOG.md";
+    changelog = "https://github.com/barrust/pyprobables/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
