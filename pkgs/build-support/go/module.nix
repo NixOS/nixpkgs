@@ -48,10 +48,6 @@
   # Go build flags.
 , GOFLAGS ? [ ]
 
-  # Needed for buildFlags{,Array} warning
-, buildFlags ? "" # deprecated
-, buildFlagsArray ? "" # deprecated
-
 , ...
 }@args':
 
@@ -223,8 +219,6 @@ in
     '');
 
     buildPhase = args.buildPhase or (
-      lib.warnIf (buildFlags != "" || buildFlagsArray != "")
-        "`buildFlags`/`buildFlagsArray` are deprecated and will be removed in the 24.11 release. Use the `ldflags` and/or `tags` attributes instead of `buildFlags`/`buildFlagsArray`"
       lib.warnIf (builtins.elem "-buildid=" ldflags)
         "`-buildid=` is set by default as ldflag by buildGoModule"
     ''
@@ -242,12 +236,13 @@ in
       buildGoDir() {
         local cmd="$1" dir="$2"
 
-        declare -ga buildFlagsArray
         declare -a flags
-        flags+=($buildFlags "''${buildFlagsArray[@]}")
         flags+=(''${tags:+-tags=''${tags// /,}})
         flags+=(''${ldflags:+-ldflags="$ldflags"})
         flags+=("-p" "$NIX_BUILD_CORES")
+        if (( "''${NIX_DEBUG:-0}" >= 1 )); then
+          flags+=(-x)
+        fi
 
         if [ "$cmd" = "test" ]; then
           flags+=(-vet=off)
@@ -276,10 +271,6 @@ in
           find . -type f -name \*$type.go -exec dirname {} \; | grep -v "/vendor/" | sort --unique | grep -v "$exclude"
         fi
       }
-
-      if (( "''${NIX_DEBUG:-0}" >= 1 )); then
-        buildFlagsArray+=(-x)
-      fi
 
       if [ -z "$enableParallelBuilding" ]; then
           export NIX_BUILD_CORES=1

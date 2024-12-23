@@ -58,7 +58,7 @@
   gnome-autoar,
   gnome-tecla,
   bash-completion,
-  mesa,
+  libgbm,
   libGL,
   libXi,
   libX11,
@@ -155,7 +155,7 @@ stdenv.mkDerivation (finalAttrs: {
     ibus
     gnome-desktop
     gnome-settings-daemon
-    mesa
+    libgbm
     libGL # for egl, required by mutter-clutter
     libXi # required by libmutter
     libX11

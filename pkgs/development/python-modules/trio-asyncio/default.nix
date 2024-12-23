@@ -49,6 +49,13 @@ buildPythonPackage rec {
     "ignore::DeprecationWarning"
   ];
 
+  disabledTests = [
+    # TypeError: RaisesGroup.__init__() got an unexpected keyword argument 'strict'
+    # https://github.com/python-trio/trio-asyncio/issues/154
+    "test_run_trio_task_errors"
+    "test_cancel_loop_with_tasks"
+  ];
+
   nativeCheckInputs = [
     pytest-trio
     pytestCheckHook

@@ -9,12 +9,8 @@ in
   substitute,
 
   # Specifies the major version used for the SDK. Uses `hostPlatform.darwinSdkVersion` by default.
-  darwinSdkMajorVersion ? (
-    if lib.versionOlder stdenv.hostPlatform.darwinSdkVersion "11" then
-      lib.versions.majorMinor stdenv.hostPlatform.darwinSdkVersion
-    else
-      lib.versions.major stdenv.hostPlatform.darwinSdkVersion
-  ),
+  darwinSdkMajorVersion ? lib.versions.major stdenv.hostPlatform.darwinSdkVersion,
+
   # Enabling bootstrap disables propagation. Defaults to `false` (meaning to propagate certain packages and `xcrun`)
   # except in stage0 of the Darwin stdenv bootstrap.
   enableBootstrap ? stdenv.name == "bootstrap-stage0-stdenv-darwin",
@@ -47,11 +43,6 @@ let
     ++ lib.optionals (!enableBootstrap) [
       (callPackage ./common/propagate-inputs.nix { })
       (callPackage ./common/propagate-xcrun.nix { })
-    ]
-    # Older SDKs do not include the libraries re-exported from umbrella frameworks in the umbrellas’ stubs, which causes
-    # link failures for those libraries unless their paths have been rewritten to point to the store.
-    ++ lib.optionals (lib.versionOlder sdkVersion "11.0") [
-      (callPackage ./common/rewrite-sdk-paths.nix { inherit sdkVersion; })
     ]
     # This has to happen last.
     ++ [
@@ -97,9 +88,7 @@ stdenvNoCC.mkDerivation (
         mkdir -p "$sdkpath"
 
         cp -rd . "$sdkpath/${sdkName}"
-        ${lib.optionalString (lib.versionAtLeast finalAttrs.version "11.0") ''
-          ln -s "${sdkName}" "$sdkpath/MacOSX${sdkMajor}.sdk"
-        ''}
+        ln -s "${sdkName}" "$sdkpath/MacOSX${sdkMajor}.sdk"
         ln -s "${sdkName}" "$sdkpath/MacOSX.sdk"
 
         runHook postInstall
@@ -116,9 +105,7 @@ stdenvNoCC.mkDerivation (
       homepage = "https://developer.apple.com";
       maintainers = lib.teams.darwin.members;
       platforms = lib.platforms.darwin;
-      badPlatforms =
-        lib.optionals (lib.versionAtLeast sdkVersion "10.15") [ lib.systems.inspect.patterns.is32bit ]
-        ++ lib.optionals (lib.versionOlder sdkVersion "11.0") [ lib.systems.inspect.patterns.isAarch ];
+      badPlatforms = [ lib.systems.inspect.patterns.is32bit ];
     };
   })
 )

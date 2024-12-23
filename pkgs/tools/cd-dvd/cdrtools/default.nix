@@ -31,6 +31,11 @@ stdenv.mkDerivation rec {
         libcap
       ];
 
+  env.CFLAGS = toString [
+    "-Wno-error=implicit-int"
+    "-Wno-error=implicit-function-declaration"
+  ];
+
   postPatch = ''
     sed "/\.mk3/d" -i libschily/Targets.man
     substituteInPlace man/Makefile --replace "man4" ""

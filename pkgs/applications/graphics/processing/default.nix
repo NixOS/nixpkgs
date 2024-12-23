@@ -93,7 +93,7 @@ stdenv.mkDerivation rec {
 
     echo "tarring jdk"
     tar --checkpoint=10000 -czf build/linux/jdk-17.0.8-${arch}.tgz ${jdk}
-    cp ${ant}/lib/ant/lib/{ant.jar,ant-launcher.jar} app/lib/
+    cp ${ant.home}/lib/{ant.jar,ant-launcher.jar} app/lib/
     mkdir -p core/library
     ln -s ${jogl}/share/java/* core/library/
     ln -s ${vaqua} app/lib/VAqua9.jar

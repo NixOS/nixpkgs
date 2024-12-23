@@ -9,7 +9,7 @@
   alsa-lib,
   gtk3,
   libxshmfence,
-  mesa,
+  libgbm,
   nss,
 }:
 
@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     gtk3
     libxshmfence
-    mesa
+    libgbm
     nss
   ];
 

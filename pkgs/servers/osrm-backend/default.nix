@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "osrm-backend";
-  version = "5.27.1";
+  version = "5.27.1-unstable-2024-11-03";
 
   src = fetchFromGitHub {
     owner = "Project-OSRM";
     repo = "osrm-backend";
-    rev = "v${version}";
-    sha256 = "sha256-3oA/U5O4GLfwMF7x99JQuFK7ewDrLJLh6BBLYfnyNaM=";
+    rev = "3614af7f6429ee35c3f2e836513b784a74664ab6";
+    hash = "sha256-iix++G49cC13wZGZIpXu1SWGtVAcqpuX3GhsIaETzUU=";
   };
 
   nativeBuildInputs = [
@@ -43,37 +43,8 @@ stdenv.mkDerivation rec {
     expat
   ];
 
-  patches = [
-    # gcc-13 build fix:
-    #   https://github.com/Project-OSRM/osrm-backend/pull/6632
-    (fetchpatch {
-      name = "gcc-13.patch";
-      url = "https://github.com/Project-OSRM/osrm-backend/commit/af59a9cfaee4d601b5c88391624a05f2a38da17b.patch";
-      hash = "sha256-dB9JP/DrJXpFGLD/paein2z64UtHIYZ17ycb91XWpEI=";
-    })
-  ];
-
-  env.NIX_CFLAGS_COMPILE = toString (
-    [
-      # Needed with GCC 12
-      "-Wno-error=stringop-overflow"
-      "-Wno-error=uninitialized"
-      # Needed for GCC 13
-      "-Wno-error=array-bounds"
-    ]
-    ++
-      # error: aligned deallocation function of type 'void (void *, std::align_val_t) noexcept' is only available on macOS 10.13 or newer
-      (lib.optionals
-        (
-          stdenv.hostPlatform.isDarwin
-          && stdenv.hostPlatform.isx86_64
-          && lib.versionOlder stdenv.hostPlatform.darwinMinVersion "10.13"
-        )
-        [
-          "-faligned-allocation"
-        ]
-      )
-  );
+  # Needed with GCC 12
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=uninitialized";
 
   postInstall = ''
     mkdir -p $out/share/osrm-backend

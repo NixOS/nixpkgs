@@ -42,6 +42,8 @@ buildPythonPackage rec {
 
   build-system = [ hatchling ];
 
+  pythonRelaxDeps = [ "aiohttp" ];
+
   dependencies = [
     aiofiles
     aiohttp

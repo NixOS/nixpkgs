@@ -11,13 +11,9 @@
   makeWrapper,
   perl,
   substituteAll,
-  substitute,
   cudd,
   fetchurl,
   nix-update-script,
-  apple-sdk,
-  apple-sdk_10_15,
-  darwinMinVersionHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -51,14 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
     makeWrapper
   ];
 
-  buildInputs =
-    [ cadical ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      (darwinMinVersionHook "10.15")
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && lib.versionOlder apple-sdk.version "10.15") [
-      apple-sdk_10_15
-    ];
+  buildInputs = [ cadical ];
 
   # do not download sources
   # link existing cadical instead

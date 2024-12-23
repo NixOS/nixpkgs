@@ -7,7 +7,7 @@
   alsa-lib,
   freetype,
   libglvnd,
-  mesa,
+  libgbm,
   curl,
   libXcursor,
   libXinerama,
@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     alsa-lib
     freetype
     libglvnd
-    mesa
+    libgbm
   ] ++ runtimeDependencies;
 
   installPhase = ''

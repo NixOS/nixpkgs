@@ -33,7 +33,7 @@
   libuuid,
   at-spi2-core,
   libdrm,
-  mesa,
+  libgbm,
   libxkbcommon,
   libxshmfence,
 }:
@@ -79,7 +79,7 @@ let
 
       libv4l
       libdrm
-      mesa
+      libgbm
       libxkbcommon
       libxshmfence
       xorg.libxkbfile

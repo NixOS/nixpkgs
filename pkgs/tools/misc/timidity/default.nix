@@ -4,7 +4,6 @@
   fetchurl,
   nixosTests,
   pkg-config,
-  memstreamHook,
   CoreAudio,
   libobjc,
   libjack2,
@@ -33,10 +32,7 @@ stdenv.mkDerivation rec {
     ./configure-compat.patch
   ];
 
-  nativeBuildInputs = [
-    pkg-config
-  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [ memstreamHook ];
-
+  nativeBuildInputs = [ pkg-config ];
   buildInputs =
     [
       libjack2

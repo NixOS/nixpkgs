@@ -1238,11 +1238,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXcursor = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libX11, libXfixes, libXrender, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libXcursor";
-    version = "1.2.2";
+    version = "1.2.3";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXcursor-1.2.2.tar.xz";
-      sha256 = "1vl87819mnhlbnccchysv9nmax4abil5x3cr61x52vn55jyp3l2k";
+      url = "mirror://xorg/individual/lib/libXcursor-1.2.3.tar.xz";
+      sha256 = "1h62narayrhrkqalrmx7z3s6yppw1acbp5id3skrvrygshnl1sgx";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -1578,11 +1578,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libXt = callPackage ({ stdenv, pkg-config, fetchurl, libICE, xorgproto, libSM, libX11, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libXt";
-    version = "1.3.0";
+    version = "1.3.1";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libXt-1.3.0.tar.xz";
-      sha256 = "14dz66rp66ar2a5q0fbsnlcqkbd34801pzdxj3f0hzc2vcy0p0jj";
+      url = "mirror://xorg/individual/lib/libXt-1.3.1.tar.xz";
+      sha256 = "120jjd6l7fjdxy5myrc1dmc0cwpqa18a97hrbg0d9x146frp99z0";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2098,11 +2098,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   utilmacros = callPackage ({ stdenv, pkg-config, fetchurl, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "util-macros";
-    version = "1.20.1";
+    version = "1.20.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/util/util-macros-1.20.1.tar.xz";
-      sha256 = "1xffkcqv96vpk5pckisanrvg4w7i9ciqhs6yv7sc12p7vii8yc0b";
+      url = "mirror://xorg/individual/util/util-macros-1.20.2.tar.xz";
+      sha256 = "13ifr0dabci130xk04kp9bq16g9kbyzf8x1mgdyjsrsglbmnkhls";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
@@ -2776,7 +2776,7 @@ self: with self; {
   })) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videoamdgpu = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, mesa, libGL, libdrm, udev, xorgserver, testers }: stdenv.mkDerivation (finalAttrs: {
+  xf86videoamdgpu = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libgbm, libGL, libdrm, udev, xorgserver, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xf86-video-amdgpu";
     version = "23.0.0";
     builder = ./builder.sh;
@@ -2787,7 +2787,7 @@ self: with self; {
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ xorgproto mesa libGL libdrm udev xorgserver ];
+    buildInputs = [ xorgproto libgbm libGL libdrm udev xorgserver ];
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];
@@ -2856,7 +2856,7 @@ self: with self; {
   })) {};
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  xf86videoati = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, mesa, libGL, libdrm, udev, libpciaccess, xorgserver, testers }: stdenv.mkDerivation (finalAttrs: {
+  xf86videoati = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libgbm, libGL, libdrm, udev, libpciaccess, xorgserver, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xf86-video-ati";
     version = "22.0.0";
     builder = ./builder.sh;
@@ -2867,7 +2867,7 @@ self: with self; {
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
     nativeBuildInputs = [ pkg-config ];
-    buildInputs = [ xorgproto mesa libGL libdrm udev libpciaccess xorgserver ];
+    buildInputs = [ xorgproto libgbm libGL libdrm udev libpciaccess xorgserver ];
     passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
     meta = {
       pkgConfigModules = [ ];

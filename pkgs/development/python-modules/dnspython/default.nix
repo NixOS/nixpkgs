@@ -1,4 +1,5 @@
 {
+  stdenv,
   lib,
   aioquic,
   buildPythonPackage,
@@ -54,6 +55,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   checkInputs = [ cacert ] ++ optional-dependencies.DNSSEC;
+
+  # don't run live tests
+  env = lib.optionalAttrs stdenv.hostPlatform.isDarwin {
+    NO_INTERNET = 1;
+  };
 
   disabledTests = [
     # dns.exception.SyntaxError: protocol not found

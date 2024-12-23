@@ -192,6 +192,7 @@ stdenv.mkDerivation (finalAttrs: {
       systemd
       taglib
       xcbutilkeysyms
+      wayland-scanner # only required for configure script
       zlib
     ]
     ++ optionals (!stdenv.hostPlatform.isAarch && !onlyLibVLC) [ live555 ]
@@ -219,6 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     )
     ++ optionals (waylandSupport && withQt5) [ libsForQt5.qtwayland ];
+  strictDeps = true;
 
   env =
     {

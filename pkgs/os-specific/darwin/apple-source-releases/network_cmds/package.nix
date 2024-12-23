@@ -1,6 +1,6 @@
 {
   lib,
-  apple-sdk_11,
+  apple-sdk,
   developer_cmds,
   fetchurl,
   libpcap,
@@ -67,7 +67,7 @@ let
     };
   };
 
-  xnu = apple-sdk_11.sourceRelease "xnu";
+  xnu = apple-sdk.sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "network_cmds-deps-private-headers";
@@ -449,7 +449,6 @@ mkAppleDerivation {
   ];
 
   buildInputs = [
-    apple-sdk_11
     libpcap
     libresolv
     openssl

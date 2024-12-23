@@ -392,6 +392,13 @@ in
 
   cmp-dictionary = super.cmp-dictionary.overrideAttrs (oa: {
     nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-cmp ];
+    nvimSkipModule = [
+      # Test files
+      "cmp_dictionary.dict.external_spec"
+      "cmp_dictionary.dict.trie_spec"
+      "cmp_dictionary.lib.trie_spec"
+      "cmp_dictionary.lib.unknown_spec"
+    ];
   });
 
   cmp-digraphs = super.cmp-digraphs.overrideAttrs (oa: {
@@ -2596,6 +2603,10 @@ in
       "snacks.terminal"
       "snacks.win"
       "snacks.words"
+      "snacks.debug"
+      "snacks.scratch"
+      # Optional trouble integration
+      "trouble.sources.profiler"
     ];
   };
 

@@ -3,7 +3,7 @@
   fetchzip,
   fetchFromGitHub,
   imagemagick,
-  mesa,
+  libgbm,
   libdrm,
   flutter324,
   pulseaudio,
@@ -15,7 +15,7 @@
 
 let
   libwebrtcRpath = lib.makeLibraryPath [
-    mesa
+    libgbm
     libdrm
   ];
   pubspecLock = lib.importJSON ./pubspec.lock.json;

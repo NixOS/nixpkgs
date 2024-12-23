@@ -4,7 +4,6 @@
   fetchzip,
   pkg-config,
   libressl,
-  memstreamHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,13 +19,9 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      libressl
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-      memstreamHook
-    ];
+  buildInputs = [
+    libressl
+  ];
 
   meta = {
     description = "Mirror notes to IMAP";

@@ -230,6 +230,12 @@ buildPythonPackage rec {
     httpretty
   ];
 
+  pytestFlagsArray = [
+    # Deprecated in 3.13. Use exc_type_str instead.
+    "-W"
+    "ignore::DeprecationWarning"
+  ];
+
   pythonImportsCheck = [ "datalad" ];
 
   meta = {

@@ -23,7 +23,7 @@ stdenv.mkDerivation {
     "-C${kernel.dev}/lib/modules/${kernel.modDirVersion}/build"
   ];
   postConfigure = ''
-    makeFlags="$makeFlags M=$(pwd)"
+    appendToVar makeFlags "M=$(pwd)"
   '';
   buildFlags = [ "modules" ];
 

@@ -39,7 +39,7 @@ index 2413329..f460bf6 100644
  
  try:
 -    dll = DLL("SDL2", ["SDL2", "SDL2-2.0", "SDL2-2.0.0"], os.getenv("PYSDL2_DLL_PATH"))
-+    dll = DLL("SDL2", "@sdl2@")
++    dll = DLL("SDL2", "@SDL2@")
  except RuntimeError as exc:
      raise ImportError(exc)
  
@@ -53,7 +53,7 @@ index 015eeaf..d6ce52f 100644
  try:
 -    dll = DLL("SDL2_gfx", ["SDL2_gfx", "SDL2_gfx-1.0"],
 -              os.getenv("PYSDL2_DLL_PATH"))
-+    dll = DLL("SDL2_gfx", "@sdl2_gfx@")
++    dll = DLL("SDL2_gfx", "@SDL2_gfx@")
  except RuntimeError as exc:
      raise ImportError(exc)
  
@@ -68,7 +68,7 @@ index a702136..dcdea51 100644
 -    dll = DLL(
 -        "SDL2_image", ["SDL2_image", "SDL2_image-2.0"], os.getenv("PYSDL2_DLL_PATH")
 -    )
-+    dll = DLL("SDL2_image", "@sdl2_image@")
++    dll = DLL("SDL2_image", "@SDL2_image@")
  except RuntimeError as exc:
      raise ImportError(exc)
  
@@ -82,7 +82,7 @@ index 5f2163c..23d95b0 100644
  try:
 -    dll = DLL("SDL2_mixer", ["SDL2_mixer", "SDL2_mixer-2.0"],
 -              os.getenv("PYSDL2_DLL_PATH"))
-+    dll = DLL("SDL2_mixer", "@sdl2_mixer@")
++    dll = DLL("SDL2_mixer", "@SDL2_mixer@")
  except RuntimeError as exc:
      raise ImportError(exc)
  
@@ -96,7 +96,7 @@ index 7c5f7db..61814cd 100644
  try:
 -    dll = DLL("SDL2_ttf", ["SDL2_ttf", "SDL2_ttf-2.0"],
 -              os.getenv("PYSDL2_DLL_PATH"))
-+    dll = DLL("SDL2_ttf", "@sdl2_ttf@")
++    dll = DLL("SDL2_ttf", "@SDL2_ttf@")
  except RuntimeError as exc:
      raise ImportError(exc)
  

@@ -24,7 +24,7 @@
   libXdamage,
   libxkbcommon,
   libXtst,
-  mesa,
+  libgbm,
   meson,
   ninja,
   pipewire,
@@ -66,7 +66,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     desktop-file-utils
-    mesa # needed for gbm
+    libgbm
     meson
     ninja
     pkg-config

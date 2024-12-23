@@ -25,6 +25,11 @@ buildPythonPackage rec {
 
   checkInputs = [ pytestCheckHook ];
 
+  disabledTests = [
+    # spacing changes in argparse output
+    "test_integration_choices_in_list"
+  ];
+
   # ModuleNotFoundError: No module named 'calmjs.types'
   # Not yet clear how to run these tests correctly
   # https://github.com/calmjs/calmjs/issues/63

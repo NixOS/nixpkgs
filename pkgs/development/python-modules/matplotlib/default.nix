@@ -110,8 +110,6 @@ buildPythonPackage rec {
   # script.
   postPatch =
     ''
-      substituteInPlace pyproject.toml \
-        --replace-fail '"numpy>=2.0.0rc1,<2.3",' ""
       patchShebangs tools
     ''
     + lib.optionalString (stdenv.hostPlatform.isLinux && interactive) ''

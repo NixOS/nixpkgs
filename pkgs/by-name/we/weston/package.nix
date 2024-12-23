@@ -15,7 +15,7 @@
   libevdev,
   libinput,
   libxkbcommon,
-  mesa,
+  libgbm,
   seatd,
   wayland,
   wayland-protocols,
@@ -82,7 +82,7 @@ stdenv.mkDerivation rec {
       libevdev
       libinput
       libxkbcommon
-      mesa
+      libgbm
       seatd
       wayland
       wayland-protocols

@@ -19,11 +19,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elupus";
     repo = "fjaraskupan";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-IKi2kaypwHdK9w+FZlWrreUXBgBgg4y3D8bSJhKHSYo=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   dependencies = [ bleak ];
 

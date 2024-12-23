@@ -27,7 +27,6 @@ in
 , coreutils
 , curl
 , darwin
-, darwinMinVersionHook
 , docbook_xsl_ns
 , docbook5
 , editline
@@ -147,15 +146,6 @@ self = stdenv.mkDerivation {
     aws-sdk-cpp
   ] ++ lib.optional (atLeast224 && stdenv.hostPlatform.isDarwin) [
     darwin.apple_sdk.libs.sandbox
-  ] ++ lib.optional (atLeast224 && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
-    # Fix the following error with the default x86_64-darwin SDK:
-    #
-    #     error: aligned allocation function of type 'void *(std::size_t, std::align_val_t)' is only available on macOS 10.13 or newer
-    #
-    # Despite the use of the 10.13 deployment target here, the aligned
-    # allocation function Clang uses with this setting actually works
-    # all the way back to 10.6.
-    (darwinMinVersionHook "10.13")
   ];
 
   propagatedBuildInputs = [

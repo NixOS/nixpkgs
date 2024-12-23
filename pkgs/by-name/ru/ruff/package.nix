@@ -1,22 +1,22 @@
 {
   lib,
-  rustPlatform,
-  fetchFromGitHub,
-  installShellFiles,
   stdenv,
   python3Packages,
-  darwin,
+  fetchFromGitHub,
+  rustPlatform,
+  installShellFiles,
   rust-jemalloc-sys,
-  ruff-lsp,
-  nix-update-script,
   versionCheckHook,
-  libiconv,
+
+  # passthru
+  ruff-lsp,
   nixosTests,
+  nix-update-script,
 }:
 
 python3Packages.buildPythonPackage rec {
   pname = "ruff";
-  version = "0.8.0";
+  version = "0.8.4";
   pyproject = true;
 
   outputs = [
@@ -27,8 +27,8 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
-    rev = "refs/tags/${version}";
-    hash = "sha256-yenGZ7TuiHtY/3AIjMPlHVtQPP6PHMc1wdezfZdVtK0=";
+    tag = version;
+    hash = "sha256-c5d2XaoEjCHWMdjTLD6CnwP8rpSXTUrmKSs0QWQ6UG0=";
   };
 
   # Do not rely on path lookup at runtime to find the ruff binary
@@ -41,7 +41,7 @@ python3Packages.buildPythonPackage rec {
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-O5+uVYWtSMEj7hBrc/FUuqRBN4hUlEbtDPF42kpL7PA=";
+    hash = "sha256-jbUjsIJRpkKYc+qHN8tkcZrcjPTFJfdCsatezzdX4Ss=";
   };
 
   nativeBuildInputs =
@@ -52,14 +52,9 @@ python3Packages.buildPythonPackage rec {
       cargoCheckHook
     ]);
 
-  buildInputs =
-    [
-      rust-jemalloc-sys
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreServices
-      libiconv
-    ];
+  buildInputs = [
+    rust-jemalloc-sys
+  ];
 
   postInstall =
     ''
@@ -74,17 +69,12 @@ python3Packages.buildPythonPackage rec {
         --zsh <($bin/bin/ruff generate-shell-completion zsh)
     '';
 
-  passthru = {
-    tests = {
-      inherit ruff-lsp;
-      nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
-    };
-    updateScript = nix-update-script { };
-  };
-
   # Run cargo tests
   cargoCheckType = "debug";
-  postInstallCheck = ''
+  # tests do not appear to respect linker options on doctests
+  # Upstream issue: https://github.com/rust-lang/cargo/issues/14189
+  # This causes errors like "error: linker `cc` not found" on static builds
+  postInstallCheck = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     cargoCheckHook
   '';
 
@@ -122,6 +112,17 @@ python3Packages.buildPythonPackage rec {
   versionCheckProgramArg = [ "--version" ];
 
   pythonImportsCheck = [ "ruff" ];
+
+  passthru = {
+    tests =
+      {
+        inherit ruff-lsp;
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
+      };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Extremely fast Python linter";

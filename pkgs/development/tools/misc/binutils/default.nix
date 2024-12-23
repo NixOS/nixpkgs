@@ -15,6 +15,7 @@ in
   lib,
   noSysDirs,
   perl,
+  runCommand,
   zlib,
   CoreServices,
 
@@ -279,11 +280,18 @@ stdenv.mkDerivation (finalAttrs: {
     inherit targetPrefix;
     hasGold = enableGold;
     isGNU = true;
-    # Having --enable-plugins is not enough, system has to support
-    # dlopen() or equivalent. See config/plugins.m4 and configure.ac
-    # (around PLUGINS) for cases that support or not support plugins.
-    # No platform specific filters yet here.
-    hasPluginAPI = enableGold;
+
+    # The plugin API is not a function of any targets. Expose it separately,
+    # currently only used by LLVM for enabling BFD to do LTO with LLVM bitcode.
+    # (Tar will exit with an error if there are no matches).
+    plugin-api-header = runCommand "libbfd-plugin-api-header" { } ''
+      mkdir -p $out
+      tar --directory=$out \
+      --extract \
+      --file=${finalAttrs.src} \
+      --strip-components=1 \
+        --wildcards '*'/include/plugin-api.h
+    '';
   };
 
   meta = with lib; {

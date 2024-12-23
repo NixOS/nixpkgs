@@ -7,7 +7,7 @@
 , stdenv
 , lib
 , libsecret
-, mesa
+, libgbm
 , udev
 , wrapGAppsHook3
 , writeScript
@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     alsa-lib
     libsecret
-    mesa
+    libgbm
   ];
 
   unpackPhase = ''

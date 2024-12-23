@@ -25,6 +25,11 @@ stdenv.mkDerivation rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    # https://github.com/Nuand/bladeRF/issues/994
+    ./gcc-14-calloc-fixes.diff
+  ];
+
   nativeBuildInputs = [
     cmake
     pkg-config

@@ -108,7 +108,7 @@ index fc498985e..b5d204d0d 100755
      if [ $ERRORS -ne 0 ]; then
 -      FAILURES_FILES="${FAILURES_FILES}  ${_TESTNAME}\n"
 -      ((FAILURES+=$ERRORS))
-+      if [[ $ERROR_EXCEPTIONS == *" $_TESTNAME "* ]]; then
++      if [[ " $ERROR_EXCEPTIONS " == *" $_TESTNAME "* ]]; then
 +        EXCEPTED_FAILURES_FILES="${EXCEPTED_FAILURES_FILES}  ${_TESTNAME}\n"
 +        ((EXCEPTED_FAILURES+=$ERRORS))
 +      else
@@ -117,7 +117,7 @@ index fc498985e..b5d204d0d 100755
 +      fi
      elif [ $WARNINGS -ne 0 ]; then
 -      if [[ $EXCEPTIONS == *$_TESTNAME* ]]; then
-+      if [[ $EXCEPTIONS == *" $_TESTNAME "* ]]; then
++      if [[ " $EXCEPTIONS " == *" $_TESTNAME "* ]]; then
          EXCEPTED_FILES="${EXCEPTED_FILES}  ${_TESTNAME}\n"
          ((EXCEPTED+=$WARNINGS))
        else
@@ -125,7 +125,7 @@ index fc498985e..b5d204d0d 100755
          ((FATAL_WARNINGS+=$WARNINGS))
        fi
 -    elif [[ $EXCEPTIONS == *$_TESTNAME* ]]; then
-+    elif [[ $ERROR_EXCEPTIONS == *" $_TESTNAME "* || $EXCEPTIONS == *" $_TESTNAME "* ]]; then
++    elif [[ " $ERROR_EXCEPTIONS " == *" $_TESTNAME "* || " $EXCEPTIONS " == *" $_TESTNAME "* ]]; then
        WOOT_FILES="${WOOT_FILES}  ${_TESTNAME}\n"
      fi
  done

@@ -1,7 +1,7 @@
 { lib
 , stdenv
 , fetchFromGitHub
-, boost182
+, boost
 , catch2_3
 , cmake
 , ninja
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost182
+    boost
     fmt_11
     mimalloc
     # though only used in tests, cmake will complain its absence when configuring

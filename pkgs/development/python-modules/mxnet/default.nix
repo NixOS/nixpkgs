@@ -29,6 +29,7 @@ buildPythonPackage {
 
   pythonRelaxDeps = [
     "graphviz"
+    "numpy"
   ];
 
   LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.mxnet ];

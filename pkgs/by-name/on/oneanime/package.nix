@@ -10,7 +10,7 @@
   libepoxy,
   libpulseaudio,
   libdrm,
-  mesa,
+  libgbm,
   buildGoModule,
   stdenv,
   mpv-unwrapped,
@@ -146,7 +146,7 @@ flutter327.buildFlutterApplication rec {
     libepoxy
     libpulseaudio
     libdrm
-    mesa
+    libgbm
     mpv
   ];
 

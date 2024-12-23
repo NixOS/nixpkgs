@@ -94,6 +94,8 @@ buildPythonPackage rec {
 
   disabledTests =
     [
+      # argparse output changed
+      "test_naked_invocation"
       # Test is flaky
       "test_stdin_read_warning"
       # httpbin compatibility issues

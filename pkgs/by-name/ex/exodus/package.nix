@@ -23,7 +23,7 @@
   libpulseaudio,
   at-spi2-core,
   libxkbcommon,
-  mesa,
+  libgbm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -86,7 +86,7 @@ stdenv.mkDerivation (finalAttrs: {
         systemd
         vivaldi-ffmpeg-codecs
         libxkbcommon
-        mesa
+        libgbm
       ];
     in
     ''

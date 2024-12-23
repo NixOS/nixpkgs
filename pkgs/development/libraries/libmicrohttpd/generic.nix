@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   preCheck = ''
     # Since `localhost' can't be resolved in a chroot, work around it.
-    sed -ie 's/localhost/127.0.0.1/g' src/test*/*.[ch]
+    sed -i -e 's/localhost/127.0.0.1/g' src/test*/*.[ch]
   '';
 
   # Disabled because the tests can time-out.

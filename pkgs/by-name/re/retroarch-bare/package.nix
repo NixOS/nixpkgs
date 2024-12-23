@@ -23,7 +23,7 @@
   libXxf86vm,
   makeBinaryWrapper,
   mbedtls_2,
-  mesa,
+  libgbm,
   nixosTests,
   nvidia_cg_toolkit,
   pkg-config,
@@ -107,7 +107,7 @@ stdenv.mkDerivation rec {
       libpulseaudio
       libv4l
       libxkbcommon
-      mesa
+      libgbm
       udev
     ];
 

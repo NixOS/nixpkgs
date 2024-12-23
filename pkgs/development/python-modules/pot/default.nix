@@ -87,9 +87,6 @@ buildPythonPackage rec {
       --replace " --durations=20" "" \
       --replace " --junit-xml=junit-results.xml" ""
 
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0" "numpy"
-
     # we don't need setup.py to find the macos sdk for us
     sed -i '/sdk_path/d' setup.py
   '';

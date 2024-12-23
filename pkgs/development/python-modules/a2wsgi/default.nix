@@ -2,13 +2,12 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  asgiref,
+  baize,
   httpx,
   pdm-backend,
   pytest-asyncio,
   pytestCheckHook,
   starlette,
-  baize,
 }:
 
 buildPythonPackage rec {
@@ -21,18 +20,19 @@ buildPythonPackage rec {
     hash = "sha256-zkYv9+HarAvFcYPG+ADwmnHCp6mN3VzeyhSePqvzM44=";
   };
 
-  nativeBuildInputs = [ pdm-backend ];
-
-  nativeCheckInputs = [
-    asgiref
-    httpx
-    pytest-asyncio
-    pytestCheckHook
-  ];
+  build-system = [ pdm-backend ];
 
   dependencies = [
     starlette
     baize
+  ];
+
+  nativeCheckInputs = [
+    baize
+    httpx
+    pytest-asyncio
+    pytestCheckHook
+    starlette
   ];
 
   meta = {

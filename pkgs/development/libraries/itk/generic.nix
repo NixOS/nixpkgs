@@ -65,19 +65,6 @@ let
     rev = "583288b1898dedcfb5e4d602e31020b452971383";
     hash = "sha256-1ItsLCRwRzGDSRe4xUDg09Hksu1nKichbWuM0YSVkbM=";
   };
-
-  # remove after next swig update:
-  swigUnstable = swig.overrideAttrs ({
-    version = "4.2.1-unstable-2024-08-19";
-
-    src = fetchFromGitHub {
-      owner = "swig";
-      repo = "swig";
-      rev = "5ac5d90f970759fbe705fae551d0743a7c63c67e";
-      hash = "sha256-32EFLHpP4l04nqrc8dt4Qsr8deTBqLt8lUlhnNnaIGU=";
-    };
-
-  });
 in
 
 stdenv.mkDerivation {
@@ -146,7 +133,7 @@ stdenv.mkDerivation {
     ]
     ++ lib.optionals enablePython [
       castxml
-      swigUnstable
+      swig
       which
     ];
 

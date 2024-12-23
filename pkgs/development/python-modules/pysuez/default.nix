@@ -2,15 +2,15 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  setuptools,
+  hatchling,
+  aiohttp,
   regex,
-  requests,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "pysuez";
-  version = "0.2.2";
+  version = "1.3.5";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -18,15 +18,15 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jb101010-2";
     repo = "pySuez";
-    rev = "refs/tags/${version}";
-    hash = "sha256-+pLknJDF0SsC6OsmP64D/yZeu0sGNtKo8EBGlDewBug=";
+    tag = version;
+    hash = "sha256-BG5nX2S+WV0Bdwm/cvm+mGO1RUd+F312tZ4jws6A/d8=";
   };
 
-  build-system = [ setuptools ];
+  build-system = [ hatchling ];
 
   dependencies = [
+    aiohttp
     regex
-    requests
   ];
 
   # Module has no tests

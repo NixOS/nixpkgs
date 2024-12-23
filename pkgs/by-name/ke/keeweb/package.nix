@@ -13,7 +13,7 @@
   nss,
   udev,
   gnome-keyring,
-  mesa,
+  libgbm,
   gtk3,
   libusb1,
   libsecret,
@@ -63,7 +63,7 @@ let
     libXtst
     libxshmfence
     gnome-keyring
-    mesa
+    libgbm
     gtk3
     libusb1
     libsecret

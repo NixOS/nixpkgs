@@ -12,7 +12,7 @@
   xar,
   libdbusmenu,
   alsa-lib,
-  mesa,
+  libgbm,
   nss,
   nspr,
   systemd,
@@ -115,7 +115,7 @@ let
 
     buildInputs = [
       alsa-lib
-      mesa
+      libgbm
       nss
       nspr
       systemd

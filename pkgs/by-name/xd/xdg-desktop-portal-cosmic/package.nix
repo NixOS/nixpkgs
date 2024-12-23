@@ -3,7 +3,7 @@
   rustPlatform,
   fetchFromGitHub,
   gst_all_1,
-  mesa,
+  libgbm,
   pkg-config,
   libglvnd,
   libxkbcommon,
@@ -37,7 +37,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libglvnd
     libxkbcommon
-    mesa
+    libgbm
     pipewire
     wayland
   ];

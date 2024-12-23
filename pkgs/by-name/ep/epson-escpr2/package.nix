@@ -37,6 +37,15 @@ stdenv.mkDerivation rec {
     cpio
   ];
 
+  patches = [
+    # Fixes "implicit declaration of function" errors
+    # source of patch: https://aur.archlinux.org/packages/epson-inkjet-printer-escpr2
+    (fetchurl {
+      url = "https://aur.archlinux.org/cgit/aur.git/plain/bug_x86_64.patch?h=epson-inkjet-printer-escpr2";
+      sha256 = "sha256-G6/3oj25FUT+xv9aJ7qP5PBZWLfy+V8MCHUYucDhtzM=";
+    })
+  ];
+
   configureFlags = [
     "--with-cupsfilterdir=${builtins.placeholder "out"}/lib/cups/filter"
     "--with-cupsppddir=${builtins.placeholder "out"}/share/cups/model"

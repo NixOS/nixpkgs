@@ -46,11 +46,8 @@ stdenv.mkDerivation rec {
 
   configureFlags = [
     "--with-bash-path=${pkgs.bash}/bin/bash"
+    "--sysconfdir=${placeholder "out"}/etc"
   ];
-
-  preConfigure = ''
-    configureFlags="$configureFlags --sysconfdir=$out/etc"
-  '';
 
   postInstall = ''
     rm -f $out/etc/spacefm/spacefm.conf

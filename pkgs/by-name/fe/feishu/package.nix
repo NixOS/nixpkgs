@@ -46,7 +46,7 @@
   libxkbfile,
   libxshmfence,
   makeShellWrapper,
-  mesa,
+  libgbm,
   nspr,
   nss,
   pango,
@@ -121,7 +121,7 @@ let
     libxkbcommon
     libxkbfile
     libxshmfence
-    mesa
+    libgbm
     nspr
     nss
     pango
@@ -161,7 +161,7 @@ stdenv.mkDerivation {
     libgcrypt
     libpulseaudio
     libxshmfence
-    mesa
+    libgbm
     nspr
     nss
   ];

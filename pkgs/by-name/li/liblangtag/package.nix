@@ -4,6 +4,7 @@
   fetchurl,
   fetchpatch,
   autoreconfHook,
+  autoconf-archive,
   gtk-doc,
   gettext,
   pkg-config,
@@ -16,38 +17,24 @@
 
 stdenv.mkDerivation rec {
   pname = "liblangtag";
-  version = "0.6.3";
+  version = "0.6.7";
 
   # Artifact tarball contains lt-localealias.h needed for darwin
   src = fetchurl {
     url = "https://bitbucket.org/tagoh/liblangtag/downloads/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-HxKiCgLsOo0i5U3tuLaDpDycFgvaG6M3vxBgYHrnM70=";
+    hash = "sha256-Xta81K4/PAXJEuYvIWzRpEEjhGFH9ymkn7VmjaUeAw4=";
   };
 
   core_zip = fetchurl {
     # please update if an update is available
-    url = "http://www.unicode.org/Public/cldr/37/core.zip";
-    sha256 = "0myswkvvaxvrz9zwq4zh65sygfd9n72cd5rk4pwacqba4nxgb4xs";
+    url = "http://www.unicode.org/Public/cldr/46/core.zip";
+    hash = "sha256-+86cInWGKtJmaPs0eD/mwznz2S3f61oQoXdftYGBoV0=";
   };
 
   language_subtag_registry = fetchurl {
-    url = "http://www.iana.org/assignments/language-subtag-registry";
-    sha256 = "0y9x5gra6jri4sk16f0dp69p06almnsl48rs85605f035kf539qm";
+    url = "https://web.archive.org/web/20241120202537id_/https://www.iana.org/assignments/language-subtag-registry/language-subtag-registry";
+    hash = "sha256-xy94jbBKP0Ig7yOPutSviCA6uryx7PW2b1lBIPk2+6Q=";
   };
-
-  patches = [
-    # Pull upstream fix for gcc-13 build compatibility
-    (fetchpatch {
-      name = "gcc-13-p1.patch";
-      url = "https://bitbucket.org/tagoh/liblangtag/commits/0b6e9f4616a34146e7443c4e9a7197153645e40b/raw";
-      hash = "sha256-69wJDVwDCP5OPHKoRn9WZNrvfCvmlX3SwtRmcpJHn2o=";
-    })
-    (fetchpatch {
-      name = "gcc-13-p1.patch";
-      url = "https://bitbucket.org/tagoh/liblangtag/commits/1497c4477d0fa0b7df1886951b953dd3cea54427/raw";
-      hash = "sha256-k0Uaeg6YLxVze4fgf0kiyuiZJ5wh2Jq3h7cFPQPtwyo=";
-    })
-  ];
 
   postPatch = ''
     gtkdocize
@@ -68,6 +55,7 @@ stdenv.mkDerivation rec {
   ];
   nativeBuildInputs = [
     autoreconfHook
+    autoconf-archive
     gtk-doc
     gettext
     pkg-config

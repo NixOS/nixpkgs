@@ -27,7 +27,7 @@
 , libsecret
 , libuuid
 , libxkbcommon
-, mesa
+, libgbm
 , nss
 , pango
 , systemd
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtk3
     pango
     systemd
-    mesa # for libgbm
+    libgbm
     nss
     libuuid
     libdrm

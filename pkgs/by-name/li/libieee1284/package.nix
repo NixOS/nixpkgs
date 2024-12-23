@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchurl {
       name = "musl.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-libs/libieee1284/files/libieee1284-0.2.11-don-t-blindly-assume-outb_p-to-be-available.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-libs/libieee1284/files/libieee1284-0.2.11-don-t-blindly-assume-outb_p-to-be-available.patch?id=dec60bb6900d6ebdaaa6aa1dcb845b30b739f9b5";
       hash = "sha256-sNu0OPBMa9GIwSu754noateF4FZC14f+8YRgYUl13KQ=";
     })
   ];

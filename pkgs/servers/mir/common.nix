@@ -25,7 +25,7 @@
   libxmlxx,
   yaml-cpp,
   lttng-ust,
-  mesa,
+  libgbm,
   nettle,
   udev,
   wayland,
@@ -124,7 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
     libxmlxx
     yaml-cpp
     lttng-ust
-    mesa
+    libgbm
     nettle
     udev
     wayland

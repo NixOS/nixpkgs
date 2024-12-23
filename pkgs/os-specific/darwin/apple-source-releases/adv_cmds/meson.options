@@ -1,1 +1,0 @@
-option('sdk_version', type : 'string')

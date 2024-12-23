@@ -35,7 +35,7 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     # Enable long long support (required for filezilla)
-    sed -ire '/PUGIXML_HAS_LONG_LONG/ s/^\/\///' src/pugiconfig.hpp
+    sed -i -e '/PUGIXML_HAS_LONG_LONG/ s/^\/\///' src/pugiconfig.hpp
   '';
 
   meta = with lib; {

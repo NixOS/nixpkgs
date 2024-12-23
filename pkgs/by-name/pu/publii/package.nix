@@ -17,7 +17,7 @@
   glibc,
   gtk3,
   libsecret,
-  mesa,
+  libgbm,
   musl,
   nss,
   pango,
@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
     glibc
     gtk3
     libsecret
-    mesa
+    libgbm
     musl
     nss
     pango

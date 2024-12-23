@@ -33,7 +33,10 @@ stdenv.mkDerivation {
   autoreconfPhase = ''
     autoreconf -i -I src/missing/m4
   '';
-  configureFlags = [ "--enable-demo" ];
+  configureFlags = [
+    "--enable-demo"
+    "CFLAGS=-D_GNU_SOURCE"
+  ];
   enableParallelBuilding = true;
 
   meta = {

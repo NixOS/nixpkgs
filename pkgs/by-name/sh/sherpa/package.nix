@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = lib.optionalString (stdenv.hostPlatform.libc == "glibc") ''
-    sed -ie '/sys\/sysctl.h/d' ATOOLS/Org/Run_Parameter.C
+    sed -i -e '/sys\/sysctl.h/d' ATOOLS/Org/Run_Parameter.C
   '';
 
   nativeBuildInputs = [

@@ -6,7 +6,7 @@
   cmake,
   gdk-pixbuf,
   libGL,
-  mesa,
+  libgbm,
 }:
 
 stdenv.mkDerivation rec {
@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     gdk-pixbuf
     libGL
-    mesa
+    libgbm
   ];
 
   meta = with lib; {

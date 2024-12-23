@@ -18,7 +18,6 @@
   which,
   # darwin support
   apple-sdk_13,
-  darwinMinVersionHook,
   xcbuild,
 
   dbus,
@@ -34,7 +33,6 @@
   libXext,
   libXi,
   libXrender,
-  libinput,
   libjpeg,
   libpng,
   libxcb,
@@ -61,6 +59,8 @@
   gtk3,
   withQttranslation ? true,
   qttranslations ? null,
+  withLibinput ? false,
+  libinput,
 
   # options
   libGLSupported ? !stdenv.hostPlatform.isDarwin,
@@ -87,13 +87,12 @@ let
     else
       throw "Please add a qtPlatformCross entry for ${plat.config}";
 
-  # Per https://doc.qt.io/qt-5/macos.html#supported-versions: deployment target = 10.13, build SDK = 13.x or 14.x.
+  # Per https://doc.qt.io/qt-5/macos.html#supported-versions: build SDK = 13.x or 14.x.
   # Despite advertising support for the macOS 14 SDK, the build system sets the maximum to 13 and complains
   # about 14, so we just use that.
   deploymentTarget = "10.13";
   darwinVersionInputs = [
     apple-sdk_13
-    (darwinMinVersionHook deploymentTarget)
   ];
 in
 
@@ -114,6 +113,7 @@ stdenv.mkDerivation (
           zlib
 
           # Text rendering
+          freetype
           harfbuzz
           icu
 
@@ -130,7 +130,6 @@ stdenv.mkDerivation (
 
             # Text rendering
             fontconfig
-            freetype
 
             libdrm
 
@@ -156,22 +155,27 @@ stdenv.mkDerivation (
           python3
           at-spi2-core
         ]
-        ++ lib.optionals (!stdenv.hostPlatform.isDarwin) ([ libinput ] ++ lib.optional withGtk3 gtk3)
+        ++ lib.optionals (!stdenv.hostPlatform.isDarwin) (
+          lib.optional withLibinput libinput ++ lib.optional withGtk3 gtk3
+        )
         ++ lib.optional stdenv.hostPlatform.isDarwin darwinVersionInputs
         ++ lib.optional developerBuild gdb
         ++ lib.optional (cups != null) cups
         ++ lib.optional (mysqlSupport) libmysqlclient
         ++ lib.optional (postgresql != null) postgresql;
 
-      nativeBuildInputs = [
-        bison
-        flex
-        gperf
-        lndir
-        perl
-        pkg-config
-        which
-      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
+      nativeBuildInputs =
+        [
+          bison
+          flex
+          gperf
+          lndir
+          perl
+          pkg-config
+          which
+        ]
+        ++ lib.optionals (mysqlSupport) [ libmysqlclient ]
+        ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild ];
 
     }
     // lib.optionalAttrs (stdenv.buildPlatform != stdenv.hostPlatform) {
@@ -183,6 +187,8 @@ stdenv.mkDerivation (
     // {
 
       propagatedNativeBuildInputs = [ lndir ];
+
+      strictDeps = true;
 
       # libQt5Core links calls CoreFoundation APIs that call into the system ICU. Binaries linked
       # against it will crash during build unless they can access `/usr/share/icu/icudtXXl.dat`.
@@ -255,7 +261,7 @@ stdenv.mkDerivation (
                 --replace-fail 'CONFIG += ' 'CONFIG += no_default_rpath ' \
                 --replace-fail \
                   'QMAKE_MACOSX_DEPLOYMENT_TARGET = 10.13' \
-                  'QMAKE_MACOSX_DEPLOYMENT_TARGET = ${deploymentTarget}'
+                  "QMAKE_MACOSX_DEPLOYMENT_TARGET = $MACOSX_DEPLOYMENT_TARGET"
             ''
           else
             lib.optionalString libGLSupported ''
@@ -334,10 +340,6 @@ stdenv.mkDerivation (
             ]
             ++ lib.optional libGLSupported ''-DNIXPKGS_MESA_GL="${libGL.out}/lib/libGL"''
             ++ lib.optional stdenv.hostPlatform.isLinux "-DUSE_X11"
-            ++ lib.optionals (stdenv.hostPlatform.system == "x86_64-darwin") [
-              # ignore "is only available on macOS 10.12.2 or newer" in obj-c code
-              "-Wno-error=unguarded-availability"
-            ]
             ++ lib.optionals withGtk3 [
               ''-DNIXPKGS_QGTK3_XDG_DATA_DIRS="${gtk3}/share/gsettings-schemas/${gtk3.name}"''
               ''-DNIXPKGS_QGTK3_GIO_EXTRA_MODULES="${dconf.lib}/lib/gio/modules"''
@@ -452,6 +454,7 @@ stdenv.mkDerivation (
           "-system-sqlite"
           ''-${if mysqlSupport then "plugin" else "no"}-sql-mysql''
           ''-${if postgresql != null then "plugin" else "no"}-sql-psql''
+          "-system-libpng"
 
           "-make libs"
           "-make tools"
@@ -462,8 +465,6 @@ stdenv.mkDerivation (
           if stdenv.hostPlatform.isDarwin then
             [
               "-no-fontconfig"
-              "-qt-freetype"
-              "-qt-libpng"
               "-no-framework"
               "-no-rpath"
             ]
@@ -487,16 +488,12 @@ stdenv.mkDerivation (
               "-I"
               "${libXrender.out}/include"
 
-              "-libinput"
-
               ''-${lib.optionalString (cups == null) "no-"}cups''
               "-dbus-linked"
               "-glib"
             ]
-            ++ [
-              "-system-libpng"
-            ]
             ++ lib.optional withGtk3 "-gtk"
+            ++ lib.optional withLibinput "-libinput"
             ++ [
               "-inotify"
             ]

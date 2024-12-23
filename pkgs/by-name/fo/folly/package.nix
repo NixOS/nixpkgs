@@ -147,6 +147,19 @@ stdenv.mkDerivation (finalAttrs: {
             "io_async_ssl_session_test.SSLSessionTest.BasicTest"
             "io_async_ssl_session_test.SSLSessionTest.NullSessionResumptionTest"
             "singleton_thread_local_test.SingletonThreadLocalDeathTest.Overload"
+
+            # very strict timing constraints, will fail under load
+            "io_async_hh_wheel_timer_test.HHWheelTimerTest.CancelTimeout"
+            "io_async_hh_wheel_timer_test.HHWheelTimerTest.DefaultTimeout"
+            "io_async_hh_wheel_timer_test.HHWheelTimerTest.DeleteWheelInTimeout"
+            "io_async_hh_wheel_timer_test.HHWheelTimerTest.DestroyTimeoutSet"
+            "io_async_hh_wheel_timer_test.HHWheelTimerTest.FireOnce"
+            "io_async_hh_wheel_timer_test.HHWheelTimerTest.GetTimeRemaining"
+            "io_async_hh_wheel_timer_test.HHWheelTimerTest.IntrusivePtr"
+            "io_async_hh_wheel_timer_test.HHWheelTimerTest.Level1"
+            "io_async_hh_wheel_timer_test.HHWheelTimerTest.NegativeTimeout"
+            "io_async_hh_wheel_timer_test.HHWheelTimerTest.ReschedTest"
+            "io_async_hh_wheel_timer_test.HHWheelTimerTest.SlowFast"
           ]
           ++ lib.optionals stdenv.hostPlatform.isLinux [
             "concurrency_cache_locality_test.CacheLocality.BenchmarkSysfs"

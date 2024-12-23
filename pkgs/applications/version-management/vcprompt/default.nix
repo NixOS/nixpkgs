@@ -23,8 +23,11 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     autoconf
-    makeFlags="$makeFlags PREFIX=$out"
   '';
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
   meta = with lib; {
     description = ''

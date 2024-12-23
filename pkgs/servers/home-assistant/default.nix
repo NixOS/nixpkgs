@@ -163,15 +163,6 @@ let
         doCheck = false; # no tests
       });
 
-      plugwise = super.plugwise.overridePythonAttrs (oldAttrs: rec {
-        version = "1.4.4";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-dlDytOSp/7npanxXH5uaDv29AP21UciEzIzDlMf6jf8=";
-        };
-      });
-
       # Pinned due to API changes in 0.1.0
       poolsense = super.poolsense.overridePythonAttrs (oldAttrs: rec {
         version = "0.0.8";
@@ -235,6 +226,21 @@ let
           rev = "refs/tags/v${version}";
           hash = "sha256-KM/gtpsQ27QZz2uI1t/yVN5no0zp9LZag1duAJzK55g=";
         };
+      });
+
+      pylamarzocco = super.pylamarzocco.overridePythonAttrs (oldAttrs: rec {
+        version = "1.2.12";
+        src = fetchFromGitHub {
+          owner = "zweckj";
+          repo = "pylamarzocco";
+          tag = "v${version}";
+          hash = "sha256-h3Oh1y1tirOWh3I8piybLZfTKwyGk0zJJ6XmHvmbUW0=";
+        };
+        dependencies = with self; [
+          bleak
+          httpx
+          websockets
+        ];
       });
 
       pymodbus = super.pymodbus.overridePythonAttrs (oldAttrs: rec {
@@ -445,7 +451,7 @@ let
   extraBuildInputs = extraPackages python.pkgs;
 
   # Don't forget to run update-component-packages.py after updating
-  hassVersion = "2024.11.3";
+  hassVersion = "2024.12.5";
 
 in
 python.pkgs.buildPythonApplication rec {
@@ -466,13 +472,13 @@ python.pkgs.buildPythonApplication rec {
     owner = "home-assistant";
     repo = "core";
     rev = "refs/tags/${version}";
-    hash = "sha256-9b4HPSCPYUUwKxn0JBw5uN6nI97jvgqBHFRUNhDue/k=";
+    hash = "sha256-LJgwtVQvO1iUPYfzAsE6l9u4+EIzAnc3IJ5FZb3xniM=";
   };
 
   # Secondary source is pypi sdist for translations
   sdist = fetchPypi {
     inherit pname version;
-    hash = "sha256-W7Z6C3kMyEIkY/3zQHm1OMMN7Tuj3ThsubLo6KjVotw=";
+    hash = "sha256-PfedigJWHLv2BqHOgVedDyJxxxSmdHe2CvPNYCWi6aA=";
   };
 
   build-system = with python.pkgs; [
@@ -516,6 +522,8 @@ python.pkgs.buildPythonApplication rec {
       src = ./patches/ffmpeg-path.patch;
       ffmpeg = "${lib.getExe ffmpeg-headless}";
     })
+
+    ./patches/watchdog5-compat.patch
   ];
 
   postPatch = ''
@@ -558,6 +566,7 @@ python.pkgs.buildPythonApplication rec {
     python-slugify
     pyyaml
     requests
+    securetar
     sqlalchemy
     typing-extensions
     ulid-transform

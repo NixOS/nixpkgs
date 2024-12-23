@@ -17,7 +17,7 @@
   nspr,
   nss,
   gtk3,
-  mesa,
+  libgbm,
   libGL,
   wayland,
   xorg,
@@ -48,7 +48,7 @@ let
     gtk3
     libappindicator
     libnotify
-    mesa
+    libgbm
     xorg.libX11
     xorg.libXScrnSaver
     xorg.libXcomposite

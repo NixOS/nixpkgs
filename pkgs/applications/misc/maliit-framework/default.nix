@@ -67,9 +67,9 @@ mkDerivation rec {
     wayland-scanner
   ];
 
-  preConfigure = ''
-    cmakeFlags+="-DQT5_PLUGINS_INSTALL_DIR=$out/$qtPluginPrefix"
-  '';
+  cmakeFlags = [
+    "-DQT5_PLUGINS_INSTALL_DIR=${placeholder "out"}/$qtPluginPrefix"
+  ];
 
   meta = with lib; {
     description = "Core libraries of Maliit and server";

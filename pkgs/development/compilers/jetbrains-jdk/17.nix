@@ -24,7 +24,7 @@
   nss,
   nspr,
   libdrm,
-  mesa,
+  libgbm,
   wayland,
   udev,
 }:
@@ -130,7 +130,7 @@ openjdk17.overrideAttrs (oldAttrs: rec {
         nss
         nspr
         libdrm
-        mesa
+        libgbm
         wayland
         udev
       ]

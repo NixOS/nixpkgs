@@ -8,7 +8,6 @@
   deepdiff,
   fetchFromGitHub,
   ifaddr,
-  mediafile,
   miniaudio,
   protobuf,
   pydantic,
@@ -19,7 +18,6 @@
   pytest-timeout,
   pytestCheckHook,
   pythonAtLeast,
-  pythonOlder,
   requests,
   setuptools,
   srptools,
@@ -33,8 +31,6 @@ buildPythonPackage rec {
   pname = "pyatv";
   version = "0.16.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "postlund";
@@ -55,7 +51,6 @@ buildPythonPackage rec {
     "chacha20poly1305-reuseable"
     "cryptography"
     "ifaddr"
-    "mediafile"
     "miniaudio"
     "protobuf"
     "requests"
@@ -71,7 +66,6 @@ buildPythonPackage rec {
     chacha20poly1305-reuseable
     cryptography
     ifaddr
-    mediafile
     miniaudio
     protobuf
     pydantic

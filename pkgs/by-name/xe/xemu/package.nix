@@ -12,7 +12,7 @@
   libpcap,
   libsamplerate,
   libslirp,
-  mesa,
+  libgbm,
   meson,
   ninja,
   openssl,
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpcap
     libsamplerate
     libslirp
-    mesa
+    libgbm
     openssl
     vte
   ];

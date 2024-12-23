@@ -5,7 +5,7 @@
   libsndfile,
   libglut,
   alsa-lib,
-  mesa,
+  libgbm,
   libGLU,
   libX11,
   libXmu,
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     libglut
     alsa-lib
-    mesa
+    libgbm
     libGLU
     libsndfile
     libX11

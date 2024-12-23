@@ -2,7 +2,7 @@
 # Do not edit!
 
 {
-  version = "2024.11.3";
+  version = "2024.12.5";
   components = {
     "3_day_blinds" =
       ps: with ps; [
@@ -10,6 +10,32 @@
     "abode" =
       ps: with ps; [
         jaraco-abode
+      ];
+    "acaia" =
+      ps: with ps; [
+        aioacaia
+        aioesphomeapi
+        aioruuvigateway
+        aioshelly
+        bleak
+        bleak-esphome
+        bleak-retry-connector
+        bluetooth-adapters
+        bluetooth-auto-recovery
+        bluetooth-data-tools
+        dbus-fast
+        esphome-dashboard-api
+        ha-ffmpeg
+        habluetooth
+        hassil
+        home-assistant-intents
+        ifaddr
+        mutagen
+        pymicro-vad
+        pyserial
+        pyspeex-noise
+        pyudev
+        zeroconf
       ];
     "accuweather" =
       ps: with ps; [
@@ -885,7 +911,7 @@
       ];
     "compensation" =
       ps: with ps; [
-        numpy_1
+        numpy
       ];
     "concord232" =
       ps: with ps; [
@@ -1015,7 +1041,7 @@
         home-assistant-intents
         ifaddr
         mutagen
-        numpy_1
+        numpy
         pillow
         psutil-home-assistant
         pymicro-vad
@@ -2617,7 +2643,7 @@
       ];
     "iqvia" =
       ps: with ps; [
-        numpy_1
+        numpy
         pyiqvia
       ];
     "irish_rail_transport" =
@@ -2886,12 +2912,13 @@
         home-assistant-intents
         ifaddr
         mutagen
+        pylamarzocco
         pymicro-vad
         pyserial
         pyspeex-noise
         pyudev
         zeroconf
-      ]; # missing inputs: lmcloud
+      ];
     "lametric" =
       ps: with ps; [
         demetriek
@@ -3584,6 +3611,10 @@
       ps: with ps; [
         mullvad-api
       ];
+    "music_assistant" =
+      ps: with ps; [
+        music-assistant-client
+      ];
     "mutesync" =
       ps: with ps; [
         mutesync
@@ -3631,6 +3662,9 @@
       ps: with ps; [
         aionanoleaf
       ];
+    "nasweb" =
+      ps: with ps; [
+      ]; # missing inputs: webio-api
     "neato" =
       ps: with ps; [
         pybotvac
@@ -3754,6 +3788,10 @@
     "nobo_hub" =
       ps: with ps; [
         pynobo
+      ];
+    "nordpool" =
+      ps: with ps; [
+        pynordpool
       ];
     "norway_air" =
       ps: with ps; [
@@ -4973,6 +5011,10 @@
       ps: with ps; [
         pyskyqhub
       ];
+    "sky_remote" =
+      ps: with ps; [
+        skyboxremote
+      ];
     "skybeacon" =
       ps:
       with ps;
@@ -5244,7 +5286,7 @@
     "stream" =
       ps: with ps; [
         av
-        numpy_1
+        numpy
         pyturbojpeg
       ];
     "streamlabswater" =
@@ -5435,8 +5477,7 @@
       ];
     "tedee" =
       ps: with ps; [
-        pytedee-async
-      ];
+      ]; # missing inputs: aiotedee
     "telegram" =
       ps:
       with ps;
@@ -5470,7 +5511,7 @@
       ];
     "tensorflow" =
       ps: with ps; [
-        numpy_1
+        numpy
         pillow
         pycocotools
         tensorflow
@@ -5745,7 +5786,7 @@
       ]; # missing inputs: TravisPy
     "trend" =
       ps: with ps; [
-        numpy_1
+        numpy
       ];
     "triggercmd" =
       ps: with ps; [
@@ -5867,7 +5908,7 @@
       ];
     "utility_meter" =
       ps: with ps; [
-        croniter
+        cronsim
       ];
     "uvc" =
       ps: with ps; [
@@ -6379,6 +6420,7 @@
   # components listed in tests/components for which all dependencies are packaged
   supportedComponentsWithTests = [
     "abode"
+    "acaia"
     "accuweather"
     "acmeda"
     "adax"
@@ -6774,6 +6816,7 @@
     "kostal_plenticore"
     "kraken"
     "kulersky"
+    "lamarzocco"
     "lametric"
     "landisgyr_heat_meter"
     "lastfm"
@@ -6866,6 +6909,7 @@
     "mqtt_room"
     "mqtt_statestream"
     "mullvad"
+    "music_assistant"
     "mutesync"
     "my"
     "myq"
@@ -6895,6 +6939,7 @@
     "nmap_tracker"
     "no_ip"
     "nobo_hub"
+    "nordpool"
     "notify"
     "notify_events"
     "notion"
@@ -7058,6 +7103,7 @@
     "simplisafe"
     "simulated"
     "siren"
+    "sky_remote"
     "skybell"
     "slack"
     "sleepiq"
@@ -7132,7 +7178,6 @@
     "tautulli"
     "tcp"
     "technove"
-    "tedee"
     "telegram"
     "telegram_bot"
     "tellduslive"

@@ -5,6 +5,7 @@
   fetchFromGitHub,
   nix-update-script,
   pkg-config,
+  mesa,
   libGLSupported ? lib.elem stdenv.hostPlatform.system mesa.meta.platforms,
   openglSupport ? libGLSupported,
   libGL,
@@ -27,7 +28,7 @@
   wayland-scanner,
   drmSupport ? false,
   libdrm,
-  mesa,
+  libgbm,
   libxkbcommon,
   dbusSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isAndroid,
   dbus,
@@ -146,7 +147,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals drmSupport [
       libdrm
-      mesa
+      libgbm
     ];
 
   buildInputs =

@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch2,
   gitMinimal,
   numpy,
   packaging,
@@ -23,6 +24,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-JHKoosjOo00vZfZJlUP663SO7LWcWXhS/ZiDm0cwdnk=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "python313-compat.patch";
+      url = "https://github.com/scientific-python/pytest-doctestplus/commit/aee0be27a8e8753ac68adc035f098ccc7a9e3678.patch";
+      hash = "sha256-UOG664zm7rJIjm/OXNu6N6jlINNB6UDZOCSUZxy3HrQ=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace pytest_doctestplus/plugin.py \

@@ -48,7 +48,7 @@
   apple_sdk,
   libGL,
   libGLU,
-  mesa,
+  libgbm,
   libintl,
   lcms2,
   libmanette,
@@ -111,14 +111,6 @@ clangStdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  preConfigure = lib.optionalString (clangStdenv.hostPlatform != clangStdenv.buildPlatform) ''
-    # Ignore gettext in cmake_prefix_path so that find_program doesn't
-    # pick up the wrong gettext. TODO: Find a better solution for
-    # this, maybe make cmake not look up executables in
-    # CMAKE_PREFIX_PATH.
-    cmakeFlags+=" -DCMAKE_IGNORE_PATH=${lib.getBin gettext}/bin"
-  '';
-
   nativeBuildInputs =
     [
       bison
@@ -155,7 +147,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       hyphen
       libGL
       libGLU
-      mesa # for libEGL headers
+      libgbm
       libgcrypt
       libgpg-error
       libidn

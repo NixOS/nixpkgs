@@ -40,7 +40,7 @@
 , withAribcaption ? withFullDeps && lib.versionAtLeast version "6.1" # ARIB STD-B24 Caption Decoder/Renderer
 , withAss ? withHeadlessDeps && stdenv.hostPlatform == stdenv.buildPlatform # (Advanced) SubStation Alpha subtitle rendering
 , withAvisynth ? withFullDeps # AviSynth script files reading
-, withBluray ? withFullDeps # BluRay reading
+, withBluray ? withHeadlessDeps # BluRay reading
 , withBs2b ? withFullDeps # bs2b DSP library
 , withBzlib ? withHeadlessDeps
 , withCaca ? withFullDeps # Textual display (ASCII art)
@@ -49,7 +49,7 @@
 , withChromaprint ? withFullDeps # Audio fingerprinting
 , withCodec2 ? withFullDeps # codec2 en/decoding
 , withCuda ? withFullDeps && withNvcodec
-, withCudaLLVM ? withFullDeps
+, withCudaLLVM ? withHeadlessDeps
 , withCudaNVCC ? withFullDeps && withUnfree && config.cudaSupport
 , withCuvid ? withHeadlessDeps && withNvcodec
 , withDav1d ? withHeadlessDeps # AV1 decoder (focused on speed and correctness)
@@ -63,7 +63,7 @@
 , withFontconfig ? withHeadlessDeps # Needed for drawtext filter
 , withFreetype ? withHeadlessDeps # Needed for drawtext filter
 , withFrei0r ? withFullDeps && withGPL # frei0r video filtering
-, withFribidi ? withFullDeps # Needed for drawtext filter
+, withFribidi ? withHeadlessDeps # Needed for drawtext filter
 , withGme ? withFullDeps # Game Music Emulator
 , withGnutls ? withHeadlessDeps
 , withGsm ? withFullDeps # GSM de/encoder
@@ -87,13 +87,13 @@
 , withNvdec ? withHeadlessDeps && withNvcodec
 , withNvenc ? withHeadlessDeps && withNvcodec
 , withOpenal ? withFullDeps # OpenAL 1.1 capture support
-, withOpencl ? withFullDeps
+, withOpencl ? withHeadlessDeps
 , withOpencoreAmrnb ? withFullDeps && withVersion3 # AMR-NB de/encoder
 , withOpencoreAmrwb ? withFullDeps && withVersion3 # AMR-WB decoder
 , withOpengl ? withFullDeps && !stdenv.hostPlatform.isDarwin # OpenGL rendering
 , withOpenh264 ? withFullDeps # H.264/AVC encoder
 , withOpenjpeg ? withHeadlessDeps # JPEG 2000 de/encoder
-, withOpenmpt ? withFullDeps # Tracked music files decoder
+, withOpenmpt ? withHeadlessDeps # Tracked music files decoder
 , withOpus ? withHeadlessDeps # Opus de/encoder
 , withPlacebo ? withFullDeps && !stdenv.hostPlatform.isDarwin # libplacebo video processing library
 , withPulse ? withSmallDeps && stdenv.hostPlatform.isLinux # Pulseaudio input support
@@ -127,7 +127,7 @@
 , withVorbis ? withHeadlessDeps # Vorbis de/encoding, native encoder exists
 , withVpl ? false # Hardware acceleration via intel libvpl
 , withVpx ? withHeadlessDeps && stdenv.buildPlatform == stdenv.hostPlatform # VP8 & VP9 de/encoding
-, withVulkan ? withSmallDeps && !stdenv.hostPlatform.isDarwin
+, withVulkan ? withHeadlessDeps && !stdenv.hostPlatform.isDarwin
 , withVvenc ? withFullDeps && lib.versionAtLeast version "7.1" # H.266/VVC encoding
 , withWebp ? withHeadlessDeps # WebP encoder
 , withX264 ? withHeadlessDeps && withGPL # H.264/AVC encoder
@@ -140,12 +140,12 @@
 , withXevd ? withFullDeps && lib.versionAtLeast version "7.1" && !xevd.meta.broken # MPEG-5 EVC decoding
 , withXeve ? withFullDeps && lib.versionAtLeast version "7.1" && !xeve.meta.broken # MPEG-5 EVC encoding
 , withXlib ? withFullDeps # Xlib support
-, withXml2 ? withFullDeps # libxml2 support, for IMF and DASH demuxers
+, withXml2 ? withHeadlessDeps # libxml2 support, for IMF and DASH demuxers
 , withXvid ? withHeadlessDeps && withGPL # Xvid encoder, native encoder exists
 , withZimg ? withHeadlessDeps
 , withZlib ? withHeadlessDeps
 , withZmq ? withFullDeps # Message passing
-, withZvbi ? withFullDeps # Teletext support
+, withZvbi ? withHeadlessDeps # Teletext support
 
 /*
  *  Licensing options (yes some are listed twice, filters and such are not listed)

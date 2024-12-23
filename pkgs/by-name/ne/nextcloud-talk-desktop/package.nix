@@ -9,7 +9,7 @@
   libxkbcommon,
   alsa-lib,
   at-spi2-core,
-  mesa,
+  libgbm,
   pango,
   libdrm,
   vivaldi-ffmpeg-codecs,
@@ -44,7 +44,7 @@ stdenv.mkDerivation (finalAttrs: {
       libxkbcommon
       gtk3
       vivaldi-ffmpeg-codecs
-      mesa
+      libgbm
       libGL
       libglvnd
     ]

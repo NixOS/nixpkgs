@@ -65,7 +65,7 @@ stdenv.mkDerivation {
       substituteInPlace $f --replace "\"/usr/bin/dot\"" "\"${graphviz}/bin/dot\""
     done
 
-    #sed -ie "/compute/,999 d" tools/build-sequence # for testing
+    #sed -i -e "/compute/,999 d" tools/build-sequence # for testing
 
     poly < tools/smart-configure.sml
 
