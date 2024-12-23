@@ -108,6 +108,8 @@ phpPackage.buildComposerProject rec {
 
     wrapProgram $out/daily.sh --prefix PATH : ${phpPackage}/bin
 
+    php $out/artisan vue-i18n:generate --multi-locales --format=umd
+
     rm -rf $out/logs $out/rrd $out/bootstrap/cache $out/storage $out/.env
     ln -s ${logDir} $out/logs
     ln -s ${dataDir}/config.php $out/config.php
