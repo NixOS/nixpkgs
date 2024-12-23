@@ -12,6 +12,7 @@
   wrapGAppsHook3,
   nixosTests,
   writeScript,
+  halibut,
   isMobile ? false,
 }:
 
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     perl
     pkg-config
     wrapGAppsHook3
+    halibut # For help pages
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString isMobile "-DSTYLUS_BASED";
