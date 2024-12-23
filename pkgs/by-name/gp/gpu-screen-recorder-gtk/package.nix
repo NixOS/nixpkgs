@@ -19,6 +19,7 @@
   wayland,
   wrapGAppsHook3,
   wrapperDir ? "/run/wrappers/bin",
+  gitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -67,6 +68,8 @@ stdenv.mkDerivation (finalAttrs: {
         ]
       })
     '';
+
+  passthru.updateScript = gitUpdater { url = "https://repo.dec05eba.com/gpu-screen-recorder-gtk"; };
 
   meta = {
     changelog = "https://git.dec05eba.com/gpu-screen-recorder-gtk/tree/com.dec05eba.gpu_screen_recorder.appdata.xml#n82";
