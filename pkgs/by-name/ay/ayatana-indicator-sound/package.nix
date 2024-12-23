@@ -30,13 +30,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-sound";
-  version = "24.5.0";
+  version = "24.5.1";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-sound";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-sFl1PM0vZIJVSDiq5z7w/CS3rFuq6Z09Uks4Ik239Cc=";
+    hash = "sha256-icHX/uZQIkS08RByjvlcX7whXtUYc+osBMbqngKqmGU=";
   };
 
   postPatch = ''
