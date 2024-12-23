@@ -12,6 +12,7 @@
   alsa-lib,
   alsa-tools,
   freetype,
+  jsoncpp,
   libusb1,
   libX11,
   libXrandr,
@@ -73,9 +74,14 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeBuildType = "Release";
 
-  cmakeFlags = lib.optionals enableVST2 [
-    (lib.cmakeFeature "BESPOKE_VST2_SDK_LOCATION" "${vst-sdk}/VST2_SDK")
-  ];
+  cmakeFlags =
+    [
+      (lib.cmakeBool "BESPOKE_SYSTEM_PYBIND11" true)
+      (lib.cmakeBool "BESPOKE_SYSTEM_JSONCPP" true)
+    ]
+    ++ lib.optionals enableVST2 [
+      (lib.cmakeFeature "BESPOKE_VST2_SDK_LOCATION" "${vst-sdk}/VST2_SDK")
+    ];
 
   strictDeps = true;
 
@@ -89,7 +95,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
-      python3 # library
+      jsoncpp
+      # library & headers
+      (python3.withPackages (
+        ps: with ps; [
+          pybind11
+        ]
+      ))
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       # List obtained from https://github.com/BespokeSynth/BespokeSynth/blob/main/azure-pipelines.yml
