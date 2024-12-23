@@ -1,13 +1,11 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   makeBinaryWrapper,
   installShellFiles,
   rustPlatform,
   testers,
   cachix,
-  darwin,
   sqlx-cli,
   nixVersions,
   openssl,
@@ -63,11 +61,7 @@ rustPlatform.buildRustPackage {
     sqlx-cli
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [ openssl ];
 
   postInstall =
     let
