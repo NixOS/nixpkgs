@@ -40,7 +40,7 @@ python3.pkgs.buildPythonApplication {
   src = fetchFromGitHub {
     owner = "inkstitch";
     repo = "inkstitch";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CGhJsDRhElgemNv2BXqZr6Vi5EyBArFak7Duz545ivY=";
   };
 
