@@ -27,7 +27,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "amdvlk";
-  version = "2024.Q4.2";
+  version = "2024.Q4.3";
 
   src = fetchRepoProject {
     name = "amdvlk-src";
