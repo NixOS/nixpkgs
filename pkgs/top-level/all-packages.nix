@@ -14499,10 +14499,7 @@ with pkgs;
 
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
-  ladybird = callPackage ../applications/networking/browsers/ladybird {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-    inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Foundation OpenGL;
-  };
+  ladybird = callPackage ../applications/networking/browsers/ladybird { };
 
   lemonbar = callPackage ../applications/window-managers/lemonbar { };
 
