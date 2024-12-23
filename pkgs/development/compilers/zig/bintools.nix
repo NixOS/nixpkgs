@@ -1,8 +1,8 @@
 {
   lib,
-  runCommand,
-  zig,
   stdenv,
+  zig,
+  runCommand,
   makeWrapper,
 }:
 let
@@ -10,9 +10,9 @@ let
     stdenv.hostPlatform != stdenv.targetPlatform
   ) "${stdenv.targetPlatform.config}-";
 in
-runCommand "zig-cc-${zig.version}"
+runCommand "zig-bintools-${zig.version}"
   {
-    pname = "zig-cc";
+    pname = "zig-bintools";
     inherit (zig) version meta;
 
     nativeBuildInputs = [ makeWrapper ];
@@ -26,13 +26,9 @@ runCommand "zig-cc-${zig.version}"
   }
   ''
     mkdir -p $out/bin
-    for tool in cc c++ ld.lld; do
+    for tool in ar objcopy ranlib; do
       makeWrapper "$zig/bin/zig" "$out/bin/${targetPrefix}$tool" \
         --add-flags "$tool" \
         --run "export ZIG_GLOBAL_CACHE_DIR=\$(mktemp -d)"
     done
-
-    mv $out/bin/${targetPrefix}c++ $out/bin/${targetPrefix}clang++
-    mv $out/bin/${targetPrefix}cc $out/bin/${targetPrefix}clang
-    mv $out/bin/${targetPrefix}ld.lld $out/bin/${targetPrefix}ld
   ''
