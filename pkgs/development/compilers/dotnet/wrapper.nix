@@ -26,11 +26,11 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     description = "${unwrapped.meta.description or "dotnet"} (wrapper)";
-    mainProgram = "dotnet";
     inherit (unwrapped.meta)
       homepage
       license
       maintainers
+      mainProgram
       platforms
       ;
   };

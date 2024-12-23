@@ -36,10 +36,10 @@ mkWrapper "sdk" (buildEnv {
   postBuild =
     ''
       mkdir -p "$out"/share/dotnet
-      cp "${cli}"/share/dotnet/dotnet $out/share/dotnet
+      cp "${cli}"/share/dotnet/${cli.meta.mainProgram} $out/share/dotnet
       cp -R "${cli}"/nix-support "$out"/
       mkdir "$out"/bin
-      ln -s "$out"/share/dotnet/dotnet "$out"/bin/dotnet
+      ln -s "$out"/share/dotnet/${cli.meta.mainProgram} "$out"/bin/${cli.meta.mainProgram}
     ''
     + lib.optionalString (cli ? man) ''
       ln -s ${cli.man} $man
