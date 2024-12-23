@@ -374,17 +374,20 @@ in
 
           echo ${cfg.package.version} > "$versionFile"
         fi
-      ''
-      + lib.optionalString (cfg.passwordFile != null) ''
-        export PAPERLESS_ADMIN_USER="''${PAPERLESS_ADMIN_USER:-admin}"
-        PAPERLESS_ADMIN_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PAPERLESS_ADMIN_PASSWORD")
-        export PAPERLESS_ADMIN_PASSWORD
-        superuserState="$PAPERLESS_ADMIN_USER:$PAPERLESS_ADMIN_PASSWORD"
-        superuserStateFile="${cfg.dataDir}/superuser-state"
 
-        if [[ $(cat "$superuserStateFile" 2>/dev/null) != "$superuserState" ]]; then
-          ${cfg.package}/bin/paperless-ngx manage_superuser
-          echo "$superuserState" > "$superuserStateFile"
+        if ${lib.boolToString (cfg.passwordFile != null)} || [[ -n $PAPERLESS_ADMIN_PASSWORD ]]; then
+          export PAPERLESS_ADMIN_USER="''${PAPERLESS_ADMIN_USER:-admin}"
+          if [[ -e $CREDENTIALS_DIRECTORY/PAPERLESS_ADMIN_PASSWORD ]]; then
+            PAPERLESS_ADMIN_PASSWORD=$(cat "$CREDENTIALS_DIRECTORY/PAPERLESS_ADMIN_PASSWORD")
+            export PAPERLESS_ADMIN_PASSWORD
+          fi
+          superuserState="$PAPERLESS_ADMIN_USER:$PAPERLESS_ADMIN_PASSWORD"
+          superuserStateFile="${cfg.dataDir}/superuser-state"
+
+          if [[ $(cat "$superuserStateFile" 2>/dev/null) != "$superuserState" ]]; then
+            ${cfg.package}/bin/paperless-ngx manage_superuser
+            echo "$superuserState" > "$superuserStateFile"
+          fi
         fi
       '';
       requires = lib.optional cfg.database.createLocally "postgresql.service";
