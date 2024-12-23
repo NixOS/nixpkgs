@@ -1612,6 +1612,7 @@ with pkgs;
   android-tools = lowPrio (darwin.apple_sdk_11_0.callPackage ../tools/misc/android-tools { });
 
   angie = callPackage ../servers/http/angie {
+    zlib-ng = zlib-ng.override { withZlibCompat = true; };
     withPerl = false;
     # We don't use `with` statement here on purpose!
     # See https://github.com/NixOS/nixpkgs/pull/10474#discussion_r42369334
@@ -1619,6 +1620,7 @@ with pkgs;
   };
 
   angieQuic = callPackage ../servers/http/angie {
+    zlib-ng = zlib-ng.override { withZlibCompat = true; };
     withPerl = false;
     withQuic = true;
     # We don't use `with` statement here on purpose!
@@ -1655,6 +1657,8 @@ with pkgs;
   arj = callPackage ../tools/archivers/arj {
     stdenv = gccStdenv;
   };
+
+  arpack-mpi = arpack.override { useMpi = true; };
 
   inherit (callPackages ../data/fonts/arphic {})
     arphic-ukai arphic-uming;
@@ -2122,6 +2126,8 @@ with pkgs;
                           };
 
   clevercsv = with python3Packages; toPythonApplication clevercsv;
+
+  cleanit = with python3Packages; toPythonApplication cleanit;
 
   clickgen = with python3Packages; toPythonApplication clickgen;
 
@@ -5105,10 +5111,6 @@ with pkgs;
   };
 
   scfbuild = python3.pkgs.callPackage ../tools/misc/scfbuild { };
-
-  sd = callPackage ../tools/text/sd {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
 
   securefs = darwin.apple_sdk_11_0.callPackage ../tools/filesystems/securefs { };
 

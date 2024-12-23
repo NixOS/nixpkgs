@@ -9018,6 +9018,18 @@ final: prev:
     meta.homepage = "https://github.com/neovimhaskell/nvim-hs.vim/";
   };
 
+  nvim-impairative = buildVimPlugin {
+    pname = "nvim-impairative";
+    version = "2024-11-20";
+    src = fetchFromGitHub {
+      owner = "idanarye";
+      repo = "nvim-impairative";
+      rev = "f591e206e377c90e419ae24edb4fd81a22b6f1d5";
+      sha256 = "0z4vlzb42j1263vnxxk3vka8wg0ggn3xkr42gmrw7dviz88l9x04";
+    };
+    meta.homepage = "https://github.com/idanarye/nvim-impairative/";
+  };
+
   nvim-jdtls = buildVimPlugin {
     pname = "nvim-jdtls";
     version = "2024-11-26";
@@ -10675,6 +10687,18 @@ final: prev:
       sha256 = "1hllww9s2wzs7rjxi9pwi0wda8bxbhdyrf3dvxmdgfl5irv1gdlp";
     };
     meta.homepage = "https://github.com/unblevable/quick-scope/";
+  };
+
+  quicker-nvim = buildVimPlugin {
+    pname = "quicker.nvim";
+    version = "2024-11-14";
+    src = fetchFromGitHub {
+      owner = "stevearc";
+      repo = "quicker.nvim";
+      rev = "049d66534d3de5920663ee1b8dd0096d70f55a67";
+      sha256 = "052bsqgjk3gh80vqpisv972d3snlf4hgmxag3hkhca5mp7zcpp2x";
+    };
+    meta.homepage = "https://github.com/stevearc/quicker.nvim/";
   };
 
   quickfix-reflector-vim = buildVimPlugin {

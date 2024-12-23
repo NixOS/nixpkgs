@@ -2173,6 +2173,10 @@ in
     }
   );
 
+  nvim-impairative = super.nvim-impairative.overrideAttrs {
+    nvimRequireCheck = "impairative";
+  };
+
   nvim-navic = super.nvim-navic.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
     nvimRequireCheck = "nvim-navic";
@@ -2458,6 +2462,10 @@ in
       "qmk.parse.zmk.init_spec"
       "qmk_spec"
     ];
+  };
+
+  quicker-nvim = super.quicker-nvim.overrideAttrs {
+    nvimRequireCheck = "quicker";
   };
 
   rainbow-delimiters-nvim = super.rainbow-delimiters-nvim.overrideAttrs {
