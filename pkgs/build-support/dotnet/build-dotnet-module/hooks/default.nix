@@ -1,10 +1,7 @@
 {
   lib,
-  stdenv,
   which,
   coreutils,
-  zlib,
-  openssl,
   makeSetupHook,
   zip,
   # Passed from ../default.nix
@@ -14,16 +11,6 @@
 {
   dotnetConfigureHook = makeSetupHook {
     name = "dotnet-configure-hook";
-    substitutions = {
-      dynamicLinker = "${stdenv.cc}/nix-support/dynamic-linker";
-      libPath = lib.makeLibraryPath [
-        stdenv.cc.cc
-        stdenv.cc.libc
-        dotnet-sdk.passthru.icu
-        zlib
-        openssl
-      ];
-    };
   } ./dotnet-configure-hook.sh;
 
   dotnetBuildHook = makeSetupHook {
