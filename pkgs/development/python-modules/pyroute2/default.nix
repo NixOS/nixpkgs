@@ -2,28 +2,25 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  importlib-metadata,
   pythonOlder,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "pyroute2";
-  version = "0.7.12";
+  version = "0.8.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "svinota";
     repo = "pyroute2";
     tag = version;
-    hash = "sha256-zB792ZwDWd74YBYvQ5au0t2RWTIAqrWvNtQ/e+ZEk50=";
+    hash = "sha256-eItzD9ub8COaOkNLEKLtf8uJil4W4rqjzVa95LJahHw=";
   };
 
-  nativeBuildInputs = [ setuptools ];
-
-  propagatedBuildInputs = lib.optionals (pythonOlder "3.8") [ importlib-metadata ];
+  build-system = [ setuptools ];
 
   # Requires root privileges, https://github.com/svinota/pyroute2/issues/778
   doCheck = false;
