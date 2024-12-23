@@ -77,6 +77,7 @@ let
 
     postPatch = ''
       patchShebangs --build ./bin/
+      patchShebangs packages/flutter_tools/bin
     '';
 
     buildPhase = ''
