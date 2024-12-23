@@ -50,6 +50,8 @@ stdenv.mkDerivation rec {
     SDL_sound
   ];
 
+  enableParallelBuilding = true;
+
   meta = {
     homepage = "http://www.gltron.org/";
     description = "Game based on the movie Tron";
