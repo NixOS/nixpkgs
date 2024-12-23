@@ -13,13 +13,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cpptrace";
-  version = "0.6.2";
+  version = "0.7.4";
 
   src = fetchFromGitHub {
     owner = "jeremy-rifkin";
     repo = "cpptrace";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-zjPxPtq+OQ104sJoeBD3jpMV9gV57FSHEJS4W6SF8GM=";
+    hash = "sha256-JBgus66duh+a8Cr1NubNsMHE7CP13uML8DTgXW9jwIc=";
   };
 
   nativeBuildInputs = [
