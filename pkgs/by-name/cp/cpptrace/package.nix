@@ -23,6 +23,13 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-JBgus66duh+a8Cr1NubNsMHE7CP13uML8DTgXW9jwIc=";
   };
 
+  postPatch = ''
+    # https://www.github.com/jeremy-rifkin/cpptrace/pull/196
+    substituteInPlace test/unit/stacktrace.cpp --replace-fail \
+        "#define CPPTRACE_FORCE_INLINE [[gnu::always_inline]]" \
+        "#define CPPTRACE_FORCE_INLINE [[gnu::always_inline]] static"
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
@@ -40,9 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   checkInputs = [ gtest ];
-
-  # Unit tests are flaky and hard to get right.
-  doCheck = false;
+  doCheck = true;
 
   passthru = {
     updateScript = nix-update-script { };
