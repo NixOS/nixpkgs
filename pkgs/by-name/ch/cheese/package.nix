@@ -95,6 +95,11 @@ stdenv.mkDerivation rec {
     )
   '';
 
+  # Fix GCC 14 build
+  # ../libcheese/cheese-flash.c:135:22: error: assignment to 'GtkWidget *' {aka 'struct _GtkWidget *'} from
+  # incompatible pointer type 'GObject *' {aka 'struct _GObject *'} [-Wincompatible-pointer-types]
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   passthru = {
     updateScript = gnome.updateScript {
       packageName = "cheese";
