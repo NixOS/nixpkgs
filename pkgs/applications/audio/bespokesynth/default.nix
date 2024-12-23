@@ -72,6 +72,14 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  # Linux builds are sandboxed properly, this always returns "localhost" there.
+  # Darwin builds doesn't have the same amount of sandboxing by default, and the builder's hostname is returned.
+  # In case this ever gets embedded into VersionInfoBld.cpp, hardcode it to the Linux value
+  postPatch = ''
+    substituteInPlace Source/cmake/versiontools.cmake \
+      --replace-fail 'cmake_host_system_information(RESULT BESPOKE_BUILD_FQDN QUERY FQDN)' 'set(BESPOKE_BUILD_FQDN "localhost")'
+  '';
+
   cmakeBuildType = "Release";
 
   cmakeFlags =
