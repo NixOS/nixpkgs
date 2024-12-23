@@ -86,6 +86,13 @@ stdenv.mkDerivation rec {
     patchPythonScript $out/lib/xplayer/plugins/dbus/dbusservice.py
   '';
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=return-mismatch"
+    ];
+  };
+
   meta = with lib; {
     description = "Generic media player from Linux Mint";
     license = with licenses; [
