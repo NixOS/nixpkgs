@@ -1,0 +1,13 @@
+Index: source/src/MEGASync/platform/platform.pri
+===================================================================
+--- source.orig/src/MEGASync/platform/platform.pri
++++ source/src/MEGASync/platform/platform.pri
+@@ -37,7 +37,7 @@ unix:!macx {
+     system(command -v lsb_release): version.commands = lsb_release -rs > $$version.target
+ 	version.files = $$version.target
+ 
+-	INSTALLS += distro version
++	# INSTALLS += distro version
+ 
+     QT += dbus
+     SOURCES += $$PWD/linux/LinuxPlatform.cpp \

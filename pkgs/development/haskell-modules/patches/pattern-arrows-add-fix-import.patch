@@ -1,0 +1,12 @@
+diff --git a/src/Control/PatternArrows.hs b/src/Control/PatternArrows.hs
+index d382c19..0b067dd 100644
+--- a/src/Control/PatternArrows.hs
++++ b/src/Control/PatternArrows.hs
+@@ -23,6 +23,7 @@ import qualified Control.Category as C
+ import Control.Category ((>>>))
+ import qualified Control.Arrow as A
+ import Control.Arrow ((***), (<+>))
++import Data.Function (fix)
+ 
+ -- |
+ -- A first-order pattern match
