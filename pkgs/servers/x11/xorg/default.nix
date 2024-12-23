@@ -1058,11 +1058,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   libICE = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, xtrans, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "libICE";
-    version = "1.1.1";
+    version = "1.1.2";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "mirror://xorg/individual/lib/libICE-1.1.1.tar.xz";
-      sha256 = "0lg4sddalwmmzsnxv3fgdm2hzqp66j8b3syc0ancfhi9yzx7mrq3";
+      url = "mirror://xorg/individual/lib/libICE-1.1.2.tar.xz";
+      sha256 = "09c656nqkz3dpik012d2cwmd5a2dkxqgjpcq2v3v6pi22ka4wklp";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
