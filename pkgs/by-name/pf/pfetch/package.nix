@@ -27,7 +27,10 @@ stdenvNoCC.mkDerivation rec {
     changelog = "https://github.com/Un1q32/pfetch/releases/tag/${version}";
     license = lib.licenses.mit;
     platforms = lib.platforms.all;
-    maintainers = with lib.maintainers; [ equirosa ];
+    maintainers = with lib.maintainers; [
+      equirosa
+      phanirithvij
+    ];
     mainProgram = "pfetch";
   };
 }
