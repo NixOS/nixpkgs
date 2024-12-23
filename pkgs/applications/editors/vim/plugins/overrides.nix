@@ -3376,10 +3376,6 @@ in
   };
 
   vim-xkbswitch = super.vim-xkbswitch.overrideAttrs {
-    patchPhase = ''
-      substituteInPlace plugin/xkbswitch.vim \
-        --replace-fail /usr/local/lib/libxkbswitch.so ${xkb-switch}/lib/libxkbswitch.so
-    '';
     buildInputs = [ xkb-switch ];
   };
 
