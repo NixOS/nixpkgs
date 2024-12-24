@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchFromGitHub,
 
   # nativeBuildInputs
   cmake,
@@ -62,16 +62,19 @@
   gtk-mac-integration,
 
   versionCheckHook,
-  nix-update-script,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
   version = "5.0.0";
   pname = "darktable";
 
-  src = fetchurl {
-    url = "https://github.com/darktable-org/darktable/releases/download/release-${version}/darktable-${version}.tar.xz";
-    hash = "sha256-6qE25uYku1MScoLiaq+gRBq8wYm1U3FGXh9aikk/o6E=";
+  src = fetchFromGitHub {
+    owner = "darktable-org";
+    repo = "darktable";
+    tag = "release-${version}";
+    fetchSubmodules = true;
+    hash = "sha256-PjNqZDFrdYzXSiZ9kTLtZSq+vFuqbFQzduDVMrFtzE0=";
   };
 
   nativeBuildInputs = [
@@ -171,9 +174,7 @@ stdenv.mkDerivation rec {
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script {
-    rev-prefix = "release-";
-  };
+  passthru.updateScript = gitUpdater { rev-prefix = "release-"; };
 
   meta = {
     description = "Virtual lighttable and darkroom for photographers";
