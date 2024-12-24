@@ -62,7 +62,7 @@
   gtk-mac-integration,
 
   versionCheckHook,
-  nix-update-script,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -171,7 +171,8 @@ stdenv.mkDerivation rec {
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script {
+  passthru.updateScript = gitUpdater {
+    url = "https://github.com/darktable-org/darktable.git";
     rev-prefix = "release-";
   };
 
