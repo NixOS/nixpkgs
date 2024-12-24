@@ -1,12 +1,10 @@
 {
   lib,
-  # Required based on 'go' directive in go.mod,
-  # remove when Go in nixpkgs defaults to 1.23 or later.
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "agebox";
   version = "0.7.2";
 
