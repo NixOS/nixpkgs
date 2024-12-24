@@ -1,0 +1,4213 @@
+{
+  "nixpkgs-manual": [
+    "index.html#nixpkgs-manual"
+  ],
+  "preface": [
+    "index.html#preface"
+  ],
+  "overview-of-nixpkgs": [
+    "index.html#overview-of-nixpkgs"
+  ],
+  "part-using": [
+    "index.html#part-using"
+  ],
+  "chap-platform-support": [
+    "index.html#chap-platform-support"
+  ],
+  "chap-packageconfig": [
+    "index.html#chap-packageconfig"
+  ],
+  "sec-allow-broken": [
+    "index.html#sec-allow-broken"
+  ],
+  "sec-allow-unsupported-system": [
+    "index.html#sec-allow-unsupported-system"
+  ],
+  "sec-allow-unfree": [
+    "index.html#sec-allow-unfree"
+  ],
+  "sec-allow-insecure": [
+    "index.html#sec-allow-insecure"
+  ],
+  "sec-modify-via-packageOverrides": [
+    "index.html#sec-modify-via-packageOverrides"
+  ],
+  "sec-config-options-reference": [
+    "index.html#sec-config-options-reference"
+  ],
+  "sec-declarative-package-management": [
+    "index.html#sec-declarative-package-management"
+  ],
+  "sec-building-environment": [
+    "index.html#sec-building-environment"
+  ],
+  "sec-getting-documentation": [
+    "index.html#sec-getting-documentation"
+  ],
+  "sec-gnu-info-setup": [
+    "index.html#sec-gnu-info-setup"
+  ],
+  "chap-overlays": [
+    "index.html#chap-overlays"
+  ],
+  "sec-overlays-install": [
+    "index.html#sec-overlays-install"
+  ],
+  "sec-overlays-argument": [
+    "index.html#sec-overlays-argument"
+  ],
+  "sec-overlays-lookup": [
+    "index.html#sec-overlays-lookup"
+  ],
+  "sec-overlays-definition": [
+    "index.html#sec-overlays-definition"
+  ],
+  "sec-overlays-alternatives": [
+    "index.html#sec-overlays-alternatives"
+  ],
+  "sec-overlays-alternatives-blas-lapack": [
+    "index.html#sec-overlays-alternatives-blas-lapack"
+  ],
+  "sec-overlays-alternatives-mpi": [
+    "index.html#sec-overlays-alternatives-mpi"
+  ],
+  "chap-overrides": [
+    "index.html#chap-overrides"
+  ],
+  "sec-pkg-override": [
+    "index.html#sec-pkg-override"
+  ],
+  "sec-pkg-overrideAttrs": [
+    "index.html#sec-pkg-overrideAttrs"
+  ],
+  "sec-pkg-overrideDerivation": [
+    "index.html#sec-pkg-overrideDerivation"
+  ],
+  "sec-lib-makeOverridable": [
+    "index.html#sec-lib-makeOverridable"
+  ],
+  "id-1.4": [
+    "index.html#id-1.4"
+  ],
+  "chap-functions": [
+    "index.html#chap-functions"
+  ],
+  "sec-functions-library": [
+    "index.html#sec-functions-library"
+  ],
+  "sec-functions-library-asserts": [
+    "index.html#sec-functions-library-asserts"
+  ],
+  "sec-functions-library-attrsets": [
+    "index.html#sec-functions-library-attrsets"
+  ],
+  "map-attrs-recursive-example": [
+    "index.html#map-attrs-recursive-example"
+  ],
+  "map-attrs-recursive-cond-example": [
+    "index.html#map-attrs-recursive-cond-example"
+  ],
+  "sec-functions-library-strings": [
+    "index.html#sec-functions-library-strings"
+  ],
+  "sec-functions-library-versions": [
+    "index.html#sec-functions-library-versions"
+  ],
+  "sec-functions-library-trivial": [
+    "index.html#sec-functions-library-trivial"
+  ],
+  "sec-functions-library-fixedPoints": [
+    "index.html#sec-functions-library-fixedPoints"
+  ],
+  "sec-functions-library-lists": [
+    "index.html#sec-functions-library-lists"
+  ],
+  "sec-functions-library-debug": [
+    "index.html#sec-functions-library-debug"
+  ],
+  "sec-functions-library-options": [
+    "index.html#sec-functions-library-options"
+  ],
+  "sec-functions-library-path": [
+    "index.html#sec-functions-library-path"
+  ],
+  "sec-functions-library-filesystem": [
+    "index.html#sec-functions-library-filesystem"
+  ],
+  "sec-functions-library-fileset": [
+    "index.html#sec-functions-library-fileset"
+  ],
+  "sec-fileset": [
+    "index.html#sec-fileset"
+  ],
+  "sec-fileset-overview": [
+    "index.html#sec-fileset-overview"
+  ],
+  "sec-fileset-path-coercion": [
+    "index.html#sec-fileset-path-coercion"
+  ],
+  "sec-fileset-path-coercion-example": [
+    "index.html#sec-fileset-path-coercion-example"
+  ],
+  "sec-functions-library-sources": [
+    "index.html#sec-functions-library-sources"
+  ],
+  "sec-functions-library-cli": [
+    "index.html#sec-functions-library-cli"
+  ],
+  "sec-functions-library-generators": [
+    "index.html#sec-functions-library-generators"
+  ],
+  "sec-functions-library-gvariant": [
+    "index.html#sec-functions-library-gvariant"
+  ],
+  "sec-functions-library-customisation": [
+    "index.html#sec-functions-library-customisation"
+  ],
+  "ex-makeScope": [
+    "index.html#ex-makeScope"
+  ],
+  "ex-makeScope-callPackage": [
+    "index.html#ex-makeScope-callPackage"
+  ],
+  "sec-functions-library-meta": [
+    "index.html#sec-functions-library-meta"
+  ],
+  "sec-functions-library-derivations": [
+    "index.html#sec-functions-library-derivations"
+  ],
+  "sec-generators": [
+    "index.html#sec-generators"
+  ],
+  "sec-debug": [
+    "index.html#sec-debug"
+  ],
+  "sec-prefer-remote-fetch": [
+    "index.html#sec-prefer-remote-fetch"
+  ],
+  "sec-pkgs-nix-gitignore": [
+    "index.html#sec-pkgs-nix-gitignore"
+  ],
+  "sec-pkgs-nix-gitignore-usage": [
+    "index.html#sec-pkgs-nix-gitignore-usage"
+  ],
+  "sec-pkgs-nix-gitignore-usage-recursive": [
+    "index.html#sec-pkgs-nix-gitignore-usage-recursive"
+  ],
+  "module-system": [
+    "index.html#module-system"
+  ],
+  "module-system-introduction": [
+    "index.html#module-system-introduction"
+  ],
+  "module-system-lib-evalModules": [
+    "index.html#module-system-lib-evalModules"
+  ],
+  "module-system-lib-evalModules-parameters": [
+    "index.html#module-system-lib-evalModules-parameters"
+  ],
+  "module-system-lib-evalModules-param-modules": [
+    "index.html#module-system-lib-evalModules-param-modules"
+  ],
+  "module-system-lib-evalModules-param-specialArgs": [
+    "index.html#module-system-lib-evalModules-param-specialArgs"
+  ],
+  "module-system-lib-evalModules-param-class": [
+    "index.html#module-system-lib-evalModules-param-class"
+  ],
+  "module-system-lib-evalModules-param-prefix": [
+    "index.html#module-system-lib-evalModules-param-prefix"
+  ],
+  "module-system-lib-evalModules-return-value": [
+    "index.html#module-system-lib-evalModules-return-value"
+  ],
+  "module-system-lib-evalModules-return-value-options": [
+    "index.html#module-system-lib-evalModules-return-value-options"
+  ],
+  "module-system-lib-evalModules-return-value-config": [
+    "index.html#module-system-lib-evalModules-return-value-config"
+  ],
+  "module-system-lib-evalModules-return-value-type": [
+    "index.html#module-system-lib-evalModules-return-value-type"
+  ],
+  "module-system-lib-evalModules-return-value-extendModules": [
+    "index.html#module-system-lib-evalModules-return-value-extendModules"
+  ],
+  "module-system-lib-evalModules-return-value-_module": [
+    "index.html#module-system-lib-evalModules-return-value-_module"
+  ],
+  "module-system-lib-evalModules-return-value-_type": [
+    "index.html#module-system-lib-evalModules-return-value-_type"
+  ],
+  "module-system-lib-evalModules-return-value-_configurationClass": [
+    "index.html#module-system-lib-evalModules-return-value-_configurationClass"
+  ],
+  "part-stdenv": [
+    "index.html#part-stdenv"
+  ],
+  "chap-stdenv": [
+    "index.html#chap-stdenv"
+  ],
+  "sec-using-stdenv": [
+    "index.html#sec-using-stdenv"
+  ],
+  "sec-building-stdenv-package-in-nix-shell": [
+    "index.html#sec-building-stdenv-package-in-nix-shell"
+  ],
+  "sec-tools-of-stdenv": [
+    "index.html#sec-tools-of-stdenv"
+  ],
+  "ssec-stdenv-dependencies": [
+    "index.html#ssec-stdenv-dependencies"
+  ],
+  "ssec-stdenv-dependencies-overview": [
+    "index.html#ssec-stdenv-dependencies-overview"
+  ],
+  "ssec-stdenv-dependencies-overview-example": [
+    "index.html#ssec-stdenv-dependencies-overview-example"
+  ],
+  "ssec-stdenv-dependencies-reference": [
+    "index.html#ssec-stdenv-dependencies-reference"
+  ],
+  "footnote-stdenv-ignored-build-platform.__back.0": [
+    "index.html#footnote-stdenv-ignored-build-platform.__back.0"
+  ],
+  "footnote-stdenv-native-dependencies-in-path.__back.0": [
+    "index.html#footnote-stdenv-native-dependencies-in-path.__back.0"
+  ],
+  "ssec-stdenv-dependencies-propagated": [
+    "index.html#ssec-stdenv-dependencies-propagated"
+  ],
+  "footnote-stdenv-find-inputs-location.__back.0": [
+    "index.html#footnote-stdenv-find-inputs-location.__back.0"
+  ],
+  "variables-specifying-dependencies": [
+    "index.html#variables-specifying-dependencies"
+  ],
+  "var-stdenv-depsBuildBuild": [
+    "index.html#var-stdenv-depsBuildBuild"
+  ],
+  "var-stdenv-nativeBuildInputs": [
+    "index.html#var-stdenv-nativeBuildInputs"
+  ],
+  "var-stdenv-depsBuildTarget": [
+    "index.html#var-stdenv-depsBuildTarget"
+  ],
+  "var-stdenv-depsHostHost": [
+    "index.html#var-stdenv-depsHostHost"
+  ],
+  "var-stdenv-buildInputs": [
+    "index.html#var-stdenv-buildInputs"
+  ],
+  "var-stdenv-depsTargetTarget": [
+    "index.html#var-stdenv-depsTargetTarget"
+  ],
+  "var-stdenv-depsBuildBuildPropagated": [
+    "index.html#var-stdenv-depsBuildBuildPropagated"
+  ],
+  "var-stdenv-propagatedNativeBuildInputs": [
+    "index.html#var-stdenv-propagatedNativeBuildInputs"
+  ],
+  "var-stdenv-depsBuildTargetPropagated": [
+    "index.html#var-stdenv-depsBuildTargetPropagated"
+  ],
+  "var-stdenv-depsHostHostPropagated": [
+    "index.html#var-stdenv-depsHostHostPropagated"
+  ],
+  "var-stdenv-propagatedBuildInputs": [
+    "index.html#var-stdenv-propagatedBuildInputs"
+  ],
+  "var-stdenv-depsTargetTargetPropagated": [
+    "index.html#var-stdenv-depsTargetTargetPropagated"
+  ],
+  "ssec-stdenv-attributes": [
+    "index.html#ssec-stdenv-attributes"
+  ],
+  "variables-affecting-stdenv-initialisation": [
+    "index.html#variables-affecting-stdenv-initialisation"
+  ],
+  "var-stdenv-NIX_DEBUG": [
+    "index.html#var-stdenv-NIX_DEBUG"
+  ],
+  "attributes-affecting-build-properties": [
+    "index.html#attributes-affecting-build-properties"
+  ],
+  "var-stdenv-enableParallelBuilding": [
+    "index.html#var-stdenv-enableParallelBuilding"
+  ],
+  "mkderivation-recursive-attributes": [
+    "index.html#mkderivation-recursive-attributes"
+  ],
+  "sec-stdenv-phases": [
+    "index.html#sec-stdenv-phases"
+  ],
+  "ssec-controlling-phases": [
+    "index.html#ssec-controlling-phases"
+  ],
+  "variables-affecting-phase-control": [
+    "index.html#variables-affecting-phase-control"
+  ],
+  "var-stdenv-phases": [
+    "index.html#var-stdenv-phases"
+  ],
+  "var-stdenv-prePhases": [
+    "index.html#var-stdenv-prePhases"
+  ],
+  "var-stdenv-preConfigurePhases": [
+    "index.html#var-stdenv-preConfigurePhases"
+  ],
+  "var-stdenv-preBuildPhases": [
+    "index.html#var-stdenv-preBuildPhases"
+  ],
+  "var-stdenv-preInstallPhases": [
+    "index.html#var-stdenv-preInstallPhases"
+  ],
+  "var-stdenv-preFixupPhases": [
+    "index.html#var-stdenv-preFixupPhases"
+  ],
+  "var-stdenv-preDistPhases": [
+    "index.html#var-stdenv-preDistPhases"
+  ],
+  "var-stdenv-postPhases": [
+    "index.html#var-stdenv-postPhases"
+  ],
+  "ssec-unpack-phase": [
+    "index.html#ssec-unpack-phase"
+  ],
+  "tar-files": [
+    "index.html#tar-files"
+  ],
+  "zip-files": [
+    "index.html#zip-files"
+  ],
+  "directories-in-the-nix-store": [
+    "index.html#directories-in-the-nix-store"
+  ],
+  "variables-controlling-the-unpack-phase": [
+    "index.html#variables-controlling-the-unpack-phase"
+  ],
+  "var-stdenv-src": [
+    "index.html#var-stdenv-src"
+  ],
+  "var-stdenv-sourceRoot": [
+    "index.html#var-stdenv-sourceRoot"
+  ],
+  "var-stdenv-setSourceRoot": [
+    "index.html#var-stdenv-setSourceRoot"
+  ],
+  "var-stdenv-preUnpack": [
+    "index.html#var-stdenv-preUnpack"
+  ],
+  "var-stdenv-postUnpack": [
+    "index.html#var-stdenv-postUnpack"
+  ],
+  "var-stdenv-dontUnpack": [
+    "index.html#var-stdenv-dontUnpack"
+  ],
+  "var-stdenv-dontMakeSourcesWritable": [
+    "index.html#var-stdenv-dontMakeSourcesWritable"
+  ],
+  "var-stdenv-unpackCmd": [
+    "index.html#var-stdenv-unpackCmd"
+  ],
+  "ssec-patch-phase": [
+    "index.html#ssec-patch-phase"
+  ],
+  "variables-controlling-the-patch-phase": [
+    "index.html#variables-controlling-the-patch-phase"
+  ],
+  "var-stdenv-dontPatch": [
+    "index.html#var-stdenv-dontPatch"
+  ],
+  "var-stdenv-patches": [
+    "index.html#var-stdenv-patches"
+  ],
+  "var-stdenv-patchFlags": [
+    "index.html#var-stdenv-patchFlags"
+  ],
+  "var-stdenv-prePatch": [
+    "index.html#var-stdenv-prePatch"
+  ],
+  "var-stdenv-postPatch": [
+    "index.html#var-stdenv-postPatch"
+  ],
+  "ssec-configure-phase": [
+    "index.html#ssec-configure-phase"
+  ],
+  "variables-controlling-the-configure-phase": [
+    "index.html#variables-controlling-the-configure-phase"
+  ],
+  "var-stdenv-configureScript": [
+    "index.html#var-stdenv-configureScript"
+  ],
+  "var-stdenv-configureFlags": [
+    "index.html#var-stdenv-configureFlags"
+  ],
+  "var-stdenv-dontConfigure": [
+    "index.html#var-stdenv-dontConfigure"
+  ],
+  "var-stdenv-configureFlagsArray": [
+    "index.html#var-stdenv-configureFlagsArray"
+  ],
+  "var-stdenv-dontAddPrefix": [
+    "index.html#var-stdenv-dontAddPrefix"
+  ],
+  "var-stdenv-prefix": [
+    "index.html#var-stdenv-prefix"
+  ],
+  "var-stdenv-prefixKey": [
+    "index.html#var-stdenv-prefixKey"
+  ],
+  "var-stdenv-dontAddStaticConfigureFlags": [
+    "index.html#var-stdenv-dontAddStaticConfigureFlags"
+  ],
+  "var-stdenv-dontAddDisableDepTrack": [
+    "index.html#var-stdenv-dontAddDisableDepTrack"
+  ],
+  "var-stdenv-dontFixLibtool": [
+    "index.html#var-stdenv-dontFixLibtool"
+  ],
+  "footnote-stdenv-sys-lib-search-path.__back.0": [
+    "index.html#footnote-stdenv-sys-lib-search-path.__back.0"
+  ],
+  "var-stdenv-dontDisableStatic": [
+    "index.html#var-stdenv-dontDisableStatic"
+  ],
+  "var-stdenv-configurePlatforms": [
+    "index.html#var-stdenv-configurePlatforms"
+  ],
+  "footnote-stdenv-build-time-guessing-impurity.__back.0": [
+    "index.html#footnote-stdenv-build-time-guessing-impurity.__back.0"
+  ],
+  "var-stdenv-preConfigure": [
+    "index.html#var-stdenv-preConfigure"
+  ],
+  "var-stdenv-postConfigure": [
+    "index.html#var-stdenv-postConfigure"
+  ],
+  "build-phase": [
+    "index.html#build-phase"
+  ],
+  "variables-controlling-the-build-phase": [
+    "index.html#variables-controlling-the-build-phase"
+  ],
+  "var-stdenv-dontBuild": [
+    "index.html#var-stdenv-dontBuild"
+  ],
+  "var-stdenv-makefile": [
+    "index.html#var-stdenv-makefile"
+  ],
+  "var-stdenv-makeFlags": [
+    "index.html#var-stdenv-makeFlags"
+  ],
+  "var-stdenv-makeFlagsArray": [
+    "index.html#var-stdenv-makeFlagsArray"
+  ],
+  "var-stdenv-buildFlags": [
+    "index.html#var-stdenv-buildFlags"
+  ],
+  "var-stdenv-preBuild": [
+    "index.html#var-stdenv-preBuild"
+  ],
+  "var-stdenv-postBuild": [
+    "index.html#var-stdenv-postBuild"
+  ],
+  "ssec-check-phase": [
+    "index.html#ssec-check-phase"
+  ],
+  "variables-controlling-the-check-phase": [
+    "index.html#variables-controlling-the-check-phase"
+  ],
+  "var-stdenv-doCheck": [
+    "index.html#var-stdenv-doCheck"
+  ],
+  "makeflags-makeflagsarray-makefile": [
+    "index.html#makeflags-makeflagsarray-makefile"
+  ],
+  "var-stdenv-checkTarget": [
+    "index.html#var-stdenv-checkTarget"
+  ],
+  "var-stdenv-checkFlags": [
+    "index.html#var-stdenv-checkFlags"
+  ],
+  "var-stdenv-checkInputs": [
+    "index.html#var-stdenv-checkInputs"
+  ],
+  "var-stdenv-nativeCheckInputs": [
+    "index.html#var-stdenv-nativeCheckInputs"
+  ],
+  "var-stdenv-preCheck": [
+    "index.html#var-stdenv-preCheck"
+  ],
+  "var-stdenv-postCheck": [
+    "index.html#var-stdenv-postCheck"
+  ],
+  "ssec-install-phase": [
+    "index.html#ssec-install-phase"
+  ],
+  "variables-controlling-the-install-phase": [
+    "index.html#variables-controlling-the-install-phase"
+  ],
+  "var-stdenv-dontInstall": [
+    "index.html#var-stdenv-dontInstall"
+  ],
+  "makeflags-makeflagsarray-makefile-1": [
+    "index.html#makeflags-makeflagsarray-makefile-1"
+  ],
+  "var-stdenv-installTargets": [
+    "index.html#var-stdenv-installTargets"
+  ],
+  "var-stdenv-installFlags": [
+    "index.html#var-stdenv-installFlags"
+  ],
+  "var-stdenv-preInstall": [
+    "index.html#var-stdenv-preInstall"
+  ],
+  "var-stdenv-postInstall": [
+    "index.html#var-stdenv-postInstall"
+  ],
+  "ssec-fixup-phase": [
+    "index.html#ssec-fixup-phase"
+  ],
+  "variables-controlling-the-fixup-phase": [
+    "index.html#variables-controlling-the-fixup-phase"
+  ],
+  "var-stdenv-dontFixup": [
+    "index.html#var-stdenv-dontFixup"
+  ],
+  "var-stdenv-dontStrip": [
+    "index.html#var-stdenv-dontStrip"
+  ],
+  "var-stdenv-dontStripHost": [
+    "index.html#var-stdenv-dontStripHost"
+  ],
+  "var-stdenv-dontStripTarget": [
+    "index.html#var-stdenv-dontStripTarget"
+  ],
+  "var-stdenv-dontMoveSbin": [
+    "index.html#var-stdenv-dontMoveSbin"
+  ],
+  "var-stdenv-stripAllList": [
+    "index.html#var-stdenv-stripAllList"
+  ],
+  "var-stdenv-stripAllListTarget": [
+    "index.html#var-stdenv-stripAllListTarget"
+  ],
+  "var-stdenv-stripAllFlags": [
+    "index.html#var-stdenv-stripAllFlags"
+  ],
+  "var-stdenv-stripDebugList": [
+    "index.html#var-stdenv-stripDebugList"
+  ],
+  "var-stdenv-stripDebugListTarget": [
+    "index.html#var-stdenv-stripDebugListTarget"
+  ],
+  "var-stdenv-stripDebugFlags": [
+    "index.html#var-stdenv-stripDebugFlags"
+  ],
+  "var-stdenv-stripExclude": [
+    "index.html#var-stdenv-stripExclude"
+  ],
+  "var-stdenv-dontPatchELF": [
+    "index.html#var-stdenv-dontPatchELF"
+  ],
+  "var-stdenv-dontPatchShebangs": [
+    "index.html#var-stdenv-dontPatchShebangs"
+  ],
+  "var-stdenv-dontPruneLibtoolFiles": [
+    "index.html#var-stdenv-dontPruneLibtoolFiles"
+  ],
+  "var-stdenv-forceShare": [
+    "index.html#var-stdenv-forceShare"
+  ],
+  "var-stdenv-setupHook": [
+    "index.html#var-stdenv-setupHook"
+  ],
+  "var-stdenv-preFixup": [
+    "index.html#var-stdenv-preFixup"
+  ],
+  "var-stdenv-postFixup": [
+    "index.html#var-stdenv-postFixup"
+  ],
+  "stdenv-separateDebugInfo": [
+    "index.html#stdenv-separateDebugInfo"
+  ],
+  "ex-gdb-debug-symbols-socat": [
+    "index.html#ex-gdb-debug-symbols-socat"
+  ],
+  "ssec-installCheck-phase": [
+    "index.html#ssec-installCheck-phase"
+  ],
+  "variables-controlling-the-installcheck-phase": [
+    "index.html#variables-controlling-the-installcheck-phase"
+  ],
+  "var-stdenv-doInstallCheck": [
+    "index.html#var-stdenv-doInstallCheck"
+  ],
+  "var-stdenv-installCheckTarget": [
+    "index.html#var-stdenv-installCheckTarget"
+  ],
+  "var-stdenv-installCheckFlags": [
+    "index.html#var-stdenv-installCheckFlags"
+  ],
+  "var-stdenv-installCheckInputs": [
+    "index.html#var-stdenv-installCheckInputs"
+  ],
+  "var-stdenv-nativeInstallCheckInputs": [
+    "index.html#var-stdenv-nativeInstallCheckInputs"
+  ],
+  "var-stdenv-preInstallCheck": [
+    "index.html#var-stdenv-preInstallCheck"
+  ],
+  "var-stdenv-postInstallCheck": [
+    "index.html#var-stdenv-postInstallCheck"
+  ],
+  "ssec-distribution-phase": [
+    "index.html#ssec-distribution-phase"
+  ],
+  "variables-controlling-the-distribution-phase": [
+    "index.html#variables-controlling-the-distribution-phase"
+  ],
+  "var-stdenv-doDist": [
+    "index.html#var-stdenv-doDist"
+  ],
+  "var-stdenv-distTarget": [
+    "index.html#var-stdenv-distTarget"
+  ],
+  "var-stdenv-distFlags": [
+    "index.html#var-stdenv-distFlags"
+  ],
+  "var-stdenv-tarballs": [
+    "index.html#var-stdenv-tarballs"
+  ],
+  "var-stdenv-dontCopyDist": [
+    "index.html#var-stdenv-dontCopyDist"
+  ],
+  "var-stdenv-preDist": [
+    "index.html#var-stdenv-preDist"
+  ],
+  "var-stdenv-postDist": [
+    "index.html#var-stdenv-postDist"
+  ],
+  "ssec-stdenv-functions": [
+    "index.html#ssec-stdenv-functions"
+  ],
+  "fun-makeWrapper": [
+    "index.html#fun-makeWrapper"
+  ],
+  "fun-remove-references-to": [
+    "index.html#fun-remove-references-to"
+  ],
+  "fun-runHook": [
+    "index.html#fun-runHook"
+  ],
+  "fun-substitute": [
+    "index.html#fun-substitute"
+  ],
+  "fun-substitute-replace-fail": [
+    "index.html#fun-substitute-replace-fail"
+  ],
+  "fun-substitute-replace-warn": [
+    "index.html#fun-substitute-replace-warn"
+  ],
+  "fun-substitute-replace-quiet": [
+    "index.html#fun-substitute-replace-quiet"
+  ],
+  "fun-substitute-subst-var": [
+    "index.html#fun-substitute-subst-var"
+  ],
+  "fun-substitute-subst-var-by": [
+    "index.html#fun-substitute-subst-var-by"
+  ],
+  "fun-substituteInPlace": [
+    "index.html#fun-substituteInPlace"
+  ],
+  "fun-substituteAll": [
+    "index.html#fun-substituteAll"
+  ],
+  "fun-substituteAllInPlace": [
+    "index.html#fun-substituteAllInPlace"
+  ],
+  "fun-stripHash": [
+    "index.html#fun-stripHash"
+  ],
+  "fun-wrapProgram": [
+    "index.html#fun-wrapProgram"
+  ],
+  "fun-prependToVar": [
+    "index.html#fun-prependToVar"
+  ],
+  "fun-appendToVar": [
+    "index.html#fun-appendToVar"
+  ],
+  "ssec-setup-hooks": [
+    "index.html#ssec-setup-hooks"
+  ],
+  "move-docs.sh": [
+    "index.html#move-docs.sh"
+  ],
+  "compress-man-pages.sh": [
+    "index.html#compress-man-pages.sh"
+  ],
+  "strip.sh": [
+    "index.html#strip.sh"
+  ],
+  "patch-shebangs.sh": [
+    "index.html#patch-shebangs.sh"
+  ],
+  "patch-shebangs.sh-invocation": [
+    "index.html#patch-shebangs.sh-invocation"
+  ],
+  "patch-shebangs.sh-invocation-flags": [
+    "index.html#patch-shebangs.sh-invocation-flags"
+  ],
+  "patch-shebangs.sh-invocation-examples": [
+    "index.html#patch-shebangs.sh-invocation-examples"
+  ],
+  "audit-tmpdir.sh": [
+    "index.html#audit-tmpdir.sh"
+  ],
+  "multiple-outputs.sh": [
+    "index.html#multiple-outputs.sh"
+  ],
+  "move-sbin.sh": [
+    "index.html#move-sbin.sh"
+  ],
+  "move-lib64.sh": [
+    "index.html#move-lib64.sh"
+  ],
+  "move-systemd-user-units.sh": [
+    "index.html#move-systemd-user-units.sh"
+  ],
+  "set-source-date-epoch-to-latest.sh": [
+    "index.html#set-source-date-epoch-to-latest.sh"
+  ],
+  "bintools-wrapper": [
+    "index.html#bintools-wrapper"
+  ],
+  "footnote-stdenv-per-platform-wrapper.__back.0": [
+    "index.html#footnote-stdenv-per-platform-wrapper.__back.0"
+  ],
+  "cc-wrapper": [
+    "index.html#cc-wrapper"
+  ],
+  "stdenv-other-hooks": [
+    "index.html#stdenv-other-hooks"
+  ],
+  "compiler-linker-wrapper-hooks": [
+    "index.html#compiler-linker-wrapper-hooks"
+  ],
+  "sec-purity-in-nixpkgs": [
+    "index.html#sec-purity-in-nixpkgs"
+  ],
+  "sec-hardening-in-nixpkgs": [
+    "index.html#sec-hardening-in-nixpkgs"
+  ],
+  "sec-hardening-flags-enabled-by-default": [
+    "index.html#sec-hardening-flags-enabled-by-default"
+  ],
+  "format": [
+    "index.html#format"
+  ],
+  "stackprotector": [
+    "index.html#stackprotector"
+  ],
+  "fortify": [
+    "index.html#fortify"
+  ],
+  "fortify3": [
+    "index.html#fortify3"
+  ],
+  "pic": [
+    "index.html#pic"
+  ],
+  "strictoverflow": [
+    "index.html#strictoverflow"
+  ],
+  "relro": [
+    "index.html#relro"
+  ],
+  "bindnow": [
+    "index.html#bindnow"
+  ],
+  "zerocallusedregs": [
+    "index.html#zerocallusedregs"
+  ],
+  "sec-hardening-flags-disabled-by-default": [
+    "index.html#sec-hardening-flags-disabled-by-default"
+  ],
+  "pie": [
+    "index.html#pie"
+  ],
+  "shadowstack": [
+    "index.html#shadowstack"
+  ],
+  "trivialautovarinit": [
+    "index.html#trivialautovarinit"
+  ],
+  "stackclashprotection": [
+    "index.html#stackclashprotection"
+  ],
+  "pacret": [
+    "index.html#pacret"
+  ],
+  "footnote-stdenv-ignored-build-platform": [
+    "index.html#footnote-stdenv-ignored-build-platform"
+  ],
+  "footnote-stdenv-native-dependencies-in-path": [
+    "index.html#footnote-stdenv-native-dependencies-in-path"
+  ],
+  "footnote-stdenv-find-inputs-location": [
+    "index.html#footnote-stdenv-find-inputs-location"
+  ],
+  "footnote-stdenv-sys-lib-search-path": [
+    "index.html#footnote-stdenv-sys-lib-search-path"
+  ],
+  "footnote-stdenv-build-time-guessing-impurity": [
+    "index.html#footnote-stdenv-build-time-guessing-impurity"
+  ],
+  "footnote-stdenv-per-platform-wrapper": [
+    "index.html#footnote-stdenv-per-platform-wrapper"
+  ],
+  "chap-meta": [
+    "index.html#chap-meta"
+  ],
+  "sec-standard-meta-attributes": [
+    "index.html#sec-standard-meta-attributes"
+  ],
+  "var-meta-description": [
+    "index.html#var-meta-description"
+  ],
+  "var-meta-longDescription": [
+    "index.html#var-meta-longDescription"
+  ],
+  "var-meta-branch": [
+    "index.html#var-meta-branch"
+  ],
+  "var-meta-homepage": [
+    "index.html#var-meta-homepage"
+  ],
+  "var-meta-downloadPage": [
+    "index.html#var-meta-downloadPage"
+  ],
+  "var-meta-changelog": [
+    "index.html#var-meta-changelog"
+  ],
+  "var-meta-license": [
+    "index.html#var-meta-license"
+  ],
+  "var-meta-sourceProvenance": [
+    "index.html#var-meta-sourceProvenance"
+  ],
+  "var-meta-maintainers": [
+    "index.html#var-meta-maintainers"
+  ],
+  "var-meta-mainProgram": [
+    "index.html#var-meta-mainProgram"
+  ],
+  "var-meta-priority": [
+    "index.html#var-meta-priority"
+  ],
+  "var-meta-platforms": [
+    "index.html#var-meta-platforms"
+  ],
+  "var-meta-badPlatforms": [
+    "index.html#var-meta-badPlatforms"
+  ],
+  "var-meta-timeout": [
+    "index.html#var-meta-timeout"
+  ],
+  "var-meta-hydraPlatforms": [
+    "index.html#var-meta-hydraPlatforms"
+  ],
+  "var-meta-broken": [
+    "index.html#var-meta-broken"
+  ],
+  "sec-meta-license": [
+    "index.html#sec-meta-license"
+  ],
+  "lib.licenses.free-free": [
+    "index.html#lib.licenses.free-free"
+  ],
+  "lib.licenses.unfreeredistributable-unfree-redistributable": [
+    "index.html#lib.licenses.unfreeredistributable-unfree-redistributable"
+  ],
+  "lib.licenses.unfree-unfree": [
+    "index.html#lib.licenses.unfree-unfree"
+  ],
+  "lib.licenses.unfreeredistributablefirmware-unfree-redistributable-firmware": [
+    "index.html#lib.licenses.unfreeredistributablefirmware-unfree-redistributable-firmware"
+  ],
+  "sec-meta-sourceProvenance": [
+    "index.html#sec-meta-sourceProvenance"
+  ],
+  "lib.sourceTypes.fromSource": [
+    "index.html#lib.sourceTypes.fromSource"
+  ],
+  "lib.sourceTypes.binaryNativeCode": [
+    "index.html#lib.sourceTypes.binaryNativeCode"
+  ],
+  "lib.sourceTypes.binaryFirmware": [
+    "index.html#lib.sourceTypes.binaryFirmware"
+  ],
+  "lib.sourceTypes.binaryBytecode": [
+    "index.html#lib.sourceTypes.binaryBytecode"
+  ],
+  "chap-passthru": [
+    "index.html#chap-passthru"
+  ],
+  "var-stdenv-passthru": [
+    "index.html#var-stdenv-passthru"
+  ],
+  "special-variables": [
+    "index.html#special-variables"
+  ],
+  "ex-accessing-passthru": [
+    "index.html#ex-accessing-passthru"
+  ],
+  "sec-common-passthru-attributes": [
+    "index.html#sec-common-passthru-attributes"
+  ],
+  "var-passthru-tests": [
+    "index.html#var-passthru-tests"
+  ],
+  "var-meta-tests": [
+    "index.html#var-meta-tests"
+  ],
+  "var-passthru-tests-packages": [
+    "index.html#var-passthru-tests-packages"
+  ],
+  "var-meta-tests-packages": [
+    "index.html#var-meta-tests-packages"
+  ],
+  "var-passthru-tests-nixos": [
+    "index.html#var-passthru-tests-nixos"
+  ],
+  "var-meta-tests-nixos": [
+    "index.html#var-meta-tests-nixos"
+  ],
+  "var-passthru-updateScript": [
+    "index.html#var-passthru-updateScript"
+  ],
+  "var-passthru-updateScript-command": [
+    "index.html#var-passthru-updateScript-command"
+  ],
+  "var-passthru-updateScript-set-command": [
+    "index.html#var-passthru-updateScript-set-command"
+  ],
+  "var-passthru-updateScript-set-attrPath": [
+    "index.html#var-passthru-updateScript-set-attrPath"
+  ],
+  "var-passthru-updateScript-set-supportedFeatures": [
+    "index.html#var-passthru-updateScript-set-supportedFeatures"
+  ],
+  "var-passthru-updateScript-env-UPDATE_NIX_NAME": [
+    "index.html#var-passthru-updateScript-env-UPDATE_NIX_NAME"
+  ],
+  "var-passthru-updateScript-env-UPDATE_NIX_PNAME": [
+    "index.html#var-passthru-updateScript-env-UPDATE_NIX_PNAME"
+  ],
+  "var-passthru-updateScript-env-UPDATE_NIX_OLD_VERSION": [
+    "index.html#var-passthru-updateScript-env-UPDATE_NIX_OLD_VERSION"
+  ],
+  "var-passthru-updateScript-env-UPDATE_NIX_ATTR_PATH": [
+    "index.html#var-passthru-updateScript-env-UPDATE_NIX_ATTR_PATH"
+  ],
+  "var-passthru-updateScript-execution": [
+    "index.html#var-passthru-updateScript-execution"
+  ],
+  "var-passthru-updateScript-supported-features": [
+    "index.html#var-passthru-updateScript-supported-features"
+  ],
+  "var-passthru-updateScript-commit": [
+    "index.html#var-passthru-updateScript-commit"
+  ],
+  "var-passthru-updateScript-commit-attrPath": [
+    "index.html#var-passthru-updateScript-commit-attrPath"
+  ],
+  "var-passthru-updateScript-commit-oldVersion": [
+    "index.html#var-passthru-updateScript-commit-oldVersion"
+  ],
+  "var-passthru-updateScript-commit-newVersion": [
+    "index.html#var-passthru-updateScript-commit-newVersion"
+  ],
+  "var-passthru-updateScript-commit-files": [
+    "index.html#var-passthru-updateScript-commit-files"
+  ],
+  "var-passthru-updateScript-commit-commitBody": [
+    "index.html#var-passthru-updateScript-commit-commitBody"
+  ],
+  "var-passthru-updateScript-commit-commitMessage": [
+    "index.html#var-passthru-updateScript-commit-commitMessage"
+  ],
+  "var-passthru-updateScript-example-commit": [
+    "index.html#var-passthru-updateScript-example-commit"
+  ],
+  "chap-multiple-output": [
+    "index.html#chap-multiple-output"
+  ],
+  "sec-multiple-outputs-using-split-packages": [
+    "index.html#sec-multiple-outputs-using-split-packages"
+  ],
+  "sec-multiple-outputs-": [
+    "index.html#sec-multiple-outputs-"
+  ],
+  "multiple-output-file-binaries-first-convention": [
+    "index.html#multiple-output-file-binaries-first-convention"
+  ],
+  "multiple-output-file-type-groups": [
+    "index.html#multiple-output-file-type-groups"
+  ],
+  "outputdev": [
+    "index.html#outputdev"
+  ],
+  "outputbin": [
+    "index.html#outputbin"
+  ],
+  "outputlib": [
+    "index.html#outputlib"
+  ],
+  "outputdoc": [
+    "index.html#outputdoc"
+  ],
+  "outputdevdoc": [
+    "index.html#outputdevdoc"
+  ],
+  "outputman": [
+    "index.html#outputman"
+  ],
+  "outputdevman": [
+    "index.html#outputdevman"
+  ],
+  "outputinfo": [
+    "index.html#outputinfo"
+  ],
+  "sec-multiple-outputs-caveats": [
+    "index.html#sec-multiple-outputs-caveats"
+  ],
+  "chap-cross": [
+    "index.html#chap-cross"
+  ],
+  "sec-cross-intro": [
+    "index.html#sec-cross-intro"
+  ],
+  "sec-cross-packaging": [
+    "index.html#sec-cross-packaging"
+  ],
+  "ssec-cross-platform-parameters": [
+    "index.html#ssec-cross-platform-parameters"
+  ],
+  "ssec-cross-dependency-categorization": [
+    "index.html#ssec-cross-dependency-categorization"
+  ],
+  "possible-dependency-types": [
+    "index.html#possible-dependency-types"
+  ],
+  "ssec-cross-cookbook": [
+    "index.html#ssec-cross-cookbook"
+  ],
+  "cross-qa-fails-to-find-binutils": [
+    "index.html#cross-qa-fails-to-find-binutils"
+  ],
+  "cross-qa-avoid-compiling-gcc-cross-compiler": [
+    "index.html#cross-qa-avoid-compiling-gcc-cross-compiler"
+  ],
+  "cross-qa-build-c-program-in-build-environment": [
+    "index.html#cross-qa-build-c-program-in-build-environment"
+  ],
+  "cross-testsuite-runs-host-code": [
+    "index.html#cross-testsuite-runs-host-code"
+  ],
+  "cross-meson-runs-host-code": [
+    "index.html#cross-meson-runs-host-code"
+  ],
+  "cross-static-on-non-static-platform": [
+    "index.html#cross-static-on-non-static-platform"
+  ],
+  "sec-cross-usage": [
+    "index.html#sec-cross-usage"
+  ],
+  "sec-cross-infra": [
+    "index.html#sec-cross-infra"
+  ],
+  "ssec-cross-dependency-implementation": [
+    "index.html#ssec-cross-dependency-implementation"
+  ],
+  "ssec-bootstrapping": [
+    "index.html#ssec-bootstrapping"
+  ],
+  "chap-platform-notes": [
+    "index.html#chap-platform-notes"
+  ],
+  "sec-darwin": [
+    "index.html#sec-darwin"
+  ],
+  "sec-darwin-troubleshooting": [
+    "index.html#sec-darwin-troubleshooting"
+  ],
+  "sec-darwin-troubleshooting-using-sdks": [
+    "index.html#sec-darwin-troubleshooting-using-sdks"
+  ],
+  "sec-darwin-troubleshooting-using-deployment-targets": [
+    "index.html#sec-darwin-troubleshooting-using-deployment-targets"
+  ],
+  "sec-darwin-troubleshooting-picking-sdk-version": [
+    "index.html#sec-darwin-troubleshooting-picking-sdk-version"
+  ],
+  "sec-darwin-troubleshooting-darwin-defaults": [
+    "index.html#sec-darwin-troubleshooting-darwin-defaults"
+  ],
+  "sec-darwin-troubleshooting-xcrun": [
+    "index.html#sec-darwin-troubleshooting-xcrun"
+  ],
+  "sec-darwin-troubleshooting-xcodebuild": [
+    "index.html#sec-darwin-troubleshooting-xcodebuild"
+  ],
+  "sec-darwin-troubleshooting-xcodebuild-absolute-paths": [
+    "index.html#sec-darwin-troubleshooting-xcodebuild-absolute-paths"
+  ],
+  "sec-darwin-troubleshooting-libiconv": [
+    "index.html#sec-darwin-troubleshooting-libiconv"
+  ],
+  "sec-darwin-troubleshooting-install-name": [
+    "index.html#sec-darwin-troubleshooting-install-name"
+  ],
+  "sec-darwin-troubleshooting-install-name-linker-flags": [
+    "index.html#sec-darwin-troubleshooting-install-name-linker-flags"
+  ],
+  "sec-darwin-troubleshooting-install-name-install_name_tool": [
+    "index.html#sec-darwin-troubleshooting-install-name-install_name_tool"
+  ],
+  "sec-darwin-troubleshooting-install-name-fixDarwinDylibNames": [
+    "index.html#sec-darwin-troubleshooting-install-name-fixDarwinDylibNames"
+  ],
+  "sec-darwin-troubleshooting-propagating-sdks": [
+    "index.html#sec-darwin-troubleshooting-propagating-sdks"
+  ],
+  "sec-darwin-legacy-frameworks": [
+    "index.html#sec-darwin-legacy-frameworks"
+  ],
+  "sec-darwin-legacy-frameworks-overrides": [
+    "index.html#sec-darwin-legacy-frameworks-overrides"
+  ],
+  "sec-darwin-legacy-cross-compilation": [
+    "index.html#sec-darwin-legacy-cross-compilation"
+  ],
+  "part-builders": [
+    "index.html#part-builders"
+  ],
+  "chap-pkgs-fetchers": [
+    "index.html#chap-pkgs-fetchers"
+  ],
+  "chap-pkgs-fetchers-caveats": [
+    "index.html#chap-pkgs-fetchers-caveats"
+  ],
+  "sec-pkgs-fetchers-updating-source-hashes": [
+    "index.html#sec-pkgs-fetchers-updating-source-hashes"
+  ],
+  "sec-pkgs-fetchers-updating-source-hashes-fakehash-method": [
+    "index.html#sec-pkgs-fetchers-updating-source-hashes-fakehash-method"
+  ],
+  "ex-fetchers-update-fod-hash": [
+    "index.html#ex-fetchers-update-fod-hash"
+  ],
+  "sec-pkgs-fetchers-secure-hashes": [
+    "index.html#sec-pkgs-fetchers-secure-hashes"
+  ],
+  "sec-pkgs-fetchers-proxy": [
+    "index.html#sec-pkgs-fetchers-proxy"
+  ],
+  "fetchurl": [
+    "index.html#fetchurl"
+  ],
+  "sec-pkgs-fetchers-fetchurl": [
+    "index.html#sec-pkgs-fetchers-fetchurl"
+  ],
+  "sec-pkgs-fetchers-fetchurl-inputs": [
+    "index.html#sec-pkgs-fetchers-fetchurl-inputs"
+  ],
+  "sec-pkgs-fetchers-fetchurl-inputs-recursiveHash": [
+    "index.html#sec-pkgs-fetchers-fetchurl-inputs-recursiveHash"
+  ],
+  "sec-pkgs-fetchers-fetchurl-inputs-downloadToTemp": [
+    "index.html#sec-pkgs-fetchers-fetchurl-inputs-downloadToTemp"
+  ],
+  "ssec-pkgs-fetchers-fetchurl-passthru-outputs": [
+    "index.html#ssec-pkgs-fetchers-fetchurl-passthru-outputs"
+  ],
+  "ssec-pkgs-fetchers-fetchurl-examples": [
+    "index.html#ssec-pkgs-fetchers-fetchurl-examples"
+  ],
+  "ex-fetchers-fetchurl-nixpkgs-version": [
+    "index.html#ex-fetchers-fetchurl-nixpkgs-version"
+  ],
+  "ex-fetchers-fetchurl-nixpkgs-version-multiple-urls": [
+    "index.html#ex-fetchers-fetchurl-nixpkgs-version-multiple-urls"
+  ],
+  "ex-fetchers-fetchurl-nixpkgs-version-postfetch": [
+    "index.html#ex-fetchers-fetchurl-nixpkgs-version-postfetch"
+  ],
+  "sec-pkgs-fetchers-fetchzip": [
+    "index.html#sec-pkgs-fetchers-fetchzip"
+  ],
+  "sec-pkgs-fetchers-fetchzip-inputs": [
+    "index.html#sec-pkgs-fetchers-fetchzip-inputs"
+  ],
+  "sec-pkgs-fetchers-fetchzip-examples": [
+    "index.html#sec-pkgs-fetchers-fetchzip-examples"
+  ],
+  "ex-fetchers-fetchzip-simple-striproot": [
+    "index.html#ex-fetchers-fetchzip-simple-striproot"
+  ],
+  "ex-fetchers-fetchzip-rar-archive": [
+    "index.html#ex-fetchers-fetchzip-rar-archive"
+  ],
+  "fetchpatch": [
+    "index.html#fetchpatch"
+  ],
+  "fetchdebianpatch": [
+    "index.html#fetchdebianpatch"
+  ],
+  "fetchsvn": [
+    "index.html#fetchsvn"
+  ],
+  "fetchgit": [
+    "index.html#fetchgit"
+  ],
+  "ex-fetchgit-sparseCheckout": [
+    "index.html#ex-fetchgit-sparseCheckout"
+  ],
+  "fetchfossil": [
+    "index.html#fetchfossil"
+  ],
+  "fetchcvs": [
+    "index.html#fetchcvs"
+  ],
+  "fetchhg": [
+    "index.html#fetchhg"
+  ],
+  "fetchfromgitea": [
+    "index.html#fetchfromgitea"
+  ],
+  "fetchfromgithub": [
+    "index.html#fetchfromgithub"
+  ],
+  "fetchfromgitlab": [
+    "index.html#fetchfromgitlab"
+  ],
+  "fetchfromgitiles": [
+    "index.html#fetchfromgitiles"
+  ],
+  "fetchfrombitbucket": [
+    "index.html#fetchfrombitbucket"
+  ],
+  "fetchfromsavannah": [
+    "index.html#fetchfromsavannah"
+  ],
+  "fetchfromrepoorcz": [
+    "index.html#fetchfromrepoorcz"
+  ],
+  "fetchfromsourcehut": [
+    "index.html#fetchfromsourcehut"
+  ],
+  "requirefile": [
+    "index.html#requirefile"
+  ],
+  "fetchtorrent": [
+    "index.html#fetchtorrent"
+  ],
+  "fetchtorrent-parameters": [
+    "index.html#fetchtorrent-parameters"
+  ],
+  "chap-trivial-builders": [
+    "index.html#chap-trivial-builders"
+  ],
+  "trivial-builder-runCommandWith": [
+    "index.html#trivial-builder-runCommandWith"
+  ],
+  "trivial-builder-runCommandWith-Type": [
+    "index.html#trivial-builder-runCommandWith-Type"
+  ],
+  "trivial-builder-runCommandWith-Inputs": [
+    "index.html#trivial-builder-runCommandWith-Inputs"
+  ],
+  "ex-runcommandwith": [
+    "index.html#ex-runcommandwith"
+  ],
+  "trivial-builder-runCommand": [
+    "index.html#trivial-builder-runCommand"
+  ],
+  "trivial-builder-runCommand-Type": [
+    "index.html#trivial-builder-runCommand-Type"
+  ],
+  "trivial-builder-runCommand-Input": [
+    "index.html#trivial-builder-runCommand-Input"
+  ],
+  "ex-runcommand-simple": [
+    "index.html#ex-runcommand-simple"
+  ],
+  "trivial-builder-text-writing": [
+    "index.html#trivial-builder-text-writing"
+  ],
+  "trivial-builder-makeDesktopItem": [
+    "index.html#trivial-builder-makeDesktopItem"
+  ],
+  "trivial-builder-makeDesktopItem-inputs": [
+    "index.html#trivial-builder-makeDesktopItem-inputs"
+  ],
+  "trivial-builder-makeDesktopItem-examples": [
+    "index.html#trivial-builder-makeDesktopItem-examples"
+  ],
+  "ex-makeDesktopItem": [
+    "index.html#ex-makeDesktopItem"
+  ],
+  "ex2-makeDesktopItem": [
+    "index.html#ex2-makeDesktopItem"
+  ],
+  "trivial-builder-writeTextFile": [
+    "index.html#trivial-builder-writeTextFile"
+  ],
+  "ex-writeTextFile": [
+    "index.html#ex-writeTextFile"
+  ],
+  "ex2-writeTextFile": [
+    "index.html#ex2-writeTextFile"
+  ],
+  "ex3-writeTextFile": [
+    "index.html#ex3-writeTextFile"
+  ],
+  "trivial-builder-writeText": [
+    "index.html#trivial-builder-writeText"
+  ],
+  "ex-writeText": [
+    "index.html#ex-writeText"
+  ],
+  "trivial-builder-writeTextDir": [
+    "index.html#trivial-builder-writeTextDir"
+  ],
+  "ex-writeTextDir": [
+    "index.html#ex-writeTextDir"
+  ],
+  "trivial-builder-writeScript": [
+    "index.html#trivial-builder-writeScript"
+  ],
+  "ex-writeScript": [
+    "index.html#ex-writeScript"
+  ],
+  "trivial-builder-writeScriptBin": [
+    "index.html#trivial-builder-writeScriptBin"
+  ],
+  "ex-writeScriptBin": [
+    "index.html#ex-writeScriptBin"
+  ],
+  "trivial-builder-writeShellScript": [
+    "index.html#trivial-builder-writeShellScript"
+  ],
+  "ex-writeShellScript": [
+    "index.html#ex-writeShellScript"
+  ],
+  "trivial-builder-writeShellScriptBin": [
+    "index.html#trivial-builder-writeShellScriptBin"
+  ],
+  "ex-writeShellScriptBin": [
+    "index.html#ex-writeShellScriptBin"
+  ],
+  "trivial-builder-concatText": [
+    "index.html#trivial-builder-concatText"
+  ],
+  "trivial-builder-writeShellApplication": [
+    "index.html#trivial-builder-writeShellApplication"
+  ],
+  "trivial-builder-symlinkJoin": [
+    "index.html#trivial-builder-symlinkJoin"
+  ],
+  "trivial-builder-writeClosure": [
+    "index.html#trivial-builder-writeClosure",
+    "index.html#trivial-builder-writeReferencesToFile"
+  ],
+  "trivial-builder-writeDirectReferencesToFile": [
+    "index.html#trivial-builder-writeDirectReferencesToFile"
+  ],
+  "chap-testers": [
+    "index.html#chap-testers"
+  ],
+  "tester-hasPkgConfigModules": [
+    "index.html#tester-hasPkgConfigModules"
+  ],
+  "tester-hasPkgConfigModule": [
+    "index.html#tester-hasPkgConfigModule"
+  ],
+  "ex-haspkgconfigmodules-defaultvalues": [
+    "index.html#ex-haspkgconfigmodules-defaultvalues"
+  ],
+  "ex-haspkgconfigmodules-explicitmodules": [
+    "index.html#ex-haspkgconfigmodules-explicitmodules"
+  ],
+  "tester-lycheeLinkCheck": [
+    "index.html#tester-lycheeLinkCheck"
+  ],
+  "ex-lycheelinkcheck": [
+    "index.html#ex-lycheelinkcheck"
+  ],
+  "tester-lycheeLinkCheck-return": [
+    "index.html#tester-lycheeLinkCheck-return"
+  ],
+  "tester-lycheeLinkCheck-inputs": [
+    "index.html#tester-lycheeLinkCheck-inputs"
+  ],
+  "tester-shellcheck": [
+    "index.html#tester-shellcheck"
+  ],
+  "ex-shellcheck": [
+    "index.html#ex-shellcheck"
+  ],
+  "tester-shellcheck-inputs": [
+    "index.html#tester-shellcheck-inputs"
+  ],
+  "tester-shellcheck-param-src": [
+    "index.html#tester-shellcheck-param-src"
+  ],
+  "tester-shellcheck-return": [
+    "index.html#tester-shellcheck-return"
+  ],
+  "tester-testVersion": [
+    "index.html#tester-testVersion"
+  ],
+  "ex-testversion-hello": [
+    "index.html#ex-testversion-hello"
+  ],
+  "ex-testversion-different-commandversion": [
+    "index.html#ex-testversion-different-commandversion"
+  ],
+  "tester-testBuildFailure": [
+    "index.html#tester-testBuildFailure"
+  ],
+  "ex-testBuildFailure-showingenvironmentchanges": [
+    "index.html#ex-testBuildFailure-showingenvironmentchanges"
+  ],
+  "tester-testEqualContents": [
+    "index.html#tester-testEqualContents"
+  ],
+  "ex-testEqualContents-toyexample": [
+    "index.html#ex-testEqualContents-toyexample"
+  ],
+  "tester-testEqualDerivation": [
+    "index.html#tester-testEqualDerivation"
+  ],
+  "ex-testEqualDerivation-hello": [
+    "index.html#ex-testEqualDerivation-hello"
+  ],
+  "tester-invalidateFetcherByDrvHash": [
+    "index.html#tester-invalidateFetcherByDrvHash"
+  ],
+  "ex-invalidateFetcherByDrvHash-nix": [
+    "index.html#ex-invalidateFetcherByDrvHash-nix"
+  ],
+  "tester-runCommand": [
+    "index.html#tester-runCommand"
+  ],
+  "ex-tester-runCommand-nix": [
+    "index.html#ex-tester-runCommand-nix"
+  ],
+  "tester-runNixOSTest": [
+    "index.html#tester-runNixOSTest"
+  ],
+  "ex-runNixOSTest-hello": [
+    "index.html#ex-runNixOSTest-hello"
+  ],
+  "tester-nixosTest": [
+    "index.html#tester-nixosTest"
+  ],
+  "tester-nixosTest-parameter": [
+    "index.html#tester-nixosTest-parameter"
+  ],
+  "tester-nixosTest-result": [
+    "index.html#tester-nixosTest-result"
+  ],
+  "chap-devShellTools": [
+    "index.html#chap-devShellTools"
+  ],
+  "sec-devShellTools-valueToString": [
+    "index.html#sec-devShellTools-valueToString"
+  ],
+  "sec-devShellTools-unstructuredDerivationInputEnv": [
+    "index.html#sec-devShellTools-unstructuredDerivationInputEnv"
+  ],
+  "sec-devShellTools-derivationOutputEnv": [
+    "index.html#sec-devShellTools-derivationOutputEnv"
+  ],
+  "chap-special": [
+    "index.html#chap-special"
+  ],
+  "sec-fakeNss": [
+    "index.html#sec-fakeNss"
+  ],
+  "sec-fakeNss-inputs": [
+    "index.html#sec-fakeNss-inputs"
+  ],
+  "sec-fakeNss-examples": [
+    "index.html#sec-fakeNss-examples"
+  ],
+  "ex-fakeNss-dockerTools-buildImage": [
+    "index.html#ex-fakeNss-dockerTools-buildImage"
+  ],
+  "ex-fakeNss-overriding": [
+    "index.html#ex-fakeNss-overriding"
+  ],
+  "sec-fhs-environments": [
+    "index.html#sec-fhs-environments"
+  ],
+  "sec-pkgs.makeSetupHook": [
+    "index.html#sec-pkgs.makeSetupHook"
+  ],
+  "sec-pkgs.makeSetupHook-usage": [
+    "index.html#sec-pkgs.makeSetupHook-usage"
+  ],
+  "sec-pkgs.makeSetupHook-usage-example": [
+    "index.html#sec-pkgs.makeSetupHook-usage-example"
+  ],
+  "sec-pkgs.makeSetupHook-attributes": [
+    "index.html#sec-pkgs.makeSetupHook-attributes"
+  ],
+  "sec-pkgs-mkShell": [
+    "index.html#sec-pkgs-mkShell"
+  ],
+  "sec-pkgs-mkShell-usage": [
+    "index.html#sec-pkgs-mkShell-usage"
+  ],
+  "sec-pkgs-mkShell-attributes": [
+    "index.html#sec-pkgs-mkShell-attributes"
+  ],
+  "sec-pkgs-mkShell-variants": [
+    "index.html#sec-pkgs-mkShell-variants"
+  ],
+  "sec-pkgs-mkShell-building": [
+    "index.html#sec-pkgs-mkShell-building"
+  ],
+  "sec-vm-tools": [
+    "index.html#sec-vm-tools"
+  ],
+  "vm-tools-createEmptyImage": [
+    "index.html#vm-tools-createEmptyImage"
+  ],
+  "vm-tools-createEmptyImage-attributes": [
+    "index.html#vm-tools-createEmptyImage-attributes"
+  ],
+  "vm-tools-runInLinuxVM": [
+    "index.html#vm-tools-runInLinuxVM"
+  ],
+  "vm-tools-runInLinuxVM-attributes": [
+    "index.html#vm-tools-runInLinuxVM-attributes"
+  ],
+  "vm-tools-runInLinuxVM-examples": [
+    "index.html#vm-tools-runInLinuxVM-examples"
+  ],
+  "vm-tools-extractFs": [
+    "index.html#vm-tools-extractFs"
+  ],
+  "vm-tools-extractFs-attributes": [
+    "index.html#vm-tools-extractFs-attributes"
+  ],
+  "vm-tools-extractFs-examples": [
+    "index.html#vm-tools-extractFs-examples"
+  ],
+  "vm-tools-extractMTDfs": [
+    "index.html#vm-tools-extractMTDfs"
+  ],
+  "vm-tools-runInLinuxImage": [
+    "index.html#vm-tools-runInLinuxImage"
+  ],
+  "vm-tools-makeImageTestScript": [
+    "index.html#vm-tools-makeImageTestScript"
+  ],
+  "vm-tools-makeImageTestScript-examples": [
+    "index.html#vm-tools-makeImageTestScript-examples"
+  ],
+  "vm-tools-diskImageFuns": [
+    "index.html#vm-tools-diskImageFuns"
+  ],
+  "vm-tools-diskImageFuns-images": [
+    "index.html#vm-tools-diskImageFuns-images"
+  ],
+  "vm-tools-diskImageFuns-attributes": [
+    "index.html#vm-tools-diskImageFuns-attributes"
+  ],
+  "vm-tools-diskImageFuns-examples": [
+    "index.html#vm-tools-diskImageFuns-examples"
+  ],
+  "vm-tools-diskImageExtraFuns": [
+    "index.html#vm-tools-diskImageExtraFuns"
+  ],
+  "vm-tools-diskImages": [
+    "index.html#vm-tools-diskImages"
+  ],
+  "sec-checkpoint-build": [
+    "index.html#sec-checkpoint-build"
+  ],
+  "sec-checkpoint-build-example": [
+    "index.html#sec-checkpoint-build-example"
+  ],
+  "chap-images": [
+    "index.html#chap-images"
+  ],
+  "sec-pkgs-appimageTools": [
+    "index.html#sec-pkgs-appimageTools"
+  ],
+  "ssec-pkgs-appimageTools-wrapping": [
+    "index.html#ssec-pkgs-appimageTools-wrapping"
+  ],
+  "ex-wrapping-appimage-from-github": [
+    "index.html#ex-wrapping-appimage-from-github"
+  ],
+  "ex-wrapping-appimage-with-extrapkgs": [
+    "index.html#ex-wrapping-appimage-with-extrapkgs"
+  ],
+  "ssec-pkgs-appimageTools-extracting": [
+    "index.html#ssec-pkgs-appimageTools-extracting"
+  ],
+  "ex-extracting-appimage": [
+    "index.html#ex-extracting-appimage"
+  ],
+  "ex-extracting-appimage-with-postextract": [
+    "index.html#ex-extracting-appimage-with-postextract"
+  ],
+  "sec-pkgs-dockerTools": [
+    "index.html#sec-pkgs-dockerTools"
+  ],
+  "ssec-pkgs-dockerTools-buildImage": [
+    "index.html#ssec-pkgs-dockerTools-buildImage"
+  ],
+  "ssec-pkgs-dockerTools-buildImage-inputs": [
+    "index.html#ssec-pkgs-dockerTools-buildImage-inputs"
+  ],
+  "ssec-pkgs-dockerTools-buildImage-passthru-outputs": [
+    "index.html#ssec-pkgs-dockerTools-buildImage-passthru-outputs"
+  ],
+  "ssec-pkgs-dockerTools-buildImage-examples": [
+    "index.html#ssec-pkgs-dockerTools-buildImage-examples"
+  ],
+  "ex-dockerTools-buildImage": [
+    "index.html#ex-dockerTools-buildImage"
+  ],
+  "ex-dockerTools-buildImage-runAsRoot": [
+    "index.html#ex-dockerTools-buildImage-runAsRoot"
+  ],
+  "ex-dockerTools-buildImage-extraCommands": [
+    "index.html#ex-dockerTools-buildImage-extraCommands"
+  ],
+  "ex-dockerTools-buildImage-creatednow": [
+    "index.html#ex-dockerTools-buildImage-creatednow"
+  ],
+  "ssec-pkgs-dockerTools-buildLayeredImage": [
+    "index.html#ssec-pkgs-dockerTools-buildLayeredImage"
+  ],
+  "ssec-pkgs-dockerTools-buildLayeredImage-examples": [
+    "index.html#ssec-pkgs-dockerTools-buildLayeredImage-examples"
+  ],
+  "ex-dockerTools-buildLayeredImage-hello": [
+    "index.html#ex-dockerTools-buildLayeredImage-hello"
+  ],
+  "ssec-pkgs-dockerTools-streamLayeredImage": [
+    "index.html#ssec-pkgs-dockerTools-streamLayeredImage"
+  ],
+  "ssec-pkgs-dockerTools-streamLayeredImage-inputs": [
+    "index.html#ssec-pkgs-dockerTools-streamLayeredImage-inputs"
+  ],
+  "dockerTools-buildLayeredImage-arg-contents": [
+    "index.html#dockerTools-buildLayeredImage-arg-contents"
+  ],
+  "dockerTools-buildLayeredImage-arg-config": [
+    "index.html#dockerTools-buildLayeredImage-arg-config"
+  ],
+  "dockerTools-buildLayeredImage-arg-uid": [
+    "index.html#dockerTools-buildLayeredImage-arg-uid"
+  ],
+  "dockerTools-buildLayeredImage-arg-gid": [
+    "index.html#dockerTools-buildLayeredImage-arg-gid"
+  ],
+  "dockerTools-buildLayeredImage-arg-uname": [
+    "index.html#dockerTools-buildLayeredImage-arg-uname"
+  ],
+  "dockerTools-buildLayeredImage-arg-gname": [
+    "index.html#dockerTools-buildLayeredImage-arg-gname"
+  ],
+  "dockerTools-buildLayeredImage-arg-maxLayers": [
+    "index.html#dockerTools-buildLayeredImage-arg-maxLayers"
+  ],
+  "ssec-pkgs-dockerTools-streamLayeredImage-passthru-outputs": [
+    "index.html#ssec-pkgs-dockerTools-streamLayeredImage-passthru-outputs"
+  ],
+  "ssec-pkgs-dockerTools-streamLayeredImage-examples": [
+    "index.html#ssec-pkgs-dockerTools-streamLayeredImage-examples"
+  ],
+  "ex-dockerTools-streamLayeredImage-hello": [
+    "index.html#ex-dockerTools-streamLayeredImage-hello"
+  ],
+  "ex-dockerTools-streamLayeredImage-exploringlayers": [
+    "index.html#ex-dockerTools-streamLayeredImage-exploringlayers"
+  ],
+  "ex-dockerTools-streamLayeredImage-configclosure": [
+    "index.html#ex-dockerTools-streamLayeredImage-configclosure"
+  ],
+  "ssec-pkgs-dockerTools-fetchFromRegistry": [
+    "index.html#ssec-pkgs-dockerTools-fetchFromRegistry"
+  ],
+  "ssec-pkgs-dockerTools-pullImage": [
+    "index.html#ssec-pkgs-dockerTools-pullImage"
+  ],
+  "ssec-pkgs-dockerTools-pullImage-inputs": [
+    "index.html#ssec-pkgs-dockerTools-pullImage-inputs"
+  ],
+  "ssec-pkgs-dockerTools-pullImage-examples": [
+    "index.html#ssec-pkgs-dockerTools-pullImage-examples"
+  ],
+  "ex-dockerTools-pullImage-niximage": [
+    "index.html#ex-dockerTools-pullImage-niximage"
+  ],
+  "ex-dockerTools-pullImage-differentregistry": [
+    "index.html#ex-dockerTools-pullImage-differentregistry"
+  ],
+  "ex-dockerTools-pullImage-nixprefetchdocker": [
+    "index.html#ex-dockerTools-pullImage-nixprefetchdocker"
+  ],
+  "ssec-pkgs-dockerTools-exportImage": [
+    "index.html#ssec-pkgs-dockerTools-exportImage"
+  ],
+  "ssec-pkgs-dockerTools-exportImage-inputs": [
+    "index.html#ssec-pkgs-dockerTools-exportImage-inputs"
+  ],
+  "ssec-pkgs-dockerTools-exportImage-examples": [
+    "index.html#ssec-pkgs-dockerTools-exportImage-examples"
+  ],
+  "ex-dockerTools-exportImage-hello": [
+    "index.html#ex-dockerTools-exportImage-hello"
+  ],
+  "ex-dockerTools-exportImage-importingDocker": [
+    "index.html#ex-dockerTools-exportImage-importingDocker"
+  ],
+  "ex-dockerTools-exportImage-naming": [
+    "index.html#ex-dockerTools-exportImage-naming"
+  ],
+  "ex-dockerTools-exportImage-fromImagePath": [
+    "index.html#ex-dockerTools-exportImage-fromImagePath"
+  ],
+  "ssec-pkgs-dockerTools-helpers": [
+    "index.html#ssec-pkgs-dockerTools-helpers"
+  ],
+  "sssec-pkgs-dockerTools-helpers-usrBinEnv": [
+    "index.html#sssec-pkgs-dockerTools-helpers-usrBinEnv"
+  ],
+  "sssec-pkgs-dockerTools-helpers-binSh": [
+    "index.html#sssec-pkgs-dockerTools-helpers-binSh"
+  ],
+  "sssec-pkgs-dockerTools-helpers-caCertificates": [
+    "index.html#sssec-pkgs-dockerTools-helpers-caCertificates"
+  ],
+  "ssec-pkgs-dockerTools-fakeNss": [
+    "index.html#ssec-pkgs-dockerTools-fakeNss"
+  ],
+  "sssec-pkgs-dockerTools-helpers-fakeNss": [
+    "index.html#sssec-pkgs-dockerTools-helpers-fakeNss"
+  ],
+  "ssec-pkgs-dockerTools-shadowSetup": [
+    "index.html#ssec-pkgs-dockerTools-shadowSetup"
+  ],
+  "ssec-pkgs-dockerTools-helpers-examples": [
+    "index.html#ssec-pkgs-dockerTools-helpers-examples"
+  ],
+  "ex-dockerTools-helpers-buildImage": [
+    "index.html#ex-dockerTools-helpers-buildImage"
+  ],
+  "ex-dockerTools-helpers-buildLayeredImage": [
+    "index.html#ex-dockerTools-helpers-buildLayeredImage"
+  ],
+  "ex-dockerTools-shadowSetup-buildImage": [
+    "index.html#ex-dockerTools-shadowSetup-buildImage"
+  ],
+  "ex-dockerTools-shadowSetup-buildLayeredImage": [
+    "index.html#ex-dockerTools-shadowSetup-buildLayeredImage"
+  ],
+  "ssec-pkgs-dockerTools-buildNixShellImage-arguments": [
+    "index.html#ssec-pkgs-dockerTools-buildNixShellImage-arguments"
+  ],
+  "ssec-pkgs-dockerTools-buildNixShellImage": [
+    "index.html#ssec-pkgs-dockerTools-buildNixShellImage"
+  ],
+  "ssec-pkgs-dockerTools-buildNixShellImage-example": [
+    "index.html#ssec-pkgs-dockerTools-buildNixShellImage-example"
+  ],
+  "ssec-pkgs-dockerTools-buildNixShellImage-examples": [
+    "index.html#ssec-pkgs-dockerTools-buildNixShellImage-examples"
+  ],
+  "ex-dockerTools-buildNixShellImage-hello": [
+    "index.html#ex-dockerTools-buildNixShellImage-hello"
+  ],
+  "ssec-pkgs-dockerTools-streamNixShellImage": [
+    "index.html#ssec-pkgs-dockerTools-streamNixShellImage"
+  ],
+  "ssec-pkgs-dockerTools-streamNixShellImage-inputs": [
+    "index.html#ssec-pkgs-dockerTools-streamNixShellImage-inputs"
+  ],
+  "ssec-pkgs-dockerTools-streamNixShellImage-examples": [
+    "index.html#ssec-pkgs-dockerTools-streamNixShellImage-examples"
+  ],
+  "ex-dockerTools-streamNixShellImage-hello": [
+    "index.html#ex-dockerTools-streamNixShellImage-hello"
+  ],
+  "ex-dockerTools-streamNixShellImage-extendingBuildInputs": [
+    "index.html#ex-dockerTools-streamNixShellImage-extendingBuildInputs"
+  ],
+  "ex-dockerTools-streamNixShellImage-addingShellHook": [
+    "index.html#ex-dockerTools-streamNixShellImage-addingShellHook"
+  ],
+  "sec-pkgs-ociTools": [
+    "index.html#sec-pkgs-ociTools"
+  ],
+  "ssec-pkgs-ociTools-buildContainer": [
+    "index.html#ssec-pkgs-ociTools-buildContainer"
+  ],
+  "ssec-pkgs-ociTools-buildContainer-inputs": [
+    "index.html#ssec-pkgs-ociTools-buildContainer-inputs"
+  ],
+  "ssec-pkgs-ociTools-buildContainer-examples": [
+    "index.html#ssec-pkgs-ociTools-buildContainer-examples"
+  ],
+  "ex-ociTools-buildContainer-bash": [
+    "index.html#ex-ociTools-buildContainer-bash"
+  ],
+  "sec-pkgs-portableService": [
+    "index.html#sec-pkgs-portableService"
+  ],
+  "ssec-pkgs-portableService-inputs": [
+    "index.html#ssec-pkgs-portableService-inputs"
+  ],
+  "ssec-pkgs-portableService-examples": [
+    "index.html#ssec-pkgs-portableService-examples"
+  ],
+  "ex-pkgs-portableService": [
+    "index.html#ex-pkgs-portableService"
+  ],
+  "ex-portableService-hello": [
+    "index.html#ex-portableService-hello"
+  ],
+  "ex-portableService-symlinks": [
+    "index.html#ex-portableService-symlinks"
+  ],
+  "sec-make-disk-image": [
+    "index.html#sec-make-disk-image"
+  ],
+  "sec-make-disk-image-features": [
+    "index.html#sec-make-disk-image-features"
+  ],
+  "sec-make-disk-image-features-common": [
+    "index.html#sec-make-disk-image-features-common"
+  ],
+  "sec-make-disk-image-features-full-image": [
+    "index.html#sec-make-disk-image-features-full-image"
+  ],
+  "sec-make-disk-image-features-reproducibility": [
+    "index.html#sec-make-disk-image-features-reproducibility"
+  ],
+  "sec-make-disk-image-usage": [
+    "index.html#sec-make-disk-image-usage"
+  ],
+  "sec-pkgs-binary-cache": [
+    "index.html#sec-pkgs-binary-cache"
+  ],
+  "sec-pkgs-binary-cache-example": [
+    "index.html#sec-pkgs-binary-cache-example"
+  ],
+  "ex-mkbinarycache-copying-package-closure": [
+    "index.html#ex-mkbinarycache-copying-package-closure"
+  ],
+  "chap-hooks": [
+    "index.html#chap-hooks"
+  ],
+  "setup-hook-autoconf": [
+    "index.html#setup-hook-autoconf"
+  ],
+  "setup-hook-automake": [
+    "index.html#setup-hook-automake"
+  ],
+  "setup-hook-autopatchelfhook": [
+    "index.html#setup-hook-autopatchelfhook"
+  ],
+  "aws-c-common": [
+    "index.html#aws-c-common"
+  ],
+  "bmake-hook": [
+    "index.html#bmake-hook"
+  ],
+  "breakpointhook": [
+    "index.html#breakpointhook"
+  ],
+  "cernlib-hook": [
+    "index.html#cernlib-hook"
+  ],
+  "cmake": [
+    "index.html#cmake"
+  ],
+  "cmake-variables-controlling": [
+    "index.html#cmake-variables-controlling"
+  ],
+  "cmake-exclusive-variables": [
+    "index.html#cmake-exclusive-variables"
+  ],
+  "cmake-flags": [
+    "index.html#cmake-flags"
+  ],
+  "cmake-build-dir": [
+    "index.html#cmake-build-dir"
+  ],
+  "dont-use-cmake-configure": [
+    "index.html#dont-use-cmake-configure"
+  ],
+  "desktop-file-utils": [
+    "index.html#desktop-file-utils"
+  ],
+  "setup-hook-gdk-pixbuf": [
+    "index.html#setup-hook-gdk-pixbuf"
+  ],
+  "ghc": [
+    "index.html#ghc"
+  ],
+  "gnome-platform": [
+    "index.html#gnome-platform"
+  ],
+  "haredo-hook": [
+    "index.html#haredo-hook"
+  ],
+  "haredo-hook-buildPhase": [
+    "index.html#haredo-hook-buildPhase"
+  ],
+  "haredo-hook-haredoBuildTargets": [
+    "index.html#haredo-hook-haredoBuildTargets"
+  ],
+  "haredo-hook-dontUseHaredoBuild": [
+    "index.html#haredo-hook-dontUseHaredoBuild"
+  ],
+  "haredo-hook-checkPhase": [
+    "index.html#haredo-hook-checkPhase"
+  ],
+  "haredo-hook-haredoCheckTargets": [
+    "index.html#haredo-hook-haredoCheckTargets"
+  ],
+  "haredo-hook-dontUseHaredoCheck": [
+    "index.html#haredo-hook-dontUseHaredoCheck"
+  ],
+  "haredo-hook-installPhase": [
+    "index.html#haredo-hook-installPhase"
+  ],
+  "haredo-hook-haredoInstallTargets": [
+    "index.html#haredo-hook-haredoInstallTargets"
+  ],
+  "haredo-hook-dontUseHaredoInstall": [
+    "index.html#haredo-hook-dontUseHaredoInstall"
+  ],
+  "installshellfiles": [
+    "index.html#installshellfiles"
+  ],
+  "installshellfiles-installbin": [
+    "index.html#installshellfiles-installbin"
+  ],
+  "installshellfiles-installbin-exampleusage": [
+    "index.html#installshellfiles-installbin-exampleusage"
+  ],
+  "installshellfiles-installmanpage": [
+    "index.html#installshellfiles-installmanpage"
+  ],
+  "installshellfiles-installmanpage-exampleusage": [
+    "index.html#installshellfiles-installmanpage-exampleusage"
+  ],
+  "installshellfiles-installshellcompletion": [
+    "index.html#installshellfiles-installshellcompletion"
+  ],
+  "installshellfiles-installshellcompletion-exampleusage": [
+    "index.html#installshellfiles-installshellcompletion-exampleusage"
+  ],
+  "installshellfiles-installshellcompletion-exampleusage-guarded": [
+    "index.html#installshellfiles-installshellcompletion-exampleusage-guarded"
+  ],
+  "just-hook": [
+    "index.html#just-hook"
+  ],
+  "just-hook-justFlags": [
+    "index.html#just-hook-justFlags"
+  ],
+  "just-hook-buildPhase": [
+    "index.html#just-hook-buildPhase"
+  ],
+  "just-hook-dontUseJustBuild": [
+    "index.html#just-hook-dontUseJustBuild"
+  ],
+  "just-hook-checkPhase": [
+    "index.html#just-hook-checkPhase"
+  ],
+  "just-hook-dontUseJustCheck": [
+    "index.html#just-hook-dontUseJustCheck"
+  ],
+  "just-hook-installPhase": [
+    "index.html#just-hook-installPhase"
+  ],
+  "just-hook-dontUseJustInstall": [
+    "index.html#just-hook-dontUseJustInstall"
+  ],
+  "libiconv-libintl": [
+    "index.html#libiconv-libintl"
+  ],
+  "setup-hook-libxml2": [
+    "index.html#setup-hook-libxml2"
+  ],
+  "meson": [
+    "index.html#meson"
+  ],
+  "meson-variables-controlling": [
+    "index.html#meson-variables-controlling"
+  ],
+  "meson-exclusive-variables": [
+    "index.html#meson-exclusive-variables"
+  ],
+  "meson-flags": [
+    "index.html#meson-flags"
+  ],
+  "meson-build-dir": [
+    "index.html#meson-build-dir"
+  ],
+  "meson-wrap-mode": [
+    "index.html#meson-wrap-mode"
+  ],
+  "meson-build-type": [
+    "index.html#meson-build-type"
+  ],
+  "meson-auto-features": [
+    "index.html#meson-auto-features"
+  ],
+  "meson-check-flags": [
+    "index.html#meson-check-flags"
+  ],
+  "meson-install-flags": [
+    "index.html#meson-install-flags"
+  ],
+  "meson-install-tags": [
+    "index.html#meson-install-tags"
+  ],
+  "dont-use-meson-configure": [
+    "index.html#dont-use-meson-configure"
+  ],
+  "dont-use-meson-check": [
+    "index.html#dont-use-meson-check"
+  ],
+  "dont-use-meson-install": [
+    "index.html#dont-use-meson-install"
+  ],
+  "meson-honored-variables": [
+    "index.html#meson-honored-variables"
+  ],
+  "setup-hook-mpi-check": [
+    "index.html#setup-hook-mpi-check"
+  ],
+  "ninja": [
+    "index.html#ninja"
+  ],
+  "sec-patchRcPathHooks": [
+    "index.html#sec-patchRcPathHooks"
+  ],
+  "setup-hook-perl": [
+    "index.html#setup-hook-perl"
+  ],
+  "setup-hook-pkg-config": [
+    "index.html#setup-hook-pkg-config"
+  ],
+  "sec-postgresqlTestHook": [
+    "index.html#sec-postgresqlTestHook"
+  ],
+  "sec-postgresqlTestHook-variables": [
+    "index.html#sec-postgresqlTestHook-variables"
+  ],
+  "sec-postgresqlTestHook-hooks": [
+    "index.html#sec-postgresqlTestHook-hooks"
+  ],
+  "sec-postgresqlTestHook-tcp": [
+    "index.html#sec-postgresqlTestHook-tcp"
+  ],
+  "premake-hook": [
+    "index.html#premake-hook"
+  ],
+  "premake-hook-premakefile": [
+    "index.html#premake-hook-premakefile"
+  ],
+  "premake-hook-premakeFlagsArray": [
+    "index.html#premake-hook-premakeFlagsArray"
+  ],
+  "setup-hook-python": [
+    "index.html#setup-hook-python"
+  ],
+  "scons": [
+    "index.html#scons"
+  ],
+  "tauri-hook": [
+    "index.html#tauri-hook"
+  ],
+  "tauri-hook-example-code-snippet": [
+    "index.html#tauri-hook-example-code-snippet"
+  ],
+  "tauri-hook-variables-controlling": [
+    "index.html#tauri-hook-variables-controlling"
+  ],
+  "tauri-hook-exclusive-variables": [
+    "index.html#tauri-hook-exclusive-variables"
+  ],
+  "tauri-build-flags": [
+    "index.html#tauri-build-flags"
+  ],
+  "tauri-bundle-type": [
+    "index.html#tauri-bundle-type"
+  ],
+  "dont-tauri-build": [
+    "index.html#dont-tauri-build"
+  ],
+  "dont-tauri-install": [
+    "index.html#dont-tauri-install"
+  ],
+  "tauri-hook-honored-variables": [
+    "index.html#tauri-hook-honored-variables"
+  ],
+  "tetex-tex-live": [
+    "index.html#tetex-tex-live"
+  ],
+  "unzip": [
+    "index.html#unzip"
+  ],
+  "validatepkgconfig": [
+    "index.html#validatepkgconfig"
+  ],
+  "versioncheckhook": [
+    "index.html#versioncheckhook"
+  ],
+  "waf-hook": [
+    "index.html#waf-hook"
+  ],
+  "waf-hook-variables-controlling": [
+    "index.html#waf-hook-variables-controlling"
+  ],
+  "waf-hook-exclusive-variables": [
+    "index.html#waf-hook-exclusive-variables"
+  ],
+  "waf-path": [
+    "index.html#waf-path"
+  ],
+  "waf-flags": [
+    "index.html#waf-flags"
+  ],
+  "dont-use-waf-configure": [
+    "index.html#dont-use-waf-configure"
+  ],
+  "dont-use-waf-build": [
+    "index.html#dont-use-waf-build"
+  ],
+  "dont-use-waf-install": [
+    "index.html#dont-use-waf-install"
+  ],
+  "waf-hook-similar-variables": [
+    "index.html#waf-hook-similar-variables"
+  ],
+  "waf-hook-honored-variables": [
+    "index.html#waf-hook-honored-variables"
+  ],
+  "zig-hook": [
+    "index.html#zig-hook"
+  ],
+  "zig-hook-example-code-snippet": [
+    "index.html#zig-hook-example-code-snippet"
+  ],
+  "zig-hook-variables-controlling": [
+    "index.html#zig-hook-variables-controlling"
+  ],
+  "zig-hook-exclusive-variables": [
+    "index.html#zig-hook-exclusive-variables"
+  ],
+  "dont-use-zig-build": [
+    "index.html#dont-use-zig-build"
+  ],
+  "dont-use-zig-check": [
+    "index.html#dont-use-zig-check"
+  ],
+  "dont-use-zig-install": [
+    "index.html#dont-use-zig-install"
+  ],
+  "zig-hook-similar-variables": [
+    "index.html#zig-hook-similar-variables"
+  ],
+  "zig-hook-variables-honored": [
+    "index.html#zig-hook-variables-honored"
+  ],
+  "xcbuildhook": [
+    "index.html#xcbuildhook"
+  ],
+  "xfce4-dev-tools": [
+    "index.html#xfce4-dev-tools"
+  ],
+  "dontUseXdtAutogenPhase": [
+    "index.html#dontUseXdtAutogenPhase"
+  ],
+  "chap-language-support": [
+    "index.html#chap-language-support"
+  ],
+  "example-navigte-nix-repl": [
+    "index.html#example-navigte-nix-repl"
+  ],
+  "example-list-haskellPackages": [
+    "index.html#example-list-haskellPackages"
+  ],
+  "agda": [
+    "index.html#agda"
+  ],
+  "how-to-use-agda": [
+    "index.html#how-to-use-agda"
+  ],
+  "compiling-agda": [
+    "index.html#compiling-agda"
+  ],
+  "writing-agda-packages": [
+    "index.html#writing-agda-packages"
+  ],
+  "building-agda-packages": [
+    "index.html#building-agda-packages"
+  ],
+  "installing-agda-packages": [
+    "index.html#installing-agda-packages"
+  ],
+  "maintaining-the-agda-package-set-on-nixpkgs": [
+    "index.html#maintaining-the-agda-package-set-on-nixpkgs"
+  ],
+  "adding-agda-packages-to-nixpkgs": [
+    "index.html#adding-agda-packages-to-nixpkgs"
+  ],
+  "agda-maintaining-packages": [
+    "index.html#agda-maintaining-packages"
+  ],
+  "android": [
+    "index.html#android"
+  ],
+  "using-androidenv-with-android-studio": [
+    "index.html#using-androidenv-with-android-studio"
+  ],
+  "deploying-an-android-sdk-installation-with-plugins": [
+    "index.html#deploying-an-android-sdk-installation-with-plugins"
+  ],
+  "using-predefined-android-package-compositions": [
+    "index.html#using-predefined-android-package-compositions"
+  ],
+  "spawning-emulator-instances": [
+    "index.html#spawning-emulator-instances"
+  ],
+  "notes-on-environment-variables-in-android-projects": [
+    "index.html#notes-on-environment-variables-in-android-projects"
+  ],
+  "notes-on-improving-build.gradle-compatibility": [
+    "index.html#notes-on-improving-build.gradle-compatibility"
+  ],
+  "querying-the-available-versions-of-each-plugin": [
+    "index.html#querying-the-available-versions-of-each-plugin"
+  ],
+  "updating-the-generated-expressions": [
+    "index.html#updating-the-generated-expressions"
+  ],
+  "building-an-android-application-with-ant": [
+    "index.html#building-an-android-application-with-ant"
+  ],
+  "sec-beam": [
+    "index.html#sec-beam"
+  ],
+  "beam-introduction": [
+    "index.html#beam-introduction"
+  ],
+  "available-versions-and-deprecations-schedule": [
+    "index.html#available-versions-and-deprecations-schedule"
+  ],
+  "elixir": [
+    "index.html#elixir"
+  ],
+  "beam-structure": [
+    "index.html#beam-structure"
+  ],
+  "build-tools": [
+    "index.html#build-tools"
+  ],
+  "build-tools-rebar3": [
+    "index.html#build-tools-rebar3"
+  ],
+  "build-tools-other": [
+    "index.html#build-tools-other"
+  ],
+  "how-to-install-beam-packages": [
+    "index.html#how-to-install-beam-packages"
+  ],
+  "ex-beam-ephemeral-shell": [
+    "index.html#ex-beam-ephemeral-shell"
+  ],
+  "ex-beam-declarative-shell": [
+    "index.html#ex-beam-declarative-shell"
+  ],
+  "packaging-beam-applications": [
+    "index.html#packaging-beam-applications"
+  ],
+  "packaging-erlang-applications": [
+    "index.html#packaging-erlang-applications"
+  ],
+  "rebar3-packages": [
+    "index.html#rebar3-packages"
+  ],
+  "erlang-mk-packages": [
+    "index.html#erlang-mk-packages"
+  ],
+  "mix-packages": [
+    "index.html#mix-packages"
+  ],
+  "mix-release-elixir-phoenix-example": [
+    "index.html#mix-release-elixir-phoenix-example"
+  ],
+  "mix-release-javascript-deps": [
+    "index.html#mix-release-javascript-deps"
+  ],
+  "mix-release-mix-deps": [
+    "index.html#mix-release-mix-deps"
+  ],
+  "mix2nix": [
+    "index.html#mix2nix"
+  ],
+  "fixed-output-derivation": [
+    "index.html#fixed-output-derivation"
+  ],
+  "mix-release-example": [
+    "index.html#mix-release-example"
+  ],
+  "example-of-creating-a-service-for-an-elixir---phoenix-project": [
+    "index.html#example-of-creating-a-service-for-an-elixir---phoenix-project"
+  ],
+  "how-to-develop": [
+    "index.html#how-to-develop"
+  ],
+  "creating-a-shell": [
+    "index.html#creating-a-shell"
+  ],
+  "beam-using-overlays": [
+    "index.html#beam-using-overlays"
+  ],
+  "beam-using-overlays-shell.nix": [
+    "index.html#beam-using-overlays-shell.nix"
+  ],
+  "elixir---phoenix-project": [
+    "index.html#elixir---phoenix-project"
+  ],
+  "sec-bower": [
+    "index.html#sec-bower"
+  ],
+  "ssec-bower2nix-usage": [
+    "index.html#ssec-bower2nix-usage"
+  ],
+  "ex-bowerJson": [
+    "index.html#ex-bowerJson"
+  ],
+  "ssec-build-bower-components": [
+    "index.html#ssec-build-bower-components"
+  ],
+  "ex-buildBowerComponents": [
+    "index.html#ex-buildBowerComponents"
+  ],
+  "ex-bowerGulpFile": [
+    "index.html#ex-bowerGulpFile"
+  ],
+  "ex-buildBowerComponentsDefaultNix": [
+    "index.html#ex-buildBowerComponentsDefaultNix"
+  ],
+  "ssec-bower2nix-troubleshooting": [
+    "index.html#ssec-bower2nix-troubleshooting"
+  ],
+  "enocache-errors-from-buildbowercomponents": [
+    "index.html#enocache-errors-from-buildbowercomponents"
+  ],
+  "sec-chicken": [
+    "index.html#sec-chicken"
+  ],
+  "sec-chicken-using": [
+    "index.html#sec-chicken-using"
+  ],
+  "sec-chicken-updating-eggs": [
+    "index.html#sec-chicken-updating-eggs"
+  ],
+  "sec-chicken-adding-eggs": [
+    "index.html#sec-chicken-adding-eggs"
+  ],
+  "sec-chicken-override-scope": [
+    "index.html#sec-chicken-override-scope"
+  ],
+  "sec-language-coq": [
+    "index.html#sec-language-coq"
+  ],
+  "coq-derivation-coq": [
+    "index.html#coq-derivation-coq"
+  ],
+  "coq-packages-attribute-sets-coqpackages": [
+    "index.html#coq-packages-attribute-sets-coqpackages"
+  ],
+  "coq-overriding-packages": [
+    "index.html#coq-overriding-packages"
+  ],
+  "coq-override": [
+    "index.html#coq-override"
+  ],
+  "coq-overrideCoqDerivation": [
+    "index.html#coq-overrideCoqDerivation"
+  ],
+  "coq-overrideAttrs": [
+    "index.html#coq-overrideAttrs"
+  ],
+  "crystal": [
+    "index.html#crystal"
+  ],
+  "building-a-crystal-package": [
+    "index.html#building-a-crystal-package"
+  ],
+  "cuda": [
+    "index.html#cuda"
+  ],
+  "adding-a-new-cuda-release": [
+    "index.html#adding-a-new-cuda-release"
+  ],
+  "updating-cuda-redistributables": [
+    "index.html#updating-cuda-redistributables"
+  ],
+  "updating-cutensor": [
+    "index.html#updating-cutensor"
+  ],
+  "updating-supported-compilers-and-gpus": [
+    "index.html#updating-supported-compilers-and-gpus"
+  ],
+  "updating-the-cuda-toolkit": [
+    "index.html#updating-the-cuda-toolkit"
+  ],
+  "updating-the-cuda-package-set": [
+    "index.html#updating-the-cuda-package-set"
+  ],
+  "cuda-docker-podman": [
+    "index.html#cuda-docker-podman"
+  ],
+  "specifying-what-devices-to-expose-to-the-container": [
+    "index.html#specifying-what-devices-to-expose-to-the-container"
+  ],
+  "using-docker-compose": [
+    "index.html#using-docker-compose"
+  ],
+  "cuelang": [
+    "index.html#cuelang"
+  ],
+  "cuelang-quickstart": [
+    "index.html#cuelang-quickstart"
+  ],
+  "cuelang-writeCueValidator": [
+    "index.html#cuelang-writeCueValidator"
+  ],
+  "sec-language-dart": [
+    "index.html#sec-language-dart"
+  ],
+  "ssec-dart-applications": [
+    "index.html#ssec-dart-applications"
+  ],
+  "ssec-dart-applications-patching-dependencies": [
+    "index.html#ssec-dart-applications-patching-dependencies"
+  ],
+  "ssec-dart-applications-build-tools": [
+    "index.html#ssec-dart-applications-build-tools"
+  ],
+  "ssec-dart-applications-nix-shell": [
+    "index.html#ssec-dart-applications-nix-shell"
+  ],
+  "ssec-dart-applications-nix-shell-deps": [
+    "index.html#ssec-dart-applications-nix-shell-deps"
+  ],
+  "ssec-dart-flutter": [
+    "index.html#ssec-dart-flutter"
+  ],
+  "ssec-dart-flutter-nix-shell": [
+    "index.html#ssec-dart-flutter-nix-shell"
+  ],
+  "ssec-dart-flutter-nix-shell-enter": [
+    "index.html#ssec-dart-flutter-nix-shell-enter"
+  ],
+  "sec-language-dhall": [
+    "index.html#sec-language-dhall"
+  ],
+  "ssec-dhall-remote-imports": [
+    "index.html#ssec-dhall-remote-imports"
+  ],
+  "ssec-dhall-packaging-expression": [
+    "index.html#ssec-dhall-packaging-expression"
+  ],
+  "ssec-dhall-package-contents": [
+    "index.html#ssec-dhall-package-contents"
+  ],
+  "ssec-dhall-packaging-functions": [
+    "index.html#ssec-dhall-packaging-functions"
+  ],
+  "ssec-dhall-dhall-to-nixpkgs": [
+    "index.html#ssec-dhall-dhall-to-nixpkgs"
+  ],
+  "ssec-dhall-remote-imports-as-fod": [
+    "index.html#ssec-dhall-remote-imports-as-fod"
+  ],
+  "ssec-dhall-overriding-dependency-versions": [
+    "index.html#ssec-dhall-overriding-dependency-versions"
+  ],
+  "ssec-dhall-overrides": [
+    "index.html#ssec-dhall-overrides"
+  ],
+  "dlang": [
+    "index.html#dlang"
+  ],
+  "dub-lockfiles": [
+    "index.html#dub-lockfiles"
+  ],
+  "builddubpackage-parameters": [
+    "index.html#builddubpackage-parameters"
+  ],
+  "dotnet": [
+    "index.html#dotnet"
+  ],
+  "local-development-workflow": [
+    "index.html#local-development-workflow"
+  ],
+  "using-many-sdks-in-a-workflow": [
+    "index.html#using-many-sdks-in-a-workflow"
+  ],
+  "dotnet-sdk-vs-dotnetcorepackages.sdk": [
+    "index.html#dotnet-sdk-vs-dotnetcorepackages.sdk"
+  ],
+  "dotnetcorepackages.sdk-vs-dotnetcorepackages.runtime-vs-dotnetcorepackages.aspnetcore": [
+    "index.html#dotnetcorepackages.sdk-vs-dotnetcorepackages.runtime-vs-dotnetcorepackages.aspnetcore"
+  ],
+  "packaging-a-dotnet-application": [
+    "index.html#packaging-a-dotnet-application"
+  ],
+  "dotnet-global-tools": [
+    "index.html#dotnet-global-tools"
+  ],
+  "packaging-dotnet-global-tools": [
+    "index.html#packaging-dotnet-global-tools"
+  ],
+  "generating-and-updating-nuget-dependencies": [
+    "index.html#generating-and-updating-nuget-dependencies"
+  ],
+  "emscripten": [
+    "index.html#emscripten"
+  ],
+  "declarative-usage": [
+    "index.html#declarative-usage"
+  ],
+  "usage-1-pkgs.zlib.override": [
+    "index.html#usage-1-pkgs.zlib.override"
+  ],
+  "usage-2-pkgs.buildemscriptenpackage": [
+    "index.html#usage-2-pkgs.buildemscriptenpackage"
+  ],
+  "declarative-debugging": [
+    "index.html#declarative-debugging"
+  ],
+  "sec-language-gnome": [
+    "index.html#sec-language-gnome"
+  ],
+  "ssec-gnome-packaging": [
+    "index.html#ssec-gnome-packaging"
+  ],
+  "ssec-gnome-settings": [
+    "index.html#ssec-gnome-settings"
+  ],
+  "ssec-gnome-gio-modules": [
+    "index.html#ssec-gnome-gio-modules"
+  ],
+  "ssec-gnome-gdk-pixbuf-loaders": [
+    "index.html#ssec-gnome-gdk-pixbuf-loaders"
+  ],
+  "ssec-gnome-icons": [
+    "index.html#ssec-gnome-icons"
+  ],
+  "ssec-icon-theme-packaging": [
+    "index.html#ssec-icon-theme-packaging"
+  ],
+  "ssec-gnome-themes": [
+    "index.html#ssec-gnome-themes"
+  ],
+  "ssec-gnome-typelibs": [
+    "index.html#ssec-gnome-typelibs"
+  ],
+  "ssec-gnome-plugins": [
+    "index.html#ssec-gnome-plugins"
+  ],
+  "ssec-gnome-hooks": [
+    "index.html#ssec-gnome-hooks"
+  ],
+  "ssec-gnome-hooks-wrapgappshook": [
+    "index.html#ssec-gnome-hooks-wrapgappshook"
+  ],
+  "ssec-gnome-hooks-wrapgappshook3": [
+    "index.html#ssec-gnome-hooks-wrapgappshook3"
+  ],
+  "ssec-gnome-hooks-wrapgappshook4": [
+    "index.html#ssec-gnome-hooks-wrapgappshook4"
+  ],
+  "ssec-gnome-hooks-wrapgappsnoguihook": [
+    "index.html#ssec-gnome-hooks-wrapgappsnoguihook"
+  ],
+  "ssec-gnome-hooks-glib": [
+    "index.html#ssec-gnome-hooks-glib"
+  ],
+  "ssec-gnome-hooks-gdk-pixbuf": [
+    "index.html#ssec-gnome-hooks-gdk-pixbuf"
+  ],
+  "ssec-gnome-hooks-gtk-drop-icon-theme-cache": [
+    "index.html#ssec-gnome-hooks-gtk-drop-icon-theme-cache"
+  ],
+  "ssec-gnome-hooks-dconf": [
+    "index.html#ssec-gnome-hooks-dconf"
+  ],
+  "ssec-gnome-hooks-hicolor-icon-theme": [
+    "index.html#ssec-gnome-hooks-hicolor-icon-theme"
+  ],
+  "ssec-gnome-hooks-gobject-introspection": [
+    "index.html#ssec-gnome-hooks-gobject-introspection"
+  ],
+  "ssec-gnome-hooks-gst-grl-plugins": [
+    "index.html#ssec-gnome-hooks-gst-grl-plugins"
+  ],
+  "ssec-gnome-updating": [
+    "index.html#ssec-gnome-updating"
+  ],
+  "ssec-gnome-common-issues": [
+    "index.html#ssec-gnome-common-issues"
+  ],
+  "ssec-gnome-common-issues-no-schemas": [
+    "index.html#ssec-gnome-common-issues-no-schemas"
+  ],
+  "ssec-gnome-common-issues-missing-schema": [
+    "index.html#ssec-gnome-common-issues-missing-schema"
+  ],
+  "ssec-gnome-common-issues-double-wrapped": [
+    "index.html#ssec-gnome-common-issues-double-wrapped"
+  ],
+  "ssec-gnome-common-issues-unwrappable-package": [
+    "index.html#ssec-gnome-common-issues-unwrappable-package"
+  ],
+  "ssec-gnome-common-issues-unwrappable-package-gnome-shell-ext": [
+    "index.html#ssec-gnome-common-issues-unwrappable-package-gnome-shell-ext"
+  ],
+  "ssec-gnome-common-issues-unwrappable-package-gsettings": [
+    "index.html#ssec-gnome-common-issues-unwrappable-package-gsettings"
+  ],
+  "ssec-gnome-common-issues-unwrappable-package-gsettings-vala": [
+    "index.html#ssec-gnome-common-issues-unwrappable-package-gsettings-vala"
+  ],
+  "ssec-gnome-common-issues-unwrappable-package-gsettings-c": [
+    "index.html#ssec-gnome-common-issues-unwrappable-package-gsettings-c"
+  ],
+  "ssec-gnome-common-issues-weird-location": [
+    "index.html#ssec-gnome-common-issues-weird-location"
+  ],
+  "sec-language-go": [
+    "index.html#sec-language-go"
+  ],
+  "ssec-language-go": [
+    "index.html#ssec-language-go"
+  ],
+  "buildgomodule-parameters": [
+    "index.html#buildgomodule-parameters",
+    "index.html#ssec-go-common-attributes"
+  ],
+  "ex-buildGoModule": [
+    "index.html#ex-buildGoModule"
+  ],
+  "buildGoModule-goModules-override": [
+    "index.html#buildGoModule-goModules-override"
+  ],
+  "buildGoPackage-migration": [
+    "index.html#buildGoPackage-migration",
+    "index.html#ssec-go-legacy",
+    "index.html#example-for-buildgopackage"
+  ],
+  "var-go-ldflags": [
+    "index.html#var-go-ldflags"
+  ],
+  "var-go-tags": [
+    "index.html#var-go-tags"
+  ],
+  "var-go-deleteVendor": [
+    "index.html#var-go-deleteVendor"
+  ],
+  "var-go-subPackages": [
+    "index.html#var-go-subPackages"
+  ],
+  "var-go-excludedPackages": [
+    "index.html#var-go-excludedPackages"
+  ],
+  "var-go-proxyVendor": [
+    "index.html#var-go-proxyVendor"
+  ],
+  "var-go-CGO_ENABLED": [
+    "index.html#var-go-CGO_ENABLED"
+  ],
+  "var-go-enableParallelBuilding": [
+    "index.html#var-go-enableParallelBuilding"
+  ],
+  "var-go-allowGoReference": [
+    "index.html#var-go-allowGoReference"
+  ],
+  "var-go-vendorHash": [
+    "index.html#var-go-vendorHash",
+    "index.html#buildGoModule-vendorHash"
+  ],
+  "var-go-modPostBuild": [
+    "index.html#var-go-modPostBuild"
+  ],
+  "var-go-modRoot": [
+    "index.html#var-go-modRoot"
+  ],
+  "ssec-go-environment": [
+    "index.html#ssec-go-environment"
+  ],
+  "ssec-skip-go-tests": [
+    "index.html#ssec-skip-go-tests"
+  ],
+  "gradle": [
+    "index.html#gradle"
+  ],
+  "building-a-gradle-package": [
+    "index.html#building-a-gradle-package"
+  ],
+  "gradle-update-script": [
+    "index.html#gradle-update-script"
+  ],
+  "gradle-environment": [
+    "index.html#gradle-environment"
+  ],
+  "sec-language-hare": [
+    "index.html#sec-language-hare"
+  ],
+  "ssec-language-hare": [
+    "index.html#ssec-language-hare"
+  ],
+  "hareHook-attributes": [
+    "index.html#hareHook-attributes"
+  ],
+  "ex-hareHook": [
+    "index.html#ex-hareHook"
+  ],
+  "hareHook-cross-compilation": [
+    "index.html#hareHook-cross-compilation"
+  ],
+  "haskell": [
+    "index.html#haskell"
+  ],
+  "haskell-available-packages": [
+    "index.html#haskell-available-packages"
+  ],
+  "haskell-available-versions": [
+    "index.html#haskell-available-versions"
+  ],
+  "haskell-dependency-resolution": [
+    "index.html#haskell-dependency-resolution"
+  ],
+  "haskell-limitations": [
+    "index.html#haskell-limitations"
+  ],
+  "haskell-mkderivation": [
+    "index.html#haskell-mkderivation"
+  ],
+  "haskell-derivation-args": [
+    "index.html#haskell-derivation-args"
+  ],
+  "haskell-derivation-deps": [
+    "index.html#haskell-derivation-deps"
+  ],
+  "haskell-derivation-meta": [
+    "index.html#haskell-derivation-meta"
+  ],
+  "haskell-incremental-builds": [
+    "index.html#haskell-incremental-builds"
+  ],
+  "haskell-development-environments": [
+    "index.html#haskell-development-environments"
+  ],
+  "haskell-shellFor": [
+    "index.html#haskell-shellFor"
+  ],
+  "haskell-language-server": [
+    "index.html#haskell-language-server"
+  ],
+  "haskell-overriding-haskell-packages": [
+    "index.html#haskell-overriding-haskell-packages"
+  ],
+  "haskell-overriding-a-single-package": [
+    "index.html#haskell-overriding-a-single-package"
+  ],
+  "haskell-haskell.lib.compose": [
+    "index.html#haskell-haskell.lib.compose"
+  ],
+  "haskell-packaging-helpers": [
+    "index.html#haskell-packaging-helpers"
+  ],
+  "haskell-development-helpers": [
+    "index.html#haskell-development-helpers"
+  ],
+  "haskell-trivial-helpers": [
+    "index.html#haskell-trivial-helpers"
+  ],
+  "haskell-package-set-lib-functions": [
+    "index.html#haskell-package-set-lib-functions"
+  ],
+  "haskell-import-from-derivation": [
+    "index.html#haskell-import-from-derivation"
+  ],
+  "haskell-cabal2nix": [
+    "index.html#haskell-cabal2nix"
+  ],
+  "haskell-faq": [
+    "index.html#haskell-faq"
+  ],
+  "haskell-why-not-covered": [
+    "index.html#haskell-why-not-covered"
+  ],
+  "haskell-faq-override-profiling": [
+    "index.html#haskell-faq-override-profiling"
+  ],
+  "sec-language-hy": [
+    "index.html#sec-language-hy"
+  ],
+  "ssec-hy-installation": [
+    "index.html#ssec-hy-installation"
+  ],
+  "installation-without-packages": [
+    "index.html#installation-without-packages"
+  ],
+  "installation-with-packages": [
+    "index.html#installation-with-packages"
+  ],
+  "idris": [
+    "index.html#idris"
+  ],
+  "installing-idris": [
+    "index.html#installing-idris"
+  ],
+  "starting-idris-with-library-support": [
+    "index.html#starting-idris-with-library-support"
+  ],
+  "building-an-idris-project-with-nix": [
+    "index.html#building-an-idris-project-with-nix"
+  ],
+  "passing-options-to-idris-commands": [
+    "index.html#passing-options-to-idris-commands"
+  ],
+  "sec-idris2": [
+    "index.html#sec-idris2"
+  ],
+  "ios": [
+    "index.html#ios"
+  ],
+  "deploying-a-proxy-component-wrapper-exposing-xcode": [
+    "index.html#deploying-a-proxy-component-wrapper-exposing-xcode"
+  ],
+  "building-an-ios-application": [
+    "index.html#building-an-ios-application"
+  ],
+  "spawning-simulator-instances": [
+    "index.html#spawning-simulator-instances"
+  ],
+  "troubleshooting": [
+    "index.html#troubleshooting"
+  ],
+  "sec-language-java": [
+    "index.html#sec-language-java"
+  ],
+  "language-javascript": [
+    "index.html#language-javascript"
+  ],
+  "javascript-introduction": [
+    "index.html#javascript-introduction"
+  ],
+  "javascript-finding-examples": [
+    "index.html#javascript-finding-examples"
+  ],
+  "javascript-finding-examples-github": [
+    "index.html#javascript-finding-examples-github"
+  ],
+  "javascript-finding-examples-gitlab": [
+    "index.html#javascript-finding-examples-gitlab"
+  ],
+  "javascript-tools-overview": [
+    "index.html#javascript-tools-overview"
+  ],
+  "javascript-general-principles": [
+    "index.html#javascript-general-principles"
+  ],
+  "javascript-upstream-node-version": [
+    "index.html#javascript-upstream-node-version"
+  ],
+  "javascript-upstream-package-manager": [
+    "index.html#javascript-upstream-package-manager"
+  ],
+  "javascript-upstream-package-json": [
+    "index.html#javascript-upstream-package-json"
+  ],
+  "javascript-using-node_modules": [
+    "index.html#javascript-using-node_modules"
+  ],
+  "javascript-packages-nixpkgs": [
+    "index.html#javascript-packages-nixpkgs"
+  ],
+  "javascript-adding-or-updating-packages": [
+    "index.html#javascript-adding-or-updating-packages"
+  ],
+  "javascript-git-error": [
+    "index.html#javascript-git-error"
+  ],
+  "javascript-tool-specific": [
+    "index.html#javascript-tool-specific"
+  ],
+  "javascript-buildNpmPackage": [
+    "index.html#javascript-buildNpmPackage"
+  ],
+  "javascript-buildNpmPackage-arguments": [
+    "index.html#javascript-buildNpmPackage-arguments"
+  ],
+  "javascript-buildNpmPackage-prefetch-npm-deps": [
+    "index.html#javascript-buildNpmPackage-prefetch-npm-deps"
+  ],
+  "javascript-buildNpmPackage-fetchNpmDeps": [
+    "index.html#javascript-buildNpmPackage-fetchNpmDeps"
+  ],
+  "javascript-buildNpmPackage-importNpmLock": [
+    "index.html#javascript-buildNpmPackage-importNpmLock"
+  ],
+  "javascript-buildNpmPackage-inputs": [
+    "index.html#javascript-buildNpmPackage-inputs"
+  ],
+  "javascript-buildNpmPackage-example": [
+    "index.html#javascript-buildNpmPackage-example"
+  ],
+  "javascript-buildNpmPackage-example-fetcherOpts": [
+    "index.html#javascript-buildNpmPackage-example-fetcherOpts"
+  ],
+  "javascript-buildNpmPackage-importNpmLock.buildNodeModules": [
+    "index.html#javascript-buildNpmPackage-importNpmLock.buildNodeModules"
+  ],
+  "javascript-corepack": [
+    "index.html#javascript-corepack"
+  ],
+  "javascript-node2nix": [
+    "index.html#javascript-node2nix"
+  ],
+  "javascript-node2nix-preparation": [
+    "index.html#javascript-node2nix-preparation"
+  ],
+  "javascript-node2nix-pitfalls": [
+    "index.html#javascript-node2nix-pitfalls"
+  ],
+  "javascript-pnpm": [
+    "index.html#javascript-pnpm"
+  ],
+  "javascript-pnpm-sourceRoot": [
+    "index.html#javascript-pnpm-sourceRoot"
+  ],
+  "javascript-pnpm-workspaces": [
+    "index.html#javascript-pnpm-workspaces"
+  ],
+  "javascript-pnpm-extraCommands": [
+    "index.html#javascript-pnpm-extraCommands"
+  ],
+  "javascript-yarn": [
+    "index.html#javascript-yarn"
+  ],
+  "javascript-yarnconfighook": [
+    "index.html#javascript-yarnconfighook"
+  ],
+  "javascript-yarnbuildhook": [
+    "index.html#javascript-yarnbuildhook"
+  ],
+  "javascript-yarninstallhook": [
+    "index.html#javascript-yarninstallhook"
+  ],
+  "javascript-yarn2nix": [
+    "index.html#javascript-yarn2nix"
+  ],
+  "javascript-yarn2nix-preparation": [
+    "index.html#javascript-yarn2nix-preparation"
+  ],
+  "javascript-yarn2nix-mkYarnPackage": [
+    "index.html#javascript-yarn2nix-mkYarnPackage"
+  ],
+  "javascript-yarn2nix-mkYarnModules": [
+    "index.html#javascript-yarn2nix-mkYarnModules"
+  ],
+  "javascript-mkYarnPackage-overriding-dependencies": [
+    "index.html#javascript-mkYarnPackage-overriding-dependencies"
+  ],
+  "javascript-yarn2nix-pitfalls": [
+    "index.html#javascript-yarn2nix-pitfalls"
+  ],
+  "javascript-outside-nixpkgs": [
+    "index.html#javascript-outside-nixpkgs"
+  ],
+  "javascript-npmlock2nix": [
+    "index.html#javascript-npmlock2nix"
+  ],
+  "javascript-npmlock2nix-pitfalls": [
+    "index.html#javascript-npmlock2nix-pitfalls"
+  ],
+  "javascript-nix-npm-buildpackage": [
+    "index.html#javascript-nix-npm-buildpackage"
+  ],
+  "javascript-nix-npm-buildpackage-pitfalls": [
+    "index.html#javascript-nix-npm-buildpackage-pitfalls"
+  ],
+  "language-julia": [
+    "index.html#language-julia"
+  ],
+  "julia-introduction": [
+    "index.html#julia-introduction"
+  ],
+  "julia-withpackage": [
+    "index.html#julia-withpackage"
+  ],
+  "julia-withpackage-arguments": [
+    "index.html#julia-withpackage-arguments"
+  ],
+  "lisp": [
+    "index.html#lisp"
+  ],
+  "lisp-overview": [
+    "index.html#lisp-overview"
+  ],
+  "lisp-use-case-example": [
+    "index.html#lisp-use-case-example"
+  ],
+  "lisp-importing-packages-from-quicklisp": [
+    "index.html#lisp-importing-packages-from-quicklisp"
+  ],
+  "lisp-quicklisp-adding-native-dependencies": [
+    "index.html#lisp-quicklisp-adding-native-dependencies"
+  ],
+  "lisp-quicklisp-trusting": [
+    "index.html#lisp-quicklisp-trusting"
+  ],
+  "lisp-quicklisp-quirks": [
+    "index.html#lisp-quicklisp-quirks"
+  ],
+  "lisp-defining-packages-inside": [
+    "index.html#lisp-defining-packages-inside"
+  ],
+  "lisp-defining-packages-outside": [
+    "index.html#lisp-defining-packages-outside"
+  ],
+  "lisp-including-external-pkg-in-scope": [
+    "index.html#lisp-including-external-pkg-in-scope"
+  ],
+  "lisp-overriding-package-attributes": [
+    "index.html#lisp-overriding-package-attributes"
+  ],
+  "lisp-dealing-with-slashy-systems": [
+    "index.html#lisp-dealing-with-slashy-systems"
+  ],
+  "lisp-building-wrappers": [
+    "index.html#lisp-building-wrappers"
+  ],
+  "lisp-loading-asdf": [
+    "index.html#lisp-loading-asdf"
+  ],
+  "lisp-loading-systems": [
+    "index.html#lisp-loading-systems"
+  ],
+  "lisp-adding-a-new-lisp": [
+    "index.html#lisp-adding-a-new-lisp"
+  ],
+  "lua": [
+    "index.html#lua"
+  ],
+  "lua-userguide": [
+    "index.html#lua-userguide"
+  ],
+  "lua-overview": [
+    "index.html#lua-overview"
+  ],
+  "installing-lua-and-packages": [
+    "index.html#installing-lua-and-packages"
+  ],
+  "lua-environment-defined-in-separate-.nix-file": [
+    "index.html#lua-environment-defined-in-separate-.nix-file"
+  ],
+  "lua-environment-defined-in-.confignixpkgsconfig.nix": [
+    "index.html#lua-environment-defined-in-.confignixpkgsconfig.nix"
+  ],
+  "lua-environment-defined-in-etcnixosconfiguration.nix": [
+    "index.html#lua-environment-defined-in-etcnixosconfiguration.nix"
+  ],
+  "how-to-override-a-lua-package-using-overlays": [
+    "index.html#how-to-override-a-lua-package-using-overlays"
+  ],
+  "temporary-lua-environment-with-nix-shell": [
+    "index.html#temporary-lua-environment-with-nix-shell"
+  ],
+  "lua-developing": [
+    "index.html#lua-developing"
+  ],
+  "packaging-a-library-on-luarocks": [
+    "index.html#packaging-a-library-on-luarocks"
+  ],
+  "packaging-a-library-manually": [
+    "index.html#packaging-a-library-manually"
+  ],
+  "lua-reference": [
+    "index.html#lua-reference"
+  ],
+  "lua-interpreters": [
+    "index.html#lua-interpreters"
+  ],
+  "attributes-on-lua-interpreters-packages": [
+    "index.html#attributes-on-lua-interpreters-packages"
+  ],
+  "buildluarockspackage-function": [
+    "index.html#buildluarockspackage-function"
+  ],
+  "buildluaapplication-function": [
+    "index.html#buildluaapplication-function"
+  ],
+  "lua.withpackages-function": [
+    "index.html#lua.withpackages-function"
+  ],
+  "lua-contributing": [
+    "index.html#lua-contributing"
+  ],
+  "maven": [
+    "index.html#maven"
+  ],
+  "maven-buildmavenpackage": [
+    "index.html#maven-buildmavenpackage"
+  ],
+  "maven-overriding-package-attributes": [
+    "index.html#maven-overriding-package-attributes"
+  ],
+  "maven-offline-build": [
+    "index.html#maven-offline-build"
+  ],
+  "stable-maven-plugins": [
+    "index.html#stable-maven-plugins"
+  ],
+  "maven-mvn2nix": [
+    "index.html#maven-mvn2nix"
+  ],
+  "solving-for-dependencies": [
+    "index.html#solving-for-dependencies"
+  ],
+  "buildmaven-with-nixosmvn2nix-maven-plugin": [
+    "index.html#buildmaven-with-nixosmvn2nix-maven-plugin"
+  ],
+  "double-invocation": [
+    "index.html#double-invocation"
+  ],
+  "building-a-jar": [
+    "index.html#building-a-jar"
+  ],
+  "runnable-jar": [
+    "index.html#runnable-jar"
+  ],
+  "classpath": [
+    "index.html#classpath"
+  ],
+  "manifest-file-via-maven-plugin": [
+    "index.html#manifest-file-via-maven-plugin"
+  ],
+  "sec-language-nim": [
+    "index.html#sec-language-nim"
+  ],
+  "buildNimPackage": [
+    "index.html#buildNimPackage"
+  ],
+  "buildnimpackage-parameters": [
+    "index.html#buildnimpackage-parameters"
+  ],
+  "nim-lockfiles": [
+    "index.html#nim-lockfiles"
+  ],
+  "buildNimSbom": [
+    "index.html#buildNimSbom"
+  ],
+  "generating-nim-sboms": [
+    "index.html#generating-nim-sboms"
+  ],
+  "nim-overrides": [
+    "index.html#nim-overrides"
+  ],
+  "nim-lock-overrides": [
+    "index.html#nim-lock-overrides"
+  ],
+  "nim-lock-overrides-overrides": [
+    "index.html#nim-lock-overrides-overrides"
+  ],
+  "sec-language-ocaml": [
+    "index.html#sec-language-ocaml"
+  ],
+  "sec-language-ocaml-user-guide": [
+    "index.html#sec-language-ocaml-user-guide"
+  ],
+  "sec-language-ocaml-packaging": [
+    "index.html#sec-language-ocaml-packaging"
+  ],
+  "sec-octave": [
+    "index.html#sec-octave"
+  ],
+  "ssec-octave-introduction": [
+    "index.html#ssec-octave-introduction"
+  ],
+  "ssec-octave-structure": [
+    "index.html#ssec-octave-structure"
+  ],
+  "ssec-octave-packaging": [
+    "index.html#ssec-octave-packaging"
+  ],
+  "sssec-buildOctavePackage-steps": [
+    "index.html#sssec-buildOctavePackage-steps"
+  ],
+  "sssec-octave-handling-dependencies": [
+    "index.html#sssec-octave-handling-dependencies"
+  ],
+  "sssec-installing-octave-packages": [
+    "index.html#sssec-installing-octave-packages"
+  ],
+  "sec-language-perl": [
+    "index.html#sec-language-perl"
+  ],
+  "ssec-perl-running": [
+    "index.html#ssec-perl-running"
+  ],
+  "ssec-perl-packaging": [
+    "index.html#ssec-perl-packaging"
+  ],
+  "ssec-generation-from-CPAN": [
+    "index.html#ssec-generation-from-CPAN"
+  ],
+  "ssec-perl-cross-compilation": [
+    "index.html#ssec-perl-cross-compilation"
+  ],
+  "sec-php": [
+    "index.html#sec-php"
+  ],
+  "ssec-php-user-guide": [
+    "index.html#ssec-php-user-guide"
+  ],
+  "ssec-php-user-guide-overview": [
+    "index.html#ssec-php-user-guide-overview"
+  ],
+  "ssec-php-user-guide-installing-with-extensions": [
+    "index.html#ssec-php-user-guide-installing-with-extensions"
+  ],
+  "ssec-php-user-guide-installing-with-extensions-phpfpm": [
+    "index.html#ssec-php-user-guide-installing-with-extensions-phpfpm"
+  ],
+  "ssec-php-user-guide-installing-with-extensions-nix-shell": [
+    "index.html#ssec-php-user-guide-installing-with-extensions-nix-shell"
+  ],
+  "ssec-php-user-guide-installing-packages-with-extensions": [
+    "index.html#ssec-php-user-guide-installing-packages-with-extensions"
+  ],
+  "ssec-php-user-guide-overriding-packages": [
+    "index.html#ssec-php-user-guide-overriding-packages"
+  ],
+  "ssec-building-php-projects": [
+    "index.html#ssec-building-php-projects"
+  ],
+  "sec-pkg-config": [
+    "index.html#sec-pkg-config"
+  ],
+  "pkg-config-writing-packages": [
+    "index.html#pkg-config-writing-packages"
+  ],
+  "sec-pkg-config-usage": [
+    "index.html#sec-pkg-config-usage"
+  ],
+  "sec-pkg-config-usage-internal": [
+    "index.html#sec-pkg-config-usage-internal"
+  ],
+  "sec-pkg-config-usage-external": [
+    "index.html#sec-pkg-config-usage-external"
+  ],
+  "python": [
+    "index.html#python"
+  ],
+  "reference": [
+    "index.html#reference"
+  ],
+  "interpreters": [
+    "index.html#interpreters"
+  ],
+  "missing-tkinter-module-standard-library": [
+    "index.html#missing-tkinter-module-standard-library"
+  ],
+  "attributes-on-interpreters-packages": [
+    "index.html#attributes-on-interpreters-packages"
+  ],
+  "building-packages-and-applications": [
+    "index.html#building-packages-and-applications"
+  ],
+  "buildpythonpackage-function": [
+    "index.html#buildpythonpackage-function"
+  ],
+  "buildpythonpackage-parameters": [
+    "index.html#buildpythonpackage-parameters"
+  ],
+  "overriding-python-packages": [
+    "index.html#overriding-python-packages"
+  ],
+  "buildpythonapplication-function": [
+    "index.html#buildpythonapplication-function"
+  ],
+  "topythonapplication-function": [
+    "index.html#topythonapplication-function"
+  ],
+  "topythonmodule-function": [
+    "index.html#topythonmodule-function"
+  ],
+  "mkpythonmetapackage-function": [
+    "index.html#mkpythonmetapackage-function"
+  ],
+  "mkpythoneditablepackage-function": [
+    "index.html#mkpythoneditablepackage-function"
+  ],
+  "python.buildenv-function": [
+    "index.html#python.buildenv-function"
+  ],
+  "python.buildenv-arguments": [
+    "index.html#python.buildenv-arguments"
+  ],
+  "python.withpackages-function": [
+    "index.html#python.withpackages-function"
+  ],
+  "setup-hooks": [
+    "index.html#setup-hooks"
+  ],
+  "user-guide": [
+    "index.html#user-guide"
+  ],
+  "using-python": [
+    "index.html#using-python"
+  ],
+  "overview": [
+    "index.html#overview"
+  ],
+  "installing-python-and-packages": [
+    "index.html#installing-python-and-packages"
+  ],
+  "ad-hoc-temporary-python-environment-with-nix-shell": [
+    "index.html#ad-hoc-temporary-python-environment-with-nix-shell"
+  ],
+  "running-python-scripts-and-using-nix-shell-as-shebang": [
+    "index.html#running-python-scripts-and-using-nix-shell-as-shebang"
+  ],
+  "load-environment-from-.nix-expression": [
+    "index.html#load-environment-from-.nix-expression"
+  ],
+  "installing-environments-globally-on-the-system": [
+    "index.html#installing-environments-globally-on-the-system"
+  ],
+  "environment-defined-in-etcnixosconfiguration.nix": [
+    "index.html#environment-defined-in-etcnixosconfiguration.nix"
+  ],
+  "developing-with-python": [
+    "index.html#developing-with-python"
+  ],
+  "python-library-packages-in-nixpkgs": [
+    "index.html#python-library-packages-in-nixpkgs"
+  ],
+  "handling-dependencies": [
+    "index.html#handling-dependencies"
+  ],
+  "testing-python-packages": [
+    "index.html#testing-python-packages"
+  ],
+  "using-pytest": [
+    "index.html#using-pytest"
+  ],
+  "using-pytestcheckhook": [
+    "index.html#using-pytestcheckhook"
+  ],
+  "using-pythonimportscheck": [
+    "index.html#using-pythonimportscheck"
+  ],
+  "using-pythonrelaxdepshook": [
+    "index.html#using-pythonrelaxdepshook"
+  ],
+  "using-unittestcheckhook": [
+    "index.html#using-unittestcheckhook"
+  ],
+  "using-sphinxhook": [
+    "index.html#using-sphinxhook"
+  ],
+  "organising-your-packages": [
+    "index.html#organising-your-packages"
+  ],
+  "including-a-derivation-using-callpackage": [
+    "index.html#including-a-derivation-using-callpackage"
+  ],
+  "faq": [
+    "index.html#faq"
+  ],
+  "how-to-solve-circular-dependencies": [
+    "index.html#how-to-solve-circular-dependencies"
+  ],
+  "how-to-override-a-python-package": [
+    "index.html#how-to-override-a-python-package"
+  ],
+  "python-setup.py-bdist_wheel-cannot-create-.whl": [
+    "index.html#python-setup.py-bdist_wheel-cannot-create-.whl"
+  ],
+  "install_data-data_files-problems": [
+    "index.html#install_data-data_files-problems"
+  ],
+  "rationale-of-non-existent-global-site-packages": [
+    "index.html#rationale-of-non-existent-global-site-packages"
+  ],
+  "how-to-consume-python-modules-using-pip-in-a-virtual-environment-like-i-am-used-to-on-other-operating-systems": [
+    "index.html#how-to-consume-python-modules-using-pip-in-a-virtual-environment-like-i-am-used-to-on-other-operating-systems"
+  ],
+  "how-to-override-a-python-package-from-configuration.nix": [
+    "index.html#how-to-override-a-python-package-from-configuration.nix"
+  ],
+  "how-to-override-a-python-package-using-overlays": [
+    "index.html#how-to-override-a-python-package-using-overlays"
+  ],
+  "how-to-override-a-python-package-for-all-python-versions-using-extensions": [
+    "index.html#how-to-override-a-python-package-for-all-python-versions-using-extensions"
+  ],
+  "how-to-use-intels-mkl-with-numpy-and-scipy": [
+    "index.html#how-to-use-intels-mkl-with-numpy-and-scipy"
+  ],
+  "what-inputs-do-setup_requires-install_requires-and-tests_require-map-to": [
+    "index.html#what-inputs-do-setup_requires-install_requires-and-tests_require-map-to"
+  ],
+  "optimizations": [
+    "index.html#optimizations"
+  ],
+  "python-optional-dependencies": [
+    "index.html#python-optional-dependencies"
+  ],
+  "tools": [
+    "index.html#tools"
+  ],
+  "deterministic-builds": [
+    "index.html#deterministic-builds"
+  ],
+  "automatic-tests": [
+    "index.html#automatic-tests"
+  ],
+  "common-issues": [
+    "index.html#common-issues"
+  ],
+  "contributing": [
+    "index.html#contributing"
+  ],
+  "contributing-guidelines": [
+    "index.html#contributing-guidelines"
+  ],
+  "python-package-set-maintenance": [
+    "index.html#python-package-set-maintenance"
+  ],
+  "python-package-bulk-updates": [
+    "index.html#python-package-bulk-updates"
+  ],
+  "python-cpython-update-schedule": [
+    "index.html#python-cpython-update-schedule"
+  ],
+  "sec-language-qt": [
+    "index.html#sec-language-qt"
+  ],
+  "qt-default-nix": [
+    "index.html#qt-default-nix"
+  ],
+  "qt-versions": [
+    "index.html#qt-versions"
+  ],
+  "qt-runtime-dependencies": [
+    "index.html#qt-runtime-dependencies"
+  ],
+  "r": [
+    "index.html#r"
+  ],
+  "installation": [
+    "index.html#installation"
+  ],
+  "rstudio": [
+    "index.html#rstudio"
+  ],
+  "updating-the-package-set": [
+    "index.html#updating-the-package-set"
+  ],
+  "sec-language-ruby": [
+    "index.html#sec-language-ruby"
+  ],
+  "using-ruby": [
+    "index.html#using-ruby"
+  ],
+  "temporary-ruby-environment-with-nix-shell": [
+    "index.html#temporary-ruby-environment-with-nix-shell"
+  ],
+  "load-ruby-environment-from-.nix-expression": [
+    "index.html#load-ruby-environment-from-.nix-expression"
+  ],
+  "execute-command-with---run": [
+    "index.html#execute-command-with---run"
+  ],
+  "using-nix-shell-as-shebang": [
+    "index.html#using-nix-shell-as-shebang"
+  ],
+  "developing-with-ruby": [
+    "index.html#developing-with-ruby"
+  ],
+  "using-an-existing-gemfile": [
+    "index.html#using-an-existing-gemfile"
+  ],
+  "gem-specific-configurations-and-workarounds": [
+    "index.html#gem-specific-configurations-and-workarounds"
+  ],
+  "ruby-platform-specif-gems": [
+    "index.html#ruby-platform-specif-gems"
+  ],
+  "adding-a-gem-to-the-default-gemset": [
+    "index.html#adding-a-gem-to-the-default-gemset"
+  ],
+  "packaging-applications": [
+    "index.html#packaging-applications"
+  ],
+  "packaging-executables-that-require-wrapping": [
+    "index.html#packaging-executables-that-require-wrapping"
+  ],
+  "rust": [
+    "index.html#rust"
+  ],
+  "compiling-rust-applications-with-cargo": [
+    "index.html#compiling-rust-applications-with-cargo"
+  ],
+  "importing-a-cargo.lock-file": [
+    "index.html#importing-a-cargo.lock-file"
+  ],
+  "cargo-features": [
+    "index.html#cargo-features"
+  ],
+  "cross-compilation": [
+    "index.html#cross-compilation"
+  ],
+  "running-package-tests": [
+    "index.html#running-package-tests"
+  ],
+  "tests-relying-on-the-structure-of-the-target-directory": [
+    "index.html#tests-relying-on-the-structure-of-the-target-directory"
+  ],
+  "disabling-package-tests": [
+    "index.html#disabling-package-tests"
+  ],
+  "using-cargo-nextest": [
+    "index.html#using-cargo-nextest"
+  ],
+  "setting-test-threads": [
+    "index.html#setting-test-threads"
+  ],
+  "building-a-package-in-debug-mode": [
+    "index.html#building-a-package-in-debug-mode"
+  ],
+  "custom-buildinstall-procedures": [
+    "index.html#custom-buildinstall-procedures"
+  ],
+  "building-a-crate-with-an-absent-or-out-of-date-cargo.lock-file": [
+    "index.html#building-a-crate-with-an-absent-or-out-of-date-cargo.lock-file"
+  ],
+  "compiling-non-rust-packages-that-include-rust-code": [
+    "index.html#compiling-non-rust-packages-that-include-rust-code"
+  ],
+  "vendoring-of-dependencies": [
+    "index.html#vendoring-of-dependencies"
+  ],
+  "hooks": [
+    "index.html#hooks"
+  ],
+  "examples": [
+    "index.html#examples"
+  ],
+  "python-package-using-setuptools-rust": [
+    "index.html#python-package-using-setuptools-rust"
+  ],
+  "python-package-using-maturin": [
+    "index.html#python-package-using-maturin"
+  ],
+  "rust-package-built-with-meson": [
+    "index.html#rust-package-built-with-meson"
+  ],
+  "compiling-rust-crates-using-nix-instead-of-cargo": [
+    "index.html#compiling-rust-crates-using-nix-instead-of-cargo"
+  ],
+  "simple-operation": [
+    "index.html#simple-operation"
+  ],
+  "handling-external-dependencies": [
+    "index.html#handling-external-dependencies"
+  ],
+  "options-and-phases-configuration": [
+    "index.html#options-and-phases-configuration"
+  ],
+  "setting-up-nix-shell": [
+    "index.html#setting-up-nix-shell"
+  ],
+  "using-community-maintained-rust-toolchains": [
+    "index.html#using-community-maintained-rust-toolchains"
+  ],
+  "using-rust-nightly-with-nix-shell": [
+    "index.html#using-rust-nightly-with-nix-shell"
+  ],
+  "using-rust-nightly-in-a-derivation-with-buildrustpackage": [
+    "index.html#using-rust-nightly-in-a-derivation-with-buildrustpackage"
+  ],
+  "using-git-bisect-on-the-rust-compiler": [
+    "index.html#using-git-bisect-on-the-rust-compiler"
+  ],
+  "sec-scheme": [
+    "index.html#sec-scheme"
+  ],
+  "sec-scheme-package-management": [
+    "index.html#sec-scheme-package-management"
+  ],
+  "sec-scheme-package-management-akku": [
+    "index.html#sec-scheme-package-management-akku"
+  ],
+  "swift": [
+    "index.html#swift"
+  ],
+  "ssec-swift-module-search-paths": [
+    "index.html#ssec-swift-module-search-paths"
+  ],
+  "ssec-swift-core-libraries": [
+    "index.html#ssec-swift-core-libraries"
+  ],
+  "ssec-swift-packaging-with-swiftpm": [
+    "index.html#ssec-swift-packaging-with-swiftpm"
+  ],
+  "ssec-swiftpm-custom-build-flags": [
+    "index.html#ssec-swiftpm-custom-build-flags"
+  ],
+  "ssec-swiftpm-running-tests": [
+    "index.html#ssec-swiftpm-running-tests"
+  ],
+  "ssec-swiftpm-patching-dependencies": [
+    "index.html#ssec-swiftpm-patching-dependencies"
+  ],
+  "ssec-swift-considerations-for-custom-build-tools": [
+    "index.html#ssec-swift-considerations-for-custom-build-tools"
+  ],
+  "ssec-swift-linking-the-standard-library": [
+    "index.html#ssec-swift-linking-the-standard-library"
+  ],
+  "sec-language-tcl": [
+    "index.html#sec-language-tcl"
+  ],
+  "sec-language-tcl-user-guide": [
+    "index.html#sec-language-tcl-user-guide"
+  ],
+  "sec-language-tcl-packaging": [
+    "index.html#sec-language-tcl-packaging"
+  ],
+  "sec-language-texlive": [
+    "index.html#sec-language-texlive"
+  ],
+  "sec-language-texlive-user-guide-experimental": [
+    "index.html#sec-language-texlive-user-guide-experimental"
+  ],
+  "sec-language-texlive-user-guide": [
+    "index.html#sec-language-texlive-user-guide"
+  ],
+  "sec-language-texlive-custom-packages": [
+    "index.html#sec-language-texlive-custom-packages"
+  ],
+  "sec-language-texlive-lualatex-font-cache": [
+    "index.html#sec-language-texlive-lualatex-font-cache"
+  ],
+  "titanium": [
+    "index.html#titanium"
+  ],
+  "building-a-titanium-app": [
+    "index.html#building-a-titanium-app"
+  ],
+  "emulating-or-simulating-the-app": [
+    "index.html#emulating-or-simulating-the-app"
+  ],
+  "vim": [
+    "index.html#vim"
+  ],
+  "custom-configuration": [
+    "index.html#custom-configuration"
+  ],
+  "managing-plugins-with-vim-packages": [
+    "index.html#managing-plugins-with-vim-packages"
+  ],
+  "what-if-your-favourite-vim-plugin-isnt-already-packaged": [
+    "index.html#what-if-your-favourite-vim-plugin-isnt-already-packaged"
+  ],
+  "vim-plugin-specificities": [
+    "index.html#vim-plugin-specificities"
+  ],
+  "vim-plugin-treesitter": [
+    "index.html#vim-plugin-treesitter"
+  ],
+  "managing-plugins-with-vim-plug": [
+    "index.html#managing-plugins-with-vim-plug"
+  ],
+  "adding-new-plugins-to-nixpkgs": [
+    "index.html#adding-new-plugins-to-nixpkgs"
+  ],
+  "testing-neovim-plugins": [
+    "index.html#testing-neovim-plugins"
+  ],
+  "testing-neovim-plugins-neovim-require-check": [
+    "index.html#testing-neovim-plugins-neovim-require-check"
+  ],
+  "vim-plugin-required-snippet": [
+    "index.html#vim-plugin-required-snippet"
+  ],
+  "updating-plugins-in-nixpkgs": [
+    "index.html#updating-plugins-in-nixpkgs"
+  ],
+  "vim-out-of-tree-overlays": [
+    "index.html#vim-out-of-tree-overlays"
+  ],
+  "chap-packages": [
+    "index.html#chap-packages"
+  ],
+  "sec-citrix": [
+    "index.html#sec-citrix"
+  ],
+  "sec-citrix-base": [
+    "index.html#sec-citrix-base"
+  ],
+  "sec-citrix-selfservice": [
+    "index.html#sec-citrix-selfservice"
+  ],
+  "sec-citrix-custom-certs": [
+    "index.html#sec-citrix-custom-certs"
+  ],
+  "sec-darwin-builder": [
+    "index.html#sec-darwin-builder"
+  ],
+  "sec-darwin-builder-example-flake": [
+    "index.html#sec-darwin-builder-example-flake"
+  ],
+  "sec-darwin-builder-reconfiguring": [
+    "index.html#sec-darwin-builder-reconfiguring"
+  ],
+  "sec-darwin-builder-troubleshoot": [
+    "index.html#sec-darwin-builder-troubleshoot"
+  ],
+  "dlib": [
+    "index.html#dlib"
+  ],
+  "compiling-without-avx-support": [
+    "index.html#compiling-without-avx-support"
+  ],
+  "sec-eclipse": [
+    "index.html#sec-eclipse"
+  ],
+  "sec-elm": [
+    "index.html#sec-elm"
+  ],
+  "sec-emacs": [
+    "index.html#sec-emacs"
+  ],
+  "sec-emacs-config": [
+    "index.html#sec-emacs-config"
+  ],
+  "sec-firefox": [
+    "index.html#sec-firefox"
+  ],
+  "build-wrapped-firefox-with-extensions-and-policies": [
+    "index.html#build-wrapped-firefox-with-extensions-and-policies"
+  ],
+  "sec-firefox-troubleshooting": [
+    "index.html#sec-firefox-troubleshooting"
+  ],
+  "sec-fish": [
+    "index.html#sec-fish"
+  ],
+  "sec-fish-vendor": [
+    "index.html#sec-fish-vendor"
+  ],
+  "sec-fish-plugins-pkg": [
+    "index.html#sec-fish-plugins-pkg"
+  ],
+  "sec-fish-wrapper": [
+    "index.html#sec-fish-wrapper"
+  ],
+  "sec-fuse": [
+    "index.html#sec-fuse"
+  ],
+  "geant4": [
+    "index.html#geant4"
+  ],
+  "geant4-hook": [
+    "index.html#geant4-hook"
+  ],
+  "geant4-datasets": [
+    "index.html#geant4-datasets"
+  ],
+  "geant4-datasets-hook": [
+    "index.html#geant4-datasets-hook"
+  ],
+  "sec-ibus-typing-booster": [
+    "index.html#sec-ibus-typing-booster"
+  ],
+  "sec-ibus-typing-booster-activate": [
+    "index.html#sec-ibus-typing-booster-activate"
+  ],
+  "sec-ibus-typing-booster-customize-hunspell": [
+    "index.html#sec-ibus-typing-booster-customize-hunspell"
+  ],
+  "sec-ibus-typing-booster-emoji-picker": [
+    "index.html#sec-ibus-typing-booster-emoji-picker"
+  ],
+  "sec-kakoune": [
+    "index.html#sec-kakoune"
+  ],
+  "sec-krita": [
+    "index.html#sec-krita"
+  ],
+  "krita-python-plugins": [
+    "index.html#krita-python-plugins"
+  ],
+  "krita-binary-plugins": [
+    "index.html#krita-binary-plugins"
+  ],
+  "krita-install-binary-plugins": [
+    "index.html#krita-install-binary-plugins"
+  ],
+  "krita-binary-plugin-structure": [
+    "index.html#krita-binary-plugin-structure"
+  ],
+  "sec-linux-kernel": [
+    "index.html#sec-linux-kernel"
+  ],
+  "ex-overriding-kernel-derivation": [
+    "index.html#ex-overriding-kernel-derivation"
+  ],
+  "sec-manual-kernel-configuration": [
+    "index.html#sec-manual-kernel-configuration"
+  ],
+  "ex-using-linux-manual-config": [
+    "index.html#ex-using-linux-manual-config"
+  ],
+  "sec-linux-kernel-developing-modules": [
+    "index.html#sec-linux-kernel-developing-modules"
+  ],
+  "ex-edit-compile-run-kernel-modules": [
+    "index.html#ex-edit-compile-run-kernel-modules"
+  ],
+  "lhapdf": [
+    "index.html#lhapdf"
+  ],
+  "lhapdf-sets": [
+    "index.html#lhapdf-sets"
+  ],
+  "lhapdf-sets-hook": [
+    "index.html#lhapdf-sets-hook"
+  ],
+  "locales": [
+    "index.html#locales"
+  ],
+  "etc": [
+    "index.html#etc"
+  ],
+  "sec-nginx": [
+    "index.html#sec-nginx"
+  ],
+  "sec-nginx-etag": [
+    "index.html#sec-nginx-etag"
+  ],
+  "sec-opengl": [
+    "index.html#sec-opengl"
+  ],
+  "nixos-desktop": [
+    "index.html#nixos-desktop"
+  ],
+  "nix-on-gnulinux": [
+    "index.html#nix-on-gnulinux"
+  ],
+  "sec-shell-helpers": [
+    "index.html#sec-shell-helpers"
+  ],
+  "sec-steam": [
+    "index.html#sec-steam"
+  ],
+  "sec-steam-nix": [
+    "index.html#sec-steam-nix"
+  ],
+  "sec-steam-play": [
+    "index.html#sec-steam-play"
+  ],
+  "sec-steam-troub": [
+    "index.html#sec-steam-troub"
+  ],
+  "sec-steam-run": [
+    "index.html#sec-steam-run"
+  ],
+  "cataclysm-dark-days-ahead": [
+    "index.html#cataclysm-dark-days-ahead"
+  ],
+  "how-to-install-cataclysm-dda": [
+    "index.html#how-to-install-cataclysm-dda"
+  ],
+  "important-note-for-overriding-packages": [
+    "index.html#important-note-for-overriding-packages"
+  ],
+  "customizing-with-mods": [
+    "index.html#customizing-with-mods"
+  ],
+  "sec-urxvt": [
+    "index.html#sec-urxvt"
+  ],
+  "sec-urxvt-conf": [
+    "index.html#sec-urxvt-conf"
+  ],
+  "sec-urxvt-pkg": [
+    "index.html#sec-urxvt-pkg"
+  ],
+  "sec-vcpkg": [
+    "index.html#sec-vcpkg"
+  ],
+  "sec-vcpkg-nix-envvars": [
+    "index.html#sec-vcpkg-nix-envvars"
+  ],
+  "sec-weechat": [
+    "index.html#sec-weechat"
+  ],
+  "sec-xorg": [
+    "index.html#sec-xorg"
+  ],
+  "katamari-tarballs": [
+    "index.html#katamari-tarballs"
+  ],
+  "individual-tarballs": [
+    "index.html#individual-tarballs"
+  ],
+  "generating-nix-expressions": [
+    "index.html#generating-nix-expressions"
+  ],
+  "overriding-the-generator": [
+    "index.html#overriding-the-generator"
+  ],
+  "sec-build-support": [
+    "index.html#sec-build-support"
+  ],
+  "pkgs-substitute": [
+    "index.html#pkgs-substitute"
+  ],
+  "ex-pkgs-substitute": [
+    "index.html#ex-pkgs-substitute"
+  ],
+  "pkgs-substituteall": [
+    "index.html#pkgs-substituteall"
+  ],
+  "ex-pkgs-substituteAll": [
+    "index.html#ex-pkgs-substituteAll"
+  ],
+  "pkgs-substituteallfiles": [
+    "index.html#pkgs-substituteallfiles"
+  ],
+  "ex-pkgs-substitute-all-files": [
+    "index.html#ex-pkgs-substitute-all-files"
+  ],
+  "part-development": [
+    "index.html#part-development"
+  ],
+  "sec-opening-issues": [
+    "index.html#sec-opening-issues"
+  ],
+  "part-contributing": [
+    "index.html#part-contributing"
+  ],
+  "chap-quick-start": [
+    "index.html#chap-quick-start"
+  ],
+  "chap-conventions": [
+    "index.html#chap-conventions"
+  ],
+  "sec-syntax": [
+    "index.html#sec-syntax"
+  ],
+  "sec-package-naming": [
+    "index.html#sec-package-naming"
+  ],
+  "sec-organisation": [
+    "index.html#sec-organisation"
+  ],
+  "sec-versioning": [
+    "index.html#sec-versioning"
+  ],
+  "sec-sources": [
+    "index.html#sec-sources"
+  ],
+  "sec-source-hashes": [
+    "index.html#sec-source-hashes"
+  ],
+  "sec-source-hashes-security": [
+    "index.html#sec-source-hashes-security"
+  ],
+  "sec-patches": [
+    "index.html#sec-patches"
+  ],
+  "sec-package-tests": [
+    "index.html#sec-package-tests"
+  ],
+  "ssec-inline-package-tests-writing": [
+    "index.html#ssec-inline-package-tests-writing"
+  ],
+  "ssec-package-tests-writing": [
+    "index.html#ssec-package-tests-writing"
+  ],
+  "ssec-package-tests-running": [
+    "index.html#ssec-package-tests-running"
+  ],
+  "ssec-package-tests-examples": [
+    "index.html#ssec-package-tests-examples"
+  ],
+  "ssec-nixos-tests-linking": [
+    "index.html#ssec-nixos-tests-linking"
+  ],
+  "ssec-import-from-derivation": [
+    "index.html#ssec-import-from-derivation"
+  ],
+  "chap-submitting-changes": [
+    "index.html#chap-submitting-changes"
+  ],
+  "submitting-changes-submitting-changes": [
+    "index.html#submitting-changes-submitting-changes"
+  ],
+  "submitting-changes-submitting-security-fixes": [
+    "index.html#submitting-changes-submitting-security-fixes"
+  ],
+  "submitting-changes-deprecating-packages": [
+    "index.html#submitting-changes-deprecating-packages"
+  ],
+  "steps-to-remove-a-package-from-nixpkgs": [
+    "index.html#steps-to-remove-a-package-from-nixpkgs"
+  ],
+  "submitting-changes-pull-request-template": [
+    "index.html#submitting-changes-pull-request-template"
+  ],
+  "submitting-changes-tested-with-sandbox": [
+    "index.html#submitting-changes-tested-with-sandbox"
+  ],
+  "submitting-changes-platform-diversity": [
+    "index.html#submitting-changes-platform-diversity"
+  ],
+  "submitting-changes-nixos-tests": [
+    "index.html#submitting-changes-nixos-tests"
+  ],
+  "submitting-changes-tested-compilation": [
+    "index.html#submitting-changes-tested-compilation"
+  ],
+  "submitting-changes-tested-execution": [
+    "index.html#submitting-changes-tested-execution"
+  ],
+  "submitting-changes-contribution-standards": [
+    "index.html#submitting-changes-contribution-standards"
+  ],
+  "submitting-changes-hotfixing-pull-requests": [
+    "index.html#submitting-changes-hotfixing-pull-requests"
+  ],
+  "submitting-changes-commit-policy": [
+    "index.html#submitting-changes-commit-policy"
+  ],
+  "submitting-changes-branches": [
+    "index.html#submitting-changes-branches"
+  ],
+  "submitting-changes-master-branch": [
+    "index.html#submitting-changes-master-branch"
+  ],
+  "submitting-changes-staging-branch": [
+    "index.html#submitting-changes-staging-branch"
+  ],
+  "submitting-changes-staging-next-branch": [
+    "index.html#submitting-changes-staging-next-branch"
+  ],
+  "submitting-changes-stable-release-branches": [
+    "index.html#submitting-changes-stable-release-branches"
+  ],
+  "submitting-changes-stable-release-branches-automatic-backports": [
+    "index.html#submitting-changes-stable-release-branches-automatic-backports"
+  ],
+  "submitting-changes-stable-release-branches-manual-backports": [
+    "index.html#submitting-changes-stable-release-branches-manual-backports"
+  ],
+  "acceptable-backport-criteria": [
+    "index.html#acceptable-backport-criteria"
+  ],
+  "chap-vulnerability-roundup": [
+    "index.html#chap-vulnerability-roundup"
+  ],
+  "vulnerability-roundup-issues": [
+    "index.html#vulnerability-roundup-issues"
+  ],
+  "vulnerability-roundup-triaging-and-fixing": [
+    "index.html#vulnerability-roundup-triaging-and-fixing"
+  ],
+  "chap-reviewing-contributions": [
+    "index.html#chap-reviewing-contributions"
+  ],
+  "reviewing-contributions-package-updates": [
+    "index.html#reviewing-contributions-package-updates"
+  ],
+  "reviewing-contributions-new-packages": [
+    "index.html#reviewing-contributions-new-packages"
+  ],
+  "reviewing-contributions-module-updates": [
+    "index.html#reviewing-contributions-module-updates"
+  ],
+  "reviewing-contributions-new-modules": [
+    "index.html#reviewing-contributions-new-modules"
+  ],
+  "reviewing-contributions-individual-maintainer-list": [
+    "index.html#reviewing-contributions-individual-maintainer-list"
+  ],
+  "reviewing-contributions-maintainer-teams": [
+    "index.html#reviewing-contributions-maintainer-teams"
+  ],
+  "reviewing-contributions-other-submissions": [
+    "index.html#reviewing-contributions-other-submissions"
+  ],
+  "reviewing-contributions--merging-pull-requests": [
+    "index.html#reviewing-contributions--merging-pull-requests"
+  ],
+  "chap-contributing": [
+    "index.html#chap-contributing"
+  ],
+  "sec-contributing-devmode": [
+    "index.html#sec-contributing-devmode"
+  ],
+  "sec-contributing-markup": [
+    "index.html#sec-contributing-markup"
+  ],
+  "part-interoperability": [
+    "index.html#part-interoperability"
+  ],
+  "chap-interop-cyclonedx": [
+    "index.html#chap-interop-cyclonedx"
+  ],
+  "sec-interop.cylonedx-nix": [
+    "index.html#sec-interop.cylonedx-nix"
+  ],
+  "sec-interop.cylonedx-narinfo": [
+    "index.html#sec-interop.cylonedx-narinfo"
+  ],
+  "sec-interop.cylonedx-fod": [
+    "index.html#sec-interop.cylonedx-fod"
+  ]
+}

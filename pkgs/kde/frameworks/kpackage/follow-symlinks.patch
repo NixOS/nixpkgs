@@ -1,0 +1,13 @@
+diff --git a/src/kpackage/packageloader.cpp b/src/kpackage/packageloader.cpp
+index 9dbd1f6..c50a6e5 100644
+--- a/src/kpackage/packageloader.cpp
++++ b/src/kpackage/packageloader.cpp
+@@ -128,7 +128,7 @@ QList<KPluginMetaData> PackageLoader::listPackages(const QString &packageFormat,
+     }
+
+     for (auto const &plugindir : std::as_const(paths)) {
+-        QDirIterator it(plugindir, QStringList{QStringLiteral("metadata.json")}, QDir::Files, QDirIterator::Subdirectories);
++        QDirIterator it(plugindir, QStringList{QStringLiteral("metadata.json")}, QDir::Files, QDirIterator::Subdirectories | QDirIterator::FollowSymlinks);
+         std::unordered_set<QString> dirs;
+         while (it.hasNext()) {
+             it.next();
