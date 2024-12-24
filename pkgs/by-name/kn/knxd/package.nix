@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "knxd";
-  version = "0.14.66";
+  version = "0.14.71";
 
   src = fetchFromGitHub {
     owner = "knxd";
     repo = "knxd";
-    rev = finalAttrs.version;
-    hash = "sha256-3Npf+SlCWOMBd9CBLPysGtYe2Zk7I7T4t1bQHZTq3rI=";
+    tag = finalAttrs.version;
+    hash = "sha256-623Q2OGGr4wVdmJytjidTPEkP3hs2Z+KukbXt+hlPgM=";
   };
 
   postPatch = ''
@@ -60,11 +60,11 @@ stdenv.mkDerivation (finalAttrs: {
     "systemdsysusersdir=$(out)/lib/sysusers.d"
   ];
 
-  meta = with lib; {
+  meta = {
     description = "Advanced router/gateway for KNX";
     homepage = "https://github.com/knxd/knxd";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ sikmir ];
-    platforms = platforms.unix;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ sikmir ];
+    platforms = lib.platforms.unix;
   };
 })
