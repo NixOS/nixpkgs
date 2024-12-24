@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "checkip";
-  version = "0.47.5";
+  version = "0.47.7";
 
   src = fetchFromGitHub {
     owner = "jreisinger";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-iAMSNz5TDSId0gBm982hFkM+JR4naEREXKS7mi6z5dw=";
+    hash = "sha256-bjKRHIY9OIEft//g8VHKHTUrwWn8UU38SPP4IdPbIQE=";
   };
 
-  vendorHash = "sha256-awqaDEdWILm8RcQ8hrtJFMTJQA5TzGZhiBTMfexmtA0=";
+  vendorHash = "sha256-hTjSOufyrOKdY6wdPXvbpXwgWiHIRI+t4ByqHBY6cPQ=";
 
   ldflags = [
     "-w"
