@@ -1381,10 +1381,10 @@ in
     dependencies = [ self.vim-floaterm ];
   };
 
-  lightline-bufferline = super.lightline-bufferline.overrideAttrs {
+  lightline-bufferline = super.lightline-bufferline.overrideAttrs (oa: {
     # Requires web-devicons but mini.icons can mock them up
-    nativeCheckInputs = [ self.nvim-web-devicons ];
-  };
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-web-devicons ];
+  });
 
   lir-nvim = super.lir-nvim.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
