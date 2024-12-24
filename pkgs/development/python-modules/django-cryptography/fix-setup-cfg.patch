@@ -1,0 +1,16 @@
+diff --git a/setup.cfg b/setup.cfg
+index 865b4c3..577d917 100644
+--- a/setup.cfg
++++ b/setup.cfg
+@@ -35,7 +35,10 @@ project_urls =
+     Documentation = https://django-cryptography.readthedocs.io
+ 
+ [options]
+-packages = django_cryptography
++packages =
++    django_cryptography
++    django_cryptography.core
++    django_cryptography.utils
+ python_requires = >=3.6
+ include_package_data = True
+ install_requires =
