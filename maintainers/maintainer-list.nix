@@ -18730,6 +18730,7 @@
   };
   rapiteanu = {
     email = "rapiteanu.catalin@gmail.com";
+    matrix = "@catalin:one.ems.host";
     github = "Steinhagen";
     githubId = 4029937;
     name = "Viorel-Cătălin Răpițeanu";
