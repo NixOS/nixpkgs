@@ -1,0 +1,52 @@
+diff '--color=auto' -ruN a/src/pmars.c b/src/pmars.c
+--- a/src/pmars.c	2024-11-12 20:36:28.142766807 +0100
++++ b/src/pmars.c	2024-11-12 20:39:48.096710063 +0100
+@@ -72,7 +72,7 @@
+ #ifdef PSPACE
+ void    pspace_init(void);
+ #endif
+-#if defined(unix) || defined(__MSDOS__) || defined(VMS)
++#if defined(unix) || defined(__MSDOS__) || defined(VMS) || defined(__MACH__)
+ void    sighandler(int dummy);
+ #endif
+ #if defined(CURSESGRAPHX)
+@@ -87,7 +87,7 @@
+ #ifdef PSPACE
+ void    pspace_init();
+ #endif
+-#if defined(unix) || defined(__MSDOS__)
++#if defined(unix) || defined(__MSDOS__) || defined(__MACH__)
+ void    sighandler();
+ #endif
+ #if defined(CURSESGRAPHX)
+@@ -224,7 +224,7 @@
+ }
+ 
+ /* called when ctrl-c is pressed; prepares for debugger entry */
+-#if defined(unix) || defined(__MSDOS__) || defined (__OS2__)
++#if defined(unix) || defined(__MSDOS__) || defined (__OS2__) || defined(__MACH__)
+ void
+ #ifdef __OS2__
+         _cdecl
+@@ -290,7 +290,7 @@
+   int     argc;
+   char  **argv;
+ {
+-#if defined(unix) && !defined(DJGPP)
++#if (defined(unix) && !defined(DJGPP)) || defined(__MACH__)
+ #ifdef SIGINT
+   signal(SIGINT, sighandler);
+ #endif
+diff '--color=auto' -ruN a/src/xwindisp.c b/src/xwindisp.c
+--- a/src/xwindisp.c	2024-11-12 20:36:28.143766827 +0100
++++ b/src/xwindisp.c	2024-11-12 20:37:39.708178145 +0100
+@@ -61,6 +61,9 @@
+ #define YELLOW                        14
+ #define WHITE                         15
+ 
++/* defined in pmars.c */
++extern void sighandler(int dummy);
++
+  /* X names of the colors we allocate */
+ static char *xColorNames[MAXXCOLOR] = {
+   "black", "blue3", "green3", "cyan3",
