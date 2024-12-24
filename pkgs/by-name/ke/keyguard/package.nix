@@ -60,6 +60,8 @@ stdenv.mkDerivation (finalAttrs: {
     useBwrap = false;
   };
 
+  passthru.updateScript = ./update.sh;
+
   doCheck = false;
 
   gradleFlags = [ "-Dorg.gradle.java.home=${jdk17}" ];
