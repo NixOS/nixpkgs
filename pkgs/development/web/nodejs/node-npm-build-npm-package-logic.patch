@@ -1,0 +1,95 @@
+This patch is based off of npm tag v9.1.5.
+
+This introduces fixes for 4 issues:
+
+1. When node-gyp is included as a dependency in a project, any scripts that run it will not use the copy included in Node. This is problematic because we patch node-gyp to work without xcbuild on Darwin, leading to these packages failing to build with a sandbox on Darwin.
+2. When a Git dependency contains install scripts, it has to be built just like any other package. Thus, we need to patch shebangs appropriately, just like in npmConfigHook.
+3. We get useless warnings that clog up logs when using a v1 lockfile, so we silence them.
+4. npm looks at a hidden lockfile to determine if files have binaries to link into `node_modules/.bin`. When using a v1 lockfile offline, this lockfile does not contain enough info, leading to binaries for packages such as Webpack not being available to scripts. We used to work around this by making npm ignore the hidden lockfile by creating a file, but now we just disable the code path entirely.
+
+To update:
+1. Run `git diff` from an npm checkout
+2. Run `fix-npm-patch-paths.sh`
+3. Include/update this frontmatter, please!
+
+diff --git a/deps/npm/node_modules/@npmcli/run-script/lib/set-path.js b/deps/npm/node_modules/@npmcli/run-script/lib/set-path.js
+index c59c270d9..98785192f 100644
+--- a/deps/npm/node_modules/@npmcli/run-script/lib/set-path.js
++++ b/deps/npm/node_modules/@npmcli/run-script/lib/set-path.js
+@@ -12,7 +12,10 @@ const setPATH = (projectPath, binPaths, env) => {
+     .reduce((set, p) => set.concat(p.filter(concatted => !set.includes(concatted))), [])
+     .join(delimiter)
+ 
+-  const pathArr = []
++  // Ensure when using buildNpmPackage hooks that Node.js'
++  // bundled copy of node-gyp is used, instead of any copy
++  // pulled in as a dependency.
++  const pathArr = process.env['NIX_NODEJS_BUILDNPMPACKAGE'] ? [nodeGypPath, PATH] : [];
+   if (binPaths) {
+     pathArr.push(...binPaths)
+   }
+@@ -26,7 +29,8 @@ const setPATH = (projectPath, binPaths, env) => {
+     pp = p
+     p = dirname(p)
+   } while (p !== pp)
+-  pathArr.push(nodeGypPath, PATH)
++  if (!process.env['NIX_NODEJS_BUILDNPMPACKAGE']) { pathArr.push(nodeGypPath, PATH) }
++
+ 
+   const pathVal = pathArr.join(delimiter)
+ 
+diff --git a/deps/npm/node_modules/pacote/lib/git.js b/deps/npm/node_modules/pacote/lib/git.js
+index 1fa8b1f96..a026bb50d 100644
+--- a/deps/npm/node_modules/pacote/lib/git.js
++++ b/deps/npm/node_modules/pacote/lib/git.js
+@@ -188,6 +188,24 @@ class GitFetcher extends Fetcher {
+       }
+       noPrepare.push(this.resolved)
+ 
++      if (process.env['NIX_NODEJS_BUILDNPMPACKAGE']) {
++        const spawn = require('@npmcli/promise-spawn')
++
++        const npmWithNixFlags = (args, cmd) => spawn('bash', ['-c', 'npm ' + args + ` $npm${cmd}Flags "$\{npm${cmd}FlagsArray[@]}" $npmFlags "$\{npmFlagsArray[@]}" || [ -n "$forceGitDeps" ]`], { cwd: dir, env: { ...process.env, _PACOTE_NO_PREPARE_: noPrepare.join('\n') } }, { message: `\`npm ${args}\` failed` })
++        const patchShebangs = () => spawn('bash', ['-c', 'source $stdenv/setup; patchShebangs node_modules'], { cwd: dir })
++
++        // the DirFetcher will do its own preparation to run the prepare scripts
++        // All we have to do is put the deps in place so that it can succeed.
++        //
++        // We ignore this.npmConfig to maintain an environment that's as close
++        // to the rest of the build as possible.
++        return spawn('bash', ['-c', '$prefetchNpmDeps --fixup-lockfile package-lock.json || [ -n "$forceGitDeps" ]'], { cwd: dir })
++        .then(() => npmWithNixFlags('ci --ignore-scripts', 'Install'))
++        .then(patchShebangs)
++        .then(() => npmWithNixFlags('rebuild', 'Rebuild'))
++        .then(patchShebangs)
++      }
++
+       // the DirFetcher will do its own preparation to run the prepare scripts
+       // All we have to do is put the deps in place so that it can succeed.
+       return npm(
+diff --git a/deps/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js b/deps/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js
+index 2ea66ac33..25e671318 100644
+--- a/deps/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js
++++ b/deps/npm/node_modules/@npmcli/arborist/lib/arborist/build-ideal-tree.js
+@@ -740,7 +740,7 @@ This is a one-time fix-up, please be patient...
+           node.package = { ...mani, _id: `${mani.name}@${mani.version}` }
+         } catch (er) {
+           const warning = `Could not fetch metadata for ${name}@${id}`
+-          log.warn(heading, warning, er)
++          if (!process.env['NIX_NODEJS_BUILDNPMPACKAGE']) { log.warn(heading, warning, er) }
+         }
+         this.finishTracker(t)
+       })
+diff --git a/deps/npm/node_modules/@npmcli/arborist/lib/arborist/load-actual.js b/deps/npm/node_modules/@npmcli/arborist/lib/arborist/load-actual.js
+index 6c3f917c6..ec21d2cc4 100644
+--- a/deps/npm/node_modules/@npmcli/arborist/lib/arborist/load-actual.js
++++ b/deps/npm/node_modules/@npmcli/arborist/lib/arborist/load-actual.js
+@@ -147,7 +147,7 @@ module.exports = cls => class ActualLoader extends cls {
+       this[_actualTree].assertRootOverrides()
+ 
+       // if forceActual is set, don't even try the hidden lockfile
+-      if (!forceActual) {
++      if (!forceActual && !process.env['NIX_NODEJS_BUILDNPMPACKAGE']) {
+         // Note: hidden lockfile will be rejected if it's not the latest thing
+         // in the folder, or if any of the entries in the hidden lockfile are
+         // missing.
