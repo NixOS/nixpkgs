@@ -7,16 +7,16 @@
 
 buildGoModule rec {
   pname = "omnictl";
-  version = "0.44.1";
+  version = "0.45.0";
 
   src = fetchFromGitHub {
     owner = "siderolabs";
     repo = "omni";
     rev = "v${version}";
-    hash = "sha256-+yN2s8LQbOlN1vkovU0pEl5O9s8NZ8u0TYMh2bTbYCM=";
+    hash = "sha256-FA2lGSeTbJXc/BEWOu43sV2xS9tTwQ+iKrDW2tFAsJ4=";
   };
 
-  vendorHash = "sha256-5K2ZmWYU8+M044mzrqYJv1aZ/E7aRsFWfq19W658SZ4=";
+  vendorHash = "sha256-U/cserG37gM1XDN9HcPqnq4hPJSaOaLBoIs5OcsocYw=";
 
   ldflags = [
     "-s"
