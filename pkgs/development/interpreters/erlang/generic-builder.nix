@@ -250,7 +250,7 @@ stdenv.mkDerivation (
           if [ "$latest" != "${version}" ]; then
             nixpkgs="$(git rev-parse --show-toplevel)"
             nix_file="$nixpkgs/pkgs/development/interpreters/erlang/${major}.nix"
-            update-source-version ${baseName}R${major} "$latest" --version-key=version --print-changes --file="$nix_file"
+            update-source-version ${baseName}_${major} "$latest" --version-key=version --print-changes --file="$nix_file"
           else
             echo "${baseName}R${major} is already up-to-date"
           fi
