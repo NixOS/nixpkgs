@@ -1,0 +1,32 @@
+diff -uNr a/src/espeakedit.cpp b/src/espeakedit.cpp
+--- a/src/espeakedit.cpp
++++ b/src/espeakedit.cpp
+@@ -123,7 +126,7 @@ bool MyApp::OnInit(void)
+ {//=====================
+ 
+ int j;
+-wxChar *p;
++const wxChar *p;
+ char param[120];
+ 
+ 
+diff -uNr a/src/spect.cpp b/src/spect.cpp
+--- a/src/spect.cpp
++++ b/src/spect.cpp
+@@ -1,6 +1,7 @@
+ /***************************************************************************
+  *   Copyright (C) 2005 to 2007 by Jonathan Duddington                     *
+  *   email: jonsd@users.sourceforge.net                                    *
++ *   Copyright (C) 2013 by Reece H. Dunn                                   *
+  *                                                                         *
+  *   This program is free software; you can redistribute it and/or modify  *
+  *   it under the terms of the GNU General Public License as published by  *
+@@ -92,6 +93,8 @@ float SpectTilt(int value, int freq)
+ 
+ 
+ SpectFrame::SpectFrame(SpectFrame *copy)
++	: FONT_SMALL(8,wxSWISS,wxNORMAL,wxNORMAL)
++	, FONT_MEDIUM(9,wxSWISS,wxNORMAL,wxNORMAL)
+ {//=====================================
+ 
+ 	int  ix;

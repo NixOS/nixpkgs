@@ -1,0 +1,18 @@
+diff -ru3 wipe-2.3.1/Makefile.in wipe-2.3.1-new/Makefile.in
+--- wipe-2.3.1/Makefile.in	2009-11-02 00:11:30.000000000 +0300
++++ wipe-2.3.1-new/Makefile.in	2014-10-18 02:51:10.088966232 +0400
+@@ -60,12 +60,12 @@
+ 	$(INSTALL_BIN) -d $(bindir)
+ 	$(INSTALL_BIN) -s $(BIN_OUT) $(bindir)
+ 	$(INSTALL) -d $(mandir)/man1
+-	$(INSTALL) -o root -m 0644 wipe.1 $(mandir)/man1/
++	$(INSTALL) -m 0644 wipe.1 $(mandir)/man1/
+ 	rm -rf $(datadir)/doc/wipe*
+ 	$(INSTALL) -d $(datadir)/doc/wipe
+ 
+ 	for file in $(DOCS); do \
+-		$(INSTALL) -o root -m 0644 $$file $(datadir)/doc/wipe/; \
++		$(INSTALL) -m 0644 $$file $(datadir)/doc/wipe/; \
+ 	done
+ 
+ install_home: $(BIN_OUT)

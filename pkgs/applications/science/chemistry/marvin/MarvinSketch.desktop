@@ -1,0 +1,10 @@
+#!/usr/bin/env xdg-open
+[Desktop Entry]
+Type=Application
+Name=MarvinSketch
+Exec=@out@/bin/msketch %f
+Icon=MarvinSketch
+MimeType=text/xml;text/plain;chemical/x-cml;chemical/x-mdl-molfile;chemical/x-mdl-sdfile;chemical/x-mol2;chemical/x-pdb;chemical/x-xyz;chemical/x-mdl-rdfile;chemical/x-mdl-rxnfile;chemical/x-inchi;
+Categories=Education;Science;Chemistry;
+StartupWMClass=com-install4j-runtime-launcher-UnixLauncher
+Comment=Molecular modelling, analysis and structure drawing program

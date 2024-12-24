@@ -1,0 +1,17 @@
+diff --git a/build-module.py b/build-module.py
+index d91375e..4d307e8 100644
+--- a/build-module.py
++++ b/build-module.py
+@@ -23,10 +23,10 @@ allowed_to_fail = os.environ.get("CIBUILDWHEEL", "0") != "1"
+ 
+ 
+ def build_cython_extensions() -> None:
+-    import Cython.Compiler.Options
+-    from Cython.Build import build_ext, cythonize
+     from setuptools import Extension
+     from setuptools.dist import Distribution
++    import Cython.Compiler.Options
++    from Cython.Build import build_ext, cythonize
+ 
+     Cython.Compiler.Options.annotate = True
+ 
