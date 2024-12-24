@@ -1,0 +1,19 @@
+scons does not use os environment by default:
+  https://scons.org/doc/2.1.0/HTML/scons-user/x1750.html
+
+nixpkgs' cc-wrapper on the other hand relies on various NIX_* variables
+to be passed through like NIX_CFLAGS_COMPILE_BEFORE.
+--- a/SConstruct
++++ b/SConstruct
+@@ -559,10 +559,7 @@ options = dict(
+     SHLINKCOMSTR=link_shared_library_message,
+     LINKCOMSTR=link_program_message,
+     PREFIX=GetOption('prefix'),
+-    ENV = dict([ (key, os.environ[key])
+-                 for key in os.environ
+-                 if key in ['PATH', 'TERM', 'HOME', 'PKG_CONFIG_PATH']
+-              ])
++    ENV = os.environ,
+ )
+ 
+ if ARGUMENTS.get('VERBOSE') == "1":

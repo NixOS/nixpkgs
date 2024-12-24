@@ -1,0 +1,15 @@
+diff --git a/YUViewLib/src/common/Typedef.h b/YUViewLib/src/common/Typedef.h
+--- a/YUViewLib/src/common/Typedef.h
++++ b/YUViewLib/src/common/Typedef.h
+@@ -212,12 +212,7 @@ private:
+ #define YUVIEW_VERSION "Unknown"
+ #endif
+ 
+-#ifndef YUVIEW_HASH
+ #define VERSION_CHECK 0
+-#define YUVIEW_HASH 0
+-#else
+-#define VERSION_CHECK 1
+-#endif
+ 
+ #define MAX_RECENT_FILES 10
