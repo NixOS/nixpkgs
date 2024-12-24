@@ -1,0 +1,25 @@
+diff --git a/common/smtppass.c b/common/smtppass.c
+index d9be1ba..4a366f4 100644
+--- a/common/smtppass.c
++++ b/common/smtppass.c
+@@ -60,15 +60,15 @@
+ 
+ #include "usuals.h"
+ 
+-#ifdef LINUX_TRANSPARENT_PROXY
+-#include <linux/netfilter_ipv4.h>
+-#endif
+-
+ #include "compat.h"
+ #include "sock_any.h"
+ #include "stringx.h"
+ #include "sppriv.h"
+ 
++#ifdef LINUX_TRANSPARENT_PROXY
++#include <linux/netfilter_ipv4.h>
++#endif
++
+ /* -----------------------------------------------------------------------
+  *  STRUCTURES
+  */
+

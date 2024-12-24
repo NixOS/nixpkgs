@@ -1,0 +1,12 @@
+diff --git a/doc/lens.txt b/doc/lens.txt
+index 60943ce..2fe43dc 100644
+--- a/doc/lens.txt
++++ b/doc/lens.txt
+@@ -76,7 +76,6 @@ g:lens#disabled_filenames
+ 
+              Default value is [].
+                                                               *g:lens#animate*
+-                                                              *g:lens#animate*
+ g:lens#animate
+              If value is 1 and animate.vim is installed, the window resize
+              will be animated.

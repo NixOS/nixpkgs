@@ -1,0 +1,13 @@
+diff --git a/mat2 b/mat2
+index 3b77e1e..b99a633 100755
+--- a/mat2
++++ b/mat2
+@@ -46,7 +46,7 @@ def __check_file(filename: str, mode: int = os.R_OK) -> bool:
+ 
+ 
+ def create_arg_parser() -> argparse.ArgumentParser:
+-    parser = argparse.ArgumentParser(description='Metadata anonymisation toolkit 2')
++    parser = argparse.ArgumentParser(description='Metadata anonymisation toolkit 2', prog='mat2')
+ 
+     parser.add_argument('-V', '--verbose', action='store_true',
+                         help='show more verbose status information')
