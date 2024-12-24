@@ -3,9 +3,8 @@
   stdenv,
   fetchFromGitHub,
   rustPlatform,
-  testers,
+  versionCheckHook,
   nix-update-script,
-  ox,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -21,11 +20,14 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-GiKSkpXEngQtnGW8zjy2RWQOG1b/xQrYRSLHsndkooo=";
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = ox;
-    };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = [ "--version" ];
 
+  passthru = {
     updateScript = nix-update-script { };
   };
 
