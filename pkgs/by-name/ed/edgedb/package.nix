@@ -16,19 +16,19 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "edgedb";
-  version = "6.0.2";
+  version = "6.1.0";
 
   src = fetchFromGitHub {
     owner = "edgedb";
     repo = "edgedb-cli";
     rev = "refs/tags/v${version}";
-    hash = "sha256-P55LwByDVO3pEzg4OZldXiyli8s5oHvV8MXCDwkF2+8=";
+    hash = "sha256-iB0ZWciEx/Xiq+pMg3nMJNHumoy5Z8dB6ev7UneHnVg=";
     fetchSubmodules = true;
   };
 
   cargoDeps = rustPlatform.fetchCargoVendor {
     inherit pname version src;
-    hash = "sha256-oRtgORzp0tabPcyArPgG8LGfYlSPhpaeRPT9QWF5BGs=";
+    hash = "sha256-oiDCUJamnl2ykvfs7V20dvr29ZAtSl+kZW4fzmlc1Ao=";
   };
 
   nativeBuildInputs = [
