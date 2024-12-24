@@ -1,11 +1,15 @@
 {
   lib,
   stdenv,
-  cmake,
+  rustPlatform,
   fetchFromGitHub,
+
+  # nativeBuildInputs
+  cmake,
   installShellFiles,
   pkg-config,
-  rustPlatform,
+
+  buildPackages,
   versionCheckHook,
   python3Packages,
   nix-update-script,
@@ -41,13 +45,16 @@ rustPlatform.buildRustPackage rec {
   # Tests require python3
   doCheck = false;
 
-  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
-    export HOME=$TMPDIR
-    installShellCompletion --cmd uv \
-      --bash <($out/bin/uv --generate-shell-completion bash) \
-      --fish <($out/bin/uv --generate-shell-completion fish) \
-      --zsh <($out/bin/uv --generate-shell-completion zsh)
-  '';
+  postInstall =
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd uv \
+        --bash <(${emulator} $out/bin/uv generate-shell-completion bash) \
+        --fish <(${emulator} $out/bin/uv generate-shell-completion fish) \
+        --zsh <(${emulator} $out/bin/uv generate-shell-completion zsh)
+    '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
