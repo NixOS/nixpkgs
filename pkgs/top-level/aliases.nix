@@ -1364,6 +1364,7 @@ mapAliases {
 
   ### V ###
 
+  v8 = throw "`v8` has been removed as it's unmaintained for several years and has vulnerabilites. Please migrate to `nodejs.libv8`"; # Added 2024-12-21
   validphys2 = throw "validphys2 has been removed, since it has a broken dependency that was removed"; # Added 2024-08-21
   vamp = { vampSDK = vamp-plugin-sdk; }; # Added 2020-03-26
   vaapiIntel = intel-vaapi-driver; # Added 2023-05-31
