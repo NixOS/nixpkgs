@@ -28,6 +28,7 @@
 
   disableDocs ? false,
 
+  callPackage,
   writers,
 }:
 
@@ -193,6 +194,23 @@ stdenv.mkDerivation (finalAttrs: {
         }
       ) nameOrPath;
     writeScriptBin = name: finalAttrs.passthru.writeScript "/bin/${name}";
+
+    # Tests #
+    tests = builtins.mapAttrs (name: path: callPackage path { racket = finalAttrs.finalPackage; }) (
+      {
+        ## Basic ##
+        write-greeting = ./tests/write-greeting.nix;
+        get-version-and-variant = ./tests/get-version-and-variant.nix;
+        load-openssl = ./tests/load-openssl.nix;
+
+        ## Nixpkgs supports ##
+        nix-write-script = ./tests/nix-write-script.nix;
+      }
+      // lib.optionalAttrs (!isMinimal) {
+        ## `main-distribution` ##
+        draw-crossing = ./tests/draw-crossing.nix;
+      }
+    );
   };
 
   meta = {
