@@ -1,0 +1,39 @@
+diff --git a/com32/chain/chain.c b/com32/chain/chain.c
+index 4e9e32d..b11b880 100644
+--- a/com32/chain/chain.c
++++ b/com32/chain/chain.c
+@@ -514,7 +514,7 @@ int main(int argc, char *argv[])
+     if (opt.file) {
+ 	fdat.base = (opt.fseg << 4) + opt.foff;
+
+-	if (loadfile(opt.file, &fdat.data, &fdat.size)) {
++	if (loadfile(opt.file, &fdat.data, (size_t*)&fdat.size)) {
+ 	    error("Couldn't read the boot file.");
+ 	    goto bail;
+ 	}
+diff --git a/com32/lib/syslinux/debug.c b/com32/lib/syslinux/debug.c
+index d9ab863..e8f53d5 100644
+--- a/com32/lib/syslinux/debug.c
++++ b/com32/lib/syslinux/debug.c
+@@ -1,6 +1,7 @@
+ #include <linux/list.h>
+ #include <string.h>
+ #include <stdbool.h>
++#include <stdio.h>
+
+ #ifdef DYNAMIC_DEBUG
+
+diff --git a/com32/libupload/tftp.h b/com32/libupload/tftp.h
+index 323dc16..09aa40b 100644
+--- a/com32/libupload/tftp.h
++++ b/com32/libupload/tftp.h
+@@ -19,4 +19,7 @@ TFTP_OK	= 11, /* Not in RFC */
+ };
+
+ extern const char *tftp_string_error_message[];
++
++extern int tftp_put(struct url_info *url, int flags, struct inode *inode,
++                               const char **redir, char *data, int data_length);
+ #endif
+--
+2.43.0

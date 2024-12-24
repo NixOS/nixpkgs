@@ -73,6 +73,8 @@ stdenv.mkDerivation {
       ./import-efisetjmp.patch
       # Upstream patch: https://www.syslinux.org/archives/2024-February/026903.html
       ./define-wchar_t.patch
+      # https://lists.openembedded.org/g/openembedded-core/topic/patch_syslinux_fix_build/105858862
+      ./gcc14.patch
     ];
 
   postPatch = ''
@@ -115,7 +117,9 @@ stdenv.mkDerivation {
   # gcc-10. Otherwise build fails as:
   #   ld: acpi/xsdt.o:/build/syslinux-b404870/com32/gpllib/../gplinclude/memory.h:40: multiple definition of
   #     `e820_types'; memory.o:/build/syslinux-b404870/com32/gpllib/../gplinclude/memory.h:40: first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
+  # Fix GCC 14 build.
+  # from incompatible pointer type [-Wincompatible-pointer-types]
+  env.NIX_CFLAGS_COMPILE = "-fcommon -Wno-error=incompatible-pointer-types";
 
   makeFlags =
     [
