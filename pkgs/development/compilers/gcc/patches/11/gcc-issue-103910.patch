@@ -1,0 +1,41 @@
+From d243f4009d8071b734df16cd70f4c5d09a373769 Mon Sep 17 00:00:00 2001
+From: Andrew Pinski <apinski@marvell.com>
+Date: Wed, 5 Jan 2022 22:00:07 +0000
+Subject: [PATCH] Fix target/103910: missing GTY on x86_mfence causing PCH
+ usage to ICE
+
+With -O3 -march=opteron, a mfence builtin is added after the loop
+to say the nontemporal stores are no longer needed. This all good
+without precompiled headers as the function decl that is referneced
+by x86_mfence is referenced in another variable but with precompiled
+headers, x86_mfence is all messed up and the decl was GC'ed away.
+This fixes the problem by marking x86_mfence as GTY to save/restore
+during precompiled headers just like most other variables in
+the header file.
+
+Committed as obvious after a bootstrap/test on x86_64-linux-gnu.
+
+gcc/ChangeLog:
+
+	PR target/103910
+	* config/i386/i386.h (x86_mfence): Mark with GTY.
+---
+ gcc/config/i386/i386.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/gcc/config/i386/i386.h b/gcc/config/i386/i386.h
+index f027608eefa..3ac0f698ae2 100644
+--- a/gcc/config/i386/i386.h
++++ b/gcc/config/i386/i386.h
+@@ -486,7 +486,7 @@ extern unsigned char ix86_prefetch_sse;
+ 
+ /* Fence to use after loop using storent.  */
+ 
+-extern tree x86_mfence;
++extern GTY(()) tree x86_mfence;
+ #define FENCE_FOLLOWING_MOVNT x86_mfence
+ 
+ /* Once GDB has been enhanced to deal with functions without frame
+-- 
+2.31.1
+

@@ -1,0 +1,10 @@
+diff --git a/lgmask.in b/lgmask.in
+index 17dbe4d..2195d91 100644
+--- a/lgmask.in
++++ b/lgmask.in
+@@ -1,4 +1,4 @@
+-#! @PERL@
++#! /usr/bin/env perl
+ 
+ #---------------------------------------------------------------------------
+ #@COPYRIGHT :
