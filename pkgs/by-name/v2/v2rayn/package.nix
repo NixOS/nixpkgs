@@ -37,7 +37,7 @@ buildDotnetModule rec {
       --replace-fail "/bin/bash" "${bash}/bin/bash"
   '';
 
-  dotnetInstallFlags = [ "-p:PublishReadyToRun=false" ];
+  dotnetBuildFlags = [ "-p:PublishReadyToRun=false" ];
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
@@ -103,6 +103,8 @@ buildDotnetModule rec {
     mkdir -p $out/share/pixmaps
     magick "v2rayN/v2rayN.Desktop/Assets/v2rayN.ico[11]" $out/share/pixmaps/v2rayn.png
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "GUI client for Windows and Linux, support Xray core and sing-box-core and others";
