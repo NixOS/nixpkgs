@@ -14,20 +14,23 @@ buildGoModule.override
   }
   {
     name = pname;
+
     src = fetchFromGitHub {
       owner = "goccy";
-      repo = pname;
+      repo = "bigquery-emulator";
       rev = "refs/tags/v${version}";
       hash = "sha256-iAVbxbm1G7FIWTB5g6Ff8h2dZjZssONA2MOCGuvK180=";
     };
 
     vendorHash = "sha256-TQlsivudutyPFW+3HHX7rYuoB5wafmDTAO1TElO/8pc=";
+
     postPatch = ''
       # main module does not contain package
       rm -r internal/cmd/generator
     '';
 
     ldflags = [ "-s -w -X main.version=${version} -X main.revision=v${version}" ];
+
     doCheck = false;
 
     meta = with lib; {
