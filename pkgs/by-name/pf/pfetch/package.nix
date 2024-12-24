@@ -2,6 +2,8 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
+  gitUpdater,
+  versionCheckHook,
 }:
 
 stdenvNoCC.mkDerivation rec {
@@ -20,6 +22,16 @@ stdenvNoCC.mkDerivation rec {
   installPhase = ''
     install -Dm755 -t $out/bin pfetch
   '';
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  passthru = {
+    updateScript = gitUpdater { };
+  };
 
   meta = {
     description = "Pretty system information tool written in POSIX sh";
