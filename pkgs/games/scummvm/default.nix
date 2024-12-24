@@ -25,26 +25,19 @@
   CoreMIDI,
   AudioUnit,
   cctools,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
   pname = "scummvm";
-  version = "2.8.1";
+  version = "2.9.0";
 
   src = fetchFromGitHub {
     owner = "scummvm";
     repo = "scummvm";
     rev = "v${version}";
-    hash = "sha256-8/q16MwHhbbmUxiwJOHkjNxrnBB4grMa7qw/n3KLvRc=";
+    hash = "sha256-4/h1bzauYWNvG7skn6afF79t0KEdgYLZoeqeqRudH7I=";
   };
-
-  patches = [
-    # Fix building with Freetype 2.13.3. Remove after next release.
-    (fetchpatch {
-      url = "https://github.com/scummvm/scummvm/commit/65977961b20ba97b1213b5267da0cb1efb49063b.patch?full_index=1";
-      hash = "sha256-e5dJd3gP8OAD3hEJlvOhMemsNErCKTn7avlprApFig0=";
-    })
-  ];
 
   nativeBuildInputs = [ nasm ];
 
@@ -97,6 +90,10 @@ stdenv.mkDerivation rec {
     '';
 
   NIX_CFLAGS_COMPILE = [ "-fpermissive" ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Program to run certain classic graphical point-and-click adventure games (such as Monkey Island)";
