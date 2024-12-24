@@ -56,16 +56,6 @@ assert lib.assertMsg (xenSupport -> hostCpuTargets == [ "i386-softmmu" ]) "Xen s
 
 let
   hexagonSupport = hostCpuTargets == null || lib.elem "hexagon" hostCpuTargets;
-
-  buildPlatformStdenv =
-    if stdenv.buildPlatform.isDarwin then
-      overrideSDK buildPackages.stdenv {
-        # Keep these values in sync with `all-packages.nix`.
-        darwinSdkVersion = "12.3";
-        darwinMinVersion = "12.0";
-      }
-    else
-      buildPackages.stdenv;
 in
 
 stdenv.mkDerivation (finalAttrs: {
@@ -82,7 +72,7 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-+FnwvGXh9TPQQLvoySvP7O5a8skhpmh8ZS+0TQib2JQ=";
   };
 
-  depsBuildBuild = [ buildPlatformStdenv.cc ]
+  depsBuildBuild = [ buildPackages.stdenv.cc ]
     ++ lib.optionals hexagonSupport [ pkg-config ];
 
   nativeBuildInputs = [
