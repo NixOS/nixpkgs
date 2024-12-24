@@ -5,6 +5,7 @@
   stdenv,
   testers,
   snyk,
+  nodejs_20,
 }:
 
 let
@@ -33,6 +34,8 @@ buildNpmPackage {
     lib.optionalString (
       stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
     ) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
+
+  nodejs = nodejs_20;
 
   npmBuildScript = "build:prod";
 
