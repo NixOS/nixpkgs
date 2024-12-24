@@ -1,0 +1,23 @@
+diff --git a/configure b/configure
+index 4480261..2fb9b34 100755
+--- a/configure
++++ b/configure
+@@ -28,18 +28,6 @@ do
+   esac
+ done
+ 
+-# Check HTTP access tool
+-if CHECK_COMMAND curl ; then
+-  PROGRAM_HTTP="curl -O"
+-elif CHECK_COMMAND wget ; then
+-  PROGRAM_HTTP="wget"
+-elif CHECK_COMMAND fetch ; then
+-  PROGRAM_HTTP="fetch"
+-else
+-  echo "ERROR: Require one of HTTP access tools (curl, wget or fetch)."
+-  exit 1
+-fi
+-
+ # Check encoding filter
+ if CHECK_COMMAND qkc ; then
+   PROGRAM_ENCODEFILTER="qkc -q -u"

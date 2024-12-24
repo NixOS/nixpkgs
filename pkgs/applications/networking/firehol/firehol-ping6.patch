@@ -1,0 +1,29 @@
+--- a/m4/ax_check_ping_ipv6.m4
++++ b/m4/ax_check_ping_ipv6.m4
+@@ -42,16 +42,16 @@ AC_DEFUN([AX_CHECK_PING_IPV6],
+
+     AC_CACHE_CHECK([whether ]PING[ has working -6 option], [ac_cv_ping_6_opt],
+     [
+-        ac_cv_ping_6_opt=no
+-        if test -n "$PING"; then
+-            echo "Trying '$PING -6 -c 1 ::1'" >&AS_MESSAGE_LOG_FD
+-            $PING -6 -c 1 ::1 > conftest.out 2>&1
+-            if test "$?" = 0; then
+-                ac_cv_ping_6_opt=yes
+-            fi
+-            cat conftest.out >&AS_MESSAGE_LOG_FD
+-            rm -f conftest.out
+-        fi
++        ac_cv_ping_6_opt=yes
++        #if test -n "$PING"; then
++        #    echo "Trying '$PING -6 -c 1 ::1'" >&AS_MESSAGE_LOG_FD
++        #    $PING -6 -c 1 ::1 > conftest.out 2>&1
++        #    if test "$?" = 0; then
++        #        ac_cv_ping_6_opt=yes
++        #    fi
++        #    cat conftest.out >&AS_MESSAGE_LOG_FD
++        #    rm -f conftest.out
++        #fi
+     ])
+
+     AS_IF([test "x$ac_cv_ping_6_opt" = "xyes"],[
