@@ -277,15 +277,6 @@ self: super:
     outputs = [ "out" "dev" "devdoc" ];
   });
 
-  luit = super.luit.overrideAttrs (attrs: {
-    # See https://bugs.freedesktop.org/show_bug.cgi?id=47792
-    # Once the bug is fixed upstream, this can be removed.
-    configureFlags = [ "--disable-selective-werror" ];
-
-    buildInputs = attrs.buildInputs ++ [libiconv];
-    meta = attrs.meta // { mainProgram = "luit"; };
-  });
-
   libICE = super.libICE.overrideAttrs (attrs: {
     outputs = [ "out" "dev" "doc" ];
   });
