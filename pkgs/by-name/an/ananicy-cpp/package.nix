@@ -42,6 +42,12 @@ clangStdenv.mkDerivation (finalAttrs: {
       url = "https://gitlab.com/ananicy-cpp/ananicy-cpp/-/commit/de6f11978db98bfd13a1e87dcdab61dbe6496710.patch";
       hash = "sha256-9bJlFCClddlAEknfqp7Gcij7NX6tqohE2wqoalLoN5I=";
     })
+    # https://gitlab.com/ananicy-cpp/ananicy-cpp/-/merge_requests/30
+    (fetchpatch {
+      name = "fix-build-with-clang-19.patch";
+      url = "https://gitlab.com/ananicy-cpp/ananicy-cpp/-/commit/b2589a9b1faa2ecf54aeede40ea781c33bfb09a8.patch";
+      hash = "sha256-nfyCdhvnWj446z5aPFCXGi79Xgja8W0Eopl6I30fOBM=";
+    })
   ];
 
   strictDeps = true;
