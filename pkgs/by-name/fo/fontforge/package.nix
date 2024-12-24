@@ -79,6 +79,7 @@ stdenv.mkDerivation rec {
     cmake
     makeWrapper
   ];
+
   buildInputs =
     [
       readline
@@ -95,14 +96,20 @@ stdenv.mkDerivation rec {
       libtiff
       libxml2
     ]
+    ++ lib.optionals withPython [ py ]
     ++ lib.optionals withSpiro [ libspiro ]
-    ++ lib.optionals withGUI [ gtk3 cairo pango ];
+    ++ lib.optionals withGUI [
+      gtk3
+      cairo
+      pango
+    ];
 
   cmakeFlags =
     [ "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" ]
     ++ lib.optional (!withSpiro) "-DENABLE_LIBSPIRO=OFF"
     ++ lib.optional (!withGUI) "-DENABLE_GUI=OFF"
     ++ lib.optional (!withGTK) "-DENABLE_X11=ON"
+    ++ lib.optional (!withPython) "-DENABLE_PYTHON_SCRIPTING=OFF"
     ++ lib.optional withExtras "-DENABLE_FONTFORGE_EXTRAS=ON";
 
   preConfigure = ''
@@ -110,21 +117,18 @@ stdenv.mkDerivation rec {
     export SOURCE_DATE_EPOCH=$(date -d ${version} +%s)
   '';
 
-  postInstall =
-    ''
-      wrapProgram $out/bin/fontforge --suffix PYTHONPATH : "${py}/${py.sitePackages}"
-    ''
-    +
-      # get rid of the runtime dependency on python
-      lib.optionalString (!withPython) ''
-        rm -r "$out/share/fontforge/python"
-      '';
+  postInstall = lib.optionalString withPython ''
+    wrapProgram $out/bin/fontforge --suffix PYTHONPATH : "${py}/${py.sitePackages}"
+  '';
 
   meta = {
     description = "Font editor";
     homepage = "https://fontforge.github.io";
     platforms = lib.platforms.all;
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ erictapen ulysseszhan ];
+    maintainers = with lib.maintainers; [
+      erictapen
+      ulysseszhan
+    ];
   };
 }
