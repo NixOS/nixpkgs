@@ -3,6 +3,7 @@
   fetchFromGitHub,
   fetchYarnDeps,
   lib,
+  nixosTests,
   nodejs,
   stash,
   stdenv,
@@ -108,6 +109,7 @@ buildGoModule {
     inherit frontend;
     updateScript = ./update.py;
     tests = {
+      inherit (nixosTests) stash;
       version = testers.testVersion {
         package = stash;
         version = "v${version} (${gitHash}) - Unofficial Build - 1970-01-01 00:00:00";
