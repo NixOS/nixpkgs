@@ -12,14 +12,14 @@
   hash ? lib.fakeHash,
 }:
 let
-  pluginsSorted = builtins.sort builtins.lessThan plugins;
+  pluginsSorted = lib.sort lib.lessThan plugins;
   pluginsList = lib.concatMapStrings (plugin: "${plugin}-") pluginsSorted;
   pluginsHash = builtins.hashString "md5" pluginsList;
-  pluginsWithoutVersion = builtins.filter (p: !lib.hasInfix "@" p) pluginsSorted;
+  pluginsWithoutVersion = lib.filter (p: !lib.hasInfix "@" p) pluginsSorted;
 in
 assert lib.assertMsg (
-  builtins.length pluginsWithoutVersion == 0
-) "All plugins should have a version (eg ${builtins.elemAt pluginsWithoutVersion 0}@x.y.z)!";
+  lib.length pluginsWithoutVersion == 0
+) "All plugins should have a version (eg ${lib.elemAt pluginsWithoutVersion 0}@x.y.z)!";
 caddy.overrideAttrs (
   finalAttrs: prevAttrs: {
     vendorHash = null;
