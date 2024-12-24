@@ -64,6 +64,11 @@ buildPythonPackage rec {
     hash = "sha256-RGRwgrDFe+0v8NYyajMikdoi1DQf1I+B5y8KJyF+cZs=";
   };
 
+  patches = [
+    # https://github.com/pallets-eco/flask-security/pull/1040
+    ./fix_test_basic.patch
+  ];
+
   build-system = [ flit-core ];
 
   # flask-login>=0.6.2 not satisfied by version 0.7.0.dev0
