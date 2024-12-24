@@ -12,16 +12,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "turnon";
-  version = "1.6.2";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "swsnr";
     repo = "turnon";
     rev = "v${version}";
-    hash = "sha256-e9xrBtLAe/OAiDMn87IuzS/6NT8s4ZRHLAI/KF42ZdU=";
+    hash = "sha256-HCeK0aOGxeiZD7Am+kUf3z4rT7JENQxyrAufBStrSms=";
   };
 
-  cargoHash = "sha256-DlEoJ5YJe679RFRfk/Bs217KrOSxSgqDJa+xpdJaTVs=";
+  cargoHash = "sha256-43hv+ZCpgXK6GGMDG0hXza7g4jvRNmr57MTgkvTOvVQ=";
 
   nativeBuildInputs = [
     cairo
