@@ -46,22 +46,13 @@ import ./make-test-python.nix (
           '';
         in
         {
-          environment.systemPackages = [ pkgs.ustreamer ];
-          networking.firewall.enable = false;
-          systemd.services.ustreamer = {
-            description = "ustreamer service";
-            wantedBy = [ "multi-user.target" ];
-            serviceConfig = {
-              DynamicUser = true;
-              ExecStart = "${pkgs.ustreamer}/bin/ustreamer --host=0.0.0.0 --port 8000 --device /dev/video9 --device-timeout=8";
-              PrivateTmp = true;
-              BindReadOnlyPaths = "/dev/video9";
-              SupplementaryGroups = [
-                "video"
-              ];
-              Restart = "always";
-            };
+          services.ustreamer = {
+            enable = true;
+            device = "/dev/video9";
+            extraArgs = [ "--device-timeout=8" ];
           };
+          networking.firewall.allowedTCPPorts = [ 8080 ];
+
           boot.extraModulePackages = [ config.boot.kernelPackages.akvcam ];
           boot.kernelModules = [ "akvcam" ];
           boot.extraModprobeConfig = ''
@@ -74,10 +65,10 @@ import ./make-test-python.nix (
       start_all()
 
       camera.wait_for_unit("ustreamer.service")
-      camera.wait_for_open_port(8000)
+      camera.wait_for_open_port(8080)
 
       client.wait_for_unit("multi-user.target")
-      client.succeed("curl http://camera:8000")
+      client.succeed("curl http://camera:8080")
     '';
   }
 )
