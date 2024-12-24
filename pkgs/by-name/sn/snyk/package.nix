@@ -29,12 +29,6 @@ buildNpmPackage {
       --replace-fail '"version": "1.0.0-monorepo"' '"version": "${version}"'
   '';
 
-  env.NIX_CFLAGS_COMPILE =
-    # Fix error: no member named 'aligned_alloc' in the global namespace
-    lib.optionalString (
-      stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64
-    ) "-D_LIBCPP_HAS_NO_LIBRARY_ALIGNED_ALLOCATION=1";
-
   nodejs = nodejs_20;
 
   npmBuildScript = "build:prod";
