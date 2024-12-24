@@ -169,13 +169,16 @@ lib.makeOverridable (
 
       # As of ruby 3.0, ruby headers require -fdeclspec when building with clang
       # Introduced in https://github.com/ruby/ruby/commit/0958e19ffb047781fe1506760c7cbd8d7fe74e57
-      env.NIX_CFLAGS_COMPILE = toString (
-        lib.optionals
-          (ruby.rubyEngine == "ruby" && stdenv.cc.isClang && lib.versionAtLeast ruby.version.major "3")
-          [
-            "-fdeclspec"
-          ]
-      );
+      env = lib.optionalAttrs (attrs ? env) attrs.env // {
+        NIX_CFLAGS_COMPILE = toString (
+          lib.optionals
+            (ruby.rubyEngine == "ruby" && stdenv.cc.isClang && lib.versionAtLeast ruby.version.major "3")
+            [
+              "-fdeclspec"
+            ]
+          ++ lib.optional (attrs.env.NIX_CFLAGS_COMPILE or "" != "") attrs.env.NIX_CFLAGS_COMPILE
+        );
+      };
 
       buildPhase =
         attrs.buildPhase or ''
