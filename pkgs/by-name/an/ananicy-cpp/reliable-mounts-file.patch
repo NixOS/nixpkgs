@@ -1,0 +1,13 @@
+diff --git a/src/platform/linux/cgroups.cpp b/src/platform/linux/cgroups.cpp
+index 766fd2f5247ce64eb7dfd45e5551f41773eaa18b..d27dbf724bdf5097dfda0c8d4eaaadb3e81f70b3 100644
+--- a/src/platform/linux/cgroups.cpp
++++ b/src/platform/linux/cgroups.cpp
+@@ -223,7 +223,7 @@ control_groups::cgroup_info control_groups::get_cgroup_version(bool reset) {
+   }
+ 
+   if (!info.has_value()) {
+-    std::ifstream mtab("/etc/mtab");
++    std::ifstream mtab("/proc/self/mounts");
+     while (mtab) {
+       std::string       word, line;
+       fs::path          cgroup_path;

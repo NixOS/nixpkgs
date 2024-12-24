@@ -1,0 +1,53 @@
+From c6b6438d3c87ce000b4e80b2eda2389e9473d24c Mon Sep 17 00:00:00 2001
+From: wxt <3264117476@qq.com>
+Date: Mon, 11 Nov 2024 11:35:03 +0800
+Subject: [PATCH] Do not download sources in cmake
+
+---
+ src/solvers/CMakeLists.txt | 9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/src/solvers/CMakeLists.txt b/src/solvers/CMakeLists.txt
+index ab8d111..d7165e2 100644
+--- a/src/solvers/CMakeLists.txt
++++ b/src/solvers/CMakeLists.txt
+@@ -102,10 +102,9 @@ foreach(SOLVER ${sat_impl})
+         message(STATUS "Building solvers with glucose")
+ 
+         download_project(PROJ glucose
+-            URL https://github.com/BrunoDutertre/glucose-syrup/archive/0bb2afd3b9baace6981cbb8b4a1c7683c44968b7.tar.gz
++            SOURCE_DIR @srcglucose@
+             PATCH_COMMAND patch -p1 -i ${CBMC_SOURCE_DIR}/scripts/glucose-syrup-patch
+             COMMAND cmake -E copy ${CBMC_SOURCE_DIR}/scripts/glucose_CMakeLists.txt CMakeLists.txt
+-            URL_MD5 7c539c62c248b74210aef7414787323a
+         )
+ 
+         add_subdirectory(${glucose_SOURCE_DIR} ${glucose_BINARY_DIR})
+@@ -121,11 +120,10 @@ foreach(SOLVER ${sat_impl})
+         message(STATUS "Building solvers with cadical")
+ 
+         download_project(PROJ cadical
+-            URL https://github.com/arminbiere/cadical/archive/rel-2.0.0.tar.gz
++            SOURCE_DIR @srccadical@
+             PATCH_COMMAND patch -p1 -i ${CBMC_SOURCE_DIR}/scripts/cadical-2.0.0-patch
+             COMMAND cmake -E copy ${CBMC_SOURCE_DIR}/scripts/cadical_CMakeLists.txt CMakeLists.txt
+             COMMAND ./configure
+-            URL_MD5 9fc2a66196b86adceb822a583318cc35
+         )
+ 
+         add_subdirectory(${cadical_SOURCE_DIR} ${cadical_BINARY_DIR})
+@@ -144,10 +142,9 @@ foreach(SOLVER ${sat_impl})
+         message(STATUS "Building with IPASIR solver linking against: CaDiCaL")
+ 
+         download_project(PROJ cadical
+-            URL https://github.com/arminbiere/cadical/archive/rel-2.0.0.tar.gz
++            SOURCE_DIR @srccadical@
+             PATCH_COMMAND patch -p1 -i ${CBMC_SOURCE_DIR}/scripts/cadical-2.0.0-patch
+             COMMAND ./configure
+-            URL_MD5 9fc2a66196b86adceb822a583318cc35
+         )
+ 
+         message(STATUS "Building CaDiCaL")
+-- 
+2.47.0
+

@@ -1,0 +1,42 @@
+From 7435b2e12c2004cb0c497ff313288902f2a6f39a Mon Sep 17 00:00:00 2001
+From: toonn <toonn@toonn.io>
+Date: Fri, 19 Jul 2024 21:53:58 +0200
+Subject: [PATCH] Don't build demos
+
+---
+ Makefile | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/Makefile b/Makefile
+index 8327b4e..7901cc5 100644
+--- a/Makefile
++++ b/Makefile
+@@ -45,7 +45,7 @@ DEMO_UTIL_OBJ = \
+ 
+ OPENCV_CFLAGS := $(shell pkg-config --cflags opencv4 2>&1)
+ OPENCV_LIBS = $(shell pkg-config --libs opencv4)
+-QUIRC_CXXFLAGS = $(QUIRC_CFLAGS) $(OPENCV_CFLAGS) --std=c++17
++QUIRC_CXXFLAGS = $(QUIRC_CFLAGS) --std=c++17
+ 
+ .PHONY: all v4l sdl opencv install uninstall clean
+ 
+@@ -93,15 +93,12 @@ libquirc.$(VERSIONED_LIB_SUFFIX): $(LIB_OBJ)
+ .cxx.o:
+ 	$(CXX) $(QUIRC_CXXFLAGS) -o $@ -c $<
+ 
+-install: libquirc.a libquirc.$(LIB_SUFFIX) quirc-demo quirc-scanner
++install: libquirc.a libquirc.$(LIB_SUFFIX)
+ 	install -o root -g root -m 0644 lib/quirc.h $(DESTDIR)$(PREFIX)/include
+ 	install -o root -g root -m 0644 libquirc.a $(DESTDIR)$(PREFIX)/lib
+ 	install -o root -g root -m 0755 libquirc.$(VERSIONED_LIB_SUFFIX) \
+ 		$(DESTDIR)$(PREFIX)/lib
+ 	cp -d libquirc.$(LIB_SUFFIX) $(DESTDIR)$(PREFIX)/lib
+-	install -o root -g root -m 0755 quirc-demo $(DESTDIR)$(PREFIX)/bin
+-	# install -o root -g root -m 0755 quirc-demo-opencv $(DESTDIR)$(PREFIX)/bin
+-	install -o root -g root -m 0755 quirc-scanner $(DESTDIR)$(PREFIX)/bin
+ 
+ uninstall:
+ 	rm -f $(DESTDIR)$(PREFIX)/include/quirc.h
+-- 
+2.42.2
+
