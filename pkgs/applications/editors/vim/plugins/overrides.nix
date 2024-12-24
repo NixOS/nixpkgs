@@ -2118,10 +2118,10 @@ in
     ];
   };
 
-  nvim-nonicons = super.nvim-nonicons.overrideAttrs {
+  nvim-nonicons = super.nvim-nonicons.overrideAttrs (oa: {
     # Requires web-devicons but mini.icons can mock them up
-    nativeCheckInputs = [ self.nvim-web-devicons ];
-  };
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.nvim-web-devicons ];
+  });
 
   nvim-nu = super.nvim-nu.overrideAttrs {
     dependencies = with self; [
