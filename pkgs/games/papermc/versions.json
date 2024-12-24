@@ -1,0 +1,74 @@
+{
+    "1.18": {
+        "hash": "sha256-PJlfINrk5OIdVVT6yVegqKXIW9W/NJFfrEtPFuDvEBs=",
+        "version": "1.18-66"
+    },
+    "1.18.1": {
+        "hash": "sha256-qUkXpEcsLLyZB6FcZmu7eE+V7Ne1PHe8CP5xED5Uh/U=",
+        "version": "1.18.1-216"
+    },
+    "1.18.2": {
+        "hash": "sha256-BXjxj01jK0lLRo7FaztBS1tW/qCH7n05z23N9MnQHwU=",
+        "version": "1.18.2-388"
+    },
+    "1.19": {
+        "hash": "sha256-DTnKzFGneysHHhzoYvy/C0pL1mjMfosxNZjYT6Cfq6w=",
+        "version": "1.19-81"
+    },
+    "1.19.1": {
+        "hash": "sha256-Wv4jofreksVHEk+odLx9kI+mdvSfCYefqHYiS2Lp1Rs=",
+        "version": "1.19.1-111"
+    },
+    "1.19.2": {
+        "hash": "sha256-LrXHRZ7JS83Fl+1xHVSaOrSw/aE+QSoHkqGgabWQOGQ=",
+        "version": "1.19.2-307"
+    },
+    "1.19.3": {
+        "hash": "sha256-MAfyxjjV8E7TK2raozBT/jY0zPp0NFyD0+pJgtONtdw=",
+        "version": "1.19.3-448"
+    },
+    "1.19.4": {
+        "hash": "sha256-5YfXjLo+me+MS8JM8gzDvbvonjOwtXIHBEavTra+XM8=",
+        "version": "1.19.4-550"
+    },
+    "1.20": {
+        "hash": "sha256-HkzPwFmfSR7m/uRFXTciMyrF14WE/M1Vy7O1HhFQRQU=",
+        "version": "1.20-17"
+    },
+    "1.20.1": {
+        "hash": "sha256-I0qbMgmBAMb8EWZk1k42zNtYtbZJrw+AvMywiwJV6uo=",
+        "version": "1.20.1-196"
+    },
+    "1.20.2": {
+        "hash": "sha256-ujQKg1rEC4Vjqn7aHNZHmhGnYjQJyJosNc2ddJDtF6c=",
+        "version": "1.20.2-318"
+    },
+    "1.20.4": {
+        "hash": "sha256-yr7TrnfPVd66fH2HIryc/V6ZEgHCEWZfkmVhbZ/lx3s=",
+        "version": "1.20.4-499"
+    },
+    "1.20.5": {
+        "hash": "sha256-PNfaL435LggqUBo5xnSqs8A0Pt0Xm4b1usyuv8mXQTI=",
+        "version": "1.20.5-22"
+    },
+    "1.20.6": {
+        "hash": "sha256-SwEfWttfbHIAdoaiIxdPzoLzGutLNPr0ZSq8hAtH5kA=",
+        "version": "1.20.6-151"
+    },
+    "1.21": {
+        "hash": "sha256-q5uxr8POppeKDAPOhEiqZU/oqcTd3zQefL2hsO2qc/U=",
+        "version": "1.21-130"
+    },
+    "1.21.1": {
+        "hash": "sha256-SXFrATNCx19foUHIzaJkeqCh4YGNKmGq4KQymeNf9Bg=",
+        "version": "1.21.1-132"
+    },
+    "1.21.3": {
+        "hash": "sha256-/nrczvDAygftMAFP+vAVygnpy6muucsiXjIY3CMswFU=",
+        "version": "1.21.3-81"
+    },
+    "1.21.4": {
+        "hash": "sha256-SCm+hrMdYGT8YKJAPwPBKWyUzNdrh7LM8Lp4FUP8q5w=",
+        "version": "1.21.4-12"
+    }
+}
