@@ -1,0 +1,39 @@
+diff --git a/LogicReinc.BlendFarm.Server/LogicReinc.BlendFarm.Server.csproj b/LogicReinc.BlendFarm.Server/LogicReinc.BlendFarm.Server.csproj
+index 9bd2039..720bcb0 100644
+--- a/LogicReinc.BlendFarm.Server/LogicReinc.BlendFarm.Server.csproj
++++ b/LogicReinc.BlendFarm.Server/LogicReinc.BlendFarm.Server.csproj
+@@ -2,7 +2,7 @@
+ 
+   <PropertyGroup>
+     <OutputType>Exe</OutputType>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+ 	<RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+   </PropertyGroup>
+   <PropertyGroup>
+diff --git a/LogicReinc.BlendFarm.Tests/LogicReinc.BlendFarm.Tests.csproj b/LogicReinc.BlendFarm.Tests/LogicReinc.BlendFarm.Tests.csproj
+index 5a00198..839f2d7 100644
+--- a/LogicReinc.BlendFarm.Tests/LogicReinc.BlendFarm.Tests.csproj
++++ b/LogicReinc.BlendFarm.Tests/LogicReinc.BlendFarm.Tests.csproj
+@@ -1,7 +1,7 @@
+ <Project Sdk="Microsoft.NET.Sdk">
+ 
+   <PropertyGroup>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+ 
+     <IsPackable>false</IsPackable>
+   </PropertyGroup>
+diff --git a/LogicReinc.BlendFarm/LogicReinc.BlendFarm.csproj b/LogicReinc.BlendFarm/LogicReinc.BlendFarm.csproj
+index 97aa471..5a01eb8 100644
+--- a/LogicReinc.BlendFarm/LogicReinc.BlendFarm.csproj
++++ b/LogicReinc.BlendFarm/LogicReinc.BlendFarm.csproj
+@@ -1,7 +1,7 @@
+ <Project Sdk="Microsoft.NET.Sdk">
+   <PropertyGroup>
+     <OutputType>Exe</OutputType>
+-    <TargetFramework>net6.0</TargetFramework>
++    <TargetFramework>net8.0</TargetFramework>
+     <ApplicationIcon>render.ico</ApplicationIcon>
+ 	<RuntimeIdentifiers>win-x64;linux-x64;osx-x64</RuntimeIdentifiers>
+   </PropertyGroup>
