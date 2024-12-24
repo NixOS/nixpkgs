@@ -33,6 +33,7 @@
   jq,
   khard,
   languagetool,
+  libgit2,
   llvmPackages,
   meson,
   neovim-unwrapped,
@@ -1033,6 +1034,24 @@ in
     dependencies = [ self.telescope-fzf-native-nvim ];
     nvimRequireCheck = "fuzzy_nvim";
   };
+
+  fugit2-nvim = super.fugit2-nvim.overrideAttrs (oa: {
+    # Requires web-devicons but mini.icons can mock them up
+    nativeCheckInputs = oa.nativeCheckInputs ++ [
+      self.nvim-web-devicons
+    ];
+    dependencies = with self; [
+      nui-nvim
+      plenary-nvim
+    ];
+    # Patch libgit2 library dependency
+    postPatch = ''
+      substituteInPlace lua/fugit2/libgit2.lua \
+        --replace-fail \
+        'M.library_path = "libgit2"' \
+        'M.library_path = "${lib.getLib libgit2}/lib/libgit2${stdenv.hostPlatform.extensions.sharedLibrary}"'
+    '';
+  });
 
   fzf-checkout-vim = super.fzf-checkout-vim.overrideAttrs {
     # The plugin has a makefile which tries to run tests in a docker container.
