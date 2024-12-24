@@ -1,17 +1,42 @@
-{ stdenv, fetchFromGitHub, lib, fetchpatch
-, cmake, uthash, pkg-config
-, python, freetype, zlib, glib, giflib, libpng, libjpeg, libtiff, libxml2, cairo, pango
-, readline, woff2, zeromq
-, withSpiro ? false, libspiro
-, withGTK ? false, gtk3
-, withGUI ? withGTK
-, withPython ? true
-, withExtras ? true
-, Carbon, Cocoa
+{
+  stdenv,
+  fetchFromGitHub,
+  lib,
+  fetchpatch,
+  cmake,
+  uthash,
+  pkg-config,
+  python,
+  freetype,
+  zlib,
+  glib,
+  giflib,
+  libpng,
+  libjpeg,
+  libtiff,
+  libxml2,
+  cairo,
+  pango,
+  readline,
+  woff2,
+  zeromq,
+  withSpiro ? false,
+  libspiro,
+  withGTK ? false,
+  gtk3,
+  withGUI ? withGTK,
+  withPython ? true,
+  withExtras ? true,
+  Carbon,
+  Cocoa,
+  makeWrapper,
 }:
 
 assert withGTK -> withGUI;
 
+let
+  py = python.withPackages (ps: with ps; [ setuptools ]);
+in
 stdenv.mkDerivation rec {
   pname = "fontforge";
   version = "20230101";
@@ -51,16 +76,40 @@ stdenv.mkDerivation rec {
   # do not use x87's 80-bit arithmetic, rouding errors result in very different font binaries
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isi686 "-msse2 -mfpmath=sse";
 
-  nativeBuildInputs = [ pkg-config cmake ];
-  buildInputs = [
-    readline uthash woff2 zeromq
-    python freetype zlib glib giflib libpng libjpeg libtiff libxml2
-  ]
+  nativeBuildInputs = [
+    pkg-config
+    cmake
+    makeWrapper
+  ];
+  buildInputs =
+    [
+      readline
+      uthash
+      woff2
+      zeromq
+      py
+      freetype
+      zlib
+      glib
+      giflib
+      libpng
+      libjpeg
+      libtiff
+      libxml2
+    ]
     ++ lib.optionals withSpiro [ libspiro ]
-    ++ lib.optionals withGUI [ gtk3 cairo pango ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ Carbon Cocoa ];
+    ++ lib.optionals withGUI [
+      gtk3
+      cairo
+      pango
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      Cocoa
+    ];
 
-  cmakeFlags = [ "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" ]
+  cmakeFlags =
+    [ "-DCMAKE_BUILD_WITH_INSTALL_RPATH=ON" ]
     ++ lib.optional (!withSpiro) "-DENABLE_LIBSPIRO=OFF"
     ++ lib.optional (!withGUI) "-DENABLE_GUI=OFF"
     ++ lib.optional (!withGTK) "-DENABLE_X11=ON"
@@ -72,16 +121,20 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall =
-    # get rid of the runtime dependency on python
-    lib.optionalString (!withPython) ''
-      rm -r "$out/share/fontforge/python"
-    '';
+    ''
+      wrapProgram $out/bin/fontforge --suffix PYTHONPATH : "${py}/${py.sitePackages}"
+    ''
+    +
+      # get rid of the runtime dependency on python
+      lib.optionalString (!withPython) ''
+        rm -r "$out/share/fontforge/python"
+      '';
 
   meta = with lib; {
     description = "Font editor";
     homepage = "https://fontforge.github.io";
     platforms = platforms.all;
     license = licenses.bsd3;
-    maintainers = [ maintainers.erictapen ];
+    maintainers = with maintainers; [ erictapen ulysseszhan ];
   };
 }
