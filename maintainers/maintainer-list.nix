@@ -19225,6 +19225,12 @@
     githubId = 807447;
     name = "Robert Scott";
   };
+  Rishik-Y = {
+    name = "Rishik Yalamanchili";
+    email = "202301258@daiict.ac.in";
+    github = "Rishik-Y";
+    githubId = 73787402;
+  };
   risson = {
     name = "Marc Schmitt";
     email = "marc.schmitt@risson.space";
