@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 
 static const char from[] =  "/usr/lib/ext/dell/omreg.cfg";
 static const char to[] = "@to@";
