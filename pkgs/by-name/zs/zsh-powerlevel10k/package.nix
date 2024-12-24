@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, substituteAll
-, gitstatus
-, bash
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  replaceVars,
+  fetchpatch,
+  gitstatus,
+  bash,
 }:
-
 
 let
   # match gitstatus version with given `gitstatus_version`:
@@ -19,6 +20,16 @@ let
       rev = "refs/tags/v${version}";
       hash = "sha256-mVfB3HWjvk4X8bmLEC/U8SKBRytTh/gjjuReqzN5qTk=";
     };
+
+    patches = (oldAtttrs.patches or [ ]) ++ [
+      # remove when bumped to 1.5.5
+      (fetchpatch {
+        url = "https://github.com/romkatv/gitstatus/commit/62177e89b2b04baf242cd1526cc2661041dda0fb.patch";
+        sha256 = "sha256-DSRYRV89MLR/Eh4MFsXpDKH1xJiAWyJgSqmfjDTXhtU=";
+        name = "drop-Werror.patch";
+      })
+    ];
+
   });
 in
 stdenv.mkDerivation rec {
@@ -36,8 +47,7 @@ stdenv.mkDerivation rec {
   buildInputs = [ bash ];
 
   patches = [
-    (substituteAll {
-      src = ./gitstatusd.patch;
+    (replaceVars ./gitstatusd.patch {
       gitstatusdPath = "${gitstatus'}/bin/gitstatusd";
     })
   ];

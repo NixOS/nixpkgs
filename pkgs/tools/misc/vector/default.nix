@@ -27,7 +27,7 @@
 
 let
   pname = "vector";
-  version = "0.42.0";
+  version = "0.43.1";
 in
 rustPlatform.buildRustPackage {
   inherit pname version;
@@ -36,7 +36,7 @@ rustPlatform.buildRustPackage {
     owner = "vectordotdev";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-0DEEgaQf4/NIbmRQyTdEuj4bPTLX8gjAhv4r48wfNZs=";
+    hash = "sha256-BFVRaHNd9LMJQnkHHfNtvGKkv8q7GjnT+FzNwSc8GZw=";
   };
 
   cargoLock = {

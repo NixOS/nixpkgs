@@ -7,6 +7,7 @@
   fetchurl,
   fetchpatch,
 
+  buildPackages,
   pkg-config,
   autoconf,
   lndir,
@@ -77,11 +78,11 @@
   temurin-bin-23,
   jdk-bootstrap ?
     {
-      "8" = temurin-bin-8;
-      "11" = temurin-bin-11;
-      "17" = temurin-bin-17;
-      "21" = temurin-bin-21;
-      "23" = temurin-bin-23;
+      "8" = temurin-bin-8.__spliced.buildBuild or temurin-bin-8;
+      "11" = temurin-bin-11.__spliced.buildBuild or temurin-bin-11;
+      "17" = temurin-bin-17.__spliced.buildBuild or temurin-bin-17;
+      "21" = temurin-bin-21.__spliced.buildBuild or temurin-bin-21;
+      "23" = temurin-bin-23.__spliced.buildBuild or temurin-bin-23;
     }
     .${featureVersion},
 }:
@@ -228,6 +229,10 @@ stdenv.mkDerivation (finalAttrs: {
       )
     ];
 
+  strictDeps = true;
+
+  depsBuildBuild = [ buildPackages.stdenv.cc ];
+
   nativeBuildInputs =
     [
       pkg-config
@@ -237,9 +242,15 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (!atLeast11) [
       lndir
+      # Certificates generated using perl in `installPhase`
+      perl
     ]
     ++ [
       unzip
+      zip
+      which
+      # Probably for BUILD_CC but not sure, not in closure.
+      zlib
     ]
     ++ lib.optionals atLeast21 [
       ensureNewerSourcesForZipFilesHook
@@ -249,11 +260,8 @@ stdenv.mkDerivation (finalAttrs: {
     [
       # TODO: Many of these should likely be in `nativeBuildInputs`.
       cpio
+      # `-lmagic` in NIX_LDFLAGS
       file
-      which
-      zip
-      perl
-      zlib
       cups
       freetype
     ]
@@ -292,7 +300,6 @@ stdenv.mkDerivation (finalAttrs: {
       libXcursor
       libXrandr
       fontconfig
-      jdk-bootstrap'
     ]
     ++ lib.optionals (!headless && enableGtk) [
       (if atLeast11 then gtk3 else gtk2)
@@ -317,6 +324,14 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags =
     [
       "--with-boot-jdk=${jdk-bootstrap'.home}"
+      # https://github.com/openjdk/jdk/blob/471f112bca715d04304cbe35c6ed63df8c7b7fee/make/autoconf/util_paths.m4#L315
+      # Ignoring value of READELF from the environment. Use command line variables instead.
+      "READELF=${stdenv.cc.targetPrefix}readelf"
+      "AR=${stdenv.cc.targetPrefix}ar"
+      "STRIP=${stdenv.cc.targetPrefix}strip"
+      "NM=${stdenv.cc.targetPrefix}nm"
+      "OBJDUMP=${stdenv.cc.targetPrefix}objdump"
+      "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
     ]
     ++ (
       if atLeast23 then
@@ -427,6 +442,11 @@ stdenv.mkDerivation (finalAttrs: {
               "-fno-delete-null-pointer-checks"
               "-std=gnu++98"
               "-Wno-error"
+            ]
+            ++ [
+              # error by default in GCC 14
+              "-Wno-error=int-conversion"
+              "-Wno-error=incompatible-pointer-types"
             ]
           );
 

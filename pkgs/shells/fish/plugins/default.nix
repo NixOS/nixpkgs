@@ -5,6 +5,8 @@ lib.makeScope newScope (self: with self; {
 
   autopair = callPackage ./autopair.nix { };
 
+  bang-bang = callPackage ./bang-bang.nix { };
+
   bobthefish = callPackage ./bobthefish.nix { };
 
   bobthefisher = callPackage ./bobthefisher.nix { };

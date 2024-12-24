@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, kernel, kmod, nixosTests }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  kernel,
+  kmod,
+  nixosTests,
+}:
 
 stdenv.mkDerivation rec {
   pname = "fanout";
@@ -19,7 +26,10 @@ stdenv.mkDerivation rec {
     ./remove_auto_mknod.patch
   ];
 
-  hardeningDisable = [ "format" "pic" ];
+  hardeningDisable = [
+    "format"
+    "pic"
+  ];
 
   nativeBuildInputs = [ kmod ] ++ kernel.moduleBuildDependencies;
 

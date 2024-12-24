@@ -1,19 +1,26 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+}:
 
 buildGoModule rec {
   pname = "terraform-ls";
-  version = "0.34.3";
+  version = "0.36.2";
 
   src = fetchFromGitHub {
     owner = "hashicorp";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-fN/C7H0s7ZhXSg8pLn9iex6WglMKsx6hA8OK/HYqbRU=";
+    hash = "sha256-XihFvQZQ+cJrFd9ly9mDVcXUDBXwndd796bterxaaAQ=";
   };
 
-  vendorHash = "sha256-NL5pqcQTjauxLschhj3kCiZLBLagABSCU/zHLcG2anM=";
+  vendorHash = "sha256-/ZlWx8/6eJfoiCl6yOtotoju2LVPP6YHqjk+5WE7jzQ=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   # There's a mixture of tests that use networking and several that fail on aarch64
   doCheck = false;
@@ -32,6 +39,9 @@ buildGoModule rec {
     homepage = "https://github.com/hashicorp/terraform-ls";
     changelog = "https://github.com/hashicorp/terraform-ls/blob/v${version}/CHANGELOG.md";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ mbaillie jk ];
+    maintainers = with maintainers; [
+      mbaillie
+      jk
+    ];
   };
 }

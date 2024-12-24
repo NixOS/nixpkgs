@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "craft-cli";
-  version = "2.10.1";
+  version = "2.12.0";
 
   pyproject = true;
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-cli";
     rev = "refs/tags/${version}";
-    hash = "sha256-XKRV5VJLC3B5gcNr/icOxWB6pDXDT7MV5wM/vEQHVm4=";
+    hash = "sha256-edN0eEXBaYDUqSc7Xv22MpG9wkHqI6x1HtRkQ468yH8=";
   };
 
   postPatch = ''

@@ -5,7 +5,7 @@
   pkg-config,
   qt5,
   stdenv,
-  substituteAll,
+  replaceVars,
   unzip,
   zip,
 }:
@@ -35,8 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./patches/0000-fix-zip-paths.diff;
+    (replaceVars ./patches/0000-fix-zip-paths.diff {
       zipPath = "${lib.getExe zip}";
       unzipPath = "${lib.getExe unzip}";
     })

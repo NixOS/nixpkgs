@@ -1,19 +1,24 @@
-{ lib, fetchurl, appimageTools }:
+{
+  lib,
+  fetchurl,
+  appimageTools,
+}:
 
 let
   pname = "polypane";
-  version = "22.0.0";
+  version = "22.1.0";
 
   src = fetchurl {
     url = "https://github.com/firstversionist/${pname}/releases/download/v${version}/${pname}-${version}.AppImage";
     name = "${pname}-${version}.AppImage";
-    sha256 = "sha256-m1alnK5p5RVn/m4tFB2BG/sFNOGBjtJPrE/pJhLa5N0=";
+    sha256 = "sha256-FxrL25NCYP0S0Ge/UegZzqzWMuU93+mROM9AVm3SD9o=";
   };
 
   appimageContents = appimageTools.extractType2 {
     inherit pname src version;
   };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname src version;
 
   extraPkgs = pkgs: [ pkgs.bash ];

@@ -18,7 +18,6 @@ fs = import('fs')
 cc = meson.get_compiler('c')
 
 bzip2 = dependency('bzip2')
-libbsd = dependency('libbsd-overlay', required : false)
 libmd = dependency('libmd')
 libresolv = cc.find_library('resolv')
 libutil = cc.find_library('util')
@@ -81,7 +80,6 @@ install_man('cat/cat.1')
 
 executable(
     'col',
-    dependencies : [ libbsd ],
     install : true,
     sources : [
         'col/col.c',
@@ -316,7 +314,7 @@ executable(
 
 executable(
     'split',
-    dependencies : [ libbsd, libutil ],
+    dependencies : [ libutil ],
     install : true,
     sources : [ 'split/split.c' ],
 )
@@ -366,7 +364,6 @@ executable(
 
 executable(
     'uniq',
-    dependencies : [ libbsd ],
     install : true,
     sources : [ 'uniq/uniq.c' ],
 )

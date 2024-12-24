@@ -15,22 +15,32 @@
 
 stdenv.mkDerivation rec {
   pname = "doxygen";
-  version = "1.10.0";
+  version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "doxygen";
     repo = "doxygen";
     rev = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    sha256 = "sha256-FPI5ICdn9Tne/g9SP6jAQS813AAyoDNooDR/Hyvq6R4=";
+    hash = "sha256-4zSaM49TjOaZvrUChM4dNJLondCsQPSArOXZnTHS4yI=";
   };
 
   patches = [
+    # fix clang-19 build. can drop on next update
+    # https://github.com/doxygen/doxygen/pull/11064
     (fetchpatch {
-      name = "sys-spdlog-fix.patch";
-      url = "https://github.com/doxygen/doxygen/commit/0df6da616f01057d28b11c8bee28443c102dd424.patch";
-      hash = "sha256-7efkCQFYGslwqhIuPsLYTEiA1rq+mO0DuyQBMt0O+m0=";
+      name = "fix-clang-19-build.patch";
+      url = "https://github.com/doxygen/doxygen/commit/cff64a87dea7596fd506a85521d4df4616dc845f.patch";
+      hash = "sha256-TtkVfV9Ep8/+VGbTjP4NOP8K3p1+A78M+voAIQ+lzOk=";
     })
   ];
+
+  # https://github.com/doxygen/doxygen/issues/10928#issuecomment-2179320509
+  postPatch = ''
+    substituteInPlace CMakeLists.txt \
+      --replace-fail 'JAVACC_CHAR_TYPE=\"unsigned char\"' \
+                     'JAVACC_CHAR_TYPE=\"char8_t\"' \
+      --replace-fail "CMAKE_CXX_STANDARD 17" "CMAKE_CXX_STANDARD 20"
+  '';
 
   nativeBuildInputs = [
     cmake
@@ -48,9 +58,6 @@ stdenv.mkDerivation rec {
     "-Duse_sys_spdlog=ON"
     "-Duse_sys_sqlite3=ON"
   ] ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
-
-  env.NIX_CFLAGS_COMPILE =
-    lib.optionalString stdenv.hostPlatform.isDarwin "-mmacosx-version-min=10.9";
 
   # put examples in an output so people/tools can test against them
   outputs = [ "out" "examples" ];

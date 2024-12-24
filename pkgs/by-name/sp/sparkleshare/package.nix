@@ -50,7 +50,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     # SparkleShare's default desktop file falls back to flatpak.
-    sed -ie "s_^Exec=.*_Exec=$out/bin/sparkleshare_" SparkleShare/Linux/SparkleShare.Autostart.desktop
+    sed -i -e "s_^Exec=.*_Exec=$out/bin/sparkleshare_" SparkleShare/Linux/SparkleShare.Autostart.desktop
 
     # Nix will manage the icon cache.
     echo '#!/bin/sh' >scripts/post-install.sh
@@ -58,31 +58,37 @@ stdenv.mkDerivation rec {
 
   postInstall = ''
     wrapProgram $out/bin/sparkleshare \
-        --set PATH ${symlinkJoin {
-          name = "mono-path";
-          paths = [
-            bash
-            coreutils
-            git
-            git-lfs
-            glib
-            mono
-            openssh
-            openssl
-            xdg-utils
-          ];
-        }}/bin \
-        --set MONO_GAC_PREFIX ${lib.concatStringsSep ":" [
-          appindicator-sharp
-          gtk-sharp-3_0
-          webkit2-sharp
-        ]} \
-        --set LD_LIBRARY_PATH ${lib.makeLibraryPath [
-          appindicator-sharp
-          gtk-sharp-3_0.gtk3
-          webkit2-sharp
-          webkit2-sharp.webkitgtk
-        ]}
+        --set PATH ${
+          symlinkJoin {
+            name = "mono-path";
+            paths = [
+              bash
+              coreutils
+              git
+              git-lfs
+              glib
+              mono
+              openssh
+              openssl
+              xdg-utils
+            ];
+          }
+        }/bin \
+        --set MONO_GAC_PREFIX ${
+          lib.concatStringsSep ":" [
+            appindicator-sharp
+            gtk-sharp-3_0
+            webkit2-sharp
+          ]
+        } \
+        --set LD_LIBRARY_PATH ${
+          lib.makeLibraryPath [
+            appindicator-sharp
+            gtk-sharp-3_0.gtk3
+            webkit2-sharp
+            webkit2-sharp.webkitgtk
+          ]
+        }
   '';
 
   meta = {

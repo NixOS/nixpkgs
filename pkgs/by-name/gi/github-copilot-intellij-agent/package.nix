@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchurl, unzip }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "github-copilot-intellij-agent";
@@ -19,7 +24,10 @@ stdenv.mkDerivation rec {
 
     mkdir -p $out/bin
     unzip -p $src github-copilot-intellij/copilot-agent/bin/copilot-agent-${
-      if stdenv.hostPlatform.isDarwin then (if stdenv.hostPlatform.isAarch64 then "macos-arm64" else "macos") else "linux"
+      if stdenv.hostPlatform.isDarwin then
+        (if stdenv.hostPlatform.isAarch64 then "macos-arm64" else "macos")
+      else
+        "linux"
     } | install -m755 /dev/stdin $out/bin/copilot-agent
 
     runHook postInstall
@@ -27,34 +35,36 @@ stdenv.mkDerivation rec {
 
   # https://discourse.nixos.org/t/unrelatable-error-when-working-with-patchelf/12043
   # https://github.com/NixOS/nixpkgs/blob/db0d8e10fc1dec84f1ccb111851a82645aa6a7d3/pkgs/development/web/now-cli/default.nix
-  preFixup = let
-    binaryLocation = "$out/bin/copilot-agent";
-    libPath = lib.makeLibraryPath [ stdenv.cc.cc ];
-  in ''
-    orig_size=$(stat --printf=%s ${binaryLocation})
+  preFixup =
+    let
+      binaryLocation = "$out/bin/copilot-agent";
+      libPath = lib.makeLibraryPath [ stdenv.cc.cc ];
+    in
+    ''
+      orig_size=$(stat --printf=%s ${binaryLocation})
 
-    patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ${binaryLocation}
-    patchelf --set-rpath ${libPath} ${binaryLocation}
-    chmod +x ${binaryLocation}
+      patchelf --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" ${binaryLocation}
+      patchelf --set-rpath ${libPath} ${binaryLocation}
+      chmod +x ${binaryLocation}
 
-    new_size=$(stat --printf=%s ${binaryLocation})
+      new_size=$(stat --printf=%s ${binaryLocation})
 
-    var_skip=20
-    var_select=22
-    shift_by=$(expr $new_size - $orig_size)
+      var_skip=20
+      var_select=22
+      shift_by=$(expr $new_size - $orig_size)
 
-    function fix_offset {
-      location=$(grep -obUam1 "$1" ${binaryLocation} | cut -d: -f1)
-      location=$(expr $location + $var_skip)
-      value=$(dd if=${binaryLocation} iflag=count_bytes,skip_bytes skip=$location \
-                 bs=1 count=$var_select status=none)
-      value=$(expr $shift_by + $value)
-      echo -n $value | dd of=${binaryLocation} bs=1 seek=$location conv=notrunc
-    }
+      function fix_offset {
+        location=$(grep -obUam1 "$1" ${binaryLocation} | cut -d: -f1)
+        location=$(expr $location + $var_skip)
+        value=$(dd if=${binaryLocation} iflag=count_bytes,skip_bytes skip=$location \
+                   bs=1 count=$var_select status=none)
+        value=$(expr $shift_by + $value)
+        echo -n $value | dd of=${binaryLocation} bs=1 seek=$location conv=notrunc
+      }
 
-    fix_offset PAYLOAD_POSITION
-    fix_offset PRELUDE_POSITION
-  '';
+      fix_offset PAYLOAD_POSITION
+      fix_offset PRELUDE_POSITION
+    '';
 
   dontStrip = true;
 
@@ -76,7 +86,11 @@ stdenv.mkDerivation rec {
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ hacker1024 ];
     mainProgram = "copilot-agent";
-    platforms = [ "x86_64-linux" "x86_64-darwin" "aarch64-darwin" ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+    ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }

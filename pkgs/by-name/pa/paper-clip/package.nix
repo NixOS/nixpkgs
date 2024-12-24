@@ -1,17 +1,18 @@
-{ lib
-, desktop-file-utils
-, exempi
-, fetchFromGitHub
-, glib
-, gtk4
-, libadwaita
-, meson
-, ninja
-, pkg-config
-, poppler
-, stdenv
-, vala
-, wrapGAppsHook4
+{
+  lib,
+  desktop-file-utils,
+  exempi,
+  fetchFromGitHub,
+  glib,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  pkg-config,
+  poppler,
+  stdenv,
+  vala,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,13 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
     poppler
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/Diego-Ivan/Paper-Clip/releases/tag/v${finalAttrs.version}";
     description = "Edit PDF document metadata";
     homepage = "https://github.com/Diego-Ivan/Paper-Clip";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "pdf-metadata-editor";
-    maintainers = with maintainers; [ michaelgrahamevans ];
-    platforms = platforms.linux;
+    maintainers = lib.teams.gnome-circle.members;
+    platforms = lib.platforms.linux;
   };
 })

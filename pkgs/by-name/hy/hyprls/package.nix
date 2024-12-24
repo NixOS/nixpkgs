@@ -1,17 +1,18 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, nix-update-script
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nix-update-script,
 }:
 buildGoModule rec {
   pname = "hyprls";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "hyprland-community";
     repo = "hyprls";
     rev = "v${version}";
-    hash = "sha256-boA2kWlHm9bEM/o0xi/1FlH6WGU4wL1RRvbGGXdzHYQ=";
+    hash = "sha256-uNT3sC81pnFqDzmhL20q5YDLBSVJwv0frNGB9wzkRkg=";
   };
 
   vendorHash = "sha256-rG+oGJOABA9ee5nIpC5/U0mMsPhwvVtQvJBlQWfxi5Y=";

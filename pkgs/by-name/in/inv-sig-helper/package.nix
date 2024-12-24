@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
 
@@ -9,32 +8,33 @@
 
   # buildInputs
   openssl,
-  darwin,
+
+  # passthru
+  unstableGitUpdater,
 }:
 
 rustPlatform.buildRustPackage {
   pname = "inv-sig-helper";
-  version = "0-unstable-2024-09-24";
+  version = "0-unstable-2024-12-17";
 
   src = fetchFromGitHub {
     owner = "iv-org";
     repo = "inv_sig_helper";
-    rev = "5025e49e6106f93ec06d0e3fd542a51e1c44c25a";
-    hash = "sha256-fMRjkZRMvcro3pOO20l5zRDOwn/E5KTVBOiDmcGROz4=";
+    rev = "74e879b54e46831e31c09fd08fe672ca58e9cb2d";
+    hash = "sha256-Q+u09WWBwWLcLLW9XwkaYDxM3xoQmeJzi37mrdDGvRc=";
   };
 
-  cargoHash = "sha256-AisolMo++xMDesdfafeGx37r7sGbk0P0vMsHq0YTUL4=";
+  cargoHash = "sha256-qMBztc2N8HWJrrzyzY2KCW9pyv0hK6QJ8tqNdNkhTzE=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs =
-    [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Security
-      darwin.apple_sdk.frameworks.SystemConfiguration
-    ];
+  buildInputs = [
+    openssl
+  ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     description = "Rust service that decrypts YouTube signatures and manages player information";

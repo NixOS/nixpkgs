@@ -1,4 +1,9 @@
-{ stdenv, lib, fetchgit, ncurses }:
+{
+  stdenv,
+  lib,
+  fetchgit,
+  ncurses,
+}:
 
 stdenv.mkDerivation rec {
   pname = "sfeed";
@@ -12,7 +17,11 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ ncurses ];
 
-  makeFlags = [ "RANLIB:=$(RANLIB)" "SFEED_CURSES_LDFLAGS:=-lncurses" ]
+  makeFlags =
+    [
+      "RANLIB:=$(RANLIB)"
+      "SFEED_CURSES_LDFLAGS:=-lncurses"
+    ]
     # use macOS's strlcat() and strlcpy() instead of vendored ones
     ++ lib.optional stdenv.hostPlatform.isDarwin "COMPATOBJ:=";
 

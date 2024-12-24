@@ -31,7 +31,7 @@ buildDotnetModule rec {
   pythonEnv = python3.withPackages(ps: with ps; [ yt-dlp ]);
 
   projectFile = "NickvisionTubeConverter.GNOME/NickvisionTubeConverter.GNOME.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   executables = "NickvisionTubeConverter.GNOME";
 
    nativeBuildInputs = [

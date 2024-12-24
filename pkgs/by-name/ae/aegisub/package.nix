@@ -2,38 +2,32 @@
   lib,
   alsa-lib,
   boost,
-  cmake,
+  curl,
+  meson,
   config,
-  darwin,
   expat,
   fetchFromGitHub,
-  fetchpatch,
   ffmpeg,
   ffms,
   fftw,
   fontconfig,
   freetype,
   fribidi,
-  glib,
   harfbuzz,
   hunspell,
   icu,
   intltool,
   libGL,
-  libGLU,
-  libX11,
   libass,
-  libiconv,
   libpulseaudio,
   libuchardet,
   luajit,
   ninja,
   openal,
-  pcre,
   pkg-config,
   portaudio,
+  python3,
   stdenv,
-  which,
   wrapGAppsHook3,
   wxGTK,
   zlib,
@@ -46,40 +40,30 @@
   useBundledLuaJIT ? false,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks)
-    AppKit
-    Carbon
-    Cocoa
-    CoreFoundation
-    CoreText
-    IOKit
-    OpenAL;
-in
 stdenv.mkDerivation (finalAttrs: {
   pname = "aegisub";
-  version = "3.3.3";
+  version = "3.4.0";
 
   src = fetchFromGitHub {
-    owner = "wangqr";
+    owner = "TypesettingTools";
     repo = "aegisub";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-oKhLv81EFudrJaaJ2ga3pVh4W5Hd2YchpjsoYoqRm78=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-HvBbHUWKUFpne7Dj8CB2V9agBSBbB24BXnnYWUjHSDI=";
   };
 
   nativeBuildInputs = [
-    cmake
+    meson
     intltool
-    luajit
     ninja
     pkg-config
-    which
-    wrapGAppsHook3
+    python3
     wxGTK
+    wrapGAppsHook3
   ];
 
   buildInputs = [
     boost
+    curl
     expat
     ffmpeg
     ffms
@@ -87,33 +71,34 @@ stdenv.mkDerivation (finalAttrs: {
     fontconfig
     freetype
     fribidi
-    glib
     harfbuzz
     icu
     libGL
-    libGLU
-    libX11
     libass
-    libiconv
     libuchardet
-    pcre
     wxGTK
     zlib
   ]
   ++ lib.optionals alsaSupport [ alsa-lib ]
-  ++ lib.optionals openalSupport [
-    (if stdenv.hostPlatform.isDarwin then OpenAL else openal)
-  ]
+  ++ lib.optionals (openalSupport && !stdenv.hostPlatform.isDarwin) [ openal ]
   ++ lib.optionals portaudioSupport [ portaudio ]
   ++ lib.optionals pulseaudioSupport [ libpulseaudio ]
   ++ lib.optionals spellcheckSupport [ hunspell ]
-  ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    Carbon
-    Cocoa
-    CoreFoundation
-    CoreText
-    IOKit
+  ++ lib.optionals (!useBundledLuaJIT) [ luajit ];
+
+  mesonFlags = [
+    (lib.mesonEnable "alsa" alsaSupport)
+    (lib.mesonEnable "openal" openalSupport)
+    (lib.mesonEnable "libpulse" pulseaudioSupport)
+    (lib.mesonEnable "portaudio" portaudioSupport)
+
+    (lib.mesonEnable "avisynth" false)
+
+    (lib.mesonEnable "hunspell" spellcheckSupport)
+
+    (lib.mesonBool "build_osx_bundle" stdenv.hostPlatform.isDarwin)
+    (lib.mesonBool "enable_update_checker" false)
+    (lib.mesonBool "system_luajit" (!useBundledLuaJIT))
   ];
 
   hardeningDisable = [
@@ -121,38 +106,39 @@ stdenv.mkDerivation (finalAttrs: {
     "relro"
   ];
 
-  patches = [
-    (fetchpatch {
-      name = "move-iconv-include-to-charset_conv.h.patch";
-      url = "https://github.com/arch1t3cht/Aegisub/commit/b8f4c98c4cbc698e4adbba302c2dc328fe193435.patch";
-      hash = "sha256-dCm/VG+8yK7qWKWF4Ew/M2hbbAC/d3hiuRglR9BvWtw=";
-    })
-  ] ++ lib.optionals (!useBundledLuaJIT) [
-    ./000-remove-bundled-luajit.patch
-  ];
+  strictDeps = true;
 
-  # error: unknown type name 'NSUInteger'
   postPatch = ''
+    patchShebangs tools/respack.py
+
+    # TODO: Tests require wrapped GoogleTest; upstream support for
+    # system version?
+    substituteInPlace meson.build \
+      --replace-fail "subdir('tests')" "# subdir('tests')"
+
+    # https://github.com/TypesettingTools/Aegisub/issues/191
     substituteInPlace src/dialog_colorpicker.cpp \
       --replace-fail "NSUInteger" "size_t"
   '';
 
-  env = {
-    NIX_CFLAGS_COMPILE = "-I${lib.getDev luajit}/include";
-    NIX_CFLAGS_LINK = "-L${lib.getLib luajit}/lib";
-  };
-
-  preConfigure = ''
-    export FORCE_GIT_VERSION=${finalAttrs.version}
+  # Inject the version, per the AUR package:
+  # <https://aur.archlinux.org/cgit/aur.git/tree/PKGBUILD?h=aegisub-arch1t3cht&id=bbbea73953858fc7bf2775a0fb92cec49afb586c>
+  preBuild = ''
+    cat > git_version.h <<EOF
+    #define BUILD_GIT_VERSION_NUMBER 0
+    #define BUILD_GIT_VERSION_STRING "${finalAttrs.version}"
+    EOF
   '';
 
-  cmakeBuildDir = "build-directory";
-
-  strictDeps = true;
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    mkdir -p $out/{Applications,bin}
+    mv Aegisub.app $out/Applications
+    makeWrapper $out/Applications/Aegisub.app/Contents/MacOS/aegisub $out/bin/aegisub
+  '';
 
   meta = {
-    homepage = "https://github.com/wangqr/Aegisub";
-    description = "Advanced subtitle editor; wangqr's fork";
+    homepage = "https://github.com/TypesettingTools/Aegisub";
+    description = "Advanced subtitle editor";
     longDescription = ''
       Aegisub is a free, cross-platform open source tool for creating and
       modifying subtitles. Aegisub makes it quick and easy to time subtitles to

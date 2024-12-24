@@ -2,6 +2,7 @@
   version,
   hash,
   cargoHash,
+  patchDir,
   extraMeta ? { },
 }:
 
@@ -35,8 +36,9 @@ let
   arch = if stdenv.hostPlatform.isx86_64 then "x86_64" else "generic";
 in
 rustPlatform.buildRustPackage rec {
-  pname = "kanidm";
+  pname = "kanidm" + (lib.optionalString enableSecretProvisioning "-with-secret-provisioning");
   inherit version cargoHash;
+  cargoDepsName = "kanidm";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -48,25 +50,31 @@ rustPlatform.buildRustPackage rec {
   KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
 
   patches = lib.optionals enableSecretProvisioning [
-    ./patches/oauth2-basic-secret-modify.patch
-    ./patches/recover-account.patch
+    "${patchDir}/oauth2-basic-secret-modify.patch"
+    "${patchDir}/recover-account.patch"
   ];
 
   postPatch =
     let
       format = (formats.toml { }).generate "${KANIDM_BUILD_PROFILE}.toml";
-      profile = {
-        admin_bind_path = "/run/kanidmd/sock";
-        cpu_flags = if stdenv.hostPlatform.isx86_64 then "x86_64_legacy" else "none";
-        default_config_path = "/etc/kanidm/server.toml";
-        default_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
-        htmx_ui_pkg_path = "@htmx_ui_pkg_path@";
-      };
+      profile =
+        {
+          admin_bind_path = "/run/kanidmd/sock";
+          cpu_flags = if stdenv.hostPlatform.isx86_64 then "x86_64_legacy" else "none";
+          default_config_path = "/etc/kanidm/server.toml";
+          default_unix_shell_path = "${lib.getBin bashInteractive}/bin/bash";
+          htmx_ui_pkg_path = "@htmx_ui_pkg_path@";
+        }
+        // lib.optionalAttrs (lib.versions.majorMinor version == "1.3") {
+          web_ui_pkg_path = "@web_ui_pkg_path@";
+        };
     in
     ''
       cp ${format profile} libs/profiles/${KANIDM_BUILD_PROFILE}.toml
-      substituteInPlace libs/profiles/${KANIDM_BUILD_PROFILE}.toml \
-        --replace-fail '@htmx_ui_pkg_path@' "$out/ui/hpkg"
+      substituteInPlace libs/profiles/${KANIDM_BUILD_PROFILE}.toml --replace-fail '@htmx_ui_pkg_path@' "$out/ui/hpkg"
+    ''
+    + lib.optionalString (lib.versions.majorMinor version == "1.3") ''
+      substituteInPlace libs/profiles/${KANIDM_BUILD_PROFILE}.toml --replace-fail '@web_ui_pkg_path@' "$out/ui/pkg"
     '';
 
   nativeBuildInputs = [
@@ -83,10 +91,14 @@ rustPlatform.buildRustPackage rec {
   ];
 
   # The UI needs to be in place before the tests are run.
-  postBuild = ''
-    mkdir -p $out/ui
-    cp -r server/core/static $out/ui/hpkg
-  '';
+  postBuild =
+    ''
+      mkdir -p $out/ui
+      cp -r server/core/static $out/ui/hpkg
+    ''
+    + lib.optionalString (lib.versions.majorMinor version == "1.3") ''
+      cp -r server/web_ui/pkg $out/ui/pkg
+    '';
 
   # Upstream runs with the Rust equivalent of -Werror,
   # which breaks when we upgrade to new Rust before them.

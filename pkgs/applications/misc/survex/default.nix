@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, fetchurl
-, fetchpatch
-, Carbon
-, Cocoa
-, ffmpeg
-, glib
-, libGLU
-, libICE
-, libX11
-, mesa
-, perl
-, pkg-config
-, proj
-, gdal
-, python3
-, wrapGAppsHook3
-, wxGTK32
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fetchpatch,
+  Carbon,
+  Cocoa,
+  ffmpeg,
+  glib,
+  libGLU,
+  libICE,
+  libX11,
+  libgbm,
+  perl,
+  pkg-config,
+  proj,
+  gdal,
+  python3,
+  wrapGAppsHook3,
+  wxGTK32,
 }:
 
 stdenv.mkDerivation rec {
   pname = "survex";
-  version = "1.4.13";
+  version = "1.4.14";
 
   src = fetchurl {
     url = "https://survex.com/software/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-4ejaOv0rwJRrV8f616D24IjIv5DXVJfY3fSTueiJG3M=";
+    hash = "sha256-TKOgbwUGE1z1PUZxfukugZWsJY1ml/VMAJ7xDIqWZWs=";
   };
 
   nativeBuildInputs = [
@@ -35,23 +36,26 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
   ];
 
-  buildInputs = [
-    ffmpeg
-    glib
-    proj
-    gdal
-    wxGTK32
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Carbon
-    Cocoa
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    # TODO: libGLU doesn't build for macOS because of Mesa issues
-    # (#233265); is it required for anything?
-    libGLU
-    mesa
-    libICE
-    libX11
-  ];
+  buildInputs =
+    [
+      ffmpeg
+      glib
+      proj
+      gdal
+      wxGTK32
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      Cocoa
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      # TODO: libGLU doesn't build for macOS because of Mesa issues
+      # (#233265); is it required for anything?
+      libGLU
+      libgbm
+      libICE
+      libX11
+    ];
 
   postPatch = ''
     patchShebangs .

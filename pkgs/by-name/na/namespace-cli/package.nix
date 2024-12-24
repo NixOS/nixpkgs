@@ -1,22 +1,27 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
 }:
 
 buildGoModule rec {
   pname = "namespace-cli";
-  version = "0.0.396";
+  version = "0.0.397";
 
   src = fetchFromGitHub {
     owner = "namespacelabs";
     repo = "foundation";
     rev = "v${version}";
-    hash = "sha256-hDCHu/RlZfuEL20wO5V7cBcKQKswoUBwTp531rlYN5A=";
+    hash = "sha256-rfJr8kcfqaKEnOzO53NxvjBKYnDOTDCX0TTtrLoCPfM=";
   };
 
-  vendorHash = "sha256-E9RhELIGOjFa+gDinl4xDR3ckTtdFLqVoAT0HQoI38I=";
+  vendorHash = "sha256-T4uyL9izxV747SuQfp94g0VMQo0g8MvBXL97OinYa2Q=";
 
-  subPackages = ["cmd/nsc" "cmd/ns" "cmd/docker-credential-nsc"];
+  subPackages = [
+    "cmd/nsc"
+    "cmd/ns"
+    "cmd/docker-credential-nsc"
+  ];
 
   ldflags = [
     "-s"

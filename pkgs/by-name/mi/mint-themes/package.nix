@@ -1,19 +1,20 @@
-{ fetchFromGitHub
-, lib
-, stdenvNoCC
-, python3
-, python3Packages
+{
+  fetchFromGitHub,
+  lib,
+  stdenvNoCC,
+  python3,
+  python3Packages,
 }:
 
 stdenvNoCC.mkDerivation rec {
   pname = "mint-themes";
-  version = "2.2.0";
+  version = "2.2.2";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = pname;
     rev = version;
-    hash = "sha256-aB44YMaf4cCFv26zn9ZPeJA7lTdGE5ePI1TkKkG+Ekw=";
+    hash = "sha256-97H2gVSZh0azl2ui4iWsNqgKzkBXRo6Daza2XtRdqII=";
   };
 
   nativeBuildInputs = [

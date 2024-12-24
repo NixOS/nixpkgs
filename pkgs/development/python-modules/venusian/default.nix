@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  fetchpatch2,
   fetchPypi,
   isPy27,
   pytestCheckHook,
@@ -19,6 +20,15 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-63LNym8xOaFdyA+cldPBD4pUoLqIHu744uxbQtPuOpU=";
   };
+
+  patches = [
+    # https://github.com/Pylons/venusian/pull/92
+    (fetchpatch2 {
+      name = "python313-compat.patch";
+      url = "https://github.com/Pylons/venusian/pull/92/commits/000b36d6968502683615da618afc3677ec8f05fc.patch?full_index=1";
+      hash = "sha256-lH4x3Fc7odV+j/sHw48BDjaZAXo+WN20omnpKPNiF7w=";
+    })
+  ];
 
   nativeBuildInputs = [ setuptools ];
 

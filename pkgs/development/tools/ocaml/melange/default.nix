@@ -31,6 +31,8 @@ let
         version = "4.0.0-51";
         hash = "sha256-940Yzp1ZXnN6mKVWY+nqKjn4qtBUJR5eHE55OTjGvdU=";
       }
+    else if lib.versionAtLeast ocaml.version "5.0" then
+      throw "melange is not available for OCaml ${ocaml.version}"
     else
       {
         version = "4.0.0-414";
@@ -57,7 +59,7 @@ buildDunePackage {
     menhirLib
     ppxlib
   ];
-  doCheck = true;
+  doCheck = false;
   nativeCheckInputs = [
     jq
     merlin

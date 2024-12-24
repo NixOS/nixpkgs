@@ -61,8 +61,7 @@ buildGo123Module {
     nodejs
   ];
 
-  CGO_ENABLED = 0;
-  GOOS = "linux";
+  env.CGO_ENABLED = 0;
   doCheck = false;
 
   ldflags = [

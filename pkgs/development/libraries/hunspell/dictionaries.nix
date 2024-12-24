@@ -669,6 +669,28 @@ rec {
     shortDescription = "Swedish (Finland)";
   };
 
+  /* ESTONIAN */
+
+  et_EE = et-ee;
+  et-ee = mkDict rec {
+    pname = "hunspell-dict-et-ee";
+    name = pname;
+    version = "20030606";
+
+    src = fetchzip {
+      url = "http://www.meso.ee/~jjpp/speller/ispell-et_${version}.tar.gz";
+      sha256 = "sha256-MVfKekzq2RKZONsz2Ey/xSRlh2bln46YO5UdGNkFdxk=";
+    };
+
+    dictFileName = "et_EE";
+    readmeFile = "README";
+
+    preInstall = ''
+      mv latin-1/${dictFileName}.dic ./
+      mv latin-1/${dictFileName}.aff ./
+    '';
+  };
+
   /* GERMAN */
 
   de_DE = de-de;
@@ -1043,5 +1065,36 @@ rec {
     shortDescription = "Greek (Greece)";
     readmeFile = "README_el_GR.txt";
     license = with lib.licenses; [ mpl11 gpl2 lgpl21 ];
+  };
+
+  /* KOREAN */
+  ko_KR = ko-kr;
+  ko-kr = mkDict rec {
+    pname = "hunspell-dict-ko-kr";
+    version = "0.7.94";
+
+    src = fetchFromGitHub {
+      owner = "spellcheck-ko";
+      repo = "hunspell-dict-ko";
+      rev = version;
+      hash = "sha256-eHuNppqB536wHXftzDghpB3cM9CNFKW1z8f0SNkEiD8=";
+    };
+
+    dictFileName = "ko_KR";
+    readmeFile = "README.md";
+
+    nativeBuildInputs = [ (python3.withPackages (ps: [ ps.pyyaml ])) ];
+
+    preInstall = ''
+      mv ko.aff ko_KR.aff
+      mv ko.dic ko_KR.dic
+    '';
+
+    meta = {
+      description = "Hunspell dictionary for Korean (South Korea)";
+      homepage = "https://github.com/spellcheck-ko/hunspell-dict-ko";
+      license = with lib.licenses; [ gpl2Plus lgpl21Plus mpl11 ];
+      maintainers = with lib.maintainers; [ honnip ];
+    };
   };
 }

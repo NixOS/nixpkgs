@@ -80,6 +80,9 @@ in {
     (lib.mkRemovedOptionModule [ "services" "mailman" "package" ] ''
       Didn't have an effect for several years.
     '')
+    (lib.mkRemovedOptionModule [ "services" "mailman" "extraPythonPackages" ] ''
+      Didn't have an effect for several years.
+    '')
   ];
 
   options = {
@@ -280,12 +283,6 @@ in {
             Path to mount the mailman-web django application on.
           '';
         };
-      };
-
-      extraPythonPackages = lib.mkOption {
-        description = "Packages to add to the python environment used by mailman and mailman-web";
-        type = lib.types.listOf lib.types.package;
-        default = [];
       };
 
       settings = lib.mkOption {
@@ -595,6 +592,7 @@ in {
             plugins = ["python3"];
             home = webEnv;
             http = "127.0.0.1:18507";
+            buffer-size = 8192;
           }
           // (if cfg.serve.virtualRoot == "/"
             then { module = "mailman_web.wsgi:application"; }

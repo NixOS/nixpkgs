@@ -10,6 +10,7 @@
   pango,
   stdenv,
   olm,
+  nodejs_20,
 }:
 
 buildNpmPackage rec {
@@ -22,6 +23,10 @@ buildNpmPackage rec {
     rev = "v${version}";
     hash = "sha256-BoUQURCfEu5kocMm8T25cVl8hgZGxcxrMzQZOl2fAbY=";
   };
+
+  # canvas, a transitive dependency of cinny, fails to build with Node 22
+  # https://github.com/Automattic/node-canvas/issues/2448
+  nodejs = nodejs_20;
 
   npmDepsHash = "sha256-fDoia6evCmXZgeIKL0coRo3yunX1dfud31ROgmop2Sc=";
 

@@ -1,13 +1,15 @@
-{ lib, stdenv
-, fetchzip
+{
+  lib,
+  stdenv,
+  fetchzip,
 
-# update script
-, writeScript
-, coreutils
-, curl
-, gnugrep
-, htmlq
-, nix-update
+  # update script
+  writeScript,
+  coreutils,
+  curl,
+  gnugrep,
+  htmlq,
+  nix-update,
 }:
 
 stdenv.mkDerivation rec {
@@ -20,34 +22,41 @@ stdenv.mkDerivation rec {
     stripRoot = false;
   };
 
-  buildPhase = let
-    inherit (stdenv.hostPlatform) system;
+  buildPhase =
+    let
+      inherit (stdenv.hostPlatform) system;
 
-    path = {
-      x86_64-linux = {
-        bin = "fasmg.x64";
-        asm = "source/linux/x64/fasmg.asm";
-      };
-      x86_64-darwin = {
-        bin = "source/macos/x64/fasmg";
-        asm = "source/macos/x64/fasmg.asm";
-      };
-      x86-linux = {
-        bin = "fasmg";
-        asm = "source/linux/fasmg.asm";
-      };
-      x86-darwin = {
-        bin = "source/macos/fasmg";
-        asm = "source/macos/fasmg.asm";
-      };
-    }.${system} or (throw "Unsupported system: ${system}");
+      path =
+        {
+          x86_64-linux = {
+            bin = "fasmg.x64";
+            asm = "source/linux/x64/fasmg.asm";
+          };
+          x86_64-darwin = {
+            bin = "source/macos/x64/fasmg";
+            asm = "source/macos/x64/fasmg.asm";
+          };
+          x86-linux = {
+            bin = "fasmg";
+            asm = "source/linux/fasmg.asm";
+          };
+          x86-darwin = {
+            bin = "source/macos/fasmg";
+            asm = "source/macos/fasmg.asm";
+          };
+        }
+        .${system} or (throw "Unsupported system: ${system}");
 
-  in ''
-    chmod +x ${path.bin}
-    ./${path.bin} ${path.asm} fasmg
-  '';
+    in
+    ''
+      chmod +x ${path.bin}
+      ./${path.bin} ${path.asm} fasmg
+    '';
 
-  outputs = [ "out" "doc" ];
+  outputs = [
+    "out"
+    "doc"
+  ];
 
   installPhase = ''
     install -Dm755 fasmg $out/bin/fasmg
@@ -57,7 +66,15 @@ stdenv.mkDerivation rec {
   '';
 
   passthru.updateScript = writeScript "update-fasmg.sh" ''
-    export PATH="${lib.makeBinPath [ coreutils curl gnugrep htmlq nix-update ]}:$PATH"
+    export PATH="${
+      lib.makeBinPath [
+        coreutils
+        curl
+        gnugrep
+        htmlq
+        nix-update
+      ]
+    }:$PATH"
     version=$(
       curl 'https://flatassembler.net/download.php' \
         | htmlq .links a.boldlink  -a href \
@@ -73,7 +90,10 @@ stdenv.mkDerivation rec {
     mainProgram = "fasmg";
     homepage = "https://flatassembler.net";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ orivej clevor ];
+    maintainers = with maintainers; [
+      orivej
+      clevor
+    ];
     platforms = with platforms; intersectLists (linux ++ darwin) x86;
   };
 }

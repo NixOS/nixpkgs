@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pypalazzetti";
-  version = "0.1.14";
+  version = "0.1.15";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "dotvav";
     repo = "py-palazzetti-api";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TDD3/UghNtsSAWV0k1I4MOjTFZB+sBqGgpKwy1p9Gx4=";
+    hash = "sha256-gqJZVlX060BMbTbkbpK6UMnM71Mr06sNHX++ObI3Y5Y=";
   };
 
   build-system = [ setuptools ];

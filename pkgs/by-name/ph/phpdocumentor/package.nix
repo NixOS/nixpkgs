@@ -6,16 +6,16 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "phpdocumentor";
-  version = "3.5.3";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "phpDocumentor";
     repo = "phpDocumentor";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-zpAKygpxyKYfefa5ag76saTSQNLon/v3rYkl0Nj2+FM=";
+    hash = "sha256-8TQlqXhZ3rHmOAuxsBYa+7JD+SxMQY0NZgCyElStFag=";
   };
 
-  vendorHash = "sha256-VNlAzWueF7ZXBpr9RrJghMPrAUof7f1DCh1osFIwFfs=";
+  vendorHash = "sha256-5EArmUc3a4+k0YncsPEfeJRR2uDgNKdIDONwQ8cAeVE=";
 
   # Needed because of the unbound version constraint on phpdocumentor/json-path
   composerStrictValidation = false;

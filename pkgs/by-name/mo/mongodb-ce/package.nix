@@ -15,24 +15,24 @@
 }:
 
 let
-  version = "8.0.3";
+  version = "8.0.4";
 
   srcs = version: {
     "x86_64-linux" = {
       url = "https://fastdl.mongodb.org/linux/mongodb-linux-x86_64-ubuntu2204-${version}.tgz";
-      hash = "sha256-AFnfK6ADPMBndL3k068IfY4wyD8Aa0/UZhY2g+jS31M=";
+      hash = "sha256-N5rwtPrrjVJj7UAk/weBAhV4+7wHRLNowkX6gEWCQVU=";
     };
     "aarch64-linux" = {
       url = "https://fastdl.mongodb.org/linux/mongodb-linux-aarch64-ubuntu2204-${version}.tgz";
-      hash = "sha256-7FGzHMdr8+1Bkx+3QFmDf/DGw5DxfDFEuzU6yICtOBo=";
+      hash = "sha256-uBa7/jxfZBNmB0l2jspJW2QQ8VY0GtWxc/tPlkV6UBk=";
     };
     "x86_64-darwin" = {
       url = "https://fastdl.mongodb.org/osx/mongodb-macos-x86_64-${version}.tgz";
-      hash = "sha256-GUIFG7F/KNyoPu9HGMs0UVw/HyK5T7jwTrSGY55/UUE=";
+      hash = "sha256-Ya+HIlRPWXPp9aX1AlRgkh/pfKRgxhqNep/6uuARmCo=";
     };
     "aarch64-darwin" = {
       url = "https://fastdl.mongodb.org/osx/mongodb-macos-arm64-${version}.tgz";
-      hash = "sha256-erTgU4XQ9Jh1ltPKbyyW6zf3hRHAcopGuHCRFw/AH5g=";
+      hash = "sha256-IZ47PXsxwEn/e890cNOO/3BOVt8qwY1N94Ql4phcz1g=";
     };
   };
 in

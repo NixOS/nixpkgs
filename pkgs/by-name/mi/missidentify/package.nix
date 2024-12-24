@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchurl
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,7 +33,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [ autoreconfHook ];
 
-  configureFlags = lib.optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [ "--build=arm" ];
+  configureFlags = lib.optionals (stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64) [
+    "--build=arm"
+  ];
 
   meta = with lib; {
     description = "Find Win32 applications";

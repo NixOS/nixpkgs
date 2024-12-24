@@ -1,35 +1,38 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, darwin
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  darwin,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "ord";
-  version = "0.21.2";
+  version = "0.22.0";
 
   src = fetchFromGitHub {
     owner = "ordinals";
     repo = "ord";
     rev = version;
-    hash = "sha256-k2SG1PPU14Q8X6F+w5xRbEZuW5hpCPvCci3x175Utc0=";
+    hash = "sha256-E2u9qXcenpnoivAOiRG2CoRO3zWzdqswRYR2p/Fzcaw=";
   };
 
-  cargoHash = "sha256-oJecSINVjcoV8Ew8W53wjihOsF9lrQ78tNpRjfhyew8=";
+  cargoHash = "sha256-+qEvXQkg4TtdzVpGEF0ZzROxwgPGZ8qerHsCIhGcMUo=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   dontUseCargoParallelTests = true;
 

@@ -100,7 +100,7 @@ let
         # upstream strongly recommends disabling CGO
         # additionally dependencies have had issues when GCO was enabled that weren't caught upstream
         # https://github.com/open-telemetry/opentelemetry-collector/blob/main/CONTRIBUTING.md#using-cgo
-        CGO_ENABLED = 0;
+        env.CGO_ENABLED = 0;
 
         ldflags = [
           "-s"

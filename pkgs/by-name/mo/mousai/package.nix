@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, appstream-glib
-, cargo
-, dbus
-, desktop-file-utils
-, glib
-, glib-networking
-, gst_all_1
-, gtk4
-, libadwaita
-, libpulseaudio
-, libsoup_3
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  cargo,
+  dbus,
+  desktop-file-utils,
+  glib,
+  glib-networking,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  libpulseaudio,
+  libsoup_3,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
@@ -67,7 +68,7 @@ stdenv.mkDerivation rec {
     mainProgram = "mousai";
     homepage = "https://github.com/SeaDve/Mousai";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda ];
+    maintainers = with maintainers; [ dotlambda ] ++ lib.teams.gnome-circle.members;
     platforms = platforms.linux;
   };
 }

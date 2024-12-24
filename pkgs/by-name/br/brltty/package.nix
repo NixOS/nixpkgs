@@ -1,20 +1,43 @@
-{ lib, stdenv, fetchurl, pkg-config, python3, bluez
-, tcl, acl, kmod, coreutils, shadow, util-linux
-, alsaSupport ? stdenv.hostPlatform.isLinux, alsa-lib
-, systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  python3,
+  bluez,
+  tcl,
+  acl,
+  kmod,
+  coreutils,
+  shadow,
+  util-linux,
+  alsaSupport ? stdenv.hostPlatform.isLinux,
+  alsa-lib,
+  systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemd,
+  systemd,
+  ncurses,
 }:
 
 stdenv.mkDerivation rec {
   pname = "brltty";
-  version = "6.6";
+  version = "6.7";
 
   src = fetchurl {
     url = "https://brltty.app/archive/brltty-${version}.tar.gz";
-    sha256 = "E+j2mb8UTuGx6PkAOt03hQkvf1XvEHxJEuPBT2zMpPw=";
+    sha256 = "sha256-FsM9AeL1lnBziJlmB7EZAIgDKylT8D4Il81Fe1y9Yjg=";
   };
 
-  nativeBuildInputs = [ pkg-config python3.pkgs.cython python3.pkgs.setuptools tcl ];
-  buildInputs = [ bluez ]
+  nativeBuildInputs = [
+    pkg-config
+    python3.pkgs.cython
+    python3.pkgs.setuptools
+    tcl
+  ];
+  buildInputs =
+    [
+      bluez
+      ncurses.dev
+    ]
     ++ lib.optional alsaSupport alsa-lib
     ++ lib.optional systemdSupport systemd;
 
@@ -49,7 +72,11 @@ stdenv.mkDerivation rec {
     "--with-updatable-directory=/var/lib/brltty"
     "--with-api-socket-path=/var/lib/BrlAPI"
   ];
-  installFlags = [ "install-systemd" "install-udev" "install-polkit" ];
+  installFlags = [
+    "install-systemd"
+    "install-udev"
+    "install-polkit"
+  ];
 
   preConfigure = ''
     substituteInPlace configure --replace /sbin/ldconfig ldconfig

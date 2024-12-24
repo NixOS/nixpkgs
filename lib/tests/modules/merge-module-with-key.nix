@@ -33,7 +33,7 @@ in
           moduleWithKey
         ];
       };
-      default = {};
+      default = { };
     };
     twice = mkOption {
       type = types.submodule {
@@ -43,7 +43,7 @@ in
           moduleWithoutKey
         ];
       };
-      default = {};
+      default = { };
     };
   };
 }

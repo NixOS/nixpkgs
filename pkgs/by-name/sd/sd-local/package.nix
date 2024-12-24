@@ -1,14 +1,18 @@
-{ lib, fetchFromGitHub, buildGoModule }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+}:
 
 buildGoModule rec {
   pname = "sd-local";
-  version = "1.0.55";
+  version = "1.0.57";
 
   src = fetchFromGitHub {
     owner = "screwdriver-cd";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-b8gv2iPk6LGTfHk67NXSlA637nHY2UjX25uLaIA6E/g=";
+    sha256 = "sha256-CBEdE15lAMMawTsfc45ptHsC2AbqFP6v4/nnktytwvc=";
   };
 
   vendorHash = "sha256-rAFfyMlnhDrb+f04S9+hNygXPaoG9mheQMxaJtXxBVw=";

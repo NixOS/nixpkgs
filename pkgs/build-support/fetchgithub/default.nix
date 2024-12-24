@@ -73,5 +73,5 @@ let
   ) // privateAttrs // passthruAttrs // { inherit name; };
 in
 
-fetcher fetcherArgs // { meta = newMeta; inherit rev owner repo; }
+fetcher fetcherArgs // { meta = newMeta; inherit rev owner repo tag; }
 )

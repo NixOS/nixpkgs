@@ -4,29 +4,29 @@
   buildPythonPackage,
   deprecated,
   fetchFromGitHub,
+  hatchling,
   pytest-mock,
   pytestCheckHook,
   pythonOlder,
-  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "headerparser";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "jwodder";
     repo = "headerparser";
     rev = "refs/tags/v${version}";
-    hash = "sha256-CWXha7BYVO5JFuhWP8OZ95fhUsZ3Jo0cgPAM+O5bfec=";
+    hash = "sha256-fn9Nlazte6r5JMmp9ynq0qmkLEoJGv8witgZlD7zJNM=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     attrs
     deprecated
   ];

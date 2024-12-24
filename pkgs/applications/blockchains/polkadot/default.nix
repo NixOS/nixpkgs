@@ -18,13 +18,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "polkadot";
-  version = "stable2409-2";
+  version = "2412";
 
   src = fetchFromGitHub {
     owner = "paritytech";
     repo = "polkadot-sdk";
-    rev = "polkadot-${version}";
-    hash = "sha256-nCxnQ243afj9Bq8LMXEvn5ZGYw2SonfeJMd0OOi/GZ0=";
+    rev = "polkadot-stable${version}";
+    hash = "sha256-0oqSABuCcyNhvCJyZuesnPvsUgHdNXdc36HeNMmToYM=";
 
     # the build process of polkadot requires a .git folder in order to determine
     # the git commit hash that is being built and add it to the version string.
@@ -48,16 +48,19 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
+      "ark-secret-scalar-0.0.2" = "sha256-yvgTxccxeUrnBhElI7AY3ad0PqmGCDlsoi8jH2Cceks=";
+      "common-0.1.0" = "sha256-Jbl5b0zIDFBcu2lYi5LYRdABq3vxgPlE4EsFucTWQd8=";
+      "fflonk-0.1.0" = "sha256-+BvZ03AhYNP0D8Wq9EMsP+lSgPA6BBlnWkoxTffVLwo=";
+      "ipfs-hasher-0.21.3" = "sha256-AH3NMil07F+kkWjqAbMaMbjnTisSQiCd3tJz934ZICw=";
       "simple-mermaid-0.1.0" = "sha256-IekTldxYq+uoXwGvbpkVTXv2xrcZ0TQfyyE2i2zH+6w=";
+      "sp-ark-bls12-381-0.4.2" = "sha256-nNr0amKhSvvI9BlsoP+8v6Xppx/s7zkf0l9Lm3DW8w8=";
+      "sp-crypto-ec-utils-0.4.1" = "sha256-KXyG43YIzMG2r6kCTyQyCIHSAkXSlZv8pbFEXXvC4JU=";
+      "sp-debug-derive-8.0.0" = "sha256-/Sw1ZM/JcJBokFE4y2mv/P43ciTL5DEm0PDG0jZvMkI=";
     };
   };
 
   buildType = "production";
-
-  cargoBuildFlags = [
-    "-p"
-    "polkadot"
-  ];
+  buildAndTestSubdir = "polkadot";
 
   # NOTE: tests currently fail to compile due to an issue with cargo-auditable
   # and resolution of features flags, potentially related to this:
@@ -89,8 +92,8 @@ rustPlatform.buildRustPackage rec {
   ROCKSDB_LIB_DIR = "${rocksdb}/lib";
 
   meta = with lib; {
-    description = "Polkadot Node Implementation";
-    homepage = "https://polkadot.network";
+    description = "Implementation of a https://polkadot.network node in Rust based on the Substrate framework";
+    homepage = "https://github.com/paritytech/polkadot-sdk";
     license = licenses.gpl3Only;
     maintainers = with maintainers; [
       akru

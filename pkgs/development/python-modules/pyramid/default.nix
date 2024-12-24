@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch2,
   webtest,
   zope-component,
   hupper,
@@ -30,6 +31,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-NyE4pzjkIWU1zHbczm7d1aGqypUTDyNU+4NCZMBvGN4=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "python-3.13-compat.patch";
+      url = "https://github.com/Pylons/pyramid/commit/1079613eb07e2a67454378e1fc28815dfd64bb82.patch";
+      hash = "sha256-/jxbA2q0kAeXDvIwhNkO8h4KbKtdquWXAH7/0lV8MXc=";
+    })
+  ];
 
   build-system = [ setuptools ];
 

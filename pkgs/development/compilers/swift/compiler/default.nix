@@ -541,7 +541,7 @@ in stdenv.mkDerivation {
     ";
     buildProject lldb llvm-project/lldb
 
-    ${lib.optionalString stdenv.hostPlatform.isDarwin ''
+    ${lib.optionalString stdenv.targetPlatform.isDarwin ''
     # Need to do a standalone build of concurrency for Darwin back deployment.
     # Based on: utils/swift_build_support/swift_build_support/products/backdeployconcurrency.py
     cmakeFlags="

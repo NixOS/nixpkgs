@@ -1,10 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, writeScript, common-updater-scripts
-, coreutils, git, gnused, nix }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeScript,
+  common-updater-scripts,
+  coreutils,
+  git,
+  gnused,
+  nix,
+}:
 
 let
   owner = "scopatz";
   repo = "nanorc";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   pname = "nanorc";
   version = "2020-10-10";
 

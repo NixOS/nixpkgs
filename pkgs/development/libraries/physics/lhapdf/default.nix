@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, python, makeWrapper }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bash,
+  python,
+  makeWrapper,
+}:
 
 stdenv.mkDerivation rec {
   pname = "lhapdf";
@@ -15,8 +22,14 @@ stdenv.mkDerivation rec {
     substituteInPlace src/GridPDF.cc --replace '#include <locale>' '#include <xlocale.h>'
   '';
 
-  nativeBuildInputs = [ makeWrapper ]
-    ++ lib.optionals (python != null && lib.versionAtLeast python.version "3.10") [ python.pkgs.cython ];
+  nativeBuildInputs =
+    [
+      bash
+      makeWrapper
+    ]
+    ++ lib.optionals (python != null && lib.versionAtLeast python.version "3.10") [
+      python.pkgs.cython
+    ];
   buildInputs = [ python ];
 
   configureFlags = lib.optionals (python == null) [ "--disable-python" ];
@@ -25,6 +38,8 @@ stdenv.mkDerivation rec {
     rm wrappers/python/lhapdf.cpp
   '';
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   passthru = {
@@ -32,14 +47,15 @@ stdenv.mkDerivation rec {
   };
 
   postInstall = ''
+    patchShebangs --build $out/bin/lhapdf-config
     wrapProgram $out/bin/lhapdf --prefix PYTHONPATH : "$(toPythonPath "$out")"
   '';
 
   meta = with lib; {
     description = "General purpose interpolator, used for evaluating Parton Distribution Functions from discretised data files";
-    license     = licenses.gpl2;
-    homepage    = "http://lhapdf.hepforge.org";
-    platforms   = platforms.unix;
+    license = licenses.gpl2;
+    homepage = "http://lhapdf.hepforge.org";
+    platforms = platforms.unix;
     maintainers = with maintainers; [ veprbl ];
   };
 }

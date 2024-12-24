@@ -21,7 +21,7 @@ buildGoModule rec {
   vendorHash = "sha256-0I/bvuyosN55oNSMuom4C8rVjxneUaqV19l9OMiwWhU=";
 
   # The dependency github.com/fsnotify/fsevents requires CGO
-  CGO_ENABLED = if stdenv.hostPlatform.isDarwin then "1" else "0";
+  env.CGO_ENABLED = if stdenv.hostPlatform.isDarwin then "1" else "0";
   ldflags = [
     "-s"
     "-X main.Version=${version}"

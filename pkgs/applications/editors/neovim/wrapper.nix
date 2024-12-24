@@ -24,6 +24,10 @@ let
     # to work with nix.
     # if true, the wrapper automatically appends those snippets when necessary
     , autoconfigure ? false
+
+    # append to PATH runtime deps of plugins
+    , autowrapRuntimeDeps ? false
+
     # should contain all args but the binary. Can be either a string or list
     , wrapperArgs ? []
     , withPython2 ? false
@@ -120,7 +124,15 @@ let
     wrapperArgsStr = if lib.isString wrapperArgs then wrapperArgs else lib.escapeShellArgs wrapperArgs;
 
     generatedWrapperArgs = let
-      binPath = lib.makeBinPath (lib.optional finalAttrs.withRuby rubyEnv ++ lib.optional finalAttrs.withNodeJs nodejs);
+      op = acc: normalizedPlugin: acc ++ normalizedPlugin.plugin.runtimeDeps or [];
+
+      runtimeDeps = lib.foldl' op [] pluginsNormalized;
+
+      binPath = lib.makeBinPath (
+           lib.optional finalAttrs.withRuby rubyEnv
+        ++ lib.optional finalAttrs.withNodeJs nodejs
+        ++ lib.optionals finalAttrs.autowrapRuntimeDeps runtimeDeps
+        );
     in
 
       # vim accepts a limited number of commands so we join them all
@@ -167,7 +179,7 @@ let
       __structuredAttrs = true;
       dontUnpack = true;
       inherit viAlias vimAlias withNodeJs withPython3 withPerl withRuby;
-      inherit autoconfigure wrapRc providerLuaRc packpathDirs;
+      inherit autoconfigure autowrapRuntimeDeps wrapRc providerLuaRc packpathDirs;
       inherit python3Env rubyEnv;
       inherit wrapperArgs generatedWrapperArgs;
       luaRcContent = rcContent;

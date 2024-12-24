@@ -1,17 +1,22 @@
-{ lib, fetchFromGitHub, buildGoModule, gnupg }:
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  gnupg,
+}:
 
 buildGoModule rec {
   pname = "ssh-to-pgp";
-  version = "1.1.3";
+  version = "1.1.4";
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "ssh-to-pgp";
     rev = version;
-    sha256 = "sha256-EynI4YQ6yjhMIOSoMM7WgLwI//5moFgdhFLX82J+bSA=";
+    sha256 = "sha256-Pd/bbXwvWHjU2ETKlcODO1F6211JnlK7pU74Mu01UvU=";
   };
 
-  vendorHash = "sha256-ww1CDDGo2r8h0ePvU8PS2owzE1vLTz2m7Z9thsQle7s=";
+  vendorHash = "sha256-69XsFBg7SdvSieQaKUDUESLtAh8cigyt47NQBO3mHpo=";
 
   nativeCheckInputs = [ gnupg ];
   checkPhase = ''

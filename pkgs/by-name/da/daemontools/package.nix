@@ -1,4 +1,11 @@
-{ fetchurl, bash, glibc, lib, stdenv, installShellFiles }:
+{
+  fetchurl,
+  bash,
+  glibc,
+  lib,
+  stdenv,
+  installShellFiles,
+}:
 
 let
   man-pages = fetchurl {
@@ -17,19 +24,22 @@ stdenv.mkDerivation rec {
 
   patches = [ ./fix-nix-usernamespace-build.patch ];
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   nativeBuildInputs = [ installShellFiles ];
 
   configurePhase = ''
     cd daemontools-${version}
 
-    sed -ie '1 s_$_ -include ${glibc.dev}/include/errno.h_' src/conf-cc
+    sed -i -e '1 s_$_ -include ${glibc.dev}/include/errno.h_' src/conf-cc
 
     substituteInPlace src/Makefile \
       --replace '/bin/sh' '${bash}/bin/bash -oxtrace'
 
-    sed -ie "s_^PATH=.*_PATH=$src/daemontools-${version}/compile:''${PATH}_" src/rts.tests
+    sed -i -e "s_^PATH=.*_PATH=$src/daemontools-${version}/compile:''${PATH}_" src/rts.tests
 
     cat ${glibc.dev}/include/errno.h
   '';

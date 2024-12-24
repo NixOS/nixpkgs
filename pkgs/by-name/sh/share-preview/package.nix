@@ -43,13 +43,15 @@ stdenv.mkDerivation (finalAttrs: {
     desktop-file-utils
   ];
 
-  buildInputs = [
-    libadwaita
-    openssl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Foundation
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      libadwaita
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.Foundation
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   env.NIX_CFLAGS_COMPILE = toString (
     lib.optionals stdenv.hostPlatform.isDarwin [ "-Wno-error=incompatible-function-pointer-types" ]
@@ -60,7 +62,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://apps.gnome.org/SharePreview";
     license = lib.licenses.gpl3Plus;
     mainProgram = "share-preview";
-    maintainers = with lib.maintainers; [ aleksana ];
+    maintainers = lib.teams.gnome-circle.members;
     platforms = lib.platforms.unix;
   };
 })

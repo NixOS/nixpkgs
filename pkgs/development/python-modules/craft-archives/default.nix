@@ -5,11 +5,12 @@
   nix-update-script,
   launchpadlib,
   lazr-restfulclient,
+  lazr-uri,
   overrides,
   pydantic,
-  setuptools,
+  python-debian,
+  distro,
   setuptools-scm,
-  tabulate,
   pytest-check,
   pytest-mock,
   pytestCheckHook,
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "craft-archives";
-  version = "2.0.0";
+  version = "2.0.2";
 
   pyproject = true;
 
@@ -25,7 +26,7 @@ buildPythonPackage rec {
     owner = "canonical";
     repo = "craft-archives";
     rev = "refs/tags/${version}";
-    hash = "sha256-BrKyOdfbwt9qU5Bt/kX/+GgxH7LCFmmFg4mevBWVp2I=";
+    hash = "sha256-1HEz4d1WLQDDHga7X+V/37n8E7JK/k0z+UDeNEiLOHs=";
   };
 
   postPatch = ''
@@ -39,11 +40,13 @@ buildPythonPackage rec {
   build-system = [ setuptools-scm ];
 
   dependencies = [
+    distro
     launchpadlib
     lazr-restfulclient
+    lazr-uri
     overrides
     pydantic
-    tabulate
+    python-debian
   ];
 
   pythonImportsCheck = [ "craft_archives" ];

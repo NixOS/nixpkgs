@@ -25,7 +25,7 @@ in
   lib,
   buildGoModule,
   runCommandLocal,
-  substituteAll,
+  replaceVars,
   # Native build inputs
   addDriverRunpath,
   makeWrapper,
@@ -109,8 +109,7 @@ in
   inherit pname version src;
 
   patches = lib.optionals (projectName == "apptainer") [
-    (substituteAll {
-      src = ./apptainer/0001-ldCache-patch-for-driverLink.patch;
+    (replaceVars ./apptainer/0001-ldCache-patch-for-driverLink.patch {
       inherit (addDriverRunpath) driverLink;
     })
   ];
@@ -209,16 +208,14 @@ in
     # Patching the hard-coded defaultPath by prefixing the packages in defaultPathInputs
     ${lib.concatMapAttrsStringSep "\n" (fileName: originalDefaultPaths: ''
       substituteInPlace ${lib.escapeShellArg fileName} \
-        ${
-          lib.concatMapStringsSep " \\\n  " (
-            originalDefaultPath:
-            lib.concatStringsSep " " [
-              "--replace-fail"
-              (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
-              (addShellDoubleQuotes ''$systemDefaultPath''${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}''${inputsDefaultPath:+:}$inputsDefaultPath'')
-            ]
-          ) originalDefaultPaths
-        }
+        ${lib.concatMapStringsSep " \\\n  " (
+          originalDefaultPath:
+          lib.concatStringsSep " " [
+            "--replace-fail"
+            (addShellDoubleQuotes (lib.escapeShellArg originalDefaultPath))
+            (addShellDoubleQuotes ''$systemDefaultPath''${systemDefaultPath:+:}${lib.escapeShellArg originalDefaultPath}''${inputsDefaultPath:+:}$inputsDefaultPath'')
+          ]
+        ) originalDefaultPaths}
     '') sourceFilesWithDefaultPaths}
 
     substituteInPlace internal/pkg/util/gpu/nvidia.go \

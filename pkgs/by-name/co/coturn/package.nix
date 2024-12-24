@@ -1,25 +1,26 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, openssl
-, libevent
-, pkg-config
-, libprom
-, libpromhttp
-, libmicrohttpd
-, sqlite
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  openssl,
+  libevent,
+  pkg-config,
+  libprom,
+  libpromhttp,
+  libmicrohttpd,
+  sqlite,
+  nixosTests,
 }:
 
 stdenv.mkDerivation rec {
   pname = "coturn";
-  version = "4.6.2";
+  version = "4.6.3";
 
   src = fetchFromGitHub {
     owner = "coturn";
     repo = "coturn";
     rev = "refs/tags/${version}";
-    hash = "sha256-BKIto762W7UkKjzIm3eVU18oiHpYUMQYJihebYxBOZs=";
+    hash = "sha256-GG8aQJoCBV5wolPEzSuZhqNn//ytaTAptjY42YKga4E=";
   };
 
   nativeBuildInputs = [

@@ -31,20 +31,20 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "envision-unwrapped";
-  version = "1.1.1";
+  version = "2.0.1";
 
   src = fetchFromGitLab {
     owner = "gabmus";
     repo = "envision";
     rev = finalAttrs.version;
-    hash = "sha256-Q6PGBt3vWAp5QhSFsG88gi9ZFHLOQLAYdKpS94wCwCc=";
+    hash = "sha256-J1zctfFOyu+uLpctTiAe5OWBM7nXanzQocTGs1ToUMA=";
   };
 
   strictDeps = true;
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-JRSTzcurHNUtyISAvhvdLJkokxLnoR+xs42YiRVmZnE=";
+    hash = "sha256-kNZucZKzxFHzDAIGE1PFfuBq1rSVkb2Gpk23MEgohME=";
   };
 
   nativeBuildInputs = [

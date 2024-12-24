@@ -181,6 +181,7 @@
         - pkgs/development/compilers/corretto/**/*
         - pkgs/development/compilers/graalvm/**/*
         - pkgs/development/compilers/openjdk/**/*
+        - pkgs/by-name/op/openjfx/**/*
         - pkgs/development/compilers/semeru-bin/**/*
         - pkgs/development/compilers/temurin-bin/**/*
         - pkgs/development/compilers/zulu/**/*
@@ -328,6 +329,7 @@
       - any-glob-to-any-file:
         - doc/languages-frameworks/nim.section.md
         - pkgs/build-support/build-nim-package.nix
+        - pkgs/build-support/build-nim-sbom.nix
         - pkgs/by-name/ni/nim*
         - pkgs/top-level/nim-overrides.nix
 

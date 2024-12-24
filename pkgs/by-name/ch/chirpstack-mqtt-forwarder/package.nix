@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  darwin,
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
@@ -23,13 +22,12 @@ rustPlatform.buildRustPackage rec {
 
   nativeBuildInputs = [ protobuf ];
 
-  nativeInstallCheckInputs = [
-    versionCheckHook
-  ];
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
-  # Skip tests depending on internet connectivity
-  checkFlags = [ "--skip=end_to_end" ];
   doInstallCheck = true;
+  checkFlags = [
+    "--skip=end_to_end" # Depends on internet connectivity
+  ];
 
   passthru.updateScript = nix-update-script { };
 

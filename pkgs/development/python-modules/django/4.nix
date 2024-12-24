@@ -44,7 +44,7 @@
 
 buildPythonPackage rec {
   pname = "django";
-  version = "4.2.16";
+  version = "4.2.17";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -53,7 +53,7 @@ buildPythonPackage rec {
     owner = "django";
     repo = "django";
     rev = "refs/tags/${version}";
-    hash = "sha256-VW/qfqOadivtU8Xg70FLqENtOV7GqJM4bR2Ik6Yag+o=";
+    hash = "sha256-G3PAG/fe4yG55699XS8rcWigF92J0Fke1qnUxRqOUnc=";
   };
 
   patches =
@@ -85,6 +85,13 @@ buildPythonPackage rec {
       # https://hydra.nixos.org/build/254630990
       substituteInPlace tests/view_tests/tests/test_debug.py \
         --replace-fail "test_files" "dont_test_files"
+    ''
+    + lib.optionalString (pythonAtLeast "3.13") ''
+      # Fixed CommandTypes.test_help_default_options_with_custom_arguments test on Python 3.13+.
+      # https://github.com/django/django/commit/3426a5c33c36266af42128ee9eca4921e68ea876
+      substituteInPlace tests/admin_scripts/tests.py --replace-fail \
+        "test_help_default_options_with_custom_arguments" \
+        "dont_test_help_default_options_with_custom_arguments"
     '';
 
   nativeBuildInputs = [ setuptools ];

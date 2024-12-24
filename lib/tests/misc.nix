@@ -1641,7 +1641,7 @@ runTests {
     expected  = "«foo»";
   };
 
-  testToPlist = {
+  testToPlistUnescaped = {
     expr = mapAttrs (const (generators.toPlist { })) {
       value = {
         nested.values = {
@@ -1657,10 +1657,34 @@ runTests {
           emptylist = [];
           attrs = { foo = null; "foo b/ar" = "baz"; };
           emptyattrs = {};
+          "keys are not <escaped>" = "and < neither are string values";
         };
       };
     };
-    expected = { value = builtins.readFile ./test-to-plist-expected.plist; };
+    expected = { value = builtins.readFile ./test-to-plist-unescaped-expected.plist; };
+  };
+
+  testToPlistEscaped = {
+    expr = mapAttrs (const (generators.toPlist { escape = true; })) {
+      value = {
+        nested.values = {
+          int = 42;
+          float = 0.1337;
+          bool = true;
+          emptystring = "";
+          string = "fn\${o}\"r\\d";
+          newlinestring = "\n";
+          path = /. + "/foo";
+          null_ = null;
+          list = [ 3 4 "test" ];
+          emptylist = [];
+          attrs = { foo = null; "foo b/ar" = "baz"; };
+          emptyattrs = {};
+          "keys are <escaped>" = "and < so are string values";
+        };
+      };
+    };
+    expected = { value = builtins.readFile ./test-to-plist-escaped-expected.plist; };
   };
 
   testToLuaEmptyAttrSet = {
@@ -1875,6 +1899,44 @@ runTests {
         locs = filter (o: ! o.internal) (optionAttrSetToDocList options);
       in map (o: o.loc) locs;
     expected = [ [ "_module" "args" ] [ "foo" ] [ "foo" "<name>" "bar" ] [ "foo" "bar" ] ];
+  };
+
+  testAttrsWithName = {
+    expr = let
+      eval =  evalModules {
+        modules = [
+          {
+            options = {
+              foo = lib.mkOption {
+                type = lib.types.attrsWith {
+                  placeholder = "MyCustomPlaceholder";
+                  elemType = lib.types.submodule {
+                    options.bar = lib.mkOption {
+                      type = lib.types.int;
+                      default = 42;
+                    };
+                  };
+                };
+              };
+            };
+          }
+        ];
+      };
+      opt = eval.options.foo;
+    in
+      (opt.type.getSubOptions opt.loc).bar.loc;
+    expected = [
+      "foo"
+      "<MyCustomPlaceholder>"
+      "bar"
+    ];
+  };
+
+  testShowOptionWithPlaceholder = {
+    # <name>, *, should not be escaped. It is used as a placeholder by convention.
+    # Other symbols should be escaped. `{}`
+    expr = lib.showOption ["<name>" "<myName>" "*" "{foo}"];
+    expected = "<name>.<myName>.*.\"{foo}\"";
   };
 
   testCartesianProductOfEmptySet = {

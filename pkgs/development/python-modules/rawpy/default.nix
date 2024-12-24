@@ -24,14 +24,14 @@
 
 buildPythonPackage rec {
   pname = "rawpy";
-  version = "0.23.2";
+  version = "0.24.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "letmaik";
     repo = "rawpy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-s7/YbD5Jy9Jzry817djG63Zs4It8b1S95qmcJgPYGZQ=";
+    tag = "v${version}";
+    hash = "sha256-u/KWbviyhbMts40Gc/9shXSESwihWZQQaf3Z44gMgvs=";
   };
 
   build-system = [

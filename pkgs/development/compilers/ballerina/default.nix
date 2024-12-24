@@ -1,14 +1,24 @@
-{ ballerina, lib, writeText, runCommand, makeWrapper, fetchzip, stdenv, openjdk }:
+{
+  ballerina,
+  lib,
+  writeText,
+  runCommand,
+  makeWrapper,
+  fetchzip,
+  stdenv,
+  openjdk,
+}:
 let
-  version = "2201.10.1";
+  version = "2201.10.3";
   codeName = "swan-lake";
-in stdenv.mkDerivation {
+in
+stdenv.mkDerivation {
   pname = "ballerina";
   inherit version;
 
   src = fetchzip {
     url = "https://dist.ballerina.io/downloads/${version}/ballerina-${version}-${codeName}.zip";
-    hash = "sha256-gKxJnoNWYE3ozQ0JvMgHgrg/DCkvFnJqZAecgqvJGq8=";
+    hash = "sha256-JVwxWRiOQaUZBkvxoLhKvktyQYnBtbCBZXZa6g6hoRQ=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -22,18 +32,20 @@ in stdenv.mkDerivation {
     wrapProgram $out/bin/bal --set JAVA_HOME ${openjdk}
   '';
 
-  passthru.tests.smokeTest = let
-    helloWorld = writeText "hello-world.bal" ''
-      import ballerina/io;
-      public function main() {
-        io:println("Hello, World!");
-      }
+  passthru.tests.smokeTest =
+    let
+      helloWorld = writeText "hello-world.bal" ''
+        import ballerina/io;
+        public function main() {
+          io:println("Hello, World!");
+        }
+      '';
+    in
+    runCommand "ballerina-${version}-smoketest" { } ''
+      ${ballerina}/bin/bal run ${helloWorld} >$out
+      read result <$out
+      [[ $result = "Hello, World!" ]]
     '';
-  in runCommand "ballerina-${version}-smoketest" { } ''
-    ${ballerina}/bin/bal run ${helloWorld} >$out
-    read result <$out
-    [[ $result = "Hello, World!" ]]
-  '';
 
   meta = with lib; {
     description = "Open-source programming language for the cloud";

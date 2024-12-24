@@ -50,11 +50,19 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nbmake" ];
 
+  # tests are prone to race conditions under high parallelism
+  # https://github.com/treebeardtech/nbmake/issues/129
+  pytestFlagsArray = [ "--maxprocesses=4" ];
+
   nativeCheckInputs = [
     pytest-xdist
     pytestCheckHook
     typing-extensions
   ];
+
+  preCheck = ''
+    export HOME=$(mktemp -d)
+  '';
 
   __darwinAllowLocalNetworking = true;
 

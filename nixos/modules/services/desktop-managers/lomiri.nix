@@ -29,9 +29,13 @@ in
     (lib.mkIf cfg.basics {
       environment = {
         # To override the default keyboard layout in Lomiri
-        etc.${pkgs.lomiri.lomiri.passthru.etcLayoutsFile}.text = lib.strings.replaceStrings [ "," ] [
-          "\n"
-        ] config.services.xserver.xkb.layout;
+        etc.${pkgs.lomiri.lomiri.passthru.etcLayoutsFile}.text =
+          lib.strings.replaceStrings
+            [ "," ]
+            [
+              "\n"
+            ]
+            config.services.xserver.xkb.layout;
 
         pathsToLink = [
           # Data

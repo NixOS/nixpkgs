@@ -29,7 +29,8 @@ rec {
   extract = args@{ pname, version, name ? null, postExtract ? "", src, ... }:
     assert lib.assertMsg (name == null) "The `name` argument is deprecated. Use `pname` and `version` instead to construct the name.";
     pkgs.runCommand "${pname}-${version}-extracted" {
-      buildInputs = [ appimage-exec ];
+      nativeBuildInputs = [ appimage-exec ];
+      strictDeps = true;
     } ''
       appimage-exec.sh -x $out ${src}
       ${postExtract}
@@ -159,7 +160,7 @@ rec {
       libidn
       tbb
       wayland
-      mesa
+      libgbm
       libxkbcommon
       vulkan-loader
 
@@ -203,7 +204,6 @@ rec {
       # libraries not on the upstream include list, but nevertheless expected
       # by at least one appimage
       libtool.lib # for Synfigstudio
-      xorg.libxshmfence # for apple-music-electron
       at-spi2-core
       pciutils # for FreeCAD
       pipewire # immersed-vr wayland support

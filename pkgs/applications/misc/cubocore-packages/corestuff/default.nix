@@ -1,4 +1,16 @@
-{ mkDerivation, lib, fetchFromGitLab, qtbase, qtx11extras, kglobalaccel, xorg, cmake, ninja, libcprime, libcsys }:
+{
+  mkDerivation,
+  lib,
+  fetchFromGitLab,
+  qtbase,
+  qtx11extras,
+  kglobalaccel,
+  xorg,
+  cmake,
+  ninja,
+  libcprime,
+  libcsys,
+}:
 
 mkDerivation rec {
   pname = "corestuff";

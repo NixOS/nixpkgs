@@ -83,8 +83,10 @@ mapAliases {
   coffee-script = pkgs.coffeescript; # added 2023-08-18
   inherit (pkgs) concurrently; # added 2024-08-05
   inherit (pkgs) configurable-http-proxy; # added 2023-08-19
+  copy-webpack-plugin = throw "copy-webpack-plugin was removed because it is a JS library, so your project should lock it with a JS package manager instead."; # Added 2024-12-16
   inherit (pkgs) cordova; # added 2023-08-18
   inherit (pkgs) create-react-app; # added 2023-09-25
+  create-react-native-app = throw "create-react-native-app was removed because it was deprecated. Upstream suggests using a framework for React Native."; # added 2024-12-08
   dat = throw "dat was removed because it was broken"; # added 2023-08-21
   inherit (pkgs) degit; # added 2023-08-18
   inherit (pkgs) diagnostic-languageserver; # added 2024-06-25
@@ -94,6 +96,7 @@ mapAliases {
   inherit (pkgs.elmPackages) elm-test;
   inherit (pkgs) eslint; # Added 2024-08-28
   inherit (pkgs) eslint_d; # Added 2023-05-26
+  expo-cli = throw "expo-cli was removed because it was deprecated upstream. Use `npx expo` or eas-cli instead."; # added 2024-12-02
   inherit (pkgs) firebase-tools; # added 2023-08-18
   inherit (pkgs) fixjson; # added 2024-06-26
   flood = pkgs.flood; # Added 2023-07-25
@@ -206,6 +209,7 @@ mapAliases {
   inherit (pkgs) undollar; # added 2024-06-29
   inherit (pkgs) ungit; # added 2023-08-20
   inherit (pkgs) vim-language-server; # added 2024-06-25
+  vls = throw "vls has been deprecated by upstream as vetur is also deprecated. Upstream suggests migrating to Volar for Vue LSP tooling instead."; # added 2024-12-09
   inherit (pkgs) vsc-leetcode-cli; # Added 2023-08-30
   vscode-css-languageserver-bin = throw "vscode-css-languageserver-bin has been removed since the upstream repository is archived; consider using vscode-langservers-extracted instead."; # added 2024-06-26
   vscode-html-languageserver-bin = throw "vscode-html-languageserver-bin has been removed since the upstream repository is archived; consider using vscode-langservers-extracted instead."; # added 2024-06-26

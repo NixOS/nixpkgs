@@ -1,25 +1,26 @@
-{ stdenv
-, lib
-, fetchFromGitLab
-, fetchpatch
-, gitUpdater
-, nixosTests
-, cmake
-, gettext
-, libapparmor
-, lomiri-action-api
-, lomiri-content-hub
-, lomiri-ui-extras
-, lomiri-ui-toolkit
-, pkg-config
-, qqc2-suru-style
-, qtbase
-, qtdeclarative
-, qtquickcontrols2
-, qtsystems
-, qtwebengine
-, wrapQtAppsHook
-, xvfb-run
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  fetchpatch,
+  gitUpdater,
+  nixosTests,
+  cmake,
+  gettext,
+  libapparmor,
+  lomiri-action-api,
+  lomiri-content-hub,
+  lomiri-ui-extras,
+  lomiri-ui-toolkit,
+  pkg-config,
+  qqc2-suru-style,
+  qtbase,
+  qtdeclarative,
+  qtquickcontrols2,
+  qtsystems,
+  qtwebengine,
+  wrapQtAppsHook,
+  xvfb-run,
 }:
 
 let
@@ -45,21 +46,23 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
-  postPatch = ''
-    substituteInPlace src/{Morph,Ubuntu}/CMakeLists.txt \
-      --replace '/usr/lib/''${CMAKE_LIBRARY_ARCHITECTURE}/qt5/qml' "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
+  postPatch =
+    ''
+      substituteInPlace src/{Morph,Ubuntu}/CMakeLists.txt \
+        --replace '/usr/lib/''${CMAKE_LIBRARY_ARCHITECTURE}/qt5/qml' "\''${CMAKE_INSTALL_PREFIX}/${qtbase.qtQmlPrefix}"
 
-    # We normally don't want to use absolute paths in desktop file, but this one is special
-    # There appears to be some issue in lomiri-app-launch's lookup of relative Icon entries (while lomiri is starting up?)
-    # that makes the session segfault.
-    # As a compromise, hardcode /run/current-system
-    substituteInPlace src/app/webbrowser/morph-browser.desktop.in.in \
-      --replace 'Icon=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser.svg' 'Icon=/run/current-system/sw/share/icons/hicolor/scalable/apps/morph-browser.svg' \
-      --replace 'X-Lomiri-Splash-Image=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser-splash.svg' 'X-Lomiri-Splash-Image=lomiri-app-launch/splash/morph-browser.svg'
-  '' + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
-    substituteInPlace CMakeLists.txt \
-      --replace 'add_subdirectory(tests)' ""
-  '';
+      # We normally don't want to use absolute paths in desktop file, but this one is special
+      # There appears to be some issue in lomiri-app-launch's lookup of relative Icon entries (while lomiri is starting up?)
+      # that makes the session segfault.
+      # As a compromise, hardcode /run/current-system
+      substituteInPlace src/app/webbrowser/morph-browser.desktop.in.in \
+        --replace 'Icon=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser.svg' 'Icon=/run/current-system/sw/share/icons/hicolor/scalable/apps/morph-browser.svg' \
+        --replace 'X-Lomiri-Splash-Image=@CMAKE_INSTALL_FULL_DATADIR@/morph-browser/morph-browser-splash.svg' 'X-Lomiri-Splash-Image=lomiri-app-launch/splash/morph-browser.svg'
+    ''
+    + lib.optionalString (!finalAttrs.finalPackage.doCheck) ''
+      substituteInPlace CMakeLists.txt \
+        --replace 'add_subdirectory(tests)' ""
+    '';
 
   strictDeps = true;
 
@@ -91,16 +94,21 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   cmakeFlags = [
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (lib.concatStringsSep ";" [
-      # Exclude tests
-      "-E" (lib.strings.escapeShellArg "(${lib.concatStringsSep "|" [
-        # Don't care about linter failures
-        "^flake8"
+    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
+      lib.concatStringsSep ";" [
+        # Exclude tests
+        "-E"
+        (lib.strings.escapeShellArg "(${
+          lib.concatStringsSep "|" [
+            # Don't care about linter failures
+            "^flake8"
 
-        # Runs into ShapeMaterial codepath in lomiri-ui-toolkit which needs OpenGL, see LUITK for details
-        "^tst_QmlTests"
-      ]})")
-    ]))
+            # Runs into ShapeMaterial codepath in lomiri-ui-toolkit which needs OpenGL, see LUITK for details
+            "^tst_QmlTests"
+          ]
+        })")
+      ]
+    ))
   ];
 
   doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
@@ -108,7 +116,18 @@ stdenv.mkDerivation (finalAttrs: {
   preCheck = ''
     export HOME=$TMPDIR
     export QT_PLUGIN_PATH=${listToQtVar qtbase.qtPluginPrefix [ qtbase ]}
-    export QML2_IMPORT_PATH=${listToQtVar qtbase.qtQmlPrefix ([ lomiri-ui-toolkit qtwebengine qtdeclarative qtquickcontrols2 qtsystems ] ++ lomiri-ui-toolkit.propagatedBuildInputs)}
+    export QML2_IMPORT_PATH=${
+      listToQtVar qtbase.qtQmlPrefix (
+        [
+          lomiri-ui-toolkit
+          qtwebengine
+          qtdeclarative
+          qtquickcontrols2
+          qtsystems
+        ]
+        ++ lomiri-ui-toolkit.propagatedBuildInputs
+      )
+    }
   '';
 
   postInstall = ''
@@ -134,7 +153,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Lightweight web browser tailored for Ubuntu Touch";
     homepage = "https://gitlab.com/ubports/development/core/morph-browser";
     changelog = "https://gitlab.com/ubports/development/core/morph-browser/-/blob/${finalAttrs.version}/ChangeLog";
-    license = with licenses; [ gpl3Only cc-by-sa-30 ];
+    license = with licenses; [
+      gpl3Only
+      cc-by-sa-30
+    ];
     mainProgram = "morph-browser";
     maintainers = teams.lomiri.members;
     platforms = platforms.linux;

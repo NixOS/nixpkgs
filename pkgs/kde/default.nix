@@ -68,7 +68,6 @@ let
         selenium-webdriver-at-spi = null; # Used for integration tests that we don't run, stub
 
         alpaka = self.callPackage ./misc/alpaka { };
-        calligra = self.callPackage ./misc/calligra { };
         kdiagram = self.callPackage ./misc/kdiagram { };
         kdevelop-pg-qt = self.callPackage ./misc/kdevelop-pg-qt { };
         kdsoap-ws-discovery-client = self.callPackage ./misc/kdsoap-ws-discovery-client { };
@@ -77,7 +76,6 @@ let
         kio-fuse = self.callPackage ./misc/kio-fuse { };
         klevernotes = self.callPackage ./misc/klevernotes { };
         ktextaddons = self.callPackage ./misc/ktextaddons { };
-        kunifiedpush = self.callPackage ./misc/kunifiedpush { };
         kup = self.callPackage ./misc/kup { };
         marknote = self.callPackage ./misc/marknote { };
         mpvqt = self.callPackage ./misc/mpvqt { };

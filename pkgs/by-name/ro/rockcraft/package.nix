@@ -42,6 +42,7 @@ python3Packages.buildPythonApplication rec {
       pytest-mock
       pytest-subprocess
       pytestCheckHook
+      tabulate
     ]
     ++ [ dpkg ];
 

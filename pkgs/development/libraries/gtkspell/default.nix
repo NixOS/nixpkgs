@@ -1,15 +1,16 @@
-{ stdenv
-, lib
-, fetchurl
-, fetchpatch
-, autoreconfHook
-, docbook_xsl
-, gtk-doc
-, intltool
-, pkg-config
-, aspell
-, enchant
-, gtk2
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  autoreconfHook,
+  docbook_xsl,
+  gtk-doc,
+  intltool,
+  pkg-config,
+  aspell,
+  enchant,
+  gtk2,
 }:
 
 stdenv.mkDerivation rec {

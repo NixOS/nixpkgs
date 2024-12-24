@@ -77,7 +77,7 @@ buildPythonPackage rec {
 
   # fix packaging.ParserSyntaxError, which can't handle comments
   postPatch = ''
-    sed -ie "s/ #.*$//g" requirements*.txt
+    sed -i -e "s/ #.*$//g" requirements*.txt
 
     # they bundle deps?
     rm -rf venv/

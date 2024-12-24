@@ -1,19 +1,21 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, perl
-, which
-, boost
-, rdkafka
-, jansson
-, curl
-, avro-c
-, avro-cpp
-, nix-update-script }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  perl,
+  which,
+  boost,
+  rdkafka,
+  jansson,
+  curl,
+  avro-c,
+  avro-cpp,
+  nix-update-script,
+}:
 
 stdenv.mkDerivation rec {
   pname = "libserdes";
-  version = "7.7.1";
+  version = "7.8.0";
 
   src = fetchFromGitHub {
     owner = "confluentinc";
@@ -22,11 +24,24 @@ stdenv.mkDerivation rec {
     hash = "sha256-rg4SWa9nIDT6JrnnCDwdiFE1cvpUn0HWHn+bPkXMHQ4=";
   };
 
-  outputs = [ "dev" "out" ];
+  outputs = [
+    "dev"
+    "out"
+  ];
 
-  nativeBuildInputs = [ perl which ];
+  nativeBuildInputs = [
+    perl
+    which
+  ];
 
-  buildInputs = [ boost rdkafka jansson curl avro-c avro-cpp ];
+  buildInputs = [
+    boost
+    rdkafka
+    jansson
+    curl
+    avro-c
+    avro-cpp
+  ];
 
   makeFlags = [ "GEN_PKG_CONFIG=y" ];
 

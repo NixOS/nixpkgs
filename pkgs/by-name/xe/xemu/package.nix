@@ -12,7 +12,7 @@
   libpcap,
   libsamplerate,
   libslirp,
-  mesa,
+  libgbm,
   meson,
   ninja,
   openssl,
@@ -27,14 +27,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "xemu";
-  version = "0.7.133";
+  version = "0.7.134";
 
   src = fetchFromGitHub {
     owner = "xemu-project";
     repo = "xemu";
     rev = "v${finalAttrs.version}";
     fetchSubmodules = true;
-    hash = "sha256-Fugy+k8MltU9TMQEx2dPbN+17bd8U31xuhLaJz45UCI=";
+    hash = "sha256-HnTNd1+VDfzetstrsQs/CpyD9XzHQGj0O912I+ejJCE=";
   };
 
   nativeBuildInputs =
@@ -64,7 +64,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpcap
     libsamplerate
     libslirp
-    mesa
+    libgbm
     openssl
     vte
   ];

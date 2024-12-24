@@ -1,7 +1,8 @@
-{ lib
-, buildHomeAssistantComponent
-, fetchFromGitHub
-, midea-beautiful-air
+{
+  lib,
+  buildHomeAssistantComponent,
+  fetchFromGitHub,
+  midea-beautiful-air,
 }:
 
 buildHomeAssistantComponent rec {
@@ -16,7 +17,7 @@ buildHomeAssistantComponent rec {
     hash = "sha256-Fl8qwsW9NdjnYdu7IGQDelXTLqNx5ioUoxkhv+p5L0I=";
   };
 
-  propagatedBuildInputs = [ midea-beautiful-air ];
+  dependencies = [ midea-beautiful-air ];
 
   meta = with lib; {
     description = "Home Assistant custom component adding support for controlling Midea air conditioners and dehumidifiers on local network";

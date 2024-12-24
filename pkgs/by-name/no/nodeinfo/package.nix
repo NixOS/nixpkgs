@@ -23,7 +23,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   meta = {
     mainProgram = "nodeinfo";

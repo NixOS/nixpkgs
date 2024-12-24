@@ -1,5 +1,12 @@
-{ lib, stdenv, fetchurl
-, pkg-config, libxslt, freetype, libpng, libxml2
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  libxslt,
+  freetype,
+  libpng,
+  libxml2,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,7 +19,12 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ libxslt freetype libpng libxml2 ];
+  buildInputs = [
+    libxslt
+    freetype
+    libpng
+    libxml2
+  ];
 
   # fatal error: 'libxml/xpath.h' file not found
   env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${libxml2.dev}/include/libxml2";

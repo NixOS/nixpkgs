@@ -1,28 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, fetchpatch2
-, buildNpmPackage
-, nixosTests
-, gettext
-, python3
-, giflib
-, darwin
-, ghostscript_headless
-, imagemagickBig
-, jbig2enc
-, optipng
-, pngquant
-, qpdf
-, tesseract5
-, unpaper
-, poppler_utils
-, liberation_ttf
-, xcbuild
-, pango
-, pkg-config
-, nltk-data
-, xorg
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchpatch2,
+  buildNpmPackage,
+  nodejs_20,
+  nixosTests,
+  gettext,
+  python3,
+  giflib,
+  darwin,
+  ghostscript_headless,
+  imagemagickBig,
+  jbig2enc,
+  optipng,
+  pngquant,
+  qpdf,
+  tesseract5,
+  unpaper,
+  poppler_utils,
+  liberation_ttf,
+  xcbuild,
+  pango,
+  pkg-config,
+  nltk-data,
+  xorg,
 }:
 
 let
@@ -44,17 +46,21 @@ let
       django = prev.django_5;
 
       # TODO: drop after https://github.com/NixOS/nixpkgs/pull/306556 or similar got merged
-      django-allauth = prev.django-allauth.overridePythonAttrs ({ src, nativeCheckInputs, ... }: let
-        version = "65.0.2";
-      in {
-        inherit version;
-        src = src.override {
-          rev = "refs/tags/${version}";
-          hash = "sha256-GvYdExkNuySrg8ERnWOJxucFe5HVdPAcHfRNeqiVS7M=";
-        };
+      django-allauth = prev.django-allauth.overridePythonAttrs (
+        { src, nativeCheckInputs, ... }:
+        let
+          version = "65.0.2";
+        in
+        {
+          inherit version;
+          src = src.override {
+            rev = "refs/tags/${version}";
+            hash = "sha256-GvYdExkNuySrg8ERnWOJxucFe5HVdPAcHfRNeqiVS7M=";
+          };
 
-        nativeCheckInputs = nativeCheckInputs ++ [ prev.fido2 ];
-      });
+          nativeCheckInputs = nativeCheckInputs ++ [ prev.fido2 ];
+        }
+      );
 
       django-extensions = prev.django-extensions.overridePythonAttrs (_: {
         # fails with: TypeError: 'class Meta' got invalid attribute(s): index_together
@@ -77,7 +83,6 @@ let
     };
   };
 
-
   path = lib.makeBinPath [
     ghostscript_headless
     imagemagickBig
@@ -94,31 +99,39 @@ let
     pname = "paperless-ngx-frontend";
     inherit version src;
 
+    nodejs = nodejs_20;  # does not build with 22
+
     postPatch = ''
       cd src-ui
     '';
 
     npmDepsHash = "sha256-pBCWcdCTQh0N4pRLBWLZXybuhpiat030xvPZ5z7CUJ0=";
 
-    nativeBuildInputs = [
-      pkg-config
-      python3
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      xcbuild
-    ];
+    nativeBuildInputs =
+      [
+        pkg-config
+        python3
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        xcbuild
+      ];
 
-    buildInputs = [
-      pango
-    ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      giflib
-      darwin.apple_sdk.frameworks.CoreText
-    ];
+    buildInputs =
+      [
+        pango
+      ]
+      ++ lib.optionals stdenv.hostPlatform.isDarwin [
+        giflib
+        darwin.apple_sdk.frameworks.CoreText
+      ];
 
     CYPRESS_INSTALL_BINARY = "0";
     NG_CLI_ANALYTICS = "false";
 
     npmBuildFlags = [
-      "--" "--configuration" "production"
+      "--"
+      "--configuration"
+      "production"
     ];
 
     doCheck = true;
@@ -151,9 +164,12 @@ python.pkgs.buildPythonApplication rec {
   ];
 
   postPatch = ''
-    # pytest-xdist makes the tests flaky
+    # pytest-xdist with to many threads makes the tests flaky
+    if (( $NIX_BUILD_CORES > 4)); then
+      NIX_BUILD_CORES=4
+    fi
     substituteInPlace src/setup.cfg \
-      --replace-fail "--numprocesses auto --maxprocesses=16" ""
+      --replace-fail "--numprocesses auto --maxprocesses=16" "--numprocesses $NIX_BUILD_CORES"
   '';
 
   nativeBuildInputs = [
@@ -161,61 +177,63 @@ python.pkgs.buildPythonApplication rec {
     xorg.lndir
   ];
 
-  dependencies = with python.pkgs; [
-    bleach
-    channels
-    channels-redis
-    concurrent-log-handler
-    dateparser
-    django_5
-    django-allauth
-    django-auditlog
-    django-celery-results
-    django-compression-middleware
-    django-cors-headers
-    django-extensions
-    django-filter
-    django-guardian
-    django-multiselectfield
-    django-soft-delete
-    djangorestframework
-    djangorestframework-guardian2
-    drf-writable-nested
-    filelock
-    flower
-    gotenberg-client
-    gunicorn
-    httpx-oauth
-    imap-tools
-    inotifyrecursive
-    jinja2
-    langdetect
-    mysqlclient
-    nltk
-    ocrmypdf
-    pathvalidate
-    pdf2image
-    psycopg
-    python-dateutil
-    python-dotenv
-    python-gnupg
-    python-ipware
-    python-magic
-    pyzbar
-    rapidfuzz
-    redis
-    scikit-learn
-    setproctitle
-    tika-client
-    tqdm
-    uvicorn
-    watchdog
-    whitenoise
-    whoosh
-    zxing-cpp
-  ]
-  ++ redis.optional-dependencies.hiredis
-  ++ uvicorn.optional-dependencies.standard;
+  dependencies =
+    with python.pkgs;
+    [
+      bleach
+      channels
+      channels-redis
+      concurrent-log-handler
+      dateparser
+      django_5
+      django-allauth
+      django-auditlog
+      django-celery-results
+      django-compression-middleware
+      django-cors-headers
+      django-extensions
+      django-filter
+      django-guardian
+      django-multiselectfield
+      django-soft-delete
+      djangorestframework
+      djangorestframework-guardian2
+      drf-writable-nested
+      filelock
+      flower
+      gotenberg-client
+      gunicorn
+      httpx-oauth
+      imap-tools
+      inotifyrecursive
+      jinja2
+      langdetect
+      mysqlclient
+      nltk
+      ocrmypdf
+      pathvalidate
+      pdf2image
+      psycopg
+      python-dateutil
+      python-dotenv
+      python-gnupg
+      python-ipware
+      python-magic
+      pyzbar
+      rapidfuzz
+      redis
+      scikit-learn
+      setproctitle
+      tika-client
+      tqdm
+      uvicorn
+      watchdog
+      whitenoise
+      whoosh
+      zxing-cpp
+    ]
+    ++ redis.optional-dependencies.hiredis
+    ++ uvicorn.optional-dependencies.standard;
 
   postBuild = ''
     # Compile manually because `pythonRecompileBytecodeHook` only works
@@ -229,24 +247,26 @@ python.pkgs.buildPythonApplication rec {
     ${python.pythonOnBuildForHost.interpreter} src/manage.py compilemessages
   '';
 
-  installPhase = let
-    pythonPath = python.pkgs.makePythonPath dependencies;
-  in ''
-    runHook preInstall
+  installPhase =
+    let
+      pythonPath = python.pkgs.makePythonPath dependencies;
+    in
+    ''
+      runHook preInstall
 
-    mkdir -p $out/lib/paperless-ngx/static/frontend
-    cp -r {src,static,LICENSE,gunicorn.conf.py} $out/lib/paperless-ngx
-    lndir -silent ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/frontend
-    chmod +x $out/lib/paperless-ngx/src/manage.py
-    makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
-      --prefix PYTHONPATH : "${pythonPath}" \
-      --prefix PATH : "${path}"
-    makeWrapper ${lib.getExe python.pkgs.celery} $out/bin/celery \
-      --prefix PYTHONPATH : "${pythonPath}:$out/lib/paperless-ngx/src" \
-      --prefix PATH : "${path}"
+      mkdir -p $out/lib/paperless-ngx/static/frontend
+      cp -r {src,static,LICENSE,gunicorn.conf.py} $out/lib/paperless-ngx
+      lndir -silent ${frontend}/lib/paperless-ui/frontend $out/lib/paperless-ngx/static/frontend
+      chmod +x $out/lib/paperless-ngx/src/manage.py
+      makeWrapper $out/lib/paperless-ngx/src/manage.py $out/bin/paperless-ngx \
+        --prefix PYTHONPATH : "${pythonPath}" \
+        --prefix PATH : "${path}"
+      makeWrapper ${lib.getExe python.pkgs.celery} $out/bin/celery \
+        --prefix PYTHONPATH : "${pythonPath}:$out/lib/paperless-ngx/src" \
+        --prefix PATH : "${path}"
 
-    runHook postInstall
-  '';
+      runHook postInstall
+    '';
 
   postFixup = ''
     # Remove tests with samples (~14M)
@@ -263,8 +283,12 @@ python.pkgs.buildPythonApplication rec {
     pytest-httpx
     pytest-mock
     pytest-rerunfailures
+    pytest-xdist
     pytestCheckHook
   ];
+
+  # manually managed in postPatch
+  dontUsePytestXdist = false;
 
   pytestFlagsArray = [
     "src"
@@ -296,8 +320,17 @@ python.pkgs.buildPythonApplication rec {
   doCheck = !stdenv.hostPlatform.isDarwin;
 
   passthru = {
-    inherit python path frontend tesseract5;
-    nltkData = with nltk-data; [ punkt_tab snowball_data stopwords ];
+    inherit
+      python
+      path
+      frontend
+      tesseract5
+      ;
+    nltkData = with nltk-data; [
+      punkt_tab
+      snowball_data
+      stopwords
+    ];
     tests = { inherit (nixosTests) paperless; };
   };
 
@@ -307,6 +340,10 @@ python.pkgs.buildPythonApplication rec {
     changelog = "https://github.com/paperless-ngx/paperless-ngx/releases/tag/v${version}";
     license = licenses.gpl3Only;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ leona SuperSandro2000 erikarvstedt ];
+    maintainers = with maintainers; [
+      leona
+      SuperSandro2000
+      erikarvstedt
+    ];
   };
 }

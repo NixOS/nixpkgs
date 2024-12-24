@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchurl
-, expat
-, libpng
-, udunits
-, netcdf
-, xorg
+{
+  lib,
+  stdenv,
+  fetchurl,
+  expat,
+  libpng,
+  udunits,
+  netcdf,
+  xorg,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

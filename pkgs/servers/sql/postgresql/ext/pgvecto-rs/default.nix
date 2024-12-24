@@ -11,7 +11,7 @@
   postgresql,
   rustPlatform,
   stdenv,
-  substituteAll,
+  replaceVars,
 }:
 
 let
@@ -42,8 +42,7 @@ in
 
     patches = [
       # Tell the `c` crate to use the flags from the rust bindgen hook
-      (substituteAll {
-        src = ./0001-read-clang-flags-from-environment.diff;
+      (replaceVars ./0001-read-clang-flags-from-environment.diff {
         clang = lib.getExe clang;
       })
     ];

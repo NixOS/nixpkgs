@@ -1,25 +1,27 @@
-{ lib
-, fetchurl
-, appimageTools
-, gconf
-, imagemagick
+{
+  lib,
+  fetchurl,
+  appimageTools,
+  gconf,
+  imagemagick,
 }:
 
 let
   pname = "mendeley";
-  version = "2.127.1";
+  version = "2.128.0";
 
   executableName = "${pname}-reference-manager";
 
   src = fetchurl {
     url = "https://static.mendeley.com/bin/desktop/mendeley-reference-manager-${version}-x86_64.AppImage";
-    hash = "sha256-VtGtv9orfOn/DLIrnUdV/fGZeP1ZpC6b5h/IG8RzaOg=";
+    hash = "sha256-V0UF52EVvxqFtBWOshiLO923osiKd0KJPc4gDadkta0=";
   };
 
   appimageContents = appimageTools.extractType2 {
     inherit pname version src;
   };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
@@ -38,7 +40,7 @@ in appimageTools.wrapType2 {
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
     license = licenses.unfree;
     platforms = [ "x86_64-linux" ];
-    maintainers  = with maintainers; [ atila ];
+    maintainers = with maintainers; [ atila ];
     mainProgram = "mendeley-reference-manager";
   };
 

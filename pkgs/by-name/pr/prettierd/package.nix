@@ -1,55 +1,49 @@
 {
   lib,
-  mkYarnPackage,
+  stdenv,
   fetchFromGitHub,
-  makeWrapper,
-  nodejs,
   fetchYarnDeps,
+  yarnConfigHook,
+  yarnBuildHook,
+  yarnInstallHook,
+  nodejs,
 }:
-mkYarnPackage rec {
+
+stdenv.mkDerivation (finalAttrs: {
   pname = "prettierd";
   version = "0.25.3";
 
   src = fetchFromGitHub {
     owner = "fsouza";
     repo = "prettierd";
-    rev = "v${version}";
+    rev = "refs/tags/v${finalAttrs.version}";
     hash = "sha256-3lvFZ5/p+1kPnHIR2PlQtCY3SVo1rs8IuBigLaabxAE=";
   };
 
   offlineCache = fetchYarnDeps {
-    yarnLock = src + "/yarn.lock";
+    yarnLock = finalAttrs.src + "/yarn.lock";
     hash = "sha256-Ti2b102pzUKB6Xy3LwZ7DlrnW0cRscgNLTUIAKz+6Us=";
   };
 
-  packageJSON = ./package.json;
+  strictDeps = true;
 
-  nativeBuildInputs = [ makeWrapper ];
-
-  buildPhase = ''
-    runHook preBuild
-    export HOME=$(mktemp -d)
-    yarn --offline build
-    runHook postBuild
-  '';
-
-  # prettierd needs to be wrapped with nodejs so that it can be executed
-  postInstall = ''
-    wrapProgram "$out/bin/prettierd" --prefix PATH : "${nodejs}/bin"
-  '';
-
-  doDist = false;
+  nativeBuildInputs = [
+    yarnConfigHook
+    yarnBuildHook
+    yarnInstallHook
+    nodejs
+  ];
 
   meta = {
     mainProgram = "prettierd";
     description = "Prettier, as a daemon, for improved formatting speed";
     homepage = "https://github.com/fsouza/prettierd";
     license = lib.licenses.isc;
-    changelog = "https://github.com/fsouza/prettierd/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/fsouza/prettierd/blob/${finalAttrs.src.rev}/CHANGELOG.md";
     platforms = with lib.platforms; linux ++ darwin;
     maintainers = with lib.maintainers; [
       NotAShelf
       n3oney
     ];
   };
-}
+})

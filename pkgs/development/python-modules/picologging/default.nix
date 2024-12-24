@@ -43,7 +43,7 @@ buildPythonPackage rec {
     hypothesis
   ];
 
-  pythonImportCheck = [ "picologging" ];
+  pythonImportsCheck = [ "picologging" ];
 
   meta = {
     homepage = "https://github.com/microsoft/picologging";

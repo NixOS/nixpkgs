@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, imagemagick
-, libXpm
-, libXmu
-, libXi
-, libXp
-, Xaw3d
-, libXaw
-, libXft
-, fig2dev
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  imagemagick,
+  libXpm,
+  libXmu,
+  libXi,
+  libXp,
+  Xaw3d,
+  libXaw,
+  libXft,
+  fig2dev,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,7 +23,10 @@ stdenv.mkDerivation rec {
     hash = "sha256-E+2dBNG7wt7AnafvSc7sJ4OC0pD2zZJkdMLy0Bb+wvc=";
   };
 
-  nativeBuildInputs = [ imagemagick makeWrapper ];
+  nativeBuildInputs = [
+    imagemagick
+    makeWrapper
+  ];
 
   buildInputs = [
     libXpm
@@ -66,6 +70,11 @@ stdenv.mkDerivation rec {
       Note that you need to have the <literal>netpbm</literal> tools
       in your path to export bitmaps.
     '';
-    inherit (fig2dev.meta) license homepage platforms maintainers;
+    inherit (fig2dev.meta)
+      license
+      homepage
+      platforms
+      maintainers
+      ;
   };
 }

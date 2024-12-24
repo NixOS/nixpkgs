@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitLab, installShellFiles }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitLab,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "obfs4";
@@ -17,7 +22,10 @@ buildGoModule rec {
 
   vendorHash = "sha256-iR3+ZMEF0SB3EoLTf2gtqTe3CQcjtDRhfwwbwGj3pXo=";
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   subPackages = [ "cmd/lyrebird" ];
 
@@ -45,6 +53,10 @@ buildGoModule rec {
     maintainers = with maintainers; [ thoughtpolice ];
     mainProgram = "lyrebird";
     changelog = "https://gitlab.torproject.org/tpo/anti-censorship/pluggable-transports/lyrebird/-/raw/${src.rev}/ChangeLog";
-    license = with lib.licenses; [ bsd2 bsd3 gpl3 ];
+    license = with lib.licenses; [
+      bsd2
+      bsd3
+      gpl3
+    ];
   };
 }

@@ -1,85 +1,88 @@
-{ atk
-, cacert
-, dbus
-, cinnamon-control-center
-, cinnamon-desktop
-, cinnamon-menus
-, cinnamon-session
-, cinnamon-translations
-, cjs
-, evolution-data-server
-, fetchFromGitHub
-, gcr
-, gdk-pixbuf
-, gettext
-, libgnomekbd
-, glib
-, gobject-introspection
-, gsound
-, gtk3
-, intltool
-, json-glib
-, libsecret
-, libstartup_notification
-, libXtst
-, libXdamage
-, mesa
-, muffin
-, networkmanager
-, pkg-config
-, polkit
-, lib
-, stdenv
-, wrapGAppsHook3
-, libxml2
-, gtk-doc
-, caribou
-, python3
-, keybinder3
-, cairo
-, xapp
-, upower
-, nemo
-, libnotify
-, accountsservice
-, gnome-online-accounts
-, glib-networking
-, pciutils
-, timezonemap
-, libnma
-, meson
-, ninja
-, gst_all_1
-, perl
+{
+  atk,
+  cacert,
+  dbus,
+  cinnamon-control-center,
+  cinnamon-desktop,
+  cinnamon-menus,
+  cinnamon-session,
+  cinnamon-translations,
+  cjs,
+  evolution-data-server,
+  fetchFromGitHub,
+  gcr,
+  gdk-pixbuf,
+  gettext,
+  libgnomekbd,
+  glib,
+  gobject-introspection,
+  gsound,
+  gtk3,
+  intltool,
+  json-glib,
+  libsecret,
+  libstartup_notification,
+  libXtst,
+  libXdamage,
+  libgbm,
+  muffin,
+  networkmanager,
+  pkg-config,
+  polkit,
+  lib,
+  stdenv,
+  wrapGAppsHook3,
+  libxml2,
+  gtk-doc,
+  caribou,
+  python3,
+  keybinder3,
+  cairo,
+  xapp,
+  upower,
+  nemo,
+  libnotify,
+  accountsservice,
+  gnome-online-accounts,
+  glib-networking,
+  pciutils,
+  timezonemap,
+  libnma,
+  meson,
+  ninja,
+  gst_all_1,
+  perl,
 }:
 
 let
-  pythonEnv = python3.withPackages (pp: with pp; [
-    dbus-python
-    setproctitle
-    pygobject3
-    pycairo
-    python-xapp
-    pillow
-    pyinotify # for looking-glass
-    pytz
-    tinycss2
-    python-pam
-    pexpect
-    distro
-    requests
-  ]);
+  pythonEnv = python3.withPackages (
+    pp: with pp; [
+      dbus-python
+      setproctitle
+      pygobject3
+      pycairo
+      python-xapp
+      pillow
+      pyinotify # for looking-glass
+      pytz
+      tinycss2
+      python-pam
+      pexpect
+      distro
+      requests
+    ]
+  );
 in
 # TODO (after 25.05 branch-off): Rename to pkgs.cinnamon
 stdenv.mkDerivation rec {
   pname = "cinnamon-common";
-  version = "6.4.2";
+  version = "6.4.3";
 
   src = fetchFromGitHub {
     owner = "linuxmint";
     repo = "cinnamon";
     rev = version;
-    hash = "sha256-r5cSm/a+xtHwwAHQmdgviDAN3nnMAnXGY/p+ER1/gbk=";
+    hash = "sha256-Nq4CFLmvgyPFg+mALE1UYauWAR7ZjtJGJOSChbIjm4g=";
   };
 
   patches = [
@@ -106,7 +109,7 @@ stdenv.mkDerivation rec {
     libstartup_notification
     libXtst
     libXdamage
-    mesa
+    libgbm
     muffin
     networkmanager
     polkit
@@ -198,7 +201,11 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    providedSessions = [ "cinnamon" "cinnamon2d" "cinnamon-wayland" ];
+    providedSessions = [
+      "cinnamon"
+      "cinnamon2d"
+      "cinnamon-wayland"
+    ];
   };
 
   meta = with lib; {

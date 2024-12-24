@@ -1,21 +1,27 @@
-{ lib
-, stdenv
-, buildNpmPackage
-, fetchFromGitHub
-, copyDesktopItems
-, makeDesktopItem
-, makeWrapper
-, libpng
-, libX11
-, libXi
-, libXtst
-, zlib
-, darwin
-, electron
+{
+  lib,
+  stdenv,
+  buildNpmPackage,
+  fetchFromGitHub,
+  copyDesktopItems,
+  makeDesktopItem,
+  makeWrapper,
+  libpng,
+  libX11,
+  libXi,
+  libXtst,
+  zlib,
+  darwin,
+  electron,
 }:
 
 let
-  inherit (darwin.apple_sdk.frameworks) Carbon CoreFoundation ApplicationServices OpenGL;
+  inherit (darwin.apple_sdk.frameworks)
+    Carbon
+    CoreFoundation
+    ApplicationServices
+    OpenGL
+    ;
 in
 buildNpmPackage rec {
   pname = "jitsi-meet-electron";
@@ -28,25 +34,29 @@ buildNpmPackage rec {
     hash = "sha256-jnt+aHkCnIj4GGFbAk6AlVhg0rvzFhGCELAaYMCZx88=";
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
-    copyDesktopItems
-  ];
+  nativeBuildInputs =
+    [
+      makeWrapper
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
+      copyDesktopItems
+    ];
 
   # robotjs node-gyp dependencies
-  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-    libpng
-    libX11
-    libXi
-    libXtst
-    zlib
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Carbon
-    CoreFoundation
-    ApplicationServices
-    OpenGL
-  ];
+  buildInputs =
+    lib.optionals stdenv.hostPlatform.isLinux [
+      libpng
+      libX11
+      libXi
+      libXtst
+      zlib
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Carbon
+      CoreFoundation
+      ApplicationServices
+      OpenGL
+    ];
 
   npmDepsHash = "sha256-zmnxNJdalspZib1PGZN0YBIauJ+gaxs6Iir94cPRNtU=";
 
@@ -113,7 +123,13 @@ buildNpmPackage rec {
       icon = "jitsi-meet-electron";
       desktopName = "Jitsi Meet";
       comment = meta.description;
-      categories = [ "VideoConference" "AudioVideo" "Audio" "Video" "Network" ];
+      categories = [
+        "VideoConference"
+        "AudioVideo"
+        "Audio"
+        "Video"
+        "Network"
+      ];
       mimeTypes = [ "x-scheme-handler/jitsi-meet" ];
       terminal = false;
     })

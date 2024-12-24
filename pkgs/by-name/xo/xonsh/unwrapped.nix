@@ -12,7 +12,7 @@ let
 
   argset = {
     pname = "xonsh";
-    version = "0.18.4";
+    version = "0.19.0";
     pyproject = true;
 
     # PyPI package ships incomplete tests
@@ -20,7 +20,7 @@ let
       owner = "xonsh";
       repo = "xonsh";
       rev = "refs/tags/${argset.version}";
-      hash = "sha256-L5UwmwwM42E3l+sIBwXgMf/q5r22cUoRbE2cqM09bZA=";
+      hash = "sha256-rt402MKnhjC/AYz9Rm6B5RkivcVxveVW2rM/nT/xcNo=";
     };
 
     nativeBuildInputs = with pythonPackages; [
@@ -94,11 +94,11 @@ let
     env.LC_ALL = "en_US.UTF-8";
 
     postPatch = ''
-      sed -ie 's|/bin/ls|${lib.getExe' coreutils "ls"}|' tests/test_execer.py
-      sed -ie 's|SHELL=xonsh|SHELL=$out/bin/xonsh|' tests/test_integrations.py
+      sed -i -e 's|/bin/ls|${lib.getExe' coreutils "ls"}|' tests/test_execer.py
+      sed -i -e 's|SHELL=xonsh|SHELL=$out/bin/xonsh|' tests/test_integrations.py
 
       for script in tests/test_integrations.py scripts/xon.sh $(find -name "*.xsh"); do
-        sed -ie 's|/usr/bin/env|${lib.getExe' coreutils "env"}|' $script
+        sed -i -e 's|/usr/bin/env|${lib.getExe' coreutils "env"}|' $script
       done
       patchShebangs .
     '';

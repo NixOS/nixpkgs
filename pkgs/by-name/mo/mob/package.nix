@@ -1,21 +1,22 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, stdenv
-, withSpeech ? !stdenv.hostPlatform.isDarwin
-, makeWrapper
-, espeak-ng
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  stdenv,
+  withSpeech ? !stdenv.hostPlatform.isDarwin,
+  makeWrapper,
+  espeak-ng,
 }:
 
 buildGoModule rec {
   pname = "mob";
-  version = "5.3.1";
+  version = "5.3.3";
 
   src = fetchFromGitHub {
     owner = "remotemobprogramming";
     repo = "mob";
     rev = "v${version}";
-    hash = "sha256-+zNlxIvIvPyz0vA9IPaMzP8wfEXwNyRcvp45ohzoxQQ=";
+    hash = "sha256-ibsaejhqvndeIJMCDIuTwrITtFrI+LJT8IZuAlTZE3E=";
   };
 
   vendorHash = null;
@@ -24,7 +25,10 @@ buildGoModule rec {
     makeWrapper
   ];
 
-  ldflags = [ "-s" "-w" ];
+  ldflags = [
+    "-s"
+    "-w"
+  ];
 
   doCheck = false;
 

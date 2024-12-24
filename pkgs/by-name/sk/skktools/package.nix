@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, pkg-config, gdbm, glib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  pkg-config,
+  gdbm,
+  glib,
+}:
 
 # Note (2017-10-24, yuriaisaka):
 # - Version 1.3.3 dates from Jul. 19, 2013.
@@ -14,7 +21,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "skk-dev";
     repo = "skktools";
-    rev = "skktools-${lib.replaceStrings ["."] ["_"] version}";
+    rev = "skktools-${lib.replaceStrings [ "." ] [ "_" ] version}";
     sha256 = "1zway8jsm18279xq8zlpr84iqiw373x3v0ysay74n9bjqxbl234a";
   };
   # # See "12.2. Package naming"
@@ -28,7 +35,10 @@ stdenv.mkDerivation rec {
   # };
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ gdbm glib ];
+  buildInputs = [
+    gdbm
+    glib
+  ];
 
   meta = {
     description = "Collection of tools to edit SKK dictionaries";

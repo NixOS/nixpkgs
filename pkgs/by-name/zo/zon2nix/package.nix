@@ -1,8 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, zig_0_11
-, nix
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  zig_0_11,
+  nix,
+  apple-sdk_11,
 }:
 
 stdenv.mkDerivation rec {
@@ -19,6 +21,8 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     zig_0_11.hook
   ];
+
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   zigBuildFlags = [
     "-Dnix=${lib.getExe nix}"

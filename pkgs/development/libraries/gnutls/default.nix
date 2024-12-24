@@ -120,6 +120,8 @@ stdenv.mkDerivation rec {
       "--enable-ktls"
     ] ++ lib.optionals (stdenv.hostPlatform.isMinGW) [
       "--disable-doc"
+    ] ++ lib.optionals (stdenv.hostPlatform.isLinux && tpmSupport) [
+      "--with-trousers-lib=${trousers}/lib/libtspi.so"
     ];
 
   enableParallelBuilding = true;

@@ -1,47 +1,53 @@
-{ lib
-, stdenv
-, fetchurl
-, bzip2
-, cmake
-, curl
-, db
-, docbook_xml_dtd_45
-, docbook_xsl
-, doxygen
-, dpkg
-, gettext
-, gnutls
-, gtest
-, libgcrypt
-, libgpg-error
-, libseccomp
-, libtasn1
-, libxslt
-, lz4
-, p11-kit
-, perlPackages
-, pkg-config
-, triehash
-, udev
-, w3m
-, xxHash
-, xz
-, zstd
-, withDocs ? true
-, withNLS ? true
+{
+  lib,
+  stdenv,
+  fetchurl,
+  bzip2,
+  cmake,
+  curl,
+  db,
+  docbook_xml_dtd_45,
+  docbook_xsl,
+  doxygen,
+  dpkg,
+  gettext,
+  gnutls,
+  gtest,
+  libgcrypt,
+  libgpg-error,
+  libseccomp,
+  libtasn1,
+  libxslt,
+  lz4,
+  p11-kit,
+  perlPackages,
+  pkg-config,
+  triehash,
+  udev,
+  w3m,
+  xxHash,
+  xz,
+  zstd,
+  withDocs ? true,
+  withNLS ? true,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "apt";
-  version = "2.9.16";
+  version = "2.9.17";
 
   src = fetchurl {
     url = "mirror://debian/pool/main/a/apt/apt_${finalAttrs.version}.tar.xz";
-    hash = "sha256-9ncx162Jm4WZBYFPvtO03ic8/rhcGEUEPxR4x1LsnvQ=";
+    hash = "sha256-MKD1u2blDmY1XqqBAJcZL5d9/rXCqle5xPWYcL57DQQ=";
   };
 
   # cycle detection; lib can't be split
-  outputs = [ "out" "dev" "doc" "man" ];
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "man"
+  ];
 
   nativeBuildInputs = [
     cmake
@@ -51,35 +57,38 @@ stdenv.mkDerivation (finalAttrs: {
     triehash
   ];
 
-  buildInputs = [
-    bzip2
-    curl
-    db
-    dpkg
-    gnutls
-    libgcrypt
-    libgpg-error
-    libseccomp
-    libtasn1
-    lz4
-    p11-kit
-    perlPackages.perl
-    udev
-    xxHash
-    xz
-    zstd
-  ] ++ lib.optionals withDocs [
-    docbook_xml_dtd_45
-    doxygen
-    perlPackages.Po4a
-    w3m
-  ] ++ lib.optionals withNLS [
-    gettext
-  ];
+  buildInputs =
+    [
+      bzip2
+      curl
+      db
+      dpkg
+      gnutls
+      libgcrypt
+      libgpg-error
+      libseccomp
+      libtasn1
+      lz4
+      p11-kit
+      perlPackages.perl
+      udev
+      xxHash
+      xz
+      zstd
+    ]
+    ++ lib.optionals withDocs [
+      docbook_xml_dtd_45
+      doxygen
+      perlPackages.Po4a
+      w3m
+    ]
+    ++ lib.optionals withNLS [
+      gettext
+    ];
 
   cmakeFlags = [
     (lib.cmakeOptionType "filepath" "BERKELEY_INCLUDE_DIRS" "${lib.getDev db}/include")
-    (lib.cmakeOptionType "filepath" "DOCBOOK_XSL""${docbook_xsl}/share/xml/docbook-xsl")
+    (lib.cmakeOptionType "filepath" "DOCBOOK_XSL" "${docbook_xsl}/share/xml/docbook-xsl")
     (lib.cmakeOptionType "filepath" "GNUTLS_INCLUDE_DIR" "${lib.getDev gnutls}/include")
     (lib.cmakeFeature "DROOT_GROUP" "root")
     (lib.cmakeBool "USE_NLS" withNLS)

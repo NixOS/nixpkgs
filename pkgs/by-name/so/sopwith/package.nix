@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, glib
-, SDL2
-, libGL
-, pkg-config
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  glib,
+  SDL2,
+  libGL,
+  pkg-config,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sopwith";
-  version = "2.6.0";
+  version = "2.7.0";
 
   src = fetchFromGitHub {
     owner = "fragglet";
     repo = "sdl-sopwith";
     rev = "refs/tags/sdl-sopwith-${version}";
-    hash = "sha256-sjg61QgcQDSQ/qrR+4PEZIf8OOnGBZvUSLCKGpS1bwg=";
+    hash = "sha256-Ah6Nv39HkYvtD/Go37G3tHowEVGLvtueoBRpi7i9HLY=";
   };
 
   nativeBuildInputs = [

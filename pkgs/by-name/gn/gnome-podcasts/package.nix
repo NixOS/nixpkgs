@@ -1,24 +1,25 @@
-{ stdenv
-, lib
-, rustPlatform
-, fetchFromGitLab
-, cargo
-, meson
-, ninja
-, gettext
-, pkg-config
-, rustc
-, glib
-, gtk4
-, libadwaita
-, appstream-glib
-, desktop-file-utils
-, dbus
-, openssl
-, glib-networking
-, sqlite
-, gst_all_1
-, wrapGAppsHook4
+{
+  stdenv,
+  lib,
+  rustPlatform,
+  fetchFromGitLab,
+  cargo,
+  meson,
+  ninja,
+  gettext,
+  pkg-config,
+  rustc,
+  glib,
+  gtk4,
+  libadwaita,
+  appstream-glib,
+  desktop-file-utils,
+  dbus,
+  openssl,
+  glib-networking,
+  sqlite,
+  gst_all_1,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {
@@ -73,7 +74,7 @@ stdenv.mkDerivation rec {
     mainProgram = "gnome-podcasts";
     homepage = "https://apps.gnome.org/Podcasts/";
     license = lib.licenses.gpl3Plus;
-    maintainers = lib.teams.gnome.members;
+    maintainers = lib.teams.gnome.members ++ lib.teams.gnome-circle.members;
     platforms = lib.platforms.unix;
     broken = stdenv.hostPlatform.isDarwin; # never built on Hydra https://hydra.nixos.org/job/nixpkgs/trunk/gnome-podcasts.x86_64-darwin
   };

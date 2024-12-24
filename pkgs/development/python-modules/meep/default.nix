@@ -126,7 +126,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     mpiCheckPhaseHook
   ];
-  pythonImportCheck = [
+  pythonImportsCheck = [
     "meep.mpb"
   ];
   checkPhase = ''

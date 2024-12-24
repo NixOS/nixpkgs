@@ -1,31 +1,32 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cargo
-, desktop-file-utils
-, glib
-, gtk4
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wrapGAppsHook4
-, gtksourceview5
-, libadwaita
-, libpanel
-, vte-gtk4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cargo,
+  desktop-file-utils,
+  glib,
+  gtk4,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wrapGAppsHook4,
+  gtksourceview5,
+  libadwaita,
+  libpanel,
+  vte-gtk4,
 }:
 
 stdenv.mkDerivation rec {
   pname = "pods";
-  version = "2.0.1-unstable-2024-08-11";
+  version = "2.1.2";
 
   src = fetchFromGitHub {
     owner = "marhkb";
     repo = pname;
-    rev = "146a85b4860375ac0a5be8d7be57fb12753a3c42";
-    sha256 = "sha256-KaS38XC+V3jRPPTnI4UqMc9KGAC7INHMu47LVo9YP44=";
+    rev = "v${version}";
+    sha256 = "sha256-S84Qb+hySjIxcznuA7Sh8n9XFvdZpf32Yznb1Sj+owY=";
   };
 
   cargoDeps = rustPlatform.importCargoLock {

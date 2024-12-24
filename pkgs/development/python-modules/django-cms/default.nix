@@ -89,7 +89,7 @@ buildPythonPackage rec {
     });
   };
 
-  pythonImportCheck = [ "cms" ];
+  pythonImportsCheck = [ "cms" ];
 
   meta = {
     description = "Lean enterprise content management powered by Django";

@@ -1,5 +1,5 @@
 { lib
-, gcc12Stdenv
+, stdenv
 , fetchFromGitHub
 , fetchurl
 , cudaSupport ? opencv.cudaSupport or false
@@ -27,7 +27,7 @@
 , protobuf
 , pugixml
 , snappy
-, tbb_2021_5
+, tbb_2022_0
 , cudaPackages
 }:
 
@@ -35,8 +35,6 @@ let
   inherit (lib)
     cmakeBool
   ;
-
-  stdenv = gcc12Stdenv;
 
   # prevent scons from leaking in the default python version
   scons' = scons.override { inherit python3Packages; };
@@ -60,14 +58,14 @@ in
 
 stdenv.mkDerivation rec {
   pname = "openvino";
-  version = "2024.5.0";
+  version = "2024.6.0";
 
   src = fetchFromGitHub {
     owner = "openvinotoolkit";
     repo = "openvino";
     rev = "refs/tags/${version}";
     fetchSubmodules = true;
-    hash = "sha256-qRa6vTwTEWiSH57HThT2oGhJqhHwFLIqNsU1eCSLwLs=";
+    hash = "sha256-GmbRuFM5L60vQNJLCkva1NzBWWKXK674xjMUpME4o4c=";
   };
 
   outputs = [
@@ -153,7 +151,7 @@ stdenv.mkDerivation rec {
     opencv.cxxdev
     pugixml
     snappy
-    tbb_2021_5
+    tbb_2022_0
   ] ++ lib.optionals cudaSupport [
     cudaPackages.cuda_cudart
   ];

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchsvn, autoreconfHook }:
+{
+  lib,
+  stdenv,
+  fetchsvn,
+  autoreconfHook,
+}:
 
 stdenv.mkDerivation {
   pname = "srm";

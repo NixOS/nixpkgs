@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "mashumaro";
-  version = "3.14";
+  version = "3.15";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "Fatal1ty";
     repo = "mashumaro";
     rev = "refs/tags/v${version}";
-    hash = "sha256-0THj22KdMvD5O3dNwXKxs2wRIJziPmojLo4BPa3fZ3Y=";
+    hash = "sha256-Zv2FijxYOLGflJ3bc3udkM3SXgHHzHIeCGHlfybyLGE=";
   };
 
   build-system = [ setuptools ];

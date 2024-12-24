@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, coreutils
-, gawk
-, gnugrep
-, gnused
-, rofi
-, todo-txt-cli
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  coreutils,
+  gawk,
+  gnugrep,
+  gnused,
+  rofi,
+  todo-txt-cli,
 }:
 
 stdenv.mkDerivation rec {
@@ -29,7 +30,16 @@ stdenv.mkDerivation rec {
 
   postFixup = ''
     patchShebangs $out/bin
-    wrapProgram $out/bin/todofi.sh --prefix PATH : "${lib.makeBinPath [ coreutils gawk gnugrep gnused rofi todo-txt-cli ]}"
+    wrapProgram $out/bin/todofi.sh --prefix PATH : "${
+      lib.makeBinPath [
+        coreutils
+        gawk
+        gnugrep
+        gnused
+        rofi
+        todo-txt-cli
+      ]
+    }"
   '';
 
   meta = with lib; {

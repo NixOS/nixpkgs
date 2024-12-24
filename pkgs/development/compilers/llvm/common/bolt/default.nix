@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   inherit version patches;
 
   # Blank llvm dir just so relative path works
-  src = runCommand "bolt-src-${finalAttrs.version}" { } (
+  src = runCommand "bolt-src-${finalAttrs.version}" { inherit (monorepoSrc) passthru; } (
     ''
       mkdir $out
     ''

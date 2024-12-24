@@ -1,4 +1,9 @@
-{ lib, rustPlatform, fetchFromGitHub, llvmPackages }:
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  llvmPackages,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "parinfer-rust";
@@ -13,7 +18,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-PW9LIQamQfusaijyJ2R9xe29LhM0GNf9BdxI9vkjVdE=";
 
-  nativeBuildInputs = [ llvmPackages.clang rustPlatform.bindgenHook ];
+  nativeBuildInputs = [
+    llvmPackages.clang
+    rustPlatform.bindgenHook
+  ];
 
   postInstall = ''
     mkdir -p $out/share/kak/autoload/plugins

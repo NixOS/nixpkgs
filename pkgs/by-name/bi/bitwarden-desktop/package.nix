@@ -1,26 +1,26 @@
-{ lib
-, buildNpmPackage
-, cargo
-, copyDesktopItems
-, electron_32
-, fetchFromGitHub
-, glib
-, gnome-keyring
-, gtk3
-, jq
-, libsecret
-, makeDesktopItem
-, makeWrapper
-, napi-rs-cli
-, nix-update-script
-, nodejs_20
-, patchutils_0_4_2
-, pkg-config
-, python3
-, runCommand
-, rustc
-, rustPlatform
-, stdenv
+{
+  lib,
+  buildNpmPackage,
+  cargo,
+  copyDesktopItems,
+  electron_32,
+  fetchFromGitHub,
+  glib,
+  gnome-keyring,
+  gtk3,
+  jq,
+  libsecret,
+  makeDesktopItem,
+  makeWrapper,
+  napi-rs-cli,
+  nix-update-script,
+  nodejs_20,
+  patchutils_0_4_2,
+  pkg-config,
+  runCommand,
+  rustc,
+  rustPlatform,
+  stdenv,
 }:
 
 let
@@ -28,20 +28,24 @@ let
   icon = "bitwarden";
   electron = electron_32;
 
-  bitwardenDesktopNativeArch = {
-    aarch64 = "arm64";
-    x86_64  = "x64";
-  }.${stdenv.hostPlatform.parsed.cpu.name} or (throw "bitwarden-desktop: unsupported CPU family ${stdenv.hostPlatform.parsed.cpu.name}");
+  bitwardenDesktopNativeArch =
+    {
+      aarch64 = "arm64";
+      x86_64 = "x64";
+    }
+    .${stdenv.hostPlatform.parsed.cpu.name}
+      or (throw "bitwarden-desktop: unsupported CPU family ${stdenv.hostPlatform.parsed.cpu.name}");
 
-in buildNpmPackage rec {
+in
+buildNpmPackage rec {
   pname = "bitwarden-desktop";
-  version = "2024.11.1";
+  version = "2024.12.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "desktop-v${version}";
-    hash = "sha256-4QTQgW8k3EMf07Xqs2B+VXQOUPzoOgaNvoC02x4zvu8=";
+    hash = "sha256-1XzIrZOTcFEuY/WqPGcFESBAZOiFcHA4ZvGXhDM7a54=";
   };
 
   patches = [
@@ -61,25 +65,24 @@ in buildNpmPackage rec {
   nodejs = nodejs_20;
 
   makeCacheWritable = true;
-  npmFlags = [ "--engine-strict" "--legacy-peer-deps" ];
+  npmFlags = [
+    "--engine-strict"
+    "--legacy-peer-deps"
+  ];
   npmWorkspace = "apps/desktop";
-  npmDepsHash = "sha256-YzhCyNMvfXGmgOpl3qWj1Pqd1hY8CJ9QLwQds5ZMnqg=";
+  npmDepsHash = "sha256-EtIcqbubAYN9I9wbw17oHiVshd3GtQayFtdgqWP7Pgg=";
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${pname}-${version}";
-    inherit src;
-    patches = map
-      (patch: runCommand
-        (builtins.baseNameOf patch)
-        { nativeBuildInputs = [ patchutils_0_4_2 ]; }
-        ''
-          < ${patch} filterdiff -p1 --include=${lib.escapeShellArg cargoRoot}'/*' > $out
-        ''
-      )
-      patches;
+  cargoDeps = rustPlatform.fetchCargoVendor {
+    inherit pname version src;
+    patches = map (
+      patch:
+      runCommand (builtins.baseNameOf patch) { nativeBuildInputs = [ patchutils_0_4_2 ]; } ''
+        < ${patch} filterdiff -p1 --include=${lib.escapeShellArg cargoRoot}'/*' > $out
+      ''
+    ) patches;
     patchFlags = [ "-p4" ];
     sourceRoot = "${src.name}/${cargoRoot}";
-    hash = "sha256-aurjpVzWET30O+ysyE4ZzauMe8kHjOL169tfKUR1Vpg=";
+    hash = "sha256-Fh6pbmFof/qIhVETtBA1fGlC45fuu1n7g9hosvmfHZc=";
   };
   cargoRoot = "apps/desktop/desktop_native";
 
@@ -92,7 +95,6 @@ in buildNpmPackage rec {
     makeWrapper
     napi-rs-cli
     pkg-config
-    (python3.withPackages (ps: with ps; [ setuptools ]))
     rustc
     rustPlatform.cargoCheckHook
     rustPlatform.cargoSetupHook
@@ -197,7 +199,11 @@ in buildNpmPackage rec {
 
   passthru = {
     updateScript = nix-update-script {
-      extraArgs = [ "--commit" "--version=stable" "--version-regex=^desktop-v(.*)$" ];
+      extraArgs = [
+        "--commit"
+        "--version=stable"
+        "--version-regex=^desktop-v(.*)$"
+      ];
     };
   };
 
@@ -207,7 +213,10 @@ in buildNpmPackage rec {
     homepage = "https://bitwarden.com";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ amarshall ];
-    platforms = [ "x86_64-linux" "aarch64-linux" ];
+    platforms = [
+      "x86_64-linux"
+      "aarch64-linux"
+    ];
     mainProgram = "bitwarden";
   };
 }

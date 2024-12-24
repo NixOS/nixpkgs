@@ -3,6 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   flit-core,
   matplotlib,
   pytest-xdist,
@@ -27,6 +28,15 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-aGIVcdG/XN999nYBHh3lJqGa3QVt0j8kmzaxdkULznY=";
   };
+
+  patches = [
+    # https://github.com/mwaskom/seaborn/pull/3685
+    (fetchpatch2 {
+      name = "numpy_2-compatibility.patch";
+      url = "https://github.com/mwaskom/seaborn/commit/58f170fe799ef496adae19925d7d4f0f14f8da95.patch";
+      hash = "sha256-/a3G+kNIRv8Oa4a0jPGnL2Wvx/9umMoiq1BXcXpehAg=";
+    })
+  ];
 
   nativeBuildInputs = [ flit-core ];
 

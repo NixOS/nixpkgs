@@ -1,21 +1,22 @@
-{ lib
-, python3
-, fetchFromGitHub
-, wrapGAppsHook4
-, appstream-glib
-, desktop-file-utils
-, gettext
-, gtk4
-, libadwaita
-, meson
-, ninja
-, pkg-config
-, gobject-introspection
-, jpegoptim
-, libwebp
-, optipng
-, pngquant
-, oxipng
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  wrapGAppsHook4,
+  appstream-glib,
+  desktop-file-utils,
+  gettext,
+  gtk4,
+  libadwaita,
+  meson,
+  ninja,
+  pkg-config,
+  gobject-introspection,
+  jpegoptim,
+  libwebp,
+  optipng,
+  pngquant,
+  oxipng,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -63,7 +64,15 @@ python3.pkgs.buildPythonApplication rec {
   preFixup = ''
     makeWrapperArgs+=(
       "''${gappsWrapperArgs[@]}"
-      "--prefix" "PATH" ":" "${lib.makeBinPath [ jpegoptim libwebp optipng pngquant oxipng ]}"
+      "--prefix" "PATH" ":" "${
+        lib.makeBinPath [
+          jpegoptim
+          libwebp
+          optipng
+          pngquant
+          oxipng
+        ]
+      }"
     )
   '';
 
@@ -72,6 +81,6 @@ python3.pkgs.buildPythonApplication rec {
     mainProgram = "curtail";
     homepage = "https://github.com/Huluti/Curtail";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ aleksana ];
+    maintainers = lib.teams.gnome-circle.members;
   };
 }

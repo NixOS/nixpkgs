@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -52,7 +53,7 @@ python3.pkgs.buildPythonApplication rec {
     uvloop
   ];
 
-  nativeCheckInputs = with  python3.pkgs; [
+  nativeCheckInputs = with python3.pkgs; [
     pytest
     pytest-asyncio
   ];
@@ -75,7 +76,11 @@ python3.pkgs.buildPythonApplication rec {
     homepage = "https://github.com/laramies/theHarvester";
     changelog = "https://github.com/laramies/theHarvester/releases/tag/${version}";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ c0bw3b fab treemo ];
+    maintainers = with maintainers; [
+      c0bw3b
+      fab
+      treemo
+    ];
     mainProgram = "theHarvester";
   };
 }

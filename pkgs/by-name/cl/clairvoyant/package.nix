@@ -1,14 +1,15 @@
-{ lib
-, fetchFromGitHub
-, gtk4
-, libadwaita
-, libportal
-, meson
-, ninja
-, pkg-config
-, stdenv
-, vala
-, wrapGAppsHook4
+{
+  lib,
+  fetchFromGitHub,
+  gtk4,
+  libadwaita,
+  libportal,
+  meson,
+  ninja,
+  pkg-config,
+  stdenv,
+  vala,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,12 +37,12 @@ stdenv.mkDerivation (finalAttrs: {
     libportal
   ];
 
-  meta = with lib; {
+  meta = {
     changelog = "https://github.com/cassidyjames/clairvoyant/releases/tag/${finalAttrs.version}";
     description = "Ask questions, get psychic answers";
     homepage = "https://github.com/cassidyjames/clairvoyant";
-    license = licenses.gpl3Plus;
+    license = lib.licenses.gpl3Plus;
     mainProgram = "com.github.cassidyjames.clairvoyant";
-    maintainers = with maintainers; [ michaelgrahamevans ];
+    maintainers = lib.teams.gnome-circle.members;
   };
 })

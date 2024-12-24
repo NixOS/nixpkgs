@@ -1,19 +1,20 @@
-{ lib
-, fetchFromGitHub
-, python3Packages
-, qt6
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+  qt6,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "zapzap";
-  version = "5.3.8";
+  version = "5.3.9";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "rafatosta";
     repo = "zapzap";
-    rev = "refs/tags/${version}";
-    hash = "sha256-UIr6EYE2Y/05a3kO6waAnf6+5gb3r5UzgKaHwDbbfZw=";
+    tag = version;
+    hash = "sha256-AiFEuoMwVokAZya2rnSf5fYjCJyQQL3uD87NGFUMy6E=";
   };
 
   nativeBuildInputs = with python3Packages; [

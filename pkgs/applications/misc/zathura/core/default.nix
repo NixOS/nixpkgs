@@ -1,8 +1,7 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  fetchpatch,
+  fetchurl,
   meson,
   ninja,
   wrapGAppsHook3,
@@ -33,23 +32,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "zathura";
-  version = "0.5.8";
+  version = "0.5.11";
 
-  src = fetchFromGitHub {
-    owner = "pwmt";
-    repo = "zathura";
-    rev = finalAttrs.version;
-    hash = "sha256-k6DEJpUA3s0mGxE38aYnX7uea98LrzevJhWW1abHo/c=";
+  src = fetchurl {
+    url = "https://pwmt.org/projects/zathura/download/zathura-${finalAttrs.version}.tar.xz";
+    hash = "sha256-VEWKmZivD7j67y6TSoESe75LeQyG3NLIuPMjZfPRtTw=";
   };
-
-  patches = [
-    # https://github.com/pwmt/zathura/issues/664
-    (fetchpatch {
-      name = "fix-build-on-macos.patch";
-      url = "https://github.com/pwmt/zathura/commit/53f151f775091abec55ccc4b63893a8f9a668588.patch";
-      hash = "sha256-d8lRdlBN1Kfw/aTjz8x0gvTKy+SqSYWHLQCjV7hF5MI=";
-    })
-  ];
 
   outputs = [
     "bin"

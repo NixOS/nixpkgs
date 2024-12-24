@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 let
   # The web client verifies, that the server version is a valid datetime string:
@@ -7,11 +12,15 @@ let
   # Example:
   #   versionToTimestamp "2021-04-22T15-44-28Z"
   #   => "2021-04-22T15:44:28Z"
-  versionToTimestamp = version:
+  versionToTimestamp =
+    version:
     let
       splitTS = builtins.elemAt (builtins.split "(.*)(T.*)" version) 1;
     in
-    builtins.concatStringsSep "" [ (builtins.elemAt splitTS 0) (builtins.replaceStrings [ "-" ] [ ":" ] (builtins.elemAt splitTS 1)) ];
+    builtins.concatStringsSep "" [
+      (builtins.elemAt splitTS 0)
+      (builtins.replaceStrings [ "-" ] [ ":" ] (builtins.elemAt splitTS 1))
+    ];
 
   # CopyrightYear will be printed to the CLI UI.
   # Example:
@@ -21,33 +30,37 @@ let
 in
 buildGoModule rec {
   pname = "minio";
-  version = "2024-11-07T00-52-20Z";
+  version = "2024-12-13T22-19-12Z";
 
   src = fetchFromGitHub {
     owner = "minio";
     repo = "minio";
     rev = "RELEASE.${version}";
-    hash = "sha256-vWrNqfB41Y3MAF9PuyopIDrGq4Bj41Y4gISbN6nO0zU=";
+    hash = "sha256-/ntz0N59RPO1mcVWz5y3bzl8JwYsGRzOczo6cMWaqYw=";
   };
 
-  vendorHash = "sha256-yYAEh4L1eStx0/bID0+wZ5kdqPYshJrSZgVGuXgtgvs=";
+  vendorHash = "sha256-HCU4zGlNoGdC2tV6coDWtvf/JYwwSnNxdFSJIv77q/g=";
 
   doCheck = false;
 
   subPackages = [ "." ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   tags = [ "kqueue" ];
 
-  ldflags = let t = "github.com/minio/minio/cmd"; in [
-    "-s"
-    "-w"
-    "-X ${t}.Version=${versionToTimestamp version}"
-    "-X ${t}.CopyrightYear=${versionToYear version}"
-    "-X ${t}.ReleaseTag=RELEASE.${version}"
-    "-X ${t}.CommitID=${src.rev}"
-  ];
+  ldflags =
+    let
+      t = "github.com/minio/minio/cmd";
+    in
+    [
+      "-s"
+      "-w"
+      "-X ${t}.Version=${versionToTimestamp version}"
+      "-X ${t}.CopyrightYear=${versionToYear version}"
+      "-X ${t}.ReleaseTag=RELEASE.${version}"
+      "-X ${t}.CommitID=${src.rev}"
+    ];
 
   passthru.tests.minio = nixosTests.minio;
 

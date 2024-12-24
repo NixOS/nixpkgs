@@ -34,7 +34,11 @@
   apple-sdk_15,
   darwinMinVersionHook,
   makeWrapper,
-  nodejs_22,
+  nodejs,
+  libGL,
+  libX11,
+  libXext,
+  livekit-libwebrtc,
 
   withGLES ? false,
 }:
@@ -89,35 +93,42 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "zed-editor";
-  version = "0.164.2";
+  version = "0.166.1";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-qWfd/d+czk/1YjncRAhgWIRDUUrJQKj7UaEV7RJ5FFs=";
+    tag = "v${version}";
+    hash = "sha256-ss4dz9qPAP6eIYbG3S5QJaSR5zEyEqLBjfacj/eb7AE=";
   };
 
-  patches =
-    [
-      # Zed uses cargo-install to install cargo-about during the script execution.
-      # We provide cargo-about ourselves and can skip this step.
-      # Until https://github.com/zed-industries/zed/issues/19971 is fixed,
-      # we also skip any crate for which the license cannot be determined.
-      ./0001-generate-licenses.patch
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # The Swift variant of livekit currently used inside Zed requires
-      # Swift 6, which is not available in nixpkgs yet:
-      #   https://github.com/NixOS/nixpkgs/issues/343210
-      # The Rust variant of livekit for Zed is still pending and there is no
-      # schedule when it will be finished:
-      #   https://github.com/zed-industries/zed/pull/13343
-      ./0002-disable-livekit-darwin.patch
-    ];
+  patches = [
+    # Zed uses cargo-install to install cargo-about during the script execution.
+    # We provide cargo-about ourselves and can skip this step.
+    # Until https://github.com/zed-industries/zed/issues/19971 is fixed,
+    # we also skip any crate for which the license cannot be determined.
+    ./0001-generate-licenses.patch
+    # See https://github.com/zed-industries/zed/pull/21661#issuecomment-2524161840
+    "script/patches/use-cross-platform-livekit.patch"
+  ];
+
+  postPatch =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      # Dynamically link WebRTC instead of static
+      substituteInPlace ../${pname}-${version}-vendor/webrtc-sys-*/build.rs \
+        --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # On Darwin, linking against the dylib results in Rust linker errors, while
+      # linking against the framework works fine.
+      substituteInPlace ../${pname}-${version}-vendor/webrtc-sys-*/build.rs \
+        --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=framework=webrtc" \
+        --replace-fail 'println!("cargo:rustc-link-search=native={}", webrtc_lib.to_str().unwrap());' \
+                       'println!("cargo:rustc-link-search=framework={}/Library/Frameworks", webrtc_dir.to_str().unwrap());'
+    '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-j8t4i4YNB7eQuJ8+GtOLX0ZSfw6SracFE1sw71l4IKI=";
+  cargoHash = "sha256-HbOdY+6FKGTK5gW2BkWSdciBvTx+oKhCchFvwKEoGNE=";
 
   nativeBuildInputs =
     [
@@ -151,14 +162,16 @@ rustPlatform.buildRustPackage rec {
       libxkbcommon
       wayland
       xorg.libxcb
+      # required by livekit:
+      libGL
+      libX11
+      libXext
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       apple-sdk_15
-      # This will need to be increased to 12.3 once
-      # https://github.com/zed-industries/zed/pull/13343
-      # is merged and released, as ScreenCaptureKit is only available on 12.3 and up:
+      # ScreenCaptureKit, required by livekit, is only available on 12.3 and up:
       # https://developer.apple.com/documentation/screencapturekit
-      (darwinMinVersionHook "10.15")
+      (darwinMinVersionHook "12.3")
     ];
 
   cargoBuildFlags = [
@@ -183,6 +196,7 @@ rustPlatform.buildRustPackage rec {
     ZED_UPDATE_EXPLANATION = "Zed has been installed using Nix. Auto-updates have thus been disabled.";
     # Used by `zed --version`
     RELEASE_VERSION = version;
+    LK_CUSTOM_WEBRTC = livekit-libwebrtc;
   };
 
   RUSTFLAGS = if withGLES then "--cfg gles" else "";
@@ -195,7 +209,7 @@ rustPlatform.buildRustPackage rec {
   postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     patchelf --add-rpath ${gpu-lib}/lib $out/libexec/*
     patchelf --add-rpath ${wayland}/lib $out/libexec/*
-    wrapProgram $out/libexec/zed-editor --suffix PATH : ${lib.makeBinPath [ nodejs_22 ]}
+    wrapProgram $out/libexec/zed-editor --suffix PATH : ${lib.makeBinPath [ nodejs ]}
   '';
 
   preCheck = ''
@@ -286,7 +300,7 @@ rustPlatform.buildRustPackage rec {
   passthru = {
     updateScript = gitUpdater {
       rev-prefix = "v";
-      ignoredVersions = "pre";
+      ignoredVersions = "(*-pre|0.999999.0|0.9999-temporary)";
     };
     fhs = fhs { };
     fhsWithPackages = f: fhs { additionalPkgs = f; };
@@ -295,7 +309,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "High-performance, multiplayer code editor from the creators of Atom and Tree-sitter";
     homepage = "https://zed.dev";
-    changelog = "https://github.com/zed-industries/zed/releases/tag/v${version}";
+    changelog = "https://github.com/zed-industries/zed/releases/tag/${src.tag}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       GaetanLepage

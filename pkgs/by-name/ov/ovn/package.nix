@@ -64,6 +64,11 @@ stdenv.mkDerivation rec {
     procps
   ];
 
+  postInstall = ''
+    mkdir -vp $out/share/openvswitch/scripts
+    cp ovs/utilities/ovs-lib $out/share/openvswitch/scripts
+  '';
+
   # https://docs.ovn.org/en/latest/topics/testing.html
   preCheck = ''
     export TESTSUITEFLAGS="-j$NIX_BUILD_CORES"

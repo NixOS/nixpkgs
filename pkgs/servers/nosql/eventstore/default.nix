@@ -42,7 +42,7 @@ buildDotnetModule rec {
     "EventStore.Projections.Core.Tests.Services.grpc_service.ServerFeaturesTests<LogFormat+V3,UInt32>.should_receive_expected_endpoints"
   ];
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   projectFile = "src/EventStore.ClusterNode/EventStore.ClusterNode.csproj";
 

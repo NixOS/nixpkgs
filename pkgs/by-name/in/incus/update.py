@@ -16,10 +16,10 @@ args = parser.parse_args()
 nixpkgs_path = os.environ["PWD"]
 
 attr = "incus"
-file = f"pkgs/by-name/in/incus/package.nix"
+file = "pkgs/by-name/in/incus/package.nix"
 if args.lts:
     attr = "incus-lts"
-    file = f"pkgs/by-name/in/incus/lts.nix"
+    file = "pkgs/by-name/in/incus/lts.nix"
 
 tags = (
     run(["list-git-tags", "--url=https://github.com/lxc/incus"], capture_output=True)
@@ -30,7 +30,7 @@ tags = [t.lstrip("v") for t in tags]
 
 latest_version = "0"
 for tag in tags:
-    if args.regex != None and not re.match(args.regex, tag):
+    if args.regex is not None and not re.match(args.regex, tag):
         continue
 
     if LooseVersion(tag) > LooseVersion(latest_version):
@@ -53,23 +53,19 @@ print(f"Found new version {latest_version} > {current_version}")
 
 run(["update-source-version", attr, latest_version, f"--file={file}"])
 
-current_vendor_hash = (
-    run(
-        [
-            "nix-instantiate",
-            ".",
-            "--eval",
-            "--strict",
-            "-A",
-            f"{attr}.goModules.drvAttrs.outputHash",
-            "--json",
-        ],
-        capture_output=True,
+file_content: str
+
+with open(file, "r+") as f:
+    file_content = f.read()
+    file_content = re.sub(
+        'vendorHash = "sha256-.*"',
+        'vendorHash = "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA="',
+        file_content,
     )
-    .stdout.decode("utf-8")
-    .strip()
-    .strip('"')
-)
+    f.seek(0)
+    f.write(file_content)
+
+print("Generating new vendorHash")
 
 latest_vendor_hash = (
     run(
@@ -80,8 +76,11 @@ latest_vendor_hash = (
     .strip()
 )
 
-with open(file, "r+") as f:
-    file_content = f.read()
-    file_content = re.sub(current_vendor_hash, latest_vendor_hash, file_content)
-    f.seek(0)
+file_content = file_content.replace(
+    "sha256-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=", latest_vendor_hash
+)
+
+with open(file, "w") as f:
     f.write(file_content)
+
+print("Done")

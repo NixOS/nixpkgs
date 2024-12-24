@@ -23,7 +23,7 @@ let
     };
 
     projectFile = "src/OmniSharp.Stdio.Driver/OmniSharp.Stdio.Driver.csproj";
-    nugetDeps = ./deps.nix;
+    nugetDeps = ./deps.json;
 
     dotnet-sdk = sdk_8_0;
     dotnet-runtime = sdk_8_0;

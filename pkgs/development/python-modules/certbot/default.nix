@@ -43,7 +43,7 @@ buildPythonPackage rec {
     })
   ];
 
-  postPatch = "cd ${pname}";  # using sourceRoot would interfere with patches
+  postPatch = "cd ${pname}"; # using sourceRoot would interfere with patches
 
   build-system = [ setuptools ];
 
@@ -72,7 +72,7 @@ buildPythonPackage rec {
   ];
 
   pytestFlagsArray = [
-    "-o cache_dir=$(mktemp -d)"
+    "-p no:cacheprovider"
     "-W"
     "ignore::DeprecationWarning"
   ];

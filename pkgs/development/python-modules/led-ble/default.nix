@@ -1,44 +1,42 @@
 {
   lib,
-  async-timeout,
   bleak,
   bleak-retry-connector,
   buildPythonPackage,
   fetchFromGitHub,
   flux-led,
   poetry-core,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "led-ble";
-  version = "1.0.2";
-  format = "pyproject";
+  version = "1.1.1";
+  pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
-    repo = pname;
+    repo = "led-ble";
     rev = "refs/tags/v${version}";
-    hash = "sha256-4z6SJE/VFNa81ecDal2IEX9adYBrSzco9VfhUPKBj4k=";
+    hash = "sha256-FPF/jPsXVk16UDpfglmVy01sOpv/XAwx+dCYCbJnFZQ=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=led_ble --cov-report=term-missing:skip-covered" ""
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     bleak
     bleak-retry-connector
     flux-led
-  ] ++ lib.optionals (pythonOlder "3.11") [ async-timeout ];
+  ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "led_ble" ];
 

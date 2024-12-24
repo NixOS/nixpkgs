@@ -67,12 +67,12 @@ def test_parse_args() -> None:
         ]
     )
     assert nr.logger.level == logging.DEBUG
-    assert r2.verbose == 3
+    assert r2.v == 3
     assert r2.flake is False
     assert r2.action == "dry-build"
     assert r2.file == "foo"
     assert r2.attr == "bar"
-    assert g2["common_flags"].verbose == 3
+    assert g2["common_flags"].v == 3
 
 
 @patch.dict(nr.process.os.environ, {}, clear=True)
@@ -82,18 +82,18 @@ def test_execute_nix_boot(mock_run: Any, tmp_path: Path) -> None:
     nixpkgs_path.mkdir()
     config_path = tmp_path / "test"
     config_path.touch()
-    mock_run.side_effect = [
-        # update_nixpkgs_rev
-        CompletedProcess([], 0, str(nixpkgs_path)),
-        CompletedProcess([], 0, "nixpkgs-rev"),
-        CompletedProcess([], 0),
-        # nixos_build
-        CompletedProcess([], 0, str(config_path)),
-        # set_profile
-        CompletedProcess([], 0),
-        # switch_to_configuration
-        CompletedProcess([], 0),
-    ]
+
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
+        if args[0] == "nix-instantiate":
+            return CompletedProcess([], 0, str(nixpkgs_path))
+        elif args[0] == "git" and "rev-parse" in args:
+            return CompletedProcess([], 0, "nixpkgs-rev")
+        elif args[0] == "nix-build":
+            return CompletedProcess([], 0, str(config_path))
+        else:
+            return CompletedProcess([], 0)
+
+    mock_run.side_effect = run_side_effect
 
     nr.execute(["nixos-rebuild", "boot", "--no-flake", "-vvv", "--fast"])
 
@@ -109,7 +109,7 @@ def test_execute_nix_boot(mock_run: Any, tmp_path: Path) -> None:
             call(
                 ["git", "-C", nixpkgs_path, "rev-parse", "--short", "HEAD"],
                 check=False,
-                stdout=PIPE,
+                capture_output=True,
                 **DEFAULT_RUN_KWARGS,
             ),
             call(
@@ -155,14 +155,14 @@ def test_execute_nix_boot(mock_run: Any, tmp_path: Path) -> None:
 def test_execute_nix_switch_flake(mock_run: Any, tmp_path: Path) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
-    mock_run.side_effect = [
-        # nixos_build_flake
-        CompletedProcess([], 0, str(config_path)),
-        # set_profile
-        CompletedProcess([], 0),
-        # switch_to_configuration
-        CompletedProcess([], 0),
-    ]
+
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
+        if args[0] == "nix":
+            return CompletedProcess([], 0, str(config_path))
+        else:
+            return CompletedProcess([], 0)
+
+    mock_run.side_effect = run_side_effect
 
     nr.execute(
         [
@@ -226,16 +226,14 @@ def test_execute_nix_switch_flake_target_host(
 ) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
-    mock_run.side_effect = [
-        # nixos_build_flake
-        CompletedProcess([], 0, str(config_path)),
-        # set_profile
-        CompletedProcess([], 0),
-        # copy_closure
-        CompletedProcess([], 0),
-        # switch_to_configuration
-        CompletedProcess([], 0),
-    ]
+
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
+        if args[0] == "nix":
+            return CompletedProcess([], 0, str(config_path))
+        else:
+            return CompletedProcess([], 0)
+
+    mock_run.side_effect = run_side_effect
 
     nr.execute(
         [
@@ -317,18 +315,16 @@ def test_execute_nix_switch_flake_build_host(
 ) -> None:
     config_path = tmp_path / "test"
     config_path.touch()
-    mock_run.side_effect = [
-        # nixos_build_flake
-        CompletedProcess([], 0, str(config_path)),
-        CompletedProcess([], 0),
-        CompletedProcess([], 0, str(config_path)),
-        # set_profile
-        CompletedProcess([], 0),
-        # copy_closure
-        CompletedProcess([], 0),
-        # switch_to_configuration
-        CompletedProcess([], 0),
-    ]
+
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
+        if args[0] == "nix" and "eval" in args:
+            return CompletedProcess([], 0, str(config_path))
+        if args[0] == "ssh" and "nix" in args:
+            return CompletedProcess([], 0, str(config_path))
+        else:
+            return CompletedProcess([], 0)
+
+    mock_run.side_effect = run_side_effect
 
     nr.execute(
         [
@@ -475,6 +471,48 @@ def test_execute_build(mock_run: Any, tmp_path: Path) -> None:
 
 
 @patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
+def test_execute_test_flake(mock_run: Any, tmp_path: Path) -> None:
+    config_path = tmp_path / "test"
+    config_path.touch()
+
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
+        if args[0] == "nix":
+            return CompletedProcess([], 0, str(config_path))
+        else:
+            return CompletedProcess([], 0)
+
+    mock_run.side_effect = run_side_effect
+
+    nr.execute(
+        ["nixos-rebuild", "test", "--flake", "github:user/repo#hostname", "--fast"]
+    )
+
+    assert mock_run.call_count == 2
+    mock_run.assert_has_calls(
+        [
+            call(
+                [
+                    "nix",
+                    "--extra-experimental-features",
+                    "nix-command flakes",
+                    "build",
+                    "--print-out-paths",
+                    "github:user/repo#nixosConfigurations.hostname.config.system.build.toplevel",
+                ],
+                check=True,
+                stdout=PIPE,
+                **DEFAULT_RUN_KWARGS,
+            ),
+            call(
+                [config_path / "bin/switch-to-configuration", "test"],
+                check=True,
+                **DEFAULT_RUN_KWARGS,
+            ),
+        ]
+    )
+
+
+@patch(get_qualified_name(nr.process.subprocess.run), autospec=True)
 @patch(get_qualified_name(nr.nix.Path.exists, nr.nix), autospec=True, return_value=True)
 @patch(get_qualified_name(nr.nix.Path.mkdir, nr.nix), autospec=True)
 def test_execute_test_rollback(
@@ -482,20 +520,21 @@ def test_execute_test_rollback(
     mock_path_exists: Any,
     mock_run: Any,
 ) -> None:
-    mock_run.side_effect = [
-        # rollback_temporary_profile
-        CompletedProcess(
-            [],
-            0,
-            stdout=textwrap.dedent("""\
-            2082   2024-11-07 22:58:56
-            2083   2024-11-07 22:59:41
-            2084   2024-11-07 23:54:17   (current)
-            """),
-        ),
-        # switch_to_configuration
-        CompletedProcess([], 0),
-    ]
+    def run_side_effect(args: list[str], **kwargs: Any) -> CompletedProcess[str]:
+        if args[0] == "nix-env":
+            return CompletedProcess(
+                [],
+                0,
+                stdout=textwrap.dedent("""\
+                2082   2024-11-07 22:58:56
+                2083   2024-11-07 22:59:41
+                2084   2024-11-07 23:54:17   (current)
+                """),
+            )
+        else:
+            return CompletedProcess([], 0)
+
+    mock_run.side_effect = run_side_effect
 
     nr.execute(
         ["nixos-rebuild", "test", "--rollback", "--profile-name", "foo", "--fast"]

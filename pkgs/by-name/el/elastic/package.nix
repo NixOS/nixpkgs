@@ -17,14 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "elastic";
-  version = "0.1.5";
+  version = "0.1.6";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "elastic";
     rev = version;
-    hash = "sha256-y/XBXN5RIqnFmxnmkThBGW0B5owgy/1Q/6jmkBCi+rk=";
+    hash = "sha256-D7DqSBP0E0CzjTROh97JXhB8N8q0I2pDo4HbAK8vQ/Y=";
   };
 
   nativeBuildInputs = [
@@ -51,6 +51,6 @@ stdenv.mkDerivation rec {
     mainProgram = "app.drey.Elastic";
     license = licenses.gpl3Plus;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ _0xMRTT ];
+    maintainers = with maintainers; [ _0xMRTT ] ++ lib.teams.gnome-circle.members;
   };
 }

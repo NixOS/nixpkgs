@@ -3,7 +3,7 @@
   python3,
   melpaBuild,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   acm,
   markdown-mode,
   basedpyright,
@@ -19,6 +19,7 @@ let
     ps: with ps; [
       epc
       orjson
+      packaging
       paramiko
       rapidfuzz
       setuptools
@@ -30,20 +31,19 @@ let
 in
 melpaBuild {
   pname = "lsp-bridge";
-  version = "0-unstable-2024-11-14";
+  version = "0-unstable-2024-12-20";
 
   src = fetchFromGitHub {
     owner = "manateelazycat";
     repo = "lsp-bridge";
-    rev = "41530f4dfafa63ebb6b510cdcf2bef0e5757b56a";
-    hash = "sha256-oKLkc9Nt1SSXIOn2hjwjzACaAgMAcgghOvm7DwE0WOE=";
+    rev = "acebc35d9fed200bfb8237087074a50fcb0d71d2";
+    hash = "sha256-PwielZ2uTW+snP2D0p1pwSCTRQ83EO1sU90lMrd0pvE=";
   };
 
   patches = [
     # Hardcode the python dependencies needed for lsp-bridge, so users
     # don't have to modify their global environment
-    (substituteAll {
-      src = ./hardcode-dependencies.patch;
+    (replaceVars ./hardcode-dependencies.patch {
       python = python.interpreter;
     })
   ];

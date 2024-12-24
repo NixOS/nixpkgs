@@ -40,6 +40,7 @@ mapAliases ({
   adafruit-nrfutil = throw "adafruit-nrfutil has been promoted to a top-level attribute name: `pkgs.adafruit-nrfutil`."; # Added 2023-11-19
   aioaladdinconnect = throw "aioaladdinconnect has been removed, as the API is supported was obsoleted on 2024-01-24."; # Added 2024-06-07
   aiohttp-isal = throw "aiohttp-isal has been removed, as it has been archived and replace by aiohttp-fast-zlib"; # Added 2024-08-11
+  aiohttp-zlib-ng = throw "aiohttp-zlib-ng has been removed, as it has been archived and replaced by aiohttp-fast-zlib"; # Added 2024-11-14
   aiomysensors = throw "aiomysensors has been removed, as it was packaged for Home Assistant, which migrated to pymysensors."; # Added 2024-07-07
   aioh2 = throw "aioh2 has been removed because it is abandoned and broken."; # Added 2022-03-30
   aiolip = throw "aiolip has been removed because the upstream repository was archived in 2021"; # Added 2024-10-04
@@ -136,6 +137,7 @@ mapAliases ({
   d2to1 = throw "d2to1 is archived and no longer works with setuptools v68"; # added 2023-07-30
   dask-xgboost = throw "dask-xgboost was removed because its features are available in xgboost"; # added 2022-05-24
   dateutil = python-dateutil; # added 2021-07-03
+  debian = python-debian; # added 2024-12-10
   deep_merge = throw "deep_merge has been removed, since it is no longer maintained and may be broken."; # added 2023-10-09
   demjson = throw "demjson has been removed, it was using setuptools 2to3 translation feature, which has been removed in setuptools 58"; # added 2022-01-18
   descartes = throw "descartes has been removed, since it is abandoned and broken"; # added 2023-06-21
@@ -167,6 +169,7 @@ mapAliases ({
   django-mysql = throw "django-mysql has been removed, since it was an unused leaf package"; # added 2024-07-02
   django_nose = django-nose; # added 2023-07-25
   django-nose = throw "django-nose has been removed since it has not been maintained and there are no dependent packages"; # added 2024-05-21
+  django-q = throw "django-q has been removed because it is unmaintained and was unused"; # added 2024-12-13
   django_reversion = django-reversion; # added 2022-06-18
   django_polymorphic = django-polymorphic; # added 2022-05-24
   django_redis = django-redis; # added 2021-10-11
@@ -271,7 +274,9 @@ mapAliases ({
   homeassistant-pyozw = throw "homeassistant-pyozw has been removed, as it was packaged for home-assistant which has removed it as a dependency."; # added 2024-01-05
   htmllaundry = throw "htmllaundry has been removed because it is abandoned"; # added 2024-06-04
   HTSeq = htseq; # added 2023-02-19
+  hug = throw "hug was marked broken since 2021 and has not established compatibility with newer dependency versions. It has therefore been removed."; # added 2024-11-15
   hyperkitty = throw "Please use pkgs.mailmanPackages.hyperkitty"; # added 2022-04-29
+  hydra-check = throw "The Python package hydra-check was removed in favor of the top-level rust based pkgs.hydra-check"; # added 2022-04-29
   ihatemoney = throw "ihatemoney was removed because it is no longer maintained downstream"; # added 2023-04-08
   IMAPClient = imapclient; # added 2021-10-28
   imdbpy = throw "imdbpy has been renamed to cinemagoer"; # added 2022-08-08
@@ -284,6 +289,7 @@ mapAliases ({
   ipython_genutils = ipython-genutils; # added 2023-10-12
   influxgraph = throw "influxgraph has been removed because it is no longer maintained"; # added 2022-07-10
   itanium_demangler = itanium-demangler; # added 2022-10-17
+  jaeger-client = throw "jaeger-client was removed because it is deprecated upstream. OpenTelemetry is recommended instead."; # Added 2024-12-09
   jaraco_classes = jaraco-classes; # added 2023-07-14
   jaraco_collections = jaraco-collections; # added 2023-07-14
   jaraco_functools = jaraco-functools; # added 2023-07-14
@@ -398,6 +404,7 @@ mapAliases ({
   openllm-client = throw "openllm-client has been removed, since it is abandoned due to a change in philosophy"; # added 2024-08-24
   openllm-core = throw "openllm-core has been removed, since it is abandoned due to a change in philosophy"; # added 2024-08-24
   opsdroid_get_image_size = opsdroid-get-image-size; # added 2023-10-16
+  opentracing = throw "The opentracing Python module was removed due to being unmaintained upstream. Use OpenTelemetry instead."; # Added 2024-12-09
   ordereddict = throw "ordereddict has been removed because it is only useful on unsupported python versions."; # added 2022-05-28
   pafy = throw "pafy has been removed because it is unmaintained and only a dependency of mps-youtube, itself superseded by yewtube"; # Added 2023-01-19
   pam = python-pam; # added 2020-09-07.

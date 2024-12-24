@@ -8,6 +8,7 @@
   fetchgit,
   imagemagick,
   lib,
+  makeFontsConf,
   runCommand,
   xdg-utils,
   pname ? "nexusmods-app",
@@ -24,12 +25,12 @@ let
 in
 buildDotnetModule (finalAttrs: {
   inherit pname;
-  version = "0.7.0";
+  version = "0.7.1";
 
   src = fetchgit {
     url = "https://github.com/Nexus-Mods/NexusMods.App.git";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-7o+orpXLvZa+F0wEh3nVnYMe4ZkiaVJQOWvhWdNmcSk=";
+    hash = "sha256-TcT+siZMJlOYRtiQV+RAPPfM47wewfsz7WiPFaxCUkc=";
     fetchSubmodules = true;
     fetchLFS = true;
   };
@@ -56,7 +57,7 @@ buildDotnetModule (finalAttrs: {
     imagemagick # For resizing SVG icon in postInstall
   ];
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   mapNuGetDependencies = true;
 
   # TODO: remove .NET 8; StrawberryShake currently needs it
@@ -146,10 +147,22 @@ buildDotnetModule (finalAttrs: {
       let
         runTest =
           name: script:
-          runCommand "${pname}-test-${name}" { nativeBuildInputs = [ finalAttrs.finalPackage ]; } ''
-            ${script}
-            touch $out
-          '';
+          runCommand "${pname}-test-${name}"
+            {
+              nativeBuildInputs = [ finalAttrs.finalPackage ];
+              FONTCONFIG_FILE = makeFontsConf {
+                fontDirectories = [ ];
+              };
+            }
+            ''
+              export XDG_DATA_HOME="$PWD/data"
+              export XDG_STATE_HOME="$PWD/state"
+              export XDG_CACHE_HOME="$PWD/cache"
+              mkdir -p "$XDG_DATA_HOME" "$XDG_STATE_HOME" "$XDG_CACHE_HOME"
+              # TODO: on error, print $XDG_STATE_HOME/NexusMods.App/Logs/nexusmods.app.main.current.log
+              ${script}
+              touch $out
+            '';
       in
       {
         serve = runTest "serve" ''

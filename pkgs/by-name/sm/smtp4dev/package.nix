@@ -37,7 +37,7 @@ buildDotnetModule {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.aspnetcore_8_0;
   projectFile = "Rnwood.Smtp4dev/Rnwood.Smtp4dev.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   executables = [ "Rnwood.Smtp4dev" ];
 
   postFixup = ''

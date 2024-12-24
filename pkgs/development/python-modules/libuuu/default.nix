@@ -6,8 +6,8 @@
   setuptools,
   setuptools-scm,
   autoPatchelfHook,
-  pytestCheckHook,
   udev,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -51,7 +51,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    description = "Python wraper for libuuu";
+    description = "Python wrapper for libuuu";
     homepage = "https://github.com/nxp-imx/mfgtools/tree/master/wrapper";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ GaetanLepage ];

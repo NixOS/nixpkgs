@@ -25,7 +25,7 @@ buildGoModule rec {
   # tests require network access
   doCheck = false;
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

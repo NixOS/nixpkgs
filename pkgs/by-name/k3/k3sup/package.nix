@@ -27,7 +27,7 @@ buildGoModule rec {
       --replace "/bin/bash" "${bash}/bin/bash"
   '';
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s" "-w"

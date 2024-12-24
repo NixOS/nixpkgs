@@ -3,13 +3,16 @@
   buildPythonPackage,
   fetchFromGitHub,
   flac,
-  openai,
+  groq,
+  httpx,
   openai-whisper,
+  openai,
   pocketsphinx,
   pyaudio,
   pytestCheckHook,
   pythonOlder,
   requests,
+  respx,
   setuptools,
   soundfile,
   typing-extensions,
@@ -17,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "speechrecognition";
-  version = "3.11.0";
+  version = "3.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +29,7 @@ buildPythonPackage rec {
     owner = "Uberi";
     repo = "speech_recognition";
     rev = "refs/tags/${version}";
-    hash = "sha256-5DZ5QhaYpVtd+AX5OSYD3cM+37Ez0+EL5a+zJ+X/uNg=";
+    hash = "sha256-2yc5hztPBOysHxUQcS76ioCXmqNqjid6QUF4qPlIt24=";
   };
 
   postPatch = ''
@@ -40,15 +43,20 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [
-    pyaudio
-    requests
-    typing-extensions
-  ];
+  dependencies = [ typing-extensions ];
 
   optional-dependencies = {
+    assemblyai = [ requests ];
     audio = [ pyaudio ];
-    whisper-api = [ openai ];
+    groq = [
+      groq
+      httpx
+    ];
+    openai = [
+      httpx
+      openai
+    ];
+    pocketsphinx = [ pocketsphinx ];
     whisper-local = [
       openai-whisper
       soundfile
@@ -56,8 +64,10 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
+    groq
     pytestCheckHook
     pocketsphinx
+    respx
   ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   pythonImportsCheck = [ "speech_recognition" ];

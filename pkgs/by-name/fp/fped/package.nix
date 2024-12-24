@@ -1,6 +1,14 @@
-{ lib, stdenv, fetchgit
-, flex, bison, fig2dev, imagemagick, netpbm, gtk2
-, pkg-config
+{
+  lib,
+  stdenv,
+  fetchgit,
+  flex,
+  bison,
+  fig2dev,
+  imagemagick,
+  netpbm,
+  gtk2,
+  pkg-config,
 }:
 
 stdenv.mkDerivation {
@@ -43,7 +51,7 @@ stdenv.mkDerivation {
     mainProgram = "fped";
     homepage = "http://projects.qi-hardware.com/index.php/p/fped/";
     license = licenses.gpl2;
-    maintainers = [];
+    maintainers = [ ];
     platforms = platforms.linux;
   };
 }

@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, meson
-, pkg-config
-, libusb1
-, scdoc
-, ninja
-, cmake
+{
+  lib,
+  stdenv,
+  fetchurl,
+  meson,
+  pkg-config,
+  libusb1,
+  scdoc,
+  ninja,
+  cmake,
 }:
 
 let
@@ -27,19 +28,21 @@ stdenv.mkDerivation {
       "udev_rules_dir = '$out/lib/udev'"
   '';
 
-  nativeBuildInputs = [ meson ninja cmake pkg-config scdoc ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    cmake
+    pkg-config
+    scdoc
+  ];
 
   buildInputs = [ libusb1 ];
 
-  meta =
-    let
-      inherit (lib) maintainers;
-    in
-    {
-      homepage = "https://gitlab.com/pine64-org/quartz-bsp/rkdeveloptool/";
-      description = "Tool from Rockchip to communicate with Rockusb devices (pine64 fork)";
-      license = lib.licenses.gpl2Only;
-      maintainers = [ maintainers.adisbladis ];
-      mainProgram = "rkdeveloptool";
-    };
+  meta = {
+    homepage = "https://gitlab.com/pine64-org/quartz-bsp/rkdeveloptool/";
+    description = "Tool from Rockchip to communicate with Rockusb devices (pine64 fork)";
+    license = lib.licenses.gpl2Only;
+    maintainers = [ ];
+    mainProgram = "rkdeveloptool";
+  };
 }

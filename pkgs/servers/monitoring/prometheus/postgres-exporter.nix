@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "postgres_exporter";
@@ -17,7 +22,9 @@ buildGoModule rec {
     let
       t = "github.com/prometheus/common/version";
     in
-    [ "-s" "-w"
+    [
+      "-s"
+      "-w"
       "-X ${t}.Version=${version}"
       "-X ${t}.Revision=unknown"
       "-X ${t}.Branch=unknown"
@@ -34,6 +41,11 @@ buildGoModule rec {
     description = "Prometheus exporter for PostgreSQL";
     mainProgram = "postgres_exporter";
     license = licenses.asl20;
-    maintainers = with maintainers; [ fpletz globin willibutz ma27 ];
+    maintainers = with maintainers; [
+      fpletz
+      globin
+      willibutz
+      ma27
+    ];
   };
 }

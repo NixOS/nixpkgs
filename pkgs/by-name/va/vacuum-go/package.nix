@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, testers, vacuum-go }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  testers,
+  vacuum-go,
+}:
 
 buildGoModule rec {
   pname = "vacuum-go";
@@ -14,7 +20,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-M9+AKgZwqnOtejIHdBF8MAWg2sJLX2cJtNdMZylp1UE=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
   ldflags = [
     "-s"
     "-w"

@@ -21,7 +21,6 @@
   # for passthru.tests
   dulwich,
   gunicorn,
-  opentracing,
   pika,
 }:
 
@@ -71,7 +70,6 @@ buildPythonPackage rec {
     inherit
       dulwich
       gunicorn
-      opentracing
       pika
       ;
   } // lib.filterAttrs (k: v: lib.hasInfix "gevent" k) python.pkgs;

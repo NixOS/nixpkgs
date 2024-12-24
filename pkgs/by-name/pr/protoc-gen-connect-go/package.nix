@@ -1,6 +1,7 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
 }:
 
 buildGoModule rec {
@@ -31,6 +32,9 @@ buildGoModule rec {
     homepage = "https://github.com/connectrpc/connect-go";
     changelog = "https://github.com/connectrpc/connect-go/releases/tag/v${version}";
     license = licenses.asl20;
-    maintainers = with maintainers; [ kilimnik jk ];
+    maintainers = with maintainers; [
+      kilimnik
+      jk
+    ];
   };
 }

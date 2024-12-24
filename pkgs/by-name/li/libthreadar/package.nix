@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchurl, gcc-unwrapped }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  gcc-unwrapped,
+}:
 
 stdenv.mkDerivation rec {
   version = "1.5.0";
@@ -9,7 +14,17 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-wJAkIUGK7Ud6n2p1275vNkSx/W7LlgKWXQaDevetPko=";
   };
 
-  outputs = [ "out" "dev" ];
+  postPatch = ''
+    # this field is not present on Darwin, ensure it is zero everywhere
+    substituteInPlace src/thread_signal.cpp \
+      --replace-fail 'sigac.sa_restorer = nullptr;' "" \
+      --replace-fail 'struct sigaction sigac;' 'struct sigaction sigac = {0};'
+  '';
+
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   buildInputs = [ gcc-unwrapped ];
 

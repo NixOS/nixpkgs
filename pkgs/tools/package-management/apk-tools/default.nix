@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://gitlab.alpinelinux.org/alpine/apk-tools";
     description = "Alpine Package Keeper";
-    maintainers = with maintainers; [ qyliss ];
+    maintainers = with maintainers; [ ];
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     mainProgram = "apk";

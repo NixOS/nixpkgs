@@ -1,53 +1,46 @@
 {
   lib,
+  astroid,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
   flit-core,
-  z3-solver,
-  astroid,
-  pytestCheckHook,
   hypothesis,
+  pytest-cov-stub,
+  pytest-xdist,
+  pytestCheckHook,
+  pythonOlder,
+  z3-solver,
 }:
 
 buildPythonPackage rec {
   pname = "deal-solver";
   version = "0.1.2";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "life4";
-    repo = pname;
+    repo = "deal-solver";
     rev = "refs/tags/${version}";
     hash = "sha256-DAOeQLFR/JED32uJSW7W9+Xx5f1Et05W8Fp+Vm7sfZo=";
   };
 
-  nativeBuildInputs = [
-    flit-core
-  ];
+  build-system = [ flit-core ];
 
   # z3 does not provide a dist-info, so python-runtime-deps-check will fail
   pythonRemoveDeps = [ "z3-solver" ];
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace "\"--cov=deal_solver\"," "" \
-      --replace "\"--cov-report=html\"," "" \
-      --replace "\"--cov-report=xml\"," "" \
-      --replace "\"--cov-report=term-missing:skip-covered\"," "" \
-      --replace "\"--cov-fail-under=100\"," ""
-  '';
-
-  propagatedBuildInputs = [
+  dependencies = [
     z3-solver
     astroid
   ] ++ z3-solver.requiredPythonModules;
 
   nativeCheckInputs = [
-    pytestCheckHook
     hypothesis
+    pytest-cov-stub
+    pytest-xdist
+    pytestCheckHook
   ];
 
   pythonImportsCheck = [ "deal_solver" ];

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  gitUpdater,
   bison,
   cmake,
   pkg-config,
@@ -182,7 +183,13 @@ stdenv.mkDerivation (finalAttrs: {
     connector-c = finalAttrs.finalPackage;
     server = finalAttrs.finalPackage;
     mysqlVersion = lib.versions.majorMinor finalAttrs.version;
-    tests.percona-server = nixosTests.mysql.percona-server_8_0;
+    tests.percona-server =
+      nixosTests.mysql."percona-server_${lib.versions.major finalAttrs.version}_${lib.versions.minor finalAttrs.version}";
+    updateScript = gitUpdater {
+      url = "https://github.com/percona/percona-server";
+      rev-prefix = "Percona-Server-";
+      allowedVersions = "${lib.versions.major finalAttrs.version}\\.${lib.versions.minor finalAttrs.version}\\..+";
+    };
   };
 
   meta = with lib; {

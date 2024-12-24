@@ -299,7 +299,7 @@ rec {
         # GHC (=> shellcheck) isn't supported on some platforms (such as risc-v)
         # but we still want to use writeShellApplication on those platforms
         let
-          shellcheckSupported = lib.meta.availableOn stdenv.buildPlatform shellcheck-minimal.compiler;
+          shellcheckSupported = lib.meta.availableOn stdenv.buildPlatform shellcheck-minimal.compiler && (builtins.tryEval shellcheck-minimal.compiler.outPath).success;
           excludeFlags = lib.optionals (excludeShellChecks != [ ]) [ "--exclude" (lib.concatStringsSep "," excludeShellChecks) ];
           shellcheckCommand = lib.optionalString shellcheckSupported ''
             # use shellcheck which does not include docs
@@ -719,7 +719,7 @@ rec {
           (name: value:
             {
               inherit value;
-              name = lib.head (builtins.match "${builtins.storeDir}/[${nixHashChars}]+-(.*)\.drv" name);
+              name = lib.head (builtins.match "${builtins.storeDir}/[${nixHashChars}]+-(.*)\\.drv" name);
             })
           derivations;
       # The syntax of output paths differs between outputs named `out`

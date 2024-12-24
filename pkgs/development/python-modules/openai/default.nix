@@ -10,7 +10,6 @@
 
   # dependencies
   anyio,
-  cached-property,
   distro,
   httpx,
   jiter,
@@ -36,16 +35,16 @@
 
 buildPythonPackage rec {
   pname = "openai";
-  version = "1.54.5";
+  version = "1.57.4";
   pyproject = true;
 
-  disabled = pythonOlder "3.7.1";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "openai";
     repo = "openai-python";
     rev = "refs/tags/v${version}";
-    hash = "sha256-bDYGE8bm1+qHvhNfLSHG2bW8Wnm1yOEjD/oCzBG+CPw=";
+    hash = "sha256-djYvHEIieJPak8EY7c5hhMhTzxm/Prc4RSfrFjzHqI4=";
   };
 
   build-system = [
@@ -62,7 +61,7 @@ buildPythonPackage rec {
     sniffio
     tqdm
     typing-extensions
-  ] ++ lib.optionals (pythonOlder "3.8") [ cached-property ];
+  ];
 
   optional-dependencies = {
     datalib = [

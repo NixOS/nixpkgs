@@ -1,6 +1,7 @@
-{ lib
-, stdenv
-, fetchurl
+{
+  lib,
+  stdenv,
+  fetchurl,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,9 +40,9 @@ stdenv.mkDerivation rec {
     description = "Small chess engine supporting fairy pieces";
     mainProgram = "fairymax";
     longDescription = ''
-       A version of micro-Max that reads the piece description from a file
-       fmax.ini, so that arbitrary fairy pieces can be implemented. This version
-       (4.8J) supports up to 15 piece types, and board sizes up to 12x8.
+      A version of micro-Max that reads the piece description from a file
+      fmax.ini, so that arbitrary fairy pieces can be implemented. This version
+      (4.8J) supports up to 15 piece types, and board sizes up to 12x8.
     '';
     license = licenses.free;
     maintainers = [ maintainers.raskin ];

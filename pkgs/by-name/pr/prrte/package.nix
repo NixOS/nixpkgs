@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "prrte";
-  version = "3.0.7";
+  version = "3.0.8";
 
   src = fetchFromGitHub {
     owner = "openpmix";
     repo = "prrte";
     rev = "v${version}";
-    hash = "sha256-Jw9/M2rpGTA19qssDaZV+9FYlIvz8wgL5oUDdWwidHI=";
+    hash = "sha256-4Xc6We0mXpKCwfHlmqi+WbFjdQegWHGzWrEnMVqkqtU=";
     fetchSubmodules = true;
   };
 
@@ -75,6 +75,6 @@ stdenv.mkDerivation rec {
     homepage = "https://docs.prrte.org/";
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [ markuskowa ];
-    platforms = lib.platforms.linux;
+    platforms = lib.platforms.unix;
   };
 }

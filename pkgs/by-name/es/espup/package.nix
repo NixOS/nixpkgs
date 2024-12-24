@@ -1,46 +1,49 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, installShellFiles
-, bzip2
-, openssl
-, xz
-, zstd
-, stdenv
-, darwin
-, testers
-, espup
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  installShellFiles,
+  bzip2,
+  openssl,
+  xz,
+  zstd,
+  stdenv,
+  darwin,
+  testers,
+  espup,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "espup";
-  version = "0.13.0";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "esp-rs";
     repo = "espup";
     rev = "v${version}";
-    hash = "sha256-okB8K0ly3MvnkVve41eT0SNr5dPn5E5QXewqLHGL/Tc=";
+    hash = "sha256-LMzVxLwl24bw1o+OYiNcxm+KrnDyrg8tjkWhwsYYKzs=";
   };
 
-  cargoHash = "sha256-n2tLG3logtc73Ut/R1UGuLSm7MpZ4Bxp/08SOhGL+80=";
+  cargoHash = "sha256-gl/Qdzt9vuSvijnJU5MqgC8gtVALp4+zR7dxKioKzDU=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
   ];
 
-  buildInputs = [
-    bzip2
-    openssl
-    xz
-    zstd
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.CoreFoundation
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      bzip2
+      openssl
+      xz
+      zstd
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.CoreFoundation
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
@@ -70,8 +73,14 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Tool for installing and maintaining Espressif Rust ecosystem";
     homepage = "https://github.com/esp-rs/espup/";
-    license = with licenses; [ mit asl20 ];
-    maintainers = with maintainers; [ knightpp beeb ];
+    license = with licenses; [
+      mit
+      asl20
+    ];
+    maintainers = with maintainers; [
+      knightpp
+      beeb
+    ];
     mainProgram = "espup";
   };
 }

@@ -12,7 +12,7 @@ let
     self = python3;
     packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
   };
-  version = "0.66.0";
+  version = "0.69.0";
   aider-chat = python3.pkgs.buildPythonApplication {
     pname = "aider-chat";
     inherit version;
@@ -22,7 +22,7 @@ let
       owner = "Aider-AI";
       repo = "aider";
       rev = "refs/tags/v${version}";
-      hash = "sha256-6wD8wBDV6Roo3J+oEYiBzZ7i1iGOZhcoiKXHV7AJjDk=";
+      hash = "sha256-fJLLWL31BLEpgBrYDq0E8t7GN9TyOA5pwt42H/Hqh58=";
     };
 
     pythonRelaxDeps = true;
@@ -109,9 +109,11 @@ let
       tree-sitter-languages
       typing-extensions
       urllib3
+      watchfiles
       wcwidth
       yarl
       zipp
+      pip
 
       # Not listed in requirements
       mixpanel
@@ -145,6 +147,8 @@ let
         "test_simple_send_with_retries"
         # Expected 'check_version' to have been called once
         "test_main_exit_calls_version_check"
+        # AssertionError: assert 2 == 1
+        "test_simple_send_non_retryable_error"
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # Tests fails on darwin

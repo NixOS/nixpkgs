@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "cargo-pio";
@@ -20,7 +21,10 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Build Rust embedded projects with PlatformIO";
     homepage = "https://github.com/esp-rs/embuild/tree/master/cargo-pio";
-    license = with lib.licenses; [ asl20 mit ];
+    license = with lib.licenses; [
+      asl20
+      mit
+    ];
     maintainers = with maintainers; [ dannixon ];
     mainProgram = "cargo-pio";
   };

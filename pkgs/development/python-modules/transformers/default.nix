@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   buildPythonPackage,
   fetchFromGitHub,
 
@@ -59,24 +58,15 @@
 
 buildPythonPackage rec {
   pname = "transformers";
-  version = "4.47.0";
+  version = "4.47.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "huggingface";
     repo = "transformers";
     tag = "v${version}";
-    hash = "sha256-TQQ+w+EH/KWLE7iaaAHGxfE74hCiLXcqlIr1TIBFGvo=";
+    hash = "sha256-xwc84wFUSRJ8SNCLiI7FQ1v/JKnXkTW4EpNCjgUbZ8E=";
   };
-
-  # torch.distributed is not available on darwin
-  # Fix submitted upstream in https://github.com/huggingface/transformers/pull/35133
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace src/transformers/pytorch_utils.py \
-      --replace-fail \
-        'if is_torch_greater_or_equal("2.5"):' \
-        'if False:'
-  '';
 
   build-system = [ setuptools ];
 
@@ -200,7 +190,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/huggingface/transformers";
     description = "Natural Language Processing for TensorFlow 2.0 and PyTorch";
     mainProgram = "transformers-cli";
-    changelog = "https://github.com/huggingface/transformers/releases/tag/v${version}";
+    changelog = "https://github.com/huggingface/transformers/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [

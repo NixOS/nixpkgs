@@ -7,16 +7,16 @@
 buildHomeAssistantComponent rec {
   owner = "iprak";
   domain = "sensi";
-  version = "1.3.4";
+  version = "1.3.14";
 
   src = fetchFromGitHub {
     inherit owner;
     repo = domain;
     rev = "refs/tags/v${version}";
-    hash = "sha256-NbK9h0nvcWNSwsc04YgjqKl+InijxftPJ3SLCQF/Hns=";
+    hash = "sha256-kskffpfxpUjNUgsGc/sSkCbGdjt47KfPpH6KBFDLsHw=";
   };
 
-  propagatedBuildInputs = [
+  dependencies = [
     websockets
   ];
 

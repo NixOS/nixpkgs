@@ -28,7 +28,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   pytestFlagsArray = [
-    "-o cache_dir=$(mktemp -d)"
+    "-p no:cacheprovider"
 
     # Monitor https://github.com/certbot/certbot/issues/9606 for a solution
     "-W"

@@ -12,7 +12,7 @@
   libinput,
   fontconfig,
   freetype,
-  mesa,
+  libgbm,
   wayland,
   xorg,
   vulkan-loader,
@@ -20,17 +20,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cosmic-edit";
-  version = "1.0.0-alpha.3";
+  version = "1.0.0-alpha.4";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-edit";
     rev = "epoch-${version}";
-    hash = "sha256-GCy/JyicPeCA7y9bfbVlyYiofRp0c82INPZi0zbnnxE=";
+    hash = "sha256-IAIO5TggPGzZyfET2zBKpde/aePXR4FsSg/Da1y3saA=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-mQSCUnCJ52iSekljNAvf7G+WefmXhhmZTxumvXl9Jyc=";
+  cargoHash = "sha256-pRp6Bi9CcHg2tMAC86CZybpfGL2BTxzst3G31tXJA5A=";
 
   # COSMIC applications now uses vergen for the About page
   # Update the COMMIT_DATE to match when the commit was made
@@ -41,7 +41,11 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
   '';
 
-  nativeBuildInputs = [ just pkg-config makeBinaryWrapper ];
+  nativeBuildInputs = [
+    just
+    pkg-config
+    makeBinaryWrapper
+  ];
   buildInputs = [
     libxkbcommon
     xorg.libX11
@@ -49,7 +53,7 @@ rustPlatform.buildRustPackage rec {
     libglvnd
     fontconfig
     freetype
-    mesa
+    libgbm
     wayland
     vulkan-loader
   ];
@@ -79,9 +83,16 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     wrapProgram "$out/bin/cosmic-edit" \
       --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${lib.makeLibraryPath [
-        xorg.libX11 xorg.libXcursor xorg.libXi vulkan-loader libxkbcommon wayland
-      ]}
+      --prefix LD_LIBRARY_PATH : ${
+        lib.makeLibraryPath [
+          xorg.libX11
+          xorg.libXcursor
+          xorg.libXi
+          vulkan-loader
+          libxkbcommon
+          wayland
+        ]
+      }
   '';
 
   meta = with lib; {
@@ -89,7 +100,10 @@ rustPlatform.buildRustPackage rec {
     description = "Text Editor for the COSMIC Desktop Environment";
     mainProgram = "cosmic-edit";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ ahoneybun nyabinary ];
+    maintainers = with maintainers; [
+      ahoneybun
+      nyabinary
+    ];
     platforms = platforms.linux;
   };
 }

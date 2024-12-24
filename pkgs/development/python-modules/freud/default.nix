@@ -51,13 +51,6 @@ buildPythonPackage rec {
     touch extern/{voro++,fsph,Eigen}/.git
   '';
 
-  # Scipy still depends on numpy 1, and so we'd get 'package duplicates in
-  # closure' error if we'd use numpy_2
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail 'numpy>=2.0.0rc1' 'numpy' \
-  '';
-
   nativeBuildInputs = [
     cmake
     cython
@@ -80,8 +73,12 @@ buildPythonPackage rec {
     matplotlib
     sympy
   ];
-  disabledTests = lib.optionals stdenv.hostPlatform.isAarch64 [
+  disabledTests = [
     # https://github.com/glotzerlab/freud/issues/961
+    #
+    # For x86_64-linux, see:
+    #
+    # https://github.com/glotzerlab/freud/issues/961#issuecomment-2553344968
     "test_docstring"
   ];
   # On top of cd $out due to https://github.com/NixOS/nixpkgs/issues/255262 ,

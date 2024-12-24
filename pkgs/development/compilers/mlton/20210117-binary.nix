@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchpatch, fetchurl, patchelf, gmp }:
+{
+  lib,
+  stdenv,
+  fetchpatch,
+  fetchurl,
+  patchelf,
+  bash,
+  gmp,
+}:
 let
   dynamic-linker = stdenv.cc.bintools.dynamicLinker;
 in
@@ -29,13 +37,17 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "remove-duplicate-if.patch";
       url = "https://github.com/MLton/mlton/commit/22002cd0a53a1ab84491d74cb8dc6a4e50c1f7b7.patch";
-      decode = "sed -e 's|Makefile\.binary|Makefile|g'";
+      decode = "sed -e 's|Makefile\\.binary|Makefile|g'";
       hash = "sha256-Gtmc+OIh+m7ordSn74fpOKVDQDtYyLHe6Le2snNCBYQ=";
     })
   ];
 
-  buildInputs = [ gmp ];
+  buildInputs = [
+    bash
+    gmp
+  ];
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux patchelf;
+  strictDeps = true;
 
   buildPhase = ''
     make update \
@@ -48,27 +60,29 @@ stdenv.mkDerivation rec {
     make install PREFIX=$out
   '';
 
-  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
-    patchelf --set-interpreter ${dynamic-linker} $out/lib/mlton/mlton-compile
-    patchelf --set-rpath ${gmp}/lib $out/lib/mlton/mlton-compile
+  postFixup =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
+      patchelf --set-interpreter ${dynamic-linker} $out/lib/mlton/mlton-compile
+      patchelf --set-rpath ${gmp}/lib $out/lib/mlton/mlton-compile
 
-    for e in mllex mlnlffigen mlprof mlyacc; do
-      patchelf --set-interpreter ${dynamic-linker} $out/bin/$e
-      patchelf --set-rpath ${gmp}/lib $out/bin/$e
-    done
-  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool -change \
-      /opt/local/lib/libgmp.10.dylib \
-      ${gmp}/lib/libgmp.10.dylib \
-      $out/lib/mlton/mlton-compile
-
-    for e in mllex mlnlffigen mlprof mlyacc; do
+      for e in mllex mlnlffigen mlprof mlyacc; do
+        patchelf --set-interpreter ${dynamic-linker} $out/bin/$e
+        patchelf --set-rpath ${gmp}/lib $out/bin/$e
+      done
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       install_name_tool -change \
         /opt/local/lib/libgmp.10.dylib \
         ${gmp}/lib/libgmp.10.dylib \
-        $out/bin/$e
-    done
-  '';
+        $out/lib/mlton/mlton-compile
+
+      for e in mllex mlnlffigen mlprof mlyacc; do
+        install_name_tool -change \
+          /opt/local/lib/libgmp.10.dylib \
+          ${gmp}/lib/libgmp.10.dylib \
+          $out/bin/$e
+      done
+    '';
 
   meta = import ./meta.nix;
 }

@@ -492,6 +492,11 @@ Examples going from bad to best practices:
 Sometimes, changes are needed to the source to allow building a derivation in nixpkgs, or to get earlier access to an upstream fix or improvement.
 When using the `patches` parameter to `mkDerivation`, make sure the patch name clearly describes the reason for the patch, or add a comment.
 
+> [!Note]
+> The version of the package does not need to be changed just because a patch is applied. Declarative package installations don't depend on the version, while imperative `nix-env` installations can use [`upgrade --eq/leq/--always`](https://nix.dev/manual/nix/2.25/command-ref/nix-env/upgrade#flags).
+>
+> See [Versioning](#versioning) for details on package versioning.
+
 ### Fetching patches
 
 In the interest of keeping our maintenance burden and the size of Nixpkgs to a minimum, patches already merged upstream or published elsewhere _should_ be retrieved using `fetchpatch`:

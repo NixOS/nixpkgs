@@ -37,7 +37,6 @@ buildPythonPackage rec {
     "lxml"
   ];
 
-
   nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "svg2tikz" ];
@@ -51,5 +50,6 @@ buildPythonPackage rec {
       dotlambda
       gal_bolle
     ];
+    broken = true;
   };
 }

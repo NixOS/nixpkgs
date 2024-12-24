@@ -1,24 +1,25 @@
-{ lib
-, fetchFromGitHub
-, stdenvNoCC
-, nodejs
-, fetchNpmDeps
-, buildPackages
-, php83
-, nixosTests
-, nix-update-script
-, dataDir ? "/var/lib/firefly-iii"
+{
+  lib,
+  fetchFromGitHub,
+  stdenvNoCC,
+  nodejs,
+  fetchNpmDeps,
+  buildPackages,
+  php83,
+  nixosTests,
+  nix-update-script,
+  dataDir ? "/var/lib/firefly-iii",
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "firefly-iii";
-  version = "6.1.24";
+  version = "6.1.25";
 
   src = fetchFromGitHub {
     owner = "firefly-iii";
     repo = "firefly-iii";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ZB0yaGHL1AI67i2ixUzuWyiBjXJNlDV4APBahDuNObI=";
+    hash = "sha256-6DZwTk67bKvgB+Zf7aPakrWWYCAjkYggrRiaFKgsMkk=";
   };
 
   buildInputs = [ php83 ];
@@ -37,12 +38,12 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   composerStrictValidation = true;
   strictDeps = true;
 
-  vendorHash = "sha256-6sOmW+CFuNEBVHpZwh/wjrIINPdcPJUvosmdLaCvZlw=";
+  vendorHash = "sha256-5uUjb5EPcoEBuFbWGb1EIC/U/VaSUsRp09S9COIx25E=";
 
   npmDeps = fetchNpmDeps {
     inherit (finalAttrs) src;
     name = "${finalAttrs.pname}-npm-deps";
-    hash = "sha256-W3lV0LbmOPfIwStNf4IwBVorSFHIlpyuIk+17/V/Y2Y=";
+    hash = "sha256-j49iltvW7xGOCV+FIB4f+ECfQo50U+wTugyaK9JGN3A=";
   };
 
   composerRepository = php83.mkComposerRepository {
@@ -81,7 +82,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     description = "Firefly III: a personal finances manager";
     homepage = "https://github.com/firefly-iii/firefly-iii";
     license = lib.licenses.agpl3Only;
-    maintainers = [ lib.maintainers.savyajha lib.maintainers.patrickdag ];
+    maintainers = [
+      lib.maintainers.savyajha
+      lib.maintainers.patrickdag
+    ];
     hydraPlatforms = lib.platforms.linux; # build hangs on both Darwin platforms, needs investigation
   };
 })

@@ -6,13 +6,13 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "ytdl-sub";
-  version = "2024.11.6";
+  version = "2024.12.14";
   pyproject = true;
 
   src = fetchPypi {
     inherit version;
     pname = "ytdl_sub";
-    hash = "sha256-YMki+1rC726RtbZceoVbcpk/Gi3F81xxERQjpqLjn+A=";
+    hash = "sha256-kCx/PlCmJesbsMv3bQ0BaTDfskP7XYE69VXdjPNfln4=";
   };
 
   pythonRelaxDeps = [

@@ -8,18 +8,19 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "labelle";
-  version = "1.2.3";
+  version = "1.3.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "labelle-org";
     repo = "labelle";
     rev = "refs/tags/v${version}";
-    hash = "sha256-nGWffQAXlnKiWBUnSo/IKGdWsLdwLr9N4jAURcVGfj8=";
+    hash = "sha256-+aRq+zwnoHy+kXerFCw1b46OHmWDDpyOiBRu4IvYAQg=";
   };
 
   postPatch = ''
-    sed -i 's/hatch-vcs >=0.3.0,<0.4/hatch-vcs >=0.3.0/' pyproject.toml
+    substituteInPlace pyproject.toml --replace-fail "hatch-vcs >=0.3.0,<0.4" "hatch-vcs >=0.3.0"
+    substituteInPlace pyproject.toml --replace-fail "Pillow>=8.1.2,<11" "Pillow>=8.1.2"
   '';
 
   buildInputs = [ qt6.qtwayland ];
@@ -27,6 +28,7 @@ python3Packages.buildPythonApplication rec {
   nativeBuildInputs = [
     qt6.wrapQtAppsHook
     python3Packages.hatchling
+    python3Packages.hatch-fancy-pypi-readme
     python3Packages.hatch-vcs
     copyDesktopItems
   ];

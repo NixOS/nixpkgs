@@ -1,4 +1,8 @@
-{ lib, stdenv, fetchurl, memstreamHook }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "hyx";
@@ -13,8 +17,6 @@ stdenv.mkDerivation rec {
     substituteInPlace Makefile \
       --replace "-Wl,-z,relro,-z,now -fpic -pie" ""
   '';
-
-  buildInputs = lib.optional (stdenv.system == "x86_64-darwin") memstreamHook;
 
   installPhase = ''
     install -vD hyx $out/bin/hyx

@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation {
   pname = "hare-ev";
-  version = "0-unstable-2024-08-06";
+  version = "0-unstable-2024-12-13";
 
   src = fetchFromSourcehut {
     owner = "~sircmpwn";
     repo = "hare-ev";
-    rev = "7de2b827e5e680e315697b97be142aebe71ec58f";
-    hash = "sha256-0RJqtYy3zGzy32WbR1pxsc3/B1VjUzJcVydqLxwmYSE=";
+    rev = "7f80dcbeb09f4dd743cdccfb2cfed10bfdeb07ab";
+    hash = "sha256-cwBmkwQUeOBjTbDor44ZNowZkJ0ifrbr+ST5j5dUJm8=";
   };
 
   nativeCheckInputs = [ hareHook ];

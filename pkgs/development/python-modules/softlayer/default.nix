@@ -1,44 +1,52 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
-  click,
   fetchFromGitHub,
-  mock,
+
+  # build-system
+  setuptools,
+
+  # dependencies
+  click,
   prettytable,
   prompt-toolkit,
   ptable,
   pygments,
-  pytestCheckHook,
-  pythonOlder,
   requests,
   rich,
+  urllib3,
+
+  # tests
+  mock,
+  pytestCheckHook,
   sphinx,
   testtools,
   tkinter,
-  urllib3,
   zeep,
 }:
 
 buildPythonPackage rec {
   pname = "softlayer";
   version = "6.2.5";
-  format = "setuptools";
-
-  disabled = pythonOlder "3.7";
+  pyproject = true;
 
   src = fetchFromGitHub {
-    owner = pname;
+    owner = "softlayer";
     repo = "softlayer-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wDLMVonPUexoaZ60kRBILmr5l46yajzACozCp6uETGY=";
   };
 
-  postPatch = ''
-    substituteInPlace setup.py \
-        --replace "rich ==" "rich >="
-  '';
+  build-system = [
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [
+    "rich"
+  ];
+
+  dependencies = [
     click
     prettytable
     prompt-toolkit
@@ -66,6 +74,11 @@ buildPythonPackage rec {
     export HOME=$(mktemp -d)
   '';
 
+  pytestFlagsArray = lib.optionals stdenv.hostPlatform.isDarwin [
+    # SoftLayer.exceptions.TransportError: TransportError(0): ('Connection aborted.', ConnectionResetError(54, 'Connection reset by peer'))
+    "--deselect=tests/CLI/modules/hardware/hardware_basic_tests.py::HardwareCLITests"
+  ];
+
   disabledTestPaths = [
     # Test fails with ConnectionError trying to connect to api.softlayer.com
     "tests/transports/soap_tests.py.unstable"
@@ -73,11 +86,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "SoftLayer" ];
 
-  meta = with lib; {
+  meta = {
     description = "Python libraries that assist in calling the SoftLayer API";
     homepage = "https://github.com/softlayer/softlayer-python";
     changelog = "https://github.com/softlayer/softlayer-python/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ onny ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ onny ];
   };
 }

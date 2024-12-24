@@ -1,16 +1,12 @@
 {
   lib,
   apple-sdk,
-  apple-sdk_10_13,
-  apple-sdk_11,
   mkAppleDerivation,
   stdenvNoCC,
 }:
 
 let
-  # The 10.12 SDK doesn’t have the files needed in the same places or possibly at all.
-  # Just use the 11.x SDK to make things easier.
-  xnu = apple-sdk_11.sourceRelease "xnu";
+  xnu = apple-sdk.sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "copyfile-deps-private-headers";
@@ -89,10 +85,6 @@ mkAppleDerivation {
   '';
 
   env.NIX_CFLAGS_COMPILE = "-I${privateHeaders}/include";
-
-  buildInputs = lib.optionals (lib.versionOlder (lib.getVersion apple-sdk) "10.13") [
-    (apple-sdk_10_13.override { enableBootstrap = true; })
-  ];
 
   meta.description = "Darwin file copying library";
 }

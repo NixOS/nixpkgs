@@ -37,13 +37,6 @@ buildPythonPackage rec {
     sortedcontainers
   ];
 
-  nativeCheckInputs = [
-    hypothesis
-    pytest-asyncio
-    pytest-mock
-    pytestCheckHook
-  ];
-
   optional-dependencies = {
     lua = [ lupa ];
     json = [ jsonpath-ng ];
@@ -51,6 +44,13 @@ buildPythonPackage rec {
     cf = [ pyprobables ];
     probabilistic = [ pyprobables ];
   };
+
+  nativeCheckInputs = [
+    hypothesis
+    pytest-asyncio
+    pytest-mock
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "fakeredis" ];
 
@@ -64,11 +64,6 @@ buildPythonPackage rec {
   postCheck = ''
     kill $REDIS_PID
   '';
-
-  disabledTests = [
-    # AssertionError
-    "test_command"
-  ];
 
   meta = with lib; {
     description = "Fake implementation of Redis API";

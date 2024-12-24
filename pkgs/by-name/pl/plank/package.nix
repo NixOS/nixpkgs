@@ -1,28 +1,30 @@
-{ lib, stdenv
-, fetchurl
-, vala
-, atk
-, cairo
-, dconf
-, glib
-, gnome-common
-, gtk3
-, libwnck
-, libX11
-, libXfixes
-, libXi
-, pango
-, gettext
-, pkg-config
-, libxml2
-, bamf
-, gdk-pixbuf
-, libdbusmenu-gtk3
-, file
-, gnome-menus
-, libgee
-, wrapGAppsHook3
-, autoreconfHook
+{
+  lib,
+  stdenv,
+  fetchurl,
+  vala,
+  atk,
+  cairo,
+  dconf,
+  glib,
+  gnome-common,
+  gtk3,
+  libwnck,
+  libX11,
+  libXfixes,
+  libXi,
+  pango,
+  gettext,
+  pkg-config,
+  libxml2,
+  bamf,
+  gdk-pixbuf,
+  libdbusmenu-gtk3,
+  file,
+  gnome-menus,
+  libgee,
+  wrapGAppsHook3,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {

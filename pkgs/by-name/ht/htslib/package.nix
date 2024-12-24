@@ -1,23 +1,41 @@
-{ lib, stdenv, fetchurl, zlib, bzip2, xz, curl, perl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  zlib,
+  bzip2,
+  xz,
+  curl,
+  perl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "htslib";
-  version = "1.19.1";
+  version = "1.21";
 
   src = fetchurl {
     url = "https://github.com/samtools/htslib/releases/download/${version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-Ii1001dPtnsVjGmIyYDuqrqKBlb15P+3a1+lfwNZM+w=";
+    sha256 = "sha256-hLUQ5zX0ljZB8m/YjIq97oH/TLYhaDEK5xZjaqwPGCM=";
   };
 
   # perl is only used during the check phase.
   nativeBuildInputs = [ perl ];
 
-  buildInputs = [ zlib bzip2 xz curl ];
+  buildInputs = [
+    zlib
+    bzip2
+    xz
+    curl
+  ];
 
-  configureFlags = if ! stdenv.hostPlatform.isStatic
-                    then [ "--enable-libcurl" ] # optional but strongly recommended
-                    else [ "--disable-libcurl" "--disable-plugins" ];
-
+  configureFlags =
+    if !stdenv.hostPlatform.isStatic then
+      [ "--enable-libcurl" ] # optional but strongly recommended
+    else
+      [
+        "--disable-libcurl"
+        "--disable-plugins"
+      ];
 
   # In the case of static builds, we need to replace the build and install phases
   buildPhase = lib.optional stdenv.hostPlatform.isStatic ''

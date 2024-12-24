@@ -1,11 +1,12 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, pkg-config
-, openssl
-, stdenv
-, curl
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  pkg-config,
+  openssl,
+  stdenv,
+  curl,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -24,8 +25,12 @@ rustPlatform.buildRustPackage rec {
   nativeBuildInputs = [
     pkg-config
   ];
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ curl Security ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      curl
+      Security
+    ];
 
   doCheck = false;
 
@@ -34,7 +39,13 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "cargo-tarpaulin";
     homepage = "https://github.com/xd009642/tarpaulin";
     changelog = "https://github.com/xd009642/tarpaulin/blob/${src.rev}/CHANGELOG.md";
-    license = with licenses; [ mit /* or */ asl20 ];
-    maintainers = with maintainers; [ figsoda hugoreeves ];
+    license = with licenses; [
+      mit # or
+      asl20
+    ];
+    maintainers = with maintainers; [
+      figsoda
+      hugoreeves
+    ];
   };
 }

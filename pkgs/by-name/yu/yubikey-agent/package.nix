@@ -1,4 +1,13 @@
-{ stdenv, lib, fetchFromGitHub, buildGoModule, libnotify, pcsclite, pkg-config, darwin }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  libnotify,
+  pcsclite,
+  pkg-config,
+  darwin,
+}:
 
 buildGoModule rec {
   pname = "yubikey-agent";
@@ -27,7 +36,11 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  ldflags = [ "-s" "-w" "-X main.Version=${version}" ];
+  ldflags = [
+    "-s"
+    "-w"
+    "-X main.Version=${version}"
+  ];
 
   postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
     mkdir -p $out/lib/systemd/user
@@ -40,7 +53,10 @@ buildGoModule rec {
     mainProgram = "yubikey-agent";
     license = licenses.bsd3;
     homepage = "https://filippo.io/yubikey-agent";
-    maintainers = with lib.maintainers; [ philandstuff rawkode ];
+    maintainers = with lib.maintainers; [
+      philandstuff
+      rawkode
+    ];
     platforms = platforms.darwin ++ platforms.linux;
   };
 }

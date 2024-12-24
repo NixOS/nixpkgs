@@ -37,7 +37,7 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   runtimeDeps = [
     libX11
@@ -102,8 +102,6 @@ buildDotnetModule rec {
 
     popd
   '';
-
-  passthru.updateScript = ./updater.sh;
 
   meta = with lib; {
     homepage = "https://ryujinx.org/";

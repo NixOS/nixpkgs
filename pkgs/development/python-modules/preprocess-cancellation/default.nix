@@ -4,7 +4,6 @@
   pythonOlder,
   fetchFromGitHub,
   poetry-core,
-  setuptools,
   shapely,
   pytestCheckHook,
 }:
@@ -13,7 +12,7 @@ buildPythonPackage rec {
   pname = "preprocess-cancellation";
   version = "0.2.1";
   disabled = pythonOlder "3.6"; # >= 3.6
-  format = "pyproject";
+  pyproject = true;
 
   # No tests in PyPI
   src = fetchFromGitHub {
@@ -26,22 +25,20 @@ buildPythonPackage rec {
   postPatch = ''
     sed -i "/^addopts/d" pyproject.toml
 
-    # setuptools 61 compatibility
-    # error: Multiple top-level packages discovered in a flat-layout: ['STLs', 'GCode'].
-    mkdir tests
-    mv GCode STLs test_* tests
-    substituteInPlace tests/test_preprocessor.py \
-      --replace "./GCode" "./tests/GCode"
-    substituteInPlace tests/test_preprocessor_with_shapely.py \
-      --replace "./GCode" "./tests/GCode"
+    cat >> pyproject.toml << EOF
+    [build-system]
+    requires = ["poetry-core"]
+    build-backend = "poetry.core.masonry.api"
+    EOF
   '';
 
-  nativeBuildInputs = [
+  build-system = [
     poetry-core
-    setuptools
   ];
 
-  propagatedBuildInputs = [ shapely ];
+  optional-dependencies = {
+    shapely = [ shapely ];
+  };
 
   nativeCheckInputs = [ pytestCheckHook ];
 

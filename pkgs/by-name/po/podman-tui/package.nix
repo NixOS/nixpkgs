@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorHash = null;
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   tags = [ "containers_image_openpgp" "remote" ]
     ++ lib.optional stdenv.hostPlatform.isDarwin "darwin";
@@ -41,11 +41,11 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/containers/podman-tui";
     description = "Podman Terminal UI";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "podman-tui";
   };
 }

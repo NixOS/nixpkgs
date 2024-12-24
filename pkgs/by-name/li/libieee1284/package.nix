@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, fetchurl
-, autoconf, automake, libtool, xmlto, docbook_xml_dtd_412, docbook_xsl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  autoconf,
+  automake,
+  libtool,
+  xmlto,
+  docbook_xml_dtd_412,
+  docbook_xsl,
 }:
 
 stdenv.mkDerivation rec {
@@ -16,7 +25,7 @@ stdenv.mkDerivation rec {
   patches = [
     (fetchurl {
       name = "musl.patch";
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-libs/libieee1284/files/libieee1284-0.2.11-don-t-blindly-assume-outb_p-to-be-available.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/sys-libs/libieee1284/files/libieee1284-0.2.11-don-t-blindly-assume-outb_p-to-be-available.patch?id=dec60bb6900d6ebdaaa6aa1dcb845b30b739f9b5";
       hash = "sha256-sNu0OPBMa9GIwSu754noateF4FZC14f+8YRgYUl13KQ=";
     })
   ];
@@ -30,14 +39,16 @@ stdenv.mkDerivation rec {
     docbook_xsl
   ];
 
-  configureFlags = [
-    "--without-python"
-  ] ++ lib.optionals (stdenv.hostPlatform.isMusl && !stdenv.hostPlatform.isx86) [
-    # musl always provides <sys/io.h>, even though the functionality
-    # is x86-specific.
-    # https://www.openwall.com/lists/musl/2024/10/25/2
-    "ac_cv_header_sys_io_h=no"
-  ];
+  configureFlags =
+    [
+      "--without-python"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isMusl && !stdenv.hostPlatform.isx86) [
+      # musl always provides <sys/io.h>, even though the functionality
+      # is x86-specific.
+      # https://www.openwall.com/lists/musl/2024/10/25/2
+      "ac_cv_header_sys_io_h=no"
+    ];
 
   prePatch = ''
     ./bootstrap

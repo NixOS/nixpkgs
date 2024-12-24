@@ -14,7 +14,7 @@ buildGoModule rec {
   vendorHash = "sha256-bwNuQPGjAQ9Afa2GuPWrW8ytfIvhsOYFKPt0zyfdZhU=";
   subPackages = [ "cmd/earthly" "cmd/debugger" ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

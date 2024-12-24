@@ -285,7 +285,7 @@ let
         --replace-fail './web' "${authentik-django}/web"
     '';
 
-    CGO_ENABLED = 0;
+    env.CGO_ENABLED = 0;
 
     vendorHash = "sha256-BcL9QAc2jJqoPaQImJIFtCiu176nxmVcCLPjXjNBwqI=";
 

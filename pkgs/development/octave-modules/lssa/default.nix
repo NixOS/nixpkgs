@@ -1,6 +1,7 @@
-{ buildOctavePackage
-, lib
-, fetchurl
+{
+  buildOctavePackage,
+  lib,
+  fetchurl,
 }:
 
 buildOctavePackage rec {
@@ -18,10 +19,10 @@ buildOctavePackage rec {
     maintainers = with maintainers; [ KarlJoad ];
     description = "Tools to compute spectral decompositions of irregularly-spaced time series";
     longDescription = ''
-       A package implementing tools to compute spectral decompositions of
-       irregularly-spaced time series. Currently includes functions based off
-       the Lomb-Scargle periodogram and Adolf Mathias' implementation for R
-       and C.
+      A package implementing tools to compute spectral decompositions of
+      irregularly-spaced time series. Currently includes functions based off
+      the Lomb-Scargle periodogram and Adolf Mathias' implementation for R
+      and C.
     '';
   };
 }

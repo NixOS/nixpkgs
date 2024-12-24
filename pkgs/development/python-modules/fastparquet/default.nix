@@ -7,7 +7,6 @@
   fsspec,
   git,
   numpy,
-  oldest-supported-numpy,
   packaging,
   pandas,
   pytestCheckHook,
@@ -33,11 +32,6 @@ buildPythonPackage rec {
     hash = "sha256-YiaVkpPzH8ZmTiEtCom9xLbKzByIt7Ilig/WlmGrYH4=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0rc1" "oldest-supported-numpy"
-  '';
-
   build-system = [
     setuptools
     setuptools-scm
@@ -47,7 +41,7 @@ buildPythonPackage rec {
   nativeBuildInputs = [
     cython
     git
-    oldest-supported-numpy
+    numpy
   ];
 
   dependencies = [

@@ -1,6 +1,7 @@
 {
   lib,
   buildPythonPackage,
+  pythonAtLeast,
   pythonOlder,
   fetchFromGitHub,
   setuptools,
@@ -25,6 +26,11 @@ buildPythonPackage rec {
   nativeBuildInputs = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.13") [
+    # https://github.com/PyCQA/pyflakes/issues/812
+    "test_errors_syntax"
+  ];
 
   pythonImportsCheck = [ "pyflakes" ];
 

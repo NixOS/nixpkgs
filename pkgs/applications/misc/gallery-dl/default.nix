@@ -10,13 +10,13 @@
 
 buildPythonApplication rec {
   pname = "gallery-dl";
-  version = "1.27.7";
+  version = "1.28.1";
   format = "setuptools";
 
   src = fetchPypi {
     inherit version;
     pname = "gallery_dl";
-    hash = "sha256-9YcxD7AH4U2dOhAiUnknwwGFy9pplFFQ7Rn4cOvDdEc=";
+    hash = "sha256-1UxLZZoDJsaiPqb+zaiWb9TyQIknKlrz6RN21B0sNe4=";
   };
 
   propagatedBuildInputs = [

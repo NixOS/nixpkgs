@@ -1,4 +1,11 @@
-{ stdenv, lib, fetchzip, substituteAll, bash, jre }:
+{
+  stdenv,
+  lib,
+  fetchzip,
+  replaceVars,
+  bash,
+  jre,
+}:
 
 stdenv.mkDerivation rec {
   pname = "bonnmotion";
@@ -13,8 +20,7 @@ stdenv.mkDerivation rec {
     # The software has a non-standard install bash script which kind of works.
     # However, to make it fully functional, the automatically detection of the
     # program paths must be substituted with full paths.
-    (substituteAll {
-      src = ./install.patch;
+    (replaceVars ./install.patch {
       inherit bash jre;
     })
   ];
@@ -47,7 +53,7 @@ stdenv.mkDerivation rec {
     homepage = "https://sys.cs.uos.de/bonnmotion/";
     sourceProvenance = with sourceTypes; [
       fromSource
-      binaryBytecode  # source bundles dependency jars
+      binaryBytecode # source bundles dependency jars
     ];
     license = licenses.gpl2Plus;
     maintainers = with maintainers; [ oxzi ];

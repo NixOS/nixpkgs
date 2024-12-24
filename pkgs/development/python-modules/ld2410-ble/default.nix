@@ -1,11 +1,12 @@
 {
   lib,
   async-timeout,
-  bleak,
   bleak-retry-connector,
+  bleak,
   buildPythonPackage,
   fetchFromGitHub,
   poetry-core,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
 }:
@@ -13,31 +14,29 @@
 buildPythonPackage rec {
   pname = "ld2410-ble";
   version = "0.2.0";
-  format = "pyproject";
+  pyproject = true;
 
   disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "930913";
-    repo = pname;
+    repo = "ld2410-ble";
     rev = "refs/tags/v${version}";
     hash = "sha256-wQnE2hNT0UOnPJbHq1eayIO8g0XRZvEH6V19DL6RqoA=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace " --cov=ld2410_ble --cov-report=term-missing:skip-covered" ""
-  '';
+  build-system = [ poetry-core ];
 
-  nativeBuildInputs = [ poetry-core ];
-
-  propagatedBuildInputs = [
+  dependencies = [
     async-timeout
     bleak
     bleak-retry-connector
   ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    pytest-cov-stub
+    pytestCheckHook
+  ];
 
   pythonImportsCheck = [ "ld2410_ble" ];
 
@@ -45,7 +44,7 @@ buildPythonPackage rec {
     description = "Library for the LD2410B modules from HiLinks";
     homepage = "https://github.com/930913/ld2410-ble";
     changelog = "https://github.com/930913/ld2410-ble/blob/v${version}/CHANGELOG.md";
-    license = with licenses; [ mit ];
+    license = licenses.mit;
     maintainers = with maintainers; [ fab ];
   };
 }

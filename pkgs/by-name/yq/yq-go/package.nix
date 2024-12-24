@@ -1,17 +1,24 @@
-{ lib, buildGoModule, fetchFromGitHub, installShellFiles, runCommand, yq-go }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  runCommand,
+  yq-go,
+}:
 
 buildGoModule rec {
   pname = "yq-go";
-  version = "4.44.5";
+  version = "4.44.6";
 
   src = fetchFromGitHub {
     owner = "mikefarah";
     repo = "yq";
     rev = "v${version}";
-    hash = "sha256-UvijtuUkwliJTzKdWQ1mPTs5Hy60FQHOMiQicJ0O+ds=";
+    hash = "sha256-C9ql10PnEeGF8mnyLR25ibwLyE4SlqnpDNcPei9FnBw=";
   };
 
-  vendorHash = "sha256-SljvJ5R/9j4QozbljEJORaZqihhCGJVpzBYnptFQ1nA=";
+  vendorHash = "sha256-B6ivzm7J0wYdYruGZ2N6SyvghsRRJlVlk84CuaF5PVA=";
 
   nativeBuildInputs = [ installShellFiles ];
 
@@ -35,6 +42,9 @@ buildGoModule rec {
     changelog = "https://github.com/mikefarah/yq/raw/v${version}/release_notes.txt";
     mainProgram = "yq";
     license = [ licenses.mit ];
-    maintainers = with maintainers; [ lewo SuperSandro2000 ];
+    maintainers = with maintainers; [
+      lewo
+      SuperSandro2000
+    ];
   };
 }

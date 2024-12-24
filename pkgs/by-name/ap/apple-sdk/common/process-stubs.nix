@@ -24,7 +24,6 @@ self: super: {
     + ''
       echo "Removing the following dylibs from the libSystem reexported libraries list: ${lib.escapeShellArg (lib.concatStringsSep ", " removedDylibs)}"
       for libSystem in libSystem.B.tbd libSystem.B_asan.tbd; do
-        test ! -e usr/lib/$libSystem && continue # TODO: remove once the minimum SDK is 10.14 or newer.
         tapi stubify --filetype=tbd-v5 usr/lib/$libSystem -o usr/lib/$libSystem # tbd-v5 is a JSON-based format.
         jq --argjson libs ${lib.escapeShellArg (builtins.toJSON removedDylibs)} '
           if .libraries then

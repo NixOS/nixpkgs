@@ -56,5 +56,14 @@ mkWrapper "sdk" (buildEnv {
     );
   };
 
-  inherit (cli) meta;
+  meta = {
+    description = "${cli.meta.description or "dotnet"} (combined)";
+    inherit (cli.meta)
+      homepage
+      license
+      mainProgram
+      maintainers
+      platforms
+      ;
+  };
 })

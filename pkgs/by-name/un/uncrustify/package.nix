@@ -1,17 +1,26 @@
-{ lib, stdenv, fetchFromGitHub, cmake, python3 }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  python3,
+}:
 
 stdenv.mkDerivation rec {
   pname = "uncrustify";
-  version = "0.80.0";
+  version = "0.80.1";
 
   src = fetchFromGitHub {
     owner = "uncrustify";
     repo = "uncrustify";
     rev = "uncrustify-${version}";
-    sha256 = "sha256-1W4g9ISMVwmc0efa6loFtyqsHNm0kwR+NVKE8eB/jEA=";
+    sha256 = "sha256-SsPuqPyv3IFjYtAqANjzK8cdTGsyGBXVLzGWEUl28dg=";
   };
 
-  nativeBuildInputs = [ cmake python3 ];
+  nativeBuildInputs = [
+    cmake
+    python3
+  ];
 
   meta = with lib; {
     description = "Source code beautifier for C, C++, C#, ObjectiveC, D, Java, Pawn and VALA";

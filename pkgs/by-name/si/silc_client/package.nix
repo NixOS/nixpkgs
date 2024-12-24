@@ -1,5 +1,13 @@
-{ lib, stdenv, fetchurl, perl, pkg-config, glib, ncurses
-, enablePlugin ? false }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  perl,
+  pkg-config,
+  glib,
+  ncurses,
+  enablePlugin ? false,
+}:
 
 # Enabling the plugin and using it with a recent irssi, segafults on join:
 # http://marc.info/?l=silc-devel&m=125610477802211
@@ -19,14 +27,20 @@ stdenv.mkDerivation rec {
 
   hardeningDisable = [ "format" ];
 
-  configureFlags = [ "--with-ncurses=${ncurses.dev}" ];
-
-  preConfigure = lib.optionalString enablePlugin ''
-    configureFlags="$configureFlags --with-silc-plugin=$out/lib/irssi"
-  '';
+  configureFlags =
+    [
+      "--with-ncurses=${ncurses.dev}"
+    ]
+    ++ lib.optionals enablePlugin [
+      "--with-silc-plugin=${placeholder "out"}/lib/irssi"
+    ];
 
   nativeBuildInputs = [ pkg-config ];
-  buildInputs = [ perl glib ncurses ];
+  buildInputs = [
+    perl
+    glib
+    ncurses
+  ];
 
   meta = {
     homepage = "http://silcnet.org/";

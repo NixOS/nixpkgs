@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://apps.gnome.org/en/Hieroglyphic/";
     license = lib.licenses.gpl3Only;
     mainProgram = "hieroglyphic";
-    maintainers = with lib.maintainers; [ tomasajt ];
+    maintainers = with lib.maintainers; [ tomasajt ] ++ lib.teams.gnome-circle.members;
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 })

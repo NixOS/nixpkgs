@@ -20,14 +20,14 @@
 let
   pname = "qownnotes";
   appname = "QOwnNotes";
-  version = "24.11.2";
+  version = "24.12.4";
 in
 stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
     url = "https://github.com/pbek/QOwnNotes/releases/download/v${version}/qownnotes-${version}.tar.xz";
-    hash = "sha256-U1yxPAYFGSNbTjpFKXcAtlsHt9u4bgSf91WtOjziT8k=";
+    hash = "sha256-1DHBi++7GlSxnA8fAWC4rHej9wi8jDvI2pQduqZhNZQ=";
   };
 
   nativeBuildInputs = [
@@ -36,8 +36,7 @@ stdenv.mkDerivation {
     wrapQtAppsHook
     pkg-config
     installShellFiles
-    xvfb-run
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ xvfb-run ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
 
   buildInputs = [
     qtbase
@@ -52,23 +51,30 @@ stdenv.mkDerivation {
     "-DBUILD_WITH_SYSTEM_BOTAN=ON"
   ];
 
-  postInstall = ''
-    installShellCompletion --cmd ${appname} \
-      --bash <(xvfb-run $out/bin/${appname} --completion bash) \
-      --fish <(xvfb-run $out/bin/${appname} --completion fish)
-    installShellCompletion --cmd ${pname} \
-      --bash <(xvfb-run $out/bin/${appname} --completion bash) \
-      --fish <(xvfb-run $out/bin/${appname} --completion fish)
+  # Install shell completion on Linux (with xvfb-run)
+  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+      installShellCompletion --cmd ${appname} \
+        --bash <(xvfb-run $out/bin/${appname} --completion bash) \
+        --fish <(xvfb-run $out/bin/${appname} --completion fish)
+      installShellCompletion --cmd ${pname} \
+        --bash <(xvfb-run $out/bin/${appname} --completion bash) \
+        --fish <(xvfb-run $out/bin/${appname} --completion fish)
+  ''
+  # Install shell completion on macOS
+  + lib.optionalString stdenv.isDarwin ''
+      installShellCompletion --cmd ${pname} \
+        --bash <($out/bin/${appname} --completion bash) \
+        --fish <($out/bin/${appname} --completion fish)
   ''
   # Create a lowercase symlink for Linux
   + lib.optionalString stdenv.hostPlatform.isLinux ''
     ln -s $out/bin/${appname} $out/bin/${pname}
   ''
-  # Wrap application for macOS as lowercase binary
+  # Rename application for macOS as lowercase binary
   + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    mkdir -p $out/Applications
-    mv $out/bin/${appname}.app $out/Applications
-    makeWrapper $out/Applications/${appname}.app/Contents/MacOS/${appname} $out/bin/${pname}
+    # Prevent "same file" error
+    mv $out/bin/${appname} $out/bin/${pname}.bin
+    mv $out/bin/${pname}.bin $out/bin/${pname}
   '';
 
   # Tests QOwnNotes using the NixOS module by launching xterm:

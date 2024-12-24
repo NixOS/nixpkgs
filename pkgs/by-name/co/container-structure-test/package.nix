@@ -1,49 +1,49 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  testers,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+  container-structure-test,
 }:
-let
-  version = "v1.19.1";
-
-  sources = {
-    x86_64-linux = {
-      url = "https://github.com/GoogleContainerTools/container-structure-test/releases/download/${version}/container-structure-test-linux-amd64";
-      hash = "sha256-7KScpej6Km4fuv6XJez4frLwXUm91lII2RLLT71YRrs=";
-    };
-    aarch64-linux = {
-      url = "https://github.com/GoogleContainerTools/container-structure-test/releases/download/${version}/container-structure-test-linux-arm64";
-      hash = "sha256-5MyjOzbDPrV5R3ldJCINipJPOILCzx8+xBVO4bxq9ic=";
-    };
-    x86_64-darwin = {
-      url = "https://github.com/GoogleContainerTools/container-structure-test/releases/download/${version}/container-structure-test-darwin-amd64";
-      hash = "sha256-2QwyKvgzOdGOEuZVwntCpBGBk0JnOLpYOoEYp48qB/I=";
-    };
-    aarch64-darwin = {
-      url = "https://github.com/GoogleContainerTools/container-structure-test/releases/download/${version}/container-structure-test-darwin-arm64";
-      hash = "sha256-x3RmVdDFmHoGOqX49OWeAab/6m1U0jq/g/30rNjj5aI=";
-    };
-  };
-in
-stdenv.mkDerivation {
-  inherit version;
+buildGoModule rec {
+  version = "1.19.3";
   pname = "container-structure-test";
-  src = fetchurl { inherit (sources.${stdenv.system}) url hash; };
+  src = fetchFromGitHub {
+    owner = "GoogleContainerTools";
+    repo = "container-structure-test";
+    rev = "v${version}";
+    sha256 = "sha256-KLLACXUn6dtVCI+gCMHU9hoAJBOAVyhfwxtzsopWS4U=";
+  };
+  vendorHash = "sha256-pBq76HJ+nluOMOs9nqBKp1mr1LuX2NERXo48g8ezE9k=";
 
-  dontUnpack = true;
+  subPackages = [ "cmd/container-structure-test" ];
+  ldflags = [
+    "-X github.com/${src.owner}/${src.repo}/pkg/version.version=${version}"
+    "-X github.com/${src.owner}/${src.repo}/pkg/version.buildDate=1970-01-01T00:00:00Z"
+  ];
 
-  installPhase = ''
-    runHook preInstall
-    install -Dm755 $src $out/bin/container-structure-test
-    runHook postInstall
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
+    for shell in bash fish zsh; do
+      $out/bin/container-structure-test completion $shell > executor.$shell
+      installShellCompletion executor.$shell
+    done
   '';
+
+  passthru.tests.version = testers.testVersion {
+    package = container-structure-test;
+    version = version;
+    command = "${lib.getExe container-structure-test} version";
+  };
 
   meta = {
     homepage = "https://github.com/GoogleContainerTools/container-structure-test";
-    description = "The Container Structure Tests provide a powerful framework to validate the structure of a container image.";
+    description = "Framework to validate the structure of a container image";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ rubenhoenle ];
-    platforms = builtins.attrNames sources;
+    platforms = lib.platforms.darwin ++ lib.platforms.linux;
     mainProgram = "container-structure-test";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };

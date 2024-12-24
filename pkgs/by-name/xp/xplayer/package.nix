@@ -1,26 +1,28 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, autoreconfHook
-, autoconf-archive
-, clutter-gst
-, clutter-gtk
-, gettext
-, glib
-, gobject-introspection
-, gst_all_1
-, gtk-doc
-, gtk3
-, intltool
-, itstool
-, libpeas
-, libxml2
-, libxplayer-plparser
-, pkg-config
-, python3
-, wrapGAppsHook3
-, xapp
-, yelp-tools }:
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  autoreconfHook,
+  autoconf-archive,
+  clutter-gst,
+  clutter-gtk,
+  gettext,
+  glib,
+  gobject-introspection,
+  gst_all_1,
+  gtk-doc,
+  gtk3,
+  intltool,
+  itstool,
+  libpeas,
+  libxml2,
+  libxplayer-plparser,
+  pkg-config,
+  python3,
+  wrapGAppsHook3,
+  xapp,
+  yelp-tools,
+}:
 
 stdenv.mkDerivation rec {
   pname = "xplayer";
@@ -84,11 +86,24 @@ stdenv.mkDerivation rec {
     patchPythonScript $out/lib/xplayer/plugins/dbus/dbusservice.py
   '';
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=return-mismatch"
+    ];
+  };
+
   meta = with lib; {
     description = "Generic media player from Linux Mint";
-    license = with licenses; [ gpl2Plus lgpl21Plus ];
+    license = with licenses; [
+      gpl2Plus
+      lgpl21Plus
+    ];
     homepage = "https://github.com/linuxmint/xplayer";
-    maintainers = with maintainers; [ tu-maurice bobby285271 ];
+    maintainers = with maintainers; [
+      tu-maurice
+      bobby285271
+    ];
     platforms = platforms.linux;
   };
 }

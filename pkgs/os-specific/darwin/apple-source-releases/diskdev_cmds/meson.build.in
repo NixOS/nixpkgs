@@ -110,7 +110,6 @@ executable(
         '-DMNT_STRICTATIME=0x80000000',
         # https://github.com/apple-oss-distributions/xnu/blob/94d3b452840153a99b38a3a9659680b2a006908e/bsd/sys/attr.h#L300
         '-DVOL_CAP_FMT_SEALED=0x02000000',
-        '-D_DARWIN_USE_64_BIT_INODE=1', # Needed with older SDKs to ensure 64-bit `struct statfs`.
     ],
     dependencies : [ apfs, libdisk ],
     include_directories : [ 'edt_fstab', 'fsck.tproj', 'mount_flags_dir' ],

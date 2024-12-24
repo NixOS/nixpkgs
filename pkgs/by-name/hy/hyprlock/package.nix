@@ -1,11 +1,12 @@
 {
   lib,
-  stdenv,
+  gcc14Stdenv,
   fetchFromGitHub,
   cmake,
   pkg-config,
   libGL,
   libxkbcommon,
+  hyprgraphics,
   hyprlang,
   hyprutils,
   pam,
@@ -20,19 +21,19 @@
   libwebp,
   pango,
   libdrm,
-  mesa,
+  libgbm,
   nix-update-script,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+gcc14Stdenv.mkDerivation (finalAttrs: {
   pname = "hyprlock";
-  version = "0.5.0";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprlock";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-sUIsjWpZLplSJXWyJcDZdvDweksXLH5r9GSkwg0kgBw=";
+    hash = "sha256-41/fFxlGCf1q+WJwdzSidr9+xJ7+td91XQ1+kzrZ+ts=";
   };
 
   strictDeps = true;
@@ -46,6 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = [
     cairo
     file
+    hyprgraphics
     hyprlang
     hyprutils
     libdrm
@@ -53,7 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libwebp
     libxkbcommon
-    mesa
+    libgbm
     pam
     pango
     sdbus-cpp_2

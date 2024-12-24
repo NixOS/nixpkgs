@@ -59,6 +59,6 @@ stdenv.mkDerivation rec {
     mainProgram = "eyedropper";
     license = lib.licenses.gpl3Plus;
     platforms = lib.platforms.linux;
-    maintainers = with lib.maintainers; [ zendo ];
+    maintainers = with lib.maintainers; [ zendo ] ++ lib.teams.gnome-circle.members;
   };
 }

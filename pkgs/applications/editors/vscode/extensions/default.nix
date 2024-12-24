@@ -1579,8 +1579,8 @@ let
           # semver scheme, contrary to preview versions which are listed on
           # the VSCode Marketplace and use a calver scheme. We should avoid
           # using preview versions, because they expire after two weeks.
-          version = "15.6.0";
-          hash = "sha256-s6ur76DyNhwuZOYma2zPfYEs3lMliRuhdmZhITCSCPE=";
+          version = "16.0.5";
+          hash = "sha256-9xvArjUXxgofGuEg+XcrI5cX32gd9CvPZxWlj4eKavo=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/eamodio.gitlens/changelog";
@@ -1618,8 +1618,8 @@ let
         mktplcRef = {
           name = "vscode-html-css";
           publisher = "ecmel";
-          version = "2.0.9";
-          sha256 = "7c30d57d2ff9986bd5daa2c9f51ec4bb04239ca23a51e971a63f7b93d005d297";
+          version = "2.0.11";
+          hash = "sha256-Cc22Dz29yKsD99A9o49anCDVvig+U9Xt/768pgzAr/4=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/ecmel.vscode-html-css/changelog";
@@ -2018,6 +2018,22 @@ let
         };
       };
 
+      geequlim.godot-tools = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "godot-tools";
+          publisher = "geequlim";
+          version = "2.3.0";
+          hash = "sha256-iuSec4PoVxyu1KB2jfCYOd98UrqQjH3q24zOR4VCPgs=";
+        };
+        meta = {
+          description = "VS Code extension for game development with Godot Engine and GDScript";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=geequlim.godot-tools";
+          homepage = "https://github.com/godotengine/godot-vscode-plugin";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ thtrf ];
+        };
+      };
+
       gencer.html-slim-scss-css-class-completion = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "html-slim-scss-css-class-completion";
@@ -2071,8 +2087,8 @@ let
         mktplcRef = {
           publisher = "github";
           name = "copilot";
-          version = "1.246.1233"; # compatible with vscode ^1.95
-          hash = "sha256-Pz46qTCGtn7q7UqCzwkQbuEEkH6tKxZV1HKSUs9WA8M=";
+          version = "1.251.0"; # compatible with vscode ^1.96
+          hash = "sha256-nv6lTPTPcggwMgO8a4KAF0W7gpou1399f/axnH0sS4s=";
         };
 
         meta = {
@@ -2089,8 +2105,8 @@ let
           publisher = "github";
           name = "copilot-chat";
           # Verify which version is available with nix run nixpkgs#vsce -- show github.copilot-chat --json
-          version = "0.23.2024102903"; # compatible with vscode ^1.95
-          hash = "sha256-FGvB+b24i23bdhpJpCQDvIHqqFvCJrWAKnX6fJgkr2E=";
+          version = "0.24.2024121201"; # compatible with vscode ^1.96
+          hash = "sha256-v3wdodDzYalz927KqqpL4IqEqLRmx1CLWdGBvZgNmpE=";
         };
         meta = {
           description = "GitHub Copilot Chat is a companion extension to GitHub Copilot that houses experimental chat features";
@@ -3246,8 +3262,8 @@ let
         mktplcRef = {
           name = "compare-folders";
           publisher = "moshfeu";
-          version = "0.24.3";
-          hash = "sha256-eaumF2BIqEYoyL7LQ0Wx3+gkkFGpWKQoN3AisI8wTQY=";
+          version = "0.25.1";
+          hash = "sha256-axNTdnSkMkFs7LSZCc7VinjbrDncsRHlRtDG9+eh2qQ=";
         };
 
         meta = {
@@ -5043,8 +5059,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.56";
-          hash = "sha256-4uze2hmTV8sNDSdlvwLf1Z/4dGn4pda0mT0FCg/xWqM=";
+          version = "0.0.61";
+          hash = "sha256-cKiIva4nzROp+bbwkMxBvguLMXVe/9uGcdhVhLxmae0=";
         };
         meta = {
           description = "VSCode language extension for Uiua";
@@ -5202,6 +5218,22 @@ let
         };
       };
 
+      visualstudiotoolsforunity.vstuc = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "vstuc";
+          publisher = "VisualStudioToolsForUnity";
+          version = "1.0.4";
+          hash = "sha256-LkLdXbXW91wMmaXpnRxSpff/zHCOE74nPP3aS0Ig3Gc=";
+        };
+        meta = {
+          description = "Integrates Visual Studio Code for Unity";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=visualstudiotoolsforunity.vstuc";
+          homepage = "https://github.com/MicrosoftDocs/vscode-dotnettools";
+          license = lib.licenses.unfree;
+          maintainers = [ lib.maintainers.mib ];
+        };
+      };
+
       vitaliymaz.vscode-svg-previewer = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "vscode-svg-previewer";
@@ -5333,8 +5365,8 @@ let
         mktplcRef = {
           name = "vscode-icons";
           publisher = "vscode-icons-team";
-          version = "12.9.0";
-          hash = "sha256-ULjZlbGcVbPiokfnx7d4z7cmVVEfy2d+SUch80rZRA4=";
+          version = "12.10.0";
+          hash = "sha256-GNDLuszuJN3P0V25F4gm7yUJsFEQgFMMPMTFLWLIvSo=";
         };
         meta = {
           description = "Bring real icons to your Visual Studio Code";

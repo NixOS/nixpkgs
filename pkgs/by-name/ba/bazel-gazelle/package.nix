@@ -1,17 +1,18 @@
-{ buildGoModule
-, fetchFromGitHub
-, lib
+{
+  buildGoModule,
+  fetchFromGitHub,
+  lib,
 }:
 
 buildGoModule rec {
   pname = "bazel-gazelle";
-  version = "0.39.1";
+  version = "0.40.0";
 
   src = fetchFromGitHub {
     owner = "bazelbuild";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Y+k8ObfMwN6fLR2+Lwn64xHljDf3kxw2xp0YpJKbrDM=";
+    hash = "sha256-cGRE+AX62U6lZbUEid0QWb9zMTiIemop6Gqrqvz5+nk=";
   };
 
   vendorHash = null;

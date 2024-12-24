@@ -26,7 +26,7 @@
   libpulseaudio,
   libcaca,
   libdrm,
-  mesa,
+  libgbm,
   libXScrnSaver,
   nv-codec-headers-11,
   libXpresent,
@@ -36,7 +36,6 @@
   makeDesktopItem,
   wrapGAppsHook3,
   copyDesktopItems,
-  xdg-user-dirs,
 }:
 flutter324.buildFlutterApplication rec {
   pname = "pilipalax";
@@ -92,7 +91,7 @@ flutter324.buildFlutterApplication rec {
     libpulseaudio
     libcaca
     libdrm
-    mesa
+    libgbm
     libXScrnSaver
     libXpresent
     nv-codec-headers-11
@@ -111,8 +110,7 @@ flutter324.buildFlutterApplication rec {
   '';
 
   extraWrapProgramArgs = ''
-    --prefix LD_LIBRARY_PATH : "$out/app/${pname}/lib" \
-    --prefix PATH : ${lib.makeBinPath [ xdg-user-dirs ]}
+    --prefix LD_LIBRARY_PATH : "$out/app/${pname}/lib"
   '';
 
   meta = {

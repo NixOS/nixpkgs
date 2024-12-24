@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
-, extras ? [ "all" ]
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  extras ? [ "all" ],
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -20,19 +21,22 @@ python3.pkgs.buildPythonApplication rec {
     hatchling
   ];
 
-  propagatedBuildInputs = with python3.pkgs; [
-    art
-    click
-    pandas
-    pillow
-    pymupdf
-    pyperclip
-    rich
-    rich-click
-    rich-pixels
-    textual
-    textual-universal-directorytree
-  ] ++ lib.attrVals extras optional-dependencies;
+  propagatedBuildInputs =
+    with python3.pkgs;
+    [
+      art
+      click
+      pandas
+      pillow
+      pymupdf
+      pyperclip
+      rich
+      rich-click
+      rich-pixels
+      textual
+      textual-universal-directorytree
+    ]
+    ++ lib.attrVals extras optional-dependencies;
 
   optional-dependencies = with python3.pkgs; {
     all = [

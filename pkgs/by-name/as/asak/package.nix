@@ -1,27 +1,31 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, pkg-config
-, alsa-lib
-, libjack2
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  pkg-config,
+  alsa-lib,
+  libjack2,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "asak";
-  version = "0.3.3";
+  version = "0.3.4";
 
   src = fetchFromGitHub {
     owner = "chaosprint";
     repo = "asak";
     rev = "v${version}";
-    hash = "sha256-yhR8xLCFSmTG2yqsbiP3w8vcvLz4dsn4cbMPFedzUFI=";
+    hash = "sha256-Kq1WdVcTRdz6vJxUDd0bqb2bfrNGCl611upwYploR7w=";
   };
 
-  cargoHash = "sha256-ssHYQhx5rNkTH6KJuJh2wPcptIcIxP8BcDNriGj3btk=";
+  cargoHash = "sha256-SS4BDhORiTV/HZhL3F9zwF8oBu/VFVYhF5Jzp2j0QFI=";
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ alsa-lib libjack2 ];
+  buildInputs = [
+    alsa-lib
+    libjack2
+  ];
 
   # There is no tests
   doCheck = false;

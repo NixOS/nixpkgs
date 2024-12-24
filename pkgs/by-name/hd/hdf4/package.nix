@@ -20,37 +20,12 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hdf";
-  version = "4.2.15";
+  version = "4.2.16-2";
 
   src = fetchurl {
     url = "https://support.hdfgroup.org/ftp/HDF/releases/HDF${finalAttrs.version}/src/hdf-${finalAttrs.version}.tar.bz2";
-    hash = "sha256-veA171oc1f29Cn8fpcF+mLvVmTABiaxNI08W6bt7yxI=";
+    hash = "sha256-xcMjS1ASJYrvLkQy9kmzHCGyYBWvuhhXrYNkDD8raSw=";
   };
-
-  patches = [
-    # Note that the PPC, SPARC and s390 patches are only needed so the aarch64 patch applies cleanly
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-ppc.patch";
-      hash = "sha256-AEsj88VzWtyZRk2nFWV/hLD/A2oPje38T/7jvfV1azU=";
-    })
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-4.2.4-sparc.patch";
-      hash = "sha256-EKuUQ1m+/HWTFYmkTormtQATDj0rHlQpI4CoK1m+5EY=";
-    })
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-s390.patch";
-      hash = "sha256-Ix6Ft+enNHADXFeRTDNijqU9XWmSEz/y8CnQoEleOCo=";
-    })
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-arm.patch";
-      hash = "sha256-gytMtvpvR1nzV1NncrYc0yz1ZlBku1AT6sPdubcK85Q=";
-    })
-    (fetchpatch {
-      url = "https://src.fedoraproject.org/rpms/hdf/raw/edbe5f49646b609f5bc9aeeee5a2be47e9556e8c/f/hdf-aarch64.patch";
-      hash = "sha256-eu+M3UbgI2plJNblAT8hO1xBXbfco6jX8iZMGjXbWoQ=";
-    })
-    ./darwin-aarch64.patch
-  ];
 
   nativeBuildInputs =
     [
@@ -162,7 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Data model, library, and file format for storing and managing data";
     homepage = "https://support.hdfgroup.org/products/hdf4/";
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [ ];
     platforms = platforms.unix;
     license = licenses.bsdOriginal;
   };

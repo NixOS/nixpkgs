@@ -1,24 +1,30 @@
-{ lib
-, stdenv
-, fetchurl
-, fig2dev
-, gettext
-, ghostscript
-, guile
-, guile-lib
-, guile-reader
-, imagemagick
-, makeWrapper
-, pkg-config
-, enableEmacs ? false, emacs
-, enableLout ? stdenv.hostPlatform.isLinux, lout
-, enablePloticus ? stdenv.hostPlatform.isLinux, ploticus
-, enableTex ? true, texliveSmall
+{
+  lib,
+  stdenv,
+  fetchurl,
+  fig2dev,
+  gettext,
+  ghostscript,
+  guile,
+  guile-lib,
+  guile-reader,
+  imagemagick,
+  makeWrapper,
+  pkg-config,
+  enableEmacs ? false,
+  emacs,
+  enableLout ? stdenv.hostPlatform.isLinux,
+  lout,
+  enablePloticus ? stdenv.hostPlatform.isLinux,
+  ploticus,
+  enableTex ? true,
+  texliveSmall,
 }:
 
 let
   inherit (lib) optional;
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "skribilo";
   version = "0.10.0";
 
@@ -32,19 +38,20 @@ in stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs = [
-    fig2dev
-    gettext
-    ghostscript
-    guile
-    guile-lib
-    guile-reader
-    imagemagick
-  ]
-  ++ optional enableEmacs emacs
-  ++ optional enableLout lout
-  ++ optional enablePloticus ploticus
-  ++ optional enableTex texliveSmall;
+  buildInputs =
+    [
+      fig2dev
+      gettext
+      ghostscript
+      guile
+      guile-lib
+      guile-reader
+      imagemagick
+    ]
+    ++ optional enableEmacs emacs
+    ++ optional enableLout lout
+    ++ optional enablePloticus ploticus
+    ++ optional enableTex texliveSmall;
 
   postInstall = ''
     wrapProgram $out/bin/skribilo \

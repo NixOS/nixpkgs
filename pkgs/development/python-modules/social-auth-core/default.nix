@@ -75,6 +75,6 @@ buildPythonPackage rec {
     homepage = "https://github.com/python-social-auth/social-core";
     changelog = "https://github.com/python-social-auth/social-core/blob/${version}/CHANGELOG.md";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ n0emis ];
+    maintainers = with maintainers; [ ];
   };
 }

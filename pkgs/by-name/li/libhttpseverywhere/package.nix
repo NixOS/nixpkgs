@@ -1,10 +1,27 @@
-{ lib, stdenv, fetchurl, pkg-config, meson, ninja, makeFontsConf, vala, fetchpatch
-, gnome, libgee, glib, json-glib, libarchive, libsoup_2_4, gobject-introspection }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  meson,
+  ninja,
+  makeFontsConf,
+  vala,
+  fetchpatch,
+  gnome,
+  libgee,
+  glib,
+  json-glib,
+  libarchive,
+  libsoup_2_4,
+  gobject-introspection,
+}:
 
 let
   pname = "libhttpseverywhere";
   version = "0.8.3";
-in stdenv.mkDerivation rec {
+in
+stdenv.mkDerivation rec {
   name = "${pname}-${version}";
 
   src = fetchurl {
@@ -12,8 +29,20 @@ in stdenv.mkDerivation rec {
     sha256 = "1jmn6i4vsm89q1axlq4ajqkzqmlmjaml9xhw3h9jnal46db6y00w";
   };
 
-  nativeBuildInputs = [ vala gobject-introspection meson ninja pkg-config ];
-  buildInputs = [ glib libgee json-glib libsoup_2_4 libarchive ];
+  nativeBuildInputs = [
+    vala
+    gobject-introspection
+    meson
+    ninja
+    pkg-config
+  ];
+  buildInputs = [
+    glib
+    libgee
+    json-glib
+    libsoup_2_4
+    libarchive
+  ];
 
   patches = [
     # Fixes build with vala >=0.42
@@ -36,7 +65,10 @@ in stdenv.mkDerivation rec {
 
   FONTCONFIG_FILE = makeFontsConf { fontDirectories = [ ]; };
 
-  outputs = [ "out" "devdoc" ];
+  outputs = [
+    "out"
+    "devdoc"
+  ];
 
   passthru = {
     updateScript = gnome.updateScript {

@@ -55,7 +55,7 @@ buildPythonPackage rec {
     "tests/integration/test_widget.py"
   ];
 
-  pythonImportCheck = [ "qtile_bonsai" ];
+  pythonImportsCheck = [ "qtile_bonsai" ];
 
   meta = {
     changelog = "https://github.com/aravinda0/qtile-bonsai/releases/tag/${version}";

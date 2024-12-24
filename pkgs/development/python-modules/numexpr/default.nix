@@ -32,15 +32,6 @@ buildPythonPackage rec {
     dos2unix numexpr/tests/test_numexpr.py
   '';
 
-  # patch for compatibility with numpy < 2.0
-  # see more details, https://numpy.org/devdocs/numpy_2_0_migration_guide.html#c-api-changes
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0" "numpy"
-    sed -i "1i#define PyDataType_SET_ELSIZE(descr, elsize)" numexpr/interpreter.cpp
-    sed -i "1i#define PyDataType_ELSIZE(descr) ((descr)->elsize)" numexpr/interpreter.cpp
-  '';
-
   nativeBuildInputs = [ dos2unix ];
 
   build-system = [

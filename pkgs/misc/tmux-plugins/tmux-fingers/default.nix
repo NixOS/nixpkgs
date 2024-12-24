@@ -1,6 +1,6 @@
 {
   mkTmuxPlugin,
-  substituteAll,
+  replaceVars,
   fetchFromGitHub,
   crystal,
 }:
@@ -38,8 +38,7 @@ mkTmuxPlugin {
   rtpFilePath = "tmux-fingers.tmux";
 
   patches = [
-    (substituteAll {
-      src = ./fix.patch;
+    (replaceVars ./fix.patch {
       tmuxFingersDir = "${fingers}/bin";
     })
   ];

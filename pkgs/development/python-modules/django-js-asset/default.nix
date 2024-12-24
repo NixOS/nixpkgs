@@ -9,14 +9,14 @@
 
 buildPythonPackage rec {
   pname = "django-js-asset";
-  version = "2.2";
+  version = "3.0.1";
   format = "pyproject";
 
   src = fetchFromGitHub {
     owner = "matthiask";
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-qAkE5ubzfTNO1LuMQXMW2Sot1cn/bhuXlWa/J/wD5SI=";
+    hash = "sha256-WBybDzGPoPbeUnrw6O41ton0x0rLjPcHBVMg1RZceWI=";
   };
 
   nativeBuildInputs = [ hatchling ];

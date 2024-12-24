@@ -27,7 +27,7 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   projectFile = "NickvisionMoney.GNOME/NickvisionMoney.GNOME.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   executables = "NickvisionMoney.GNOME";
 
   nativeBuildInputs = [

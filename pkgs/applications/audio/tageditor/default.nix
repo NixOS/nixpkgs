@@ -1,29 +1,30 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, cmake
-, cpp-utilities
-, qtutilities
-, mp4v2
-, libid3tag
-, qtbase
-, qttools
-, qtwebengine
-, qtx11extras
-, tagparser
-, wrapQtAppsHook
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  cmake,
+  cpp-utilities,
+  qtutilities,
+  mp4v2,
+  libid3tag,
+  qtbase,
+  qttools,
+  qtwebengine,
+  qtx11extras,
+  tagparser,
+  wrapQtAppsHook,
 }:
 
 stdenv.mkDerivation rec {
   pname = "tageditor";
-  version = "3.9.3";
+  version = "3.9.4";
 
   src = fetchFromGitHub {
     owner = "martchus";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-KAtOnTf3foOILDfTjVpkCOG6jsyS5fv0/Wv9Zcut2oE=";
+    hash = "sha256-VRQV4bTPG4VFhRHFJamUnYd04ZCaNpaxU27Jcl6Chc4=";
   };
 
   nativeBuildInputs = [

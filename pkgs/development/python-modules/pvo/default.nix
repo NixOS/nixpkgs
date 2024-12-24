@@ -15,8 +15,8 @@
 
 buildPythonPackage rec {
   pname = "pvo";
-  version = "2.1.1";
-  format = "pyproject";
+  version = "2.2.0";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
@@ -24,7 +24,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-pvoutput";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Js8oPEMxJyWK1E6GDm1xwm2BilnV3WBM6Hibf6oFOKE=";
+    hash = "sha256-EQdOPAYh7D9jHtuOuDtokxXnFKKtC0HybSwX77jj6+c=";
   };
 
   postPatch = ''
@@ -34,9 +34,9 @@ buildPythonPackage rec {
       --replace "--cov" ""
   '';
 
-  nativeBuildInputs = [ poetry-core ];
+  build-system = [ poetry-core ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     aiohttp
     mashumaro
     yarl

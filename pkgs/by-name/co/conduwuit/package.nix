@@ -17,6 +17,7 @@
   rust-jemalloc-sys,
   enableLiburing ? stdenv.hostPlatform.isLinux,
   liburing,
+  nixosTests,
 }:
 let
   rust-jemalloc-sys' = rust-jemalloc-sys.override {
@@ -84,10 +85,16 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     updateScript = nix-update-script { };
-    tests.version = testers.testVersion {
-      package = conduwuit;
-      version = "${version}";
-    };
+    tests =
+      {
+        version = testers.testVersion {
+          inherit version;
+          package = conduwuit;
+        };
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        inherit (nixosTests) conduwuit;
+      };
   };
 
   meta = {

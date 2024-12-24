@@ -15,7 +15,7 @@
   libnotify,
   libpulseaudio,
   libva,
-  mesa,
+  libgbm,
   nixosTests,
   openssl,
   pciutils,
@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage rec {
           libnotify
           libpulseaudio
           libva
-          mesa
+          libgbm
           pciutils
           pipewire
           udev

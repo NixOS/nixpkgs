@@ -33,7 +33,7 @@ buildDotnetModule rec {
   dotnet-sdk = dotnetCorePackages.sdk_7_0;
   dotnet-runtime = dotnetCorePackages.runtime_7_0;
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   nativeBuildInputs = [ wrapGAppsHook3 copyDesktopItems ];
 
