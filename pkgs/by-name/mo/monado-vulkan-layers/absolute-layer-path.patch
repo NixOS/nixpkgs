@@ -1,0 +1,12 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index d9a1b56..9a07e69 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -41,6 +41,7 @@ generate_vulkan_api_layer_manifest_at_install(
+ 	RELATIVE_LAYER_DIR ${LAYER_INSTALLDIR}
+ 	DESTINATION ${CMAKE_INSTALL_DATADIR}/vulkan/implicit_layer.d
+ 	COMPONENT vulkan_layer
++	ABSOLUTE_LAYER_PATH
+ 	)
+ 
+ set(CPACK_COMPONENT_vulkan_layer_DISPLAY_NAME "Timeline Semaphore Vulkan Implicit Layer")
