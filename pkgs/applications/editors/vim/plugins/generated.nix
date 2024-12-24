@@ -4236,6 +4236,18 @@ final: prev:
     meta.homepage = "https://github.com/raghur/fruzzy/";
   };
 
+  fugit2-nvim = buildVimPlugin {
+    pname = "fugit2.nvim";
+    version = "2024-12-19";
+    src = fetchFromGitHub {
+      owner = "SuperBo";
+      repo = "fugit2.nvim";
+      rev = "96f729a4bdcf44174c6168f4457b9f3f9229efa2";
+      sha256 = "151i92jzmwh2b2h6v85cfrdlnqa9ll49gcrvg1r3hi83yj4dygzr";
+    };
+    meta.homepage = "https://github.com/SuperBo/fugit2.nvim/";
+  };
+
   fugitive-gitlab-vim = buildVimPlugin {
     pname = "fugitive-gitlab.vim";
     version = "2024-11-13";
