@@ -1,0 +1,13 @@
+diff --git a/rcmain.unix b/rcmain.unix
+index 7ccbe1b..691f493 100644
+--- a/rcmain.unix
++++ b/rcmain.unix
+@@ -13,7 +13,7 @@ if(~ $rcname ?.out) prompt=('broken! ' '	')
+ if(flag p) path=/bin
+ if not {
+ 	finit
+-	if(~ $#path 0) path=(. /bin /usr/bin /usr/local/bin)
++	if(~ $#path 0) path=`:{/usr/bin/env echo -n $PATH}
+ }
+ fn sigexit
+ if(! ~ $#cflag 0){

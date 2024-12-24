@@ -1,0 +1,13 @@
+diff --git a/Makefile.def b/Makefile.def
+index 34f7df3..05dc86c 100644
+--- a/Makefile.def
++++ b/Makefile.def
+@@ -155,7 +155,7 @@ dist_lc3sim-tk: lc3sim-tk
+ 
+ lc3sim-tk: lc3sim-tk.def
+ 	${SED} -e 's @@WISH@@ ${WISH} g' \
+-		-e 's*@@LC3_SIM@@*"${INSTALL_DIR}/lc3sim"*g' \
++		-e 's*@@LC3_SIM@@*"${INSTALL_DIR}/bin/lc3sim"*g' \
+ 		-e 's!@@CODE_FONT@@!${CODE_FONT}!g' \
+ 		-e 's!@@BUTTON_FONT@@!${BUTTON_FONT}!g' \
+ 		-e 's!@@CONSOLE_FONT@@!${CONSOLE_FONT}!g' \

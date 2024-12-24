@@ -1,0 +1,15 @@
+diff --git a/Cargo.lock b/Cargo.lock
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -1286,9 +1286,9 @@ checksum = "3e75f6a532d0fd9f7f13144f392b6ad56a32696bfcd9c78f797f16bbb6f072d6"
+ 
+ [[package]]
+ name = "rustc-serialize"
+-version = "0.3.24"
++version = "0.3.25"
+ source = "registry+https://github.com/rust-lang/crates.io-index"
+-checksum = "dcf128d1287d2ea9d80910b5f1120d0b8eede3fbf1abe91c40d39ea7d51e6fda"
++checksum = "fe834bc780604f4674073badbad26d7219cadfb4a2275802db12cbae17498401"
+ 
+ [[package]]
+ name = "rustc_version"

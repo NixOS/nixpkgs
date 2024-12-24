@@ -1,0 +1,84 @@
+diff -u a/CoreFoundation/CMakeLists.txt b/CoreFoundation/CMakeLists.txt
+--- a/CoreFoundation/CMakeLists.txt	1969-12-31 19:00:01.000000000 -0500
++++ b/CoreFoundation/CMakeLists.txt	2023-06-29 18:59:08.659632504 -0400
+@@ -1,5 +1,5 @@
+ 
+-cmake_minimum_required(VERSION 3.4.3)
++cmake_minimum_required(VERSION 3.14)
+ list(APPEND CMAKE_MODULE_PATH
+      "${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules")
+ 
+@@ -45,6 +45,8 @@
+                 ${FRAMEWORK_LIBRARY_TYPE}
+               FRAMEWORK_DIRECTORY
+                 CoreFoundation_FRAMEWORK_DIRECTORY
++              VERSION
++                A
+               MODULE_MAP
+                 Base.subproj/module.modulemap
+               PRIVATE_HEADERS
+diff -u a/CoreFoundation/cmake/modules/CoreFoundationAddFramework.cmake b/CoreFoundation/cmake/modules/CoreFoundationAddFramework.cmake
+--- a/CoreFoundation/cmake/modules/CoreFoundationAddFramework.cmake	1969-12-31 19:00:01.000000000 -0500
++++ b/CoreFoundation/cmake/modules/CoreFoundationAddFramework.cmake	2023-06-29 18:57:55.792860996 -0400
+@@ -3,7 +3,7 @@
+ 
+ function(add_framework NAME)
+   set(options STATIC SHARED)
+-  set(single_value_args MODULE_MAP FRAMEWORK_DIRECTORY)
++  set(single_value_args MODULE_MAP FRAMEWORK_DIRECTORY VERSION)
+   set(multiple_value_args PRIVATE_HEADERS PUBLIC_HEADERS SOURCES)
+   cmake_parse_arguments(AF "${options}" "${single_value_args}" "${multiple_value_args}" ${ARGN})
+ 
+@@ -14,26 +14,32 @@
+     set(AF_TYPE SHARED)
+   endif()
+ 
++  file(MAKE_DIRECTORY ${CMAKE_BINARY_DIR}/${NAME}.framework/Versions/${AF_VERSION})
++  file(CREATE_LINK ${AF_VERSION} ${CMAKE_BINARY_DIR}/${NAME}.framework/Versions/Current SYMBOLIC)
++
+   if(AF_MODULE_MAP)
+     file(COPY
+            ${AF_MODULE_MAP}
+          DESTINATION
+-           ${CMAKE_BINARY_DIR}/${NAME}.framework/Modules
++           ${CMAKE_BINARY_DIR}/${NAME}.framework/Versions/Current/Modules
+          NO_SOURCE_PERMISSIONS)
++    file(CREATE_LINK Versions/Current/Modules ${CMAKE_BINARY_DIR}/${NAME}.framework/Modules SYMBOLIC)
+   endif()
+   if(AF_PUBLIC_HEADERS)
+     file(COPY
+            ${AF_PUBLIC_HEADERS}
+          DESTINATION
+-           ${CMAKE_BINARY_DIR}/${NAME}.framework/Headers
++           ${CMAKE_BINARY_DIR}/${NAME}.framework/Versions/Current/Headers
+          NO_SOURCE_PERMISSIONS)
++    file(CREATE_LINK Versions/Current/Headers ${CMAKE_BINARY_DIR}/${NAME}.framework/Headers SYMBOLIC)
+   endif()
+   if(AF_PRIVATE_HEADERS)
+     file(COPY
+            ${AF_PRIVATE_HEADERS}
+          DESTINATION
+-           ${CMAKE_BINARY_DIR}/${NAME}.framework/PrivateHeaders
++           ${CMAKE_BINARY_DIR}/${NAME}.framework/Versions/Current/PrivateHeaders
+          NO_SOURCE_PERMISSIONS)
++    file(CREATE_LINK Versions/Current/PrivateHeaders ${CMAKE_BINARY_DIR}/${NAME}.framework/PrivateHeaders SYMBOLIC)
+   endif()
+   add_custom_target(${NAME}_POPULATE_HEADERS
+                     DEPENDS
+@@ -51,13 +57,15 @@
+   set_target_properties(${NAME}
+                         PROPERTIES
+                           LIBRARY_OUTPUT_DIRECTORY
+-                              ${CMAKE_BINARY_DIR}/${NAME}.framework)
++                              ${CMAKE_BINARY_DIR}/${NAME}.framework/Versions/Current)
+   target_compile_options(${NAME}
+                          PRIVATE
+                            -F;${CMAKE_BINARY_DIR}
+                            -I;${CMAKE_BINARY_DIR}/${NAME}.framework/PrivateHeaders)
+   add_dependencies(${NAME} ${NAME}_POPULATE_HEADERS)
+ 
++  file(CREATE_LINK Versions/Current/${NAME} ${CMAKE_BINARY_DIR}/${NAME}.framework/${NAME} SYMBOLIC)
++
+   if(AF_FRAMEWORK_DIRECTORY)
+     set(${AF_FRAMEWORK_DIRECTORY} ${CMAKE_BINARY_DIR}/${NAME}.framework PARENT_SCOPE)
+   endif()

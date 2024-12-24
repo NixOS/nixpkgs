@@ -1,0 +1,22 @@
+diff --git a/src/webservice.cpp b/src/webservice.cpp
+index 3a36167..df14812 100644
+--- a/src/webservice.cpp
++++ b/src/webservice.cpp
+@@ -184,7 +184,7 @@ WebService::get(const std::string &entity,
+ 	if (!sess) 
+ 		throw WebServiceError("ne_session_create() failed.");
+ 	ne_set_server_auth(sess, httpAuth, this);
+-	ne_set_useragent(sess, PACKAGE"/"VERSION);
++	ne_set_useragent(sess, PACKAGE "/" VERSION);
+ 	
+ 	// Use proxy server
+ 	if (!d->proxyHost.empty()) {
+@@ -269,7 +269,7 @@ WebService::post(const std::string &entity,
+ 	if (!sess) 
+ 		throw WebServiceError("ne_session_create() failed.");
+ 	ne_set_server_auth(sess, httpAuth, this);
+-	ne_set_useragent(sess, PACKAGE"/"VERSION);
++	ne_set_useragent(sess, PACKAGE "/" VERSION);
+ 
+ 	// Use proxy server
+ 	if (!d->proxyHost.empty()) {

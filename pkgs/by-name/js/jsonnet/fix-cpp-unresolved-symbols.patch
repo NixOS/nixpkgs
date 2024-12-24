@@ -1,0 +1,12 @@
+diff --git a/cpp/CMakeLists.txt b/cpp/CMakeLists.txt
+index 3a52458..872e6c6 100644
+--- a/cpp/CMakeLists.txt
++++ b/cpp/CMakeLists.txt
+@@ -10,6 +10,7 @@ set(LIBJSONNETPP_SOURCE
+
+ add_library(libjsonnet++ SHARED ${LIBJSONNETPP_HEADERS} ${LIBJSONNETPP_SOURCE})
+ add_dependencies(libjsonnet++ jsonnet)
++target_link_libraries(libjsonnet++ libjsonnet)
+ # target_link_libraries(libjsonnet libjsonnet)
+
+ # CMake prepends CMAKE_SHARED_LIBRARY_PREFIX to shared libraries, so without

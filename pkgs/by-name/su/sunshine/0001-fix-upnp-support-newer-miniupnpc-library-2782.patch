@@ -1,0 +1,120 @@
+From f4f1800f5e67ab59312ccf710695acf06fb4ae26 Mon Sep 17 00:00:00 2001
+From: ReenigneArcher <42013603+ReenigneArcher@users.noreply.github.com>
+Date: Mon, 1 Jul 2024 10:07:06 -0400
+Subject: [PATCH] fix(upnp): support newer miniupnpc library (#2782)
+
+Co-authored-by: Vithorio Polten <reach@vithor.io>
+---
+ src/upnp.cpp | 30 +++++++++++++++---------------
+ src/upnp.h   | 31 ++++++++++++++++++++++++++++++-
+ 2 files changed, 45 insertions(+), 16 deletions(-)
+
+diff --git a/src/upnp.cpp b/src/upnp.cpp
+index f65bcb87..fcbaaeb5 100644
+--- a/src/upnp.cpp
++++ b/src/upnp.cpp
+@@ -19,19 +19,6 @@
+ using namespace std::literals;
+ 
+ namespace upnp {
+-  constexpr auto INET6_ADDRESS_STRLEN = 46;
+-
+-  constexpr auto PORT_MAPPING_LIFETIME = 3600s;
+-  constexpr auto REFRESH_INTERVAL = 120s;
+-
+-  constexpr auto IPv4 = 0;
+-  constexpr auto IPv6 = 1;
+-
+-  using device_t = util::safe_ptr<UPNPDev, freeUPNPDevlist>;
+-
+-  KITTY_USING_MOVE_T(urls_t, UPNPUrls, , {
+-    FreeUPNPUrls(&el);
+-  });
+ 
+   struct mapping_t {
+     struct {
+@@ -59,6 +46,19 @@ namespace upnp {
+     return "Unknown status"sv;
+   }
+ 
++  /**
++   * This function is a wrapper around UPNP_GetValidIGD() that returns the status code. There is a pre-processor
++   * check to determine which version of the function to call based on the version of the MiniUPnPc library.
++   */
++  int
++  UPNP_GetValidIGDStatus(device_t &device, urls_t *urls, IGDdatas *data, std::array<char, INET6_ADDRESS_STRLEN> &lan_addr) {
++#if (MINIUPNPC_API_VERSION >= 18)
++    return UPNP_GetValidIGD(device.get(), &urls->el, data, lan_addr.data(), lan_addr.size(), nullptr, 0);
++#else
++    return UPNP_GetValidIGD(device.get(), &urls->el, data, lan_addr.data(), lan_addr.size());
++#endif
++  }
++
+   class deinit_t: public platf::deinit_t {
+   public:
+     deinit_t() {
+@@ -109,7 +109,7 @@ namespace upnp {
+       IGDdatas data;
+       urls_t urls;
+       std::array<char, INET6_ADDRESS_STRLEN> lan_addr;
+-      auto status = UPNP_GetValidIGD(device.get(), &urls.el, &data, lan_addr.data(), lan_addr.size());
++      auto status = upnp::UPNP_GetValidIGDStatus(device, &urls, &data, lan_addr);
+       if (status != 1 && status != 2) {
+         BOOST_LOG(debug) << "No valid IPv6 IGD: "sv << status_string(status);
+         return false;
+@@ -331,7 +331,7 @@ namespace upnp {
+         std::array<char, INET6_ADDRESS_STRLEN> lan_addr;
+ 
+         urls_t urls;
+-        auto status = UPNP_GetValidIGD(device.get(), &urls.el, &data, lan_addr.data(), lan_addr.size());
++        auto status = upnp::UPNP_GetValidIGDStatus(device, &urls, &data, lan_addr);
+         if (status != 1 && status != 2) {
+           BOOST_LOG(error) << status_string(status);
+           mapped = false;
+diff --git a/src/upnp.h b/src/upnp.h
+index 73fc4f79..4b2e3296 100644
+--- a/src/upnp.h
++++ b/src/upnp.h
+@@ -4,9 +4,38 @@
+  */
+ #pragma once
+ 
++#include <miniupnpc/miniupnpc.h>
++
+ #include "platform/common.h"
+ 
+ namespace upnp {
++  constexpr auto INET6_ADDRESS_STRLEN = 46;
++  constexpr auto IPv4 = 0;
++  constexpr auto IPv6 = 1;
++  constexpr auto PORT_MAPPING_LIFETIME = 3600s;
++  constexpr auto REFRESH_INTERVAL = 120s;
++
++  using device_t = util::safe_ptr<UPNPDev, freeUPNPDevlist>;
++
++  KITTY_USING_MOVE_T(urls_t, UPNPUrls, , {
++    FreeUPNPUrls(&el);
++  });
++
++  /**
++   * @brief Get the valid IGD status.
++   * @param device The device.
++   * @param urls The URLs.
++   * @param data The IGD data.
++   * @param lan_addr The LAN address.
++   * @return The UPnP Status.
++   * @retval 0 No IGD found.
++   * @retval 1 A valid connected IGD has been found.
++   * @retval 2 A valid IGD has been found but it reported as not connected.
++   * @retval 3 An UPnP device has been found but was not recognized as an IGD.
++   */
++  int
++  UPNP_GetValidIGDStatus(device_t &device, urls_t *urls, IGDdatas *data, std::array<char, INET6_ADDRESS_STRLEN> &lan_addr);
++
+   [[nodiscard]] std::unique_ptr<platf::deinit_t>
+   start();
+-}
++}  // namespace upnp
+-- 
+2.45.2
+
