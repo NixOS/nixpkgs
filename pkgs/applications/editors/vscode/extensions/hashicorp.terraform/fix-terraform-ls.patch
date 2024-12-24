@@ -1,0 +1,19 @@
+diff --git a/out/serverPath.js b/out/serverPath.js
+index fafa915..2e6d376 100644
+--- a/out/serverPath.js
++++ b/out/serverPath.js
+@@ -18,7 +18,13 @@ exports.CUSTOM_BIN_PATH_OPTION_NAME = 'languageServer.pathToBinary';
+ class ServerPath {
+     constructor(context) {
+         this.context = context;
+-        this.customBinPath = vscode.workspace.getConfiguration('terraform').get(exports.CUSTOM_BIN_PATH_OPTION_NAME);
++
++        const customBinPath = vscode.workspace.getConfiguration('terraform').get(exports.CUSTOM_BIN_PATH_OPTION_NAME);
++        if (!customBinPath) {
++          this.customBinPath = 'TERRAFORM-LS-PATH';
++        } else {
++            this.customBinPath = customBinPath;
++        }
+     }
+     installPath() {
+         return path.join(this.context.globalStorageUri.fsPath, INSTALL_FOLDER_NAME);

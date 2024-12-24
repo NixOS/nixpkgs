@@ -1,0 +1,13 @@
+diff --git a/lua/tsc/utils.lua b/lua/tsc/utils.lua
+index 6433bcb..75760f9 100644
+--- a/lua/tsc/utils.lua
++++ b/lua/tsc/utils.lua
+@@ -16,7 +16,7 @@ M.find_tsc_bin = function()
+     return node_modules_tsc_binary
+   end
+ 
+-  return "tsc"
++  return "@tsc@"
+ end
+ 
+ --- @param run_mono_repo boolean
