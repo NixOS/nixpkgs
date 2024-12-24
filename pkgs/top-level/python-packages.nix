@@ -2065,7 +2065,9 @@ self: super: with self; {
 
   connection-pool = callPackage ../development/python-modules/connection-pool { };
 
-  connectorx = callPackage ../development/python-modules/connectorx {};
+  connectorx = callPackage ../development/python-modules/connectorx {
+    krb5-c = pkgs.krb5;
+  };
 
   connio = callPackage ../development/python-modules/connio { };
 

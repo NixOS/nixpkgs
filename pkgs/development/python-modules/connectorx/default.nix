@@ -1,10 +1,13 @@
-{ lib, buildPythonPackage, rustPlatform, pytestCheckHook,
-
-fetchFromGitHub,
-
-krb5, openssl,
-
-libkrb5, }:
+{ lib
+, buildPythonPackage
+, rustPlatform
+, pytestCheckHook
+, fetchFromGitHub
+, krb5-c
+, openssl
+, libkrb5
+,
+}:
 buildPythonPackage rec {
   pname = "connectorx";
   version = "0.3.3";
@@ -32,11 +35,14 @@ buildPythonPackage rec {
     OPENSSL_DIR = "${lib.getDev openssl}";
   };
 
+  build-system = [
+    rustPlatform.maturinBuildHook
+  ];
+
   nativeBuildInputs = [
-    krb5 # needed for `krb5-config` during libgssapi-sys
+    krb5-c # needed for `krb5-config` during libgssapi-sys
 
     rustPlatform.cargoSetupHook
-    rustPlatform.maturinBuildHook
     rustPlatform.bindgenHook
   ];
 
