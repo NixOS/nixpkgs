@@ -6,6 +6,8 @@ let
   cfg = config.services.minidlna;
   settingsFormat = pkgs.formats.keyValue { listsAsDuplicateKeys = true; };
   settingsFile = settingsFormat.generate "minidlna.conf" cfg.settings;
+  defaultUser = "minidlna";
+  defaultGroup = defaultUser;
 in
 
 {
@@ -109,6 +111,20 @@ in
     };
   };
 
+  options.services.minidlna.user = mkOption {
+    type = types.str;
+    default = defaultUser;
+    example = "yourUser";
+    description = "Overrides the default user used to run MiniDLNA.  Skips the creation of the default `${defaultUser}` user.";
+  };
+
+  options.services.minidlna.group = mkOption {
+    type = types.str;
+    default = defaultGroup;
+    example = "yourGroup";
+    description = "Overrides the default group used to run MiniDLNA.  Skips the creation of the default `${defaultGroup}` group.";
+  };
+
   imports = [
     (mkRemovedOptionModule [ "services" "minidlna" "config" ] "")
     (mkRemovedOptionModule [ "services" "minidlna" "extraConfig" ] "")
@@ -124,13 +140,18 @@ in
     networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.settings.port ];
     networking.firewall.allowedUDPPorts = mkIf cfg.openFirewall [ 1900 ];
 
-    users.users.minidlna = {
-      description = "MiniDLNA daemon user";
-      group = "minidlna";
-      uid = config.ids.uids.minidlna;
-    };
+    users.users = mkIf (cfg.user == defaultUser) {
+      ${defaultUser} =
+        { group = cfg.group;
+          uid = config.ids.uids.minidlna;
+          description = "MiniDLNA daemon user";
+        };
+     };
 
-    users.groups.minidlna.gid = config.ids.gids.minidlna;
+    users.groups = mkIf (cfg.group == defaultGroup) {
+      ${defaultGroup}.gid =
+        config.ids.gids.minidlna;
+    };
 
     systemd.services.minidlna = {
       description = "MiniDLNA Server";
@@ -138,8 +159,8 @@ in
       after = [ "network.target" ];
 
       serviceConfig = {
-        User = "minidlna";
-        Group = "minidlna";
+        User = cfg.user;
+        Group = cfg.group;
         CacheDirectory = "minidlna";
         RuntimeDirectory = "minidlna";
         PIDFile = "/run/minidlna/pid";
