@@ -231,7 +231,9 @@ in
         webserver = lib.mkOption {
           type = lib.types.attrTag {
             nginx = lib.mkOption {
-              type = lib.types.submodule (import ../web-servers/nginx/vhost-options.nix);
+              type = lib.types.submodule (
+                lib.modules.importApply ../web-servers/nginx/vhost-options.nix { inherit config lib; }
+              );
               default = { };
               description = ''
                 Extra configuration for the nginx virtual host of Misskey.

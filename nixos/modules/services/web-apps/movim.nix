@@ -402,7 +402,7 @@ in
 
       nginx = mkOption {
         type = with types; nullOr (submodule
-          (import ../web-servers/nginx/vhost-options.nix {
+          (lib.modules.importApply ../web-servers/nginx/vhost-options.nix {
             inherit config lib;
           }));
         default = null;

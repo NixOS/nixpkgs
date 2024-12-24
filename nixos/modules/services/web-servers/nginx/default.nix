@@ -1121,45 +1121,9 @@ in
   ];
 
   config = mkIf cfg.enable {
-    warnings =
-    let
-      deprecatedSSL = name: config: optional config.enableSSL
-      ''
-        config.services.nginx.virtualHosts.<name>.enableSSL is deprecated,
-        use config.services.nginx.virtualHosts.<name>.onlySSL instead.
-      '';
+    warnings = concatMap (host: host.warnings) (lib.attrValues virtualHosts);
 
-    in flatten (mapAttrsToList deprecatedSSL virtualHosts);
-
-    assertions =
-    let
-      hostOrAliasIsNull = l: l.root == null || l.alias == null;
-    in [
-      {
-        assertion = all (host: all hostOrAliasIsNull (attrValues host.locations)) (attrValues virtualHosts);
-        message = "Only one of nginx root or alias can be specified on a location.";
-      }
-
-      {
-        assertion = all (host: with host;
-          count id [ addSSL (onlySSL || enableSSL) forceSSL rejectSSL ] <= 1
-        ) (attrValues virtualHosts);
-        message = ''
-          Options services.nginx.service.virtualHosts.<name>.addSSL,
-          services.nginx.virtualHosts.<name>.onlySSL,
-          services.nginx.virtualHosts.<name>.forceSSL and
-          services.nginx.virtualHosts.<name>.rejectSSL are mutually exclusive.
-        '';
-      }
-
-      {
-        assertion = all (host: !(host.enableACME && host.useACMEHost != null)) (attrValues virtualHosts);
-        message = ''
-          Options services.nginx.service.virtualHosts.<name>.enableACME and
-          services.nginx.virtualHosts.<name>.useACMEHost are mutually exclusive.
-        '';
-      }
-
+    assertions = [
       {
         assertion = cfg.package.pname != "nginxQuic" && cfg.package.pname != "angieQuic" -> !(cfg.enableQuicBPF);
         message = ''
@@ -1168,49 +1132,14 @@ in
           `services.nginx.package = pkgs.angieQuic;`.
         '';
       }
-
-      {
-        assertion = cfg.package.pname != "nginxQuic" && cfg.package.pname != "angieQuic" -> all (host: !host.quic) (attrValues virtualHosts);
-        message = ''
-          services.nginx.service.virtualHosts.<name>.quic requires using nginxQuic or angie packages,
-          which can be achieved by setting `services.nginx.package = pkgs.nginxQuic;` or
-          `services.nginx.package = pkgs.angieQuic;`.
-        '';
-      }
-
-      {
-        # The idea is to understand whether there is a virtual host with a listen configuration
-        # that requires ACME configuration but has no HTTP listener which will make deterministically fail
-        # this operation.
-        # Options' priorities are the following at the moment:
-        # listen (vhost) > defaultListen (server) > listenAddresses (vhost) > defaultListenAddresses (server)
-        assertion =
-        let
-          hasAtLeastHttpListener = listenOptions: any (listenLine: if listenLine ? proxyProtocol then !listenLine.proxyProtocol else true) listenOptions;
-          hasAtLeastDefaultHttpListener = if cfg.defaultListen != [] then hasAtLeastHttpListener cfg.defaultListen else (cfg.defaultListenAddresses != []);
-        in
-          all (host:
-            let
-              hasAtLeastVhostHttpListener = if host.listen != [] then hasAtLeastHttpListener host.listen else (host.listenAddresses != []);
-              vhostAuthority = host.listen != [] || (cfg.defaultListen == [] && host.listenAddresses != []);
-            in
-              # Either vhost has precedence and we need a vhost specific http listener
-              # Either vhost set nothing and inherit from server settings
-              host.enableACME -> ((vhostAuthority && hasAtLeastVhostHttpListener) || (!vhostAuthority && hasAtLeastDefaultHttpListener))
-          ) (attrValues virtualHosts);
-        message = ''
-          services.nginx.virtualHosts.<name>.enableACME requires a HTTP listener
-          to answer to ACME requests.
-        '';
-      }
-
       {
         assertion = cfg.resolver.ipv4 || cfg.resolver.ipv6;
         message = ''
           At least one of services.nginx.resolver.ipv4 and services.nginx.resolver.ipv6 must be true.
         '';
       }
-    ] ++ map (name: mkCertOwnershipAssertion {
+    ] ++ concatMap (host: host.assertions) (lib.attrValues virtualHosts)
+    ++ map (name: mkCertOwnershipAssertion {
       cert = config.security.acme.certs.${name};
       groups = config.users.groups;
       services = [ config.systemd.services.nginx ] ++ lib.optional (cfg.enableReload || vhostCertNames != []) config.systemd.services.nginx-config-reload;

@@ -78,18 +78,15 @@ in {
       };
 
       nginx = mkOption {
-        type = types.nullOr (types.submodule (
-          recursiveUpdate
-            (import ../web-servers/nginx/vhost-options.nix { inherit config lib; })
-            {
-              # enable encryption by default,
-              # as sensitive login and Matomo data should not be transmitted in clear text.
-              options.forceSSL.default = true;
-              options.enableACME.default = true;
-            }
-        )
-        );
+        type = types.nullOr (types.submodule
+          (lib.modules.importApply ../web-servers/nginx/vhost-options.nix { inherit config lib; }));
         default = null;
+        defaultText = ''
+          {
+            forceSSL = true;
+            enableACME = true;
+          }
+        '';
         example = literalExpression ''
           {
             serverAliases = [
@@ -263,6 +260,11 @@ in {
       # https://fralef.me/piwik-hardening-with-nginx-and-php-fpm.html
       # https://github.com/perusio/piwik-nginx
       "${cfg.hostname}" = mkMerge [ cfg.nginx {
+        # enable encryption by default,
+        # as sensitive login and Matomo data should not be transmitted in clear text.
+        forceSSL = lib.mkDefault true;
+        enableACME = lib.mkDefault true;
+
         # don't allow to override the root easily, as it will almost certainly break Matomo.
         # disadvantage: not shown as default in docs.
         root = mkForce "${cfg.package}/share";

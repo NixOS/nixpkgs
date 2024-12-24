@@ -991,7 +991,7 @@ in {
 
       nginx = mkOption {
         type = with types; nullOr (submodule
-          (import ../web-servers/nginx/vhost-options.nix { inherit config lib; }));
+          (lib.modules.importApply ../web-servers/nginx/vhost-options.nix { inherit config lib; }));
         default = null;
         description = ''
           Extra configuration for the nginx virtual host of Akkoma.
