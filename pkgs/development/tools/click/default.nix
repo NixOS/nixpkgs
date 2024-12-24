@@ -2,6 +2,7 @@
   buildPythonApplication,
   fetchFromGitLab,
   fetchpatch,
+  gitUpdater,
   lib,
   stdenv,
   testers,
@@ -150,8 +151,11 @@ buildPythonApplication rec {
     )
   '';
 
-  passthru.tests.pkg-config = testers.hasPkgConfigModules {
-    package = ubports-click;
+  passthru = {
+    tests.pkg-config = testers.hasPkgConfigModules {
+      package = ubports-click;
+    };
+    updateScript = gitUpdater { };
   };
 
   meta = {
