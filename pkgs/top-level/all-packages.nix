@@ -11976,7 +11976,7 @@ with pkgs;
 
   rabbitmq-server = callPackage ../by-name/ra/rabbitmq-server/package.nix rec {
     erlang = erlang_27;
-    elixir = pkgs.elixir.override { inherit erlang; };
+    elixir = elixir_1_17.override { inherit erlang; };
   };
 
   qcal = callPackage ../tools/networking/qcal/default.nix { };
@@ -15185,17 +15185,8 @@ with pkgs;
   eiskaltdcpp = libsForQt5.callPackage ../applications/networking/p2p/eiskaltdcpp { };
 
   qemu = callPackage ../applications/virtualization/qemu {
-    inherit (darwin.apple_sdk_12_3.frameworks) CoreServices Cocoa Hypervisor Kernel vmnet;
     inherit (darwin.stubs) rez setfile;
     inherit (darwin) sigtool;
-    stdenv =
-      if stdenv.hostPlatform.isDarwin then
-        overrideSDK stdenv {
-          darwinSdkVersion = "12.3";
-          darwinMinVersion = "12.0";
-        }
-      else
-        stdenv;
   };
 
   qemu-python-utils = python3Packages.toPythonApplication (
