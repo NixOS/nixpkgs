@@ -16,8 +16,7 @@
   systemd,
   stdenv,
   fetchpatch,
-  testers,
-  proxmox-backup-client,
+  versionCheckHook,
 }:
 
 let
@@ -170,10 +169,9 @@ rustPlatform.buildRustPackage {
     systemd.dev
   ];
 
-  passthru.tests.version = testers.testVersion {
-    package = proxmox-backup-client;
-    command = "${pname} version";
-  };
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "version" ];
 
   meta = with lib; {
     description = "Command line client for Proxmox Backup Server";
