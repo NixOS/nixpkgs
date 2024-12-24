@@ -8,7 +8,7 @@
   pkgsBuildHost,
   openssl,
   pkg-config,
-  testers,
+  versionCheckHook,
   gurk-rs,
 }:
 
@@ -49,9 +49,12 @@ rustPlatform.buildRustPackage rec {
 
   useNextest = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = gurk-rs;
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = [ "--version" ];
 
   meta = with lib; {
     description = "Signal Messenger client for terminal";
