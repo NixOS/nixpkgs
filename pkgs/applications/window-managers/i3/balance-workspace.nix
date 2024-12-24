@@ -23,7 +23,7 @@ buildPythonPackage rec {
     description = "Balance windows and workspaces in i3wm";
     homepage = "https://pypi.org/project/i3-balance-workspace/";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ pacien ];
+    maintainers = with lib.maintainers; [ euxane ];
     mainProgram = "i3_balance_workspace";
   };
 }
