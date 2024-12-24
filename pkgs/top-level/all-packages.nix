@@ -6957,8 +6957,6 @@ with pkgs;
     llvmPackages = llvmPackages_18;
   };
 
-  ubports-click = python3Packages.callPackage ../development/tools/click { };
-
   urweb = callPackage ../development/compilers/urweb {
     icu = icu67;
   };
