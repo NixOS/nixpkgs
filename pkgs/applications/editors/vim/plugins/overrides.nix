@@ -1061,10 +1061,9 @@ in
     dependencies = [ self.plenary-nvim ];
   };
 
-  fzf-lua = super.fzf-lua.overrideAttrs {
+  fzf-lua = neovimUtils.buildNeovimPlugin {
+    luaAttr = luaPackages.fzf-lua;
     propagatedBuildInputs = [ fzf ];
-    # FIXME: address already in use
-    # nvimRequireCheck = "fzf-lua";
   };
 
   fzf-vim = super.fzf-vim.overrideAttrs {
