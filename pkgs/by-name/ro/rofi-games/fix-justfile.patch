@@ -1,0 +1,26 @@
+diff --git a/justfile b/justfile
+index cd111a1..b6f3827 100644
+--- a/justfile
++++ b/justfile
+@@ -13,9 +13,9 @@ PKGNAME := env("PKGNAME", "rofi-games")
+ PKGDIR := env("PKGDIR", "")
+ LIB_NAME := "librofi_games.so"
+ PLUGIN_NAME := "games.so"
+-THEMES_DIR := "/usr/share/rofi/themes"
+-LICENSES_DIR := "/usr/share/licenses/" + PKGNAME
+-PLUGINS_DIR := `pkg-config --variable pluginsdir rofi || if test -d "/usr/lib64"; then echo "/usr/lib64/rofi"; else echo "/usr/lib/rofi"; fi`
++THEMES_DIR := "/share/rofi/themes"
++LICENSES_DIR := "/share/licenses/" + PKGNAME
++PLUGINS_DIR := "/lib/rofi"
+ PLUGIN_PATH := join(PLUGINS_DIR, PLUGIN_NAME)
+ 
+ # Set rust flags if running a version of `rofi` with changes newer than the base `1.7.5`
+@@ -32,7 +32,7 @@ RUSTFLAGS := if `rofi -version` =~ '^Version: 1\.7\.5(?:\+wayland2)?$' { "" } el
+ 
+ # List commands
+ default:
+-    just --list
++    just build
+ 
+ # Build
+ build:

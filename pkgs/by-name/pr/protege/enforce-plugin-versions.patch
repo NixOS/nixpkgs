@@ -1,0 +1,43 @@
+diff --git a/pom.xml b/pom.xml
+index 839bed04..4cb5f392 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -358,6 +358,30 @@
+ 						<release>11</release>
+ 					</configuration>
+ 				</plugin>
++
++                                <plugin>
++					<groupId>org.apache.maven.plugins</groupId>
++					<artifactId>maven-install-plugin</artifactId>
++					<version>3.1.1</version>
++                                </plugin>
++
++                                <plugin>
++					<groupId>org.apache.maven.plugins</groupId>
++					<artifactId>maven-site-plugin</artifactId>
++					<version>3.12.1</version>
++                                </plugin>
++
++                                <plugin>
++					<groupId>org.apache.maven.plugins</groupId>
++					<artifactId>maven-deploy-plugin</artifactId>
++					<version>3.1.1</version>
++                                </plugin>
++
++                                <plugin>
++					<groupId>org.apache.maven.plugins</groupId>
++					<artifactId>maven-jar-plugin</artifactId>
++					<version>3.3.0</version>
++                                </plugin>
+ 							
+ 				<plugin>
+ 					<groupId>org.apache.maven.plugins</groupId>
+@@ -476,6 +494,7 @@
+ 								<requireMavenVersion>
+ 									<version>3.6.3</version>
+ 								</requireMavenVersion>
++                                                                <requirePluginVersions/>
+ 							</rules>
+ 						</configuration>
+ 					</execution>
