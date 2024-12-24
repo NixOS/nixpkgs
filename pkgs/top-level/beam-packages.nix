@@ -68,10 +68,6 @@ in
       elixir_1_16
       elixir_1_15
       elixir_1_14
-      elixir_1_13
-      elixir_1_12
-      elixir_1_11
-      elixir_1_10
       elixir-ls
       lfe
       lfe_2_1
