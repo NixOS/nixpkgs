@@ -41,7 +41,6 @@
 
 , useLLVM ? !(stdenv.targetPlatform.isx86
               || stdenv.targetPlatform.isPower
-              || stdenv.targetPlatform.isSparc
               || stdenv.targetPlatform.isAarch64
               || stdenv.targetPlatform.isGhcjs
               || (lib.versionAtLeast version "9.12" && stdenv.targetPlatform.isRiscV64))
