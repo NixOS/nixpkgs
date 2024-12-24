@@ -1,28 +1,30 @@
 {
-  lib,
+  buildPythonApplication,
   fetchFromGitLab,
   fetchpatch,
+  lib,
   stdenv,
-  buildPythonApplication,
+  testers,
+  ubports-click,
   autoreconfHook,
   dbus,
   dbus-test-runner,
   dpkg,
-  glib,
-  python-debian,
-  python-apt,
-  perl,
-  vala,
-  pkg-config,
-  libgee,
-  json-glib,
-  properties-cpp,
-  gobject-introspection,
   getopt,
+  glib,
+  gobject-introspection,
+  json-glib,
+  libgee,
+  perl,
+  pkg-config,
+  properties-cpp,
+  pygobject3,
+  python-apt,
+  python-debian,
   setuptools,
   six,
-  pygobject3,
   unittestCheckHook,
+  vala,
   wrapGAppsHook3,
 }:
 
@@ -37,86 +39,6 @@ buildPythonApplication rec {
     rev = version;
     hash = "sha256-AV3n6tghvpV/6Ew6Lokf8QAGBIMbHFAnp6G4pefVn+8=";
   };
-
-  postPatch = ''
-    # These should be proper Requires, using the header needs their headers
-    substituteInPlace lib/click/click-*.pc.in \
-      --replace-fail 'Requires.private' 'Requires'
-
-    # Don't completely override PKG_CONFIG_PATH
-    substituteInPlace click_package/tests/Makefile.am \
-      --replace-fail 'PKG_CONFIG_PATH=$(top_builddir)/lib/click' 'PKG_CONFIG_PATH=$(top_builddir)/lib/click:$(PKG_CONFIG_PATH)'
-
-    patchShebangs bin/click
-  '';
-
-  configureFlags = [
-    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
-    "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
-  ];
-
-  preFixup = ''
-    makeWrapperArgs+=(
-      --prefix LD_LIBRARY_PATH : "$out/lib"
-    )
-  '';
-
-  preConfigure = ''
-    export click_cv_perl_vendorlib=$out/${perl.libPrefix}
-    export PYTHON_INSTALL_FLAGS="--prefix=$out"
-  '';
-
-  strictDeps = true;
-
-  pkgsBuildBuild = [
-    pkg-config
-  ];
-
-  nativeBuildInputs = [
-    autoreconfHook
-    dbus-test-runner # Always checking for this
-    perl
-    pkg-config
-    gobject-introspection
-    vala
-    getopt
-    wrapGAppsHook3
-  ];
-
-  nativeCheckInputs = [
-    dbus
-    dpkg
-    unittestCheckHook
-  ];
-
-  checkInputs = [
-    python-apt
-    six
-  ];
-
-  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-
-  preCheck = ''
-    export HOME=$TMP
-
-    # tests recompile some files for loaded predefines, doesn't use any optimisation level for it
-    # makes test output harder to read, so make the warning go away
-    export NIX_CFLAGS_COMPILE+=" -U_FORTIFY_SOURCE"
-
-    for path in $disabledTestPaths; do
-      rm -v $path
-    done
-  '';
-
-  disabledTestPaths = [
-    # From apt: Unable to determine a suitable packaging system type
-    "click_package/tests/integration/test_signatures.py"
-    "click_package/tests/test_build.py"
-    "click_package/tests/test_install.py"
-    "click_package/tests/test_scripts.py"
-  ];
-
-  enableParallelBuilding = true;
 
   patches = [
     # Remove when version > 0.5.2
@@ -134,10 +56,39 @@ buildPythonApplication rec {
     })
   ];
 
+  postPatch = ''
+    # These should be proper Requires, using the header needs their headers
+    substituteInPlace lib/click/click-*.pc.in \
+      --replace-fail 'Requires.private' 'Requires'
+
+    # Don't completely override PKG_CONFIG_PATH
+    substituteInPlace click_package/tests/Makefile.am \
+      --replace-fail 'PKG_CONFIG_PATH=$(top_builddir)/lib/click' 'PKG_CONFIG_PATH=$(top_builddir)/lib/click:$(PKG_CONFIG_PATH)'
+
+    patchShebangs bin/click
+  '';
+
+  strictDeps = true;
+
+  pkgsBuildBuild = [
+    pkg-config
+  ];
+
+  nativeBuildInputs = [
+    autoreconfHook
+    dbus-test-runner # Always checking for this
+    getopt
+    gobject-introspection
+    perl
+    pkg-config
+    vala
+    wrapGAppsHook3
+  ];
+
   buildInputs = [
     glib
-    libgee
     json-glib
+    libgee
     properties-cpp
   ];
 
@@ -147,14 +98,74 @@ buildPythonApplication rec {
     setuptools
   ];
 
+  nativeCheckInputs = [
+    dbus
+    dpkg
+    unittestCheckHook
+  ];
+
+  checkInputs = [
+    python-apt
+    six
+  ];
+
+  preConfigure = ''
+    export click_cv_perl_vendorlib=$out/${perl.libPrefix}
+    export PYTHON_INSTALL_FLAGS="--prefix=$out"
+  '';
+
+  configureFlags = [
+    "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
+    "--with-systemduserunitdir=${placeholder "out"}/lib/systemd/user"
+  ];
+
+  enableParallelBuilding = true;
+
+  doCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+
+  disabledTestPaths = [
+    # From apt: Unable to determine a suitable packaging system type
+    "click_package/tests/integration/test_signatures.py"
+    "click_package/tests/test_build.py"
+    "click_package/tests/test_install.py"
+    "click_package/tests/test_scripts.py"
+  ];
+
+  preCheck = ''
+    export HOME=$TMP
+
+    # tests recompile some files for loaded predefines, doesn't use any optimisation level for it
+    # makes test output harder to read, so make the warning go away
+    export NIX_CFLAGS_COMPILE+=" -U_FORTIFY_SOURCE"
+
+    # Haven'tbeen able to get them excluded via disabledTest{s,Paths}, just deleting them
+    for path in $disabledTestPaths; do
+      rm -v $path
+    done
+  '';
+
+  preFixup = ''
+    makeWrapperArgs+=(
+      --prefix LD_LIBRARY_PATH : "$out/lib"
+    )
+  '';
+
+  passthru.tests.pkg-config = testers.hasPkgConfigModules {
+    package = ubports-click;
+  };
+
   meta = {
-    description = "Tool to build click packages. Mainly used for Ubuntu Touch";
+    description = "Tool to build click packages, mainly used for Ubuntu Touch";
     homepage = "https://gitlab.com/ubports/development/core/click";
+    changelog = "https://gitlab.com/ubports/development/core/click/-/blob/${version}/ChangeLog";
     license = lib.licenses.gpl3Only;
+    mainProgram = "click";
     maintainers = with lib.maintainers; [
       ilyakooo0
-      OPNA2608
-    ];
+    ] ++ lib.teams.lomiri.members;
     platforms = lib.platforms.linux;
+    pkgConfigModules = [
+      "click-0.4"
+    ];
   };
 }
