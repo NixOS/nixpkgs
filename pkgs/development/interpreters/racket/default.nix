@@ -27,6 +27,8 @@
   wrapGAppsHook3,
 
   disableDocs ? false,
+
+  writers,
 }:
 
 let
@@ -174,6 +176,24 @@ stdenv.mkDerivation (finalAttrs: {
         #:exists 'replace)
       EOF
     '';
+
+  passthru = {
+    # Functionalities #
+    writeScript =
+      nameOrPath:
+      {
+        libraries ? [ ],
+        ...
+      }@config:
+      assert lib.assertMsg (libraries == [ ]) "library integration for Racket has not been implemented";
+      writers.makeScriptWriter (
+        builtins.removeAttrs config [ "libraries" ]
+        // {
+          interpreter = "${lib.getExe finalAttrs.finalPackage}";
+        }
+      ) nameOrPath;
+    writeScriptBin = name: finalAttrs.passthru.writeScript "/bin/${name}";
+  };
 
   meta = {
     description =
