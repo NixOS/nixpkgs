@@ -1,0 +1,18 @@
+diff --git a/Bio/SeqIO/SeqXmlIO.py b/Bio/SeqIO/SeqXmlIO.py
+index 8fe75ebb728..6758317d05f 100644
+--- a/Bio/SeqIO/SeqXmlIO.py
++++ b/Bio/SeqIO/SeqXmlIO.py
+@@ -498,11 +498,12 @@ def iterate(self, handle):
+             if not text:
+                 break
+             parser.feed(text)
++        # Closing the parser ensures that all XML data fed into it are processed
++        parser.close()
+         # We have reached the end of the XML file;
+         # send out the remaining records
+         yield from records
+         records.clear()
+-        parser.close()
+ 
+ 
+ class SeqXmlWriter(SequenceWriter):
