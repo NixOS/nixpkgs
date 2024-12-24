@@ -233,6 +233,16 @@ in
       default = { };
     };
 
+    externalInit = mkOption {
+      description = ''
+        When the `externalInit` option is set to `true`, the initrd will not
+        use NixOS utilities to boot the system. This enables users to utilize
+        init in other rootfs.
+      '';
+      type = types.bool;
+      default = false;
+    };
+
     suppressedStorePaths = mkOption {
       description = ''
         Store paths specified in the storePaths option that
@@ -658,7 +668,7 @@ in
         }
       ];
 
-      services.initrd-nixos-activation = {
+      services.initrd-nixos-activation = lib.optionalAttr (!cfg.externalInit) {
         after = [ "initrd-switch-root.target" ];
         requiredBy = [ "initrd-switch-root.service" ];
         before = [ "initrd-switch-root.service" ];
