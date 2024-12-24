@@ -2,6 +2,7 @@
   version,
   hash,
   cargoHash,
+  patchDir,
   extraMeta ? { },
 }:
 
@@ -35,8 +36,9 @@ let
   arch = if stdenv.hostPlatform.isx86_64 then "x86_64" else "generic";
 in
 rustPlatform.buildRustPackage rec {
-  pname = "kanidm";
+  pname = "kanidm" + (lib.optionalString enableSecretProvisioning "-with-secret-provisioning");
   inherit version cargoHash;
+  cargoDepsName = "kanidm";
 
   src = fetchFromGitHub {
     owner = pname;
@@ -48,8 +50,8 @@ rustPlatform.buildRustPackage rec {
   KANIDM_BUILD_PROFILE = "release_nixos_${arch}";
 
   patches = lib.optionals enableSecretProvisioning [
-    ./patches/oauth2-basic-secret-modify.patch
-    ./patches/recover-account.patch
+    "${patchDir}/oauth2-basic-secret-modify.patch"
+    "${patchDir}/recover-account.patch"
   ];
 
   postPatch =
