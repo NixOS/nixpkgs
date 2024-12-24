@@ -149,6 +149,7 @@
   ./programs/_1password.nix
   ./programs/adb.nix
   ./programs/alvr.nix
+  ./programs/amnezia-vpn.nix
   ./programs/appgate-sdp.nix
   ./programs/appimage.nix
   ./programs/arp-scan.nix
