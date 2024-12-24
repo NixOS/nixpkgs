@@ -29,8 +29,8 @@ self: super: {
   Cabal_3_12_1_0 = doDistribute (super.Cabal_3_12_1_0.override {
     Cabal-syntax = self.Cabal-syntax_3_12_1_0;
   });
-  Cabal_3_14_0_0 = doDistribute (super.Cabal_3_14_0_0.override {
-    Cabal-syntax = self.Cabal-syntax_3_14_0_0;
+  Cabal_3_14_1_0 = doDistribute (super.Cabal_3_14_1_0.override {
+    Cabal-syntax = self.Cabal-syntax_3_14_1_0;
   });
 
   # hackage-security == 0.6.2.6 has a wider support range in theory, but it only
