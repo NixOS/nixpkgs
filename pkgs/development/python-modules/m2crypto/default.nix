@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "m2crypto";
-  version = "0.42.0";
+  version = "0.43.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-QrYt8sr2IxYbHWQ6cjVGTC/ioxBQSevEmKbUfcCPZLQ=";
+    hash = "sha256-bCwce7DoqnaPfKgD2n28JmbUADsmvXrfcCM6/FnYzzM=";
   };
 
   build-system = [ setuptools ];
