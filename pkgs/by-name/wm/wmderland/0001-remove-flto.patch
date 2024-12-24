@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 17a4944..33406f3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -10,7 +10,7 @@ include(BuildType)
+ # Request C++14 standard, using new CMake variables.
+ set(CMAKE_CXX_STANDARD 14)
+ set(CMAKE_CXX_STANDARD_REQUIRED True)
+-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -flto -Wall")
++set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall")
+ 
+ # If the BuildType is Debug, then add -rdynamic.
+ # (used to print stacktrace with function names)

@@ -1,0 +1,32 @@
+diff --git a/auto_editor/ffwrapper.py b/auto_editor/ffwrapper.py
+index b6df2d4..8409032 100644
+--- a/auto_editor/ffwrapper.py
++++ b/auto_editor/ffwrapper.py
+@@ -30,13 +30,7 @@ class FFmpeg:
+                 return ff_location
+             if my_ffmpeg:
+                 return "ffmpeg"
+-
+-            try:
+-                import ae_ffmpeg
+-
+-                return ae_ffmpeg.get_path()
+-            except ImportError:
+-                return "ffmpeg"
++            return "@ffmpeg@"
+ 
+         self.debug = debug
+         self.show_cmd = show_cmd
+diff --git a/auto_editor/utils/types.py b/auto_editor/utils/types.py
+index ccd6581..a66e5e3 100644
+--- a/auto_editor/utils/types.py
++++ b/auto_editor/utils/types.py
+@@ -218,7 +218,7 @@ def resolution(val: str | None) -> tuple[int, int] | None:
+ 
+ @dataclass
+ class Args:
+-    yt_dlp_location: str = "yt-dlp"
++    yt_dlp_location: str = "@yt_dlp@"
+     download_format: str | None = None
+     output_format: str | None = None
+     yt_dlp_extras: str | None = None

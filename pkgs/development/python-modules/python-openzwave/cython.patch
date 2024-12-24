@@ -1,0 +1,20 @@
+diff --git a/pyozw_setup.py b/pyozw_setup.py
+index b201840..37bf2a8 100644
+--- a/pyozw_setup.py
++++ b/pyozw_setup.py
+@@ -257,13 +257,13 @@ class Template(object):
+         if sys.platform.startswith("win"):
+             return ['Cython']
+         else:
+-            return ['Cython==0.28.6']
++            return ['Cython>=0.28.6']
+ 
+     def build_requires(self):
+         if sys.platform.startswith("win"):
+             return ['Cython']
+         else:
+-            return ['Cython==0.28.6']
++            return ['Cython>=0.28.6']
+ 
+     def build(self):
+         if len(self.ctx['extra_objects']) == 1 and os.path.isfile(self.ctx['extra_objects'][0]):

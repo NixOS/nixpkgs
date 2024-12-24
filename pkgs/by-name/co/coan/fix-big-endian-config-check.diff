@@ -1,0 +1,22 @@
+diff --git a/configure.ac b/configure.ac
+index 23ba6f0..13e6647 100644
+--- a/configure.ac
++++ b/configure.ac
+@@ -4,7 +4,7 @@ AC_PREREQ(2.59)
+ AM_INIT_AUTOMAKE(1.13 no-define)
+ AC_CHECK_HEADERS(strings.h)
+ AC_MSG_CHECKING(for big-endian host)
+-AC_TRY_RUN([main () {
++AC_TRY_RUN([int main () {
+   /* Are we little or big endian?  From Harbison&amp;Steele.  */
+   union
+   {
+@@ -12,7 +12,7 @@ AC_TRY_RUN([main () {
+     char c[sizeof (long)];
+   } u;
+   u.l = 1;
+-  exit (u.c[sizeof (long) - 1] == 1);
++  return u.c[sizeof (long) - 1] == 1;
+ }], BIG_ENDIAN=no, BIG_ENDIAN=yes)
+ AC_MSG_RESULT([$BIG_ENDIAN])
+ AM_CONDITIONAL([IS_BIG_ENDIAN],[test "$BIG_ENDIAN" = "yes"])
