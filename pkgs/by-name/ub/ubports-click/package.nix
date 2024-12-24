@@ -1,5 +1,4 @@
 {
-  buildPythonApplication,
   fetchFromGitLab,
   fetchpatch,
   gitUpdater,
@@ -19,17 +18,12 @@
   perl,
   pkg-config,
   properties-cpp,
-  pygobject3,
-  python-apt,
-  python-debian,
-  setuptools,
-  six,
-  unittestCheckHook,
+  python3Packages,
   vala,
   wrapGAppsHook3,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "click";
   version = "0.5.2";
   format = "other";
@@ -93,7 +87,7 @@ buildPythonApplication rec {
     properties-cpp
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     python-debian
     pygobject3
     setuptools
@@ -102,10 +96,10 @@ buildPythonApplication rec {
   nativeCheckInputs = [
     dbus
     dpkg
-    unittestCheckHook
+    python3Packages.unittestCheckHook
   ];
 
-  checkInputs = [
+  checkInputs = with python3Packages; [
     python-apt
     six
   ];
