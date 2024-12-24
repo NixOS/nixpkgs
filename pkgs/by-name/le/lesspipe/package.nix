@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lesspipe";
-  version = "2.11";
+  version = "2.14";
 
   src = fetchFromGitHub {
     owner = "wofr06";
     repo = "lesspipe";
     rev = "v${version}";
-    hash = "sha256-jJrKiRdrargk0JzcPWxBZGyOpMfTIONHG8HNRecazVo=";
+    hash = "sha256-SEFyiKxfKC2Rx5tQ2OK8zEiCBFex2kZUY/vnnDsdCoc=";
   };
 
   nativeBuildInputs = [
@@ -121,6 +121,7 @@ stdenv.mkDerivation rec {
             "lynx"
             "elinks"
             "html2text"
+            "xmq"
             "dtc"
             "pdftotext"
             "pdftohtml"
@@ -137,7 +138,6 @@ stdenv.mkDerivation rec {
             "xlscat"
             "odt2txt"
             "wvText"
-            "antiword"
             "catdoc"
             "broken_catppt"
             "sxw2txt"
@@ -157,9 +157,11 @@ stdenv.mkDerivation rec {
             "plutil"
             "id3v2"
             "csvlook"
+            "csvtable"
             "jq"
             "zlib-flate"
             "lessfilter"
+            "snap"
           ]
           ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) [
             # resholve only identifies this on darwin/bsd
