@@ -3873,6 +3873,8 @@ self: super: with self; {
 
   drf-nested-routers = callPackage ../development/python-modules/drf-nested-routers { };
 
+  drf-orjson-renderer = callPackage ../development/python-modules/drf-orjson-renderer { };
+
   drf-spectacular = callPackage ../development/python-modules/drf-spectacular { };
 
   drf-spectacular-sidecar = callPackage ../development/python-modules/drf-spectacular-sidecar { };
@@ -10722,6 +10724,8 @@ self: super: with self; {
   python-izone = callPackage ../development/python-modules/python-izone { };
 
   python-juicenet = callPackage ../development/python-modules/python-juicenet { };
+
+  python-kadmin-rs = callPackage ../development/python-modules/python-kadmin-rs { };
 
   python-kasa = callPackage ../development/python-modules/python-kasa { };
 
