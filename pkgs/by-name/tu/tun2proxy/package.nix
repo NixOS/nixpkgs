@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tun2proxy";
-  version = "0.6.0";
+  version = "0.6.6";
 
   src = fetchFromGitHub {
     owner = "tun2proxy";
     repo = "tun2proxy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-LY7vVD85GVFqARYOBDeb4fS6rL2PwPXYXIAJtwm2goo=";
+    tag = "v${version}";
+    hash = "sha256-ylzzeIpM03uWpfoseo+ELVGwoqgc99+KXPQJQj9TcEo=";
   };
 
-  cargoHash = "sha256-o/zQjWR9qNs0XVL/dcRiMHgj+8Xvl6vVl/Yw5iLhroI=";
+  cargoHash = "sha256-HkjoJltqlxU3R3ANIoFTX8B2gUpa94cMbNnUZoLnXSU=";
 
   cargoPatches = [
     ./Cargo.lock.patch
