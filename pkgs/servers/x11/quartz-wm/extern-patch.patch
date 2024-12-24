@@ -1,0 +1,13 @@
+diff --git a/src/x-list.h b/src/x-list.h
+index bb85c02..059c88b 100644
+--- a/src/x-list.h
++++ b/src/x-list.h
+@@ -39,7 +39,7 @@
+ #endif
+ 
+ #ifndef X_EXTERN
+-# define X_EXTERN __private_extern__
++# define X_EXTERN extern
+ #endif
+ 
+ X_EXTERN void X_PFX (list_free_1) (x_list *node);

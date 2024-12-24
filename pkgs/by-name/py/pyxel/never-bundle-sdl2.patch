@@ -1,0 +1,13 @@
+diff --git a/rust/pyxel-platform/build.rs b/rust/pyxel-platform/build.rs
+index 45eecae..f385eb9 100644
+--- a/rust/pyxel-platform/build.rs
++++ b/rust/pyxel-platform/build.rs
+@@ -31,7 +31,7 @@ impl SDL2BindingsBuilder {
+     }
+ 
+     fn should_bundle_sdl2(&self) -> bool {
+-        self.target_os.contains("windows") || self.target_os == "darwin"
++        false
+     }
+ 
+     fn download_sdl2(&self) {

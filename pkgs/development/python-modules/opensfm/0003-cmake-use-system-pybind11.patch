@@ -1,0 +1,161 @@
+From 36820fbab1abeeebd99f14e368093e0e3f934ca7 Mon Sep 17 00:00:00 2001
+From: Someone Serge <sergei.kozlukov@aalto.fi>
+Date: Sat, 19 Feb 2022 02:37:54 +0200
+Subject: [PATCH 3/4] cmake: use system pybind11
+
+---
+ opensfm/src/CMakeLists.txt            | 3 ++-
+ opensfm/src/bundle/CMakeLists.txt     | 2 +-
+ opensfm/src/dense/CMakeLists.txt      | 2 +-
+ opensfm/src/features/CMakeLists.txt   | 1 -
+ opensfm/src/foundation/CMakeLists.txt | 1 -
+ opensfm/src/geo/CMakeLists.txt        | 1 -
+ opensfm/src/geometry/CMakeLists.txt   | 1 -
+ opensfm/src/map/CMakeLists.txt        | 3 +--
+ opensfm/src/robust/CMakeLists.txt     | 1 -
+ opensfm/src/sfm/CMakeLists.txt        | 1 -
+ 10 files changed, 5 insertions(+), 11 deletions(-)
+
+diff --git a/opensfm/src/CMakeLists.txt b/opensfm/src/CMakeLists.txt
+index 640d47a6..6e391ffa 100644
+--- a/opensfm/src/CMakeLists.txt
++++ b/opensfm/src/CMakeLists.txt
+@@ -54,6 +54,8 @@ endif()
+ 
+ find_package(gflags REQUIRED)
+ 
++find_package(pybind11 REQUIRED)
++
+ find_package(LAPACK)
+ find_package(SuiteSparse)
+ find_package(Eigen3 REQUIRED)
+@@ -82,7 +84,6 @@ else()
+ endif()
+ 
+ ####### Third party libraries #######
+-add_subdirectory(third_party/pybind11)
+ add_subdirectory(third_party/akaze)
+ add_subdirectory(third_party/vlfeat)
+ 
+diff --git a/opensfm/src/bundle/CMakeLists.txt b/opensfm/src/bundle/CMakeLists.txt
+index 7cd9cf74..307e963a 100644
+--- a/opensfm/src/bundle/CMakeLists.txt
++++ b/opensfm/src/bundle/CMakeLists.txt
+@@ -52,7 +52,7 @@ target_link_libraries(pybundle PRIVATE
+   bundle
+   geometry
+   foundation
+-  pybind11)
++)
+ set_target_properties(pybundle PROPERTIES
+     LIBRARY_OUTPUT_DIRECTORY "${opensfm_SOURCE_DIR}/.."
+ )
+diff --git a/opensfm/src/dense/CMakeLists.txt b/opensfm/src/dense/CMakeLists.txt
+index cbebb5ea..2728749d 100644
+--- a/opensfm/src/dense/CMakeLists.txt
++++ b/opensfm/src/dense/CMakeLists.txt
+@@ -23,7 +23,7 @@ endif()
+ 
+ pybind11_add_module(pydense python/pybind.cc)
+ target_include_directories(pydense PRIVATE ${GLOG_INCLUDE_DIR})
+-target_link_libraries(pydense PRIVATE dense foundation pybind11)
++target_link_libraries(pydense PRIVATE dense foundation)
+ set_target_properties(pydense PROPERTIES
+     LIBRARY_OUTPUT_DIRECTORY "${opensfm_SOURCE_DIR}/.."
+ )
+diff --git a/opensfm/src/features/CMakeLists.txt b/opensfm/src/features/CMakeLists.txt
+index b131d30a..6db5b3f1 100644
+--- a/opensfm/src/features/CMakeLists.txt
++++ b/opensfm/src/features/CMakeLists.txt
+@@ -22,7 +22,6 @@ target_link_libraries(pyfeatures
+   PRIVATE
+     features
+     foundation
+-    pybind11
+     akaze
+ )
+ set_target_properties(pyfeatures PROPERTIES
+diff --git a/opensfm/src/foundation/CMakeLists.txt b/opensfm/src/foundation/CMakeLists.txt
+index 40185227..9e0e45e7 100644
+--- a/opensfm/src/foundation/CMakeLists.txt
++++ b/opensfm/src/foundation/CMakeLists.txt
+@@ -12,7 +12,6 @@ set(FOUNDATION_FILES
+ add_library(foundation ${FOUNDATION_FILES})
+ target_link_libraries(foundation
+   PUBLIC
+-    pybind11
+     ${OpenCV_LIBS}
+     ${OpenMP_libomp_LIBRARY}
+     Eigen3::Eigen
+diff --git a/opensfm/src/geo/CMakeLists.txt b/opensfm/src/geo/CMakeLists.txt
+index a9cbae02..75620d06 100644
+--- a/opensfm/src/geo/CMakeLists.txt
++++ b/opensfm/src/geo/CMakeLists.txt
+@@ -29,7 +29,6 @@ target_link_libraries(pygeo
+   PRIVATE
+     geo
+     foundation
+-    pybind11
+ )
+ set_target_properties(pygeo PROPERTIES
+     LIBRARY_OUTPUT_DIRECTORY "${opensfm_SOURCE_DIR}/.."
+diff --git a/opensfm/src/geometry/CMakeLists.txt b/opensfm/src/geometry/CMakeLists.txt
+index e6dda2c2..51bfd6c5 100644
+--- a/opensfm/src/geometry/CMakeLists.txt
++++ b/opensfm/src/geometry/CMakeLists.txt
+@@ -48,7 +48,6 @@ target_link_libraries(pygeometry
+   PRIVATE
+     geometry
+     foundation
+-    pybind11
+ )
+ set_target_properties(pygeometry PROPERTIES
+     LIBRARY_OUTPUT_DIRECTORY "${opensfm_SOURCE_DIR}/.."
+diff --git a/opensfm/src/map/CMakeLists.txt b/opensfm/src/map/CMakeLists.txt
+index b6f67bcd..f869aa4c 100644
+--- a/opensfm/src/map/CMakeLists.txt
++++ b/opensfm/src/map/CMakeLists.txt
+@@ -20,7 +20,7 @@ set(MAP_FILES
+ add_library(map ${MAP_FILES})
+ target_link_libraries(map
+   PUBLIC
+-    pybind11
++    pybind11::module
+     Eigen3::Eigen
+   PRIVATE
+     geo
+@@ -39,7 +39,6 @@ target_link_libraries(pymap
+     map
+     geometry
+     bundle
+-    pybind11
+ )
+ 
+ if (OPENSFM_BUILD_TESTS)
+diff --git a/opensfm/src/robust/CMakeLists.txt b/opensfm/src/robust/CMakeLists.txt
+index ce70749f..40bdf7a4 100644
+--- a/opensfm/src/robust/CMakeLists.txt
++++ b/opensfm/src/robust/CMakeLists.txt
+@@ -29,7 +29,6 @@ target_link_libraries(pyrobust
+   PRIVATE
+     robust
+     foundation
+-    pybind11
+ )
+ set_target_properties(pyrobust PROPERTIES
+     LIBRARY_OUTPUT_DIRECTORY "${opensfm_SOURCE_DIR}/.."
+diff --git a/opensfm/src/sfm/CMakeLists.txt b/opensfm/src/sfm/CMakeLists.txt
+index 98c28f41..7f56b791 100644
+--- a/opensfm/src/sfm/CMakeLists.txt
++++ b/opensfm/src/sfm/CMakeLists.txt
+@@ -35,7 +35,6 @@ target_include_directories(pysfm PRIVATE ${GLOG_INCLUDE_DIR})
+ target_link_libraries(pysfm
+   PRIVATE
+     foundation
+-    pybind11
+     sfm
+ )
+ set_target_properties(pysfm PROPERTIES
+-- 
+2.33.1
+
