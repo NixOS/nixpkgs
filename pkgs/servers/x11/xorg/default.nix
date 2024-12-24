@@ -3138,11 +3138,11 @@ self: with self; {
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   xf86videonouveau = callPackage ({ stdenv, pkg-config, fetchurl, xorgproto, libdrm, udev, libpciaccess, xorgserver, testers }: stdenv.mkDerivation (finalAttrs: {
     pname = "xf86-video-nouveau";
-    version = "3ee7cbca8f9144a3bb5be7f71ce70558f548d268";
+    version = "1.0.18";
     builder = ./builder.sh;
     src = fetchurl {
-      url = "https://gitlab.freedesktop.org/xorg/driver/xf86-video-nouveau/-/archive/3ee7cbca8f9144a3bb5be7f71ce70558f548d268/xf86-video-nouveau-3ee7cbca8f9144a3bb5be7f71ce70558f548d268.tar.bz2";
-      sha256 = "0rhs3z274jdzd82pcsl25xn8hmw6i4cxs2kwfnphpfhxbbkiq7wl";
+      url = "mirror://xorg/individual/driver/xf86-video-nouveau-1.0.18.tar.xz";
+      sha256 = "1z9bqfr81w2ahq2vyphgjbl0ffxndrpxb4mqqly76srjcj7d6ap8";
     };
     hardeningDisable = [ "bindnow" "relro" ];
     strictDeps = true;
