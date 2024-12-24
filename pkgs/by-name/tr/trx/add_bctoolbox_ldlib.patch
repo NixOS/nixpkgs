@@ -1,0 +1,15 @@
+diff --git a/Makefile b/Makefile
+index ffcd883..c4b4ff7 100644
+--- a/Makefile
++++ b/Makefile
+@@ -12,8 +12,9 @@ CFLAGS += -MMD -Wall
+ LDLIBS_ASOUND ?= -lasound
+ LDLIBS_OPUS ?= -lopus
+ LDLIBS_ORTP ?= -lortp
++LDLIBS_BCTOOLBOX ?= -lbctoolbox
+ 
+-LDLIBS += $(LDLIBS_ASOUND) $(LDLIBS_OPUS) $(LDLIBS_ORTP)
++LDLIBS += $(LDLIBS_ASOUND) $(LDLIBS_OPUS) $(LDLIBS_ORTP) $(LDLIBS_BCTOOLBOX)
+ 
+ .PHONY:		all install dist clean
+ 

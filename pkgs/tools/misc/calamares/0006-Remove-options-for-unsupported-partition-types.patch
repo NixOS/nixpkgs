@@ -1,0 +1,38 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Victor Fuentes <vmfuentes64@gmail.com>
+Date: Thu, 1 Aug 2024 16:02:40 -0400
+Subject: [PATCH] Remove options for unsupported partition types
+
+---
+ src/modules/partition/gui/CreatePartitionDialog.cpp       | 3 ++-
+ src/modules/partition/gui/EditExistingPartitionDialog.cpp | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/src/modules/partition/gui/CreatePartitionDialog.cpp b/src/modules/partition/gui/CreatePartitionDialog.cpp
+index d18676138..60bb8fdaf 100644
+--- a/src/modules/partition/gui/CreatePartitionDialog.cpp
++++ b/src/modules/partition/gui/CreatePartitionDialog.cpp
+@@ -108,7 +108,8 @@ CreatePartitionDialog::CreatePartitionDialog( Device* device,
+     {
+         // We need to ensure zfs is added to the list if the zfs module is enabled
+         if ( ( fs->type() == FileSystem::Type::Zfs && Calamares::Settings::instance()->isModuleEnabled( "zfs" ) )
+-             || ( fs->supportCreate() != FileSystem::cmdSupportNone && fs->type() != FileSystem::Extended ) )
++             || ( fs->supportCreate() != FileSystem::cmdSupportNone && fs->type() != FileSystem::Extended
++             && fs->type() != FileSystem::Luks && fs->type() != FileSystem::Luks2 && fs->type() != FileSystem::Minix ) )
+         {
+             fsNames << userVisibleFS( fs );  // This is put into the combobox
+             if ( fs->type() == defaultFSType )
+diff --git a/src/modules/partition/gui/EditExistingPartitionDialog.cpp b/src/modules/partition/gui/EditExistingPartitionDialog.cpp
+index 7a3f4951a..4c3bfc4b0 100644
+--- a/src/modules/partition/gui/EditExistingPartitionDialog.cpp
++++ b/src/modules/partition/gui/EditExistingPartitionDialog.cpp
+@@ -113,7 +113,8 @@ EditExistingPartitionDialog::EditExistingPartitionDialog( Device* device,
+     {
+         // We need to ensure zfs is added to the list if the zfs module is enabled
+         if ( ( fs->type() == FileSystem::Type::Zfs && Calamares::Settings::instance()->isModuleEnabled( "zfs" ) )
+-             || ( fs->supportCreate() != FileSystem::cmdSupportNone && fs->type() != FileSystem::Extended ) )
++             || ( fs->supportCreate() != FileSystem::cmdSupportNone && fs->type() != FileSystem::Extended
++             && fs->type() != FileSystem::Luks && fs->type() != FileSystem::Luks2 && fs->type() != FileSystem::Minix) )
+         {
+             fsNames << userVisibleFS( fs );  // For the combo box
+         }
