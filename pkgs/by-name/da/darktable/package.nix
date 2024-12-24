@@ -66,7 +66,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  version = "5.0.0";
+  version = "5.1.0";
   pname = "darktable";
 
   src = fetchFromGitHub {
@@ -74,7 +74,7 @@ stdenv.mkDerivation rec {
     repo = "darktable";
     tag = "release-${version}";
     fetchSubmodules = true;
-    hash = "sha256-PjNqZDFrdYzXSiZ9kTLtZSq+vFuqbFQzduDVMrFtzE0=";
+    hash = "sha256-cK881s0pW7VNTzHCem5BuPMpcwG61DWipTQQqohF0P8=";
   };
 
   nativeBuildInputs = [
