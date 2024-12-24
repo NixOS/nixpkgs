@@ -12,7 +12,11 @@
   fetchpatch,
   fetchurl,
   # Please unpin FFmpeg on the next upstream release.
-  ffmpeg_6,
+  # Currently FFmpeg is pinned to 4.x because VAAPI acceleration is broken when
+  # building with newer versions:
+  # https://code.videolan.org/videolan/vlc/-/issues/26772
+  # This is intentional by upstream but VLC 4.0 will support newer FFmpeg.
+  ffmpeg_4,
   flac,
   fluidsynth,
   freefont_ttf,
@@ -139,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
       avahi
       dbus
       faad2
-      ffmpeg_6
+      ffmpeg_4
       flac
       fluidsynth
       fribidi
