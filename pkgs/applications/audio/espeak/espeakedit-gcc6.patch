@@ -1,0 +1,57 @@
+diff --git i/src/compiledata.cpp w/src/compiledata.cpp
+index f1bcb30..30e9e2d 100755
+--- i/src/compiledata.cpp
++++ w/src/compiledata.cpp
+@@ -212,7 +212,7 @@ enum {
+ 	kTUNE_SPLIT,
+ };
+ 
+-static const char utf8_bom[] = {0xef,0xbb,0xbf,0};
++static const char utf8_bom[] = {char(0xef),char(0xbb),char(0xbf),0};
+ 
+ static keywtab_t k_intonation[] = {
+ 	{"tune",      0,   kTUNE},
+diff --git i/src/espeakedit.cpp w/src/espeakedit.cpp
+index bde03ea..071689d 100755
+--- i/src/espeakedit.cpp
++++ w/src/espeakedit.cpp
+@@ -744,7 +744,7 @@ void MyFrame::OnTools(wxCommandEvent& event)
+ 	int debug_flag=0;
+ 	char fname_log[sizeof(path_dsource)+12];
+ 	char err_fname[sizeof(path_home)+15];
+-	static const char utf8_bom[] = {0xef,0xbb,0xbf,0};
++	static const char utf8_bom[] = {char(0xef),char(0xbb),char(0xbf),0};
+ 
+ 	switch(event.GetId())
+ 	{
+diff --git i/src/extras.cpp w/src/extras.cpp
+index fa6ac3b..ee68f59 100644
+--- i/src/extras.cpp
++++ w/src/extras.cpp
+@@ -335,16 +335,16 @@ void Lexicon_It(int pass)
+ 	static const char *vowels1 = "aeiou";
+ 	static const char *vowels2 = "aeou";
+ 
+-	static const char ex1[] = {'a',0xc3,0xac,0};  // aì
+-	static const char ex2[] = {'e',0xc3,0xac,0};  // eì
+-	static const char ex3[] = {0xc3,0xb9,'a',0};  // ùa
+-	static const char ex4[] = {0xc3,0xb9,'e',0};  // ùe
+-	static const char ex5[] = {0xc3,0xb9,'i',0};  // ùi
+-	static const char ex6[] = {0xc3,0xb9,'o',0};  // ùo
+-	static const char ex7[] = {'c',0xc3,0xac,'a',0};  // cìa
+-	static const char ex8[] = {'c',0xc3,0xac,'o',0};  // cìo
+-	static const char ex9[] = {'c',0xc3,0xac,'u',0};  // cìu
+-	static const char ex10[] = {'g','l',0xc3,0xac,0};  // glì
++	static const char ex1[] = {'a',char(0xc3),char(0xac),0};  // aì
++	static const char ex2[] = {'e',char(0xc3),char(0xac),0};  // eì
++	static const char ex3[] = {char(0xc3),char(0xb9),'a',0};  // ùa
++	static const char ex4[] = {char(0xc3),char(0xb9),'e',0};  // ùe
++	static const char ex5[] = {char(0xc3),char(0xb9),'i',0};  // ùi
++	static const char ex6[] = {char(0xc3),char(0xb9),'o',0};  // ùo
++	static const char ex7[] = {'c',char(0xc3),char(0xac),'a',0};  // cìa
++	static const char ex8[] = {'c',char(0xc3),char(0xac),'o',0};  // cìo
++	static const char ex9[] = {'c',char(0xc3),char(0xac),'u',0};  // cìu
++	static const char ex10[] = {'g','l',char(0xc3),char(0xac),0};  // glì
+ 
+ 
+ 	static const char *exceptions[] = {ex1, ex2, ex3, ex4, ex5, ex6, ex7, ex8, ex9, ex10, NULL};

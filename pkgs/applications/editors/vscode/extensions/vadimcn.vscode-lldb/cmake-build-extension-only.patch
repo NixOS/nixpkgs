@@ -1,0 +1,50 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -16,13 +16,6 @@
+ set(VERSION "${VERSION}${VERSION_SUFFIX}")
+ message("Version ${VERSION}")
+ 
+-set(LLDB_PACKAGE $ENV{LLDB_PACKAGE} CACHE PATH "Zip archive containing LLDB files")
+-if (LLDB_PACKAGE)
+-    message("Using LLDB_PACKAGE=${LLDB_PACKAGE}")
+-else()
+-    message(FATAL_ERROR "LLDB_PACKAGE not set." )
+-endif()
+-
+ if (CMAKE_SYSROOT)
+     set(CMAKE_C_FLAGS "--sysroot=${CMAKE_SYSROOT} ${CMAKE_C_FLAGS}")
+     set(CMAKE_CXX_FLAGS "--sysroot=${CMAKE_SYSROOT} ${CMAKE_CXX_FLAGS}")
+@@ -102,16 +95,6 @@
+ configure_file(webpack.config.js ${CMAKE_CURRENT_BINARY_DIR}/webpack.config.js @ONLY)
+ file(COPY ${CMAKE_CURRENT_SOURCE_DIR}/package-lock.json DESTINATION ${CMAKE_CURRENT_BINARY_DIR})
+ 
+-# Install node_modules
+-execute_process(
+-    COMMAND ${NPM} ci # like install, but actually respects package-lock file.
+-    WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+-    RESULT_VARIABLE Result
+-)
+-if (NOT ${Result} EQUAL 0)
+-    message(FATAL_ERROR "npm intall failed: ${Result}")
+-endif()
+-
+ # Resolve $refs
+ execute_process(
+     COMMAND ${WithEnv} NODE_PATH=${CMAKE_CURRENT_BINARY_DIR}/node_modules node ${CMAKE_CURRENT_SOURCE_DIR}/tools/prep-package.js ${CMAKE_CURRENT_BINARY_DIR}/package.json ${CMAKE_CURRENT_BINARY_DIR}/package.json
+@@ -169,6 +152,7 @@
+ 
+ add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/README.md ${CMAKE_CURRENT_BINARY_DIR}/README.md)
+ add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/CHANGELOG.md ${CMAKE_CURRENT_BINARY_DIR}/CHANGELOG.md)
++add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE ${CMAKE_CURRENT_BINARY_DIR}/LICENSE)
+ add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/images/lldb.png ${CMAKE_CURRENT_BINARY_DIR}/images/lldb.png)
+ add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/images/user.svg ${CMAKE_CURRENT_BINARY_DIR}/images/user.svg)
+ add_copy_file(PackageFiles ${CMAKE_CURRENT_SOURCE_DIR}/images/users.svg ${CMAKE_CURRENT_BINARY_DIR}/images/users.svg)
+@@ -185,6 +169,7 @@
+ set(PackagedFilesBootstrap
+     README.md
+     CHANGELOG.md
++    LICENSE
+     extension.js
+     images/*
+     syntaxes/*
