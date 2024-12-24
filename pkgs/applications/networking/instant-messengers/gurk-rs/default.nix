@@ -20,7 +20,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "boxdot";
     repo = "gurk-rs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-FPbEtk2A7qs/85VsmfV1uPsVZ7V5WKhMKeWrzUt5L4w=";
   };
 
