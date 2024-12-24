@@ -100,6 +100,7 @@ python3Packages.buildPythonApplication rec {
     maintainers = with maintainers; [
       mkg20001
       SuperSandro2000
+      donteatoreo
     ];
     mainProgram = "yt-dlp";
   };
