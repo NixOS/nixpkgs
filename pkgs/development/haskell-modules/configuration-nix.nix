@@ -464,6 +464,9 @@ self: super: builtins.intersectAttrs super {
   # Disable tests because they require a running dbus session
   xmonad-dbus = dontCheck super.xmonad-dbus;
 
+  # Test suite requires running a docker container via testcontainers
+  amqp-streamly = dontCheck super.amqp-streamly;
+
   # wxc supports wxGTX >= 3.0, but our current default version points to 2.8.
   # http://hydra.cryp.to/build/1331287/log/raw
   wxc = (addBuildDepend self.split super.wxc).override { wxGTK = pkgs.wxGTK32; };
@@ -471,6 +474,7 @@ self: super: builtins.intersectAttrs super {
 
   shellify = enableSeparateBinOutput super.shellify;
   specup = enableSeparateBinOutput super.specup;
+  aws-spend-summary = self.generateOptparseApplicativeCompletions [ "aws-spend-summary" ] (enableSeparateBinOutput super.aws-spend-summary);
 
   # Test suite wants to connect to $DISPLAY.
   bindings-GLFW = dontCheck super.bindings-GLFW;
@@ -1009,6 +1013,18 @@ self: super: builtins.intersectAttrs super {
   postgresql-libpq-notify = dontCheck super.postgresql-libpq-notify;
   postgresql-pure = dontCheck super.postgresql-pure;
 
+  # Needs PostgreSQL db during tests
+  relocant = overrideCabal (drv: {
+    preCheck = ''
+      export postgresqlTestUserOptions="LOGIN SUPERUSER"
+      export PGDATABASE=relocant
+    '';
+    testToolDepends = drv.testToolDepends or [] ++ [
+      pkgs.postgresql
+      pkgs.postgresqlTestHook
+    ];
+  }) super.relocant;
+
   retrie = addTestToolDepends [pkgs.git pkgs.mercurial] super.retrie;
   retrie_1_2_0_0 = addTestToolDepends [pkgs.git pkgs.mercurial] super.retrie_1_2_0_0;
   retrie_1_2_1_1 = addTestToolDepends [pkgs.git pkgs.mercurial] super.retrie_1_2_1_1;
@@ -1326,6 +1342,14 @@ self: super: builtins.intersectAttrs super {
     ] ++ drv.testFlags or [];
   }) super.http-api-data-qq;
 
+  # Test have become more fussy in >= 2.0. We need to have which available for
+  # tests to succeed and the makefile no longer finds happy by itself.
+  happy_2_1_2 = overrideCabal (drv: {
+    buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.which ];
+    preCheck = drv.preCheck or "" + ''
+      export PATH="$PWD/dist/build/happy:$PATH"
+    '';
+  }) super.happy_2_1_2;
   # Additionally install documentation
   jacinda = overrideCabal (drv: {
     enableSeparateDocOutput = true;
