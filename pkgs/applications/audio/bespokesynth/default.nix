@@ -60,13 +60,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bespokesynth";
-  version = "1.2.1";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "BespokeSynth";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-vDvNm9sW9BfWloB0CA+JHTp/bfDWAP/T0hDXjoMZ3X4=";
+    hash = "sha256-ad8wdLos3jM0gRMpcfRKeaiUxJsPGqWd/7XeDz87ToQ=";
     fetchSubmodules = true;
   };
 
