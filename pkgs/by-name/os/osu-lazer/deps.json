@@ -581,23 +581,23 @@
   },
   {
     "pname": "OpenTabletDriver",
-    "version": "0.6.4",
-    "hash": "sha256-tTk8ezYrMs/Kj+snMvWq9Ae7WLU4pq5NpFHEZV8WjJM="
+    "version": "0.6.5",
+    "hash": "sha256-tn24wONDXJOL3lhSOGI1ZS1sVsdKGr798r35DgmU+pA="
   },
   {
     "pname": "OpenTabletDriver.Configurations",
-    "version": "0.6.4",
-    "hash": "sha256-9QqvSck5Ofn3clWQzwGoTHX6k5d1nUxjD56UeIBx+1A="
+    "version": "0.6.5",
+    "hash": "sha256-+6y3GkGaIYqEgzAV/Q04vxvB5UyrsT7NQR5mIWOIhCI="
   },
   {
     "pname": "OpenTabletDriver.Native",
-    "version": "0.6.4",
-    "hash": "sha256-4vNnamnIVNpVBOPXyyJcbj0pe/aixGLmvXzq3vkUXMs="
+    "version": "0.6.5",
+    "hash": "sha256-QLWzpV1YeMozcR38guHv5rT8cNnuwm92NGAvdXua1U4="
   },
   {
     "pname": "OpenTabletDriver.Plugin",
-    "version": "0.6.4",
-    "hash": "sha256-9jORi42+oYFdNEin9lYWMBGrktyTBMAl5sfr1jxAbVE="
+    "version": "0.6.5",
+    "hash": "sha256-czzfFsCBu9989ML7FvDUZrBtaf3K4bBhmuaU9Y1h3vk="
   },
   {
     "pname": "PolySharp",
@@ -636,8 +636,8 @@
   },
   {
     "pname": "ppy.osu.Framework",
-    "version": "2024.1206.0",
-    "hash": "sha256-2XouXC/uahqY1ldHvNWyobxGYXEQJky65g8EL7fL5Zw="
+    "version": "2024.1224.0",
+    "hash": "sha256-Ci0tblihnKxv8c0vgYvTDTfu2Fl6huEsl/2/SDdh5CQ="
   },
   {
     "pname": "ppy.osu.Framework.NativeLibs",
@@ -651,8 +651,8 @@
   },
   {
     "pname": "ppy.osu.Game.Resources",
-    "version": "2024.1219.1",
-    "hash": "sha256-KyZeNkTissfZAusvWYUdZ3+YujrcTfkZDyzt99i4fkg="
+    "version": "2024.1224.0",
+    "hash": "sha256-EtruxGvWQQzWGtpQAb58j6Hdsv2GKNf/eSwPV3qti/Q="
   },
   {
     "pname": "ppy.osuTK.NS20",
