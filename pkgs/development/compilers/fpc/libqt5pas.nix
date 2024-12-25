@@ -1,5 +1,5 @@
 {
-  mkDerivation,
+  stdenv,
   lib,
   lazarus,
   qmake,
@@ -7,7 +7,7 @@
   qtx11extras,
 }:
 
-mkDerivation {
+stdenv.mkDerivation {
   pname = "libqt5pas";
   inherit (lazarus) version src;
 
@@ -24,6 +24,8 @@ mkDerivation {
     qtbase
     qtx11extras
   ];
+
+  dontWrapQtApps = true;
 
   meta = with lib; {
     description = "Free Pascal Qt5 binding library";
