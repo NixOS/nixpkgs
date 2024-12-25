@@ -2542,6 +2542,8 @@ self: super: with self; {
 
   colorzero = callPackage ../development/python-modules/colorzero { };
 
+  colormanager = callPackage ../development/python-modules/color-manager { };
+
   colour = callPackage ../development/python-modules/colour { };
 
   colout = callPackage ../development/python-modules/colout { };
