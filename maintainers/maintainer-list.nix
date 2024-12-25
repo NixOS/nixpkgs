@@ -14811,12 +14811,6 @@
     name = "Marcin Mikuła";
     keys = [ { fingerprint = "5547 2A56 AC30 69C9 15C8  B98D 997F 71FA 1D74 6E37"; } ];
   };
-  milahu = {
-    email = "milahu@gmail.com";
-    github = "milahu";
-    githubId = 12958815;
-    name = "Milan Hauth";
-  };
   milesbreslin = {
     email = "milesbreslin@gmail.com";
     github = "MilesBreslin";
