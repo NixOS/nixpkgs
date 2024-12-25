@@ -55,11 +55,13 @@ rustPlatform.buildRustPackage rec {
     "--disable-multi-os-directory"
   ];
 
-  buildInputs = [ libffi ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
-    # V8 supports 10.15+; binary references `aligned_alloc` directly
-    (darwinMinVersionHook "10.15")
-  ];
+  buildInputs =
+    [ libffi ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_11
+      # V8 supports 10.15+; binary references `aligned_alloc` directly
+      (darwinMinVersionHook "10.15")
+    ];
 
   buildAndTestSubdir = "cli";
 
@@ -110,7 +112,10 @@ rustPlatform.buildRustPackage rec {
     '';
     license = licenses.mit;
     mainProgram = "deno";
-    maintainers = with maintainers; [ jk ofalvai ];
+    maintainers = with maintainers; [
+      jk
+      ofalvai
+    ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
