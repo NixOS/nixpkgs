@@ -45,15 +45,12 @@ buildPythonPackage rec {
   };
 
   nativeCheckInputs = [
-    aiohttp
     eventlet
     mock
-    requests
     tornado
-    websocket-client
     pytest-asyncio
     pytestCheckHook
-  ];
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
