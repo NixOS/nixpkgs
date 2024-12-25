@@ -22,6 +22,8 @@ buildGoModule {
 
   vendorHash = "sha256-AFlkzs5mL/x9CwfF2apLcQbiu60GD33oFH6lQDHAL1M=";
 
+  env.CGO_ENABLED = 0;
+
   doCheck = true;
 
   nativeInstallCheckInputs = [
