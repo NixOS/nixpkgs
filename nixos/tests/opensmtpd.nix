@@ -16,7 +16,24 @@ import ./make-test-python.nix {
             }
           ];
         };
-        environment.systemPackages = [ pkgs.opensmtpd ];
+        environment.systemPackages = let
+          testSendmail = pkgs.writeScriptBin "test-sendmail" ''
+            #!/bin/sh
+            set -euxo pipefail
+            echo "========= SENDING" >&2
+            ${pkgs.system-sendmail}/bin/sendmail -v -f alice@smtp1 bob@smtp2 >&2 <<EOF
+            From: alice@smtp1
+            To: bob@smtp2
+            Subject: Sendmail Test
+
+            Hello World
+            EOF
+            echo "=========== FINISHED SENDING" >&2
+          '';
+        in [
+          pkgs.opensmtpd
+          testSendmail
+        ];
         services.opensmtpd = {
           enable = true;
           extraServerArgs = [ "-v" ];
@@ -108,9 +125,12 @@ import ./make-test-python.nix {
                 print("===> content:", content)
                 split = content.split(b'\r\n')
                 print("===> split:", split)
-                lastline = split[-3]
+                split.reverse()
+                lastline = next(filter(lambda x: x != b"", map(bytes.strip, split)))
                 print("===> lastline:", lastline)
                 assert lastline.strip() == b'Hello World'
+                imap.store(refs[0], '+FLAGS', '\\Deleted')
+                imap.expunge()
             '';
           in
           [
@@ -136,6 +156,11 @@ import ./make-test-python.nix {
     smtp2.wait_for_open_port(143)
 
     client.succeed("send-a-test-mail")
+    smtp1.wait_until_fails("smtpctl show queue | egrep .")
+    smtp2.wait_until_fails("smtpctl show queue | egrep .")
+    client.succeed("check-mail-landed >&2")
+
+    smtp1.succeed("test-sendmail")
     smtp1.wait_until_fails("smtpctl show queue | egrep .")
     smtp2.wait_until_fails("smtpctl show queue | egrep .")
     client.succeed("check-mail-landed >&2")
