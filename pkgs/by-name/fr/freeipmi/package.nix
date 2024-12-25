@@ -30,6 +30,10 @@ stdenv.mkDerivation rec {
     "ac_cv_file__dev_random=true"
   ];
 
+  # Fix GCC 14 build.
+  # https://savannah.gnu.org/bugs/?65203
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
   doCheck = true;
 
   meta = {
