@@ -11,7 +11,7 @@ appimageTools.wrapType2 rec {
     hash = "sha256-Q4bH1cFvZfNSOWGXmg/RAOtjK6u5p2iRfUrOvetnoOs=";
   };
   meta = {
-    description = "Accounting software. Available for Windows, Mac and Linux.";
+    description = "Free accounting software for Windows, Mac and Linux";
     homepage = "https://www.manager.io/";
     maintainers = with lib.maintainers; [ darwincereska ];
   };
