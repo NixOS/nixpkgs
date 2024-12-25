@@ -22,12 +22,8 @@ import ./make-test-python.nix {
           extraServerArgs = [ "-v" ];
           serverConfiguration = ''
             listen on 0.0.0.0
-            action do_relay relay
-            # DO NOT DO THIS IN PRODUCTION!
-            # Setting up authentication requires a certificate which is painful in
-            # a test environment, but THIS WOULD BE DANGEROUS OUTSIDE OF A
-            # WELL-CONTROLLED ENVIRONMENT!
-            match from any for any action do_relay
+            action relay_smtp2 relay host "smtp://192.168.1.2"
+            match from any for any action relay_smtp2
           '';
         };
       };
@@ -87,7 +83,7 @@ import ./make-test-python.nix {
               import smtplib, sys
 
               with smtplib.SMTP('192.168.1.1') as smtp:
-                smtp.sendmail('alice@[192.168.1.1]', 'bob@[192.168.1.2]', """
+                smtp.sendmail('alice@smtp1', 'bob@smtp2', """
                   From: alice@smtp1
                   To: bob@smtp2
                   Subject: Test
@@ -105,8 +101,8 @@ import ./make-test-python.nix {
                 imap.select()
                 status, refs = imap.search(None, 'ALL')
                 assert status == 'OK'
-                assert len(refs) == 1
-                status, msg = imap.fetch(refs[0], 'BODY[TEXT]')
+                assert len(refs) == 1 and refs[0] != ""
+                status, msg = imap.fetch(refs[0], '(BODY[TEXT])')
                 assert status == 'OK'
                 content = msg[0][1]
                 print("===> content:", content)
