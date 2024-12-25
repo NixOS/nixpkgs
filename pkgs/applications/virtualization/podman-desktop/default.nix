@@ -20,12 +20,16 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podman-desktop";
-    rev = "v${finalAttrs.version}";
-    sha256 = "sha256-pewLcukPTXijEP11i2ah8F17N3Rav8UyHrpCu9fUScg=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-pewLcukPTXijEP11i2ah8F17N3Rav8UyHrpCu9fUScg=";
   };
 
+  prePnpmInstall = ''
+    pnpm config set dedupe-peer-dependants false
+  '';
+
   pnpmDeps = pnpm_9.fetchDeps {
-    inherit (finalAttrs) pname version src patches;
+    inherit (finalAttrs) pname version src patches prePnpmInstall;
     hash = "sha256-EzkAcd84JEBq6eDkh9XCGfCyeo5r2vpZSIvb2hqpsBU=";
   };
 
@@ -41,7 +45,7 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail '(process as any).resourcesPath' "'$out/share/lib/podman-desktop/resources'"
   '';
 
-  ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
   nativeBuildInputs = [
     makeWrapper nodejs pnpm_9.configHook
