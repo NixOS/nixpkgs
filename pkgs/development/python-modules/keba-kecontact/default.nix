@@ -3,31 +3,34 @@
   asyncio-dgram,
   buildPythonPackage,
   fetchFromGitHub,
-  netifaces,
+  hatchling,
+  ifaddr,
+  pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "keba-kecontact";
-  version = "3.0.3";
-  format = "setuptools";
+  version = "4.0.2";
+  pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "dannerph";
     repo = "keba-kecontact";
     rev = "refs/tags/${version}";
-    hash = "sha256-gR1ut2IjrU/JMy8/ZFv0jQTB6c3A/tZqtXMpQsapuj0=";
+    hash = "sha256-HzfoWijsrtDNElqyxWB7f07OTMIoS/fEjmdX59G+Hw0=";
   };
 
-  propagatedBuildInputs = [
+  build-system = [ hatchling ];
+
+  dependencies = [
     asyncio-dgram
-    netifaces
+    ifaddr
   ];
 
-  # Module has no tests
-  doCheck = false;
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "keba_kecontact" ];
 
