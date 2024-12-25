@@ -113,9 +113,11 @@ in
       source = "${cfg.package}/bin/smtpctl";
     };
 
-    services.mail.sendmailSetuidWrapper = lib.mkIf cfg.setSendmail (
-      security.wrappers.smtpctl // { program = "sendmail"; }
-    );
+    services.mail.sendmailSetuidWrapper = lib.mkIf cfg.setSendmail
+      (security.wrappers.smtpctl // {
+        source = "${sendmail}/bin/sendmail";
+        program = "sendmail";
+      });
 
     systemd.tmpfiles.rules = [
       "d /var/spool/smtpd 711 root - - -"
