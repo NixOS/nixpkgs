@@ -1,0 +1,30 @@
+diff --git i/app/proc_globdata.pas w/app/proc_globdata.pas
+index d161b09c7..0fcfbdc09 100644
+--- i/app/proc_globdata.pas
++++ w/app/proc_globdata.pas
+@@ -1342,6 +1342,7 @@ begin
+ 
+   {$ifdef unix}
+   for Dir in [
++              '@python3@/lib',
+               '/usr/lib64',
+               '/usr/lib',
+               '/usr/lib/x86_64-linux-gnu'
+@@ -1364,7 +1365,7 @@ var
+ function GetDirPrecopy: string;
+ begin
+   {$ifdef linux}
+-  exit('/usr/share/cudatext');
++  exit('@out@/share/cudatext');
+   {$endif}
+ 
+   {$ifdef darwin}
+@@ -2056,7 +2057,7 @@ begin
+     FindWrapAtEdge_Delay:= 350;
+     FindWrapAtEdge_ThemeItem:= ''; //'EdMarkedRangeBg';
+ 
+-    AllowProgramUpdates:= true;
++    AllowProgramUpdates:= false;
+     EscapeClose:= false;
+     EscapeCloseConsole:= true;
+     EscapeCloseFinder:= true;

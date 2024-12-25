@@ -1,0 +1,12 @@
+diff --git a/cargo-geiger/src/lib.rs b/cargo-geiger/src/lib.rs
+index cc08146..d220ad9 100644
+--- a/cargo-geiger/src/lib.rs
++++ b/cargo-geiger/src/lib.rs
+@@ -5,7 +5,6 @@
+ #![deny(clippy::cargo)]
+ #![deny(clippy::doc_markdown)]
+ #![forbid(unsafe_code)]
+-#![deny(warnings)]
+ 
+ /// Argument parsing
+ pub mod args;

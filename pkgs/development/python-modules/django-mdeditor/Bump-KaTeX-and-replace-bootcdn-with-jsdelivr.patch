@@ -1,0 +1,63 @@
+From c5af641cccf663dffb4a47d32e28404f609badce Mon Sep 17 00:00:00 2001
+From: Tomo <tomodachi94@protonmail.com>
+Date: Sat, 12 Oct 2024 03:39:12 +0000
+Subject: [PATCH 1/2] chore(KaTeX): bump to 0.7.1
+
+Many bugfixes. This KaTeX is still quite old,
+but versions beyond this have backwards-incompatibilities
+(starting in 0.8).
+---
+ mdeditor/static/mdeditor/js/editormd.js | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mdeditor/static/mdeditor/js/editormd.js b/mdeditor/static/mdeditor/js/editormd.js
+index be0005d..8aacb56 100644
+--- a/mdeditor/static/mdeditor/js/editormd.js
++++ b/mdeditor/static/mdeditor/js/editormd.js
+@@ -4179,8 +4179,8 @@
+     // 使用国外的CDN，加载速度有时会很慢，或者自定义URL
+     // You can custom KaTeX load url.
+     editormd.katexURL  = {
+-        css : "//cdn.bootcdn.net/ajax/libs/KaTeX/0.3.0/katex.min",
+-        js  : "//cdn.bootcdn.net/ajax/libs/KaTeX/0.3.0/katex.min"
++        css : "//cdn.bootcdn.net/ajax/libs/KaTeX/0.7.1/katex.min",
++        js  : "//cdn.bootcdn.net/ajax/libs/KaTeX/0.7.1/katex.min"
+     };
+     
+     editormd.kaTeXLoaded = false;
+-- 
+2.46.2
+
+
+From 3d082a738262b057d33b9aa8c777d50113143952 Mon Sep 17 00:00:00 2001
+From: Tomo <tomodachi94@protonmail.com>
+Date: Mon, 7 Oct 2024 17:44:39 -0700
+Subject: [PATCH 2/2] fix(KaTeX): Use jsdelivr instead of bootcdn
+
+Bootcdn was compromised by a malicious actor:
+https://sansec.io/research/polyfill-supply-chain-attack
+
+KaTeX recommends using jsdelivr, so I used that:
+https://katex.org/docs/browser
+---
+ mdeditor/static/mdeditor/js/editormd.js | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/mdeditor/static/mdeditor/js/editormd.js b/mdeditor/static/mdeditor/js/editormd.js
+index 8aacb56..a31e817 100644
+--- a/mdeditor/static/mdeditor/js/editormd.js
++++ b/mdeditor/static/mdeditor/js/editormd.js
+@@ -4179,8 +4179,8 @@
+     // 使用国外的CDN，加载速度有时会很慢，或者自定义URL
+     // You can custom KaTeX load url.
+     editormd.katexURL  = {
+-        css : "//cdn.bootcdn.net/ajax/libs/KaTeX/0.7.1/katex.min",
+-        js  : "//cdn.bootcdn.net/ajax/libs/KaTeX/0.7.1/katex.min"
++        css : "//cdn.jsdelivr.net/npm/katex@0.7.1/dist/katex.min.css",
++        js  : "//cdn.jsdelivr.net/npm/katex@0.7.1/dist/katex.min.js"
+     };
+     
+     editormd.kaTeXLoaded = false;
+-- 
+2.46.2
+
