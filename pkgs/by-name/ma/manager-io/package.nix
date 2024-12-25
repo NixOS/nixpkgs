@@ -19,7 +19,7 @@ appimageTools.wrapType2 rec {
     description = "Accounting software for Windows, Mac and Linux";
     homepage = "https://www.manager.io";
     maintainers = with lib.maintainers; [ darwincereska ];
-    license = with lib.licenses; [ unfree ]; # Unspecified freeware
+    license = with lib.licenses; [ unfree ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "x86_64-linux"
