@@ -21,6 +21,6 @@ buildEnv {
   '';
 
   meta = kubo-migrator-unwrapped.meta // {
-    description = "Run the appripriate migrations for migrating the filesystem repository of Kubo";
+    description = "Run the appropriate migrations for migrating the filesystem repository of Kubo";
   };
 }

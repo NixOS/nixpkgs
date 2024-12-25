@@ -20,7 +20,7 @@ in
 {
   beamLib = callPackage ../development/beam-modules/lib.nix { };
 
-  latestVersion = "erlang_25";
+  latestVersion = "erlang_27";
 
   # Each
   interpreters = {
