@@ -25,13 +25,13 @@ let
 in
 maven.buildMavenPackage rec {
   pname = "lemminx";
-  version = "0.27.0";
+  version = "0.29.0";
 
   src = fetchFromGitHub {
     owner = "eclipse";
     repo = "lemminx";
     rev = version;
-    hash = "sha256-VWYTkYlPziNRyxHdvIWVuDlABpKdzhC/F6BUBj/opks=";
+    hash = "sha256-joeaN0Q/XxEWa7UX/LVSWIAb8GGTfVUE+NudedbBLBI=";
     # Lemminx reads this git information at runtime from a git.properties
     # file on the classpath
     leaveDotGit = true;
@@ -47,7 +47,7 @@ maven.buildMavenPackage rec {
   };
 
   mvnJdk = jdk_headless;
-  mvnHash = "sha256-Bl+fASYrSIzpmI0FQ3N7CUJb3a04wq3Vzc27JbD8qk8=";
+  mvnHash = "sha256-7RLZSlmXnjl9vwvCf/Z+mc2906JtuUbjjkRGVMC1En8=";
 
   # Disable gitcommitid plugin which needs a .git folder which we don't have.
   # Disable failing tests which either need internet access or are flaky.
