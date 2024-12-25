@@ -2,9 +2,8 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
-  testers,
+  versionCheckHook,
   nix-update-script,
-  pinact,
 }:
 
 let
@@ -16,6 +15,7 @@ let
     rev = "v${version}";
     hash = "sha256-fOmQDfqG1aWzpL80Nc8JA6HWQR+z9mhqtwU4rC2g2Gg=";
   };
+  mainProgram = "pinact";
 in
 buildGoModule {
   inherit pname version src;
@@ -24,11 +24,14 @@ buildGoModule {
 
   doCheck = true;
 
-  passthru = {
-    tests.version = testers.testVersion {
-      package = pinact;
-    };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${mainProgram}";
+  versionCheckProgramArg = [ "version" ];
 
+  passthru = {
     updateScript = nix-update-script { };
   };
 
@@ -39,11 +42,11 @@ buildGoModule {
   ];
 
   meta = with lib; {
+    inherit mainProgram;
     description = "Pin GitHub Actions versions";
     homepage = "https://github.com/suzuki-shunsuke/pinact";
     changelog = "https://github.com/suzuki-shunsuke/pinact/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = [ maintainers.kachick ];
-    mainProgram = "pinact";
   };
 }
