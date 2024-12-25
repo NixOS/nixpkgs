@@ -41,7 +41,10 @@ let
       license = lib.licenses.mit;
       mainProgram = "tabby";
       maintainers = with lib.maintainers; [ geodic ];
-      platforms = [ "x86_64-linux" ];
+      platforms = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
     };
 
     # We need to fix the argv logic as tabby only handles it for the node executable, but we are running it with electron
