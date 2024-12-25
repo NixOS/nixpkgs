@@ -1,0 +1,38 @@
+diff --git a/common/info.cpp b/common/info.cpp
+index 8291cc7..6216326 100644
+--- a/common/info.cpp
++++ b/common/info.cpp
+@@ -36,6 +36,7 @@
+ #include "strtonum.hpp"
+ #include "lock.hpp"
+ #include "string_map.hpp"
++#include "file_util.hpp"
+ 
+ #include "gettext.h"
+ 
+@@ -495,6 +496,25 @@ namespace acommon {
+     lst.clear();
+     lst.add(config->retrieve("data-dir"));
+     lst.add(config->retrieve("dict-dir"));
++    if (config->lookup("data-dir") == NULL && config->lookup("dict-dir") == NULL) {
++        const char* cprofiles = getenv("NIX_PROFILES");
++        if (cprofiles != NULL) {
++            char* profiles = strdup(cprofiles);
++            char* profile = profiles;
++            char* end = profile;
++            while (*end != '\0') {
++                if (*end == ' ') {
++                    *end = '\0';
++                    lst.add(add_possible_dir(profile, "lib/aspell"));
++                    profile = ++end;
++                } else {
++                    ++end;
++                }
++            }
++            lst.add(add_possible_dir(profile, "lib/aspell"));
++            free(profiles);
++        }
++    }
+   }
+ 
+   DictExt::DictExt(ModuleInfo * m, const char * e)
