@@ -111,7 +111,7 @@ stdenv.mkDerivation rec {
     # run zsh as a full-fledged independent process and then wait for it to
     # exit. (The "exit" statements in the zshrc ensure that zsh will exit
     # almost immediately after starting.)
-    ZDOTDIR=. zsh -i &
+    ZDOTDIR=. zsh -d -i &
     wait $!
   '';
 
