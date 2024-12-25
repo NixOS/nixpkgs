@@ -102,6 +102,7 @@ nixos/modules/installer/tools/nix-fallback-paths.nix  @NixOS/nix-team @raitobeza
 /nixos/default.nix                                    @infinisil
 /nixos/lib/from-env.nix                               @infinisil
 /nixos/lib/eval-config.nix                            @infinisil
+/nixos/modules/misc/ids.nix                           @R-VdP
 /nixos/modules/system/activation/bootspec.nix         @grahamc @cole-h @raitobezarius
 /nixos/modules/system/activation/bootspec.cue         @grahamc @cole-h @raitobezarius
 

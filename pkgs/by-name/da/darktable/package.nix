@@ -16,6 +16,7 @@
   # buildInputs
   SDL2,
   adwaita-icon-theme,
+  alsa-lib,
   cairo,
   curl,
   exiv2,
@@ -31,9 +32,14 @@
   json-glib,
   lcms2,
   lensfun,
+  lerc,
   libaom,
   libavif,
+  libdatrie,
+  libepoxy,
   libexif,
+  libgcrypt,
+  libgpg-error,
   libgphoto2,
   libheif,
   libjpeg,
@@ -42,27 +48,35 @@
   librsvg,
   libsecret,
   libsoup_2_4,
+  libsysprof-capture,
+  libthai,
   libtiff,
   libwebp,
   libxslt,
   lua,
+  util-linux,
   openexr_3,
   openjpeg,
   osm-gps-map,
-  pcre,
+  pcre2,
   portmidi,
   pugixml,
   sqlite,
   # Linux only
   colord,
   colord-gtk,
+  libselinux,
+  libsepol,
   libX11,
+  libXdmcp,
+  libxkbcommon,
+  libXtst,
   ocl-icd,
   # Darwin only
   gtk-mac-integration,
 
   versionCheckHook,
-  nix-update-script,
+  gitUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -89,6 +103,7 @@ stdenv.mkDerivation rec {
     [
       SDL2
       adwaita-icon-theme
+      alsa-lib
       cairo
       curl
       exiv2
@@ -104,9 +119,14 @@ stdenv.mkDerivation rec {
       json-glib
       lcms2
       lensfun
+      lerc
       libaom
       libavif
+      libdatrie
+      libepoxy
       libexif
+      libgcrypt
+      libgpg-error
       libgphoto2
       libheif
       libjpeg
@@ -115,14 +135,17 @@ stdenv.mkDerivation rec {
       librsvg
       libsecret
       libsoup_2_4
+      libsysprof-capture
+      libthai
       libtiff
       libwebp
       libxslt
       lua
+      util-linux
       openexr_3
       openjpeg
       osm-gps-map
-      pcre
+      pcre2
       portmidi
       pugixml
       sqlite
@@ -130,7 +153,12 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       colord
       colord-gtk
+      libselinux
+      libsepol
       libX11
+      libXdmcp
+      libxkbcommon
+      libXtst
       ocl-icd
     ]
     ++ lib.optional stdenv.hostPlatform.isDarwin gtk-mac-integration
@@ -171,8 +199,10 @@ stdenv.mkDerivation rec {
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script {
+  passthru.updateScript = gitUpdater {
     rev-prefix = "release-";
+    odd-unstable = true;
+    url = "https://github.com/darktable-org/darktable.git";
   };
 
   meta = {

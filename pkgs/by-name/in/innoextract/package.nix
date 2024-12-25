@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   cmake,
   makeWrapper,
   boost,
@@ -19,6 +20,16 @@ stdenv.mkDerivation rec {
     url = "https://constexpr.org/innoextract/files/innoextract-${version}.tar.gz";
     sha256 = "09l1z1nbl6ijqqwszdwch9mqr54qb7df0wp2sd77v17dq6gsci33";
   };
+
+  patches = [
+    # Fix boost-1.86 build:
+    #   https://github.com/dscharrer/innoextract/pull/169
+    (fetchpatch {
+      name = "boost-1.86.patch";
+      url = "https://github.com/dscharrer/innoextract/commit/264c2fe6b84f90f6290c670e5f676660ec7b2387.patch";
+      hash = "sha256-QYwrqLXC7FE4oYi6G1erpX/RUUtS5zNBv7/fO7AdZQg=";
+    })
+  ];
 
   buildInputs = [
     xz
