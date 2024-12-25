@@ -115,7 +115,10 @@ stdenv.mkDerivation {
   # gcc-10. Otherwise build fails as:
   #   ld: acpi/xsdt.o:/build/syslinux-b404870/com32/gpllib/../gplinclude/memory.h:40: multiple definition of
   #     `e820_types'; memory.o:/build/syslinux-b404870/com32/gpllib/../gplinclude/memory.h:40: first defined here
-  env.NIX_CFLAGS_COMPILE = "-fcommon";
+  # and with gcc14+ also:
+  #  /build/source/com32/chain/chain.c:517:44:
+  #   error: passing argument 3 of 'loadfile' from incompatible pointer type
+  env.NIX_CFLAGS_COMPILE = "-fcommon -Wno-error=incompatible-pointer-types";
 
   makeFlags =
     [
