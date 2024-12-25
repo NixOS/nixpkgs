@@ -10,14 +10,14 @@
 
 buildPythonPackage rec {
   pname = "django-cors-headers";
-  version = "4.4.0";
+  version = "4.6.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = pname;
     rev = version;
-    hash = "sha256-/uTQ09zIjRV1Ilb/mXyr4zn5tJI/mNFHpfql2ptuER4=";
+    hash = "sha256-Dvsuj+U1YFC9jT5qkh2h1aL71JkRsAyXW4rxhLzEbOw=";
   };
 
   build-system = [ setuptools ];
