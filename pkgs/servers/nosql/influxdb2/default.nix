@@ -50,7 +50,14 @@ let
         hash = "sha256-6LOTgbOCfETNTmshyXgtDZf9y4t/2iqRuVPkz9dYPHc=";
       })
       ./fix-unsigned-char.patch
+      # https://github.com/influxdata/flux/pull/5516
+      ./rust_lifetime.patch
     ];
+    # Don't fail on missing code documentation
+    postPatch = ''
+      substituteInPlace flux-core/src/lib.rs \
+        --replace-fail "deny(warnings, missing_docs))]" "deny(warnings))]"
+    '';
     sourceRoot = "${src.name}/libflux";
     cargoHash = "sha256-O+t4f4P5291BuyARH6Xf3LejMFEQEBv+qKtyjHRhclA=";
     nativeBuildInputs = [ rustPlatform.bindgenHook ];
@@ -74,7 +81,6 @@ let
         install_name_tool -id $out/lib/libflux.dylib $out/lib/libflux.dylib
       '';
   };
-
 in
 buildGoModule {
   pname = "influxdb";
@@ -132,7 +138,9 @@ buildGoModule {
     "-X main.version=${version}"
   ];
 
-  passthru.tests = { inherit (nixosTests) influxdb2; };
+  passthru.tests = {
+    inherit (nixosTests) influxdb2;
+  };
 
   meta = with lib; {
     description = "Open-source distributed time series database";
