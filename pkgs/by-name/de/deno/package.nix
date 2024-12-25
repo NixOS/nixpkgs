@@ -7,8 +7,6 @@
   cmake,
   protobuf,
   installShellFiles,
-  apple-sdk_11,
-  darwinMinVersionHook,
   librusty_v8 ? callPackage ./librusty_v8.nix {
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
@@ -55,14 +53,7 @@ rustPlatform.buildRustPackage rec {
     "--disable-multi-os-directory"
   ];
 
-  buildInputs =
-    [ libffi ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      # V8 supports 10.15+; binary references `aligned_alloc` directly
-      (darwinMinVersionHook "10.15")
-    ];
-
+  buildInputs = [ libffi ];
   buildAndTestSubdir = "cli";
 
   # work around "error: unknown warning group '-Wunused-but-set-parameter'"
