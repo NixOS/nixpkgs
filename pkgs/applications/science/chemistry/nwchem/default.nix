@@ -147,6 +147,9 @@ stdenv.mkDerivation rec {
     runHook postConfigure
   '';
 
+  # Required for build with gcc-14
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-int";
+
   enableParallelBuilding = true;
 
   preBuild = ''
