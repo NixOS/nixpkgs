@@ -1,34 +1,35 @@
-{ 
-  lib, 
-  stdenv, 
-  fetchgit, 
-  fetchurl, 
-  fetchYarnDeps, 
-  nodejs, 
-  yarn, 
-  git, 
-  patch-package, 
-  electron_29, 
-  prefetch-yarn-deps, 
-  fixup-yarn-lock, 
-  python3, 
-  makeWrapper, 
-  http-server, 
-  fontconfig, 
-  pkg-config, 
-  libsecret, 
-  desktop-file-utils
- }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchurl,
+  fetchYarnDeps,
+  nodejs,
+  yarn,
+  git,
+  patch-package,
+  electron_29,
+  prefetch-yarn-deps,
+  fixup-yarn-lock,
+  python3,
+  makeWrapper,
+  http-server,
+  fontconfig,
+  pkg-config,
+  libsecret,
+  desktop-file-utils,
+}:
 
 let
   tabby = rec {
     pname = "tabby-terminal";
     version = "1.0.215";
 
-    src = fetchgit {
-      url = "https://github.com/Eugeny/tabby";
-      rev = "refs/tags/v${version}";
-      hash = "sha256-euxkvZDIEIMJ8xZKS74easWj0GJOduPClOCiXZfWXPU=";
+    src = fetchFromGitHub {
+      owner = "Eugeny";
+      repo = "tabby";
+      rev = "v${version}";
+      hash = "sha256-l3Hyt3e1edJjb7vL66JDllkpHwTU5efsNbgJ5Pcvn60=";
       leaveDotGit = true;
       deepClone = true;
     };
@@ -43,7 +44,7 @@ let
     };
 
     # We need to fix the argv logic as tabby only handles it for the node executable, but we are running it with electron
-    patches = [./fix-argv-prefix-splice.patch];
+    patches = [ ./fix-argv-prefix-splice.patch ];
 
     electronVersion = "29.4.6";
 
@@ -59,9 +60,9 @@ let
 
     buildInputs = [
       nodejs
-   	  python3
-   	  fontconfig
-  	  electron_29
+      python3
+      fontconfig
+      electron_29
     ];
 
     nativeBuildInputs = [
@@ -83,91 +84,96 @@ let
 
     configurePhase =
       ''
-      export buildDir=$PWD
+        export buildDir=$PWD
       ''
       # Loop through all the yarn caches and install the deps for the respective package
-      + builtins.concatStringsSep "\n" (map (cache:
-        ''
-        cd ${cache.pkg}
-        export HOME=$PWD/yarn_home
-        fixup-yarn-lock yarn.lock
-        yarn config --offline set yarn-offline-mirror ${cache.cache}
-        echo "Installing deps for ${cache.pkg}"
-        yarn install --offline --prefer-offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
-        patch-package
-        patchShebangs node_modules
-        echo "Done!"
-        cd $buildDir
-        ''
-      ) yarnCaches)
+      + builtins.concatStringsSep "\n" (
+        map (cache: ''
+          cd ${cache.pkg}
+          export HOME=$PWD/yarn_home
+          fixup-yarn-lock yarn.lock
+          yarn config --offline set yarn-offline-mirror ${cache.cache}
+          echo "Installing deps for ${cache.pkg}"
+          yarn install --offline --prefer-offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
+          patch-package
+          patchShebangs node_modules
+          echo "Done!"
+          cd $buildDir
+        '') yarnCaches
+      )
       + ''
-      cd $buildDir/node_modules
+        cd $buildDir/node_modules
       ''
       # Loop thought the "built in" plugins and link them to the node_modules
-      + builtins.concatStringsSep "\n" (map (plugin:
-        ''
-        ln -fs ../${plugin} ${plugin}
-        ''
-      ) builtinPlugins)
+      + builtins.concatStringsSep "\n" (
+        map (plugin: ''
+          ln -fs ../${plugin} ${plugin}
+        '') builtinPlugins
+      )
       + ''
-      cd $buildDir
+        cd $buildDir
       '';
 
     buildPhase =
       # Start a fake (and completely unnecessary) http-server to let electron-rebuild "download" the headers and hashes
       ''
-      mkdir -p http-cache/v${electronVersion}
-      cp $electronHeaders http-cache/v${electronVersion}/node-v${electronVersion}-headers.tar.gz
-      cp $electronHeadersSHA http-cache/v${electronVersion}/SHASUMS256.txt
-      http-server http-cache &
+        mkdir -p http-cache/v${electronVersion}
+        cp $electronHeaders http-cache/v${electronVersion}/node-v${electronVersion}-headers.tar.gz
+        cp $electronHeadersSHA http-cache/v${electronVersion}/SHASUMS256.txt
+        http-server http-cache &
       ''
       # Rebuild all the needed packages using electron-rebuild
-      + builtins.concatStringsSep "\n" (map (pkg:
-        ''
-        yarn --offline electron-rebuild -v ${electronVersion} -m ${pkg} -f -d "http://localhost:8080"
-        ''
-      ) rebuildPkgs)
+      + builtins.concatStringsSep "\n" (
+        map (pkg: ''
+          yarn --offline electron-rebuild -v ${electronVersion} -m ${pkg} -f -d "http://localhost:8080"
+        '') rebuildPkgs
+      )
       + ''
-      kill $!
-      yarn build
-      
-      mkdir -p $out/share/tabby
-      mkdir -p $out/bin      
-      cp -r . $out/share/tabby
-      makeWrapper "${electron_29}/bin/electron" "$out/bin/tabby" --add-flags "$out/share/tabby/app" --set TABBY_DEV 1
+        kill $!
+        yarn build
 
-      mkdir -p $out/share/icons/hicolor/128x128/apps
-      cp ./build/icons/128x128.png $out/share/icons/hicolor/128x128/apps/tabby.png
+        mkdir -p $out/share/tabby
+        mkdir -p $out/bin
+        cp -r . $out/share/tabby
+        makeWrapper "${electron_29}/bin/electron" "$out/bin/tabby" --add-flags "$out/share/tabby/app" --set TABBY_DEV 1
 
-	  mkdir -p $out/share/applications
-	  echo "[Desktop Entry]" > tabby.desktop
-      desktop-file-install --dir $out/share/applications \
-        --set-key Type --set-value Application \
-        --set-key Exec --set-value tabby \
-        --set-key Name --set-value Tabby \
-        --set-key Comment --set-value "A terminal for a more modern age." \
-        --set-key Categories --set-value "Utility;TerminalEmulator;System" \
-        --set-key Icon --set-value $out/share/icons/hicolor/128x128/apps/tabby.png \
-        tabby.desktop
+        mkdir -p $out/share/icons/hicolor/128x128/apps
+        cp ./build/icons/128x128.png $out/share/icons/hicolor/128x128/apps/tabby.png
+
+      mkdir -p $out/share/applications
+      echo "[Desktop Entry]" > tabby.desktop
+        desktop-file-install --dir $out/share/applications \
+          --set-key Type --set-value Application \
+          --set-key Exec --set-value tabby \
+          --set-key Name --set-value Tabby \
+          --set-key Comment --set-value "A terminal for a more modern age." \
+          --set-key Categories --set-value "Utility;TerminalEmulator;System" \
+          --set-key Icon --set-value $out/share/icons/hicolor/128x128/apps/tabby.png \
+          tabby.desktop
       '';
   };
 
   builtinPlugins = [
-   "tabby-core"
-   "tabby-settings"
-   "tabby-terminal"
-   "tabby-web"
-   "tabby-community-color-schemes"
-   "tabby-ssh"
-   "tabby-serial"
-   "tabby-telnet"
-   "tabby-local"
-   "tabby-electron"
-   "tabby-plugin-manager"
-   "tabby-linkifier"
+    "tabby-core"
+    "tabby-settings"
+    "tabby-terminal"
+    "tabby-web"
+    "tabby-community-color-schemes"
+    "tabby-ssh"
+    "tabby-serial"
+    "tabby-telnet"
+    "tabby-local"
+    "tabby-electron"
+    "tabby-plugin-manager"
+    "tabby-linkifier"
   ];
 
-  packages = builtinPlugins ++ ["." "app" "web" "tabby-web-demo"];
+  packages = builtinPlugins ++ [
+    "."
+    "app"
+    "web"
+    "tabby-web-demo"
+  ];
 
   pkgHashes = {
     "." = "sha256-Qklo8iX27lE6VTUAX1bwa9yBw/tMx+G+FB2MJUkt+7s=";
@@ -189,15 +195,21 @@ let
   };
 
   # Loop through all the packages and create a yarn cache for them
-  yarnCaches = map (pkg:
-    {
-      inherit pkg;
-      cache = fetchYarnDeps {
-        src = lib.removeSuffix "/." (tabby.src + "/" + pkg);
-        sha256 = builtins.getAttr pkg pkgHashes;
-      };
-    }) packages;
+  yarnCaches = map (pkg: {
+    inherit pkg;
+    cache = fetchYarnDeps {
+      src = lib.removeSuffix "/." (tabby.src + "/" + pkg);
+      sha256 = builtins.getAttr pkg pkgHashes;
+    };
+  }) packages;
 
-  rebuildPkgs = ["app" "tabby-core" "tabby-local" "tabby-ssh" "tabby-terminal"];
+  rebuildPkgs = [
+    "app"
+    "tabby-core"
+    "tabby-local"
+    "tabby-ssh"
+    "tabby-terminal"
+  ];
 
-in stdenv.mkDerivation tabby
+in
+stdenv.mkDerivation tabby
