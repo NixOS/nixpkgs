@@ -1,0 +1,278 @@
+name: Eval
+
+on:
+  pull_request_target:
+  push:
+    # Keep this synced with ci/request-reviews/dev-branches.txt
+    branches:
+      - master
+      - staging
+      - release-*
+      - staging-*
+      - haskell-updates
+      - python-updates
+
+permissions:
+  contents: read
+
+jobs:
+  get-merge-commit:
+    uses: ./.github/workflows/get-merge-commit.yml
+
+  attrs:
+    name: Attributes
+    runs-on: ubuntu-latest
+    needs: get-merge-commit
+    # Skip this and dependent steps if the PR can't be merged
+    if: needs.get-merge-commit.outputs.mergedSha
+    outputs:
+      baseSha: ${{ steps.baseSha.outputs.baseSha }}
+      systems: ${{ steps.systems.outputs.systems }}
+    steps:
+      - name: Check out the PR at the test merge commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
+          fetch-depth: 2
+          path: nixpkgs
+
+      - name: Determine base commit
+        if: github.event_name == 'pull_request_target'
+        id: baseSha
+        run: |
+          baseSha=$(git -C nixpkgs rev-parse HEAD^1)
+          echo "baseSha=$baseSha" >> "$GITHUB_OUTPUT"
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+
+      - name: Evaluate the list of all attributes and get the systems matrix
+        id: systems
+        run: |
+          nix-build nixpkgs/ci -A eval.attrpathsSuperset
+          echo "systems=$(<result/systems.json)" >> "$GITHUB_OUTPUT"
+
+      - name: Upload the list of all attributes
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        with:
+          name: paths
+          path: result/*
+
+  eval-aliases:
+    name: Eval nixpkgs with aliases enabled
+    runs-on: ubuntu-latest
+    needs: [ attrs, get-merge-commit ]
+    steps:
+      - name: Check out the PR at the test merge commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
+          path: nixpkgs
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+
+      - name: Query nixpkgs with aliases enabled to check for basic syntax errors
+        run: |
+          time nix-env -I ./nixpkgs -f ./nixpkgs -qa '*' --option restrict-eval true --option allow-import-from-derivation false >/dev/null
+
+  outpaths:
+    name: Outpaths
+    runs-on: ubuntu-latest
+    needs: [ attrs, get-merge-commit ]
+    strategy:
+      fail-fast: false
+      matrix:
+        system: ${{ fromJSON(needs.attrs.outputs.systems) }}
+    steps:
+      - name: Download the list of all attributes
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: paths
+          path: paths
+
+      - name: Check out the PR at the test merge commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
+          path: nixpkgs
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+
+      - name: Evaluate the ${{ matrix.system }} output paths for all derivation attributes
+        env:
+          MATRIX_SYSTEM: ${{ matrix.system }}
+        run: |
+          nix-build nixpkgs/ci -A eval.singleSystem \
+            --argstr evalSystem "$MATRIX_SYSTEM" \
+            --arg attrpathFile ./paths/paths.json \
+            --arg chunkSize 10000
+          # If it uses too much memory, slightly decrease chunkSize
+
+      - name: Upload the output paths and eval stats
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        with:
+          name: intermediate-${{ matrix.system }}
+          path: result/*
+
+  process:
+    name: Process
+    runs-on: ubuntu-latest
+    needs: [ outpaths, attrs, get-merge-commit ]
+    outputs:
+      baseRunId: ${{ steps.baseRunId.outputs.baseRunId }}
+    steps:
+      - name: Download output paths and eval stats for all systems
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          pattern: intermediate-*
+          path: intermediate
+
+      - name: Check out the PR at the test merge commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
+          path: nixpkgs
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+
+      - name: Combine all output paths and eval stats
+        run: |
+          nix-build nixpkgs/ci -A eval.combine \
+            --arg resultsDir ./intermediate \
+            -o prResult
+
+      - name: Upload the combined results
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        with:
+          name: result
+          path: prResult/*
+
+      - name: Get base run id
+        if: needs.attrs.outputs.baseSha
+        id: baseRunId
+        run: |
+          # Get the latest eval.yml workflow run for the PR's base commit
+          if ! run=$(gh api --method GET /repos/"$REPOSITORY"/actions/workflows/eval.yml/runs \
+            -f head_sha="$BASE_SHA" -f event=push \
+            --jq '.workflow_runs | sort_by(.run_started_at) | .[-1]') \
+            || [[ -z "$run" ]]; then
+            echo "Could not find an eval.yml workflow run for $BASE_SHA, cannot make comparison"
+            exit 0
+          fi
+          echo "Comparing against $(jq .html_url <<< "$run")"
+          runId=$(jq .id <<< "$run")
+          conclusion=$(jq -r .conclusion <<< "$run")
+
+          while [[ "$conclusion" == null || "$conclusion" == "" ]]; do
+            echo "Workflow not done, waiting 10 seconds before checking again"
+            sleep 10
+            conclusion=$(gh api /repos/"$REPOSITORY"/actions/runs/"$runId" --jq '.conclusion')
+          done
+
+          if [[ "$conclusion" != "success" ]]; then
+            echo "Workflow was not successful (conclusion: $conclusion), cannot make comparison"
+            exit 0
+          fi
+
+          echo "baseRunId=$runId" >> "$GITHUB_OUTPUT"
+        env:
+          REPOSITORY: ${{ github.repository }}
+          BASE_SHA: ${{ needs.attrs.outputs.baseSha }}
+          GH_TOKEN: ${{ github.token }}
+
+      - uses: actions/download-artifact@v4
+        if: steps.baseRunId.outputs.baseRunId
+        with:
+          name: result
+          path: baseResult
+          github-token: ${{ github.token }}
+          run-id: ${{ steps.baseRunId.outputs.baseRunId }}
+
+      - name: Compare against the base branch
+        if: steps.baseRunId.outputs.baseRunId
+        run: |
+          nix-build nixpkgs/ci -A eval.compare \
+            --arg beforeResultDir ./baseResult \
+            --arg afterResultDir ./prResult \
+            -o comparison
+          cat comparison/step-summary.md >> "$GITHUB_STEP_SUMMARY"
+          # TODO: Request reviews from maintainers for packages whose files are modified in the PR
+
+      - name: Upload the combined results
+        if: steps.baseRunId.outputs.baseRunId
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
+        with:
+          name: comparison
+          path: comparison/*
+
+  # Separate job to have a very tightly scoped PR write token
+  tag:
+    name: Tag
+    runs-on: ubuntu-latest
+    needs: process
+    if: needs.process.outputs.baseRunId
+    permissions:
+      pull-requests: write
+      statuses: write
+    steps:
+      - name: Download process result
+        uses: actions/download-artifact@fa0a91b85d4f404e444e00e005971372dc801d16 # v4.1.8
+        with:
+          name: comparison
+          path: comparison
+
+      - name: Tagging pull request
+        run: |
+          # Get all currently set rebuild labels
+          gh api \
+            /repos/"$REPOSITORY"/issues/"$NUMBER"/labels \
+            --jq '.[].name | select(startswith("10.rebuild"))' \
+            | sort > before
+
+          # And the labels that should be there
+          jq -r '.labels[]' comparison/changed-paths.json \
+            | sort > after
+
+          # Remove the ones not needed anymore
+          while read -r toRemove; do
+            echo "Removing label $toRemove"
+            gh api \
+              --method DELETE \
+              /repos/"$REPOSITORY"/issues/"$NUMBER"/labels/"$toRemove"
+          done < <(comm -23 before after)
+
+          # And add the ones that aren't set already
+          while read -r toAdd; do
+            echo "Adding label $toAdd"
+            gh api \
+              --method POST \
+              /repos/"$REPOSITORY"/issues/"$NUMBER"/labels \
+              -f "labels[]=$toAdd"
+          done < <(comm -13 before after)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          NUMBER: ${{ github.event.number }}
+
+      - name: Add eval summary to commit statuses
+        if: ${{ github.event_name == 'pull_request_target' }}
+        run: |
+          description=$(jq -r '
+          "Package: added " + (.attrdiff.added | length | tostring) +
+          ", removed " + (.attrdiff.removed | length | tostring) +
+          ", changed " + (.attrdiff.changed | length | tostring) +
+          ", Rebuild: linux " + (.rebuildCountByKernel.linux | tostring) +
+          ", darwin " + (.rebuildCountByKernel.darwin | tostring)
+          ' <comparison/changed-paths.json)
+          target_url="$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID?pr=$NUMBER"
+          gh api --method POST \
+            -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/repos/$GITHUB_REPOSITORY/statuses/$PR_HEAD_SHA" \
+            -f "context=Eval / Summary" -f "state=success" -f "description=$description" -f "target_url=$target_url"
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR_HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          NUMBER: ${{ github.event.number }}
