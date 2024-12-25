@@ -11,14 +11,14 @@
 
 buildPythonPackage rec {
   pname = "django-htmx";
-  version = "1.19.0";
+  version = "1.21.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "adamchainz";
     repo = "django-htmx";
     rev = version;
-    hash = "sha256-nSutErUkFafKjBswhC+Lrn39MgCbCrzttAx1a+qt1so=";
+    hash = "sha256-2zmCJ+oHvw21lvCgAFja2LRPA6LNWep4uRor0z1Ft6g=";
   };
 
   build-system = [ setuptools ];
