@@ -1703,6 +1703,8 @@ self: super: with self; {
 
   bashlex = callPackage ../development/python-modules/bashlex { };
 
+  basic-colormath = callPackage ../development/python-modules/basic-colormath { };
+
   basiciw = callPackage ../development/python-modules/basiciw { };
 
   basswood-av = callPackage ../development/python-modules/basswood-av { };
