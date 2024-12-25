@@ -42,21 +42,11 @@ maven.buildMavenPackage rec {
     '';
   };
 
-  manualMvnArtifacts = [
-    "org.apache.maven.surefire:surefire-junit-platform:3.1.2"
-    "org.junit.platform:junit-platform-launcher:1.10.0"
-  ];
-
   mvnJdk = jdk_headless;
-  mvnHash = "sha256-jIvYUATcNUZZmZcXbUMqyHGX4CYiXqL0jkji+zrCYJY=";
+  mvnHash = "sha256-Bl+fASYrSIzpmI0FQ3N7CUJb3a04wq3Vzc27JbD8qk8=";
 
-  buildOffline = true;
-
-  # disable gitcommitid plugin which needs a .git folder which we
-  # don't have
-  mvnDepsParameters = "-Dmaven.gitcommitid.skip=true";
-
-  # disable failing tests which either need internet access or are flaky
+  # Disable gitcommitid plugin which needs a .git folder which we don't have.
+  # Disable failing tests which either need internet access or are flaky.
   mvnParameters = lib.escapeShellArgs [
     "-Dmaven.gitcommitid.skip=true"
     "-Dtest=!XMLValidationCommandTest,
@@ -70,15 +60,16 @@ maven.buildMavenPackage rec {
     !MissingChildElementCodeActionTest,
     !XSDValidationExternalResourcesTest,
     !DocumentLifecycleParticipantTest,
-    !DTDValidationExternalResourcesTest"
+    !DTDValidationExternalResourcesTest,
+    !DTDHoverExtensionsTest,
+    !CacheResourcesManagerTest"
   ];
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/bin $out/share
-    install -Dm644 org.eclipse.lemminx/target/org.eclipse.lemminx-uber.jar \
-      $out/share
+    install -Dm644 org.eclipse.lemminx/target/org.eclipse.lemminx-uber.jar $out/share
 
     makeWrapper ${jre}/bin/java $out/bin/lemminx \
       --add-flags "-jar $out/share/org.eclipse.lemminx-uber.jar"
