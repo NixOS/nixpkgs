@@ -5,7 +5,7 @@
   fetchFromGitHub,
   installShellFiles,
   buildPackages,
-  testers,
+  versionCheckHook,
   nix-update-script,
   hugo,
 }:
@@ -58,11 +58,12 @@ buildGoModule rec {
         --zsh  <(${emulator} $out/bin/hugo completion zsh)
     '';
 
-  passthru.tests.version = testers.testVersion {
-    package = hugo;
-    command = "hugo version";
-    version = "v${version}";
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = [ "version" ];
 
   passthru.updateScript = nix-update-script { };
 
