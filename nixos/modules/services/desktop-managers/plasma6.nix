@@ -302,7 +302,10 @@ in
     services.displayManager.sddm = {
       package = kdePackages.sddm;
       theme = mkDefault "breeze";
-      wayland.compositor = "kwin";
+      wayland = mkDefault {
+        enable = true;
+        compositor = "kwin";
+      };
       extraPackages = with kdePackages; [
         breeze-icons
         kirigami
