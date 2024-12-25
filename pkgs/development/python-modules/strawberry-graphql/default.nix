@@ -155,6 +155,7 @@ buildPythonPackage rec {
     "tests/utils/test_pretty_print.py"
     "tests/websockets/test_graphql_transport_ws.py"
     "tests/litestar/"
+    "tests/experimental/pydantic"
   ];
 
   __darwinAllowLocalNetworking = true;
