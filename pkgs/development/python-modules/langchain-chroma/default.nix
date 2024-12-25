@@ -28,7 +28,10 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  pythonRelaxDeps = [ "chromadb" ];
+  pythonRelaxDeps = [
+    "chromadb"
+    "numpy"
+  ];
 
   dependencies = [
     langchain-core
