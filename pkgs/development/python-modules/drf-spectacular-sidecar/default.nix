@@ -7,14 +7,14 @@
 
 buildPythonPackage rec {
   pname = "drf-spectacular-sidecar";
-  version = "2023.9.1";
+  version = "2024.12.1";
   format = "setuptools";
 
   src = fetchFromGitHub {
     owner = "tfranzel";
     repo = "drf-spectacular-sidecar";
     rev = version;
-    hash = "sha256-EoQKbxzXEuKC50/W1/tBB2wASJZmNNwg9r1qhIB4Ws8=";
+    hash = "sha256-ZA6WuavWV4hGqPoSl6qHhr1h1NCL2ulpbdOzk0saK3w=";
   };
 
   propagatedBuildInputs = [ django ];
