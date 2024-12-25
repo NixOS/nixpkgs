@@ -14,5 +14,14 @@ appimageTools.wrapType2 rec {
     description = "Free accounting software for Windows, Mac and Linux";
     homepage = "https://www.manager.io/";
     maintainers = with lib.maintainers; [ darwincereska ];
+    platforms = [
+      "x86_64-linux"
+      "x86_64-darwin"
+      "aarch64-darwin"
+      # "x86_64-windows" # Windows ones are optional, really, feel free to exclude them
+      # "i686-windows"
+   ];
+   license = with lib.licenses; [ free ]; # Unspecified freeware
+   sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 }
