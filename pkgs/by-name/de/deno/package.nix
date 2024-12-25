@@ -77,7 +77,7 @@ rustPlatform.buildRustPackage rec {
     find ./target -name libswc_common${stdenv.hostPlatform.extensions.sharedLibrary} -delete
   '';
 
-  postInstall = lib.optionalString (canExecute) ''
+  postInstall = lib.optionalString canExecute ''
     installShellCompletion --cmd deno \
       --bash <($out/bin/deno completions bash) \
       --fish <($out/bin/deno completions fish) \
@@ -85,7 +85,7 @@ rustPlatform.buildRustPackage rec {
   '';
 
   doInstallCheck = canExecute;
-  installCheckPhase = lib.optionalString (canExecute) ''
+  installCheckPhase = lib.optionalString canExecute ''
     runHook preInstallCheck
     $out/bin/deno --help
     $out/bin/deno --version | grep "deno ${version}"
@@ -110,7 +110,7 @@ rustPlatform.buildRustPackage rec {
     '';
     license = licenses.mit;
     mainProgram = "deno";
-    maintainers = with maintainers; [ jk ];
+    maintainers = with maintainers; [ jk ofalvai ];
     platforms = [
       "x86_64-linux"
       "aarch64-linux"
