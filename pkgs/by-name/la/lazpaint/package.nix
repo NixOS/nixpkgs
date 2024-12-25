@@ -6,7 +6,6 @@
   fpc,
   autoPatchelfHook,
   libsForQt5,
-  libqt5pas,
   xorg,
   python3,
 }:
@@ -43,9 +42,9 @@ stdenv.mkDerivation rec {
     autoPatchelfHook
   ];
 
-  buildInputs = [
-    libsForQt5.qtbase
-    libqt5pas
+  buildInputs = with libsForQt5; [
+    qtbase
+    libqtpas
   ];
 
   runtimeDependencies = [
