@@ -127,7 +127,7 @@ stdenv.mkDerivation rec {
     platforms = lib.platforms.all;
     license = lib.licenses.bsd3;
     maintainers = with lib.maintainers; [
-      erictapen
+      philiptaron
       ulysseszhan
     ];
   };
