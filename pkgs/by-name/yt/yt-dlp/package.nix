@@ -98,7 +98,6 @@ python3Packages.buildPythonApplication rec {
     changelog = "https://github.com/yt-dlp/yt-dlp/blob/HEAD/Changelog.md";
     license = licenses.unlicense;
     maintainers = with maintainers; [
-      mkg20001
       SuperSandro2000
       donteatoreo
     ];
