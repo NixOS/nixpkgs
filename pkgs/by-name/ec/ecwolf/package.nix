@@ -23,8 +23,8 @@ stdenv.mkDerivation rec {
   version = "1.4.1";
 
   src = fetchFromBitbucket {
-    owner = pname;
-    repo = pname;
+    owner = "ecwolf";
+    repo = "ecwolf";
     rev = version;
     sha256 = "V2pSP8i20zB50WtUMujzij+ISSupdQQ/oCYYrOaTU1g=";
   };
