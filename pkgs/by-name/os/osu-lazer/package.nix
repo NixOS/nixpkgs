@@ -21,13 +21,13 @@
 
 buildDotnetModule rec {
   pname = "osu-lazer";
-  version = "2024.1219.2";
+  version = "2024.1224.1";
 
   src = fetchFromGitHub {
     owner = "ppy";
     repo = "osu";
     tag = version;
-    hash = "sha256-uRaMVd3FH6094MxplLNG0JJnO+7s805TI0aeDN/rRVY=";
+    hash = "sha256-T9KYb+fVcCWtb33ImHyoipJqsLr2em4GoYyvsSgIWx0=";
   };
 
   projectFile = "osu.Desktop/osu.Desktop.csproj";
