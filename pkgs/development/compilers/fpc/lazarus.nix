@@ -43,6 +43,7 @@ let
     )
   );
 
+  qtVersion = lib.versions.major qtbase.version;
 in
 stdenv.mkDerivation rec {
   pname = "lazarus-${LCL_PLATFORM}";
@@ -94,7 +95,7 @@ stdenv.mkDerivation rec {
     "bigide"
   ];
 
-  LCL_PLATFORM = if withQt then "qt5" else "gtk2";
+  LCL_PLATFORM = if withQt then "qt${qtVersion}" else "gtk2";
 
   NIX_LDFLAGS = lib.concatStringsSep " " (
     [
@@ -114,7 +115,7 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals withQt [
       "-L${lib.getLib libqtpas}/lib"
-      "-lQt5Pas"
+      "-lQt${qtVersion}Pas"
     ]
   );
 

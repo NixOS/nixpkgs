@@ -633,6 +633,7 @@ mapAliases {
   LASzip2 = laszip_2; # Added 2024-06-12
   latencytop = throw "'latencytop' has been removed due to lack of maintenance upstream."; # Added 2024-12-04
   latinmodern-math = lmmath;
+  lazarus-qt = lazarus-qt5; # Added 2024-12-25
   leafpad = throw "'leafpad' has been removed due to lack of maintenance upstream. Consider using 'xfce.mousepad' instead"; # Added 2024-10-19
   ledger_agent = ledger-agent; # Added 2024-01-07
   lfs = dysk; # Added 2023-07-03

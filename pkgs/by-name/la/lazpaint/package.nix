@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  lazarus-qt,
+  lazarus-qt5,
   fpc,
   autoPatchelfHook,
   libsForQt5,
@@ -36,7 +36,7 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [
-    lazarus-qt
+    lazarus-qt5
     fpc
     libsForQt5.wrapQtAppsHook
     autoPatchelfHook
@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     cp -r --no-preserve=mode ${bgrabitmap} bgrabitmap
     cp -r --no-preserve=mode ${bgracontrols} bgracontrols
 
-    lazbuild --lazarusdir=${lazarus-qt}/share/lazarus \
+    lazbuild --lazarusdir=${lazarus-qt5}/share/lazarus \
       --build-mode=ReleaseQt5 \
       bgrabitmap/bgrabitmap/bgrabitmappack.lpk \
       bgracontrols/bgracontrols.lpk \

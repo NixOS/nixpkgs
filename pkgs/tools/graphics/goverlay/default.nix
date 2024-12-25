@@ -5,7 +5,7 @@
   stdenv,
   fetchFromGitHub,
   fpc,
-  lazarus-qt,
+  lazarus-qt5,
   wrapQtAppsHook,
   breeze-qt5,
   libGL,
@@ -69,7 +69,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     fpc
-    lazarus-qt
+    lazarus-qt5
     wrapQtAppsHook
   ];
 
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   buildPhase = ''
     runHook preBuild
-    HOME=$(mktemp -d) lazbuild --lazarusdir=${lazarus-qt}/share/lazarus -B goverlay.lpi
+    HOME=$(mktemp -d) lazbuild --lazarusdir=${lazarus-qt5}/share/lazarus -B goverlay.lpi
     runHook postBuild
   '';
 
