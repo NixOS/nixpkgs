@@ -1,0 +1,51 @@
+diff --git a/ext/iconv/iconv.c b/ext/iconv/iconv.c
+index 2801049..77fae7e 100644
+--- a/ext/iconv/iconv.c
++++ b/ext/iconv/iconv.c
+@@ -188,7 +188,7 @@ static VALUE iconv_convert _((iconv_t cd, VALUE str, long start, long length, in
+ static VALUE iconv_s_allocate _((VALUE klass));
+ static VALUE iconv_initialize _((int argc, VALUE *argv, VALUE self));
+ static VALUE iconv_s_open _((int argc, VALUE *argv, VALUE self));
+-static VALUE iconv_s_convert _((struct iconv_env_t* env));
++static VALUE iconv_s_convert _((VALUE env));
+ static VALUE iconv_s_iconv _((int argc, VALUE *argv, VALUE self));
+ static VALUE iconv_init_state _((VALUE cd));
+ static VALUE iconv_finish _((VALUE self));
+@@ -204,7 +204,7 @@ static VALUE charset_map;
+  * Returns the map from canonical name to system dependent name.
+  */
+ static VALUE
+-charset_map_get(void)
++charset_map_get(VALUE klass)
+ {
+     return charset_map;
+ }
+@@ -642,7 +642,7 @@ iconv_s_allocate(VALUE klass)
+ }
+ 
+ static VALUE
+-get_iconv_opt_i(VALUE i, VALUE arg)
++get_iconv_opt_i(RB_BLOCK_CALL_FUNC_ARGLIST(i, arg))
+ {
+     VALUE name;
+ #if defined ICONV_SET_TRANSLITERATE || defined ICONV_SET_DISCARD_ILSEQ
+@@ -784,8 +784,9 @@ iconv_s_open(int argc, VALUE *argv, VALUE self)
+ }
+ 
+ static VALUE
+-iconv_s_convert(struct iconv_env_t* env)
++iconv_s_convert(VALUE env_value)
+ {
++    struct iconv_env_t* env = (struct iconv_env_t*)env_value;
+     VALUE last = 0;
+ 
+     for (; env->argc > 0; --env->argc, ++env->argv) {
+@@ -906,7 +907,7 @@ list_iconv(unsigned int namescount, const char *const *names, void *data)
+ 
+ #if defined(HAVE_ICONVLIST) || defined(HAVE___ICONV_FREE_LIST)
+ static VALUE
+-iconv_s_list(void)
++iconv_s_list(VALUE klass)
+ {
+ #ifdef HAVE_ICONVLIST
+     int state;
