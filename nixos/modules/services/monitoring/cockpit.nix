@@ -2,9 +2,12 @@
 
 let
   cfg = config.services.cockpit;
-  inherit (lib) types mkEnableOption mkOption mkIf literalMD mkPackageOption;
+  inherit (lib) types mkEnableOption mkOption mkIf literalMD mkPackageOption mkRenamedOptionModule concatStringsSep;
   settingsFormat = pkgs.formats.ini {};
 in {
+  imports = [
+    (mkRenamedOptionModule [ "services" "cockpit" "port" ] [ "services" "cockpit" "listenPort" ])
+  ];
   options = {
     services.cockpit = {
       enable = mkEnableOption "Cockpit";
@@ -13,7 +16,7 @@ in {
         default = [ "cockpit" ];
       };
 
-      settings = lib.mkOption {
+      settings = mkOption {
         type = settingsFormat.type;
 
         default = {};
@@ -25,10 +28,21 @@ in {
         '';
       };
 
-      port = mkOption {
+      listenPort = mkOption {
         description = "Port where cockpit will listen.";
         type = types.port;
         default = 9090;
+      };
+
+      listenAddress = mkOption {
+        description = ''
+          Address cockpit will listen on.
+
+          After changing the listening address it might be necessary to reload related systemd units.
+        '';
+        type = types.str;
+        default = "0.0.0.0";
+        example = "127.0.0.1";
       };
 
       openFirewall = mkOption {
@@ -51,7 +65,7 @@ in {
 
     security.pam.services.cockpit = {};
 
-    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.port ];
+    networking.firewall.allowedTCPPorts = mkIf cfg.openFirewall [ cfg.listenPort ];
 
     # units are in reverse sort order if you ls $out/lib/systemd/system
     # all these units are basically verbatim translated from upstream
@@ -158,7 +172,7 @@ in {
         Wants = "cockpit-motd.service";
       };
       socketConfig = {
-        ListenStream = cfg.port;
+        ListenStream = concatStringsSep ":" [ cfg.listenAddress (toString cfg.listenPort) ];
         ExecStartPost = [
           "-${cfg.package}/share/cockpit/motd/update-motd \"\" localhost"
           "-${pkgs.coreutils}/bin/ln -snf active.motd /run/cockpit/motd"
