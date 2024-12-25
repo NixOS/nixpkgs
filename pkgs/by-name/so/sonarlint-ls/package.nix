@@ -17,19 +17,25 @@
 
 maven.buildMavenPackage rec {
   pname = "sonarlint-ls";
-  version = "3.5.1.75119";
+  version = "3.14.1.75775";
 
   src = fetchFromGitHub {
     owner = "SonarSource";
     repo = "sonarlint-language-server";
     rev = version;
-    hash = "sha256-6tbuX0wUpqbTyM44e7PqZHL0/XjN8hTFCgfzV+qc1m0=";
+    hash = "sha256-QXBSdXpkhqcvfjihcWwy4oCjTMmbAJRZG1T66sa8T4U=";
   };
 
-  mvnJdk = jdk17;
-  mvnHash = "sha256-SdRK2lI4cMG6Pp4xhz1pJ2r8bLzyWPueYwoa3M30RRg=";
+  # Replaces unavailable versions with available ones in maven central. Can be
+  # removed again if
+  # https://github.com/SonarSource/sonarlint-language-server/pull/427 is
+  # merged.
+  patches = [ ./sonar-analyzers-versions.patch ];
 
-  # disable failing tests which either need network access or are flaky
+  mvnJdk = jdk17;
+  mvnHash = "sha256-SKkOf3f9Ze3Rm6i2uYbFkvSnnEySARvaoiAS1e2kFi0=";
+
+  # Disables failing tests which either need network access or are flaky.
   mvnParameters = lib.escapeShellArgs [
     "-Dskip.installnodenpm=true"
     "-Dskip.npm"
