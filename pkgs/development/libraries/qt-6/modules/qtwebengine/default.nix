@@ -66,6 +66,7 @@
   bootstrap_cmds,
   cctools,
   xcbuild,
+  fetchpatch,
 }:
 
 qtModule {
@@ -114,6 +115,15 @@ qtModule {
 
     # Override locales install path so they go to QtWebEngine's $out
     ./locales-path.patch
+
+    # Fix build of vendored xnnpack on aarch64/gcc14
+    # FIXME: remove when upstream updates
+    (fetchpatch {
+      url = "https://github.com/google/XNNPACK/commit/1b11a8b0620afe8c047304273674c4c57c289755.patch";
+      stripLen = 1;
+      extraPrefix = "src/3rdparty/chromium/third_party/xnnpack/src/";
+      hash = "sha256-GUESVNR88I1K2V5xr0e09ec4j2eselMhNN06+PCcINM=";
+    })
   ];
 
   postPatch =
