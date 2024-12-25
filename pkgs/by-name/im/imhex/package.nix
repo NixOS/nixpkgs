@@ -2,8 +2,6 @@
   lib,
   stdenv,
   cmake,
-  darwin,
-  fetchpatch,
   llvmPackages_17,
   fetchFromGitHub,
   mbedtls,
@@ -30,8 +28,8 @@
 }:
 
 let
-  version = "1.35.4";
-  patterns_version = "1.35.4";
+  version = "1.36.2";
+  patterns_version = "1.36.2";
 
   llvmPackages = llvmPackages_17;
 
@@ -46,7 +44,7 @@ let
     owner = "WerWolv";
     repo = "ImHex-Patterns";
     rev = "ImHex-v${patterns_version}";
-    hash = "sha256-7ch2KXkbkdRAvo3HyErWcth3kG4bzYvp9I5GZSsb/BQ=";
+    hash = "sha256-MKw9BsOhbaojmQGdl+Wkit/ot5Xsym+AvCTHY2vZHmY=";
   };
 
 in
@@ -60,56 +58,41 @@ stdenv'.mkDerivation (finalAttrs: {
     owner = "WerWolv";
     repo = "ImHex";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-6QpmFkSMQpGlEzo7BHZn20c+q8CTDUB4yO87wMU5JT4=";
+    hash = "sha256-e7ppx2MdtTPki/Q+1kWswHkFLNRcO0Y8+q9VzpgUoVE=";
   };
 
-  patches = [
-    # https://github.com/WerWolv/ImHex/pull/1910
-    # during https://github.com/NixOS/nixpkgs/pull/330303 it was discovered that ImHex
-    # would not build on Darwin x86-64
-    # this temporary patch can be removed when the above PR is merged
-    (fetchpatch {
-      url = "https://github.com/WerWolv/ImHex/commit/69624a2661ea44db9fb8b81c3278ef69016ebfcf.patch";
-      hash = "sha256-LcUCl8Rfz6cbhop2StksuViim2bH4ma3/8tGVKFdAgg=";
-    })
-  ];
 
   # Comment out fixup_bundle in PostprocessBundle.cmake as we are not building a standalone application
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     substituteInPlace cmake/modules/PostprocessBundle.cmake \
       --replace-fail "fixup_bundle" "#fixup_bundle"
   '';
+  strictDeps = true;
 
-  nativeBuildInputs =
-    [
-      cmake
-      llvmPackages.llvm
-      python3
-      perl
-      pkg-config
-      rsync
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
+  nativeBuildInputs = [
+    cmake
+    llvmPackages.llvm
+    python3
+    perl
+    pkg-config
+    rsync
+    makeWrapper
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
 
-  buildInputs =
-    [
-      capstone
-      curl
-      dbus
-      file
-      fmt
-      glfw3
-      gtk3
-      jansson
-      libGLU
-      mbedtls
-      nlohmann_json
-      yara
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk_11_0.frameworks.UniformTypeIdentifiers
-    ];
+  buildInputs = [
+    capstone
+    curl
+    dbus
+    file
+    fmt
+    glfw3
+    gtk3
+    jansson
+    libGLU
+    mbedtls
+    nlohmann_json
+    yara
+  ];
 
   # autoPatchelfHook only searches for *.so and *.so.*, and won't find *.hexpluglib
   # however, we will append to RUNPATH ourselves
