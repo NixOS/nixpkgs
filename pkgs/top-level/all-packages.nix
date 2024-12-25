@@ -4841,7 +4841,7 @@ with pkgs;
 
   pleroma = callPackage ../servers/pleroma {
     elixir = elixir_1_17;
-    beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_17; });
+    beamPackages = beam.packages.erlang_26.extend (self: super: { elixir = elixir_1_17; });
   };
 
   plfit = callPackage ../by-name/pl/plfit/package.nix {
