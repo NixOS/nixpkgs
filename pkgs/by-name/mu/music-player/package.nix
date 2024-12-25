@@ -45,6 +45,9 @@ rustPlatform.buildRustPackage rec {
     changelog = "https://github.com/tsirysndr/music-player/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = [ lib.maintainers.sigmasquadron ];
+    # A rust crate this project depends on is broken upstream on Darwin:
+    # https://github.com/RustAudio/coreaudio-sys/issues/25
+    badPlatforms = [ lib.systems.inspect.patterns.isDarwin ];
     mainProgram = "music-player";
   };
 }
