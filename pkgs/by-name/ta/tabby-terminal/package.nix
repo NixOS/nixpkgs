@@ -17,7 +17,8 @@
   fontconfig,
   pkg-config,
   libsecret,
-  desktop-file-utils,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 let
@@ -28,23 +29,38 @@ let
     src = fetchFromGitHub {
       owner = "Eugeny";
       repo = "tabby";
-      rev = "v${version}";
+      tag = "v${version}";
       hash = "sha256-l3Hyt3e1edJjb7vL66JDllkpHwTU5efsNbgJ5Pcvn60=";
       leaveDotGit = true;
       deepClone = true;
     };
 
-    meta = with lib; {
+    meta = {
       description = "A terminal for a more modern age";
       homepage = "https://tabby.sh";
-      license = licenses.mit;
+      license = lib.licenses.mit;
       mainProgram = "tabby";
-      maintainers = with maintainers; [ geodic ];
+      maintainers = with lib.maintainers; [ geodic ];
       platforms = [ "x86_64-linux" ];
     };
 
     # We need to fix the argv logic as tabby only handles it for the node executable, but we are running it with electron
     patches = [ ./fix-argv-prefix-splice.patch ];
+
+    desktopItems = [
+      (makeDesktopItem {
+        name = "tabby";
+        desktopName = "Tabby";
+        exec = "tabby %u";
+        comment = "A terminal for a more modern age";
+        icon = "tabby";
+        categories = [
+          "Utility"
+          "TerminalEmulator"
+          "System"
+        ];
+      })
+    ];
 
     electronVersion = "29.4.6";
 
@@ -79,7 +95,7 @@ let
       http-server
       pkg-config
       libsecret
-      desktop-file-utils
+      copyDesktopItems
     ];
 
     configurePhase =
@@ -117,6 +133,8 @@ let
     buildPhase =
       # Start a fake (and completely unnecessary) http-server to let electron-rebuild "download" the headers and hashes
       ''
+        runHook preBuild
+
         mkdir -p http-cache/v${electronVersion}
         cp $electronHeaders http-cache/v${electronVersion}/node-v${electronVersion}-headers.tar.gz
         cp $electronHeadersSHA http-cache/v${electronVersion}/SHASUMS256.txt
@@ -129,28 +147,31 @@ let
         '') rebuildPkgs
       )
       + ''
-          kill $!
-          yarn build
+        kill $!
+        yarn build
 
-          mkdir -p $out/share/tabby
-          mkdir -p $out/bin
-          cp -r . $out/share/tabby
-          makeWrapper "${electron_29}/bin/electron" "$out/bin/tabby" --add-flags "$out/share/tabby/app" --set TABBY_DEV 1
-
-          mkdir -p $out/share/icons/hicolor/128x128/apps
-          cp ./build/icons/128x128.png $out/share/icons/hicolor/128x128/apps/tabby.png
-
-        mkdir -p $out/share/applications
-        echo "[Desktop Entry]" > tabby.desktop
-          desktop-file-install --dir $out/share/applications \
-            --set-key Type --set-value Application \
-            --set-key Exec --set-value tabby \
-            --set-key Name --set-value Tabby \
-            --set-key Comment --set-value "A terminal for a more modern age." \
-            --set-key Categories --set-value "Utility;TerminalEmulator;System" \
-            --set-key Icon --set-value $out/share/icons/hicolor/128x128/apps/tabby.png \
-            tabby.desktop
+        runHook postBuild
       '';
+
+    installPhase = ''
+      runHook preInstall
+
+      mkdir -p $out/share/tabby
+      mkdir -p $out/bin
+      cp -r . $out/share/tabby
+
+      # Tabby needs TABBY_DEV to run manually with electron
+      makeWrapper "${electron_29}/bin/electron" "$out/bin/tabby" --add-flags "$out/share/tabby/app" --set TABBY_DEV 1
+
+      for iconsize in 16 32 64 128
+      do
+        size=$iconsize"x"$iconsize
+        mkdir -p $out/share/icons/hicolor/$size/apps
+        ln -s $out/share/tabby/build/icons/"$size".png $out/share/icons/hicolor/$size/apps/tabby.png
+      done
+
+      runHook postInstall
+    '';
   };
 
   builtinPlugins = [
