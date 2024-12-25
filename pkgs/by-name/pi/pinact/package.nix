@@ -12,7 +12,7 @@ let
   src = fetchFromGitHub {
     owner = "suzuki-shunsuke";
     repo = "pinact";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-fOmQDfqG1aWzpL80Nc8JA6HWQR+z9mhqtwU4rC2g2Gg=";
   };
   mainProgram = "pinact";
@@ -40,14 +40,14 @@ buildGoModule {
   ldflags = [
     "-s"
     "-w"
-    "-X main.version=${version} -X main.commit=${src.rev}"
+    "-X main.version=${version} -X main.commit=v${version}"
   ];
 
   meta = with lib; {
     inherit mainProgram;
     description = "Pin GitHub Actions versions";
     homepage = "https://github.com/suzuki-shunsuke/pinact";
-    changelog = "https://github.com/suzuki-shunsuke/pinact/releases/tag/${src.rev}";
+    changelog = "https://github.com/suzuki-shunsuke/pinact/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = [ maintainers.kachick ];
   };
