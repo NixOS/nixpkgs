@@ -77,6 +77,7 @@ buildGoModule rec {
       schneefux
       Br1ght0ne
       Frostman
+      kachick
     ];
   };
 }
