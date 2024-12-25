@@ -27,18 +27,7 @@ maven.buildMavenPackage rec {
   };
 
   mvnJdk = jdk17;
-  manualMvnArtifacts = [
-    "org.apache.maven.surefire:surefire-junit-platform:3.1.2"
-    "org.junit.platform:junit-platform-launcher:1.8.2"
-  ];
-
-  mvnHash = "sha256-ZhAQtpi0wQP8+QPeYaor2MveY+DZ9RPENb3kITnuWd8=";
-
-  buildOffline = true;
-
-  # disable node and npm module installation because the need network access
-  # for the tests.
-  mvnDepsParameters = "-Dskip.installnodenpm=true -Dskip.npm package";
+  mvnHash = "sha256-SdRK2lI4cMG6Pp4xhz1pJ2r8bLzyWPueYwoa3M30RRg=";
 
   # disable failing tests which either need network access or are flaky
   mvnParameters = lib.escapeShellArgs [
@@ -48,20 +37,16 @@ maven.buildMavenPackage rec {
     !LanguageServerWithFoldersMediumTests,
     !NotebookMediumTests,
     !ConnectedModeMediumTests,
-    !JavaMediumTests"
+    !JavaMediumTests,
+    !OpenNotebooksCacheTests"
   ];
-
-  doCheck = false;
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p $out/{bin,share/plugins}
-    install -Dm644 target/sonarlint-language-server-*.jar \
-      $out/share/sonarlint-ls.jar
-    install -Dm644 target/plugins/* \
-      $out/share/plugins
-
+    install -Dm644 target/sonarlint-language-server-*.jar $out/share/sonarlint-ls.jar
+    install -Dm644 target/plugins/* $out/share/plugins
 
     makeWrapper ${jre_headless}/bin/java $out/bin/sonarlint-ls \
       --add-flags "-jar $out/share/sonarlint-ls.jar" \
@@ -95,7 +80,7 @@ maven.buildMavenPackage rec {
           gnused
         ];
         text = ''
-          LATEST_TAG=$(curl https://api.github.com/repos/${src.owner}/${src.repo}/tags | \
+          LATEST_TAG=$(curl -L https://api.github.com/repos/${src.owner}/${src.repo}/tags | \
             jq -r '[.[] | select(.name | test("^[0-9]"))] | sort_by(.name | split(".") |
             map(tonumber)) | reverse | .[0].name')
           update-source-version sonarlint-ls "$LATEST_TAG"
