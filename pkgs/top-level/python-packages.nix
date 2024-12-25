@@ -10734,6 +10734,8 @@ self: super: with self; {
 
   python-opensky = callPackage ../development/python-modules/python-opensky { };
 
+  python-overseerr = callPackage ../development/python-modules/python-overseerr { };
+
   python-owasp-zap-v2-4 = callPackage ../development/python-modules/python-owasp-zap-v2-4 { };
 
   python-poppler = callPackage ../development/python-modules/python-poppler { };
