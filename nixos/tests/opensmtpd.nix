@@ -16,24 +16,26 @@ import ./make-test-python.nix {
             }
           ];
         };
-        environment.systemPackages = let
-          testSendmail = pkgs.writeScriptBin "test-sendmail" ''
-            #!/bin/sh
-            set -euxo pipefail
-            echo "========= SENDING" >&2
-            ${pkgs.system-sendmail}/bin/sendmail -v -f alice@smtp1 bob@smtp2 >&2 <<EOF
-            From: alice@smtp1
-            To: bob@smtp2
-            Subject: Sendmail Test
+        environment.systemPackages =
+          let
+            testSendmail = pkgs.writeScriptBin "test-sendmail" ''
+              #!/bin/sh
+              set -euxo pipefail
+              echo "========= SENDING" >&2
+              ${pkgs.system-sendmail}/bin/sendmail -v -f alice@smtp1 bob@smtp2 >&2 <<EOF
+              From: alice@smtp1
+              To: bob@smtp2
+              Subject: Sendmail Test
 
-            Hello World
-            EOF
-            echo "=========== FINISHED SENDING" >&2
-          '';
-        in [
-          pkgs.opensmtpd
-          testSendmail
-        ];
+              Hello World
+              EOF
+              echo "=========== FINISHED SENDING" >&2
+            '';
+          in
+          [
+            pkgs.opensmtpd
+            testSendmail
+          ];
         services.opensmtpd = {
           enable = true;
           extraServerArgs = [ "-v" ];
