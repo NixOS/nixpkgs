@@ -43,12 +43,12 @@ buildGoModule {
     "-X main.version=${version} -X main.commit=v${version}"
   ];
 
-  meta = with lib; {
+  meta = {
     inherit mainProgram;
     description = "Pin GitHub Actions versions";
     homepage = "https://github.com/suzuki-shunsuke/pinact";
     changelog = "https://github.com/suzuki-shunsuke/pinact/releases/tag/v${version}";
-    license = licenses.mit;
-    maintainers = [ maintainers.kachick ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kachick ];
   };
 }
