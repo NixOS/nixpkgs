@@ -1,0 +1,13 @@
+diff --git a/src/input_common/helpers/udp_protocol.h b/src/input_common/helpers/udp_protocol.h
+index db08fc62c5..ea223ea937 100644
+--- a/src/input_common/helpers/udp_protocol.h
++++ b/src/input_common/helpers/udp_protocol.h
+@@ -69,7 +69,7 @@ Message<T> CreateMessage(const u32 magic, const T data, const u32 sender_id) {
+     };
+     Message<T> message{header, data};
+     crc.process_bytes(&message, sizeof(Message<T>));
+-    message.header.crc = crc.checksum();
++    message.header.crc = static_cast<u32_le>(crc.checksum());
+     return message;
+ }
+ 
