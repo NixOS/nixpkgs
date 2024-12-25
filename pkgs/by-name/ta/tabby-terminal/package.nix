@@ -129,27 +129,27 @@ let
         '') rebuildPkgs
       )
       + ''
-        kill $!
-        yarn build
+          kill $!
+          yarn build
 
-        mkdir -p $out/share/tabby
-        mkdir -p $out/bin
-        cp -r . $out/share/tabby
-        makeWrapper "${electron_29}/bin/electron" "$out/bin/tabby" --add-flags "$out/share/tabby/app" --set TABBY_DEV 1
+          mkdir -p $out/share/tabby
+          mkdir -p $out/bin
+          cp -r . $out/share/tabby
+          makeWrapper "${electron_29}/bin/electron" "$out/bin/tabby" --add-flags "$out/share/tabby/app" --set TABBY_DEV 1
 
-        mkdir -p $out/share/icons/hicolor/128x128/apps
-        cp ./build/icons/128x128.png $out/share/icons/hicolor/128x128/apps/tabby.png
+          mkdir -p $out/share/icons/hicolor/128x128/apps
+          cp ./build/icons/128x128.png $out/share/icons/hicolor/128x128/apps/tabby.png
 
-      mkdir -p $out/share/applications
-      echo "[Desktop Entry]" > tabby.desktop
-        desktop-file-install --dir $out/share/applications \
-          --set-key Type --set-value Application \
-          --set-key Exec --set-value tabby \
-          --set-key Name --set-value Tabby \
-          --set-key Comment --set-value "A terminal for a more modern age." \
-          --set-key Categories --set-value "Utility;TerminalEmulator;System" \
-          --set-key Icon --set-value $out/share/icons/hicolor/128x128/apps/tabby.png \
-          tabby.desktop
+        mkdir -p $out/share/applications
+        echo "[Desktop Entry]" > tabby.desktop
+          desktop-file-install --dir $out/share/applications \
+            --set-key Type --set-value Application \
+            --set-key Exec --set-value tabby \
+            --set-key Name --set-value Tabby \
+            --set-key Comment --set-value "A terminal for a more modern age." \
+            --set-key Categories --set-value "Utility;TerminalEmulator;System" \
+            --set-key Icon --set-value $out/share/icons/hicolor/128x128/apps/tabby.png \
+            tabby.desktop
       '';
   };
 
