@@ -14,6 +14,7 @@
   makeDesktopItem,
   alsa-lib,
   darwin,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lrcget";
@@ -103,6 +104,8 @@ rustPlatform.buildRustPackage rec {
       comment = meta.description;
     })
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Utility for mass-downloading LRC synced lyrics for your offline music library";
