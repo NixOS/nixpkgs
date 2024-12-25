@@ -17,11 +17,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "bazarr";
-  version = "1.4.5";
+  version = "1.5.0";
 
   src = fetchzip {
     url = "https://github.com/morpheus65535/bazarr/releases/download/v${version}/bazarr.zip";
-    hash = "sha256-BV+ON+SavPc0ZUlIk6tlsvmWub8TiYSSJSRutZb1q+g=";
+    hash = "sha256-Q/KlqvVWhegSxkxHls0WwCClaQwkmLAfuzfi3X4xgAY=";
     stripRoot = false;
   };
 
