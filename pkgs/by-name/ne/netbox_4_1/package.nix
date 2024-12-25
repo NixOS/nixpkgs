@@ -28,10 +28,9 @@ py.pkgs.buildPythonApplication rec {
 
   patches = [
     ./custom-static-root.patch
-    (fetchpatch {
-      url = "https://github.com/netbox-community/netbox/pull/17620.patch";
-      hash = "sha256-zN2zke4qlNJUbxI8mSV+zGmEv0Qtd0zSCbCXWyE1L2k=";
-    })
+    # based on https://github.com/netbox-community/netbox/pull/17620.patch
+    # adjusted for new requirements.txt of 4.10.0
+    ./django-51-17620.patch
   ];
 
   propagatedBuildInputs =
