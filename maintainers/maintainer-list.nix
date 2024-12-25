@@ -22307,6 +22307,11 @@
     githubId = 159372832;
     keys = [ { fingerprint = "6F54 C08C 37C8 EC78 15FA  0D01 A721 8CBA 2D80 15C3"; } ];
   };
+  Tert0 = {
+    name = "Tert0";
+    github = "Tert0";
+    githubId = 62036464;
+  };
   tesq0 = {
     email = "mikolaj.galkowski@gmail.com";
     github = "tesq0";
