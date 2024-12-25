@@ -10270,6 +10270,8 @@ self: super: with self; {
 
   pinecone-client = callPackage ../development/python-modules/pinecone-client { };
 
+  pinecone-plugin-interface = callPackage ../development/python-modules/pinecone-plugin-interface { };
+
   psrpcore = callPackage ../development/python-modules/psrpcore { };
 
   pyaprilaire = callPackage ../development/python-modules/pyaprilaire { };
