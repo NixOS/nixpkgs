@@ -2777,6 +2777,8 @@ self: super: with self; {
 
   collidoscope = callPackage ../development/python-modules/collidoscope { };
 
+  color-manager = callPackage ../development/python-modules/color-manager { };
+
   color-operations = callPackage ../development/python-modules/color-operations { };
 
   color-parser-py = callPackage ../development/python-modules/color-parser-py { };
