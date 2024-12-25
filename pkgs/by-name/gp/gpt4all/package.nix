@@ -10,6 +10,7 @@
   qt6,
   fmt,
   shaderc,
+  variant-lite,
   vulkan-headers,
   wayland,
   cudaSupport ? config.cudaSupport,
@@ -53,6 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [
       expected-lite
+      variant-lite
       fmt
       qt6.qtwayland
       qt6.qtquicktimeline
