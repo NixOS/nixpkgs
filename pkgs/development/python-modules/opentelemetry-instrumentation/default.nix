@@ -43,6 +43,14 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "opentelemetry.instrumentation" ];
 
+  disabledTests = [
+    # bootstrap: error: argument -a/--action: invalid choice: 'pipenv' (choose from install, requirements)
+    # RuntimeError: Patch is already started
+    "test_run_cmd_install"
+    "test_run_cmd_print"
+    "test_run_unknown_cmd"
+  ];
+
   passthru.updateScript = opentelemetry-api.updateScript;
 
   meta = with lib; {

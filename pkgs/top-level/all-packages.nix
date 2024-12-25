@@ -331,8 +331,6 @@ with pkgs;
     catch2 = catch2_3;
   };
 
-  edgedb = callPackage ../tools/networking/edgedb { };
-
   eludris = callPackage ../tools/misc/eludris { };
 
   enochecker-test = with python3Packages; callPackage ../development/tools/enochecker-test { };
@@ -7179,7 +7177,7 @@ with pkgs;
 
   inherit (beam.interpreters)
     erlang erlang_27 erlang_26 erlang_25 erlang_24
-    elixir elixir_1_17 elixir_1_16 elixir_1_15 elixir_1_14 elixir_1_13 elixir_1_12 elixir_1_11 elixir_1_10
+    elixir elixir_1_18 elixir_1_17 elixir_1_16 elixir_1_15 elixir_1_14
     elixir-ls;
 
   erlang_nox = beam_nox.interpreters.erlang;
@@ -10893,10 +10891,6 @@ with pkgs;
   };
 
   unixODBCDrivers = recurseIntoAttrs (callPackages ../development/libraries/unixODBCDrivers { });
-
-  v8 = callPackage ../development/libraries/v8 {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-  };
 
   valeStyles = recurseIntoAttrs (callPackages ../by-name/va/vale/styles.nix { });
 
@@ -16779,11 +16773,8 @@ with pkgs;
   minecraftServers = import ../games/minecraft-servers { inherit callPackage lib javaPackages; };
   minecraft-server = minecraftServers.vanilla; # backwards compatibility
 
-  minetest = callPackage ../games/minetest {
-    inherit (darwin.apple_sdk.frameworks) OpenGL OpenAL Carbon Cocoa Kernel;
-  };
-  minetestclient = minetest.override { buildServer = false; };
-  minetestserver = minetest.override { buildClient = false; };
+  luanti-client = luanti.override { buildServer = false; };
+  luanti-server = luanti.override { buildClient = false; };
 
   mnemosyne = callPackage ../games/mnemosyne {
     python = python3;
@@ -17037,6 +17028,8 @@ with pkgs;
 
   wesnoth = callPackage ../games/wesnoth {
     inherit (darwin.apple_sdk.frameworks) Cocoa Foundation;
+    # fails to build against latest boost
+    boost = boost183;
     # wesnoth requires lua built with c++, see https://github.com/wesnoth/wesnoth/pull/8234
     lua = lua5_4.override {
       postConfigure = ''
@@ -17848,7 +17841,9 @@ with pkgs;
 
   cups-pk-helper = callPackage ../misc/cups/cups-pk-helper.nix { };
 
-  epsonscan2 = pkgs.libsForQt5.callPackage ../misc/drivers/epsonscan2 { };
+  epsonscan2 = callPackage ../by-name/ep/epsonscan2/package.nix {
+    inherit (qt5) wrapQtAppsHook qtbase;
+  };
 
   foomatic-db-ppds-withNonfreeDb = callPackage ../by-name/fo/foomatic-db-ppds/package.nix { withNonfreeDb = true; };
 
