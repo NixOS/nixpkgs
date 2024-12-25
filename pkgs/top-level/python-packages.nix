@@ -14244,6 +14244,10 @@ self: super: with self; {
     redis-server = pkgs.redis;
   };
 
+  rq2 = callPackage ../development/python-modules/rq/2.nix {
+    redis-server = pkgs.redis;
+  };
+
   rsa = callPackage ../development/python-modules/rsa { };
 
   rsskey = callPackage ../development/python-modules/rsskey { };
