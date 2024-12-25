@@ -48,7 +48,10 @@ let
     };
 
     # We need to fix the argv logic as tabby only handles it for the node executable, but we are running it with electron
-    patches = [ ./fix-argv-prefix-splice.patch ];
+    patches = [
+      ./fix-argv-prefix-splice.patch
+      ./fix-app-version.patch
+    ];
 
     desktopItems = [
       (makeDesktopItem {
