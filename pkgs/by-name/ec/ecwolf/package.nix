@@ -15,6 +15,7 @@
   writers,
   python3Packages,
   nix-update,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -27,6 +28,15 @@ stdenv.mkDerivation rec {
     rev = version;
     sha256 = "V2pSP8i20zB50WtUMujzij+ISSupdQQ/oCYYrOaTU1g=";
   };
+
+  patches = [
+    # Fixes build with gcc >= 14. Shouldn't be needed for ecwolf versions > 1.4.1.
+    (fetchpatch {
+      name = "tmemory.h-const-correctness.patch";
+      url = "https://bitbucket.org/ecwolf/ecwolf/commits/400aaf96a36a14ab8eab18a670ba6439046f3bb0/raw";
+      hash = "sha256-2YwHEctBPyprs0DVsazimGEgmiCba24zh2dFfw9tOnU=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
