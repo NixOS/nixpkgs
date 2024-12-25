@@ -123,7 +123,7 @@ let
       license = licenses.gpl2Plus;
       maintainers = with maintainers; [
         lukegb
-        pacien
+        euxane
         techknowlogick
       ];
       platforms = platforms.unix;

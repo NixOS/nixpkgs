@@ -46,6 +46,6 @@ buildPythonPackage rec {
     description = "Ploomber extension";
     homepage = "https://pypi.org/project/ploomber-extension";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ pacien ];
+    maintainers = with maintainers; [ euxane ];
   };
 }
