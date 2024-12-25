@@ -15,18 +15,18 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "tsukimi";
-  version = "0.17.3";
+  version = "0.18.0";
 
   src = fetchFromGitHub {
     owner = "tsukinaha";
     repo = "tsukimi";
     rev = "v${version}";
-    hash = "sha256-2AmDP4R06toNrtjV0HSO+Fj8mrXbLgC7bMQPvl10un0=";
+    hash = "sha256-JHB1D94ymVjP3PEHZ4fTT4c6VOEkFgSdpanzs1AzJUc=";
     fetchSubmodules = true;
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-3xu4h9ZHlqnaB6Pgn2ixyBF3VS6OF8ZkLaNU4unir7A=";
+  cargoHash = "sha256-Gh9CPQ73+EpwZTixgQpV4rSwZnedVHQwZRlLQXr8EUo=";
 
   nativeBuildInputs = [
     pkg-config
