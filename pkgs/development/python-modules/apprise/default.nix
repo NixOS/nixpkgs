@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "apprise";
-  version = "1.9.0";
+  version = "1.9.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-tck6/WMxr+S2OlXRzqkHbke+y0uom1YrGBwT4luwx9Y=";
+    hash = "sha256-eezQLEHYbf/SEbs1zFwGyEbndwQavh0HAfmJmA3kRok=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
