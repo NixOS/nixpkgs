@@ -15,7 +15,7 @@ buildPythonPackage rec {
   version = "0.8.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "alengwenus";
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     description = "LCN-PCK library written in Python";
     homepage = "https://github.com/alengwenus/pypck";
     changelog = "https://github.com/alengwenus/pypck/releases/tag/${version}";
-    license = with licenses; [ epl20 ];
+    license = licenses.epl20;
     maintainers = with maintainers; [ fab ];
   };
 }
