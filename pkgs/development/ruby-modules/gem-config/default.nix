@@ -17,7 +17,7 @@
 # This separates "what to build" (the exact gem versions) from "how to build"
 # (to make gems behave if necessary).
 
-{ lib, fetchurl, fetchpatch2, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
+{ lib, fetchurl, fetchpatch, fetchpatch2, writeScript, ruby, libkrb5, libxml2, libxslt, python2, stdenv, which
 , libiconv, postgresql, nodejs, clang, sqlite, zlib, imagemagick, lasem
 , pkg-config , ncurses, xapian, gpgme, util-linux, tzdata, icu, libffi
 , cmake, libssh2, openssl, openssl_1_1, libmysqlclient, git, perl, pcre2, gecode_3, curl
@@ -407,15 +407,16 @@ in
       ++ lib.optional (lib.versionAtLeast attrs.version "1.53.0" && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) autoSignDarwinBinariesHook;
     buildInputs = [ openssl ];
     hardeningDisable = [ "format" ];
-    env.NIX_CFLAGS_COMPILE = toString [
-      "-Wno-error=stringop-overflow"
-      "-Wno-error=implicit-fallthrough"
-      "-Wno-error=sizeof-pointer-memaccess"
-      "-Wno-error=cast-function-type"
-      "-Wno-error=class-memaccess"
-      "-Wno-error=ignored-qualifiers"
-      "-Wno-error=tautological-compare"
-      "-Wno-error=stringop-truncation"
+    env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+    patches = [
+      (fetchpatch {
+        name = "gcc-14-fixes.patch";
+        url = "https://boringssl.googlesource.com/boringssl/+/c70190368c7040c37c1d655f0690bcde2b109a0d%5E%21/?format=TEXT";
+        decode = "base64 -d";
+        stripLen=1;
+        extraPrefix = "third_party/boringssl-with-bazel/src/";
+        hash = "sha256-1QyQm5s55op268r72dfExNGV+UyV5Ty6boHa9DQq40U=";
+       })
     ];
     dontBuild = false;
     postPatch = ''
