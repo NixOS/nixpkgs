@@ -1,0 +1,41 @@
+{
+  lib,
+  buildPythonPackage,
+  isPy27,
+  fetchFromGitHub,
+  django,
+  redis,
+  rq2,
+  sentry-sdk,
+}:
+
+buildPythonPackage rec {
+  pname = "django-rq";
+  version = "3.0";
+  format = "setuptools";
+  disabled = isPy27;
+
+  src = fetchFromGitHub {
+    owner = "rq";
+    repo = pname;
+    rev = "refs/tags/v${version}";
+    hash = "sha256-5X3Fnud33SuC2dbM1dpSQRDF5s45AHk7/DVsQwzOmjg=";
+  };
+
+  propagatedBuildInputs = [
+    django
+    redis
+    rq2
+    sentry-sdk
+  ];
+
+  pythonImportsCheck = [ "django_rq" ];
+
+  meta = with lib; {
+    description = "Simple app that provides django integration for RQ (Redis Queue)";
+    homepage = "https://github.com/rq/django-rq";
+    changelog = "https://github.com/rq/django-rq/releases/tag/v${version}";
+    license = licenses.mit;
+    maintainers = with maintainers; [ hexa ];
+  };
+}

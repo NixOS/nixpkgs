@@ -3617,6 +3617,8 @@ self: super: with self; {
 
   django-rq = callPackage ../development/python-modules/django-rq { };
 
+  django-rq3 = callPackage ../development/python-modules/django-rq/3.nix { };
+
   djangorestframework = callPackage ../development/python-modules/djangorestframework { };
 
   djangorestframework-dataclasses = callPackage ../development/python-modules/djangorestframework-dataclasses { };
