@@ -1,0 +1,15 @@
+diff -ru -x '*~' Rserve_orig/src/Makevars.in Rserve/src/Makevars.in
+--- Rserve_orig/src/Makevars.in	2013-08-22 06:09:33.000000000 +0900
++++ Rserve/src/Makevars.in	2014-11-09 21:36:31.184590320 +0900
+@@ -12,8 +12,9 @@
+ 	$(CC) -DSTANDALONE_RSERVE -DRSERV_DEBUG -DNODAEMON -I. -Iinclude $(ALL_CPPFLAGS) $(ALL_CFLAGS) $(PKG_CPPFLAGS) $(PKG_CFLAGS) -o Rserve.dbg $(SERVER_SRC) $(ALL_LIBS) $(PKG_LIBS)
+ 
+ # merging to bin/Rserve works only if installed from sources, won't work for binary
+-	-./mergefat Rserve "$(R_HOME)/bin/Rserve"
+-	-./mergefat Rserve.dbg "$(R_HOME)/bin/Rserve.dbg"
++	mkdir $(out)/bin
++	-./mergefat Rserve "$(out)/bin/Rserve"
++	-./mergefat Rserve.dbg "$(out)/bin/Rserve.dbg"
+ 
+ client: config.h
+ 	cp config.h client/cxx/
