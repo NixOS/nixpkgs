@@ -8,7 +8,7 @@
 }:
 
 stdenv.mkDerivation {
-  pname = "libqt5pas";
+  pname = "libqtpas";
   inherit (lazarus) version src;
 
   sourceRoot = "lazarus/lcl/interfaces/qt5/cbindings";

@@ -1495,7 +1495,7 @@ with pkgs;
   ### APPLICATIONS/FILE-MANAGERS
 
   doublecmd = callPackage ../by-name/do/doublecmd/package.nix {
-    inherit (qt5) wrapQtAppsHook;
+    inherit (libsForQt5) libqtpas wrapQtAppsHook;
   };
 
   krusader = libsForQt5.callPackage ../applications/file-managers/krusader { };
@@ -3582,7 +3582,7 @@ with pkgs;
   gdown = with python3Packages; toPythonApplication gdown;
 
   goverlay = callPackage ../tools/graphics/goverlay {
-    inherit (qt5) wrapQtAppsHook;
+    inherit (libsForQt5) libqtpas wrapQtAppsHook;
     inherit (plasma5Packages) breeze-qt5;
   };
 
@@ -9913,8 +9913,6 @@ with pkgs;
   libpwquality = callPackage ../development/libraries/libpwquality {
     python = python3;
   };
-
-  libqt5pas = libsForQt5.callPackage ../development/compilers/fpc/libqt5pas.nix { };
 
   librsvg = callPackage ../development/libraries/librsvg {
     inherit (darwin) libobjc;

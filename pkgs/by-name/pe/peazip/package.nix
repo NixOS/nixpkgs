@@ -6,7 +6,6 @@
   fpc,
   lazarus,
   xorg,
-  libqt5pas,
   runCommand,
   _7zz,
   archiver,
@@ -41,7 +40,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     xorg.libX11
-    libqt5pas
+    libsForQt5.libqtpas
   ];
 
   NIX_LDFLAGS = "--as-needed -rpath ${lib.makeLibraryPath buildInputs}";

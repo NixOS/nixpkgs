@@ -19,7 +19,7 @@
   binutils,
   withQt ? false,
   qtbase ? null,
-  libqt5pas ? null,
+  libqtpas ? null,
   wrapQtAppsHook ? null,
 }:
 
@@ -73,7 +73,7 @@ stdenv.mkDerivation rec {
       gdk-pixbuf
     ]
     ++ lib.optionals withQt [
-      libqt5pas
+      libqtpas
       qtbase
     ];
 
@@ -113,7 +113,7 @@ stdenv.mkDerivation rec {
       "-lpango-1.0"
     ]
     ++ lib.optionals withQt [
-      "-L${lib.getLib libqt5pas}/lib"
+      "-L${lib.getLib libqtpas}/lib"
       "-lQt5Pas"
     ]
   );

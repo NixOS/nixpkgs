@@ -10,7 +10,7 @@
   breeze-qt5,
   libGL,
   libGLU,
-  libqt5pas,
+  libqtpas,
   libX11,
   coreutils,
   git,
@@ -77,7 +77,7 @@ stdenv.mkDerivation rec {
     breeze-qt5
     libGL
     libGLU
-    libqt5pas
+    libqtpas
     libX11
   ];
 
