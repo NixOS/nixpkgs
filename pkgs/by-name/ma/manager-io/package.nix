@@ -78,7 +78,7 @@ appimageTools.wrapType2 {
     description = "Free Accounting software for Windows, Mac and Linux";
     homepage = "https://www.manager.io";
     license = with lib.licenses; [ unfree ];
-    maintainers = with lib.maintainers; [ darwincereska ]
+    maintainers = with lib.maintainers; [ darwincereska ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     platforms = [
       "x86_64-linux"
