@@ -3,7 +3,6 @@
   fetchurl,
   lib,
   appimageTools,
-
   icu,
   webkitgtk_6_0,
   webkitgtk_4_0, # for older devices
@@ -38,22 +37,22 @@ let
 
       in
       ''
-        				patchelf \
-        					--add-needed libicui18n.so \
-        					--add-needed libicuuc.so \
-        					$out/opt/manager/libcoreclr.so \
-        					$out/opt/manager/*System.Globalization.Native.so
-        				patchelf \
-        					--add-needed libgssapi_krb5.so \
-        					$out/opt/manager/*System.Net.Security.Native.so
-        				patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so $out/opt/manager/libcoreclrtraceptprovider.so
-        				patchelf --add-needed libssl.so \
-        					 $out/opt/manager/*System.Security.Cryptography.Native.OpenSsl.so
-        				patchelf \
-        					--set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
-        					--set-rpath "${libPath}" \
-        					$out/opt/manager/ManagerDesktop
-        			'';
+        patchelf \
+         --add-needed libicui18n.so \
+         --add-needed libicuuc.so \
+         $out/opt/manager/libcoreclr.so \
+         $out/opt/manager/*System.Globalization.Native.so
+        patchelf \
+         --add-needed libgssapi_krb5.so \
+         $out/opt/manager/*System.Net.Security.Native.so
+        patchelf --replace-needed liblttng-ust.so.0 liblttng-ust.so $out/opt/manager/libcoreclrtraceptprovider.so
+        patchelf --add-needed libssl.so \
+         $out/opt/manager/*System.Security.Cryptography.Native.OpenSsl.so
+        patchelf \
+         --set-interpreter "$(cat $NIX_CC/nix-support/dynamic-linker)" \
+         --set-rpath "${libPath}" \
+         $out/opt/manager/ManagerDesktop
+      '';
   };
 in
 
@@ -61,20 +60,19 @@ appimageTools.wrapType2 {
   inherit pname version src;
 
   extraInstallCommands = ''
-        install -m 444 -D ${appimageContents}/manager.desktop -t $out/share/applications
-    		cp -r ${appimageContents}/usr/share/icons $out/share
+    install -m 444 -D ${appimageContents}/manager.desktop -t $out/share/applications
+    cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
-  extraPkgs =
-    pkgs: with pkgs; [
-      icu
-      webkitgtk_6_0
-      webkitgtk_4_0 # for older devices
-      mono
-      libnotify
-      stdenv.cc.cc
-      lttng-ust
-    ];
+  extraPkgs = [
+    icu
+    webkitgtk_6_0
+    webkitgtk_4_0 # for older devices
+    mono
+    libnotify
+    stdenv.cc.cc
+    lttng-ust
+  ];
 
   meta = {
     description = "Free Accounting software for Windows, Mac and Linux";
