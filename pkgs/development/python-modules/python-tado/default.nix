@@ -5,12 +5,13 @@
   pytestCheckHook,
   pythonOlder,
   requests,
+  responses,
   setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "python-tado";
-  version = "0.17.7";
+  version = "0.18.5";
   pyproject = true;
 
   disabled = pythonOlder "3.5";
@@ -19,14 +20,28 @@ buildPythonPackage rec {
     owner = "wmalgadey";
     repo = "PyTado";
     rev = "refs/tags/${version}";
-    hash = "sha256-WpGznYNVpis1pM9PRXHnQVev3JW6baUT5J9iPxwd0Uk=";
+    hash = "sha256-NW3Au4meVf9QFVqmsx6f2TQus6QxanILx5U5GlVc3TE=";
   };
 
   build-system = [ setuptools ];
 
   dependencies = [ requests ];
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  nativeCheckInputs = [
+    responses
+    pytestCheckHook
+  ];
+
+  disabledTests = [
+    # Tests require network access
+    "test_interface_with_tado_api"
+  ];
+
+  disabledTestPaths = [
+    # Tests require network access
+    "tests/test_my_tado.py"
+    "tests/test_my_zone.py"
+  ];
 
   pythonImportsCheck = [ "PyTado" ];
 
