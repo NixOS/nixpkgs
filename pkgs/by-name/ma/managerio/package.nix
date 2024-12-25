@@ -12,7 +12,7 @@ appimageTools.wrapType2 rec {
   };
   meta = {
     description = "Accounting software. Available for Windows, Mac and Linux.";
-    homepage = "https://github.com/Manager-io/Manager";
+    homepage = "https://www.manager.io/";
     maintainers = with lib.maintainers; [ darwincereska ];
   };
 }
