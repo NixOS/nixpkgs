@@ -18,14 +18,14 @@
   fetchpatch,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "ecwolf";
   version = "1.4.1";
 
   src = fetchFromBitbucket {
     owner = "ecwolf";
     repo = "ecwolf";
-    rev = version;
+    rev = finalAttrs.version;
     sha256 = "V2pSP8i20zB50WtUMujzij+ISSupdQQ/oCYYrOaTU1g=";
   };
 
@@ -115,4 +115,4 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.all;
   };
-}
+})
