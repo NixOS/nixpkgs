@@ -13370,6 +13370,12 @@
     githubId = 37505890;
     name = "Luis Wirth";
   };
+  lu1a = {
+    email = "lu5a@proton.me";
+    github = "lu1a";
+    githubId = 83420438;
+    name = "Lewis";
+  };
   LucaGuerra = {
     email = "luca@guerra.sh";
     github = "LucaGuerra";
