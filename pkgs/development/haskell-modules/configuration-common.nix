@@ -34,10 +34,10 @@ self: super: {
   });
 
   # hackage-security == 0.6.2.6 has a wider support range in theory, but it only
-  # makes sense to use the non Stackage version if we want to use Cabal* >= 3.12
+  # makes sense to use the non Stackage version if we want to use Cabal* >= 3.14
   hackage-security_0_6_2_6 = super.hackage-security_0_6_2_6.override {
-    Cabal = self.Cabal_3_12_1_0;
-    Cabal-syntax = self.Cabal-syntax_3_12_1_0;
+    Cabal = self.Cabal_3_14_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_14_1_0;
   };
 
   # cabal-install needs most recent versions of Cabal and Cabal-syntax,
@@ -48,9 +48,9 @@ self: super: {
       cabalInstallOverlay = cself: csuper:
         {
           hackage-security = self.hackage-security_0_6_2_6;
-        } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.10.2") {
-          Cabal = cself.Cabal_3_12_1_0;
-          Cabal-syntax = cself.Cabal-syntax_3_12_1_0;
+        } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.12") {
+          Cabal = cself.Cabal_3_14_1_0;
+          Cabal-syntax = cself.Cabal-syntax_3_14_1_0;
         };
     in
     {
