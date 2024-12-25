@@ -146,29 +146,51 @@ let
         "lib"
         "man"
       ];
-      outputChecks.out = {
-        disallowedReferences = [
-          "dev"
-          "doc"
-          "man"
-        ];
-        disallowedRequisites = [
-          stdenv'.cc
-          llvmPackages.llvm.out
-        ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
-      };
-      outputChecks.lib = {
-        disallowedReferences = [
-          "out"
-          "dev"
-          "doc"
-          "man"
-        ];
-        disallowedRequisites = [
-          stdenv'.cc
-          llvmPackages.llvm.out
-        ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
-      };
+      outputChecks =
+        {
+          out = {
+            disallowedReferences = [
+              "dev"
+              "doc"
+              "man"
+            ];
+            disallowedRequisites = [
+              stdenv'.cc
+              llvmPackages.llvm.out
+            ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
+          };
+
+          lib = {
+            disallowedReferences = [
+              "out"
+              "dev"
+              "doc"
+              "man"
+            ];
+            disallowedRequisites = [
+              stdenv'.cc
+              llvmPackages.llvm.out
+            ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
+          };
+        }
+        // lib.optionalAttrs (atLeast "14" && olderThan "15") {
+          # TODO: Make this unconditional via staging because of number of rebuilds.
+          doc = {
+            disallowedReferences = [
+              "out"
+              "dev"
+              "man"
+            ];
+          };
+
+          man = {
+            disallowedReferences = [
+              "out"
+              "dev"
+              "doc"
+            ];
+          };
+        };
 
       strictDeps = true;
 
