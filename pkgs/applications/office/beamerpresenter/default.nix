@@ -98,7 +98,7 @@ stdenv.mkDerivation rec {
     ];
     platforms = platforms.all;
     maintainers = with maintainers; [
-      pacien
+      euxane
       dotlambda
     ];
     mainProgram = "beamerpresenter";
