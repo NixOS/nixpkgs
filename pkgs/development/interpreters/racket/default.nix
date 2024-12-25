@@ -180,6 +180,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     # Functionalities #
+    updateScript = {
+      command = ./update.py;
+      attrPath = "racket";
+      supportedFeatures = [ "commit" ];
+    };
     writeScript =
       nameOrPath:
       {
