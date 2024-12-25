@@ -1,6 +1,7 @@
 {
   lib,
   aiohttp,
+  async-upnp-client,
   buildPythonPackage,
   fetchFromGitHub,
   pythonOlder,
@@ -9,7 +10,7 @@
 
 buildPythonPackage rec {
   pname = "devialet";
-  version = "1.4.5";
+  version = "1.5.0";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -18,12 +19,15 @@ buildPythonPackage rec {
     owner = "fwestenberg";
     repo = "devialet";
     rev = "refs/tags/v${version}";
-    hash = "sha256-oGa5tRCJAWBg/877UmmXnX7fkFLoxhyuG6gpXmyhRKo=";
+    hash = "sha256-FM6nZFkny3+LJYK5eUmg1VQag5jqCvmUKBlhTXrCosA=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [ aiohttp ];
+  dependencies = [
+    aiohttp
+    async-upnp-client
+  ];
 
   # Module has no tests
   doCheck = false;
