@@ -23,10 +23,18 @@ buildGoModule rec {
 
   vendorHash = "sha256-swcj1JxYoRqKscu/IC0uiAATp4AXN0aANWkSq/mJsyc=";
 
-  checkFlags = [
-    # Workaround for "failed to load modules"
-    "-skip=TestCommands/mod"
-  ];
+  checkFlags =
+    let
+      skippedTestPrefixes = [
+        # Workaround for "failed to load modules"
+        "TestCommands/mod"
+        # Server tests are flaky, at least in x86_64-darwin. See #368072
+        # We can try testing again after updating the `httpget` helper
+        # ref: https://github.com/gohugoio/hugo/blob/v0.140.1/main_test.go#L220-L233
+        "TestCommands/server"
+      ];
+    in
+    [ "-skip=^${builtins.concatStringsSep "|^" skippedTestPrefixes}" ];
 
   proxyVendor = true;
 
