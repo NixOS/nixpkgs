@@ -48,7 +48,7 @@ py.pkgs.buildPythonApplication rec {
         django-pglocks
         django-prometheus
         django-redis
-        django-rq
+        django-rq3
         django-tables2
         django-taggit
         django-timezone-field
