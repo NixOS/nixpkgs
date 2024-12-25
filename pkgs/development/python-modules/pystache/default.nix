@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "pystache";
-  version = "0.6.6";
+  version = "0.6.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "PennyDreadfulMTG";
     repo = "pystache";
     tag = "v${version}";
-    hash = "sha256-E6y7r68mfXVoNgsTBqyo561dVOjq1fL73SqSFM32oeQ=";
+    hash = "sha256-kfR3ZXbrCDrIVOh4bcOTXqg9D56YQrIyV0NthStga5U=";
   };
 
   build-system = [
