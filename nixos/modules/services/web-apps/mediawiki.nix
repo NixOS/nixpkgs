@@ -48,10 +48,26 @@ let
     preferLocalBuild = true;
   } ''
     mkdir -p $out/bin
-    for i in changePassword.php createAndPromote.php resetUserEmail.php userOptions.php edit.php nukePage.php update.php; do
-      makeWrapper ${php}/bin/php $out/bin/mediawiki-$(basename $i .php) \
-        --set MEDIAWIKI_CONFIG ${mediawikiConfig} \
-        --add-flags ${pkg}/share/mediawiki/maintenance/$i
+    makeWrapper ${php}/bin/php $out/bin/mediawiki-maintenance \
+      --set MEDIAWIKI_CONFIG ${mediawikiConfig} \
+      --add-flags ${pkg}/share/mediawiki/maintenance/run.php
+
+    for i in changePassword createAndPromote deleteUserEmail resetUserEmail userOptions edit nukePage update importDump run; do
+      script="$out/bin/mediawiki-$i"
+    cat <<'EOF' >"$script"
+    #!${pkgs.runtimeShell}
+    become=(exec)
+    if [[ "$(id -u)" != ${user} ]]; then
+      become=(exec /run/wrappers/bin/sudo -u ${user} --)
+    fi
+    "${"$"}{become[@]}" ${placeholder "out"}/bin/mediawiki-maintenance \
+    EOF
+      if [[ "$i" != "run" ]]; then
+        echo "  ${pkg}/share/mediawiki/maintenance/$i.php \"\$@\"" >>"$script"
+      else
+        echo "  ${pkg}/share/mediawiki/maintenance/\$1.php \"\''${@:2}\"" >>"$script"
+      fi
+      chmod +x "$script"
     done
   '';
 
