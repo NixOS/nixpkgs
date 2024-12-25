@@ -18764,4 +18764,8 @@ with pkgs;
   clash-verge-rev = callPackage ../by-name/cl/clash-verge-rev/package.nix {
     libsoup = libsoup_3;
   };
+
+  wings = callPackage ../by-name/wi/wings/package.nix {
+    erlang = erlang_25;
+  };
 }
