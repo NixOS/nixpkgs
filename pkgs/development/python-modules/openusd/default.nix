@@ -5,6 +5,7 @@
   buildPythonPackage,
   cmake,
   darwin,
+  distutils,
   doxygen,
   draco,
   embree,
@@ -144,6 +145,7 @@ buildPythonPackage rec {
       jinja2
       numpy
       pyopengl
+      distutils
     ]
     ++ lib.optionals (withTools || withUsdView) [
       pyside-tools-uic

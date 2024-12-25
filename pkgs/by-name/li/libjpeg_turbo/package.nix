@@ -127,7 +127,6 @@ stdenv.mkDerivation (finalAttrs: {
     ];
     maintainers = with maintainers; [
       vcunat
-      colemickens
       kamadorueda
     ];
     platforms = platforms.all;
