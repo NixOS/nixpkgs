@@ -265,10 +265,7 @@ stdenv.mkDerivation (
         asl20
         vim
       ];
-      maintainers = with lib.maintainers; [
-        manveru
-        rvolosatovs
-      ];
+      maintainers = lib.teams.neovim.members;
       platforms = lib.platforms.unix;
     };
   }

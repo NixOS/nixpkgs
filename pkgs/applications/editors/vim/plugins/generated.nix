@@ -4236,6 +4236,18 @@ final: prev:
     meta.homepage = "https://github.com/raghur/fruzzy/";
   };
 
+  fugit2-nvim = buildVimPlugin {
+    pname = "fugit2.nvim";
+    version = "2024-12-19";
+    src = fetchFromGitHub {
+      owner = "SuperBo";
+      repo = "fugit2.nvim";
+      rev = "96f729a4bdcf44174c6168f4457b9f3f9229efa2";
+      sha256 = "151i92jzmwh2b2h6v85cfrdlnqa9ll49gcrvg1r3hi83yj4dygzr";
+    };
+    meta.homepage = "https://github.com/SuperBo/fugit2.nvim/";
+  };
+
   fugitive-gitlab-vim = buildVimPlugin {
     pname = "fugitive-gitlab.vim";
     version = "2024-11-13";
@@ -4318,18 +4330,6 @@ final: prev:
       sha256 = "1330a2ycs9bz0kkkygbsri5fh9grldzkg5fwahv30vf3nsybsrpc";
     };
     meta.homepage = "https://github.com/gfanto/fzf-lsp.nvim/";
-  };
-
-  fzf-lua = buildNeovimPlugin {
-    pname = "fzf-lua";
-    version = "2024-12-20";
-    src = fetchFromGitHub {
-      owner = "ibhagwan";
-      repo = "fzf-lua";
-      rev = "7de67daddd5d4cd7757481d5fdc2a879b7ced1ad";
-      sha256 = "08rry48ipdz4mcbf834ips3y29lk54k7iqhzzgan1b7iqk3x0j70";
-    };
-    meta.homepage = "https://github.com/ibhagwan/fzf-lua/";
   };
 
   fzf-vim = buildVimPlugin {

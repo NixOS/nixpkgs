@@ -191,6 +191,12 @@
     "sha256": "12r17xxwrnci5v18x71y44289z5dvvrj8xr3sfl1ipvlrvzggbfh",
     "version": "3.0"
   },
+  "wp-fail2ban": {
+    "path": "wp-fail2ban/tags/5.3.2",
+    "rev": "3131194",
+    "sha256": "1svp2a3xr6ajfhabz2n4rqcf9bzfr9dilc2n27ral9akc86lj1ii",
+    "version": "5.3.2"
+  },
   "wp-fastest-cache": {
     "path": "wp-fastest-cache/tags/1.3.2",
     "rev": "3181365",
