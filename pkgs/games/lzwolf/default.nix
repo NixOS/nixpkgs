@@ -36,6 +36,12 @@ stdenv.mkDerivation rec {
       url = "https://bitbucket.org/soturi/lzwolf/commits/41f212026dff4f089d1c0921cb49ab1a2b81e0d6/raw";
       hash = "sha256-EgSdDaZovD7DyZ0BkuX8ZdsrX7J7v8/D6y5P1NWGJew=";
     })
+    # Fixes build with gcc >= 14. Picked patch from the original ecwolf repo.
+    (fetchpatch {
+      name = "tmemory.h-const-correctness.patch";
+      url = "https://bitbucket.org/ecwolf/ecwolf/commits/400aaf96a36a14ab8eab18a670ba6439046f3bb0/raw";
+      hash = "sha256-2YwHEctBPyprs0DVsazimGEgmiCba24zh2dFfw9tOnU=";
+    })
   ];
 
   postPatch = ''
