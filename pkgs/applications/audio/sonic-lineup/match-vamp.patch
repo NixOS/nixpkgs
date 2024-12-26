@@ -1,0 +1,11 @@
+--- a/match/src/FullDTW.h
++++ b/match/src/FullDTW.h
+@@ -83,7 +83,7 @@
+      * against the best-matching subsequence of s1; otherwise it is
+      * against the whole of s1.
+      */
+-    std::vector<size_t> align(const featureseq_t &s1,
++    std::vector<std::size_t> align(const featureseq_t &s1,
+                               const featureseq_t &s2);
+ 
+ private:
