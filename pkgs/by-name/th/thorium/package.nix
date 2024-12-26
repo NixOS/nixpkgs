@@ -6,10 +6,10 @@
 }:
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "thorium";
-  version = "M126.0.6478.231";
+  version = "126.0.6478.231";
 
   src = fetchurl {
-    url = "https://github.com/Alex313031/Thorium-MacOS/releases/download/M126.0.6478.231/Thorium_MacOS_ARM64.dmg";
+    url = "https://github.com/Alex313031/Thorium-MacOS/releases/download/M${finalAttrs.version}/Thorium_MacOS_ARM64.dmg";
     hash = "sha256-BBqkNbQ7QjCMfU8yQkiRqV3g9ipjco1XKxR7VYVWhig=";
   };
 
