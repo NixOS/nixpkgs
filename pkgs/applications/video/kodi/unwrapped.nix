@@ -1,4 +1,4 @@
-{ stdenv, lib, fetchFromGitHub, fetchzip
+{ stdenv, lib, fetchFromGitHub, fetchpatch, fetchzip
 , autoconf, automake, libtool, makeWrapper
 , pkg-config, cmake, yasm, python3Packages
 , libxcrypt, libgcrypt, libgpg-error, libunistring
@@ -99,6 +99,10 @@ in stdenv.mkDerivation (finalAttrs: {
 
     patches = [
       ./no-python-lib.patch
+      (fetchpatch {
+        url = "https://github.com/xbmc/xbmc/commit/32b04718c65a90f87e409674c4ef984b087b8657.patch";
+        hash = "sha256-I79thepzDOfw55r9gfaOp/Ri2FA0gouc+RgTc2Zh1Sw=";
+      })
     ];
 
     # make  derivations declared in the let binding available here, so
@@ -190,7 +194,7 @@ in stdenv.mkDerivation (finalAttrs: {
       "-DENABLE_OPTICAL=${if opticalSupport then "ON" else "OFF"}"
       "-DENABLE_VDPAU=${if vdpauSupport then "ON" else "OFF"}"
       "-DLIRC_DEVICE=/run/lirc/lircd"
-      "-DSWIG_EXECUTABLE=${buildPackages.swig3}/bin/swig"
+      "-DSWIG_EXECUTABLE=${buildPackages.swig}/bin/swig"
       "-DFLATBUFFERS_FLATC_EXECUTABLE=${buildPackages.flatbuffers}/bin/flatc"
       "-DPYTHON_EXECUTABLE=${buildPackages.python3Packages.python}/bin/python"
       "-DPYTHON_LIB_PATH=${python3Packages.python.sitePackages}"
