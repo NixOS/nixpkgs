@@ -22,6 +22,13 @@
             (range "8.17" "8.20")
             (isGe "2.0.0")
           ];
+          out = "0.5.0";
+        }
+        {
+          cases = [
+            (range "8.17" "8.20")
+            (isGe "2.0.0")
+          ];
           out = "0.4.0";
         }
         {
@@ -50,6 +57,7 @@
 
   releaseRev = v: "v${v}";
 
+  release."0.5.0".sha256 = "sha256-Guu2+tmHym52DA6SB5Rq/rYWIQEl47Q7YvMaUkfOH2k=";
   release."0.4.0".sha256 = "sha256-hItFO2XY2LTPSofPTKt3AfOEfiLliaYdzUXgDv4ea9Y=";
   release."0.3.1".sha256 = "sha256-KcuG/11Yq5ACem4FyVnQqHKvy3tNK7hd0ir2SJzzMN0=";
   release."0.3.0".sha256 = "sha256:14rm0726f1732ldds495qavg26gsn30w6dfdn36xb12g5kzavp38";

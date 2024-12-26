@@ -20,6 +20,7 @@ let
   withDoc = single && (args.withDoc or false);
   defaultVersion = let inherit (lib.versions) range; in
     lib.switch coq.coq-version [
+      { case = range "8.19" "8.20"; out = "2.3.0"; }
       { case = range "8.17" "8.20"; out = "2.2.0"; }
       { case = range "8.17" "8.18"; out = "2.1.0"; }
       { case = range "8.17" "8.18"; out = "2.0.0"; }
@@ -39,6 +40,7 @@ let
       { case = range "8.5" "8.7";   out = "1.6.4";  }
     ] null;
   release = {
+    "2.3.0".sha256  = "sha256-wa6OBig8rhAT4iwupSylyCAMhO69rADa0MQIX5zzL+Q=";
     "2.2.0".sha256  = "sha256-SPyWSI5kIP5w7VpgnQ4vnK56yEuWnJylNQOT7M77yoQ=";
     "2.1.0".sha256  = "sha256-XDLx0BIkVRkSJ4sGCIE51j3rtkSGemNTs/cdVmTvxqo=";
     "2.0.0".sha256  = "sha256-dpOmrHYUXBBS9kmmz7puzufxlbNpIZofpcTvJFLG5DI=";

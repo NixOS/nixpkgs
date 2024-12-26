@@ -17,6 +17,7 @@ mkCoqDerivation {
   owner = "math-comp";
   inherit version;
   release = {
+    "2.0.2".sha256 = "sha256-hBo9JMtmXDYBmf5ihKGksQLHv3c0+zDBnd8/aI2V/ao=";
     "2.0.1".sha256 = "sha256-tQTI3PCl0q1vWpps28oATlzOI8TpVQh1jhTwVmhaZic=";
     "2.0.0".sha256 = "sha256-sZvfiC5+5Lg4nRhfKKqyFzovCj2foAhqaq/w9F2bdU8=";
     "1.1.4".sha256 = "sha256-8Hs6XfowbpeRD8RhMRf4ZJe2xf8kE0e8m7bPUzR/IM4=";
@@ -34,6 +35,13 @@ mkCoqDerivation {
     lib.switch
       [ coq.version mathcomp.version ]
       [
+        {
+          cases = [
+            (isGe "8.17")
+            (isGe "2.1.0")
+          ];
+          out = "2.0.2";
+        }
         {
           cases = [
             (isGe "8.17")
