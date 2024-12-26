@@ -1,7 +1,7 @@
 #! @runtimeShell@
 # shellcheck shell=bash
 
-if [ -x "@runtimeShell@" ]; then export SHELL="@runtimeShell@"; fi;
+if [ -x "@runtimeShell@" ]; then export SHELL="@runtimeShell@"; fi
 
 set -e
 set -o pipefail
@@ -13,7 +13,6 @@ showSyntax() {
     exec man nixos-rebuild
     exit 1
 }
-
 
 # Parse the command line.
 origArgs=("$@")
@@ -48,12 +47,13 @@ log() {
 }
 
 while [ "$#" -gt 0 ]; do
-    i="$1"; shift 1
+    i="$1"
+    shift 1
     case "$i" in
-      --help)
+    --help)
         showSyntax
         ;;
-      switch|boot|test|build|edit|repl|dry-build|dry-run|dry-activate|build-vm|build-vm-with-bootloader|build-image|list-generations)
+    switch | boot | test | build | edit | repl | dry-build | dry-run | dry-activate | build-vm | build-vm-with-bootloader | build-image | list-generations)
         if [ "$i" = dry-run ]; then i=dry-build; fi
         if [ "$i" = list-generations ]; then
             buildNix=
@@ -63,7 +63,7 @@ while [ "$#" -gt 0 ]; do
         if [ -n "$action" ]; then showSyntax; fi
         action="$i"
         ;;
-      --file|-f)
+    --file | -f)
         if [ -z "$1" ]; then
             log "$0: '$i' requires an argument"
             exit 1
@@ -72,7 +72,7 @@ while [ "$#" -gt 0 ]; do
         buildingAttribute=
         shift 1
         ;;
-      --attr|-A)
+    --attr | -A)
         if [ -z "$1" ]; then
             log "$0: '$i' requires an argument"
             exit 1
@@ -81,61 +81,65 @@ while [ "$#" -gt 0 ]; do
         buildingAttribute=
         shift 1
         ;;
-      --install-grub)
+    --install-grub)
         log "$0: --install-grub deprecated, use --install-bootloader instead"
         installBootloader=1
         ;;
-      --install-bootloader)
+    --install-bootloader)
         installBootloader=1
         ;;
-      --no-build-nix)
+    --no-build-nix)
         buildNix=
         ;;
-      --rollback)
+    --rollback)
         rollback=1
         ;;
-      --upgrade)
+    --upgrade)
         upgrade=1
         ;;
-      --upgrade-all)
+    --upgrade-all)
         upgrade=1
         upgrade_all=1
         ;;
-      --use-substitutes|--substitute-on-destination|-s)
+    --use-substitutes | --substitute-on-destination | -s)
         copyFlags+=("-s")
         ;;
-      -I|--builders)
-        j="$1"; shift 1
+    -I | --builders)
+        j="$1"
+        shift 1
         extraBuildFlags+=("$i" "$j")
         ;;
-      --max-jobs|-j|--cores|--log-format)
-        j="$1"; shift 1
+    --max-jobs | -j | --cores | --log-format)
+        j="$1"
+        shift 1
         extraBuildFlags+=("$i" "$j")
         copyFlags+=("$i" "$j")
         ;;
-      --accept-flake-config|-j*|--quiet|--print-build-logs|-L|--no-build-output|-Q|--show-trace|--refresh|--impure|--offline|--no-net)
+    --accept-flake-config | -j* | --quiet | --print-build-logs | -L | --no-build-output | -Q | --show-trace | --refresh | --impure | --offline | --no-net)
         extraBuildFlags+=("$i")
         ;;
-      --keep-going|-k|--keep-failed|-K|--fallback|--repair)
+    --keep-going | -k | --keep-failed | -K | --fallback | --repair)
         extraBuildFlags+=("$i")
         copyFlags+=("$i")
         ;;
-      --verbose|-v|-vv|-vvv|-vvvv|-vvvvv)
+    --verbose | -v | -vv | -vvv | -vvvv | -vvvvv)
         verboseScript="true"
         extraBuildFlags+=("$i")
         copyFlags+=("$i")
         ;;
-      --option)
-        j="$1"; shift 1
-        k="$1"; shift 1
+    --option)
+        j="$1"
+        shift 1
+        k="$1"
+        shift 1
         extraBuildFlags+=("$i" "$j" "$k")
         copyFlags+=("$i" "$j" "$k")
         ;;
-      --fast)
+    --fast)
         buildNix=
         fast=1
         ;;
-      --profile-name|-p)
+    --profile-name | -p)
         if [ -z "$1" ]; then
             log "$0: ‘--profile-name’ requires an argument"
             exit 1
@@ -146,7 +150,7 @@ while [ "$#" -gt 0 ]; do
         fi
         shift 1
         ;;
-      --specialisation|-c)
+    --specialisation | -c)
         if [ -z "$1" ]; then
             log "$0: ‘--specialisation’ requires an argument"
             exit 1
@@ -154,7 +158,7 @@ while [ "$#" -gt 0 ]; do
         specialisation="$1"
         shift 1
         ;;
-      --image-variant)
+    --image-variant)
         if [ -z "$1" ]; then
             log "$0: ‘--image-variant’ requires an argument"
             exit 1
@@ -162,43 +166,46 @@ while [ "$#" -gt 0 ]; do
         imageVariant="$1"
         shift 1
         ;;
-      --build-host)
+    --build-host)
         buildHost="$1"
         shift 1
         ;;
-      --target-host)
+    --target-host)
         targetHost="$1"
         shift 1
         ;;
-      --use-remote-sudo)
+    --use-remote-sudo)
         remoteSudo=1
         ;;
-      --no-ssh-tty)
+    --no-ssh-tty)
         noSSHTTY=1
         ;;
-      --flake)
+    --flake)
         flake="$1"
         shift 1
         ;;
-      --no-flake)
+    --no-flake)
         noFlake=1
         ;;
-      --recreate-lock-file|--no-update-lock-file|--no-write-lock-file|--no-registries|--commit-lock-file)
+    --recreate-lock-file | --no-update-lock-file | --no-write-lock-file | --no-registries | --commit-lock-file)
         lockFlags+=("$i")
         ;;
-      --update-input)
-        j="$1"; shift 1
+    --update-input)
+        j="$1"
+        shift 1
         lockFlags+=("$i" "$j")
         ;;
-      --override-input)
-        j="$1"; shift 1
-        k="$1"; shift 1
+    --override-input)
+        j="$1"
+        shift 1
+        k="$1"
+        shift 1
         lockFlags+=("$i" "$j" "$k")
         ;;
-      --json)
+    --json)
         json=1
         ;;
-      *)
+    *)
         log "$0: unknown option \`$i'"
         exit 1
         ;;
@@ -208,7 +215,7 @@ done
 # log the given argument to stderr if verbose mode is on
 logVerbose() {
     if [ -n "$verboseScript" ]; then
-      echo "$@" >&2
+        echo "$@" >&2
     fi
 }
 
@@ -292,25 +299,28 @@ nixBuild() {
         local drv=
 
         while [ "$#" -gt 0 ]; do
-            local i="$1"; shift 1
+            local i="$1"
+            shift 1
             case "$i" in
-              -o)
-                local out="$1"; shift 1
+            -o)
+                local out="$1"
+                shift 1
                 buildArgs+=("--add-root" "$out" "--indirect")
                 ;;
-              -A)
-                local j="$1"; shift 1
+            -A)
+                local j="$1"
+                shift 1
                 instArgs+=("$i" "$j")
                 ;;
-              -I) # We don't want this in buildArgs
+            -I) # We don't want this in buildArgs
                 shift 1
                 ;;
-              --no-out-link) # We don't want this in buildArgs
+            --no-out-link) # We don't want this in buildArgs
                 ;;
-              "<"*) # nix paths
+            "<"*) # nix paths
                 instArgs+=("$i")
                 ;;
-              *)
+            *)
                 buildArgs+=("$i")
                 ;;
             esac
@@ -329,13 +339,12 @@ nixBuild() {
             log "nix-instantiate failed"
             exit 1
         fi
-  fi
+    fi
 }
 
 nixFlakeBuild() {
     logVerbose "Building in flake mode."
-    if [[ -z "$buildHost" && -z "$targetHost" && "$action" != switch && "$action" != boot && "$action" != test && "$action" != dry-activate ]]
-    then
+    if [[ -z "$buildHost" && -z "$targetHost" && "$action" != switch && "$action" != boot && "$action" != test && "$action" != dry-activate ]]; then
         runCmd nix "${flakeFlags[@]}" build "$@"
         readlink -f ./result
     elif [ -z "$buildHost" ]; then
@@ -349,23 +358,27 @@ nixFlakeBuild() {
         local drv=
 
         while [ "$#" -gt 0 ]; do
-            local i="$1"; shift 1
+            local i="$1"
+            shift 1
             case "$i" in
-              --recreate-lock-file|--no-update-lock-file|--no-write-lock-file|--no-registries|--commit-lock-file)
+            --recreate-lock-file | --no-update-lock-file | --no-write-lock-file | --no-registries | --commit-lock-file)
                 evalArgs+=("$i")
                 ;;
-              --update-input)
-                local j="$1"; shift 1
+            --update-input)
+                local j="$1"
+                shift 1
                 evalArgs+=("$i" "$j")
                 ;;
-              --override-input)
-                local j="$1"; shift 1
-                local k="$1"; shift 1
+            --override-input)
+                local j="$1"
+                shift 1
+                local k="$1"
+                shift 1
                 evalArgs+=("$i" "$j" "$k")
                 ;;
-              --impure) # We don't want this in buildArgs, it's only needed at evaluation time, and unsupported during realisation
+            --impure) # We don't want this in buildArgs, it's only needed at evaluation time, and unsupported during realisation
                 ;;
-              *)
+            *)
                 buildArgs+=("$i")
                 ;;
             esac
@@ -382,7 +395,6 @@ nixFlakeBuild() {
         fi
     fi
 }
-
 
 if [ -z "$action" ]; then showSyntax; fi
 
@@ -417,7 +429,7 @@ if [[ -n $upgrade && -z $_NIXOS_REBUILD_REEXEC && -z $flake ]]; then
             runCmd nix-channel --update "$channel_name"
         elif [ -e "$channelpath/.update-on-nixos-rebuild" ]; then
             runCmd nix-channel --update "$channel_name"
-        elif [[ -n $upgrade_all ]] ; then
+        elif [[ -n $upgrade_all ]]; then
             runCmd nix-channel --update "$channel_name"
         fi
     done
@@ -463,8 +475,8 @@ SSHOPTS="$NIX_SSHOPTS -o ControlMaster=auto -o ControlPath=$tmpDir/ssh-%n -o Con
 # build from the flake.
 if [[ -n $flake ]]; then
     if [[ $flake =~ ^(.*)\#([^\#\"]*)$ ]]; then
-       flake="${BASH_REMATCH[1]}"
-       flakeAttr="${BASH_REMATCH[2]}"
+        flake="${BASH_REMATCH[1]}"
+        flakeAttr="${BASH_REMATCH[2]}"
     fi
     if [[ -z $flakeAttr ]]; then
         hostname="$(targetHostCmd cat /proc/sys/kernel/hostname)"
@@ -481,7 +493,6 @@ if [[ ! -z "$specialisation" && ! "$action" = switch && ! "$action" = test ]]; t
     log "error: ‘--specialisation’ can only be used with ‘switch’ and ‘test’"
     exit 1
 fi
-
 
 # Re-execute nixos-rebuild from the Nixpkgs tree.
 if [[ -z $_NIXOS_REBUILD_REEXEC && -n $canRun && -z $fast ]]; then
@@ -575,7 +586,7 @@ getNixDrv() {
         remoteNixStorePath="$(runCmd prebuiltNix "$(buildHostCmd uname -m)")"
         remoteNix="$remoteNixStorePath/bin"
         if ! buildHostCmd nix-store -r "$remoteNixStorePath" \
-          --option extra-binary-caches https://cache.nixos.org/ >/dev/null; then
+            --option extra-binary-caches https://cache.nixos.org/ >/dev/null; then
             remoteNix=
             log "warning: don't know how to get latest Nix"
         fi
@@ -603,7 +614,6 @@ getVersion() {
     fi
 }
 
-
 if [[ -n $buildNix && -z $flake ]]; then
     log "building Nix..."
     getNixDrv
@@ -620,18 +630,16 @@ if [[ -n $buildNix && -z $flake ]]; then
     PATH="$tmpDir/nix/bin:$PATH"
 fi
 
-
 # Update the version suffix if we're building from Git (so that
 # nixos-version shows something useful).
 if [[ -n $canRun && -z $flake ]]; then
     if nixpkgs=$(runCmd nix-instantiate --find-file nixpkgs "${extraBuildFlags[@]}"); then
         suffix=$(getVersion "$nixpkgs" || true)
         if [ -n "$suffix" ]; then
-            echo -n "$suffix" > "$nixpkgs/.version-suffix" || true
+            echo -n "$suffix" >"$nixpkgs/.version-suffix" || true
         fi
     fi
 fi
-
 
 if [ "$action" = dry-build ]; then
     extraBuildFlags+=(--dry-run)
@@ -717,32 +725,32 @@ if [ "$action" = list-generations ]; then
     generation_from_dir() {
         generation_dir="$1"
         generation_base="$(basename "$generation_dir")" # Has the format "system-123-link" for generation 123
-        no_link_gen="${generation_base%-link}"  # remove the "-link"
-        echo "${no_link_gen##*-}" # remove everything before the last dash
+        no_link_gen="${generation_base%-link}"          # remove the "-link"
+        echo "${no_link_gen##*-}"                       # remove everything before the last dash
     }
-    describe_generation(){
+    describe_generation() {
         generation_dir="$1"
         generation_number="$(generation_from_dir "$generation_dir")"
-        nixos_version="$(cat "$generation_dir/nixos-version" 2> /dev/null || echo "Unknown")"
+        nixos_version="$(cat "$generation_dir/nixos-version" 2>/dev/null || echo "Unknown")"
 
         kernel_dir="$(dirname "$(realpath "$generation_dir/kernel")")"
         kernel_version="$(ls "$kernel_dir/lib/modules" || echo "Unknown")"
 
-        configurationRevision="$("$generation_dir/sw/bin/nixos-version" --configuration-revision 2> /dev/null || true)"
+        configurationRevision="$("$generation_dir/sw/bin/nixos-version" --configuration-revision 2>/dev/null || true)"
 
         # Old nixos-version output ignored unknown flags and just printed the version
         # therefore the following workaround is done not to show the default output
         nixos_version_default="$("$generation_dir/sw/bin/nixos-version")"
         if [ "$configurationRevision" == "$nixos_version_default" ]; then
-             configurationRevision=""
+            configurationRevision=""
         fi
 
         # jq automatically quotes the output => don't try to quote it in output!
         build_date="$(stat "$generation_dir" --format=%W | jq 'todate')"
 
-        pushd "$generation_dir/specialisation/" > /dev/null || :
+        pushd "$generation_dir/specialisation/" >/dev/null || :
         specialisation_list=(*)
-        popd > /dev/null || :
+        popd >/dev/null || :
 
         specialisations="$(jq --compact-output --null-input '$ARGS.positional' --args -- "${specialisation_list[@]}")"
 
@@ -753,10 +761,10 @@ if [ "$action" = list-generations ]; then
         fi
 
         # Escape userdefined strings
-        nixos_version="$(jq -aR <<< "$nixos_version")"
-        kernel_version="$(jq -aR <<< "$kernel_version")"
-        configurationRevision="$(jq -aR <<< "$configurationRevision")"
-        cat << EOF
+        nixos_version="$(jq -aR <<<"$nixos_version")"
+        kernel_version="$(jq -aR <<<"$kernel_version")"
+        configurationRevision="$(jq -aR <<<"$configurationRevision")"
+        cat <<EOF
 {
   "generation": $generation_number,
   "date": $build_date,
@@ -787,7 +795,6 @@ EOF
         fi
     exit 0
 fi
-
 
 # Either upgrade the configuration in the system profile (for "switch"
 # or "boot"), or just build it and create a symlink "result" in the
@@ -832,26 +839,26 @@ if [ -z "$rollback" ]; then
         if [[ -z $buildingAttribute ]]; then
             variants="$(
                 runCmd nix-instantiate --eval --strict --json --expr \
-                "let
+                    "let
                     value = import \"$(realpath $buildFile)\";
                     set = if builtins.isFunction value then value {} else value;
                 in builtins.mapAttrs (n: v: v.passthru.filePath) set.${attr:+$attr.}config.system.build.images" \
-                "${extraBuildFlags[@]}"
+                    "${extraBuildFlags[@]}"
             )"
         elif [[ -z $flake ]]; then
             variants="$(
                 runCmd nix-instantiate --eval --strict --json --expr \
-                "with import <nixpkgs/nixos> {}; builtins.mapAttrs (n: v: v.passthru.filePath) config.system.build.images" \
-                "${extraBuildFlags[@]}"
+                    "with import <nixpkgs/nixos> {}; builtins.mapAttrs (n: v: v.passthru.filePath) config.system.build.images" \
+                    "${extraBuildFlags[@]}"
             )"
         else
             variants="$(
                 runCmd nix "${flakeFlags[@]}" eval --json \
-                "$flake#$flakeAttr.config.system.build.images" \
-                --apply "builtins.mapAttrs (n: v: v.passthru.filePath)" "${evalArgs[@]}" "${extraBuildFlags[@]}"
+                    "$flake#$flakeAttr.config.system.build.images" \
+                    --apply "builtins.mapAttrs (n: v: v.passthru.filePath)" "${evalArgs[@]}" "${extraBuildFlags[@]}"
             )"
         fi
-        if ! echo "$variants" | jq -e --arg variant "$imageVariant" "keys | any(. == \$variant)" > /dev/null; then
+        if ! echo "$variants" | jq -e --arg variant "$imageVariant" "keys | any(. == \$variant)" >/dev/null; then
             echo -e "Please specify one of the following supported image variants via --image-variant:\n" >&2
             echo "$variants" | jq -r '. | keys | join ("\n")'
             exit 1
@@ -879,7 +886,7 @@ else # [ -n "$rollback" ]
     elif [[ "$action" = test || "$action" = build ]]; then
         systemNumber=$(
             targetHostCmd nix-env -p "$profile" --list-generations |
-            sed -n '/current/ {g; p;}; s/ *\([0-9]*\).*/\1/; h'
+                sed -n '/current/ {g; p;}; s/ *\([0-9]*\).*/\1/; h'
         )
         pathToConfig="$profile"-${systemNumber}-link
         if [ -z "$targetHost" ]; then
@@ -889,7 +896,6 @@ else # [ -n "$rollback" ]
         showSyntax
     fi
 fi
-
 
 # If we're not just building, then make the new configuration the boot
 # default and/or activate it now.
@@ -951,7 +957,6 @@ if [[ "$action" = switch || "$action" = boot || "$action" = test || "$action" = 
         exit 1
     fi
 fi
-
 
 if [[ "$action" = build-vm || "$action" = build-vm-with-bootloader ]]; then
     cat >&2 <<EOF
