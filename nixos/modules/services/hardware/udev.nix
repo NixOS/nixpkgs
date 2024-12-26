@@ -162,15 +162,9 @@ let
     '';
 
   compressFirmware = firmware:
-    let
-      inherit (config.boot.kernelPackages) kernelAtLeast;
-    in
-      if ! (firmware.compressFirmware or true) then
-        firmware
-      else
-        if kernelAtLeast "5.19" then pkgs.compressFirmwareZstd firmware
-        else if kernelAtLeast "5.3" then pkgs.compressFirmwareXz firmware
-        else firmware;
+    if config.hardware.firmwareCompression == "none" || (firmware.compressFirmware or true) == false then firmware
+    else if config.hardware.firmwareCompression == "zstd" then pkgs.compressFirmwareZstd firmware
+    else pkgs.compressFirmwareXz firmware;
 
   # Udev has a 512-character limit for ENV{PATH}, so create a symlink
   # tree to work around this.
@@ -279,6 +273,21 @@ in
       };
     };
 
+    hardware.firmwareCompression = lib.mkOption {
+      type = lib.types.enum [ "xz" "zstd" "none" ];
+      default = if config.boot.kernelPackages.kernelAtLeast "5.19" then "zstd"
+        else if config.boot.kernelPackages.kernelAtLeast "5.3" then "xz"
+        else "none";
+      defaultText = "auto";
+      description = ''
+        Whether to compress firmware files.
+        Defaults depend on the kernel version.
+        For kernels older than 5.3, firmware files are not compressed.
+        For kernels 5.3 and newer, firmware files are compressed with xz.
+        For kernels 5.19 and newer, firmware files are compressed with zstd.
+      '';
+    };
+
     networking.usePredictableInterfaceNames = lib.mkOption {
       default = true;
       type = lib.types.bool;
@@ -345,6 +354,23 @@ in
   ###### implementation
 
   config = lib.mkIf cfg.enable {
+
+    assertions = [
+      {
+        assertion = config.hardware.firmwareCompression == "zstd" -> config.boot.kernelPackages.kernelAtLeast "5.19";
+        message = ''
+          The firmware compression method is set to zstd, but the kernel version is too old.
+          The kernel version must be at least 5.3 to use zstd compression.
+        '';
+      }
+      {
+        assertion = config.hardware.firmwareCompression == "xz" -> config.boot.kernelPackages.kernelAtLeast "5.3";
+        message = ''
+          The firmware compression method is set to xz, but the kernel version is too old.
+          The kernel version must be at least 5.3 to use xz compression.
+        '';
+      }
+    ];
 
     services.udev.extraRules = nixosRules;
 
