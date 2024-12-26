@@ -785,6 +785,18 @@ final: prev:
     meta.homepage = "https://github.com/AstroNvim/astrotheme/";
   };
 
+  astroui = buildVimPlugin {
+    pname = "astroui";
+    version = "2024-12-23";
+    src = fetchFromGitHub {
+      owner = "AstroNvim";
+      repo = "astroui";
+      rev = "81ddd0315ac4b260a4563a00be943992901ae5e5";
+      sha256 = "1qv9ny98wxyjdyzsw5gmn4wfsklrl01m27hxaba0mypirjr0kv1r";
+    };
+    meta.homepage = "https://github.com/AstroNvim/astroui/";
+  };
+
   async-vim = buildVimPlugin {
     pname = "async.vim";
     version = "2022-04-04";
