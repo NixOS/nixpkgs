@@ -81,6 +81,7 @@ buildPythonPackage rec {
   disabledTests = [
     # Need network
     "test_bearer_token"
+    "test_auth_header_with_catchall_proxy"
     "test_token_refresh_timeout"
     "test_with_simple_auth_no_oidc_via_api_key"
     "test_client_with_extra_options"
