@@ -73,7 +73,10 @@ let
       # Remove old versions of elixir, when the supports fades out:
       # https://hexdocs.pm/elixir/compatibility-and-deprecations.html
 
-      ex_doc = callPackage ./ex_doc { inherit elixir fetchMixDeps mixRelease; };
+      ex_doc = callPackage ./ex_doc {
+        inherit fetchMixDeps mixRelease;
+        elixir = elixir_1_17;
+      };
 
       elixir-ls = callPackage ./elixir-ls { inherit elixir fetchMixDeps mixRelease; };
 
