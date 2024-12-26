@@ -148,8 +148,17 @@ in
   };
 
   astrotheme = super.astrotheme.overrideAttrs {
-    nvimRequireCheck = "astrotheme";
+    nvimSkipModule = [
+      # attempt to index local 'c' (a nil value)
+      "astrotheme.groups.plugins.flash"
+      "astrotheme.groups.plugins.todo-comments"
+    ];
   };
+
+  astroui = super.astroui.overrideAttrs (oa: {
+    # Readme states that astrocore is an optional dependency
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.astrocore ];
+  });
 
   asyncrun-vim = super.asyncrun-vim.overrideAttrs {
     nvimSkipModule = [
