@@ -12,12 +12,11 @@ buildGoModule rec {
 
   postPatch = ''
     cp -r --no-preserve=all ${extraSources.libneko} ../../../../libneko
-    cp -r --no-preserve=all ${extraSources.sing-box-extra} ../../../../sing-box-extra
     cp -r --no-preserve=all ${extraSources.sing-box} ../../../../sing-box
     cp -r --no-preserve=all ${extraSources.sing-quic} ../../../../sing-quic
   '';
 
-  vendorHash = "sha256-q/Co67AwJVElJnEY2O0SLLUzwlGiqazKu+fD/nnbrTk=";
+  vendorHash = "sha256-eHqCu0pmvITqGF5hs7mj2IcAU0wSTBjh/7kQ3en+gEY=";
 
   ldflags = [
     "-w"

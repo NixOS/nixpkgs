@@ -3,14 +3,17 @@
   stdenv,
   fetchFromGitHub,
   libsForQt5,
+
   cmake,
   ninja,
+
   protobuf,
   yaml-cpp,
   zxing-cpp,
+
   callPackage,
-  makeDesktopItem,
   copyDesktopItems,
+  makeDesktopItem,
 
   v2ray-geoip,
   v2ray-domain-list-community,
@@ -31,32 +34,20 @@ let
 
   extraSources = {
     # revs found in https://github.com/MatsuriDayo/nekoray/blob/<version>/libs/get_source_env.sh
-    Xray-core = fetchSource {
-      name = "Xray-core";
-      rev = "01208225ee7e508044cca8eb6776a117bcecd997";
-      hash = "sha256-R66i9MITdE9JlhD4wV0EitKPxyahQqDNpunUxVTmupA=";
+    libneko = fetchSource {
+      name = "libneko";
+      rev = "1c47a3af71990a7b2192e03292b4d246c308ef0b";
+      hash = "sha256-9ftRh8K4z7m265dbEwWSBeNiwznnNl/FolVv4rZ4C8E=";
     };
-    sing-box-extra = fetchSource {
-      name = "sing-box-extra";
-      rev = "d31d6da26a51a929349e0d75fd89dccbe20d1268";
-      hash = "sha256-YlzMAff8VOZGyCP7ksjcmoBDHT5llTYwwXIrs+qO5P4=";
-    };
-
-    # revs found in https://github.com/MatsuriDayo/sing-box-extra/blob/<sing-box-extra.rev>/libs/get_source_env.sh
     sing-box = fetchSource {
       name = "sing-box";
-      rev = "64f4eed2c667d9ff1e52a84233dee0e2ca32c17e";
-      hash = "sha256-jIg/+fvTn46h6tE6YXtov+ZaBD/ywApTZbzHlT5v4lM=";
+      rev = "06557f6cef23160668122a17a818b378b5a216b5";
+      hash = "sha256-WyDYOY9udumTlf9ZNOYWKsPmJz3W/wp5kZYJkmvqokk=";
     };
     sing-quic = fetchSource {
       name = "sing-quic";
-      rev = "e396733db4de15266f0cfdb43c392aca0759324a";
-      hash = "sha256-un5NtZPRx1QAjwNhXkR9OVGldtfM1jQoNRUzt9oilUE=";
-    };
-    libneko = fetchSource {
-      name = "libneko";
-      rev = "5277a5bfc889ee7a89462695b0e678c1bd4909b1";
-      hash = "sha256-6dlWDzI9ox4PQzEtJNgwA0pXmPC7fGrGId88Zl+1gpw=";
+      rev = "b49ce60d9b3622d5238fee96bfd3c5f6e3915b42";
+      hash = "sha256-U6v7ts2b9Kzp+U/hOR7b8JM42diOW2PV6lA9EDFoZRo=";
     };
   };
 
@@ -69,28 +60,30 @@ let
 
   installGeodata = lib.concatStringsSep "\n" (
     lib.mapAttrsToList (filename: file: ''
-      install -Dm644 ${file} "$out/share/nekoray/${filename}"
+      install -Dm644 ${file} "$out/share/nekobox/${filename}"
     '') geodata
   );
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "nekoray";
-  version = "3.26";
+  version = "4.0.1";
 
   src = fetchSource {
     name = "nekoray";
     rev = finalAttrs.version;
-    hash = "sha256-fDm6fCI6XA4DHKCN3zm9B7Qbdh3LTHYGK8fPmeEnhjI=";
+    hash = "sha256-AaL/mROOciU42A6VDhsi6o0wUIReu0OWibEjKveHym8=";
     fetchSubmodules = true;
   };
+
+  patches = [ ./use-appdata.patch ];
 
   strictDeps = true;
 
   nativeBuildInputs = [
-    libsForQt5.wrapQtAppsHook
     cmake
-    ninja
     copyDesktopItems
+    libsForQt5.wrapQtAppsHook
+    ninja
   ];
 
   buildInputs = [
@@ -103,24 +96,19 @@ stdenv.mkDerivation (finalAttrs: {
     zxing-cpp
   ];
 
-  # NKR_PACKAGE makes sure the app uses the user's config directory to store it's non-static content
-  # it's essentially the same as always setting the -appdata flag when running the program
-  cmakeFlags = [ (lib.cmakeBool "NKR_PACKAGE" true) ];
-
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 nekoray "$out/share/nekoray/nekoray"
+    install -Dm755 nekobox "$out/share/nekobox/nekobox"
     mkdir -p "$out/bin"
-    ln -s "$out/share/nekoray/nekoray" "$out/bin"
+    ln -s "$out/share/nekobox/nekobox" "$out/bin"
 
     # nekoray looks for other files and cores in the same directory it's located at
-    ln -s ${finalAttrs.passthru.nekoray-core}/bin/nekoray_core "$out/share/nekoray/nekoray_core"
-    ln -s ${finalAttrs.passthru.nekobox-core}/bin/nekobox_core "$out/share/nekoray/nekobox_core"
+    ln -s ${finalAttrs.passthru.nekobox-core}/bin/nekobox_core "$out/share/nekobox/nekobox_core"
 
     ${installGeodata}
 
-    install -Dm644 "$src/res/public/nekoray.png" "$out/share/icons/hicolor/256x256/apps/nekoray.png"
+    install -Dm644 "$src/res/public/nekobox.png" "$out/share/icons/hicolor/256x256/apps/nekobox.png"
 
     runHook postInstall
   '';
@@ -128,24 +116,17 @@ stdenv.mkDerivation (finalAttrs: {
   desktopItems = [
     (makeDesktopItem {
       name = "nekoray";
-      desktopName = "nekoray";
-      exec = "nekoray";
-      icon = "nekoray";
+      desktopName = "NekoRay";
+      exec = "nekobox";
+      icon = "nekobox";
       comment = finalAttrs.meta.description;
       terminal = false;
-      categories = [
-        "Network"
-        "Application"
-      ];
+      categories = [ "Network" ];
     })
   ];
 
   passthru = {
     nekobox-core = callPackage ./nekobox-core.nix {
-      inherit (finalAttrs) src version;
-      inherit extraSources;
-    };
-    nekoray-core = callPackage ./nekoray-core.nix {
       inherit (finalAttrs) src version;
       inherit extraSources;
     };
@@ -155,7 +136,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Qt based cross-platform GUI proxy configuration manager";
     homepage = "https://github.com/MatsuriDayo/nekoray";
     license = lib.licenses.gpl3Plus;
-    mainProgram = "nekoray";
+    mainProgram = "nekobox";
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = lib.platforms.linux;
   };
