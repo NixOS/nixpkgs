@@ -1,0 +1,17 @@
+diff --git a/libexec/rc/rc b/libexec/rc/rc
+index 0ea61a4b2c0a..d9bfb228224c 100644
+--- a/libexec/rc/rc
++++ b/libexec/rc/rc
+@@ -87,6 +87,12 @@ if ! [ -e ${firstboot_sentinel} ]; then
+ 	skip_firstboot="-s firstboot"
+ fi
+ 
++if [ -z "$USER_LOGIN" ]; then
++        skip="$skip -s user"
++else
++        skip="$skip -k user"
++fi
++
+ # Do a first pass to get everything up to $early_late_divider so that
+ # we can do a second pass that includes $local_startup directories
+ #

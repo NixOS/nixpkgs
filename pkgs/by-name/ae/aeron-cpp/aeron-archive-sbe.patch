@@ -1,0 +1,11 @@
+--- a/aeron-archive/src/main/cpp/CMakeLists.txt
++++ b/aeron-archive/src/main/cpp/CMakeLists.txt
+@@ -59,7 +59,7 @@ set(GENERATED_CODECS
+     ${ARCHIVE_CODEC_TARGET_DIR}/aeron_archive_client/RecordingSignalEvent.h)
+ 
+ add_custom_command(OUTPUT ${GENERATED_CODECS}
+-    COMMAND ${CMAKE_COMMAND} -E env JAVA_HOME=$ENV{JAVA_HOME} BUILD_JAVA_HOME=$ENV{BUILD_JAVA_HOME} BUILD_JAVA_VERSION=$ENV{BUILD_JAVA_VERSION} ${GRADLE_WRAPPER} -Dcodec.target.dir=${ARCHIVE_CODEC_TARGET_DIR} :aeron-archive:generateCppCodecs --no-daemon --console=plain -q
++    COMMAND ${CMAKE_COMMAND} -E env JAVA_HOME=$ENV{JAVA_HOME} BUILD_JAVA_HOME=$ENV{BUILD_JAVA_HOME} BUILD_JAVA_VERSION=$ENV{BUILD_JAVA_VERSION} java -cp sbe.jar -Dsbe.output.dir=${ARCHIVE_CODEC_TARGET_DIR} -Dsbe.target.language=Cpp -Dsbe.target.namespace=aeron.archive.client uk.co.real_logic.sbe.SbeTool ${ARCHIVE_CODEC_SCHEMA_DIR}/aeron-archive-codecs.xml
+     DEPENDS ${CODEC_SCHEMA} aeron-all-jar
+     WORKING_DIRECTORY ${ARCHIVE_CODEC_WORKING_DIR}
+     COMMENT "Generating C++ Archive codecs")
