@@ -7179,7 +7179,7 @@ with pkgs;
   };
 
   inherit (beam.interpreters)
-    erlang erlang_27 erlang_26 erlang_25 erlang_24
+    erlang erlang_27 erlang_26 erlang_25
     elixir elixir_1_18 elixir_1_17 elixir_1_16 elixir_1_15 elixir_1_14
     elixir-ls;
 
