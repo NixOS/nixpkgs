@@ -1,0 +1,6 @@
+    --argv0 my-wrapper \
+    --set-default MESSAGE HELLO \
+    --prefix PATH : /usr/bin/ \
+    --suffix PATH : /usr/local/bin/ \
+    --add-flags "-x -y -z" \
+    --set MESSAGE2 WORLD
