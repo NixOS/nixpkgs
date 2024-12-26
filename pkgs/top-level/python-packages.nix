@@ -15427,6 +15427,8 @@ self: super: with self; {
 
   stamina = callPackage ../development/python-modules/stamina { };
 
+  standard-imghdr = if pythonOlder "3.13" then null else callPackage ../development/python-modules/standard-imghdr { };
+
   stanio = callPackage ../development/python-modules/stanio { };
 
   stanza = callPackage ../development/python-modules/stanza { };
