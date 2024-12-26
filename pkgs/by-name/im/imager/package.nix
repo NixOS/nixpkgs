@@ -87,8 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out/bin
     cp -a ../gildas-exe/* $out
     mv $out/$GAG_EXEC_SYSTEM $out/libexec
-    cp admin/wrapper.sh $out/bin/imager
-    chmod 755 $out/bin/imager
+    install -Dm755 admin/wrapper.sh $out/bin/imager
   '';
 
   meta = {
