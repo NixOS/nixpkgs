@@ -78,7 +78,7 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace admin/wrapper.sh \
       --subst-var out \
       --subst-var-by PYTHONHOME ${python3Env}
-    substituteInPlace utilities/main/gag-makedepend.pl --replace '/usr/bin/perl' ${perl}/bin/perl
+    substituteInPlace utilities/main/gag-makedepend.pl --replace-fail '/usr/bin/perl' ${lib.getExe perl}
     source admin/gildas-env.sh -c gfortran -o openmp
     echo "gag_doc:        $out/share/doc/" >> kernel/etc/gag.dico.lcl
   '';
