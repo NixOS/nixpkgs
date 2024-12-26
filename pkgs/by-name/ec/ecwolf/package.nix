@@ -25,7 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromBitbucket {
     owner = "ecwolf";
     repo = "ecwolf";
-    rev = finalAttrs.version;
+    rev = "refs/tags/${finalAttrs.version}";
     sha256 = "V2pSP8i20zB50WtUMujzij+ISSupdQQ/oCYYrOaTU1g=";
   };
 
