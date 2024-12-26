@@ -6,13 +6,13 @@
 }:
 let
   cfg = config.services.zfs.autoReplication;
-  recursive = lib.optionalString cfg.recursive " --recursive";
-  followDelete = lib.optionalString cfg.followDelete " --follow-delete";
 in
 {
   options = {
     services.zfs.autoReplication = {
       enable = lib.mkEnableOption "ZFS snapshot replication";
+
+      package = lib.mkPackageOption pkgs "zfs-replicate" { };
 
       followDelete = lib.mkOption {
         description = "Remove remote snapshots that don't have a local correspondent.";
@@ -76,7 +76,23 @@ in
         "https://github.com/alunduil/zfs-replicate"
       ];
       restartIfChanged = false;
-      serviceConfig.ExecStart = "${pkgs.zfs-replicate}/bin/zfs-replicate${recursive} -l ${lib.escapeShellArg cfg.username} -i ${lib.escapeShellArg cfg.identityFilePath}${followDelete} ${lib.escapeShellArg cfg.host} ${lib.escapeShellArg cfg.remoteFilesystem} ${lib.escapeShellArg cfg.localFilesystem}";
+      serviceConfig.ExecStart =
+        let
+          args = lib.map lib.escapeShellArg (
+            [
+              "-l"
+              cfg.username
+              "-i"
+              cfg.identityFilePath
+              cfg.host
+              cfg.remoteFilesystem
+              cfg.localFilesystem
+            ]
+            ++ (lib.optional cfg.recursive "--recursive")
+            ++ (lib.optional cfg.followDelete "--follow-delete")
+          );
+        in
+        "${lib.getExe cfg.package} ${lib.concatStringSep " " args}";
       wantedBy = [
         "zfs-snapshot-daily.service"
         "zfs-snapshot-frequent.service"
