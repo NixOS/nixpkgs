@@ -322,7 +322,6 @@ stdenv.mkDerivation rec {
       lgpl3Plus
     ];
     maintainers = with maintainers; [
-      milahu
       nickcao
       LunNova
     ];

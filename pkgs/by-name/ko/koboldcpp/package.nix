@@ -3,31 +3,28 @@
   fetchFromGitHub,
   stdenv,
   makeWrapper,
-  gitUpdater,
   python3Packages,
   tk,
   addDriverRunpath,
 
   apple-sdk_12,
+  darwinMinVersionHook,
 
   koboldLiteSupport ? true,
 
   config,
   cudaPackages ? { },
 
-  openblasSupport ? !stdenv.hostPlatform.isDarwin,
-  openblas,
-
   cublasSupport ? config.cudaSupport,
   # You can find a full list here: https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
-  # For example if you're on an GTX 1080 that means you're using "Pascal" and you need to pass "sm_60"
+  # For example if you're on an RTX 3060 that means you're using "Ampere" and you need to pass "sm_86"
   cudaArches ? cudaPackages.cudaFlags.realArches or [ ],
 
   clblastSupport ? stdenv.hostPlatform.isLinux,
   clblast,
   ocl-icd,
 
-  vulkanSupport ? true,
+  vulkanSupport ? (!stdenv.hostPlatform.isDarwin),
   vulkan-loader,
   metalSupport ? stdenv.hostPlatform.isDarwin,
   nix-update-script,
@@ -44,13 +41,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.79.1";
+  version = "1.80.1";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-RHeEI6mJklGF7BQXxLwxSr1xD6GsI9+fio888UxKru0=";
+    hash = "sha256-CgJzYF8FnHk0zKdysGJWLnNo/MND24AbQdjRbDtv0II=";
   };
 
   enableParallelBuilding = true;
@@ -65,8 +62,10 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [ tk ]
     ++ finalAttrs.pythonInputs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
-    ++ lib.optionals openblasSupport [ openblas ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      apple-sdk_12
+      (darwinMinVersionHook "10.15")
+    ]
     ++ lib.optionals cublasSupport [
       cudaPackages.libcublas
       cudaPackages.cuda_nvcc
@@ -82,7 +81,6 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   pythonPath = finalAttrs.pythonInputs;
 
   makeFlags = [
-    (makeBool "LLAMA_OPENBLAS" openblasSupport)
     (makeBool "LLAMA_CUBLAS" cublasSupport)
     (makeBool "LLAMA_CLBLAST" clblastSupport)
     (makeBool "LLAMA_VULKAN" vulkanSupport)

@@ -78,30 +78,34 @@ stdenv.mkDerivation {
 
   src = "${sources}/src";
 
-  patches = [
-    # Adds missing dependencies to generated LICENSE
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/add_licenses.patch";
-      hash = "sha256-9A4KyRW1K3eoQxsTbPX0vOnj66TCs2Fxjpsu5wO8mGI=";
-    })
-    # Fixes the certificate chain, required for Let's Encrypt certs
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/ssl_verify_callback_with_native_handle.patch";
-      hash = "sha256-/gneuCac4VGJCWCjJZlgLKFOTV+x7Lc5KVFnNIKenwM=";
-    })
-    # Adds dependencies and features required by livekit
-    (fetchpatch {
-      url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/add_deps.patch";
-      hash = "sha256-EMNYcTcBYh51Tt96+HP43ND11qGKClfx3xIPQmIBSo0=";
-    })
-    # Fixes concurrency and localization issues
-    (fetchpatch {
-      url = "https://github.com/zed-industries/webrtc/commit/08f7a701a2eda6407670508fc2154257a3c90308.patch";
-      hash = "sha256-oWYZLwqjRSHDt92MqsxsoBSMyZKj1ubNbOXZRbPpbEw=";
-    })
-    # Required for dynamically linking to ffmpeg libraries and exposing symbols
-    ./0001-shared-libraries.patch
-  ];
+  patches =
+    [
+      # Adds missing dependencies to generated LICENSE
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/add_licenses.patch";
+        hash = "sha256-9A4KyRW1K3eoQxsTbPX0vOnj66TCs2Fxjpsu5wO8mGI=";
+      })
+      # Fixes the certificate chain, required for Let's Encrypt certs
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/ssl_verify_callback_with_native_handle.patch";
+        hash = "sha256-/gneuCac4VGJCWCjJZlgLKFOTV+x7Lc5KVFnNIKenwM=";
+      })
+      # Adds dependencies and features required by livekit
+      (fetchpatch {
+        url = "https://raw.githubusercontent.com/livekit/rust-sdks/b41861c7b71762d5d85b3de07ae67ffcae7c3fa2/webrtc-sys/libwebrtc/patches/add_deps.patch";
+        hash = "sha256-EMNYcTcBYh51Tt96+HP43ND11qGKClfx3xIPQmIBSo0=";
+      })
+      # Fixes concurrency and localization issues
+      (fetchpatch {
+        url = "https://github.com/zed-industries/webrtc/commit/08f7a701a2eda6407670508fc2154257a3c90308.patch";
+        hash = "sha256-oWYZLwqjRSHDt92MqsxsoBSMyZKj1ubNbOXZRbPpbEw=";
+      })
+      # Required for dynamically linking to ffmpeg libraries and exposing symbols
+      ./0001-shared-libraries.patch
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      ./0002-disable-narrowing-const-reference.patch
+    ];
 
   postPatch =
     ''
