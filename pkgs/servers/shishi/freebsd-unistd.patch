@@ -1,0 +1,12 @@
+diff --git a/gl/unistd.in.h b/gl/unistd.in.h
+index 2ea9af4..ed58960 100644
+--- a/gl/unistd.in.h
++++ b/gl/unistd.in.h
+@@ -116,6 +116,7 @@
+ # include <getopt.h>
+ #endif
+ 
++#include "config.h"
+ _GL_INLINE_HEADER_BEGIN
+ #ifndef _GL_UNISTD_INLINE
+ # define _GL_UNISTD_INLINE _GL_INLINE
