@@ -166,6 +166,7 @@ in
       environment.etc = configFiles;
 
       systemd.packages = [ pkgs.borgmatic ];
+      systemd.services.borgmatic.path = [ pkgs.coreutils ];
 
       # Workaround: https://github.com/NixOS/nixpkgs/issues/81138
       systemd.timers.borgmatic.wantedBy = [ "timers.target" ];
