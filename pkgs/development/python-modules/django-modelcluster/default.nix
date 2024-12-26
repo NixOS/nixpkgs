@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "django-modelcluster";
-  version = "6.3";
+  version = "6.4";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -21,8 +21,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wagtail";
     repo = "django-modelcluster";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-AUVl2aidjW7Uu//3HlAod7pxzj6Gs1Xd0uTt3NrrqAU=";
+    tag = "v${version}";
+    hash = "sha256-JoDDHvZ9N+7hcIxRsbVrYW8/95iUcNHDQkvtmDVUzws=";
   };
 
   build-system = [ setuptools ];
