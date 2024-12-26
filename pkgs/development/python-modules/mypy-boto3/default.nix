@@ -454,12 +454,12 @@ rec {
       "sha256-0Xe77fz+lA+nuUGK+PjU0EgWeQ7AJ9Smsb/4yK1tow0=";
 
   mypy-boto3-ecr =
-    buildMypyBoto3Package "ecr" "1.35.21"
-      "sha256-1+jCQIbOOyWeSsKicfw07U7/3pnHiZrH1kwto8/wrNc=";
+    buildMypyBoto3Package "ecr" "1.35.87"
+      "sha256-XK9Q9fz05sI6XqO1BfGaZihfQhHssXgCf0GJONOBym8=";
 
   mypy-boto3-ecr-public =
-    buildMypyBoto3Package "ecr-public" "1.35.0"
-      "sha256-KXtN44KAIDXjMgv3ICG8rXYfEjcZ85pQ+qdvN2Yiq3g=";
+    buildMypyBoto3Package "ecr-public" "1.35.87"
+      "sha256-MvEGV9hSLsWPC+FoBH3K2F+DXvoeTSYfwE92QDp7ufU=";
 
   mypy-boto3-ecs =
     buildMypyBoto3Package "ecs" "1.35.83"
@@ -470,8 +470,8 @@ rec {
       "sha256-Pf+g7g5cjPoIqAL5sJqqMtPWU0hqGDQnfzwoxNgL5OE=";
 
   mypy-boto3-eks =
-    buildMypyBoto3Package "eks" "1.35.86"
-      "sha256-dlAVnQiIkab9aVOQ5OO8D4XJI6+CWWJvjQpnOp88vT4=";
+    buildMypyBoto3Package "eks" "1.35.87"
+      "sha256-GhuxfL16FBXbuMoj1OY3dv+tHGAkq9aUn7rTJm9iY1g=";
 
   mypy-boto3-elastic-inference =
     buildMypyBoto3Package "elastic-inference" "1.35.38"
@@ -574,8 +574,8 @@ rec {
       "sha256-RJEZBr3yU/lGEainrpidLsdYBvVOPMq3cIaIpsTAziQ=";
 
   mypy-boto3-glue =
-    buildMypyBoto3Package "glue" "1.35.80"
-      "sha256-49t5o9j5sEKGEBoGQibQTgNl4Ab07VggRFFtg1jvAWY=";
+    buildMypyBoto3Package "glue" "1.35.87"
+      "sha256-0dXxu1xSlwRaGmUKZnLEajGePPNzCF0jA8IXncW0bX0=";
 
   mypy-boto3-grafana =
     buildMypyBoto3Package "grafana" "1.35.0"
