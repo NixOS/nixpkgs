@@ -64,6 +64,7 @@ in
     # `beam.packages.erlang_24.elixir`.
     inherit (self.packages.erlang)
       elixir
+      elixir_1_18
       elixir_1_17
       elixir_1_16
       elixir_1_15
