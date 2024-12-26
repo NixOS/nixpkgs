@@ -43,9 +43,14 @@ stdenv.mkDerivation (finalAttrs: {
       --replace-fail 'process.resourcesPath' "'$out/share/lib/podman-desktop/resources'"
     substituteInPlace "extensions/podman/packages/extension/src/util.ts" \
       --replace-fail '(process as any).resourcesPath' "'$out/share/lib/podman-desktop/resources'"
+    substituteInPlace 'package.json' \
+      --replace-fail 'playwright install' 'true'
   '';
 
-  env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+  env = {
+    ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
+    PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD = "1";
+  };
 
   nativeBuildInputs = [
     makeWrapper nodejs pnpm_9.configHook
