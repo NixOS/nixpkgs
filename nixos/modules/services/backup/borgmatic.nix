@@ -16,11 +16,17 @@ let
     // {
       postgresql_databases = map (
         d:
+        let
+          as_user = if d ? username then "${pkgs.sudo}/bin/sudo -u ${d.username} " else "";
+        in
         {
           pg_dump_command =
-            if d.name == "all" then "${postgresql}/bin/pg_dumpall" else "${postgresql}/bin/pg_dump";
-          pg_restore_command = "${postgresql}/bin/pg_restore";
-          psql_command = "${postgresql}/bin/psql";
+            if d.name == "all" then
+              "${as_user}${postgresql}/bin/pg_dumpall"
+            else
+              "${as_user}${postgresql}/bin/pg_dump";
+          pg_restore_command = "${as_user}${postgresql}/bin/pg_restore";
+          psql_command = "${as_user}${postgresql}/bin/psql";
         }
         // d
       ) (s.postgresql_databases or [ ]);
