@@ -53,6 +53,8 @@ let
       platforms = lib.platforms.linux;
     };
 
+    __darwinAllowLocalNetworking = true;
+
     desktopItems = [
       (makeDesktopItem {
         name = "tabby";
@@ -123,29 +125,27 @@ let
         git tag ${version}
       ''
       # Loop through all the yarn caches and install the deps for the respective package
-      + builtins.concatStringsSep "\n" (
-        map (cache: ''
-          cd ${cache.pkg}
-          export HOME=$PWD/yarn_home
-          fixup-yarn-lock yarn.lock
-          yarn config --offline set yarn-offline-mirror ${cache.cache}
-          echo "Installing deps for ${cache.pkg}"
-          yarn install --offline --prefer-offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
-          patch-package
-          patchShebangs node_modules
-          echo "Done!"
-          cd $buildDir
-        '') yarnCaches
-      )
+      + lib.concatMapStringsSep "\n" (cache: ''
+        cd ${cache.pkg}
+        export HOME=$PWD/yarn_home
+        fixup-yarn-lock yarn.lock
+        yarn config --offline set yarn-offline-mirror ${cache.cache}
+        echo "Installing deps for ${cache.pkg}"
+        yarn install --offline --prefer-offline --frozen-lockfile --ignore-scripts --no-progress --non-interactive
+        patch-package
+        patchShebangs node_modules
+        echo "Done!"
+        cd $buildDir
+      '') yarnCaches
+
       + ''
         cd $buildDir/node_modules
       ''
       # Loop thought the "built in" plugins and link them to the node_modules
-      + builtins.concatStringsSep "\n" (
-        map (plugin: ''
-          ln -fs ../${plugin} ${plugin}
-        '') builtinPlugins
-      )
+      + lib.concatMapStringsSep "\n" (plugin: ''
+        ln -fs ../${plugin} ${plugin}
+      '') builtinPlugins
+
       + ''
         cd $buildDir
 
@@ -163,11 +163,9 @@ let
         http-server http-cache &
       ''
       # Rebuild all the needed packages using electron-rebuild
-      + builtins.concatStringsSep "\n" (
-        map (pkg: ''
-          yarn --offline electron-rebuild -v ${electronPackage.version} -m ${pkg} -f -d "http://localhost:8080"
-        '') rebuildPkgs
-      )
+      + lib.concatMapStringsSep "\n" (pkg: ''
+        yarn --offline electron-rebuild -v ${electronPackage.version} -m ${pkg} -f -d "http://localhost:8080"
+      '') rebuildPkgs
       + ''
         kill $!
         yarn build
@@ -218,31 +216,14 @@ let
     "tabby-web-demo"
   ];
 
-  pkgHashes = {
-    "." = "sha256-W4T9Vaow37yBD08UFv7Wby2OKiz/Lp70OXddGjTckxU=";
-    app = "sha256-pTHCyxx7pXKyITKzV3nrtdPX7ZUc+7oBMO3E8Py4Uiw=";
-    web = "sha256-kdER/yB8O7gfWnLZ/rNl4ha1eNnypcVmS1L7RrFCn0Q=";
-    tabby-core = "sha256-Z42TZeE0z96ZRtIFIgGbQyv8gtGY/Llya/Dhs8JtuWo=";
-    tabby-local = "sha256-GmVoeKxF8Sj55fDPN4GhwGVXoktdiwF3EFYTJHGO/NQ=";
-    tabby-settings = "sha256-7t9mXsMqU892fLHyHmivgDxECSVn8KgRNAz9E2nKC/I=";
-    tabby-electron = "sha256-JDEsn+7xOcoKFyOCFeClFqcD2NJWwRA6uyM8SwxKW8c=";
-    tabby-web-demo = "sha256-i8UoUMb5m+rf/73eKPm2S0v6cs8qSqy6lRjnZ6GoO/k=";
-    tabby-linkifier = "sha256-78wgw6BbN/GtRMYeJF9svn9hn82bTZj4+8TXf/rAC64=";
-    tabby-web = "sha256-ErhWM0jiVK4PBosBz4IHi1xiemAzRuk/EE8ntyhO2PE=";
-    tabby-telnet = "sha256-J8nBBUxwTdigcdohEF6dw8+EHRBUm8O1SLM9oDB3VaA=";
-    tabby-ssh = "sha256-8PRf0F6Q3Hoqxiz6lcoFZn0z9EAyeTNNuSh6gli35+U=";
-    tabby-community-color-schemes = "sha256-oZgyP0hTU9bxszOVg3Bmiu6yos2d2Inc1Do8To4z8GQ=";
-    tabby-plugin-manager = "sha256-CrgsIGg834A+WQh7o07Quv+SSFqYxPMugZsSOHCrdPU=";
-    tabby-serial = "sha256-sg/CJnlkUcohFgmY6xGE79WG5mmx9jh196mb8iVCk6g=";
-    tabby-terminal = "sha256-LS30V7iqLI0sEm3xlnMFtMnIxhALOMjQ148+zR0NyqU=";
-  };
+  pkgHashes = lib.importJSON ./pkg-hashes.json;
 
   # Loop through all the packages and create a yarn cache for them
   yarnCaches = map (pkg: {
     inherit pkg;
     cache = fetchYarnDeps {
       src = lib.removeSuffix "/." (tabby.src + "/" + pkg);
-      sha256 = builtins.getAttr pkg pkgHashes;
+      hash = pkgHashes.${pkg};
     };
   }) packages;
 

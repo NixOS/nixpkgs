@@ -1,0 +1,18 @@
+{
+  ".": "sha256-W4T9Vaow37yBD08UFv7Wby2OKiz/Lp70OXddGjTckxU=",
+  "app": "sha256-pTHCyxx7pXKyITKzV3nrtdPX7ZUc+7oBMO3E8Py4Uiw=",
+  "web": "sha256-kdER/yB8O7gfWnLZ/rNl4ha1eNnypcVmS1L7RrFCn0Q=",
+  "tabby-core": "sha256-Z42TZeE0z96ZRtIFIgGbQyv8gtGY/Llya/Dhs8JtuWo=",
+  "tabby-local": "sha256-GmVoeKxF8Sj55fDPN4GhwGVXoktdiwF3EFYTJHGO/NQ=",
+  "tabby-settings": "sha256-7t9mXsMqU892fLHyHmivgDxECSVn8KgRNAz9E2nKC/I=",
+  "tabby-electron": "sha256-JDEsn+7xOcoKFyOCFeClFqcD2NJWwRA6uyM8SwxKW8c=",
+  "tabby-web-demo": "sha256-i8UoUMb5m+rf/73eKPm2S0v6cs8qSqy6lRjnZ6GoO/k=",
+  "tabby-linkifier": "sha256-78wgw6BbN/GtRMYeJF9svn9hn82bTZj4+8TXf/rAC64=",
+  "tabby-web": "sha256-ErhWM0jiVK4PBosBz4IHi1xiemAzRuk/EE8ntyhO2PE=",
+  "tabby-telnet": "sha256-J8nBBUxwTdigcdohEF6dw8+EHRBUm8O1SLM9oDB3VaA=",
+  "tabby-ssh": "sha256-8PRf0F6Q3Hoqxiz6lcoFZn0z9EAyeTNNuSh6gli35+U=",
+  "tabby-community-color-schemes": "sha256-oZgyP0hTU9bxszOVg3Bmiu6yos2d2Inc1Do8To4z8GQ=",
+  "tabby-plugin-manager": "sha256-CrgsIGg834A+WQh7o07Quv+SSFqYxPMugZsSOHCrdPU=",
+  "tabby-serial": "sha256-sg/CJnlkUcohFgmY6xGE79WG5mmx9jh196mb8iVCk6g=",
+  "tabby-terminal": "sha256-LS30V7iqLI0sEm3xlnMFtMnIxhALOMjQ148+zR0NyqU="
+}
