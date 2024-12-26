@@ -16945,6 +16945,12 @@
     githubId = 111265;
     name = "Ozan Sener";
   };
+  oskardotglobal = {
+    github = "oskardotglobal";
+    githubId = 52569953;
+    email = "me@oskar.global";
+    name = "Oskar Manhart";
+  };
   osnyx = {
     email = "os@flyingcircus.io";
     github = "osnyx";
