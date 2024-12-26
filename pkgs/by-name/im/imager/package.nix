@@ -25,7 +25,7 @@ let
   );
 in
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   srcVersion = "dec24";
   version = "4.4-01";
   pname = "imager";
