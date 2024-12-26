@@ -147,8 +147,8 @@ let
         src = fetchFromGitHub {
           owner = "ggerganov";
           repo = "llama.cpp";
-          rev = "6423c65aa8be1b98f990cf207422505ac5a441a1";
-          hash = "sha256-DI3VhXEeok/wIFuM/l1hJJZlpxvyKY6Kmi97o3g0Ppk=";
+          rev = "26a8406ba9198eb6fdd8329fa717555b4f77f05f";
+          hash = "sha256-WFkg4ZhL5x55JdeFmAGBFKjWd31XyfGPtQkn+9b7GF4=";
           fetchSubmodules = true;
         };
         postPatch =
@@ -275,32 +275,14 @@ let
     '';
   };
 
-  go-rwkv = stdenv.mkDerivation {
-    name = "go-rwkv";
-    src = fetchFromGitHub {
-      owner = "donomii";
-      repo = "go-rwkv.cpp";
-      rev = "661e7ae26d442f5cfebd2a0881b44e8c55949ec6";
-      hash = "sha256-byTNZQSnt7qpBMng3ANJmpISh3GJiz+F15UqfXaz6nQ=";
-      fetchSubmodules = true;
-    };
-    buildFlags = [ "librwkv.a" ];
-    dontUseCmakeConfigure = true;
-    nativeBuildInputs = [ cmake ];
-    installPhase = ''
-      cp -r --no-preserve=mode $src $out
-      cp *.a $out
-    '';
-  };
-
   # try to merge with openai-whisper-cpp in future
   whisper-cpp = effectiveStdenv.mkDerivation {
     name = "whisper-cpp";
     src = fetchFromGitHub {
       owner = "ggerganov";
       repo = "whisper.cpp";
-      rev = "31aea563a83803c710691fed3e8d700e06ae6788";
-      hash = "sha256-YCYRx+DHhxazJ3ZAdmuqeYHOX5v6JEZhU9eo487yEtk=";
+      rev = "6266a9f9e56a5b925e9892acf650f3eb1245814d";
+      hash = "sha256-y30ZccpF3SCdRGa+P3ddF1tT1KnvlI4Fexx81wZxfTk=";
     };
 
     nativeBuildInputs = [
@@ -335,25 +317,6 @@ let
     ];
     postInstall = ''
       install -Dt $out/bin bin/*
-    '';
-  };
-
-  go-bert = stdenv.mkDerivation {
-    name = "go-bert";
-    src = fetchFromGitHub {
-      owner = "go-skynet";
-      repo = "go-bert.cpp";
-      rev = "710044b124545415f555e4260d16b146c725a6e4";
-      hash = "sha256-UNrs3unYjvSzCVaVISFFBDD+s37lmN6/7ajmGNcYgrU=";
-      fetchSubmodules = true;
-    };
-    buildFlags = [ "libgobert.a" ];
-    dontUseCmakeConfigure = true;
-    nativeBuildInputs = [ cmake ];
-    env.NIX_CFLAGS_COMPILE = "-Wformat";
-    installPhase = ''
-      cp -r --no-preserve=mode $src $out
-      cp *.a $out
     '';
   };
 
@@ -417,6 +380,45 @@ let
     meta.broken = lib.versionOlder go-tiny-dream.stdenv.cc.version "13";
   };
 
+  bark = stdenv.mkDerivation {
+    name = "bark";
+    src = fetchFromGitHub {
+      owner = "PABannier";
+      repo = "bark.cpp";
+      rev = "v1.0.0";
+      hash = "sha256-wOcggRWe8lsUzEj/wqOAUlJVypgNFmit5ISs9fbwoCE=";
+      fetchSubmodules = true;
+    };
+    installPhase = ''
+      mkdir -p $out/build
+      cp -ra $src/* $out
+      find . \( -name '*.a' -or -name '*.c.o' \) -print0 \
+        | tar cf - --null --files-from - \
+        | tar xf - -C $out/build
+    '';
+    nativeBuildInputs = [ cmake ];
+  };
+
+  stable-diffusion = stdenv.mkDerivation {
+    name = "stable-diffusion";
+    src = fetchFromGitHub {
+      owner = "leejet";
+      repo = "stable-diffusion.cpp";
+      rev = "4570715727f35e5a07a76796d823824c8f42206c";
+      hash = "sha256-1w7OokrQflasvauDEADLDJf2530m5a7WP+X1KgwxCks=";
+      fetchSubmodules = true;
+    };
+    installPhase = ''
+      mkdir -p $out/build
+      cp -ra $src/* $out
+      find . \( -name '*.a' -or -name '*.c.o' \) -print0 \
+        | tar cf - --null --files-from - \
+        | tar xf - -C $out/build
+    '';
+    nativeBuildInputs = [ cmake ];
+    buildInputs = [ opencv ];
+  };
+
   GO_TAGS =
     lib.optional with_tinydream "tinydream"
     ++ lib.optional with_tts "tts"
@@ -431,12 +433,12 @@ let
       stdenv;
 
   pname = "local-ai";
-  version = "2.23.0";
+  version = "2.24.2";
   src = fetchFromGitHub {
     owner = "go-skynet";
     repo = "LocalAI";
     rev = "v${version}";
-    hash = "sha256-7i2qW9yh++YQrEnjjxkHB7GJZSIIJQFJ9GyU2Rp9+kk=";
+    hash = "sha256-nJYeNwx6G3WhrTZYi1yoPzYtofx1H7bTkK0T9ld5wcE=";
   };
 
   prepare-sources =
@@ -447,30 +449,32 @@ let
       mkdir sources
       ${cp} ${go-llama} sources/go-llama.cpp
       ${cp} ${if with_tts then go-piper else go-piper.src} sources/go-piper
-      ${cp} ${go-rwkv} sources/go-rwkv.cpp
       ${cp} ${whisper-cpp.src} sources/whisper.cpp
       cp ${whisper-cpp}/lib/lib*.a sources/whisper.cpp
-      ${cp} ${go-bert} sources/go-bert.cpp
       ${cp} ${
         if with_stablediffusion then go-stable-diffusion else go-stable-diffusion.src
       } sources/go-stable-diffusion
       ${cp} ${if with_tinydream then go-tiny-dream else go-tiny-dream.src} sources/go-tiny-dream
+      ${cp} ${bark} sources/bark.cpp
+      ${cp} ${stable-diffusion} sources/stablediffusion-ggml.cpp
     '';
 
   self = buildGo123Module.override { stdenv = effectiveStdenv; } {
     inherit pname version src;
 
-    vendorHash = "sha256-bLeKh0aKSQrD5jTydG0ZLW5RCNb3oKvjCSeA9juI3B8=";
+    vendorHash = "sha256-QmOoICJ11SY8xXE0g1+1mWRUZ3kQPtCcpM6aZiBkHQ0=";
 
     env.NIX_CFLAGS_COMPILE = lib.optionalString with_stablediffusion " -isystem ${opencv}/include/opencv4";
 
     postPatch =
       ''
+        # TODO: add silero-vad
         sed -i Makefile \
           -e '/mod download/ d' \
           -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-fallback/ d' \
           -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-avx/ d' \
           -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/llama-cpp-cuda/ d' \
+          -e '/^ALL_GRPC_BACKENDS+=backend-assets\/grpc\/silero-vad/ d' \
 
       ''
       + lib.optionalString with_cublas ''
@@ -492,7 +496,8 @@ let
         cp ${llama-cpp-rpc}/bin/llama-rpc-server backend-assets/util/llama-cpp-rpc-server
 
         # avoid rebuild of prebuilt make targets
-        touch backend-assets/grpc/* backend-assets/util/* sources/**/lib*.a
+        touch backend-assets/grpc/* backend-assets/util/*
+        find sources -name "lib*.a" -exec touch {} +
       '';
 
     buildInputs =
@@ -511,14 +516,17 @@ let
       ++ lib.optionals with_stablediffusion go-stable-diffusion.buildInputs
       ++ lib.optionals with_tts go-piper.buildInputs;
 
-    nativeBuildInputs = [
-      protobuf
-      protoc-gen-go
-      protoc-gen-go-grpc
-      makeWrapper
-      ncurses # tput
-      which
-    ] ++ lib.optional enable_upx upx ++ lib.optionals with_cublas [ cuda_nvcc ];
+    nativeBuildInputs =
+      [
+        protobuf
+        protoc-gen-go
+        protoc-gen-go-grpc
+        makeWrapper
+        ncurses # tput
+        which
+      ]
+      ++ lib.optional enable_upx upx
+      ++ lib.optionals with_cublas [ cuda_nvcc ];
 
     enableParallelBuilding = false;
 
@@ -599,8 +607,6 @@ let
     passthru.local-packages = {
       inherit
         go-tiny-dream
-        go-rwkv
-        go-bert
         go-llama
         go-piper
         llama-cpp-grpc
@@ -610,6 +616,9 @@ let
         piper-phonemize
         piper-tts'
         llama-cpp-rpc
+        go-stable-diffusion
+        bark
+        stable-diffusion
         ;
     };
 
