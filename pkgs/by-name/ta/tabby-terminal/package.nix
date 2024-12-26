@@ -35,9 +35,8 @@ let
         owner = "Eugeny";
         repo = "tabby";
         tag = "v${version}";
-        hash = "sha256-0yItlAbHqAZzrHiuAVWfcqIjcRAW+VtnRN7HWAKNsAw=";
+        hash = "sha256-JLOVw2B3bTOcjE2qVId8pITqy0KgxegXLsFky6ggs3E=";
         leaveDotGit = true;
-        deepClone = true;
       };
       patches = [
         ./fix-deps-for-new-electron.patch
@@ -120,6 +119,8 @@ let
         runHook preConfigure
 
         export buildDir=$PWD
+
+        git tag ${version}
       ''
       # Loop through all the yarn caches and install the deps for the respective package
       + builtins.concatStringsSep "\n" (
