@@ -1,0 +1,12 @@
+diff --git a/src/tests/test_helpers.rs b/src/tests/test_helpers.rs
+index 73e4175..d2ed70b 100644
+--- a/src/tests/test_helpers.rs
++++ b/src/tests/test_helpers.rs
+@@ -53,6 +53,7 @@ fn get_testres_path() -> PathBuf {
+     base_path.pop();
+     base_path.pop();
+     base_path.pop();
++    base_path.pop();
+     base_path.push("testres");
+ 
+     base_path
