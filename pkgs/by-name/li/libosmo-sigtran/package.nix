@@ -2,7 +2,7 @@
   lib,
   stdenv,
   autoreconfHook,
-  fetchFromGitHub,
+  fetchgit,
   lksctp-tools,
   pkg-config,
   libosmocore,
@@ -10,14 +10,14 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "libosmo-sccp";
-  version = "1.9.0";
+  pname = "libosmo-sigtran";
+  version = "2.0.1";
 
-  src = fetchFromGitHub {
-    owner = "osmocom";
-    repo = "libosmo-sccp";
+  # fetchFromGitea hangs
+  src = fetchgit {
+    url = "https://gitea.osmocom.org/osmocom/libosmo-sigtran.git";
     rev = version;
-    hash = "sha256-XEpkLLOjq28ipAbAyR1uBpo3i77xRZyD9NJ35HlRWXU=";
+    hash = "sha256-tNSe5FFietdjl80hhQntsdgG90CP7z7RWyTpGhsApt0=";
   };
 
   configureFlags = [ "--with-systemdsystemunitdir=$out" ];
