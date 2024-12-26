@@ -114,5 +114,12 @@ stdenv.mkDerivation rec {
       licenses.openssl
     ];
     platforms = lib.platforms.linux;
+    knownVulnerabilities = [
+      "CVE-2021-42072"
+      "CVE-2021-42073"
+      "CVE-2021-42074"
+      "CVE-2021-42075"
+      "CVE-2021-42076"
+    ];
   };
 }
