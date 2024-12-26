@@ -59,6 +59,10 @@ in
         type = types.submodule {
           freeformType = format.type;
 
+          imports = [
+            (mkRemovedOptionModule [ "Ebpf" ] "this option was unused")
+          ];
+
           options = {
             Server = {
 
@@ -150,24 +154,6 @@ in
                 '';
               };
 
-            };
-
-            Ebpf.ModulesPath = mkOption {
-              type = types.path;
-              default =
-                if cfg.settings.ProcMonitorMethod == "ebpf" then
-                  "${config.boot.kernelPackages.opensnitch-ebpf}/etc/opensnitchd"
-                else
-                  null;
-              defaultText = literalExpression ''
-                if cfg.settings.ProcMonitorMethod == "ebpf" then
-                  "\\$\\{config.boot.kernelPackages.opensnitch-ebpf\\}/etc/opensnitchd"
-                else null;
-              '';
-              description = ''
-                Configure eBPF modules path. Used when
-                `settings.ProcMonitorMethod` is set to `ebpf`.
-              '';
             };
 
             Rules.Path = mkOption {
