@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   meta = {
     description = "Conda-forge distribution with mamba";
     homepage = "https://github.com/conda-forge/miniforge";
-    license =  with licenses; [ bsd3 ];
+    license = with licenses; [ bsd3 ];
     platforms = platforms.unix;
     maintainers = with maintainers; [ qxrein ];
   };
