@@ -11,17 +11,17 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lanzaboote-tool";
-  version = "0.3.0";
+  version = "0.4.1";
 
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "lanzaboote";
     tag = "v${version}";
-    hash = "sha256-Fb5TeRTdvUlo/5Yi2d+FC8a6KoRLk2h1VE0/peMhWPs=";
+    hash = "sha256-eSZyrQ9uoPB9iPQ8Y5H7gAmAgAvCw3InStmU3oEjqsE=";
   };
 
   sourceRoot = "source/rust/tool";
-  cargoHash = "sha256-g4WzqfH6DZVUuNb0jV3MFdm3h7zy2bQ6d3agrXesWgc=";
+  cargoHash = "sha256-veUpirIxUhTanUWhZgK1grgqsjYDBpgAUp21nNiZjMs=";
 
   env.TEST_SYSTEMD = systemd;
   doCheck = lib.meta.availableOn stdenv.hostPlatform systemd;
@@ -31,6 +31,9 @@ rustPlatform.buildRustPackage rec {
   ];
 
   postInstall = ''
+    if [[ -f $out/bin/lzbt-systemd ]]; then
+      mv $out/bin/lzbt{-systemd,}
+    fi
     # Clean PATH to only contain what we need to do objcopy.
     # This is still an unwrapped lanzaboote tool lacking of the
     # UEFI stub location.
