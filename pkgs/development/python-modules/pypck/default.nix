@@ -12,16 +12,16 @@
 
 buildPythonPackage rec {
   pname = "pypck";
-  version = "0.7.24";
+  version = "0.8.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "alengwenus";
     repo = "pypck";
     rev = "refs/tags/${version}";
-    hash = "sha256-DWdQUnURL3WBi916vOTawtBqq+SHTu4iLViGczwAWQE=";
+    hash = "sha256-O0hRfSUJwn/xW+xJ2zD/Z8bb1G42n8UGIKHzLkl9n5M=";
   };
 
   postPatch = ''
@@ -48,7 +48,7 @@ buildPythonPackage rec {
     description = "LCN-PCK library written in Python";
     homepage = "https://github.com/alengwenus/pypck";
     changelog = "https://github.com/alengwenus/pypck/releases/tag/${version}";
-    license = with licenses; [ epl20 ];
+    license = licenses.epl20;
     maintainers = with maintainers; [ fab ];
   };
 }

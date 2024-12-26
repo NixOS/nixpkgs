@@ -74,10 +74,20 @@ stdenv.mkDerivation rec {
         --replace 'find_program( LLVM_SPIRV llvm-spirv PATHS ''${LLVM_TOOLS_BINARY_DIR} NO_DEFAULT_PATH )' \
                   'find_program( LLVM_SPIRV llvm-spirv PATHS "${spirv-llvm-translator}/bin" NO_DEFAULT_PATH )'
     ''
-    + lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-      substituteInPlace CMakeLists.txt \
-        --replace 'COMMAND prepare_builtins' 'COMMAND ${buildLlvmTools.libclc.dev}/bin/prepare_builtins'
-    '';
+    + lib.optionalString (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
+      if (lib.versionOlder release_version "19") then
+        ''
+          substituteInPlace CMakeLists.txt \
+            --replace 'COMMAND prepare_builtins' \
+                      'COMMAND ${buildLlvmTools.libclc.dev}/bin/prepare_builtins'
+        ''
+      else
+        ''
+          substituteInPlace CMakeLists.txt \
+            --replace-fail 'set( prepare_builtins_exe prepare_builtins )' \
+                           'set( prepare_builtins_exe ${buildLlvmTools.libclc.dev}/bin/prepare_builtins )'
+        ''
+    );
 
   nativeBuildInputs =
     [
