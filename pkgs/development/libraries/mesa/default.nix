@@ -361,6 +361,11 @@ in stdenv.mkDerivation {
       fi
     done
 
+    # update symlinks pointing to libgallium in $out
+    for link in $drivers/lib/dri/*_drv_video.so $drivers/lib/vdpau/*.so.1.0.0; do
+      ln -sf $drivers/lib/libgallium*.so $link
+    done
+
     # Don't depend on build python
     patchShebangs --host --update $out/bin/*
 
