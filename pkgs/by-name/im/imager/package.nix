@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "https://dave.oasu.u-bordeaux.fr:5000/5964614a-44f2-47fd-ba18-5f155543044e/imager-last.tgz";
-    sha256 = "sha256-cIgsj/OYzi8UZc9Gk/0bN3vHD8Kh+y1+EAPzM4J7t+4=";
+    hash = "sha256-cIgsj/OYzi8UZc9Gk/0bN3vHD8Kh+y1+EAPzM4J7t+4=";
   };
 
   nativeBuildInputs = [
