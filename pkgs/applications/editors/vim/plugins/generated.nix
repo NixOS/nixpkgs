@@ -749,6 +749,30 @@ final: prev:
     meta.homepage = "https://github.com/otavioschwanck/arrow.nvim/";
   };
 
+  astrocore = buildVimPlugin {
+    pname = "astrocore";
+    version = "2024-12-23";
+    src = fetchFromGitHub {
+      owner = "AstroNvim";
+      repo = "astrocore";
+      rev = "ecaf7c76484d3313b966856c2c29672a6abbc3f4";
+      sha256 = "1n9akfpm7lmby20w2dmh99vspff8hack81f6d0as531yjjflbcy0";
+    };
+    meta.homepage = "https://github.com/AstroNvim/astrocore/";
+  };
+
+  astrolsp = buildVimPlugin {
+    pname = "astrolsp";
+    version = "2024-12-23";
+    src = fetchFromGitHub {
+      owner = "AstroNvim";
+      repo = "astrolsp";
+      rev = "e5e88e2b5ed1c0f8b6fbea682577473aeabdc2b4";
+      sha256 = "0arf7lmmcniq1ppsa9544x240simw38m72fm4i0100r05p0h4ygk";
+    };
+    meta.homepage = "https://github.com/AstroNvim/astrolsp/";
+  };
+
   astrotheme = buildVimPlugin {
     pname = "astrotheme";
     version = "2024-12-10";
@@ -759,6 +783,18 @@ final: prev:
       sha256 = "0znpm60hrgmfzrpv4lfnmp6hnqi67hwvjh4zwd8nw2ln6r292gzn";
     };
     meta.homepage = "https://github.com/AstroNvim/astrotheme/";
+  };
+
+  astroui = buildVimPlugin {
+    pname = "astroui";
+    version = "2024-12-23";
+    src = fetchFromGitHub {
+      owner = "AstroNvim";
+      repo = "astroui";
+      rev = "81ddd0315ac4b260a4563a00be943992901ae5e5";
+      sha256 = "1qv9ny98wxyjdyzsw5gmn4wfsklrl01m27hxaba0mypirjr0kv1r";
+    };
+    meta.homepage = "https://github.com/AstroNvim/astroui/";
   };
 
   async-vim = buildVimPlugin {
@@ -6507,6 +6543,18 @@ final: prev:
     meta.homepage = "https://github.com/williamboman/mason-lspconfig.nvim/";
   };
 
+  mason-null-ls-nvim = buildVimPlugin {
+    pname = "mason-null-ls.nvim";
+    version = "2024-04-09";
+    src = fetchFromGitHub {
+      owner = "jay-babu";
+      repo = "mason-null-ls.nvim";
+      rev = "de19726de7260c68d94691afb057fa73d3cc53e7";
+      sha256 = "1jxslvqp05hzsz3vrspg5yal94314agh15b2p9cimiwj955igbys";
+    };
+    meta.homepage = "https://github.com/jay-babu/mason-null-ls.nvim/";
+  };
+
   mason-nvim = buildVimPlugin {
     pname = "mason.nvim";
     version = "2024-07-16";
@@ -6517,6 +6565,18 @@ final: prev:
       sha256 = "0rnscicsvlcxcp5i3pzym8wqg0qv664j15b4vnm1rlhbq2bsqjhp";
     };
     meta.homepage = "https://github.com/williamboman/mason.nvim/";
+  };
+
+  mason-nvim-dap-nvim = buildVimPlugin {
+    pname = "mason-nvim-dap.nvim";
+    version = "2024-08-04";
+    src = fetchFromGitHub {
+      owner = "jay-babu";
+      repo = "mason-nvim-dap.nvim";
+      rev = "8b9363d83b5d779813cdd2819b8308651cec2a09";
+      sha256 = "0q2pk217lrnpyvqj0mqikayyiajdvj3apki66mxx27zibgc7qg3l";
+    };
+    meta.homepage = "https://github.com/jay-babu/mason-nvim-dap.nvim/";
   };
 
   mason-tool-installer-nvim = buildVimPlugin {

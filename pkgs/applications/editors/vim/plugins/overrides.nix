@@ -143,9 +143,22 @@ in
     nvimRequireCheck = "advanced_git_search.utils";
   };
 
-  astrotheme = super.astrotheme.overrideAttrs {
-    nvimRequireCheck = "astrotheme";
+  astrocore = super.astrocore.overrideAttrs {
+    dependencies = [ self.lazy-nvim ];
   };
+
+  astrotheme = super.astrotheme.overrideAttrs {
+    nvimSkipModule = [
+      # attempt to index local 'c' (a nil value)
+      "astrotheme.groups.plugins.flash"
+      "astrotheme.groups.plugins.todo-comments"
+    ];
+  };
+
+  astroui = super.astroui.overrideAttrs (oa: {
+    # Readme states that astrocore is an optional dependency
+    nativeCheckInputs = oa.nativeCheckInputs ++ [ self.astrocore ];
+  });
 
   asyncrun-vim = super.asyncrun-vim.overrideAttrs {
     nvimSkipModule = [
@@ -1556,6 +1569,20 @@ in
     nvimRequireCheck = "mason-lspconfig";
   };
 
+  mason-null-ls-nvim = super.mason-null-ls-nvim.overrideAttrs {
+    dependencies = with self; [
+      mason-nvim
+      null-ls-nvim
+    ];
+  };
+
+  mason-nvim-dap-nvim = super.mason-nvim-dap-nvim.overrideAttrs {
+    dependencies = with self; [
+      mason-nvim
+      nvim-dap
+    ];
+  };
+
   mason-nvim = super.mason-nvim.overrideAttrs {
     # lua/mason-vendor/zzlib/inflate-bwo.lua:15: 'end' expected near '&'
     nvimSkipModule = "mason-vendor.zzlib.inflate-bwo";
@@ -2345,7 +2372,7 @@ in
       openscad
     ];
 
-    # FIXME: cant find plugin root dir
+    # FIXME: can't find plugin root dir
     nvimSkipModule = [
       "openscad"
       "openscad.snippets.openscad"
