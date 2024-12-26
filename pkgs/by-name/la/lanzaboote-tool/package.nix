@@ -7,6 +7,7 @@
   rustPlatform,
   fetchFromGitHub,
   lib,
+  nix-update-script,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "lanzaboote-tool";
@@ -15,11 +16,11 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "lanzaboote";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-Fb5TeRTdvUlo/5Yi2d+FC8a6KoRLk2h1VE0/peMhWPs=";
   };
 
-  sourceRoot = "${src.name}/rust/tool";
+  sourceRoot = "source/rust/tool";
   cargoHash = "sha256-g4WzqfH6DZVUuNb0jV3MFdm3h7zy2bQ6d3agrXesWgc=";
 
   env.TEST_SYSTEMD = systemd;
@@ -48,12 +49,14 @@ rustPlatform.buildRustPackage rec {
     sbsigntool
   ];
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
+    mainProgram = "lzbt";
     description = "Lanzaboote UEFI tooling for SecureBoot enablement on NixOS systems";
     homepage = "https://github.com/nix-community/lanzaboote";
-    license = licenses.gpl3Only;
-    mainProgram = "lzbt";
-    maintainers = with maintainers; [
+    license = lib.licenses.gpl3Only;
+    maintainers = with lib.maintainers; [
       raitobezarius
       nikstur
     ];
