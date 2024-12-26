@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
   '';
 
   meta = with lib; {
-    description = "A conda-forge distribution with mamba 1.5.11";
+    description = "Conda-forge distribution with mamba";
     homepage = "https://github.com/conda-forge/miniforge";
     license = licenses.bsd3;
     platforms = platforms.unix;
