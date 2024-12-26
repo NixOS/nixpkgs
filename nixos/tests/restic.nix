@@ -137,6 +137,16 @@ import ./make-test-python.nix (
               pruneOpts = [ "--keep-last 1" ];
               checkOpts = [ "--some-check-option" ];
             };
+            customUnitConfig = {
+              inherit passwordFile paths;
+              repository = remoteRepository;
+              unitConfig = {
+                documentation = [ "https://custom-unit-config-was-written.example.com" ];
+                serviceConfig = {
+                  ExecStartPre = "${pkgs.coreutils}/bin/touch /tmp/custom-service-config-survived-custom-unit-config";
+                };
+              };
+            };
           };
 
           environment.sessionVariables.RCLONE_CONFIG_LOCAL_TYPE = "local";
@@ -236,6 +246,15 @@ import ./make-test-python.nix (
           "systemctl start restic-backups-remoteprune.service",
           'restic-remotebackup snapshots --json | ${pkgs.jq}/bin/jq "length | . == 1"',
 
+          # test that custom unit config is present
+          "systemctl cat restic-backups-customUnitConfig",
+          "systemctl cat restic-backups-customUnitConfig | grep custom-unit-config-was-written",
+          # confirms that ExecStart was not clobbered by UnitConfig block
+          "systemctl start restic-backups-customUnitConfig",
+          # this check that the extra ServiceConfig survived doesn't work b/c of PrivateTmp
+          # "ls /tmp/custom-service-config-survived-custom-unit-config"
+          # so we have to simply grep for it instead
+          "systemctl cat restic-backups-customUnitConfig | grep /tmp/custom-service-config-survived-custom-unit-config"
       )
 
       # test that the inhibit option is working
