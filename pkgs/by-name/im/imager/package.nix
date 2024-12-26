@@ -92,7 +92,7 @@ stdenv.mkDerivation rec {
     longDescription = ''
       IMAGER is an interferometric imaging package in the GILDAS software,
       tailored for usage simplicity and efficiency for multi-spectral data sets.
-      
+
       IMAGER was developed and optimized to handle large data files.
       Therefore, IMAGER works mostly on internal buffers and avoids as much as possible
       saving data to intermediate files.
