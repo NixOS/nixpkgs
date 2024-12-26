@@ -99,10 +99,17 @@ let
     in
     test;
 
-  plugins =
-    lib.mapAttrs
-      (
-        _: provider:
+  plugins = removeAttrs terraform-providers [
+    "override"
+    "overrideDerivation"
+    "recurseForDerivations"
+  ];
+
+  withPlugins =
+    plugins:
+    let
+      actualPlugins = lib.lists.map (
+        provider:
         if provider ? override then
           # use opentofu plugin registry over terraform's
           provider.override (oldArgs: {
@@ -116,19 +123,7 @@ let
           })
         else
           provider
-      )
-      (
-        removeAttrs terraform-providers [
-          "override"
-          "overrideDerivation"
-          "recurseForDerivations"
-        ]
-      );
-
-  withPlugins =
-    plugins:
-    let
-      actualPlugins = plugins package.plugins;
+      ) (plugins package.plugins);
 
       # Wrap PATH of plugins propagatedBuildInputs, plugins may have runtime dependencies on external binaries
       wrapperInputs = lib.unique (
