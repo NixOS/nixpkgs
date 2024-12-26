@@ -8,6 +8,7 @@
   libevent,
   openssl,
   python3,
+  buildPackages,
   cmake,
   pkg-config,
   bison,
@@ -35,7 +36,8 @@ stdenv.mkDerivation rec {
       flex
       pkg-config
       python3
-      python3.pkgs.setuptools
+      # `python3.pkgs` splicing does not work here, so we force buildPackages.
+      buildPackages.python3.pkgs.setuptools
     ]
     ++ lib.optionals (!static) [
       python3.pkgs.twisted
