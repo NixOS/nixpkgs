@@ -107,6 +107,8 @@ flutter327.buildFlutterApplication rec {
     install -Dm0644 ./assets/images/logo/logo_linux.png $out/share/icons/hicolor/512x512/apps/io.github.Predidit.Kazumi.png
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Watch Animes online with danmaku support";
     homepage = "https://github.com/Predidit/Kazumi";
