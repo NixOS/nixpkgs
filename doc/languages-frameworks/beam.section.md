@@ -296,7 +296,7 @@ Usually, we need to create a `shell.nix` file and do our development inside of t
 
 with pkgs;
 let
-  elixir = beam.packages.erlang_24.elixir_1_18;
+  elixir = beam.packages.erlang_27.elixir_1_18;
 in
 mkShell {
   buildInputs = [ elixir ];
