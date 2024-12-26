@@ -35,6 +35,12 @@ stdenv.mkDerivation (finalAttrs: rec {
     license = lib.licenses.bsd3;
     mainProgram = "thorium";
     maintainers = [ lib.maintainers.quinneden ];
-    platforms = [ "aarch64-darwin" ];
+    platforms = [ "aarch64-darwin" ]; # Upstream issue with building on x86_64-darwin, latest version only aarch64-darwin currently.
+    badPlatforms = [
+      "aarch64-linux"
+      "x86_64-linux"
+    ];
+    # undmg has a problem reading the dmg file during the unpack phase on systems other than aarch64-darwin.
+    # TODO: another way to unpack with this dependency?
   };
 })
