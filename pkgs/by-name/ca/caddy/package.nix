@@ -1,11 +1,16 @@
 { lib
 , buildGoModule
+, callPackage
 , fetchFromGitHub
 , nixosTests
 , caddy
 , testers
 , installShellFiles
 , stdenv
+, go
+, xcaddy
+, cacert
+, git
 }:
 let
   version = "2.8.4";
@@ -32,7 +37,8 @@ buildGoModule {
   subPackages = [ "cmd/caddy" ];
 
   ldflags = [
-    "-s" "-w"
+    "-s"
+    "-w"
     "-X github.com/caddyserver/caddy/v2.CustomVersion=${version}"
   ];
 
@@ -61,12 +67,15 @@ buildGoModule {
       --zsh <($out/bin/caddy completion zsh)
   '';
 
-  passthru.tests = {
-    inherit (nixosTests) caddy;
-    version = testers.testVersion {
-      command = "${caddy}/bin/caddy version";
-      package = caddy;
+  passthru = {
+    tests = {
+      inherit (nixosTests) caddy;
+      version = testers.testVersion {
+        command = "${caddy}/bin/caddy version";
+        package = caddy;
+      };
     };
+    withPlugins = callPackage ./plugins.nix { inherit caddy; };
   };
 
   meta = with lib; {
