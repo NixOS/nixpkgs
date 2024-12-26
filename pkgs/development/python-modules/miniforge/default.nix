@@ -1,9 +1,4 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, python3
-, conda
-}:
+{ lib, stdenv, fetchFromGitHub, python3, conda }:
 
 stdenv.mkDerivation rec {
   pname = "miniforge";
@@ -13,13 +8,11 @@ stdenv.mkDerivation rec {
     owner = "conda-forge";
     repo = "miniforge";
     rev = version;
-    sha256 = "sha256-Mtw0TI5LWv7aC2kCx7EStYXEUa9J3xTwUPpN/z9GvAQ=";  # Will be provided by nix-build error
+    sha256 =
+      "sha256-Mtw0TI5LWv7aC2kCx7EStYXEUa9J3xTwUPpN/z9GvAQ="; 
   };
 
-  buildInputs = [
-    python3
-    conda
-  ];
+  buildInputs = [ python3 conda ];
 
   installPhase = ''
     mkdir -p $out/bin
@@ -32,6 +25,7 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/conda-forge/miniforge";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ ];  # Add your maintainer handle after PR to nixpkgs-maintainers
+    maintainers = with maintainers;
+      [ ]; 
   };
 }
