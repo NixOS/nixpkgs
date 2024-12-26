@@ -71,8 +71,9 @@ stdenv.mkDerivation rec {
   );
 
   configurePhase = ''
-    substituteInPlace admin/wrapper.sh --replace '%%OUT%%' $out
-    substituteInPlace admin/wrapper.sh --replace '%%PYTHONHOME%%' ${python3Env}
+    substituteInPlace admin/wrapper.sh \
+      --subst-var out \
+      --subst-var-by PYTHONHOME ${python3Env}
     substituteInPlace utilities/main/gag-makedepend.pl --replace '/usr/bin/perl' ${perl}/bin/perl
     source admin/gildas-env.sh -c gfortran -o openmp
     echo "gag_doc:        $out/share/doc/" >> kernel/etc/gag.dico.lcl
