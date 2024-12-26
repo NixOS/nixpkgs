@@ -8,6 +8,40 @@ let
   cfg = config.services.borgmatic;
   settingsFormat = pkgs.formats.yaml { };
 
+  postgresql = config.services.postgresql.package;
+  mysql = config.services.mysql.package;
+  addRequiredBinaries =
+    s:
+    s
+    // {
+      postgresql_databases = map (
+        d:
+        {
+          pg_dump_command =
+            if d.name == "all" then "${postgresql}/bin/pg_dumpall" else "${postgresql}/bin/pg_dump";
+          pg_restore_command = "${postgresql}/bin/pg_restore";
+          psql_command = "${postgresql}/bin/psql";
+        }
+        // d
+      ) (s.postgresql_databases or [ ]);
+      mariadb_databases = map (
+        d:
+        {
+          mariadb_dump_command = "${mysql}/bin/mariadb-dump";
+          mariadb_command = "${mysql}/bin/mariadb";
+        }
+        // d
+      ) (s.mariadb_databases or [ ]);
+      mysql_databases = map (
+        d:
+        {
+          mysql_dump_command = "${mysql}/bin/mysqldump";
+          mysql_command = "${mysql}/bin/mysql";
+        }
+        // d
+      ) (s.mysql_databases or [ ]);
+    };
+
   repository =
     with lib.types;
     submodule {
@@ -72,7 +106,7 @@ let
       };
     };
 
-  cfgfile = settingsFormat.generate "config.yaml" cfg.settings;
+  cfgfile = settingsFormat.generate "config.yaml" (addRequiredBinaries cfg.settings);
 in
 {
   options.services.borgmatic = {
@@ -106,7 +140,7 @@ in
         // lib.mapAttrs' (
           name: value:
           lib.nameValuePair "borgmatic.d/${name}.yaml" {
-            source = settingsFormat.generate "${name}.yaml" value;
+            source = settingsFormat.generate "${name}.yaml" (addRequiredBinaries value);
           }
         ) cfg.configurations;
       borgmaticCheck =
