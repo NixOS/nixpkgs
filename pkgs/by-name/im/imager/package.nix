@@ -70,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Workaround for https://github.com/NixOS/nixpkgs/issues/304528
   env.GAG_CPP = lib.optionalString stdenv.hostPlatform.isDarwin "${gfortran.outPath}/bin/cpp";
 
-  NIX_LDFLAGS = lib.optionalString stdenv.isDarwin (
+  NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin (
     with darwin.apple_sdk.frameworks; "-F${CoreFoundation}/Library/Frameworks"
   );
 
