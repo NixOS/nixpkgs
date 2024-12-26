@@ -1,7 +1,7 @@
 {
- lib,
- appimageTools,
- fetchurl
+  lib,
+  appimageTools,
+  fetchurl,
 }:
 let
   pname = "noi";
@@ -13,7 +13,8 @@ let
   appimageContents = appimageTools.extract {
     inherit pname version src;
   };
-in appimageTools.wrapType2 {
+in
+appimageTools.wrapType2 {
   inherit pname version src;
   extraInstallCommands = ''
     mkdir -p $out/share/applications
