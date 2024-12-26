@@ -26,7 +26,6 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  srcVersion = "dec24";
   version = "4.4-01";
   pname = "imager";
 
@@ -34,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
     # The recommended download link is on Nextcloud instance that
     # requires to accept some general terms of use. Use a mirror at
     # univ-grenoble-alpes.fr instead.
-    url = "https://cloud.univ-grenoble-alpes.fr/s/J6yEqA6yZ8tX9da/download?path=%2F&files=imager-${srcVersion}.tar.gz";
+    url = "https://cloud.univ-grenoble-alpes.fr/s/J6yEqA6yZ8tX9da/download?path=%2F&files=imager-dec24.tar.gz";
     hash = "sha256-Pq92IsGY4heekm5zNGngnp6J6YiCHYAyuMT2RsD1/9o=";
   };
 
@@ -108,4 +107,4 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 
-}
+})
