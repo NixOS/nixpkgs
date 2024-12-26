@@ -89,7 +89,16 @@ stdenv.mkDerivation rec {
 
   meta = {
     description = "Interferometric imaging package";
-    longDescription = ''IMAGER is an interferometric imaging package in the GILDAS software, tailored for usage simplicity and efficiency for multi-spectral data sets. IMAGER was developed and optimized to handle large data files. Therefore, IMAGER works mostly on internal buffers and avoids as much as possible saving data to intermediate files. File saving is done ultimately once the data analysis process is complete, which offers an optimum use of the disk bandwidth.'';
+    longDescription = ''
+      IMAGER is an interferometric imaging package in the GILDAS software,
+      tailored for usage simplicity and efficiency for multi-spectral data sets.
+      
+      IMAGER was developed and optimized to handle large data files.
+      Therefore, IMAGER works mostly on internal buffers and avoids as much as possible
+      saving data to intermediate files.
+      File saving is done ultimately once the data analysis process is complete, 
+      which offers an optimum use of the disk bandwidth.
+    '';
     homepage = "https://imager.oasu.u-bordeaux.fr";
     license = lib.licenses.free;
     maintainers = [ lib.maintainers.smaret ];
