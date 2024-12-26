@@ -410,6 +410,7 @@ in {
   gotosocial = runTest ./web-apps/gotosocial.nix;
   grafana = handleTest ./grafana {};
   grafana-agent = handleTest ./grafana-agent.nix {};
+  graphics = handleTest ./graphics.nix {};
   graphite = handleTest ./graphite.nix {};
   graylog = handleTest ./graylog.nix {};
   greetd-no-shadow = handleTest ./greetd-no-shadow.nix {};
