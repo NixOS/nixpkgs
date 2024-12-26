@@ -41,6 +41,7 @@
   vulkanSupport ? true,
   waylandSupport ? true,
   x11Support ? true,
+  flashfetchSupport ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "fastfetch";
@@ -123,6 +124,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.cmakeBool "ENABLE_XCB_RANDR" x11Support)
       (lib.cmakeBool "ENABLE_XFCONF" (x11Support && (!stdenv.hostPlatform.isDarwin)))
       (lib.cmakeBool "ENABLE_XRANDR" x11Support)
+      (lib.cmakeBool "BUILD_FLASHFETCH" flashfetchSupport)
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       (lib.cmakeOptionType "filepath" "CUSTOM_PCI_IDS_PATH" "${hwdata}/share/hwdata/pci.ids")
@@ -133,12 +135,15 @@ stdenv.mkDerivation (finalAttrs: {
     substituteInPlace completions/fastfetch.fish --replace-fail python3 '${python3.interpreter}'
   '';
 
-  postInstall = ''
-    wrapProgram $out/bin/fastfetch \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
-    wrapProgram $out/bin/flashfetch \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
-  '';
+  postInstall =
+    ''
+      wrapProgram $out/bin/fastfetch \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
+    ''
+    + lib.optionalString flashfetchSupport ''
+      wrapProgram $out/bin/flashfetch \
+        --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath finalAttrs.buildInputs}"
+    '';
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = "--version";
