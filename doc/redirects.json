@@ -3034,6 +3034,9 @@
   "javascript-yarninstallhook": [
     "index.html#javascript-yarninstallhook"
   ],
+  "javascript-yarnberry": [
+    "index.html#javascript-yarnberry"
+  ],
   "javascript-yarn2nix": [
     "index.html#javascript-yarn2nix"
   ],

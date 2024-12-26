@@ -1,0 +1,7 @@
+{
+  "name": "yarn-testing",
+  "packageManager": "yarn@4.5.0",
+  "dependencies": {
+    "lit-html": "^3.2.1"
+  }
+}
