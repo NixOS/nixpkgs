@@ -11,7 +11,7 @@
 }:
 
 let
-  rev = "cce7d2a5c4efd4e7727c440868141229354b327b";
+  rev = "17823e99898131a234ccdb39ad114dbaeebb7fc3";
 in
 stdenv.mkDerivation {
   pname = "rkdeveloptool";
@@ -19,13 +19,13 @@ stdenv.mkDerivation {
 
   src = fetchurl {
     url = "https://gitlab.com/pine64-org/quartz-bsp/rkdeveloptool/-/archive/${rev}/rkdeveloptool-${rev}.tar.gz";
-    sha256 = "sha256-u/x1Y1zZ19SYwNLVAvpqjH247RijyDJ1HTDWIsmqlFk=";
+    hash = "sha256-KbNjuRb6/FTTInxXVYVTtCfEKZJC/aBdtkZDkDu+rKE=";
   };
 
   postPatch = ''
     substituteInPlace meson.build --replace \
       "udev_rules_dir = udev.get_pkgconfig_variable('udevdir') + '/rules.d'" \
-      "udev_rules_dir = '$out/lib/udev'"
+      "udev_rules_dir = '$out/lib/udev/rules.d'"
   '';
 
   nativeBuildInputs = [
