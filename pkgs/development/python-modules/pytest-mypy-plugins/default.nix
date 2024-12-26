@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "pytest-mypy-plugins";
-  version = "3.1.2";
+  version = "3.2.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,8 +26,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "typeddjango";
     repo = "pytest-mypy-plugins";
-    rev = "refs/tags/${version}";
-    hash = "sha256-yme1g9Kj5guao0Lf8mbkNJRw6ipS2Wd4Io1cSlEBAGo=";
+    tag = version;
+    hash = "sha256-60VxMUUCIP+Mp+OsgdyRTPZVLGC/3iaMxxhw02ABB9k=";
   };
 
   build-system = [ setuptools ];
