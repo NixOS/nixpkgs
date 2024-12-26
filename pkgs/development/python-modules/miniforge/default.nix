@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, python3, conda }:
+{ lib, buildPythonPackage, stdenv, fetchFromGitHub, python3, conda }:
 
 stdenv.mkDerivation rec {
   pname = "miniforge";
@@ -19,12 +19,12 @@ stdenv.mkDerivation rec {
     ln -s $out/miniforge3/bin/conda $out/bin/miniforge-conda
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Conda-forge distribution with mamba";
     homepage = "https://github.com/conda-forge/miniforge";
     license = licenses.bsd3;
     platforms = platforms.unix;
     maintainers = with maintainers;
-      [ ]; 
+      [ qxrein ]; 
   };
 }
