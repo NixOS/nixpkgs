@@ -8931,6 +8931,8 @@ with pkgs;
     then pkgs."androidndkPkgs_${stdenv.hostPlatform.androidNdkVersion}".libraries
     else callPackage ../os-specific/linux/bionic-prebuilt { };
 
+  bionic-translation = callPackage ../development/libraries/bionic-translation { };
+
   inherit (callPackage ../development/libraries/boost { inherit (buildPackages) boost-build; })
     boost175
     boost177
