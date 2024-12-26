@@ -7,19 +7,19 @@
 }:
 let
   pname = "open-webui";
-  version = "0.4.8";
+  version = "0.5.2";
 
   src = fetchFromGitHub {
     owner = "open-webui";
     repo = "open-webui";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-9N/t8hxODM6Dk/eMKS26/2Sh1lJVkq9pNkPcEtbXqb4=";
+    tag = "v${version}";
+    hash = "sha256-QQSJaef/0G8elj3c3uVWq9Yh7puNhe0vZc+IVH3rDpE=";
   };
 
   frontend = buildNpmPackage {
     inherit pname version src;
 
-    npmDepsHash = "sha256-ThOGBurFjndBZcdpiGugdXpv1YCwCN7s3l2JjSk/hY0=";
+    npmDepsHash = "sha256-SUrI5nKtW/NoqT2BNRjBM9Aw9KIZL/T6SEtEbazhvPQ=";
 
     # Disabling `pyodide:fetch` as it downloads packages during `buildPhase`
     # Until this is solved, running python packages from the browser will not work.
@@ -90,6 +90,9 @@ python312.pkgs.buildPythonApplication rec {
     flask-cors
     fpdf2
     ftfy
+    google-api-python-client
+    google-auth-httplib2
+    google-auth-oauthlib
     google-generativeai
     googleapis-common-protos
     iso-639
@@ -156,11 +159,14 @@ python312.pkgs.buildPythonApplication rec {
   };
 
   meta = {
-    changelog = "https://github.com/open-webui/open-webui/blob/${src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/open-webui/open-webui/blob/${src.tag}/CHANGELOG.md";
     description = "Comprehensive suite for LLMs with a user-friendly WebUI";
     homepage = "https://github.com/open-webui/open-webui";
     license = lib.licenses.mit;
     mainProgram = "open-webui";
-    maintainers = with lib.maintainers; [ shivaraj-bh ];
+    maintainers = with lib.maintainers; [
+      drupol
+      shivaraj-bh
+    ];
   };
 }
