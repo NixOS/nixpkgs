@@ -1576,6 +1576,13 @@ in
     ];
   };
 
+  mason-nvim-dap-nvim = super.mason-nvim-dap-nvim.overrideAttrs {
+    dependencies = with self; [
+      mason-nvim
+      nvim-dap
+    ];
+  };
+
   mason-nvim = super.mason-nvim.overrideAttrs {
     # lua/mason-vendor/zzlib/inflate-bwo.lua:15: 'end' expected near '&'
     nvimSkipModule = "mason-vendor.zzlib.inflate-bwo";

@@ -6567,6 +6567,18 @@ final: prev:
     meta.homepage = "https://github.com/williamboman/mason.nvim/";
   };
 
+  mason-nvim-dap-nvim = buildVimPlugin {
+    pname = "mason-nvim-dap.nvim";
+    version = "2024-08-04";
+    src = fetchFromGitHub {
+      owner = "jay-babu";
+      repo = "mason-nvim-dap.nvim";
+      rev = "8b9363d83b5d779813cdd2819b8308651cec2a09";
+      sha256 = "0q2pk217lrnpyvqj0mqikayyiajdvj3apki66mxx27zibgc7qg3l";
+    };
+    meta.homepage = "https://github.com/jay-babu/mason-nvim-dap.nvim/";
+  };
+
   mason-tool-installer-nvim = buildVimPlugin {
     pname = "mason-tool-installer.nvim";
     version = "2024-06-03";
