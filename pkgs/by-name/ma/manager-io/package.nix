@@ -17,7 +17,7 @@ let
   name = "${pname}-${version}";
   src = fetchurl {
     url = "https://github.com/Manager-io/Manager/releases/download/${version}/Manager-linux-x64.AppImage";
-    hash = "sha256-RwpuI08w0lnP+2V4tiubw4wzc6ya6sAajJi4k5eUyzo=";
+    hash = "sha256-Q4bH1cFvZfNSOWGXmg/RAOtjK6u5p2iRfUrOvetnoOs=";
   };
 
   appimageContents = appimageTools.extract {
@@ -64,7 +64,7 @@ appimageTools.wrapType2 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
-  extraPkgs = [
+  extraPkgs = pkgs: [ 
     icu
     webkitgtk_6_0
     webkitgtk_4_0 # for older devices
