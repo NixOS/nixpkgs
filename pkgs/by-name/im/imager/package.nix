@@ -102,7 +102,7 @@ stdenv.mkDerivation rec {
     homepage = "https://imager.oasu.u-bordeaux.fr";
     license = lib.licenses.free;
     maintainers = [ lib.maintainers.smaret ];
-    platforms = lib.platforms.all;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
   };
 
 }
