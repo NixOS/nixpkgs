@@ -1330,35 +1330,48 @@ rec {
           pairs);
 
   /**
-    Compare two lists element-by-element.
+    Compare two lists element-by-element with a comparison function `cmp`.
+
+    List elements are compared pairwise in order by the provided comparison function `cmp`,
+    the first non-equal pair of elements determines the result.
+
+    :::{.note}
+    The `<` operator can also be used to compare lists using a boolean condition. (e.g. `[1 2] < [1 3]` is `true`).
+    See also [language operators](https://nix.dev/manual/nix/stable/language/operators#comparison) for more information.
+    :::
 
     # Inputs
 
     `cmp`
 
-    : 1\. Function argument
+    : The comparison function `a: b: ...` must return:
+      - `0` if `a` and `b` are equal
+      - `1` if `a` is greater than `b`
+      - `-1` if `a` is less than `b`
+
+      See [lib.compare](#function-library-lib.trivial.compare) for a an example implementation.
 
     `a`
 
-    : 2\. Function argument
+    : The first list
 
     `b`
 
-    : 3\. Function argument
+    : The second list
 
 
     # Examples
     :::{.example}
-    ## `lib.lists.compareLists` usage example
+    ## `lib.lists.compareLists` usage examples
 
     ```nix
-    compareLists compare [] []
+    compareLists lib.compare [] []
     => 0
-    compareLists compare [] [ "a" ]
+    compareLists lib.compare [] [ "a" ]
     => -1
-    compareLists compare [ "a" ] []
+    compareLists lib.compare [ "a" ] []
     => 1
-    compareLists compare [ "a" "b" ] [ "a" "c" ]
+    compareLists lib.compare [ "a" "b" ] [ "a" "c" ]
     => -1
     ```
 
