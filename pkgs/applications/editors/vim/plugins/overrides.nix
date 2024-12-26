@@ -143,6 +143,10 @@ in
     nvimRequireCheck = "advanced_git_search.utils";
   };
 
+  astrocore = super.astrocore.overrideAttrs {
+    dependencies = [ self.lazy-nvim ];
+  };
+
   astrotheme = super.astrotheme.overrideAttrs {
     nvimRequireCheck = "astrotheme";
   };
@@ -2345,7 +2349,7 @@ in
       openscad
     ];
 
-    # FIXME: cant find plugin root dir
+    # FIXME: can't find plugin root dir
     nvimSkipModule = [
       "openscad"
       "openscad.snippets.openscad"
