@@ -1,0 +1,155 @@
+From c71d5fed4ef1f0b6d56400cddf02d8ac438168c8 Mon Sep 17 00:00:00 2001
+From: OPNA2608 <opna2608@protonmail.com>
+Date: Wed, 17 Apr 2024 16:18:23 +0200
+Subject: [PATCH] Mark problematic tests
+
+- ShapeMaterial requires a Qt OpenGL context, doesn't work in our sandbox
+- SignalSpy on QML shaders compilers don't see changes
+- TypeError on some properties with Qt 5.15
+  https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/9
+---
+ tests/checkresults.sh | 88 ++++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 82 insertions(+), 6 deletions(-)
+
+diff --git a/tests/checkresults.sh b/tests/checkresults.sh
+index fc498985e..b5d204d0d 100755
+--- a/tests/checkresults.sh
++++ b/tests/checkresults.sh
+@@ -22,6 +22,7 @@ ERRORS_PATTERN='<failure'
+ 
+ FAILURES=0
+ FATAL_WARNINGS=0
++EXCEPTED_FAILURES=0
+ EXCEPTED=0
+ for _XML in $*; do
+     _TESTNAME=$(basename $_XML | sed -r 's@(.+)\.xml@\1@' -)
+@@ -31,7 +32,71 @@ for _XML in $*; do
+       exit 1
+     fi
+ 
+-    EXCEPTIONS='components_benchmark \
++    ERROR_EXCEPTIONS='\
++                tst_actionbar.13.qml \
++                tst_actionlist.13.qml \
++                tst_adaptivepagelayout.13.qml \
++                tst_adaptivepagelayout_configuration.13.qml \
++                tst_combobutton.11.qml \
++                tst_combobutton.13.qml \
++                tst_contextual_actions.13.qml \
++                tst_focus.13.qml \
++                tst_header.13.qml \
++                tst_hide_chrome.11.qml \
++                tst_listitem.12.qml \
++                tst_listitem.13.qml \
++                tst_listitem_actions_breaks_selectmode.12.qml \
++                tst_listitem_extras.13.qml \
++                tst_listitem_focus.13.qml \
++                tst_listitem_horizontal_navigation.13.qml \
++                tst_listitem_selectmode.12.qml \
++                tst_listitem_selectmode.13.qml \
++                tst_listitems_itemselector.11.qml \
++                tst_listitems_standard.11.qml \
++                tst_listitems_standard.13.qml \
++                tst_lomirilistview.11.qml \
++                tst_lomiritestcase.qml \
++                tst_multicolumnheader.13.qml \
++                tst_optionselector.11.qml \
++                tst_optionselector.13.qml \
++                tst_page_with_header.13.qml \
++                tst_pagehead_back_action.13.qml \
++                tst_pagehead_contents_width.13.qml \
++                tst_pagehead_sections.13.qml \
++                tst_pagehead_visible.13.qml \
++                tst_pageheader.13.qml \
++                tst_pagestack.13.qml \
++                tst_pagestack.DEPRECATED_APPHEADER_TABS.13.qml \
++                tst_picker.11.qml \
++                tst_picker.13.qml \
++                tst_popover.12.qml \
++                tst_popover.13.qml \
++                tst_popups_dialog.13.qml \
++                tst_popups_pagestack.13.qml \
++                tst_pulltorefresh_pagestack_topmargin.13.qml \
++                tst_slider.11.qml \
++                tst_slider.13.qml \
++                tst_switch_bug1510919.13.qml \
++                tst_tabs.11.qml \
++                tst_tabs.13.qml \
++                tst_tabs.DEPRECATED_TOOLBAR.11.qml \
++                tst_textarea.11.qml \
++                tst_textarea_in_flickable.11.qml \
++                tst_textfield.11.qml \
++                tst_textinput_common.12.qml \
++                tst_textinput_common.13.qml \
++                tst_toggles.13.qml \
++                inversemousearea \
++                layouts \
++                recreateview \
++                subtheming \
++                swipearea \
++                tst_icon.11.qml \
++                tst_icon.13.qml \
++                '
++
++    EXCEPTIONS='\
++                components_benchmark \
+                 tst_tabbar.11.qml \
+                 tst_datepicker.bug1567840.SEGFAULT.12.qml \
+                 tst_datepicker.bug1567840.SEGFAULT.13.qml \
+@@ -49,22 +114,28 @@ for _XML in $*; do
+                 inversemousearea \
+                 tst_listitem_focus_bug.13.qml \
+                 tst_shortcuts.13.qml \
++                tst_pagestack.DEPRECATED_TOOLBAR.11.qml \
+                 '
+ 
+     WARNINGS=$(grep -c -P "$WARNINGS_PATTERN" $_XML)
+     ERRORS=$(grep -c -P "$ERRORS_PATTERN" $_XML)
+     if [ $ERRORS -ne 0 ]; then
+-      FAILURES_FILES="${FAILURES_FILES}  ${_TESTNAME}\n"
+-      ((FAILURES+=$ERRORS))
++      if [[ " $ERROR_EXCEPTIONS " == *" $_TESTNAME "* ]]; then
++        EXCEPTED_FAILURES_FILES="${EXCEPTED_FAILURES_FILES}  ${_TESTNAME}\n"
++        ((EXCEPTED_FAILURES+=$ERRORS))
++      else
++        FAILURES_FILES="${FAILURES_FILES}  ${_TESTNAME}\n"
++        ((FAILURES+=$ERRORS))
++      fi
+     elif [ $WARNINGS -ne 0 ]; then
+-      if [[ $EXCEPTIONS == *$_TESTNAME* ]]; then
++      if [[ " $EXCEPTIONS " == *" $_TESTNAME "* ]]; then
+         EXCEPTED_FILES="${EXCEPTED_FILES}  ${_TESTNAME}\n"
+         ((EXCEPTED+=$WARNINGS))
+       else
+         FATAL_WARNINGS_FILES="${FATAL_WARNINGS_FILES}  ${_TESTNAME}\n"
+         ((FATAL_WARNINGS+=$WARNINGS))
+       fi
+-    elif [[ $EXCEPTIONS == *$_TESTNAME* ]]; then
++    elif [[ " $ERROR_EXCEPTIONS " == *" $_TESTNAME "* || " $EXCEPTIONS " == *" $_TESTNAME "* ]]; then
+       WOOT_FILES="${WOOT_FILES}  ${_TESTNAME}\n"
+     fi
+ done
+@@ -82,6 +153,11 @@ if [ -n "$FATAL_WARNINGS_FILES" ]; then
+     echo -e "$FATAL_WARNINGS_FILES"
+ fi
+ 
++if [ -n "$EXCEPTED_FAILURES_FILES" ]; then
++    echo The following tests issued $EXCEPTED_FAILURES expected failures:
++    echo -e "$EXCEPTED_FAILURES_FILES"
++fi
++
+ if [ -n "$EXCEPTED_FILES" ]; then
+     echo The following tests issued $EXCEPTED expected warnings:
+     echo -e "$EXCEPTED_FILES"
+@@ -89,7 +165,7 @@ fi
+ 
+ if [ -n "$WOOT_FILES" ]; then
+     echo Woot! Known problematic tests passed!
+-    echo Consider removing these from EXCEPTIONS in ${0#$(pwd)/}!
++    echo Consider removing these from ERROR_EXCEPTIONS/EXCEPTIONS in ${0#$(pwd)/}!
+     echo -e "$WOOT_FILES"
+ fi
+ 
+-- 
+2.42.0
+

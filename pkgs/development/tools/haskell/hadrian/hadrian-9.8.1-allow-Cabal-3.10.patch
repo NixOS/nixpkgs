@@ -1,0 +1,13 @@
+diff --git a/hadrian.cabal b/hadrian.cabal
+index 70fded11aa..3893537f05 100644
+--- a/hadrian/hadrian.cabal
++++ b/hadrian/hadrian.cabal
+@@ -150,7 +150,7 @@ executable hadrian
+                        , TypeOperators
+     other-extensions:    MultiParamTypeClasses
+                        , TypeFamilies
+-    build-depends:       Cabal                >= 3.2     && < 3.9
++    build-depends:       Cabal                >= 3.2     && < 3.11
+                        , base                 >= 4.11    && < 5
+                        , bytestring           >= 0.10    && < 0.13
+                        , containers           >= 0.5     && < 0.7

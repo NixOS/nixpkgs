@@ -1,0 +1,87 @@
+diff --git a/baksmali/build.gradle b/baksmali/build.gradle
+index d346970e..eaddfa27 100644
+--- a/baksmali/build.gradle
++++ b/baksmali/build.gradle
+@@ -25,7 +25,7 @@ task fatJar(type: Jar) {
+     from sourceSets.main.output
+     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+ 
+-    classifier = 'fat'
++    archiveClassifier = 'fat'
+ 
+     manifest {
+         attributes('Main-Class': 'org.jf.baksmali.Main')
+@@ -36,6 +36,10 @@ task fatJar(type: Jar) {
+             ant.symlink(link: file("${destinationDirectory.get()}/baksmali.jar"), resource: archivePath, overwrite: true)
+         }
+     }
++
++    // Necessary on Gradle 7 to eplicitly set dependency
++    dependsOn project(':util').jar
++    dependsOn project(':dexlib2').jar
+ }
+ tasks.getByPath('build').dependsOn(fatJar)
+ 
+diff --git a/build.gradle b/build.gradle
+index 5656b634..e519c53e 100644
+--- a/build.gradle
++++ b/build.gradle
+@@ -30,8 +30,8 @@ subprojects {
+     version = parent.version
+ 
+     java {
+-        sourceCompatibility JavaVersion.VERSION_1_8
+-        targetCompatibility JavaVersion.VERSION_1_8
++        sourceCompatibility JavaVersion.VERSION_17
++        targetCompatibility JavaVersion.VERSION_17
+     }
+ 
+     ext {
+diff --git a/dexlib2/build.gradle b/dexlib2/build.gradle
+index e1c39897..fc45707c 100644
+--- a/dexlib2/build.gradle
++++ b/dexlib2/build.gradle
+@@ -18,4 +18,7 @@ task ragel(type:Exec) {
+             'SyntheticAccessorFSM.rl'
+ }
+ 
+-
++test {
++    // Since Java 9, this is needed. See https://stackoverflow.com/a/41265267
++    jvmArgs '--add-opens', 'java.base/java.lang=ALL-UNNAMED'
++}
+diff --git a/smali/build.gradle b/smali/build.gradle
+index 6ec5f483..2b3bb771 100644
+--- a/smali/build.gradle
++++ b/smali/build.gradle
+@@ -57,13 +57,17 @@ dependencies {
+ 
+ processResources.inputs.property('version', version)
+ processResources.expand('version': version)
++processResources.configure {
++    // Necessary on Gradle 7 to eplicitly set dependency
++    dependsOn generateGrammarSource
++}
+ 
+ // Build a separate jar that contains all dependencies
+ task fatJar(type: Jar, dependsOn: jar) {
+     from sourceSets.main.output
+     from { configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) } }
+ 
+-    classifier = 'fat'
++    archiveClassifier = 'fat'
+ 
+     manifest {
+         attributes('Main-Class': 'org.jf.smali.Main')
+@@ -74,6 +78,11 @@ task fatJar(type: Jar, dependsOn: jar) {
+             ant.symlink(link: file("${destinationDirectory.get()}/smali.jar"), resource: archivePath, overwrite: true)
+         }
+     }
++
++    // Necessary on Gradle 7 to eplicitly set dependency
++    dependsOn project(':util').jar
++    dependsOn project(':dexlib2').jar
++    dependsOn project(':baksmali').jar
+ }
+ tasks.getByPath('build').dependsOn(fatJar)
+ 

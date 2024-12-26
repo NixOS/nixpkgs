@@ -1,0 +1,49 @@
+From 7438d1fa962eb736af9754669f200f29c5b6025d Mon Sep 17 00:00:00 2001
+From: liushuyu <liushuyu011@gmail.com>
+Date: Mon, 18 Nov 2024 16:12:54 -0700
+Subject: [PATCH] Preliminary Python 3.13 compatibility
+
+---
+ argcomplete/packages/_argparse.py | 15 +++++++++++++++
+ 1 file changed, 15 insertions(+)
+
+diff --git a/argcomplete/packages/_argparse.py b/argcomplete/packages/_argparse.py
+index d10cf01..10ed00c 100644
+--- a/argcomplete/packages/_argparse.py
++++ b/argcomplete/packages/_argparse.py
+@@ -5,6 +5,7 @@
+ 
+ # This file contains argparse introspection utilities used in the course of argcomplete execution.
+ 
++import sys
+ from argparse import (
+     ONE_OR_MORE,
+     OPTIONAL,
+@@ -15,6 +16,7 @@
+     Action,
+     ArgumentError,
+     ArgumentParser,
++    Namespace,
+     _get_action_name,
+     _SubParsersAction,
+ )
+@@ -75,6 +77,19 @@ class IntrospectiveArgumentParser(ArgumentParser):
+     except for the lines that contain the string "Added by argcomplete".
+     '''
+ 
++    def _parse_known_args2(self, args, namespace, intermixed):
++        if args is None:
++            # args default to the system args
++            args = sys.argv[1:]
++        else:
++            # make sure that args are mutable
++            args = list(args)
++
++        # default Namespace built from parser defaults
++        if namespace is None:
++            namespace = Namespace()
++        return self._parse_known_args(args, namespace)
++
+     def _parse_known_args(self, arg_strings, namespace):
+         _num_consumed_args.clear()  # Added by argcomplete
+         self._argcomplete_namespace = namespace

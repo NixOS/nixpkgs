@@ -1,0 +1,36 @@
+diff --git a/src/debugger.cpp b/src/debugger.cpp
+index 946bdd12..5c24b371 100644
+--- a/src/debugger.cpp
++++ b/src/debugger.cpp
+@@ -36,12 +36,12 @@ QList<Debugger> Debugger::availableInternalDebuggers(const QString &backend)
+         result.push_back(std::make_shared<Data>(
+             Data{.displayName = i18nc("@label the debugger called GDB", "GDB"),
+                  .codeName = u"gdb"_s,
+-                 .tryExec = u"gdb"_s,
++                 .tryExec = u"@gdb@"_s,
+                  .backendData =
+-                     BackendData{.command = u"gdb -nw -n -batch -x %preamblefile -x %tempfile -p %pid %execpath"_s,
++                     BackendData{.command = u"@gdb@ -nw -n -batch -x %preamblefile -x %tempfile -p %pid %execpath"_s,
+                                  .supportsCommandWithSymbolResolution = true,
+                                  .commandWithSymbolResolution =
+-                                     u"gdb -nw -n -batch --init-eval-command='set debuginfod enabled on' -x %preamblefile -x %tempfile -p %pid %execpath"_s,
++                                     u"@gdb@ -nw -n -batch --init-eval-command='set debuginfod enabled on' -x %preamblefile -x %tempfile -p %pid %execpath"_s,
+                                  .backtraceBatchCommands = u"thread\nthread apply all bt"_s,
+                                  .preambleCommands = expandCommand(
+                                      u"gdb"_s,
+@@ -63,12 +63,12 @@ QList<Debugger> Debugger::availableInternalDebuggers(const QString &backend)
+             Data{
+                 .displayName = i18nc("@label the debugger called GDB", "GDB"),
+                 .codeName = u"gdb"_s,
+-                .tryExec = u"gdb"_s,
++                .tryExec = u"@gdb@"_s,
+                 .backendData = BackendData{
+-                    .command = u"gdb --nw --nx --batch --command=%preamblefile --command=%tempfile --core=%corefile %execpath"_s,
++                    .command = u"@gdb@ --nw --nx --batch --command=%preamblefile --command=%tempfile --core=%corefile %execpath"_s,
+                     .supportsCommandWithSymbolResolution = true,
+                     .commandWithSymbolResolution =
+-                        u"gdb --nw --nx --batch --init-eval-command='set debuginfod enabled on' --command=%preamblefile --command=%tempfile --core=%corefile %execpath"_s,
++                        u"@gdb@ --nw --nx --batch --init-eval-command='set debuginfod enabled on' --command=%preamblefile --command=%tempfile --core=%corefile %execpath"_s,
+                     .backtraceBatchCommands = u"thread\nthread apply all bt"_s,
+                     .preambleCommands = expandCommand(
+                         u"gdb"_s,

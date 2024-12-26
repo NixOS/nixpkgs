@@ -1,0 +1,15 @@
+diff --git a/pahole.c b/pahole.c
+index 954498d2ad4f..2b010658330c 100644
+--- a/pahole.c
++++ b/pahole.c
+@@ -3705,6 +3705,10 @@ int main(int argc, char *argv[])
+ 		goto out;
+ 	}
+ 
++	/* This being set means whoever called us tries to do a reproducible build */
++	if (getenv("SOURCE_DATE_EPOCH"))
++		conf_load.reproducible_build = true;
++
+ 	if (languages.str && parse_languages())
+ 		return rc;
+ 

@@ -1,0 +1,23 @@
+diff --git a/test/unit/test_uv_fs.c b/test/unit/test_uv_fs.c
+index 638c39c..c8758d2 100644
+--- a/test/unit/test_uv_fs.c
++++ b/test/unit/test_uv_fs.c
+@@ -40,18 +40,6 @@ TEST(UvFsCheckDir, exists, DirSetUp, DirTearDown, 0, NULL)
+     return MUNIT_OK;
+ }
+ 
+-/* If the directory doesn't exist, it an error is returned. */
+-TEST(UvFsCheckDir, doesNotExist, DirSetUp, DirTearDown, 0, NULL)
+-{
+-    const char *parent = data;
+-    char errmsg[RAFT_ERRMSG_BUF_SIZE];
+-    char dir[128];
+-    sprintf(errmsg, "%s/sub", parent);
+-    sprintf(errmsg, "directory '%s' does not exist", dir);
+-    CHECK_DIR_ERROR(dir, RAFT_NOTFOUND, errmsg);
+-    return MUNIT_OK;
+-}
+-
+ /* If the process can't access the directory, an error is returned. */
+ TEST(UvFsCheckDir, permissionDenied, NULL, NULL, 0, NULL)
+ {
