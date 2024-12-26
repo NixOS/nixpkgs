@@ -2237,8 +2237,8 @@ self: super: {
   }) super.gi-gtk-declarative;
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
 
-  gi-gtk_4 = self.gi-gtk_4_0_9;
-  gi-gtk_4_0_9 = doDistribute (super.gi-gtk_4_0_9.override {
+  gi-gtk_4 = self.gi-gtk_4_0_11;
+  gi-gtk_4_0_11 = doDistribute (super.gi-gtk_4_0_11.override {
     gi-gdk = self.gi-gdk_4;
   });
   gi-gdk_4 = self.gi-gdk_4_0_9;
