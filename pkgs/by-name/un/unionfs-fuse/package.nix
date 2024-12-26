@@ -4,17 +4,19 @@
   fetchFromGitHub,
   cmake,
   fuse,
+  fuse3,
+  pkg-config,
 }:
 
 stdenv.mkDerivation rec {
   pname = "unionfs-fuse";
-  version = "2.2";
+  version = "3.5";
 
   src = fetchFromGitHub {
     owner = "rpodgorny";
     repo = "unionfs-fuse";
     rev = "v${version}";
-    sha256 = "sha256-EJryML6E0CW4kvsqMRqV3cq77j50HuylNzgaHD6CL/o=";
+    sha256 = "sha256-yosS1x15E8Rtuvikkl0cr6VHTEWn/up+EzFybyiU0Lk=";
   };
 
   patches = [
@@ -30,8 +32,17 @@ stdenv.mkDerivation rec {
       --replace '/usr/local/include/osxfuse/fuse' '${lib.getDev fuse}/include/fuse'
   '';
 
-  nativeBuildInputs = [ cmake ];
-  buildInputs = [ fuse ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
+  buildInputs =
+    (lib.optionals stdenv.hostPlatform.isDarwin [
+      fuse
+    ])
+    ++ (lib.optionals (!stdenv.hostPlatform.isDarwin) [
+      fuse3
+    ]);
 
   # Put the unionfs mount helper in place as mount.unionfs-fuse. This makes it
   # possible to do:
@@ -42,12 +53,11 @@ stdenv.mkDerivation rec {
   preConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir -p $out/sbin
     cp -a mount.unionfs $out/sbin/mount.unionfs-fuse
-    substituteInPlace $out/sbin/mount.unionfs-fuse --replace mount.fuse ${fuse}/sbin/mount.fuse
+    substituteInPlace $out/sbin/mount.unionfs-fuse --replace mount.fuse ${fuse3}/sbin/mount.fuse
     substituteInPlace $out/sbin/mount.unionfs-fuse --replace unionfs $out/bin/unionfs
   '';
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "FUSE UnionFS implementation";
     homepage = "https://github.com/rpodgorny/unionfs-fuse";
     license = licenses.bsd3;
