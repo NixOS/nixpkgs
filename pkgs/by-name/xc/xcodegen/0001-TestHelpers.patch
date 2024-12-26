@@ -1,0 +1,13 @@
+diff --git a/Sources/TestSupport/TestHelpers.swift b/Sources/TestSupport/TestHelpers.swift
+index 757856df..18e5e1d1 100644
+--- a/Sources/TestSupport/TestHelpers.swift
++++ b/Sources/TestSupport/TestHelpers.swift
+@@ -111,7 +111,7 @@ extension XCScheme: Named {}
+ 
+ extension XCTestCase {
+ 
+-    public func describe(_ name: StaticString = #function, _ test: (ContextType) -> Void) {
++    public func describe(_ name: String = #function, _ test: (ContextType) -> Void) {
+ 
+         var name = String(describing: name)
+         if name.hasPrefix("test") {
