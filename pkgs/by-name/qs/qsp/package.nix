@@ -13,7 +13,7 @@ stdenv.mkDerivation {
     owner = "QSPFoundation";
     repo = "qsp";
     rev = "f6ede7f8756e49604de056fcbdfe99fa4abd4812";
-    sha256 = "MoNam2IFnLpk02tKp+lkl4l+mBiaWNPhFc3/n4zUHcw=";
+    hash = "sha256-MoNam2IFnLpk02tKp+lkl4l+mBiaWNPhFc3/n4zUHcw=";
   };
   buildInputs = [ oniguruma ];
   nativeBuildInputs = [
