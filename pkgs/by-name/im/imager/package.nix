@@ -100,7 +100,7 @@ stdenv.mkDerivation rec {
       IMAGER was developed and optimized to handle large data files.
       Therefore, IMAGER works mostly on internal buffers and avoids as much as possible
       saving data to intermediate files.
-      File saving is done ultimately once the data analysis process is complete, 
+      File saving is done ultimately once the data analysis process is complete,
       which offers an optimum use of the disk bandwidth.
     '';
     homepage = "https://imager.oasu.u-bordeaux.fr";
