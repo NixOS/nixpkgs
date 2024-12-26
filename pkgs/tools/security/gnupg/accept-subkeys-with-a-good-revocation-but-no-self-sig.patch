@@ -1,0 +1,32 @@
+From: Vincent Breitmoser <look@my.amazin.horse>
+Date: Thu, 13 Jun 2019 21:27:43 +0200
+Subject: gpg: accept subkeys with a good revocation but no self-sig during
+ import
+
+* g10/import.c (chk_self_sigs): Set the NODE_GOOD_SELFSIG flag when we
+encounter a valid revocation signature. This allows import of subkey
+revocation signatures, even in the absence of a corresponding subkey
+binding signature.
+
+--
+
+This fixes the remaining test in import-incomplete.scm.
+
+GnuPG-Bug-id: 4393
+Signed-off-by: Daniel Kahn Gillmor <dkg@fifthhorseman.net>
+---
+ g10/import.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/g10/import.c b/g10/import.c
+index 4fdf248..ee2fed8 100644
+--- a/g10/import.c
++++ b/g10/import.c
+@@ -3613,6 +3613,7 @@ chk_self_sigs (ctrl_t ctrl, kbnode_t keyblock, u32 *keyid, int *non_self)
+                   /* It's valid, so is it newer? */
+                   if (sig->timestamp >= rsdate)
+                     {
++                      knode->flag |= NODE_GOOD_SELFSIG; /* Subkey is valid.  */
+                       if (rsnode)
+                         {
+                           /* Delete the last revocation sig since

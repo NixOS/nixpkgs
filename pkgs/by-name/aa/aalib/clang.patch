@@ -1,0 +1,74 @@
+diff -ur a/configure b/configure
+--- a/configure	2001-04-26 10:44:54.000000000 -0400
++++ b/configure	2023-10-21 23:19:52.941161475 -0400
+@@ -1005,7 +1005,7 @@
+ #line 1006 "configure"
+ #include "confdefs.h"
+ 
+-main(){return(0);}
++int main(){return(0);}
+ EOF
+ if { (eval echo configure:1011: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+   ac_cv_prog_cc_works=yes
+diff -ur a/src/aafire.c b/src/aafire.c
+--- a/src/aafire.c	2001-04-26 11:30:03.000000000 -0400
++++ b/src/aafire.c	2023-10-21 23:46:54.478750904 -0400
+@@ -1,3 +1,4 @@
++#include <stdlib.h>
+ #include <stdio.h>
+ #include "aalib.h"
+ 
+diff -ur a/src/aainfo.c b/src/aainfo.c
+--- a/src/aainfo.c	2001-04-26 10:37:31.000000000 -0400
++++ b/src/aainfo.c	2023-10-21 23:31:54.141133353 -0400
+@@ -1,4 +1,4 @@
+-
++#include <stdlib.h>
+ #include "aalib.h"
+ #include "aaint.h"
+ int main(int argc, char **argv)
+diff -ur a/src/aakbdreg.c b/src/aakbdreg.c
+--- a/src/aakbdreg.c	2023-10-21 23:19:00.787207960 -0400
++++ b/src/aakbdreg.c	2023-10-21 23:23:49.667253541 -0400
+@@ -1,4 +1,5 @@
+ #include <malloc.h>
++#include <string.h>
+ #include "config.h"
+ #include "aalib.h"
+ #include "aaint.h"
+diff -ur a/src/aamoureg.c b/src/aamoureg.c
+--- a/src/aamoureg.c	2023-10-21 23:19:00.787725591 -0400
++++ b/src/aamoureg.c	2023-10-21 23:26:51.821477807 -0400
+@@ -1,4 +1,5 @@
+ #include <malloc.h>
++#include <string.h>
+ #include "config.h"
+ #include "aalib.h"
+ #include "aaint.h"
+diff -ur a/src/aaregist.c b/src/aaregist.c
+--- a/src/aaregist.c	2023-10-21 23:19:00.788130179 -0400
++++ b/src/aaregist.c	2023-10-21 23:19:38.929729034 -0400
+@@ -1,4 +1,5 @@
+ #include <malloc.h>
++#include <string.h>
+ #include "config.h"
+ #include "aalib.h"
+ #include "aaint.h"
+diff -ur a/src/aasavefont.c b/src/aasavefont.c
+--- a/src/aasavefont.c	2001-04-26 10:37:31.000000000 -0400
++++ b/src/aasavefont.c	2023-10-21 23:51:09.216521714 -0400
+@@ -1,3 +1,5 @@
++#include <stdlib.h>
++#include <stdio.h>
+ #include "aalib.h"
+ int main(int argc, char **argv)
+ {
+diff -ur a/src/aatest.c b/src/aatest.c
+--- a/src/aatest.c	2001-04-26 10:37:31.000000000 -0400
++++ b/src/aatest.c	2023-10-21 23:43:16.758422704 -0400
+@@ -1,3 +1,5 @@
++#include <stdlib.h>
++#include <string.h>
+ #include "aalib.h"
+ int main(int argc, char **argv)
+ {
