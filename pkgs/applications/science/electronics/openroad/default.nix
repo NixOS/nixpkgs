@@ -2,7 +2,6 @@
   lib,
   mkDerivation,
   fetchFromGitHub,
-  fetchpatch,
   bison,
   cmake,
   doxygen,
@@ -10,19 +9,20 @@
   git,
   python3,
   swig,
-  boost179,
+  boost180,
   cbc, # for clp
   cimg,
   clp, # for or-tools
+  cudd,
   eigen,
   glpk,
   lcov,
   lemon-graph,
+  libsForQt5,
   libjpeg,
   or-tools,
   pcre,
   pkg-config,
-  qtbase,
   re2, # for or-tools
   readline,
   spdlog,
@@ -33,16 +33,24 @@
   zlib,
 }:
 
+let
+  or-tools-static = or-tools.overrideAttrs (oldAttrs: {
+    cmakeFlags = oldAttrs.cmakeFlags ++ [
+      # https://github.com/google/or-tools/issues/3709
+      "-DBUILD_SHARED_LIBS=OFF"
+    ];
+  });
+in
 mkDerivation rec {
   pname = "openroad";
-  version = "unstable-2023-08-26";
+  version = "2.0-unstable-2024-12-22";
 
   src = fetchFromGitHub {
     owner = "The-OpenROAD-Project";
     repo = "OpenROAD";
-    rev = "6dba515c2aacd3fca58ef8135424884146efd95b";
+    rev = "51302eb80b11576a01171d33452c362301d55143";
     fetchSubmodules = true;
-    hash = "sha256-LAj7X+Vq0+H3tIo5zgyUuIjQwTj+2DLL18/KMJ/kf4A=";
+    hash = "sha256-xFeZo6GjKKee7fTrzN4TNNL8eeTDJXyQGPkIKU/WvIc=";
   };
 
   nativeBuildInputs = [
@@ -56,41 +64,31 @@ mkDerivation rec {
   ];
 
   buildInputs = [
-    boost179
+    boost180
     cbc
     cimg
     clp
+    cudd
     eigen
     glpk
     lcov
     lemon-graph
     libjpeg
-    or-tools
+    or-tools-static
     pcre
     python3
-    qtbase
+    libsForQt5.qtbase
+    libsForQt5.qtcharts
+    libsForQt5.qtsvg
+    libsForQt5.qtdeclarative
     re2
     readline
     spdlog
     tcl
-    tclPackages.tcllib
+    tclPackages.tclreadline
     yosys
     xorg.libX11
     zlib
-  ];
-
-  patches = [
-    # https://github.com/The-OpenROAD-Project/OpenROAD/pull/3911
-    (fetchpatch {
-      name = "openroad-fix-fmt-10.patch";
-      url = "https://github.com/The-OpenROAD-Project/OpenROAD/commit/9396f07f28e0260cd64acfc51909f6566b70e682.patch";
-      hash = "sha256-jy8K8pdhSswVz6V6otk8JAI7nndaFVMuKQ/4A3Kzwns=";
-    })
-    # Upstream is not aware of these failures
-    ./0001-Disable-failing-regression-tests.patch
-    # This is an issue we experience in the sandbox, and upstream
-    # probably wouldn't mind merging this change, but no PR was opened.
-    ./0002-Ignore-warning-on-stderr.patch
   ];
 
   postPatch = ''
@@ -103,8 +101,11 @@ mkDerivation rec {
     # the regression tests so we can get by without building unit tests.
     "-DENABLE_TESTS=OFF"
     "-DUSE_SYSTEM_BOOST=ON"
-    "-DUSE_CIMG_LIB=ON"
+    "-DUSE_SYSTEM_ABC=OFF"
+    "-DUSE_SYSTEM_OPENSTA=OFF"
     "-DOPENROAD_VERSION=${src.rev}"
+    "-DTCL_LIBRARY=${tcl}/lib/libtcl.so"
+    "-DTCL_HEADER=${tcl}/include/tcl.h"
   ];
 
   # Resynthesis needs access to the Yosys binaries.
@@ -127,8 +128,10 @@ mkDerivation rec {
     description = "OpenROAD's unified application implementing an RTL-to-GDS flow";
     homepage = "https://theopenroadproject.org";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ trepetti ];
+    maintainers = with maintainers; [
+      trepetti
+      hzeller
+    ];
     platforms = platforms.linux;
-    broken = true; # last successful build 2024-06-30
   };
 }
