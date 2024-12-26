@@ -8,8 +8,7 @@ stdenv.mkDerivation rec {
     owner = "conda-forge";
     repo = "miniforge";
     rev = version;
-    sha256 =
-      "sha256-Mtw0TI5LWv7aC2kCx7EStYXEUa9J3xTwUPpN/z9GvAQ="; 
+    hash = "sha256-Mtw0TI5LWv7aC2kCx7EStYXEUa9J3xTwUPpN/z9GvAQ="; 
   };
 
   buildInputs = [ python3 conda ];
