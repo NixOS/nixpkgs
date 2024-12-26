@@ -28,6 +28,13 @@
             (range "8.19" "8.20")
             (isGe "1.7")
           ];
+          out = "0.7.7";
+        }
+        {
+          cases = [
+            (range "8.19" "8.20")
+            (isGe "1.7")
+          ];
           out = "0.7.5";
         }
         {
@@ -74,6 +81,7 @@
         }
       ]
       null;
+  release."0.7.7".sha256 = "sha256-kEbpMl7U+I2kvqi1VrjhIVFkZFO6h0tTHEUZRbHYG7E=";
   release."0.7.5".sha256 = "sha256-pzPo+Acjx3vlyqOkSZQ8uT2BDLSTfbAnRm39e+/CqE0=";
   release."0.7.3".sha256 = "sha256-7+qPtE1KfDmo9ZsQtWMzoR2MYnFpTjFHK/yZYVm+GxA=";
   release."0.7.2".sha256 = "sha256-dekrdVmuTcqXXmKhIb831EKtMhbPrXHJZhzmGb9rdRo=";
