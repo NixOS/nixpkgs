@@ -14585,6 +14585,12 @@
     githubId = 68288772;
     name = "Markus Heinrich";
   };
+  MH0386 = {
+    name = "Mohamed Hisham Abdelzaher";
+    email = "mohamed.hisham.abdelzaher@gmail.com";
+    github = "MH0386";
+    githubId = 77013511;
+  };
   mh182 = {
     email = "mh182@chello.at";
     github = "mh182";
