@@ -30,9 +30,11 @@ stdenv.mkDerivation {
     install -m755 -D share/cht.sh.txt "$out/bin/cht.sh"
 
     # install shell completion files
-    mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions
+    mkdir -p $out/share/bash-completion/completions $out/share/zsh/site-functions $out/share/fish/{vendor_completions.d,vendor_functions.d}
     mv share/bash_completion.txt $out/share/bash-completion/completions/cht.sh
     cp share/zsh.txt $out/share/zsh/site-functions/_cht
+    sed 's/function cheat.sh/function cht.sh/' share/fish.txt > $out/share/fish/vendor_functions.d/cht.sh.fish
+    echo "complete -c cht.sh -xa '(curl -s cheat.sh/:list)'" > $out/share/fish/vendor_completions.d/cht.sh.fish
 
     wrapProgram "$out/bin/cht.sh" \
       --prefix PATH : "${
