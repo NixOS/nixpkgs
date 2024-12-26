@@ -19,14 +19,12 @@
 , qt6Packages
 , woff2
 , ffmpeg
+, fontconfig
 , simdutf
 , skia
 , nixosTests
-, AppKit
-, Cocoa
-, Foundation
-, OpenGL
 , unstableGitUpdater
+, apple-sdk_14
 }:
 
 let
@@ -107,6 +105,7 @@ stdenv.mkDerivation (finalAttrs: {
   buildInputs = with qt6Packages; [
     curl
     ffmpeg
+    fontconfig
     libavif
     libjxl
     libwebp
@@ -120,10 +119,7 @@ stdenv.mkDerivation (finalAttrs: {
     libpulseaudio.dev
     qtwayland
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    AppKit
-    Cocoa
-    Foundation
-    OpenGL
+    apple-sdk_14
   ];
 
   cmakeFlags = [
@@ -158,7 +154,5 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ fgaz ];
     platforms = [ "x86_64-linux" "aarch64-linux" "x86_64-darwin" "aarch64-darwin" ];
     mainProgram = "Ladybird";
-    # use of undeclared identifier 'NSBezelStyleAccessoryBarAction'
-    broken = stdenv.hostPlatform.isDarwin;
   };
 })
