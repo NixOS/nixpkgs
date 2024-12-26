@@ -8,7 +8,7 @@
   yarn,
   git,
   patch-package,
-  electron_29,
+  electron_32,
   prefetch-yarn-deps,
   fixup-yarn-lock,
   python3,
@@ -19,6 +19,9 @@
   libsecret,
   makeDesktopItem,
   copyDesktopItems,
+  jq,
+  moreutils,
+  applyPatches,
 }:
 
 let
@@ -26,13 +29,17 @@ let
     pname = "tabby-terminal";
     version = "1.0.215";
 
-    src = fetchFromGitHub {
-      owner = "Eugeny";
-      repo = "tabby";
-      tag = "v${version}";
-      hash = "sha256-l3Hyt3e1edJjb7vL66JDllkpHwTU5efsNbgJ5Pcvn60=";
-      leaveDotGit = true;
-      deepClone = true;
+    # We need to apply dependency patches extremely early as patchPhase runs AFTER the derivations for the yarn caches are computed.
+    src = applyPatches {
+      src = fetchFromGitHub {
+        owner = "Eugeny";
+        repo = "tabby";
+        tag = "v${version}";
+        hash = "sha256-0yItlAbHqAZzrHiuAVWfcqIjcRAW+VtnRN7HWAKNsAw=";
+        leaveDotGit = true;
+        deepClone = true;
+      };
+      patches = [ ./fix-deps-for-new-electron.patch ./splice-argv.patch ];
     };
 
     meta = {
@@ -41,17 +48,8 @@ let
       license = lib.licenses.mit;
       mainProgram = "tabby";
       maintainers = with lib.maintainers; [ geodic ];
-      platforms = [
-        "x86_64-linux"
-        "aarch64-linux"
-      ];
+      platforms = lib.platforms.linux;
     };
-
-    # We need to fix the argv logic as tabby only handles it for the node executable, but we are running it with electron
-    patches = [
-      ./fix-argv-prefix-splice.patch
-      ./fix-app-version.patch
-    ];
 
     desktopItems = [
       (makeDesktopItem {
@@ -68,23 +66,23 @@ let
       })
     ];
 
-    electronVersion = "29.4.6";
+    electronPackage = electron_32;
 
     electronHeaders = fetchurl {
-      url = "https://www.electronjs.org/headers/v${electronVersion}/node-v${electronVersion}-headers.tar.gz";
-      hash = "sha256-e0qiEGI/1rWK72oLXfKtbbc8KmOGMhMx4IbT6MGAjms=";
+      url = "https://www.electronjs.org/headers/v${electronPackage.version}/node-v${electronPackage.version}-headers.tar.gz";
+      hash = "sha256-D9j1wSDzartWUfDm2UrZDrgum2X+vV+DpDlKPFCtBbA=";
     };
 
     electronHeadersSHA = fetchurl {
-      url = "https://www.electronjs.org/headers/v${electronVersion}/SHASUMS256.txt";
-      hash = "sha256-0mCnKIR3GS1TL+g0h+y2cAlqbBogf88WxN8xJvmFl4g=";
+      url = "https://www.electronjs.org/headers/v${electronPackage.version}/SHASUMS256.txt";
+      hash = "sha256-ZnWVCzTwwog4kgeFAZGsM2F2mmebrpXMVMxn/K+LWlU=";
     };
 
     buildInputs = [
       nodejs
       python3
       fontconfig
-      electron_29
+      electronPackage
     ];
 
     nativeBuildInputs = [
@@ -102,10 +100,22 @@ let
       pkg-config
       libsecret
       copyDesktopItems
+      jq
+      moreutils
     ];
+
+    patchPhase = ''
+      runHook prePatch
+
+      jq '.version = "${version}"' app/package.json | sponge app/package.json
+
+      runHook postPatch
+    '';
 
     configurePhase =
       ''
+        runHook preConfigure
+
         export buildDir=$PWD
       ''
       # Loop through all the yarn caches and install the deps for the respective package
@@ -134,6 +144,8 @@ let
       )
       + ''
         cd $buildDir
+
+        runHook postConfigure
       '';
 
     buildPhase =
@@ -141,15 +153,15 @@ let
       ''
         runHook preBuild
 
-        mkdir -p http-cache/v${electronVersion}
-        cp $electronHeaders http-cache/v${electronVersion}/node-v${electronVersion}-headers.tar.gz
-        cp $electronHeadersSHA http-cache/v${electronVersion}/SHASUMS256.txt
+        mkdir -p http-cache/v${electronPackage.version}
+        cp $electronHeaders http-cache/v${electronPackage.version}/node-v${electronPackage.version}-headers.tar.gz
+        cp $electronHeadersSHA http-cache/v${electronPackage.version}/SHASUMS256.txt
         http-server http-cache &
       ''
       # Rebuild all the needed packages using electron-rebuild
       + builtins.concatStringsSep "\n" (
         map (pkg: ''
-          yarn --offline electron-rebuild -v ${electronVersion} -m ${pkg} -f -d "http://localhost:8080"
+          yarn --offline electron-rebuild -v ${electronPackage.version} -m ${pkg} -f -d "http://localhost:8080"
         '') rebuildPkgs
       )
       + ''
@@ -167,7 +179,7 @@ let
       cp -r . $out/share/tabby
 
       # Tabby needs TABBY_DEV to run manually with electron
-      makeWrapper "${electron_29}/bin/electron" "$out/bin/tabby" --add-flags "$out/share/tabby/app" --set TABBY_DEV 1
+      makeWrapper "${electronPackage}/bin/electron" "$out/bin/tabby" --add-flags "$out/share/tabby/app" --set TABBY_DEV 1
 
       for iconsize in 16 32 64 128
       do
@@ -203,8 +215,8 @@ let
   ];
 
   pkgHashes = {
-    "." = "sha256-Qklo8iX27lE6VTUAX1bwa9yBw/tMx+G+FB2MJUkt+7s=";
-    app = "sha256-wo/ZhfyngBeagoYlzthsUSVNnSTaz+cHZD5dx9X8nP8=";
+    "." = "sha256-W4T9Vaow37yBD08UFv7Wby2OKiz/Lp70OXddGjTckxU=";
+    app = "sha256-pTHCyxx7pXKyITKzV3nrtdPX7ZUc+7oBMO3E8Py4Uiw=";
     web = "sha256-kdER/yB8O7gfWnLZ/rNl4ha1eNnypcVmS1L7RrFCn0Q=";
     tabby-core = "sha256-Z42TZeE0z96ZRtIFIgGbQyv8gtGY/Llya/Dhs8JtuWo=";
     tabby-local = "sha256-GmVoeKxF8Sj55fDPN4GhwGVXoktdiwF3EFYTJHGO/NQ=";
