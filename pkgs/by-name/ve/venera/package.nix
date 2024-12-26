@@ -65,6 +65,8 @@ flutter327.buildFlutterApplication rec {
     install -Dm0644 ./debian/gui/venera.png $out/share/pixmaps/venera.png
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Comic reader that support reading local and network comics";
     homepage = "https://github.com/venera-app/venera";
