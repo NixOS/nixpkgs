@@ -39,7 +39,10 @@ let
         leaveDotGit = true;
         deepClone = true;
       };
-      patches = [ ./fix-deps-for-new-electron.patch ./splice-argv.patch ];
+      patches = [
+        ./fix-deps-for-new-electron.patch
+        ./splice-argv.patch
+      ];
     };
 
     meta = {
