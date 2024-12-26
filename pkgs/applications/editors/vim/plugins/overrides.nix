@@ -1569,6 +1569,13 @@ in
     nvimRequireCheck = "mason-lspconfig";
   };
 
+  mason-null-ls-nvim = super.mason-null-ls-nvim.overrideAttrs {
+    dependencies = with self; [
+      mason-nvim
+      null-ls-nvim
+    ];
+  };
+
   mason-nvim = super.mason-nvim.overrideAttrs {
     # lua/mason-vendor/zzlib/inflate-bwo.lua:15: 'end' expected near '&'
     nvimSkipModule = "mason-vendor.zzlib.inflate-bwo";

@@ -6543,6 +6543,18 @@ final: prev:
     meta.homepage = "https://github.com/williamboman/mason-lspconfig.nvim/";
   };
 
+  mason-null-ls-nvim = buildVimPlugin {
+    pname = "mason-null-ls.nvim";
+    version = "2024-04-09";
+    src = fetchFromGitHub {
+      owner = "jay-babu";
+      repo = "mason-null-ls.nvim";
+      rev = "de19726de7260c68d94691afb057fa73d3cc53e7";
+      sha256 = "1jxslvqp05hzsz3vrspg5yal94314agh15b2p9cimiwj955igbys";
+    };
+    meta.homepage = "https://github.com/jay-babu/mason-null-ls.nvim/";
+  };
+
   mason-nvim = buildVimPlugin {
     pname = "mason.nvim";
     version = "2024-07-16";
