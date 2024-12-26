@@ -64,7 +64,7 @@ appimageTools.wrapType2 {
     cp -r ${appimageContents}/usr/share/icons $out/share
   '';
 
-  extraPkgs = pkgs: [ 
+  extraPkgs = pkgs: [
     icu
     webkitgtk_6_0
     webkitgtk_4_0 # for older devices
