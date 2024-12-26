@@ -13,7 +13,7 @@ let
 in
 stdenvNoCC.mkDerivation {
   pname = "antora-ui-default";
-  version = "0";
+  version = "0-unstable-2024-09-20";
 
   # The UI bundle is fetched from lib.maintainers.naho's antora-ui-default fork
   # for the following reasons:
