@@ -347,6 +347,7 @@ mapAliases {
   epdfview = throw "'epdfview' has been removed due to lack of maintenance upstream. Consider using 'qpdfview' instead"; # Added 2024-10-19
   epoxy = throw "'epoxy' has been renamed to/replaced by 'libepoxy'"; # Converted to throw 2024-10-17
 
+  erlang_24 = throw "erlang_24 has been removed as it is unmaintained upstream";
   erlang_27-rc3 = throw "erlang_27-rc3 has been removed in favor of erlang_27"; # added 2024-05-20
   erlangR24 = throw "erlangR24 has been removed in favor of erlang_24"; # added 2024-05-24
   erlangR24_odbc = throw "erlangR24_odbc has been removed in favor of erlang_24_odbc"; # added 2024-05-24
