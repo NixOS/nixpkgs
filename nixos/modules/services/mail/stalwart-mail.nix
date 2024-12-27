@@ -119,6 +119,10 @@ in
       };
     };
 
+    systemd.tmpfiles.rules = [
+      "d '${cfg.dataDir}' - stalwart-mail stalwart-mail - -"
+    ];
+
     systemd = {
       packages = [ cfg.package ];
       services.stalwart-mail = {
@@ -147,6 +151,9 @@ in
           StandardOutput = "journal";
           StandardError = "journal";
 
+          ReadWritePaths = [
+            cfg.dataDir
+          ];
           CacheDirectory = "stalwart-mail";
           StateDirectory = "stalwart-mail";
 
