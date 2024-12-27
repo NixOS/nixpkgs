@@ -8,6 +8,64 @@
 let
   cfg = config.services.automx2;
   format = pkgs.formats.json { };
+  imapSmtpServerType = lib.types.mkOptionType {
+    name = "imapSmtpServerType";
+    description = "automx2 settings: IMAP/SMTP server configuration";
+    check =
+      x:
+      if !builtins.isAttrs x then
+        false
+      else if !lib.types.str.check x.type then
+        false
+      else if x.type != "imap" && x.type != "smtp" then
+        false
+      else if !lib.types.str.check x.name then
+        false
+      else if !lib.types.port.check x.port then
+        false
+      else
+        true;
+  };
+  davServerType = lib.types.mkOptionType {
+    name = "davServerType";
+    description = "automx2 settings: CalDAV/CardDAV server configuration";
+    check =
+      x:
+      if !builtins.isAttrs x then
+        false
+      else if
+        !builtins.all (key: builtins.hasAttr key x) [
+          "type"
+          "url"
+          "port"
+        ]
+      then
+        false
+      else if !lib.types.str.check x.type then
+        false
+      else if x.type != "caldav" && x.type != "carddav" then
+        false
+      else if !lib.types.str.check x.url then
+        false
+      else if !lib.types.port.check x.port then
+        false
+      else
+        true;
+  };
+  serverType = lib.types.mkOptionType {
+    name = "serverType";
+    description = "The autoconfig values of mail and/or DAV services";
+    check =
+      x:
+      if !lib.isList x then
+        false
+      else if builtins.length x < 1 then
+        false
+      else if !lib.all (item: imapSmtpServerType.check item || davServerType.check item) x then
+        false
+      else
+        true;
+  };
 in
 {
   options = {
@@ -39,11 +97,46 @@ in
       };
 
       settings = lib.mkOption {
-        inherit (format) type;
-        description = ''
-          Bootstrap json to populate database.
-          See [docs](https://rseichter.github.io/automx2/#_sqlite) for details.
-        '';
+        description = "Configuration of data provided by the automx2 service. Used to populate DB at service startup. See [docs](https://rseichter.github.io/automx2/#_sqlite) for details.";
+        type = lib.types.submodule {
+          freeformType = format.type;
+          options = {
+            provider = lib.mkOption {
+              type = lib.types.str;
+              example = "ACME Corp & Brothers Communication Services";
+              description = "A description letting the user know, who provides the service.";
+            };
+
+            domains = lib.mkOption {
+              type = lib.types.nonEmptyListOf lib.types.str;
+              description = "The domains for which automx2 provides an autoconfiguration service";
+              default = cfg.domains;
+              defaultText = lib.literalExpression "services.automx2.domains";
+              example = [
+                "example.org"
+                "example.com"
+              ];
+            };
+
+            servers = lib.mkOption {
+              type = serverType;
+              description = "The offered services and their connection details";
+              example = [
+                {
+                  name = "mail.example.org";
+                  port = 993;
+                  type = "imap";
+                }
+                {
+                  url = "https://dav.example.com/cal/dav/";
+                  port = 443;
+                  type = "carddav";
+                }
+              ];
+              default = [ ];
+            };
+          };
+        };
       };
     };
   };
