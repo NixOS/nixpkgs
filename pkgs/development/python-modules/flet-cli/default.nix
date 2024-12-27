@@ -8,6 +8,7 @@
 
   flet,
   flet-desktop,
+  flet-web,
   qrcode,
   toml,
   watchdog,
@@ -25,6 +26,7 @@ buildPythonPackage rec {
   dependencies = [
     flet
     flet-desktop
+    flet-web
     qrcode
     toml
     watchdog

@@ -4780,6 +4780,8 @@ self: super: with self; {
 
   flet-desktop = callPackage ../development/python-modules/flet-desktop { };
 
+  flet-web = callPackage ../development/python-modules/flet-web { };
+
   flexcache = callPackage ../development/python-modules/flexcache { };
 
   flexit-bacnet = callPackage ../development/python-modules/flexit-bacnet { };
