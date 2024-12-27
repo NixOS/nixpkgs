@@ -9,6 +9,7 @@
   flet,
   fastapi,
   uvicorn,
+  python,
 }:
 
 buildPythonPackage rec {
@@ -23,6 +24,14 @@ buildPythonPackage rec {
   dependencies = [ flet fastapi uvicorn ];
 
   pythonImportsCheck = [ "flet_web" ];
+
+  web = flet-client-flutter.override {
+    fletTarget = "web";
+  };
+
+  postInstall = ''
+    ln -s $web $out/${python.sitePackages}/flet_web/web
+  '';
 
   meta = {
     description = "Flet web client in Flutter.";

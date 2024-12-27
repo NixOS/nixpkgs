@@ -14,6 +14,7 @@
 , libplacebo
 , _experimental-update-script-combinators
 , flet-client-flutter
+, fletTarget ? "linux"
 }:
 
 flutter.buildFlutterApplication rec {
@@ -32,6 +33,8 @@ flutter.buildFlutterApplication rec {
   cmakeFlags = [
     "-DMIMALLOC_LIB=${mimalloc}/lib/mimalloc.o"
   ];
+
+  targetFlutterPlatform = fletTarget;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 
