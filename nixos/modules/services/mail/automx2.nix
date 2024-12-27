@@ -185,10 +185,8 @@ in
           pkgs.python3.buildEnv.override { extraLibs = [ cfg.package ]; }
         }/bin/flask run --host=127.0.0.1 --port=${toString cfg.port}";
         Restart = "always";
-        StateDirectory = "automx2";
         DynamicUser = true;
         User = "automx2";
-        WorkingDirectory = "/var/lib/automx2";
       };
       unitConfig = {
         Description = "Service to automatically configure mail clients";
