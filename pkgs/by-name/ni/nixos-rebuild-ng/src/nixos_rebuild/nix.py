@@ -128,9 +128,9 @@ def build_remote_flake(
     attr: str,
     flake: Flake,
     build_host: Remote,
-    flake_build_flags: Args | None = None,
+    eval_flags: Args | None = None,
     copy_flags: Args | None = None,
-    build_flags: Args | None = None,
+    flake_build_flags: Args | None = None,
 ) -> Path:
     r = run_wrapper(
         [
@@ -139,7 +139,7 @@ def build_remote_flake(
             "eval",
             "--raw",
             flake.to_attr(attr, "drvPath"),
-            *dict_to_flags(flake_build_flags),
+            *dict_to_flags(eval_flags),
         ],
         stdout=PIPE,
     )
@@ -152,7 +152,7 @@ def build_remote_flake(
             "build",
             f"{drv}^*",
             "--print-out-paths",
-            *dict_to_flags(build_flags),
+            *dict_to_flags(flake_build_flags),
         ],
         remote=build_host,
         stdout=PIPE,

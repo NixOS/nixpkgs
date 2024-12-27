@@ -174,9 +174,9 @@ def test_build_remote_flake(mock_run: Any, monkeypatch: Any) -> None:
         "config.system.build.toplevel",
         flake,
         build_host,
-        flake_build_flags={"flake": True},
+        eval_flags={"flake": True},
         copy_flags={"copy": True},
-        build_flags={"build": True},
+        flake_build_flags={"build": True},
     ) == Path("/path/to/file")
     mock_run.assert_has_calls(
         [

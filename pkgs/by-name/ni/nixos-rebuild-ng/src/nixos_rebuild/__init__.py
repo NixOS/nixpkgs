@@ -43,19 +43,19 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     common_build_flags.add_argument("--print-build-logs", "-L", action="store_true")
     common_build_flags.add_argument("--show-trace", action="store_true")
 
-    flake_build_flags = argparse.ArgumentParser(add_help=False)
-    flake_build_flags.add_argument("--accept-flake-config", action="store_true")
-    flake_build_flags.add_argument("--refresh", action="store_true")
-    flake_build_flags.add_argument("--impure", action="store_true")
-    flake_build_flags.add_argument("--offline", action="store_true")
-    flake_build_flags.add_argument("--no-net", action="store_true")
-    flake_build_flags.add_argument("--recreate-lock-file", action="store_true")
-    flake_build_flags.add_argument("--no-update-lock-file", action="store_true")
-    flake_build_flags.add_argument("--no-write-lock-file", action="store_true")
-    flake_build_flags.add_argument("--no-registries", action="store_true")
-    flake_build_flags.add_argument("--commit-lock-file", action="store_true")
-    flake_build_flags.add_argument("--update-input")
-    flake_build_flags.add_argument("--override-input", nargs=2)
+    flake_common_flags = argparse.ArgumentParser(add_help=False)
+    flake_common_flags.add_argument("--accept-flake-config", action="store_true")
+    flake_common_flags.add_argument("--refresh", action="store_true")
+    flake_common_flags.add_argument("--impure", action="store_true")
+    flake_common_flags.add_argument("--offline", action="store_true")
+    flake_common_flags.add_argument("--no-net", action="store_true")
+    flake_common_flags.add_argument("--recreate-lock-file", action="store_true")
+    flake_common_flags.add_argument("--no-update-lock-file", action="store_true")
+    flake_common_flags.add_argument("--no-write-lock-file", action="store_true")
+    flake_common_flags.add_argument("--no-registries", action="store_true")
+    flake_common_flags.add_argument("--commit-lock-file", action="store_true")
+    flake_common_flags.add_argument("--update-input")
+    flake_common_flags.add_argument("--override-input", nargs=2)
 
     classic_build_flags = argparse.ArgumentParser(add_help=False)
     classic_build_flags.add_argument("--no-build-output", "-Q", action="store_true")
@@ -74,7 +74,7 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     sub_parsers = {
         "common_flags": common_flags,
         "common_build_flags": common_build_flags,
-        "flake_build_flags": flake_build_flags,
+        "flake_common_flags": flake_common_flags,
         "classic_build_flags": classic_build_flags,
         "copy_flags": copy_flags,
     }
@@ -327,7 +327,8 @@ def execute(argv: list[str]) -> None:
     common_flags = vars(args_groups["common_flags"])
     common_build_flags = common_flags | vars(args_groups["common_build_flags"])
     build_flags = common_build_flags | vars(args_groups["classic_build_flags"])
-    flake_build_flags = common_build_flags | vars(args_groups["flake_build_flags"])
+    flake_common_flags = common_flags | vars(args_groups["flake_common_flags"])
+    flake_build_flags = common_build_flags | flake_common_flags
     copy_flags = common_flags | vars(args_groups["copy_flags"])
 
     if args.upgrade or args.upgrade_all:
@@ -410,9 +411,9 @@ def execute(argv: list[str]) -> None:
                         attr,
                         flake,
                         build_host,
+                        eval_flags=flake_common_flags,
                         flake_build_flags=flake_build_flags,
                         copy_flags=copy_flags,
-                        build_flags=build_flags,
                     )
                 case (_, False, None, Flake(_)):
                     path_to_config = nix.build_flake(
