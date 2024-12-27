@@ -34,10 +34,11 @@ stdenv.mkDerivation {
           url = "https://salsa.debian.org/images-team/syslinux/raw/" + commit + "/debian/patches/" + name;
           inherit name hash;
         };
+      archlinuxCommit = "db7884ec80642781edeead3e3bbd883a15b9b3ce";
       fetchArchlinuxPatch =
-        name: commit: hash:
+        name: hash:
         fetchurl {
-          url = "https://raw.githubusercontent.com/archlinux/svntogit-packages/" + commit + "/trunk/" + name;
+          url = "https://gitlab.archlinux.org/archlinux/packaging/packages/syslinux/-/raw/${archlinuxCommit}/${name}";
           inherit name hash;
         };
     in
@@ -46,13 +47,8 @@ stdenv.mkDerivation {
       (fetchDebianPatch "0002-gfxboot-menu-label.patch" "fa1349f1"
         "sha256-0f6QhM4lJmGflLige4n7AZTodL7vnyAvi5dIedd/Lho="
       )
-      (fetchArchlinuxPatch "0005-gnu-efi-version-compatibility.patch"
-        "821c3da473d1399d930d5b4a086e46a4179eaa45"
-        "sha256-hhCVnfbAFWj/R4yh60qsMB87ofW9RznarsByhl6L4tc="
-      )
-      (fetchArchlinuxPatch "0025-reproducible-build.patch" "821c3da473d1399d930d5b4a086e46a4179eaa45"
-        "sha256-mnb291pCSFvDNxY7o4BosJ94ib3BpOGRQIiY8Q3jZmI="
-      )
+      (fetchArchlinuxPatch "0005-gnu-efi-version-compatibility.patch" "sha256-hhCVnfbAFWj/R4yh60qsMB87ofW9RznarsByhl6L4tc=")
+      (fetchArchlinuxPatch "0025-reproducible-build.patch" "sha256-mnb291pCSFvDNxY7o4BosJ94ib3BpOGRQIiY8Q3jZmI=")
       (fetchDebianPatch
         # mbr.bin: too big (452 > 440)
         # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=906414
@@ -73,11 +69,7 @@ stdenv.mkDerivation {
       ./import-efisetjmp.patch
       # Upstream patch: https://www.syslinux.org/archives/2024-February/026903.html
       ./define-wchar_t.patch
-      (fetchpatch {
-        url = "https://gitlab.archlinux.org/archlinux/packaging/packages/syslinux/-/raw/db7884ec80642781edeead3e3bbd883a15b9b3ce/0027-use-correct-type-for-size.patch";
-        name = "0027-use-correct-type-for-size.patch";
-        hash = "sha256-5nlKwIbXpZEyBrBSq9Zg0D+PRF7/kzEG13WzpwzDpPA=";
-      })
+      (fetchArchlinuxPatch "0027-use-correct-type-for-size.patch" "sha256-5nlKwIbXpZEyBrBSq9Zg0D+PRF7/kzEG13WzpwzDpPA=")
       # gnu-efi changed their definition to already be a 1-elem array, don't double-ref it.
       # https://github.com/ncroxon/gnu-efi/commit/5b74db0e154ffd2fba4bcc254069844f21913988
       ./fix-longjmp-calls.patch
