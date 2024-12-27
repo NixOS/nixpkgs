@@ -19,6 +19,9 @@
 
   # nativeCheckInputs
   python3,
+
+  # nativeInstallCheckInputs
+  versionCheckHook,
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "taskwarrior";
@@ -89,6 +92,14 @@ stdenv.mkDerivation (finalAttrs: {
   nativeCheckInputs = [
     python3
   ];
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
 
   postInstall = ''
     # ZSH is installed automatically from some reason, only bash and fish need
