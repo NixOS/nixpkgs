@@ -26,8 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "GothenburgBitFactory";
     repo = "taskwarrior";
-    rev = "dcbe916286792e6f5d2d3af3baab79918ebc5f71";
-    hash = "sha256-jma1BYZugMH+JiX5Xu6VI8ZFn4FBr1NxbNrOHX0bFk0=";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-aKDwRCJ1yopRdsPxnHhgOpSho1i8/dcAurI+XhpSbn4=";
     fetchSubmodules = true;
   };
   cargoDeps = rustPlatform.fetchCargoTarball {
