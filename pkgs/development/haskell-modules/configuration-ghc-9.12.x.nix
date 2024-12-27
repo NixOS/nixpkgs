@@ -2,8 +2,9 @@
 
 let
   inherit (pkgs) lib;
-
 in
+
+with haskellLib;
 
 self: super: {
   llvmPackages = lib.dontRecurseIntoAttrs self.ghc.llvmPackages;
@@ -56,4 +57,6 @@ self: super: {
   unix = null;
   xhtml = null;
 
+  # Version upgrades
+  splitmix = doDistribute self.splitmix_0_1_1;
 }

@@ -709,6 +709,7 @@ self: super: builtins.intersectAttrs super {
 
   # Break infinite recursion cycle between QuickCheck and splitmix.
   splitmix = dontCheck super.splitmix;
+  splitmix_0_1_1 = dontCheck super.splitmix_0_1_1;
 
   # Break infinite recursion cycle with OneTuple and quickcheck-instances.
   foldable1-classes-compat = dontCheck super.foldable1-classes-compat;
