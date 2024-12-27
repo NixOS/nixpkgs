@@ -46,5 +46,6 @@ python3Packages.buildPythonApplication rec {
       mirkolenz
     ];
     platforms = lib.platforms.darwin ++ lib.platforms.linux;
+    changelog = "https://github.com/mirkolenz/makejinja/blob/${src.tag}/CHANGELOG.md";
   };
 }
