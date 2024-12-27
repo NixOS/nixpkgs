@@ -37,7 +37,7 @@ lib.makeScope pkgs.newScope (
       attrs:
       let
         name = attrs.name or "${attrs.pname}-${attrs.version}";
-        pkgConfigMajorVersion = if gimp.majorVersion == "2.0" then "2" else "3";
+        pkgConfigMajorVersion = lib.versions.major gimp.version;
       in
       stdenv.mkDerivation (
         {
