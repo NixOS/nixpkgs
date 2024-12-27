@@ -6270,6 +6270,12 @@
     githubId = 15128988;
     name = "Maksim Dzabraev";
   };
+  damidoug = {
+    email = "contact@damidoug.dev";
+    github = "damidoug";
+    githubId = 75175586;
+    name = "Douglas Damiano";
+  };
   e1mo = {
     email = "nixpkgs@e1mo.de";
     matrix = "@e1mo:chaos.jetzt";
