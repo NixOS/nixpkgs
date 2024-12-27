@@ -1,0 +1,58 @@
+diff --git a/app/cfstream_test.ml b/app/cfstream_test.ml
+index 457c5e5..c6a01a5 100644
+--- a/app/cfstream_test.ml
++++ b/app/cfstream_test.ml
+@@ -73,7 +73,7 @@ let test_uncombine () =
+ let test_partition () =
+   let f x = x mod 2 = 0 in
+   let l = List.init 100 ~f:(fun _ -> Random.int 10) in
+-  let r1 = Caml.List.partition f l in
++  let r1 = Stdlib.List.partition f l in
+   let r2 = of_list l |> partition ~f |> fun (a, b) -> to_list a, to_list b in
+   assert_equal
+     ~printer:int_list_tuple_printer
+diff --git a/lib/CFStream_stream.ml b/lib/CFStream_stream.ml
+index 25c0e5a..835791c 100644
+--- a/lib/CFStream_stream.ml
++++ b/lib/CFStream_stream.ml
+@@ -83,7 +83,7 @@ let find xs ~f = find_map xs ~f:(fun x -> if f x then Some x else None)
+ let find_exn xs ~f =
+   match find xs ~f with
+   | Some x -> x
+-  | None -> raise Caml.Not_found
++  | None -> raise Stdlib.Not_found
+ ;;
+ 
+ let exists xs ~f =
+@@ -287,7 +287,7 @@ let group_aux xs map eq =
+ ;;
+ 
+ let group xs ~f = group_aux xs f Poly.( = )
+-let group_by xs ~eq = group_aux xs ident eq
++let group_by xs ~eq = group_aux xs Fn.id eq
+ 
+ let chunk2 xs =
+   from (fun _ ->
+@@ -615,11 +615,11 @@ let to_hashtbl xs =
+ let of_map t = of_list (Map.to_alist t)
+ 
+ let to_map xs =
+-  fold xs ~init:Map.Poly.empty ~f:(fun accu (key, data) -> Map.Poly.set accu ~key ~data)
++  fold xs ~init:Map.Poly.empty ~f:(fun accu (key, data) -> Map.set accu ~key ~data)
+ ;;
+ 
+ let of_set t = of_list (Set.to_list t)
+-let to_set xs = fold xs ~init:Set.Poly.empty ~f:(fun accu e -> Set.Poly.add accu e)
++let to_set xs = fold xs ~init:Set.Poly.empty ~f:(fun accu e -> Set.add accu e)
+ 
+ module Infix = struct
+   let ( -- ) x y = range x ~until:y
+@@ -660,7 +660,7 @@ module Result = struct
+       | M.E e -> Result.Error e
+     ;;
+ 
+-    let all xs ~f = all_gen ident xs ~f
++    let all xs ~f = all_gen Fn.id xs ~f
+     let all' xs ~f = all_gen (fun x -> Ok x) xs ~f
+     let to_exn = result_to_exn
+ 
