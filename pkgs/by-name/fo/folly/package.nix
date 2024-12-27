@@ -122,7 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  doCheck = true;
+  # Temporary fix until next `staging` cycle.
+  doCheck = !stdenv.cc.isClang;
 
   patches = [
     # The base template for std::char_traits has been removed in LLVM 19
