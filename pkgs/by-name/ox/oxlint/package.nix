@@ -25,6 +25,8 @@ rustPlatform.buildRustPackage rec {
     darwin.apple_sdk.frameworks.Security
   ];
 
+  env.OXC_VERSION = version;
+
   cargoBuildFlags = [ "--bin=oxlint" ];
   cargoTestFlags = cargoBuildFlags;
 
