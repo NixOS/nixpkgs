@@ -237,9 +237,9 @@ def test_copy_closure(monkeypatch: Any) -> None:
 
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-opt")
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
-        n.copy_closure(closure, None, build_host)
+        n.copy_closure(closure, None, build_host, copy_flag=True)
         mock_run.assert_called_with(
-            ["nix-copy-closure", "--from", "user@build.host", closure],
+            ["nix-copy-closure", "--copy-flag", "--from", "user@build.host", closure],
             extra_env={
                 "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-opt"])
             },
@@ -251,11 +251,12 @@ def test_copy_closure(monkeypatch: Any) -> None:
         "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-target-opt"])
     }
     with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
-        n.copy_closure(closure, target_host, build_host)
+        n.copy_closure(closure, target_host, build_host, copy_flag=True)
         mock_run.assert_called_with(
             [
                 "nix",
                 "copy",
+                "--copy-flag",
                 "--from",
                 "ssh://user@build.host",
                 "--to",
