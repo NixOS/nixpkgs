@@ -192,6 +192,7 @@ def copy_closure(
             [
                 "nix",
                 "copy",
+                *dict_to_flags(copy_flags),
                 "--from",
                 f"ssh://{from_host.host}",
                 "--to",
