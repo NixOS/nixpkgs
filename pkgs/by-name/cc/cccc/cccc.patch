@@ -1,0 +1,24 @@
+diff --git a/cccc/cccc_tbl.cc b/cccc/cccc_tbl.cc
+index df98e2b..59f2572 100644
+--- a/cccc/cccc_tbl.cc
++++ b/cccc/cccc_tbl.cc
+@@ -96,7 +96,7 @@ bool CCCC_Table<T>::remove(T* old_item_ptr)
+   typename map_t::iterator value_iterator=map_t::find(old_item_ptr->key());
+   if(value_iterator!=map_t::end())
+     {
+-      erase(value_iterator);
++      map_t::erase(value_iterator);
+       retval=true;
+     }
+   return retval;
+diff --git a/makefile b/makefile
+index 23ad004..2cca469 100644
+--- a/makefile
++++ b/makefile
+@@ -20,5 +20,5 @@ test :
+ 	cd test ; make -f posix.mak
+ 
+ install : 
+-	cd install ; su root -c "make -f install.mak" 
++	cd install ; make -f install.mak
+ 
