@@ -3100,6 +3100,11 @@ let
     (overrideCabal (drv: { src = gogolSrc; }) drv).overrideAttrs (_oldAttrs: {
       sourceRoot = "${gogolSrc.name}/${dir}";
     });
+  isGogolService = name: lib.hasPrefix "gogol-" name && name != "gogol-core";
+  gogolServices = lib.filter isGogolService (lib.attrNames super);
+  gogolServiceOverrides = (lib.foldl' (acc: name:
+    acc // { "${name}" = setGogolSourceRoot "lib/services/${name}" super.${name}; }
+  ) {}) gogolServices;
 in
 {
   gogol-core = lib.pipe
@@ -3110,4 +3115,4 @@ in
       (overrideCabal (drv: { editedCabalFile = null; revision = null; }))
     ];
   gogol = setGogolSourceRoot "lib/gogol" super.gogol;
-})
+} // gogolServiceOverrides)
