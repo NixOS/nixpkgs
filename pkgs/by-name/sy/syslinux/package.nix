@@ -36,9 +36,9 @@ stdenv.mkDerivation {
         };
     in
     [
-      ./gcc10.patch
       (fetchArchlinuxPatch "0002-gfxboot-menu-label.patch" "sha256-eoId3jn4eRxItil5naoGMBGOJM/p5FG74ePwxiJ0w/8=")
       (fetchArchlinuxPatch "0005-gnu-efi-version-compatibility.patch" "sha256-5oZ/24emWNPHx621v/9i2xU6rodpVCM0R18hCU35eDk=")
+      (fetchArchlinuxPatch "0006-Replace-builtin-strlen-that-appears-to-get-optimized.patch" "sha256-aq2vKqGonhMI2gRrAYNe+VRD8Vwijn7kOOv5wqAncx8=")
       (fetchArchlinuxPatch "0025-reproducible-build.patch" "sha256-vhth9CFHqChPQPgGhUWVpYwMFnnjoMVIGr7Wfu1jcDY=")
       (fetchArchlinuxPatch
         # mbr.bin: too big (452 > 440)
