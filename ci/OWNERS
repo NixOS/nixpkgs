@@ -14,12 +14,13 @@
 # Processing of this file is implemented in workflows/codeowners-v2.yml
 
 # CI
-/.github/workflows @NixOS/Security @Mic92 @zowoq @infinisil @azuwis
+/.github/*_TEMPLATE*                    @SigmaSquadron
+/.github/workflows                      @NixOS/Security @Mic92 @zowoq @infinisil @azuwis
 /.github/workflows/check-nix-format.yml @infinisil
-/.github/workflows/nixpkgs-vet.yml @infinisil @philiptaron
-/.github/workflows/codeowners-v2.yml @infinisil
-/ci @infinisil @philiptaron @NixOS/Security
-/ci/OWNERS @infinisil @philiptaron
+/.github/workflows/codeowners-v2.yml    @infinisil
+/.github/workflows/nixpkgs-vet.yml      @infinisil @philiptaron
+/ci                                     @infinisil @philiptaron @NixOS/Security
+/ci/OWNERS                              @infinisil @philiptaron
 
 # Development support
 /.editorconfig @Mic92 @zowoq
