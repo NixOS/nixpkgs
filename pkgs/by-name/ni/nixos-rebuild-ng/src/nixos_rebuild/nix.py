@@ -70,7 +70,7 @@ def build_flake(
     return Path(r.stdout.strip())
 
 
-def remote_build(
+def build_remote(
     attr: str,
     build_attr: BuildAttr,
     build_host: Remote | None,
@@ -124,7 +124,7 @@ def remote_build(
         run_wrapper(["rm", "-rf", remote_tmpdir], remote=build_host, check=False)
 
 
-def remote_build_flake(
+def build_remote_flake(
     attr: str,
     flake: Flake,
     build_host: Remote,

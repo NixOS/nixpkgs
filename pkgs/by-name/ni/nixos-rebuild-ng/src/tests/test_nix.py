@@ -76,7 +76,7 @@ def test_build_flake(mock_run: Any) -> None:
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 @patch(get_qualified_name(n.uuid4, n), autospec=True)
-def test_remote_build(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
+def test_build_remote(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
     build_host = m.Remote("user@host", [], None)
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
 
@@ -97,7 +97,7 @@ def test_remote_build(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
     mock_run.side_effect = run_wrapper_side_effect
     mock_uuid4.side_effect = [uuid.UUID(int=1), uuid.UUID(int=2)]
 
-    assert n.remote_build(
+    assert n.build_remote(
         "config.system.build.toplevel",
         m.BuildAttr("<nixpkgs/nixos>", "preAttr"),
         build_host,
@@ -164,12 +164,12 @@ def test_remote_build(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
     autospec=True,
     return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
 )
-def test_remote_build_flake(mock_run: Any, monkeypatch: Any) -> None:
+def test_build_remote_flake(mock_run: Any, monkeypatch: Any) -> None:
     flake = m.Flake.parse(".#hostname")
     build_host = m.Remote("user@host", [], None)
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
 
-    assert n.remote_build_flake(
+    assert n.build_remote_flake(
         "config.system.build.toplevel",
         flake,
         build_host,

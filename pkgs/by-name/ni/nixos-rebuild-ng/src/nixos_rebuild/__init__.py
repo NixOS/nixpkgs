@@ -395,7 +395,7 @@ def execute(argv: list[str]) -> None:
                 case (_, True, _, _):
                     raise NRError(f"--rollback is incompatible with '{action}'")
                 case (_, False, Remote(_), Flake(_)):
-                    path_to_config = nix.remote_build_flake(
+                    path_to_config = nix.build_remote_flake(
                         attr,
                         flake,
                         build_host,
@@ -412,7 +412,7 @@ def execute(argv: list[str]) -> None:
                         **flake_build_flags,
                     )
                 case (_, False, Remote(_), None):
-                    path_to_config = nix.remote_build(
+                    path_to_config = nix.build_remote(
                         attr,
                         build_attr,
                         build_host,
