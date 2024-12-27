@@ -17,13 +17,13 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "ranger";
-  version = "1.9.3";
+  version = "1.9.4";
 
   src = fetchFromGitHub {
     owner = "ranger";
     repo = "ranger";
     tag = "v${version}";
-    hash = "sha256-iNMOKGsPFzjqojCttZf9eGkC9Ju00kFsx9uqz3x2z+c=";
+    hash = "sha256-9ehxMXwQj7oVhlotTc3mzCKCkoMSbB9cliPg/NMEoWM=";
   };
 
   LC_ALL = "en_US.UTF-8";
