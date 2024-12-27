@@ -1,8 +1,8 @@
 import logging
 from collections.abc import Mapping, Sequence
-from typing import Any, TypeAlias, assert_never, override
+from typing import Any, assert_never, override
 
-Args: TypeAlias = bool | str | list[str] | int | None
+type Args = bool | str | list[str] | int | None
 
 
 class LogFormatter(logging.Formatter):
