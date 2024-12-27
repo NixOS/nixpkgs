@@ -1,46 +1,38 @@
 {
   lib,
   buildPythonPackage,
-  fetchFromGitHub,
-  pythonOlder,
-
-  # build
-  hatchling,
-
-  # runtime
-  jsonschema,
-  python-json-logger,
-  pyyaml,
-  referencing,
-  traitlets,
-
-  # optionals
   click,
-  rich,
-
-  # tests
+  fetchFromGitHub,
+  hatchling,
+  jsonschema,
   pytest-asyncio,
   pytest-console-scripts,
   pytestCheckHook,
+  python-json-logger,
+  pythonOlder,
+  pyyaml,
+  referencing,
+  rich,
+  traitlets,
 }:
 
 buildPythonPackage rec {
   pname = "jupyter-events";
-  version = "0.10.0";
+  version = "0.11.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "jupyter";
     repo = "jupyter_events";
     tag = "v${version}";
-    hash = "sha256-8aps8aNgXw+XbDgtCvWw+Ij1Cm1N0G+wcL35ySkofOk=";
+    hash = "sha256-e+BxJc/i5lpljvv6Uwqwrog+nLJ4NOBSqd47Q7DELOE=";
   };
 
-  nativeBuildInputs = [ hatchling ];
+  build-system = [ hatchling ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     jsonschema
     python-json-logger
     pyyaml
@@ -68,11 +60,11 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "jupyter_events" ];
 
   meta = with lib; {
-    changelog = "https://github.com/jupyter/jupyter_events/releases/tag/v${version}";
     description = "Configurable event system for Jupyter applications and extensions";
-    mainProgram = "jupyter-events";
     homepage = "https://github.com/jupyter/jupyter_events";
+    changelog = "https://github.com/jupyter/jupyter_events/releases/tag/v${version}";
     license = licenses.bsd3;
     maintainers = [ ];
+    mainProgram = "jupyter-events";
   };
 }
