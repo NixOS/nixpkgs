@@ -1,0 +1,225 @@
+# Build settings based on the upstream Xcode project.
+# See: https://github.com/apple-oss-distributions/adv_cmds/blob/main/adv_cmds.xcodeproj/project.pbxproj
+
+# Project settings
+project('adv_cmds', 'c', 'cpp', version : '@version@')
+
+
+# Dependencies
+cc = meson.get_compiler('c')
+cxx = meson.get_compiler('cpp')
+
+dbm = cc.find_library('dbm')
+libxo = dependency('libxo')
+ncurses = dependency('ncurses')
+
+
+# Generators
+bison_bin = find_program('bison', required : true)
+flex_bin = find_program('flex', required : true)
+
+bison = generator(
+    bison_bin,
+    arguments : ['@INPUT@', '--header=@OUTPUT0@', '--output=@OUTPUT1@'],
+    output : [ '@BASENAME@.tab.h', '@BASENAME@.tab.c'],
+)
+
+flex = generator(
+    flex_bin,
+    arguments : ['--header-file=@OUTPUT0@', '--outfile=@OUTPUT1@', '@INPUT@'],
+    output : ['@BASENAME@.yy.h', '@BASENAME@.yy.c'],
+)
+
+
+# Binaries
+executable(
+    'cap_mkdb',
+    dependencies : dbm,
+    install : true,
+    sources : ['cap_mkdb/cap_mkdb.c'],
+)
+install_man('cap_mkdb/cap_mkdb.1')
+
+executable(
+    'colldef',
+    dependencies : dbm,
+    include_directories : [
+        'colldef',
+        'colldef/locale',
+    ],
+    install : true,
+    sources : [
+        bison.process('colldef/parse.y'),
+        flex.process('colldef/scan.l'),
+    ],
+)
+install_man('colldef/colldef.1')
+
+executable(
+    'finger',
+    dependencies : dbm,
+    install : true,
+    sources : [
+        'finger/finger.c',
+        'finger/lprint.c',
+        'finger/net.c',
+        'finger/sprint.c',
+        'finger/util.c',
+    ],
+)
+install_man(
+    'finger/finger.1',
+    'finger/finger.conf.5'
+)
+
+executable(
+    'gencat',
+    install : true,
+    sources : [
+        'gencat/gencat.c',
+        'gencat/genlib.c',
+    ],
+)
+install_man('gencat/gencat.1')
+
+executable(
+    'genwrap',
+    include_directories : 'genwrap',
+    install : true,
+    sources : [
+        'genwrap/genwrap.c',
+        bison.process('genwrap/genwrap.y'),
+        flex.process('genwrap/lex.l'),
+    ],
+)
+install_data(
+    'genwrap/wrapper-head.c',
+    'genwrap/wrapper-tail.c',
+    install_dir : get_option('datadir') + '/genwrap'
+)
+install_data(
+    'genwrap/sample.make',
+    'genwrap/sample.rsync',
+    install_dir : get_option('datadir') + '/genwrap/examples'
+)
+install_man('genwrap/genwrap.8')
+
+executable(
+    'last',
+    dependencies : libxo,
+    install : true,
+    sources : ['last/last.c'],
+)
+install_man('last/last.1')
+
+executable(
+    'locale',
+    install : true,
+    sources : ['locale/locale.cc'],
+)
+install_man('locale/locale.1')
+
+executable(
+    'localedef',
+    include_directories : [ 'localedef', 'localedef/libc' ],
+    install : true,
+    sources : [
+        'localedef/charmap.c',
+        'localedef/collate.c',
+        'localedef/ctype.c',
+        'localedef/localedef.c',
+        'localedef/messages.c',
+        'localedef/monetary.c',
+        'localedef/numeric.c',
+        'localedef/scanner.c',
+        'localedef/time.c',
+        'localedef/wide.c',
+        bison.process('localedef/parser.y'),
+    ],
+)
+install_man('localedef/localedef.1')
+
+executable(
+    'lsvfs',
+    install : true,
+    sources : ['lsvfs/lsvfs.c'],
+)
+install_man('lsvfs/lsvfs.1')
+
+executable(
+    'mklocale',
+    include_directories : 'mklocale',
+    install : true,
+    sources : [
+        bison.process('mklocale/yacc.y'),
+        flex.process('mklocale/lex.l'),
+    ],
+)
+install_man('mklocale/mklocale.1')
+
+executable(
+    'pkill',
+    # Requires undocumented, private sysmon.h.
+    build_by_default : false,
+    install : false,
+    sources : ['pkill/pkill.c'],
+)
+# install_man('pkill/pkill.1')
+
+executable(
+    'ps',
+    c_args : [
+        # Needed for `persona.h`
+        '-DPRIVATE',
+        # From bsd/sys/event_private.h
+        '-Dkqueue_id_t=uint64_t'
+    ],
+    install : true,
+    sources : [
+        'ps/fmt.c',
+        'ps/keyword.c',
+        'ps/nlist.c',
+        'ps/print.c',
+        'ps/ps.c',
+        'ps/tasks.c',
+    ],
+)
+install_man('ps/ps.1')
+
+executable(
+    'stty',
+    install : true,
+    sources : [
+        'stty/cchar.c',
+        'stty/gfmt.c',
+        'stty/key.c',
+        'stty/modes.c',
+        'stty/print.c',
+        'stty/stty.c',
+        'stty/util.c',
+    ],
+)
+install_man('stty/stty.1')
+
+executable(
+    'tabs',
+    dependencies : ncurses,
+    install : true,
+    sources : ['tabs/tabs.c'],
+)
+install_man('tabs/tabs.1')
+
+executable(
+    'tty',
+    install : true,
+    sources : ['tty/tty.c'],
+)
+install_man('tty/tty.1')
+
+executable(
+    'whois',
+    install : true,
+    sources : ['whois/whois.c'],
+)
+install_man('whois/whois.1')
+
