@@ -2299,10 +2299,16 @@ self: super: {
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
 
-  # Fix from https://github.com/brendanhay/gogol/pull/144 which has seen no release
-  # Can't use fetchpatch as it required tweaking the line endings as the .cabal
-  # file revision on hackage was gifted CRLF line endings
-  gogol-core = appendPatch ./patches/gogol-core-144.patch super.gogol-core;
+  # 2024-12-27: use latest source files from github, as the hackage release is outdated
+  gogol-core = overrideCabal (drv: {
+    src = pkgs.fetchFromGitHub {
+      owner = "brendanhay";
+      repo = "gogol";
+      rev = "a9d50bbd73d2cb9675bd9bff0f50fcd108f95608";
+      sha256 = "sha256-8ilQe/Z5MLFIDY8T68azFpYW5KkSyhy3c6pgWtsje9w=";
+    };
+    postUnpack = "sourceRoot=$sourceRoot/lib/gogol-core";
+  }) super.gogol-core;
 
   # Stackage LTS 19 still has 10.*
   hadolint = super.hadolint.override {
