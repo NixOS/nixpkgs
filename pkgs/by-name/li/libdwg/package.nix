@@ -14,6 +14,17 @@ stdenv.mkDerivation rec {
     sha256 = "0l8ks1x70mkna1q7mzy1fxplinz141bd24qhrm1zkdil74mcsryc";
   };
 
+  patches = [
+    ./include-missing.patch
+    ./add-missing-function-declaration.patch
+    ./fix-error-return-value.patch
+    ./fix-incorrect-macro-definition.patch
+    ./make-dump-error-able.patch
+    ./fix-return-value-for-field-xdata.patch
+    ./define-dump-entity-handle.patch
+    ./missing-ctype-include.patch
+  ];
+
   nativeBuildInputs = [ indent ];
 
   hardeningDisable = [ "format" ];

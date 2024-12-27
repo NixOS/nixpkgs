@@ -1,0 +1,36 @@
+diff --git a/src/decode_r2000.c b/src/decode_r2000.c
+index bb6afd5..4e67658 100644
+--- a/src/decode_r2000.c
++++ b/src/decode_r2000.c
+@@ -32,6 +32,7 @@
+ #include "decode_r2000.h"
+ #include "variables.h"
+ #include "logging.h"
++#include "object.h"
+ 
+ extern Dwg_Header_Section header;
+ 
+diff --git a/src/decode_r2004.c b/src/decode_r2004.c
+index c7407de..7174495 100644
+--- a/src/decode_r2004.c
++++ b/src/decode_r2004.c
+@@ -33,6 +33,7 @@
+ #include "decode_r2004.h"
+ #include "variables.h"
+ #include "logging.h"
++#include "object.h"
+ 
+ extern Dwg_Header_Section header;
+ 
+diff --git a/src/dwg.c b/src/dwg.c
+index 47f150b..81841a2 100644
+--- a/src/dwg.c
++++ b/src/dwg.c
+@@ -34,6 +34,7 @@
+ #include "decode.h"
+ #include "object.h"
+ #include "logging.h"
++#include "variables.h"
+ 
+ /** DWG version codes */
+ char version_codes[9][7] = {

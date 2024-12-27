@@ -1,0 +1,37 @@
+diff --git a/programs/dump_objects.in.c b/programs/dump_objects.in.c
+index 2c7093c..1e0b684 100644
+--- a/programs/dump_objects.in.c
++++ b/programs/dump_objects.in.c
+@@ -156,7 +156,7 @@
+   dump_entity_handle (dat, obj);
+ 
+ #define DWG_ENTITY(token) \
+-void \
++int \
+ dump_##token (Bit_Chain *dat, Dwg_Object * obj)\
+ {\
+   char tmp[1024];\
+@@ -171,10 +171,11 @@ dump_##token (Bit_Chain *dat, Dwg_Object * obj)\
+     obj->handle.size,\
+     obj->handle.value);
+ 
+-#define DWG_ENTITY_END }
++#define DWG_ENTITY_END \
++  return 0;}
+ 
+ #define DWG_NONGRAPH(token) \
+-void \
++int \
+ dump_##token (Bit_Chain *dat, Dwg_Object * obj) \
+ { \
+   char tmp[1024];\
+@@ -188,7 +189,8 @@ dump_##token (Bit_Chain *dat, Dwg_Object * obj) \
+     obj->handle.size,\
+     obj->handle.value);
+ 
+-#define DWG_NONGRAPH_END }
++#define DWG_NONGRAPH_END \
++  return 0;}
+ 
+ int dump_retzero() {return (0);}
+ 

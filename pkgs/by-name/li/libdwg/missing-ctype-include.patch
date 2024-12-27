@@ -1,0 +1,12 @@
+diff --git a/programs/dwg-dxf.c b/programs/dwg-dxf.c
+index 9015df6..632f319 100644
+--- a/programs/dwg-dxf.c
++++ b/programs/dwg-dxf.c
+@@ -24,6 +24,7 @@
+ #include <stdint.h>
+ #include <string.h>
+ #include <math.h>
++#include <ctype.h>
+ #include "config.h"
+ 
+ #include "dwg.h"

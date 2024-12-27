@@ -1,0 +1,16 @@
+diff --git a/programs/dump_objects.in.c b/programs/dump_objects.in.c
+index 1e0b684..4ea9de8 100644
+--- a/programs/dump_objects.in.c
++++ b/programs/dump_objects.in.c
+@@ -105,9 +105,9 @@
+       FIELD_HANDLE(name[vcount], code);\
+     }
+ 
+-#define HANDLE_VECTOR(name, sizefield, code) HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code)
++#define FIELD_XDATA(name, size) return(1); // Not implemented
+ 
+-#define FIELD_XDATA(name, size) return;
++#define HANDLE_VECTOR(name, sizefield, code) HANDLE_VECTOR_N(name, FIELD_VALUE(sizefield), code)
+ 
+ #define REACTORS(hcode)\
+   for (vcount=0; vcount < obj->num_reactors; vcount++)\

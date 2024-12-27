@@ -1,0 +1,13 @@
+diff --git a/src/dwg_object_free.in.c b/src/dwg_object_free.in.c
+index 5e9dd59..0015f20 100644
+--- a/src/dwg_object_free.in.c
++++ b/src/dwg_object_free.in.c
+@@ -78,7 +78,7 @@
+ 
+ #define HANDLE_VECTOR(name, sizefield, code) FIELD_TV(name)
+ 
+-#define FIELD_XDATA(name, size) return;
++#define FIELD_XDATA(name, size) FIELD_TV(name)
+ 
+ #define REACTORS(code) \
+   if (obj->reactors)\

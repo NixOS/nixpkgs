@@ -1,0 +1,52 @@
+diff --git a/programs/dump_entity_handle.h b/programs/dump_entity_handle.h
+new file mode 100644
+index 0000000..c36f174
+--- /dev/null
++++ b/programs/dump_entity_handle.h
+@@ -0,0 +1,22 @@
++/*****************************************************************************/
++/*  LibDWG - free implementation of the DWG file format                      */
++/*                                                                           */
++/*  Copyright (C) 2024 Gavin John                                            */
++/*                                                                           */
++/*  This library is free software, licensed under the terms of the GNU       */
++/*  General Public License as published by the Free Software Foundation,     */
++/*  either version 3 of the License, or (at your option) any later version.  */
++/*  You should have received a copy of the GNU General Public License        */
++/*  along with this program.  If not, see <http://www.gnu.org/licenses/>.    */
++/*                                                                           */
++/*****************************************************************************/
++
++/**
++ *     \file       dump_entity_handle.h
++ *     \author     written by Gavin John
++ *     \version
++ *     \copyright  GNU General Public License (version 3 or later)
++ */
++
++int
++dump_entity_handle (Bit_Chain * dat, Dwg_Object * obj);
+diff --git a/programs/dump_entity_handle.in.c b/programs/dump_entity_handle.in.c
+index 6388a62..1ce9eaa 100644
+--- a/programs/dump_entity_handle.in.c
++++ b/programs/dump_entity_handle.in.c
+@@ -25,6 +25,7 @@
+ #define FIELD_VALUE(name) _ent->name
+ 
+ #include "dwg_macro.h"
++#include "dump_entity_handle.h"
+ 
+ #define FIELD_HANDLE(name, handle_code) \
+   printf ("  " #name ": HANDLE(%1X.%d.%lu)\n",\
+diff --git a/programs/dump_objects.in.c b/programs/dump_objects.in.c
+index 4ea9de8..c44364f 100644
+--- a/programs/dump_objects.in.c
++++ b/programs/dump_objects.in.c
+@@ -26,6 +26,7 @@
+   printf ("  " #name ": " FORMAT_##type "\n", FIELD_VALUE(name))
+ 
+ #include "dwg_macro.h"
++#include "dump_entity_handle.h"
+ 
+ #define SKIP(name) dump_retzero()
+ 

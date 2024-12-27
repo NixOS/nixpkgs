@@ -1,0 +1,13 @@
+diff --git a/src/dwg_object.spe.c b/src/dwg_object.spe.c
+index 4c44384..a289e06 100644
+--- a/src/dwg_object.spe.c
++++ b/src/dwg_object.spe.c
+@@ -1466,7 +1466,7 @@ DWG_NONGRAPH(DICTIONARY);
+           stderr,
+           "Strange: dictionary with more than 10 thousand entries! Handle: %lu\n",
+           obj->handle.value);
+-      return;
++      return 1;
+     }
+ 
+   FIELD_TV_VECTOR(text, numitems);

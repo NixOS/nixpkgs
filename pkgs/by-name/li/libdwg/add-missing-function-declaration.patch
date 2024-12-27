@@ -1,0 +1,13 @@
+diff --git a/src/decode.h b/src/decode.h
+index 81cbc71..42f3bb1 100644
+--- a/src/decode.h
++++ b/src/decode.h
+@@ -110,6 +110,8 @@ int dwg_decode_object (Bit_Chain * dat, Dwg_Object * obj);
+ 
+ int dwg_decode_entity (Bit_Chain *dat, Dwg_Object_Entity * ent);
+ 
++int dwg_decode_entity_handles (Bit_Chain *dat, Dwg_Object * obj);
++
+ int dwg_decode_nongraph (Bit_Chain *dat, Dwg_Object_Nongraph * ngr);
+ 
+ void dwg_decode_common_entity_handle_data (Bit_Chain *dat, Dwg_Object *obj);
