@@ -77,6 +77,7 @@ rustPlatform.buildRustPackage rec {
       yshym
       jmc-figueira
       atemu
+      Rishik-Y
     ];
     platforms = platforms.linux;
     mainProgram = "wluma";
