@@ -1408,6 +1408,10 @@ let
 
     odate = callPackage ../development/ocaml-modules/odate { };
 
+    odiff-core = callPackage ../development/ocaml-modules/odiff/core.nix { };
+
+    odiff-io = callPackage ../development/ocaml-modules/odiff/io.nix { };
+
     odig = callPackage ../development/ocaml-modules/odig { };
 
     odoc = callPackage ../development/ocaml-modules/odoc { };
