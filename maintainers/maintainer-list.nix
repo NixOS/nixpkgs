@@ -4911,17 +4911,17 @@
     github = "damhiya";
     githubId = 13533446;
   };
-  DamienCassou = {
-    email = "damien@cassou.me";
-    github = "DamienCassou";
-    githubId = 217543;
-    name = "Damien Cassou";
-  };
   damidoug = {
     email = "contact@damidoug.dev";
     github = "damidoug";
     githubId = 75175586;
     name = "Douglas Damiano";
+  };
+  DamienCassou = {
+    email = "damien@cassou.me";
+    github = "DamienCassou";
+    githubId = 217543;
+    name = "Damien Cassou";
   };
   dan4ik605743 = {
     email = "6057430gu@gmail.com";
