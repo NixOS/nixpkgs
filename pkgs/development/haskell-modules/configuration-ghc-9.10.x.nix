@@ -77,7 +77,7 @@ self: super: {
   network-control = super.network-control_0_1_3;
   network-run = super.network-run_0_4_0;
   ormolu = doDistribute self.ormolu_0_7_7_0;
-  primitive = doDistribute (dontCheck self.primitive_0_9_0_0); # tests introduce a recursive dependency via hspec
+  primitive = doDistribute self.primitive_0_9_0_0;
   quickcheck-instances = doDistribute self.quickcheck-instances_0_3_32;
   rebase = doDistribute self.rebase_1_21_1;
   rerebase = doDistribute self.rerebase_1_21_1;

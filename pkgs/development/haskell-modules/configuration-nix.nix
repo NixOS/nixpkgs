@@ -984,6 +984,7 @@ self: super: builtins.intersectAttrs super {
   # break infinite recursion with base-orphans
   primitive = dontCheck super.primitive;
   primitive_0_7_1_0 = dontCheck super.primitive_0_7_1_0;
+  primitive_0_9_0_0 = dontCheck super.primitive_0_9_0_0;
 
   cut-the-crap =
     let path = pkgs.lib.makeBinPath [ pkgs.ffmpeg pkgs.youtube-dl ];
