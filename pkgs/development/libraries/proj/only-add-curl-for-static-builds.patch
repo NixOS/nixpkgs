@@ -1,0 +1,37 @@
+From 54b1dbc550b3daa2a7834a9bfd73a0c2f8aeba6a Mon Sep 17 00:00:00 2001
+From: Even Rouault <even.rouault@spatialys.com>
+Date: Tue, 5 Jul 2022 19:40:53 +0200
+Subject: [PATCH] proj-config.cmake generation: only add find_dependency(CURL)
+ for static builds
+
+---
+ cmake/project-config.cmake.in | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/cmake/project-config.cmake.in b/cmake/project-config.cmake.in
+index 3f359668..db886396 100644
+--- a/cmake/project-config.cmake.in
++++ b/cmake/project-config.cmake.in
+@@ -19,11 +19,15 @@ include(CMakeFindDependencyMacro)
+ # Cf https://gitlab.kitware.com/cmake/cmake/-/issues/17612
+ cmake_policy(PUSH)
+ cmake_policy(SET CMP0012 NEW)
+-if("@ENABLE_TIFF@")
+-    set(PROJ_CONFIG_FIND_TIFF_DEP ON)
++if(NOT "@BUILD_SHARED_LIBS@")
++    if("@ENABLE_TIFF@")
++        set(PROJ_CONFIG_FIND_TIFF_DEP ON)
++    endif()
+ endif()
+-if("@CURL_ENABLED@")
+-    set(PROJ_CONFIG_FIND_CURL_DEP ON)
++if(NOT "@BUILD_SHARED_LIBS@")
++    if("@CURL_ENABLED@")
++        set(PROJ_CONFIG_FIND_CURL_DEP ON)
++    endif()
+ endif()
+ cmake_policy(POP)
+ 
+-- 
+2.41.0
+
