@@ -8,20 +8,21 @@
 
 buildGoModule rec {
   pname = "plow";
-  version = "1.3.1";
+  version = "1.3.2";
 
   src = fetchFromGitHub {
     owner = "six-ddc";
     repo = "plow";
     rev = "refs/tags/v${version}";
-    hash = "sha256-TynFq7e4MtZlA5SmGMybhmCVw67yHYgZWffQjuyhTDA=";
+    hash = "sha256-q9k5GzhYPOP8p8VKrqpoHc3B9Qak+4DtZAZZuFlkED0=";
   };
 
-  vendorHash = "sha256-t2lBPyCn8bu9hLsWmaCGir9egbX0mQR+8kB0RfY7nHE=";
+  vendorHash = "sha256-KfnDJI6M6tzfoI7krKId5FXUw27eV6cEoz3UaNrlXWk=";
 
   ldflags = [
     "-s"
     "-w"
+    "-X main.version=${version}"
   ];
 
   passthru.tests.version = testers.testVersion {

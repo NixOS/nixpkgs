@@ -120,7 +120,7 @@ stdenv.mkDerivation ({
       with hot code upgrades.
     '';
 
-    license = licenses.epl10;
+    license = licenses.asl20;
     platforms = platforms.unix;
     maintainers = teams.beam.members;
   };

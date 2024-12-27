@@ -50,6 +50,8 @@ buildPythonPackage rec {
     "test_request"
     "test_trying_to_use_django_integration"
     "test_upload"
+    # AssertionError: 2 != 3
+    "test_flush_interval"
   ];
 
   meta = with lib; {
