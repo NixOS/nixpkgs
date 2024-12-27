@@ -353,6 +353,7 @@ let
     Biostrings = [ pkgs.zlib ];
     CellBarcode = [ pkgs.zlib ];
     cld3 = [ pkgs.protobuf ];
+    cpp11qpdf = with pkgs; [ zlib.dev libjpeg ];
     bnpmr = [ pkgs.gsl ];
     caviarpd = [ pkgs.cargo ];
     cairoDevice = [ pkgs.gtk2.dev ];
