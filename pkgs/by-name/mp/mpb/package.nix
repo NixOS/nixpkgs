@@ -44,6 +44,9 @@ stdenv.mkDerivation rec {
     perl
   ];
 
+  # Required for build with gcc-14
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=int-conversion";
+
   enableParallelBuilding = true;
 
   configureFlags = [
