@@ -61,7 +61,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://grandperspectiv.sourceforge.net";
     license = licenses.gpl2Only;
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ eliandoran ];
+    maintainers = with maintainers; [
+      eliandoran
+      DimitarNestorov
+    ];
     platforms = platforms.darwin;
   };
 
