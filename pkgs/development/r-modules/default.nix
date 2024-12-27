@@ -1043,7 +1043,7 @@ let
       cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
         src = attrs.src;
         sourceRoot = "gifski/src/myrustlib";
-        hash = "sha256-e6nuiQU22GiO2I+bu0muyICGrdkCLSZUDHDz2mM2hz0=";
+        hash = "sha256-tVbuYzGdBzWVeQ26Imq6y5gA0R/CjuNCZtQgfd3/qwA=";
       };
 
       cargoRoot = "src/myrustlib";
