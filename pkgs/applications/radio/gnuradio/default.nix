@@ -10,7 +10,6 @@
 , orc
 , boost
 , spdlog
-, swig
 , mpir
 , doxygen
 , python
@@ -21,7 +20,6 @@
 , libjack2
 , libiio
 , libad9361
-, CoreAudio
 , uhd
 , SDL
 , gsl
@@ -173,7 +171,6 @@ let
     gr-audio = {
       runtime = []
         ++ lib.optionals stdenv.hostPlatform.isLinux [ alsa-lib libjack2 ]
-        ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreAudio ]
       ;
       cmakeEnableFlag = "GR_AUDIO";
     };

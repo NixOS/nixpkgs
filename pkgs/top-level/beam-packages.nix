@@ -28,6 +28,8 @@ in
     erlang = self.interpreters.${self.latestVersion};
 
     # Standard Erlang versions, using the generic builder.
+    #
+    # Three versions are supported according to https://github.com/erlang/otp/security
 
     erlang_27 = self.beamLib.callErlang ../development/interpreters/erlang/27.nix {
       wxGTK = wxGTK32;
@@ -51,17 +53,9 @@ in
       inherit wxSupport systemdSupport;
     };
 
-    erlang_24 = self.beamLib.callErlang ../development/interpreters/erlang/24.nix {
-      wxGTK = wxGTK32;
-      # Can be enabled since the bug has been fixed in https://github.com/erlang/otp/pull/2508
-      parallelBuild = true;
-      autoconf = buildPackages.autoconf269;
-      inherit wxSupport systemdSupport;
-    };
-
     # Other Beam languages. These are built with `beam.interpreters.erlang`. To
     # access for example elixir built with different version of Erlang, use
-    # `beam.packages.erlang_24.elixir`.
+    # `beam.packages.erlang_27.elixir`.
     inherit (self.packages.erlang)
       elixir
       elixir_1_18
@@ -85,7 +79,6 @@ in
     erlang_27 = self.packagesWith self.interpreters.erlang_27;
     erlang_26 = self.packagesWith self.interpreters.erlang_26;
     erlang_25 = self.packagesWith self.interpreters.erlang_25;
-    erlang_24 = self.packagesWith self.interpreters.erlang_24;
   };
 
   __attrsFailEvaluation = true;

@@ -32,6 +32,11 @@ stdenv.mkDerivation rec {
     ./configure-compat.patch
   ];
 
+  postPatch = ''
+    substituteInPlace configure \
+      --replace-fail "\$(pkg-config" "\$(\$PKG_CONFIG"
+  '';
+
   nativeBuildInputs = [ pkg-config ];
   buildInputs =
     [
