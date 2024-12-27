@@ -1147,6 +1147,7 @@ mapAliases {
   rockbox_utility = rockbox-utility; # Added 2022-03-17
   rpiboot-unstable = throw "'rpiboot-unstable' has been renamed to/replaced by 'rpiboot'"; # Converted to throw 2024-10-17
   rr-unstable = rr; # Added 2022-09-17
+  rtfm = throw "'rtfm' has been replaced by 'biblioteca'"; # Added 2024-12-27
   rtx = mise; # Added 2024-01-05
   runCommandNoCC = runCommand;
   runCommandNoCCLocal = runCommandLocal;
