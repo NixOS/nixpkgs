@@ -4917,6 +4917,12 @@
     githubId = 217543;
     name = "Damien Cassou";
   };
+  damidoug = {
+    email = "contact@damidoug.dev";
+    github = "damidoug";
+    githubId = 75175586;
+    name = "Douglas Damiano";
+  };
   dan4ik605743 = {
     email = "6057430gu@gmail.com";
     github = "dan4ik605743";
