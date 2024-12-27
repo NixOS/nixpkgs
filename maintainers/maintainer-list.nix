@@ -604,6 +604,12 @@
     githubId = 25236206;
     name = "Adrian Dole";
   };
+  adrian-gierakowski = {
+    email = "adrian.gierakowski@gmail.com";
+    github = "adrian-gierakowski";
+    githubId = 330177;
+    name = "Adrian Gierakowski";
+  };
   adriangl = {
     email = "adrian@lauterer.it";
     matrix = "@adriangl:pvv.ntnu.no";
