@@ -61,7 +61,8 @@ let
     interfaceName: peer:
     removeNulls {
       PublicKey = peer.publicKey;
-      PresharedKey = "@${presharedKeyCredential interfaceName peer}";
+      PresharedKey =
+        if peer.presharedKeyFile == null then null else "@${presharedKeyCredential interfaceName peer}";
       AllowedIPs = peer.allowedIPs;
       Endpoint = peer.endpoint;
       PersistentKeepalive = peer.persistentKeepalive;
