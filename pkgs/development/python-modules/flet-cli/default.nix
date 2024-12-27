@@ -7,6 +7,7 @@
   poetry-core,
 
   flet,
+  flet-desktop,
   qrcode,
   toml,
   watchdog,
@@ -23,6 +24,7 @@ buildPythonPackage rec {
 
   dependencies = [
     flet
+    flet-desktop
     qrcode
     toml
     watchdog
