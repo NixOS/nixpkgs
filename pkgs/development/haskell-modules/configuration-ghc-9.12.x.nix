@@ -61,6 +61,7 @@ self: super: {
   primitive = doDistribute self.primitive_0_9_0_0;
   splitmix = doDistribute self.splitmix_0_1_1;
   tagged = doDistribute self.tagged_0_8_9;
+  tar = doDistribute self.tar_0_6_3_0;
 
   # Test suite issues
   call-stack = dontCheck super.call-stack; # https://github.com/sol/call-stack/issues/19
