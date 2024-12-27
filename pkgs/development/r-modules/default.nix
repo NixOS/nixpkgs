@@ -604,6 +604,7 @@ let
 
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
+    adbcpostgresql = with pkgs; [ readline.dev zlib.dev openssl.dev libkrb5.dev openpam ];
     asciicast = with pkgs; [ xz.dev bzip2.dev zlib.dev icu.dev libdeflate ];
     island = [ pkgs.gsl.dev ];
     svKomodo = [ pkgs.which ];
