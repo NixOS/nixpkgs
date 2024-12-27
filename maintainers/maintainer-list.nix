@@ -23149,6 +23149,12 @@
     githubId = 504580;
     name = "Thibaut Robert";
   };
+  tropf = {
+    name = "tropf";
+    matrix = "@tropf:matrix.org";
+    github = "tropf";
+    githubId = 29873239;
+  };
   troydm = {
     email = "d.geurkov@gmail.com";
     github = "troydm";
