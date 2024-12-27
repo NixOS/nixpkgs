@@ -40,19 +40,19 @@ buildPythonPackage rec {
   ];
 
   _flet_version = ''
-  version = "${version}"
-  def update_version():
-    pass
+    version = "${version}"
+    def update_version():
+      pass
   '';
   _flet_utils_pip = ''
-  def install_flet_package(name: str):
-    pass
+    def install_flet_package(name: str):
+      pass
   '';
 
   postPatch = ''
-   # nerf out nagging about pip
-  echo "$_flet_version" > src/flet/version.py
-  echo "$_flet_utils_pip" >> src/flet/utils/pip.py
+     # nerf out nagging about pip
+    echo "$_flet_version" > src/flet/version.py
+    echo "$_flet_utils_pip" >> src/flet/utils/pip.py
   '';
 
   dependencies = [

@@ -21,7 +21,11 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies = [ flet fastapi uvicorn ];
+  dependencies = [
+    flet
+    fastapi
+    uvicorn
+  ];
 
   pythonImportsCheck = [ "flet_web" ];
 

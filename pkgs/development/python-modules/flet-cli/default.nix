@@ -32,7 +32,10 @@ buildPythonPackage rec {
     watchdog
   ];
 
-  pythonRelaxDeps = [ "qrcode" "watchdog" ];
+  pythonRelaxDeps = [
+    "qrcode"
+    "watchdog"
+  ];
 
   makeWrapperArgs = [
     "--prefix"
