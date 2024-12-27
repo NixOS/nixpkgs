@@ -61,7 +61,7 @@ buildPythonPackage rec {
       "test_bytestring_passthru"
     ]
     # https://github.com/sqlalchemy/mako/issues/408
-    ++ lib.optional (stdenv.targetPlatform.toolchain == "llvm") "test_future_import";
+    ++ lib.optional (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) "test_future_import";
 
   meta = with lib; {
     description = "Super-fast templating language";

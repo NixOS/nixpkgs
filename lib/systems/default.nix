@@ -105,11 +105,16 @@ let
         "clang"
       else "gcc";
 
-      bintools = if final.toolchain == "bintools" then
+      bintools = if final.toolchain == "llvm" then
         "llvm"
       else if final.toolchain == "apple" then
         "apple"
       else "gnu";
+
+      libcxx =
+        /**/ if final.toolchain == "llvm" then "libcxx"
+        else if final.toolchain == "gnu" then "libstdcxx"
+        else null;
 
       libc =
         /**/ if final.isDarwin                then "libSystem"
@@ -130,6 +135,17 @@ let
         else if final.isNone                  then "newlib"
         # TODO(@Ericson2314) think more about other operating systems
         else                                     "native/impure";
+
+      unwinderlib =
+        /**/ if final.toolchain == "llvm" then "libunwinder"
+        else if final.toolchain == "gnu" then "libgcc_s"
+        else null;
+
+      rtlib =
+        /**/ if final.toolchain == "llvm" then "compiler-rt"
+        else if final.toolchain == "gnu" then "libgcc"
+        else null;
+
       # Choose what linker we wish to use by default. Someday we might also
       # choose the C compiler, runtime library, C++ standard library, etc. in
       # this way, nice and orthogonally, and deprecate `useLLVM`. But due to

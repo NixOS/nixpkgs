@@ -53,7 +53,7 @@ buildPythonPackage rec {
       # AssertionError: assert 'foo' in ['setup']
       "test_init_extension_module"
     ]
-    ++ lib.optionals (stdenv.targetPlatform.toolchain == "llvm") [
+    ++ lib.optionals (stdenv.cc.isClang && !stdenv.hostPlatform.isDarwin) [
       # InvalidPythonEnvironment: The python binary is potentially unsafe.
       "test_create_environment_executable"
       # AssertionError: assert ['', '.1000000000000001'] == ['', '.1']

@@ -61,7 +61,7 @@ with pkgs;
       # thing to to create an earlier thing (leading to infinite recursion) and
       # we also would still respect the stage arguments choices for these
       # things.
-      (if stdenvNoCC.hostPlatform.isDarwin || stdenvNoCC.hostPlatform.toolchain == "llvm"
+      (if stdenvNoCC.hostPlatform.cc == "clang"
        then overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoCompilerRt
        else gccCrossLibcStdenv)
     else mkStdenvNoLibs stdenv;
@@ -69,7 +69,7 @@ with pkgs;
   stdenvNoLibc =
     if stdenvNoCC.hostPlatform != stdenvNoCC.buildPlatform
     then
-      (if stdenvNoCC.hostPlatform.isDarwin || stdenvNoCC.hostPlatform.toolchain == "llvm"
+      (if stdenvNoCC.hostPlatform.cc == "clang"
        then overrideCC stdenvNoCC buildPackages.llvmPackages.clangNoLibc
        else gccCrossLibcStdenv)
     else mkStdenvNoLibs stdenv;
@@ -11991,7 +11991,7 @@ with pkgs;
 
   busybox = callPackage ../os-specific/linux/busybox {
     # Fixes libunwind from being dynamically linked to a static binary.
-    stdenv = if stdenv.targetPlatform.toolchain == "llvm" then
+    stdenv = if stdenv.cc.isClang && stdenv.hostPlatform.unwinderlib == "libunwind" then
       overrideCC stdenv buildPackages.llvmPackages.clangNoLibcxx
     else stdenv;
   };
