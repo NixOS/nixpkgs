@@ -594,15 +594,15 @@ let format' = format; in let
       # '-E offset=X' option, so we can't do this outside the VM.
       ${lib.optionalString (partitionTableType == "efi" || partitionTableType == "hybrid") ''
         mkdir -p $mountPoint/boot
-        mkfs.vfat -n ESP /dev/vda1
+        mkfs.vfat -F 32 -n ESP /dev/vda1
         mount /dev/vda1 $mountPoint/boot
 
         ${lib.optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
       ''}
       ${lib.optionalString (partitionTableType == "efixbootldr") ''
         mkdir -p $mountPoint/{boot,efi}
-        mkfs.vfat -n ESP /dev/vda1
-        mkfs.vfat -n BOOT /dev/vda2
+        mkfs.vfat -F 32 -n ESP /dev/vda1
+        mkfs.vfat -F 32 -n BOOT /dev/vda2
         mount /dev/vda1 $mountPoint/efi
         mount /dev/vda2 $mountPoint/boot
 
