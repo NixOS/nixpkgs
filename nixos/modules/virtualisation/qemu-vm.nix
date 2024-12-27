@@ -228,10 +228,37 @@ let
       ${lib.getExe cfg.tpm.package} \
         socket \
         --tpmstate dir="$NIX_SWTPM_DIR" \
-        --ctrl type=unixio,path="$NIX_SWTPM_DIR"/socket,terminate \
+        --server type=unixio,path="$NIX_SWTPM_DIR"/socket \
+        --ctrl type=unixio,path="$NIX_SWTPM_DIR"/socket.ctrl \
         --pid file="$NIX_SWTPM_DIR"/pid --daemon \
+        --flags not-need-init \
         --tpm2 \
         --log file="$NIX_SWTPM_DIR"/stdout,level=6
+
+      (
+        export TPM2TOOLS_TCTI=swtpm:path="$NIX_SWTPM_DIR"/socket
+        export PATH=${
+          lib.makeBinPath [
+            pkgs.tpm2-tools
+          ]
+        }:$PATH
+
+        tpm2_startup --clear
+        tpm2_startup
+
+        ${lib.optionalString (cfg.tpm.provisioning != null)
+          # Run provisioning in a subshell not to pollute vars
+          ''
+            (
+              export TCTI=swtpm:path="$NIX_SWTPM_DIR"/socket
+              ${cfg.tpm.provisioning}
+            )
+          ''
+        }
+
+        tpm2_shutdown
+        tpm2_shutdown --clear
+      )
 
       # Enable `fdflags` builtin in Bash
       # We will need it to perform surgical modification of the file descriptor
@@ -249,7 +276,7 @@ let
       # will stop it.
       coproc waitingswtpm {
         read || :
-        echo "" | ${lib.getExe hostPkgs.socat} STDIO UNIX-CONNECT:"$NIX_SWTPM_DIR"/socket
+        ${cfg.tpm.package}/bin/swtpm_ioctl --unix "$NIX_SWTPM_DIR"/socket.ctrl --stop 2>/dev/null
       }
       # Clear `FD_CLOEXEC` on the coprocess' file descriptor stdin.
       fdflags -s-cloexec ''${waitingswtpm[1]}
@@ -980,6 +1007,26 @@ in
         example = "tpm-tis-device";
         description = "QEMU device model for the TPM, uses the appropriate default based on th guest platform system and the package passed.";
       };
+
+      provisioning = mkOption {
+        type = types.nullOr types.str;
+        default = null;
+        description = ''
+          Script to provision the TPM before control is handed off to the VM.
+
+          `TPM2TOOLS_TCTI` will be provided to configure tpm2-tools to use the
+          swtpm instance transparently.
+          `TCTI` is also provided as a generic value, consumer is expected to
+          re-export it however it may need (`TPM2OPENSSL_TCTI`, `TPM2_PKCS11_TCTI`,
+          ...).
+        '';
+        example = literalExpression ''
+          tpm2_nvdefine 0xcafecafe \
+            -C o \
+            -a "ownerread|policyread|policywrite|ownerwrite|authread|authwrite"
+          echo "foobar" | tpm2_nvwrite 0xcafecafe -C o
+        '';
+      };
     };
 
     virtualisation.useDefaultFilesystems = mkOption {
@@ -1198,7 +1245,7 @@ in
         "-nographic"
       ])
       (mkIf (cfg.tpm.enable) [
-        "-chardev socket,id=chrtpm,path=\"$NIX_SWTPM_DIR\"/socket"
+        "-chardev socket,id=chrtpm,path=\"$NIX_SWTPM_DIR\"/socket.ctrl"
         "-tpmdev emulator,id=tpm_dev_0,chardev=chrtpm"
         "-device ${cfg.tpm.deviceModel},tpmdev=tpm_dev_0"
       ])

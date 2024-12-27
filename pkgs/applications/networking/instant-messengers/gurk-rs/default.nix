@@ -8,19 +8,20 @@
   pkgsBuildHost,
   openssl,
   pkg-config,
-  testers,
+  versionCheckHook,
+  nix-update-script,
   gurk-rs,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "gurk-rs";
-  version = "0.5.2";
+  version = "0.6.0";
 
   src = fetchFromGitHub {
     owner = "boxdot";
     repo = "gurk-rs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZVpI60pZZCLRnKdC80P8f63gE0+Vi1lelhyFPAhpHyU=";
+    tag = "v${version}";
+    hash = "sha256-FPbEtk2A7qs/85VsmfV1uPsVZ7V5WKhMKeWrzUt5L4w=";
   };
 
   postPatch = ''
@@ -29,7 +30,7 @@ rustPlatform.buildRustPackage rec {
 
   useFetchCargoVendor = true;
 
-  cargoHash = "sha256-jTZ2wJPXj3nU7GVTfne64eSra+JuKhNryCtRZMKOE44=";
+  cargoHash = "sha256-yLZKat6NNZkbyTpAVpOvDAbbNajh4Vaebc7fmK0I3Mc=";
 
   nativeBuildInputs = [
     protobuf
@@ -49,9 +50,14 @@ rustPlatform.buildRustPackage rec {
 
   useNextest = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = gurk-rs;
-  };
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = [ "--version" ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Signal Messenger client for terminal";
