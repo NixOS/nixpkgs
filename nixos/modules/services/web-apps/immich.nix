@@ -253,7 +253,7 @@ in
       in
       [
         ''
-          ${lib.getExe' config.services.postgresql.package "psql"} -d "${cfg.database.name}" -f "${sqlFile}"
+          ${lib.getExe' config.services.postgresql.package "psql"} -p "${cfg.database.port}" -d "${cfg.database.name}" -f "${sqlFile}"
         ''
       ];
 
