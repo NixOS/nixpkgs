@@ -5,34 +5,32 @@
 
   # build-system
   poetry-core,
+  pytestCheckHook,
 
   # propagates
   fastapi,
-  flet-core,
-  flet-runtime,
   httpx,
   oauthlib,
   packaging,
   qrcode,
+  repath,
   cookiecutter,
   uvicorn,
   watchdog,
   websocket-client,
   websockets,
-
 }:
 
 buildPythonPackage rec {
   pname = "flet";
   inherit (flet-client-flutter) version src;
-
   pyproject = true;
 
   sourceRoot = "${src.name}/sdk/python/packages/flet";
 
-  nativeBuildInputs = [
-    poetry-core
-  ];
+  build-system = [ poetry-core ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   makeWrapperArgs = [
     "--prefix"
@@ -49,10 +47,8 @@ buildPythonPackage rec {
     "websockets"
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     fastapi
-    flet-core
-    flet-runtime
     uvicorn
     websocket-client
     watchdog
@@ -60,13 +56,12 @@ buildPythonPackage rec {
     websockets
     httpx
     packaging
+    repath
     qrcode
     cookiecutter
     fastapi
     uvicorn
   ];
-
-  doCheck = false;
 
   pythonImportsCheck = [ "flet" ];
 

@@ -4776,10 +4776,6 @@ self: super: with self; {
 
   flet = callPackage ../development/python-modules/flet { };
 
-  flet-core = callPackage ../development/python-modules/flet-core { };
-
-  flet-runtime = callPackage ../development/python-modules/flet-runtime { };
-
   flexcache = callPackage ../development/python-modules/flexcache { };
 
   flexit-bacnet = callPackage ../development/python-modules/flexit-bacnet { };
