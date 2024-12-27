@@ -2299,17 +2299,6 @@ self: super: {
   # 2021-08-18: streamly-posix was released with hspec 2.8.2, but it works with older versions too.
   streamly-posix = doJailbreak super.streamly-posix;
 
-  # 2024-12-27: use latest source files from github, as the hackage release is outdated
-  gogol-core = overrideCabal (drv: {
-    src = pkgs.fetchFromGitHub {
-      owner = "brendanhay";
-      repo = "gogol";
-      rev = "a9d50bbd73d2cb9675bd9bff0f50fcd108f95608";
-      sha256 = "sha256-8ilQe/Z5MLFIDY8T68azFpYW5KkSyhy3c6pgWtsje9w=";
-    };
-    postUnpack = "sourceRoot=$sourceRoot/lib/gogol-core";
-  }) super.gogol-core;
-
   # Stackage LTS 19 still has 10.*
   hadolint = super.hadolint.override {
     language-docker = self.language-docker_11_0_0;
@@ -3095,3 +3084,30 @@ self: super: {
     # 2025-01-23: jailbreak to allow base >= 4.17
     warp-systemd = doJailbreak super.warp-systemd;
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super
+
+# Gogol Packages
+# 2024-12-27: use latest source files from github, as the hackage release is outdated
+// (
+let
+  gogolSrc = pkgs.fetchFromGitHub {
+    owner = "brendanhay";
+    repo = "gogol";
+    rev = "a9d50bbd73d2cb9675bd9bff0f50fcd108f95608";
+    sha256 = "sha256-8ilQe/Z5MLFIDY8T68azFpYW5KkSyhy3c6pgWtsje9w=";
+  };
+  setGogolSourceRoot =
+    dir: drv:
+    (overrideCabal (drv: { src = gogolSrc; }) drv).overrideAttrs (_oldAttrs: {
+      sourceRoot = "${gogolSrc.name}/${dir}";
+    });
+in
+{
+  gogol-core = lib.pipe
+    super.gogol-core
+    [
+      (setGogolSourceRoot "lib/gogol-core")
+      (addBuildDepend self.base64_1_0)
+      (overrideCabal (drv: { editedCabalFile = null; revision = null; }))
+    ];
+  gogol = setGogolSourceRoot "lib/gogol" super.gogol;
+})
