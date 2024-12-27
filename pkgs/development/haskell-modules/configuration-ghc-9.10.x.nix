@@ -122,7 +122,7 @@ self: super: {
   #
   # Test suite issues
   #
-  call-stack = dontCheck super.call-stack; # expects the package to be named "main", but we generate a name
+  call-stack = dontCheck super.call-stack; # https://github.com/sol/call-stack/issues/19
   lifted-base = dontCheck super.lifted-base; # doesn't compile with transformers ==0.6.*
   lukko_0_1_2 = dontCheck super.lukko_0_1_2; # doesn't compile with tasty ==1.4.*
   resolv = dontCheck super.resolv; # doesn't compile with filepath ==1.5.*
