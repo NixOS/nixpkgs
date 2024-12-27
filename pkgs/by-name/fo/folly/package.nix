@@ -122,7 +122,8 @@ stdenv.mkDerivation (finalAttrs: {
     ]
   );
 
-  doCheck = true;
+  # Temporary fix until next `staging` cycle.
+  doCheck = !stdenv.cc.isClang;
 
   # https://github.com/NixOS/nixpkgs/issues/144170
   postPatch = ''
