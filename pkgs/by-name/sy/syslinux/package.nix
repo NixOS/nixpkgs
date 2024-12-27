@@ -39,24 +39,19 @@ stdenv.mkDerivation {
       (fetchArchlinuxPatch "0002-gfxboot-menu-label.patch" "sha256-eoId3jn4eRxItil5naoGMBGOJM/p5FG74ePwxiJ0w/8=")
       (fetchArchlinuxPatch "0005-gnu-efi-version-compatibility.patch" "sha256-5oZ/24emWNPHx621v/9i2xU6rodpVCM0R18hCU35eDk=")
       (fetchArchlinuxPatch "0006-Replace-builtin-strlen-that-appears-to-get-optimized.patch" "sha256-aq2vKqGonhMI2gRrAYNe+VRD8Vwijn7kOOv5wqAncx8=")
-      (fetchArchlinuxPatch "0025-reproducible-build.patch" "sha256-vhth9CFHqChPQPgGhUWVpYwMFnnjoMVIGr7Wfu1jcDY=")
-      (fetchArchlinuxPatch
-        # mbr.bin: too big (452 > 440)
-        # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=906414
-        "0016-strip-gnu-property.patch"
-        "sha256-gn69YHbObqg6uTLPTtu8otNBFuCSyazwxLW3FbTNLX4="
-      )
-      (fetchArchlinuxPatch
-        # mbr.bin: too big (452 > 440)
-        "0017-single-load-segment.patch"
-        "sha256-pGDcP62k50YkGgP0pFp5NSe7X0sojfLCzTmJtba2Yww="
-      )
-      (fetchArchlinuxPatch "0018-prevent-pow-optimization.patch" "sha256-1+u8Kb6bxRbTPm0QCCt4yViLozzD/+/yspkJasOFM+g=")
+      # mbr.bin: too big (452 > 440)
+      # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=906414
+      (fetchArchlinuxPatch "0016-strip-gnu-property.patch" "sha256-gn69YHbObqg6uTLPTtu8otNBFuCSyazwxLW3FbTNLX4=")
+      # mbr.bin: too big (452 > 440)
+      (fetchArchlinuxPatch "0017-single-load-segment.patch" "sha256-pGDcP62k50YkGgP0pFp5NSe7X0sojfLCzTmJtba2Yww=")
       # Fixes build with "modern" gnu-efi
+      (fetchArchlinuxPatch "0018-prevent-pow-optimization.patch" "sha256-1+u8Kb6bxRbTPm0QCCt4yViLozzD/+/yspkJasOFM+g=")
+      (fetchArchlinuxPatch "0025-reproducible-build.patch" "sha256-vhth9CFHqChPQPgGhUWVpYwMFnnjoMVIGr7Wfu1jcDY=")
+      (fetchArchlinuxPatch "0027-use-correct-type-for-size.patch" "sha256-5nlKwIbXpZEyBrBSq9Zg0D+PRF7/kzEG13WzpwzDpPA=")
+
       ./import-efisetjmp.patch
       # Upstream patch: https://www.syslinux.org/archives/2024-February/026903.html
       ./define-wchar_t.patch
-      (fetchArchlinuxPatch "0027-use-correct-type-for-size.patch" "sha256-5nlKwIbXpZEyBrBSq9Zg0D+PRF7/kzEG13WzpwzDpPA=")
       # gnu-efi changed their definition to already be a 1-elem array, don't double-ref it.
       # https://github.com/ncroxon/gnu-efi/commit/5b74db0e154ffd2fba4bcc254069844f21913988
       ./fix-longjmp-calls.patch
