@@ -1,14 +1,14 @@
 {
   lib,
   stdenv,
-  python311,
+  python312,
   fetchFromGitHub,
   gitMinimal,
   portaudio,
 }:
 
 let
-  python3 = python311.override {
+  python3 = python312.override {
     self = python3;
     packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
   };
