@@ -78,6 +78,9 @@ stdenv.mkDerivation {
         name = "0027-use-correct-type-for-size.patch";
         hash = "sha256-5nlKwIbXpZEyBrBSq9Zg0D+PRF7/kzEG13WzpwzDpPA=";
       })
+      # gnu-efi changed their definition to already be a 1-elem array, don't double-ref it.
+      # https://github.com/ncroxon/gnu-efi/commit/5b74db0e154ffd2fba4bcc254069844f21913988
+      ./fix-longjmp-calls.patch
     ];
 
   postPatch = ''
@@ -120,10 +123,7 @@ stdenv.mkDerivation {
   # gcc-10. Otherwise build fails as:
   #   ld: acpi/xsdt.o:/build/syslinux-b404870/com32/gpllib/../gplinclude/memory.h:40: multiple definition of
   #     `e820_types'; memory.o:/build/syslinux-b404870/com32/gpllib/../gplinclude/memory.h:40: first defined here
-  # and with gcc14+ also:
-  #  /build/source/com32/chain/chain.c:517:44:
-  #   error: passing argument 3 of 'loadfile' from incompatible pointer type
-  env.NIX_CFLAGS_COMPILE = "-fcommon -Wno-error=incompatible-pointer-types";
+  env.NIX_CFLAGS_COMPILE = "-fcommon";
 
   makeFlags =
     [
