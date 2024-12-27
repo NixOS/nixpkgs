@@ -3,7 +3,6 @@
   stdenv,
   fetchFromRepoOrCz,
   gnu-efi,
-  fetchurl,
   fetchpatch,
   libuuid,
   makeWrapper,
@@ -31,28 +30,28 @@ stdenv.mkDerivation {
       archlinuxCommit = "db7884ec80642781edeead3e3bbd883a15b9b3ce";
       fetchArchlinuxPatch =
         name: hash:
-        fetchurl {
+        fetchpatch {
           url = "https://gitlab.archlinux.org/archlinux/packaging/packages/syslinux/-/raw/${archlinuxCommit}/${name}";
           inherit name hash;
         };
     in
     [
       ./gcc10.patch
-      (fetchArchlinuxPatch "0002-gfxboot-menu-label.patch" "sha256-0f6QhM4lJmGflLige4n7AZTodL7vnyAvi5dIedd/Lho=")
-      (fetchArchlinuxPatch "0005-gnu-efi-version-compatibility.patch" "sha256-hhCVnfbAFWj/R4yh60qsMB87ofW9RznarsByhl6L4tc=")
-      (fetchArchlinuxPatch "0025-reproducible-build.patch" "sha256-mnb291pCSFvDNxY7o4BosJ94ib3BpOGRQIiY8Q3jZmI=")
+      (fetchArchlinuxPatch "0002-gfxboot-menu-label.patch" "sha256-eoId3jn4eRxItil5naoGMBGOJM/p5FG74ePwxiJ0w/8=")
+      (fetchArchlinuxPatch "0005-gnu-efi-version-compatibility.patch" "sha256-5oZ/24emWNPHx621v/9i2xU6rodpVCM0R18hCU35eDk=")
+      (fetchArchlinuxPatch "0025-reproducible-build.patch" "sha256-vhth9CFHqChPQPgGhUWVpYwMFnnjoMVIGr7Wfu1jcDY=")
       (fetchArchlinuxPatch
         # mbr.bin: too big (452 > 440)
         # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=906414
         "0016-strip-gnu-property.patch"
-        "sha256-lW+E6THuXlTGvhly0f/D9NwYHhkiKHot2l+bz9Eaxp4="
+        "sha256-gn69YHbObqg6uTLPTtu8otNBFuCSyazwxLW3FbTNLX4="
       )
       (fetchArchlinuxPatch
         # mbr.bin: too big (452 > 440)
         "0017-single-load-segment.patch"
-        "sha256-C6VmdlTs1blMGUHH3OfOlFBZsfpwRn9vWodwqVn8+Cs="
+        "sha256-pGDcP62k50YkGgP0pFp5NSe7X0sojfLCzTmJtba2Yww="
       )
-      (fetchArchlinuxPatch "0018-prevent-pow-optimization.patch" "sha256-dVzXBi/oSV9vYgU85mRFHBKuZdup+1x1BipJX74ED7E=")
+      (fetchArchlinuxPatch "0018-prevent-pow-optimization.patch" "sha256-1+u8Kb6bxRbTPm0QCCt4yViLozzD/+/yspkJasOFM+g=")
       # Fixes build with "modern" gnu-efi
       ./import-efisetjmp.patch
       # Upstream patch: https://www.syslinux.org/archives/2024-February/026903.html
