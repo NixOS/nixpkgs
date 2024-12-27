@@ -79,8 +79,11 @@ import ../make-test-python.nix (
     testScript = ''
       start_all()
 
-      peer0.wait_for_unit("systemd-networkd-wait-online.service")
-      peer1.wait_for_unit("systemd-networkd-wait-online.service")
+      peer0.systemctl("start network-online.target")
+      peer0.wait_for_unit("network-online.target")
+
+      peer1.systemctl("start network-online.target")
+      peer1.wait_for_unit("network-online.target")
 
       peer1.succeed("ping -c5 fc00::1")
       peer1.succeed("ping -c5 10.23.42.1")
