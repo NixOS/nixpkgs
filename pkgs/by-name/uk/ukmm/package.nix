@@ -48,12 +48,13 @@ rustPlatform.buildRustPackage rec {
   # Force linking to libEGL, which is always dlopen()ed, and to
   # libwayland-client & libxkbcommon, which is dlopen()ed based on the
   # winit backend.
-  RUSTFLAGS = map (a: "-C link-arg=${a}") [
-    "-Wl,--push-state,--no-as-needed"
+  NIX_LDFLAGS = [
+    "--push-state"
+    "--no-as-needed"
     "-lEGL"
     "-lwayland-client"
     "-lxkbcommon"
-    "-Wl,--pop-state"
+    "--pop-state"
   ];
 
   cargoTestFlags = [
