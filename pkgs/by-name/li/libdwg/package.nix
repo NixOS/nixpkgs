@@ -42,7 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library to read DWG files";
     homepage = "http://libdwg.sourceforge.net/en/";
     license = lib.licenses.gpl3;
-    maintainers = [ lib.maintainers.marcweber ];
+    maintainers = with lib.maintainers; [
+      marcweber
+      pandapip1
+    ];
     platforms = lib.platforms.linux;
   };
 })
