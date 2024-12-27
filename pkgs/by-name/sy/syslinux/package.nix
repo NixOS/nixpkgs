@@ -73,6 +73,11 @@ stdenv.mkDerivation {
       ./import-efisetjmp.patch
       # Upstream patch: https://www.syslinux.org/archives/2024-February/026903.html
       ./define-wchar_t.patch
+      (fetchpatch {
+        url = "https://gitlab.archlinux.org/archlinux/packaging/packages/syslinux/-/raw/db7884ec80642781edeead3e3bbd883a15b9b3ce/0027-use-correct-type-for-size.patch";
+        name = "0027-use-correct-type-for-size.patch";
+        hash = "sha256-5nlKwIbXpZEyBrBSq9Zg0D+PRF7/kzEG13WzpwzDpPA=";
+      })
     ];
 
   postPatch = ''
