@@ -382,6 +382,27 @@ in {
     f:
     a: if a == null then a else f a;
 
+  /**
+    Equivalent to the "!=" operator, useful for constructing simple predicates.
+
+    # Inputs
+
+    `x`
+
+    : Left-Hand side
+
+    `y`
+
+    : Left-Hand side
+
+    # Type
+
+    ```
+    neq :: x -> b -> bool
+    ```
+  */
+  neq = x: y: x != y;
+
   # Pull in some builtins not included elsewhere.
   inherit (builtins)
     pathExists readFile isBool
