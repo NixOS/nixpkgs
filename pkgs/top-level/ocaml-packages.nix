@@ -1408,6 +1408,8 @@ let
 
     odate = callPackage ../development/ocaml-modules/odate { };
 
+    odds = callPackage ../development/ocaml-modules/odds { };
+
     odig = callPackage ../development/ocaml-modules/odig { };
 
     odoc = callPackage ../development/ocaml-modules/odoc { };
