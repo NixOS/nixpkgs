@@ -11447,6 +11447,18 @@ final: prev:
     meta.homepage = "https://github.com/ibhagwan/smartyank.nvim/";
   };
 
+  smear-cursor-nvim = buildVimPlugin {
+    pname = "smear-cursor.nvim";
+    version = "2024-12-26";
+    src = fetchFromGitHub {
+      owner = "sphamba";
+      repo = "smear-cursor.nvim";
+      rev = "e6de22fc4efbf7b2703317115e9c288d00e02f60";
+      sha256 = "05j8yb7whr6fa8lsar9nc6bc0gkzqr6829ypa1xb5y7wk7wlc160";
+    };
+    meta.homepage = "https://github.com/sphamba/smear-cursor.nvim/";
+  };
+
   snacks-nvim = buildVimPlugin {
     pname = "snacks.nvim";
     version = "2024-12-19";
