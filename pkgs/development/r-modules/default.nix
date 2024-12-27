@@ -1150,6 +1150,10 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    arcgisutils = old.arcgisutils.overrideAttrs (_: {
+      postPatch = "patchShebangs configure";
+    });
+
    gmailr = old.gmailr.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
