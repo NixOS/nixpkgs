@@ -972,9 +972,7 @@ with pkgs;
 
   bikeshed = python3Packages.callPackage ../applications/misc/bikeshed { };
 
-  davinci-resolve = callPackage ../applications/video/davinci-resolve { };
-
-  davinci-resolve-studio = callPackage ../applications/video/davinci-resolve { studioVariant = true; };
+  davinci-resolve-studio = callPackage ../by-name/da/davinci-resolve/package.nix { studioVariant = true; };
 
   dehinter = with python3Packages; toPythonApplication dehinter;
 
