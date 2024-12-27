@@ -1,10 +1,10 @@
 import ./make-test-python.nix (
-  { pkgs, lib, ... }:
+  { lib, ... }:
 
   {
     name = "swapspace";
 
-    meta = with pkgs.lib.maintainers; {
+    meta = with lib.maintainers; {
       maintainers = [
         Luflosi
         phanirithvij
@@ -37,6 +37,9 @@ import ./make-test-python.nix (
       machine.wait_for_unit("multi-user.target")
       machine.wait_for_unit("swapspace.service")
       machine.wait_for_unit("root-swapfile.swap")
+
+      # ensure swapspace wrapper command runs
+      machine.succeed("swapspace --inspect")
 
       swamp = False
       with subtest("swapspace works"):
