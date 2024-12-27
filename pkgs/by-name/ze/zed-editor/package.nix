@@ -309,7 +309,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "High-performance, multiplayer code editor from the creators of Atom and Tree-sitter";
     homepage = "https://zed.dev";
-    changelog = "https://github.com/zed-industries/zed/releases/tag/${src.tag}";
+    changelog = "https://github.com/zed-industries/zed/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       GaetanLepage
