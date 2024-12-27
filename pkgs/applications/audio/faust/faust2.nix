@@ -31,7 +31,7 @@ let
     owner = "grame-cncm";
     repo = "faust";
     rev = version;
-    hash = "88fbe13e3de48c1affe74b08ee91db146826c6cac47102c0fe1def81e60e8c65";
+    hash = "";
     fetchSubmodules = true;
   };
 
