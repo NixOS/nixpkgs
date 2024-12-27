@@ -1,12 +1,14 @@
 {
   stdenv,
   lib,
-  fetchFromGitLab,
+  fetchurl,
+  fetchpatch,
   replaceVars,
   meson,
   ninja,
   pkg-config,
   babl,
+  cfitsio,
   gegl,
   gtk3,
   glib,
@@ -21,6 +23,8 @@
   fontconfig,
   lcms,
   libpng,
+  libiff,
+  libilbm,
   libjpeg,
   libjxl,
   poppler,
@@ -41,6 +45,7 @@
   libxslt,
   gobject-introspection,
   vala,
+  gi-docgen,
   perl,
   appstream-glib,
   desktop-file-utils,
@@ -48,6 +53,7 @@
   glib-networking,
   json-glib,
   libmypaint,
+  llvmPackages,
   gexiv2,
   harfbuzz,
   mypaint-brushes1,
@@ -63,8 +69,6 @@
   desktopToDarwinBundle,
   AppKit,
   Cocoa,
-  gtk-mac-integration-gtk3,
-  unstableGitUpdater,
 }:
 
 let
@@ -76,23 +80,17 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gimp";
-  version = "2.99.14-unstable-2023-03-17";
+  version = "3.0.0-RC1";
 
   outputs = [
     "out"
     "dev"
+    "devdoc"
   ];
 
-  # We should not use fetchFromGitLab because the build system
-  # will complain and mark the build as unsupported when it cannot find
-  # .git directory but downloading the whole repo is jus too much.
-  src = fetchFromGitLab rec {
-    name = "gimp-dev-${rev}"; # to make sure the hash is updated
-    domain = "gitlab.gnome.org";
-    owner = "GNOME";
-    repo = "gimp";
-    rev = "ad7a2e53eb72ef471566fa2d0ce9faeec929fbcf";
-    hash = "sha256-IJMUJc817EDWIRqqkCuwAcSw7gcgCkXxPan5fEq1AO0=";
+  src = fetchurl {
+    url = "https://download.gimp.org/gimp/v${lib.versions.majorMinor finalAttrs.version}/gimp-${finalAttrs.version}.tar.xz";
+    hash = "sha256-s9CyZMXjjnifqvNBcAM5fzJAAUxZx/QX+co705xf+2Y=";
   };
 
   patches = [
@@ -104,6 +102,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Use absolute paths instead of relying on PATH
     # to make sure plug-ins are loaded by the correct interpreter.
+    # TODO: This now only appears to be used on Windows.
     (replaceVars ./hardcode-plugin-interpreters.patch {
       python_interpreter = python.interpreter;
       PYTHON_PATH = null;
@@ -115,12 +114,12 @@ stdenv.mkDerivation (finalAttrs: {
       session_conf = "${dbus.out}/share/dbus-1/session.conf";
     })
 
-    # Since we pass absolute datadirs to Meson, the path is resolved incorrectly.
-    # What is more, even the assumption that iso-codes have the same datadir
-    # subdirectory as GIMP is incorrect. Though, there is not a way to obtain
-    # the correct directory at the moment. There is a MR against isocodes to fix that:
-    # https://salsa.debian.org/iso-codes-team/iso-codes/merge_requests/11
-    ./fix-isocodes-paths.patch
+    # Fix pkg-config file.
+    # https://gitlab.gnome.org/GNOME/gimp/-/merge_requests/2037
+    (fetchpatch {
+      url = "https://gitlab.gnome.org/GNOME/gimp/-/commit/a18e1806dbc9b180aefabb2c0fae43493f1ef14a.patch";
+      hash = "sha256-BUrPm9lB/aiybB2Sd3TKlJ+59ITMZlNUBXJP5ZdLQ44=";
+    })
   ];
 
   nativeBuildInputs =
@@ -134,6 +133,9 @@ stdenv.mkDerivation (finalAttrs: {
       gobject-introspection
       perl
       vala
+
+      # for docs
+      gi-docgen
 
       # for tests
       desktop-file-utils
@@ -150,6 +152,7 @@ stdenv.mkDerivation (finalAttrs: {
     [
       appstream-glib # for library
       babl
+      cfitsio
       gegl
       gtk3
       glib
@@ -164,6 +167,8 @@ stdenv.mkDerivation (finalAttrs: {
       fontconfig
       lcms
       libpng
+      libiff
+      libilbm
       libjpeg
       libjxl
       poppler
@@ -204,9 +209,9 @@ stdenv.mkDerivation (finalAttrs: {
       gjs
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      llvmPackages.openmp
       AppKit
       Cocoa
-      gtk-mac-integration-gtk3
     ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libgudev
@@ -215,6 +220,9 @@ stdenv.mkDerivation (finalAttrs: {
   propagatedBuildInputs = [
     # needed by gimp-3.0.pc
     gegl
+    cairo
+    pango
+    gexiv2
   ];
 
   mesonFlags =
@@ -227,14 +235,10 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.mesonEnable "linux-input" stdenv.hostPlatform.isLinux)
       # Not very important to do downstream, save a dependency.
       "-Dappdata-test=disabled"
-      # Incompatible with version in nixpkgs
-      "-Djpeg-xl=disabled"
-      # Broken references
-      "-Dgi-docgen=disabled"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       "-Dalsa=disabled"
-      "-Djavascript=false"
+      "-Djavascript=disabled"
     ];
 
   doCheck = true;
@@ -243,11 +247,7 @@ stdenv.mkDerivation (finalAttrs: {
     # The check runs before glib-networking is registered
     GIO_EXTRA_MODULES = "${glib-networking}/lib/gio/modules";
 
-    NIX_CFLAGS_COMPILE = toString (
-      [ ]
-      ++ lib.optionals stdenv.cc.isGNU [ "-Wno-error=incompatible-pointer-types" ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ "-DGDK_OSX_BIG_SUR=16" ]
-    );
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-DGDK_OSX_BIG_SUR=16";
 
     # Check if librsvg was built with --disable-pixbuf-loader.
     PKG_CONFIG_GDK_PIXBUF_2_0_GDK_PIXBUF_MODULEDIR = "${librsvg}/${gdk-pixbuf.moduleDir}";
@@ -258,19 +258,46 @@ stdenv.mkDerivation (finalAttrs: {
       app/tests/create_test_env.sh \
       tools/gimp-mkenums
 
-    # Bypass the need for downloading git archive.
-    substitute app/git-version.h.in git-version.h \
-      --subst-var-by GIMP_GIT_VERSION "GIMP_2.99.?-g${builtins.substring 0 10 finalAttrs.src.rev}" \
-      --subst-var-by GIMP_GIT_VERSION_ABBREV "${builtins.substring 0 10 finalAttrs.src.rev}" \
-      --subst-var-by GIMP_GIT_LAST_COMMIT_YEAR "${builtins.head (builtins.match ".+\-unstable-([0-9]{4})-[0-9]{2}-[0-9]{2}" finalAttrs.version)}"
+    # GIMP is executed at build time so we need to fix this.
+    # TODO: Look into if we can fix the interp thing.
+    chmod +x plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
+    patchShebangs \
+      plug-ins/python/{colorxhtml,file-openraster,foggify,gradients-save-as-css,histogram-export,palette-offset,palette-sort,palette-to-gradient,python-eval,spyro-plus}.py
   '';
+
+  preBuild =
+    let
+      librarySuffix =
+        if stdenv.hostPlatform.extensions.library == ".so" then
+          "3.0.so.0"
+        else if stdenv.hostPlatform.extensions.library == ".dylib" then
+          "3.0.0.dylib"
+        else
+          throw "Unsupported library extension ‘${stdenv.hostPlatform.extensions.library}’";
+    in
+    ''
+      # Our gobject-introspection patches make the shared library paths absolute
+      # in the GIR files. When running GIMP in build or check phase, it will try
+      # to use plug-ins, which import GIMP introspection files which will try
+      # to load the GIMP libraries which will not be installed yet.
+      # So we need to replace the absolute path with a local one.
+      # We are using a symlink that will be overridden during installation.
+      mkdir -p "$out/lib"
+      ln -s "$PWD/libgimp/libgimp-${librarySuffix}" \
+        "$PWD/libgimpbase/libgimpbase-${librarySuffix}" \
+        "$PWD/libgimpcolor/libgimpcolor-${librarySuffix}" \
+        "$PWD/libgimpconfig/libgimpconfig-${librarySuffix}" \
+        "$PWD/libgimpmath/libgimpmath-${librarySuffix}" \
+        "$PWD/libgimpmodule/libgimpmodule-${librarySuffix}" \
+        "$out/lib/"
+    '';
 
   preCheck = ''
     # Avoid “Error retrieving accessibility bus address”
     export NO_AT_BRIDGE=1
     # Fix storing recent file list in tests
     export HOME="$TMPDIR"
-    export XDG_DATA_DIRS="${glib.getSchemaDataDirPath gtk3}:$XDG_DATA_DIRS"
+    export XDG_DATA_DIRS="${glib.getSchemaDataDirPath gtk3}:${adwaita-icon-theme}/share:$XDG_DATA_DIRS"
   '';
 
   preFixup = ''
@@ -284,10 +311,15 @@ stdenv.mkDerivation (finalAttrs: {
     }")
   '';
 
+  postFixup = ''
+    # Cannot be in postInstall, otherwise _multioutDocs hook in preFixup will move right back.
+    moveToOutput "share/doc" "$devdoc"
+  '';
+
   passthru = {
     # The declarations for `gimp-with-plugins` wrapper,
     # used for determining plug-in installation paths
-    majorVersion = "2.99";
+    majorVersion = "${lib.versions.major finalAttrs.version}.0";
     targetLibDir = "lib/gimp/${finalAttrs.passthru.majorVersion}";
     targetDataDir = "share/gimp/${finalAttrs.passthru.majorVersion}";
     targetPluginDir = "${finalAttrs.passthru.targetLibDir}/plug-ins";
@@ -295,12 +327,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     # probably its a good idea to use the same gtk in plugins ?
     gtk = gtk3;
-
-    updateScript = unstableGitUpdater {
-      stableVersion = true;
-      tagPrefix = "GIMP_";
-      tagConverter = "sed s/_/./g";
-    };
   };
 
   meta = with lib; {
@@ -308,7 +334,7 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://www.gimp.org/";
     maintainers = with maintainers; [ jtojnar ];
     license = licenses.gpl3Plus;
-    platforms = platforms.unix;
+    platforms = platforms.linux;
     mainProgram = "gimp";
   };
 })

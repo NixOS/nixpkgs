@@ -20,7 +20,7 @@ let
     ];
   exeVersion =
     if gimp.majorVersion == "2.0" then lib.versions.majorMinor gimp.version else gimp.majorVersion;
-  majorVersion = if gimp.majorVersion == "2.0" then "2" else "3";
+  majorVersion = lib.versions.major gimp.version;
 
 in
 symlinkJoin {
