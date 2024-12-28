@@ -10,6 +10,8 @@
   libsoup,
   rustPlatform,
   makeDesktopItem,
+  libsForQt5,
+  kdePackages,
   meta,
   webkitgtk_4_1,
   openssl,
@@ -32,7 +34,11 @@ rustPlatform.buildRustPackage {
         --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
 
       substituteInPlace $cargoDepsCopy/sysproxy-*/src/linux.rs \
-        --replace-fail '"gsettings"' '"${glib.bin}/bin/gsettings"'
+        --replace-fail '"gsettings"' '"${glib.bin}/bin/gsettings"' \
+        --replace-fail '"kreadconfig5"' '"${libsForQt5.kconfig}/bin/kreadconfig5"' \
+        --replace-fail '"kreadconfig6"' '"${kdePackages.kconfig}/bin/kreadconfig6"' \
+        --replace-fail '"kwriteconfig5"' '"${libsForQt5.kconfig}/bin/kwriteconfig5"' \
+        --replace-fail '"kwriteconfig6"' '"${kdePackages.kconfig}/bin/kwriteconfig6"'
 
       substituteInPlace ./tauri.conf.json \
         --replace-fail '"frontendDist": "../dist",' '"frontendDist": "${webui}",' \
