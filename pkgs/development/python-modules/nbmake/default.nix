@@ -1,17 +1,18 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
-  poetry-core,
-  setuptools,
-  wheel,
+
+  # build-system
+  hatchling,
+
+  # dependencies
   ipykernel,
   nbclient,
   nbformat,
   pygments,
-  pytest,
-  pyyaml,
+
+  # tests
   pytest-xdist,
   pytestCheckHook,
   typing-extensions,
@@ -19,22 +20,18 @@
 
 buildPythonPackage rec {
   pname = "nbmake";
-  version = "1.5.4";
+  version = "1.5.5";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "treebeardtech";
     repo = "nbmake";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-OzjqpipFb5COhqc//Sg6OU65ShPrYe/KtxifToEXveg=";
+    tag = "v${version}";
+    hash = "sha256-Du2sxSl1a5ZVl7ueHWnkTTPtuMUlmALuOuSkoEFIQcE=";
   };
 
   build-system = [
-    poetry-core
-    setuptools
-    wheel
+    hatchling
   ];
 
   dependencies = [
@@ -42,8 +39,6 @@ buildPythonPackage rec {
     nbclient
     nbformat
     pygments
-    pytest
-    pyyaml
   ];
 
   pythonRelaxDeps = [ "nbclient" ];
@@ -69,7 +64,7 @@ buildPythonPackage rec {
   meta = {
     description = "Pytest plugin for testing notebooks";
     homepage = "https://github.com/treebeardtech/nbmake";
-    changelog = "https://github.com/treebeardtech/nbmake/releases/tag/v${version}";
+    changelog = "https://github.com/treebeardtech/nbmake/releases/tag/${src.tag}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ GaetanLepage ];
   };
