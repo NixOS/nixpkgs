@@ -2,7 +2,7 @@
 
 { lib, fetchFromGitHub
 , cmake, ninja, python3, openjdk8, mono, pkg-config
-, msgpack-cxx, toml11
+, msgpack-cxx, toml11, jemalloc, doctest
 
 , gccStdenv, llvmPackages
 , useClang ? false
@@ -37,7 +37,9 @@ let
           inherit rev hash;
         };
 
-        buildInputs = [ ssl boost msgpack-cxx toml11 ];
+        buildInputs = [ ssl boost msgpack-cxx toml11 jemalloc ];
+
+        checkInputs = [ doctest ];
 
         nativeBuildInputs = [ pkg-config cmake ninja python3 openjdk8 mono ]
           ++ lib.optionals useClang [ llvmPackages.lld ];
@@ -55,9 +57,7 @@ let
             # >   Could not find lz4_STATIC_LIBRARIES using the following names: liblz4.a
             "-DSSD_ROCKSDB_EXPERIMENTAL=FALSE"
 
-            # FoundationDB's CMake is hardcoded to pull in jemalloc as an external
-            # project at build time.
-            "-DUSE_JEMALLOC=FALSE"
+            "-DBUILD_DOCUMENTATION=FALSE"
 
             # LTO brings up overall build time, but results in much smaller
             # binaries for all users and the cache.
@@ -68,8 +68,8 @@ let
             # Same with LLD when Clang is available.
             (lib.optionalString useClang    "-DUSE_LD=LLD")
             (lib.optionalString (!useClang) "-DUSE_LD=GOLD")
-          ] ++ lib.optionals (lib.versionOlder version "7.2.0")
-          [ # FIXME: why can't openssl be found automatically?
+
+            # FIXME: why can't openssl be found automatically?
             "-DOPENSSL_USE_STATIC_LIBS=FALSE"
             "-DOPENSSL_CRYPTO_LIBRARY=${ssl.out}/lib/libcrypto.so"
             "-DOPENSSL_SSL_LIBRARY=${ssl.out}/lib/libssl.so"
@@ -77,19 +77,16 @@ let
 
         hardeningDisable = [ "fortify" ];
 
-        env.NIX_CFLAGS_COMPILE = toString [
-          # Needed with GCC 12
-          "-Wno-error=missing-template-keyword"
-          # Needed to compile on aarch64
-          (lib.optionalString stdenv.hostPlatform.isAarch64 "-march=armv8-a+crc")
-        ];
-
         inherit patches;
 
-        # allow using any msgpack-cxx version
         postPatch = ''
+          # allow using any msgpack-cxx version
           substituteInPlace cmake/GetMsgpack.cmake \
             --replace-warn 'find_package(msgpack-cxx 6 QUIET CONFIG)' 'find_package(msgpack-cxx QUIET CONFIG)'
+
+          # Use our doctest package
+          substituteInPlace bindings/c/test/unit/third_party/CMakeLists.txt \
+            --replace-fail '/opt/doctest_proj_2.4.8' '${doctest}/include'
         '';
 
         # the install phase for cmake is pretty wonky right now since it's not designed to
