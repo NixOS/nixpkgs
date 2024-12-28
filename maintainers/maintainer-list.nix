@@ -5768,6 +5768,12 @@
     githubId = 11946442;
     name = "Dipin Hora";
   };
+  diredocks = {
+    email = "chensudago@gmail.com";
+    github = "diredocks";
+    githubId = 26994007;
+    name = "Chen Xin";
+  };
   dirkx = {
     email = "dirkx@webweaving.org";
     github = "dirkx";
