@@ -209,7 +209,7 @@ let
 
   version6 = "6.7.3";
   version7 = "7.5.4";
-  version8 = "8.3.2";
+  version8 = "8.4.0";
 
   mkStandard = version: hash: mkPianoteq {
     name = "standard";
@@ -253,10 +253,10 @@ let
   };
 in
 {
-  standard_8 = mkStandard version8 "sha256-U9i9XgZKed8KxDL1fwGbRs30wj0IQwMjP+GH2JpdrJ0=";
+  standard_8 = mkStandard version8 "sha256-ZDGB/SOOz+sWz7P+sNzyaipEH452n8zq5LleO3ztSXc=";
   stage_8 = mkStage version8 "";
-  standard-trial_8 = mkStandardTrial version8 "sha256-nYhTtPtkmYwVV5N1XIGBNU9YBbeIxLOjw2bA29ObXps=";
-  stage-trial_8 = mkStageTrial version8 "sha256-dkSG1PZgVds4fTir/77TSKhd3pBMJaOcWnLtZHsPqWo=";
+  standard-trial_8 = mkStandardTrial version8 "sha256-K3LbAWxciXt9hVAyRayxSoE/IYJ38Fd03+j0s7ZsMuw=";
+  stage-trial_8 = mkStageTrial version8 "sha256-k0p7SnkEq90bqIlT7PTYAQuhKEDVi+srHwYrpMUtIbM=";
 
   standard_7 = mkStandard version7 "sha256-TA9CiuT21fQedlMUGz7bNNxYun5ArmRjvIxjOGqXDCs=";
   stage_7 = mkStage version7 "";
