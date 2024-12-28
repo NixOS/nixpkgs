@@ -27,15 +27,15 @@
 
 buildPythonPackage rec {
   pname = "nifty8";
-  version = "8.5.2";
+  version = "8.5.4";
   pyproject = true;
 
   src = fetchFromGitLab {
     domain = "gitlab.mpcdf.mpg.de";
     owner = "ift";
     repo = "nifty";
-    rev = "v${version}";
-    hash = "sha256-EWsJX+iqKOhQXEWlQfYUiPYqyfOfrwLtbI+DVn7vCQI=";
+    tag = "v${version}";
+    hash = "sha256-Q42ZhQ/T8JmkG75BexevbvVKQqfDmMG6+oTYR0Ze718=";
   };
 
   build-system = [ setuptools ];
@@ -76,7 +76,15 @@ buildPythonPackage rec {
 
   meta = {
     homepage = "https://gitlab.mpcdf.mpg.de/ift/nifty";
+    changelog = "https://gitlab.mpcdf.mpg.de/ift/nifty/-/blob/${src.tag}/ChangeLog.md";
     description = "Bayesian Imaging library for high-dimensional posteriors";
+    longDescription = ''
+      NIFTy, "Numerical Information Field Theory", is a Bayesian imaging library.
+      It is designed to infer the million to billion dimensional posterior
+      distribution in the image space from noisy input data.  At the core of
+      NIFTy lies a set of powerful Gaussian Process (GP) models and accurate
+      Variational Inference (VI) algorithms.
+    '';
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ parras ];
   };
