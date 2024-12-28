@@ -4,7 +4,7 @@
   undmg,
   lib,
 }:
-stdenv.mkDerivation (finalAttrs: rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "thorium";
   version = "126.0.6478.231";
 
@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   unpackPhase = ''
     runHook preUnpack
-    undmg ${src}
+    undmg "$src"
     rm ./Applications
     runHook postUnpack
   '';
