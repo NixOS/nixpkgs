@@ -461,6 +461,9 @@ let
 
         DRM_LEGACY = whenOlder "6.8" no;
 
+        # Must be the same as CONFIG_DRM
+        BACKLIGHT_CLASS_DEVICE = yes;
+
         NOUVEAU_LEGACY_CTX_SUPPORT = whenOlder "6.3" no;
 
         # Enable simpledrm and use it for generic framebuffer
