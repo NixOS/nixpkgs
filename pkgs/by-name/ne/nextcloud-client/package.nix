@@ -19,7 +19,7 @@
 
 qt6Packages.stdenv.mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.14.3";
+  version = "3.15.2";
 
   outputs = [ "out" "dev" ];
 
@@ -27,7 +27,7 @@ qt6Packages.stdenv.mkDerivation rec {
     owner = "nextcloud-releases";
     repo = "desktop";
     tag = "v${version}";
-    hash = "sha256-nYoBs5EnWiqYRsqc5CPxCIs0NAxSprI9PV0lO/c8khw=";
+    hash = "sha256-JA6ke9tBS4IiuDWJ8Efa76+5os+RT0L/zv00ncgH+IU=";
   };
 
   patches = [
