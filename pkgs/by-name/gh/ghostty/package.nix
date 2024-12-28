@@ -1,40 +1,45 @@
 {
+  lib,
+  stdenv,
   bzip2,
   callPackage,
-  expat,
   fetchFromGitHub,
   fontconfig,
   freetype,
   glib,
   glslang,
   harfbuzz,
-  lib,
-  libadwaita,
   libGL,
-  libpng,
   libX11,
-  libXcursor,
-  libXi,
-  libXrandr,
+  libadwaita,
   ncurses,
   nixosTests,
   oniguruma,
   pandoc,
   pkg-config,
   removeReferencesTo,
-  stdenv,
   versionCheckHook,
   wrapGAppsHook4,
   zig_0_13,
-  zlib,
+  # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/build.zig#L106
+  withAdwaita ? true,
 }:
+
 let
   # Ghostty needs to be built with --release=fast, --release=debug and
   # --release=safe enable too many runtime safety checks.
   zig_hook = zig_0_13.hook.overrideAttrs {
     zig_default_flags = "-Dcpu=baseline -Doptimize=ReleaseFast --color off";
   };
+
+  # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/apprt.zig#L72-L76
+  appRuntime = if stdenv.hostPlatform.isLinux then "gtk" else "none";
+  # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/font/main.zig#L94
+  fontBackend = if stdenv.hostPlatform.isDarwin then "coretext" else "fontconfig_freetype";
+  # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/renderer.zig#L51-L52
+  renderer = if stdenv.hostPlatform.isDarwin then "metal" else "opengl";
 in
+
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghostty";
   version = "1.0.0";
@@ -48,33 +53,33 @@ stdenv.mkDerivation (finalAttrs: {
 
   strictDeps = true;
 
-  nativeBuildInputs = [
-    glib # Required for `glib-compile-schemas`
-    ncurses
-    pandoc
-    pkg-config
-    removeReferencesTo
-    wrapGAppsHook4
-    zig_hook
-  ];
+  nativeBuildInputs =
+    [
+      ncurses
+      pandoc
+      pkg-config
+      removeReferencesTo
+      zig_hook
+    ]
+    ++ lib.optionals (appRuntime == "gtk") [
+      glib # Required for `glib-compile-schemas`
+      wrapGAppsHook4
+    ];
 
-  buildInputs = [
-    bzip2
-    expat
-    fontconfig
-    freetype
-    glslang
-    harfbuzz
-    libadwaita
-    libGL
-    libpng
-    libX11
-    libXcursor
-    libXi
-    libXrandr
-    oniguruma
-    zlib
-  ];
+  buildInputs =
+    [
+      glslang
+      oniguruma
+    ]
+    ++ lib.optional (appRuntime == "gtk" && withAdwaita) libadwaita
+    ++ lib.optional (appRuntime == "gtk") libX11
+    ++ lib.optional (renderer == "opengl") libGL
+    ++ lib.optionals (fontBackend == "fontconfig_freetype") [
+      bzip2
+      fontconfig
+      freetype
+      harfbuzz
+    ];
 
   dontConfigure = true;
   # doCheck is set to false because unit tests currently fail inside the Nix sandbox.
@@ -90,6 +95,11 @@ stdenv.mkDerivation (finalAttrs: {
       "--system"
       "${finalAttrs.deps}"
       "-Dversion-string=${finalAttrs.version}"
+
+      "-Dapp-runtime=${appRuntime}"
+      "-Dfont-backend=${fontBackend}"
+      "-Dgtk-adwaita=${lib.boolToString withAdwaita}"
+      "-Drenderer=${renderer}"
     ]
     ++ lib.mapAttrsToList (name: package: "-fsys=${name} --search-prefix ${lib.getLib package}") {
       inherit glslang;
@@ -121,7 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
     remove-references-to -t ${finalAttrs.deps} $out/bin/ghostty
   '';
 
-  NIX_LDFLAGS = [ "-lX11" ];
+  NIX_LDFLAGS = lib.optional (appRuntime == "gtk") "-lX11";
 
   nativeInstallCheckInputs = [
     versionCheckHook
