@@ -20,7 +20,7 @@
 
 buildPythonPackage rec {
   pname = "rq";
-  version = "1.16.2";
+  version = "2.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -28,8 +28,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rq";
     repo = "rq";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-8uhCV4aJNbY273jOa9D5OlgEG1w3hXVncClKQTO9Pyk=";
+    tag = "v${version}";
+    hash = "sha256-J3ftABqm+5lH37LiBskEXOb6MszvDKO2271s+CEk0ls=";
   };
 
   build-system = [ hatchling ];
