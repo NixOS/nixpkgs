@@ -6,7 +6,10 @@
   uasm,
 }:
 
-gcc13Stdenv.mkDerivation rec {
+let
+  stdenv = gcc13Stdenv;
+in
+stdenv.mkDerivation rec {
   pname = "uasm";
   version = "2.57";
 
@@ -25,7 +28,7 @@ gcc13Stdenv.mkDerivation rec {
     else
       "Makefile-Linux-GCC-64.mak";
 
-  makeFlags = [ "CC=${gcc13Stdenv.cc.targetPrefix}cc" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall
@@ -49,5 +52,6 @@ gcc13Stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [ thiagokokada ];
     license = licenses.watcom;
+    broken = stdenv.isDarwin;
   };
 }
