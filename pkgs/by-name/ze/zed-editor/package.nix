@@ -93,13 +93,13 @@ let
 in
 rustPlatform.buildRustPackage rec {
   pname = "zed-editor";
-  version = "0.166.1";
+  version = "0.166.2";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
     repo = "zed";
     tag = "v${version}";
-    hash = "sha256-ss4dz9qPAP6eIYbG3S5QJaSR5zEyEqLBjfacj/eb7AE=";
+    hash = "sha256-Z3WdJRn6JpZpZlHq2vjIq1EX1vW4+Gv/XAz2H4WH0Fw=";
   };
 
   patches = [
@@ -128,7 +128,7 @@ rustPlatform.buildRustPackage rec {
     '';
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-HbOdY+6FKGTK5gW2BkWSdciBvTx+oKhCchFvwKEoGNE=";
+  cargoHash = "sha256-J5vJ/KV94a+9AqGbNZx6sCzWflOZsyUj3NcqnfaexGE=";
 
   nativeBuildInputs =
     [
@@ -309,7 +309,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "High-performance, multiplayer code editor from the creators of Atom and Tree-sitter";
     homepage = "https://zed.dev";
-    changelog = "https://github.com/zed-industries/zed/releases/tag/${src.tag}";
+    changelog = "https://github.com/zed-industries/zed/releases/tag/v${version}";
     license = lib.licenses.gpl3Only;
     maintainers = with lib.maintainers; [
       GaetanLepage
