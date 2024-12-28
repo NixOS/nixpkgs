@@ -21,15 +21,17 @@
   versionCheckHook,
   wrapGAppsHook4,
   zig_0_13,
+  # Usually you would override `zig.hook` with this, but we do that internally
+  # since upstream recommends a non-default level
+  # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/PACKAGING.md#build-options
+  optimizeLevel ? "ReleaseFast",
   # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/build.zig#L106
   withAdwaita ? true,
 }:
 
 let
-  # Ghostty needs to be built with --release=fast, --release=debug and
-  # --release=safe enable too many runtime safety checks.
   zig_hook = zig_0_13.hook.overrideAttrs {
-    zig_default_flags = "-Dcpu=baseline -Doptimize=ReleaseFast --color off";
+    zig_default_flags = "-Dcpu=baseline -Doptimize=${optimizeLevel} --color off";
   };
 
   # https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/apprt.zig#L72-L76
