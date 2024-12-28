@@ -1,16 +1,17 @@
-{ lib
-, stdenv
-, cmake
-, fetchFromGitHub
-, fetchpatch
-, python3
-, flex
-, bison
-, qt5
-, CoreServices
-, libiconv
-, spdlog
-, sqlite
+{
+  lib,
+  stdenv,
+  cmake,
+  fetchFromGitHub,
+  fetchpatch,
+  python3,
+  flex,
+  bison,
+  qt5,
+  CoreServices,
+  libiconv,
+  spdlog,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
@@ -49,8 +50,19 @@ stdenv.mkDerivation rec {
     bison
   ];
 
-  buildInputs = [ libiconv spdlog sqlite ]
-    ++ lib.optionals (qt5 != null) (with qt5; [ qtbase wrapQtAppsHook ])
+  buildInputs =
+    [
+      libiconv
+      spdlog
+      sqlite
+    ]
+    ++ lib.optionals (qt5 != null) (
+      with qt5;
+      [
+        qtbase
+        wrapQtAppsHook
+      ]
+    )
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   cmakeFlags = [
@@ -60,18 +72,21 @@ stdenv.mkDerivation rec {
   ] ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
 
   # put examples in an output so people/tools can test against them
-  outputs = [ "out" "examples" ];
+  outputs = [
+    "out"
+    "examples"
+  ];
+
   postInstall = ''
     cp -r ../examples $examples
   '';
 
   meta = {
     license = lib.licenses.gpl2Plus;
-    homepage = "https://www.doxygen.nl/";
+    homepage = "https://www.doxygen.nl";
     changelog = "https://www.doxygen.nl/manual/changelog.html";
     description = "Source code documentation generator tool";
     mainProgram = "doxygen";
-
     longDescription = ''
       Doxygen is the de facto standard tool for generating documentation from
       annotated C++ sources, but it also supports other popular programming
@@ -81,7 +96,6 @@ stdenv.mkDerivation rec {
       off-line reference manual (in LaTeX) from a set of documented source
       files.
     '';
-
     platforms = if qt5 != null then lib.platforms.linux else lib.platforms.unix;
   };
 }
