@@ -287,7 +287,6 @@ let
       coreutils
       gmp
       gnugrep
-      libtapi
       openssl
       pcre2
       xar
@@ -1197,7 +1196,6 @@ assert bootstrapTools.passthru.isFromBootstrapFiles or false; # sanity check
               ld64.lib
               ld64.out
               libffi.out
-              libtapi.out
               libxml2.out
               ncurses.dev
               ncurses.man
