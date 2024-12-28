@@ -1,11 +1,12 @@
 {
   lib,
   stdenv,
-  python3Packages,
-  fetchFromGitHub,
   rustPlatform,
+  fetchFromGitHub,
   installShellFiles,
+
   rust-jemalloc-sys,
+  buildPackages,
   versionCheckHook,
 
   # passthru
@@ -14,15 +15,9 @@
   nix-update-script,
 }:
 
-python3Packages.buildPythonPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "ruff";
   version = "0.8.4";
-  pyproject = true;
-
-  outputs = [
-    "bin"
-    "out"
-  ];
 
   src = fetchFromGitHub {
     owner = "astral-sh";
@@ -31,46 +26,29 @@ python3Packages.buildPythonPackage rec {
     hash = "sha256-c5d2XaoEjCHWMdjTLD6CnwP8rpSXTUrmKSs0QWQ6UG0=";
   };
 
-  # Do not rely on path lookup at runtime to find the ruff binary
-  postPatch = ''
-    substituteInPlace python/ruff/__main__.py \
-      --replace-fail \
-        'ruff_exe = "ruff" + sysconfig.get_config_var("EXE")' \
-        'return "${placeholder "bin"}/bin/ruff"'
-  '';
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-jbUjsIJRpkKYc+qHN8tkcZrcjPTFJfdCsatezzdX4Ss=";
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-jbUjsIJRpkKYc+qHN8tkcZrcjPTFJfdCsatezzdX4Ss=";
-  };
-
-  nativeBuildInputs =
-    [ installShellFiles ]
-    ++ (with rustPlatform; [
-      cargoSetupHook
-      maturinBuildHook
-      cargoCheckHook
-    ]);
+  nativeBuildInputs = [ installShellFiles ];
 
   buildInputs = [
     rust-jemalloc-sys
   ];
 
   postInstall =
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
     ''
-      mkdir -p $bin/bin
-      mv $out/bin/ruff $bin/bin/
-      rmdir $out/bin
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd ruff \
-        --bash <($bin/bin/ruff generate-shell-completion bash) \
-        --fish <($bin/bin/ruff generate-shell-completion fish) \
-        --zsh <($bin/bin/ruff generate-shell-completion zsh)
+        --bash <(${emulator} $out/bin/ruff generate-shell-completion bash) \
+        --fish <(${emulator} $out/bin/ruff generate-shell-completion fish) \
+        --zsh <(${emulator} $out/bin/ruff generate-shell-completion zsh)
     '';
 
   # Run cargo tests
-  cargoCheckType = "debug";
+  checkType = "debug";
+
   # tests do not appear to respect linker options on doctests
   # Upstream issue: https://github.com/rust-lang/cargo/issues/14189
   # This causes errors like "error: linker `cc` not found" on static builds
@@ -106,12 +84,11 @@ python3Packages.buildPythonPackage rec {
     "--skip=unix::symlink_inside_workspace"
   ];
 
-  nativeCheckInputs = [
+  nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgramArg = [ "--version" ];
-
-  pythonImportsCheck = [ "ruff" ];
+  doInstallCheck = true;
 
   passthru = {
     tests =

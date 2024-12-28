@@ -970,9 +970,7 @@ with pkgs;
 
   bikeshed = python3Packages.callPackage ../applications/misc/bikeshed { };
 
-  davinci-resolve = callPackage ../applications/video/davinci-resolve { };
-
-  davinci-resolve-studio = callPackage ../applications/video/davinci-resolve { studioVariant = true; };
+  davinci-resolve-studio = callPackage ../by-name/da/davinci-resolve/package.nix { studioVariant = true; };
 
   dehinter = with python3Packages; toPythonApplication dehinter;
 
@@ -1864,7 +1862,7 @@ with pkgs;
 
   kavita = callPackage ../servers/web-apps/kavita { };
 
-  livebook = callPackage ../servers/web-apps/livebook {
+  livebook = callPackage ../by-name/li/livebook/package.nix {
     elixir = elixir_1_17;
     beamPackages = beamPackages.extend (self: super: { elixir = elixir_1_17; });
   };
@@ -2278,8 +2276,6 @@ with pkgs;
   easyocr = with python3.pkgs; toPythonApplication easyocr;
 
   eddy = libsForQt5.callPackage ../applications/graphics/eddy { };
-
-  electronplayer = callPackage ../applications/video/electronplayer/electronplayer.nix { };
 
   element-web = callPackage ../by-name/el/element-web/package.nix {
     conf = config.element-web.conf or { };
@@ -3057,7 +3053,6 @@ with pkgs;
   };
 
   curlHTTP3 = curl.override {
-    openssl = quictls;
     http3Support = true;
   };
 
@@ -3205,7 +3200,9 @@ with pkgs;
 
   tsm-client-withGui = callPackage ../by-name/ts/tsm-client/package.nix { enableGui = true; };
 
-  tracy-x11 = callPackage ../by-name/tr/tracy/package.nix { withWayland = false; };
+  tracy = callPackage ../by-name/tr/tracy/package.nix { withWayland = stdenv.isLinux; };
+  tracy-glfw = callPackage ../by-name/tr/tracy/package.nix { withWayland = false; };
+  tracy-wayland = callPackage ../by-name/tr/tracy/package.nix { withWayland = true; };
 
   uusi = haskell.lib.compose.justStaticExecutables haskellPackages.uusi;
 
@@ -3581,9 +3578,8 @@ with pkgs;
 
   gdown = with python3Packages; toPythonApplication gdown;
 
-  goverlay = callPackage ../tools/graphics/goverlay {
-    inherit (libsForQt5) libqtpas wrapQtAppsHook;
-    inherit (plasma5Packages) breeze-qt5;
+  goverlay = qt6Packages.callPackage ../tools/graphics/goverlay {
+    inherit (qt6Packages) libqtpas wrapQtAppsHook;
   };
 
   gpt4all-cuda = gpt4all.override {
@@ -6828,9 +6824,7 @@ with pkgs;
   cargo-bazel = callPackage ../development/tools/rust/cargo-bazel {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  cargo-cache = callPackage ../development/tools/rust/cargo-cache {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  cargo-cache = callPackage ../development/tools/rust/cargo-cache { };
   cargo-crev = callPackage ../development/tools/rust/cargo-crev {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration CoreFoundation;
   };
@@ -8725,6 +8719,7 @@ with pkgs;
     boost182
     boost183
     boost186
+    boost187
   ;
 
   boost = boost186;
@@ -9225,7 +9220,6 @@ with pkgs;
   gmime3 = callPackage ../development/libraries/gmime/3.nix { };
   gmime = gmime2;
 
-  gmp4 = callPackage ../development/libraries/gmp/4.3.2.nix { }; # required by older GHC versions
   gmp6 = callPackage ../development/libraries/gmp/6.x.nix { };
   gmp = gmp6;
   gmpxx = gmp.override { cxx = true; };
@@ -13430,7 +13424,7 @@ with pkgs;
   };
 
   inherit (callPackage ../applications/virtualization/docker {})
-    docker_24 docker_25 docker_26 docker_27;
+    docker_25 docker_26 docker_27;
 
   docker = docker_27;
   docker-client = docker.override { clientOnly = true; };
@@ -14395,10 +14389,7 @@ with pkgs;
 
   ladspa-sdk = callPackage ../applications/audio/ladspa-sdk { };
 
-  ladybird = callPackage ../applications/networking/browsers/ladybird {
-    stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-    inherit (darwin.apple_sdk_11_0.frameworks) AppKit Cocoa Foundation OpenGL;
-  };
+  ladybird = callPackage ../applications/networking/browsers/ladybird { };
 
   lemonbar = callPackage ../applications/window-managers/lemonbar { };
 
@@ -14605,7 +14596,7 @@ with pkgs;
 
   minitube = libsForQt5.callPackage ../applications/video/minitube { };
 
-  mixxx = libsForQt5.callPackage ../applications/audio/mixxx { };
+  mixxx = qt6Packages.callPackage ../applications/audio/mixxx { };
 
   mldonkey = callPackage ../applications/networking/p2p/mldonkey {
     ocamlPackages = ocaml-ng.ocamlPackages_4_14_unsafe_string;

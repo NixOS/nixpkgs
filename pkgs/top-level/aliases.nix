@@ -300,6 +300,7 @@ mapAliases {
   dnnl = throw "'dnnl' has been renamed to/replaced by 'oneDNN'"; # Converted to throw 2024-10-17
   dnscrypt-wrapper = throw "dnscrypt-wrapper was removed because it has been effectively unmaintained since 2018. Use DNSCcrypt support in dnsdist instead"; # Added 2024-09-14
   docear = throw "Docear was removed because it was unmaintained upstream. JabRef, Zotero, or Mendeley are potential replacements."; # Added 2024-11-02
+  docker_24 = throw "'docker_24' has been removed because it has been unmaintained since June 2024. Use docker_25 or newer instead."; # Added 2024-12-21
   docker-compose_1 = throw "'docker-compose_1' has been removed because it has been unmaintained since May 2021. Use docker-compose instead."; # Added 2024-07-29
   docker-distribution = distribution; # Added 2023-12-26
   dolphin-emu-beta = dolphin-emu; # Added 2023-02-11
@@ -327,6 +328,7 @@ mapAliases {
 
   edUnstable = throw "edUnstable was removed; use ed instead"; # Added 2024-07-01
   elasticsearch7Plugins = elasticsearchPlugins;
+  electronplayer = throw "'electronplayer' has been removed as it had been discontinued upstream since October 2024"; # Added 2024-12-17
 
   element-desktop-wayland = throw "element-desktop-wayland has been removed. Consider setting NIXOS_OZONE_WL=1 via 'environment.sessionVariables' instead"; # Added 2024-12-17
 
@@ -473,6 +475,7 @@ mapAliases {
   glfw-wayland-minecraft = glfw3-minecraft; # Added 2024-05-08
   glxinfo = mesa-demos; # Added 2024-07-04
   gmailieer = throw "'gmailieer' has been renamed to/replaced by 'lieer'"; # Converted to throw 2024-10-17
+  gmp4 = throw "'gmp4' is end-of-life, consider using 'gmp' instead"; # Added 2024-12-24
   gnatboot11 = gnat-bootstrap11;
   gnatboot12 = gnat-bootstrap12;
   gnatboot = gnat-bootstrap;
@@ -550,6 +553,9 @@ mapAliases {
   ht-rust = throw "'ht-rust' has been renamed to/replaced by 'xh'"; # Converted to throw 2024-10-17
   hydra_unstable = hydra; # Added 2024-08-22
   hydron = throw "hydron has been removed as the project has been archived upstream since 2022 and is affected by a severe remote code execution vulnerability";
+  hyprgui = throw "hyprgui has been removed as the repository is deleted"; # Added 2024-12-27
+  hyprlauncher = throw "hyprlauncher has been removed as the repository is deleted"; # Added 2024-12-27
+  hyprwall = throw "hyprwall has been removed as the repository is deleted"; # Added 2024-12-27
 
 
   ### I ###
@@ -691,6 +697,7 @@ mapAliases {
   libusb = throw "'libusb' has been renamed to/replaced by 'libusb1'"; # Converted to throw 2024-10-17
   libvpx_1_8 = throw "libvpx_1_8 has been removed because it is impacted by security issues and not used in nixpkgs, move to 'libvpx'"; # Added 2024-07-26
   libwnck3 = libwnck;
+  libxplayer-plparser = throw "libxplayer-plparser has been removed as the upstream project was archived"; # Added 2024-12-27
   libyamlcpp = yaml-cpp; # Added 2023-01-29
   libyamlcpp_0_3 = yaml-cpp_0_3; # Added 2023-01-29
   lightdm_gtk_greeter = lightdm-gtk-greeter; # Added 2022-08-01
@@ -1307,6 +1314,7 @@ mapAliases {
   testVersion = testers.testVersion; # Added 2022-04-20
   tfplugindocs = terraform-plugin-docs; # Added 2023-11-01
   invalidateFetcherByDrvHash = testers.invalidateFetcherByDrvHash; # Added 2022-05-05
+  tijolo = throw "'tijolo' has been removed due to being unmaintained"; # Added 2024-12-27
   timescale-prometheus = throw "'timescale-prometheus' has been renamed to/replaced by 'promscale'"; # Converted to throw 2024-10-17
   tightvnc = throw "'tightvnc' has been removed as the version 1.3 is not maintained upstream anymore and is insecure"; # Added 2024-08-22
   tix = tclPackages.tix; # Added 2024-10-02
@@ -1433,6 +1441,7 @@ mapAliases {
   x509-limbo = throw "'x509-limbo' has been removed from nixpkgs"; # Added 2024-10-22
   xarchive = throw "'xarchive' has been removed due to lack of maintenance upstream. Consider using 'file-roller' instead"; # Added 2024-10-19
   xbmc-retroarch-advanced-launchers = throw "'xbmc-retroarch-advanced-launchers' has been renamed to/replaced by 'kodi-retroarch-advanced-launchers'"; # Converted to throw 2024-10-17
+  xboxdrv = throw "'xboxdrv' has been dropped as it has been superseded by an in-tree kernel driver"; # Added 2024-12-25
   xdg_utils = throw "'xdg_utils' has been renamed to/replaced by 'xdg-utils'"; # Converted to throw 2024-10-17
   xen-light = throw "'xen-light' has been renamed to/replaced by 'xen-slim'"; # Added 2024-06-30
   xen-slim = throw "'xen-slim' has been renamed to 'xen'. The old Xen package with built-in components no longer exists"; # Added 2024-10-05
@@ -1449,6 +1458,7 @@ mapAliases {
   xmake-core-sv = throw "'xmake-core-sv' has been removed, use 'libsv' instead"; # Added 2024-10-10
   xournal = throw "'xournal' has been removed due to lack of activity upstream and depending on gnome2. Consider using 'xournalpp' instead."; # Added 2024-12-06
   xonsh-unwrapped = python3Packages.xonsh; # Added 2024-06-18
+  xplayer = throw "xplayer has been removed as the upstream project was archived"; # Added 2024-12-27
   xprite-editor = throw "'xprite-editor' has been removed due to lack of maintenance upstream. Consider using 'pablodraw' or 'aseprite' instead"; # Added 2024-09-14
   xulrunner = firefox-unwrapped; # Added 2023-11-03
   xvfb_run = throw "'xvfb_run' has been renamed to/replaced by 'xvfb-run'"; # Converted to throw 2024-10-17
