@@ -380,7 +380,6 @@ in
     let
       inherit (lib)
         concatMapAttrs
-        id
         makeScope
         recurseIntoAttrs
         removeSuffix
@@ -434,13 +433,12 @@ in
     if pathExists defaultPath then
       # if `${directory}/package.nix` exists, call it directly
       callPackage defaultPath { }
-    else if args ? newScope then
-      # Create a new scope and mark it `recurseForDerivations`.
-      # This lets the packages refer to each other.
-      # See:
-      #  [lib.makeScope](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope) and
-      #  [lib.recurseIntoAttrs](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope)
-      recurseIntoAttrs (
+    else recurseIntoAttrs (
+      if args ? newScope then
+        # Create a new scope, letting the packages refer to each other.
+        # See:
+        #  [lib.makeScope](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope) and
+        #  [lib.recurseIntoAttrs](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope)
         makeScope newScope (
           self:
           # generate the attrset representing the directory, using the new scope's `callPackage` and `newScope`
@@ -451,7 +449,7 @@ in
             }
           )
         )
-      )
-    else
-      processDir args;
+      else
+        processDir args
+    );
 }
