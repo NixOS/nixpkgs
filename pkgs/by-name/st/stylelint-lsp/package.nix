@@ -49,12 +49,14 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  meta = with lib; {
+  meta = {
     description = "A stylelint Language Server";
     homepage = "https://github.com/bmatcuk/stylelint-lsp";
-    license = licenses.mit;
-    maintainers = with maintainers; [ gepbird ];
+    license = lib.licenses.mit;
     mainProgram = "stylelint-lsp";
-    platforms = platforms.unix;
+    maintainers = with lib.maintainers; [
+      gepbird
+    ];
+    platforms = lib.platforms.unix;
   };
 })
