@@ -94,7 +94,7 @@ self: super: {
   ghc-lib-parser-ex = addBuildDepend self.ghc-lib-parser super.ghc-lib-parser-ex;
 
   # This became a core library in ghc 8.10., so we don’t have an "exception" attribute anymore.
-  exceptions = self.exceptions_0_10_8;
+  exceptions = self.exceptions_0_10_9;
 
   # vector 0.12.2 indroduced doctest checks that don’t work on older compilers
   vector = dontCheck super.vector;
