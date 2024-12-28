@@ -177,7 +177,6 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   meta = {
-    homepage = "https://ghostty.org/";
     description = "Fast, native, feature-rich terminal emulator pushing modern features";
     longDescription = ''
       Ghostty is a terminal emulator that differentiates itself by being
@@ -185,21 +184,24 @@ stdenv.mkDerivation (finalAttrs: {
       emulators available, they all force you to choose between speed,
       features, or native UIs. Ghostty provides all three.
     '';
+    homepage = "https://ghostty.org/";
     downloadPage = "https://ghostty.org/download";
 
     license = lib.licenses.mit;
-    platforms = lib.platforms.linux;
     mainProgram = "ghostty";
+    maintainers = with lib.maintainers; [
+      jcollie
+      pluiedev
+      getchoo
+    ];
     outputsToInstall = [
       "out"
       "man"
       "shell_integration"
       "terminfo"
     ];
-    maintainers = with lib.maintainers; [
-      jcollie
-      pluiedev
-      getchoo
-    ];
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    # Issues finding the SDK in the sandbox
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
