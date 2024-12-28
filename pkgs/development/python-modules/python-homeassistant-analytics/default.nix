@@ -16,6 +16,7 @@
   # tests
   pytestCheckHook,
   aioresponses,
+  pytest-cov-stub,
   pytest-asyncio,
   syrupy,
 }:
@@ -34,11 +35,6 @@ buildPythonPackage rec {
     hash = "sha256-TfD1N4KoeIVoDp1YoOhBw8E7adow1nU1N6vj2j3W2No=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "--cov" ""
-  '';
-
   build-system = [ poetry-core ];
 
   dependencies = [
@@ -51,6 +47,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     aioresponses
+    pytest-cov-stub
     pytest-asyncio
     syrupy
   ];
@@ -58,10 +55,9 @@ buildPythonPackage rec {
   pythonImportsCheck = [ "python_homeassistant_analytics" ];
 
   meta = with lib; {
+    description = "Asynchronous Python client for Home Assistant Analytics";
     changelog = "https://github.com/joostlek/python-homeassistant-analytics/releases/tag/v${version}";
-    description = "Asynchronous Python client for Homeassistant Analytics";
-    homepage = "https://github.com/joostlek/python-homeassistant-analytics
-";
+    homepage = "https://github.com/joostlek/python-homeassistant-analytics";
     license = licenses.mit;
     maintainers = with maintainers; [ jamiemagee ];
   };
