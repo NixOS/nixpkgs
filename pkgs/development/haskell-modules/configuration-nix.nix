@@ -827,6 +827,8 @@ self: super: builtins.intersectAttrs super {
       # Setup PATH for the actual tests
       ln -sf dist/build/git-annex/git-annex git-annex
       ln -sf git-annex git-annex-shell
+      ln -sf git-annex git-remote-annex
+      ln -sf git-annex git-remote-tor-annex
       PATH+=":$PWD"
 
       echo checkFlags: $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
