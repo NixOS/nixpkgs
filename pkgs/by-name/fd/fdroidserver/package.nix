@@ -8,20 +8,17 @@
   installShellFiles,
 }:
 
-let
-  version = "2.3.1";
-in
-python3Packages.buildPythonApplication {
+python3Packages.buildPythonApplication rec {
   pname = "fdroidserver";
-  inherit version;
+  version = "2.3.4";
 
   pyproject = true;
 
   src = fetchFromGitLab {
     owner = "fdroid";
     repo = "fdroidserver";
-    rev = version;
-    hash = "sha256-1jJwKvxm33Hge35dhqy5HgXzyokj8a2XhWvCmScj5bA=";
+    tag = version;
+    hash = "sha256-NsILbFirIFz2zZxTSRFV1D2WeMN2lsvAwsZy7ie5ZJE=";
   };
 
   pythonRelaxDeps = [
