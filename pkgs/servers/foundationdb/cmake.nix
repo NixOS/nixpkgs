@@ -1,7 +1,7 @@
 # This builder is for FoundationDB CMake build system.
 
 { lib, fetchFromGitHub
-, cmake, ninja, python3, openjdk8, mono, pkg-config
+, cmake, ninja, python3, openjdk, mono, pkg-config
 , msgpack-cxx, toml11, jemalloc, doctest
 
 , gccStdenv, llvmPackages
@@ -41,7 +41,7 @@ let
 
         checkInputs = [ doctest ];
 
-        nativeBuildInputs = [ pkg-config cmake ninja python3 openjdk8 mono ]
+        nativeBuildInputs = [ pkg-config cmake ninja python3 openjdk mono ]
           ++ lib.optionals useClang [ llvmPackages.lld ];
 
         separateDebugInfo = true;
