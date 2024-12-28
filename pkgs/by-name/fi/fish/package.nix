@@ -15,6 +15,7 @@
   libiconv,
   pcre2,
   pkg-config,
+  sphinx,
   gettext,
   ncurses,
   python3,
@@ -25,6 +26,7 @@
   rustc,
   rustPlatform,
   versionCheckHook,
+  writableTmpDirAsHomeHook,
 
   # used to generate autocompletions from manpages and for configuration editing in the browser
   usePython ? true,
@@ -216,8 +218,6 @@ let
         # tests/checks/complete.fish
         sed -i 's|/bin/ls|${lib.getExe' coreutils "ls"}|' tests/checks/complete.fish
 
-        sed -i 's|/bin/ls|${coreutils}/bin/ls|' tests/checks/complete.fish
-
         # pexpect tests are flaky
         # See https://github.com/fish-shell/fish-shell/issues/8789
         rm tests/pexpects/exit_handlers.py
@@ -242,7 +242,9 @@ let
       "out"
       "doc"
     ];
+
     strictDeps = true;
+
     nativeBuildInputs = [
       cargo
       cmake
@@ -251,6 +253,8 @@ let
       pkg-config
       rustc
       rustPlatform.cargoSetupHook
+      # Avoid warnings when building the manpages about HOME not being writable
+      writableTmpDirAsHomeHook
     ];
 
     buildInputs = [
@@ -302,6 +306,7 @@ let
         glibcLocales
         (python3.withPackages (ps: [ ps.pexpect ]))
         procps
+        sphinx
       ]
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         # For the getconf command, used in default-setup-path.fish
