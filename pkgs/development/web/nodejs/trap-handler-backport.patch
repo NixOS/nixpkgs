@@ -1,0 +1,76 @@
+Backport V8_TRAP_HANDLER_SUPPORTED conditional compilation for trap
+handler implementation.
+
+See https://github.com/v8/v8/commit/e7bef8d4cc4f38cc3d5a532fbcc445dc62adc08f
+
+E.g. when cross-compiling from aarch64-linux for x86_64-linux target,
+handler-inside-posix.cc is built on aarch64-linux even though it is not
+supported; see src/trap-handler/trap-handler.h in v8 for (host, target)
+combinations where trap handler is supported.
+
+Note that handler-inside-posix.cc fails to build in the case above.
+
+diff --git a/deps/v8/src/trap-handler/handler-inside-posix.cc b/deps/v8/src/trap-handler/handler-inside-posix.cc
+index e4454c378f..17af3d75dc 100644
+--- a/deps/v8/src/trap-handler/handler-inside-posix.cc
++++ b/deps/v8/src/trap-handler/handler-inside-posix.cc
+@@ -47,6 +47,8 @@ namespace v8 {
+ namespace internal {
+ namespace trap_handler {
+ 
++#if V8_TRAP_HANDLER_SUPPORTED
++
+ #if V8_OS_LINUX
+ #define CONTEXT_REG(reg, REG) &uc->uc_mcontext.gregs[REG_##REG]
+ #elif V8_OS_DARWIN
+@@ -181,6 +183,8 @@ void HandleSignal(int signum, siginfo_t* info, void* context) {
+   // TryHandleSignal modifies context to change where we return to.
+ }
+ 
++#endif
++
+ }  // namespace trap_handler
+ }  // namespace internal
+ }  // namespace v8
+diff --git a/deps/v8/src/trap-handler/handler-inside-win.cc b/deps/v8/src/trap-handler/handler-inside-win.cc
+index fcccc78ee5..3d7a2c416a 100644
+--- a/deps/v8/src/trap-handler/handler-inside-win.cc
++++ b/deps/v8/src/trap-handler/handler-inside-win.cc
+@@ -38,6 +38,8 @@ namespace v8 {
+ namespace internal {
+ namespace trap_handler {
+ 
++#if V8_TRAP_HANDLER_SUPPORTED
++
+ // The below struct needed to access the offset in the Thread Environment Block
+ // to see if the thread local storage for the thread has been allocated yet.
+ //
+@@ -129,6 +131,8 @@ LONG HandleWasmTrap(EXCEPTION_POINTERS* exception) {
+   return EXCEPTION_CONTINUE_SEARCH;
+ }
+ 
++#endif
++
+ }  // namespace trap_handler
+ }  // namespace internal
+ }  // namespace v8
+diff --git a/deps/v8/src/trap-handler/handler-outside-simulator.cc b/deps/v8/src/trap-handler/handler-outside-simulator.cc
+index 179eab0659..5e58719e7f 100644
+--- a/deps/v8/src/trap-handler/handler-outside-simulator.cc
++++ b/deps/v8/src/trap-handler/handler-outside-simulator.cc
+@@ -4,6 +4,9 @@
+ 
+ #include "include/v8config.h"
+ #include "src/trap-handler/trap-handler-simulator.h"
++#include "src/trap-handler/trap-handler.h"
++
++#if V8_TRAP_HANDLER_SUPPORTED
+ 
+ #if V8_OS_DARWIN
+ #define SYMBOL(name) "_" #name
+@@ -35,3 +38,5 @@ asm(
+     SYMBOL(v8_probe_memory_continuation) ":         \n"
+     // If the trap handler continues here, it wrote the landing pad in %rax.
+     "  ret                                          \n");
++
++#endif
