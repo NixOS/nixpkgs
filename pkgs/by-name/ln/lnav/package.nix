@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   pcre2,
   sqlite,
   ncurses,
@@ -36,13 +37,21 @@ stdenv.mkDerivation rec {
   enableParallelBuilding = true;
   separateDebugInfo = true;
 
+  patches = [
+    # fix cross-build of rust dependencies
+    # https://github.com/tstack/lnav/pull/1360
+    (fetchpatch {
+      url = "https://github.com/tstack/lnav/pull/1360/commits/2b0d2c402f4c11b31bd3dc804344f121dff4c08e.patch";
+      hash = "sha256-dDDc3ijEn/TbmAPxFn4bi6800cTEPoOqoXtqXq53xzo=";
+    })
+  ];
+
   strictDeps = true;
   depsBuildBuild = [ buildPackages.stdenv.cc ];
   nativeBuildInputs = [
     autoconf
     automake
     zlib
-    curl.dev
     re2c
     cargo
     rustPlatform.cargoSetupHook
@@ -75,6 +84,10 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     ./autogen.sh
   '';
+
+  # in cross, curl-config does not work, and ./configure does not determine
+  # that it needs -lcurl
+  configureFlags = [ "LDFLAGS=-lcurl" ];
 
   passthru.updateScript = nix-update-script { };
 
