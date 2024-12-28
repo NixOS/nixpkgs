@@ -38,6 +38,7 @@
   xorg,
   zlib,
   zstd,
+  ffmpeg,
   ...
 }:
 
