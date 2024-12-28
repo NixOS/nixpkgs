@@ -155,17 +155,24 @@ stdenv.mkDerivation rec {
       "-Dcoroutine=gthread" # Fixes "Function missing:makecontext"
     ];
 
-  postPatch = ''
-    # get rid of absolute path to helper in store so we can use a setuid wrapper
-    substituteInPlace src/usb-acl-helper.c \
-      --replace 'ACL_HELPER_PATH"/' '"'
-    # don't try to setcap/suid in a nix builder
-    substituteInPlace src/meson.build \
-      --replace "meson.add_install_script('../build-aux/setcap-or-suid'," \
-      "# meson.add_install_script('../build-aux/setcap-or-suid',"
+  postPatch =
+    ''
+      # get rid of absolute path to helper in store so we can use a setuid wrapper
+      substituteInPlace src/usb-acl-helper.c \
+        --replace-fail 'ACL_HELPER_PATH"/' '"'
+      # don't try to setcap/suid in a nix builder
+      substituteInPlace src/meson.build \
+        --replace-fail "meson.add_install_script('../build-aux/setcap-or-suid'," \
+        "# meson.add_install_script('../build-aux/setcap-or-suid',"
 
-    patchShebangs subprojects/keycodemapdb/tools/keymap-gen
-  '';
+      patchShebangs subprojects/keycodemapdb/tools/keymap-gen
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # don't use version script and don't export symbols
+      substituteInPlace src/meson.build \
+        --replace-fail "spice_gtk_version_script = [" "# spice_gtk_version_script = [" \
+        --replace-fail ",--version-script=@0@'.format(spice_client_glib_syms_path)" "'"
+    '';
 
   meta = with lib; {
     description = "GTK 3 SPICE widget";

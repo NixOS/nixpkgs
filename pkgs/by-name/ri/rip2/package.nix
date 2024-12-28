@@ -5,6 +5,7 @@
   versionCheckHook,
   installShellFiles,
   stdenv,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -35,6 +36,8 @@ rustPlatform.buildRustPackage rec {
       --fish <($out/bin/rip completions fish) \
       --zsh <($out/bin/rip completions zsh)
   '';
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Safe and ergonomic alternative to rm";
