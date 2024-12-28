@@ -604,6 +604,12 @@
     githubId = 25236206;
     name = "Adrian Dole";
   };
+  adrian-gierakowski = {
+    email = "adrian.gierakowski@gmail.com";
+    github = "adrian-gierakowski";
+    githubId = 330177;
+    name = "Adrian Gierakowski";
+  };
   adriangl = {
     email = "adrian@lauterer.it";
     matrix = "@adriangl:pvv.ntnu.no";
@@ -5761,6 +5767,12 @@
     github = "dipinhora";
     githubId = 11946442;
     name = "Dipin Hora";
+  };
+  diredocks = {
+    email = "chensudago@gmail.com";
+    github = "diredocks";
+    githubId = 26994007;
+    name = "Chen Xin";
   };
   dirkx = {
     email = "dirkx@webweaving.org";

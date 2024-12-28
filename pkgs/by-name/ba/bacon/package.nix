@@ -9,16 +9,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "bacon";
-  version = "3.5.0";
+  version = "3.6.0";
 
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "bacon";
     rev = "refs/tags/v${version}";
-    hash = "sha256-gfISv1a/6XBl5L/ywHqG0285tDOasucp8YbJeXrv6OA=";
+    hash = "sha256-L+LVD7ceKUQ+nVyepusrv9Zz4BSGjXucnimsf+abM2k=";
   };
 
-  cargoHash = "sha256-xjiHXhtikqXMKMzCyxfGXfj1S7YCx4UbPS2jjgpY25A=";
+  cargoHash = "sha256-NUCy3DZ1uV1iPanHGbK/TSY6oS3zSQxVpmnw7Aon+pw=";
 
   nativeInstallCheckInputs = [ versionCheckHook ];
   versionCheckProgramArg = [ "--version" ];
