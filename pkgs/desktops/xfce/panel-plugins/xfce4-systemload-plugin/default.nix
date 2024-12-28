@@ -5,7 +5,9 @@
   gettext,
   pkg-config,
   xfce4-panel,
+  libgtop,
   libxfce4ui,
+  upower,
   xfconf,
   gitUpdater,
 }:
@@ -28,7 +30,9 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
+    libgtop
     libxfce4ui
+    upower
     xfce4-panel
     xfconf
   ];
