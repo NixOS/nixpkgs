@@ -579,14 +579,14 @@ buildLuarocksPackage {
 fzf-lua = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "fzf-lua";
-  version = "0.0.1582-1";
+  version = "0.0.1594-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/fzf-lua-0.0.1582-1.rockspec";
-    sha256 = "1bk23f6dgs3y6n7am7zg30zk56ipxsgdljqgfgw5xb2ki63kaxcx";
+    url    = "mirror://luarocks/fzf-lua-0.0.1594-1.rockspec";
+    sha256 = "1hc23a5kf3343jzcqwlz51af5a3yfxhbspsfy4p1lzvw596hlq38";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/ibhagwan/fzf-lua/archive/c3cfa2b59ad1903f79a5a431ce3133300dd6e072.zip";
-    sha256 = "1mvzhns06i8sic1iqlw7m8xqwnh7jls1kk8gfq5dy74yyv50k9fp";
+    url    = "https://github.com/ibhagwan/fzf-lua/archive/dbc5bd14e72ba680df44906e957b0a821121726b.zip";
+    sha256 = "1qcgacgrn6jmqi623rqav45rz83r9m3xv4k5bm5f8lnqdyi3r0av";
   };
 
   disabled = luaOlder "5.1";
@@ -2795,14 +2795,14 @@ buildLuarocksPackage {
 neotest = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder, nvim-nio, plenary-nvim }:
 buildLuarocksPackage {
   pname = "neotest";
-  version = "5.6.1-1";
+  version = "5.7.0-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/neotest-5.6.1-1.rockspec";
-    sha256 = "08r740v4yxhjxrh3xcbi9974d28h786lkbzff6x0bixdsvnysdwy";
+    url    = "mirror://luarocks/neotest-5.7.0-1.rockspec";
+    sha256 = "1fzvcz54vrcjashjpq6bd10yy0kvzsfz2kk2b7imfqnjgwq44d15";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/nvim-neotest/neotest/archive/6d3d22cdad49999ef774ebe1bc250a4994038964.zip";
-    sha256 = "10zac93v1i9iqbwwy4hb1q4wmwxg1nf9dmlywx6qmlkq0scnqg80";
+    url    = "https://github.com/nvim-neotest/neotest/archive/0dccb5ebcf00de245e2060fa17822a9464f5c41a.zip";
+    sha256 = "15zkhdbkgla3ycxzbl6l2wspcx5ig9q58wsp3cnh1biffk4zn102";
   };
 
   disabled = luaOlder "5.1";
@@ -3169,14 +3169,14 @@ buildLuarocksPackage {
 rustaceanvim = callPackage({ buildLuarocksPackage, fetchurl, fetchzip, luaOlder }:
 buildLuarocksPackage {
   pname = "rustaceanvim";
-  version = "5.19.2-1";
+  version = "5.20.1-1";
   knownRockspec = (fetchurl {
-    url    = "mirror://luarocks/rustaceanvim-5.19.2-1.rockspec";
-    sha256 = "0cza1rp8d5sg4av87s859aa1ncni1i8i2b6lalklwy6q3f6cvf9l";
+    url    = "mirror://luarocks/rustaceanvim-5.20.1-1.rockspec";
+    sha256 = "0g1s35k1wysi59mhnfbzhxhgqd4jm2n250q8cqizpazslhis8gvf";
   }).outPath;
   src = fetchzip {
-    url    = "https://github.com/mrcjkb/rustaceanvim/archive/v5.19.2.zip";
-    sha256 = "1kxapy0vidvgrnrvsdrpwaqq6aa4gb91f5i8wxzwxnl6ag4parxa";
+    url    = "https://github.com/mrcjkb/rustaceanvim/archive/v5.20.1.zip";
+    sha256 = "1zq7p087cg9c9fl7lpcb7pg6kndiywp9cp2ja6jml3q6smb84i4d";
   };
 
   disabled = luaOlder "5.1";
