@@ -370,6 +370,7 @@ let
     exactextractr = [ pkgs.geos ];
     EMCluster = [ pkgs.lapack ];
     fangs = [ pkgs.cargo ];
+    fastpng = [ pkgs.zlib.dev ];
     fcl = [ pkgs.cargo ];
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [ fftw.dev pkg-config ];
