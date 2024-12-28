@@ -50,7 +50,7 @@
     }
     {
       name = "fetchers";
-      description = "functions which can be reused across [fetchers](#chap-pkgs-fetchers)";
+      description = "functions which can be reused across fetchers";
     }
     {
       name = "filesystem";
