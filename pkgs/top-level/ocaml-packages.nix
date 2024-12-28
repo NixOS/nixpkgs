@@ -668,6 +668,10 @@ let
 
     h2-eio = callPackage ../development/ocaml-modules/h2/eio.nix { };
 
+    h2-lwt = callPackage ../development/ocaml-modules/h2/lwt.nix { };
+
+    h2-lwt-unix = callPackage ../development/ocaml-modules/h2/lwt-unix.nix { };
+
     hack_parallel = callPackage ../development/ocaml-modules/hack_parallel { };
 
     hacl-star = callPackage ../development/ocaml-modules/hacl-star { };
