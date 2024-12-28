@@ -9,17 +9,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "oxigraph";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-LV46NjMFUtyUZZo+q16aPzCpuJmNakJwb0vsc41UQzA=";
+    hash = "sha256-EG9VLDS9BhgPwr2Z7SGWe9l9j5Yg9KdRysvd9KGQDgk=";
     fetchSubmodules = true;
   };
 
-  cargoHash = "sha256-U3DfoDt6wWg72uwQ5AgCiqF5TR1/h/w9LPEte3/jIuA=";
+  cargoHash = "sha256-GFtKToMnQc3NUKjOn8jj2pj3tdqY6G2abgLSh6nGbic=";
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
