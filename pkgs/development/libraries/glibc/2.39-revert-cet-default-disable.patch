@@ -1,0 +1,49 @@
+Revert 55d63e731253de82e96ed4ddca2e294076cd0bc5
+
+--- b/sysdeps/x86/cpu-features.c
++++ a/sysdeps/x86/cpu-features.c
+@@ -110,7 +110,7 @@
+   if (!CPU_FEATURES_CPU_P (cpu_features, RTM_ALWAYS_ABORT))
+     CPU_FEATURE_SET_ACTIVE (cpu_features, RTM);
+ 
++#if CET_ENABLED
+-#if CET_ENABLED && 0
+   CPU_FEATURE_SET_ACTIVE (cpu_features, IBT);
+   CPU_FEATURE_SET_ACTIVE (cpu_features, SHSTK);
+ #endif
+reverted:
+--- b/sysdeps/x86/cpu-tunables.c
++++ a/sysdeps/x86/cpu-tunables.c
+@@ -35,17 +35,6 @@
+       break;								\
+     }
+ 
+-#define CHECK_GLIBC_IFUNC_CPU_BOTH(f, cpu_features, name, len)		\
+-  _Static_assert (sizeof (#name) - 1 == len, #name " != " #len);	\
+-  if (tunable_str_comma_strcmp_cte (&f, #name))				\
+-    {									\
+-      if (f.disable)							\
+-	CPU_FEATURE_UNSET (cpu_features, name)				\
+-      else								\
+-	CPU_FEATURE_SET_ACTIVE (cpu_features, name)			\
+-      break;								\
+-    }
+-
+ /* Disable a preferred feature NAME.  We don't enable a preferred feature
+    which isn't available.  */
+ #define CHECK_GLIBC_IFUNC_PREFERRED_OFF(f, cpu_features, name, len)	\
+@@ -142,13 +131,11 @@
+ 	    }
+ 	  break;
+ 	case 5:
+-	  {
+-	    CHECK_GLIBC_IFUNC_CPU_BOTH (n, cpu_features, SHSTK, 5);
+-	  }
+ 	  if (n.disable)
+ 	    {
+ 	      CHECK_GLIBC_IFUNC_CPU_OFF (n, cpu_features, LZCNT, 5);
+ 	      CHECK_GLIBC_IFUNC_CPU_OFF (n, cpu_features, MOVBE, 5);
++	      CHECK_GLIBC_IFUNC_CPU_OFF (n, cpu_features, SHSTK, 5);
+ 	      CHECK_GLIBC_IFUNC_CPU_OFF (n, cpu_features, SSSE3, 5);
+ 	      CHECK_GLIBC_IFUNC_CPU_OFF (n, cpu_features, XSAVE, 5);
+ 	    }
