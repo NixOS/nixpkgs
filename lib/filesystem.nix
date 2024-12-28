@@ -395,17 +395,27 @@ in
     :::
     ::::
 
-    :::{.example}
-    ## Mark with `recurseIntoAttrs` when recursing into a directory
+    ::::{.example}
+    ## Avoid marking with `recurseIntoAttrs` when recursing into a directory
     ```nix
     packagesFromDirectoryRecursive {
       inherit (pkgs) callPackage;
       directory = ./my-packages;
-
-      recurseIntoDirectory = processDir: args: lib.recurseIntoAttrs (processDir args);
+      recurseIntoDirectory = lib.id;
     }
     ```
+    :::{.note}
+    The following may *seem* equivalent, but is less robust:
+    ```nix
+    lib.dontRecurseIntoAttrs (lib.packagesFromDirectoryRecursive { ... })
+    ```
+
+    There are 2 key differences:
+    - this fails to evaluate when `directory` contains a `default.nix` which does not evaluate to an attrset;
+    - `lib.dontRecurseIntoAttrs` only marks the root of the attrset as not to be searched for derivations:
+      in particular, if any child attrset is exposed via another attr-path, it may be recursed into.
     :::
+    ::::
 
     :::{.example}
     ## Express custom recursion behaviour with `recurseIntoDirectory`
@@ -429,7 +439,7 @@ in
   */
   packagesFromDirectoryRecursive =
     let
-      inherit (lib) concatMapAttrs id makeScope recurseIntoAttrs removeSuffix;
+      inherit (lib) concatMapAttrs makeScope recurseIntoAttrs removeSuffix;
       inherit (lib.path) append;
 
       # Generate an attrset corresponding to a given directory.
@@ -478,8 +488,10 @@ in
               })
             ))
         else
-          # otherwise, no modification is necessary
-          id,
+          # otherwise, apply `recurseIntoAttrs` when recursing into a directory
+          processDir: args:
+          recurseIntoAttrs (processDir args)
+        ,
     }@args:
     let
       defaultPath = append directory "package.nix";
