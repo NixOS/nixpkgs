@@ -131,6 +131,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      inherit (nixosTests) allTerminfo;
       nixos = nixosTests.terminal-emulators.ghostty;
     };
   };
