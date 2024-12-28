@@ -129,6 +129,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   versionCheckProgramArg = [ "--version" ];
 
+  passthru = {
+    tests = lib.optionalAttrs stdenv.hostPlatform.isLinux {
+      nixos = nixosTests.terminal-emulators.ghostty;
+    };
+  };
+
   meta = {
     homepage = "https://ghostty.org/";
     description = "Fast, native, feature-rich terminal emulator pushing modern features";
