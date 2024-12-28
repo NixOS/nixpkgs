@@ -21,6 +21,8 @@ mkLibretroCore rec {
     "NP2KAI_HASH=${builtins.substring 0 7 src.rev}"
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration -Wno-error=incompatible-pointer-types -Wno-error=int-conversion";
+
   preBuild = "cd sdl";
 
   meta = {
