@@ -5,6 +5,7 @@
   fixDarwinDylibNames,
   pkgsStatic,
   cmake,
+  zlib,
   testers,
 }:
 
@@ -19,9 +20,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-bucVkRgZdzLe2HFzIP+Trq4+FJ5kLYdIVNUiJ2f52zg=";
   };
 
-  cmakeFlags = lib.optionals stdenv.hostPlatform.isStatic [ "-DLIBDEFLATE_BUILD_SHARED_LIB=OFF" ];
+  cmakeFlags = [
+    "-DLIBDEFLATE_BUILD_TESTS=ON"
+  ] ++ lib.optionals stdenv.hostPlatform.isStatic [ "-DLIBDEFLATE_BUILD_SHARED_LIB=OFF" ];
 
   nativeBuildInputs = [ cmake ] ++ lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
+  buildInputs = [ zlib ];
 
   passthru.tests = {
     static = pkgsStatic.libdeflate;
@@ -29,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
       package = finalAttrs.finalPackage;
     };
   };
+
+  doCheck = true;
 
   meta = with lib; {
     description = "Fast DEFLATE/zlib/gzip compressor and decompressor";
