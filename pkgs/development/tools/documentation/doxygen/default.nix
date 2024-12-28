@@ -3,7 +3,6 @@
   stdenv,
   cmake,
   fetchFromGitHub,
-  fetchpatch,
   python3,
   flex,
   bison,
@@ -16,24 +15,14 @@
 
 stdenv.mkDerivation rec {
   pname = "doxygen";
-  version = "1.12.0";
+  version = "1.13.0";
 
   src = fetchFromGitHub {
     owner = "doxygen";
     repo = "doxygen";
-    rev = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-4zSaM49TjOaZvrUChM4dNJLondCsQPSArOXZnTHS4yI=";
+    tag = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    hash = "sha256-XKzH2nMByE0WE7WX4YYj2boq9+iwD7SyO5w9/4g9cGE=";
   };
-
-  patches = [
-    # fix clang-19 build. can drop on next update
-    # https://github.com/doxygen/doxygen/pull/11064
-    (fetchpatch {
-      name = "fix-clang-19-build.patch";
-      url = "https://github.com/doxygen/doxygen/commit/cff64a87dea7596fd506a85521d4df4616dc845f.patch";
-      hash = "sha256-TtkVfV9Ep8/+VGbTjP4NOP8K3p1+A78M+voAIQ+lzOk=";
-    })
-  ];
 
   # https://github.com/doxygen/doxygen/issues/10928#issuecomment-2179320509
   postPatch = ''
