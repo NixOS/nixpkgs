@@ -57,7 +57,7 @@ resholve.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "goss-org";
     repo = "goss";
-    rev = "refs/tags/v${version}";
+    tag = version;
     hash = "sha256-FDn1OETkYIpMenk8QAAHvfNZcSzqGl5xrD0fAZPVmRM=";
   };
 
