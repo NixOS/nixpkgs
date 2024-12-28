@@ -1489,6 +1489,8 @@ let
 
     parse-argv = callPackage ../development/ocaml-modules/parse-argv { };
 
+    patch = callPackage ../development/ocaml-modules/patch { };
+
     path_glob = callPackage ../development/ocaml-modules/path_glob { };
 
     pbkdf = callPackage ../development/ocaml-modules/pbkdf { };
@@ -1651,6 +1653,10 @@ let
     ### R ###
 
     randomconv = callPackage ../development/ocaml-modules/randomconv { };
+
+    raylib = callPackage ../development/ocaml-modules/raylib { };
+
+    raygui = callPackage ../development/ocaml-modules/raylib/raygui.nix { };
 
     rdbg = callPackage ../development/ocaml-modules/rdbg { };
 
