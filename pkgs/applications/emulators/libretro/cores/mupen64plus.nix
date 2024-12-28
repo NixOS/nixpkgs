@@ -36,6 +36,8 @@ mkLibretroCore {
     "WITH_DYNAREC=${stdenv.hostPlatform.parsed.cpu.name}"
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+
   meta = {
     description = "Libretro port of Mupen64 Plus";
     homepage = "https://github.com/libretro/mupen64plus-libretro-nx";
