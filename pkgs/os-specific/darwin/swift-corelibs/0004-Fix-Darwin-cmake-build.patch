@@ -1,0 +1,66 @@
+--- a/CoreFoundation/CMakeLists.txt	1969-12-31 19:00:01.000000000 -0500
++++ b/CoreFoundation/CMakeLists.txt	2023-06-29 18:52:49.096019700 -0400
+@@ -129,7 +129,7 @@
+                 Base.subproj/CFByteOrder.h
+                 Base.subproj/CFUUID.h
+                 Base.subproj/CFUtilities.h
+-                Base.subproj/SwiftRuntime/CoreFoundation.h
++                Base.subproj/CoreFoundation.h  # The SwiftRuntime version of this file causes linker errors and is not correct for standalone CF.
+                 Base.subproj/SwiftRuntime/TargetConditionals.h
+                 # Collections
+                 Collections.subproj/CFArray.h
+@@ -245,6 +245,8 @@
+                 # RunLoop
+                 RunLoop.subproj/CFRunLoop.c
+                 RunLoop.subproj/CFSocket.c
++                RunLoop.subproj/CFMachPort.c   # These files are missing from the upstream `CMakeLists.txt` but required to build on Darwin.
++                RunLoop.subproj/CFMessagePort.c
+                 # Stream
+                 Stream.subproj/CFConcreteStreams.c
+                 Stream.subproj/CFSocketStream.c
+@@ -336,6 +338,11 @@
+   target_include_directories(CoreFoundation
+                              PRIVATE
+                                ${CURL_INCLUDE_DIRS})
++elseif(CMAKE_SYSTEM_NAME STREQUAL Darwin)
++  find_package(CURL REQUIRED)
++  target_include_directories(CoreFoundation PRIVATE ${CURL_INCLUDE_DIRS})
++  find_package(LibXml2 REQUIRED)
++  target_include_directories(CoreFoundation PRIVATE ${LIBXML2_INCLUDE_DIR})
+ else()
+   target_include_directories(CoreFoundation
+                              PRIVATE
+@@ -365,6 +372,10 @@
+                         PRIVATE
+                           ${CURL_LIBRARIES}
+                           ${LIBXML2_LIBRARIES})
++elseif(CMAKE_SYSTEM_NAME STREQUAL Darwin)
++  target_link_libraries(CoreFoundation PRIVATE
++    ${CURL_LIBRARIES}
++    ${LIBXML2_LIBRARIES})
+ else()
+   target_link_libraries(CoreFoundation
+                         PRIVATE
+@@ -398,9 +400,19 @@
+   target_link_libraries(CoreFoundation
+                         PRIVATE
+                           icucore)
+-  set_target_properties(CoreFoundation
+-                        PROPERTIES LINK_FLAGS
+-                          -Xlinker;-alias_list;-Xlinker;Base.subproj/DarwinSymbolAliases;-twolevel_namespace;-sectcreate;__UNICODE;__csbitmaps;CharacterSets/CFCharacterSetBitmaps.bitmap;-sectcreate;__UNICODE;__properties;CharacterSets/CFUniCharPropertyDatabase.data;-sectcreate;__UNICODE;__data;CharacterSets/CFUnicodeData-L.mapping;-segprot;__UNICODE;r;r)
++  target_link_options(CoreFoundation
++                      PUBLIC
++                      "LINKER:-alias_list,../Base.subproj/DarwinSymbolAliases"
++                      "LINKER:-twolevel_namespace"
++                      "LINKER:-sectcreate,__UNICODE,__csbitmaps,../CharacterSets/CFCharacterSetBitmaps.bitmap"
++                      "LINKER:-sectcreate,__UNICODE,__properties,../CharacterSets/CFUniCharPropertyDatabase.data"
++                      "LINKER:-sectcreate,__UNICODE,__data,../CharacterSets/CFUnicodeData-L.mapping"
++                      "LINKER:-segprot,__UNICODE,r,r"
++                      "LINKER:-current_version,1454.90.0"
++                      "LINKER:-compatibility_version,150.0.0"
++                      "LINKER:-init,___CFInitialize")
++  set(CMAKE_SHARED_LIBRARY_PREFIX "")
++  set(CMAKE_SHARED_LIBRARY_SUFFIX "")
+ endif()
+ 
+ install(TARGETS
