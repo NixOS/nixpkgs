@@ -4,6 +4,9 @@
   fetchFromGitHub,
   dpkg,
   nix-update-script,
+  testers,
+  rockcraft,
+  cacert,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -49,7 +52,14 @@ python3Packages.buildPythonApplication rec {
     "test_run_init_django"
   ];
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    tests.version = testers.testVersion {
+      package = rockcraft;
+      command = "env SSL_CERT_FILE=${cacert}/etc/ssl/certs/ca-bundle.crt HOME=$(mktemp -d) rockcraft --version";
+      version = "rockcraft ${version}";
+    };
+  };
 
   meta = {
     mainProgram = "rockcraft";
