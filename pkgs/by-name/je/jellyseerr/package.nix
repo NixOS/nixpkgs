@@ -4,12 +4,16 @@
   fetchFromGitHub,
   stdenv,
   makeWrapper,
-  nodejs,
+  nodejs_20,
   python3,
   sqlite,
   nix-update-script,
 }:
 
+let
+  nodejs = nodejs_20;
+  pnpm = pnpm_9.override { inherit nodejs; };
+in
 stdenv.mkDerivation rec {
   pname = "jellyseerr";
   version = "2.1.0";
@@ -21,7 +25,7 @@ stdenv.mkDerivation rec {
     hash = "sha256-5kaeqhjUy9Lgx4/uFcGRlAo+ROEOdTWc2m49rq8R8Hs=";
   };
 
-  pnpmDeps = pnpm_9.fetchDeps {
+  pnpmDeps = pnpm.fetchDeps {
     inherit pname version src;
     hash = "sha256-xu6DeaBArQmnqEnIgjc1DTZujQebSkjuai9tMHeQWCk=";
   };
@@ -32,7 +36,7 @@ stdenv.mkDerivation rec {
     python3
     nodejs
     makeWrapper
-    pnpm_9.configHook
+    pnpm.configHook
   ];
 
   preBuild = ''
