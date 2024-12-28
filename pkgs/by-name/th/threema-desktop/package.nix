@@ -6,6 +6,7 @@
   copyDesktopItems,
   makeWrapper,
   electron,
+  nodejs_20,
   python3,
 }:
 
@@ -35,6 +36,8 @@ let
     nativeBuildInputs = [
       (python3.withPackages (ps: [ ps.setuptools ])) # Used by gyp
     ];
+
+    nodejs = nodejs_20;
 
     patches = [
       "${electronSrc}/tools/patches/patch-user-agent.patch"
