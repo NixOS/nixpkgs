@@ -5,12 +5,12 @@
   nixosTests,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "0.9.2";
   pname = "tayga";
 
   src = fetchurl {
-    url = "http://www.litech.org/${pname}/${pname}-${version}.tar.bz2";
+    url = "http://www.litech.org/tayga/tayga-${finalAttrs.version}.tar.bz2";
     hash = "sha256-Kx95J6nS3P+Qla/zwnGSSwUsz9L6ypWIsndDGkTwAJw=";
   };
 
@@ -36,4 +36,4 @@ stdenv.mkDerivation rec {
     platforms = platforms.linux;
     mainProgram = "tayga";
   };
-}
+})
