@@ -37,6 +37,8 @@ flutter.buildFlutterApplication {
     cp -r linux/debian/usr/share $out/share
   '';
 
+  passthru.updateScript = ./update.sh;
+
   meta = {
     description = "Powerful, minimalistic, cross-platform, opensource note-taking app";
     homepage = "https://github.com/LinwoodDev/Butterfly";
