@@ -394,6 +394,38 @@ in
     `a.nix` cannot directly take as inputs packages defined in a child directory, such as `b1`.
     :::
     ::::
+
+    :::{.example}
+    ## Mark with `recurseIntoAttrs` when recursing into a directory
+    ```nix
+    packagesFromDirectoryRecursive {
+      inherit (pkgs) callPackage;
+      directory = ./my-packages;
+
+      recurseIntoDirectory = processDir: args: lib.recurseIntoAttrs (processDir args);
+    }
+    ```
+    :::
+
+    :::{.example}
+    ## Express custom recursion behaviour with `recurseIntoDirectory`
+    For instance, only mark attrsets produced by `packagesFromDirectoryRecursive` with `recurseForDerivations`
+    if they (transitively) contain derivations.
+
+    ```nix
+    packagesFromDirectoryRecursive {
+      inherit (pkgs) callPackage;
+      directory = ./my-packages;
+
+      recurseIntoDirectory = processDir: args: let
+        result = processDir args;
+      in result // {
+        recurseForDerivations =
+          lib.any (child: lib.isDerivation child || child.recurseForDerivations or false) result;
+      };
+    }
+    ```
+    :::
   */
   packagesFromDirectoryRecursive =
     let
