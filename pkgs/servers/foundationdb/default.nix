@@ -8,7 +8,7 @@
   cmake,
   ninja,
   python3,
-  openjdk8,
+  openjdk,
   mono,
   openssl,
   boost,
