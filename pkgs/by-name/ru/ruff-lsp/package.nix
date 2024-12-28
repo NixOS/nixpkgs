@@ -36,7 +36,7 @@ python3Packages.buildPythonApplication rec {
     pytestCheckHook
     pytest-asyncio
     python-lsp-jsonrpc
-    ruff.bin
+    ruff
     versionCheckHook
   ];
   versionCheckProgramArg = [ "--version" ];
