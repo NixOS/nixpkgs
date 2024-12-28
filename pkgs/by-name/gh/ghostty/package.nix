@@ -46,11 +46,23 @@ stdenv.mkDerivation (finalAttrs: {
   pname = "ghostty";
   version = "1.0.0";
 
+  outputs = [
+    "out"
+    "man"
+    "shell_integration"
+    "terminfo"
+    "vim"
+  ];
+
   src = fetchFromGitHub {
     owner = "ghostty-org";
     repo = "ghostty";
     tag = "v${finalAttrs.version}";
     hash = "sha256-AHI1Z4mfgXkNwQA8xYq4tS0/BARbHL7gQUT41vCxQTM=";
+  };
+
+  deps = callPackage ./deps.nix {
+    name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
   };
 
   strictDeps = true;
@@ -83,15 +95,6 @@ stdenv.mkDerivation (finalAttrs: {
       harfbuzz
     ];
 
-  dontConfigure = true;
-  # doCheck is set to false because unit tests currently fail inside the Nix sandbox.
-  doCheck = false;
-  doInstallCheck = true;
-
-  deps = callPackage ./deps.nix {
-    name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
-  };
-
   zigBuildFlags =
     [
       "--system"
@@ -109,27 +112,46 @@ stdenv.mkDerivation (finalAttrs: {
 
   zigCheckFlags = finalAttrs.zigBuildFlags;
 
-  outputs = [
-    "out"
-    "terminfo"
-    "shell_integration"
-    "vim"
-  ];
+  # Unit tests currently fail inside the sandbox
+  doCheck = false;
 
-  postInstall = ''
-    mkdir -p "$terminfo/share"
-    mv "$out/share/terminfo" "$terminfo/share/terminfo"
-    ln -sf "$terminfo/share/terminfo" "$out/share/terminfo"
+  /**
+    Ghostty really likes all of it's resources to be in the same directory, so link them back after we split them
 
-    mkdir -p "$shell_integration"
-    mv "$out/share/ghostty/shell-integration" "$shell_integration/shell-integration"
-    ln -sf "$shell_integration/shell-integration" "$out/share/ghostty/shell-integration"
+    - https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/os/resourcesdir.zig#L11-L52
+    - https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/termio/Exec.zig#L745-L750
+    - https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/termio/Exec.zig#L818-L834
 
-    mv "$out/share/vim/vimfiles" "$vim"
-    ln -sf "$vim" "$out/share/vim/vimfiles"
-  '';
+    terminfo and shell integration should also be installable on remote machines
 
-  preFixup = ''
+    ```nix
+    { pkgs, ... }: {
+      environment.systemPackages = [ pkgs.ghostty.terminfo ];
+
+      programs.bash = {
+        interactiveShellInit = ''
+          if [[ "$TERM" == "xterm-ghostty" ]]; then
+            builtin source ${pkgs.ghostty.shell_integration}/bash/ghostty.bash
+          fi
+        '';
+      };
+    }
+    ```
+  */
+  postFixup = ''
+    ln -s $man/share/man $out/share/man
+
+    moveToOutput share/terminfo $terminfo
+    ln -s $terminfo/share/terminfo $out/share/terminfo
+
+    mv $out/share/ghostty/shell-integration $shell_integration
+    ln -s $shell_integration $out/share/ghostty/shell-integration
+
+    mv $out/share/vim/vimfiles $vim
+    rmdir $out/share/vim
+    ln -s $vim $out/share/vim-plugins
+
+
     remove-references-to -t ${finalAttrs.deps} $out/bin/ghostty
   '';
 
@@ -138,6 +160,8 @@ stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
+  doInstallCheck = true;
 
   versionCheckProgramArg = [ "--version" ];
 
@@ -162,7 +186,12 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     platforms = lib.platforms.linux;
     mainProgram = "ghostty";
-    outputsToInstall = finalAttrs.outputs;
+    outputsToInstall = [
+      "out"
+      "man"
+      "shell_integration"
+      "terminfo"
+    ];
     maintainers = with lib.maintainers; [
       jcollie
       pluiedev
