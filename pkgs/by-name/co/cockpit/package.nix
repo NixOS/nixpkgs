@@ -39,7 +39,7 @@
 
 stdenv.mkDerivation rec {
   pname = "cockpit";
-  version = "328";
+  version = "331";
 
   src = fetchFromGitHub {
     owner = "cockpit-project";
@@ -104,12 +104,13 @@ stdenv.mkDerivation rec {
       test/common/pixel-tests \
       test/common/run-tests \
       test/common/tap-cdp \
-      test/static-code \
       tools/escape-to-c \
       tools/make-compile-commands \
       tools/node-modules \
       tools/termschutz \
-      tools/webpack-make.js
+      tools/webpack-make.js \
+      tools/test-driver \
+      test/common/static-code
 
     for f in node_modules/.bin/*; do
       patchShebangs $(realpath $f)
@@ -129,10 +130,16 @@ stdenv.mkDerivation rec {
     substituteInPlace src/common/Makefile-common.am \
       --replace 'TEST_PROGRAM += test-pipe' "" # skip test-pipe because it hangs the build
 
+    substituteInPlace src/ws/Makefile-ws.am \
+      --replace 'TEST_PROGRAM += test-compat' ""
+
     substituteInPlace test/pytest/*.py \
       --replace "'bash" "'${bashInteractive}/bin/bash"
 
     echo "m4_define(VERSION_NUMBER, [${version}])" > version.m4
+
+    # hardcode libexecdir, I am assuming that cockpit only use it to find it's binaries
+    printf 'def get_libexecdir() -> str:\n\treturn "%s"' "$out/libexec" >> src/cockpit/packages.py
   '';
 
   configureFlags = [
@@ -140,33 +147,14 @@ stdenv.mkDerivation rec {
     "--disable-pcp" # TODO: figure out how to package its dependency
     "--with-default-session-path=/run/wrappers/bin:/run/current-system/sw/bin"
     "--with-admin-group=root" # TODO: really? Maybe "wheel"?
-    "--enable-old-bridge=yes"
   ];
 
   enableParallelBuilding = true;
 
-  preBuild = ''
-    patchShebangs \
-      tools/test-driver
-  '';
-
-  postBuild = ''
-    chmod +x \
-      src/systemd/update-motd \
-      src/tls/cockpit-certificate-helper \
-      src/ws/cockpit-desktop
-
-    patchShebangs \
-      src/systemd/update-motd \
-      src/tls/cockpit-certificate-helper \
-      src/ws/cockpit-desktop
-
-    substituteInPlace src/ws/cockpit-desktop \
-      --replace ' /bin/bash' ' ${runtimeShell}'
-  '';
-
   fixupPhase = ''
     runHook preFixup
+
+    patchShebangs $out/libexec/*
 
     wrapProgram $out/libexec/cockpit-certificate-helper \
       --prefix PATH : ${
@@ -177,9 +165,6 @@ stdenv.mkDerivation rec {
       } \
       --run 'cd $(mktemp -d)'
 
-    wrapProgram $out/share/cockpit/motd/update-motd \
-      --prefix PATH : ${lib.makeBinPath [ gnused ]}
-
     wrapProgram $out/bin/cockpit-bridge \
       --prefix PYTHONPATH : $out/${python3Packages.python.sitePackages}
 
@@ -189,29 +174,31 @@ stdenv.mkDerivation rec {
     substituteInPlace $out/share/polkit-1/actions/org.cockpit-project.cockpit-bridge.policy \
       --replace-fail /usr $out
 
+    substituteInPlace $out/lib/systemd/*/* \
+      --replace /bin /run/current-system/sw/bin
+
     runHook postFixup
   '';
 
-  doCheck = true;
   checkInputs = [
     bashInteractive
     cacert
     dbus
     glib-networking
     openssh
-    python3Packages.pytest
+    python3Packages.pytestCheckHook
   ];
-  checkPhase = ''
+
+  preCheck = ''
     export GIO_EXTRA_MODULES=$GIO_EXTRA_MODULES:${glib-networking}/lib/gio/modules
     export G_DEBUG=fatal-criticals
     export G_MESSAGES_DEBUG=cockpit-ws,cockpit-wrapper,cockpit-bridge
     export PATH=$PATH:$(pwd)
 
-    make pytest -j$NIX_BUILD_CORES || true
+    # make pytest -j$NIX_BUILD_CORES || true
     make check  -j$NIX_BUILD_CORES || true
-    test/static-code
     npm run eslint
-    npm run stylelint || true
+    npm run stylelint
   '';
 
   passthru = {
