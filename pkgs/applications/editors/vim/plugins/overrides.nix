@@ -1161,10 +1161,6 @@ in
     dependencies = [ self.guard-nvim ];
   };
 
-  guard-nvim = super.guard-nvim.overrideAttrs {
-    nvimRequireCheck = "guard";
-  };
-
   hardhat-nvim = super.hardhat-nvim.overrideAttrs {
     dependencies = with self; [
       overseer-nvim
@@ -2219,6 +2215,11 @@ in
   nvim-navic = super.nvim-navic.overrideAttrs {
     dependencies = [ self.nvim-lspconfig ];
     nvimRequireCheck = "nvim-navic";
+  };
+
+  nvim-notify = super.nvim-notify.overrideAttrs {
+    # Optional fzf integration
+    nvimSkipModule = "notify.integrations.fzf";
   };
 
   nvim-paredit = super.nvim-paredit.overrideAttrs {
