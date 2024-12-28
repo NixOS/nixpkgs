@@ -30,10 +30,14 @@ stdenv.mkDerivation rec {
 
   nativeCheckInputs = lib.optional useMpi openssh;
 
+  # a couple tests fail when run in parallel
   doCheck = true;
+  enableParallelChecking = false;
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" stdenv.hostPlatform.hasSharedLibraries)
+    (lib.cmakeBool "EIGEN" true)
+    (lib.cmakeBool "EXAMPLES" true)
     (lib.cmakeBool "ICB" true)
     (lib.cmakeBool "INTERFACE64" blas.isILP64)
     (lib.cmakeBool "MPI" useMpi)
@@ -42,11 +46,6 @@ stdenv.mkDerivation rec {
     # to segfault
     "-DBLA_VENDOR=Generic"
   ];
-
-  preCheck = ''
-    # Prevent tests from using all cores
-    export OMP_NUM_THREADS=2
-  '';
 
   passthru = {
     inherit (blas) isILP64;
