@@ -1,5 +1,5 @@
 #!/usr/bin/env nix-shell
-#!nix-shell -I nixpkgs=./. -i bash -p curl jq yq nixVersions.latest bash coreutils nix-update
+#!nix-shell -I nixpkgs=./. -i bash -p curl jq yq nix bash coreutils nix-update
 
 set -eou pipefail
 
