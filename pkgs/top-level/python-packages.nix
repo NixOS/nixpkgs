@@ -2921,6 +2921,8 @@ self: super: with self; {
 
   crytic-compile = callPackage ../development/python-modules/crytic-compile { };
 
+  csaf-tool = callPackage ../development/python-modules/csaf-tool { };
+
   cson = callPackage ../development/python-modules/cson { };
 
   csrmesh = callPackage ../development/python-modules/csrmesh { };
