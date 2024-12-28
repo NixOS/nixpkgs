@@ -44,6 +44,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [ lvm2 ];
 
+  # Fix build with gcc 14
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=implicit-int"
+    "-Wno-error=return-mismatch"
+  ];
+
   # Hand-written Makefile does not have full dependencies to survive
   # parallel build:
   #   tools/dmraid.c:12:10: fatal error: dmraid/dmraid.h: No such file
