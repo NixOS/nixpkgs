@@ -12,11 +12,6 @@ let
     toString
     ;
 
-  inherit (lib.attrsets)
-    mapAttrs'
-    filterAttrs
-    ;
-
   inherit (lib.filesystem)
     pathIsDirectory
     pathIsRegularFile
@@ -26,7 +21,6 @@ let
 
   inherit (lib.strings)
     hasSuffix
-    removeSuffix
     ;
 in
 
