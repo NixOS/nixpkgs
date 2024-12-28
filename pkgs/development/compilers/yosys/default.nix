@@ -5,6 +5,7 @@
   boost,
   fetchFromGitHub,
   flex,
+  gtkwave,
   libffi,
   makeWrapper,
   pkg-config,
@@ -80,13 +81,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "yosys";
-  version = "0.47";
+  version = "0.48";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "yosys";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-9u9aAPTZyt9vzZwryor3GRCGzs/mu2/XtM0XzV7uHfk=";
+    rev = "refs/tags/v${finalAttrs.version}";
+    hash = "sha256-LzBx1bxpiPOiRTPgBcjNnuQemZG5xfvtA/NgqUib/6g=";
     fetchSubmodules = true;
     leaveDotGit = true;
     postFetch = ''
@@ -160,7 +161,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   checkTarget = "test";
   doCheck = true;
-  nativeCheckInputs = [ iverilog ];
+  nativeCheckInputs = [
+    gtkwave
+    iverilog
+  ];
 
   setupHook = ./setup-hook.sh;
 
