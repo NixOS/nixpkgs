@@ -8662,6 +8662,8 @@ self: super: with self; {
 
   lib4sbom = callPackage ../development/python-modules/lib4sbom { };
 
+  lib4vex = callPackage ../development/python-modules/lib4vex { };
+
   libagent = callPackage ../development/python-modules/libagent { };
 
   libais = callPackage ../development/python-modules/libais { };
