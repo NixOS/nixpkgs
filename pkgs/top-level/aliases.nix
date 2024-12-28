@@ -475,6 +475,7 @@ mapAliases {
   glfw-wayland-minecraft = glfw3-minecraft; # Added 2024-05-08
   glxinfo = mesa-demos; # Added 2024-07-04
   gmailieer = throw "'gmailieer' has been renamed to/replaced by 'lieer'"; # Converted to throw 2024-10-17
+  gmp4 = throw "'gmp4' is end-of-life, consider using 'gmp' instead"; # Added 2024-12-24
   gnatboot11 = gnat-bootstrap11;
   gnatboot12 = gnat-bootstrap12;
   gnatboot = gnat-bootstrap;
@@ -552,6 +553,9 @@ mapAliases {
   ht-rust = throw "'ht-rust' has been renamed to/replaced by 'xh'"; # Converted to throw 2024-10-17
   hydra_unstable = hydra; # Added 2024-08-22
   hydron = throw "hydron has been removed as the project has been archived upstream since 2022 and is affected by a severe remote code execution vulnerability";
+  hyprgui = throw "hyprgui has been removed as the repository is deleted"; # Added 2024-12-27
+  hyprlauncher = throw "hyprlauncher has been removed as the repository is deleted"; # Added 2024-12-27
+  hyprwall = throw "hyprwall has been removed as the repository is deleted"; # Added 2024-12-27
 
 
   ### I ###
