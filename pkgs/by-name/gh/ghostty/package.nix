@@ -61,6 +61,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-AHI1Z4mfgXkNwQA8xYq4tS0/BARbHL7gQUT41vCxQTM=";
   };
 
+  # Avoid using runtime hacks to help find X11
+  postPatch = lib.optionalString (appRuntime == "gtk") ''
+    substituteInPlace src/apprt/gtk/x11.zig \
+      --replace-warn 'std.DynLib.open("libX11.so");' 'std.DynLib.open("${lib.getLib libX11}/lib/libX11.so");'
+  '';
+
   deps = callPackage ./deps.nix {
     name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
   };
@@ -154,8 +160,6 @@ stdenv.mkDerivation (finalAttrs: {
 
     remove-references-to -t ${finalAttrs.deps} $out/bin/ghostty
   '';
-
-  NIX_LDFLAGS = lib.optional (appRuntime == "gtk") "-lX11";
 
   nativeInstallCheckInputs = [
     versionCheckHook
