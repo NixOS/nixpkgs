@@ -1164,6 +1164,13 @@ lib.mapAttrs mkLicense (
       fullName = "Sendmail License";
     };
 
+    sfl = {
+      fullName = "Source First License 1.1";
+      url = "https://gitlab.futo.org/videostreaming/grayjay/-/blob/master/LICENSE.md";
+      free = false;
+      redistributable = true;
+    };
+
     sgi-b-20 = {
       spdxId = "SGI-B-2.0";
       fullName = "SGI Free Software License B v2.0";
