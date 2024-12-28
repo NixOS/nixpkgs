@@ -1,13 +1,13 @@
 {
   lib,
-  stdenv,
+  gcc13Stdenv,
   fetchFromGitHub,
   fetchpatch,
   testers,
   uasm,
 }:
 
-stdenv.mkDerivation rec {
+gcc13Stdenv.mkDerivation rec {
   pname = "uasm";
   version = "2.56.2";
 
@@ -31,9 +31,9 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  makefile = if stdenv.hostPlatform.isDarwin then "ClangOSX64.mak" else "gccLinux64.mak";
+  makefile = if gcc13Stdenv.hostPlatform.isDarwin then "ClangOSX64.mak" else "gccLinux64.mak";
 
-  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
+  makeFlags = [ "CC=${gcc13Stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     runHook preInstall
