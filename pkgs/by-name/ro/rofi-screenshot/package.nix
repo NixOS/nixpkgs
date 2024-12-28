@@ -16,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "rofi-screenshot";
-  version = "2023-07-02";
+  version = "2024-09-27";
 
   src = fetchFromGitHub {
     owner = "ceuk";
     repo = pname;
-    rev = "365cfa51c6c7deb072d98d7bfd68cf4038bf2737";
-    hash = "sha256-M1cab+2pOjZ2dElMg0Y0ZrIxRE0VwymVwcElgzFrmVs=";
+    rev = "09a07d9c2ff2efbf75b1753bb412f4f8f086708f";
+    hash = "sha256-3UpYdXAX3LD1ZAQ429JkzWWooiBpuf/uPf0CRh5EXd8=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

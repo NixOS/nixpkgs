@@ -2018,6 +2018,22 @@ let
         };
       };
 
+      geequlim.godot-tools = buildVscodeMarketplaceExtension {
+        mktplcRef = {
+          name = "godot-tools";
+          publisher = "geequlim";
+          version = "2.3.0";
+          hash = "sha256-iuSec4PoVxyu1KB2jfCYOd98UrqQjH3q24zOR4VCPgs=";
+        };
+        meta = {
+          description = "VS Code extension for game development with Godot Engine and GDScript";
+          downloadPage = "https://marketplace.visualstudio.com/items?itemName=geequlim.godot-tools";
+          homepage = "https://github.com/godotengine/godot-vscode-plugin";
+          license = lib.licenses.mit;
+          maintainers = with lib.maintainers; [ thtrf ];
+        };
+      };
+
       gencer.html-slim-scss-css-class-completion = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "html-slim-scss-css-class-completion";
@@ -4313,8 +4329,8 @@ let
         mktplcRef = {
           name = "sas-lsp";
           publisher = "SAS";
-          version = "1.12.0";
-          hash = "sha256-go7H9DS1uJkzKowIQ2riSPOZRC737/Q0AWxzHIcBwg4=";
+          version = "1.13.0";
+          hash = "sha256-bcj9p/hvzZ1z03D1dXxiyPmGndh3pD7seI5VYHWsvzU=";
         };
         meta = {
           changelog = "https://marketplace.visualstudio.com/items/SAS.sas-lsp/changelog";
@@ -5043,8 +5059,8 @@ let
         mktplcRef = {
           name = "uiua-vscode";
           publisher = "uiua-lang";
-          version = "0.0.56";
-          hash = "sha256-4uze2hmTV8sNDSdlvwLf1Z/4dGn4pda0mT0FCg/xWqM=";
+          version = "0.0.61";
+          hash = "sha256-cKiIva4nzROp+bbwkMxBvguLMXVe/9uGcdhVhLxmae0=";
         };
         meta = {
           description = "VSCode language extension for Uiua";

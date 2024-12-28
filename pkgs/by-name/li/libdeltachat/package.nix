@@ -72,6 +72,11 @@ stdenv.mkDerivation rec {
       --replace __FILE__ '"${placeholder "out"}/include/deltachat.h"'
   '';
 
+  env = {
+    CARGO_BUILD_TARGET = stdenv.hostPlatform.rust.rustcTarget;
+    CARGO_BUILD_RUSTFLAGS = "-C linker=${stdenv.cc.targetPrefix}cc";
+  };
+
   passthru = {
     tests = {
       inherit deltachat-desktop deltachat-repl deltachat-rpc-server;

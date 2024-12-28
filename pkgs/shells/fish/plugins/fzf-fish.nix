@@ -64,7 +64,7 @@ buildFishPlugin rec {
     changelog = "https://github.com/PatrickF1/fzf.fish/releases/tag/${src.rev}";
     license = licenses.mit;
     maintainers = with maintainers; [
-      pacien
+      euxane
       natsukium
     ];
   };

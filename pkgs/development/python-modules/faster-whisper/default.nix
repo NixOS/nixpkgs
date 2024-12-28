@@ -19,15 +19,14 @@
 
 buildPythonPackage rec {
   pname = "faster-whisper";
-  version = "unstable-2024-07-26";
+  version = "1.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "SYSTRAN";
     repo = "faster-whisper";
-    # rev = "refs/tags/v${version}";
-    rev = "d57c5b40b06e59ec44240d93485a95799548af50";
-    hash = "sha256-C/O+wt3dykQJmH+VsVkpQwEAdyW8goMUMKR0Z3Y7jdo=";
+    tag = "v${version}";
+    hash = "sha256-oJBCEwTfon80XQ9XIgnRw0SLvpwX0L5jnezwG0jv3Eg=";
   };
 
   build-system = [
@@ -59,7 +58,7 @@ buildPythonPackage rec {
   '';
 
   meta = with lib; {
-    changelog = "https://github.com/SYSTRAN/faster-whisper/releases/tag/v${version}";
+    changelog = "https://github.com/SYSTRAN/faster-whisper/releases/tag/${src.tag}";
     description = "Faster Whisper transcription with CTranslate2";
     homepage = "https://github.com/SYSTRAN/faster-whisper";
     license = licenses.mit;

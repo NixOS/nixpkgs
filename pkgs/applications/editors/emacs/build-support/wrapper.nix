@@ -82,7 +82,7 @@ runCommand (lib.appendToName "with-packages" emacs).name
             # well :D.
             local varSlice="$var[*]"
             # ''${..-} to hack around old bash empty array problem
-            case "''${!varSlice-}" in
+            case " ''${!varSlice-} " in
                 *" $pkg "*) return 0 ;;
             esac
             unset -v varSlice
@@ -205,6 +205,8 @@ runCommand (lib.appendToName "with-packages" emacs).name
         --subst-var-by bash ${emacs.stdenv.shell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
+        --subst-var-by wrapperInvocationDirectory "$out/bin/" \
+        --subst-var-by wrapperInvocationName "$progname" \
         --subst-var prog
       chmod +x $out/bin/$progname
       # Create a “NOP” binary wrapper for the pure sake of it becoming a
@@ -229,6 +231,8 @@ runCommand (lib.appendToName "with-packages" emacs).name
         --subst-var-by bash ${emacs.stdenv.shell} \
         --subst-var-by wrapperSiteLisp "$deps/share/emacs/site-lisp" \
         --subst-var-by wrapperSiteLispNative "$deps/share/emacs/native-lisp" \
+        --subst-var-by wrapperInvocationDirectory "$out/Applications/Emacs.app/Contents/MacOS/" \
+        --subst-var-by wrapperInvocationName "Emacs" \
         --subst-var-by prog "$emacs/Applications/Emacs.app/Contents/MacOS/Emacs"
       chmod +x $out/Applications/Emacs.app/Contents/MacOS/Emacs
       wrapProgramBinary $out/Applications/Emacs.app/Contents/MacOS/Emacs

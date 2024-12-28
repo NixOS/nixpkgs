@@ -89,14 +89,6 @@ buildPostgresqlExtension (finalAttrs: {
     "--disable-extension-upgrades-install"
   ];
 
-  postConfigure = ''
-    mkdir -p $out/bin
-
-    # postgis' build system assumes it is being installed to the same place as postgresql, and looks
-    # for the postgres binary relative to $PREFIX. We gently support this system using an illusion.
-    ln -s ${postgresql}/bin/postgres $out/bin/postgres
-  '';
-
   makeFlags = [
     "PERL=${perl}/bin/perl"
   ];
@@ -111,9 +103,6 @@ buildPostgresqlExtension (finalAttrs: {
 
   # create aliases for all commands adding version information
   postInstall = ''
-    # Teardown the illusory postgres used for building; see postConfigure.
-    rm $out/bin/postgres
-
     for prog in $out/bin/*; do # */
       ln -s $prog $prog-${finalAttrs.version}
     done

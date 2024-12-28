@@ -15,7 +15,6 @@
 , libgee
 , libhandy
 , gnome-settings-daemon
-, mesa
 , mutter
 , elementary-icon-theme
 , wingpanel-with-indicators
@@ -67,7 +66,6 @@ stdenv.mkDerivation rec {
     libgee
     libhandy
     lightdm
-    mesa # for libEGL
     mutter
   ];
 

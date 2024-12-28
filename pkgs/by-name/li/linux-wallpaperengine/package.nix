@@ -41,7 +41,7 @@
   libXcomposite,
   libXdamage,
   libXfixes,
-  mesa,
+  libgbm,
   gtk3,
   pango,
   cairo,
@@ -74,7 +74,7 @@ let
     libXext
     libXfixes
     libXrandr
-    mesa
+    libgbm
     gtk3
     pango
     cairo

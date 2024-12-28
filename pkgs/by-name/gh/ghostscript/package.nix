@@ -2,6 +2,7 @@
 , stdenv
 , lib
 , fetchurl
+, fetchpatch2
 , pkg-config
 , zlib
 , expat
@@ -72,6 +73,12 @@ stdenv.mkDerivation rec {
   patches = [
     ./urw-font-files.patch
     ./doc-no-ref.diff
+
+    # Support SOURCE_DATE_EPOCH for reproducible builds
+    (fetchpatch2 {
+      url = "https://salsa.debian.org/debian/ghostscript/-/raw/01e895fea033cc35054d1b68010de9818fa4a8fc/debian/patches/2010_add_build_timestamp_setting.patch";
+      hash = "sha256-XTKkFKzMR2QpcS1YqoxzJnyuGk/l/Y2jdevsmbMtCXA=";
+    })
   ];
 
   outputs = [ "out" "man" "doc" "fonts" ];

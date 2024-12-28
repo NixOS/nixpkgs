@@ -18,6 +18,7 @@
   procps,
   which,
   libuuid,
+  libtpms,
 }:
 let
   # Avoid a circular dependency on Linux systems (systemd depends on tpm2-tss,
@@ -61,6 +62,7 @@ stdenv.mkDerivation rec {
       libgcrypt
       uthash
       libuuid
+      libtpms
     ]
     # cmocka is checked in the configure script
     # when unit and/or integration testing is enabled
@@ -99,15 +101,30 @@ stdenv.mkDerivation rec {
     ./no-shadow.patch
   ];
 
-  postPatch = ''
-    patchShebangs script
-    substituteInPlace src/tss2-tcti/tctildr-dl.c \
-      --replace '@PREFIX@' $out/lib/
-    substituteInPlace ./test/unit/tctildr-dl.c \
-      --replace '@PREFIX@' $out/lib/
-    substituteInPlace ./bootstrap \
-      --replace 'git describe --tags --always --dirty' 'echo "${version}"'
-  '';
+  postPatch =
+    ''
+      patchShebangs script
+      substituteInPlace src/tss2-tcti/tctildr-dl.c \
+        --replace-fail '@PREFIX@' $out/lib/
+      substituteInPlace ./test/unit/tctildr-dl.c \
+        --replace-fail '@PREFIX@' $out/lib/
+      substituteInPlace ./bootstrap \
+        --replace-fail 'git describe --tags --always --dirty' 'echo "${version}"'
+      for src in src/tss2-tcti/tcti-libtpms.c test/unit/tcti-libtpms.c; do
+        substituteInPlace "$src" \
+          --replace-fail '"libtpms.so"' '"${libtpms.out}/lib/libtpms.so"' \
+          --replace-fail '"libtpms.so.0"' '"${libtpms.out}/lib/libtpms.so.0"'
+      done
+    ''
+    # tcti tests rely on mocking function calls, which appears not to be supported
+    # on clang
+    + lib.optionalString stdenv.cc.isClang ''
+      sed -i '/TESTS_UNIT / {
+        /test\/unit\/tcti-swtpm/d;
+        /test\/unit\/tcti-mssim/d;
+        /test\/unit\/tcti-device/d
+      }' Makefile-test.am
+    '';
 
   configureFlags = lib.optionals doInstallCheck [
     "--enable-unit"

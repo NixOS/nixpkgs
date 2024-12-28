@@ -14,7 +14,7 @@
   libxc,
   makeWrapper,
   gsl,
-  boost180,
+  boost,
   autoPatchelfHook,
   enableQcmaquis ? false,
   # Note that the CASPT2 module is broken with MPI
@@ -103,7 +103,7 @@ stdenv.mkDerivation rec {
       armadillo
       libxc
       gsl.dev
-      boost180
+      boost
     ]
     ++ lib.optionals enableMpi [
       mpi

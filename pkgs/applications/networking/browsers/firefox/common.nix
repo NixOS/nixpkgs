@@ -268,6 +268,29 @@ buildStdenv.mkDerivation {
       hash = "sha256-2IpdSyye3VT4VB95WurnyRFtdN1lfVtYpgEiUVhfNjw=";
     })
   ]
+  ++ [
+    # LLVM 19 turned on WASM reference types by default, exposing a bug
+    # that broke the Mozilla WASI build. Supposedly, it has been fixed
+    # upstream in LLVM, but the build fails in the same way for us even
+    # with LLVM 19 versions that contain the upstream patch.
+    #
+    # Apply the temporary patch Mozilla used to work around this bug
+    # for now until someone can investigate what’s going on here.
+    #
+    # TODO: Please someone figure out what’s up with this.
+    #
+    # See: <https://bugzilla.mozilla.org/show_bug.cgi?id=1905251>
+    # See: <https://github.com/llvm/llvm-project/pull/97451>
+    (fetchpatch {
+      name = "wasi-sdk-disable-reference-types.patch";
+      url = "https://hg.mozilla.org/integration/autoland/raw-rev/23a9f6555c7c";
+      hash = "sha256-CRywalJlRMFVLITEYXxpSq3jLPbUlWKNRHuKLwXqQfU=";
+    })
+    # Python 3.12.8 compat
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1935621
+    # https://phabricator.services.mozilla.com/D231480
+    ./mozbz-1935621-attachment-9442305.patch
+  ]
   ++ extraPatches;
 
   postPatch = ''

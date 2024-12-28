@@ -7,7 +7,7 @@
   alsa-lib,
   asio,
   avahi,
-  boost179,
+  boost,
   flac,
   libogg,
   libvorbis,
@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   # not needed
   buildInputs =
     [
-      boost179
+      boost
       asio
       avahi
       flac

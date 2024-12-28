@@ -11,15 +11,22 @@
   libffi,
   libtool,
   libunistring,
+  libiconvReal,
   makeWrapper,
   pkg-config,
   pkgsBuildBuild,
   readline,
-}:
+}@args:
 
 let
   # Do either a coverage analysis build or a standard build.
   builder = if coverageAnalysis != null then coverageAnalysis else stdenv.mkDerivation;
+  # workaround for libiconv bug in macOS 14/15
+  libunistring =
+    if stdenv.hostPlatform.isDarwin then
+      args.libunistring.override { libiconv = libiconvReal; }
+    else
+      args.libunistring;
 in
 builder rec {
   pname = "guile";

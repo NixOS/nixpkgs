@@ -30,6 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/dgibson/dtc/commit/56a7d0cb3be5f2f7604bc42299e24d13a39c72d8.patch";
       hash = "sha256-GmAyk/K2OolH/Z8SsgwCcq3/GOlFuSpnVPr7jsy8Cs0=";
     })
+    # backport fix for SWIG 4.3
+    (fetchpatch2 {
+      url = "https://github.com/dgibson/dtc/commit/9a969f3b70b07bbf1c9df44a38d7f8d1d3a6e2a5.patch";
+      hash = "sha256-YrRzc3ATNmU6LYNHEQeU8wtjt1Ap7/gNFvtRR14PQEE=";
+    })
   ];
 
   env.SETUPTOOLS_SCM_PRETEND_VERSION = finalAttrs.version;

@@ -91,6 +91,7 @@ let
         pkgs:
         (with pkgs; [
           xorg.libxkbfile
+          xorg.libxshmfence
           xcb-util-cursor-HEAD
           krb5
           zstd

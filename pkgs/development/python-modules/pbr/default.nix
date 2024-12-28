@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   callPackage,
+  distutils,
   fetchPypi,
   setuptools,
   six,
@@ -20,6 +21,7 @@ buildPythonPackage rec {
   build-system = [ setuptools ];
 
   dependencies = [
+    distutils # for distutils.command in pbr/packaging.py
     setuptools # for pkg_resources
     six
   ];

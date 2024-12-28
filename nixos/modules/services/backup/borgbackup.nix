@@ -20,8 +20,19 @@ let
     lib.concatStringsSep " "
       (lib.mapAttrsToList (x: y: "--keep-${x}=${toString y}") cfg.prune.keep);
 
+  mkExtraArgs = cfg:
+    # Create BASH arrays of extra args
+    lib.concatLines
+      (lib.mapAttrsToList (name: values: ''
+        ${name}=(${values})
+      '')
+  { inherit (cfg) extraArgs extraInitArgs extraCreateArgs extraPruneArgs extraCompactArgs; });
+
   mkBackupScript = name: cfg: pkgs.writeShellScript "${name}-script" (''
     set -e
+
+    ${mkExtraArgs cfg}
+
     on_exit()
     {
       exitStatus=$?
@@ -46,35 +57,35 @@ let
     ${cfg.preHook}
   '' + lib.optionalString cfg.doInit ''
     # Run borg init if the repo doesn't exist yet
-    if ! borgWrapper list $extraArgs > /dev/null; then
-      borgWrapper init $extraArgs \
+    if ! borgWrapper list "''${extraArgs[@]}" > /dev/null; then
+      borgWrapper init "''${extraArgs[@]}" \
         --encryption ${cfg.encryption.mode} \
-        $extraInitArgs
+        "''${extraInitArgs[@]}"
       ${cfg.postInit}
     fi
   '' + ''
     (
       set -o pipefail
       ${lib.optionalString (cfg.dumpCommand != null) ''${lib.escapeShellArg cfg.dumpCommand} | \''}
-      borgWrapper create $extraArgs \
+      borgWrapper create "''${extraArgs[@]}" \
         --compression ${cfg.compression} \
         --exclude-from ${mkExcludeFile cfg} \
         --patterns-from ${mkPatternsFile cfg} \
-        $extraCreateArgs \
+        "''${extraCreateArgs[@]}" \
         "::$archiveName$archiveSuffix" \
         ${if cfg.paths == null then "-" else lib.escapeShellArgs cfg.paths}
     )
   '' + lib.optionalString cfg.appendFailedSuffix ''
-    borgWrapper rename $extraArgs \
+    borgWrapper rename "''${extraArgs[@]}" \
       "::$archiveName$archiveSuffix" "$archiveName"
   '' + ''
     ${cfg.postCreate}
   '' + lib.optionalString (cfg.prune.keep != { }) ''
-    borgWrapper prune $extraArgs \
+    borgWrapper prune "''${extraArgs[@]}" \
       ${mkKeepArgs cfg} \
       ${lib.optionalString (cfg.prune.prefix != null) "--glob-archives ${lib.escapeShellArg "${cfg.prune.prefix}*"}"} \
-      $extraPruneArgs
-    borgWrapper compact $extraArgs $extraCompactArgs
+      "''${extraPruneArgs[@]}"
+    borgWrapper compact "''${extraArgs[@]}" "''${extraCompactArgs[@]}"
     ${cfg.postPrune}
   '');
 
@@ -120,7 +131,6 @@ let
       };
       environment = {
         BORG_REPO = cfg.repo;
-        inherit (cfg) extraArgs extraInitArgs extraCreateArgs extraPruneArgs extraCompactArgs;
       } // (mkPassEnv cfg) // cfg.environment;
     };
 
@@ -236,7 +246,7 @@ let
   };
 
 in {
-  meta.maintainers = with lib.maintainers; [ dotlambda ];
+  meta.maintainers = with lib.maintainers; [ dotlambda Scrumplex ];
   meta.doc = ./borgbackup.md;
 
   ###### interface
@@ -581,7 +591,7 @@ in {
             default = "";
             example = ''
               # To add excluded paths at runtime
-              extraCreateArgs="$extraCreateArgs --exclude /some/path"
+              extraCreateArgs+=("--exclude" "/some/path")
             '';
           };
 

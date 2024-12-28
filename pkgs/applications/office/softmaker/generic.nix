@@ -46,7 +46,7 @@ in
 stdenv.mkDerivation {
   inherit pname src;
 
-  version = "${edition}.${version}";
+  version = if edition != "" then "${edition}.${version}" else version;
 
   nativeBuildInputs = [
     autoPatchelfHook

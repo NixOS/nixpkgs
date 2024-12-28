@@ -10,7 +10,7 @@
   xcbuild,
   udev,
   xorg,
-  mesa,
+  libgbm,
   darwin,
   coreutils,
 }:
@@ -88,7 +88,7 @@ stdenv.mkDerivation {
       xorg.libXt
       xorg.libXxf86vm
       xorg.libXrender
-      mesa
+      libgbm
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk_11_0.frameworks.AppKit

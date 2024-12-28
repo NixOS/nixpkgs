@@ -25,14 +25,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pixman";
-  version = "0.43.4";
+  version = "0.44.2";
 
   src = fetchurl {
     urls = with finalAttrs; [
       "mirror://xorg/individual/lib/${pname}-${version}.tar.gz"
       "https://cairographics.org/releases/${pname}-${version}.tar.gz"
     ];
-    hash = "sha256-oGJNuQGAx923n8epFRCT3DfGRtjDjT8jL3Z89kuFoiY=";
+    hash = "sha256-Y0kGHOGjOKtpUrkhlNGwN3RyJEII1H/yW++G/HGXNGY=";
   };
 
   # Raise test timeout, 120s can be slightly exceeded on slower hardware
@@ -56,12 +56,6 @@ stdenv.mkDerivation (finalAttrs: {
   # architectures and requires used to disable them:
   #   https://gitlab.freedesktop.org/pixman/pixman/-/issues/88
   mesonAutoFeatures = "auto";
-  mesonFlags =
-    [
-      "-Diwmmxt=disabled"
-    ]
-    # Disable until https://gitlab.freedesktop.org/pixman/pixman/-/issues/46 is resolved
-    ++ lib.optional (stdenv.hostPlatform.isAarch64 && !stdenv.cc.isGNU) "-Da64-neon=disabled";
 
   preConfigure = ''
     # https://gitlab.freedesktop.org/pixman/pixman/-/issues/62

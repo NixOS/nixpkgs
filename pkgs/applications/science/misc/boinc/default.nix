@@ -72,12 +72,14 @@ stdenv.mkDerivation rec {
 
   preConfigure = ''
     ./_autosetup
-    configureFlags="$configureFlags --sysconfdir=$out/etc"
   '';
 
   enableParallelBuilding = true;
 
-  configureFlags = [ "--disable-server" ] ++ lib.optionals headless [ "--disable-manager" ];
+  configureFlags = [
+    "--disable-server"
+    "--sysconfdir=${placeholder "out"}/etc"
+  ] ++ lib.optionals headless [ "--disable-manager" ];
 
   postInstall = ''
     install --mode=444 -D 'client/scripts/boinc-client.service' "$out/etc/systemd/system/boinc.service"

@@ -15,6 +15,7 @@
   git,
   hyprcursor,
   hyprgraphics,
+  hyprland-qtutils,
   hyprlang,
   hyprutils,
   hyprwayland-scanner,
@@ -24,7 +25,7 @@
   libinput,
   libuuid,
   libxkbcommon,
-  mesa,
+  libgbm,
   pango,
   pciutils,
   pkgconf,
@@ -84,14 +85,14 @@ assert assertMsg (!hidpiXWayland)
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.46.1";
+  version = "0.46.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-0SVRQJeKsdwaTO7pMM0MwTXyVwKNQ4m1f2mvcPnZttM=";
+    hash = "sha256-dj9dpVwpyTmUyVu4jtaIU39bHgVkoZjv6cgYfWyHc9E=";
   };
 
   postPatch = ''
@@ -152,7 +153,7 @@ customStdenv.mkDerivation (finalAttrs: {
       libinput
       libuuid
       libxkbcommon
-      mesa
+      libgbm
       pango
       pciutils
       re2
@@ -197,6 +198,7 @@ customStdenv.mkDerivation (finalAttrs: {
         --suffix PATH : ${
           makeBinPath [
             binutils
+            hyprland-qtutils
             pciutils
             pkgconf
           ]

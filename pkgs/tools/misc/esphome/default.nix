@@ -22,14 +22,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2024.12.1";
+  version = "2024.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-XWjWmp5lfdyJxD8dPCFq3HbcCzfAtTyzpOSa+IjUNm0=";
+    hash = "sha256-VW9p3VNVJOw5vkjCU4fujG0ie4N2D2QLidBANPV512U=";
   };
 
   build-systems = with python.pkgs; [

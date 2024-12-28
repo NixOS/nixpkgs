@@ -10,7 +10,7 @@
   libcef,
   luajit,
   xorg,
-  mesa,
+  libgbm,
   glib,
   nss,
   nspr,
@@ -56,7 +56,7 @@ let
           xorg.libXext
           xorg.libXfixes
           xorg.libXrandr
-          mesa
+          libgbm
           gtk3
           pango
           cairo
@@ -106,7 +106,7 @@ let
     ];
 
     buildInputs = [
-      mesa
+      libgbm
       xorg.libX11
       xorg.libxcb
       libarchive
@@ -198,7 +198,7 @@ buildFHSEnv {
     ln -s ${bolt}/share/icons/hicolor/256x256/apps/*.png $out/share/icons/hicolor/256x256/apps/
   '';
 
-  runScript = "${bolt.pname}";
+  runScript = "${bolt.name}";
 
   meta = {
     homepage = "https://github.com/Adamcake/Bolt";
@@ -209,6 +209,6 @@ buildFHSEnv {
     license = lib.licenses.agpl3Plus;
     maintainers = with lib.maintainers; [ nezia ];
     platforms = lib.platforms.linux;
-    mainProgram = "${bolt.pname}";
+    mainProgram = "${bolt.name}";
   };
 }

@@ -18,13 +18,13 @@ assert !blas.isILP64 && !lapack.isILP64;
 
 stdenv.mkDerivation rec {
   pname = "dftd4";
-  version = "3.6.0";
+  version = "3.7.0";
 
   src = fetchFromGitHub {
     owner = "dftd4";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-VIV9953hx0MZupOARdH+P1h7JtZeJmTlqtO8si+lwdU=";
+    hash = "sha256-dixPCLH5dWkE2/7ghGEXJmX2/g1DN30dB4jX2d7fmio=";
   };
 
   patches = [

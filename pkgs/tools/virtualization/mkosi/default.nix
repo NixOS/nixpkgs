@@ -68,7 +68,7 @@ buildPythonApplication rec {
       (replaceVars ./0001-Use-wrapped-binaries-instead-of-Python-interpreter.patch {
         UKIFY = "${systemdForMkosi}/lib/systemd/ukify";
         PYTHON_PEFILE = "${python3pefile}/bin/python3.12";
-        MKOSI_SANDBOX = "~MKOSI_SANDBOX~"; # to satisfy replaceVars, will be replaced in postPatch
+        MKOSI_SANDBOX = null; # will be replaced in postPatch
       })
       (replaceVars ./0002-Fix-library-resolving.patch {
         LIBC = "${stdenv.cc.libc}/lib/libc.so.6";
@@ -84,7 +84,7 @@ buildPythonApplication rec {
   postPatch = ''
     # As we need the $out reference, we can't use `replaceVars` here.
     substituteInPlace mkosi/run.py \
-      --replace-fail '~MKOSI_SANDBOX~' "\"$out/bin/mkosi-sandbox\""
+      --replace-fail '@MKOSI_SANDBOX@' "\"$out/bin/mkosi-sandbox\""
   '';
 
   nativeBuildInputs = [

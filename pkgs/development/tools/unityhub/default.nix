@@ -61,7 +61,7 @@ stdenv.mkDerivation rec {
         alsa-lib
         nss
         libdrm
-        mesa
+        libgbm
         nspr
         atk
         dbus

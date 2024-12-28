@@ -8,11 +8,11 @@
 }:
 let
   pname = "cursor";
-  version = "0.43.6";
+  version = "0.44.5";
   appKey = "230313mzl4w4u92";
   src = fetchurl {
-    url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.43.6-build-241206z7j6me2e2-x86_64.AppImage";
-    hash = "sha256-adEyDExGvxwpvAT0qYiCfvkpINP9BJ6a+LSwQHQ/H/U=";
+    url = "https://download.todesktop.com/230313mzl4w4u92/cursor-0.44.5-build-241220s3ux0e1tv-x86_64.AppImage";
+    hash = "sha256-5IbIsOyJdIzDpxOd+CLe8UdxaocJFJckiZvNSuGXtys=";
   };
   appimageContents = appimageTools.extractType2 { inherit version pname src; };
 in
@@ -62,6 +62,7 @@ stdenvNoCC.mkDerivation {
   meta = {
     description = "AI-powered code editor built on vscode";
     homepage = "https://cursor.com";
+    changelog = "https://cursor.com/changelog";
     license = lib.licenses.unfree;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     maintainers = with lib.maintainers; [ sarahec ];

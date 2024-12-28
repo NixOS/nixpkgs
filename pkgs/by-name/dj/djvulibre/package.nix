@@ -20,8 +20,10 @@ stdenv.mkDerivation rec {
 
   outputs = [
     "bin"
-    "dev"
     "out"
+    "dev"
+    "lib"
+    "man"
   ];
 
   strictDeps = true;

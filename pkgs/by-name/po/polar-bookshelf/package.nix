@@ -39,7 +39,7 @@
   libnghttp2,
   gsettings-desktop-schemas,
   libdrm,
-  mesa,
+  libgbm,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,7 +54,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libdrm
-    mesa
+    libgbm
     gsettings-desktop-schemas
     glib
     gtk3

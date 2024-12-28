@@ -43,7 +43,8 @@
               || stdenv.targetPlatform.isPower
               || stdenv.targetPlatform.isSparc
               || stdenv.targetPlatform.isAarch64
-              || stdenv.targetPlatform.isGhcjs)
+              || stdenv.targetPlatform.isGhcjs
+              || (lib.versionAtLeast version "9.12" && stdenv.targetPlatform.isRiscV64))
 , # LLVM is conceptually a run-time-only dependency, but for
   # non-x86, we need LLVM to bootstrap later stages, so it becomes a
   # build-time dependency too.

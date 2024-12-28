@@ -24,21 +24,37 @@
   mangohud,
   vkbasalt-cli,
   vmtouch,
+  libportal,
   nix-update-script,
+  removeWarningPopup ? false, # Final reminder to report any issues on nixpkgs' bugtracker
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "bottles-unwrapped";
-  version = "51.15";
+  version = "51.17";
 
   src = fetchFromGitHub {
     owner = "bottlesdevs";
     repo = "bottles";
-    rev = "refs/tags/${version}";
-    hash = "sha256-HjGAeIh9s7xWBy35Oj66tCtgKCd/DpHg1sMPsdjWKDs=";
+    tag = version;
+    hash = "sha256-m4ATWpAZxIBp1X0cNeyNGmt6aIBo/cHH+DpOMkLia0E=";
   };
 
-  patches = [ ./vulkan_icd.patch ];
+  patches =
+    [
+      ./vulkan_icd.patch
+      ./redirect-bugtracker.patch
+      ./remove-flatpak-check.patch
+      ./remove-core-tab.patch
+    ]
+    ++ (
+      if removeWarningPopup then
+        [ ./remove-unsupported-warning.patch ]
+      else
+        [
+          ./warn-unsupported.patch
+        ]
+    );
 
   # https://github.com/bottlesdevs/Bottles/wiki/Packaging
   nativeBuildInputs = [
@@ -57,26 +73,29 @@ python3Packages.buildPythonApplication rec {
     gtk4
     gtksourceview5
     libadwaita
+    libportal
   ];
 
   propagatedBuildInputs =
     with python3Packages;
     [
-      pathvalidate
-      pycurl
       pyyaml
-      requests
-      pygobject3
-      patool
-      markdown
-      fvs
-      pefile
-      urllib3
+      pycurl
       chardet
-      certifi
-      idna
-      orjson
+      requests
+      markdown
       icoextract
+      patool
+      pathvalidate
+      fvs
+      orjson
+      pycairo
+      pygobject3
+      charset-normalizer
+      idna
+      urllib3
+      certifi
+      pefile
     ]
     ++ [
       cabextract

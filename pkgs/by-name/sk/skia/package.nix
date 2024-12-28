@@ -20,6 +20,7 @@
 , cctools
 , zlib
 , apple-sdk_11
+, fixDarwinDylibNames
 
 , enableVulkan ? !stdenv.hostPlatform.isDarwin
 }:
@@ -49,7 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     gn
     ninja
     python3
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ xcbuild cctools.libtool zlib ];
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    xcbuild
+    cctools.libtool
+    zlib
+    fixDarwinDylibNames
+  ];
 
   buildInputs = [
     expat
@@ -95,6 +101,10 @@ stdenv.mkDerivation (finalAttrs: {
     "libwebp"
   ] ++ lib.optionals enableVulkan [
     "skia_use_vulkan=true"
+  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
+    "skia_use_fontconfig=true"
+    "skia_use_freetype=true"
+    "skia_use_metal=true"
   ];
 
   env.NIX_LDFLAGS = lib.optionalString stdenv.hostPlatform.isDarwin "-lz";

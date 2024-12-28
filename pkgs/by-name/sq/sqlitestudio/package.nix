@@ -11,13 +11,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "sqlitestudio";
-  version = "3.4.9";
+  version = "3.4.12";
 
   src = fetchFromGitHub {
     owner = "pawelsalawa";
     repo = "sqlitestudio";
     rev = version;
-    hash = "sha256-G6siAHXG4gwYFAWe/KI8Qhbe3ONIQcIR8UgnRcy7tKc=";
+    hash = "sha256-KPHiJTAxRQ3ZNnkKpfj877vTHEPRKNwy7wHfseftukQ=";
   };
 
   nativeBuildInputs =

@@ -6,7 +6,7 @@
   libxkbcommon,
   libinput,
   libglvnd,
-  mesa,
+  libgbm,
   udev,
   wayland,
 }:
@@ -32,7 +32,7 @@ rustPlatform.buildRustPackage rec {
     libxkbcommon
     libinput
     libglvnd
-    mesa
+    libgbm
     udev
     wayland
   ];

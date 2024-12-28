@@ -14,7 +14,7 @@
   libpng,
   libwebp,
   libX11,
-  mesa,
+  libgbm,
   ninja,
   python3,
   zlib,
@@ -65,7 +65,7 @@ clangStdenv.mkDerivation (finalAttrs: {
     libpng
     libwebp
     libX11
-    mesa
+    libgbm
     zlib
   ];
 

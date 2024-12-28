@@ -16,6 +16,7 @@
   python3,
   systemd,
   xfconf,
+  xfdesktop,
   lib,
 }:
 
@@ -26,9 +27,9 @@ in
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-screensaver";
-  version = "4.18.3";
+  version = "4.18.4";
 
-  sha256 = "sha256-hOhWJoiKoeRgkhXaR8rnDpcJpStMD4BBdll4nwSA+EQ=";
+  sha256 = "sha256-vkxkryi7JQg1L/JdWnO9qmW6Zx6xP5Urq4kXMe7Iiyc=";
 
   nativeBuildInputs = [
     gobject-introspection
@@ -55,6 +56,11 @@ mkXfceDerivation {
   configureFlags = [ "--without-console-kit" ];
 
   makeFlags = [ "DBUS_SESSION_SERVICE_DIR=$(out)/etc" ];
+
+  preFixup = ''
+    # For default wallpaper.
+    gappsWrapperArgs+=(--prefix XDG_DATA_DIRS : "${xfdesktop}/share")
+  '';
 
   meta = with lib; {
     description = "Screensaver for Xfce";

@@ -14,7 +14,7 @@
   swig,
   systemd,
   # ImportError: cannot import name 'mlog' from 'mesonbuild'
-  withDocs ? stdenv.hostPlatform.canExecute stdenv.buildPlatform,
+  withDocs ? stdenv.buildPlatform.canExecute stdenv.hostPlatform,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

@@ -478,7 +478,6 @@ with lib.maintainers;
     members = [
       cdepillabout
       maralorn
-      ncfavier
       sternenseemann
     ];
     githubTeams = [ "haskell" ];
@@ -804,6 +803,13 @@ with lib.maintainers;
     enableFeatureFreezePing = true;
   };
 
+  neovim = {
+    members = [ ];
+    githubTeams = [ "neovim" ];
+    scope = "Maintain the vim and neovim text editors and related packages.";
+    shortName = "Vim/Neovim";
+  };
+
   ngi = {
     members = [
       eljamm
@@ -1088,16 +1094,6 @@ with lib.maintainers;
     members = [ mic92 ];
     scope = "coqui-ai TTS (formerly Mozilla TTS) and leaf packages";
     shortName = "coqui-ai TTS";
-  };
-
-  vim = {
-    members = [
-      figsoda
-      softinio
-      teto
-    ];
-    scope = "Maintain the vim and neovim text editors and related packages.";
-    shortName = "Vim/Neovim";
   };
 
   wdz = {

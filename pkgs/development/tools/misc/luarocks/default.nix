@@ -50,12 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
     lua -e "" || {
         luajit -e "" && {
             export LUA_SUFFIX=jit
-            configureFlags="$configureFlags --lua-suffix=$LUA_SUFFIX"
+            appendToVar configureFlags "--lua-suffix=$LUA_SUFFIX"
         }
     }
     lua_inc="$(echo "${lua}/include"/*/)"
     if test -n "$lua_inc"; then
-        configureFlags="$configureFlags --with-lua-include=$lua_inc"
+        appendToVar configureFlags "--with-lua-include=$lua_inc"
     fi
   '';
 
@@ -96,12 +96,12 @@ stdenv.mkDerivation (finalAttrs: {
                 --suffix LUA_PATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
                 --suffix LUA_CPATH ";" "$(echo "$out"/lib/lua/*/)?.so" \
                 --suffix LUA_CPATH ";" "$(echo "$out"/share/lua/*/)?/init.lua" \
-                --suffix PATH : ${lib.makeBinPath finalAttrs.propagatedBuildInputs}
+                --suffix PATH : ${lib.makeBinPath finalAttrs.propagatedNativeBuildInputs}
           }
       done
     '';
 
-  propagatedBuildInputs = [
+  propagatedNativeBuildInputs = [
     zip
     unzip
     cmake

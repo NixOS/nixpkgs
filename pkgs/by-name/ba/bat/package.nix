@@ -5,10 +5,9 @@
   fetchFromGitHub,
   pkg-config,
   less,
-  libiconv,
   installShellFiles,
   makeWrapper,
-  apple-sdk_11,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -29,9 +28,8 @@ rustPlatform.buildRustPackage rec {
     makeWrapper
   ];
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-    apple-sdk_11
+  buildInputs = [
+    zlib
   ];
 
   postInstall = ''

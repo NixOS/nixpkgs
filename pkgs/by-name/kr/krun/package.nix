@@ -9,7 +9,6 @@
   passt,
   sommelier,
   mesa,
-  opengl-driver ? mesa.drivers,
   withSommelier ? false,
 }:
 
@@ -56,7 +55,7 @@ rustPlatform.buildRustPackage rec {
 
   postFixup = ''
     wrapProgram $out/bin/krun $wrapArgs \
-      --set-default OPENGL_DRIVER ${opengl-driver}
+      --set-default OPENGL_DRIVER ${mesa.driverLink}
   '';
 
   meta = {

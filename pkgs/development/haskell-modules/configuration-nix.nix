@@ -255,7 +255,7 @@ self: super: builtins.intersectAttrs super {
   jni = overrideCabal (drv: {
     preConfigure = ''
       local libdir=( "${pkgs.jdk}/lib/openjdk/jre/lib/"*"/server" )
-      configureFlags+=" --extra-lib-dir=''${libdir[0]}"
+      appendToVar configureFlags "--extra-lib-dir=''${libdir[0]}"
     '';
   }) super.jni;
 

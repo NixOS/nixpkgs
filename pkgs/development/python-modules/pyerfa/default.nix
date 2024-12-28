@@ -22,11 +22,6 @@ buildPythonPackage rec {
     hash = "sha256-rLimcTIy6jXAS8bkCsTkYd/MgX05XvKjyAUcGjMkndM=";
   };
 
-  postPatch = ''
-    substituteInPlace pyproject.toml \
-      --replace-fail "numpy>=2.0.0rc1" "numpy"
-  '';
-
   build-system = [
     jinja2
     packaging

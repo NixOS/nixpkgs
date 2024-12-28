@@ -37,7 +37,7 @@
   libXScrnSaver,
   libxkbcommon,
   libdrm,
-  mesa,
+  libgbm,
   # It's unknown which version of openssl that postman expects but it seems that
   # OpenSSL 3+ seems to work fine (cf.
   # https://github.com/NixOS/nixpkgs/issues/254325). If postman breaks apparently
@@ -105,7 +105,7 @@ stdenv.mkDerivation rec {
     gtk3
     freetype
     fontconfig
-    mesa
+    libgbm
     nss
     nspr
     pango

@@ -5,7 +5,7 @@
 }:
 let
   pname = "oathkeeper";
-  version = "0.40.7";
+  version = "0.40.8";
   commit = "c75695837f170334b526359f28967aa33d61bce6";
 in
 buildGoModule {
@@ -15,10 +15,10 @@ buildGoModule {
     owner = "ory";
     repo = "oathkeeper";
     rev = "v${version}";
-    hash = "sha256-Y5bowCFR9S70ko0vNCwZnhOIKKGdqgcDEBEtZisKEig=";
+    hash = "sha256-syrOb8COZKgiW64Xlg+g+fu1y84jsKQ5QBFTrCl4Tys=";
   };
 
-  vendorHash = "sha256-+hh7MFYGPTaAlU/D0ROv5pw6YvzkAm6URuhP5jdgQtM=";
+  vendorHash = "sha256-w6W02BHuDcZyh92CAli8XS9m7/fTYBulVsgYPow+yM4=";
 
   tags = [
     "sqlite"

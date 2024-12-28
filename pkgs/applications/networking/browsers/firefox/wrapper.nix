@@ -12,14 +12,13 @@
 , udev
 , libkrb5
 , libva
-, mesa # firefox wants gbm for drm+dmabuf
+, libgbm
 , cups
 , pciutils
 , vulkan-loader
 , sndio
 , libjack2
 , speechd-minimal
-, removeReferencesTo
 }:
 
 ## configurability of the wrapper itself
@@ -89,7 +88,7 @@ let
        );
 
        libs = lib.optionals stdenv.hostPlatform.isLinux (
-            [ udev libva mesa libnotify xorg.libXScrnSaver cups pciutils vulkan-loader ]
+            [ udev libva libgbm libnotify xorg.libXScrnSaver cups pciutils vulkan-loader ]
             ++ lib.optional (cfg.speechSynthesisSupport or true) speechd-minimal
        )
             ++ lib.optional pipewireSupport pipewire
@@ -243,7 +242,7 @@ let
               };
             }));
 
-      nativeBuildInputs = [ makeWrapper lndir jq removeReferencesTo ];
+      nativeBuildInputs = [ makeWrapper lndir jq ];
       buildInputs = [ browser.gtk3 ];
 
 
@@ -426,9 +425,6 @@ let
       passthru = { unwrapped = browser; };
 
       disallowedRequisites = [ stdenv.cc ];
-      postInstall = ''
-        find "$out" -type f -exec remove-references-to -t ${stdenv.cc} '{}' +
-      '';
       meta = browser.meta // {
         inherit (browser.meta) description;
         mainProgram = launcherName;

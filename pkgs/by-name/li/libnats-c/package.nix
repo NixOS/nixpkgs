@@ -11,13 +11,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libnats";
-  version = "3.8.2";
+  version = "3.9.1";
 
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "nats.c";
     rev = "v${version}";
-    sha256 = "sha256-Tn88RRigL6C36AcFhUlLbLyqcqbBR8z6PKAQH4w/mYY=";
+    sha256 = "sha256-n6DKkUDNoxTJedrDc/i93Nw0Nq6PXWnFCcUQFL2BI30=";
   };
 
   nativeBuildInputs = [ cmake ];

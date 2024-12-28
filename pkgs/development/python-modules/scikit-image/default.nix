@@ -49,9 +49,6 @@ let
 
     postPatch = ''
       patchShebangs skimage/_build_utils/{version,cythoner}.py
-
-      substituteInPlace pyproject.toml \
-        --replace "numpy>=2.0.0rc1" "numpy"
     '';
 
     nativeBuildInputs = [

@@ -58,7 +58,8 @@ buildPythonPackage rec {
   ];
 
   # https://github.com/NixOS/nixpkgs/issues/255262
-  pytestFlagsArray = [ "$out/${python.sitePackages}/numcodecs" ];
+  preCheck = "pushd $out";
+  postCheck = "popd";
 
   meta = {
     homepage = "https://github.com/zarr-developers/numcodecs";

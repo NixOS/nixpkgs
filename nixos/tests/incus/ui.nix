@@ -2,7 +2,7 @@ import ../make-test-python.nix (
   {
     pkgs,
     lib,
-    incus ? pkgs.incus-lts,
+    lts ? true,
     ...
   }:
   {
@@ -18,7 +18,7 @@ import ../make-test-python.nix (
         virtualisation = {
           incus = {
             enable = true;
-            package = incus;
+            package = if lts then pkgs.incus-lts else pkgs.incus;
           };
           incus.ui.enable = true;
         };

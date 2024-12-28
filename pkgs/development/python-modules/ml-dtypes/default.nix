@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
 
   # build-system
   setuptools,
@@ -30,9 +31,16 @@ buildPythonPackage rec {
     fetchSubmodules = true;
   };
 
+  patches = [
+    (fetchpatch2 {
+      name = "numpy2-compat.patch";
+      url = "https://github.com/jax-ml/ml_dtypes/commit/204df1147fd568f65890d958b6cdfa4dc55a226c.patch";
+      hash = "sha256-IPHE6bQTbM0Ky5X6FDwwD/1eXL+kcA/D8pDGihAiJrQ=";
+    })
+  ];
+
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "numpy~=2.0" "numpy" \
       --replace-fail "setuptools~=73.0.1" "setuptools"
   '';
 

@@ -7,7 +7,7 @@
 , libX11
 , libXi
 , freetype
-, mesa
+, libgbm
 }:
 
 stdenv.mkDerivation rec {
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     libX11
     libXi
     freetype
-    mesa
+    libgbm
   ];
 
   cmakeFlags = [

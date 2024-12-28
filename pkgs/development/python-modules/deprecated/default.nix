@@ -2,6 +2,8 @@
   lib,
   fetchFromGitHub,
   buildPythonPackage,
+  pythonAtLeast,
+  setuptools,
   wrapt,
   pytestCheckHook,
   sphinxHook,
@@ -10,7 +12,8 @@
 buildPythonPackage rec {
   pname = "deprecated";
   version = "1.2.14";
-  format = "setuptools";
+  pyproject = true;
+
   outputs = [
     "out"
     "doc"
@@ -23,11 +26,19 @@ buildPythonPackage rec {
     hash = "sha256-H5Gp2F/ChMeEH4fSYXIB34syDIzDymfN949ksJnS0k4=";
   };
 
+  build-system = [ setuptools ];
+
   nativeBuildInputs = [ sphinxHook ];
 
   propagatedBuildInputs = [ wrapt ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = lib.optionals (pythonAtLeast "3.13") [
+    # assertion text mismatch
+    "test_classic_deprecated_class_method__warns"
+    "test_sphinx_deprecated_class_method__warns"
+  ];
 
   pythonImportsCheck = [ "deprecated" ];
 

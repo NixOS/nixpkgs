@@ -39,9 +39,9 @@ stdenv.mkDerivation rec {
     ];
 
   preBuild = ''
-    sed -ie 's|all: $(LIBPREFIX)wxsqlite$(LIBEXT)|all: |g' Makefile
-    sed -ie 's|wxsqliteplus$(EXEEXT): $(WXSQLITEPLUS_OBJECTS) $(LIBPREFIX)wxsqlite$(LIBEXT)|wxsqliteplus$(EXEEXT):  $(WXSQLITEPLUS_OBJECTS) |g' Makefile
-    sed -ie 's|-lwxsqlite |-lwxcode_${
+    sed -i -e 's|all: $(LIBPREFIX)wxsqlite$(LIBEXT)|all: |g' Makefile
+    sed -i -e 's|wxsqliteplus$(EXEEXT): $(WXSQLITEPLUS_OBJECTS) $(LIBPREFIX)wxsqlite$(LIBEXT)|wxsqliteplus$(EXEEXT):  $(WXSQLITEPLUS_OBJECTS) |g' Makefile
+    sed -i -e 's|-lwxsqlite |-lwxcode_${
       if stdenv.hostPlatform.isDarwin then "osx_cocoau_wxsqlite3-3.2.0" else "gtk3u_wxsqlite3-3.2"
     } |g' Makefile
   '';

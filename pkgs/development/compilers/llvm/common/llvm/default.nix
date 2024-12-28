@@ -13,9 +13,6 @@
 , python3
 , python3Packages
 , libffi
-  # TODO: Can this memory corruption bug still occur?
-  # <https://github.com/llvm/llvm-project/issues/61350>
-, enableGoldPlugin ? libbfd.hasPluginAPI
 , ld64
 , libbfd
 , libpfm
@@ -373,8 +370,13 @@ stdenv.mkDerivation (finalAttrs: {
     "-DSPHINX_OUTPUT_MAN=ON"
     "-DSPHINX_OUTPUT_HTML=OFF"
     "-DSPHINX_WARNINGS_AS_ERRORS=OFF"
-  ] ++ optionals (enableGoldPlugin) [
-    "-DLLVM_BINUTILS_INCDIR=${libbfd.dev}/include"
+  ] ++ optionals (libbfd != null) [
+    # LLVM depends on binutils only through libbfd/include/plugin-api.h, which
+    # is meant to be a stable interface. Depend on that file directly rather
+    # than through a build of BFD to break the dependency of clang on the target
+    # triple. The result of this is that a single clang build can be used for
+    # multiple targets.
+    "-DLLVM_BINUTILS_INCDIR=${libbfd.plugin-api-header}/include"
   ] ++ optionals stdenv.hostPlatform.isDarwin [
     "-DLLVM_ENABLE_LIBCXX=ON"
     "-DCAN_TARGET_i386=false"

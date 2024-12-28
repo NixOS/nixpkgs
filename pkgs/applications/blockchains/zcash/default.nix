@@ -1,6 +1,6 @@
 {
   autoreconfHook,
-  boost180,
+  boost,
   cargo,
   coreutils,
   curl,
@@ -56,7 +56,7 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
 
   buildInputs =
     [
-      boost180
+      boost
       db62
       libevent
       libsodium
@@ -88,7 +88,7 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
 
   configureFlags = [
     "--disable-tests"
-    "--with-boost-libdir=${lib.getLib boost180}/lib"
+    "--with-boost-libdir=${lib.getLib boost}/lib"
     "RUST_TARGET=${stdenv.hostPlatform.rust.rustcTargetSpec}"
   ];
 

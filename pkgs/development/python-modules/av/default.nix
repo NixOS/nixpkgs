@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "av";
-  version = "13.0.0";
+  version = "13.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "PyAV-Org";
     repo = "PyAV";
     rev = "refs/tags/v${version}";
-    hash = "sha256-blvtHSUqSl9xAM4t+dFJWmXiOjtnAUC9nicMaUY1zuU=";
+    hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
   };
 
   build-system = [

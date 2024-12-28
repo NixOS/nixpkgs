@@ -28,7 +28,7 @@
   libxkbcommon,
   libxcrypt-legacy,
   lshw,
-  mesa,
+  libgbm,
   nspr,
   nss,
   pango,
@@ -84,7 +84,7 @@ stdenv.mkDerivation rec {
     gtk3
     harfbuzz
     lshw
-    mesa
+    libgbm
     nspr
     nss
     pango

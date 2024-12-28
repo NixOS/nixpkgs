@@ -38,6 +38,7 @@ runTest (
             config.dbtype = "pgsql";
             notify_push = {
               enable = true;
+              bendDomainToLocalhost = true;
               logLevel = "debug";
             };
             extraAppsEnable = true;

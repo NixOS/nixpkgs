@@ -10,7 +10,7 @@
   unzip,
   at-spi2-atk,
   libdrm,
-  mesa,
+  libgbm,
   libxkbcommon,
   libxshmfence,
   libGL,
@@ -120,7 +120,7 @@ let
     ]
     ++ lib.optionals (lib.versionAtLeast version "9.0.0") [
       libdrm
-      mesa
+      libgbm
     ]
     ++ lib.optionals (lib.versionOlder version "10.0.0") [ libXScrnSaver ]
     ++ lib.optionals (lib.versionAtLeast version "11.0.0") [ libxkbcommon ]

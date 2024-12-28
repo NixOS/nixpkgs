@@ -7,7 +7,7 @@
   pkg-config,
   openssl,
   glib,
-  ostree,
+  ostree-full,
   versionCheckHook,
 }:
 
@@ -31,7 +31,7 @@ rustPlatform.buildRustPackage rec {
     zstd
     openssl
     glib
-    ostree
+    ostree-full
   ];
 
   nativeInstallCheckInputs = [

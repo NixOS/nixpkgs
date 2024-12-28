@@ -56,12 +56,15 @@ lib:
   libseccomp,
   makeWrapper,
   nixosTests,
+  overrideBundleAttrs ? { }, # An attrSet/function to override the `k3sBundle` derivation.
+  overrideCniPluginsAttrs ? { }, # An attrSet/function to override the `k3sCNIPlugins` derivation.
+  overrideContainerdAttrs ? { }, # An attrSet/function to override the `k3sContainerd` derivation.
   pkg-config,
   pkgsBuildBuild,
   procps,
   rsync,
-  runc,
   runCommand,
+  runc,
   socat,
   sqlite,
   stdenv,
@@ -174,28 +177,30 @@ let
     sha256 = k3sRootSha256;
     stripRoot = false;
   };
-  k3sCNIPlugins = buildGoModule rec {
-    pname = "k3s-cni-plugins";
-    version = k3sCNIVersion;
-    vendorHash = null;
+  k3sCNIPlugins =
+    (buildGoModule rec {
+      pname = "k3s-cni-plugins";
+      version = k3sCNIVersion;
+      vendorHash = null;
 
-    subPackages = [ "." ];
+      subPackages = [ "." ];
 
-    src = fetchFromGitHub {
-      owner = "rancher";
-      repo = "plugins";
-      rev = "v${version}";
-      sha256 = k3sCNISha256;
-    };
+      src = fetchFromGitHub {
+        owner = "rancher";
+        repo = "plugins";
+        rev = "v${version}";
+        sha256 = k3sCNISha256;
+      };
 
-    postInstall = ''
-      mv $out/bin/plugins $out/bin/cni
-    '';
+      postInstall = ''
+        mv $out/bin/plugins $out/bin/cni
+      '';
 
-    meta = baseMeta // {
-      description = "CNI plugins, as patched by rancher for k3s";
-    };
-  };
+      meta = baseMeta // {
+        description = "CNI plugins, as patched by rancher for k3s";
+      };
+    }).overrideAttrs
+      overrideCniPluginsAttrs;
   # Grab this separately from a build because it's used by both stages of the
   # k3s build.
   k3sRepo = fetchgit {
@@ -261,67 +266,71 @@ let
   # derivation when we've built all the binaries, but haven't bundled them in
   # with generated bindata yet.
 
-  k3sServer = buildGoModule {
-    pname = "k3s-server";
-    version = k3sVersion;
+  k3sBundle =
+    (buildGoModule {
+      pname = "k3s-bin";
+      version = k3sVersion;
 
-    src = k3sRepo;
-    vendorHash = k3sVendorHash;
+      src = k3sRepo;
+      vendorHash = k3sVendorHash;
 
-    nativeBuildInputs = [ pkg-config ];
-    buildInputs = [
-      libseccomp
-      sqlite.dev
-    ];
+      nativeBuildInputs = [ pkg-config ];
+      buildInputs = [
+        libseccomp
+        sqlite.dev
+      ];
 
-    subPackages = [ "cmd/server" ];
-    ldflags = versionldflags;
+      subPackages = [ "cmd/server" ];
+      ldflags = versionldflags;
 
-    tags = [
-      "ctrd"
-      "libsqlite3"
-      "linux"
-    ];
+      tags = [
+        "ctrd"
+        "libsqlite3"
+        "linux"
+      ];
 
-    # create the multicall symlinks for k3s
-    postInstall = ''
-      mv $out/bin/server $out/bin/k3s
-      pushd $out
-      # taken verbatim from https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/build#L105-L113
-      ln -s k3s ./bin/containerd
-      ln -s k3s ./bin/crictl
-      ln -s k3s ./bin/ctr
-      ln -s k3s ./bin/k3s-agent
-      ln -s k3s ./bin/k3s-certificate
-      ln -s k3s ./bin/k3s-completion
-      ln -s k3s ./bin/k3s-etcd-snapshot
-      ln -s k3s ./bin/k3s-secrets-encrypt
-      ln -s k3s ./bin/k3s-server
-      ln -s k3s ./bin/k3s-token
-      ln -s k3s ./bin/kubectl
-      popd
-    '';
+      # create the multicall symlinks for k3s
+      postInstall = ''
+        mv $out/bin/server $out/bin/k3s
+        pushd $out
+        # taken verbatim from https://github.com/k3s-io/k3s/blob/v1.23.3%2Bk3s1/scripts/build#L105-L113
+        ln -s k3s ./bin/containerd
+        ln -s k3s ./bin/crictl
+        ln -s k3s ./bin/ctr
+        ln -s k3s ./bin/k3s-agent
+        ln -s k3s ./bin/k3s-certificate
+        ln -s k3s ./bin/k3s-completion
+        ln -s k3s ./bin/k3s-etcd-snapshot
+        ln -s k3s ./bin/k3s-secrets-encrypt
+        ln -s k3s ./bin/k3s-server
+        ln -s k3s ./bin/k3s-token
+        ln -s k3s ./bin/kubectl
+        popd
+      '';
 
-    meta = baseMeta // {
-      description = "Various binaries that get packaged into the final k3s binary";
-    };
-  };
+      meta = baseMeta // {
+        description = "Various binaries that get packaged into the final k3s binary";
+      };
+    }).overrideAttrs
+      overrideBundleAttrs;
   # Only used for the shim since
   # https://github.com/k3s-io/k3s/blob/v1.27.2%2Bk3s1/scripts/build#L153
-  k3sContainerd = buildGoModule {
-    pname = "k3s-containerd";
-    version = containerdVersion;
-    src = fetchFromGitHub {
-      owner = "k3s-io";
-      repo = "containerd";
-      rev = "v${containerdVersion}";
-      sha256 = containerdSha256;
-    };
-    vendorHash = null;
-    buildInputs = [ btrfs-progs ];
-    subPackages = [ "cmd/containerd-shim-runc-v2" ];
-    ldflags = versionldflags;
-  };
+  k3sContainerd =
+    (buildGoModule {
+      pname = "k3s-containerd";
+      version = containerdVersion;
+      src = fetchFromGitHub {
+        owner = "k3s-io";
+        repo = "containerd";
+        rev = "v${containerdVersion}";
+        sha256 = containerdSha256;
+      };
+      vendorHash = null;
+      buildInputs = [ btrfs-progs ];
+      subPackages = [ "cmd/containerd-shim-runc-v2" ];
+      ldflags = versionldflags;
+    }).overrideAttrs
+      overrideContainerdAttrs;
 in
 buildGoModule rec {
   pname = "k3s";
@@ -397,7 +406,7 @@ buildGoModule rec {
   propagatedBuildInputs = [
     k3sCNIPlugins
     k3sContainerd
-    k3sServer
+    k3sBundle
   ];
 
   # We override most of buildPhase due to peculiarities in k3s's build.
@@ -411,7 +420,7 @@ buildGoModule rec {
 
     # copy needed 'go generate' inputs into place
     mkdir -p ./bin/aux
-    rsync -a --no-perms ${k3sServer}/bin/ ./bin/
+    rsync -a --no-perms ${k3sBundle}/bin/ ./bin/
     ln -vsf ${k3sCNIPlugins}/bin/cni ./bin/cni
     ln -vsf ${k3sContainerd}/bin/containerd-shim-runc-v2 ./bin
     rsync -a --no-perms --chmod u=rwX ${k3sRoot}/etc/ ./etc/
@@ -463,7 +472,7 @@ buildGoModule rec {
       k3sContainerd = k3sContainerd;
       k3sRepo = k3sRepo;
       k3sRoot = k3sRoot;
-      k3sServer = k3sServer;
+      k3sBundle = k3sBundle;
       mkTests =
         version:
         let

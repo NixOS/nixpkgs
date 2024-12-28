@@ -18,7 +18,7 @@
   nspr,
   gdk-pixbuf,
   libdrm,
-  mesa,
+  libgbm,
   libX11,
   libXScrnSaver,
   libXcomposite,
@@ -67,7 +67,7 @@ stdenv.mkDerivation rec {
     libXtst
     libxcb
     libxshmfence
-    mesa # Required for libgbm
+    libgbm
     nspr
     nss
   ];

@@ -9,7 +9,7 @@
   python3Packages,
   wayland-scanner,
   libxkbcommon,
-  mesa,
+  libgbm,
   pixman,
   xorg,
   wayland,
@@ -37,7 +37,7 @@ stdenv.mkDerivation {
   ];
   buildInputs = [
     libxkbcommon
-    mesa
+    libgbm
     pixman
     wayland
     xorg.libxcb

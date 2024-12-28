@@ -29,6 +29,11 @@ buildPythonPackage rec {
     hash = "sha256-GdNz34A8IKwPG/270sY5t3SoggGCZMWfDq/Wyhk0ez8=";
   };
 
+  patches = [
+    # Backport of https://github.com/wntrblm/nox/pull/903, which can be removed on next release
+    ./fix-broken-mock-on-cpython-3.12.8.patch
+  ];
+
   build-system = [ hatchling ];
 
   dependencies =
@@ -50,7 +55,7 @@ buildPythonPackage rec {
     uv = [ uv ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ lib.flatten (builtins.attrValues optional-dependencies);
+  nativeCheckInputs = [ pytestCheckHook ];
 
   preCheck = ''
     export HOME=$(mktemp -d)

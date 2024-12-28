@@ -5,6 +5,8 @@
   clangStdenv,
   fetchfossil,
   lib,
+  objfw,
+  writeTextDir,
 }:
 
 clangStdenv.mkDerivation (finalAttrs: {
@@ -29,6 +31,10 @@ clangStdenv.mkDerivation (finalAttrs: {
   ];
 
   doCheck = true;
+
+  passthru.tests = {
+    build-hello-world = (import ./test-build-and-run.nix) { inherit clangStdenv objfw writeTextDir; };
+  };
 
   meta = {
     description = "A portable framework for the Objective-C language";

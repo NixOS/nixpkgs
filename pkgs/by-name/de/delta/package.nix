@@ -6,8 +6,8 @@
   pkg-config,
   oniguruma,
   stdenv,
-  apple-sdk_11,
   git,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,7 +33,7 @@ rustPlatform.buildRustPackage rec {
       oniguruma
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
+      zlib
     ];
 
   nativeCheckInputs = [ git ];

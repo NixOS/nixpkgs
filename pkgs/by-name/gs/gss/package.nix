@@ -2,6 +2,8 @@
   lib,
   stdenv,
   fetchurl,
+  autoreconfHook,
+  gtk-doc,
   withShishi ? !stdenv.hostPlatform.isDarwin,
   shishi,
 }:
@@ -20,6 +22,11 @@ stdenv.mkDerivation rec {
   postPatch = ''
     rm tests/krb5context.c
   '';
+
+  nativeBuildInputs = [
+    autoreconfHook
+    gtk-doc
+  ];
 
   buildInputs = lib.optional withShishi shishi;
 

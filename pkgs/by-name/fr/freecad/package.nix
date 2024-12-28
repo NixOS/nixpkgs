@@ -155,7 +155,7 @@ freecad-utils.makeCustomizable (stdenv.mkDerivation (finalAttrs: {
 
   # This should work on both x86_64, and i686 linux
   preBuild = ''
-    export NIX_LDFLAGS="-L${gfortran.cc}/lib64 -L${gfortran.cc}/lib $NIX_LDFLAGS";
+    export NIX_LDFLAGS="-L${gfortran.cc.lib}/lib64 -L${gfortran.cc.lib}/lib $NIX_LDFLAGS";
   '';
 
   preConfigure = ''

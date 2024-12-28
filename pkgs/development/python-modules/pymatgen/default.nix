@@ -43,11 +43,6 @@ buildPythonPackage rec {
     hash = "sha256-o76bGItldcLfgZ5KDw2uL0GJvyljQJEwISR0topVR44=";
   };
 
-  prePatch = ''
-    # Upstream switched to building against numpy2 but should still be compatible with numpy1
-    substituteInPlace pyproject.toml --replace-fail "numpy>=2.1.0" "numpy>=1.26.0"
-  '';
-
   build-system = [ setuptools ];
 
   nativeBuildInputs = [

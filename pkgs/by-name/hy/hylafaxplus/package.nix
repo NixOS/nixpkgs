@@ -4,7 +4,7 @@
   fakeroot,
   fetchurl,
   libfaketime,
-  substituteAll,
+  replaceVars,
   ## runtime dependencies
   coreutils,
   file,
@@ -36,18 +36,14 @@ let
   version = "7.0.9";
   hash = "sha512-3OJwM4vFC9pzPozPobFLiNNx/Qnkl8BpNNziRUpJNBDLBxjtg/eDm3GnprS2hpt7VUoV4PCsFvp1hxhNnhlUwQ==";
 
-  configSite = substituteAll {
-    name = "${pname}-config.site";
-    src = ./config.site;
+  configSite = replaceVars ./config.site {
     config_maxgid = lib.optionalString (maxgid != null) ''CONFIG_MAXGID=${builtins.toString maxgid}'';
     ghostscript_version = ghostscript.version;
-    out_ = "@out@"; # "out" will be resolved in post-install.sh
+    out = null; # "out" will be resolved in post-install.sh
     inherit coreutils ghostscript libtiff;
   };
 
-  postPatch = substituteAll {
-    name = "${pname}-post-patch.sh";
-    src = ./post-patch.sh;
+  postPatch = replaceVars ./post-patch.sh {
     inherit configSite;
     maxuid = lib.optionalString (maxuid != null) (builtins.toString maxuid);
     faxcover_binpath = lib.makeBinPath [
@@ -64,9 +60,7 @@ let
     ];
   };
 
-  postInstall = substituteAll {
-    name = "${pname}-post-install.sh";
-    src = ./post-install.sh;
+  postInstall = replaceVars ./post-install.sh {
     inherit fakeroot libfaketime;
   };
 

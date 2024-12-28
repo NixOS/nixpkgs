@@ -11,13 +11,13 @@
 
 mkYarnPackage rec {
   pname = "mjolnir";
-  version = "1.8.3";
+  version = "1.9.1";
 
   src = fetchFromGitHub {
     owner = "matrix-org";
     repo = "mjolnir";
     rev = "refs/tags/v${version}";
-    hash = "sha256-yD7QGsS2Em8Z95po9pGRUDmHgHe4z0j0Jnvy3IG7xKY=";
+    hash = "sha256-LK2CgMLDJHfr1+ejHYeJNw2ekCnUA8GHufZ6vbifzGQ=";
   };
 
   patches = [
@@ -29,7 +29,7 @@ mkYarnPackage rec {
 
   offlineCache = fetchYarnDeps {
     yarnLock = src + "/yarn.lock";
-    hash = "sha256-05DqddK8+136Qq/JGeiITZkVJ8Dw9K9HfACKW86989U=";
+    hash = "sha256-1V7ooONt9j+4hk/3w6Dsv/SdWwa1xsLk97EwhuPegNo=";
   };
 
   packageResolutions = {

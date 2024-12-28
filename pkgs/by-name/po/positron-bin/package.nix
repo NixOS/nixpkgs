@@ -11,7 +11,7 @@
   libglvnd,
   libxkbcommon,
   makeShellWrapper,
-  mesa,
+  libgbm,
   musl,
   nss,
   patchelf,
@@ -44,7 +44,7 @@ stdenv.mkDerivation {
       gtk3
       libglvnd
       libxkbcommon
-      mesa
+      libgbm
       musl
       nss
       stdenv.cc.cc

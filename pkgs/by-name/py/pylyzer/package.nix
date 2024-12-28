@@ -14,17 +14,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "pylyzer";
-  version = "0.0.74";
+  version = "0.0.75";
 
   src = fetchFromGitHub {
     owner = "mtshiba";
     repo = "pylyzer";
     tag = "v${version}";
-    hash = "sha256-NVCFwISPRTNgs4hn9ezp2Xb4r7xytziIByVSKyqt/lo=";
+    hash = "sha256-N0a13nuHL6UuaSTowiEGu0VszW9QTqAmgsUOJXDhj8Q=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-mNFRP6mT4mKKKg05nJcdd8qy6YFxWVADHIU9uGrEcng=";
+  cargoHash = "sha256-LJaAcMajDLrpAKmYATN2xWKmoXaZzOyACzVe4vi4+vU=";
 
   nativeBuildInputs = [
     git
@@ -76,7 +76,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Fast static code analyzer & language server for Python";
     homepage = "https://github.com/mtshiba/pylyzer";
-    changelog = "https://github.com/mtshiba/pylyzer/releases/tag/${src.tag}";
+    changelog = "https://github.com/mtshiba/pylyzer/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ natsukium ];
     mainProgram = "pylyzer";

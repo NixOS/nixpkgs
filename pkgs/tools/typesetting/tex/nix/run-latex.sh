@@ -99,7 +99,7 @@ fi
 if test -f $rootNameBase.idx; then
     echo "MAKING INDEX..."
     if test -n "$compressBlanksInIndex"; then
-        makeindexFlags="$makeindexFlags -c"
+        appendToVar makeindexFlags "-c"
     fi
     makeindex $makeindexFlags $rootNameBase.idx
     runNeeded=1

@@ -113,7 +113,7 @@ let
         zlib
         stdenv.cc.cc
         wayland
-        mesa
+        libgbm
         libGL
         openssl
         dbus # for nvidia-powerd

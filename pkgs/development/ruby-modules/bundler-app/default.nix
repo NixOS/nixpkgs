@@ -49,7 +49,6 @@ let
 
   cmdArgs =
     removeAttrs args [
-      "pname"
       "postBuild"
       "gemConfig"
       "passthru"
@@ -58,6 +57,7 @@ let
     ]
     // {
       inherit preferLocalBuild allowSubstitutes; # pass the defaults
+      inherit (basicEnv) version;
 
       nativeBuildInputs = nativeBuildInputs ++ lib.optionals (scripts != [ ]) [ makeWrapper ];
 

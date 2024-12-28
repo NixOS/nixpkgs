@@ -4,7 +4,7 @@
 , libGL
 , libinput
 , libxkbcommon
-, mesa
+, libgbm
 , pango
 , udev
 , shaderc
@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [
     libGL
     libxkbcommon
-    mesa
+    libgbm
     pango
     udev
     libinput

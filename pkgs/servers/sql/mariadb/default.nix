@@ -47,7 +47,7 @@ let
       libxml2,
       linux-pam,
       numactl,
-      fmt_8,
+      fmt_11,
       withStorageMroonga ? true,
       kytea,
       libsodium,
@@ -65,7 +65,7 @@ let
 
       mytopEnv = buildPackages.perl.withPackages (
         p: with p; [
-          DBDmysql
+          DBDMariaDB
           DBI
           TermReadKey
         ]
@@ -231,7 +231,7 @@ let
 
           buildInputs =
             common.buildInputs
-            ++ lib.optionals (lib.versionAtLeast common.version "10.7") [ fmt_8 ];
+            ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
 
           cmakeFlags = common.cmakeFlags ++ [
             "-DPLUGIN_AUTH_PAM=NO"
@@ -286,7 +286,7 @@ let
               msgpack
               zeromq
             ]
-            ++ lib.optionals (lib.versionAtLeast common.version "10.7") [ fmt_8 ];
+            ++ lib.optionals (lib.versionAtLeast common.version "10.11") [ fmt_11 ];
 
           propagatedBuildInputs = lib.optional withNuma numactl;
 

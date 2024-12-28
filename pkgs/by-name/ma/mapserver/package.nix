@@ -62,7 +62,7 @@ stdenv.mkDerivation rec {
     libjpeg
     libpng
     librsvg
-    (libxml2.override { enableHttp = true; })
+    libxml2
     postgresql
     proj
     protobufc

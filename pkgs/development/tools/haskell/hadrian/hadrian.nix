@@ -47,6 +47,12 @@ mkDerivation {
     # See https://gitlab.haskell.org/ghc/ghc/-/merge_requests/1190
     "-O0"
   ];
+  jailbreak =
+    # Ignore lower bound on directory. Upstream uses this to avoid a race condition
+    # that only seems to affect Windows. We never build GHC natively on Windows.
+    # https://gitlab.haskell.org/ghc/ghc/-/issues/24382
+    # https://gitlab.haskell.org/ghc/ghc/-/commit/a2c033cf82635c83f3107706634bebee43297b99
+    (lib.versionAtLeast ghcVersion "9.12" && lib.versionOlder ghcVersion "9.13");
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends =

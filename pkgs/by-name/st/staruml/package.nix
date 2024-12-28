@@ -19,7 +19,7 @@
   cairo,
   expat,
   libdrm,
-  mesa,
+  libgbm,
   alsa-lib,
   at-spi2-core,
   cups,
@@ -53,7 +53,7 @@ let
     xorg.libXrandr
     expat
     libdrm
-    mesa
+    libgbm
     alsa-lib
     at-spi2-core
     cups

@@ -1,21 +1,25 @@
 {
   lib,
   buildPythonPackage,
-  fetchPypi,
+  fetchFromGitHub,
   isPyPy,
   pytestCheckHook,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "six";
-  version = "1.16.0";
+  version = "1.17.0";
+  pyproject = true;
 
-  format = "setuptools";
-
-  src = fetchPypi {
-    inherit pname version;
-    sha256 = "1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926";
+  src = fetchFromGitHub {
+    owner = "benjaminp";
+    repo = "six";
+    rev = "refs/tags/${version}";
+    hash = "sha256-tz99C+dz5xJhunoC45bl0NdSdV9NXWya9ti48Z/KaHY=";
   };
+
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 

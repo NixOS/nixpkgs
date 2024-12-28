@@ -3,6 +3,7 @@
 , pkg-config, meson, ninja, makeWrapper
 , libbsd, numactl, libbpf, zlib, elfutils, jansson, openssl, libpcap, rdma-core
 , doxygen, python3, pciutils
+, fetchpatch
 , withExamples ? []
 , shared ? false
 , machine ? (
@@ -48,6 +49,14 @@ stdenv.mkDerivation rec {
     rdma-core
     # Requested by pkg-config.
     libbsd
+  ];
+
+  patches = [
+    (fetchpatch {
+      name = "CVE-2024-11614.patch";
+      url = "https://git.dpdk.org/dpdk-stable/patch/?id=fdf13ea6fede07538fbe5e2a46fa6d4b2368fa81";
+      hash = "sha256-lD2mhPm5r1tWZb4IpzHa2SeK1DyQ3rwjzArRTpAgZAY=";
+    })
   ];
 
   postPatch = ''

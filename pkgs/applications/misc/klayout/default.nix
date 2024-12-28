@@ -64,7 +64,7 @@ mkDerivation rec {
     homepage = "https://www.klayout.de/";
     changelog = "https://www.klayout.de/development.html#${version}";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [ ];
   };
 }
 

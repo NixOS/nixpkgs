@@ -180,7 +180,13 @@ pipe ((callFile ./common/builder.nix {}) ({
   inherit version;
 
   src = fetchurl {
-    url = "mirror://gcc/releases/gcc-${version}/gcc-${version}.tar.xz";
+    url = "mirror://gcc/${
+      # TODO: Remove this before 25.05.
+      if version == "14-20241116" then
+        "snapshots/"
+      else
+        "releases/gcc-"
+    }${version}/gcc-${version}.tar.xz";
     ${if is10 || is11 || is13 then "hash" else "sha256"} =
       gccVersions.srcHashForVersion version;
   };
@@ -201,6 +207,29 @@ pipe ((callFile ./common/builder.nix {}) ({
     for configureScript in $configureScripts; do
       patchShebangs $configureScript
     done
+  ''
+  # Copy the precompiled `gcc/gengtype-lex.cc` from the 14.2.0 tarball.
+  # Since the `gcc/gengtype-lex.l` file didn’t change between 14.2.0
+  # and 14-2024116, this is safe. If it changes and we update the
+  # snapshot, we might need to vendor the compiled output in Nixpkgs.
+  #
+  # TODO: Remove this before 25.05.
+  + optionalString (version == "14-20241116") ''
+    cksum -c <<EOF
+    SHA256 (gcc/gengtype-lex.l) = 05acceeda02e673eaef47d187d3a68a1632508112fbe31b5dc2b0a898998d7ec
+    EOF
+
+    (XZ_OPT="--threads=$NIX_BUILD_CORES" xz -d < ${fetchurl {
+      url = "mirror://gcc/releases/gcc-14.2.0/gcc-14.2.0.tar.xz";
+      hash = "sha256-p7Obxpy/niWCbFpgqyZHcAH3wI2FzsBLwOKcq+1vPMk=";
+    }}; true) | tar xf - \
+      --mode=+w \
+      --warning=no-timestamp \
+      --strip-components=1 \
+      gcc-14.2.0/gcc/gengtype-lex.cc
+
+    # Make sure Make knows it’s up‐to‐date.
+    touch gcc/gengtype-lex.cc
   ''
   # This should kill all the stdinc frameworks that gcc and friends like to
   # insert into default search paths.

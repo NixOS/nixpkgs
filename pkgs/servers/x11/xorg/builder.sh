@@ -21,14 +21,14 @@ postInstall() {
         for p in "${pkgsHostHost[@]}" "${pkgsHostTarget[@]}"; do
             if test -e $p/lib/pkgconfig/$r.pc; then
                 echo "  found requisite $r in $p"
-                propagatedBuildInputs+=" $p"
+                appendToVar propagatedBuildInputs "$p"
             fi
         done
     done
 }
 
 
-installFlags="appdefaultdir=$out/share/X11/app-defaults $installFlags"
+prependToVar installFlags "appdefaultdir=$out/share/X11/app-defaults"
 
 
 if test -n "$x11BuildHook"; then

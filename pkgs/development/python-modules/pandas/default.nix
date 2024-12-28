@@ -80,7 +80,6 @@ let
       substituteInPlace pyproject.toml \
         --replace-fail "meson-python==0.13.1" "meson-python>=0.13.1" \
         --replace-fail "meson==1.2.1" "meson>=1.2.1" \
-        --replace-fail "numpy>=2.0" "numpy"
     '';
 
     nativeBuildInputs = [
@@ -253,7 +252,6 @@ let
       '';
       maintainers = with maintainers; [
         raskin
-        knedlsepp
       ];
     };
   };

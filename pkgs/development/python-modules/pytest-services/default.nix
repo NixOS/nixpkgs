@@ -63,7 +63,7 @@ buildPythonPackage rec {
     # Tests require binaries and additional parts
     "test_memcached"
     "test_mysql"
-    "test_xvfb "
+    "test_xvfb"
   ];
 
   meta = with lib; {

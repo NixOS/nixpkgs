@@ -9,7 +9,6 @@
   fixup-yarn-lock,
   npmHooks,
   yarn,
-  substituteAll,
   libnotify,
   unzip,
   pkgs,

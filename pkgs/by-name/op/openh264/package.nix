@@ -1,7 +1,6 @@
 {
   lib,
   fetchFromGitHub,
-  fetchpatch2,
   gtest,
   meson,
   nasm,
@@ -13,29 +12,23 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "openh264";
-  version = "2.4.1";
+  version = "2.5.0";
 
   src = fetchFromGitHub {
     owner = "cisco";
     repo = "openh264";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-ai7lcGcQQqpsLGSwHkSs7YAoEfGCIbxdClO6JpGA+MI=";
+    hash = "sha256-K8p94P4XO6bUWCJuT6jR5Kmz3lamNDyclGWgsV6Lf9I=";
   };
-
-  patches = [
-    # build: fix build with meson on riscv64
-    # https://github.com/cisco/openh264/pull/3773
-    (fetchpatch2 {
-      name = "openh264-riscv64.patch";
-      url = "https://github.com/cisco/openh264/commit/cea886eda8fae7ba42c4819e6388ce8fc633ebf6.patch";
-      hash = "sha256-ncXuGgogXA7JcCOjGk+kBprmOErFohrYjYzZYzAbbDQ=";
-    })
-  ];
 
   outputs = [
     "out"
     "dev"
   ];
+
+  postPatch = ''
+    substituteInPlace meson.build --replace-fail "'-Werror'," ""
+  '';
 
   nativeBuildInputs = [
     meson

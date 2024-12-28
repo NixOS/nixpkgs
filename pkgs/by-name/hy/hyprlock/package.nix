@@ -21,7 +21,7 @@
   libwebp,
   pango,
   libdrm,
-  mesa,
+  libgbm,
   nix-update-script,
 }:
 
@@ -55,7 +55,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
     libjpeg
     libwebp
     libxkbcommon
-    mesa
+    libgbm
     pam
     pango
     sdbus-cpp_2

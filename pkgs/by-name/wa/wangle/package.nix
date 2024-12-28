@@ -100,10 +100,11 @@ stdenv.mkDerivation (finalAttrs: {
 
     ctest -j $NIX_BUILD_CORES --output-on-failure ${
       # Deterministic glibc abort 🫠
+      # SSLContextManagerTest uses 15+ GB of RAM
       lib.optionalString stdenv.hostPlatform.isLinux (
         lib.escapeShellArgs [
           "--exclude-regex"
-          "^(BootstrapTest|BroadcastPoolTest)$"
+          "^(BootstrapTest|BroadcastPoolTest|SSLContextManagerTest)$"
         ]
       )
     }

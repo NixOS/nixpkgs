@@ -22,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
       sha256 = "19cmrlx4khn30qqrpyayn7bicg8yi0wpz1x1bvqqrbvr3kwldxyj";
     })
     (fetchurl {
-      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-text/cuneiform/files/cuneiform-1.1.0-gcc11.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/app-text/cuneiform/files/cuneiform-1.1.0-gcc11.patch?id=fd8e596c6a5eab634656e265c3da5241f5ceee8c";
       sha256 = "14bp2f4dvlgxnpdza1rgszhkbxhp6p7lhgnb1s7c1x7vwdrx0ri7";
     })
   ];

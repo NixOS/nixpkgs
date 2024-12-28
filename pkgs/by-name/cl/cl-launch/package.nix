@@ -13,9 +13,12 @@ stdenv.mkDerivation rec {
   };
 
   preConfigure = ''
-    export makeFlags="$makeFlags PREFIX='$out'"
     mkdir -p "$out/bin"
   '';
+
+  makeFlags = [
+    "PREFIX=${placeholder "out"}"
+  ];
 
   preBuild = ''
     sed -e 's/\t\t@/\t\t/g' -i Makefile

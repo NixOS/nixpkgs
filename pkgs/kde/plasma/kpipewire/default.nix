@@ -4,7 +4,7 @@
   pkg-config,
   pipewire,
   ffmpeg,
-  mesa,
+  libgbm,
   libva,
 }:
 mkKdeDerivation {
@@ -15,7 +15,7 @@ mkKdeDerivation {
     qtquick3d
     pipewire
     ffmpeg
-    mesa
+    libgbm
     libva
   ];
 }

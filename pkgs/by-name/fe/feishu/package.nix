@@ -46,7 +46,7 @@
   libxkbfile,
   libxshmfence,
   makeShellWrapper,
-  mesa,
+  libgbm,
   nspr,
   nss,
   pango,
@@ -66,12 +66,12 @@
 let
   sources = {
     x86_64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/bfdb886c/Feishu-linux_x64-7.22.9.deb";
-      sha256 = "sha256-4lLCQeW6ZRzmzrHPQ91RxKEqJCxqqa4iGuJ8snZqvkQ=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/018b8d40/Feishu-linux_x64-7.28.10.deb";
+      sha256 = "sha256-rVi9bRHu1/nu153gAl6xF1IHt6uoABHXd8AN4JoCGo0=";
     };
     aarch64-linux = fetchurl {
-      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/c3f495d6/Feishu-linux_arm64-7.22.9.deb";
-      sha256 = "sha256-cT9n1p220ya1T21fWy4b7b7dIx3hqw7lConGaSZ2+UA=";
+      url = "https://sf3-cn.feishucdn.com/obj/ee-appcenter/8ce25ba1/Feishu-linux_arm64-7.28.10.deb";
+      sha256 = "sha256-IsjGuyHvmDNjJYCBXR1NFShaVsWUYcF3OV5ihY9fJl0=";
     };
   };
 
@@ -121,7 +121,7 @@ let
     libxkbcommon
     libxkbfile
     libxshmfence
-    mesa
+    libgbm
     nspr
     nss
     pango
@@ -135,7 +135,7 @@ let
   ];
 in
 stdenv.mkDerivation {
-  version = "7.22.9";
+  version = "7.28.10";
   pname = "feishu";
 
   src =
@@ -161,7 +161,7 @@ stdenv.mkDerivation {
     libgcrypt
     libpulseaudio
     libxshmfence
-    mesa
+    libgbm
     nspr
     nss
   ];

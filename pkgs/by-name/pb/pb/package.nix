@@ -32,12 +32,12 @@ buildGoModule rec {
     command = "pb version";
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/parseablehq/pb";
     changelog = "https://github.com/parseablehq/pb/releases/tag/v${version}";
     description = "CLI client for Parseable server";
-    license = licenses.agpl3Plus;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.agpl3Plus;
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "pb";
   };
 }

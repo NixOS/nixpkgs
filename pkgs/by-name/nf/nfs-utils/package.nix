@@ -42,7 +42,8 @@ stdenv.mkDerivation rec {
     '';
 
   configureFlags =
-    [ "--enable-gss"
+    [ "--with-start-statd=${placeholder "out"}/bin/start-statd"
+      "--enable-gss"
       "--enable-svcgss"
       "--with-statedir=/var/lib/nfs"
       "--with-krb5=${lib.getLib libkrb5}"
@@ -78,8 +79,6 @@ stdenv.mkDerivation rec {
       patchShebangs tests
       sed -i "s,/usr/sbin,$out/bin,g" utils/statd/statd.c
       sed -i "s,^PATH=.*,PATH=$out/bin:${statdPath}," utils/statd/start-statd
-
-      configureFlags="--with-start-statd=$out/bin/start-statd $configureFlags"
 
       substituteInPlace systemd/nfs-utils.service \
         --replace "/bin/true" "${coreutils}/bin/true"

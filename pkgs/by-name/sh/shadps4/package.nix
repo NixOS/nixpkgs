@@ -4,7 +4,7 @@
   fetchFromGitHub,
   nixosTests,
   alsa-lib,
-  boost184,
+  boost,
   cmake,
   cryptopp,
   glslang,
@@ -17,7 +17,7 @@
   libunwind,
   libusb1,
   magic-enum,
-  mesa,
+  libgbm,
   pkg-config,
   pugixml,
   qt6,
@@ -54,7 +54,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [
     alsa-lib
-    boost184
+    boost
     cryptopp
     glslang
     ffmpeg
@@ -68,7 +68,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libX11
     xorg.libXext
     magic-enum
-    mesa
+    libgbm
     pugixml
     qt6.qtbase
     qt6.qtdeclarative

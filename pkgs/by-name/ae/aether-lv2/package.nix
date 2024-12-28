@@ -6,7 +6,7 @@
   libX11,
   libGL,
   libGLU,
-  mesa,
+  libgbm,
   cmake,
 }:
 
@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
     libX11
     libGL
     libGLU
-    mesa
+    libgbm
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [

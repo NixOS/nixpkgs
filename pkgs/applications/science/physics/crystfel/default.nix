@@ -32,7 +32,6 @@
   gtk3,
   gdk-pixbuf,
   argp-standalone,
-  memorymappingHook,
   withGui ? true,
   withBitshuffle ? true,
 }:
@@ -253,9 +252,6 @@ stdenv.mkDerivation rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       argp-standalone
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64) [
-      memorymappingHook
     ]
     ++ lib.optionals withBitshuffle [ hdf5-external-filter-plugins ];
 

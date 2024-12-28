@@ -33,6 +33,10 @@
 , docbook-xsl-nons
 , docbook_xml_dtd_42
 , python3
+
+  # Optional ComposeFS support
+, withComposefs ? false
+, composefs
 }:
 
 let
@@ -87,6 +91,8 @@ in stdenv.mkDerivation rec {
     # for installed tests
     testPython
     gjs
+  ] ++ lib.optionals withComposefs [
+    (lib.getDev composefs)
   ];
 
   enableParallelBuilding = true;
@@ -97,6 +103,8 @@ in stdenv.mkDerivation rec {
     "--with-systemdsystemgeneratordir=${placeholder "out"}/lib/systemd/system-generators"
     "--enable-installed-tests"
     "--with-ed25519-libsodium"
+  ] ++ lib.optionals withComposefs [
+    "--with-composefs"
   ];
 
   makeFlags = [

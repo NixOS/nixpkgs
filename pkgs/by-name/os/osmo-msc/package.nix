@@ -8,25 +8,21 @@
   sqlite,
   libosmoabis,
   libosmo-netif,
-  libosmo-sccp,
+  libosmo-sigtran,
   osmo-mgw,
   osmo-hlr,
   lksctp-tools,
 }:
 
-let
-  inherit (stdenv.hostPlatform) isLinux;
-in
-
 stdenv.mkDerivation rec {
   pname = "osmo-msc";
-  version = "1.12.0";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "osmocom";
     repo = "osmo-msc";
     rev = version;
-    hash = "sha256-3yQKboodOBc55R6CdvqSFSwQpstvCVvtZMn7gFKASmI=";
+    hash = "sha256-/+pbfJL/kW835AA44jocmk/QLB1tR3Qu5pKj5K5WFRM=";
   };
 
   postPatch = ''
@@ -43,7 +39,7 @@ stdenv.mkDerivation rec {
     sqlite
     libosmoabis
     libosmo-netif
-    libosmo-sccp
+    libosmo-sigtran
     osmo-mgw
     osmo-hlr
     lksctp-tools
@@ -56,7 +52,7 @@ stdenv.mkDerivation rec {
     mainProgram = "osmo-msc";
     homepage = "https://osmocom.org/projects/osmomsc/wiki";
     license = lib.licenses.agpl3Only;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
   };
 }

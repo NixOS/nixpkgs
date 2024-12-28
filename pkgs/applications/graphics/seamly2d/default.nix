@@ -8,7 +8,7 @@
   poppler_utils,
   qtxmlpatterns,
   qtsvg,
-  mesa,
+  libgbm,
   xvfb-run,
   fontconfig,
   freetype,
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
     poppler_utils
     qtxmlpatterns
     qtsvg
-    mesa
+    libgbm
     freetype
     xorg.libXi
     xorg.libXrender

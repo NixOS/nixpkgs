@@ -1,35 +1,42 @@
 {
   lib,
   stdenv,
-  arviz,
-  blackjax,
   buildPythonPackage,
   fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
+  arviz,
   formulae,
   graphviz,
-  numpyro,
   pandas,
   pymc,
+
+  # tests
+  blackjax,
+  numpyro,
   pytestCheckHook,
-  pythonOlder,
-  setuptools-scm,
 }:
 
 buildPythonPackage rec {
   pname = "bambi";
-  version = "0.14.0";
+  version = "0.15.0";
   pyproject = true;
-
-  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "bambinos";
     repo = "bambi";
-    rev = "refs/tags/${version}";
-    hash = "sha256-kxrNNbZfC96/XHb1I7aUHYZdFJvGR80ZI8ell/0FQXc=";
+    tag = version;
+    hash = "sha256-G8RKTccsJRcLgTQPTOXAgK6ViVEwIQydUwdAexEJ2bc=";
   };
 
-  build-system = [ setuptools-scm ];
+  build-system = [
+    setuptools
+    setuptools-scm
+  ];
 
   dependencies = [
     arviz
@@ -39,12 +46,15 @@ buildPythonPackage rec {
     pymc
   ];
 
-  # bayeux-ml is not available in nixpkgs
-  # optional-dependencies = {
-  #   jax = [ bayeux-ml ];
-  # };
+  optional-dependencies = {
+    jax = [
+      # not (yet) available in nixpkgs (https://github.com/NixOS/nixpkgs/pull/345438)
+      # bayeux-ml
+    ];
+  };
 
   nativeCheckInputs = [
+    # bayeux-ml
     blackjax
     numpyro
     pytestCheckHook
@@ -111,7 +121,7 @@ buildPythonPackage rec {
   meta = {
     description = "High-level Bayesian model-building interface";
     homepage = "https://bambinos.github.io/bambi";
-    changelog = "https://github.com/bambinos/bambi/releases/tag/${version}";
+    changelog = "https://github.com/bambinos/bambi/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ bcdarwin ];
   };

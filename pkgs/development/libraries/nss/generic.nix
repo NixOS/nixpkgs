@@ -5,6 +5,7 @@
   fetchFromGitHub,
   nspr,
   perl,
+  installShellFiles,
   zlib,
   sqlite,
   ninja,
@@ -41,6 +42,7 @@ stdenv.mkDerivation rec {
       perl
       ninja
       (buildPackages.python3.withPackages (ps: with ps; [ gyp ]))
+      installShellFiles
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
@@ -79,6 +81,7 @@ stdenv.mkDerivation rec {
     "out"
     "dev"
     "tools"
+    "man"
   ];
 
   buildPhase =
@@ -166,6 +169,8 @@ stdenv.mkDerivation rec {
         -e "s,@MOD_PATCH_VERSION@,$NSS_PATCH_VERSION," \
         pkg/pkg-config/nss-config.in > $out/bin/nss-config
     chmod 0755 $out/bin/nss-config
+
+    installManPage doc/nroff/*
   '';
 
   postInstall = lib.optionalString useP11kit ''

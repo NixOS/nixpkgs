@@ -6,16 +6,16 @@
 
 buildGoModule rec {
   pname = "rain";
-  version = "1.13.0";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "cenkalti";
     repo = "rain";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pz20vhr3idXja7wYIdVr1dosSpqYiQfeho66rqd718I=";
+    hash = "sha256-bn1LblXwYqZxfCuOmnmWo4Q8Ltt7ARnDCyEI7iNuYHU=";
   };
 
-  vendorHash = "sha256-40DK0D9TRJDfrMbBJNpcNzvjKb/uXN/Yz5Bb7oXBh+E=";
+  vendorHash = "sha256-SX686l6fsr3Gm+gyzNUZUSGXwAnxaTvUo/J57N10fmU=";
 
   meta = {
     description = "BitTorrent client and library in Go";

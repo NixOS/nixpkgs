@@ -8,7 +8,7 @@
   fontconfig,
   libGL,
   libxkbcommon,
-  mesa,
+  libgbm,
   openxr-loader,
   pkg-config,
   xorg,
@@ -43,7 +43,7 @@ rustPlatform.buildRustPackage rec {
     fontconfig
     libGL
     libxkbcommon
-    mesa
+    libgbm
     openxr-loader
     xorg.libX11
     xorg.libXfixes

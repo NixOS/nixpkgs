@@ -98,6 +98,8 @@ buildPythonPackage rec {
       "test_get_bad_default_response"
       "test_schema_response"
       "test_writeonly"
+      # test expects "{'name': 'foo', 'type': 'string'}" rather than "{'type': 'string', 'name': 'foo'}"
+      "test_invalid_type"
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # ImportError: Error while finding loader for '/private/tmp/nix-build-python3.12-connexion-3.1.0.drv-0/source' (<class 'ModuleNotFoundError'>: No module named '/private/tmp/nix-build-python3')

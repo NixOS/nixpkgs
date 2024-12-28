@@ -432,6 +432,11 @@ concatTo() {
 # $ flags=("lorem ipsum" "dolor" "sit amet")
 # $ concatStringsSep ";" flags
 # lorem ipsum;dolor;sit amet
+#
+# Also supports multi-character separators;
+# $ flags=("lorem ipsum" "dolor" "sit amet")
+# $ concatStringsSep " and " flags
+# lorem ipsum and dolor and sit amet
 concatStringsSep() {
     local sep="$1"
     local name="$2"
@@ -443,11 +448,17 @@ concatStringsSep() {
                 echo "concatStringsSep(): ERROR: trying to use concatStringsSep on an associative array." >&2
                 return 1 ;;
             -a*)
-                local IFS="$sep"
-                echo -n "${nameref[*]}" ;;
+                # \036 is the "record separator" character. We assume that this will never need to be part of
+                # an argument string we create here. If anyone ever hits this limitation: Feel free to refactor.
+                # To avoid leaking an unescaped rs character when dumping the environment with nix, we use printf
+                # in a subshell.
+                local IFS="$(printf '\036')" ;;
             *)
-                echo -n "${nameref// /"${sep}"}" ;;
+                local IFS=" " ;;
+
         esac
+        local ifs_separated="${nameref[*]}"
+        echo -n "${ifs_separated//"$IFS"/"$sep"}"
     fi
 }
 
@@ -674,7 +685,7 @@ findInputs() {
     # shellcheck disable=SC1087
     local varSlice="$var[*]"
     # ${..-} to hack around old bash empty array problem
-    case "${!varSlice-}" in
+    case " ${!varSlice-} " in
         *" $pkg "*) return 0 ;;
     esac
     unset -v varSlice
@@ -1211,7 +1222,7 @@ _defaultUnpack() {
         # We can't preserve hardlinks because they may have been
         # introduced by store optimization, which might break things
         # in the build.
-        cp -pr --reflink=auto -- "$fn" "$destination"
+        cp -r --preserve=mode,timestamps --reflink=auto -- "$fn" "$destination"
 
     else
 

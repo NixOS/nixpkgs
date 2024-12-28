@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "beszel";
-  version = "0.6.2";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "henrygd";
     repo = "beszel";
     rev = "refs/tags/v${version}";
-    hash = "sha256-x9HU+sDjxRthC4ROJaKbuKHPHgxFSpyn/dywyGWE/v8=";
+    hash = "sha256-VB3ICoJrBIwP27jZJASQin4xzQ04089VqwFp7hfqZaQ=";
   };
 
   webui = buildNpmPackage {
@@ -28,17 +28,11 @@ buildGoModule rec {
 
     npmFlags = [ "--legacy-peer-deps" ];
 
-    patches = [
-      # add missing @esbuild for multi platform
-      # https://github.com/henrygd/beszel/pull/235
-      # add missing @esbuild for multi platform
-      # https://github.com/henrygd/beszel/pull/235
-      ./0001-fix-build.patch
-    ];
-
     buildPhase = ''
       runHook preBuild
 
+      npx lingui extract --overwrite
+      npx lingui compile
       node --max_old_space_size=1024000 ./node_modules/vite/bin/vite.js build
 
       runHook postBuild
@@ -55,12 +49,12 @@ buildGoModule rec {
 
     sourceRoot = "${src.name}/beszel/site";
 
-    npmDepsHash = "sha256-t7Qcuvqbt0sPHAu3vcZaU8/Ij2yY5/g1TguozlKu0mU=";
+    npmDepsHash = "sha256-ObLulUnCCcKetDW6XKdC8u0NuKBLVUl37jebCGloGoE=";
   };
 
   sourceRoot = "${src.name}/beszel";
 
-  vendorHash = "sha256-/FePQkqoeuH63mV81v1NxpFw9osMUCcZ1bP+0yN1Qlo=";
+  vendorHash = "sha256-yvHsmA4FtENIxKNMS8Bm9bC4dbE64XCX5KP9JYkTtKc=";
 
   preBuild = ''
     mkdir -p site/dist

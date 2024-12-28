@@ -13,7 +13,7 @@
   pango,
   cairo,
   libxkbcommon,
-  mesa,
+  libgbm,
   expat,
   alsa-lib,
   buildFHSEnv,
@@ -64,7 +64,7 @@ let
         libdrm
         pango
         cairo
-        mesa
+        libgbm
         libGL
         expat
         libxkbcommon
