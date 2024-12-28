@@ -1,4 +1,4 @@
-{ lib, stdenv, fetchFromGitHub, cmake
+{ lib, stdenv, fetchFromGitHub, cmake, ninja
 , gfortran, blas, lapack, eigen
 , useMpi ? false
 , mpi
@@ -21,7 +21,7 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-HCvapLba8oLqx9I5+KDAU0s/dTmdWOEilS75i4gyfC0=";
   };
 
-  nativeBuildInputs = [ cmake gfortran ];
+  nativeBuildInputs = [ cmake gfortran ninja ];
   buildInputs = assert (blas.isILP64 == lapack.isILP64); [
     blas
     lapack
@@ -33,10 +33,10 @@ stdenv.mkDerivation rec {
   doCheck = true;
 
   cmakeFlags = [
-    "-DBUILD_SHARED_LIBS=ON"
-    "-DINTERFACE64=${if blas.isILP64 then "1" else "0"}"
-    "-DMPI=${if useMpi then "ON" else "OFF"}"
-    "-DICB=ON"
+    (lib.cmakeBool "BUILD_SHARED_LIBS" stdenv.hostPlatform.hasSharedLibraries)
+    (lib.cmakeBool "ICB" true)
+    (lib.cmakeBool "INTERFACE64" blas.isILP64)
+    (lib.cmakeBool "MPI" useMpi)
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     # prevent cmake from using Accelerate, which causes single precision tests
     # to segfault
@@ -46,10 +46,6 @@ stdenv.mkDerivation rec {
   preCheck = ''
     # Prevent tests from using all cores
     export OMP_NUM_THREADS=2
-  '';
-
-  postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    install_name_tool -change libblas.dylib ${blas}/lib/libblas.dylib $out/lib/libarpack.dylib
   '';
 
   passthru = {
