@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 55eb05c..18f7fc3 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -234,7 +234,7 @@ endif()
+ 
+ set(BINARY_INST_DESTINATION "bin")
+ set(RESOURCE_INST_DESTINATION "share/shadered")
+-install(PROGRAMS bin/SHADERed DESTINATION "${BINARY_INST_DESTINATION}" RENAME shadered)
++install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/bin/SHADERed DESTINATION "${BINARY_INST_DESTINATION}" RENAME shadered)
+ install(DIRECTORY bin/data bin/templates bin/themes bin/plugins DESTINATION "${RESOURCE_INST_DESTINATION}")
+ 
+ if (UNIX AND NOT APPLE)
