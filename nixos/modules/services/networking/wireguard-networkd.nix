@@ -22,14 +22,16 @@ let
     ;
   inherit (lib.modules) mkIf;
   inherit (lib.options) literalExpression mkOption;
-  inherit (lib.strings) hasInfix;
+  inherit (lib.strings) hasInfix replaceStrings;
   inherit (lib.trivial) flip pipe;
 
   removeNulls = filterAttrs (_: v: v != null);
 
-  privateKeyCredential = interfaceName: "wireguard-${interfaceName}-private-key";
+  escapeCredentialName = input: replaceStrings [ "\\" ] [ "_" ] input;
+
+  privateKeyCredential = interfaceName: escapeCredentialName "wireguard-${interfaceName}-private-key";
   presharedKeyCredential =
-    interfaceName: peer: "wireguard-${interfaceName}-${peer.name}-preshared-key";
+    interfaceName: peer: escapeCredentialName "wireguard-${interfaceName}-${peer.name}-preshared-key";
 
   interfaceCredentials =
     interfaceName: interface:
