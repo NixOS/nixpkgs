@@ -15,6 +15,7 @@
 , sphinx
 , sqlite
 , xdg-utils
+, libsysprof-capture
 }:
 
 qt6Packages.stdenv.mkDerivation rec {
@@ -66,6 +67,7 @@ qt6Packages.stdenv.mkDerivation rec {
     qt6Packages.qtwebsockets
     qt6Packages.qtwayland
     sqlite
+    libsysprof-capture
   ];
 
   qtWrapperArgs = [
