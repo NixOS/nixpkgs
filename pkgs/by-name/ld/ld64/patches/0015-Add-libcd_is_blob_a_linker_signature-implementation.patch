@@ -1,26 +1,21 @@
-From add8bae5577ebe1c98cf7a711f87a3578a51d313 Mon Sep 17 00:00:00 2001
+From 1894e5752ebfe0572684c235da3cdcdfd10f29a1 Mon Sep 17 00:00:00 2001
 From: Randy Eckenrode <randy@largeandhighquality.com>
-Date: Mon, 8 Apr 2024 22:42:40 -0400
-Subject: [PATCH 6/8] Add libcd_is_blob_a_linker_signature implementation
+Date: Sat, 16 Nov 2024 16:21:17 -0500
+Subject: [PATCH 15/18] Add libcd_is_blob_a_linker_signature implementation
 
 ---
- compat/libcodedirectory.c | 74 +++++++++++++++++++++++++++++++++++++++
- src/ld/libcodedirectory.h |  8 +++++
- 2 files changed, 82 insertions(+)
- create mode 100644 compat/libcodedirectory.c
+ .../libcodedirectory/libcodedirectory.c       | 68 +++++++++++++++++++
+ .../libcodedirectory/libcodedirectory.h       |  9 +++
+ 2 files changed, 77 insertions(+)
 
-diff --git a/compat/libcodedirectory.c b/compat/libcodedirectory.c
-new file mode 100644
-index 0000000..e584dfc
---- /dev/null
-+++ b/compat/libcodedirectory.c
-@@ -0,0 +1,74 @@
-+// SPDX-License-Identifier: APSL-2.0
-+// libcd_is_blob_a_linker_signature implementation written by Randy Eckenrode © 2024
-+
-+#include <libcodedirectory.h>
-+
-+#include <stdbool.h>
+diff --git a/subprojects/libcodedirectory/libcodedirectory.c b/subprojects/libcodedirectory/libcodedirectory.c
+index 02e31b1..89908b9 100644
+--- a/subprojects/libcodedirectory/libcodedirectory.c
++++ b/subprojects/libcodedirectory/libcodedirectory.c
+@@ -1221,3 +1221,71 @@ libcd_get_cdhash_for_type(libcd *s, int hash_type, uint8_t* cdhash_buf, size_t c
+     }
+     return LIBCD_CDHASH_TYPE_NOT_FOUND;
+ }
 +
 +// References:
 +// - https://forums.developer.apple.com/forums/thread/702351
@@ -43,7 +38,7 @@ index 0000000..e584dfc
 +
 +static inline const uint8_t* find_code_directory(const uint8_t* data, size_t size) {
 +    const uint8_t* index_ptr = data + offsetof(CS_SuperBlob, index);
-+    
++
 +    // There also needs to be space for the actual blobs, but there must be at least enough space
 +    // for the blob indexes. If there’s not, then something’s wrong, and the blob is invalid.
 +    uint32_t count = read32be(data + offsetof(CS_SuperBlob, count));
@@ -89,11 +84,11 @@ index 0000000..e584dfc
 +
 +    return LIBCD_SIGNATURE_QUERY_SUCCESS;
 +}
-diff --git a/src/ld/libcodedirectory.h b/src/ld/libcodedirectory.h
-index 0e989a9..7532648 100644
---- a/src/ld/libcodedirectory.h
-+++ b/src/ld/libcodedirectory.h
-@@ -116,6 +116,14 @@ enum libcd_set_linkage_ret {
+diff --git a/subprojects/libcodedirectory/libcodedirectory.h b/subprojects/libcodedirectory/libcodedirectory.h
+index 0e989a9..67a5a22 100644
+--- a/subprojects/libcodedirectory/libcodedirectory.h
++++ b/subprojects/libcodedirectory/libcodedirectory.h
+@@ -116,6 +116,15 @@ enum libcd_set_linkage_ret {
  
  enum libcd_set_linkage_ret libcd_set_linkage(libcd *s, int linkage_hash_type, uint8_t *linkage_hash);
  
@@ -105,9 +100,10 @@ index 0e989a9..7532648 100644
 +
 +enum libcd_signature_query_ret libcd_is_blob_a_linker_signature(const uint8_t* data, size_t size, int* linker_signed);
 +
++
  __END_DECLS
  
  #endif // H_LIBCODEDIRECTORY
 -- 
-2.45.1
+2.47.2
 
