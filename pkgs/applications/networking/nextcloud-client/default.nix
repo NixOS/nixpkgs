@@ -39,8 +39,6 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    # Explicitly move dbus configuration files to the store path rather than `/etc/dbus-1/services`.
-    ./0001-Explicitly-copy-dbus-files-into-the-store-dir.patch
     ./0001-When-creating-the-autostart-entry-do-not-use-an-abso.patch
   ];
 
