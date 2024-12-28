@@ -6,6 +6,7 @@
   curl,
   libseccomp,
   installShellFiles,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -42,4 +43,6 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with maintainers; [ djanatyn ];
     mainProgram = "rdrview";
   };
+
+  passthru.updateScript = nix-update-script { };
 })
