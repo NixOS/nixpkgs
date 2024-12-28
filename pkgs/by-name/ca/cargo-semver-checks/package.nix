@@ -6,7 +6,9 @@
   zlib,
   stdenv,
   darwin,
-  git,
+  testers,
+  cargo-semver-checks,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "obi1kenobi";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-IcKjiKFvkFvu8+LFCAmm39AGUaUdK8zhtNzzSb8VPE0=";
   };
 
@@ -53,16 +55,21 @@ rustPlatform.buildRustPackage rec {
         'cargo-semver-checks ${version}'
   '';
 
-  meta = with lib; {
+  passthru = {
+    tests.version = testers.testVersion { package = cargo-semver-checks; };
+    updateScript = nix-update-script { };
+  };
+
+  meta = {
     description = "Tool to scan your Rust crate for semver violations";
     mainProgram = "cargo-semver-checks";
     homepage = "https://github.com/obi1kenobi/cargo-semver-checks";
     changelog = "https://github.com/obi1kenobi/cargo-semver-checks/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       mit # or
       asl20
     ];
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       figsoda
       matthiasbeyer
     ];
