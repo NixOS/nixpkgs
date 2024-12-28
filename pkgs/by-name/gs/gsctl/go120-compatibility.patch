@@ -1,0 +1,21 @@
+--- a/client/clienterror/matcher.go
++++ b/client/clienterror/matcher.go
+@@ -2,6 +2,7 @@ package clienterror
+ 
+ import (
+ 	"crypto/x509"
++	"errors"
+ 	"net/http"
+ 
+ 	"github.com/giantswarm/microerror"
+@@ -101,9 +102,7 @@ func IsServiceUnavailableError(err error) bool {
+ // a x509.UnknownAuthorityError
+ func IsCertificateSignedByUnknownAuthorityError(err error) bool {
+ 	if clientErr, ok := err.(*APIError); ok {
+-		if _, certErrorOK := clientErr.OriginalError.(x509.UnknownAuthorityError); certErrorOK {
+-			return true
+-		}
++		return errors.As(clientErr.OriginalError, &x509.UnknownAuthorityError{})
+ 	}
+ 
+ 	return false
