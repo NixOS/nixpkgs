@@ -8,12 +8,12 @@
 
 let
   pname = "pinact";
-  version = "1.1.0";
+  version = "1.1.1";
   src = fetchFromGitHub {
     owner = "suzuki-shunsuke";
     repo = "pinact";
     tag = "v${version}";
-    hash = "sha256-FOWlCKhMZhxWRb6079aSbTO3RR1Da7ZfjHb5N/ULl8o=";
+    hash = "sha256-nreKo4tH5fidevuWH4LYg4c0uoeiEFPF0qSYouC5N5w=";
   };
   mainProgram = "pinact";
 in
