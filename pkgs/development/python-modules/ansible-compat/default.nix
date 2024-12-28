@@ -12,6 +12,7 @@
   setuptools-scm,
   subprocess-tee,
   pythonOlder,
+  fetchpatch2,
 }:
 
 buildPythonPackage rec {
@@ -26,6 +27,15 @@ buildPythonPackage rec {
     inherit version;
     hash = "sha256-n/ICReG9nemyOjZ5AlJKsOEfvPt0GDGZbaXaW2Crld8=";
   };
+
+  patches = [
+    # Patch incompatibility between tests and ansible-core
+    # TODO: remove when new release is out
+    (fetchpatch2 {
+      url = "https://github.com/ansible/ansible-compat/commit/39729217f41282884414c4b19f3c5156383fedc5.patch?full_index=1";
+      hash = "sha256-zvBrL7zLIAXQCPiMeHseTjjkIJToV3naXz7xpdXBDhk=";
+    })
+  ];
 
   nativeBuildInputs = [
     setuptools
