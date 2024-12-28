@@ -66,6 +66,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   qmakeFlags = lib.optionals usePulseaudio [ "CONFIG+=USE_PULSEAUDIO" ];
 
+  # https://github.com/Audio4Linux/JDSP4Linux/issues/228
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=incompatible-pointer-types"
+    "-Wno-error=implicit-int"
+    "-Wno-error=implicit-function-declaration"
+  ];
+
   desktopItems = [
     (makeDesktopItem {
       name = "jamesdsp";
