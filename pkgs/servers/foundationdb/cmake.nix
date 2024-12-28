@@ -87,6 +87,11 @@ let
           # Use our doctest package
           substituteInPlace bindings/c/test/unit/third_party/CMakeLists.txt \
             --replace-fail '/opt/doctest_proj_2.4.8' '${doctest}/include'
+
+          # Upstream upgraded to Boost 1.86 with no code changes; see:
+          # <https://github.com/apple/foundationdb/pull/11788>
+          substituteInPlace cmake/CompileBoost.cmake \
+            --replace-fail 'find_package(Boost 1.78.0 EXACT ' 'find_package(Boost '
         '';
 
         # the install phase for cmake is pretty wonky right now since it's not designed to
