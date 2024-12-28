@@ -23054,6 +23054,12 @@
     github = "totoroot";
     githubId = 39650930;
   };
+  totaltax = {
+    name = "Coen Shields";
+    email = "shieldscoen@gmail.com";
+    github = "TotalTaxAmount";
+    githubId = 64336456;
+  };
   ToxicFrog = {
     email = "toxicfrog@ancilla.ca";
     github = "ToxicFrog";
