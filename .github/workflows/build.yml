@@ -1,0 +1,76 @@
+name: Build
+
+on:
+  pull_request_target:
+
+permissions:
+  contents: read
+
+jobs:
+  parse-commits:
+    name: Parse commits
+
+    runs-on: ubuntu-latest
+
+    outputs:
+      attributes: ${{ steps.attributes.outputs.attributes }}
+
+    steps:
+      - name: Get attribute names from commits
+        id: attributes
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+          PR_NUMBER: ${{ github.event.number }}
+        run: |
+          echo "attributes=$(gh api \
+            "/repos/{owner}/{repo}/pulls/$PR_NUMBER/commits" \
+            --jq '[ .[] | .commit.message | split("\n") | .[0] | split(":") | .[0] ]')" \
+            >> "$GITHUB_OUTPUT"
+
+  get-merge-commit:
+    uses: ./.github/workflows/get-merge-commit.yml
+
+  build:
+    name: Build ${{ matrix.attribute }} (${{ matrix.platform.system }})
+    needs: [ get-merge-commit, parse-commits ]
+
+    if: ${{ needs.get-merge-commit.outputs.mergedSha }}
+
+    runs-on: ${{ matrix.platform.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        platform:
+          - os: ubuntu-latest
+            system: x86_64-linux
+          - os: macos-13
+            system: x86_64-darwin
+          - os: macos-latest
+            system: aarch64-darwin
+        attribute: ${{ fromJSON(needs.parse-commits.outputs.attributes) }}
+
+    steps:
+      - name: Check out the PR at the test merge commit
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          ref: ${{ needs.get-merge-commit.outputs.mergedSha }}
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@08dcb3a5e62fa31e2da3d490afc4176ef55ecd72 # v30
+
+      - name: Evaluate attribute
+        id: evaluate
+        # Some of our detected attributes may not exist or have failures for other reasons. Let's not assume anything
+        continue-on-error: true
+        env:
+          attribute: ${{ matrix.attribute }}
+        run: |
+          drv_path=$(nix-instantiate -A "$attribute")
+          echo "drv_path=$drv_path" >> "$GITHUB_ENV"
+
+      - name: Build attribute
+        if: ${{ steps.evaluate.outcome == 'success' }}
+        run: |
+          nix-build "$drv_path"
