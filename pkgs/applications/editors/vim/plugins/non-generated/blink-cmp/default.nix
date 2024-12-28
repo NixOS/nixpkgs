@@ -6,6 +6,7 @@
   vimUtils,
   nix-update-script,
   git,
+  replaceVars,
 }:
 let
   version = "0.8.2";
@@ -38,6 +39,10 @@ vimUtils.buildVimPlugin {
     mkdir -p target/release
     ln -s ${blink-fuzzy-lib}/lib/libblink_cmp_fuzzy.${libExt} target/release/libblink_cmp_fuzzy.${libExt}
   '';
+
+  patches = [
+    (replaceVars ./force-version.patch { inherit (src) tag; })
+  ];
 
   passthru = {
     updateScript = nix-update-script {
