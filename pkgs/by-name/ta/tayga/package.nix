@@ -14,6 +14,11 @@ stdenv.mkDerivation rec {
     hash = "sha256-Kx95J6nS3P+Qla/zwnGSSwUsz9L6ypWIsndDGkTwAJw=";
   };
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-address-of-packed-member"
+    "-Wno-implicit-function-declaration"
+  ];
+
   passthru.tests.tayga = nixosTests.tayga;
 
   meta = with lib; {
