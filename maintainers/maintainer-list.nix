@@ -11639,6 +11639,12 @@
     github = "karantan";
     githubId = 7062631;
   };
+  Karidus-423 = {
+    email = "kennettdev1@gmail.com";
+    github = "Karidus-423";
+    githubId = 79239830;
+    name = "Kennett Puerto";
+  };
   KarlJoad = {
     email = "karl@hallsby.com";
     github = "KarlJoad";
