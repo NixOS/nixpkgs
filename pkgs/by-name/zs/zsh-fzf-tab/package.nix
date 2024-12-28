@@ -4,6 +4,7 @@
   fetchFromGitHub,
   zsh,
   ncurses,
+  autoconf,
   nix-update-script,
 }:
 
