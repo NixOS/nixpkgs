@@ -15,23 +15,23 @@
   pkg-config,
   msgpack-cxx,
   toml11,
+  jemalloc,
+  doctest,
 }@args:
 
 let
   cmakeBuild = import ./cmake.nix args;
 in
 {
-  foundationdb71 = cmakeBuild {
-    version = "7.1.32";
-    hash = "sha256-CNJ4w1ECadj2KtcfbBPBQpXQeq9BAiw54hUgRTWPFzY=";
+  foundationdb73 = cmakeBuild {
+    version = "7.3.42";
+    hash = "sha256-jQcm+HLai5da2pZZ7iLdN6fpQZxf5+/kkfv9OSXQ57c=";
     boost = boost178;
     ssl = openssl;
 
     patches = [
       ./patches/disable-flowbench.patch
-      ./patches/don-t-run-tests-requiring-doctest.patch
       ./patches/don-t-use-static-boost-libs.patch
-      ./patches/fix-open-with-O_CREAT.patch
       # GetMsgpack: add 4+ versions of upstream
       # https://github.com/apple/foundationdb/pull/10935
       (fetchpatch {
