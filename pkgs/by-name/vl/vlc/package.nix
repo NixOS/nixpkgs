@@ -61,7 +61,6 @@
   libupnp,
   libv4l,
   libva,
-  libvdpau,
   libvorbis,
   libxml2,
   live555,
@@ -184,7 +183,6 @@ stdenv.mkDerivation (finalAttrs: {
       libupnp
       libv4l
       libva
-      libvdpau
       libvorbis
       libxml2
       lua5
@@ -285,11 +283,6 @@ stdenv.mkDerivation (finalAttrs: {
   postConfigure = ''
     sed -i 's|^#define CONFIGURE_LINE.*$|#define CONFIGURE_LINE "<removed>"|g' config.h
   '';
-
-  # fails on high core machines
-  # ld: cannot find -lvlc_vdpau: No such file or directory
-  # https://code.videolan.org/videolan/vlc/-/issues/27338
-  enableParallelInstalling = false;
 
   # Add missing SOFA files
   # Given in EXTRA_DIST, but not in install-data target
