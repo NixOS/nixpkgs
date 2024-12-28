@@ -39,12 +39,12 @@
 }:
 flutter324.buildFlutterApplication rec {
   pname = "pilipalax";
-  version = "1.0.22-beta.12+174";
+  version = "1.0.22-beta.12";
 
   src = fetchFromGitHub {
     owner = "orz12";
     repo = "PiliPalaX";
-    tag = version;
+    tag = "${version}+174";
     hash = "sha256-Qjqyg9y5R70hODGfVClS505dJwexL0BbUm6lXSHzhJs=";
   };
 
@@ -112,6 +112,8 @@ flutter324.buildFlutterApplication rec {
   extraWrapProgramArgs = ''
     --prefix LD_LIBRARY_PATH : "$out/app/${pname}/lib"
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     description = "Third-party BiliBili client developed with Flutter";
