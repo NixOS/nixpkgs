@@ -1,0 +1,32 @@
+handlers = java.util.logging.FileHandler
+
+java.util.logging.FileHandler.level = FINE
+java.util.logging.FileHandler.pattern   = /var/log/jitsi/jibri/log.%g.txt
+java.util.logging.FileHandler.formatter = net.java.sip.communicator.util.ScLogFormatter
+java.util.logging.FileHandler.count = 10
+java.util.logging.FileHandler.limit = 10000000
+
+org.jitsi.jibri.capture.ffmpeg.util.FfmpegFileHandler.level = FINE
+org.jitsi.jibri.capture.ffmpeg.util.FfmpegFileHandler.pattern   = /var/log/jitsi/jibri/ffmpeg.%g.txt
+org.jitsi.jibri.capture.ffmpeg.util.FfmpegFileHandler.formatter = net.java.sip.communicator.util.ScLogFormatter
+org.jitsi.jibri.capture.ffmpeg.util.FfmpegFileHandler.count = 10
+org.jitsi.jibri.capture.ffmpeg.util.FfmpegFileHandler.limit = 10000000
+
+org.jitsi.jibri.sipgateway.pjsua.util.PjsuaFileHandler.level = FINE
+org.jitsi.jibri.sipgateway.pjsua.util.PjsuaFileHandler.pattern   = /var/log/jitsi/jibri/pjsua.%g.txt
+org.jitsi.jibri.sipgateway.pjsua.util.PjsuaFileHandler.formatter = net.java.sip.communicator.util.ScLogFormatter
+org.jitsi.jibri.sipgateway.pjsua.util.PjsuaFileHandler.count = 10
+org.jitsi.jibri.sipgateway.pjsua.util.PjsuaFileHandler.limit = 10000000
+
+org.jitsi.jibri.selenium.util.BrowserFileHandler.level = FINE
+org.jitsi.jibri.selenium.util.BrowserFileHandler.pattern   = /var/log/jitsi/jibri/browser.%g.txt
+org.jitsi.jibri.selenium.util.BrowserFileHandler.formatter = net.java.sip.communicator.util.ScLogFormatter
+org.jitsi.jibri.selenium.util.BrowserFileHandler.count = 10
+org.jitsi.jibri.selenium.util.BrowserFileHandler.limit = 10000000
+
+org.jitsi.level = FINE
+org.jitsi.jibri.config.level = INFO
+
+org.glassfish.level = INFO
+org.osgi.level = INFO
+org.jitsi.xmpp.level = INFO
