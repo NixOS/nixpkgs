@@ -1,4 +1,4 @@
-{ lib, stdenv, rustPlatform, fetchCrate, pkg-config, udev, CoreFoundation, DiskArbitration, Foundation }:
+{ lib, stdenv, rustPlatform, fetchCrate, pkg-config, udev }:
 
 rustPlatform.buildRustPackage rec {
   pname = "elf2uf2-rs";
@@ -9,18 +9,13 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-cmiCOykORue0Cg2uUUWa/nXviX1ddbGNC5gRKe+1kYs=";
   };
 
+  cargoHash = "sha256-TBH3pLB6vQVGnfShLtFPNKjciuUIuTkvp3Gayzo+X9E=";
+
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = lib.optional stdenv.hostPlatform.isLinux udev
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      CoreFoundation
-      DiskArbitration
-      Foundation
-    ];
-
-  cargoHash = "sha256-TBH3pLB6vQVGnfShLtFPNKjciuUIuTkvp3Gayzo+X9E=";
+  buildInputs = lib.optional stdenv.hostPlatform.isLinux udev;
 
   meta = with lib; {
     description = "Convert ELF files to UF2 for USB Flashing Bootloaders";
