@@ -33,7 +33,7 @@ buildPythonPackage rec {
     owner = "microsoft";
     repo = "debugpy";
     tag = "v${version}";
-    hash = "sha256-jq/0Z6Oo/9gjJlziYJIjIC5i9YMayUdPYSGTjnDL8yU=";
+    hash = "sha256-C/cLUMQNmiLn3z93LOg++3WeDUihMR9O3XKouL4uPqw=";
   };
 
   patches =
