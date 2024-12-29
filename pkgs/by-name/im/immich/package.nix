@@ -187,7 +187,7 @@ buildNpmPackage' {
     mkdir node_modules
     ln -s ${node-addon-api} node_modules/node-addon-api
 
-    ${lib.getExe nodejs} install/check
+    node install/check
 
     rm -r node_modules
 
