@@ -20,14 +20,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "snoop";
-  version = "0.4.1";
+  version = "0.4.2";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "philippun1";
     repo = "snoop";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-v4+A0q04+THBJ+U5izICVhofXPEC3db73MzYonXcDvU=";
+    tag = finalAttrs.version;
+    hash = "sha256-M+wV6WYPtTbKXgBCOD/qN3LYAbpucwSAuKZQBVUjZo8=";
   };
 
   patchPhase = ''
