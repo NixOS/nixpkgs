@@ -5,7 +5,7 @@ set -eou pipefail
 recursive=false
 no_flake=false
 positional_args=()
-nix_args=()
+nix_args=(--arg nixos "import <nixpkgs/nixos> { }")
 flake=""
 
 while [[ $# -gt 0 ]]; do
