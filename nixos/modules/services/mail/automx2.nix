@@ -166,10 +166,7 @@ in
 
     systemd.services.automx2 = {
       after = [ "network.target" ];
-      postStart = ''
-        sleep 3
-        ${lib.getExe pkgs.curl} -X POST --json @${format.generate "automx2.json" cfg.settings} http://127.0.0.1:${toString cfg.port}/initdb/
-      '';
+      postStart = "${lib.getExe pkgs.curl} -X POST --json @${format.generate "automx2.json" cfg.settings} http://127.0.0.1:${toString cfg.port}/initdb/";
       serviceConfig = {
         Environment = [
           "AUTOMX2_CONF=${pkgs.writeText "automx2-conf" ''
@@ -187,6 +184,7 @@ in
         Restart = "always";
         DynamicUser = true;
         User = "automx2";
+        Type = "notify";
       };
       unitConfig = {
         Description = "Service to automatically configure mail clients";
