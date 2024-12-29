@@ -11135,7 +11135,12 @@ with pkgs;
     faslExt = "fasl";
     flags = [ "--dynamic-space-size" "3000" ];
   };
-  sbcl = sbcl_2_4_11;
+  sbcl_2_5_0 = wrapLisp {
+    pkg = callPackage ../development/compilers/sbcl { version = "2.5.0"; };
+    faslExt = "fasl";
+    flags = [ "--dynamic-space-size" "3000" ];
+  };
+  sbcl = sbcl_2_5_0;
 
   sbclPackages = recurseIntoAttrs sbcl.pkgs;
 
