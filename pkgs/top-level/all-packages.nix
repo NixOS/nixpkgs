@@ -1726,10 +1726,6 @@ with pkgs;
     httpServer = true;
   };
 
-  apt-dater = callPackage ../tools/package-management/apt-dater {
-    autoreconfHook = buildPackages.autoreconfHook269;
-  };
-
   bashate = python3Packages.callPackage ../development/tools/bashate {
     python3Packages = python311Packages;
   };
