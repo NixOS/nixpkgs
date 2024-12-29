@@ -1,0 +1,13 @@
+diff --git a/security/keys/request_key.c b/security/keys/request_key.c
+index 88172c163953..4da74a1eebb2 100644
+--- a/security/keys/request_key.c
++++ b/security/keys/request_key.c
+@@ -161,7 +161,7 @@ static int call_sbin_request_key(struct key_construction *cons,
+
+	/* set up the argument list */
+	i = 0;
+-	argv[i++] = "/sbin/request-key";
++	argv[i++] = "/run/current-system/sw/bin/request-key";
+	argv[i++] = (char *) op;
+	argv[i++] = key_str;
+	argv[i++] = uid_str;
