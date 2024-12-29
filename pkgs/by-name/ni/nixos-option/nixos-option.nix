@@ -1,11 +1,11 @@
 {
-  nixos ? import <nixpkgs/nixos> { },
+  nixos,
   # list representing a nixos option path (e.g. ['console' 'enable']), or a
   # prefix of such a path (e.g. ['console']), or a string representing the same
   # (e.g. 'console.enable')
   path,
   # whether to recurse down the config attrset and show each set value instead
-  recursive ? false,
+  recursive,
 }:
 
 let
