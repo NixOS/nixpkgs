@@ -107,46 +107,50 @@ in
 
   ###### implementation
 
-  config = lib.mkIf cfg.enable (lib.mkMerge [
-    {
+  config = lib.mkIf cfg.enable (
+    lib.mkMerge [
+      {
 
-      # for physlock -l and physlock -L
-      environment.systemPackages = [ pkgs.physlock ];
+        # for physlock -l and physlock -L
+        environment.systemPackages = [ pkgs.physlock ];
 
-      systemd.services.physlock = {
-        enable = true;
-        description = "Physlock";
-        wantedBy =
-          lib.optional cfg.lockOn.suspend "suspend.target"
-          ++ lib.optional cfg.lockOn.hibernate "hibernate.target"
-          ++ cfg.lockOn.extraTargets;
-        before =
-          lib.optional cfg.lockOn.suspend "systemd-suspend.service"
-          ++ lib.optional cfg.lockOn.hibernate "systemd-hibernate.service"
-          ++ lib.optional (cfg.lockOn.hibernate || cfg.lockOn.suspend) "systemd-suspend-then-hibernate.service"
-          ++ cfg.lockOn.extraTargets;
-        serviceConfig = {
-          Type = "forking";
-          ExecStart = "${pkgs.physlock}/bin/physlock -d${lib.optionalString cfg.muteKernelMessages "m"}${lib.optionalString cfg.disableSysRq "s"}${
-            lib.optionalString (cfg.lockMessage != "") " -p \"${cfg.lockMessage}\""
-          }";
+        systemd.services.physlock = {
+          enable = true;
+          description = "Physlock";
+          wantedBy =
+            lib.optional cfg.lockOn.suspend "suspend.target"
+            ++ lib.optional cfg.lockOn.hibernate "hibernate.target"
+            ++ cfg.lockOn.extraTargets;
+          before =
+            lib.optional cfg.lockOn.suspend "systemd-suspend.service"
+            ++ lib.optional cfg.lockOn.hibernate "systemd-hibernate.service"
+            ++ lib.optional (
+              cfg.lockOn.hibernate || cfg.lockOn.suspend
+            ) "systemd-suspend-then-hibernate.service"
+            ++ cfg.lockOn.extraTargets;
+          serviceConfig = {
+            Type = "forking";
+            ExecStart = "${pkgs.physlock}/bin/physlock -d${lib.optionalString cfg.muteKernelMessages "m"}${lib.optionalString cfg.disableSysRq "s"}${
+              lib.optionalString (cfg.lockMessage != "") " -p \"${cfg.lockMessage}\""
+            }";
+          };
         };
-      };
 
-      security.pam.services.physlock = { };
+        security.pam.services.physlock = { };
 
-    }
+      }
 
-    (lib.mkIf cfg.allowAnyUser {
+      (lib.mkIf cfg.allowAnyUser {
 
-      security.wrappers.physlock = {
-        setuid = true;
-        owner = "root";
-        group = "root";
-        source = "${pkgs.physlock}/bin/physlock";
-      };
+        security.wrappers.physlock = {
+          setuid = true;
+          owner = "root";
+          group = "root";
+          source = "${pkgs.physlock}/bin/physlock";
+        };
 
-    })
-  ]);
+      })
+    ]
+  );
 
 }
