@@ -1,0 +1,15 @@
+{
+  "replay": {
+     "url": "https://static.replay.io/downloads/linux-gecko-20220722-71c783507536-b7eae18423ef.tar.bz2",
+     "sha256": "0d3zbiid849nljhpfffi45qy2frghs33s28r86q8xrnli1d0cg83"
+  },
+  "recordreplay": {
+     "url": "https://static.replay.io/downloads/linux-recordreplay-b7eae18423ef.tgz",
+     "sha256": "1nvhka6ryiw8hac2fkg6va1narb0d7jiqqhxgs1dzblian3kw5j3",
+     "stripRoot": false
+  },
+  "replay-node": {
+      "url": "https://static.replay.io/downloads/linux-node-20220726-bac6d66b5ca1-5b966f2f136c",
+      "sha256": "1563bypnh60wd3k4s5xkla10cymyvnzcl4cfnkpyyrv5920qqc19"
+  }
+}
