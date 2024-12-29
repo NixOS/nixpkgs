@@ -426,12 +426,20 @@ in
       "relay"
       "isBridge"
     ] "Use services.tor.relay.role instead.")
-    (lib.mkRemovedOptionModule [ "services" "tor" "relay" "isExit" ] "Use services.tor.relay.role instead.")
+    (lib.mkRemovedOptionModule [
+      "services"
+      "tor"
+      "relay"
+      "isExit"
+    ] "Use services.tor.relay.role instead.")
     (lib.mkRenamedOptionModule
       [ "services" "tor" "relay" "nickname" ]
       [ "services" "tor" "settings" "Nickname" ]
     )
-    (lib.mkRenamedOptionModule [ "services" "tor" "relay" "port" ] [ "services" "tor" "settings" "ORPort" ])
+    (lib.mkRenamedOptionModule
+      [ "services" "tor" "relay" "port" ]
+      [ "services" "tor" "settings" "ORPort" ]
+    )
     (lib.mkRenamedOptionModule
       [ "services" "tor" "relay" "portSpec" ]
       [ "services" "tor" "settings" "ORPort" ]
