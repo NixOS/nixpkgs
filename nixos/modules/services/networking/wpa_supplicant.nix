@@ -31,7 +31,8 @@ let
     };
 
   # Creates a WPA2 fallback network
-  mkWPA2Fallback = opts: opts // { authProtocols = lib.subtractLists wpa3Protocols opts.authProtocols; };
+  mkWPA2Fallback =
+    opts: opts // { authProtocols = lib.subtractLists wpa3Protocols opts.authProtocols; };
 
   # Networks attrset as a list
   networkList = lib.mapAttrsToList (ssid: opts: opts // { inherit ssid; }) cfg.networks;
@@ -113,7 +114,8 @@ let
           "-c ${configFile}";
     in
     {
-      description = "WPA Supplicant instance" + lib.optionalString (iface != null) " for interface ${iface}";
+      description =
+        "WPA Supplicant instance" + lib.optionalString (iface != null) " for interface ${iface}";
 
       after = deviceUnit;
       before = [ "network.target" ];
