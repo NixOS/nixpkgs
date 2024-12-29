@@ -18075,8 +18075,6 @@ with pkgs;
 
   nix-linter = haskell.lib.compose.justStaticExecutables (haskellPackages.nix-linter);
 
-  nixos-option = callPackage ../tools/nix/nixos-option { };
-
   nix-pin = callPackage ../tools/package-management/nix-pin { };
 
   nix-prefetch-github = with python3Packages;
