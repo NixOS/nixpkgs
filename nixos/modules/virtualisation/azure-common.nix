@@ -5,7 +5,6 @@
   ...
 }:
 
-with lib;
 let
   cfg = config.virtualisation.azure;
   mlxDrivers = [
@@ -16,7 +15,7 @@ let
 in
 {
   options.virtualisation.azure = {
-    acceleratedNetworking = mkOption {
+    acceleratedNetworking = lib.mkOption {
       default = false;
       description = "Whether the machine's network interface has enabled accelerated networking.";
     };
@@ -68,7 +67,7 @@ in
     services.openssh.settings.ClientAliveInterval = 180;
 
     # Force getting the hostname from Azure
-    networking.hostName = mkDefault "";
+    networking.hostName = lib.mkDefault "";
 
     # Always include cryptsetup so that NixOps can use it.
     # sg_scan is needed to finalize disk removal on older kernels
@@ -79,12 +78,8 @@ in
 
     networking.usePredictableInterfaceNames = false;
 
-    services.udev.extraRules =
-      with builtins;
-      concatStringsSep "\n" (
-        map (i: ''
-          ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:${toString i}", ATTR{removable}=="0", SYMLINK+="disk/by-lun/${toString i}"
-        '') (lib.range 1 15)
-      );
+    services.udev.extraRules = lib.concatMapStrings (i: ''
+      ENV{DEVTYPE}=="disk", KERNEL!="sda" SUBSYSTEM=="block", SUBSYSTEMS=="scsi", KERNELS=="?:0:0:${toString i}", ATTR{removable}=="0", SYMLINK+="disk/by-lun/${toString i}"
+    '') (lib.range 1 15);
   };
 }

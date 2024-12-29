@@ -13,6 +13,6 @@
     "${modulesPath}/virtualisation/azure-image.nix"
   ];
 
-  # Please update the VM Generation to the actual value
-  virtualisation.azureImage.vmGeneration = "v1";
+  # Please set the VM Generation to the actual value
+  # virtualisation.azureImage.vmGeneration = "v1";
 }
