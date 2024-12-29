@@ -154,7 +154,7 @@ stdenv.mkDerivation (finalAttrs: {
   */
 
   meta = {
-    description = "Document Viewer application for Ubuntu Touch devices";
+    description = "Convergent E-Mail client for Ubuntu Touch devices";
     homepage = "https://gitlab.com/dekkan/dekko";
     changelog = "https://gitlab.com/dekkan/dekko/-/releases/${finalAttrs.version}";
     license = lib.licenses.gpl3Only;
