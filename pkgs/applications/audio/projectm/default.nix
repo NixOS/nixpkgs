@@ -12,15 +12,16 @@
   which,
 }:
 
+
 mkDerivation rec {
   pname = "projectm";
-  version = "3.1.12";
+  version = "4.1.3";
 
   src = fetchFromGitHub {
     owner = "projectM-visualizer";
     repo = "projectM";
     rev = "v${version}";
-    sha256 = "sha256-oEfOx93JyR94II5NkUCvMwqxuV7ktpOHZ8PNMLCiqDw=";
+    sha256 = "sha256-CvKEeUIi/2RxO3uQMdKgOqtsbOR4cnuRwTpXJKV7P5k=";
   };
 
   nativeBuildInputs = [
