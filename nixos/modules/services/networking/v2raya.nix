@@ -45,7 +45,9 @@ in
 
         serviceConfig = {
           User = "root";
-          ExecStart = "${lib.getExe (cfg.package.override { v2ray = cfg.cliPackage; })} --log-disable-timestamp";
+          ExecStart = "${
+            lib.getExe (cfg.package.override { v2ray = cfg.cliPackage; })
+          } --log-disable-timestamp";
           Environment = [ "V2RAYA_LOG_FILE=/var/log/v2raya/v2raya.log" ];
           LimitNPROC = 500;
           LimitNOFILE = 1000000;
