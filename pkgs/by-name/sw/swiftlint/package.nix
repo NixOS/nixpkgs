@@ -4,6 +4,7 @@
   fetchurl,
   unzip,
   nix-update-script,
+  versionCheckHook,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "swiftlint";
@@ -27,6 +28,9 @@ stdenvNoCC.mkDerivation rec {
     install -Dm755 swiftlint $out/bin/swiftlint
     runHook postInstall
   '';
+
+  doInstallCheck = true;
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   passthru.updateScript = nix-update-script { };
 
