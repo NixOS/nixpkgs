@@ -6562,6 +6562,8 @@ self: super: with self; {
 
   jax-cuda12-pjrt = callPackage ../development/python-modules/jax-cuda12-pjrt { };
 
+  jax-cuda12-plugin = callPackage ../development/python-modules/jax-cuda12-plugin { };
+
   jax-jumpy = callPackage ../development/python-modules/jax-jumpy { };
 
   jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix { };
