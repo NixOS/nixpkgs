@@ -65,13 +65,13 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "obs-studio";
-  version = "30.2.3";
+  version = "31.0.1";
 
   src = fetchFromGitHub {
     owner = "obsproject";
     repo = "obs-studio";
     rev = finalAttrs.version;
-    hash = "sha256-4bAzW62xX9apKOAJyn3iys1bFdHj4re2reMZtlGsn5s=";
+    hash = "sha256-dwS/90j4WfcneAsGFwuABM7xqvq1+VSD2uDVdU/GgQo=";
     fetchSubmodules = true;
   };
 
@@ -81,29 +81,6 @@ stdenv.mkDerivation (finalAttrs: {
     # Lets obs-browser build against CEF 90.1.0+
     ./Enable-file-access-and-universal-access-for-file-URL.patch
     ./fix-nix-plugin-path.patch
-
-    # Fix libobs.pc for plugins on non-x86 systems
-    (fetchpatch {
-      name = "fix-arm64-cmake.patch";
-      url = "https://git.alpinelinux.org/aports/plain/community/obs-studio/broken-config.patch?id=a92887564dcc65e07b6be8a6224fda730259ae2b";
-      hash = "sha256-yRSw4VWDwMwysDB3Hw/tsmTjEQUhipvrVRQcZkbtuoI=";
-      includes = [ "*/CompilerConfig.cmake" ];
-    })
-
-    (fetchpatch {
-      name = "qt-6.8.patch";
-      url = "https://github.com/obsproject/obs-websocket/commit/d9befb9e0a4898695eef5ccbc91a4fac02027854.patch";
-      extraPrefix = "plugins/obs-websocket/";
-      stripLen = 1;
-      hash = "sha256-7SDBRr9G40b9DfbgdaYJxTeiDSLUfVixtMtM3cLTVZs=";
-    })
-
-    # Fix lossless audio, ffmpeg 7,1 compatibility issue
-    (fetchpatch {
-      name = "fix-lossless-audio.patch";
-      url = "https://github.com/obsproject/obs-studio/commit/dfc3a69c5276edf84c933035ff2a7e278fa13c9a.patch";
-      hash = "sha256-wiF3nolBpZKp7LR7NloNfJ+v4Uq/nBgwCVoKZX+VEMA=";
-    })
   ];
 
   nativeBuildInputs = [
