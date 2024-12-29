@@ -4,9 +4,6 @@
   lib,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.hologram-agent;
 
@@ -19,20 +16,20 @@ in
 {
   options = {
     services.hologram-agent = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable the Hologram agent for AWS instance credentials";
       };
 
-      dialAddress = mkOption {
-        type = types.str;
+      dialAddress = lib.mkOption {
+        type = lib.types.str;
         default = "localhost:3100";
         description = "Hologram server and port.";
       };
 
-      httpPort = mkOption {
-        type = types.str;
+      httpPort = lib.mkOption {
+        type = lib.types.str;
         default = "80";
         description = "Port for metadata service to listen on.";
       };
@@ -40,7 +37,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     boot.kernelModules = [ "dummy" ];
 
     networking.interfaces.dummy0.ipv4.addresses = [
