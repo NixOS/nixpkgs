@@ -1,6 +1,7 @@
 {
   lib,
   buildGoModule,
+  installShellFiles,
   fetchFromGitHub,
   nix-update-script,
 }:
@@ -22,7 +23,16 @@ buildGoModule rec {
 
   subPackages = [ "./exercism" ];
 
+  nativeBuildInputs = [ installShellFiles ];
+
   passthru.updateScript = nix-update-script { };
+
+  postInstall = ''
+    installShellCompletion --cmd exercism \
+      --bash shell/exercism_completion.bash \
+      --fish shell/exercism.fish \
+      --zsh shell/exercism_completion.zsh
+  '';
 
   meta = with lib; {
     inherit (src.meta) homepage;
