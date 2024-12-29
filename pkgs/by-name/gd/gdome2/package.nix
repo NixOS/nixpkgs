@@ -36,6 +36,7 @@ stdenv.mkDerivation {
   patches = [
     ./xml-document.patch
     ./fno-common.patch
+    ./configure.patch
   ];
 
   meta = with lib; {

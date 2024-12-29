@@ -1,0 +1,11 @@
+--- a/configure	2024-12-29 14:19:55.616708624 +0100
++++ b/configure	2024-12-29 14:19:43.876864480 +0100
+@@ -1206,7 +1206,7 @@
+ #line 1207 "configure"
+ #include "confdefs.h"
+ 
+-main(){return(0);}
++int main(){return(0);}
+ EOF
+ if { (eval echo configure:1212: \"$ac_link\") 1>&5; (eval $ac_link) 2>&5; } && test -s conftest${ac_exeext}; then
+   ac_cv_prog_cc_works=yes
