@@ -14,14 +14,14 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "handheld-daemon";
-  version = "3.8.1";
+  version = "3.9.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "hhd-dev";
     repo = "hhd";
     tag = "v${version}";
-    hash = "sha256-LDZ3z1IZTkqdJ/xli9b65yO9t1Pj6a4F0DrYdOnOgNU=";
+    hash = "sha256-7nFCZgQY+UDn8jkcyYK8F3j+AjZT0elSXhhy74ofmyM=";
   };
 
   # This package relies on several programs expected to be on the user's PATH.
