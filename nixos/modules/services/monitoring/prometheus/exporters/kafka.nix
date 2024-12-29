@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.prometheus.exporters.kafka;
@@ -9,7 +14,8 @@ let
     types
     concatStringsSep
     ;
-in {
+in
+{
   port = 8080;
 
   extraOpts = {
@@ -24,22 +30,27 @@ in {
       '';
     };
   };
-  serviceOpts = mkMerge ([{
-    serviceConfig = {
-      ExecStart = ''
-        ${lib.getExe cfg.package}
-      '';
-      EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
-      RestartSec = "5s";
-      RestrictAddressFamilies = [
-        "AF_INET"
-        "AF_INET6"
-      ];
-    };
-  }] ++ [
-    (mkIf config.services.apache-kafka.enable {
-      after = [ "apache-kafka.service" ];
-      requires = [ "apache-kafka.service" ];
-    })
-  ]);
+  serviceOpts = mkMerge (
+    [
+      {
+        serviceConfig = {
+          ExecStart = ''
+            ${lib.getExe cfg.package}
+          '';
+          EnvironmentFile = mkIf (cfg.environmentFile != null) cfg.environmentFile;
+          RestartSec = "5s";
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ];
+        };
+      }
+    ]
+    ++ [
+      (mkIf config.services.apache-kafka.enable {
+        after = [ "apache-kafka.service" ];
+        requires = [ "apache-kafka.service" ];
+      })
+    ]
+  );
 }
