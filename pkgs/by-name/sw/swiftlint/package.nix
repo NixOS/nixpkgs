@@ -34,13 +34,16 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "A tool to enforce Swift style and conventions";
     homepage = "https://realm.github.io/SwiftLint/";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "swiftlint";
-    maintainers = with maintainers; [ matteopacini ];
-    platforms = platforms.darwin;
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
+    maintainers = with lib.maintainers; [
+      matteopacini
+      DimitarNestorov
+    ];
+    platforms = lib.platforms.darwin;
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }
