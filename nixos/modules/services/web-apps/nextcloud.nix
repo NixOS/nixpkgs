@@ -416,7 +416,6 @@ in {
     config = {
       dbtype = mkOption {
         type = types.enum [ "sqlite" "pgsql" "mysql" ];
-        default = "sqlite";
         description = "Database type.";
       };
       dbname = mkOption {
