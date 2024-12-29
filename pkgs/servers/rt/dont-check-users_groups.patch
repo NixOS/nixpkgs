@@ -1,0 +1,12 @@
+diff --git a/sbin/rt-test-dependencies.in b/sbin/rt-test-dependencies.in
+index e51feb197..d75b1bc4e 100644
+--- a/sbin/rt-test-dependencies.in
++++ b/sbin/rt-test-dependencies.in
+@@ -423,6 +423,7 @@ sub check_perl_version {
+ }
+ 
+ sub check_users_groups {
++    return 0;
+     section("users / groups");
+ 
+     my $fails = 0;

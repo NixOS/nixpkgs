@@ -1,0 +1,16 @@
+diff --git a/lib/youseedee/__init__.py b/lib/youseedee/__init__.py
+index d2aeab3..c706277 100644
+--- a/lib/youseedee/__init__.py
++++ b/lib/youseedee/__init__.py
+@@ -29,10 +29,7 @@ UCD_URL = "https://unicode.org/Public/UCD/latest/ucd/UCD.zip"
+ 
+ 
+ def ucd_dir():
+-    ucddir = os.path.expanduser("~/.youseedee")
+-    if not os.path.isdir(ucddir):
+-        os.mkdir(ucddir)
+-    return ucddir
++    return "@ucd_dir@"
+ 
+ 
+ def ensure_files():

@@ -1,0 +1,26 @@
+diff --git a/panels/dock/tray/CMakeLists.txt b/panels/dock/tray/CMakeLists.txt
+index ed6da31..1a33d06 100644
+--- a/panels/dock/tray/CMakeLists.txt
++++ b/panels/dock/tray/CMakeLists.txt
+@@ -10,7 +10,7 @@ endif()
+ 
+ # project(dde-dock)
+ 
+-find_package(DtkTools REQUIRED)
++find_package(Dtk6Tools REQUIRED)
+ 
+ set(CMAKE_THREAD_LIBS_INIT "-lpthread")
+ set(CMAKE_HAVE_THREADS_LIBRARY 1)
+diff --git a/panels/dock/tray/frame/CMakeLists.txt b/panels/dock/tray/frame/CMakeLists.txt
+index b55aa48..0a397cb 100644
+--- a/panels/dock/tray/frame/CMakeLists.txt
++++ b/panels/dock/tray/frame/CMakeLists.txt
+@@ -22,7 +22,7 @@ find_package(Qt6WaylandClient REQUIRED)
+ find_package(Dtk6Gui REQUIRED)
+ find_package(Dtk6Core REQUIRED)
+ find_package(Dtk6Widget REQUIRED)
+-find_package(DtkCMake REQUIRED)
++find_package(Dtk6CMake REQUIRED)
+ # find_package(dbusmenu-qt6 REQUIRED)
+ find_package(ECM REQUIRED NO_MODULE)
+ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
