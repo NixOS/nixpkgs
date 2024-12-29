@@ -74,8 +74,14 @@ let
             --replace-fail 'auto &vi' 'auto vi'
         '';
 
-      # We don't need PS overrides anymore, and gcode-viewer is embedded in the binary.
-      postInstall = null;
+      # We don't need PS overrides anymore, and gcode-viewer is embedded in the binary
+      # but we do still need to move OCCTWrapper.so to the lib directory
+      postInstall = ''
+        if [[ -f $out/bin/OCCTWrapper.so ]]; then
+          mkdir -p "$out/lib"
+          mv -v $out/bin/*.* $out/lib/
+        fi
+      '';
       separateDebugInfo = true;
 
       buildInputs = super.buildInputs ++ [
