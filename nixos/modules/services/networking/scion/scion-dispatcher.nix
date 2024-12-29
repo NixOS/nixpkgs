@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   globalCfg = config.services.scion;
   cfg = config.services.scion.scion-dispatcher;
@@ -21,15 +18,15 @@ let
       level = "info";
     };
   };
-  configFile = toml.generate "scion-dispatcher.toml" (recursiveUpdate defaultConfig cfg.settings);
+  configFile = toml.generate "scion-dispatcher.toml" (lib.recursiveUpdate defaultConfig cfg.settings);
 in
 {
   options.services.scion.scion-dispatcher = {
-    enable = mkEnableOption "the scion-dispatcher service";
-    settings = mkOption {
+    enable = lib.mkEnableOption "the scion-dispatcher service";
+    settings = lib.mkOption {
       default = { };
       type = toml.type;
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           dispatcher = {
             id = "dispatcher";
@@ -48,7 +45,7 @@ in
       '';
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # Needed for group ownership of the dispatcher socket
     users.groups.scion = { };
 
