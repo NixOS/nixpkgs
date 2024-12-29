@@ -1200,7 +1200,7 @@ let
     });
 
     b64 = old.b64.overrideAttrs (attrs: {
-      nativeBuildInputs = [ pkgs.cargo ] ++ attrs.nativeBuildInputs;
+      nativeBuildInputs = with pkgs; [ cargo rustc ] ++ attrs.nativeBuildInputs;
       postPatch = "patchShebangs configure";
     });
 
