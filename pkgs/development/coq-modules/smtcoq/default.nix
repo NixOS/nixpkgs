@@ -11,16 +11,17 @@
   version ? null,
 }:
 
-let
-  # version of veriT that works with SMTCoq
-  veriT' = veriT.overrideAttrs (oA: {
-    src = fetchurl {
-      url = "https://www.lri.fr/~keller/Documents-recherche/Smtcoq/veriT9f48a98.tar.gz";
-      sha256 = "sha256-Pe46PxQVHWwWwx5Ei4Bl95A0otCiXZuUZ2nXuZPYnhY=";
-    };
-    meta.broken = false;
-  });
-in
+# Broken since https://github.com/NixOS/nixpkgs/pull/354627, temporarily disactivated
+# let
+#   # version of veriT that works with SMTCoq
+#   veriT' = veriT.overrideAttrs (oA: {
+#     src = fetchurl {
+#       url = "https://www.lri.fr/~keller/Documents-recherche/Smtcoq/veriT9f48a98.tar.gz";
+#       sha256 = "sha256-Pe46PxQVHWwWwx5Ei4Bl95A0otCiXZuUZ2nXuZPYnhY=";
+#     };
+#     meta.broken = false;
+#   });
+# in
 
 mkCoqDerivation {
   pname = "smtcoq";
@@ -79,7 +80,7 @@ mkCoqDerivation {
   propagatedBuildInputs =
     [
       cvc5
-      veriT'
+      # veriT'  # c.f. comment above
       zchaff
       stdlib
     ]
