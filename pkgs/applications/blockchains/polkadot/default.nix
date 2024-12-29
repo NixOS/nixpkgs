@@ -72,9 +72,11 @@ rustPlatform.buildRustPackage rec {
       SystemConfiguration
     ];
 
-  # NOTE: disable building `core`/`std` in wasm environment since rust-src isn't
-  # available for `rustc-wasm32`
-  WASM_BUILD_STD = 0;
+  # NOTE: currently we can't build the runtimes since it requires rebuilding rust std
+  # (-Zbuild-std), for which rust-src is required to be available in the sysroot of rustc.
+  # this should no longer be needed after: https://github.com/paritytech/polkadot-sdk/pull/7008
+  # since the new wasmv1-none target won't require rebuilding std.
+  SKIP_WASM_BUILD = 1;
 
   OPENSSL_NO_VENDOR = 1;
   PROTOC = "${protobuf}/bin/protoc";
