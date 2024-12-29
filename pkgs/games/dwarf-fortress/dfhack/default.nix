@@ -95,9 +95,14 @@ let
       xmlRev = "53b334a03e06693ea78164cee8e1a410ee68fef3";
     };
     "50.14" = {
-      dfHackRelease = "50.14-r1.1";
-      hash = "sha256-2zsAWEFk/t4Y9impHoZI4XJulMLln4lGPh3Yx24ivW4=";
-      xmlRev = "8db66a097d6467e608c9e7c4f378ca0a5b153b0f";
+      dfHackRelease = "50.14-r2.1";
+      hash = "sha256-dmWKe3O/vxrzkoB/9dWs6kYqHx5vAayFyDfQiE36Bws=";
+      xmlRev = "be343a666869be92c28036ca0e1cebcb9328b636";
+    };
+    "50.15" = {
+      dfHackRelease = "50.15-r1.2";
+      hash = "sha256-k/Qd47guvk/ziCIiuvqOg5Yr8Zb5L4YsaCyud7s30EM=";
+      xmlRev = "ffdf5771ea23e3b35f5f46624f773a555e1c450f";
     };
   };
 
