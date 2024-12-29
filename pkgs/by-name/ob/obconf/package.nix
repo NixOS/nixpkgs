@@ -40,6 +40,8 @@ stdenv.mkDerivation (finalAttrs: {
     openbox
   ];
 
+  strictDeps = true;
+
   postPatch = ''
     substituteInPlace configure.ac --replace-fail 2.0.4 ${finalAttrs.version}
   '';
