@@ -11,6 +11,7 @@
 lib.makeOverridable (
   {
     name, # The name of the desktop file
+    destination ? "/share/applications",
     type ? "Application",
     # version is hardcoded
     desktopName, # The name of the application
@@ -135,7 +136,7 @@ lib.makeOverridable (
   in
   writeTextFile {
     name = "${name}.${extension}";
-    destination = "/share/applications/${name}.${extension}";
+    destination = "${destination}/${name}.${extension}";
     text = builtins.concatStringsSep "\n" content;
     checkPhase = ''${buildPackages.desktop-file-utils}/bin/desktop-file-validate "$target"'';
   }
