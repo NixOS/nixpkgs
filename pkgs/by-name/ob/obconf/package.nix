@@ -23,6 +23,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-qwm66VA/ueRMFtSUcrmuObNkz+KYgWRnmR7TnQwpxiE=";
   };
 
+  patches = [ ./fix-implicit-declarations.patch ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
