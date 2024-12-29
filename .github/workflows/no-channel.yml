@@ -16,7 +16,8 @@ jobs:
     name: "This PR is is targeting a channel branch"
     runs-on: ubuntu-latest
     steps:
-    - run: |
+    - if: ${{ startsWith(github.base_ref, 'nixos') || startsWith(github.base_ref, 'nixpkgs') }}
+      run: |
         cat <<EOF
         The nixos-* and nixpkgs-* branches are pushed to by the channel
         release script and should not be merged into directly.
