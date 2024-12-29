@@ -117,6 +117,7 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [
       cpcloud
       natsukium
+      misilelab
     ];
     mainProgram = "pdm";
   };
