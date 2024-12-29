@@ -41,7 +41,7 @@ stdenv.mkDerivation rec {
   postPatch = ''
     for a in tests/kakasi-* ; do
       substituteInPlace $a \
-        --replace "/bin/echo" echo
+        --replace-quiet "/bin/echo" echo
     done
   '';
 
