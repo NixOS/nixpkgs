@@ -2,6 +2,9 @@
   lib,
   fetchFromGitHub,
   buildGoModule,
+  testers,
+  termshot,
+  nix-update-script,
 }:
 buildGoModule rec {
   pname = "termshot";
@@ -10,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "homeport";
     repo = "termshot";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-vvSUdXVLuc3GmxPX9SzSeb8vbmqjhSLjXd9nmU7Q46g=";
   };
 
@@ -22,9 +25,15 @@ buildGoModule rec {
     "-X github.com/homeport/termshot/internal/cmd.version=${version}"
   ];
 
+  passthru = {
+    tests.version = testers.testVersion { package = termshot; };
+    updateScript = nix-update-script { };
+  };
+
   meta = {
     description = "Creates screenshots based on terminal command output";
     homepage = "https://github.com/homeport/termshot";
+    changelog = "https://github.com/homeport/termshot/releases/tag/v${version}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ defelo ];
     mainProgram = "termshot";
