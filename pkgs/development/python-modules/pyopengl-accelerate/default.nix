@@ -19,11 +19,21 @@ buildPythonPackage rec {
     hash = "sha256-KxI2ISc6k59/0uwidUHjmfm11OgV1prgvbG2xwopNoA=";
   };
 
+  postPatch = ''
+    substituteInPlace src/numpy_formathandler.pyx \
+      --replace-fail 'Py_intptr_t' 'npy_intp'
+  '';
+
   nativeBuildInputs = [
     cython
     numpy
     setuptools
     wheel
+  ];
+
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=int-conversion"
+    "-Wno-error=incompatible-pointer-types"
   ];
 
   meta = {
