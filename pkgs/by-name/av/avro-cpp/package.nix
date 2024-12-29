@@ -31,6 +31,8 @@ stdenv.mkDerivation rec {
     fmt
   ];
 
+  doCheck = true;
+
   meta = {
     description = "C++ library which implements parts of the Avro Specification";
     mainProgram = "avrogencpp";
