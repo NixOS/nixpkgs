@@ -34,6 +34,7 @@ stdenv.mkDerivation {
   env.NIX_CFLAGS_COMPILE = builtins.concatStringsSep " " [
     "-Wno-error=deprecated-declarations"
     "-Wno-error=incompatible-pointer-types"
+    "-Wno-error=discarded-qualifiers"
   ];
 
   nativeBuildInputs = [
@@ -61,11 +62,11 @@ stdenv.mkDerivation {
       wrapGAppsHook3
     ]);
 
-  meta = with lib; {
+  meta = {
     description = "Tool to record a running X desktop to an animation suitable for presentation in a web browser";
     homepage = "https://github.com/GNOME/byzanz";
-    license = licenses.gpl3;
-    platforms = platforms.linux;
-    maintainers = [ ];
+    license = lib.licenses.gpl3;
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ bot-wxt1221 ];
   };
 }
