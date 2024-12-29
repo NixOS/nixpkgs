@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.wg-netmanager;
 in
@@ -14,12 +11,12 @@ in
 
   options = {
     services.wg-netmanager = {
-      enable = mkEnableOption "Wireguard network manager";
+      enable = lib.mkEnableOption "Wireguard network manager";
     };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     # NOTE: wg-netmanager runs as root
     systemd.services.wg-netmanager = {
       description = "Wireguard network manager";
@@ -50,5 +47,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ gin66 ];
+  meta.maintainers = with lib.maintainers; [ gin66 ];
 }
