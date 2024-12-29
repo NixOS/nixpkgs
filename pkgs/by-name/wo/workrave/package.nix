@@ -26,12 +26,10 @@
   dbus,
   dbus-glib,
   gdome2,
-  gstreamer,
-  gst-plugins-base,
-  gst-plugins-good,
+  gst_all_1,
   libsigcxx,
   boost,
-  jinja2,
+  python3Packages,
 }:
 
 stdenv.mkDerivation rec {
@@ -54,7 +52,7 @@ stdenv.mkDerivation rec {
     libtool
     pkg-config
     wrapGAppsHook3
-    jinja2
+    python3Packages.jinja2
     gobject-introspection
   ];
 
@@ -74,9 +72,9 @@ stdenv.mkDerivation rec {
     dbus
     dbus-glib
     gdome2
-    gstreamer
-    gst-plugins-base
-    gst-plugins-good
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-good
     libsigcxx
     boost
   ];
