@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   cmake,
   python3Packages,
   libsForQt5,
@@ -29,6 +30,14 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-du3dPTg3OxNTWXDQo2m9W0rJxtrkn+lQSh/XGiu/eGg=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "add-missing-gcc14-include.patch";
+      url = "https://github.com/nba-emu/NanoBoyAdvance/commit/f5551cc1aa6a12b3d65dd56d186c73a67f3d9dd6.patch";
+      hash = "sha256-TCyN0qz7o7BDhVZtaTsWCZAcKThi5oVqUM0NGmj44FI=";
+    })
+  ];
 
   nativeBuildInputs = [
     cmake
