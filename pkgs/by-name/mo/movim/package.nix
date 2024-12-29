@@ -155,8 +155,9 @@ php.buildComposerProject (finalAttrs: {
   postInstall = ''
     mkdir -p $out/bin
     echo "#!${lib.getExe dash}" > $out/bin/movim
-    echo "${lib.getExe finalAttrs.php} $out/share/php/${finalAttrs.pname}/daemon.php \"\$@\"" >> $out/bin/movim
-    chmod +x $out/bin/movim
+    echo "${lib.getExe finalAttrs.php} $out/share/php/${finalAttrs.pname}/daemon.php \"\$@\"" >> $out/bin/${finalAttrs.meta.mainProgram}
+    chmod +x $out/bin/${finalAttrs.meta.mainProgram}
+
 
     mkdir -p $out/share/{bash-completion/completion,fish/vendor_completions.d,zsh/site-functions}
     $out/bin/movim completion bash | sed "s/daemon.php/movim/g" > $out/share/bash-completion/completion/movim.bash

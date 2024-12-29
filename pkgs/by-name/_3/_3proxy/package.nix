@@ -35,6 +35,9 @@ stdenv.mkDerivation rec {
     rm -fr $out/var
   '';
 
+  # common.c:208:9: error: initialization of 'int (*)(struct pollfd *, unsigned int,  int)' from incompatible pointer type 'int (*)(struct pollfd *, nfds_t,  int)' {aka 'int (*)(struct pollfd *, long unsigned int,  int)'}
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   passthru.tests = {
     smoke-test = nixosTests._3proxy;
   };

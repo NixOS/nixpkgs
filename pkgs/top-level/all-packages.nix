@@ -970,9 +970,7 @@ with pkgs;
 
   bikeshed = python3Packages.callPackage ../applications/misc/bikeshed { };
 
-  davinci-resolve = callPackage ../applications/video/davinci-resolve { };
-
-  davinci-resolve-studio = callPackage ../applications/video/davinci-resolve { studioVariant = true; };
+  davinci-resolve-studio = callPackage ../by-name/da/davinci-resolve/package.nix { studioVariant = true; };
 
   dehinter = with python3Packages; toPythonApplication dehinter;
 
@@ -1570,7 +1568,6 @@ with pkgs;
   };
   xst = callPackage ../applications/terminal-emulators/st/xst.nix { };
   mcaimi-st = callPackage ../applications/terminal-emulators/st/mcaimi-st.nix { };
-  siduck76-st = callPackage ../applications/terminal-emulators/st/siduck76-st.nix { };
 
   stupidterm = callPackage ../applications/terminal-emulators/stupidterm {
     gtk = gtk3;
@@ -2278,8 +2275,6 @@ with pkgs;
   easyocr = with python3.pkgs; toPythonApplication easyocr;
 
   eddy = libsForQt5.callPackage ../applications/graphics/eddy { };
-
-  electronplayer = callPackage ../applications/video/electronplayer/electronplayer.nix { };
 
   element-web = callPackage ../by-name/el/element-web/package.nix {
     conf = config.element-web.conf or { };
@@ -3057,7 +3052,6 @@ with pkgs;
   };
 
   curlHTTP3 = curl.override {
-    openssl = quictls;
     http3Support = true;
   };
 
@@ -3205,7 +3199,9 @@ with pkgs;
 
   tsm-client-withGui = callPackage ../by-name/ts/tsm-client/package.nix { enableGui = true; };
 
-  tracy-x11 = callPackage ../by-name/tr/tracy/package.nix { withWayland = false; };
+  tracy = callPackage ../by-name/tr/tracy/package.nix { withWayland = stdenv.isLinux; };
+  tracy-glfw = callPackage ../by-name/tr/tracy/package.nix { withWayland = false; };
+  tracy-wayland = callPackage ../by-name/tr/tracy/package.nix { withWayland = true; };
 
   uusi = haskell.lib.compose.justStaticExecutables haskellPackages.uusi;
 
@@ -3581,9 +3577,8 @@ with pkgs;
 
   gdown = with python3Packages; toPythonApplication gdown;
 
-  goverlay = callPackage ../tools/graphics/goverlay {
-    inherit (libsForQt5) libqtpas wrapQtAppsHook;
-    inherit (plasma5Packages) breeze-qt5;
+  goverlay = qt6Packages.callPackage ../tools/graphics/goverlay {
+    inherit (qt6Packages) libqtpas wrapQtAppsHook;
   };
 
   gpt4all-cuda = gpt4all.override {
@@ -4448,8 +4443,6 @@ with pkgs;
   nextcloud28Packages = callPackage ../servers/nextcloud/packages { ncVersion = "28"; };
   nextcloud29Packages = callPackage ../servers/nextcloud/packages { ncVersion = "29"; };
   nextcloud30Packages = callPackage ../servers/nextcloud/packages { ncVersion = "30"; };
-
-  nextcloud-client = qt6Packages.callPackage ../applications/networking/nextcloud-client { };
 
   nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
 
@@ -6828,9 +6821,7 @@ with pkgs;
   cargo-bazel = callPackage ../development/tools/rust/cargo-bazel {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-  cargo-cache = callPackage ../development/tools/rust/cargo-cache {
-    inherit (darwin.apple_sdk.frameworks) Security;
-  };
+  cargo-cache = callPackage ../development/tools/rust/cargo-cache { };
   cargo-crev = callPackage ../development/tools/rust/cargo-crev {
     inherit (darwin.apple_sdk.frameworks) Security SystemConfiguration CoreFoundation;
   };
@@ -8371,7 +8362,8 @@ with pkgs;
 
   qtcreator = qt6Packages.callPackage ../development/tools/qtcreator {
     inherit (linuxPackages) perf;
-    stdenv = llvmPackages.stdenv;
+    llvmPackages = llvmPackages_18;
+    stdenv = llvmPackages_18.stdenv;
   };
 
   qxmledit = libsForQt5.callPackage ../applications/editors/qxmledit {} ;
@@ -8725,6 +8717,7 @@ with pkgs;
     boost182
     boost183
     boost186
+    boost187
   ;
 
   boost = boost186;
@@ -9225,7 +9218,6 @@ with pkgs;
   gmime3 = callPackage ../development/libraries/gmime/3.nix { };
   gmime = gmime2;
 
-  gmp4 = callPackage ../development/libraries/gmp/4.3.2.nix { }; # required by older GHC versions
   gmp6 = callPackage ../development/libraries/gmp/6.x.nix { };
   gmp = gmp6;
   gmpxx = gmp.override { cxx = true; };
@@ -13430,7 +13422,7 @@ with pkgs;
   };
 
   inherit (callPackage ../applications/virtualization/docker {})
-    docker_24 docker_25 docker_26 docker_27;
+    docker_25 docker_26 docker_27;
 
   docker = docker_27;
   docker-client = docker.override { clientOnly = true; };
