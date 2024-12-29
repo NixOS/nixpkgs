@@ -78,7 +78,6 @@ python3Packages.buildPythonApplication rec {
     maintainers = with lib.maintainers; [
       toonn
       lucasew
-      magnetophon
     ];
     mainProgram = "ranger";
   };
