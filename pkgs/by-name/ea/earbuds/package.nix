@@ -12,7 +12,7 @@
 }:
 rustPlatform.buildRustPackage {
   pname = "earbuds";
-  version = "0.1.9-unstable-2024-06-28";
+  version = "0.1.9";
 
   src = fetchFromGitHub {
     owner = "JojiiOfficial";
