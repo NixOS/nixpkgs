@@ -1,18 +1,18 @@
 {
   lib,
   stdenv,
-  python311,
+  python312,
   fetchFromGitHub,
   gitMinimal,
   portaudio,
 }:
 
 let
-  python3 = python311.override {
+  python3 = python312.override {
     self = python3;
     packageOverrides = _: super: { tree-sitter = super.tree-sitter_0_21; };
   };
-  version = "0.69.0";
+  version = "0.70.0";
   aider-chat = python3.pkgs.buildPythonApplication {
     pname = "aider-chat";
     inherit version;
@@ -22,7 +22,7 @@ let
       owner = "Aider-AI";
       repo = "aider";
       rev = "refs/tags/v${version}";
-      hash = "sha256-fJLLWL31BLEpgBrYDq0E8t7GN9TyOA5pwt42H/Hqh58=";
+      hash = "sha256-wGm6JV9ISRi/p1lA3JyzOdHQKFHFxEhfr+NdShUxm0M=";
     };
 
     pythonRelaxDeps = true;

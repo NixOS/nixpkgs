@@ -604,6 +604,12 @@
     githubId = 25236206;
     name = "Adrian Dole";
   };
+  adrian-gierakowski = {
+    email = "adrian.gierakowski@gmail.com";
+    github = "adrian-gierakowski";
+    githubId = 330177;
+    name = "Adrian Gierakowski";
+  };
   adriangl = {
     email = "adrian@lauterer.it";
     matrix = "@adriangl:pvv.ntnu.no";
@@ -5762,6 +5768,12 @@
     githubId = 11946442;
     name = "Dipin Hora";
   };
+  diredocks = {
+    email = "chensudago@gmail.com";
+    github = "diredocks";
+    githubId = 26994007;
+    name = "Chen Xin";
+  };
   dirkx = {
     email = "dirkx@webweaving.org";
     github = "dirkx";
@@ -10334,6 +10346,14 @@
     github = "jchv";
     githubId = 938744;
     name = "John Chadwick";
+  };
+  jcollie = {
+    email = "jeff@ocjtech.us";
+    github = "jcollie";
+    githubId = 740022;
+    matrix = "@jeff:ocjtech.us";
+    name = "Jeffrey C. Ollie";
+    keys = [ { fingerprint = "A8CF 5B72 ABC3 9A17 3FEA  620E 6F86 035A 6D97 044E"; } ];
   };
   jcouyang = {
     email = "oyanglulu@gmail.com";

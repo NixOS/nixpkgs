@@ -17,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "bloodyad";
-  version = "2.1.5";
+  version = "2.1.7";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "CravateRouge";
     repo = "bloodyAD";
     rev = "refs/tags/v${version}";
-    hash = "sha256-98Fm5c2BWRTuazVMM3v7s2ad5M0nOFQ+H+60whYhnDE=";
+    hash = "sha256-0BzVZ1aIjcq6D95hBjO+ahHaA48bmyaPAYHTAwQHaQg=";
   };
 
   build-system = [ hatchling ];

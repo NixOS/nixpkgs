@@ -30,6 +30,7 @@ python3.pkgs.buildPythonApplication rec {
       pika
       python-dateutil
       pytz # https://github.com/Kozea/Radicale/issues/816
+      ldap3
     ]
     ++ passlib.optional-dependencies.bcrypt;
 

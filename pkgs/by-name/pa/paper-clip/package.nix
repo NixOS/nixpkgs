@@ -8,6 +8,7 @@
   libadwaita,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   poppler,
   stdenv,
@@ -42,6 +43,10 @@ stdenv.mkDerivation (finalAttrs: {
     libadwaita
     poppler
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/Diego-Ivan/Paper-Clip/releases/tag/v${finalAttrs.version}";

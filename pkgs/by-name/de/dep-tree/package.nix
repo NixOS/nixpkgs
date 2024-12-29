@@ -32,7 +32,7 @@ let
     };
   };
   pname = "dep-tree";
-  version = "0.23.0";
+  version = "0.23.1";
 in
 buildGoModule {
   inherit pname version;
@@ -41,7 +41,7 @@ buildGoModule {
     owner = "gabotechs";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-Vd6g9UE3XEFGjCK8tFfOphYcNx+zeBS9rBVz0MDLe1I=";
+    hash = "sha256-Y+zNx+p8xmM0L4C5IELtepm7TQDhpxOVzgc1HxdFa0w=";
   };
 
   vendorHash = "sha256-KoVOjZq+RrJ2gzLnANHPPtbEY1ztC0rIXWD9AXAxqMg=";
