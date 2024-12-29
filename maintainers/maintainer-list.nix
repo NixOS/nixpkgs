@@ -23048,17 +23048,17 @@
     githubId = 70387628;
     name = "Basil Keeler";
   };
-  totoroot = {
-    name = "Matthias Thym";
-    email = "git@thym.at";
-    github = "totoroot";
-    githubId = 39650930;
-  };
   totaltax = {
     name = "Coen Shields";
     email = "shieldscoen@gmail.com";
     github = "TotalTaxAmount";
     githubId = 64336456;
+  };
+  totoroot = {
+    name = "Matthias Thym";
+    email = "git@thym.at";
+    github = "totoroot";
+    githubId = 39650930;
   };
   ToxicFrog = {
     email = "toxicfrog@ancilla.ca";

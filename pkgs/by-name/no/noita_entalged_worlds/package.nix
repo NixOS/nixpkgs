@@ -1,12 +1,4 @@
-{
-  rustPlatform,
-  fetchFromGitHub,
-  libxcb,
-  python3,
-  makeWrapper,
-  steam-run,
-  lib
-}:
+{ rustPlatform, fetchFromGitHub, libxcb, python3, makeWrapper, steam-run, lib }:
 
 rustPlatform.buildRustPackage rec {
   pname = "noita_entangled_worlds";
@@ -21,21 +13,13 @@ rustPlatform.buildRustPackage rec {
 
   sourceRoot = "${src.name}/noita-proxy";
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-  };
+  cargoLock = { lockFile = ./Cargo.lock; };
 
   patches = [ ./00-save-location.patch ];
 
-  buildInputs = [
-    libxcb
-    steam-run
-  ];
+  buildInputs = [ libxcb steam-run ];
 
-  nativeBuildInputs = [
-    python3
-    makeWrapper
-  ];
+  nativeBuildInputs = [ python3 makeWrapper ];
 
   doCheck = false;
 
@@ -48,14 +32,12 @@ rustPlatform.buildRustPackage rec {
       --add-flags "$out/bin/.noita-proxy-unwrapped"
   '';
 
-    meta = {
-    changelog = "https://github.com/IntQuant/noita_entangled_worlds/releases/tag/v${version}";
+  meta = {
+    changelog =
+      "https://github.com/IntQuant/noita_entangled_worlds/releases/tag/v${version}";
     description = "True coop multiplayer mod for Noita";
     homepage = "https://github.com/IntQuant/noita_entangled_worlds";
-    license = with lib.licenses; [
-      asl20
-      mit
-    ];
+    license = with lib.licenses; [ asl20 mit ];
     maintainers = with lib.maintainers; [ totaltax ];
     platforms = lib.platforms.linux;
     mainProgram = "noita-proxy";
