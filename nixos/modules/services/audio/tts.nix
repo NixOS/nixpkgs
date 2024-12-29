@@ -123,10 +123,10 @@ in
             User = "tts";
             StateDirectory = "tts";
             ExecStart =
-              "${pkgs.tts}/bin/tts-server --port ${toString options.port}"
-              + optionalString (options.model != null) " --model_name ${options.model}"
-              + optionalString (options.useCuda) " --use_cuda"
-              + (concatMapStringsSep " " escapeShellArgs options.extraArgs);
+              "${pkgs.tts}/bin/tts-server --port ${toString options.port} "
+              + optionalString (options.model != null) "--model_name ${options.model} "
+              + optionalString (options.useCuda) "--use_cuda "
+              + (escapeShellArgs options.extraArgs);
             CapabilityBoundingSet = "";
             DeviceAllow =
               if options.useCuda then
