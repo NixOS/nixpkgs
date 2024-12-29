@@ -223,7 +223,9 @@ in
             # `cfg.rules`).
             find ${cfg.settings.Rules.Path} -type l -lname '${builtins.storeDir}/*' ${
               lib.optionalString (rules != { }) ''
-                -not \( ${lib.concatMapStringsSep " -o " ({ local, ... }: "-name '${baseNameOf local}*'") rules} \) \
+                -not \( ${
+                  lib.concatMapStringsSep " -o " ({ local, ... }: "-name '${baseNameOf local}*'") rules
+                } \) \
               ''
             } -delete
             ${lib.concatMapStrings (
