@@ -1,0 +1,18 @@
+diff --git a/noita-proxy/src/lib.rs b/noita-proxy/src/lib.rs
+index 6919ebb..842e672 100644
+--- a/src/lib.rs
++++ b/src/lib.rs
+@@ -752,11 +752,8 @@ impl App {
+         cc.egui_ctx
+             .set_zoom_factor(args.ui_zoom_factor.unwrap_or(default_zoom_factor));
+         info!("Creating the app...");
+-        let run_save_state = if let Ok(path) = std::env::current_exe() {
+-            SaveState::new(path.parent().unwrap().join("save_state"))
+-        } else {
+-            SaveState::new("./save_state/".into())
+-        };
++        let home_dir: String = std::env::var("HOME").unwrap();
++        let run_save_state = SaveState::new(format!("{home_dir}/Games/Noita_Entangled_Worlds").into());
+         let path = player_path(modmanager_settings.mod_path());
+         let player_image = if path.exists() {
+             image::open(path)
