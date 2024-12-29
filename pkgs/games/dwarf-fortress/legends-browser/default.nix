@@ -6,7 +6,7 @@ let
 
   jar = fetchurl {
     url = "https://github.com/robertjanetzko/LegendsBrowser/releases/download/${version}/legendsbrowser-${version}.jar";
-    sha256 = "sha256-jkv7InwaRn0K3VAa0LqkYpH6TnrT/tGYBtbvNGM6t98=";
+    hash = "sha256-jkv7InwaRn0K3VAa0LqkYpH6TnrT/tGYBtbvNGM6t98=";
   };
 
   script = writeShellScriptBin "legends-browser" ''
