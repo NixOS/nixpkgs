@@ -1,52 +1,48 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
-  rustPlatform,
   cmake,
   coreutils,
+  fetchFromGitHub,
   just,
+  lib,
+  libcosmicAppHook,
   libinput,
-  libxkbcommon,
   linux-pam,
-  pkg-config,
+  rustPlatform,
+  stdenv,
   udev,
-  wayland,
+  xkeyboard_config,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "cosmic-greeter";
-  version = "1.0.0-alpha.2";
+  version = "1.0.0-alpha.4";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-greeter";
-    rev = "epoch-${version}";
-    hash = "sha256-5BSsiGgL369/PePS0FmuE42tktK2bpgJziYuUEnZ2jY=";
+    rev = "refs/tags/epoch-1.0.0-alpha.4";
+    hash = "sha256-H7ieV+urShGOdyJtz3DVD4aFmV8nNMnyDAL/XxopPl4=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-5TXFE/pIeIOvy8x8c5sR3YaI8R2RTA8fzloguIpE4TM=";
-
-  cargoBuildFlags = [
-    "--all"
-  ];
+  cargoHash = "sha256-9pI3eepuZUPapsG/xffh0xaK4XZJ11sdjOc6EJDu/n0=";
 
   nativeBuildInputs = [
-    rustPlatform.bindgenHook
     cmake
     just
-    pkg-config
+    libcosmicAppHook
+    rustPlatform.bindgenHook
   ];
+
+  cargoBuildFlags = [ "--all" ];
   buildInputs = [
     libinput
-    libxkbcommon
     linux-pam
     udev
-    wayland
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -64,12 +60,21 @@ rustPlatform.buildRustPackage rec {
     substituteInPlace src/greeter.rs --replace-fail '/usr/bin/env' '${lib.getExe' coreutils "env"}'
   '';
 
+  postInstall = ''
+    libcosmicAppWrapperArgs+=(--set-default X11_BASE_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/base.xml)
+    libcosmicAppWrapperArgs+=(--set-default X11_EXTRA_RULES_XML ${xkeyboard_config}/share/X11/xkb/rules/base.extras.xml)
+  '';
+
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-greeter";
     description = "Greeter for the COSMIC Desktop Environment";
-    mainProgram = "cosmic-greeter";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
     platforms = platforms.linux;
+    mainProgram = "cosmic-greeter";
+
+    maintainers = with maintainers; [
+      nyabinary
+      thefossguy
+    ];
   };
 }

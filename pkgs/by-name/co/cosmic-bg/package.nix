@@ -1,44 +1,35 @@
 {
-  lib,
-  stdenv,
   fetchFromGitHub,
-  rustPlatform,
   just,
-  pkg-config,
-  makeBinaryWrapper,
-  libxkbcommon,
-  wayland,
+  lib,
+  libcosmicAppHook,
+  nasm,
+  rustPlatform,
+  stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "cosmic-bg";
-  version = "1.0.0-alpha.2";
+  version = "1.0.0-alpha.4";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = "epoch-${version}";
-    hash = "sha256-lAFAZBo5FnXgJV3MrZhaYmBxqtH1E7+Huj53ho/hPik=";
+    repo = "cosmic-bg";
+    rev = "refs/tags/epoch-1.0.0-alpha.4";
+    hash = "sha256-bmcMZIURozlptsR4si62NTmexqaCX1Yj5bYj49GDehQ=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-up3yNsKxTC9YrRuTPsGlCHTp9S/woDXPc5HcYcEY9Xc=";
-
-  postPatch = ''
-    substituteInPlace justfile --replace-fail '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+  cargoHash = "sha256-GLXooTjcGq4MsBNnlpHBBUJGNs5UjKMQJGJuj9UO2wk=";
 
   nativeBuildInputs = [
     just
-    pkg-config
-    makeBinaryWrapper
-  ];
-  buildInputs = [
-    libxkbcommon
-    wayland
+    libcosmicAppHook
+    nasm
   ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -49,17 +40,16 @@ rustPlatform.buildRustPackage rec {
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-bg"
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/cosmic-bg \
-      --prefix LD_LIBRARY_PATH : "${lib.makeLibraryPath [ wayland ]}"
-  '';
-
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-bg";
     description = "Applies Background for the COSMIC Desktop Environment";
     license = licenses.mpl20;
-    maintainers = with maintainers; [ nyabinary ];
     platforms = platforms.linux;
     mainProgram = "cosmic-bg";
+
+    maintainers = with maintainers; [
+      nyabinary
+      thefossguy
+    ];
   };
 }

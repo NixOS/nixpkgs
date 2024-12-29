@@ -1,53 +1,42 @@
 {
-  lib,
-  stdenv,
   fetchFromGitHub,
-  rustPlatform,
-  makeBinaryWrapper,
-  cosmic-icons,
-  just,
-  pkg-config,
   glib,
-  libxkbcommon,
-  wayland,
-  xorg,
+  just,
+  lib,
+  libcosmicAppHook,
+  rustPlatform,
+  stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "cosmic-files";
-  version = "1.0.0-alpha.1";
+  version = "1.0.0-alpha.4";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-files";
-    rev = "epoch-${version}";
-    hash = "sha256-UwQwZRzOyMvLRRmU2noxGrqblezkR8J2PNMVoyG0M0w=";
+    rev = "refs/tags/epoch-1.0.0-alpha.4";
+    hash = "sha256-O7O03ksks4Rp4kUtYHzmoaIGLleA8yAxPIjapylR+ao=";
   };
+  # Match this to the git commit SHA matching the `src.rev`
+  env.VERGEN_GIT_SHA = "2fa8e6adc44448bd5ac749302154f8f670e7f381";
+  # Match this to the commit date of `src.rev` in the format 'YYYY-MM-DD'
+  env.VERGEN_GIT_COMMIT_DATE = "2024-12-04";
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-me/U4LtnvYtf77qxF2Z1ncHRVOLp3inDVlwnCjwlj08=";
-
-  # COSMIC applications now uses vergen for the About page
-  # Update the COMMIT_DATE to match when the commit was made
-  env.VERGEN_GIT_COMMIT_DATE = "2024-08-05";
-  env.VERGEN_GIT_SHA = src.rev;
-
-  postPatch = ''
-    substituteInPlace justfile --replace '#!/usr/bin/env' "#!$(command -v env)"
-  '';
+  cargoHash = "sha256-ZuKb654nfSt+v50l07z8uVAVP52IxCZG4Z2qDfyM6pk=";
 
   nativeBuildInputs = [
     just
-    pkg-config
-    makeBinaryWrapper
-  ];
-  buildInputs = [
-    glib
-    libxkbcommon
-    wayland
+    libcosmicAppHook
   ];
 
+  buildInputs = [ glib ];
+  cargoBuildFlags = [ "--package" "cosmic-files" "--package" "cosmic-files-applet" ];
+  cargoTestFlags = [ "--package" "cosmic-files" "--package" "cosmic-files-applet" ];
+
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -56,31 +45,22 @@ rustPlatform.buildRustPackage rec {
     "--set"
     "bin-src"
     "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files"
+    "--set"
+    "applet-src"
+    "target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cosmic-files-applet"
   ];
-
-  # LD_LIBRARY_PATH can be removed once tiny-xlib is bumped above 0.2.2
-  postInstall = ''
-    wrapProgram "$out/bin/cosmic-files" \
-      --suffix XDG_DATA_DIRS : "${cosmic-icons}/share" \
-      --prefix LD_LIBRARY_PATH : ${
-        lib.makeLibraryPath [
-          xorg.libX11
-          xorg.libXcursor
-          xorg.libXrandr
-          xorg.libXi
-          wayland
-        ]
-      }
-  '';
 
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-files";
     description = "File Manager for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
+    platforms = platforms.linux;
+    mainProgram = "cosmic-files";
+
     maintainers = with maintainers; [
       ahoneybun
       nyabinary
+      thefossguy
     ];
-    platforms = platforms.linux;
   };
 }

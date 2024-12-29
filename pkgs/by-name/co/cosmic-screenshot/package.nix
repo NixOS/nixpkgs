@@ -1,31 +1,28 @@
 {
-  lib,
-  stdenv,
   fetchFromGitHub,
-  rustPlatform,
   just,
-  pkg-config,
+  lib,
+  rustPlatform,
+  stdenv,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "cosmic-screenshot";
-  version = "1.0.0-alpha.2";
+  version = "1.0.0-alpha.4";
 
   src = fetchFromGitHub {
     owner = "pop-os";
-    repo = pname;
-    rev = "epoch-${version}";
+    repo = "cosmic-screenshot";
+    rev = "refs/tags/epoch-1.0.0-alpha.4";
     hash = "sha256-+yHpRbK+AWnpcGrC5U0wKbt0u8tm3CFGjKTCDQpb3G0=";
   };
 
-  cargoHash = "sha256-fzIVyxzNknEjGJoR9sgXkY+gyuTC0T4Sy513X8umbWA=";
+  cargoHash = "sha256-vTHOwnTgMn52AnKivsmzAt7EVp+lFWI7p4AfV2Nac24=";
 
-  nativeBuildInputs = [
-    just
-    pkg-config
-  ];
+  nativeBuildInputs = [ just ];
 
   dontUseJustBuild = true;
+  dontUseJustCheck = true;
 
   justFlags = [
     "--set"
@@ -40,8 +37,12 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/pop-os/cosmic-screenshot";
     description = "Screenshot tool for the COSMIC Desktop Environment";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
     platforms = platforms.linux;
     mainProgram = "cosmic-screenshot";
+
+    maintainers = with maintainers; [
+      nyabinary
+      thefossguy
+    ];
   };
 }

@@ -1,33 +1,34 @@
 {
-  lib,
   fetchFromGitHub,
-  rustPlatform,
+  lib,
+  libcosmicAppHook,
   pkg-config,
-  libxkbcommon,
   pulseaudio,
+  rustPlatform,
   udev,
-  wayland,
 }:
 
-rustPlatform.buildRustPackage rec {
+rustPlatform.buildRustPackage {
   pname = "cosmic-osd";
-  version = "1.0.0-alpha.2";
+  version = "1.0.0-alpha.4";
 
   src = fetchFromGitHub {
     owner = "pop-os";
     repo = "cosmic-osd";
-    rev = "epoch-${version}";
-    hash = "sha256-JDdVFNTJI9O88lLKB1esJE4sk7ZZnTMilQRZSAgnTqs=";
+    rev = "refs/tags/epoch-1.0.0-alpha.4";
+    hash = "sha256-wgQrHUphp6IJYEh5JKFarhkELetRvHSxTNHbyX5JqNM=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-Db1a1FusUdO7rQb0jfznaFNaJjdS9XSDGCMuzV1D79A=";
+  cargoHash = "sha256-VFsRYGgQW+j3efwiORz8owFs09qdhXUatBi1bnaNcJg=";
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    libcosmicAppHook
+    pkg-config
+  ];
+
   buildInputs = [
-    libxkbcommon
     pulseaudio
-    wayland
     udev
   ];
 
@@ -36,9 +37,13 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-osd";
     description = "OSD for the COSMIC Desktop Environment";
-    mainProgram = "cosmic-osd";
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nyabinary ];
     platforms = platforms.linux;
+    mainProgram = "cosmic-osd";
+
+    maintainers = with maintainers; [
+      nyabinary
+      thefossguy
+    ];
   };
 }
