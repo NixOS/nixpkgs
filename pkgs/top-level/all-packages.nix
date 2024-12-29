@@ -1727,7 +1727,7 @@ with pkgs;
     httpServer = true;
   };
 
-  apt-dater = callPackage ../tools/package-management/apt-dater {
+  apt-dater = callPackage ../by-name/ap/apt-dater {
     autoreconfHook = buildPackages.autoreconfHook269;
   };
 
