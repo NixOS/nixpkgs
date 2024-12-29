@@ -4,9 +4,6 @@
   lib,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.cloudlog;
   dbFile =
@@ -77,51 +74,51 @@ let
   };
 in
 {
-  options.services.cloudlog = with types; {
-    enable = mkEnableOption "Cloudlog";
-    dataDir = mkOption {
+  options.services.cloudlog = with lib.types; {
+    enable = lib.mkEnableOption "Cloudlog";
+    dataDir = lib.mkOption {
       type = str;
       default = "/var/lib/cloudlog";
       description = "Cloudlog data directory.";
     };
-    baseUrl = mkOption {
+    baseUrl = lib.mkOption {
       type = str;
       default = "http://localhost";
       description = "Cloudlog base URL";
     };
-    user = mkOption {
+    user = lib.mkOption {
       type = str;
       default = "cloudlog";
       description = "User account under which Cloudlog runs.";
     };
     database = {
-      createLocally = mkOption {
+      createLocally = lib.mkOption {
         type = types.bool;
         default = true;
         description = "Create the database and database user locally.";
       };
-      host = mkOption {
+      host = lib.mkOption {
         type = str;
         description = "MySQL database host";
         default = "localhost";
       };
-      name = mkOption {
+      name = lib.mkOption {
         type = str;
         description = "MySQL database name.";
         default = "cloudlog";
       };
-      user = mkOption {
+      user = lib.mkOption {
         type = str;
         description = "MySQL user name.";
         default = "cloudlog";
       };
-      passwordFile = mkOption {
+      passwordFile = lib.mkOption {
         type = nullOr str;
         description = "MySQL user password file.";
         default = null;
       };
     };
-    poolConfig = mkOption {
+    poolConfig = lib.mkOption {
       type = attrsOf (oneOf [
         str
         int
@@ -139,7 +136,7 @@ in
         Options for Cloudlog's PHP-FPM pool.
       '';
     };
-    virtualHost = mkOption {
+    virtualHost = lib.mkOption {
       type = nullOr str;
       default = "localhost";
       description = ''
@@ -147,7 +144,7 @@ in
          any virtualhost.
       '';
     };
-    extraConfig = mkOption {
+    extraConfig = lib.mkOption {
       description = ''
         Any additional text to be appended to the config.php
         configuration file. This is a PHP script. For configuration
@@ -160,7 +157,7 @@ in
       '';
     };
     upload-lotw = {
-      enable = mkOption {
+      enable = lib.mkOption {
         type = bool;
         default = true;
         description = ''
@@ -169,7 +166,7 @@ in
            option.
         '';
       };
-      interval = mkOption {
+      interval = lib.mkOption {
         type = str;
         default = "daily";
         description = ''
@@ -179,7 +176,7 @@ in
       };
     };
     upload-clublog = {
-      enable = mkOption {
+      enable = lib.mkOption {
         type = bool;
         default = true;
         description = ''
@@ -187,7 +184,7 @@ in
           timer will run the log upload task as specified by the interval option.
         '';
       };
-      interval = mkOption {
+      interval = lib.mkOption {
         type = str;
         default = "daily";
         description = ''
@@ -197,7 +194,7 @@ in
       };
     };
     update-lotw-users = {
-      enable = mkOption {
+      enable = lib.mkOption {
         type = bool;
         default = true;
         description = ''
@@ -206,7 +203,7 @@ in
           option.
         '';
       };
-      interval = mkOption {
+      interval = lib.mkOption {
         type = str;
         default = "weekly";
         description = ''
@@ -216,7 +213,7 @@ in
       };
     };
     update-dok = {
-      enable = mkOption {
+      enable = lib.mkOption {
         type = bool;
         default = true;
         description = ''
@@ -224,7 +221,7 @@ in
           systemd timer will run the update task as specified by the interval option.
         '';
       };
-      interval = mkOption {
+      interval = lib.mkOption {
         type = str;
         default = "monthly";
         description = ''
@@ -234,7 +231,7 @@ in
       };
     };
     update-clublog-scp = {
-      enable = mkOption {
+      enable = lib.mkOption {
         type = bool;
         default = true;
         description = ''
@@ -243,7 +240,7 @@ in
           option.
         '';
       };
-      interval = mkOption {
+      interval = lib.mkOption {
         type = str;
         default = "monthly";
         description = ''
@@ -253,7 +250,7 @@ in
       };
     };
     update-wwff = {
-      enable = mkOption {
+      enable = lib.mkOption {
         type = bool;
         default = true;
         description = ''
@@ -262,7 +259,7 @@ in
           option.
         '';
       };
-      interval = mkOption {
+      interval = lib.mkOption {
         type = str;
         default = "monthly";
         description = ''
@@ -272,7 +269,7 @@ in
       };
     };
     upload-qrz = {
-      enable = mkOption {
+      enable = lib.mkOption {
         type = bool;
         default = true;
         description = ''
@@ -280,7 +277,7 @@ in
           timer will run the update task as specified by the interval option.
         '';
       };
-      interval = mkOption {
+      interval = lib.mkOption {
         type = str;
         default = "daily";
         description = ''
@@ -290,7 +287,7 @@ in
       };
     };
     update-sota = {
-      enable = mkOption {
+      enable = lib.mkOption {
         type = bool;
         default = true;
         description = ''
@@ -298,7 +295,7 @@ in
           systemd timer will run the update task as specified by the interval option.
         '';
       };
-      interval = mkOption {
+      interval = lib.mkOption {
         type = str;
         default = "monthly";
         description = ''
@@ -308,7 +305,7 @@ in
       };
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {
@@ -328,7 +325,7 @@ in
       };
     };
 
-    services.nginx = mkIf (cfg.virtualHost != null) {
+    services.nginx = lib.mkIf (cfg.virtualHost != null) {
       enable = true;
       virtualHosts = {
         "${cfg.virtualHost}" = {
@@ -345,7 +342,7 @@ in
       };
     };
 
-    services.mysql = mkIf cfg.database.createLocally {
+    services.mysql = lib.mkIf cfg.database.createLocally {
       enable = true;
       ensureDatabases = [ cfg.database.name ];
       ensureUsers = [
@@ -360,7 +357,7 @@ in
 
     systemd = {
       services = {
-        cloudlog-setup-database = mkIf cfg.database.createLocally {
+        cloudlog-setup-database = lib.mkIf cfg.database.createLocally {
           description = "Set up cloudlog database";
           serviceConfig = {
             Type = "oneshot";
@@ -518,5 +515,5 @@ in
     };
   };
 
-  meta.maintainers = with maintainers; [ melling ];
+  meta.maintainers = with lib.maintainers; [ melling ];
 }
