@@ -6,6 +6,7 @@
   boost,
   python3,
   fmt,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,6 +33,13 @@ stdenv.mkDerivation rec {
   ];
 
   doCheck = true;
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/avrogencpp";
+  versionCheckProgramArg = [ "--version" ];
 
   meta = {
     description = "C++ library which implements parts of the Avro Specification";
