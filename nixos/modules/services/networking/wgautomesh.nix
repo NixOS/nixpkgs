@@ -12,7 +12,9 @@ let
     # if value is null
     settingsFormat.generate "wgautomesh-config.toml" (
       lib.filterAttrs (k: v: v != null) (
-        lib.mapAttrs (k: v: if k == "peers" then map (e: lib.filterAttrs (k: v: v != null) e) v else v) cfg.settings
+        lib.mapAttrs (
+          k: v: if k == "peers" then map (e: lib.filterAttrs (k: v: v != null) e) v else v
+        ) cfg.settings
       )
     );
   runtimeConfigFile =
