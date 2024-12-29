@@ -199,9 +199,13 @@ stdenv.mkDerivation (
       ]
       ++ lib.optional withGd "--with-gd";
 
-    makeFlags = (args.makeFlags or [ ]) ++ [
-      "OBJCOPY=${stdenv.cc.targetPrefix}objcopy"
-    ];
+    makeFlags =
+      (args.makeFlags or [ ])
+      ++ [ "OBJCOPY=${stdenv.cc.targetPrefix}objcopy" ]
+      ++ lib.optionals (stdenv.cc.libc != null) [
+        "BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib"
+        "OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"
+      ];
 
     postInstall =
       (args.postInstall or "")
@@ -268,11 +272,6 @@ stdenv.mkDerivation (
         url = "mirror://gnu/glibc/glibc-${version}.tar.xz";
         inherit sha256;
       };
-
-      makeFlags = lib.optionals (stdenv.cc.libc != null) [
-        "BUILD_LDFLAGS=-Wl,-rpath,${stdenv.cc.libc}/lib"
-        "OBJDUMP=${stdenv.cc.bintools.bintools}/bin/objdump"
-      ];
 
       # Remove absolute paths from `configure' & co.; build out-of-tree.
       preConfigure =
