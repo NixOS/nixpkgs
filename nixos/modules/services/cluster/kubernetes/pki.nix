@@ -266,32 +266,34 @@ in
       # - it assumes that it is clusterAdmin or can gain clusterAdmin rights through serviceAccount
       # - it is designed to be used with k8s system components only
       # - it would be better with a more Nix-oriented way of managing addons
-      systemd.services.kube-addon-manager = lib.mkIf top.addonManager.enable (lib.mkMerge [
-        {
-          environment.KUBECONFIG =
-            with cfg.certs.addonManager;
-            top.lib.mkKubeConfig "addon-manager" {
-              server = top.apiserverAddress;
-              certFile = cert;
-              keyFile = key;
-            };
-        }
+      systemd.services.kube-addon-manager = lib.mkIf top.addonManager.enable (
+        lib.mkMerge [
+          {
+            environment.KUBECONFIG =
+              with cfg.certs.addonManager;
+              top.lib.mkKubeConfig "addon-manager" {
+                server = top.apiserverAddress;
+                certFile = cert;
+                keyFile = key;
+              };
+          }
 
-        (lib.optionalAttrs (top.addonManager.bootstrapAddons != { }) {
-          serviceConfig.PermissionsStartOnly = true;
-          preStart =
-            with pkgs;
-            let
-              files = mapAttrsToList (
-                n: v: writeText "${n}.json" (builtins.toJSON v)
-              ) top.addonManager.bootstrapAddons;
-            in
-            ''
-              export KUBECONFIG=${clusterAdminKubeconfig}
-              ${top.package}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
-            '';
-        })
-      ]);
+          (lib.optionalAttrs (top.addonManager.bootstrapAddons != { }) {
+            serviceConfig.PermissionsStartOnly = true;
+            preStart =
+              with pkgs;
+              let
+                files = mapAttrsToList (
+                  n: v: writeText "${n}.json" (builtins.toJSON v)
+                ) top.addonManager.bootstrapAddons;
+              in
+              ''
+                export KUBECONFIG=${clusterAdminKubeconfig}
+                ${top.package}/bin/kubectl apply -f ${concatStringsSep " \\\n -f " files}
+              '';
+          })
+        ]
+      );
 
       environment.etc.${cfg.etcClusterAdminKubeconfig}.source = lib.mkIf (
         cfg.etcClusterAdminKubeconfig != null
