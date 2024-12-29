@@ -41,10 +41,12 @@ in
 
     # This overrides the systemd user unit shipped with the
     # yubikey-agent package
-    systemd.user.services.yubikey-agent = lib.mkIf (config.programs.gnupg.agent.pinentryPackage != null) {
-      path = [ config.programs.gnupg.agent.pinentryPackage ];
-      wantedBy = [ "default.target" ];
-    };
+    systemd.user.services.yubikey-agent =
+      lib.mkIf (config.programs.gnupg.agent.pinentryPackage != null)
+        {
+          path = [ config.programs.gnupg.agent.pinentryPackage ];
+          wantedBy = [ "default.target" ];
+        };
 
     # Yubikey-agent expects pcsd to be running in order to function.
     services.pcscd.enable = true;
