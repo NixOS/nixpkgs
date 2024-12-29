@@ -18,6 +18,7 @@
   wrapGAppsHook4,
   glib-networking,
   symlinkJoin,
+  nix-update-script,
   extraDocsPackage ? [ ],
 }:
 
@@ -92,6 +93,10 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   doCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     homepage = "https://apps.gnome.org/Biblioteca/";
