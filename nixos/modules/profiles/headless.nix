@@ -1,10 +1,6 @@
 # Common configuration for headless machines (e.g., Amazon EC2
 # instances).
-
 { lib, ... }:
-
-with lib;
-
 {
   # Don't start a tty on the serial consoles.
   systemd.services."serial-getty@ttyS0".enable = lib.mkDefault false;
