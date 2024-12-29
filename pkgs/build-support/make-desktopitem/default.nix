@@ -4,10 +4,74 @@
   buildPackages,
 }:
 
-# All possible values as defined by the spec, version 1.4.
-# Please keep in spec order for easier maintenance.
-# When adding a new value, don't forget to update the Version field below!
-# See https://specifications.freedesktop.org/desktop-entry-spec/latest
+
+/**
+  A utility builder to create a desktop entry file at a predetermined location (by default, $out/share/applications).
+
+  # Examples
+
+  ```nix
+  makeDesktopItem {
+    name = "Eclipse";
+    exec = "eclipse";
+    icon = "eclipse";
+    comment = "Integrated Development Environment";
+    desktopName = "Eclipse IDE";
+    genericName = "Integrated Development Environment";
+    categories = [ "Development" ];
+  }
+  => «derivation /nix/store/sh017x5n50i2qwns2na1sxdp7zb2zgcw-Eclipse.desktop.drv»
+  ```
+
+  # Type
+
+  ```
+  makeDesktopItem :: AttrSet -> Derivation
+  ```
+
+  # Input
+
+  `attrs`
+
+  : An AttrSet with the following definitions. See https://specifications.freedesktop.org/desktop-entry-spec/1.4/recognized-keys.html#id-1.7.6 for definitions.
+
+    - `name` (string): The name of the desktop file (excluding the .desktop or .directory file extensions)
+    - `destination` (string): The directory that will contain the desktop entry file (Default: "/share/applications")
+    - `type` ("Application" | "Link" | "Directory"): The `Type` of the desktop entry
+    - `desktopName` (string): The `Name` of the desktop entry
+    - `genericName` (string): The `GenericName` of the desktop entry
+    - `noDisplay` (bool): The `NoDisplay` of the desktop entry
+    - `comment` (string): The `Comment` of the desktop entry
+    - `icon` (string): The `Icon` of the desktop entry
+    - `onlyShowIn` (string[]): The `OnlyShowIn` of the desktop entry
+    - `notShowIn` (string[]): The `NotShowIn` of the desktop entry
+    - `dbusActivatable` (bool): The `DBusActivatable` of the desktop entry
+    - `tryExec` (string): The `TryExec` of the desktop entry
+    - `exec` (string): The `Exec` of the desktop entry
+    - `path` (string): The `Path` of the desktop entry
+    - `terminal` (bool): The `Terminal` of the desktop entry
+    - `actions` (AttrSet): An attrset of [internal name] -> { name, exec?, icon? } representing the `Actions` of the desktop entry
+    - `mimeTypes` (string[]): The `MimeType` of the desktop entry
+    - `categories` (string[]): The `Categories` of the desktop entry; see https://specifications.freedesktop.org/menu-spec/1.0/category-registry.html for possible values
+    - `implements` (string[]): The `Implements` of the desktop entry
+    - `keywords` (string[]): The `Keywords` of the desktop entry
+    - `startupNotify` (bool): The `StartupNotify` of the desktop entry
+    - `startupWMClass` (string): The `StartupWMClass` of the desktop entry
+    - `url` (string): The `URL` of the Link-type desktop entry
+    - `prefersNonDefaultGPU` (bool): The `PrefersNonDefaultGPU` (non-standard) of the desktop entry
+    - `extraConfig` (AttrSet): Additional values to be added literally to the final item, e.g. vendor extensions
+
+  # Output
+
+  A derivation that contains the output desktop entry file.
+
+  # Developer Note
+
+  All possible values are as defined by the spec, version 1.4.
+  Please keep in spec order for easier maintenance.
+  When adding a new value, don't forget to update the Version field below!
+  See https://specifications.freedesktop.org/desktop-entry-spec/latest
+*/
 lib.makeOverridable (
   {
     name, # The name of the desktop file
