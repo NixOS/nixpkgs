@@ -7,10 +7,6 @@
 , testers
 , installShellFiles
 , stdenv
-, go
-, xcaddy
-, cacert
-, git
 }:
 let
   version = "2.8.4";
