@@ -454,12 +454,12 @@ rec {
       "sha256-0Xe77fz+lA+nuUGK+PjU0EgWeQ7AJ9Smsb/4yK1tow0=";
 
   mypy-boto3-ecr =
-    buildMypyBoto3Package "ecr" "1.35.87"
-      "sha256-XK9Q9fz05sI6XqO1BfGaZihfQhHssXgCf0GJONOBym8=";
+    buildMypyBoto3Package "ecr" "1.35.90"
+      "sha256-ocIOtpU5Ae9ggyXOTWY5LnpfGUnDHdG1e1XuO5q833w=";
 
   mypy-boto3-ecr-public =
-    buildMypyBoto3Package "ecr-public" "1.35.87"
-      "sha256-MvEGV9hSLsWPC+FoBH3K2F+DXvoeTSYfwE92QDp7ufU=";
+    buildMypyBoto3Package "ecr-public" "1.35.90"
+      "sha256-K63rvMDWrOWjyizRLwSs5DQn3ysF/VBqK2tVtiINx/0=";
 
   mypy-boto3-ecs =
     buildMypyBoto3Package "ecs" "1.35.83"
@@ -950,8 +950,8 @@ rec {
       "sha256-Epx+p5M+3x0plFaXdc8Rsz+p18ZnxbNlr4IhH5STvZM=";
 
   mypy-boto3-network-firewall =
-    buildMypyBoto3Package "network-firewall" "1.35.52"
-      "sha256-i4h13QqDO65bSTlxdt5hN6iXag578jc3Mv7bOHBZkpQ=";
+    buildMypyBoto3Package "network-firewall" "1.35.88"
+      "sha256-36FYuBsY8ZQ6o+T7U2zZclhHPvIRbeLby9oSJyshxa4=";
 
   mypy-boto3-networkmanager =
     buildMypyBoto3Package "networkmanager" "1.35.81"
@@ -1086,8 +1086,8 @@ rec {
       "sha256-12AIEWhTwK3YdCUhImozJeO83Ye9G2D1VaKMeqbV/pE=";
 
   mypy-boto3-rds =
-    buildMypyBoto3Package "rds" "1.35.82"
-      "sha256-P1yEz5IrOIwTjXFH0lD2WetEffFwCDoKfSWU2Qb6/08=";
+    buildMypyBoto3Package "rds" "1.35.89"
+      "sha256-1Xf5cjgBurcHiwvgEQCdv3Ry9sxhGLoE2DIXwcyJCgw=";
 
   mypy-boto3-rds-data =
     buildMypyBoto3Package "rds-data" "1.35.64"
@@ -1222,8 +1222,8 @@ rec {
       "sha256-w30YExW6ENhUaHIwTX8mbnRhQpsI5jUHwjzFCMPvQmQ=";
 
   mypy-boto3-securityhub =
-    buildMypyBoto3Package "securityhub" "1.35.72"
-      "sha256-+AeLQrA2MHQ94z4Rwq5/mhYc1+uJ0qZI1pm1FSnQOqM=";
+    buildMypyBoto3Package "securityhub" "1.35.88"
+      "sha256-s6qkdIPIwD4GUowrwg11EvyQu5rc9TBHXmkzPoxCE9Y=";
 
   mypy-boto3-securitylake =
     buildMypyBoto3Package "securitylake" "1.35.40"
