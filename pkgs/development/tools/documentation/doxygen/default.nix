@@ -13,14 +13,14 @@
 , sqlite
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "doxygen";
   version = "1.12.0";
 
   src = fetchFromGitHub {
     owner = "doxygen";
     repo = "doxygen";
-    rev = "Release_${lib.replaceStrings [ "." ] [ "_" ] version}";
+    rev = "Release_${lib.replaceStrings [ "." ] [ "_" ] finalAttrs.version}";
     hash = "sha256-4zSaM49TjOaZvrUChM4dNJLondCsQPSArOXZnTHS4yI=";
   };
 
@@ -54,7 +54,6 @@ stdenv.mkDerivation rec {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   cmakeFlags = [
-    "-DICONV_INCLUDE_DIR=${libiconv}/include"
     "-Duse_sys_spdlog=ON"
     "-Duse_sys_sqlite3=ON"
   ] ++ lib.optional (qt5 != null) "-Dbuild_wizard=YES";
@@ -84,4 +83,4 @@ stdenv.mkDerivation rec {
 
     platforms = if qt5 != null then lib.platforms.linux else lib.platforms.unix;
   };
-}
+})
