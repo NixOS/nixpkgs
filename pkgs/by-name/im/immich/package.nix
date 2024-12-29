@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchpatch2,
   python3,
-  nodejs,
+  nodejs_20,
   node-gyp,
   runCommand,
   nixosTests,
@@ -27,6 +27,7 @@
   vips,
 }:
 let
+  nodejs = nodejs_20;
   buildNpmPackage' = buildNpmPackage.override { inherit nodejs; };
   sources = lib.importJSON ./sources.json;
   inherit (sources) version;
