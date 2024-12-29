@@ -1,29 +1,44 @@
 {
   lib,
-  stdenvNoCC,
-  fetchurl,
-  undmg,
+  stdenv,
+  fetchFromGitHub,
   nix-update-script,
+  apple-sdk,
+  swift,
+  xcbuildHook,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "stats";
   version = "2.11.21";
 
-  src = fetchurl {
-    url = "https://github.com/exelban/stats/releases/download/v${finalAttrs.version}/Stats.dmg";
-    hash = "sha256-EqgWHxiSpMpzxQkogfMX8wTlzIhlfcUIlTARlihjwgw=";
+  src = fetchFromGitHub {
+    owner = "exelban";
+    repo = "Stats";
+    rev = "v${finalAttrs.version}";
+    sha256 = "sha256-DtXIuBEUX+9tMC4OU0j77LxvBLkhFFu4vf0YFLDsaek=";
   };
 
-  sourceRoot = ".";
+  nativeBuildInputs = [
+    apple-sdk
+    xcbuildHook
+    swift
+  ];
 
-  nativeBuildInputs = [ undmg ];
+  xcbuildFlags = [
+    "-scheme"
+    "Stats"
+    "-configuration"
+    "Release"
+  ];
+
+  __structuredAttrs = true;
 
   installPhase = ''
     runHook preInstall
 
     mkdir -p "$out/Applications"
-    cp -r *.app "$out/Applications"
+    cp -r ./build/Build/Products/Release/Stats.app "$out/Applications/Stats.app"
 
     runHook postInstall
   '';
@@ -39,6 +54,5 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       emilytrau
     ];
     platforms = lib.platforms.darwin;
-    sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 })
