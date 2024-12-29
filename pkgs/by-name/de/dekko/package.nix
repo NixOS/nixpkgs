@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     substituteInPlace CMakeLists.txt \
       --replace-fail 'COMMAND ''${QMAKE_EXECUTABLE} -query QT_INSTALL_QML' 'COMMAND echo "''${CMAKE_INSTALL_PREFIX}/${libsForQt5.qtbase.qtQmlPrefix}"'
-    sed -i '45s|quickflux|quickflux/src|' upstream/quick-flux/CMakeLists.txt
+    cp ${./CMakeLists.txt} upstream/quick-flux/CMakeLists.txt
   '';
 
   strictDeps = true;
