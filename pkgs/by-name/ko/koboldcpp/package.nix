@@ -8,7 +8,6 @@
   addDriverRunpath,
 
   apple-sdk_12,
-  darwinMinVersionHook,
 
   koboldLiteSupport ? true,
 
@@ -41,13 +40,13 @@ let
 in
 effectiveStdenv.mkDerivation (finalAttrs: {
   pname = "koboldcpp";
-  version = "1.80.1";
+  version = "1.80.3";
 
   src = fetchFromGitHub {
     owner = "LostRuins";
     repo = "koboldcpp";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-CgJzYF8FnHk0zKdysGJWLnNo/MND24AbQdjRbDtv0II=";
+    hash = "sha256-uxqn4t2dDaVSkVilJOflNbG2Q3fH3Yid8qdEaDGfIcw=";
   };
 
   enableParallelBuilding = true;
@@ -62,10 +61,7 @@ effectiveStdenv.mkDerivation (finalAttrs: {
   buildInputs =
     [ tk ]
     ++ finalAttrs.pythonInputs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_12
-      (darwinMinVersionHook "10.15")
-    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_12 ]
     ++ lib.optionals cublasSupport [
       cudaPackages.libcublas
       cudaPackages.cuda_nvcc
