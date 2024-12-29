@@ -29,9 +29,9 @@ rustPlatform.buildRustPackage {
   inherit version;
 
   src = fetchFromGitHub {
-    owner = "martinvonz";
+    owner = "jj-vcs";
     repo = "jj";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-XsD4P2UygZFcnlV2o3E/hRRgsGjwKw1r9zniEeAk758";
   };
 
@@ -110,8 +110,8 @@ rustPlatform.buildRustPackage {
 
   meta = {
     description = "Git-compatible DVCS that is both simple and powerful";
-    homepage = "https://github.com/martinvonz/jj";
-    changelog = "https://github.com/martinvonz/jj/blob/v${version}/CHANGELOG.md";
+    homepage = "https://github.com/jj-vcs/jj";
+    changelog = "https://github.com/jj-vcs/jj/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [
       _0x4A6F
