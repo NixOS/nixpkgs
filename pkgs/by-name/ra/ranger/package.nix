@@ -77,7 +77,7 @@ python3Packages.buildPythonApplication rec {
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [
       toonn
-      magnetophon
+      lucasew
     ];
     mainProgram = "ranger";
   };
