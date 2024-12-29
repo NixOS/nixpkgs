@@ -24,7 +24,7 @@ flutter324.buildFlutterApplication rec {
   src = fetchFromGitHub {
     owner = "flet-dev";
     repo = "flet";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-bD44MCRZPXB/xuw2vBCzNbRNSVgdc4GyyWg3F2adxKk=";
   };
 
