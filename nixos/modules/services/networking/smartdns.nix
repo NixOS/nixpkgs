@@ -1,38 +1,35 @@
 { lib, pkgs, config, ... }:
-
-with lib;
-
 let
   inherit (lib.types) attrsOf coercedTo listOf oneOf str int bool;
   cfg = config.services.smartdns;
 
-  confFile = pkgs.writeText "smartdns.conf" (with generators;
-    toKeyValue {
-      mkKeyValue = mkKeyValueDefault {
+  confFile = pkgs.writeText "smartdns.conf" (
+    lib.generators.toKeyValue {
+      mkKeyValue = lib.generators.mkKeyValueDefault {
         mkValueString = v:
-          if isBool v then
+          if lib.isBool v then
             if v then "yes" else "no"
           else
-            mkValueStringDefault { } v;
+            lib.generators.mkValueStringDefault { } v;
       } " ";
       listsAsDuplicateKeys =
         true; # Allowing duplications because we need to deal with multiple entries with the same key.
     } cfg.settings);
 in {
   options.services.smartdns = {
-    enable = mkEnableOption "SmartDNS DNS server";
+    enable = lib.mkEnableOption "SmartDNS DNS server";
 
-    bindPort = mkOption {
-      type = types.port;
+    bindPort = lib.mkOption {
+      type = lib.types.port;
       default = 53;
       description = "DNS listening port number.";
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type =
       let atom = oneOf [ str int bool ];
-      in attrsOf (coercedTo atom toList (listOf atom));
-      example = literalExpression ''
+      in attrsOf (coercedTo atom lib.toList (listOf atom));
+      example = lib.literalExpression ''
         {
           bind = ":5353 -no-rule -group example";
           cache-size = 4096;
@@ -50,7 +47,7 @@ in {
   };
 
   config = lib.mkIf cfg.enable {
-    services.smartdns.settings.bind = mkDefault ":${toString cfg.bindPort}";
+    services.smartdns.settings.bind = lib.mkDefault ":${toString cfg.bindPort}";
 
     systemd.packages = [ pkgs.smartdns ];
     systemd.services.smartdns.wantedBy = [ "multi-user.target" ];
