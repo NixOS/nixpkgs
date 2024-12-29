@@ -13,6 +13,7 @@
   linkFarm,
   substitute,
   CoreServices,
+  installShellFiles,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
   webUISupport ? false,
@@ -172,10 +173,12 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-32CcOb5op+7QOgLSw+8rvMW3GjJ0jaQsryX5DiW+bIk=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-    CoreServices
-  ];
+  buildInputs =
+    [ installShellFiles ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      CoreServices
+    ];
   nativeBuildInputs = [ which ] ++ lib.optionals webUISupport [ emscripten ];
 
   patches = lib.optionals webUISupport [
@@ -213,6 +216,10 @@ rustPlatform.buildRustPackage {
     PREFIX=$out make install
     ${lib.optionalString (!enableShared) "rm $out/lib/*.so{,.*}"}
     ${lib.optionalString (!enableStatic) "rm $out/lib/*.a"}
+    installShellCompletion --cmd tree-sitter \
+      --bash <("$out/bin/tree-sitter" complete --shell bash) \
+      --zsh <("$out/bin/tree-sitter" complete --shell zsh) \
+      --fish <("$out/bin/tree-sitter" complete --shell fish)
   '';
 
   # test result: FAILED. 120 passed; 13 failed; 0 ignored; 0 measured; 0 filtered out
