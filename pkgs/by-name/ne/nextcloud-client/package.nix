@@ -1,6 +1,7 @@
 { lib
-, stdenv
+, gitUpdater
 , fetchFromGitHub
+, qt6Packages
 , cmake
 , extra-cmake-modules
 , inotify-tools
@@ -11,36 +12,26 @@
 , openssl
 , pcre
 , pkg-config
-, qt5compat
-, qtbase
-, qtkeychain
-, qtsvg
-, qttools
-, qtwebengine
-, qtwebsockets
 , sphinx
 , sqlite
 , xdg-utils
-, qtwayland
-, wrapQtAppsHook
+, libsysprof-capture
 }:
 
-stdenv.mkDerivation rec {
+qt6Packages.stdenv.mkDerivation rec {
   pname = "nextcloud-client";
-  version = "3.14.3";
+  version = "3.15.2";
 
   outputs = [ "out" "dev" ];
 
   src = fetchFromGitHub {
     owner = "nextcloud-releases";
     repo = "desktop";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-nYoBs5EnWiqYRsqc5CPxCIs0NAxSprI9PV0lO/c8khw=";
+    tag = "v${version}";
+    hash = "sha256-JA6ke9tBS4IiuDWJ8Efa76+5os+RT0L/zv00ncgH+IU=";
   };
 
   patches = [
-    # Explicitly move dbus configuration files to the store path rather than `/etc/dbus-1/services`.
-    ./0001-Explicitly-copy-dbus-files-into-the-store-dir.patch
     ./0001-When-creating-the-autostart-entry-do-not-use-an-abso.patch
   ];
 
@@ -57,7 +48,7 @@ stdenv.mkDerivation rec {
     extra-cmake-modules
     librsvg
     sphinx
-    wrapQtAppsHook
+    qt6Packages.wrapQtAppsHook
   ];
 
   buildInputs = [
@@ -67,15 +58,16 @@ stdenv.mkDerivation rec {
     libsecret
     openssl
     pcre
-    qt5compat
-    qtbase
-    qtkeychain
-    qtsvg
-    qttools
-    qtwebengine
-    qtwebsockets
+    qt6Packages.qt5compat
+    qt6Packages.qtbase
+    qt6Packages.qtkeychain
+    qt6Packages.qtsvg
+    qt6Packages.qttools
+    qt6Packages.qtwebengine
+    qt6Packages.qtwebsockets
+    qt6Packages.qtwayland
     sqlite
-    qtwayland
+    libsysprof-capture
   ];
 
   qtWrapperArgs = [
@@ -94,13 +86,15 @@ stdenv.mkDerivation rec {
     make doc-man
   '';
 
-  meta = with lib; {
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+
+  meta = {
     changelog = "https://github.com/nextcloud/desktop/releases/tag/v${version}";
     description = "Desktop sync client for Nextcloud";
     homepage = "https://nextcloud.com";
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ kranzes SuperSandro2000 ];
-    platforms = platforms.linux;
+    license = lib.licenses.gpl2Plus;
+    maintainers = with lib.maintainers; [ kranzes SuperSandro2000 ];
+    platforms = lib.platforms.linux;
     mainProgram = "nextcloud";
   };
 }

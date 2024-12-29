@@ -8,7 +8,7 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "rockcraft";
-  version = "1.6.0";
+  version = "1.7.0";
 
   src = fetchFromGitHub {
     owner = "canonical";

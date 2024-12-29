@@ -4445,8 +4445,6 @@ with pkgs;
   nextcloud29Packages = callPackage ../servers/nextcloud/packages { ncVersion = "29"; };
   nextcloud30Packages = callPackage ../servers/nextcloud/packages { ncVersion = "30"; };
 
-  nextcloud-client = qt6Packages.callPackage ../applications/networking/nextcloud-client { };
-
   nextcloud-news-updater = callPackage ../servers/nextcloud/news-updater.nix { };
 
   nextcloud-notify_push = callPackage ../servers/nextcloud/notify_push.nix { };
