@@ -1,0 +1,20 @@
+{
+    "x86_64-linux": {
+        "urls": [
+            "https://web.archive.org/web/20240330140328/https://out7.hex-rays.com/files/idafree84_linux.run"
+        ],
+        "sha256": "1wg60afkhjj7my2la4x4qf6gdxzl2aqdbvd6zfnwf8n3bl7ckn2a"
+    },
+    "x86_64-darwin": {
+        "urls": [
+            "https://web.archive.org/web/20240330140623/https://out7.hex-rays.com/files/idafree84_mac.app.zip"
+        ],
+        "sha256": "0a97xb0ah6rcq69whs5xvkar43ci8r5nan9wa29ad19w8k25ryym"
+    },
+    "aarch64-darwin": {
+        "urls": [
+            "https://web.archive.org/web/20240330140634/https://out7.hex-rays.com/files/arm_idafree84_mac.app.zip"
+        ],
+        "sha256": "10wwq7ia1z1kxfigj4i7xr037bzv1cg3pyvrl27jdq9v7bghdf3m"
+    }
+}
