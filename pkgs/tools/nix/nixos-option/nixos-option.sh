@@ -66,6 +66,8 @@ if [[ -z "$flake" ]] && [[ -e /etc/nixos/flake.nix ]] && [[ "$no_flake" == "fals
 fi
 
 if [[ -n "$flake" ]]; then
+  echo >&2 "[WARN] Flake support in nixos-option is experimental and has known issues."
+
   if [[ $flake =~ ^(.*)\#([^\#\"]*)$ ]]; then
     flake="${BASH_REMATCH[1]}"
     flakeAttr="${BASH_REMATCH[2]}"
