@@ -13,6 +13,9 @@
   libgbm,
   vaapiSupport ? !stdenv.hostPlatform.isDarwin,
   libva,
+  withVenus ? !stdenv.hostPlatform.isDarwin,
+  vulkan-headers,
+  vulkan-loader,
   gitUpdater,
 }:
 
@@ -28,26 +31,26 @@ stdenv.mkDerivation rec {
   separateDebugInfo = true;
 
   buildInputs =
-    [
-      libepoxy
-    ]
-    ++ lib.optionals vaapiSupport [ libva ]
+    [ libepoxy ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       libGLU
       libX11
       libdrm
       libgbm
-    ];
+    ]
+    ++ lib.optionals vaapiSupport [ libva ]
+    ++ lib.optionals withVenus [ vulkan-loader ];
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
     python3
-  ];
+  ] ++ lib.optionals withVenus [ vulkan-headers ];
 
   mesonFlags = [
     (lib.mesonBool "video" vaapiSupport)
+    (lib.mesonBool "venus" withVenus)
   ];
 
   passthru = {
