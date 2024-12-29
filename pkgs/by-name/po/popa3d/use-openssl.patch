@@ -1,0 +1,21 @@
+diff -ubr popa3d-1.0.2-orig/Makefile popa3d-1.0.2/Makefile
+--- popa3d-1.0.2-orig/Makefile	2012-09-19 01:19:56.698098130 +0200
++++ popa3d-1.0.2/Makefile	2012-09-19 01:23:00.309636423 +0200
+@@ -5,7 +5,7 @@
+ INSTALL = install -c
+ CFLAGS = -Wall -O2 -fomit-frame-pointer
+ # You may use OpenSSL's MD5 routines instead of the ones supplied here
+-#CFLAGS += -DHAVE_OPENSSL
++CFLAGS += -DHAVE_OPENSSL
+ LDFLAGS = -s
+ LIBS =
+ # Linux with glibc, FreeBSD, NetBSD
+@@ -21,7 +21,7 @@
+ # libwrap may also want this
+ #LIBS += -lnsl
+ # OpenSSL (-DHAVE_OPENSSL)
+-#LIBS += -lcrypto
++LIBS += -lcrypto
+ 
+ DESTDIR =
+ PREFIX = /usr/local
