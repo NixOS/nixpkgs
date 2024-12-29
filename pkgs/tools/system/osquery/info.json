@@ -1,0 +1,13 @@
+{
+    "openssl": {
+        "hash": "sha256-g8cyn+UshQZ3115dCwyiRTCbl+jsvP3B39xKufrDWzk=",
+        "url": "https://www.openssl.org/source/openssl-3.2.1.tar.gz"
+    },
+    "osquery": {
+        "fetchSubmodules": true,
+        "hash": "sha256-Zi1lCV7i+UmaG1/32mg82BH5vjb9291fnEXLha26zQ0=",
+        "owner": "osquery",
+        "repo": "osquery",
+        "rev": "5.14.1"
+    }
+}
