@@ -15,6 +15,7 @@
   libadwaita,
   gettext,
   appstream,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,6 +54,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   # needed for darwin
   env.GETTEXT_DIR = "${gettext}";
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/FineFindus/Hieroglyphic/releases/tag/v${finalAttrs.version}";

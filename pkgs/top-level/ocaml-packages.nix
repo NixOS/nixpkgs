@@ -627,9 +627,11 @@ let
     gluon = callPackage ../development/ocaml-modules/gluon { };
 
     gluten = callPackage ../development/ocaml-modules/gluten { };
+    gluten-async = callPackage ../development/ocaml-modules/gluten/async.nix { };
     gluten-eio = callPackage ../development/ocaml-modules/gluten/eio.nix { };
     gluten-lwt = callPackage ../development/ocaml-modules/gluten/lwt.nix { };
     gluten-lwt-unix = callPackage ../development/ocaml-modules/gluten/lwt-unix.nix { };
+    gluten-mirage = callPackage ../development/ocaml-modules/gluten/mirage.nix { };
 
     gmap = callPackage ../development/ocaml-modules/gmap { };
 
@@ -665,6 +667,10 @@ let
     h2 = callPackage ../development/ocaml-modules/h2 { };
 
     h2-eio = callPackage ../development/ocaml-modules/h2/eio.nix { };
+
+    h2-lwt = callPackage ../development/ocaml-modules/h2/lwt.nix { };
+
+    h2-lwt-unix = callPackage ../development/ocaml-modules/h2/lwt-unix.nix { };
 
     hack_parallel = callPackage ../development/ocaml-modules/hack_parallel { };
 
@@ -705,6 +711,7 @@ let
 
     httpun-ws = callPackage ../development/ocaml-modules/httpun-ws { };
 
+    httpun-ws-lwt = callPackage ../development/ocaml-modules/httpun-ws/lwt.nix { };
     hxd = callPackage ../development/ocaml-modules/hxd { };
 
     ### I ###

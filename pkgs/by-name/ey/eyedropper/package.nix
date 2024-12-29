@@ -15,6 +15,7 @@
   wrapGAppsHook4,
   appstream-glib,
   desktop-file-utils,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -52,6 +53,10 @@ stdenv.mkDerivation rec {
     gtk4
     libadwaita
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Pick and format colors";
