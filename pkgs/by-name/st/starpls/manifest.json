@@ -1,0 +1,21 @@
+{
+  "version": "0.1.20",
+  "assets": {
+    "x86_64-linux": {
+      "url": "https://github.com/withered-magic/starpls/releases/download/v0.1.20/starpls-linux-amd64",
+      "hash": "sha256-oImI2aWIGPKJiu/eDwT2ExP0UNz6kj8ZWjZNPUkT5Dc="
+    },
+    "aarch64-linux": {
+      "url": "https://github.com/withered-magic/starpls/releases/download/v0.1.20/starpls-linux-aarch64",
+      "hash": "sha256-z6KY//iMcXXtTRn+9DuXAYZRsakyNOjiGpLztC0g6a4="
+    },
+    "x86_64-darwin": {
+      "url": "https://github.com/withered-magic/starpls/releases/download/v0.1.20/starpls-darwin-amd64",
+      "hash": "sha256-hTD+DE6Ih10+Jr2sATDAedpRQOnW9BCrEcAcuvd/u50="
+    },
+    "aarch64-darwin": {
+      "url": "https://github.com/withered-magic/starpls/releases/download/v0.1.20/starpls-darwin-arm64",
+      "hash": "sha256-tOk/w+g8xI7uGKPUc8Ff5QQ6/brmy6TcfzH8dCjlU2w="
+    }
+  }
+}
