@@ -6618,6 +6618,8 @@ self: super: with self; {
 
   jinja2-pluralize = callPackage ../development/python-modules/jinja2-pluralize { };
 
+  jinja2-strcase = callPackage ../development/python-modules/jinja2-strcase { };
+
   jinja2-time = callPackage ../development/python-modules/jinja2-time { };
 
   jira = callPackage ../development/python-modules/jira { };
