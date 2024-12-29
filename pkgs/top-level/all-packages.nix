@@ -1645,10 +1645,6 @@ with pkgs;
 
   apitrace = libsForQt5.callPackage ../applications/graphics/apitrace { };
 
-  arj = callPackage ../tools/archivers/arj {
-    stdenv = gccStdenv;
-  };
-
   arpack-mpi = arpack.override { useMpi = true; };
 
   inherit (callPackages ../data/fonts/arphic {})
@@ -1724,10 +1720,6 @@ with pkgs;
   amule-web = amule.override {
     monolithic = false;
     httpServer = true;
-  };
-
-  apt-dater = callPackage ../tools/package-management/apt-dater {
-    autoreconfHook = buildPackages.autoreconfHook269;
   };
 
   bashate = python3Packages.callPackage ../development/tools/bashate {
@@ -3424,8 +3416,6 @@ with pkgs;
   };
 
   uniscribe = callPackage ../tools/text/uniscribe { };
-
-  gallery-dl = python3Packages.callPackage ../applications/misc/gallery-dl { };
 
   gandi-cli = python3Packages.callPackage ../tools/networking/gandi-cli { };
 
