@@ -1,0 +1,26 @@
+diff --git a/invocations/packaging/release.py b/invocations/packaging/release.py
+index 54322c3..81ac173 100644
+--- a/invocations/packaging/release.py
++++ b/invocations/packaging/release.py
+@@ -23,7 +23,7 @@ from shutil import rmtree
+ 
+ from invoke.vendor.lexicon import Lexicon
+ 
+-from blessings import Terminal
++from blessed import Terminal
+ from docutils.utils import Reporter
+ from enum import Enum
+ from invoke import Collection, task, Exit
+diff --git a/setup.py b/setup.py
+index 78ae28b..c78a74c 100644
+--- a/setup.py
++++ b/setup.py
+@@ -16,7 +16,7 @@ requirements = [
+     # time if missing), but that got hairy fast, and these are all
+     # pure-Python packages, so it shouldn't be a huge burden for users to
+     # obtain them.
+-    "blessings>=1.6",
++    "blessed",
+     "releases>=1.6",
+     "semantic_version>=2.4,<2.7",
+     "tabulate>=0.7.5",
