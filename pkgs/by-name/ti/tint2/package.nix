@@ -31,7 +31,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitLab {
     owner = "nick87720z";
     repo = "tint2";
-    rev = version;
+    tag = version;
     hash = "sha256-9sEe/Gnj+FWLPbWBtfL1YlNNC12j7/KjQ40xdkaFJVQ=";
   };
 
