@@ -1,0 +1,20 @@
+diff --git a/cmake/external/eigen.cmake b/cmake/external/eigen.cmake
+index b123adb..aab2483 100644
+--- a/cmake/external/eigen.cmake
++++ b/cmake/external/eigen.cmake
+@@ -7,8 +7,13 @@ else ()
+         eigen
+         URL ${DEP_URL_eigen}
+         URL_HASH SHA1=${DEP_SHA1_eigen}
++	FIND_PACKAGE_ARGS NAMES Eigen3
+     )
+ 
+-    FetchContent_Populate(eigen)
+-    set(eigen_INCLUDE_DIRS  "${eigen_SOURCE_DIR}")
++    FetchContent_MakeAvailable(eigen)
++    add_library(eigen ALIAS Eigen3::Eigen)
++    # Onnxruntime doesn't always use `eigen` as a target in
++    # `target_link_libraries`, sometimes it just uses
++    # `target_include_directories`:
++    get_target_property(eigen_INCLUDE_DIRS Eigen3::Eigen INTERFACE_INCLUDE_DIRECTORIES)
+ endif()
