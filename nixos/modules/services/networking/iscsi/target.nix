@@ -4,19 +4,16 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.target;
 in
 {
   ###### interface
   options = {
-    services.target = with types; {
-      enable = mkEnableOption "the kernel's LIO iscsi target";
+    services.target = with lib.types; {
+      enable = lib.mkEnableOption "the kernel's LIO iscsi target";
 
-      config = mkOption {
+      config = lib.mkOption {
         type = attrs;
         default = { };
         description = ''
@@ -28,7 +25,7 @@ in
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.etc."target/saveconfig.json" = {
       text = builtins.toJSON cfg.config;
       mode = "0600";
