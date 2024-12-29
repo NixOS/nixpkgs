@@ -16,6 +16,10 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [ autoreconfHook ];
 
+  # fdatasync is undocumented on darwin with no header file which breaks the build.
+  # use fsync instead.
+  configureFlags = lib.optional stdenv.hostPlatform.isDarwin "ac_cv_func_fdatasync=no";
+
   patches = [ ./fix-install.patch ];
 
   meta = with lib; {
