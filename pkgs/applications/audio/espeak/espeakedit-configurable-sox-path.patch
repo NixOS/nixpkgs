@@ -1,0 +1,27 @@
+Make the path to 'sox' configurable by marking it '@sox@' (easy to match with sed).
+
+Author: Bjørn Forsman
+diff -uNr espeakedit-1.48.03.orig/src/compiledata.cpp espeakedit-1.48.03/src/compiledata.cpp
+--- espeakedit-1.48.03.orig/src/compiledata.cpp	2014-03-04 17:48:11.000000000 +0100
++++ espeakedit-1.48.03/src/compiledata.cpp	2014-07-22 16:38:50.261388452 +0200
+@@ -1884,7 +1884,7 @@
+             fname2 = msg;
+         }
+ 
+-        sprintf(command,"sox \"%s%s.wav\" -r %d -c1 -t wav %s\n",path_source,fname2,samplerate_native, fname_temp);
++        sprintf(command,"@sox@ \"%s%s.wav\" -r %d -c1 -t wav %s\n",path_source,fname2,samplerate_native, fname_temp);
+         if(system(command) != 0)
+         {
+             failed = 1;
+diff -uNr espeakedit-1.48.03.orig/src/readclause.cpp espeakedit-1.48.03/src/readclause.cpp
+--- espeakedit-1.48.03.orig/src/readclause.cpp	2014-03-04 17:48:11.000000000 +0100
++++ espeakedit-1.48.03/src/readclause.cpp	2014-07-22 16:38:37.190440504 +0200
+@@ -892,7 +892,7 @@
+ 			if((fd_temp = mkstemp(fname_temp)) >= 0)
+ 			{
+ 				close(fd_temp);
+-				sprintf(command,"sox \"%s\" -r %d -c1 -t wav %s\n", fname, samplerate, fname_temp);
++				sprintf(command,"@sox@ \"%s\" -r %d -c1 -t wav %s\n", fname, samplerate, fname_temp);
+ 				if(system(command) == 0)
+ 				{
+ 					fname = fname_temp;
