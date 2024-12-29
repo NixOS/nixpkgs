@@ -45,6 +45,9 @@ stdenv.mkDerivation rec {
     })
   ];
 
+  # Fix build with gcc14
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isGNU "-Wno-error=incompatible-pointer-types";
+
   nativeBuildInputs = [
     pkg-config
     cmake
