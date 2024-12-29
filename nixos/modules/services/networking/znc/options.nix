@@ -1,7 +1,4 @@
 { lib, config, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.znc;
@@ -9,49 +6,49 @@ let
   networkOpts = {
     options = {
 
-      server = mkOption {
-        type = types.str;
+      server = lib.mkOption {
+        type = lib.types.str;
         example = "irc.libera.chat";
         description = ''
           IRC server address.
         '';
       };
 
-      port = mkOption {
-        type = types.port;
+      port = lib.mkOption {
+        type = lib.types.port;
         default = 6697;
         description = ''
           IRC server port.
         '';
       };
 
-      password = mkOption {
-        type = types.str;
+      password = lib.mkOption {
+        type = lib.types.str;
         default = "";
         description = ''
           IRC server password, such as for a Slack gateway.
         '';
       };
 
-      useSSL = mkOption {
-        type = types.bool;
+      useSSL = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = ''
           Whether to use SSL to connect to the IRC server.
         '';
       };
 
-      modules = mkOption {
-        type = types.listOf types.str;
+      modules = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ "simple_away" ];
-        example = literalExpression ''[ "simple_away" "sasl" ]'';
+        example = lib.literalExpression ''[ "simple_away" "sasl" ]'';
         description = ''
           ZNC network modules to load.
         '';
       };
 
-      channels = mkOption {
-        type = types.listOf types.str;
+      channels = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "nixos" ];
         description = ''
@@ -59,17 +56,17 @@ let
         '';
       };
 
-      hasBitlbeeControlChannel = mkOption {
-        type = types.bool;
+      hasBitlbeeControlChannel = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to add the special Bitlbee operations channel.
         '';
       };
 
-      extraConf = mkOption {
+      extraConf = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         example = ''
           Encoding = ^UTF-8
           FloodBurst = 4
@@ -94,9 +91,9 @@ in
   options = {
     services.znc = {
 
-      useLegacyConfig = mkOption {
+      useLegacyConfig = lib.mkOption {
         default = true;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Whether to propagate the legacy options under
           {option}`services.znc.confOptions.*` to the znc config. If this
@@ -114,8 +111,8 @@ in
       };
 
       confOptions = {
-        modules = mkOption {
-          type = types.listOf types.str;
+        modules = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [
             "webadmin"
             "adminlog"
@@ -131,8 +128,8 @@ in
           '';
         };
 
-        userModules = mkOption {
-          type = types.listOf types.str;
+        userModules = lib.mkOption {
+          type = lib.types.listOf lib.types.str;
           default = [
             "chansaver"
             "controlpanel"
@@ -148,22 +145,22 @@ in
           '';
         };
 
-        userName = mkOption {
+        userName = lib.mkOption {
           default = "znc";
           example = "johntron";
-          type = types.str;
+          type = lib.types.str;
           description = ''
             The user name used to log in to the ZNC web admin interface.
           '';
         };
 
-        networks = mkOption {
+        networks = lib.mkOption {
           default = { };
-          type = with types; attrsOf (submodule networkOpts);
+          type = with lib.types; attrsOf (submodule networkOpts);
           description = ''
             IRC networks to connect the user to.
           '';
-          example = literalExpression ''
+          example = lib.literalExpression ''
             {
               "libera" = {
                 server = "irc.libera.chat";
@@ -175,16 +172,16 @@ in
           '';
         };
 
-        nick = mkOption {
+        nick = lib.mkOption {
           default = "znc-user";
           example = "john";
-          type = types.str;
+          type = lib.types.str;
           description = ''
             The IRC nick.
           '';
         };
 
-        passBlock = mkOption {
+        passBlock = lib.mkOption {
           example = ''
             &lt;Pass password&gt;
                Method = sha256
@@ -192,7 +189,7 @@ in
                Salt = l5Xryew4g*!oa(ECfX2o
             &lt;/Pass&gt;
           '';
-          type = types.str;
+          type = lib.types.str;
           description = ''
             Generate with {command}`nix-shell -p znc --command "znc --makepass"`.
             This is the password used to log in to the ZNC web admin interface.
@@ -202,25 +199,25 @@ in
           '';
         };
 
-        port = mkOption {
+        port = lib.mkOption {
           default = 5000;
-          type = types.port;
+          type = lib.types.port;
           description = ''
             Specifies the port on which to listen.
           '';
         };
 
-        useSSL = mkOption {
+        useSSL = lib.mkOption {
           default = true;
-          type = types.bool;
+          type = lib.types.bool;
           description = ''
             Indicates whether the ZNC server should use SSL when listening on
             the specified port. A self-signed certificate will be generated.
           '';
         };
 
-        uriPrefix = mkOption {
-          type = types.nullOr types.str;
+        uriPrefix = lib.mkOption {
+          type = lib.types.nullOr lib.types.str;
           default = null;
           example = "/znc/";
           description = ''
@@ -229,9 +226,9 @@ in
           '';
         };
 
-        extraZncConf = mkOption {
+        extraZncConf = lib.mkOption {
           default = "";
-          type = types.lines;
+          type = lib.types.lines;
           description = ''
             Extra config to `znc.conf` file.
           '';
@@ -241,13 +238,13 @@ in
     };
   };
 
-  config = mkIf cfg.useLegacyConfig {
+  config = lib.mkIf cfg.useLegacyConfig {
 
     services.znc.config =
       let
         c = cfg.confOptions;
         # defaults here should override defaults set in the non-legacy part
-        mkDefault = mkOverride 900;
+        mkDefault = lib.mkOverride 900;
       in
       {
         LoadModule = mkDefault c.modules;
@@ -265,22 +262,22 @@ in
           Ident = mkDefault c.nick;
           RealName = mkDefault c.nick;
           LoadModule = mkDefault c.userModules;
-          Network = mapAttrs (name: net: {
+          Network = lib.mapAttrs (name: net: {
             LoadModule = mkDefault net.modules;
-            Server = mkDefault "${net.server} ${optionalString net.useSSL "+"}${toString net.port} ${net.password}";
+            Server = mkDefault "${net.server} ${lib.optionalString net.useSSL "+"}${toString net.port} ${net.password}";
             Chan =
-              optionalAttrs net.hasBitlbeeControlChannel { "&bitlbee" = mkDefault { }; }
-              // listToAttrs (map (n: nameValuePair "#${n}" (mkDefault { })) net.channels);
+              lib.optionalAttrs net.hasBitlbeeControlChannel { "&bitlbee" = mkDefault { }; }
+              // lib.listToAttrs (map (n: lib.nameValuePair "#${n}" (mkDefault { })) net.channels);
             extraConfig = if net.extraConf == "" then mkDefault null else net.extraConf;
           }) c.networks;
           extraConfig = [ c.passBlock ];
         };
-        extraConfig = optional (c.extraZncConf != "") c.extraZncConf;
+        extraConfig = lib.optional (c.extraZncConf != "") c.extraZncConf;
       };
   };
 
   imports = [
-    (mkRemovedOptionModule [ "services" "znc" "zncConf" ] ''
+    (lib.mkRemovedOptionModule [ "services" "znc" "zncConf" ] ''
       Instead of `services.znc.zncConf = "... foo ...";`, use
       `services.znc.configFile = pkgs.writeText "znc.conf" "... foo ...";`.
     '')
