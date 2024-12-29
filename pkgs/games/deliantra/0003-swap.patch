@@ -1,0 +1,14 @@
+--- a/include/util.h
++++ b/include/util.h
+@@ -449,6 +449,11 @@ struct slice_allocator
+   {
+     p->~Tp ();
+   }
++
++  bool operator ==(const slice_allocator &) const
++  {
++    return true;
++  }
+ };
+ 
+ // basically a memory area, but refcounted
