@@ -10,18 +10,19 @@
   libxml2,
   ncurses,
   popt,
+  libxslt,
   screen,
 }:
 
 stdenv.mkDerivation rec {
   pname = "apt-dater";
-  version = "1.0.4";
+  version = "1.0.4-unstable-2024-10-04";
 
   src = fetchFromGitHub {
     owner = "DE-IBH";
     repo = "apt-dater";
-    rev = "v${version}";
-    sha256 = "1r6gz9jkh1wxi11mcq5p9mqg0szclsaq8ic79vnfnbjdrmmdfi4y";
+    rev = "113ea9b72d318f316ea7cac8ddad5be004787a22";
+    hash = "sha256-/Ufa/pEbqD25kp+k0zm9MuLS1zG+xWqhpBkL7ng2+Bo=";
   };
 
   nativeBuildInputs = [
@@ -43,17 +44,28 @@ stdenv.mkDerivation rec {
 
   prePatch = ''
     substituteInPlace etc/Makefile.am \
-      --replace 02770 0770
+      --replace-fail 02770 0770
   '';
 
   postPatch = ''
     substituteInPlace configure.ac \
-      --replace "/usr/bin/screen" "${screen}/bin/screen"
+      --replace-fail "/usr/bin/screen" "${screen}/bin/screen" \
+      --replace-fail "/usr/bin/xsltproc" "${libxslt}/bin/xsltproc" \
+      --replace-fail "man/Makefile" "" # Need /usr/share/xml/docbook/stylesheet/nwalsh can't find in nixpkgs
+    substituteInPlace Makefile.am \
+      --replace-fail "man" ""
+    substituteInPlace build/screen_sockpath \
+      --replace-fail "/usr/bin/screen" "${screen}/bin/screen"
+  '';
+
+  postInstall = ''
+    substituteInPlace $out/bin/adsh \
+      --replace-fail "apt-dater" "$out/bin/apt-dater"
   '';
 
   doCheck = true;
 
-  meta = with lib; {
+  meta = {
     homepage = "https://github.com/DE-IBH/apt-dater";
     description = "Terminal-based remote package update manager";
     longDescription = ''
@@ -61,7 +73,8 @@ stdenv.mkDerivation rec {
       number of remote hosts using SSH. It supports Debian-based managed hosts
       as well as rug (e.g. openSUSE) and yum (e.g. CentOS) based systems.
     '';
-    license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ c0bw3b ];
+    license = lib.licenses.gpl2Plus;
+    mainProgram = "apt-dater";
+    maintainers = with lib.maintainers; [ c0bw3b ];
   };
 }

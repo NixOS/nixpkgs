@@ -37,7 +37,6 @@ buildGoModule rec {
     license = licenses.asl20;
     maintainers = with maintainers; [
       tjni
-      emilylange
     ];
   };
 }
