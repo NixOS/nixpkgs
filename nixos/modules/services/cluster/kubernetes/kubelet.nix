@@ -367,7 +367,9 @@ in
                         --kubeconfig=${kubeconfig} \
                         ${lib.optionalString (cfg.nodeIp != null) "--node-ip=${cfg.nodeIp}"} \
                         --pod-infra-container-image=pause \
-                        ${lib.optionalString (cfg.manifests != { }) "--pod-manifest-path=/etc/${manifestPath}"} \
+                        ${
+                          lib.optionalString (cfg.manifests != { }) "--pod-manifest-path=/etc/${manifestPath}"
+                        } \
                         ${lib.optionalString (taints != "") "--register-with-taints=${taints}"} \
                         --root-dir=${top.dataDir} \
                         ${lib.optionalString (cfg.verbosity != null) "--v=${toString cfg.verbosity}"} \
