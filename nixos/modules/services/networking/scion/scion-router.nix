@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   globalCfg = config.services.scion;
   cfg = config.services.scion.scion-router;
@@ -17,15 +14,15 @@ let
       config_dir = "/etc/scion";
     };
   };
-  configFile = toml.generate "scion-router.toml" (recursiveUpdate defaultConfig cfg.settings);
+  configFile = toml.generate "scion-router.toml" (lib.recursiveUpdate defaultConfig cfg.settings);
 in
 {
   options.services.scion.scion-router = {
-    enable = mkEnableOption "the scion-router service";
-    settings = mkOption {
+    enable = lib.mkEnableOption "the scion-router service";
+    settings = lib.mkOption {
       default = { };
       type = toml.type;
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           general.id = "br";
         }
@@ -37,7 +34,7 @@ in
       '';
     };
   };
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.scion-router = {
       description = "SCION Router";
       after = [ "network-online.target" ];
