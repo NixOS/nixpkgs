@@ -5,6 +5,7 @@
   fetchFromGitHub,
   qt6,
   nix-update-script,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,6 +35,12 @@ stdenv.mkDerivation (finalAttrs: {
     qt6.qtwayland
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  doInstallCheck = true;
+  versionCheckProgram = "${placeholder "out"}/bin/${finalAttrs.meta.mainProgram}";
+
   qmakeFlags = [
     "./example/qhexedit.pro"
   ];
@@ -48,11 +55,7 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  passthru = {
-    updateScript = nix-update-script { };
-    # I would use testers.testVersion except for some reason it fails, even with my patches that add a --version flag
-    # TODO: Debug why testVersion reports a non-zero status code in the nix sandbox
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "Hex Editor for Qt";
