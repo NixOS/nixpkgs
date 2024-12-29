@@ -735,6 +735,7 @@ in
       "u-boot.itb"
       "idbloader.img"
       "u-boot-rockchip.bin"
+      "u-boot-rockchip-spi.bin"
     ];
   };
 
@@ -756,6 +757,7 @@ in
       "u-boot.itb"
       "idbloader.img"
       "u-boot-rockchip.bin"
+      "u-boot-rockchip-spi.bin"
     ];
   };
 
