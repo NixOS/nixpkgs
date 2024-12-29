@@ -1,18 +1,17 @@
 name: "No channel PR"
 
 on:
-  pull_request:
+  pull_request_target:
+    # Re-run should be triggered when the base branch is updated, instead of silently failing
+    types: [opened, synchronize, reopened, edited]
     branches:
       - 'nixos-**'
       - 'nixpkgs-**'
 
-permissions:
-  contents: read
+permissions: {}
 
 jobs:
   fail:
-    permissions:
-      contents: none
     name: "This PR is is targeting a channel branch"
     runs-on: ubuntu-latest
     steps:
