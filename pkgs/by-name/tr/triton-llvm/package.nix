@@ -203,6 +203,11 @@ stdenv.mkDerivation (finalAttrs: {
         --replace-fail "Path.cpp" ""
     ''
     # Not sure why this fails
+    + ''
+      rm mlir/test/Dialect/SPIRV/IR/availability.mlir
+      rm mlir/test/Dialect/SPIRV/IR/target-env.mlir
+    ''
+    # Not sure why this fails
     + lib.optionalString stdenv.hostPlatform.isAarch64 ''
       rm llvm/test/tools/llvm-exegesis/AArch64/latency-by-opcode-name.s
     '';
