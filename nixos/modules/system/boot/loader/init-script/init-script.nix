@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
 
   initScriptBuilder = pkgs.substituteAll {
@@ -31,9 +28,9 @@ in
 
     boot.loader.initScript = {
 
-      enable = mkOption {
+      enable = lib.mkOption {
         default = false;
-        type = types.bool;
+        type = lib.types.bool;
         description = ''
           Some systems require a /sbin/init script which is started.
           Or having it makes starting NixOS easier.
@@ -51,7 +48,7 @@ in
 
   ###### implementation
 
-  config = mkIf config.boot.loader.initScript.enable {
+  config = lib.mkIf config.boot.loader.initScript.enable {
 
     system.build.installBootLoader = initScriptBuilder;
 
