@@ -112,7 +112,8 @@ rec {
     render = single (value: concatStringsSep sep value);
   };
 
-  mkAttrsOfParams = params: mkAttrsOf params (lib.types.submodule { options = paramsToOptions params; });
+  mkAttrsOfParams =
+    params: mkAttrsOf params (lib.types.submodule { options = paramsToOptions params; });
 
   mkAttrsOfParam = param: mkAttrsOf param param.option.type;
 
