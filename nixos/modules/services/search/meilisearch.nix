@@ -1,14 +1,13 @@
-{ config, lib, pkgs, ... }:
-
-with lib;
-
-let
-  cfg = config.services.meilisearch;
-
-in
 {
-
-  meta.maintainers = with maintainers; [ Br1ght0ne happysalada ];
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+with lib; let
+  cfg = config.services.meilisearch;
+in {
+  meta.maintainers = with maintainers; [Br1ght0ne happysalada];
   meta.doc = ./meilisearch.md;
 
   ###### interface
@@ -37,7 +36,7 @@ in
     environment = mkOption {
       description = "Defines the running environment of MeiliSearch.";
       default = "development";
-      type = types.enum [ "development" "production" ];
+      type = types.enum ["development" "production"];
     };
 
     # TODO change this to LoadCredentials once possible
@@ -48,6 +47,15 @@ in
         If no master key is provided, all routes can be accessed without requiring any key.
         The format is the following:
         MEILI_MASTER_KEY=my_secret_key
+      '';
+      default = null;
+      type = with types; nullOr path;
+    };
+
+    datadir = mkOption {
+      description = ''
+        Location where meilisearch should persist its data. If not set, systemd's "dynamic user
+        defaults" will be used, which means /var/lib/meilisearch
       '';
       default = null;
       type = with types; nullOr path;
@@ -99,31 +107,54 @@ in
       default = "104857600";
       type = types.str;
     };
-
   };
 
   ###### implementation
 
   config = mkIf cfg.enable {
+    # used to restore dumps
+    environment.systemPackages = [cfg.package];
+
+    systemd.tmpfiles.rules = mkIf (cfg.datadir != null) [
+      "d '${cfg.datadir}' - meilisearch meilisearch - -"
+    ];
+
     systemd.services.meilisearch = {
       description = "MeiliSearch daemon";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+      wantedBy = ["multi-user.target"];
+      after = ["network.target"];
+
       environment = {
-        MEILI_DB_PATH = "/var/lib/meilisearch";
+        MEILI_DB_PATH = with cfg;
+          if (datadir != null)
+          then datadir
+          else "/var/lib/meilisearch";
         MEILI_HTTP_ADDR = "${cfg.listenAddress}:${toString cfg.listenPort}";
         MEILI_NO_ANALYTICS = boolToString cfg.noAnalytics;
         MEILI_ENV = cfg.environment;
-        MEILI_DUMP_DIR = "/var/lib/meilisearch/dumps";
+        MEILI_DUMP_DIR = with cfg; "${
+          if (datadir != null)
+          then datadir
+          else "/val/lib/meilisearch"
+        }/dumps";
         MEILI_LOG_LEVEL = cfg.logLevel;
         MEILI_MAX_INDEX_SIZE = cfg.maxIndexSize;
       };
-      serviceConfig = {
-        ExecStart = "${cfg.package}/bin/meilisearch";
-        DynamicUser = true;
-        StateDirectory = "meilisearch";
-        EnvironmentFile = mkIf (cfg.masterKeyEnvironmentFile != null) cfg.masterKeyEnvironmentFile;
-      };
+      serviceConfig =
+        {
+          ExecStart = "${cfg.package}/bin/meilisearch";
+          DynamicUser = true;
+          EnvironmentFile = mkIf (cfg.masterKeyEnvironmentFile != null) cfg.masterKeyEnvironmentFile;
+        }
+        // (
+          if (cfg.datadir != null)
+          then {
+            ReadWritePaths = mkIf (cfg.datadir != null) [
+              cfg.datadir
+            ];
+          }
+          else {StateDirectory = mkIf (cfg.datadir == null) "meilisearch";}
+        );
     };
   };
 }
