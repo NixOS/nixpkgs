@@ -47,7 +47,7 @@ import ./make-test-python.nix (
 
       # store test record in atuin server and sync
       server.succeed("ATUIN_SESSION=$(${atuin}/bin/atuin uuid) ${atuin}/bin/atuin history start 'shazbot'")
-      server.succeed("${atuin}/bin/atuin sync")
+      server.succeed("ATUIN_SESSION=$(${atuin}/bin/atuin uuid) ${atuin}/bin/atuin sync")
 
       # configure atuin client on client node
       client.execute("mkdir -p ~/.config/atuin")
