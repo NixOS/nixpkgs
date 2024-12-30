@@ -1,8 +1,4 @@
 {
-  pname,
-  version,
-  outputs,
-  meta,
   lib,
   stdenvNoCC,
   fetchurl,
@@ -11,8 +7,6 @@
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
-  inherit pname version outputs;
-
   src = fetchurl {
     url = "https://release.files.ghostty.org/${finalAttrs.version}/Ghostty.dmg";
     sha256 = "sha256-CR96Kz9BYKFtfVKygiEku51XFJk4FfYqfXACeYQ3JlI=";
@@ -56,7 +50,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
       done
     '';
 
-  meta = meta // {
+  meta = {
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 })

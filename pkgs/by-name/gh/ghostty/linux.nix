@@ -1,8 +1,4 @@
 {
-  pname,
-  version,
-  outputs,
-  meta,
   lib,
   stdenv,
   bzip2,
@@ -47,13 +43,6 @@ let
 in
 
 stdenv.mkDerivation (finalAttrs: {
-  inherit
-    pname
-    version
-    outputs
-    meta
-    ;
-
   src = fetchFromGitHub {
     owner = "ghostty-org";
     repo = "ghostty";
@@ -174,5 +163,4 @@ stdenv.mkDerivation (finalAttrs: {
       nixos = nixosTests.terminal-emulators.ghostty;
     };
   };
-
 })
