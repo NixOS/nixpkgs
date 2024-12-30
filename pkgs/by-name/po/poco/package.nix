@@ -10,18 +10,19 @@
   sqlite,
   openssl,
   unixODBC,
+  utf8proc,
   libmysqlclient,
 }:
 
 stdenv.mkDerivation rec {
   pname = "poco";
 
-  version = "1.13.3";
+  version = "1.14.1";
 
   src = fetchFromGitHub {
     owner = "pocoproject";
     repo = "poco";
-    sha256 = "sha256-ryBQjzg1DyYd/LBZzjHxq8m/7ZXRSKNNGRkIII0eHK0=";
+    hash = "sha256-acq2eja61sH/QHwMPmiDNns2jvXRTk0se/tHj9XRSiU=";
     rev = "poco-${version}-release";
   };
 
@@ -32,8 +33,10 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     unixODBC
+    utf8proc
     libmysqlclient
   ];
+
   propagatedBuildInputs = [
     zlib
     pcre2
@@ -50,8 +53,15 @@ stdenv.mkDerivation rec {
   MYSQL_DIR = libmysqlclient;
   MYSQL_INCLUDE_DIR = "${MYSQL_DIR}/include/mysql";
 
-  configureFlags = [
-    "--unbundled"
+  cmakeFlags = [
+    # use nix provided versions of sqlite, zlib, pcre, expat, ... instead of bundled versions
+    "-DPOCO_UNBUNDLED=ON"
+  ];
+
+  patches = [
+    # poco builds its own version of pcre, disable it for static builds
+    # https://github.com/pocoproject/poco/issues/4871
+    ./disable-internal-pcre-files-for-static-builds.patch
   ];
 
   postFixup = ''

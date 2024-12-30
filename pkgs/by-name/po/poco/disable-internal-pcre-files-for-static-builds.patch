@@ -1,0 +1,23 @@
+diff --git a/Foundation/CMakeLists.txt b/Foundation/CMakeLists.txt
+index d5f3b267d..dfaf99a10 100644
+--- a/Foundation/CMakeLists.txt
++++ b/Foundation/CMakeLists.txt
+@@ -31,11 +31,13 @@ if(POCO_UNBUNDLED)
+ 	find_package(ZLIB REQUIRED)
+ 	find_package(Utf8Proc REQUIRED)
+
+-	#HACK: Unicode.cpp requires functions from these files. The can't be taken from the library
+-	POCO_SOURCES(SRCS RegExp
+-		src/pcre2_ucd.c
+-		src/pcre2_tables.c
+-	)
++    if(NOT POCO_STATIC AND BUILD_SHARED_LIBS)
++    	#HACK: Unicode.cpp requires functions from these files. The can't be taken from the library
++    	POCO_SOURCES(SRCS RegExp
++    		src/pcre2_ucd.c
++    		src/pcre2_tables.c
++        )
++    endif()
+
+ else()
+ 	# pcre2
