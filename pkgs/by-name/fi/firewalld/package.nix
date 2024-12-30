@@ -12,6 +12,7 @@
 , libnotify
 , libxml2
 , libxslt
+, networkmanager
 , networkmanagerapplet
 , pkg-config
 , python3
@@ -79,6 +80,7 @@ stdenv.mkDerivation rec {
   ] ++ lib.optionals withGui [
     gtk3
     libnotify
+    networkmanager
     pythonPath
   ];
 
