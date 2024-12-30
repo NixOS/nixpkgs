@@ -120,6 +120,8 @@ stdenv'.mkDerivation (finalAttrs: {
       ''
         mkdir -p $out/share/imhex
         rsync -av --exclude="*_schema.json" ${patterns_src}/{constants,encodings,includes,magic,nodes,patterns} $out/share/imhex
+        # without this imhex is not able to find pattern files
+        wrapProgram $out/bin/imhex --prefix XDG_DATA_DIRS : $out/share
       ''
     else if stdenv.hostPlatform.isDarwin then
       ''
