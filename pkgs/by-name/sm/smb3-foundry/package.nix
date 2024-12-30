@@ -6,15 +6,14 @@
 }:
 
 let
-  python = (
-    python3.withPackages (
-      ps: with ps; [
-        pyside6
-        py65
-        qdarkstyle
-      ]
-    )
+  python = python3.withPackages (
+    ps: with ps; [
+      pyside6
+      py65
+      qdarkstyle
+    ]
   );
+
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smb3-foundry";
@@ -23,7 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mchlnix";
     repo = "SMB3-Foundry";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-9pztxzgdPqrTNUMtD9boxtqb32LCsGMoa/bBq5GSJ1I=";
   };
 
@@ -42,7 +41,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = {
-    changelog = "https://github.com/mchlnix/SMB3-Foundry/releases/tag/${finalAttrs.version}";
+    changelog = "https://github.com/mchlnix/SMB3-Foundry/releases/tag/${finalAttrs.src.tag}";
     description = "Modern Super Mario Bros. 3 Level Editor";
     homepage = "https://github.com/mchlnix/SMB3-Foundry";
     license = lib.licenses.gpl3Only;
