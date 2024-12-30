@@ -25,7 +25,7 @@
   libzip,
   libsecret,
   libssh,
-  python3,
+  python3Packages,
   jre,
   boost,
   libsigcxx,
@@ -53,7 +53,9 @@ let
     };
   });
 
-  inherit (python3.pkgs) paramiko pycairo pyodbc;
+  getCoreExe = lib.getExe' coreutils;
+
+  inherit (python3Packages) paramiko pycairo pyodbc;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mysql-workbench";
@@ -66,23 +68,23 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     (replaceVars ./hardcode-paths.patch {
-      catchsegv = "${glibc.bin}/bin/catchsegv";
-      bash = "${bash}/bin/bash";
-      cp = "${coreutils}/bin/cp";
-      dd = "${coreutils}/bin/dd";
-      ls = "${coreutils}/bin/ls";
-      mkdir = "${coreutils}/bin/mkdir";
-      nohup = "${coreutils}/bin/nohup";
-      rm = "${coreutils}/bin/rm";
-      rmdir = "${coreutils}/bin/rmdir";
-      stat = "${coreutils}/bin/stat";
-      sudo = "${sudo}/bin/sudo";
+      bash = lib.getExe bash;
+      catchsegv = lib.getExe' glibc "catchsegv";
+      cp = getCoreExe "cp";
+      dd = getCoreExe "dd";
+      ls = getCoreExe "ls";
+      mkdir = getCoreExe "mkdir";
+      nohup = getCoreExe "nohup";
+      rm = getCoreExe "rm";
+      rmdir = getCoreExe "rmdir";
+      stat = getCoreExe "stat";
+      sudo = lib.getExe sudo;
     })
 
     # Fix swig not being able to find headers
     # https://github.com/NixOS/nixpkgs/pull/82362#issuecomment-597948461
     (replaceVars ./fix-swig-build.patch {
-      cairoDev = "${cairo.dev}";
+      cairoDev = lib.getDev cairo;
     })
 
     # Don't try to override the ANTLR_JAR_PATH specified in cmakeFlags
@@ -110,7 +112,7 @@ stdenv.mkDerivation (finalAttrs: {
     gtkmm3
     libX11
     antlr4_12.runtime.cpp
-    python3
+    python3Packages.python
     mysql
     (libxml2.override { enableHttp = true; })
     libmysqlconnectorcpp
@@ -161,13 +163,13 @@ stdenv.mkDerivation (finalAttrs: {
   );
 
   cmakeFlags = [
-    "-DMySQL_CONFIG_PATH=${mysql}/bin/mysql_config"
-    "-DIODBC_CONFIG_PATH=${libiodbc}/bin/iodbc-config"
+    (lib.cmakeFeature "MySQL_CONFIG_PATH" (lib.getExe' mysql "mysql_config"))
+    (lib.cmakeFeature "IODBC_CONFIG_PATH" (lib.getExe' libiodbc "iodbc-config"))
+    (lib.cmakeFeature "ANTLR_JAR_PATH" "${antlr4_12.jarLocation}")
     # mysql-workbench 8.0.21 depends on libmysqlconnectorcpp 1.1.8.
     # Newer versions of connector still provide the legacy library when enabled
     # but the headers are in a different location.
-    "-DANTLR_JAR_PATH=${antlr4_12.jarLocation}"
-    "-DMySQLCppConn_INCLUDE_DIR=${libmysqlconnectorcpp}/include/jdbc"
+    (lib.cmakeFeature "MySQLCppConn_INCLUDE_DIR" "${lib.getDev libmysqlconnectorcpp}/include/jdbc")
   ];
 
   # There is already an executable and a wrapper in bindir
@@ -176,8 +178,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --prefix PATH : "${python3}/bin"
-      --prefix PROJSO : "${proj}/lib/libproj.so"
+      --prefix PATH : "${lib.makeBinPath [ python3Packages.python ]}"
+      --prefix PROJSO : "${lib.getLib proj}/lib/libproj.so"
       --set PYTHONPATH $PYTHONPATH
     )
   '';
