@@ -17,21 +17,14 @@
 
 stdenv.mkDerivation rec {
   pname = "text-engine";
-  version = "0.1.1";
+  version = "0.1.1-unstable-2024-09-16";
+
   src = fetchFromGitHub {
     owner = "mjakeman";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-YSG4Vk3hrmtaJkK1WAlQcdgiDdgC4Un0t6UdaoIcUes=";
+    rev = "4c26887556fd8e28211324c4058d49508eb5f557";
+    hash = "sha256-0rMBz2s3wYv7gZiJTj8rixWxBjT6Dd6SaINP8kDbTyw=";
   };
-
-  patches = [
-    # Fixes build with newer versions of clang
-    (fetchpatch {
-      url = "https://github.com/mjakeman/text-engine/commit/749c94d853c0b0e29e79a1b270ec61947b65c319.patch";
-      hash = "sha256-vs/a8IBovArw8tc1ZLUsaDHRVyA71KMB1NGENOKNOdk=";
-    })
-  ];
 
   nativeBuildInputs = [
     gobject-introspection
