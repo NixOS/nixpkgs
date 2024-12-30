@@ -12,6 +12,7 @@
   lomiri-content-hub,
   lomiri-ui-extras,
   lomiri-ui-toolkit,
+  mesa,
   pkg-config,
   qqc2-suru-style,
   qtbase,
@@ -90,6 +91,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   nativeCheckInputs = [
+    mesa.llvmpipeHook # ShapeMaterial needs an OpenGL context: https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/35
     xvfb-run
   ];
 
@@ -102,9 +104,6 @@ stdenv.mkDerivation (finalAttrs: {
           lib.concatStringsSep "|" [
             # Don't care about linter failures
             "^flake8"
-
-            # Runs into ShapeMaterial codepath in lomiri-ui-toolkit which needs OpenGL, see LUITK for details
-            "^tst_QmlTests"
           ]
         })")
       ]
