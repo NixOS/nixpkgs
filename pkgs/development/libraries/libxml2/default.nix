@@ -32,7 +32,7 @@
 
 stdenv.mkDerivation (finalAttrs: rec {
   pname = "libxml2";
-  version = "2.12.7";
+  version = "2.12.9";
 
   outputs =
     [
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/libxml2/${lib.versions.majorMinor version}/libxml2-${version}.tar.xz";
-    hash = "sha256-JK54/xNjqXPm2L66lBp5RdoqwFbhm1OVautpJ/1s+1Y=";
+    hash = "sha256-WZEttTarVqOZZInqApl2jHvP/lcWnwI15/liqR9INZA=";
   };
 
   strictDeps = true;
