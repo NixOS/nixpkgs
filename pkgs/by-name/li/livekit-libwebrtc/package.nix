@@ -147,6 +147,11 @@ stdenv.mkDerivation {
       substituteInPlace build/toolchain/apple/toolchain.gni --replace-fail "/bin/cp -Rc" "cp -a"
     '';
 
+  outputs = [
+    "dev"
+    "out"
+  ];
+
   nativeBuildInputs =
     (builtins.concatLists (
       lib.mapAttrsToList (
@@ -249,24 +254,24 @@ stdenv.mkDerivation {
     ''
       runHook preInstall
 
-      mkdir -p $out/{lib,include}
-      cp obj/webrtc.ninja $out/
-      cp args.gn $out/
-      cp LICENSE.md $out/
+      mkdir -p $out/lib
+      mkdir -p $dev/include
+
+      install -m0644 obj/webrtc.ninja args.gn LICENSE.md $dev
+
+      pushd ../..
+      find . -name "*.h" -print | cpio -pd $dev/include
+      popd
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
-      cp libwebrtc.so $out/lib/
-      cp libthird_party_boringssl.so $out/lib/
+      install -m0644 libwebrtc.so libthird_party_boringssl.so $out/lib
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      mkdir -p $out/Library/Frameworks
-      cp -r WebRTC.framework $out/Library/Frameworks
-      cp libwebrtc.dylib $out/lib
-      cp libthird_party_boringssl.dylib $out/lib/
+      install -m0644 WebRTC.framework/Versions/A/WebRTC $out/lib/libwebrtc.dylib
+      install -m0644 libthird_party_boringssl.dylib $out/lib
     ''
     + ''
-      cd ../..
-      find . -name "*.h" -print | cpio -pd $out/include
+      ln -s $out/lib $dev/lib
 
       runHook postInstall
     '';
@@ -274,13 +279,10 @@ stdenv.mkDerivation {
   postFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     boringssl="$out/lib/libthird_party_boringssl.dylib"
     webrtc="$out/lib/libwebrtc.dylib"
-    framework="$out/Library/Frameworks/WebRTC.framework/Versions/A/WebRTC"
 
     install_name_tool -id "$boringssl" "$boringssl"
     install_name_tool -id "$webrtc" "$webrtc"
     install_name_tool -change @rpath/libthird_party_boringssl.dylib "$boringssl" "$webrtc"
-    install_name_tool -id "$framework" "$framework"
-    install_name_tool -change @rpath/libthird_party_boringssl.dylib "$boringssl" "$framework"
   '';
 
   passthru.updateScript = writeShellScript "update-livekit-libwebrtc" ''
