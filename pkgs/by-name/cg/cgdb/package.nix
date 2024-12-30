@@ -8,12 +8,12 @@
   texinfo,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "cgdb";
   version = "0.8.0";
 
   src = fetchurl {
-    url = "https://cgdb.me/files/${pname}-${version}.tar.gz";
+    url = "https://cgdb.me/files/cgdb-${finalAttrs.version}.tar.gz";
     sha256 = "sha256-DTi1JNN3JXsQa61thW2K4zBBQOHuJAhTQ+bd8bZYEfE=";
   };
 
@@ -40,4 +40,4 @@ stdenv.mkDerivation rec {
     platforms = with platforms; linux ++ cygwin;
     maintainers = [ ];
   };
-}
+})
