@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.unclutter-xfixes;
 
@@ -14,29 +11,29 @@ in
 {
   options.services.unclutter-xfixes = {
 
-    enable = mkOption {
+    enable = lib.mkOption {
       description = "Enable unclutter-xfixes to hide your mouse cursor when inactive.";
-      type = types.bool;
+      type = lib.types.bool;
       default = false;
     };
 
-    package = mkPackageOption pkgs "unclutter-xfixes" { };
+    package = lib.mkPackageOption pkgs "unclutter-xfixes" { };
 
-    timeout = mkOption {
+    timeout = lib.mkOption {
       description = "Number of seconds before the cursor is marked inactive.";
-      type = types.int;
+      type = lib.types.int;
       default = 1;
     };
 
-    threshold = mkOption {
+    threshold = lib.mkOption {
       description = "Minimum number of pixels considered cursor movement.";
-      type = types.int;
+      type = lib.types.int;
       default = 1;
     };
 
-    extraOptions = mkOption {
+    extraOptions = lib.mkOption {
       description = "More arguments to pass to the unclutter-xfixes command.";
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [
         "exclude-root"
@@ -46,7 +43,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.user.services.unclutter-xfixes = {
       description = "unclutter-xfixes";
       wantedBy = [ "graphical-session.target" ];
@@ -55,7 +52,7 @@ in
         ${cfg.package}/bin/unclutter \
           --timeout ${toString cfg.timeout} \
           --jitter ${toString (cfg.threshold - 1)} \
-          ${concatMapStrings (x: " --" + x) cfg.extraOptions} \
+          ${lib.concatMapStrings (x: " --" + x) cfg.extraOptions} \
       '';
       serviceConfig.RestartSec = 3;
       serviceConfig.Restart = "always";
