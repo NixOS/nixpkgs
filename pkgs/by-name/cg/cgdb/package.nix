@@ -17,6 +17,10 @@ stdenv.mkDerivation (finalAttrs: {
     sha256 = "sha256-DTi1JNN3JXsQa61thW2K4zBBQOHuJAhTQ+bd8bZYEfE=";
   };
 
+  patches = [
+    ./gcc14.patch
+  ];
+
   buildInputs = [
     ncurses
     readline
