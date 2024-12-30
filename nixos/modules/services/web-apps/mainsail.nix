@@ -1,26 +1,25 @@
 { config, lib, pkgs, ... }:
-with lib;
 let
   cfg = config.services.mainsail;
   moonraker = config.services.moonraker;
 in
 {
   options.services.mainsail = {
-    enable = mkEnableOption "a modern and responsive user interface for Klipper";
+    enable = lib.mkEnableOption "a modern and responsive user interface for Klipper";
 
-    package = mkPackageOption pkgs "mainsail" { };
+    package = lib.mkPackageOption pkgs "mainsail" { };
 
-    hostName = mkOption {
-      type = types.str;
+    hostName = lib.mkOption {
+      type = lib.types.str;
       default = "localhost";
       description = "Hostname to serve mainsail on";
     };
 
-    nginx = mkOption {
-      type = types.submodule
+    nginx = lib.mkOption {
+      type = lib.types.submodule
         (import ../web-servers/nginx/vhost-options.nix { inherit config lib; });
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           serverAliases = [ "mainsail.''${config.networking.domain}" ];
         }
@@ -29,14 +28,14 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.nginx = {
       enable = true;
       upstreams.mainsail-apiserver.servers."${moonraker.address}:${toString moonraker.port}" = { };
-      virtualHosts."${cfg.hostName}" = mkMerge [
+      virtualHosts."${cfg.hostName}" = lib.mkMerge [
         cfg.nginx
         {
-          root = mkForce "${cfg.package}/share/mainsail";
+          root = lib.mkForce "${cfg.package}/share/mainsail";
           locations = {
             "/" = {
               index = "index.html";
