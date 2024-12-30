@@ -19,13 +19,13 @@ in
 
 stdenv.mkDerivation rec {
   pname = "sby";
-  version = "0.47";
+  version = "0.48";
 
   src = fetchFromGitHub {
     owner = "YosysHQ";
     repo = "sby";
-    rev = "yosys-${version}";
-    hash = "sha256-Il2pXw2doaoZrVme2p0dSUUa8dCQtJJrmYitn1MkTD4=";
+    tag = "v${version}";
+    hash = "sha256-icOlWutvajHMCi2YUIGU4v5S63YobXw4fYYUvPoSzo4=";
   };
 
   nativeBuildInputs = [ bash ];
@@ -89,12 +89,7 @@ stdenv.mkDerivation rec {
     runHook postCheck
   '';
 
-  passthru.updateScript = nix-update-script {
-    extraArgs = [
-      "--version-regex"
-      "yosys-([0-9].*)"
-    ];
-  };
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "SymbiYosys, a front-end for Yosys-based formal verification flows";
