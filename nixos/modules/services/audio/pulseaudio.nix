@@ -6,7 +6,7 @@
 }:
 let
 
-  cfg = config.hardware.pulseaudio;
+  cfg = config.services.pulseaudio;
 
   hasZeroconf =
     let
@@ -90,10 +90,13 @@ let
 
 in
 {
+  imports = [
+    (lib.mkRenamedOptionModule [ "hardware" "pulseaudio" ] [ "services" "pulseaudio" ])
+  ];
 
   options = {
 
-    hardware.pulseaudio = {
+    services.pulseaudio = {
       enable = lib.mkOption {
         type = lib.types.bool;
         default = false;
@@ -239,13 +242,13 @@ in
           "libao.conf".source = pkgs.writeText "libao.conf" "default_driver=pulse";
         };
 
-        hardware.pulseaudio.configFile = lib.mkDefault "${lib.getBin overriddenPackage}/etc/pulse/default.pa";
+        services.pulseaudio.configFile = lib.mkDefault "${lib.getBin overriddenPackage}/etc/pulse/default.pa";
 
         # Disable flat volumes to enable relative ones
-        hardware.pulseaudio.daemon.config.flat-volumes = lib.mkDefault "no";
+        services.pulseaudio.daemon.config.flat-volumes = lib.mkDefault "no";
 
         # Upstream defaults to speex-float-1 which results in audible artifacts
-        hardware.pulseaudio.daemon.config.resample-method = lib.mkDefault "speex-float-5";
+        services.pulseaudio.daemon.config.resample-method = lib.mkDefault "speex-float-5";
 
         # Allow PulseAudio to get realtime priority using rtkit.
         security.rtkit.enable = true;
@@ -257,7 +260,7 @@ in
       }
 
       (lib.mkIf (cfg.extraModules != [ ]) {
-        hardware.pulseaudio.daemon.config.dl-search-path =
+        services.pulseaudio.daemon.config.dl-search-path =
           let
             overriddenModules = builtins.map (
               drv: drv.override { pulseaudio = overriddenPackage; }
