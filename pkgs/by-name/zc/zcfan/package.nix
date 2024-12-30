@@ -37,7 +37,10 @@ stdenv.mkDerivation (finalAttrs: {
     homepage = "https://github.com/cdown/zcfan";
     changelog = "https://github.com/cdown/zcfan/tags/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ kashw2 ];
+    maintainers = with lib.maintainers; [
+      luftmensch-luftmensch
+      kashw2
+    ];
     platforms = lib.platforms.linux;
   };
 })
