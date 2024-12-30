@@ -1166,6 +1166,10 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    pingr = old.pingr.overrideAttrs (_: {
+      postPatch = "patchShebangs configure";
+    });
+
     heck = old.heck.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
     });
