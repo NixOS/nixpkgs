@@ -157,8 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     rmdir $out/share/vim
     ln -s $vim $out/share/vim-plugins
 
-
-    remove-references-to -t ${finalAttrs.deps} $out/bin/ghostty
+    remove-references-to -t ${finalAttrs.deps} $out/bin/.ghostty-wrapped
   '';
 
   nativeInstallCheckInputs = [
