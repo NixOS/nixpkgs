@@ -5,18 +5,15 @@
   utils,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.systemd.coredump;
   systemd = config.systemd.package;
 in
 {
   options = {
-    systemd.coredump.enable = mkOption {
+    systemd.coredump.enable = lib.mkOption {
       default = true;
-      type = types.bool;
+      type = lib.types.bool;
       description = ''
         Whether core dumps should be processed by
         {command}`systemd-coredump`. If disabled, core dumps
@@ -24,9 +21,9 @@ in
       '';
     };
 
-    systemd.coredump.extraConfig = mkOption {
+    systemd.coredump.extraConfig = lib.mkOption {
       default = "";
-      type = types.lines;
+      type = lib.types.lines;
       example = "Storage=journal";
       description = ''
         Extra config options for systemd-coredump. See coredump.conf(5) man page
@@ -35,9 +32,9 @@ in
     };
   };
 
-  config = mkMerge [
+  config = lib.mkMerge [
 
-    (mkIf cfg.enable {
+    (lib.mkIf cfg.enable {
       systemd.additionalUpstreamSystemUnits = [
         "systemd-coredump.socket"
         "systemd-coredump@.service"
@@ -78,8 +75,8 @@ in
       users.groups.systemd-coredump = { };
     })
 
-    (mkIf (!cfg.enable) {
-      boot.kernel.sysctl."kernel.core_pattern" = mkDefault "core";
+    (lib.mkIf (!cfg.enable) {
+      boot.kernel.sysctl."kernel.core_pattern" = lib.mkDefault "core";
     })
 
   ];

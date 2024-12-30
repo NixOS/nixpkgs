@@ -1,26 +1,22 @@
 # This module automatically grows the root partition.
 # This allows an instance to be created with a bigger root filesystem
 # than provided by the machine image.
-
 {
   config,
   lib,
   pkgs,
   ...
 }:
-
-with lib;
-
 {
   imports = [
-    (mkRenamedOptionModule [ "virtualisation" "growPartition" ] [ "boot" "growPartition" ])
+    (lib.mkRenamedOptionModule [ "virtualisation" "growPartition" ] [ "boot" "growPartition" ])
   ];
 
   options = {
-    boot.growPartition = mkEnableOption "growing the root partition on boot";
+    boot.growPartition = lib.mkEnableOption "growing the root partition on boot";
   };
 
-  config = mkIf config.boot.growPartition {
+  config = lib.mkIf config.boot.growPartition {
     assertions = [
       {
         assertion = !config.boot.initrd.systemd.repart.enable && !config.systemd.repart.enable;

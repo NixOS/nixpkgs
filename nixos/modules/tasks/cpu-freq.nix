@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cpupower = config.boot.kernelPackages.cpupower;
   cfg = config.powerManagement;
@@ -19,8 +16,8 @@ in
 
     # TODO: This should be aliased to powerManagement.cpufreq.governor.
     # https://github.com/NixOS/nixpkgs/pull/53041#commitcomment-31825338
-    cpuFreqGovernor = mkOption {
-      type = types.nullOr types.str;
+    cpuFreqGovernor = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
       default = null;
       example = "ondemand";
       description = ''
@@ -35,8 +32,8 @@ in
 
     cpufreq = {
 
-      max = mkOption {
-        type = types.nullOr types.ints.unsigned;
+      max = lib.mkOption {
+        type = lib.types.nullOr lib.types.ints.unsigned;
         default = null;
         example = 2200000;
         description = ''
@@ -44,8 +41,8 @@ in
         '';
       };
 
-      min = mkOption {
-        type = types.nullOr types.ints.unsigned;
+      min = lib.mkOption {
+        type = lib.types.nullOr lib.types.ints.unsigned;
         default = null;
         example = 800000;
         description = ''
@@ -65,9 +62,9 @@ in
       minEnable = cfg.cpufreq.min != null;
       enable = !config.boot.isContainer && (governorEnable || maxEnable || minEnable);
     in
-    mkIf enable {
+    lib.mkIf enable {
 
-      boot.kernelModules = optional governorEnable "cpufreq_${cfg.cpuFreqGovernor}";
+      boot.kernelModules = lib.optional governorEnable "cpufreq_${cfg.cpuFreqGovernor}";
 
       environment.systemPackages = [ cpupower ];
 
@@ -85,9 +82,9 @@ in
           RemainAfterExit = "yes";
           ExecStart =
             "${cpupower}/bin/cpupower frequency-set "
-            + optionalString governorEnable "--governor ${cfg.cpuFreqGovernor} "
-            + optionalString maxEnable "--max ${toString cfg.cpufreq.max} "
-            + optionalString minEnable "--min ${toString cfg.cpufreq.min} ";
+            + lib.optionalString governorEnable "--governor ${cfg.cpuFreqGovernor} "
+            + lib.optionalString maxEnable "--max ${toString cfg.cpufreq.max} "
+            + lib.optionalString minEnable "--min ${toString cfg.cpufreq.min} ";
           SuccessExitStatus = "0 237";
         };
       };

@@ -4,15 +4,12 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.boot.loader.external;
 in
 {
   meta = {
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       cole-h
       grahamc
       raitobezarius
@@ -21,10 +18,10 @@ in
   };
 
   options.boot.loader.external = {
-    enable = mkEnableOption "using an external tool to install your bootloader";
+    enable = lib.mkEnableOption "using an external tool to install your bootloader";
 
-    installHook = mkOption {
-      type = with types; path;
+    installHook = lib.mkOption {
+      type = with lib.types; path;
       description = ''
         The full path to a program of your choosing which performs the bootloader installation process.
 
@@ -33,11 +30,11 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     boot.loader = {
-      grub.enable = mkDefault false;
-      systemd-boot.enable = mkDefault false;
-      supportsInitrdSecrets = mkDefault false;
+      grub.enable = lib.mkDefault false;
+      systemd-boot.enable = lib.mkDefault false;
+      supportsInitrdSecrets = lib.mkDefault false;
     };
 
     system.build.installBootLoader = cfg.installHook;

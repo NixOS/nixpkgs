@@ -4,85 +4,82 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.xserver.xautolock;
 in
 {
   options = {
     services.xserver.xautolock = {
-      enable = mkEnableOption "xautolock";
-      enableNotifier = mkEnableOption "xautolock.notify" // {
+      enable = lib.mkEnableOption "xautolock";
+      enableNotifier = lib.mkEnableOption "xautolock.notify" // {
         description = ''
           Whether to enable the notifier feature of xautolock.
           This publishes a notification before the autolock.
         '';
       };
 
-      time = mkOption {
+      time = lib.mkOption {
         default = 15;
-        type = types.int;
+        type = lib.types.int;
 
         description = ''
           Idle time (in minutes) to wait until xautolock locks the computer.
         '';
       };
 
-      locker = mkOption {
+      locker = lib.mkOption {
         default = "${pkgs.xlockmore}/bin/xlock"; # default according to `man xautolock`
-        defaultText = literalExpression ''"''${pkgs.xlockmore}/bin/xlock"'';
-        example = literalExpression ''"''${pkgs.i3lock}/bin/i3lock -i /path/to/img"'';
-        type = types.str;
+        defaultText = lib.literalExpression ''"''${pkgs.xlockmore}/bin/xlock"'';
+        example = lib.literalExpression ''"''${pkgs.i3lock}/bin/i3lock -i /path/to/img"'';
+        type = lib.types.str;
 
         description = ''
           The script to use when automatically locking the computer.
         '';
       };
 
-      nowlocker = mkOption {
+      nowlocker = lib.mkOption {
         default = null;
-        example = literalExpression ''"''${pkgs.i3lock}/bin/i3lock -i /path/to/img"'';
-        type = types.nullOr types.str;
+        example = lib.literalExpression ''"''${pkgs.i3lock}/bin/i3lock -i /path/to/img"'';
+        type = lib.types.nullOr lib.types.str;
 
         description = ''
           The script to use when manually locking the computer with {command}`xautolock -locknow`.
         '';
       };
 
-      notify = mkOption {
+      notify = lib.mkOption {
         default = 10;
-        type = types.int;
+        type = lib.types.int;
 
         description = ''
           Time (in seconds) before the actual lock when the notification about the pending lock should be published.
         '';
       };
 
-      notifier = mkOption {
+      notifier = lib.mkOption {
         default = null;
-        example = literalExpression ''"''${pkgs.libnotify}/bin/notify-send 'Locking in 10 seconds'"'';
-        type = types.nullOr types.str;
+        example = lib.literalExpression ''"''${pkgs.libnotify}/bin/notify-send 'Locking in 10 seconds'"'';
+        type = lib.types.nullOr lib.types.str;
 
         description = ''
           Notification script to be used to warn about the pending autolock.
         '';
       };
 
-      killer = mkOption {
+      killer = lib.mkOption {
         default = null; # default according to `man xautolock` is none
         example = "/run/current-system/systemd/bin/systemctl suspend";
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
 
         description = ''
           The script to use when nothing has happened for as long as {option}`killtime`
         '';
       };
 
-      killtime = mkOption {
+      killtime = lib.mkOption {
         default = 20; # default according to `man xautolock`
-        type = types.int;
+        type = lib.types.int;
 
         description = ''
           Minutes xautolock waits until it executes the script specified in {option}`killer`
@@ -90,8 +87,8 @@ in
         '';
       };
 
-      extraOptions = mkOption {
-        type = types.listOf types.str;
+      extraOptions = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
         default = [ ];
         example = [ "-detectsleep" ];
         description = ''
@@ -102,7 +99,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     environment.systemPackages = with pkgs; [ xautolock ];
     systemd.user.services.xautolock = {
       description = "xautolock service";

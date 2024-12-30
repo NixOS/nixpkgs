@@ -1,14 +1,10 @@
 # This module adds a scripted iPXE entry to the GRUB boot menu.
-
 {
   config,
   lib,
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   scripts = builtins.attrNames config.boot.loader.grub.ipxe;
 
@@ -29,14 +25,14 @@ let
 in
 {
   options = {
-    boot.loader.grub.ipxe = mkOption {
-      type = types.attrsOf (types.either types.path types.str);
+    boot.loader.grub.ipxe = lib.mkOption {
+      type = lib.types.attrsOf (lib.types.either lib.types.path lib.types.str);
       description = ''
         Set of iPXE scripts available for
         booting from the GRUB boot menu.
       '';
       default = { };
-      example = literalExpression ''
+      example = lib.literalExpression ''
         { demo = '''
             #!ipxe
             dhcp
@@ -47,7 +43,7 @@ in
     };
   };
 
-  config = mkIf (builtins.length scripts != 0) {
+  config = lib.mkIf (builtins.length scripts != 0) {
 
     boot.loader.grub.extraEntries = toString (map grubEntry scripts);
 
