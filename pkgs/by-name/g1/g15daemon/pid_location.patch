@@ -1,0 +1,25 @@
+diff --git a/g15daemon/main.c b/g15daemon/main.c
+index e674475..97b8242 100644
+--- a/g15daemon/main.c
++++ b/g15daemon/main.c
+@@ -574,7 +574,7 @@ exitnow:
+     g15daemon_quit_refresh();
+     uf_conf_write(lcdlist,"/etc/g15daemon.conf");
+     uf_conf_free(lcdlist);
+-    unlink("/var/run/g15daemon.pid");
++    unlink("/run/g15daemon/g15daemon.pid");
+     }
+     return 0;
+ }
+diff --git a/g15daemon/utility_funcs.c b/g15daemon/utility_funcs.c
+index c93d164..2e9c679 100644
+--- a/g15daemon/utility_funcs.c
++++ b/g15daemon/utility_funcs.c
+@@ -48,7 +48,7 @@
+
+ extern unsigned int g15daemon_debug;
+ extern volatile int leaving;
+-#define G15DAEMON_PIDFILE "/var/run/g15daemon.pid"
++#define G15DAEMON_PIDFILE "/run/g15daemon/g15daemon.pid"
+
+ pthread_cond_t lcd_refresh = PTHREAD_COND_INITIALIZER;
