@@ -1,38 +1,60 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchzip,
   pkg-config,
   glib,
   libwnck,
   libnotify,
+  libtool,
   dbus-glib,
   makeWrapper,
+  gnome-common,
   gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "notify-osd";
-  version = "0.9.34";
+  version = "0.9.35+20.04.20191129";
 
-  src = fetchurl {
-    url = "https://launchpad.net/notify-osd/precise/${finalAttrs.version}/+download/notify-osd-${finalAttrs.version}.tar.gz";
-    sha256 = "0g5a7a680b05x27apz0y1ldl5csxpp152wqi42s107jymbp0s20j";
+  src = fetchzip {
+    url = "https://launchpad.net/ubuntu/+archive/primary/+files/notify-osd_${finalAttrs.version}.orig.tar.gz";
+    sha256 = "sha256-aSU83HoWhHZtob8NFHFYNUIIZAecvQ/p0z62KMlQNCU=";
+    stripRoot = false;
   };
 
   nativeBuildInputs = [
     pkg-config
     makeWrapper
+    libtool
   ];
+
   buildInputs = [
     glib
     libwnck
     libnotify
     dbus-glib
     gsettings-desktop-schemas
+    gnome-common
   ];
 
-  configureFlags = [ "--libexecdir=$(out)/bin" ];
+  env = {
+    NIX_CFLAGS_COMPILE = "-fpermissive";
+  };
+
+  # deprecated function: g_memdup
+  postPatch = ''
+    substituteInPlace src/stack.c \
+      --replace-fail "g_memdup" "g_memdup2"
+  '';
+
+  preConfigure = ''
+    NOCONFIGURE=1 ./autogen.sh
+  '';
+
+  configureFlags = [
+    ''--libexecdir=$(out)/bin''
+  ];
 
   preFixup = ''
     wrapProgram "$out/bin/notify-osd" \
