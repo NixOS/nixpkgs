@@ -36,9 +36,14 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libadwaita
-    json-glib
     libxml2
   ];
+
+  postPatch = ''
+    # See https://github.com/mjakeman/text-engine/pull/42
+    substituteInPlace src/meson.build \
+      --replace-fail "dependency('json-glib-1.0')," ""
+  '';
 
   meta = {
     description = "Rich text framework for GTK";
