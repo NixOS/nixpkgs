@@ -1,7 +1,4 @@
 { config, lib, options, pkgs, ... }:
-
-with lib;
-
 let
 
   plymouth = pkgs.plymouth.override {
@@ -68,44 +65,44 @@ in
 
     boot.plymouth = {
 
-      enable = mkEnableOption "Plymouth boot splash screen";
+      enable = lib.mkEnableOption "Plymouth boot splash screen";
 
-      font = mkOption {
+      font = lib.mkOption {
         default = "${pkgs.dejavu_fonts.minimal}/share/fonts/truetype/DejaVuSans.ttf";
-        defaultText = literalExpression ''"''${pkgs.dejavu_fonts.minimal}/share/fonts/truetype/DejaVuSans.ttf"'';
-        type = types.path;
+        defaultText = lib.literalExpression ''"''${pkgs.dejavu_fonts.minimal}/share/fonts/truetype/DejaVuSans.ttf"'';
+        type = lib.types.path;
         description = ''
           Font file made available for displaying text on the splash screen.
         '';
       };
 
-      themePackages = mkOption {
+      themePackages = lib.mkOption {
         default = lib.optional (cfg.theme == "breeze") nixosBreezePlymouth;
-        defaultText = literalMD ''
+        defaultText = lib.literalMD ''
           A NixOS branded variant of the breeze theme when
           `config.${opt.theme} == "breeze"`, otherwise
           `[ ]`.
         '';
-        type = types.listOf types.package;
+        type = lib.types.listOf lib.types.package;
         description = ''
           Extra theme packages for plymouth.
         '';
       };
 
-      theme = mkOption {
+      theme = lib.mkOption {
         default = "bgrt";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Splash screen theme.
         '';
       };
 
-      logo = mkOption {
-        type = types.path;
+      logo = lib.mkOption {
+        type = lib.types.path;
         # Dimensions are 48x48 to match GDM logo
         default = "${pkgs.nixos-icons}/share/icons/hicolor/48x48/apps/nix-snowflake-white.png";
-        defaultText = literalExpression ''"''${pkgs.nixos-icons}/share/icons/hicolor/48x48/apps/nix-snowflake-white.png"'';
-        example = literalExpression ''
+        defaultText = lib.literalExpression ''"''${pkgs.nixos-icons}/share/icons/hicolor/48x48/apps/nix-snowflake-white.png"'';
+        example = lib.literalExpression ''
           pkgs.fetchurl {
             url = "https://nixos.org/logo/nixos-hires.png";
             sha256 = "1ivzgd7iz0i06y36p8m5w48fd8pjqwxhdaavc0pxs7w1g7mcy5si";
@@ -117,8 +114,8 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Literal string to append to `configFile`
@@ -130,7 +127,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     boot.kernelParams = [ "splash" ];
 
@@ -226,7 +223,7 @@ in
         # Fonts
         "/etc/plymouth/fonts".source = pkgs.runCommand "plymouth-initrd-fonts" {} ''
           mkdir -p $out
-          cp ${escapeShellArg cfg.font} $out
+          cp ${lib.escapeShellArg cfg.font} $out
         '';
         "/etc/fonts/fonts.conf".text = ''
           <?xml version="1.0"?>
@@ -321,18 +318,18 @@ in
       EOF
     '';
 
-    boot.initrd.extraUtilsCommandsTest = mkIf (!config.boot.initrd.systemd.enable) ''
+    boot.initrd.extraUtilsCommandsTest = lib.mkIf (!config.boot.initrd.systemd.enable) ''
       $out/bin/plymouthd --help >/dev/null
       $out/bin/plymouth --help >/dev/null
     '';
 
-    boot.initrd.extraUdevRulesCommands = mkIf (!config.boot.initrd.systemd.enable) ''
+    boot.initrd.extraUdevRulesCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
       cp ${config.systemd.package}/lib/udev/rules.d/{70-uaccess,71-seat}.rules $out
       sed -i '/loginctl/d' $out/71-seat.rules
     '';
 
     # We use `mkAfter` to ensure that LUKS password prompt would be shown earlier than the splash screen.
-    boot.initrd.preLVMCommands = mkIf (!config.boot.initrd.systemd.enable) (mkAfter ''
+    boot.initrd.preLVMCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (lib.mkAfter ''
       mkdir -p /etc/plymouth
       mkdir -p /run/plymouth
       ln -s $extraUtils/etc/plymouth/logo.png /etc/plymouth/logo.png
@@ -346,12 +343,12 @@ in
       plymouth show-splash
     '');
 
-    boot.initrd.postMountCommands = mkIf (!config.boot.initrd.systemd.enable) ''
+    boot.initrd.postMountCommands = lib.mkIf (!config.boot.initrd.systemd.enable) ''
       plymouth update-root-fs --new-root-dir="$targetRoot"
     '';
 
     # `mkBefore` to ensure that any custom prompts would be visible.
-    boot.initrd.preFailCommands = mkIf (!config.boot.initrd.systemd.enable) (mkBefore ''
+    boot.initrd.preFailCommands = lib.mkIf (!config.boot.initrd.systemd.enable) (lib.mkBefore ''
       plymouth quit --wait
     '');
 
