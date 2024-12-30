@@ -4,17 +4,14 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.merecat;
   format = pkgs.formats.keyValue {
-    mkKeyValue = generators.mkKeyValueDefault {
+    mkKeyValue = lib.generators.mkKeyValueDefault {
       mkValueString =
         v:
         # In merecat.conf, booleans are "true" and "false"
-        if builtins.isBool v then if v then "true" else "false" else generators.mkValueStringDefault { } v;
+        if builtins.isBool v then if v then "true" else "false" else lib.generators.mkValueStringDefault { } v;
     } "=";
   };
   configFile = format.generate "merecat.conf" cfg.settings;
@@ -24,9 +21,9 @@ in
 
   options.services.merecat = {
 
-    enable = mkEnableOption "Merecat HTTP server";
+    enable = lib.mkEnableOption "Merecat HTTP server";
 
-    settings = mkOption {
+    settings = lib.mkOption {
       inherit (format) type;
       default = { };
       description = ''
@@ -42,7 +39,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     systemd.services.merecat = {
       description = "Merecat HTTP server";
