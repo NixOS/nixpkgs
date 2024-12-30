@@ -14,7 +14,9 @@ let
     ${lib.optionalString (
       config.networking.nameservers != [ ]
     ) "DNS=${lib.concatStringsSep " " config.networking.nameservers}"}
-    ${lib.optionalString (cfg.fallbackDns != null) "FallbackDNS=${lib.concatStringsSep " " cfg.fallbackDns}"}
+    ${lib.optionalString (
+      cfg.fallbackDns != null
+    ) "FallbackDNS=${lib.concatStringsSep " " cfg.fallbackDns}"}
     ${lib.optionalString (cfg.domains != [ ]) "Domains=${lib.concatStringsSep " " cfg.domains}"}
     LLMNR=${cfg.llmnr}
     DNSSEC=${cfg.dnssec}
