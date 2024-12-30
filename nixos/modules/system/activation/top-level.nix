@@ -154,9 +154,10 @@ in
       description = ''
         If enabled, copies the NixOS configuration file
         (usually {file}`/etc/nixos/configuration.nix`)
-        and links it from the resulting system
+        and symlinks it from the resulting system
         (getting to {file}`/run/current-system/configuration.nix`).
         Note that only this single file is copied, even if it imports others.
+        Warning: This feature cannot be used when the system is configured by a flake
       '';
     };
 
