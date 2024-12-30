@@ -5,9 +5,6 @@
   ...
 }:
 let
-
-  inherit (pkgs) mariadb gzip;
-
   cfg = config.services.mysqlBackup;
   defaultUser = "mysqlbackup";
 
@@ -22,7 +19,7 @@ let
   '';
   backupDatabaseScript = db: ''
     dest="${cfg.location}/${db}.gz"
-    if ${mariadb}/bin/mysqldump ${lib.optionalString cfg.singleTransaction "--single-transaction"} ${db} | ${gzip}/bin/gzip -c ${cfg.gzipOptions} > $dest.tmp; then
+    if ${pkgs.mariadb}/bin/mysqldump ${lib.optionalString cfg.singleTransaction "--single-transaction"} ${db} | ${pkgs.gzip}/bin/gzip -c ${cfg.gzipOptions} > $dest.tmp; then
       mv $dest.tmp $dest
       echo "Backed up to $dest"
     else
@@ -33,12 +30,9 @@ let
   '';
 
 in
-
 {
   options = {
-
     services.mysqlBackup = {
-
       enable = lib.mkEnableOption "MySQL backups";
 
       calendar = lib.mkOption {
@@ -106,7 +100,6 @@ in
       {
         name = cfg.user;
         ensurePermissions =
-          with lib;
           let
             privs = "SELECT, SHOW VIEW, TRIGGER, LOCK TABLES";
             grant = db: lib.nameValuePair "${db}.*" privs;
