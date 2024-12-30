@@ -3,45 +3,38 @@
   stdenv,
   fetchurl,
   replaceVars,
+
   cmake,
   ninja,
   pkg-config,
-  glibc,
-  gtk3,
-  gtkmm3,
-  pcre,
+  jre,
   swig,
-  antlr4_12,
+  wrapGAppsHook3,
+
+  bash,
+  coreutils,
+  glibc,
   sudo,
+
+  cairo,
   mysql,
+  libiodbc,
+  proj,
+
+  antlr4_12,
+  gtkmm3,
   libxml2,
   libmysqlconnectorcpp,
   vsqlite,
   gdal,
-  libiodbc,
-  libpthreadstubs,
-  libXdmcp,
+  boost,
+  libssh,
+  openssl,
+  rapidjson,
   libuuid,
   libzip,
   libsecret,
-  libssh,
   python3Packages,
-  jre,
-  boost,
-  libsigcxx,
-  libX11,
-  openssl,
-  rapidjson,
-  proj,
-  cairo,
-  libxkbcommon,
-  libepoxy,
-  wrapGAppsHook3,
-  at-spi2-core,
-  dbus,
-  bash,
-  coreutils,
-  zstd,
 }:
 
 let
@@ -108,12 +101,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-    gtk3
-    gtkmm3
-    libX11
     antlr4_12.runtime.cpp
-    python3Packages.python
-    mysql
+    gtkmm3
     (libxml2.override { enableHttp = true; })
     libmysqlconnectorcpp
     vsqlite
@@ -122,29 +111,16 @@ stdenv.mkDerivation (finalAttrs: {
     libssh
     openssl
     rapidjson
-    libiodbc
-    pcre
-    cairo
     libuuid
     libzip
     libsecret
-    libsigcxx
-    proj
+    libiodbc
 
     # python dependencies:
     paramiko
     pycairo
     pyodbc
     # TODO: package sqlanydb and add it here
-
-    # transitive dependencies:
-    libpthreadstubs
-    libXdmcp
-    libxkbcommon
-    libepoxy
-    at-spi2-core
-    dbus
-    zstd
   ];
 
   env.NIX_CFLAGS_COMPILE = toString (
