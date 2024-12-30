@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "biolab";
     repo = "orange-widget-base";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-tWo8vwC8xLA2ZKeab2GqpXGdlHhaqOT9wu1efqSHZSg=";
   };
 
