@@ -1,7 +1,7 @@
 {
   lib,
   mkDerivation,
-  mknod
+  mknod,
 }:
 mkDerivation {
   path = "usr.sbin/mtree";
