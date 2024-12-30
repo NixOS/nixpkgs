@@ -1,0 +1,14 @@
+--- ./piqilib/piq_lexer.ml
++++ ./piqilib/piq_lexer.ml
+@@ -476,11 +476,6 @@ let init_from_string s =
+   make_buf lexbuf
+ 
+ 
+-let init_from_stream s =
+-  let lexbuf = Sedlexing.Utf8.from_stream s in
+-  make_buf lexbuf
+-
+-
+ let init_from_channel ch =
+   let lexbuf = Sedlexing.Utf8.from_channel ch in
+   make_buf lexbuf
