@@ -10,12 +10,13 @@
   nix,
   lib,
   nixosTests,
+  path,
   installShellFiles,
   binlore,
   nixos-rebuild,
 }:
 let
-  fallback = import ./../../../../nixos/modules/installer/tools/nix-fallback-paths.nix;
+  fallback = import "${toString path}/nixos/modules/installer/tools/nix-fallback-paths.nix";
 in
 substitute {
   name = "nixos-rebuild";
