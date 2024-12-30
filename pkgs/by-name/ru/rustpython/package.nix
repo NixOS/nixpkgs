@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   rustPlatform,
   fetchFromGitHub,
   python3,
@@ -40,7 +39,6 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Python 3 interpreter in written Rust";
     homepage = "https://rustpython.github.io";
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ prusnak ];
     mainProgram = "rustpython";
