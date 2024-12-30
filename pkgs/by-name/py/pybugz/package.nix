@@ -6,17 +6,17 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "pybugz";
-  version = "0.13";
+  version = "0.14";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "williamh";
     repo = "pybugz";
     tag = version;
-    hash = "sha256-n7fUs8/O+Kjzk40ZhZzpEitbod0bZpYFug0dkA8+gNs=";
+    hash = "sha256-rhiCQPSh987QEM4aMd3R/7e6l+pm2eJDE7f5LckIuho=";
   };
 
-  build-system = [ python3Packages.setuptools ];
+  build-system = [ python3Packages.flit-core ];
 
   pythonImportsCheck = [ "bugz" ];
 
