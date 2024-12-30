@@ -14,7 +14,7 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-5KJR2b+AxonytE22c7AOC6/CnaPDyT5hhrcIHnpxh8o=";
   };
-  
+
   propagatedBuildInputs = [ django ];
 
   nativeBuildInputs = [
