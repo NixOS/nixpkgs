@@ -21,6 +21,7 @@
   coc-css,
   coc-diagnostic,
   coc-pyright,
+  coc-toml,
   code-minimap,
   dasht,
   deno,
@@ -588,6 +589,12 @@ in
     pname = "coc-nginx";
     inherit (nodePackages."@yaegassy/coc-nginx") version meta;
     src = "${nodePackages."@yaegassy/coc-nginx"}/lib/node_modules/@yaegassy/coc-nginx";
+  };
+
+  coc-toml = buildVimPlugin {
+    pname = "coc-toml";
+    inherit (coc-toml) version meta;
+    src = "${coc-toml}/lib/node_modules/coc-toml";
   };
 
   codecompanion-nvim = super.codecompanion-nvim.overrideAttrs {
@@ -3711,7 +3718,6 @@ in
       "coc-sumneko-lua"
       "coc-tabnine"
       "coc-texlab"
-      "coc-toml"
       "coc-tsserver"
       "coc-ultisnips"
       "coc-vetur"

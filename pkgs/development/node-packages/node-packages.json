@@ -58,7 +58,6 @@
 , "coc-sqlfluff"
 , "coc-tabnine"
 , "coc-texlab"
-, "coc-toml"
 , "coc-tsserver"
 , "coc-ultisnips"
 , "coc-vetur"
