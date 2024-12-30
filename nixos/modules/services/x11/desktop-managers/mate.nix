@@ -84,7 +84,9 @@ in
       programs.zsh.vteIntegration = lib.mkDefault true;
 
       # Mate uses this for printing
-      programs.system-config-printer.enable = (lib.mkIf config.services.printing.enable (lib.mkDefault true));
+      programs.system-config-printer.enable = (
+        lib.mkIf config.services.printing.enable (lib.mkDefault true)
+      );
 
       services.gnome.at-spi2-core.enable = true;
       services.gnome.glib-networking.enable = true;
