@@ -45,6 +45,14 @@
 }:
 
 let
+  # for some reason the package doesn't build with swig 4.3.0
+  swig_4_2 = swig.overrideAttrs (prevAttrs: {
+    version = "4.2.1";
+    src = prevAttrs.src.override {
+      hash = "sha256-VlUsiRZLScmbC7hZDzKqUr9481YXVwo0eXT/jy6Fda8=";
+    };
+  });
+
   inherit (python3.pkgs) paramiko pycairo pyodbc;
 in
 stdenv.mkDerivation (finalAttrs: {
@@ -93,7 +101,7 @@ stdenv.mkDerivation (finalAttrs: {
     ninja
     pkg-config
     jre
-    swig
+    swig_4_2
     wrapGAppsHook3
   ];
 
