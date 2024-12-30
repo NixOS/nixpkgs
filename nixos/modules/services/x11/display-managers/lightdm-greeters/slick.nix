@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   ldmcfg = config.services.xserver.displayManager.lightdm;
   cfg = ldmcfg.greeters.slick;
@@ -26,27 +23,27 @@ let
     font-name=${cfg.font.name}
     cursor-theme-name=${cfg.cursorTheme.name}
     cursor-theme-size=${toString cfg.cursorTheme.size}
-    draw-user-backgrounds=${boolToString cfg.draw-user-backgrounds}
+    draw-user-backgrounds=${lib.boolToString cfg.draw-user-backgrounds}
     ${cfg.extraConfig}
   '';
 in
 {
   options = {
     services.xserver.displayManager.lightdm.greeters.slick = {
-      enable = mkEnableOption "lightdm-slick-greeter as the lightdm greeter";
+      enable = lib.mkEnableOption "lightdm-slick-greeter as the lightdm greeter";
 
       theme = {
-        package = mkOption {
-          type = types.package;
+        package = lib.mkOption {
+          type = lib.types.package;
           default = pkgs.gnome-themes-extra;
-          defaultText = literalExpression "pkgs.gnome-themes-extra";
+          defaultText = lib.literalExpression "pkgs.gnome-themes-extra";
           description = ''
             The package path that contains the theme given in the name option.
           '';
         };
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = "Adwaita";
           description = ''
             Name of the theme to use for the lightdm-slick-greeter.
@@ -55,17 +52,17 @@ in
       };
 
       iconTheme = {
-        package = mkOption {
-          type = types.package;
+        package = lib.mkOption {
+          type = lib.types.package;
           default = pkgs.adwaita-icon-theme;
-          defaultText = literalExpression "pkgs.adwaita-icon-theme";
+          defaultText = lib.literalExpression "pkgs.adwaita-icon-theme";
           description = ''
             The package path that contains the icon theme given in the name option.
           '';
         };
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = "Adwaita";
           description = ''
             Name of the icon theme to use for the lightdm-slick-greeter.
@@ -74,17 +71,17 @@ in
       };
 
       font = {
-        package = mkOption {
-          type = types.package;
+        package = lib.mkOption {
+          type = lib.types.package;
           default = pkgs.ubuntu-classic;
-          defaultText = literalExpression "pkgs.ubuntu-classic";
+          defaultText = lib.literalExpression "pkgs.ubuntu-classic";
           description = ''
             The package path that contains the font given in the name option.
           '';
         };
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = "Ubuntu 11";
           description = ''
             Name of the font to use.
@@ -93,25 +90,25 @@ in
       };
 
       cursorTheme = {
-        package = mkOption {
-          type = types.package;
+        package = lib.mkOption {
+          type = lib.types.package;
           default = pkgs.adwaita-icon-theme;
-          defaultText = literalExpression "pkgs.adwaita-icon-theme";
+          defaultText = lib.literalExpression "pkgs.adwaita-icon-theme";
           description = ''
             The package path that contains the cursor theme given in the name option.
           '';
         };
 
-        name = mkOption {
-          type = types.str;
+        name = lib.mkOption {
+          type = lib.types.str;
           default = "Adwaita";
           description = ''
             Name of the cursor theme to use for the lightdm-slick-greeter.
           '';
         };
 
-        size = mkOption {
-          type = types.int;
+        size = lib.mkOption {
+          type = lib.types.int;
           default = 24;
           description = ''
             Size of the cursor theme to use for the lightdm-slick-greeter.
@@ -119,10 +116,10 @@ in
         };
       };
 
-      draw-user-backgrounds = mkEnableOption "draw user backgrounds";
+      draw-user-backgrounds = lib.mkEnableOption "draw user backgrounds";
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         description = ''
           Extra configuration that should be put in the lightdm-slick-greeter.conf
@@ -132,10 +129,10 @@ in
     };
   };
 
-  config = mkIf (ldmcfg.enable && cfg.enable) {
+  config = lib.mkIf (ldmcfg.enable && cfg.enable) {
     services.xserver.displayManager.lightdm = {
       greeters.gtk.enable = false;
-      greeter = mkDefault {
+      greeter = lib.mkDefault {
         package = pkgs.lightdm-slick-greeter.xgreeters;
         name = "lightdm-slick-greeter";
       };
