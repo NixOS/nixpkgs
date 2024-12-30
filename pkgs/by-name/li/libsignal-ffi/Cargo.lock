@@ -421,20 +421,21 @@ dependencies = [
 
 [[package]]
 name = "boring"
-version = "4.9.0"
-source = "git+https://github.com/signalapp/boring?tag=signal-v4.9.0b#3d4180b232d332a86ee3b41d1a622b0f1c1c6037"
+version = "4.13.0"
+source = "git+https://github.com/signalapp/boring?tag=signal-v4.13.0#1af143f50937bce6a9a9c7405ec824a9153c8ba0"
 dependencies = [
  "bitflags",
  "boring-sys",
  "foreign-types",
  "libc",
  "once_cell",
+ "openssl-macros",
 ]
 
 [[package]]
 name = "boring-sys"
-version = "4.9.0"
-source = "git+https://github.com/signalapp/boring?tag=signal-v4.9.0b#3d4180b232d332a86ee3b41d1a622b0f1c1c6037"
+version = "4.13.0"
+source = "git+https://github.com/signalapp/boring?tag=signal-v4.13.0#1af143f50937bce6a9a9c7405ec824a9153c8ba0"
 dependencies = [
  "autocfg",
  "bindgen",
@@ -1244,6 +1245,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "324a1be68054ef05ad64b861cc9eaf1d623d2d8cb25b4bf2cb9cdd902b4bf253"
 dependencies = [
  "crc32fast",
+ "libz-sys",
  "miniz_oxide",
 ]
 
@@ -1838,6 +1840,11 @@ dependencies = [
 ]
 
 [[package]]
+name = "intmap"
+version = "2.0.0"
+source = "git+https://github.com/JesperAxelsson/rust-intmap?rev=e7edd6e8fb452506ca2570e91f62b14dc29a950c#e7edd6e8fb452506ca2570e91f62b14dc29a950c"
+
+[[package]]
 name = "ipnet"
 version = "2.10.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2185,7 +2192,7 @@ dependencies = [
 
 [[package]]
 name = "libsignal-ffi"
-version = "0.62.0"
+version = "0.64.1"
 dependencies = [
  "cpufeatures",
  "futures-util",
@@ -2200,10 +2207,11 @@ dependencies = [
 
 [[package]]
 name = "libsignal-jni"
-version = "0.62.0"
+version = "0.64.1"
 dependencies = [
  "cfg-if",
  "cpufeatures",
+ "flate2",
  "jni 0.19.0",
  "jni 0.21.1",
  "libsignal-bridge",
@@ -2216,7 +2224,7 @@ dependencies = [
 
 [[package]]
 name = "libsignal-jni-testing"
-version = "0.62.0"
+version = "0.64.1"
 dependencies = [
  "jni 0.21.1",
  "libsignal-bridge-testing",
@@ -2258,15 +2266,18 @@ dependencies = [
  "cbc",
  "clap",
  "clap-stdin",
+ "criterion",
  "derive-where",
  "dir-test",
  "displaydoc",
  "env_logger",
+ "flate2",
  "futures",
  "hex",
  "hex-literal",
  "hkdf",
  "hmac",
+ "intmap",
  "itertools 0.13.0",
  "json5",
  "libsignal-account-keys",
@@ -2284,6 +2295,7 @@ dependencies = [
  "protobuf",
  "protobuf-codegen",
  "protobuf-json-mapping",
+ "rand",
  "serde",
  "serde_json",
  "sha2",
@@ -2296,6 +2308,7 @@ dependencies = [
  "thiserror",
  "usernames",
  "uuid",
+ "visibility",
  "zkcredential",
  "zkgroup",
 ]
@@ -2422,12 +2435,13 @@ dependencies = [
  "tokio-util",
  "tungstenite 0.23.0",
  "url",
+ "visibility",
  "warp",
 ]
 
 [[package]]
 name = "libsignal-node"
-version = "0.62.0"
+version = "0.64.1"
 dependencies = [
  "cmake",
  "futures",
@@ -2508,6 +2522,17 @@ dependencies = [
  "subtle",
  "test-case",
  "zerocopy",
+]
+
+[[package]]
+name = "libz-sys"
+version = "1.1.20"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d2d16453e800a8cf6dd2fc3eb4bc99b786a9b90c663b8559a5b1a041bf89e472"
+dependencies = [
+ "cc",
+ "pkg-config",
+ "vcpkg",
 ]
 
 [[package]]
@@ -2949,6 +2974,17 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c08d65885ee38876c4f86fa503fb49d7b507c2b62552df7c70b2fce627e06381"
 
 [[package]]
+name = "openssl-macros"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a948666b637a0f465e8564c73e89d4dde00d72d4d473cc972f390fc3dcee7d9c"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.77",
+]
+
+[[package]]
 name = "openssl-probe"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3147,6 +3183,12 @@ dependencies = [
  "der",
  "spki",
 ]
+
+[[package]]
+name = "pkg-config"
+version = "0.3.31"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "953ec861398dccce10c670dfeaf3ec4911ca479e9c02154b3a215178c5f566f2"
 
 [[package]]
 name = "plotters"
@@ -4457,8 +4499,8 @@ dependencies = [
 
 [[package]]
 name = "tokio-boring"
-version = "4.9.0"
-source = "git+https://github.com/signalapp/boring?tag=signal-v4.9.0b#3d4180b232d332a86ee3b41d1a622b0f1c1c6037"
+version = "4.13.0"
+source = "git+https://github.com/signalapp/boring?tag=signal-v4.13.0#1af143f50937bce6a9a9c7405ec824a9153c8ba0"
 dependencies = [
  "boring",
  "boring-sys",
@@ -4804,10 +4846,27 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "830b7e5d4d90034032940e4ace0d9a9a057e7a45cd94e6c007832e39edb82f6d"
 
 [[package]]
+name = "vcpkg"
+version = "0.2.15"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "accd4ea62f7bb7a82fe23066fb0957d48ef677f6eeb8215f372f52e48bb32426"
+
+[[package]]
 name = "version_check"
 version = "0.9.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
+
+[[package]]
+name = "visibility"
+version = "0.1.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d674d135b4a8c1d7e813e2f8d1c9a58308aee4a680323066025e53132218bd91"
+dependencies = [
+ "proc-macro2",
+ "quote",
+ "syn 2.0.77",
+]
 
 [[package]]
 name = "wait-timeout"
