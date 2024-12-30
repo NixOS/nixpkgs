@@ -28,7 +28,7 @@ let
 
     inherit src;
     sourceRoot = "source/ms-tools";
-    vendorHash = "sha256-imHpsos7RDpATSZFWRxug67F7VgjRTT1SkLt7cWk6tU=";
+    vendorHash = null; # dependencies are vendored in the release tarball
 
     buildInputs = [
       hidapi
