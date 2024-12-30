@@ -49,6 +49,10 @@
       description = "path functions";
     }
     {
+      name = "fetchers";
+      description = "functions which can be reused across fetchers";
+    }
+    {
       name = "filesystem";
       description = "filesystem functions";
     }
