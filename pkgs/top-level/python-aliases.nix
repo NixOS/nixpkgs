@@ -451,6 +451,7 @@ mapAliases ({
   py-radix = throw "py-radix has been removed, since it abandoned"; # added 2023-07-07
   py_stringmatching = py-stringmatching; # added 2023-11-12
   py17track = throw "py17track was removed because Home Assistant switched to pyseventeentrack"; # added 2024-08-08
+  py3to2 = throw "py3to2 has been removed, since it is unmaintained"; # added 2024-12-31
   pyalmond = throw "pyalmond has been removed, since its API endpoints have been shutdown"; # added 2023-02-02
   pyblake2 = throw "pyblake2 is deprecated in favor of hashlib"; # added 2023-04-23
   pyblock = throw "pyblock has been removed, since it is abandoned and broken"; # added 2023-06-20
