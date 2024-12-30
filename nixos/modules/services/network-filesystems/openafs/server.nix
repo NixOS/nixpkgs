@@ -351,32 +351,33 @@ in
         after = [ "network.target" ];
         wantedBy = [ "multi-user.target" ];
         restartIfChanged = false;
-        unitConfig.ConditionPathExists = [
-          "|/etc/openafs/server/KeyFileExt"
-        ];
-        preStart = ''
-          mkdir -m 0755 -p /var/openafs
-          ${optionalString (netInfo != null) "cp ${netInfo} /var/openafs/netInfo"}
-          ${optionalString useBuCellServDB "cp ${buCellServDB}"}
-        '' + lib.optionalString (cfg.privilegedAdministrators != null) ''
-          rm -f /etc/openafs/server/UserList
-        '';
+        unitConfig.ConditionPathExists = [ "|/etc/openafs/server/KeyFileExt" ];
+        preStart =
+          ''
+            mkdir -m 0755 -p /var/openafs
+            ${optionalString (netInfo != null) "cp ${netInfo} /var/openafs/netInfo"}
+            ${optionalString useBuCellServDB "cp ${buCellServDB}"}
+          ''
+          + lib.optionalString (cfg.privilegedAdministrators != null) ''
+            rm -f /etc/openafs/server/UserList
+          '';
         serviceConfig =
           let
-            bosAddr = if (cfg.advertisedAddresses != [ ])
-                      then builtins.head cfg.advertisedAddresses
-                      else "localhost";
-          in {
-          ExecStart = "${openafsBin}/bin/bosserver -nofork";
-          ExecStartPost = mkIf (cfg.privilegedAdministrators != null)
-            (pkgs.writeShellScript "openafs-admin-init" ''
-               for admin in ${lib.escapeShellArgs cfg.privilegedAdministrators}
-               do
-                 ${openafsBin}/bin/bos adduser ${bosAddr} "$admin" -localauth
-               done
-             '');
-          ExecStop = "${openafsBin}/bin/bos shutdown ${bosAddr} -wait -localauth";
-        };
+            bosAddr =
+              if (cfg.advertisedAddresses != [ ]) then builtins.head cfg.advertisedAddresses else "localhost";
+          in
+          {
+            ExecStart = "${openafsBin}/bin/bosserver -nofork";
+            ExecStartPost = mkIf (cfg.privilegedAdministrators != null) (
+              pkgs.writeShellScript "openafs-admin-init" ''
+                for admin in ${lib.escapeShellArgs cfg.privilegedAdministrators}
+                do
+                  ${openafsBin}/bin/bos adduser ${bosAddr} "$admin" -localauth
+                done
+              ''
+            );
+            ExecStop = "${openafsBin}/bin/bos shutdown ${bosAddr} -wait -localauth";
+          };
       };
     };
   };
