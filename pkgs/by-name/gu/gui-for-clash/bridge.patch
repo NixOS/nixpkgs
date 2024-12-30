@@ -18,7 +18,7 @@
  
 -	Env.BasePath = filepath.Dir(exePath)
 -	Env.AppName = filepath.Base(exePath)
-+	Env.AppName = "GUI.for.SingBox"
++	Env.AppName = "GUI.for.Clash"
 +	xdgDataHome := os.Getenv("XDG_DATA_HOME")
 +	if xdgDataHome == "" {
 +		homeDir, _ := os.UserHomeDir()
