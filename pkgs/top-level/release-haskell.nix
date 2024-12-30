@@ -576,6 +576,7 @@ let
       hlint = lib.subtractLists [
         compilerNames.ghc902
         compilerNames.ghc9101
+        compilerNames.ghc9121
       ] released;
       hpack = released;
       hsdns = released;
@@ -600,11 +601,13 @@ let
         compilerNames.ghc928
       ];
       ghc-tags = lib.subtractLists [
+        compilerNames.ghc9121
       ] released;
       hashable = released;
       primitive = released;
       weeder = lib.subtractLists [
         compilerNames.ghc9101
+        compilerNames.ghc9121
       ] released;
     })
     {
