@@ -17505,6 +17505,18 @@ final: prev:
     meta.homepage = "https://github.com/kbenzie/vim-spirv/";
   };
 
+  vim-splunk = buildVimPlugin {
+    pname = "vim-splunk";
+    version = "2024-08-10";
+    src = fetchFromGitHub {
+      owner = "yorokobi";
+      repo = "vim-splunk";
+      rev = "827cdf8d9f6940eea146e6571a1086ed7a4061eb";
+      sha256 = "08f5c14ic4mr039by2ml9xf6b2l2rylgjj5q3m7gj29n7mn1zzc7";
+    };
+    meta.homepage = "https://github.com/yorokobi/vim-splunk/";
+  };
+
   vim-startify = buildVimPlugin {
     pname = "vim-startify";
     version = "2023-09-20";
