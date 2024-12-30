@@ -1,65 +1,82 @@
 {
-  lib,
-  stdenv,
-  fetchFromGitHub,
   autoreconfHook,
-  pkg-config,
-  glibcLocales,
-  kmod,
-  coreutils,
-  perl,
-  dmidecode,
-  hwdata,
-  sqlite,
-  libtraceevent,
+  fetchFromGitHub,
   fetchpatch,
+  lib,
+  libtraceevent,
+  nix-update-script,
   nixosTests,
+  perl,
+  pkg-config,
+  sqlite,
+  stdenv,
+  # Options
+  enableDmidecode ? stdenv.hostPlatform.isx86_64,
+  dmidecode,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "rasdaemon";
-  version = "0.8.0";
+  version = "0.8.2";
 
   src = fetchFromGitHub {
     owner = "mchehab";
     repo = "rasdaemon";
-    rev = "v${version}";
-    sha256 = "sha256-BX3kc629FOh5cnD6Sa/69wKdhmhT3Rpz5ZvhnD4MclQ=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-veaqAbSJvoUzkn1OLYY3t3y9Bh8dzuenpLGO2yz/yaM=";
   };
 
   patches = [
+    # these 3 patches fix nixosTests.rasdaemon for v0.8.2
+    # see https://github.com/NixOS/nixpkgs/pull/369375 for the investigation
     (fetchpatch {
-      # fix #295002 (segfault on AMD), will be in the release after 0.8.0
-      name = "fix crash on AMD";
-      url = "https://github.com/mchehab/rasdaemon/commit/f1ea76375281001cdf4a048c1a4a24d86c6fbe48.patch";
-      hash = "sha256-1VPDTrAsvZGiGbh52EUdG6tYV/n6wUS0mphOSXzran0=";
+      name = "revert eafd51d859a91fcee4509dd7abab3c449b4830ab";
+      url = "https://github.com/mchehab/rasdaemon/commit/eafd51d859a91fcee4509dd7abab3c449b4830ab.patch";
+      hash = "sha256-mwtl3QWqALgiQSo6h8DGTQEdurCNNSWQ3rKtTvgRAH4=";
+      includes = [ "ras-events.c" ];
+      revert = true;
+    })
+    (fetchpatch {
+      name = "revert dc1233045d023708047320bf722b1f52fd797c58";
+      url = "https://github.com/mchehab/rasdaemon/commit/dc1233045d023708047320bf722b1f52fd797c58.patch";
+      hash = "sha256-K2PCgtF+/zS5JO/uxBTDbJY9Rol8j/nJ2TwPgJCtc68=";
+      includes = [ "ras-events.c" ];
+      revert = true;
+    })
+    (fetchpatch {
+      name = "revert d22ed5ef1880f81cafe0b18fe4c121da4ea4950f";
+      url = "https://github.com/mchehab/rasdaemon/commit/d22ed5ef1880f81cafe0b18fe4c121da4ea4950f.patch";
+      hash = "sha256-5x51fyGWluYok+0UYUEYiBpTi5kaSO3J/fh2AzZozTc=";
+      revert = true;
     })
   ];
+
+  strictDeps = true;
+
+  enableParallelBuilding = true;
 
   nativeBuildInputs = [
     autoreconfHook
     pkg-config
   ];
 
-  buildInputs = [
-    coreutils
-    glibcLocales
-    hwdata
-    kmod
-    sqlite
-    libtraceevent
-    (perl.withPackages (
-      ps: with ps; [
-        DBI
-        DBDSQLite
-      ]
-    ))
-  ] ++ lib.optionals (!stdenv.hostPlatform.isAarch64) [ dmidecode ];
+  buildInputs =
+    [
+      libtraceevent
+      (perl.withPackages (
+        ps: with ps; [
+          DBDSQLite
+        ]
+      ))
+      sqlite
+    ]
+    ++ lib.optionals enableDmidecode [
+      dmidecode
+    ];
 
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
-    "--with-sysconfdefdir=${placeholder "out"}/etc/sysconfig"
     "--enable-all"
   ];
 
@@ -83,9 +100,15 @@ stdenv.mkDerivation rec {
 
   # easy way out, ends up installing /nix/store/...rasdaemon/bin in $out
 
-  postConfigure = ''
-    substituteInPlace Makefile \
-      --replace '"$(DESTDIR)/etc/ras/dimm_labels.d"' '"$(prefix)/etc/ras/dimm_labels.d"'
+  postPatch = ''
+    patchShebangs contrib/
+  '';
+
+  preConfigure = ''
+    substituteInPlace Makefile.am \
+      --replace-fail '"$(DESTDIR)@sysconfdir@/ras/dimm_labels.d"' '"$(prefix)@sysconfdir@/ras/dimm_labels.d"' \
+      --replace-fail '"$(DESTDIR)@SYSCONFDEFDIR@/rasdaemon"' '"$(prefix)@SYSCONFDEFDIR@/rasdaemon"' \
+      --replace-fail '"$(DESTDIR)@sysconfdir@/ras/triggers' '"$(prefix)@sysconfdir@/ras/triggers'
   '';
 
   outputs = [
@@ -100,20 +123,16 @@ stdenv.mkDerivation rec {
     install -Dm 0755 contrib/edac-tests $inject/bin/edac-tests
   '';
 
-  postFixup =
-    ''
-      # Fix dmidecode and modprobe paths
-      substituteInPlace $out/bin/ras-mc-ctl \
-        --replace 'find_prog ("modprobe")  or exit (1)' '"${kmod}/bin/modprobe"'
-    ''
-    + lib.optionalString (!stdenv.hostPlatform.isAarch64) ''
-      substituteInPlace $out/bin/ras-mc-ctl \
-        --replace 'find_prog ("dmidecode")' '"${dmidecode}/bin/dmidecode"'
-    '';
+  postFixup = lib.optionalString enableDmidecode ''
+    substituteInPlace $out/bin/ras-mc-ctl \
+      --replace-fail 'find_prog ("dmidecode")' '"${dmidecode}/bin/dmidecode"'
+  '';
 
   passthru.tests = nixosTests.rasdaemon;
 
-  meta = with lib; {
+  passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = ''
       A Reliability, Availability and Serviceability (RAS) logging tool using EDAC kernel tracing events
     '';
@@ -125,9 +144,9 @@ stdenv.mkDerivation rec {
       drivers for other architectures like arm also exists.
     '';
     homepage = "https://github.com/mchehab/rasdaemon";
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux;
-    changelog = "https://github.com/mchehab/rasdaemon/blob/v${version}/ChangeLog";
-    maintainers = with maintainers; [ evils ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux;
+    changelog = "${finalAttrs.meta.homepage}/releases/tag/v${finalAttrs.version}";
+    maintainers = with lib.maintainers; [ evils ];
   };
-}
+})
