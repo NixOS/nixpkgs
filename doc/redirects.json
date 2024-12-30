@@ -155,6 +155,9 @@
   "sec-functions-library-cli": [
     "index.html#sec-functions-library-cli"
   ],
+  "sec-functions-library-fetchers": [
+    "index.html#sec-functions-library-fetchers"
+  ],
   "sec-functions-library-generators": [
     "index.html#sec-functions-library-generators"
   ],
