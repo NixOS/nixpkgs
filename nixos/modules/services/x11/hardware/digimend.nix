@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
 
   cfg = config.services.xserver.digimend;
@@ -21,13 +18,13 @@ in
 
     services.xserver.digimend = {
 
-      enable = mkEnableOption "the digimend drivers for Huion/XP-Pen/etc. tablets";
+      enable = lib.mkEnableOption "the digimend drivers for Huion/XP-Pen/etc. tablets";
 
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     # digimend drivers use xsetwacom and wacom X11 drivers
     services.xserver.wacom.enable = true;
