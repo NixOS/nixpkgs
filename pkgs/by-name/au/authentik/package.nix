@@ -343,6 +343,11 @@ stdenvNoCC.mkDerivation {
   postPatch = ''
     rm Makefile
     patchShebangs lifecycle/ak
+
+    # This causes issues in systemd services
+    substituteInPlace lifecycle/ak \
+      --replace-fail 'printf' '>&2 printf' \
+      --replace-fail '>/dev/stderr' ""
   '';
 
   installPhase = ''
