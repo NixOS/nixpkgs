@@ -1316,6 +1316,7 @@
   ./services/networking/yggdrasil.nix
   ./services/networking/zapret.nix
   ./services/networking/zerobin.nix
+  ./services/networking/zenohd.nix
   ./services/networking/zeronet.nix
   ./services/networking/zerotierone.nix
   ./services/networking/zeronsd.nix

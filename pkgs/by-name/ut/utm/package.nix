@@ -8,11 +8,11 @@
 
 stdenvNoCC.mkDerivation rec {
   pname = "utm";
-  version = "4.6.3";
+  version = "4.6.4";
 
   src = fetchurl {
     url = "https://github.com/utmapp/UTM/releases/download/v${version}/UTM.dmg";
-    hash = "sha256-LKSKbUx7rxNWBybEKA7ah/5esArs9TRFJexLlMlEqjs=";
+    hash = "sha256-qthnJhUrFaPpY893igsN/Y6Bhzazga7SaZ2XShiEVCc=";
   };
 
   nativeBuildInputs = [

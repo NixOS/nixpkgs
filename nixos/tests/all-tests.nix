@@ -1186,6 +1186,7 @@ in {
   yggdrasil = handleTest ./yggdrasil.nix {};
   your_spotify = handleTest ./your_spotify.nix {};
   zammad = handleTest ./zammad.nix {};
+  zenohd = handleTest ./zenohd.nix {};
   zeronet-conservancy = handleTest ./zeronet-conservancy.nix {};
   zfs = handleTest ./zfs.nix {};
   zigbee2mqtt = handleTest ./zigbee2mqtt.nix {};

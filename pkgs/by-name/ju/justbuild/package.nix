@@ -33,23 +33,23 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "justbuild";
-  version = "1.3.2";
+  version = "1.4.1";
 
   src = fetchFromGitHub {
     owner = "just-buildsystem";
     repo = "justbuild";
     rev = "refs/tags/v${version}";
-    hash = "sha256-N9K1n2ttxhD0q2BXprt/nQdQseUtpaFmEZUcxRJV5C8=";
+    hash = "sha256-asbJdm50srMinr8sguGR3rWT7YXm75Zjm2Dvj53PpMc=";
   };
 
   bazelapi = fetchurl {
     url = "https://github.com/bazelbuild/remote-apis/archive/e1fe21be4c9ae76269a5a63215bb3c72ed9ab3f0.tar.gz";
-    hash = "sha256-dCGr1TUsz5J8IFBFOk2/ofexxxcOw+hwK2/i05uIBf4=";
+    hash = "sha256:1zh5i2dx7qkg5dqfihqf2z3v3xx1px6kliah41y95krc6pasn8bl";
   };
 
   googleapi = fetchurl {
-    url = "https://github.com/googleapis/googleapis/archive/2f9af297c84c55c8b871ba4495e01ade42476c92.tar.gz";
-    hash = "sha256-W7awJTzPZLU9bHJJYlp+P2w7xkAqvVLTd4v6SCWHA6A=";
+    url = "https://github.com/googleapis/googleapis/archive/fe8ba054ad4f7eca946c2d14a63c3f07c0b586a0.tar.gz";
+    hash = "sha256:1r33jj8yipxjgiarddcxr1yc5kmn98rwrjl9qxfx0fzn1bsg04q5";
   };
 
   nativeBuildInputs = [
@@ -122,7 +122,7 @@ stdenv.mkDerivation rec {
 
     mkdir .distfiles
     ln -s ${bazelapi} .distfiles/e1fe21be4c9ae76269a5a63215bb3c72ed9ab3f0.tar.gz
-    ln -s ${googleapi} .distfiles/2f9af297c84c55c8b871ba4495e01ade42476c92.tar.gz
+    ln -s ${googleapi} .distfiles/fe8ba054ad4f7eca946c2d14a63c3f07c0b586a0.tar.gz
 
     mkdir .pkgconfig
     cat << __EOF__ > .pkgconfig/gsl.pc
