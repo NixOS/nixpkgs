@@ -1462,6 +1462,7 @@ in
         baseServiceConfig = {
           environment = optionalAttrs (cfg.withJemalloc) {
             LD_PRELOAD = "${pkgs.jemalloc}/lib/libjemalloc.so";
+            PYTHONMALLOC = "malloc";
           };
           serviceConfig = {
             Type = "notify";
