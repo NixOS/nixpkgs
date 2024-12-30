@@ -61,12 +61,6 @@ stdenv'.mkDerivation (finalAttrs: {
     hash = "sha256-e7ppx2MdtTPki/Q+1kWswHkFLNRcO0Y8+q9VzpgUoVE=";
   };
 
-
-  # Comment out fixup_bundle in PostprocessBundle.cmake as we are not building a standalone application
-  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
-    substituteInPlace cmake/modules/PostprocessBundle.cmake \
-      --replace-fail "fixup_bundle" "#fixup_bundle"
-  '';
   strictDeps = true;
 
   nativeBuildInputs = [
@@ -114,6 +108,12 @@ stdenv'.mkDerivation (finalAttrs: {
     (lib.cmakeBool "USE_SYSTEM_YARA" true)
   ];
 
+  # Comment out fixup_bundle in PostprocessBundle.cmake as we are not building a standalone application
+  postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
+    substituteInPlace cmake/modules/PostprocessBundle.cmake \
+      --replace-fail "fixup_bundle" "#fixup_bundle"
+  '';
+
   # rsync is used here so we can not copy the _schema.json files
   postInstall =
     if stdenv.hostPlatform.isLinux then
@@ -137,14 +137,14 @@ stdenv'.mkDerivation (finalAttrs: {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "Hex Editor for Reverse Engineers, Programmers and people who value their retinas when working at 3 AM";
     homepage = "https://github.com/WerWolv/ImHex";
-    license = with licenses; [ gpl2Only ];
-    maintainers = with maintainers; [
+    license = with lib.licenses; [ gpl2Only ];
+    maintainers = with lib.maintainers; [
       kashw2
       cafkafk
     ];
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = with lib.platforms; linux ++ darwin;
   };
 })
