@@ -28,6 +28,12 @@ python3Packages.buildPythonApplication {
       url = "https://github.com/sanecz/prometheus-rasdaemon-exporter/commit/c9ab08e8918497edb8f1ab0f933fa270cb7860a8.patch";
       hash = "sha256-QtjzXuxPG7e+cgUDVbAVNY4VyBp3W5+vQDAvFJ9t92I=";
     })
+    # Fix sqlite3.connect URI passing
+    # https://github.com/sanecz/prometheus-rasdaemon-exporter/pull/2
+    (fetchpatch2 {
+      url = "https://github.com/sanecz/prometheus-rasdaemon-exporter/commit/52f6c47b77f480cd7f83853a2baffffb45f77b37.patch";
+      hash = "sha256-XYeWMkAhWJIOUKLeTstIJr3P37Jwt8tzRURCvlrrxVs=";
+    })
   ];
 
   build-system = with python3Packages; [
