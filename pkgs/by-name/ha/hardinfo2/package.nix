@@ -90,6 +90,6 @@ stdenv.mkDerivation (finalAtrs: {
     ];
     maintainers = with lib.maintainers; [ sigmanificient ];
     platforms = lib.platforms.linux;
-    mainProgram = "hardinfo";
+    mainProgram = "hardinfo2";
   };
 })
