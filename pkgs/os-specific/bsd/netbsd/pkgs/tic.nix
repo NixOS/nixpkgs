@@ -1,4 +1,5 @@
 {
+  lib,
   mkDerivation,
   bsdSetupHook,
   netbsdSetupHook,
@@ -31,4 +32,6 @@ mkDerivation {
     "usr.bin/tic"
     "tools/Makefile.host"
   ];
+
+  meta.platforms = lib.platforms.unix;
 }

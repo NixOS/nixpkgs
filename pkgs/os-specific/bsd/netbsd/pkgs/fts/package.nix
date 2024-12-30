@@ -1,4 +1,5 @@
 {
+  lib,
   mkDerivation,
   bsdSetupHook,
   netbsdSetupHook,
@@ -38,4 +39,6 @@ mkDerivation {
     ../../../../../build-support/setup-hooks/role.bash
     ./fts-setup-hook.sh
   ];
+
+  meta.platforms = lib.platforms.unix;
 }
