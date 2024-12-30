@@ -1,6 +1,5 @@
 {
   lib,
-  buildPythonPackage,
   stdenv,
   fetchFromGitHub,
   python3,
@@ -25,15 +24,15 @@ stdenv.mkDerivation rec {
 
   installPhase = ''
     mkdir -p $out/bin
-    cp -r * $out/
-    ln -s $out/miniforge3/bin/conda $out/bin/miniforge-conda
+    cp -r Miniforge3/* $out/
+    ln -s ${conda}/bin/conda $out/bin/miniforge-conda
   '';
 
-  meta = {
+  meta = with lib; {
     description = "Conda-forge distribution with mamba";
     homepage = "https://github.com/conda-forge/miniforge";
-    license = with licenses; [ bsd3 ];
+    license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = with maintainers; [ qxrein ];
+    maintainers = [ "qxrein" ];
   };
 }
