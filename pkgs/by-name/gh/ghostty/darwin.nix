@@ -28,26 +28,47 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
+  /**
+    Ghostty really likes all of it's resources to be in the same directory, so link them back after we split them
+
+    - https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/os/resourcesdir.zig#L11-L52
+    - https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/termio/Exec.zig#L745-L750
+    - https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/termio/Exec.zig#L818-L834
+
+    terminfo and shell integration should also be installable on remote machines
+
+    ```nix
+    { pkgs, ... }: {
+      environment.systemPackages = [ pkgs.ghostty.terminfo ];
+
+      programs.bash = {
+        interactiveShellInit = ''
+          if [[ "$TERM" == "xterm-ghostty" ]]; then
+            builtin source ${pkgs.ghostty.shell_integration}/bash/ghostty.bash
+          fi
+        '';
+      };
+    }
+    ```
+  */
   postFixup =
     let
       resources = "$out/Applications/Ghostty.app/Contents/Resources";
     in
     ''
       mkdir -p $man/share
-      ln -s ${resources}/man $man/share/man
+      mv ${resources}/man $man/share/man
+      ln -s $man/share/man ${resources}/man
 
       mkdir -p $terminfo/share
-      ln -s ${resources}/terminfo $terminfo/share/terminfo
+      mv ${resources}/terminfo $terminfo/share/terminfo
+      ln -s $terminfo/share/terminfo ${resources}/terminfo
 
-      mkdir -p $shell_integration
-      for folder in "${resources}/ghostty/shell-integration"/*; do
-        ln -s $folder $shell_integration/$(basename "$folder")
-      done
+      mv ${resources}/shell-integration $shell_integration
+      ln -s $shell_integration ${resources}/shell-integration
 
-      mkdir -p $vim
-      for folder in "${resources}/vim/vimfiles"/*; do
-        ln -s $folder $vim/$(basename "$folder")
-      done
+      mv ${resources}/vim/vimfiles $vim
+      ln -s $vim ${resources}/vim/vimfiles
     '';
 
   meta = {
