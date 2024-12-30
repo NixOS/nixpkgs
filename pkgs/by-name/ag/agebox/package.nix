@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "agebox";
-  version = "0.7.2";
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "slok";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-QH0kkquLnB00oKuwb5j2ZoAKPnZkSHJRGaq3RXO5ggg=";
+    hash = "sha256-/FTNvGV7PsJmpSU1dI/kjfiY5G7shomvLd3bvFqORfg=";
   };
 
   vendorHash = "sha256-s3LZgQpUF0t9ETNloJux4gXXSn5Kg+pcuhJSMfWWnSo=";
