@@ -1,0 +1,34 @@
+From 7eed499898226222a949a792e0400ec10db4a1c9 Mon Sep 17 00:00:00 2001
+From: Zhaofeng Li <hello@zhaofeng.li>
+Date: Tue, 22 Nov 2022 13:00:39 -0700
+Subject: [PATCH] [not for upstream] CMakeLists: Link against webkit2gtk in
+ libslic3r_gui
+
+WebView.cpp uses symbols from webkitgtk directly. Upstream setup
+links wxGTK statically so webkitgtk is already pulled in.
+
+> /nix/store/039g378vc3pc3dvi9dzdlrd0i4q93qwf-binutils-2.39/bin/ld: slic3r/liblibslic3r_gui.a(WebView.cpp.o): undefined reference to symbol 'webkit_web_view_run_javascript_finish'
+> /nix/store/039g378vc3pc3dvi9dzdlrd0i4q93qwf-binutils-2.39/bin/ld: /nix/store/8yvy428jy2nwq4dhmrcs7gj5r27a2pv6-webkitgtk-2.38.2+abi=4.0/lib/libwebkit2gtk-4.0.so.37: error adding symbols: DSO missing from command line
+---
+ src/CMakeLists.txt | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 9c5cb96..e92a0e3 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -175,6 +175,11 @@ if (WIN32)
+     target_link_libraries(BambuStudio_app_gui PRIVATE boost_headeronly)
+ endif ()
+ 
++# We link against webkit2gtk symbols in src/slic3r/GUI/Widgets/WebView.cpp
++if (CMAKE_SYSTEM_NAME STREQUAL "Linux")
++    target_link_libraries(libslic3r_gui "-lwebkit2gtk-4.0")
++endif ()
++
+ # Link the resources dir to where Slic3r GUI expects it
+ set(output_dlls_Release "")
+ set(output_dlls_Debug "")
+-- 
+2.38.1
+
