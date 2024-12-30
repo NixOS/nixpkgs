@@ -5371,6 +5371,8 @@ self: super: with self; {
 
   ghdiff = callPackage ../development/python-modules/ghdiff { };
 
+  ghidra-bridge = callPackage ../development/python-modules/ghidra-bridge { };
+
   ghome-foyer-api = callPackage ../development/python-modules/ghome-foyer-api { };
 
   ghp-import = callPackage ../development/python-modules/ghp-import { };
