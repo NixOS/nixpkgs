@@ -1,10 +1,10 @@
 {
   lib,
-  buildPythonPackage,
   fetchFromGitHub,
+  python3Packages,
 }:
 
-buildPythonPackage {
+python3Packages.buildPythonApplication {
   pname = "bugz-0.9.3";
   version = "0.13";
 

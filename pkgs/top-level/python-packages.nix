@@ -1952,8 +1952,6 @@ self: super: with self; {
 
   bugwarrior = callPackage ../development/python-modules/bugwarrior { };
 
-  bugz = callPackage ../development/python-modules/bugz { };
-
   buienradar = callPackage ../development/python-modules/buienradar { };
 
   build = callPackage ../development/python-modules/build { };
