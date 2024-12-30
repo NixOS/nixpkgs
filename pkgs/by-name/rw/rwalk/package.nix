@@ -25,14 +25,19 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ];
+  buildInputs = [
+    openssl
+  ];
 
   env = {
     OPENSSL_NO_VENDOR = true;
   };
+
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   meta = {
     description = "Blazingly fast web directory scanner written in Rust";
