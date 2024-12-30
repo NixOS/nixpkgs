@@ -7,19 +7,18 @@
 let
   cfg = config.services.hitch;
   ocspDir = lib.optionalString cfg.ocsp-stapling.enabled "/var/cache/hitch/ocsp";
-  hitchConfig =
-    pkgs.writeText "hitch.conf" (
-      lib.concatStringsSep "\n" [
-        ("backend = \"${cfg.backend}\"")
-        (lib.concatMapStrings (s: "frontend = \"${s}\"\n") cfg.frontend)
-        (lib.concatMapStrings (s: "pem-file = \"${s}\"\n") cfg.pem-files)
-        ("ciphers = \"${cfg.ciphers}\"")
-        ("ocsp-dir = \"${ocspDir}\"")
-        "user = \"${cfg.user}\""
-        "group = \"${cfg.group}\""
-        cfg.extraConfig
-      ]
-    );
+  hitchConfig = pkgs.writeText "hitch.conf" (
+    lib.concatStringsSep "\n" [
+      ("backend = \"${cfg.backend}\"")
+      (lib.concatMapStrings (s: "frontend = \"${s}\"\n") cfg.frontend)
+      (lib.concatMapStrings (s: "pem-file = \"${s}\"\n") cfg.pem-files)
+      ("ciphers = \"${cfg.ciphers}\"")
+      ("ocsp-dir = \"${ocspDir}\"")
+      "user = \"${cfg.user}\""
+      "group = \"${cfg.group}\""
+      cfg.extraConfig
+    ]
+  );
 in
 {
   options = {
