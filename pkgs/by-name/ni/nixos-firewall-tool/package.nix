@@ -6,13 +6,10 @@
   shellcheck-minimal,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation {
   name = "nixos-firewall-tool";
 
-  src = lib.fileset.toSource {
-    root = ./.;
-    fileset = lib.fileset.fileFilter (file: !file.hasExt "nix") ./.;
-  };
+  src = builtins.filterSource (name: _: !(lib.hasSuffix ".nix" name)) ./.;
 
   strictDeps = true;
   buildInputs = [ bash ];
