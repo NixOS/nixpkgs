@@ -1,13 +1,13 @@
 {
   lib,
-  makeWrapper,
-  stdenvNoCC,
-  installShellFiles,
-  shellcheck,
-  nix,
-  jq,
-  man-db,
   coreutils,
+  installShellFiles,
+  jq,
+  makeWrapper,
+  man-db,
+  nix,
+  shellcheck,
+  stdenvNoCC,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -44,7 +44,9 @@ stdenvNoCC.mkDerivation {
   doInstallCheck = true;
   installCheckPhase = ''
     runHook preInstallCheck
+
     shellcheck $out/bin/nixos-option
+
     runHook postInstallCheck
   '';
 
@@ -52,10 +54,10 @@ stdenvNoCC.mkDerivation {
     wrapProgram $out/bin/nixos-option \
       --prefix PATH : ${
         lib.makeBinPath [
-          nix
+          coreutils
           jq
           man-db
-          coreutils
+          nix
         ]
       }
   '';
