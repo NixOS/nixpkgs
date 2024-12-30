@@ -18,13 +18,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "smb3-foundry";
-  version = "1.3.1";
+  version = "1.4";
 
   src = fetchFromGitHub {
     owner = "mchlnix";
     repo = "SMB3-Foundry";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-8cf7VhvC372Cqi94n2FSHcoCGblpZoZvBXcXq5jU6CY=";
+    hash = "sha256-9pztxzgdPqrTNUMtD9boxtqb32LCsGMoa/bBq5GSJ1I=";
   };
 
   buildInputs = [ python ];
