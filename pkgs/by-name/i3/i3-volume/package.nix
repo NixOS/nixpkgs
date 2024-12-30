@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  gitUpdater,
   coreutils,
   bash,
   gawk,
@@ -42,6 +43,10 @@ stdenv.mkDerivation rec {
 
     runHook postInstall
   '';
+
+  passthru.updateScript = gitUpdater {
+    rev-prefix = "v";
+  };
 
   # Example usage for `services.pipewire.enabled = true;` (will use `amixer` program) - `i3-volume -a -n -c 0 up 100`
   meta = {
