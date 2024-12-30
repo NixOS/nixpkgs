@@ -8,11 +8,9 @@
   which,
   rustPlatform,
   emscripten,
-  Security,
   callPackage,
   linkFarm,
   substitute,
-  CoreServices,
   installShellFiles,
   enableShared ? !stdenv.hostPlatform.isStatic,
   enableStatic ? stdenv.hostPlatform.isStatic,
@@ -173,34 +171,18 @@ rustPlatform.buildRustPackage {
 
   cargoHash = "sha256-mk3aw1aFu7N+b4AQL5kiaHuIAuJv24KonFeGKid427Q=";
 
-  buildInputs =
-    [ installShellFiles ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      CoreServices
-    ];
+  buildInputs = [ installShellFiles ];
   nativeBuildInputs = [ which ] ++ lib.optionals webUISupport [ emscripten ];
 
-  patches = lib.optionals webUISupport [
+  patches = lib.optionals (!webUISupport) [
     (substitute {
-      src = ./fix-paths.patch;
-      substitutions = [
-        "--subst-var-by"
-        "emcc"
-        "${emscripten}/bin/emcc"
-      ];
+      src = ./remove-web-interface.patch;
     })
   ];
 
-  postPatch = lib.optionalString (!webUISupport) ''
-    # remove web interface
-    sed -e '/pub mod playground/d' \
-        -i cli/src/lib.rs
-    sed -e 's/playground,//' \
-        -e 's/playground::serve(&grammar_path.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
-        -i cli/src/main.rs
-    sed -e 's/playground::serve(.*$/println!("ERROR: web-ui is not available in this nixpkgs build; enable the webUISupport"); std::process::exit(1);/' \
-        -i cli/src/main.rs
+  postPatch = lib.optionalString webUISupport ''
+    substituteInPlace cli/loader/src/lib.rs \
+        --replace-fail 'let emcc_name = if cfg!(windows) { "emcc.bat" } else { "emcc" };' 'let emcc_name = "${lib.getExe' emscripten "emcc"}";'
   '';
 
   # Compile web assembly with emscripten. The --debug flag prevents us from
@@ -264,6 +246,9 @@ rustPlatform.buildRustPackage {
       * Dependency-free so that the runtime library (which is written in pure C) can be embedded in any application
     '';
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ Profpatsch ];
+    maintainers = with lib.maintainers; [
+      Profpatsch
+      uncenter
+    ];
   };
 }
