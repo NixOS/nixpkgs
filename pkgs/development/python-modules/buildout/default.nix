@@ -9,13 +9,13 @@
 
 buildPythonPackage rec {
   pname = "zc-buildout";
-  version = "3.0.1";
+  version = "3.3";
 
   src = fetchFromGitHub {
     owner = "buildout";
     repo = "buildout";
-    rev = version;
-    sha256 = "J/ymUCFhl7EviHMEYSUCTky0ULRT8aL4gNCGxrbqJi0=";
+    tag = version;
+    hash = "sha256-o/iMCc8Jf+jNCHu3OnbCxD+oukoH/b7SUsdm6traO7k=";
   };
 
   propagatedBuildInputs = [
