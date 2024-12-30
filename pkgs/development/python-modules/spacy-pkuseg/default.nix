@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  isPy3k,
   cython,
+  setuptools,
   numpy,
   srsly,
 }:
@@ -11,9 +11,7 @@
 buildPythonPackage rec {
   pname = "spacy-pkuseg";
   version = "1.0.0";
-  format = "setuptools";
-
-  disabled = !isPy3k;
+  pyproject = true;
 
   src = fetchPypi {
     inherit version;
@@ -25,9 +23,13 @@ buildPythonPackage rec {
   # recognizes some non-tests as tests and fails.
   doCheck = false;
 
-  nativeBuildInputs = [ cython ];
+  build-system = [
+    cython
+    numpy
+    setuptools
+  ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     numpy
     srsly
   ];
