@@ -64,7 +64,6 @@ let
     homepage = "https://wire.com/";
     downloadPage = "https://wire.com/download/";
     sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    knownVulnerabilities = [ "CVE-2024-6775" ];
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       arianvp
