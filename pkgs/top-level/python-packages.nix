@@ -10924,6 +10924,8 @@ self: super: with self; {
 
   pyhepmc = callPackage ../development/python-modules/pyhepmc { };
 
+  pyhidra = callPackage ../development/python-modules/pyhidra { };
+
   pyhive-integration = callPackage ../development/python-modules/pyhive-integration { };
 
   pyhumps = callPackage ../development/python-modules/pyhumps { };
