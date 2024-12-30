@@ -125,7 +125,7 @@ in
         wantedBy = [ "multi-user.target" ];
 
         preStart = ''
-          mkdir -m 710 -p /var/cron
+          mkdir -m 710 /var/cron || true
 
           # By default, allow all users to create a crontab.  This
           # is denoted by the existence of an empty cron.deny file.
