@@ -26,11 +26,9 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "weblate";
-  version = "5.8.3";
+  version = "5.9.2";
 
   pyproject = true;
-
-  disabled = python.pythonOlder "3.11";
 
   outputs = [
     "out"
@@ -41,7 +39,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "WeblateOrg";
     repo = "weblate";
     tag = "weblate-${version}";
-    hash = "sha256-Kmna23jhhFRJ0ExplYNPFEaIAJxmwHU2azivfKHHnjs=";
+    hash = "sha256-/fsNQvIIgcTPZHHIwr8sruEJpPJTmXbevoxy1GPmOOU=";
   };
 
   patches = [
@@ -75,6 +73,7 @@ python.pkgs.buildPythonApplication rec {
     [
       aeidon
       ahocorasick-rs
+      altcha
       (toPythonModule (borgbackup.override { python3 = python; }))
       celery
       certifi
@@ -103,6 +102,7 @@ python.pkgs.buildPythonApplication rec {
       gitpython
       hiredis
       html2text
+      httpx
       iniparse
       jsonschema
       lxml
@@ -131,6 +131,7 @@ python.pkgs.buildPythonApplication rec {
       tesserocr
       translate-toolkit
       translation-finder
+      unidecode
       user-agents
       weblate-language-data
       weblate-schemas
