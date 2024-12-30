@@ -2,9 +2,9 @@
   lib,
   stdenv,
   fetchurl,
+  flex,
   ncurses,
   readline,
-  flex,
   texinfo,
 }:
 
@@ -20,9 +20,14 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     readline
+  ];
+
+  nativeBuildInputs = [
     flex
     texinfo
   ];
+
+  strictDeps = true;
 
   meta = with lib; {
     description = "Curses interface to gdb";
