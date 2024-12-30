@@ -4,19 +4,16 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.spectrwm;
 in
 
 {
   options = {
-    services.xserver.windowManager.spectrwm.enable = mkEnableOption "spectrwm";
+    services.xserver.windowManager.spectrwm.enable = lib.mkEnableOption "spectrwm";
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.xserver.windowManager = {
       session = [
         {
