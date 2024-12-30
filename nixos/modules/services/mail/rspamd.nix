@@ -44,7 +44,8 @@ let
       };
       config.rawEntry =
         let
-          maybeOption = option: lib.optionalString options.${option}.isDefined " ${option}=${config.${option}}";
+          maybeOption =
+            option: lib.optionalString options.${option}.isDefined " ${option}=${config.${option}}";
         in
         if (!(lib.hasPrefix "/" config.socket)) then
           "${config.socket}"
@@ -152,7 +153,9 @@ let
         lib.mkIf (name == "normal" || name == "controller" || name == "fuzzy" || name == "rspamd_proxy")
           {
             type = lib.mkDefault name;
-            includes = lib.mkDefault [ "$CONFDIR/worker-${if name == "rspamd_proxy" then "proxy" else name}.inc" ];
+            includes = lib.mkDefault [
+              "$CONFDIR/worker-${if name == "rspamd_proxy" then "proxy" else name}.inc"
+            ];
             bindSockets =
               let
                 unixSocket = name: {
