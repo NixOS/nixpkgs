@@ -177,5 +177,7 @@ mkDerivation {
   # not needed when building for FreeBSD.
   meta.platforms = lib.platforms.linux;
 
+  meta.platforms = lib.platforms.unix;
+
   alwaysKeepStatic = true;
 }

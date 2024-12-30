@@ -14,4 +14,6 @@ mkDerivation {
   postPatch = ''
     sed -i 's/FTS_PHYSICAL/FTS_LOGICAL/' $BSDSRCDIR/usr.sbin/kldxref/kldxref.c
   '';
+
+  meta.platforms = lib.platforms.unix;
 }
