@@ -1,31 +1,28 @@
 {
   lib,
   stdenvNoCC,
-  fetchurl,
   _7zz,
+  fetchurl,
   makeBinaryWrapper,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchurl {
     url = "https://release.files.ghostty.org/${finalAttrs.version}/Ghostty.dmg";
-    sha256 = "sha256-CR96Kz9BYKFtfVKygiEku51XFJk4FfYqfXACeYQ3JlI=";
+    hash = "sha256-CR96Kz9BYKFtfVKygiEku51XFJk4FfYqfXACeYQ3JlI=";
   };
+
+  sourceRoot = ".";
 
   nativeBuildInputs = [
     _7zz
     makeBinaryWrapper
   ];
 
-  sourceRoot = ".";
-  installPhase = ''
-    runHook preInstall
-
+  postInstall = ''
     mkdir -p $out/Applications
     mv Ghostty.app $out/Applications/
     makeWrapper $out/Applications/Ghostty.app/Contents/MacOS/ghostty $out/bin/ghostty
-
-    runHook postInstall
   '';
 
   # For use in our shared postFixup
