@@ -2334,6 +2334,8 @@ self: super: with self; {
 
   clarifai-grpc = callPackage ../development/python-modules/clarifai-grpc { };
 
+  clarifai-protocol = callPackage ../development/python-modules/clarifai-protocol { };
+
   claripy = callPackage ../development/python-modules/claripy { };
 
   classify-imports = callPackage ../development/python-modules/classify-imports { };
