@@ -12,6 +12,7 @@
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -25,6 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-Tz3rVbaHw5RfFKuLih4BEEnn3uNeLrtDQpBD2yYUzkM=";
     fetchSubmodules = true;
   };
+
+  passthru.updateScript = nix-update-script { };
 
   patches = [ ./assets-path.diff ];
 
