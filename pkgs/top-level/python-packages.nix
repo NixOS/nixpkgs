@@ -4776,9 +4776,11 @@ self: super: with self; {
 
   flet = callPackage ../development/python-modules/flet { };
 
-  flet-core = callPackage ../development/python-modules/flet-core { };
+  flet-cli = callPackage ../development/python-modules/flet-cli { };
 
-  flet-runtime = callPackage ../development/python-modules/flet-runtime { };
+  flet-desktop = callPackage ../development/python-modules/flet-desktop { };
+
+  flet-web = callPackage ../development/python-modules/flet-web { };
 
   flexcache = callPackage ../development/python-modules/flexcache { };
 
@@ -6618,6 +6620,8 @@ self: super: with self; {
 
   jinja2-pluralize = callPackage ../development/python-modules/jinja2-pluralize { };
 
+  jinja2-strcase = callPackage ../development/python-modules/jinja2-strcase { };
+
   jinja2-time = callPackage ../development/python-modules/jinja2-time { };
 
   jira = callPackage ../development/python-modules/jira { };
@@ -7640,6 +7644,8 @@ self: super: with self; {
   locket = callPackage ../development/python-modules/locket { };
 
   lockfile = callPackage ../development/python-modules/lockfile { };
+
+  locust = callPackage ../development/python-modules/locust { };
 
   log-symbols = callPackage ../development/python-modules/log-symbols { };
 

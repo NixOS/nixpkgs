@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "jcli";
-  version = "0.0.44";
+  version = "0.0.46";
 
   src = fetchFromGitHub {
     owner = "jenkins-zh";
     repo = "jenkins-cli";
     tag = "v${version}";
-    hash = "sha256-lsYLUgjpHcURiMTA4we9g+a6dFimOupAYMw0TcmABk4=";
+    hash = "sha256-l0qpyrggDJSzaJMbhgJYVK2Y3A/R+xS0Qoy3afA/eGo=";
   };
 
-  vendorHash = "sha256-f2f/Qi6aav7LPpO9ERYkejygz0XiPQ8YrKLB63EpaoY=";
+  vendorHash = "sha256-0x0Cl6cqullGIvtQTlHTGnWz9dBCT7aMEIRSB/Cuy8k=";
 
   ldflags = [
     "-s"
@@ -36,6 +36,7 @@ buildGoModule rec {
     + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd jcli \
         --bash <($out/bin/jcli completion --type bash) \
+        --fish <($out/bin/jcli completion --type fish) \
         --zsh <($out/bin/jcli completion --type zsh)
     '';
 

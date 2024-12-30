@@ -15986,11 +15986,6 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Cocoa;
   };
 
-  workrave = callPackage ../applications/misc/workrave {
-    inherit (python3Packages) jinja2;
-    inherit (gst_all_1) gstreamer gst-plugins-base gst-plugins-good;
-  };
-
   worldengine-cli = python3Packages.worldengine;
 
   wpsoffice = libsForQt5.callPackage ../applications/office/wpsoffice { };
