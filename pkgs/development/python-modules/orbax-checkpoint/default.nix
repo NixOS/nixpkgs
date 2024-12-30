@@ -11,6 +11,7 @@
   # dependencies
   etils,
   humanize,
+  importlib-resources,
   jax,
   msgpack,
   nest-asyncio,
@@ -50,6 +51,7 @@ buildPythonPackage rec {
     absl-py
     etils
     humanize
+    importlib-resources
     jax
     msgpack
     nest-asyncio
