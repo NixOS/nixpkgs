@@ -22,14 +22,14 @@ buildPythonPackage rec {
   version = "4.25.0";
   pyproject = true;
 
-  build-system = [ setuptools ];
-
   src = fetchFromGitHub {
     owner = "biolab";
     repo = "orange-widget-base";
     tag = version;
     hash = "sha256-tWo8vwC8xLA2ZKeab2GqpXGdlHhaqOT9wu1efqSHZSg=";
   };
+
+  build-system = [ setuptools ];
 
   dependencies = [
     matplotlib
