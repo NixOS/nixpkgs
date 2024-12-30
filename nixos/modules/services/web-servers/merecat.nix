@@ -11,7 +11,10 @@ let
       mkValueString =
         v:
         # In merecat.conf, booleans are "true" and "false"
-        if builtins.isBool v then if v then "true" else "false" else lib.generators.mkValueStringDefault { } v;
+        if builtins.isBool v then
+          if v then "true" else "false"
+        else
+          lib.generators.mkValueStringDefault { } v;
     } "=";
   };
   configFile = format.generate "merecat.conf" cfg.settings;
