@@ -705,7 +705,7 @@ in
 
         withJemalloc = mkOption {
           type = types.bool;
-          default = false;
+          default = true;
           description = ''
             Whether to preload jemalloc to reduce memory fragmentation and overall usage.
           '';
