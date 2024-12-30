@@ -31,13 +31,13 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstallCheck
   '';
 
-  meta = with lib; {
+  meta = {
     description = "Zero-configuration fan daemon for ThinkPads";
     mainProgram = "zcfan";
     homepage = "https://github.com/cdown/zcfan";
     changelog = "https://github.com/cdown/zcfan/tags/${finalAttrs.version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ kashw2 ];
-    platforms = platforms.linux;
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ kashw2 ];
+    platforms = lib.platforms.linux;
   };
 })
