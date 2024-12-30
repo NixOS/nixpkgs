@@ -7448,6 +7448,8 @@ self: super: with self; {
 
   libagent = callPackage ../development/python-modules/libagent { };
 
+  libbs = callPackage ../development/python-modules/libbs { };
+
   pa-ringbuffer = callPackage ../development/python-modules/pa-ringbuffer { };
 
   lib4sbom = callPackage ../development/python-modules/lib4sbom { };
