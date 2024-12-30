@@ -8,18 +8,18 @@
 
 buildPythonPackage rec {
   pname = "editorconfig";
-  version = "0.12.4";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "editorconfig";
     repo = "editorconfig-core-py";
     rev = "v${version}";
-    hash = "sha256-+m674bLj6xs7MWU+8BMixEwy7/TjyES0lvCLLogTDHQ=";
+    hash = "sha256-vYuXW+Yb0GXZAwaarV4WBIJtS31+EleiddU9ibBn/hs=";
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   nativeCheckInputs = [ cmake ];
 
