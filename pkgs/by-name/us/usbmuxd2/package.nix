@@ -53,6 +53,9 @@ clangStdenv.mkDerivation rec {
   postPatch = ''
     # Checking for libgeneral version still fails
     sed -i 's/libgeneral >= $LIBGENERAL_MINVERS_STR/libgeneral/' configure.ac
+
+    # Otherwise, it will complain about no matching function for call to 'find'
+    sed -i 1i'#include <algorithm>' usbmuxd2/Muxer.cpp
   '';
 
   nativeBuildInputs = [
