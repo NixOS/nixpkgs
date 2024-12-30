@@ -43,6 +43,6 @@ buildPythonPackage rec {
     license = licenses.mit;
     maintainers = with maintainers; [ dotlambda ];
     # https://github.com/home-assistant-libs/pytradfri/issues/720
-    broken = versionAtLeast pydantic.version "2";
+    broken = versionAtLeast pydantic.version "2" && versionAtLeast version "10";
   };
 }
