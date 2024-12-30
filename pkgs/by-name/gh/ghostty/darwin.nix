@@ -3,7 +3,7 @@
   stdenvNoCC,
   fetchurl,
   _7zz,
-  makeWrapper,
+  makeBinaryWrapper,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     _7zz
-    makeWrapper
+    makeBinaryWrapper
   ];
 
   sourceRoot = ".";
