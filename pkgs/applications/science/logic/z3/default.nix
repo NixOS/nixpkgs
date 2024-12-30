@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   python,
   fixDarwinDylibNames,
   javaBindings ? false,
@@ -12,6 +13,7 @@
   findlib ? null,
   zarith ? null,
   writeScript,
+  replaceVars,
 }:
 
 assert javaBindings -> jdk != null;
@@ -123,6 +125,27 @@ let
         ];
       };
     };
+
+  static-matrix-def-patch = fetchpatch {
+    # clang / gcc fixes. fixes typos in some member names
+    name = "gcc-15-fixes.patch";
+    url = "https://github.com/Z3Prover/z3/commit/2ce89e5f491fa817d02d8fdce8c62798beab258b.patch";
+    includes = [ "src/math/lp/static_matrix_def.h" ];
+    hash = "sha256-rEH+UzylzyhBdtx65uf8QYj5xwuXOyG6bV/4jgKkXGo=";
+  };
+
+  static-matrix-patch = fetchpatch {
+    # clang / gcc fixes. fixes typos in some member names
+    name = "gcc-15-fixes.patch";
+    url = "https://github.com/Z3Prover/z3/commit/2ce89e5f491fa817d02d8fdce8c62798beab258b.patch";
+    includes = [ "src/@dir@/lp/static_matrix.h" ];
+    stripLen = 3;
+    extraPrefix = "src/@dir@/";
+    hash = "sha256-+H1/VJPyI0yq4M/61ay8SRCa6OaoJ/5i+I3zVTAPUVo=";
+  };
+
+  # replace @dir@ in the path of the given list of patches
+  fixupPatches = dir: map (patch: replaceVars patch { dir = dir; });
 in
 {
   z3_4_13 = common {
@@ -132,18 +155,53 @@ in
   z3_4_12 = common {
     version = "4.12.6";
     sha256 = "sha256-X4wfPWVSswENV0zXJp/5u9SQwGJWocLKJ/CNv57Bt+E=";
+    patches =
+      fixupPatches "math" [
+        ./lower-bound-typo.diff
+        static-matrix-patch
+      ]
+      ++ [
+        static-matrix-def-patch
+      ];
   };
   z3_4_11 = common {
     version = "4.11.2";
     sha256 = "sha256-OO0wtCvSKwGxnKvu+AfXe4mEzv4nofa7A00BjX+KVjc=";
+    patches =
+      fixupPatches "math" [
+        ./lower-bound-typo.diff
+        static-matrix-patch
+        ./tail-matrix.diff
+      ]
+      ++ [
+        static-matrix-def-patch
+      ];
   };
   z3_4_8 = common {
     version = "4.8.17";
     sha256 = "sha256-BSwjgOU9EgCcm18Zx0P9mnoPc9ZeYsJwEu0ffnACa+8=";
+    patches =
+      fixupPatches "math" [
+        ./lower-bound-typo.diff
+        static-matrix-patch
+        ./tail-matrix.diff
+      ]
+      ++ [
+        static-matrix-def-patch
+      ];
   };
   z3_4_8_5 = common {
     tag = "Z3";
     version = "4.8.5";
     sha256 = "sha256-ytG5O9HczbIVJAiIGZfUXC/MuYH7d7yLApaeTRlKXoc=";
+    patches =
+      fixupPatches "util" [
+        ./lower-bound-typo.diff
+        static-matrix-patch
+        ./tail-matrix.diff
+      ]
+      ++ [
+        ./4-8-5-typos.diff
+      ];
   };
 }
