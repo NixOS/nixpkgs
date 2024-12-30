@@ -35,7 +35,7 @@ rustPlatform.buildRustPackage rec {
   };
 
   meta = {
-    description = "A blazingly fast web directory scanner written in Rust";
+    description = "Blazingly fast web directory scanner written in Rust";
     homepage = "https://github.com/cestef/rwalk";
     changelog = "https://github.com/cestef/rwalk/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.mit;
