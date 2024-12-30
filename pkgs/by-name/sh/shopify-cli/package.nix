@@ -1,24 +1,33 @@
-{ buildNpmPackage, lib, testers, shopify-cli }:
-let
-  version = "3.69.3";
-in
-buildNpmPackage {
+{
+  lib,
+  testers,
+  shopify-cli,
+  fetchFromGitHub,
+  stdenv,
+  pnpm,
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "shopify";
-  version = version;
+  version = "3.72.2";
 
-  src = lib.fileset.toSource {
-    root = ./.;
-    fileset = with lib.fileset; unions [
-      ./package.json
-      ./package-lock.json
-    ];
+  src = fetchFromGitHub {
+    owner = "Shopify";
+    repo = "cli";
+    rev = "refs/tags/${finalAttrs.version}";
+    hash = "sha256-iAnOuGi7n3qd0rfQ9aPXWIkBiafmjL0ELDiigGn/DmE=";
   };
 
-  npmDepsHash = "sha256-QhbOKOs/0GEOeySG4uROzgtD4o7C+6tS/TAaPcmC3xk=";
-  dontNpmBuild = true;
+  nativeBuildInputs = [
+    #nodejs
+    pnpm.configHook
+  ];
+
+  pnpmDeps = pnpm.fetchDeps {
+    inherit (finalAttrs) pname version src;
+    hash = "sha256-PWFyyP4qcp7RIcmAdFRnvRo8KppeEvSmFgtcBMm2xlg=";
+  };
 
   passthru = {
-    updateScript = ./update.sh;
     tests.version = testers.testVersion {
       package = shopify-cli;
       command = "shopify version";
@@ -30,8 +39,11 @@ buildNpmPackage {
     mainProgram = "shopify";
     description = "CLI which helps you build against the Shopify platform faster";
     homepage = "https://github.com/Shopify/cli";
-    changelog = "https://github.com/Shopify/cli/releases/tag/${version}";
+    changelog = "https://github.com/Shopify/cli/releases/tag/${finalAttrs.version}";
     license = lib.licenses.mit;
-    maintainers = with lib.maintainers; [ fd onny ];
+    maintainers = with lib.maintainers; [
+      fd
+      onny
+    ];
   };
-}
+})
