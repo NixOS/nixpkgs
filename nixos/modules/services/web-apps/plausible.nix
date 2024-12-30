@@ -268,7 +268,9 @@ in
               SMTP_USER_NAME = cfg.mail.smtp.user;
             });
 
-          path = [ cfg.package ] ++ lib.optional cfg.database.postgres.setup config.services.postgresql.package;
+          path = [
+            cfg.package
+          ] ++ lib.optional cfg.database.postgres.setup config.services.postgresql.package;
           script = ''
             # Elixir does not start up if `RELEASE_COOKIE` is not set,
             # even though we set `RELEASE_DISTRIBUTION=none` so the cookie should be unused.
