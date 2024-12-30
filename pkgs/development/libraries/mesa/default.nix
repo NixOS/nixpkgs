@@ -138,6 +138,9 @@ in stdenv.mkDerivation {
 
   patches = [
     ./opencl.patch
+    # cherry-picked from https://gitlab.freedesktop.org/mesa/mesa/-/merge_requests/32719
+    # safe to remove for versions > 24.3.2
+    ./cross_clc.patch
   ];
 
   postPatch = ''
@@ -204,6 +207,7 @@ in stdenv.mkDerivation {
 
     # Enable Intel RT stuff when available
     (lib.mesonBool "install-intel-clc" true)
+    (lib.mesonBool "install-mesa-clc" true)
     (lib.mesonEnable "intel-rt" stdenv.hostPlatform.isx86_64)
     (lib.mesonOption "clang-libdir" "${lib.getLib llvmPackages.clang-unwrapped}/lib")
 
@@ -222,6 +226,7 @@ in stdenv.mkDerivation {
     (lib.mesonOption "video-codecs" "all")
   ] ++ lib.optionals needNativeCLC [
     (lib.mesonOption "intel-clc" "system")
+    (lib.mesonOption "mesa-clc" "system")
   ];
 
   strictDeps = true;
@@ -333,6 +338,7 @@ in stdenv.mkDerivation {
     echo $opencl/lib/libRusticlOpenCL.so > $opencl/etc/OpenCL/vendors/rusticl.icd
 
     moveToOutput bin/intel_clc $driversdev
+    moveToOutput bin/mesa_clc $driversdev
     moveToOutput lib/gallium-pipe $opencl
     moveToOutput "lib/lib*OpenCL*" $opencl
     moveToOutput "lib/libOSMesa*" $osmesa
