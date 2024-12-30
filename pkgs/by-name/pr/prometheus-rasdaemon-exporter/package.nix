@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  fetchpatch2,
 }:
 
 python3Packages.buildPythonApplication {
@@ -15,6 +16,19 @@ python3Packages.buildPythonApplication {
     rev = "e37084edeb4d397dd360298cb22f18f83a35ff46";
     hash = "sha256-O0Zzog+5jDixFRGbqmjPYi6JDpHbxpU4hKfsqTnexS8=";
   };
+
+  patches = [
+    # Normalization of metric names
+    # https://github.com/sanecz/prometheus-rasdaemon-exporter/pull/1
+    (fetchpatch2 {
+      url = "https://github.com/sanecz/prometheus-rasdaemon-exporter/commit/46d379ba205c2340a0b266bf3cd48ec88ce025d0.patch";
+      hash = "sha256-kqo1Tjn51M1FzArS4K0ylQ2/rFDOAiZU3OUt/oBhGhM=";
+    })
+    (fetchpatch2 {
+      url = "https://github.com/sanecz/prometheus-rasdaemon-exporter/commit/c9ab08e8918497edb8f1ab0f933fa270cb7860a8.patch";
+      hash = "sha256-QtjzXuxPG7e+cgUDVbAVNY4VyBp3W5+vQDAvFJ9t92I=";
+    })
+  ];
 
   build-system = with python3Packages; [
     setuptools
