@@ -24,9 +24,6 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libpulseaudio
-    coreutils
-    bash
-    gawk
     alsa-lib
     libnotify
   ];
