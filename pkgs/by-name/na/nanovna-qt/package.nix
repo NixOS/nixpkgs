@@ -12,13 +12,13 @@
 stdenv.mkDerivation rec {
   pname = "nanovna-qt";
   # 20200507 dropped support for NanoVNA V2.2
-  version = "20200403";
+  version = "20200507";
 
   src = fetchFromGitHub {
     owner = "nanovna-v2";
     repo = "NanoVNA-QT";
     rev = version;
-    hash = "sha256-0nRpjLglCog9e4bSkaNSwjrwmLwut3Ykr3AaYZCaMEs=";
+    hash = "sha256-yaintP56yn1FdAoXAkgi+tV/jLzKKEyDdqnGDe+bBKc=";
   };
 
   patches = [ ./fix-build.patch ];
