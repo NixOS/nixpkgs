@@ -110,6 +110,7 @@ mapAliases ({
   case = throw "case has been removed, since it is an unused leaf package with a dependency on the nose test framework"; # added 2024-07-08
   cchardet = faust-cchardet; # added 2023-03-02
   cepa = throw "cepa has been removed, as onionshare switched back to stem"; # added 2024-05-07
+  chainer = throw "chainer has been removed, as it is abandoned and broken"; # added 2024-12-31
   chiabip158 = throw "chiabip158 has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # added 2023-11-26
   chiapos = throw "chiapos has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # added 2023-11-26
   chiavdf = throw "chiavdf has been removed. see https://github.com/NixOS/nixpkgs/pull/270254"; # added 2023-11-26
