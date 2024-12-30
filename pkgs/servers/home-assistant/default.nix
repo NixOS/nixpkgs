@@ -45,21 +45,6 @@ let
         ];
       });
 
-      aiopurpleair = super.aiopurpleair.overridePythonAttrs (oldAttrs: rec {
-        version = "2022.12.1";
-        src = fetchFromGitHub {
-          owner = "bachya";
-          repo = "aiopurpleair";
-          rev = "refs/tags/${version}";
-          hash = "sha256-YmJH4brWkTpgzyHwu9UnIWrY5qlDCmMtvF+KxQFXwfk=";
-        };
-        postPatch = ''
-          substituteInPlace pyproject.toml --replace-fail \
-            '"setuptools >= 35.0.2", "wheel >= 0.29.0", "poetry>=0.12"' \
-            '"poetry-core"'
-        '';
-      });
-
       aioskybell = super.aioskybell.overridePythonAttrs (oldAttrs: rec {
         version = "22.7.0";
         src = fetchFromGitHub {
@@ -112,13 +97,6 @@ let
         };
         dependencies = with self; [
           requests
-        ];
-      });
-
-      inline-snapshot = super.inline-snapshot.overridePythonAttrs (oldAttrs: {
-        disabledTests = oldAttrs.disabledTests or [ ] ++ [
-          # fixture does not expect pydantic<2
-          "test_pydantic_repr"
         ];
       });
 
@@ -183,18 +161,6 @@ let
           sha256 = "00ly4injmgrj34p0lyx7cz2crgnfcijmzc0540gf7hpwha0marf6";
         };
       });
-
-      pyaussiebb = super.pyaussiebb.overridePythonAttrs (oldAttrs: rec {
-        version = "0.0.18";
-        src = fetchFromGitHub {
-          owner = "yaleman";
-          repo = "aussiebb";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-tEdddVsLFCHRvyLCctDakioiop2xWaJlfGE16P1ukHc=";
-        };
-      });
-
-      pydantic = super.pydantic_1;
 
       pydexcom = super.pydexcom.overridePythonAttrs (oldAttrs: rec {
         version = "0.2.3";
@@ -272,16 +238,6 @@ let
         };
       });
 
-      # newer versions require pydantic>=2
-      python-on-whales = super.python-on-whales.overridePythonAttrs (oldAttrs: rec {
-        version = "0.72.0";
-        src = fetchFromGitHub {
-          inherit (oldAttrs.src) owner repo;
-          rev = "refs/tags/v${version}";
-          hash = "sha256-oKI7zXfoUVmJXLQvyoDEmoCL4AwaYgaFcLKNlFFrC9o=";
-        };
-      });
-
       pytradfri = super.pytradfri.overridePythonAttrs (oldAttrs: rec {
         version = "9.0.1";
         src = fetchFromGitHub {
@@ -290,46 +246,8 @@ let
           rev = "refs/tags/${version}";
           hash = "sha256-xOdTzG0bF5p1QpkXv2btwrVugQRjSwdAj8bXcC0IoQg=";
         };
+        meta.broken = false;
       });
-
-      # newer sigstore version transitivevly require pydantic>=2
-      sigstore = super.sigstore.overridePythonAttrs (oldAttrs: rec {
-        version = "1.1.2";
-        src = fetchFromGitHub {
-          owner = "sigstore";
-          repo = "sigstore-python";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-QqY5GOBS75OkbSaF5Ua5jnJAhsYfVRuWLUoWDxX8Ino=";
-        };
-        dependencies = with self; [
-          appdirs
-          cryptography
-          id
-          pydantic
-          pyjwt
-          pyopenssl
-          requests
-          securesystemslib
-          sigstore-protobuf-specs
-          tuf
-        ];
-        doCheck = false; # pytest too new
-      });
-
-      sigstore-protobuf-specs = super.sigstore-protobuf-specs.overridePythonAttrs {
-        version = "0.1.0";
-        src = fetchPypi {
-          pname = "sigstore-protobuf-specs";
-          version = "0.1.0";
-          hash = "sha256-YistIxYToo7T5mYKzYeBhnW06DSG9JoPDBmKxUdfy4E=";
-        };
-        nativeBuildInputs = with self; [
-          flit-core
-        ];
-        pythonRelaxDeps = [
-          "betterproto"
-        ];
-      };
 
       slack-sdk = super.slack-sdk.overridePythonAttrs (oldAttrs: rec {
         version = "2.5.0";
@@ -390,36 +308,6 @@ let
           rev = version;
           hash = "sha256-sHCZ8Csxs5rwg1ZG++hP3MfK7ldeAdqm5ta9tEXeW+I=";
         };
-      });
-
-      xbox-webapi = super.xbox-webapi.overridePythonAttrs (oldAttrs: rec {
-        version = "2.0.11";
-        src = fetchFromGitHub {
-          owner = "OpenXbox";
-          repo = "xbox-webapi-python";
-          rev = "refs/tags/v${version}";
-          hash = "sha256-fzMB+I8+ZTJUiZovcuj+d5GdHY9BJyJd6j92EhJeIFI=";
-        };
-        postPatch = ''
-          sed -i '/pytest-runner/d' setup.py
-        '';
-        propagatedBuildInputs = with self; [
-          aiohttp
-          appdirs
-          ms-cv
-          pydantic
-          ecdsa
-        ];
-        nativeCheckInputs = with self; [
-          aresponses
-        ];
-      });
-
-      youtubeaio = super.youtubeaio.overridePythonAttrs (old: {
-        pytestFlagsArray = [
-          # fails with pydantic v1
-          "--deselect=tests/test_video.py::test_fetch_video"
-        ];
       });
 
       # internal python packages only consumed by home-assistant itself
