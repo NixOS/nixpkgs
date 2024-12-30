@@ -6,6 +6,7 @@
   lib,
   fetchFromGitHub,
   fetchurl,
+  fetchpatch,
   copyDesktopItems,
   makeDesktopItem,
   python3,
@@ -43,6 +44,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     ./darwin-fixes.patch
+    (fetchpatch {
+      name = "gcc14.patch";
+      url = "https://github.com/HarbourMasters/Shipwright/commit/1bc15d5bf3042d4fd64e1952eb68c47a7d5d8061.patch";
+      hash = "sha256-OpjP+rGqx56DB4W8yzLkxuxSAQa6oXQqtbQ2cNcFjYQ=";
+    })
   ];
 
   # This would get fetched at build time otherwise, see:

@@ -4776,9 +4776,11 @@ self: super: with self; {
 
   flet = callPackage ../development/python-modules/flet { };
 
-  flet-core = callPackage ../development/python-modules/flet-core { };
+  flet-cli = callPackage ../development/python-modules/flet-cli { };
 
-  flet-runtime = callPackage ../development/python-modules/flet-runtime { };
+  flet-desktop = callPackage ../development/python-modules/flet-desktop { };
+
+  flet-web = callPackage ../development/python-modules/flet-web { };
 
   flexcache = callPackage ../development/python-modules/flexcache { };
 
@@ -6560,11 +6562,13 @@ self: super: with self; {
 
   jax = callPackage ../development/python-modules/jax { };
 
+  jax-cuda12-pjrt = callPackage ../development/python-modules/jax-cuda12-pjrt { };
+
+  jax-cuda12-plugin = callPackage ../development/python-modules/jax-cuda12-plugin { };
+
   jax-jumpy = callPackage ../development/python-modules/jax-jumpy { };
 
-  jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix {
-    inherit (pkgs.config) cudaSupport;
-  };
+  jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix { };
 
   jaxlib-build = callPackage ../development/python-modules/jaxlib rec {
     # Some platforms don't have `cudaSupport` defined, hence the need for 'or false'.
@@ -6572,16 +6576,7 @@ self: super: with self; {
     IOKit = pkgs.darwin.apple_sdk_11_0.IOKit;
   };
 
-  # Use the -bin on macOS since the source build doesn't support it (see #323154)
-  jaxlib = if jaxlib-build.meta.unsupported then jaxlib-bin else jaxlib-build;
-
-  jaxlibWithCuda = self.jaxlib.override {
-    cudaSupport = true;
-  };
-
-  jaxlibWithoutCuda = self.jaxlib.override {
-    cudaSupport = false;
-  };
+  jaxlib = jaxlib-bin;
 
   jaxopt = callPackage ../development/python-modules/jaxopt { };
 
@@ -6624,6 +6619,8 @@ self: super: with self; {
   jinja2-git = callPackage ../development/python-modules/jinja2-git { };
 
   jinja2-pluralize = callPackage ../development/python-modules/jinja2-pluralize { };
+
+  jinja2-strcase = callPackage ../development/python-modules/jinja2-strcase { };
 
   jinja2-time = callPackage ../development/python-modules/jinja2-time { };
 
@@ -7647,6 +7644,8 @@ self: super: with self; {
   locket = callPackage ../development/python-modules/locket { };
 
   lockfile = callPackage ../development/python-modules/lockfile { };
+
+  locust = callPackage ../development/python-modules/locust { };
 
   log-symbols = callPackage ../development/python-modules/log-symbols { };
 
