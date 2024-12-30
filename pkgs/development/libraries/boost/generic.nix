@@ -212,7 +212,7 @@ stdenv.mkDerivation {
       })
     ]
     ++ lib.optional (lib.versionAtLeast version "1.81" && stdenv.cc.isClang) ./fix-clang-target.patch
-    ++ lib.optional (lib.versionAtLeast version "1.86") [
+    ++ lib.optional (lib.versionAtLeast version "1.86" && lib.versionOlder version "1.87") [
       # Backport fix for NumPy 2 support.
       (fetchpatch {
         name = "boost-numpy-2-compatibility.patch";

@@ -4,28 +4,27 @@
   fetchFromGitHub,
   installShellFiles,
   rustPlatform,
-  buildPackages,
   apple-sdk_11,
   nixosTests,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "atuin";
-  version = "18.3.0";
+  version = "18.4.0";
 
   src = fetchFromGitHub {
     owner = "atuinsh";
     repo = "atuin";
     rev = "v${version}";
-    hash = "sha256-Q3UI1IUD5Jz2O4xj3mFM7DqY3lTy3WhWYPa8QjJHTKE=";
+    hash = "sha256-P/q4XYhpXo9kwiltA0F+rQNSlqI+s8TSi5v5lFJWJ/4=";
   };
 
   # TODO: unify this to one hash because updater do not support this
   cargoHash =
     if stdenv.hostPlatform.isLinux then
-      "sha256-K4Vw/d0ZOROWujWr76I3QvfKefLhXLeFufUrgStAyjQ="
+      "sha256-JDm7HWMaLSodpOhrR7rm6ZS/ATX/q8fRK+OJ/EKqg3U="
     else
-      "sha256-8NAfE7cGFT64ntNXK9RT0D/MbDJweN7vvsG/KlrY4K4=";
+      "sha256-mrsqaqJHMyNi3yFDIyAXFBS+LY71VWXE8O7mjvgI6lo=";
 
   # atuin's default features include 'check-updates', which do not make sense
   # for distribution builds. List all other default features.
@@ -43,11 +42,6 @@ rustPlatform.buildRustPackage rec {
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     apple-sdk_11
   ];
-
-  preBuild = ''
-    export PROTOC=${buildPackages.protobuf}/bin/protoc
-    export PROTOC_INCLUDE="${buildPackages.protobuf}/include";
-  '';
 
   postInstall = lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
     installShellCompletion --cmd atuin \
