@@ -6,6 +6,7 @@
   makeWrapper,
   man-db,
   nix,
+  nixosTests,
   shellcheck,
   stdenvNoCC,
 }:
@@ -61,6 +62,8 @@ stdenvNoCC.mkDerivation {
         ]
       }
   '';
+
+  passthru.tests.installer-simpleUefiSystemdBoot = nixosTests.installer.simpleUefiSystemdBoot;
 
   meta = {
     description = "Evaluate NixOS configuration and return the properties of given option";
