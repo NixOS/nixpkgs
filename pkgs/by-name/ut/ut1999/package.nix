@@ -42,6 +42,8 @@ let
   unpackIso =
     runCommand "ut1999-iso"
       {
+        # This upload of the game is officially sanctioned by OldUnreal (who has received permission from Epic Games to link to archive.org) and the UT99.org community
+        # This is a copy of the original Unreal Tournament: Game of the Year Edition (also known as UT or UT99).
         src = fetchurl {
           url = "https://archive.org/download/ut-goty/UT_GOTY_CD1.iso";
           hash = "sha256-4YSYTKiPABxd3VIDXXbNZOJm4mx0l1Fhte1yNmx0cE8=";
