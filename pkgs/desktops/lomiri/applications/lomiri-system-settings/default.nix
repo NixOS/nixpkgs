@@ -29,6 +29,7 @@
   lomiri-settings-components,
   lomiri-ui-toolkit,
   maliit-keyboard,
+  mesa,
   pkg-config,
   polkit,
   python3,
@@ -136,6 +137,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeCheckInputs = [
     dbus
+    mesa.llvmpipeHook # ShapeMaterial needs an OpenGL context: https://gitlab.com/ubports/development/core/lomiri-ui-toolkit/-/issues/35
     (python3.withPackages (ps: with ps; [ python-dbusmock ]))
     xvfb-run
   ];
@@ -151,19 +153,6 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [
     (lib.cmakeBool "ENABLE_LIBDEVICEINFO" true)
     (lib.cmakeBool "ENABLE_TESTS" finalAttrs.finalPackage.doCheck)
-    (lib.cmakeFeature "CMAKE_CTEST_ARGUMENTS" (
-      lib.concatStringsSep ";" [
-        # Exclude tests
-        "-E"
-        (lib.strings.escapeShellArg "(${
-          lib.concatStringsSep "|" [
-            # Hits OpenGL context issue inside lomiri-ui-toolkit, see derivation of that on details
-            "^testmouse"
-            "^tst_notifications"
-          ]
-        })")
-      ]
-    ))
   ];
 
   # The linking for this normally ignores missing symbols, which is inconvenient for figuring out why subpages may be
