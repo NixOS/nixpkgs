@@ -7,6 +7,5 @@ setup( name         = "waitress-django"
      , description  = "A waitress WSGI server serving django"
      , author       = "Bas van Dijk"
      , author_email = "v.dijk.bas@gmail.com"
-     , package_dir  = {"" : "src"}
-     , scripts      = ["src/waitress-serve-django"]
+     , scripts      = ["waitress-serve-django"]
      )
