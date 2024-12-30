@@ -4,9 +4,6 @@
   config,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.vikunja;
   format = pkgs.formats.yaml { };
@@ -16,7 +13,7 @@ let
 in
 {
   imports = [
-    (mkRemovedOptionModule [ "services" "vikunja" "setupNginx" ]
+    (lib.mkRemovedOptionModule [ "services" "vikunja" "setupNginx" ]
       "services.vikunja no longer supports the automatic set up of a nginx virtual host. Set up your own webserver config with a proxy pass to the vikunja service."
     )
   ];
