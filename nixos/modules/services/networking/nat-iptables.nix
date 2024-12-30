@@ -214,36 +214,38 @@ in
 
   };
 
-  config = lib.mkIf (!config.networking.nftables.enable) (lib.mkMerge [
-    ({ networking.firewall.extraCommands = lib.mkBefore flushNat; })
-    (lib.mkIf config.networking.nat.enable {
+  config = lib.mkIf (!config.networking.nftables.enable) (
+    lib.mkMerge [
+      ({ networking.firewall.extraCommands = lib.mkBefore flushNat; })
+      (lib.mkIf config.networking.nat.enable {
 
-      networking.firewall = lib.mkIf config.networking.firewall.enable {
-        extraCommands = setupNat;
-        extraStopCommands = flushNat;
-      };
-
-      systemd.services = lib.mkIf (!config.networking.firewall.enable) {
-        nat = {
-          description = "Network Address Translation";
-          wantedBy = [ "network.target" ];
-          after = [
-            "network-pre.target"
-            "systemd-modules-load.service"
-          ];
-          path = [ config.networking.firewall.package ];
-          unitConfig.ConditionCapability = "CAP_NET_ADMIN";
-
-          serviceConfig = {
-            Type = "oneshot";
-            RemainAfterExit = true;
-          };
-
-          script = flushNat + setupNat;
-
-          postStop = flushNat;
+        networking.firewall = lib.mkIf config.networking.firewall.enable {
+          extraCommands = setupNat;
+          extraStopCommands = flushNat;
         };
-      };
-    })
-  ]);
+
+        systemd.services = lib.mkIf (!config.networking.firewall.enable) {
+          nat = {
+            description = "Network Address Translation";
+            wantedBy = [ "network.target" ];
+            after = [
+              "network-pre.target"
+              "systemd-modules-load.service"
+            ];
+            path = [ config.networking.firewall.package ];
+            unitConfig.ConditionCapability = "CAP_NET_ADMIN";
+
+            serviceConfig = {
+              Type = "oneshot";
+              RemainAfterExit = true;
+            };
+
+            script = flushNat + setupNat;
+
+            postStop = flushNat;
+          };
+        };
+      })
+    ]
+  );
 }
