@@ -1,4 +1,10 @@
-{ stdenv, lib, buildGoModule, fetchFromGitHub, cyphernetes }:
+{
+  stdenv,
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  cyphernetes,
+}:
 
 buildGoModule rec {
   pname = "cyphernetes";
