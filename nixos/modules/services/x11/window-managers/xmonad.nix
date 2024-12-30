@@ -1,6 +1,4 @@
 {pkgs, lib, config, ...}:
-
-with lib;
 let
   inherit (lib) mkOption mkIf optionals literalExpression optionalString;
   cfg = config.services.xserver.windowManager.xmonad;
@@ -38,17 +36,17 @@ let
 
   xmonad = if (cfg.config != null) then xmonad-config else xmonad-vanilla;
 in {
-  meta.maintainers = with maintainers; [ lassulus xaverdh ivanbrennan slotThe ];
+  meta.maintainers = with lib.maintainers; [ lassulus xaverdh ivanbrennan slotThe ];
 
   options = {
     services.xserver.windowManager.xmonad = {
-      enable = mkEnableOption "xmonad";
+      enable = lib.mkEnableOption "xmonad";
 
       haskellPackages = mkOption {
         default = pkgs.haskellPackages;
         defaultText = literalExpression "pkgs.haskellPackages";
         example = literalExpression "pkgs.haskell.packages.ghc810";
-        type = types.attrs;
+        type = lib.types.attrs;
         description = ''
           haskellPackages used to build Xmonad and other packages.
           This can be used to change the GHC version used to build
@@ -58,7 +56,7 @@ in {
       };
 
       extraPackages = mkOption {
-        type = types.functionTo (types.listOf types.package);
+        type = lib.types.functionTo (lib.types.listOf lib.types.package);
         default = self: [];
         defaultText = literalExpression "self: []";
         example = literalExpression ''
