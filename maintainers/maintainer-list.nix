@@ -4869,6 +4869,12 @@
     githubId = 217899;
     name = "Cyryl Płotnicki";
   };
+  cything = {
+    name = "cy";
+    email = "nix@cything.io";
+    github = "cything";
+    githubId = 45041772;
+  };
   d3vil0p3r = {
     name = "Antonio Voza";
     email = "vozaanthony@gmail.com";
@@ -21496,6 +21502,12 @@
     email = "me@samuelrounce.co.uk";
     github = "srounce";
     githubId = 60792;
+  };
+  srv6d = {
+    name = "Marvin Vogt";
+    github = "SRv6d";
+    githubId = 18124752;
+    email = "m@rvinvogt.com";
   };
   Srylax = {
     name = "Srylax";
