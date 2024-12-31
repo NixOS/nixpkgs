@@ -4,6 +4,9 @@
   pkgs,
   ...
 }:
+
+with lib;
+
 let
   cfg = config.services.xserver.windowManager.clfswm;
 in
@@ -11,13 +14,13 @@ in
 {
   options = {
     services.xserver.windowManager.clfswm = {
-      enable = lib.mkEnableOption "clfswm";
-      package = lib.mkPackageOption pkgs [ "sbclPackages" "clfswm" ] { };
+      enable = mkEnableOption "clfswm";
+      package = mkPackageOption pkgs [ "sbclPackages" "clfswm" ] { };
     };
   };
 
-  config = lib.mkIf cfg.enable {
-    services.xserver.windowManager.session = lib.singleton {
+  config = mkIf cfg.enable {
+    services.xserver.windowManager.session = singleton {
       name = "clfswm";
       start = ''
         ${cfg.package}/bin/clfswm &

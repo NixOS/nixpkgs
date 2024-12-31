@@ -1,4 +1,7 @@
 { config, lib, pkgs, utils, ... }:
+
+with lib;
+
 let
   cfg = config.services.xserver.desktopManager.xfce;
   excludePackages = config.environment.xfce.excludePackages;
@@ -6,70 +9,70 @@ let
 in
 {
   meta = {
-    maintainers = lib.teams.xfce.members;
+    maintainers = teams.xfce.members;
   };
 
   imports = [
     # added 2019-08-18
     # needed to preserve some semblance of UI familarity
     # with original XFCE module
-    (lib.mkRenamedOptionModule
+    (mkRenamedOptionModule
       [ "services" "xserver" "desktopManager" "xfce4-14" "extraSessionCommands" ]
       [ "services" "xserver" "displayManager" "sessionCommands" ])
 
     # added 2019-11-04
     # xfce4-14 module removed and promoted to xfce.
     # Needed for configs that used xfce4-14 module to migrate to this one.
-    (lib.mkRenamedOptionModule
+    (mkRenamedOptionModule
       [ "services" "xserver" "desktopManager" "xfce4-14" "enable" ]
       [ "services" "xserver" "desktopManager" "xfce" "enable" ])
-    (lib.mkRenamedOptionModule
+    (mkRenamedOptionModule
       [ "services" "xserver" "desktopManager" "xfce4-14" "noDesktop" ]
       [ "services" "xserver" "desktopManager" "xfce" "noDesktop" ])
-    (lib.mkRenamedOptionModule
+    (mkRenamedOptionModule
       [ "services" "xserver" "desktopManager" "xfce4-14" "enableXfwm" ]
       [ "services" "xserver" "desktopManager" "xfce" "enableXfwm" ])
-    (lib.mkRenamedOptionModule
+    (mkRenamedOptionModule
       [ "services" "xserver" "desktopManager" "xfce" "extraSessionCommands" ]
       [ "services" "xserver" "displayManager" "sessionCommands" ])
-    (lib.mkRemovedOptionModule [ "services" "xserver" "desktopManager" "xfce" "screenLock" ] "")
+    (mkRemovedOptionModule [ "services" "xserver" "desktopManager" "xfce" "screenLock" ] "")
 
     # added 2022-06-26
     # thunar has its own module
-    (lib.mkRenamedOptionModule
+    (mkRenamedOptionModule
       [ "services" "xserver" "desktopManager" "xfce" "thunarPlugins" ]
       [ "programs" "thunar" "plugins" ])
   ];
 
   options = {
     services.xserver.desktopManager.xfce = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
+      enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Enable the Xfce desktop environment.";
       };
 
-      noDesktop = lib.mkOption {
-        type = lib.types.bool;
+      noDesktop = mkOption {
+        type = types.bool;
         default = false;
         description = "Don't install XFCE desktop components (xfdesktop and panel).";
       };
 
-      enableXfwm = lib.mkOption {
-        type = lib.types.bool;
+      enableXfwm = mkOption {
+        type = types.bool;
         default = true;
         description = "Enable the XFWM (default) window manager.";
       };
 
-      enableScreensaver = lib.mkOption {
-        type = lib.types.bool;
+      enableScreensaver = mkOption {
+        type = types.bool;
         default = true;
         description = "Enable the XFCE screensaver.";
       };
 
-      enableWaylandSession = lib.mkEnableOption "the experimental Xfce Wayland session";
+      enableWaylandSession = mkEnableOption "the experimental Xfce Wayland session";
 
-      waylandSessionCompositor = lib.mkOption {
+      waylandSessionCompositor = mkOption {
         type = lib.types.str;
         default = "";
         example = "wayfire";
@@ -84,15 +87,15 @@ in
       };
     };
 
-    environment.xfce.excludePackages = lib.mkOption {
+    environment.xfce.excludePackages = mkOption {
       default = [];
-      example = lib.literalExpression "[ pkgs.xfce.xfce4-volumed-pulse ]";
-      type = lib.types.listOf lib.types.package;
+      example = literalExpression "[ pkgs.xfce.xfce4-volumed-pulse ]";
+      type = types.listOf types.package;
       description = "Which packages XFCE should exclude from the default environment";
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     environment.systemPackages = utils.removePackagesByName (with pkgs; [
       glib # for gsettings
       gtk3.out # gtk-update-icon-cache
@@ -144,10 +147,10 @@ in
         xfce.xfdesktop
       ] ++ lib.optional cfg.enableScreensaver xfce.xfce4-screensaver) excludePackages;
 
-    programs.gnupg.agent.pinentryPackage = lib.mkDefault pkgs.pinentry-gtk2;
+    programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-gtk2;
     programs.xfconf.enable = true;
     programs.thunar.enable = true;
-    programs.labwc.enable = lib.mkDefault (cfg.enableWaylandSession && (
+    programs.labwc.enable = mkDefault (cfg.enableWaylandSession && (
       cfg.waylandSessionCompositor == "" || lib.substring 0 5 cfg.waylandSessionCompositor == "labwc"));
 
     environment.pathsToLink = [
@@ -170,7 +173,7 @@ in
 
     # Copied from https://gitlab.xfce.org/xfce/xfce4-session/-/blob/xfce4-session-4.19.2/xfce-wayland.desktop.in
     # to maintain consistent l10n state with X11 session file and to support the waylandSessionCompositor option.
-    services.displayManager.sessionPackages = lib.optionals cfg.enableWaylandSession [
+    services.displayManager.sessionPackages = optionals cfg.enableWaylandSession [
       ((pkgs.writeTextDir "share/wayland-sessions/xfce-wayland.desktop" ''
         [Desktop Entry]
         Version=1.0
@@ -195,16 +198,16 @@ in
     services.gnome.glib-networking.enable = true;
     services.gvfs.enable = true;
     services.tumbler.enable = true;
-    services.system-config-printer.enable = (lib.mkIf config.services.printing.enable (lib.mkDefault true));
-    services.libinput.enable = lib.mkDefault true; # used in xfce4-settings-manager
-    services.colord.enable = lib.mkDefault true;
+    services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
+    services.libinput.enable = mkDefault true; # used in xfce4-settings-manager
+    services.colord.enable = mkDefault true;
 
     # Enable default programs
     programs.dconf.enable = true;
 
     # Shell integration for VTE terminals
-    programs.bash.vteIntegration = lib.mkDefault true;
-    programs.zsh.vteIntegration = lib.mkDefault true;
+    programs.bash.vteIntegration = mkDefault true;
+    programs.zsh.vteIntegration = mkDefault true;
 
     # Systemd services
     systemd.packages = utils.removePackagesByName (with pkgs.xfce; [
@@ -213,6 +216,6 @@ in
 
     security.pam.services.xfce4-screensaver.unixAuth = cfg.enableScreensaver;
 
-    xdg.portal.configPackages = lib.mkDefault [ pkgs.xfce.xfce4-session ];
+    xdg.portal.configPackages = mkDefault [ pkgs.xfce.xfce4-session ];
   };
 }

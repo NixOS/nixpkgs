@@ -4,6 +4,8 @@
   pkgs,
   ...
 }:
+
+with lib;
 let
   dmcfg = config.services.xserver.displayManager;
   ldmcfg = dmcfg.lightdm;
@@ -27,8 +29,8 @@ in
 {
   options = {
     services.xserver.displayManager.lightdm.greeters.enso = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
+      enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable enso-os-greeter as the lightdm greeter
@@ -36,17 +38,17 @@ in
       };
 
       theme = {
-        package = lib.mkOption {
-          type = lib.types.package;
+        package = mkOption {
+          type = types.package;
           default = pkgs.gnome-themes-extra;
-          defaultText = lib.literalExpression "pkgs.gnome-themes-extra";
+          defaultText = literalExpression "pkgs.gnome-themes-extra";
           description = ''
             The package path that contains the theme given in the name option.
           '';
         };
 
-        name = lib.mkOption {
-          type = lib.types.str;
+        name = mkOption {
+          type = types.str;
           default = "Adwaita";
           description = ''
             Name of the theme to use for the lightdm-enso-os-greeter
@@ -55,17 +57,17 @@ in
       };
 
       iconTheme = {
-        package = lib.mkOption {
-          type = lib.types.package;
+        package = mkOption {
+          type = types.package;
           default = pkgs.papirus-icon-theme;
-          defaultText = lib.literalExpression "pkgs.papirus-icon-theme";
+          defaultText = literalExpression "pkgs.papirus-icon-theme";
           description = ''
             The package path that contains the icon theme given in the name option.
           '';
         };
 
-        name = lib.mkOption {
-          type = lib.types.str;
+        name = mkOption {
+          type = types.str;
           default = "ePapirus";
           description = ''
             Name of the icon theme to use for the lightdm-enso-os-greeter
@@ -74,17 +76,17 @@ in
       };
 
       cursorTheme = {
-        package = lib.mkOption {
-          type = lib.types.package;
+        package = mkOption {
+          type = types.package;
           default = pkgs.capitaine-cursors;
-          defaultText = lib.literalExpression "pkgs.capitaine-cursors";
+          defaultText = literalExpression "pkgs.capitaine-cursors";
           description = ''
             The package path that contains the cursor theme given in the name option.
           '';
         };
 
-        name = lib.mkOption {
-          type = lib.types.str;
+        name = mkOption {
+          type = types.str;
           default = "capitane-cursors";
           description = ''
             Name of the cursor theme to use for the lightdm-enso-os-greeter
@@ -92,24 +94,24 @@ in
         };
       };
 
-      blur = lib.mkOption {
-        type = lib.types.bool;
+      blur = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether or not to enable blur
         '';
       };
 
-      brightness = lib.mkOption {
-        type = lib.types.int;
+      brightness = mkOption {
+        type = types.int;
         default = 7;
         description = ''
           Brightness
         '';
       };
 
-      extraConfig = lib.mkOption {
-        type = lib.types.lines;
+      extraConfig = mkOption {
+        type = types.lines;
         default = "";
         description = ''
           Extra configuration that should be put in the greeter.conf
@@ -119,7 +121,7 @@ in
     };
   };
 
-  config = lib.mkIf (ldmcfg.enable && cfg.enable) {
+  config = mkIf (ldmcfg.enable && cfg.enable) {
     environment.etc."lightdm/greeter.conf".source = ensoGreeterConf;
 
     environment.systemPackages = [
@@ -129,14 +131,14 @@ in
     ];
 
     services.xserver.displayManager.lightdm = {
-      greeter = lib.mkDefault {
+      greeter = mkDefault {
         package = pkgs.lightdm-enso-os-greeter.xgreeters;
         name = "pantheon-greeter";
       };
 
       greeters = {
         gtk = {
-          enable = lib.mkDefault false;
+          enable = mkDefault false;
         };
       };
     };
