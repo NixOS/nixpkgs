@@ -203,6 +203,8 @@ self: super: {
   http-api-data = doJailbreak super.http-api-data;
   tasty-discover = doJailbreak super.tasty-discover;
 
+  # Too strict lower bound on lens, drop with LTS 23
+  provide = doJailbreak super.provide;
   # Out of date test data: https://github.com/ocharles/weeder/issues/176
   weeder = appendPatch (pkgs.fetchpatch {
     name = "weeder-2.9.0-test-fix-expected.patch";
