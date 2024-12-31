@@ -36,6 +36,7 @@ $pcMap{"gl"} = "libGL";
 $pcMap{"GL"} = "libGL";
 $pcMap{"gbm"} = "libgbm";
 $pcMap{"hwdata"} = "hwdata";
+$pcMap{"fontutil"} = "fontutil";
 $pcMap{"\$PIXMAN"} = "pixman";
 $pcMap{"\$RENDERPROTO"} = "xorgproto";
 $pcMap{"\$DRI3PROTO"} = "xorgproto";
@@ -261,6 +262,7 @@ print OUT <<EOF;
 {
   lib,
   font-alias,
+  font-util,
   luit,
   pixman,
 }:
@@ -270,6 +272,7 @@ self: with self; {
   inherit pixman;
   inherit luit;
   fontalias = font-alias;
+  fontutil = font-util;
 
 EOF
 

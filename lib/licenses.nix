@@ -257,6 +257,11 @@ lib.mapAttrs mkLicense (
       fullName = "BSD Protection License";
     };
 
+    bsdSourceCode = {
+      spdxId = "BSD-Source-Code";
+      fullName = "BSD Source Code Attribution";
+    };
+
     bsl11 = {
       spdxId = "BUSL-1.1";
       fullName = "Business Source License 1.1";
@@ -942,6 +947,11 @@ lib.mapAttrs mkLicense (
       fullName = "MIT No Attribution";
     };
 
+    mitOpenGroup = {
+      spdxId = "MIT-open-group";
+      fullName = "MIT Open Group variant";
+    };
+
     mpl10 = {
       spdxId = "MPL-1.0";
       fullName = "Mozilla Public License 1.0";
@@ -1324,6 +1334,11 @@ lib.mapAttrs mkLicense (
     unicode-dfs-2016 = {
       spdxId = "Unicode-DFS-2016";
       fullName = "Unicode License Agreement - Data Files and Software (2016)";
+    };
+
+    unicodeTOU = {
+      spdxId = "Unicode-TOU";
+      fullName = "Unicode Terms of Use";
     };
 
     unlicense = {
