@@ -6,18 +6,7 @@
 }:
 
 let
-  src = lib.fileset.toSource {
-    root = ./local;
-    fileset = lib.fileset.unions [
-      ./local/app
-      ./local/CHANGELOG.md
-      ./local/local.cabal
-    ];
-  };
-  # This prevents the source from depending on the formatting of the ./local/generated.nix file
-  localRaw = haskell.lib.compose.overrideSrc {
-    inherit src;
-  } (haskellPackages.callPackage ./local/generated.nix { });
+  localRaw = haskellPackages.callPackage ./generated.nix { };
 in
 lib.recurseIntoAttrs rec {
 
@@ -28,7 +17,6 @@ lib.recurseIntoAttrs rec {
 
   localFromCabalSdist = haskellPackages.buildFromCabalSdist localRaw;
 
-  # NOTE: ./local refers to the "./." path in `./local/generated.nix`.
   # This test makes sure that localHasNoDirectReference can actually fail if
   # it doesn't do anything. If this test fails, either the test setup was broken,
   # or Haskell packaging has changed the way `src` is treated in such a way that
@@ -39,7 +27,7 @@ lib.recurseIntoAttrs rec {
         drvPath = builtins.unsafeDiscardOutputDependency localRaw.drvPath;
       }
       ''
-        grep ${src} $drvPath >/dev/null
+        grep ${localRaw.src} $drvPath >/dev/null
         touch $out
       '';
 
@@ -49,7 +37,7 @@ lib.recurseIntoAttrs rec {
         drvPath = builtins.unsafeDiscardOutputDependency localFromCabalSdist.drvPath;
       }
       ''
-        grep -v ${src} $drvPath >/dev/null
+        grep -v ${localRaw.src} $drvPath >/dev/null
         touch $out
       '';
 }
