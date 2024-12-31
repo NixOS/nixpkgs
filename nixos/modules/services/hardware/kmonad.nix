@@ -56,7 +56,7 @@ let
             };
 
             delay = lib.mkOption {
-              type = lib.types.int;
+              type = lib.types.ints.unsigned;
               default = 5;
               description = "The delay (in milliseconds) between compose key sequences.";
             };
