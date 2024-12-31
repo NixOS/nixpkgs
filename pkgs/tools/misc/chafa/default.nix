@@ -30,6 +30,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-9RkN0yZnHf5cx6tsp3P6jsi0/xtplWxMm3hYCPjWj0M=";
   };
 
+  outputs = [
+    "bin"
+    "dev"
+    "man"
+    "out"
+  ];
+
   nativeBuildInputs = [
     autoconf
     automake
