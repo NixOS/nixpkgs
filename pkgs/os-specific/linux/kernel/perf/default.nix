@@ -39,6 +39,8 @@
   zstd,
   withLibcap ? true,
   libcap,
+  buildPackages,
+  writeShellScript,
 }:
 let
   d3-flame-graph-templates = stdenv.mkDerivation rec {
@@ -54,6 +56,15 @@ let
       install -D -m 0755 -t $out/share/d3-flame-graph/ ./dist/templates/*
     '';
   };
+  # The cc-wrapper adds `-fzero-call-used-regs` as part of the default
+  # hardening to the compiler command line, but clang aborts with an error when
+  # that is used together with a target arch that is not x86 or x86_64.
+  # This wrapper works around that issue by instructing the machinery to not
+  # add that flag for those particular invocations.
+  clang-bpf = writeShellScript "clang-bpf" ''
+    NIX_HARDENING_ENABLE=''${NIX_HARDENING_ENABLE/zerocallusedregs/}
+    exec ${lib.getExe buildPackages.clang} "$@"
+  '';
 in
 
 stdenv.mkDerivation {
@@ -78,6 +89,9 @@ stdenv.mkDerivation {
         url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=1d302f626c2a23e4fd05bb810eff300e8f2174fd";
         hash = "sha256-KhCmof8LkyTcBBpfMEtolL3m3kmC5rukKzQvufVKCdI=";
       })
+    ]
+    ++ lib.optionals (lib.versions.majorMinor kernel.version == "6.12") [
+      ./fix-augmented-raw-syscalls.bpf.diff # Loading this bpf object can fail with E2BIG in perf trace without the fix
     ];
 
   postPatch =
@@ -85,6 +99,9 @@ stdenv.mkDerivation {
       # Linux scripts
       patchShebangs scripts
       patchShebangs tools/perf/check-headers.sh
+
+      # Expose warnings and errors of feature detection
+      sed -i -e 's/2>\/dev\/null//g' tools/build/Makefile.feature
     ''
     + lib.optionalString (lib.versionAtLeast kernel.version "6.3") ''
       # perf-specific scripts
@@ -113,6 +130,7 @@ stdenv.mkDerivation {
       "prefix=$(out)"
       "WERROR=0"
       "ASCIIDOC8=1"
+      "CLANG=${clang-bpf}"
     ]
     ++ kernel.makeFlags
     ++ lib.optional (!withGtk) "NO_GTK2=1"
