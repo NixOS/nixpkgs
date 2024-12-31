@@ -1,0 +1,48 @@
+From 7f51ec77e1a35bbfb8ced3b7340818a72d859c0e Mon Sep 17 00:00:00 2001
+From: Jan Tojnar <jtojnar@gmail.com>
+Date: Mon, 14 Oct 2024 00:57:57 +0200
+Subject: [PATCH] build: Add missing gio-unix-2.0 dependency
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+On Nix, we try to isolate dependencies more than usual and have an alternative interpretation of pkg-config’s `Requires.private` field.
+In this environment, Entangle fails to build because it has implicit dependency on gio-unix:
+
+../src/frontend/entangle-camera-manager.c:28:10: fatal error: gio/gunixoutputstream.h: No such file or directory
+   28 | #include <gio/gunixoutputstream.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~
+
+Let’s add it explicitly.
+---
+ meson.build              | 1 +
+ src/frontend/meson.build | 1 +
+ 2 files changed, 2 insertions(+)
+
+diff --git a/meson.build b/meson.build
+index 1510962..90873ef 100644
+--- a/meson.build
++++ b/meson.build
+@@ -33,6 +33,7 @@ add_global_arguments('-DGLIB_VERSION_MAX_ALLOWED=GLIB_VERSION_2_38', language :
+ 
+ glib_dep = dependency('glib-2.0', version: glib_min_version)
+ gio_dep = dependency('gio-2.0', version: glib_min_version)
++gio_unix_dep = dependency('gio-unix-2.0', version: glib_min_version)
+ gthread_dep = dependency('gthread-2.0', version: glib_min_version)
+ gmodule_dep = dependency('gmodule-2.0', version: glib_min_version)
+ gdk_pixbuf_dep = dependency('gdk-pixbuf-2.0', version: gdk_pixbuf_min_version)
+diff --git a/src/frontend/meson.build b/src/frontend/meson.build
+index 1ed9d75..81310c8 100644
+--- a/src/frontend/meson.build
++++ b/src/frontend/meson.build
+@@ -90,6 +90,7 @@ entangle_frontend_sources += entangle_frontend_enum_sources
+ entangle_frontend_deps = [
+   gthread_dep,
+   gmodule_dep,
++  gio_unix_dep,
+   gtk_dep,
+   gst_dep,
+   pango_dep,
+-- 
+2.46.0
+

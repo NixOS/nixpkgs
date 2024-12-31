@@ -1,0 +1,42 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: rewine <luhongxu@deepin.org>
+Date: Wed, 29 Mar 2023 11:51:33 +0800
+Subject: [PATCH] qtbase: find tools in PATH
+
+1. find qt's tools in `QTTOOLSPATH` env
+   qt assumes that all components use the same install prefix
+   we can't get the real prefix for qttools when build qtbase
+   we will add /libexec to `QTTOOLSPATH` in qtToolsHook
+   find_path will also search in 'PATH' by default
+   see `CMAKE_FIND_USE_SYSTEM_ENVIRONMENT_PATH`
+
+2. disable tool_dependencies_enabled
+   We can guarantee the build order of qt components in nixpkgs
+   tools in qttools always build before qtdoc
+   qdoc_bin is not a build target now, since we find it in `QTTOOLSPATH`
+---
+ cmake/QtDocsHelpers.cmake | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
+
+diff --git a/cmake/QtDocsHelpers.cmake b/cmake/QtDocsHelpers.cmake
+index 8b631e88ca5..922639a9985 100644
+--- a/cmake/QtDocsHelpers.cmake
++++ b/cmake/QtDocsHelpers.cmake
+@@ -72,9 +72,14 @@ function(qt_internal_add_docs)
+         set(doc_tools_libexec "${QT_BUILD_INTERNALS_RELOCATABLE_INSTALL_PREFIX}/${INSTALL_LIBEXECDIR}")
+     endif()
+ 
+-    set(qdoc_bin "${doc_tools_bin}/qdoc${CMAKE_EXECUTABLE_SUFFIX}")
+-    set(qtattributionsscanner_bin "${doc_tools_libexec}/qtattributionsscanner${CMAKE_EXECUTABLE_SUFFIX}")
+-    set(qhelpgenerator_bin "${doc_tools_libexec}/qhelpgenerator${CMAKE_EXECUTABLE_SUFFIX}")
++    set(tool_dependencies_enabled FALSE)
++
++    find_path(qdoc_path name qdoc PATHS ENV QTTOOLSPATH)
++    find_path(qtattributionsscanner_path name qtattributionsscanner PATHS ENV QTTOOLSPATH)
++    find_path(qhelpgenerator_path name qhelpgenerator PATHS ENV QTTOOLSPATH)
++    set(qdoc_bin "${qdoc_path}/qdoc${CMAKE_EXECUTABLE_SUFFIX}")
++    set(qtattributionsscanner_bin "${qtattributionsscanner_path}/qtattributionsscanner${CMAKE_EXECUTABLE_SUFFIX}")
++    set(qhelpgenerator_bin "${qhelpgenerator_path}/qhelpgenerator${CMAKE_EXECUTABLE_SUFFIX}")
+ 
+     get_target_property(target_type ${target} TYPE)
+     if (NOT target_type STREQUAL "INTERFACE_LIBRARY")
