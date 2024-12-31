@@ -7,19 +7,19 @@
   vimUtils,
 }:
 let
-  version = "0-unstable-2024-12-17";
+  version = "2.3.2-unstable-2024-12-22";
   src = fetchFromGitHub {
     owner = "vyfor";
     repo = "cord.nvim";
-    rev = "c82ab475e7bb198d6fac20833a3468de1a1d14d0";
-    hash = "sha256-GVy8q9Fxb3mzx6mUQyIMumjnwZ7W08dPz1O3ckzVvdE=";
+    rev = "8ead1d237ddfc157b593262f29804b169fdf238c";
+    hash = "sha256-zdRNFT2fqEHYiARR0qX8F6P5kTuiz5GOGDsLH/yVrlo=";
   };
   extension = if stdenv.hostPlatform.isDarwin then "dylib" else "so";
   cord-nvim-rust = rustPlatform.buildRustPackage {
     pname = "cord.nvim-rust";
     inherit version src;
 
-    cargoHash = "sha256-unE600Uo8fXaFV0UWRhBenhQaXftDH7K+HyQ/9xo7JY=";
+    cargoHash = "sha256-Gky5vmdxMCcOy6ER86rU+66gf9DsWuZixHs0lKxD3XQ=";
 
     installPhase =
       let
