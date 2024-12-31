@@ -8,14 +8,14 @@
 }:
 python3.pkgs.buildPythonApplication rec {
   pname = "seahub";
-  version = "11.0.12";
+  version = "12.0.11";
   pyproject = false;
 
   src = fetchFromGitHub {
     owner = "haiwen";
     repo = "seahub";
-    rev = "d998361dd890cac3f6d6ebec3af47a589e0332bc"; # using a fixed revision because upstream may re-tag releases :/
-    hash = "sha256-n56sRZ9TVb37JA0+12ZoF2Mt7dADjaYk7V0PmdBY0EU=";
+    rev = "cd9cedbeb337a7503098bf627214e88a84d0c63e"; # using a fixed revision because upstream may re-tag releases :/
+    hash = "sha256-mXaehtgj9vwTjvR3zUR0ButCtFuZAojXYRq9HEJIMfo=";
   };
 
   dontBuild = true;
@@ -44,7 +44,7 @@ python3.pkgs.buildPythonApplication rec {
     chardet
     pyjwt
     pycryptodome
-    pyopenssl
+    # The correct version of pyopenssl is transitively provided by djangosaml2 -> pysaml2 -> pyopenssl
     python-ldap
     qrcode
     pysearpc
