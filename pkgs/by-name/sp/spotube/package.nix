@@ -22,7 +22,7 @@
 
 let
   pname = "spotube";
-  version = "3.8.3";
+  version = "3.9.0";
 
   meta = {
     description = "Open source, cross-platform Spotify client compatible across multiple platforms";
@@ -40,24 +40,50 @@ let
       "x86_64-linux"
       "x86_64-darwin"
       "aarch64-darwin"
+      "aarch64-linux"
     ];
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
   };
 
-  fetchArtifact =
-    { filename, hash }:
-    fetchurl {
-      url = "https://github.com/KRTirtho/spotube/releases/download/v${version}/${filename}";
-      inherit hash;
+  sources =
+    let
+      fetchArtifact =
+        { filename, hash }:
+        fetchurl {
+          url = "https://github.com/KRTirtho/spotube/releases/download/v${version}/${filename}";
+          inherit hash;
+        };
+    in
+    {
+      "aarch64-linux" = fetchArtifact {
+        filename = "Spotube-linux-aarch64.deb";
+        hash = "sha256-KBuUAgUU6c/rBkkbpYjSarzckIoi+gRtCkumvtaoras=";
+      };
+      "x86_64-linux" = fetchArtifact {
+        filename = "Spotube-linux-x86_64.deb";
+        hash = "sha256-vzzK3csyKYP6fKKIoysziBsc2tqrg5LXS/6KoXBtNVI=";
+      };
+      "x86_64-darwin" = fetchArtifact {
+        filename = "Spotube-macos-universal.dmg";
+        hash = "sha256-wwIIKY+bmMJZigc2AK/QMg142uvZ+D6LOddzedJM5f8=";
+      };
+      "aarch64-darwin" = fetchArtifact {
+        filename = "Spotube-macos-universal.dmg";
+        hash = "sha256-wwIIKY+bmMJZigc2AK/QMg142uvZ+D6LOddzedJM5f8=";
+      };
     };
+
+  src = sources.${stdenv.hostPlatform.system};
 
   darwin = stdenv.mkDerivation {
-    inherit pname version meta;
+    inherit
+      pname
+      version
+      meta
+      src
+      ;
 
-    src = fetchArtifact {
-      filename = "Spotube-macos-universal.dmg";
-      hash = "sha256-N1H/Vy5QQi8zAqiqAi5aTnUQcKC/EgL3GUhEfnCkaAQ=";
-    };
+    passthru = { inherit sources; };
 
     sourceRoot = ".";
 
@@ -76,12 +102,14 @@ let
   };
 
   linux = stdenv.mkDerivation {
-    inherit pname version meta;
+    inherit
+      pname
+      version
+      meta
+      src
+      ;
 
-    src = fetchArtifact {
-      filename = "Spotube-linux-x86_64.deb";
-      hash = "sha256-x75ie9FXunClMT+YZVFlvl2VSDl933QYMRpEYjJ8YhY=";
-    };
+    passthru = { inherit sources; };
 
     nativeBuildInputs = [
       autoPatchelfHook

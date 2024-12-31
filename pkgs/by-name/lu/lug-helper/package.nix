@@ -7,6 +7,9 @@
   coreutils,
   findutils,
   zenity,
+  unzip,
+  cabextract,
+  libnotify,
   fetchFromGitHub,
   nix-update-script,
 }:
@@ -55,6 +58,9 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           coreutils
           findutils
           zenity
+          cabextract
+          unzip
+          libnotify
         ]
       }
 

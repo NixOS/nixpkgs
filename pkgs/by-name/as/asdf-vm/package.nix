@@ -48,13 +48,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "asdf-vm";
-  version = "0.14.1";
+  version = "0.15.0";
 
   src = fetchFromGitHub {
     owner = "asdf-vm";
     repo = "asdf";
     rev = "v${version}";
-    sha256 = "sha256-1dacsAoZVwoQv8+V4FrjRLa7awLIZchlhkuET0wTO7w=";
+    sha256 = "sha256-quDgoYi+3hZUEAzXWTHuL5UK1T+4o7+G67w0UzZOjJA=";
   };
 
   nativeBuildInputs = [
