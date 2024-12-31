@@ -65,6 +65,23 @@ rec {
       };
     in valueType;
 
+    /**
+      Writes a JSON file from a nix value.
+
+      # Inputs
+
+      `name` (string)
+      : The name of the file to write.
+
+      `value` (any)
+      : The value to write to the file. Must be JSON-serializable.
+
+      # Example
+
+      ```nix
+      writeJSON "data.json" { hello = "world"; }
+      ```
+    */
     generate = name: value: pkgs.callPackage ({ runCommand, jq }: runCommand name {
       nativeBuildInputs = [ jq ];
       value = builtins.toJSON value;
