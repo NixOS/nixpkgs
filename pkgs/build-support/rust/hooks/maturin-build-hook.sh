@@ -20,7 +20,7 @@ maturinBuildHook() {
     local flagsArray=(
         "--jobs=$NIX_BUILD_CORES"
         "--offline"
-        "--target" "@rustTargetPlatformSpec@"
+        "--target" "@rustcTarget@"
         "--manylinux" "off"
         "--strip"
         "--release"
@@ -31,7 +31,7 @@ maturinBuildHook() {
     concatTo flagsArray maturinBuildFlags
 
     echoCmd 'maturinBuildHook flags' "${flagsArray[@]}"
-    @setEnv@ maturin build "${flagsArray[@]}"
+    maturin build "${flagsArray[@]}"
 
     if [ -n "${buildAndTestSubdir-}" ]; then
         popd
