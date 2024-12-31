@@ -4,22 +4,22 @@
   fetchFromGitHub,
   pkg-config,
   openssl,
-  stdenv,
-  darwin,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "rwalk";
-  version = "0.8.7";
+  version = "0.9.0";
 
   src = fetchFromGitHub {
     owner = "cestef";
     repo = "rwalk";
     tag = "v${version}";
-    hash = "sha256-rEecl8KdPqPreCRq8CZCBfpedInYD7+gfCwCst+VS90=";
+    hash = "sha256-W42b3fUezMpOPaNmTogUbgn67nCiKteCkkYUAux9Ng4=";
   };
 
-  cargoHash = "...";
+  cargoHash = "sha256-R5L19GMOjbXMVfjCuergxVZvAHCTLVkf3rmdvYJCMLU=";
 
   nativeBuildInputs = [
     pkg-config
@@ -36,8 +36,13 @@ rustPlatform.buildRustPackage rec {
   nativeInstallCheckInputs = [
     versionCheckHook
   ];
+
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Blazingly fast web directory scanner written in Rust";
