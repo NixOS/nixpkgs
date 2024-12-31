@@ -8,11 +8,11 @@
 
 stdenv.mkDerivation rec {
   pname = "epubcheck";
-  version = "5.1.0";
+  version = "5.2.0";
 
   src = fetchzip {
     url = "https://github.com/w3c/epubcheck/releases/download/v${version}/epubcheck-${version}.zip";
-    sha256 = "sha256-gskQ02lGka3nBHSDXO3TpKSQzaoaJUQY9AvWG7L+1YM=";
+    sha256 = "sha256-7Vfbs0lqrm/YDSfvMxaQu9IsYx1PugpbsDYLU2fIC6U=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
