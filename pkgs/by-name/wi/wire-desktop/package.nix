@@ -71,8 +71,21 @@ let
     hydraPlatforms = [ ];
   };
 
+  passthru.updateScript = {
+    command = [
+      ./update.sh
+      ./.
+    ];
+    supportedFeatures = [ "commit" ];
+  };
+
   linux = stdenv.mkDerivation rec {
-    inherit pname version meta;
+    inherit
+      pname
+      version
+      meta
+      passthru
+      ;
 
     src = fetchurl {
       url = "https://wire-app.wire.com/linux/debian/pool/main/Wire-${version}_amd64.deb";
@@ -147,7 +160,12 @@ let
   };
 
   darwin = stdenv.mkDerivation {
-    inherit pname version meta;
+    inherit
+      pname
+      version
+      meta
+      passthru
+      ;
 
     src = fetchurl {
       url = "https://github.com/wireapp/wire-desktop/releases/download/macos%2F${version}/Wire.pkg";
