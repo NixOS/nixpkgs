@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "${lib.optionalString withNgshared "lib"}ngspice";
-  version = "43";
+  version = "44";
 
   src = fetchurl {
     url = "mirror://sourceforge/ngspice/ngspice-${version}.tar.gz";
-    hash = "sha256-FN1qbwhTHyBRwTrmN5CkVwi9Q/PneIamqEiYwpexNpk=";
+    hash = "sha256-OGXROrRPHwH2jHrA4HFphORdzlqG0SZgPCbY3zAWHps=";
   };
 
   nativeBuildInputs = [
