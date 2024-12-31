@@ -2510,6 +2510,12 @@
     githubId = 66330398;
     name = "Victor Hang";
   };
+  baongoc124 = {
+    email = "baongoc124@gmail.com";
+    github = "baongoc124";
+    githubId = 766221;
+    name = "Ngoc Nguyen";
+  };
   barab-i = {
     email = "barab_i@outlook.com";
     github = "barab-i";
