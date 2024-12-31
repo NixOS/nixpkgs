@@ -6,8 +6,6 @@
   rustup,
   openssl,
   stdenv,
-  libiconv,
-  Security,
   makeWrapper,
   gitUpdater,
 }:
@@ -35,14 +33,7 @@ rustPlatform.buildRustPackage rec {
   # Integration tests fail
   doCheck = false;
 
-  buildInputs =
-    if stdenv.hostPlatform.isDarwin then
-      [
-        libiconv
-        Security
-      ]
-    else
-      [ openssl ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   nativeBuildInputs = [
     pkg-config
