@@ -118,7 +118,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.mit;
     maintainers = with maintainers; [ raskin teto ];
     mainProgram = "luarocks";
-    platforms = platforms.linux ++ platforms.darwin;
+    platforms = platforms.unix;
     downloadPage = "http://luarocks.org/releases/";
   };
 })
