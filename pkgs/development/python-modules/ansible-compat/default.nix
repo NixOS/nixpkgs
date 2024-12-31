@@ -15,7 +15,6 @@
   coreutils,
   ansible-core,
   flaky,
-  git,
   pytest-mock,
   pytestCheckHook,
 }:
@@ -51,7 +50,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ansible-core
     flaky
-    git
     pytest-mock
     pytestCheckHook
   ];
