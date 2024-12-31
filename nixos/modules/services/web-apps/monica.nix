@@ -296,7 +296,7 @@ in {
       DB_USERNAME = db.user;
       MAIL_DRIVER = mail.driver;
       MAIL_FROM_NAME = mail.fromName;
-      MAIL_FROM = mail.from;
+      MAIL_FROM_ADDRESS = mail.from;
       MAIL_HOST = mail.host;
       MAIL_PORT = mail.port;
       MAIL_USERNAME = mail.user;

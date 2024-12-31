@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.uptimed;
   stateDir = "/var/lib/uptimed";
@@ -14,8 +11,8 @@ in
 {
   options = {
     services.uptimed = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable `uptimed`, allowing you to track
@@ -25,7 +22,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.uptimed ];
 
