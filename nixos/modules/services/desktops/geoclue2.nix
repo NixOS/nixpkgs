@@ -8,11 +8,6 @@
 let
   cfg = config.services.geoclue2;
 
-  defaultWhitelist = [
-    "gnome-shell"
-    "io.elementary.desktop.agent-geoclue2"
-  ];
-
   appConfigModule = lib.types.submodule (
     { name, ... }:
     {
@@ -198,6 +193,18 @@ in
         '';
       };
 
+      agentWhitelist = lib.mkOption {
+        type = lib.types.listOf lib.types.str;
+        default = [
+          "geoclue-demo-agent"
+          "gnome-shell"
+          "io.elementary.desktop.agent-geoclue2"
+        ];
+        description = ''
+          Whitelist of desktop IDs (without .desktop part) of all agents geoclue will recognise
+        '';
+      };
+
     };
 
   };
@@ -269,7 +276,7 @@ in
       {
         agent = {
           whitelist = lib.concatStringsSep ";" (
-            lib.optional cfg.enableDemoAgent "geoclue-demo-agent" ++ defaultWhitelist
+            cfg.agentWhitelist
           );
         };
         network-nmea = {
