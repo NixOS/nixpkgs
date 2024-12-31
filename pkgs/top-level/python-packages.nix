@@ -2922,8 +2922,6 @@ self: super: with self; {
 
   dash-html-components = callPackage ../development/python-modules/dash-html-components { };
 
-  dash-renderer = callPackage ../development/python-modules/dash-renderer { };
-
   dash-table = callPackage ../development/python-modules/dash-table { };
 
   dashing = callPackage ../development/python-modules/dashing { };
