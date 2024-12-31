@@ -894,11 +894,9 @@ rec {
 
   # TODO: move docs to Nixpkgs manual
   /* An immutable empty directory in the store. */
-  emptyDirectory = runCommand "empty-directory"
-    {
-      outputHashAlgo = "sha256";
-      outputHashMode = "recursive";
-      outputHash = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
-      preferLocalBuild = true;
-    } "mkdir $out";
+  emptyDirectory = builtins.path {
+    name = "empty-directory";
+    path = /var/empty;
+    sha256 = "0sjjj9z1dhilhpc8pq4154czrb79z9cm044jvn75kxcjv6v5l2m5";
+  };
 }
