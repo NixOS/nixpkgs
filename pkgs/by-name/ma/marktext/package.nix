@@ -23,13 +23,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "marktext";
-  version = "0.17.1-unstable-2024-06-10";
+  version = "0.17.0-unstable-2024-06-10";
 
   src = fetchFromGitHub {
     owner = "marktext";
     repo = "marktext";
-    rev = "cd8452979bf2441f8064968ab1f9ae28302c9d75";
-    hash = "sha256-6oD9Bp0XonhNHWA8JajyWdNkAXpX4GoKPpdLzpvr+jM=";
+    rev = "11c8cc1e1929a7975df39fa5f4503130fef53547";
+    hash = "sha256-5PIOTg4/RBave/b3CArQSLvmA64ME9++3O1JT4lgKm0=";
     postFetch = ''
       cd $out
       patch -p1 < ${./0001-update-electron.patch}
