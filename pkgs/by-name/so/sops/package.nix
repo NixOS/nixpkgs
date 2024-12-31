@@ -8,16 +8,16 @@
 
 buildGo122Module rec {
   pname = "sops";
-  version = "3.9.2";
+  version = "3.9.3";
 
   src = fetchFromGitHub {
     owner = "getsops";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-v35LRFYdnWigWYlDhrOgSOcCI7SUqJbJHaZvlQ6PC4I=";
+    hash = "sha256-U8ZJktOSj0JJ70CbXDS3FpNmk07cKnco5w2rt4BnQBU=";
   };
 
-  vendorHash = "sha256-dnhrZPXZWeU98+dEaFLIdtcLWgIrh47l+WAxe+F+0/I=";
+  vendorHash = "sha256-+UxngJgKG+gAjnXXEcdXPXQqRcMfRDn4wPeR1IhltC0=";
 
   postPatch = ''
     substituteInPlace go.mod \
