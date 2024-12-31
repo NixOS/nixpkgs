@@ -9,6 +9,7 @@
 # See https://github.com/NixOS/nixpkgs/pull/324022. This may change later.
 , vtk_9
 , autoPatchelfHook
+, versionCheckHook
 , Cocoa
 , OpenGL
 , python3Packages
@@ -19,7 +20,7 @@
 , withPythonBinding ? false
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "f3d";
   version = "2.5.1";
 
@@ -28,7 +29,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "f3d-app";
     repo = "f3d";
-    rev = "refs/tags/v${version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-S3eigdW6rkDRSm4uCCTFHx5fhJGNVWpAAAKboougr08=";
   };
 
@@ -72,16 +73,22 @@ stdenv.mkDerivation rec {
     "-DF3D_BINDINGS_PYTHON=ON"
   ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
+  meta = {
     description = "Fast and minimalist 3D viewer using VTK";
     homepage = "https://f3d-app.github.io/f3d";
-    changelog = "https://github.com/f3d-app/f3d/releases/tag/v${version}";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ bcdarwin pbsds ];
-    platforms = with platforms; unix;
+    changelog = "https://github.com/f3d-app/f3d/releases/tag/v${finalAttrs.version}";
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ bcdarwin pbsds ];
+    platforms = with lib.platforms; unix;
     mainProgram = "f3d";
     # error: use of undeclared identifier 'NSMenuItem'
     # adding AppKit does not solve it
     broken = with stdenv.hostPlatform; isDarwin && isx86_64;
   };
-}
+})
