@@ -14,6 +14,7 @@
   cryptominisat,
   zlib,
   pkg-config,
+  cmake,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -34,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
     git
     ninja
+    cmake
   ];
   buildInputs = [
     cadical
@@ -48,6 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
     # note: the default value for default_library fails to link dynamic dependencies
     # but setting it to shared works even in pkgsStatic
     "-Ddefault_library=shared"
+    "-Dcryptominisat=true"
 
     (lib.strings.mesonEnable "testing" finalAttrs.finalPackage.doCheck)
   ];
