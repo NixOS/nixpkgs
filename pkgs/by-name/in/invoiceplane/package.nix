@@ -17,16 +17,16 @@
 
 php.buildComposerProject (finalAttrs: {
   pname = "invoiceplane";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = "InvoicePlane";
     repo = "InvoicePlane";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-rVt3HkAh3zBVwt1a4ZGiuC/Khvb3Ugk42hT5mul4qRA=";
+    hash = "sha256-E2TZ/FhlVKZpGuczXb/QLn27gGiO7YYlAkPSolTEoeQ=";
   };
 
-  vendorHash = "sha256-qYjNn7VQGkUfJ74coUpUOfAOkgi3eLoo/ITpcOcTenk=";
+  vendorHash = "sha256-k7YBs6x/ABNTHPx9/EZXa4W9kcLQqpruV7YFGAADZq0=";
 
   buildInputs = [ libsass ];
 
@@ -42,15 +42,9 @@ php.buildComposerProject (finalAttrs: {
   ];
 
   offlineCache = fetchYarnDeps {
-    yarnLock = ./yarn.lock;
-    hash = "sha256-t9GYFqKY3YZ/l5LZXIHIgehgvxIbMMuYLwXvvdQaryM=";
+    yarnLock = "${finalAttrs.src}/yarn.lock";
+    hash = "sha256-KVlqC9zSijPP4/ifLBHD04fm6IQJpil0Gy9M3FNvUUw=";
   };
-
-  # Upstream yarn.lock and package.json out of sync
-  # https://github.com/InvoicePlane/InvoicePlane/issues/1109
-  preConfigure = ''
-    cp ${./yarn.lock} ./yarn.lock
-  '';
 
   # Upstream composer.json file is missing the name, description and license fields
   composerStrictValidation = false;
