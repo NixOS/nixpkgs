@@ -120,12 +120,12 @@ in
 
 stdenv.mkDerivation rec {
   pname = "mplayer";
-  version = "1.5-unstable-2024-07-03";
+  version = "1.5-unstable-2024-12-21";
 
   src = fetchsvn {
     url = "svn://svn.mplayerhq.hu/mplayer/trunk";
-    rev = "38637";
-    hash = "sha256-9KQOB6QIs1VZhazJqW8dY4ASiMgoxV6davfpKgLPbmE=";
+    rev = "38668";
+    hash = "sha256-ezWYBkhiSBgf/SeTrO6sKGbL/IrX+82KXCIlqYMEtgY=";
   };
 
   prePatch = ''
@@ -276,7 +276,8 @@ stdenv.mkDerivation rec {
     description = "Movie player that supports many video formats";
     homepage = "http://mplayerhq.hu";
     license = licenses.gpl2Only;
-    maintainers = [ ];
+    # Picking it up: no idea about the origin of some choices (but seems fine)
+    maintainers = [ maintainers.raskin ];
     platforms = [
       "i686-linux"
       "x86_64-linux"
