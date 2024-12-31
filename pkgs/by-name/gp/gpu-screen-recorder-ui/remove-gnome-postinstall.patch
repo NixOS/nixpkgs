@@ -1,0 +1,14 @@
+diff --git a/meson.build b/meson.build
+index cf16e81..7c3629d 100644
+--- a/meson.build
++++ b/meson.build
+@@ -147,9 +147,6 @@ install_subdir('translations', install_dir : gsr_ui_resources_path)
+ if get_option('desktop-files') == true
+     install_data(files('gpu-screen-recorder.desktop'), install_dir : join_paths(prefix, datadir, 'applications'))
+     install_subdir('icons/hicolor', install_dir : icons_path)
+-
+-    gnome = import('gnome')
+-    gnome.post_install(update_desktop_database : true)
+ endif
+ 
+ if get_option('systemd') == true
