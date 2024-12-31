@@ -1,20 +1,15 @@
-{ lib
-, stdenv
-, fetchurl
-, cmake
-, qttools
-, qtbase
-, qtdeclarative
-, qtsvg
-, qtwayland
-, qtwebsockets
-, makeWrapper
-, wrapQtAppsHook
-, botan2
-, pkg-config
-, nixosTests
-, installShellFiles
-, xvfb-run
+{
+  lib,
+  stdenv,
+  fetchurl,
+  qt6Packages,
+  cmake,
+  makeWrapper,
+  botan2,
+  pkg-config,
+  nixosTests,
+  installShellFiles,
+  xvfb-run,
 }:
 
 let
@@ -22,7 +17,7 @@ let
   appname = "QOwnNotes";
   version = "24.12.7";
 in
-stdenv.mkDerivation {
+qt6Packages.stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
@@ -30,21 +25,24 @@ stdenv.mkDerivation {
     hash = "sha256-48puEyScG6EIrsXZpFc62dl4a23p+TO2buzuwq9m3Sw=";
   };
 
-  nativeBuildInputs = [
-    cmake
-    qttools
-    wrapQtAppsHook
-    pkg-config
-    installShellFiles
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ xvfb-run ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
+  nativeBuildInputs =
+    [
+      cmake
+      qt6Packages.qttools
+      qt6Packages.wrapQtAppsHook
+      pkg-config
+      installShellFiles
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ xvfb-run ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeWrapper ];
 
   buildInputs = [
-    qtbase
-    qtdeclarative
-    qtsvg
-    qtwebsockets
+    qt6Packages.qtbase
+    qt6Packages.qtdeclarative
+    qt6Packages.qtsvg
+    qt6Packages.qtwebsockets
     botan2
-  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ qtwayland ];
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ qt6Packages.qtwayland ];
 
   cmakeFlags = [
     "-DQON_QT6_BUILD=ON"
@@ -52,30 +50,31 @@ stdenv.mkDerivation {
   ];
 
   # Install shell completion on Linux (with xvfb-run)
-  postInstall = lib.optionalString stdenv.hostPlatform.isLinux ''
+  postInstall =
+    lib.optionalString stdenv.hostPlatform.isLinux ''
       installShellCompletion --cmd ${appname} \
         --bash <(xvfb-run $out/bin/${appname} --completion bash) \
         --fish <(xvfb-run $out/bin/${appname} --completion fish)
       installShellCompletion --cmd ${pname} \
         --bash <(xvfb-run $out/bin/${appname} --completion bash) \
         --fish <(xvfb-run $out/bin/${appname} --completion fish)
-  ''
-  # Install shell completion on macOS
-  + lib.optionalString stdenv.isDarwin ''
+    ''
+    # Install shell completion on macOS
+    + lib.optionalString stdenv.isDarwin ''
       installShellCompletion --cmd ${pname} \
         --bash <($out/bin/${appname} --completion bash) \
         --fish <($out/bin/${appname} --completion fish)
-  ''
-  # Create a lowercase symlink for Linux
-  + lib.optionalString stdenv.hostPlatform.isLinux ''
-    ln -s $out/bin/${appname} $out/bin/${pname}
-  ''
-  # Rename application for macOS as lowercase binary
-  + lib.optionalString stdenv.hostPlatform.isDarwin ''
-    # Prevent "same file" error
-    mv $out/bin/${appname} $out/bin/${pname}.bin
-    mv $out/bin/${pname}.bin $out/bin/${pname}
-  '';
+    ''
+    # Create a lowercase symlink for Linux
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      ln -s $out/bin/${appname} $out/bin/${pname}
+    ''
+    # Rename application for macOS as lowercase binary
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # Prevent "same file" error
+      mv $out/bin/${appname} $out/bin/${pname}.bin
+      mv $out/bin/${pname}.bin $out/bin/${pname}
+    '';
 
   # Tests QOwnNotes using the NixOS module by launching xterm:
   passthru.tests.basic-nixos-module-functionality = nixosTests.qownnotes;
@@ -86,7 +85,10 @@ stdenv.mkDerivation {
     changelog = "https://www.qownnotes.org/changelog.html";
     downloadPage = "https://github.com/pbek/QOwnNotes/releases/tag/v${version}";
     license = licenses.gpl2Only;
-    maintainers = with maintainers; [ pbek totoroot ];
+    maintainers = with maintainers; [
+      pbek
+      totoroot
+    ];
     platforms = platforms.unix;
   };
 }
