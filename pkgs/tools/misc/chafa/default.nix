@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  installShellFiles,
   autoconf,
   automake,
   libtool,
@@ -42,6 +43,7 @@ stdenv.mkDerivation rec {
     libxml2
     docbook_xml_dtd_412
     docbook_xsl
+    installShellFiles
   ];
 
   buildInputs = [ glib ] ++ lib.optional stdenv.hostPlatform.isDarwin Foundation;
@@ -57,6 +59,10 @@ stdenv.mkDerivation rec {
     "--enable-man"
     "--with-xml-catalog=${docbook_xml_dtd_412}/xml/dtd/docbook/catalog.xml"
   ];
+
+  postInstall = ''
+    installShellCompletion --cmd chafa tools/completions/zsh-completion.zsh
+  '';
 
   meta = with lib; {
     description = "Terminal graphics for the 21st century";
