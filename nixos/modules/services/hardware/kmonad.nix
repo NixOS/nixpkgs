@@ -15,6 +15,7 @@ let
       options = {
         name = lib.mkOption {
           type = lib.types.str;
+          default = name;
           example = "laptop-internal";
           description = "Keyboard name.";
         };
@@ -70,10 +71,6 @@ let
           type = lib.types.lines;
           description = "Keyboard configuration.";
         };
-      };
-
-      config = {
-        name = lib.mkDefault name;
       };
     };
 
