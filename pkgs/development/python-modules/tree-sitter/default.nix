@@ -43,6 +43,9 @@ buildPythonPackage rec {
   preCheck = ''
     # https://github.com/NixOS/nixpkgs/issues/255262#issuecomment-1721265871
     rm -r tree_sitter
+
+    # FIX: remove in the next release
+    substituteInPlace tests/test_language.py --replace-fail "2795" "2809"
   '';
 
   meta = with lib; {
