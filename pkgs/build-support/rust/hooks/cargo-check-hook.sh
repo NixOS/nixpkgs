@@ -30,7 +30,7 @@ cargoCheckHook() {
     fi
 
     flagsArray+=(
-        "--target" "@rustHostPlatformSpec@"
+        "--target" "@rustcTarget@"
         "--offline"
     )
 
@@ -38,7 +38,7 @@ cargoCheckHook() {
     concatTo flagsArray cargoTestFlags checkFlags checkFlagsArray
 
     echoCmd 'cargoCheckHook flags' "${flagsArray[@]}"
-    @setEnv@ cargo test "${flagsArray[@]}"
+    cargo test "${flagsArray[@]}"
 
     if [[ -n "${buildAndTestSubdir-}" ]]; then
         popd
