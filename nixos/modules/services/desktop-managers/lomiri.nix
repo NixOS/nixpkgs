@@ -63,6 +63,7 @@ in
           with pkgs;
           [
             ayatana-indicator-datetime # Clock
+            ayatana-indicator-keyboard # Ability to change keyboard layout
             ayatana-indicator-session # Controls for shutting down etc
           ]
         );
