@@ -131,6 +131,7 @@ import ./make-test-python.nix (
       start_all()
 
       for n in network_nodes + network_switches:
+          n.systemctl("start systemd-networkd-wait-online.service")
           n.wait_for_unit("systemd-networkd-wait-online.service")
 
       node1.succeed("ping 10.0.0.2 -w 10 -c 1")
