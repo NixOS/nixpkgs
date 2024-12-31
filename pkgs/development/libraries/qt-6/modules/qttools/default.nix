@@ -21,7 +21,7 @@ qtModule {
     qtdeclarative
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ cups ];
   patches = [
-    ../patches/qttools-paths.patch
+    ./paths.patch
   ];
   env.NIX_CFLAGS_COMPILE = toString [
     "-DNIX_OUTPUT_OUT=\"${placeholder "out"}\""

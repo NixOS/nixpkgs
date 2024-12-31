@@ -27,13 +27,13 @@ let
   # 2) nix-build -A tree-sitter.updater.update-all-grammars
   # 3) Set GITHUB_TOKEN env variable to avoid api rate limit (Use a Personal Access Token from https://github.com/settings/tokens It does not need any permissions)
   # 4) run the ./result script that is output by that (it updates ./grammars)
-  version = "0.24.3";
-  hash = "sha256-2Pg4D1Pf1Ex6ykXouAJvD1NVfg5CH4rCQcSTAJmYwd4=";
+  version = "0.24.6";
+  hash = "sha256-L7F2/S22knqEdB2hxfqLe5Tcgk0WQqBdFQ7BvHFl4EI=";
 
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     inherit hash;
     fetchSubmodules = true;
   };
@@ -111,7 +111,7 @@ rustPlatform.buildRustPackage {
   pname = "tree-sitter";
   inherit src version;
 
-  cargoHash = "sha256-0ZoXf0eV3kmHaRoHcWrVEgoWnYNBsY9GiFfy84H+0mc=";
+  cargoHash = "sha256-mk3aw1aFu7N+b4AQL5kiaHuIAuJv24KonFeGKid427Q=";
 
   buildInputs =
     lib.optionals stdenv.hostPlatform.isDarwin [ Security CoreServices ];

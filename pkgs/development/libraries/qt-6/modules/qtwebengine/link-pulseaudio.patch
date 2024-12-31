@@ -1,5 +1,3 @@
-diff --git a/src/core/CMakeLists.txt b/src/core/CMakeLists.txt
-index de5222645..bddb2322a 100644
 --- a/src/core/CMakeLists.txt
 +++ b/src/core/CMakeLists.txt
 @@ -366,6 +366,7 @@ foreach(arch ${archs})

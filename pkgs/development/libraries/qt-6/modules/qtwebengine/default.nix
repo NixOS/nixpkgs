@@ -101,12 +101,12 @@ qtModule {
     # Don't assume /usr/share/X11, and also respect the XKB_CONFIG_ROOT
     # environment variable, since NixOS relies on it working.
     # See https://github.com/NixOS/nixpkgs/issues/226484 for more context.
-    ../patches/qtwebengine-xkb-includes.patch
+    ./xkb-includes.patch
 
-    ../patches/qtwebengine-link-pulseaudio.patch
+    ./link-pulseaudio.patch
 
     # Override locales install path so they go to QtWebEngine's $out
-    ../patches/qtwebengine-locales-path.patch
+    ./locales-path.patch
   ];
 
   postPatch = ''

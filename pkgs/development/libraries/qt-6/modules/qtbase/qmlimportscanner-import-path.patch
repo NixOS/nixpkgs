@@ -1,14 +1,3 @@
-From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
-From: Nick Cao <nickcao@nichi.co>
-Date: Tue, 10 Oct 2023 10:12:56 -0400
-Subject: [PATCH] qtbase: pass to qmlimportscanner the QML2_IMPORT_PATH
-
----
- src/tools/macdeployqt/shared/shared.cpp | 7 +++++++
- 1 file changed, 7 insertions(+)
-
-diff --git a/src/tools/macdeployqt/shared/shared.cpp b/src/tools/macdeployqt/shared/shared.cpp
-index b7ee93f6fc1..57b68627eba 100644
 --- a/src/tools/macdeployqt/shared/shared.cpp
 +++ b/src/tools/macdeployqt/shared/shared.cpp
 @@ -1300,6 +1300,13 @@ bool deployQmlImports(const QString &appBundlePath, DeploymentInfo deploymentInf

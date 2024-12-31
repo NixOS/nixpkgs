@@ -1,7 +1,6 @@
 {
   stdenv,
   lib,
-  fetchpatch2,
   fetchurl,
   gettext,
   meson,
@@ -38,7 +37,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "tinysparql";
-  version = "3.8.0";
+  version = "3.8.1";
 
   outputs = [
     "out"
@@ -50,7 +49,7 @@ stdenv.mkDerivation (finalAttrs: {
     url =
       with finalAttrs;
       "mirror://gnome/sources/tinysparql/${lib.versions.majorMinor version}/tinysparql-${version}.tar.xz";
-    hash = "sha256-wPzad1IPUxVIsjlRN9zRk+6c3l4iLTydJz8DDRdipQQ=";
+    hash = "sha256-U+BK3R7LTQjKoTF/R3/fDnFI6qxUYoMfI3SIAJL/spU=";
   };
 
   strictDeps = true;
@@ -123,14 +122,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (!stdenv.hostPlatform.isLinux) [
       "-Dsystemd_user_services=false"
     ];
-
-  patches = [
-    # https://gitlab.gnome.org/GNOME/tinysparql/-/merge_requests/730
-    (fetchpatch2 {
-      url = "https://gitlab.gnome.org/GNOME/tinysparql/commit/12ed969913cb579f638fa0aa0853aeb6c6c6f536.patch";
-      hash = "sha256-jyx9hdWUUxfCSTGn7lZL4RUiQAF4pkf4gfCP8g9Ep3U=";
-    })
-  ];
 
   doCheck = true;
 

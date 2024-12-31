@@ -2,7 +2,6 @@
   stdenv,
   lib,
   src,
-  patches ? [ ],
   version,
   bison,
   flex,
@@ -77,7 +76,6 @@
   libmysqlclient,
   postgresql,
   withGtk3 ? false,
-  dconf,
   gtk3,
   # options
   libGLSupported ? stdenv.hostPlatform.isLinux,
@@ -206,7 +204,37 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  inherit patches;
+  patches = [
+    # look for Qt plugins in directories on PATH
+    ./derive-plugin-load-path-from-PATH.patch
+
+    # allow translations to be found outside of install prefix, as is the case in our split builds
+    ./allow-translations-outside-prefix.patch
+
+    # always link to libraries by name in qmake-generated build scripts
+    ./qmake-always-use-libname.patch
+    # always explicitly list includedir in qmake-generated pkg-config files
+    ./qmake-fix-includedir.patch
+
+    # don't generate SBOM files by default, they don't work with our split installs anyway
+    ./no-sbom.patch
+
+    # use cmake from PATH in qt-cmake wrapper, to avoid qtbase runtime-depending on cmake
+    ./use-cmake-from-path.patch
+
+    # macdeployqt fixes
+    # get qmlimportscanner location from environment variable
+    ./find-qmlimportscanner.patch
+    # pass QML2_IMPORT_PATH from environment to qmlimportscanner
+    ./qmlimportscanner-import-path.patch
+    # don't pass qtbase's QML directory to qmlimportscanner if it's empty
+    ./skip-missing-qml-directory.patch
+
+    # Qt treats linker flags without known suffix as libraries since 6.7.2 (see qt/qtbase commit ea0f00d).
+    # Don't do this for absolute paths (like `/nix/store/…/QtMultimedia.framework/Versions/A/QtMultimedia`).
+    # Upcoming upstream fix: https://codereview.qt-project.org/c/qt/qtbase/+/613683.
+    ./dont-treat-abspaths-without-suffix-as-libraries.patch
+  ];
 
   postPatch = lib.optionalString stdenv.hostPlatform.isDarwin ''
     # TODO: Verify that this catches all the occurrences?
@@ -229,8 +257,8 @@ stdenv.mkDerivation rec {
       --replace-fail 'CONFIG += ' 'CONFIG += no_default_rpath '
   '';
 
-  fix_qt_builtin_paths = ../hooks/fix-qt-builtin-paths.sh;
-  fix_qt_module_paths = ../hooks/fix-qt-module-paths.sh;
+  fix_qt_builtin_paths = ../../hooks/fix-qt-builtin-paths.sh;
+  fix_qt_module_paths = ../../hooks/fix-qt-module-paths.sh;
   preHook = ''
     . "$fix_qt_builtin_paths"
     . "$fix_qt_module_paths"
@@ -288,7 +316,7 @@ stdenv.mkDerivation rec {
 
   dontWrapQtApps = true;
 
-  setupHook = ../hooks/qtbase-setup-hook.sh;
+  setupHook = ../../hooks/qtbase-setup-hook.sh;
 
   meta = with lib; {
     homepage = "https://www.qt.io/";
