@@ -1,11 +1,14 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.services.earlyoom;
 
   inherit (lib)
-    concatStringsSep
-    escapeShellArg
     literalExpression
     mkDefault
     mkEnableOption
@@ -15,7 +18,8 @@ let
     mkRemovedOptionModule
     optionalString
     optionals
-    types;
+    types
+    ;
 in
 {
   meta = {
@@ -132,8 +136,11 @@ in
 
     extraArgs = mkOption {
       type = types.listOf types.str;
-      default = [];
-      example = [ "-g" "--prefer '(^|/)(java|chromium)$'" ];
+      default = [ ];
+      example = [
+        "-g"
+        "--prefer '(^|/)(java|chromium)$'"
+      ];
       description = "Extra command-line arguments to be passed to earlyoom.";
     };
   };
