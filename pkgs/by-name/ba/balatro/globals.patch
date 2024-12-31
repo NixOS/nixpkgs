@@ -1,0 +1,15 @@
+--- result/share/balatro/globals.lua    1970-01-01 01:00:01.000000000 +0100
++++ result/share/balatro/globals.lua    1970-01-01 01:00:01.000000000 +0100
+@@ -56,6 +56,12 @@ function Game:set_globals()
+         self.F_CRASH_REPORTS = false
+     end
+ 
++    if love.system.getOS() == 'Linux' then
++        self.F_SAVE_TIMER = 5
++        self.F_DISCORD = true
++        self.F_ENGLISH_ONLY = false
++    end
++
+     if love.system.getOS() == 'Nintendo Switch' then
+         self.F_HIDE_BETA_LANGS = true
+         self.F_BASIC_CREDITS = true
