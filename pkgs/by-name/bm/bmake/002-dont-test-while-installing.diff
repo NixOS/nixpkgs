@@ -1,0 +1,21 @@
+diff -Naur bmake-old/boot-strap bmake-new/boot-strap
+--- bmake-old/boot-strap	2024-03-10 14:51:10.000000000 -0300
++++ bmake-new/boot-strap	2024-05-30 21:49:13.689803511 -0300
+@@ -435,9 +435,6 @@
+ 	[ -s make-bootstrap.sh ] || op_configure
+ 	chmod 755 make-bootstrap.sh || exit 1
+ 	./make-bootstrap.sh || exit 1
+-	case "$op" in
+-	build) rm -f tested; op_test;;
+-	esac
+ }
+ 
+ op_test() {
+@@ -461,7 +458,6 @@
+ }
+ 
+ op_install() {
+-	op_test
+ 	case "$INSTALL_PREFIX,$INSTALL_BIN,$prefix" in
+ 	,$HOST_TARGET/bin,*/$HOST_TARGET)
+ 		INSTALL_PREFIX=`dirname $prefix`

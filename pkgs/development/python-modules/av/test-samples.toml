@@ -1,0 +1,17 @@
+"fate-suite/aac/latm_stereo_to_51.ts" = { url = "http://fate.ffmpeg.org/fate-suite/aac/latm_stereo_to_51.ts", hash = "sha256-lVz0iby2IEUVdwKYamv4HVm8EUGHJS/cWY+QFBMaCBY=" }
+"fate-suite/amv/MTV_high_res_320x240_sample_Penguin_Joke_MTV_from_WMV.amv" = { url = "http://fate.ffmpeg.org/fate-suite/amv/MTV_high_res_320x240_sample_Penguin_Joke_MTV_from_WMV.amv", hash = "sha256-O9YMj0+0bM4YyZNGgkZJL8E2aG+Y3lq8/c+DVht0McI=" }
+"fate-suite/audio-reference/chorusnoise_2ch_44kHz_s16.wav" = { url = "http://fate.ffmpeg.org/fate-suite/audio-reference/chorusnoise_2ch_44kHz_s16.wav", hash = "sha256-KodB5hQkBFtfkI+L7hnkSonPM+IuOCNrTV3Vsy1bvhs=" }
+"fate-suite/h264/interlaced_crop.mp4" = { url = "http://fate.ffmpeg.org/fate-suite/h264/interlaced_crop.mp4", hash = "sha256-SVWWaOcfOp718dvgkpgOWCYoV9Ylomv8MBYzbRqvbBE=" }
+"fate-suite/hap/HAPQA_NoSnappy_127x1.mov" = { url = "http://fate.ffmpeg.org/fate-suite/hap/HAPQA_NoSnappy_127x1.mov", hash = "sha256-WMUqg9o84ki2AIIsGhY8P10KBc3qgCsmljqJXXRHbs8=" }
+"fate-suite/mkv/codec_delay_opus.mkv" = { url = "http://fate.ffmpeg.org/fate-suite/mkv/codec_delay_opus.mkv", hash = "sha256-GanpfRyGKN36NLAa7pZehcM1F2VDCW3g6hhO26vFg1I=" }
+"fate-suite/mov/displaymatrix.mov" = { url = "http://fate.ffmpeg.org/fate-suite/mov/displaymatrix.mov", hash = "sha256-Aq0/zcKKHI2dgThIKfYMXCjNI6WoVwy7VtD5Bke6krQ=" }
+"fate-suite/mov/mov-1elist-ends-last-bframe.mov" = { url = "http://fate.ffmpeg.org/fate-suite/mov/mov-1elist-ends-last-bframe.mov", hash = "sha256-1g488WPvvzzeHXoQg7xZnrVCoGCz7sOUSpzZj6qWnhI=" }
+"fate-suite/mov/white_zombie_scrunch-part.mov" = { url = "http://fate.ffmpeg.org/fate-suite/mov/white_zombie_scrunch-part.mov", hash = "sha256-apoPuBxsjqkjCaSdtgTJhpYFXMp5LbtZQz+lo3o9jx8=" }
+"fate-suite/mpeg2/mpeg2_field_encoding.ts" = { url = "http://fate.ffmpeg.org/fate-suite/mpeg2/mpeg2_field_encoding.ts", hash = "sha256-logzOhRbniwhObnKts1JZqzRl4j9YgtLMdtcKJFUfLg=" }
+"fate-suite/mxf/track_01_v02.mxf" = { url = "http://fate.ffmpeg.org/fate-suite/mxf/track_01_v02.mxf", hash = "sha256-AQ+UxFVfBgQwbEtoMautd02BL5kC6pAbsXD3SVRd9xE=" }
+"fate-suite/png1/55c99e750a5fd6_50314226.png" = { url = "http://fate.ffmpeg.org/fate-suite/png1/55c99e750a5fd6_50314226.png", hash = "sha256-yADmkBgeMB5wv140gwnaDMjvErRTXZhXdBz02HZSMBc=" }
+"fate-suite/qtrle/aletrek-rle.mov" = { url = "http://fate.ffmpeg.org/fate-suite/qtrle/aletrek-rle.mov", hash = "sha256-uXUvVkwuPbfs/rzT896ty3RZfvGoSPj3su+sjLPU09g=" }
+"fate-suite/sub/MovText_capability_tester.mp4" = { url = "http://fate.ffmpeg.org/fate-suite/sub/MovText_capability_tester.mp4", hash = "sha256-Y2uhvfGrZaPebD6ZsJemzpOk+XHX6ukBceVauEit9h8=" }
+"fate-suite/sub/vobsub.sub" = { url = "http://fate.ffmpeg.org/fate-suite/sub/vobsub.sub", hash = "sha256-X2rEMyTlo1xuUlqgx2uvqd2WWhfOCID9fraeGbaFPIs=" }
+"pyav-curated/pexels/time-lapse-video-of-night-sky-857195.mp4" = { url = "https://pyav.org/datasets/pexels/time-lapse-video-of-night-sky-857195.mp4", hash = "sha256-6307VwepfoVNKeGm8WEMZtfowJZ27Hv2fwgp6J/Q0oE=" }
+"pyav-curated/pexels/time-lapse-video-of-sunset-by-the-sea-854400.mp4" = { url = "https://pyav.org/datasets/pexels/time-lapse-video-of-sunset-by-the-sea-854400.mp4", hash = "sha256-2RWphhz5KWPSnJh8ARrC7aPjBa77DJO1Fv0/I4kWxYg=" }
