@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.unclutter;
 
@@ -14,42 +11,42 @@ in
 {
   options.services.unclutter = {
 
-    enable = mkOption {
+    enable = lib.mkOption {
       description = "Enable unclutter to hide your mouse cursor when inactive";
-      type = types.bool;
+      type = lib.types.bool;
       default = false;
     };
 
-    package = mkPackageOption pkgs "unclutter" { };
+    package = lib.mkPackageOption pkgs "unclutter" { };
 
-    keystroke = mkOption {
+    keystroke = lib.mkOption {
       description = "Wait for a keystroke before hiding the cursor";
-      type = types.bool;
+      type = lib.types.bool;
       default = false;
     };
 
-    timeout = mkOption {
+    timeout = lib.mkOption {
       description = "Number of seconds before the cursor is marked inactive";
-      type = types.int;
+      type = lib.types.int;
       default = 1;
     };
 
-    threshold = mkOption {
+    threshold = lib.mkOption {
       description = "Minimum number of pixels considered cursor movement";
-      type = types.int;
+      type = lib.types.int;
       default = 1;
     };
 
-    excluded = mkOption {
+    excluded = lib.mkOption {
       description = "Names of windows where unclutter should not apply";
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "" ];
     };
 
-    extraOptions = mkOption {
+    extraOptions = lib.mkOption {
       description = "More arguments to pass to the unclutter command";
-      type = types.listOf types.str;
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [
         "noevent"
@@ -58,7 +55,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.user.services.unclutter = {
       description = "unclutter";
       wantedBy = [ "graphical-session.target" ];
@@ -67,9 +64,9 @@ in
         ${cfg.package}/bin/unclutter \
           -idle ${toString cfg.timeout} \
           -jitter ${toString (cfg.threshold - 1)} \
-          ${optionalString cfg.keystroke "-keystroke"} \
-          ${concatMapStrings (x: " -" + x) cfg.extraOptions} \
-          -not ${concatStringsSep " " cfg.excluded} \
+          ${lib.optionalString cfg.keystroke "-keystroke"} \
+          ${lib.concatMapStrings (x: " -" + x) cfg.extraOptions} \
+          -not ${lib.concatStringsSep " " cfg.excluded} \
       '';
       serviceConfig.PassEnvironment = "DISPLAY";
       serviceConfig.RestartSec = 3;
@@ -78,7 +75,7 @@ in
   };
 
   imports = [
-    (mkRenamedOptionModule
+    (lib.mkRenamedOptionModule
       [ "services" "unclutter" "threeshold" ]
       [ "services" "unclutter" "threshold" ]
     )

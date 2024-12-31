@@ -49,6 +49,6 @@ stdenv.mkDerivation (finalAttrs: {
       hzeller
       pca006132
     ];
-    platforms = lib.platforms.linux; # currently issues with Darwin
+    platforms = lib.platforms.unix;
   };
 })
