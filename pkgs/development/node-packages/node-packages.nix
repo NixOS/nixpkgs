@@ -17942,15 +17942,6 @@ let
         sha512 = "8gsBDI5Y3vrKUCxN6Ue8xr6occZ5nsDEc4C7jO/EovFGozx8uttCAyfhRrvoUAWi2WMm3OmYs+0mPJU7kQdYWQ==";
       };
     };
-    "conventional-changelog-conventionalcommits-7.0.2" = {
-      name = "conventional-changelog-conventionalcommits";
-      packageName = "conventional-changelog-conventionalcommits";
-      version = "7.0.2";
-      src = fetchurl {
-        url = "https://registry.npmjs.org/conventional-changelog-conventionalcommits/-/conventional-changelog-conventionalcommits-7.0.2.tgz";
-        sha512 = "NKXYmMR/Hr1DevQegFB4MwfM5Vv0m4UIxKZTTYuD98lpTknaZlSRrDOG4X7wIXpGkfsYxZTghUN+Qq+T0YQI7w==";
-      };
-    };
     "conventional-changelog-conventionalcommits-8.0.0" = {
       name = "conventional-changelog-conventionalcommits";
       packageName = "conventional-changelog-conventionalcommits";
@@ -53762,36 +53753,6 @@ in
     buildInputs = globalBuildInputs;
     meta = {
       description = "Lint your commit messages";
-      homepage = "https://commitlint.js.org/";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
-  "@commitlint/config-conventional" = nodeEnv.buildNodePackage {
-    name = "_at_commitlint_slash_config-conventional";
-    packageName = "@commitlint/config-conventional";
-    version = "19.5.0";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/@commitlint/config-conventional/-/config-conventional-19.5.0.tgz";
-      sha512 = "OBhdtJyHNPryZKg0fFpZNOBM1ZDbntMvqMuSmpfyP86XSfwzGw4CaoYRG4RutUPg0BTK07VMRIkNJT6wi2zthg==";
-    };
-    dependencies = [
-      sources."@commitlint/types-19.5.0"
-      sources."@types/conventional-commits-parser-5.0.0"
-      sources."@types/node-22.5.5"
-      sources."array-ify-1.0.0"
-      sources."chalk-5.3.0"
-      sources."compare-func-2.0.0"
-      sources."conventional-changelog-conventionalcommits-7.0.2"
-      sources."dot-prop-5.3.0"
-      sources."is-obj-2.0.0"
-      sources."undici-types-6.19.8"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "Shareable commitlint config enforcing conventional commits";
       homepage = "https://commitlint.js.org/";
       license = "MIT";
     };
