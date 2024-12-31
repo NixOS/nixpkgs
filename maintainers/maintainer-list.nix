@@ -4869,6 +4869,12 @@
     githubId = 217899;
     name = "Cyryl Płotnicki";
   };
+  cything = {
+    name = "cy";
+    email = "nix@cything.io";
+    github = "cything";
+    githubId = 45041772;
+  };
   d3vil0p3r = {
     name = "Antonio Voza";
     email = "vozaanthony@gmail.com";
@@ -12221,6 +12227,12 @@
     githubId = 1903418;
     name = "Kovacsics Robert";
   };
+  kpcyrd = {
+    email = "git@rxv.cc";
+    github = "kpcyrd";
+    githubId = 7763184;
+    name = "kpcyrd";
+  };
   kquick = {
     email = "quick@sparq.org";
     github = "kquick";
@@ -14965,6 +14977,12 @@
     github = "Misaka13514";
     githubId = 54669781;
     keys = [ { fingerprint = "293B 93D8 A471 059F 85D7  16A6 5BA9 2099 D9BE 2DAA"; } ];
+  };
+  misilelab = {
+    name = "misilelab";
+    email = "misileminecord@gmail.com";
+    github = "misilelab";
+    githubId = 74066467;
   };
   mislavzanic = {
     email = "mislavzanic3@gmail.com";
@@ -21484,6 +21502,12 @@
     email = "me@samuelrounce.co.uk";
     github = "srounce";
     githubId = 60792;
+  };
+  srv6d = {
+    name = "Marvin Vogt";
+    github = "SRv6d";
+    githubId = 18124752;
+    email = "m@rvinvogt.com";
   };
   Srylax = {
     name = "Srylax";
