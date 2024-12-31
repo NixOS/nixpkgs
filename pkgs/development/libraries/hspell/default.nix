@@ -25,7 +25,7 @@ stdenv.mkDerivation rec {
   patches = [ ./remove-shared-library-checks.patch ];
   postPatch = "patchShebangs .";
   preBuild = lib.optionalString (stdenv.hostPlatform != stdenv.buildPlatform) ''
-    make CC=${buildPackages.stdenv.cc}/bin/cc find_sizes
+    make CC='${buildPackages.stdenv.cc}/bin/cc -I${lib.getDev buildPackages.zlib}/include -L${buildPackages.zlib}/lib' find_sizes
     mv find_sizes find_sizes_build
     make clean
 
@@ -41,7 +41,10 @@ stdenv.mkDerivation rec {
     perl
     zlib
   ];
-  buildInputs = [ perl ];
+  buildInputs = [
+    perl
+    zlib
+  ];
 
   strictDeps = true;
 
