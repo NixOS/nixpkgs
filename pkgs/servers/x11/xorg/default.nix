@@ -5,6 +5,7 @@
   font-util,
   gccmakedep,
   libpciaccess,
+  libpthread-stubs,
   luit,
   pixman,
 }:
@@ -19,6 +20,7 @@ self: with self; {
     ;
   fontalias = font-alias;
   fontutil = font-util;
+  libpthreadstubs = libpthread-stubs;
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   appres = callPackage (
@@ -3194,37 +3196,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ "fontenc" ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  libpthreadstubs = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "libpthread-stubs";
-      version = "0.5";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/xcb/libpthread-stubs-0.5.tar.xz";
-        sha256 = "1g224hyy694jch54357zc895z46r90xs193hg4m7rfnfxinmdnjr";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "pthread-stubs" ];
         platforms = lib.platforms.unix;
       };
     })
