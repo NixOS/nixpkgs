@@ -2,23 +2,39 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  stdenv,
+  installShellFiles,
   nix-update-script,
   usage,
   testers,
 }:
 
 rustPlatform.buildRustPackage rec {
-  pname = "jdx";
-  version = "0.3.1";
+  pname = "usage";
+  version = "1.7.4";
 
   src = fetchFromGitHub {
     owner = "jdx";
     repo = "usage";
     rev = "v${version}";
-    hash = "sha256-9zQ+gkBVhzjqSIieGjxoD9vc7999lfRQ7awkvlEkseE=";
+    hash = "sha256-+Wt/ZOwj9LHgt0EOFF554TGf2tZyuRoXAPpCebPZfNY=";
   };
 
-  cargoHash = "sha256-4ebjD1Tf7F2YyNrF7eEi2yKonctprnyu4nMf+vE2whY=";
+  cargoHash = "sha256-w8GWvMjC6Plho+zw542Q00hU/KZMdyyoP/rGAg72h1s=";
+
+  postPatch = ''
+    substituteInPlace ./examples/mounted.sh \
+      --replace-fail '/usr/bin/env -S usage' "$(pwd)/target/${stdenv.targetPlatform.rust.rustcTargetSpec}/release/usage"
+  '';
+
+  nativeBuildInputs = [ installShellFiles ];
+
+  postInstall = ''
+    installShellCompletion --cmd usage \
+      --bash <($out/bin/usage --completions bash) \
+      --fish <($out/bin/usage --completions fish) \
+      --zsh <($out/bin/usage --completions zsh)
+  '';
 
   passthru = {
     updateScript = nix-update-script { };
