@@ -3,6 +3,7 @@ make_glib_find_gsettings_schemas() {
     for maybe_dir in "$1"/share/gsettings-schemas/*; do
         if [[ -d "$maybe_dir/glib-2.0/schemas" ]]; then
             addToSearchPath GSETTINGS_SCHEMAS_PATH "$maybe_dir"
+            addToSearchPath XDG_DATA_DIRS "$maybe_dir" # for nix develop shells
         fi
     done
 }
