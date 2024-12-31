@@ -35,11 +35,13 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
-  dependencies = [ httpx ];
+  dependencies = [
+    httpx
+    pydantic
+  ];
 
   nativeCheckInputs = [
     pillow
-    pydantic
     pytest-asyncio
     pytest-httpserver
     pytestCheckHook
