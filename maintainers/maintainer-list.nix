@@ -14508,6 +14508,12 @@
     githubId = 38578268;
     name = "Morgan Wolfe";
   };
+  mx2uller = {
+    email = "mx2uller@pm.me";
+    github = "mx2uller";
+    githubId = 93703653;
+    name = "Marko Müller";
+  };
   mxkrsv = {
     email = "mxkrsv@disroot.org";
     github = "mxkrsv";
