@@ -33,6 +33,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/conda-forge/miniforge";
     license = licenses.bsd3;
     platforms = platforms.unix;
-    maintainers = [ "qxrein" ];
+    maintainers = with maintainers; [ "qxrein" ];
   };
 }
