@@ -9,24 +9,26 @@
   wrapGAppsHook4,
   desktop-file-utils,
   libadwaita,
+  itstool,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "exhibit";
-  version = "1.2.0";
+  version = "1.4.2";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "Exhibit";
-    rev = "v${version}";
-    hash = "sha256-yNS6q7XbWda2+so9QRS/c4uYaVPo7b4JCite5nzc3Eo=";
+    tag = "v${version}";
+    hash = "sha256-/dug7U8ei+gSdepILLqhnoIBhZ5QZePkREtCUl4p1Hs=";
   };
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    itstool
     gobject-introspection
     wrapGAppsHook4
     desktop-file-utils
