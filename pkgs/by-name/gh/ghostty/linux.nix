@@ -110,43 +110,11 @@ stdenv.mkDerivation (finalAttrs: {
   # Unit tests currently fail inside the sandbox
   doCheck = false;
 
-  /**
-    Ghostty really likes all of it's resources to be in the same directory, so link them back after we split them
+  # For use in our shared postFixup
+  resourceDir = "${placeholder "out"}/share";
 
-    - https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/os/resourcesdir.zig#L11-L52
-    - https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/termio/Exec.zig#L745-L750
-    - https://github.com/ghostty-org/ghostty/blob/4b4d4062dfed7b37424c7210d1230242c709e990/src/termio/Exec.zig#L818-L834
-
-    terminfo and shell integration should also be installable on remote machines
-
-    ```nix
-    { pkgs, ... }: {
-      environment.systemPackages = [ pkgs.ghostty.terminfo ];
-
-      programs.bash = {
-        interactiveShellInit = ''
-          if [[ "$TERM" == "xterm-ghostty" ]]; then
-            builtin source ${pkgs.ghostty.shell_integration}/bash/ghostty.bash
-          fi
-        '';
-      };
-    }
-    ```
-  */
-  postFixup = ''
-    ln -s $man/share/man $out/share/man
-
-    moveToOutput share/terminfo $terminfo
-    ln -s $terminfo/share/terminfo $out/share/terminfo
-
-    mv $out/share/ghostty/shell-integration $shell_integration
-    ln -s $shell_integration $out/share/ghostty/shell-integration
-
-    mv $out/share/vim/vimfiles $vim
-    rmdir $out/share/vim
-    ln -s $vim $out/share/vim-plugins
-
-    remove-references-to -t ${finalAttrs.deps} $out/bin/.ghostty-wrapped
+  preFixup = ''
+    remove-references-to -t ${finalAttrs.deps} $out/bin/ghostty
   '';
 
   nativeInstallCheckInputs = [
