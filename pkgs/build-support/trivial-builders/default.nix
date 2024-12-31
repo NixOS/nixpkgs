@@ -886,12 +886,11 @@ rec {
 
   # TODO: move docs to Nixpkgs manual
   /* An immutable file in the store with a length of 0 bytes. */
-  emptyFile = runCommand "empty-file"
-    {
-      outputHash = "sha256-d6xi4mKdjkX2JFicDIv5niSzpyI0m/Hnm8GGAIU04kY=";
-      outputHashMode = "recursive";
-      preferLocalBuild = true;
-    } "touch $out";
+  emptyFile = builtins.path {
+    name = "empty-file";
+    path = ./emptyFile;  # can't be /dev/null, which is a character device file
+    sha256 = "d6xi4mKdjkX2JFicDIv5niSzpyI0m/Hnm8GGAIU04kY=";
+  };
 
   # TODO: move docs to Nixpkgs manual
   /* An immutable empty directory in the store. */
