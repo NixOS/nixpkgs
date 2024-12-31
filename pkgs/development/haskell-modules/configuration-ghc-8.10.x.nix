@@ -174,8 +174,8 @@ self: super: {
   # Needs OneTuple for ghc < 9.2
   binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;
 
-  # Requires GHC < 9.4
-  ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
+  # 0.4.6.0 only supports >= 9.0
+  ghc-source-gen = doDistribute self.ghc-source-gen_0_4_5_0;
 
   # No instance for (Show B.Builder) arising from a use of ‘print’
   http-types = dontCheck super.http-types;

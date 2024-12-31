@@ -594,12 +594,9 @@ let
       ghc-lib = released;
       ghc-lib-parser = released;
       ghc-lib-parser-ex = released;
-      ghc-source-gen = [
-        # Feel free to remove these as they break,
-        compilerNames.ghc8107
-        compilerNames.ghc902
-        compilerNames.ghc928
-      ];
+      ghc-source-gen = lib.subtractLists [
+        compilerNames.ghc9121
+      ] released;
       ghc-tags = lib.subtractLists [
         compilerNames.ghc9121
       ] released;
