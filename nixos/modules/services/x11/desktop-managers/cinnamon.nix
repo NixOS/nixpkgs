@@ -1,7 +1,4 @@
 { config, lib, pkgs, utils, ... }:
-
-with lib;
-
 let
 
   cfg = config.services.xserver.desktopManager.cinnamon;
@@ -18,16 +15,16 @@ in
 {
   options = {
     services.cinnamon = {
-      apps.enable = mkEnableOption "Cinnamon default applications";
+      apps.enable = lib.mkEnableOption "Cinnamon default applications";
     };
 
     services.xserver.desktopManager.cinnamon = {
-      enable = mkEnableOption "the cinnamon desktop manager";
+      enable = lib.mkEnableOption "the cinnamon desktop manager";
 
-      sessionPath = mkOption {
+      sessionPath = lib.mkOption {
         default = [];
-        type = types.listOf types.package;
-        example = literalExpression "[ pkgs.gpaste ]";
+        type = lib.types.listOf lib.types.package;
+        example = lib.literalExpression "[ pkgs.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
@@ -36,53 +33,53 @@ in
         '';
       };
 
-      extraGSettingsOverrides = mkOption {
+      extraGSettingsOverrides = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = "Additional gsettings overrides.";
       };
 
-      extraGSettingsOverridePackages = mkOption {
+      extraGSettingsOverridePackages = lib.mkOption {
         default = [];
-        type = types.listOf types.path;
+        type = lib.types.listOf lib.types.path;
         description = "List of packages for which gsettings are overridden.";
       };
     };
 
-    environment.cinnamon.excludePackages = mkOption {
+    environment.cinnamon.excludePackages = lib.mkOption {
       default = [];
-      example = literalExpression "[ pkgs.blueman ]";
-      type = types.listOf types.package;
+      example = lib.literalExpression "[ pkgs.blueman ]";
+      type = lib.types.listOf lib.types.package;
       description = "Which packages cinnamon should exclude from the default environment";
     };
 
   };
 
-  config = mkMerge [
-    (mkIf cfg.enable {
+  config = lib.mkMerge [
+    (lib.mkIf cfg.enable {
       services.displayManager.sessionPackages = [ pkgs.cinnamon-common ];
 
       services.xserver.displayManager.lightdm.greeters.slick = {
-        enable = mkDefault true;
+        enable = lib.mkDefault true;
 
         # Taken from mint-artwork.gschema.override
-        theme = mkIf (notExcluded pkgs.mint-themes) {
-          name = mkDefault "Mint-Y-Aqua";
-          package = mkDefault pkgs.mint-themes;
+        theme = lib.mkIf (notExcluded pkgs.mint-themes) {
+          name = lib.mkDefault "Mint-Y-Aqua";
+          package = lib.mkDefault pkgs.mint-themes;
         };
-        iconTheme = mkIf (notExcluded pkgs.mint-y-icons) {
-          name = mkDefault "Mint-Y-Sand";
-          package = mkDefault pkgs.mint-y-icons;
+        iconTheme = lib.mkIf (notExcluded pkgs.mint-y-icons) {
+          name = lib.mkDefault "Mint-Y-Sand";
+          package = lib.mkDefault pkgs.mint-y-icons;
         };
-        cursorTheme = mkIf (notExcluded pkgs.mint-cursor-themes) {
-          name = mkDefault "Bibata-Modern-Classic";
-          package = mkDefault pkgs.mint-cursor-themes;
+        cursorTheme = lib.mkIf (notExcluded pkgs.mint-cursor-themes) {
+          name = lib.mkDefault "Bibata-Modern-Classic";
+          package = lib.mkDefault pkgs.mint-cursor-themes;
         };
       };
 
       # Have to take care of GDM + Cinnamon on Wayland users
       environment.extraInit = ''
-        ${concatMapStrings (p: ''
+        ${lib.concatMapStrings (p: ''
           if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
             export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
           fi
@@ -95,30 +92,30 @@ in
       '';
 
       # Default services
-      services.blueman.enable = mkDefault (notExcluded pkgs.blueman);
-      hardware.bluetooth.enable = mkDefault true;
+      services.blueman.enable = lib.mkDefault (notExcluded pkgs.blueman);
+      hardware.bluetooth.enable = lib.mkDefault true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
-      services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
+      services.system-config-printer.enable = (lib.mkIf config.services.printing.enable (lib.mkDefault true));
       services.dbus.packages = with pkgs; [
         cinnamon-common
         cinnamon-screensaver
         nemo-with-extensions
         xapp
       ];
-      services.cinnamon.apps.enable = mkDefault true;
+      services.cinnamon.apps.enable = lib.mkDefault true;
       services.gnome.evolution-data-server.enable = true;
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gvfs.enable = true;
-      services.power-profiles-daemon.enable = mkDefault true;
-      services.switcherooControl.enable = mkDefault true; # xapp-gpu-offload-helper
-      services.touchegg.enable = mkDefault true;
+      services.power-profiles-daemon.enable = lib.mkDefault true;
+      services.switcherooControl.enable = lib.mkDefault true; # xapp-gpu-offload-helper
+      services.touchegg.enable = lib.mkDefault true;
       services.udisks2.enable = true;
-      services.upower.enable = mkDefault config.powerManagement.enable;
-      services.libinput.enable = mkDefault true;
+      services.upower.enable = lib.mkDefault config.powerManagement.enable;
+      services.libinput.enable = lib.mkDefault true;
       services.xserver.updateDbusEnvironment = true;
-      networking.networkmanager.enable = mkDefault true;
+      networking.networkmanager.enable = lib.mkDefault true;
 
       # Enable colord server
       services.colord.enable = true;
@@ -204,9 +201,9 @@ in
         pkgs.xdg-desktop-portal-gtk
       ];
 
-      services.orca.enable = mkDefault (notExcluded pkgs.orca);
+      services.orca.enable = lib.mkDefault (notExcluded pkgs.orca);
 
-      xdg.portal.configPackages = mkDefault [ pkgs.cinnamon-common ];
+      xdg.portal.configPackages = lib.mkDefault [ pkgs.cinnamon-common ];
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
@@ -217,8 +214,8 @@ in
       ];
 
       # Shell integration for VTE terminals
-      programs.bash.vteIntegration = mkDefault true;
-      programs.zsh.vteIntegration = mkDefault true;
+      programs.bash.vteIntegration = lib.mkDefault true;
+      programs.zsh.vteIntegration = lib.mkDefault true;
 
       # Default Fonts
       fonts.packages = with pkgs; [
@@ -227,10 +224,10 @@ in
       ];
     })
 
-    (mkIf serviceCfg.apps.enable {
-      programs.gnome-disks.enable = mkDefault (notExcluded pkgs.gnome-disk-utility);
-      programs.gnome-terminal.enable = mkDefault (notExcluded pkgs.gnome-terminal);
-      programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
+    (lib.mkIf serviceCfg.apps.enable {
+      programs.gnome-disks.enable = lib.mkDefault (notExcluded pkgs.gnome-disk-utility);
+      programs.gnome-terminal.enable = lib.mkDefault (notExcluded pkgs.gnome-terminal);
+      programs.file-roller.enable = lib.mkDefault (notExcluded pkgs.file-roller);
 
       environment.systemPackages = with pkgs; utils.removePackagesByName [
         # cinnamon team apps

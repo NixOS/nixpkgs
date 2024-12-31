@@ -4,21 +4,18 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.xserver.windowManager.berry;
 in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.berry.enable = mkEnableOption "berry";
+    services.xserver.windowManager.berry.enable = lib.mkEnableOption "berry";
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton {
+  config = lib.mkIf cfg.enable {
+    services.xserver.windowManager.session = lib.singleton {
       name = "berry";
       start = ''
         ${pkgs.berry}/bin/berry &

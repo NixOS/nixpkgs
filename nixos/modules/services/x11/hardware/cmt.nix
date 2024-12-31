@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
 
   cfg = config.services.xserver.cmt;
@@ -18,13 +15,13 @@ in
   options = {
 
     services.xserver.cmt = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Enable chrome multitouch input (cmt). Touchpad drivers that are configured for chromebooks.";
       };
-      models = mkOption {
-        type = types.enum [
+      models = lib.mkOption {
+        type = lib.types.enum [
           "atlas"
           "banjo"
           "candy"
@@ -83,7 +80,7 @@ in
     }; # closes services
   }; # closes options
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.xserver.modules = [ pkgs.xf86_input_cmt ];
 
