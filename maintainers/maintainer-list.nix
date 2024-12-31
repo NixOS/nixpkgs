@@ -22628,6 +22628,11 @@
     githubId = 1220572;
     name = "Christian Theune";
   };
+  theverygaming = {
+    name = "theverygaming";
+    github = "theverygaming";
+    githubId = 18639279;
+  };
   thiagokokada = {
     email = "thiagokokada@gmail.com";
     github = "thiagokokada";
