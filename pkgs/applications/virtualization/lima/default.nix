@@ -14,16 +14,16 @@
 
 buildGoModule rec {
   pname = "lima";
-  version = "1.0.2";
+  version = "1.0.3";
 
   src = fetchFromGitHub {
     owner = "lima-vm";
     repo = "lima";
     rev = "v${version}";
-    hash = "sha256-LNsxMrbEgdosGDDUNvMZq/hpP5azNiIHjKTp0Iw/PC0=";
+    hash = "sha256-S0Mk7h4gH5syP/ayK5g1g8HG5f23sKCQCCbM6xOj+n0=";
   };
 
-  vendorHash = "sha256-taozyQBJvkCsJAaOHg1gFK4qOnepRbzIn4jHzxfAn6A=";
+  vendorHash = "sha256-1SHiz+lfG4nl1qavq/Fd73UV8LkErILk7d8XZJSbHd0=";
 
   nativeBuildInputs = [
     makeWrapper
@@ -71,7 +71,7 @@ buildGoModule rec {
     '';
 
   doInstallCheck = true;
-  # Workaround for: "panic: $HOME is not defined" at https://github.com/lima-vm/lima/blob/v1.0.2/pkg/limayaml/defaults.go#L52
+  # Workaround for: "panic: $HOME is not defined" at https://github.com/lima-vm/lima/blob/v1.0.3/pkg/limayaml/defaults.go#L52
   # Don't use versionCheckHook for this package. It cannot inject environment variables.
   installCheckPhase = ''
     if [[ "$(HOME="$(mktemp -d)" "$out/bin/limactl" --version | cut -d ' ' -f 3)" == "${version}" ]]; then
