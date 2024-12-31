@@ -5,6 +5,7 @@
   pam,
   openldap,
   perl,
+  unstableGitUpdater,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -32,6 +33,8 @@ stdenv.mkDerivation (finalAttrs: {
     pam
     openldap
   ];
+
+  passthru.updateScript = unstableGitUpdater { };
 
   meta = {
     homepage = "https://www.padl.com/OSS/pam_ldap.html";
