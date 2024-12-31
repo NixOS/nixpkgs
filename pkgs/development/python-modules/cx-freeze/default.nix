@@ -9,6 +9,7 @@
   setuptools,
   filelock,
   wheel,
+  typing-extensions,
   patchelf,
 }:
 
@@ -17,7 +18,7 @@ buildPythonPackage rec {
   version = "7.2.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.11";
+  disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     pname = "cx_freeze";
@@ -39,13 +40,17 @@ buildPythonPackage rec {
 
   buildInputs = [ ncurses ];
 
-  dependencies = [
-    distutils
-    filelock
-    packaging
-    setuptools
-    wheel
-  ];
+  dependencies =
+    [
+      distutils
+      filelock
+      packaging
+      setuptools
+      wheel
+    ]
+    ++ lib.optionals (pythonOlder "3.10") [
+      typing-extensions
+    ];
 
   makeWrapperArgs = [
     "--prefix"
