@@ -1,6 +1,9 @@
+import inspect
 import os
 import re
 import signal
+import subprocess
+import sys
 import tempfile
 import threading
 from collections.abc import Callable, Iterator
@@ -49,6 +52,8 @@ class Driver:
     global_timeout: int
     race_timer: threading.Timer
     logger: AbstractLogger
+    rebuild_cmd: Optional[str]
+    rebuild_exe: Optional[str]
 
     def __init__(
         self,
@@ -59,12 +64,16 @@ class Driver:
         logger: AbstractLogger,
         keep_vm_state: bool = False,
         global_timeout: int = 24 * 60 * 60 * 7,
+        rebuild_cmd: Optional[str] = None,
+        rebuild_exe: Optional[str] = None,
     ):
         self.tests = tests
         self.out_dir = out_dir
         self.global_timeout = global_timeout
         self.race_timer = threading.Timer(global_timeout, self.terminate_test)
         self.logger = logger
+        self.rebuild_cmd = rebuild_cmd
+        self.rebuild_exe = rebuild_exe
 
         tmp_dir = get_tmp_dir()
 
@@ -109,6 +118,153 @@ class Driver:
                 except Exception as e:
                     self.logger.error(f"Error during cleanup of vlan{vlan.nr}: {e}")
 
+    def rebuild(self, cmd: Optional[str] = None, exe: Optional[str] = None) -> None:
+        """
+        Only makes sense when running interactively. Rebuilds the test driver by running `cmd`, or a globally defined `driver.rebuild_cmd`. This should be the same command that built this test driver to begin with. Then uses the new driver at path `exe` to reconfigure this one and redeploy changed machines.
+        """
+
+        # Get the caller module's global scope. Should be the interactive repl.
+        current_frame = inspect.currentframe()
+        assert current_frame is not None
+        repl_frame = current_frame.f_back
+        assert repl_frame is not None
+        repl_globals = repl_frame.f_globals
+
+        if cmd is None:
+            cmd = self.rebuild_cmd
+        if cmd is not None:
+            with self.logger.nested(f"rebuilding test with `{cmd}`"):
+                subprocess.run(cmd, shell=True, check=True, stdout=sys.stderr.buffer)
+
+        tmp_dir = get_tmp_dir()
+
+        if exe is None:
+            exe = self.rebuild_exe
+        if exe is None:
+            # TODO: ideally Driver.rebuild_exe this could default to
+            # sys.argv[0], and this would be result/ bin/nixos-test-driver in
+            # the typical case, but propagating argv0 through layers of wrappers
+            # does not work with python scripts. See issues #24525 #60260
+            # #150841
+            self.logger.error(
+                'No executable name to update from. Try passing rebuild(exe="./result/bin/nixos-test-driver")'
+            )
+            return
+
+        with self.logger.nested(f"getting new driver info from {exe}"):
+            new_driver_info = subprocess.check_output(
+                [exe, "--internal-print-update-driver-info-and-exit"],
+                text=True,
+            )
+            (
+                start_scripts,
+                vlans_str,
+                testscript,
+                output_directory,
+            ) = new_driver_info.rstrip().split("\n")
+
+        with self.logger.nested("updating machines"):
+            start_cmds = [
+                NixStartScript(start_script) for start_script in start_scripts.split()
+            ]
+            names = [start_cmd.machine_name for start_cmd in start_cmds]
+
+            # delete machines that are no longer part of the test
+            to_del = []
+            for idx, machine in enumerate(self.machines):
+                py_name = pythonize_name(machine.name)
+                if machine.name not in names:
+                    if machine.booted:
+                        self.logger.warning(
+                            f"skipping removal of {machine.name} from the test, because it's running. Call {py_name}.shutdown() and re-run rebuild() to remove."
+                        )
+                    else:
+                        to_del.append(idx)
+            for idx in sorted(to_del, reverse=True):
+                py_name = pythonize_name(self.machines[idx].name)
+                self.logger.info(
+                    f"{self.machines[idx].name} removed from the test. deleting it from the environment"
+                )
+                del repl_globals[py_name]
+                del self.machines[idx]
+
+            # add and change new machines
+            for start_cmd in start_cmds:
+                existing = [
+                    m for m in self.machines if m.name == start_cmd.machine_name
+                ]
+                if len(existing) == 0:
+                    machine = self.create_machine(start_cmd._cmd)
+                    py_name = pythonize_name(machine.name)
+                    repl_globals[py_name] = machine
+                    self.machines.append(machine)
+
+                    self.logger.info(
+                        f"new machine created {start_cmd.machine_name}. start it with {py_name}.start()"
+                    )
+                elif len(existing) == 1:
+                    machine = existing[0]
+                    if machine.start_command._cmd == start_cmd._cmd:
+                        self.logger.info(f"{start_cmd.machine_name} unchanged.")
+                    elif not machine.booted:
+                        self.logger.info(f"{start_cmd.machine_name} changed.")
+                        machine.start_command = start_cmd
+                    else:
+                        with self.logger.nested(
+                            f"{start_cmd.machine_name} updated. switching to new configuration"
+                        ):
+                            store_path = Path(start_cmd._cmd).parent.parent
+                            store_path_exists, _ = machine.execute(f"ls {store_path}")
+                            if store_path_exists != 0:
+                                self.logger.error(
+                                    f"Skipping the update of {start_cmd.machine_name}, because the store output {start_cmd._cmd} does not exist on the VM. This will happen if `virtualisation.useNixStoreImage = true;`."
+                                )
+                            else:
+                                switch_cmd = (
+                                    store_path
+                                    / "system"
+                                    / "bin"
+                                    / "switch-to-configuration"
+                                )
+                                machine.succeed(f"{switch_cmd} test")
+                                machine.start_command = start_cmd
+                else:
+                    self.logger.error(
+                        f"Skipping the update of {start_cmd.machine_name}, because there are multiple machines with that name. This shouldn't be possible, and is an error in the testing framework."
+                    )
+
+        with self.logger.nested("updating vlans"):
+            nrs = list(set([int(vlan) for vlan in vlans_str.split(" ")]))
+            to_del = []
+            for idx, vlan in enumerate(self.vlans):
+                if vlan.nr not in nrs:
+                    to_del.append(idx)
+            for idx in sorted(to_del, reverse=True):
+                self.logger.info(
+                    f"vlan {self.vlans[idx].nr} removed from test. Deleting it"
+                )
+                del self.vlans[idx]
+            # add new vlans
+            old_nrs = [vlan.nr for vlan in self.vlans]
+            for nr in nrs:
+                if nr not in old_nrs:
+                    self.vlans.append(VLan(nr, tmp_dir, self.logger))
+
+        new_tests = Path(testscript).read_text()
+        if new_tests != self.tests:
+            self.tests = Path(testscript).read_text()
+            self.logger.info(
+                "Test script updated. We cannot post-hoc modify anything caused by running test_script(), but if you run it now it will reflect the new version."
+            )
+
+        # we can't copy the existing outputs over to the new directory because there might be other files mixed in (and usually is)
+        new_out_dir = Path(output_directory)
+        if new_out_dir != self.out_dir:
+            self.logger.info(
+                "new output directory: `{new_out_dir}`. Already transferred files will remain in old directory `{self.out_dir}`."
+            )
+            self.out_dir = new_out_dir
+
     def subtest(self, name: str) -> Iterator[None]:
         """Group logs under a given test name"""
         with self.logger.subtest(name):
@@ -139,6 +295,7 @@ class Driver:
             serial_stdout_off=self.serial_stdout_off,
             serial_stdout_on=self.serial_stdout_on,
             polling_condition=self.polling_condition,
+            rebuild=self.rebuild,
             Machine=Machine,  # for typing
         )
         machine_symbols = {pythonize_name(m.name): m for m in self.machines}

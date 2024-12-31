@@ -96,6 +96,35 @@ $ ./result/bin/nixos-test-driver --keep-vm-state
 The machine state is stored in the `$TMPDIR/vm-state-machinename`
 directory.
 
+## Rebuilding the test / redeploying the VMs {#sec-nixos-test-rebuild}
+
+When you change the VM configurations, you can update the running interactive
+driver and redeploy to those machines without restarting. The `rebuild()`
+command at the python REPL will update the running driver based on the
+executable produced by the command provided.
+
+```py
+>>> rebuild("nix-build . -A nixosTests.login.driverInteractive")
+```
+
+By default the new `nixos-test-driver` executable is assumed to be located at
+the same place the running driver was launched from. This works when the
+`result/` symlink is updated to point at the new derivation output. If needed, the path
+can be overridden with the `exe` parameter to `rebuild()`.
+
+You can also specify the rebuild command at the command line when the driver is
+first launched. Then `rebuild()` can be called without arguments.
+
+```ShellSession
+$ build_cmd="nix-build . -A nixosTests.login.driverInteractive"
+$ eval $build_cmd
+$ ./result/bin/nixos-test-driver --rebuild-cmd "$build_cmd"
+>>> start_all()
+[test edited in another window]
+>>> rebuild()
+[new configurations deployed to VMs]
+```
+
 ## Interactive-only test configuration {#sec-nixos-test-interactive-configuration}
 
 The `.driverInteractive` attribute combines the regular test configuration with

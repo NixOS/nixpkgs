@@ -90,13 +90,20 @@ let
         ''}
 
         # set defaults through environment
-        # see: ./test-driver/test-driver.py argparse implementation
+        # see: nixos/lib/test-driver/test_driver/__init__.py argparse implementation
         wrapProgram $out/bin/nixos-test-driver \
           --set startScripts "''${vmStartScripts[*]}" \
           --set testScript "$out/test-script" \
           --set globalTimeout "${toString config.globalTimeout}" \
           --set vlans '${toString vlans}' \
           ${lib.escapeShellArgs (lib.concatMap (arg: ["--add-flags" arg]) config.extraDriverArgs)}
+
+        # `--set rebuildExe $0` would substitute $0 when wrapProgram is called
+        # `--set rebuildExe '$0'` would set rebuildExe to the literal string '$0'
+        # wrapProgram doesn't have a mechanism for setting one variable to the
+        # value of another variable at runtime. So we use sed to add
+        # `export rebuildExe="$0"` to the second-to-last line of the file (before exec)
+        sed -i "$(wc -l < $out/bin/nixos-test-driver)"'i\export rebuildExe="$0"\' $out/bin/nixos-test-driver
       '';
 
 in
