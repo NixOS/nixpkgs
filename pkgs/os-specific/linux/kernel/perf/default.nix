@@ -39,6 +39,7 @@
   zstd,
   withLibcap ? true,
   libcap,
+  clang,
 }:
 let
   d3-flame-graph-templates = stdenv.mkDerivation rec {
@@ -78,6 +79,8 @@ stdenv.mkDerivation {
         url = "https://git.kernel.org/pub/scm/linux/kernel/git/perf/perf-tools-next.git/patch/?id=1d302f626c2a23e4fd05bb810eff300e8f2174fd";
         hash = "sha256-KhCmof8LkyTcBBpfMEtolL3m3kmC5rukKzQvufVKCdI=";
       })
+    ] ++ lib.optionals (lib.versions.majorMinor kernel.version == "6.12") [
+      ./fix-augmented-raw-syscalls.bpf.diff # Loading this bpf object can fail with E2BIG in perf trace without the fix
     ];
 
   postPatch =
@@ -119,7 +122,7 @@ stdenv.mkDerivation {
     ++ lib.optional (!withZstd) "NO_LIBZSTD=1"
     ++ lib.optional (!withLibcap) "NO_LIBCAP=1";
 
-  hardeningDisable = [ "format" ];
+  hardeningDisable = [ "format" "zerocallusedregs" ];
 
   # perf refers both to newt and slang
   nativeBuildInputs = [
@@ -135,6 +138,7 @@ stdenv.mkDerivation {
     makeWrapper
     pkg-config
     python3
+    clang
   ];
 
   buildInputs =
