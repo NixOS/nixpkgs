@@ -177,6 +177,13 @@ let
           ];
           propagatedBuildInputs = op jemallocSupport jemalloc;
 
+          env = lib.optionalAttrs (stdenv.hostPlatform != stdenv.buildPlatform && yjitSupport) {
+            # The ruby build system will use a bare `rust` command by default for its rust.
+            # We can use the Nixpkgs rust wrapper to work around the fact that our Rust builds
+            # for cross-compilation output for the build target by default.
+            NIX_RUSTFLAGS = "--target ${stdenv.hostPlatform.rust.rustcTargetSpec}";
+          };
+
           enableParallelBuilding = true;
           # /build/ruby-2.7.7/lib/fileutils.rb:882:in `chmod':
           #   No such file or directory @ apply2files - ...-ruby-2.7.7-devdoc/share/ri/2.7.0/system/ARGF/inspect-i.ri (Errno::ENOENT)
