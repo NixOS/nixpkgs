@@ -14,6 +14,7 @@
   libffi,
   expat,
   libGL,
+  nanosvg,
 
   libX11,
   libxkbcommon,
@@ -69,6 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-CqB8AmOZ4YxnEsQkyu/ZEaun6ywpSh4B7PM+MFJF0qU=";
       stripLen = 1;
     })
+    ./nanosvg-unvendor.diff
   ];
 
   nativeBuildInputs = [
@@ -88,6 +90,7 @@ stdenv.mkDerivation (finalAttrs: {
       nettle
       fontconfig
       libffi
+      nanosvg
     ]
     ++ lib.optionals xorgSupport [
       libxkbcommon
