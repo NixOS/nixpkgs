@@ -185,6 +185,10 @@ let
                     echo "reused"
                     passphrase=$(cat /crypt-ramfs/passphrase)
                     break
+                elif [ -e /dev/mapper/${dev.name} ]; then
+                    echo "opened externally"
+                    rm -f /crypt-ramfs/device
+                    return
                 else
                     # ask cryptsetup-askpass
                     echo -n "${dev.device}" > /crypt-ramfs/device
