@@ -611,11 +611,19 @@ in
           # There's a test app we could use that also displays their contents, but it's abit inconsistent.
           with subtest("ayatana indicators work"):
               mouse_click(735, 0) # the cog in the top-right, for the session indicator
-              wait_for_text(r"(Notifications|Rotation|Battery|Sound|Time|Date|System)")
+              wait_for_text(r"(Notifications|Rotation|Battery|Sound|Time|Date|System|Keyboard)")
               machine.screenshot("indicators_open")
 
               # Indicator order within the menus *should* be fixed based on per-indicator order setting
-              # Session is the one we clicked, but the last we should test (logout). Go as far left as we can test.
+              # Keyboard is the one we clicked, the last one we should test is to the left of it (logout).
+
+              with subtest("ayatana indicator keyboard works"):
+                  # We start on this, don't go right
+                  wait_for_text("English")
+                  machine.screenshot("indicators_keyboard")
+
+              # Now go as far left as we can test.
+              machine.send_key("left")
               machine.send_key("left")
               machine.send_key("left")
               machine.send_key("left")
