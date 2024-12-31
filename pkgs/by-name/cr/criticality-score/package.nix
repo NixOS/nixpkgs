@@ -1,33 +1,54 @@
 {
   lib,
-  python3Packages,
-  fetchPypi,
+  buildGoModule,
+  fetchFromGitHub,
+  versionCheckHook,
 }:
 
-python3Packages.buildPythonApplication rec {
-  pname = "criticality_score";
-  version = "1.0.8";
+buildGoModule rec {
+  pname = "criticality-score";
+  version = "2.0.4";
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-5XkVT0blnLG158a01jDfQl1Rx9U1LMsqaMjTdN7Q4QQ=";
+  src = fetchFromGitHub {
+    owner = "ossf";
+    repo = "criticality_score";
+    tag = "v${version}";
+    hash = "sha256-p2ZXNpPFwIKPWDKCdEUZQvt/hvLQS9xjZaaquNTaUB0=";
   };
 
-  propagatedBuildInputs = with python3Packages; [
-    pygithub
-    python-gitlab
+  proxyVendor = true;
+
+  vendorHash = "sha256-mKCwyAE/fI9ateKcrTLDAdULbT6pUpV0cMZ0X5bqT1M=";
+
+  ldflags = [
+    "-s"
+    "-w"
+    "-X=main.version=${version}"
+    "-X=main.commit=${src.tag}"
+    "-X=main.date=1970-01-01T00:00:00Z"
   ];
 
-  doCheck = false;
+  subPackages = [
+    "cmd/collect_signals"
+    "cmd/criticality_score"
+    "cmd/csv_transfer"
+    "cmd/enumerate_github"
+    "cmd/scorer"
+  ];
 
-  pythonImportsCheck = [ "criticality_score" ];
+  doInstallCheck = true;
 
-  meta = with lib; {
-    description = "Python tool for computing the Open Source Project Criticality Score";
-    mainProgram = "criticality_score";
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgram = "${placeholder "out"}/bin/${meta.mainProgram}";
+  versionCheckProgramArg = [ "--version" ];
+
+  meta = {
+    description = "Gives criticality score for an open source project";
     homepage = "https://github.com/ossf/criticality_score";
     changelog = "https://github.com/ossf/criticality_score/releases/tag/v${version}";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ wamserma ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ wamserma ];
+    mainProgram = "criticality_score";
   };
 }
