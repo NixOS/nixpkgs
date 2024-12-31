@@ -5,7 +5,6 @@
   hexdump,
   wxGTK32,
   zlib,
-  Cocoa,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,20 +24,18 @@ stdenv.mkDerivation rec {
     hexdump
   ];
 
-  buildInputs =
-    [
-      wxGTK32
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Cocoa
-    ];
+  buildInputs = [
+    wxGTK32
+    zlib
+  ];
 
   makeFlags = [
     "prefix=${placeholder "out"}"
     "CC=${stdenv.cc.targetPrefix}cc"
     "CXX=${stdenv.cc.targetPrefix}c++"
   ];
+
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
   preInstall = ''
     mkdir -p $out/bin

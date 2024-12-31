@@ -1632,6 +1632,12 @@
     matrix = "@anthonyrsl:matrix.org";
     keys = [ { fingerprint = "472D 368A F107 F443 F3A5  C712 9DC4 987B 1A55 E75E"; } ];
   };
+  antipatico = {
+    email = "code@bootkit.dev";
+    github = "antipatico";
+    githubId = 14838767;
+    name = "Jacopo Scannella";
+  };
   antoinerg = {
     email = "roygobeil.antoine@gmail.com";
     github = "antoinerg";
@@ -2509,6 +2515,12 @@
     github = "Banh-Canh";
     githubId = 66330398;
     name = "Victor Hang";
+  };
+  baongoc124 = {
+    email = "baongoc124@gmail.com";
+    github = "baongoc124";
+    githubId = 766221;
+    name = "Ngoc Nguyen";
   };
   barab-i = {
     email = "barab_i@outlook.com";
@@ -4930,6 +4942,12 @@
     email = "damhiya@gmail.com";
     github = "damhiya";
     githubId = 13533446;
+  };
+  damidoug = {
+    email = "contact@damidoug.dev";
+    github = "damidoug";
+    githubId = 75175586;
+    name = "Douglas Damiano";
   };
   DamienCassou = {
     email = "damien@cassou.me";
@@ -20454,6 +20472,13 @@
     githubId = 71049646;
     keys = [ { fingerprint = "8BDF DFB5 6842 2393 82A0  441B 9238 BC70 9E05 516A"; } ];
   };
+  sehqlr = {
+    name = "Sam Hatfield";
+    email = "hey@samhatfield.me";
+    matrix = "@sehqlr:matrix.org";
+    github = "sehqlr";
+    githubId = 2746852;
+  };
   sei40kr = {
     name = "Seong Yong-ju";
     email = "sei40kr@gmail.com";
@@ -24370,6 +24395,13 @@
     github = "WilliButz";
     githubId = 20464732;
     name = "Willi Butz";
+  };
+  willow_ch = {
+    email = "nix@w.wolo.dev";
+    github = "spaghetus";
+    githubId = 28763739;
+    name = "Willow Carlson-Huber";
+    keys = [ { fingerprint = "FE21E0981CDFD50ADD086423C21A693BA4693A60"; } ];
   };
   willswats = {
     email = "williamstuwatson@gmail.com";
