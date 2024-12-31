@@ -2,7 +2,8 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  gitUpdater,
+  fetchpatch,
+  unstableGitUpdater,
   nixosTests,
   accountsservice,
   cmake,
@@ -20,14 +21,22 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ayatana-indicator-keyboard";
-  version = "24.7.0";
+  version = "24.7.0-unstable-2024-11-09";
 
   src = fetchFromGitHub {
     owner = "AyatanaIndicators";
     repo = "ayatana-indicator-keyboard";
-    rev = finalAttrs.version;
-    hash = "sha256-W7AvSU2k1vCz6drnm7MDTUNC1irljXjgnFsprYxKAg0=";
+    rev = "270798fbb77775a01fa339622a16c365acb57d67";
+    hash = "sha256-3mjOvjtF9a3NK/IawWGwqiw/dkRkW6MISMDyoSlYylc=";
   };
+
+  patches = [
+    (fetchpatch {
+      name = "0001-ayatana-indicator-keyboard-Never-crash-when-getting-system-layouts.patch";
+      url = "https://github.com/AyatanaIndicators/ayatana-indicator-keyboard/commit/f4aba7e7e809b6c72971142a63aac233df5e1391.patch";
+      hash = "sha256-ypiIn8vpxWjOqt6RoUnyW4LR2R0fsfP+qip991iSSu8=";
+    })
+  ];
 
   postPatch = ''
     substituteInPlace data/CMakeLists.txt \
@@ -75,7 +84,7 @@ stdenv.mkDerivation (finalAttrs: {
       ];
     };
     tests.vm = nixosTests.ayatana-indicators;
-    updateScript = gitUpdater { };
+    updateScript = unstableGitUpdater { };
   };
 
   meta = {
