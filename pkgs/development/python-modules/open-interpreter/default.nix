@@ -53,6 +53,7 @@ buildPythonPackage rec {
     "google-generativeai"
     "psutil"
     "pynput"
+    "tiktoken"
     "yaspin"
   ];
 
