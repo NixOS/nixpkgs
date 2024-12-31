@@ -188,4 +188,11 @@ in
       services = lib.mapAttrs' (_: mkService) cfg.keyboards;
     };
   };
+
+  meta = {
+    maintainers = with lib.maintainers; [
+      linj
+      rvdp
+    ];
+  };
 }
