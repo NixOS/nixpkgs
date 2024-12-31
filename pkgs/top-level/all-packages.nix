@@ -12103,8 +12103,6 @@ with pkgs;
 
   alfred = callPackage ../os-specific/linux/batman-adv/alfred.nix { };
 
-  alertmanager-executor = callPackage ../servers/monitoring/alertmanager-executor { };
-
   alsa-utils = callPackage ../by-name/al/alsa-utils/package.nix {
     fftw = fftwFloat;
   };

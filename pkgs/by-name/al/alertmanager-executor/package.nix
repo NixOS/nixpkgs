@@ -13,10 +13,10 @@ buildGoModule rec {
     owner = "imgix";
     repo = "prometheus-am-executor";
     rev = "d43ae740ade7641258cc13c4ef2b9c19e7c63fc2";
-    sha256 = "sha256-TJIh+mNBTOauheIlC4O6FI5xBzmcXgMyVA+zUFyYY/4=";
+    hash = "sha256-TJIh+mNBTOauheIlC4O6FI5xBzmcXgMyVA+zUFyYY/4=";
   };
 
-  vendorSha256 = "sha256-NUu97fpCw1YPyRyHq4+sX9IiSHb3ALlx8yo4zvppP/A=";
+  vendorHash = "sha256-NUu97fpCw1YPyRyHq4+sX9IiSHb3ALlx8yo4zvppP/A=";
 
   ldflags = [
     "-s"
