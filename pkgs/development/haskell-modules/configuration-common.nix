@@ -29,15 +29,15 @@ self: super: {
   Cabal_3_12_1_0 = doDistribute (super.Cabal_3_12_1_0.override {
     Cabal-syntax = self.Cabal-syntax_3_12_1_0;
   });
-  Cabal_3_14_0_0 = doDistribute (super.Cabal_3_14_0_0.override {
-    Cabal-syntax = self.Cabal-syntax_3_14_0_0;
+  Cabal_3_14_1_0 = doDistribute (super.Cabal_3_14_1_0.override {
+    Cabal-syntax = self.Cabal-syntax_3_14_1_0;
   });
 
   # hackage-security == 0.6.2.6 has a wider support range in theory, but it only
-  # makes sense to use the non Stackage version if we want to use Cabal* >= 3.12
+  # makes sense to use the non Stackage version if we want to use Cabal* >= 3.14
   hackage-security_0_6_2_6 = super.hackage-security_0_6_2_6.override {
-    Cabal = self.Cabal_3_12_1_0;
-    Cabal-syntax = self.Cabal-syntax_3_12_1_0;
+    Cabal = self.Cabal_3_14_1_0;
+    Cabal-syntax = self.Cabal-syntax_3_14_1_0;
   };
 
   # cabal-install needs most recent versions of Cabal and Cabal-syntax,
@@ -48,9 +48,9 @@ self: super: {
       cabalInstallOverlay = cself: csuper:
         {
           hackage-security = self.hackage-security_0_6_2_6;
-        } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.10.2") {
-          Cabal = cself.Cabal_3_12_1_0;
-          Cabal-syntax = cself.Cabal-syntax_3_12_1_0;
+        } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.12") {
+          Cabal = cself.Cabal_3_14_1_0;
+          Cabal-syntax = cself.Cabal-syntax_3_14_1_0;
         };
     in
     {
@@ -169,7 +169,7 @@ self: super: {
   # jacinda needs latest version of alex and happy
   jacinda = super.jacinda.override {
     alex = self.alex_3_5_1_0;
-    happy = self.happy_2_1_2;
+    happy = self.happy_2_1_3;
   };
 
   # 2024-07-09: rhine 1.4.* needs newer monad-schedule than stackage (and is only consumer)
@@ -202,6 +202,11 @@ self: super: {
   # Too strict bounds on hspec < 2.11
   http-api-data = doJailbreak super.http-api-data;
   tasty-discover = doJailbreak super.tasty-discover;
+
+  # Too strict lower bound on lens, drop with LTS 23
+  provide = doJailbreak super.provide;
+  # Too strict bounds on quickcheck-instances/tasty-qickcheck, drop with LTS 23
+  lawful-conversions = doJailbreak super.lawful-conversions;
 
   # Out of date test data: https://github.com/ocharles/weeder/issues/176
   weeder = appendPatch (pkgs.fetchpatch {
@@ -265,9 +270,6 @@ self: super: {
   termbox-bindings-c = appendConfigureFlags [
     "--ghc-option=-optc=-Wno-error=implicit-function-declaration"
   ] super.termbox-bindings-c;
-  libxml-sax = appendConfigureFlags [
-    "--ghc-option=-optc=-Wno-error=implicit-function-declaration"
-  ] super.libxml-sax;
 
   # There are numerical tests on random data, that may fail occasionally
   lapack = dontCheck super.lapack;
@@ -374,6 +376,11 @@ self: super: {
   # As well as deepseq < 1.5 (so it forbids GHC 9.8)
   hw-fingertree = doJailbreak super.hw-fingertree;
 
+  # Test suite is slow and sometimes comes up with counter examples.
+  # Upstream is aware (https://github.com/isovector/nspace/issues/1),
+  # if it's a bug, at least doesn't seem to be nixpkgs-specific.
+  nspace = dontCheck super.nspace;
+
   # 2024-03-10: Maintainance stalled, fixes unmerged: https://github.com/haskell/ThreadScope/pull/130
   threadscope = overrideCabal (drv: {
     prePatch = drv.prePatch or "" + ''
@@ -442,7 +449,7 @@ self: super: {
       name = "git-annex-${super.git-annex.version}-src";
       url = "git://git-annex.branchable.com/";
       rev = "refs/tags/" + super.git-annex.version;
-      sha256 = "0lhy8yhlnjw8n9ymn1r6n7z9vgil188asj10s2q5mjb706ip8wmj";
+      sha256 = "0jr4crq52qvnn85qxw077bdpzrgvamm7fmrqn6ygrhlyk1lb9n9x";
       # delete android and Android directories which cause issues on
       # darwin (case insensitive directory). Since we don't need them
       # during the build process, we can delete it to prevent a hash
@@ -489,6 +496,10 @@ self: super: {
   # Too strict upper bound on algebraic-graphs
   # https://github.com/awakesecurity/nix-graph/issues/5
   nix-graph = doJailbreak super.nix-graph;
+
+  # Too strict bounds on hspec
+  # https://github.com/illia-shkroba/pfile/issues/2
+  pfile = doJailbreak super.pfile;
 
   # Manually maintained
   cachix-api = overrideCabal (drv: {
@@ -1966,18 +1977,18 @@ self: super: {
 
   # Pandoc 3.5 improves the quality of PDF rendering in Quarto >=1.6.30.
   # https://github.com/NixOS/nixpkgs/pull/349683
-  pandoc-cli_3_5 = super.pandoc-cli_3_5.overrideScope (
+  pandoc-cli_3_6 = super.pandoc-cli_3_6.overrideScope (
     self: super: {
       doclayout = self.doclayout_0_5;
       hslua-module-doclayout = self.hslua-module-doclayout_1_2_0;
       lpeg = self.lpeg_1_1_0;
-      pandoc = self.pandoc_3_5;
-      pandoc-lua-engine = self.pandoc-lua-engine_0_3_3;
-      pandoc-server = self.pandoc-server_0_1_0_9;
-      texmath = self.texmath_0_12_8_11;
+      pandoc = self.pandoc_3_6;
+      pandoc-lua-engine = self.pandoc-lua-engine_0_4;
+      pandoc-server = self.pandoc-server_0_1_0_10;
+      texmath = self.texmath_0_12_8_12;
       tls = self.tls_2_0_6;
       toml-parser = self.toml-parser_2_0_1_0;
-      typst = self.typst_0_6;
+      typst = self.typst_0_6_1;
       typst-symbols = self.typst-symbols_0_1_6;
     }
   );
@@ -2153,6 +2164,7 @@ self: super: {
   # 2021-04-16: too strict bounds on QuickCheck and tasty
   # https://github.com/hasufell/lzma-static/issues/1
   lzma-static = doJailbreak super.lzma-static;
+  xz = doJailbreak super.xz;
 
   # Too strict version bounds on base:
   # https://github.com/obsidiansystems/database-id/issues/1
@@ -2237,8 +2249,8 @@ self: super: {
   }) super.gi-gtk-declarative;
   gi-gtk-declarative-app-simple = doJailbreak super.gi-gtk-declarative-app-simple;
 
-  gi-gtk_4 = self.gi-gtk_4_0_9;
-  gi-gtk_4_0_9 = doDistribute (super.gi-gtk_4_0_9.override {
+  gi-gtk_4 = self.gi-gtk_4_0_11;
+  gi-gtk_4_0_11 = doDistribute (super.gi-gtk_4_0_11.override {
     gi-gdk = self.gi-gdk_4;
   });
   gi-gdk_4 = self.gi-gdk_4_0_9;
@@ -2752,21 +2764,6 @@ self: super: {
   # base <4.14
   decimal-literals = doJailbreak super.decimal-literals;
 
-  # 2024-06-22: hevm ghc96 fixes
-  hevm = lib.pipe super.hevm [
-    (appendPatch (fetchpatch {
-      url = "https://github.com/ethereum/hevm/compare/02c072f...hellwolf:hevm:c29d3a7.patch";
-      hash = "sha256-cL26HD77vXsiKqo5G6PXgK0q19MUGMwaNium5x93CBI=";
-    }))
-    (overrideCabal (old: {
-      postPatch = old.postPatch or "" + ''
-        sed -i 's/^ *brick .*,/brick,/' hevm.cabal
-        sed -i 's/^ *vty .*,/vty,/' hevm.cabal
-      '';
-    }))
-    doJailbreak
-  ];
-
   # multiple bounds too strict
   snaplet-sqlite-simple = doJailbreak super.snaplet-sqlite-simple;
 
@@ -2942,36 +2939,6 @@ self: super: {
     })
     super.linux-namespaces;
 
-  inherit
-    (let
-      unbreakRepa = packageName: drv: lib.pipe drv [
-        # 2023-12-23: Apply build fixes for ghc >=9.4
-        (appendPatches (lib.optionals (lib.versionAtLeast self.ghc.version "9.4") (repaPatches.${packageName} or [])))
-        # 2023-12-23: jailbreak for base <4.17, vector <0.13
-        doJailbreak
-      ];
-      # https://github.com/haskell-repa/repa/pull/27
-      repaPatches = lib.mapAttrs (relative: hash: lib.singleton (pkgs.fetchpatch {
-        name = "repa-pr-27.patch";
-        url = "https://github.com/haskell-repa/repa/pull/27/commits/40cb2866bb4da51a8cac5e3792984744a64b016e.patch";
-        inherit relative hash;
-     })) {
-        repa = "sha256-bcSnzvCJmmSBts9UQHA2dYL0Q+wXN9Fbz5LfkrmhCo8=";
-        repa-io = "sha256-KsIN7NPWCyTpVzhR+xaBKGl8vC6rYH94llvlTawSxFk=";
-        repa-examples = "sha256-//2JG1CW1h2sKS2BSJadVAujSE3v1TfS0F8zgcNkPI8=";
-        repa-algorithms = "sha256-z/a7DpT3xJrIsif4cbciYcTSjapAtCoNNVX7PrZtc4I=";
-      };
-    in
-      lib.mapAttrs unbreakRepa super)
-    repa
-    repa-io
-    repa-examples
-    repa-algorithms
-    # The following packages aren't fixed yet, sorry:
-    #   repa-array, repa-convert, repa-eval, repa-flow,
-    #   repa-query, repa-scalar, repa-store, repa-stream
-  ;
-
   # Use recent git version as the hackage version is outdated and not building on recent GHC versions
   haskell-to-elm = overrideSrc {
     version = "unstable-2023-12-02";
@@ -3086,5 +3053,11 @@ self: super: {
       sha256 = "sha256-MnOc51tTNg8+HDu1VS2Ct7Mtu0vuuRd3DjzOAOF+t7Q=";
     })
   ] super.hailgun;
+
+  # opencascade-hs requires the include path configuring relative to the
+  # opencascade subdirectory in include.
+  opencascade-hs = appendConfigureFlags [
+    "--extra-include-dirs=${lib.getDev pkgs.opencascade-occt}/include/opencascade"
+  ] super.opencascade-hs;
 
 } // import ./configuration-tensorflow.nix {inherit pkgs haskellLib;} self super

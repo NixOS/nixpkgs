@@ -385,7 +385,7 @@ in
         buildTargetLlvmPackages = pkgsBuildTarget.llvmPackages_15;
         llvmPackages = pkgs.llvmPackages_15;
       };
-      ghc98 = compiler.ghc982; # HLS doesn't work yet with 9.8.3
+      ghc98 = compiler.ghc984;
       ghc9101 = callPackage ../development/compilers/ghc/9.10.1.nix {
         bootPkgs =
           # For GHC 9.6 no armv7l bindists are available.
@@ -595,7 +595,7 @@ in
         ghc = bh.compiler.ghc984;
         compilerConfig = callPackage ../development/haskell-modules/configuration-ghc-9.8.x.nix { };
       };
-      ghc98 = packages.ghc982; # HLS doesn't work yet with 9.8.3
+      ghc98 = packages.ghc984;
       ghc9101 = callPackage ../development/haskell-modules {
         buildHaskellPackages = bh.packages.ghc9101;
         ghc = bh.compiler.ghc9101;

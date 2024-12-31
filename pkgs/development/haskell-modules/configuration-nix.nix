@@ -709,6 +709,7 @@ self: super: builtins.intersectAttrs super {
 
   # Break infinite recursion cycle between QuickCheck and splitmix.
   splitmix = dontCheck super.splitmix;
+  splitmix_0_1_1 = dontCheck super.splitmix_0_1_1;
 
   # Break infinite recursion cycle with OneTuple and quickcheck-instances.
   foldable1-classes-compat = dontCheck super.foldable1-classes-compat;
@@ -826,6 +827,8 @@ self: super: builtins.intersectAttrs super {
       # Setup PATH for the actual tests
       ln -sf dist/build/git-annex/git-annex git-annex
       ln -sf git-annex git-annex-shell
+      ln -sf git-annex git-remote-annex
+      ln -sf git-annex git-remote-tor-annex
       PATH+=":$PWD"
 
       echo checkFlags: $checkFlags ''${checkFlagsArray:+"''${checkFlagsArray[@]}"}
@@ -983,6 +986,7 @@ self: super: builtins.intersectAttrs super {
   # break infinite recursion with base-orphans
   primitive = dontCheck super.primitive;
   primitive_0_7_1_0 = dontCheck super.primitive_0_7_1_0;
+  primitive_0_9_0_0 = dontCheck super.primitive_0_9_0_0;
 
   cut-the-crap =
     let path = pkgs.lib.makeBinPath [ pkgs.ffmpeg pkgs.youtube-dl ];
@@ -1344,12 +1348,12 @@ self: super: builtins.intersectAttrs super {
 
   # Test have become more fussy in >= 2.0. We need to have which available for
   # tests to succeed and the makefile no longer finds happy by itself.
-  happy_2_1_2 = overrideCabal (drv: {
+  happy_2_1_3 = overrideCabal (drv: {
     buildTools = drv.buildTools or [ ] ++ [ pkgs.buildPackages.which ];
     preCheck = drv.preCheck or "" + ''
       export PATH="$PWD/dist/build/happy:$PATH"
     '';
-  }) super.happy_2_1_2;
+  }) super.happy_2_1_3;
   # Additionally install documentation
   jacinda = overrideCabal (drv: {
     enableSeparateDocOutput = true;
@@ -1434,6 +1438,12 @@ self: super: builtins.intersectAttrs super {
   # Disable checks to break dependency loop with SCalendar
   scalendar = dontCheck super.scalendar;
 
+  # Make sure we build xz against nixpkgs' xz package instead of
+  # Hackage repackaging of the upstream sources.
+  xz = enableCabalFlag "system-xz" super.xz;
+  xz-clib = dontDistribute super.xz-clib;
+  lzma-static = dontDistribute super.lzma-static; # deprecated
+
   halide-haskell = super.halide-haskell.override { Halide = pkgs.halide; };
 
   feedback = self.generateOptparseApplicativeCompletions [ "feedback" ]
@@ -1449,7 +1459,7 @@ self: super: builtins.intersectAttrs super {
     }) super)
       gi-javascriptcore
       gi-webkit2webextension
-      gi-gtk_4_0_9
+      gi-gtk_4_0_11
       gi-gdk_4_0_9
       gi-gsk
       gi-adwaita
