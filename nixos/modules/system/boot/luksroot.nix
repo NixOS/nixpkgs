@@ -42,9 +42,11 @@ let
         if ! dev_exist $target; then
             echo -n "Waiting $secs seconds for $desc..."
             local success=false;
-            for try in $(seq $secs); do
+            local try=0
+            while [ $try -lt $secs ] ; do
                 echo -n "."
                 sleep 1
+                try=$((try+1))
                 if dev_exist $target; then
                     success=true
                     break
@@ -68,9 +70,11 @@ let
         if [ $? != 0 ]; then
             echo -n "Waiting $secs seconds for YubiKey to appear..."
             local success=false
-            for try in $(seq $secs); do
-                echo -n .
+            local try=0
+            while [ $try -lt $secs ] ; do
+                echo -n "."
                 sleep 1
+                try=$((try+1))
                 ykinfo -v 1>/dev/null 2>&1
                 if [ $? == 0 ]; then
                     success=true
@@ -95,9 +99,11 @@ let
         if [ $? != 0 ]; then
             echo -n "Waiting $secs seconds for GPG Card to appear"
             local success=false
-            for try in $(seq $secs); do
-                echo -n .
+            local try=0
+            while [ $try -lt $secs ] ; do
+                echo -n "."
                 sleep 1
+                try=$((try+1))
                 gpg --card-status > /dev/null 2> /dev/null
                 if [ $? == 0 ]; then
                     success=true
