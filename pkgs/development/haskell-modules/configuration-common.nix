@@ -487,6 +487,10 @@ self: super: {
   # https://github.com/awakesecurity/nix-graph/issues/5
   nix-graph = doJailbreak super.nix-graph;
 
+  # Too strict bounds on hspec
+  # https://github.com/illia-shkroba/pfile/issues/2
+  pfile = doJailbreak super.pfile;
+
   # Manually maintained
   cachix-api = overrideCabal (drv: {
     version = "1.7.5";
