@@ -58,6 +58,7 @@ self: super: {
   xhtml = null;
 
   # Version upgrades
+  htree = doDistribute self.htree_0_2_0_0;
   primitive = doDistribute self.primitive_0_9_0_0;
   splitmix = doDistribute self.splitmix_0_1_1;
   tagged = doDistribute self.tagged_0_8_9;
