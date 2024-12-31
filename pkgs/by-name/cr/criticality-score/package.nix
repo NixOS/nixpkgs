@@ -1,12 +1,10 @@
 {
   lib,
-  buildPythonPackage,
+  python3Packages,
   fetchPypi,
-  pygithub,
-  python-gitlab,
 }:
 
-buildPythonPackage rec {
+python3Packages.buildPythonApplication rec {
   pname = "criticality_score";
   version = "1.0.8";
 
@@ -15,7 +13,7 @@ buildPythonPackage rec {
     hash = "sha256-5XkVT0blnLG158a01jDfQl1Rx9U1LMsqaMjTdN7Q4QQ=";
   };
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     pygithub
     python-gitlab
   ];
