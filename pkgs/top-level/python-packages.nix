@@ -4879,6 +4879,8 @@ self: super: with self; {
 
   oelint-parser = callPackage ../development/python-modules/oelint-parser { };
 
+  ohmepy = callPackage ../development/python-modules/ohmepy { };
+
   openstep-parser = callPackage ../development/python-modules/openstep-parser { };
 
   openstep-plist = callPackage ../development/python-modules/openstep-plist { };
