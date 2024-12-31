@@ -37,13 +37,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "shadps4";
-  version = "0.4.0-unstable-2024-12-23";
+  version = "0.5.0-unstable-2025-01-02";
 
   src = fetchFromGitHub {
     owner = "shadps4-emu";
     repo = "shadPS4";
-    rev = "c2e9c877dd82e9bf79c8ede7bc8cffb591a31c76";
-    hash = "sha256-6LmNLH5Fy+9AYDXLh/YFThs3EUgA6gnmUEvBltkUQig=";
+    rev = "596f4cdf0e66a97c9d2d4272091d8c0167a5b8e1";
+    hash = "sha256-apwAl8TCzSKchqYGHV0UsMSGErF4GgiwhlwmOPWpeLs=";
     fetchSubmodules = true;
   };
 
@@ -113,15 +113,10 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postInstall
   '';
 
-  fixupPhase = ''
-    patchelf --add-rpath ${
-      lib.makeLibraryPath [
-        vulkan-loader
-        xorg.libXi
-      ]
-    } \
-      $out/bin/shadps4
-  '';
+  runtimeDependencies = [
+    vulkan-loader
+    xorg.libXi
+  ];
 
   passthru = {
     tests.openorbis-example = nixosTests.shadps4;
