@@ -74,6 +74,8 @@ let
       };
     };
 
+  mkName = name: "kmonad-" + name;
+
   # Create a complete KMonad configuration file:
   mkCfg =
     keyboard:
@@ -81,7 +83,7 @@ let
       defcfg = ''
         (defcfg
           input  (device-file "${keyboard.device}")
-          output (uinput-sink "kmonad-${keyboard.name}")
+          output (uinput-sink "${mkName keyboard.name}")
           ${lib.optionalString (keyboard.defcfg.compose.key != null) ''
             cmp-seq ${keyboard.defcfg.compose.key}
             cmp-seq-delay ${toString keyboard.defcfg.compose.delay}
@@ -92,7 +94,7 @@ let
       '';
     in
     pkgs.writeTextFile {
-      name = "kmonad-${keyboard.name}.cfg";
+      name = "${mkName keyboard.name}.cfg";
       text = lib.optionalString keyboard.defcfg.enable (defcfg + "\n") + keyboard.config;
       checkPhase = "${cfg.package}/bin/kmonad -d $out";
     };
@@ -102,7 +104,7 @@ let
   mkPath =
     keyboard:
     let
-      name = "kmonad-${keyboard.name}";
+      name = mkName keyboard.name;
     in
     lib.nameValuePair name {
       description = "KMonad trigger for ${keyboard.device}";
@@ -126,7 +128,7 @@ let
         ++ cfg.extraArgs
         ++ [ "${mkCfg keyboard}" ];
     in
-    lib.nameValuePair "kmonad-${keyboard.name}" {
+    lib.nameValuePair (mkName keyboard.name) {
       description = "KMonad for ${keyboard.device}";
       script = lib.escapeShellArgs cmd;
       unitConfig = {
