@@ -148,6 +148,9 @@ qtModule {
         --replace "QLibraryInfo::path(QLibraryInfo::DataPath)" "\"$out\"" \
         --replace "QLibraryInfo::path(QLibraryInfo::TranslationsPath)" "\"$out/translations\"" \
         --replace "QLibraryInfo::path(QLibraryInfo::LibraryExecutablesPath)" "\"$out/libexec\""
+
+      substituteInPlace configure.cmake src/gn/CMakeLists.txt \
+        --replace "AppleClang" "Clang"
     ''
     + lib.optionalString stdenv.hostPlatform.isLinux ''
       sed -i -e '/lib_loader.*Load/s!"\(libudev\.so\)!"${lib.getLib systemd}/lib/\1!' \
@@ -157,8 +160,6 @@ qtModule {
         src/3rdparty/chromium/gpu/config/gpu_info_collector_linux.cc
     ''
     + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      substituteInPlace configure.cmake src/gn/CMakeLists.txt \
-        --replace "AppleClang" "Clang"
       substituteInPlace cmake/Functions.cmake \
         --replace "/usr/bin/xcrun" "${xcbuild}/bin/xcrun"
     '';
