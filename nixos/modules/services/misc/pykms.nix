@@ -31,6 +31,7 @@ in
       listenAddress = lib.mkOption {
         type = lib.types.str;
         default = "0.0.0.0";
+        example = "::";
         description = "The IP address on which to listen.";
       };
 
