@@ -39,6 +39,7 @@
 , webkitgtk_4_0
 , withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemd, systemd
 , wxGTK-override ? null
+, opencascade-override ? null
 }:
 let
   wxGTK-prusa = wxGTK32.overrideAttrs (old: rec {
@@ -67,6 +68,7 @@ let
   });
   openvdb_tbb_2021_8 = openvdb.override { tbb = tbb_2021_11; };
   wxGTK-override' = if wxGTK-override == null then wxGTK-prusa else wxGTK-override;
+  opencascade-override' = if opencascade-override == null then opencascade-occt_7_6_1 else opencascade-override;
 
   patches = [
   ];
@@ -127,7 +129,7 @@ stdenv.mkDerivation (finalAttrs: {
     mpfr
     nanosvg-fltk
     nlopt
-    opencascade-occt_7_6_1
+    opencascade-override'
     openvdb_tbb_2021_8
     pcre
     qhull
