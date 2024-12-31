@@ -2,6 +2,7 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
+  nix-update-script,
   testers,
   nixel,
 }:
@@ -27,6 +28,7 @@ rustPlatform.buildRustPackage rec {
   passthru.tests = {
     version = testers.testVersion { package = nixel; };
   };
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Lexer, Parser, Abstract Syntax Tree and Concrete Syntax Tree for the Nix Expressions Language";
