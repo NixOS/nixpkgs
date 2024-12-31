@@ -18,10 +18,10 @@
 mkXfceDerivation {
   category = "apps";
   pname = "xfce4-terminal";
-  version = "1.1.3";
+  version = "1.1.4";
   odd-unstable = false;
 
-  sha256 = "sha256-CUIQf22Lmb6MNPd2wk8LlHFNUhdIoC1gzVV6RDP2PfY=";
+  sha256 = "sha256-WrmffY8kC9tBorvtEb8q6DmHKX5d7HnvbxtBbpy4LJs=";
 
   nativeBuildInputs = [
     libxslt

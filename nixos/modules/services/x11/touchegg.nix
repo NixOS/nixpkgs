@@ -4,27 +4,24 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.touchegg;
 
 in
 {
   meta = {
-    maintainers = teams.pantheon.members;
+    maintainers = lib.teams.pantheon.members;
   };
 
   ###### interface
   options.services.touchegg = {
-    enable = mkEnableOption "touchegg, a multi-touch gesture recognizer";
+    enable = lib.mkEnableOption "touchegg, a multi-touch gesture recognizer";
 
-    package = mkPackageOption pkgs "touchegg" { };
+    package = lib.mkPackageOption pkgs "touchegg" { };
   };
 
   ###### implementation
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.touchegg = {
       description = "Touchegg Daemon";
       serviceConfig = {

@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.xserver.desktopManager.kodi;
 in
@@ -14,19 +11,19 @@ in
 {
   options = {
     services.xserver.desktopManager.kodi = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Enable the kodi multimedia center.";
       };
 
-      package = mkPackageOption pkgs "kodi" {
+      package = lib.mkPackageOption pkgs "kodi" {
         example = "kodi.withPackages (p: with p; [ jellyfin pvr-iptvsimple vfs-sftp ])";
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.xserver.desktopManager.session = [
       {
         name = "kodi";
