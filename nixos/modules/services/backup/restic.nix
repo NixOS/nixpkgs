@@ -401,7 +401,10 @@ in
     environment.systemPackages = lib.mapAttrsToList (name: backup: let
       extraOptions = lib.concatMapStrings (arg: " -o ${arg}") backup.extraOptions;
       resticCmd = "${backup.package}/bin/restic${extraOptions}";
-    in pkgs.writeShellScriptBin "restic-${name}" ''
+    in pkgs.runCommand "restic-${name}" ''
+      mkdir -p $out/{bin,share/bash-completion/completions}
+
+      cat <<'EOF' > $out/bin/restic-${name}
       set -a  # automatically export variables
       ${lib.optionalString (backup.environmentFile != null) "source ${backup.environmentFile}"}
       # set same environment variables as the systemd service
@@ -412,7 +415,22 @@ in
       ]}
       PATH=${config.systemd.services."restic-backups-${name}".environment.PATH}:$PATH
 
-      exec ${resticCmd} $@
+      exec ${resticCmd} "$@"
+      EOF
+
+      chmod +x $out/bin/restic-${name}
+
+      sed 's:__start_restic restic:__start_restic restic-${name}:' \
+        ${backup.package}/share/bash-completion/completions/restic.bash \
+        > $out/share/bash-completion/completions/restic-${name}.bash
+
+      sed 's:compdef _restic restic:compdef _restic restic-${name}:' \
+        ${backup.package}/share/zsh/site-functions/_restic \
+        > $out/share/zsh/site-functions/_restic-${name}
+
+      sed 's:\(complete \(-k \)\?-c restic\):\1-${name}:;s:"restic:"restic-${name}:' \
+        ${backup.package}/share/fish/vendor_completions.d/restic.fish \
+        > $out/share/fish/vendor_completions.d/restic-${name}.fish \
     '') (lib.filterAttrs (_: v: v.createWrapper) config.services.restic.backups);
   };
 }
