@@ -4,7 +4,6 @@
   lib,
   ...
 }:
-with lib;
 let
   cfg = config.services.zerobin;
 
@@ -17,34 +16,34 @@ in
 {
   options = {
     services.zerobin = {
-      enable = mkEnableOption "0bin";
+      enable = lib.mkEnableOption "0bin";
 
-      dataDir = mkOption {
-        type = types.str;
+      dataDir = lib.mkOption {
+        type = lib.types.str;
         default = "/var/lib/zerobin";
         description = ''
           Path to the 0bin data directory
         '';
       };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "zerobin";
         description = ''
           The user 0bin should run as
         '';
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "zerobin";
         description = ''
           The group 0bin should run as
         '';
       };
 
-      listenPort = mkOption {
-        type = types.int;
+      listenPort = lib.mkOption {
+        type = lib.types.int;
         default = 8000;
         example = 1357;
         description = ''
@@ -52,8 +51,8 @@ in
         '';
       };
 
-      listenAddress = mkOption {
-        type = types.str;
+      listenAddress = lib.mkOption {
+        type = lib.types.str;
         default = "localhost";
         example = "127.0.0.1";
         description = ''
@@ -61,8 +60,8 @@ in
         '';
       };
 
-      extraConfig = mkOption {
-        type = types.lines;
+      extraConfig = lib.mkOption {
+        type = lib.types.lines;
         default = "";
         example = ''
           MENU = (
@@ -78,8 +77,8 @@ in
     };
   };
 
-  config = mkIf (cfg.enable) {
-    users.users.${cfg.user} = optionalAttrs (cfg.user == "zerobin") {
+  config = lib.mkIf (cfg.enable) {
+    users.users.${cfg.user} = lib.optionalAttrs (cfg.user == "zerobin") {
       isSystemUser = true;
       group = cfg.group;
       home = cfg.dataDir;

@@ -5,16 +5,13 @@
   options,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.openntpd;
 
   package = pkgs.openntpd_nixos;
 
   configFile = ''
-    ${concatStringsSep "\n" (map (s: "server ${s}") cfg.servers)}
+    ${lib.concatStringsSep "\n" (map (s: "server ${s}") cfg.servers)}
     ${cfg.extraConfig}
   '';
 
@@ -25,17 +22,17 @@ in
   ###### interface
 
   options.services.openntpd = {
-    enable = mkEnableOption "OpenNTP time synchronization server";
+    enable = lib.mkEnableOption "OpenNTP time synchronization server";
 
-    servers = mkOption {
+    servers = lib.mkOption {
       default = config.services.ntp.servers;
-      defaultText = literalExpression "config.services.ntp.servers";
-      type = types.listOf types.str;
+      defaultText = lib.literalExpression "config.services.ntp.servers";
+      type = lib.types.listOf lib.types.str;
       inherit (options.services.ntp.servers) description;
     };
 
-    extraConfig = mkOption {
-      type = with types; lines;
+    extraConfig = lib.mkOption {
+      type = with lib.types; lines;
       default = "";
       example = ''
         listen on 127.0.0.1
@@ -46,8 +43,8 @@ in
       '';
     };
 
-    extraOptions = mkOption {
-      type = with types; separatedString " ";
+    extraOptions = lib.mkOption {
+      type = with lib.types; separatedString " ";
       default = "";
       example = "-s";
       description = ''
@@ -58,9 +55,9 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     meta.maintainers = with lib.maintainers; [ thoughtpolice ];
-    services.timesyncd.enable = mkForce false;
+    services.timesyncd.enable = lib.mkForce false;
 
     # Add ntpctl to the environment for status checking
     environment.systemPackages = [ package ];
