@@ -41,6 +41,9 @@ stdenv.mkDerivation rec {
     glib
   ];
 
+  # Required for gcc-14 builds
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   configureFlags = [
     "--disable-python"
   ];
