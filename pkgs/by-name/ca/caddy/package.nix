@@ -9,7 +9,7 @@
 , stdenv
 }:
 let
-  version = "2.8.4";
+  version = "2.9.0";
   dist = fetchFromGitHub {
     owner = "caddyserver";
     repo = "dist";
@@ -25,10 +25,10 @@ buildGoModule {
     owner = "caddyserver";
     repo = "caddy";
     rev = "v${version}";
-    hash = "sha256-CBfyqtWp3gYsYwaIxbfXO3AYaBiM7LutLC7uZgYXfkQ=";
+    hash = "sha256-ea1Cch0LOGVGO9CVvS61EHVwJule4HZRizpQYP1QA2w=";
   };
 
-  vendorHash = "sha256-1Api8bBZJ1/oYk4ZGIiwWCSraLzK9L+hsKXkFtk6iVM=";
+  vendorHash = "sha256-HEQCNOv4vO5QsbmoT0acRoaJ4sB0dzF1zcR38778nBI=";
 
   subPackages = [ "cmd/caddy" ];
 
