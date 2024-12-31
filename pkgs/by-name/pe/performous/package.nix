@@ -50,6 +50,11 @@ stdenv.mkDerivation rec {
       excludes = [ ".github/workflows/macos.yml" ];
       hash = "sha256-cQVelET/g2Kx2PlV3pspjEoNIwwn5Yz6enYl5vCMMKo=";
     })
+    (fetchpatch {
+      name = "performous-gcc14.patch";
+      url = "https://github.com/performous/performous/commit/eb9b97f46b7d064c32ed0f086d89a70427ce1d14.patch";
+      hash = "sha256-98pcO/sFQJ+G67ErwlO/aAITNDPuRgPziQiF1cAlc0g=";
+    })
   ];
 
   postPatch = ''
