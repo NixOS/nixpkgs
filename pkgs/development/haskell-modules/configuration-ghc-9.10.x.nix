@@ -73,6 +73,7 @@ self: super: {
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
   http2 = doDistribute self.http2_5_3_9;
   http-semantics = doDistribute self.http-semantics_0_3_0;
+  htree = doDistribute self.htree_0_2_0_0;
   lens = doDistribute self.lens_5_3_2;
   lukko = doDistribute self.lukko_0_1_2;
   network-control = super.network-control_0_1_3;
