@@ -33,6 +33,11 @@ rustPlatform.buildRustPackage rec {
     install_name_tool -add_rpath "${rustc.unwrapped}/lib" "$out/bin/git-rustfmt"
   '';
 
+  env = lib.optionalAttrs (asNightly && stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) {
+    # give install_name_tool enough space so preFixup doesn't fail
+    NIX_LDFLAGS = "-headerpad_max_install_names";
+  };
+
   # As of 1.0.0 and rustc 1.30 rustfmt requires a nightly compiler
   RUSTC_BOOTSTRAP = 1;
 
