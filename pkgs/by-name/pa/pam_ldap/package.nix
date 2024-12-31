@@ -10,13 +10,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pam_ldap";
-  version = "186";
+  version = "0-unstable-2024-02-22";
 
   src = fetchFromGitHub {
     owner = "PADL";
     repo = "pam_ldap";
-    rev = "d1c2e08e4b023708648e2d720add19da6caf77d0";
-    hash = "sha256-W0n01HqWZaEoVShXJyND3xGe+snClGm+GZRw7P4fX10=";
+    rev = "656448f091cbeb9efb3ece08e6868e40b8e7b6f8";
+    hash = "sha256-o2RBewxhaXcMW9KIRwlxFv6YaWxaBngafvjEYxFchX4=";
   };
 
   postPatch = ''
