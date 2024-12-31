@@ -209,7 +209,6 @@ mirror://xorg/individual/lib/xtrans-1.6.0.tar.xz
 mirror://xorg/individual/proto/xcb-proto-1.17.0.tar.xz
 mirror://xorg/individual/proto/xorgproto-2024.1.tar.xz
 mirror://xorg/individual/util/bdftopcf-1.1.2.tar.xz
-mirror://xorg/individual/util/gccmakedep-1.0.4.tar.xz
 mirror://xorg/individual/util/imake-1.0.10.tar.xz
 mirror://xorg/individual/util/lndir-1.0.5.tar.xz
 mirror://xorg/individual/util/makedepend-1.0.9.tar.xz

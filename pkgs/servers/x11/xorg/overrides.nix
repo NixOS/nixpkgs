@@ -157,7 +157,6 @@ self: super:
     };
   });
 
-  gccmakedep = addMainProgram super.gccmakedep { };
   iceauth = addMainProgram super.iceauth { };
   ico = addMainProgram super.ico { };
 
