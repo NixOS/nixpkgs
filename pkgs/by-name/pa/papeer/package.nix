@@ -1,4 +1,9 @@
-{ lib, buildGoModule, fetchFromGitHub }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  installShellFiles,
+}:
 
 buildGoModule rec {
   pname = "papeer";
@@ -12,6 +17,14 @@ buildGoModule rec {
   };
 
   vendorHash = "sha256-3QRSdkx9p0H+zPB//bpWCBKKjKjrx0lHMk5lFm+U7pA=";
+
+  nativeBuildInputs = [ installShellFiles ];
+  postInstall = ''
+    installShellCompletion --cmd papeer \
+      --bash <($out/bin/papeer completion bash) \
+      --fish <($out/bin/papeer completion fish) \
+      --zsh <($out/bin/papeer completion zsh)
+  '';
 
   doCheck = false; # uses network
 
