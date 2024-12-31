@@ -18568,7 +18568,7 @@
     name = "qwqawawow";
   };
   qxrein = {
-    email = "manavrj.07@gmail.com.com";
+    email = "manavrj.07@gmail.com";
     github = "qxrein";
     githubId = 101001298;
     name = "qxrein";
