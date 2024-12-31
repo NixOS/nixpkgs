@@ -1,0 +1,60 @@
+diff --git a/src/libslic3r/PrintBase.cpp b/src/libslic3r/PrintBase.cpp
+index 25b282c7b..81ee858c2 100644
+--- a/src/libslic3r/PrintBase.cpp
++++ b/src/libslic3r/PrintBase.cpp
+@@ -79,7 +79,7 @@ std::string PrintBase::output_filename(const std::string &format, const std::str
+ 			cfg.opt_string("input_filename_base") + default_ext :
+ 			this->placeholder_parser().process(format, 0, &cfg);
+         if (filename.extension().empty())
+-            filename = boost::filesystem::change_extension(filename, default_ext);
++            filename.replace_extension(default_ext);
+         return filename.string();
+     } catch (std::runtime_error &err) {
+         throw Slic3r::PlaceholderParserError(L("Failed processing of the filename_format template.") + "\n" + err.what());
+diff --git a/src/slic3r/GUI/AuxiliaryDataViewModel.cpp b/src/slic3r/GUI/AuxiliaryDataViewModel.cpp
+index 50368b854..cad5cf545 100644
+--- a/src/slic3r/GUI/AuxiliaryDataViewModel.cpp
++++ b/src/slic3r/GUI/AuxiliaryDataViewModel.cpp
+@@ -337,7 +337,7 @@ wxDataViewItemArray AuxiliaryModel::ImportFile(AuxiliaryModelNode* sel, wxArrayS
+         dir_path += "\\" + src_bfs_path.filename().generic_wstring();
+ 
+         boost::system::error_code ec;
+-        if (!fs::copy_file(src_bfs_path, fs::path(dir_path.ToStdWstring()), fs::copy_option::overwrite_if_exists, ec))
++        if (!fs::copy_file(src_bfs_path, fs::path(dir_path.ToStdWstring()), fs::copy_options::overwrite_existing, ec))
+             continue;
+ 
+         // Update model data
+diff --git a/src/slic3r/GUI/Plater.cpp b/src/slic3r/GUI/Plater.cpp
+index f3782be14..e12f0c321 100644
+--- a/src/slic3r/GUI/Plater.cpp
++++ b/src/slic3r/GUI/Plater.cpp
+@@ -10265,7 +10265,7 @@ bool Plater::preview_zip_archive(const boost::filesystem::path& archive_path)
+                             std::replace(name.begin(), name.end(), '\\', '/');
+                             // rename if file exists
+                             std::string filename = path.filename().string();
+-                            std::string extension = boost::filesystem::extension(path);
++                            std::string extension = path.extension().string();
+                             std::string just_filename = filename.substr(0, filename.size() - extension.size());
+                             std::string final_filename = just_filename;
+ 
+diff --git a/src/slic3r/GUI/RemovableDriveManager.cpp b/src/slic3r/GUI/RemovableDriveManager.cpp
+index a26e13448..83ec4695c 100644
+--- a/src/slic3r/GUI/RemovableDriveManager.cpp
++++ b/src/slic3r/GUI/RemovableDriveManager.cpp
+@@ -22,7 +22,6 @@
+ #include <pwd.h>
+ #include <boost/filesystem.hpp>
+ #include <boost/system/error_code.hpp>
+-#include <boost/filesystem/convenience.hpp>
+ #include <boost/process.hpp>
+ #endif
+ 
+@@ -202,7 +201,7 @@ namespace search_for_drives_internal
+ 				stat(path.c_str(), &buf);
+ 				uid_t uid = buf.st_uid;
+ 				if (getuid() == uid)
+-					out.emplace_back(DriveData{ boost::filesystem::basename(boost::filesystem::path(path)), path });
++					out.emplace_back(DriveData{ boost::filesystem::path(path).stem().string(), path });
+ 			}
+ 		}
+ 	}
