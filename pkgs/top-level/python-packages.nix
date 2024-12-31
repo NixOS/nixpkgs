@@ -744,6 +744,8 @@ self: super: with self; {
 
   apt-repo = callPackage ../development/python-modules/apt-repo { };
 
+  apted = callPackage ../development/python-modules/apted { };
+
   apycula = callPackage ../development/python-modules/apycula { };
 
   aqipy-atmotech = callPackage ../development/python-modules/aqipy-atmotech { };
@@ -2333,6 +2335,8 @@ self: super: with self; {
   clarifai = callPackage ../development/python-modules/clarifai { };
 
   clarifai-grpc = callPackage ../development/python-modules/clarifai-grpc { };
+
+  clarifai-protocol = callPackage ../development/python-modules/clarifai-protocol { };
 
   claripy = callPackage ../development/python-modules/claripy { };
 
@@ -16420,6 +16424,8 @@ self: super: with self; {
   troposphere = callPackage ../development/python-modules/troposphere { };
 
   trove-classifiers = callPackage ../development/python-modules/trove-classifiers { };
+
+  trubar = callPackage ../development/python-modules/trubar { };
 
   trueskill = callPackage ../development/python-modules/trueskill { };
 
