@@ -1,0 +1,42 @@
+diff --git a/src/synapse-plugins/calculator-plugin/calculator-plugin-backend.vala b/src/synapse-plugins/calculator-plugin/calculator-plugin-backend.vala
+index 542e7aa..228c6d7 100644
+--- a/src/synapse-plugins/calculator-plugin/calculator-plugin-backend.vala
++++ b/src/synapse-plugins/calculator-plugin/calculator-plugin-backend.vala
+@@ -83,7 +83,7 @@ namespace Synapse {
+                 Pid pid;
+                 int read_fd, write_fd;
+                 /* Must include math library to get non-integer results and to access standard math functions */
+-                string[] argv = {"bc", "-l"};
++                string[] argv = {"@bc@", "-l"};
+ 
+                 Process.spawn_async_with_pipes (
+                     null, argv, null,
+diff --git a/src/synapse-plugins/calculator-plugin/calculator-plugin.vala b/src/synapse-plugins/calculator-plugin/calculator-plugin.vala
+index d14f1de..35c8621 100644
+--- a/src/synapse-plugins/calculator-plugin/calculator-plugin.vala
++++ b/src/synapse-plugins/calculator-plugin/calculator-plugin.vala
+@@ -49,9 +49,7 @@ namespace Synapse {
+                 _("Calculator"),
+                 _("Calculate basic expressions."),
+                 "accessories-calculator",
+-                register_plugin,
+-                Environment.find_program_in_path ("bc") != null,
+-                _("bc is not installed")
++                register_plugin
+             );
+         }
+ 
+diff --git a/src/synapse-plugins/converter-plugin/converter-plugin.vala b/src/synapse-plugins/converter-plugin/converter-plugin.vala
+index 8d230cc..ed31927 100644
+--- a/src/synapse-plugins/converter-plugin/converter-plugin.vala
++++ b/src/synapse-plugins/converter-plugin/converter-plugin.vala
+@@ -46,9 +46,7 @@ namespace Synapse {
+                 _("Converter"),
+                 _("Convert between units."),
+                 "accessories-converter",
+-                register_plugin,
+-                Environment.find_program_in_path ("bc") != null,
+-                _("bc is not installed")
++                register_plugin
+             );
+         }
