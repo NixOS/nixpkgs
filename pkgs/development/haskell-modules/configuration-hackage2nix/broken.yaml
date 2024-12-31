@@ -129,7 +129,6 @@ broken-packages:
   - alex-prelude # failure in job https://hydra.nixos.org/build/233238387 at 2023-09-02
   - al # failure in job https://hydra.nixos.org/build/252733710 at 2024-03-16
   - alfred # failure in job https://hydra.nixos.org/build/233227316 at 2023-09-02
-  - alfred-margaret # failure in job https://hydra.nixos.org/build/233223038 at 2023-09-02
   - alga # failure in job https://hydra.nixos.org/build/233252723 at 2023-09-02
   - algebra-dag # failure in job https://hydra.nixos.org/build/233191945 at 2023-09-02
   - algebraic-classes # failure in job https://hydra.nixos.org/build/233246872 at 2023-09-02
