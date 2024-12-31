@@ -4943,10 +4943,6 @@ with pkgs;
 
   qosmic = libsForQt5.callPackage ../applications/graphics/qosmic { };
 
-  qownnotes = qt6Packages.callPackage ../applications/office/qownnotes {
-    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-  };
-
   qtikz = libsForQt5.callPackage ../applications/graphics/ktikz { };
 
   qtspim = libsForQt5.callPackage ../development/tools/misc/qtspim { };
