@@ -24,6 +24,11 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-/dug7U8ei+gSdepILLqhnoIBhZ5QZePkREtCUl4p1Hs=";
   };
 
+  postPatch = ''
+    substituteInPlace src/logger_lib.py src/window.py \
+      --replace-warn 'os.environ["XDG_DATA_HOME"]' 'os.environ.get("XDG_DATA_HOME", os.path.expanduser("~/.local/share"))'
+  '';
+
   nativeBuildInputs = [
     meson
     ninja
@@ -39,6 +44,7 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     pygobject3
     f3d_egl
+    wand
   ];
 
   dontWrapGApps = true;
