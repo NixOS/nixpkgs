@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "questionary";
-  version = "2.0.1";
+  version = "2.1.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.8";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "tmbo";
     repo = pname;
     tag = version;
-    hash = "sha256-JY0kXomgiGtOrsXfRf0756dTPVgud91teh+jW+kFNdk=";
+    hash = "sha256-HiQsOkG3oK+hnyeFjebnVASxpZhUPGBGz69JvPO43fM=";
   };
 
   nativeBuildInputs = [
