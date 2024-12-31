@@ -96,7 +96,7 @@ let
     pkgs.writeTextFile {
       name = "${mkName keyboard.name}.kbd";
       text = lib.optionalString keyboard.defcfg.enable (defcfg + "\n") + keyboard.config;
-      checkPhase = "${cfg.package}/bin/kmonad -d $out";
+      checkPhase = "${lib.getExe cfg.package} -d $out";
     };
 
   # Build a systemd path config that starts the service below when a
