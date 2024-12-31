@@ -5740,6 +5740,8 @@ self: super: with self; {
 
   habitipy = callPackage ../development/python-modules/habitipy { };
 
+  habiticalib = callPackage ../development/python-modules/habiticalib { };
+
   hachoir = callPackage ../development/python-modules/hachoir { };
 
   hacking = callPackage ../development/python-modules/hacking { };
