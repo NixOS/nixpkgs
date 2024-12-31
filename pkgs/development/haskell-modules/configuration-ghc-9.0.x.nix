@@ -151,9 +151,6 @@ self: super: {
   # Needs OneTuple for ghc < 9.2
   binary-orphans = addBuildDepends [ self.OneTuple ] super.binary-orphans;
 
-  # Requires GHC < 9.4
-  ghc-source-gen = doDistribute (unmarkBroken super.ghc-source-gen);
-
   hspec-megaparsec = super.hspec-megaparsec_2_2_0;
 
   # No instance for (Show B.Builder) arising from a use of ‘print’
