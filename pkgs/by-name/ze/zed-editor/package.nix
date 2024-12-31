@@ -112,20 +112,11 @@ rustPlatform.buildRustPackage rec {
     "script/patches/use-cross-platform-livekit.patch"
   ];
 
-  postPatch =
-    lib.optionalString stdenv.hostPlatform.isLinux ''
-      # Dynamically link WebRTC instead of static
-      substituteInPlace ../${pname}-${version}-vendor/webrtc-sys-*/build.rs \
-        --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
-    ''
-    + lib.optionalString stdenv.hostPlatform.isDarwin ''
-      # On Darwin, linking against the dylib results in Rust linker errors, while
-      # linking against the framework works fine.
-      substituteInPlace ../${pname}-${version}-vendor/webrtc-sys-*/build.rs \
-        --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=framework=webrtc" \
-        --replace-fail 'println!("cargo:rustc-link-search=native={}", webrtc_lib.to_str().unwrap());' \
-                       'println!("cargo:rustc-link-search=framework={}/Library/Frameworks", webrtc_dir.to_str().unwrap());'
-    '';
+  # Dynamically link WebRTC instead of static
+  postPatch = ''
+    substituteInPlace ../${pname}-${version}-vendor/webrtc-sys-*/build.rs \
+      --replace-fail "cargo:rustc-link-lib=static=webrtc" "cargo:rustc-link-lib=dylib=webrtc"
+  '';
 
   useFetchCargoVendor = true;
   cargoHash = "sha256-J5vJ/KV94a+9AqGbNZx6sCzWflOZsyUj3NcqnfaexGE=";
@@ -296,6 +287,16 @@ rustPlatform.buildRustPackage rec {
   versionCheckProgram = "${placeholder "out"}/bin/zeditor";
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
+
+  # The darwin Applications directory is not stripped by default, see
+  # https://github.com/NixOS/nixpkgs/issues/367169
+  # This setting is not platform-guarded as it doesn't do any harm on Linux,
+  # where this directory simply does not exist.
+  stripDebugList = [
+    "bin"
+    "libexec"
+    "Applications"
+  ];
 
   passthru = {
     updateScript = gitUpdater {

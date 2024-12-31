@@ -3483,10 +3483,6 @@ with pkgs;
 
   gnucap-full = gnucap.withPlugins(p: [ p.verilog ]);
 
-  gnufdisk = callPackage ../tools/system/fdisk {
-    guile = guile_1_8;
-  };
-
   gnugrep = callPackage ../tools/text/gnugrep { };
 
   gnupatch = callPackage ../tools/text/gnupatch { };
@@ -13323,10 +13319,6 @@ with pkgs;
   cudatext-qt = callPackage ../applications/editors/cudatext { widgetset = "qt5"; };
   cudatext-gtk = callPackage ../applications/editors/cudatext { widgetset = "gtk2"; };
   cudatext = cudatext-qt;
-
-  comical = callPackage ../applications/graphics/comical {
-    inherit (darwin.apple_sdk.frameworks) Cocoa;
-  };
 
   cqrlog = callPackage ../applications/radio/cqrlog {
     hamlib = hamlib_4;
