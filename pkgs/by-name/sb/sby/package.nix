@@ -28,9 +28,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-icOlWutvajHMCi2YUIGU4v5S63YobXw4fYYUvPoSzo4=";
   };
 
-  nativeBuildInputs = [ bash ];
-  buildInputs = [
-    pythonEnv
+  nativeCheckInputs = [
+    python3
+    python3.pkgs.xmlschema
     yosys
     boolector
     yices
@@ -40,7 +40,8 @@ stdenv.mkDerivation rec {
   ];
 
   postPatch = ''
-    patchShebangs docs/source/conf.py \
+    patchShebangs --build \
+      docs/source/conf.py \
       docs/source/conf.diff \
       tests/autotune/*.sh \
       tests/keepgoing/*.sh \
@@ -63,8 +64,6 @@ stdenv.mkDerivation rec {
     substituteInPlace sbysrc/sby.py \
       --replace-fail '/usr/bin/env python3' '${pythonEnv}/bin/python'
     substituteInPlace sbysrc/sby_autotune.py \
-      --replace-fail '["btorsim", "--vcd"]' '["${btor2tools}/bin/btorsim", "--vcd"]'
-    substituteInPlace tests/make/required_tools.py \
       --replace-fail '["btorsim", "--vcd"]' '["${btor2tools}/bin/btorsim", "--vcd"]'
   '';
 
