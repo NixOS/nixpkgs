@@ -29,16 +29,18 @@ let
           in
           p1 != null && 0 < p2 && p2 < 1024
       )
-      (flatten [
-        cfg.settings.ORPort
-        cfg.settings.DirPort
-        cfg.settings.DNSPort
-        cfg.settings.ExtORPort
-        cfg.settings.HTTPTunnelPort
-        cfg.settings.NATDPort
-        cfg.settings.SOCKSPort
-        cfg.settings.TransPort
-      ]);
+      (
+        lib.flatten [
+          cfg.settings.ORPort
+          cfg.settings.DirPort
+          cfg.settings.DNSPort
+          cfg.settings.ExtORPort
+          cfg.settings.HTTPTunnelPort
+          cfg.settings.NATDPort
+          cfg.settings.SOCKSPort
+          cfg.settings.TransPort
+        ]
+      );
   optionBool =
     optionName:
     lib.mkOption {
@@ -68,7 +70,7 @@ let
       description = (descriptionGeneric optionName);
     };
   optionAddress = lib.mkOption {
-    type = with types; nullOr str;
+    type = with lib.types; nullOr str;
     default = null;
     example = "0.0.0.0";
     description = ''
@@ -76,7 +78,7 @@ let
     '';
   };
   optionUnix = lib.mkOption {
-    type = with types; nullOr path;
+    type = with lib.types; nullOr path;
     default = null;
     description = ''
       Unix domain socket path to use.
@@ -84,7 +86,7 @@ let
   };
   optionPort = lib.mkOption {
     type =
-      with types;
+      with lib.types;
       nullOr (oneOf [
         port
         (enum [ "auto" ])
@@ -126,7 +128,7 @@ let
           config = {
             flags =
               filter (name: config.${name} == true) isolateFlags
-              ++ optional (config.SessionGroup != null) "SessionGroup=${toString config.SessionGroup}";
+              ++ lib.optional (config.SessionGroup != null) "SessionGroup=${toString config.SessionGroup}";
           };
         }
       ))
@@ -196,13 +198,13 @@ let
             # Only add flags in SOCKSPort to avoid duplicates
             flags =
               filter (name: config.${name} == true) flags
-              ++ optional (config.SessionGroup != null) "SessionGroup=${toString config.SessionGroup}";
+              ++ lib.optional (config.SessionGroup != null) "SessionGroup=${toString config.SessionGroup}";
           };
         }
       ))
     ];
   optionFlags = lib.mkOption {
-    type = with types; listOf str;
+    type = with lib.types; listOf str;
     default = [ ];
   };
   optionORPort =
@@ -273,23 +275,23 @@ let
     else if isBool v then
       (if v then "1" else "0")
     else if v ? "unix" && v.unix != null then
-      "unix:" + v.unix + optionalString (v ? "flags") (" " + concatStringsSep " " v.flags)
+      "unix:" + v.unix + lib.optionalString (v ? "flags") (" " + concatStringsSep " " v.flags)
     else if v ? "port" && v.port != null then
-      optionalString (v ? "addr" && v.addr != null) "${v.addr}:"
+      lib.optionalString (v ? "addr" && v.addr != null) "${v.addr}:"
       + toString v.port
-      + optionalString (v ? "flags") (" " + concatStringsSep " " v.flags)
+      + lib.optionalString (v ? "flags") (" " + concatStringsSep " " v.flags)
     else if k == "ServerTransportPlugin" then
-      optionalString (v.transports != [ ]) "${concatStringsSep "," v.transports} exec ${v.exec}"
+      lib.optionalString (v.transports != [ ]) "${concatStringsSep "," v.transports} exec ${v.exec}"
     else if k == "HidServAuth" then
       v.onion + " " + v.auth
     else
-      generators.mkValueStringDefault { } v;
+      lib.generators.mkValueStringDefault { } v;
   genTorrc =
     settings:
-    generators.toKeyValue
+    lib.generators.toKeyValue
       {
         listsAsDuplicateKeys = true;
-        mkKeyValue = k: generators.mkKeyValueDefault { mkValueString = mkValueString k; } " " k;
+        mkKeyValue = k: lib.generators.mkKeyValueDefault { mkValueString = mkValueString k; } " " k;
       }
       (
         lib.mapAttrs (
@@ -311,8 +313,8 @@ let
       );
   torrc = pkgs.writeText "torrc" (
     genTorrc cfg.settings
-    + concatStrings (
-      mapAttrsToList (
+    + lib.concatStrings (
+      lib.mapAttrsToList (
         name: onion: "HiddenServiceDir ${onion.path}\n" + genTorrc onion.settings
       ) cfg.relay.onionServices
     )
@@ -506,7 +508,7 @@ in
           };
           type = lib.types.attrsOf (
             lib.types.submodule (
-              { name, config, ... }:
+              { ... }:
               {
                 options.clientAuthorizations = lib.mkOption {
                   description = ''
@@ -810,7 +812,7 @@ in
                   };
                 };
                 config = {
-                  path = mkDefault ((if config.secretKey == null then stateDir else runDir) + "/onion/${name}");
+                  path = lib.mkDefault ((if config.secretKey == null then stateDir else runDir) + "/onion/${name}");
                   settings.HiddenServiceVersion = config.version;
                   settings.HiddenServiceAuthorizeClient =
                     if config.authorizeClient != null then
@@ -890,7 +892,7 @@ in
           options.ConnDirectionStatistics = optionBool "ConnDirectionStatistics";
           options.ConstrainedSockets = optionBool "ConstrainedSockets";
           options.ContactInfo = optionString "ContactInfo";
-          options.ControlPort = lib.mkOption rec {
+          options.ControlPort = lib.mkOption {
             description = (descriptionGeneric "ControlPort");
             default = [ ];
             example = [ { port = 9051; } ];
@@ -1177,8 +1179,11 @@ in
     # Not sure if `cfg.relay.role == "private-bridge"` helps as tor
     # sends a lot of stats
     warnings =
-      optional
-        (cfg.settings.BridgeRelay && flatten (mapAttrsToList (n: o: o.map) cfg.relay.onionServices) != [ ])
+      lib.optional
+        (
+          cfg.settings.BridgeRelay
+          && lib.flatten (lib.mapAttrsToList (n: o: o.map) cfg.relay.onionServices) != [ ]
+        )
         ''
           Running Tor hidden services on a public relay makes the
           presence of hidden services visible through simple statistical
@@ -1189,16 +1194,16 @@ in
           actually hide your hidden services. In either case, you can
           always create a container/VM with a separate Tor daemon instance.
         ''
-      ++ flatten (
-        mapAttrsToList (
+      ++ lib.flatten (
+        lib.mapAttrsToList (
           n: o:
-          optionals (o.settings.HiddenServiceVersion == 2) [
+          lib.optionals (o.settings.HiddenServiceVersion == 2) [
             (optional (o.settings.HiddenServiceExportCircuitID != null) ''
               HiddenServiceExportCircuitID is used in the HiddenService: ${n}
               but this option is only for v3 hidden services.
             '')
           ]
-          ++ optionals (o.settings.HiddenServiceVersion != 2) [
+          ++ lib.optionals (o.settings.HiddenServiceVersion != 2) [
             (optional (o.settings.HiddenServiceAuthorizeClient != null) ''
               HiddenServiceAuthorizeClient is used in the HiddenService: ${n}
               but this option is only for v2 hidden services.
@@ -1220,12 +1225,12 @@ in
       uid = config.ids.uids.tor;
     };
 
-    services.tor.settings = mkMerge [
-      (mkIf cfg.enableGeoIP {
+    services.tor.settings = lib.mkMerge [
+      (lib.mkIf cfg.enableGeoIP {
         GeoIPFile = "${cfg.package.geoip}/share/tor/geoip";
         GeoIPv6File = "${cfg.package.geoip}/share/tor/geoip6";
       })
-      (mkIf cfg.controlSocket.enable {
+      (lib.mkIf cfg.controlSocket.enable {
         ControlPort = [
           {
             unix = runDir + "/control";
@@ -1234,47 +1239,47 @@ in
           }
         ];
       })
-      (mkIf cfg.relay.enable (
-        optionalAttrs (cfg.relay.role != "exit") {
-          ExitPolicy = mkForce [ "reject *:*" ];
+      (lib.mkIf cfg.relay.enable (
+        lib.optionalAttrs (cfg.relay.role != "exit") {
+          ExitPolicy = lib.mkForce [ "reject *:*" ];
         }
         //
-          optionalAttrs
+          lib.optionalAttrs
             (elem cfg.relay.role [
               "bridge"
               "private-bridge"
             ])
             {
               BridgeRelay = true;
-              ExtORPort.port = mkDefault "auto";
-              ServerTransportPlugin.transports = mkDefault [ "obfs4" ];
-              ServerTransportPlugin.exec = mkDefault "${lib.getExe pkgs.obfs4} managed";
+              ExtORPort.port = lib.mkDefault "auto";
+              ServerTransportPlugin.transports = lib.mkDefault [ "obfs4" ];
+              ServerTransportPlugin.exec = lib.mkDefault "${lib.getExe pkgs.obfs4} managed";
             }
-        // optionalAttrs (cfg.relay.role == "private-bridge") {
+        // lib.optionalAttrs (cfg.relay.role == "private-bridge") {
           ExtraInfoStatistics = false;
           PublishServerDescriptor = false;
         }
       ))
-      (mkIf (!cfg.relay.enable) {
+      (lib.mkIf (!cfg.relay.enable) {
         # Avoid surprises when leaving ORPort/DirPort configurations in cfg.settings,
         # because it would still enable Tor as a relay,
         # which can trigger all sort of problems when not carefully done,
         # like the blocklisting of the machine's IP addresses
         # by some hosting providers...
-        DirPort = mkForce [ ];
-        ORPort = mkForce [ ];
-        PublishServerDescriptor = mkForce false;
+        DirPort = lib.mkForce [ ];
+        ORPort = lib.mkForce [ ];
+        PublishServerDescriptor = lib.mkForce false;
       })
-      (mkIf (!cfg.client.enable) {
+      (lib.mkIf (!cfg.client.enable) {
         # Make sure application connections via SOCKS are disabled
         # when services.tor.client.enable is false
-        SOCKSPort = mkForce [ 0 ];
+        SOCKSPort = lib.mkForce [ 0 ];
       })
-      (mkIf cfg.client.enable (
+      (lib.mkIf cfg.client.enable (
         {
           SOCKSPort = [ cfg.client.socksListenAddress ];
         }
-        // optionalAttrs cfg.client.transparentProxy.enable {
+        // lib.optionalAttrs cfg.client.transparentProxy.enable {
           TransPort = [
             {
               addr = "127.0.0.1";
@@ -1282,7 +1287,7 @@ in
             }
           ];
         }
-        // optionalAttrs cfg.client.dns.enable {
+        // lib.optionalAttrs cfg.client.dns.enable {
           DNSPort = [
             {
               addr = "127.0.0.1";
@@ -1292,8 +1297,8 @@ in
           AutomapHostsOnResolve = true;
         }
         //
-          optionalAttrs
-            (flatten (mapAttrsToList (n: o: o.clientAuthorizations) cfg.client.onionServices) != [ ])
+          lib.optionalAttrs
+            (lib.flatten (lib.mapAttrsToList (n: o: o.clientAuthorizations) cfg.client.onionServices) != [ ])
             {
               ClientOnionAuthDir = runDir + "/ClientOnionAuthDir";
             }
@@ -1305,12 +1310,17 @@ in
         concatMap
           (
             o:
-            if isInt o && o > 0 then [ o ] else optionals (o ? "port" && isInt o.port && o.port > 0) [ o.port ]
+            if isInt o && o > 0 then
+              [ o ]
+            else
+              lib.optionals (o ? "port" && isInt o.port && o.port > 0) [ o.port ]
           )
-          (flatten [
-            cfg.settings.ORPort
-            cfg.settings.DirPort
-          ]);
+          (
+            lib.flatten [
+              cfg.settings.ORPort
+              cfg.settings.DirPort
+            ]
+          );
     };
 
     systemd.services.tor = {
@@ -1332,11 +1342,11 @@ in
             "+"
             + pkgs.writeShellScript "ExecStartPre" (
               concatStringsSep "\n" (
-                flatten (
+                lib.flatten (
                   [ "set -eu" ]
-                  ++ mapAttrsToList (
+                  ++ lib.mapAttrsToList (
                     name: onion:
-                    optional (onion.authorizedClients != [ ]) ''
+                    lib.optional (onion.authorizedClients != [ ]) ''
                       rm -rf ${escapeShellArg onion.path}/authorized_clients
                       install -d -o tor -g tor -m 0700 ${escapeShellArg onion.path} ${escapeShellArg onion.path}/authorized_clients
                     ''
@@ -1344,7 +1354,7 @@ in
                       echo ${pubKey} |
                       install -o tor -g tor -m 0400 /dev/stdin ${escapeShellArg onion.path}/authorized_clients/${toString i}.auth
                     '') onion.authorizedClients
-                    ++ optional (onion.secretKey != null) ''
+                    ++ lib.optional (onion.secretKey != null) ''
                       install -d -o tor -g tor -m 0700 ${escapeShellArg onion.path}
                       key="$(cut -f1 -d: ${escapeShellArg onion.secretKey} | head -1)"
                       case "$key" in
@@ -1354,7 +1364,7 @@ in
                       esac
                     ''
                   ) cfg.relay.onionServices
-                  ++ mapAttrsToList (
+                  ++ lib.mapAttrsToList (
                     name: onion:
                     imap0 (
                       i: prvKeyPath:
@@ -1393,9 +1403,9 @@ in
             "tor"
             "tor/onion"
           ]
-          ++ flatten (
-            mapAttrsToList (
-              name: onion: optional (onion.secretKey == null) "tor/onion/${name}"
+          ++ lib.flatten (
+            lib.mapAttrsToList (
+              name: onion: lib.optional (onion.secretKey == null) "tor/onion/${name}"
             ) cfg.relay.onionServices
           );
         # The following options are only to optimize:
@@ -1410,7 +1420,7 @@ in
             storeDir
             "/etc"
           ]
-          ++ optionals config.services.resolved.enable [
+          ++ lib.optionals config.services.resolved.enable [
             "/run/systemd/resolve/stub-resolv.conf"
             "/run/systemd/resolve/resolv.conf"
           ];
@@ -1423,7 +1433,7 @@ in
         NoNewPrivileges = true;
         PrivateDevices = true;
         PrivateMounts = true;
-        PrivateNetwork = mkDefault false;
+        PrivateNetwork = lib.mkDefault false;
         PrivateTmp = true;
         # Tor cannot currently bind privileged port when PrivateUsers=true,
         # see https://gitlab.torproject.org/legacy/trac/-/issues/20930
