@@ -32,7 +32,7 @@
 
 buildPythonPackage rec {
   pname = "mypy";
-  version = "1.13.0";
+  version = "1.14.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     owner = "python";
     repo = "mypy";
     rev = "refs/tags/v${version}";
-    hash = "sha256-P2Ozmj7/7QBmjlveHLsNdYgUAerg0qOoa8pO0iQc5os=";
+    hash = "sha256-Ha7icLFc4BL7a3NECcwX4dtWmkXctANCqu/IbrEnmjw=";
   };
 
   passthru.updateScript = gitUpdater {
