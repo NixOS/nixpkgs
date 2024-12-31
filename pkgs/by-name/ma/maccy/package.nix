@@ -32,7 +32,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     homepage = "https://maccy.app";
     license = licenses.mit;
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
-    maintainers = with maintainers; [ emilytrau ];
+    maintainers = with maintainers; [
+      emilytrau
+      baongoc124
+    ];
     platforms = platforms.darwin;
   };
 })
