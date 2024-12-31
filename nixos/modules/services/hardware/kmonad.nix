@@ -35,16 +35,16 @@ let
             Since KMonad runs as an unprivileged user, it may sometimes
             need extra permissions in order to read the keyboard device
             file.  If your keyboard's device file isn't in the input
-            group you'll need to list its group in this option.
+            group, you'll need to list its group in this option.
           '';
         };
 
         defcfg = {
           enable = lib.mkEnableOption ''
-            Automatically generate the defcfg block.
+            automatic generation of the defcfg block.
 
-            When this is option is set to true the config option for
-            this keyboard should not include a defcfg block.
+            When this option is set to true, the config option for
+            this keyboard should not include a defcfg block
           '';
 
           compose = {
@@ -61,9 +61,9 @@ let
             };
           };
 
-          fallthrough = lib.mkEnableOption "Re-emit unhandled key events.";
+          fallthrough = lib.mkEnableOption "re-emitting unhandled key events";
 
-          allowCommands = lib.mkEnableOption "Allow keys to run shell commands.";
+          allowCommands = lib.mkEnableOption "keys to run shell commands";
         };
 
         config = lib.mkOption {
@@ -159,9 +159,9 @@ let
 in
 {
   options.services.kmonad = {
-    enable = lib.mkEnableOption "KMonad: An advanced keyboard manager.";
+    enable = lib.mkEnableOption "KMonad: an advanced keyboard manager";
 
-    package = lib.mkPackageOption pkgs "kmonad" { };
+    package = lib.mkPackageOption pkgs "KMonad" { default = "kmonad"; };
 
     keyboards = lib.mkOption {
       type = lib.types.attrsOf (lib.types.submodule keyboard);
