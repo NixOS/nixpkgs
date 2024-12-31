@@ -199,6 +199,8 @@ in
           "geoclue-demo-agent"
           "gnome-shell"
           "io.elementary.desktop.agent-geoclue2"
+          "sm.puri.Phosh"
+          "lipstick"
         ];
         description = ''
           Whitelist of desktop IDs (without .desktop part) of all agents geoclue will recognise
@@ -262,6 +264,15 @@ in
       };
     };
 
+    # Gnome appConfig in gnome.nix:368
+
+    # Elementary appConfig in pantheon.nix:163
+
+    services.geoclue2.appConfig."sm.puri.Phosh" = {
+      isAllowed = true;
+      isSystem = true;
+    };
+
     services.geoclue2.appConfig.epiphany = {
       isAllowed = true;
       isSystem = false;
@@ -270,6 +281,11 @@ in
     services.geoclue2.appConfig.firefox = {
       isAllowed = true;
       isSystem = false;
+    };
+
+    services.geoclue2.appConfig.lipstick = {
+      isAllowed = true;
+      isSystem = true;
     };
 
     environment.etc."geoclue/geoclue.conf".text = lib.generators.toINI { } (
