@@ -8185,6 +8185,8 @@ self: super: with self; {
 
   minidump = callPackage ../development/python-modules/minidump { };
 
+  miniforge = callPackage ../development/python-modules/miniforge { };
+
   miniful = callPackage ../development/python-modules/miniful { };
 
   minikanren = callPackage ../development/python-modules/minikanren { };
