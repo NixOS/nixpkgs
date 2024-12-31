@@ -1,0 +1,33 @@
+diff --git a/auto_cpufreq/core.py b/auto_cpufreq/core.py
+index 58cedb7..89e77a4 100755
+--- a/auto_cpufreq/core.py
++++ b/auto_cpufreq/core.py
+@@ -136,26 +136,8 @@ except PermissionError:
+
+ # display running version of auto-cpufreq
+ def app_version():
+-
+-    print("auto-cpufreq version: ", end="")
+-
+-    # snap package
+-    if os.getenv("PKG_MARKER") == "SNAP":
+-        print(getoutput(r"echo \(Snap\) $SNAP_VERSION"))
+-    # aur package
+-    elif dist_name in ["arch", "manjaro", "garuda"]:
+-        aur_pkg_check = call("pacman -Qs auto-cpufreq > /dev/null", shell=True)
+-        if aur_pkg_check == 1:
+-            print(get_formatted_version())
+-        else:
+-            print(getoutput("pacman -Qi auto-cpufreq | grep Version"))
+-    else:
+-        # source code (auto-cpufreq-installer)
+-        try:
+-            print(get_formatted_version())
+-        except Exception as e:
+-            print(repr(e))
+-            pass
++   print("auto-cpufreq version: @version@")
++   print("Git commit: v@version@")
+
+ def check_for_update():
+     # returns True if a new release is available from the GitHub repo

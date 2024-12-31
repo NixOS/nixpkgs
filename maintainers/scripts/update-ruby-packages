@@ -1,0 +1,16 @@
+#!/usr/bin/env nix-shell
+#!nix-shell -i bash -p bundler bundix
+
+set -euf -o pipefail
+
+(
+  cd pkgs/development/ruby-modules/with-packages
+  rm -f gemset.nix Gemfile.lock
+  # Since bundler 2+, the lock command generates a platform-dependent
+  # Gemfile.lock, hence causing to bundix to generate a gemset tied to the
+  # platform from where it was executed.
+  BUNDLE_FORCE_RUBY_PLATFORM=1 bundle lock
+  bundix
+  mv gemset.nix ../../../top-level/ruby-packages.nix
+  rm -f Gemfile.lock
+)

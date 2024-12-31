@@ -1,0 +1,100 @@
+{
+  "name": "auto-changelog",
+  "version": "2.4.0",
+  "description": "Command line tool for generating a changelog from git tags and commit history",
+  "main": "./src/index.js",
+  "bin": {
+    "auto-changelog": "./src/index.js"
+  },
+  "engines": {
+    "node": ">=8.3"
+  },
+  "scripts": {
+    "lint": "standard --verbose | snazzy",
+    "lint-fix": "standard --fix",
+    "lint-markdown": "markdownlint README.md test/data/*.md",
+    "test": "cross-env NODE_ENV=test mocha -r @babel/register test",
+    "test-coverage": "cross-env NODE_ENV=test nyc mocha test",
+    "report-coverage": "nyc report --reporter=json && codecov -f coverage/coverage-final.json",
+    "preversion": "npm run lint && npm run test",
+    "version": "node src/index.js --package && git add CHANGELOG.md",
+    "generate-test-data": "cross-env NODE_ENV=test node scripts/generate-test-data.js"
+  },
+  "author": "Pete Cook <pete@cookpete.com> (https://github.com/cookpete)",
+  "homepage": "https://github.com/CookPete/auto-changelog",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CookPete/auto-changelog.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CookPete/auto-changelog/issues"
+  },
+  "keywords": [
+    "auto",
+    "automatic",
+    "changelog",
+    "change",
+    "log",
+    "generator",
+    "git",
+    "commit",
+    "commits",
+    "history"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^7.2.0",
+    "handlebars": "^4.7.7",
+    "node-fetch": "^2.6.1",
+    "parse-github-url": "^1.0.2",
+    "semver": "^7.3.5"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/register": "^7.13.16",
+    "babel-plugin-istanbul": "^6.0.0",
+    "babel-plugin-rewire": "^1.2.0",
+    "chai": "^4.3.4",
+    "codecov": "^3.8.2",
+    "cross-env": "^7.0.3",
+    "markdownlint-cli": "^0.30.0",
+    "mocha": "^9.2.0",
+    "nyc": "^15.1.0",
+    "snazzy": "^9.0.0",
+    "standard": "^16.0.3"
+  },
+  "babel": {
+    "env": {
+      "test": {
+        "plugins": [
+          "istanbul",
+          "rewire"
+        ]
+      }
+    }
+  },
+  "standard": {
+    "ignore": [
+      "test/data/"
+    ]
+  },
+  "nyc": {
+    "all": true,
+    "include": "src",
+    "exclude": "src/index.js",
+    "sourceMap": false,
+    "instrument": false,
+    "report-dir": "./coverage",
+    "temp-dir": "./coverage/.nyc_output",
+    "require": [
+      "@babel/register"
+    ],
+    "reporter": [
+      "text",
+      "html"
+    ]
+  },
+  "auto-changelog": {
+    "breakingPattern": "Breaking change"
+  }
+}
