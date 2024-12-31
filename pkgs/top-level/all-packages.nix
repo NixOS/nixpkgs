@@ -13962,6 +13962,8 @@ with pkgs;
 
   gpu-screen-recorder-notification = callPackage ../applications/video/gpu-screen-recorder/gpu-screen-recorder-notification.nix { };
 
+  gpu-screen-recorder-ui = callPackage ../applications/video/gpu-screen-recorder/gpu-screen-recorder-ui.nix { };
+
   gpxsee-qt5 = libsForQt5.callPackage ../applications/misc/gpxsee { };
 
   gpxsee-qt6 = qt6Packages.callPackage ../applications/misc/gpxsee { };
