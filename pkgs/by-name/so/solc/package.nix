@@ -71,6 +71,15 @@ let
           hash = linuxHash;
         };
 
+        # Fix build with GCC 14
+        # Submitted upstream: https://github.com/ethereum/solidity/pull/15685
+        postPatch = ''
+          substituteInPlace test/yulPhaser/Chromosome.cpp \
+            --replace-fail \
+              "BOOST_TEST(abs" \
+              "BOOST_TEST(fabs"
+        '';
+
         cmakeFlags =
           [
             "-DBoost_USE_STATIC_LIBS=OFF"
