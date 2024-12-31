@@ -1940,6 +1940,7 @@ dont-distribute-packages:
  - haskore-realtime
  - haskore-supercollider
  - haskore-synthesizer
+ - hasktorch
  - hasktorch-ffi-thc
  - hasktorch-indef
  - hasktorch-signatures
@@ -3373,6 +3374,8 @@ dont-distribute-packages:
  - remote-json-client
  - remote-json-server
  - remotion
+ - repa-array
+ - repa-flow
  - repa-plugin
  - repa-v4l2
  - replicant
