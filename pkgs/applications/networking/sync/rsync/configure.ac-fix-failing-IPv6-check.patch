@@ -1,0 +1,12 @@
+diff -rup rsync-3.2.7/configure.sh rsync-3.2.7-fixed/configure.sh
+--- rsync-3.2.7/configure.sh	2022-10-20 17:57:22
++++ rsync-3.2.7-fixed/configure.sh	2024-01-01 19:51:58
+@@ -7706,7 +7706,7 @@ else $as_nop
+ #include <stdlib.h>
+ #include <sys/types.h>
+ #include <sys/socket.h>
+-main()
++int main()
+ {
+    if (socket(AF_INET6, SOCK_STREAM, 0) < 0)
+      exit(1);

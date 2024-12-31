@@ -1,0 +1,12 @@
+diff --git a/pkg/goatfile/unmarshal_test.go b/pkg/goatfile/unmarshal_test.go
+index 089e89f..5b4191b 100644
+--- a/pkg/goatfile/unmarshal_test.go
++++ b/pkg/goatfile/unmarshal_test.go
+@@ -8,7 +8,6 @@ import (
+ 
+ 	"github.com/golang/mock/gomock"
+ 	"github.com/stretchr/testify/assert"
+-	"github.com/studio-b12/goat/mocks"
+ 	"github.com/studio-b12/goat/pkg/set"
+ )
+ 

@@ -1,0 +1,56 @@
+diff --git a/src/main/native/darwin/sleep_prevention_jni.cc b/src/main/native/darwin/sleep_prevention_jni.cc
+index 67c35b201e..e50a58320e 100644
+--- a/src/main/native/darwin/sleep_prevention_jni.cc
++++ b/src/main/native/darwin/sleep_prevention_jni.cc
+@@ -33,31 +33,13 @@ static int g_sleep_state_stack = 0;
+ static IOPMAssertionID g_sleep_state_assertion = kIOPMNullAssertionID;
+ 
+ int portable_push_disable_sleep() {
+-  std::lock_guard<std::mutex> lock(g_sleep_state_mutex);
+-  BAZEL_CHECK_GE(g_sleep_state_stack, 0);
+-  if (g_sleep_state_stack == 0) {
+-    BAZEL_CHECK_EQ(g_sleep_state_assertion, kIOPMNullAssertionID);
+-    CFStringRef reasonForActivity = CFSTR("build.bazel");
+-    IOReturn success = IOPMAssertionCreateWithName(
+-        kIOPMAssertionTypeNoIdleSleep, kIOPMAssertionLevelOn, reasonForActivity,
+-        &g_sleep_state_assertion);
+-    BAZEL_CHECK_EQ(success, kIOReturnSuccess);
+-  }
+-  g_sleep_state_stack += 1;
+-  return 0;
++  // Unreliable, disable for now
++  return -1;
+ }
+ 
+ int portable_pop_disable_sleep() {
+-  std::lock_guard<std::mutex> lock(g_sleep_state_mutex);
+-  BAZEL_CHECK_GT(g_sleep_state_stack, 0);
+-  g_sleep_state_stack -= 1;
+-  if (g_sleep_state_stack == 0) {
+-    BAZEL_CHECK_NE(g_sleep_state_assertion, kIOPMNullAssertionID);
+-    IOReturn success = IOPMAssertionRelease(g_sleep_state_assertion);
+-    BAZEL_CHECK_EQ(success, kIOReturnSuccess);
+-    g_sleep_state_assertion = kIOPMNullAssertionID;
+-  }
+-  return 0;
++  // Unreliable, disable for now
++  return -1;
+ }
+ 
+ }  // namespace blaze_jni
+diff --git a/src/main/native/darwin/system_suspension_monitor_jni.cc b/src/main/native/darwin/system_suspension_monitor_jni.cc
+index 3483aa7935..51782986ec 100644
+--- a/src/main/native/darwin/system_suspension_monitor_jni.cc
++++ b/src/main/native/darwin/system_suspension_monitor_jni.cc
+@@ -83,10 +83,7 @@ void portable_start_suspend_monitoring() {
+     // Register to receive system sleep notifications.
+     // Testing needs to be done manually. Use the logging to verify
+     // that sleeps are being caught here.
+-    suspend_state.connect_port = IORegisterForSystemPower(
+-        &suspend_state, &notifyPortRef, SleepCallBack, &notifierObject);
+-    BAZEL_CHECK_NE(suspend_state.connect_port, MACH_PORT_NULL);
+-    IONotificationPortSetDispatchQueue(notifyPortRef, queue);
++    // XXX: Unreliable, disable for now
+ 
+     // Register to deal with SIGCONT.
+     // We register for SIGCONT because we can't catch SIGSTOP.

@@ -1,0 +1,31 @@
+diff --git a/rutabaga_gfx/ffi/Makefile b/rutabaga_gfx/ffi/Makefile
+index f8c7820bf..e88a6c308 100644
+--- a/rutabaga_gfx/ffi/Makefile
++++ b/rutabaga_gfx/ffi/Makefile
+@@ -47,24 +47,16 @@ build:
+ 	cargo build $(gfxstream_feature) $(release)
+ 
+ install: build
+-ifeq ($(UNAME), Linux)
+ 	install -D -m 755 $(OUT)/$(LIB_NAME) $(DESTDIR)$(libdir)/$(LIB_NAME).$(RUTABAGA_VERSION)
+-endif
+ ifeq ($(UNAME), Darwin)
+-	install_name_tool -id $(DESTDIR)$(libdir)/$(LIB_NAME).$(RUTABAGA_VERSION) $(DESTDIR)$(libdir)/$(LIB_NAME)
++	install_name_tool -id $(DESTDIR)$(libdir)/$(LIB_NAME).$(RUTABAGA_VERSION) $(DESTDIR)$(libdir)/$(LIB_NAME).$(RUTABAGA_VERSION)
+ endif
+ 
+ 	ln -sf $(LIB_NAME).$(RUTABAGA_VERSION) $(DESTDIR)$(libdir)/$(LIB_NAME).$(RUTABAGA_VERSION_MAJOR)
+ 	ln -sf $(LIB_NAME).$(RUTABAGA_VERSION) $(DESTDIR)$(libdir)/$(LIB_NAME)
+ 
+-ifeq ($(UNAME), Linux)
+ 	install -D -m 0644 $(SRC)/share/rutabaga_gfx_ffi.pc $(DESTDIR)$(libdir)/pkgconfig/rutabaga_gfx_ffi.pc
+ 	install -D -m 0644 $(SRC)/include/rutabaga_gfx_ffi.h $(DESTDIR)$(includedir)/rutabaga_gfx_ffi.h
+-endif
+-ifeq ($(UNAME), Darwin)
+-	install -m 0644 $(SRC)/share/rutabaga_gfx_ffi.pc $(DESTDIR)$(libdir)/pkgconfig/rutabaga_gfx_ffi.pc
+-	install -m 0644 $(SRC)/include/rutabaga_gfx_ffi.h $(DESTDIR)$(includedir)/rutabaga_gfx_ffi.h
+-endif
+ 
+ clean:
+ 	cargo clean $(release)
+
