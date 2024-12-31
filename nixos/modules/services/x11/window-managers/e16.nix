@@ -4,18 +4,21 @@
   pkgs,
   ...
 }:
+
+with lib;
+
 let
   cfg = config.services.xserver.windowManager.e16;
 in
 {
   ###### interface
   options = {
-    services.xserver.windowManager.e16.enable = lib.mkEnableOption "e16";
+    services.xserver.windowManager.e16.enable = mkEnableOption "e16";
   };
 
   ###### implementation
-  config = lib.mkIf cfg.enable {
-    services.xserver.windowManager.session = lib.singleton {
+  config = mkIf cfg.enable {
+    services.xserver.windowManager.session = singleton {
       name = "E16";
       start = ''
         ${pkgs.e16}/bin/e16 &

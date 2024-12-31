@@ -1,4 +1,7 @@
 { config, lib, pkgs, ... }:
+
+with lib;
+
 let
   cfg = config.services.xserver.displayManager.xpra;
   dmcfg = config.services.xserver.displayManager;
@@ -10,46 +13,46 @@ in
 
   options = {
     services.xserver.displayManager.xpra = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
+      enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Whether to enable xpra as display manager.";
       };
 
-      bindTcp = lib.mkOption {
+      bindTcp = mkOption {
         default = "127.0.0.1:10000";
         example = "0.0.0.0:10000";
-        type = lib.types.nullOr lib.types.str;
+        type = types.nullOr types.str;
         description = "Bind xpra to TCP";
       };
 
-      desktop = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+      desktop = mkOption {
+        type = types.nullOr types.str;
         default = null;
         example = "gnome-shell";
         description = "Start a desktop environment instead of seamless mode";
       };
 
-      auth = lib.mkOption {
-        type = lib.types.str;
+      auth = mkOption {
+        type = types.str;
         default = "pam";
         example = "password:value=mysecret";
         description = "Authentication to use when connecting to xpra";
       };
 
-      pulseaudio = lib.mkEnableOption "pulseaudio audio streaming";
+      pulseaudio = mkEnableOption "pulseaudio audio streaming";
 
-      extraOptions = lib.mkOption {
+      extraOptions = mkOption {
         description = "Extra xpra options";
         default = [];
-        type = lib.types.listOf lib.types.str;
+        type = types.listOf types.str;
       };
     };
   };
 
   ###### implementation
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     services.xserver.videoDrivers = ["dummy"];
 
     services.xserver.monitorSection = ''
@@ -224,7 +227,7 @@ in
     '';
 
     services.displayManager.execCmd = ''
-      ${lib.optionalString (cfg.pulseaudio)
+      ${optionalString (cfg.pulseaudio)
         "export PULSE_COOKIE=/run/pulse/.config/pulse/cookie"}
       exec ${pkgs.xpra}/bin/xpra ${if cfg.desktop == null then "start" else "start-desktop --start=${cfg.desktop}"} \
         --daemon=off \
@@ -236,20 +239,20 @@ in
         --speaker=yes \
         --mdns=no \
         --pulseaudio=no \
-        ${lib.optionalString (cfg.pulseaudio) "--sound-source=pulse"} \
+        ${optionalString (cfg.pulseaudio) "--sound-source=pulse"} \
         --socket-dirs=/run/xpra \
-        --xvfb="xpra_Xdummy ${lib.concatStringsSep " " dmcfg.xserverArgs}" \
-        ${lib.optionalString (cfg.bindTcp != null) "--bind-tcp=${cfg.bindTcp}"} \
+        --xvfb="xpra_Xdummy ${concatStringsSep " " dmcfg.xserverArgs}" \
+        ${optionalString (cfg.bindTcp != null) "--bind-tcp=${cfg.bindTcp}"} \
         --auth=${cfg.auth} \
-        ${lib.concatStringsSep " " cfg.extraOptions}
+        ${concatStringsSep " " cfg.extraOptions}
     '';
 
     services.xserver.terminateOnReset = false;
 
     environment.systemPackages = [pkgs.xpra];
 
-    services.pulseaudio.enable = lib.mkDefault cfg.pulseaudio;
-    services.pulseaudio.systemWide = lib.mkDefault cfg.pulseaudio;
+    services.pulseaudio.enable = mkDefault cfg.pulseaudio;
+    services.pulseaudio.systemWide = mkDefault cfg.pulseaudio;
   };
 
 }
