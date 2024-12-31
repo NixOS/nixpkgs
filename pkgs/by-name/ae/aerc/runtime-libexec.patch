@@ -1,0 +1,87 @@
+diff --git a/config/aerc.conf b/config/aerc.conf
+index 7d33b43..4315f0e 100644
+--- a/config/aerc.conf
++++ b/config/aerc.conf
+@@ -202,8 +202,7 @@
+ #
+ #   ${XDG_CONFIG_HOME:-~/.config}/aerc/stylesets
+ #   ${XDG_DATA_HOME:-~/.local/share}/aerc/stylesets
+-#   /usr/local/share/aerc/stylesets
+-#   /usr/share/aerc/stylesets
++#   @out@/share/aerc/stylesets
+ #
+ #stylesets-dirs=
+ 
+@@ -547,8 +546,7 @@ message/rfc822=colorize
+ #
+ #   ${XDG_CONFIG_HOME:-~/.config}/aerc/templates
+ #   ${XDG_DATA_HOME:-~/.local/share}/aerc/templates
+-#   /usr/local/share/aerc/templates
+-#   /usr/share/aerc/templates
++#   @out@/share/aerc/templates
+ #
+ #template-dirs=
+ 
+diff --git a/config/config.go b/config/config.go
+index d70bcfe..c19e59a 100644
+--- a/config/config.go
++++ b/config/config.go
+@@ -54,10 +54,8 @@ func buildDefaultDirs() []string {
+ 	}
+ 
+ 	// Add fixed fallback locations
+-	defaultDirs = append(defaultDirs, "/usr/local/libexec/aerc")
+-	defaultDirs = append(defaultDirs, "/usr/local/share/aerc")
+-	defaultDirs = append(defaultDirs, "/usr/libexec/aerc")
+-	defaultDirs = append(defaultDirs, "/usr/share/aerc")
++	defaultDirs = append(defaultDirs, "@out@/libexec/aerc")
++	defaultDirs = append(defaultDirs, "@out@/share/aerc")
+ 
+ 	return defaultDirs
+ }
+diff --git a/doc/aerc-config.5.scd b/doc/aerc-config.5.scd
+index 9e1f8a3..694abbc 100644
+--- a/doc/aerc-config.5.scd
++++ b/doc/aerc-config.5.scd
+@@ -300,8 +300,7 @@ These options are configured in the *[ui]* section of _aerc.conf_.
+ 	```
+ 	${XDG_CONFIG_HOME:-~/.config}/aerc/stylesets
+ 	${XDG_DATA_HOME:-~/.local/share}/aerc/stylesets
+-	/usr/local/share/aerc/stylesets
+-	/usr/share/aerc/stylesets
++	@out@/share/aerc/stylesets
+ 	```
+ 
+ *styleset-name* = _<string>_
+@@ -900,8 +899,7 @@ These options are configured in the *[templates]* section of _aerc.conf_.
+ 	```
+ 	${XDG_CONFIG_HOME:-~/.config}/aerc/templates
+ 	${XDG_DATA_HOME:-~/.local/share}/aerc/templates
+-	/usr/local/share/aerc/templates
+-	/usr/share/aerc/templates
++	@out@/share/aerc/templates
+ 	```
+ 
+ *new-message* = _<template_name>_
+diff --git a/doc/aerc-templates.7.scd b/doc/aerc-templates.7.scd
+index ae9bc6d..5f42b14 100644
+--- a/doc/aerc-templates.7.scd
++++ b/doc/aerc-templates.7.scd
+@@ -319,7 +319,7 @@ aerc provides the following additional functions:
+ 	Execute external command, provide the second argument to its stdin.
+ 
+ 	```
+-	{{exec `/usr/libexec/aerc/filters/html` .OriginalText}}
++	{{exec `@out@/libexec/aerc/filters/html` .OriginalText}}
+ 	```
+ 
+ *.Local*
+@@ -425,7 +425,7 @@ aerc provides the following additional functions:
+ 
+ 	```
+ 	{{if eq .OriginalMIMEType "text/html"}}
+-	{{exec `/usr/libexec/aerc/filters/html` .OriginalText | wrap 72 | quote}}
++	{{exec `@out@/libexec/aerc/filters/html` .OriginalText | wrap 72 | quote}}
+ 	{{else}}
+ 	{{wrap 72 .OriginalText | trimSignature | quote}}
+ 	{{end}}
