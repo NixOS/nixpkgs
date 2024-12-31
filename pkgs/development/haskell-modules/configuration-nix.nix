@@ -1438,6 +1438,12 @@ self: super: builtins.intersectAttrs super {
   # Disable checks to break dependency loop with SCalendar
   scalendar = dontCheck super.scalendar;
 
+  # Make sure we build xz against nixpkgs' xz package instead of
+  # Hackage repackaging of the upstream sources.
+  xz = enableCabalFlag "system-xz" super.xz;
+  xz-clib = dontDistribute super.xz-clib;
+  lzma-static = dontDistribute super.lzma-static; # deprecated
+
   halide-haskell = super.halide-haskell.override { Halide = pkgs.halide; };
 
   feedback = self.generateOptparseApplicativeCompletions [ "feedback" ]

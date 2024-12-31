@@ -2150,6 +2150,7 @@ self: super: {
   # 2021-04-16: too strict bounds on QuickCheck and tasty
   # https://github.com/hasufell/lzma-static/issues/1
   lzma-static = doJailbreak super.lzma-static;
+  xz = doJailbreak super.xz;
 
   # Too strict version bounds on base:
   # https://github.com/obsidiansystems/database-id/issues/1
