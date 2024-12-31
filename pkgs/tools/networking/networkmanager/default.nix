@@ -5,7 +5,7 @@
 , gettext
 , pkg-config
 , dbus
-, gnome
+, gitUpdater
 , libuuid
 , polkit
 , gnutls
@@ -58,13 +58,13 @@
 let
   pythonForDocs = python3.pythonOnBuildForHost.withPackages (pkgs: with pkgs; [ pygobject3 ]);
 in
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "networkmanager";
-  version = "1.48.10";
+  version = "1.50.2";
 
   src = fetchurl {
-    url = "mirror://gnome/sources/NetworkManager/${lib.versions.majorMinor version}/NetworkManager-${version}.tar.xz";
-    hash = "sha256-XcGI/f/PLSPInTSx5jGaayAgPhLq7CSzADe36orIxhM=";
+    url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/releases/${finalAttrs.version}/downloads/NetworkManager-${finalAttrs.version}.tar.xz";
+    hash = "sha256-EEc76dOrifiiemi3v1vJVXhRpRg7dLYkHl4PpcaSH+8=";
   };
 
   outputs = [ "out" "dev" "devdoc" "man" "doc" ];
@@ -105,8 +105,6 @@ stdenv.mkDerivation rec {
     "-Dresolvconf=${openresolv}/bin/resolvconf"
 
     # DHCP clients
-    # ISC DHCP client has reached it's end of life, so stop using it
-    "-Ddhclient=no"
     "-Ddhcpcd=${dhcpcd}/bin/dhcpcd"
     "-Ddhcpcanon=no"
 
@@ -131,9 +129,6 @@ stdenv.mkDerivation rec {
     # Meson does not support using different directories during build and
     # for installation like Autotools did with flags passed to make install.
     ./fix-install-paths.patch
-
-    # https://gitlab.freedesktop.org/NetworkManager/NetworkManager/-/merge_requests/1966
-    ./without-systemd.patch
   ];
 
   buildInputs = [
@@ -209,10 +204,9 @@ stdenv.mkDerivation rec {
   '';
 
   passthru = {
-    updateScript = gnome.updateScript {
-      packageName = "NetworkManager";
-      attrPath = "networkmanager";
-      versionPolicy = "odd-unstable";
+    updateScript = gitUpdater {
+      odd-unstable = true;
+      url = "https://gitlab.freedesktop.org/NetworkManager/NetworkManager.git";
     };
     tests = {
       inherit (nixosTests.networking) networkmanager;
@@ -231,4 +225,4 @@ stdenv.mkDerivation rec {
       lib.systems.inspect.platformPatterns.isStatic
     ];
   };
-}
+})
