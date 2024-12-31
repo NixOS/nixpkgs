@@ -4,9 +4,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
 
   cfg = config.services.xserver.displayManager.startx;
@@ -19,8 +16,8 @@ in
 
   options = {
     services.xserver.displayManager.startx = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Whether to enable the dummy "startx" pseudo-display manager,
@@ -36,7 +33,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.xserver = {
       exportConfiguration = true;
     };
@@ -46,7 +43,7 @@ in
     #
     # To send log to Xorg's default log location ($XDG_DATA_HOME/xorg/), we do
     # not specify a log file when running X
-    services.xserver.logFile = mkDefault null;
+    services.xserver.logFile = lib.mkDefault null;
 
     # Implement xserverArgs via xinit's system-wide xserverrc
     environment.etc."X11/xinit/xserverrc".source = pkgs.writeShellScript "xserverrc" ''

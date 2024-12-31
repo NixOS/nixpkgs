@@ -5,9 +5,6 @@
   utils,
   ...
 }:
-
-with lib;
-
 let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.deepin;
@@ -21,68 +18,68 @@ in
   options = {
 
     services.xserver.desktopManager.deepin = {
-      enable = mkEnableOption "Deepin desktop manager";
-      extraGSettingsOverrides = mkOption {
+      enable = lib.mkEnableOption "Deepin desktop manager";
+      extraGSettingsOverrides = lib.mkOption {
         default = "";
-        type = types.lines;
+        type = lib.types.lines;
         description = "Additional gsettings overrides.";
       };
-      extraGSettingsOverridePackages = mkOption {
+      extraGSettingsOverridePackages = lib.mkOption {
         default = [ ];
-        type = types.listOf types.path;
+        type = lib.types.listOf lib.types.path;
         description = "List of packages for which gsettings are overridden.";
       };
     };
 
-    environment.deepin.excludePackages = mkOption {
+    environment.deepin.excludePackages = lib.mkOption {
       default = [ ];
-      type = types.listOf types.package;
+      type = lib.types.listOf lib.types.package;
       description = "List of default packages to exclude from the configuration";
     };
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     services.displayManager.sessionPackages = [ pkgs.deepin.dde-session ];
-    services.displayManager.defaultSession = mkDefault "dde-x11";
+    services.displayManager.defaultSession = lib.mkDefault "dde-x11";
 
     # Update the DBus activation environment after launching the desktop manager.
     services.xserver.displayManager.sessionCommands = ''
       ${lib.getBin pkgs.dbus}/bin/dbus-update-activation-environment --systemd --all
     '';
 
-    hardware.bluetooth.enable = mkDefault true;
+    hardware.bluetooth.enable = lib.mkDefault true;
     security.polkit.enable = true;
 
-    services.deepin.dde-daemon.enable = mkForce true;
-    services.deepin.dde-api.enable = mkForce true;
-    services.deepin.app-services.enable = mkForce true;
+    services.deepin.dde-daemon.enable = lib.mkForce true;
+    services.deepin.dde-api.enable = lib.mkForce true;
+    services.deepin.app-services.enable = lib.mkForce true;
 
-    services.colord.enable = mkDefault true;
-    services.accounts-daemon.enable = mkDefault true;
-    services.gvfs.enable = mkDefault true;
-    services.gnome.glib-networking.enable = mkDefault true;
-    services.gnome.gnome-keyring.enable = mkDefault true;
-    services.bamf.enable = mkDefault true;
+    services.colord.enable = lib.mkDefault true;
+    services.accounts-daemon.enable = lib.mkDefault true;
+    services.gvfs.enable = lib.mkDefault true;
+    services.gnome.glib-networking.enable = lib.mkDefault true;
+    services.gnome.gnome-keyring.enable = lib.mkDefault true;
+    services.bamf.enable = lib.mkDefault true;
 
-    services.libinput.enable = mkDefault true;
+    services.libinput.enable = lib.mkDefault true;
     services.udisks2.enable = true;
-    services.upower.enable = mkDefault config.powerManagement.enable;
-    networking.networkmanager.enable = mkDefault true;
-    programs.dconf.enable = mkDefault true;
-    programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
+    services.upower.enable = lib.mkDefault config.powerManagement.enable;
+    networking.networkmanager.enable = lib.mkDefault true;
+    programs.dconf.enable = lib.mkDefault true;
+    programs.gnupg.agent.pinentryPackage = lib.mkDefault pkgs.pinentry-qt;
 
     fonts.packages = with pkgs; [ noto-fonts ];
     xdg.mime.enable = true;
     xdg.menus.enable = true;
     xdg.icons.enable = true;
-    xdg.portal.enable = mkDefault true;
-    xdg.portal.extraPortals = mkDefault [
+    xdg.portal.enable = lib.mkDefault true;
+    xdg.portal.extraPortals = lib.mkDefault [
       pkgs.xdg-desktop-portal-gtk
     ];
 
     # https://github.com/NixOS/nixpkgs/pull/247766#issuecomment-1722839259
-    xdg.portal.config.deepin.default = mkDefault [ "gtk" ];
+    xdg.portal.config.deepin.default = lib.mkDefault [ "gtk" ];
 
     environment.sessionVariables = {
       NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-overrides}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";

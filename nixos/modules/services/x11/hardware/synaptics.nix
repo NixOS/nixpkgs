@@ -5,9 +5,6 @@
   pkgs,
   ...
 }:
-
-with lib;
-
 let
   cfg = config.services.xserver.synaptics;
   opt = options.services.xserver.synaptics;
@@ -35,14 +32,14 @@ in
 
     services.xserver.synaptics = {
 
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable touchpad support. Deprecated: Consider services.libinput.enable.";
       };
 
-      dev = mkOption {
-        type = types.nullOr types.str;
+      dev = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "/dev/input/event0";
         description = ''
@@ -51,73 +48,73 @@ in
         '';
       };
 
-      accelFactor = mkOption {
-        type = types.nullOr types.str;
+      accelFactor = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = "0.001";
         description = "Cursor acceleration (how fast speed increases from minSpeed to maxSpeed).";
       };
 
-      minSpeed = mkOption {
-        type = types.nullOr types.str;
+      minSpeed = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = "0.6";
         description = "Cursor speed factor for precision finger motion.";
       };
 
-      maxSpeed = mkOption {
-        type = types.nullOr types.str;
+      maxSpeed = lib.mkOption {
+        type = lib.types.nullOr lib.types.str;
         default = "1.0";
         description = "Cursor speed factor for highest-speed finger motion.";
       };
 
-      scrollDelta = mkOption {
-        type = types.nullOr types.int;
+      scrollDelta = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
         example = 75;
         description = "Move distance of the finger for a scroll event.";
       };
 
-      twoFingerScroll = mkOption {
-        type = types.bool;
+      twoFingerScroll = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable two-finger drag-scrolling. Overridden by horizTwoFingerScroll and vertTwoFingerScroll.";
       };
 
-      horizTwoFingerScroll = mkOption {
-        type = types.bool;
+      horizTwoFingerScroll = lib.mkOption {
+        type = lib.types.bool;
         default = cfg.twoFingerScroll;
-        defaultText = literalExpression "config.${opt.twoFingerScroll}";
+        defaultText = lib.literalExpression "config.${opt.twoFingerScroll}";
         description = "Whether to enable horizontal two-finger drag-scrolling.";
       };
 
-      vertTwoFingerScroll = mkOption {
-        type = types.bool;
+      vertTwoFingerScroll = lib.mkOption {
+        type = lib.types.bool;
         default = cfg.twoFingerScroll;
-        defaultText = literalExpression "config.${opt.twoFingerScroll}";
+        defaultText = lib.literalExpression "config.${opt.twoFingerScroll}";
         description = "Whether to enable vertical two-finger drag-scrolling.";
       };
 
-      horizEdgeScroll = mkOption {
-        type = types.bool;
+      horizEdgeScroll = lib.mkOption {
+        type = lib.types.bool;
         default = !cfg.horizTwoFingerScroll;
-        defaultText = literalExpression "! config.${opt.horizTwoFingerScroll}";
+        defaultText = lib.literalExpression "! config.${opt.horizTwoFingerScroll}";
         description = "Whether to enable horizontal edge drag-scrolling.";
       };
 
-      vertEdgeScroll = mkOption {
-        type = types.bool;
+      vertEdgeScroll = lib.mkOption {
+        type = lib.types.bool;
         default = !cfg.vertTwoFingerScroll;
-        defaultText = literalExpression "! config.${opt.vertTwoFingerScroll}";
+        defaultText = lib.literalExpression "! config.${opt.vertTwoFingerScroll}";
         description = "Whether to enable vertical edge drag-scrolling.";
       };
 
-      tapButtons = mkOption {
-        type = types.bool;
+      tapButtons = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Whether to enable tap buttons.";
       };
 
-      buttonsMap = mkOption {
-        type = types.listOf types.int;
+      buttonsMap = lib.mkOption {
+        type = lib.types.listOf lib.types.int;
         default = [
           1
           2
@@ -132,8 +129,8 @@ in
         apply = map toString;
       };
 
-      fingersMap = mkOption {
-        type = types.listOf types.int;
+      fingersMap = lib.mkOption {
+        type = lib.types.listOf lib.types.int;
         default = [
           1
           2
@@ -148,34 +145,34 @@ in
         apply = map toString;
       };
 
-      palmDetect = mkOption {
-        type = types.bool;
+      palmDetect = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Whether to enable palm detection (hardware support required)";
       };
 
-      palmMinWidth = mkOption {
-        type = types.nullOr types.int;
+      palmMinWidth = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
         example = 5;
         description = "Minimum finger width at which touch is considered a palm";
       };
 
-      palmMinZ = mkOption {
-        type = types.nullOr types.int;
+      palmMinZ = lib.mkOption {
+        type = lib.types.nullOr lib.types.int;
         default = null;
         example = 20;
         description = "Minimum finger pressure at which touch is considered a palm";
       };
 
-      horizontalScroll = mkOption {
-        type = types.bool;
+      horizontalScroll = lib.mkOption {
+        type = lib.types.bool;
         default = true;
         description = "Whether to enable horizontal scrolling (on touchpad)";
       };
 
-      additionalOptions = mkOption {
-        type = types.str;
+      additionalOptions = lib.mkOption {
+        type = lib.types.str;
         default = "";
         example = ''
           Option "RTCornerButton" "2"
@@ -190,7 +187,7 @@ in
 
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.xserver.modules = [ pkg.out ];
 
@@ -203,12 +200,12 @@ in
       Section "InputClass"
         Identifier "synaptics touchpad catchall"
         MatchIsTouchpad "on"
-        ${optionalString (cfg.dev != null) ''MatchDevicePath "${cfg.dev}"''}
+        ${lib.optionalString (cfg.dev != null) ''MatchDevicePath "${cfg.dev}"''}
         Driver "synaptics"
-        ${optionalString (cfg.minSpeed != null) ''Option "MinSpeed" "${cfg.minSpeed}"''}
-        ${optionalString (cfg.maxSpeed != null) ''Option "MaxSpeed" "${cfg.maxSpeed}"''}
-        ${optionalString (cfg.accelFactor != null) ''Option "AccelFactor" "${cfg.accelFactor}"''}
-        ${optionalString cfg.tapButtons tapConfig}
+        ${lib.optionalString (cfg.minSpeed != null) ''Option "MinSpeed" "${cfg.minSpeed}"''}
+        ${lib.optionalString (cfg.maxSpeed != null) ''Option "MaxSpeed" "${cfg.maxSpeed}"''}
+        ${lib.optionalString (cfg.accelFactor != null) ''Option "AccelFactor" "${cfg.accelFactor}"''}
+        ${lib.optionalString cfg.tapButtons tapConfig}
         Option "ClickFinger1" "${builtins.elemAt cfg.buttonsMap 0}"
         Option "ClickFinger2" "${builtins.elemAt cfg.buttonsMap 1}"
         Option "ClickFinger3" "${builtins.elemAt cfg.buttonsMap 2}"
@@ -216,19 +213,19 @@ in
         Option "HorizTwoFingerScroll" "${if cfg.horizTwoFingerScroll then "1" else "0"}"
         Option "VertEdgeScroll" "${if cfg.vertEdgeScroll then "1" else "0"}"
         Option "HorizEdgeScroll" "${if cfg.horizEdgeScroll then "1" else "0"}"
-        ${optionalString cfg.palmDetect ''Option "PalmDetect" "1"''}
-        ${optionalString (
+        ${lib.optionalString cfg.palmDetect ''Option "PalmDetect" "1"''}
+        ${lib.optionalString (
           cfg.palmMinWidth != null
         ) ''Option "PalmMinWidth" "${toString cfg.palmMinWidth}"''}
-        ${optionalString (cfg.palmMinZ != null) ''Option "PalmMinZ" "${toString cfg.palmMinZ}"''}
-        ${optionalString (
+        ${lib.optionalString (cfg.palmMinZ != null) ''Option "PalmMinZ" "${toString cfg.palmMinZ}"''}
+        ${lib.optionalString (
           cfg.scrollDelta != null
         ) ''Option "VertScrollDelta" "${toString cfg.scrollDelta}"''}
         ${
           if !cfg.horizontalScroll then
             ''Option "HorizScrollDelta" "0"''
           else
-            (optionalString (
+            (lib.optionalString (
               cfg.scrollDelta != null
             ) ''Option "HorizScrollDelta" "${toString cfg.scrollDelta}"'')
         }
