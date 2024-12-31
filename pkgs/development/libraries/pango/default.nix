@@ -29,7 +29,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "pango";
-  version = "1.54.0";
+  version = "1.55.5";
 
   outputs = [
     "bin"
@@ -38,10 +38,8 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ lib.optional withIntrospection "devdoc";
 
   src = fetchurl {
-    url =
-      with finalAttrs;
-      "mirror://gnome/sources/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.xz";
-    hash = "sha256-ip7tdQIe5zTX/A/fOmXDu6Ud/v5K5RqbQUpgxwstHtg=";
+    url = "mirror://gnome/sources/pango/${lib.versions.majorMinor finalAttrs.version}/pango-${finalAttrs.version}.tar.xz";
+    hash = "sha256-45YSbqCCA8vY7xJjjmIi4uH9iqnKxnQwcv7cXy2CDdg=";
   };
 
   depsBuildBuild = [
@@ -115,7 +113,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     updateScript = gnome.updateScript {
-      packageName = finalAttrs.pname;
+      packageName = "pango";
       # 1.90 is alpha for API 2.
       freeze = "1.90.0";
     };
