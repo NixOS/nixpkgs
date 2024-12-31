@@ -60,6 +60,7 @@ stdenv.mkDerivation rec {
     EOF
 
     sed -e s/getline/bsdgames_local_getline/g -i $(grep getline -rl .)
+    sed -e '/sigpause/d' -i hunt/hunt/otto.c
   '';
 
   postConfigure = ''
