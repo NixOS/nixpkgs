@@ -1283,6 +1283,7 @@ in
   ragnarwm = runTestOn [ "x86_64-linux" "aarch64-linux" ] ./ragnarwm.nix;
   rasdaemon = runTest ./rasdaemon.nix;
   rathole = runTest ./rathole.nix;
+  rauthy = runTest ./rauthy.nix;
   readarr = runTest ./readarr.nix;
   realm = runTest ./realm.nix;
   readeck = runTest ./readeck.nix;
