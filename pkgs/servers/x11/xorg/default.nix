@@ -2,6 +2,7 @@
 {
   lib,
   font-alias,
+  font-util,
   luit,
   pixman,
 }:
@@ -11,6 +12,7 @@ self: with self; {
   inherit pixman;
   inherit luit;
   fontalias = font-alias;
+  fontutil = font-util;
 
   # THIS IS A GENERATED FILE.  DO NOT EDIT!
   appres = callPackage (
@@ -1560,37 +1562,6 @@ self: with self; {
       passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
       meta = {
         pkgConfigModules = [ ];
-        platforms = lib.platforms.unix;
-      };
-    })
-  ) { };
-
-  # THIS IS A GENERATED FILE.  DO NOT EDIT!
-  fontutil = callPackage (
-    {
-      stdenv,
-      pkg-config,
-      fetchurl,
-      testers,
-    }:
-    stdenv.mkDerivation (finalAttrs: {
-      pname = "font-util";
-      version = "1.4.1";
-      builder = ./builder.sh;
-      src = fetchurl {
-        url = "mirror://xorg/individual/font/font-util-1.4.1.tar.xz";
-        sha256 = "15fcd3rzlgm51fwgfapg6vzyd1kkd28rj149xq7iajqr7h9697sw";
-      };
-      hardeningDisable = [
-        "bindnow"
-        "relro"
-      ];
-      strictDeps = true;
-      nativeBuildInputs = [ pkg-config ];
-      buildInputs = [ ];
-      passthru.tests.pkg-config = testers.testMetaPkgConfig finalAttrs.finalPackage;
-      meta = {
-        pkgConfigModules = [ "fontutil" ];
         platforms = lib.platforms.unix;
       };
     })
