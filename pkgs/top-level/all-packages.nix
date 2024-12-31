@@ -1261,9 +1261,7 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) Security;
   };
 
-  git-trim = darwin.apple_sdk_11_0.callPackage ../applications/version-management/git-trim {
-    inherit (darwin.apple_sdk_11_0.frameworks) IOKit CoreFoundation Security;
-  };
+  git-trim = callPackage ../applications/version-management/git-trim { };
 
   git-up = callPackage ../applications/version-management/git-up {
     pythonPackages = python3Packages;
