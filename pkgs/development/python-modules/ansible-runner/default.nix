@@ -113,7 +113,7 @@ buildPythonPackage rec {
     homepage = "https://github.com/ansible/ansible-runner";
     changelog = "https://github.com/ansible/ansible-runner/releases/tag/${version}";
     license = lib.licenses.asl20;
-    maintainers = [ ];
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "ansible-runner";
   };
 }
