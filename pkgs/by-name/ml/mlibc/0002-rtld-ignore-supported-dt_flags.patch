@@ -1,0 +1,46 @@
+From 50894ac109aa6ddb283e1b42ce5d64948542c8d0 Mon Sep 17 00:00:00 2001
+From: mintsuki <mintsuki@protonmail.com>
+Date: Thu, 17 Oct 2024 05:27:48 +0200
+Subject: [PATCH] rtld: Add list of supported DT_FLAGS{,_1} to ignore
+
+---
+ options/rtld/generic/main.cpp | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
+
+diff --git a/options/rtld/generic/main.cpp b/options/rtld/generic/main.cpp
+index cfa2a6012f..68b447c22b 100644
+--- a/options/rtld/generic/main.cpp
++++ b/options/rtld/generic/main.cpp
+@@ -271,6 +271,11 @@ static frg::vector<frg::string_view, MemoryAllocator> parseList(frg::string_view
+ 	return list;
+ }
+ 
++#ifndef MLIBC_STATIC_BUILD
++static constexpr uint64_t supportedDtFlags = DF_BIND_NOW;
++static constexpr uint64_t supportedDtFlags1 = DF_1_NOW;
++#endif
++
+ extern "C" void *interpreterMain(uintptr_t *entry_stack) {
+ 	if(logEntryExit)
+ 		mlibc::infoLogger() << "Entering ld.so" << frg::endlog;
+@@ -337,6 +342,20 @@ extern "C" void *interpreterMain(uintptr_t *entry_stack) {
+ 		case DT_RELRENT:
+ 		case DT_PLTGOT:
+ 			continue;
++		case DT_FLAGS: {
++			if((ent->d_un.d_val & ~supportedDtFlags) == 0) {
++				continue;
++			}
++			mlibc::panicLogger() << "rtld: unexpected DT_FLAGS value of " << frg::hex_fmt(ent->d_un.d_val) << " in program interpreter" << frg::endlog;
++			break;
++		}
++		case DT_FLAGS_1: {
++			if((ent->d_un.d_val & ~supportedDtFlags1) == 0) {
++				continue;
++			}
++			mlibc::panicLogger() << "rtld: unexpected DT_FLAGS_1 value of " << frg::hex_fmt(ent->d_un.d_val) << " in program interpreter" << frg::endlog;
++			break;
++		}
+ 		default:
+ 			mlibc::panicLogger() << "rtld: unexpected dynamic entry " << ent->d_tag << " in program interpreter" << frg::endlog;
+ 		}

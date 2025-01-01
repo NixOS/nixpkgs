@@ -1,0 +1,23 @@
+From cf78339c7ba5ad5571d4c66cbd8788ecaccf3bae Mon Sep 17 00:00:00 2001
+From: no92 <leo@managarm.org>
+Date: Wed, 25 Sep 2024 01:42:54 +0200
+Subject: [PATCH] options/rtdl: improve logging for unexpected interpreter
+ dynamic entries
+
+---
+ options/rtld/generic/main.cpp | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/options/rtld/generic/main.cpp b/options/rtld/generic/main.cpp
+index 3edd15ff90..9219ef0ffd 100644
+--- a/options/rtld/generic/main.cpp
++++ b/options/rtld/generic/main.cpp
+@@ -305,7 +305,7 @@ extern "C" void *interpreterMain(uintptr_t *entry_stack) {
+ 		case DT_PLTGOT:
+ 			continue;
+ 		default:
+-			__ensure(!"Unexpected dynamic entry in program interpreter");
++			mlibc::panicLogger() << "rtld: unexpected dynamic entry " << ent->d_tag << " in program interpreter" << frg::endlog;
+ 		}
+ 	}
+ 	__ensure(strtab_offset);
