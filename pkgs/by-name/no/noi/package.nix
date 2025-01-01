@@ -33,7 +33,7 @@ appimageTools.wrapType2 {
     install -D ${appimageContents}/usr/lib/noi/resources/icons/icon.png $out/share/icons/hicolor/256x256/apps/noi.png
   '';
   meta = {
-    description = "Power Your World with AI - Explore, Extend, Empower.";
+    description = "Power Your World with AI - Explore, Extend, Empower";
     homepage = "https://noi.nofwl.com";
     maintainers = with lib.maintainers; [ darwincereska ];
     license = lib.licenses.unfree;
