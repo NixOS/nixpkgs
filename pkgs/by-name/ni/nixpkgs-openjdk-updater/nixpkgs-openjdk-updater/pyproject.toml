@@ -1,0 +1,41 @@
+[project]
+name = "nixpkgs-openjdk-updater"
+version = "0.1.0"
+description = "Update tool for Nixpkgs OpenJDK packages"
+requires-python = ">=3.12"
+dependencies = [
+    "pydantic>=2.8.2",
+    "pygithub>=2.4.0",
+]
+
+[project.scripts]
+nixpkgs-openjdk-updater = "nixpkgs_openjdk_updater:main"
+
+[build-system]
+requires = ["hatchling>=1.25.0"]
+build-backend = "hatchling.build"
+
+[tool.pyright]
+include = ["src"]
+strict = ["**/*"]
+pythonVersion = "3.12"
+
+[tool.pytest.ini_options]
+addopts = "--doctest-modules"
+
+[tool.ruff]
+line-length = 80
+
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = ["COM812", "D203", "D213", "ISC001", "T201"]
+allowed-confusables = ["’"]
+
+[tool.ruff.format]
+docstring-code-format = true
+docstring-code-line-length = "dynamic"
+
+[tool.uv]
+dev-dependencies = [
+    "pytest>=8.3.3",
+]

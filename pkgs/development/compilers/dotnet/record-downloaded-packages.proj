@@ -1,0 +1,13 @@
+<Project>
+  <Target Name="NuGetToNix"
+    BeforeTargets="CopyInnerBuildRestoredPackages">
+    <ItemGroup>
+      <_NuGetToNixPackageCache Include="$(ProjectDirectory)artifacts/sb/package-cache/"/>
+      <_NuGetToNixPackageCache Include="$(ProjectDirectory)artifacts/source-build/self/package-cache/"/>
+    </ItemGroup>
+    <Exec
+      Command="nuget-to-nix '@(_NuGetToNixPackageCache)' >'$(ProjectDirectory)deps.nix' 2>'$(ProjectDirectory)deps.out'"
+      WorkingDirectory="$(ProjectDirectory)"
+      Condition="Exists('%(Identity)')"/>
+  </Target>
+</Project>

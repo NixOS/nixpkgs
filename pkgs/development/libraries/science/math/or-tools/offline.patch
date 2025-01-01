@@ -1,0 +1,16 @@
+diff --git a/cmake/dependencies/CMakeLists.txt b/cmake/dependencies/CMakeLists.txt
+index af3a28c113..ba92c3c55e 100644
+--- a/cmake/dependencies/CMakeLists.txt
++++ b/cmake/dependencies/CMakeLists.txt
+@@ -177,9 +177,8 @@ if(BUILD_PYTHON AND BUILD_pybind11_protobuf)
+   list(APPEND CMAKE_MESSAGE_INDENT "  ")
+   FetchContent_Declare(
+     pybind11_protobuf
+-    GIT_REPOSITORY "https://github.com/pybind/pybind11_protobuf.git"
+-    GIT_TAG "main"
+-    PATCH_COMMAND git apply --ignore-whitespace "${CMAKE_CURRENT_LIST_DIR}/../../patches/pybind11_protobuf.patch"
++    SOURCE_DIR @pybind11_protobuf@
++    PATCH_COMMAND patch -p1 < "${CMAKE_CURRENT_LIST_DIR}/../../patches/pybind11_protobuf.patch"
+   )
+   FetchContent_MakeAvailable(pybind11_protobuf)
+   list(POP_BACK CMAKE_MESSAGE_INDENT)
