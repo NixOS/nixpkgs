@@ -17,9 +17,9 @@ let
       util-linux
       busybox
     ]
-    ++ optional cfg.btrfs.enable btrfs-progs
-    ++ optional cfg.ext4.enable e2fsprogs
-    ++ optional cfg.xfs.enable xfsprogs
+    ++ lib.optional cfg.btrfs.enable btrfs-progs
+    ++ lib.optional cfg.ext4.enable e2fsprogs
+    ++ lib.optional cfg.xfs.enable xfsprogs
     ++ cfg.extraPackages;
   hasFs = fsName: lib.any (fs: fs.fsType == fsName) (lib.attrValues config.fileSystems);
   settingsFormat = pkgs.formats.yaml { };
