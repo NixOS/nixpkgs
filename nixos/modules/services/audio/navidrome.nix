@@ -45,6 +45,12 @@ in
               description = "Port to run Navidrome on.";
               type = port;
             };
+
+            EnableInsightsCollector = mkOption {
+              default = false;
+              description = "Enable anonymous usage data collection, see <https://www.navidrome.org/docs/getting-started/insights/> for details.";
+              type = bool;
+            };
           };
         };
         default = { };
