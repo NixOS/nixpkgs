@@ -9138,11 +9138,11 @@ self: super: with self; {
 
   netbox-documents = callPackage ../development/python-modules/netbox-documents { };
 
+  netbox-plugin-prometheus-sd = callPackage ../development/python-modules/netbox-plugin-prometheus-sd { };
+
   netbox-qrcode = callPackage ../development/python-modules/netbox-qrcode { };
 
   netbox-reorder-rack = callPackage ../development/python-modules/netbox-reorder-rack { };
-
-  netbox-plugin-prometheus-sd = callPackage ../development/python-modules/netbox-plugin-prometheus-sd { };
 
   netcdf4 = callPackage ../development/python-modules/netcdf4 { };
 
