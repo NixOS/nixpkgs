@@ -14,21 +14,12 @@
   extraPythonPackages ? (_: [ ]),
   nixosTests,
 }:
-let
-  fs = lib.fileset;
-in
 python3Packages.buildPythonApplication {
   pname = "nixos-test-driver";
   version = "1.1";
-  src = fs.toSource {
-    root = ./.;
-    fileset = fs.unions [
-      ./pyproject.toml
-      ./test_driver
-      ./extract-docstrings.py
-    ];
-  };
   pyproject = true;
+
+  src = ./src;
 
   propagatedBuildInputs =
     [

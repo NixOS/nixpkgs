@@ -90,10 +90,7 @@
 stdenvNoCC.mkDerivation {
   name = "nixpkgs-lib-docs";
 
-  src = lib.fileset.toSource {
-    root = ../..;
-    fileset = ../../lib;
-  };
+  src = ../../lib;
 
   buildInputs = [
     nixdoc
@@ -101,6 +98,8 @@ stdenvNoCC.mkDerivation {
   ];
 
   installPhase = ''
+    cd ..
+
     export NIX_STATE_DIR=$(mktemp -d)
     nix-instantiate --eval --strict --json ${./lib-function-locations.nix} \
       --arg nixpkgsPath "./." \

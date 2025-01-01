@@ -23,15 +23,21 @@ stdenvNoCC.mkDerivation (
 
     nativeBuildInputs = [ nixos-render-docs ];
 
-    src = lib.fileset.toSource {
-      root = ../.;
-      fileset = lib.fileset.unions [
-        (lib.fileset.fileFilter (file: file.hasExt "md" || file.hasExt "md.in") ../.)
-        ../style.css
-        ../anchor-use.js
-        ../anchor.min.js
-        ../manpage-urls.json
-      ];
+    src = lib.cleanSourceWith {
+      src = ../.;
+      filter =
+        path: type:
+        type == "directory"
+        || lib.hasSuffix ".md" path
+        || lib.hasSuffix ".md.in" path
+        || lib.elem path (
+          map toString [
+            ../style.css
+            ../anchor-use.js
+            ../anchor.min.js
+            ../manpage-urls.json
+          ]
+        );
     };
 
     postPatch = ''
