@@ -38,6 +38,12 @@ stdenv.mkDerivation rec {
       includes = [ "src/kernel/integer/random-integer.h" ];
       hash = "sha256-b2Q8apP9ueEqIUtibTeP47x6TlroRzLgAxuv5ZM1EUw=";
     })
+    # https://github.com/linbox-team/givaro/issues/232
+    (fetchpatch {
+      name = "clang-19.patch";
+      url = "https://github.com/linbox-team/givaro/commit/a18baf5227d4f3e81a50850fe98e0d954eaa3ddb.patch";
+      hash = "sha256-IR0IHhCqbxgtsST30vxM9ak1nGtt0apxcLUQ1kS1DHw=";
+    })
   ];
 
   enableParallelBuilding = true;
