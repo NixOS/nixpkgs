@@ -306,10 +306,14 @@ lib.makeScope pkgs.newScope (
         sha256 = "1jj3n7spkjc63aipwdqsvq9gi07w13bb1v8iqzvxwzld2kxa3c8w";
       };
 
-      buildInputs = with pkgs; [
-        lensfun
-        gexiv2
-      ];
+      buildInputs = (
+        with pkgs;
+        [
+          lensfun
+          gexiv2
+        ]
+        ++ lib.optional stdenv.cc.isClang llvmPackages.openmp
+      );
 
       installPhase = "
       installPlugin gimp-lensfun
@@ -322,7 +326,6 @@ lib.makeScope pkgs.newScope (
 
         license = lib.licenses.gpl3Plus;
         maintainers = [ ];
-        platforms = lib.platforms.gnu ++ lib.platforms.linux;
       };
     };
 
