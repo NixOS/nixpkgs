@@ -19,7 +19,7 @@ buildPythonPackage rec {
   version = "1.8.0";
   format = "setuptools";
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "getlogbook";
