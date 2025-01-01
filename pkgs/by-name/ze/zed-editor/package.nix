@@ -39,8 +39,10 @@
   libX11,
   libXext,
   livekit-libwebrtc,
+  testers,
 
   withGLES ? false,
+  buildRemoteServer ? true,
 }:
 
 assert withGLES -> stdenv.hostPlatform.isLinux;
@@ -94,6 +96,8 @@ in
 rustPlatform.buildRustPackage rec {
   pname = "zed-editor";
   version = "0.169.2";
+
+  outputs = [ "out" ] ++ lib.optional buildRemoteServer "remote_server";
 
   src = fetchFromGitHub {
     owner = "zed-industries";
@@ -168,7 +172,7 @@ rustPlatform.buildRustPackage rec {
   cargoBuildFlags = [
     "--package=zed"
     "--package=cli"
-  ];
+  ] ++ lib.optional buildRemoteServer "--package=remote_server";
 
   # Required on darwin because we don't have access to the
   # proprietary Metal shader compiler.
@@ -274,6 +278,9 @@ rustPlatform.buildRustPackage rec {
         ${lib.getExe envsubst} < "crates/zed/resources/zed.desktop.in" > "$out/share/applications/dev.zed.Zed.desktop"
       )
     ''
+    + lib.optionalString buildRemoteServer ''
+      install -Dm755 $release_target/remote_server $remote_server/bin/zed-remote-server-stable-$version
+    ''
     + ''
       runHook postInstall
     '';
@@ -302,6 +309,12 @@ rustPlatform.buildRustPackage rec {
     };
     fhs = fhs { };
     fhsWithPackages = f: fhs { additionalPkgs = f; };
+    tests = {
+      remoteServerVersion = testers.testVersion {
+        package = zed-editor.remote_server;
+        command = "zed-remote-server-stable-${version} version";
+      };
+    };
   };
 
   meta = {
