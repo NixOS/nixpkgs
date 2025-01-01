@@ -4,10 +4,13 @@
   pkgs,
   ...
 }:
+
+with lib;
+
 {
   # added 2019-11-11
   imports = [
-    (lib.mkRemovedOptionModule [ "services" "xserver" "displayManager" "slim" ] ''
+    (mkRemovedOptionModule [ "services" "xserver" "displayManager" "slim" ] ''
       The SLIM project is abandoned and their last release was in 2013.
       Because of this it poses a security risk to your system.
       Other issues include it not fully supporting systemd and logind sessions.

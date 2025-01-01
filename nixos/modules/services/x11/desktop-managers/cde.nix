@@ -4,16 +4,19 @@
   pkgs,
   ...
 }:
+
+with lib;
+
 let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.cde;
 in
 {
   options.services.xserver.desktopManager.cde = {
-    enable = lib.mkEnableOption "Common Desktop Environment";
+    enable = mkEnableOption "Common Desktop Environment";
 
-    extraPackages = lib.mkOption {
-      type = with lib.types; listOf package;
+    extraPackages = mkOption {
+      type = with types; listOf package;
       default = with pkgs.xorg; [
         xclock
         bitmap
@@ -26,7 +29,7 @@ in
         xwd
         xwud
       ];
-      defaultText = lib.literalExpression ''
+      defaultText = literalExpression ''
         with pkgs.xorg; [
           xclock bitmap xlsfonts xfd xrefresh xload xwininfo xdpyinfo xwd xwud
         ]
@@ -37,7 +40,7 @@ in
     };
   };
 
-  config = lib.mkIf (xcfg.enable && cfg.enable) {
+  config = mkIf (xcfg.enable && cfg.enable) {
     environment.systemPackages = cfg.extraPackages;
 
     services.rpcbind.enable = true;
