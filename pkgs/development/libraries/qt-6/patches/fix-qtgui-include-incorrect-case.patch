@@ -1,0 +1,13 @@
+diff --git a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp b/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
+index c90dabb53..12557976d 100644
+--- a/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
++++ b/src/plugins/multimedia/ffmpeg/qffmpegscreencapture_dxgi.cpp
+@@ -7,7 +7,7 @@
+ #include <private/qmultimediautils_p.h>
+ #include <private/qwindowsmultimediautils_p.h>
+ #include <private/qvideoframe_p.h>
+-#include <qtgui/qscreen_platform.h>
++#include <QtGui/qscreen_platform.h>
+ #include "qvideoframe.h"
+ 
+ #include <qloggingcategory.h>
