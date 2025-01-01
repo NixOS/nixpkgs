@@ -1,0 +1,56 @@
+diff --git a/decoration.js b/decoration.js
+index d1ff3dd..ff4193f 100644
+--- a/decoration.js
++++ b/decoration.js
+@@ -223,7 +223,7 @@ var Decoration = class {
+ 
+         let winId = this._guessWindowXID(win);
+ 
+-        let xprops = GLib.spawn_command_line_sync(`xprop -id ${winId}`);
++        let xprops = GLib.spawn_command_line_sync(`@xprop@ -id ${winId}`);
+         if (!xprops[0]) {
+             Utils.log_debug(`Unable to determine windows '${win.get_title()}' original state`);
+             return win._noTitleBarOriginalState = WindowState.UNKNOWN;
+@@ -237,7 +237,7 @@ var Decoration = class {
+         let prop = '_MOTIF_WM_HINTS';
+         let value = '0x2, 0x0, %s, 0x0, 0x0'.format(hide ? '0x2' : '0x1');
+ 
+-        GLib.spawn_command_line_sync(`xprop -id ${windId} -f ${prop} 32c -set ${prop} "${value}"`);
++        GLib.spawn_command_line_sync(`@xprop@ -id ${windId} -f ${prop} 32c -set ${prop} "${value}"`);
+         if (!hide && !win.titlebar_is_onscreen()) {
+             Utils.log_debug(`Shoving titlebar onscreen for window '${win.get_title()}'`);
+             win.shove_titlebar_onscreen();
+@@ -354,7 +354,7 @@ var Decoration = class {
+         let act = win.get_compositor_private();
+         let xwindow = act && act['x-window'];
+         if (xwindow) {
+-            let xwininfo = GLib.spawn_command_line_sync('xwininfo -children -id 0x%x'.format(xwindow));
++            let xwininfo = GLib.spawn_command_line_sync('@xwininfo@ -children -id 0x%x'.format(xwindow));
+             if (xwininfo[0]) {
+                 let str = ByteArray.toString(xwininfo[1]);
+ 
+@@ -384,7 +384,7 @@ var Decoration = class {
+         // Try enumerating all available windows and match the title. Note that this
+         // may be necessary if the title contains special characters and `x-window`
+         // is not available.
+-        let result = GLib.spawn_command_line_sync('xprop -root _NET_CLIENT_LIST');
++        let result = GLib.spawn_command_line_sync('@xprop@ -root _NET_CLIENT_LIST');
+         if (result[0]) {
+             let str = ByteArray.toString(result[1]);
+ 
+@@ -395,7 +395,7 @@ var Decoration = class {
+ 
+             // For each window ID, check if the title matches the desired title.
+             for (var i = 0; i < windowList.length; ++i) {
+-                let cmd = 'xprop -id "' + windowList[i] + '" _NET_WM_NAME _NO_TITLE_BAR_ORIGINAL_STATE';
++                let cmd = '@xprop@ -id "' + windowList[i] + '" _NET_WM_NAME _NO_TITLE_BAR_ORIGINAL_STATE';
+                 let result = GLib.spawn_command_line_sync(cmd);
+ 
+                 if (result[0]) {
+@@ -455,4 +455,4 @@ var Decoration = class {
+         let styleContent = this._updateUserStyles();
+         GLib.file_set_contents(this._userStylesPath, styleContent);
+     }
+-}
+\ No newline at end of file
++}
