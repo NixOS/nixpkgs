@@ -10097,6 +10097,14 @@
     githubId = 938744;
     name = "John Chadwick";
   };
+  jcollie = {
+    email = "jeff@ocjtech.us";
+    github = "jcollie";
+    githubId = 740022;
+    matrix = "@jeff:ocjtech.us";
+    name = "Jeffrey C. Ollie";
+    keys = [ { fingerprint = "A8CF 5B72 ABC3 9A17 3FEA  620E 6F86 035A 6D97 044E"; } ];
+  };
   jcouyang = {
     email = "oyanglulu@gmail.com";
     github = "jcouyang";
