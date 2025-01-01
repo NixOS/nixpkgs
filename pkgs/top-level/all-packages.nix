@@ -1911,8 +1911,6 @@ with pkgs;
 
   gomobile = callPackage ../development/mobile/gomobile { };
 
-  titaniumenv = callPackage ../development/mobile/titaniumenv { };
-
   adb-sync = callPackage ../development/mobile/adb-sync {
     inherit (androidenv.androidPkgs) platform-tools;
   };
