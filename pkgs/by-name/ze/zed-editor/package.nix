@@ -218,68 +218,65 @@ rustPlatform.buildRustPackage rec {
     ];
 
   installPhase =
-    if stdenv.hostPlatform.isDarwin then
-      ''
-        runHook preInstall
+    ''
+      runHook preInstall
 
-        # cargo-bundle expects the binary in target/release
-        mv target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/zed target/release/zed
+      release_target="target/${stdenv.hostPlatform.rust.cargoShortTarget}/release"
+    ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      # cargo-bundle expects the binary in target/release
+      mv $release_target/zed target/release/zed
 
-        pushd crates/zed
+      pushd crates/zed
 
-        # Note that this is GNU sed, while Zed's bundle-mac uses BSD sed
-        sed -i "s/package.metadata.bundle-stable/package.metadata.bundle/" Cargo.toml
-        export CARGO_BUNDLE_SKIP_BUILD=true
-        app_path=$(cargo bundle --release | xargs)
+      # Note that this is GNU sed, while Zed's bundle-mac uses BSD sed
+      sed -i "s/package.metadata.bundle-stable/package.metadata.bundle/" Cargo.toml
+      export CARGO_BUNDLE_SKIP_BUILD=true
+      app_path=$(cargo bundle --release | xargs)
 
-        # We're not using Zed's fork of cargo-bundle, so we must manually append their plist extensions
-        # Remove closing tags from Info.plist (last two lines)
-        head -n -2 $app_path/Contents/Info.plist > Info.plist
-        # Append extensions
-        cat resources/info/*.plist >> Info.plist
-        # Add closing tags
-        printf "</dict>\n</plist>\n" >> Info.plist
-        mv Info.plist $app_path/Contents/Info.plist
+      # We're not using Zed's fork of cargo-bundle, so we must manually append their plist extensions
+      # Remove closing tags from Info.plist (last two lines)
+      head -n -2 $app_path/Contents/Info.plist > Info.plist
+      # Append extensions
+      cat resources/info/*.plist >> Info.plist
+      # Add closing tags
+      printf "</dict>\n</plist>\n" >> Info.plist
+      mv Info.plist $app_path/Contents/Info.plist
 
-        popd
+      popd
 
-        mkdir -p $out/Applications $out/bin
-        # Zed expects git next to its own binary
-        ln -s ${git}/bin/git $app_path/Contents/MacOS/git
-        mv target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cli $app_path/Contents/MacOS/cli
-        mv $app_path $out/Applications/
+      mkdir -p $out/Applications $out/bin
+      # Zed expects git next to its own binary
+      ln -s ${lib.getExe git} $app_path/Contents/MacOS/git
+      mv $release_target/cli $app_path/Contents/MacOS/cli
+      mv $app_path $out/Applications/
 
-        # Physical location of the CLI must be inside the app bundle as this is used
-        # to determine which app to start
-        ln -s $out/Applications/Zed.app/Contents/MacOS/cli $out/bin/zeditor
+      # Physical location of the CLI must be inside the app bundle as this is used
+      # to determine which app to start
+      ln -s $out/Applications/Zed.app/Contents/MacOS/cli $out/bin/zeditor
+    ''
+    + lib.optionalString stdenv.hostPlatform.isLinux ''
+      install -Dm755 $release_target/zed $out/libexec/zed-editor
+      install -Dm755 $release_target/cli $out/bin/zeditor
 
-        runHook postInstall
-      ''
-    else
-      ''
-        runHook preInstall
+      install -Dm644 ${src}/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/zed.png
+      install -Dm644 ${src}/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/zed.png
 
-        mkdir -p $out/bin $out/libexec
-        cp target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/zed $out/libexec/zed-editor
-        cp target/${stdenv.hostPlatform.rust.cargoShortTarget}/release/cli $out/bin/zeditor
-
-        install -D ${src}/crates/zed/resources/app-icon@2x.png $out/share/icons/hicolor/1024x1024@2x/apps/zed.png
-        install -D ${src}/crates/zed/resources/app-icon.png $out/share/icons/hicolor/512x512/apps/zed.png
-
-        # extracted from https://github.com/zed-industries/zed/blob/v0.141.2/script/bundle-linux (envsubst)
-        # and https://github.com/zed-industries/zed/blob/v0.141.2/script/install.sh (final desktop file name)
-        (
-          export DO_STARTUP_NOTIFY="true"
-          export APP_CLI="zeditor"
-          export APP_ICON="zed"
-          export APP_NAME="Zed"
-          export APP_ARGS="%U"
-          mkdir -p "$out/share/applications"
-          ${lib.getExe envsubst} < "crates/zed/resources/zed.desktop.in" > "$out/share/applications/dev.zed.Zed.desktop"
-        )
-
-        runHook postInstall
-      '';
+      # extracted from https://github.com/zed-industries/zed/blob/v0.141.2/script/bundle-linux (envsubst)
+      # and https://github.com/zed-industries/zed/blob/v0.141.2/script/install.sh (final desktop file name)
+      (
+        export DO_STARTUP_NOTIFY="true"
+        export APP_CLI="zeditor"
+        export APP_ICON="zed"
+        export APP_NAME="Zed"
+        export APP_ARGS="%U"
+        mkdir -p "$out/share/applications"
+        ${lib.getExe envsubst} < "crates/zed/resources/zed.desktop.in" > "$out/share/applications/dev.zed.Zed.desktop"
+      )
+    ''
+    + ''
+      runHook postInstall
+    '';
 
   nativeInstallCheckInputs = [
     versionCheckHook
