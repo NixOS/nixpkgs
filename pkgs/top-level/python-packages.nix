@@ -14456,6 +14456,8 @@ self: super: with self; {
 
   scikits-odes = callPackage ../development/python-modules/scikits-odes { };
 
+  scikits-odes-core = callPackage ../development/python-modules/scikits-odes-core { };
+
   scikit-tda = callPackage ../development/python-modules/scikit-tda { };
 
   scipy = callPackage ../development/python-modules/scipy { };
