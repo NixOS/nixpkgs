@@ -27,22 +27,17 @@
 let
   tabby = rec {
     pname = "tabby-terminal";
-    version = "1.0.215";
+    version = "1.0.216";
 
-    # We need to apply dependency patches extremely early as patchPhase runs AFTER the derivations for the yarn caches are computed.
-    src = applyPatches {
-      src = fetchFromGitHub {
-        owner = "Eugeny";
-        repo = "tabby";
-        tag = "v${version}";
-        hash = "sha256-JLOVw2B3bTOcjE2qVId8pITqy0KgxegXLsFky6ggs3E=";
-        leaveDotGit = true;
-      };
-      patches = [
-        ./fix-deps-for-new-electron.patch
-        ./splice-argv.patch
-      ];
+    src = fetchFromGitHub {
+      owner = "Eugeny";
+      repo = "tabby";
+      rev = "1e44d8c5252b68324c15f39ad082950c192b3291";
+      hash = "sha256-TQaJyloZOxCz1iSLJrYLAk6KQjm1pTBGe0j+gscsAYc=";
+      leaveDotGit = true;
     };
+
+    patches = [ ./splice-argv.patch ];
 
     meta = {
       description = "A terminal for a more modern age";
