@@ -1,0 +1,92 @@
+From 8304b645c655832c47ee9ca706d182c26d29eaff Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Tue, 9 Apr 2024 06:35:39 +0000
+Subject: [PATCH] Revert "rust: recursively pull proc-macro dependencies as
+ well"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+This reverts commit aee941559c4b88a062e88186819a820c69c200ae.
+
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ mesonbuild/build.py                                   |  2 ++
+ test cases/rust/18 proc-macro/lib.rs                  |  8 --------
+ test cases/rust/18 proc-macro/meson.build             | 11 -----------
+ test cases/rust/18 proc-macro/subdir/meson.build      |  1 -
+ .../rust/18 proc-macro/transitive-proc-macro.rs       |  7 -------
+ 5 files changed, 2 insertions(+), 27 deletions(-)
+ delete mode 100644 test cases/rust/18 proc-macro/lib.rs
+ delete mode 100644 test cases/rust/18 proc-macro/subdir/meson.build
+ delete mode 100644 test cases/rust/18 proc-macro/transitive-proc-macro.rs
+
+diff --git a/mesonbuild/build.py b/mesonbuild/build.py
+index 6f0d6a2dd..7be9b497b 100644
+--- a/mesonbuild/build.py
++++ b/mesonbuild/build.py
+@@ -1295,6 +1295,8 @@ def get_dependencies_recurse(self, result: OrderedSet[BuildTargetTypes], include
+         for t in self.link_targets:
+             if t in result:
+                 continue
++            if t.rust_crate_type == 'proc-macro':
++                continue
+             if include_internals or not t.is_internal():
+                 result.add(t)
+             if isinstance(t, StaticLibrary):
+diff --git a/test cases/rust/18 proc-macro/lib.rs b/test cases/rust/18 proc-macro/lib.rs
+deleted file mode 100644
+index 5242886cc..000000000
+--- a/test cases/rust/18 proc-macro/lib.rs	
++++ /dev/null
+@@ -1,8 +0,0 @@
+-extern crate proc_macro_examples;
+-use proc_macro_examples::make_answer;
+-
+-make_answer!();
+-
+-pub fn func() -> u32 {
+-    answer()
+-}
+diff --git a/test cases/rust/18 proc-macro/meson.build b/test cases/rust/18 proc-macro/meson.build
+index e8b28eda1..c5f0dfc82 100644
+--- a/test cases/rust/18 proc-macro/meson.build	
++++ b/test cases/rust/18 proc-macro/meson.build	
+@@ -31,14 +31,3 @@ main = executable(
+ )
+ 
+ test('main_test2', main)
+-
+-subdir('subdir')
+-
+-staticlib = static_library('staticlib', 'lib.rs',
+-  link_with: pm_in_subdir,
+-  rust_dependency_map : {'proc_macro_examples3' : 'proc_macro_examples'}
+-)
+-
+-executable('transitive-proc-macro', 'transitive-proc-macro.rs',
+-  link_with: staticlib,
+-)
+diff --git a/test cases/rust/18 proc-macro/subdir/meson.build b/test cases/rust/18 proc-macro/subdir/meson.build
+deleted file mode 100644
+index 04842c431..000000000
+--- a/test cases/rust/18 proc-macro/subdir/meson.build	
++++ /dev/null
+@@ -1 +0,0 @@
+-pm_in_subdir = rust.proc_macro('proc_macro_examples3', '../proc.rs')
+diff --git a/test cases/rust/18 proc-macro/transitive-proc-macro.rs b/test cases/rust/18 proc-macro/transitive-proc-macro.rs
+deleted file mode 100644
+index 4c804b3b6..000000000
+--- a/test cases/rust/18 proc-macro/transitive-proc-macro.rs	
++++ /dev/null
+@@ -1,7 +0,0 @@
+-extern crate staticlib;
+-use staticlib::func;
+-
+-
+-fn main() {
+-    assert_eq!(42, func());
+-}
+-- 
+2.44.0
+

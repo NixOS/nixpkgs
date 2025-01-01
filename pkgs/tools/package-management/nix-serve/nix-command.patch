@@ -1,0 +1,40 @@
+From 9e434fff4486afeb3cc3f631f6dc56492b204704 Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?J=C3=B6rg=20Thalheim?= <joerg@thalheim.io>
+Date: Wed, 31 Jul 2024 23:53:31 +0200
+Subject: [PATCH] add extra-experimental-features for nix-command
+
+fixes https://github.com/NixOS/nixpkgs/pull/331230
+---
+ nix-serve.psgi | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/nix-serve.psgi b/nix-serve.psgi
+index 928fa3b..65a8680 100644
+--- a/nix-serve.psgi
++++ b/nix-serve.psgi
+@@ -64,7 +64,7 @@ my $app = sub {
+         return [404, ['Content-Type' => 'text/plain'], ["Incorrect NAR hash. Maybe the path has been recreated.\n"]]
+             unless $narHash eq "sha256:$expectedNarHash";
+         my $fh = new IO::Handle;
+-        open $fh, "-|", "nix", "dump-path", "--", $storePath;
++        open $fh, "-|", "nix", "--extra-experimental-features", "nix-command", "dump-path", "--", $storePath;
+         return [200, ['Content-Type' => 'text/plain', 'Content-Length' => $narSize], $fh];
+     }
+ 
+@@ -75,14 +75,14 @@ my $app = sub {
+         return [404, ['Content-Type' => 'text/plain'], ["No such path.\n"]] unless $storePath;
+         my ($deriver, $narHash, $time, $narSize, $refs) = $store->queryPathInfo($storePath, 1) or die;
+         my $fh = new IO::Handle;
+-        open $fh, "-|", "nix", "dump-path", "--", $storePath;
++        open $fh, "-|", "nix", "--extra-experimental-features", "nix-command", "dump-path", "--", $storePath;
+         return [200, ['Content-Type' => 'text/plain', 'Content-Length' => $narSize], $fh];
+     }
+ 
+     elsif ($path =~ /^\/log\/([0-9a-z]+-[0-9a-zA-Z\+\-\.\_\?\=]+)/) {
+         my $storePath = "$Nix::Config::storeDir/$1";
+         my $fh = new IO::Handle;
+-        open $fh, "-|", "nix", "log", $storePath;
++        open $fh, "-|", "nix", "--extra-experimental-features", "nix-command", "log", $storePath;
+         return [200, ['Content-Type' => 'text/plain' ], $fh];
+     }
+ 
