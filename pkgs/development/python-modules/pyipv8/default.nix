@@ -16,11 +16,11 @@
 
 buildPythonPackage rec {
   pname = "pyipv8";
-  version = "2.13.0";
+  version = "3.0.0";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-Qp5vqMa7kfSp22C5KAUvut+4YbSXMEZRsHsLevB4QvE=";
+    hash = "sha256-e8HoKKA1s93LbmvHs7gJqmCcuZZ9REenBwxKJFR6wjM=";
   };
 
   propagatedBuildInputs = [
