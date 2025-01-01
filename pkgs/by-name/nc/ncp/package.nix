@@ -15,7 +15,7 @@ buildGoModule rec {
   vendorHash = "sha256-Q6nYI9u5Jl7rxv8b8tLVTLhbJw5GSe/Sl+QOK285E8I=";
 
   meta = {
-    description = "Effortlessly transfer files and folders, to and from your NFS server.";
+    description = "Effortlessly transfer files and folders, to and from your NFS server";
     homepage = "https://github.com/kha7iq/ncp";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ darwincereska ];
