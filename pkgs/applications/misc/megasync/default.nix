@@ -122,8 +122,8 @@ mkDerivation rec {
     (lib.cmakeBool "ENABLE_DESIGN_TOKENS_IMPORTER" false) # cannot be fetched
   ];
 
-  postInstall = ''
-    wrapProgram $out/bin/megasync --prefix PATH : ${lib.makeBinPath [ xorg.xrdb ]}
+  preFixup = ''
+    qtWrapperArgs+=(--prefix PATH : ${lib.makeBinPath [ xorg.xrdb ]})
   '';
 
   meta = with lib; {
