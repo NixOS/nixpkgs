@@ -1,0 +1,12 @@
+{
+  "type": "tool",
+  "name": "toolchain-xtensa-esp-elf",
+  "version": "13.2.0+20240530",
+  "spec": {
+    "owner": "platformio",
+    "id": 17066,
+    "name": "toolchain-xtensa-esp-elf",
+    "requirements": null,
+    "uri": null
+  }
+}

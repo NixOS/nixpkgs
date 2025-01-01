@@ -1,0 +1,12 @@
+{
+  "type": "tool",
+  "name": "framework-arduinoespressif8266",
+  "version": "2.7.8",
+  "spec": {
+    "owner": "tasmota",
+    "id": null,
+    "name": "framework-arduinoespressif8266",
+    "requirements": null,
+    "uri": "https://github.com/tasmota/Arduino/releases/download/2.7.8/esp8266-2.7.8.zip"
+  }
+}

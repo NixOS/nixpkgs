@@ -141,7 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
     longDescription = "Alternative firmware for ESP8266 and ESP32 based devices with easy configuration using webUI, OTA updates, automation using timers or rules, expandability and entirely local control over MQTT, HTTP, Serial or KNX";
     homepage = "https://tasmota.github.io/docs/";
     license = lib.licenses.gpl3;
-    maintainers = with stdenv.lib.maintainers; [ davhau ];
+    maintainers = with lib.maintainers; [ davhau ];
     platforms = [ "x86_64-linux" ];
   };
 })
