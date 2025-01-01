@@ -2,6 +2,8 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  gitUpdater,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -11,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "joerdav";
     repo = pname;
-    rev = "v${version}";
+    tag = "v${version}";
     sha256 = "sha256-vTyCS85xbJnAgbasWD6LFxij9EezzlJ1pyvCJptqmOU=";
   };
 
@@ -23,13 +25,26 @@ buildGoModule rec {
     "-X=main.version=${version}"
   ];
 
-  meta = with lib; {
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  postInstallCheck = ''
+    cp ${./example.md} example.md
+    $out/bin/xc -file ./example.md example
+    if ! [[ -f test ]] then
+      echo "example.md didn't do anything" >&2
+      return 1
+    fi
+  '';
+
+  passthru.updateScript = gitUpdater { rev-prefix = "v"; };
+
+  meta = {
     description = "Markdown defined task runner";
     mainProgram = "xc";
     homepage = "https://xcfile.dev/";
-    changelog = "https://github.com/joerdav/xc/releases/tag/${src.rev}";
-    license = licenses.mit;
-    maintainers = with maintainers; [
+    changelog = "https://github.com/joerdav/xc/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [
       figsoda
       joerdav
     ];
