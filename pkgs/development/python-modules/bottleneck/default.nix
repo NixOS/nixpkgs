@@ -13,7 +13,7 @@ buildPythonPackage rec {
   version = "1.4.2";
   format = "setuptools";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     inherit pname version;
