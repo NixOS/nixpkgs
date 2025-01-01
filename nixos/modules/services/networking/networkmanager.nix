@@ -660,6 +660,10 @@ in
         useDHCP = false;
       })
 
+      (mkIf (cfg.dhcp == "dhcpcd") {
+        dhcpcd.enable = true;
+      })
+
       {
         networkmanager.plugins = with pkgs; [
           networkmanager-fortisslvpn
