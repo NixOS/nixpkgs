@@ -28,6 +28,12 @@ buildPythonPackage rec {
     hash = "sha256-NEhr8zkrHceeLbAyuUvc7U6dyQxkpkj0m5LlnBMafA0=";
   };
 
+  # fix version string
+  postPatch = ''
+    substituteInPlace setup.py \
+      --replace-fail "VERSION = (1, 3, 3)" "VERSION = (1, 3, 4)"
+  '';
+
   nativeBuildInputs = [ setuptools ];
 
   propagatedBuildInputs = [
