@@ -1,0 +1,12 @@
+diff --git a/src/args.cc b/src/args.cc
+index a8975e81624c..99854c919341 100644
+--- a/src/args.cc
++++ b/src/args.cc
+@@ -10,6 +10,7 @@
+ 
+ #include <stdlib.h>
+ 
++#include <cstdint>
+ #include <iostream>
+ #include <stdexcept>
+ #include <string>

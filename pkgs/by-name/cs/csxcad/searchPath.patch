@@ -1,0 +1,11 @@
+--- CSXCAD/matlab/searchBinary.m	2019-07-14 09:24:02.154291745 -0700
++++ CSXCAD/matlab/searchBinary.m	2019-07-14 09:20:20.900248280 -0700
+@@ -33,7 +33,7 @@
+
+ % try all search paths
+ for n=1:numel(searchpath)
+-    binary_location = [searchpath{n} name];
++    binary_location = [searchpath{n} filesep name];
+     if exist(binary_location, 'file')
+         return
+     end
