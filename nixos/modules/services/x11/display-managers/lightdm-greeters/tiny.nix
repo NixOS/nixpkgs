@@ -4,6 +4,9 @@
   pkgs,
   ...
 }:
+
+with lib;
+
 let
 
   dmcfg = config.services.xserver.displayManager;
@@ -16,8 +19,8 @@ in
 
     services.xserver.displayManager.lightdm.greeters.tiny = {
 
-      enable = lib.mkOption {
-        type = lib.types.bool;
+      enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable lightdm-tiny-greeter as the lightdm greeter.
@@ -29,16 +32,16 @@ in
       };
 
       label = {
-        user = lib.mkOption {
-          type = lib.types.str;
+        user = mkOption {
+          type = types.str;
           default = "Username";
           description = ''
             The string to represent the user_text label.
           '';
         };
 
-        pass = lib.mkOption {
-          type = lib.types.str;
+        pass = mkOption {
+          type = types.str;
           default = "Password";
           description = ''
             The string to represent the pass_text label.
@@ -46,8 +49,8 @@ in
         };
       };
 
-      extraConfig = lib.mkOption {
-        type = lib.types.lines;
+      extraConfig = mkOption {
+        type = types.lines;
         default = "";
         description = ''
           Section to describe style and ui.
@@ -58,7 +61,7 @@ in
 
   };
 
-  config = lib.mkIf (ldmcfg.enable && cfg.enable) {
+  config = mkIf (ldmcfg.enable && cfg.enable) {
 
     services.xserver.displayManager.lightdm.greeters.gtk.enable = false;
 
@@ -70,10 +73,10 @@ in
           static const char *pass_text = "${cfg.label.pass}";
           static const char *session = "${dmcfg.defaultSession}";
         '';
-        config = lib.optionalString (cfg.extraConfig != "") (configHeader + cfg.extraConfig);
+        config = optionalString (cfg.extraConfig != "") (configHeader + cfg.extraConfig);
         package = pkgs.lightdm-tiny-greeter.override { conf = config; };
       in
-      lib.mkDefault {
+      mkDefault {
         package = package.xgreeters;
         name = "lightdm-tiny-greeter";
       };

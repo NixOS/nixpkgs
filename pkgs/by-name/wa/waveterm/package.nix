@@ -2,8 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  makeDesktopItem,
-  copyDesktopItems,
+  dpkg,
   autoPatchelfHook,
   atk,
   at-spi2-atk,
@@ -28,44 +27,19 @@
   wrapGAppsHook3,
   udev,
   libGL,
-  fetchzip,
   unzip,
+  makeWrapper,
 }:
 let
   selectSystem = attrs: attrs.${stdenv.hostPlatform.system};
   pname = "waveterm";
-  version = "0.10.1";
+  version = "0.10.4";
+
   passthru.updateScript = ./update.sh;
 
-  desktopItems = [
-    (makeDesktopItem {
-      name = "waveterm";
-      exec = "waveterm --no-sandbox %U";
-      icon = fetchurl {
-        url = "https://raw.githubusercontent.com/wavetermdev/waveterm/refs/tags/v${version}/build/appicon.png";
-        hash = "sha256-qob27/64C9XPBtXghxg5/g0qRaiOUOpuFYL1n7/aEB0=";
-      };
-      startupWMClass = "Wave";
-      comment = "Open-Source AI-Native Terminal Built for Seamless Workflows";
-      desktopName = "Wave";
-      genericName = "Terminal Emulator";
-      categories = [
-        "Development"
-        "Utility"
-        "TerminalEmulator"
-      ];
-      keywords = [
-        "developer"
-        "terminal"
-        "emulator"
-      ];
-    })
-  ];
-
-  meta = {
+  metaCommon = {
     description = "Open-source, cross-platform terminal for seamless workflows";
     homepage = "https://www.waveterm.dev";
-    mainProgram = "waveterm";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.asl20;
     platforms = [
@@ -78,35 +52,28 @@ let
   };
 
   linux = stdenv.mkDerivation {
-    inherit
-      pname
-      version
-      desktopItems
-      meta
-      passthru
-      ;
+    inherit pname version passthru;
 
     src =
       let
         arch = selectSystem {
-          x86_64-linux = "x64";
+          x86_64-linux = "amd64";
           aarch64-linux = "arm64";
         };
-        hash = selectSystem {
-          x86_64-linux = "sha256-zv8ndwMt4VqsdJEEdfXzK4rnyslxF/gwnFdUu5OavNY=";
-          aarch64-linux = "sha256-6EFk1CDPeYc1KWeIxBQEsMLA9tYpnSxjG+yRg5CkGZA=";
-        };
       in
-      fetchzip {
-        url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/waveterm-linux-${arch}-${version}.zip";
-        inherit hash;
-        stripRoot = false;
+      fetchurl {
+        url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/waveterm-linux-${arch}-${version}.deb";
+        hash = selectSystem {
+          x86_64-linux = "sha256-dwBnRuskajMpfaBQ5zr19+CQ3A/qen2RtxmV7GnXx0E=";
+          aarch64-linux = "sha256-HfzvbAV8RkmuwvuBtgvHgzAslbejlPJJJO7juGSMm1o=";
+        };
       };
 
     nativeBuildInputs = [
-      copyDesktopItems
+      dpkg
       autoPatchelfHook
       wrapGAppsHook3
+      makeWrapper
     ];
 
     buildInputs = [
@@ -139,30 +106,31 @@ let
     installPhase = ''
       runHook preInstall
 
-      mkdir $out
-      cp -r . $out/waveterm
+      cp -r opt $out
+      cp -r usr/share $out/share
+      substituteInPlace $out/share/applications/waveterm.desktop \
+        --replace-fail "/opt/Wave/" ""
 
       runHook postInstall
     '';
 
     preFixup = ''
       mkdir $out/bin
-      makeWrapper $out/waveterm/waveterm $out/bin/waveterm \
+      makeWrapper $out/Wave/waveterm $out/bin/waveterm \
         --prefix LD_LIBRARY_PATH : "${
           lib.makeLibraryPath [
             libGL
           ]
         }"
     '';
+
+    meta = metaCommon // {
+      mainProgram = "waveterm";
+    };
   };
 
-  darwin = stdenv.mkDerivation rec {
-    inherit
-      pname
-      version
-      meta
-      passthru
-      ;
+  darwin = stdenv.mkDerivation {
+    inherit pname version passthru;
 
     src =
       let
@@ -170,30 +138,31 @@ let
           x86_64-darwin = "x64";
           aarch64-darwin = "arm64";
         };
-        hash = selectSystem {
-          x86_64-darwin = "sha256-7TCDg0TU0Bx9WLwLiQRcyzrFTlmkXYQIpya2SUiEXoc=";
-          aarch64-darwin = "sha256-pVxPmTz1bCKREUOvA3Jrf7kiOI5iLzqgnutblEqc4IA=";
-        };
       in
       fetchurl {
         url = "https://github.com/wavetermdev/waveterm/releases/download/v${version}/Wave-darwin-${arch}-${version}.zip";
-        inherit hash;
+        hash = selectSystem {
+          x86_64-darwin = "sha256-iQimmHhpojimZvJtPgOExLaEu/io6BrWWkTsx/1avjY=";
+          aarch64-darwin = "sha256-4txsd3aKIcsjSvx+XeDm7a6M9YRkZNLUuvv5adLOVx8=";
+        };
       };
 
     nativeBuildInputs = [
       unzip
     ];
 
-    sourceRoot = "Wave.app";
-
     installPhase = ''
       runHook preInstall
 
       mkdir -p $out/Applications
-      cp -r . $out/Applications/Wave.app
+      cp -r . "$out/Applications/Wave.app"
 
       runHook postInstall
     '';
+
+    meta = metaCommon // {
+      mainProgram = "Wave";
+    };
   };
 in
 if stdenv.hostPlatform.isDarwin then darwin else linux

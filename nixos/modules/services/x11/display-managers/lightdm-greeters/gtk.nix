@@ -4,6 +4,9 @@
   pkgs,
   ...
 }:
+
+with lib;
+
 let
 
   dmcfg = config.services.xserver.displayManager;
@@ -24,11 +27,9 @@ let
     cursor-theme-name = ${cfg.cursorTheme.name}
     cursor-theme-size = ${toString cfg.cursorTheme.size}
     background = ${ldmcfg.background}
-    ${lib.optionalString (cfg.clock-format != null) "clock-format = ${cfg.clock-format}"}
-    ${lib.optionalString (
-      cfg.indicators != null
-    ) "indicators = ${lib.concatStringsSep ";" cfg.indicators}"}
-    ${lib.optionalString (xcfg.dpi != null) "xft-dpi=${toString xcfg.dpi}"}
+    ${optionalString (cfg.clock-format != null) "clock-format = ${cfg.clock-format}"}
+    ${optionalString (cfg.indicators != null) "indicators = ${concatStringsSep ";" cfg.indicators}"}
+    ${optionalString (xcfg.dpi != null) "xft-dpi=${toString xcfg.dpi}"}
     ${cfg.extraConfig}
   '';
 
@@ -38,8 +39,8 @@ in
 
     services.xserver.displayManager.lightdm.greeters.gtk = {
 
-      enable = lib.mkOption {
-        type = lib.types.bool;
+      enable = mkOption {
+        type = types.bool;
         default = true;
         description = ''
           Whether to enable lightdm-gtk-greeter as the lightdm greeter.
@@ -48,17 +49,17 @@ in
 
       theme = {
 
-        package = lib.mkOption {
-          type = lib.types.package;
+        package = mkOption {
+          type = types.package;
           default = pkgs.gnome-themes-extra;
-          defaultText = lib.literalExpression "pkgs.gnome-themes-extra";
+          defaultText = literalExpression "pkgs.gnome-themes-extra";
           description = ''
             The package path that contains the theme given in the name option.
           '';
         };
 
-        name = lib.mkOption {
-          type = lib.types.str;
+        name = mkOption {
+          type = types.str;
           default = "Adwaita";
           description = ''
             Name of the theme to use for the lightdm-gtk-greeter.
@@ -69,17 +70,17 @@ in
 
       iconTheme = {
 
-        package = lib.mkOption {
-          type = lib.types.package;
+        package = mkOption {
+          type = types.package;
           default = pkgs.adwaita-icon-theme;
-          defaultText = lib.literalExpression "pkgs.adwaita-icon-theme";
+          defaultText = literalExpression "pkgs.adwaita-icon-theme";
           description = ''
             The package path that contains the icon theme given in the name option.
           '';
         };
 
-        name = lib.mkOption {
-          type = lib.types.str;
+        name = mkOption {
+          type = types.str;
           default = "Adwaita";
           description = ''
             Name of the icon theme to use for the lightdm-gtk-greeter.
@@ -90,25 +91,25 @@ in
 
       cursorTheme = {
 
-        package = lib.mkOption {
-          type = lib.types.package;
+        package = mkOption {
+          type = types.package;
           default = pkgs.adwaita-icon-theme;
-          defaultText = lib.literalExpression "pkgs.adwaita-icon-theme";
+          defaultText = literalExpression "pkgs.adwaita-icon-theme";
           description = ''
             The package path that contains the cursor theme given in the name option.
           '';
         };
 
-        name = lib.mkOption {
-          type = lib.types.str;
+        name = mkOption {
+          type = types.str;
           default = "Adwaita";
           description = ''
             Name of the cursor theme to use for the lightdm-gtk-greeter.
           '';
         };
 
-        size = lib.mkOption {
-          type = lib.types.int;
+        size = mkOption {
+          type = types.int;
           default = 16;
           description = ''
             Size of the cursor theme to use for the lightdm-gtk-greeter.
@@ -116,8 +117,8 @@ in
         };
       };
 
-      clock-format = lib.mkOption {
-        type = lib.types.nullOr lib.types.str;
+      clock-format = mkOption {
+        type = types.nullOr types.str;
         default = null;
         example = "%F";
         description = ''
@@ -128,8 +129,8 @@ in
         '';
       };
 
-      indicators = lib.mkOption {
-        type = lib.types.nullOr (lib.types.listOf lib.types.str);
+      indicators = mkOption {
+        type = types.nullOr (types.listOf types.str);
         default = null;
         example = [
           "~host"
@@ -154,8 +155,8 @@ in
         '';
       };
 
-      extraConfig = lib.mkOption {
-        type = lib.types.lines;
+      extraConfig = mkOption {
+        type = types.lines;
         default = "";
         description = ''
           Extra configuration that should be put in the lightdm-gtk-greeter.conf
@@ -167,9 +168,9 @@ in
 
   };
 
-  config = lib.mkIf (ldmcfg.enable && cfg.enable) {
+  config = mkIf (ldmcfg.enable && cfg.enable) {
 
-    services.xserver.displayManager.lightdm.greeter = lib.mkDefault {
+    services.xserver.displayManager.lightdm.greeter = mkDefault {
       package = pkgs.lightdm-gtk-greeter.xgreeters;
       name = "lightdm-gtk-greeter";
     };

@@ -5,6 +5,9 @@
   utils,
   ...
 }:
+
+with lib;
+
 let
 
   xcfg = config.services.xserver;
@@ -16,48 +19,48 @@ in
   options = {
 
     services.xserver.desktopManager.mate = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
+      enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Enable the MATE desktop environment";
       };
 
-      debug = lib.mkEnableOption "mate-session debug messages";
+      debug = mkEnableOption "mate-session debug messages";
 
-      extraPanelApplets = lib.mkOption {
+      extraPanelApplets = mkOption {
         default = [ ];
-        example = lib.literalExpression "with pkgs.mate; [ mate-applets ]";
-        type = lib.types.listOf lib.types.package;
+        example = literalExpression "with pkgs.mate; [ mate-applets ]";
+        type = types.listOf types.package;
         description = "Extra applets to add to mate-panel.";
       };
 
-      extraCajaExtensions = lib.mkOption {
+      extraCajaExtensions = mkOption {
         default = [ ];
         example = lib.literalExpression "with pkgs.mate; [ caja-extensions ]";
-        type = lib.types.listOf lib.types.package;
+        type = types.listOf types.package;
         description = "Extra extensions to add to caja.";
       };
 
-      enableWaylandSession = lib.mkEnableOption "MATE Wayland session";
+      enableWaylandSession = mkEnableOption "MATE Wayland session";
     };
 
-    environment.mate.excludePackages = lib.mkOption {
+    environment.mate.excludePackages = mkOption {
       default = [ ];
-      example = lib.literalExpression "[ pkgs.mate.mate-terminal pkgs.mate.pluma ]";
-      type = lib.types.listOf lib.types.package;
+      example = literalExpression "[ pkgs.mate.mate-terminal pkgs.mate.pluma ]";
+      type = types.listOf types.package;
       description = "Which MATE packages to exclude from the default environment";
     };
 
   };
 
-  config = lib.mkMerge [
-    (lib.mkIf (cfg.enable || cfg.enableWaylandSession) {
+  config = mkMerge [
+    (mkIf (cfg.enable || cfg.enableWaylandSession) {
       services.displayManager.sessionPackages = [
         pkgs.mate.mate-session-manager
       ];
 
       # Debugging
-      environment.sessionVariables.MATE_SESSION_DEBUG = lib.mkIf cfg.debug "1";
+      environment.sessionVariables.MATE_SESSION_DEBUG = mkIf cfg.debug "1";
 
       environment.systemPackages = utils.removePackagesByName (
         pkgs.mate.basePackages
@@ -80,13 +83,11 @@ in
 
       programs.dconf.enable = true;
       # Shell integration for VTE terminals
-      programs.bash.vteIntegration = lib.mkDefault true;
-      programs.zsh.vteIntegration = lib.mkDefault true;
+      programs.bash.vteIntegration = mkDefault true;
+      programs.zsh.vteIntegration = mkDefault true;
 
       # Mate uses this for printing
-      programs.system-config-printer.enable = (
-        lib.mkIf config.services.printing.enable (lib.mkDefault true)
-      );
+      programs.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
 
       services.gnome.at-spi2-core.enable = true;
       services.gnome.glib-networking.enable = true;
@@ -94,15 +95,15 @@ in
       services.udev.packages = [ pkgs.mate.mate-settings-daemon ];
       services.gvfs.enable = true;
       services.upower.enable = config.powerManagement.enable;
-      services.libinput.enable = lib.mkDefault true;
+      services.libinput.enable = mkDefault true;
 
       security.pam.services.mate-screensaver.unixAuth = true;
 
-      xdg.portal.configPackages = lib.mkDefault [ pkgs.mate.mate-desktop ];
+      xdg.portal.configPackages = mkDefault [ pkgs.mate.mate-desktop ];
 
       environment.pathsToLink = [ "/share" ];
     })
-    (lib.mkIf cfg.enableWaylandSession {
+    (mkIf cfg.enableWaylandSession {
       programs.wayfire.enable = true;
       programs.wayfire.plugins = [ pkgs.wayfirePlugins.firedecor ];
 
