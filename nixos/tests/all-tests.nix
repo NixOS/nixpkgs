@@ -520,6 +520,7 @@ in {
   keyd = handleTest ./keyd.nix {};
   keymap = handleTest ./keymap.nix {};
   kimai = handleTest ./kimai.nix {};
+  kmonad = runTest ./kmonad.nix;
   knot = handleTest ./knot.nix {};
   komga = handleTest ./komga.nix {};
   krb5 = discoverTests (import ./krb5);
