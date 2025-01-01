@@ -4,6 +4,9 @@
   pkgs,
   ...
 }:
+
+with lib;
+
 let
 
   cfg = config.services.colord;
@@ -14,12 +17,12 @@ in
   options = {
 
     services.colord = {
-      enable = lib.mkEnableOption "colord, the color management daemon";
+      enable = mkEnableOption "colord, the color management daemon";
     };
 
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
 
     environment.systemPackages = [ pkgs.colord ];
 

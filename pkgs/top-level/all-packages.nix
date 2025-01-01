@@ -4930,10 +4930,6 @@ with pkgs;
 
   qosmic = libsForQt5.callPackage ../applications/graphics/qosmic { };
 
-  qownnotes = qt6Packages.callPackage ../applications/office/qownnotes {
-    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-  };
-
   qtikz = libsForQt5.callPackage ../applications/graphics/ktikz { };
 
   qtspim = libsForQt5.callPackage ../development/tools/misc/qtspim { };
@@ -5656,7 +5652,7 @@ with pkgs;
 
   yarn-berry = callPackage ../development/tools/yarn-berry { };
 
-  yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea/yarn2nix { pkgs = pkgs.__splicedPackages; };
+  yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea { pkgs = pkgs.__splicedPackages; };
 
   inherit (yarn2nix-moretea)
     yarn2nix
@@ -9237,7 +9233,7 @@ with pkgs;
 
   grantlee = libsForQt5.callPackage ../development/libraries/grantlee { };
 
-  glib = callPackage ../development/libraries/glib (let
+  glib = callPackage ../by-name/gl/glib/package.nix (let
     glib-untested = glib.overrideAttrs { doCheck = false; };
   in {
     # break dependency cycles
