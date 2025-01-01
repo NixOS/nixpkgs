@@ -115,7 +115,7 @@ class TypstPackage:
             hash=source_hash,
             typstDeps=[
                 self.package_name_full(p, v)
-                for p, v in sorted(self.deps, key=lambda x: x[0])
+                for p, v in sorted(self.deps, key=lambda x: (x[0], Version(x[1])))
             ],
             description=self.description,
             license=self.license_tokens(),
