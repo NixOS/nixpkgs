@@ -5,7 +5,6 @@
   wxGTK32,
   libX11,
   readline,
-  darwin,
   fetchpatch,
 }:
 
@@ -48,15 +47,11 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ bin2c ];
-  buildInputs =
-    [
-      wxGTK32
-      libX11
-      readline
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.Cocoa
-    ];
+  buildInputs = [
+    wxGTK32
+    libX11
+    readline
+  ];
 
   makeFlags = [
     "WXVERSION=3.2"
@@ -65,7 +60,15 @@ stdenv.mkDerivation rec {
     "bin/bossash"
     "bin/bossa"
   ];
-  env.NIX_CFLAGS_COMPILE = "-Wno-error=deprecated-declarations";
+
+  env.NIX_CFLAGS_COMPILE = toString (
+    [
+      "-Wno-error=deprecated-declarations"
+    ]
+    ++ lib.optionals stdenv.cc.isClang [
+      "-Wno-error=vla-cxx-extension"
+    ]
+  );
 
   installPhase = ''
     mkdir -p $out/bin
