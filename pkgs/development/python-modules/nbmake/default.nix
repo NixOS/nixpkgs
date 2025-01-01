@@ -13,7 +13,6 @@
   pygments,
 
   # tests
-  pytest-xdist,
   pytestCheckHook,
   typing-extensions,
 }:
@@ -45,12 +44,7 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "nbmake" ];
 
-  # tests are prone to race conditions under high parallelism
-  # https://github.com/treebeardtech/nbmake/issues/129
-  pytestFlagsArray = [ "--maxprocesses=4" ];
-
   nativeCheckInputs = [
-    pytest-xdist
     pytestCheckHook
     typing-extensions
   ];
@@ -58,6 +52,13 @@ buildPythonPackage rec {
   preCheck = ''
     export HOME=$(mktemp -d)
   '';
+
+  disabledTests = [
+    # depends on pytest-xdist that is not added, as
+    # tests are prone to race conditions under parallelism, they sometimes hang indefinitely
+    # https://github.com/treebeardtech/nbmake/issues/129
+    "test_when_parallel_passing_nbs_then_ok"
+  ];
 
   __darwinAllowLocalNetworking = true;
 
