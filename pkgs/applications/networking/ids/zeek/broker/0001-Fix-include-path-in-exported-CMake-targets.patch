@@ -1,0 +1,75 @@
+From 889ee4dd9e778511e2fb850e6467f55a331cded9 Mon Sep 17 00:00:00 2001
+From: Tobias Mayer <tobim@fastmail.fm>
+Date: Sun, 13 Nov 2022 19:06:00 +0100
+Subject: [PATCH] Fix include path in exported CMake targets
+
+---
+ CMakeLists.txt | 23 ++++++++++++++---------
+ 1 file changed, 14 insertions(+), 9 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e22b77aa..77a15314 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -209,7 +209,6 @@ if (CAF_ROOT)
+   else()
+     find_package(CAF REQUIRED COMPONENTS openssl test io core net)
+   endif()
+-  list(APPEND LINK_LIBS CAF::core CAF::io CAF::net)
+   set(BROKER_USE_EXTERNAL_CAF ON)
+ else ()
+   message(STATUS "Using bundled CAF")
+@@ -243,22 +242,18 @@ endif ()
+ 
+ # Make sure there are no old header versions on disk.
+ install(
+-  CODE "MESSAGE(STATUS \"Removing: ${CMAKE_INSTALL_PREFIX}/include/broker\")"
+-  CODE "file(REMOVE_RECURSE \"${CMAKE_INSTALL_PREFIX}/include/broker\")")
++  CODE "MESSAGE(STATUS \"Removing: ${CMAKE_FULL_INSTALL_INCLUDEDIR}/broker\")"
++  CODE "file(REMOVE_RECURSE \"${CMAKE_FULL_INSTALL_INCLUDEDIR}/broker\")")
+ 
+ # Install all headers except the files from broker/internal.
+ install(DIRECTORY include/broker
+-        DESTINATION include
++        DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}"
+         FILES_MATCHING PATTERN "*.hh"
+                        PATTERN "include/broker/internal" EXCLUDE)
+ 
+-include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/include)
+-
+-include_directories(${CMAKE_CURRENT_BINARY_DIR}/include)
+-
+ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/src/config.hh.in
+                ${CMAKE_CURRENT_BINARY_DIR}/include/broker/config.hh)
+-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/broker/config.hh DESTINATION include/broker)
++install(FILES ${CMAKE_CURRENT_BINARY_DIR}/include/broker/config.hh DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}/broker")
+ 
+ if (NOT BROKER_EXTERNAL_SQLITE_TARGET)
+   include_directories(BEFORE ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty)
+@@ -360,6 +355,11 @@ if (ENABLE_SHARED)
+                         OUTPUT_NAME broker)
+   target_link_libraries(broker PUBLIC ${LINK_LIBS})
+   target_link_libraries(broker PRIVATE CAF::core CAF::io CAF::net)
++  target_include_directories(
++    broker PUBLIC
++      $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
++      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
++      $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+   install(TARGETS broker
+           EXPORT BrokerTargets
+           DESTINATION ${CMAKE_INSTALL_LIBDIR})
+@@ -373,6 +373,11 @@ if (ENABLE_STATIC)
+   endif()
+   target_link_libraries(broker_static PUBLIC ${LINK_LIBS})
+   target_link_libraries(broker_static PRIVATE CAF::core CAF::io CAF::net)
++  target_include_directories(
++    broker_static PUBLIC
++      $<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/include>
++      $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
++      $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>)
+   install(TARGETS broker_static
+           EXPORT BrokerTargets
+           DESTINATION ${CMAKE_INSTALL_LIBDIR})
+-- 
+2.38.1
+
