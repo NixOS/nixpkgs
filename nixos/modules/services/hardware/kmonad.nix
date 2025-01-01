@@ -122,8 +122,6 @@ let
       cmd =
         [
           (lib.getExe cfg.package)
-          "--input"
-          ''device-file "${keyboard.device}"''
         ]
         ++ cfg.extraArgs
         ++ [ "${mkCfg keyboard}" ];
