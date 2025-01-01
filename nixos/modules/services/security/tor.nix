@@ -126,7 +126,7 @@ let
             );
           config = {
             flags =
-              filter (name: config.${name} == true) isolateFlags
+              lib.filter (name: config.${name} == true) isolateFlags
               ++ lib.optional (config.SessionGroup != null) "SessionGroup=${toString config.SessionGroup}";
           };
         }
@@ -244,7 +244,7 @@ let
                     }
                   );
                 config = {
-                  flags = filter (name: config.${name} == true) flags;
+                  flags = lib.filter (name: config.${name} == true) flags;
                 };
               }
             ))
@@ -928,7 +928,7 @@ in
                           }
                         );
                       config = {
-                        flags = filter (name: config.${name} == true) flags;
+                        flags = lib.filter (name: config.${name} == true) flags;
                       };
                     }
                   ))
