@@ -8059,8 +8059,6 @@ with pkgs;
 
   edb = libsForQt5.callPackage ../development/tools/misc/edb { };
 
-  elf2uf2-rs = callPackage ../development/embedded/elf2uf2-rs {};
-
   license_finder = callPackage ../development/tools/license_finder { };
 
   # NOTE: Override and set useIcon = false to use Awk instead of Icon.
