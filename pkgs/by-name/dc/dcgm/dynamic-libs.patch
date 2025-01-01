@@ -1,0 +1,40 @@
+diff --git a/cmake/FindJsoncpp.cmake b/cmake/FindJsoncpp.cmake
+index abedf7bb85..d7a52f5c7b 100644
+--- a/cmake/FindJsoncpp.cmake
++++ b/cmake/FindJsoncpp.cmake
+@@ -16,8 +16,8 @@
+ 
+ if (NOT TARGET JsonCpp::JsonCpp)
+     find_package(jsoncpp REQUIRED CONFIG)
+-    set(JSONCPP_STATIC_LIBS jsoncpp_static)
+-    set(JSONCPP_INCLUDE_PATH $<TARGET_PROPERTY:jsoncpp_static,INTERFACE_INCLUDE_DIRECTORIES>)
++    set(JSONCPP_STATIC_LIBS jsoncpp)
++    set(JSONCPP_INCLUDE_PATH $<TARGET_PROPERTY:jsoncpp,INTERFACE_INCLUDE_DIRECTORIES>)
+ endif()
+ # set(Jsoncpp_PATH_PREFIXES /usr/local "${Jsoncpp_ROOT}" "$ENV{HOME}")
+ # foreach(prefix ${Jsoncpp_PATH_PREFIXES})
+diff --git a/cmake/FindLibevent.cmake b/cmake/FindLibevent.cmake
+index 354d6f9b99..38aca9534e 100644
+--- a/cmake/FindLibevent.cmake
++++ b/cmake/FindLibevent.cmake
+@@ -26,16 +26,12 @@
+ endforeach()
+ 
+ find_path(LIBEVENT_INCLUDE_DIR evhttp.h event.h PATHS ${Libevent_INCLUDE_PATHS})
+-find_library(LIBEVENT_STATIC_LIB NAMES libevent.a libevent_core.a libevent_extra.a PATHS ${Libevent_LIB_PATHS})
+-find_library(LIBEVENT_PTHREAD_STATIC_LIB NAMES libevent_pthreads.a PATHS ${Libevent_LIB_PATHS})
++find_library(LIBEVENT_STATIC_LIB NAMES libevent.so libevent_core.so libevent_extra.so PATHS ${Libevent_LIB_PATHS})
++find_library(LIBEVENT_PTHREAD_STATIC_LIB NAMES libevent_pthreads.so PATHS ${Libevent_LIB_PATHS})
+ 
+-if (LIBEVENT_INCLUDE_DIR AND LIBEVENT_STATIC_LIB AND LIBEVENT_PTHREAD_STATIC_LIB)
++if (LIBEVENT_INCLUDE_DIR AND LIBEVENT_STATIC_LIB)
+     set(Libevent_FOUND TRUE)
+-    add_library(libevent_event_static STATIC IMPORTED)
+-    set_target_properties(libevent_event_static PROPERTIES IMPORTED_LOCATION ${LIBEVENT_STATIC_LIB})
+-    add_library(libevent_event_pthread STATIC IMPORTED)
+-    set_target_properties(libevent_event_pthread PROPERTIES IMPORTED_LOCATION ${LIBEVENT_PTHREAD_STATIC_LIB})
+-    set(LIBEVENT_STATIC_LIBS libevent_event_static libevent_event_pthread)
++    set(LIBEVENT_STATIC_LIBS ${LIBEVENT_STATIC_LIB} ${LIBEVENT_PTHREAD_STATIC_LIB})
+ else ()
+     set(Libevent_FOUND FALSE)
+ endif ()
