@@ -1,0 +1,28 @@
+From 766263d53ae69d70c5915426e6e8f58abd988226 Mon Sep 17 00:00:00 2001
+From: Robert Hensing <robert@roberthensing.nl>
+Date: Tue, 22 Oct 2024 15:28:04 +0200
+Subject: [PATCH 1/6] Fix meson build on darwin
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+std::stringbuf is defined in <sstream>
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ src/libutil/strings.cc | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/libutil/strings.cc b/src/libutil/strings.cc
+index d1c9f700c..c221a43c6 100644
+--- a/src/libutil/strings.cc
++++ b/src/libutil/strings.cc
+@@ -1,5 +1,6 @@
+ #include <filesystem>
+ #include <string>
++#include <sstream>
+ 
+ #include "strings-inline.hh"
+ #include "os-string.hh"
+-- 
+2.46.1
+

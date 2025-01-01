@@ -1,0 +1,75 @@
+From d1e0bae55afb3c3ef0bcad5d644b0e04da6279b3 Mon Sep 17 00:00:00 2001
+From: Robert Hensing <robert@roberthensing.nl>
+Date: Thu, 3 Oct 2024 12:57:00 +0200
+Subject: [PATCH 6/6] local-derivation-goal: Move builder preparation to
+ non-builtin code path
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+Signed-off-by: Jörg Thalheim <joerg@thalheim.io>
+---
+ .../unix/build/local-derivation-goal.cc       | 25 ++++++++-----------
+ 1 file changed, 10 insertions(+), 15 deletions(-)
+
+diff --git a/src/libstore/unix/build/local-derivation-goal.cc b/src/libstore/unix/build/local-derivation-goal.cc
+index f781a84c6..dcfaadeef 100644
+--- a/src/libstore/unix/build/local-derivation-goal.cc
++++ b/src/libstore/unix/build/local-derivation-goal.cc
+@@ -2087,11 +2087,6 @@ void LocalDerivationGoal::runChild()
+                 throw SysError("setuid failed");
+         }
+ 
+-        /* Fill in the arguments. */
+-        Strings args;
+-
+-        std::string builder = "invalid";
+-
+ #if __APPLE__
+         /* This has to appear before import statements. */
+         std::string sandboxProfile = "(version 1)\n";
+@@ -2216,14 +2211,6 @@ void LocalDerivationGoal::runChild()
+         }
+ #endif
+ 
+-        if (!drv->isBuiltin()) {
+-            builder = drv->builder;
+-            args.push_back(std::string(baseNameOf(drv->builder)));
+-        }
+-
+-        for (auto & i : drv->args)
+-            args.push_back(rewriteStrings(i, inputRewrites));
+-
+         /* Indicate that we managed to set up the build environment. */
+         writeFull(STDERR_FILENO, std::string("\2\n"));
+ 
+@@ -2254,6 +2241,14 @@ void LocalDerivationGoal::runChild()
+             }
+         }
+ 
++        // Now builder is not builtin
++
++        Strings args;
++        args.push_back(std::string(baseNameOf(drv->builder)));
++
++        for (auto & i : drv->args)
++            args.push_back(rewriteStrings(i, inputRewrites));
++
+ #if __APPLE__
+         posix_spawnattr_t attrp;
+ 
+@@ -2275,9 +2270,9 @@ void LocalDerivationGoal::runChild()
+             posix_spawnattr_setbinpref_np(&attrp, 1, &cpu, NULL);
+         }
+ 
+-        posix_spawn(NULL, builder.c_str(), NULL, &attrp, stringsToCharPtrs(args).data(), stringsToCharPtrs(envStrs).data());
++        posix_spawn(NULL, drv->builder.c_str(), NULL, &attrp, stringsToCharPtrs(args).data(), stringsToCharPtrs(envStrs).data());
+ #else
+-        execve(builder.c_str(), stringsToCharPtrs(args).data(), stringsToCharPtrs(envStrs).data());
++        execve(drv->builder.c_str(), stringsToCharPtrs(args).data(), stringsToCharPtrs(envStrs).data());
+ #endif
+ 
+         throw SysError("executing '%1%'", drv->builder);
+-- 
+2.46.1
+
