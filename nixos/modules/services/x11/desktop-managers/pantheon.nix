@@ -1,4 +1,7 @@
 { config, lib, utils, pkgs, ... }:
+
+with lib;
+
 let
 
   cfg = config.services.xserver.desktopManager.pantheon;
@@ -16,7 +19,7 @@ in
 
   meta = {
     doc = ./pantheon.md;
-    maintainers = lib.teams.pantheon.members;
+    maintainers = teams.pantheon.members;
   };
 
   options = {
@@ -24,24 +27,24 @@ in
     services.pantheon = {
 
       contractor = {
-         enable = lib.mkEnableOption "contractor, a desktop-wide extension service used by Pantheon";
+         enable = mkEnableOption "contractor, a desktop-wide extension service used by Pantheon";
       };
 
-      apps.enable = lib.mkEnableOption "Pantheon default applications";
+      apps.enable = mkEnableOption "Pantheon default applications";
 
     };
 
     services.xserver.desktopManager.pantheon = {
-      enable = lib.mkOption {
-        type = lib.types.bool;
+      enable = mkOption {
+        type = types.bool;
         default = false;
         description = "Enable the pantheon desktop manager";
       };
 
-      sessionPath = lib.mkOption {
+      sessionPath = mkOption {
         default = [];
-        type = lib.types.listOf lib.types.package;
-        example = lib.literalExpression "[ pkgs.gpaste ]";
+        type = types.listOf types.package;
+        example = literalExpression "[ pkgs.gpaste ]";
         description = ''
           Additional list of packages to be added to the session search path.
           Useful for GSettings-conditional autostart.
@@ -50,46 +53,46 @@ in
         '';
       };
 
-      extraWingpanelIndicators = lib.mkOption {
+      extraWingpanelIndicators = mkOption {
         default = null;
-        type = with lib.types; nullOr (listOf package);
+        type = with types; nullOr (listOf package);
         description = "Indicators to add to Wingpanel.";
       };
 
-      extraSwitchboardPlugs = lib.mkOption {
+      extraSwitchboardPlugs = mkOption {
         default = null;
-        type = with lib.types; nullOr (listOf package);
+        type = with types; nullOr (listOf package);
         description = "Plugs to add to Switchboard.";
       };
 
-      extraGSettingsOverrides = lib.mkOption {
+      extraGSettingsOverrides = mkOption {
         default = "";
-        type = lib.types.lines;
+        type = types.lines;
         description = "Additional gsettings overrides.";
       };
 
-      extraGSettingsOverridePackages = lib.mkOption {
+      extraGSettingsOverridePackages = mkOption {
         default = [];
-        type = lib.types.listOf lib.types.path;
+        type = types.listOf types.path;
         description = "List of packages for which gsettings are overridden.";
       };
 
-      debug = lib.mkEnableOption "gnome-session debug messages";
+      debug = mkEnableOption "gnome-session debug messages";
 
     };
 
-    environment.pantheon.excludePackages = lib.mkOption {
+    environment.pantheon.excludePackages = mkOption {
       default = [];
-      example = lib.literalExpression "[ pkgs.pantheon.elementary-camera ]";
-      type = lib.types.listOf lib.types.package;
+      example = literalExpression "[ pkgs.pantheon.elementary-camera ]";
+      type = types.listOf types.package;
       description = "Which packages pantheon should exclude from the default environment";
     };
 
   };
 
 
-  config = lib.mkMerge [
-    (lib.mkIf cfg.enable {
+  config = mkMerge [
+    (mkIf cfg.enable {
       services.xserver.desktopManager.pantheon.sessionPath = utils.removePackagesByName [
         pkgs.pantheon.pantheon-agent-geoclue2
       ] config.environment.pantheon.excludePackages;
@@ -98,21 +101,21 @@ in
 
       # Ensure lightdm is used when Pantheon is enabled
       # Without it screen locking will be nonfunctional because of the use of lightlocker
-      warnings = lib.optional (config.services.xserver.displayManager.lightdm.enable != true)
+      warnings = optional (config.services.xserver.displayManager.lightdm.enable != true)
         ''
           Using Pantheon without LightDM as a displayManager will break screenlocking from the UI.
         '';
 
-      services.xserver.displayManager.lightdm.greeters.pantheon.enable = lib.mkDefault true;
+      services.xserver.displayManager.lightdm.greeters.pantheon.enable = mkDefault true;
 
       # Without this, elementary LightDM greeter will pre-select non-existent `default` session
       # https://github.com/elementary/greeter/issues/368
-      services.displayManager.defaultSession = lib.mkDefault "pantheon";
+      services.displayManager.defaultSession = mkDefault "pantheon";
 
       services.xserver.displayManager.sessionCommands = ''
         if test "$XDG_CURRENT_DESKTOP" = "Pantheon"; then
             true
-            ${lib.concatMapStrings (p: ''
+            ${concatMapStrings (p: ''
               if [ -d "${p}/share/gsettings-schemas/${p.name}" ]; then
                 export XDG_DATA_DIRS=$XDG_DATA_DIRS''${XDG_DATA_DIRS:+:}${p}/share/gsettings-schemas/${p.name}
               fi
@@ -126,38 +129,38 @@ in
       '';
 
       # Default services
-      hardware.bluetooth.enable = lib.mkDefault true;
+      hardware.bluetooth.enable = mkDefault true;
       security.polkit.enable = true;
       services.accounts-daemon.enable = true;
       services.bamf.enable = true;
-      services.colord.enable = lib.mkDefault true;
-      services.fwupd.enable = lib.mkDefault true;
+      services.colord.enable = mkDefault true;
+      services.fwupd.enable = mkDefault true;
       # TODO: Enable once #177946 is resolved
       # services.packagekit.enable = mkDefault true;
-      services.power-profiles-daemon.enable = lib.mkDefault true;
-      services.touchegg.enable = lib.mkDefault true;
+      services.power-profiles-daemon.enable = mkDefault true;
+      services.touchegg.enable = mkDefault true;
       services.touchegg.package = pkgs.pantheon.touchegg;
-      services.tumbler.enable = lib.mkDefault true;
-      services.system-config-printer.enable = (lib.mkIf config.services.printing.enable (lib.mkDefault true));
+      services.tumbler.enable = mkDefault true;
+      services.system-config-printer.enable = (mkIf config.services.printing.enable (mkDefault true));
       services.dbus.packages = with pkgs.pantheon; [
         switchboard-plug-power
         elementary-default-settings # accountsservice extensions
       ];
-      services.pantheon.apps.enable = lib.mkDefault true;
-      services.pantheon.contractor.enable = lib.mkDefault true;
+      services.pantheon.apps.enable = mkDefault true;
+      services.pantheon.contractor.enable = mkDefault true;
       services.gnome.at-spi2-core.enable = true;
       services.gnome.evolution-data-server.enable = true;
       services.gnome.glib-networking.enable = true;
       services.gnome.gnome-keyring.enable = true;
       services.gvfs.enable = true;
-      services.gnome.rygel.enable = lib.mkDefault true;
+      services.gnome.rygel.enable = mkDefault true;
       services.udisks2.enable = true;
       services.upower.enable = config.powerManagement.enable;
-      services.libinput.enable = lib.mkDefault true;
-      services.switcherooControl.enable = lib.mkDefault true;
+      services.libinput.enable = mkDefault true;
+      services.switcherooControl.enable = mkDefault true;
       services.xserver.updateDbusEnvironment = true;
-      services.zeitgeist.enable = lib.mkDefault true;
-      services.geoclue2.enable = lib.mkDefault true;
+      services.zeitgeist.enable = mkDefault true;
+      services.geoclue2.enable = mkDefault true;
       # pantheon has pantheon-agent-geoclue2
       services.geoclue2.enableDemoAgent = false;
       services.geoclue2.appConfig."io.elementary.desktop.agent-geoclue2" = {
@@ -170,7 +173,7 @@ in
         # https://gitlab.gnome.org/GNOME/mutter/-/merge_requests/1443
         pkgs.pantheon.mutter
       ];
-      services.orca.enable = lib.mkDefault (notExcluded pkgs.orca);
+      services.orca.enable = mkDefault (notExcluded pkgs.orca);
       systemd.packages = with pkgs; [
         gnome-session
         pantheon.gala
@@ -178,7 +181,7 @@ in
         pantheon.elementary-session-settings
       ];
       programs.dconf.enable = true;
-      networking.networkmanager.enable = lib.mkDefault true;
+      networking.networkmanager.enable = mkDefault true;
 
       systemd.user.targets."gnome-session-x11-services".wants = [
         "org.gnome.SettingsDaemon.XSettings.service"
@@ -243,12 +246,12 @@ in
         xdg-desktop-portal-pantheon
       ]);
 
-      xdg.portal.configPackages = lib.mkDefault [ pkgs.pantheon.elementary-default-settings ];
+      xdg.portal.configPackages = mkDefault [ pkgs.pantheon.elementary-default-settings ];
 
       # Override GSettings schemas
       environment.sessionVariables.NIX_GSETTINGS_OVERRIDES_DIR = "${nixos-gsettings-desktop-schemas}/share/gsettings-schemas/nixos-gsettings-overrides/glib-2.0/schemas";
 
-      environment.sessionVariables.GNOME_SESSION_DEBUG = lib.mkIf cfg.debug "1";
+      environment.sessionVariables.GNOME_SESSION_DEBUG = mkIf cfg.debug "1";
 
       environment.pathsToLink = [
         # FIXME: modules should link subdirs of `/share` rather than relying on this
@@ -262,8 +265,8 @@ in
       programs.nm-applet.indicator = false;
 
       # Shell integration for VTE terminals
-      programs.bash.vteIntegration = lib.mkDefault true;
-      programs.zsh.vteIntegration = lib.mkDefault true;
+      programs.bash.vteIntegration = mkDefault true;
+      programs.zsh.vteIntegration = mkDefault true;
 
       # Default Fonts
       fonts.packages = with pkgs; [
@@ -279,9 +282,9 @@ in
       };
     })
 
-    (lib.mkIf serviceCfg.apps.enable {
-      programs.evince.enable = lib.mkDefault (notExcluded pkgs.evince);
-      programs.file-roller.enable = lib.mkDefault (notExcluded pkgs.file-roller);
+    (mkIf serviceCfg.apps.enable {
+      programs.evince.enable = mkDefault (notExcluded pkgs.evince);
+      programs.file-roller.enable = mkDefault (notExcluded pkgs.file-roller);
 
       environment.systemPackages = utils.removePackagesByName ([
         pkgs.gnome-font-viewer
@@ -312,7 +315,7 @@ in
       ];
     })
 
-    (lib.mkIf serviceCfg.contractor.enable {
+    (mkIf serviceCfg.contractor.enable {
       environment.systemPackages = with pkgs.pantheon; [
         contractor
         file-roller-contract

@@ -4,26 +4,29 @@
   pkgs,
   ...
 }:
+
+with lib;
+
 let
   layouts = config.services.xserver.xkb.extraLayouts;
 
   layoutOpts = {
     options = {
-      description = lib.mkOption {
-        type = lib.types.str;
+      description = mkOption {
+        type = types.str;
         description = "A short description of the layout.";
       };
 
-      languages = lib.mkOption {
-        type = lib.types.listOf lib.types.str;
+      languages = mkOption {
+        type = types.listOf types.str;
         description = ''
           A list of languages provided by the layout.
           (Use ISO 639-2 codes, for example: "eng" for english)
         '';
       };
 
-      compatFile = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
+      compatFile = mkOption {
+        type = types.nullOr types.path;
         default = null;
         description = ''
           The path to the xkb compat file.
@@ -33,8 +36,8 @@ let
         '';
       };
 
-      geometryFile = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
+      geometryFile = mkOption {
+        type = types.nullOr types.path;
         default = null;
         description = ''
           The path to the xkb geometry file.
@@ -44,8 +47,8 @@ let
         '';
       };
 
-      keycodesFile = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
+      keycodesFile = mkOption {
+        type = types.nullOr types.path;
         default = null;
         description = ''
           The path to the xkb keycodes file.
@@ -55,8 +58,8 @@ let
         '';
       };
 
-      symbolsFile = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
+      symbolsFile = mkOption {
+        type = types.nullOr types.path;
         default = null;
         description = ''
           The path to the xkb symbols file.
@@ -66,8 +69,8 @@ let
         '';
       };
 
-      typesFile = lib.mkOption {
-        type = lib.types.nullOr lib.types.path;
+      typesFile = mkOption {
+        type = types.nullOr types.path;
         default = null;
         description = ''
           The path to the xkb types file.
@@ -108,10 +111,10 @@ in
   ###### interface
 
   options.services.xserver.xkb = {
-    extraLayouts = lib.mkOption {
-      type = lib.types.attrsOf (lib.types.submodule layoutOpts);
+    extraLayouts = mkOption {
+      type = types.attrsOf (types.submodule layoutOpts);
       default = { };
-      example = lib.literalExpression ''
+      example = literalExpression ''
         {
           mine = {
             description = "My custom xkb layout.";
@@ -133,7 +136,7 @@ in
 
   ###### implementation
 
-  config = lib.mkIf (layouts != { }) {
+  config = mkIf (layouts != { }) {
 
     environment.sessionVariables = {
       # runtime override supported by multiple libraries e. g. libxkbcommon
