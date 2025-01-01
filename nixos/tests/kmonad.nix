@@ -11,6 +11,9 @@
     machine = {
       services.kmonad = {
         enable = true;
+        extraArgs = [
+          "--log-level=debug"
+        ];
         keyboards = {
           defaultKbd = {
             device = "/dev/input/by-id/vm-default-kbd";
