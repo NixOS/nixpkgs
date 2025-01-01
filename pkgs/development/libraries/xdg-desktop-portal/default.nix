@@ -74,12 +74,6 @@ stdenv.mkDerivation (finalAttrs: {
     ./installed-tests-share.patch
   ];
 
-  # until/unless bubblewrap ships a pkg-config file, meson has no way to find it when cross-compiling.
-  postPatch = ''
-    substituteInPlace meson.build \
-      --replace-fail "find_program('bwrap'"  "find_program('${lib.getExe bubblewrap}'"
-  '';
-
   nativeBuildInputs = [
     docbook_xml_dtd_412
     docbook_xml_dtd_43
@@ -148,6 +142,12 @@ stdenv.mkDerivation (finalAttrs: {
   strictDeps = true;
 
   doCheck = true;
+
+  postPatch = ''
+    # until/unless bubblewrap ships a pkg-config file, meson has no way to find it when cross-compiling.
+    substituteInPlace meson.build \
+      --replace-fail "find_program('bwrap'"  "find_program('${lib.getExe bubblewrap}'"
+  '';
 
   preCheck = ''
     # For test_trash_file
