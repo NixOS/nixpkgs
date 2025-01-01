@@ -21,7 +21,6 @@
   falcon,
   fastapi,
   flask,
-  flask-sockets,
   gunicorn,
   moto,
   pyramid,
@@ -73,7 +72,6 @@ buildPythonPackage rec {
       falcon
       fastapi
       flask
-      flask-sockets
       gunicorn
       moto
       pyramid

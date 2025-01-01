@@ -4736,8 +4736,6 @@ self: super: with self; {
 
   flask-socketio = callPackage ../development/python-modules/flask-socketio { };
 
-  flask-sockets = callPackage ../development/python-modules/flask-sockets { };
-
   flask-sqlalchemy = callPackage ../development/python-modules/flask-sqlalchemy { };
 
   flask-sqlalchemy-lite = callPackage ../development/python-modules/flask-sqlalchemy-lite { };
