@@ -53,7 +53,7 @@ import ./make-test-python.nix (
         machine.succeed("echo 'SELECT value FROM osquery_flags WHERE name = \"nullvalue\";' | osqueryi | tee /dev/console | grep -q ${nullvalue}")
 
         # Module creates directories for default database_path and pidfile flag values.
-        machine.succeed("test -d $(dirname ${cfg.flags.database_path})")
+        machine.succeed("test -d $(dirname /var/lib/${cfg.flags.database_path})")
         machine.succeed("test -d $(dirname ${cfg.flags.pidfile})")
       '';
   }

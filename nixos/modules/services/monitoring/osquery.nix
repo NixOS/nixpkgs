@@ -63,16 +63,16 @@ in
           freeformType = attrsOf str;
           options = {
             database_path = lib.mkOption {
-              default = "/var/lib/osquery/osquery.db";
+              default = "osquery/osquery.db";
               readOnly = true;
-              description = "Path used for the database file.";
-              type = path;
+              description = "Path used for the database file, relative to /var/lib/.";
+              type = nonEmptyStr;
             };
             logger_path = lib.mkOption {
-              default = "/var/log/osquery";
+              default = "osquery";
               readOnly = true;
-              description = "Base directory used for logging.";
-              type = path;
+              description = "Base directory used for logging, relative to /var/log/.";
+              type = nonEmptyStr;
             };
             pidfile = lib.mkOption {
               default = "/run/osquery/osqueryd.pid";
