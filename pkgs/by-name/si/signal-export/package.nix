@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
     hash = "sha256-QHTix56hdujxWr+pjCg6zu15tCB7YoDSzmNpWwWOHN0=";
   };
 
-  nativeBuildInputs = with python3.pkgs; [
+  build-system = with python3.pkgs; [
     pdm-backend
   ];
 
