@@ -18366,6 +18366,8 @@ self: super: with self; {
     pname = "z3-solver";
   }))).python;
 
+  zabbix-utils = callPackage ../development/python-modules/zabbix-utils { };
+
   zadnegoale = callPackage ../development/python-modules/zadnegoale { };
 
   zamg = callPackage ../development/python-modules/zamg { };
