@@ -27,6 +27,8 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
+    "-X"
+    "codeberg.org/codeberg/pages/server/version.Version=${version}"
   ];
 
   tags = [
