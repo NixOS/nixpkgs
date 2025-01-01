@@ -1,0 +1,70 @@
+From ead7a3b988a47a3896ea8a3ff01556e073115f16 Mon Sep 17 00:00:00 2001
+From: Sofi <sofi+git@mailbox.org>
+Date: Thu, 27 Jul 2023 17:23:31 +0200
+Subject: [PATCH] No launch4j
+
+---
+ pom.xml | 47 +----------------------------------------------
+ 1 file changed, 1 insertion(+), 46 deletions(-)
+
+diff --git a/pom.xml b/pom.xml
+index 21352e0..320d4f3 100644
+--- a/pom.xml
++++ b/pom.xml
+@@ -253,51 +253,6 @@
+                     </execution>
+                 </executions>
+             </plugin>
+-            <plugin>
+-                <groupId>com.akathist.maven.plugins.launch4j</groupId>
+-                <version>2.2.0</version>
+-                <artifactId>launch4j-maven-plugin</artifactId>
+-                <executions>
+-                    <execution>
+-                        <id>l4j-ns-usbloader</id>
+-                        <phase>package</phase>
+-                        <goals>
+-                            <goal>launch4j</goal>
+-                        </goals>
+-                        <configuration>
+-                            <headerType>gui</headerType>
+-                            <icon>appicon.ico</icon>
+-                            <outfile>target/${project.name}.exe</outfile>
+-                            <jar>target/${project.artifactId}-${project.version}-${maven.build.timestamp}.jar</jar>
+-                            <!-- <downloadUrl>https://download.oracle.com/java/17/archive/jdk-17.0.1_windows-x64_bin.msi</downloadUrl> -->
+-                            <errTitle>Launching error</errTitle>
+-                            <!-- <dontWrapJar>true</dontWrapJar> -->
+-                            <jre>
+-                                <path>%PWD%/jdk</path>
+-                                <minVersion>11.0.0</minVersion>
+-                            </jre>
+-                            <versionInfo>
+-                                <fileVersion>${project.version}.0.0</fileVersion>
+-                                <txtFileVersion>${project.version}</txtFileVersion>
+-                                <fileDescription>NS multi-tool</fileDescription>
+-                                <copyright>GNU General Public License v3, ${project.inceptionYear} ${project.organization.name}, Russia.</copyright>
+-                                <productVersion>${project.version}.0.0</productVersion>
+-                                <txtProductVersion>${project.version}</txtProductVersion>
+-                                <companyName>${project.organization.name}</companyName>
+-                                <productName>${project.name}</productName>
+-                                <internalName>${project.name}</internalName>
+-                                <originalFilename>${project.name}.exe</originalFilename>
+-                            </versionInfo>
+-                            <messages>
+-                                <startupErr>Startup error</startupErr>
+-                                <jreNotFoundErr>JDK not found</jreNotFoundErr>
+-                                <jreVersionErr>JDK Version mismatch</jreVersionErr>
+-                                <launcherErr>Launcher Error</launcherErr>
+-                            </messages>
+-                        </configuration>
+-                    </execution>
+-                </executions>
+-            </plugin>
+         </plugins>
+     </build>
+-</project>
+\ No newline at end of file
++</project>
+-- 
+2.41.0
+
