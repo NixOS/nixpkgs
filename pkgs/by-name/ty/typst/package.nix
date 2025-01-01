@@ -8,6 +8,7 @@
   xz,
   nix-update-script,
   versionCheckHook,
+  callPackage,
 }:
 
 rustPlatform.buildRustPackage (finalAttrs: {
@@ -47,9 +48,9 @@ rustPlatform.buildRustPackage (finalAttrs: {
 
   postInstall = ''
     installManPage crates/typst-cli/artifacts/*.1
-    installShellCompletion \
-      crates/typst-cli/artifacts/typst.{bash,fish} \
-      --zsh crates/typst-cli/artifacts/_typst
+        installShellCompletion \
+              crates/typst-cli/artifacts/typst.{bash,fish} \
+                    --zsh crates/typst-cli/artifacts/_typst
   '';
 
   cargoTestFlags = [ "--workspace" ];
@@ -60,7 +61,11 @@ rustPlatform.buildRustPackage (finalAttrs: {
   versionCheckProgramArg = [ "--version" ];
   doInstallCheck = true;
 
-  passthru.updateScript = nix-update-script { };
+  passthru = {
+    updateScript = nix-update-script { };
+    typstPackages = callPackage ./typst-packages.nix { };
+    withPackages = callPackage ./with-packages.nix { };
+  };
 
   meta = {
     changelog = "https://github.com/typst/typst/releases/tag/v${finalAttrs.version}";
