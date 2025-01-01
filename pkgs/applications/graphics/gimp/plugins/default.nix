@@ -119,11 +119,9 @@ lib.makeScope pkgs.newScope (
 
       nativeBuildInputs = with pkgs; [ which ];
 
-      env.NIX_CFLAGS_COMPILE = toString (
-        lib.optionals stdenv.cc.isClang [
-          "-Wno-error=incompatible-function-pointer-types"
-        ]
-      );
+      # workaround for issue:
+      # https://github.com/alessandrofrancesconi/gimp-plugin-bimp/issues/411
+      env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
 
       installFlags = [
         "SYSTEM_INSTALL_DIR=${placeholder "out"}/${gimp.targetPluginDir}/bimp"
