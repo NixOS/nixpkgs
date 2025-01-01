@@ -1,0 +1,73 @@
+From 4880b9c67628a781bdb183dcdc69f12cb829817d Mon Sep 17 00:00:00 2001
+From: Jean Delvare <jdelvare@suse.de>
+Date: Sat, 15 Apr 2023 11:53:27 +0200
+Subject: [PATCH] rtkit-daemon: Don't log debug messages by default
+
+The rtkit-daemon service is a lot more verbose than other services
+when it doesn't have anything to do. Stop logging the debug messages
+by default to avoid flooding the system log.
+
+This addresses issue #22.
+---
+ rtkit-daemon.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/rtkit-daemon.c b/rtkit-daemon.c
+index 17122fa..0c5d814 100644
+--- a/rtkit-daemon.c
++++ b/rtkit-daemon.c
+@@ -154,6 +154,9 @@ static bool canary_demote_unknown = FALSE;
+ /* Log to stderr? */
+ static bool log_stderr = FALSE;
+ 
++/* Also log debugging messages? */
++static bool log_debug = FALSE;
++
+ /* Scheduling policy to use */
+ static int sched_policy = SCHED_RR;
+ 
+@@ -1876,6 +1879,7 @@ enum {
+         ARG_CANARY_DEMOTE_UNKNOWN,
+         ARG_CANARY_REFUSE_SEC,
+         ARG_STDERR,
++        ARG_DEBUG,
+         ARG_INTROSPECT
+ };
+ 
+@@ -1905,6 +1909,7 @@ static const struct option long_options[] = {
+     { "canary-demote-unknown",       no_argument,       0, ARG_CANARY_DEMOTE_UNKNOWN },
+     { "canary-refuse-sec",           required_argument, 0, ARG_CANARY_REFUSE_SEC },
+     { "stderr",                      no_argument,       0, ARG_STDERR },
++    { "debug",                       no_argument,       0, ARG_DEBUG },
+     { "introspect",                  no_argument,       0, ARG_INTROSPECT },
+     { NULL, 0, 0, 0}
+ };
+@@ -1933,6 +1938,7 @@ static void show_help(const char *exe) {
+                "      --version                       Show version\n\n"
+                "OPTIONS:\n"
+                "      --stderr                        Log to STDERR in addition to syslog\n"
++               "      --debug                         Also log debugging mssages\n"
+                "      --user-name=USER                Run daemon as user (%s)\n\n"
+                "      --scheduling-policy=(RR|FIFO)   Choose scheduling policy (%s)\n"
+                "      --our-realtime-priority=[%i..%i] Realtime priority for the daemon (%u)\n"
+@@ -2222,6 +2228,10 @@ static int parse_command_line(int argc, char *argv[], int *ret) {
+                                 log_stderr = TRUE;
+                                 break;
+ 
++                        case ARG_DEBUG:
++                                log_debug = TRUE;
++                                break;
++
+                         case ARG_INTROSPECT:
+                                 fputs(introspect_xml, stdout);
+                                 *ret = 0;
+@@ -2251,6 +2261,9 @@ static int parse_command_line(int argc, char *argv[], int *ret) {
+                 return -1;
+         }
+ 
++	if (!log_debug)
++                setlogmask(LOG_UPTO(LOG_INFO));
++
+         assert(our_realtime_priority >= (unsigned) sched_get_priority_min(sched_policy));
+         assert(our_realtime_priority <= (unsigned) sched_get_priority_max(sched_policy));
+ 
