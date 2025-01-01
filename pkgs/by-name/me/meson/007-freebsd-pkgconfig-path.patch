@@ -1,0 +1,16 @@
+diff --git a/mesonbuild/modules/pkgconfig.py b/mesonbuild/modules/pkgconfig.py
+index 1bdf82931..db165ea12 100644
+--- a/mesonbuild/modules/pkgconfig.py
++++ b/mesonbuild/modules/pkgconfig.py
+@@ -701,10 +701,7 @@ class PkgConfigModule(NewExtensionModule):
+         pcfile = filebase + '.pc'
+         pkgroot = pkgroot_name = kwargs['install_dir'] or default_install_dir
+         if pkgroot is None:
+-            if mesonlib.is_freebsd():
+-                pkgroot = os.path.join(_as_str(state.environment.coredata.get_option(OptionKey('prefix'))), 'libdata', 'pkgconfig')
+-                pkgroot_name = os.path.join('{prefix}', 'libdata', 'pkgconfig')
+-            elif mesonlib.is_haiku():
++            if mesonlib.is_haiku():
+                 pkgroot = os.path.join(_as_str(state.environment.coredata.get_option(OptionKey('prefix'))), 'develop', 'lib', 'pkgconfig')
+                 pkgroot_name = os.path.join('{prefix}', 'develop', 'lib', 'pkgconfig')
+             else:
