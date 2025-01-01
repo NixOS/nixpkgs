@@ -18372,7 +18372,7 @@ self: super: with self; {
 
   zarr = callPackage ../development/python-modules/zarr { };
 
-  zc-buildout = callPackage ../development/python-modules/buildout { };
+  zc-buildout = callPackage ../development/python-modules/zc-buildout { };
 
   zc-lockfile = callPackage ../development/python-modules/zc-lockfile { };
 
