@@ -61,7 +61,10 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://homer-demo.netlify.app/";
     changelog = "https://github.com/bastienwirtz/homer/releases";
     license = licenses.asl20;
-    maintainers = with maintainers; [ stunkymonkey ];
+    maintainers = with maintainers; [
+      stunkymonkey
+      christoph-heiss
+    ];
     platforms = platforms.all;
   };
 }
