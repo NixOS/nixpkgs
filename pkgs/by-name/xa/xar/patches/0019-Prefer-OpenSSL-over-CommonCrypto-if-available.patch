@@ -1,0 +1,150 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ivan Trubach <mr.trubach@icloud.com>
+Date: Sat, 24 Aug 2024 10:44:09 +0300
+Subject: [PATCH 19/19] Prefer OpenSSL over CommonCrypto if available
+
+In Nixpkgs, we always have OpenSSL input available, so it makes sense to
+prefer it over the CommonCrypto library.
+See https://github.com/NixOS/nixpkgs/pull/329721#discussion_r1713492113
+---
+ xar/configure.ac        |  5 ++++-
+ xar/include/config.h.in |  1 +
+ xar/lib/archive.h       |  6 ------
+ xar/lib/hash.c          | 20 +++++++++++---------
+ 4 files changed, 16 insertions(+), 16 deletions(-)
+
+diff --git a/xar/configure.ac b/xar/configure.ac
+index c3d9ff7..f7626bf 100644
+--- a/xar/configure.ac
++++ b/xar/configure.ac
+@@ -299,9 +299,12 @@ dnl
+ have_openssl="1"
+ AC_CHECK_HEADERS([openssl/evp.h], , [have_openssl="0"])
+ AC_CHECK_LIB([crypto], [OPENSSL_config], , [have_openssl="0"])
+-if test "x${have_openssl}" = "x0" ; then
++if test "x${have_openssl}" = "x1" ; then
++  AC_DEFINE([HAVE_OPENSSL], [], [HAVE_OPENSSL])
++else
+   case "${host}" in
+     *-*-darwin*)
++      # Darwin uses CommonCrypto if OpenSSL is not available.
+       ;;
+     *)
+       AC_MSG_ERROR([Cannot build without OpenSSL for non-Darwin host])
+diff --git a/xar/include/config.h.in b/xar/include/config.h.in
+index 779f5aa..dd44002 100644
+--- a/xar/include/config.h.in
++++ b/xar/include/config.h.in
+@@ -24,6 +24,7 @@
+ #undef HAVE_LIBUTIL_H
+ #undef HAVE_LIBPTHREAD
+ #undef HAVE_ASPRINTF
++#undef HAVE_OPENSSL
+ #undef HAVE_LIBBZ2
+ #undef HAVE_LIBLZMA
+ #undef HAVE_LCHOWN
+diff --git a/xar/lib/archive.h b/xar/lib/archive.h
+index f926245..8743120 100644
+--- a/xar/lib/archive.h
++++ b/xar/lib/archive.h
+@@ -40,12 +40,6 @@
+ #define _XAR_ARCHIVE_H_
+ #include <zlib.h>
+ #include <libxml/hash.h>
+-#ifdef __APPLE__
+-#include <CommonCrypto/CommonDigest.h>
+-#include <CommonCrypto/CommonDigestSPI.h>
+-#else
+-#include <openssl/evp.h>
+-#endif
+ #include <sys/types.h>
+ #include <sys/stat.h>
+ #include "xar.h"
+diff --git a/xar/lib/hash.c b/xar/lib/hash.c
+index cb4f6cf..b99eca9 100644
+--- a/xar/lib/hash.c
++++ b/xar/lib/hash.c
+@@ -41,7 +41,10 @@
+ #include <string.h>
+ #include <sys/types.h>
+ #include <zlib.h>
+-#ifdef __APPLE__
++
++#include "config.h"
++
++#if !defined(HAVE_OPENSSL)
+ #include <CommonCrypto/CommonDigest.h>
+ #include <CommonCrypto/CommonDigestSPI.h>
+ #else
+@@ -50,7 +53,6 @@
+ 
+ #include "xar.h"
+ #include "hash.h"
+-#include "config.h"
+ #ifndef HAVE_ASPRINTF
+ #include "asprintf.h"
+ #endif
+@@ -58,7 +60,7 @@
+ 
+ #pragma mark Hash Wrapper Object
+ 
+-#ifdef __APPLE__
++#if !defined(HAVE_OPENSSL)
+ 
+ CCDigestRef digestRef_from_name(const char* name, unsigned int *outHashSize) {
+     CCDigestRef result = NULL;
+@@ -88,13 +90,13 @@ CCDigestRef digestRef_from_name(const char* name, unsigned int *outHashSize) {
+ 	
+     return result;
+ }
+-#endif // __APPLE__
++#endif // !defined(HAVE_OPENSSL)
+ 
+ 
+ struct __xar_hash_t {
+ 	const char *digest_name;
+ 	void *context;
+-#ifdef __APPLE__
++#if !defined(HAVE_OPENSSL)
+ 	CCDigestRef digest;
+ #else
+ 	EVP_MD_CTX *digest;
+@@ -113,7 +115,7 @@ xar_hash_t xar_hash_new(const char *digest_name, void *context) {
+ 	if( context )
+ 		HASH_CTX(hash)->context = context;
+ 	
+-#ifdef __APPLE__
++#if !defined(HAVE_OPENSSL)
+ 	HASH_CTX(hash)->digest = digestRef_from_name(digest_name, &HASH_CTX(hash)->length);
+ #else
+ 	OpenSSL_add_all_digests();
+@@ -136,7 +138,7 @@ const char *xar_hash_get_digest_name(xar_hash_t hash) {
+ }
+ 
+ void xar_hash_update(xar_hash_t hash, void *buffer, size_t nbyte) {
+-#ifdef __APPLE__
++#if !defined(HAVE_OPENSSL)
+ 	CCDigestUpdate(HASH_CTX(hash)->digest, buffer, nbyte);
+ #else
+ 	EVP_DigestUpdate(HASH_CTX(hash)->digest, buffer, nbyte);
+@@ -144,7 +146,7 @@ void xar_hash_update(xar_hash_t hash, void *buffer, size_t nbyte) {
+ }
+ 
+ void *xar_hash_finish(xar_hash_t hash, size_t *nbyte) {
+-#ifdef __APPLE__
++#if !defined(HAVE_OPENSSL)
+ 	void *buffer = calloc(1, CC_SHA512_DIGEST_LENGTH); // current biggest digest size  This is what OpenSSL uses
+ #else
+ 	void *buffer = calloc(1, EVP_MAX_MD_SIZE);
+@@ -152,7 +154,7 @@ void *xar_hash_finish(xar_hash_t hash, size_t *nbyte) {
+ 	if( ! buffer )
+ 		return NULL;
+ 	
+-#ifdef __APPLE__
++#if !defined(HAVE_OPENSSL)
+ 	CCDigestFinal(HASH_CTX(hash)->digest, buffer);
+ 	CCDigestDestroy(HASH_CTX(hash)->digest);
+ #else
+-- 
+2.44.1
+
