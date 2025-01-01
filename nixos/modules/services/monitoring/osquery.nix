@@ -64,17 +64,17 @@ in
         submodule {
           freeformType = attrsOf str;
           options = {
-            database_path = mkOption {
-              default = "/var/lib/osquery/osquery.db";
+            database_path = lib.mkOption {
+              default = "osquery/osquery.db";
               readOnly = true;
-              description = "Path used for the database file.";
-              type = path;
+              description = "Path used for the database file, relative to /var/lib/.";
+              type = nonEmptyStr;
             };
-            logger_path = mkOption {
-              default = "/var/log/osquery";
+            logger_path = lib.mkOption {
+              default = "osquery";
               readOnly = true;
-              description = "Base directory used for logging.";
-              type = path;
+              description = "Base directory used for logging, relative to /var/log/.";
+              type = nonEmptyStr;
             };
             pidfile = mkOption {
               default = "/run/osquery/osqueryd.pid";
