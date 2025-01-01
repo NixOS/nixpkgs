@@ -1,0 +1,22 @@
+--- a/kazam/backend/grabber.py
++++ b/kazam/backend/grabber.py
+@@ -72,7 +72,7 @@
+         #
+         if prefs.shutter_sound and (not self.god):
+             soundfile = os.path.join(prefs.datadir, 'sounds', prefs.sound_files[prefs.shutter_type])
+-            subprocess.call(['/usr/bin/canberra-gtk-play', '-f', soundfile])
++            subprocess.call(['@libcanberra@/bin/canberra-gtk-play', '-f', soundfile])
+ 
+         if self.xid:
+             if prefs.capture_borders_pic:
+--- a/kazam/pulseaudio/ctypes_pulseaudio.py
++++ b/kazam/pulseaudio/ctypes_pulseaudio.py
+@@ -20,7 +20,7 @@
+ #       MA 02110-1301, USA.
+ 
+ from ctypes import *
+-PA = CDLL('libpulse.so.0')
++PA = CDLL('@libpulseaudio@/lib/libpulse.so.0')
+ 
+ #
+ # Pulse Audio constants and defines
