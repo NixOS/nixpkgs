@@ -6307,6 +6307,8 @@ with pkgs;
     mbedtls_4
     ;
 
+  mlibc-headers = callPackage ../by-name/ml/mlibc/package.nix { headersOnly = true; };
+
   simple-dftd3 = callPackage ../development/libraries/science/chemistry/simple-dftd3 { };
 
   tblite = callPackage ../development/libraries/science/chemistry/tblite { };
