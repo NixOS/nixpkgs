@@ -1,0 +1,96 @@
+From a8a7f4460b8f46ca752389f3e1fa43b5c95f2bac Mon Sep 17 00:00:00 2001
+From: Emily <hello@emily.moe>
+Date: Thu, 28 Nov 2024 05:56:34 +0000
+Subject: [PATCH] Remove use of deprecated `<boost/filesystem/convenience.hpp>`
+
+This header was dropped in Boost 1.85.
+---
+ client_generic/Client/Player.cpp               | 3 ---
+ client_generic/Client/lua_playlist.h           | 3 ---
+ client_generic/ContentDecoder/graph_playlist.h | 4 +---
+ client_generic/TupleStorage/luastorage.cpp     | 3 ---
+ 4 files changed, 1 insertion(+), 12 deletions(-)
+
+diff --git a/client_generic/Client/Player.cpp b/client_generic/Client/Player.cpp
+index 1f65d761..9726b014 100644
+--- a/client_generic/Client/Player.cpp
++++ b/client_generic/Client/Player.cpp
+@@ -60,7 +60,6 @@
+ 
+ #include	"boost/filesystem/path.hpp"
+ #include	"boost/filesystem/operations.hpp"
+-#include	"boost/filesystem/convenience.hpp"
+ 
+ #if defined(MAC) || defined(WIN32)
+ 	#define HONOR_VBL_SYNC
+@@ -68,8 +67,6 @@
+ 
+ using boost::filesystem::path;
+ using boost::filesystem::exists;
+-using boost::filesystem::directory_iterator;
+-using boost::filesystem::extension;
+ 
+ using namespace DisplayOutput;
+ 
+diff --git a/client_generic/Client/lua_playlist.h b/client_generic/Client/lua_playlist.h
+index fbe5a333..511c86ee 100644
+--- a/client_generic/Client/lua_playlist.h
++++ b/client_generic/Client/lua_playlist.h
+@@ -17,13 +17,10 @@
+ 
+ #include	"boost/filesystem/path.hpp"
+ #include	"boost/filesystem/operations.hpp"
+-#include	"boost/filesystem/convenience.hpp"
+ #include	<boost/thread.hpp>
+ 
+ using boost::filesystem::path;
+ using boost::filesystem::exists;
+-using boost::filesystem::directory_iterator;
+-using boost::filesystem::extension;
+ 
+ 
+ //	Lua.
+diff --git a/client_generic/ContentDecoder/graph_playlist.h b/client_generic/ContentDecoder/graph_playlist.h
+index 1f0a6cd0..cc2672e2 100644
+--- a/client_generic/ContentDecoder/graph_playlist.h
++++ b/client_generic/ContentDecoder/graph_playlist.h
+@@ -13,13 +13,11 @@
+ 
+ #include	"boost/filesystem/path.hpp"
+ #include	"boost/filesystem/operations.hpp"
+-#include	"boost/filesystem/convenience.hpp"
+ 
+ using boost::filesystem::path;
+ using boost::filesystem::exists;
+ using boost::filesystem::no_check;
+ using boost::filesystem::directory_iterator;
+-using boost::filesystem::extension;
+ 
+ namespace ContentDecoder
+ {
+@@ -116,7 +114,7 @@ class	CGraphPlaylist : public CPlaylist
+ 		for( directory_iterator i( _dir ), end; i != end; ++i )
+ 		{
+ 			#warning TODO (Keffo#1#): Remove hardcoded extension...
+-			if( extension(*i) != ".avi" )
++			if( i->extension().string() != ".avi" )
+ 				continue;
+ 
+ 			std::string file = i->string();
+diff --git a/client_generic/TupleStorage/luastorage.cpp b/client_generic/TupleStorage/luastorage.cpp
+index efbe8867..9b2ffa93 100644
+--- a/client_generic/TupleStorage/luastorage.cpp
++++ b/client_generic/TupleStorage/luastorage.cpp
+@@ -9,12 +9,9 @@
+ 
+ #include	"boost/filesystem/path.hpp"
+ #include	"boost/filesystem/operations.hpp"
+-#include	"boost/filesystem/convenience.hpp"
+ 
+ using boost::filesystem::path;
+ using boost::filesystem::exists;
+-using boost::filesystem::directory_iterator;
+-using boost::filesystem::extension;
+ 
+ using namespace std;
+ 
