@@ -14494,6 +14494,8 @@ self: super: with self; {
 
   scikits-odes-daepack = callPackage ../development/python-modules/scikits-odes-daepack { };
 
+  scikits-odes-sundials = callPackage ../development/python-modules/scikits-odes-sundials { };
+
   scikit-tda = callPackage ../development/python-modules/scikit-tda { };
 
   scipy = callPackage ../development/python-modules/scipy { };
