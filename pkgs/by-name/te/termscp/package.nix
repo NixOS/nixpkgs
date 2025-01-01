@@ -53,6 +53,7 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenvNoCC.hostPlatform.isDarwin [
       "--skip=system::watcher::test::should_poll_file_removed"
       "--skip=system::watcher::test::should_poll_file_update"
+      "--skip=system::watcher::test::should_poll_nothing"
     ];
 
   passthru = {

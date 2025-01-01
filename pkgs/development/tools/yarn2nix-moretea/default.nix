@@ -398,15 +398,7 @@ in rec {
     });
 
   yarn2nix = mkYarnPackage {
-    src = lib.fileset.toSource {
-      root = ./.;
-      fileset = lib.fileset.unions [
-        ./bin
-        ./lib
-        ./package.json
-        ./yarn.lock
-      ];
-    };
+    src = ./yarn2nix;
 
     # yarn2nix is the only package that requires the yarnNix option.
     # All the other projects can auto-generate that file.
@@ -415,7 +407,7 @@ in rec {
     # Using the filter above and importing package.json from the filtered
     # source results in an error in restricted mode. To circumvent this,
     # we import package.json from the unfiltered source
-    packageJSON = ./package.json;
+    packageJSON = ./yarn2nix/package.json;
 
     yarnFlags = defaultYarnFlags ++ [ "--ignore-scripts" "--production=true" ];
 
@@ -446,7 +438,7 @@ in rec {
     mkdir -p $out/lib
     mkdir -p $out/bin
 
-    cp ${./lib/urlToName.js} $out/lib/urlToName.js
+    cp ${./yarn2nix/lib/urlToName.js} $out/lib/urlToName.js
     cp ${./internal/fixup_yarn_lock.js} $out/bin/fixup_yarn_lock
 
     patchShebangs $out

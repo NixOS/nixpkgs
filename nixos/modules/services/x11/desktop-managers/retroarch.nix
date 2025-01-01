@@ -4,20 +4,23 @@
   pkgs,
   ...
 }:
+
+with lib;
+
 let
   cfg = config.services.xserver.desktopManager.retroarch;
 
 in
 {
   options.services.xserver.desktopManager.retroarch = {
-    enable = lib.mkEnableOption "RetroArch";
+    enable = mkEnableOption "RetroArch";
 
-    package = lib.mkPackageOption pkgs "retroarch" {
+    package = mkPackageOption pkgs "retroarch" {
       example = "retroarch-full";
     };
 
-    extraArgs = lib.mkOption {
-      type = lib.types.listOf lib.types.str;
+    extraArgs = mkOption {
+      type = types.listOf types.str;
       default = [ ];
       example = [
         "--verbose"
@@ -27,12 +30,12 @@ in
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     services.xserver.desktopManager.session = [
       {
         name = "RetroArch";
         start = ''
-          ${cfg.package}/bin/retroarch -f ${lib.escapeShellArgs cfg.extraArgs} &
+          ${cfg.package}/bin/retroarch -f ${escapeShellArgs cfg.extraArgs} &
           waitPID=$!
         '';
       }
@@ -41,5 +44,5 @@ in
     environment.systemPackages = [ cfg.package ];
   };
 
-  meta.maintainers = with lib.maintainers; [ j0hax ];
+  meta.maintainers = with maintainers; [ j0hax ];
 }
