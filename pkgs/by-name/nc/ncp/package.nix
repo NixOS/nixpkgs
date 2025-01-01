@@ -9,7 +9,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "kha7iq";
     repo = "ncp";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-3YqY7FtpwYHgZuroICrtI8tvTZCiU2xlWOFCGRgbmPo=";
   };
   vendorHash = "sha256-Q6nYI9u5Jl7rxv8b8tLVTLhbJw5GSe/Sl+QOK285E8I=";
