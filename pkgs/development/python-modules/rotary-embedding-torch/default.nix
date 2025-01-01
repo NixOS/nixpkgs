@@ -15,14 +15,14 @@
 
 buildPythonPackage rec {
   pname = "rotary-embedding-torch";
-  version = "0.8.5";
+  version = "0.8.6";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lucidrains";
     repo = "rotary-embedding-torch";
-    rev = "refs/tags/${version}";
-    hash = "sha256-sd2zi0dKXLo9HCFDQrLr4icaJnwWeMPoaeTV8qaoyhQ=";
+    tag = version;
+    hash = "sha256-4/vKf5RwWbiFYKCQo4kAQzXLM85L4CwaL/MR7/xTkH8=";
   };
 
   nativeBuildInputs = [
