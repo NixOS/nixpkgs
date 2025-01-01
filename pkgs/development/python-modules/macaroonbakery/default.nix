@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "go-macaroon-bakery";
     repo = "py-macaroon-bakery";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-NEhr8zkrHceeLbAyuUvc7U6dyQxkpkj0m5LlnBMafA0=";
   };
 
@@ -34,9 +34,9 @@ buildPythonPackage rec {
       --replace-fail "VERSION = (1, 3, 3)" "VERSION = (1, 3, 4)"
   '';
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     protobuf
     pymacaroons
     pynacl
