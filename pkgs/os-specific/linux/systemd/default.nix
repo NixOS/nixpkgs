@@ -36,6 +36,7 @@
   audit,
   acl,
   lz4,
+  openssl,
   libgcrypt,
   libgpg-error,
   libidn2,
@@ -108,6 +109,7 @@
   withFido2 ? true,
   # conflicts with the NixOS /etc management
   withFirstboot ? false,
+  withGcrypt ? true,
   withHomed ? !stdenv.hostPlatform.isMusl,
   withHostnamed ? true,
   withHwdb ? true,
@@ -135,6 +137,7 @@
   withNetworkd ? true,
   withNss ? !stdenv.hostPlatform.isMusl,
   withOomd ? true,
+  withOpenSSL ? true,
   withPam ? true,
   withPasswordQuality ? true,
   withPCRE2 ? true,
@@ -178,13 +181,17 @@ assert withImportd -> withCompression;
 assert withCoredump -> withCompression;
 assert withHomed -> withCryptsetup;
 assert withHomed -> withPam;
+assert withHomed -> withOpenSSL;
+assert withFido2 -> withOpenSSL;
+assert withSysupdate -> withOpenSSL;
+assert withImportd -> (withGcrypt || withOpenSSL);
 assert withUkify -> (withEfi && withBootloader);
 assert withRepart -> withCryptsetup;
 assert withBootloader -> withEfi;
 
 let
   wantCurl = withRemote || withImportd;
-  wantGcrypt = withResolved || withImportd;
+
   version = "257.1";
 
   # Use the command below to update `releaseTimestamp` on every (major) version
@@ -362,10 +369,11 @@ stdenv.mkDerivation (finalAttrs: {
       bashInteractive # for patch shebangs
     ]
 
-    ++ lib.optionals wantGcrypt [
+    ++ lib.optionals withGcrypt [
       libgcrypt
       libgpg-error
     ]
+    ++ lib.optionals withOpenSSL [ openssl ]
     ++ lib.optional withTests glib
     ++ lib.optional withAcl acl
     ++ lib.optional withApparmor libapparmor
@@ -503,7 +511,7 @@ stdenv.mkDerivation (finalAttrs: {
 
       # FIDO2
       (lib.mesonEnable "libfido2" withFido2)
-      (lib.mesonEnable "openssl" (withHomed || withFido2 || withSysupdate))
+      (lib.mesonEnable "openssl" withOpenSSL)
 
       # Password Quality
       (lib.mesonEnable "pwquality" withPasswordQuality)
@@ -517,7 +525,7 @@ stdenv.mkDerivation (finalAttrs: {
       (lib.mesonEnable "acl" withAcl)
       (lib.mesonEnable "audit" withAudit)
       (lib.mesonEnable "apparmor" withApparmor)
-      (lib.mesonEnable "gcrypt" wantGcrypt)
+      (lib.mesonEnable "gcrypt" withGcrypt)
       (lib.mesonEnable "importd" withImportd)
       (lib.mesonEnable "homed" withHomed)
       (lib.mesonEnable "polkit" withPolkit)
