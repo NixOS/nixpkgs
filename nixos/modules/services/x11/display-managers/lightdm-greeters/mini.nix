@@ -4,6 +4,9 @@
   pkgs,
   ...
 }:
+
+with lib;
+
 let
 
   dmcfg = config.services.xserver.displayManager;
@@ -53,8 +56,8 @@ in
 
     services.xserver.displayManager.lightdm.greeters.mini = {
 
-      enable = lib.mkOption {
-        type = lib.types.bool;
+      enable = mkOption {
+        type = types.bool;
         default = false;
         description = ''
           Whether to enable lightdm-mini-greeter as the lightdm greeter.
@@ -65,16 +68,16 @@ in
         '';
       };
 
-      user = lib.mkOption {
-        type = lib.types.str;
+      user = mkOption {
+        type = types.str;
         default = "root";
         description = ''
           The user to login as.
         '';
       };
 
-      extraConfig = lib.mkOption {
-        type = lib.types.lines;
+      extraConfig = mkOption {
+        type = types.lines;
         default = "";
         description = ''
           Extra configuration that should be put in the lightdm-mini-greeter.conf
@@ -86,11 +89,11 @@ in
 
   };
 
-  config = lib.mkIf (ldmcfg.enable && cfg.enable) {
+  config = mkIf (ldmcfg.enable && cfg.enable) {
 
     services.xserver.displayManager.lightdm.greeters.gtk.enable = false;
 
-    services.xserver.displayManager.lightdm.greeter = lib.mkDefault {
+    services.xserver.displayManager.lightdm.greeter = mkDefault {
       package = pkgs.lightdm-mini-greeter.xgreeters;
       name = "lightdm-mini-greeter";
     };

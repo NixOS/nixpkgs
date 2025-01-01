@@ -4,13 +4,14 @@
   pkgs,
   ...
 }:
+with lib;
 let
   runXdgAutostart = config.services.xserver.desktopManager.runXdgAutostartIfNone;
 in
 {
   options = {
-    services.xserver.desktopManager.runXdgAutostartIfNone = lib.mkOption {
-      type = lib.types.bool;
+    services.xserver.desktopManager.runXdgAutostartIfNone = mkOption {
+      type = types.bool;
       default = false;
       description = ''
         Whether to run XDG autostart files for sessions without a desktop manager
@@ -26,18 +27,18 @@ in
     };
   };
 
-  config = lib.mkMerge [
+  config = mkMerge [
     {
       services.xserver.desktopManager.session = [
         {
           name = "none";
-          start = lib.optionalString runXdgAutostart ''
+          start = optionalString runXdgAutostart ''
             /run/current-system/systemd/bin/systemctl --user start xdg-autostart-if-no-desktop-manager.target
           '';
         }
       ];
     }
-    (lib.mkIf runXdgAutostart {
+    (mkIf runXdgAutostart {
       systemd.user.targets.xdg-autostart-if-no-desktop-manager = {
         description = "Run XDG autostart files";
         # From `plasma-workspace`, `share/systemd/user/plasma-workspace@.target`.

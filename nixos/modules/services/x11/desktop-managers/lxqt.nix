@@ -1,4 +1,7 @@
 { config, lib, pkgs, utils, ... }:
+
+with lib;
+
 let
   xcfg = config.services.xserver;
   cfg = xcfg.desktopManager.lxqt;
@@ -7,29 +10,29 @@ in
 
 {
   meta = {
-    maintainers = lib.teams.lxqt.members;
+    maintainers = teams.lxqt.members;
   };
 
   options = {
 
-    services.xserver.desktopManager.lxqt.enable = lib.mkOption {
-      type = lib.types.bool;
+    services.xserver.desktopManager.lxqt.enable = mkOption {
+      type = types.bool;
       default = false;
       description = "Enable the LXQt desktop manager";
     };
 
-    environment.lxqt.excludePackages = lib.mkOption {
+    environment.lxqt.excludePackages = mkOption {
       default = [];
-      example = lib.literalExpression "[ pkgs.lxqt.qterminal ]";
-      type = lib.types.listOf lib.types.package;
+      example = literalExpression "[ pkgs.lxqt.qterminal ]";
+      type = types.listOf types.package;
       description = "Which LXQt packages to exclude from the default environment";
     };
 
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
 
-    services.xserver.desktopManager.session = lib.singleton {
+    services.xserver.desktopManager.session = singleton {
       name = "lxqt";
       bgSupport = true;
       start = ''
@@ -59,19 +62,19 @@ in
     # Link some extra directories in /run/current-system/software/share
     environment.pathsToLink = [ "/share" ];
 
-    programs.gnupg.agent.pinentryPackage = lib.mkDefault pkgs.pinentry-qt;
+    programs.gnupg.agent.pinentryPackage = mkDefault pkgs.pinentry-qt;
 
     # virtual file systems support for PCManFM-QT
     services.gvfs.enable = true;
 
     services.upower.enable = config.powerManagement.enable;
 
-    services.libinput.enable = lib.mkDefault true;
+    services.libinput.enable = mkDefault true;
 
-    xdg.portal.lxqt.enable = lib.mkDefault true;
+    xdg.portal.lxqt.enable = mkDefault true;
 
     # https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1050804
-    xdg.portal.config.lxqt.default = lib.mkDefault [ "lxqt" "gtk" ];
+    xdg.portal.config.lxqt.default = mkDefault [ "lxqt" "gtk" ];
   };
 
 }

@@ -4,38 +4,39 @@
   pkgs,
   ...
 }:
+with lib;
 let
   cfg = config.services.fractalart;
 in
 {
   options.services.fractalart = {
-    enable = lib.mkOption {
-      type = lib.types.bool;
+    enable = mkOption {
+      type = types.bool;
       default = false;
       example = true;
       description = "Enable FractalArt for generating colorful wallpapers on login";
     };
 
-    width = lib.mkOption {
-      type = lib.types.nullOr lib.types.int;
+    width = mkOption {
+      type = types.nullOr types.int;
       default = null;
       example = 1920;
       description = "Screen width";
     };
 
-    height = lib.mkOption {
-      type = lib.types.nullOr lib.types.int;
+    height = mkOption {
+      type = types.nullOr types.int;
       default = null;
       example = 1080;
       description = "Screen height";
     };
   };
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     environment.systemPackages = [ pkgs.haskellPackages.FractalArt ];
     services.xserver.displayManager.sessionCommands =
       "${pkgs.haskellPackages.FractalArt}/bin/FractalArt --no-bg -f .background-image"
-      + lib.optionalString (cfg.width != null) " -w ${toString cfg.width}"
-      + lib.optionalString (cfg.height != null) " -h ${toString cfg.height}";
+      + optionalString (cfg.width != null) " -w ${toString cfg.width}"
+      + optionalString (cfg.height != null) " -h ${toString cfg.height}";
   };
 }

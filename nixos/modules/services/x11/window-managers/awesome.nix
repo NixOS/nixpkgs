@@ -4,6 +4,9 @@
   pkgs,
   ...
 }:
+
+with lib;
+
 let
 
   cfg = config.services.xserver.windowManager.awesome;
@@ -22,20 +25,20 @@ in
 
     services.xserver.windowManager.awesome = {
 
-      enable = lib.mkEnableOption "Awesome window manager";
+      enable = mkEnableOption "Awesome window manager";
 
-      luaModules = lib.mkOption {
+      luaModules = mkOption {
         default = [ ];
-        type = lib.types.listOf lib.types.package;
+        type = types.listOf types.package;
         description = "List of lua packages available for being used in the Awesome configuration.";
-        example = lib.literalExpression "[ pkgs.luaPackages.vicious ]";
+        example = literalExpression "[ pkgs.luaPackages.vicious ]";
       };
 
-      package = lib.mkPackageOption pkgs "awesome" { };
+      package = mkPackageOption pkgs "awesome" { };
 
-      noArgb = lib.mkOption {
+      noArgb = mkOption {
         default = false;
-        type = lib.types.bool;
+        type = types.bool;
         description = "Disable client transparency support, which can be greatly detrimental to performance in some setups";
       };
     };
@@ -44,9 +47,9 @@ in
 
   ###### implementation
 
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
 
-    services.xserver.windowManager.session = lib.singleton {
+    services.xserver.windowManager.session = singleton {
       name = "awesome";
       start = ''
         ${awesome}/bin/awesome ${lib.optionalString cfg.noArgb "--no-argb"} ${makeSearchPath cfg.luaModules} &
