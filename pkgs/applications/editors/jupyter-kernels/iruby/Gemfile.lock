@@ -1,0 +1,35 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    data_uri (0.1.0)
+    ffi (1.15.5)
+    ffi-rzmq (2.0.7)
+      ffi-rzmq-core (>= 1.0.7)
+    ffi-rzmq-core (1.0.7)
+      ffi
+    io-console (0.6.0)
+    irb (1.7.4)
+      reline (>= 0.3.6)
+    iruby (0.7.4)
+      data_uri (~> 0.1)
+      ffi-rzmq
+      irb
+      mime-types (>= 3.3.1)
+      multi_json (~> 1.11)
+      native-package-installer
+    mime-types (3.5.1)
+      mime-types-data (~> 3.2015)
+    mime-types-data (3.2023.0808)
+    multi_json (1.15.0)
+    native-package-installer (1.1.8)
+    reline (0.3.8)
+      io-console (~> 0.5)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  iruby (= 0.7.4)
+
+BUNDLED WITH
+   2.4.19
