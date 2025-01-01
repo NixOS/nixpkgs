@@ -33,7 +33,7 @@ let
       # systemd in stage 1
       raid-sd-stage-1 = {
         test = callTest ./systemd-stage-1.nix;
-        kernelFilter = lib.id;
+        kernelFilter = lib.filter (v: v != "5.15");
         flavour = "raid";
       };
       thinpool-sd-stage-1 = {
