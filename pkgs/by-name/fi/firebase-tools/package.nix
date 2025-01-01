@@ -20,7 +20,12 @@ buildNpmPackage {
   pname = "firebase-tools";
   inherit version src;
 
-  npmDepsHash = "sha256-3+XeXK3VGIs4Foi9iW9Kho/Y0JsTQZ7p+582MPgdH1A=";
+  npmDepsHash = "sha256-ZBeUb1syVWkEv/EmbiCm/ZnQC0yC7nnVvR5DwQ/qKFo=";
+
+  patches = [
+    # Upgrade `nan`, a transitive dependency of `firebase-tools`, to a version compatible with Node.js 22
+    ./node_22_nan.patch
+  ];
 
   postPatch = ''
     ln -s npm-shrinkwrap.json package-lock.json

@@ -1,0 +1,31 @@
+diff --git a/npm-shrinkwrap.json b/npm-shrinkwrap.json
+index 81d46da..56787ef 100644
+--- a/npm-shrinkwrap.json
++++ b/npm-shrinkwrap.json
+@@ -14646,9 +14646,10 @@
+       }
+     },
+     "node_modules/nan": {
+-      "version": "2.17.0",
+-      "resolved": "https://registry.npmjs.org/nan/-/nan-2.17.0.tgz",
+-      "integrity": "sha512-2ZTgtl0nJsO0KQCjEpxcIr5D+Yv90plTitZt9JBfQvVJDS5seMl3FOvsh3+9CoYWXf/1l5OaZzzF6nDm4cagaQ==",
++      "version": "2.22.0",
++      "resolved": "https://registry.npmjs.org/nan/-/nan-2.22.0.tgz",
++      "integrity": "sha512-nbajikzWTMwsW+eSsNm3QwlOs7het9gGJU5dDZzRTQGk03vyBOauxgI4VakDzE0PtsGTmXPsXTbbjVhRwR5mpw==",
++      "license": "MIT",
+       "optional": true
+     },
+     "node_modules/nanoid": {
+@@ -31921,9 +31922,9 @@
+       }
+     },
+     "nan": {
+-      "version": "2.17.0",
+-      "resolved": "https://registry.npmjs.org/nan/-/nan-2.17.0.tgz",
+-      "integrity": "sha512-2ZTgtl0nJsO0KQCjEpxcIr5D+Yv90plTitZt9JBfQvVJDS5seMl3FOvsh3+9CoYWXf/1l5OaZzzF6nDm4cagaQ==",
++      "version": "2.22.0",
++      "resolved": "https://registry.npmjs.org/nan/-/nan-2.22.0.tgz",
++      "integrity": "sha512-nbajikzWTMwsW+eSsNm3QwlOs7het9gGJU5dDZzRTQGk03vyBOauxgI4VakDzE0PtsGTmXPsXTbbjVhRwR5mpw==",
+       "optional": true
+     },
+     "nanoid": {
