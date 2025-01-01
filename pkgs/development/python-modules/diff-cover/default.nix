@@ -23,7 +23,7 @@ buildPythonPackage rec {
   version = "9.2.1";
   format = "pyproject";
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "diff_cover";
