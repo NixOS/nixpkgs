@@ -23,6 +23,7 @@
   withWebKit ? stdenv.hostPlatform.isDarwin,
   webkitgtk_4_0,
   setfile,
+  libpng,
 }:
 
 stdenv.mkDerivation rec {
@@ -62,6 +63,7 @@ stdenv.mkDerivation rec {
     ++ lib.optional (withWebKit && !stdenv.hostPlatform.isDarwin) webkitgtk_4_0
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       setfile
+      libpng
     ];
 
   configureFlags =
