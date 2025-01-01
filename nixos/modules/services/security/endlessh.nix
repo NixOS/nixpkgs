@@ -60,7 +60,7 @@ in
           Restart = "always";
           ExecStart =
             with cfg;
-            concatStringsSep " " (
+            lib.concatStringsSep " " (
               [
                 "${pkgs.endlessh}/bin/endlessh"
                 "-p ${toString port}"
@@ -109,7 +109,7 @@ in
         };
     };
 
-    networking.firewall.allowedTCPPorts = with cfg; optionals openFirewall [ port ];
+    networking.firewall.allowedTCPPorts = with cfg; lib.optionals openFirewall [ port ];
   };
 
   meta.maintainers = with lib.maintainers; [ azahi ];
