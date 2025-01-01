@@ -138,6 +138,20 @@ in
           };
         };
       };
+
+      logLevel = lib.mkOption {
+        type = lib.types.enum [
+          "INFO"
+          "WARNING"
+          "DEBUG"
+          "ERROR"
+          "CRITICAL"
+        ];
+        default = "WARNING";
+        description = "Log level used for automx2 service.";
+        example = "DEBUG";
+      };
+
     };
   };
 
@@ -171,7 +185,7 @@ in
         Environment = [
           "AUTOMX2_CONF=${pkgs.writeText "automx2-conf" ''
             [automx2]
-            loglevel = WARNING
+            loglevel = ${cfg.logLevel}
             db_uri = sqlite:///:memory:
             proxy_count = 1
           ''}"
