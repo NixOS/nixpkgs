@@ -21,7 +21,9 @@ buildPythonPackage rec {
 
   dependencies = [ nltk ];
 
-  doCheck = true;
+  # Test process requires pytestCheckHook and network access to download wordnet
+  # Error: 'wordnet not found' 'Attempted to load corpora/wordnet'
+  doCheck = false;
 
   pythonImportsCheck = [ "textblob" ];
 
