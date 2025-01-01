@@ -6,7 +6,7 @@
 
 stdenv.mkDerivation rec {
   pname = "libxmp";
-  version = "4.6.0";
+  version = "4.6.1";
 
   meta = with lib; {
     description = "Extended module player library";
@@ -22,6 +22,6 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://sourceforge/xmp/libxmp/${pname}-${version}.tar.gz";
-    sha256 = "sha256-LTxF/lI7UJB+ieYPmjt/TMmquD7J27p3Q+r/vNyzXqY=";
+    sha256 = "sha256-r2Becsg7JKuvAyaTR+JOvD/AbNe0lWUqLGGcH1FLxcs=";
   };
 }
