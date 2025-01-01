@@ -1,0 +1,61 @@
+diff --git a/src/Gui/PreferencePages/DlgSettingsEditor.cpp b/src/Gui/PreferencePages/DlgSettingsEditor.cpp
+index 5f92058c18..b00104497b 100644
+--- a/src/Gui/PreferencePages/DlgSettingsEditor.cpp
++++ b/src/Gui/PreferencePages/DlgSettingsEditor.cpp
+@@ -56,27 +56,34 @@ namespace
+  *
+  * Based on
+  * https://stackoverflow.com/questions/18896933/qt-qfont-selection-of-a-monospace-font-doesnt-work
++ * Local fix to based on comment in
++ * https://github.com/FreeCAD/FreeCAD/issues/10514#issuecomment-1849176386
+  */
++bool hasFixedPitch(const QFont& font)
++{
++    return QFontInfo(font).fixedPitch();
++}
++
+ QFont getMonospaceFont()
+ {
+-    QFont font(QString::fromLatin1("monospace"));
+-    if (font.fixedPitch()) {
+-        return font;
+-    }
+-    font.setStyleHint(QFont::Monospace);
+-    if (font.fixedPitch()) {
+-        return font;
++    if (QFont font = QFontDatabase::systemFont(QFontDatabase::FixedFont); hasFixedPitch(font)) {
++        return font;  // should typically work.
+     }
+-    font.setStyleHint(QFont::TypeWriter);
+-    if (font.fixedPitch()) {
++
++    QFont font;                         // default QApplication font
++    font.setStyleHint(QFont::Courier);  // may not work
++    if (hasFixedPitch(font)) {
+         return font;
+     }
+-    font.setFamily(QString::fromLatin1("courier"));
+-    if (font.fixedPitch()) {
+-        return font;
++    for (const char* family : {"Monospace", "Courier"}) {
++        font.setFamily(QString::fromLatin1(family));
++        if (hasFixedPitch(font)) {
++            return font;
++        }
+     }
+-    return font;  // We failed, but return whatever we have anyway
++    return font;
+ }
++
+ }  // namespace
+ 
+ /* TRANSLATOR Gui::Dialog::DlgSettingsEditor */
+@@ -302,7 +309,7 @@ void DlgSettingsEditor::loadSettings()
+     ui->fontSize->setValue(10);
+     ui->fontSize->setValue(hGrp->GetInt("FontSize", ui->fontSize->value()));
+ 
+-    QByteArray defaultMonospaceFont = getMonospaceFont().family().toLatin1();
++    QByteArray defaultMonospaceFont = QFontInfo(getMonospaceFont()).family().toLatin1();
+ 
+ #if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+     QStringList familyNames = QFontDatabase().families(QFontDatabase::Any);
