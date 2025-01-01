@@ -74,7 +74,9 @@ if [[ -n "$flake" ]]; then
   fi
   # Unlike nix cli, builtins.getFlake infer path:// when a path is given
   # See https://github.com/NixOS/nix/issues/5836
-  if [[ -d "$flake" ]] && [[ -e "$flake/.git" ]] ; then
+  # Using `git rev-parse --show-toplevel` since we can't assume the flake dir
+  # itself is a git repo, because the flake could be in a sub directory
+  if [[ -d "$flake" ]] && git -C "$flake" rev-parse --show-toplevel &>/dev/null; then
     flake="git+file://$(realpath "$flake")"
   fi
   if [[ -z "${flakeAttr:-}" ]]; then
