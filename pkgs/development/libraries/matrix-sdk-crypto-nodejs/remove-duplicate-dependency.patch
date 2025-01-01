@@ -1,0 +1,55 @@
+diff --git a/Cargo.lock b/Cargo.lock
+index 208ef4ff..b5045040 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -2124,19 +2124,6 @@ dependencies = [
+  "web-sys",
+ ]
+ 
+-[[package]]
+-name = "indexed_db_futures"
+-version = "0.2.3"
+-source = "git+https://github.com/Hywan/rust-indexed-db?branch=feat-factory-nodejs#5dab67890cea0ab88b967031adc09179a537d77c"
+-dependencies = [
+- "cfg-if",
+- "js-sys",
+- "uuid 0.8.2",
+- "wasm-bindgen",
+- "wasm-bindgen-futures",
+- "web-sys",
+-]
+-
+ [[package]]
+ name = "indexmap"
+ version = "1.9.1"
+@@ -2726,8 +2713,7 @@ dependencies = [
+  "derive_builder",
+  "getrandom 0.2.7",
+  "gloo-utils",
+- "indexed_db_futures 0.2.3 (registry+https://github.com/rust-lang/crates.io-index)",
+- "indexed_db_futures 0.2.3 (git+https://github.com/Hywan/rust-indexed-db?branch=feat-factory-nodejs)",
++ "indexed_db_futures",
+  "js-sys",
+  "matrix-sdk-base",
+  "matrix-sdk-common",
+diff --git a/crates/matrix-sdk-indexeddb/Cargo.toml b/crates/matrix-sdk-indexeddb/Cargo.toml
+index 5b0ef4f4..da73979b 100644
+--- a/crates/matrix-sdk-indexeddb/Cargo.toml
++++ b/crates/matrix-sdk-indexeddb/Cargo.toml
+@@ -16,7 +16,7 @@ rustdoc-args = ["--cfg", "docsrs"]
+ [features]
+ default = ["e2e-encryption"]
+ e2e-encryption = ["matrix-sdk-base/e2e-encryption", "dep:matrix-sdk-crypto", "dashmap"]
+-experimental-nodejs = ["indexed_db_futures_nodejs"]
++experimental-nodejs = []
+ 
+ [dependencies]
+ anyhow = "1.0.57"
+@@ -26,7 +26,6 @@ dashmap = { version = "5.2.0", optional = true }
+ derive_builder = "0.11.2"
+ gloo-utils = { version = "0.1", features = ["serde"] }
+ indexed_db_futures = "0.2.3"
+-indexed_db_futures_nodejs = { version = "0.2.3", package = "indexed_db_futures", git = "https://github.com/Hywan/rust-indexed-db", branch = "feat-factory-nodejs", optional = true }
+ js-sys = { version = "0.3.58" }
+ matrix-sdk-base = { version = "0.6.0", path = "../matrix-sdk-base", features = ["js"] }
+ matrix-sdk-crypto = { version = "0.6.0", path = "../matrix-sdk-crypto", features = ["js"], optional = true }

@@ -1,0 +1,13 @@
+diff --git a/slurm-spank-x11-plug.c b/slurm-spank-x11-plug.c
+index bef6c14..7cb77c4 100644
+--- a/slurm-spank-x11-plug.c
++++ b/slurm-spank-x11-plug.c
+@@ -608,7 +608,7 @@ int _connect_node (char* node,uint32_t jobid,uint32_t stepid)
+ int _x11_connect_nodes (char* nodes,uint32_t jobid,uint32_t stepid)
+ {
+ 	char* host;
+-	hostlist_t hlist;
++	hostlist_t *hlist;
+ 	int n=0;
+ 	int i;
+ 
