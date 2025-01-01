@@ -1,4 +1,4 @@
-# nix run ../../../../..#cabal2nix -- ./.
+# nix run ../../../../..#cabal2nix -- ./local
 {
   mkDerivation,
   base,
@@ -7,10 +7,11 @@
 mkDerivation {
   pname = "local";
   version = "0.1.0.0";
-  src = ./.; # also referred to as ./local in the test; these are the same path constants
+  src = ./local;
   isLibrary = false;
   isExecutable = true;
   executableHaskellDepends = [ base ];
   description = "Nixpkgs test case";
   license = lib.licenses.mit;
+  mainProgram = "local";
 }
