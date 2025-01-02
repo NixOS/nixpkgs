@@ -1,30 +1,24 @@
 {
   lib,
-  stdenv,
   testers,
   fetchFromGitHub,
   rustPlatform,
-  darwin,
   numbat,
   tzdata,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "numbat";
-  version = "1.14.0";
+  version = "1.15.0";
 
   src = fetchFromGitHub {
     owner = "sharkdp";
     repo = "numbat";
-    rev = "v${version}";
-    hash = "sha256-TmzM541S2W5Cy8zHEWKRE2Zj2bSgrM4vbsWw3zbi3LQ=";
+    tag = "v${version}";
+    hash = "sha256-5XsrOAvBrmCG6k7YRwGZZtBP/o1jVVtBBTrwIT5CDX8=";
   };
 
-  cargoHash = "sha256-exvJJsGIj6KhmMcwhPjXMELvisuUtl17BAO6XEJSJmI=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    darwin.apple_sdk.frameworks.Security
-  ];
+  cargoHash = "sha256-RMON7JThY6Ad1QHQFiNbTb2PUsfviR2t+55k1ZtlOd8=";
 
   env.NUMBAT_SYSTEM_MODULE_PATH = "${placeholder "out"}/share/numbat/modules";
 
