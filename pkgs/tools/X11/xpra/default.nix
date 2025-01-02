@@ -9,6 +9,7 @@
   atk,
   cairo,
   cudatoolkit,
+  cudaPackages,
   ffmpeg,
   gdk-pixbuf,
   getopt,
@@ -39,6 +40,7 @@
   xorg,
   xorgserver,
   xxHash,
+  clang,
 }:
 
 let
@@ -72,10 +74,17 @@ let
         cp ${nv-codec-headers-10}/include/ffnvcodec/nvEncodeAPI.h $out/include
         substituteAll ${./nvenc.pc} $out/lib/pkgconfig/nvenc.pc
       '';
+
+  nvjpegHeaders = runCommand "nvjpeg-headers" { } ''
+    mkdir -p $out/include $out/lib/pkgconfig
+    substituteAll ${cudaPackages.libnvjpeg.dev}/share/pkgconfig/nvjpeg.pc $out/lib/pkgconfig/nvjpeg.pc
+  '';
 in
 buildPythonApplication rec {
   pname = "xpra";
   version = "6.2.1";
+
+  stdenv = if withNvenc then cudaPackages.backendStdenv else stdenv;
 
   src = fetchFromGitHub {
     owner = "Xpra-org";
@@ -92,6 +101,8 @@ buildPythonApplication rec {
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace xpra/platform/posix/features.py \
       --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
+
+    patchShebangs --build fs/bin/build_cuda_kernels.py
   '';
 
   INCLUDE_DIRS = "${pam}/include";
@@ -144,7 +155,10 @@ buildPythonApplication rec {
       x265
       xxHash
     ]
-    ++ lib.optional withNvenc nvencHeaders;
+    ++ lib.optional withNvenc [
+      nvencHeaders
+      nvjpegHeaders
+    ];
 
   propagatedBuildInputs =
     with python3.pkgs;
@@ -181,15 +195,20 @@ buildPythonApplication rec {
   # error: 'import_cairo' defined but not used
   env.NIX_CFLAGS_COMPILE = "-Wno-error=unused-function";
 
-  setupPyBuildFlags = [
-    "--with-Xdummy"
-    "--without-Xdummy_wrapper"
-    "--without-strict"
-    "--with-gtk3"
-    # Override these, setup.py checks for headers in /usr/* paths
-    "--with-pam"
-    "--with-vsock"
-  ] ++ lib.optional withNvenc "--with-nvenc";
+  setupPyBuildFlags =
+    [
+      "--with-Xdummy"
+      "--without-Xdummy_wrapper"
+      "--without-strict"
+      "--with-gtk3"
+      # Override these, setup.py checks for headers in /usr/* paths
+      "--with-pam"
+      "--with-vsock"
+    ]
+    ++ lib.optional withNvenc [
+      "--with-nvenc"
+      "--with-nvjpeg_encoder"
+    ];
 
   dontWrapGApps = true;
 
