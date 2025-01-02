@@ -13,6 +13,7 @@
   libmicrohttpd,
   gnutls,
   libtasn1,
+  libxml2,
   p11-kit,
   vim,
   which,
@@ -24,13 +25,13 @@ with lib.strings;
 
 let
 
-  version = "2.74.6";
+  version = "2.77.3";
 
   src = fetchFromGitHub {
     owner = "grame-cncm";
     repo = "faust";
     rev = version;
-    hash = "sha256-0r7DjTrsNKZ5ZmWoA+Y9OXyJFUiUFZiPQb1skXXWYTw=";
+    hash = "sha256-C2EOd85idiSKKnWYcfoUFMuCQHB36d3CkrYVNNYmotw=";
     fetchSubmodules = true;
   };
 
@@ -73,6 +74,7 @@ let
         libtasn1
         p11-kit
         ncurses_static
+        libxml2
       ];
 
       passthru = { inherit wrap wrapWithBuildEnv faust2ApplBase; };
