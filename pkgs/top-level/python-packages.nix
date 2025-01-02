@@ -6691,6 +6691,8 @@ self: super: with self; {
 
   jsonlines = callPackage ../development/python-modules/jsonlines { };
 
+  json-api-doc = callPackage ../development/python-modules/json-api-doc { };
+
   json-logging = callPackage ../development/python-modules/json-logging { };
 
   jsonmerge = callPackage ../development/python-modules/jsonmerge { };
