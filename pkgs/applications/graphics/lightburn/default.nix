@@ -11,21 +11,26 @@
   qtserialport,
   cups,
   autoPatchelfHook,
+  libgpg-error,
+  e2fsprogs,
+  makeDesktopItem,
+  copyDesktopItems,
 }:
 
 stdenv.mkDerivation rec {
   pname = "lightburn";
-  version = "1.6.04";
+  version = "1.7.04";
+
+  src = fetchurl {
+    url = "https://release.lightburnsoftware.com/LightBurn/Release/LightBurn-v${version}/LightBurn-Linux64-v${version}.7z";
+    hash = "sha256-zO6lQTlBARHmYIdq/xHwFg+6FLbkAIAWAG30Tpw8Z4c=";
+  };
 
   nativeBuildInputs = [
     p7zip
     autoPatchelfHook
+    copyDesktopItems
   ];
-
-  src = fetchurl {
-    url = "https://github.com/LightBurnSoftware/deployment/releases/download/${version}/LightBurn-Linux64-v${version}.7z";
-    sha256 = "sha256-3dvLUfOczysRC8Ou6aQHzzmJs2rwtKAvfrwpQ4VMB/M=";
-  };
 
   buildInputs = [
     nss
@@ -35,27 +40,44 @@ stdenv.mkDerivation rec {
     qtmultimedia
     qtserialport
     cups
+    libgpg-error
+    e2fsprogs
   ];
 
   unpackPhase = ''
     7z x $src
   '';
 
+  desktopItems = [
+    (makeDesktopItem {
+      name = "lightburn";
+      exec = "lightburn";
+      icon = "lightburn";
+      genericName = "LightBurn";
+      desktopName = "LightBurn";
+    })
+  ];
+
   installPhase = ''
-    mkdir -p $out/share $out/bin
-    cp -ar LightBurn $out/share/LightBurn
-    ln -s $out/share/LightBurn/AppRun $out/bin/LightBurn
+    runHook preInstall
+
+    mkdir -p $out/bin $out/app
+    cp -ar LightBurn $out/app/lightburn
+    ln -s $out/app/lightburn/AppRun $out/bin/lightburn
+    install -Dm644 $out/app/lightburn/LightBurn.png $out/share/pixmaps/lightburn.png
+
+    runHook postInstall
   '';
 
   dontWrapQtApps = true;
 
   meta = {
     description = "Layout, editing, and control software for your laser cutter";
-    homepage = "https://lightburnsoftware.com/";
+    homepage = "https://lightburnsoftware.com";
     sourceProvenance = with lib.sourceTypes; [ binaryNativeCode ];
     license = lib.licenses.unfree;
     maintainers = with lib.maintainers; [ q3k ];
     platforms = [ "x86_64-linux" ];
-    mainProgram = "LightBurn";
+    mainProgram = "lightburn";
   };
 }
