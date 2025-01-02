@@ -1,0 +1,13 @@
+diff --git a/src/Cafe/CMakeLists.txt.orig b/src/Cafe/CMakeLists.txt
+index 91d257b..cff779a 100644
+--- a/src/Cafe/CMakeLists.txt
++++ b/src/Cafe/CMakeLists.txt
+@@ -545,7 +545,7 @@ target_link_libraries(CemuCafe PRIVATE
+	Boost::nowide
+	CURL::libcurl
+	fmt::fmt
+-	glslang::SPIRV
++	glslang::glslang
+	ih264d
+	OpenSSL::Crypto
+	OpenSSL::SSL
