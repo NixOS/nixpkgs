@@ -9389,6 +9389,18 @@ final: prev:
     meta.homepage = "https://github.com/LhKipp/nvim-nu/";
   };
 
+  nvim-numbertoggle = buildVimPlugin {
+    pname = "nvim-numbertoggle";
+    version = "2024-03-29";
+    src = fetchFromGitHub {
+      owner = "sitiom";
+      repo = "nvim-numbertoggle";
+      rev = "c5827153f8a955886f1b38eaea6998c067d2992f";
+      sha256 = "18nxqi3a3xamrjzpsabww411ix6vr44smprqi9prd47238lpshi2";
+    };
+    meta.homepage = "https://github.com/sitiom/nvim-numbertoggle/";
+  };
+
   nvim-osc52 = buildVimPlugin {
     pname = "nvim-osc52";
     version = "2024-05-24";
