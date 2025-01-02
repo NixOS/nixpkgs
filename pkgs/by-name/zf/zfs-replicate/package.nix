@@ -2,6 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
+  lz4,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -15,6 +16,15 @@ python3Packages.buildPythonApplication rec {
     tag = "v${version}";
     hash = "sha256-VajMSoFZ4SQXpuF1Lo6S9IhxvspCfUwpNw5zg16uA3M=";
   };
+
+  # For compression to work, both local and remote systems must have lz4 installed.
+  # This hard codes the path to the lz4 when running it on the local system.
+  postPatch = ''
+    substituteInPlace zfs/replicate/compress/command.py \
+      --replace-fail \
+        '("/usr/bin/env - lz4 | ", "/usr/bin/env - lz4 -d | ")' \
+        '("${lib.getExe lz4}  | ", "/usr/bin/env - lz4 -d | ")'
+  '';
 
   build-system = with python3Packages; [
     poetry-core
