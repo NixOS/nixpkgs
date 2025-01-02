@@ -1,3 +1,5 @@
+# Tests: ./tests.nix
+
 /**
   Generates documentation for [nix modules](https://nix.dev/tutorials/module-system/index.html).
 
