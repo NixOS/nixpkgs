@@ -19927,6 +19927,29 @@ with self; {
     };
   };
 
+  pacup = buildPerlPackage rec {
+    version = "3.3.7";
+    pname = "pacup";
+    src = fetchFromGitHub {
+      owner = "pacstall";
+      repo = pname;
+      rev = version;
+      hash = "sha256-bsJXNvKEqyptMR6ypVuiUyML+vDp84kgbSfO7beja4Y=";
+    };
+    preBuild = ''
+      patchShebangs ./pacup
+    '';
+    buildInputs = [ pkgs.dpkg ];
+    propagatedBuildInputs = [ DataCompare Filechdir IPCSystemSimple ListMoreUtils JSON LWP TermProgressBar ];
+    outputs = [ "out" ];
+
+    meta = {
+      description = "maintainer helper tool to help maintainers update their pacscripts.";
+      homepage = "https://github.com/pacstall/pacup";
+      license = lib.licenses.gpl3Only;
+    };
+  };
+
   Pango = buildPerlPackage {
     pname = "Pango";
     version = "1.227";
