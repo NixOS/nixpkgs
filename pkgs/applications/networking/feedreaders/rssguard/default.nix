@@ -1,38 +1,12 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  cmake,
-  kdePackages,
-  wrapGAppsHook4,
+  callPackage,
 }:
 
-stdenv.mkDerivation rec {
+let
   pname = "rssguard";
   version = "4.8.1";
-
-  src = fetchFromGitHub {
-    owner = "martinrotter";
-    repo = pname;
-    rev = "refs/tags/${version}";
-    sha256 = "sha256-qWxcjGl4EaLXZ0q6RVy+IKyBcqlx/yYojlGivSXy5Io=";
-  };
-
-  buildInputs = [
-    kdePackages.qtwebengine
-    kdePackages.qttools
-    kdePackages.mpvqt
-    kdePackages.full
-  ];
-  nativeBuildInputs = [
-    cmake
-    wrapGAppsHook4
-    kdePackages.wrapQtAppsHook
-  ];
-  cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=\"Release\""
-  ];
-  # qmakeFlags = [ "CONFIG+=release" ];
 
   meta = with lib; {
     description = "Simple RSS/Atom feed reader with online synchronization";
@@ -45,10 +19,20 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/martinrotter/rssguard";
     changelog = "https://github.com/martinrotter/rssguard/releases/tag/${version}";
     license = licenses.gpl3Plus;
-    platforms = platforms.linux;
+    platforms = platforms.darwin ++ platforms.linux;
     maintainers = with maintainers; [
       jluttine
       tebriel
     ];
   };
-}
+in
+if stdenv.hostPlatform.isDarwin then
+  callPackage ./darwin.nix {
+    inherit
+      pname
+      version
+      meta
+      ;
+  }
+else
+  callPackage ./linux.nix { inherit pname version meta; }
