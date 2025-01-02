@@ -46,6 +46,13 @@ let
     url = "https://github.com/Binary-Eater/open-gpu-kernel-modules/commit/8ac26d3c66ea88b0f80504bdd1e907658b41609d.patch";
     hash = "sha256-+SfIu3uYNQCf/KXhv4PWvruTVKQSh4bgU1moePhe57U=";
   };
+
+  # Source corresponding to https://aur.archlinux.org/packages/nvidia-390xx-dkms
+  aurPatches = fetchgit {
+    url = "https://aur.archlinux.org/nvidia-390xx-utils.git";
+    rev = "94dffc01e23a93c354a765ea7ac64484a3ef96c1";
+    hash = "sha256-c94qXNZyMrSf7Dik7jvz2ECaGELqN7WEYNpnbUkzeeU=";
+  };
 in
 rec {
   mkDriver = generic;
@@ -151,15 +158,14 @@ rec {
   };
 
   # Last one supporting x86
-  legacy_390 =
-    let
-      # Source corresponding to https://aur.archlinux.org/packages/nvidia-390xx-dkms
-      aurPatches = fetchgit {
-        url = "https://aur.archlinux.org/nvidia-390xx-utils.git";
-        rev = "ebb48c240ce329e89ad3b59e78c8c708f46f27b3";
-        hash = "sha256-AGx3/EQ81awBMs6rrXTGWJmyq+UjBCPp6/9z1BQBB9E=";
-      };
-      patchset = [
+  legacy_390 = generic {
+      version = "390.157";
+      sha256_32bit = "sha256-VdZeCkU5qct5YgDF8Qgv4mP7CVHeqvlqnP/rioD3B5k=";
+      sha256_64bit = "sha256-W+u8puj+1da52BBw+541HxjtxTSVJVPL3HHo/QubMoo=";
+      settingsSha256 = "sha256-uJZO4ak/w/yeTQ9QdXJSiaURDLkevlI81de0q4PpFpw=";
+      persistencedSha256 = "sha256-NuqUQbVt80gYTXgIcu0crAORfsj9BCRooyH3Gp1y1ns=";
+
+      patches = map (patch: "${aurPatches}/${patch}") [
         "kernel-4.16+-memory-encryption.patch"
         "kernel-6.2.patch"
         "kernel-6.3.patch"
@@ -169,17 +175,9 @@ rec {
         "kernel-6.8.patch"
         "gcc-14.patch"
         "kernel-6.10.patch"
+        "kernel-6.12.patch"
       ];
-    in
-    generic {
-      version = "390.157";
-      sha256_32bit = "sha256-VdZeCkU5qct5YgDF8Qgv4mP7CVHeqvlqnP/rioD3B5k=";
-      sha256_64bit = "sha256-W+u8puj+1da52BBw+541HxjtxTSVJVPL3HHo/QubMoo=";
-      settingsSha256 = "sha256-uJZO4ak/w/yeTQ9QdXJSiaURDLkevlI81de0q4PpFpw=";
-      persistencedSha256 = "sha256-NuqUQbVt80gYTXgIcu0crAORfsj9BCRooyH3Gp1y1ns=";
-
-      patches = map (patch: "${aurPatches}/${patch}") patchset;
-      broken = kernel.kernelAtLeast "6.11 ";
+      broken = kernel.kernelAtLeast "6.13";
 
       # fixes the bug described in https://bbs.archlinux.org/viewtopic.php?pid=2083439#p2083439
       # see https://bbs.archlinux.org/viewtopic.php?pid=2083651#p2083651
