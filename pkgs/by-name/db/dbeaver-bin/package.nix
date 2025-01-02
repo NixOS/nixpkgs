@@ -17,7 +17,7 @@
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "dbeaver-bin";
-  version = "24.3.0";
+  version = "24.3.2";
 
   src =
     let
@@ -30,10 +30,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
         aarch64-darwin = "macos-aarch64.dmg";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-7tmz6ThT6oH2eMRl5XTf1+nr/ufDlp4BvGyKFICiTRw=";
-        aarch64-linux = "sha256-idnTeh37Ew6fg1gdJaoFF+wpgoShcJZokmWsid6g3ow=";
-        x86_64-darwin = "sha256-P1XseM1Al7y1JFVe/8VCIE84nMT4l9KF+Ik+rHjrv20=";
-        aarch64-darwin = "sha256-Xl4D8qTwB0tccuXqon4DApOOM95swxbfwSTD8gqc7jo=";
+        x86_64-linux = "sha256-kbpdAA/ZmH1f+MEfozyjr8HTKLhWEhswAGc7iSpy9rE=";
+        aarch64-linux = "sha256-SiNriPbyiMeHZSHab3JwyedURogPjI9McXwJqjpZXiA=";
+        x86_64-darwin = "sha256-cBJvElGfuCbyFRXzqcuQRa4GA6nXmEDxtse388FuH30=";
+        aarch64-darwin = "sha256-kzJeKY7V8CBcdsoDZDI9eBrr1hEWh3vyHI3wgos/s/M=";
       };
     in
     fetchurl {
@@ -106,6 +106,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
         runHook postInstall
       '';
+
+  autoPatchelfIgnoreMissingDeps = [
+    "libc.so.8"
+  ];
 
   passthru.updateScript = ./update.sh;
 
