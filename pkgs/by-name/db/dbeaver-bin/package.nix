@@ -111,6 +111,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   meta = {
     homepage = "https://dbeaver.io/";
+    changelog = "https://github.com/dbeaver/dbeaver/releases/tag/${finalAttrs.version}";
     description = "Universal SQL Client for developers, DBA and analysts. Supports MySQL, PostgreSQL, MariaDB, SQLite, and more";
     longDescription = ''
       Free multi-platform database tool for developers, SQL programmers, database
