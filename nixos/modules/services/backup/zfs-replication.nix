@@ -80,6 +80,7 @@ in
         let
           args = lib.map lib.escapeShellArg (
             [
+              "--verbose"
               "--user"
               cfg.username
               "--identity-file"
