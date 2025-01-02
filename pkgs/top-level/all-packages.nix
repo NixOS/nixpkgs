@@ -8964,9 +8964,7 @@ with pkgs;
   fplll = callPackage ../development/libraries/fplll { };
   fplll_20160331 = callPackage ../development/libraries/fplll/20160331.nix { };
 
-  freeimage = callPackage ../development/libraries/freeimage {
-    inherit (darwin) autoSignDarwinBinariesHook;
-  };
+  freeimage = callPackage ../development/libraries/freeimage { };
 
   freeipa = callPackage ../os-specific/linux/freeipa {
     kerberos = krb5.override {
