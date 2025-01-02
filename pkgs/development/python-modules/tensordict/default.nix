@@ -1,13 +1,11 @@
 {
   lib,
   buildPythonPackage,
-  pythonOlder,
   fetchFromGitHub,
 
   # build-system
   setuptools,
   torch,
-  which,
 
   # dependencies
   cloudpickle,
@@ -23,22 +21,19 @@
 
 buildPythonPackage rec {
   pname = "tensordict";
-  version = "0.5.0";
+  version = "0.6.2";
   pyproject = true;
-
-  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
     rev = "refs/tags/v${version}";
-    hash = "sha256-jnRlN9gefR77pioIXf0qM1CP6EtpeQkBvVIecGkb/pw=";
+    hash = "sha256-dsbpk0O5Gs5WUfi3ENqHdpy4rWoBjm1i44+ycp0jDJ0=";
   };
 
   build-system = [
     setuptools
     torch
-    which
   ];
 
   dependencies = [
