@@ -2,13 +2,13 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pythonAtLeast,
   pythonOlder,
   hatchling,
   hatch-vcs,
   numpy,
   packaging,
   importlib-resources,
+  typing-extensions,
   pydicom,
   pillow,
   h5py,
@@ -37,10 +37,13 @@ buildPythonPackage rec {
     hatch-vcs
   ];
 
-  dependencies = [
-    numpy
-    packaging
-  ] ++ lib.optionals (pythonOlder "3.9") [ importlib-resources ];
+  dependencies =
+    [
+      numpy
+      packaging
+    ]
+    ++ lib.optionals (pythonOlder "3.12") [ importlib-resources ]
+    ++ lib.optionals (pythonOlder "3.13") [ typing-extensions ];
 
   optional-dependencies = rec {
     all = dicom ++ dicomfs ++ minc2 ++ spm ++ zstd;
