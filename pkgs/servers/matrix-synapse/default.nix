@@ -149,7 +149,7 @@ python3.pkgs.buildPythonApplication rec {
       mock
       parameterized
     ])
-    ++ lib.flatten (lib.attrValues optional-dependencies);
+    ++ builtins.filter (p: !p.meta.broken) (lib.flatten (lib.attrValues optional-dependencies));
 
   doCheck = !stdenv.hostPlatform.isDarwin;
 
