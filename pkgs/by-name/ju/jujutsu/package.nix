@@ -21,7 +21,7 @@
 }:
 
 let
-  version = "0.24.0";
+  version = "0.25.0";
 in
 
 rustPlatform.buildRustPackage {
@@ -32,10 +32,10 @@ rustPlatform.buildRustPackage {
     owner = "jj-vcs";
     repo = "jj";
     tag = "v${version}";
-    hash = "sha256-XsD4P2UygZFcnlV2o3E/hRRgsGjwKw1r9zniEeAk758";
+    hash = "sha256-5J1ZfPNyniUK5D3Pt1aKuJ+/8vad3JPxCztBRY591N8=";
   };
 
-  cargoHash = "sha256-9JwRdeHo8JkwRQwPA+UsIEWar4gYQS4SIM/uj1TU2yg";
+  cargoHash = "sha256-kuZ1zvb6H5QWjJSUYMq5tEywsQMC6187YJPUT1r4S5o=";
 
   nativeBuildInputs = [
     installShellFiles
