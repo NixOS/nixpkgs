@@ -19,8 +19,8 @@ buildGoModule rec {
 
   passthru.updateScript = pkgs.nix-update-script { };
 
-  meta = with lib; {
-    description = "A simple terminal UI player for di.fm";
+  meta = {
+    description = "Simple terminal UI player for di.fm";
     homepage = "https://github.com/acaloiaro/di-tui";
     license = licenses.bsd2;
     maintainers = [ maintainers.acaloiaro ];
