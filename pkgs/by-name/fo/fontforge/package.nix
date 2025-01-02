@@ -52,14 +52,21 @@ stdenv.mkDerivation rec {
       url = "https://github.com/fontforge/fontforge/commit/216eb14b558df344b206bf82e2bdaf03a1f2f429.patch";
       hash = "sha256-aRnir09FSQMT50keoB7z6AyhWAVBxjSQsTRvBzeBuHU=";
     })
+
+    # Replace distutils use in the build script
+    (fetchpatch {
+      name = "replace-distutils.patch";
+      url = "https://github.com/fontforge/fontforge/commit/8c75293e924602ed09a9481b0eeb67ba6c623a81.patch";
+      includes = [ "pyhook/CMakeLists.txt" ];
+      hash = "sha256-3CEwC8vygmCztKRmeD45aZIqyoj8yk5CLwxX2SGP7z4=";
+    })
+
     # Fixes translation compatibility with gettext 0.22
     (fetchpatch {
       url = "https://github.com/fontforge/fontforge/commit/55d58f87ab1440f628f2071a6f6cc7ef9626c641.patch";
       hash = "sha256-rkYnKPXA8Ztvh9g0zjG2yTUCPd3lE1uqwvBuEd8+Oyw=";
     })
 
-    # https://github.com/fontforge/fontforge/pull/5423
-    ./replace-distutils.patch
   ];
 
   # use $SOURCE_DATE_EPOCH instead of non-deterministic timestamps
