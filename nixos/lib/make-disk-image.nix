@@ -327,9 +327,10 @@ let format' = format; in let
       nixos-enter
       nix
       systemdMinimal
+      coreutils
+      findutils
     ]
-    ++ lib.optional deterministic gptfdisk
-    ++ stdenv.initialPath);
+    ++ lib.optional deterministic gptfdisk);
 
   # I'm preserving the line below because I'm going to search for it across nixpkgs to consolidate
   # image building logic. The comment right below this now appears in 4 different places in nixpkgs :)
@@ -515,6 +516,7 @@ let format' = format; in let
     ''}
 
     echo "copying staging root to image..."
+    shopt -s dotglob
     cptofs -p ${lib.optionalString (partitionTableType != "none") "-P ${rootPartition}"} \
            -t ${fsType} \
            -i $diskImage \
@@ -542,8 +544,15 @@ let format' = format; in let
     echo "file ${format}-image $out/${filename}" >> $out/nix-support/hydra-build-products
   '';
 
+  buildSystem = pkgs.stdenv.buildPlatform.system;
+  hostSystem = pkgs.stdenv.hostPlatform.system;
+  crossPkgs = if (hostSystem != buildSystem) then
+      import ../.. /*nixpkgs*/ { system = hostSystem; }
+    else
+      pkgs;
+
   buildImage = pkgs.vmTools.runInLinuxVM (
-    pkgs.runCommand name {
+    crossPkgs.runCommand name {
       preVM = prepareImage + lib.optionalString touchEFIVars createEFIVars;
       buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
       postVM = moveOrConvertImage + createHydraBuildProducts + postVM;
@@ -576,29 +585,34 @@ let format' = format; in let
       mkdir $mountPoint
       mount $rootDisk $mountPoint
 
+      mkdir $mountPoint/run
+      mount -t tmpfs -o "mode=755" none $mountPoint/run
+      mkdir $mountPoint/run/current-system
+      ln -s ${config.system.build.etc}/etc $mountPoint/run/current-system/etc
+
       # Create the ESP and mount it. Unlike e2fsprogs, mkfs.vfat doesn't support an
       # '-E offset=X' option, so we can't do this outside the VM.
       ${lib.optionalString (partitionTableType == "efi" || partitionTableType == "hybrid") ''
-        mkdir -p /mnt/boot
-        mkfs.vfat -n ESP /dev/vda1
-        mount /dev/vda1 /mnt/boot
+        mkdir -p $mountPoint/boot
+        mkfs.vfat -F 32 -n ESP /dev/vda1
+        mount /dev/vda1 $mountPoint/boot
 
         ${lib.optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
       ''}
       ${lib.optionalString (partitionTableType == "efixbootldr") ''
-        mkdir -p /mnt/{boot,efi}
-        mkfs.vfat -n ESP /dev/vda1
-        mkfs.vfat -n BOOT /dev/vda2
-        mount /dev/vda1 /mnt/efi
-        mount /dev/vda2 /mnt/boot
+        mkdir -p $mountPoint/{boot,efi}
+        mkfs.vfat -F 32 -n ESP /dev/vda1
+        mkfs.vfat -F 32 -n BOOT /dev/vda2
+        mount /dev/vda1 $mountPoint/efi
+        mount /dev/vda2 $mountPoint/boot
 
         ${lib.optionalString touchEFIVars "mount -t efivarfs efivarfs /sys/firmware/efi/efivars"}
       ''}
 
       # Install a configuration.nix
-      mkdir -p /mnt/etc/nixos
+      mkdir -p $mountPoint/etc/nixos
       ${lib.optionalString (configFile != null) ''
-        cp ${configFile} /mnt/etc/nixos/configuration.nix
+        cp ${configFile} $mountPoint/etc/nixos/configuration.nix
       ''}
 
       ${lib.optionalString installBootLoader ''
@@ -639,7 +653,7 @@ let format' = format; in let
         fi
       done
 
-      umount -R /mnt
+      umount -R $mountPoint
 
       # Make sure resize2fs works. Note that resize2fs has stricter criteria for resizing than a normal
       # mount, so the `-c 0` and `-i 0` don't affect it. Setting it to `now` doesn't produce deterministic

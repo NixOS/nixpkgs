@@ -14,6 +14,7 @@ maturinBuildHook() {
 
     local flagsArray=(
         "--jobs=$NIX_BUILD_CORES"
+        "--interpreter=@pythonInterpreter@"
         "--offline"
         "--target" "@rustTargetPlatformSpec@"
         "--manylinux" "off"

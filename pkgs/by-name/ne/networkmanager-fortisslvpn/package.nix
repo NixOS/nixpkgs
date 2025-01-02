@@ -42,6 +42,7 @@ stdenv.mkDerivation rec {
     gettext
     pkg-config
     file
+    glib
   ];
 
   buildInputs = [
