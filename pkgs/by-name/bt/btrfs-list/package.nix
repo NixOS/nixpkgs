@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "btrfs-list";
-  version = "2.3";
+  version = "2.4";
 
   src = fetchFromGitHub {
     owner = "speed47";
     repo = "btrfs-list";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-cWzDRop0cyrjVIJzuZxTqELgec66GiPAUJY1xIBr3OY=";
+    hash = "sha256-K6/xFR4Qmr6ynH5rZfOTN8nkl99iqcJPmKPwtp9FYyc=";
   };
 
   buildInputs = [ perl ];

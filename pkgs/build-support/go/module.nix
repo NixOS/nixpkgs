@@ -117,7 +117,7 @@ in
 
       export GIT_SSL_CAINFO=$NIX_SSL_CERT_FILE
       ${if finalAttrs.proxyVendor then ''
-        mkdir -p "''${GOPATH}/pkg/mod/cache/download"
+        mkdir -p "$GOPATH/pkg/mod/cache/download"
         go mod download
       '' else ''
         if (( "''${NIX_DEBUG:-0}" >= 1 )); then
@@ -135,8 +135,8 @@ in
       runHook preInstall
 
       ${if finalAttrs.proxyVendor then ''
-        rm -rf "''${GOPATH}/pkg/mod/cache/download/sumdb"
-        cp -r --reflink=auto "''${GOPATH}/pkg/mod/cache/download" $out
+        rm -rf "$GOPATH/pkg/mod/cache/download/sumdb"
+        cp -r --reflink=auto "$GOPATH/pkg/mod/cache/download" $out
       '' else ''
         cp -r --reflink=auto vendor $out
       ''}
