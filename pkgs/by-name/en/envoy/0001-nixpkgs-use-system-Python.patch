@@ -1,4 +1,4 @@
-From 47406ebaf0260e5b66a92baac3717936c8386b69 Mon Sep 17 00:00:00 2001
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
 From: Paul Meyer <49727155+katexochen@users.noreply.github.com>
 Date: Mon, 22 Apr 2024 11:52:59 +0200
 Subject: [PATCH] nixpkgs: use system Python
@@ -10,7 +10,7 @@ Signed-off-by: Paul Meyer <49727155+katexochen@users.noreply.github.com>
  2 files changed, 5 insertions(+), 23 deletions(-)
 
 diff --git a/bazel/python_dependencies.bzl b/bazel/python_dependencies.bzl
-index 9f2b336b1a..53a2c93c59 100644
+index 9f2b336b1a36ca0d2f04a40ac1809b30ff21df27..53a2c93c59492a12ef4a6ecfc0c8a679f0df73f7 100644
 --- a/bazel/python_dependencies.bzl
 +++ b/bazel/python_dependencies.bzl
 @@ -1,28 +1,25 @@
@@ -47,7 +47,7 @@ index 9f2b336b1a..53a2c93c59 100644
          extra_pip_args = ["--require-hashes"],
      )
 diff --git a/bazel/repositories_extra.bzl b/bazel/repositories_extra.bzl
-index b92dd461ba..cef32b3140 100644
+index b92dd461ba7037d2f1c079f283ff2c466686f7a4..cef32b3140588cb7668d47d0c08528f131184fe4 100644
 --- a/bazel/repositories_extra.bzl
 +++ b/bazel/repositories_extra.bzl
 @@ -2,19 +2,11 @@ load("@aspect_bazel_lib//lib:repositories.bzl", "aspect_bazel_lib_dependencies")
