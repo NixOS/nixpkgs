@@ -889,6 +889,7 @@ in {
   rathole = handleTest ./rathole.nix {};
   readarr = handleTest ./readarr.nix {};
   realm = handleTest ./realm.nix {};
+  readeck = runTest ./readeck.nix;
   redis = handleTest ./redis.nix {};
   redlib = handleTest ./redlib.nix {};
   redmine = handleTestOn [ "x86_64-linux" "aarch64-linux" ] ./redmine.nix {};
