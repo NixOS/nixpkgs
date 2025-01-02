@@ -22181,6 +22181,12 @@
     github = "teatwig";
     githubId = 18734648;
   };
+  tebriel = {
+    email = "tebriel@frodux.in";
+    name = "tebriel";
+    github = "tebriel";
+    githubId = 821688;
+  };
   techknowlogick = {
     email = "techknowlogick@gitea.com";
     github = "techknowlogick";
