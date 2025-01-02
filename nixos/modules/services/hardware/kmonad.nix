@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  utils,
   ...
 }:
 
@@ -118,19 +119,8 @@ let
   # Build a systemd service that starts KMonad:
   mkService =
     keyboard:
-    let
-      cmd =
-        [
-          (lib.getExe cfg.package)
-          "--input"
-          ''device-file "${keyboard.device}"''
-        ]
-        ++ cfg.extraArgs
-        ++ [ "${mkCfg keyboard}" ];
-    in
     lib.nameValuePair (mkName keyboard.name) {
       description = "KMonad for ${keyboard.device}";
-      script = lib.escapeShellArgs cmd;
       unitConfig = {
         # Control rate limiting.
         # Stop the restart logic if we restart more than
@@ -139,6 +129,10 @@ let
         StartLimitBurst = 5;
       };
       serviceConfig = {
+        ExecStart = ''
+          ${lib.getExe cfg.package} ${mkCfg keyboard} \
+            ${utils.escapeSystemdExecArgs cfg.extraArgs}
+        '';
         Restart = "always";
         # Restart at increasing intervals from 2s to 1m
         RestartSec = 2;
