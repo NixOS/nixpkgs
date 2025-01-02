@@ -1,0 +1,92 @@
+[
+  {
+    "pname": "Autofac",
+    "version": "8.1.1",
+    "hash": "sha256-///N/c/OmCa7DUVz9/hIA/rFsaJ4TMltqdrVk7Ycmq8="
+  },
+  {
+    "pname": "Newtonsoft.Json",
+    "version": "13.0.3",
+    "hash": "sha256-hy/BieY4qxBWVVsDqqOPaLy1QobiIapkbrESm6v2PHc="
+  },
+  {
+    "pname": "Seq.Api",
+    "version": "2024.3.0",
+    "hash": "sha256-OUBZ9VV7C5p/CzW0hoN3N9m1RAEGg24wNYFZgfJgk4s="
+  },
+  {
+    "pname": "Seq.Apps",
+    "version": "2023.4.0",
+    "hash": "sha256-PLN0KYbxH9aQkMCTOSmb16NcGD+XDooJdU4QIej1i+0="
+  },
+  {
+    "pname": "Seq.Syntax",
+    "version": "1.0.0",
+    "hash": "sha256-FcDdFhRE2EIgQjoTHDjKLq/Pl9mKzezL/B75pGhvk9s="
+  },
+  {
+    "pname": "Serilog",
+    "version": "4.0.2",
+    "hash": "sha256-vkd4s/PsKnnVzN1+f9haIP5LoxNWxnhdv3mBQYl/2Hc="
+  },
+  {
+    "pname": "Serilog.Expressions",
+    "version": "5.0.0",
+    "hash": "sha256-xpAT8U0pzTvRGa/qBd2M3YOQDD1xgAHCMVN9NEz0L4E="
+  },
+  {
+    "pname": "Serilog.Formatting.Compact",
+    "version": "3.0.0",
+    "hash": "sha256-nejEYqJEMG9P2iFZvbsCUPr5LZRtxbdUTLCI9N71jHY="
+  },
+  {
+    "pname": "Serilog.Formatting.Compact.Reader",
+    "version": "4.0.0",
+    "hash": "sha256-89+SaaXp9Pt8YTkTwVuMV3PzlPMg9mOHiFBKs3oHOUs="
+  },
+  {
+    "pname": "Serilog.Sinks.Console",
+    "version": "6.0.0",
+    "hash": "sha256-QH8ykDkLssJ99Fgl+ZBFBr+RQRl0wRTkeccQuuGLyro="
+  },
+  {
+    "pname": "Serilog.Sinks.File",
+    "version": "5.0.0",
+    "hash": "sha256-GKy9hwOdlu2W0Rw8LiPyEwus+sDtSOTl8a5l9uqz+SQ="
+  },
+  {
+    "pname": "Serilog.Sinks.Seq",
+    "version": "8.0.0",
+    "hash": "sha256-1AEtDLODwS9WBkJ2yrmjKl2Rq3q2VPs1H9bQCUhC05s="
+  },
+  {
+    "pname": "SerilogTracing",
+    "version": "2.1.2",
+    "hash": "sha256-fhSiUgk21s7kiz4QYF2fy9YLC1X0YHibi95x2flPqMM="
+  },
+  {
+    "pname": "Superpower",
+    "version": "3.0.0",
+    "hash": "sha256-5MNmhBDYyOs+sTH364Qdn+Ck328BAQaVC1KMQ7yK2Vw="
+  },
+  {
+    "pname": "System.Diagnostics.DiagnosticSource",
+    "version": "8.0.1",
+    "hash": "sha256-zmwHjcJgKcbkkwepH038QhcnsWMJcHys+PEbFGC0Jgo="
+  },
+  {
+    "pname": "System.Reactive",
+    "version": "6.0.1",
+    "hash": "sha256-Lo5UMqp8DsbVSUxa2UpClR1GoYzqQQcSxkfyFqB/d4Q="
+  },
+  {
+    "pname": "System.Security.Cryptography.ProtectedData",
+    "version": "8.0.0",
+    "hash": "sha256-fb0pa9sQxN+mr0vnXg1Igbx49CaOqS+GDkTfWNboUvs="
+  },
+  {
+    "pname": "Tavis.UriTemplates",
+    "version": "2.0.0",
+    "hash": "sha256-Rd3VH55GFiXhMDbUcnKri2jDVIA1M7CQ+6Fjdsn/PSE="
+  }
+]
