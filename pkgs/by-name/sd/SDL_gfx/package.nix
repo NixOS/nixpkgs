@@ -16,12 +16,12 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-37FaxfjOeklS3BLSrtl0dRjF5rM1wOMWNtI/k8Yw9Bk=";
   };
 
-  nativeBuildInputs = [ SDL ];
-
   buildInputs = [ SDL ];
 
   # SDL_gfx.pc refers to sdl.pc and some SDL_gfx headers import SDL.h
   propagatedBuildInputs = [ SDL ];
+
+  env.SDL_CONFIG = lib.getExe' SDL.dev "sdl-config";
 
   configureFlags = [
     (lib.enableFeature false "mmx")
