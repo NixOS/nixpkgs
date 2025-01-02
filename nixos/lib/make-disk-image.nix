@@ -717,17 +717,14 @@ let
 
           # Set up core system link, bootloader (sd-boot, GRUB, uboot, etc.), etc.
 
-          # NOTE: systemd-boot-builder.py calls nix-env --list-generations which
-          # clobbers $HOME/.nix-defexpr/channels/nixos This would cause a  folder
-          # /homeless-shelter to show up in the final image which  in turn breaks
-          # nix builds in the target image if sandboxing is turned off (through
-          # __noChroot for example).
-          export HOME=$TMPDIR
-          NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
-
-          # The above scripts will generate a random machine-id and we don't want to bake a single ID into all our images
-          rm -f $mountPoint/etc/machine-id
-        ''}
+        # NOTE: systemd-boot-builder.py calls nix-env --list-generations which
+        # clobbers $HOME/.nix-defexpr/channels/nixos This would cause a  folder
+        # /homeless-shelter to show up in the final image which  in turn breaks
+        # nix builds in the target image if sandboxing is turned off (through
+        # __noChroot for example).
+        export HOME=$TMPDIR
+        NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
+      ''}
 
         # Set the ownerships of the contents. The modes are set in preVM.
         # No globbing on targets, so no need to set -f
