@@ -6,7 +6,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   flake8,
-  flask-sockets,
   moto,
   psutil,
   pytest-asyncio,
@@ -49,7 +48,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     flake8
-    flask-sockets
     moto
     psutil
     pytest-asyncio

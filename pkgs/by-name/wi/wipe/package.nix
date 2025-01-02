@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,6 +13,12 @@ stdenv.mkDerivation rec {
     url = "mirror://sourceforge/wipe/${version}/${pname}-${version}.tar.bz2";
     sha256 = "180snqvh6k6il6prb19fncflf2jcvkihlb4w84sbndcv1wvicfa6";
   };
+
+  nativeBuildInputs = [ autoreconfHook ];
+
+  # fdatasync is undocumented on darwin with no header file which breaks the build.
+  # use fsync instead.
+  configureFlags = lib.optional stdenv.hostPlatform.isDarwin "ac_cv_func_fdatasync=no";
 
   patches = [ ./fix-install.patch ];
 

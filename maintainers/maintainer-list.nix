@@ -1632,6 +1632,12 @@
     matrix = "@anthonyrsl:matrix.org";
     keys = [ { fingerprint = "472D 368A F107 F443 F3A5  C712 9DC4 987B 1A55 E75E"; } ];
   };
+  antipatico = {
+    email = "code@bootkit.dev";
+    github = "antipatico";
+    githubId = 14838767;
+    name = "Jacopo Scannella";
+  };
   antoinerg = {
     email = "roygobeil.antoine@gmail.com";
     github = "antoinerg";
@@ -2509,6 +2515,12 @@
     github = "Banh-Canh";
     githubId = 66330398;
     name = "Victor Hang";
+  };
+  baongoc124 = {
+    email = "baongoc124@gmail.com";
+    github = "baongoc124";
+    githubId = 766221;
+    name = "Ngoc Nguyen";
   };
   barab-i = {
     email = "barab_i@outlook.com";
@@ -4869,6 +4881,12 @@
     githubId = 217899;
     name = "Cyryl Płotnicki";
   };
+  cything = {
+    name = "cy";
+    email = "nix@cything.io";
+    github = "cything";
+    githubId = 45041772;
+  };
   d3vil0p3r = {
     name = "Antonio Voza";
     email = "vozaanthony@gmail.com";
@@ -4924,6 +4942,12 @@
     email = "damhiya@gmail.com";
     github = "damhiya";
     githubId = 13533446;
+  };
+  damidoug = {
+    email = "contact@damidoug.dev";
+    github = "damidoug";
+    githubId = 75175586;
+    name = "Douglas Damiano";
   };
   DamienCassou = {
     email = "damien@cassou.me";
@@ -11111,11 +11135,11 @@
     githubId = 13179;
   };
   jopejoe1 = {
-    email = "johannes@joens.email";
+    email = "nixpkgs@missing.ninja";
     matrix = "@jopejoe1:matrix.org";
     github = "jopejoe1";
     githubId = 34899572;
-    name = "Johannes Jöns";
+    name = "jopejoe1";
   };
   jordanisaacs = {
     name = "Jordan Isaacs";
@@ -12220,6 +12244,12 @@
     github = "KoviRobi";
     githubId = 1903418;
     name = "Kovacsics Robert";
+  };
+  kpcyrd = {
+    email = "git@rxv.cc";
+    github = "kpcyrd";
+    githubId = 7763184;
+    name = "kpcyrd";
   };
   kquick = {
     email = "quick@sparq.org";
@@ -14966,6 +14996,12 @@
     githubId = 54669781;
     keys = [ { fingerprint = "293B 93D8 A471 059F 85D7  16A6 5BA9 2099 D9BE 2DAA"; } ];
   };
+  misilelab = {
+    name = "misilelab";
+    email = "misileminecord@gmail.com";
+    github = "misilelab";
+    githubId = 74066467;
+  };
   mislavzanic = {
     email = "mislavzanic3@gmail.com";
     github = "mislavzanic";
@@ -15591,6 +15627,12 @@
     githubId = 38578268;
     name = "Morgan Wolfe";
   };
+  mx2uller = {
+    email = "mx2uller@pm.me";
+    github = "mx2uller";
+    githubId = 93703653;
+    name = "Marko Müller";
+  };
   mxkrsv = {
     email = "mxkrsv@disroot.org";
     github = "mxkrsv";
@@ -15618,6 +15660,12 @@
     github = "Myrl";
     githubId = 9636071;
     name = "Myrl Hex";
+  };
+  myypo = {
+    email = "nikirsmcgl@gmail.com";
+    github = "myypo";
+    githubId = 110892040;
+    name = "Mykyta Polchanov";
   };
   mzacho = {
     email = "nixpkgs@martinzacho.net";
@@ -18602,6 +18650,12 @@
     githubId = 40905037;
     name = "qwqawawow";
   };
+  qxrein = {
+    email = "mnv07@proton.me";
+    github = "qxrein";
+    githubId = 101001298;
+    name = "qxrein";
+  };
   qyliss = {
     email = "hi@alyssa.is";
     github = "alyssais";
@@ -20436,6 +20490,13 @@
     githubId = 71049646;
     keys = [ { fingerprint = "8BDF DFB5 6842 2393 82A0  441B 9238 BC70 9E05 516A"; } ];
   };
+  sehqlr = {
+    name = "Sam Hatfield";
+    email = "hey@samhatfield.me";
+    matrix = "@sehqlr:matrix.org";
+    github = "sehqlr";
+    githubId = 2746852;
+  };
   sei40kr = {
     name = "Seong Yong-ju";
     email = "sei40kr@gmail.com";
@@ -21484,6 +21545,12 @@
     email = "me@samuelrounce.co.uk";
     github = "srounce";
     githubId = 60792;
+  };
+  srv6d = {
+    name = "Marvin Vogt";
+    github = "SRv6d";
+    githubId = 18124752;
+    email = "m@rvinvogt.com";
   };
   Srylax = {
     name = "Srylax";
@@ -24346,6 +24413,13 @@
     github = "WilliButz";
     githubId = 20464732;
     name = "Willi Butz";
+  };
+  willow_ch = {
+    email = "nix@w.wolo.dev";
+    github = "spaghetus";
+    githubId = 28763739;
+    name = "Willow Carlson-Huber";
+    keys = [ { fingerprint = "FE21E0981CDFD50ADD086423C21A693BA4693A60"; } ];
   };
   willswats = {
     email = "williamstuwatson@gmail.com";

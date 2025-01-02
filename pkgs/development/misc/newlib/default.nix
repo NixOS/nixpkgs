@@ -13,11 +13,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "newlib";
-  version = "4.3.0.20230120";
+  version = "4.4.0.20231231";
 
   src = fetchurl {
     url = "ftp://sourceware.org/pub/newlib/newlib-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-g6Yqma9Z4465sMWO0JLuJNcA//Q6IsA+QzlVET7zUVA=";
+    sha256 = "sha256-DBZqOeG/CVHfr81olJ/g5LbTZYCB1igvOa7vxjEPLxM=";
   };
 
   patches = lib.optionals nanoizeNewlib [

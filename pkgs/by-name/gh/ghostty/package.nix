@@ -44,8 +44,7 @@ in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "ghostty";
-  version = "1.0.0";
-
+  version = "1.0.1";
   outputs = [
     "out"
     "man"
@@ -58,14 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ghostty-org";
     repo = "ghostty";
     tag = "v${finalAttrs.version}";
-    hash = "sha256-AHI1Z4mfgXkNwQA8xYq4tS0/BARbHL7gQUT41vCxQTM=";
+    hash = "sha256-BiXFNeoL+BYpiqzCuDIrZGQ6JVI8cBOXerJH48CbnxU=";
   };
-
-  # Avoid using runtime hacks to help find X11
-  postPatch = lib.optionalString (appRuntime == "gtk") ''
-    substituteInPlace src/apprt/gtk/x11.zig \
-      --replace-warn 'std.DynLib.open("libX11.so");' 'std.DynLib.open("${lib.getLib libX11}/lib/libX11.so");'
-  '';
 
   deps = callPackage ./deps.nix {
     name = "${finalAttrs.pname}-cache-${finalAttrs.version}";
@@ -118,8 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   zigCheckFlags = finalAttrs.zigBuildFlags;
 
-  # Unit tests currently fail inside the sandbox
-  doCheck = false;
+  doCheck = true;
 
   /**
     Ghostty really likes all of it's resources to be in the same directory, so link them back after we split them
@@ -158,7 +150,7 @@ stdenv.mkDerivation (finalAttrs: {
     ln -s $vim $out/share/vim-plugins
 
 
-    remove-references-to -t ${finalAttrs.deps} $out/bin/ghostty
+    remove-references-to -t ${finalAttrs.deps} $out/bin/.ghostty-wrapped
   '';
 
   nativeInstallCheckInputs = [
@@ -186,7 +178,9 @@ stdenv.mkDerivation (finalAttrs: {
     '';
     homepage = "https://ghostty.org/";
     downloadPage = "https://ghostty.org/download";
-
+    changelog = "https://ghostty.org/docs/install/release-notes/${
+      builtins.replaceStrings [ "." ] [ "-" ] finalAttrs.version
+    }";
     license = lib.licenses.mit;
     mainProgram = "ghostty";
     maintainers = with lib.maintainers; [

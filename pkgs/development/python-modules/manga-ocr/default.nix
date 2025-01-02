@@ -37,6 +37,11 @@ buildPythonPackage rec {
     unidic-lite
   ];
 
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "numpy<2" "numpy"
+  '';
+
   meta = with lib; {
     description = "Optical character recognition for Japanese text, with the main focus being Japanese manga";
     homepage = "https://github.com/kha-white/manga-ocr";

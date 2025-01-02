@@ -75,7 +75,7 @@
 , withKvazaar ? withFullDeps # HEVC encoding
 , withLadspa ? withFullDeps # LADSPA audio filtering
 , withLc3 ? withFullDeps && lib.versionAtLeast version "7.1" # LC3 de/encoding
-, withLcevcdec ? withFullDeps && lib.versionAtLeast version "7.1" # LCEVC decoding
+, withLcevcdec ? false && lib.versionAtLeast version "7.1" # LCEVC decoding # FIXME currently makes ffmpeg crash in any operation on non-AVX CPUs
 , withLcms2 ? withFullDeps # ICC profile support via lcms2
 , withLzma ? withHeadlessDeps # xz-utils
 , withMetal ? false # Unfree and requires manual downloading of files

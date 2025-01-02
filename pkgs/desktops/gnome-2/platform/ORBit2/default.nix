@@ -38,6 +38,15 @@ stdenv.mkDerivation rec {
     "dev"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals (stdenv.cc.isGNU && (lib.versionAtLeast (lib.getVersion stdenv.cc.cc) "14")) [
+      # the ./configure script is not compatible with gcc-14, not easy to
+      # regenerate without porting: https://github.com/NixOS/nixpkgs/issues/367694
+      "-Wno-error=implicit-int"
+      "-Wno-error=incompatible-pointer-types"
+    ]
+  );
+
   configureFlags = lib.optionals (stdenv.buildPlatform != stdenv.hostPlatform) [
     "--with-idl-compiler=${lib.getExe' buildPackages.gnome2.ORBit2 "orbit-idl-2"}"
     # https://github.com/void-linux/void-packages/blob/e5856e02aa6ef7e4f2725afbff2915f89d39024b/srcpkgs/ORBit2/template#L17-L35
