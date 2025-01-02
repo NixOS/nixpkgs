@@ -272,7 +272,7 @@ jobs:
           # There appears to be no API to request reviews based on GitHub IDs
           jq -r 'keys[]' comparison/maintainers.json \
             | while read -r id; do gh api /user/"$id"; done \
-            | jq -s '{ reviewers: map(.login) }' \
+            | jq -s --arg author "${{ github.event.pull_request.user.login }}" '{ reviewers: map(.login) | map(select(. != $author)) }' \
             > reviewers.json
 
           # Request reviewers from maintainers of changed output paths
