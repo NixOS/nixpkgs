@@ -2,27 +2,41 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
+  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "ogen";
-  version = "1.4.1";
+  version = "1.8.1";
 
   src = fetchFromGitHub {
     owner = "ogen-go";
     repo = "ogen";
     rev = "refs/tags/v${version}";
-    hash = "sha256-SwJY9VQafclAxEQ/cbRJALvMLlnSIItIOz92XzuCoCk=";
+    hash = "sha256-gB9K+uRtTSPPy72F15Hagl22R5VD3vD8S455UOkOctA=";
   };
 
-  vendorHash = "sha256-IxG7y0Zy0DerCh5DRdSWSaD643BG/8Wj2wuYvkn+XzE=";
+  # ogen reads version from runtime/debug buildinfo
+  # which is not overridable as of now?
+  postPatch = ''
+    substituteInPlace internal/ogenversion/ogenversion.go \
+      --replace-fail 'return m.Version, true' 'return "${version}", true'
+  '';
 
-  patches = [ ./modify-version-handling.patch ];
+  vendorHash = "sha256-Wdt5KiSIHWYZ8kak03rDFnZesYsX3UlIKwPYDRZqNBY=";
 
   subPackages = [
     "cmd/ogen"
     "cmd/jschemagen"
   ];
+
+  # default checkPhase doesn't run anything
+  # enabling test requires generating files and changing go.sum
+  doCheck = false;
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
 
   meta = {
     description = "OpenAPI v3 Code Generator for Go";
