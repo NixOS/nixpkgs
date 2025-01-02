@@ -192,33 +192,35 @@ let
     # Fix FHS paths in tests
     postPatch =
       ''
-        sed -i 's|"/bin/ls"|"${lib.getExe' coreutils "ls"}"|' src/builtins/tests/test_tests.rs
-        sed -i 's|"/bin/echo"|"${lib.getExe' coreutils "echo"}"|' src/tests/highlight.rs
-        sed -i 's|"/bin/c"|"${lib.getExe' coreutils "c"}"|' src/tests/highlight.rs
-        sed -i 's|"/bin/ca"|"${lib.getExe' coreutils "ca"}"|' src/tests/highlight.rs
+        substituteInPlace src/builtins/tests/test_tests.rs \
+          --replace-fail '"/bin/ls"' '"${lib.getExe' coreutils "ls"}"'
 
-        sed -i 's|/usr|/|' src/tests/highlight.rs
+        substituteInPlace src/tests/highlight.rs \
+          --replace-fail '"/bin/echo"' '"${lib.getExe' coreutils "echo"}"' \
+          --replace-fail '"/bin/c"' '"${lib.getExe' coreutils "c"}"' \
+          --replace-fail '"/bin/ca"' '"${lib.getExe' coreutils "ca"}"' \
+          --replace-fail '/usr' '/'
 
-        # tests/checks/cd.fish
-        sed -i 's|/bin/pwd|${lib.getExe' coreutils "pwd"}|' tests/checks/cd.fish
+        substituteInPlace tests/checks/cd.fish \
+          --replace-fail '/bin/pwd' '${lib.getExe' coreutils "pwd"}'
 
-        # tests/checks/redirect.fish
-        sed -i 's|/bin/echo|${lib.getExe' coreutils "echo"}|' tests/checks/redirect.fish
+        substituteInPlace tests/checks/redirect.fish \
+          --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
 
-        # tests/checks/vars_as_commands.fish
-        sed -i 's|/usr/bin|${coreutils}/bin|' tests/checks/vars_as_commands.fish
+        substituteInPlace tests/checks/vars_as_commands.fish \
+          --replace-fail '/usr/bin' '${coreutils}/bin'
 
-        # tests/checks/jobs.fish
-        sed -i 's|ps -o stat|${lib.getExe' procps "ps"} -o stat|' tests/checks/jobs.fish
-        sed -i 's|/bin/echo|${lib.getExe' coreutils "echo"}|' tests/checks/jobs.fish
+        substituteInPlace tests/checks/jobs.fish \
+          --replace-fail 'ps -o' '${lib.getExe' procps "ps"} -o' \
+          --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
 
-        # tests/checks/job-control-noninteractive.fish
-        sed -i 's|/bin/echo|${lib.getExe' coreutils "echo"}|' tests/checks/job-control-noninteractive.fish
+        substituteInPlace tests/checks/job-control-noninteractive.fish \
+          --replace-fail '/bin/echo' '${lib.getExe' coreutils "echo"}'
 
-        # tests/checks/complete.fish
-        sed -i 's|/bin/ls|${lib.getExe' coreutils "ls"}|' tests/checks/complete.fish
+        substituteInPlace tests/checks/complete.fish \
+          --replace-fail '/bin/ls' '${lib.getExe' coreutils "ls"}'
 
-        # pexpect tests are flaky
+        # Several pexpect tests are flaky
         # See https://github.com/fish-shell/fish-shell/issues/8789
         rm tests/pexpects/exit_handlers.py
         rm tests/pexpects/private_mode.py
@@ -336,24 +338,14 @@ let
 
     postInstall =
       ''
-        sed -r "s|command grep|command ${lib.getExe gnugrep}|" \
-            -i "$out/share/fish/functions/grep.fish"
-        sed -e "s|\|cut|\|${lib.getExe' coreutils "cut"}|"             \
-            -i "$out/share/fish/functions/fish_prompt.fish"
-        sed -e "s|uname|${lib.getExe' coreutils "uname"}|"             \
-            -i "$out/share/fish/functions/__fish_pwd.fish"   \
-               "$out/share/fish/functions/prompt_pwd.fish"
-        sed -e "s|sed |${lib.getExe gnused} |"                  \
-            -i "$out/share/fish/functions/alias.fish"        \
-               "$out/share/fish/functions/prompt_pwd.fish"
-        sed -i "s|nroff|${lib.getExe' groff "nroff"}|"                 \
-               "$out/share/fish/functions/__fish_print_help.fish"
-        sed -i "s|/usr/local/sbin /sbin /usr/sbin||"         \
-               $out/share/fish/completions/{sudo.fish,doas.fish}
-        sed -e "s| awk | ${lib.getExe' gawk "awk"} |"                  \
-            -i $out/share/fish/functions/{__fish_print_packages.fish,__fish_print_addresses.fish,__fish_describe_command.fish,__fish_complete_man.fish,__fish_complete_convert_options.fish} \
-               $out/share/fish/completions/{cwebp,adb,ezjail-admin,grunt,helm,heroku,lsusb,make,p4,psql,rmmod,vim-addons}.fish
+        substituteInPlace "$out/share/fish/functions/grep.fish" \
+          --replace-fail "command grep" "command ${lib.getExe gnugrep}"
 
+        substituteInPlace "$out/share/fish/functions/__fish_print_help.fish" \
+          --replace-fail "nroff" "${lib.getExe' groff "nroff"}"
+
+        substituteInPlace $out/share/fish/completions/{sudo.fish,doas.fish} \
+          --replace-fail "/usr/local/sbin /sbin /usr/sbin" ""
       ''
       + lib.optionalString usePython ''
         cat > $out/share/fish/functions/__fish_anypython.fish <<EOF
@@ -362,20 +354,17 @@ let
             return 0
         end
         EOF
-
       ''
       + lib.optionalString stdenv.hostPlatform.isLinux ''
         for cur in $out/share/fish/functions/*.fish; do
-          sed -e "s|/usr/bin/getent|${lib.getExe getent}|" \
-              -i "$cur"
+          substituteInPlace "$cur" \
+            --replace-quiet '/usr/bin/getent' '${lib.getExe getent}' \
+            --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
         done
-
-      ''
-      + lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
-        sed -i "s|Popen(\['manpath'|Popen(\['${lib.getExe' man-db "manpath"}'|" \
-                "$out/share/fish/tools/create_manpage_completions.py"
-        sed -i "s|command manpath|command ${lib.getExe' man-db "manpath"}|"     \
-                "$out/share/fish/functions/man.fish"
+        for cur in $out/share/fish/completions/*.fish; do
+          substituteInPlace "$cur" \
+            --replace-quiet 'awk' '${lib.getExe' gawk "awk"}'
+        done
       ''
       + lib.optionalString useOperatingSystemEtc ''
         tee -a $out/etc/fish/config.fish < ${etcConfigAppendix}
