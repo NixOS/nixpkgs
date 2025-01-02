@@ -43,14 +43,14 @@
 
 buildPythonPackage rec {
   pname = "pillow";
-  version = "11.0.0";
+  version = "11.1.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "python-pillow";
     repo = "pillow";
-    rev = "refs/tags/${version}";
-    hash = "sha256-vWNqzA2ZfJcWexXw790RgyYtP8WDtahoQIX16otCRnk=";
+    tag = version;
+    hash = "sha256-9tcukZIJMheVNBfpppjUcuhvRal7J59iQWgBqkEgJDk=";
   };
 
   build-system = [ setuptools ];
@@ -133,7 +133,7 @@ buildPythonPackage rec {
       ;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://python-pillow.org";
     changelog = "https://pillow.readthedocs.io/en/stable/releasenotes/${version}.html";
     description = "Friendly PIL fork (Python Imaging Library)";
@@ -143,8 +143,7 @@ buildPythonPackage rec {
       supports many file formats, and provides powerful image
       processing and graphics capabilities.
     '';
-    license = licenses.mit-cmu;
-    maintainers = with maintainers; [ hexa ];
+    license = lib.licenses.mit-cmu;
+    maintainers = with lib.maintainers; [ hexa ];
   };
-
 }
