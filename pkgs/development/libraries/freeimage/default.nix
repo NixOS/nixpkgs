@@ -14,7 +14,6 @@
   jxrlib,
   pkg-config,
   fixDarwinDylibNames,
-  autoSignDarwinBinariesHook,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -72,10 +71,8 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       cctools
       fixDarwinDylibNames
-    ]
-    ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64) [
-      autoSignDarwinBinariesHook
     ];
+
   buildInputs = [
     libtiff
     libtiff.dev_private
