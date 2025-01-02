@@ -1,0 +1,23 @@
+diff -Naur terraform.old/internal/command/init.go terraform.new/internal/command/init.go
+--- terraform.old/internal/command/init.go
++++ terraform.new/internal/command/init.go
+@@ -3,6 +3,7 @@
+ import (
+ 	"context"
+ 	"fmt"
++	"os"
+ 	"log"
+ 	"strings"
+ 
+@@ -55,6 +56,11 @@
+ 
+ 	var diags tfdiags.Diagnostics
+ 
++	val, ok := os.LookupEnv("NIX_TERRAFORM_PLUGIN_DIR")
++	if ok {
++		flagPluginPath = append(flagPluginPath, val)
++	}
++
+ 	if len(flagPluginPath) > 0 {
+ 		c.pluginPath = flagPluginPath
+ 	}
