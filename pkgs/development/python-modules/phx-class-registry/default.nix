@@ -4,19 +4,24 @@
   fetchFromGitHub,
   pytestCheckHook,
   pythonOlder,
+  poetry-core,
 }:
 
 buildPythonPackage rec {
   pname = "class-registry";
-  version = "4.1.0";
-  disabled = pythonOlder "3.5";
+  version = "5.1.1";
+  pyproject = true;
+
+  disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "todofixthis";
-    repo = pname;
+    repo = "class-registry";
     rev = "refs/tags/${version}";
-    hash = "sha256-kJbyUzyklVSvW6bBxTTTrY+WhfcV0GUf/+Pzyv+7sEA=";
+    hash = "sha256-MI63b77ydmhQSbtKovla7BCEUjLF43DW80VABjAVEI0=";
   };
+
+  build-system = [ poetry-core ];
 
   nativeCheckInputs = [ pytestCheckHook ];
 
