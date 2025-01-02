@@ -12,8 +12,10 @@ assert (hash == null) -> (src != null);
 let
   atLeast224 = lib.versionAtLeast version "2.24pre";
   atLeast225 = lib.versionAtLeast version "2.25pre";
+  atLeast226 = lib.versionAtLeast version "2.26pre";
 in
 { stdenv
+, Security
 , autoconf-archive
 , autoreconfHook
 , bash
@@ -24,11 +26,13 @@ in
 , busybox-sandbox-shell
 , bzip2
 , callPackage
+, cmake
 , coreutils
 , curl
 , darwin
-, docbook_xsl_ns
 , docbook5
+, docbook_xsl_ns
+, doxygen
 , editline
 , flex
 , git
@@ -45,19 +49,22 @@ in
 , libxslt
 , lowdown
 , lowdown-unsandboxed
-, toml11
 , man
 , mdbook
 , mdbook-linkcheck
-, nlohmann_json
+, meson
+, ninja
 , nixosTests
+, nlohmann_json
 , openssl
 , perl
-, python3
+, perlPackages
 , pkg-config
+, python3
 , rapidcheck
-, Security
+, rsync
 , sqlite
+, toml11
 , util-linuxMinimal
 , xz
 , enableDocumentation ? stdenv.buildPlatform.canExecute stdenv.hostPlatform
@@ -75,7 +82,7 @@ in
 , runCommand
 , pkgs
 }: let
-self = stdenv.mkDerivation {
+self = stdenv.mkDerivation (finalAttrs: {
   pname = "nix";
 
   version = "${version}${suffix}";
@@ -93,28 +100,44 @@ self = stdenv.mkDerivation {
     "shadowstack"
   ] ++ lib.optional stdenv.hostPlatform.isMusl "fortify";
 
-  nativeInstallCheckInputs = lib.optional atLeast224 [ git man ];
-
   nativeBuildInputs = [
     pkg-config
-    autoconf-archive
-    autoreconfHook
     bison
     flex
     jq
-  ] ++ lib.optionals enableDocumentation
-    (if atLeast224 then [
-      (lib.getBin lowdown-unsandboxed)
-      mdbook
-      mdbook-linkcheck
-    ] else [
-      libxslt
-      libxml2
-      docbook_xsl_ns
-      docbook5
-    ])
+  ]
+  ++ lib.optionals (enableDocumentation && atLeast226) [
+    doxygen
+    rsync
+  ]
+  ++ lib.optionals (enableDocumentation && atLeast225) [
+    python3
+  ]
+  ++ lib.optionals (enableDocumentation && atLeast224) [
+    (lib.getBin lowdown-unsandboxed)
+    mdbook
+    mdbook-linkcheck
+  ]
+  ++ lib.optionals (enableDocumentation && !atLeast224) [
+    libxslt
+    libxml2
+    docbook_xsl_ns
+    docbook5
+  ]
   ++ lib.optionals stdenv.hostPlatform.isLinux [
     util-linuxMinimal
+  ]
+  ++ lib.optionals (!atLeast226) [
+    autoconf-archive
+    autoreconfHook
+  ]
+  ++ lib.optionals atLeast226 [
+    meson
+    ninja
+    cmake
+    perl
+    perlPackages.DBDSQLite
+    perlPackages.DBI
   ];
 
   buildInputs = [
@@ -134,8 +157,6 @@ self = stdenv.mkDerivation {
     libgit2
     toml11
     rapidcheck
-  ] ++ lib.optionals (atLeast225 && enableDocumentation) [
-    python3
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     Security
   ] ++ lib.optionals (stdenv.hostPlatform.isx86_64) [
@@ -185,6 +206,13 @@ self = stdenv.mkDerivation {
         --subst-var-by tar ${gnutar}/bin/tar \
         --subst-var-by tr ${coreutils}/bin/tr
       mv tmp/config.nix.in corepkgs/config.nix.in
+    '' +
+    # https://github.com/NixOS/nix/blob/442a2623e48357ff72c77bb11cf2cf06d94d2f90/packaging/dependencies.nix#L69-L83
+    lib.optionalString atLeast226 ''
+      case "$mesonBuildType" in
+      release|minsize) appendToVar mesonFlags "-Db_lto=true"  ;;
+      *)               appendToVar mesonFlags "-Db_lto=false" ;;
+      esac
     '';
 
   configureFlags = [
@@ -216,10 +244,29 @@ self = stdenv.mkDerivation {
   ] ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "PRECOMPILE_HEADERS=0"
     ++ lib.optional (stdenv.hostPlatform.isDarwin) "PRECOMPILE_HEADERS=1";
 
+  mesonBuildType = "release";
+  mesonFlags = lib.optionals atLeast226 [
+    (lib.mesonBool "doc-gen" enableDocumentation)
+    (lib.mesonEnable "tests:perl" (finalAttrs.doCheck && !stdenv.isDarwin))
+    (lib.mesonEnable "cpuid:nix-util" stdenv.hostPlatform.isx86_64)
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [
+    (lib.mesonOption "sandbox-shell:nix-store" "${busybox-sandbox-shell}/bin/busybox")
+  ];
+  mesonCheckFlags = [ "--print-errorlogs" ];
+
   installFlags = [ "sysconfdir=$(out)/etc" ];
 
-  doInstallCheck = true;
+  doCheck = atLeast226;
+  nativeCheckInputs =
+    finalAttrs.nativeInstallCheckInputs
+    ++ lib.optionals (atLeast226 && !stdenv.isDarwin) [
+      perlPackages.Test2Harness
+    ];
+  preCheck = finalAttrs.preInstallCheck;
+
+  doInstallCheck = !atLeast226;
   installCheckTarget = if atLeast224 then "installcheck" else null;
+  nativeInstallCheckInputs = lib.optionals atLeast224 [ git man ];
 
   # socket path becomes too long otherwise
   preInstallCheck = lib.optionalString stdenv.hostPlatform.isDarwin ''
@@ -236,7 +283,8 @@ self = stdenv.mkDerivation {
   '' # TODO: investigate why this broken
   + lib.optionalString (atLeast224 && stdenv.hostPlatform.system == "aarch64-linux") ''
     echo "exit 0" > tests/functional/flakes/show.sh
-  '' + ''
+  ''
+  + ''
     # nixStatic otherwise does not find its man pages in tests.
     export MANPATH=$man/share/man:$MANPATH
   '';
@@ -303,5 +351,5 @@ self = stdenv.mkDerivation {
     outputsToInstall = [ "out" ] ++ optional enableDocumentation "man";
     mainProgram = "nix";
   };
-};
+});
 in self
