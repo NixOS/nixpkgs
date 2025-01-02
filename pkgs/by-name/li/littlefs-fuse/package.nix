@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
   meta = src.meta // {
     description = "FUSE wrapper that puts the littlefs in user-space";
     license = lib.licenses.bsd3;
-    maintainers = with lib.maintainers; [ ehmry ];
     mainProgram = "littlefs-fuse";
     inherit (fuse.meta) platforms;
     # fatal error: 'linux/fs.h' file not found
