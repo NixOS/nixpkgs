@@ -12,11 +12,6 @@ let
     toString
     ;
 
-  inherit (lib.attrsets)
-    mapAttrs'
-    filterAttrs
-    ;
-
   inherit (lib.filesystem)
     pathIsDirectory
     pathIsRegularFile
@@ -26,7 +21,6 @@ let
 
   inherit (lib.strings)
     hasSuffix
-    removeSuffix
     ;
 in
 
@@ -312,11 +306,13 @@ in
     # Type
 
     ```
-    packagesFromDirectoryRecursive :: {
+    packagesFromDirectoryRecursive :: (args :: {
       callPackage :: Path -> {} -> a,
+      newScope? :: AttrSet -> scope,
       directory :: Path,
-      ...
-    } -> AttrSet
+      recurseIntoDirectory? :: (args -> AttrSet) -> args -> AttrSet,
+      recurseArgs? :: Any
+    }) -> AttrSet
     ```
 
     # Inputs
@@ -325,9 +321,36 @@ in
     : The function used to convert a Nix file's path into a leaf of the attribute set.
       It is typically the `callPackage` function, taken from either `pkgs` or a new scope corresponding to the `directory`.
 
+    `newScope`
+    : If present, this function is used by the default `recurseIntoDirectory` to generate a new scope.
+      The arguments are updated with the scope's `callPackage` and `newScope` functions, so packages can require
+      anything in their scope, or in an ancestor of their scope.
+      This argument has no effect when `recurseIntoDirectory` is provided.
+
     `directory`
     : The directory to read package files from.
 
+    `recurseIntoDirectory`
+    : This argument is applied to the function which processes directories.
+    : Equivalently, this function takes `processDir` and `args`, and can modify arguments passed to `processDir`
+      (same as above) before calling it, as well as modify its output (which is then returned by `recurseIntoDirectory`).
+
+      :::{.note}
+      When `newScope` is set, the default `recurseIntoDirectory` is equivalent to:
+      ```nix
+      processDir: { newScope, ... }@args:
+        # create a new scope and mark it `recurseForDerivations`
+        lib.recurseIntoAttrs (lib.makeScope newScope (self:
+          # generate the attrset representing the directory, using the new scope's `callPackage` and `newScope`
+          processDir (args // {
+            inherit (self) callPackage newScope;
+          })
+        ))
+      ```
+      :::
+
+    `recurseArgs`
+    : Optional argument, which can be hold data used by `recurseIntoDirectory`
 
     # Examples
     :::{.example}
@@ -348,12 +371,10 @@ in
     ::::{.example}
     ## Create a scope for the nix files found in a directory
     ```nix
-    lib.makeScope pkgs.newScope (
-      self: packagesFromDirectoryRecursive {
-        inherit (self) callPackage;
-        directory = ./my-packages;
-      }
-    )
+    packagesFromDirectoryRecursive {
+      inherit (pkgs) callPackage newScope;
+      directory = ./my-packages;
+    }
     => { ... }
     ```
 
@@ -372,46 +393,112 @@ in
     :::{.note}
     `a.nix` cannot directly take as inputs packages defined in a child directory, such as `b1`.
     :::
+    ::::
 
-    :::{.warning}
-    As of now, `lib.packagesFromDirectoryRecursive` cannot create nested scopes for sub-directories.
+    ::::{.example}
+    ## Avoid marking with `recurseIntoAttrs` when recursing into a directory
+    ```nix
+    packagesFromDirectoryRecursive {
+      inherit (pkgs) callPackage;
+      directory = ./my-packages;
+      recurseIntoDirectory = lib.id;
+    }
+    ```
+    :::{.note}
+    The following may *seem* equivalent, but is less robust:
+    ```nix
+    lib.dontRecurseIntoAttrs (lib.packagesFromDirectoryRecursive { ... })
+    ```
 
-    In particular, files under `b/` can only require (as inputs) other files under `my-packages`,
-    but not to those in the same directory, nor those in a parent directory; e.g, `b2.nix` cannot directly
-    require `b1`.
+    There are 2 key differences:
+    - this fails to evaluate when `directory` contains a `default.nix` which does not evaluate to an attrset;
+    - `lib.dontRecurseIntoAttrs` only marks the root of the attrset as not to be searched for derivations:
+      in particular, if any child attrset is exposed via another attr-path, it may be recursed into.
     :::
     ::::
+
+    :::{.example}
+    ## Express custom recursion behaviour with `recurseIntoDirectory`
+    For instance, only mark attrsets produced by `packagesFromDirectoryRecursive` with `recurseForDerivations`
+    if they (transitively) contain derivations.
+
+    ```nix
+    packagesFromDirectoryRecursive {
+      inherit (pkgs) callPackage;
+      directory = ./my-packages;
+
+      recurseIntoDirectory = processDir: args: let
+        result = processDir args;
+      in result // {
+        recurseForDerivations = with lib;
+          any (child: isDerivation child || child.recurseForDerivations or false) result;
+      };
+    }
+    ```
+    :::
   */
   packagesFromDirectoryRecursive =
+    let
+      inherit (lib) concatMapAttrs makeScope recurseIntoAttrs removeSuffix;
+      inherit (lib.path) append;
+
+      # Generate an attrset corresponding to a given directory.
+      # This function is outside `packagesFromDirectoryRecursive`'s lambda expression,
+      #  to prevent accidentally using its parameters.
+      processDir = { callPackage, directory, ... }@args:
+        concatMapAttrs (name: type:
+          # for each directory entry
+          let path = append directory name; in
+          if type == "directory" then {
+            # recurse into directories
+            "${name}" = packagesFromDirectoryRecursive (args // {
+              directory = path;
+            });
+          } else if type == "regular" && hasSuffix ".nix" name then {
+            # call .nix files
+            "${removeSuffix ".nix" name}" = callPackage path {};
+          } else if type == "regular" then {
+            # ignore non-nix files
+          } else throw ''
+            lib.filesystem.packagesFromDirectoryRecursive: Unsupported file type ${type} at path ${toString path}
+          ''
+        ) (builtins.readDir directory);
+    in
     {
       callPackage,
+      newScope ? throw "lib.packagesFromDirectoryRecursive: newScope wasn't passed in args",
       directory,
-      ...
-    }:
+      # recurseIntoDirectory can modify the function used when processing directory entries
+      #  and recurseArgs can (optionally) hold data for its use ; see nixdoc above
+      recurseArgs ? throw "lib.packagesFromDirectoryRecursive: recurseArgs wasn't passed in args",
+      recurseIntoDirectory ?
+        if args ? newScope then
+          # `processDir` is the same function as defined above
+          # `args` are the arguments passed to (this recursive call of) `packagesFromDirectoryRecursive`
+          processDir: { newScope, ... }@args:
+            # Create a new scope and mark it `recurseForDerivations`.
+            # This lets the packages refer to each other.
+            # See:
+            #  [lib.makeScope](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope) and
+            #  [lib.recurseIntoAttrs](https://nixos.org/manual/nixpkgs/unstable/#function-library-lib.customisation.makeScope)
+            recurseIntoAttrs (makeScope newScope (self:
+              # generate the attrset representing the directory, using the new scope's `callPackage` and `newScope`
+              processDir (args // {
+                inherit (self) callPackage newScope;
+              })
+            ))
+        else
+          # otherwise, apply `recurseIntoAttrs` when recursing into a directory
+          processDir: args:
+          recurseIntoAttrs (processDir args)
+        ,
+    }@args:
     let
-      inherit (lib) concatMapAttrs removeSuffix;
-      inherit (lib.path) append;
       defaultPath = append directory "package.nix";
     in
     if pathExists defaultPath then
       # if `${directory}/package.nix` exists, call it directly
       callPackage defaultPath {}
-    else concatMapAttrs (name: type:
-      # otherwise, for each directory entry
-      let path = append directory name; in
-      if type == "directory" then {
-        # recurse into directories
-        "${name}" = packagesFromDirectoryRecursive {
-          inherit callPackage;
-          directory = path;
-        };
-      } else if type == "regular" && hasSuffix ".nix" name then {
-        # call .nix files
-        "${removeSuffix ".nix" name}" = callPackage path {};
-      } else if type == "regular" then {
-        # ignore non-nix files
-      } else throw ''
-        lib.filesystem.packagesFromDirectoryRecursive: Unsupported file type ${type} at path ${toString path}
-      ''
-    ) (builtins.readDir directory);
+    else
+      recurseIntoDirectory processDir args;
 }
