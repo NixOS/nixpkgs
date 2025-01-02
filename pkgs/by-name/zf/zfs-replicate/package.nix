@@ -1,7 +1,7 @@
 {
-  python3Packages,
-  fetchPypi,
   lib,
+  python3Packages,
+  fetchFromGitHub,
 }:
 
 python3Packages.buildPythonApplication rec {
@@ -9,13 +9,20 @@ python3Packages.buildPythonApplication rec {
   version = "4.0.0";
   pyproject = true;
 
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-9WD2IW7GRxMF7hOa8HTI/+cuOjVaYMT4OnrYU/xFgME=";
+  src = fetchFromGitHub {
+    owner = "alunduil";
+    repo = "zfs-replicate";
+    tag = "v${version}";
+    hash = "sha256-VajMSoFZ4SQXpuF1Lo6S9IhxvspCfUwpNw5zg16uA3M=";
   };
 
-  nativeBuildInputs = with python3Packages; [
+  build-system = with python3Packages; [
     poetry-core
+  ];
+
+  dependencies = with python3Packages; [
+    click
+    stringcase
   ];
 
   nativeCheckInputs = with python3Packages; [
@@ -24,18 +31,14 @@ python3Packages.buildPythonApplication rec {
     pytest-cov-stub
   ];
 
-  propagatedBuildInputs = with python3Packages; [
-    click
-    stringcase
-  ];
-
   doCheck = true;
 
-  meta = with lib; {
-    homepage = "https://github.com/alunduil/zfs-replicate";
+  meta = {
     description = "ZFS Snapshot Replication";
+    homepage = "https://github.com/alunduil/zfs-replicate";
+    changelog = "https://github.com/alunduil/zfs-replicate/blob/v${version}/CHANGELOG.md";
     mainProgram = "zfs-replicate";
-    license = licenses.bsd2;
-    maintainers = with maintainers; [ alunduil ];
+    license = lib.licenses.bsd2;
+    maintainers = with lib.maintainers; [ alunduil ];
   };
 }
