@@ -17,6 +17,7 @@
   pytest-asyncio,
   pytest-localserver,
   pytestCheckHook,
+  pythonAtLeast,
   pythonOlder,
   pyu2f,
   requests,
@@ -100,6 +101,9 @@ buildPythonPackage rec {
     "tests/transport/test_requests.py"
     "tests/transport/test_urllib3.py"
     "tests/transport/test__custom_tls_signer.py"
+  ] ++ lib.optionals (pythonAtLeast "3.13") [
+    # oauth2client depends on the dead and remove cgi battery
+    "tests/test__oauth2client.py"
   ];
 
   __darwinAllowLocalNetworking = true;
