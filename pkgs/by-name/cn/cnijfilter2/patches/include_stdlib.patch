@@ -1,0 +1,12 @@
+Only in b/lgmon3/src: .ccls-cache
+diff --color -ur a/lgmon3/src/keytext.c b/lgmon3/src/keytext.c
+--- a/lgmon3/src/keytext.c	2022-01-08 02:16:35.000000000 +0100
++++ b/lgmon3/src/keytext.c	2025-01-02 09:09:18.795934055 +0100
+@@ -37,6 +37,7 @@
+ #include <unistd.h>
+ #include <libxml/parser.h>	/* Ver.2.80 */
+ #include <string.h>
++#include <stdlib.h>
+ 
+ #include "keytext.h"
+ 
