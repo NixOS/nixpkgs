@@ -14140,6 +14140,8 @@ self: super: with self; {
 
   riden = callPackage ../development/python-modules/riden { };
 
+  rigour = callPackage ../development/python-modules/rigour { };
+
   ring-doorbell = callPackage ../development/python-modules/ring-doorbell { };
 
   rio-tiler = callPackage ../development/python-modules/rio-tiler { };
