@@ -10,6 +10,20 @@
   melpaBuild,
   copilot-node-server,
 }:
+let
+  # The Emacs package isn't compatible with the latest
+  # copilot-node-server so we have to set a specific revision
+  # https://github.com/copilot-emacs/copilot.el/issues/344
+  pinned-copilot-node-server = copilot-node-server.overrideAttrs (old: rec {
+    version = "1.27.0";
+    src = fetchFromGitHub {
+      owner = "jfcherng";
+      repo = "copilot-node-server";
+      rev = version;
+      hash = "sha256-Ds2agoO7LBXI2M1dwvifQyYJ3F9fm9eV2Kmm7WITgyo=";
+    };
+  });
+in
 melpaBuild {
   pname = "copilot";
   version = "0-unstable-2024-12-28";
@@ -25,7 +39,7 @@ melpaBuild {
 
   patches = [
     (replaceVars ./specify-copilot-install-dir.patch {
-      copilot-node-server = copilot-node-server;
+      copilot-node-server = pinned-copilot-node-server;
     })
   ];
   packageRequires = [
