@@ -1,0 +1,73 @@
+diff --git a/src/libLfunction/Lcommon.h b/src/libLfunction/Lcommon.h
+index 873778c..d361b91 100644
+--- a/src/libLfunction/Lcommon.h
++++ b/src/libLfunction/Lcommon.h
+@@ -6,7 +6,7 @@
+ #define precise(T) typename precise<T>::precise_type
+ template<class T> struct precise { typedef T precise_type; };
+ template<> struct precise<double> { typedef Double precise_type; };
+-template<> struct precise<complex<double> > { typedef Complex precise_type; };
++template<> struct precise<lcalc::complex<double> > { typedef Complex precise_type; };
+ template<> struct precise<long long> { typedef long long precise_type; };
+ typedef long long Long;
+ 
+diff --git a/src/libLfunction/Lcomplex.h b/src/libLfunction/Lcomplex.h
+index 363bbf4..6e38186 100644
+--- a/src/libLfunction/Lcomplex.h
++++ b/src/libLfunction/Lcomplex.h
+@@ -40,10 +40,8 @@
+  *  in your programs, rather than any of the "st[dl]_*.h" implementation files.
+  */
+ 
+-#ifndef _CPP_COMPLEX
+-#define _CPP_COMPLEX	1
+-
+-#pragma GCC system_header
++#ifndef Lcomplex_H
++#define Lcomplex_H
+ 
+ //no longer include:
+ //#include <bits/cpp_type_traits.h>  only thing used was is_floating... 
+@@ -56,8 +54,19 @@
+ #include <cmath>
+ #include <sstream>
+ 
+-namespace std
++namespace lcalc
+ {
++  using std::abs;
++  using std::atan2;
++  using std::cos;
++  using std::cosh;
++  using std::sin;
++  using std::sinh;
++  using std::sqrt;
++  using std::exp;
++  using std::log;
++  using std::max;
++
+   // Forward declarations
+   template<typename _Tp> class complex;
+   template<> class complex<float>;
+@@ -1193,6 +1202,6 @@ namespace std
+   inline
+   complex<long double>::complex(const complex<double>& __z)
+   : _M_value(_ComplexT(__z._M_value)) { }
+-} // namespace std
++} // namespace lc
+ 
+-#endif	/* _CPP_COMPLEX */
++#endif
+diff --git a/src/libLfunction/Lglobals.h b/src/libLfunction/Lglobals.h
+index 8c6300b..21ba62c 100644
+--- a/src/libLfunction/Lglobals.h
++++ b/src/libLfunction/Lglobals.h
+@@ -53,7 +53,7 @@ using namespace std;
+ 
+ 
+ #include "Lcomplex.h"     //for complex numbers
+-typedef complex<Double> Complex;
++typedef lcalc::complex<Double> Complex;
+ 
+ #include "Lcommon.h"
+ 
