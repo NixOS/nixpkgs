@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-lambda";
-  version = "1.5.0";
+  version = "1.6.1";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-58kVtwBZEAlv9eVesqmWMZ+KxAwEiGMm8mCf9X5tPMI=";
+    hash = "sha256-O4yJ+6Uk4dHjCDp28JbUtL/B+v9JJEGkinZ4MsIpjUk=";
   };
 
-  cargoHash = "sha256-DoMIVpYtEHvYSW2THpZFdhoFI0zjC70hYnwnzGwkJ4Q=";
+  cargoHash = "sha256-vK37S5hLuHYimTljo0i6iRq2kt/r0kZ6Uqw2wQMhSGc=";
 
   nativeCheckInputs = [ cacert ];
 
@@ -41,11 +41,6 @@ rustPlatform.buildRustPackage rec {
       CoreServices
       Security
     ];
-
-  checkFlags = [
-    # Tests disabled because they access the network.
-    "--skip=test_download_example"
-  ];
 
   # Remove files that don't make builds reproducible:
   # - Remove build.rs file that adds the build date to the version.

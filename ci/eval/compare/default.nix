@@ -96,7 +96,12 @@ let
           rebuildsByKernel
           rebuildCountByKernel
           ;
-        labels = getLabels rebuildCountByKernel;
+        labels =
+          (getLabels rebuildCountByKernel)
+          # Adds "10.rebuild-*-stdenv" label if the "stdenv" attribute was changed
+          ++ lib.mapAttrsToList (kernel: _: "10.rebuild-${kernel}-stdenv") (
+            lib.filterAttrs (_: kernelRebuilds: kernelRebuilds ? "stdenv") rebuildsByKernel
+          );
       }
     );
 in

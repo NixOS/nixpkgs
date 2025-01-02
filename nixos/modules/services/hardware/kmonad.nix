@@ -15,6 +15,7 @@ let
       options = {
         name = lib.mkOption {
           type = lib.types.str;
+          default = name;
           example = "laptop-internal";
           description = "Keyboard name.";
         };
@@ -35,16 +36,16 @@ let
             Since KMonad runs as an unprivileged user, it may sometimes
             need extra permissions in order to read the keyboard device
             file.  If your keyboard's device file isn't in the input
-            group you'll need to list its group in this option.
+            group, you'll need to list its group in this option.
           '';
         };
 
         defcfg = {
           enable = lib.mkEnableOption ''
-            Automatically generate the defcfg block.
+            automatic generation of the defcfg block.
 
-            When this is option is set to true the config option for
-            this keyboard should not include a defcfg block.
+            When this option is set to true, the config option for
+            this keyboard should not include a defcfg block
           '';
 
           compose = {
@@ -55,15 +56,15 @@ let
             };
 
             delay = lib.mkOption {
-              type = lib.types.int;
+              type = lib.types.ints.unsigned;
               default = 5;
               description = "The delay (in milliseconds) between compose key sequences.";
             };
           };
 
-          fallthrough = lib.mkEnableOption "Re-emit unhandled key events.";
+          fallthrough = lib.mkEnableOption "re-emitting unhandled key events";
 
-          allowCommands = lib.mkEnableOption "Allow keys to run shell commands.";
+          allowCommands = lib.mkEnableOption "keys to run shell commands";
         };
 
         config = lib.mkOption {
@@ -71,11 +72,9 @@ let
           description = "Keyboard configuration.";
         };
       };
-
-      config = {
-        name = lib.mkDefault name;
-      };
     };
+
+  mkName = name: "kmonad-" + name;
 
   # Create a complete KMonad configuration file:
   mkCfg =
@@ -84,7 +83,7 @@ let
       defcfg = ''
         (defcfg
           input  (device-file "${keyboard.device}")
-          output (uinput-sink "kmonad-${keyboard.name}")
+          output (uinput-sink "${mkName keyboard.name}")
           ${lib.optionalString (keyboard.defcfg.compose.key != null) ''
             cmp-seq ${keyboard.defcfg.compose.key}
             cmp-seq-delay ${toString keyboard.defcfg.compose.delay}
@@ -95,9 +94,9 @@ let
       '';
     in
     pkgs.writeTextFile {
-      name = "kmonad-${keyboard.name}.cfg";
+      name = "${mkName keyboard.name}.kbd";
       text = lib.optionalString keyboard.defcfg.enable (defcfg + "\n") + keyboard.config;
-      checkPhase = "${cfg.package}/bin/kmonad -d $out";
+      checkPhase = "${lib.getExe cfg.package} -d $out";
     };
 
   # Build a systemd path config that starts the service below when a
@@ -105,7 +104,7 @@ let
   mkPath =
     keyboard:
     let
-      name = "kmonad-${keyboard.name}";
+      name = mkName keyboard.name;
     in
     lib.nameValuePair name {
       description = "KMonad trigger for ${keyboard.device}";
@@ -129,7 +128,7 @@ let
         ++ cfg.extraArgs
         ++ [ "${mkCfg keyboard}" ];
     in
-    lib.nameValuePair "kmonad-${keyboard.name}" {
+    lib.nameValuePair (mkName keyboard.name) {
       description = "KMonad for ${keyboard.device}";
       script = lib.escapeShellArgs cmd;
       unitConfig = {
@@ -155,13 +154,26 @@ let
           config.users.groups.uinput.name
         ] ++ keyboard.extraGroups;
       };
+      # make sure the new config is used after nixos-rebuild switch
+      # stopIfChanged controls[0] how a service is "restarted" during
+      # nixos-rebuild switch.  By default, stopIfChanged is true, which stops
+      # the old service and then starts the new service after config updates.
+      # Since we use path-based activation[1] here, the service unit will
+      # immediately[2] be started by the path unit.  Probably that start is
+      # before config updates, whcih causes the service unit to use the old
+      # config after nixos-rebuild switch.  Setting stopIfChanged to false works
+      # around this issue by restarting the service after config updates.
+      # [0]: https://nixos.org/manual/nixos/unstable/#sec-switching-systems
+      # [1]: man 7 daemon
+      # [2]: man 5 systemd.path
+      stopIfChanged = false;
     };
 in
 {
   options.services.kmonad = {
-    enable = lib.mkEnableOption "KMonad: An advanced keyboard manager.";
+    enable = lib.mkEnableOption "KMonad: an advanced keyboard manager";
 
-    package = lib.mkPackageOption pkgs "kmonad" { };
+    package = lib.mkPackageOption pkgs "KMonad" { default = "kmonad"; };
 
     keyboards = lib.mkOption {
       type = lib.types.attrsOf (lib.types.submodule keyboard);
@@ -187,5 +199,12 @@ in
       paths = lib.mapAttrs' (_: mkPath) cfg.keyboards;
       services = lib.mapAttrs' (_: mkService) cfg.keyboards;
     };
+  };
+
+  meta = {
+    maintainers = with lib.maintainers; [
+      linj
+      rvdp
+    ];
   };
 }

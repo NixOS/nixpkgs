@@ -1952,8 +1952,6 @@ self: super: with self; {
 
   bugwarrior = callPackage ../development/python-modules/bugwarrior { };
 
-  bugz = callPackage ../development/python-modules/bugz { };
-
   buienradar = callPackage ../development/python-modules/buienradar { };
 
   build = callPackage ../development/python-modules/build { };
@@ -4879,6 +4877,8 @@ self: super: with self; {
 
   oelint-parser = callPackage ../development/python-modules/oelint-parser { };
 
+  ohmepy = callPackage ../development/python-modules/ohmepy { };
+
   openstep-parser = callPackage ../development/python-modules/openstep-parser { };
 
   openstep-plist = callPackage ../development/python-modules/openstep-plist { };
@@ -4909,7 +4909,7 @@ self: super: with self; {
 
   formulaic = callPackage ../development/python-modules/formulaic { };
 
-  foundationdb71 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb71; };
+  foundationdb73 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb73; };
 
   fountains = callPackage ../development/python-modules/fountains { };
 
@@ -5739,6 +5739,8 @@ self: super: with self; {
   habluetooth = callPackage ../development/python-modules/habluetooth { };
 
   habitipy = callPackage ../development/python-modules/habitipy { };
+
+  habiticalib = callPackage ../development/python-modules/habiticalib { };
 
   hachoir = callPackage ../development/python-modules/hachoir { };
 
@@ -13189,7 +13191,7 @@ self: super: with self; {
 
   python-mapnik = callPackage ../development/python-modules/python-mapnik rec {
     inherit (pkgs) pkg-config cairo icu libjpeg libpng libtiff libwebp proj zlib;
-    boost = pkgs.boost182.override {
+    boost = pkgs.boost.override {
       enablePython = true;
       inherit python;
     };
@@ -13828,7 +13830,7 @@ self: super: with self; {
   rdflib = callPackage ../development/python-modules/rdflib { };
 
   rdkit = callPackage ../development/python-modules/rdkit {
-    boost = pkgs.boost182.override {
+    boost = pkgs.boost.override {
       enablePython = true;
       inherit python;
     };
@@ -16425,6 +16427,8 @@ self: super: with self; {
 
   trove-classifiers = callPackage ../development/python-modules/trove-classifiers { };
 
+  trubar = callPackage ../development/python-modules/trubar { };
+
   trueskill = callPackage ../development/python-modules/trueskill { };
 
   truncnorm = callPackage ../development/python-modules/truncnorm { };
@@ -18368,7 +18372,7 @@ self: super: with self; {
 
   zarr = callPackage ../development/python-modules/zarr { };
 
-  zc-buildout = callPackage ../development/python-modules/buildout { };
+  zc-buildout = callPackage ../development/python-modules/zc-buildout { };
 
   zc-lockfile = callPackage ../development/python-modules/zc-lockfile { };
 
