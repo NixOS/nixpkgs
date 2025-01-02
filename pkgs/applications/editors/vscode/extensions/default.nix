@@ -4287,6 +4287,8 @@ let
         };
       };
 
+      saoudrizwan.claude-dev = callPackage ./saoudrizwan.claude-dev { };
+
       sainnhe.gruvbox-material = buildVscodeMarketplaceExtension {
         mktplcRef = {
           name = "gruvbox-material";
