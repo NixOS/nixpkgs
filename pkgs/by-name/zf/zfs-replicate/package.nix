@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   python3Packages,
   fetchFromGitHub,
   lz4,
@@ -42,6 +43,11 @@ python3Packages.buildPythonApplication rec {
   ];
 
   doCheck = true;
+
+  disabledTestPaths = lib.optionals stdenv.isDarwin [
+    # AssertionError: Expected SystemExit or FileNotFoundError
+    "zfs_test/replicate_test/cli_test/main_test.py"
+  ];
 
   meta = {
     description = "ZFS Snapshot Replication";
