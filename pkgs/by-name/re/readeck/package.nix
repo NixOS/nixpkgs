@@ -8,7 +8,7 @@
 }:
 
 let
-  
+
   file-compose = buildGoModule {
     pname = "file-compose";
     version = "unstable-2023-10-21";
