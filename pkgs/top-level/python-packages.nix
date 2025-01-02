@@ -10647,6 +10647,8 @@ self: super: with self; {
 
   pysequoia = callPackage ../development/python-modules/pysequoia { };
 
+  pyseries = callPackage ../development/python-modules/pyseries { };
+
   pyschemes = callPackage ../development/python-modules/pyschemes { };
 
   pyschlage = callPackage ../development/python-modules/pyschlage { };
@@ -11616,6 +11618,8 @@ self: super: with self; {
   pyecotrend-ista = callPackage ../development/python-modules/pyecotrend-ista { };
 
   pyecowitt = callPackage ../development/python-modules/pyecowitt { };
+
+  pyedflib = callPackage ../development/python-modules/pyedflib { };
 
   pyedimax = callPackage ../development/python-modules/pyedimax { };
 
