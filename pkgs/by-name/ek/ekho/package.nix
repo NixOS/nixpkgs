@@ -11,7 +11,6 @@
   espeak-ng,
   sonic,
   utf8cpp,
-  darwin,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -47,9 +46,9 @@ stdenv.mkDerivation (finalAttrs: {
     espeak-ng
     sonic
     utf8cpp
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ darwin.apple_sdk.frameworks.AudioUnit ];
+  ];
 
-  meta = with lib; {
+  meta = {
     description = "Chinese text-to-speech software";
     homepage = "http://www.eguidedog.net/ekho.php";
     longDescription = ''
@@ -59,9 +58,9 @@ stdenv.mkDerivation (finalAttrs: {
       (a dialect in Taiwan), Tibetan, Ngangien (an ancient Chinese before
       Yuan Dynasty) and Korean (in trial).
     '';
-    license = licenses.gpl2Plus;
-    platforms = platforms.linux ++ platforms.darwin;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.gpl2Plus;
+    platforms = lib.platforms.linux ++ lib.platforms.darwin;
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "ekho";
   };
 })

@@ -12,13 +12,13 @@
 
 buildGoModule rec {
   pname = "orbiton";
-  version = "2.68.4";
+  version = "2.68.6";
 
   src = fetchFromGitHub {
     owner = "xyproto";
     repo = "orbiton";
-    rev = "v${version}";
-    hash = "sha256-VEYeC3gtjBxkDYH/fEsdKtIInB8E2pcHokinspdj10Q=";
+    tag = "v${version}";
+    hash = "sha256-7h8U6Ye5Jyf0UmV/+6yHv9QBEtxYHlDBq+T09tmywnM=";
   };
 
   vendorHash = null;
@@ -48,11 +48,11 @@ buildGoModule rec {
       wrapProgram $out/bin/og --prefix PATH : $out/bin
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Config-free text editor and IDE limited to VT100";
     homepage = "https://orbiton.zip";
-    license = licenses.bsd3;
-    maintainers = with maintainers; [ sikmir ];
+    license = lib.licenses.bsd3;
+    maintainers = with lib.maintainers; [ sikmir ];
     mainProgram = "o";
   };
 }

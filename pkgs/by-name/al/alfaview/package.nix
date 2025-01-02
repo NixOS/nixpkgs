@@ -1,15 +1,15 @@
 { stdenv, lib, fetchurl, dpkg, autoPatchelfHook, makeWrapper, wrapGAppsHook3
 , alsa-lib, dbus, fontconfig, freetype, glib, gst_all_1, libGL
 , libinput, libpulseaudio, libsecret, libtiff, libxkbcommon
-, mesa, openssl, systemd, xorg }:
+, libgbm, openssl, systemd, xorg }:
 
 stdenv.mkDerivation rec {
   pname = "alfaview";
-  version = "9.18.1";
+  version = "9.19.0";
 
   src = fetchurl {
     url = "https://assets.alfaview.com/stable/linux/deb/${pname}_${version}.deb";
-    hash = "sha256-O0lFDyIL+BJBRfPKsEm7+sdoyPBojgN3uVSe6e75HqI=";
+    hash = "sha256-o0sB+JLwemUNRflp8cR0exc5QvCkpxIAVd/g4vwix6Q=";
   };
 
   nativeBuildInputs = [
@@ -34,7 +34,7 @@ stdenv.mkDerivation rec {
     libsecret
     libtiff
     libxkbcommon
-    mesa
+    libgbm
     openssl
     stdenv.cc.cc
     systemd

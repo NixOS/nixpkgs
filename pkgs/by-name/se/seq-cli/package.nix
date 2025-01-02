@@ -18,7 +18,7 @@ buildDotnetModule (finalAttrs: {
   };
 
   projectFile = "src/SeqCli/SeqCli.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   dotnetInstallFlags = "-f net8.0";
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;

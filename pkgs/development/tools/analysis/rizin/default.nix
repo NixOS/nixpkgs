@@ -29,11 +29,11 @@
 let
   rizin = stdenv.mkDerivation rec {
     pname = "rizin";
-    version = "0.7.3";
+    version = "0.7.4";
 
     src = fetchurl {
       url = "https://github.com/rizinorg/rizin/releases/download/v${version}/rizin-src-v${version}.tar.xz";
-      hash = "sha256-4O0lraa+QgmNONqczvS++9VJ5HfoD43/pcobj/n72nQ=";
+      hash = "sha256-9xGJEOXchDw4uqPgCzDsAZoc3VwTK6K8Fs8MdJdjEgE=";
     };
 
     mesonFlags = [

@@ -23,14 +23,14 @@
 
 buildPythonPackage rec {
   pname = "bayesian-optimization";
-  version = "2.0.0";
+  version = "2.0.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bayesian-optimization";
     repo = "BayesianOptimization";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-XAO+UeHsOFAmUXqzMY/Iws1E738ZnU4Wz7E4YNIeGKY=";
+    tag = "v${version}";
+    hash = "sha256-7XjbW/pKe5pbSDpoXdUxm/eRlD+KipCVLMEl5q0hjxo=";
   };
 
   build-system = [ poetry-core ];

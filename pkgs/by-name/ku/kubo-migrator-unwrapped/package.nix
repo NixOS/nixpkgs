@@ -23,7 +23,7 @@ buildGoModule rec {
   doCheck = false;
 
   meta = {
-    description = "Run the appripriate migrations for migrating the filesystem repository of Kubo (migrations not included)";
+    description = "Run the appropriate migrations for migrating the filesystem repository of Kubo (migrations not included)";
     homepage = "https://github.com/ipfs/fs-repo-migrations";
     license = lib.licenses.mit;
     platforms = lib.platforms.unix;

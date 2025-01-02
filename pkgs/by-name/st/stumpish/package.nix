@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  substituteAll,
+  replaceVars,
   fetchFromGitHub,
   gnused,
   ncurses,
@@ -28,8 +28,7 @@ stdenv.mkDerivation {
   ];
 
   patches = [
-    (substituteAll {
-      src = ./paths.patch;
+    (replaceVars ./paths.patch {
       sed = "${gnused}/bin/sed";
       xprop = "${xorg.xprop}/bin/xprop";
       rlwrap = "${rlwrap}/bin/rlwrap";

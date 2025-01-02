@@ -30,7 +30,7 @@
 let
   versions = callPackage ./versions.nix { };
 
-  matching-versions = lib.sort (v1: v2: lib.versionAtLeast v1.version v2.version) (
+  matching-versions = lib.sort (v1: v2: lib.versionOlder v2.version v1.version) (
     lib.filter (
       v: v.lang == lang && (version == null || isMatching v.version version) && matchesDoc v
     ) versions

@@ -45,6 +45,9 @@ stdenv.mkDerivation (finalAttrs: {
     })
   ];
 
+  # Fix build with gcc 14
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   nativeBuildInputs = [
     pkg-config
     intltool

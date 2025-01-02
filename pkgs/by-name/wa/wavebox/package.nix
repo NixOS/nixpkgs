@@ -41,7 +41,7 @@
   libkrb5,
   libdrm,
   libglvnd,
-  mesa,
+  libgbm,
   libxkbcommon,
   pipewire,
   wayland,
@@ -140,7 +140,7 @@ let
       libkrb5
       libdrm
       libglvnd
-      mesa
+      libgbm
       coreutils
       libxkbcommon
       pipewire

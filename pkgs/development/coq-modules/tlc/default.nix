@@ -2,6 +2,7 @@
   lib,
   mkCoqDerivation,
   coq,
+  stdlib,
   version ? null,
 }:
 
@@ -36,6 +37,8 @@
   release."20210316".sha256 = "1hlavnx20lxpf2iydbbxqmim9p8wdwv4phzp9ypij93yivih0g4a";
   release."20200328".sha256 = "16vzild9gni8zhgb3qhmka47f8zagdh03k6nssif7drpim8233lx";
   release."20181116".sha256 = "032lrbkxqm9d3fhf6nv1kq2z0mqd3czv3ijlbsjwnfh12xck4vpl";
+
+  propagatedBuildInputs = [ stdlib ];
 
   meta = with lib; {
     homepage = "http://www.chargueraud.org/softs/tlc/";

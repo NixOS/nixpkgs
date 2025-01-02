@@ -1,59 +1,72 @@
 {
-  fetchurl,
   lib,
   stdenv,
+  fetchFromGitHub,
+  makeRustPlatform,
+  rustc,
+  cargo,
+  llvmPackages,
+  cmake,
+  gcc,
+
+  # gcc compile error at deps: aws-lc-sys, function 'memcpy' inlined from 'OPENSSL_memcpy'
+  # error: '__builtin_memcpy' specified bound exceeds maximum object size
+  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=91397
+  useRustPlatform ? makeRustPlatform {
+    inherit rustc cargo;
+    inherit (llvmPackages) stdenv;
+  },
 }:
 
-let
-  version = "1.9.0";
-  # nixpkgs-update: no auto update
-
-  suffix =
-    {
-      x86_64-linux = "x86_64";
-      aarch64-linux = "aarch64";
-    }
-    ."${stdenv.hostPlatform.system}" or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
-
-  baseurl = "https://github.com/firecracker-microvm/firecracker/releases/download";
-
-  dlbin =
-    hash:
-    fetchurl {
-      url = "${baseurl}/v${version}/firecracker-v${version}-${suffix}.tgz";
-      hash =
-        hash."${stdenv.hostPlatform.system}" or (throw "unsupported system ${stdenv.hostPlatform.system}");
-    };
-
-in
-stdenv.mkDerivation {
+useRustPlatform.buildRustPackage rec {
   pname = "firecracker";
-  inherit version;
+  version = "1.9.1";
 
-  sourceRoot = ".";
-  src = dlbin {
-    x86_64-linux = "sha256-lcE3QMfKGm37QOD1HNCp7v7h8iPNLDU4dV0Dw6m6Ujc=";
-    aarch64-linux = "sha256-xVZOdt7CuOgJLFLw+KTF9FzzF5HpWpMC9DYKdx33j2k=";
+  src = fetchFromGitHub {
+    owner = "firecracker-microvm";
+    repo = "firecracker";
+    rev = "v${version}";
+    hash = "sha256-NgT06Xfb6j+d5EcqFjQeaiY08uJJjmrddzdwSoqpKbQ=";
   };
 
-  dontConfigure = true;
+  cargoLock = {
+    lockFile = ./Cargo.lock;
+    outputHashes = {
+      "micro_http-0.1.0" = "sha256-bso39jUUyhlNutUxHw8uHtKWQIHmoikfQ5O3RIePboo=";
+    };
+  };
 
-  buildPhase = ''
-    mv release-v${version}-${suffix}/firecracker-v${version}-${suffix} firecracker
-    mv release-v${version}-${suffix}/jailer-v${version}-${suffix} jailer
-    chmod +x firecracker jailer
-  '';
+  nativeBuildInputs = [
+    cmake
+    gcc
+    useRustPlatform.bindgenHook
+  ];
 
-  doCheck = true;
-  checkPhase = ''
-    ./firecracker --version
-    ./jailer --version
-  '';
+  cargoBuildFlags = [ "--workspace" ];
+
+  checkFlags = [
+    # requires /sys/devices/virtual/dmi
+    "--skip=fingerprint::dump::tests::test_read_valid_sysfs_file"
+    # requires /dev/kvm
+    "--skip=template::dump::tests::test_dump"
+    "--skip=tests::test_fingerprint_dump_command"
+    "--skip=tests::test_template_dump_command"
+    "--skip=tests::test_template_verify_command"
+    "--skip=utils::tests::test_build_microvm"
+    # requires seccomp == 0
+    "--skip=tests::test_filter_apply"
+  ];
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/bin
-    install -D firecracker $out/bin/firecracker
-    install -D jailer      $out/bin/jailer
+    releaseDir="build/cargo_target/${stdenv.hostPlatform.rust.rustcTarget}/release"
+    for bin in $(find $releaseDir -maxdepth 1 -type f -executable); do
+      install -Dm555 -t $out/bin $bin
+    done
+
+    runHook postInstall
   '';
 
   meta = with lib; {
@@ -62,11 +75,9 @@ stdenv.mkDerivation {
     changelog = "https://github.com/firecracker-microvm/firecracker/releases/tag/v${version}";
     mainProgram = "firecracker";
     license = licenses.asl20;
-    platforms = [
-      "x86_64-linux"
-      "aarch64-linux"
-    ];
+    platforms = lib.platforms.linux;
     maintainers = with maintainers; [
+      usertam
       thoughtpolice
       qjoly
       techknowlogick

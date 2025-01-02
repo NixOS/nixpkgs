@@ -14,6 +14,7 @@
   libsecret,
   tinysparql,
   darwin,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -61,6 +62,10 @@ stdenv.mkDerivation rec {
       "-Wno-error=incompatible-function-pointer-types"
     ]
   );
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Health tracking app for the GNOME desktop";

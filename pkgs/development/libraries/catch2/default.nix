@@ -26,7 +26,6 @@ stdenv.mkDerivation rec {
     license = licenses.boost;
     maintainers = with maintainers; [
       edwtjo
-      knedlsepp
     ];
     platforms = with platforms; unix ++ windows;
   };

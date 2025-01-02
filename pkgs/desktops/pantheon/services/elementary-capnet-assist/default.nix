@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "elementary-capnet-assist";
-  version = "8.0.0";
+  version = "8.0.1";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = "capnet-assist";
     rev = version;
-    sha256 = "sha256-xYywiI8hFjS7ODEhLGVwrlAY8I0pvUHfg6UkDhUsglU=";
+    sha256 = "sha256-u+JYJ5J5Cx27MrVlhh6AXAtpKGw7Kf1+MyJEEHqgod0=";
   };
 
   nativeBuildInputs = [

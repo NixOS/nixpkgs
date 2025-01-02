@@ -22,26 +22,23 @@
 
 stdenv.mkDerivation rec {
   pname = "bolt";
-  version = "0.9.7";
+  version = "0.9.8";
 
   src = fetchFromGitLab {
     domain = "gitlab.freedesktop.org";
     owner = "bolt";
     repo = "bolt";
     rev = version;
-    sha256 = "sha256-6m4Yrev9W5WV4/pptc8tJ4hc6QSC+eJ7BSt2mx33s9U=";
+    hash = "sha256-sDPipSIT2MJMdsOjOQSB+uOe6KXzVnyAqcQxPPr2NsU=";
   };
 
   patches = [
-    # meson install tries to create /var/lib/boltd
-    ./0001-skip-mkdir.patch
-
     # Test does not work on ZFS with atime disabled.
     # Upstream issue: https://gitlab.freedesktop.org/bolt/bolt/-/issues/167
     (fetchpatch {
       url = "https://gitlab.freedesktop.org/bolt/bolt/-/commit/c2f1d5c40ad71b20507e02faa11037b395fac2f8.diff";
       revert = true;
-      sha256 = "6w7ll65W/CydrWAVi/qgzhrQeDv1PWWShulLxoglF+I=";
+      hash = "sha256-6w7ll65W/CydrWAVi/qgzhrQeDv1PWWShulLxoglF+I=";
     })
   ];
 
@@ -59,15 +56,12 @@ stdenv.mkDerivation rec {
     ninja
     pkg-config
     glib
-  ] ++ lib.optional (!doCheck) python3;
+  ];
 
   buildInputs = [
     polkit
     systemd
   ];
-
-  # https://gitlab.freedesktop.org/bolt/bolt/-/issues/181
-  doCheck = false;
 
   preCheck = ''
     export LD_LIBRARY_PATH=${umockdev.out}/lib/

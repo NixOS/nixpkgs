@@ -61,11 +61,7 @@ makeScopeWithSplicing' {
 
       xfce4-appfinder = callPackage ./core/xfce4-appfinder { };
 
-      xfce4-dev-tools = callPackage ./core/xfce4-dev-tools {
-        mkXfceDerivation = self.mkXfceDerivation.override {
-          xfce4-dev-tools = null;
-        };
-      };
+      xfce4-dev-tools = callPackage ./core/xfce4-dev-tools { };
 
       #### APPLICATIONS
 

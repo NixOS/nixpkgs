@@ -2,8 +2,9 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pytest-asyncio,
   pytest-xdist,
-  pytest7CheckHook,
+  pytestCheckHook,
   pythonOlder,
   poetry-core,
   toml,
@@ -11,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "librouteros";
-  version = "3.3.1";
+  version = "3.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -20,7 +21,7 @@ buildPythonPackage rec {
     owner = "luqasz";
     repo = "librouteros";
     rev = "refs/tags/${version}";
-    hash = "sha256-vwM7psrb+7ww+oAc3l7y1YkNzgLyxX2VvHbLxcqQypo=";
+    hash = "sha256-vN12LYqFOU7flD6bTFtGw5VhPJ238pZ0MStM3ljwDU4=";
   };
 
   build-system = [ poetry-core ];
@@ -28,8 +29,9 @@ buildPythonPackage rec {
   dependencies = [ toml ];
 
   nativeCheckInputs = [
+    pytest-asyncio
     pytest-xdist
-    pytest7CheckHook
+    pytestCheckHook
   ];
 
   disabledTests = [
@@ -40,8 +42,6 @@ buildPythonPackage rec {
     "test_add_then_remove"
     "test_add_then_update"
     "test_generator_ditch"
-    # AttributeError: 'called_once_with' is not a valid assertion
-    "test_rawCmd_calls_writeSentence"
   ];
 
   pythonImportsCheck = [ "librouteros" ];

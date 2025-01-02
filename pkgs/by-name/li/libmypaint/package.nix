@@ -28,9 +28,12 @@ stdenv.mkDerivation rec {
     sha256 = "1ppgpmnhph9h8ayx9776f79a0bxbdszfw9c6bw7c3ffy2yk40178";
   };
 
+  strictDeps = true;
+
   nativeBuildInputs = [
     autoconf
     automake
+    glib # AM_GLIB_GNU_GETTEXT
     intltool
     libtool
     pkg-config

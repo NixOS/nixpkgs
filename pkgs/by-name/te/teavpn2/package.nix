@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   iproute2,
 }:
 stdenv.mkDerivation {
@@ -17,8 +17,7 @@ stdenv.mkDerivation {
   };
 
   patches = [
-    (substituteAll {
-      src = ./nix.patch;
+    (replaceVars ./nix.patch {
       inherit iproute2;
     })
   ];

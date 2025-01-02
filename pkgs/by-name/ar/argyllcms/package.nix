@@ -19,7 +19,7 @@
   lib,
   openssl,
   buildPackages,
-  substituteAll,
+  replaceVars,
   writeScript,
 }:
 
@@ -41,8 +41,7 @@ stdenv.mkDerivation rec {
 
   patches = lib.optional (!stdenv.buildPlatform.canExecute stdenv.hostPlatform) (
     # Build process generates files by compiling and then invoking an executable.
-    substituteAll {
-      src = ./jam-cross.patch;
+    replaceVars ./jam-cross.patch {
       emulator = stdenv.hostPlatform.emulator buildPackages;
     }
   );

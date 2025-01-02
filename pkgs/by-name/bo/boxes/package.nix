@@ -1,6 +1,6 @@
 {
   lib,
-  gccStdenv,
+  stdenv,
   fetchFromGitHub,
   bison,
   flex,
@@ -9,7 +9,7 @@
   ncurses,
 }:
 
-gccStdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "boxes";
   version = "2.3.1";
 
@@ -43,7 +43,7 @@ gccStdenv.mkDerivation rec {
                 "GLOBALCONF=${placeholder "out"}/share/boxes/boxes-config"
   '';
 
-  makeFlags = [ "CC=${gccStdenv.cc.targetPrefix}cc" ];
+  makeFlags = [ "CC=${stdenv.cc.targetPrefix}cc" ];
 
   installPhase = ''
     install -Dm755 -t $out/bin out/boxes

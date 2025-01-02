@@ -23,7 +23,7 @@ buildGoModule rec {
 
   subPackages = [ "cmd/trdl" ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

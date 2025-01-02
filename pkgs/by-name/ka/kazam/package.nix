@@ -1,7 +1,7 @@
 {
   lib,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   python3Packages,
   gst_all_1,
   wrapGAppsHook3,
@@ -54,8 +54,7 @@ python3Packages.buildPythonApplication rec {
 
   patches = [
     # Fix paths
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       libcanberra = libcanberra-gtk3;
       inherit libpulseaudio;
     })

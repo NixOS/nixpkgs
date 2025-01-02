@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  substituteAll,
+  replaceVars,
   buildEnv,
   fetchgit,
   fetchFromGitHub,
@@ -58,8 +58,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./libpath.patch;
+    (replaceVars ./libpath.patch {
       env = "${
         buildEnv {
           name = "weechat-otr-env";

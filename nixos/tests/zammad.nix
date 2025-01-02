@@ -6,7 +6,6 @@ import ./make-test-python.nix (
 
     meta.maintainers = with lib.maintainers; [
       taeer
-      n0emis
       netali
     ];
 

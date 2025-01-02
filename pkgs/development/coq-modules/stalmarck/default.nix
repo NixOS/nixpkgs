@@ -2,6 +2,7 @@
   lib,
   mkCoqDerivation,
   coq,
+  stdlib,
   version ? null,
 }:
 
@@ -30,7 +31,7 @@ let
     let
       pname = package;
       istac = package == "stalmarck-tactic";
-      propagatedBuildInputs = lib.optional istac (stalmarck_ "stalmarck");
+      propagatedBuildInputs = if istac then [ (stalmarck_ "stalmarck") ] else [ stdlib ];
       description =
         if istac then
           "Coq tactic and verified tool for proving tautologies using Stålmarck's algorithm"

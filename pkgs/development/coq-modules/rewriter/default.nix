@@ -2,6 +2,7 @@
   lib,
   mkCoqDerivation,
   coq,
+  stdlib,
   version ? null,
 }:
 
@@ -23,6 +24,8 @@ mkCoqDerivation {
     "0.0.11".sha256 = "sha256-aYoO08nwItlOoE5BnKRGib2Zk4Fz4Ni/L4QaqkObPow=";
   };
   releaseRev = v: "v${v}";
+
+  propagatedBuildInputs = [ stdlib ];
 
   mlPlugin = true;
 

@@ -8,16 +8,16 @@
 
 buildGoModule rec {
   pname = "age";
-  version = "1.2.0";
+  version = "1.2.1";
 
   src = fetchFromGitHub {
     owner = "FiloSottile";
     repo = "age";
     rev = "v${version}";
-    hash = "sha256-O0NKDPvr+6ZupakPIpnGgDcdfG3nWR1pvVE+3KkYurY=";
+    hash = "sha256-9ZJdrmqBj43zSvStt0r25wjSfnvitdx3GYtM3urHcaA=";
   };
 
-  vendorHash = "sha256-5We4OYoexzzSF1AkxuGCUwuYJ3Wra+T6mCcT4XYgzhU=";
+  vendorHash = "sha256-ilRLEV7qOBZbqzg2XQi4kt0JAb/1ftT4JmahYT0zSRU=";
 
   ldflags = [
     "-s"

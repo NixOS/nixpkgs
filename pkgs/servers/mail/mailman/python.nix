@@ -20,13 +20,12 @@ lib.fix (self: python3.override {
         [2] f931bc81d63f5cfda55ac73d754c87b3fd63b291
       */
 
-      # django-q tests fail with redis 5.0.0.
-      # https://gitlab.com/mailman/hyperkitty/-/issues/493
-      redis = super.redis.overridePythonAttrs ({ pname, ... }: rec {
-        version = "4.6.0";
-        src = fetchPypi {
-          inherit pname version;
-          hash = "sha256-WF3FFrnrBCphnvCjnD19Vf6BvbTfCaUsnN3g0Hvxqn0=";
+      # the redis python library only supports hiredis 3+ from version 5.1.0 onwards
+      hiredis = super.hiredis.overrideAttrs (new: { src, ... }: {
+        version = "3.1.0";
+        src = src.override {
+          rev = "refs/tags/v${new.version}";
+          hash = "sha256-ID5OJdARd2N2GYEpcYOpxenpZlhWnWr5fAClAgqEgGg=";
         };
       });
     })

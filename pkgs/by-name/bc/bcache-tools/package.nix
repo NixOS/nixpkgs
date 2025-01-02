@@ -5,7 +5,7 @@
   pkg-config,
   util-linux,
   bash,
-  substituteAll,
+  replaceVars,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,8 +34,7 @@ stdenv.mkDerivation rec {
   '';
 
   patches = [
-    (substituteAll {
-      src = ./bcache-udev-modern.patch;
+    (replaceVars ./bcache-udev-modern.patch {
       shell = "${bash}/bin/sh";
     })
     ./fix-static.patch

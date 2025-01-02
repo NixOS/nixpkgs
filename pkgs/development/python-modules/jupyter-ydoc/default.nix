@@ -18,13 +18,13 @@
 
 buildPythonPackage rec {
   pname = "jupyter-ydoc";
-  version = "3.0.1";
+  version = "3.0.2";
   pyproject = true;
 
   src = fetchPypi {
     pname = "jupyter_ydoc";
     inherit version;
-    hash = "sha256-ztrp8+4KdyiDF/IbuBhI7WFnTRukaLDDlsFgomSiEGs=";
+    hash = "sha256-1fHVvD7JV55YdGlJbNM9bypp4Y50Mp4TDCMUELocMdA=";
   };
 
   build-system = [

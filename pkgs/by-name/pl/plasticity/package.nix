@@ -18,7 +18,7 @@
   libnotify,
   libsForQt5,
   libxkbcommon,
-  mesa,
+  libgbm,
   nspr,
   nss,
   openssl,
@@ -47,7 +47,7 @@ stdenv.mkDerivation rec {
     wrapGAppsHook3
     autoPatchelfHook
     rpmextract
-    mesa
+    libgbm
   ];
 
   buildInputs = [

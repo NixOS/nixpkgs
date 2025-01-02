@@ -1,14 +1,9 @@
 {
   lib,
 
-  beam_minimal,
+  beamPackages,
   fetchFromGitHub,
 }:
-
-let
-  beamPackages = beam_minimal.packages.erlang_27;
-  elixir = beamPackages.elixir_1_17;
-in
 
 beamPackages.mixRelease rec {
   pname = "next-ls";
@@ -22,13 +17,10 @@ beamPackages.mixRelease rec {
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
-    inherit src version elixir;
+    inherit src version;
     pname = "next-ls-deps";
     hash = "sha256-4Rt5Q0fX+fbncvxyXdpIhgEvn9VYX/QDxDdnbanT21Q=";
   };
-
-  inherit elixir;
-  inherit (beamPackages) erlang;
 
   removeCookie = false;
 

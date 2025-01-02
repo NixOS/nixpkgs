@@ -759,6 +759,8 @@ let
           "ManageTemporaryAddress"
           "AddPrefixRoute"
           "AutoJoin"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertHasField "Address")
         (assertValueOneOf "PreferredLifetime" ["forever" "infinity" "0" 0])
@@ -877,6 +879,7 @@ let
           "IAID"
           "RequestBroadcast"
           "RouteMetric"
+          "RapidCommit"
           "RouteTable"
           "RouteMTUBytes"
           "ListenPort"
@@ -888,6 +891,8 @@ let
           "FallbackLeaseLifetimeSec"
           "Label"
           "Use6RD"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "RoutesToDNS" boolValues)
@@ -906,6 +911,7 @@ let
         (assertInt "IAID")
         (assertValueOneOf "RequestBroadcast" boolValues)
         (assertInt "RouteMetric")
+        (assertValueOneOf "RapidCommit" boolValues)
         (assertInt "RouteTable")
         (assertRange "RouteTable" 0 4294967295)
         (assertByteFormat "RouteMTUBytes")
@@ -940,6 +946,8 @@ let
           "IAID"
           "UseDelegatedPrefix"
           "SendRelease"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertValueOneOf "UseAddress" boolValues)
         (assertValueOneOf "UseDNS" boolValues)
@@ -965,6 +973,8 @@ let
           "Token"
           "ManageTemporaryAddress"
           "RouteMetric"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertValueOneOf "Announce" boolValues)
         (assertValueOneOf "Assign" boolValues)
@@ -992,6 +1002,8 @@ let
           "UseRoutePrefix"
           "Token"
           "UsePREF64"
+          "NetLabel"
+          "NFTSet"
         ])
         (assertValueOneOf "UseDNS" boolValues)
         (assertValueOneOf "UseDomains" (boolValues ++ ["route"]))

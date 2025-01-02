@@ -1,23 +1,21 @@
 {
   lib,
-  # Required based on 'go' directive in go.mod,
-  # remove when Go in nixpkgs defaults to 1.23 or later.
-  buildGo123Module,
+  buildGoModule,
   fetchFromGitHub,
 }:
 
-buildGo123Module rec {
+buildGoModule rec {
   pname = "agebox";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "slok";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-RtFa7k+tw0hyf7bYm51aIxptaD4uOH6/3WDjeoWEEKA=";
+    hash = "sha256-QH0kkquLnB00oKuwb5j2ZoAKPnZkSHJRGaq3RXO5ggg=";
   };
 
-  vendorHash = "sha256-57YbYDvRYOzQATEFpAuGzQzOYNY8n5LUrcu8jhjSiNI=";
+  vendorHash = "sha256-s3LZgQpUF0t9ETNloJux4gXXSn5Kg+pcuhJSMfWWnSo=";
 
   ldflags = [
     "-s"

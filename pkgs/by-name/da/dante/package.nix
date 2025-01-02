@@ -17,11 +17,11 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "dante";
-  version = "1.4.3";
+  version = "1.4.4";
 
   src = fetchurl {
     url = "https://www.inet.no/dante/files/${pname}-${version}.tar.gz";
-    sha256 = "0pbahkj43rx7rmv2x40mf5p3g3x9d6i2sz7pzglarf54w5ghd2j1";
+    sha256 = "sha256-GXPHcy8fnwpMDM8sHORix8JQYLJWQ+qQ+bmPU6gT+uw=";
   };
 
   nativeBuildInputs = [ autoreconfHook ];
@@ -46,8 +46,6 @@ stdenv.mkDerivation rec {
       # Fixes several issues with `osint.m4` that causes incorrect check failures when using newer
       # versions of clang: missing `stdint.h` for `uint8_t` and unused `sa_len_ptr`.
       ./clang-osint-m4.patch
-      # Fixes build with miniupnpc 2.2.8.
-      ./dante-1.4.3-miniupnpc-2.2.8.patch
     ]
     ++ lib.optionals remove_getaddrinfo_checks [
       (fetchpatch {

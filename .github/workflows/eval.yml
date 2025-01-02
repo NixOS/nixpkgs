@@ -53,7 +53,7 @@ jobs:
           echo "systems=$(<result/systems.json)" >> "$GITHUB_OUTPUT"
 
       - name: Upload the list of all attributes
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
         with:
           name: paths
           path: result/*
@@ -81,6 +81,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ attrs, get-merge-commit ]
     strategy:
+      fail-fast: false
       matrix:
         system: ${{ fromJSON(needs.attrs.outputs.systems) }}
     steps:
@@ -110,7 +111,7 @@ jobs:
           # If it uses too much memory, slightly decrease chunkSize
 
       - name: Upload the output paths and eval stats
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
         with:
           name: intermediate-${{ matrix.system }}
           path: result/*
@@ -144,7 +145,7 @@ jobs:
             -o prResult
 
       - name: Upload the combined results
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
         with:
           name: result
           path: prResult/*
@@ -165,7 +166,7 @@ jobs:
           runId=$(jq .id <<< "$run")
           conclusion=$(jq -r .conclusion <<< "$run")
 
-          while [[ "$conclusion" == null ]]; do
+          while [[ "$conclusion" == null || "$conclusion" == "" ]]; do
             echo "Workflow not done, waiting 10 seconds before checking again"
             sleep 10
             conclusion=$(gh api /repos/"$REPOSITORY"/actions/runs/"$runId" --jq '.conclusion')
@@ -202,7 +203,7 @@ jobs:
 
       - name: Upload the combined results
         if: steps.baseRunId.outputs.baseRunId
-        uses: actions/upload-artifact@b4b15b8c7c6ac21ea08fcf65892d2ee8f75cf882 # v4.4.3
+        uses: actions/upload-artifact@6f51ac03b9356f520e9adb1b1b7802705f340c2b # v4.5.0
         with:
           name: comparison
           path: comparison/*

@@ -20,19 +20,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "emulationstation-de";
-  version = "3.1.0";
+  version = "3.1.1";
 
   src = fetchzip {
     url = "https://gitlab.com/es-de/emulationstation-de/-/archive/v${finalAttrs.version}/emulationstation-de-v${finalAttrs.version}.tar.gz";
-    hash = "sha256-v9nOY9T5VOVLBUKoDXqwYa1iYvW42iGA+3kpPUOmHkg=";
+    hash = "sha256-pQHT/BEtIWc8tQXPjU5KFt8jED+4IqcZR+VMmAFc940=";
   };
 
   patches = [
-    (fetchpatch {
-      name = "fix-buffer-overflow-detection-with-gcc-fortification";
-      url = "https://gitlab.com/es-de/emulationstation-de/-/commit/41fd33fdc3dacef507b987ed316aec2b0d684317.patch";
-      sha256 = "sha256-LHJ11mtBn8hRU97+Lz9ugPTTGUAxrPz7yvyxqNOAYKY=";
-    })
     ./001-add-nixpkgs-retroarch-cores.patch
   ];
 

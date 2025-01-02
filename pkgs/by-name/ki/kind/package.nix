@@ -10,13 +10,13 @@
 
 buildGoModule rec {
   pname = "kind";
-  version = "0.25.0";
+  version = "0.26.0";
 
   src = fetchFromGitHub {
     rev = "v${version}";
     owner = "kubernetes-sigs";
     repo = "kind";
-    hash = "sha256-6WlkZ2dLMSSSlJAEshMpD5Ai0WVo1NzXAvpjEQd3JPA=";
+    hash = "sha256-1bU4vHC9bVz8TfO7knO1RYRxJUnwsXxZrRVnit5iQz0=";
   };
 
   patches = [
@@ -30,7 +30,7 @@ buildGoModule rec {
 
   subPackages = [ "." ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

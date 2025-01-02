@@ -104,7 +104,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # /usr/bin/env is used in test commands and embedded scripts.
     find test -name '*.sh' \
-      -exec sed -ie 's|/usr/bin/env|${coreutils}/bin/env|g' {} +
+      -exec sed -i -e 's|/usr/bin/env|${coreutils}/bin/env|g' {} +
   '';
 
   # Functional tests use loopback networking.

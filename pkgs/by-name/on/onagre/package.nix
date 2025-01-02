@@ -17,16 +17,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "onagre";
-  version = "1.1.0";
+  version = "1.1.1";
 
   src = fetchFromGitHub {
     owner = "onagre-launcher";
     repo = "onagre";
-    rev = "1.1.0";
-    hash = "sha256-ASeLvgj2RyhsZQtkUTYeA7jWyhbLg8yl6HbN2A/Sl2M=";
+    rev = "1.1.1";
+    hash = "sha256-yVkK3B7/ul0sOxPE3z2qkY/CnsZPQYqTpd64Wo/GXZI=";
   };
 
-  cargoHash = "sha256-17Hw3jtisOXwARpp0jB0hrNax7nzMWS0kCE3ZAruBj8=";
+  cargoHash = "sha256-ZjS4g0lwWTJwwXpdKHxmEXIS/GQ6eo888nPhq0v+y9I=";
 
   nativeBuildInputs = [
     makeWrapper

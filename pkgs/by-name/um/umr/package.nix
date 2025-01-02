@@ -8,7 +8,7 @@
   pkg-config,
 
   libdrm,
-  mesa, # libgbm
+  libgbm,
   libpciaccess,
   llvmPackages,
   nanomsg,
@@ -38,7 +38,7 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     libdrm
-    mesa
+    libgbm
     libpciaccess
     llvmPackages.llvm
     nanomsg

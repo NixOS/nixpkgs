@@ -4,26 +4,27 @@
   fetchFromGitHub,
 }:
 
-stdenvNoCC.mkDerivation rec {
+stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "montserrat";
-  version = "7.222";
+  version = "9.000";
 
   src = fetchFromGitHub {
     owner = "JulietaUla";
-    repo = pname;
-    rev = "v${version}";
-    hash = "sha256-eVCRn2OtNI5NuYZBQy06HKnMMXhPPnFxI8m8kguZjg0=";
+    repo = "montserrat";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-fKgq3eUxrYBZtJuw2gs0K0wpW4BNqX5cDErF3IQ2ft4=";
   };
+
+  dontBuild = true;
 
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/share/fonts/{otf,ttf,woff,woff2}
+    mkdir -p $out/share/fonts/
 
-    mv fonts/otf/*.otf $out/share/fonts/otf
-    mv fonts/ttf/*.ttf $out/share/fonts/ttf
-    mv fonts/webfonts/*.woff $out/share/fonts/woff
-    mv fonts/webfonts/*.woff2 $out/share/fonts/woff2
+    mv fonts/otf $out/share/fonts/otf
+    mv fonts/ttf $out/share/fonts/ttf
+    mv fonts/webfonts $out/share/fonts/woff2
 
     runHook postInstall
   '';
@@ -38,4 +39,4 @@ stdenvNoCC.mkDerivation rec {
       jk
     ];
   };
-}
+})

@@ -2,7 +2,6 @@
   stdenv,
   lib,
   fetchFromGitHub,
-  substituteAll,
   pkg-config,
   autoreconfHook,
   autoconf-archive,

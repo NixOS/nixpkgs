@@ -10,6 +10,7 @@
   libadwaita,
   meson,
   ninja,
+  nix-update-script,
   pkg-config,
   rustPlatform,
   rustc,
@@ -61,6 +62,10 @@ stdenv.mkDerivation (finalAttrs: {
       "-Wno-error=incompatible-function-pointer-types"
     ]
   );
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     changelog = "https://github.com/bragefuglseth/fretboard/releases/tag/v${finalAttrs.version}";

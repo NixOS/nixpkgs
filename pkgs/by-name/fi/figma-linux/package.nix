@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
       gtk3
       libdrm
       libxkbcommon
-      mesa
+      libgbm
       nspr
       nss
       pango

@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchurl,
-  substituteAll,
+  replaceVars,
   bubblewrap,
   cairo,
   cargo,
@@ -70,8 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
       packageName = "glycin";
     };
 
-    glycinPathsPatch = substituteAll {
-      src = ./fix-glycin-paths.patch;
+    glycinPathsPatch = replaceVars ./fix-glycin-paths.patch {
       bwrap = "${bubblewrap}/bin/bwrap";
     };
   };

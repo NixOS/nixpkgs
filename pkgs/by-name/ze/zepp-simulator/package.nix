@@ -35,7 +35,7 @@
   dtc,
   capstone_4,
   libjpeg8,
-  mesa,
+  libgbm,
   curlWithGnuTls,
 }:
 
@@ -102,7 +102,7 @@ stdenv.mkDerivation {
       libjpeg8
       dtc
       capstone_4
-      mesa
+      libgbm
       curlWithGnuTls
     ];
 

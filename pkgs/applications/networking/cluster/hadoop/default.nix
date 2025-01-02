@@ -46,7 +46,9 @@ let
           "mirror://apache/hadoop/common/hadoop-${finalAttrs.version}/hadoop-${finalAttrs.version}"
           + lib.optionalString stdenv.hostPlatform.isAarch64 "-aarch64"
           + ".tar.gz";
-        inherit (platformAttrs.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}")) hash;
+        inherit (platformAttrs.${stdenv.system} or (throw "Unsupported system: ${stdenv.system}"))
+          hash
+          ;
       };
       doCheck = true;
 
@@ -101,7 +103,12 @@ let
           # hadoop 3.3+ depends on protobuf 3.18, 3.2 depends on 3.8
           find $out/lib/native -name 'libhdfspp.so*' | \
             xargs -r -n1 patchelf --replace-needed libprotobuf.so.${
-              if (lib.versionAtLeast finalAttrs.version "3.3") then "18" else "8"
+              if (lib.versionAtLeast finalAttrs.version "3.4.1") then
+                "32"
+              else if (lib.versionAtLeast finalAttrs.version "3.3") then
+                "18"
+              else
+                "8"
             } libprotobuf.so
 
           patchelf --replace-needed libcrypto.so.1.1 libcrypto.so \
@@ -163,13 +170,15 @@ in
     pname = "hadoop";
     platformAttrs = rec {
       x86_64-linux = {
-        version = "3.4.0";
-        hash = "sha256-4xGnhIBBQDD57GNUml1oXmnibyBxA9mr8hpIud0DyGw=";
-        srcHash = "sha256-viDF3LdRCZHqFycOYfN7nUQBPHiMCIjmu7jgIAaaK9E=";
+        version = "3.4.1";
+        hash = "sha256-mtVIeDOZbf5VFOdW9DkQKckFKf0i6NAC/T3QwUwEukY=";
+        srcHash = "sha256-lE9uSohy6GWXprFEYbEin2ITqTms2h6EWXe4nEd3U4Y=";
       };
       x86_64-darwin = x86_64-linux;
       aarch64-linux = x86_64-linux // {
+        version = "3.4.0";
         hash = "sha256-QWxzKtNyw/AzcHMv0v7kj91pw1HO7VAN9MHO84caFk8=";
+        srcHash = "sha256-viDF3LdRCZHqFycOYfN7nUQBPHiMCIjmu7jgIAaaK9E=";
       };
       aarch64-darwin = aarch64-linux;
     };

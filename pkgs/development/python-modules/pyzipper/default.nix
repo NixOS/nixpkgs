@@ -32,6 +32,8 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "pyzipper" ];
 
+  doCheck = pythonOlder "3.13"; # depends on removed nntplib battery
+
   disabledTests = [
     # Tests are parsing CLI output
     "test_args_from_interpreter_flags"

@@ -64,7 +64,7 @@ buildPythonPackage rec {
     hash = "sha256-L3YlOtzJv9R4TLeJGzfMQ+0nYtQEsqmgNZpW9B6vVAI=";
   };
 
-  patches = lib.optionals (pythonOlder "3.12") [
+  patches = [
     # Build script fails to build the cython extension on python 3.11 (no issues with python 3.12):
     # distutils.errors.DistutilsSetupError: each element of 'ext_modules' option must be an Extension instance or 2-tuple
     # This error vanishes if Cython and setuptools imports are swapped

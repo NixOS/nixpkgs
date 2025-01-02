@@ -2,8 +2,8 @@
   lib,
   stdenv,
   fetchurl,
+  gettext,
   pkg-config,
-  intltool,
   libxfce4util,
   xfce4-panel,
   libxfce4ui,
@@ -19,16 +19,16 @@ in
 
 stdenv.mkDerivation rec {
   pname = "xfce4-timer-plugin";
-  version = "1.7.2";
+  version = "1.7.3";
 
   src = fetchurl {
     url = "mirror://xfce/src/${category}/${pname}/${lib.versions.majorMinor version}/${pname}-${version}.tar.bz2";
-    sha256 = "sha256-/rO4wtOVBegWaDVAoyJr172ocMy8tMfQ9qv+7/XFi30=";
+    sha256 = "sha256-rPTIYa+IYIuegCp2pLBYRr0wGJ4AhegmaAzBebbfTNM=";
   };
 
   nativeBuildInputs = [
+    gettext
     pkg-config
-    intltool
   ];
 
   buildInputs = [

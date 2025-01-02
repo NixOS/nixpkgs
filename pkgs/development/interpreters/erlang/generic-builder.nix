@@ -1,5 +1,4 @@
 {
-  pkgs,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -32,6 +31,7 @@
   coreutils,
   git,
   wrapGAppsHook3,
+  zlib,
 }:
 {
   baseName ? "erlang",
@@ -144,20 +144,12 @@ stdenv.mkDerivation (
       [
         ncurses
         opensslPackage
+        zlib
       ]
       ++ optionals wxSupport wxPackages2
       ++ optionals odbcSupport odbcPackages
       ++ optionals javacSupport javacPackages
-      ++ optional systemdSupport systemd
-      ++ optionals stdenv.hostPlatform.isDarwin (
-        with pkgs.darwin.apple_sdk.frameworks;
-        [
-          AGL
-          Carbon
-          Cocoa
-          WebKit
-        ]
-      );
+      ++ optional systemdSupport systemd;
 
     debugInfo = enableDebugInfo;
 
@@ -250,7 +242,7 @@ stdenv.mkDerivation (
           if [ "$latest" != "${version}" ]; then
             nixpkgs="$(git rev-parse --show-toplevel)"
             nix_file="$nixpkgs/pkgs/development/interpreters/erlang/${major}.nix"
-            update-source-version ${baseName}R${major} "$latest" --version-key=version --print-changes --file="$nix_file"
+            update-source-version ${baseName}_${major} "$latest" --version-key=version --print-changes --file="$nix_file"
           else
             echo "${baseName}R${major} is already up-to-date"
           fi

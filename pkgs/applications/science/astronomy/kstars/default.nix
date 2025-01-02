@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  mkDerivation,
   extra-cmake-modules,
   fetchurl,
   kconfig,
@@ -34,15 +33,15 @@
   wcslib,
   stellarsolver,
   libxisf,
+  curl,
 }:
-
 stdenv.mkDerivation (finalAttrs: {
   pname = "kstars";
-  version = "3.7.2";
+  version = "3.7.4";
 
   src = fetchurl {
     url = "mirror://kde/stable/kstars/${finalAttrs.version}/kstars-${finalAttrs.version}.tar.xz";
-    hash = "sha256-fEu3BGBW5cgrY38zBB3iL0/SRrobEtJVsGNWRNtT40s=";
+    hash = "sha256-WdVsPCwDQWW/NIRehuqk5f8rgtucAbGLSbmwZLMLiHM=";
   };
 
   nativeBuildInputs = [
@@ -80,6 +79,7 @@ stdenv.mkDerivation (finalAttrs: {
     wcslib
     stellarsolver
     libxisf
+    curl
   ];
 
   cmakeFlags = [

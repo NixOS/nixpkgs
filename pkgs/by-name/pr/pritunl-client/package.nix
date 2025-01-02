@@ -19,12 +19,12 @@
   electron,
 }:
 let
-  version = "1.3.4083.88";
+  version = "1.3.4099.99";
   src = fetchFromGitHub {
     owner = "pritunl";
     repo = "pritunl-client-electron";
     rev = version;
-    sha256 = "sha256-6CKckRrf1TVhuYOJ7caTRDFWiX5b27kDjLjd709NKUs=";
+    sha256 = "sha256-bxCGZ2Jm2rPKRH6Uj0JmQ3MQ3zRd6kXjOVeAOHBl1lA=";
   };
 
   cli = buildGoModule {

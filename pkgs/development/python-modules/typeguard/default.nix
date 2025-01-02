@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "typeguard";
-  version = "4.3.0";
+  version = "4.4.1";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-ku5qCuyRNRgermBn69YX/Z3o111xT7VIcopJM7HeplE=";
+    hash = "sha256-DSKonQC0U7R8SYdfQrZgG5YXV1QaLh4O9Re24kITwhs=";
   };
 
   outputs = [
@@ -54,25 +54,11 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "typeguard" ];
 
-  disabledTestPaths = [
-    # mypy tests aren't passing with latest mypy
-    "tests/mypy"
-  ];
-
-  disabledTests = [
-    # AssertionError: 'type of argument "x" must be ' != 'None'
-    "TestPrecondition::test_precondition_ok_and_typeguard_fails"
-    # AttributeError: 'C' object has no attribute 'x'
-    "TestInvariant::test_invariant_ok_and_typeguard_fails"
-    # AttributeError: 'D' object has no attribute 'x'
-    "TestInheritance::test_invariant_ok_and_typeguard_fails"
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "This library provides run-time type checking for functions defined with argument type annotations";
     homepage = "https://github.com/agronholm/typeguard";
     changelog = "https://github.com/agronholm/typeguard/releases/tag/${version}";
-    license = licenses.mit;
+    license = lib.licenses.mit;
     maintainers = [ ];
   };
 }

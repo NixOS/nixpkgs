@@ -3,13 +3,15 @@
   version,
   src,
   libayatana-appindicator,
-  sysproxy-hash,
+  vendor-hash,
+  glib,
   webui,
   pkg-config,
+  libsoup,
   rustPlatform,
   makeDesktopItem,
   meta,
-  webkitgtk_4_0,
+  webkitgtk_4_1,
   openssl,
 }:
 rustPlatform.buildRustPackage {
@@ -17,24 +19,26 @@ rustPlatform.buildRustPackage {
   pname = "${pname}-unwrapped";
   sourceRoot = "${src.name}/src-tauri";
 
-  cargoLock = {
-    lockFile = ./Cargo-tauri.lock;
-    outputHashes = {
-      "sysproxy-0.3.0" = sysproxy-hash;
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = vendor-hash;
 
   env = {
     OPENSSL_NO_VENDOR = 1;
   };
 
   postPatch = ''
-    substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
-      --replace "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
-    substituteInPlace ./tauri.conf.json \
-      --replace-fail '"distDir": "../dist",' '"distDir": "${webui}",' \
-      --replace-fail '"beforeBuildCommand": "pnpm run web:build"' '"beforeBuildCommand": ""'
-    sed -i -e '/externalBin/d' -e '/resources/d' tauri.conf.json
+    ls $cargoDepsCopy
+      substituteInPlace $cargoDepsCopy/libappindicator-sys-*/src/lib.rs \
+        --replace-fail "libayatana-appindicator3.so.1" "${libayatana-appindicator}/lib/libayatana-appindicator3.so.1"
+
+      substituteInPlace $cargoDepsCopy/sysproxy-*/src/linux.rs \
+        --replace-fail '"gsettings"' '"${glib.bin}/bin/gsettings"'
+
+      substituteInPlace ./tauri.conf.json \
+        --replace-fail '"frontendDist": "../dist",' '"frontendDist": "${webui}",' \
+        --replace-fail '"beforeBuildCommand": "pnpm run web:build"' '"beforeBuildCommand": ""'
+      sed -i -e '/externalBin/d' -e '/resources/d' tauri.conf.json
+      sed -i -e '/sidecar/d' -e '/resources/d' tauri.linux.conf.json
   '';
 
   nativeBuildInputs = [
@@ -44,7 +48,8 @@ rustPlatform.buildRustPackage {
 
   buildInputs = [
     openssl
-    webkitgtk_4_0
+    libsoup
+    webkitgtk_4_1
   ];
 
   postInstall = ''

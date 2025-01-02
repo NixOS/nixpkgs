@@ -20,7 +20,7 @@ buildDotnetModule rec {
   patches = [ ./targetframework.patch ];
 
   dotnet-sdk = dotnetCorePackages.sdk_6_0;
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   executables = [ "Knossos.NET" ];
 
   runtimeDeps = [ openal ];

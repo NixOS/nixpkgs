@@ -15,7 +15,7 @@
   qtbase,
   qtsvg,
   xdg-utils,
-  substituteAll,
+  replaceVars,
   buildNpmPackage,
 }:
 
@@ -97,7 +97,10 @@ rec {
     src = "${sources}/aw-qt";
 
     pyproject = true;
-    build-system = [ python3Packages.poetry-core ];
+    build-system = [
+      python3Packages.poetry-core
+      python3Packages.setuptools
+    ];
 
     dependencies = with python3Packages; [
       aw-core
@@ -188,8 +191,7 @@ rec {
 
     patches = [
       # Override version string with hardcoded value as it may be outdated upstream.
-      (substituteAll {
-        src = ./override-version.patch;
+      (replaceVars ./override-version.patch {
         version = sources.rev;
       })
     ];
@@ -234,8 +236,7 @@ rec {
 
     patches = [
       # Hardcode version to avoid the need to have the Git repo available at build time.
-      (substituteAll {
-        src = ./commit-hash.patch;
+      (replaceVars ./commit-hash.patch {
         commit_hash = sources.rev;
       })
     ];

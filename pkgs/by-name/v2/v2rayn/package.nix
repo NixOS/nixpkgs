@@ -11,49 +11,33 @@
   openssl,
   lttng-ust_2_12,
   krb5,
-  wrapGAppsHook4,
   imagemagick,
   makeDesktopItem,
   copyDesktopItems,
   bash,
+  xorg,
 }:
-let
-  selectSystem =
-    attrs:
-    attrs.${stdenv.hostPlatform.system}
-      or (throw "v2rayn: ${stdenv.hostPlatform.system} is not supported");
-  arch = selectSystem {
-    x86_64-linux = "linux-x64";
-    aarch64-linux = "linux-arm64";
-  };
-in
 buildDotnetModule rec {
   pname = "v2rayn";
-  version = "7.3.1";
+  version = "7.4.1";
 
   src = fetchFromGitHub {
     owner = "2dust";
     repo = "v2rayN";
     tag = version;
-    hash = "sha256-K5u8+zaXcDn4aytsgYFhhzG3xzLgoks5dnWuVk/6cS4=";
+    hash = "sha256-mtmuEwZy72LPYFf7hzE8TYiSh2kK6xe2CRdkOSbg2h4=";
   };
 
   projectFile = "v2rayN/v2rayN.Desktop/v2rayN.Desktop.csproj";
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   postPatch = ''
-    substituteInPlace v2rayN/AmazTool/UpgradeApp.cs \
-      --replace-fail "return AppDomain.CurrentDomain.BaseDirectory;" 'return Path.Combine(Environment.GetEnvironmentVariable("XDG_DATA_HOME") ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".local", "share"), "v2rayn");'
-    substituteInPlace v2rayN/ServiceLib/Common/Utils.cs \
-      --replace-fail "return AppDomain.CurrentDomain.BaseDirectory;" 'return Path.Combine(Environment.GetEnvironmentVariable("XDG_DATA_HOME") ?? Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), ".local", "share"), "v2rayn");'
     substituteInPlace v2rayN/ServiceLib/Common/Utils.cs \
       --replace-fail "/bin/bash" "${bash}/bin/bash"
   '';
 
   dotnetInstallFlags = [ "-p:PublishReadyToRun=false" ];
-
-  selfContainedBuild = true;
 
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
 
@@ -62,10 +46,9 @@ buildDotnetModule rec {
   executables = [ "v2rayN" ];
 
   nativeBuildInputs = [
-    autoPatchelfHook
-    wrapGAppsHook4
-    copyDesktopItems
     imagemagick
+    copyDesktopItems
+    autoPatchelfHook
   ];
 
   buildInputs = [
@@ -73,17 +56,38 @@ buildDotnetModule rec {
     fontconfig
     icu
     openssl
-    lttng-ust_2_12
     krb5
+    lttng-ust_2_12
     (lib.getLib stdenv.cc.cc)
   ];
 
-  postBuild = ''
-    mv ./v2rayN/v2rayN.Desktop/bin/Release/net8.0/${arch} ./v2rayN/v2rayN.Desktop/bin/Release/v2rayn
-    rm -r ./v2rayN/v2rayN.Desktop/bin/Release/net8.0
-    mv ./v2rayN/v2rayN.Desktop/bin/Release/v2rayn ./v2rayN/v2rayN.Desktop/bin/Release/net8.0
-    ln -s . ./v2rayN/v2rayN.Desktop/bin/Release/net8.0/${arch}
-  '';
+  runtimeDeps = [
+    xorg.libX11
+    xorg.libXrandr
+    xorg.libXi
+    xorg.libICE
+    xorg.libSM
+    xorg.libXcursor
+    xorg.libXext
+  ];
+
+  postBuild =
+    let
+      selectSystem =
+        attrs:
+        attrs.${stdenv.hostPlatform.system}
+          or (throw "v2rayn: ${stdenv.hostPlatform.system} is not supported");
+      arch = selectSystem {
+        x86_64-linux = "x64";
+        aarch64-linux = "arm64";
+      };
+    in
+    ''
+      mv ./v2rayN/v2rayN.Desktop/bin/Release/net8.0/linux-${arch} ./v2rayN/v2rayN.Desktop/bin/Release/v2rayn
+      rm -r ./v2rayN/v2rayN.Desktop/bin/Release/net8.0
+      mv ./v2rayN/v2rayN.Desktop/bin/Release/v2rayn ./v2rayN/v2rayN.Desktop/bin/Release/net8.0
+      ln -s . ./v2rayN/v2rayN.Desktop/bin/Release/net8.0/linux-${arch}
+    '';
 
   desktopItems = [
     (makeDesktopItem {

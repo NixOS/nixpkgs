@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchPypi,
+  fetchpatch2,
   mock,
   pytestCheckHook,
   pythonOlder,
@@ -19,6 +20,14 @@ buildPythonPackage rec {
     inherit pname version;
     hash = "sha256-f8kFJyzvpPNkwaNCnLvpwPmLeTmI77W/kKrIDwjbCbE=";
   };
+
+  patches = [
+    (fetchpatch2 {
+      name = "parameterized-docstring-3.13-compat.patch";
+      url = "https://gitweb.gentoo.org/repo/gentoo.git/plain/dev-python/parameterized/files/parameterized-0.9.0-py313-test.patch?id=dec60bb6900d6ebdaaa6aa1dcb845b30b739f9b5";
+      hash = "sha256-tWcN0eRC0oRHrOaa/cctXLhi1WapDKvxO36e6gU6UIk=";
+    })
+  ];
 
   postPatch = ''
     # broken with pytest 7 and python 3.12

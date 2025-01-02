@@ -69,8 +69,6 @@ let
     ghc926
     ghc927
     ghc928
-    ghc945
-    ghc946
     ghc947
     ghc948
     ghc963
@@ -82,6 +80,7 @@ let
     ghc983
     ghc984
     ghc9101
+    ghc9121
   ];
 
   # packagePlatforms applied to `haskell.packages.*`
@@ -274,6 +273,7 @@ let
         agda
         alex
         arion
+        aws-spend-summary
         bench
         blucontrol
         cabal-install
@@ -557,8 +557,6 @@ let
         compilerNames.ghc926
         compilerNames.ghc927
         compilerNames.ghc928
-        compilerNames.ghc945
-        compilerNames.ghc946
         compilerNames.ghc947
         compilerNames.ghc948
         compilerNames.ghc9101

@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
     sha256 = "1c7h4ivgfdyygz2hyh6nfibxlkz8kdk868a576qkkjgj5gn78xyv";
   };
 
-  patches = lib.optionals stdenv.cc.isClang [
+  patches = [
     # Fixes a call to undeclared function `utf8_decode`.
     # https://github.com/xiph/vorbis-tools/pull/33
     (fetchpatch {

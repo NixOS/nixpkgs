@@ -12,7 +12,7 @@
 let
   inherit (buildPackages) buildDotnetModule;
 
-  nugetDeps = ./nuget-deps.nix;
+  nugetDeps = ./nuget-deps.json;
 
   # Specify the TargetFramework via an environment variable so that we don't
   # have to update the .csproj files when updating dotnet-sdk

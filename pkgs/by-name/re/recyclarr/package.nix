@@ -29,7 +29,7 @@ buildDotnetModule (finalAttrs: {
   };
 
   projectFile = "Recyclarr.sln";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   prePatch = ''
     substituteInPlace src/Recyclarr.Cli/Program.cs \

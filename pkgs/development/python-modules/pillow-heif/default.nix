@@ -40,6 +40,8 @@ buildPythonPackage rec {
 
   postPatch = ''
     sed -i '/addopts/d' pyproject.toml
+    substituteInPlace setup.py \
+      --replace-warn ', "-Werror"' ""
   '';
 
   nativeBuildInputs = [
@@ -60,9 +62,6 @@ buildPythonPackage rec {
   ];
 
   env = {
-    # clang-16: error: argument unused during compilation: '-fno-strict-overflow'
-    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unused-command-line-argument";
-
     RELEASE_FULL_FLAG = 1;
   };
 

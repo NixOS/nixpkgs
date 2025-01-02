@@ -1,6 +1,7 @@
 {
   lib,
   SDL2,
+  autoreconfHook,
   darwin,
   fetchurl,
   giflib,
@@ -22,15 +23,16 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "SDL2_image";
-  version = "2.8.2";
+  version = "2.8.4";
 
   src = fetchurl {
     url = "https://www.libsdl.org/projects/SDL_image/release/SDL2_image-${finalAttrs.version}.tar.gz";
-    hash = "sha256-j0hrv7z4Rk3VjJ5dkzlKsCVc5otRxalmqRgkSCCnbdw=";
+    hash = "sha256-WomgFCChkridvMX1JnRIGB1dzIHS9aFojLHqxvVX2mc=";
   };
 
   nativeBuildInputs = [
     SDL2
+    autoreconfHook
     pkg-config
   ];
 

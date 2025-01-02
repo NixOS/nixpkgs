@@ -4,7 +4,7 @@
   buildNpmPackage,
   fetchNpmDeps,
   nodejs,
-  substituteAll,
+  replaceVars,
 }:
 
 let
@@ -66,8 +66,7 @@ buildNpmPackage {
   preBuild = ''
     chmod +w /build/source
     patch -p3 <${
-      substituteAll {
-        src = ./decouple-from-source-tree.patch;
+      replaceVars ./decouple-from-source-tree.patch {
         inherit client;
       }
     }

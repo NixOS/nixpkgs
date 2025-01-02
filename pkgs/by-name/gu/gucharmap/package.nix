@@ -18,7 +18,7 @@
   libxml2,
   yelp-tools,
   docbook_xsl,
-  docbook_xml_dtd_412,
+  docbook_xml_dtd_45,
   gsettings-desktop-schemas,
   unzip,
   unicode-character-database,
@@ -47,7 +47,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "gucharmap";
-  version = "16.0.1";
+  version = "16.0.2";
 
   outputs = [
     "out"
@@ -61,7 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "GNOME";
     repo = "gucharmap";
     rev = finalAttrs.version;
-    hash = "sha256-eQ27TIggwQ2RjDQO5ytVrUT7iNtbP5HOwMcpzweMW8A=";
+    hash = "sha256-UaXgQIhAoI27iYWgZuZeO7Lv6J9pj06HPp0SZs/5abM=";
   };
 
   strictDeps = true;
@@ -77,7 +77,7 @@ stdenv.mkDerivation (finalAttrs: {
       itstool
       gtk-doc
       docbook_xsl
-      docbook_xml_dtd_412
+      docbook_xml_dtd_45
       yelp-tools
       libxml2
       desktop-file-utils

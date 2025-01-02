@@ -19,10 +19,6 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-OZn9C7tIUomlK+FLL2i1ccuE44DMQzh+rfd49kx55t8=";
   };
 
-  nativeBuildInputs = [
-    SDL
-  ];
-
   buildInputs = [
     SDL
     flac
@@ -33,6 +29,8 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     (lib.enableFeature enableSdltest "sdltest")
   ];
+
+  env.SDL_CONFIG = lib.getExe' SDL.dev "sdl-config";
 
   strictDeps = true;
 

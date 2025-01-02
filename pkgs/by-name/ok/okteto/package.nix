@@ -9,13 +9,13 @@
 
 buildGoModule rec {
   pname = "okteto";
-  version = "3.2.0";
+  version = "3.2.2";
 
   src = fetchFromGitHub {
     owner = "okteto";
     repo = "okteto";
     rev = version;
-    hash = "sha256-s6bA7kj6IQ1Lu/Na9d6g4KlNzRmhIpwmVChpABMuQc8=";
+    hash = "sha256-NN6Y+QkER5Bs9vy09Y4Dl4LoK3HkCJ04vCe5ectFUok=";
   };
 
   vendorHash = "sha256-/V95521PFvLACuXVjqsW3TEHHGQYKY8CSAOZ6FwuR0k=";
@@ -77,11 +77,11 @@ buildGoModule rec {
     command = "HOME=\"$(mktemp -d)\" okteto version";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Develop your applications directly in your Kubernetes Cluster";
     homepage = "https://okteto.com/";
-    license = licenses.asl20;
-    maintainers = with maintainers; [ aaronjheng ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ aaronjheng ];
     mainProgram = "okteto";
   };
 }

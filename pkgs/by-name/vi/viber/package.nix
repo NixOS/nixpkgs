@@ -28,7 +28,7 @@
   libxml2,
   libxslt,
   libwebp,
-  mesa,
+  libgbm,
   nspr,
   nss,
   openssl,
@@ -84,7 +84,7 @@ stdenv.mkDerivation {
     libxml2
     libxslt
     libwebp
-    mesa
+    libgbm
     nspr
     nss
     openssl

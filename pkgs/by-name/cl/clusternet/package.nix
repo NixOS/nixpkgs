@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "clusternet";
-  version = "0.17.2";
+  version = "0.17.3";
 
   src = fetchFromGitHub {
     owner = "clusternet";
     repo = "clusternet";
     rev = "refs/tags/v${version}";
-    hash = "sha256-6JZdFHMbdFm2uTlMbbi0y4rcVkbUZ6gSeK57v6MiL7M=";
+    hash = "sha256-uhRnJyUR7lbJvVxd3YNVxmTSTDksQsVcM5G8ZKO7Xbk=";
   };
 
   vendorHash = "sha256-hY4bgQXwKjL4UT3omDYuxy9xN9XOr00mMvGssKOSsG4=";

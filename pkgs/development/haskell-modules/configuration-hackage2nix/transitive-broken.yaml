@@ -481,7 +481,6 @@ dont-distribute-packages:
  - amazon-emailer-client-snap
  - amby
  - ampersand
- - amqp-streamly
  - analyze-client
  - anansi-hscolour
  - anatomy
@@ -623,8 +622,6 @@ dont-distribute-packages:
  - bbi
  - bdcs
  - bdcs-api
- - beam-automigrate
- - beam-postgres
  - beam-th
  - beautifHOL
  - bech32-th
@@ -795,7 +792,6 @@ dont-distribute-packages:
  - cflp
  - cfopu
  - chainweb-mining-client
- - chakra
  - chalkboard-viewer
  - chapelure
  - charade
@@ -1163,7 +1159,7 @@ dont-distribute-packages:
  - distribution-plot
  - dixi
  - dl-fedora
- - dl-fedora_1_2
+ - dl-fedora_1_2_1
  - dmenu-pkill
  - dmenu-pmount
  - dmenu-search
@@ -1230,7 +1226,6 @@ dont-distribute-packages:
  - elsa
  - ema-extra
  - emacs-keys
- - email
  - emailparse
  - embroidery
  - emd
@@ -1738,6 +1733,8 @@ dont-distribute-packages:
  - gore-and-ash-sync
  - gps
  - gps2htmlReport
+ - gpu-vulkan
+ - gpu-vulkan-middle
  - grab-form
  - graflog
  - grammar-combinators
@@ -1825,8 +1822,6 @@ dont-distribute-packages:
  - haddocset
  - hadoop-tools
  - haggis
- - hailgun-send
- - hailgun-simple
  - hails-bin
  - hake
  - hakyll-elm
@@ -2248,7 +2243,6 @@ dont-distribute-packages:
  - hxournal
  - hxt-binary
  - hxt-filter
- - hxthelper
  - hxweb
  - hybrid
  - hydra-print
@@ -2317,6 +2311,7 @@ dont-distribute-packages:
  - instrument-cloudwatch
  - integreat
  - intel-aes
+ - intel-powermon
  - interpolatedstring-qq
  - interpolatedstring-qq-mwotton
  - intro-prelude
@@ -2917,6 +2912,8 @@ dont-distribute-packages:
  - nri-test-encoding
  - numeric-kinds
  - numeric-ode
+ - numeric-optimization
+ - numeric-optimization-ad
  - numerical
  - numhask-hedgehog
  - numhask-histogram
@@ -3358,7 +3355,6 @@ dont-distribute-packages:
  - regular-web
  - regular-xmlpickler
  - reheat
- - rel8
  - relational-postgresql8
  - relational-query
  - relational-query-HDBC
@@ -3484,6 +3480,7 @@ dont-distribute-packages:
  - samtools-conduit
  - samtools-enumerator
  - samtools-iteratee
+ - sandwich-webdriver_0_3_0_0
  - sarsi
  - sasha
  - sasl
@@ -3595,7 +3592,6 @@ dont-distribute-packages:
  - servant-zeppelin-server
  - servant-zeppelin-swagger
  - sessiontypes-distributed
- - sgf
  - sgrep
  - shady-gen
  - shady-graphics
@@ -3818,7 +3814,7 @@ dont-distribute-packages:
  - sydtest-webdriver-screenshot_0_1_0_0
  - sydtest-webdriver-yesod
  - sydtest-yesod
- - sydtest_0_18_0_0
+ - sydtest_0_18_0_1
  - sylvia
  - symantic-atom
  - symantic-http-demo
@@ -3875,6 +3871,7 @@ dont-distribute-packages:
  - techlab
  - telegram-bot
  - telegram-raw-api
+ - telescope
  - ten-lens
  - ten-unordered-containers
  - term-rewriting
@@ -4019,8 +4016,6 @@ dont-distribute-packages:
  - ukrainian-phonetics-basic
  - unagi-bloomfilter
  - unbound
- - unbound-generics-unify
- - unbound-kind-generics
  - unfoldable-restricted
  - uni-events
  - uni-graphs

@@ -1,64 +1,78 @@
 {
+  uiua_versionType ? "stable",
+
   lib,
   stdenv,
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
 
+  libffi,
   audioSupport ? true,
   alsa-lib,
   webcamSupport ? false,
 
-  # passthru.tests.run
   runCommand,
-  uiua,
-
-  unstable ? false,
 }:
 
 let
-  versionInfo = import (if unstable then ./unstable.nix else ./stable.nix);
+  versionInfo =
+    {
+      "stable" = import ./stable.nix;
+      "unstable" = import ./unstable.nix;
+    }
+    .${uiua_versionType};
 in
-rustPlatform.buildRustPackage rec {
-  pname = "uiua";
-  inherit (versionInfo) version cargoHash;
 
-  src = fetchFromGitHub {
-    owner = "uiua-lang";
-    repo = "uiua";
-    inherit (versionInfo) rev hash;
-  };
+# buildRustPackage doesn't support finalAttrs, so we can't use finalPackage for the tests
+lib.fix (
+  uiua:
+  rustPlatform.buildRustPackage rec {
+    pname = "uiua";
+    inherit (versionInfo) version cargoHash;
 
-  nativeBuildInputs =
-    lib.optionals (webcamSupport || stdenv.hostPlatform.isDarwin) [ rustPlatform.bindgenHook ]
-    ++ lib.optionals audioSupport [ pkg-config ];
+    src = fetchFromGitHub {
+      owner = "uiua-lang";
+      repo = "uiua";
+      inherit (versionInfo) rev hash;
+    };
 
-  buildInputs = lib.optionals (audioSupport && stdenv.hostPlatform.isLinux) [ alsa-lib ];
+    nativeBuildInputs =
+      lib.optionals (webcamSupport || stdenv.hostPlatform.isDarwin) [ rustPlatform.bindgenHook ]
+      ++ lib.optionals audioSupport [ pkg-config ];
 
-  buildFeatures = lib.optional audioSupport "audio" ++ lib.optional webcamSupport "webcam";
+    buildInputs =
+      [ libffi ] # we force dynamic linking our own libffi below
+      ++ lib.optionals (audioSupport && stdenv.hostPlatform.isLinux) [ alsa-lib ];
 
-  passthru.updateScript = versionInfo.updateScript;
-  passthru.tests.run = runCommand "uiua-test-run" { nativeBuildInputs = [ uiua ]; } ''
-    uiua init
-    diff -U3 --color=auto <(uiua run main.ua) <(echo '"Hello, World!"')
-    touch $out
-  '';
+    buildFeatures =
+      [ "libffi/system" ] # force libffi to be linked dynamically instead of rebuilding it
+      ++ lib.optional audioSupport "audio"
+      ++ lib.optional webcamSupport "webcam";
 
-  meta = {
-    changelog = "https://github.com/uiua-lang/uiua/blob/${src.rev}/changelog.md";
-    description = "Stack-oriented array programming language with a focus on simplicity, beauty, and tacit code";
-    longDescription = ''
-      Uiua combines the stack-oriented and array-oriented paradigms in a single
-      language. Combining these already terse paradigms results in code with a very
-      high information density and little syntactic noise.
+    passthru.updateScript = versionInfo.updateScript;
+    passthru.tests.run = runCommand "uiua-test-run" { nativeBuildInputs = [ uiua ]; } ''
+      uiua init
+      diff -U3 --color=auto <(uiua run main.ua) <(echo '"Hello, World!"')
+      touch $out
     '';
-    homepage = "https://www.uiua.org/";
-    license = lib.licenses.mit;
-    mainProgram = "uiua";
-    maintainers = with lib.maintainers; [
-      cafkafk
-      tomasajt
-      defelo
-    ];
-  };
-}
+
+    meta = {
+      changelog = "https://github.com/uiua-lang/uiua/blob/${src.rev}/changelog.md";
+      description = "Stack-oriented array programming language with a focus on simplicity, beauty, and tacit code";
+      longDescription = ''
+        Uiua combines the stack-oriented and array-oriented paradigms in a single
+        language. Combining these already terse paradigms results in code with a very
+        high information density and little syntactic noise.
+      '';
+      homepage = "https://www.uiua.org/";
+      license = lib.licenses.mit;
+      mainProgram = "uiua";
+      maintainers = with lib.maintainers; [
+        cafkafk
+        tomasajt
+        defelo
+      ];
+    };
+  }
+)

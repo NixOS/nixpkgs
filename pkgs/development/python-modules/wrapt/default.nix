@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  setuptools,
   pytestCheckHook,
   sphinxHook,
   sphinx-rtd-theme,
@@ -9,26 +10,29 @@
 
 buildPythonPackage rec {
   pname = "wrapt";
-  version = "1.16.0";
-  outputs = [
-    "out"
-    "doc"
-  ];
-  format = "setuptools";
+  version = "1.17.0dev4";
+  pyproject = true;
 
   src = fetchFromGitHub {
     owner = "GrahamDumpleton";
-    repo = pname;
+    repo = "wrapt";
     rev = "refs/tags/${version}";
-    hash = "sha256-lVpSriXSvRwAKX4iPOIBvJwhqhKjdrUdGaEG4QoTQyo=";
+    hash = "sha256-q2DYCzTWxGpuIa5v6cyDCTekXfDlFML4eo8J60YdCsc=";
   };
 
-  nativeCheckInputs = [ pytestCheckHook ];
+  build-system = [ setuptools ];
 
   nativeBuildInputs = [
     sphinxHook
     sphinx-rtd-theme
   ];
+
+  outputs = [
+    "out"
+    "doc"
+  ];
+
+  nativeCheckInputs = [ pytestCheckHook ];
 
   pythonImportsCheck = [ "wrapt" ];
 

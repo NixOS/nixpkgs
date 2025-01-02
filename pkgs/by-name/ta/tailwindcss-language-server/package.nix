@@ -60,6 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     mkdir -p $out/{bin,lib/tailwindcss-language-server}
     cp -r {packages,node_modules} $out/lib/tailwindcss-language-server
+    chmod +x $out/lib/tailwindcss-language-server/packages/tailwindcss-language-server/bin/tailwindcss-language-server
     ln -s $out/lib/tailwindcss-language-server/packages/tailwindcss-language-server/bin/tailwindcss-language-server $out/bin/tailwindcss-language-server
 
     runHook postInstall

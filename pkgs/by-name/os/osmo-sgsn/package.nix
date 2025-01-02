@@ -12,10 +12,6 @@
   c-ares,
 }:
 
-let
-  inherit (stdenv.hostPlatform) isLinux;
-in
-
 stdenv.mkDerivation rec {
   pname = "osmo-sgsn";
   version = "1.12.1";
@@ -51,7 +47,7 @@ stdenv.mkDerivation rec {
     description = "Osmocom implementation of the 3GPP Serving GPRS Support Node (SGSN)";
     homepage = "https://osmocom.org/projects/osmosgsn";
     license = lib.licenses.agpl3Plus;
-    maintainers = [ ];
+    maintainers = [ lib.maintainers.markuskowa ];
     platforms = lib.platforms.linux;
     mainProgram = "osmo-sgsn";
   };

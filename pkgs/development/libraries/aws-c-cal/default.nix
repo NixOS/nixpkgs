@@ -11,13 +11,14 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "aws-c-cal";
-  version = "0.6.15";
+  # nixpkgs-update: no auto update
+  version = "0.8.0";
 
   src = fetchFromGitHub {
     owner = "awslabs";
     repo = "aws-c-cal";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-RrUJz3IqwbBJ8NuJTIWqK33FlJHolcaid55PT2EhO24=";
+    hash = "sha256-dYFUYdMQMT8CZFMrCrhQ8JPEhA4CVf+f7VLFt3JNmn8=";
   };
 
   patches = [

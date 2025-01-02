@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "sip";
-  version = "6.9.0";
+  version = "6.9.1";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-CT/Q4V2Zri+Kg91/fbqj/yUMWCp3644IRc2aytsfCTQ=";
+    hash = "sha256-eQS+UZDXh5lSVjt4o68OWPon2VJa9/U/k+rHqDtDPns=";
   };
 
   build-system = [

@@ -62,6 +62,8 @@ buildPythonPackage rec {
       "test_tracing_other_threads"
       # subprocess.CalledProcessError
       "test_find_main_thread_id"
+      # numpy 2 compat
+      "test_evaluate_numpy"
     ]
     ++ lib.optionals (pythonAtLeast "3.12") [
       "test_case_handled_and_unhandled_exception_generator"

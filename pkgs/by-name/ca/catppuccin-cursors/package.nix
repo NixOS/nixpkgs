@@ -5,11 +5,10 @@
   inkscape,
   just,
   xcursorgen,
-  hyprcursor,
-  xcur2png,
   catppuccin-whiskers,
   python3,
   python3Packages,
+  zip,
 }:
 let
   dimensions = {
@@ -40,7 +39,7 @@ let
   };
   variantName = { palette, color }: palette + color;
   variants = lib.mapCartesianProduct variantName dimensions;
-  version = "1.0.1";
+  version = "1.0.2";
 in
 stdenvNoCC.mkDerivation {
   pname = "catppuccin-cursors";
@@ -50,18 +49,17 @@ stdenvNoCC.mkDerivation {
     owner = "catppuccin";
     repo = "cursors";
     rev = "v${version}";
-    hash = "sha256-l01L0UiE9bgUOMHhs74Bndarw2b6TaJGW/xU/8rfoAk=";
+    hash = "sha256-Mm0fRh/Shem65E/Cl0yyw+efEHOEt/OJ+MzL+3Mcbwc=";
   };
 
   nativeBuildInputs = [
     just
     inkscape
     xcursorgen
-    hyprcursor
-    xcur2png
     catppuccin-whiskers
     python3
     python3Packages.pyside6
+    zip
   ];
 
   outputs = variants ++ [ "out" ]; # dummy "out" output to prevent breakage
@@ -73,7 +71,7 @@ stdenvNoCC.mkDerivation {
 
     patchShebangs .
 
-    just all_with_hyprcursor
+    just all
 
     runHook postBuild
   '';

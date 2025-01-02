@@ -3,7 +3,7 @@
   buildGoModule,
   fetchFromGitHub,
   nix-update-script,
-  substituteAll,
+  replaceVars,
 }:
 buildGoModule rec {
   pname = "flottbot";
@@ -18,8 +18,7 @@ buildGoModule rec {
 
   patches = [
     # patch out debug.ReadBuidlInfo since version information is not available with buildGoModule
-    (substituteAll {
-      src = ./version.patch;
+    (replaceVars ./version.patch {
       version = version;
       vcsHash = version; # Maybe there is a way to get the git ref from src? idk.
     })

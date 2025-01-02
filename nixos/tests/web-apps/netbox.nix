@@ -22,7 +22,6 @@ import ../make-test-python.nix (
     meta = with lib.maintainers; {
       maintainers = [
         minijackson
-        n0emis
       ];
     };
 

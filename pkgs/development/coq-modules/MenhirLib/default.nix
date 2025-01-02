@@ -2,6 +2,7 @@
   lib,
   mkCoqDerivation,
   coq,
+  stdlib,
   version ? null,
 }:
 let
@@ -32,6 +33,7 @@ let
       "20211230".sha256 = "sha256-+ntl4ykkqJWEeJJzt6fO5r0X1J+4in2LJIj1N8R175w="; # coq 8.7 - 8.18
       "20200624".sha256 = "sha256-8lMqwmOsqxU/45Xr+GeyU2aIjrClVdv3VamCCkF76jY="; # coq 8.7 - 8.13
     };
+    propagatedBuildInputs = [ stdlib ];
     preBuild = "cd coq-menhirlib/src";
     meta = with lib; {
       homepage = "https://gitlab.inria.fr/fpottier/menhir/-/tree/master/coq-menhirlib";

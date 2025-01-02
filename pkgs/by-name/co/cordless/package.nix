@@ -24,6 +24,6 @@ buildGoModule rec {
     description = "Discord terminal client";
     mainProgram = "cordless";
     license = licenses.bsd3;
-    maintainers = with maintainers; [ colemickens ];
+    maintainers = with maintainers; [ ];
   };
 }

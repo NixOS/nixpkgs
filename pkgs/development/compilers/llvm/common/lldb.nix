@@ -24,15 +24,13 @@
 , patches ? [ ]
 , enableManpages ? false
 , devExtraCmakeFlags ? [ ]
-, apple-sdk_11
-, darwinMinVersionHook
 , ...
 }:
 
 let
   src' =
     if monorepoSrc != null then
-      runCommand "lldb-src-${version}" { } (''
+      runCommand "lldb-src-${version}" { inherit (monorepoSrc) passthru; } (''
         mkdir -p "$out"
       '' + lib.optionalString (lib.versionAtLeast release_version "14") ''
         cp -r ${monorepoSrc}/cmake "$out"
@@ -93,14 +91,6 @@ stdenv.mkDerivation (rec {
     (lib.getLib libclang)
   ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.bootstrap_cmds
-  ]
-  ++ lib.optionals
-    (
-      stdenv.targetPlatform.isDarwin
-        && lib.versionOlder stdenv.targetPlatform.darwinSdkVersion "11.0"
-    ) [
-    apple-sdk_11
-    (darwinMinVersionHook "10.15")
   ];
 
   hardeningDisable = [ "format" ];

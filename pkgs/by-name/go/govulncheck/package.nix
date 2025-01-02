@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
 }:
 
 buildGoModule rec {
@@ -18,8 +18,7 @@ buildGoModule rec {
 
   patches = [
     # patch in version information
-    (substituteAll {
-      src = ./version.patch;
+    (replaceVars ./version.patch {
       inherit version;
     })
   ];

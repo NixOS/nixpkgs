@@ -28,22 +28,24 @@ stdenv.mkDerivation rec {
   # pythonFull.buildEnv.override { extraLibs = [ thrift ]; }
   pythonPath = [ ];
 
-  nativeBuildInputs = [
-    bison
-    cmake
-    flex
-    pkg-config
-    python3
-    python3.pkgs.setuptools
-  ];
-
-  buildInputs =
+  nativeBuildInputs =
     [
-      boost
+      bison
+      cmake
+      flex
+      pkg-config
+      python3
+      python3.pkgs.setuptools
     ]
     ++ lib.optionals (!static) [
-      (python3.withPackages (ps: [ ps.twisted ]))
+      python3.pkgs.twisted
     ];
+
+  buildInputs = [
+    boost
+  ];
+
+  strictDeps = true;
 
   propagatedBuildInputs = [
     libevent

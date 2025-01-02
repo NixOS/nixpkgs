@@ -7,7 +7,7 @@
   libglvnd,
   libinput,
   libxkbcommon,
-  mesa,
+  libgbm,
   nix-update-script,
   pango,
   pipewire,
@@ -60,7 +60,7 @@ rustPlatform.buildRustPackage rec {
       libglvnd # For libEGL
       libinput
       libxkbcommon
-      mesa # For libgbm
+      libgbm
       pango
       seatd
       wayland # For libwayland-client

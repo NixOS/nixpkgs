@@ -1,24 +1,30 @@
 {
-  stdenvNoCC,
+  stdenv,
   fetchFromGitHub,
   lib,
   cmake,
-  mkDerivation,
   libxcb,
   qtbase,
   qtsvg,
+  wrapQtAppsHook,
+  procps,
 }:
 
-mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   pname = "spotify-qt";
-  version = "3.11";
+  version = "3.12";
 
   src = fetchFromGitHub {
     owner = "kraxarn";
-    repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-Dm+ELHtYZGSzJSrERtvpuuV5cVZ9ah9WQ0iTTJqGqVg=";
+    repo = "spotify-qt";
+    rev = "v${finalAttrs.version}";
+    hash = "sha256-j9g2fq12gsue0pc/fLoCAtDlwwlbCVJ65kxPiTJTqvk=";
   };
+
+  postPatch = ''
+    substituteInPlace src/spotifyclient/helper.cpp \
+      --replace-fail /usr/bin/ps ${lib.getExe' procps "ps"}
+  '';
 
   buildInputs = [
     libxcb
@@ -26,13 +32,16 @@ mkDerivation rec {
     qtsvg
   ];
 
-  nativeBuildInputs = [ cmake ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
 
-  cmakeFlags = [ "-DCMAKE_INSTALL_PREFIX=" ];
+  cmakeFlags = [ (lib.cmakeFeature "CMAKE_INSTALL_PREFIX" "") ];
 
   installFlags = [ "DESTDIR=$(out)" ];
 
-  postInstall = lib.optionalString stdenvNoCC.hostPlatform.isDarwin ''
+  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
     mkdir -p $out/Applications
     mv $out/bin/spotify-qt.app $out/Applications
     ln $out/Applications/spotify-qt.app/Contents/MacOS/spotify-qt $out/bin/spotify-qt
@@ -46,4 +55,4 @@ mkDerivation rec {
     maintainers = with maintainers; [ iivusly ];
     platforms = platforms.unix;
   };
-}
+})

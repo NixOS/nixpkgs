@@ -15,7 +15,7 @@
   udev,
   wayland,
   wayland-protocols,
-  mesa,
+  libgbm,
 }:
 
 stdenv.mkDerivation rec {
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     udev
     wayland
     wayland-protocols
-    mesa
+    libgbm
   ];
 
   mesonFlags = [

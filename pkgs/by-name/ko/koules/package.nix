@@ -46,13 +46,13 @@ stdenv.mkDerivation rec {
   postPatch = ''
     # We do not want to depend on that particular font to be available in the
     # xserver, hence substitute it by a font which is always available
-    sed -ie 's:-schumacher-clean-bold-r-normal--8-80-75-75-c-80-\*iso\*:fixed:' xlib/init.c
+    sed -i -e 's:-schumacher-clean-bold-r-normal--8-80-75-75-c-80-\*iso\*:fixed:' xlib/init.c
   '';
 
   preBuild = ''
     cp xkoules.6 xkoules.man  # else "make" will not succeed
-    sed -ie "s:^SOUNDDIR\s*=.*:SOUNDDIR=$out/lib:" Makefile
-    sed -ie "s:^KOULESDIR\s*=.*:KOULESDIR=$out:" Makefile
+    sed -i -e "s:^SOUNDDIR\s*=.*:SOUNDDIR=$out/lib:" Makefile
+    sed -i -e "s:^KOULESDIR\s*=.*:KOULESDIR=$out:" Makefile
   '';
 
   installPhase = ''

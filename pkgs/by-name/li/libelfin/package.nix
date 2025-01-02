@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   python3,
-  substituteAll,
+  replaceVars,
 }:
 
 stdenv.mkDerivation rec {
@@ -18,8 +18,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./0001-Don-t-detect-package-version-with-Git.patch;
+    (replaceVars ./0001-Don-t-detect-package-version-with-Git.patch {
       inherit version;
     })
   ];

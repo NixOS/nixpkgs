@@ -1009,7 +1009,8 @@ in
             };
             ipv6 = mkOption {
               type = types.bool;
-              default = true;
+              default = config.networking.enableIPv6;
+              defaultText = lib.literalExpression "config.networking.enableIPv6";
               description = ''
                 By default, nginx will look up both IPv4 and IPv6 addresses while resolving.
                 If looking up of IPv6 addresses is not desired, the ipv6=off parameter can be

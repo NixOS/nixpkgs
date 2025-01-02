@@ -10,7 +10,7 @@ systemd itself uses extensively.
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/src/basic/path-util.h b/src/basic/path-util.h
-index fcb3aa9399..b9e69cbf91 100644
+index dff5a3a549..01344e5cf6 100644
 --- a/src/basic/path-util.h
 +++ b/src/basic/path-util.h
 @@ -17,10 +17,10 @@

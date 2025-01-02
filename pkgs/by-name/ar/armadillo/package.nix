@@ -40,7 +40,6 @@ stdenv.mkDerivation rec {
     platforms = platforms.unix;
     maintainers = with maintainers; [
       juliendehos
-      knedlsepp
     ];
   };
 }

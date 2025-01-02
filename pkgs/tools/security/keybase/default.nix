@@ -1,6 +1,6 @@
 {
   stdenv,
-  substituteAll,
+  replaceVars,
   lib,
   buildGoModule,
   fetchFromGitHub,
@@ -36,8 +36,7 @@ buildGoModule rec {
   vendorHash = "sha256-KHahkGzkXr6xp0XY9MyEeeiHnmphaNYi9dPBQ476+us=";
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths-keybase.patch;
+    (replaceVars ./fix-paths-keybase.patch {
       gpg = "${gnupg}/bin/gpg";
       gpg2 = "${gnupg}/bin/gpg2";
     })

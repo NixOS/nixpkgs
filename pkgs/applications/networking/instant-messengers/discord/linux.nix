@@ -43,7 +43,7 @@
   libXtst,
   libxcb,
   libxshmfence,
-  mesa,
+  libgbm,
   nspr,
   nss,
   pango,
@@ -101,7 +101,7 @@ stdenv.mkDerivation rec {
     libXtst
     libxcb
     libxshmfence
-    mesa
+    libgbm
     nss
     wrapGAppsHook3
     makeShellWrapper
@@ -115,7 +115,7 @@ stdenv.mkDerivation rec {
       systemd
       libpulseaudio
       libdrm
-      mesa
+      libgbm
       stdenv.cc.cc
       alsa-lib
       atk

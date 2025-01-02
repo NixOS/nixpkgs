@@ -36,6 +36,10 @@ buildPythonPackage rec {
 
   build-system = [ poetry-core ];
 
+  pythonRelaxDeps = [
+    "numpy"
+  ];
+
   dependencies = [
     langchain-core
     numpy

@@ -24,7 +24,7 @@
 , libxcb
 , libxkbcommon
 , makeWrapper
-, mesa
+, libgbm
 , nspr
 , nss
 , pango
@@ -59,7 +59,7 @@ let
       libGL
       libnotify
       libxkbcommon
-      mesa
+      libgbm
       nspr
       nss
       pango

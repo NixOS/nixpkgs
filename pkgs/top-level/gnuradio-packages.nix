@@ -37,18 +37,6 @@ in {
 
   osmosdr = callPackage ../development/gnuradio-modules/osmosdr/default.nix { };
 
-  ais = callPackage ../development/gnuradio-modules/ais/default.nix { };
-
   fosphor = callPackage ../development/gnuradio-modules/fosphor/default.nix { };
-
-  grnet = callPackage ../development/gnuradio-modules/grnet/default.nix { };
-
-  gsm = callPackage ../development/gnuradio-modules/gsm/default.nix { };
-
-  nacl = callPackage ../development/gnuradio-modules/nacl/default.nix { };
-
-  rds = callPackage ../development/gnuradio-modules/rds/default.nix { };
-
-  limesdr = callPackage ../development/gnuradio-modules/limesdr/default.nix { };
 
 })

@@ -260,7 +260,8 @@ in
       ''
       else ''
         rm -f /usr/bin/env
-        rmdir --ignore-fail-on-non-empty /usr/bin /usr
+        if test -d /usr/bin; then rmdir --ignore-fail-on-non-empty /usr/bin; fi
+        if test -d /usr; then rmdir --ignore-fail-on-non-empty /usr; fi
       '';
 
     system.activationScripts.specialfs =

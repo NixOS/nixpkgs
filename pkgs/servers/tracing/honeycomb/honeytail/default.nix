@@ -16,7 +16,6 @@ import ./versions.nix (
       rev = "v${version}";
       hash = sha256;
     };
-    inherit (buildGoModule.go) GOOS GOARCH;
 
     meta = with lib; {
       description = "agent for ingesting log file data into honeycomb.io and making it available for exploration";

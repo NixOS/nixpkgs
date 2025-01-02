@@ -4,6 +4,7 @@
   fetchpatch,
   fetchurl,
   patchelf,
+  bash,
   gmp,
 }:
 let
@@ -36,13 +37,17 @@ stdenv.mkDerivation rec {
     (fetchpatch {
       name = "remove-duplicate-if.patch";
       url = "https://github.com/MLton/mlton/commit/22002cd0a53a1ab84491d74cb8dc6a4e50c1f7b7.patch";
-      decode = "sed -e 's|Makefile\.binary|Makefile|g'";
+      decode = "sed -e 's|Makefile\\.binary|Makefile|g'";
       hash = "sha256-Gtmc+OIh+m7ordSn74fpOKVDQDtYyLHe6Le2snNCBYQ=";
     })
   ];
 
-  buildInputs = [ gmp ];
+  buildInputs = [
+    bash
+    gmp
+  ];
   nativeBuildInputs = lib.optional stdenv.hostPlatform.isLinux patchelf;
+  strictDeps = true;
 
   buildPhase = ''
     make update \

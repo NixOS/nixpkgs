@@ -12,16 +12,17 @@
   wrapGAppsHook3,
   nixosTests,
   writeScript,
+  halibut,
   isMobile ? false,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sgt-puzzles";
-  version = "20241123.5e74004";
+  version = "20241223.5eea14c";
 
   src = fetchurl {
     url = "http://www.chiark.greenend.org.uk/~sgtatham/puzzles/puzzles-${version}.tar.gz";
-    hash = "sha256-r96rQWq2UJoLoIB+w1xcxIvd5kNGGYq+Wri/Vojeb0Q=";
+    hash = "sha256-c9cPPxjU7O+uAp6jzCkfv8ZJeVrcLmEfD+lUK0l+X9w=";
   };
 
   sgt-puzzles-menu = fetchurl {
@@ -36,6 +37,7 @@ stdenv.mkDerivation rec {
     perl
     pkg-config
     wrapGAppsHook3
+    halibut # For help pages
   ];
 
   env.NIX_CFLAGS_COMPILE = lib.optionalString isMobile "-DSTYLUS_BASED";

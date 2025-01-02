@@ -60,7 +60,8 @@ lib.makeOverridable ({ # The kernel source tarball.
   # symbolic name and `patch' is the actual patch.  The patch may
   # optionally be compressed with gzip or bzip2.
   kernelPatches ? []
-, ignoreConfigErrors ? stdenv.hostPlatform.linux-kernel.name != "pc"
+, ignoreConfigErrors ?
+  !lib.elem stdenv.hostPlatform.linux-kernel.name [ "aarch64-multiplatform" "pc" ]
 , extraMeta ? {}
 
 , isZen      ? false
@@ -171,23 +172,18 @@ let
 
     buildPhase = ''
       export buildRoot="''${buildRoot:-build}"
-      export HOSTCC=$CC_FOR_BUILD
-      export HOSTCXX=$CXX_FOR_BUILD
-      export HOSTAR=$AR_FOR_BUILD
-      export HOSTLD=$LD_FOR_BUILD
 
       # Get a basic config file for later refinement with $generateConfig.
       make $makeFlags \
           -C . O="$buildRoot" $kernelBaseConfig \
-          ARCH=$kernelArch \
-          HOSTCC=$HOSTCC HOSTCXX=$HOSTCXX HOSTAR=$HOSTAR HOSTLD=$HOSTLD \
-          CC=$CC OBJCOPY=$OBJCOPY OBJDUMP=$OBJDUMP READELF=$READELF \
+          ARCH=$kernelArch CROSS_COMPILE=${stdenv.cc.targetPrefix} \
           $makeFlags
 
       # Create the config file.
       echo "generating kernel configuration..."
       ln -s "$kernelConfigPath" "$buildRoot/kernel-config"
-      DEBUG=1 ARCH=$kernelArch KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
+      DEBUG=1 ARCH=$kernelArch CROSS_COMPILE=${stdenv.cc.targetPrefix} \
+        KERNEL_CONFIG="$buildRoot/kernel-config" AUTO_MODULES=$autoModules \
         PREFER_BUILTIN=$preferBuiltin BUILD_ROOT="$buildRoot" SRC=. MAKE_FLAGS="$makeFlags" \
         perl -w $generateConfig
     '';
@@ -239,8 +235,8 @@ kernel.overrideAttrs (finalAttrs: previousAttrs: {
 
     # Adds dependencies needed to edit the config:
     # nix-shell '<nixpkgs>' -A linux.configEnv --command 'make nconfig'
-    configEnv = kernel.overrideAttrs (old: {
-      nativeBuildInputs = old.nativeBuildInputs or [] ++ (with buildPackages; [
+    configEnv = finalAttrs.finalPackage.overrideAttrs (previousAttrs: {
+      nativeBuildInputs = previousAttrs.nativeBuildInputs or [ ] ++ (with buildPackages; [
         pkg-config ncurses
       ]);
     });

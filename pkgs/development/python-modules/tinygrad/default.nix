@@ -86,11 +86,16 @@ buildPythonPackage rec {
     ''
     + lib.optionalString rocmSupport ''
       substituteInPlace tinygrad/runtime/autogen/hip.py \
-        --replace-fail "/opt/rocm/lib/libamdhip64.so" "${rocmPackages.clr}/lib/libamdhip64.so" \
-        --replace-fail "/opt/rocm/lib/libhiprtc.so" "${rocmPackages.clr}/lib/libhiprtc.so" \
+        --replace-fail "/opt/rocm/" "${rocmPackages.clr}/"
+
+      substituteInPlace tinygrad/runtime/support/compiler_hip.py \
+        --replace-fail "/opt/rocm/include" "${rocmPackages.clr}/include"
+
+      substituteInPlace tinygrad/runtime/support/compiler_hip.py \
+        --replace-fail "/opt/rocm/llvm" "${rocmPackages.llvm.llvm}"
 
       substituteInPlace tinygrad/runtime/autogen/comgr.py \
-        --replace-fail "/opt/rocm/lib/libamd_comgr.so" "${rocmPackages.rocm-comgr}/lib/libamd_comgr.so"
+        --replace-fail "/opt/rocm/" "${rocmPackages.rocm-comgr}/"
     '';
 
   build-system = [ setuptools ];

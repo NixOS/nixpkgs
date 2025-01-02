@@ -1,4 +1,4 @@
-{ lib, mkCoqDerivation, coq, version ? null }:
+{ lib, mkCoqDerivation, coq, stdlib, version ? null }:
 
 mkCoqDerivation rec {
   pname = "coq-ext-lib";
@@ -32,6 +32,8 @@ mkCoqDerivation rec {
   release."0.9.5".sha256  = "1b4cvz3llxin130g13calw5n1zmvi6wdd5yb8a41q7yyn2hd3msg";
   release."0.9.4".sha256  = "1y66pamgsdxlq2w1338lj626ln70cwj7k53hxcp933g8fdsa4hp0";
   releaseRev = v: "v${v}";
+
+  propagatedBuildInputs = [ stdlib ];
 
   meta = {
     description = "Collection of theories and plugins that may be useful in other Coq developments";

@@ -14,11 +14,12 @@
   pytestCheckHook,
   CoreServices,
   libiconv,
+  python,
 }:
 
 buildPythonPackage rec {
   pname = "watchfiles";
-  version = "0.22.0";
+  version = "0.24.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.7";
@@ -27,14 +28,16 @@ buildPythonPackage rec {
     owner = "samuelcolvin";
     repo = pname;
     rev = "refs/tags/v${version}";
-    hash = "sha256-TtRSRgtMOqsnhdvsic3lg33xlA+r/DcYHlzewSOu/44=";
+    hash = "sha256-uc4CfczpNkS4NMevtRxhUOj9zTt59cxoC0BXnuHFzys=";
   };
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    inherit src;
-    name = "${pname}-${version}";
-    hash = "sha256-n9yN/VRNQWCxh+BoliIMkKqJC51inpB9DQ9WtqR4oA0=";
+  cargoDeps = rustPlatform.importCargoLock {
+    lockFile = ./Cargo.lock;
+    outputHashes."notify-6.1.1" = "sha256-lT3R5ZQpjx52NVMEKTTQI90EWT16YnbqphqvZmNpw/I=";
   };
+
+  # Fixes cross compilation to aarch64-linux
+  maturinBuildFlags = [ "--interpreter ${python.executable}" ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     CoreServices

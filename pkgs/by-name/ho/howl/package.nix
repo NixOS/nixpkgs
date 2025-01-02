@@ -43,7 +43,7 @@ stdenv.mkDerivation rec {
     homepage = "https://howl.io/";
     description = "General purpose, fast and lightweight editor with a keyboard-centric minimalistic user interface";
     license = licenses.mit;
-    maintainers = with maintainers; [ pacien ];
+    maintainers = with maintainers; [ euxane ];
     mainProgram = "howl";
 
     # LuaJIT and Howl builds fail for x86_64-darwin and aarch64-linux respectively

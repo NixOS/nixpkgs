@@ -14,17 +14,18 @@ in
 
 pythonPackages.buildPythonApplication rec {
   pname = "quast";
-  version = "5.0.2";
+  version = "5.3.0";
 
   src = fetchurl {
     url = "https://github.com/ablab/quast/releases/download/${pname}_${version}/${pname}-${version}.tar.gz";
-    sha256 = "13ml8qywbb4cc7wf2x7z5mz1rjqg51ab8wkizwcg4f6c40zgif6d";
+    hash = "sha256-rJ26A++dClHXqeLFaCYQTnjzQPYmOjrTk2SEQt68dOw=";
   };
 
   pythonPath = with pythonPackages; [
     simplejson
     joblib
     setuptools
+    distutils
     matplotlib
   ];
 
@@ -58,15 +59,15 @@ pythonPackages.buildPythonApplication rec {
   # Tests need to download data files, so manual run after packaging is needed
   doCheck = false;
 
-  meta = with lib; {
+  meta = {
     description = "Evaluates genome assemblies by computing various metrics";
     homepage = "https://github.com/ablab/quast";
-    sourceProvenance = with sourceTypes; [
+    sourceProvenance = with lib.sourceTypes; [
       fromSource
       binaryNativeCode # source bundles binary dependencies
     ];
-    license = licenses.gpl2;
-    maintainers = [ maintainers.bzizou ];
-    platforms = platforms.all;
+    license = lib.licenses.gpl2;
+    maintainers = [ lib.maintainers.bzizou ];
+    platforms = lib.platforms.all;
   };
 }

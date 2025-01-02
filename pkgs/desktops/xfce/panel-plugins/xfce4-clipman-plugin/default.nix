@@ -18,8 +18,8 @@
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-clipman-plugin";
-  version = "1.6.6";
-  sha256 = "sha256-wdEoM4etco+s0+dULkBvWJZ3WBCW3Ph2bdY0E/l5VRc=";
+  version = "1.6.7";
+  sha256 = "sha256-kbcA1X5LBnk1FcrhVqpCENp5bleJga2jnCh1RltN72o=";
 
   nativeBuildInputs = [
     wayland-scanner

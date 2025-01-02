@@ -8,7 +8,7 @@
   cups,
   udev,
   libdrm,
-  mesa,
+  libgbm,
   dbus,
   expat,
   fontconfig,
@@ -79,7 +79,7 @@ stdenv.mkDerivation rec {
     xorg.libXtst
     xorg.libxcb
     libdrm
-    mesa.out
+    libgbm
   ];
 
   runtimeDependencies = [

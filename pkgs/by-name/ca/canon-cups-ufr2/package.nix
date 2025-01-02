@@ -74,20 +74,20 @@ stdenv.mkDerivation rec {
     (
       cd $sourceRoot
       tar -xf Sources/cnrdrvcups-lb-${version}-1.${suffix2}.tar.xz
-      sed -ie "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-common-${version}/allgen.sh
-      sed -ie "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-common-${version}/allgen.sh
-      sed -ie "s@_bindir=/usr/bin@_bindir=$out/bin@" cnrdrvcups-common-${version}/allgen.sh
-      sed -ie "s@/usr@$out@" cnrdrvcups-common-${version}/{{backend,rasterfilter}/Makefile.am,rasterfilter/cnrasterproc.h}
-      sed -ie "s@etc/cngplp@$out/etc/cngplp@" cnrdrvcups-common-${version}/cngplp/Makefile.am
-      sed -ie "s@usr/share/cngplp@$out/usr/share/cngplp@" cnrdrvcups-common-${version}/cngplp/src/Makefile.am
+      sed -i -e "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-common-${version}/allgen.sh
+      sed -i -e "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-common-${version}/allgen.sh
+      sed -i -e "s@_bindir=/usr/bin@_bindir=$out/bin@" cnrdrvcups-common-${version}/allgen.sh
+      sed -i -e "s@/usr@$out@" cnrdrvcups-common-${version}/{{backend,rasterfilter}/Makefile.am,rasterfilter/cnrasterproc.h}
+      sed -i -e "s@etc/cngplp@$out/etc/cngplp@" cnrdrvcups-common-${version}/cngplp/Makefile.am
+      sed -i -e "s@usr/share/cngplp@$out/usr/share/cngplp@" cnrdrvcups-common-${version}/cngplp/src/Makefile.am
       patchShebangs cnrdrvcups-common-${version}
 
-      sed -ie "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-lb-${version}/allgen.sh
-      sed -ie "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-lb-${version}/allgen.sh
-      sed -ie "s@_bindir=/usr/bin@_bindir=$out/bin@" cnrdrvcups-lb-${version}/allgen.sh
-      sed -ie '/^cd \.\.\/cngplp/,/^cd files/{/^cd files/!{d}}' cnrdrvcups-lb-${version}/allgen.sh
-      sed -ie "s@cd \.\./pdftocpca@cd pdftocpca@" cnrdrvcups-lb-${version}/allgen.sh
-      sed -ie "s@/usr@$out@" cnrdrvcups-lb-${version}/pdftocpca/Makefile.am
+      sed -i -e "s@_prefix=/usr@_prefix=$out@" cnrdrvcups-lb-${version}/allgen.sh
+      sed -i -e "s@_libdir=/usr/lib@_libdir=$out/lib@" cnrdrvcups-lb-${version}/allgen.sh
+      sed -i -e "s@_bindir=/usr/bin@_bindir=$out/bin@" cnrdrvcups-lb-${version}/allgen.sh
+      sed -i -e '/^cd \.\.\/cngplp/,/^cd files/{/^cd files/!{d}}' cnrdrvcups-lb-${version}/allgen.sh
+      sed -i -e "s@cd \.\./pdftocpca@cd pdftocpca@" cnrdrvcups-lb-${version}/allgen.sh
+      sed -i -e "s@/usr@$out@" cnrdrvcups-lb-${version}/pdftocpca/Makefile.am
       sed -i "/CNGPLPDIR/d" cnrdrvcups-lb-${version}/Makefile
       patchShebangs cnrdrvcups-lb-${version}
     )

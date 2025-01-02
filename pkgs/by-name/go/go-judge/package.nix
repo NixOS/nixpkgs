@@ -24,7 +24,7 @@ buildGoModule rec {
     echo v${version} > ./cmd/go-judge/version/version.txt
   '';
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   meta = with lib; {
     description = "High performance sandbox service based on container technologies";

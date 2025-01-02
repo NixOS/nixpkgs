@@ -133,7 +133,7 @@ llvmPackages.stdenv.mkDerivation rec {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "v(\d\.\d)"
+        "v(\\d\\.\\d)"
       ];
     };
     # Let the user access the chosen uClibc outside the derivation.

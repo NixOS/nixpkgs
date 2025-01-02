@@ -30,11 +30,11 @@
 }:
 
 let
-  openrct2-version = "0.4.15";
+  openrct2-version = "0.4.17";
 
   # Those versions MUST match the pinned versions within the CMakeLists.txt
   # file. The REPLAYS repository from the CMakeLists.txt is not necessary.
-  objects-version = "1.4.8";
+  objects-version = "1.4.11";
   openmsx-version = "1.6";
   opensfx-version = "1.0.5";
   title-sequences-version = "0.4.14";
@@ -43,14 +43,14 @@ let
     owner = "OpenRCT2";
     repo = "OpenRCT2";
     rev = "v${openrct2-version}";
-    hash = "sha256-VumjJGAur+2A7n0pFcNM7brYaoeaVCPBtRGFIZmq5QY=";
+    hash = "sha256-lyphYKPkS1DQj7OAvswI/zNMUZmvEevvtDar951AXwg=";
   };
 
   objects-src = fetchFromGitHub {
     owner = "OpenRCT2";
     repo = "objects";
     rev = "v${objects-version}";
-    hash = "sha256-A6iFaWda5qiFirGqOP6H9w0PP5Me8BRr2HXKZPHJImE=";
+    hash = "sha256-V06lh3h3sCKmLat4OWSOmrzpiFlOu8HhaSQSqsfkjds=";
   };
 
   openmsx-src = fetchFromGitHub {
@@ -117,11 +117,6 @@ stdenv.mkDerivation {
     "-DDOWNLOAD_TITLE_SEQUENCES=OFF"
   ];
 
-  env.NIX_CFLAGS_COMPILE = toString [
-    # Needed with GCC 12
-    "-Wno-error=maybe-uninitialized"
-  ];
-
   postUnpack = ''
     mkdir -p $sourceRoot/data/assetpack
 
@@ -145,8 +140,6 @@ stdenv.mkDerivation {
       + (versionCheck "OPENSFX" opensfx-version)
       + (versionCheck "TITLE_SEQUENCE" title-sequences-version)
     );
-
-  preFixup = "ln -s $out/share/openrct2 $out/bin/data";
 
   meta = with lib; {
     description = "Open source re-implementation of RollerCoaster Tycoon 2 (original game required)";

@@ -201,7 +201,7 @@ let
       # Bootstrap a cross stdenv using the LLVM toolchain.
       # This is currently not possible when compiling natively,
       # so we don't need to check hostPlatform != buildPlatform.
-      crossSystem = stdenv.targetPlatform // {
+      crossSystem = stdenv.hostPlatform // {
         useLLVM = true;
         linker = "lld";
       };

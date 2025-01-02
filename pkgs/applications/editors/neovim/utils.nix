@@ -108,7 +108,7 @@ let
       # the function you would have passed to lua.withPackages
       extraLuaPackages ? (_: [ ]),
       withNodeJs ? false,
-      withRuby ? true,
+      withRuby ? false,
       vimAlias ? false,
       viAlias ? false,
       configure ? { },

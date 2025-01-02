@@ -2,7 +2,7 @@
   lib,
   python3,
   stdenv,
-  substituteAll,
+  replaceVars,
   fetchFromGitHub,
 }:
 
@@ -20,8 +20,7 @@ stdenv.mkDerivation rec {
   patches =
     with python3.pkgs;
     [
-      (substituteAll {
-        src = ./websockify.patch;
+      (replaceVars ./websockify.patch {
         inherit websockify;
       })
     ]

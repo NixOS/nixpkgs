@@ -1,32 +1,27 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, stdenv
-, Security
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "onetun";
-  version = "0.3.7";
+  version = "0.3.10";
 
   src = fetchFromGitHub {
     owner = "aramperes";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-GVIRCMeuuhUA8lqQ1oI/Xcuf90QIlwhqYeU+HhbGWXQ=";
+    sha256 = "sha256-bggBBl2YQUncfOYIDsPgrHPwznCJQOlIOY3bbiZz7Rw=";
   };
 
-  cargoHash = "sha256-TRfr4riMzR/MbsV2RiQNlPoPLhHK5EScNBCeyyamfgE=";
+  cargoHash = "sha256-Il/jwaQ4nu93R1fC3r6haSSF5ATSrgkv4uZmAA/RZBI=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    Security
-  ];
-
-  meta = with lib; {
+  meta = {
     description = "Cross-platform, user-space WireGuard port-forwarder that requires no root-access or system network configurations";
     homepage = "https://github.com/aramperes/onetun";
-    license = licenses.mit;
-    maintainers = with maintainers; [ dit7ya ];
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ dit7ya ];
     mainProgram = "onetun";
   };
 }

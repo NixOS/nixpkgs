@@ -504,11 +504,11 @@ let self = {
 
   njs = rec {
     name = "njs";
-    src = fetchhg {
-      url = "https://hg.nginx.org/njs";
-      rev = "0.8.4";
-      sha256 = "sha256-SooPFx4WNEezPD+W/wmMLY+FdkGRoojLNUFbhn3Riyg=";
-      name = "nginx-njs";
+    src = fetchFromGitHub {
+      owner = "nginx";
+      repo = "njs";
+      rev = "0.8.7";
+      hash = "sha256-VEXzP+cN5hnDeniccwY7GIi4x460rnWO/o7ja3DyRCc=";
     };
 
     # njs module sources have to be writable during nginx build, so we copy them

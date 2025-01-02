@@ -11,10 +11,11 @@
   git,
   cairo,
   libxcb,
+  xcb-util-cursor,
+  xcbutilkeysyms,
   xcbutil,
   xcbutilwm,
   xcbutilxrm,
-  xcb-util-cursor,
   libstartup_notification,
   bison,
   flex,
@@ -26,14 +27,14 @@
 
 stdenv.mkDerivation rec {
   pname = "rofi-unwrapped";
-  version = "1.7.5";
+  version = "1.7.6";
 
   src = fetchFromGitHub {
     owner = "davatorium";
     repo = "rofi";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-3XFusKeckagEPfbLtt1xAVTEfn1Qebdi/Iq1AYbHCR4=";
+    hash = "sha256-hT9FMCAwY8hZx4y1l0vHfcReIJUBxSmixZJhKP8nRpw=";
   };
 
   preConfigure = ''
@@ -63,10 +64,11 @@ stdenv.mkDerivation rec {
     check
     libstartup_notification
     libxcb
+    xcb-util-cursor
+    xcbutilkeysyms
     xcbutil
     xcbutilwm
     xcbutilxrm
-    xcb-util-cursor
     which
   ];
 

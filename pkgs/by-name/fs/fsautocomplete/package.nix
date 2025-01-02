@@ -17,7 +17,7 @@ buildDotnetModule (finalAttrs: rec {
     hash = "sha256-+IkoXj7l6a/iPigIVy334XiwQFm/pD63FWpV2r0x84c=";
   };
 
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
 
   postPatch = ''
     rm global.json

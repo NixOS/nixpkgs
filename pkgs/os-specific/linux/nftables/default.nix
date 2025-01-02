@@ -34,6 +34,14 @@ stdenv.mkDerivation rec {
     hash = "sha256-Y1iDDzpk8x45sK1CHX2tzSQLcjQ97UjY7xO4+vIEhlo=";
   };
 
+  patches = [
+    (fetchurl {
+      name = "musl.patch";
+      url = "https://lore.kernel.org/netfilter-devel/20241219231001.1166085-2-hi@alyssa.is/raw";
+      hash = "sha256-7vMBIoDWcI/JBInYP5yYWp8BnYbATRfMTxqyZr2L9Sk=";
+    })
+  ];
+
   nativeBuildInputs = [
     autoreconfHook
     pkg-config

@@ -2,7 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   installShellFiles,
   testers,
   org-stats,
@@ -24,8 +24,7 @@ buildGoModule rec {
   patches = [
     # patch in version information
     # since `debug.ReadBuildInfo` does not work with `go build
-    (substituteAll {
-      src = ./version.patch;
+    (replaceVars ./version.patch {
       inherit version;
     })
   ];

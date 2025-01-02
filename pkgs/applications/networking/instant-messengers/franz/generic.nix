@@ -23,7 +23,7 @@
   udev,
   libnotify,
   xdg-utils,
-  mesa,
+  libgbm,
   libglvnd,
   libappindicator-gtk3,
 }:
@@ -83,7 +83,7 @@ stdenv.mkDerivation (
         libXScrnSaver
       ])
       ++ [
-        mesa # libgbm
+        libgbm
         gtk3
         atk
         glib

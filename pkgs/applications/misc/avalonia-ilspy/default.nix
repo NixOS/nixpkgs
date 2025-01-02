@@ -78,7 +78,7 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.runtime_6_0;
 
   projectFile = "ILSpy/ILSpy.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   executables = [ "ILSpy" ];
 
   desktopItems = [

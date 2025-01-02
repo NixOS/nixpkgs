@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   xapp,
   circle-flags,
   gettext,
@@ -25,8 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./libmpv-path.patch;
+    (replaceVars ./libmpv-path.patch {
       libmpv = "${lib.getLib mpv}/lib/libmpv${stdenv.hostPlatform.extensions.sharedLibrary}";
     })
   ];

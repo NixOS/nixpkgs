@@ -38,6 +38,8 @@ default-package-overrides:
   - xmonad-contrib < 0.18.1
   # 2024-11-01: no release version of http2/3 supports http-semantics >= 0.3.0 at the moment
   - http-semantics < 0.3.0
+  # 2024-12-23: last version to be compatible with Stackage LTS 22/23 (due to data-default)
+  - diagrams-input < 0.1.4
 
 extra-packages:
   - Cabal == 3.2.*                      # Used for packages needing newer Cabal on ghc 8.6 and 8.8
@@ -201,6 +203,7 @@ package-maintainers:
     - patat
     - svgcairo
   danielrolls:
+    - aws-spend-summary
     - byte-count-reader
     - shellify
     - specup

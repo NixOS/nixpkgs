@@ -1,12 +1,16 @@
 import logging
 import os
+from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from importlib.resources import files
 from pathlib import Path
 from string import Template
 from subprocess import PIPE, CalledProcessError
 from typing import Final
+from uuid import uuid4
 
+from . import tmpdir
+from .constants import WITH_NIX_2_18
 from .models import (
     Action,
     BuildAttr,
@@ -28,7 +32,7 @@ logger = logging.getLogger(__name__)
 def build(
     attr: str,
     build_attr: BuildAttr,
-    **build_flags: Args,
+    build_flags: Args | None = None,
 ) -> Path:
     """Build NixOS attribute using classic Nix.
 
@@ -48,7 +52,7 @@ def build(
 def build_flake(
     attr: str,
     flake: Flake,
-    **flake_build_flags: Args,
+    flake_build_flags: Args | None = None,
 ) -> Path:
     """Build NixOS attribute using Flakes.
 
@@ -66,41 +70,67 @@ def build_flake(
     return Path(r.stdout.strip())
 
 
-def remote_build(
+def build_remote(
     attr: str,
     build_attr: BuildAttr,
     build_host: Remote | None,
-    build_flags: dict[str, Args] | None = None,
-    instantiate_flags: dict[str, Args] | None = None,
-    copy_flags: dict[str, Args] | None = None,
+    build_flags: Args | None = None,
+    instantiate_flags: Args | None = None,
+    copy_flags: Args | None = None,
 ) -> Path:
+    # We need to use `--add-root` otherwise Nix will print this warning:
+    # > warning: you did not specify '--add-root'; the result might be removed
+    # > by the garbage collector
     r = run_wrapper(
         [
             "nix-instantiate",
             build_attr.path,
             "--attr",
             build_attr.to_attr(attr),
-            *dict_to_flags(instantiate_flags or {}),
+            "--add-root",
+            tmpdir.TMPDIR_PATH / uuid4().hex,
+            *dict_to_flags(instantiate_flags),
         ],
         stdout=PIPE,
     )
-    drv = Path(r.stdout.strip())
-    copy_closure(drv, to_host=build_host, from_host=None, **(copy_flags or {}))
+    drv = Path(r.stdout.strip()).resolve()
+    copy_closure(drv, to_host=build_host, from_host=None, copy_flags=copy_flags)
+
+    # Need a temporary directory in remote to use in `nix-store --add-root`
     r = run_wrapper(
-        ["nix-store", "--realise", drv, *dict_to_flags(build_flags or {})],
-        remote=build_host,
-        stdout=PIPE,
+        ["mktemp", "-d", "-t", "nixos-rebuild.XXXXX"], remote=build_host, stdout=PIPE
     )
-    return Path(r.stdout.strip())
+    remote_tmpdir = Path(r.stdout.strip())
+    try:
+        r = run_wrapper(
+            [
+                "nix-store",
+                "--realise",
+                drv,
+                "--add-root",
+                remote_tmpdir / uuid4().hex,
+                *dict_to_flags(build_flags),
+            ],
+            remote=build_host,
+            stdout=PIPE,
+        )
+        # When you use `--add-root`, `nix-store` returns the root and not the
+        # path inside Nix store
+        r = run_wrapper(
+            ["readlink", "-f", r.stdout.strip()], remote=build_host, stdout=PIPE
+        )
+        return Path(r.stdout.strip())
+    finally:
+        run_wrapper(["rm", "-rf", remote_tmpdir], remote=build_host, check=False)
 
 
-def remote_build_flake(
+def build_remote_flake(
     attr: str,
     flake: Flake,
     build_host: Remote,
-    flake_build_flags: dict[str, Args] | None = None,
-    copy_flags: dict[str, Args] | None = None,
-    build_flags: dict[str, Args] | None = None,
+    eval_flags: Args | None = None,
+    copy_flags: Args | None = None,
+    flake_build_flags: Args | None = None,
 ) -> Path:
     r = run_wrapper(
         [
@@ -109,12 +139,12 @@ def remote_build_flake(
             "eval",
             "--raw",
             flake.to_attr(attr, "drvPath"),
-            *dict_to_flags(flake_build_flags or {}),
+            *dict_to_flags(eval_flags),
         ],
         stdout=PIPE,
     )
     drv = Path(r.stdout.strip())
-    copy_closure(drv, to_host=build_host, from_host=None, **(copy_flags or {}))
+    copy_closure(drv, to_host=build_host, from_host=None, copy_flags=copy_flags)
     r = run_wrapper(
         [
             "nix",
@@ -122,7 +152,7 @@ def remote_build_flake(
             "build",
             f"{drv}^*",
             "--print-out-paths",
-            *dict_to_flags(build_flags or {}),
+            *dict_to_flags(flake_build_flags),
         ],
         remote=build_host,
         stdout=PIPE,
@@ -134,38 +164,65 @@ def copy_closure(
     closure: Path,
     to_host: Remote | None,
     from_host: Remote | None = None,
-    **copy_flags: Args,
+    copy_flags: Args | None = None,
 ) -> None:
     """Copy a nix closure to or from host to localhost.
 
     Also supports copying a closure from a remote to another remote."""
-    host = to_host or from_host
-    if not host:
-        return
 
     sshopts = os.getenv("NIX_SSHOPTS", "")
-    run_wrapper(
-        [
-            "nix-copy-closure",
-            *dict_to_flags(copy_flags),
-            "--to" if to_host else "--from",
-            host.host,
-            closure,
-        ],
-        extra_env={
-            # Using raw NIX_SSHOPTS here to avoid messing up with the passed
-            # parameters, and we do not add the SSH_DEFAULT_OPTS in the remote
-            # to remote case, otherwise it will fail because of ControlPath
-            # will not exist in remote
-            "NIX_SSHOPTS": sshopts
-            if from_host and to_host
-            else " ".join(filter(lambda x: x, [*SSH_DEFAULT_OPTS, sshopts]))
-        },
-        remote=from_host if to_host else None,
-    )
+    extra_env = {
+        "NIX_SSHOPTS": " ".join(filter(lambda x: x, [*SSH_DEFAULT_OPTS, sshopts]))
+    }
+
+    def nix_copy_closure(host: Remote, to: bool) -> None:
+        run_wrapper(
+            [
+                "nix-copy-closure",
+                *dict_to_flags(copy_flags),
+                "--to" if to else "--from",
+                host.host,
+                closure,
+            ],
+            extra_env=extra_env,
+        )
+
+    def nix_copy(to_host: Remote, from_host: Remote) -> None:
+        run_wrapper(
+            [
+                "nix",
+                "copy",
+                *dict_to_flags(copy_flags),
+                "--from",
+                f"ssh://{from_host.host}",
+                "--to",
+                f"ssh://{to_host.host}",
+                closure,
+            ],
+            extra_env=extra_env,
+        )
+
+    match (to_host, from_host):
+        case (None, None):
+            return
+        case (Remote(_) as host, None) | (None, Remote(_) as host):
+            nix_copy_closure(host, to=bool(to_host))
+        case (Remote(_), Remote(_)):
+            if WITH_NIX_2_18:
+                # With newer Nix, use `nix copy` instead of `nix-copy-closure`
+                # since it supports `--to` and `--from` at the same time
+                # TODO: once we drop Nix 2.3 from nixpkgs, remove support for
+                # `nix-copy-closure`
+                nix_copy(to_host, from_host)
+            else:
+                # With older Nix, we need to copy from to local and local to
+                # host. This means it is slower and need additional disk space
+                # in local
+                nix_copy_closure(from_host, to=False)
+                nix_copy_closure(to_host, to=True)
 
 
-def edit(flake: Flake | None, **flake_flags: Args) -> None:
+def edit(flake: Flake | None, flake_flags: Args | None = None) -> None:
     "Try to find and open NixOS configuration file in editor."
     if flake:
         run_wrapper(
@@ -194,7 +251,7 @@ def edit(flake: Flake | None, **flake_flags: Args) -> None:
             raise NRError("cannot find NixOS config file")
 
 
-def find_file(file: str, **nix_flags: Args) -> Path | None:
+def find_file(file: str, nix_flags: Args | None = None) -> Path | None:
     "Find classic Nix file location."
     r = run_wrapper(
         ["nix-instantiate", "--find-file", file, *dict_to_flags(nix_flags)],
@@ -218,7 +275,8 @@ def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
         r = run_wrapper(
             ["git", "-C", nixpkgs_path, "rev-parse", "--short", "HEAD"],
             check=False,
-            stdout=PIPE,
+            # https://github.com/NixOS/nixpkgs/issues/365222
+            capture_output=True,
         )
     except FileNotFoundError:
         # Git is not included in the closure so we need to check
@@ -237,68 +295,72 @@ def get_nixpkgs_rev(nixpkgs_path: Path | None) -> str | None:
         return None
 
 
-def _parse_generation_from_nix_store(path: Path, profile: Profile) -> Generation:
-    entry_id = path.name.split("-")[1]
-    current = path.name == profile.path.readlink().name
-    timestamp = datetime.fromtimestamp(path.stat().st_ctime).strftime(
-        "%Y-%m-%d %H:%M:%S"
-    )
-
-    return Generation(
-        id=int(entry_id),
-        timestamp=timestamp,
-        current=current,
-    )
-
-
-def _parse_generation_from_nix_env(line: str) -> Generation:
-    parts = line.split()
-
-    entry_id = parts[0]
-    timestamp = f"{parts[1]} {parts[2]}"
-    current = "(current)" in parts
-
-    return Generation(
-        id=int(entry_id),
-        timestamp=timestamp,
-        current=current,
-    )
-
-
-def get_generations(
-    profile: Profile,
-    target_host: Remote | None = None,
-    using_nix_env: bool = False,
-    sudo: bool = False,
-) -> list[Generation]:
+def get_generations(profile: Profile) -> list[Generation]:
     """Get all NixOS generations from profile.
 
     Includes generation ID (e.g.: 1, 2), timestamp (e.g.: when it was created)
     and if this is the current active profile or not.
-
-    If `lock_profile = True` this command will need root to run successfully.
     """
     if not profile.path.exists():
         raise NRError(f"no profile '{profile.name}' found")
 
-    result = []
-    if using_nix_env:
-        # Using `nix-env --list-generations` needs root to lock the profile
-        # TODO: do we actually need to lock profile for e.g.: rollback?
-        # https://github.com/NixOS/nix/issues/5144
-        r = run_wrapper(
-            ["nix-env", "-p", profile.path, "--list-generations"],
-            stdout=PIPE,
-            remote=target_host,
-            sudo=sudo,
+    def parse_path(path: Path, profile: Profile) -> Generation:
+        entry_id = path.name.split("-")[1]
+        current = path.name == profile.path.readlink().name
+        timestamp = datetime.fromtimestamp(path.stat().st_ctime).strftime(
+            "%Y-%m-%d %H:%M:%S"
         )
-        for line in r.stdout.splitlines():
-            result.append(_parse_generation_from_nix_env(line))
-    else:
-        assert not target_host, "target_host is not supported when using_nix_env=False"
-        for p in profile.path.parent.glob("system-*-link"):
-            result.append(_parse_generation_from_nix_store(p, profile))
-    return sorted(result, key=lambda d: d.id)
+
+        return Generation(
+            id=int(entry_id),
+            timestamp=timestamp,
+            current=current,
+        )
+
+    return sorted(
+        [parse_path(p, profile) for p in profile.path.parent.glob("system-*-link")],
+        key=lambda d: d.id,
+    )
+
+
+def get_generations_from_nix_env(
+    profile: Profile,
+    target_host: Remote | None = None,
+    sudo: bool = False,
+) -> list[Generation]:
+    """Get all NixOS generations from profile with nix-env. Needs root.
+
+    Includes generation ID (e.g.: 1, 2), timestamp (e.g.: when it was created)
+    and if this is the current active profile or not.
+    """
+    if not profile.path.exists():
+        raise NRError(f"no profile '{profile.name}' found")
+
+    # Using `nix-env --list-generations` needs root to lock the profile
+    r = run_wrapper(
+        ["nix-env", "-p", profile.path, "--list-generations"],
+        stdout=PIPE,
+        remote=target_host,
+        sudo=sudo,
+    )
+
+    def parse_line(line: str) -> Generation:
+        parts = line.split()
+
+        entry_id = parts[0]
+        timestamp = f"{parts[1]} {parts[2]}"
+        current = "(current)" in parts
+
+        return Generation(
+            id=int(entry_id),
+            timestamp=timestamp,
+            current=current,
+        )
+
+    return sorted(
+        [parse_line(line) for line in r.stdout.splitlines()],
+        key=lambda d: d.id,
+    )
 
 
 def list_generations(profile: Profile) -> list[GenerationJson]:
@@ -310,9 +372,8 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
     Will be formatted in a way that is expected by the output of
     `nixos-rebuild list-generations --json`.
     """
-    generations = get_generations(profile)
-    result = []
-    for generation in reversed(generations):
+
+    def get_generation_info(generation: Generation) -> GenerationJson:
         generation_path = (
             profile.path.parent / f"{profile.path.name}-{generation.id}-link"
         )
@@ -340,29 +401,34 @@ def list_generations(profile: Profile) -> list[GenerationJson]:
             logger.debug("could not get configuration revision: %s", ex)
             configuration_revision = "Unknown"
 
-        result.append(
-            GenerationJson(
-                generation=generation.id,
-                date=generation.timestamp,
-                nixosVersion=nixos_version,
-                kernelVersion=kernel_version,
-                configurationRevision=configuration_revision,
-                specialisations=specialisations,
-                current=generation.current,
-            )
+        return GenerationJson(
+            generation=generation.id,
+            date=generation.timestamp,
+            nixosVersion=nixos_version,
+            kernelVersion=kernel_version,
+            configurationRevision=configuration_revision,
+            specialisations=specialisations,
+            current=generation.current,
         )
 
-    return result
+    # This can be surprisingly slow, especially with lots of generations,
+    # but it is basically IO work so we can run in parallel
+    with ThreadPoolExecutor() as executor:
+        return sorted(
+            executor.map(get_generation_info, get_generations(profile)),
+            key=lambda x: x["generation"],
+            reverse=True,
+        )
 
 
-def repl(attr: str, build_attr: BuildAttr, **nix_flags: Args) -> None:
+def repl(attr: str, build_attr: BuildAttr, nix_flags: Args | None = None) -> None:
     run_args = ["nix", "repl", "--file", build_attr.path]
     if build_attr.attr:
         run_args.append(build_attr.attr)
     run_wrapper([*run_args, *dict_to_flags(nix_flags)])
 
 
-def repl_flake(attr: str, flake: Flake, **flake_flags: Args) -> None:
+def repl_flake(attr: str, flake: Flake, flake_flags: Args | None = None) -> None:
     expr = Template(
         files(__package__).joinpath(FLAKE_REPL_TEMPLATE).read_text()
     ).substitute(
@@ -404,11 +470,8 @@ def rollback_temporary_profile(
     sudo: bool,
 ) -> Path | None:
     "Rollback a temporary Nix profile, like one created by `nixos-rebuild test`."
-    generations = get_generations(
-        profile,
-        target_host=target_host,
-        using_nix_env=True,
-        sudo=sudo,
+    generations = get_generations_from_nix_env(
+        profile, target_host=target_host, sudo=sudo
     )
     previous_gen_id = None
     for generation in generations:

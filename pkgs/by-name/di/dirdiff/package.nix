@@ -70,7 +70,6 @@ stdenv.mkDerivation rec {
     '';
     homepage = "https://www.samba.org/ftp/paulus/";
     license = licenses.gpl2Plus;
-    maintainers = with maintainers; [ khumba ];
     platforms = platforms.unix;
   };
 }

@@ -2,6 +2,7 @@
   lib,
   mkCoqDerivation,
   coq,
+  stdlib,
   version ? null,
 }:
 
@@ -96,6 +97,8 @@ mkCoqDerivation {
     ] null;
 
   mlPlugin = true;
+
+  propagatedBuildInputs = [ stdlib ];
 
   meta = with lib; {
     description = "Coq plugin providing tactics for rewriting universally quantified equations";

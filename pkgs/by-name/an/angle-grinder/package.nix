@@ -1,6 +1,7 @@
 { lib
 , fetchFromGitHub
 , rustPlatform
+, nix-update-script
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -15,6 +16,10 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-+l0+zaZSPOk4gJLHZ9LFFbYlZ5vkS68Jg2dWPHSkzKw=";
+
+  passthru = {
+    updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
+  };
 
   meta = with lib; {
     description = "Slice and dice logs on the command line";

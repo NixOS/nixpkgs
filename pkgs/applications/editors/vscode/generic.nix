@@ -11,7 +11,7 @@
   at-spi2-atk,
   autoPatchelfHook,
   alsa-lib,
-  mesa,
+  libgbm,
   nss,
   nspr,
   xorg,
@@ -200,7 +200,7 @@ stdenv.mkDerivation (
         alsa-lib
         at-spi2-atk
         libkrb5
-        mesa
+        libgbm
         nss
         nspr
         systemd

@@ -2,7 +2,7 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   gobject-introspection,
   wrapGAppsHook3,
   gtk3,
@@ -48,8 +48,7 @@ python3Packages.buildPythonPackage rec {
 
   patches = [
     # hardcodes version output
-    (substituteAll {
-      src = ./fix-version-output.patch;
+    (replaceVars ./fix-version-output.patch {
       inherit version;
     })
 

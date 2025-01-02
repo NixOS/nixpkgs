@@ -42,7 +42,7 @@ stdenv.mkDerivation rec {
 
   preBuild = ''
     dataDir="$out/share/rocksndiamonds"
-    makeFlags+="BASE_PATH=$dataDir"
+    appendToVar makeFlags "BASE_PATH=$dataDir"
   '';
 
   installPhase = ''

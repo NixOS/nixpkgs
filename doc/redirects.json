@@ -3769,6 +3769,9 @@
   "testing-neovim-plugins": [
     "index.html#testing-neovim-plugins"
   ],
+  "testing-neovim-plugins-neovim-require-check": [
+    "index.html#testing-neovim-plugins-neovim-require-check"
+  ],
   "vim-plugin-required-snippet": [
     "index.html#vim-plugin-required-snippet"
   ],

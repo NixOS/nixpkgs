@@ -6,7 +6,6 @@
   libGL,
   pkg-config,
   xorg,
-  mesa,
   libsndfile,
   libsamplerate,
 }:
@@ -32,7 +31,6 @@ stdenv.mkDerivation rec {
     libjack2
     xorg.libX11
     libGL
-    mesa
     libsndfile
     libsamplerate
   ];

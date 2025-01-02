@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchurl,
+  autoreconfHook,
   openssl,
   perl,
   pps-tools,
@@ -17,6 +18,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-z4TF8/saKVKElCYk2CP/+mNBROCWz8T5lprJjvX0aOU=";
   };
 
+  # fix for gcc-14 compile failure
+  postPatch = ''
+    substituteInPlace sntp/m4/openldap-thread-check.m4 \
+      --replace-fail "pthread_detach(NULL)" "pthread_detach(pthread_self())"
+  '';
+
   configureFlags = [
     "--sysconfdir=/etc"
     "--localstatedir=/var"
@@ -25,6 +32,8 @@ stdenv.mkDerivation rec {
     "--enable-ignore-dns-errors"
     "--with-yielding-select=yes"
   ] ++ lib.optional stdenv.hostPlatform.isLinux "--enable-linuxcaps";
+
+  nativeBuildInputs = [ autoreconfHook ];
 
   buildInputs =
     [

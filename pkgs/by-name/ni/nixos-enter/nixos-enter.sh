@@ -12,7 +12,7 @@ if [ -z "$NIXOS_ENTER_REEXEC" ]; then
     if [ "$(id -u)" != 0 ]; then
         extraFlags="-r"
     fi
-    exec unshare --fork --mount --uts --mount-proc --pid $extraFlags -- "$0" "$@"
+    exec unshare --fork --mount --uts --mount-proc $extraFlags -- "$0" "$@"
 else
     mount --make-rprivate /
 fi

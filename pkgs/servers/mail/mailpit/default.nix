@@ -68,7 +68,7 @@ buildGoModule {
   pname = "mailpit";
   inherit src version vendorHash;
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

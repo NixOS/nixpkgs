@@ -3,6 +3,7 @@
   mkCoqDerivation,
   which,
   coq,
+  stdlib,
   version ? null,
 }:
 
@@ -163,7 +164,12 @@ in
   propagatedBuildInputs = [
     coq.ocamlPackages.findlib
     elpi
+    stdlib
   ];
+
+  preConfigure = ''
+    make elpi/dune || true
+  '';
 
   meta = {
     description = "Coq plugin embedding ELPI";

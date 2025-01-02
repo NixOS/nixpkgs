@@ -64,6 +64,11 @@ mkDerivation rec {
     })
   ];
 
+  postPatch = ''
+    substituteInPlace src/FileModule.cc \
+      --replace-fail 'fs::is_regular' 'fs::is_regular_file'
+  '';
+
   nativeBuildInputs = [
     bison
     flex

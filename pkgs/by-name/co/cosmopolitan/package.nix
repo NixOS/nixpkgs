@@ -5,7 +5,7 @@
   bintools-unwrapped,
   callPackage,
   coreutils,
-  substituteAll,
+  replaceVars,
   unzip,
 }:
 
@@ -22,8 +22,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches = [
     # make sure tests set PATH correctly
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit coreutils;
     })
   ];

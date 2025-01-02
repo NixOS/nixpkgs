@@ -28,7 +28,7 @@
   libxcb,
   libxkbcommon,
   libxshmfence,
-  mesa,
+  libgbm,
   nspr,
   nss,
   pango,
@@ -59,7 +59,7 @@ let
     libxcb
     libxkbcommon
     libxshmfence
-    mesa
+    libgbm
     nspr
     nss
     pango

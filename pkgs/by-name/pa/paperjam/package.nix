@@ -26,8 +26,8 @@ stdenv.mkDerivation (finalAttrs: {
   makeFlags = [
     "PREFIX=$(out)"
     # prevent real build date which is impure
-    "BUILD_DATE=\<unknown\>"
-    "BUILD_COMMIT=\<unknown\>"
+    "BUILD_DATE=\\<unknown\\>"
+    "BUILD_COMMIT=\\<unknown\\>"
   ];
 
   # provide backward compatible PointerHolder, suppress deprecation warnings

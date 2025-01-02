@@ -30,7 +30,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [ cmake ];
 
   env = {
-    NIX_LDFLAGS = "-lxml2 -L${lib.getLib (libxml2.override { enableHttp = true; })}/lib";
+    NIX_LDFLAGS = "-lxml2 -L${lib.getLib libxml2}/lib";
     NIX_CFLAGS_COMPILE =
       lib.optionalString stdenv.cc.isClang "-Wno-implicit-function-declaration "
       + lib.optionalString (

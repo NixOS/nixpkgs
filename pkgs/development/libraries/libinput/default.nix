@@ -46,7 +46,7 @@ in
 
 stdenv.mkDerivation rec {
   pname = "libinput";
-  version = "1.26.2";
+  version = "1.27.0";
 
   outputs = [ "bin" "out" "dev" ];
 
@@ -55,7 +55,7 @@ stdenv.mkDerivation rec {
     owner = "libinput";
     repo = "libinput";
     rev = version;
-    hash = "sha256-Ly832W2U38JuXiqvt6e7u3APynrmwi4Ns98bBdTBnP8=";
+    hash = "sha256-aeCMZnH4RPvaV4+1kqeOSqIj1ViUlaryEXQAo8KaOQE=";
   };
 
   patches = [

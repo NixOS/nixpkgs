@@ -259,14 +259,13 @@ let
 
   full =
     {
-      # Whether to evaluate just a single system, by default all are evaluated
-      evalSystem ? if quickTest then "x86_64-linux" else null,
+      # Whether to evaluate on a specific set of systems, by default all are evaluated
+      evalSystems ? if quickTest then [ "x86_64-linux" ] else supportedSystems,
       # The number of attributes per chunk, see ./README.md for more info.
       chunkSize,
       quickTest ? false,
     }:
     let
-      systems = if evalSystem == null then supportedSystems else [ evalSystem ];
       results = linkFarm "results" (
         map (evalSystem: {
           name = evalSystem;
@@ -274,7 +273,7 @@ let
             inherit quickTest evalSystem chunkSize;
             attrpathFile = attrpathsSuperset + "/paths.json";
           };
-        }) systems
+        }) evalSystems
       );
     in
     combine {

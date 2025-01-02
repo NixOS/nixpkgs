@@ -65,7 +65,7 @@ php.buildComposerProject (finalAttrs: {
 
   meta = with lib; {
     license = licenses.mit;
-    maintainers = with maintainers; [ n0emis ];
+    maintainers = with maintainers; [ ];
     description = "ERP beyond your fridge - grocy is a web-based self-hosted groceries & household management solution for your home";
     homepage = "https://grocy.info/";
   };

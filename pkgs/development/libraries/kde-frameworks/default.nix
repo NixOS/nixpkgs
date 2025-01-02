@@ -74,7 +74,7 @@ let
                   # Propagate $dev so that this setup hook is propagated
                   # But only if there is a separate $dev output
                   if [ "''${outputDev:?}" != out ]; then
-                      propagatedBuildInputs="''${propagatedBuildInputs-} @dev@"
+                      appendToVar propagatedBuildInputs "@dev@"
                   fi
               fi
             '';

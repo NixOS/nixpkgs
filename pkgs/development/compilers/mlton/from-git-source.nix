@@ -18,12 +18,14 @@ stdenv.mkDerivation {
     inherit url rev sha256;
   };
 
-  nativeBuildInputs = [ which ];
-
-  buildInputs = [
+  nativeBuildInputs = [
+    which
     mltonBootstrap
-    gmp
   ];
+
+  buildInputs = [ gmp ];
+
+  strictDeps = true;
 
   # build fails otherwise
   enableParallelBuilding = false;

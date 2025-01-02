@@ -36,7 +36,7 @@
   libxshmfence,
   libdrm,
   libxkbcommon,
-  mesa,
+  libgbm,
   nixosTests,
 }:
 
@@ -76,7 +76,7 @@ let
     libxshmfence
     libdrm
     libxkbcommon
-    mesa
+    libgbm
   ];
 
 in

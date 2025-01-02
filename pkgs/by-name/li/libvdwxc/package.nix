@@ -30,10 +30,12 @@ stdenv.mkDerivation rec {
     fftwMpi
   ];
 
+  # Required for compilation with gcc-14
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   preConfigure = ''
     mkdir build && cd build
 
-    export PATH=$PATH:${mpi}/bin
     configureFlagsArray+=(
       --with-mpi=${lib.getDev mpi}
       CC=mpicc
@@ -55,7 +57,7 @@ stdenv.mkDerivation rec {
       lgpl3Plus
       bsd3
     ];
-    homepage = "https://libvdwxc.org/";
+    homepage = "https://libvdwxc.materialsmodeling.org/";
     platforms = platforms.unix;
     maintainers = [ maintainers.sheepforce ];
   };

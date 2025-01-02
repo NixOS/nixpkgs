@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
 
   patchPhase = ''
     # include <unistd.h> to fix undefined getcwd
-    sed -ie 's/<stdlib.h>/<stdlib.h>\n#include <unistd.h>/' src/CTPP2FileSourceLoader.cpp
+    sed -i -e 's/<stdlib.h>/<stdlib.h>\n#include <unistd.h>/' src/CTPP2FileSourceLoader.cpp
   '';
 
   cmakeFlags = [

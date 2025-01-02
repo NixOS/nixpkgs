@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "gvm-tools";
-  version = "24.8.0";
+  version = "24.12.1";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "greenbone";
     repo = "gvm-tools";
     rev = "refs/tags/v${version}";
-    hash = "sha256-MwLwJyxKu4O0cEabBjcdhqtqW3uwgbyVlezZysUDYa4=";
+    hash = "sha256-0YIWfeHd0Z50xschRHrVijhKQdDxvwR+gowEuAIc+OU=";
   };
 
   __darwinAllowLocalNetworking = true;

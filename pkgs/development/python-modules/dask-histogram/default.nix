@@ -17,14 +17,14 @@
 
 buildPythonPackage rec {
   pname = "dask-histogram";
-  version = "2024.9.1";
+  version = "2024.12.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "dask-contrib";
     repo = "dask-histogram";
-    rev = "refs/tags/${version}";
-    hash = "sha256-k+hD5y9K6Jsm++H+IAWJ/Z3wlCN4fV8RIcyAnvOvem0=";
+    tag = version;
+    hash = "sha256-chznfEsMFuIioIlTz6uNpVAkjMMoMXjS62R4luKxVZQ=";
   };
 
   build-system = [
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   meta = {
     description = "Histograms with task scheduling";
     homepage = "https://dask-histogram.readthedocs.io/";
-    changelog = "https://github.com/dask-contrib/dask-histogram/releases/tag/${version}";
+    changelog = "https://github.com/dask-contrib/dask-histogram/releases/tag/${src.tag}";
     license = with lib.licenses; [ bsd3 ];
     maintainers = with lib.maintainers; [ veprbl ];
   };

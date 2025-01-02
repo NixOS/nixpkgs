@@ -1,15 +1,11 @@
 {
   apple-sdk,
-  apple-sdk_10_13,
-  apple-sdk_11,
   mkAppleDerivation,
   stdenvNoCC,
 }:
 
 let
-  # The 10.12 SDK doesn’t have the files needed in the same places or possibly at all.
-  # Just use the 11.x SDK to make things easier.
-  xnu = apple-sdk_11.sourceRelease "xnu";
+  xnu = apple-sdk.sourceRelease "xnu";
 
   privateHeaders = stdenvNoCC.mkDerivation {
     name = "removefile-deps-private-headers";

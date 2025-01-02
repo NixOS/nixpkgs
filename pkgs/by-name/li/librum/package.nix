@@ -3,7 +3,7 @@
   mupdf,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   cmake,
   qt6,
   desktopToDarwinBundle,
@@ -25,8 +25,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./use_mupdf_in_nixpkgs.patch;
+    (replaceVars ./use_mupdf_in_nixpkgs.patch {
       nixMupdfLibPath = "${mupdf-cxx.out}/lib";
       nixMupdfIncludePath = "${mupdf-cxx.dev}/include";
     })

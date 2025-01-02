@@ -34,7 +34,7 @@ gappsWrapperArgsHook() {
     done
 }
 
-preFixupPhases+=" gappsWrapperArgsHook"
+appendToVar preFixupPhases gappsWrapperArgsHook
 
 wrapGApp() {
     local program="$1"

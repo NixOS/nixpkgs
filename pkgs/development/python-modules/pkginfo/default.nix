@@ -2,8 +2,8 @@
   lib,
   buildPythonPackage,
   fetchPypi,
-  pytestCheckHook,
   setuptools,
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -21,6 +21,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [ pytestCheckHook ];
 
   disabledTests = [
+    # wheel metadata version mismatch 2.1 vs 2.3
     "test_installed_ctor_w_dist_info"
   ];
 

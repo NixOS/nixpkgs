@@ -2,8 +2,7 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  gocovsh, # self
+  versionCheckHook,
 }:
 
 buildGoModule rec {
@@ -26,7 +25,9 @@ buildGoModule rec {
     "-X main.date=19700101T000000Z"
   ];
 
-  passthru.tests.version = testers.testVersion { package = gocovsh; };
+  nativeCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   meta = {
     description = "Go Coverage in your terminal: a tool for exploring Go Coverage reports from the command line";

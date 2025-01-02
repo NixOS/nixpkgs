@@ -1,4 +1,5 @@
 import textwrap
+import uuid
 from pathlib import Path
 from subprocess import PIPE, CompletedProcess
 from typing import Any
@@ -20,7 +21,9 @@ from .helpers import get_qualified_name
 )
 def test_build(mock_run: Any, monkeypatch: Any) -> None:
     assert n.build(
-        "config.system.build.attr", m.BuildAttr("<nixpkgs/nixos>", None), nix_flag="foo"
+        "config.system.build.attr",
+        m.BuildAttr("<nixpkgs/nixos>", None),
+        {"nix_flag": "foo"},
     ) == Path("/path/to/file")
     mock_run.assert_called_with(
         [
@@ -54,8 +57,7 @@ def test_build_flake(mock_run: Any) -> None:
     assert n.build_flake(
         "config.system.build.toplevel",
         flake,
-        no_link=True,
-        nix_flag="foo",
+        {"no_link": True, "nix_flag": "foo"},
     ) == Path("/path/to/file")
     mock_run.assert_called_with(
         [
@@ -73,22 +75,38 @@ def test_build_flake(mock_run: Any) -> None:
     )
 
 
-@patch(
-    get_qualified_name(n.run_wrapper, n),
-    autospec=True,
-    return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
-)
-def test_remote_build(mock_run: Any, monkeypatch: Any) -> None:
+@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
+@patch(get_qualified_name(n.uuid4, n), autospec=True)
+def test_build_remote(mock_uuid4: Any, mock_run: Any, monkeypatch: Any) -> None:
     build_host = m.Remote("user@host", [], None)
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
-    assert n.remote_build(
+
+    def run_wrapper_side_effect(
+        args: list[str], **kwargs: Any
+    ) -> CompletedProcess[str]:
+        if args[0] == "nix-instantiate":
+            return CompletedProcess([], 0, stdout=" \n/path/to/file\n ")
+        elif args[0] == "mktemp":
+            return CompletedProcess([], 0, stdout=" \n/tmp/tmpdir\n ")
+        elif args[0] == "nix-store":
+            return CompletedProcess([], 0, stdout=" \n/tmp/tmpdir/config\n ")
+        elif args[0] == "readlink":
+            return CompletedProcess([], 0, stdout=" \n/path/to/config\n ")
+        else:
+            return CompletedProcess([], 0)
+
+    mock_run.side_effect = run_wrapper_side_effect
+    mock_uuid4.side_effect = [uuid.UUID(int=1), uuid.UUID(int=2)]
+
+    assert n.build_remote(
         "config.system.build.toplevel",
         m.BuildAttr("<nixpkgs/nixos>", "preAttr"),
         build_host,
         build_flags={"build": True},
         instantiate_flags={"inst": True},
         copy_flags={"copy": True},
-    ) == Path("/path/to/file")
+    ) == Path("/path/to/config")
+
     mock_run.assert_has_calls(
         [
             call(
@@ -97,6 +115,8 @@ def test_remote_build(mock_run: Any, monkeypatch: Any) -> None:
                     "<nixpkgs/nixos>",
                     "--attr",
                     "preAttr.config.system.build.toplevel",
+                    "--add-root",
+                    n.tmpdir.TMPDIR_PATH / "00000000000000000000000000000001",
                     "--inst",
                 ],
                 stdout=PIPE,
@@ -112,13 +132,30 @@ def test_remote_build(mock_run: Any, monkeypatch: Any) -> None:
                 extra_env={
                     "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh opts"])
                 },
-                remote=None,
             ),
             call(
-                ["nix-store", "--realise", Path("/path/to/file"), "--build"],
+                ["mktemp", "-d", "-t", "nixos-rebuild.XXXXX"],
                 remote=build_host,
                 stdout=PIPE,
             ),
+            call(
+                [
+                    "nix-store",
+                    "--realise",
+                    Path("/path/to/file"),
+                    "--add-root",
+                    Path("/tmp/tmpdir/00000000000000000000000000000002"),
+                    "--build",
+                ],
+                remote=build_host,
+                stdout=PIPE,
+            ),
+            call(
+                ["readlink", "-f", "/tmp/tmpdir/config"],
+                remote=build_host,
+                stdout=PIPE,
+            ),
+            call(["rm", "-rf", Path("/tmp/tmpdir")], remote=build_host, check=False),
         ]
     )
 
@@ -128,18 +165,18 @@ def test_remote_build(mock_run: Any, monkeypatch: Any) -> None:
     autospec=True,
     return_value=CompletedProcess([], 0, stdout=" \n/path/to/file\n "),
 )
-def test_remote_build_flake(mock_run: Any, monkeypatch: Any) -> None:
+def test_build_remote_flake(mock_run: Any, monkeypatch: Any) -> None:
     flake = m.Flake.parse(".#hostname")
     build_host = m.Remote("user@host", [], None)
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh opts")
 
-    assert n.remote_build_flake(
+    assert n.build_remote_flake(
         "config.system.build.toplevel",
         flake,
         build_host,
-        flake_build_flags={"flake": True},
+        eval_flags={"flake": True},
         copy_flags={"copy": True},
-        build_flags={"build": True},
+        flake_build_flags={"build": True},
     ) == Path("/path/to/file")
     mock_run.assert_has_calls(
         [
@@ -166,7 +203,6 @@ def test_remote_build_flake(mock_run: Any, monkeypatch: Any) -> None:
                 extra_env={
                     "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh opts"])
                 },
-                remote=None,
             ),
             call(
                 [
@@ -185,44 +221,74 @@ def test_remote_build_flake(mock_run: Any, monkeypatch: Any) -> None:
     )
 
 
-@patch(get_qualified_name(n.run_wrapper, n), autospec=True)
-def test_copy_closure(mock_run: Any, monkeypatch: Any) -> None:
+def test_copy_closure(monkeypatch: Any) -> None:
     closure = Path("/path/to/closure")
-    n.copy_closure(closure, None)
-    mock_run.assert_not_called()
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, None)
+        mock_run.assert_not_called()
 
     target_host = m.Remote("user@target.host", [], None)
     build_host = m.Remote("user@build.host", [], None)
-
-    n.copy_closure(closure, target_host)
-    mock_run.assert_called_with(
-        ["nix-copy-closure", "--to", "user@target.host", closure],
-        extra_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
-        remote=None,
-    )
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, target_host)
+        mock_run.assert_called_with(
+            ["nix-copy-closure", "--to", "user@target.host", closure],
+            extra_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS)},
+        )
 
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-opt")
-    n.copy_closure(closure, None, build_host)
-    mock_run.assert_called_with(
-        ["nix-copy-closure", "--from", "user@build.host", closure],
-        extra_env={"NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-opt"])},
-        remote=None,
-    )
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, None, build_host, {"copy_flag": True})
+        mock_run.assert_called_with(
+            ["nix-copy-closure", "--copy-flag", "--from", "user@build.host", closure],
+            extra_env={
+                "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-opt"])
+            },
+        )
 
     monkeypatch.setenv("NIX_SSHOPTS", "--ssh build-target-opt")
-    n.copy_closure(closure, target_host, build_host)
-    mock_run.assert_called_with(
-        ["nix-copy-closure", "--to", "user@target.host", closure],
-        remote=build_host,
-        extra_env={"NIX_SSHOPTS": "--ssh build-target-opt"},
-    )
+    monkeypatch.setattr(n, "WITH_NIX_2_18", True)
+    extra_env = {
+        "NIX_SSHOPTS": " ".join(p.SSH_DEFAULT_OPTS + ["--ssh build-target-opt"])
+    }
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, target_host, build_host, {"copy_flag": True})
+        mock_run.assert_called_with(
+            [
+                "nix",
+                "copy",
+                "--copy-flag",
+                "--from",
+                "ssh://user@build.host",
+                "--to",
+                "ssh://user@target.host",
+                closure,
+            ],
+            extra_env=extra_env,
+        )
+
+    monkeypatch.setattr(n, "WITH_NIX_2_18", False)
+    with patch(get_qualified_name(n.run_wrapper, n), autospec=True) as mock_run:
+        n.copy_closure(closure, target_host, build_host)
+        mock_run.assert_has_calls(
+            [
+                call(
+                    ["nix-copy-closure", "--from", "user@build.host", closure],
+                    extra_env=extra_env,
+                ),
+                call(
+                    ["nix-copy-closure", "--to", "user@target.host", closure],
+                    extra_env=extra_env,
+                ),
+            ]
+        )
 
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_edit(mock_run: Any, monkeypatch: Any, tmpdir: Any) -> None:
     # Flake
     flake = m.Flake.parse(".#attr")
-    n.edit(flake, commit_lock_file=True)
+    n.edit(flake, {"commit_lock_file": True})
     mock_run.assert_called_with(
         [
             "nix",
@@ -262,14 +328,14 @@ def test_get_nixpkgs_rev() -> None:
         mock_run.assert_called_with(
             ["git", "-C", path, "rev-parse", "--short", "HEAD"],
             check=False,
-            stdout=PIPE,
+            capture_output=True,
         )
 
     expected_calls = [
         call(
             ["git", "-C", path, "rev-parse", "--short", "HEAD"],
             check=False,
-            stdout=PIPE,
+            capture_output=True,
         ),
         call(
             ["git", "-C", path, "diff", "--quiet"],
@@ -300,7 +366,7 @@ def test_get_nixpkgs_rev() -> None:
         mock_run.assert_has_calls(expected_calls)
 
 
-def test_get_generations_from_nix_store(tmp_path: Path) -> None:
+def test_get_generations(tmp_path: Path) -> None:
     nixos_path = tmp_path / "nixos-system"
     nixos_path.mkdir()
 
@@ -310,20 +376,17 @@ def test_get_generations_from_nix_store(tmp_path: Path) -> None:
     (tmp_path / "system-3-link").symlink_to(nixos_path)
     (tmp_path / "system-2-link").symlink_to(nixos_path)
 
-    assert n.get_generations(
-        m.Profile("system", tmp_path / "system"),
-        using_nix_env=False,
-    ) == [
+    assert n.get_generations(m.Profile("system", tmp_path / "system")) == [
         m.Generation(id=1, current=False, timestamp=ANY),
         m.Generation(id=2, current=True, timestamp=ANY),
         m.Generation(id=3, current=False, timestamp=ANY),
     ]
 
 
-@patch(
-    get_qualified_name(n.run_wrapper, n),
-    autospec=True,
-    return_value=CompletedProcess(
+def test_get_generations_from_nix_env(tmp_path: Path) -> None:
+    path = tmp_path / "test"
+    path.touch()
+    return_value = CompletedProcess(
         [],
         0,
         stdout=textwrap.dedent("""\
@@ -331,17 +394,40 @@ def test_get_generations_from_nix_store(tmp_path: Path) -> None:
         2083   2024-11-07 22:59:41
         2084   2024-11-07 23:54:17   (current)
         """),
-    ),
-)
-def test_get_generations_from_nix_env(mock_run: Any, tmp_path: Path) -> None:
-    path = tmp_path / "test"
-    path.touch()
+    )
 
-    assert n.get_generations(m.Profile("system", path), using_nix_env=True) == [
-        m.Generation(id=2082, current=False, timestamp="2024-11-07 22:58:56"),
-        m.Generation(id=2083, current=False, timestamp="2024-11-07 22:59:41"),
-        m.Generation(id=2084, current=True, timestamp="2024-11-07 23:54:17"),
-    ]
+    with patch(
+        get_qualified_name(n.run_wrapper, n), autospec=True, return_value=return_value
+    ) as mock_run:
+        assert n.get_generations_from_nix_env(m.Profile("system", path)) == [
+            m.Generation(id=2082, current=False, timestamp="2024-11-07 22:58:56"),
+            m.Generation(id=2083, current=False, timestamp="2024-11-07 22:59:41"),
+            m.Generation(id=2084, current=True, timestamp="2024-11-07 23:54:17"),
+        ]
+        mock_run.assert_called_with(
+            ["nix-env", "-p", path, "--list-generations"],
+            stdout=PIPE,
+            remote=None,
+            sudo=False,
+        )
+
+    remote = m.Remote("user@host", [], "password")
+    with patch(
+        get_qualified_name(n.run_wrapper, n), autospec=True, return_value=return_value
+    ) as mock_run:
+        assert n.get_generations_from_nix_env(
+            m.Profile("system", path), remote, True
+        ) == [
+            m.Generation(id=2082, current=False, timestamp="2024-11-07 22:58:56"),
+            m.Generation(id=2083, current=False, timestamp="2024-11-07 22:59:41"),
+            m.Generation(id=2084, current=True, timestamp="2024-11-07 23:54:17"),
+        ]
+        mock_run.assert_called_with(
+            ["nix-env", "-p", path, "--list-generations"],
+            stdout=PIPE,
+            remote=remote,
+            sudo=True,
+        )
 
 
 @patch(
@@ -387,7 +473,7 @@ def test_list_generations(mock_get_generations: Any, tmp_path: Path) -> None:
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_repl(mock_run: Any) -> None:
-    n.repl("attr", m.BuildAttr("<nixpkgs/nixos>", None), nix_flag=True)
+    n.repl("attr", m.BuildAttr("<nixpkgs/nixos>", None), {"nix_flag": True})
     mock_run.assert_called_with(
         ["nix", "repl", "--file", "<nixpkgs/nixos>", "--nix-flag"]
     )
@@ -398,7 +484,7 @@ def test_repl(mock_run: Any) -> None:
 
 @patch(get_qualified_name(n.run_wrapper, n), autospec=True)
 def test_repl_flake(mock_run: Any) -> None:
-    n.repl_flake("attr", m.Flake(Path("flake.nix"), "myAttr"), nix_flag=True)
+    n.repl_flake("attr", m.Flake(Path("flake.nix"), "myAttr"), {"nix_flag": True})
     # See nixos-rebuild-ng.tests.repl for a better test,
     # this is mostly for sanity check
     assert mock_run.call_count == 1

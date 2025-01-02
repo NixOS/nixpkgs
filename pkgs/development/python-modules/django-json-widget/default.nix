@@ -37,7 +37,7 @@ buildPythonPackage rec {
     export DJANGO_SETTINGS_MODULE=tests.settings
   '';
 
-  pythonImportCheck = [ "django_json_widget" ];
+  pythonImportsCheck = [ "django_json_widget" ];
 
   meta = {
     description = "Alternative widget that makes it easy to edit the jsonfield field of django";

@@ -7,7 +7,7 @@
   libGL,
   lv2,
   libjack2,
-  mesa,
+  libgbm,
   pkg-config,
 }:
 
@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
     libGL
     lv2
     libjack2
-    mesa
+    libgbm
   ];
 
   postPatch = ''

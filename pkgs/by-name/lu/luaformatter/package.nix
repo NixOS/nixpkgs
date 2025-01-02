@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   antlr4_9,
   libargs,
   catch2,
@@ -24,8 +24,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-lib-paths.patch;
+    (replaceVars ./fix-lib-paths.patch {
       antlr4RuntimeCpp = antlr4.runtime.cpp.dev;
       yamlCpp = yaml-cpp;
       inherit libargs catch2;

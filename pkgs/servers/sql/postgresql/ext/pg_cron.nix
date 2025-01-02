@@ -8,13 +8,13 @@
 
 buildPostgresqlExtension rec {
   pname = "pg_cron";
-  version = "1.6.4";
+  version = "1.6.5";
 
   src = fetchFromGitHub {
     owner = "citusdata";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-t1DpFkPiSfdoGG2NgNT7g1lkvSooZoRoUrix6cBID40=";
+    hash = "sha256-Llksil7Fk7jvJJmCpfCN0Qm2b2I4J1VOA7/ibytO+KM=";
   };
 
   meta = with lib; {

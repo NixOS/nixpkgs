@@ -25,7 +25,6 @@
 
 # platform-specific dependencies
 , bash
-, apple-sdk_11
 , darwin
 , windows
 
@@ -178,9 +177,6 @@ let
     bluez
   ] ++ optionals enableFramework [
     darwin.apple_sdk.frameworks.Cocoa
-  ] ++ optionals stdenv.hostPlatform.isDarwin [
-    # Work around for ld64 crashes on x86_64-darwin. Remove once 11.0 becomes the default.
-    apple-sdk_11
   ] ++ optionals stdenv.hostPlatform.isMinGW [
     windows.dlfcn
     windows.mingw_w64_pthreads
@@ -298,6 +294,8 @@ in with passthru; stdenv.mkDerivation (finalAttrs: {
   ] ++ optionals (pythonOlder "3.12") [
     # https://github.com/python/cpython/issues/90656
     ./loongarch-support.patch
+  ] ++ optionals (pythonAtLeast "3.12") [
+    ./3.12/CVE-2024-12254.patch
   ] ++ optionals (pythonAtLeast "3.11" && pythonOlder "3.13") [
     # backport fix for https://github.com/python/cpython/issues/95855
     ./platform-triplet-detection.patch

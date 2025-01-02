@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   fetchPypi,
-  substituteAll,
+  replaceVars,
   python39,
   fluidsynth,
   soundfont-fluid,
@@ -58,8 +58,7 @@ python.pkgs.buildPythonApplication {
   strictDeps = false;
 
   patches = [
-    (substituteAll {
-      src = ./hardcoded-paths.patch;
+    (replaceVars ./hardcoded-paths.patch {
       fluidsynth = "${fluidsynth}/lib/libfluidsynth.so";
       soundfont = "${soundfont-fluid}/share/soundfonts/FluidR3_GM2-2.sf2";
       ghostscript = "${ghostscript}/bin/gs";

@@ -54,7 +54,7 @@ buildPythonPackage rec {
   # Disable tests because dependency djangocms-versioning isn't packaged yet.
   doCheck = false;
 
-  pythonImportCheck = [ "djangocms_alias" ];
+  pythonImportsCheck = [ "djangocms_alias" ];
 
   meta = {
     description = "Lean enterprise content management powered by Django";

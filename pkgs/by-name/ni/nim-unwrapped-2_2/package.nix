@@ -45,7 +45,7 @@ let
     else if isx86_64 then
       "amd64"
     else
-      abort "no Nim CPU support known for ${config}";
+      throw "no Nim CPU support known for ${config}";
 
   parseOs =
     platform:
@@ -72,7 +72,7 @@ let
     else if isiOS then
       "iOS"
     else
-      abort "no Nim OS support known for ${config}";
+      throw "no Nim OS support known for ${config}";
 
   parsePlatform = p: {
     cpu = parseCpu p;

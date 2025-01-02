@@ -32,7 +32,7 @@ buildGoModule rec {
     "-X=github.com/go-task/task/v3/internal/version.version=${version}"
   ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   postInstall = ''
     ln -s $out/bin/task $out/bin/go-task

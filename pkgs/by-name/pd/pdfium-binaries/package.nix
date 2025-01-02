@@ -4,7 +4,7 @@
   stdenv,
 }:
 let
-  version = "6886";
+  version = "6899";
   src =
     let
       inherit (stdenv.hostPlatform) system;
@@ -16,10 +16,10 @@ let
         aarch64-darwin = "mac-arm64";
       };
       hash = selectSystem {
-        x86_64-linux = "sha256-8o2PgbyHqU1ST2clx2NRB6/E1eBWjuyx2oIVvc1/ujI=";
-        aarch64-linux = "sha256-SUxtX7NMK+sMi5Fybc2P+bNrXET0TTBJTUhsMw0eBTc=";
-        x86_64-darwin = "sha256-p4lHxr1Do3pLKXn2bOt8gh2R5KHPr4HpAM9hphFUimU=";
-        aarch64-darwin = "sha256-Eb9I17GcuBaMAVKI9K0Rf/iD+nhBFDgYhWth46yU0xE=";
+        x86_64-linux = "sha256-JPXgjdGfQK1BztK3opqKfg5P2lAnmkcVj3qk2Ck8vHg=";
+        aarch64-linux = "sha256-za1d1jKM3LdeBFttBBHQ+Nx1O4KC6FFwotuRHTj8tFk=";
+        x86_64-darwin = "sha256-K2Sr4z4+WWmK9OxvkZB0k9LQDxCNnUvL0RArG5v2aYs=";
+        aarch64-darwin = "sha256-wLa61Af4G47AE99M+uPlBjR2rdP5yUenoW9gsrOmZpw=";
       };
     in
     fetchzip {

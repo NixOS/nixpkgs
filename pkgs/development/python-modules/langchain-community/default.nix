@@ -53,6 +53,7 @@ buildPythonPackage rec {
   build-system = [ poetry-core ];
 
   pythonRelaxDeps = [
+    "numpy"
     "pydantic-settings"
     "tenacity"
   ];
@@ -107,6 +108,12 @@ buildPythonPackage rec {
     # See https://github.com/NixOS/nixpkgs/pull/326337 and https://github.com/wasmerio/wasmer-python/issues/778
     "test_table_info"
     "test_sql_database_run"
+    # pydantic.errors.PydanticUserError: `SQLDatabaseToolkit` is not fully defined; you should define `BaseCache`, then call `SQLDatabaseToolkit.model_rebuild()`.
+    "test_create_sql_agent"
+    # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
+    "test_proper_inputs"
+    # pydantic.errors.PydanticUserError: `NatBotChain` is not fully defined; you should define `BaseCache`, then call `NatBotChain.model_rebuild()`.
+    "test_variable_key_naming"
   ];
 
   meta = {

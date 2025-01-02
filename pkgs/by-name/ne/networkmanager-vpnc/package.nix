@@ -1,7 +1,7 @@
 { stdenv
 , lib
 , fetchurl
-, substituteAll
+, replaceVars
 , vpnc
 , pkg-config
 , networkmanager
@@ -27,8 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit vpnc kmod;
     })
   ];

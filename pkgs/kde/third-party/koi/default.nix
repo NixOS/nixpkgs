@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "koi";
-  version = "0.3.1";
+  version = "0.4";
 
   src = fetchFromGitHub {
     owner = "baduhai";
     repo = "Koi";
     rev = version;
-    sha256 = "sha256-dhpuKIY/Xi62hzJlnVCIOF0k6uoQ3zH129fLq/r+Kmg";
+    sha256 = "sha256-ip7e/Sz/l5UiTFUTLJPorPO7NltE2Isij2MCmvHZV40=";
   };
 
   # See https://github.com/baduhai/Koi/blob/master/development/Nix%20OS/dev.nix

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   makeWrapper,
   makeDesktopItem,
   copyDesktopItems,
@@ -64,10 +64,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   patches =
     [ ./disable_update_checking.patch ]
-    ++ lib.optional withSystemEquicord (substituteAll {
-      inherit equicord;
-      src = ./use_system_equicord.patch;
-    });
+    ++ lib.optional withSystemEquicord (
+      replaceVars ./use_system_equicord.patch {
+        inherit equicord;
+      }
+    );
 
   env = {
     ELECTRON_SKIP_BINARY_DOWNLOAD = 1;

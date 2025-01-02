@@ -10,7 +10,7 @@
   pcre,
   gtkmm4,
   pugixml,
-  mesa,
+  libgbm,
   pciutils,
 }:
 
@@ -37,7 +37,7 @@ stdenv.mkDerivation rec {
     pcre
     gtkmm4
     pugixml
-    mesa
+    libgbm
     pciutils
   ];
 

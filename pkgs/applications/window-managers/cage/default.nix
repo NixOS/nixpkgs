@@ -17,7 +17,6 @@
   systemd,
   libGL,
   libX11,
-  mesa,
   xwayland ? null,
   nixosTests,
 }:
@@ -53,7 +52,6 @@ stdenv.mkDerivation rec {
     pixman
     libxkbcommon
     xcbutilwm
-    mesa # for libEGL headers
     systemd
     libGL
     libX11

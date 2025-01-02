@@ -5,7 +5,7 @@
 , img ? pkgs.stdenv.hostPlatform.linux-kernel.target
 , storeDir ? builtins.storeDir
 , rootModules ?
-    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "virtiofs" "crc32c_generic" "iso9660" "loop" ]
+    [ "virtio_pci" "virtio_mmio" "virtio_blk" "virtio_balloon" "virtio_rng" "ext4" "unix" "virtiofs" "crc32c_generic" "iso9660" "loop"]
 }:
 
 let
@@ -748,7 +748,7 @@ rec {
     {name, packagesLists, urlPrefix, packages}:
 
     runCommand "${name}.nix"
-      { nativeBuildInputs = [ buildPackages.perl buildPackages.dpkg ]; } ''
+      { nativeBuildInputs = [ buildPackages.perl buildPackages.dpkg pkgs.nixfmt-rfc-style ]; } ''
       for i in ${toString packagesLists}; do
         echo "adding $i..."
         case $i in
@@ -766,6 +766,7 @@ rec {
 
       perl -w ${deb/deb-closure.pl} \
         ./Packages ${urlPrefix} ${toString packages} > $out
+      nixfmt $out
     '';
 
 

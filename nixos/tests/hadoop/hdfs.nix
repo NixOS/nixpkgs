@@ -36,6 +36,7 @@ import ../make-test-python.nix (
         datanode =
           { pkgs, ... }:
           {
+            virtualisation.diskSize = 4096;
             services.hadoop = {
               inherit package;
               hdfs.datanode = {

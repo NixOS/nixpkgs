@@ -40,20 +40,20 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "alvr";
-  version = "20.11.0";
+  version = "20.11.1";
 
   src = fetchFromGitHub {
     owner = "alvr-org";
     repo = "ALVR";
     rev = "refs/tags/v${version}";
     fetchSubmodules = true; #TODO devendor openvr
-    hash = "sha256-zqeh9U0A/KHlRieq9Lf+7f04K3JG/vpE2gZ916ReXLc=";
+    hash = "sha256-d4KldPii8W1HcfnMSD8Fn+IGO/a3r8747APPjRCnbe8=";
   };
 
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "openxr-0.19.0" = "sha256-bnMSjJh+zjLw4Pdxr7LLm6qYAJOK7hz5xORKZ2pVcGw=";
+      "openxr-0.18.0" = "sha256-v8sY9PROrqzkpuq3laIn2hPaX+DY7Fbca6i/Xiacd1g=";
       "settings-schema-0.2.0" = "sha256-luEdAKDTq76dMeo5kA+QDTHpRMFUg3n0qvyQ7DkId0k=";
     };
   };

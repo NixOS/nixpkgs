@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "nixpkgs-review";
-  version = "2.12.0";
+  version = "3.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "Mic92";
     repo = "nixpkgs-review";
-    rev = "refs/tags/${version}";
-    hash = "sha256-yNdBqL3tceuoUHx8/j2y5ZTq1zeVDAm37RZtlCbC6rg=";
+    tag = version;
+    hash = "sha256-C2JAlCgH5OCMAZr/Rvi0H7xAwesnkVCJ3kZyyVYaLg4=";
   };
 
   build-system = [
@@ -76,7 +76,7 @@ python3Packages.buildPythonApplication rec {
   versionCheckProgramArg = [ "--version" ];
 
   meta = {
-    changelog = "https://github.com/Mic92/nixpkgs-review/releases/tag/${version}";
+    changelog = "https://github.com/Mic92/nixpkgs-review/releases/tag/${src.tag}";
     description = "Review pull-requests on https://github.com/NixOS/nixpkgs";
     homepage = "https://github.com/Mic92/nixpkgs-review";
     license = lib.licenses.mit;

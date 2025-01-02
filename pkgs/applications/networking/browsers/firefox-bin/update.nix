@@ -79,7 +79,8 @@ writeScript "update-${pname}" ''
                  tr " " ":"`; do
       # create an entry for every locale
       cat >> $tmpfile <<EOF
-      { url = "$url$version/`echo $line | cut -d":" -f3`";
+      {
+        url = "$url$version/`echo $line | cut -d":" -f3`";
         locale = "`echo $line | cut -d":" -f3 | sed "s/$arch\///" | sed "s/\/.*//"`";
         arch = "$arch";
         sha256 = "`echo $line | cut -d":" -f1`";
@@ -88,7 +89,7 @@ writeScript "update-${pname}" ''
     done
   done
   cat >> $tmpfile <<EOF
-      ];
+    ];
   }
   EOF
 

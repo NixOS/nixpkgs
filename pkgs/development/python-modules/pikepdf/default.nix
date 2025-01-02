@@ -25,10 +25,10 @@
 
 buildPythonPackage rec {
   pname = "pikepdf";
-  version = "9.2.1";
+  version = "9.4.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.9";
 
   src = fetchFromGitHub {
     owner = "pikepdf";
@@ -40,7 +40,7 @@ buildPythonPackage rec {
     postFetch = ''
       rm "$out/.git_archival.txt"
     '';
-    hash = "sha256-k50Wg/JvHgOULocUsYRjYH+q1M+5DTFLBZzHC6io+To=";
+    hash = "sha256-J/ipkKqZifkWtgv7z/MJPwRK+yB7MP/19PDdjV1NMpY=";
   };
 
   patches = [

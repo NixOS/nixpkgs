@@ -5,7 +5,7 @@
   fetchFromGitHub,
 
   # patches
-  substituteAll,
+  replaceVars,
   meek,
   obfs4,
   snowflake,
@@ -32,8 +32,7 @@ python3Packages.buildPythonApplication rec {
 
   patches = [
     # hardcode store paths of dependencies
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit
         meek
         obfs4

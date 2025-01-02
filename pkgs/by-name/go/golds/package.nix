@@ -2,19 +2,18 @@
   lib,
   buildGoModule,
   fetchFromGitHub,
-  testers,
-  golds, # self
+  versionCheckHook,
 }:
 
 buildGoModule rec {
   pname = "golds";
-  version = "0.7.1";
+  version = "0.7.2";
 
   src = fetchFromGitHub {
     owner = "go101";
     repo = "golds";
     tag = "v${version}";
-    hash = "sha256-6YkyKJtSAFFYidMlZXSjNpjyIIaTlibg/QMMin/NbU0=";
+    hash = "sha256-ExvCVGWYAngasnDHVzBLeLmms4cFNcQ/KzuE4t3r36A=";
   };
 
   # nixpkgs is not using the go distpack archive and missing a VERSION file in the source
@@ -26,10 +25,9 @@ buildGoModule rec {
 
   ldflags = [ "-s" ];
 
-  passthru.tests.version = testers.testVersion {
-    package = golds;
-    version = "v${version}";
-  };
+  nativeCheckInputs = [ versionCheckHook ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
   meta = {
     description = "Experimental Go local docs server/generator and code reader implemented with some fresh ideas";

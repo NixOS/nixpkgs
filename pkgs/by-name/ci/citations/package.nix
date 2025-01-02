@@ -19,23 +19,24 @@
   testers,
   wrapGAppsHook4,
   clippy,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "citations";
-  version = "0.6.2";
+  version = "0.7.0";
 
   src = fetchFromGitLab {
     domain = "gitlab.gnome.org";
     owner = "World";
     repo = "citations";
     rev = finalAttrs.version;
-    hash = "sha256-RV9oQcXzRsNcvZc/8Xt7qZ/88DvHofC2Av0ftxzeF6Q=";
+    hash = "sha256-WYy6cyPmyWL/11yHf+dRbcZGBfvVfELeTwKvpJMu5ns=";
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     src = finalAttrs.src;
-    hash = "sha256-XlqwgXuwxR6oEz0+hYAp/3b+XxH+Vd/DGr5j+iKhUjQ=";
+    hash = "sha256-SmKt3oPzeJRAFjgZvJubNCTsjhqCrGZfE1LfDQ8AxZA=";
   };
 
   nativeBuildInputs = [
@@ -80,9 +81,13 @@ stdenv.mkDerivation (finalAttrs: {
     sed -i -e '/PATH=/d' ../src/meson.build
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = finalAttrs.finalPackage;
-    command = "citations --help";
+  passthru = {
+    tests.version = testers.testVersion {
+      package = finalAttrs.finalPackage;
+      command = "citations --help";
+    };
+
+    updateScript = nix-update-script { };
   };
 
   meta = with lib; {

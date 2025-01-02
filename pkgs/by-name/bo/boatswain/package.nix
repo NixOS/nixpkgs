@@ -19,6 +19,7 @@
   libsecret,
   libsoup_3,
   libpeas2,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -55,6 +56,10 @@ stdenv.mkDerivation rec {
     libsoup_3
     libpeas2
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Control Elgato Stream Deck devices";

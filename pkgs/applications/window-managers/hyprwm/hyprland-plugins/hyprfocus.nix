@@ -3,6 +3,7 @@
   mkHyprlandPlugin,
   hyprland,
   fetchFromGitHub,
+  nix-update-script,
 }:
 
 mkHyprlandPlugin hyprland {
@@ -25,6 +26,7 @@ mkHyprlandPlugin hyprland {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { extraArgs = [ "--version=branch" ]; };
   meta = {
     homepage = "https://github.com/pyt0xic/hyprfocus";
     description = "Focus animation plugin for Hyprland inspired by Flashfocus";

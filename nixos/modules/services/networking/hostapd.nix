@@ -11,7 +11,6 @@ let
     attrNames
     attrValues
     concatLists
-    concatMap
     concatMapStrings
     concatStringsSep
     count
@@ -34,11 +33,9 @@ let
     mkOption
     mkPackageOption
     mkRemovedOptionModule
-    optional
     optionalAttrs
     optionalString
     optionals
-    singleton
     stringLength
     toLower
     types
@@ -710,7 +707,7 @@ in {
 
                     pairwiseCiphers = mkOption {
                       default = ["CCMP"];
-                      example = ["CCMP-256" "GCMP-256"];
+                      example = ["GCMP" "GCMP-256"];
                       type = types.listOf types.str;
                       description = ''
                         Set of accepted cipher suites (encryption algorithms) for pairwise keys (unicast packets).
@@ -719,7 +716,8 @@ in {
 
                         Please refer to the hostapd documentation for allowed values. Generally, only
                         CCMP or GCMP modes should be considered safe options. Most devices support CCMP while
-                        GCMP is often only available with devices supporting WiFi 5 (IEEE 802.11ac) or higher.
+                        GCMP and GCMP-256 is often only available with devices supporting WiFi 5 (IEEE 802.11ac) or higher.
+                        CCMP-256 support is rare.
                       '';
                     };
 
@@ -906,7 +904,7 @@ in {
                   bssCfg = bssSubmod.config;
                   pairwiseCiphers =
                     concatStringsSep " " (unique (bssCfg.authentication.pairwiseCiphers
-                      ++ optionals bssCfg.authentication.enableRecommendedPairwiseCiphers ["CCMP" "CCMP-256" "GCMP" "GCMP-256"]));
+                      ++ optionals bssCfg.authentication.enableRecommendedPairwiseCiphers ["CCMP" "GCMP" "GCMP-256"]));
                 in {
                   settings = {
                     ssid = bssCfg.ssid;

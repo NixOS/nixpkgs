@@ -6,11 +6,11 @@
 
 appimageTools.wrapType2 rec {
   pname = "clockify";
-  version = "2.1.17.1354";
+  version = "2.2.9.2224";
 
   src = fetchurl {
-    url = "https://web.archive.org/web/20240406052908/https://clockify.me/downloads/Clockify_Setup.AppImage";
-    hash = "sha256-G5VOAf6PrjHUsnk7IlXdqJ2D941cnggjuHkkgrOaVaA=";
+    url = "https://web.archive.org/web/20241218115559/https://clockify.me/downloads/Clockify_Setup.AppImage";
+    hash = "sha256-/L70C+sTFJPzXkt1NSak2wVTRtFy2zInIlmLPG5LqeY=";
   };
 
   extraInstallCommands =
@@ -22,13 +22,13 @@ appimageTools.wrapType2 rec {
       install -Dm 444 ${appimageContents}/clockify.png -t $out/share/pixmaps
 
       substituteInPlace $out/share/applications/clockify.desktop \
-        --replace 'Exec=AppRun' 'Exec=${pname}'
+        --replace-fail 'Exec=AppRun' 'Exec=${pname}'
     '';
 
-  meta = with lib; {
+  meta = {
     description = "Free time tracker and timesheet app that lets you track work hours across projects";
     homepage = "https://clockify.me";
-    license = licenses.unfree;
+    license = lib.licenses.unfree;
     maintainers = [ ];
     mainProgram = "clockify";
     platforms = [ "x86_64-linux" ];

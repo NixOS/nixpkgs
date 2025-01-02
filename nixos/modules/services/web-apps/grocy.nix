@@ -211,7 +211,7 @@ in
   };
 
   meta = {
-    maintainers = with maintainers; [ n0emis ];
+    maintainers = with maintainers; [ ];
     doc = ./grocy.md;
   };
 }

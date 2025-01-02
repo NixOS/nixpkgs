@@ -23,6 +23,7 @@
 , appstream-glib
 , desktop-file-utils
 , glycin-loaders
+, nix-update-script
 }:
 
 clangStdenv.mkDerivation rec {
@@ -80,12 +81,16 @@ clangStdenv.mkDerivation rec {
     gst-plugins-rs # for gtk4paintablesink
   ];
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     description = "Scan and Generate QR Codes";
     homepage = "https://gitlab.gnome.org/World/decoder";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
     mainProgram = "decoder";
-    maintainers = with maintainers; [ zendo ];
+    maintainers = with maintainers; [ zendo ] ++ lib.teams.gnome-circle.members;
   };
 }

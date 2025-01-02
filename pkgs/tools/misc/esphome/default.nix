@@ -22,14 +22,14 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "esphome";
-  version = "2024.11.3";
+  version = "2024.12.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "refs/tags/${version}";
-    hash = "sha256-ZGqYvbNBQSoU6F20Bdzif8zmzLPr4XusVVrOR0iWl7k=";
+    hash = "sha256-VW9p3VNVJOw5vkjCU4fujG0ie4N2D2QLidBANPV512U=";
   };
 
   build-systems = with python.pkgs; [
@@ -55,20 +55,15 @@ python.pkgs.buildPythonApplication rec {
 
     # ensure component dependencies are available
     cat requirements_optional.txt >> requirements.txt
-    # relax strict runtime version check
-    substituteInPlace esphome/components/font/__init__.py \
-      --replace-fail "10.4.0" "${python.pkgs.pillow.version}"
   '';
 
   # Remove esptool and platformio from requirements
   env.ESPHOME_USE_SUBPROCESS = "";
 
   # esphome has optional dependencies it does not declare, they are
-  # loaded when certain config blocks are used, like `font`, `image`
-  # or `animation`.
+  # loaded when certain config blocks are used.
   # They have validation functions like:
-  # - validate_cryptography_installed
-  # - validate_pillow_installed
+  # - validate_cryptography_installed for the wifi component
   dependencies = with python.pkgs; [
     aioesphomeapi
     argcomplete

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitLab,
-  substituteAll,
+  replaceVars,
   meson,
   ninja,
   pkg-config,
@@ -21,6 +21,7 @@
   json-glib,
   duplicity,
   rclone,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -36,8 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (substituteAll {
-      src = ./fix-paths.patch;
+    (replaceVars ./fix-paths.patch {
       inherit coreutils;
     })
   ];
@@ -74,6 +74,10 @@ stdenv.mkDerivation (finalAttrs: {
       --prefix PATH : "${lib.makeBinPath [ rclone ]}"
     )
   '';
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Simple backup tool";

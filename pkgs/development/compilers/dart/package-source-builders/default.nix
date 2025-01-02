@@ -1,6 +1,7 @@
 { callPackage }:
 
 {
+  audiotags = callPackage ./audiotags { };
   file_picker = callPackage ./file_picker { };
   flutter_secure_storage_linux = callPackage ./flutter-secure-storage-linux { };
   flutter_volume_controller = callPackage ./flutter_volume_controller { };
@@ -8,6 +9,7 @@
   handy_window = callPackage ./handy-window { };
   matrix = callPackage ./matrix { };
   media_kit_libs_linux = callPackage ./media_kit_libs_linux { };
+  metadata_god = callPackage ./metadata_god { };
   olm = callPackage ./olm { };
   pdfrx = callPackage ./pdfrx { };
   printing = callPackage ./printing { };

@@ -19,7 +19,7 @@
   openssl,
   udev,
   xorg,
-  mesa,
+  libgbm,
   libdrm,
   libappindicator,
 }:
@@ -51,7 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     xorg.libXScrnSaver
     xorg.libXtst
     xorg.libxshmfence
-    mesa
+    libgbm
     libdrm
   ];
 

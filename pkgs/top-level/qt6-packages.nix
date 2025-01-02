@@ -55,6 +55,9 @@ makeScopeWithSplicing' {
   futuresql = callPackage ../development/libraries/futuresql { };
   kquickimageedit = callPackage ../development/libraries/kquickimageedit { };
   libqaccessibilityclient = callPackage ../development/libraries/libqaccessibilityclient { };
+
+  libqtpas = callPackage ../development/compilers/fpc/libqtpas.nix { };
+
   libquotient = callPackage ../development/libraries/libquotient { };
   mlt = pkgs.mlt.override {
     qt = qt6;
@@ -85,6 +88,8 @@ makeScopeWithSplicing' {
   qtstyleplugin-kvantum = kdePackages.callPackage ../development/libraries/qtstyleplugin-kvantum { };
 
   qtutilities = callPackage ../development/libraries/qtutilities { };
+
+  qt-jdenticon = callPackage ../development/libraries/qt-jdenticon { };
 
   quazip = callPackage ../development/libraries/quazip { };
 

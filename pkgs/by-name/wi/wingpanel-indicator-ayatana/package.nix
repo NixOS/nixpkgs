@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitHub,
   unstableGitUpdater,
-  substituteAll,
+  replaceVars,
   meson,
   ninja,
   pkg-config,
@@ -27,8 +27,7 @@ stdenv.mkDerivation rec {
 
   patches = [
     # Tells the indicator the path for libapplication.so
-    (substituteAll {
-      src = ./fix-libapplication-dir.patch;
+    (replaceVars ./fix-libapplication-dir.patch {
       indicator_application = indicator-application-gtk3;
     })
   ];

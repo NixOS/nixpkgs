@@ -1,11 +1,11 @@
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, utils, ... }:
 
 with lib;
 
 let
   cfg = config.services.nginx.sso;
-  pkg = getBin cfg.package;
-  configYml = pkgs.writeText "nginx-sso.yml" (builtins.toJSON cfg.configuration);
+  format = pkgs.formats.yaml { };
+  configPath = "/var/lib/nginx-sso/config.yaml";
 in {
   options.services.nginx.sso = {
     enable = mkEnableOption "nginx-sso service";
@@ -13,14 +13,16 @@ in {
     package = mkPackageOption pkgs "nginx-sso" { };
 
     configuration = mkOption {
-      type = types.attrsOf types.unspecified;
+      type = format.type;
       default = {};
       example = literalExpression ''
         {
           listen = { addr = "127.0.0.1"; port = 8080; };
 
           providers.token.tokens = {
-            myuser = "MyToken";
+            myuser = {
+              _secret = "/path/to/secret/token.txt"; # File content should be the secret token
+            };
           };
 
           acl = {
@@ -37,6 +39,11 @@ in {
         nginx-sso configuration
         ([documentation](https://github.com/Luzifer/nginx-sso/wiki/Main-Configuration))
         as a Nix attribute set.
+
+        Options containing secret data should be set to an attribute set
+        with the singleton attribute `_secret` - a string value set to the path
+        to the file containing the secret value which should be used in the
+        configuration. This file must be readable by `nginx-sso`.
       '';
     };
   };
@@ -47,14 +54,29 @@ in {
       after = [ "network.target" ];
       wantedBy = [ "multi-user.target" ];
       serviceConfig = {
+        StateDirectory = "nginx-sso";
+        WorkingDirectory = "/var/lib/nginx-sso";
+        ExecStartPre = pkgs.writeShellScript "merge-nginx-sso-config" ''
+          rm -f '${configPath}'
+          # Relies on YAML being a superset of JSON
+          ${utils.genJqSecretsReplacementSnippet cfg.configuration configPath}
+        '';
         ExecStart = ''
-          ${pkg}/bin/nginx-sso \
-            --config ${configYml} \
-            --frontend-dir ${pkg}/share/frontend
+          ${lib.getExe cfg.package} \
+            --config ${configPath} \
+            --frontend-dir ${lib.getBin cfg.package}/share/frontend
         '';
         Restart = "always";
-        DynamicUser = true;
+        User = "nginx-sso";
+        Group = "nginx-sso";
       };
     };
+
+    users.users.nginx-sso = {
+      isSystemUser = true;
+      group = "nginx-sso";
+    };
+
+    users.groups.nginx-sso = { };
   };
 }

@@ -25,7 +25,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "rclone";
     repo = "rclone";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-3Al58jg+pYP46VbpIRbYBhMOG6m7OQaC0pxKawX12E8=";
   };
 
@@ -47,7 +47,7 @@ buildGoModule rec {
   ldflags = [
     "-s"
     "-w"
-    "-X github.com/rclone/rclone/fs.Version=${version}"
+    "-X github.com/rclone/rclone/fs.Version=${src.tag}"
   ];
 
   postConfigure = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''

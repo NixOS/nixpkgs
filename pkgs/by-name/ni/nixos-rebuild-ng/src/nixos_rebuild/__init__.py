@@ -1,5 +1,4 @@
 import argparse
-import atexit
 import json
 import logging
 import os
@@ -8,24 +7,26 @@ from pathlib import Path
 from subprocess import CalledProcessError, run
 from typing import assert_never
 
-from . import nix
+from . import nix, tmpdir
+from .constants import EXECUTABLE, WITH_NIX_2_18, WITH_REEXEC, WITH_SHELL_FILES
 from .models import Action, BuildAttr, Flake, NRError, Profile
 from .process import Remote, cleanup_ssh
-from .utils import Args, LogFormatter
+from .utils import Args, LogFormatter, tabulate
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-# Build-time flags
-# Strings to avoid breaking standalone (e.g.: `python -m nixos_rebuild`) usage
-EXECUTABLE = "@executable@"
-WITH_REEXEC = "@withReexec@"
-WITH_SHELL_FILES = "@withShellFiles@"
-
 
 def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentParser]]:
     common_flags = argparse.ArgumentParser(add_help=False)
-    common_flags.add_argument("--verbose", "-v", action="count", default=0)
+    common_flags.add_argument(
+        "--verbose",
+        "-v",
+        action="count",
+        dest="v",
+        default=0,
+        help="Enable verbose logging (includes nix)",
+    )
     common_flags.add_argument("--max-jobs", "-j")
     common_flags.add_argument("--cores")
     common_flags.add_argument("--log-format")
@@ -42,32 +43,38 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
     common_build_flags.add_argument("--print-build-logs", "-L", action="store_true")
     common_build_flags.add_argument("--show-trace", action="store_true")
 
-    flake_build_flags = argparse.ArgumentParser(add_help=False)
-    flake_build_flags.add_argument("--accept-flake-config", action="store_true")
-    flake_build_flags.add_argument("--refresh", action="store_true")
-    flake_build_flags.add_argument("--impure", action="store_true")
-    flake_build_flags.add_argument("--offline", action="store_true")
-    flake_build_flags.add_argument("--no-net", action="store_true")
-    flake_build_flags.add_argument("--recreate-lock-file", action="store_true")
-    flake_build_flags.add_argument("--no-update-lock-file", action="store_true")
-    flake_build_flags.add_argument("--no-write-lock-file", action="store_true")
-    flake_build_flags.add_argument("--no-registries", action="store_true")
-    flake_build_flags.add_argument("--commit-lock-file", action="store_true")
-    flake_build_flags.add_argument("--update-input")
-    flake_build_flags.add_argument("--override-input", nargs=2)
+    flake_common_flags = argparse.ArgumentParser(add_help=False)
+    flake_common_flags.add_argument("--accept-flake-config", action="store_true")
+    flake_common_flags.add_argument("--refresh", action="store_true")
+    flake_common_flags.add_argument("--impure", action="store_true")
+    flake_common_flags.add_argument("--offline", action="store_true")
+    flake_common_flags.add_argument("--no-net", action="store_true")
+    flake_common_flags.add_argument("--recreate-lock-file", action="store_true")
+    flake_common_flags.add_argument("--no-update-lock-file", action="store_true")
+    flake_common_flags.add_argument("--no-write-lock-file", action="store_true")
+    flake_common_flags.add_argument("--no-registries", action="store_true")
+    flake_common_flags.add_argument("--commit-lock-file", action="store_true")
+    flake_common_flags.add_argument("--update-input")
+    flake_common_flags.add_argument("--override-input", nargs=2)
 
     classic_build_flags = argparse.ArgumentParser(add_help=False)
     classic_build_flags.add_argument("--no-build-output", "-Q", action="store_true")
 
     copy_flags = argparse.ArgumentParser(add_help=False)
     copy_flags.add_argument(
-        "--use-substitutes", "--substitute-on-destination", "-s", action="store_true"
+        "--use-substitutes",
+        "--substitute-on-destination",
+        "-s",
+        action="store_true",
+        # `-s` is the destination since it has the same meaning in
+        # `nix-copy-closure` and `nix copy`
+        dest="s",
     )
 
     sub_parsers = {
         "common_flags": common_flags,
         "common_build_flags": common_build_flags,
-        "flake_build_flags": flake_build_flags,
+        "flake_common_flags": flake_common_flags,
         "classic_build_flags": classic_build_flags,
         "copy_flags": copy_flags,
     }
@@ -80,6 +87,9 @@ def get_parser() -> tuple[argparse.ArgumentParser, dict[str, argparse.ArgumentPa
         allow_abbrev=False,
     )
     main_parser.add_argument("--help", "-h", action="store_true", help="Show manpage")
+    main_parser.add_argument(
+        "--debug", action="store_true", help="Enable debug logging"
+    )
     main_parser.add_argument(
         "--file", "-f", help="Enable and build the NixOS system from the specified file"
     )
@@ -187,7 +197,7 @@ def parse_args(
     }
 
     if args.help or args.action is None:
-        if WITH_SHELL_FILES == "true":
+        if WITH_SHELL_FILES:
             r = run(["man", "8", EXECUTABLE], check=False)
             parser.exit(r.returncode)
         else:
@@ -197,8 +207,8 @@ def parse_args(
     def parser_warn(msg: str) -> None:
         print(f"{parser.prog}: warning: {msg}", file=sys.stderr)
 
-    # This flag affects both nix and this script
-    if args.verbose:
+    # verbose affects both nix commands and this script, debug only this script
+    if args.v or args.debug:
         logger.setLevel(logging.DEBUG)
 
     # https://github.com/NixOS/nixpkgs/blob/master/pkgs/os-specific/linux/nixos-rebuild/nixos-rebuild.sh#L56
@@ -236,6 +246,8 @@ def parse_args(
         Action.BUILD.value,
         Action.DRY_BUILD.value,
         Action.DRY_ACTIVATE.value,
+        Action.BUILD_VM.value,
+        Action.BUILD_VM_WITH_BOOTLOADER.value,
     ):
         parser.error(
             f"--target-host/--build-host is not supported with '{args.action}'"
@@ -250,20 +262,32 @@ def parse_args(
 def reexec(
     argv: list[str],
     args: argparse.Namespace,
-    build_flags: dict[str, Args],
-    flake_build_flags: dict[str, Args],
+    build_flags: Args,
+    flake_build_flags: Args,
 ) -> None:
     drv = None
     attr = "config.system.build.nixos-rebuild"
     try:
-        # Need to set target_host=None, to avoid connecting to remote
-        if flake := Flake.from_arg(args.flake, None):
-            drv = nix.build_flake(attr, flake, **flake_build_flags, no_link=True)
+        # Parsing the args here but ignore ask_sudo_password since it is not
+        # needed and we would end up asking sudo password twice
+        if flake := Flake.from_arg(args.flake, Remote.from_arg(args.target_host, None)):
+            drv = nix.build_flake(
+                attr,
+                flake,
+                flake_build_flags | {"no_link": True},
+            )
         else:
             build_attr = BuildAttr.from_arg(args.attr, args.file)
-            drv = nix.build(attr, build_attr, **build_flags, no_out_link=True)
+            drv = nix.build(
+                attr,
+                build_attr,
+                build_flags | {"no_out_link": True},
+            )
     except CalledProcessError:
-        logger.warning("could not find a newer version of nixos-rebuild")
+        logger.warning(
+            "could not build a newer version of nixos-rebuild, "
+            + "using current version"
+        )
 
     if drv:
         new = drv / f"bin/{EXECUTABLE}"
@@ -271,22 +295,40 @@ def reexec(
         if new != current:
             logging.debug(
                 "detected newer version of script, re-exec'ing, current=%s, new=%s",
-                argv[0],
+                current,
                 new,
             )
+            # Manually call clean-up functions since os.execve() will replace
+            # the process immediately
             cleanup_ssh()
-            os.execve(new, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
+            tmpdir.TMPDIR.cleanup()
+            try:
+                os.execve(new, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
+            except Exception:
+                # Possible errors that we can have here:
+                # - Missing the binary
+                # - Exec format error (e.g.: another OS/CPU arch)
+                logger.warning(
+                    "could not re-exec in a newer version of nixos-rebuild, "
+                    + "using current version"
+                )
+                logger.debug("re-exec exception", exc_info=True)
+                # We already run clean-up, let's re-exec in the current version
+                # to avoid issues
+                os.execve(current, argv, os.environ | {"_NIXOS_REBUILD_REEXEC": "1"})
 
 
 def execute(argv: list[str]) -> None:
     args, args_groups = parse_args(argv)
 
-    atexit.register(cleanup_ssh)
+    if not WITH_NIX_2_18:
+        logger.warning("you're using Nix <2.18, some features will not work correctly")
 
     common_flags = vars(args_groups["common_flags"])
     common_build_flags = common_flags | vars(args_groups["common_build_flags"])
     build_flags = common_build_flags | vars(args_groups["classic_build_flags"])
-    flake_build_flags = common_build_flags | vars(args_groups["flake_build_flags"])
+    flake_common_flags = common_flags | vars(args_groups["flake_common_flags"])
+    flake_build_flags = common_build_flags | flake_common_flags
     copy_flags = common_flags | vars(args_groups["copy_flags"])
 
     if args.upgrade or args.upgrade_all:
@@ -303,7 +345,7 @@ def execute(argv: list[str]) -> None:
     # Re-exec to a newer version of the script before building to ensure we get
     # the latest fixes
     if (
-        WITH_REEXEC == "true"
+        WITH_REEXEC
         and can_run
         and not args.fast
         and not os.environ.get("_NIXOS_REBUILD_REEXEC")
@@ -317,7 +359,7 @@ def execute(argv: list[str]) -> None:
     flake = Flake.from_arg(args.flake, target_host)
 
     if can_run and not flake:
-        nixpkgs_path = nix.find_file("nixpkgs", **build_flags)
+        nixpkgs_path = nix.find_file("nixpkgs", build_flags)
         rev = nix.get_nixpkgs_rev(nixpkgs_path)
         if nixpkgs_path and rev:
             (nixpkgs_path / ".version-suffix").write_text(rev)
@@ -330,13 +372,24 @@ def execute(argv: list[str]) -> None:
             | Action.BUILD
             | Action.DRY_BUILD
             | Action.DRY_ACTIVATE
+            | Action.BUILD_VM
+            | Action.BUILD_VM_WITH_BOOTLOADER
         ):
             logger.info("building the system configuration...")
 
-            attr = "config.system.build.toplevel"
             dry_run = action == Action.DRY_BUILD
             no_link = action in (Action.SWITCH, Action.BOOT)
+            build_flags |= {"no_out_link": no_link, "dry_run": dry_run}
+            flake_build_flags |= {"no_link": no_link, "dry_run": dry_run}
             rollback = bool(args.rollback)
+
+            match action:
+                case Action.BUILD_VM:
+                    attr = "config.system.build.vm"
+                case Action.BUILD_VM_WITH_BOOTLOADER:
+                    attr = "config.system.build.vmWithBootLoader"
+                case _:
+                    attr = "config.system.build.toplevel"
 
             match (action, rollback, build_host, flake):
                 case (Action.SWITCH | Action.BOOT, True, _, _):
@@ -354,24 +407,22 @@ def execute(argv: list[str]) -> None:
                 case (_, True, _, _):
                     raise NRError(f"--rollback is incompatible with '{action}'")
                 case (_, False, Remote(_), Flake(_)):
-                    path_to_config = nix.remote_build_flake(
+                    path_to_config = nix.build_remote_flake(
                         attr,
                         flake,
                         build_host,
+                        eval_flags=flake_common_flags,
                         flake_build_flags=flake_build_flags,
                         copy_flags=copy_flags,
-                        build_flags=build_flags,
                     )
                 case (_, False, None, Flake(_)):
                     path_to_config = nix.build_flake(
                         attr,
                         flake,
-                        no_link=no_link,
-                        dry_run=dry_run,
-                        **flake_build_flags,
+                        flake_build_flags=flake_build_flags,
                     )
                 case (_, False, Remote(_), None):
-                    path_to_config = nix.remote_build(
+                    path_to_config = nix.build_remote(
                         attr,
                         build_attr,
                         build_host,
@@ -383,21 +434,23 @@ def execute(argv: list[str]) -> None:
                     path_to_config = nix.build(
                         attr,
                         build_attr,
-                        no_out_link=no_link,
-                        dry_run=dry_run,
-                        **build_flags,
+                        build_flags=build_flags,
                     )
-                case m:
+                case never:
                     # should never happen, but mypy is not smart enough to
                     # handle this with assert_never
-                    raise NRError(f"invalid match for build: {m}")
+                    # https://github.com/python/mypy/issues/16650
+                    # https://github.com/python/mypy/issues/16722
+                    raise AssertionError(
+                        f"expected code to be unreachable, but got: {never}"
+                    )
 
             if not rollback:
                 nix.copy_closure(
                     path_to_config,
                     to_host=target_host,
                     from_host=build_host,
-                    **copy_flags,
+                    copy_flags=copy_flags,
                 )
                 if action in (Action.SWITCH, Action.BOOT):
                     nix.set_profile(
@@ -406,6 +459,7 @@ def execute(argv: list[str]) -> None:
                         target_host=target_host,
                         sudo=args.sudo,
                     )
+
             if action in (Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE):
                 nix.switch_to_configuration(
                     path_to_config,
@@ -415,25 +469,14 @@ def execute(argv: list[str]) -> None:
                     specialisation=args.specialisation,
                     install_bootloader=args.install_bootloader,
                 )
-        case Action.BUILD_VM | Action.BUILD_VM_WITH_BOOTLOADER:
-            logger.info("building the system configuration...")
-            attr = "vm" if action == Action.BUILD_VM else "vmWithBootLoader"
-            if flake:
-                path_to_config = nix.build_flake(
-                    f"config.system.build.{attr}",
-                    flake,
-                    **flake_build_flags,
+            elif action in (Action.BUILD_VM, Action.BUILD_VM_WITH_BOOTLOADER):
+                # If you get `not-found`, please open an issue
+                vm_path = next(path_to_config.glob("bin/run-*-vm"), "not-found")
+                print(
+                    f"Done. The virtual machine can be started by running '{vm_path}'"
                 )
-            else:
-                path_to_config = nix.build(
-                    f"config.system.build.{attr}",
-                    build_attr,
-                    **build_flags,
-                )
-            vm_path = next(path_to_config.glob("bin/run-*-vm"), "./result/bin/run-*-vm")
-            print(f"Done. The virtual machine can be started by running '{vm_path}'")
         case Action.EDIT:
-            nix.edit(flake, **flake_build_flags)
+            nix.edit(flake, flake_build_flags)
         case Action.DRY_RUN:
             assert False, "DRY_RUN should be a DRY_BUILD alias"
         case Action.LIST_GENERATIONS:
@@ -441,8 +484,6 @@ def execute(argv: list[str]) -> None:
             if args.json:
                 print(json.dumps(generations, indent=2))
             else:
-                from tabulate import tabulate
-
                 headers = {
                     "generation": "Generation",
                     "date": "Build-date",
@@ -452,22 +493,12 @@ def execute(argv: list[str]) -> None:
                     "specialisations": "Specialisation",
                     "current": "Current",
                 }
-                # Not exactly the same format as legacy nixos-rebuild but close
-                # enough
-                table = tabulate(
-                    generations,
-                    headers=headers,
-                    tablefmt="plain",
-                    numalign="left",
-                    stralign="left",
-                    disable_numparse=True,
-                )
-                print(table)
+                print(tabulate(generations, headers=headers))
         case Action.REPL:
             if flake:
-                nix.repl_flake("toplevel", flake, **flake_build_flags)
+                nix.repl_flake("toplevel", flake, flake_build_flags)
             else:
-                nix.repl("system", build_attr, **build_flags)
+                nix.repl("system", build_attr, build_flags)
         case _:
             assert_never(action)
 
@@ -479,6 +510,15 @@ def main() -> None:
 
     try:
         execute(sys.argv)
+    except CalledProcessError as ex:
+        if logger.level == logging.DEBUG:
+            import traceback
+
+            traceback.print_exc()
+        else:
+            print(str(ex), file=sys.stderr)
+        # Exit with the error code of the process that failed
+        sys.exit(ex.returncode)
     except (Exception, KeyboardInterrupt) as ex:
         if logger.level == logging.DEBUG:
             raise

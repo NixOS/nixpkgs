@@ -13,7 +13,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-KmAMGKm+cFGRMD1Nyn9/CHv9vUvflAiLJcro08GIGtw=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"
@@ -31,7 +31,7 @@ buildGoModule rec {
     description = "All-in-one router, firewall and service proxy for Kubernetes";
     mainProgram = "kube-router";
     license = licenses.asl20;
-    maintainers = with maintainers; [ colemickens johanot ];
+    maintainers = with maintainers; [ johanot ];
     platforms = platforms.linux;
   };
 }

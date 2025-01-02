@@ -13,7 +13,12 @@ import ./make-test-python.nix (
       {
         services.loki = {
           enable = true;
-          configFile = "${pkgs.grafana-loki.src}/cmd/loki/loki-local-config.yaml";
+
+          # FIXME(globin) revert to original file when upstream fix released
+          # configFile = "${pkgs.grafana-loki.src}/cmd/loki/loki-local-config.yaml";
+          configFile = pkgs.runCommandNoCC "patched-loki-cfg.yml" { } ''
+            sed '/metric_aggregation/!b;n;/enable/d' "${pkgs.grafana-loki.src}/cmd/loki/loki-local-config.yaml" > $out
+          '';
         };
         services.promtail = {
           enable = true;

@@ -10,7 +10,7 @@
   libGL,
   libinput,
   libxkbcommon,
-  mesa,
+  libgbm,
   seatd,
   wayland,
 }:
@@ -67,7 +67,7 @@ rustPlatform.buildRustPackage rec {
     libGL
     libinput
     libxkbcommon
-    mesa
+    libgbm
     seatd
     systemd
     wayland

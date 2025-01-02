@@ -167,6 +167,9 @@
   "sec-building-image-tech-notes": [
     "index.html#sec-building-image-tech-notes"
   ],
+  "sec-image-nixos-rebuild-build-image": [
+    "index.html#sec-image-nixos-rebuild-build-image"
+  ],
   "sec-image-repart": [
     "index.html#sec-image-repart"
   ],

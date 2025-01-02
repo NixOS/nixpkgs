@@ -3,7 +3,7 @@
   fetchFromGitHub,
   makeWrapper,
   mkDerivation,
-  substituteAll,
+  replaceVars,
   wrapGAppsHook3,
   wrapQtAppsHook,
 
@@ -82,14 +82,14 @@ let
   ];
 in
 mkDerivation rec {
-  version = "3.34.13";
+  version = "3.34.14";
   pname = "qgis-ltr-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-eNncDIRfFYFxyc5a2tZijmVpx/LNm/roak84guFvldg=";
+    hash = "sha256-4nptnzAvLOC8R1sqfdHJ4YYtotwcOARbu9fe4YKwIVM=";
   };
 
   passthru = {
@@ -145,8 +145,7 @@ mkDerivation rec {
     ++ pythonBuildInputs;
 
   patches = [
-    (substituteAll {
-      src = ./set-pyqt-package-dirs-ltr.patch;
+    (replaceVars ./set-pyqt-package-dirs-ltr.patch {
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
     })

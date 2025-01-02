@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   setuptools,
   unittestCheckHook,
 }:
@@ -18,7 +19,15 @@ buildPythonPackage rec {
     hash = "sha256-OL+7ntgzpA63ALQ8whhKRePsKxcp81PLuU1bHJvxN9U=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  patches = [
+    (fetchpatch2 {
+      name = "dont-fail-with-python-313.patch";
+      url = "https://github.com/jazzband/geojson/commit/c13afff339e6b78f442785cc95f0eb66ddab3e7b.patch?full_index=1";
+      hash = "sha256-xdz96vzTA+zblJtCvXIZe5p51xJGM5eB/HAtCXgy5JA=";
+    })
+  ];
+
+  build-system = [ setuptools ];
 
   pythonImportsCheck = [ "geojson" ];
 

@@ -5,6 +5,7 @@
   setuptools,
   aiohttp,
   websockets,
+  regex,
 }:
 
 buildPythonPackage rec {
@@ -23,6 +24,7 @@ buildPythonPackage rec {
   dependencies = [
     aiohttp
     websockets
+    regex
   ];
 
   pythonImportsCheck = [ "pymee" ];

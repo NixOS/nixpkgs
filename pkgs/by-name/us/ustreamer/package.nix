@@ -14,17 +14,20 @@
   jansson,
   libopus,
   nixosTests,
+  systemdLibs,
+  which,
+  withSystemd ? true,
   withJanus ? true,
 }:
 stdenv.mkDerivation rec {
   pname = "ustreamer";
-  version = "6.12";
+  version = "6.18";
 
   src = fetchFromGitHub {
     owner = "pikvm";
     repo = "ustreamer";
     rev = "v${version}";
-    hash = "sha256-iaCgPHgklk7tbhJhQmyjKggb1bMWBD+Zurgfk9sCQ3E=";
+    hash = "sha256-VzhTfr0Swrv3jZUvBYYy5l0+iSokIztpeyA1CuG/roY=";
   };
 
   buildInputs =
@@ -33,6 +36,9 @@ stdenv.mkDerivation rec {
       libevent
       libjpeg
       libdrm
+    ]
+    ++ lib.optionals withSystemd [
+      systemdLibs
     ]
     ++ lib.optionals withJanus [
       janus-gateway
@@ -43,12 +49,18 @@ stdenv.mkDerivation rec {
       libopus
     ];
 
-  nativeBuildInputs = [ pkg-config ];
+  nativeBuildInputs = [
+    pkg-config
+    which
+  ];
 
   makeFlags =
     [
       "PREFIX=${placeholder "out"}"
       "WITH_V4P=1"
+    ]
+    ++ lib.optionals withSystemd [
+      "WITH_SYSTEMD=1"
     ]
     ++ lib.optionals withJanus [
       "WITH_JANUS=1"
@@ -77,5 +89,6 @@ stdenv.mkDerivation rec {
       matthewcroughan
     ];
     platforms = platforms.linux;
+    mainProgram = "ustreamer";
   };
 }

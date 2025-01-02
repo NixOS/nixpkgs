@@ -1,90 +1,58 @@
 {
   lib,
+  stdenv,
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  stdenv,
-  python3Packages,
-  darwin,
+
   rust-jemalloc-sys,
-  ruff-lsp,
-  nix-update-script,
+  buildPackages,
   versionCheckHook,
-  libiconv,
+
+  # passthru
+  ruff-lsp,
   nixosTests,
+  nix-update-script,
 }:
 
-python3Packages.buildPythonPackage rec {
+rustPlatform.buildRustPackage rec {
   pname = "ruff";
-  version = "0.8.0";
-  pyproject = true;
-
-  outputs = [
-    "bin"
-    "out"
-  ];
+  version = "0.8.4";
 
   src = fetchFromGitHub {
     owner = "astral-sh";
     repo = "ruff";
-    rev = "refs/tags/${version}";
-    hash = "sha256-yenGZ7TuiHtY/3AIjMPlHVtQPP6PHMc1wdezfZdVtK0=";
+    tag = version;
+    hash = "sha256-c5d2XaoEjCHWMdjTLD6CnwP8rpSXTUrmKSs0QWQ6UG0=";
   };
 
-  # Do not rely on path lookup at runtime to find the ruff binary
-  postPatch = ''
-    substituteInPlace python/ruff/__main__.py \
-      --replace-fail \
-        'ruff_exe = "ruff" + sysconfig.get_config_var("EXE")' \
-        'return "${placeholder "bin"}/bin/ruff"'
-  '';
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-jbUjsIJRpkKYc+qHN8tkcZrcjPTFJfdCsatezzdX4Ss=";
 
-  cargoDeps = rustPlatform.fetchCargoVendor {
-    inherit pname version src;
-    hash = "sha256-O5+uVYWtSMEj7hBrc/FUuqRBN4hUlEbtDPF42kpL7PA=";
-  };
+  nativeBuildInputs = [ installShellFiles ];
 
-  nativeBuildInputs =
-    [ installShellFiles ]
-    ++ (with rustPlatform; [
-      cargoSetupHook
-      maturinBuildHook
-      cargoCheckHook
-    ]);
-
-  buildInputs =
-    [
-      rust-jemalloc-sys
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      darwin.apple_sdk.frameworks.CoreServices
-      libiconv
-    ];
+  buildInputs = [
+    rust-jemalloc-sys
+  ];
 
   postInstall =
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
     ''
-      mkdir -p $bin/bin
-      mv $out/bin/ruff $bin/bin/
-      rmdir $out/bin
-    ''
-    + lib.optionalString (stdenv.buildPlatform.canExecute stdenv.hostPlatform) ''
       installShellCompletion --cmd ruff \
-        --bash <($bin/bin/ruff generate-shell-completion bash) \
-        --fish <($bin/bin/ruff generate-shell-completion fish) \
-        --zsh <($bin/bin/ruff generate-shell-completion zsh)
+        --bash <(${emulator} $out/bin/ruff generate-shell-completion bash) \
+        --fish <(${emulator} $out/bin/ruff generate-shell-completion fish) \
+        --zsh <(${emulator} $out/bin/ruff generate-shell-completion zsh)
     '';
 
-  passthru = {
-    tests = {
-      inherit ruff-lsp;
-      nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
-    };
-    updateScript = nix-update-script { };
-  };
-
   # Run cargo tests
-  cargoCheckType = "debug";
-  postInstallCheck = ''
+  checkType = "debug";
+
+  # tests do not appear to respect linker options on doctests
+  # Upstream issue: https://github.com/rust-lang/cargo/issues/14189
+  # This causes errors like "error: linker `cc` not found" on static builds
+  postInstallCheck = lib.optionalString (!stdenv.hostPlatform.isStatic) ''
     cargoCheckHook
   '';
 
@@ -116,12 +84,22 @@ python3Packages.buildPythonPackage rec {
     "--skip=unix::symlink_inside_workspace"
   ];
 
-  nativeCheckInputs = [
+  nativeInstallCheckInputs = [
     versionCheckHook
   ];
   versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
 
-  pythonImportsCheck = [ "ruff" ];
+  passthru = {
+    tests =
+      {
+        inherit ruff-lsp;
+      }
+      // lib.optionalAttrs stdenv.hostPlatform.isLinux {
+        nixos-test-driver-busybox = nixosTests.nixos-test-driver.busybox;
+      };
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Extremely fast Python linter";

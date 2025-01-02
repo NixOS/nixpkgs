@@ -17,7 +17,7 @@ luarocks_bootstrap.overrideAttrs (old: {
     hash = "sha256-hsjv+jlLsoIDM4gB/0mFeoVu1YZ1I9ELDALLTEnlCF0=";
   };
 
-  propagatedBuildInputs = old.propagatedBuildInputs ++ [
+  propagatedNativeBuildInputs = old.propagatedNativeBuildInputs ++ [
     file
     nurl
   ];

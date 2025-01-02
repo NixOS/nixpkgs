@@ -13,13 +13,13 @@
 
 buildNpmPackage rec {
   pname = "bitwarden-cli";
-  version = "2024.11.1";
+  version = "2024.12.0";
 
   src = fetchFromGitHub {
     owner = "bitwarden";
     repo = "clients";
     rev = "cli-v${version}";
-    hash = "sha256-J7gmrSAiu59LLP9pKfbv9+H00vXGQCrjkd4GBhkcyTY=";
+    hash = "sha256-3aN2t8/qhN0sjACvtip45efHQJl8nEMNre0+oBL1/go=";
   };
 
   postPatch = ''
@@ -29,7 +29,7 @@ buildNpmPackage rec {
 
   nodejs = nodejs_20;
 
-  npmDepsHash = "sha256-MZoreHKmiUUxhq3tmL4lPp6vPmoQIqG3IPpZE56Z1Kc=";
+  npmDepsHash = "sha256-EtIcqbubAYN9I9wbw17oHiVshd3GtQayFtdgqWP7Pgg=";
 
   nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
@@ -49,6 +49,20 @@ buildNpmPackage rec {
   npmWorkspace = "apps/cli";
 
   npmFlags = [ "--legacy-peer-deps" ];
+
+  postConfigure = ''
+    # we want to build everything from source
+    shopt -s globstar
+    rm -r node_modules/**/prebuilds
+    shopt -u globstar
+  '';
+
+  postBuild = ''
+    # remove build artifacts that bloat the closure
+    shopt -s globstar
+    rm -r node_modules/**/{*.target.mk,binding.Makefile,config.gypi,Makefile,Release/.deps}
+    shopt -u globstar
+  '';
 
   passthru = {
     tests = {

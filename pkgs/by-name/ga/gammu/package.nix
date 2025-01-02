@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  substituteAll,
+  replaceVars,
   pkg-config,
   cmake,
   bluez,
@@ -34,8 +34,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./bashcomp-dir.patch
     ./systemd.patch
-    (substituteAll {
-      src = ./gammu-config-dialog.patch;
+    (replaceVars ./gammu-config-dialog.patch {
       dialog = "${dialog}/bin/dialog";
     })
   ];

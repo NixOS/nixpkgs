@@ -24,7 +24,7 @@ buildDotnetModule rec {
   sourceRoot = "${src.name}/Source";
 
   projectFile = [ "mqttMultimeter.sln" ];
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   dotnet-sdk = dotnetCorePackages.sdk_8_0;
   dotnet-runtime = dotnet-runtime_8;
   executables = [ "mqttMultimeter" ];

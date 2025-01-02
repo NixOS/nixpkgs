@@ -2,7 +2,7 @@
   lib,
   fetchFromGitHub,
   stdenv,
-  substituteAll,
+  replaceVars,
   SDL2,
   frei0r,
   ladspaPlugins,
@@ -53,9 +53,8 @@ stdenv.mkDerivation (finalAttrs: {
   cmakeFlags = [ "-DSHOTCUT_VERSION=${finalAttrs.version}" ];
 
   patches = [
-    (substituteAll {
+    (replaceVars ./fix-mlt-ffmpeg-path.patch {
       inherit mlt ffmpeg;
-      src = ./fix-mlt-ffmpeg-path.patch;
     })
   ];
 

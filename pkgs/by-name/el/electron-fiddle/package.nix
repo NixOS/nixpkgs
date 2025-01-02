@@ -137,7 +137,7 @@ buildFHSEnv {
       libdrm
       libnotify
       libxkbcommon
-      mesa
+      libgbm
       nspr
       nss
       pango

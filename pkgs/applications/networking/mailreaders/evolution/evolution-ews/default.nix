@@ -15,7 +15,7 @@
   json-glib,
   libmspack,
   webkitgtk_4_1,
-  substituteAll,
+  replaceVars,
   _experimental-update-script-combinators,
   glib,
   makeHardcodeGsettingsPatch,
@@ -35,8 +35,7 @@ stdenv.mkDerivation rec {
     # schemas from evolution. evolution-data-server is not wrapped with
     # evolution's schemas because it would be a circular dependency with
     # evolution.
-    (substituteAll {
-      src = ./hardcode-gsettings.patch;
+    (replaceVars ./hardcode-gsettings.patch {
       evo = glib.makeSchemaPath evolution evolution.name;
     })
   ];

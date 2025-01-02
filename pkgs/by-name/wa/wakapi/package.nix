@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "2.12.2";
+  version = "2.12.3";
 in
 buildGoModule {
   pname = "wakapi";
@@ -13,8 +13,8 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "muety";
     repo = "wakapi";
-    rev = "refs/tags/${version}";
-    hash = "sha256-6wlFgIof4uzQ3phd7paHZ6Sezp0Dfj8qFzsudFKfNdU=";
+    tag = version;
+    hash = "sha256-kgzxeU5hM9fSidyJEmdTr26/w5OaBk1VdjSztmOgMYs=";
   };
 
   vendorHash = "sha256-q5o88fwc1S14ZwGyDS9aFtJMfPZ4pmMjffmeXODhajg=";

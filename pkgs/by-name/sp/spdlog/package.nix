@@ -41,6 +41,11 @@ stdenv.mkDerivation rec {
   postInstall = ''
     mkdir -p $out/share/doc/spdlog
     cp -rv ../example $out/share/doc/spdlog
+
+    substituteInPlace $dev/include/spdlog/tweakme.h \
+      --replace-fail \
+        '// #define SPDLOG_FMT_EXTERNAL' \
+        '#define SPDLOG_FMT_EXTERNAL'
   '';
 
   doCheck = true;

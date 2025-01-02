@@ -3,6 +3,7 @@
   callPackage,
   mkCoqDerivation,
   coq,
+  stdlib,
   version ? null,
 }:
 
@@ -62,6 +63,8 @@
   enableParallelBuilding = false;
 
   passthru.tests.suite = callPackage ./test.nix { };
+
+  propagatedBuildInputs = [ stdlib ];
 
   meta = with lib; {
     description = "Reflexive SAT solver parameterised by a leaf tactic and Nelson-Oppen support";

@@ -12,7 +12,11 @@
   fetchpatch,
   fetchurl,
   # Please unpin FFmpeg on the next upstream release.
-  ffmpeg_6,
+  # Currently FFmpeg is pinned to 4.x because VAAPI acceleration is broken when
+  # building with newer versions:
+  # https://code.videolan.org/videolan/vlc/-/issues/26772
+  # This is intentional by upstream but VLC 4.0 will support newer FFmpeg.
+  ffmpeg_4,
   flac,
   fluidsynth,
   freefont_ttf,
@@ -139,7 +143,7 @@ stdenv.mkDerivation (finalAttrs: {
       avahi
       dbus
       faad2
-      ffmpeg_6
+      ffmpeg_4
       flac
       fluidsynth
       fribidi
@@ -192,6 +196,7 @@ stdenv.mkDerivation (finalAttrs: {
       systemd
       taglib
       xcbutilkeysyms
+      wayland-scanner # only required for configure script
       zlib
     ]
     ++ optionals (!stdenv.hostPlatform.isAarch && !onlyLibVLC) [ live555 ]
@@ -219,6 +224,7 @@ stdenv.mkDerivation (finalAttrs: {
       ]
     )
     ++ optionals (waylandSupport && withQt5) [ libsForQt5.qtwayland ];
+  strictDeps = true;
 
   env =
     {
@@ -251,7 +257,7 @@ stdenv.mkDerivation (finalAttrs: {
           ${freefont_ttf}/share/fonts/truetype
     ''
     # Upstream luac can't cross compile, so we have to install the lua sources
-    # instead of bytecode:
+    # instead of bytecode, which was built for buildPlatform:
     # https://www.lua.org/wshop13/Jericke.pdf#page=39
     + lib.optionalString (!stdenv.hostPlatform.canExecute stdenv.buildPlatform) ''
       substituteInPlace share/Makefile.am \

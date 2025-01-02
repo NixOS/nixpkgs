@@ -26,11 +26,11 @@ buildGoModule rec {
     version = "v${version}";
   };
 
-  meta = with lib; {
+  meta = {
     description = "Implementation of Jsonnet in pure Go";
     homepage = "https://github.com/google/go-jsonnet";
-    license = licenses.asl20;
-    maintainers = with maintainers; [
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [
       nshalman
       aaronjheng
     ];

@@ -5,12 +5,11 @@
   pythonOlder,
   setuptools,
   setuptools-scm,
-  wheel,
 }:
 
 buildPythonPackage rec {
   pname = "astropy-iers-data";
-  version = "0.2024.9.23.0.31.43";
+  version = "0.2024.12.9.0.36.21";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -19,13 +18,12 @@ buildPythonPackage rec {
     owner = "astropy";
     repo = "astropy-iers-data";
     rev = "refs/tags/v${version}";
-    hash = "sha256-PGr8meqVs9l15+k5DHmcPcGK96ydN0nRUOBVfvCtRUg=";
+    hash = "sha256-SN4qDBY3hi0Gj+AH3SSDi5+hKrHMNgPR/Y6HR2Vid0A=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
-    wheel
   ];
 
   pythonImportsCheck = [ "astropy_iers_data" ];

@@ -25,6 +25,11 @@ let
   # Rename the variables to prevent infinite recursion
   requireSigningDefault = requireSigning;
   allowAddonSideloadDefault = allowAddonSideload;
+
+  # Specifying --(dis|en)able-elf-hack on a platform for which it's not implemented will give `--disable-elf-hack is not available in this configuration`
+  # This is declared here because it's used in the default value of elfhackSupport
+  isElfhackPlatform = stdenv: stdenv.hostPlatform.isElf &&
+    (stdenv.hostPlatform.isi686 || stdenv.hostPlatform.isx86_64 || stdenv.hostPlatform.isAarch32 || stdenv.hostPlatform.isAarch64);
 in
 
 { lib
@@ -110,6 +115,7 @@ in
 , jemallocSupport ? !stdenv.hostPlatform.isMusl, jemalloc
 , ltoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.is64bit && !stdenv.hostPlatform.isRiscV), overrideCC, buildPackages
 , pgoSupport ? (stdenv.hostPlatform.isLinux && stdenv.hostPlatform == stdenv.buildPlatform), xvfb-run
+, elfhackSupport ? isElfhackPlatform stdenv && !(stdenv.hostPlatform.isMusl && stdenv.hostPlatform.isAarch64)
 , pipewireSupport ? waylandSupport && webrtcSupport
 , pulseaudioSupport ? stdenv.hostPlatform.isLinux, libpulseaudio
 , sndioSupport ? stdenv.hostPlatform.isLinux, sndio
@@ -160,6 +166,7 @@ in
 
 assert stdenv.cc.libc or null != null;
 assert pipewireSupport -> !waylandSupport || !webrtcSupport -> throw "${pname}: pipewireSupport requires both wayland and webrtc support.";
+assert elfhackSupport -> isElfhackPlatform stdenv;
 
 let
   inherit (lib) enableFeature;
@@ -260,6 +267,29 @@ buildStdenv.mkDerivation {
       url = "https://hg.mozilla.org/mozilla-central/raw-rev/ba6abbd36b496501cea141e17b61af674a18e279";
       hash = "sha256-2IpdSyye3VT4VB95WurnyRFtdN1lfVtYpgEiUVhfNjw=";
     })
+  ]
+  ++ [
+    # LLVM 19 turned on WASM reference types by default, exposing a bug
+    # that broke the Mozilla WASI build. Supposedly, it has been fixed
+    # upstream in LLVM, but the build fails in the same way for us even
+    # with LLVM 19 versions that contain the upstream patch.
+    #
+    # Apply the temporary patch Mozilla used to work around this bug
+    # for now until someone can investigate what’s going on here.
+    #
+    # TODO: Please someone figure out what’s up with this.
+    #
+    # See: <https://bugzilla.mozilla.org/show_bug.cgi?id=1905251>
+    # See: <https://github.com/llvm/llvm-project/pull/97451>
+    (fetchpatch {
+      name = "wasi-sdk-disable-reference-types.patch";
+      url = "https://hg.mozilla.org/integration/autoland/raw-rev/23a9f6555c7c";
+      hash = "sha256-CRywalJlRMFVLITEYXxpSq3jLPbUlWKNRHuKLwXqQfU=";
+    })
+    # Python 3.12.8 compat
+    # https://bugzilla.mozilla.org/show_bug.cgi?id=1935621
+    # https://phabricator.services.mozilla.com/D231480
+    ./mozbz-1935621-attachment-9442305.patch
   ]
   ++ extraPatches;
 
@@ -402,9 +432,7 @@ buildStdenv.mkDerivation {
      "--enable-lto=cross" # Cross-Language LTO
      "--enable-linker=lld"
   ]
-  # elf-hack is broken when using clang+lld:
-  # https://bugzilla.mozilla.org/show_bug.cgi?id=1482204
-  ++ lib.optional (ltoSupport && (buildStdenv.hostPlatform.isAarch32 || buildStdenv.hostPlatform.isi686 || buildStdenv.hostPlatform.isx86_64)) "--disable-elf-hack"
+  ++ lib.optional (isElfhackPlatform stdenv) (enableFeature elfhackSupport "elf-hack")
   ++ lib.optional (!drmSupport) "--disable-eme"
   ++ lib.optional (allowAddonSideload) "--allow-addon-sideload"
   ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [

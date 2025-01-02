@@ -124,6 +124,7 @@ let
             PSI = lib.mkForce (option no);
             RT_GROUP_SCHED = lib.mkForce (option no);
             SCHED_AUTOGROUP = lib.mkForce (option no);
+            SCHED_CLASS_EXT = lib.mkForce (option no);
             SCHED_CORE = lib.mkForce (option no);
             UCLAMP_TASK = lib.mkForce (option no);
             UCLAMP_TASK_GROUP = lib.mkForce (option no);

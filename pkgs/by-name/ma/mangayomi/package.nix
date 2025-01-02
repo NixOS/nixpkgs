@@ -27,7 +27,7 @@
   libpulseaudio,
   libcaca,
   libdrm,
-  mesa,
+  libgbm,
   libXScrnSaver,
   nv-codec-headers-11,
   libXpresent,
@@ -125,7 +125,7 @@ flutter324.buildFlutterApplication {
     libpulseaudio
     libcaca
     libdrm
-    mesa
+    libgbm
     libXScrnSaver
     libXpresent
     nv-codec-headers-11

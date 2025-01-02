@@ -18,11 +18,8 @@ stdenv.mkDerivation (finalAttrs: {
   configureFlags = [
     "--with-layout=fhs-system"
     "--disable-install-p"
+    "--with-config-file=${placeholder "out"}/etc/GNUstep/GNUstep.conf"
   ];
-
-  preConfigure = ''
-    configureFlags="$configureFlags --with-config-file=$out/etc/GNUstep/GNUstep.conf"
-  '';
 
   makeFlags = [
     "GNUSTEP_INSTALLATION_DOMAIN=SYSTEM"

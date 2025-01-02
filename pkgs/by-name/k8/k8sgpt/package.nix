@@ -18,7 +18,7 @@ buildGoModule rec {
   vendorHash = "sha256-K9do7u13w2a/9jI7LRtbRvjKJcFU9AnDp2u+ZWSVxw0=";
 
   # https://nixos.org/manual/nixpkgs/stable/#var-go-CGO_ENABLED
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   # https://nixos.org/manual/nixpkgs/stable/#ssec-skip-go-tests
   checkFlags = [

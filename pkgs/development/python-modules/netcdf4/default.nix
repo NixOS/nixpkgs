@@ -32,10 +32,6 @@ buildPythonPackage rec {
     hash = "sha256-N9VX42ZUiJ1wIBkr+1b51fk4lMsymX64N65YbFOP17Y=";
   };
 
-  postPatch = ''
-    sed -i "/numpy>=/d" pyproject.toml
-  '';
-
   build-system = [
     cython
     oldest-supported-numpy

@@ -38,13 +38,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "watchman";
-  version = "2024.11.18.00";
+  version = "2024.12.09.00";
 
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "watchman";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-deOSeExhwn8wrtP2Y0BDaHdmaeiUaDBok6W7N1rH/24=";
+    hash = "sha256-w8Xm0xAkPH/Yapph/K8uPoPQxfc9bHLEDr0wFrNJ2LA=";
   };
 
   nativeBuildInputs = [

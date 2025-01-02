@@ -161,6 +161,14 @@ let
           arrayWithSep="$(concatStringsSep "&" array)"
           [[ "$arrayWithSep" == "lorem ipsum&dolor&sit amet" ]] || (echo "'\$arrayWithSep' was not 'lorem ipsum&dolor&sit amet'" && false)
 
+          array=("lorem ipsum" "dolor" "sit amet")
+          arrayWithSep="$(concatStringsSep "++" array)"
+          [[ "$arrayWithSep" == "lorem ipsum++dolor++sit amet" ]] || (echo "'\$arrayWithSep' was not 'lorem ipsum++dolor++sit amet'" && false)
+
+          array=("lorem ipsum" "dolor" "sit amet")
+          arrayWithSep="$(concatStringsSep " and " array)"
+          [[ "$arrayWithSep" == "lorem ipsum and dolor and sit amet" ]] || (echo "'\$arrayWithSep' was not 'lorem ipsum and dolor and sit amet'" && false)
+
           touch $out
         '';
       };

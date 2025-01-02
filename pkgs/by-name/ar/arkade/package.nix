@@ -15,7 +15,7 @@ buildGoModule rec {
     hash = "sha256-MFce+stC+OzUL0H0ahZZAfMwr9Y+EVJIMmhhRl4JYaU=";
   };
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   nativeBuildInputs = [ installShellFiles ];
 

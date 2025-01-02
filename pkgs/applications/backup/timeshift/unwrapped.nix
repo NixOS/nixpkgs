@@ -57,6 +57,10 @@ stdenv.mkDerivation rec {
     xapp
   ];
 
+  env = lib.optionalAttrs stdenv.cc.isGNU {
+    NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
+  };
+
   meta = with lib; {
     description = "System restore tool for Linux";
     longDescription = ''

@@ -10,16 +10,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "waylyrics";
-  version = "0.3.16";
+  version = "0.3.20";
 
   src = fetchFromGitHub {
     owner = "waylyrics";
     repo = "waylyrics";
     rev = "v${version}";
-    hash = "sha256-/hwx4fe1yjfsLYxsQkUMXrqWhAgp/VJ74N1eSiXuJ54=";
+    hash = "sha256-NDdZH33tkY+TgDLkT7r+M9uHCeE9/NRQgVZhJ7EuxEc=";
   };
 
-  cargoHash = "sha256-Os7djeTDChNWXWbmDuJWJnf7E+U/V14Jg4cLOMAKhu4=";
+  useFetchCargoVendor = true;
+
+  cargoHash = "sha256-dTyUPLwDcT2b3Kw4Q7/DyX6YfFcaOeDq6CCUpG9QUQQ=";
 
   nativeBuildInputs = [
     pkg-config
@@ -31,6 +33,8 @@ rustPlatform.buildRustPackage rec {
   ];
 
   checkFlags = [
+    "--skip=tests::lrclib_lyric::get_lrclib_lyric" # Requires network access
+    "--skip=tests::lrclib_lyric::search_lrclib_lyric" # Requires network access
     "--skip=tests::netease_lyric::get_netease_lyric" # Requires network access
   ];
 

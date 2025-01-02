@@ -9,6 +9,7 @@
   alsa-lib,
   faac,
   faad2,
+  fetchpatch,
   ffmpeg,
   glib,
   openh264,
@@ -87,6 +88,22 @@ stdenv.mkDerivation rec {
     rev = version;
     hash = "sha256-w+xyMNFmKylSheK0yAGl8J6MXly/HUjjAfR9Qq3s/kA=";
   };
+
+  patches = [
+    # GCC 14 compatibility
+    (fetchpatch {
+      url = "https://github.com/FreeRDP/FreeRDP/commit/5b14b7cbdd36414f1838047f21502654bd32ebb1.patch";
+      hash = "sha256-EWLfmjGJGWA/sY2E2DnFKhPbzhOVbXZPCrV8i1XuSeY=";
+    })
+    (fetchpatch {
+      url = "https://github.com/FreeRDP/FreeRDP/commit/efa899d3deb8595a29fabb2a2251722f9d7e0d7f.patch";
+      hash = "sha256-hjqNexYq+3iO2L2L9wT2tWbHz0BEtl/y7jgQT4kpNIM=";
+    })
+    (fetchpatch {
+      url = "https://github.com/FreeRDP/FreeRDP/commit/0c20fac8f1deeeca3df93a6619542e5d9176f0f0.patch";
+      hash = "sha256-cEzNPteucoI5KoGEM3C6mg2kW9uWImPebZEV6nssexY=";
+    })
+  ];
 
   postPatch =
     ''

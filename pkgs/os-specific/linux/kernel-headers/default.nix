@@ -143,13 +143,13 @@ in
 
   linuxHeaders =
     let
-      version = "6.10";
+      version = "6.12";
     in
     makeLinuxHeaders {
       inherit version;
       src = fetchurl {
         url = "mirror://kernel/linux/kernel/v${lib.versions.major version}.x/linux-${version}.tar.xz";
-        hash = "sha256-d0aYQi7lTF8ecERW83xlwGtRtOmosIZvNFgNhv744iY=";
+        hash = "sha256-saJWK+VuQq+z+EidTCp6xHKsIwmPHvHB5A2mAfVGJes=";
       };
       patches = [
         ./no-relocs.patch # for building x86 kernel headers on non-ELF platforms

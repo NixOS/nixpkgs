@@ -11,7 +11,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "liberasurecode";
-  version = "1.6.4";
+  version = "1.6.5";
 
   outputs = [
     "out"
@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "openstack";
     repo = "liberasurecode";
     rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-KYXlRjUudWhFbhyv9V1fmqwBw3/vTBfusxafaNG+Q40=";
+    hash = "sha256-242p6lyLM+0UpuYvQqz87Z1S0oayxGXz7CZJW7fbgBk=";
   };
 
   postPatch = ''

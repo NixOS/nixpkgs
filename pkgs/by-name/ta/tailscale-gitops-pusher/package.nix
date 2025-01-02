@@ -9,9 +9,12 @@ buildGo123Module {
     version
     src
     vendorHash
-    CGO_ENABLED
     ;
   pname = "tailscale-gitops-pusher";
+
+  env = {
+    inherit (tailscale) CGO_ENABLED;
+  };
 
   subPackages = [
     "cmd/gitops-pusher"

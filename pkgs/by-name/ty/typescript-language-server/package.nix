@@ -7,7 +7,7 @@
   makeWrapper,
   nodejs,
   prefetch-yarn-deps,
-  substituteAll,
+  replaceVars,
   yarn,
   testers,
   typescript,
@@ -25,8 +25,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (substituteAll {
-      src = ./default-fallbackTsserverPath.diff;
+    (replaceVars ./default-fallbackTsserverPath.diff {
       typescript = "${typescript}/lib/node_modules/typescript/lib/tsserver.js";
     })
   ];

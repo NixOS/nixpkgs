@@ -48,7 +48,7 @@ in
         Strings to prefix to the default
         {option}`system.nixos.label`.
 
-        Useful for not loosing track of configurations built with
+        Useful for not losing track of configurations built with
         different options, e.g.:
 
         ```

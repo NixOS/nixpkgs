@@ -4,7 +4,7 @@
   cmake,
   curl,
   curlpp,
-  doctest,
+  srcOnly,
   fetchFromGitHub,
   fetchurl,
   fmt,
@@ -12,7 +12,6 @@
   qt5,
   spdlog,
   substituteAll,
-  trompeloeil,
   buildDayZLauncher ? false,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -36,8 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
         rev = "45664c4e9f05ff287731a9ff8b724d0c89fb6e77";
         hash = "sha256-qLD9zD6hbItDn6ZHHWBXrAWhySvqcs40xA5+C/5Fkhw=";
       };
-      curlpp_src = curlpp.src;
-      doctest_src = doctest;
+      curlpp_src = srcOnly curlpp;
       fmt_src = fmt;
       nlohmann_json_src = nlohmann_json;
       pugixml_src = fetchFromGitHub {
@@ -51,7 +49,9 @@ stdenv.mkDerivation (finalAttrs: {
         url = "https://github.com/julianxhokaxhiu/SteamworksSDKCI/releases/download/1.53/SteamworksSDK-v1.53.0_x64.zip";
         hash = "sha256-6PQGaPsaxBg/MHVWw2ynYW6LaNSrE9Rd9Q9ZLKFGPFA=";
       };
-      trompeloeil_src = trompeloeil;
+      # Only required for testing?
+      doctest_src = null;
+      trompeloeil_src = null;
     })
     # game won't launch with steam integration anyways, disable it
     ./disable_steam_integration.patch
@@ -60,14 +60,9 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     qt5.wrapQtAppsHook
     cmake
-  ];
-
-  buildInputs = [
     spdlog
-    curlpp.src
     curl
-    qt5.qtbase
-    qt5.qtsvg
+    curlpp
   ];
 
   cmakeFlags = [ "-Wno-dev" ] ++ lib.optionals buildDayZLauncher [ "-DBUILD_DAYZ_LAUNCHER=ON" ];

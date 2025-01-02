@@ -21,6 +21,7 @@
 , wayland
 , zbar
 , glycin-loaders
+, nix-update-script
 }:
 
 stdenv.mkDerivation rec {
@@ -79,6 +80,10 @@ stdenv.mkDerivation rec {
     wayland
     zbar
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = {
     description = "Two-factor authentication code generator for GNOME";

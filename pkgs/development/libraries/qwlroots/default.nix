@@ -11,7 +11,7 @@
   wayland-protocols,
   wlr-protocols,
   pixman,
-  mesa,
+  libgbm,
   vulkan-loader,
   libinput,
   xorg,
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     wayland-protocols
     wlr-protocols
     pixman
-    mesa
+    libgbm
     vulkan-loader
     libinput
     xorg.libXdmcp

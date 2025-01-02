@@ -41,6 +41,7 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional withSystemd "--with-systemdsystemunitdir=${placeholder "out"}/lib/systemd/system"
   ++ lib.optional withPpp "--with-pppd=${ppp}/bin/pppd"
+  # configure: error: cannot check for file existence when cross compiling
   ++ lib.optional (stdenv.hostPlatform != stdenv.buildPlatform) "--disable-proc";
 
   enableParallelBuilding = true;

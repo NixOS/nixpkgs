@@ -3,7 +3,6 @@
   buildPythonPackage,
   pythonOlder,
   fetchFromGitHub,
-  future,
   pytestCheckHook,
   setuptools,
 }:
@@ -24,14 +23,9 @@ buildPythonPackage rec {
 
   build-system = [ setuptools ];
 
-  dependencies = [ future ];
+  pythonRemoveDeps = [ "enum-compat" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
-
-  postPatch = ''
-    substituteInPlace setup.py \
-      --replace "enum-compat" ""
-  '';
 
   pytestFlagsArray = [ "tests/test_asn1.py" ];
 

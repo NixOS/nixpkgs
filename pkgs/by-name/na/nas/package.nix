@@ -45,6 +45,12 @@ stdenv.mkDerivation (finalAttrs: {
     "World"
   ];
 
+  env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=implicit-function-declaration"
+    "-Wno-error=implicit-int"
+    "-Wno-error=incompatible-pointer-types"
+  ];
+
   installFlags = [
     "LDLIBS=-lfl"
     "DESTDIR=${placeholder "out"}"

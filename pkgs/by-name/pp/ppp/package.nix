@@ -1,13 +1,17 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, libpcap
-, libxcrypt
-, pkg-config
-, autoreconfHook
-, openssl
-, bash
-, nixosTests
+{
+  autoreconfHook,
+  bash,
+  fetchFromGitHub,
+  lib,
+  libpcap,
+  libxcrypt,
+  linux-pam,
+  nixosTests,
+  openssl,
+  pkg-config,
+  stdenv,
+  withSystemd ? lib.meta.availableOn stdenv.hostPlatform systemdMinimal,
+  systemdMinimal,
 }:
 
 stdenv.mkDerivation rec {
@@ -25,6 +29,7 @@ stdenv.mkDerivation rec {
     "--localstatedir=/var"
     "--sysconfdir=/etc"
     "--with-openssl=${openssl.dev}"
+    (lib.enableFeature withSystemd "systemd")
   ];
 
   nativeBuildInputs = [
@@ -32,12 +37,17 @@ stdenv.mkDerivation rec {
     autoreconfHook
   ];
 
-  buildInputs = [
-    libpcap
-    libxcrypt
-    openssl
-    bash
-  ];
+  buildInputs =
+    [
+      bash
+      libpcap
+      libxcrypt
+      linux-pam
+      openssl
+    ]
+    ++ lib.optionals withSystemd [
+      systemdMinimal
+    ];
 
   postPatch = ''
     for file in $(find -name Makefile.linux); do
@@ -72,16 +82,16 @@ stdenv.mkDerivation rec {
     inherit (nixosTests) pppd;
   };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://ppp.samba.org";
     description = "Point-to-point implementation to provide Internet connections over serial lines";
-    license = with licenses; [
+    license = with lib.licenses; [
       bsdOriginal
       publicDomain
       gpl2Only
       lgpl2
     ];
-    platforms = platforms.linux;
-    maintainers = [ ];
+    platforms = lib.platforms.linux;
+    maintainers = with lib.maintainers; [ stv0g ];
   };
 }

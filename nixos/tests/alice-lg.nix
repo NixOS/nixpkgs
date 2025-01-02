@@ -13,7 +13,7 @@ let
   inherit (pkgs.lib) optionalString;
 in
 makeTest {
-  name = "birdwatcher";
+  name = "alice-lg";
   nodes = {
     host1 = {
       environment.systemPackages = with pkgs; [ jq ];

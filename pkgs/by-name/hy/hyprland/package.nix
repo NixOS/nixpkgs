@@ -14,6 +14,8 @@
   epoll-shim,
   git,
   hyprcursor,
+  hyprgraphics,
+  hyprland-qtutils,
   hyprlang,
   hyprutils,
   hyprwayland-scanner,
@@ -23,11 +25,12 @@
   libinput,
   libuuid,
   libxkbcommon,
-  mesa,
+  libgbm,
   pango,
   pciutils,
   pkgconf,
   python3,
+  re2,
   systemd,
   tomlplusplus,
   wayland,
@@ -82,14 +85,14 @@ assert assertMsg (!hidpiXWayland)
 
 customStdenv.mkDerivation (finalAttrs: {
   pname = "hyprland" + optionalString debug "-debug";
-  version = "0.45.2";
+  version = "0.46.2";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "hyprland";
     fetchSubmodules = true;
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-1pNsLGNStCFjXiBc2zMUxKzKk45CePTf+GwKlzTmrCY=";
+    hash = "sha256-dj9dpVwpyTmUyVu4jtaIU39bHgVkoZjv6cgYfWyHc9E=";
   };
 
   postPatch = ''
@@ -98,6 +101,10 @@ customStdenv.mkDerivation (finalAttrs: {
 
     # Remove extra @PREFIX@ to fix pkg-config paths
     sed -i "s#@PREFIX@/##g" hyprland.pc.in
+
+    substituteInPlace protocols/meson.build --replace-fail \
+      "wayland_scanner = dependency('wayland-scanner')" \
+      "wayland_scanner = dependency('wayland-scanner', native: true)"
   '';
 
   # variables used by generateVersion.sh script, and shown in `hyprctl version`
@@ -138,6 +145,7 @@ customStdenv.mkDerivation (finalAttrs: {
       cairo
       git
       hyprcursor.dev
+      hyprgraphics
       hyprlang
       hyprutils
       libGL
@@ -145,9 +153,10 @@ customStdenv.mkDerivation (finalAttrs: {
       libinput
       libuuid
       libxkbcommon
-      mesa
+      libgbm
       pango
       pciutils
+      re2
       tomlplusplus
       wayland
       wayland-protocols
@@ -168,6 +177,7 @@ customStdenv.mkDerivation (finalAttrs: {
   mesonBuildType = if debug then "debugoptimized" else "release";
 
   dontStrip = debug;
+  strictDeps = true;
 
   mesonFlags = concatLists [
     (mapAttrsToList mesonEnable {
@@ -188,6 +198,7 @@ customStdenv.mkDerivation (finalAttrs: {
         --suffix PATH : ${
           makeBinPath [
             binutils
+            hyprland-qtutils
             pciutils
             pkgconf
           ]

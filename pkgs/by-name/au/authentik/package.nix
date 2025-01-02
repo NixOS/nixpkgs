@@ -1,26 +1,27 @@
-{ lib
-, stdenvNoCC
-, callPackages
-, fetchFromGitHub
-, fetchpatch
-, fetchzip
-, buildNpmPackage
-, buildGoModule
-, runCommand
-, openapi-generator-cli
-, nodejs
-, python312
-, codespell
-, makeWrapper }:
+{
+  lib,
+  stdenvNoCC,
+  callPackages,
+  cacert,
+  fetchFromGitHub,
+  buildNpmPackage,
+  buildGoModule,
+  runCommand,
+  chromedriver,
+  openapi-generator-cli,
+  nodejs,
+  python312,
+  makeWrapper,
+}:
 
 let
-  version = "2024.6.4";
+  version = "2024.12.1";
 
   src = fetchFromGitHub {
     owner = "goauthentik";
     repo = "authentik";
     rev = "version/${version}";
-    hash = "sha256-QwK/auMLCJEHHtyexFnO+adCq/u0fezHQ90fXW9J4c4=";
+    hash = "sha256-CkUmsVKzAQ/VWIhtxWxlcGtrWVa8hxqsMqvfcsG5ktA=";
   };
 
   meta = with lib; {
@@ -29,34 +30,69 @@ let
     homepage = "https://goauthentik.io/";
     license = licenses.mit;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jvanbruegge risson ];
-    knownVulnerabilities = [
-      "CVE-2024-52307"
-      "CVE-2024-52287"
-      "CVE-2024-52289"
-      "Authentik 2024.6.x is end-of-life, consider using https://github.com/nix-community/authentik-nix for an up-to-date alternative"
+    maintainers = with maintainers; [
+      jvanbruegge
+      risson
     ];
   };
 
-  website = buildNpmPackage {
-    pname = "authentik-website";
-    inherit version src meta;
-    npmDepsHash = "sha256-JM+ae+zDsMdvovd2p4IJIH89KlMeDU7HOZjFbDCyehw=";
+  # prefetch-npm-deps does not save all dependencies even though the lockfile is fine
+  website-deps = stdenvNoCC.mkDerivation {
+    pname = "authentik-website-deps";
+    inherit src version meta;
 
-    NODE_ENV = "production";
-    NODE_OPTIONS = "--openssl-legacy-provider";
+    sourceRoot = "source/website";
+
+    outputHash = "sha256-SONw9v67uuVk8meRIuS1KaBGbej6Gbz6nZxPDnHfCwQ=";
+    outputHashMode = "recursive";
+
+    nativeBuildInputs = [
+      nodejs
+      cacert
+    ];
+
+    buildPhase = ''
+      npm ci --cache ./cache
+      rm -r ./cache
+    '';
+
+    installPhase = ''
+      mv node_modules $out
+    '';
+
+    dontPatchShebangs = true;
+  };
+
+  website = stdenvNoCC.mkDerivation {
+    pname = "authentik-website";
+    inherit src version meta;
+
+    nativeBuildInputs = [ nodejs ];
 
     postPatch = ''
-      cd website
+      substituteInPlace package.json --replace-fail 'cross-env ' ""
+    '';
+
+    sourceRoot = "source/website";
+
+    buildPhase = ''
+      runHook preBuild
+
+      cp -r ${website-deps} node_modules
+      chmod -R +w node_modules
+      pushd node_modules/.bin
+      patchShebangs $(readlink docusaurus)
+      popd
+      cat node_modules/.bin/docusaurus
+      npm run build-bundled
+
+      runHook postBuild
     '';
 
     installPhase = ''
       mkdir $out
       cp -r build $out/help
     '';
-
-    npmBuildScript = "build-bundled";
-    npmFlags = [ "--ignore-scripts" ];
   };
 
   clientapi = stdenvNoCC.mkDerivation {
@@ -86,18 +122,20 @@ let
     pname = "authentik-webui";
     inherit version meta;
 
-    src = runCommand "authentik-webui-source" {} ''
+    src = runCommand "authentik-webui-source" { } ''
       mkdir -p $out/web/node_modules/@goauthentik/
       cp -r ${src}/web $out/
       ln -s ${src}/package.json $out/
       ln -s ${src}/website $out/
       ln -s ${clientapi} $out/web/node_modules/@goauthentik/api
     '';
-    npmDepsHash = "sha256-8TzB3ylZzVLePD86of8E/lGgIQCciWMQF9m1Iqv9ZTY=";
+    npmDepsHash = "sha256-aRfpJWTp2WQB3E9aqzJn3BiPLwpCkdvMoyHexaKvz0U=";
 
     postPatch = ''
       cd web
     '';
+
+    CHROMEDRIVER_FILEPATH = lib.getExe chromedriver;
 
     installPhase = ''
       runHook preInstall
@@ -110,7 +148,10 @@ let
     NODE_ENV = "production";
     NODE_OPTIONS = "--openssl-legacy-provider";
 
-    npmInstallFlags = [ "--include=dev" ];
+    npmInstallFlags = [
+      "--include=dev"
+      "--ignore-scripts"
+    ];
   };
 
   python = python312.override {
@@ -164,14 +205,6 @@ let
         inherit version src meta;
         pyproject = true;
 
-        patches = [
-          (fetchpatch {
-            name = "scim-schema-load.patch";
-            url = "https://github.com/goauthentik/authentik/commit/f3640bd3c0ee2f43efcfd506bb71d2b7b6761017.patch";
-            hash = "sha256-4AC7Dc4TM7ok964ztc+XdHvoU/DKyi9yJoz5u1dljEM=";
-          })
-        ];
-
         postPatch = ''
           rm lifecycle/system_migrations/tenant_files.py
           substituteInPlace authentik/root/settings.py \
@@ -186,76 +219,82 @@ let
             --replace-fail 'web/' '${webui}/'
         '';
 
-        nativeBuildInputs = [ prev.poetry-core ];
+        nativeBuildInputs = [
+          prev.poetry-core
+        ];
 
-        propagatedBuildInputs = with final; [
-          argon2-cffi
-          celery
-          channels
-          channels-redis
-          codespell
-          colorama
-          dacite
-          deepmerge
-          defusedxml
-          django
-          django-cte
-          django-filter
-          django-guardian
-          django-model-utils
-          django-pglock
-          django-prometheus
-          django-redis
-          django-storages
-          django-tenants
-          djangorestframework
-          djangorestframework-guardian2
-          docker
-          drf-spectacular
-          duo-client
-          facebook-sdk
-          fido2
-          flower
-          geoip2
-          google-api-python-client
-          gunicorn
-          jsonpatch
-          kubernetes
-          ldap3
-          lxml
-          msgraph-sdk
-          opencontainers
-          packaging
-          paramiko
-          psycopg
-          pydantic
-          pydantic-scim
-          pyjwt
-          pyyaml
-          requests-oauthlib
-          scim2-filter-parser
-          sentry-sdk
-          service-identity
-          setproctitle
-          structlog
-          swagger-spec-validator
-          tenant-schemas-celery
-          twilio
-          twisted
-          ua-parser
-          urllib3
-          uvicorn
-          watchdog
-          webauthn
-          wsproto
-          xmlsec
-          zxcvbn
-        ]
-        ++ channels.optional-dependencies.daphne
-        ++ django-storages.optional-dependencies.s3
-        ++ opencontainers.optional-dependencies.reggie
-        ++ psycopg.optional-dependencies.c
-        ++ uvicorn.optional-dependencies.standard;
+        propagatedBuildInputs =
+          with final;
+          [
+            argon2-cffi
+            celery
+            channels
+            channels-redis
+            cryptography
+            dacite
+            deepmerge
+            defusedxml
+            django
+            django-countries
+            django-cte
+            django-filter
+            django-guardian
+            django-model-utils
+            django-pglock
+            django-prometheus
+            django-redis
+            django-storages
+            django-tenants
+            djangorestframework
+            djangorestframework-guardian2
+            docker
+            drf-orjson-renderer
+            drf-spectacular
+            duo-client
+            fido2
+            flower
+            geoip2
+            google-api-python-client
+            gunicorn
+            gssapi
+            jsonpatch
+            jwcrypto
+            kubernetes
+            ldap3
+            lxml
+            msgraph-sdk
+            opencontainers
+            packaging
+            paramiko
+            psycopg
+            pydantic
+            pydantic-scim
+            pyjwt
+            pyrad
+            python-kadmin-rs
+            pyyaml
+            requests-oauthlib
+            scim2-filter-parser
+            sentry-sdk
+            service-identity
+            setproctitle
+            structlog
+            swagger-spec-validator
+            tenant-schemas-celery
+            twilio
+            ua-parser
+            urllib3
+            uvicorn
+            watchdog
+            webauthn
+            wsproto
+            xmlsec
+            zxcvbn
+          ]
+          ++ django-storages.optional-dependencies.s3
+          ++ opencontainers.optional-dependencies.reggie
+          ++ psycopg.optional-dependencies.c
+          ++ uvicorn.optional-dependencies.standard;
 
         postInstall = ''
           mkdir -p $out/web $out/website
@@ -285,9 +324,9 @@ let
         --replace-fail './web' "${authentik-django}/web"
     '';
 
-    CGO_ENABLED = 0;
+    env.CGO_ENABLED = 0;
 
-    vendorHash = "sha256-BcL9QAc2jJqoPaQImJIFtCiu176nxmVcCLPjXjNBwqI=";
+    vendorHash = "sha256-FyRTPs2xfostV2x03IjrxEYBSrsZwnuPn+oHyQq1Kq0=";
 
     postInstall = ''
       mv $out/bin/server $out/bin/authentik
@@ -296,18 +335,14 @@ let
     subPackages = [ "cmd/server" ];
   };
 
-in stdenvNoCC.mkDerivation {
+in
+stdenvNoCC.mkDerivation {
   pname = "authentik";
   inherit src version;
 
   postPatch = ''
     rm Makefile
     patchShebangs lifecycle/ak
-
-    # This causes issues in systemd services
-    substituteInPlace lifecycle/ak \
-      --replace-fail 'printf' '>&2 printf' \
-      --replace-fail '> /dev/stderr' ""
   '';
 
   installPhase = ''
@@ -316,7 +351,12 @@ in stdenvNoCC.mkDerivation {
     cp -r lifecycle/ak $out/bin/
 
     wrapProgram $out/bin/ak \
-      --prefix PATH : ${lib.makeBinPath [ (python.withPackages (ps: [ps.authentik-django])) proxy ]} \
+      --prefix PATH : ${
+        lib.makeBinPath [
+          (python.withPackages (ps: [ ps.authentik-django ]))
+          proxy
+        ]
+      } \
       --set TMPDIR /dev/shm \
       --set PYTHONDONTWRITEBYTECODE 1 \
       --set PYTHONUNBUFFERED 1

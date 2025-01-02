@@ -5,7 +5,6 @@
   lib,
   vimUtils,
   vim,
-  darwin,
   llvmPackages,
   neovim-unwrapped,
   neovimUtils,
@@ -33,7 +32,6 @@ let
   # If additional modifications to the build process are required,
   # add to ./overrides.nix.
   overrides = callPackage ./overrides.nix {
-    inherit (darwin.apple_sdk.frameworks) Cocoa CoreFoundation CoreServices;
     inherit buildVimPlugin;
     inherit llvmPackages;
   };

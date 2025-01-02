@@ -22,7 +22,7 @@ buildGoModule rec {
     "-w"
   ];
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   meta = {
     description = "Command-line interface for Picocrypt";

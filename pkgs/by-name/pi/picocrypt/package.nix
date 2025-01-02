@@ -48,7 +48,7 @@ buildGoModule rec {
     wrapGAppsHook3
   ];
 
-  CGO_ENABLED = 1;
+  env.CGO_ENABLED = 1;
 
   postInstall = ''
     mv $out/bin/Picocrypt $out/bin/picocrypt-gui

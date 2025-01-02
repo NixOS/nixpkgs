@@ -3,7 +3,7 @@
   stdenv,
   fetchFromGitLab,
   rustPlatform,
-  substituteAll,
+  replaceVars,
   cargo,
   desktop-file-utils,
   git,
@@ -18,6 +18,7 @@
   gtk4,
   libadwaita,
   libsecret,
+  nix-update-script,
 }:
 
 stdenv.mkDerivation rec {
@@ -39,8 +40,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./borg-path.patch;
+    (replaceVars ./borg-path.patch {
       borg = lib.getExe borgbackup;
     })
   ];
@@ -68,6 +68,10 @@ stdenv.mkDerivation rec {
     libadwaita
     libsecret
   ];
+
+  passthru = {
+    updateScript = nix-update-script { };
+  };
 
   meta = with lib; {
     description = "Simple backups based on borg";

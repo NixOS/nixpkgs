@@ -3,6 +3,7 @@
   stdenv,
   fetchFromGitLab,
   autoreconfHook,
+  bash,
   python,
   root,
   makeWrapper,
@@ -23,6 +24,7 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = with python.pkgs; [
     autoreconfHook
+    bash
     cython
     makeWrapper
   ];
@@ -43,6 +45,8 @@ stdenv.mkDerivation rec {
     zlib
   ];
 
+  strictDeps = true;
+
   enableParallelBuilding = true;
 
   postPatch = ''
@@ -54,6 +58,7 @@ stdenv.mkDerivation rec {
   '';
 
   postInstall = ''
+    patchShebangs --build $out/bin/yoda-config
     for prog in "$out"/bin/*; do
       wrapProgram "$prog" --set PYTHONPATH $PYTHONPATH:$(toPythonPath "$out")
     done

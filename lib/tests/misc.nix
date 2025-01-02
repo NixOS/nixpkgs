@@ -1641,7 +1641,7 @@ runTests {
     expected  = "«foo»";
   };
 
-  testToPlist = {
+  testToPlistUnescaped = {
     expr = mapAttrs (const (generators.toPlist { })) {
       value = {
         nested.values = {
@@ -1657,10 +1657,34 @@ runTests {
           emptylist = [];
           attrs = { foo = null; "foo b/ar" = "baz"; };
           emptyattrs = {};
+          "keys are not <escaped>" = "and < neither are string values";
         };
       };
     };
-    expected = { value = builtins.readFile ./test-to-plist-expected.plist; };
+    expected = { value = builtins.readFile ./test-to-plist-unescaped-expected.plist; };
+  };
+
+  testToPlistEscaped = {
+    expr = mapAttrs (const (generators.toPlist { escape = true; })) {
+      value = {
+        nested.values = {
+          int = 42;
+          float = 0.1337;
+          bool = true;
+          emptystring = "";
+          string = "fn\${o}\"r\\d";
+          newlinestring = "\n";
+          path = /. + "/foo";
+          null_ = null;
+          list = [ 3 4 "test" ];
+          emptylist = [];
+          attrs = { foo = null; "foo b/ar" = "baz"; };
+          emptyattrs = {};
+          "keys are <escaped>" = "and < so are string values";
+        };
+      };
+    };
+    expected = { value = builtins.readFile ./test-to-plist-escaped-expected.plist; };
   };
 
   testToLuaEmptyAttrSet = {

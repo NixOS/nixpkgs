@@ -57,7 +57,7 @@ buildPythonPackage rec {
     description = "3D visualization of scientific data in Python";
     homepage = "https://github.com/enthought/mayavi";
     license = licenses.bsdOriginal;
-    maintainers = with maintainers; [ knedlsepp ];
+    maintainers = with maintainers; [ ];
     mainProgram = "mayavi2";
   };
 }

@@ -1,67 +1,107 @@
 let
 
   generic =
-    # dependencies
+    # utils
     {
       stdenv,
-      lib,
-      fetchurl,
       fetchpatch,
-      makeWrapper,
-      glibc,
-      zlib,
-      readline,
-      openssl,
-      icu,
-      lz4,
-      zstd,
-      systemdLibs,
-      libuuid,
-      pkg-config,
-      libxml2,
-      tzdata,
-      libkrb5,
+      fetchurl,
+      lib,
       substituteAll,
-      darwin,
-      linux-pam,
-      bison,
-      flex,
-      perl,
-      docbook_xml_dtd_45,
-      docbook-xsl-nons,
-      libxslt,
-
-      removeReferencesTo,
       writeShellScriptBin,
 
-      systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
-      gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic,
-
-      # for postgresql.pkgs
-      self,
-      newScope,
-      buildEnv,
-      stdenvNoCC,
-      postgresqlTestHook,
-
       # source specification
-      version,
       hash,
       muslPatches ? { },
+      version,
 
-      # for tests
-      testers,
+      # runtime dependencies
+      darwin,
+      glibc,
+      libuuid,
+      libxml2,
+      lz4,
+      openssl,
+      readline,
+      tzdata,
+      zlib,
+      zstd,
+
+      # build dependencies
+      bison,
+      docbook-xsl-nons,
+      docbook_xml_dtd_45,
+      flex,
+      libxslt,
+      makeWrapper,
+      pkg-config,
+      removeReferencesTo,
+
+      # passthru
+      buildEnv,
+      newScope,
       nixosTests,
+      postgresqlTestHook,
+      self,
+      stdenvNoCC,
+      testers,
+
+      # bonjour
+      bonjourSupport ? false,
+
+      # GSSAPI
+      gssSupport ? with stdenv.hostPlatform; !isWindows && !isStatic,
+      libkrb5,
+
+      # icu
+      # Building with icu in pkgsStatic gives tons of "undefined reference" errors like this:
+      #   /nix/store/452lkaak37d3mzzn3p9ak7aa3wzhdqaj-icu4c-74.2-x86_64-unknown-linux-musl/lib/libicuuc.a(chariter.ao):
+      #    (.data.rel.ro._ZTIN6icu_7417CharacterIteratorE[_ZTIN6icu_7417CharacterIteratorE]+0x0):
+      #    undefined reference to `vtable for __cxxabiv1::__si_class_type_info'
+      icuSupport ? !stdenv.hostPlatform.isStatic,
+      icu,
 
       # JIT
-      jitSupport,
-      nukeReferences,
+      jitSupport, # not default on purpose, this is set via "_jit or not" attributes
       llvmPackages,
+      nukeReferences,
       overrideCC,
+
+      # LDAP
+      ldapSupport ? false,
+      openldap,
+
+      # NLS
+      nlsSupport ? false,
+      gettext,
+
+      # PAM
+      # Building with linux-pam in pkgsStatic gives a few "undefined reference" errors like this:
+      #   /nix/store/3s55icpsbc36sgn7sa8q3qq4z6al6rlr-linux-pam-static-x86_64-unknown-linux-musl-1.6.1/lib/libpam.a(pam_audit.o):
+      #     in function `pam_modutil_audit_write':(.text+0x571):
+      #     undefined reference to `audit_close'
+      pamSupport ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isStatic,
+      linux-pam,
+
+      # PL/Perl
+      perlSupport ? false,
+      perl,
 
       # PL/Python
       pythonSupport ? false,
       python3,
+
+      # PL/Tcl
+      tclSupport ? false,
+      tcl,
+
+      # SELinux
+      selinuxSupport ? false,
+      libselinux,
+
+      # Systemd
+      systemdSupport ? lib.meta.availableOn stdenv.hostPlatform systemdLibs,
+      systemdLibs,
     }@args:
     let
       atLeast = lib.versionAtLeast version;
@@ -112,14 +152,10 @@ let
           "doc"
           "man"
         ];
-        disallowedRequisites =
-          [
-            stdenv'.cc
-          ]
-          ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs))
-          ++ lib.optionals jitSupport [
-            llvmPackages.llvm.out
-          ];
+        disallowedRequisites = [
+          stdenv'.cc
+          llvmPackages.llvm.out
+        ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
       };
       outputChecks.lib = {
         disallowedReferences = [
@@ -128,35 +164,39 @@ let
           "doc"
           "man"
         ];
-        disallowedRequisites =
-          [
-            stdenv'.cc
-          ]
-          ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs))
-          ++ lib.optionals jitSupport [
-            llvmPackages.llvm.out
-          ];
+        disallowedRequisites = [
+          stdenv'.cc
+          llvmPackages.llvm.out
+        ] ++ (map lib.getDev (builtins.filter (drv: drv ? "dev") finalAttrs.buildInputs));
       };
+
+      strictDeps = true;
 
       buildInputs =
         [
           zlib
           readline
           openssl
-          (libxml2.override { enableHttp = true; })
-          icu
+          libxml2
           libuuid
         ]
+        ++ lib.optionals icuSupport [ icu ]
         ++ lib.optionals jitSupport [ llvmPackages.llvm ]
         ++ lib.optionals lz4Enabled [ lz4 ]
         ++ lib.optionals zstdEnabled [ zstd ]
         ++ lib.optionals systemdSupport [ systemdLibs ]
         ++ lib.optionals pythonSupport [ python3 ]
         ++ lib.optionals gssSupport [ libkrb5 ]
-        ++ lib.optionals stdenv'.hostPlatform.isLinux [ linux-pam ];
+        ++ lib.optionals pamSupport [ linux-pam ]
+        ++ lib.optionals perlSupport [ perl ]
+        ++ lib.optionals ldapSupport [ openldap ]
+        ++ lib.optionals tclSupport [ tcl ]
+        ++ lib.optionals selinuxSupport [ libselinux ]
+        ++ lib.optionals nlsSupport [ gettext ];
 
       nativeBuildInputs =
         [
+          libxml2
           makeWrapper
           pkg-config
           removeReferencesTo
@@ -190,10 +230,13 @@ let
         + (if stdenv'.cc.isClang then " -flto" else " -fmerge-constants -Wl,--gc-sections");
 
       configureFlags =
+        let
+          inherit (lib) withFeature;
+        in
         [
           "--with-openssl"
           "--with-libxml"
-          "--with-icu"
+          (withFeature icuSupport "icu")
           "--sysconfdir=/etc"
           "--with-system-tzdata=${tzdata}/share/zoneinfo"
           "--enable-debug"
@@ -205,13 +248,17 @@ let
         ++ lib.optionals gssSupport [ "--with-gssapi" ]
         ++ lib.optionals pythonSupport [ "--with-python" ]
         ++ lib.optionals jitSupport [ "--with-llvm" ]
-        ++ lib.optionals stdenv'.hostPlatform.isLinux [ "--with-pam" ]
-        # This could be removed once the upstream issue is resolved:
-        # https://postgr.es/m/flat/427c7c25-e8e1-4fc5-a1fb-01ceff185e5b%40technowledgy.de
-        ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "16") [
+        ++ lib.optionals pamSupport [ "--with-pam" ]
+        # This can be removed once v17 is removed. v18+ ships with it.
+        ++ lib.optionals (stdenv'.hostPlatform.isDarwin && atLeast "16" && olderThan "18") [
           "LDFLAGS_EX_BE=-Wl,-export_dynamic"
         ]
-        ++ lib.optionals (atLeast "17") [ "--without-perl" ];
+        ++ lib.optionals (atLeast "17" && !perlSupport) [ "--without-perl" ]
+        ++ lib.optionals ldapSupport [ "--with-ldap" ]
+        ++ lib.optionals tclSupport [ "--with-tcl" ]
+        ++ lib.optionals selinuxSupport [ "--with-selinux" ]
+        ++ lib.optionals nlsSupport [ "--enable-nls" ]
+        ++ lib.optionals bonjourSupport [ "--with-bonjour" ];
 
       patches =
         [
@@ -276,7 +323,8 @@ let
           # because there is a realistic use-case for extensions to locate the /lib directory to
           # load other shared modules.
           remove-references-to -t "$dev" -t "$doc" -t "$man" "$out/bin/postgres"
-
+        ''
+        + lib.optionalString (!stdenv'.hostPlatform.isStatic) ''
           if [ -z "''${dontDisableStatic:-}" ]; then
             # Remove static libraries in case dynamic are available.
             for i in $lib/lib/*.a; do
@@ -287,6 +335,8 @@ let
               fi
             done
           fi
+        ''
+        + ''
           # The remaining static libraries are libpgcommon.a, libpgport.a and related.
           # Those are only used when building e.g. extensions, so go to $dev.
           moveToOutput "lib/*.a" "$dev"
@@ -297,6 +347,13 @@ let
 
           # Stop lib depending on the -dev output of llvm
           remove-references-to -t ${llvmPackages.llvm.dev} "$out/lib/llvmjit${dlSuffix}"
+        ''
+        + lib.optionalString stdenv'.hostPlatform.isDarwin ''
+          # The darwin specific Makefile for PGXS contains a reference to the postgres
+          # binary. Some extensions (here: postgis), which are able to set bindir correctly
+          # to their own output for installation, will then fail to find "postgres" during linking.
+          substituteInPlace "$dev/lib/pgxs/src/Makefile.port" \
+            --replace-fail '-bundle_loader $(bindir)/postgres' "-bundle_loader $out/bin/postgres"
         '';
 
       postFixup = lib.optionalString stdenv'.hostPlatform.isGnu ''
@@ -304,9 +361,14 @@ let
         wrapProgram $out/bin/initdb --prefix PATH ":" ${glibc.bin}/bin
       '';
 
-      doCheck = !stdenv'.hostPlatform.isDarwin;
-      # autodetection doesn't seem to able to find this, but it's there.
-      checkTarget = "check-world";
+      # Running tests as "install check" to work around SIP issue on macOS:
+      # https://www.postgresql.org/message-id/flat/4D8E1BC5-BBCF-4B19-8226-359201EA8305%40gmail.com
+      # Also see <nixpkgs>/doc/stdenv/platform-notes.chapter.md
+      doCheck = false;
+      # Tests just get stuck on macOS 14.x for v13 and v14
+      doInstallCheck =
+        !(stdenv'.hostPlatform.isDarwin && olderThan "15") && !(stdenv'.hostPlatform.isStatic);
+      installCheckTarget = "check-world";
 
       passthru =
         let
@@ -407,6 +469,9 @@ let
         # resulting LLVM IR isn't platform-independent this doesn't give you much.
         # In fact, I tried to test the result in a VM-test, but as soon as JIT was used to optimize
         # a query, postgres would coredump with `Illegal instruction`.
+        #
+        # Note: This is "host canExecute build" on purpose, since this is about the LLVM that is called
+        # to do JIT at **runtime**.
         broken = jitSupport && !stdenv.hostPlatform.canExecute stdenv.buildPlatform;
       };
     });

@@ -1,4 +1,6 @@
 {
+  config,
+  lib,
   stdenv,
   callPackage,
   AVFoundation,
@@ -47,8 +49,6 @@
 
   gst-plugins-ugly = callPackage ./ugly { inherit CoreFoundation DiskArbitration IOKit; };
 
-  gst-plugins-viperfx = callPackage ./viperfx { };
-
   gst-plugins-rs = callPackage ./rs { inherit Security SystemConfiguration; };
 
   gst-rtsp-server = callPackage ./rtsp-server { };
@@ -70,4 +70,7 @@
   };
 
   # note: gst-python is in ../../python-modules/gst-python - called under python3Packages
+}
+// lib.optionalAttrs config.allowAliases {
+  gst-plugins-viperfx = throw "'gst_all_1.gst-plugins-viperfx' was removed as it is broken and not maintained upstream"; # Added 2024-12-16
 }

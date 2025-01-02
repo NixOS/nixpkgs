@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  pythonAtLeast,
   pythonOlder,
   setuptools,
   pytestCheckHook,
@@ -13,7 +14,8 @@ buildPythonPackage rec {
   version = "0.5";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
+  # lib2to3 usage and unmaintained since 2019
+  disabled = pythonOlder "3.9" || pythonAtLeast "3.13";
 
   src = fetchFromGitHub {
     owner = "myint";

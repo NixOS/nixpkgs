@@ -1,6 +1,6 @@
 {
   mkDerivation,
-  substituteAll,
+  replaceVars,
   lib,
   extra-cmake-modules,
   breeze-icons,
@@ -89,8 +89,7 @@ mkDerivation {
   # doesn't find them. See:
   # https://github.com/NixOS/nixpkgs/issues/83885
   patches = [
-    (substituteAll {
-      src = ./dependency-paths.patch;
+    (replaceVars ./dependency-paths.patch {
       inherit mediainfo glaxnimate;
       ffmpeg = ffmpeg-full;
       mlt = mlt-full;

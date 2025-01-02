@@ -16,7 +16,9 @@
   wrapGAppsHook3,
   gobject-introspection,
   bash,
+  linuxConsoleTools,
 }:
+
 let
   python = python3.withPackages (
     p: with p; [
@@ -86,7 +88,9 @@ stdenv.mkDerivation {
 
   postInstall = ''
     substituteInPlace $out/lib/udev/rules.d/* \
-      --replace /bin/sh ${bash}/bin/sh
+      --replace-fail /bin/sh ${bash}/bin/sh
+    substituteInPlace $out/lib/udev/rules.d/99-fanatec-wheel-perms.rules \
+      --replace-fail /usr/bin/evdev-joystick ${linuxConsoleTools}/bin/evdev-joystick
   '';
 
   patches = [ ];

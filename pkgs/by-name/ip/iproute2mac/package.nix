@@ -7,14 +7,14 @@
   python3,
 }:
 
-stdenv.mkDerivation rec {
-  version = "1.5.4";
+stdenv.mkDerivation (finalAttrs: {
   pname = "iproute2mac";
+  version = "1.5.4";
 
   src = fetchFromGitHub {
     owner = "brona";
     repo = "iproute2mac";
-    rev = "v${version}";
+    rev = "v${finalAttrs.version}";
     hash = "sha256-hmSqJ2gc0DOXUuFrp1ZG8usjFdo07zjV/1JLs5r/E04=";
   };
 
@@ -52,4 +52,4 @@ stdenv.mkDerivation rec {
     maintainers = with lib.maintainers; [ jiegec ];
     platforms = lib.platforms.darwin;
   };
-}
+})

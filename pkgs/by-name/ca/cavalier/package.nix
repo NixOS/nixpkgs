@@ -29,7 +29,7 @@ buildDotnetModule rec {
   dotnet-runtime = dotnetCorePackages.runtime_8_0;
 
   projectFile = "NickvisionCavalier.GNOME/NickvisionCavalier.GNOME.csproj";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   executables = "NickvisionCavalier.GNOME";
 
   nativeBuildInputs = [

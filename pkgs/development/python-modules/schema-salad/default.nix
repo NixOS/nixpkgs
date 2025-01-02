@@ -22,7 +22,7 @@
 
 buildPythonPackage rec {
   pname = "schema-salad";
-  version = "8.7.20241021092521";
+  version = "8.8.20241206093842";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -31,12 +31,12 @@ buildPythonPackage rec {
     owner = "common-workflow-language";
     repo = "schema_salad";
     rev = "refs/tags/${version}";
-    hash = "sha256-1V73y+sp94QwoCz8T2LCMnf5iq8MtL9cvrhF949R+08=";
+    hash = "sha256-DUBrKBFphOa5hbEtsLVSI186TrhCkiNPtqlA61MENx0=";
   };
 
   postPatch = ''
     substituteInPlace pyproject.toml \
-      --replace-fail "mypy[mypyc]==1.12.1" "mypy"
+      --replace-fail "mypy[mypyc]==1.13.0" "mypy"
   '';
 
   build-system = [ setuptools-scm ];

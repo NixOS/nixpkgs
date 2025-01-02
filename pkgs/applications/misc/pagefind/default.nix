@@ -38,16 +38,16 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "pagefind";
-  version = "1.2.0";
+  version = "1.3.0";
 
   src = fetchFromGitHub {
     owner = "cloudcannon";
     repo = "pagefind";
     rev = "refs/tags/v${version}";
-    hash = "sha256-OKZYy+Mm9xOEBBD/tI2GwP2+Myt5aELosRP8Tbi5bqY=";
+    hash = "sha256-NIEiXwuy8zuUDxPsD4Hiq3x4cOG3VM+slfNIBSJU2Mk=";
   };
 
-  cargoHash = "sha256-k50RyGuS66r+wWIij7yOOSlDxXYY1y+lTJgCkMREllc=";
+  cargoHash = "sha256-dfE4pfArW9hTPi7LCC9l274dNd1r0RAh50cciUGnv58=";
 
   env.npmDeps_web_js = fetchNpmDeps {
     name = "npm-deps-web-js";

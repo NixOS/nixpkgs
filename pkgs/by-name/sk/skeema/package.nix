@@ -9,18 +9,18 @@
 
 buildGoModule rec {
   pname = "skeema";
-  version = "1.12.1";
+  version = "1.12.2";
 
   src = fetchFromGitHub {
     owner = "skeema";
     repo = "skeema";
     rev = "v${version}";
-    hash = "sha256-XA4Bi11XstL9tqQqv7t4toQN464n1CePM51VmaUIRaE=";
+    hash = "sha256-3oI/bedw2bCh8cNVO+V0CkpwwKiCc/nkVLwUaNWIckY=";
   };
 
   vendorHash = null;
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   ldflags = [
     "-s"

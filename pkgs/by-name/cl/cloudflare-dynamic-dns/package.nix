@@ -7,16 +7,16 @@
 }:
 buildGoModule rec {
   pname = "cloudflare-dynamic-dns";
-  version = "4.3.11";
+  version = "4.3.12";
 
   src = fetchFromGitHub {
     owner = "zebradil";
     repo = "cloudflare-dynamic-dns";
     rev = "refs/tags/${version}";
-    hash = "sha256-gnTfzlqJ80zTvXLOXT/HTDS/oxBU5D22N4mNtGAEn7o=";
+    hash = "sha256-28fIxwQmM9Lmu5Ak31+5/zw/syYwBDnQDZ0CYfmMR+U=";
   };
 
-  vendorHash = "sha256-qahW01gSeWaTtot2zQ6R3T3ypgUsOO5R4OHvxq1+7mk=";
+  vendorHash = "sha256-ie5/9qChgEWXKPqhbJzOalKPxTBr4UN9exxvfB8/HrQ=";
 
   subPackages = ".";
 
@@ -28,7 +28,7 @@ buildGoModule rec {
     "-X=main.date=1970-01-01"
   ];
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   passthru.tests.version = testers.testVersion { package = cloudflare-dynamic-dns; };
 

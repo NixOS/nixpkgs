@@ -98,12 +98,12 @@ let
   allPkgs = pkgs;
 in
 stdenv.mkDerivation (finalAttrs: {
-  version = "9.2.0";
+  version = "9.3.0";
   pname = "octave";
 
   src = fetchurl {
     url = "mirror://gnu/octave/octave-${finalAttrs.version}.tar.gz";
-    sha256 = "sha256-BjZVSwWZaZfkMcqtRCLAA4bS18aJAEcnAP7PX/63yZE=";
+    sha256 = "sha256-gJ+jmnrMhIFb9NxNLX5rIoznWgfzskE/MxOqjgqqMoc=";
   };
 
   buildInputs =

@@ -39,6 +39,7 @@
   xorg,
   xorgserver,
   xxHash,
+  clang,
 }:
 
 let
@@ -92,11 +93,14 @@ buildPythonApplication rec {
   postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace xpra/platform/posix/features.py \
       --replace-fail "/usr/bin/xdg-open" "${xdg-utils}/bin/xdg-open"
+
+    patchShebangs --build fs/bin/build_cuda_kernels.py
   '';
 
   INCLUDE_DIRS = "${pam}/include";
 
   nativeBuildInputs = [
+    clang
     gobject-introspection
     pkg-config
     wrapGAppsHook3

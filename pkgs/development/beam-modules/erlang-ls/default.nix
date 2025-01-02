@@ -50,11 +50,6 @@ rebar3Relx {
   releaseType = "escript";
   beamDeps = builtins.attrValues deps;
 
-  # https://github.com/erlang-ls/erlang_ls/issues/1429
-  postPatch = ''
-    rm apps/els_lsp/test/els_diagnostics_SUITE.erl
-  '';
-
   buildPlugins = [ rebar3-proper ];
   buildPhase = "HOME=. make";
   # based on https://github.com/erlang-ls/erlang_ls/blob/main/.github/workflows/build.yml
@@ -76,7 +71,7 @@ rebar3Relx {
   };
   passthru.updateScript = writeScript "update.sh" ''
     #!/usr/bin/env nix-shell
-    #! nix-shell -i bash -p common-updater-scripts coreutils git gnused gnutar gzip "rebar3WithPlugins { globalPlugins = [ beamPackages.rebar3-nix ]; }"
+    #! nix-shell -i bash -p common-updater-scripts coreutils git gnused gnutar gzip nixfmt-rfc-style "rebar3WithPlugins { globalPlugins = [ beamPackages.rebar3-nix ]; }"
 
     set -ox errexit
     latest=$(list-git-tags | sed -n '/[\d\.]\+/p' | sort -V | tail -1)
@@ -88,6 +83,7 @@ rebar3Relx {
       cp -R $(nix-build $nixpkgs --no-out-link -A erlang-ls.src)/* "$tmpdir"
       DEBUG=1
       (cd "$tmpdir" && HOME=. rebar3 as test nix lock -o "$nix_path/rebar-deps.nix")
+      nixfmt "$nix_path/rebar-deps.nix"
     else
       echo "erlang-ls is already up-to-date"
     fi

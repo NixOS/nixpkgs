@@ -4,7 +4,6 @@
   autoPatchelfHook,
   makeWrapper,
   lib,
-  copyDesktopItems,
   libnotify,
   libX11,
   libXScrnSaver,
@@ -22,7 +21,7 @@
   nss,
   libgpg-error,
   libjack2,
-  mesa,
+  libgbm,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -57,7 +56,7 @@ stdenv.mkDerivation (finalAttrs: {
     nss
     libgpg-error
     libjack2
-    mesa
+    libgbm
   ];
 
   unpackPhase = ''
@@ -71,9 +70,15 @@ stdenv.mkDerivation (finalAttrs: {
     mkdir -p $out
     cp -r usr/* $out/
 
-    makeWrapper $out/share/eusoft-eudic/eudic $out/bin/eudic
+    makeWrapper $out/share/eusoft-eudic/eudic $out/bin/eudic \
+      --inherit-argv0
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/share/applications/eusoft-eudic.desktop \
+      --replace-fail '/usr/share/eusoft-eudic/AppRun' 'eudic'
   '';
 
   meta = {

@@ -17,7 +17,7 @@ buildDotnetModule rec {
   };
 
   projectFile = "DepotDownloader.sln";
-  nugetDeps = ./deps.nix;
+  nugetDeps = ./deps.json;
   dotnet-sdk = dotnetCorePackages.sdk_9_0;
   dotnet-runtime = dotnetCorePackages.runtime_9_0;
 

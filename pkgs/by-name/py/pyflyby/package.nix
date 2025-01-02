@@ -4,7 +4,7 @@
   fetchFromGitHub,
 }:
 let
-  version = "1.9.8";
+  version = "1.9.10";
 in
 python3.pkgs.buildPythonApplication rec {
   inherit version;
@@ -14,8 +14,8 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "deshaw";
     repo = "pyflyby";
-    rev = "refs/tags/${version}";
-    hash = "sha256-lMOLdPirPrld/DfX7YPdFJ+4K451aATz4vql4z+lLO0=";
+    tag = version;
+    hash = "sha256-Q0Z429DUB0PpPNGajuMQBi4K6cotAC8hXP1bo69O7y8=";
   };
 
   build-system = with python3.pkgs; [

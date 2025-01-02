@@ -38,13 +38,27 @@ stdenv.mkDerivation rec {
     # Required to build with newer versions of clang. Fixes call to undeclared functions errors
     # and incompatible function pointer conversions.
     ./clang-fix.patch
+    ./gcc-14-fix.diff
   ];
 
-  postPatch = ''
-    sed -i src/osdep/unix/Makefile -e 's,/usr/local/ssl,${openssl.dev},'
-    sed -i src/osdep/unix/Makefile -e 's,^SSLCERTS=.*,SSLCERTS=/etc/ssl/certs,'
-    sed -i src/osdep/unix/Makefile -e 's,^SSLLIB=.*,SSLLIB=${lib.getLib openssl}/lib,'
-  '';
+  postPatch =
+    ''
+      sed -i src/osdep/unix/Makefile -e 's,/usr/local/ssl,${openssl.dev},'
+      sed -i src/osdep/unix/Makefile -e 's,^SSLCERTS=.*,SSLCERTS=/etc/ssl/certs,'
+      sed -i src/osdep/unix/Makefile -e 's,^SSLLIB=.*,SSLLIB=${lib.getLib openssl}/lib,'
+    ''
+    # utime takes a struct utimbuf rather than an array of time_t[2]
+    # convert time_t tp[2] to a struct utimbuf where
+    # tp[0] -> tp.actime and tp[1] -> tp.modtime, where actime and modtime are
+    # type time_t.
+    + ''
+      sed -i \
+        -e 's/time_t tp\[2]/struct utimbuf tp/' \
+        -e 's/\<tp\[0]/tp.actime/g' \
+        -e 's/\<tp\[1]/tp.modtime/g' \
+        -e 's/\(utime *([-a-z>]*\),tp)/\1,\&tp)/' \
+        src/osdep/unix/{mbx.c,mh.c,mmdf.c,mtx.c,mx.c,tenex.c,unix.c}
+    '';
 
   preConfigure = ''
     makeFlagsArray+=("ARRC=${stdenv.cc.targetPrefix}ar rc")

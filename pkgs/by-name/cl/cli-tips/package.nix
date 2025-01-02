@@ -2,7 +2,6 @@
   lib,
   stdenvNoCC,
   fetchFromGitHub,
-  bash,
   makeWrapper,
   nix-update-script,
 }:
@@ -37,7 +36,9 @@ stdenvNoCC.mkDerivation {
       --set TIPS_FOLDER "$out/share/translations"
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [ "--version=branch" ];
+  };
 
   meta = {
     description = "CLI tool that provides useful tips and commands for Linux users";

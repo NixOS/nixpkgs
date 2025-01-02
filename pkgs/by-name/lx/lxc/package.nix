@@ -19,13 +19,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "lxc";
-  version = "6.0.2";
+  version = "6.0.3";
 
   src = fetchFromGitHub {
     owner = "lxc";
     repo = "lxc";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-qc60oSs2KahQJpSmhrctXpV2Zumv7EvlnGFaOCSCX/E=";
+    hash = "sha256-h41lcHGjJmIH28XRpM0gdFsOQOCLSWevSLfvQ7gIf7Q=";
   };
 
   nativeBuildInputs = [
@@ -85,8 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      incus-legacy-init = nixosTests.incus.container-legacy-init;
-      incus-systemd-init = nixosTests.incus.container-systemd-init;
+      incus-lts = nixosTests.incus-lts.container;
       lxc = nixosTests.lxc;
       lxd = nixosTests.lxd.container;
     };

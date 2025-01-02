@@ -12,7 +12,7 @@
   grim,
   inih,
   libdrm,
-  mesa,
+  libgbm,
   pipewire,
   scdoc,
   slurp,
@@ -44,7 +44,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     inih
     libdrm
-    mesa
+    libgbm
     pipewire
     systemd
     wayland

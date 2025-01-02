@@ -16,7 +16,7 @@ buildGoModule rec {
 
   vendorHash = "sha256-HJ3/RY0Co86y1t2Mas5C+rjwRRG4ZJgxjkz9iWcKf5E=";
 
-  CGO_ENABLED = 0;
+  env.CGO_ENABLED = 0;
 
   subPackages = [ "cli/slsa-verifier" ];
 

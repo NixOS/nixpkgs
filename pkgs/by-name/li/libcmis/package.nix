@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchFromGitHub,
+  fetchpatch,
   boost,
   libxml2,
   pkg-config,
@@ -21,6 +22,14 @@ stdenv.mkDerivation rec {
     rev = "v${version}";
     sha256 = "sha256-HXiyQKjOlQXWABY10XrOiYxPqfpmUJC3a6xD98LIHDw=";
   };
+
+  patches = [
+    # Backport to fix build with boost 1.86
+    (fetchpatch {
+      url = "https://github.com/tdf/libcmis/commit/3659d32999ff7593662dcf5136bcb7ac15c13f61.patch";
+      hash = "sha256-EXmQcXCHaVnF/dwU3Z4WLtaiHjYHeeonlKdyK27UkiY=";
+    })
+  ];
 
   nativeBuildInputs = [
     autoreconfHook

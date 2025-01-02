@@ -28,6 +28,22 @@ in
         url = "https://github.com/canonical/mir/commit/0704026bd06372ea8286a46d8c939286dd8a8c68.patch";
         hash = "sha256-k+51piPQandbHdm+ioqpBrb+C7Aqi2kugchAehZ1aiU=";
       })
+
+      # Fix ignored return value of std::lock_guard
+      # Remove when version > 2.15.0
+      # Was changed as part of the big platform API change, no individual upstream commit with this fix
+      ./1001-mir-2_15-Fix-ignored-return-value-of-std-lock_guard.patch
+
+      # Fix missing includes for methods from algorithm
+      # Remove when version > 2.16.4
+      # https://github.com/canonical/mir/pull/3191 backported to 2.15
+      ./1002-mir-2_15-Add-missing-includes-for-algorithm.patch
+
+      # Fix order of calloc arguments
+      # Remove when version > 2.16.4
+      # Partially done in https://github.com/canonical/mir/pull/3192, though one of the calloc was fixed earlier
+      # when some code was moved into that file
+      ./1003-mir-2_15-calloc-args-in-right-order.patch
     ];
   };
 }

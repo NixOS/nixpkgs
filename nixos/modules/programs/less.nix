@@ -101,8 +101,8 @@ in
 
       lessopen = lib.mkOption {
         type = lib.types.nullOr lib.types.str;
-        default = "|${pkgs.lesspipe}/bin/lesspipe.sh %s";
-        defaultText = lib.literalExpression ''"|''${pkgs.lesspipe}/bin/lesspipe.sh %s"'';
+        default = null;
+        example = lib.literalExpression ''"|''${pkgs.lesspipe}/bin/lesspipe.sh %s"'';
         description = ''
           Before less opens a file, it first gives your input preprocessor a chance to modify the way the contents of the file are displayed.
         '';

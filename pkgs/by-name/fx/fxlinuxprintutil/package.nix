@@ -2,7 +2,7 @@
   stdenv,
   lib,
   fetchzip,
-  substituteAll,
+  replaceVars,
   dpkg,
   autoPatchelfHook,
   cups,
@@ -41,8 +41,7 @@ stdenv.mkDerivation rec {
 
     # replaces the code that looks for X11’s locale.alias in /usr/share/X11/locale or
     # /usr/lib/X11/locale with /nix/store/libX11/share/X11/locale
-    (substituteAll {
-      src = ./fxlocalechk.tcl.patch;
+    (replaceVars ./fxlocalechk.tcl.patch {
       inherit (xorg) libX11;
     })
   ];

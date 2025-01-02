@@ -11,7 +11,7 @@
 
 buildPythonPackage rec {
   pname = "rmscene";
-  version = "0.6.0";
+  version = "0.6.1";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -20,7 +20,7 @@ buildPythonPackage rec {
     owner = "ricklupton";
     repo = "rmscene";
     rev = "refs/tags/v${version}";
-    hash = "sha256-BnTr3rLehP5uhzXWXKPaXcJCWW2ofk5N8amqoEUmlWo=";
+    hash = "sha256-mgEjGfoQW73DcwMEXflR3/Ole4c5uXZJVJ699KNSqKg=";
   };
 
   build-system = [

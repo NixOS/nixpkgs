@@ -48,7 +48,7 @@
   apple_sdk,
   libGL,
   libGLU,
-  mesa,
+  libgbm,
   libintl,
   lcms2,
   libmanette,
@@ -80,7 +80,7 @@
 # https://webkitgtk.org/2024/10/04/webkitgtk-2.46.html recommends building with clang.
 clangStdenv.mkDerivation (finalAttrs: {
   pname = "webkitgtk";
-  version = "2.46.4";
+  version = "2.46.5";
   name = "${finalAttrs.pname}-${finalAttrs.version}+abi=${
     if lib.versionAtLeast gtk3.version "4.0" then
       "6.0"
@@ -100,7 +100,7 @@ clangStdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://webkitgtk.org/releases/webkitgtk-${finalAttrs.version}.tar.xz";
-    hash = "sha256-Dv9fCrCihy7IffYrwy4yicivYlcWrHHpSymNdOA3QXY=";
+    hash = "sha256-utQCC7DPs+dA3zCCwtnL9nz0CVWWWIpWrs3eZwITeAU=";
   };
 
   patches = lib.optionals clangStdenv.hostPlatform.isLinux [
@@ -110,14 +110,6 @@ clangStdenv.mkDerivation (finalAttrs: {
       inherit (addDriverRunpath) driverLink;
     })
   ];
-
-  preConfigure = lib.optionalString (clangStdenv.hostPlatform != clangStdenv.buildPlatform) ''
-    # Ignore gettext in cmake_prefix_path so that find_program doesn't
-    # pick up the wrong gettext. TODO: Find a better solution for
-    # this, maybe make cmake not look up executables in
-    # CMAKE_PREFIX_PATH.
-    cmakeFlags+=" -DCMAKE_IGNORE_PATH=${lib.getBin gettext}/bin"
-  '';
 
   nativeBuildInputs =
     [
@@ -155,7 +147,7 @@ clangStdenv.mkDerivation (finalAttrs: {
       hyphen
       libGL
       libGLU
-      mesa # for libEGL headers
+      libgbm
       libgcrypt
       libgpg-error
       libidn

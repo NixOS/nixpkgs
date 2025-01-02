@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "flirt";
-  version = "0.2";
+  version = "0.2.1";
 
   src = fetchFromSourcehut {
     owner = "~hadronized";
     repo = "flirt";
     rev = "v${version}";
-    hash = "sha256-NV6UP7fPTcn0WrZwIfe1zuZW6hJDuxrfATM2Gpx0yr0=";
+    hash = "sha256-LCwSETvXHAUbe4QIeGpT7vVbuZl1SDfIehVG8svkmHM=";
   };
 
-  cargoHash = "sha256-gVtRU+tjwf3rTei/TjUFYSMvLB9g6gNeGYO+9NBxgYQ=";
+  cargoHash = "sha256-EquriyhfbYyi87TP3zuLiCXDV7baDRaTRuZd7Yht/UA=";
 
   meta = {
     description = "FiLe InteRacT, the file interaction tool for your command line";

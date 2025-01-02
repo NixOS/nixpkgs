@@ -502,7 +502,11 @@ let
 
         echo -n "Passphrase for $device: "
         IFS= read -rs passphrase
+        ret=$?
         echo
+        if [ $ret -ne 0 ]; then
+          die "End of file reached. Exiting shell."
+        fi
 
         rm /crypt-ramfs/device
         echo -n "$passphrase" > /crypt-ramfs/passphrase

@@ -18,20 +18,20 @@
 
 buildNpmPackage rec {
   pname = "bruno";
-  version = "1.34.2";
+  version = "1.37.0";
 
   src = fetchFromGitHub {
     owner = "usebruno";
     repo = "bruno";
-    rev = "v${version}";
-    hash = "sha256-ydb80+FP2IsobvCZiIKzbErAJNakVoSoYrhddmPmYkc=";
+    tag = "v${version}";
+    hash = "sha256-+CLop9fU0fk5n5jNkLbTXZfXyfOXyigukRhTHnML4t0=";
 
     postFetch = ''
       ${lib.getExe npm-lockfile-fix} $out/package-lock.json
     '';
   };
 
-  npmDepsHash = "sha256-ODE8GLIgdUEOiniki8jzkHfU5TKHWoIIbjGJjNzMZCI=";
+  npmDepsHash = "sha256-K7M4eZQpI79TUI2rf0UP2hEipqaOVjhjMRjIVlcy7c8=";
   npmFlags = [ "--legacy-peer-deps" ];
 
   nativeBuildInputs =
@@ -69,6 +69,10 @@ buildNpmPackage rec {
   postPatch = ''
     substituteInPlace scripts/build-electron.sh \
       --replace-fail 'if [ "$1" == "snap" ]; then' 'exit 0; if [ "$1" == "snap" ]; then'
+
+    # disable telemetry
+    substituteInPlace packages/bruno-app/src/providers/App/index.js \
+      --replace-fail "useTelemetry();" ""
   '';
 
   postConfigure = ''
@@ -81,9 +85,12 @@ buildNpmPackage rec {
   # remove giflib dependency
   npmRebuildFlags = [ "--ignore-scripts" ];
   preBuild = ''
-    substituteInPlace node_modules/canvas/binding.gyp \
-      --replace-fail "'with_gif%': '<!(node ./util/has_lib.js gif)'" "'with_gif%': 'false'"
-    npm rebuild
+    # upstream keeps removing and adding back canvas, only patch it when it is present
+    if [[ -e node_modules/canvas/binding.gyp ]]; then
+      substituteInPlace node_modules/canvas/binding.gyp \
+        --replace-fail "'with_gif%': '<!(node ./util/has_lib.js gif)'" "'with_gif%': 'false'"
+      npm rebuild
+    fi
   '';
 
   buildPhase = ''
@@ -136,7 +143,6 @@ buildNpmPackage rec {
 
   installPhase = ''
     runHook preInstall
-
 
     ${
       if stdenv.hostPlatform.isDarwin then

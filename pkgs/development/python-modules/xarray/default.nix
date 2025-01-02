@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   numpy,
   packaging,
   pandas,
@@ -24,6 +25,14 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-s5MvHp2OkomD3xNYzj9oKlVLMgHZDQRBJM6vgOAv1jQ=";
   };
+  patches = [
+    # Fixes https://github.com/pydata/xarray/issues/9873
+    (fetchpatch {
+      name = "xarray-PR9879-fix-tests.patch";
+      url = "https://github.com/pydata/xarray/commit/50f3a04855d7cf79ddf132ed07d74fb534e57f3a.patch";
+      hash = "sha256-PKYzzBOG1Dccpt9D7rcQV1Hxgw11mDOAx3iUfD0rrUc=";
+    })
+  ];
 
   build-system = [
     setuptools

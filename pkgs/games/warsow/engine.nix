@@ -1,7 +1,7 @@
 {
   stdenv,
   lib,
-  substituteAll,
+  replaceVars,
   fetchurl,
   cmake,
   libogg,
@@ -27,8 +27,7 @@ stdenv.mkDerivation rec {
   };
 
   patches = [
-    (substituteAll {
-      src = ./libpath.patch;
+    (replaceVars ./libpath.patch {
       inherit
         zlib
         curl

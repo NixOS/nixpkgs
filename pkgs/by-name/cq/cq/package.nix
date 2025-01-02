@@ -3,7 +3,7 @@
   fetchFromGitHub,
   fetchurl,
   buildGraalvmNativeImage,
-  graalvmCEPackages,
+  graalvmPackages,
 }:
 
 buildGraalvmNativeImage rec {
@@ -24,7 +24,7 @@ buildGraalvmNativeImage rec {
     hash = "sha256-yjAC2obipdmh+JlHzVUTMtTXN2VKe4WKkyJyu2Q93c8=";
   };
 
-  graalvmDrv = graalvmCEPackages.graalvm-ce;
+  graalvmDrv = graalvmPackages.graalvm-ce;
 
   executable = "cq";
 

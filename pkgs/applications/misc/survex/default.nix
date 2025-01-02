@@ -10,7 +10,7 @@
   libGLU,
   libICE,
   libX11,
-  mesa,
+  libgbm,
   perl,
   pkg-config,
   proj,
@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "survex";
-  version = "1.4.13";
+  version = "1.4.14";
 
   src = fetchurl {
     url = "https://survex.com/software/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-4ejaOv0rwJRrV8f616D24IjIv5DXVJfY3fSTueiJG3M=";
+    hash = "sha256-TKOgbwUGE1z1PUZxfukugZWsJY1ml/VMAJ7xDIqWZWs=";
   };
 
   nativeBuildInputs = [
@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
       # TODO: libGLU doesn't build for macOS because of Mesa issues
       # (#233265); is it required for anything?
       libGLU
-      mesa
+      libgbm
       libICE
       libX11
     ];

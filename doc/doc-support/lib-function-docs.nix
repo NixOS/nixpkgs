@@ -95,7 +95,7 @@ stdenvNoCC.mkDerivation {
     fileset = ../../lib;
   };
 
-  buildInputs = [
+  nativeBuildInputs = [
     nixdoc
     nix
   ];

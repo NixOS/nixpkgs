@@ -4,24 +4,22 @@
 , autoPatchelfHook
 , dpkg
 , gtk3
-, openssl_1_1
+, openssl
 , pcsclite
 }:
 
 stdenv.mkDerivation rec {
   pname = "pcsc-safenet";
-  version = "10.8.28";
+  version = "10.8.1050";
 
-  debName = "Installation/Standard/Ubuntu-2004/safenetauthenticationclient_${version}_amd64.deb";
+  debName = "Installation/Standard/Ubuntu-2204/safenetauthenticationclient_${version}_amd64.deb";
 
   # extract debian package from larger zip file
-  src =
-    let
-      versionWithUnderscores = builtins.replaceStrings ["."] ["_"] version;
-    in fetchzip {
-      url = "https://www.digicert.com/StaticFiles/SAC_${versionWithUnderscores}_GA_Build.zip";
-      hash = "sha256-7XWj3T9/KnmgQ05urOJV6dqgkAS/A2G7efnqjQO2ing=";
-    };
+  src = fetchzip {
+    # URL version name is different that the version name of the .deb file inside
+    url = "https://www.digicert.com/StaticFiles/Linux_SAC_10_8_R1_GA.zip";
+    hash = "sha256-Wh2Ax4ZVFKqn0yDwZmwvtUqwQNYyBng08IPfemHzZC0=";
+  };
 
   dontBuild = true;
   dontConfigure = true;
@@ -32,12 +30,12 @@ stdenv.mkDerivation rec {
 
   buildInputs = [
     gtk3
-    openssl_1_1
+    openssl
     pcsclite
   ];
 
   runtimeDependencies = [
-    openssl_1_1
+    openssl
   ];
 
   nativeBuildInputs = [
@@ -75,7 +73,7 @@ stdenv.mkDerivation rec {
       done
     ) || exit
 
-    ln -sf ${lib.getLib openssl_1_1}/lib/libcrypto.so $out/lib/libcrypto.so.1.1.0
+    ln -sf ${lib.getLib openssl}/lib/libcrypto.so $out/lib/libcrypto.so.3
   '';
 
   dontAutoPatchelf = true;

@@ -2,7 +2,7 @@
   lib,
   stdenv,
   fetchurl,
-  substituteAll,
+  replaceVars,
   cmake,
   ninja,
   pkg-config,
@@ -57,8 +57,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   patches = [
-    (substituteAll {
-      src = ./hardcode-paths.patch;
+    (replaceVars ./hardcode-paths.patch {
       catchsegv = "${glibc.bin}/bin/catchsegv";
       bash = "${bash}/bin/bash";
       cp = "${coreutils}/bin/cp";
@@ -74,8 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Fix swig not being able to find headers
     # https://github.com/NixOS/nixpkgs/pull/82362#issuecomment-597948461
-    (substituteAll {
-      src = ./fix-swig-build.patch;
+    (replaceVars ./fix-swig-build.patch {
       cairoDev = "${cairo.dev}";
     })
 

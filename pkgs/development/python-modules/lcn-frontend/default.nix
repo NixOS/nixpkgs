@@ -7,13 +7,13 @@
 
 buildPythonPackage rec {
   pname = "lcn-frontend";
-  version = "0.2.2";
+  version = "0.2.3";
   pyproject = true;
 
   src = fetchPypi {
     pname = "lcn_frontend";
     inherit version;
-    hash = "sha256-D6rwFLThOCEbKYhUpuA8K+0iLYt3pqU4GHzJcr3LaAM=";
+    hash = "sha256-j5NE/AFGHC5z44I2afMCGUDY9gqjPZPJ5nDBHf52tJY=";
   };
 
   postPatch = ''

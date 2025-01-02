@@ -6,16 +6,16 @@
 
 buildNpmPackage rec {
   pname = "maizzle";
-  version = "1.5.9";
+  version = "2.0.0";
 
   src = fetchFromGitHub {
     owner = "maizzle";
     repo = "cli";
     rev = "v${version}";
-    hash = "sha256-r3HWqfm/BdOfENi5cGdau7ockvNLxnWufWcQepI/RFM=";
+    hash = "sha256-Nzl4Pp1jY+LaQgLDJHjEdDA8b6MOfMXZNpvazPdmrTA=";
   };
 
-  npmDepsHash = "sha256-WlqWOGwmSab+cJWPUFIBWuFwMK4lFQm80PoUfEIIIH8=";
+  npmDepsHash = "sha256-ZPZALeuerHXAJuoCcqIwxsChuhBJ/zABYjb7+pcs4pU=";
 
   dontNpmBuild = true;
 
