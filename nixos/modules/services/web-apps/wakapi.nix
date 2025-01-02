@@ -26,6 +26,14 @@ in
   options.services.wakapi = {
     enable = mkEnableOption "Wakapi";
     package = mkPackageOption pkgs "wakapi" { };
+    stateDir = mkOption {
+      type = types.path;
+      default = "/var/lib/wakapi";
+      description = ''
+        The state directory where data is stored. Will also be used as the
+        working directory for the wakapi service.
+      '';
+    };
 
     settings = mkOption {
       inherit (settingsFormat) type;
@@ -166,6 +174,8 @@ in
         RestrictNamespaces = true;
         RestrictRealtime = true;
         RestrictSUIDSGID = true;
+        WorkingDirectory = cfg.stateDir;
+        RuntimeDirectory = "wakapi";
         StateDirectory = "wakapi";
         StateDirectoryMode = "0700";
         Restart = "always";
