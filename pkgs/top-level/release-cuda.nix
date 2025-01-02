@@ -43,6 +43,8 @@ in
       "${variant}Support" = true;
       inHydra = true;
     };
+
+    __allowFileset = false;
   },
   ...
 }@args:

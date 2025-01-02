@@ -12,7 +12,7 @@
   lib,
   stdenv,
   program ? "pdfstudio",
-  year ? "2023",
+  year ? "2024",
   fetchurl,
   callPackage,
   jdk11,
@@ -34,13 +34,13 @@ in
       program
       year
       ;
-    version = "${year}.0.3";
+    version = "${year}.0.1";
     longDescription = ''
       PDF Studio Viewer is an easy to use, full-featured PDF editing software. This is the free edition. For the standard/pro edition, see the package pdfstudio.
     '';
     src = fetchurl {
-      url = "https://download.qoppa.com/pdfstudioviewer/PDFStudioViewer_linux64.deb";
-      sha256 = "sha256-JQx5yJLjwW4VRXLM+/VNDXFN8ZcHJxlxyKDIzc++hEs=";
+      url = "https://web.archive.org/web/20241201121627/https://download.qoppa.com/pdfstudioviewer/PDFStudioViewer_linux64.deb";
+      hash = "sha256-hxReGuyGsBiEr7wWxWzQUQvxk11sgF9HkJ07L9i+e+0=";
     };
     jdk = jdk17;
   };
@@ -56,7 +56,7 @@ in
     version = "${year}.2.2";
     src = fetchurl {
       url = "https://download.qoppa.com/pdfstudio/v${year}/PDFStudio_v${dot2dash version}_linux64.deb";
-      sha256 = "sha256-HdkwRMqwquAaW6l3AukGReFtw2f5n36tZ8vXo6QiPvU=";
+      hash = "sha256-HdkwRMqwquAaW6l3AukGReFtw2f5n36tZ8vXo6QiPvU=";
     };
     extraBuildInputs = [
       (lib.getLib stdenv.cc.cc) # for libstdc++.so.6 and libgomp.so.1
@@ -75,7 +75,7 @@ in
     version = "${year}.2.5";
     src = fetchurl {
       url = "https://download.qoppa.com/pdfstudio/v${year}/PDFStudio_v${dot2dash version}_linux64.deb";
-      sha256 = "sha256-3faZyWUnFe//S+gOskWhsZ6jzHw67FRsv/xP77R1jj4=";
+      hash = "sha256-3faZyWUnFe//S+gOskWhsZ6jzHw67FRsv/xP77R1jj4=";
     };
     extraBuildInputs = [
       (lib.getLib stdenv.cc.cc) # for libstdc++.so.6 and libgomp.so.1
@@ -91,10 +91,10 @@ in
       program
       year
       ;
-    version = "${year}.0.3";
+    version = "${year}.0.4";
     src = fetchurl {
       url = "https://download.qoppa.com/pdfstudio/v${year}/PDFStudio_v${dot2dash version}_linux64.deb";
-      sha256 = "sha256-Po7BMmEWoC46rP7tUwZT9Ji/Wi8lKc6WN8x47fx2DXg=";
+      hash = "sha256-TTh0yzpCOpxFKGfrakvnu1Y+l9NI0nfWlVuvSWpkRkE=";
     };
     extraBuildInputs = [
       (lib.getLib stdenv.cc.cc) # for libstdc++.so.6 and libgomp.so.1
@@ -113,7 +113,7 @@ in
     version = "${year}.0.0";
     src = fetchurl {
       url = "https://download.qoppa.com/pdfstudio/v${year}/PDFStudio_v${dot2dash version}_linux64.deb";
-      sha256 = "sha256-9TMSKtBE0+T7wRnBgtUjRr/JUmCaYdyD/7y0ML37wCM=";
+      hash = "sha256-9TMSKtBE0+T7wRnBgtUjRr/JUmCaYdyD/7y0ML37wCM=";
     };
     extraBuildInputs = [
       (lib.getLib stdenv.cc.cc) # for libstdc++.so.6 and libgomp.so.1
