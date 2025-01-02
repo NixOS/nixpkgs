@@ -5,15 +5,16 @@
   pnpm,
   nodejs,
   dart-sass,
+  nix-update-script,
 }:
 stdenvNoCC.mkDerivation rec {
   pname = "homer";
-  version = "24.11.4";
+  version = "24.12.1";
   src = fetchFromGitHub {
     owner = "bastienwirtz";
     repo = "homer";
     rev = "v${version}";
-    hash = "sha256-UaoBdYzTEYB1pkiTYrt4T7GjwMJWXPuW5VSl4MU8DCI=";
+    hash = "sha256-nOhovVqWlHPunwruJrgqFhhDxccKBp/iEyB3Y3C5Cz8=";
   };
 
   pnpmDeps = pnpm.fetchDeps {
@@ -23,11 +24,11 @@ stdenvNoCC.mkDerivation rec {
       src
       patches
       ;
-    hash = "sha256-5unoY8lPaX9sZAJEBICpxSddwLV8liK1tbamB2ulvew=";
+    hash = "sha256-+FijxCiI5pr6kp+/99DJJOJSI9w6pbtfW25SUyEcWio=";
   };
 
   # Enables specifying a custom Sass compiler binary path via `SASS_EMBEDDED_BIN_PATH` environment variable.
-  patches = [ ./sass-embedded.patch ];
+  patches = [ ./0001-build-enable-specifying-custom-sass-compiler-path-by.patch ];
 
   nativeBuildInputs = [
     nodejs
@@ -53,12 +54,17 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
+  passthru.updateScript = nix-update-script { };
+
   meta = with lib; {
     description = "A very simple static homepage for your server.";
     homepage = "https://homer-demo.netlify.app/";
     changelog = "https://github.com/bastienwirtz/homer/releases";
     license = licenses.asl20;
-    maintainers = with maintainers; [ stunkymonkey ];
+    maintainers = with maintainers; [
+      stunkymonkey
+      christoph-heiss
+    ];
     platforms = platforms.all;
   };
 }

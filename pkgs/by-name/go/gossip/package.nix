@@ -2,6 +2,7 @@
   cmake,
   darwin,
   fetchFromGitHub,
+  SDL2,
   ffmpeg_6,
   fontconfig,
   git,
@@ -65,6 +66,7 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [
+      SDL2
       ffmpeg_6
       fontconfig
       libGL
@@ -98,9 +100,13 @@ rustPlatform.buildRustPackage rec {
   '';
 
   postFixup = lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
+    # We don't want the bundled libraries.
+    rm -rf $out/lib
+
     patchelf $out/bin/gossip \
       --add-rpath ${
         lib.makeLibraryPath [
+          SDL2
           libGL
           libxkbcommon
           wayland

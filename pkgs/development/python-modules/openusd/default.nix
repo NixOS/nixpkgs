@@ -74,6 +74,19 @@ buildPythonPackage rec {
       url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/c8fec1342e05dca98a1afd4ea93c7a5f0b41e25b.patch?full_index=1";
       hash = "sha256-pK1TUwmVv9zsZkOypq25pl+FJDxJJvozUtVP9ystGtI=";
     })
+    # https://github.com/PixarAnimationStudios/OpenUSD/issues/3442
+    # https://github.com/PixarAnimationStudios/OpenUSD/pull/3434 commit 1
+    (fetchpatch {
+      name = "explicitly-adding-template-keyword.patch";
+      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/274cf7c6fe1c121d095acd38dd1a33214e0c8448.patch?full_index=1";
+      hash = "sha256-nlw7o2jVWV9f1Lzl32UXcRVXcWnfyMNv9Mp4SVgFvyw=";
+    })
+    # https://github.com/PixarAnimationStudios/OpenUSD/pull/3434 commit 2
+    (fetchpatch {
+      name = "fix-removes-unused-path.patch";
+      url = "https://github.com/PixarAnimationStudios/OpenUSD/commit/5a6437e44269534bfde0c35cc2c7bdef087b70e8.patch?full_index=1";
+      hash = "sha256-X2v14U0pJjd4IMD8viXK2/onVFqUabJTXwDGRFKDZ+g=";
+    })
   ];
 
   env.OSL_LOCATION = "${osl}";

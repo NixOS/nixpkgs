@@ -61,7 +61,5 @@ rustPlatform.buildRustPackage rec {
       giomf
       atemu
     ];
-    # Failing tests on Darwin.
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }

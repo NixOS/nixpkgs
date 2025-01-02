@@ -36,8 +36,6 @@ let
     ${lib.optionalString (cfg.cert != null) "cert=${cfg.cert}"}
     ${lib.optionalString (cfg.pkey != null) "pkey=${cfg.pkey}"}
     ${lib.optionalString (cfg.dh-file != null) "dh-file=${cfg.dh-file}"}
-    no-stdout-log
-    syslog
     pidfile=${pidfile}
     ${lib.optionalString cfg.secure-stun "secure-stun"}
     ${lib.optionalString cfg.no-cli "no-cli"}

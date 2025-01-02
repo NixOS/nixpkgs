@@ -744,6 +744,8 @@ self: super: with self; {
 
   apt-repo = callPackage ../development/python-modules/apt-repo { };
 
+  apted = callPackage ../development/python-modules/apted { };
+
   apycula = callPackage ../development/python-modules/apycula { };
 
   aqipy-atmotech = callPackage ../development/python-modules/aqipy-atmotech { };
@@ -1950,8 +1952,6 @@ self: super: with self; {
 
   bugwarrior = callPackage ../development/python-modules/bugwarrior { };
 
-  bugz = callPackage ../development/python-modules/bugz { };
-
   buienradar = callPackage ../development/python-modules/buienradar { };
 
   build = callPackage ../development/python-modules/build { };
@@ -2333,6 +2333,8 @@ self: super: with self; {
   clarifai = callPackage ../development/python-modules/clarifai { };
 
   clarifai-grpc = callPackage ../development/python-modules/clarifai-grpc { };
+
+  clarifai-protocol = callPackage ../development/python-modules/clarifai-protocol { };
 
   claripy = callPackage ../development/python-modules/claripy { };
 
@@ -4732,8 +4734,6 @@ self: super: with self; {
 
   flask-socketio = callPackage ../development/python-modules/flask-socketio { };
 
-  flask-sockets = callPackage ../development/python-modules/flask-sockets { };
-
   flask-sqlalchemy = callPackage ../development/python-modules/flask-sqlalchemy { };
 
   flask-sqlalchemy-lite = callPackage ../development/python-modules/flask-sqlalchemy-lite { };
@@ -4776,9 +4776,11 @@ self: super: with self; {
 
   flet = callPackage ../development/python-modules/flet { };
 
-  flet-core = callPackage ../development/python-modules/flet-core { };
+  flet-cli = callPackage ../development/python-modules/flet-cli { };
 
-  flet-runtime = callPackage ../development/python-modules/flet-runtime { };
+  flet-desktop = callPackage ../development/python-modules/flet-desktop { };
+
+  flet-web = callPackage ../development/python-modules/flet-web { };
 
   flexcache = callPackage ../development/python-modules/flexcache { };
 
@@ -4873,6 +4875,8 @@ self: super: with self; {
 
   oelint-parser = callPackage ../development/python-modules/oelint-parser { };
 
+  ohmepy = callPackage ../development/python-modules/ohmepy { };
+
   openstep-parser = callPackage ../development/python-modules/openstep-parser { };
 
   openstep-plist = callPackage ../development/python-modules/openstep-plist { };
@@ -4903,7 +4907,7 @@ self: super: with self; {
 
   formulaic = callPackage ../development/python-modules/formulaic { };
 
-  foundationdb71 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb71; };
+  foundationdb73 = callPackage ../servers/foundationdb/python.nix { foundationdb = pkgs.foundationdb73; };
 
   fountains = callPackage ../development/python-modules/fountains { };
 
@@ -5734,6 +5738,8 @@ self: super: with self; {
 
   habitipy = callPackage ../development/python-modules/habitipy { };
 
+  habiticalib = callPackage ../development/python-modules/habiticalib { };
+
   hachoir = callPackage ../development/python-modules/hachoir { };
 
   hacking = callPackage ../development/python-modules/hacking { };
@@ -6483,6 +6489,7 @@ self: super: with self; {
   itk = toPythonModule (pkgs.itk.override {
     inherit python numpy;
     enablePython = true;
+    enableRtk = false;
   });
 
 
@@ -6560,11 +6567,13 @@ self: super: with self; {
 
   jax = callPackage ../development/python-modules/jax { };
 
+  jax-cuda12-pjrt = callPackage ../development/python-modules/jax-cuda12-pjrt { };
+
+  jax-cuda12-plugin = callPackage ../development/python-modules/jax-cuda12-plugin { };
+
   jax-jumpy = callPackage ../development/python-modules/jax-jumpy { };
 
-  jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix {
-    inherit (pkgs.config) cudaSupport;
-  };
+  jaxlib-bin = callPackage ../development/python-modules/jaxlib/bin.nix { };
 
   jaxlib-build = callPackage ../development/python-modules/jaxlib rec {
     # Some platforms don't have `cudaSupport` defined, hence the need for 'or false'.
@@ -6572,16 +6581,7 @@ self: super: with self; {
     IOKit = pkgs.darwin.apple_sdk_11_0.IOKit;
   };
 
-  # Use the -bin on macOS since the source build doesn't support it (see #323154)
-  jaxlib = if jaxlib-build.meta.unsupported then jaxlib-bin else jaxlib-build;
-
-  jaxlibWithCuda = self.jaxlib.override {
-    cudaSupport = true;
-  };
-
-  jaxlibWithoutCuda = self.jaxlib.override {
-    cudaSupport = false;
-  };
+  jaxlib = jaxlib-bin;
 
   jaxopt = callPackage ../development/python-modules/jaxopt { };
 
@@ -6624,6 +6624,8 @@ self: super: with self; {
   jinja2-git = callPackage ../development/python-modules/jinja2-git { };
 
   jinja2-pluralize = callPackage ../development/python-modules/jinja2-pluralize { };
+
+  jinja2-strcase = callPackage ../development/python-modules/jinja2-strcase { };
 
   jinja2-time = callPackage ../development/python-modules/jinja2-time { };
 
@@ -7647,6 +7649,8 @@ self: super: with self; {
   locket = callPackage ../development/python-modules/locket { };
 
   lockfile = callPackage ../development/python-modules/lockfile { };
+
+  locust = callPackage ../development/python-modules/locust { };
 
   log-symbols = callPackage ../development/python-modules/log-symbols { };
 
@@ -10643,6 +10647,8 @@ self: super: with self; {
 
   pysequoia = callPackage ../development/python-modules/pysequoia { };
 
+  pyseries = callPackage ../development/python-modules/pyseries { };
+
   pyschemes = callPackage ../development/python-modules/pyschemes { };
 
   pyschlage = callPackage ../development/python-modules/pyschlage { };
@@ -11612,6 +11618,8 @@ self: super: with self; {
   pyecotrend-ista = callPackage ../development/python-modules/pyecotrend-ista { };
 
   pyecowitt = callPackage ../development/python-modules/pyecowitt { };
+
+  pyedflib = callPackage ../development/python-modules/pyedflib { };
 
   pyedimax = callPackage ../development/python-modules/pyedimax { };
 
@@ -13186,7 +13194,7 @@ self: super: with self; {
 
   python-mapnik = callPackage ../development/python-modules/python-mapnik rec {
     inherit (pkgs) pkg-config cairo icu libjpeg libpng libtiff libwebp proj zlib;
-    boost = pkgs.boost182.override {
+    boost = pkgs.boost.override {
       enablePython = true;
       inherit python;
     };
@@ -13825,7 +13833,7 @@ self: super: with self; {
   rdflib = callPackage ../development/python-modules/rdflib { };
 
   rdkit = callPackage ../development/python-modules/rdkit {
-    boost = pkgs.boost182.override {
+    boost = pkgs.boost.override {
       enablePython = true;
       inherit python;
     };
@@ -16422,6 +16430,8 @@ self: super: with self; {
 
   trove-classifiers = callPackage ../development/python-modules/trove-classifiers { };
 
+  trubar = callPackage ../development/python-modules/trubar { };
+
   trueskill = callPackage ../development/python-modules/trueskill { };
 
   truncnorm = callPackage ../development/python-modules/truncnorm { };
@@ -18365,7 +18375,7 @@ self: super: with self; {
 
   zarr = callPackage ../development/python-modules/zarr { };
 
-  zc-buildout = callPackage ../development/python-modules/buildout { };
+  zc-buildout = callPackage ../development/python-modules/zc-buildout { };
 
   zc-lockfile = callPackage ../development/python-modules/zc-lockfile { };
 

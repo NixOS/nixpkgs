@@ -18,14 +18,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "alpaca";
-  version = "2.9.0";
+  version = "3.1.0";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Jeffser";
     repo = "Alpaca";
-    rev = "refs/tags/${version}";
-    hash = "sha256-ionioPA69haDIyXjqU84nuTNtI32jOnhd6oCTRI6vcA=";
+    tag = version;
+    hash = "sha256-KPab5TU+Ra1o0FWpD5pkhtP7ylno903GQTqqWlir26s=";
   };
 
   nativeBuildInputs = [
@@ -49,10 +49,11 @@ python3Packages.buildPythonApplication rec {
     requests
     pillow
     pypdf
-    pytube
     html2text
     youtube-transcript-api
     pydbus
+    odfpy
+    pyicu
   ];
 
   dontWrapGApps = true;
@@ -84,7 +85,10 @@ python3Packages.buildPythonApplication rec {
     homepage = "https://jeffser.com/alpaca";
     license = lib.licenses.gpl3Plus;
     mainProgram = "alpaca";
-    maintainers = with lib.maintainers; [ aleksana ];
+    maintainers = with lib.maintainers; [
+      aleksana
+      Gliczy
+    ];
     platforms = lib.platforms.linux;
   };
 }

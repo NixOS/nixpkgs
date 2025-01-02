@@ -206,9 +206,4 @@ in {
     pythonVersion = "3.9";
     inherit passthruFun;
   };
-
-  rustpython = darwin.apple_sdk_11_0.callPackage ./rustpython/default.nix {
-    inherit (darwin.apple_sdk_11_0.frameworks) SystemConfiguration;
-  };
-
 })

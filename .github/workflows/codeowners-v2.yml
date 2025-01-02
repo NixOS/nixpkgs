@@ -19,6 +19,8 @@ name: Codeowners v2
 #
 # This split is done because checking code owners requires handling untrusted PR input,
 # while requesting code owners requires PR write access, and those shouldn't be mixed.
+#
+# Note that the latter is also used for ./eval.yml requesting reviewers.
 
 on:
   pull_request_target:

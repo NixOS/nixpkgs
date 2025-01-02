@@ -6062,6 +6062,18 @@ final: prev:
     meta.homepage = "https://github.com/junegunn/limelight.vim/";
   };
 
+  linediff-vim = buildVimPlugin {
+    pname = "linediff.vim";
+    version = "2024-04-22";
+    src = fetchFromGitHub {
+      owner = "AndrewRadev";
+      repo = "linediff.vim";
+      rev = "ddae71ef5f94775d101c1c70032ebe8799f32745";
+      sha256 = "01dshpxm1svfhw9l447mz224qbvlbvywd7ai4wxwyjzgkhp36937";
+    };
+    meta.homepage = "https://github.com/AndrewRadev/linediff.vim/";
+  };
+
   lingua-franca-vim = buildVimPlugin {
     pname = "lingua-franca.vim";
     version = "2021-09-05";
@@ -9387,6 +9399,18 @@ final: prev:
       sha256 = "03zvbfpwslvra00sbr8jk9ydm3b5j6iqg32rhps964lr5bascvlr";
     };
     meta.homepage = "https://github.com/LhKipp/nvim-nu/";
+  };
+
+  nvim-numbertoggle = buildVimPlugin {
+    pname = "nvim-numbertoggle";
+    version = "2024-03-29";
+    src = fetchFromGitHub {
+      owner = "sitiom";
+      repo = "nvim-numbertoggle";
+      rev = "c5827153f8a955886f1b38eaea6998c067d2992f";
+      sha256 = "18nxqi3a3xamrjzpsabww411ix6vr44smprqi9prd47238lpshi2";
+    };
+    meta.homepage = "https://github.com/sitiom/nvim-numbertoggle/";
   };
 
   nvim-osc52 = buildVimPlugin {
@@ -15596,6 +15620,18 @@ final: prev:
     meta.homepage = "https://github.com/jelera/vim-javascript-syntax/";
   };
 
+  vim-jetpack = buildVimPlugin {
+    pname = "vim-jetpack";
+    version = "2024-04-10";
+    src = fetchFromGitHub {
+      owner = "tani";
+      repo = "vim-jetpack";
+      rev = "2ae7300f774cf1692bdb49c47c8c3ff15dd8d9b5";
+      sha256 = "1vml4asdapkgz0fl2yqry158mz7b71fjlyxsrm04mazr5q53vgq0";
+    };
+    meta.homepage = "https://github.com/tani/vim-jetpack/";
+  };
+
   vim-jinja = buildVimPlugin {
     pname = "vim-jinja";
     version = "2021-08-26";
@@ -17503,6 +17539,18 @@ final: prev:
       sha256 = "0dqv3zq248pv5xpcjy3ssr324l47zdwf9bdrrq94m69l98j7whkh";
     };
     meta.homepage = "https://github.com/kbenzie/vim-spirv/";
+  };
+
+  vim-splunk = buildVimPlugin {
+    pname = "vim-splunk";
+    version = "2024-08-10";
+    src = fetchFromGitHub {
+      owner = "yorokobi";
+      repo = "vim-splunk";
+      rev = "827cdf8d9f6940eea146e6571a1086ed7a4061eb";
+      sha256 = "08f5c14ic4mr039by2ml9xf6b2l2rylgjj5q3m7gj29n7mn1zzc7";
+    };
+    meta.homepage = "https://github.com/yorokobi/vim-splunk/";
   };
 
   vim-startify = buildVimPlugin {

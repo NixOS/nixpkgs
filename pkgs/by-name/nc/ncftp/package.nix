@@ -19,18 +19,20 @@ stdenv.mkDerivation rec {
 
   enableParallelBuilding = true;
 
-  # Workaround build failure on -fno-common toolchains like upstream
-  # gcc-10. Otherwise build fails as:
-  #   ld: bookmark.o: (.bss+0x20): multiple definition of `gBm';
-  #     gpshare.o:(.bss+0x0): first defined here
-  env.NIX_CFLAGS_COMPILE = toString (
-    [ "-fcommon" ]
-    # these are required for the configure script to work with clang
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      # Workaround build failure on -fno-common toolchains like upstream
+      # gcc-10. Otherwise build fails as:
+      #   ld: bookmark.o: (.bss+0x20): multiple definition of `gBm';
+      #     gpshare.o:(.bss+0x0): first defined here
+      "-fcommon"
+      # configure fails due to ancient sample C program:
+      # error: installation or configuration problem: C compiler cannot create executables.
       "-Wno-implicit-int"
+      # error: two or more data types in declaration specifiers
       "-Wno-implicit-function-declaration"
-    ]
-  );
+    ];
+  };
 
   preConfigure = ''
     find -name Makefile.in | xargs sed -i '/^TMPDIR=/d'

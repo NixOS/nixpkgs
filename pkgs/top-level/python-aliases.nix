@@ -90,6 +90,7 @@ mapAliases ({
   boto = throw "boto was removed as it is deprecated upstream, had not been updated since 2018, and failed to build; please use boto3 and botocore"; # Added 2024-09-22
   bsblan = python-bsblan; # added 2022-11-04
   btchip = btchip-python; # added 2023-03-03
+  bugz = throw "use pkgs.pybugz instead"; # added 2024-12-31
   bugzilla = python-bugzilla; # added 2024-10-17
   buildbot = throw "use pkgs.buildbot instead"; # added 2022-04-07
   buildbot-ui = throw "use pkgs.buildbot-ui instead"; # added 2022-04-07
@@ -223,6 +224,7 @@ mapAliases ({
   flask-autoindex = throw "flask-autoindex was removed, as it is not compatible with flask 3.0 and unmaintained since 2020.";
   flask-basicauth = throw "flask-basicauth was removed, as it is not compatible with flask 3.0 and unmaintained since 2016.";
   flask-sessionstore = throw "flask-sessionstore was removed, as it is not compatible with flask 3.0 and unmaintained since 2017.";
+  flask-sockets = throw "flask-sockets has been removed as the upstream repository was archived in 2022"; # Added 2025-01-01
   flowlogs_reader = flowlogs-reader; # added 2024-01-03
   flufl_bounce = flufl-bounce; # added 2023-11-03
   flufl_i18n = flufl-i18n; # added 2023-11-03
@@ -233,6 +235,7 @@ mapAliases ({
   foundationdb52 = throw "foundationdb52 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
   foundationdb60 = throw "foundationdb60 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
   foundationdb61 = throw "foundationdb61 is no longer maintained, use foundationdb71 instead"; # added 2023-06-06
+  foundationdb71 = throw "foundationdb71 has been removed, use foundationdb73 instead"; # added 2024-12-28
   functorch = throw "functorch is now part of the torch package and has therefore been removed. See https://github.com/pytorch/functorch/releases/tag/v1.13.0 for more info."; # added 2022-12-01
   functools32 = throw "functool32 was removed from nixpkgs, because python 2.7 has reach end of life in early 2020"; # added 2024-05-16
   fritzprofiles = throw "fritzprofiles was removed from nixpkgs, because it was removed as dependency of home-assistant for which it was pacakged."; # added 2024-01-05

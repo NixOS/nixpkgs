@@ -22,7 +22,6 @@
   ./config/nix-remote-build.nix
   ./config/nsswitch.nix
   ./config/power-management.nix
-  ./config/pulseaudio.nix
   ./config/qt.nix
   ./config/resolvconf.nix
   ./config/shells-environment.nix
@@ -317,6 +316,7 @@
   ./programs/usbtop.nix
   ./programs/vim.nix
   ./programs/virt-manager.nix
+  ./programs/vivid.nix
   ./programs/wavemon.nix
   ./programs/wayland/cardboard.nix
   ./programs/wayland/hyprlock.nix
@@ -406,6 +406,7 @@
   ./services/audio/mympd.nix
   ./services/audio/navidrome.nix
   ./services/audio/networkaudiod.nix
+  ./services/audio/pulseaudio.nix
   ./services/audio/roon-bridge.nix
   ./services/audio/roon-server.nix
   ./services/audio/slimserver.nix
@@ -1315,6 +1316,7 @@
   ./services/networking/yggdrasil.nix
   ./services/networking/zapret.nix
   ./services/networking/zerobin.nix
+  ./services/networking/zenohd.nix
   ./services/networking/zeronet.nix
   ./services/networking/zerotierone.nix
   ./services/networking/zeronsd.nix

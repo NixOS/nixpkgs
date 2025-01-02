@@ -32,8 +32,10 @@
           message = "`!system.etc.overlay.mutable` requires `systemd.sysusers.enable` or `services.userborn.enable`";
         }
         {
-          assertion = lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.6";
-          message = "`system.etc.overlay.enable requires a newer kernel, at least version 6.6";
+          assertion =
+            (config.system.switch.enable)
+            -> (lib.versionAtLeast config.boot.kernelPackages.kernel.version "6.6");
+          message = "switchable systems with `system.etc.overlay.enable` require a newer kernel, at least version 6.6";
         }
       ];
 

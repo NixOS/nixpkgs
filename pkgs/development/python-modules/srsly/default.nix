@@ -16,14 +16,14 @@
 
 buildPythonPackage rec {
   pname = "srsly";
-  version = "2.4.8";
+  version = "2.5.0";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-sk2VplAJwkR+C0nNoEOsU/7PTwnjWNh6V0RkWPkbipE=";
+    hash = "sha256-J3Z1LNsUJ1ygHpp7epwEfM8x2xfwB25zNDz8yajfbL0=";
   };
 
   nativeBuildInputs = [

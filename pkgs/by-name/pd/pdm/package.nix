@@ -8,31 +8,45 @@
   pdm,
 }:
 
-python3.pkgs.buildPythonApplication rec {
+let
+  python = python3.override {
+    self = python;
+    packageOverrides = _: super: {
+      resolvelib = super.resolvelib.overridePythonAttrs (old: rec {
+        version = "1.1.0";
+        src = old.src.override {
+          rev = version;
+          hash = "sha256-UBdgFN+fvbjz+rp8+rog8FW2jwO/jCfUPV7UehJKiV8=";
+        };
+      });
+    };
+  };
+in
+python.pkgs.buildPythonApplication rec {
   pname = "pdm";
-  version = "2.19.3";
+  version = "2.22.1";
   pyproject = true;
 
-  disabled = python3.pkgs.pythonOlder "3.8";
+  disabled = python.pkgs.pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pdm-project";
     repo = "pdm";
     rev = "refs/tags/${version}";
-    hash = "sha256-xgwIPHlTtmgCNN4R6/BJsqmI9hbA0wFAiq4YCa+r/UM=";
+    hash = "sha256-khAS/OpuvZTJGh9/lIGtKONajIonCwc/M9D9lSwzFvw=";
   };
 
   pythonRelaxDeps = [ "hishel" ];
 
   nativeBuildInputs = [ installShellFiles ];
 
-  build-system = with python3.pkgs; [
+  build-system = with python.pkgs; [
     pdm-backend
     pdm-build-locked
   ];
 
   dependencies =
-    with python3.pkgs;
+    with python.pkgs;
     [
       blinker
       dep-logic
@@ -74,7 +88,7 @@ python3.pkgs.buildPythonApplication rec {
     unset PDM_LOG_DIR
   '';
 
-  nativeCheckInputs = with python3.pkgs; [
+  nativeCheckInputs = with python.pkgs; [
     first
     pytestCheckHook
     pytest-mock
@@ -117,6 +131,7 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [
       cpcloud
       natsukium
+      misilelab
     ];
     mainProgram = "pdm";
   };

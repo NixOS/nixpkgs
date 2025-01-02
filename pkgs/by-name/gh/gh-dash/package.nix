@@ -8,13 +8,13 @@
 
 buildGoModule rec {
   pname = "gh-dash";
-  version = "4.8.0";
+  version = "4.8.1";
 
   src = fetchFromGitHub {
     owner = "dlvhdr";
     repo = "gh-dash";
     rev = "v${version}";
-    hash = "sha256-0LiuEhp1caTdROBvkqEpI80y3s5zW3jIUTEKtY2OD0o=";
+    hash = "sha256-d6wAyn6Vj4pWnPUmYodSm+SQtBf3EU1vVSCUnfiXRas=";
   };
 
   vendorHash = "sha256-lqmz+6Cr9U5IBoJ5OeSN6HKY/nKSAmszfvifzbxG7NE=";

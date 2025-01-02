@@ -207,7 +207,7 @@ in
         pkgs.obexftp
       ]
       ++ lib.optional config.networking.networkmanager.enable plasma-nm
-      ++ lib.optional config.hardware.pulseaudio.enable plasma-pa
+      ++ lib.optional config.services.pulseaudio.enable plasma-pa
       ++ lib.optional config.services.pipewire.pulse.enable plasma-pa
       ++ lib.optional config.powerManagement.enable powerdevil
       ++ lib.optional config.services.printing.enable print-manager

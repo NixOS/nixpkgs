@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "wafw00f";
-  version = "2.2.0";
+  version = "2.3.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "EnableSecurity";
     repo = "wafw00f";
     rev = "refs/tags/v${version}";
-    hash = "sha256-wJZ1/aRMFpE6Q5YAtGxXwxe2G9H/de+l3l0C5rwEWA8=";
+    hash = "sha256-47lzFPMyAJTtreGGazFWUYiu9e9Q1D3QYsrQbwyaQME=";
   };
 
   build-system = with python3.pkgs; [ setuptools ];

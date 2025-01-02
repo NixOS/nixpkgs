@@ -119,6 +119,11 @@ stdenv.mkDerivation rec {
       hash = "sha256-XI7JW9Nuueb7muKpaC2icM/CxhrCJtO48cLHK+BVWXI=";
     })
     (fetchpatch {
+      name = "fix-build-with-clang-2.patch";
+      url = "https://github.com/arnholm/codeblocks_sfmirror/commit/edc6b145bcdcaf2823ef9c7da51a211f65d6f5d0.patch";
+      hash = "sha256-GuttBL4gp1IBn3ia2O8wtOR6xOSGrzwCKXwFLI3RO5o=";
+    })
+    (fetchpatch {
       name = "fix-normalize.patch";
       url = "https://github.com/archlinux/svntogit-community/raw/458eacb60bc0e71e3d333943cebbc41e75ed0956/trunk/sc_wxtypes-normalize.patch";
       hash = "sha256-7wEwDLwuNUWHUwHjFyq74sHiuEha1VexRLEX42rPZSs=";

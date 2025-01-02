@@ -89,6 +89,8 @@ let
       "link=${link}"
       "-sEXPAT_INCLUDE=${expat.dev}/include"
       "-sEXPAT_LIBPATH=${expat.out}/lib"
+    ]
+    ++ lib.optionals (lib.versionAtLeast version "1.85") [
       (
         # The stacktrace from exception feature causes memory leaks when built
         # with libc++. For all other standard library implementations, i.e.
@@ -99,9 +101,8 @@ let
         else
           "define=BOOST_STACKTRACE_LIBCXX_RUNTIME_MAY_CAUSE_MEMORY_LEAK"
       )
-
-      # TODO: make this unconditional
     ]
+    # TODO: make this unconditional
     ++
       lib.optionals
         (
@@ -212,7 +213,7 @@ stdenv.mkDerivation {
       })
     ]
     ++ lib.optional (lib.versionAtLeast version "1.81" && stdenv.cc.isClang) ./fix-clang-target.patch
-    ++ lib.optional (lib.versionAtLeast version "1.86") [
+    ++ lib.optional (lib.versionAtLeast version "1.86" && lib.versionOlder version "1.87") [
       # Backport fix for NumPy 2 support.
       (fetchpatch {
         name = "boost-numpy-2-compatibility.patch";

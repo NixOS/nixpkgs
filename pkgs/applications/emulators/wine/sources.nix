@@ -69,9 +69,9 @@ in rec {
 
   unstable = fetchurl rec {
     # NOTE: Don't forget to change the hash for staging as well.
-    version = "9.20";
+    version = "9.22";
     url = "https://dl.winehq.org/wine/source/9.x/wine-${version}.tar.xz";
-    hash = "sha256-lfK0WxRYElvn2fzMlMpfjM4KXkrhHQ0ZPPt93bNeeoY=";
+    hash = "sha256-4VDSl0KqVPdo7z6XbthhqqT59IVC5Am+qQLQ9Js1loM=";
     inherit (stable) patches;
 
     ## see http://wiki.winehq.org/Gecko
@@ -117,7 +117,7 @@ in rec {
   staging = fetchFromGitLab rec {
     # https://gitlab.winehq.org/wine/wine-staging
     inherit (unstable) version;
-    hash = "sha256-ewozuCtYPaV9d4XD9sdRGMfJcBIE13TC5vNEWdbcGCs=";
+    hash = "sha256-8bWr8HTl6y9t6TBQr5843FoxxwFJ0z7H/3Zx0gHZO+k=";
     domain = "gitlab.winehq.org";
     owner = "wine";
     repo = "wine-staging";

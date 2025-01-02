@@ -1886,11 +1886,23 @@
   "sec-release-25.05-notable-changes": [
     "release-notes.html#sec-release-25.05-notable-changes"
   ],
-  "sec-release-25.05-lib": [
-    "release-notes.html#sec-release-25.05-lib"
+  "sec-nixpkgs-release-25.05": [
+    "release-notes.html#sec-nixpkgs-release-25.05"
   ],
-  "sec-release-25.05-lib-breaking": [
-    "release-notes.html#sec-release-25.05-lib-breaking"
+  "sec-nixpkgs-release-25.05-incompatibilities": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities"
+  ],
+  "sec-nixpkgs-release-25.05-incompatibilities-titanium-removed": [
+    "release-notes.html#sec-nixpkgs-release-25.05-incompatibilities-titanium-removed",
+    "index.html#titanium",
+    "index.html#building-a-titanium-app",
+    "index.html#emulating-or-simulating-the-app"
+  ],
+  "sec-nixpkgs-release-25.05-lib": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib"
+  ],
+  "sec-nixpkgs-release-25.05-lib-breaking": [
+    "release-notes.html#sec-nixpkgs-release-25.05-lib-breaking"
   ],
   "sec-release-24.11": [
     "release-notes.html#sec-release-24.11"

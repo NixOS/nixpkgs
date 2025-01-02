@@ -40,6 +40,6 @@ stdenv.mkDerivation rec {
     homepage = "https://github.com/Qucs/adms";
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ disassembler ];
-    platforms = with lib.platforms; linux;
+    platforms = with lib.platforms; unix;
   };
 }

@@ -353,6 +353,7 @@ let
     Biostrings = [ pkgs.zlib ];
     CellBarcode = [ pkgs.zlib ];
     cld3 = [ pkgs.protobuf ];
+    cpp11qpdf = with pkgs; [ zlib.dev libjpeg ];
     bnpmr = [ pkgs.gsl ];
     caviarpd = [ pkgs.cargo ];
     cairoDevice = [ pkgs.gtk2.dev ];
@@ -370,6 +371,7 @@ let
     exactextractr = [ pkgs.geos ];
     EMCluster = [ pkgs.lapack ];
     fangs = [ pkgs.cargo ];
+    fastpng = [ pkgs.zlib.dev ];
     fcl = [ pkgs.cargo ];
     fftw = [ pkgs.fftw.dev ];
     fftwtools = with pkgs; [ fftw.dev pkg-config ];
@@ -494,7 +496,7 @@ let
     clustermq = [ pkgs.zeromq ];
     SAVE = with pkgs; [ zlib bzip2 icu xz pcre ];
     salso = [ pkgs.cargo ];
-    ymd = [ pkgs.cargo ];
+    ymd = with pkgs; [ cargo rustc ];
     arcpbf = [ pkgs.cargo ];
     sdcTable = with pkgs; [ gmp glpk ];
     seewave = with pkgs; [ fftw.dev libsndfile.dev ];
@@ -604,6 +606,7 @@ let
 
   packagesWithBuildInputs = {
     # sort -t '=' -k 2
+    adbcpostgresql = with pkgs; [ readline.dev zlib.dev openssl.dev libkrb5.dev openpam ];
     asciicast = with pkgs; [ xz.dev bzip2.dev zlib.dev icu.dev libdeflate ];
     island = [ pkgs.gsl.dev ];
     svKomodo = [ pkgs.which ];
@@ -904,6 +907,7 @@ let
     "margaret"
     "MSnID"
     "OmnipathR"
+    "orthGS"
     "precommit"
     "protGear"
     "PCRA"
@@ -1043,7 +1047,7 @@ let
       cargoDeps = pkgs.rustPlatform.fetchCargoTarball {
         src = attrs.src;
         sourceRoot = "gifski/src/myrustlib";
-        hash = "sha256-e6nuiQU22GiO2I+bu0muyICGrdkCLSZUDHDz2mM2hz0=";
+        hash = "sha256-tVbuYzGdBzWVeQ26Imq6y5gA0R/CjuNCZtQgfd3/qwA=";
       };
 
       cargoRoot = "src/myrustlib";
@@ -1150,7 +1154,19 @@ let
       postPatch = "patchShebangs configure";
     });
 
+    arcgisutils = old.arcgisutils.overrideAttrs (_: {
+      postPatch = "patchShebangs configure";
+    });
+
+    arcgisgeocode = old.arcgisgeocode.overrideAttrs (_: {
+      postPatch = "patchShebangs configure";
+    });
+
    gmailr = old.gmailr.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+    });
+
+    pingr = old.pingr.overrideAttrs (_: {
       postPatch = "patchShebangs configure";
     });
 
@@ -1160,6 +1176,14 @@ let
 
    surtvep = old.surtvep.overrideAttrs (attrs: {
       postPatch = "patchShebangs configure";
+    });
+
+   rtiktoken = old.rtiktoken.overrideAttrs (attrs: {
+      postPatch = "patchShebangs configure";
+      nativeBuildInputs = attrs.nativeBuildInputs ++ [
+        pkgs.cargo
+        pkgs.rustc
+      ];
     });
 
     purrr = old.purrr.overrideAttrs (attrs: {
@@ -1189,7 +1213,7 @@ let
     });
 
     b64 = old.b64.overrideAttrs (attrs: {
-      nativeBuildInputs = [ pkgs.cargo ] ++ attrs.nativeBuildInputs;
+      nativeBuildInputs = with pkgs; [ cargo rustc ] ++ attrs.nativeBuildInputs;
       postPatch = "patchShebangs configure";
     });
 
@@ -1822,6 +1846,7 @@ let
 
     rhdf5= old.rhdf5.overrideAttrs (attrs: {
       patches = [ ./patches/rhdf5.patch ];
+      env.NIX_CFLAGS_COMPILE = "-Wno-error=implicit-function-declaration";
     });
 
     rmarkdown = old.rmarkdown.overrideAttrs (_: {

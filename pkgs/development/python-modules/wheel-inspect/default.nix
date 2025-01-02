@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "wheel-inspect";
-  version = "1.7.1";
+  version = "1.7.2";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "jwodder";
     repo = "wheel-inspect";
     rev = "refs/tags/v${version}";
-    hash = "sha256-pB9Rh+A7GlxnYuka2mTSBoxpoyYCzoaMPVgsHDlpos0=";
+    hash = "sha256-Mdw9IlY/2qDlb5FumNH+VHmg7vrUzo3vn+03QsUGgo8=";
   };
 
   pythonRelaxDeps = [

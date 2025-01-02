@@ -6,7 +6,6 @@
   libevent,
   pkg-config,
   libprom,
-  libpromhttp,
   libmicrohttpd,
   sqlite,
   nixosTests,
@@ -31,7 +30,6 @@ stdenv.mkDerivation rec {
     openssl
     (libevent.override { inherit openssl; })
     libprom
-    libpromhttp
     libmicrohttpd
     sqlite.dev
   ];

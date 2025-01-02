@@ -12,13 +12,13 @@
 }:
 python3Packages.buildPythonApplication rec {
   pname = "nicotine-plus";
-  version = "3.3.6";
+  version = "3.3.7";
   pyproject = true;
   src = fetchFromGitHub {
     owner = "nicotine-plus";
     repo = "nicotine-plus";
     rev = "refs/tags/${version}";
-    hash = "sha256-je3hyxbF9wKW2gvHoDp712EJxBxooS2z0pQM57WDdOk=";
+    hash = "sha256-Rj+dDkBXNV4l4A9LxjBApzBQ4c1edP5XjoPfpifkDoM=";
   };
 
   nativeBuildInputs = [

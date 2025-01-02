@@ -1,21 +1,18 @@
 { config, lib, pkgs, utils, ... }:
-
-with lib;
-
 let
   cfg = config.services.nginx.sso;
   format = pkgs.formats.yaml { };
   configPath = "/var/lib/nginx-sso/config.yaml";
 in {
   options.services.nginx.sso = {
-    enable = mkEnableOption "nginx-sso service";
+    enable = lib.mkEnableOption "nginx-sso service";
 
-    package = mkPackageOption pkgs "nginx-sso" { };
+    package = lib.mkPackageOption pkgs "nginx-sso" { };
 
-    configuration = mkOption {
+    configuration = lib.mkOption {
       type = format.type;
       default = {};
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           listen = { addr = "127.0.0.1"; port = 8080; };
 
@@ -48,7 +45,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.services.nginx-sso = {
       description = "Nginx SSO Backend";
       after = [ "network.target" ];

@@ -6,13 +6,7 @@ buildNpmPackage {
   pname = "shopify";
   version = version;
 
-  src = lib.fileset.toSource {
-    root = ./.;
-    fileset = with lib.fileset; unions [
-      ./package.json
-      ./package-lock.json
-    ];
-  };
+  src = ./manifests;
 
   npmDepsHash = "sha256-QhbOKOs/0GEOeySG4uROzgtD4o7C+6tS/TAaPcmC3xk=";
   dontNpmBuild = true;

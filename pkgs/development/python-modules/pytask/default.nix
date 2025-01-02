@@ -25,15 +25,15 @@
 }:
 buildPythonPackage rec {
   pname = "pytask";
-  version = "0.5.1";
+  version = "0.5.2";
   pyproject = true;
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pytask-dev";
     repo = "pytask";
-    rev = "v${version}";
-    hash = "sha256-b+sS+l0Rp5bb8Dh6UBv3xHYTYKFp3dD5AuLqxB3n6Go=";
+    tag = "v${version}";
+    hash = "sha256-YJouWQ9Edj27nD72m7EDSH9TXcrsu6X+pGDo5fgGU5U=";
   };
 
   build-system = [

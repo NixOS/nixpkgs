@@ -2,16 +2,16 @@
 
 buildGoModule rec {
   pname = "tanka";
-  version = "0.30.2";
+  version = "0.31.0";
 
   src = fetchFromGitHub {
     owner = "grafana";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-46qnhjQDYmoqeFrRTo5ofr0oErS7U2SKWMb78N1z2+w=";
+    sha256 = "sha256-h7oIL9MWah5kEBj0N6Ro53P0T9fF0B8qdfv1031vLN8=";
   };
 
-  vendorHash = "sha256-w0xgtTsoUWyu5MQC+A6YrZsyBSeuGOCdYTN5VApvYwI=";
+  vendorHash = "sha256-/8tPq/piCrguFoRigzGoAUSBJ2C1AY0ghyHosPE5n68=";
 
   doCheck = false;
   # Required for versions >= 0.28 as they introduce a gowork.sum file. This is only used for tests so we can safely disable GOWORK

@@ -1,7 +1,7 @@
 { lib
 , fetchFromGitHub
 , pkg-config
-, flutter
+, flutter324
 , gst_all_1
 , libunwind
 , makeWrapper
@@ -14,17 +14,18 @@
 , libplacebo
 , _experimental-update-script-combinators
 , flet-client-flutter
+, fletTarget ? "linux"
 }:
 
-flutter.buildFlutterApplication rec {
+flutter324.buildFlutterApplication rec {
   pname = "flet-client-flutter";
-  version = "0.24.1";
+  version = "0.25.2";
 
   src = fetchFromGitHub {
     owner = "flet-dev";
     repo = "flet";
-    rev = "v${version}";
-    hash = "sha256-cT1cWxMVpZ0fXoIaJpW96ifQKNe7+PLUXjIFJ3ALdyo=";
+    tag = "v${version}";
+    hash = "sha256-bD44MCRZPXB/xuw2vBCzNbRNSVgdc4GyyWg3F2adxKk=";
   };
 
   sourceRoot = "${src.name}/client";
@@ -32,6 +33,8 @@ flutter.buildFlutterApplication rec {
   cmakeFlags = [
     "-DMIMALLOC_LIB=${mimalloc}/lib/mimalloc.o"
   ];
+
+  targetFlutterPlatform = fletTarget;
 
   pubspecLock = lib.importJSON ./pubspec.lock.json;
 

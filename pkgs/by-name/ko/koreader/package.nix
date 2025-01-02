@@ -11,13 +11,14 @@
   luajit,
   sdcv,
   SDL2,
+  nix-update-script,
 }:
 let
   luajit_lua52 = luajit.override { enable52Compat = true; };
 in
 stdenv.mkDerivation rec {
   pname = "koreader";
-  version = "2024.04";
+  version = "2024.11";
 
   src =
     {
@@ -31,7 +32,7 @@ stdenv.mkDerivation rec {
       };
       x86_64-linux = fetchurl {
         url = "https://github.com/koreader/koreader/releases/download/v${version}/koreader-${version}-amd64.deb";
-        hash = "sha256-hqJRZDZqzPNLK/8Bb+Oay70JqKAMKB0Epbbzeu5npLw=";
+        hash = "sha256-ibehFrOcJqhM+CMAcHDn3Xwy6CueB8kdnoYMMDe/2Js=";
       };
     }
     .${stdenv.hostPlatform.system} or (throw "Unsupported system: ${stdenv.hostPlatform.system}");
@@ -78,6 +79,10 @@ stdenv.mkDerivation rec {
     }
   '';
 
+  passthru = {
+    updateScript = nix-update-script { };
+  };
+
   meta = with lib; {
     homepage = "https://github.com/koreader/koreader";
     changelog = "https://github.com/koreader/koreader/releases/tag/v${version}";
@@ -93,6 +98,7 @@ stdenv.mkDerivation rec {
     maintainers = with maintainers; [
       contrun
       neonfuz
+      liberodark
     ];
   };
 }

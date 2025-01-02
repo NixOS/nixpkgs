@@ -23,14 +23,7 @@
   withWebKit ? stdenv.hostPlatform.isDarwin,
   webkitgtk_4_0,
   setfile,
-  AGL,
-  Carbon,
-  Cocoa,
-  Kernel,
-  QTKit,
-  AVFoundation,
-  AVKit,
-  WebKit,
+  libpng,
 }:
 
 stdenv.mkDerivation rec {
@@ -68,19 +61,10 @@ stdenv.mkDerivation rec {
     ++ lib.optional withCurl curl
     ++ lib.optional withMesa libGLU
     ++ lib.optional (withWebKit && !stdenv.hostPlatform.isDarwin) webkitgtk_4_0
-    ++ lib.optional (withWebKit && stdenv.hostPlatform.isDarwin) WebKit
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       setfile
-      Carbon
-      Cocoa
-      Kernel
-      QTKit
-      AVFoundation
-      AVKit
-      WebKit
+      libpng
     ];
-
-  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isDarwin AGL;
 
   configureFlags =
     [

@@ -122,6 +122,17 @@ let
         ];
       });
 
+      ollama = super.ollama.overridePythonAttrs (oldAttrs: rec {
+        version = "0.3.3";
+        src = fetchFromGitHub {
+          owner = "ollama";
+          repo = "ollama-python";
+          tag = "v${version}";
+          hash = "sha256-27OJwPvHBxCdaiHk8EQ2s1OeBzgsrzp1MjgKHNgvz+A=";
+        };
+        dependencies = with self; [ httpx ];
+      });
+
       openhomedevice = super.openhomedevice.overridePythonAttrs (oldAttrs: rec {
         version = "2.2";
         src = fetchFromGitHub {

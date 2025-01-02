@@ -1,13 +1,16 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    enumerable-statistics (2.0.7)
+    csv (3.3.0)
+    enumerable-statistics (2.0.8)
     unicode_plot (0.0.5)
       enumerable-statistics (>= 2.0.1)
-    youplot (0.4.5)
+    youplot (0.4.6)
+      csv
       unicode_plot (>= 0.0.5)
 
 PLATFORMS
+  x86_64-linux
   arm64-darwin-22
   ruby
 
@@ -15,4 +18,4 @@ DEPENDENCIES
   youplot
 
 BUNDLED WITH
-   2.5.3
+   2.5.16

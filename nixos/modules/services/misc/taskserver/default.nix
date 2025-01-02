@@ -498,15 +498,15 @@ in
         ca.cert = if needToCreateCA then "${cfg.dataDir}/keys/ca.cert" else "${cfg.pki.manual.ca.cert}";
       };
 
+      systemd.tmpfiles.rules = [
+        "d ${cfg.dataDir} 0770 ${cfg.user} ${cfg.group}"
+        "z ${cfg.dataDir} 0770 ${cfg.user} ${cfg.group}"
+      ];
+
       systemd.services.taskserver-init = {
         wantedBy = [ "taskserver.service" ];
         before = [ "taskserver.service" ];
         description = "Initialize Taskserver Data Directory";
-
-        preStart = ''
-          mkdir -m 0770 -p "${cfg.dataDir}"
-          chown "${cfg.user}:${cfg.group}" "${cfg.dataDir}"
-        '';
 
         script = ''
           ${taskd} init

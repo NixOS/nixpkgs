@@ -32,6 +32,9 @@ stdenv.mkDerivation rec {
     zlib
     libXxf86misc
   ];
+
+  patches = [ ./xpilot-ng-gcc-14-fix.patch ];
+
   meta = with lib; {
     description = "Multiplayer X11 space combat game";
     homepage = "http://xpilot.sf.net/";

@@ -828,6 +828,10 @@ in
       "--with-sqlite3-include=${sqlite.dev}/include"
       "--with-sqlite3-lib=${sqlite.out}/lib"
     ];
+    env.NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=incompatible-pointer-types"
+      "-Wno-error=int-conversion"
+    ];
   };
 
   rb-readline = attrs: {

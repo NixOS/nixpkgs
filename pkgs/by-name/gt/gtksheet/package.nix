@@ -41,6 +41,8 @@ stdenv.mkDerivation (finalAttrs: {
     pango
   ];
 
+  env.NIX_CFLAGS_COMPILE = "-Wno-error=incompatible-pointer-types";
+
   meta = {
     description = "Spreadsheet widget for GTK+";
     homepage = "https://fpaquet.github.io/gtksheet/";

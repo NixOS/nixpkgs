@@ -22,14 +22,14 @@
 
 mkDerivation rec {
   pname = "kaidan";
-  version = "0.9.2";
+  version = "0.10.1";
 
   src = fetchFromGitLab {
     domain = "invent.kde.org";
     owner = "network";
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-2UzXWd/fR5UwGywebYGWhh817x+VC76zmVaVZSBOg7M=";
+    hash = "sha256-u+8uNBDfszH5YJokie4A2QhW04ANq/JTwkMeu5gY0to=";
   };
 
   nativeBuildInputs = [

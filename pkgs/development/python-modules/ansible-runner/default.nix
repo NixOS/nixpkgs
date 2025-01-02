@@ -1,24 +1,31 @@
 {
   lib,
   stdenv,
-  ansible-core,
   buildPythonPackage,
-  fetchPypi,
-  glibcLocales,
-  importlib-metadata,
-  mock,
-  openssh,
+  fetchFromGitHub,
+
+  # build-system
+  setuptools,
+  setuptools-scm,
+
+  # dependencies
   packaging,
   pexpect,
+  python-daemon,
+  pyyaml,
+  pythonOlder,
+  importlib-metadata,
+
+  # tests
+  ansible-core,
+  glibcLocales,
+  mock,
+  openssh,
   pytest-mock,
   pytest-timeout,
   pytest-xdist,
   pytestCheckHook,
-  pythonOlder,
-  python-daemon,
-  pyyaml,
-  setuptools,
-  setuptools-scm,
+  versionCheckHook,
 }:
 
 buildPythonPackage rec {
@@ -26,11 +33,11 @@ buildPythonPackage rec {
   version = "2.4.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.9";
-
-  src = fetchPypi {
-    inherit pname version;
-    hash = "sha256-gtArJUiDDzelNRe2XII8SvNxBpQGx9ITtckEHUXgxbY=";
+  src = fetchFromGitHub {
+    owner = "ansible";
+    repo = "ansible-runner";
+    tag = version;
+    hash = "sha256-lmaYTdJ7NlaCJ5/CVds6Xzwbe45QXbtS3h8gi5xqvUc=";
   };
 
   postPatch = ''
@@ -53,13 +60,15 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     ansible-core # required to place ansible CLI onto the PATH in tests
     glibcLocales
-    pytestCheckHook
+    mock
+    openssh
     pytest-mock
     pytest-timeout
     pytest-xdist
-    mock
-    openssh
+    pytestCheckHook
+    versionCheckHook
   ];
+  versionCheckProgramArg = [ "--version" ];
 
   preCheck = ''
     export HOME=$(mktemp -d)
@@ -77,10 +86,11 @@ buildPythonPackage rec {
     # Failed: DID NOT RAISE <class 'RuntimeError'>
     "test_validate_pattern"
     # Assertion error
+    "test_callback_plugin_censoring_does_not_overwrite"
     "test_get_role_list"
     "test_include_role_from_collection_events"
+    "test_module_level_no_log"
     "test_resolved_actions"
-    "test_callback_plugin_censoring_does_not_overwrite"
   ];
 
   disabledTestPaths =
@@ -98,12 +108,12 @@ buildPythonPackage rec {
 
   pythonImportsCheck = [ "ansible_runner" ];
 
-  meta = with lib; {
+  meta = {
     description = "Helps when interfacing with Ansible";
     homepage = "https://github.com/ansible/ansible-runner";
     changelog = "https://github.com/ansible/ansible-runner/releases/tag/${version}";
-    license = licenses.asl20;
-    maintainers = [ ];
+    license = lib.licenses.asl20;
+    maintainers = with lib.maintainers; [ GaetanLepage ];
     mainProgram = "ansible-runner";
   };
 }

@@ -1,11 +1,8 @@
 {
-  config,
   lib,
   stdenv,
   buildPythonPackage,
   fetchFromGitLab,
-
-  cudaSupport ? config.cudaSupport,
 
   # build-system
   setuptools,
@@ -48,7 +45,7 @@ buildPythonPackage rec {
     ducc0
     h5py
     jax
-    (jaxlib.override { inherit cudaSupport; })
+    jaxlib
     matplotlib
     mpi4py
     mpi

@@ -10,13 +10,13 @@
 }:
 stdenv.mkDerivation rec {
   pname = "dnsdbq";
-  version = "2.6.7";
+  version = "2.6.8";
 
   src = fetchFromGitHub {
     owner = "dnsdb";
     repo = "dnsdbq";
     rev = "v${version}";
-    hash = "sha256-VeoLgDLly5bDIzvcf6Xb+tqCaQxIzeSpoW3ij+Hq4O8=";
+    hash = "sha256-5Pi8xFZXnU3abIsH9m6xqrQ6NnEtAbhMU6HXsOYP0gg=";
   };
 
   passthru = {
