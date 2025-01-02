@@ -2,31 +2,32 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
   bleak,
-  construct,
   construct-typing,
   pytest-asyncio,
   pytestCheckHook,
+  pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "eq3btsmart";
-  version = "1.4.1";
+  version = "2.0.0";
   pyproject = true;
+
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
     owner = "EuleMitKeule";
     repo = "eq3btsmart";
     rev = "refs/tags/${version}";
-    hash = "sha256-FRnCnSMtsiZ1AbZOMwO/I5UoFWP0xAFqRZsnrHG9WJA=";
+    hash = "sha256-30ULuK3uAb3Bc1AoCyol+TL/gcSh5hn7t+Ys7JA9faQ=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ setuptools ];
 
   dependencies = [
     bleak
-    construct
     construct-typing
   ];
 
