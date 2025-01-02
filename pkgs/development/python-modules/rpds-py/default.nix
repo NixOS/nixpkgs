@@ -35,7 +35,7 @@ buildPythonPackage rec {
     rustPlatform.maturinBuildHook
     cargo
     rustc
-    python3
+    #python3
   ];
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ libiconv ];
