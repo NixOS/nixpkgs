@@ -68,6 +68,12 @@ stdenv.mkDerivation rec {
       hash = "sha256-uO9uEhB64hkVa6O2tJKE8BLFR96m27d8NEN9UikNcvg=";
     })
 
+    # Updates to new Python initialization API
+    (fetchpatch {
+      name = "modern-python-initialization-api.patch";
+      url = "https://github.com/fontforge/fontforge/commit/2f2ba54c15c5565acbde04eb6608868cbc871e01.patch";
+      hash = "sha256-qF4DqFpiZDbULi9+POPM73HF6pEot8BAFSVaVCNQrMU=";
+    })
   ];
 
   # use $SOURCE_DATE_EPOCH instead of non-deterministic timestamps
