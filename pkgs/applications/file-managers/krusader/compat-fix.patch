@@ -1,0 +1,20 @@
+diff --git a/app/compat.h b/app/compat.h
+index b63d561..c051f35 100644
+--- a/app/compat.h
++++ b/app/compat.h
+@@ -11,13 +11,13 @@
+ 
+ #if __has_include(<KCompletion/kcompletion_version.h>)
+ #  include <KCompletion/kcompletion_version.h>
+-#else // Pre KF-5.91 header layout
++#elif __has_include(<kcompletion_version.h>) // Pre KF-5.91 header layout
+ #  include <kcompletion_version.h>
+ #endif
+ 
+ #if __has_include(<KArchive/karchive_version.h>)
+ #  include <KArchive/karchive_version.h>
+-#else // Pre KF-5.91 header layout
++#elif __has_include(<karchive_version.h>) // Pre KF-5.91 header layout
+ #  include <karchive_version.h>
+ #endif
+ 
