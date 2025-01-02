@@ -149,6 +149,9 @@
   "sec-changing-config": [
     "index.html#sec-changing-config"
   ],
+  "sec-release-25.05-lib-notable-changes": [
+    "release-notes.html#sec-release-25.05-lib-notable-changes"
+  ],
   "sec-upgrading": [
     "index.html#sec-upgrading"
   ],

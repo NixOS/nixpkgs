@@ -2559,7 +2559,7 @@ runTests {
   testPackagesFromDirectoryRecursive = {
     expr = packagesFromDirectoryRecursive {
       callPackage = path: overrides: import path overrides;
-      directory = ./packages-from-directory;
+      directory = ./packages-from-directory/plain;
     };
     expected = {
       a = "a";
@@ -2584,8 +2584,36 @@ runTests {
   testPackagesFromDirectoryRecursiveTopLevelPackageNix = {
     expr = packagesFromDirectoryRecursive {
       callPackage = path: overrides: import path overrides;
-      directory = ./packages-from-directory/c;
+      directory = ./packages-from-directory/plain/c;
     };
     expected = "c";
+  };
+
+  # Check that `packagesFromDirectoryRecursive` can be used to create scopes
+  # for sub-directories
+  testPackagesFromDirectoryNestedScopes = let
+    inherit (lib) makeScope recurseIntoAttrs;
+    emptyScope = makeScope lib.callPackageWith (_: {});
+  in {
+    expr = lib.filterAttrsRecursive (name: value: !lib.elem name [ "callPackage" "newScope" "overrideScope" "packages" ]) (packagesFromDirectoryRecursive {
+      inherit (emptyScope) callPackage newScope;
+      directory = ./packages-from-directory/scope;
+    });
+    expected = lib.recurseIntoAttrs {
+      a = "a";
+      b = "b";
+      # Note: Other files/directories in `./test-data/c/` are ignored and can be
+      # used by `package.nix`.
+      c = "c";
+      my-namespace = lib.recurseIntoAttrs {
+        d = "d";
+        e = "e";
+        f = "f";
+        my-sub-namespace = lib.recurseIntoAttrs {
+          g = "g";
+          h = "h";
+        };
+      };
+    };
   };
 }
