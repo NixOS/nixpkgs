@@ -1,10 +1,16 @@
 {
   lib,
-  rustPlatform,
+  stdenv,
   fetchFromGitHub,
+  meson,
+  ninja,
+  python3,
+  rustPlatform,
+  rustc,
+  cargo,
 }:
 
-rustPlatform.buildRustPackage rec {
+stdenv.mkDerivation rec {
   pname = "neocmakelsp";
   version = "0.8.13";
 
@@ -15,14 +21,26 @@ rustPlatform.buildRustPackage rec {
     hash = "sha256-MRno86pi389p2lBTu86LCPx5yFN76CbM5AXAs4bsl7c=";
   };
 
-  cargoHash = "sha256-UVXJF8jvZUcEWbsL+UmrO2VSlvowkXNGRbxCEmB89OU=";
+  cargoDeps = rustPlatform.fetchCargoTarball {
+    inherit pname version src;
+    hash = "sha256-UVXJF8jvZUcEWbsL+UmrO2VSlvowkXNGRbxCEmB89OU=";
+  };
 
-  meta = with lib; {
+  nativeBuildInputs = [
+    meson
+    ninja
+    python3
+    rustPlatform.cargoSetupHook
+    rustc
+    cargo
+  ];
+
+  meta = {
     description = "CMake lsp based on tower-lsp and treesitter";
     homepage = "https://github.com/Decodetalkers/neocmakelsp";
-    license = licenses.mit;
-    platforms = platforms.unix;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.unix;
+    maintainers = with lib.maintainers; [
       rewine
       multivac61
     ];
