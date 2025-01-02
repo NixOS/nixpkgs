@@ -11,13 +11,13 @@
 
 buildGoModule rec {
   pname = "updatecli";
-  version = "0.90.0";
+  version = "0.91.0";
 
   src = fetchFromGitHub {
     owner = "updatecli";
     repo = "updatecli";
     rev = "v${version}";
-    hash = "sha256-O7NG6KGEiUGieAS2nEfpvCWnE1SYe5pbwD87q2/uBkA=";
+    hash = "sha256-r/8QPVJHrvHbDZZ7RFgKBB7isy/P5hTBe84xFcevEH4=";
   };
 
   vendorHash = "sha256-Y1klBZZvDtCootNXQOlScSgDpaw1/owzBX9ykCD6NCw=";
