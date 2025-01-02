@@ -355,6 +355,12 @@ rec {
         stripLen = 1;
         extraPrefix = "src/s3select/";
       })
+
+      (fetchpatch2 {
+        name = "ceph-gcc-14.patch";
+        url = "https://github.com/ceph/ceph/commit/0eace4ea9ea42412d4d6a16d24a8660642e41173.patch?full_index=1";
+        hash = "sha256-v+AExf/npe4NgmVl2j6o8860nwF9YuzC/vR0TWxTrIE=";
+      })
     ];
 
     nativeBuildInputs = [
