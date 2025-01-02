@@ -43,6 +43,9 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/martinrotter/rssguard/releases/tag/${version}";
     license = licenses.gpl3Plus;
     platforms = platforms.linux;
-    maintainers = with maintainers; [ jluttine ];
+    maintainers = with maintainers; [
+      jluttine
+      tebriel
+    ];
   };
 }
