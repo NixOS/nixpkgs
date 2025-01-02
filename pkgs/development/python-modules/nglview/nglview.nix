@@ -11,6 +11,7 @@
   jupyter-packaging,
   jupyter_core,
   notebook-shim,
+  setuptools-scm,
 }:
 
 let
@@ -27,13 +28,13 @@ let
 in
 buildPythonPackage rec {
   pname = "nglview";
-  version = "3.0.3";
+  version = "3.1.4";
 
   src = fetchFromGitHub {
     owner = "arose";
     repo = "nglview";
     rev = "v${version}";
-    sha256 = "tkRz55W+iGKXZKqnAus3DmspS86td3mMuIVHz3pRCoI=";
+    sha256 = "QY7rn6q67noWeoLn0RU2Sn5SeJON+Br/j+aNMlK1PDo=";
   };
 
   nativeBuildInputs = [
@@ -41,6 +42,7 @@ buildPythonPackage rec {
     jupyter-packaging
     jupyter_core
     notebook-shim
+    setuptools-scm # Add this line
   ];
 
   propagatedBuildInputs = [
@@ -49,12 +51,6 @@ buildPythonPackage rec {
     ipykernel
     numpy
   ];
-
-  postPatch = ''
-    substituteInPlace versioneer.py \
-      --replace "configparser.SafeConfigParser()" "configparser.ConfigParser()" \
-      --replace "parser.readfp(f)" "parser.read_file(f)"
-  '';
 
   preBuild = ''
     export HOME=$TMPDIR
@@ -72,6 +68,10 @@ buildPythonPackage rec {
     description = "IPython/Jupyter widget to interactively view molecular structures and trajectories";
     homepage = "https://github.com/arose/nglview";
     license = licenses.mit;
-    maintainers = [ ];
+    maintainers = [
+      "Hai Nguyen"
+      "David A Case"
+      "Alexander S Rose"
+    ];
   };
 }
