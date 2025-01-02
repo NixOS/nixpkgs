@@ -5,7 +5,7 @@
   fetchFromGitHub,
   replaceVars,
   cmake,
-  boost183,
+  boost,
   zlib,
   openssl,
   R,
@@ -85,7 +85,7 @@ stdenv.mkDerivation rec {
 
   buildInputs =
     [
-      boost183
+      boost
       zlib
       openssl
       R
@@ -131,6 +131,7 @@ stdenv.mkDerivation rec {
     ./ignore-etc-os-release.patch
     ./dont-yarn-install.patch
     ./dont-assume-pandoc-in-quarto.patch
+    ./boost-1.86.patch
   ];
 
   postPatch = ''
