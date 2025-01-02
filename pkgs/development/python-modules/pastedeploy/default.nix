@@ -18,7 +18,7 @@ buildPythonPackage rec {
     owner = "Pylons";
     repo = "pastedeploy";
     rev = "refs/tags/${version}";
-    hash = "sha256-8MNeOcYPEYAfghZN/K/1v/tAAdgz/fCvuVnBoru+81Q=";
+    hash = "sha256-yR7UxAeF0fQrbU7tl29GpPeEAc4YcxHdNQWMD67pP3g=";
   };
 
   postPatch = ''
