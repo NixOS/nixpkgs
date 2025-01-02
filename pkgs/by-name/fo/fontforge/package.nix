@@ -63,8 +63,9 @@ stdenv.mkDerivation rec {
 
     # Fixes translation compatibility with gettext 0.22
     (fetchpatch {
-      url = "https://github.com/fontforge/fontforge/commit/55d58f87ab1440f628f2071a6f6cc7ef9626c641.patch";
-      hash = "sha256-rkYnKPXA8Ztvh9g0zjG2yTUCPd3lE1uqwvBuEd8+Oyw=";
+      name = "update-translation-compatibility.patch";
+      url = "https://github.com/fontforge/fontforge/commit/642d8a3db6d4bc0e70b429622fdf01ecb09c4c10.patch";
+      hash = "sha256-uO9uEhB64hkVa6O2tJKE8BLFR96m27d8NEN9UikNcvg=";
     })
 
   ];
