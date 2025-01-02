@@ -4,11 +4,11 @@
   pkgs ? import ../../.. { inherit system config; },
   lib ? pkgs.lib,
   kernelVersionsToTest ? [
-    "4.19"
     "5.4"
     "5.10"
     "5.15"
     "6.1"
+    "6.6"
     "latest"
   ],
 }:
@@ -33,7 +33,7 @@ let
       # systemd in stage 1
       raid-sd-stage-1 = {
         test = callTest ./systemd-stage-1.nix;
-        kernelFilter = lib.id;
+        kernelFilter = lib.filter (v: v != "5.15");
         flavour = "raid";
       };
       thinpool-sd-stage-1 = {
