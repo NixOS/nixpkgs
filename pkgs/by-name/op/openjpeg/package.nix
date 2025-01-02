@@ -29,13 +29,13 @@ let
 in
 stdenv.mkDerivation rec {
   pname = "openjpeg";
-  version = "2.5.3";
+  version = "2.5.2";
 
   src = fetchFromGitHub {
     owner = "uclouvain";
     repo = "openjpeg";
     rev = "v${version}";
-    hash = "sha256-ONPahcQ80e3ahYRQU+Tu8Z7ZTARjRlpXqPAYpUlX5sY=";
+    hash = "sha256-mQ9B3MJY2/bg0yY/7jUJrAXM6ozAHT5fmwES5Q1SGxw=";
   };
 
   outputs = [ "out" "dev" ];
