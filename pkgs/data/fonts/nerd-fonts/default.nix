@@ -14,10 +14,10 @@ let
     let
       lowerName = lib.strings.toLower name;
     in
-    if builtins.match "[[:digit:]].*" lowerName != null then "_" + lowerName else lowerName;
+    if builtins.match "^[[:digit:]].*" lowerName != null then "_" + lowerName else lowerName;
 
   convertVersion =
-    version: if builtins.match "[[:digit:]].*" version != null then "+" + version else "";
+    version: if builtins.match "^[[:digit:]].*" version != null then "+" + version else "";
 
   convertLicense = import ./convert-license.nix lib;
 
