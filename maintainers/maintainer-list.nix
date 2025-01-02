@@ -23142,6 +23142,12 @@
     githubId = 33605526;
     name = "Yash Garg";
   };
+  yassinebenarbia = {
+    email = "yassine.bna@proton.me";
+    github = "yassinebenarbia";
+    githubId = 104306099;
+    name = "Yassine";
+  };
   yavko = {
     name = "Yavor Kolev";
     email = "yavornkolev@gmail.com";
