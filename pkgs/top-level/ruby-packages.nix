@@ -2753,10 +2753,10 @@
     platforms = [];
     source = {
       remotes = ["https://rubygems.org"];
-      sha256 = "0pgxgng905jbhp0pr54w4w2pr4nqcq80ijj48204bj4x4nigj8ji";
+      sha256 = "sRYggpgxsct+bJtGyB/4puNsyz+IjxZEhetzUfOGJzo=";
       type = "gem";
     };
-    version = "0.24.0";
+    version = "1.3.0";
   };
   pry = {
     dependencies = ["coderay" "method_source"];
