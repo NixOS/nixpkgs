@@ -17,9 +17,12 @@ stdenvNoCC.mkDerivation rec {
     sha256 = "sha256-ONrVZC6GBV5v3TeBekW9ybZjDHF3FNyXw1rYknqKRbk=";
   };
 
+  nativeBuildInputs = [
+    scdoc
+  ];
+
   buildInputs = [
     bash
-    scdoc
   ];
 
   installFlags = [ "PREFIX=$(out)/" ];
