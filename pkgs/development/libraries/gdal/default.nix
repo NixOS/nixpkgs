@@ -60,7 +60,7 @@
   libxml2,
   lz4,
   netcdf,
-  openexr,
+  openexr_3,
   openjpeg,
   openssl,
   pcre2,
@@ -167,7 +167,7 @@ stdenv.mkDerivation (finalAttrs: {
       nonDarwinDeps = lib.optionals (!stdenv.hostPlatform.isDarwin) (
         [
           # tests for formats enabled by these packages fail on macos
-          openexr
+          openexr_3
           xercesc
         ]
         ++ arrowDeps
