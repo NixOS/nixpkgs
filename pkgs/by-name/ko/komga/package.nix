@@ -33,7 +33,10 @@ stdenvNoCC.mkDerivation rec {
     homepage = "https://komga.org/";
     license = lib.licenses.mit;
     platforms = jdk23_headless.meta.platforms;
-    maintainers = with lib.maintainers; [ govanify ];
+    maintainers = with lib.maintainers; [
+      tebriel
+      govanify
+    ];
     mainProgram = "komga";
     sourceProvenance = with lib.sourceTypes; [ binaryBytecode ];
   };
