@@ -22,14 +22,14 @@
 
 buildPythonPackage rec {
   pname = "databricks-sdk";
-  version = "0.38.0";
+  version = "0.40.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "databricks";
     repo = "databricks-sdk-py";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-g00NRo0FSHujN2mCLZCc1hKGsBFiN7ztEneUMziuQpk=";
+    tag = "v${version}";
+    hash = "sha256-x8CbjWdholuIGVr3TxbFjEszu0owjSIm7+G3Sh+cHEk=";
   };
 
   build-system = [
