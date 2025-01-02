@@ -26,7 +26,7 @@ Signed-off-by: Tristan Ross <tristan.ross@midstall.com>
 
 diff --git a/config/eu-common.am b/config/eu-common.am
 new file mode 100644
-index 000000000..9cc7f6969
+index 00000000..9cc7f696
 --- /dev/null
 +++ b/config/eu-common.am
 @@ -0,0 +1,148 @@
@@ -179,7 +179,7 @@ index 000000000..9cc7f6969
 +print-%:
 +	@echo $*=$($*)
 diff --git a/config/eu.am b/config/eu.am
-index e6c241f9d..3aa6048aa 100644
+index 0b7dab5b..3aa6048a 100644
 --- a/config/eu.am
 +++ b/config/eu.am
 @@ -1,4 +1,5 @@
@@ -194,7 +194,7 @@ index e6c241f9d..3aa6048aa 100644
  ##
  
 -DEFS = -D_GNU_SOURCE -DHAVE_CONFIG_H -DLOCALEDIR='"${localedir}"'
- AM_CPPFLAGS = -I. -I$(srcdir) -I$(top_srcdir)/lib -I..
+-AM_CPPFLAGS = -iquote . -I$(srcdir) -I$(top_srcdir)/lib -I..
 -
 -# Drop the 'u' flag that automake adds by default. It is incompatible
 -# with deterministic archives.
@@ -310,12 +310,13 @@ index e6c241f9d..3aa6048aa 100644
 -
 -print-%:
 -	@echo $*=$($*)
++AM_CPPFLAGS = -I. -I$(srcdir) -I$(top_srcdir)/lib -I..
 +include $(top_srcdir)/config/eu-common.am
 diff --git a/src/Makefile.am b/src/Makefile.am
-index 1d592d4de..5fcebc21d 100644
+index 97a0c61a..5bb8c078 100644
 --- a/src/Makefile.am
 +++ b/src/Makefile.am
-@@ -16,10 +16,12 @@
+@@ -16,14 +16,15 @@
  ## You should have received a copy of the GNU General Public License
  ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
  ##
@@ -323,9 +324,15 @@ index 1d592d4de..5fcebc21d 100644
 +include $(top_srcdir)/config/eu-common.am
  DEFS += $(YYDEBUG) -DDEBUGPRED=@DEBUGPRED@ \
  	-DSRCDIR=\"$(shell cd $(srcdir);pwd)\" -DOBJDIR=\"$(shell pwd)\"
+ 
+-DEFAULT_INCLUDES =
 -AM_CPPFLAGS += -I$(srcdir)/../libelf -I$(srcdir)/../libebl \
+-	    -I$(srcdir)/../libdw -I$(srcdir)/../libdwelf \
+-	    -I$(srcdir)/../libdwfl -I$(srcdir)/../libasm -I../debuginfod
 +DEFAULT_INCLUDES = -I$(top_builddir)
 +AM_CPPFLAGS = -I$(top_srcdir)/lib -I.. \
 +	    -I$(srcdir)/../libelf -I$(srcdir)/../libebl \
- 	    -I$(srcdir)/../libdw -I$(srcdir)/../libdwelf \
- 	    -I$(srcdir)/../libdwfl -I$(srcdir)/../libasm -I../debuginfod
++ 	    -I$(srcdir)/../libdw -I$(srcdir)/../libdwelf \
++ 	    -I$(srcdir)/../libdwfl -I$(srcdir)/../libasm -I../debuginfod
+ 
+ AM_LDFLAGS = -Wl,-rpath-link,../libelf:../libdw $(STACK_USAGE_NO_ERROR)
