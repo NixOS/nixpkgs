@@ -44,6 +44,7 @@
   pyserial,
   python,
   python-daemon,
+  pythonOlder,
   pyyaml,
   requests,
   setuptools,
@@ -200,7 +201,7 @@ stdenv.mkDerivation rec {
         pyelftools
         pygments
         pykwalify
-        pylint
+        (pylint.overridePythonAttrs { doCheck = pythonOlder "3.13"; })
         pyperclip
         pyserial
         python-daemon
