@@ -18571,8 +18571,6 @@ with pkgs;
 
   wfuzz = with python3Packages; toPythonApplication wfuzz;
 
-  zfs-replicate = python3Packages.callPackage ../tools/backup/zfs-replicate { };
-
   kodelife = callPackage ../applications/graphics/kodelife {
     inherit (gst_all_1) gstreamer gst-plugins-base;
   };

@@ -1,16 +1,10 @@
 {
-  buildPythonApplication,
-  click,
+  python3Packages,
   fetchPypi,
-  hypothesis,
   lib,
-  poetry-core,
-  pytest-cov-stub,
-  pytestCheckHook,
-  stringcase,
 }:
 
-buildPythonApplication rec {
+python3Packages.buildPythonApplication rec {
   pname = "zfs_replicate";
   version = "4.0.0";
   pyproject = true;
@@ -20,17 +14,17 @@ buildPythonApplication rec {
     hash = "sha256-9WD2IW7GRxMF7hOa8HTI/+cuOjVaYMT4OnrYU/xFgME=";
   };
 
-  nativeBuildInputs = [
+  nativeBuildInputs = with python3Packages; [
     poetry-core
   ];
 
-  nativeCheckInputs = [
+  nativeCheckInputs = with python3Packages; [
     pytestCheckHook
     hypothesis
     pytest-cov-stub
   ];
 
-  propagatedBuildInputs = [
+  propagatedBuildInputs = with python3Packages; [
     click
     stringcase
   ];
