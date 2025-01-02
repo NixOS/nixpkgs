@@ -1911,8 +1911,6 @@ with pkgs;
 
   gomobile = callPackage ../development/mobile/gomobile { };
 
-  titaniumenv = callPackage ../development/mobile/titaniumenv { };
-
   adb-sync = callPackage ../development/mobile/adb-sync {
     inherit (androidenv.androidPkgs) platform-tools;
   };
@@ -5665,8 +5663,6 @@ with pkgs;
 
   yapf = with python3Packages; toPythonApplication yapf;
 
-  yarn-berry = callPackage ../development/tools/yarn-berry { };
-
   yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea { pkgs = pkgs.__splicedPackages; };
 
   inherit (yarn2nix-moretea)
@@ -8771,10 +8767,7 @@ with pkgs;
     certbot-dns-route53
   ]);
 
-  # CGAL 5 has API changes
-  cgal_4 = callPackage ../development/libraries/CGAL/4.nix { };
-  cgal_5 = callPackage ../development/libraries/CGAL { };
-  cgal = cgal_5;
+  cgal = callPackage ../development/libraries/CGAL { };
 
   check = callPackage ../development/libraries/check {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
