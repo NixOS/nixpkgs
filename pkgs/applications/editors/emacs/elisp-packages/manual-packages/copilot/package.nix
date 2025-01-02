@@ -4,9 +4,11 @@
   editorconfig,
   f,
   fetchFromGitHub,
+  replaceVars,
   nodejs,
   s,
   melpaBuild,
+  copilot-node-server,
 }:
 melpaBuild {
   pname = "copilot";
@@ -21,6 +23,11 @@ melpaBuild {
 
   files = ''(:defaults "dist")'';
 
+  patches = [
+    (replaceVars ./specify-copilot-install-dir.patch {
+      copilot-node-server = copilot-node-server;
+    })
+  ];
   packageRequires = [
     dash
     editorconfig
