@@ -145,7 +145,10 @@ stdenv.mkDerivation (finalAttrs: {
     libSM
     re2
     openssl
-    geographiclib
+    # FIXME: split outputs aren't working with find_package. Possibly related to nixpkgs/issues/144170 ?
+    (geographiclib.overrideAttrs {
+      outputs = [ "out" ];
+    })
     gtest
     glm
     bzip2
