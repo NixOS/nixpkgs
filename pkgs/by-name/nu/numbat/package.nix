@@ -1,10 +1,10 @@
 {
   lib,
-  testers,
   fetchFromGitHub,
   rustPlatform,
-  numbat,
   tzdata,
+  versionCheckHook,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -34,11 +34,12 @@ rustPlatform.buildRustPackage rec {
     export TZDIR=${tzdata}/share/zoneinfo
   '';
 
-  passthru.tests.version = testers.testVersion {
-    package = numbat;
-  };
+  nativeInstallCheckInputs = [ versionCheckHook ];
+  doInstallCheck = true;
+  versionCheckProgramArg = [ "--version" ];
 
   meta = with lib; {
+  passthru.updateScript = nix-update-script { };
     description = "High precision scientific calculator with full support for physical units";
     longDescription = ''
       A statically typed programming language for scientific computations
