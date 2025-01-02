@@ -9,13 +9,13 @@
 
 buildDotnetModule rec {
   pname = "tone";
-  version = "0.2.3";
+  version = "0.2.4";
 
   src = fetchFromGitHub {
     owner = "sandreas";
     repo = "tone";
     tag = "v${version}";
-    hash = "sha256-NBFAPEeUKZgyfNlvcOBS1IpktEnI+fOd9WLj0ByzpLY=";
+    hash = "sha256-DX54NSlqAZzVQObm9qjUsYatjxjHKGcSLHH1kVD4Row=";
   };
 
   projectFile = "tone/tone.csproj";
