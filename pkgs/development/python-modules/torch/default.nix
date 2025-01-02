@@ -746,5 +746,10 @@ buildPythonPackage rec {
       lib.platforms.linux
       ++ lib.optionals (!cudaSupport && !rocmSupport) lib.platforms.darwin;
     broken = builtins.any trivial.id (builtins.attrValues brokenConditions);
+    badPlatforms = [
+      # error: variable length arrays in C++ are a Clang extension [-Werror,-Wvla-cxx-extension]
+      # https://github.com/NixOS/nixpkgs/issues/370298
+      "x86_64-darwin"
+    ];
   };
 }
