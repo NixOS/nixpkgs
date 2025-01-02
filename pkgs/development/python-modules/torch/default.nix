@@ -464,6 +464,10 @@ buildPythonPackage rec {
       NIX_CFLAGS_COMPILE = toString (
         (
           lib.optionals (blas.implementation == "mkl") [ "-Wno-error=array-bounds" ]
+          # error: variable length arrays in C++ are a Clang extension [-Werror,-Wvla-cxx-extension]
+          ++ lib.optionals (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64) [
+            "-Wno-error=vla-cxx-extension"
+          ]
           # Suppress gcc regression: avx512 math function raises uninitialized variable warning
           # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=105593
           # See also: Fails to compile with GCC 12.1.0 https://github.com/pytorch/pytorch/issues/77939
