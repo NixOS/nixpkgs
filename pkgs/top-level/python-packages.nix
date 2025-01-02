@@ -13011,6 +13011,8 @@ self: super: with self; {
     inherit (pkgs) cmake ninja;
   });
 
+  pyside6-qtads = callPackage ../development/python-modules/pyside6-qtads { };
+
   pysigma = callPackage ../development/python-modules/pysigma { };
 
   pysigma-backend-elasticsearch = callPackage ../development/python-modules/pysigma-backend-elasticsearch { };
