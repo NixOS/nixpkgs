@@ -38,8 +38,9 @@ rustPlatform.buildRustPackage rec {
   doInstallCheck = true;
   versionCheckProgramArg = [ "--version" ];
 
-  meta = with lib; {
   passthru.updateScript = nix-update-script { };
+
+  meta = {
     description = "High precision scientific calculator with full support for physical units";
     longDescription = ''
       A statically typed programming language for scientific computations
@@ -47,14 +48,14 @@ rustPlatform.buildRustPackage rec {
     '';
     homepage = "https://numbat.dev";
     changelog = "https://github.com/sharkdp/numbat/releases/tag/v${version}";
-    license = with licenses; [
+    license = with lib.licenses; [
       asl20
       mit
     ];
-    mainProgram = "numbat";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       giomf
       atemu
     ];
+    mainProgram = "numbat";
   };
 }
