@@ -2,39 +2,40 @@
   lib,
   buildHomeAssistantComponent,
   fetchFromGitHub,
-  toPythonModule,
   async-timeout,
-  music-assistant,
+  music-assistant-client,
   pytestCheckHook,
   pytest-asyncio,
   pytest-cov-stub,
   pytest-homeassistant-custom-component,
+  zeroconf,
 }:
 
 buildHomeAssistantComponent rec {
   owner = "music-assistant";
   domain = "mass";
-  version = "2024.9.1";
+  version = "2024.12.1";
 
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "hass-music-assistant";
     rev = version;
-    hash = "sha256-8YZ77SYv8hDsbKUjxPZnuAycLE8RkIbAq3HXk+OyAmM=";
+    hash = "sha256-e2e59oG0PeQdq/Vg4ovjxpOQTXrDfQxFVkWZ63QkfRw=";
   };
 
   dependencies = [
     async-timeout
-    (toPythonModule music-assistant)
+    music-assistant-client
   ];
 
-  dontCheckManifest = true; # expects music-assistant 2.0.6, we have 2.0.7
+  ignoreVersionRequirement = [ "music-assistant-client" ];
 
   nativeCheckInputs = [
     pytestCheckHook
     pytest-asyncio
     pytest-cov-stub
     pytest-homeassistant-custom-component
+    zeroconf
   ];
 
   meta = with lib; {

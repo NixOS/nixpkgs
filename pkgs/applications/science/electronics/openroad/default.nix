@@ -15,6 +15,7 @@
   clp, # for or-tools
   cudd,
   eigen,
+  gtest,
   glpk,
   lcov,
   lemon-graph,
@@ -43,15 +44,19 @@ let
 in
 mkDerivation rec {
   pname = "openroad";
-  version = "2.0-unstable-2024-12-22";
+  version = "2.0-unstable-2024-12-31";
 
   src = fetchFromGitHub {
     owner = "The-OpenROAD-Project";
     repo = "OpenROAD";
-    rev = "51302eb80b11576a01171d33452c362301d55143";
+    rev = "21cf29eda317e0c7777fbfaa3f384ec9fab1a0f9";
     fetchSubmodules = true;
-    hash = "sha256-xFeZo6GjKKee7fTrzN4TNNL8eeTDJXyQGPkIKU/WvIc=";
+    hash = "sha256-cRETSW8cG/Q0hgxaFJjtnBqsIU0r6/kCRy1+5gJfC9o=";
   };
+
+  patches = [
+    ./swig43-compat.patch # https://github.com/The-OpenROAD-Project/OpenROAD/issues/6451
+  ];
 
   nativeBuildInputs = [
     bison
@@ -59,6 +64,7 @@ mkDerivation rec {
     doxygen
     flex
     git
+    gtest
     pkg-config
     swig
   ];
@@ -95,15 +101,13 @@ mkDerivation rec {
     patchShebangs --build etc/find_messages.py
   '';
 
-  # Enable output images from the placer.
   cmakeFlags = [
-    # Tries to download gtest 1.13 as part of the build. We currently rely on
-    # the regression tests so we can get by without building unit tests.
-    "-DENABLE_TESTS=OFF"
+    "-DENABLE_TESTS=ON"
     "-DUSE_SYSTEM_BOOST=ON"
     "-DUSE_SYSTEM_ABC=OFF"
     "-DUSE_SYSTEM_OPENSTA=OFF"
-    "-DOPENROAD_VERSION=${src.rev}"
+    "-DOPENROAD_VERSION=${version}_${src.rev}"
+    "-DCMAKE_RULE_MESSAGES=OFF"
     "-DTCL_LIBRARY=${tcl}/lib/libtcl.so"
     "-DTCL_HEADER=${tcl}/include/tcl.h"
   ];
@@ -115,6 +119,9 @@ mkDerivation rec {
   # to see if there are any breaking changes in unstable that should be vendored as well.
   doCheck = true;
   checkPhase = ''
+    # Disable two tests that are failing curently.
+    sed 's/^.*partition_gcd/# \0/g' -i src/par/test/CTestTestfile.cmake
+    make test
     ../test/regression
   '';
 

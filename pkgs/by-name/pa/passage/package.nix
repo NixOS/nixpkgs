@@ -34,6 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
     (replaceVars ./darwin-getopt-path.patch {
       inherit getopt;
     })
+    ./set-correct-program-name-for-sleep.patch
   ];
 
   nativeBuildInputs = [ makeBinaryWrapper ];
