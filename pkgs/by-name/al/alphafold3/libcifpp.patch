@@ -1,0 +1,27 @@
+diff --git a/src/alphafold3/build_data.py b/src/alphafold3/build_data.py
+index 0c33338..f3b6ab9 100644
+--- a/src/alphafold3/build_data.py
++++ b/src/alphafold3/build_data.py
+@@ -22,7 +22,7 @@ from alphafold3.constants.converters import chemical_component_sets_gen
+ def build_data():
+   """Builds intermediate data."""
+   for site_path in site.getsitepackages():
+-    path = pathlib.Path(site_path) / 'share/libcifpp/components.cif'
++    path = pathlib.Path('@libcifpp@/share/libcifpp/components.cif')
+     if path.exists():
+       cif_path = path
+       break
+diff --git a/src/alphafold3/model/mkdssp_pybind.cc b/src/alphafold3/model/mkdssp_pybind.cc
+index 27ca7b5..7909456 100644
+--- a/src/alphafold3/model/mkdssp_pybind.cc
++++ b/src/alphafold3/model/mkdssp_pybind.cc
+@@ -31,8 +31,7 @@ void RegisterModuleMkdssp(pybind11::module m) {
+   bool found = false;
+   for (const auto& py_path : paths) {
+     auto path_str =
+-        std::filesystem::path(py::cast<absl::string_view>(py_path)) /
+-        "share/libcifpp/components.cif";
++        std::filesystem::path("@libcifpp@/share/libcifpp/components.cif");
+     if (std::filesystem::exists(path_str)) {
+       setenv("LIBCIFPP_DATA_DIR", path_str.parent_path().c_str(), 0);
+       found = true;

@@ -1,0 +1,9 @@
+diff --git a/run_alphafold.py b/run_alphafold.py
+index 5e76b03..50eeda2 100644
+--- a/run_alphafold.py
++++ b/run_alphafold.py
+@@ -1,3 +1,4 @@
++#!/usr/bin/env python
+ # Copyright 2024 DeepMind Technologies Limited
+ #
+ # AlphaFold 3 source code is licensed under CC BY-NC-SA 4.0. To view a copy of
