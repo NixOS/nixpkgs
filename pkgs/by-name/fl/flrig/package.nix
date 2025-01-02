@@ -27,6 +27,8 @@ stdenv.mkDerivation rec {
     pkg-config
   ];
 
+  env.FLTK_CONFIG = lib.getExe' (lib.getDev fltk13) "fltk-config";
+
   meta = {
     description = "Digital modem rig control program";
     homepage = "https://sourceforge.net/projects/fldigi/";
