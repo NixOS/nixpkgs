@@ -195,6 +195,17 @@ in
   config = lib.mkIf cfg.enable {
     hardware.uinput.enable = true;
 
+    services.udev.extraRules =
+      let
+        mkRule = name: ''
+          ACTION=="add", KERNEL=="event*", SUBSYSTEM=="input", ATTRS{name}=="${name}", ATTRS{id/product}=="5679", ATTRS{id/vendor}=="1235", SYMLINK+="input/by-id/${name}"
+        '';
+      in
+      lib.foldlAttrs (
+        rules: _: keyboard:
+        rules + "\n" + mkRule (mkName keyboard.name)
+      ) "" cfg.keyboards;
+
     systemd = {
       paths = lib.mapAttrs' (_: mkPath) cfg.keyboards;
       services = lib.mapAttrs' (_: mkService) cfg.keyboards;
