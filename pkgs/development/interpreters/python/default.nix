@@ -139,10 +139,10 @@ in {
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "12";
+      patch = "17";
     };
 
-    hash = "sha256-3WHYjaJ0ws4s7HdmfUo9+aZSvMUOJvkJkdTdCvZrzPQ=";
+    hash = "sha256-UOBoQPS73pFEgICkEYBoqJuPvK4l/42h4rsUAtyaA0Y=";
     pythonVersion = "2.7";
     db = db.override { dbmSupport = !stdenv.hostPlatform.isDarwin; };
     python = __splicedPackages.pythonInterpreters.pypy27_prebuilt;
@@ -176,14 +176,14 @@ in {
     sourceVersion = {
       major = "7";
       minor = "3";
-      patch = "12";
+      patch = "17";
     };
 
     hash = {
-      aarch64-linux = "sha256-4E3LYoantHJOw/DlDTzBuoWDMB3RZYwG1/N1meQgHFk=";
-      x86_64-linux = "sha256-GmGiV0t5Rm9gYBDymZormVvZbNCF+Rp46909XCxA6B0=";
-      aarch64-darwin = "sha256-a3R6oHauhZfklgPF3sTKWTWhoKEy10BKVZvpaiYNm/c=";
-      x86_64-darwin = "sha256-bon/3RVTfOT/zjFFtl7lfC6clSiSvZW5NAEtLwCfUDs=";
+      aarch64-linux = "sha256-DUzvpmBoUk4qyyxPn1EQSqcnIc0YvPRi7HyLo5Ekqa4=";
+      x86_64-linux = "sha256-nzSX+HszctF+RHNp4AFqS+yZprTSpZq6d0olv+Q1NHQ=";
+      aarch64-darwin = "sha256-gCJIc5sqzIwb5tlH8Zsy/A44wI4xKzXAXMf7IvEHCeQ=";
+      x86_64-darwin = "sha256-gtRgQhRmyBraSh2Z3y3xuLNTQbOXyF///lGkwwItCDM=";
     }.${stdenv.system};
     pythonVersion = "2.7";
     inherit passthruFun;
