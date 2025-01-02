@@ -9785,6 +9785,18 @@ final: prev:
     meta.homepage = "https://github.com/RRethy/nvim-treesitter-textsubjects/";
   };
 
+  nvim-trevJ-lua = buildVimPlugin {
+    pname = "nvim-trevJ.lua";
+    version = "2024-12-23";
+    src = fetchFromGitHub {
+      owner = "AckslD";
+      repo = "nvim-trevJ.lua";
+      rev = "86445d0143d47aede944b6daa5c0a463e9d3e730";
+      sha256 = "0wrmzk7wyr4mk8y0c7hq0qqk19ngdwvvd80690vqs3vby89a5zkj";
+    };
+    meta.homepage = "https://github.com/AckslD/nvim-trevJ.lua/";
+  };
+
   nvim-ts-autotag = buildVimPlugin {
     pname = "nvim-ts-autotag";
     version = "2024-12-02";
