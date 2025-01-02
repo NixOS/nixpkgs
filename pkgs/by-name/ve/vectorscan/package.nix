@@ -24,6 +24,10 @@ stdenv.mkDerivation rec {
   };
 
   postPatch = ''
+    sed -i '/examples/d' CMakeLists.txt
+    substituteInPlace libhs.pc.in \
+      --replace-fail "libdir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_LIBDIR@" "libdir=@CMAKE_INSTALL_LIBDIR@" \
+      --replace-fail "includedir=@CMAKE_INSTALL_PREFIX@/@CMAKE_INSTALL_INCLUDEDIR@" "includedir=@CMAKE_INSTALL_INCLUDEDIR@"
     substituteInPlace cmake/build_wrapper.sh \
       --replace-fail 'nm' '${stdenv.cc.targetPrefix}nm' \
       --replace-fail 'objcopy' '${stdenv.cc.targetPrefix}objcopy'
