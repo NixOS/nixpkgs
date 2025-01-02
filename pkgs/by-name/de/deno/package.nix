@@ -1,21 +1,23 @@
 {
-  stdenv,
   lib,
+  stdenv,
   callPackage,
-  fetchFromGitHub,
   rustPlatform,
+  fetchFromGitHub,
+
+  # nativeBuildInputs
   cmake,
   protobuf,
   installShellFiles,
+
   librusty_v8 ? callPackage ./librusty_v8.nix {
     inherit (callPackage ./fetchers.nix { }) fetchLibrustyV8;
   },
   libffi,
+  buildPackages,
+  versionCheckHook,
 }:
 
-let
-  canExecute = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
-in
 rustPlatform.buildRustPackage rec {
   pname = "deno";
   version = "2.1.4";
@@ -23,7 +25,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CUfUYiD1ZVrbH4RowJN0PUCafpIsEWu0sCPzxngz4Ak=";
   };
 
@@ -32,10 +34,14 @@ rustPlatform.buildRustPackage rec {
   postPatch = ''
     # upstream uses lld on aarch64-darwin for faster builds
     # within nix lld looks for CoreFoundation rather than CoreFoundation.tbd and fails
-    substituteInPlace .cargo/config.toml --replace-fail "-fuse-ld=lld " ""
+    substituteInPlace .cargo/config.toml \
+      --replace-fail "-fuse-ld=lld " ""
 
     # Use patched nixpkgs libffi in order to fix https://github.com/libffi/libffi/pull/857
-    substituteInPlace ext/ffi/Cargo.toml --replace-fail "libffi = \"=3.2.0\"" "libffi = { version = \"3.2.0\", features = [\"system\"] }"
+    substituteInPlace ext/ffi/Cargo.toml \
+      --replace-fail \
+        'libffi = "=3.2.0"' \
+        'libffi = { version = "3.2.0", features = ["system"] }'
   '';
 
   # uses zlib-ng but can't dynamically link yet
@@ -56,11 +62,13 @@ rustPlatform.buildRustPackage rec {
   buildInputs = [ libffi ];
   buildAndTestSubdir = "cli";
 
-  # work around "error: unknown warning group '-Wunused-but-set-parameter'"
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
-  # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
-  # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
-  env.RUSTY_V8_ARCHIVE = librusty_v8;
+  env = {
+    # work around "error: unknown warning group '-Wunused-but-set-parameter'"
+    NIX_CFLAGS_COMPILE = lib.optionalString stdenv.cc.isClang "-Wno-unknown-warning-option";
+    # The v8 package will try to download a `librusty_v8.a` release at build time to our read-only filesystem
+    # To avoid this we pre-download the file and export it via RUSTY_V8_ARCHIVE
+    RUSTY_V8_ARCHIVE = librusty_v8;
+  };
 
   # Tests have some inconsistencies between runs with output integration tests
   # Skipping until resolved
@@ -70,25 +78,29 @@ rustPlatform.buildRustPackage rec {
     find ./target -name libswc_common${stdenv.hostPlatform.extensions.sharedLibrary} -delete
   '';
 
-  postInstall = lib.optionalString canExecute ''
-    installShellCompletion --cmd deno \
-      --bash <($out/bin/deno completions bash) \
-      --fish <($out/bin/deno completions fish) \
-      --zsh <($out/bin/deno completions zsh)
-  '';
+  postInstall =
+    let
+      emulator = stdenv.hostPlatform.emulator buildPackages;
+    in
+    ''
+      installShellCompletion --cmd deno \
+        --bash <(${emulator} $out/bin/deno completions bash) \
+        --fish <(${emulator} $out/bin/deno completions fish) \
+        --zsh <(${emulator} $out/bin/deno completions zsh)
+    '';
 
-  doInstallCheck = canExecute;
-  installCheckPhase = lib.optionalString canExecute ''
-    runHook preInstallCheck
-    $out/bin/deno --help
-    $out/bin/deno --version | grep "deno ${version}"
-    runHook postInstallCheck
-  '';
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
 
-  passthru.updateScript = ./update/update.ts;
-  passthru.tests = callPackage ./tests { };
+  passthru = {
+    updateScript = ./update/update.ts;
+    tests = callPackage ./tests { };
+  };
 
-  meta = with lib; {
+  meta = {
     homepage = "https://deno.land/";
     changelog = "https://github.com/denoland/deno/releases/tag/v${version}";
     description = "Secure runtime for JavaScript and TypeScript";
@@ -101,9 +113,9 @@ rustPlatform.buildRustPackage rec {
       Among other things, Deno is a great replacement for utility scripts that may have been historically written with
       bash or python.
     '';
-    license = licenses.mit;
+    license = lib.licenses.mit;
     mainProgram = "deno";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       jk
       ofalvai
     ];
