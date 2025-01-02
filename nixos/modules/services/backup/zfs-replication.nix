@@ -80,9 +80,9 @@ in
         let
           args = lib.map lib.escapeShellArg (
             [
-              "-l"
+              "--user"
               cfg.username
-              "-i"
+              "--identity-file"
               cfg.identityFilePath
               cfg.host
               cfg.remoteFilesystem
