@@ -1952,8 +1952,6 @@ self: super: with self; {
 
   bugwarrior = callPackage ../development/python-modules/bugwarrior { };
 
-  bugz = callPackage ../development/python-modules/bugz { };
-
   buienradar = callPackage ../development/python-modules/buienradar { };
 
   build = callPackage ../development/python-modules/build { };
@@ -4878,6 +4876,8 @@ self: super: with self; {
   };
 
   oelint-parser = callPackage ../development/python-modules/oelint-parser { };
+
+  ohmepy = callPackage ../development/python-modules/ohmepy { };
 
   openstep-parser = callPackage ../development/python-modules/openstep-parser { };
 
@@ -18372,7 +18372,7 @@ self: super: with self; {
 
   zarr = callPackage ../development/python-modules/zarr { };
 
-  zc-buildout = callPackage ../development/python-modules/buildout { };
+  zc-buildout = callPackage ../development/python-modules/zc-buildout { };
 
   zc-lockfile = callPackage ../development/python-modules/zc-lockfile { };
 

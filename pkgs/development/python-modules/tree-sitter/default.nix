@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch,
   pytestCheckHook,
   pythonOlder,
   setuptools,
@@ -26,6 +27,12 @@ buildPythonPackage rec {
     hash = "sha256-RWnt1g7WN5CDbgWY5YSTuPFZomoxtRgDaSLkG9y2B6w=";
     fetchSubmodules = true;
   };
+  patches = [
+    (fetchpatch {
+      url = "https://github.com/tree-sitter/py-tree-sitter/commit/a85342e16d28c78a1cf1e14c74f4598cd2a5f3e0.patch";
+      hash = "sha256-gm79KciA/KoDqrRfWuSB3GOD1jBx6Skd1olt4zoofaw=";
+    })
+  ];
 
   build-system = [ setuptools ];
 
