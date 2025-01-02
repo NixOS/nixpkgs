@@ -3,7 +3,7 @@
   lib,
   bash,
   installShellFiles,
-  shellcheck-minimal,
+  pkgsBuildHost,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -27,10 +27,10 @@ stdenvNoCC.mkDerivation {
 
   # Skip shellcheck if GHC is not available, see writeShellApplication.
   doCheck =
-    lib.meta.availableOn stdenvNoCC.buildPlatform shellcheck-minimal.compiler
-    && (builtins.tryEval shellcheck-minimal.compiler.outPath).success;
+    lib.meta.availableOn stdenvNoCC.buildPlatform pkgsBuildHost.shellcheck-minimal.compiler
+    && (builtins.tryEval pkgsBuildHost.shellcheck-minimal.compiler.outPath).success;
   checkPhase = ''
-    ${lib.getExe shellcheck-minimal} nixos-firewall-tool
+    ${lib.getExe pkgsBuildHost.shellcheck-minimal} nixos-firewall-tool
   '';
 
   meta = with lib; {
