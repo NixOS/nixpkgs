@@ -68,6 +68,10 @@ lib.makeScope pkgs.newScope (
       noGui = true;
     };
 
+    emacs30-noc = self.emacs30.override {
+      withNativeCompilation = false;
+    };
+
     emacs30-pgtk = self.emacs30.override {
       withPgtk = true;
     };

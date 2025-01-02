@@ -13478,6 +13478,7 @@ with pkgs;
     emacs30
     emacs30-gtk3
     emacs30-nox
+    emacs30-noc
     emacs30-pgtk
 
     emacs28-macport
@@ -13488,6 +13489,7 @@ with pkgs;
   emacs = emacs29;
   emacs-gtk = emacs29-gtk3;
   emacs-nox = emacs29-nox;
+  emacs-noc = emacs30-noc;
 
   emacsPackagesFor = emacs: import ./emacs-packages.nix {
     inherit (lib) makeScope makeOverridable dontRecurseIntoAttrs;
