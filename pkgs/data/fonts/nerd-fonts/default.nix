@@ -9,6 +9,8 @@ let
   fontsInfo = lib.trivial.importJSON ./manifests/fonts.json;
   checksums = lib.trivial.importJSON ./manifests/checksums.json;
 
+  releaseVersion = lib.removePrefix "v" releaseInfo.tag_name;
+
   convertAttrName =
     name:
     let
@@ -33,7 +35,7 @@ let
     }:
     stdenvNoCC.mkDerivation {
       pname = "nerd-fonts-" + lib.strings.toLower caskName;
-      version = (lib.removePrefix "v" releaseInfo.tag_name) + convertVersion version;
+      version = releaseVersion + convertVersion version;
 
       src =
         let
@@ -63,9 +65,12 @@ let
           runHook postInstall
         '';
 
-      passthru.updateScript = {
-        command = ./update.py;
-        supportedFeatures = [ "commit" ];
+      passthru = {
+        inherit releaseVersion;
+        updateScript = {
+          command = ./update.py;
+          supportedFeatures = [ "commit" ];
+        };
       };
 
       meta = {
