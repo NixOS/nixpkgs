@@ -23,6 +23,12 @@ stdenv.mkDerivation rec {
     hash = "sha256-wz2oIhau/vjnri3LOyPZSCFAWg694FTLVt7+SZYEsL4=";
   };
 
+  postPatch = ''
+    substituteInPlace cmake/build_wrapper.sh \
+      --replace-fail "objcopy " "$OBJCOPY " \
+      --replace-fail "nm -f p " "$NM --format=posix "
+  '';
+
   nativeBuildInputs = [
     cmake
     pkg-config
