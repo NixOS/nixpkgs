@@ -130,7 +130,7 @@ in
                 type = addCheck str (
                   x:
                   cfg.svcManager == "command"
-                  || elem x [
+                  || lib.elem x [
                     "restart"
                     "reload"
                     "nop"

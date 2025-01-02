@@ -193,7 +193,7 @@ in
           ExecStart =
             with cfg;
             let
-              opt = n: v: optionalString (v != null) ''-${n}="${v}"'';
+              opt = n: v: lib.optionalString (v != null) ''-${n}="${v}"'';
             in
             lib.concatStringsSep " \\\n" [
               "${pkgs.cfssl}/bin/cfssl serve"

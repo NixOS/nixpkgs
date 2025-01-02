@@ -15627,6 +15627,12 @@
     githubId = 38578268;
     name = "Morgan Wolfe";
   };
+  mx2uller = {
+    email = "mx2uller@pm.me";
+    github = "mx2uller";
+    githubId = 93703653;
+    name = "Marko Müller";
+  };
   mxkrsv = {
     email = "mxkrsv@disroot.org";
     github = "mxkrsv";
@@ -18637,6 +18643,12 @@
     github = "qwqawawow";
     githubId = 40905037;
     name = "qwqawawow";
+  };
+  qxrein = {
+    email = "mnv07@proton.me";
+    github = "qxrein";
+    githubId = 101001298;
+    name = "qxrein";
   };
   qyliss = {
     email = "hi@alyssa.is";

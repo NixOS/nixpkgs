@@ -2,6 +2,7 @@
   lib,
   aiohttp,
   aioresponses,
+  awesomeversion,
   buildPythonPackage,
   fetchFromGitHub,
   mashumaro,
@@ -17,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "aiomealie";
-  version = "0.9.4";
+  version = "0.9.5";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -26,13 +27,14 @@ buildPythonPackage rec {
     owner = "joostlek";
     repo = "python-mealie";
     rev = "refs/tags/v${version}";
-    hash = "sha256-Sl2n78R/twx4+liob4k0B1pskonYD7B00lo9hz45qIs=";
+    hash = "sha256-hcHXX95d9T/jJMqHkikWN8ZdM5MRxJxhH575U3KDXxY=";
   };
 
   build-system = [ poetry-core ];
 
   dependencies = [
     aiohttp
+    awesomeversion
     mashumaro
     orjson
     yarl

@@ -261,6 +261,7 @@ let
       nixosTests = {
         inherit (packagePlatforms pkgs.nixosTests)
           agda
+          kmonad
           xmonad
           xmonad-xdg-autostart
           ;
