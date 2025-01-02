@@ -10,13 +10,13 @@
 }:
 melpaBuild {
   pname = "copilot";
-  version = "0-unstable-2024-05-01";
+  version = "0-unstable-2024-12-28";
 
   src = fetchFromGitHub {
     owner = "copilot-emacs";
     repo = "copilot.el";
-    rev = "733bff26450255e092c10873580e9abfed8a81b8";
-    sha256 = "sha256-Knp36PtgA73gtYO+W1clQfr570bKCxTFsGW3/iH86A0=";
+    rev = "c5dfa99f05878db5e6a6a378dc7ed09f11e803d4";
+    sha256 = "sha256-FzI08AW7a7AleEM7kSQ8LsWsDYID8SW1SmSN6/mIB/A=";
   };
 
   files = ''(:defaults "dist")'';
