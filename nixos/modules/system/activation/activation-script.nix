@@ -1,11 +1,8 @@
 # generate the script used to activate the configuration.
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
 
-  addAttributeName = mapAttrs (a: v: v // {
+  addAttributeName = lib.mapAttrs (a: v: v // {
     text = ''
       #### Activation script snippet ${a}:
       _localstatus=0
@@ -18,7 +15,7 @@ let
   });
 
   systemActivationScript = set: onlyDry: let
-    set' = mapAttrs (_: v: if isString v then (noDepEntry v) // { supportsDryActivation = false; } else v) set;
+    set' = lib.mapAttrs (_: v: if lib.isString v then (lib.noDepEntry v) // { supportsDryActivation = false; } else v) set;
     withHeadlines = addAttributeName set';
     # When building a dry activation script, this replaces all activation scripts
     # that do not support dry mode with a comment that does nothing. Filtering these
@@ -26,7 +23,7 @@ let
     # does not work because when an activation script that supports dry mode depends on
     # an activation script that does not, the dependency cannot be resolved and the eval
     # fails.
-    withDrySnippets = mapAttrs (a: v: if onlyDry && !v.supportsDryActivation then v // {
+    withDrySnippets = lib.mapAttrs (a: v: if onlyDry && !v.supportsDryActivation then v // {
       text = "#### Activation script snippet ${a} does not support dry activation.";
     } else v) withHeadlines;
   in
@@ -48,9 +45,9 @@ let
       # Ensure a consistent umask.
       umask 0022
 
-      ${textClosureMap id (withDrySnippets) (attrNames withDrySnippets)}
+      ${lib.textClosureMap lib.id (withDrySnippets) (lib.attrNames withDrySnippets)}
 
-    '' + optionalString (!onlyDry) ''
+    '' + lib.optionalString (!onlyDry) ''
       # Make this configuration the current configuration.
       # The readlink is there to ensure that when $systemConfig = /system
       # (which is a symlink to the store), /run/current-system is still
@@ -60,7 +57,7 @@ let
       exit $_status
     '';
 
-  path = with pkgs; map getBin
+  path = with pkgs; map lib.getBin
     [ coreutils
       gnugrep
       findutils
@@ -71,19 +68,19 @@ let
       util-linux # needed for mount and mountpoint
     ];
 
-  scriptType = withDry: with types;
+  scriptType = withDry: with lib.types;
     let scriptOptions =
-      { deps = mkOption
+      { deps = lib.mkOption
           { type = types.listOf types.str;
             default = [ ];
             description = "List of dependencies. The script will run after these.";
           };
-        text = mkOption
+        text = lib.mkOption
           { type = types.lines;
             description = "The content of the script.";
           };
-      } // optionalAttrs withDry {
-        supportsDryActivation = mkOption
+      } // lib.optionalAttrs withDry {
+        supportsDryActivation = lib.mkOption
           { type = types.bool;
             default = false;
             description = ''
@@ -106,10 +103,10 @@ in
 
   options = {
 
-    system.activationScripts = mkOption {
+    system.activationScripts = lib.mkOption {
       default = {};
 
-      example = literalExpression ''
+      example = lib.literalExpression ''
         {
           stdio = {
             # Run after /dev has been mounted
@@ -135,24 +132,24 @@ in
         idempotent and fast.
       '';
 
-      type = types.attrsOf (scriptType true);
+      type = lib.types.attrsOf (scriptType true);
       apply = set: set // {
         script = systemActivationScript set false;
       };
     };
 
-    system.dryActivationScript = mkOption {
+    system.dryActivationScript = lib.mkOption {
       description = "The shell script that is to be run when dry-activating a system.";
       readOnly = true;
       internal = true;
       default = systemActivationScript (removeAttrs config.system.activationScripts [ "script" ]) true;
-      defaultText = literalMD "generated activation script";
+      defaultText = lib.literalMD "generated activation script";
     };
 
-    system.userActivationScripts = mkOption {
+    system.userActivationScripts = lib.mkOption {
       default = {};
 
-      example = literalExpression ''
+      example = lib.literalExpression ''
         { plasmaSetup = {
             text = '''
               ''${pkgs.libsForQt5.kservice}/bin/kbuildsycoca5"
@@ -171,7 +168,7 @@ in
         idempotent and fast.
       '';
 
-      type = with types; attrsOf (scriptType false);
+      type = with lib.types; attrsOf (scriptType false);
 
       apply = set: {
         script = ''
@@ -185,9 +182,9 @@ in
 
           ${
             let
-              set' = mapAttrs (n: v: if isString v then noDepEntry v else v) set;
+              set' = lib.mapAttrs (n: v: if lib.isString v then lib.noDepEntry v else v) set;
               withHeadlines = addAttributeName set';
-            in textClosureMap id (withHeadlines) (attrNames withHeadlines)
+            in lib.textClosureMap lib.id (withHeadlines) (lib.attrNames withHeadlines)
           }
 
           exit $_status
@@ -196,11 +193,11 @@ in
 
     };
 
-    environment.usrbinenv = mkOption {
+    environment.usrbinenv = lib.mkOption {
       default = "${pkgs.coreutils}/bin/env";
-      defaultText = literalExpression ''"''${pkgs.coreutils}/bin/env"'';
-      example = literalExpression ''"''${pkgs.busybox}/bin/env"'';
-      type = types.nullOr types.path;
+      defaultText = lib.literalExpression ''"''${pkgs.coreutils}/bin/env"'';
+      example = lib.literalExpression ''"''${pkgs.busybox}/bin/env"'';
+      type = lib.types.nullOr lib.types.path;
       visible = false;
       description = ''
         The env(1) executable that is linked system-wide to
@@ -208,7 +205,7 @@ in
       '';
     };
 
-    system.build.installBootLoader = mkOption {
+    system.build.installBootLoader = lib.mkOption {
       internal = true;
       default = pkgs.writeShellScript "no-bootloader" ''
         echo 'Warning: do not know how to make this configuration bootable; please enable a boot loader.' 1>&2
@@ -223,13 +220,13 @@ in
 
         See `nixos/modules/system/activation/switch-to-configuration.pl`.
       '';
-      type = types.unique {
+      type = lib.types.unique {
         message = ''
           Only one bootloader can be enabled at a time. This requirement has not
           been checked until NixOS 22.05. Earlier versions defaulted to the last
           definition. Change your configuration to enable only one bootloader.
         '';
-      } (types.either types.str types.package);
+      } (lib.types.either lib.types.str lib.types.package);
     };
 
   };

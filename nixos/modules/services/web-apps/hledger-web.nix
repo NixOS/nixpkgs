@@ -4,27 +4,26 @@
   config,
   ...
 }:
-with lib;
 let
   cfg = config.services.hledger-web;
 in
 {
   options.services.hledger-web = {
 
-    enable = mkEnableOption "hledger-web service";
+    enable = lib.mkEnableOption "hledger-web service";
 
-    serveApi = mkEnableOption "serving only the JSON web API, without the web UI";
+    serveApi = lib.mkEnableOption "serving only the JSON web API, without the web UI";
 
-    host = mkOption {
-      type = types.str;
+    host = lib.mkOption {
+      type = lib.types.str;
       default = "127.0.0.1";
       description = ''
         Address to listen on.
       '';
     };
 
-    port = mkOption {
-      type = types.port;
+    port = lib.mkOption {
+      type = lib.types.port;
       default = 5000;
       example = 80;
       description = ''
@@ -32,8 +31,8 @@ in
       '';
     };
 
-    allow = mkOption {
-      type = types.enum [
+    allow = lib.mkOption {
+      type = lib.types.enum [
         "view"
         "add"
         "edit"
@@ -50,8 +49,8 @@ in
       '';
     };
 
-    stateDir = mkOption {
-      type = types.path;
+    stateDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/hledger-web";
       description = ''
         Path the service has access to. If left as the default value this
@@ -61,16 +60,16 @@ in
       '';
     };
 
-    journalFiles = mkOption {
-      type = types.listOf types.str;
+    journalFiles = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ".hledger.journal" ];
       description = ''
         Paths to journal files relative to {option}`services.hledger-web.stateDir`.
       '';
     };
 
-    baseUrl = mkOption {
-      type = with types; nullOr str;
+    baseUrl = lib.mkOption {
+      type = with lib.types; nullOr str;
       default = null;
       example = "https://example.org";
       description = ''
@@ -78,8 +77,8 @@ in
       '';
     };
 
-    extraOptions = mkOption {
-      type = types.listOf types.str;
+    extraOptions = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
       default = [ ];
       example = [ "--forecast" ];
       description = ''
@@ -90,14 +89,14 @@ in
   };
 
   imports = [
-    (mkRemovedOptionModule [
+    (lib.mkRemovedOptionModule [
       "services"
       "hledger-web"
       "capabilities"
     ] "This option has been replaced by new option `services.hledger-web.allow`.")
   ];
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     users.users.hledger = {
       name = "hledger";
@@ -131,7 +130,7 @@ in
         documentation = [ "https://hledger.org/hledger-web.html" ];
         wantedBy = [ "multi-user.target" ];
         after = [ "networking.target" ];
-        serviceConfig = mkMerge [
+        serviceConfig = lib.mkMerge [
           {
             ExecStart = "${pkgs.hledger-web}/bin/hledger-web ${serverArgs}";
             Restart = "always";
@@ -140,7 +139,7 @@ in
             Group = "hledger";
             PrivateTmp = true;
           }
-          (mkIf (cfg.stateDir == "/var/lib/hledger-web") {
+          (lib.mkIf (cfg.stateDir == "/var/lib/hledger-web") {
             StateDirectory = "hledger-web";
           })
         ];
