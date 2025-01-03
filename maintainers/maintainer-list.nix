@@ -5988,6 +5988,12 @@
     githubId = 57304299;
     keys = [ { fingerprint = "33CD 5C0A 673C C54D 661E  5E4C 0DB5 361B EEE5 30AB"; } ];
   };
+  dopplerian = {
+    name = "Dopplerian";
+    github = "Dopplerian";
+    githubId = 53937537;
+    keys = [ { fingerprint = "BBC4 C071 516B A147 8D07  F9DC D2FD E6EC 2E8C 2BF4"; } ];
+  };
   doriath = {
     email = "tomasz.zurkowski@gmail.com";
     github = "doriath";
@@ -11135,11 +11141,11 @@
     githubId = 13179;
   };
   jopejoe1 = {
-    email = "johannes@joens.email";
+    email = "nixpkgs@missing.ninja";
     matrix = "@jopejoe1:matrix.org";
     github = "jopejoe1";
     githubId = 34899572;
-    name = "Johannes Jöns";
+    name = "jopejoe1";
   };
   jordanisaacs = {
     name = "Jordan Isaacs";
@@ -15660,6 +15666,12 @@
     github = "Myrl";
     githubId = 9636071;
     name = "Myrl Hex";
+  };
+  myypo = {
+    email = "nikirsmcgl@gmail.com";
+    github = "myypo";
+    githubId = 110892040;
+    name = "Mykyta Polchanov";
   };
   mzacho = {
     email = "nixpkgs@martinzacho.net";
@@ -22301,6 +22313,12 @@
     name = "tea";
     github = "teatwig";
     githubId = 18734648;
+  };
+  tebriel = {
+    email = "tebriel@frodux.in";
+    name = "tebriel";
+    github = "tebriel";
+    githubId = 821688;
   };
   techknowlogick = {
     email = "techknowlogick@gitea.com";

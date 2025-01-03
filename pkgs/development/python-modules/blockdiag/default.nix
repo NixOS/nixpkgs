@@ -58,6 +58,7 @@ buildPythonPackage rec {
     funcparserlib
     pillow
     reportlab
+    setuptools
     webcolors
   ];
 
