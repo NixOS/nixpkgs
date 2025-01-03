@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "apache";
     repo = "pulsar-client-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2Ahv0lfeHuBhGIYhiTjKegEKsJqHkpK3Qu6xBnjsanI=";
   };
 

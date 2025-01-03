@@ -14,7 +14,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dmytrostriletskyi";
     repo = "diagrams-as-code";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cd602eQvNCUQuCdn/RpcfURcDHjXLZ0gAG+SObB++Q0=";
   };
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "semuconsulting";
     repo = "pynmeagps";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-U5AI6iQiMvlCfL0SMAl0PkwC/orCr57royWvHKvWpAI=";
   };
 

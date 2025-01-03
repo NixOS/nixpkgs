@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "hongquan";
     repo = "CoBang";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/8JtDoXFQGlM7tlwKd+WRIKpnKCD6OnMmbvElg7LbzU=";
   };
 

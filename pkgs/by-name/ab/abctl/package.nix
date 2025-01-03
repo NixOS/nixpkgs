@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "airbytehq";
     repo = "abctl";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-O+ABjageccJudXtO5wUYLIT/kI04f68RLW0B7d//jdw=";
   };
 

@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "laurentS";
     repo = "slowapi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-R/Mr+Qv22AN7HCDGmAUVh4efU8z4gMIyhC0AuKmxgdE=";
   };
 

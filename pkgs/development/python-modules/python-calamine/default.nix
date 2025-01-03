@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dimastbk";
     repo = "python-calamine";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zZqhvfpkkbWLhPJIthDgxqvPUMpaXkyptuzY2fcecHU=";
   };
 

@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wesselhuising";
     repo = "pandantic";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-JRhnDVRYX0OV/dZkfqNoS2qFcoHOZHm9QZphF/JhgxM=";
   };
 

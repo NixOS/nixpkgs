@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "anacrolix";
     repo = "dms";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dObY2MNrrQqn5i/y2LDlKvd9S04EArmsalIsfXsrth0=";
   };
 

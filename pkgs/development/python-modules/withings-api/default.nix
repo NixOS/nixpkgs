@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vangorra";
     repo = "python_withings_api";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-8cOLHYnodPGk1b1n6xbVyW2iju3cG6MgnzYTKDsP/nw=";
   };
 

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "absent1706";
     repo = "sqlalchemy-mixins";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0uB3x7RQSNEq3DyTSiOIGajwPQQEBjXK8HOyuXCNa/E=";
   };
 

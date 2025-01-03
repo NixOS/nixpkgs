@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joalla";
     repo = "discogs_client";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3MwGuYh4Jp/T7LNd5QjajHScdJJOa+VRXmKwFVqfURU=";
   };
 

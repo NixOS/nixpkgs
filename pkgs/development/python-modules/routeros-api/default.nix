@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "socialwifi";
     repo = "routeros-api";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6IpoByG3YhHh2dPS18ufaoI1vzTZBsZa9WNHS/fImrg=";
   };
 

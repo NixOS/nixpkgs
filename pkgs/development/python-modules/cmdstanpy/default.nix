@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stan-dev";
     repo = "cmdstanpy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/MiWawB1Y4/eMBHXQLjd+P+Pe8EtsLbGFrzQa1RNf6g=";
   };
 

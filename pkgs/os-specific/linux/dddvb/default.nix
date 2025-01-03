@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "DigitalDevices";
     repo = "dddvb";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-bt/vMnqRWDDChZ6R4JbCr77cz3nlSPkx6siC9KLSEqs=";
   };
 
