@@ -2,25 +2,41 @@
 let
   inherit (lib) optionalAttrs;
 
-  mkLicense = lname: {
-    shortName ? lname,
-    # Most of our licenses are Free, explicitly declare unfree additions as such!
-    free ? true,
-    deprecated ? false,
-    spdxId ? null,
-    url ? null,
-    fullName ? null,
-    redistributable ? free
-  }@attrs: {
-    inherit shortName free deprecated redistributable;
-  } // optionalAttrs (attrs ? spdxId) {
-    inherit spdxId;
-    url = "https://spdx.org/licenses/${spdxId}.html";
-  } // optionalAttrs (attrs ? url) {
-    inherit url;
-  } // optionalAttrs (attrs ? fullName) {
-    inherit fullName;
-  };
+  mkLicense =
+    lname:
+    {
+      shortName ? lname,
+      # Most of our licenses are Free, explicitly declare unfree additions as such!
+      free ? true,
+      deprecated ? false,
+      spdxId ? null,
+      url ? null,
+      fullName ? null,
+      redistributable ? free,
+      faircode ? false,
+    }@attrs:
+    lib.throwIf (free && !redistributable) "License ${lname} is marked as free but not redistributable" (
+      lib.throwIf (free && faircode) "License ${lname} is marked as free but also Faircode" (
+        {
+          inherit
+            shortName
+            free
+            deprecated
+            redistributable
+            ;
+        }
+        // optionalAttrs (attrs ? spdxId) {
+          inherit spdxId;
+          url = "https://spdx.org/licenses/${spdxId}.html";
+        }
+        // optionalAttrs (attrs ? url) {
+          inherit url;
+        }
+        // optionalAttrs (attrs ? fullName) {
+          inherit fullName;
+        }
+      )
+    );
 
 in
 lib.mapAttrs mkLicense ({
