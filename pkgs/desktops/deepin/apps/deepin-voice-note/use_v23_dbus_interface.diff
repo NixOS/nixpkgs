@@ -1,0 +1,13 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index e7bfb81..f56f11a 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -103,7 +103,7 @@ set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS}  -fstack-protector-all")
+ execute_process(COMMAND cat /etc/os-version OUTPUT_VARIABLE OS_INFO_STR)
+ string(REGEX MATCHALL "MajorVersion=[0-9]+" MAJOR_STR "${OS_INFO_STR}")
+ string(REGEX MATCH "[0-9]+" MAJOR_VERSION "${MAJOR_STR}")
+-if (MAJOR_VERSION MATCHES "23")
++if (TRUE)
+     message("--------------------- OS_BUILD_V23 on")
+     add_definitions(-DOS_BUILD_V23)
+ endif()
