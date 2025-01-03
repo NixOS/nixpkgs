@@ -5483,6 +5483,8 @@ self: super: with self; {
 
   gorilla = callPackage ../development/python-modules/gorilla { };
 
+  goslide-api = callPackage ../development/python-modules/goslide-api { };
+
   govee-ble = callPackage ../development/python-modules/govee-ble { };
 
   govee-led-wez = callPackage ../development/python-modules/govee-led-wez { };
