@@ -8,15 +8,15 @@
 
 buildDunePackage rec {
   pname = "lo";
-  version = "0.2.0";
+  version = "0.2.0-unstable-2024-07-24";
 
   minimalOCamlVersion = "4.06";
 
   src = fetchFromGitHub {
     owner = "savonet";
     repo = "ocaml-lo";
-    rev = "v${version}";
-    sha256 = "0mi8h6f6syxjkxz493l5c3l270pvxx33pz0k3v5465wqjsnppar2";
+    rev = "0b43bdf113c7e2c27d55c6a5f81f2fa4b30b5454";
+    sha256 = "sha256-5LjhxwwE0mDZH7hcStzpV68QP2E84k1vL9e5UezeKIE=";
   };
 
   buildInputs = [ dune-configurator ];
