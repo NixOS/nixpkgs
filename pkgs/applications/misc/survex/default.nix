@@ -22,11 +22,11 @@
 
 stdenv.mkDerivation rec {
   pname = "survex";
-  version = "1.4.14";
+  version = "1.4.15";
 
   src = fetchurl {
     url = "https://survex.com/software/${version}/${pname}-${version}.tar.gz";
-    hash = "sha256-TKOgbwUGE1z1PUZxfukugZWsJY1ml/VMAJ7xDIqWZWs=";
+    hash = "sha256-8RuVHVugJmTP3CBYXzxxZGe5GYGUxJrlkzxXFRakkWI=";
   };
 
   nativeBuildInputs = [
