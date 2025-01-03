@@ -14536,6 +14536,8 @@ self: super: with self; {
 
   scim2-server = callPackage ../development/python-modules/scim2-server { };
 
+  scim2-tester = callPackage ../development/python-modules/scim2-tester { };
+
   scikit-bio = callPackage ../development/python-modules/scikit-bio { };
 
   scikit-build = callPackage ../development/python-modules/scikit-build { };
