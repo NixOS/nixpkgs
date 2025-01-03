@@ -47,6 +47,16 @@ while read -r user; do
     fi
 done < "$tmp/already-reviewed-by"
 
+for user in "${!users[@]}"; do
+    if ! gh api \
+        -H "Accept: application/vnd.github+json" \
+        -H "X-GitHub-Api-Version: 2022-11-28" \
+        "/repos/$baseRepo/collaborators/$user" >&2; then
+        log "User $user is not a repository collaborator, probably missed the automated invite to the maintainers team (see <https://github.com/NixOS/nixpkgs/issues/234293>), ignoring"
+        unset 'users[$user]'
+    fi
+done
+
 # Turn it into a JSON for the GitHub API call to request PR reviewers
 jq -n \
     --arg users "${!users[*]}" \
