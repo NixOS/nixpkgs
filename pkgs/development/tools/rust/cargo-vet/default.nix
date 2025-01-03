@@ -20,7 +20,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-M8sZzgSEMIB6pPVaE+tC18MCbwYaYpHOnhrEvm9JTso=";
 
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security zlib.dev ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
+    Security
+    zlib.dev
+  ];
 
   # the test_project tests require internet access
   checkFlags = [
