@@ -761,6 +761,9 @@ let
         # Optimizer error: too much on the stack
         ack-menu = ignoreCompilationError super.ack-menu;
 
+        # https://github.com/skeeto/emacs-aio/issues/31
+        aio = ignoreCompilationError super.aio;
+
         # https://github.com/gongo/airplay-el/issues/2
         airplay = addPackageRequires super.airplay [ self.request-deferred ];
 

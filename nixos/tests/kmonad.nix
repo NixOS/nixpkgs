@@ -11,6 +11,9 @@
     machine = {
       services.kmonad = {
         enable = true;
+        extraArgs = [
+          "--log-level=debug"
+        ];
         keyboards = {
           defaultKbd = {
             device = "/dev/input/by-id/vm-default-kbd";
@@ -43,5 +46,7 @@
 
     with subtest("kmonad is running"):
          machine.succeed(f"systemctl status {service_name}")
+    with subtest("kmonad symlink is created"):
+         machine.wait_for_file(f"/dev/input/by-id/{service_name}", timeout=5)
   '';
 }

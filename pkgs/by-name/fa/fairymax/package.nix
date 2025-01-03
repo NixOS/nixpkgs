@@ -29,6 +29,9 @@ stdenv.mkDerivation rec {
       -DINI_FILE='"'"$out/share/fairymax/fmax.ini"'"'
   '';
 
+  # errors by default in GCC 14
+  NIX_CFLAGS_COMPILE = "-Wno-error=return-mismatch -Wno-error=implicit-int";
+
   installPhase = ''
     mkdir -p "$out"/{bin,share/fairymax}
     cp fairymax "$out/bin"

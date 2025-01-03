@@ -660,6 +660,11 @@ in {
   navidrome = handleTest ./navidrome.nix {};
   nbd = handleTest ./nbd.nix {};
   ncdns = handleTest ./ncdns.nix {};
+  ncps = runTest ./ncps.nix;
+  ncps-custom-cache-datapath = runTest {
+    imports = [ ./ncps.nix ];
+    defaults.services.ncps.cache.dataPath =  "/path/to/ncps";
+  };
   ndppd = handleTest ./ndppd.nix {};
   nix-channel = pkgs.callPackage ../modules/config/nix-channel/test.nix { };
   nebula = handleTest ./nebula.nix {};
