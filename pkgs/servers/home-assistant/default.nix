@@ -4,7 +4,7 @@
   callPackage,
   fetchFromGitHub,
   fetchPypi,
-  python312,
+  python313,
   substituteAll,
   ffmpeg-headless,
   inetutils,
@@ -270,7 +270,7 @@ let
     })
   ];
 
-  python = python312.override {
+  python = python313.override {
     self = python;
     packageOverrides = lib.composeManyExtensions (defaultOverrides ++ [ packageOverrides ]);
   };
@@ -380,6 +380,7 @@ python.pkgs.buildPythonApplication rec {
     async-interrupt
     atomicwrites-homeassistant
     attrs
+    audioop-lts
     awesomeversion
     bcrypt
     certifi
@@ -405,6 +406,8 @@ python.pkgs.buildPythonApplication rec {
     requests
     securetar
     sqlalchemy
+    standard-aifc
+    standard-telnetlib
     typing-extensions
     ulid-transform
     urllib3
