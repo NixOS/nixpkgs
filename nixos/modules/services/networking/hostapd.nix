@@ -21,11 +21,11 @@ let
     count
     escapeShellArg
     filter
-    flip
     generators
     getAttr
     hasPrefix
     imap0
+    imap1
     isInt
     isString
     length
@@ -163,7 +163,7 @@ in
               # countryCode = "US";
               networks.wlp2s0 = {
                 ssid = "AP 1";
-                authentication.saePasswords = [{ password = "a flakey password"; }]; # Use saePasswordsFile if possible.
+                authentication.saePasswords = [{ passwordFile = "/run/secrets/my-password"; }];
               };
             };
 
@@ -174,7 +174,7 @@ in
               # countryCode = "US";
               networks.wlp3s0 = {
                 ssid = "My AP";
-                authentication.saePasswords = [{ password = "a flakey password"; }]; # Use saePasswordsFile if possible.
+                authentication.saePasswords = [{ passwordFile = "/run/secrets/my-password"; }];
               };
               networks.wlp3s0-1 = {
                 ssid = "Open AP with WiFi5";
@@ -554,7 +554,7 @@ in
                   {
                     wlp2s0 = {
                       ssid = "Primary advertised network";
-                      authentication.saePasswords = [{ password = "a flakey password"; }]; # Use saePasswordsFile if possible.
+                      authentication.saePasswords = [{ passwordFile = "/run/secrets/my-password"; }];
                     };
                     wlp2s0-1 = {
                       ssid = "Secondary advertised network (Open)";
@@ -799,7 +799,7 @@ in
                               You will have to specify both {option}`wpaPassword` and {option}`saePasswords` (or one of their alternatives).
                             - {var}`"wpa3-sae"`: Use WPA3-Personal (SAE). This is currently the recommended way to
                               setup a secured WiFi AP (as of March 2023) and therefore the default. Passwords are set
-                              using either {option}`saePasswords` or preferably {option}`saePasswordsFile`.
+                              using either {option}`saePasswords` or {option}`saePasswordsFile`.
                           '';
                         };
 
@@ -897,7 +897,7 @@ in
                             [
                               # Any client may use these passwords
                               { password = "Wi-Figure it out"; }
-                              { password = "second password for everyone"; mac = "ff:ff:ff:ff:ff:ff"; }
+                              { passwordFile = "/run/secrets/my-password-file"; mac = "ff:ff:ff:ff:ff:ff"; }
 
                               # Only the client with MAC-address 11:22:33:44:55:66 can use this password
                               { password = "sekret pazzword"; mac = "11:22:33:44:55:66"; }
@@ -919,15 +919,27 @@ in
                             types.submodule {
                               options = {
                                 password = mkOption {
+                                  default = null;
                                   example = "a flakey password";
-                                  type = types.str;
+                                  type = types.nullOr types.str;
                                   description = ''
                                     The password for this entry. SAE technically imposes no restrictions on
                                     password length or character set. But due to limitations of {command}`hostapd`'s
                                     config file format, a true newline character cannot be parsed.
 
                                     Warning: This password will get put into a world-readable file in
-                                    the Nix store! Using {option}`wpaPasswordFile` or {option}`wpaPskFile` is recommended.
+                                    the Nix store! Prefer using the sibling option {option}`passwordFile` or directly set {option}`saePasswordsFile`.
+                                  '';
+                                };
+
+                                passwordFile = mkOption {
+                                  default = null;
+                                  type = types.nullOr types.path;
+                                  description = ''
+                                    The password for this entry, read from the given file when starting hostapd.
+                                    SAE technically imposes no restrictions on password length or character set.
+                                    But due to limitations of {command}`hostapd`'s config file format, a true newline
+                                    character cannot be parsed.
                                   '';
                                 };
 
@@ -1044,15 +1056,6 @@ in
                             # Always enable QoS, which is required for 802.11n and above
                             wmm_enabled = mkDefault true;
                             ap_isolate = bssCfg.apIsolate;
-
-                            sae_password = flip map bssCfg.authentication.saePasswords (
-                              entry:
-                              entry.password
-                              + optionalString (entry.mac != null) "|mac=${entry.mac}"
-                              + optionalString (entry.vlanid != null) "|vlanid=${toString entry.vlanid}"
-                              + optionalString (entry.pk != null) "|pk=${entry.pk}"
-                              + optionalString (entry.id != null) "|id=${entry.id}"
-                            );
                           }
                           // optionalAttrs (bssCfg.bssid != null) {
                             bssid = bssCfg.bssid;
@@ -1174,6 +1177,32 @@ in
                                 grep -v '^\s*#' ${escapeShellArg bssCfg.authentication.saePasswordsFile} \
                                   | sed 's/^/sae_password=/' >> "$HOSTAPD_CONFIG_FILE"
                               ''
+                            );
+                            # Add sae passwords from nix definitions, potentially reading secrets
+                            "20-saePasswords" = mkIf (bssCfg.authentication.saePasswords != [ ]) (
+                              pkgs.writeShellScript "sae-passwords" (
+                                ''
+                                  HOSTAPD_CONFIG_FILE=$1
+                                ''
+                                + concatMapStrings (
+                                  entry:
+                                  let
+                                    lineSuffix =
+                                      optionalString (entry.password != null) entry.password
+                                      + optionalString (entry.mac != null) "|mac=${entry.mac}"
+                                      + optionalString (entry.vlanid != null) "|vlanid=${toString entry.vlanid}"
+                                      + optionalString (entry.pk != null) "|pk=${entry.pk}"
+                                      + optionalString (entry.id != null) "|id=${entry.id}";
+                                  in
+                                  ''
+                                    (
+                                      echo -n 'sae_password='
+                                      ${optionalString (entry.passwordFile != null) ''tr -d '\n' < ${entry.passwordFile}''}
+                                      echo ${escapeShellArg lineSuffix}
+                                    ) >> "$HOSTAPD_CONFIG_FILE"
+                                  ''
+                                ) bssCfg.authentication.saePasswords
+                              )
                             );
                           };
                       };
@@ -1377,6 +1406,12 @@ in
                   message = ''hostapd radio ${radio} bss ${bss}: uses WPA2-PSK which requires defining a wpa password option'';
                 }
               ]
+              ++ optionals (auth.saePasswords != [ ]) (
+                imap1 (i: entry: {
+                  assertion = (entry.password == null) != (entry.passwordFile == null);
+                  message = ''hostapd radio ${radio} bss ${bss} saePassword entry ${i}: must set exactly one of `password` or `passwordFile`'';
+                }) auth.saePasswords
+              )
             ) radioCfg.networks
           ))
         ) cfg.radios
