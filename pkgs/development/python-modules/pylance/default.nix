@@ -9,9 +9,7 @@
   pkg-config,
 
   # buildInputs
-  libiconv,
   protobuf,
-  darwin,
 
   # dependencies
   numpy,
@@ -35,14 +33,14 @@
 
 buildPythonPackage rec {
   pname = "pylance";
-  version = "0.18.2";
+  version = "0.20.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lance";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-CIIZbeRrraTqWronkspDpBVP/Z4JVoaiS5iBIXfsZGg=";
+    tag = "v${version}";
+    hash = "sha256-KcbeEHDpTxnLNO9x6/mtYuVXX6pZ79ceFzJRY/6gAY4=";
   };
 
   buildAndTestSubdir = "python";
@@ -50,7 +48,7 @@ buildPythonPackage rec {
   cargoDeps = rustPlatform.importCargoLock { lockFile = ./Cargo.lock; };
 
   postPatch = ''
-    ln -s ${./Cargo.lock} Cargo.lock
+    ln -sf ${./Cargo.lock} Cargo.lock
   '';
 
   nativeBuildInputs = [
@@ -61,18 +59,9 @@ buildPythonPackage rec {
 
   build-system = [ rustPlatform.maturinBuildHook ];
 
-  buildInputs =
-    [
-      libiconv
-      protobuf
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    protobuf
+  ];
 
   pythonRelaxDeps = [ "pyarrow" ];
 
@@ -131,8 +120,10 @@ buildPythonPackage rec {
     changelog = "https://github.com/lancedb/lance/releases/tag/v${version}";
     license = lib.licenses.asl20;
     maintainers = with lib.maintainers; [ natsukium ];
-    # test_indices.py ...sss.Fatal Python error: Fatal Python error: Illegal instructionIllegal instruction
-    # File "/nix/store/wiiccrs0vd1qbh4j6ki9p40xmamsjix3-python3.12-pylance-0.17.0/lib/python3.12/site-packages/lance/indices.py", line 237 in train_ivf
-    broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isx86_64;
+    badPlatforms = [
+      # test_indices.py ...sss.Fatal Python error: Fatal Python error: Illegal instructionIllegal instruction
+      # File "/nix/store/wiiccrs0vd1qbh4j6ki9p40xmamsjix3-python3.12-pylance-0.17.0/lib/python3.12/site-packages/lance/indices.py", line 237 in train_ivf
+      # "x86_64-darwin"
+    ];
   };
 }

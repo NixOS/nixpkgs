@@ -2,16 +2,17 @@
   lib,
   stdenv,
   buildPythonPackage,
-  rustPlatform,
   fetchFromGitHub,
-  darwin,
-  libiconv,
+  rustPlatform,
   openssl,
   pkg-config,
   protobuf,
+
+  # dependencies
   attrs,
   cachetools,
   deprecation,
+  nest-asyncio,
   overrides,
   packaging,
   pydantic,
@@ -19,24 +20,28 @@
   requests,
   retry,
   tqdm,
+
+  # tests
   aiohttp,
   pandas,
   polars,
   pytest-asyncio,
   pytestCheckHook,
+
   nix-update-script,
 }:
 
 buildPythonPackage rec {
   pname = "lancedb";
-  version = "0.14.0";
+  version = "0.17.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lancedb";
     repo = "lancedb";
+    # tag = "python-v${version}";
     rev = "refs/tags/python-v${version}";
-    hash = "sha256-lw2tZ26Py6JUxuetaokJKnxOv/WoLK4spxssLKxvxJA=";
+    hash = "sha256-GUWkn2c9RrpkmUTAu6hWsStE0GASVdwlP0AZZzwlhmc=";
   };
 
   buildAndTestSubdir = "python";
@@ -55,24 +60,15 @@ buildPythonPackage rec {
     rustPlatform.cargoSetupHook
   ];
 
-  buildInputs =
-    [
-      libiconv
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin (
-      with darwin.apple_sdk.frameworks;
-      [
-        IOKit
-        Security
-        SystemConfiguration
-      ]
-    );
+  buildInputs = [
+    openssl
+  ];
 
   dependencies = [
     attrs
     cachetools
     deprecation
+    nest-asyncio
     overrides
     packaging
     pydantic
