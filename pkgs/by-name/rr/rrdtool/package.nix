@@ -29,7 +29,7 @@ perl.pkgs.toPerlModule (
 
     # Fix darwin build
     patches = lib.optional stdenv.hostPlatform.isDarwin (fetchpatch {
-      url = "https://github.com/oetiker/rrdtool-1.x/pull/1262.patch";
+      url = "https://github.com/oetiker/rrdtool-1.x/commit/98b2944d3b41f6e19b6a378d7959f569fdbaa9cd.diff";
       hash = "sha256-aP0rmDlILn6VC8Tg7HpRXbxL9+KD/PRTbXnbQ7HgPEg=";
     });
 

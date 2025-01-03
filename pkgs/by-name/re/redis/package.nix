@@ -37,7 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
       # fixes: make test [exception]: Executing test client: permission denied
       # https://github.com/redis/redis/issues/12792
       (fetchpatch {
-        url = "https://github.com/redis/redis/pull/12887.diff";
+        url = "https://github.com/redis/redis/commit/bef5715374a2fe9700b690f152f314d15aa6eacd.diff";
         hash = "sha256-VZEMShW7Ckn5hLJHffQvE94Uly41WZW1bwvxny+Y3W8=";
       })
     ]

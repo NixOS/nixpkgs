@@ -50,8 +50,6 @@ let
   binaryUrl = version: rel:
     if arch == archs.aarch64-linux then
       "https://dev.alpinelinux.org/archive/crystal/crystal-${version}-aarch64-alpine-linux-musl.tar.gz"
-    else if arch == archs.x86_64-darwin && lib.versionOlder version "1.2.0" then
-      "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-darwin-x86_64.tar.gz"
     else
       "https://github.com/crystal-lang/crystal/releases/download/${version}/crystal-${version}-${toString rel}-${arch}.tar.gz";
 
@@ -95,18 +93,9 @@ let
       };
 
       patches = [
-          (substituteAll {
-            src = ./tzdata.patch;
-            inherit tzdata;
-          })
-        ]
-        ++ lib.optionals (lib.versionOlder version "1.2.0") [
-        # add support for DWARF5 debuginfo, fixes builds on recent compilers
-        # the PR is 8 commits from 2019, so just fetch the whole thing
-        # and hope it doesn't change
-        (fetchpatch {
-          url = "https://github.com/crystal-lang/crystal/pull/11399.patch";
-          sha256 = "sha256-CjNpkQQ2UREADmlyLUt7zbhjXf0rTjFhNbFYLwJKkc8=";
+        (substituteAll {
+          src = ./tzdata.patch;
+          inherit tzdata;
         })
       ];
 

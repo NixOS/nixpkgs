@@ -25,11 +25,11 @@ rustPlatform.buildRustPackage rec {
 
   patches = [
     (fetchpatch {
-      url = "https://github.com/slp/krun/pull/39.diff";
+      url = "https://github.com/AsahiLinux/muvm/commit/622e177d51d3d162f46bd5c46524e7c391c55764.diff";
       hash = "sha256-CV69L+VDDLRcWgpgDCAYKLlTU9ytFcHhzNgOibWD8KY=";
     })
     (fetchpatch {
-      url = "https://github.com/slp/krun/pull/38.diff";
+      url = "https://github.com/AsahiLinux/krun/commit/41abb0b0be8d4c7604b132a0e9c7f2db92c12d57.diff";
       hash = "sha256-cK3iDhh+33H16V65lWUXahjmpSxI1HhiLUmkjfkRB7A=";
     })
   ];

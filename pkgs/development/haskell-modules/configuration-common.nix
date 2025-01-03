@@ -2558,8 +2558,8 @@ self: super: {
   # Fix build failures for ghc 9 (https://github.com/mokus0/polynomial/pull/20)
   polynomial = appendPatch (fetchpatch {
     name = "haskell-polynomial.20.patch";
-    url = "https://github.com/mokus0/polynomial/pull/20.diff";
-    sha256 = "1bwivimpi2hiil3zdnl5qkds1inyn239wgxbn3y8l2pwyppnnfl0";
+    url = "https://github.com/mokus0/polynomial/compare/42fde2c9a72f449eeda4d534acfe64b8e92b5c27...109686b52c8bdace29f92f83d1458b33391e2afa.diff";
+    hash = "sha256-gDpr7/X8Cor8sKs/noaw3sag28SF2vYHjRGKeGvcka8=";
   })
   (overrideCabal (drv: {
     revision = null;

@@ -1,7 +1,7 @@
 {
   lib,
   stdenv,
-  fetchurl,
+  fetchpatch2,
   fetchFromGitHub,
   autoreconfHook,
   pkg-config,
@@ -26,9 +26,9 @@ stdenv.mkDerivation rec {
 
   patches = [
     # driver_init: load libva-x11.so for any ABI version
-    (fetchurl {
-      url = "https://github.com/01org/intel-hybrid-driver/pull/26.diff";
-      sha256 = "1ql4mbi5x1d2a5c8mkjvciaq60zj8nhx912992winbhfkyvpb3gx";
+    (fetchpatch2 {
+      url = "https://github.com/intel/intel-hybrid-driver/commit/b3b4d9a3a08d48bf6022723908a22255cc271ab7.diff?full_index=1";
+      hash = "sha256-aUW0hMQuB7J3yVOUhpS2MvQu17uR6VKpSJbgazVmFfU=";
     })
   ];
 

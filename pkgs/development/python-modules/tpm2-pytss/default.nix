@@ -41,7 +41,7 @@ buildPythonPackage rec {
       # libtpms (underneath swtpm) bumped the TPM revision
       # https://github.com/tpm2-software/tpm2-pytss/pull/593
       (fetchpatch {
-        url = "https://github.com/tpm2-software/tpm2-pytss/pull/593.patch";
+        url = "https://github.com/tpm2-software/tpm2-pytss/commit/146c3f4442f48d634297487b7f215c0d42e30f36.diff";
         hash = "sha256-CNJnSIvUQ0Yvy0o7GdVfFZ7kHJd2hBt5Zv1lqgOeoks=";
       })
     ]

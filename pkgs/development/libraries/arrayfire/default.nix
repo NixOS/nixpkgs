@@ -139,7 +139,7 @@ stdenv.mkDerivation rec {
     ./no-download.patch
     # Fix for newer opencl-clhpp. Remove with the next release.
     (fetchpatch {
-      url = "https://github.com/arrayfire/arrayfire/pull/3562.patch";
+      url = "https://github.com/arrayfire/arrayfire/commit/48a97be35f3892044094172d8fe9db586ccb601a.diff";
       hash = "sha256-AdWlpcRTn9waNAaVpZfK6sJ/xBQLiBC4nBeEYiGNN50";
     })
   ];
