@@ -138,8 +138,13 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
 
-  postBuild = ''
-    make -C contrib/subtree
+  postBuild = (lib.optionalString withManual ''
+    # Need to build the main Git documentation before building the
+    # contrib/subtree documentation, as the latter depends on the
+    # asciidoc.conf file created by the former.
+    make -C Documentation
+  '') + ''
+    make -C contrib/subtree all ${lib.optionalString withManual "doc"}
   '' + (lib.optionalString perlSupport ''
     make -C contrib/diff-highlight
   '') + (lib.optionalString osxkeychainSupport ''
