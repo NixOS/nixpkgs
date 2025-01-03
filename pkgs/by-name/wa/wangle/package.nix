@@ -15,8 +15,6 @@
   gflags,
   libevent,
   double-conversion,
-  apple-sdk_11,
-  darwinMinVersionHook,
 
   gtest,
 
@@ -45,20 +43,15 @@ stdenv.mkDerivation (finalAttrs: {
     removeReferencesTo
   ];
 
-  buildInputs =
-    [
-      folly
-      fizz
-      openssl
-      glog
-      gflags
-      libevent
-      double-conversion
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
-    ];
+  buildInputs = [
+    folly
+    fizz
+    openssl
+    glog
+    gflags
+    libevent
+    double-conversion
+  ];
 
   checkInputs = [
     gtest

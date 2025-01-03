@@ -27,9 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   # Disable hardening which adds incompatible flags like -fPIC
   hardeningDisable = [ "all" ];
 
-  buildPhase = ''
-    make -j$NIX_BUILD_CORES
-  '';
+  enableParallelBuilding = true;
 
   installPhase = ''
     runHook preInstall
@@ -57,6 +55,5 @@ stdenv.mkDerivation (finalAttrs: {
       "aarch64-linux"
     ];
     maintainers = with lib.maintainers; [ liberodark ];
-    mainProgram = "dtbloader.efi";
   };
 })

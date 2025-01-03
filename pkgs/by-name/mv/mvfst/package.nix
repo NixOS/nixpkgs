@@ -11,8 +11,6 @@
   folly,
   gflags,
   glog,
-  apple-sdk_11,
-  darwinMinVersionHook,
 
   fizz,
 
@@ -44,16 +42,11 @@ stdenv.mkDerivation (finalAttrs: {
     removeReferencesTo
   ];
 
-  buildInputs =
-    [
-      folly
-      gflags
-      glog
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
-    ];
+  buildInputs = [
+    folly
+    gflags
+    glog
+  ];
 
   propagatedBuildInputs = [
     fizz
