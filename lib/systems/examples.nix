@@ -133,6 +133,10 @@ rec {
     config = "aarch64-unknown-linux-musl";
   };
 
+  aarch64-linux-mlibc = {
+    config = "aarch64-unknown-linux-mlibc";
+  };
+
   gnu64 = {
     config = "x86_64-unknown-linux-gnu";
   };
@@ -148,11 +152,22 @@ rec {
     config = "i686-unknown-linux-musl";
   };
 
+  x86_64-linux-mlibc = {
+    config = "x86_64-unknown-linux-mlibc";
+  };
+  i686-linux-mlibc = {
+    config = "i686-unknown-linux-mlibc";
+  };
+
   riscv64 = riscv "64";
   riscv32 = riscv "32";
 
   riscv64-musl = {
     config = "riscv64-unknown-linux-musl";
+  };
+
+  riscv64-linux-mlibc = {
+    config = "riscv64-unknown-linux-mlibc";
   };
 
   riscv64-embedded = {
@@ -187,6 +202,10 @@ rec {
     };
   };
 
+  loongarch64-linux-mlibc = lib.recursiveUpdate platforms.loongarch64-multiplatform {
+    config = "loongarch64-unknown-linux-mlibc";
+  };
+
   mmix = {
     config = "mmix-unknown-mmixware";
     libc = "newlib";
@@ -218,6 +237,10 @@ rec {
 
   m68k = {
     config = "m68k-unknown-linux-gnu";
+  };
+
+  m68k-linux-mlibc = {
+    config = "m68k-unknown-linux-mlibc";
   };
 
   s390 = {
