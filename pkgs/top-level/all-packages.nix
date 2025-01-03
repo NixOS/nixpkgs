@@ -4401,7 +4401,9 @@ with pkgs;
     };
   });
 
-  netlify-cli = callPackage ../development/web/netlify-cli { };
+  netlify-cli = callPackage ../development/web/netlify-cli {
+    nodejs = nodejs_20;
+  };
 
   netpbm = callPackage ../tools/graphics/netpbm { };
 
