@@ -2,10 +2,11 @@
   lib,
   stdenv,
   alsa-lib,
+  apple-sdk_11,
   autoPatchelfHook,
   cairo,
   cups,
-  darwin,
+  darwinMinVersionHook,
   fontconfig,
   glib,
   glibc,
@@ -30,10 +31,12 @@ let
     "lib"
     "stdenv"
     "alsa-lib"
+    "apple-sdk_11"
     "autoPatchelfHook"
     "cairo"
     "cups"
     "darwin"
+    "darwinMinVersionHook"
     "fontconfig"
     "glib"
     "glibc"
@@ -122,34 +125,51 @@ let
       propagatedBuildInputs = [
         setJavaClassPath
         zlib
-      ] ++ lib.optional stdenv.hostPlatform.isDarwin darwin.apple_sdk_11_0.frameworks.Foundation;
-
-      buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
-        alsa-lib # libasound.so wanted by lib/libjsound.so
-        fontconfig
-        (lib.getLib stdenv.cc.cc) # libstdc++.so.6
-        xorg.libX11
-        xorg.libXext
-        xorg.libXi
-        xorg.libXrender
-        xorg.libXtst
       ];
+
+      buildInputs =
+        lib.optionals stdenv.hostPlatform.isLinux [
+          alsa-lib # libasound.so wanted by lib/libjsound.so
+          fontconfig
+          (lib.getLib stdenv.cc.cc) # libstdc++.so.6
+          xorg.libX11
+          xorg.libXext
+          xorg.libXi
+          xorg.libXrender
+          xorg.libXtst
+        ]
+        ++ (lib.optionals stdenv.hostPlatform.isDarwin [
+          apple-sdk_11
+          (darwinMinVersionHook "11.0")
+        ]);
 
       postInstall =
         let
           cLibsAsFlags = (map (l: "--add-flags '-H:CLibraryPath=${l}/lib'") cLibs);
-          preservedNixVariables = [
-            "-ELOCALE_ARCHIVE"
-            "-ENIX_BINTOOLS"
-            "-ENIX_BINTOOLS_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
-            "-ENIX_BUILD_CORES"
-            "-ENIX_BUILD_TOP"
-            "-ENIX_CC"
-            "-ENIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
-            "-ENIX_CFLAGS_COMPILE"
-            "-ENIX_HARDENING_ENABLE"
-            "-ENIX_LDFLAGS"
-          ];
+          preservedNixVariables =
+            [
+              "-ENIX_BINTOOLS"
+              "-ENIX_BINTOOLS_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
+              "-ENIX_BUILD_CORES"
+              "-ENIX_BUILD_TOP"
+              "-ENIX_CC"
+              "-ENIX_CC_WRAPPER_TARGET_HOST_${stdenv.cc.suffixSalt}"
+              "-ENIX_CFLAGS_COMPILE"
+              "-ENIX_HARDENING_ENABLE"
+              "-ENIX_LDFLAGS"
+            ]
+            ++ lib.optionals stdenv.hostPlatform.isLinux [
+              "-ELOCALE_ARCHIVE"
+            ]
+            ++ lib.optionals stdenv.hostPlatform.isDarwin [
+              "-EDEVELOPER_DIR"
+              "-EDEVELOPER_DIR_FOR_BUILD"
+              "-EDEVELOPER_DIR_FOR_TARGET"
+              "-EMACOSX_DEPLOYMENT_TARGET"
+              "-EMACOSX_DEPLOYMENT_TARGET_FOR_BUILD"
+              "-EMACOSX_DEPLOYMENT_TARGET_FOR_TARGET"
+              "-ENIX_APPLE_SDK_VERSION"
+            ];
           preservedNixVariablesAsFlags = (map (f: "--add-flags '${f}'") preservedNixVariables);
         in
         ''
