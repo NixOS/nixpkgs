@@ -282,10 +282,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall =
     ''
-      notSupported() {
-        unlink $1 || true
-      }
-
       # Set up the flags array for make in the same way as for the main install
       # phase from stdenv.
       local flagsArray=(
@@ -381,8 +377,7 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       else
         ''
-          # replace git-svn by notification script
-          notSupported $out/libexec/git-core/git-svn
+          rm $out/libexec/git-core/git-svn
         ''
     )
 
@@ -395,8 +390,7 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       else
         ''
-          # replace git-send-email by notification script
-          notSupported $out/libexec/git-core/git-send-email
+          rm $out/libexec/git-core/git-send-email
         ''
     )
 
@@ -419,9 +413,8 @@ stdenv.mkDerivation (finalAttrs: {
         ''
       else
         ''
-          # Don't wrap Tcl/Tk, replace them by notification scripts
           for prog in bin/gitk libexec/git-core/git-gui; do
-            notSupported "$out/$prog"
+            rm "$out/$prog"
           done
         ''
     )
