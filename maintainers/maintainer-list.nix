@@ -16578,6 +16578,13 @@
     githubId = 22592293;
     name = "Kartik Gokte";
   };
+  nullcube = {
+    email = "nullcub3@gmail.com";
+    name = "NullCube";
+    github = "nullcub3";
+    githubId = 51034487;
+    matrix = "@nullcube:matrix.org";
+  };
   nullishamy = {
     email = "spam@amyerskine.me";
     name = "nullishamy";
