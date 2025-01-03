@@ -1,5 +1,4 @@
 {
-  apple-sdk_11,
   boost,
   cmake,
   dbus,
@@ -47,7 +46,6 @@ stdenv.mkDerivation (finalAttrs: {
       qt6.qttools
       zlib
     ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ]
     ++ lib.optionals guiSupport [ dbus ]
     ++ lib.optionals (guiSupport && stdenv.hostPlatform.isLinux) [ qt6.qtwayland ]
     ++ lib.optionals trackerSearch [ python3 ];

@@ -50,6 +50,7 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [
       ethancedwards8
       fab
+      matthiasbeyer
     ];
     mainProgram = "gitlint";
   };

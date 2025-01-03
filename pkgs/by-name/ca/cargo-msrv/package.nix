@@ -6,24 +6,22 @@
   rustup,
   openssl,
   stdenv,
-  libiconv,
-  Security,
   makeWrapper,
   gitUpdater,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-msrv";
-  version = "0.16.2";
+  version = "0.17.1";
 
   src = fetchFromGitHub {
     owner = "foresterre";
     repo = pname;
-    rev = "v${version}";
-    sha256 = "sha256-pgSwyq5KK9PCsmMnquufaw2oW7VSm93xRmozi/uqzNc=";
+    tag = "v${version}";
+    sha256 = "sha256-cRdnx9K+EkVEKtPxQk+gXK6nkgkpWhpYij/5e7pFzMU=";
   };
 
-  cargoHash = "sha256-4eGoNKv76+3QVRUbTPiqTiLbQoOX6mVouJ3puxN6pMY=";
+  cargoHash = "sha256-Hs/bdDpJFQ0w+Ds2L5at06Sw3F+5bXu5HU798gR9/9Q=";
 
   passthru = {
     updateScript = gitUpdater {
@@ -35,14 +33,7 @@ rustPlatform.buildRustPackage rec {
   # Integration tests fail
   doCheck = false;
 
-  buildInputs =
-    if stdenv.hostPlatform.isDarwin then
-      [
-        libiconv
-        Security
-      ]
-    else
-      [ openssl ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [ openssl ];
 
   nativeBuildInputs = [
     pkg-config

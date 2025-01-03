@@ -13,7 +13,6 @@
   libXcursor,
   freetype,
   alsa-lib,
-  apple-sdk_11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -53,17 +52,15 @@ stdenv.mkDerivation (finalAttrs: {
     pkg-config
   ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      libX11
-      libXrandr
-      libXinerama
-      libXext
-      libXcursor
-      freetype
-      alsa-lib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libX11
+    libXrandr
+    libXinerama
+    libXext
+    libXcursor
+    freetype
+    alsa-lib
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "FETCHCONTENT_FULLY_DISCONNECTED" true)
