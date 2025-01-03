@@ -58,7 +58,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     repo = "shairport-sync";
     owner = "mikebrady";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-GYu/n4JoghqUHnkCiSQJYm9WSLww585WKgXTEiWGq4g=";
   };
 

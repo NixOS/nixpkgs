@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "coin-or";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-lpbk1GeC8F/iLGV8G5RPHghnaM9eL82YekUYEt9+mvc=";
   };
 

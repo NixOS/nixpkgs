@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "spatial-image";
     repo = "spatial-image";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yIAqHhq2naTA8PdLOdrNSrhEOhRwlFD6x9dH4xDVt9Y=";
   };
 

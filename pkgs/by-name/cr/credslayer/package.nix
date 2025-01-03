@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ShellCode33";
     repo = "CredSLayer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gryV9MHULY6ZHy6YDFQDIkZsfIX8La0tHT0vrrQJNDQ=";
   };
 

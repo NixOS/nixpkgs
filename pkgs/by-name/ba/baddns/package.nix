@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "blacklanternsecurity";
     repo = "baddns";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-pF7HYl1l+TSahJHuyVBZtYeET6wPCiSi+Yi7Rg46T44=";
   };
 

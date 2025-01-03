@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "jaxopt";
-    rev = "refs/tags/jaxopt-v${version}";
+    tag = "jaxopt-v${version}";
     hash = "sha256-T/BHSnuk3IRuLkBj3Hvb/tFIb7Au25jjQtvwL28OU1U=";
   };
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "lindenb";
     repo = "makefile2graph";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4jyftC0eCJ13X/L4uEWhT5FA5/UXUmSHSoba89GSySQ=";
   };
 

@@ -18,7 +18,7 @@ let
       src = fetchFromGitHub {
         owner = "syncthing";
         repo = "syncthing";
-        rev = "refs/tags/v${version}";
+        tag = "v${version}";
         hash = "sha256-JW78n/3hssH600uXn4YLxcIJylPbSpEZICtKmqfqamI=";
       };
 

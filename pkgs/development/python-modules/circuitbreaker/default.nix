@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fabfuel";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jaDCMGCZZu3STluYeHDNgdEPf2DNq7bXJ0LPV3JZdk0=";
   };
 

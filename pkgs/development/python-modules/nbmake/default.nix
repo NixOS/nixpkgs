@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "treebeardtech";
     repo = "nbmake";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OzjqpipFb5COhqc//Sg6OU65ShPrYe/KtxifToEXveg=";
   };
 

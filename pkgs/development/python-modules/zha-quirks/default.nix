@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zigpy";
     repo = "zha-device-handlers";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Tqt+ydp7Vr3pWBQ0T5B0CV+bfX+0yRXynEhD01afY/w=";
   };
 

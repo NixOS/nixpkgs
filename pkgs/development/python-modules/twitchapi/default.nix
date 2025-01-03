@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Teekeks";
     repo = "pyTwitchAPI";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yN7KsiPnhGSm8wj44zn1TzGhRDIMflkKiRnBlVT5i2o=";
   };
 

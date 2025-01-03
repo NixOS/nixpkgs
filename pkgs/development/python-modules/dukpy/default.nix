@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amol-";
     repo = "dukpy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-8RDMz9SfBoUe7LQ9/atsZlJ/2uwLUb0hZxeYdsUOGpU=";
   };
 

@@ -12,7 +12,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ua-parser";
     repo = "uap-rust";
-    rev = "refs/tags/ua-parser-rs-${version}";
+    tag = "ua-parser-rs-${version}";
     hash = "sha256-+qAYNGZFOkQyHhzqZZGrxgKHrPTWolO/4KKuppIMSRE=";
     fetchSubmodules = true;
   };

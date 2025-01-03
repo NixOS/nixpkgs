@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cesbit";
     repo = "pyleri";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4t+6wtYzJbmL0TB/OXr89uZ2s8DeGlUdWwHd4YPsCW0=";
   };
 

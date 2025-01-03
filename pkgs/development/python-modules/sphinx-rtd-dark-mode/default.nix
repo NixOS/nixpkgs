@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MrDogeBro";
     repo = "sphinx_rtd_dark_mode";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-N5KG2Wqn9wfGNY3VH4FnBce1aZUbnvVmwD10Loe0Qn4=";
   };
 

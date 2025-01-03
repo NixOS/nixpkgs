@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Kludex";
     repo = "python-multipart";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6RV1BKf7/OihbUiH+nqrnAWW/eWppUb+Nn44Y+QQLX4=";
   };
 

@@ -22,7 +22,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "malaterre";
     repo = "GDCM";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Zlb6UCP4aFZOJJNhFQBBrwzst+f37gs1zaCBMTOUgZE=";
   };
 

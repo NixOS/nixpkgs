@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "GoogleCloudPlatform";
     repo = "alloydb-auth-proxy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Z1sTArR6usEkoI/Dp5FUXhjsPeDHVG88GaSbrb9KaaA=";
   };
 

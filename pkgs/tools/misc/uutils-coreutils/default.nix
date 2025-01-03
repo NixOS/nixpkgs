@@ -18,7 +18,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "uutils";
     repo = "coreutils";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Gwks+xTkwK5dgV9AkSthIrhBNwq/WvM9SNr0wR/SBSM=";
   };
 

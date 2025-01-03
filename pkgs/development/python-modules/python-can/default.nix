@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hardbyte";
     repo = "python-can";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XCv2oOkGq8c2gTo+8UcZbuBYXyhhQstWLyddk3db38s=";
   };
 

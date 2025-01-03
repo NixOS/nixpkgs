@@ -16,7 +16,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-GKDAdjO67aedCEFHKDukQ+oPMomTPwFE/CvJu112fus=";
   };
 

@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "usit-gd";
     repo = "zabbix-cli";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-hvLtc6owEOD29Y1oC7EmOOFp9P8hWOuj9N7qhtqkpks=";
   };
 

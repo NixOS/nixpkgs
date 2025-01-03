@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "thegeeklab";
     repo = "url-parser";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IGA+T0Qv3l32UmWciCH2J5G+YGWu0plqSG7yfEtuswM=";
   };
 

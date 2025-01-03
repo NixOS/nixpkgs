@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "angr";
     repo = "claripy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-k3jlHGkgtT/+Eo9rwUSgRCfs9PPHX+vS4LR0jH6cVdE=";
   };
 
