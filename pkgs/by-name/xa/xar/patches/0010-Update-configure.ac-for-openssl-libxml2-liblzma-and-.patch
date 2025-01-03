@@ -1,0 +1,127 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Ivan Trubach <mr.trubach@icloud.com>
+Date: Sat, 27 Jul 2024 18:58:14 +0300
+Subject: [PATCH 10/19] Update configure.ac for openssl, libxml2, liblzma and
+ musl-fts
+
+Simplifies libxml2 detection, adds detection for liblzma (from xz),
+openssl and fts (for musl libc).
+---
+ xar/configure.ac | 83 +++++++++++++++++-------------------------------
+ 1 file changed, 30 insertions(+), 53 deletions(-)
+
+diff --git a/xar/configure.ac b/xar/configure.ac
+index 0cc04dd..e466ee0 100644
+--- a/xar/configure.ac
++++ b/xar/configure.ac
+@@ -272,63 +272,14 @@ AC_PREFIX_DEFAULT(/usr/local)
+ 
+ AC_CHECK_FUNC([asprintf], AC_DEFINE([HAVE_ASPRINTF], [], [HAVE_ASPRINTF]))
+ 
++AC_SEARCH_LIBS([fts_close], [fts])
++
+ dnl 
+ dnl Configure libxml2.
+ dnl 
+-LIBXML2_VERSION_MIN=2.6.11
+-
+ have_libxml2="1"
+-
+-AC_ARG_WITH([xml2-config], [  --with-xml2-config      libxml2 config program],
+-if test "x${with_xml2_config}" = "xno" ; then
+-  XML2_CONFIG=
+-else
+-  XML2_CONFIG="${with_xml2_config}"
+-fi
+-,
+-  XML2_CONFIG=
+-)
+-if test "x${XML2_CONFIG}" != "x" ; then
+-   if test ! -x "${XML2_CONFIG}" ; then
+-     AC_MSG_ERROR([Unusable or missing xml2-config: ${XML2_CONFIG}])
+-   fi
+-else
+-  AC_PATH_PROG([XML2_CONFIG], [xml2-config], , [${PATH}])
+-  if test "x${XML2_CONFIG}" = "x" ; then
+-    AC_MSG_ERROR([Cannot configure without xml2-config])
+-  fi
+-fi
+-
+-dnl Make sure the version of libxml2 found is sufficient.
+-AC_MSG_CHECKING([for libxml >= ${LIBXML2_VERSION_MIN}])
+-LIBXML2_FOUND=`2>&1 ${XML2_CONFIG} --version`
+-LIBXML2_MAJOR=`echo ${LIBXML2_FOUND} | tr . " " | awk '{print $1}'`
+-LIBXML2_MINOR=`echo ${LIBXML2_FOUND} | tr . " " | awk '{print $2}' | tr a-z " " |awk '{print $1}'`
+-LIBXML2_BRANCH=`echo ${LIBXML2_FOUND} | tr . " " | awk '{print $3}' | tr a-z " " |awk '{print $1}'`
+-if test "x${LIBXML2_BRANCH}" = "x" ; then
+-  LIBXML2_BRANCH=0
+-fi
+-LIBXML2_MAJOR_MIN=`echo ${LIBXML2_VERSION_MIN} | tr . " " | awk '{print $1}'`
+-LIBXML2_MINOR_MIN=`echo ${LIBXML2_VERSION_MIN} | tr . " " | awk '{print $2}'`
+-LIBXML2_BRANCH_MIN=`echo ${LIBXML2_VERSION_MIN} | tr . " " | awk '{print $3}'`
+-if test ${LIBXML2_MAJOR} -gt ${LIBXML2_MAJOR_MIN} \
+-     -o ${LIBXML2_MAJOR} -eq ${LIBXML2_MAJOR_MIN} \
+-     -a ${LIBXML2_MINOR} -gt ${LIBXML2_MINOR_MIN} \
+-     -o ${LIBXML2_MAJOR} -eq ${LIBXML2_MAJOR_MIN} \
+-     -a ${LIBXML2_MINOR} -eq ${LIBXML2_MINOR_MIN} \
+-     -a ${LIBXML2_BRANCH} -ge $LIBXML2_BRANCH_MIN ; then
+-  AC_MSG_RESULT([${LIBXML2_MAJOR}.${LIBXML2_MINOR}.${LIBXML2_BRANCH}])
+-  have_libxml2="1"
+-  CPPFLAGS="${CPPFLAGS} `${XML2_CONFIG} --cflags`"
+-  LIBS="${LIBS} `${XML2_CONFIG} --libs`"
+-else
+-  AC_MSG_RESULT([no])
+-  have_libxml2="0"
+-fi
+-if test "x${have_libxml2}" = "x1" ; then
+-  dnl Final sanity check, to make sure that xmlwriter is present.
+-  AC_CHECK_HEADER([libxml/xmlwriter.h], , [have_libxml2="0"])
+-fi
++AC_CHECK_HEADERS([libxml/xmlwriter.h], , [have_libxml2="0"])
++AC_CHECK_LIB([xml2], [xmlInitParser], , [have_libxml2="0"])
+ if test "x${have_libxml2}" = "x0" ; then
+   AC_MSG_ERROR([Cannot build without libxml2])
+ fi
+@@ -343,6 +294,22 @@ if test "x${have_libz}" = "x0" ; then
+   AC_MSG_ERROR([Cannot build without libz])
+ fi
+ 
++dnl 
++dnl Configure openssl.
++dnl 
++have_openssl="1"
++AC_CHECK_HEADERS([openssl/evp.h], , [have_openssl="0"])
++AC_CHECK_LIB([crypto], [OPENSSL_config], , [have_openssl="0"])
++if test "x${have_openssl}" = "x0" ; then
++  case "${host}" in
++    *-*-darwin*)
++      ;;
++    *)
++      AC_MSG_ERROR([Cannot build without OpenSSL for non-Darwin host])
++      ;;
++  esac
++fi
++
+ dnl 
+ dnl Configure libbz2.
+ dnl 
+@@ -353,6 +320,16 @@ if test "x${have_libbz2}" = "x1" ; then
+   AC_DEFINE([HAVE_LIBBZ2], [], [HAVE_LIBBZ2])
+ fi
+ 
++dnl 
++dnl Configure liblzma.
++dnl 
++have_liblzma="1"
++AC_CHECK_HEADERS([lzma.h], , [have_liblzma="0"])
++AC_CHECK_LIB([lzma], [lzma_stream_decoder], , [have_liblzma="0"])
++if test "x${have_liblzma}" = "x1" ; then
++  AC_DEFINE([HAVE_LIBLZMA], [], [HAVE_LIBLZMA])
++fi
++
+ dnl 
+ dnl Configure libpthread.
+ dnl 
+-- 
+2.44.1
+
