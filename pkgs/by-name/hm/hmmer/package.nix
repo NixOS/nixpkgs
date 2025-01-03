@@ -8,13 +8,13 @@
   versionCheckHook,
 }:
 
-stdenv.mkDerivation rec {
+stdenv.mkDerivation (finalAttrs: {
   version = "3.4";
   pname = "hmmer";
 
   src = fetchurl {
-    url = "http://eddylab.org/software/hmmer/${pname}-${version}.tar.gz";
-    sha256 = "sha256-ynDZT9DPJxvXBjQjqrsRbULeUzEXNDqbJ6ZcF/8G+/M=";
+    url = "http://eddylab.org/software/hmmer/hmmer-${finalAttrs.version}.tar.gz";
+    hash = "sha256-ynDZT9DPJxvXBjQjqrsRbULeUzEXNDqbJ6ZcF/8G+/M=";
   };
 
   enableParallelBuilding = true;
@@ -39,7 +39,7 @@ stdenv.mkDerivation rec {
 
   versionCheckProgramArg = [ "-h" ];
 
-  meta = with lib; {
+  meta = {
     description = "Biosequence analysis using profile hidden Markov models";
     longDescription = ''
       HMMER is used for searching sequence databases for sequence homologs, and for making sequence alignments. It implements methods using probabilistic models called profile hidden Markov models (profile HMMs).
@@ -48,9 +48,9 @@ stdenv.mkDerivation rec {
       HMMER can be downloaded and installed as a command line tool on your own hardware, and now it is also more widely accessible to the scientific community via new search servers at the European Bioinformatics Institute.
     '';
     homepage = "http://hmmer.org/";
-    changelog = "https://github.com/EddyRivasLab/hmmer/blob/hmmer-${version}/release-notes/RELEASE-${version}.md";
-    license = licenses.bsd3;
-    maintainers = [ maintainers.iimog ];
+    changelog = "https://github.com/EddyRivasLab/hmmer/blob/hmmer-${finalAttrs.version}/release-notes/RELEASE-${finalAttrs.version}.md";
+    license = lib.licenses.bsd3;
+    maintainers = [ lib.maintainers.iimog ];
     platforms = lib.platforms.unix;
   };
-}
+})
