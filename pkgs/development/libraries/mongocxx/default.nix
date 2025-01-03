@@ -1,5 +1,5 @@
 { lib
-, pkgs
+, stdenv
 , fetchFromGitHub
 , mongoc
 , openssl
@@ -9,8 +9,6 @@
 , testers
 , darwin
 }:
-
-let stdenv = if pkgs.stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else pkgs.stdenv; in
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "mongocxx";
