@@ -1,13 +1,11 @@
 {
   fetchFromGitHub,
   lib,
-  stdenv,
   rustPlatform,
   gtk4,
   pkg-config,
   pango,
   wrapGAppsHook4,
-  apple-sdk_11,
   versionCheckHook,
 }:
 
@@ -29,14 +27,10 @@ rustPlatform.buildRustPackage rec {
     wrapGAppsHook4
   ];
 
-  buildInputs =
-    [
-      gtk4
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  buildInputs = [
+    gtk4
+    pango
+  ];
 
   # Disable test_replay tests as they need a gui
   preCheck = ''
