@@ -647,24 +647,7 @@ let
 
   buildImage = pkgs.vmTools.runInLinuxVM (
 
-    # crossPkgs.runCommand name {
-    #   preVM = prepareImage + lib.optionalString touchEFIVars createEFIVars;
-    #   buildInputs = with pkgs; [ util-linux e2fsprogs dosfstools ];
-    #   postVM = moveOrConvertImage + createHydraBuildProducts + postVM;
-    #   QEMU_OPTS =
-    #     lib.concatStringsSep " " (lib.optional useEFIBoot "-drive if=pflash,format=raw,unit=0,readonly=on,file=${efiFirmware}"
-    #     ++ lib.optionals touchEFIVars [
-    #       "-drive if=pflash,format=raw,unit=1,file=$efiVars"
-    #     ] ++ lib.optionals (OVMF.systemManagementModeRequired or false) [
-    #       "-machine" "q35,smm=on"
-    #       "-global" "driver=cfi.pflash01,property=secure,value=on"
-    #     ]
-    #   );
-    #   inherit memSize;
-    # } ''
-    #   export PATH=${binPath}:$PATH
-
-    pkgs.runCommand name
+    crossPkgs.runCommand name
       {
         preVM = prepareImage + lib.optionalString touchEFIVars createEFIVars;
         buildInputs = with pkgs; [

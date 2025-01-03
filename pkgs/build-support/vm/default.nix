@@ -284,7 +284,7 @@ rec {
     ''${diskImage:+diskImage=$diskImage}
     ${buildPackages.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-store.sock --sandbox none --shared-dir "${storeDir}" &
     ${buildPackages.virtiofsd}/bin/virtiofsd --xattr --socket-path virtio-xchg.sock --sandbox none --shared-dir xchg &
-
+    
     ${qemuCommand}
     EOF
 
