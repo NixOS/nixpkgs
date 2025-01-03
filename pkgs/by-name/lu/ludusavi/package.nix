@@ -109,7 +109,7 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/mtkennerly/ludusavi";
     changelog = "https://github.com/mtkennerly/ludusavi/blob/v${version}/CHANGELOG.md";
     license = licenses.mit;
-    maintainers = with maintainers; [ pasqui23 ];
+    maintainers = with maintainers; [ pasqui23 megheaiulian];
     mainProgram = "ludusavi";
   };
 }
