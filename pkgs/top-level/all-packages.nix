@@ -1089,10 +1089,6 @@ with pkgs;
 
   tailwindcss = callPackage ../development/tools/tailwindcss { };
 
-  termusic = darwin.apple_sdk_11_0.callPackage ../by-name/te/termusic/package.nix {
-    inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreAudio CoreGraphics Foundation IOKit MediaPlayer Security;
-  };
-
   ufolint = with python3Packages; toPythonApplication ufolint;
 
   valeronoi = qt6Packages.callPackage ../tools/misc/valeronoi { };
