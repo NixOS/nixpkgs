@@ -5892,6 +5892,11 @@
     githubId = 283316;
     name = "Dane Lipscombe";
   };
+  dlurak = {
+    github = "dlurak";
+    githubId = 84224239;
+    name = "dlurak";
+  };
   dmadisetti = {
     email = "nix@madisetti.me";
     github = "dmadisetti";
