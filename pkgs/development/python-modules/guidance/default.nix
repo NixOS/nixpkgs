@@ -3,23 +3,17 @@
   buildPythonPackage,
   fetchFromGitHub,
   pytestCheckHook,
-  pythonOlder,
   pybind11,
   setuptools,
-  wheel,
-  aiohttp,
   diskcache,
   fastapi,
-  gptcache,
   huggingface-hub,
   jsonschema,
-  msal,
   numpy,
   openai,
   ordered-set,
   platformdirs,
   protobuf,
-  pyformlang,
   pydantic,
   requests,
   tiktoken,
@@ -32,8 +26,6 @@ buildPythonPackage rec {
   version = "0.1.16";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
-
   src = fetchFromGitHub {
     owner = "guidance-ai";
     repo = "guidance";
@@ -41,29 +33,20 @@ buildPythonPackage rec {
     hash = "sha256-dPakdT97cuLv4OwdaUFncopD5X6uXGyUjwzqn9fxnhU=";
   };
 
-  nativeBuildInputs = [ pybind11 ];
-
   build-system = [
+    pybind11
     setuptools
-    wheel
   ];
 
   dependencies = [
-    aiohttp
     diskcache
-    fastapi
-    gptcache
-    msal
     numpy
-    openai
     ordered-set
     platformdirs
     protobuf
-    pyformlang
     pydantic
     requests
     tiktoken
-    uvicorn
   ];
 
   optional-dependencies = {
@@ -119,11 +102,11 @@ buildPythonPackage rec {
 
   __darwinAllowLocalNetworking = true;
 
-  meta = with lib; {
+  meta = {
     description = "Guidance language for controlling large language models";
     homepage = "https://github.com/guidance-ai/guidance";
-    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${version}";
-    license = licenses.mit;
-    maintainers = with maintainers; [ natsukium ];
+    changelog = "https://github.com/guidance-ai/guidance/releases/tag/${src.tag}";
+    license = lib.licenses.mit;
+    maintainers = with lib.maintainers; [ natsukium ];
   };
 }
