@@ -1,6 +1,6 @@
 {
   buildGoModule,
-  fetchFromSourcehut,
+  fetchFromGitea,
   lib,
   jq,
   installShellFiles,
@@ -13,8 +13,9 @@ buildGoModule rec {
   pname = "ijq";
   version = "1.1.2";
 
-  src = fetchFromSourcehut {
-    owner = "~gpanders";
+  src = fetchFromGitea {
+    domain = "codeberg.org";
+    owner = "gpanders";
     repo = "ijq";
     rev = "v${version}";
     hash = "sha256-7vG9T+gC6HeSGwFDf3m7nM0hBz32n6ATiM30AKNC1Og=";
@@ -49,7 +50,7 @@ buildGoModule rec {
   meta = with lib; {
     description = "Interactive wrapper for jq";
     mainProgram = "ijq";
-    homepage = "https://git.sr.ht/~gpanders/ijq";
+    homepage = "https://codeberg.org/gpanders/ijq";
     license = licenses.gpl3Plus;
     maintainers = with maintainers; [
       justinas

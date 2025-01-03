@@ -32,6 +32,7 @@
   parameterized,
   pip-tools,
   pkg-config,
+  pkgconfig,
   prompt-toolkit,
   protobuf,
   psutil,
@@ -105,6 +106,7 @@ stdenv.mkDerivation rec {
     zap-chip
     # gdbus-codegen
     glib
+    pkgconfig
     python3
     # dependencies of build scripts
     click
@@ -193,6 +195,7 @@ stdenv.mkDerivation rec {
         packaging
         parameterized
         pip-tools
+        pkgconfig
         prompt-toolkit
         protobuf
         psutil
@@ -223,26 +226,18 @@ stdenv.mkDerivation rec {
         wheel
         yapf
       ];
-      depListToAttrs =
-        list:
-        builtins.listToAttrs (
-          map (dep: {
-            name = dep.name;
-            value = dep;
-          }) (lib.filter (x: x != null) list)
-        );
-      saturateDependencies =
-        deps:
-        let
-          before = deps;
-          new = lib.mergeAttrsList (
-            map (dep: depListToAttrs (dep.propagatedBuildInputs or [ ])) (lib.attrValues before)
-          );
-          after = before // new;
-        in
-        if lib.attrNames before != lib.attrNames after then saturateDependencies after else before;
-      saturateDependencyList = list: lib.attrValues (saturateDependencies (depListToAttrs list));
-      saturatedDependencyList = lib.filter (drv: drv ? dist) (saturateDependencyList dependencies);
+      filterNull = list: lib.filter (dep: dep != null) list;
+      toItem = dep: {
+        inherit dep;
+        key = dep.name;
+      };
+      saturatedDependencies = lib.genericClosure {
+        startSet = map toItem (filterNull dependencies);
+        operator = item: map toItem (filterNull ((item.dep).propagatedBuildInputs or [ ]));
+      };
+      saturatedDependencyList = lib.filter (dep: dep ? dist && dep != null) (
+        map (item: item.dep) saturatedDependencies
+      );
     in
     lib.concatMapStringsSep " " (dep: "file://${dep.dist}") saturatedDependencyList;
 
