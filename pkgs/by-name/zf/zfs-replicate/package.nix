@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   };
 
   # For compression to work, both local and remote systems must have lz4 installed.
-  # This hard codes the path to the lz4 when running it on the local system.
+  # This hard codes the path to the lz4 binary when running it on the local system.
   postPatch = ''
     substituteInPlace zfs/replicate/compress/command.py \
       --replace-fail \
@@ -37,9 +37,9 @@ python3Packages.buildPythonApplication rec {
   ];
 
   nativeCheckInputs = with python3Packages; [
-    pytestCheckHook
     hypothesis
     pytest-cov-stub
+    pytestCheckHook
   ];
 
   doCheck = true;
