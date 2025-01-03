@@ -290,7 +290,7 @@ stdenv.mkDerivation (finalAttrs: {
 
    + lib.optionalString withManual ''
        # Install man pages
-       make "''${flagsArray[@]}" cmd-list.made install install-html \
+       make "''${flagsArray[@]}" install install-html \
          -C Documentation
      ''
 
