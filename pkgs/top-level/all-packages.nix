@@ -1089,7 +1089,7 @@ with pkgs;
 
   tailwindcss = callPackage ../development/tools/tailwindcss { };
 
-  termusic = darwin.apple_sdk_11_0.callPackage ../applications/audio/termusic {
+  termusic = darwin.apple_sdk_11_0.callPackage ../by-name/te/termusic/package.nix {
     inherit (darwin.apple_sdk_11_0.frameworks) AppKit CoreAudio CoreGraphics Foundation IOKit MediaPlayer Security;
   };
 
