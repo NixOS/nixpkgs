@@ -21,12 +21,12 @@
 
 stdenv.mkDerivation rec {
   pname = "libsigrok";
-  version = "0.5.2-unstable-2024-01-03";
+  version = "0.5.2-unstable-2024-10-20";
 
   src = fetchgit {
     url = "git://sigrok.org/libsigrok";
-    rev = "b503d24cdf56abf8c0d66d438ccac28969f01670";
-    hash = "sha256-9EW0UCzU6MqBX6rkT5CrBsDkAi6/CLyS9MZHsDV+1IQ=";
+    rev = "f06f788118191d19fdbbb37046d3bd5cec91adb1";
+    hash = "sha256-8aco5tymkCJ6ya1hyp2ODrz+dlXvZmcYoo4o9YC6D6o=";
   };
 
   enableParallelBuilding = true;
