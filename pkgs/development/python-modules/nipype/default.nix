@@ -41,13 +41,13 @@
 
 buildPythonPackage rec {
   pname = "nipype";
-  version = "1.8.6";
+  version = "1.9.2";
   disabled = pythonOlder "3.7";
   format = "setuptools";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-l3sTFej3D5QWPsB+MeVXG+g/Kt1gIxQcWgascAEm+NE=";
+    hash = "sha256-pQO9QbZY8ITRBCUv1yjvdfGhmYAm/quYsWOZiWVOA0M=";
   };
 
   postPatch = ''
