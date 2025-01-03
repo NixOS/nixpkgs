@@ -25,7 +25,6 @@ stdenv.mkDerivation rec {
     changelog = "https://github.com/EddyRivasLab/hmmer/blob/hmmer-${version}/release-notes/RELEASE-${version}.md";
     license = licenses.gpl3;
     maintainers = [ maintainers.iimog ];
-    # at least SSE is *required*
-    platforms = platforms.x86_64;
+    platforms = lib.platforms.unix;
   };
 }
