@@ -7546,6 +7546,8 @@ with pkgs;
       newlib-nano
     else if libc == "musl" then
       musl
+    else if libc == "mlibc" then
+      mlibc
     else if libc == "msvcrt" then
       if stdenv.hostPlatform.isMinGW then windows.mingw_w64 else windows.sdk
     else if libc == "ucrt" then
