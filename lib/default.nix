@@ -151,7 +151,7 @@ let
       getValues getFiles
       optionAttrSetToDocList optionAttrSetToDocList'
       scrubOptionValue literalExpression literalExample
-      showOption showOptionWithDefLocs showFiles
+      showOption showOptionParent showOptionWithDefLocs showFiles
       unknownModule mkOption mkPackageOption mkPackageOptionMD
       literalMD;
     inherit (self.types) isType setType defaultTypeMerge defaultFunctor

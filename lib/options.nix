@@ -432,6 +432,40 @@ rec {
         then part
         else lib.strings.escapeNixIdentifier part;
     in (concatStringsSep ".") (map escapeOptionPart parts);
+
+  /**
+    Show the option path, except for the last `n` elements.
+
+    This can be used to refer to groups of options in documentation.
+
+    # Inputs
+
+    - `opt`: The option path.
+
+    - `n`: The number of elements to exclude from the end.
+
+    # Example
+
+    ```nix
+    showOptionParent config.services.foo.settings.bar 1
+    => "services.foo.settings"
+    ```
+
+    ```nix
+    mkOption {
+      type = types.str;
+      description = "The settings file for foo.";
+      default = tomlFormat.generate "foo.toml" opt.settings.value;
+      defaultText = lib.literalMD ''
+        Generated TOML file based on `${showOptionParent opt.settings.bar 1}`
+      '';
+    }
+    ```
+
+   */
+  showOptionParent = opt: n:
+    showOption (lib.dropEnd n opt);
+
   showFiles = files: concatStringsSep " and " (map (f: "`${f}'") files);
 
   showDefs = defs: concatMapStrings (def:
