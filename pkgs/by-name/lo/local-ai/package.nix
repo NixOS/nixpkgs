@@ -638,6 +638,7 @@ let
 
     meta = with lib; {
       description = "OpenAI alternative to run local LLMs, image and audio generation";
+      mainProgram = "local-ai";
       homepage = "https://localai.io";
       license = licenses.mit;
       maintainers = with maintainers; [
