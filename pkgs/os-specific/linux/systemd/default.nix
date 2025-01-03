@@ -240,9 +240,12 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals stdenv.hostPlatform.isMusl (
       let
+        # NOTE: the master-next branch does not have stable URLs.
+        # If we need patches that aren't in master yet, they'll have to be
+        # vendored.
         oe-core = fetchzip {
-          url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-86ab9abd1073474f25d0ad878d5bea01ba633772.tar.gz";
-          hash = "sha256-avTJC905erZIQ3OGBNwOcCgk0fQWju6X2P1kRJGxRYI=";
+          url = "https://git.openembedded.org/openembedded-core/snapshot/openembedded-core-4891f47cdaf919033bf1c02cc12e4805e5db99a0.tar.gz";
+          hash = "sha256-YKL/oC+rPZ2EEVNidEV+pJihZgUv7vLb0OASplgktn4=";
         };
       in
       map (patch: "${oe-core}/meta/recipes-core/systemd/systemd/${patch}") [
