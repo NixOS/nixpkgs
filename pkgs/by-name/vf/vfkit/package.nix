@@ -3,7 +3,6 @@
   apple-sdk_14,
   buildGoModule,
   darwin,
-  darwinMinVersionHook,
   fetchFromGitHub,
   testers,
   vfkit,
@@ -36,7 +35,6 @@ buildGoModule rec {
 
   buildInputs = [
     apple-sdk_14
-    (darwinMinVersionHook "11")
   ];
 
   postFixup = ''
