@@ -11,7 +11,6 @@
   pythonOlder,
   pyyaml,
   setuptools,
-  apple-sdk_11,
 }:
 
 buildPythonPackage rec {
@@ -25,8 +24,6 @@ buildPythonPackage rec {
   };
 
   build-system = [ setuptools ];
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   optional-dependencies.watchmedo = [ pyyaml ];
 
