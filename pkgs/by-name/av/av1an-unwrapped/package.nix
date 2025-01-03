@@ -1,28 +1,28 @@
 {
   lib,
-  rustPlatform,
   fetchFromGitHub,
-  pkg-config,
   ffmpeg,
-  nasm,
-  vapoursynth,
   libaom,
-  rav1e,
+  nasm,
   nix-update-script,
+  pkg-config,
+  rav1e,
+  rustPlatform,
+  vapoursynth,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "av1an-unwrapped";
-  version = "0.4.3";
+  version = "0.4.4";
 
   src = fetchFromGitHub {
     owner = "master-of-zen";
     repo = "av1an";
     tag = version;
-    hash = "sha256-Mb5I+9IBwpfmK1w4LstNHI/qsJKlCuRxgSUiqpwUqF0=";
+    hash = "sha256-YF+j349777pE+evvXWTo42DQn1CE0jlfKBEXUFTfcb8=";
   };
 
-  cargoHash = "sha256-IWcSaJoakXSPIdycWIikGSmOk+D4A3aMnJwuiKn8XNY=";
+  cargoHash = "sha256-5YKxRKHXGljByX+aIekBBV7T5MB7O+mSHdMx3uxnik4=";
 
   nativeBuildInputs = [
     nasm
