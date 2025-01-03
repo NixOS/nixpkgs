@@ -24,7 +24,7 @@ appimageTools.wrapType2 {
   '';
 
   meta = {
-    description = "This is another Test 3 | Fork of Firefox, focused on privacy, security and freedom (upstream AppImage release)";
+    description = "This is another Test 4 | Fork of Firefox, focused on privacy, security and freedom (upstream AppImage release)";
     homepage = "https://librewolf.net";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ dwrege ];
