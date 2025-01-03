@@ -33,11 +33,11 @@ let
 in
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "PortfolioPerformance";
-  version = "0.72.2";
+  version = "0.73.0";
 
   src = fetchurl {
     url = "https://github.com/buchen/portfolio/releases/download/${finalAttrs.version}/PortfolioPerformance-${finalAttrs.version}-linux.gtk.x86_64.tar.gz";
-    hash = "sha256-IYidpwN82j/XKUV+Z3V2pNkxTh9BTTCYD+322ILxZgU=";
+    hash = "sha256-GCP1lvdXzvdUMKBZnSyoLBJ3sxI2/4JKAuDrtGZQJxo=";
   };
 
   nativeBuildInputs = [
@@ -49,8 +49,42 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   dontBuild = true;
 
   installPhase = ''
+    runHook preInstall
+
     mkdir -p $out/portfolio
     cp -av ./* $out/portfolio
+
+    # Remove all jna plugins that does not match the system
+    rm -fR $out/portfolio/plugins/com.sun.jna*/com/sun/jna/{\
+    aix-ppc,\
+    aix-ppc64,\
+    darwin-aarch64,\
+    darwin-x86-64,\
+    dragonflybsd-x86-64,\
+    freebsd-aarch64,\
+    freebsd-x86,\
+    freebsd-x86-64,\
+    linux-aarch64,\
+    linux-arm,\
+    linux-armel,\
+    linux-loongarch64,\
+    linux-mips64el,\
+    linux-ppc,\
+    linux-ppc64le,\
+    linux-riscv64,\
+    linux-s390x,\
+    linux-x86,\
+    openbsd-x86,\
+    openbsd-x86-64,\
+    sunos-sparc,\
+    sunos-sparcv9,\
+    sunos-x86,\
+    sunos-x86-64,\
+    win32,\
+    win32-aarch64,\
+    win32-x86,\
+    win32-x86-64\
+    }
 
     makeWrapper $out/portfolio/PortfolioPerformance $out/bin/portfolio \
       --prefix LD_LIBRARY_PATH : "${runtimeLibs}" \
@@ -61,6 +95,8 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     cp ${desktopItem}/share/applications/* $out/share/applications
     mkdir -p $out/share/pixmaps
     ln -s $out/portfolio/icon.xpm $out/share/pixmaps/portfolio.xpm
+
+    runHook postInstall
   '';
 
   passthru.updateScript = gitUpdater { url = "https://github.com/buchen/portfolio.git"; };
