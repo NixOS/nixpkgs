@@ -1323,8 +1323,12 @@
         aioecowitt
       ];
     "eddystone_temperature" =
-      ps: with ps; [
-      ]; # missing inputs: beacontools
+      ps:
+      with ps;
+      [
+        beacontools
+      ]
+      ++ beacontools.optional-dependencies.scan;
     "edimax" =
       ps: with ps; [
         pyedimax
