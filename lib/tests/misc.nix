@@ -854,6 +854,18 @@ runTests {
     ([ 1 2 3 ] == (take 4 [  1 2 3 ]))
   ];
 
+  testDrop = let inherit (lib) drop; in testAllTrue [
+    # list index -1 is out of bounds
+    # ([ 1 2 3 ] == (drop (-1) [  1 2 3 ]))
+    (drop 0 [ 1 2 3 ] == [ 1 2 3 ])
+    (drop 1 [ 1 2 3 ] == [ 2 3 ])
+    (drop 2 [ 1 2 3 ] == [ 3 ])
+    (drop 3 [ 1 2 3 ] == [ ])
+    (drop 4 [ 1 2 3 ] == [ ])
+    (drop 0 [ ] == [ ])
+    (drop 1 [ ] == [ ])
+  ];
+
   testListHasPrefixExample1 = {
     expr = lists.hasPrefix [ 1 2 ] [ 1 2 3 4 ];
     expected = true;
