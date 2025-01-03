@@ -117,6 +117,7 @@ buildPythonPackage rec {
     (lib.cmakeBool "RDK_BUILD_INCHI_SUPPORT" true)
     (lib.cmakeBool "RDK_BUILD_MAEPARSER_SUPPORT" true)
     (lib.cmakeBool "RDK_BUILD_THREADSAFE_SSS" true)
+    (lib.cmakeBool "RDK_BUILD_XYZ2MOL_SUPPORT" true)
     (lib.cmakeBool "RDK_BUILD_YAEHMOP_SUPPORT" true)
     (lib.cmakeBool "RDK_INSTALL_INTREE" false)
     (lib.cmakeBool "RDK_INSTALL_STATIC_LIBS" false)
