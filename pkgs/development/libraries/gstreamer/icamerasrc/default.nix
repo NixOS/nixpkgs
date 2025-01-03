@@ -17,7 +17,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "intel";
     repo = "icamerasrc";
-    rev = "refs/tags/20240926_1446";
+    tag = "20240926_1446";
     hash = "sha256-BpIZxkPmSVKqPntwBJjGmCaMSYFCEZHJa4soaMAJRWE=";
   };
 

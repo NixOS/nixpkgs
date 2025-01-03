@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dannerph";
     repo = "keba-kecontact";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2XWZt9H+1m4TX0C3cjEIlkrXp6BSArUsbLi+VKGDqhE=";
   };
 

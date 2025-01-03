@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cottsay";
     repo = "aioraven";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ux2jeXkh8YsJ6mItXOx40pp0Tc+aJXMV7ZqyZg+iy2c=";
   };
 

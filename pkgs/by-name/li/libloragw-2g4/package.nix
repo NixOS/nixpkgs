@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Lora-net";
     repo = "gateway_2g4_hal";
-    rev = "refs/tags/V${finalAttrs.version}";
+    tag = "V${finalAttrs.version}";
     hash = "sha256-EvsYCkZ55nEdZXhxp7AjCw954+uUIoi2Fc3xhaIjZys=";
   };
 

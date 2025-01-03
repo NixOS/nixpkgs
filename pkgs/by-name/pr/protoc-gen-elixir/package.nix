@@ -10,7 +10,7 @@ beamPackages.mixRelease rec {
   src = fetchFromGitHub {
     owner = "elixir-protobuf";
     repo = "protobuf";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TnuIlXYr36hx1sVktPHj4J4cJLCFK5F1xaX0V9/+ICQ=";
   };
 

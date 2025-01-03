@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ecederstrand";
     repo = "exchangelib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nu1uhsUc4NhVE08RtaD8h6KL6DFzA8mPcCJ/cX2UYME=";
   };
 

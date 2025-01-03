@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "triyanox";
     repo = "lla";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8BnYLC5SGFvk9srRyLxflDgfVbbGMSHXBOjXQLMLIi8=";
   };
 

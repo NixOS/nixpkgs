@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jaraco";
     repo = "jaraco.envs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yRMX0H6yWN8TiO/LGAr4HyrVS8ZhBjuR885/+UQscP0=";
   };
 

@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "adafruit";
     repo = "circup";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Iid6IwPoj7F9X6Yb0ESsuvD9/tZdRQyCceGOVt2R1qw=";
   };
 

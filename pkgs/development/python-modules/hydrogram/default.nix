@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hydrogram";
     repo = "hydrogram";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kKzXR8ared2+mHBABxtX+glJ3PMuxA1Pek3DuUkTT40=";
   };
 

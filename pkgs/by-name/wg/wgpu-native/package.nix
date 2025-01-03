@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "gfx-rs";
     repo = "wgpu-native";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lEUHRU7+sFWtEYTOB2F+SmMNG8nrjro3IL7BgYuIGgM=";
     fetchSubmodules = true;
   };

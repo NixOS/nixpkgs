@@ -10,7 +10,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cryptaliagy";
     repo = "tomlq";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-g8xjz8qCTiulTwcEbLTHYldw4PI+4ZfCOMJs+J6L1C4=";
   };
 

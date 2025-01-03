@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fronzbot";
     repo = "blinkpy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MWXOxE0nxBFhkAWjy7qFPhv4AO6VjGf+fAiyaWXeiX8=";
   };
 

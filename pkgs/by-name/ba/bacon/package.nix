@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Canop";
     repo = "bacon";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-pw+EfmpDvMCKSHOeHiv06x13/tRuf053Zcj8z0eWnPs=";
   };
 

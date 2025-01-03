@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "modal-com";
     repo = "pytest-markdown-docs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-mclN28tfPcoFxswECjbrkeOI51XXSqUXfbvuSHrd7Sw=";
   };
 

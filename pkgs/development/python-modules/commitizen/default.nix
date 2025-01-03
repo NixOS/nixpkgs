@@ -39,7 +39,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "commitizen-tools";
     repo = "commitizen";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-f3uusTNGMK6a3Plh6FHBeM8vEXDZW31o9E0i+sWsBgE=";
   };
 
