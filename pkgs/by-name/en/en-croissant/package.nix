@@ -15,7 +15,6 @@
   libsoup_2_4,
   webkitgtk_4_0,
   gst_all_1,
-  apple-sdk_11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -51,17 +50,15 @@ rustPlatform.buildRustPackage rec {
     ++ lib.optionals stdenv.hostPlatform.isLinux [ wrapGAppsHook3 ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [ makeBinaryWrapper ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      openssl
-      libsoup_2_4
-      webkitgtk_4_0
-      gst_all_1.gstreamer
-      gst_all_1.gst-plugins-base
-      gst_all_1.gst-plugins-bad
-      gst_all_1.gst-plugins-good
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    openssl
+    libsoup_2_4
+    webkitgtk_4_0
+    gst_all_1.gstreamer
+    gst_all_1.gst-plugins-base
+    gst_all_1.gst-plugins-bad
+    gst_all_1.gst-plugins-good
+  ];
 
   doCheck = false; # many scoring tests fail
 
