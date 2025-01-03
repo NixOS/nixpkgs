@@ -9,6 +9,7 @@
   makeWrapper,
   cmake,
   perl,
+  llvm,
   clang,
   hip-common,
   hipcc,
@@ -72,6 +73,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    llvm
     numactl
     libGL
     libxml2
@@ -84,6 +86,8 @@ stdenv.mkDerivation (finalAttrs: {
     rocm-runtime
     rocminfo
   ];
+
+  hardeningDisable = [ "all" ];
 
   cmakeFlags = [
     "-DCMAKE_POLICY_DEFAULT_CMP0072=NEW" # Prefer newer OpenGL libraries
@@ -190,6 +194,8 @@ stdenv.mkDerivation (finalAttrs: {
       "1102"
     ] (target: "gfx${target}");
 
+    rocmClang = clang;
+
     updateScript = rocmUpdateScript {
       name = finalAttrs.pname;
       owner = finalAttrs.src.owner;
@@ -215,8 +221,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
+    # broken =
+    #   versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+    #   || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

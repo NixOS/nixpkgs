@@ -15,7 +15,7 @@
   python3Packages,
   buildTests ? false,
   buildBenchmarks ? false, # Seems to depend on tests
-  gpuTargets ? [ ],
+  gpuTargets ? clr.gpuTargets,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -157,7 +157,7 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
     broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      versions.minor finalAttrs.version != versions.minor clr.rocmClang.version
       || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

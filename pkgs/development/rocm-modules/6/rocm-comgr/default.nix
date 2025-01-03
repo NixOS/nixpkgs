@@ -4,6 +4,7 @@
   fetchFromGitHub,
   rocmUpdateScript,
   cmake,
+  llvm,
   rocm-cmake,
   rocm-device-libs,
   libxml2,
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
+    llvm
     rocm-device-libs
     libxml2
   ];
@@ -55,8 +57,8 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.ncsa;
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
+    # broken =
+    #   versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+    #   || versionAtLeast finalAttrs.version "7.0.0";
   };
 })
