@@ -98,7 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
     ./patches/fix-cmake-install.patch
     # }}}
 
-    # These may be submitted upstream {{{
+    # These may be or already are submitted upstream {{{
     ./patches/add-cstdint.patch # use <cstdint> for GCC 13 compatibility
     ./patches/fix-zoned-time.patch # fix ambiguity of some date/chrono functions in GCC 13
     # fix apparent logic error when checking for supported audio codecs on launch
@@ -107,7 +107,12 @@ stdenv.mkDerivation (finalAttrs: {
       url = "https://github.com/dpaulat/supercell-wx/commit/9dfbac66172b882c5c4ccfa4251a03f8bf607b02.diff";
       sha256 = "sha256-sGw/vwJVNcWD56z/cG0VMZo+daQXb/I0+zbG3Gr18lU=";
     })
-    ./patches/add-missing-algorithm-include-gcc14.patch
+    # fix missing include in test
+    (fetchpatch {
+      name = "add-missing-algorithm-include-gcc14";
+      url = "https://github.com/dpaulat/supercell-wx/commit/3be82e1d1f0a6c36456d53c107fd788027422d74.patch";
+      sha256 = "sha256-JZPiFm0OAXOufnbcDfX5kv/BtLZiBvhTvI876f4qvo4=";
+    })
     # }}}
   ];
 
