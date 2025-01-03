@@ -66,6 +66,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [
       taylor1791
       calavera
+      matthiasbeyer
     ];
   };
 }
