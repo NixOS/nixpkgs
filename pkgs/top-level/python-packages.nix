@@ -15517,6 +15517,8 @@ self: super: with self; {
 
   standard-chunk = callPackage ../development/python-modules/standard-chunk { };
 
+  standard-telnetlib = callPackage ../development/python-modules/standard-telnetlib { };
+
   stone = callPackage ../development/python-modules/stone { };
 
   stookalert = callPackage ../development/python-modules/stookalert { };
