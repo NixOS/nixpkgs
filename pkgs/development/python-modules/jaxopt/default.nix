@@ -94,6 +94,7 @@ buildPythonPackage rec {
       # AssertionError (flaky numerical tests)
       "test_logreg_with_intercept_manual_loop3"
       "test_binary_logit_log_likelihood"
+      "test_inv_hessian_product_pytree3"
     ];
 
   meta = {
