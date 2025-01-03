@@ -43,6 +43,7 @@
   unidiff,
   glibcLocales,
   nixosTests,
+  fetchpatch,
 }:
 
 let
@@ -140,6 +141,11 @@ buildPythonApplication rec {
   ];
 
   patches = [
+    (fetchpatch {
+      name = "remove-uses-of-twisted-python-constants.patch";
+      url = "https://github.com/buildbot/buildbot/commit/ac46c0aa77be46eaa64e09bef03da6f8dbaacfa7.patch";
+      hash = "sha256-XoODSKY0GzFh2H5gWxiXm/QxngGN2MM0yId5D1RQflQ=";
+    })
     # This patch disables the test that tries to read /etc/os-release which
     # is not accessible in sandboxed builds.
     ./skip_test_linux_distro.patch
