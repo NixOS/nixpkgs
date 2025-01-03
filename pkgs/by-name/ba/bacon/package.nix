@@ -34,6 +34,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/Canop/bacon";
     changelog = "https://github.com/Canop/bacon/blob/v${version}/CHANGELOG.md";
     license = lib.licenses.agpl3Only;
-    maintainers = with lib.maintainers; [ FlorianFranzen ];
+    maintainers = with lib.maintainers; [
+      FlorianFranzen
+      matthiasbeyer
+    ];
   };
 }
