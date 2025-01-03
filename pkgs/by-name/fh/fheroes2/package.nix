@@ -18,13 +18,13 @@
 
 stdenv.mkDerivation rec {
   pname = "fheroes2";
-  version = "1.1.4";
+  version = "1.1.5";
 
   src = fetchFromGitHub {
     owner = "ihhub";
     repo = "fheroes2";
     rev = version;
-    hash = "sha256-hgFOXAxbCpG3lHWyX6gE/aGJ1A/QymWHMmRwta997+Q=";
+    hash = "sha256-Iy7aDC2IRwaNcX+hqtlKNDdOC8WCIlCxfNVeMRK6KP4=";
   };
 
   nativeBuildInputs = [ imagemagick ];
@@ -56,7 +56,7 @@ stdenv.mkDerivation rec {
   installPhase = ''
     runHook preInstall
 
-    install -Dm755 $PWD/src/dist/fheroes2 $out/bin/fheroes2
+    install -Dm755 $PWD/src/dist/fheroes2/fheroes2 $out/bin/fheroes2
 
     install -Dm644 -t $out/share/fheroes2/files/lang $PWD/files/lang/*.mo
     install -Dm644 -t $out/share/fheroes2/files/data $PWD/files/data/resurrection.h2d
