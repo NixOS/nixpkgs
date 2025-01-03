@@ -33,8 +33,6 @@ jobs:
       max-parallel: 1
       matrix:
         pairs:
-          - from: master
-            into: haskell-updates
           - from: release-24.11
             into: staging-next-24.11
           - from: staging-next-24.11

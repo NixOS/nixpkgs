@@ -2188,8 +2188,6 @@ with pkgs;
 
   csvtool = callPackage ../development/ocaml-modules/csv/csvtool.nix { };
 
-  cutemarked-ng = libsForQt5.callPackage ../applications/office/cutemarked-ng { };
-
   dataclass-wizard = with python3Packages; toPythonApplication dataclass-wizard;
 
   datasette = with python3Packages; toPythonApplication datasette;
@@ -6813,9 +6811,6 @@ with pkgs;
   cargo-lambda = callPackage ../development/tools/rust/cargo-lambda {
     zig = buildPackages.zig_0_12;
     inherit (darwin.apple_sdk.frameworks) CoreServices Security;
-  };
-  cargo-msrv = callPackage ../development/tools/rust/cargo-msrv {
-    inherit (darwin.apple_sdk.frameworks) Security;
   };
   cargo-ndk = callPackage ../development/tools/rust/cargo-ndk {
     inherit (darwin.apple_sdk.frameworks) CoreGraphics Foundation;
@@ -14593,12 +14588,6 @@ with pkgs;
   moc = callPackage ../applications/audio/moc {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
   };
-
-  xmrig = darwin.apple_sdk_11_0.callPackage ../applications/misc/xmrig { };
-
-  xmrig-mo = darwin.apple_sdk_11_0.callPackage ../applications/misc/xmrig/moneroocean.nix { };
-
-  xmrig-proxy = darwin.apple_sdk_11_0.callPackage ../applications/misc/xmrig/proxy.nix { };
 
   monotone = callPackage ../applications/version-management/monotone {
     lua = lua5;

@@ -15,7 +15,6 @@
   dbus,
   fontconfig,
   libsixel,
-  apple-sdk_11,
 
   # build options
   withStreaming ? true,
@@ -74,9 +73,6 @@ rustPlatform.buildRustPackage rec {
       openssl
       dbus
       fontconfig
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11 # can be removed once x86_64-darwin defaults to a newer SDK
     ]
     ++ lib.optionals withSixel [ libsixel ]
     ++ lib.optionals (withAudioBackend == "alsa") [ alsa-lib ]

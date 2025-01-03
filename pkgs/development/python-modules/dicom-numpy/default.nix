@@ -4,6 +4,7 @@
   fetchFromGitHub,
   pythonOlder,
   pytestCheckHook,
+  setuptools,
   numpy,
   pydicom,
 }:
@@ -21,6 +22,15 @@ buildPythonPackage rec {
     rev = "refs/tags/v${version}";
     hash = "sha256-pgmREQlstr0GY2ThIWt4hbcSWmaNWgkr2gO4PSgGHqE=";
   };
+
+  postPatch = ''
+    substituteInPlace dicom_numpy/zip_archive.py \
+      --replace-fail "pydicom.read_file" "pydicom.dcmread"
+  '';
+
+  build-system = [
+    setuptools
+  ];
 
   propagatedBuildInputs = [
     numpy

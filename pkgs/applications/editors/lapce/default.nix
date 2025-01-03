@@ -19,7 +19,6 @@
   wayland,
   gobject-introspection,
   xorg,
-  apple-sdk_11,
 }:
 let
   rpathLibs = lib.optionals stdenv.hostPlatform.isLinux [
@@ -94,7 +93,6 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
       libobjc
-      apple-sdk_11
     ];
 
   postInstall =

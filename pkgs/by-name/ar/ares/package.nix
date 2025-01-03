@@ -2,7 +2,6 @@
   lib,
   SDL2,
   alsa-lib,
-  apple-sdk_11,
   autoPatchelfHook,
   fetchFromGitHub,
   gtk3,
@@ -67,9 +66,6 @@ stdenv.mkDerivation (finalAttrs: {
       libpulseaudio
       openal
       udev
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
     ];
 
   appendRunpaths = [ (lib.makeLibraryPath [ vulkan-loader ]) ];
