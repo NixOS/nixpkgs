@@ -56,9 +56,6 @@ while (( "$n" < "$nParams" )); do
                 c++*) isCxx=1 ;;
             esac
             ;;
-        # check common c++ file extensions
-        # taken from clang: https://github.com/llvm/llvm-project/blob/4d6a5fc702e568b0456c4d8f9e2307eb6d81e955/clang/lib/Driver/Types.cpp#L299-L369
-        *.C|*.H|*.cc|*.CC|*.cp|*.hh|*.ccm|*.cpp|*.CPP|*.c++|*.C++|*.cxx|*.CXX|*.hpp|*.hxx|*.c++m|*.cppm|*.cxxm) isCxx=1 ;;
         --) # Everything else is positional args!
             # See: https://github.com/llvm/llvm-project/commit/ed1d07282cc9d8e4c25d585e03e5c8a1b6f63a74
 
@@ -68,12 +65,6 @@ while (( "$n" < "$nParams" )); do
 
             positionalArgs=("${params[@]:$n}")
             params=("${params[@]:0:$((n - 1))}")
-
-            for pa in "${positionalArgs[@]}"; do
-                case $pa in
-                    *.C|*.H|*.cc|*.CC|*.cp|*.hh|*.ccm|*.cpp|*.CPP|*.c++|*.C++|*.cxx|*.CXX|*.hpp|*.hxx|*.c++m|*.cppm|*.cxxm) isCxx=1 ;;
-                esac
-            done
             break;
             ;;
         -?*) ;;
