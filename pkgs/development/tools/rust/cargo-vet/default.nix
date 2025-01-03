@@ -4,6 +4,7 @@
   fetchFromGitHub,
   stdenv,
   Security,
+  zlib,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-M8sZzgSEMIB6pPVaE+tC18MCbwYaYpHOnhrEvm9JTso=";
 
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security zlib.dev ];
 
   # the test_project tests require internet access
   checkFlags = [
