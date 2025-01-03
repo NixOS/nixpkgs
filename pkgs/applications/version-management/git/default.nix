@@ -52,6 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [ "format" ];
 
   enableParallelBuilding = true;
+  enableParallelInstalling = true;
 
   patches = [
     ./docbook2texi.patch
@@ -129,19 +130,30 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
 
-  postBuild = lib.optionalString withManual ''
+  postBuild = ''
+    # Set up the flags array for make in the same way as for the main build
+    # phase from stdenv.
+    local flagsArray=(
+        ''${enableParallelBuilding:+-j''${NIX_BUILD_CORES}}
+        SHELL="$SHELL"
+    )
+    concatTo flagsArray makeFlags makeFlagsArray buildFlags buildFlagsArray
+    echoCmd 'build flags' "''${flagsArray[@]}"
+  '' + lib.optionalString withManual ''
     # Need to build the main Git documentation before building the
     # contrib/subtree documentation, as the latter depends on the
     # asciidoc.conf file created by the former.
-    make -C Documentation
+    make -C Documentation "''${flagsArray[@]}"
   '' + ''
-    make -C contrib/subtree all ${lib.optionalString withManual "doc"}
+    make -C contrib/subtree "''${flagsArray[@]}" all ${lib.optionalString withManual "doc"}
   '' + lib.optionalString perlSupport ''
-    make -C contrib/diff-highlight
+    make -C contrib/diff-highlight "''${flagsArray[@]}"
   '' + lib.optionalString osxkeychainSupport ''
-    make -C contrib/credential/osxkeychain
+    make -C contrib/credential/osxkeychain "''${flagsArray[@]}"
   '' + lib.optionalString withLibsecret ''
-    make -C contrib/credential/libsecret
+    make -C contrib/credential/libsecret "''${flagsArray[@]}"
+  '' + ''
+    unset flagsArray
   '';
 
 
@@ -168,8 +180,17 @@ stdenv.mkDerivation (finalAttrs: {
         unlink $1 || true
       }
 
+      # Set up the flags array for make in the same way as for the main install
+      # phase from stdenv.
+      local flagsArray=(
+          ''${enableParallelInstalling:+-j''${NIX_BUILD_CORES}}
+          SHELL="$SHELL"
+      )
+      concatTo flagsArray makeFlags makeFlagsArray installFlags installFlagsArray
+      echoCmd 'install flags' "''${flagsArray[@]}"
+
       # Install git-subtree.
-      make -C contrib/subtree install ${lib.optionalString withManual "install-doc"}
+      make -C contrib/subtree "''${flagsArray[@]}" install ${lib.optionalString withManual "install-doc"}
       rm -rf contrib/subtree
 
       # Install contrib stuff.
@@ -260,7 +281,7 @@ stdenv.mkDerivation (finalAttrs: {
 
    + lib.optionalString withManual ''
        # Install man pages
-       make -j $NIX_BUILD_CORES PERL_PATH="${buildPackages.perl}/bin/perl" cmd-list.made install install-html \
+       make "''${flagsArray[@]}" cmd-list.made install install-html \
          -C Documentation
      ''
 
@@ -286,6 +307,8 @@ stdenv.mkDerivation (finalAttrs: {
     [credential]
       helper = osxkeychain
     EOF
+  '' + ''
+    unset flagsArray
   '';
 
 
