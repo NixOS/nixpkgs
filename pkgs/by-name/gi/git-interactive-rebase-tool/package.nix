@@ -4,7 +4,6 @@
   fetchFromGitHub,
   rustPlatform,
   libiconv,
-  apple-sdk_11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -22,7 +21,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     libiconv
-    apple-sdk_11
   ];
 
   # Compilation during tests fails if this env var is not set.
