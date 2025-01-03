@@ -7732,13 +7732,11 @@ with pkgs;
     bazel_self = bazel_5;
   };
 
-  bazel_6 = darwin.apple_sdk_11_0.callPackage ../development/tools/build-managers/bazel/bazel_6 {
+  bazel_6 = callPackage ../development/tools/build-managers/bazel/bazel_6 {
     inherit (darwin) sigtool;
-    inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation CoreServices Foundation;
     buildJdk = jdk11_headless;
     runJdk = jdk11_headless;
-    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv
-      else if stdenv.cc.isClang then llvmPackages.stdenv
+    stdenv = if stdenv.cc.isClang then llvmPackages_17.stdenv
       else if stdenv.cc.isGNU then gcc12Stdenv
       else stdenv;
     bazel_self = bazel_6;
