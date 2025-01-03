@@ -9931,6 +9931,8 @@ self: super: with self; {
 
   osxphotos = callPackage ../development/python-modules/osxphotos { };
 
+  otpauth = callPackage ../development/python-modules/otpauth { };
+
   ots-python = callPackage ../development/python-modules/ots-python { };
 
   outcome = callPackage ../development/python-modules/outcome { };
