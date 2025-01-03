@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  libiconv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,10 +16,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-9pUUKxPpyoX9f10ZiLWsol2rv66WzQqwa6VubRTrT9Y=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    libiconv
-  ];
 
   # Compilation during tests fails if this env var is not set.
   preCheck = "export GIRT_BUILD_GIT_HASH=${version}";
