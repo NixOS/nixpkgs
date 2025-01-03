@@ -9229,6 +9229,13 @@
     githubId = 287215;
     keys = [ { fingerprint = "D618 7A03 A40A 3D56 62F5  4B46 03EF BF83 9A5F DC15"; } ];
   };
+  hlad = {
+    email = "hlad+nix@hlad.org";
+    name = "Marek Hladky";
+    matrix = "@hlad:hlad.org";
+    github = "hlad";
+    githubId = 6285728;
+  };
   hleboulanger = {
     email = "hleboulanger@protonmail.com";
     name = "Harold Leboulanger";
@@ -13748,6 +13755,17 @@
     github = "mahmoudk1000";
     githubId = 24735185;
     name = "Mahmoud Ayman";
+  };
+  mahtaran = {
+    email = "luka.leer@gmail.com";
+    github = "mahtaran";
+    githubId = 22727323;
+    name = "Luka Leer";
+    keys = [
+      {
+        fingerprint = "C7FF B72E 0527 423A D470  E132 AA82 C4EB CB16 82E0";
+      }
+    ];
   };
   majesticmullet = {
     email = "hoccthomas@gmail.com.au";
