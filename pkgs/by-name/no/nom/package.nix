@@ -21,7 +21,10 @@ buildGoModule rec {
     description = "RSS reader for the terminal";
     platforms = platforms.linux ++ platforms.darwin;
     license = licenses.gpl3Only;
-    maintainers = with maintainers; [ nadir-ishiguro ];
+    maintainers = with maintainers; [
+      nadir-ishiguro
+      matthiasbeyer
+    ];
     mainProgram = "nom";
   };
 }
