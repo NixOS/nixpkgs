@@ -11,6 +11,8 @@
   diskcache,
   fastapi,
   gptcache,
+  huggingface-hub,
+  jsonschema,
   msal,
   numpy,
   openai,
@@ -18,6 +20,7 @@
   platformdirs,
   protobuf,
   pyformlang,
+  pydantic,
   requests,
   tiktoken,
   torch,
@@ -57,15 +60,29 @@ buildPythonPackage rec {
     platformdirs
     protobuf
     pyformlang
+    pydantic
     requests
     tiktoken
     uvicorn
   ];
 
+  optional-dependencies = {
+    azureai = [ openai ];
+    openai = [ openai ];
+    schemas = [ jsonschema ];
+    server = [
+      fastapi
+      uvicorn
+    ];
+  };
+
   nativeCheckInputs = [
+    huggingface-hub
     pytestCheckHook
     torch
-  ];
+  ] ++ optional-dependencies.schemas;
+
+  pytestFlagsArray = [ "tests/unit" ];
 
   disabledTests = [
     # require network access
@@ -79,6 +96,10 @@ buildPythonPackage rec {
     "test_recursion_error"
     "test_openai_class_detection"
     "test_openai_chat_without_roles"
+    "test_local_image"
+    "test_remote_image"
+    "test_image_from_bytes"
+    "test_remote_image_not_found"
 
     # flaky tests
     "test_remote_mock_gen" # frequently fails when building packages in parallel
@@ -86,11 +107,12 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # require network access
-    "tests/library/test_gen.py"
+    "tests/unit/test_tokenizers.py"
   ];
 
   preCheck = ''
     export HOME=$TMPDIR
+    rm tests/conftest.py
   '';
 
   pythonImportsCheck = [ "guidance" ];
