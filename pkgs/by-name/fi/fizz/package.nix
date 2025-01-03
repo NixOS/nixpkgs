@@ -14,8 +14,6 @@
   zstd,
   gflags,
   libevent,
-  apple-sdk_11,
-  darwinMinVersionHook,
 
   folly,
   libsodium,
@@ -49,19 +47,14 @@ stdenv.mkDerivation (finalAttrs: {
     removeReferencesTo
   ];
 
-  buildInputs =
-    [
-      openssl
-      glog
-      double-conversion
-      zstd
-      gflags
-      libevent
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
-    ];
+  buildInputs = [
+    openssl
+    glog
+    double-conversion
+    zstd
+    gflags
+    libevent
+  ];
 
   propagatedBuildInputs = [
     folly

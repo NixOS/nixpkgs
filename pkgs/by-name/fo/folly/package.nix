@@ -21,8 +21,6 @@
   zstd,
   libiberty,
   libunwind,
-  apple-sdk_11,
-  darwinMinVersionHook,
 
   boost,
   fmt_11,
@@ -64,26 +62,21 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   # See CMake/folly-deps.cmake in the Folly source tree.
-  buildInputs =
-    [
-      boost
-      double-conversion
-      fast-float
-      gflags
-      glog
-      libevent
-      zlib
-      openssl
-      xz
-      lz4
-      zstd
-      libiberty
-      libunwind
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
-    ];
+  buildInputs = [
+    boost
+    double-conversion
+    fast-float
+    gflags
+    glog
+    libevent
+    zlib
+    openssl
+    xz
+    lz4
+    zstd
+    libiberty
+    libunwind
+  ];
 
   propagatedBuildInputs =
     [

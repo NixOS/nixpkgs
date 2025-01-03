@@ -17,8 +17,6 @@
   zlib,
   zstd,
   xxHash,
-  apple-sdk_11,
-  darwinMinVersionHook,
 
   mvfst,
 
@@ -56,22 +54,17 @@ stdenv.mkDerivation (finalAttrs: {
     removeReferencesTo
   ];
 
-  buildInputs =
-    [
-      openssl
-      gflags
-      glog
-      folly
-      fizz
-      wangle
-      zlib
-      zstd
-      xxHash
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
-    ];
+  buildInputs = [
+    openssl
+    gflags
+    glog
+    folly
+    fizz
+    wangle
+    zlib
+    zstd
+    xxHash
+  ];
 
   propagatedBuildInputs = [
     mvfst
