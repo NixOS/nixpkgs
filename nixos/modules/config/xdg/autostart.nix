@@ -7,7 +7,7 @@
   options = {
     xdg.autostart.enable = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
       description = ''
         Whether to install files to support the
         [XDG Autostart specification](https://specifications.freedesktop.org/autostart-spec/latest).

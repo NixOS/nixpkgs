@@ -12,7 +12,7 @@
   options = {
     xdg.icons.enable = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
       description = ''
         Whether to install files to support the
         [XDG Icon Theme specification](https://specifications.freedesktop.org/icon-theme-spec/latest).

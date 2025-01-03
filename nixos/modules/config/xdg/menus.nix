@@ -7,7 +7,7 @@
   options = {
     xdg.menus.enable = lib.mkOption {
       type = lib.types.bool;
-      default = true;
+      default = false;
       description = ''
         Whether to install files to support the
         [XDG Desktop Menu specification](https://specifications.freedesktop.org/menu-spec/latest).
