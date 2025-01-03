@@ -1,0 +1,24 @@
+diff --git a/tests/test_api.py b/tests/test_api.py
+index 582ee5a..20db1f5 100644
+--- a/tests/test_api.py
++++ b/tests/test_api.py
+@@ -1,7 +1,7 @@
+ import unittest
+ import json
+ from flask import Flask, Blueprint, redirect, views, abort as flask_abort
+-from flask.signals import got_request_exception, signals_available
++from flask.signals import got_request_exception
+ try:
+     from mock import Mock
+ except:
+@@ -491,10 +491,6 @@ class APITestCase(unittest.TestCase):
+         self.assertEqual(api.default_mediatype, resp.headers['Content-Type'])
+ 
+     def test_handle_error_signal(self):
+-        if not signals_available:
+-            # This test requires the blinker lib to run.
+-            print("Can't test signals without signal support")
+-            return
+         app = Flask(__name__)
+         api = flask_restful.Api(app)
+ 
