@@ -430,6 +430,9 @@ rec {
         muslabin32
         muslabi64
       ];
+    isMlibc = {
+      abi = abis.mlibc;
+    };
     isUClibc =
       with abis;
       map (a: { abi = a; }) [
