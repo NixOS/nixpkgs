@@ -2,6 +2,7 @@
   stdenv,
   lib,
   fetchFromGitHub,
+  fetchpatch,
   pkg-config,
   python3,
   autoreconfHook,
@@ -67,6 +68,14 @@ stdenv.mkDerivation {
     vala
     libevhtp
     oniguruma
+  ];
+
+  patches = [
+    # https://github.com/haiwen/seafile-server/pull/658
+    (fetchpatch {
+      url = "https://github.com/haiwen/seafile-server/commit/8029a11a731bfe142af43f230f47b93811ebaaaa.patch";
+      hash = "sha256-AWNDXIyrKXgqgq3p0m8+s3YH8dKxWnf7uEMYzSsjmX4=";
+    })
   ];
 
   postInstall = ''
