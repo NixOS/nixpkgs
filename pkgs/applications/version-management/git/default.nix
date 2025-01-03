@@ -185,10 +185,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   postInstall =
     ''
-      notSupported() {
-        unlink $1 || true
-      }
-
       # Set up the flags array for make in the same way as for the main install
       # phase from stdenv.
       local flagsArray=(
@@ -275,8 +271,7 @@ stdenv.mkDerivation (finalAttrs: {
           --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath (perlLibs ++ [svn.out])}" \
           --prefix PATH : "${svn.out}/bin"
       '' else ''
-        # replace git-svn by notification script
-        notSupported $out/libexec/git-core/git-svn
+        rm -f $out/libexec/git-core/git-svn
      '')
 
    + (if sendEmailSupport then ''
@@ -284,8 +279,7 @@ stdenv.mkDerivation (finalAttrs: {
         wrapProgram $out/libexec/git-core/git-send-email \
                      --set GITPERLLIB "$out/${perlPackages.perl.libPrefix}:${perlPackages.makePerlPath smtpPerlLibs}"
       '' else ''
-        # replace git-send-email by notification script
-        notSupported $out/libexec/git-core/git-send-email
+        rm -f $out/libexec/git-core/git-send-email
       '')
 
    + lib.optionalString withManual ''
@@ -303,9 +297,8 @@ stdenv.mkDerivation (finalAttrs: {
        done
        ln -s $out/share/git/contrib/completion/git-completion.bash $out/share/bash-completion/completions/gitk
      '' else ''
-       # Don't wrap Tcl/Tk, replace them by notification scripts
        for prog in bin/gitk libexec/git-core/git-gui; do
-         notSupported "$out/$prog"
+         rm -f "$out/$prog"
        done
      '')
    + lib.optionalString osxkeychainSupport ''
