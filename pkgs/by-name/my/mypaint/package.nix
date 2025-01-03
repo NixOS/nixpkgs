@@ -35,7 +35,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "mypaint";
     repo = "mypaint";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-rVKcxzWZRLcuxK8xRyRgvitXAh4uOEyqHswLeTdA2Mk=";
     fetchSubmodules = true;
   };
