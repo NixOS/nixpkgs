@@ -101,6 +101,11 @@ let
           moveToOutput "lib/libz3java.${stdenv.hostPlatform.extensions.sharedLibrary}" "$java"
         '';
 
+      doInstallCheck = true;
+      installCheckPhase = ''
+        $out/bin/z3 -version 2>&1 | grep -F "Z3 version $version"
+      '';
+
       outputs =
         [
           "out"
