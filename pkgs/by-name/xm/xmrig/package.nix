@@ -7,12 +7,8 @@
 , openssl
 , hwloc
 , donateLevel ? 0
-, darwin
 }:
 
-let
-  inherit (darwin.apple_sdk_11_0.frameworks) Carbon CoreServices OpenCL;
-in
 stdenv.mkDerivation rec {
   pname = "xmrig";
   version = "6.22.2";
@@ -43,10 +39,6 @@ stdenv.mkDerivation rec {
     libmicrohttpd
     openssl
     hwloc
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    Carbon
-    CoreServices
-    OpenCL
   ];
 
   inherit donateLevel;
