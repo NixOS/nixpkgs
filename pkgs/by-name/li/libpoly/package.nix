@@ -19,6 +19,11 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-7aFz+6XJOVEA/Fmi0ywd6rZdTW8sHq8MoHqXR0Hc2o4=";
   };
 
+  postPatch = ''
+    substituteInPlace src/CMakeLists.txt \
+      --replace-warn " -Werror " " "
+  '';
+
   nativeBuildInputs = [ cmake ];
 
   buildInputs = [

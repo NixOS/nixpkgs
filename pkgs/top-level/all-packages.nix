@@ -1911,8 +1911,6 @@ with pkgs;
 
   gomobile = callPackage ../development/mobile/gomobile { };
 
-  titaniumenv = callPackage ../development/mobile/titaniumenv { };
-
   adb-sync = callPackage ../development/mobile/adb-sync {
     inherit (androidenv.androidPkgs) platform-tools;
   };
@@ -5665,8 +5663,6 @@ with pkgs;
 
   yapf = with python3Packages; toPythonApplication yapf;
 
-  yarn-berry = callPackage ../development/tools/yarn-berry { };
-
   yarn2nix-moretea = callPackage ../development/tools/yarn2nix-moretea { pkgs = pkgs.__splicedPackages; };
 
   inherit (yarn2nix-moretea)
@@ -5906,6 +5902,8 @@ with pkgs;
   devpi-client = python3Packages.callPackage ../development/tools/devpi-client { };
 
   devpi-server = python3Packages.callPackage ../development/tools/devpi-server { };
+
+  dprint-plugins = recurseIntoAttrs (callPackage ../by-name/dp/dprint/plugins { });
 
   elm2nix = haskell.lib.compose.justStaticExecutables haskellPackages.elm2nix;
 
@@ -8771,10 +8769,7 @@ with pkgs;
     certbot-dns-route53
   ]);
 
-  # CGAL 5 has API changes
-  cgal_4 = callPackage ../development/libraries/CGAL/4.nix { };
-  cgal_5 = callPackage ../development/libraries/CGAL { };
-  cgal = cgal_5;
+  cgal = callPackage ../development/libraries/CGAL { };
 
   check = callPackage ../development/libraries/check {
     inherit (darwin.apple_sdk.frameworks) CoreServices;
@@ -9493,6 +9488,7 @@ with pkgs;
 
   itk_5_2 = callPackage ../development/libraries/itk/5.2.x.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
+    enableRtk = false;
   };
 
   itk_5 = callPackage ../development/libraries/itk/5.x.nix {
@@ -10967,12 +10963,10 @@ with pkgs;
 
   wxGTK31 = callPackage ../development/libraries/wxwidgets/wxGTK31.nix {
     inherit (darwin.stubs) setfile;
-    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit AVFoundation AVKit WebKit;
   };
 
   wxGTK32 = callPackage ../development/libraries/wxwidgets/wxGTK32.nix {
     inherit (darwin.stubs) setfile;
-    inherit (darwin.apple_sdk.frameworks) AGL Carbon Cocoa Kernel QTKit AVFoundation AVKit WebKit;
   };
 
   wxSVG = callPackage ../development/libraries/wxSVG {

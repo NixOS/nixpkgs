@@ -8,13 +8,14 @@
   pytestCheckHook,
   # fetchers
   fetchFromGitHub,
+  fetchpatch,
   gitUpdater,
   # build tools
   cmake,
   swig,
   # native dependencies
   eigen,
-  boost179,
+  boost,
   cgal,
   gmp,
   hdf5,
@@ -65,6 +66,20 @@ buildPythonPackage rec {
     hash = "sha256-tnj14lBEkUZNDM9J1sRhNA7OkWTWa5JPTSF8hui3q7k=";
   };
 
+  patches = [
+    (fetchpatch {
+      name = "ifcopenshell-boost-1.86-mt19937.patch";
+      url = "https://github.com/IfcOpenShell/IfcOpenShell/commit/1fe168d331123920eeb9a96e542fcc1453de57fe.patch";
+      hash = "sha256-oZDEL8cPcEu83lW+qSvCbmDGYpaNNRrptW9MLu2pN70=";
+    })
+
+    (fetchpatch {
+      name = "ifcopenshell-boost-1.86-json.patch";
+      url = "https://github.com/IfcOpenShell/IfcOpenShell/commit/88b861737c7c206d0e7307f90d37467e9585515c.patch";
+      hash = "sha256-zMoQcBWRdtavL0xdsr53SqyG6CZoeon8/mmJhrw85lc=";
+    })
+  ];
+
   nativeBuildInputs = [
     # c++
     cmake
@@ -77,7 +92,7 @@ buildPythonPackage rec {
   buildInputs = [
     # ifcopenshell needs stdc++
     (lib.getLib stdenv.cc.cc)
-    boost179
+    boost
     cgal
     eigen
     gmp
