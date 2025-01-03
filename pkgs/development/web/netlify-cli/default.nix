@@ -1,11 +1,11 @@
 {
-  callPackage,
-  vips,
-  pkg-config,
-  lib,
   buildNpmPackage,
+  callPackage,
   fetchFromGitHub,
+  lib,
   nix-update-script,
+  pkg-config,
+  vips,
 }:
 
 buildNpmPackage rec {
