@@ -14435,6 +14435,8 @@ self: super: with self; {
 
   scim2-filter-parser = callPackage ../development/python-modules/scim2-filter-parser { };
 
+  scim2-models = callPackage ../development/python-modules/scim2-models { };
+
   scikit-bio = callPackage ../development/python-modules/scikit-bio { };
 
   scikit-build = callPackage ../development/python-modules/scikit-build { };
