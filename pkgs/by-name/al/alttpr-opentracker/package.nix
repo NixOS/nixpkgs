@@ -22,7 +22,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "trippsc2";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha512-nWkPgVYdnBJibyJRdLPe3O3RioDPbzumSritRejmr4CeiPb7aUTON7HjivcV/GKor1guEYu+TJ+QxYrqO/eppg==";
   };
 

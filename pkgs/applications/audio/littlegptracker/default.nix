@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "djdiskmachine";
     repo = "littlegptracker";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-1uXC5nJ63YguQuNIkuK0yx9lmrMBqw0WdlmCV8o11cE=";
   };
 

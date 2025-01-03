@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "lxndr";
     repo = "gswatcher";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-U09vovOanYmDl5ymFC3bXU8pi8aUq2tPUE5AEoqmfpc=";
   };
 

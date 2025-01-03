@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "xosnrdev";
     repo = "cargonode";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xzBLuQRyKmd9k0sbBFV5amtFWwKqXR0CEsRv8SHiJcQ=";
   };
 

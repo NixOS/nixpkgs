@@ -30,7 +30,7 @@ python.pkgs.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mautrix";
     repo = "telegram";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uR0vhp7ONyjwMKbgM1iObpFRoQzyQzJLbw4i9P58jTs=";
   };
 

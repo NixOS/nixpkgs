@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "rusq";
     repo = "slackdump";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-szo5n1sVv9PZUW77k/1qLuU0URl0FNB4cO5vqokoZ2c=";
   };
 

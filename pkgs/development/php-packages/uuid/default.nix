@@ -15,7 +15,7 @@ buildPecl {
   src = fetchFromGitHub {
     owner = "php";
     repo = "pecl-networking-uuid";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-C4SoSKkCTQOLKM1h47vbBgiHTG+ChocDB9tzhWfKUsw=";
   };
 

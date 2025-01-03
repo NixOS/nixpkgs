@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyca";
     repo = "cryptography";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-A+qYW8GksYk+FQG8ZJHNYrjcouE1CsVH0Lko2ahoYUI=";
   };
 

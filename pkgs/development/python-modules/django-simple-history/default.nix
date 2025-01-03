@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "django-simple-history";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-bPdMdtiEDRvRD00ZBwUQkeCDKCx2SW65+FsbuMwVdK0=";
   };
 

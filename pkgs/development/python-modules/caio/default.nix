@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mosquito";
     repo = "caio";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-aTJ02dCLb3CsT6KmJxkmOzwtg5nuXeBwz+mT7ZTTU9o=";
   };
 

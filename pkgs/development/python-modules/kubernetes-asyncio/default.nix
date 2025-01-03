@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tomplus";
     repo = "kubernetes_asyncio";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-YKBqhUeLqLiQ6bK235zTm4salnSLUxl4DUiFLQSjWqw=";
   };
 

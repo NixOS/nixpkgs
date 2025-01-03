@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "arduino";
     repo = "arduino-language-server";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PmPGhbB1HqxZRK+f28SdZNh4HhE0oseYsdJuEAAk90I=";
   };
 

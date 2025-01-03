@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "twilio";
     repo = "twilio-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sZhKFnCmARocnOqM1NE6eGU/6UtfJSQTK+bv5HHHU1U=";
   };
 

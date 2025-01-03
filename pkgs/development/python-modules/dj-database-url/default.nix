@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "dj-database-url";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Q0A9wA/k1xObw0e8+9qVTfpxBNL4W9rXisi0ge+R3DM=";
   };
 

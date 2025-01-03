@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "toruseo";
     repo = "UXsim";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lN9kcpNVSPNRWwF9rltweqHJpzqsYrKeP0KEQRwiltk=";
   };
 

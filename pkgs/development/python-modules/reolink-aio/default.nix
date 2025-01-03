@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "starkillerOG";
     repo = "reolink_aio";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-QZPv3bdmk3RVLfINegSbSl8SLrjTKYkdJBiK2jRmYlU=";
   };
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dan-r";
     repo = "ohmepy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hCwaB6YXtNHCNOyjRxDSonBdTpKqX9GmLwFMvrY9UpI=";
   };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openshift";
     repo = "openshift-restclient-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uLfewj7M8KNs3oL1AM18sR/WhAR2mvBfqadyhR73FP0=";
   };
 

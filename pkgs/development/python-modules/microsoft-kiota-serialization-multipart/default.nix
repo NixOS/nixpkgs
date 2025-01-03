@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "kiota-serialization-multipart-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OGX6vX02928F1uCP8bF/q1Z5aDrdj29iQNOITzF2LQI=";
   };
 

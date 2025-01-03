@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "RedTeamPentesting";
     repo = "monsoon";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-efVwOon499DUJ17g6aQveMd2g544Ck+/P7VttYnR+No=";
   };
 

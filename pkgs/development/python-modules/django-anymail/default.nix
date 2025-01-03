@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "anymail";
     repo = "django-anymail";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TuEEwxwgZVv97Ns4sRWdQjaNymE03nj8CTiU9S6ynZ8=";
   };
 

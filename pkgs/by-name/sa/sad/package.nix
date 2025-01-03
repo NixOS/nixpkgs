@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "ms-jpq";
     repo = "sad";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-frsOfv98VdetlwgNA6O0KEhcCSY9tQeEwkl2am226ko=";
   };
 

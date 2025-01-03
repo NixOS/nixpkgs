@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "mongodb";
     repo = "mongo-cxx-driver";
-    rev = "refs/tags/r${finalAttrs.version}";
+    tag = "r${finalAttrs.version}";
     hash = "sha256-fAOOQyXJ6H4Rt8gRGJnvb5I7E505MOAjNDcFqXUdY+U=";
   };
 

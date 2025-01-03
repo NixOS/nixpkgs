@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nielstron";
     repo = "pysyncthru";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Zije1WzfgIU9pT0H7T/Mx+5gEBCsRgMLkfsa/KB0YtI=";
   };
 

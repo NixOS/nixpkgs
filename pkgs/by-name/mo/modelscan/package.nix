@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "protectai";
     repo = "modelscan";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-90VnIVQFjtKgLCHc+tmOtDdgJP8aaH4h5ZiOOejnXgQ=";
   };
 
