@@ -4,6 +4,7 @@
   fetchzip,
   autoconf,
   automake,
+  autoPatchelfHook,
   cups,
   glib,
   libxml2,
@@ -25,6 +26,7 @@ stdenv.mkDerivation {
   nativeBuildInputs = [
     automake
     autoconf
+    autoPatchelfHook
   ];
   buildInputs = [
     cups
