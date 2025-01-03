@@ -2744,7 +2744,8 @@
       ];
     "jvc_projector" =
       ps: with ps; [
-      ]; # missing inputs: pyjvcprojector
+        pyjvcprojector
+      ];
     "kaiterra" =
       ps: with ps; [
       ]; # missing inputs: kaiterra-async-client
@@ -6807,6 +6808,7 @@
     "jewish_calendar"
     "juicenet"
     "justnimbus"
+    "jvc_projector"
     "kaleidescape"
     "keenetic_ndms2"
     "kegtron"
