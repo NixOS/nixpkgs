@@ -170,6 +170,8 @@ let
             "relibc"
           else if final.isMusl then
             "musl"
+          else if final.isMlibc then
+            "mlibc"
           else if final.isPicolibc then
             "picolibc"
           else if final.isUClibc then
@@ -281,7 +283,8 @@ let
           (
             isAndroid
             || isGnu
-            || isMusl # Linux (allows multiple libcs)
+            || isMusl
+            || (isMlibc && isLinux) # Linux (allows multiple libcs)
             || isDarwin
             || isSunOS
             || isOpenBSD

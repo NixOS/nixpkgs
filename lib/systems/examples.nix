@@ -146,6 +146,10 @@ rec {
     config = "aarch64-unknown-linux-musl";
   };
 
+  aarch64-linux-mlibc = {
+    config = "aarch64-unknown-linux-mlibc";
+  };
+
   gnu64 = {
     config = "x86_64-unknown-linux-gnu";
   };
@@ -158,6 +162,13 @@ rec {
   };
   musl32 = {
     config = "i686-unknown-linux-musl";
+  };
+
+  x86_64-linux-mlibc = {
+    config = "x86_64-unknown-linux-mlibc";
+  };
+  i686-linux-mlibc = {
+    config = "i686-unknown-linux-mlibc";
   };
 
   riscv64 = riscv "64";
