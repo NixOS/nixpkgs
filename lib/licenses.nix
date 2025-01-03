@@ -445,6 +445,13 @@ lib.mapAttrs mkLicense ({
     faircode = true;
   };
 
+  confluent-community = {
+    fullName = "Confluent Community License";
+    url = "https://www.confluent.io/confluent-community-license";
+    free = false;
+    faircode = true;
+  };
+
   cpl10 = {
     spdxId = "CPL-1.0";
     fullName = "Common Public License 1.0";
