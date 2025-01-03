@@ -3,7 +3,6 @@
   lib,
   fetchFromGitHub,
   libX11,
-  fixDarwinDylibNames,
 }:
 
 stdenv.mkDerivation rec {
@@ -17,14 +16,18 @@ stdenv.mkDerivation rec {
     hash = "sha256-qBewSOiwf5iaGKLGRWOQUoHkUADuH8Q1mJCLiWCXmuQ=";
   };
 
-  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin fixDarwinDylibNames;
   buildInputs = [ libX11 ];
 
   configureFlags = [ "--disable-debug" ];
-  makeFlags = [
-    "CC=${stdenv.cc.targetPrefix}cc"
-    "AR=${stdenv.cc.targetPrefix}ar"
-  ];
+  makeFlags =
+    [
+      "CC=${stdenv.cc.targetPrefix}cc"
+      "AR=${stdenv.cc.targetPrefix}ar"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "shared=-dynamiclib"
+      "shared+=-Wl,-install_name,$(out)/lib/$(lib_so)"
+    ];
 
   preInstall = ''
     mkdir -p $out/{lib,include}

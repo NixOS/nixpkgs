@@ -59455,34 +59455,6 @@ in
     bypassCache = true;
     reconstructLock = true;
   };
-  coc-toml = nodeEnv.buildNodePackage {
-    name = "coc-toml";
-    packageName = "coc-toml";
-    version = "1.2.5";
-    src = fetchurl {
-      url = "https://registry.npmjs.org/coc-toml/-/coc-toml-1.2.5.tgz";
-      sha512 = "8ypH+v7PkGfYTfg/7QoUGrpgSidzxwr2uvuTXR3FgzWrLT9OQOvlocH9KfCRsP8IIAbCuMOa/OpStN+pNwO6Ug==";
-    };
-    dependencies = [
-      sources."@taplo/lsp-0.2.4"
-      sources."encoding-0.1.13"
-      sources."iconv-lite-0.6.3"
-      sources."node-fetch-2.7.0"
-      sources."safer-buffer-2.1.2"
-      sources."tr46-0.0.3"
-      sources."webidl-conversions-3.0.1"
-      sources."whatwg-url-5.0.0"
-    ];
-    buildInputs = globalBuildInputs;
-    meta = {
-      description = "toml extension for coc.nvim";
-      homepage = "https://github.com/kkiyama117/coc-toml#readme";
-      license = "MIT";
-    };
-    production = true;
-    bypassCache = true;
-    reconstructLock = true;
-  };
   coc-tsserver = nodeEnv.buildNodePackage {
     name = "coc-tsserver";
     packageName = "coc-tsserver";

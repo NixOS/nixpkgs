@@ -28,7 +28,6 @@
   spirv-tools,
   gtest,
   glew,
-  apple-sdk_11,
 }:
 let
   clientExecutable = "TaterClient-DDNet";

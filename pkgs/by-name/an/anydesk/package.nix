@@ -10,8 +10,10 @@
   cairo,
   gdk-pixbuf,
   glib,
-  gnome2,
-  gtk2,
+  gtk3,
+  dbus,
+  harfbuzz,
+  libz,
   libGLU,
   libGL,
   pango,
@@ -48,10 +50,12 @@ stdenv.mkDerivation (finalAttrs: {
       cairo
       gdk-pixbuf
       glib
-      gtk2
+      gtk3
+      dbus
+      harfbuzz
+      libz
       stdenv.cc.cc
       pango
-      gnome2.gtkglext
       libGLU
       libGL
       minizip
@@ -112,18 +116,15 @@ stdenv.mkDerivation (finalAttrs: {
       --set-rpath "${lib.makeLibraryPath finalAttrs.buildInputs}" \
       $out/bin/anydesk
 
-    # pangox is not actually necessary (it was only added as a part of gtkglext)
-    patchelf \
-      --remove-needed libpangox-1.0.so.0 \
-      $out/bin/anydesk
-
     wrapProgram $out/bin/anydesk \
       --prefix PATH : ${
         lib.makeBinPath [
           lsb-release
           pciutils
         ]
-      }
+      } \
+      --prefix GDK_BACKEND : x11 \
+      --set GTK_THEME Adwaita
   '';
 
   passthru = {

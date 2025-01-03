@@ -44,13 +44,13 @@ let
 in
 php.buildComposerProject (finalAttrs: {
   pname = "movim";
-  version = "0.28";
+  version = "0.29";
 
   src = fetchFromGitHub {
     owner = "movim";
     repo = "movim";
     rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-mjBeBu1seH5XMls+e4ON13ayVeugKogbNTzbjp1pUjE=";
+    hash = "sha256-hAOT3n0i9t3uWMjqWJlOs4Vakq3y4+GhiFZ4n3jVqtw=";
   };
 
   php = php.buildEnv (
@@ -98,7 +98,7 @@ php.buildComposerProject (finalAttrs: {
   # pinned commonmark
   composerStrictValidation = false;
 
-  vendorHash = "sha256-ZfMUpkIRCAsiQf6PEVPrMpljZWjP9JXf+nEFA/LunsQ=";
+  vendorHash = "sha256-uma3evj/81qz/+1+poIl0FJqWe1e2Ay0Jm446CKOGP0=";
 
   postPatch = ''
     # Our modules are already wrapped, removes missing *.so warnings;

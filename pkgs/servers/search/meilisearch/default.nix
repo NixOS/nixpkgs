@@ -1,9 +1,7 @@
 {
-  stdenv,
   lib,
   rustPlatform,
   fetchFromGitHub,
-  apple-sdk_11,
   nixosTests,
   nix-update-script,
 }:
@@ -37,8 +35,6 @@ rustPlatform.buildRustPackage {
   buildNoDefaultFeatures = true;
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   passthru = {
     updateScript = nix-update-script { };

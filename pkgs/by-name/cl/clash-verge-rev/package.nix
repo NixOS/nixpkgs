@@ -70,6 +70,10 @@ let
   meta = {
     description = "Clash GUI based on tauri";
     homepage = "https://github.com/clash-verge-rev/clash-verge-rev";
+    longDescription = ''
+      Clash GUI based on tauri
+      Setting NixOS option `programs.clash-verge.enable = true` is recommended.
+    '';
     license = lib.licenses.gpl3Only;
     mainProgram = "clash-verge";
     maintainers = with lib.maintainers; [
@@ -108,16 +112,16 @@ stdenv.mkDerivation {
   installPhase = ''
     runHook preInstall
 
-    mkdir -p $out/{bin,share,lib/clash-verge/resources}
+    mkdir -p $out/{bin,share,lib/Clash\ Verge/resources}
     cp -r ${unwrapped}/share/* $out/share
     cp -r ${unwrapped}/bin/clash-verge $out/bin/clash-verge
     # This can't be symbol linked. It will find mihomo in its runtime path
     ln -s ${service}/bin/clash-verge-service $out/bin/clash-verge-service
     ln -s ${mihomo}/bin/mihomo $out/bin/verge-mihomo
     # people who want to use alpha build show override mihomo themselves. The alpha core entry was removed in clash-verge.
-    ln -s ${v2ray-geoip}/share/v2ray/geoip.dat $out/lib/clash-verge/resources/geoip.dat
-    ln -s ${v2ray-domain-list-community}/share/v2ray/geosite.dat $out/lib/clash-verge/resources/geosite.dat
-    ln -s ${dbip-country-lite.mmdb} $out/lib/clash-verge/resources/Country.mmdb
+    ln -s ${v2ray-geoip}/share/v2ray/geoip.dat $out/lib/Clash\ Verge/resources/geoip.dat
+    ln -s ${v2ray-domain-list-community}/share/v2ray/geosite.dat $out/lib/Clash\ Verge/resources/geosite.dat
+    ln -s ${dbip-country-lite.mmdb} $out/lib/Clash\ Verge/resources/Country.mmdb
     runHook postInstall
   '';
 }

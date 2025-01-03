@@ -19,7 +19,6 @@
   libXtst,
   libXi,
   wayland,
-  apple-sdk_11,
 }:
 
 buildNpmPackage rec {
@@ -50,17 +49,13 @@ buildNpmPackage rec {
       copyDesktopItems
     ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      libxkbcommon
-      libX11
-      libXtst
-      libXi
-      wayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libxkbcommon
+    libX11
+    libXtst
+    libXi
+    wayland
+  ];
 
   dontUseCmakeConfigure = true;
 

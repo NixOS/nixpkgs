@@ -7,13 +7,11 @@
   pnpm,
   python3,
   node-gyp,
-  cacert,
   xcbuild,
   libkrb5,
   libmongocrypt,
   postgresql,
   makeWrapper,
-  nix-update-script,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -23,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "n8n-io";
     repo = "n8n";
-    rev = "n8n@${finalAttrs.version}";
+    tag = "n8n@${finalAttrs.version}";
     hash = "sha256-GIA2y81nuKWe1zuZQ99oczQtQWStyT1Qh3bZ1oe8me4=";
   };
 
@@ -36,7 +34,6 @@ stdenv.mkDerivation (finalAttrs: {
     pnpm.configHook
     python3 # required to build sqlite3 bindings
     node-gyp # required to build sqlite3 bindings
-    cacert # required for rustls-native-certs (dependency of turbo build tool)
     makeWrapper
   ] ++ lib.optional stdenv.hostPlatform.isDarwin [ xcbuild ];
 
@@ -61,13 +58,17 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   preInstall = ''
-    echo "Removing non-deterministic files"
+    echo "Removing non-deterministic and unnecessary files"
 
-    rm -r $(find -type d -name .turbo)
+    find -type d -name .turbo -exec rm -rf {} +
     rm node_modules/.modules.yaml
     rm packages/nodes-base/dist/types/nodes.json
 
-    echo "Removed non-deterministic files"
+    pnpm --ignore-scripts prune --prod
+    find -type f \( -name "*.ts" -o -name "*.map" \) -exec rm -rf {} +
+    rm -rf node_modules/.pnpm/{typescript*,prettier*}
+
+    echo "Removed non-deterministic and unnecessary files"
   '';
 
   installPhase = ''
@@ -84,10 +85,13 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = nixosTests.n8n;
-    updateScript = nix-update-script { };
+    updateScript = ./update.sh;
   };
 
+  # this package has ~80000 files, these take too long and seem to be unnecessary
   dontStrip = true;
+  dontPatchELF = true;
+  dontRewriteSymlinks = true;
 
   meta = {
     description = "Free and source-available fair-code licensed workflow automation tool";
@@ -96,7 +100,7 @@ stdenv.mkDerivation (finalAttrs: {
       Easily automate tasks across different services.
     '';
     homepage = "https://n8n.io";
-    changelog = "https://github.com/n8n-io/n8n/releases/tag/${finalAttrs.src.rev}";
+    changelog = "https://github.com/n8n-io/n8n/releases/tag/n8n@${finalAttrs.version}";
     maintainers = with lib.maintainers; [
       gepbird
     ];

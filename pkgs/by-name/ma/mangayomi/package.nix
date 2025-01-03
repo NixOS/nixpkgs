@@ -5,34 +5,6 @@
   pkg-config,
   webkitgtk_4_1,
   mpv,
-  libass,
-  ffmpeg,
-  libplacebo,
-  libunwind,
-  shaderc,
-  vulkan-loader,
-  lcms,
-  libdovi,
-  libdvdnav,
-  libdvdread,
-  mujs,
-  libbluray,
-  lua,
-  rubberband,
-  libuchardet,
-  zimg,
-  alsa-lib,
-  openal,
-  pipewire,
-  libpulseaudio,
-  libcaca,
-  libdrm,
-  libgbm,
-  libXScrnSaver,
-  nv-codec-headers-11,
-  libXpresent,
-  libva,
-  libvdpau,
   rustPlatform,
   stdenv,
   copyDesktopItems,
@@ -103,34 +75,6 @@ flutter324.buildFlutterApplication {
   buildInputs = [
     webkitgtk_4_1
     mpv
-    libass
-    ffmpeg
-    libplacebo
-    libunwind
-    shaderc
-    vulkan-loader
-    lcms
-    libdovi
-    libdvdnav
-    libdvdread
-    mujs
-    libbluray
-    lua
-    rubberband
-    libuchardet
-    zimg
-    alsa-lib
-    openal
-    pipewire
-    libpulseaudio
-    libcaca
-    libdrm
-    libgbm
-    libXScrnSaver
-    libXpresent
-    nv-codec-headers-11
-    libva
-    libvdpau
   ];
 
   desktopItems = [

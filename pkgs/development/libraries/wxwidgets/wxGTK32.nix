@@ -25,14 +25,6 @@
 , withWebKit ? true
 , webkitgtk_4_0
 , setfile
-, AGL
-, Carbon
-, Cocoa
-, Kernel
-, QTKit
-, AVFoundation
-, AVKit
-, WebKit
 }:
 let
   catch = fetchFromGitHub {
@@ -81,20 +73,10 @@ stdenv.mkDerivation rec {
   ]
   ++ lib.optional withMesa libGLU
   ++ lib.optional (withWebKit && stdenv.hostPlatform.isLinux) webkitgtk_4_0
-  ++ lib.optional (withWebKit && stdenv.hostPlatform.isDarwin) WebKit
   ++ lib.optionals stdenv.hostPlatform.isDarwin [
     expat
     setfile
-    Carbon
-    Cocoa
-    Kernel
-    QTKit
-    AVFoundation
-    AVKit
-    WebKit
   ];
-
-  propagatedBuildInputs = lib.optional stdenv.hostPlatform.isDarwin AGL;
 
   configureFlags = [
     "--disable-precomp-headers"
