@@ -15,8 +15,6 @@
   wangle,
   fbthrift,
   gtest,
-  apple-sdk_11,
-  darwinMinVersionHook,
 
   nix-update-script,
 }:
@@ -48,20 +46,15 @@ stdenv.mkDerivation (finalAttrs: {
     removeReferencesTo
   ];
 
-  buildInputs =
-    [
-      glog
-      gflags
-      folly
-      fb303
-      wangle
-      fbthrift
-      gtest
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "11.0")
-    ];
+  buildInputs = [
+    glog
+    gflags
+    folly
+    fb303
+    wangle
+    fbthrift
+    gtest
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_SHARED_LIBS" (!stdenv.hostPlatform.isStatic))
