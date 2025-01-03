@@ -19,6 +19,7 @@
   which,
   libuuid,
   libtpms,
+  util-linux,
 }:
 let
   # Avoid a circular dependency on Linux systems (systemd depends on tpm2-tss,
@@ -68,9 +69,10 @@ stdenv.mkDerivation rec {
     # when unit and/or integration testing is enabled
     # cmocka doesn't build with pkgsStatic, and we don't need it anyway
     # when tests are not run
-    ++ lib.optional doInstallCheck cmocka;
+    ++ lib.optional doInstallCheck cmocka
+    ++ lib.optional stdenv.hostPlatform.isDarwin util-linux;
 
-  nativeInstallCheckInputs = [
+  nativeInstallCheckInputs = lib.optionals (!doInstallCheck) [
     cmocka
     which
     openssl
@@ -126,10 +128,22 @@ stdenv.mkDerivation rec {
       }' Makefile-test.am
     '';
 
-  configureFlags = lib.optionals doInstallCheck [
-    "--enable-unit"
-    "--enable-integration"
-  ];
+  configureFlags =
+    lib.optionals doInstallCheck [
+      "--enable-unit"
+      "--enable-integration"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      # sys/prctl.h required
+      "--disable-tcti-cmd"
+      # uchar.h required
+      "--disable-fapi"
+      "--disable-policy"
+      # uses fallocate
+      "--disable-tcti-libtpms"
+      # iproute2 required
+      "--disable-integration"
+    ];
 
   postInstall = ''
     # Do not install the upstream udev rules, they rely on specific
@@ -138,7 +152,8 @@ stdenv.mkDerivation rec {
   '';
 
   doCheck = false;
-  doInstallCheck = stdenv.buildPlatform.canExecute stdenv.hostPlatform;
+  doInstallCheck =
+    stdenv.buildPlatform.canExecute stdenv.hostPlatform && !stdenv.hostPlatform.isDarwin;
   # Since we rewrote the load path in the dynamic loader for the TCTI
   # The various tcti implementation should be placed in their target directory
   # before we could run tests, so we make turn checkPhase into installCheckPhase
@@ -148,7 +163,7 @@ stdenv.mkDerivation rec {
     description = "OSS implementation of the TCG TPM2 Software Stack (TSS2)";
     homepage = "https://github.com/tpm2-software/tpm2-tss";
     license = licenses.bsd2;
-    platforms = platforms.linux;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ baloo ];
   };
 }
