@@ -9,24 +9,31 @@
   wrapGAppsHook4,
   desktop-file-utils,
   libadwaita,
+  itstool,
 }:
 
 python3Packages.buildPythonApplication rec {
   pname = "exhibit";
-  version = "1.2.0";
+  version = "1.4.2";
   pyproject = false; # Built with meson
 
   src = fetchFromGitHub {
     owner = "Nokse22";
     repo = "Exhibit";
-    rev = "v${version}";
-    hash = "sha256-yNS6q7XbWda2+so9QRS/c4uYaVPo7b4JCite5nzc3Eo=";
+    tag = "v${version}";
+    hash = "sha256-/dug7U8ei+gSdepILLqhnoIBhZ5QZePkREtCUl4p1Hs=";
   };
+
+  postPatch = ''
+    substituteInPlace src/logger_lib.py src/window.py \
+      --replace-warn 'os.environ["XDG_DATA_HOME"]' 'os.environ.get("XDG_DATA_HOME", os.path.expanduser("~/.local/share"))'
+  '';
 
   nativeBuildInputs = [
     meson
     ninja
     pkg-config
+    itstool
     gobject-introspection
     wrapGAppsHook4
     desktop-file-utils
@@ -37,6 +44,7 @@ python3Packages.buildPythonApplication rec {
   dependencies = with python3Packages; [
     pygobject3
     f3d_egl
+    wand
   ];
 
   dontWrapGApps = true;
