@@ -13,17 +13,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "tauri";
-  version = "2.1.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "tauri-apps";
     repo = "tauri";
     tag = "tauri-v${version}";
-    hash = "sha256-HPmViOowP1xAjDJ89YS0BTjNnKI1P0L777ywkqAhhc4=";
+    hash = "sha256-lkTkRNJIdGMJCkqxpBAM4r3JzO55nCjl2l+1xjsCtRI=";
   };
 
   useFetchCargoVendor = true;
-  cargoHash = "sha256-BwNsr/CclSA9CIGVjKjaMM560hgUYirmpRm4Q8hNkkc=";
+  cargoHash = "sha256-fZ3SGF+iIeu9TIyJvKm8vAo2PUT1VREyTKUpcqyC5vo=";
 
   nativeBuildInputs = [ pkg-config ];
 
