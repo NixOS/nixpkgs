@@ -16,6 +16,7 @@
 , texinfo ? null
 , perl ? null # optional, for texi2pod (then pod2man)
 , gmp, mpfr, libmpc, gettext, which, patchelf, binutils
+, autoconf269
 , isl ? null # optional, for the Graphite optimization framework.
 , zlib ? null
 , libucontext ? null
@@ -103,6 +104,7 @@ let
       # inherit generated with 'nix eval --json --impure --expr "with import ./. {}; lib.attrNames (lib.functionArgs gcc${majorVersion}.cc.override)" | jq '.[]' --raw-output'
       inherit
         apple-sdk
+        autoconf269
         binutils
         buildPackages
         cargo
