@@ -27,7 +27,7 @@ buildDotnetModule rec {
     (makeDesktopItem {
       name = "openutau";
       desktopName = "OpenUtau";
-      startupWMClass = "openutau";  
+      startupWMClass = "openutau";
       icon = "openutau";
       genericName = "Utau";
       comment = "Open source UTAU successor";
