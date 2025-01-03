@@ -1,0 +1,23 @@
+From 777be9c46c4caed5f3fcde65b70ada4d773f4298 Mon Sep 17 00:00:00 2001
+From: Sarah Clark <seclark@nextquestion.net>
+Date: Sat, 24 Aug 2024 11:26:30 -0700
+Subject: [PATCH] Unpin setuptools
+
+---
+ pyproject.toml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pyproject.toml b/pyproject.toml
+index d17d12dc8..6bf1c7a38 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -54,7 +54,7 @@ scalene = "scalene.__main__:main"
+ [build-system]
+ build-backend = "setuptools.build_meta"
+ requires = [
+-    "setuptools>=65.5.1,<71.0", # Pin to setuptools<71.0 to avoid this bug: https://github.com/pypa/setuptools/issues/4496
++    "setuptools>=65.5.1",
+     "setuptools_scm>=8",
+     "wheel",
+     "cython",
+--

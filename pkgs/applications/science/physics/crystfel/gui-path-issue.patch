@@ -1,0 +1,27 @@
+diff --git a/src/gui_index.c b/src/gui_index.c
+index 2cc8e8db..13be77d5 100644
+--- a/src/gui_index.c
++++ b/src/gui_index.c
+@@ -540,6 +540,7 @@ static void delete_gui_tempdir(char *tmpdir)
+ {
+ 	char *path;
+ 	int i;
++	size_t pathlen;
+ 
+ 	/* List of files which it's safe to delete */
+ 	char *files[] = {"gmon.out", "mosflm.lp", "SUMMARY", "XDS.INP",
+@@ -552,11 +553,12 @@ static void delete_gui_tempdir(char *tmpdir)
+ 
+ 	if ( tmpdir == NULL ) return;
+ 
+-	path = calloc(strlen(tmpdir)+64, 1);
++	pathlen = strlen(tmpdir)+64;
++	path = calloc(pathlen, 1);
+ 	if ( path == NULL ) return;
+ 
+ 	for ( i=0; i<n_files; i++ ) {
+-		snprintf(path, 127, "%s/%s", tmpdir, files[i]);
++		snprintf(path, pathlen, "%s/%s", tmpdir, files[i]);
+ 		unlink(path);
+ 	}
+ 
