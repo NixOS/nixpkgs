@@ -7,10 +7,11 @@
   erlang,
   fetchFromGitHub,
   nixosTests,
+  nix-update-script,
 }:
 beamPackages.mixRelease rec {
   pname = "livebook";
-  version = "0.14.4";
+  version = "0.14.5";
 
   inherit elixir;
 
@@ -21,14 +22,14 @@ beamPackages.mixRelease rec {
   src = fetchFromGitHub {
     owner = "livebook-dev";
     repo = "livebook";
-    rev = "v${version}";
-    hash = "sha256-XpBJlPLr7E3OqTnLxnSmKCgDyiU1hT8WfOhWeRGYROA=";
+    tag = "v${version}";
+    hash = "sha256-VSxW+X5zt6npV4tVVgTEvQhjA+jTramSX5h92BWWaQM=";
   };
 
   mixFodDeps = beamPackages.fetchMixDeps {
     pname = "mix-deps-${pname}";
     inherit src version;
-    hash = "sha256-jB6IOBX3LwdrEtaWY3gglo1HO2OhdiK8j3BgzfZ1nAU=";
+    hash = "sha256-FrkM82LO7GIFpKQfhlEUrAuKu33BzPBs6OrWW4C6pI0=";
   };
 
   postInstall = ''
@@ -42,18 +43,21 @@ beamPackages.mixRelease rec {
       --set MIX_REBAR3 ${rebar3}/bin/rebar3
   '';
 
-  passthru.tests = {
-    livebook-service = nixosTests.livebook-service;
+  passthru = {
+    updateScript = nix-update-script { };
+    tests = {
+      livebook-service = nixosTests.livebook-service;
+    };
   };
 
-  meta = with lib; {
-    license = licenses.asl20;
+  meta = {
+    license = lib.licenses.asl20;
     homepage = "https://livebook.dev/";
     description = "Automate code & data workflows with interactive Elixir notebooks";
-    maintainers = with maintainers; [
+    maintainers = with lib.maintainers; [
       munksgaard
       scvalex
     ];
-    platforms = platforms.unix;
+    platforms = lib.platforms.unix;
   };
 }

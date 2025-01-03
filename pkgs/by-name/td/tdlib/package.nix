@@ -35,7 +35,7 @@ in
 
 stdenv.mkDerivation {
   pname = "tdlib";
-  version = "1.8.41";
+  version = "1.8.42";
 
   src = fetchFromGitHub {
     owner = "tdlib";
@@ -44,8 +44,8 @@ stdenv.mkDerivation {
     # The tdlib authors do not set tags for minor versions, but
     # external programs depending on tdlib constrain the minor
     # version, hence we set a specific commit with a known version.
-    rev = "5b974c298d4ed551d3ad2c061ad7b8280d137c7e";
-    hash = "sha256-1TyGv2yMjX75+ccZSox/2m6SMmwEZAkShIhLfCeNmZg=";
+    rev = "ef580cd3dd0e5223c2be503342dc29e128be866e";
+    hash = "sha256-k1YQpQXYmEdoiyWeAcj2KRU+BcWuWbHpd4etxLspEoo=";
   };
 
   buildInputs = [
