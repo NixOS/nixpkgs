@@ -18,7 +18,6 @@
   makeWrapper,
   DarwinTools, # sw_vers
   cctools, # vtool
-  darwinMinVersionHook,
   xcbuild,
   CryptoKit,
   LocalAuthentication,
@@ -387,7 +386,7 @@ let
         swift-driver
         swift-system
         swift-tools-support-core
-      ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ (darwinMinVersionHook "10.15.4") ];
+      ];
 
       cmakeFlags = [
         "-DUSE_CMAKE_INSTALL=ON"
@@ -422,8 +421,7 @@ stdenv.mkDerivation (
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         CryptoKit
         LocalAuthentication
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [ (darwinMinVersionHook "10.15.4") ];
+      ];
 
     configurePhase =
       generated.configure
