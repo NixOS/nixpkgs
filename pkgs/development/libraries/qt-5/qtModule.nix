@@ -4,7 +4,6 @@
   buildPackages,
   mkDerivation,
   apple-sdk_13,
-  darwinMinVersionHook,
   perl,
   qmake,
   patches,
@@ -35,7 +34,6 @@ mkDerivation (
       # Per https://doc.qt.io/qt-5/macos.html#supported-versions
       ++ lib.optionals stdenv.hostPlatform.isDarwin [
         apple-sdk_13
-        (darwinMinVersionHook "10.13")
       ];
 
     nativeBuildInputs =
