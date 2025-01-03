@@ -12,7 +12,6 @@
   copyDesktopItems,
   makeDesktopItem,
   electron,
-  apple-sdk_11,
 }:
 
 buildNpmPackage rec {
@@ -69,8 +68,6 @@ buildNpmPackage rec {
     zip
     makeWrapper
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 
