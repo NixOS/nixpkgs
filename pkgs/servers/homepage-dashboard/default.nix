@@ -5,7 +5,6 @@
   python3,
   stdenv,
   cctools,
-  IOKit,
   lib,
   nixosTests,
   enableLocalIcons ? false,
@@ -54,7 +53,7 @@ buildNpmPackage rec {
 
   buildInputs = [
     nodePackages.node-gyp-build
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ IOKit ];
+  ];
 
   env.PYTHON = "${python3}/bin/python";
 
@@ -109,6 +108,5 @@ buildNpmPackage rec {
     license = lib.licenses.gpl3;
     maintainers = with lib.maintainers; [ jnsgruk ];
     platforms = lib.platforms.all;
-    broken = stdenv.hostPlatform.isDarwin;
   };
 }
