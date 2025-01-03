@@ -89,6 +89,7 @@ rustPlatform.buildRustPackage rec {
       _0x4A6F
       abbe
       pyrox0
+      matthiasbeyer
     ];
     mainProgram = "zellij";
   };

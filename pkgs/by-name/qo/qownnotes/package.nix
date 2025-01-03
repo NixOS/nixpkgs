@@ -88,6 +88,7 @@ qt6Packages.stdenv.mkDerivation {
     maintainers = with maintainers; [
       pbek
       totoroot
+      matthiasbeyer
     ];
     platforms = platforms.unix;
   };

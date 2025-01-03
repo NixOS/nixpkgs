@@ -4,6 +4,7 @@
   vala,
   glib,
   gtk3,
+  gtksourceview4,
   libxfce4ui,
   libxfce4util,
   xfce4-panel,
@@ -13,8 +14,8 @@
 mkXfceDerivation {
   category = "panel-plugins";
   pname = "xfce4-notes-plugin";
-  version = "1.11.0";
-  sha256 = "sha256-hAGgJIZaUjrizuriW2yX4uOKqRxpZ6BiUhnj4u3BOBA=";
+  version = "1.11.1";
+  sha256 = "sha256-LeKQCsnHVataTP0rYn09x0Ddx8lMtVC0WW/jje7yXag=";
   odd-unstable = false;
 
   nativeBuildInputs = [
@@ -24,6 +25,7 @@ mkXfceDerivation {
   buildInputs = [
     glib
     gtk3
+    gtksourceview4
     libxfce4ui
     libxfce4util
     xfce4-panel
