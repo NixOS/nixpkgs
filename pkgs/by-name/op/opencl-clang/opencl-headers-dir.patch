@@ -1,0 +1,25 @@
+diff --git a/cl_headers/CMakeLists.txt b/cl_headers/CMakeLists.txt
+index 3dd2ea4..aeae6e9 100644
+--- a/cl_headers/CMakeLists.txt
++++ b/cl_headers/CMakeLists.txt
+@@ -11,12 +11,14 @@ add_custom_command(
+ )
+ endfunction(copy_file)
+ 
+-if(USE_PREBUILT_LLVM)
+-    set(OPENCL_HEADERS_DIR
+-      "${LLVM_LIBRARY_DIRS}/clang/${LLVM_VERSION_MAJOR}.${LLVM_VERSION_MINOR}.${LLVM_VERSION_PATCH}/include/")
+-else(USE_PREBUILT_LLVM)
+-    set(OPENCL_HEADERS_DIR "${CLANG_SOURCE_DIR}/lib/Headers")
+-endif(USE_PREBUILT_LLVM)
++if(NOT DEFINED OPENCL_HEADERS_DIR)
++  if(USE_PREBUILT_LLVM)
++      set(OPENCL_HEADERS_DIR
++        "${LLVM_LIBRARY_DIRS}/clang/${LLVM_VERSION_MAJOR}.${LLVM_VERSION_MINOR}.${LLVM_VERSION_PATCH}/include/")
++  else(USE_PREBUILT_LLVM)
++      set(OPENCL_HEADERS_DIR "${CLANG_SOURCE_DIR}/lib/Headers")
++  endif(USE_PREBUILT_LLVM)
++endif()
+ copy_file(${OPENCL_HEADERS_DIR}/opencl-c.h opencl-c.h)
+ 
+ add_custom_target (
