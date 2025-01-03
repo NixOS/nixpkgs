@@ -23,6 +23,7 @@ stdenv.mkDerivation rec {
   patches = [
     ./use-system-mbedtls.patch
     ./device-info-list.patch
+    ./musl.patch
   ];
 
   outputs = [
