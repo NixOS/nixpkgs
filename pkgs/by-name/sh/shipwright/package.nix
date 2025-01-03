@@ -27,7 +27,6 @@
   zenity,
   makeWrapper,
   darwin,
-  apple-sdk_11,
   libicns,
 }:
 stdenv.mkDerivation (finalAttrs: {
@@ -94,8 +93,7 @@ stdenv.mkDerivation (finalAttrs: {
       libXext
       libpulseaudio
       zenity
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
+    ];
 
   cmakeFlags = [
     (lib.cmakeBool "NON_PORTABLE" true)
