@@ -11,8 +11,6 @@
   # buildInputs
   fontconfig,
   openssl,
-  apple-sdk_15,
-  darwinMinVersionHook,
 
   redis,
   versionCheckHook,
@@ -40,16 +38,10 @@ rustPlatform.buildRustPackage rec {
     rustPlatform.bindgenHook
   ];
 
-  buildInputs =
-    [
-      fontconfig
-      (lib.getDev openssl)
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_15
-      # aws-lc-sys requires CryptoKit's CommonCrypto, which is available on macOS 10.15+
-      (darwinMinVersionHook "10.15")
-    ];
+  buildInputs = [
+    fontconfig
+    (lib.getDev openssl)
+  ];
 
   # Required for golem-wasm-rpc's build.rs to find the required protobuf files
   # https://github.com/golemcloud/wasm-rpc/blob/v1.0.6/wasm-rpc/build.rs#L7
