@@ -80,6 +80,7 @@ let
           "--disable-decimal-float" # requires libc
           "--disable-libmpx" # requires libc
           "--disable-hosted-libstdcxx" # requires libc
+          "--disable-hosted-libstdcxx"
           "--disable-libstdcxx-backtrace"
           "--disable-linux-futex"
           "--disable-libvtv"
