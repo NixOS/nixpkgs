@@ -123,5 +123,6 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.gpl2Plus;
     platforms = lib.platforms.unix;
     maintainers = with lib.maintainers; [ kilianar ];
+    broken = stdenv.hostPlatform.isDarwin;
   };
 })
