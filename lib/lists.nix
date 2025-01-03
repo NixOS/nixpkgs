@@ -6,6 +6,7 @@ let
   inherit (lib.strings) toInt;
   inherit (lib.trivial) compare min id warn pipe;
   inherit (lib.attrsets) mapAttrs;
+  inherit (lib) max;
 in
 rec {
 
@@ -1496,6 +1497,46 @@ rec {
   drop =
     count:
     list: sublist count (length list) list;
+
+  /**
+    Remove the last (at most) N elements of a list.
+
+
+    # Inputs
+
+    `count`
+
+    : Number of elements to drop
+
+    `list`
+
+    : Input list
+
+    # Type
+
+    ```
+    dropEnd :: Int -> [a] -> [a]
+    ```
+
+    # Examples
+
+    :::{.example}
+    ## `lib.lists.dropEnd` usage example
+
+    ```nix
+      dropEnd 2 [ "a" "b" "c" "d" ]
+      => [ "a" "b" ]
+      dropEnd 2 [ ]
+      => [ ]
+    ```
+    :::
+
+   */
+  dropEnd =
+    n: xs:
+      take
+        (max 0 (length xs - n))
+        xs;
 
   /**
     Whether the first list is a prefix of the second list.

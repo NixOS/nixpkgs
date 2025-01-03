@@ -866,6 +866,18 @@ runTests {
     (drop 1 [ ] == [ ])
   ];
 
+  testDropEnd = let inherit (lib) dropEnd; in testAllTrue [
+    (dropEnd 0 [ 1 2 3 ] == [ 1 2 3 ])
+    (dropEnd 1 [ 1 2 3 ] == [ 1 2 ])
+    (dropEnd 2 [ 1 2 3 ] == [ 1 ])
+    (dropEnd 3 [ 1 2 3 ] == [ ])
+    (dropEnd 4 [ 1 2 3 ] == [ ])
+    (dropEnd 0 [ ] == [ ])
+    (dropEnd 1 [ ] == [ ])
+    (dropEnd (-1) [ 1 2 3 ] == [ 1 2 3 ])
+    (dropEnd (-1) [ ] == [ ])
+  ];
+
   testListHasPrefixExample1 = {
     expr = lists.hasPrefix [ 1 2 ] [ 1 2 3 4 ];
     expected = true;
