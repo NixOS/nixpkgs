@@ -35,6 +35,8 @@ rustPlatform.buildRustPackage rec {
       --replace /usr/bin/which '${which}/bin/which'
     substituteInPlace src/sampler/mod.rs \
       --replace /usr/bin/which '${which}/bin/which'
+    substituteInPlace src/core/ruby_spy.rs \
+      --replace /usr/bin/ruby '${ruby}/bin/ruby'
   '';
 
   checkFlags = [
@@ -45,10 +47,12 @@ rustPlatform.buildRustPackage rec {
     "--skip=test_sample_subprocesses"
   ];
 
-  nativeBuildInputs = [
+  nativeBuildInputs = lib.optional stdenv.hostPlatform.isDarwin rustPlatform.bindgenHook;
+
+  nativeCheckInputs = [
     ruby
     which
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin rustPlatform.bindgenHook;
+  ];
 
   passthru.updateScript = nix-update-script { };
 
