@@ -131,6 +131,8 @@ self: super: with self; {
 
   aggdraw = callPackage ../development/python-modules/aggdraw { };
 
+  ahocorapy = callPackage ../development/python-modules/ahocorapy { };
+
   ahocorasick-rs = callPackage ../development/python-modules/ahocorasick-rs { };
 
   aigpy = callPackage ../development/python-modules/aigpy { };
@@ -1564,6 +1566,8 @@ self: super: with self; {
     callPackage ../development/python-modules/bcrypt { };
 
   bdffont = callPackage ../development/python-modules/bdffont { };
+
+  beacontools = callPackage ../development/python-modules/beacontools { };
 
   beaker = callPackage ../development/python-modules/beaker { };
 
