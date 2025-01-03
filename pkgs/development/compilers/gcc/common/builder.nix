@@ -202,7 +202,9 @@ originalAttrs:
         configureScript=../$sourceRoot/configure
       '';
 
-    postConfigure = ''
+    postConfigure =
+      (originalAttrs.postConfigure or "")
+      + ''
       # Avoid store paths when embedding ./configure flags into gcc.
       # Mangled arguments are still useful when reporting bugs upstream.
       sed -e "/TOPLEVEL_CONFIGURE_ARGUMENTS=/ s|$NIX_STORE/[a-z0-9]\{32\}-|$NIX_STORE/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-|g" -i Makefile
@@ -278,17 +280,33 @@ originalAttrs:
 
       # More dependencies with the previous gcc or some libs (gccbug stores the build command line)
       rm -rf $out/bin/gccbug
-
-      if type "install_name_tool"; then
-          for i in "''${!outputLib}"/lib/*.*.dylib "''${!outputLib}"/lib/*.so.[0-9]; do
-              install_name_tool -id "$i" "$i" || true
-              for old_path in $(otool -L "$i" | grep "$out" | awk '{print $1}'); do
-                new_path=`echo "$old_path" | sed "s,$out,''${!outputLib},"`
-                install_name_tool -change "$old_path" "$new_path" "$i" || true
-              done
+  ''
+  # remove all LC_RPATH entries and assert that there are no references to
+  # @rpath/xxx. If this fails it means the configure scripts changed and the
+  # substitutions that patch out @rpath in the link step need updating.
+  + lib.optionalString stdenv.hostPlatform.isDarwin ''
+      containsRpath=()
+      for i in "''${!outputLib}"/lib/*; do
+          [[ -f "$i" && ! -L "$i" ]] || continue
+          isMachO "$i" || continue
+          otool -L "$i" | grep -q @rpath && containsRpath+=("$i")
+          for path in $(otool -l "$i" | awk '/\<path\>/{ print $2 }'); do
+              install_name_tool -delete_rpath "$path" "$i" || true
           done
+      done
+      if ((''${#containsRpath})); then
+          # if this fails '@rpath/libname.dylib' is getting passed to
+          # -install_name for the link step and @rpath needs to be changed to
+          # $lib
+          # print out all @rpaths and error out
+          echo "ERROR: FOUND @RPATH! UPDATE CONFIGURE SUBSTITUTIONS" >&2
+          for i in "''${containsRpath[@]}"; do
+              echo "error: found @rpath in $i" >&2
+              otool -L "$i" | grep @rpath >&2
+          done
+          exit 1
       fi
-
+  '' + ''
       # Get rid of some "fixed" header files
       rm -rfv $out/lib/gcc/*/*/include-fixed/{root,linux,sys/mount.h,bits/statx.h,pthread.h}
 
