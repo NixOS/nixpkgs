@@ -11882,6 +11882,8 @@ self: super: with self; {
 
   pyjsparser = callPackage ../development/python-modules/pyjsparser { };
 
+  pyjvcprojector = callPackage ../development/python-modules/pyjvcprojector { };
+
   pyjwkest = callPackage ../development/python-modules/pyjwkest { };
 
   pyjwt = callPackage ../development/python-modules/pyjwt { };
