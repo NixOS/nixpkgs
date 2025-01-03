@@ -19,8 +19,6 @@
   DarwinTools, # sw_vers
   cctools, # vtool
   xcbuild,
-  CryptoKit,
-  LocalAuthentication,
 }:
 
 let
@@ -412,16 +410,11 @@ stdenv.mkDerivation (
       swift
       swiftpm-bootstrap
     ];
-    buildInputs =
-      [
-        ncursesInput
-        sqlite
-        XCTest
-      ]
-      ++ lib.optionals stdenv.hostPlatform.isDarwin [
-        CryptoKit
-        LocalAuthentication
-      ];
+    buildInputs = [
+      ncursesInput
+      sqlite
+      XCTest
+    ];
 
     configurePhase =
       generated.configure
