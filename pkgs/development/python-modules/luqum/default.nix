@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jurismarches";
     repo = "luqum";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-lcJCLl0crCl3Y5UlWBMZJR2UtVP96gaJNRxwY9Xn7TM=";
   };
 

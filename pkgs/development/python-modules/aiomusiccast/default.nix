@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vigonotion";
     repo = "aiomusiccast";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-V4xl2QY+pPEnJtx7dxSNj/aXqHvV9Z6uuWgbVHNyLjA=";
   };
 

@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Yelp";
     repo = "aactivator";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vnBDtLEvU1jHbb5/MXAulXaBaugdCZdLQSP2b8P6SiQ=";
   };
 

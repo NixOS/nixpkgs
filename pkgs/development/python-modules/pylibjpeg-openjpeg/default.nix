@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pylibjpeg-openjpeg";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cCDnARElNn+uY+HQ39OnGJRz2vTz0I8s0Oe+qGvqM1o=";
   };
 

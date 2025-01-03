@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-q99roKqeC8lra29gyJertJLnVNFvKRFZ2agREvHZx6k=";
   };
 

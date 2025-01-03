@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "aiopegelonline";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kDz+q4Y6ImgXbY7OSC/PKXPtKdktixW+ee51xHMX9o4=";
   };
 

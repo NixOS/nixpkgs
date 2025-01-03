@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "seperman";
     repo = "orderly-set";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZDo5fSHD0lCn9CRQtWK10QeZoOhuXG3LR3KA/to9gpE=";
   };
   patches = [

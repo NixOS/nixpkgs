@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mammothb";
     repo = "symspellpy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZnkZE7v4o0o6iPdkjCycDgVdLhsE3Vn1uuGT7o0F86I=";
   };
 

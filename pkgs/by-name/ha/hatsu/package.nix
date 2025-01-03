@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "importantimport";
     repo = "hatsu";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-K+8X/bNPdjxBSJdlFIXUUOXlTq7Cgol3fFToj5KzbeE=";
   };
 

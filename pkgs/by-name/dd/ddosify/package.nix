@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ddosify";
     repo = "ddosify";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5K/qXtdlDC09dEjRwYvoh9SapGLNmvywDMiNdwZDDTQ=";
   };
 

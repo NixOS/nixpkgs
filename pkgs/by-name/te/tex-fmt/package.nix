@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "WGUNDERWOOD";
     repo = "tex-fmt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LeoV500tnvnvl869NXi4b4LpBvX1FclYJzYAcC0QVRo=";
   };
 

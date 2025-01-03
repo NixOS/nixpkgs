@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "nats-io";
     repo = "natscli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kdoBHTJq/Sj27BOD4NFDVpMlywG5H7vGRS6uUbPscOY=";
   };
 

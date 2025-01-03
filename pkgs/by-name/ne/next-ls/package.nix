@@ -12,7 +12,7 @@ beamPackages.mixRelease rec {
   src = fetchFromGitHub {
     owner = "elixir-tools";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2KzBOzrfoQQIqjEtYufvhT9bBibfEjNDiC+d3l5eaUc=";
   };
 
