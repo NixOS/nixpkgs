@@ -11,6 +11,7 @@ lib.makeOverridable (
 , sparseCheckout ? []
 , githubBase ? "github.com", varPrefix ? null
 , meta ? { }
+, passthru ? { }
 , ... # For hash agility
 }@args:
 
@@ -32,7 +33,7 @@ let
     # to indicate where derivation originates, similar to make-derivation.nix's mkDerivation
     position = "${position.file}:${toString position.line}";
   };
-  passthruAttrs = removeAttrs args [ "owner" "repo" "tag" "rev" "fetchSubmodules" "forceFetchGit" "private" "githubBase" "varPrefix" ];
+  extraFetcherAttrs = removeAttrs args [ "owner" "repo" "tag" "rev" "fetchSubmodules" "forceFetchGit" "private" "githubBase" "varPrefix" "meta" "passthru" ];
   varBase = "NIX${lib.optionalString (varPrefix != null) "_${varPrefix}"}_GITHUB_PRIVATE_";
   useFetchGit = fetchSubmodules || (leaveDotGit == true) || deepClone || forceFetchGit || fetchLFS || (sparseCheckout != []);
   # We prefer fetchzip in cases we don't need submodules as the hash
@@ -63,17 +64,18 @@ let
 
   fetcherArgs = (if useFetchGit
     then {
-      inherit tag rev deepClone fetchSubmodules sparseCheckout fetchLFS; url = gitRepoUrl;
+      inherit tag rev deepClone fetchSubmodules sparseCheckout fetchLFS;
+      url = gitRepoUrl;
+      passthru = { inherit owner repo; } // passthru;
     } // lib.optionalAttrs (leaveDotGit != null) { inherit leaveDotGit; }
     else {
       url = "${baseUrl}/archive/${revWithTag}.tar.gz";
-
-      passthru = {
-        inherit gitRepoUrl;
-      };
+      passthru = { inherit owner repo tag rev gitRepoUrl; } // passthru;
     }
-  ) // privateAttrs // passthruAttrs // { inherit name; };
+  ) // {
+    inherit name;
+    meta = newMeta;
+  } // privateAttrs // extraFetcherAttrs;
 in
-
-fetcher fetcherArgs // { meta = newMeta; inherit owner repo tag; rev = revWithTag; }
+fetcher fetcherArgs
 )
