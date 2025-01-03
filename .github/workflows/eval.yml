@@ -293,7 +293,7 @@ jobs:
           # Request reviewers from maintainers of changed output paths
           GH_TOKEN=${{ steps.app-token.outputs.token }} gh api \
             --method POST \
-            /repos/${{ github.repository }}/pulls/${{ github.event.number }}/requested_reviewers \
+            /repos/"$REPOSITORY"/pulls/"$NUMBER"/requested_reviewers \
             --input reviewers.json
 
         env:
