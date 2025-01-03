@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
     '';
     homepage = "http://hmmer.org/";
     changelog = "https://github.com/EddyRivasLab/hmmer/blob/hmmer-${version}/release-notes/RELEASE-${version}.md";
-    license = licenses.gpl3;
+    license = licenses.bsd3;
     maintainers = [ maintainers.iimog ];
     platforms = lib.platforms.unix;
   };
