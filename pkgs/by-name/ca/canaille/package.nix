@@ -11,7 +11,7 @@ let
 in
 python.pkgs.buildPythonApplication rec {
   pname = "canaille";
-  version = "0.0.56";
+  version = "0.0.57";
   pyproject = true;
 
   disabled = python.pythonOlder "3.10";
@@ -20,7 +20,7 @@ python.pkgs.buildPythonApplication rec {
     owner = "yaal";
     repo = "canaille";
     rev = "refs/tags/${version}";
-    hash = "sha256-cLsLwttUDxMKVqtVDCY5A22m1YY1UezeZQh1j74WzgU=";
+    hash = "sha256-pesN7k5kGHi3dqTMaXWdCsNsnaJxXv/Ku1wVC9N9a3k=";
   };
 
   build-system = with python.pkgs; [
@@ -35,6 +35,7 @@ python.pkgs.buildPythonApplication rec {
       flask
       flask-wtf
       pydantic-settings
+      requests
       wtforms
     ]
     ++ sentry-sdk.optional-dependencies.flask;
@@ -51,6 +52,7 @@ python.pkgs.buildPythonApplication rec {
       pytest-lazy-fixtures
       pytest-smtpd
       pytest-xdist
+      scim2-tester
       slapd
       toml
       faker
@@ -58,8 +60,11 @@ python.pkgs.buildPythonApplication rec {
     ]
     ++ optional-dependencies.front
     ++ optional-dependencies.oidc
+    ++ optional-dependencies.scim
     ++ optional-dependencies.ldap
-    ++ optional-dependencies.postgresql;
+    ++ optional-dependencies.postgresql
+    ++ optional-dependencies.otp
+    ++ optional-dependencies.sms;
 
   postInstall = ''
     mkdir -p $out/etc/schema
@@ -88,6 +93,10 @@ python.pkgs.buildPythonApplication rec {
       zxcvbn-rs-py
     ];
     oidc = [ authlib ];
+    scim = [
+      scim2-models
+      authlib
+    ];
     ldap = [ python-ldap ];
     sentry = [ sentry-sdk ];
     postgresql = [
@@ -95,7 +104,13 @@ python.pkgs.buildPythonApplication rec {
       sqlalchemy
       sqlalchemy-json
       sqlalchemy-utils
-    ] ++ sqlalchemy.optional-dependencies.postgresql;
+    ] ++ sqlalchemy.optional-dependencies.postgresql_psycopg2binary;
+    otp = [
+      otpauth
+      pillow
+      qrcode
+    ];
+    sms = [ smpplib ];
   };
 
   passthru = {
