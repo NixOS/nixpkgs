@@ -2188,8 +2188,6 @@ with pkgs;
 
   csvtool = callPackage ../development/ocaml-modules/csv/csvtool.nix { };
 
-  cutemarked-ng = libsForQt5.callPackage ../applications/office/cutemarked-ng { };
-
   dataclass-wizard = with python3Packages; toPythonApplication dataclass-wizard;
 
   datasette = with python3Packages; toPythonApplication datasette;
