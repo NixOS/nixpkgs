@@ -17,7 +17,7 @@ stdenv.mkDerivation {
       sha256 = "12dbm87wvcpmn7nzgzwlk45cybp091diara8blqm6129ps27z6kb";
       stripRoot = false;
     }
-    + /profont-x11;
+    + "/profont-x11";
 
   srcOtb =
     fetchzip {
@@ -25,7 +25,7 @@ stdenv.mkDerivation {
       sha256 = "18rfhfqrsj3510by0w1a7ak5as6r2cxh8xv02xc1y30mfa6g24x6";
       stripRoot = false;
     }
-    + /profont-otb;
+    + "/profont-otb";
 
   dontBuild = true;
 
