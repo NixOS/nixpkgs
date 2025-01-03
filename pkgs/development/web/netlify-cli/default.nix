@@ -4,6 +4,7 @@
   fetchFromGitHub,
   lib,
   nix-update-script,
+  nodejs,
   pkg-config,
   vips,
 }:
@@ -20,6 +21,8 @@ buildNpmPackage rec {
   };
 
   npmDepsHash = "sha256-pJaNdR9jyFSdfE+yLnQn9/Gbq2CbH6y3aEVbpg3Ft/o=";
+
+  inherit nodejs;
 
   buildInputs = [ vips ];
   nativeBuildInputs = [ pkg-config ];
