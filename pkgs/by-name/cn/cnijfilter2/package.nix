@@ -36,6 +36,7 @@ stdenv.mkDerivation {
 
   patches = [
     ./patches/get_protocol.patch
+    ./patches/include-stdlib.patch
   ];
 
   # lgmon3's --enable-libdir flag is used soley for specifying in which
