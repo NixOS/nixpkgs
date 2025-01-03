@@ -9482,11 +9482,6 @@ with pkgs;
 
   json2yaml = haskell.lib.compose.justStaticExecutables haskellPackages.json2yaml;
 
-  libjodycode = callPackage ../development/libraries/libjodycode {
-    # missing aligned_alloc()
-    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-  };
-
   kddockwidgets = libsForQt5.callPackage ../development/libraries/kddockwidgets { };
 
   keybinder = callPackage ../development/libraries/keybinder {
@@ -15890,10 +15885,6 @@ with pkgs;
     xwaylandSupport = false;
   };
 
-  chatterino2 = callPackage ../applications/networking/instant-messengers/chatterino2 {
-    stdenv = if stdenv.hostPlatform.isDarwin then darwin.apple_sdk_11_0.stdenv else stdenv;
-  };
-
   wgnord = callPackage ../applications/networking/wgnord/default.nix { };
 
   whalebird = callPackage ../applications/misc/whalebird {
@@ -16159,7 +16150,6 @@ with pkgs;
   };
 
   groestlcoin  = libsForQt5.callPackage ../applications/blockchains/groestlcoin {
-    stdenv = darwin.apple_sdk_11_0.stdenv;
     withGui = true;
     inherit (darwin) autoSignDarwinBinariesHook;
   };
