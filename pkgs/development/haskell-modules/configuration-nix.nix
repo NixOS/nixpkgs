@@ -1536,4 +1536,13 @@ self: super: builtins.intersectAttrs super {
   # certificate used only 1024 Bit RSA key and SHA-1, which is not allowed in OpenSSL 3.1+
   # security level 2
   openssl-streams = appendPatch ./patches/openssl-streams-cert.patch super.openssl-streams;
+
+  libtorch-ffi = appendConfigureFlags ([
+    "--extra-include-dirs=${lib.getDev pkgs.libtorch-bin}/include/torch/csrc/api/include"
+  ] ++ (lib.optionals pkgs.config.cudaSupport [ "-f" "cuda" ])
+  ) (super.libtorch-ffi.override ({
+    c10 = pkgs.libtorch-bin;
+    torch = pkgs.libtorch-bin;
+    torch_cpu = pkgs.libtorch-bin;
+  }));
 }
