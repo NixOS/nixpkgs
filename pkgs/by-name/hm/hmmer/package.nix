@@ -2,6 +2,10 @@
   lib,
   stdenv,
   fetchurl,
+  easel,
+  perl,
+  python3,
+  versionCheckHook,
 }:
 
 stdenv.mkDerivation rec {
@@ -12,6 +16,28 @@ stdenv.mkDerivation rec {
     url = "http://eddylab.org/software/hmmer/${pname}-${version}.tar.gz";
     sha256 = "sha256-ynDZT9DPJxvXBjQjqrsRbULeUzEXNDqbJ6ZcF/8G+/M=";
   };
+
+  enableParallelBuilding = true;
+
+  doCheck = true;
+
+  nativeCheckInputs = [
+    perl
+    python3
+  ];
+
+  preCheck = ''
+    install -Dm755 ${easel.src}/devkit/sqc easel/devkit/sqc
+    patchShebangs easel/devkit/sqc testsuite/* src/hmmpress.itest.pl
+  '';
+
+  doInstallCheck = true;
+
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  versionCheckProgram = "${placeholder "out"}/bin/hmmalign";
+
+  versionCheckProgramArg = [ "-h" ];
 
   meta = with lib; {
     description = "Biosequence analysis using profile hidden Markov models";
