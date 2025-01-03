@@ -7,21 +7,25 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "piston-cli";
-  version = "1.4.3";
+  version = "1.5.0";
   format = "pyproject";
 
   src = fetchPypi {
     inherit pname version;
-    sha256 = "qvDGVJcaMXUajdUQWl4W1dost8k0PsS9XX/o8uQrtfY=";
+    sha256 = "sha256-YzQo22/63IJ78Y7pqk7W1galI+HNk7gIodiDlHwNllY=";
   };
 
   propagatedBuildInputs = with python3Packages; [
-    rich
+    appdirs
+    click
+    coloredlogs
+    more-itertools
     prompt-toolkit
-    requests
     pygments
     pyyaml
-    more-itertools
+    requests
+    requests-cache
+    rich
   ];
 
   checkPhase = ''
