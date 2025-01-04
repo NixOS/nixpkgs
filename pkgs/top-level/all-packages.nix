@@ -9647,7 +9647,12 @@ with pkgs;
     python = python3;
   };
 
-  libffi = callPackage ../development/libraries/libffi { };
+  # Use Apple’s fork of libffi by default, which provides APIs and trampoline functionality that is not yet
+  # merged upstream. This is needed by some packages (such as cffi).
+  #
+  # `libffiReal` is provided in case the upstream libffi package is needed on Darwin instead of the fork.
+  libffiReal = callPackage ../development/libraries/libffi { };
+  libffi = if stdenv.hostPlatform.isDarwin then darwin.libffi else libffiReal;
   libffi_3_3 = callPackage ../development/libraries/libffi/3.3.nix { };
   libffiBoot = libffi.override {
     doCheck = false;
