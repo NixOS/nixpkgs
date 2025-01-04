@@ -10,16 +10,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "zizmor";
-  version = "0.10.0";
+  version = "1.0.0";
 
   src = fetchFromGitHub {
     owner = "woodruffw";
     repo = "zizmor";
     tag = "v${version}";
-    hash = "sha256-fq+J1+CrxFSbCimM8SIshwQciEjRjPcjAmdVKbVV13s=";
+    hash = "sha256-95YtFlnC8xFBz1v+qC3rh7jEUp+4JBoMGgVQd/6IFwE=";
   };
 
-  cargoHash = "sha256-OUwl9vBB8jMY40SbOc9YK4yyxvgWQTgQRWw2LN07W08=";
+  cargoHash = "sha256-imq7ElZcC9E4nDkHaaFiBf8r1VuMtw5zOn9O7EzIPkQ=";
 
   buildInputs = [ openssl ];
 
