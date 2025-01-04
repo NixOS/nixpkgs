@@ -261,13 +261,25 @@ print OUT <<EOF;
 {
   lib,
   pixman,
+  font-alias,
+  font-util,
+  gccmakedep,
+  libpciaccess,
+  libpthread-stubs,
   luit,
 }:
 
 self: with self; {
 
   inherit pixman;
-  inherit luit;
+  inherit
+    gccmakedep
+    libpciaccess
+    luit
+    ;
+  fontalias = font-alias;
+  fontutil = font-util;
+  libpthreadstubs = libpthread-stubs;
 
 EOF
 
