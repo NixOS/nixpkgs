@@ -105,9 +105,6 @@ let
 
     meta = {
       mainProgram = "gpu_stats";
-      # ld: library not found for -lIOReport
-      # TODO: succeeds on https://github.com/NixOS/nixpkgs/pull/348827, so try again once it lands on master
-      broken = stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64;
     };
   };
 
