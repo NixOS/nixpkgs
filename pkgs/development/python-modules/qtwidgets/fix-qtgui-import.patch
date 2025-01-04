@@ -1,0 +1,10 @@
+diff --git a/qtwidgets/rangeslider/rangeslider.py b/qtwidgets/rangeslider/rangeslider.py
+index 54baf2b..d01dbcf 100644
+--- a/qtwidgets/rangeslider/rangeslider.py
++++ b/qtwidgets/rangeslider/rangeslider.py
+@@ -3,3 +3,3 @@ import sys
+ if "PyQt5" in sys.modules:
+-    from PyQt5 import QtCore, QtWidgets
++    from PyQt5 import QtCore, QtWidgets, QtGui
+     from PyQt5.QtCore import Qt, pyqtSignal as Signal
+
