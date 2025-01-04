@@ -4296,6 +4296,12 @@
     githubId = 71959829;
     name = "Cleeyv";
   };
+  clemjvdm = {
+    email = "clement.jvdm@gmail.com";
+    github = "clemjvdm";
+    githubId = 131002498;
+    name = "clement";
+  };
   clerie = {
     email = "nix@clerie.de";
     github = "clerie";
