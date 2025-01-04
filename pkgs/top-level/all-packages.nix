@@ -1908,10 +1908,6 @@ with pkgs;
     inherit (androidenv.androidPkgs) platform-tools;
   };
 
-  anbox = callPackage ../os-specific/linux/anbox {
-    protobuf = protobuf_21;
-  };
-
   androidenv = callPackage ../development/mobile/androidenv { };
 
   androidndkPkgs = androidndkPkgs_26;
