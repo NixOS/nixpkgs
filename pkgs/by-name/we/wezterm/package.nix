@@ -19,6 +19,7 @@
   unstableGitUpdater,
   vulkan-loader,
   wayland,
+  wezterm,
   xcbutil,
   xcbutilimage,
   xcbutilkeysyms,
@@ -116,34 +117,13 @@ rustPlatform.buildRustPackage rec {
 
   passthru = {
     # the headless variant is useful when deploying wezterm's mux server on remote severs
-    headless = rustPlatform.buildRustPackage {
-      pname = "${pname}-headless";
+    headless = import ./headless.nix {
       inherit
-        version
-        src
-        postPatch
-        cargoHash
-        useFetchCargoVendor
-        meta
+        openssl
+        pkg-config
+        rustPlatform
+        wezterm
         ;
-
-      nativeBuildInputs = [ pkg-config ];
-
-      buildInputs = [ openssl ];
-
-      cargoBuildFlags = [
-        "--package"
-        "wezterm"
-        "--package"
-        "wezterm-mux-server"
-      ];
-
-      doCheck = false;
-
-      postInstall = ''
-        install -Dm644 assets/shell-integration/wezterm.sh -t $out/etc/profile.d
-        install -Dm644 ${passthru.terminfo}/share/terminfo/w/wezterm -t $out/share/terminfo/w
-      '';
     };
 
     terminfo =
