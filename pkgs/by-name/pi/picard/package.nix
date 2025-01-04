@@ -27,7 +27,7 @@ pythonPackages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "metabrainz";
     repo = "picard";
-    rev = "refs/tags/release-${version}";
+    tag = "release-${version}";
     hash = "sha256-ysHOiX8b9tlUaQDGl4qHUVLrLUF9MUDc4+vOQB76cj4=";
   };
 

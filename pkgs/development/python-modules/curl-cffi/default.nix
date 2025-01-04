@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lexiforest";
     repo = "curl_cffi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Q1VppzQ1Go+ia1D1BemTf40o9wV0miWyoGy/tY+95qE==";
   };
 

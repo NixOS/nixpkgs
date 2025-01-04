@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchgit {
     url = "https://git.launchpad.net/gweled";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-cm1z6l2tfYBFVFcvsnQ6cI3pQDnJMzn6SUC20gnBF5w=";
   };
 

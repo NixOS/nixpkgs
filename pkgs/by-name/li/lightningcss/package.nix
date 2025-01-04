@@ -13,7 +13,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "parcel-bundler";
     repo = "lightningcss";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IwuDJcKCG1CDyRsZbobPQnRzsaUfpJHKFemOWLJNM9c=";
   };
 

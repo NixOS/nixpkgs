@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "linien-org";
     repo = "linien";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-j6oiP/usLfV5HZtKLcXQ5pHhhxRG05kP2FMwingiWm0=";
   };
 

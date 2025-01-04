@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "locustio";
     repo = "locust";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xDquVQjkWVER9h0a6DHWRZH6KtRf0jsThycSojDEdh4=";
   };
 

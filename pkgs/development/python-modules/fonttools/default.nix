@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fonttools";
     repo = "fonttools";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-iYd3EiziaLR7zS0UQAje0QfShNfnhHPdH2+noCQ2yto=";
   };
 

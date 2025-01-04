@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "volatiletech";
     repo = "sqlboiler";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hb8aMaK2iDDCEJXoNn9BLELP0J7LcJzsQdSYZe1tcjQ=";
   };
 

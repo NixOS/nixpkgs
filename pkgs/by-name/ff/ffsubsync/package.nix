@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "smacke";
     repo = "ffsubsync";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ZdKZeKfAUe/FXLOur9Btb5RgXewmy3EHunQphqlxpIc=";
   };
 

@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "minoki";
     repo = "LunarML";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-wNcsvtIR/MbvwAIhybc7zzbS+RgfwndQ1jdDVdte+44=";
   };
 

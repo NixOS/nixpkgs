@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "nix-community";
     repo = "nix-zsh-completions";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-bgbMc4HqigqgdkvUe/CWbUclwxpl17ESLzCIP8Sz+F8=";
   };
 

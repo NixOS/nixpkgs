@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openai";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uJgm8l1SxIRC5PV6BIH/ht/1ucGT5UaUhkFMdusejgA=";
   };
 

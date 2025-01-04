@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "sapcc";
     repo = "nova-password";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+qFbBjjbp1Nazpo21oOytvEPzn6Nmc4Cr8du045Ab/E=";
   };
 

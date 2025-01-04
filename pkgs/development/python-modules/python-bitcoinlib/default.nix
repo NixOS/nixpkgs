@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "petertodd";
     repo = "python-bitcoinlib";
-    rev = "refs/tags/python-bitcoinlib-v${version}";
+    tag = "python-bitcoinlib-v${version}";
     hash = "sha256-jfd2Buy6GSCH0ZeccRREC1NmlS6Mq1qtNv/NLNJOsX0=";
   };
 

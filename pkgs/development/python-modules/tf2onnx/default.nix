@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "onnx";
     repo = "tensorflow-onnx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qtRzckw/KHWm3gjFwF+cPuBhGbfktjhYIwImwHn2CFk=";
   };
 

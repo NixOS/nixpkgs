@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bm1549";
     repo = "frigidaire";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-RzwTQRo5cIh6I8VQAJNcLg5TBiF6dAnZICGfvwCvx5Y=";
   };
 

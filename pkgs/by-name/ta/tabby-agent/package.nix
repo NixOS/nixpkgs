@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "TabbyML";
     repo = "tabby";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-TP0KEGH8w9kdTj5yxCsAn4LRS1gj3Dnz96GA8DDSJJU=";
   };
 

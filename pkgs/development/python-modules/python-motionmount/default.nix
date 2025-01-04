@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vogelsproducts";
     repo = "python-MotionMount";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-07wTlyfUSt44dBwOXjkXADA+HDy8531KYxJAKqBWKeQ=";
   };
 

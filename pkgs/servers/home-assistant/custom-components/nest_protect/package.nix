@@ -11,7 +11,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     inherit owner;
     repo = "ha-nest-protect";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IiHndx+mQVfpMLisiRwSEhrFJ3mJ4qaWTxZrubowkQs=";
   };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cyberjunky";
     repo = "python-garminconnect";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-rY3jIrCl5y2Pyw7qakUuMtdPTR7e61n5pScPavvBtbM=";
   };
 

@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "wheel";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-tgueGEWByS5owdA5rhXGn3qh1Vtf0HGYC6+BHfrnGAs=";
     postFetch = ''
       cd $out

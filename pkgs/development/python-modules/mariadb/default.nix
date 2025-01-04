@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mariadb-corporation";
     repo = "mariadb-connector-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YpA65J8ozKJfpOc4hZLdgCcT3j/lqRiNeX7k8U/aYkE=";
   };
 

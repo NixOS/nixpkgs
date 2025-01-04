@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jb101010-2";
     repo = "pySuez";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BG5nX2S+WV0Bdwm/cvm+mGO1RUd+F312tZ4jws6A/d8=";
   };
 

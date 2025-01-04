@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyproj4";
     repo = "pyproj";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uCoWmJ0xtbJ/DHts5+9KR6d6p8vmZqDrI4RFjXQn2fM=";
   };
 
