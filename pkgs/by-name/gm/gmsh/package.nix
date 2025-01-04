@@ -59,6 +59,10 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./fix-python.patch
+    (fetchurl {
+      url = "https://gitlab.onelab.info/gmsh/gmsh/-/commit/7d5094fb0a5245cb435afd3f3e8c35e2ecfe70fd.diff";
+      hash = "sha256-h3+skISCXYNfxe0BtdAEFwbQwGNdXq6pPyhNXAx7WW0=";
+    })
   ];
 
   postPatch = ''
