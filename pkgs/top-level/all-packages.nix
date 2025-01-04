@@ -18188,6 +18188,8 @@ with pkgs;
 
   unityhub = callPackage ../development/tools/unityhub { };
 
+  upspin-ui = callPackage ../applications/file-managers/upspin-ui { };
+
   urbit = callPackage ../misc/urbit { };
 
   unixcw = libsForQt5.callPackage ../applications/radio/unixcw { };
