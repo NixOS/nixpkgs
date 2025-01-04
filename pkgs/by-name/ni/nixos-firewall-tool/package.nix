@@ -6,7 +6,7 @@
   shellcheck-minimal,
 }:
 
-stdenvNoCC.mkDerivation (finalAttrs: {
+stdenvNoCC.mkDerivation {
   name = "nixos-firewall-tool";
 
   src = builtins.filterSource (name: _: !(lib.hasSuffix ".nix" name)) ./.;
@@ -14,7 +14,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   strictDeps = true;
   buildInputs = [ bash ];
   nativeBuildInputs = [ installShellFiles ];
-  nativeCheckInputs = lib.optionals finalAttrs.doCheck [ shellcheck-minimal ];
+  nativeCheckInputs = [ shellcheck-minimal ];
 
   postPatch = ''
     patchShebangs --host nixos-firewall-tool
@@ -45,4 +45,4 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     mainProgram = "nixos-firewall-tool";
   };
-})
+}
