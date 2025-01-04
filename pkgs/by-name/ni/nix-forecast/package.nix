@@ -11,16 +11,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "nix-forecast";
-  version = "0.1.0";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "getchoo";
     repo = "nix-forecast";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-jfS7DXEIVHihC0/kH9W8ZJDOjoWuxdRvLMfzknElvrg=";
+    tag = "v${version}";
+    hash = "sha256-kNSH2QbryNAfZXILQzMk9MHDzX4420KyQJOKW0Xrl7c=";
   };
 
-  cargoHash = "sha256-EHqHdcMI1K7DqhmFfr0ipfAsyM7cP9/22bMs4uIV2To=";
+  cargoHash = "sha256-C5KPOwGD8jFqRuN6h1G6yO4lkl7t+RMzAE45r5d5lI0=";
 
   nativeBuildInputs = [
     installShellFiles
