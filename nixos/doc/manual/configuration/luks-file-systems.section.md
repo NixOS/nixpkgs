@@ -6,7 +6,7 @@ Ext4 file system on the device
 `/dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d`:
 
 ```ShellSession
-# cryptsetup luksFormat /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d
+# cryptsetup luksFormat --pbkdf pbkdf2 /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d
 
 WARNING!
 ========
@@ -21,6 +21,11 @@ Enter passphrase for /dev/disk/by-uuid/3f6b0024-3a44-4fde-a43a-767b872abe5d: ***
 
 # mkfs.ext4 /dev/mapper/crypted
 ```
+
+Note that we use the `pbkdf2` key derivation function. This is required
+if you need to boot from this partition, because grub currently cannot
+handle the default key derivation function Argon2, which would render
+the partition unbootable.
 
 The LUKS volume should be automatically picked up by
 `nixos-generate-config`, but you might want to verify that your
