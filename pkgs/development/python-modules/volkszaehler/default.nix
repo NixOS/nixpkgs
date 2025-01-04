@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-ecosystem";
     repo = "python-volkszaehler";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-7SB0x0BO9SMeMG1M/hH4fX7oDbtwPgCzyRrrUq1/WPo=";
   };
 

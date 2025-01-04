@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DeebotUniverse";
     repo = "client.py";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-hJGE9D0rsYKrd4XZIrOOnwaQlq75Qy4S8681wjr4VDs=";
   };
 

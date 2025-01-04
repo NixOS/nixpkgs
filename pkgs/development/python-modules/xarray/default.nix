@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydata";
     repo = "xarray";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-s5MvHp2OkomD3xNYzj9oKlVLMgHZDQRBJM6vgOAv1jQ=";
   };
   patches = [

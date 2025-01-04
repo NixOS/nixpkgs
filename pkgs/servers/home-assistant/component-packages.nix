@@ -1323,8 +1323,12 @@
         aioecowitt
       ];
     "eddystone_temperature" =
-      ps: with ps; [
-      ]; # missing inputs: beacontools
+      ps:
+      with ps;
+      [
+        beacontools
+      ]
+      ++ beacontools.optional-dependencies.scan;
     "edimax" =
       ps: with ps; [
         pyedimax
@@ -2740,7 +2744,8 @@
       ];
     "jvc_projector" =
       ps: with ps; [
-      ]; # missing inputs: pyjvcprojector
+        pyjvcprojector
+      ];
     "kaiterra" =
       ps: with ps; [
       ]; # missing inputs: kaiterra-async-client
@@ -5037,7 +5042,8 @@
       ];
     "slide" =
       ps: with ps; [
-      ]; # missing inputs: goslide-api
+        goslide-api
+      ];
     "slimproto" =
       ps: with ps; [
         aioslimproto
@@ -6802,6 +6808,7 @@
     "jewish_calendar"
     "juicenet"
     "justnimbus"
+    "jvc_projector"
     "kaleidescape"
     "keenetic_ndms2"
     "kegtron"

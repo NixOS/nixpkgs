@@ -3,7 +3,6 @@
   stdenv,
   buildPythonPackage,
   fetchPypi,
-  autoAddDriverRunpath,
   autoPatchelfHook,
   pypaInstallHook,
   wheelUnpackHook,
@@ -90,7 +89,6 @@ buildPythonPackage {
   );
 
   nativeBuildInputs = [
-    autoAddDriverRunpath
     autoPatchelfHook
     pypaInstallHook
     wheelUnpackHook
@@ -99,6 +97,9 @@ buildPythonPackage {
   dependencies = [ jax-cuda12-pjrt ];
 
   pythonImportsCheck = [ "jax_cuda12_plugin" ];
+
+  # no tests
+  doCheck = false;
 
   meta = {
     description = "JAX Plugin for CUDA12";
@@ -110,8 +111,6 @@ buildPythonPackage {
     # see CUDA compatibility matrix
     # https://jax.readthedocs.io/en/latest/installation.html#pip-installation-nvidia-gpu-cuda-installed-locally-harder
     broken =
-      !(lib.versionAtLeast cudaVersion "12.1")
-      || !(lib.versionAtLeast cudaPackages.cudnn.version "9.1")
-      || true;
+      !(lib.versionAtLeast cudaVersion "12.1") || !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
   };
 }

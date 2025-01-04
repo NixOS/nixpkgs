@@ -3,7 +3,7 @@
   stdenv,
   buildPythonPackage,
   fetchurl,
-  autoAddDriverRunpath,
+  addDriverRunpath,
   autoPatchelfHook,
   pypaInstallHook,
   wheelUnpackHook,
@@ -19,16 +19,14 @@ let
     with cudaPackages;
     [
       (lib.getLib cuda_cudart) # libcudart.so
-      (lib.getLib cuda_cupti) # libcupti.so
       (lib.getLib cudnn) # libcudnn.so
-      (lib.getLib libcufft) # libcufft.so
-      (lib.getLib libcusolver) # libcusolver.so
-      (lib.getLib libcusparse) # libcusparse.so
+      (lib.getLib libcublas) # libcublas.so
+      addDriverRunpath.driverLink # libcuda.so
     ]
   );
 
   # Find new releases at https://storage.googleapis.com/jax-releases
-  # When upgrading, you can get these hashes from prefetch.sh. See
+  # When upgrading, you can get these hashes from jaxlib/prefetch.sh. See
   # https://github.com/google/jax/issues/12879 as to why this specific URL is the correct index.
 
   # upstream does not distribute jax-cuda12-pjrt 0.4.38 binaries for aarch64-linux
@@ -53,46 +51,37 @@ buildPythonPackage {
       or (throw "jax-cuda12-pjrt: No src for ${stdenv.hostPlatform.system}");
 
   nativeBuildInputs = [
-    autoAddDriverRunpath
     autoPatchelfHook
     pypaInstallHook
     wheelUnpackHook
   ];
 
-  # The following attributes (buildInputs, postInstall and preInstallCheck) are copied from jaxlib-0.4.28
-  # but it does not recognize GPUs as of 2024-12-29
-  # Dynamic link dependencies
-  buildInputs = [ (lib.getLib stdenv.cc.cc) ];
-
-  # jaxlib looks for ptxas at runtime, eg when running `jax.random.PRNGKey(0)`.
+  # jax-cuda12-pjrt looks for ptxas, nvlink and nvvm at runtime, eg when running `jax.random.PRNGKey(0)`.
   # Linking into $out is the least bad solution. See
   # * https://github.com/NixOS/nixpkgs/pull/164176#discussion_r828801621
   # * https://github.com/NixOS/nixpkgs/pull/288829#discussion_r1493852211
   # for more info.
   postInstall = ''
-    mkdir -p $out/${python.sitePackages}/jaxlib/cuda/bin
-    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "ptxas"} $out/${python.sitePackages}/jaxlib/cuda/bin/ptxas
+    mkdir -p $out/${python.sitePackages}/jax_plugins/nvidia/cuda_nvcc/bin
+    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "ptxas"} $out/${python.sitePackages}/jax_plugins/nvidia/cuda_nvcc/bin/ptxas
+    ln -s ${lib.getExe' cudaPackages.cuda_nvcc "nvlink"} $out/${python.sitePackages}/jax_plugins/nvidia/cuda_nvcc/bin/nvlink
+    ln -s ${cudaPackages.cuda_nvcc}/nvvm $out/${python.sitePackages}/jax_plugins/nvidia/cuda_nvcc/nvvm
   '';
 
-  # jaxlib contains shared libraries that open other shared libraries via dlopen
+  # jax-cuda12-pjrt contains shared libraries that open other shared libraries via dlopen
   # and these implicit dependencies are not recognized by ldd or
   # autoPatchelfHook. That means we need to sneak them into rpath. This step
   # must be done after autoPatchelfHook and the automatic stripping of
   # artifacts. autoPatchelfHook runs in postFixup and auto-stripping runs in the
   # patchPhase.
   preInstallCheck = ''
-    shopt -s globstar
-
-    for file in $out/**/*.so; do
-      echo $file
-      patchelf --add-rpath "${cudaLibPath}" "$file"
-    done
+    patchelf --add-rpath "${cudaLibPath}" $out/${python.sitePackages}/jax_plugins/xla_cuda12/xla_cuda_plugin.so
   '';
 
-  # no tests
-  doCheck = false;
+  # FIXME: there are no tests, but we need to run preInstallCheck above
+  doCheck = true;
 
-  pythonImportsCheck = [ "jax_plugins.xla_cuda12" ];
+  pythonImportsCheck = [ "jax_plugins" ];
 
   meta = {
     description = "JAX XLA PJRT Plugin for NVIDIA GPUs";
@@ -104,8 +93,6 @@ buildPythonPackage {
     # see CUDA compatibility matrix
     # https://jax.readthedocs.io/en/latest/installation.html#pip-installation-nvidia-gpu-cuda-installed-locally-harder
     broken =
-      !(lib.versionAtLeast cudaVersion "12.1")
-      || !(lib.versionAtLeast cudaPackages.cudnn.version "9.1")
-      || true;
+      !(lib.versionAtLeast cudaVersion "12.1") || !(lib.versionAtLeast cudaPackages.cudnn.version "9.1");
   };
 }

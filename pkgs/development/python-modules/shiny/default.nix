@@ -35,7 +35,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "posit-dev";
     repo = "py-shiny";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-s1j9bMAapO0iRXsuNxiwlNaVv2EoWcl9U7WnHwQe9n8=";
   };
 

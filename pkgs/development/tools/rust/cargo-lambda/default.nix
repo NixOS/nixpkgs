@@ -16,16 +16,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "cargo-lambda";
-  version = "1.6.1";
+  version = "1.6.2";
 
   src = fetchFromGitHub {
     owner = pname;
     repo = pname;
     rev = "v${version}";
-    hash = "sha256-O4yJ+6Uk4dHjCDp28JbUtL/B+v9JJEGkinZ4MsIpjUk=";
+    hash = "sha256-21p9bo+kfqVrRAxVSuZ24XaHDU7XkIIhGXjHLUsGQOg=";
   };
 
-  cargoHash = "sha256-vK37S5hLuHYimTljo0i6iRq2kt/r0kZ6Uqw2wQMhSGc=";
+  cargoHash = "sha256-5AzeqJjs8Ee6ltXnXMZU47fXt1THsSERxCaT22zjK6g=";
 
   nativeCheckInputs = [ cacert ];
 
@@ -66,6 +66,7 @@ rustPlatform.buildRustPackage rec {
     maintainers = with maintainers; [
       taylor1791
       calavera
+      matthiasbeyer
     ];
   };
 }

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zxdavb";
     repo = "evohome-async";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-+tBqyg7E9wRC6oHq6Fv2vzIGtrHqZp8w/3x/xbacqWI=";
   };
 

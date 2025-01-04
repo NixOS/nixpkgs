@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wikipedia2vec";
     repo = "wikipedia2vec";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vrBLlNm0bVIStSBWDHRCtuRpazu8JMCtBl4qJPtHGvU=";
   };
 

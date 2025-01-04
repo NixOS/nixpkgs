@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kulkansecurity";
     repo = "gitxray";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-rxG/FXIvPPCmV8//Bq3Upu4kNjwVhPVTK4ADp9X3OL0=";
   };
 

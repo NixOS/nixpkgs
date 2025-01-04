@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "AzureAD";
     repo = "microsoft-authentication-extensions-for-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-javYE1XDW1yrMZ/BLqIu/pUXChlBZlACctbD2RfWuis=";
   };
 

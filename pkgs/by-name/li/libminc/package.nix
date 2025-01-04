@@ -16,7 +16,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "BIC-MNI";
     repo = "libminc";
-    rev = "refs/tags/release-${finalAttrs.version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-HTt3y0AFM9pkEkWPb9cDmvUz4iBQWfpX7wLF9Vlg8hc=";
   };
 

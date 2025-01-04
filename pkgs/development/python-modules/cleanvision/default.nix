@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cleanlab";
     repo = "cleanvision";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QAydDqLJx/jYKXqxRUElTdM5dOFA6nZag8rNAjPZjRg=";
   };
 

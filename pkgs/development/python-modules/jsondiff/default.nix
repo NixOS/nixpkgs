@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xlwings";
     repo = "jsondiff";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-0EnI7f5t7Ftl/8UcsRdA4iVQ78mxvPucCJjFJ8TMwww=";
   };
 

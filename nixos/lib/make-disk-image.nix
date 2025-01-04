@@ -619,9 +619,6 @@ let format' = format; in let
         # __noChroot for example).
         export HOME=$TMPDIR
         NIXOS_INSTALL_BOOTLOADER=1 nixos-enter --root $mountPoint -- /nix/var/nix/profiles/system/bin/switch-to-configuration boot
-
-        # The above scripts will generate a random machine-id and we don't want to bake a single ID into all our images
-        rm -f $mountPoint/etc/machine-id
       ''}
 
       # Set the ownerships of the contents. The modes are set in preVM.

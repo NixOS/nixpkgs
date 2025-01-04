@@ -5,10 +5,10 @@
 }:
 let
   srcFetchFromGitLab = {
-    hash = "sha256-q2FwkwzjanxTIxjMpCyMpzPt782uYZiWVdZ7Eev79oM=";
     owner = "trueNAHO";
     repo = "antora-ui-default";
     rev = "11f563294248e9b64124b9289d639e349f2e9f5f";
+    hash = "sha256-gUQLLjnWZ1OsAe005IOPIfoM0qmjoevcUuGBRD3oHXA=";
   };
 in
 stdenvNoCC.mkDerivation {

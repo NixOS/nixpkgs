@@ -120,6 +120,7 @@ stdenvNoCC.mkDerivation {
 
   passthru = {
     gitRepoUrl = url;
+    inherit tag;
   };
 }
 ))

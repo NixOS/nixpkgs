@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "antonioginer";
     repo = "switchres";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/21RcpumWYNBPck7gpH6krwC3Thz/rKDPgeJblN2BDA=";
   };
 

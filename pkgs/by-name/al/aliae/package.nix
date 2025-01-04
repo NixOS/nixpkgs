@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "jandedobbeleer";
     repo = "aliae";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HccUA4+es9M7PZUTqWvIb3xNxmOeyI2iw5bG316RgLE=";
   };
 

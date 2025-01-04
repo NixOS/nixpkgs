@@ -13,7 +13,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "sandialabs";
     repo = "verdict";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-VrjyAMou5BajOIb13RjEqVgOsDcllfzI/OJ81fyILjs=";
   };
 

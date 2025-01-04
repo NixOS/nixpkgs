@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "fdev31";
     repo = "wlr-layout-ui";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Qgg4fdxOVkADDOxmQgQFSF/wgrEQihoRNC9oXeQvaoI=";
   };
 

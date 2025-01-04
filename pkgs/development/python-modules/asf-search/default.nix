@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "asfadmin";
     repo = "Discovery-asf_search";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-mOhY64Csxdc/DYS1OlbstxYEodtpXTVyPwd4B1jrDK8=";
   };
 

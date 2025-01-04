@@ -19,7 +19,6 @@
   libXtst,
   libXi,
   wayland,
-  apple-sdk_11,
 }:
 
 buildNpmPackage rec {
@@ -29,7 +28,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "kando-menu";
     repo = "kando";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OTNxK2D7lM8IluZa6Rydd3WSP3hPNcT9nkQm1smq4ms=";
   };
 
@@ -50,17 +49,13 @@ buildNpmPackage rec {
       copyDesktopItems
     ];
 
-  buildInputs =
-    lib.optionals stdenv.hostPlatform.isLinux [
-      libxkbcommon
-      libX11
-      libXtst
-      libXi
-      wayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+    libxkbcommon
+    libX11
+    libXtst
+    libXi
+    wayland
+  ];
 
   dontUseCmakeConfigure = true;
 

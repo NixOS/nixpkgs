@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Guts";
     repo = "mkdocs-rss-plugin";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6FTOJQqK9lKYt6cVpKvMcNUrhSwX26032Vr4JyZ6sI8=";
   };
 

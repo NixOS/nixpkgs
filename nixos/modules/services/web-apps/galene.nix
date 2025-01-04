@@ -152,7 +152,7 @@ in
           WorkingDirectory = cfg.stateDir;
           ExecStart = ''${cfg.package}/bin/galene \
           ${optionalString (cfg.insecure) "-insecure"} \
-          -http ${cfg.httpAddress}:${cfg.httpPort} \
+          -http ${cfg.httpAddress}:${toString cfg.httpPort} \
           -turn ${cfg.turnAddress} \
           -data ${cfg.dataDir} \
           -groups ${cfg.groupsDir} \

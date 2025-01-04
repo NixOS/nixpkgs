@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "copier-org";
     repo = "copier";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     # Conflict on APFS on darwin
     postFetch = ''
       rm $out/tests/demo/doc/ma*ana.txt

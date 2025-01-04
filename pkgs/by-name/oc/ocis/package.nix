@@ -37,7 +37,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "owncloud";
     repo = "ocis";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TsMrQx+P1F2t66e0tGG0VvRi4W7+pCpDHd0aNsacOsI=";
   };
 

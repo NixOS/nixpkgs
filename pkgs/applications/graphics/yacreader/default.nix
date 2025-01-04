@@ -16,13 +16,13 @@
 
 mkDerivation rec {
   pname = "yacreader";
-  version = "9.14.2";
+  version = "9.15.0";
 
   src = fetchFromGitHub {
     owner = "YACReader";
     repo = pname;
     rev = version;
-    sha256 = "sha256-gQ4Aaapini6j3lCtowFbrfwbe91aFl50hp1EfxTO8uY=";
+    sha256 = "sha256-5vCjr8WRwa7Q/84Itgg07K1CJKGnWA1z53et2IxxReE=";
   };
 
   nativeBuildInputs = [

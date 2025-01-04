@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "metaopt";
     repo = "optree";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/Y2pMpVPz4EXyWoW++K3FFf67Ym6yUs0ZQI4y0GVwmo=";
   };
 

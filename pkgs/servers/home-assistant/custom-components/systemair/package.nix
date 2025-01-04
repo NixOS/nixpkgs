@@ -12,7 +12,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     inherit owner;
     repo = "systemair";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lzFnKPkBOt2fkVGWCj1M/skSr8V39GgDHS+0HD4ACAw=";
   };
 

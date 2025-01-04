@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stanfordnlp";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-hrRn6ITsN7kFL1T6VjSXPDytANEeJYKwMaSdCG+YJyM=";
   };
 

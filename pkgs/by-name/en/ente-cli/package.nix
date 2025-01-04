@@ -20,7 +20,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "ente-io";
     repo = "ente";
-    rev = "refs/tags/cli-v${version}";
+    tag = "cli-v${version}";
     hash = "sha256-ynbljYl73XwCnt3RUNmOYdrN8FX3sJ+3qDhWa8m2YJs=";
     sparseCheckout = [ "cli" ];
   };

@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "JacKeTUs";
     repo = "universal-pidff";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BViobWl+9ypTcQJWtZ9pbeU4cmHcFNZWlsmQUOO64Vc=";
   };
 
