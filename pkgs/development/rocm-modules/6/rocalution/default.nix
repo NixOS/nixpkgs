@@ -22,7 +22,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocalution";
-  version = "6.0.2";
+  version = "6.2.1";
 
   outputs =
     [
@@ -42,7 +42,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocALUTION";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-mrN+CI2mqaMi8oKxui7HAIE2qSn50aNaFipkWwYMtbc=";
+    hash = "sha256-5CbI1uPW9FlwvsCTVAOznTqdLaEE8Ncuz4EwzwqUWmk=";
   };
 
   nativeBuildInputs = [
