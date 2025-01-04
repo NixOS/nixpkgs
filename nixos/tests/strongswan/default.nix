@@ -9,6 +9,7 @@ let
   ];
   tests = {
     swanctl = import ./swanctl.nix;
+    strongswan = import ./strongswan.nix;
   };
 in
 lib.mergeAttrsList (
