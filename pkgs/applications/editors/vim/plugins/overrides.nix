@@ -2129,6 +2129,13 @@ in
     dependencies = [ self.nvim-treesitter ];
   };
 
+  nvim-java-core = super.nvim-java-core.overrideAttrs {
+    dependencies = with self; [
+      mason-nvim
+      nvim-lspconfig
+    ];
+  };
+
   nvim-lsp-file-operations = super.nvim-lsp-file-operations.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
     nvimRequireCheck = "lsp-file-operations";
