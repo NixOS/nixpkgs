@@ -16,7 +16,7 @@
   freetype-py,
   gflanguages,
   gfsubsets,
-  git,
+  gitMinimal,
   glyphsets,
   installShellFiles,
   jinja2,
@@ -110,7 +110,7 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
     pytestCheckHook
     pytest-xdist
     requests-mock
