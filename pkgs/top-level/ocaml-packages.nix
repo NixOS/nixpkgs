@@ -1079,6 +1079,8 @@ let
 
     melange = callPackage ../development/tools/ocaml/melange { };
 
+    mem_usage = callPackage ../development/ocaml-modules/mem_usage { };
+
     memprof-limits = callPackage ../development/ocaml-modules/memprof-limits { };
 
     memtrace = callPackage ../development/ocaml-modules/memtrace { };
