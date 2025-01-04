@@ -24,6 +24,7 @@
   runCommand,
   vulkan-loader,
   fetchpatch2,
+  unstableGitUpdater,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -33,7 +34,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "wez";
     repo = "wezterm";
-    rev = version;
+    rev = "5046fc225992db6ba2ef8812743fadfdfe4b184a";
     fetchSubmodules = true;
     hash = "sha256-Az+HlnK/lRJpUSGm5UKyma1l2PaBKNCGFiaYnLECMX8=";
   };
@@ -181,6 +182,11 @@ rustPlatform.buildRustPackage rec {
       # the test is commented out in nixos/tests/terminal-emulators.nix
       #terminal-emulators = nixosTests.terminal-emulators.wezterm;
     };
+
+    # upstream tags are composed with timestamp+commit, e.g.:
+    # 20240203-110809-5046fc22
+    # doesn't make much sense if we are following unstable
+    updateScript = unstableGitUpdater { hardcodeZeroVersion = true; };
   };
 
   meta = with lib; {
