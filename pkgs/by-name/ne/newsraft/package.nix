@@ -42,7 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Feed reader for terminal";
     homepage = "https://codeberg.org/grisha/newsraft";
     license = lib.licenses.isc;
-    maintainers = with lib.maintainers; [ arthsmn ];
+    maintainers = with lib.maintainers; [
+      arthsmn
+      luftmensch-luftmensch
+    ];
     mainProgram = "newsraft";
     platforms = lib.platforms.all;
   };
