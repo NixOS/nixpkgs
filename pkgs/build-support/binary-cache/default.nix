@@ -39,7 +39,10 @@ stdenv.mkDerivation {
   buildCommand = ''
     mkdir -p $out/nar
 
-    python ${./make-binary-cache.py}
+    NUM_WORKERS="''${NIX_BUILD_CORES:-4}"
+
+    python ${./make-binary-cache.py} \
+      --num-workers "$NUM_WORKERS"
 
     # These directories must exist, or Nix might try to create them in LocalBinaryCacheStore::init(),
     # which fails if mounted read-only
