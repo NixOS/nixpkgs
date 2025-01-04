@@ -10,7 +10,7 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "igvm-tooling";
-  version = "1.5.0-unstable-2024-06-06";
+  version = "igvm-1.5.0";
   pyproject = true;
 
   src = fetchFromGitHub {
