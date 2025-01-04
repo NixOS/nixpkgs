@@ -2,8 +2,6 @@
   lib,
   rustPlatform,
   fetchFromGitHub,
-  stdenv,
-  apple-sdk_11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -20,8 +18,6 @@ rustPlatform.buildRustPackage rec {
   cargoHash = "sha256-mxx4G77ldPfVorNa1LGTcA0Idwmrcl8S/ze+UUoLHhI=";
 
   nativeBuildInputs = [ rustPlatform.bindgenHook ];
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   preCheck = "HOME=$(mktemp -d)";
 

@@ -2,7 +2,6 @@
   lib,
   stdenv,
   alsa-lib,
-  apple-sdk_11,
   config,
   dbus,
   fetchFromGitHub,
@@ -50,7 +49,6 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [ ncurses ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11
     ++ lib.optional stdenv.hostPlatform.isLinux openssl
     ++ lib.optional (withALSA || withRodio) alsa-lib
     ++ lib.optional withClipboard libxcb

@@ -10,13 +10,13 @@
 
 buildPythonPackage rec {
   pname = "iottycloud";
-  version = "0.2.1";
+  version = "0.3.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "pburgio";
     repo = "iottyCloud";
-    rev = "refs/tags/v${version}";
+    rev = "refs/tags/${version}";
     hash = "sha256-EtAAUyVL7FTn0VoGmU5bU9XouMuEQUOx2t6j/wd1OEo=";
   };
 
@@ -32,7 +32,7 @@ buildPythonPackage rec {
   ];
 
   meta = {
-    changelog = "https://github.com/pburgio/iottyCloud/releases/tag/v${version}";
+    changelog = "https://github.com/pburgio/iottyCloud/releases/tag/${version}";
     description = "Python library to interact with iotty CloudApi";
     homepage = "https://github.com/pburgio/iottyCloud";
     license = lib.licenses.agpl3Only;

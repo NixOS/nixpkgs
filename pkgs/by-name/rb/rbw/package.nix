@@ -6,9 +6,7 @@
   openssl,
   pkg-config,
   installShellFiles,
-  darwin,
   bash,
-  apple-sdk_11,
   # rbw-fzf
   withFzf ? false,
   fzf,
@@ -39,13 +37,7 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pkg-config ];
 
-  buildInputs =
-    [ bash ] # for git-credential-rbw
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11 # Needs _NSPasteboardTypeFileURL, can be removed once x86_64-darwin defaults to a higher SDK
-      darwin.apple_sdk_11_0.frameworks.Security
-      darwin.apple_sdk_11_0.frameworks.AppKit
-    ];
+  buildInputs = [ bash ]; # for git-credential-rbw
 
   preConfigure = lib.optionalString stdenv.hostPlatform.isLinux ''
     export OPENSSL_INCLUDE_DIR="${openssl.dev}/include"

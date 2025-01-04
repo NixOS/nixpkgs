@@ -1115,6 +1115,8 @@ self: super: with self; {
 
   aws-encryption-sdk = callPackage ../development/python-modules/aws-encryption-sdk { };
 
+  aws-error-utils = callPackage ../development/python-modules/aws-error-utils { };
+
   aws-lambda-builders = callPackage ../development/python-modules/aws-lambda-builders { };
 
   aws-request-signer = callPackage ../development/python-modules/aws-request-signer { };
@@ -1122,6 +1124,8 @@ self: super: with self; {
   aws-sam-translator = callPackage ../development/python-modules/aws-sam-translator { };
 
   aws-secretsmanager-caching = callPackage ../development/python-modules/aws-secretsmanager-caching { };
+
+  aws-sso-lib = callPackage ../development/python-modules/aws-sso-lib { };
 
   aws-xray-sdk = callPackage ../development/python-modules/aws-xray-sdk { };
 
@@ -5479,6 +5483,8 @@ self: super: with self; {
 
   gorilla = callPackage ../development/python-modules/gorilla { };
 
+  goslide-api = callPackage ../development/python-modules/goslide-api { };
+
   govee-ble = callPackage ../development/python-modules/govee-ble { };
 
   govee-led-wez = callPackage ../development/python-modules/govee-led-wez { };
@@ -6690,6 +6696,8 @@ self: super: with self; {
   jsonfield = callPackage ../development/python-modules/jsonfield { };
 
   jsonlines = callPackage ../development/python-modules/jsonlines { };
+
+  json-api-doc = callPackage ../development/python-modules/json-api-doc { };
 
   json-logging = callPackage ../development/python-modules/json-logging { };
 
@@ -8249,6 +8257,8 @@ self: super: with self; {
   mkdocs-get-deps = callPackage ../development/python-modules/mkdocs-get-deps { };
 
   mkdocs-git-authors-plugin = callPackage ../development/python-modules/mkdocs-git-authors-plugin { };
+
+  mkdocs-git-committers-plugin-2 = callPackage ../development/python-modules/mkdocs-git-committers-plugin-2 { };
 
   mkdocs-git-revision-date-localized-plugin = callPackage ../development/python-modules/mkdocs-git-revision-date-localized-plugin { };
 
@@ -18310,6 +18320,8 @@ self: super: with self; {
   yosys = toPythonModule (pkgs.yosys.override {
     python3 = python;
   });
+
+  yoto-api = callPackage ../development/python-modules/yoto-api { };
 
   youless-api = callPackage ../development/python-modules/youless-api { };
 

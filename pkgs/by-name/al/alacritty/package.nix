@@ -22,7 +22,6 @@
   wayland,
   xdg-utils,
 
-  apple-sdk_11,
 }:
 let
   rpathLibs =
@@ -65,11 +64,7 @@ rustPlatform.buildRustPackage rec {
     scdoc
   ];
 
-  buildInputs =
-    rpathLibs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  buildInputs = rpathLibs;
 
   outputs = [
     "out"

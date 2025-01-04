@@ -5,7 +5,6 @@
   cmake,
   pkg-config,
   stdenv,
-  apple-sdk_11,
   curl,
   openssl,
   buildPackages,
@@ -36,7 +35,7 @@ rustPlatform.buildRustPackage rec {
     installShellFiles
   ];
 
-  buildInputs = [ curl ] ++ (if stdenv.hostPlatform.isDarwin then [ apple-sdk_11 ] else [ openssl ]);
+  buildInputs = [ curl ] ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [ openssl ];
 
   preFixup = lib.optionalString canRunCmd ''
     installShellCompletion --cmd gix \

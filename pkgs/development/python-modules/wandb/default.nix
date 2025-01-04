@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  apple-sdk_11,
   fetchFromGitHub,
 
   ## wandb-core
@@ -178,8 +177,6 @@ buildPythonPackage rec {
   build-system = [
     hatchling
   ];
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   dependencies =
     [
