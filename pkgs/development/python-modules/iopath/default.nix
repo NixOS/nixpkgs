@@ -24,7 +24,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "facebookresearch";
     repo = "iopath";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Qubf/mWKMgYz9IVoptMZrwy4lQKsNGgdqpJB1j/u5s8=";
   };
 

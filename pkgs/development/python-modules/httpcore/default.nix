@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "encode";
     repo = "httpcore";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-sF/ymIoEnqWRX9b8knojIw+ySci/obXSttaNJLb+/nE=";
   };
 

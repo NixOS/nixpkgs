@@ -26,7 +26,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "aleiepure";
     repo = "devtoolbox";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yeOX2ASQWpo3TN9ou25voOVD3pSK4SE0CDXHkrwu+E4=";
   };
 

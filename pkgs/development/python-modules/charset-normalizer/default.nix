@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Ousret";
     repo = "charset_normalizer";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-de6rg/e9RPfuO44+/Uipad75YqZQrnqiSPopfBNOFP8=";
   };
 

@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ofek";
     repo = "coincurve";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NKx/iLuzFEu1UBuwa14x55Ab3laVAKEtX6dtoWi0dOg=";
   };
 

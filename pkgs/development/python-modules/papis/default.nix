@@ -42,7 +42,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "papis";
     repo = "papis";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-UpZoMYk4URN8tSFGIynVzWMk+9S0izROAgbx6uI2cN8=";
   };
 

@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "elalish";
     repo = "manifold";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wbeWxAeKyqjEPemc2e5n357gwq83pQlASOvMd0ZCE7g=";
   };
 

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dotX12";
     repo = "ShazamIO";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PYA7HUm++4r4kwezyPi3mWRRGF47qHjz2nHUZmVYk/I=";
   };
 
@@ -70,7 +70,7 @@ buildPythonPackage rec {
   meta = with lib; {
     description = "Free asynchronous library from reverse engineered Shazam API";
     homepage = "https://github.com/dotX12/ShazamIO";
-    changelog = "https://github.com/dotX12/ShazamIO/releases/tag/${lib.removePrefix "refs/tags/" src.rev}";
+    changelog = "https://github.com/dotX12/ShazamIO/releases/tag/${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ figsoda ];
     # https://github.com/shazamio/ShazamIO/issues/80

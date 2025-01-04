@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "lockbook";
     repo = "lockbook";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-hqBjA/6MWlhVjV4m+cIcnoRTApHuzbPzivMsaQHfRcc=";
   };
 

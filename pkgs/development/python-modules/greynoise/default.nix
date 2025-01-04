@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GreyNoise-Intelligence";
     repo = "pygreynoise";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-17NieDQ57qVT2i4S26vLS9N6zALZ+eTtCCcBbhQ8fhQ=";
   };
 

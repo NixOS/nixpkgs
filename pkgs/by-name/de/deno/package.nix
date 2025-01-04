@@ -23,7 +23,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "denoland";
     repo = "deno";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CUfUYiD1ZVrbH4RowJN0PUCafpIsEWu0sCPzxngz4Ak=";
   };
 

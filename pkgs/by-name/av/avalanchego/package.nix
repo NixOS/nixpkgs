@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ava-labs";
     repo = "avalanchego";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-iedhLVNtwU8wSQIaq0r0fAYGH8fNnCRJW69D7wPdyx0=";
   };
 

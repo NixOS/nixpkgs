@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "qdrant";
     repo = "qdrant-client";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rElbGIXnhkHaAvtneEMhyyhySFlT4UT/vhhIlRD3xT0=";
   };
 

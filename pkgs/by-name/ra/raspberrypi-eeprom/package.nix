@@ -19,7 +19,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "raspberrypi";
     repo = "rpi-eeprom";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-6HyaEdMEBIFilZJJ9yPBHqdp0g+kLbbpr/5RsLZLI3U=";
   };
 

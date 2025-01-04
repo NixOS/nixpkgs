@@ -15,7 +15,7 @@ buildPythonPackage rec {
     owner = "stchris";
     repo = "untangle";
     # 1.1.1 is not tagged on GitHub
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-cJkN8vT5hW5hRuLxr/6udwMO4GVH1pJhAc6qmPO2EEI=";
   };
 
