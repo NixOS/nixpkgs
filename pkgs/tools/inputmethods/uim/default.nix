@@ -1,6 +1,7 @@
-{
+args@{
   lib,
   stdenv,
+  gcc13Stdenv,
   fetchFromGitHub,
   fetchpatch,
   shared-mime-info,
@@ -52,6 +53,10 @@ assert withSqlite -> sqlite != null;
 assert withNetworking -> curl != null && openssl != null;
 assert withFFI -> libffi != null;
 assert withMisc -> libeb != null;
+
+let
+  stdenv = if args.stdenv.cc.isGNU then args.gcc13Stdenv else args.stdenv;
+in
 
 stdenv.mkDerivation rec {
   version = "1.8.8";
