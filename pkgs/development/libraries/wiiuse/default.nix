@@ -21,6 +21,13 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-l2CS//7rx5J3kI32yTSp0BDtP0T5+riLowtnxnfAotc=";
   };
 
+  outputs = [
+    "out"
+    "dev"
+    "doc"
+    "lib"
+  ];
+
   patches = [
     # Fix `.pc` files's double prefixes:
     #   https://github.com/wiiuse/wiiuse/pull/153
