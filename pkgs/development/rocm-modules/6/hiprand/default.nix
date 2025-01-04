@@ -14,7 +14,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hiprand";
-  version = "6.0.2";
+  version = "6.3.1";
 
   outputs =
     [
@@ -28,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "hipRAND";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-uGHzOhUX5JEknVFwhHhWFdPmwLS/TuaXYMeItS7tXIg=";
+    hash = "sha256-TVc+qFwRiS5tAo1OKI1Wu5hadlwPZmSVZ9SvVvH1w7Y=";
   };
 
   nativeBuildInputs = [
@@ -41,8 +41,6 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
-      "-DCMAKE_C_COMPILER=hipcc"
-      "-DCMAKE_CXX_COMPILER=hipcc"
       "-DHIP_ROOT_DIR=${clr}"
       # Manually define CMAKE_INSTALL_<DIR>
       # See: https://github.com/NixOS/nixpkgs/pull/197838
@@ -67,8 +65,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   meta = with lib; {
@@ -77,8 +75,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

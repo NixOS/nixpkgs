@@ -1,5 +1,4 @@
 {
-  rocfft,
   lib,
   stdenv,
   fetchFromGitHub,
@@ -15,18 +14,18 @@
   gtest,
   openmp,
   rocrand,
-  gpuTargets ? [ ],
+  gpuTargets ? clr.localGpuTargets or clr.gpuTargets,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "rocfft";
-  version = "6.0.2";
+  pname = "rocfft${clr.gpuArchSuffix}";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "rocFFT";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-6Gjsy14GeR08VqnNmFhu8EyYDnQ+VZRlg+u9MAAWfHc=";
+    hash = "sha256-RrxdwZ64uC7lQzyJI1eGHX2dmRnW8TfNThnuvuz5XWo=";
   };
 
   nativeBuildInputs = [
@@ -36,6 +35,7 @@ stdenv.mkDerivation (finalAttrs: {
     rocm-cmake
   ];
 
+  # FIXME: rocfft_aot_helper times out build due to no logs!!
   buildInputs = [ sqlite ];
 
   cmakeFlags =
@@ -52,6 +52,10 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (gpuTargets != [ ]) [
       "-DAMDGPU_TARGETS=${lib.concatStringsSep ";" gpuTargets}"
     ];
+
+  preConfigure = ''
+    makeFlagsArray+=("-l$(((NIX_BUILD_CORES * 2) / 3))")
+  '';
 
   passthru = {
     test = stdenv.mkDerivation {
@@ -156,8 +160,8 @@ stdenv.mkDerivation (finalAttrs: {
 
     updateScript = rocmUpdateScript {
       name = finalAttrs.pname;
-      owner = finalAttrs.src.owner;
-      repo = finalAttrs.src.repo;
+      inherit (finalAttrs.src) owner;
+      inherit (finalAttrs.src) repo;
     };
   };
 
@@ -169,8 +173,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ kira-bruneau ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

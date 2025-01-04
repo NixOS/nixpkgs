@@ -1,18 +1,21 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hip-common";
-  version = "6.0.2";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "HIP";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-51u3By0R4LKoWiklNacFP6HILL845jxpN6FD7rQB+zQ=";
+    hash = "sha256-y85S2fULvbQfwxZukIsMLuQAqWEv1kHL8fdozK4kj5I=";
+    # rev = "5f2d2d109c34e749d7947b48834098eec26a5e67";
+    # hash = "sha256-Lws65mzRJZP/JE9UiHHfX4Y3zOYA6FPxgbAea48D9Gk=";
   };
 
   dontConfigure = true;
@@ -29,8 +32,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   meta = with lib; {
@@ -39,6 +42,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

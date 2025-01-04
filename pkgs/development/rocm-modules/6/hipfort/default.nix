@@ -1,21 +1,22 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, cmake
-, rocm-cmake
-, gfortran
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  cmake,
+  rocm-cmake,
+  gfortran,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "hipfort";
-  version = "6.0.2";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "hipfort";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-3PIqSDyDlY0oVSEx20EPlKGYNkc9xPZtIG3Sbw69esE=";
+    hash = "sha256-cokHxyb4NDMHeq7RIVz7PBuUKRIHyGdZgDgF6Za4fHM=";
   };
 
   nativeBuildInputs = [
@@ -51,8 +52,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   meta = with lib; {
@@ -61,6 +62,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ]; # mitx11
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

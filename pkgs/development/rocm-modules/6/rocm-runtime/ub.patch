@@ -1,0 +1,66 @@
+commit 56ad93a08c185cd43f925488ee5295149cce4d9d
+Author: Luna Nova <git@lunnova.dev>
+Date:   Mon Dec 30 11:58:30 2024 -0800
+
+    kfd_ioctl: cast to unsigned before << 31 to avoid UB
+
+diff --git a/libhsakmt/include/hsakmt/linux/kfd_ioctl.h b/libhsakmt/include/hsakmt/linux/kfd_ioctl.h
+index e132cedf..ab15e69f 100644
+--- a/libhsakmt/include/hsakmt/linux/kfd_ioctl.h
++++ b/libhsakmt/include/hsakmt/linux/kfd_ioctl.h
+@@ -1026,7 +1026,7 @@ struct kfd_ioctl_acquire_vm_args {
+ #define KFD_IOC_ALLOC_MEM_FLAGS_DOORBELL	(1 << 3)
+ #define KFD_IOC_ALLOC_MEM_FLAGS_MMIO_REMAP	(1 << 4)
+ /* Allocation flags: attributes/access options */
+-#define KFD_IOC_ALLOC_MEM_FLAGS_WRITABLE	(1 << 31)
++#define KFD_IOC_ALLOC_MEM_FLAGS_WRITABLE	(1U << 31U)
+ #define KFD_IOC_ALLOC_MEM_FLAGS_EXECUTABLE	(1 << 30)
+ #define KFD_IOC_ALLOC_MEM_FLAGS_PUBLIC		(1 << 29)
+ #define KFD_IOC_ALLOC_MEM_FLAGS_NO_SUBSTITUTE	(1 << 28)
+commit 967f8c11b702fa769e0f95052f7b37a357b215f2
+Author: Luna Nova <git@lunnova.dev>
+Date:   Mon Dec 30 15:32:49 2024 -0800
+
+    topology: fix signed integer overflow due to << 31
+
+diff --git a/libhsakmt/src/topology.c b/libhsakmt/src/topology.c
+index 9990286a..d3b54d11 100644
+--- a/libhsakmt/src/topology.c
++++ b/libhsakmt/src/topology.c
+@@ -460,7 +460,7 @@ static void cpumap_to_cpu_ci(char *shared_cpu_map,
+ 			     struct proc_cpuinfo *cpuinfo,
+ 			     HsaCacheProperties *this_cache)
+ {
+-	int num_hexs, bit;
++	unsigned int num_hexs, bit;
+ 	uint32_t proc, apicid, mask;
+ 	char *ch_ptr;
+ 
+@@ -473,7 +473,7 @@ static void cpumap_to_cpu_ci(char *shared_cpu_map,
+ 	while (num_hexs-- > 0) {
+ 		mask = strtol(ch_ptr, NULL, 16); /* each X */
+ 		for (bit = 0; bit < 32; bit++) {
+-			if (!((1 << bit) & mask))
++			if (!((1U << bit) & mask))
+ 				continue;
+ 			proc = num_hexs * 32 + bit;
+ 			apicid = cpuinfo[proc].apicid;
+commit 8524c5b6af087ba29999119245effc4dc94f1584
+Author: Luna Nova <git@lunnova.dev>
+Date:   Mon Dec 30 15:34:05 2024 -0800
+
+    queues: fix signed integer overflow due to << 31
+
+diff --git a/libhsakmt/src/queues.c b/libhsakmt/src/queues.c
+index de37f8b9..d2aaa7b6 100644
+--- a/libhsakmt/src/queues.c
++++ b/libhsakmt/src/queues.c
+@@ -663,7 +663,7 @@ HSAKMT_STATUS HSAKMTAPI hsaKmtCreateQueueExt(HSAuint32 NodeId,
+ 		/* cu_mask_count counts bits. It must be multiple of 32 */
+ 		q->cu_mask_count = ALIGN_UP_32(cu_num, 32);
+ 		for (i = 0; i < cu_num; i++)
+-			q->cu_mask[i/32] |= (1 << (i % 32));
++			q->cu_mask[i/32] |= (1U << (i % 32));
+ 	}
+ 
+ 	struct kfd_ioctl_create_queue_args args = {0};

@@ -1,11 +1,12 @@
 {
   lib,
   stdenv,
-  fetchFromGitHub,
-  rocmUpdateScript,
   cmake,
-  rocm-cmake,
+  python3,
+  rocm-merged-llvm,
   rocm-device-libs,
+  zlib,
+  zstd,
   libxml2,
 }:
 
@@ -20,34 +21,30 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocm-comgr";
-  version = "6.0.2";
+  # In-tree with ROCm LLVM
+  inherit (rocm-merged-llvm) version;
+  src = rocm-merged-llvm.llvm-src;
 
-  src = fetchFromGitHub {
-    owner = "ROCm";
-    repo = "ROCm-CompilerSupport";
-    rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-9HuNU/k+kPJMlzqOTM20gm6SAOWJe9tpAZXEj4erdmI=";
-  };
-
-  sourceRoot = "${finalAttrs.src.name}/lib/comgr";
+  sourceRoot = "${finalAttrs.src.name}/amd/comgr";
 
   nativeBuildInputs = [
     cmake
-    rocm-cmake
+    python3
   ];
 
   buildInputs = [
     rocm-device-libs
     libxml2
+    zlib
+    zstd
+    rocm-merged-llvm
   ];
 
-  cmakeFlags = [ "-DLLVM_TARGETS_TO_BUILD=AMDGPU;X86" ];
-
-  passthru.updateScript = rocmUpdateScript {
-    name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
-  };
+  cmakeFlags = [
+    "-DCMAKE_VERBOSE_MAKEFILE=ON"
+    "-DCMAKE_BUILD_TYPE=Release"
+    "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
+  ];
 
   meta = with lib; {
     description = "APIs for compiling and inspecting AMDGPU code objects";
@@ -55,8 +52,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.ncsa;
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

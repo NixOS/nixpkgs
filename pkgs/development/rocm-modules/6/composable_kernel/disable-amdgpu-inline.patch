@@ -1,0 +1,16 @@
+Flag -amdgpu-early-inline-all explodes memory consumption, so that build does not fit 64GB of RAM.
+LLVM bug: https://github.com/llvm/llvm-project/issues/86332
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -213,11 +213,6 @@ if(NOT WIN32 AND check-coerce AND ${hip_VERSION_FLAT} GREATER 600241132 AND ${hi
+    message("Adding the amdgpu-coerce-illegal-types=1")
+    add_compile_options("SHELL: -mllvm -amdgpu-coerce-illegal-types=1")
+ endif()
+-if(NOT WIN32 AND ${hip_VERSION_FLAT} GREATER 600241132)
+-   message("Adding -amdgpu-early-inline-all=true and -amdgpu-function-calls=false")
+-   add_compile_options("SHELL: -mllvm -amdgpu-early-inline-all=true")
+-   add_compile_options("SHELL: -mllvm -amdgpu-function-calls=false")
+-endif()
+ #
+ # Seperate linking jobs from compiling
+ # Too many concurrent linking jobs can break the build
