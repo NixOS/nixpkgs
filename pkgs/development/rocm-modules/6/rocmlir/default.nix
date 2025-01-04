@@ -7,7 +7,6 @@
   cmake,
   rocm-cmake,
   rocminfo,
-  ninja,
   clr,
   git,
   libxml2,
@@ -19,6 +18,13 @@
   buildRockCompiler ? false,
   buildTests ? false, # `argument of type 'NoneType' is not iterable`
 }:
+
+# FIXME: rocmlir has an entire separate LLVM build in a subdirectory this is silly
+# It seems to be forked from AMD's own LLVM
+# If possible reusing the rocmPackages.llvm build would be better
+# Would have to confirm it is compatible with ROCm's tagged LLVM.
+# Fairly likely it's not given AMD's track record with forking their own software in incompatible ways
+# in subdirs
 
 # Theoretically, we could have our MLIR have an output
 # with the source and built objects so that we can just
@@ -36,7 +42,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocmlir${suffix}";
-  version = "6.0.2";
+  version = "6.3.1";
 
   outputs =
     [
@@ -50,13 +56,12 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocMLIR";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-AypY0vL8Ij1zLycwpG2EPWWl4utp4ejXpAK0Jj/UvrA=";
+    hash = "sha256-0SQ6uLDRfVfdCX+8a7D6pu6dYlFvX0HFzCDEvlKYfak=";
   };
 
   nativeBuildInputs = [
     cmake
     rocm-cmake
-    ninja
     clr
     python3Packages.python
     python3Packages.tomli
@@ -75,23 +80,17 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   patches = [
-    (fetchpatch {
-      name = "fix-TosaToRock-missing-includes.patch";
-      url = "https://github.com/ROCm/rocMLIR/commit/80b8c94a5dd6ab832733116fe0339c1d6011ab57.patch";
-      hash = "sha256-przg1AQZTiVbVd/4wA+KlGXu/RISO5n11FBkmUFKRSA=";
-    })
-    (fetchpatch {
-      name = "fix-cmake-depedency-on-transforms.patch";
-      url = "https://github.com/ROCm/rocMLIR/commit/b85ca4855e0f0214c2fd695e493c884cf08a3472.patch";
-      hash = "sha256-m108PnwvDAN3xWko+gZMgvCNFl4LXTvC67JHXhFHeBc=";
-    })
+    ./initparamdata-sort-const.patch
   ];
 
   cmakeFlags =
     [
       "-DLLVM_TARGETS_TO_BUILD=AMDGPU;${llvmNativeTarget}"
-      "-DLLVM_ENABLE_ZSTD=ON"
-      "-DLLVM_ENABLE_ZLIB=ON"
+      "-DCMAKE_BUILD_TYPE=Release"
+      "-DLLVM_USE_LINKER=lld"
+      "-DLLVM_ENABLE_ZSTD=FORCE_ON"
+      "-DLLVM_ENABLE_ZLIB=FORCE_ON"
+      "-DLLVM_ENABLE_LIBCXX=ON"
       "-DLLVM_ENABLE_TERMINFO=ON"
       "-DROCM_PATH=${clr}"
       # Manually define CMAKE_INSTALL_<DIR>
@@ -99,9 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
       "-DCMAKE_INSTALL_BINDIR=bin"
       "-DCMAKE_INSTALL_LIBDIR=lib"
       "-DCMAKE_INSTALL_INCLUDEDIR=include"
-    ]
-    ++ lib.optionals buildRockCompiler [
-      "-DBUILD_FAT_LIBROCKCOMPILER=ON"
+      (lib.cmakeBool "BUILD_FAT_LIBROCKCOMPILER" buildRockCompiler)
     ]
     ++ lib.optionals (!buildRockCompiler) [
       "-DROCM_TEST_CHIPSET=gfx000"
@@ -110,6 +107,10 @@ stdenv.mkDerivation (finalAttrs: {
   postPatch = ''
     patchShebangs mlir
     patchShebangs external/llvm-project/mlir/lib/Dialect/GPU/AmdDeviceLibsIncGen.py
+
+    # Fixes mlir/lib/Analysis/BufferDependencyAnalysis.cpp:41:19: error: redefinition of 'read'
+    substituteInPlace mlir/lib/Analysis/BufferDependencyAnalysis.cpp \
+      --replace-fail "enum EffectType { read, write, unknown };" "enum class EffectType { read, write, unknown };"
 
     # remove when no longer required
     substituteInPlace mlir/test/{e2e/generateE2ETest.py,fusion/e2e/generate-fusion-tests.py} \
@@ -150,10 +151,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
-    page = "tags?per_page=2";
-    filter = ".[1].name | split(\"-\") | .[1]";
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
+    page = "tags?per_page=4";
   };
 
   meta = with lib; {
@@ -162,8 +162,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ asl20 ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

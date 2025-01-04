@@ -11,6 +11,7 @@
   rocrand,
   clr,
   git,
+  pkg-config,
   openmp,
   openmpi,
   gtest,
@@ -22,7 +23,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocalution";
-  version = "6.0.2";
+  version = "6.3.1";
 
   outputs =
     [
@@ -42,7 +43,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocALUTION";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-mrN+CI2mqaMi8oKxui7HAIE2qSn50aNaFipkWwYMtbc=";
+    hash = "sha256-xdZ3HUiRGsreHfJH8RgL/s3jGyC5ABmBKcEfgtqWg8Y=";
   };
 
   nativeBuildInputs = [
@@ -50,6 +51,7 @@ stdenv.mkDerivation (finalAttrs: {
     rocm-cmake
     clr
     git
+    pkg-config
   ];
 
   buildInputs =
@@ -65,9 +67,12 @@ stdenv.mkDerivation (finalAttrs: {
       gtest
     ];
 
+  CXXFLAGS = "-I${openmp.dev}/include";
   cmakeFlags =
     [
-      "-DCMAKE_CXX_COMPILER=hipcc"
+      "-DOpenMP_C_INCLUDE_DIR=${openmp.dev}/include"
+      "-DOpenMP_CXX_INCLUDE_DIR=${openmp.dev}/include"
+      "-DOpenMP_omp_LIBRARY=${openmp}/lib"
       "-DROCM_PATH=${clr}"
       "-DHIP_ROOT_DIR=${clr}"
       "-DSUPPORT_HIP=ON"
@@ -82,6 +87,7 @@ stdenv.mkDerivation (finalAttrs: {
     ]
     ++ lib.optionals (gpuTargets != [ ]) [
       "-DAMDGPU_TARGETS=${lib.strings.concatStringsSep ";" gpuTargets}"
+      "-DGPU_TARGETS=${lib.strings.concatStringsSep ";" gpuTargets}"
     ]
     ++ lib.optionals buildTests [
       "-DBUILD_CLIENTS_TESTS=ON"
@@ -115,8 +121,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   meta = with lib; {
@@ -125,8 +131,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })
