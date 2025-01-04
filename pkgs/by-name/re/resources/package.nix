@@ -2,6 +2,7 @@
 , stdenv
 , fetchFromGitHub
 , appstream-glib
+, autoAddDriverRunpath
 , cargo
 , desktop-file-utils
 , meson
@@ -37,6 +38,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   nativeBuildInputs = [
     appstream-glib
+    autoAddDriverRunpath
     desktop-file-utils
     meson
     ninja
