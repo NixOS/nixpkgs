@@ -212,6 +212,23 @@ checkConfigOutput '^42$' config.value ./declare-oneOf.nix ./define-value-int-pos
 checkConfigOutput '^\[\]$' config.value ./declare-oneOf.nix ./define-value-list.nix
 checkConfigOutput '^"24"$' config.value ./declare-oneOf.nix ./define-value-string.nix
 
+test_flake_type() {
+    # A flake must be returned without any pre or post-processing.
+    checkConfigOutput "^true$" config.result ./declare-flake.nix ./define-flake.nix
+
+    # Even an identical flake can not be merged. In the "best" case it's the same flake,
+    # but we'd have to check that is. Perhaps some attributes could be merged, but
+    # many can't, so this would effectively create two _usage_ types:
+    #  - full access, allowing access to `sourceInfo` and `packages.default`
+    #  - only access to attributes that can be expected to be merged, such as
+    #    `packages.foo`
+    # However, the latter would still break the rule that an addition somewhere "unrelated"
+    # doesn't break anything. So merging would be a bad idea.
+    checkConfigError "The option .flake. is defined multiple times" config.result ./declare-flake.nix ./define-flake.nix ./define-flake-again.nix
+    checkConfigError "However, flakes can not be merged" config.result ./declare-flake.nix ./define-flake.nix ./define-flake-again.nix
+}
+test_flake_type
+
 # Check mkForce without submodules.
 set -- config.enable ./declare-enable.nix ./define-enable.nix
 checkConfigOutput '^true$' "$@"
