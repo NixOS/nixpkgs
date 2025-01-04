@@ -1,10 +1,30 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, makeWrapper
-, bundlerEnv
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  makeWrapper,
+  bundlerEnv,
+  writeText,
+  sslLegacyProvider ? false,
 }:
+let
+  openssl_conf = writeText "openssl.conf" ''
+    openssl_conf = openssl_init
 
+    [openssl_init]
+    providers = provider_sect
+
+    [provider_sect]
+    default = default_sect
+    legacy = legacy_sect
+
+    [default_sect]
+    activate = 1
+
+    [legacy_sect]
+    activate = 1
+  '';
+in
 stdenv.mkDerivation rec {
   pname = "evil-winrm";
   version = "3.5";
@@ -23,17 +43,17 @@ stdenv.mkDerivation rec {
     gemset = ./gemset.nix;
   };
 
-  nativeBuildInputs = [
-    makeWrapper
-  ];
+  nativeBuildInputs = [ makeWrapper ];
 
-  buildInputs = [
-    env.wrappedRuby
-  ];
+  buildInputs = [ env.wrappedRuby ];
 
   installPhase = ''
     mkdir -p $out/bin
     cp evil-winrm.rb $out/bin/evil-winrm
+  '';
+
+  postFixup = lib.optionalString sslLegacyProvider ''
+    wrapProgram $out/bin/evil-winrm --prefix OPENSSL_CONF : "${openssl_conf}"
   '';
 
   meta = with lib; {
