@@ -299,6 +299,15 @@ package-maintainers:
     - sensei
   malo:
     - cornelis
+  mangoiv:
+    - fused-effects
+    - htree
+    - http-barf
+    - libsodium-bindings
+    - scoped-codensity
+    - sel
+    - text-display
+    - unclogging
   maralorn:
     - bluefin
     - cabal-fmt
