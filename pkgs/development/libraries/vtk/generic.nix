@@ -16,7 +16,9 @@
   libXt,
   libpng,
   libtiff,
+  gdcm,
   fetchpatch,
+  fetchFromGitHub,
   enableQt ? false,
   qtx11extras,
   qttools,
@@ -25,6 +27,7 @@
   enablePython ? false,
   python ? throw "vtk: Python support requested, but no python interpreter was given.",
   enableEgl ? false,
+  enableVtkDicom ? true,
 }:
 
 let
@@ -64,6 +67,9 @@ stdenv.mkDerivation {
     ]
     ++ optionals enablePython [
       python
+    ]
+    ++ optionals enableVtkDicom [
+      (gdcm.override { enableVTK = false; })
     ];
   propagatedBuildInputs = optionals stdenv.hostPlatform.isLinux [
     libX11
@@ -75,10 +81,22 @@ stdenv.mkDerivation {
 
   # GCC 13: error: 'int64_t' in namespace 'std' does not name a type
   postPatch =
+    let
+      vtk-dicom = fetchFromGitHub {
+        owner = "dgobbi";
+        repo = "vtk-dicom";
+        tag = "v0.8.17";
+        hash = "sha256-1lI2qsV4gymWqjeouEHZ5FRlmlh9vimH7J5rzA+eOds=";
+      };
+    in
     ''
       sed '1i#include <cstdint>' \
         -i ThirdParty/libproj/vtklibproj/src/proj_json_streaming_writer.hpp \
         -i IO/Image/vtkSEPReader.h
+    ''
+    + optionalString enableVtkDicom ''
+      cp -r ${vtk-dicom} ./Remote/vtkDICOM
+      chmod -R +w ./Remote/vtkDICOM
     ''
     + optionalString stdenv.hostPlatform.isDarwin ''
       sed -i 's|COMMAND vtkHashSource|COMMAND "DYLD_LIBRARY_PATH=''${VTK_BINARY_DIR}/lib" ''${VTK_BINARY_DIR}/bin/vtkHashSource-${majorVersion}|' ./Parallel/Core/CMakeLists.txt
@@ -117,6 +135,11 @@ stdenv.mkDerivation {
     ++ optionals enablePython [
       "-DVTK_WRAP_PYTHON:BOOL=ON"
       "-DVTK_PYTHON_VERSION:STRING=${pythonMajor}"
+    ]
+    ++ optionals enableVtkDicom [
+      # Allows to read compressed dicom files:
+      # https://dgobbi.github.io/vtk-dicom/doc/api/installation.html
+      "-DUSE_GDCM=ON"
     ];
 
   env = {
