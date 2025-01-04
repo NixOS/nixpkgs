@@ -154,8 +154,9 @@ rustPlatform.buildRustPackage rec {
     license = licenses.mit;
     mainProgram = "wezterm";
     maintainers = with maintainers; [
-      SuperSandro2000
       mimame
+      SuperSandro2000
+      thiagokokada
     ];
   };
 }
