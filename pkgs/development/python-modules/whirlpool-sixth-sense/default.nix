@@ -2,6 +2,7 @@
   lib,
   aioconsole,
   aiohttp,
+  aioresponses,
   async-timeout,
   buildPythonPackage,
   fetchFromGitHub,
@@ -37,13 +38,11 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [
+    aioresponses
     pytest-asyncio
     pytest-mock
     pytestCheckHook
   ];
-
-  # https://github.com/abmantis/whirlpool-sixth-sense/issues/15
-  doCheck = false;
 
   pythonImportsCheck = [ "whirlpool" ];
 
