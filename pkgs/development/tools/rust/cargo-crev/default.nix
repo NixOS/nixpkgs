@@ -1,15 +1,17 @@
-{ lib, stdenv
-, fetchFromGitHub
-, rustPlatform
-, perl
-, pkg-config
-, SystemConfiguration
-, Security
-, CoreFoundation
-, curl
-, libiconv
-, openssl
-, git
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  perl,
+  pkg-config,
+  SystemConfiguration,
+  Security,
+  CoreFoundation,
+  curl,
+  libiconv,
+  openssl,
+  gitMinimal,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,17 +33,35 @@ rustPlatform.buildRustPackage rec {
     git config --global user.email "nobody@example.com"
   '';
 
-  nativeBuildInputs = [ perl pkg-config ];
+  nativeBuildInputs = [
+    perl
+    pkg-config
+  ];
 
-  buildInputs = [ openssl ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ SystemConfiguration Security CoreFoundation libiconv curl ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      SystemConfiguration
+      Security
+      CoreFoundation
+      libiconv
+      curl
+    ];
 
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [ gitMinimal ];
 
   meta = with lib; {
     description = "Cryptographically verifiable code review system for the cargo (Rust) package manager";
     mainProgram = "cargo-crev";
     homepage = "https://github.com/crev-dev/cargo-crev";
-    license = with licenses; [ asl20 mit mpl20 ];
-    maintainers = with maintainers; [ b4dm4n matthiasbeyer ];
+    license = with licenses; [
+      asl20
+      mit
+      mpl20
+    ];
+    maintainers = with maintainers; [
+      b4dm4n
+      matthiasbeyer
+    ];
   };
 }
