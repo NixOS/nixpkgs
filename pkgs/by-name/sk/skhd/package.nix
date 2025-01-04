@@ -2,8 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  apple-sdk_11,
-  darwinMinVersionHook,
   nix-update-script,
   versionCheckHook,
 }:
@@ -17,11 +15,6 @@ stdenv.mkDerivation (finalAttrs: {
     rev = "v${finalAttrs.version}";
     hash = "sha256-fnkWws/g4BdHKDRhqoCpdPFUavOHdk8R7h7H1dAdAYI=";
   };
-
-  buildInputs = [
-    apple-sdk_11
-    (darwinMinVersionHook "10.13")
-  ];
 
   makeFlags = [ "BUILD_PATH=$(out)/bin" ];
 

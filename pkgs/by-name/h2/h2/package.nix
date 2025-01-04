@@ -19,7 +19,7 @@ maven.buildMavenPackage rec {
   src = fetchFromGitHub {
     owner = "h2database";
     repo = "h2database";
-    rev = "refs/tags/version-${version}";
+    tag = "version-${version}";
     hash = "sha256-voqQ4JqYkHRxVdxMGsHmKirQXMP7s44rTXeasWWW2Jw=";
   };
 

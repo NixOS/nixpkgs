@@ -8,14 +8,14 @@
 
 python3Packages.buildPythonApplication rec {
   pname = "snowflake-cli";
-  version = "3.1.0";
+  version = "3.2.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "snowflakedb";
     repo = "snowflake-cli";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-/n11GbrgFwjiAuwpFNJ3T96VDhdOy2x+hesgh4oPVbo=";
+    tag = "v${version}";
+    hash = "sha256-1AXp2bCBNuYwnyQMIQn3uLLKdWVznBRK6HcB/E7Yjo8=";
   };
 
   build-system = with python3Packages; [
@@ -65,6 +65,7 @@ python3Packages.buildPythonApplication rec {
     "test_snow_typer_help_sanitization" # Snapshot needs update?
     "test_help_message" # Snapshot needs update?
     "test_executing_command_sends_telemetry_usage_data" # Fails on mocked version
+    "test_generate_jwt_with_passphrase" # Fails, upstream PR https://github.com/snowflakedb/snowflake-cli/pull/1898
   ];
 
   pythonRelaxDeps = true;

@@ -19,7 +19,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "gleam-lang";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bGXSlbyV+0RjNtG/6u11xqjcvL7/FhhqdXanv2JlVII=";
   };
 

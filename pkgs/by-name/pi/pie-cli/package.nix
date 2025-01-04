@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Falconerd";
     repo = "pie";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-qJaQyet6pjvPhBg6p0wxSIJtZE+P7A7XVqzAnvGn12E=";
   };
 

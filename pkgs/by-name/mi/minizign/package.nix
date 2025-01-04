@@ -3,7 +3,6 @@
   stdenv,
   fetchFromGitHub,
   zig_0_13,
-  apple-sdk_11,
 }:
 
 let
@@ -23,8 +22,6 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     zig.hook
   ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   meta = {
     description = "Minisign reimplemented in Zig";

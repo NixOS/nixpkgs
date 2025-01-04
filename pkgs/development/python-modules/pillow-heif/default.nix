@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bigcat88";
     repo = "pillow_heif";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-a1qCxI+mMuEYsCk2CUYGNKCe+SONuvVizqUvmQKy3sE=";
   };
 

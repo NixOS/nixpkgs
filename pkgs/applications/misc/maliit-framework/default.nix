@@ -31,7 +31,7 @@ mkDerivation rec {
   src = fetchFromGitHub {
     owner = "maliit";
     repo = "framework";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-q+hiupwlA0PfG+xtomCUp2zv6HQrGgmOd9CU193ucrY=";
   };
 

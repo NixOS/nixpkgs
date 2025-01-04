@@ -14,7 +14,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "EnterpriseDB";
     repo = "barman";
-    rev = "refs/tags/release/${version}";
+    tag = "release/${version}";
     hash = "sha256-X39XOv8HJdSjMjMMnmB7Gxjseg5k/LuKICTxapcHVsU=";
   };
 

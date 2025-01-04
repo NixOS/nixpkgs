@@ -11,7 +11,7 @@ stdenvNoCC.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "simtrami";
     repo = "posy-improved-cursor-linux";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-i0N/QB5uzqHapMCDl6h6PWPJ4GOAyB1ds9qlqmZacLY=";
   };
 

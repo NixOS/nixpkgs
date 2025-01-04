@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "unbound";
-    rev = "refs/tags/release-${finalAttrs.version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-CFsd8tdFL+JbxmDZoWdStvWcs9azSaLtMG8Ih5oXE/A=";
   };
 
@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     lib.optionals withMakeWrapper [ makeWrapper ]
     ++ lib.optionals withDNSTAP [ protobufc ]
-    ++ [ pkg-config flex ]
+    ++ [ pkg-config flex bison ]
     ++ lib.optionals withPythonModule [ swig ];
 
   buildInputs = [ openssl nettle expat libevent ]
@@ -120,8 +120,6 @@ stdenv.mkDerivation (finalAttrs: {
   in ''
     sed -E '/CONFCMDLINE/ s;${storeDir}/[a-z0-9]{32}-;${storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-;g' -i config.h
   '';
-
-  nativeCheckInputs = [ bison ];
 
   doCheck = true;
 

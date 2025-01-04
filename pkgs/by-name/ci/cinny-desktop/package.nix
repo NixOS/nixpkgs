@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cinnyapp";
     repo = "cinny-desktop";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yNGzgkZXz/VroGGnZFqo5n2v3cE6/tvpQv5U4p27row=";
   };
 

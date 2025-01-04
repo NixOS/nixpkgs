@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "kxxt";
     repo = "tracexec";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZoYqmjqY9eAHGDIbFX9FY1yGF210C60UWcHi0lxzL7g=";
   };
 

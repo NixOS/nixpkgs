@@ -1290,6 +1290,18 @@ final: prev:
     meta.homepage = "https://github.com/Saghen/blink.compat/";
   };
 
+  blink-ripgrep-nvim = buildVimPlugin {
+    pname = "blink-ripgrep.nvim";
+    version = "2025-01-04";
+    src = fetchFromGitHub {
+      owner = "mikavilpas";
+      repo = "blink-ripgrep.nvim";
+      rev = "1e0ff13ef364b585c1a21148d91b185cf3b246af";
+      sha256 = "0hhv74pa61b3z990w7j5q59r9wd6l2c7vlxgak6xvgb5gksk3cbp";
+    };
+    meta.homepage = "https://github.com/mikavilpas/blink-ripgrep.nvim/";
+  };
+
   block-nvim = buildVimPlugin {
     pname = "block.nvim";
     version = "2023-10-10";
@@ -6062,6 +6074,18 @@ final: prev:
     meta.homepage = "https://github.com/junegunn/limelight.vim/";
   };
 
+  linediff-vim = buildVimPlugin {
+    pname = "linediff.vim";
+    version = "2024-04-22";
+    src = fetchFromGitHub {
+      owner = "AndrewRadev";
+      repo = "linediff.vim";
+      rev = "ddae71ef5f94775d101c1c70032ebe8799f32745";
+      sha256 = "01dshpxm1svfhw9l447mz224qbvlbvywd7ai4wxwyjzgkhp36937";
+    };
+    meta.homepage = "https://github.com/AndrewRadev/linediff.vim/";
+  };
+
   lingua-franca-vim = buildVimPlugin {
     pname = "lingua-franca.vim";
     version = "2021-09-05";
@@ -9389,6 +9413,18 @@ final: prev:
     meta.homepage = "https://github.com/LhKipp/nvim-nu/";
   };
 
+  nvim-numbertoggle = buildVimPlugin {
+    pname = "nvim-numbertoggle";
+    version = "2024-03-29";
+    src = fetchFromGitHub {
+      owner = "sitiom";
+      repo = "nvim-numbertoggle";
+      rev = "c5827153f8a955886f1b38eaea6998c067d2992f";
+      sha256 = "18nxqi3a3xamrjzpsabww411ix6vr44smprqi9prd47238lpshi2";
+    };
+    meta.homepage = "https://github.com/sitiom/nvim-numbertoggle/";
+  };
+
   nvim-osc52 = buildVimPlugin {
     pname = "nvim-osc52";
     version = "2024-05-24";
@@ -9759,6 +9795,18 @@ final: prev:
       sha256 = "063xfbmwzrazvi21s1b01lqzyq67m7r8pnr3wyrdsxl2x8rcvjkx";
     };
     meta.homepage = "https://github.com/RRethy/nvim-treesitter-textsubjects/";
+  };
+
+  nvim-trevJ-lua = buildVimPlugin {
+    pname = "nvim-trevJ.lua";
+    version = "2024-12-23";
+    src = fetchFromGitHub {
+      owner = "AckslD";
+      repo = "nvim-trevJ.lua";
+      rev = "86445d0143d47aede944b6daa5c0a463e9d3e730";
+      sha256 = "0wrmzk7wyr4mk8y0c7hq0qqk19ngdwvvd80690vqs3vby89a5zkj";
+    };
+    meta.homepage = "https://github.com/AckslD/nvim-trevJ.lua/";
   };
 
   nvim-ts-autotag = buildVimPlugin {
@@ -10614,6 +10662,18 @@ final: prev:
       sha256 = "1md639mcs3dgvhvx93wi0rxiwjnb195r9al9bfqvcvl3r307gxba";
     };
     meta.homepage = "https://github.com/ahmedkhalf/project.nvim/";
+  };
+
+  projections-nvim = buildVimPlugin {
+    pname = "projections.nvim";
+    version = "2023-06-29";
+    src = fetchFromGitHub {
+      owner = "GnikDroy";
+      repo = "projections.nvim";
+      rev = "f18a8505f84f45a0fe024cafca5b969447f63cd5";
+      sha256 = "1yljcd1k8ksjxcs61b20z3rw36960mczi62x07i8z4xrxqrn4k5y";
+    };
+    meta.homepage = "https://github.com/GnikDroy/projections.nvim/";
   };
 
   promise-async = buildVimPlugin {

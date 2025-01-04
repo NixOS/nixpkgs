@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SkXf8zZif1l+yOSUjYpW474gYOmxifaLtj/DNK+ZNfg=";
   };
 

@@ -17,7 +17,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "sidevesh";
     repo = "Luminance";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-1xDRs+OBzcrB75pILA3ZxIrZEleWVBROBNZz0MsCWnA=";
   };
 

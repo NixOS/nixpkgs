@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "gcp_scanner";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6bIrSaTqpXQjB64YWAI64DlgQBD2XD+zMvKymMtwpDk=";
   };
 

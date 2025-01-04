@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "wmalgadey";
     repo = "PyTado";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-WpGznYNVpis1pM9PRXHnQVev3JW6baUT5J9iPxwd0Uk=";
   };
 

@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "tun2proxy";
     repo = "tun2proxy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LY7vVD85GVFqARYOBDeb4fS6rL2PwPXYXIAJtwm2goo=";
   };
 

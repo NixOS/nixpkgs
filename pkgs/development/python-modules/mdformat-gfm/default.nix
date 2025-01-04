@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "hukkin";
     repo = "mdformat-gfm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-c1jJwyTL8IgQnIAJFoPSuJ8VEYgnQ4slZyV0bHlUHLQ=";
   };
 

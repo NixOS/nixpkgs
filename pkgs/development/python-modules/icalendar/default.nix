@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "collective";
     repo = "icalendar";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-P+cUwNFSBjyTzqdBnIricoM3rUWUXQc8k1912jil79Q=";
   };
 

@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mammothb";
     repo = "editdistpy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kTaJkx1fdd2Rl4uhzxdZAFP/ArsM0qTPweJ1jlUcjxQ=";
   };
 

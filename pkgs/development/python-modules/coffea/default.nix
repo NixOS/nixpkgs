@@ -48,7 +48,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CoffeaTeam";
     repo = "coffea";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QE+la7CB2xrbbIOUL/HtKRHUOGu19IyfDvjL6oucn7g=";
   };
 

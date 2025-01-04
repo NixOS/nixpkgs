@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "SilasMarvin";
     repo = "lsp-ai";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-mBbaJn4u+Wlu/Y4G4a6YUBWnmN143INAGm0opiAjnIk=";
   };
 

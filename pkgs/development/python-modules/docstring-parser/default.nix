@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rr-";
     repo = "docstring_parser";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-xwV+mgCOC/MyCqGELkJVqQ3p2g2yw/Ieomc7k0HMXms=";
   };
 

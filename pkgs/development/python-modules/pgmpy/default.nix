@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pgmpy";
     repo = "pgmpy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RusVREhEXYaJuQXTaCQ7EJgbo4+wLB3wXXCAc3sBGtU=";
   };
 

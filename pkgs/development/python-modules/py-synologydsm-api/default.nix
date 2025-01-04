@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mib1185";
     repo = "py-synologydsm-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3DpgJqL8pSiAK/t/Qe2CxntQStTqDumkivhnPKHVlnE=";
   };
 

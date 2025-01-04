@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws-samples";
     repo = "awsipranges";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ve1+0zkDDUGswtQoXhfESMcBzoNgUutxEhz43HXL4H8=";
   };
 

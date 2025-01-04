@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pbs";
     repo = "pycaption";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-07Llsp2Cvvo9WueeTBJnAos3uynhYL0gT5U21EI9dHY=";
   };
 

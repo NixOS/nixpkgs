@@ -13,7 +13,7 @@ perlPackages.buildPerlPackage rec {
   src = fetchFromGitHub {
     owner = "mahlonsmith";
     repo = "shelldap";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-67ttAXzu9pfeqjfhMfLMb9vWCXTrE+iUDCbamqswaLg=";
   };
 

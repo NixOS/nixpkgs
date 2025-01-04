@@ -13,7 +13,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   inherit pname;
-  version = "24.2.4";
+  version = "24.3.2";
 
   src =
     let
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     in
     fetchurl {
       url = "https://www.dbvis.com/product_download/dbvis-${finalAttrs.version}/media/dbvis_linux_${underscoreVersion}.tar.gz";
-      hash = "sha256-vZm8rLkNpnWbKFrH/Q7yMhVhq+zfb0I00hJNT6JaPrw=";
+      hash = "sha256-oZxOGudRGFfbVz7n5eeKxr/7lxUhYAHjD0wsHw6G8OI=";
     };
 
   strictDeps = true;

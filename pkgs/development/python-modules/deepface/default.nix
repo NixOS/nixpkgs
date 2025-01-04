@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "serengil";
     repo = "deepface";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Vjm8lfpGyJ7/1CUwIvxXxHqwmv0+iKewYV3vE08gpPQ=";
   };
 

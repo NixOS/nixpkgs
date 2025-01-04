@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eclipse-cyclonedds";
     repo = "cyclonedds-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-MN3Z5gqsD+cr5Awmsia9+uCHL/a2KQP2uMS13rVc1Hw=";
   };
 

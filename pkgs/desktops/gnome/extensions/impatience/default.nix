@@ -12,7 +12,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "timbertson";
     repo = "gnome-shell-impatience";
-    rev = "refs/tags/version-${version}";
+    tag = "version-${version}";
     hash = "sha256-Z+tpmmGbC1rgV4U1w6qM3g85FwpRvzHbBCmFCfcmc60=";
   };
 

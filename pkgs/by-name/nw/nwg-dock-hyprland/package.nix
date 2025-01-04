@@ -15,7 +15,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "nwg-piotr";
     repo = "nwg-dock-hyprland";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IKdXH2UK2CBZTHY8c9eN6JSbqsF4OpIHYH14XEKyrM0=";
   };
 

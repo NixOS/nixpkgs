@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LibreTranslate";
     repo = "LibreTranslate";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-u0m9dTxwSGU50YplV24daSO+WY/At648OpIEZYMmqqo=";
   };
 

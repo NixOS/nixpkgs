@@ -17,7 +17,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "getpatchwork";
     repo = "git-pw";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-y5qbvhuT+tjXvIFgCrM7RIPF6zhCkMu+/qByValrEXE=";
   };
 

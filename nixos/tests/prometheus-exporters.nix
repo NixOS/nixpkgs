@@ -399,7 +399,7 @@ let
     fastly = {
       exporterConfig = {
         enable = true;
-        tokenPath = pkgs.writeText "token" "abc123";
+        environmentFile = pkgs.writeText "fastly-exporter-env" "FASTLY_API_TOKEN=abc123";
       };
 
       exporterTest = ''

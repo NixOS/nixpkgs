@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "priv-kweihmann";
     repo = "oelint-parser";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-0cCcbnipijQgWH+08eZbE6Cqcx5cenrb+bQlf3h04tw=";
   };
 

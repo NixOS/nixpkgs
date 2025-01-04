@@ -13,7 +13,7 @@ maven.buildMavenPackage rec {
     sparseCheckout = [ "src" ];
     owner = "fordfrog";
     repo = "apgdiff";
-    rev = "refs/tags/release_${version}";
+    tag = "release_${version}";
     hash = "sha256-2m+9QNwQV2tJwOabTXE2xjRB5gDrSwyL6zL2op+wmkM=";
   };
 

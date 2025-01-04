@@ -14,7 +14,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "gennaro-tedesco";
     repo = "archimede";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7P7PtzYlcNYG2+KW9zvcaRlTW+vHw8jeLD2dEQXmrzc=";
   };
 

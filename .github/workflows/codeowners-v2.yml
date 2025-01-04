@@ -19,6 +19,8 @@ name: Codeowners v2
 #
 # This split is done because checking code owners requires handling untrusted PR input,
 # while requesting code owners requires PR write access, and those shouldn't be mixed.
+#
+# Note that the latter is also used for ./eval.yml requesting reviewers.
 
 on:
   pull_request_target:
@@ -104,6 +106,6 @@ jobs:
       run: nix-build ci -A requestReviews
 
     - name: Request reviews
-      run: result/bin/request-reviews.sh ${{ github.repository }} ${{ github.event.number }} "$OWNERS_FILE"
+      run: result/bin/request-code-owner-reviews.sh ${{ github.repository }} ${{ github.event.number }} "$OWNERS_FILE"
       env:
         GH_TOKEN: ${{ steps.app-token.outputs.token }}

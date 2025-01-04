@@ -201,6 +201,8 @@ mapAliases {
   cargo-espflash = espflash;
   cawbird = throw "cawbird has been abandoned upstream and is broken anyways due to Twitter closing its API";
   certmgr-selfsigned = certmgr; # Added 2023-11-30
+  cgal_4 = throw "cgal_4 has been removed as it is obsolete use cgal instead"; # Added 2024-12-30
+  cgal_5 = cgal; # Added 2024-12-30
   challenger = taler-challenger; # Added 2024-09-04
   check_smartmon = nagiosPlugins.check_smartmon; # Added 2024-05-03
   check_systemd = nagiosPlugins.check_systemd; # Added 2024-05-03
@@ -254,6 +256,7 @@ mapAliases {
   cudaPackages_10_2 = throw "CUDA 10.2 has been removed from Nixpkgs, as it is unmaintained upstream and depends on unsupported compilers"; # Added 2024-11-20
   cudaPackages_10 = throw "CUDA 10 has been removed from Nixpkgs, as it is unmaintained upstream and depends on unsupported compilers"; # Added 2024-11-20
   cups-kyodialog3 = cups-kyodialog; # Added 2022-11-12
+  cutemarked-ng = throw "'cutemarked-ng' has been removed due to lack of maintenance upstream. Consider using 'kdePackages.ghostwriter' instead"; # Added 2024-12-27
   cvs_fast_export = throw "'cvs_fast_export' has been renamed to/replaced by 'cvs-fast-export'"; # Converted to throw 2024-10-17
 
   # these are for convenience, not for backward compat and shouldn't expire
@@ -409,6 +412,7 @@ mapAliases {
   framework-system-tools = framework-tool; # added 2023-12-09
   francis = kdePackages.francis; # added 2024-07-13
   frostwire = throw "frostwire was removed, as it was broken due to reproducibility issues, use `frostwire-bin` package instead."; # added 2024-05-17
+  ftjam = throw "ftjam was removed, as it hasn't been updated since 2007 and fails to build"; # added 2025-01-02
   fuse2fs = if stdenv.hostPlatform.isLinux then e2fsprogs.fuse2fs else null; # Added 2022-03-27 preserve, reason: convenience, arch has a package named fuse2fs too.
   fuse-common = throw "fuse-common was removed, because the udev rule was early included by systemd-udevd and the config is done by NixOS module `programs.fuse`"; # added 2024-09-29
   futuresql = libsForQt5.futuresql; # added 2023-11-11

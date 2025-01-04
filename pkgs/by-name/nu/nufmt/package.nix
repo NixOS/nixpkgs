@@ -1,9 +1,7 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
   rustPlatform,
-  apple-sdk_11,
   nix-update-script,
 }:
 
@@ -20,10 +18,6 @@ rustPlatform.buildRustPackage {
 
   nativeBuildInputs = [
     rustPlatform.bindgenHook
-  ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
   ];
 
   cargoHash = "sha256-MHZlXmHAYIiaB6Isutqjrh45jppRzTZRSE3VqzpFBBA=";

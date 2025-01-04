@@ -60,7 +60,7 @@ buildDunePackage rec {
   src = fetchFromGitHub {
     owner = "ocsigen";
     repo = "ocsigenserver";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-T3bgPZpDO6plgebLJDBtBuR2eR/bN3o24UAUv1VwgtI=";
   };
 

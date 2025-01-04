@@ -13,7 +13,7 @@ buildHomeAssistantComponent rec {
   src = fetchFromGitHub {
     owner = "wills106";
     repo = "homeassistant-solax-modbus";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Hy4LHEDp+WPpmWKQQqqLjQ0xSnShQg3a68g8NMJ9o2k=";
   };
 

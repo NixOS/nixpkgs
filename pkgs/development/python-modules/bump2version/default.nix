@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "c4urself";
     repo = "bump2version";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-j6HKi3jTwSgGBrA8PCJJNg+yQqRMo1aqaLgPGf4KAKU=";
   };
 

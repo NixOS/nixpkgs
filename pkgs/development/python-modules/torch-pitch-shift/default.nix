@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "KentoNishi";
     repo = "torch-pitch-shift";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QuDz9IpmBdzfMjwAuG2Ln0x2OL/w3RVd/EfO4Ws78dw=";
   };
 
