@@ -1,5 +1,6 @@
-{
+args@{
   stdenv,
+  gcc13Stdenv,
   lib,
   fetchFromGitHub,
   pkg-config,
@@ -98,6 +99,7 @@ let
       commaSepList = lib.concatStringsSep "," (builtins.attrNames (lib.filterAttrs (n: v: v) attrset));
     in
     lib.withFeatureAs (commaSepList != "") featureName commaSepList;
+  stdenv = if args.stdenv.cc.isGNU then args.gcc13Stdenv else args.stdenv;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "mlterm";
