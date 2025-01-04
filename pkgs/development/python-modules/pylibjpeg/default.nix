@@ -9,6 +9,7 @@
   pydicom,
   pylibjpeg-data,
   pylibjpeg-libjpeg,
+  pylibjpeg-openjpeg,
 }:
 
 buildPythonPackage rec {
@@ -28,6 +29,12 @@ buildPythonPackage rec {
   build-system = [ flit-core ];
 
   dependencies = [ numpy ];
+
+  optional-dependencies = {
+    libjpeg = [ pylibjpeg-libjpeg ];
+    openjpeg = [ pylibjpeg-openjpeg ];
+    #rle = [ pylibjpeg-rle ]; # not in Nixpkgs
+  };
 
   nativeCheckInputs = [
     pytestCheckHook

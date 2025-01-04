@@ -13,7 +13,6 @@
   pkg-config,
   python3,
   removeReferencesTo,
-  apple-sdk_11,
   cctools,
   SDL2,
   fontconfig,
@@ -81,7 +80,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
     SDL2
     fontconfig
     rustPlatform.bindgenHook
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+  ];
 
   postFixup =
     let

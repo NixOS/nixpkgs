@@ -5037,7 +5037,8 @@
       ];
     "slide" =
       ps: with ps; [
-      ]; # missing inputs: goslide-api
+        goslide-api
+      ];
     "slimproto" =
       ps: with ps; [
         aioslimproto

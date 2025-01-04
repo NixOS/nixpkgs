@@ -3,8 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   nix-update-script,
-  apple-sdk_11,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,10 +17,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-cZTA50gm7o+vBaRNjpZI0LQkXaHIukVTBXoYMUubZgw=";
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
-    apple-sdk_11
-  ];
 
   doCheck = true;
 

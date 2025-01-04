@@ -3,8 +3,6 @@
   rustPlatform,
   fetchFromGitHub,
   installShellFiles,
-  apple-sdk_11,
-  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -19,9 +17,6 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-moRr8usrFHE8YPQnsmeKoDZPAk94qRm9cHzHBLXtGFM=";
-
-  # pizauth cannot be built with default apple-sdk_10 on x86_64-darwin, pin to 11
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   nativeBuildInputs = [ installShellFiles ];
 

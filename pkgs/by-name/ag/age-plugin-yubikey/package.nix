@@ -6,7 +6,6 @@
   pkg-config,
   openssl,
   pcsclite,
-  apple-sdk_11,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -31,12 +30,9 @@ rustPlatform.buildRustPackage rec {
     pkg-config
   ];
 
-  buildInputs =
-    [
-      openssl
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+  buildInputs = [
+    openssl
+  ] ++ lib.optionals stdenv.hostPlatform.isLinux [ pcsclite ];
 
   meta = with lib; {
     description = "YubiKey plugin for age";
