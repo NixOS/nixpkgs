@@ -2136,6 +2136,16 @@ in
     ];
   };
 
+  nvim-java-refactor = super.nvim-java-refactor.overrideAttrs {
+    dependencies = [ self.nvim-java-core ];
+    nvimSkipModule = [
+      # Requires the `java.utils.ui` module which seems to be provided by `nvim-java` (cyclic dependency)
+      # -> Skip to avoid infinite recursion
+      "java-refactor.action"
+      "java-refactor.refactor"
+    ];
+  };
+
   nvim-lsp-file-operations = super.nvim-lsp-file-operations.overrideAttrs {
     dependencies = [ self.plenary-nvim ];
     nvimRequireCheck = "lsp-file-operations";
