@@ -1,0 +1,14 @@
+diff --git a/pyproject.toml b/pyproject.toml
+index a2bf31cd..c9ed8aff 100644
+--- a/pyproject.toml
++++ b/pyproject.toml
+@@ -1,7 +1,7 @@
+ [build-system]
+ requires = [
+-    "setuptools >= 35.0.2",
+-    "setuptools_scm >= 2.0.0, <3"
++    "setuptools",
++    "setuptools_scm"
+ ]
+ build-backend = "setuptools.build_meta"
+ 
