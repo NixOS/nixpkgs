@@ -1,0 +1,13 @@
+diff --git a/homeassistant/components/folder_watcher/__init__.py b/homeassistant/components/folder_watcher/__init__.py
+index 3aeaa6f7ef2..f5c2db513b7 100644
+--- a/homeassistant/components/folder_watcher/__init__.py
++++ b/homeassistant/components/folder_watcher/__init__.py
+@@ -68,7 +68,7 @@ class EventHandler(PatternMatchingEventHandler):
+ 
+     def __init__(self, patterns: list[str], hass: HomeAssistant, entry_id: str) -> None:
+         """Initialise the EventHandler."""
+-        super().__init__(patterns)
++        super().__init__(patterns=patterns)
+         self.hass = hass
+         self.entry_id = entry_id
+ 
