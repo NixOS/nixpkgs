@@ -7,7 +7,7 @@
   cxx-rs,
   db62,
   fetchFromGitHub,
-  git,
+  gitMinimal,
   hexdump,
   lib,
   libevent,
@@ -48,7 +48,7 @@ rustPlatform.buildRustPackage.override { inherit stdenv; } rec {
     autoreconfHook
     cargo
     cxx-rs
-    git
+    gitMinimal
     hexdump
     makeWrapper
     pkg-config
