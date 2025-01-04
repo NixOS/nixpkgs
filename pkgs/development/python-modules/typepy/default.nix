@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "typepy";
-  version = "1.3.2";
+  version = "1.3.4";
   format = "setuptools";
 
   disabled = pythonOlder "3.7";
@@ -22,7 +22,7 @@ buildPythonPackage rec {
     owner = "thombashi";
     repo = pname;
     tag = "v${version}";
-    hash = "sha256-oIDVjJwapHun0Rk04zOZ4IjAh7qZ2k0BXK6zqFmtVds=";
+    hash = "sha256-lgwXoEtv2nBRKiWQH5bDrAIfikKN3cOqcHLEdnSAMpc=";
   };
 
   propagatedBuildInputs = [ mbstrdecoder ];
