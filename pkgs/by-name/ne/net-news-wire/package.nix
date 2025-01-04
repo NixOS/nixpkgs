@@ -38,7 +38,10 @@ stdenvNoCC.mkDerivation rec {
     changelog = "https://github.com/Ranchero-Software/NetNewsWire/releases/tag/mac-${version}";
     license = licenses.mit;
     platforms = platforms.darwin;
-    maintainers = with maintainers; [ jakuzure ];
+    maintainers = with maintainers; [
+      jakuzure
+      DimitarNestorov
+    ];
     sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }
