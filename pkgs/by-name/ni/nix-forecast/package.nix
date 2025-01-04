@@ -4,6 +4,7 @@
   installShellFiles,
   makeBinaryWrapper,
   nix,
+  nix-update-script,
   rustPlatform,
   versionCheckHook,
 }:
@@ -42,6 +43,10 @@ rustPlatform.buildRustPackage rec {
 
   env = {
     COMPLETION_DIR = "completions";
+  };
+
+  passthru = {
+    updateScript = nix-update-script { };
   };
 
   meta = {
