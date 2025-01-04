@@ -78,7 +78,7 @@ if ! "$SCRIPT_DIR"/verify-base-branch.sh "$tmp/nixpkgs.git" "$headRef" "$baseRep
 fi
 
 log "Getting code owners to request reviews from"
-"$SCRIPT_DIR"/get-reviewers.sh "$tmp/nixpkgs.git" "$ownersFile" "$baseBranch" "$headRef" | \
+"$SCRIPT_DIR"/get-code-owners.sh "$tmp/nixpkgs.git" "$ownersFile" "$baseBranch" "$headRef" | \
     "$SCRIPT_DIR"/process-reviewers.sh "$baseRepo" "$prNumber" "$prAuthor" > "$tmp/reviewers.json"
 
 log "Requesting reviews from: $(<"$tmp/reviewers.json")"
