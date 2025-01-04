@@ -17,6 +17,8 @@
   withPipewireLib ? true,
   symlinkJoin,
   coreutils,
+  testers,
+  alsa-utils,
 }:
 
 let
@@ -73,6 +75,15 @@ stdenv.mkDerivation rec {
 
   passthru.updateScript = directoryListingUpdater {
     url = "https://www.alsa-project.org/files/pub/utils/";
+  };
+
+  passthru.tests.udev-rules = testers.runNixOSTest {
+    name = pname + "-udev-rules";
+    nodes.machine = {
+      services.udev.packages = [ alsa-utils ];
+    };
+    # the udev rules are checked during generation the machine
+    testScript = "machine.start()";
   };
 
   meta = with lib; {
