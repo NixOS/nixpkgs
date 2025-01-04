@@ -15,6 +15,7 @@ let
     mkIf
     mkEnableOption
     mkOption
+    mkPackageOption
     types
     literalExpression
     optionalString
@@ -80,6 +81,8 @@ in
 {
   options.services.strongswan = {
     enable = mkEnableOption "strongSwan";
+
+    package = mkPackageOption pkgs "strongswan" { };
 
     secrets = mkOption {
       type = types.listOf types.str;
@@ -200,7 +203,7 @@ in
           };
         };
         serviceConfig = {
-          ExecStart = "${pkgs.strongswan}/sbin/ipsec start --nofork";
+          ExecStart = "${cfg.package}/sbin/ipsec start --nofork";
         };
         preStart = ''
           # with 'nopeerdns' setting, ppp writes into this folder
