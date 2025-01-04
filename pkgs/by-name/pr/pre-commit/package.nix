@@ -6,13 +6,12 @@
   cargo,
   coursier,
   dotnet-sdk,
-  git,
+  gitMinimal,
   glibcLocales,
   go,
   nodejs,
   perl,
   cabal-install,
-  testers,
   pre-commit,
 }:
 
@@ -50,7 +49,7 @@ buildPythonApplication rec {
     cargo
     coursier
     dotnet-sdk
-    git
+    gitMinimal
     glibcLocales
     go
     libiconv # For rust tests on Darwin
