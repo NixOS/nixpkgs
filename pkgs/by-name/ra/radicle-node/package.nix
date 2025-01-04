@@ -43,8 +43,6 @@
 
   preCheck = ''
     export PATH=$PATH:$PWD/target/${stdenv.hostPlatform.rust.rustcTargetSpec}/release
-    # Tests want to open many files.
-    ulimit -n 4096
   '';
   checkFlags = [
     "--skip=service::message::tests::test_node_announcement_validate"
