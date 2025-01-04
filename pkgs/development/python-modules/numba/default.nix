@@ -45,7 +45,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "numba";
     repo = "numba";
-    rev = "refs/tags/${version}";
+    tag = version;
     # Upstream uses .gitattributes to inject information about the revision
     # hash and the refname into `numba/_version.py`, see:
     #

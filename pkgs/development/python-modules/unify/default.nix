@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "myint";
     repo = "unify";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-cWV/Q+LbeIxnQNqyatRWQUF8X+HHlQdc10y9qJ7v3dA=";
   };
 

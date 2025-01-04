@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "uqfoundation";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-77F5fkZbljq/tuBTkquKEYVubfghUrMZsAdhp1QpH2k=";
   };
 

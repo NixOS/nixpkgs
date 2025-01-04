@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "plugwise";
     repo = "python-plugwise";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-REWU3ngf93HUVDnyiErML41E+nPoqphfhBKmAYvV2+U=";
   };
 

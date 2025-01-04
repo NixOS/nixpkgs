@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yaml";
     repo = "pyyaml";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-IQoZd9Lp0ZHLAQN3PFwMsZVTsIVJyIaT9D6fpkzA8IA=";
   };
 

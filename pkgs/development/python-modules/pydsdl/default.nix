@@ -14,7 +14,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "OpenCyphal";
     repo = "pydsdl";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Q6Zt7qiFZvTK2pF4nWfHbjwQHZffzKOad6X/HQ94EUo=";
   };
 

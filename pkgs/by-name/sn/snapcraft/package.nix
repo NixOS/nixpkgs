@@ -19,7 +19,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "snapcraft";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-7kIVWbVj5qse3JIdlCvRtVUfSa/rSjn4e8HJdVY3sOA=";
   };
 

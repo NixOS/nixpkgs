@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jwodder";
     repo = "wheel-inspect";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Mdw9IlY/2qDlb5FumNH+VHmg7vrUzo3vn+03QsUGgo8=";
   };
 

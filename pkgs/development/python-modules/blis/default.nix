@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "explosion";
     repo = "cython-blis";
-    rev = "refs/tags/release-v${version}";
+    tag = "release-v${version}";
     hash = "sha256-J/EaJNmImcK4zScpbYPlQuoLyjoUkUgxUp6926P6rUQ=";
   };
 

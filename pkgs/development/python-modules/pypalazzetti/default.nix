@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dotvav";
     repo = "py-palazzetti-api";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gqJZVlX060BMbTbkbpK6UMnM71Mr06sNHX++ObI3Y5Y=";
   };
 

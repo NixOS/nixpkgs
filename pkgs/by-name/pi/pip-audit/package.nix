@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "pip-audit";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MRFfF5OygUCIdUnPvxhYk4IcLSWGgmlw2qgzPoZDniw=";
   };
 

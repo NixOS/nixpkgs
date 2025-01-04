@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "starkillerOG";
     repo = "motion-blinds";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-MU+zMka8d8wocc90vdS56BMHg6Z/LAAdRetiysh9Ssc=";
   };
 

@@ -14,7 +14,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "OpenVPN";
     repo = "gdbuspp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LwEUNBQ7BUyoTm8tBgE4hwL7AbimCY/grQus8lWSI/M=";
   };
 

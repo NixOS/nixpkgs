@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bebleo";
     repo = "pytest-smtpd";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Vu2D2hfxBYxgXQ4Gjr+jFpac9fjpLL2FftBhnqrcQaA=";
   };
 

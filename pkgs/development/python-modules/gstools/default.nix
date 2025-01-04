@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "GeoStat-Framework";
     repo = "GSTools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QpdOARzcSRVFl/DbnE2JLBFZmTSh/fBOmzweuf+zfEs=";
   };
 

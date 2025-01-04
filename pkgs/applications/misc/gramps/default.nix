@@ -33,7 +33,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "gramps-project";
     repo = "gramps";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DfKKB+rgMGQ8HTqhCp11UTYLj3Fdd0B0v4a922GJ8L8=";
   };
 

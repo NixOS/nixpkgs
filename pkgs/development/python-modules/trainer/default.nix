@@ -29,7 +29,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "idiap";
     repo = "coqui-ai-Trainer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zm8BTfXvfwuWpmHFcSxuu+/V4bKanSBU2dniQboVdLY=";
   };
 

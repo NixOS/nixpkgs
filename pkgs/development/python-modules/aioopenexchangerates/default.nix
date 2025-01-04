@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MartinHjelmare";
     repo = "aioopenexchangerates";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Rb5oCheiTZ737nKDwSpoRZcgpWPt5YMzplD6Wb6kZxY=";
   };
 

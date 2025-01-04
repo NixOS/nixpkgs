@@ -16,7 +16,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "ajayd-san";
     repo = "gomanagedocker";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oM0DCOHdVPJFWgmHF8yeGGo6XvuTCXar7NebM1obahg=";
   };
 

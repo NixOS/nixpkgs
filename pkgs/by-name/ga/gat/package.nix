@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "koki-develop";
     repo = "gat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MBRKp1S/6dizZR0zDyaNGqKsHI+vK6oTNkPuxwbf7os=";
   };
 

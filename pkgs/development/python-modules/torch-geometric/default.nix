@@ -67,7 +67,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyg-team";
     repo = "pytorch_geometric";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Zw9YqPQw2N0ZKn5i5Kl4Cjk9JDTmvZmyO/VvIVr6fTU=";
   };
 

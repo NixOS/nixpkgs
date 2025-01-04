@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pydantic";
     repo = "jiter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-XYOdy7jduPak8XBL2hdAQfBxrmPq/nyzNlA4RygCtK0=";
   };
 

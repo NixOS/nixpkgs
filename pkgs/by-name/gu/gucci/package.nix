@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "noqcks";
     repo = "gucci";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-bwPQQtaPHby96C5ZHZhBTok+m8GPPS40U1CUPVYqCa4=";
   };
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "PyLacus";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-M7xPJKM/8fY8RBU2ESzaYOfENICCRNexORJGkerD4FM=";
   };
 

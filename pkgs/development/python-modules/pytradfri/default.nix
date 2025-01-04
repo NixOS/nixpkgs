@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "pytradfri";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CWv3ebDulZuiFP+nJ2Xr7U/HTDFTqA9VYC0USLkpWR0=";
   };
 

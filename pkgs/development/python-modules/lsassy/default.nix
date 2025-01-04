@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Hackndo";
     repo = "lsassy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DdIEDseGLI+hUIaUNPBqpkGGe+F+Z+jZ0g/JzXB8pf8=";
   };
 

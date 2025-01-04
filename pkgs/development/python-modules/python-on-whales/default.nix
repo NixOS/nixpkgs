@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "gabrieldemarmiesse";
     repo = "python-on-whales";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-i2lctR5V4hF/cS46d+TW73iKZ+2G/UwiHMNbtP/Z7xo=";
   };
 

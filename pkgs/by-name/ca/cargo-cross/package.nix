@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cross-rs";
     repo = "cross";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-TFPIQno30Vm5m2nZ2b3d0WPu/98UqANLhw3IZiE5a38=";
   };
 

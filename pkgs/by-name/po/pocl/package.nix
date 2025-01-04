@@ -36,13 +36,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "pocl";
-  version = "6.0";
+  version = "6.0-unstable-2025-01-02";
 
   src = fetchFromGitHub {
     owner = "pocl";
     repo = "pocl";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-NHR9yrI6Odb/s/OBnEVifdcLEXvwqzAMZWpGViv2cJg=";
+    rev = "acf4ea163b7346d20b3023d41c1141f094acc755";
+    hash = "sha256-d/BD8YkdMYtu6yFlGNXrsz7PVIrzBvvYLU1JRv7ZJmc=";
   };
 
   cmakeFlags = [
@@ -85,6 +85,7 @@ stdenv.mkDerivation (finalAttrs: {
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [
       jansol
+      johnrtitor
       xddxdd
     ];
     platforms = lib.platforms.unix;

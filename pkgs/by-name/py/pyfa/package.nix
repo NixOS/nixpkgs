@@ -18,7 +18,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pyfa-org";
     repo = "Pyfa";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-i8NcRTn817gqwQP6j0RPUJkq09eTI4nfe3EVqYnWRpo=";
   };
 

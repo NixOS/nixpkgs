@@ -33,7 +33,7 @@ let
     src = fetchFromGitHub {
       owner = "deepmind";
       repo = "dm-haiku";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-RJpQ9BzlbQ4X31XoJFnsZASiaC9fP2AdyuTAGINhMxs=";
     };
 

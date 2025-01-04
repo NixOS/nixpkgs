@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ktock";
     repo = "container2wasm";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Awk7tC5eyapbra/GlwPPfYx+Jh5UHlK9zo9ZRCVz9S0=";
   };
 

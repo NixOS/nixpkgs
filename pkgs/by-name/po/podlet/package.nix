@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "containers";
     repo = "podlet";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-STkYCaXBoQSmFKpMdsKzqFGXHh9s0jeGi5K2itj8jmc=";
   };
 

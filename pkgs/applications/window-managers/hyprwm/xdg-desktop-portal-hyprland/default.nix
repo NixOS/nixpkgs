@@ -32,7 +32,7 @@ gcc14Stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "xdg-desktop-portal-hyprland";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-sAObJHBZjJHzYR62g+BLNBNq19cqb5LTw73H8m57K0w=";
   };
 

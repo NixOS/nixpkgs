@@ -138,7 +138,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "google-deepmind";
     repo = "mujoco";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-n1H9e+GMqHYsimypF7AiVzHC2dXkL+4FWDEHB5B2ZIE=";
   };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "georgemarshall";
     repo = "django-cryptography";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-C3E2iT9JdLvF+1g+xhZ8dPDjjh25JUxLAtTMnalIxPk=";
   };
 
