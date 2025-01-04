@@ -8,7 +8,7 @@
 }:
 
 let
-  version = "0.2.70";
+  version = "0.2.71";
 in
 buildGoModule {
   pname = "act";
@@ -18,10 +18,10 @@ buildGoModule {
     owner = "nektos";
     repo = "act";
     tag = "v${version}";
-    hash = "sha256-7e2ehUM3d5hcFtaahW/hrhVkpy74ufMdYwdnbsUA+WM=";
+    hash = "sha256-ykZ6n9v56G5PZNTYdkGp8xveA7gzYhICkBoCCx3s0ew=";
   };
 
-  vendorHash = "sha256-2fHNiquFg6I0JefqXfXRrnXxKPkNQOtQB7fznldO3GE=";
+  vendorHash = "sha256-zCiqIl08s00U/DQkUhbb/qrjWof9xzBf4EznuvE4rlE=";
 
   doCheck = false;
 
