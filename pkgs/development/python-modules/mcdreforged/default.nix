@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "mcdreforged";
-  version = "2.14.2";
+  version = "2.14.3";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "MCDReforged";
     repo = "MCDReforged";
     tag = "v${version}";
-    hash = "sha256-4podJ3InBnNc+t4BpCQrg2QbJ9ZJr5fmroXyzo7JrZw=";
+    hash = "sha256-sNpQIG41YxzXvEkckabYevAYrlCcdN9wS5tanKq8VPs=";
   };
 
   build-system = [ setuptools ];
