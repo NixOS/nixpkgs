@@ -35,7 +35,7 @@ let
     src = fetchFromGitHub {
       owner = "contourpy";
       repo = "contourpy";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-QvAIV2Y8H3oPZCF5yaqy2KWfs7aMyRX6aAU5t8E9Vpo=";
     };
 

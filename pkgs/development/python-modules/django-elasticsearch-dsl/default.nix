@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-es";
     repo = "django-elasticsearch-dsl";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-GizdFOM4UjI870XdE33D7uXHXkuv/bLYbyi9yyNjti8=";
   };
 

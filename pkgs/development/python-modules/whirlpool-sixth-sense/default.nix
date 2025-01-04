@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "abmantis";
     repo = "whirlpool-sixth-sense";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-aDvUV83o/yKx15kenDGng5xh3LECLVlLWJlVe/y+1Co=";
   };
 

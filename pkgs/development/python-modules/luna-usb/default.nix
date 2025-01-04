@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greatscottgadgets";
     repo = "luna";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-T9V0rI6vcEpM3kN/duRni6v2plCU4B379Zx07dBGKjk=";
   };
 

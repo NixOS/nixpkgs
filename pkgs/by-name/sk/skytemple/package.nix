@@ -17,7 +17,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "SkyTemple";
     repo = "skytemple";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-RFLxDV/L6Qbz14KqIEcMX/EnirNUrHL0MW8v5Z8ByK0=";
   };
 

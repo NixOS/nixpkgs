@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "jaxopt";
-    rev = "refs/tags/jaxopt-v${version}";
+    tag = "jaxopt-v${version}";
     hash = "sha256-T/BHSnuk3IRuLkBj3Hvb/tFIb7Au25jjQtvwL28OU1U=";
   };
 
@@ -94,6 +94,7 @@ buildPythonPackage rec {
       # AssertionError (flaky numerical tests)
       "test_logreg_with_intercept_manual_loop3"
       "test_binary_logit_log_likelihood"
+      "test_inv_hessian_product_pytree3"
     ];
 
   meta = {

@@ -26,7 +26,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Sude-";
     repo = "lgogdownloader";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-coPUPercfpB8LilBn5Uww9rEM+X9QAgzDECtQ1Ui/hg=";
   };
 

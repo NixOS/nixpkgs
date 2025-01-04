@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "django-ckeditor";
     repo = "django-ckeditor";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-tPwWXQAKoHPpZDZ+fnEoOA29at6gUXBw6CcPdireTr8=";
   };
 

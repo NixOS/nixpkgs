@@ -13,7 +13,6 @@
   cairo,
   pango,
   npm-lockfile-fix,
-  apple-sdk_11,
 }:
 
 buildNpmPackage rec {
@@ -43,16 +42,11 @@ buildNpmPackage rec {
       copyDesktopItems
     ];
 
-  buildInputs =
-    [
-      pixman
-      cairo
-      pango
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      # fix for: https://github.com/NixOS/nixpkgs/issues/272156
-      apple-sdk_11
-    ];
+  buildInputs = [
+    pixman
+    cairo
+    pango
+  ];
 
   desktopItems = [
     (makeDesktopItem {

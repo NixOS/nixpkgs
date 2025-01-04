@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "icalevents";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Bp+Wz88q65Gem8LyRz0A4xE5hIgOD+iZ7E1UlnfFiD4=";
   };
 

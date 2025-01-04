@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "loli";
     repo = "medpy";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-M46d8qiR3+ioiuRhzIaU5bV1dnfDm819pjn78RYlcG0=";
   };
 

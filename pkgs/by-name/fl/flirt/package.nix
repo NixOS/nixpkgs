@@ -2,6 +2,7 @@
   rustPlatform,
   fetchFromSourcehut,
   lib,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,6 +17,8 @@ rustPlatform.buildRustPackage rec {
   };
 
   cargoHash = "sha256-EquriyhfbYyi87TP3zuLiCXDV7baDRaTRuZd7Yht/UA=";
+
+  passthru.updateScript = nix-update-script { };
 
   meta = {
     description = "FiLe InteRacT, the file interaction tool for your command line";

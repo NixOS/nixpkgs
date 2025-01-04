@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "influxdata";
     repo = "influxdb-client-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MKTfRsqizZDXPMqJAypUDQBm+a2s6FaEG3TM30wucrI=";
   };
 

@@ -11,7 +11,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "Zren";
     repo = "plasma-applet-commandoutput";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-Tjnm26EYKXtBM9JBHKI73AMvOW/rQ3qOw2JDYey7EfQ=";
   };
 

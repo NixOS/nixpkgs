@@ -15,7 +15,7 @@ buildGo123Module rec {
   src = fetchFromGitHub {
     owner = "abhinav";
     repo = "git-spice";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Q5cNkX6ZtNXh+qDjpR0a2FfHmk5YA9izLCBRPFRpdvs=";
   };
 

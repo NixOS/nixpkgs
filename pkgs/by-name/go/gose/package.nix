@@ -12,7 +12,7 @@ let
   src = fetchFromGitHub {
     repo = "gose";
     owner = "stv0g";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Vcp9gMJ296KS8OFOIcWvvYrS+LrOVlN3KN20yJxoo5U=";
   };
 

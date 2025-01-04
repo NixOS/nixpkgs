@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "asteroid-team";
     repo = "asteroid-filterbanks";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Z5M2Xgj83lzqov9kCw/rkjJ5KXbjuP+FHYCjhi5nYFE=";
   };
 

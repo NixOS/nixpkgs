@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "sensorpush-ble";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-T2sjzQoWWRGAKiMDN29jZ7jZ5/i75qpNCiuVB7VEhJw=";
   };
 

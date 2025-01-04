@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "frenck";
     repo = "python-twentemilieu";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-8tYa/fnc8km0Tl0N/OMP8GUUlIjzB8XP1Ivy9jDmY3s=";
   };
 

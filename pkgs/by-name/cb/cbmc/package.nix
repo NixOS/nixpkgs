@@ -23,7 +23,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "diffblue";
     repo = "cbmc";
-    rev = "refs/tags/cbmc-${finalAttrs.version}";
+    tag = "cbmc-${finalAttrs.version}";
     hash = "sha256-PZZnseOE3nodE0zwyG+82gm55BO4rsCcP4T+fZq7L6I=";
   };
 

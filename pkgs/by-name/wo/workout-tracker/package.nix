@@ -14,7 +14,7 @@ let
   src = fetchFromGitHub {
     owner = "jovandeginste";
     repo = "workout-tracker";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Sn6SOHrsp1ZgsPntc2+cmlAEPVBUrYv1vKLKAQvT9m4=";
   };
 

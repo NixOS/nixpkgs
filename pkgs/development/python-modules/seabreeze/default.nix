@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ap--";
     repo = "python-seabreeze";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NzZ+ZRfJ97Ufp6hmqN6ziBFfdvJXpmWwh9A66od/8Hc=";
     leaveDotGit = true;
   };

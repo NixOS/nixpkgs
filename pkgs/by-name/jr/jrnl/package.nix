@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jrnl-org";
     repo = "jrnl";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-x0JoYJzD6RnuHbRsQMgrhHsNW6nVEVeoDjtPop2eg+w=";
   };
 

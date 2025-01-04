@@ -21,7 +21,7 @@ let
   src = fetchFromGitHub {
     owner = "OpenShot";
     repo = "openshot-qt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zZZ7C/1+Qh7KS1WJ8YWkhFgw0+UHJhjk+145u9/TBcI=";
   };
 in

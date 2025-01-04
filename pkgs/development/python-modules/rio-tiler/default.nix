@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cogeotiff";
     repo = "rio-tiler";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-uVLizNkUL7wGF0vFjPXb2iW9ILVkJcbDssXtp3E8ubE=";
   };
 

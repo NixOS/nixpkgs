@@ -237,6 +237,7 @@ stdenv.mkDerivation rec {
       plist and archive formats, perl storable data and gpg encrypted files.
       This does require additional helper programs being installed.
     '';
+    mainProgram = "lesspipe.sh";
     homepage = "https://github.com/wofr06/lesspipe";
     platforms = platforms.all;
     license = licenses.gpl2Only;

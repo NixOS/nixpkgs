@@ -40,7 +40,7 @@ os.chdir(os.path.join(os.path.dirname(os.path.abspath(__file__)), "manifests"))
 
 release_info = slicedict(
     fetchjson(RELEASE_INFO_URL),
-    ["tag_name", "published_at"]
+    ["tag_name"]
 )
 
 tag_name = release_info["tag_name"]

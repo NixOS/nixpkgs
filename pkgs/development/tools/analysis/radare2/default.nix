@@ -52,7 +52,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "radare";
     repo = "radare2";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-t/BMsYqNLMAlBBYm6JCDkFYL5YwJBwmEaaIY4KFYxY4=";
   };
 

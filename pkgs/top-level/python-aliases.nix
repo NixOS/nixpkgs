@@ -224,6 +224,7 @@ mapAliases ({
   flask-autoindex = throw "flask-autoindex was removed, as it is not compatible with flask 3.0 and unmaintained since 2020.";
   flask-basicauth = throw "flask-basicauth was removed, as it is not compatible with flask 3.0 and unmaintained since 2016.";
   flask-sessionstore = throw "flask-sessionstore was removed, as it is not compatible with flask 3.0 and unmaintained since 2017.";
+  flask-sockets = throw "flask-sockets has been removed as the upstream repository was archived in 2022"; # Added 2025-01-01
   flowlogs_reader = flowlogs-reader; # added 2024-01-03
   flufl_bounce = flufl-bounce; # added 2023-11-03
   flufl_i18n = flufl-i18n; # added 2023-11-03
@@ -318,6 +319,7 @@ mapAliases ({
   Kajiki = kajiki; # added 2023-02-19
   keepkey_agent = keepkey-agent; # added 2024-01-06
   Keras = keras; # added 2021-11-25
+  keyring_24 = throw "keyring_24 has been removed, use keyring instead"; # added 2025-01-01
   ldap = python-ldap; # added 2022-09-16
   lammps-cython = throw "lammps-cython no longer builds and is unmaintained"; # added 2021-07-04
   langchainplus-sdk = langsmith; # added 2023-08-01

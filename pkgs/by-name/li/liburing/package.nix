@@ -11,7 +11,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "axboe";
     repo = "liburing";
-    rev = "refs/tags/liburing-${version}";
+    tag = "liburing-${version}";
     hash = "sha256-10zmoMDzO41oNRVXE/6FzDGPVRVJTJTARVUmc1b7f+o=";
   };
 

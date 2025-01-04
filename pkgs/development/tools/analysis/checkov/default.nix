@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-wmQJSqoFOrWi5ihGFd0PA+hSW/H4si+N6wprFHWDYbM=";
   };
 

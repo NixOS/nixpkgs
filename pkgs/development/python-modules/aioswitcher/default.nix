@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TomerFi";
     repo = "aioswitcher";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-cKHH1yXVm/kZigO1Ub0XZEv+yq4lROc4SGFLqFuwQto=";
   };
 

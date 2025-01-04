@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vesoft-inc";
     repo = "nebula-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-p2dXpcOwVKbdfRKKTAc4LhaNuTjvPd8BBBI8aUivaZ4=";
   };
 

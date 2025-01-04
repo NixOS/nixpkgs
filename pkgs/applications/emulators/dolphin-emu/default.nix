@@ -60,7 +60,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "dolphin-emu";
     repo = "dolphin";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-5Eir8EQPGVSg2QXzzuHH9lf7CrV76KwmRsHiDqs6tD4=";
     fetchSubmodules = true;
   };

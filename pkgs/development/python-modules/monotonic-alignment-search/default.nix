@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "eginhard";
     repo = "monotonic_alignment_search";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qBkJKED0KVArhzmhZo8UuWQ55XMMBgvKM3xOwiPVwKU=";
   };
 

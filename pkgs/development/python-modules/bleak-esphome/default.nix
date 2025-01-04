@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bluetooth-devices";
     repo = "bleak-esphome";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WFswGtPX0OpDTqT25oHGZ+gIN/fhco4orWeGVXIIfzM=";
   };
 

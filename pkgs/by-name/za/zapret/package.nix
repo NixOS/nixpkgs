@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "bol-van";
     repo = "zapret";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-rpm9v/7twsrImeipz3I7fHUrk98qzkLQ2b4Kz3Rc+GI=";
   };
 

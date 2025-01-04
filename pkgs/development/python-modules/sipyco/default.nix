@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "m-labs";
     repo = "sipyco";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-PPnAyDedUQ7Og/Cby9x5OT9wMkNGTP8GS53V6N/dk4w=";
   };
 

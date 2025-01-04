@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "vincentsarago";
     repo = "color-operations";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qqOTmVYD3VfjeVJtYvDQw+cxjcTsmqTYQNL1qMX+fL4=";
   };
 

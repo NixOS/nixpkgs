@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "greenbone";
     repo = "gvm-tools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0YIWfeHd0Z50xschRHrVijhKQdDxvwR+gowEuAIc+OU=";
   };
 

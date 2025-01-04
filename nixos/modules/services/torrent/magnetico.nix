@@ -15,7 +15,7 @@ let
       credentialsFile
     else
       pkgs.writeText "magnetico-credentials" (
-        concatStrings (mapAttrsToList (user: hash: "${user}:${hash}\n") cfg.web.credentials)
+        lib.concatStrings (lib.mapAttrsToList (user: hash: "${user}:${hash}\n") cfg.web.credentials)
       );
 
   # default options in magneticod/main.go
@@ -28,7 +28,7 @@ let
 
   crawlerArgs =
     with cfg.crawler;
-    escapeShellArgs (
+    lib.escapeShellArgs (
       [
         "--database=${dbURI}"
         "--indexer-addr=${address}:${toString port}"
@@ -40,7 +40,7 @@ let
 
   webArgs =
     with cfg.web;
-    escapeShellArgs (
+    lib.escapeShellArgs (
       [
         "--database=${dbURI}"
         (

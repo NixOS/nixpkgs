@@ -19,8 +19,6 @@
   wxGTK32,
   makeWrapper,
   stdenv,
-  apple-sdk_11,
-  darwinMinVersionHook,
   waylandSupport ? false,
   x11Support ? stdenv.hostPlatform.isLinux,
   testers,
@@ -80,10 +78,6 @@ rustPlatform.buildRustPackage rec {
       dbus
       libnotify
       libxkbcommon
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-      (darwinMinVersionHook "10.13")
     ]
     ++ lib.optionals waylandSupport [
       wl-clipboard

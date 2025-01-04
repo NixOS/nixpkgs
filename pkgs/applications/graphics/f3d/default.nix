@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "f3d-app";
     repo = "f3d";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-S3eigdW6rkDRSm4uCCTFHx5fhJGNVWpAAAKboougr08=";
   };
 

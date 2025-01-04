@@ -15,9 +15,14 @@ stdenv.mkDerivation rec {
     owner = "SRI-CSL";
     repo = "libpoly";
     # they've pushed to the release branch, use explicit tag
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-7aFz+6XJOVEA/Fmi0ywd6rZdTW8sHq8MoHqXR0Hc2o4=";
   };
+
+  postPatch = ''
+    substituteInPlace src/CMakeLists.txt \
+      --replace-warn " -Werror " " "
+  '';
 
   nativeBuildInputs = [ cmake ];
 

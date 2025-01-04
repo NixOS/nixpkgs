@@ -37,10 +37,9 @@ lib.makeOverridable (
         repo
       ]
     );
+    revWithTag = if tag != null then "refs/tags/" + tag else rev;
     escapedSlug = lib.replaceStrings [ "." "/" ] [ "%2E" "%2F" ] slug;
-    escapedRev = lib.replaceStrings [ "+" "%" "/" ] [ "%2B" "%25" "%2F" ] (
-      if tag != null then "refs/tags/" + tag else rev
-    );
+    escapedRevWithTag = lib.replaceStrings [ "+" "%" "/" ] [ "%2B" "%25" "%2F" ] revWithTag;
     passthruAttrs = removeAttrs args [
       "protocol"
       "domain"
@@ -77,7 +76,7 @@ lib.makeOverridable (
           }
         else
           {
-            url = "${protocol}://${domain}/api/v4/projects/${escapedSlug}/repository/archive.tar.gz?sha=${escapedRev}";
+            url = "${protocol}://${domain}/api/v4/projects/${escapedSlug}/repository/archive.tar.gz?sha=${escapedRevWithTag}";
 
             passthru = {
               inherit gitRepoUrl;
@@ -95,9 +94,9 @@ lib.makeOverridable (
     meta.homepage = "${protocol}://${domain}/${slug}/";
     inherit
       tag
-      rev
       owner
       repo
       ;
+    rev = revWithTag;
   }
 )

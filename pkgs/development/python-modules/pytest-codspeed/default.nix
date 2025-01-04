@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CodSpeedHQ";
     repo = "pytest-codspeed";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-A8H8gx+g2Fcf+aapahnAiVBt5vUzPc1SW4scOmSjI0g=";
   };
 
