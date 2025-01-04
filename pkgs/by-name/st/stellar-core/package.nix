@@ -5,7 +5,7 @@
   fetchFromGitHub,
   fetchpatch,
   flex,
-  git,
+  gitMinimal,
   lib,
   libtool,
   libunwind,
@@ -47,7 +47,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     automake
     autoconf
-    git
+    gitMinimal
     libtool
     pkg-config
     ripgrep
