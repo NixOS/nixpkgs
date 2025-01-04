@@ -42,6 +42,7 @@
 , glibcLocales
 , meson
 , ninja
+, nix-eval-jobs
 , fetchFromGitHub
 , nixosTests
 , unstableGitUpdater
@@ -125,13 +126,13 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "hydra";
-  version = "0-unstable-2024-12-05";
+  version = "0-unstable-2024-12-11";
 
   src = fetchFromGitHub {
     owner = "NixOS";
     repo = "hydra";
-    rev = "250668a19fa4d8ff9a6176ee6c44ca3003adedf1";
-    hash = "sha256-r+t/0U8Pp6/Lvi3s3v8nDB9xCggvxFsnCEJ9TuZvVJc=";
+    rev = "5833e12466dc214521e8d0d7de8801bfcd9dee94";
+    hash = "sha256-0thAFTYlvjhAjw9uBIW1Tvg+8DZeNcbpXptOReEEnGo=";
   };
 
   outputs = [ "out" "doc" ];
@@ -162,6 +163,7 @@ stdenv.mkDerivation (finalAttrs: {
       subversion
       openssh
       nix
+      nix-eval-jobs
       coreutils
       findutils
       pixz
@@ -182,6 +184,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs = [
     meson
     ninja
+    nix-eval-jobs
     makeWrapper
     pkg-config
     mdbook
@@ -202,7 +205,7 @@ stdenv.mkDerivation (finalAttrs: {
   };
 
   shellHook = ''
-    PATH=$(pwd)/src/script:$(pwd)/src/hydra-eval-jobs:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH
+    PATH=$(pwd)/src/script:$(pwd)/src/hydra-queue-runner:$(pwd)/src/hydra-evaluator:$PATH
     PERL5LIB=$(pwd)/src/lib:$PERL5LIB;
   '';
 
@@ -228,7 +231,8 @@ stdenv.mkDerivation (finalAttrs: {
             --prefix PATH ':' $out/bin:$hydraPath \
             --set-default HYDRA_RELEASE ${finalAttrs.version} \
             --set HYDRA_HOME $out/libexec/hydra \
-            --set NIX_RELEASE ${nix.name or "unknown"}
+            --set NIX_RELEASE ${nix.name or "unknown"} \
+            --set NIX_EVAL_JOBS_RELEASE ${nix-eval-jobs.name or "unknown"}
     done
   '';
 
