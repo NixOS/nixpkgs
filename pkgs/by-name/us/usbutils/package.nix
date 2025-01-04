@@ -3,7 +3,8 @@
   stdenv,
   fetchurl,
   substituteAll,
-  autoreconfHook,
+  meson,
+  ninja,
   pkg-config,
   libusb1,
   hwdata,
@@ -12,11 +13,11 @@
 
 stdenv.mkDerivation rec {
   pname = "usbutils";
-  version = "017";
+  version = "018";
 
   src = fetchurl {
     url = "mirror://kernel/linux/utils/usb/usbutils/usbutils-${version}.tar.xz";
-    hash = "sha256-pqJf/c+RA+ONekRzKsoXBz9OYCuS5K5VYlIxqCcC4Fs=";
+    hash = "sha256-g/aLWbWFR1icACZugmcYZGJ1k6tDYtjIB/UO6pI8rZM=";
   };
 
   patches = [
@@ -27,7 +28,8 @@ stdenv.mkDerivation rec {
   ];
 
   nativeBuildInputs = [
-    autoreconfHook
+    meson
+    ninja
     pkg-config
   ];
   buildInputs = [
@@ -40,10 +42,6 @@ stdenv.mkDerivation rec {
     "man"
     "python"
   ];
-
-  postBuild = ''
-    $CC $NIX_CFLAGS -o usbreset usbreset.c
-  '';
 
   postInstall = ''
     moveToOutput "bin/lsusb.py" "$python"
