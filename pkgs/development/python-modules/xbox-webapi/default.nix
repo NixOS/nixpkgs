@@ -44,6 +44,10 @@ buildPythonPackage rec {
     respx
   ];
 
+  disabledTests = [
+    "test_import" # fails due to line splitting differences
+  ];
+
   meta = with lib; {
     changelog = "https://github.com/OpenXbox/xbox-webapi-python/blob/${src.rev}/CHANGELOG.md";
     description = "Library to authenticate with Windows Live/Xbox Live and use their API";
