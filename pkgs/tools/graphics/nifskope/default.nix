@@ -75,7 +75,7 @@ stdenv.mkDerivation {
   '';
 
   meta = with lib; {
-    homepage = "https://niftools.sourceforge.net/wiki/NifSkope";
+    homepage = "https://github.com/niftools/nifskope";
     description = "Tool for analyzing and editing NetImmerse/Gamebryo '*.nif' files";
     maintainers = [ ];
     platforms = platforms.linux;
