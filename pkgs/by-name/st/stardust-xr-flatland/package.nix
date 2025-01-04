@@ -7,13 +7,13 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "stardust-xr-flatland";
-  version = "0-unstable-2024-04-13";
+  version = "0-unstable-2024-09-09";
 
   src = fetchFromGitHub {
     owner = "stardustxr";
     repo = "flatland";
-    rev = "b3b0f29c4ea1b82c96cf9de507837bf15a5e4c0e";
-    hash = "sha256-m7c6XpmpTM1URuqMG2KqtaWbL2Vt8vJFJtmvq123BmY=";
+    rev = "0914dd3df54a5e6258dfc0a02d65af1c0fc0fc90";
+    hash = "sha256-rDBQ9tXQCCA7emikSYH59ADJELE2IpzB7eoLrpHYzU4=";
   };
 
   env.STARDUST_RES_PREFIXES = "${src}/res";
@@ -21,8 +21,8 @@ rustPlatform.buildRustPackage rec {
   cargoLock = {
     lockFile = ./Cargo.lock;
     outputHashes = {
-      "stardust-xr-0.44.0" = "sha256-Gu/P78nFFVSpgwCcbMwyoqdEZO8zIcvP1ovU7Y0sXqg=";
-      "stardust-xr-molecules-0.44.0" = "sha256-TpgsmQnaAbtcp+veclGaht7f9hwEWEzMOpEIvdICTbc=";
+      "stardust-xr-0.45.0" = "sha256-6+L9WQWrHot+Pm+iZ9oq8DOK3AzaDpP7pUjpaq3zH3c=";
+      "stardust-xr-molecules-0.45.0" = "sha256-aOZUbKdICzkZwJYYz7J4M3BIyoLmUGouVCkM+KFQsMc=";
     };
   };
 
