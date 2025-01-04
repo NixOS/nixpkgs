@@ -6,6 +6,7 @@
   cmake,
   rocm-cmake,
   rocblas,
+  rocprim,
   rocsparse,
   clr,
   fmt,
@@ -14,12 +15,25 @@
   lapack-reference,
   buildTests ? false,
   buildBenchmarks ? false,
-  gpuTargets ? [ ], # gpuTargets = [ "gfx803" "gfx900" "gfx906:xnack-" ]
+  gpuTargets ? (
+    clr.localGpuTargets or [
+      "gfx900"
+      "gfx906"
+      "gfx908"
+      "gfx90a"
+      "gfx942"
+      "gfx1010"
+      "gfx1030"
+      "gfx1100"
+      "gfx1101"
+      "gfx1102"
+    ]
+  ),
 }:
 
 stdenv.mkDerivation (finalAttrs: {
-  pname = "rocsolver";
-  version = "6.0.2";
+  pname = "rocsolver${clr.gpuArchSuffix}";
+  version = "6.3.1";
 
   outputs =
     [
@@ -36,12 +50,13 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocSOLVER";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-tglQpwCSFABRuEDiJrzQVFIdx9p85E2MiUYN0aoTAXo=";
+    hash = "sha256-+sGU+0CB48iolJSyYo+xH36q5LCUp+nKtOYbguzMuhg=";
   };
 
   nativeBuildInputs =
     [
       cmake
+      # no ninja, it buffers console output and nix times out long periods of no output
       rocm-cmake
       clr
     ]
@@ -51,7 +66,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs =
     [
+      # FIXME: rocblas and rocsolver can't build in parallel
+      # but rocsolver doesn't need rocblas' offload builds at build time
+      # could we build against a rocblas-minimal?
       rocblas
+      rocprim
       rocsparse
       fmt
     ]
@@ -62,10 +81,16 @@ stdenv.mkDerivation (finalAttrs: {
       lapack-reference
     ];
 
+  # Reduce parallelism of build to account for internal parallelism from HIP_CLANG_NUM_PARALLEL_JOBS
+  preConfigure = ''
+    export NIX_BUILD_CORES=$((1 + NIX_BUILD_CORES/10))
+    makeFlagsArray+=("-l$(nproc)")
+  '';
   cmakeFlags =
     [
-      "-DCMAKE_CXX_COMPILER=hipcc"
-      "-DCMAKE_CXX_FLAGS=-Wno-switch" # Way too many warnings
+      "-DHIP_CLANG_NUM_PARALLEL_JOBS=10"
+      "-DCMAKE_BUILD_TYPE=Release"
+      "-DCMAKE_VERBOSE_MAKEFILE=ON"
       # Manually define CMAKE_INSTALL_<DIR>
       # See: https://github.com/NixOS/nixpkgs/pull/197838
       "-DCMAKE_INSTALL_BINDIR=bin"
@@ -97,10 +122,11 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
+  enableParallelBuilding = true;
   requiredSystemFeatures = [ "big-parallel" ];
 
   meta = with lib; {
@@ -111,8 +137,5 @@ stdenv.mkDerivation (finalAttrs: {
     platforms = platforms.linux;
     timeout = 14400; # 4 hours
     maxSilent = 14400; # 4 hours
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

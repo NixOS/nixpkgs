@@ -19,7 +19,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "roctracer";
-  version = "6.0.2";
+  version = "6.3.1";
 
   outputs =
     [
@@ -36,7 +36,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "roctracer";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-a6/N6W3JXVI0VZRGxlS3cVENC3VTP1w9UFnd0+EWAuo=";
+    hash = "sha256-GhnF7rqNLQLLB7nzIp0xNqyqBOwj9ZJ+hzzj1EAaXWU=";
   };
 
   nativeBuildInputs =
@@ -106,8 +106,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   meta = with lib; {
@@ -116,8 +116,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ]; # mitx11
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor clr.version
-      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

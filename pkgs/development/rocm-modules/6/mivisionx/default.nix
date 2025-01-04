@@ -43,13 +43,13 @@ stdenv.mkDerivation (finalAttrs: {
         "cpu"
     );
 
-  version = "6.0.2";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "MIVisionX";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-d32lcJq24MXeIWbNbo6putWaol5kF2io6cz4ZuL+DbE=";
+    hash = "sha256-SisCbUDCAiWQ1Ue7qrtoT6vO/1ztzqji+3cJD6MXUNw=";
   };
 
   patches = [
@@ -144,8 +144,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   meta = with lib; {
@@ -154,8 +154,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })

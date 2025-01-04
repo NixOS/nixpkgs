@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocgdb";
-  version = "6.0.2";
+  version = "6.3.1";
 
   src = fetchFromGitHub {
     owner = "ROCm";
     repo = "ROCgdb";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-XeX/k8gfo9HgcUSIjs35C7IqCmFhvBOqQJSOoPF6HK4=";
+    hash = "sha256-P9NbYMrCs0UpnaEIP+bJEM6yPiRHzl0lI0J4+A7/ePc=";
   };
 
   nativeBuildInputs = [
@@ -91,8 +91,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   meta = with lib; {
@@ -101,6 +101,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = licenses.gpl3Plus;
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken = versionAtLeast finalAttrs.version "7.0.0";
   };
 })

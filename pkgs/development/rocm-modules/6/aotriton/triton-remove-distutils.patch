@@ -1,0 +1,68 @@
+From https://github.com/triton-lang/triton/pull/1400/files
+diff --git a/python/setup.py b/python/setup.py
+index 1d5eb89c591d..9dfd5a62ad63 100644
+--- a/third_party/triton/python/setup.py
++++ b/third_party/triton/python/setup.py
+@@ -1,14 +1,13 @@
+-import distutils
+ import os
+ import platform
+ import re
+ import shutil
+ import subprocess
+ import sys
++import sysconfig
+ import tarfile
+ import tempfile
+ import urllib.request
+-from distutils.version import LooseVersion
+ from pathlib import Path
+ from typing import NamedTuple
+ 
+@@ -154,10 +153,10 @@ def run(self):
+                 "CMake must be installed to build the following extensions: " + ", ".join(e.name for e in self.extensions)
+             )
+ 
+-        if platform.system() == "Windows":
+-            cmake_version = LooseVersion(re.search(r"version\s*([\d.]+)", out.decode()).group(1))
+-            if cmake_version < "3.1.0":
+-                raise RuntimeError("CMake >= 3.1.0 is required on Windows")
++        match = re.search(r"version\s*(?P<major>\d+)\.(?P<minor>\d+)([\d.]+)?", out.decode())
++        cmake_major, cmake_minor = int(match.group("major")), int(match.group("minor"))
++        if (cmake_major, cmake_minor) < (3, 20):
++            raise RuntimeError("CMake >= 3.20.0 is required")
+ 
+         for ext in self.extensions:
+             self.build_extension(ext)
+@@ -176,7 +175,7 @@ def build_extension(self, ext):
+         if not os.path.exists(self.build_temp):
+             os.makedirs(self.build_temp)
+         # python directories
+-        python_include_dir = distutils.sysconfig.get_python_inc()
++        python_include_dir = sysconfig.get_path("platinclude")
+         cmake_args = [
+             "-DLLVM_ENABLE_WERROR=ON",
+             "-DCMAKE_LIBRARY_OUTPUT_DIRECTORY=" + extdir,
+@@ -200,9 +199,8 @@ def build_extension(self, ext):
+                 cmake_args += ["-A", "x64"]
+             build_args += ["--", "/m"]
+         else:
+-            import multiprocessing
+             cmake_args += ["-DCMAKE_BUILD_TYPE=" + cfg]
+-            build_args += ['-j' + str(2 * multiprocessing.cpu_count())]
++            build_args += ['-j' + str(2 * os.cpu_count())]
+ 
+         env = os.environ.copy()
+         subprocess.check_call(["cmake", self.base_dir] + cmake_args, cwd=self.build_temp, env=env)
+@@ -245,6 +243,11 @@ def build_extension(self, ext):
+         "Topic :: Software Development :: Build Tools",
+         "License :: OSI Approved :: MIT License",
+         "Programming Language :: Python :: 3.6",
++        "Programming Language :: Python :: 3.7",
++        "Programming Language :: Python :: 3.8",
++        "Programming Language :: Python :: 3.9",
++        "Programming Language :: Python :: 3.10",
++        "Programming Language :: Python :: 3.11",
+     ],
+     test_suite="tests",
+     extras_require={

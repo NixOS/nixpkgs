@@ -1,0 +1,57 @@
+diff --git a/Tensile/Ops/AMaxGenerator.py b/Tensile/Ops/AMaxGenerator.py
+index 03325974..666c53e4 100644
+--- a/Tensile/Ops/AMaxGenerator.py
++++ b/Tensile/Ops/AMaxGenerator.py
+@@ -125,6 +125,8 @@ class AMaxKernelGenerator:
+         self.op = 'AMax'
+         self.sgprs  = collections.OrderedDict()
+         self.vgprs  = collections.OrderedDict()
++        if any(value is None for value in self.__dict__.values()):
++            raise Exception(f"Some values in {self.__dict__} are None")
+ 
+     @property
+     def lds_usage_byte(self) -> int:
+@@ -841,6 +843,7 @@ if __name__ == '__main__':
+     isa = gfxArch(arch)
+ 
+     if any([not i for i in (arch, toolchain_path, isa)]):
++        print("Fell back to defaults due to `not i` in AMaxGenerator! (arch, toolchain_path, isa)", (arch, toolchain_path, isa))
+         restoreDefaultGlobalParameters()
+         assignGlobalParameters({})
+         detectGlobalCurrentISA()
+
+diff --git a/Tensile/Ops/LayerNormGenerator.py b/Tensile/Ops/LayerNormGenerator.py
+index 9546d3c2..19a6735a 100644
+--- a/Tensile/Ops/LayerNormGenerator.py
++++ b/Tensile/Ops/LayerNormGenerator.py
+@@ -123,6 +123,8 @@ class LayerNormKernelGenerator:
+         self.op = 'LayerNorm'
+         self.sgprs  = collections.OrderedDict()
+         self.vgprs  = collections.OrderedDict()
++        if any(value is None for value in self.__dict__.values()):
++            raise Exception(f"Some values in {self.__dict__} are None")
+ 
+     @property
+     def lds_usage_byte(self) -> int:
+@@ -922,6 +924,7 @@ if __name__ == '__main__':
+     isa = gfxArch(arch)
+ 
+     if any([not i for i in (arch, toolchain_path, isa)]):
++        print("Fell back to defaults due to `not i` in AMaxGenerator! (arch, toolchain_path, isa)", (arch, toolchain_path, isa))
+         restoreDefaultGlobalParameters()
+         assignGlobalParameters({})
+         detectGlobalCurrentISA()
+
+diff --git a/Tensile/Ops/SoftmaxGenerator.py b/Tensile/Ops/SoftmaxGenerator.py
+index dc4c53aa..57851859 100644
+--- a/Tensile/Ops/SoftmaxGenerator.py
++++ b/Tensile/Ops/SoftmaxGenerator.py
+@@ -97,6 +97,8 @@ class SoftmaxKernelGenerator:
+         self.debug_label = True
+         self.arch = arch
+         self.op = 'Softmax'
++        if any(value is None for value in self.__dict__.values()):
++            raise Exception(f"Some values in {self.__dict__} are None")
+ 
+     def _validate(self):
+         assert self.num_cols * self.num_rows == self.num_workitems

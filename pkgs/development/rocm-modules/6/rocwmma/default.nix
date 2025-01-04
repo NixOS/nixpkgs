@@ -14,12 +14,12 @@
   buildExtendedTests ? false,
   buildBenchmarks ? false,
   buildSamples ? false,
-  gpuTargets ? [ ], # gpuTargets = [ "gfx908:xnack-" "gfx90a:xnack-" "gfx90a:xnack+" ... ]
+  gpuTargets ? [ ],
 }:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "rocwmma";
-  version = "6.0.2";
+  version = "6.3.1";
 
   outputs =
     [
@@ -39,7 +39,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "rocWMMA";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-vbC4OuCmEpD38lVq0uXNw86iS4KkL6isOVq6vmlu1oM=";
+    hash = "sha256-kih3hn6QhcMmyj9n8f8eO+RIgKQgWKIuzg8fb0eoRPE=";
   };
 
   patches = lib.optionals (buildTests || buildBenchmarks) [
@@ -64,7 +64,9 @@ stdenv.mkDerivation (finalAttrs: {
 
   cmakeFlags =
     [
-      "-DCMAKE_CXX_COMPILER=hipcc"
+      "-DOpenMP_C_INCLUDE_DIR=${openmp.dev}/include"
+      "-DOpenMP_CXX_INCLUDE_DIR=${openmp.dev}/include"
+      "-DOpenMP_omp_LIBRARY=${openmp}/lib"
       "-DROCWMMA_BUILD_TESTS=${if buildTests || buildBenchmarks then "ON" else "OFF"}"
       "-DROCWMMA_BUILD_SAMPLES=${if buildSamples then "ON" else "OFF"}"
       # Manually define CMAKE_INSTALL_<DIR>
@@ -105,8 +107,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   meta = with lib; {
@@ -115,8 +117,5 @@ stdenv.mkDerivation (finalAttrs: {
     license = with licenses; [ mit ];
     maintainers = teams.rocm.members;
     platforms = platforms.linux;
-    broken =
-      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
-      || versionAtLeast finalAttrs.version "7.0.0";
   };
 })
