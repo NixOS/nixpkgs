@@ -1,0 +1,13 @@
+diff --git a/snapcraft/utils.py b/snapcraft/utils.py
+index 999a64ec..4f38b4cd 100644
+--- a/snapcraft/utils.py
++++ b/snapcraft/utils.py
+@@ -94,7 +94,7 @@ def get_os_platform(
+     release = platform.release()
+     machine = platform.machine()
+ 
+-    if system == "Linux":
++    if system == "Linux" and "NixOS" not in platform.version():
+         try:
+             with filepath.open("rt", encoding="utf-8") as release_file:
+                 lines = release_file.readlines()
