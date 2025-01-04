@@ -9138,6 +9138,18 @@ final: prev:
     meta.homepage = "https://github.com/nvim-java/nvim-java-core/";
   };
 
+  nvim-java-refactor = buildVimPlugin {
+    pname = "nvim-java-refactor";
+    version = "2024-07-25";
+    src = fetchFromGitHub {
+      owner = "nvim-java";
+      repo = "nvim-java-refactor";
+      rev = "ea1420fed5463c9cc976c2b4175f434b3646f0f7";
+      sha256 = "0jspnlfq0c69ki0nva3jv6zi3fxd0x4p33d8szj1nh4yg8a0qbhl";
+    };
+    meta.homepage = "https://github.com/nvim-java/nvim-java-refactor/";
+  };
+
   nvim-jdtls = buildVimPlugin {
     pname = "nvim-jdtls";
     version = "2024-11-26";
