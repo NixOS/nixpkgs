@@ -39,5 +39,6 @@ stdenvNoCC.mkDerivation rec {
     license = licenses.mit;
     platforms = platforms.darwin;
     maintainers = with maintainers; [ jakuzure ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
   };
 }
