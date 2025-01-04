@@ -16,6 +16,7 @@
   pipewire,
   withPipewireLib ? true,
   symlinkJoin,
+  coreutils,
 }:
 
 let
@@ -65,6 +66,9 @@ stdenv.mkDerivation rec {
       ]
     }"
     wrapProgram $out/bin/aplay --set-default ALSA_PLUGIN_DIR ${plugin-dir}
+
+    sed -i $out/lib/udev/rules.d/*.rules \
+      -e 's,/usr/bin/cat,${coreutils}/bin/cat,g'
   '';
 
   passthru.updateScript = directoryListingUpdater {
