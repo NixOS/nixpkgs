@@ -273,6 +273,7 @@ in {
   cockpit = handleTest ./cockpit.nix {};
   cockroachdb = handleTestOn ["x86_64-linux"] ./cockroachdb.nix {};
   code-server = handleTest ./code-server.nix {};
+  codeberg-pages = runTest ./codeberg-pages.nix {};
   coder = handleTest ./coder.nix {};
   collectd = handleTest ./collectd.nix {};
   commafeed = handleTest ./commafeed.nix {};
