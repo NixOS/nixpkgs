@@ -12766,8 +12766,6 @@ with pkgs;
     inherit (plasma5Packages) breeze-icons;
   };
 
-  iosevka = callPackage ../data/fonts/iosevka { };
-  iosevka-bin = callPackage ../data/fonts/iosevka/bin.nix { };
   iosevka-comfy = recurseIntoAttrs (callPackages ../data/fonts/iosevka/comfy.nix {});
 
   kde-rounded-corners = kdePackages.callPackage ../data/themes/kwin-decorations/kde-rounded-corners { };
