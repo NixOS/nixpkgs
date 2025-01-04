@@ -1,0 +1,15 @@
+Botan2 has switched the parameter order in encryption descriptions
+
+--- monotone-upstream/src/botan_glue.hh 2021-08-17 19:06:32.736753732 +0200
++++ monotone-patched/src/botan_glue.hh  2021-08-17 19:07:44.437750535 +0200
+@@ -45,7 +45,9 @@
+ // In Botan revision d8021f3e (back when it still used monotone) the name
+ // of SHA-1 changed to SHA-160.
+ const static char * PBE_PKCS5_KEY_FORMAT =
+-#if BOTAN_VERSION_CODE >= BOTAN_VERSION_CODE_FOR(1,11,0)
++#if BOTAN_VERSION_CODE >= BOTAN_VERSION_CODE_FOR(2,0,0)
++  "PBE-PKCS5v20(TripleDES/CBC,SHA-160)";
++#elif BOTAN_VERSION_CODE >= BOTAN_VERSION_CODE_FOR(1,11,0)
+   "PBE-PKCS5v20(SHA-160,TripleDES/CBC)";
+ #else
+   "PBE-PKCS5v20(SHA-1,TripleDES/CBC)";
