@@ -12,6 +12,7 @@
   ffmpeg,
   python3,
   vips,
+  nixosTests,
 }:
 
 let
@@ -133,6 +134,10 @@ stdenv.mkDerivation (finalAttrs: {
       mkBin "zipline-$(basename $script .js)" "$script"
     done
   '';
+
+  passthru = {
+    tests = { inherit (nixosTests) zipline; };
+  };
 
   meta = {
     description = "ShareX/file upload server that is easy to use, packed with features, and with an easy setup";
