@@ -1,0 +1,44 @@
+diff --git a/Makefile b/Makefile
+index a705c11..08b952b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -13,11 +13,14 @@ OBJS = $(SRCS:.cc=.o)
+ MODULE_big = plv8-$(PLV8_VERSION)
+ EXTENSION = plv8
+ PLV8_DATA = plv8.control plv8--$(PLV8_VERSION).sql
++USE_SYSTEM_V8 = 0
+ 
+ ifeq ($(OS),Windows_NT)
+ 	# noop for now
+ else
++	ifeq ($(USE_SYSTEM_V8),0)
+ 	SHLIB_LINK += -Ldeps/v8-cmake/build
++	endif
+ 	UNAME_S := $(shell uname -s)
+ 	ifeq ($(UNAME_S),Darwin)
+ 		CCFLAGS += -stdlib=libc++
+@@ -34,6 +37,7 @@ ifeq ($(NUMPROC),0)
+ 	NUMPROC = 1
+ endif
+ 
++ifeq ($(USE_SYSTEM_V8),0)
+ SHLIB_LINK += -Ldeps/v8-cmake/build
+ 
+ all: v8 $(OBJS)
+@@ -46,11 +50,16 @@ deps/v8-cmake/build/libv8_libbase.a:
+ 	@cd deps/v8-cmake && mkdir -p build && cd build && cmake -Denable-fPIC=ON -DCMAKE_BUILD_TYPE=Release ../ && make -j $(NUMPROC)
+ 
+ v8: deps/v8-cmake/build/libv8_libbase.a
++else
++all: $(OBJS)
++endif
+ 
+ # enable direct jsonb conversion by default
+ CCFLAGS += -DJSONB_DIRECT_CONVERSION
+ 
++ifeq ($(USE_SYSTEM_V8),0)
+ CCFLAGS += -Ideps/v8-cmake/v8/include -std=c++17
++endif
+ 
+ ifdef EXECUTION_TIMEOUT
+ 	CCFLAGS += -DEXECUTION_TIMEOUT
