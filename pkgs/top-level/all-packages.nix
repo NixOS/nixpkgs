@@ -1576,8 +1576,6 @@ with pkgs;
   };
   termite-unwrapped = callPackage ../applications/terminal-emulators/termite { };
 
-  wezterm = callPackage ../applications/terminal-emulators/wezterm { };
-
   twine = with python3Packages; toPythonApplication twine;
 
   amazon-qldb-shell = callPackage ../development/tools/amazon-qldb-shell {
