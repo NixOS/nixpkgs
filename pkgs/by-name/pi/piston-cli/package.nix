@@ -39,10 +39,10 @@ python3Packages.buildPythonApplication rec {
   ];
 
   meta = with lib; {
-    broken = stdenv.hostPlatform.isDarwin;
     description = "Piston api tool";
     homepage = "https://github.com/Shivansh-007/piston-cli";
     license = licenses.mit;
+    platforms = platforms.unix;
     maintainers = with maintainers; [ ethancedwards8 ];
     mainProgram = "piston";
   };
