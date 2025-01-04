@@ -12,7 +12,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "alangrainger";
     repo = "immich-public-proxy";
-    rev = "v${version}";
+    tag = "v${version}";
     hash = "sha256-nAXSlzMJNx7QjdHr/Ax8RAcWVcsMgBLbBO0CqpWCsvA=";
   };
 
@@ -40,6 +40,7 @@ buildNpmPackage rec {
   };
 
   meta = {
+    changelog = "https://github.com/alangrainger/immich-public-proxy/releases/tag/${src.tag}";
     description = "Share your Immich photos and albums in a safe way without exposing your Immich instance to the public";
     homepage = "https://github.com/alangrainger/immich-public-proxy";
     license = lib.licenses.agpl3Only;
