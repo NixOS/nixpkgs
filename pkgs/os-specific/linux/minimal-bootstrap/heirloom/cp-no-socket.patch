@@ -1,0 +1,84 @@
+--- cp/cp.c
++++ cp/cp.c
+@@ -42,8 +42,6 @@ static const char sccsid[] USED = "@(#)cp.sl	1.84 (gritter) 3/4/06";
+ 
+ #include	<sys/types.h>
+ #include	<sys/stat.h>
+-#include	<sys/socket.h>
+-#include	<sys/un.h>
+ #include	<sys/time.h>
+ #include	<sys/resource.h>
+ #include	<fcntl.h>
+@@ -427,6 +425,7 @@ fdcopy(const char *src, const struct stat *ssp, const int sfd,
+ #endif
+ 
+ #ifdef	__linux__
++#ifdef	O_DIRECT
+ 	if (!bflag && !Dflag && ssp->st_size > 0) {
+ 		long long	sent;
+ 
+@@ -436,6 +435,7 @@ fdcopy(const char *src, const struct stat *ssp, const int sfd,
+ 		if (sent < 0)
+ 			goto err;
+ 	}
++#endif
+ #endif	/* __linux__ */
+ 	if (pagesize == 0)
+ 		if ((pagesize = 4096) < 0)
+@@ -702,37 +702,6 @@ symlinkcopy(const char *src, const struct stat *ssp,
+ 	}
+ }
+ 
+-static void
+-socketcopy(const char *src, const struct stat *ssp,
+-		const char *tgt, const struct stat *dsp)
+-{
+-	int	fd, addrsz;
+-	struct sockaddr_un	addr;
+-	size_t	len;
+-
+-	if (do_unlink(tgt, dsp) != OKAY)
+-		return;
+-	len = strlen(tgt);
+-	memset(&addr, 0, sizeof addr);
+-	addr.sun_family = AF_UNIX;
+-	addrsz = sizeof addr - sizeof addr.sun_path + len;
+-	if ((len >= sizeof addr.sun_path ? errno = ENAMETOOLONG, fd = -1, 1 :
+-			(strncpy(addr.sun_path,tgt,sizeof addr.sun_path), 0)) ||
+-			(fd = socket(AF_UNIX, SOCK_STREAM, 0)) < 0 ||
+-			bind(fd, (struct sockaddr *)&addr, addrsz) < 0) {
+-		fprintf(stderr, "%s: cannot create socket %s\n%s: %s\n",
+-				progname, tgt,
+-				progname, strerror(errno));
+-		if (fd >= 0)
+-			close(fd);
+-		errcnt |= 01;
+-		return;
+-	}
+-	close(fd);
+-	if (pflag)
+-		permissions(tgt, ssp);
+-}
+-
+ static void
+ specialcopy(const char *src, const struct stat *ssp,
+ 		const char *tgt, const struct stat *dsp)
+@@ -748,9 +717,6 @@ specialcopy(const char *src, const struct stat *ssp,
+ 	case S_IFLNK:
+ 		symlinkcopy(src, ssp, tgt, dsp);
+ 		break;
+-	case S_IFSOCK:
+-		socketcopy(src, ssp, tgt, dsp);
+-		break;
+ 	case S_IFDOOR:
+ 		ignoring("door", src);
+ 		break;
+@@ -1043,7 +1009,7 @@ ln(const char *src, const char *tgt, struct stat *dsp, int level,
+ 		errcnt |= 01;
+ 		return;
+ 	}
+-#if (defined (SUS) || defined (S42)) && (defined (__linux__) || defined (__sun))
++#if (defined (SUS) || defined (S42)) && (defined (__linux__) || defined (__sun)) && !defined (__TINYC__)
+ 	if (sflag == 0) {
+ 		char	*rpbuf = alloca(PATH_MAX+1);
+ 		if (realpath(src, rpbuf) == NULL) {
