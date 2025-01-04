@@ -113,7 +113,7 @@ in
       enable = lib.mkEnableOption "Image compression";
 
       algorithm = lib.mkOption {
-        type = lib.types.enum [ "zstd" "xz" ];
+        type = lib.types.enum [ "zstd" "xz" "qcow2-compressed" ];
         default = "zstd";
         description = "Compression algorithm";
       };
@@ -274,6 +274,7 @@ in
           {
             "zstd" = ".zst";
             "xz" = ".xz";
+            "qcow2-compressed" = ".qcow2";
           }."${cfg.compression.algorithm}";
 
         makeClosure = paths: pkgs.closureInfo { rootPaths = paths; };
