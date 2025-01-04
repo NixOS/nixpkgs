@@ -4662,6 +4662,8 @@ self: super: with self; {
 
   flask-appbuilder = callPackage ../development/python-modules/flask-appbuilder { };
 
+  flask-apscheduler = callPackage ../development/python-modules/flask-apscheduler { };
+
   flask-assets = callPackage ../development/python-modules/flask-assets { };
 
   flask-babel = callPackage ../development/python-modules/flask-babel { };
@@ -8379,6 +8381,8 @@ self: super: with self; {
 
   molbar = callPackage ../development/python-modules/molbar { };
 
+  mo-installer = callPackage ../development/python-modules/mo-installer { };
+
   molecule = callPackage ../development/python-modules/molecule { };
 
   molecule-plugins = callPackage ../development/python-modules/molecule/plugins.nix { };
@@ -10023,6 +10027,8 @@ self: super: with self; {
   pasimple = callPackage ../development/python-modules/pasimple { };
 
   passlib = callPackage ../development/python-modules/passlib { };
+
+  password-strength = callPackage ../development/python-modules/password-strength { };
 
   paste = callPackage ../development/python-modules/paste { };
 
@@ -14434,6 +14440,8 @@ self: super: with self; {
   schemainspect = callPackage ../development/python-modules/schemainspect { };
 
   schema-salad = callPackage ../development/python-modules/schema-salad { };
+
+  schematics = callPackage ../development/python-modules/schematics { };
 
   schemdraw = callPackage ../development/python-modules/schemdraw { };
 
