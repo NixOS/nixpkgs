@@ -544,6 +544,13 @@ sub handle_modified_unit { ## no critic(Subroutines::ProhibitManyArgs, Subroutin
                     }
                 }
 
+                if (parse_systemd_bool(\%new_unit_info, "Service", "X-NotSocketActivated", 0)) {
+                    # If the unit explicitly opts out of socket
+                    # activation, restart it as if it weren't (but do
+                    # restart its sockets, that's fine):
+                    $socket_activated = 0;
+                }
+
                 # If the unit is not socket-activated, record
                 # that this unit needs to be started below.
                 # We write this to a file to ensure that the
