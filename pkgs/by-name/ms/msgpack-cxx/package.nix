@@ -14,7 +14,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "msgpack";
     repo = "msgpack-c";
-    rev = "refs/tags/cpp-${finalAttrs.version}";
+    tag = "cpp-${finalAttrs.version}";
     hash = "sha256-kg4mpNiigfZ59ZeL8LXEHwtkLU8Po+vgRcUcgTJd+h4=";
   };
 

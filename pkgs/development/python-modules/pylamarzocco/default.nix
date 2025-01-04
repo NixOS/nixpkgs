@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zweckj";
     repo = "pylamarzocco";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Ntss7erVbpeW6EEeKrkR/anzvTUQhzggNhHi6rOIsFQ=";
   };
 

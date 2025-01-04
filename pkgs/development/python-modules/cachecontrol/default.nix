@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ionrock";
     repo = "cachecontrol";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qeTq2NfMOmNtjBItLmjxlaxqqy/Uvb6JfBpCBRvRLh4=";
   };
 

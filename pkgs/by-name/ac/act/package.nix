@@ -17,7 +17,7 @@ buildGoModule {
   src = fetchFromGitHub {
     owner = "nektos";
     repo = "act";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7e2ehUM3d5hcFtaahW/hrhVkpy74ufMdYwdnbsUA+WM=";
   };
 

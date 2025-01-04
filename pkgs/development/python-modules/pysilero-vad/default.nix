@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rhasspy";
     repo = "pysilero-vad";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-p0pPhQo/raZhlHettmoc7FwnlZH9n2NI4tYHvikJ8i4=";
   };
 

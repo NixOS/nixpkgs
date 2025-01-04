@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "open-iscsi";
     repo = "${pname}-fb";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-z9fpSVyv96ZoJaP0ch2A3bX/o/K23ooEpxa/OAhY6Z4=";
   };
 

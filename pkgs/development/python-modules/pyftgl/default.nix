@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "umlaeute";
     repo = "pyftgl";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-mbzXpIPMNe6wfwaAAw/Ri8xaW6Z6kuNUhFFyzsiW7Is=";
   };
 

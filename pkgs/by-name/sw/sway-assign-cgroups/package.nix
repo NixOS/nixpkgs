@@ -10,7 +10,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "alebastr";
     repo = "sway-systemd";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AJ87/sPy8IVJgb5YehfUfNTOFEDithLfiTxgZfZf238=";
   };
   format = "other";

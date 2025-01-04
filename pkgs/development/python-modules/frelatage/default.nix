@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Rog3rSm1th";
     repo = "frelatage";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-eHVqp6govBV9FvSQyaZuEEImHQRs/mbLaW86RCvtDbM=";
   };
 

@@ -33,7 +33,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "wangle";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-alRlq5gHVlyY1B8344D9C1EHjgQWl4VaOcTVhZ9NdSI=";
   };
 

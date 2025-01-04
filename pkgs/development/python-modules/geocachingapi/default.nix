@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Sholofly";
     repo = "geocachingapi-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-zme1jqn3qtoo39zyj4dKxt9M7gypMqJu0bfgY1iYhjs=";
   };
 

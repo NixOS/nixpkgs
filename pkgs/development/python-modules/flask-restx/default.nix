@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-restx";
     repo = "flask-restx";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CBReP/u96fsr28lMV1BfLjjdBMXEvsD03wvsxkIcteI=";
   };
 

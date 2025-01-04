@@ -26,7 +26,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "varietywalls";
     repo = "variety";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-FjnhV7vzRPVDCgUNK8CHo3arKXuwe+3xH/5AxCVgeIY=";
   };
 

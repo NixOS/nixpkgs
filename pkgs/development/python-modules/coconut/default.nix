@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "evhub";
     repo = "coconut";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Vd6ZY3PlbPOy63/0/0YJ1U2PpsVdctOoInyKftj//cM=";
   };
 

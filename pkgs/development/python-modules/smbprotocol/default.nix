@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jborean93";
     repo = "smbprotocol";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9J6p3rJeD6ZTOiumUQ7XX7nHI4mC3Sf+Gc+Fw2vwVk4=";
   };
 

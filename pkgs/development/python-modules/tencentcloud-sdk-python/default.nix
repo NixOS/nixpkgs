@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "TencentCloud";
     repo = "tencentcloud-sdk-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6Xuih0E+i5dxTlkYzYa0J3T0aNpCoGnnBo1tpfuzWQM=";
   };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "4n4nd";
     repo = "prometheus-api-client-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tUu0+ZUOFxBCj//lHhNm88rhFbS01j1x508+nqIkCfQ=";
   };
 

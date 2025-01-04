@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Electrostatics";
     repo = "mmcif_pdbx";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ymMQ/q4IMoq+B8RvIdL0aqolKxyE/4rnVfd4bUV5OUY=";
   };
 

@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "CycloneDX";
     repo = "cyclonedx-gomod";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-s5kzyQPf29RZPnPtgFf4IVHnOtVZOtGSQqy1BNVVykQ=";
   };
 

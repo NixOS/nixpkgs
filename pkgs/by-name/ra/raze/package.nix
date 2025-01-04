@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "ZDoom";
     repo = "Raze";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-R3Sm/cibg+D2QPS4UisRp91xvz3Ine2BUR8jF5Rbj1g=";
     leaveDotGit = true;
     postFetch = ''

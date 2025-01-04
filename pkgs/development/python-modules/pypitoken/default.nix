@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ewjoachim";
     repo = "pypitoken";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-1SUR6reZywgFpSdD49E5PjEDNrlvsHH4TK6SkXStUws=";
   };
 

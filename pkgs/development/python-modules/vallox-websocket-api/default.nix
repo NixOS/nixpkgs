@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "yozik04";
     repo = "vallox_websocket_api";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jJ+FFDU4w1vdCqErz6ksJDvjFcalSAwaH+G77BNI5/E=";
   };
 

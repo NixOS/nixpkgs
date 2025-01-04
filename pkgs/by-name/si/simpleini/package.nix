@@ -15,7 +15,7 @@ stdenv.mkDerivation (finalAttrs: {
     name = "simpleini-sources-${finalAttrs.version}";
     owner = "brofield";
     repo = "simpleini";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-H4J4+v/3A8ZTOp4iMeiZ0OClu68oP4vUZ8YOFZbllcM=";
   };
 

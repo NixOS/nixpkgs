@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "octodns";
     repo = "octodns";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-L3c4lYt/fgMctJFArc1XlR+hvpz10kcBcYYXajnNQr0=";
   };
 

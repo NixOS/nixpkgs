@@ -37,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Textualize";
     repo = "rich";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Zaop9zR+Sz9lMQjQP1ddJSid5jEmf0tQYuTeLuWNGA8=";
   };
 

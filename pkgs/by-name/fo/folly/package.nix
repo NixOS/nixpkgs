@@ -50,7 +50,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "folly";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-uX63Zg0Dy5kHdDFYAX7kbVTXUyrWNsdz867VJ0191YI=";
   };
 

@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "closeio";
     repo = "ciso8601";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KkMa1Rr3Z+5VnZfj25LDYpTfRyKqWA9u0vq6dZpwEy0=";
   };
 

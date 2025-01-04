@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mathLab";
     repo = "EZyRB";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nu75Geyeu1nTLoGaohXB9pmbUWKgdgch9Z5OJqz9xKQ=";
   };
 

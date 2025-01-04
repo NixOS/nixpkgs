@@ -29,7 +29,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "facebook";
     repo = "fb303";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-XG/qW+XT1BVN8ZLTN2lqNBxi0x8fx3n/779BJN2lE4E=";
   };
 
