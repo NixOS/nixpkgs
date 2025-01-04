@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "rseichter";
     repo = "automx2";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-7SbSKSjDHTppdqfPPKvuWbdoksHa6BMIOXOq0jDggTE=";
   };
 

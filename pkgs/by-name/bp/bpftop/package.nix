@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } {
   src = fetchFromGitHub {
     owner = "Netflix";
     repo = "bpftop";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WH/oCnkBcvoouBbkAcyawfAuNR3VsTl5+ZATLpi9d4w=";
   };
 

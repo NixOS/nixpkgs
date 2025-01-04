@@ -13,7 +13,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "Ravenbrook";
     repo = "mps";
-    rev = "refs/tags/release-${version}";
+    tag = "release-${version}";
     hash = "sha256-3ql3jWLccgnQHKf23B1en+nJ9rxqmHcWd7aBr93YER0=";
   };
 

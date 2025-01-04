@@ -21,7 +21,7 @@ let
     src = fetchFromGitHub {
       owner = "Aider-AI";
       repo = "aider";
-      rev = "refs/tags/v${version}";
+      tag = "v${version}";
       hash = "sha256-wGm6JV9ISRi/p1lA3JyzOdHQKFHFxEhfr+NdShUxm0M=";
     };
 

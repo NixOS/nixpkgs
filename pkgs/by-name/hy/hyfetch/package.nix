@@ -12,7 +12,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "hykilpikonna";
     repo = "hyfetch";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-GL1/V+LgSXJ4b28PfinScDrJhU9VDa4pVi24zWEzbAk=";
   };
 

@@ -20,7 +20,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "d99kris";
     repo = "nchat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NrAU47GA7ZASJ7vCo1S8nyGBpfsZn4EBBqx2c4HKx7k=";
   };
 

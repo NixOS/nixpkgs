@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "miguelgrinberg";
     repo = "simple-websocket";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-dwL6GUyygNGBXqkkTnsHwFFpa1JAaeWc9ycQNRgTN4I=";
   };
 

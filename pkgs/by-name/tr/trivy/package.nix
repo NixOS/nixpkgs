@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = "trivy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-YKeNIi6PBIfzd/Kuv5cgxeAEbqfFXWwmK9JTOBsRLsw=";
   };
 

@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "projectdiscovery";
     repo = "naabu";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ffE/PlLUH2qO4QJpSGHmEh7/ghputTCnTYplzP+Umw0=";
   };
 

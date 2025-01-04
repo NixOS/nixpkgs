@@ -147,6 +147,7 @@ buildPythonPackage rec {
     "tests/cli/"
     "tests/django/test_dataloaders.py"
     "tests/exceptions/"
+    "tests/experimental/pydantic/test_fields.py"
     "tests/http/"
     "tests/schema/extensions/"
     "tests/schema/test_dataloaders.py"

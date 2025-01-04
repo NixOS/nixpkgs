@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "corteva";
     repo = "rioxarray";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-0YsGu8JuYrb6lWuC3RQ4jCkulxxFpnd0eaRajCwtFHo=";
   };
 

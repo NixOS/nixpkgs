@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alexferl";
     repo = "flask-simpleldap";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WcedTtEwaSc3BYFE3L0FZrtKKdbwk7r3qSPP8evtYlc=";
   };
 

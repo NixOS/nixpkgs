@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "thebjorn";
     repo = "pydeps";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZLFcaWzu8iYBnbSh1Ua4fvFyYD5q71R/iIqzRUKRn1E=";
   };
 

@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Lookyloo";
     repo = "PlaywrightCapture";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TnK7CeW4mJGS77tzYkBQJbLn+niZEMWScpLLaWLmQAA=";
   };
 

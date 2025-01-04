@@ -43,7 +43,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jeertmans";
     repo = "manim-slides";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-M500u7x0jQqcqCd3RbS0CpI1nuwNs9URFlHPeGkiT7E=";
   };
 

@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "blackjax-devs";
     repo = "blackjax";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qaQBbRAKExRHr4Uhm5/Q1Ydon6ePsjG2PWbwSdR9QZM=";
   };
 

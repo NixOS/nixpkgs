@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "stegm";
     repo = "pykoplenti";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6edlcjQvV+6q3/ytn9KR/IovduVREEQt8foE2lfsBko=";
   };
 

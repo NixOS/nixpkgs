@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PyAV-Org";
     repo = "PyAV";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-x2a9SC4uRplC6p0cD7fZcepFpRidbr6JJEEOaGSWl60=";
   };
 

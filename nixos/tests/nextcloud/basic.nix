@@ -59,6 +59,7 @@ runTest (
 
           services.nextcloud = {
             enable = true;
+            config.dbtype = "sqlite";
             datadir = "/var/lib/nextcloud-data";
             autoUpdateApps = {
               enable = true;

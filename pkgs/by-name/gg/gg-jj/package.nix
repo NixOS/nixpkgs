@@ -17,7 +17,6 @@
 
   openssl,
   webkitgtk_4_1,
-  apple-sdk_11,
 
   versionCheckHook,
   nix-update-script,
@@ -29,7 +28,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "gulbanana";
     repo = "gg";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-iQxPJgMxBtyindkNdQkehwPf7ZgWCI09PToqs2y1Hfw=";
   };
 
@@ -71,8 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     [ openssl ]
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       webkitgtk_4_1
-    ]
-    ++ lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
+    ];
 
   env.OPENSSL_NO_VENDOR = true;
 

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "Watfaq";
     repo = "clash-rs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SJ3NhLiDA0iRgq9pKB/CeltPE2ewbY+z1NBQriebNi0=";
   };
 

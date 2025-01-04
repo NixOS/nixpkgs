@@ -13,7 +13,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "galister";
     repo = "VrcAdvert";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-noIu5LV0yva94Kmdr39zb0kKXDaIrQ8DIplCj3aTIbQ=";
   };
 

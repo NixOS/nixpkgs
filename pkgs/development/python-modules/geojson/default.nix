@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = "geojson";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-OL+7ntgzpA63ALQ8whhKRePsKxcp81PLuU1bHJvxN9U=";
   };
 

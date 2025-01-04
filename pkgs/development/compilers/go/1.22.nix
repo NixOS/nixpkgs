@@ -5,7 +5,6 @@
   tzdata,
   substituteAll,
   iana-etc,
-  apple-sdk_11,
   xcbuild,
   mailcap,
   buildPackages,
@@ -64,7 +63,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals (stdenv.hostPlatform.libc == "glibc") [ stdenv.cc.libc.static ];
 
   depsTargetTargetPropagated = lib.optionals stdenv.targetPlatform.isDarwin [
-    apple-sdk_11
     xcbuild
   ];
 

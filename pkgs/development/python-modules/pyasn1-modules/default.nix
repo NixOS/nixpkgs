@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pyasn1";
     repo = "pyasn1-modules";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7tCmhADC8LuswonL4QQ01/DD0RzeRLFJrsU49On4fqY=";
   };
 

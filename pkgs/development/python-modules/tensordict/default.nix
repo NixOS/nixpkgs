@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pytorch";
     repo = "tensordict";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-jnRlN9gefR77pioIXf0qM1CP6EtpeQkBvVIecGkb/pw=";
   };
 

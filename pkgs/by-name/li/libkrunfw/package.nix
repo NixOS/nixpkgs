@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "containers";
     repo = "libkrunfw";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-GFfBiGMOyBwMKjpD1kj3vRpvjR0ydji3QNDyoOQoQsw=";
   };
 

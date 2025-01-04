@@ -94,14 +94,14 @@ in
           Restart = "always";
           ExecStart =
             with cfg;
-            concatStringsSep " " (
+            lib.concatStringsSep " " (
               [
                 (lib.getExe cfg.package)
                 "-logtostderr"
                 "-host=${listenAddress}"
                 "-port=${toString port}"
               ]
-              ++ optionals prometheus.enable [
+              ++ lib.optionals prometheus.enable [
                 "-enable_prometheus"
                 "-prometheus_host=${prometheus.listenAddress}"
                 "-prometheus_port=${toString prometheus.port}"
@@ -149,7 +149,7 @@ in
         };
     };
 
-    networking.firewall.allowedTCPPorts = with cfg; optionals openFirewall [ port ];
+    networking.firewall.allowedTCPPorts = with cfg; lib.optionals openFirewall [ port ];
   };
 
   meta.maintainers = with lib.maintainers; [ azahi ];

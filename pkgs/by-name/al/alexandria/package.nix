@@ -22,7 +22,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "btpf";
     repo = "Alexandria";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-18i3/HLTfhBSa9/c55dCOfFal+V40wcHcLoYt1dU+d0=";
     fetchSubmodules = true;
   };

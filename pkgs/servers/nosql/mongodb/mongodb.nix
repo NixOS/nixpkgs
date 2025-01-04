@@ -16,8 +16,6 @@
   openssl,
   libpcap,
   curl,
-  Security,
-  CoreFoundation,
   cctools,
   xz,
 }:
@@ -102,8 +100,6 @@ stdenv.mkDerivation rec {
       zlib
     ]
     ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      Security
-      CoreFoundation
       cctools
     ]
     ++ lib.optional stdenv.hostPlatform.isLinux net-snmp

@@ -1,11 +1,12 @@
 {
-  callPackage,
-  vips,
-  pkg-config,
-  lib,
   buildNpmPackage,
+  callPackage,
   fetchFromGitHub,
+  lib,
   nix-update-script,
+  nodejs,
+  pkg-config,
+  vips,
 }:
 
 buildNpmPackage rec {
@@ -15,11 +16,13 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "netlify";
     repo = "cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1UaIPCzyHMKNJfDFILPYIrjHwzHAmlYNk+aHZM1Bp6Q=";
   };
 
   npmDepsHash = "sha256-pJaNdR9jyFSdfE+yLnQn9/Gbq2CbH6y3aEVbpg3Ft/o=";
+
+  inherit nodejs;
 
   buildInputs = [ vips ];
   nativeBuildInputs = [ pkg-config ];

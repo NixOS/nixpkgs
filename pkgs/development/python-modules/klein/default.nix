@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "twisted";
     repo = "klein";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2/zl4fS9ZP73quPmGnz2+brEt84ODgVS89Om/cUsj0M=";
   };
 

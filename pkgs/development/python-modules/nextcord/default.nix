@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nextcord";
     repo = "nextcord";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bv4I+Ol/N4kbp/Ch7utaUpo0GmF+Mpx4zWmHL7uIveM=";
   };
 

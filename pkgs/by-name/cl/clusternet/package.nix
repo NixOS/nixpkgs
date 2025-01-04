@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "clusternet";
     repo = "clusternet";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uhRnJyUR7lbJvVxd3YNVxmTSTDksQsVcM5G8ZKO7Xbk=";
   };
 

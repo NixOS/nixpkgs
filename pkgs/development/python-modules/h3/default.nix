@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "uber";
     repo = "h3-py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wXQaSMXQI0f7zfyj37mubxdqGFv7vhHQd6rH08H57d4=";
   };
 

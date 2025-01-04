@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Blosc";
     repo = "python-blosc2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2aLfyd+/I8cy9OqdU4yNXY/bkf0AdXu+hZPLDdM3g5g=";
   };
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "xolox";
     repo = "python-naturalsort";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-MBb8yCIs9DW77TKiV3qOHidt8/zi9m2dgyfB3xrdg3A=";
   };
 

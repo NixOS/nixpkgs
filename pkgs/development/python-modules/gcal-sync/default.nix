@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "allenporter";
     repo = "gcal_sync";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-424PRKjQnpb6fH+iSAqkoOhlvugW7W3wjUxCHTc/A20=";
   };
 

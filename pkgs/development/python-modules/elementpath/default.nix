@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "sissaschool";
     repo = "elementpath";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-zyJ+UtPTGEziIlucIXN1dIzfN5sfLkeOia7tiqOGFjk=";
   };
 

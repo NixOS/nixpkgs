@@ -30,7 +30,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "otfried";
     repo = "ipe";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-bvwEgEP/cinigixJr8e964sm6secSK+7Ul7WFfwM0gE=";
   };
 

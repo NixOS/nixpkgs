@@ -8,7 +8,6 @@
   bison,
   flex,
   zlib,
-  apple-sdk_11,
 }:
 
 stdenv.mkDerivation rec {
@@ -33,14 +32,10 @@ stdenv.mkDerivation rec {
     python3
   ];
 
-  buildInputs =
-    [
-      flex
-      zlib
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  buildInputs = [
+    flex
+    zlib
+  ];
 
   postPatch = ''
     patchShebangs scripts tests/scripts

@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Nasdaq";
     repo = "data-link-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Q3Ay9FpJsvSVu0WU2bxFyo3ODKP/ZUo3SqsBtOGrIIE=";
   };
 

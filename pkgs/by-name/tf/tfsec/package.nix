@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = "tfsec";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-7e75VdqwjzP+GyTtXqOf1pN+5wEbxNYoUcpsTjwB+0Y=";
   };
 

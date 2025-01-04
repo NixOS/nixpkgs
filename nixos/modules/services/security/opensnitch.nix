@@ -150,7 +150,7 @@ in
             };
 
             Ebpf.ModulesPath = lib.mkOption {
-              type = lib.types.path;
+              type = lib.types.nullOr lib.types.path;
               default =
                 if cfg.settings.ProcMonitorMethod == "ebpf" then
                   "${config.boot.kernelPackages.opensnitch-ebpf}/etc/opensnitchd"
@@ -202,10 +202,16 @@ in
       services.opensnitchd = {
         wantedBy = [ "multi-user.target" ];
         serviceConfig = {
-          ExecStart = [
-            ""
-            "${pkgs.opensnitch}/bin/opensnitchd --config-file ${format.generate "default-config.json" cfg.settings}"
-          ];
+          ExecStart =
+            let
+              preparedSettings = removeAttrs cfg.settings (
+                lib.optional (cfg.settings.ProcMonitorMethod != "ebpf") "Ebpf"
+              );
+            in
+            [
+              ""
+              "${pkgs.opensnitch}/bin/opensnitchd --config-file ${format.generate "default-config.json" preparedSettings}"
+            ];
         };
         preStart = lib.mkIf (cfg.rules != { }) (
           let

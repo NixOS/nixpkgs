@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "zabuldon";
     repo = "teslajsonpy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LvkStE5iIDfJ6U939JkVWqNsPLojGBXM/TFiJZpZ8tA=";
   };
 

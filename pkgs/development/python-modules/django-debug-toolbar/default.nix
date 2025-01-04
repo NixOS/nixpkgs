@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jazzband";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-eLC3GnhYuEunKkKXNMtaFCqjyf8rn5cTkjL7Ep4Qp3c=";
   };
 
