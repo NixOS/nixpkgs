@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pgjones";
     repo = "quart-cors";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qUzs0CTZHf3fGADBXPkd3CjZ6dnz1t3cTxflMErvz/k=";
   };
 

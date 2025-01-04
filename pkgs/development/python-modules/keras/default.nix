@@ -92,6 +92,8 @@ buildPythonPackage rec {
       "test_min_max_norm"
     ]
     ++ lib.optionals stdenv.isDarwin [
+      # TypeError: Cannot convert a MPS Tensor to float64 dtype as the MPS framework doesn't support float64. Please use float32 instead.
+      "test_dynamic_backend_torch"
       # AttributeError: module 'numpy' has no attribute 'float128'. Did you mean: 'float16'?
       "test_spectrogram_error"
     ];

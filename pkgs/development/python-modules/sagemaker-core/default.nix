@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-core";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6r8roHMJ4s/+mGiPeMVZ9wagdXNJQ3+tUFZ/7T+NQBc=";
   };
 

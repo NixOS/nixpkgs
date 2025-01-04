@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "LouisChrist";
     repo = "pyblu";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BDuptBC72XG+q/5MlbPMjYDIhWKg4gfEo2pLOflwQaM=";
   };
 

@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "textual-textarea";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tmbSCU1VgxR9aXG22UVpweD71dVmhKSRBTDm1Gf33jM=";
   };
 

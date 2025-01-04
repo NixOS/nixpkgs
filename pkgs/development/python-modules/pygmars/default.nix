@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nexB";
     repo = "pygmars";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OhmTD83p/4tCMoCXy35/0fy8Tw1usn27dJyzpOeGlkU=";
   };
 

@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "darkhz";
     repo = "invidtui";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-C465lzbZIh8LYDUHNa5u66nFteFsKAffilvy1Danfpg=";
   };
 

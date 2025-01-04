@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "alanjds";
     repo = "drf-nested-routers";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qlXNDydoQJ9FZB6G7yV/pNmx3BEo+lvRqsfjrvlbdNY=";
   };
 

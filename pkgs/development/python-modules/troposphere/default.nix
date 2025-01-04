@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cloudtools";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Mz6n7QjNvK2HEQeWCySdxioA1dD5CLUh7jCQb1Q6mdc=";
   };
 

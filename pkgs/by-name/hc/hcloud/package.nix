@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hetznercloud";
     repo = "cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Va6OWoBSEO+u1J1jYG6O0u7urnNkAPqXPBCFCHYO7VU=";
   };
 

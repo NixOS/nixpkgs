@@ -16,7 +16,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "bloomberg";
     repo = "memray";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-U9JR60rSxPYXbZaKR7vVNhGT78AXnqcoqvVC6/1OW/E=";
   };
 

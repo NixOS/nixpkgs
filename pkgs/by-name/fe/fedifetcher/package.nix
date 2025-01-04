@@ -13,7 +13,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "nanos";
     repo = "FediFetcher";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SfR4CYVs2kLLguKCau+x5vy6ha48Zd43OJ+tsA6M9yg=";
   };
 

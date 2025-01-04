@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "molobrakos";
     repo = "volvooncall";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xr3g93rt3jvxVZrZY7cFh5eBP3k0arsejsgvx8p5EV4=";
   };
 

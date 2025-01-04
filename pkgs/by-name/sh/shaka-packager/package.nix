@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "shaka-project";
     repo = "shaka-packager";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-xXKgL8sUP+meFXV9S/i7dao7BIkIx+e/ujjpew7xGL0=";
   };
 

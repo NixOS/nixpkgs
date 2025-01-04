@@ -11,7 +11,7 @@ gcc10Stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "KhronosGroup";
     repo = "COLLADA2GLTF";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3Eo1qS6S5vlc/d2WB4iDJTjUnwMUrx9+Ln6n8PYU5qA=";
     fetchSubmodules = true;
   };

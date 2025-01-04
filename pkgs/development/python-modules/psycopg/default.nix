@@ -39,7 +39,7 @@ let
   src = fetchFromGitHub {
     owner = "psycopg";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-vcUZvQeD5MnEM02phk73I9dpf0Eug95V7Rspi0s6S2M=";
   };
 

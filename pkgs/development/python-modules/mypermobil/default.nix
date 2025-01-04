@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Permobil-Software";
     repo = "mypermobil";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-linnaRyA45EzqeSeNmvIE5gXkHA2F504U1++QBeRa90=";
   };
 

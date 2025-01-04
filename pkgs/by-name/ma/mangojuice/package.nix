@@ -27,7 +27,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "radiolamp";
     repo = "mangojuice";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-L+wxRmpCAfrvLE9IHAT9g+F/clXlQAkLpbnMJwC8RxY=";
   };
 

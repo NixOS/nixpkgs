@@ -38,7 +38,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cleanlab";
     repo = "cleanlab";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-0kCEIHNOXIkdwDH5zCVWnR/W79ppc/1PFsJ/a4goGzk=";
   };
 

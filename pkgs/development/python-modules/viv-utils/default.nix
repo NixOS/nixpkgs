@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "williballenthin";
     repo = "viv-utils";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-NiXLNsRQ/ah+fB2r91A1oqf/8Yt95Vdt2JQFJE73HXo=";
   };
 

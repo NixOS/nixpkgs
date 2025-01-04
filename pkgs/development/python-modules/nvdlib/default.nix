@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Vehemont";
     repo = "nvdlib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-/UmBNdch9yM6yCVcJbzsCx6om4XlqQa40X/fgEYgRuI=";
   };
 

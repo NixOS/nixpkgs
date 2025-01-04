@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "netinvent";
     repo = "command_runner";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-rdbZtqNndtIxrLA90eWzR6dB8EyFrBALduBUkOVq4oE=";
   };
 

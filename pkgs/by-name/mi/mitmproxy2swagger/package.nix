@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "alufers";
     repo = "mitmproxy2swagger";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-VHxqxee5sQWRS13V4SfY4LWaN0oxxWsNVDOEqUyKHfg=";
   };
 

@@ -17,7 +17,7 @@ buildPythonPackage rec {
     owner = "zachhannum";
     repo = "mkdocs-autolinks-plugin";
     # The commit messages mention version 0.7.1, but the tag is v_071.
-    rev = "refs/tags/v_${version}";
+    tag = "v_${version}";
     hash = "sha256-mEbuB9VwK7po1TqtJfBSkItOVlI3/W3nD2LYRHgPpTA=";
   };
 

@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "anthropics";
     repo = "anthropic-sdk-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lpW+waHvwgbhK7EnPZy/XI8gK3a8JjFflPqUFbDN1z8=";
   };
 
