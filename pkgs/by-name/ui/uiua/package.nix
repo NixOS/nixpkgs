@@ -6,6 +6,7 @@
   rustPlatform,
   fetchFromGitHub,
   pkg-config,
+  versionCheckHook,
 
   libffi,
   audioSupport ? true,
@@ -34,7 +35,7 @@ lib.fix (
     src = fetchFromGitHub {
       owner = "uiua-lang";
       repo = "uiua";
-      inherit (versionInfo) rev hash;
+      inherit (versionInfo) tag hash;
     };
 
     nativeBuildInputs =
@@ -49,6 +50,10 @@ lib.fix (
       [ "libffi/system" ] # force libffi to be linked dynamically instead of rebuilding it
       ++ lib.optional audioSupport "audio"
       ++ lib.optional webcamSupport "webcam";
+
+    nativeInstallCheckInputs = [ versionCheckHook ];
+    versionCheckProgramArg = "--version";
+    doInstallCheck = true;
 
     passthru.updateScript = versionInfo.updateScript;
     passthru.tests.run = runCommand "uiua-test-run" { nativeBuildInputs = [ uiua ]; } ''
