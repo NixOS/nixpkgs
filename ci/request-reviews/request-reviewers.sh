@@ -68,23 +68,16 @@ for user in "${!users[@]}"; do
     fi
 done
 
-# Turn it into a JSON for the GitHub API call to request PR reviewers
-jq -n \
-    --arg users "${!users[*]}" \
-    '{
-      reviewers: $users | split(" "),
-    }' > "$tmp/reviewers.json"
+for user in "${!users[@]}"; do
+    log "Requesting review from: $user"
 
-log "Requesting reviews from: $(<"$reviewersFile")"
-
-if ! response=$(effect gh api \
-    --method POST \
-    -H "Accept: application/vnd.github+json" \
-    -H "X-GitHub-Api-Version: 2022-11-28" \
-    "/repos/$baseRepo/pulls/$prNumber/requested_reviewers" \
-    --input "$tmp/reviewers.json"); then
-    log "Failed to request reviews: $response"
-    exit 1
-fi
-
-log "Successfully requested reviews"
+    if ! response=$(jq -n --arg user "$user" '{ reviewers: [ $user ] }' | \
+        effect gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/repos/$baseRepo/pulls/$prNumber/requested_reviewers" \
+            --input -); then
+        log "Failed to request review from $user: $response"
+    fi
+done
