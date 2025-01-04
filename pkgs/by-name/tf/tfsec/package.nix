@@ -6,13 +6,13 @@
 
 buildGoModule rec {
   pname = "tfsec";
-  version = "1.28.11";
+  version = "1.28.12";
 
   src = fetchFromGitHub {
     owner = "aquasecurity";
     repo = "tfsec";
     tag = "v${version}";
-    hash = "sha256-7e75VdqwjzP+GyTtXqOf1pN+5wEbxNYoUcpsTjwB+0Y=";
+    hash = "sha256-ul4KKwTWFg5FxmLhyrQAQWfuCoSVDc6eIchbLwpG/xI=";
   };
 
   ldflags = [
@@ -23,7 +23,7 @@ buildGoModule rec {
     # "-extldflags '-fno-PIC -static'"
   ];
 
-  vendorHash = "sha256-Zr6Z9Px1nxkr6fKWINMbp6cESZeZkxnuDPwbV+WX2Oo=";
+  vendorHash = "sha256-yi124OllfSchKSaj+OlxG/7UQcBLdx8JUlnu/a8MSOU=";
 
   subPackages = [
     "cmd/tfsec"
