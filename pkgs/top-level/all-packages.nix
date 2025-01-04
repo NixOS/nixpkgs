@@ -1645,9 +1645,6 @@ with pkgs;
 
   arpack-mpi = arpack.override { useMpi = true; };
 
-  inherit (callPackages ../data/fonts/arphic {})
-    arphic-ukai arphic-uming;
-
   asymptote = libsForQt5.callPackage ../tools/graphics/asymptote { };
 
   atomicparsley = callPackage ../tools/video/atomicparsley {
@@ -2403,8 +2400,6 @@ with pkgs;
   };
 
   jellyfin-mpv-shim = python3Packages.callPackage ../applications/video/jellyfin-mpv-shim { };
-
-  jellyseerr = callPackage ../servers/jellyseerr { };
 
   juce = callPackage ../development/misc/juce {
     stdenv = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
@@ -4377,8 +4372,6 @@ with pkgs;
   });
 
   mytetra = libsForQt5.callPackage ../applications/office/mytetra { };
-
-  navilu-font = callPackage ../data/fonts/navilu { stdenv = stdenvNoCC; };
 
   nerd-fonts = recurseIntoAttrs (callPackage ../data/fonts/nerd-fonts { });
 
@@ -10489,7 +10482,7 @@ with pkgs;
   qt6 = recurseIntoAttrs (callPackage ../development/libraries/qt-6 { });
 
   qt6Packages = recurseIntoAttrs (import ./qt6-packages.nix {
-    inherit lib __splicedPackages makeScopeWithSplicing' generateSplicesForMkScope pkgsHostTarget kdePackages;
+    inherit lib config __splicedPackages makeScopeWithSplicing' generateSplicesForMkScope pkgsHostTarget kdePackages;
     inherit stdenv;
   });
 
@@ -12674,9 +12667,6 @@ with pkgs;
 
   andromeda-gtk-theme = libsForQt5.callPackage ../data/themes/andromeda-gtk-theme { };
 
-  ankacoder = callPackage ../data/fonts/ankacoder { };
-  ankacoder-condensed = callPackage ../data/fonts/ankacoder/condensed.nix { };
-
   ant-theme = callPackage ../data/themes/ant-theme/ant.nix { };
 
   ant-bloody-theme = callPackage ../data/themes/ant-theme/ant-bloody.nix { };
@@ -12735,9 +12725,6 @@ with pkgs;
     inherit (nodePackages) svgo;
   };
 
-  fira-code = callPackage ../data/fonts/fira-code { };
-  fira-code-symbols = callPackage ../data/fonts/fira-code/symbols.nix { };
-
   flat-remix-icon-theme = callPackage ../data/icons/flat-remix-icon-theme {
     inherit (plasma5Packages) breeze-icons;
   };
@@ -12779,21 +12766,9 @@ with pkgs;
     inherit (plasma5Packages) breeze-icons;
   };
 
-  hackgen-font = callPackage ../data/fonts/hackgen { };
-
-  hackgen-nf-font = callPackage ../data/fonts/hackgen/nerdfont.nix { };
-
-  inconsolata = callPackage ../data/fonts/inconsolata { };
-
-  inconsolata-lgc = callPackage ../data/fonts/inconsolata/lgc.nix { };
-
-  input-fonts = callPackage ../data/fonts/input-fonts { };
-
   iosevka = callPackage ../data/fonts/iosevka { };
   iosevka-bin = callPackage ../data/fonts/iosevka/bin.nix { };
   iosevka-comfy = recurseIntoAttrs (callPackages ../data/fonts/iosevka/comfy.nix {});
-
-  joypixels = callPackage ../data/fonts/joypixels { };
 
   kde-rounded-corners = kdePackages.callPackage ../data/themes/kwin-decorations/kde-rounded-corners { };
 
@@ -12880,10 +12855,6 @@ with pkgs;
 
   papis = with python3Packages; toPythonApplication papis;
 
-  paratype-pt-mono = callPackage ../data/fonts/paratype-pt/mono.nix { };
-  paratype-pt-sans = callPackage ../data/fonts/paratype-pt/sans.nix { };
-  paratype-pt-serif = callPackage ../data/fonts/paratype-pt/serif.nix { };
-
   plata-theme = callPackage ../data/themes/plata {
     inherit (mate) marco;
   };
@@ -12893,8 +12864,6 @@ with pkgs;
   powerline-rs = callPackage ../tools/misc/powerline-rs {
     inherit (darwin.apple_sdk.frameworks) Security;
   };
-
-  profont = callPackage ../data/fonts/profont { };
 
   qogir-kde = libsForQt5.callPackage ../data/themes/qogir-kde { };
 
@@ -12935,8 +12904,6 @@ with pkgs;
   source-han-sans-vf-ttf = sourceHanPackages.sans-vf-ttf;
   source-han-serif-vf-otf = sourceHanPackages.serif-vf-otf;
   source-han-serif-vf-ttf = sourceHanPackages.serif-vf-ttf;
-
-  inherit (callPackages ../data/fonts/tai-languages { }) tai-ahom;
 
   tango-icon-theme = callPackage ../data/icons/tango-icon-theme {
     gtk = res.gtk2;
