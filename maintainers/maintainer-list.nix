@@ -16554,6 +16554,18 @@
     githubId = 3521180;
     name = "Tom Sydney Kerckhove";
   };
+  normalcea = {
+    name = "normalcea";
+    email = "normalc@posteo.net";
+    github = "normalcea";
+    githubId = 190049873;
+    keys = [
+      {
+        fingerprint = "6057 1155 7BA4 B922 66D6 2064 3DE3 BCB2 142A 8C71";
+      }
+    ];
+    matrix = "@normalcea:matrix.org";
+  };
   nosewings = {
     name = "Nicholas Coltharp";
     email = "coltharpnicholas@gmail.com";
