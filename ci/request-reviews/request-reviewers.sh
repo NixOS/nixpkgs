@@ -1,13 +1,24 @@
 #!/usr/bin/env bash
 
-# Process reviewers for a PR, reading line-separated usernames on stdin,
-# returning a JSON suitable to be consumed by the API endpoint to request reviews:
+# Request reviewers for a PR, reading line-separated usernames on stdin,
+# filtering for valid reviewers before using the API endpoint to request reviews:
 # https://docs.github.com/en/rest/pulls/review-requests?apiVersion=2022-11-28#request-reviewers-for-a-pull-request
 
 set -euo pipefail
 
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' exit
+
 log() {
     echo "$@" >&2
+}
+
+effect() {
+    if [[ -n "${DRY_MODE:-}" ]]; then
+        log "Skipping in dry mode:" "${@@Q}"
+    else
+        "$@"
+    fi
 }
 
 if (( "$#" < 3 )); then
@@ -62,4 +73,18 @@ jq -n \
     --arg users "${!users[*]}" \
     '{
       reviewers: $users | split(" "),
-    }'
+    }' > "$tmp/reviewers.json"
+
+log "Requesting reviews from: $(<"$reviewersFile")"
+
+if ! response=$(effect gh api \
+    --method POST \
+    -H "Accept: application/vnd.github+json" \
+    -H "X-GitHub-Api-Version: 2022-11-28" \
+    "/repos/$baseRepo/pulls/$prNumber/requested_reviewers" \
+    --input "$tmp/reviewers.json"); then
+    log "Failed to request reviews: $response"
+    exit 1
+fi
+
+log "Successfully requested reviews"
