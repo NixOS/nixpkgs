@@ -123,7 +123,7 @@ in
         shellAliases = builtins.mapAttrs (name: lib.mkDefault) cfge.shellAliases;
 
         shellInit = ''
-          if [ -z "$__NIXOS_SET_ENVIRONMENT_DONE" ]; then
+          if [ -z "''${__NIXOS_SET_ENVIRONMENT_DONE+x}" ]; then
               . ${config.system.build.setEnvironment}
           fi
 
@@ -153,7 +153,7 @@ in
         # This file is read for login shells.
 
         # Only execute this file once per shell.
-        if [ -n "$__ETC_PROFILE_SOURCED" ]; then return; fi
+        if [ -n "''${__ETC_PROFILE_SOURCED+x}" ]; then return; fi
         __ETC_PROFILE_SOURCED=1
 
         # Prevent this file from being sourced by interactive non-login child shells.
@@ -176,18 +176,18 @@ in
         # /etc/bashrc: DO NOT EDIT -- this file has been generated automatically.
 
         # Only execute this file once per shell.
-        if [ -n "$__ETC_BASHRC_SOURCED" ] || [ -n "$NOSYSBASHRC" ]; then return; fi
+        if [ -n "''${__ETC_BASHRC_SOURCED+x}" ] || [ -n "''${NOSYSBASHRC+x}" ]; then return; fi
         __ETC_BASHRC_SOURCED=1
 
         # If the profile was not loaded in a parent process, source
         # it.  But otherwise don't do it because we don't want to
         # clobber overridden values of $PATH, etc.
-        if [ -z "$__ETC_PROFILE_DONE" ]; then
+        if [ -z "''${__ETC_PROFILE_DONE+x}" ]; then
             . /etc/profile
         fi
 
         # We are not always an interactive shell.
-        if [ -n "$PS1" ]; then
+        if [ -n "''${PS1+x}" ]; then
             ${cfg.interactiveShellInit}
         fi
 

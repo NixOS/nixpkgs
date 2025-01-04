@@ -1,6 +1,10 @@
 {
   name = "adguardhome";
 
+  defaults = {
+    systemd.enableStrictShellChecks = true;
+  };
+
   nodes = {
     nullConf = {
       services.adguardhome.enable = true;

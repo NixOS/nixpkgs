@@ -177,8 +177,9 @@ in
       };
 
       preStart = lib.optionalString (settings != null) ''
+        MUTABLE_SETTINGS=${toString cfg.mutableSettings}
         if    [ -e "$STATE_DIRECTORY/AdGuardHome.yaml" ] \
-           && [ "${toString cfg.mutableSettings}" = "1" ]; then
+           && [ "$MUTABLE_SETTINGS" = "1" ]; then
           # First run a schema_version update on the existing configuration
           # This ensures that both the new config and the existing one have the same schema_version
           # Note: --check-config has the side effect of modifying the file at rest!
