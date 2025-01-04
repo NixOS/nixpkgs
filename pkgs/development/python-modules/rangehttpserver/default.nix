@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "danvk";
     repo = "RangeHTTPServer";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-wvGJ5wHYLb7wJUGgurkdRTABV6kTH7/GXzXgpd0Ypbc=";
   };
 

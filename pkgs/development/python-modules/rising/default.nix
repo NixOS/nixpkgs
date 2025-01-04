@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "PhoenixDL";
     repo = "rising";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-sBzVTst5Tp2oZZ+Xsg3M7uAMbucL6idlpYwHvib3EaY=";
   };
 

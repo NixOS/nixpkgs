@@ -14,7 +14,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "jorisroovers";
     repo = "gitlint";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4SGkkC4LjZXTDXwK6jMOIKXR1qX76CasOwSqv8XUrjs=";
   };
 
@@ -50,6 +50,7 @@ python3.pkgs.buildPythonApplication rec {
     maintainers = with maintainers; [
       ethancedwards8
       fab
+      matthiasbeyer
     ];
     mainProgram = "gitlint";
   };

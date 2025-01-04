@@ -20,7 +20,7 @@ let
   src = fetchFromGitHub {
     owner = "russellbanks";
     repo = "Komac";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yAf89GtKu500VPn+CKF6sGC+TPhJcGz2lR7C30/YBRI=";
   };
 in

@@ -46,7 +46,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "garywill";
     repo = "linux-router";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-iiIDWDPz8MBwsBcJAWVNeuGwaNJ7xh7gFfRqXTG4oGQ=";
   };
 

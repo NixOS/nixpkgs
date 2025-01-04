@@ -11,10 +11,12 @@
   boto3,
   cloudpickle,
   docker,
+  fastapi,
   google-pasta,
   importlib-metadata,
   jsonschema,
   numpy,
+  omegaconf,
   packaging,
   pandas,
   pathos,
@@ -24,12 +26,12 @@
   pyyaml,
   requests,
   sagemaker-core,
-  sagemaker-mlflow,
   schema,
   smdebug-rulesconfig,
   tblib,
   tqdm,
   urllib3,
+  uvicorn,
 
   # optional-dependencies
   scipy,
@@ -38,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "sagemaker";
-  version = "2.232.3";
+  version = "2.237.2";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "aws";
     repo = "sagemaker-python-sdk";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-6kGxmgkR/1ih2V49C9aEUBBCJS6s1Jbev80FDnJtHFg=";
+    tag = "v${version}";
+    hash = "sha256-cNBPuXoViHy03ZMBrF3+xeMSUpovi1lloXizBvgNJmw=";
   };
 
   build-system = [
@@ -57,6 +59,8 @@ buildPythonPackage rec {
     "boto3"
     "cloudpickle"
     "importlib-metadata"
+    "numpy"
+    "omegaconf"
     "protobuf"
   ];
 
@@ -65,10 +69,12 @@ buildPythonPackage rec {
     boto3
     cloudpickle
     docker
+    fastapi
     google-pasta
     importlib-metadata
     jsonschema
     numpy
+    omegaconf
     packaging
     pandas
     pathos
@@ -78,12 +84,12 @@ buildPythonPackage rec {
     pyyaml
     requests
     sagemaker-core
-    sagemaker-mlflow
     schema
     smdebug-rulesconfig
     tblib
     tqdm
     urllib3
+    uvicorn
   ];
 
   doCheck = false; # many test dependencies are not available in nixpkgs

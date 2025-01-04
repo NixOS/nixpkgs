@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "arvkevi";
     repo = "kneed";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-oakP6NkdvTzMZcoXS6cKNsRo//K+CoPLlhvbQLGij00=";
   };
 

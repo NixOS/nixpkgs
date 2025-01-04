@@ -17,7 +17,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "galister";
     repo = "oscavmgr";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-05dNBzf1f92bVNLbRaUB6KUae+wY3V8mUxDgAb+g1T4=";
   };
 

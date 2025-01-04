@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "thebeanogamer";
     repo = "hstsparser";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-9ZNBzPa4mFXbao73QukEL56sM/3dg4ElOMXgNGTVh1g=";
   };
 

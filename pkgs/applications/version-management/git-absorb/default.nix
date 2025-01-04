@@ -8,18 +8,18 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "git-absorb";
-  version = "0.6.15";
+  version = "0.6.16";
 
   src = fetchFromGitHub {
     owner = "tummychow";
     repo = "git-absorb";
-    rev = "refs/tags/${version}";
-    hash = "sha256-7Y/gEym+29lTwJ7FbuvOqzbiMSzrY9f5IPhtvIJUKbU=";
+    tag = version;
+    hash = "sha256-5ZCCrq/mc9FAjl7AMbuQyRak5sL1dG3qWnrdNzUu4Ss=";
   };
 
   nativeBuildInputs = [ installShellFiles ];
 
-  cargoHash = "sha256-Y/0In33y4mVTaE9yoBZ/3tRWcsSKgGjTCSHdjScNEj0=";
+  cargoHash = "sha256-CzZgAjAIJryhFEJve3E62rg4QGRPSvBMuFZJzHGf09w=";
 
   postInstall =
     ''
@@ -36,7 +36,10 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/tummychow/git-absorb";
     description = "git commit --fixup, but automatic";
     license = [ licenses.bsd3 ];
-    maintainers = with maintainers; [ tomfitzhenry ];
+    maintainers = with maintainers; [
+      tomfitzhenry
+      matthiasbeyer
+    ];
     mainProgram = "git-absorb";
   };
 }

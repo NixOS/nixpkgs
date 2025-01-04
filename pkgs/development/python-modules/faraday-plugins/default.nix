@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "infobyte";
     repo = "faraday_plugins";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-e1VrZf0WNUZ5gU5e4uBkW8PgfQrqGgqqDb0n56nm1Xg=";
   };
 

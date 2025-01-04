@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "FlorianRhiem";
     repo = "pyGLFW";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-3jcj4YExEtK1ANKDQsq94/NKF6GXXTFTEsXO3Jpf1uQ=";
   };
 

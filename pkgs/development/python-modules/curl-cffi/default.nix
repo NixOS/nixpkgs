@@ -12,14 +12,14 @@
 
 buildPythonPackage rec {
   pname = "curl-cffi";
-  version = "0.7.2";
+  version = "0.7.4";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "lexiforest";
     repo = "curl_cffi";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-s8P/7erdAeGZuykUrgpCcm0a4ym3Y8F6kKFXoDXsOdQ=";
+    tag = "v${version}";
+    hash = "sha256-Q1VppzQ1Go+ia1D1BemTf40o9wV0miWyoGy/tY+95qE==";
   };
 
   patches = [ ./use-system-libs.patch ];

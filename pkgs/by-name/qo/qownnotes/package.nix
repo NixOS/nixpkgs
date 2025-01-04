@@ -17,7 +17,7 @@ let
   appname = "QOwnNotes";
   version = "24.12.7";
 in
-qt6Packages.stdenv.mkDerivation {
+stdenv.mkDerivation {
   inherit pname version;
 
   src = fetchurl {
@@ -88,6 +88,7 @@ qt6Packages.stdenv.mkDerivation {
     maintainers = with maintainers; [
       pbek
       totoroot
+      matthiasbeyer
     ];
     platforms = platforms.unix;
   };

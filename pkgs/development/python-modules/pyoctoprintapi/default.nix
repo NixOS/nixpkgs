@@ -26,7 +26,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "rfleming71";
     repo = "pyoctoprintapi";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-DKqkT0Wyxf4grXBqei9IYBGMOgPxjzuo955M/nHDLo8=";
   };
 

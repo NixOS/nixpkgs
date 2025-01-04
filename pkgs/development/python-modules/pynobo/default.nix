@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "echoromeo";
     repo = "pynobo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-OSgpT9CLkfnv1BLAJApZUs3vMc1WE2eG7ZrinCLy/0U=";
   };
 

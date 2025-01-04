@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "music-assistant";
     repo = "python-hass-client";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-FA3acaXLWcBMDsabLPxVk6EArSxcTAnmFeO1ixTXB1Q=";
   };
 

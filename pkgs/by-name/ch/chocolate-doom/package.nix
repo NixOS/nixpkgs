@@ -19,7 +19,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "chocolate-doom";
     repo = "chocolate-doom";
-    rev = "refs/tags/chocolate-doom-${finalAttrs.version}";
+    tag = "chocolate-doom-${finalAttrs.version}";
     hash = "sha256-yDPfqCuzRbDhOQisIDAGo2bmmMjT+0lds5xc9C2pqoU=";
   };
 

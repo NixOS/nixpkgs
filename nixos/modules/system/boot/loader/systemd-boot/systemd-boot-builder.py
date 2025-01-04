@@ -159,7 +159,7 @@ def copy_from_file(file: str, dry_run: bool = False) -> str:
 
 
 def write_entry(profile: str | None, generation: int, specialisation: str | None,
-                machine_id: str, bootspec: BootSpec, current: bool) -> None:
+                machine_id: str | None, bootspec: BootSpec, current: bool) -> None:
     if specialisation:
         bootspec = bootspec.specialisations[specialisation]
     kernel = copy_from_file(bootspec.kernel)
@@ -281,11 +281,7 @@ def install_bootloader(args: argparse.Namespace) -> None:
     except IOError as e:
         if e.errno != errno.ENOENT:
             raise
-        # Since systemd version 232 a machine ID is required and it might not
-        # be there on newly installed systems, so let's generate one so that
-        # bootctl can find it and we can also pass it to write_entry() later.
-        cmd = [f"{SYSTEMD}/bin/systemd-machine-id-setup", "--print"]
-        machine_id = run(cmd, stdout=subprocess.PIPE).stdout.rstrip()
+        machine_id = None
 
     if os.getenv("NIXOS_INSTALL_GRUB") == "1":
         warnings.warn("NIXOS_INSTALL_GRUB env var deprecated, use NIXOS_INSTALL_BOOTLOADER", DeprecationWarning)

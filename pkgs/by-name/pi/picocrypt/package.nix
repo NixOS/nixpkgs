@@ -20,7 +20,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "Picocrypt";
     repo = "Picocrypt";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-VJCLbMthxb2eWN20pXA6GOzR1FDN97KCU6ligKbKQkY=";
   };
 

@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tconbeer";
     repo = "textual-fastdatatable";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-r1evN69etFn21TkXPLuAh1OxIsurDDyPyYOKQR5uUos=";
   };
 

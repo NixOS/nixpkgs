@@ -1,7 +1,6 @@
 {
   lib,
   stdenv,
-  apple-sdk_11,
   fetchFromGitHub,
 
   ## wandb-core
@@ -80,7 +79,7 @@ let
   src = fetchFromGitHub {
     owner = "wandb";
     repo = "wandb";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nx50baneYSSIWPAIOkUk4cGCNpWAhv7IwFDQJ4vUMiw=";
   };
 
@@ -178,8 +177,6 @@ buildPythonPackage rec {
   build-system = [
     hatchling
   ];
-
-  buildInputs = lib.optional stdenv.hostPlatform.isDarwin apple-sdk_11;
 
   dependencies =
     [

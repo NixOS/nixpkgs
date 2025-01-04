@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mitogen-hq";
     repo = "mitogen";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oWrPpQdfhn3gaaCqkwDabUZRLMEyVyXjRZdu+B9D4CI=";
   };
 
