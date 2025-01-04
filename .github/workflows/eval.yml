@@ -294,14 +294,7 @@ jobs:
           # There appears to be no API to request reviews based on GitHub IDs
           jq -r 'keys[]' comparison/maintainers.json \
             | while read -r id; do gh api /user/"$id" --jq .login; done \
-            | GH_TOKEN=${{ steps.app-token.outputs.token }} result/bin/process-reviewers.sh "$REPOSITORY" "$NUMBER" "$AUTHOR" \
-            > reviewers.json
-
-          # Request reviewers from maintainers of changed output paths
-          GH_TOKEN=${{ steps.app-token.outputs.token }} gh api \
-            --method POST \
-            /repos/"$REPOSITORY"/pulls/"$NUMBER"/requested_reviewers \
-            --input reviewers.json
+            | GH_TOKEN=${{ steps.app-token.outputs.token }} result/bin/request-reviewers.sh "$REPOSITORY" "$NUMBER" "$AUTHOR"
 
         env:
           GH_TOKEN: ${{ github.token }}

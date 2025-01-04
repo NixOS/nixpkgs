@@ -77,20 +77,6 @@ if ! "$SCRIPT_DIR"/verify-base-branch.sh "$tmp/nixpkgs.git" "$headRef" "$baseRep
     exit 1
 fi
 
-log "Getting code owners to request reviews from"
+log "Requesting reviews from code owners"
 "$SCRIPT_DIR"/get-code-owners.sh "$tmp/nixpkgs.git" "$ownersFile" "$baseBranch" "$headRef" | \
-    "$SCRIPT_DIR"/process-reviewers.sh "$baseRepo" "$prNumber" "$prAuthor" > "$tmp/reviewers.json"
-
-log "Requesting reviews from: $(<"$tmp/reviewers.json")"
-
-if ! response=$(effect gh api \
-    --method POST \
-    -H "Accept: application/vnd.github+json" \
-    -H "X-GitHub-Api-Version: 2022-11-28" \
-    "/repos/$baseRepo/pulls/$prNumber/requested_reviewers" \
-    --input "$tmp/reviewers.json"); then
-    log "Failed to request reviews: $response"
-    exit 1
-fi
-
-log "Successfully requested reviews"
+    "$SCRIPT_DIR"/request-reviewers.sh "$baseRepo" "$prNumber" "$prAuthor"
