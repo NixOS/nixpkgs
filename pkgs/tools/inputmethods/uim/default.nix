@@ -181,6 +181,8 @@ stdenv.mkDerivation rec {
     export XDG_DATA_DIRS="${shared-mime-info}/share"
   '';
 
+  enableParallelBuilding = false;
+
   dontUseCmakeConfigure = true;
 
   meta = with lib; {
