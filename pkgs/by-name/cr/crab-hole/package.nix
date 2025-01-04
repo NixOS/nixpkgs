@@ -6,16 +6,16 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "crab-hole";
-  version = "0.1.10";
+  version = "0.1.11";
 
   src = fetchFromGitHub {
     owner = "LuckyTurtleDev";
     repo = "crab-hole";
     tag = "v${version}";
-    hash = "sha256-OyZ+GkWU+OMnS6X7yk7H1e1MzfQQQkhOkoxUmWn6k7I=";
+    hash = "sha256-z3lwhcpX76OHBlDQLmd/SmRaZMEjdaAHmjzn6ucOudk=";
   };
 
-  cargoHash = "sha256-NeVCGN2ZIyrufa3geO8bbwV7ncenguftnr5SClRZLi8=";
+  cargoHash = "sha256-PDDw/5VRZWGzG2LhS7go0HvYhPO8PwBcsmlLWjBfP8Q=";
 
   meta = {
     description = "Pi-Hole clone written in Rust using Hickory DNS";
