@@ -5,6 +5,7 @@
 # this file.
 
 { lib
+, config
 , __splicedPackages
 , makeScopeWithSplicing'
 , generateSplicesForMkScope
@@ -124,6 +125,6 @@ makeScopeWithSplicing' {
 
   xwaylandvideobridge = kdePackages.callPackage ../tools/wayland/xwaylandvideobridge { };
   });
-} // {
+} // lib.optionalAttrs config.allowAliases {
   stdenv = lib.warn "qt6Packages.stdenv is deprecated. Use stdenv instead." stdenv; # Added for 25.05
 }
