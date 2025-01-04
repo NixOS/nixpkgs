@@ -42,7 +42,7 @@ gh api \
 # And we don't want to rerequest reviews from people who already reviewed
 while read -r user; do
     if [[ -v users[${user,,}] ]]; then
-        log "User $user is a code owner but has already left a review, ignoring"
+        log "User $user is a potential reviewer, but has already left a review, ignoring"
         unset 'users[${user,,}]'
     fi
 done < "$tmp/already-reviewed-by"
