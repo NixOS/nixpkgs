@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch2,
   fontconfig,
   installShellFiles,
   libGL,
@@ -29,34 +28,17 @@
 
 rustPlatform.buildRustPackage rec {
   pname = "wezterm";
-  version = "20240203-110809-5046fc22";
+  version = "0-unstable-2025-01-03";
 
   src = fetchFromGitHub {
     owner = "wez";
     repo = "wezterm";
-    rev = "5046fc225992db6ba2ef8812743fadfdfe4b184a";
+    rev = "8e9cf912e66f704f300fac6107206a75036de1e7";
     fetchSubmodules = true;
-    hash = "sha256-Az+HlnK/lRJpUSGm5UKyma1l2PaBKNCGFiaYnLECMX8=";
+    hash = "sha256-JkAovAeoVrH2QlHzzcciraebfsSQPBQPsA3fUKEjRm8=";
   };
 
-  patches = [
-    # Remove unused `fdopen` in vendored zlib, which causes compilation failures with clang 19 on Darwin.
-    # Ref: https://github.com/madler/zlib/commit/4bd9a71f3539b5ce47f0c67ab5e01f3196dc8ef9
-    ./zlib-fdopen.patch
-
-    # Fix platform check in vendored libpng with clang 19 on Darwin.
-    (fetchpatch2 {
-      url = "https://github.com/pnggroup/libpng/commit/893b8113f04d408cc6177c6de19c9889a48faa24.patch?full_index=1";
-      extraPrefix = "deps/freetype/libpng/";
-      stripLen = 1;
-      excludes = [ "deps/freetype/libpng/AUTHORS" ];
-      hash = "sha256-zW/oUo2EGcnsxAfbbbhTKGui/lwCqovyrvUnylfRQzc=";
-    })
-  ];
-
   postPatch = ''
-    cp ${./Cargo.lock} Cargo.lock
-
     echo ${version} > .tag
 
     # tests are failing with: Unable to exchange encryption keys
@@ -70,12 +52,8 @@ rustPlatform.buildRustPackage rec {
       --replace-fail 'hash hostnamectl 2>/dev/null' 'command type -P hostnamectl &>/dev/null'
   '';
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "xcb-imdkit-0.3.0" = "sha256-fTpJ6uNhjmCWv7dZqVgYuS2Uic36XNYTbqlaly5QBjI=";
-    };
-  };
+  cargoHash = "sha256-UagPKPH/PRXk3EFe+rDbkSTSnHdi/Apz0Qek8YlNMxo=";
+  useFetchCargoVendor = true;
 
   nativeBuildInputs = [
     installShellFiles
@@ -144,7 +122,8 @@ rustPlatform.buildRustPackage rec {
         version
         src
         postPatch
-        cargoLock
+        cargoHash
+        useFetchCargoVendor
         meta
         ;
 
