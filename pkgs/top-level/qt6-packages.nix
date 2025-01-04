@@ -27,7 +27,6 @@ makeScopeWithSplicing' {
     inherit (self) callPackage;
     noExtraAttrs = set: lib.attrsets.removeAttrs set [ "extend" "override" "overrideScope" "overrideDerivation" ];
   in (noExtraAttrs qt6) // {
-  stdenv = lib.warn "qt6Packages.stdenv is deprecated. Use stdenv instead." stdenv;
 
   # LIBRARIES
   accounts-qt = callPackage ../development/libraries/accounts-qt { };
@@ -125,4 +124,6 @@ makeScopeWithSplicing' {
 
   xwaylandvideobridge = kdePackages.callPackage ../tools/wayland/xwaylandvideobridge { };
   });
+} // {
+  stdenv = lib.warn "qt6Packages.stdenv is deprecated. Use stdenv instead." stdenv; # Added for 25.05
 }
