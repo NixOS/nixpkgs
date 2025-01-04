@@ -1,7 +1,7 @@
 { config, lib, pkgs, ... }:
+
 let
   cfg = config.services.ntfy-sh;
-
   settingsFormat = pkgs.formats.yaml { };
 in
 
@@ -21,6 +21,26 @@ in
       default = "ntfy-sh";
       type = lib.types.str;
       description = "Primary group of ntfy-sh user.";
+    };
+
+    smtpSenderPassFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = ''
+        Path to a file containing the password for the SMTP sender.
+        Uses systemd's LoadCredential feature for secure runtime secret handling,
+        preventing the secret from being written to the Nix store.
+      '';
+    };
+
+    webPushPrivateKeyFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      default = null;
+      description = ''
+        Path to a file containing the private key for web push notifications.
+        Uses systemd's LoadCredential feature for secure runtime secret handling,
+        preventing the secret from being written to the Nix store.
+      '';
     };
 
     settings = lib.mkOption {
@@ -82,10 +102,22 @@ in
         wantedBy = [ "multi-user.target" ];
         after = [ "network.target" ];
 
+        environment = lib.mkIf (cfg.smtpSenderPassFile != null || cfg.webPushPrivateKeyFile != null) {
+          CREDENTIALS_DIRECTORY = "%d/credentials";
+          SMTP_SENDER_PASS = lib.mkIf (cfg.smtpSenderPassFile != null)
+            "$(cat $CREDENTIALS_DIRECTORY/smtp_pass)";
+          WEB_PUSH_PRIVATE_KEY = lib.mkIf (cfg.webPushPrivateKeyFile != null)
+            "$(cat $CREDENTIALS_DIRECTORY/webpush_key)";
+        };
+
         serviceConfig = {
           ExecStart = "${cfg.package}/bin/ntfy serve -c ${configuration}";
           User = cfg.user;
           StateDirectory = "ntfy-sh";
+
+          LoadCredential =
+            (lib.optional (cfg.smtpSenderPassFile != null) "smtp_pass:${cfg.smtpSenderPassFile}" ++
+              lib.optional (cfg.webPushPrivateKeyFile != null) "webpush_key:${cfg.webPushPrivateKeyFile}");
 
           DynamicUser = true;
           AmbientCapabilities = "CAP_NET_BIND_SERVICE";
