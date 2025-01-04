@@ -7,16 +7,16 @@
 }:
 rustPlatform.buildRustPackage rec {
   pname = "limbo";
-  version = "0.0.10";
+  version = "0.0.11";
 
   src = fetchFromGitHub {
     owner = "tursodatabase";
     repo = "limbo";
     tag = "v${version}";
-    hash = "sha256-RTX/CRfUKvMSZhULhZD+PcYcc+a1gxANMxm+GmNyb3M=";
+    hash = "sha256-bX56aiL7Eqa3jLd1u9h6u583q0S9VZfJ+cVPB+8R1eU=";
   };
 
-  cargoHash = "sha256-BzVPaT7eGOQKRkZe2ZK4rWjHQ2WM7YVMo2siUhpGfOM=";
+  cargoHash = "sha256-GspyWOxwAQvjNzN0yZvj3WpADR3VUO0MjSKiq9wbLOw=";
 
   cargoBuildFlags = [
     "-p"
