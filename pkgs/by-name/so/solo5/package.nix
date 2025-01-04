@@ -40,6 +40,13 @@ stdenv.mkDerivation {
     hash = "sha256-w5ZEPxjplBTkedPN4yJN1A55HtItYjuwZA8UPFQBOw8=";
   };
 
+  patches = [
+    (fetchurl {
+      url = "https://github.com/wegank/solo5/commit/38bacb4155b54447dcbefff1fdc5260e5e6e31a7.patch";
+      sha256 = "10dz4i1pvcdsv6pd9civipngfzs2k03wjaf65inh6jch1swm5r19";
+    })
+  ];
+
   hardeningEnable = [ "pie" ];
 
   configurePhase = ''
@@ -85,8 +92,6 @@ stdenv.mkDerivation {
   checkPhase = ''
     runHook preCheck
     patchShebangs tests
-    substituteInPlace scripts/virtio-run/solo5-virtio-run.sh \
-      --replace " -no-acpi" ""
     ./tests/bats-core/bats ./tests/tests.bats
     runHook postCheck
   '';
