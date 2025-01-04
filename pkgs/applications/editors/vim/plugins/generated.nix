@@ -1290,6 +1290,18 @@ final: prev:
     meta.homepage = "https://github.com/Saghen/blink.compat/";
   };
 
+  blink-ripgrep-nvim = buildVimPlugin {
+    pname = "blink-ripgrep.nvim";
+    version = "2025-01-04";
+    src = fetchFromGitHub {
+      owner = "mikavilpas";
+      repo = "blink-ripgrep.nvim";
+      rev = "1e0ff13ef364b585c1a21148d91b185cf3b246af";
+      sha256 = "0hhv74pa61b3z990w7j5q59r9wd6l2c7vlxgak6xvgb5gksk3cbp";
+    };
+    meta.homepage = "https://github.com/mikavilpas/blink-ripgrep.nvim/";
+  };
+
   block-nvim = buildVimPlugin {
     pname = "block.nvim";
     version = "2023-10-10";
