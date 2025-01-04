@@ -123,7 +123,10 @@ stdenv.mkDerivation {
     # Lots of warnings in vendored code…
     NIX_CFLAGS_COMPILE =
       if stdenv.cc.isClang then
-        "-Wno-error=incompatible-function-pointer-types"
+        toString [
+          "-Wno-error=implicit-function-declaration"
+          "-Wno-error=incompatible-function-pointer-types"
+        ]
       else
         "-Wno-error=incompatible-pointer-types";
   };
