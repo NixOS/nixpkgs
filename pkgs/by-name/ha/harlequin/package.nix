@@ -2,8 +2,6 @@
   lib,
   python3Packages,
   fetchFromGitHub,
-  harlequin,
-  testers,
   nix-update-script,
   versionCheckHook,
   glibcLocales,
@@ -22,7 +20,10 @@ python3Packages.buildPythonApplication rec {
     hash = "sha256-ov9pMvFzJAMfOM7JeSgnp6dZ424GiRaH7W5OCKin9Jk=";
   };
 
-  pythonRelaxDeps = [ "textual" ];
+  pythonRelaxDeps = [
+    "numpy"
+    "textual"
+  ];
 
   build-system = with python3Packages; [ poetry-core ];
 
