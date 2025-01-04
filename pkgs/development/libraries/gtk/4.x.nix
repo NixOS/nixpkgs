@@ -56,6 +56,14 @@
 , darwinMinVersionHook
 }:
 
+assert lib.assertMsg (!builtins.any (x: x) [
+  stdenv.hostPlatform.isDarwin
+  stdenv.hostPlatform.isWindows
+  broadwaySupport
+  waylandSupport
+  x11Support
+]) "At least one backend must be enabled";
+
 let
 
   gtkCleanImmodulesCache = substituteAll {
@@ -108,7 +116,6 @@ stdenv.mkDerivation (finalAttrs: {
   ] ++ finalAttrs.setupHooks;
 
   buildInputs = [
-    libxkbcommon
     libpng
     libtiff
     libjpeg
@@ -134,6 +141,7 @@ stdenv.mkDerivation (finalAttrs: {
     tinysparql
   ] ++ lib.optionals waylandSupport [
     libGL
+    libxkbcommon
     wayland
     wayland-protocols
   ] ++ lib.optionals xineramaSupport [
@@ -170,6 +178,7 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.mesonBool "broadway-backend" broadwaySupport)
     (lib.mesonEnable "vulkan" vulkanSupport)
     (lib.mesonEnable "print-cups" cupsSupport)
+    (lib.mesonBool "wayland-backend" waylandSupport)
     (lib.mesonBool "x11-backend" x11Support)
   ] ++ lib.optionals (stdenv.hostPlatform.isDarwin && !stdenv.hostPlatform.isAarch64) [
     "-Dmedia-gstreamer=disabled" # requires gstreamer-gl
