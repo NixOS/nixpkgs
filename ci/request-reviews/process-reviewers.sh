@@ -24,7 +24,7 @@ trap 'rm -rf "$tmp"' exit
 
 declare -A users=()
 while read -r handle && [[ -n "$handle" ]]; do
-    users[$handle]=
+    users[${handle,,}]=
 done
 
 # Cannot request a review from the author
