@@ -254,7 +254,7 @@ jobs:
       - name: Build the requestReviews derivation
         run: nix-build base/ci -A requestReviews
 
-      - name: Tagging pull request
+      - name: Labelling pull request
         run: |
           # Get all currently set rebuild labels
           gh api \
@@ -283,6 +283,13 @@ jobs:
               -f "labels[]=$toAdd"
           done < <(comm -13 before after)
 
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          NUMBER: ${{ github.event.number }}
+
+      - name: Requesting maintainer reviews
+        run: |
           # maintainers.json contains GitHub IDs. Look up handles to request reviews from.
           # There appears to be no API to request reviews based on GitHub IDs
           jq -r 'keys[]' comparison/maintainers.json \
