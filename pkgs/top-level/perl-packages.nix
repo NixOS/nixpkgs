@@ -27264,7 +27264,7 @@ with self; {
     };
     meta = {
       description = "Handy utf8 tests";
-      homepage = "https://github.com/2shortplanks/Test-utf8/tree";
+      homepage = "https://github.com/2shortplanks/Test-utf8";
       license = with lib.licenses; [ artistic1 gpl1Plus ];
     };
   };

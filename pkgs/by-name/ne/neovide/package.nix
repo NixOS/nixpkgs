@@ -26,16 +26,16 @@
 
 rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
   pname = "neovide";
-  version = "0.13.3";
+  version = "0.14.0";
 
   src = fetchFromGitHub {
     owner = "neovide";
     repo = "neovide";
     rev = version;
-    hash = "sha256-u10JxMvXC/FIobeolWJElBZuCiJ3xIUg4F0vLom7/S0=";
+    hash = "sha256-4fdC/wChsCICLd69ZjK7IaCH7gDmXvfKllCnRNsdqYI=";
   };
 
-  cargoHash = "sha256-j8++watC7RBc1zn8m7Jg0Zl/iKXSrld+q62GiaLxGCo=";
+  cargoHash = "sha256-CqnT9FEDzEMSais4dJg7zYVoSPNvIA09hmI0JE2YZIg=";
 
   SKIA_SOURCE_DIR =
     let
@@ -43,8 +43,8 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
         owner = "rust-skia";
         repo = "skia";
         # see rust-skia:skia-bindings/Cargo.toml#package.metadata skia
-        rev = "m126-0.74.2";
-        hash = "sha256-4l6ekAJy+pG27hBGT6A6LLRwbsyKinJf6PP6mMHwaAs=";
+        rev = "m131-0.79.1";
+        hash = "sha256-XqXfKNYSiECbN96WVWA67Vy4sPuVvg6KqHESjA8gFJM=";
       };
       # The externals for skia are taken from skia/DEPS
       externals = linkFarm "skia-externals" (
@@ -122,13 +122,13 @@ rustPlatform.buildRustPackage.override { stdenv = clangStdenv; } rec {
 
   disallowedReferences = [ SKIA_SOURCE_DIR ];
 
-  meta = with lib; {
-    description = "This is a simple graphical user interface for Neovim";
+  meta = {
+    description = "Neovide is a simple, no-nonsense, cross-platform graphical user interface for Neovim";
     mainProgram = "neovide";
-    homepage = "https://github.com/neovide/neovide";
+    homepage = "https://neovide.dev/";
     changelog = "https://github.com/neovide/neovide/releases/tag/${version}";
-    license = with licenses; [ mit ];
-    maintainers = with maintainers; [ ck3d ];
-    platforms = platforms.unix;
+    license = with lib.licenses; [ mit ];
+    maintainers = with lib.maintainers; [ ck3d ];
+    platforms = lib.platforms.unix;
   };
 }
