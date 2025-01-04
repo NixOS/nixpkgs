@@ -67,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     lib.optionals withMakeWrapper [ makeWrapper ]
     ++ lib.optionals withDNSTAP [ protobufc ]
-    ++ [ pkg-config flex ]
+    ++ [ pkg-config flex bison ]
     ++ lib.optionals withPythonModule [ swig ];
 
   buildInputs = [ openssl nettle expat libevent ]
