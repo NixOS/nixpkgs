@@ -323,6 +323,9 @@ checkConfigOutput '^true$' "$@" ./define-_module-args-custom.nix
 set -- "$@" ./define-_module-args-custom.nix ./import-custom-arg.nix
 checkConfigError 'while evaluating the module argument .*custom.* in .*import-custom-arg.nix.*:' "$@"
 checkConfigError 'infinite recursion encountered' "$@"
+# Make sure the error context for the `config` fixpoint is not triggered
+checkConfigNotError '\*risky\* while evaluating the module fixpoint.*custom. was not provided externally through .specialArgs., so I will now attempt to load it from the module fixpoint' config.result ./error-context-module-argument-failing.nix
+checkConfigError 'while evaluating the module argument .custom.' config.result ./error-context-module-argument-failing.nix
 
 # Check _module.check.
 set -- config.enable ./declare-enable.nix ./define-enable.nix ./define-attrsOfSub-foo.nix
