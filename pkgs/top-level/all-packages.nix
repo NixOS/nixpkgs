@@ -10915,10 +10915,6 @@ with pkgs;
   inherit (libsForQt5.callPackage ../development/libraries/wt { })
     wt4;
 
-  wxSVG = callPackage ../development/libraries/wxSVG {
-    wxGTK = wxGTK32;
-  };
-
   inherit (callPackages ../development/libraries/xapian { })
     xapian_1_4;
   xapian = xapian_1_4;
