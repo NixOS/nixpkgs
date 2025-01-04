@@ -1,16 +1,23 @@
 { lib, stdenv, fetchurl, libcdio-paranoia, cddiscid, wget, which, vorbis-tools, id3v2, eyed3
 , lame, flac, glyr
 , perlPackages
+, fetchFromGitHub
 , makeWrapper }:
 
-let version = "2.9.3";
+let version = "2.9.3-unstable-2023-04-23";
 in
   stdenv.mkDerivation {
     pname = "abcde";
     inherit version;
-    src = fetchurl {
-      url = "https://abcde.einval.com/download/abcde-${version}.tar.gz";
-      sha256 = "091ip2iwb6b67bhjsj05l0sxyq2whqjycbzqpkfbpm4dlyxx0v04";
+    #src = fetchurl {
+    #  url = "https://abcde.einval.com/download/abcde-${version}.tar.gz";
+    #  sha256 = "091ip2iwb6b67bhjsj05l0sxyq2whqjycbzqpkfbpm4dlyxx0v04";
+    #};
+    src = fetchFromGitHub {
+      owner = "glanois";
+      repo = "abcde";
+      rev = "45d4389ffab26b9bff99d7b466c5e95d4e88fe13";
+      hash = "sha256-bbPmw4r+CgNQT/Txz3a7Sk+WNDft6wM8Z6KVNZqijGY=";
     };
 
     # FIXME: This package does not support `distmp3', `eject', etc.
