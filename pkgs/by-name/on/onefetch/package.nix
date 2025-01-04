@@ -8,7 +8,7 @@
   zstd,
   stdenv,
   darwin,
-  git,
+  gitMinimal,
 }:
 
 let
@@ -45,7 +45,7 @@ rustPlatform.buildRustPackage rec {
     ];
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   preCheck = ''
