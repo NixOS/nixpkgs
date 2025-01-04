@@ -1,13 +1,24 @@
 #!/usr/bin/env bash
 
-# Process reviewers for a PR, reading line-separated usernames on stdin,
-# returning a JSON suitable to be consumed by the API endpoint to request reviews:
+# Request reviewers for a PR, reading line-separated usernames on stdin,
+# filtering for valid reviewers before using the API endpoint to request reviews:
 # https://docs.github.com/en/rest/pulls/review-requests?apiVersion=2022-11-28#request-reviewers-for-a-pull-request
 
 set -euo pipefail
 
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' exit
+
 log() {
     echo "$@" >&2
+}
+
+effect() {
+    if [[ -n "${DRY_MODE:-}" ]]; then
+        log "Skipping in dry mode:" "${@@Q}"
+    else
+        "$@"
+    fi
 }
 
 if (( "$#" < 3 )); then
@@ -42,7 +53,7 @@ gh api \
 # And we don't want to rerequest reviews from people who already reviewed
 while read -r user; do
     if [[ -v users[${user,,}] ]]; then
-        log "User $user is a code owner but has already left a review, ignoring"
+        log "User $user is a potential reviewer, but has already left a review, ignoring"
         unset 'users[${user,,}]'
     fi
 done < "$tmp/already-reviewed-by"
@@ -57,9 +68,16 @@ for user in "${!users[@]}"; do
     fi
 done
 
-# Turn it into a JSON for the GitHub API call to request PR reviewers
-jq -n \
-    --arg users "${!users[*]}" \
-    '{
-      reviewers: $users | split(" "),
-    }'
+for user in "${!users[@]}"; do
+    log "Requesting review from: $user"
+
+    if ! response=$(jq -n --arg user "$user" '{ reviewers: [ $user ] }' | \
+        effect gh api \
+            --method POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "/repos/$baseRepo/pulls/$prNumber/requested_reviewers" \
+            --input -); then
+        log "Failed to request review from $user: $response"
+    fi
+done
