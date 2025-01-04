@@ -49,7 +49,7 @@ lib.optionalString (hostPlatform.isSunOS && hostPlatform.is64bit) ''
 ''
 
 
-+ lib.optionalString withoutTargetLibc ''
++ lib.optionalString (withoutTargetLibc || targetPlatform.isMlibc) ''
   for i in */configure.ac; do
     pushd "$(dirname "$i")"
     echo "Running autoreconf in $PWD"
