@@ -6,7 +6,7 @@
   libgit2,
   rust-jemalloc-sys,
   zlib,
-  git,
+  gitMinimal,
 }:
 rustPlatform.buildRustPackage rec {
   pname = "biome";
@@ -29,7 +29,7 @@ rustPlatform.buildRustPackage rec {
     zlib
   ];
 
-  nativeCheckInputs = [ git ];
+  nativeCheckInputs = [ gitMinimal ];
 
   cargoBuildFlags = [ "-p=biome_cli" ];
   cargoTestFlags =
