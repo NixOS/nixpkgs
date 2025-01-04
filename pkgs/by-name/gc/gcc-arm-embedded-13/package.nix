@@ -3,7 +3,6 @@
   stdenv,
   fetchurl,
   ncurses5,
-  python39,
   libxcrypt-legacy,
   runtimeShell,
 }:
@@ -53,22 +52,10 @@ stdenv.mkDerivation rec {
           "$out"
           stdenv.cc.cc
           ncurses5
-          python39
           libxcrypt-legacy
         ]
       } "$f" || true
     done
-  '';
-
-  postFixup = ''
-    mv $out/bin/arm-none-eabi-gdb $out/bin/arm-none-eabi-gdb-unwrapped
-    cat <<EOF > $out/bin/arm-none-eabi-gdb
-    #!${runtimeShell}
-    export PYTHONPATH=${python39}/lib/python3.9
-    export PYTHONHOME=${python39.interpreter}
-    exec $out/bin/arm-none-eabi-gdb-unwrapped "\$@"
-    EOF
-    chmod +x $out/bin/arm-none-eabi-gdb
   '';
 
   meta = with lib; {
