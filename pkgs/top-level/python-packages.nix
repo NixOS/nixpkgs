@@ -10708,6 +10708,8 @@ self: super: with self; {
 
   pytask = callPackage ../development/python-modules/pytask { };
 
+  pytest-lsp = callPackage ../development/python-modules/pytest-lsp { };
+
   pytest-mockito = callPackage ../development/python-modules/pytest-mockito { };
 
   pytest-pudb = callPackage ../development/python-modules/pytest-pudb { };
