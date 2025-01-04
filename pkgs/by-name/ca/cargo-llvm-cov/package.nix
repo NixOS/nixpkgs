@@ -20,7 +20,7 @@
   fetchFromGitHub,
   rustPlatform,
   llvmPackages_19,
-  git,
+  gitMinimal,
 }:
 
 let
@@ -70,7 +70,7 @@ rustPlatform.buildRustPackage {
   LLVM_PROFDATA = "${llvm}/bin/llvm-profdata";
 
   nativeCheckInputs = [
-    git
+    gitMinimal
   ];
 
   # `cargo-llvm-cov` tests rely on `git ls-files.
