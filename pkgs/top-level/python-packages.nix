@@ -4889,6 +4889,8 @@ self: super: with self; {
 
   openstep-plist = callPackage ../development/python-modules/openstep-plist { };
 
+  glumpy = callPackage ../development/python-modules/glumpy { };
+
   glyphsets = callPackage ../development/python-modules/glyphsets { };
 
   glyphslib = callPackage ../development/python-modules/glyphslib { };
@@ -16411,6 +16413,8 @@ self: super: with self; {
   };
 
   trezor = callPackage ../development/python-modules/trezor { };
+
+  triangle = callPackage ../development/python-modules/triangle { };
 
   trimesh = callPackage ../development/python-modules/trimesh { };
 
