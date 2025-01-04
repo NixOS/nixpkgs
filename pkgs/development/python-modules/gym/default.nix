@@ -34,7 +34,7 @@ buildPythonPackage rec {
 
   meta = with lib; {
     description = "Toolkit for developing and comparing your reinforcement learning agents";
-    homepage = "https://gym.openai.com/";
+    homepage = "https://www.gymlibrary.dev/";
     license = licenses.mit;
     maintainers = with maintainers; [ hyphon81 ];
   };
