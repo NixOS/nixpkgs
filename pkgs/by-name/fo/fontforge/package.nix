@@ -3,10 +3,10 @@
   fetchFromGitHub,
   lib,
   fetchpatch,
+  replaceVars,
   cmake,
   uthash,
   pkg-config,
-  makeWrapper,
   python3,
   freetype,
   zlib,
@@ -74,6 +74,9 @@ stdenv.mkDerivation rec {
       url = "https://github.com/fontforge/fontforge/commit/2f2ba54c15c5565acbde04eb6608868cbc871e01.patch";
       hash = "sha256-qF4DqFpiZDbULi9+POPM73HF6pEot8BAFSVaVCNQrMU=";
     })
+
+    # Provide a Nix-controlled location for the initial `sys.path` entry.
+    (replaceVars ./set-python-sys-path.patch { python = "${py}/${py.sitePackages}"; })
   ];
 
   # use $SOURCE_DATE_EPOCH instead of non-deterministic timestamps
@@ -91,7 +94,6 @@ stdenv.mkDerivation rec {
   nativeBuildInputs = [
     pkg-config
     cmake
-    makeWrapper
   ];
 
   buildInputs =
@@ -129,10 +131,6 @@ stdenv.mkDerivation rec {
   preConfigure = ''
     # The way $version propagates to $version of .pe-scripts (https://github.com/dejavu-fonts/dejavu-fonts/blob/358190f/scripts/generate.pe#L19)
     export SOURCE_DATE_EPOCH=$(date -d ${version} +%s)
-  '';
-
-  postInstall = lib.optionalString withPython ''
-    wrapProgram $out/bin/fontforge --suffix PYTHONPATH : "${py}/${py.sitePackages}"
   '';
 
   meta = {
