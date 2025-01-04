@@ -94,7 +94,7 @@ stdenv.mkDerivation (finalAttrs: {
       inherit tzdata;
     })
     ./remove-tools-1.11.patch
-    ./go_no_vendor_checks-1.22.patch
+    ./go_no_vendor_checks-1.23.patch
   ];
 
   GOOS = if stdenv.targetPlatform.isWasi then "wasip1" else stdenv.targetPlatform.parsed.kernel.name;
