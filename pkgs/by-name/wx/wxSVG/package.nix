@@ -8,7 +8,7 @@
   libexif,
   pango,
   pkg-config,
-  wxGTK,
+  wxGTK32,
   darwin,
 }:
 
@@ -40,7 +40,7 @@ stdenv.mkDerivation rec {
     ffmpeg
     libexif
     pango
-    wxGTK
+    wxGTK32
   ] ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
 
   enableParallelBuilding = true;
@@ -55,6 +55,6 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.gpl2Plus;
     maintainers = [ ];
-    inherit (wxGTK.meta) platforms;
+    inherit (wxGTK32.meta) platforms;
   };
 }
