@@ -26,7 +26,12 @@ stdenvNoCC.mkDerivation rec {
     runHook postInstall
   '';
 
-  passthru.updateScript = nix-update-script { };
+  passthru.updateScript = nix-update-script {
+    extraArgs = [
+      "--version-regex"
+      "^mac-(\\d+\\.\\d+\\.\\d+)$"
+    ];
+  };
 
   meta = {
     description = "RSS reader for macOS and iOS";
