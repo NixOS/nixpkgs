@@ -52,7 +52,7 @@ rustPlatform.buildRustPackage rec {
   meta = {
     description = "Check the forecast for today's Nix builds";
     homepage = "https://github.com/getchoo/nix-forecast";
-    changelog = "https://github.com/getchoo/nix-forecast/releases/tag/${version}";
+    changelog = "https://github.com/getchoo/nix-forecast/releases/tag/v${version}";
     license = lib.licenses.mpl20;
     maintainers = with lib.maintainers; [ getchoo ];
     mainProgram = "nix-forecast";
