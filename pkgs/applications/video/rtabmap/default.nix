@@ -32,7 +32,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "introlab";
     repo = "rtabmap";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-y/p1uFSxVQNXO383DLGCg4eWW7iu1esqpWlyPMF3huk=";
   };
 

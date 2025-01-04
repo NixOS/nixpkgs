@@ -7,14 +7,14 @@
 }:
 stdenv.mkDerivation rec {
   pname = "fna3d";
-  version = "24.12";
+  version = "25.01";
 
   src = fetchFromGitHub {
     owner = "FNA-XNA";
     repo = "FNA3D";
     rev = version;
     fetchSubmodules = true;
-    hash = "sha256-ieodMkzBDPq8WCTEyPMENFxoGwrknWV6qsVCZmi0TwQ=";
+    hash = "sha256-0BD3aFIg3miBhGr6YuWJyrRxWsNnPNIFNiZSzPalJ/c=";
   };
 
   buildInputs = [ SDL2 ];

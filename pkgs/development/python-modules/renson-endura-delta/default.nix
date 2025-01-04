@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jimmyd-be";
     repo = "Renson-endura-delta-library";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ndk0qcRUWxUimNHg62UgeYK/MRKQd3e4JQDh9x8vFj8=";
   };
 

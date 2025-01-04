@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nabucasa";
     repo = "hass-nabucasa";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ySo0G/Zh+KQMocMxrvUua704gt2tWQMlArqxBS/C9hs=";
   };
 

@@ -18,7 +18,7 @@ let
 in
 buildPythonPackage rec {
   pname = "reportlab";
-  version = "4.2.4";
+  version = "4.2.5";
   pyproject = true;
 
   # See https://bitbucket.org/pypy/compatibility/wiki/reportlab%20toolkit
@@ -26,7 +26,7 @@ buildPythonPackage rec {
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-oAtXKS4VanvahO3zHWDCVXgVMHbI+5YzHQxZ7d2gUsg=";
+    hash = "sha256-XPNbj9YJtoCArHu7CuHjdhBPfV97LTkUx63GPyWTlB8=";
   };
 
   postPatch = ''

@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "sqlfluff";
     repo = "sqlfluff";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jYAzFqHuTpcgmnodt7vuNWTHRP3rd0B/3tp2Q04/N9o=";
   };
 

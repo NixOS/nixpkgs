@@ -28,7 +28,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "Huluti";
     repo = "Curtail";
-    rev = "refs/tags/${version}";
+    tag = version;
     sha256 = "sha256-IpN1NMIT13icYnflkcZW+aSzw0Nau8UIOP38Kzji3bg=";
   };
 

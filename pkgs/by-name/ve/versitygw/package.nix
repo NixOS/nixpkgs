@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "versity";
     repo = "versitygw";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-giPk0037zMqrqG6L1b9M7Us9d9YpGNjlJXWaNCIx3vc=";
   };
 

@@ -24,13 +24,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "louvre";
-  version = "2.9.0-1";
+  version = "2.13.0-1";
 
   src = fetchFromGitHub {
     owner = "CuarzoSoftware";
     repo = "Louvre";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-0M1Hl5kF8r4iFflkGBb9CWqwzauSZPVKSRNWZKFZC4U=";
+    hash = "sha256-ZUGan5lcE44Lt6xEvVO9Nd1ONBEvvwj8QuLDnAaenpU=";
   };
 
   sourceRoot = "${finalAttrs.src.name}/src";

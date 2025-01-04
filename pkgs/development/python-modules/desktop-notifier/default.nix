@@ -21,7 +21,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "SamSchott";
     repo = "desktop-notifier";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-HynREkiPxv/1y1/ICVwqANIe9tAkIvdpDy4oXxQarec=";
   };
 

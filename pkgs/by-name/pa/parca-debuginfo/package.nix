@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "parca-dev";
     repo = "parca-debuginfo";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gL1BgDtEf2Q7yxzpoiTJY+nsRlsWv3zYzLVvaVijMDM=";
   };
 

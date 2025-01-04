@@ -4,7 +4,6 @@
   fetchFromGitHub,
   ncurses,
   perl,
-  apple-sdk_11,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,7 +20,7 @@ stdenv.mkDerivation rec {
   buildInputs = [
     ncurses
     perl
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
+  ];
 
   makeFlags = [
     "PREFIX=$(out)"

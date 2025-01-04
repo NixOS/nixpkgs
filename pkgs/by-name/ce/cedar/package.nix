@@ -14,7 +14,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cedar-policy";
     repo = "cedar";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-p8idQx3HGO/ikL0pDTPXx5+rD2sRpXANqs/g51BL554=";
   };
 

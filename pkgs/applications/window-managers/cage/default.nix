@@ -28,7 +28,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "cage-kiosk";
     repo = "cage";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2SFtz62z0EF8cpFTC6wGi125MD4a5mkXqP/C+7fH+3g=";
   };
 

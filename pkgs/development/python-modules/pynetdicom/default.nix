@@ -2,7 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  poetry-core,
+  flit-core,
   pydicom,
   pyfakefs,
   pytestCheckHook,
@@ -13,19 +13,19 @@
 
 buildPythonPackage rec {
   pname = "pynetdicom";
-  version = "2.1.1";
+  version = "2.1.1-unstable-2024-12-22";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "pydicom";
     repo = "pynetdicom";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cEe0/mzmMnPoLQMx5AsJocGxCUVE512k9KlEmjzjzn4=";
+    rev = "c22be4b79a20eea0f176340629b37c6e30dd10b2";
+    hash = "sha256-ydNFlSR/h9xJcJxHyRLpLfkaQwJABPt9PJMkPEWzf3s=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ flit-core ];
 
   dependencies = [ pydicom ];
 

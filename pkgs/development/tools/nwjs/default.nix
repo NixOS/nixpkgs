@@ -37,7 +37,7 @@
 }:
 
 let
-  bits = if stdenv.hostPlatform.system == "x86_64-linux" then "x64" else "ia32";
+  bits = if stdenv.hostPlatform.is64bit then "x64" else "ia32";
 
   nwEnv = buildEnv {
     name = "nwjs-env";
@@ -139,13 +139,13 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
-  meta = with lib; {
+  meta = {
     description = "App runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
     platforms = [ "i686-linux" "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = [ maintainers.mikaelfangel ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    maintainers = [ lib.maintainers.mikaelfangel ];
     mainProgram = "nw";
-    license = licenses.bsd3;
+    license = lib.licenses.mit;
   };
 }

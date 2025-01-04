@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geoalchemy";
     repo = "geoalchemy2";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-LjfCPSpKwcyjmGReTC4M58890ow3hbxlwl1f7iC9i6Y=";
   };
 

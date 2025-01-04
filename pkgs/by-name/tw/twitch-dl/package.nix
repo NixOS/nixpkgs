@@ -15,7 +15,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ihabunek";
     repo = "twitch-dl";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BIE3+SDmc5ggF9P+qeloI1JYYrEtOJQ/8oDR76i0t6c=";
   };
 

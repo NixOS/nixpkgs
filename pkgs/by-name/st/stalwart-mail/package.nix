@@ -34,7 +34,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "stalwartlabs";
     repo = "mail-server";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-BATkLgfkz94u2M+Xy6PYQi+7EIxBe86VLYTnBI8PzzY=";
     fetchSubmodules = true;
   };

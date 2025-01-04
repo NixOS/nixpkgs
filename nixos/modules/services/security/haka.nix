@@ -1,14 +1,10 @@
 # This module defines global configuration for Haka.
-
 {
   config,
   lib,
   pkgs,
   ...
 }:
-
-with lib;
-
 let
 
   cfg = config.services.haka;
@@ -23,14 +19,14 @@ let
       else
         "${haka}/share/haka/sample/${cfg.configFile}"
     }
-    ${optionalString (builtins.lessThan 0 cfg.threads) "thread = ${cfg.threads}"}
+    ${lib.optionalString (builtins.lessThan 0 cfg.threads) "thread = ${cfg.threads}"}
 
     [packet]
-    ${optionalString cfg.pcap ''module = "packet/pcap"''}
-    ${optionalString cfg.nfqueue ''module = "packet/nqueue"''}
-    ${optionalString cfg.dump.enable ''dump = "yes"''}
-    ${optionalString cfg.dump.enable ''dump_input = "${cfg.dump.input}"''}
-    ${optionalString cfg.dump.enable ''dump_output = "${cfg.dump.output}"''}
+    ${lib.optionalString cfg.pcap ''module = "packet/pcap"''}
+    ${lib.optionalString cfg.nfqueue ''module = "packet/nqueue"''}
+    ${lib.optionalString cfg.dump.enable ''dump = "yes"''}
+    ${lib.optionalString cfg.dump.enable ''dump_input = "${cfg.dump.input}"''}
+    ${lib.optionalString cfg.dump.enable ''dump_output = "${cfg.dump.output}"''}
 
     interfaces = "${lib.strings.concatStringsSep "," cfg.interfaces}"
 
@@ -62,14 +58,14 @@ in
 
     services.haka = {
 
-      enable = mkEnableOption "Haka";
+      enable = lib.mkEnableOption "Haka";
 
-      package = mkPackageOption pkgs "haka" { };
+      package = lib.mkPackageOption pkgs "haka" { };
 
-      configFile = mkOption {
+      configFile = lib.mkOption {
         default = "empty.lua";
         example = "/srv/haka/myfilter.lua";
-        type = types.str;
+        type = lib.types.str;
         description = ''
           Specify which configuration file Haka uses.
           It can be absolute path or a path relative to the sample directory of
@@ -77,46 +73,46 @@ in
         '';
       };
 
-      interfaces = mkOption {
+      interfaces = lib.mkOption {
         default = [ "eth0" ];
         example = [ "any" ];
-        type = with types; listOf str;
+        type = with lib.types; listOf str;
         description = ''
           Specify which interface(s) Haka listens to.
           Use 'any' to listen to all interfaces.
         '';
       };
 
-      threads = mkOption {
+      threads = lib.mkOption {
         default = 0;
         example = 4;
-        type = types.int;
+        type = lib.types.int;
         description = ''
           The number of threads that will be used.
           All system threads are used by default.
         '';
       };
 
-      pcap = mkOption {
+      pcap = lib.mkOption {
         default = true;
-        type = types.bool;
+        type = lib.types.bool;
         description = "Whether to enable pcap";
       };
 
-      nfqueue = mkEnableOption "nfqueue";
+      nfqueue = lib.mkEnableOption "nfqueue";
 
-      dump.enable = mkEnableOption "dump";
-      dump.input = mkOption {
+      dump.enable = lib.mkEnableOption "dump";
+      dump.input = lib.mkOption {
         default = "/tmp/input.pcap";
         example = "/path/to/file.pcap";
-        type = types.path;
+        type = lib.types.path;
         description = "Path to file where incoming packets are dumped";
       };
 
-      dump.output = mkOption {
+      dump.output = lib.mkOption {
         default = "/tmp/output.pcap";
         example = "/path/to/file.pcap";
-        type = types.path;
+        type = lib.types.path;
         description = "Path to file where outgoing packets are dumped";
       };
     };
@@ -124,7 +120,7 @@ in
 
   ###### implementation
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     assertions = [
       {

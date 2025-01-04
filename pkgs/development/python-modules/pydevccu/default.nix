@@ -8,17 +8,22 @@
 
 buildPythonPackage rec {
   pname = "pydevccu";
-  version = "0.1.8";
+  version = "0.1.9";
   pyproject = true;
 
-  disabled = pythonOlder "3.8";
+  disabled = pythonOlder "3.12";
 
   src = fetchFromGitHub {
-    owner = "danielperna84";
+    owner = "SukramJ";
     repo = "pydevccu";
-    rev = "refs/tags/${version}";
-    hash = "sha256-WguSTtWxkiDs5nK5eiaarfD0CBxzIxQR9fxjuW3wMGc=";
+    tag = version;
+    hash = "sha256-s1u9+w0sPpXuqAET4k5VPWP+VoPqB08dZa9oY4UFXc8=";
   };
+
+  postPatch = ''
+    substituteInPlace pyproject.toml \
+      --replace-fail "setuptools==75.6.0" setuptools
+  '';
 
   build-system = [ setuptools ];
 
@@ -29,8 +34,8 @@ buildPythonPackage rec {
 
   meta = {
     description = "HomeMatic CCU XML-RPC Server with fake devices";
-    homepage = "https://github.com/danielperna84/pydevccu";
-    changelog = "https://github.com/danielperna84/pydevccu/releases/tag/${version}";
+    homepage = "https://github.com/SukramJ/pydevccu";
+    changelog = "https://github.com/SukramJ/pydevccu/releases/tag/${src.tag}";
     license = lib.licenses.mit;
     maintainers = with lib.maintainers; [ fab ];
   };

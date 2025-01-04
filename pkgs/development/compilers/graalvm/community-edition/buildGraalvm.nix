@@ -2,11 +2,9 @@
   lib,
   stdenv,
   alsa-lib,
-  apple-sdk_11,
   autoPatchelfHook,
   cairo,
   cups,
-  darwinMinVersionHook,
   fontconfig,
   glib,
   glibc,
@@ -31,7 +29,6 @@ let
     "lib"
     "stdenv"
     "alsa-lib"
-    "apple-sdk_11"
     "autoPatchelfHook"
     "cairo"
     "cups"
@@ -127,21 +124,16 @@ let
         zlib
       ];
 
-      buildInputs =
-        lib.optionals stdenv.hostPlatform.isLinux [
-          alsa-lib # libasound.so wanted by lib/libjsound.so
-          fontconfig
-          (lib.getLib stdenv.cc.cc) # libstdc++.so.6
-          xorg.libX11
-          xorg.libXext
-          xorg.libXi
-          xorg.libXrender
-          xorg.libXtst
-        ]
-        ++ (lib.optionals stdenv.hostPlatform.isDarwin [
-          apple-sdk_11
-          (darwinMinVersionHook "11.0")
-        ]);
+      buildInputs = lib.optionals stdenv.hostPlatform.isLinux [
+        alsa-lib # libasound.so wanted by lib/libjsound.so
+        fontconfig
+        (lib.getLib stdenv.cc.cc) # libstdc++.so.6
+        xorg.libX11
+        xorg.libXext
+        xorg.libXi
+        xorg.libXrender
+        xorg.libXtst
+      ];
 
       postInstall =
         let

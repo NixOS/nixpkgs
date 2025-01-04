@@ -6,8 +6,6 @@
   cmake,
   pkg-config,
 
-  apple-sdk_11,
-  darwinMinVersionHook,
   dbus,
   openssl,
   sqlite,
@@ -35,10 +33,6 @@ stdenv.mkDerivation rec {
     sqlite
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [
     dbus
-  ] ++ lib.optionals stdenv.hostPlatform.isDarwin [
-    # Needed for `utimensat` on `x86_64-darwin`
-    apple-sdk_11
-    (darwinMinVersionHook "11.3")
   ];
 
   installPhase = ''

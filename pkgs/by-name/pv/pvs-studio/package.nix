@@ -11,6 +11,7 @@
   pvs-studio,
 }:
 
+# nixpkgs-update: no auto update
 stdenv.mkDerivation rec {
   pname = "pvs-studio";
   version = "7.33.85330.89";

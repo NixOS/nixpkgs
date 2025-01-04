@@ -33,7 +33,7 @@ let
   src = fetchFromGitHub {
     owner = "tree-sitter";
     repo = "tree-sitter";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     inherit hash;
     fetchSubmodules = true;
   };

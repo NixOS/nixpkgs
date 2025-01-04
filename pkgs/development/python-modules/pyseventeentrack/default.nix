@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "shaiu";
     repo = "pyseventeentrack";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AHFJu2z3UWBR6BzwdxAKl3wpqBnsyj8pn16z1rgFVpw=";
   };
 

@@ -21,13 +21,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "keyguard";
-  version = "1.7.1";
+  version = "1.7.2";
 
   src = fetchFromGitHub {
     owner = "AChep";
     repo = "keyguard-app";
-    tag = "r20241221";
-    hash = "sha256-AeomyFazONZatbxT6qaTt+/5eBAkgWYwti62CD98jkg=";
+    tag = "r20241223";
+    hash = "sha256-7fMSpTKEEjSXfYotZ/qxX1m+i8GheCLboo+XoA3gTbc=";
   };
 
   gradleBuildTask = ":desktopApp:createDistributable";
@@ -59,6 +59,8 @@ stdenv.mkDerivation (finalAttrs: {
     silent = false;
     useBwrap = false;
   };
+
+  passthru.updateScript = ./update.sh;
 
   doCheck = false;
 

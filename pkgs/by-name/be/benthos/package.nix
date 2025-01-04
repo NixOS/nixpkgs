@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "redpanda-data";
     repo = "benthos";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-JLBH3eFhqPaLK5kCqsnUF54Izu+fEFQbP+cehvrHL9Q=";
   };
 

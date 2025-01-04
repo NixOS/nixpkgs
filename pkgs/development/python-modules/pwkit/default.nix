@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pkgw";
     repo = "pwkit";
-    rev = "refs/tags/pwkit@${version}";
+    tag = "pwkit@${version}";
     hash = "sha256-FEMPHdXj2XCV5fCcdJsVpDMsJntP6zp1yFkjv1ov478=";
   };
 

@@ -27,7 +27,7 @@ buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pre-commit";
     repo = "pre-commit";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qMNnzAxJOS7mabHmGYZ/VkDrpaZbqTJyETSCxq/OrGQ=";
   };
 

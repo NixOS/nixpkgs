@@ -22,7 +22,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "Rapptz";
     repo = "discord.py";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-GIwXx7bRCH2+G3zlilJ/Tb8el50SDbxGGX2/1bqL3+U=";
   };
 

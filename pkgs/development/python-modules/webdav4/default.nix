@@ -26,7 +26,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "skshetry";
     repo = "webdav4";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LgWYgERRuUODFzUnC08kDJTVRx9vanJ+OU8sREEMVwM=";
   };
 

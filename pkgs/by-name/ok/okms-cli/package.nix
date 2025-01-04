@@ -14,7 +14,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ovh";
     repo = "okms-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-y7Oy2vCxq5nXOUZxawz5737/io1+e/jNjuv7bH97yKA=";
   };
 

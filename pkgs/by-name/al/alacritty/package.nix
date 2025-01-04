@@ -22,7 +22,6 @@
   wayland,
   xdg-utils,
 
-  apple-sdk_11,
 }:
 let
   rpathLibs =
@@ -49,7 +48,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "alacritty";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-ZhkuuxTx2y8vOfxfpDpJAyNyDdRWab0pqyDdbOCQ2XE=";
   };
 
@@ -65,11 +64,7 @@ rustPlatform.buildRustPackage rec {
     scdoc
   ];
 
-  buildInputs =
-    rpathLibs
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
-    ];
+  buildInputs = rpathLibs;
 
   outputs = [
     "out"

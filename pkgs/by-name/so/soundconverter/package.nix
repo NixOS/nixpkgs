@@ -22,7 +22,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "kassoulet";
     repo = "soundconverter";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qa8VBPpB27hw+mYXGi6I35dxjJAOucH/SevxqKeu6o0=";
   };
 

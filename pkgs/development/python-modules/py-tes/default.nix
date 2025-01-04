@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ohsu-comp-bio";
     repo = "py-tes";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PP6l9HITC8JDOUVwf+S5tDOZDIFST9Uz+ttG0xJwrB0=";
   };
 

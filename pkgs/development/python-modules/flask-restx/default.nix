@@ -17,6 +17,7 @@
   pytest-flask,
   pytest-mock,
   pytest-benchmark,
+  pytest-vcr,
   pytestCheckHook,
   setuptools,
 }:
@@ -32,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-restx";
     repo = "flask-restx";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-CBReP/u96fsr28lMV1BfLjjdBMXEvsD03wvsxkIcteI=";
   };
 
@@ -55,6 +56,7 @@ buildPythonPackage rec {
     pytest-benchmark
     pytest-flask
     pytest-mock
+    pytest-vcr
     pytestCheckHook
   ];
 
@@ -70,6 +72,7 @@ buildPythonPackage rec {
     ];
 
   disabledTests = [
+    "test_specs_endpoint_host_and_subdomain"
     # broken in werkzeug 2.3 upgrade
     "test_media_types_method"
     "test_media_types_q"

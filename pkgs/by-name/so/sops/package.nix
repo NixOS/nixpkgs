@@ -13,7 +13,7 @@ buildGo122Module rec {
   src = fetchFromGitHub {
     owner = "getsops";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-v35LRFYdnWigWYlDhrOgSOcCI7SUqJbJHaZvlQ6PC4I=";
   };
 

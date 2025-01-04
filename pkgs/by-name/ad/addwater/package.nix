@@ -21,7 +21,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "largestgithubuseronearth";
     repo = "addwater";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5iuSRA18TWj6naw5MraGZ1Y9OUWEVg2oKqQtkC8rMWw=";
   };
 

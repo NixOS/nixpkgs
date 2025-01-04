@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "HDFGroup";
     repo = "hdf4";
-    rev = "refs/tags/hdf${finalAttrs.version}";
+    tag = "hdf${finalAttrs.version}";
     hash = "sha256-Q2VKwkp/iroStrOnwHI8d/dtMWkMoJesBVBVChwNa30=";
   };
 

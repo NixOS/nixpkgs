@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cms-nanoAOD";
     repo = "correctionlib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-l+JjW/giGzU00z0jBN3D4KB/LjTIxeJb3CS+Ge0gbiA=";
     fetchSubmodules = true;
   };

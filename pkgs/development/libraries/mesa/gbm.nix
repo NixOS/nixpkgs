@@ -15,9 +15,19 @@
 let
   common = import ./common.nix { inherit lib fetchFromGitLab; };
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "mesa-libgbm";
-  inherit (common) version src meta;
+  inherit (common) meta;
+
+  version = "24.3.2";
+
+  src = fetchFromGitLab {
+    domain = "gitlab.freedesktop.org";
+    owner = "mesa";
+    repo = "mesa";
+    rev = "mesa-${version}";
+    hash = "sha256-6EcSOE73wEz+aS4C+GUVfcbJtGB0MvIL4a6zA1ohVGA=";
+  };
 
   mesonAutoFeatures = "disabled";
 
