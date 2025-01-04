@@ -288,6 +288,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           # yes, older SDKs omit the comma
           cs = mkConsoleTests "C#" "cs" "Hello,?\\ World!";
           fs = mkConsoleTests "F#" "fs" "Hello\\ from\\ F#";
+          vb = mkConsoleTests "VB" "vb" "Hello,?\\ World!";
         };
 
         web = lib.recurseIntoAttrs {
