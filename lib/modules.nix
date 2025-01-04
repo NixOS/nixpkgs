@@ -404,7 +404,10 @@ let
           };
         in parentFile: parentKey: initialModules: args: collectResults (imap1 (n: x:
           let
-            module = checkModule (loadModule args parentFile "${parentKey}:anon-${toString n}" x);
+            module =
+              builtins.addErrorContext
+                "while loading imports of module `${parentFile}`"
+                (checkModule (loadModule args parentFile "${parentKey}:anon-${toString n}" x));
             collectedImports = collectStructuredModules module._file module.key module.imports args;
           in {
             key = module.key;

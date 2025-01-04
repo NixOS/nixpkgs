@@ -107,6 +107,31 @@ checkConfigError() {
     fi
 }
 
+checkConfigNotError() {
+    local errorContains=$1
+    local err=""
+    shift
+    if err="$(evalConfig "$@" 2>&1 >/dev/null)"; then
+        logStartFailure
+        echo "ACTUAL: exit code 0, output:"
+        reportFailure "$@"
+        echo "EXPECTED: non-zero exit code"
+        logFailure
+        logEndFailure
+    else
+        if echo "$err" | grep -zP --silent "$errorContains" ; then
+            logStartFailure
+            echo "ACTUAL:"
+            reportFailure "$@"
+            echo "EXPECTED: log does not contain '$errorContains'"
+            logFailure
+            logEndFailure
+        else
+            ((++pass))
+        fi
+    fi
+}
+
 # Shorthand meta attribute does not duplicate the config
 checkConfigOutput '^"one two"$' config.result ./shorthand-meta.nix
 
@@ -534,6 +559,15 @@ checkConfigError 'Type foo defines both `functor.payload` and `functor.wrapped` 
 # Anonymous submodules don't get nixed by import resolution/deduplication
 # because of an `extendModules` bug, issue 168767.
 checkConfigOutput '^1$' config.sub.specialisation.value ./extendModules-168767-imports.nix
+
+# Imports error context
+checkConfigError 'while loading imports of module .a.' config.result ./error-context-imports.nix
+checkConfigError 'while loading imports of module .a-parent.' config.result ./error-context-imports-anonymous.nix
+# Full ancestry is generally not relevant, so we don't want to pollute the trace with it. Note that addErrorContext is printed regardless of --no-show-trace.
+checkConfigNotError 'while loading imports of module .not-this-file.' config.result ./error-context-imports.nix
+checkConfigError 'while loading imports of module .a.' config.result ./error-context-imports-fail-in-body.nix
+checkConfigError 'while loading imports of module .a.' config.result ./error-context-imports-fail-in-body-structure.nix
+checkConfigError 'while loading imports of module .a.' config.result ./error-context-imports-fail-in-body-infinite-recursion.nix
 
 # Class checks, evalModules
 checkConfigOutput '^{}$' config.ok.config ./class-check.nix
