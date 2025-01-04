@@ -94,7 +94,7 @@ let
         {
           inherit version;
           src = src.override {
-            rev = version;
+            tag = version;
             hash = "sha256-ZYEjT/yShfA4+zpbGOtaFOx1nSSOWPtMvskPhHv3c9U=";
           };
         }
