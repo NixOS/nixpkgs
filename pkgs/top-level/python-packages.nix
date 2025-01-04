@@ -4490,6 +4490,8 @@ self: super: with self; {
 
   faster-whisper = callPackage ../development/python-modules/faster-whisper { };
 
+  fasthtml = callPackage ../development/python-modules/fasthtml { };
+
   fastimport = callPackage ../development/python-modules/fastimport { };
 
   fastjet = toPythonModule (pkgs.fastjet.override {
@@ -4498,6 +4500,8 @@ self: super: with self; {
   });
 
   fastjsonschema = callPackage ../development/python-modules/fastjsonschema { };
+
+  fastlite = callPackage ../development/python-modules/fastlite { };
 
   fastnlo-toolkit = toPythonModule (pkgs.fastnlo-toolkit.override {
     withPython = true;
@@ -15384,6 +15388,8 @@ self: super: with self; {
   sqlite-migrate = callPackage ../development/python-modules/sqlite-migrate { };
 
   sqlite-fts4 = callPackage ../development/python-modules/sqlite-fts4 { };
+
+  sqlite-minutils = callPackage ../development/python-modules/sqlite-minutils { };
 
   sqlite-utils = callPackage ../development/python-modules/sqlite-utils { };
 
