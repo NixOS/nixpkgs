@@ -40,18 +40,17 @@ let
       genericName = "Computer Aided (Interior) Design";
       categories = [ "Graphics" "2DGraphics" "3DGraphics" ];
     };
-
-    postPatch = ''
+    postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
       addAutoPatchelfSearchPath ${jdk}/lib/openjdk/lib/
       autoPatchelf lib
-
+    '' + ''
       # Nix cannot see the runtime references to the paths we just patched in
       # once they've been compressed into the .jar. Scan for and remember them
       # as plain text so they don't get overlooked.
-      find . -name '*.so' | xargs strings | { grep '/nix/store' || :; } >> ./.jar-paths
+      find . -name '*.so' -or -name '*.dylib' | xargs strings | { grep '/nix/store' || :; } >> ./.jar-paths
     '';
 
-    nativeBuildInputs = [ makeWrapper autoPatchelfHook stripJavaArchivesHook ];
+    nativeBuildInputs = [ makeWrapper stripJavaArchivesHook ] ++ lib.optionals stdenv.hostPlatform.isLinux [ autoPatchelfHook ];
     buildInputs = [ ant jdk p7zip gtk3 gsettings-desktop-schemas libXxf86vm ];
 
     # upstream targets Java 7 by default
@@ -99,8 +98,16 @@ let
       homepage = "http://www.sweethome3d.com/index.jsp";
       inherit description;
       inherit license;
-      maintainers = [ lib.maintainers.edwtjo ];
-      platforms = lib.platforms.linux;
+      maintainers = with lib.maintainers; [
+        edwtjo
+        lpzimmermann
+      ];
+      platforms = [
+        "i686-linux"
+        "x86_64-darwin"
+        "x86_64-linux"
+        "aarch64-darwin"
+      ];
       mainProgram = exec;
     };
   };
