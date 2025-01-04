@@ -19,13 +19,9 @@ stdenv.mkDerivation rec {
     hash = "sha256-RxWZ7T0I9zV7jUVnL6jV/PxEoU32KY7Q1UsOL5Lonuc=";
   };
 
-  # workaround for vendored GCC 3.5 <complex>
+  # workaround for vendored GCC <complex> on libc++
   # https://gitlab.com/sagemath/lcalc/-/issues/16
-  env.NIX_CFLAGS_COMPILE = toString [
-    "-D_GLIBCXX_COMPLEX"
-    "-D_LIBCPP_COMPLEX"
-    "-D_LIBCPP___FWD_COMPLEX_H"
-  ];
+  patches = [ ./libcxx-compat.patch ];
 
   nativeBuildInputs = [
     autoreconfHook
