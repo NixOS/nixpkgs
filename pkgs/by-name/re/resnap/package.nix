@@ -28,20 +28,20 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     lz4
   ];
 
-  postFixup = ''
-    substituteInPlace $out/bin/reSnap \
-      --replace-fail "\$0" reSnap
-
-    wrapProgram $out/bin/reSnap \
-      --suffix PATH : "${lib.makeBinPath finalAttrs.runtimeInputs}"
-  '';
-
   installPhase = ''
     runHook preInstall
 
     install -D reSnap.sh $out/bin/reSnap
 
     runHook postInstall
+  '';
+
+  postFixup = ''
+    substituteInPlace $out/bin/reSnap \
+      --replace-fail "\$0" reSnap
+
+    wrapProgram $out/bin/reSnap \
+      --suffix PATH : "${lib.makeBinPath finalAttrs.runtimeInputs}"
   '';
 
   meta = {
