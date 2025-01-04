@@ -15879,7 +15879,7 @@ with pkgs;
 
   wsjtx = qt5.callPackage ../applications/radio/wsjtx { };
 
-  wxhexeditor = callPackage ../applications/editors/wxhexeditor {
+  wxhexeditor = callPackage ../by-name/wx/wxhexeditor/package.nix {
     inherit (darwin.apple_sdk.frameworks) Cocoa;
     inherit (llvmPackages) openmp;
     wxGTK = wxGTK32;
