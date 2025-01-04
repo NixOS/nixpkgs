@@ -1,0 +1,13 @@
+diff --git a/src/init.cc b/src/init.cc
+index 738f756..1b0e4fc 100644
+--- a/src/init.cc
++++ b/src/init.cc
+@@ -2049,7 +2049,7 @@ static ncclResult_t ncclCommInitRankFunc(struct ncclAsyncJob* job_) {
+     if (mscclEnabled() && (comm->topo->mscclEnabled || mscclForceEnabled()) && mscclppCommCompatible(comm)) {
+       hipDeviceProp_t devProp;
+       CUDACHECK(hipGetDeviceProperties(&devProp, cudaDev));
+-      comm->mscclppCompatible = IsArchMatch(devProp.gcnArchName, "gfx94");
++      comm->mscclppCompatible = IsArchMatch(devProp.gcnArchName, "gfx9");
+       if (comm->mscclppCompatible) {
+         bool mapContainsId = (mscclpp_uniqueIdMap.count(job->commId) > 0);
+         auto& mscclppUniqueId = mscclpp_uniqueIdMap[job->commId];

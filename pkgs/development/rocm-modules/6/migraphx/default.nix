@@ -7,7 +7,6 @@
   cmake,
   rocm-cmake,
   clr,
-  clang-tools-extra,
   openmp,
   rocblas,
   rocmlir,
@@ -54,7 +53,7 @@ let
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "migraphx";
-  version = "6.0.2";
+  version = "6.3.1";
 
   outputs =
     [
@@ -71,7 +70,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "ROCm";
     repo = "AMDMIGraphX";
     rev = "rocm-${finalAttrs.version}";
-    hash = "sha256-VDYUSpWYAdJ63SKVCO26DVAC3RtZM7otqN0sYUA6DBQ=";
+    hash = "sha256-h9cTbrMwHeRGVJS/uHQnCXplNcrBqxbhwz2AcAEso0M=";
   };
 
   nativeBuildInputs =
@@ -80,7 +79,6 @@ stdenv.mkDerivation (finalAttrs: {
       cmake
       rocm-cmake
       clr
-      clang-tools-extra
       python3Packages.python
     ]
     ++ lib.optionals buildDocs [
@@ -172,8 +170,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   passthru.updateScript = rocmUpdateScript {
     name = finalAttrs.pname;
-    owner = finalAttrs.src.owner;
-    repo = finalAttrs.src.repo;
+    inherit (finalAttrs.src) owner;
+    inherit (finalAttrs.src) repo;
   };
 
   meta = with lib; {
