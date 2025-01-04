@@ -12,7 +12,7 @@
 }:
 
 stdenv.mkDerivation rec {
-  pname = "wxSVG";
+  pname = "wxsvg";
   version = "1.5.25";
 
   src = fetchurl {
