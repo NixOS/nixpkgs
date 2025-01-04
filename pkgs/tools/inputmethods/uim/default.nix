@@ -2,7 +2,6 @@
   lib,
   stdenv,
   fetchFromGitHub,
-  fetchpatch,
   shared-mime-info,
   autoconf,
   automake,
@@ -54,15 +53,15 @@ assert withFFI -> libffi != null;
 assert withMisc -> libeb != null;
 
 stdenv.mkDerivation rec {
-  version = "1.8.8";
+  version = "1.8.9";
   pname = "uim";
 
   src = fetchFromGitHub {
     owner = "uim";
     repo = "uim";
-    rev = "2c0958c9c505a87e70e344c2192e2e5123c71ea5";
+    rev = version;
     fetchSubmodules = true;
-    sha256 = "1hkjxi5r49gcna37m3jvykny5hz9ram4y8a3q7lw4qzr52mz9pdp";
+    hash = "sha256-OqbtuoV9xPg51BhboP4EtTZA2psd8sUk3l3RfvYtv3w=";
   };
 
   nativeBuildInputs =
@@ -120,18 +119,6 @@ stdenv.mkDerivation rec {
 
   patches = [
     ./data-hook.patch
-
-    # Pull upstream fix for -fno-common toolchains
-    #   https://github.com/uim/libgcroots/pull/4
-    (fetchpatch {
-      name = "libgcroots-fno-common.patch";
-      url = "https://github.com/uim/libgcroots/commit/7e39241344ad0663409e836560ae6b5eb231e1fc.patch";
-      sha256 = "0iifcl5lk8bvl0cflm47gkymg88aiwzj0gxh2aj3mqlyhvyx78nz";
-      # Patch comes from git submodule. Relocate as:
-      # a/include/private/gc_priv.h -> a/sigscheme/libgcroots/include/private/gc_priv.h
-      stripLen = 1;
-      extraPrefix = "sigscheme/libgcroots/";
-    })
   ];
 
   configureFlags =
