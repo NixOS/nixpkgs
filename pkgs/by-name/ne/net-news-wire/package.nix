@@ -28,7 +28,7 @@ stdenvNoCC.mkDerivation rec {
 
   passthru.updateScript = nix-update-script { };
 
-  meta = with lib; {
+  meta = {
     description = "RSS reader for macOS and iOS";
     longDescription = ''
       It's like podcasts — but for reading.
@@ -36,9 +36,9 @@ stdenvNoCC.mkDerivation rec {
     '';
     homepage = "https://github.com/Ranchero-Software/NetNewsWire";
     changelog = "https://github.com/Ranchero-Software/NetNewsWire/releases/tag/mac-${version}";
-    license = licenses.mit;
-    platforms = platforms.darwin;
-    maintainers = with maintainers; [
+    license = lib.licenses.mit;
+    platforms = lib.platforms.darwin;
+    maintainers = with lib.maintainers; [
       jakuzure
       DimitarNestorov
     ];
