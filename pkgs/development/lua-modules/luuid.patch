@@ -1,0 +1,16 @@
+diff -Naur 5.2/uuid/luuid.c rock/uuid/luuid.c
+--- 5.2/uuid/luuid.c	2012-05-10 11:22:00.000000000 +1000
++++ rock/uuid/luuid.c	2019-06-13 15:13:10.374134079 +1000
+@@ -64,7 +64,11 @@
+ 
+ LUALIB_API int luaopen_uuid(lua_State *L)
+ {
+- luaL_newlib(L,R);
++ #if LUA_VERSION_NUM == 501
++  luaL_register(L,MYNAME,R);
++ #else
++  luaL_newlib(L,R);
++ #endif
+  lua_pushliteral(L,"version");			/** version */
+  lua_pushliteral(L,MYVERSION);
+  lua_settable(L,-3);
