@@ -96,6 +96,18 @@ let
 
         cmakeFlags = extraCppCmakeFlags;
 
+        # Fix CMake paths caused by multiple outputs
+        preFixup = lib.optionalString
+          # v4.9 has a bug where the files are not installed
+          (builtins.compareVersions version "4.10" != -1
+          || builtins.compareVersions version "4.9" == -1)
+          ''
+            subdir="antlr4${lib.optionalString (builtins.compareVersions version "4.8" != 0) "-runtime"}"
+            substituteInPlace $out/lib/cmake/$subdir/antlr4-runtime-config.cmake \
+              --replace-fail $dev/include/antlr4-runtime $\{PACKAGE_PREFIX_DIR}/include/antlr4-runtime \
+              --replace-fail $\{PACKAGE_PREFIX_DIR}/lib $out/lib
+          '';
+
         meta = with lib; {
           description = "C++ target for ANTLR 4";
           homepage = "https://www.antlr.org/";
@@ -108,9 +120,9 @@ let
 
 in {
   antlr4_13 = (mkAntlr {
-    version = "4.13.0";
-    sourceSha256 = "sha256-s1yAdScMYg1wFpYNsBAtpifIhQsnSAgJg7JjPDx+htc=";
-    jarSha256 = "sha256-vG9KvA0iWidXASbFFAJWnwAKje2jSHtw52QoQOVw5KY=";
+    version = "4.13.2";
+    sourceSha256 = "sha256-DxxRL+FQFA+x0RudIXtLhewseU50aScHKSCDX7DE9bY=";
+    jarSha256 = "sha256-6uLfoRmmQydERnKv9j6ew1ogGA3FuAkLemq4USXfTXY=";
     extraCppCmakeFlags = [
       # Generate CMake config files, which are not installed by default.
       "-DANTLR4_INSTALL=ON"
