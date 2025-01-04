@@ -4,7 +4,7 @@ import ./make-test-python.nix ({ pkgs, ...} : {
     maintainers = [ nequissimus ];
   };
 
-  nodes.machine = { pkgs, ... }:
+  nodes.machine = { pkgs, lib, ... }: lib.mkMerge [
     {
       boot.kernelPackages = pkgs.linuxPackages;
       environment.etc.plainFile.text = ''
@@ -17,8 +17,15 @@ import ./make-test-python.nix ({ pkgs, ...} : {
       environment.sessionVariables = {
         TERMINFO_DIRS = "/run/current-system/sw/share/terminfo";
         NIXCON = "awesome";
+        SHOULD_NOT_BE_SET = "oops";
       };
-    };
+    }
+    {
+      environment.sessionVariables = {
+        SHOULD_NOT_BE_SET = lib.mkForce null;
+      };
+    }
+  ];
 
   testScript = ''
     machine.succeed('[ -L "/etc/plainFile" ]')
@@ -32,5 +39,6 @@ import ./make-test-python.nix ({ pkgs, ...} : {
         "echo ''${TERMINFO_DIRS}"
     )
     assert "awesome" in machine.succeed("echo ''${NIXCON}")
+    machine.fail("printenv SHOULD_NOT_BE_SET")
   '';
 })
