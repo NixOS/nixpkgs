@@ -7,7 +7,7 @@
 , platformToolsVersion ? "35.0.2"
 , buildToolsVersions ? [ "35.0.0" ]
 , includeEmulator ? false
-, emulatorVersion ? "35.1.4"
+, emulatorVersion ? "35.4.1"
 , platformVersions ? []
 , includeSources ? false
 , includeSystemImages ? false
@@ -15,7 +15,7 @@
 , abiVersions ? [ "x86" "x86_64" "armeabi-v7a" "arm64-v8a" ]
 , cmakeVersions ? [ ]
 , includeNDK ? false
-, ndkVersion ? "27.0.12077973"
+, ndkVersion ? "27.2.12479018"
 , ndkVersions ? [ndkVersion]
 , useGoogleAPIs ? false
 , useGoogleTVAddOns ? false
