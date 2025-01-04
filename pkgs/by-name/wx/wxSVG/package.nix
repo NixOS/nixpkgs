@@ -9,12 +9,8 @@
   pango,
   pkg-config,
   wxGTK32,
-  darwin,
 }:
 
-let
-  inherit (darwin.apple_sdk.frameworks) Cocoa;
-in
 stdenv.mkDerivation rec {
   pname = "wxSVG";
   version = "1.5.25";
@@ -41,7 +37,7 @@ stdenv.mkDerivation rec {
     libexif
     pango
     wxGTK32
-  ] ++ lib.optional stdenv.hostPlatform.isDarwin Cocoa;
+  ];
 
   enableParallelBuilding = true;
 
