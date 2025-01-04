@@ -8,6 +8,9 @@
 # [nixpkgs]$ lib/tests/modules.sh
 # or:
 # [nixpkgs]$ nix-build lib/tests/release.nix
+#
+# You may show all error traces, even for successful tests, by setting DUMP_TRACES=1
+# This can answer some questions about the occurrence of certain addErrorContext traces.
 
 set -o errexit -o noclobber -o nounset -o pipefail
 shopt -s failglob inherit_errexit
@@ -19,6 +22,14 @@ cd "$DIR"/modules
 
 pass=0
 fail=0
+
+if [[ -z "${DUMP_TRACES:-}" ]]; then
+    dump_traces() { :; }
+else
+    dump_traces() {
+        echo "$@"
+    }
+fi
 
 # loc
 #   prints the location of the call of to the function that calls it
@@ -96,6 +107,7 @@ checkConfigError() {
     else
         if echo "$err" | grep -zP --silent "$errorContains" ; then
             ((++pass))
+            dump_traces "$err"
         else
             logStartFailure
             echo "ACTUAL:"
@@ -128,6 +140,7 @@ checkConfigNotError() {
             logEndFailure
         else
             ((++pass))
+            dump_traces "$err"
         fi
     fi
 }
