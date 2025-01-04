@@ -32,7 +32,6 @@
   qtnetworkauth,
   qttools,
   nixosTests,
-  apple-sdk_11,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -127,9 +126,6 @@ stdenv.mkDerivation (finalAttrs: {
     ++ lib.optionals stdenv.hostPlatform.isLinux [
       alsa-lib
       qtwayland
-    ]
-    ++ lib.optionals stdenv.hostPlatform.isDarwin [
-      apple-sdk_11
     ];
 
   postInstall =

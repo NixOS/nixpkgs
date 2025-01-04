@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "hahwul";
     repo = "dalfox";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tg8TXPeGINGDBR3HOWYRXrg7ioBFhX1V7N1wRzHI0/c=";
   };
 

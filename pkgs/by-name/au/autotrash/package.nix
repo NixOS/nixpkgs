@@ -13,7 +13,7 @@ python3Packages.buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bneijt";
     repo = "autotrash";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qMU3jjBL5+fd9vKX5BIqES5AM8D/54aBOmdHFiBtfEo=";
   };
 

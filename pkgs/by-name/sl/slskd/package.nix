@@ -24,7 +24,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "slskd";
     repo = "slskd";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2IMEkNc7LqevTwsW6r6WR+2xH760wFYT5/S8dvjOz4o=";
   };
 

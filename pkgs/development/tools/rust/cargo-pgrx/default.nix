@@ -48,7 +48,10 @@ let
         homepage = "https://github.com/pgcentralfoundation/pgrx";
         changelog = "https://github.com/pgcentralfoundation/pgrx/releases/tag/v${version}";
         license = licenses.mit;
-        maintainers = with maintainers; [ happysalada ];
+        maintainers = with maintainers; [
+          happysalada
+          matthiasbeyer
+        ];
         mainProgram = "cargo-pgrx";
       };
     };

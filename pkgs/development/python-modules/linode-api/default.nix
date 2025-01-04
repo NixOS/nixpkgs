@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "linode-api";
-  version = "5.22.0";
+  version = "5.25.0";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -23,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "linode";
     repo = "python-linode-api";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-f9v9xhlOfSCKEWHmzi/tpoMIXccGwA6isoAAIZOf3r4=";
+    tag = "v${version}";
+    hash = "sha256-rEBMZft4o7R2e0N7x1ZEaCisRmhKggMbZWdtDvraoD0=";
   };
 
   nativeBuildInputs = [ setuptools ];

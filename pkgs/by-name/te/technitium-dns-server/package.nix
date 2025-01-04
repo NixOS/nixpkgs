@@ -14,7 +14,7 @@ buildDotnetModule rec {
   src = fetchFromGitHub {
     owner = "TechnitiumSoftware";
     repo = "DnsServer";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-oxLMBs+XkzvlfSst6ZD56ZIgiXwm0Px8Tn3Trdd/6H8=";
     name = "${pname}-${version}";
   };

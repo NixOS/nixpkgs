@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "dbus-fast";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RRVQCah44YTgRoGKtTDFU3dsaFbiUnKze3tZoCLM4uk=";
   };
 

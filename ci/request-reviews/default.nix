@@ -15,6 +15,7 @@ stdenvNoCC.mkDerivation {
     root = ./.;
     fileset = lib.fileset.unions [
       ./get-reviewers.sh
+      ./process-reviewers.sh
       ./request-reviews.sh
       ./verify-base-branch.sh
       ./dev-branches.txt

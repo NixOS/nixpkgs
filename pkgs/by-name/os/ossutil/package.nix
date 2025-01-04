@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "aliyun";
     repo = "ossutil";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-M7Jh3rmWdUlsvj+P0UKazjQoe0zLDro882f/l8wFZGQ=";
   };
 

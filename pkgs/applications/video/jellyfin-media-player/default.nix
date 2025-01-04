@@ -21,6 +21,7 @@
 , qtwebchannel
 , qtwebengine
 , qtx11extras
+, jellyfin-web
 , withDbus ? stdenv.hostPlatform.isLinux
 }:
 
@@ -36,6 +37,8 @@ mkDerivation rec {
   };
 
   patches = [
+    # fix the location of the jellyfin-web path
+    ./fix-web-path.patch
     # disable update notifications since the end user can't simply download the release artifacts to update
     ./disable-update-notifications.patch
   ];
@@ -74,7 +77,12 @@ mkDerivation rec {
     "-DLINUX_X11POWER=ON"
   ];
 
-  postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
+  preConfigure = ''
+    # link the jellyfin-web files to be copied by cmake (see fix-web-path.patch)
+    ln -s ${jellyfin-web}/share/jellyfin-web .
+  '';
+
+  postInstall = lib.optionalString stdenv.isDarwin ''
     mkdir -p $out/bin $out/Applications
     mv "$out/Jellyfin Media Player.app" $out/Applications
     ln -s "$out/Applications/Jellyfin Media Player.app/Contents/MacOS/Jellyfin Media Player" $out/bin/jellyfinmediaplayer
@@ -85,7 +93,7 @@ mkDerivation rec {
     description = "Jellyfin Desktop Client based on Plex Media Player";
     license = with licenses; [ gpl2Only mit ];
     platforms = [ "aarch64-linux" "x86_64-linux" "aarch64-darwin" "x86_64-darwin" ];
-    maintainers = with maintainers; [ jojosch kranzes ];
+    maintainers = with maintainers; [ jojosch kranzes paumr ];
     mainProgram = "jellyfinmediaplayer";
   };
 }

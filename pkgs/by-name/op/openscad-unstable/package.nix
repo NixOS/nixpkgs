@@ -9,7 +9,7 @@
   bison,
   boost,
   cairo,
-  cgal_5,
+  cgal,
   clipper2,
   double-conversion,
   eigen,
@@ -83,7 +83,7 @@ clangStdenv.mkDerivation rec {
       mimalloc
       boost
       cairo
-      cgal_5
+      cgal
       double-conversion
       eigen
       fontconfig

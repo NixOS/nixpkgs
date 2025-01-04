@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "carpedm20";
     repo = "emoji";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-1oFzuIA2HFoBw50HHYi8bGZTAAeC6fesSnLReuXUZcM=";
   };
 

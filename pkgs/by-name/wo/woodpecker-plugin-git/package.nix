@@ -13,7 +13,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "woodpecker-ci";
     repo = "plugin-git";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-ffP4CmvoxmXdwrWWOG2HIoz1pgmxTUdG5rPsgJ1+3do=";
   };
 

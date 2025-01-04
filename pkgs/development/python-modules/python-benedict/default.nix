@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fabiocaccamo";
     repo = "python-benedict";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-HQ9VVgRfF5qA36yOyKT63gXuKNLLjouqYKz5EuqGA2E=";
   };
 

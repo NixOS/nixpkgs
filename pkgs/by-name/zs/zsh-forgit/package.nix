@@ -20,7 +20,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "wfxr";
     repo = "forgit";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-8BMFL3WktkkB8m6asbNeb9swnLWi3jHo012fBXGa8ls=";
   };
 

@@ -31,7 +31,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "joostlek";
     repo = "python-homeassistant-analytics";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TfD1N4KoeIVoDp1YoOhBw8E7adow1nU1N6vj2j3W2No=";
   };
 

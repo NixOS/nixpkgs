@@ -33,7 +33,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-troveclient";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6JviPG2ikKRqvW/eqPIHMvpV6GjqbaXYHhcOOpaIS4U=";
   };
 

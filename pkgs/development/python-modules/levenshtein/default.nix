@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "maxbachmann";
     repo = "Levenshtein";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-uLOOAmJ8Y0z+tuIIOSnI8qZoZ+IA2+tNBX1lDCvc8+A=";
     fetchSubmodules = true; # # for vendored `rapidfuzz-cpp`
   };

@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "rustwasm";
     repo = "wasm-pack";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-CN1LcLX7ag+in9sosT2NYVKfhDLGv2m3zHOk2T4MFYc=";
   };
 

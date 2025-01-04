@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pkkid";
     repo = "python-plexapi";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-4dWtSj6OwD4c18yDKtlqXyPc37JQhbsAuj9OmcIHe0I=";
   };
 

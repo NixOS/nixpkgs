@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "iMerica";
     repo = "dj-rest-auth";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-fNy1uN3oH54Wd9+EqYpiV0ot1MbSSC7TZoAARQeR81s=";
   };
 

@@ -2,6 +2,7 @@
   lib,
   stdenv,
   fetchurl,
+  fetchpatch,
   pkg-config,
   gettext,
   gtk-doc,
@@ -39,6 +40,16 @@ stdenv.mkDerivation rec {
     gtk3
     cairo
     glib
+  ];
+
+  # add fedora patch to fix gcc-14 build
+  # https://src.fedoraproject.org/rpms/goocanvas2/tree/main
+  patches = [
+    (fetchpatch {
+      name = "goocanvas-2.0.4-Fix-building-with-GCC-14.patch";
+      hash = "sha256-9uqqC1uKZF9TDz5dfDTKSRCmjEiuvqkLnZ9w6U+q2TI=";
+      url = "https://src.fedoraproject.org/rpms/goocanvas2/raw/e799612a277262a0c6bd03db10a6ee9ca7871b9c/f/goocanvas-2.0.4-Fix-building-with-GCC-14.patch";
+    })
   ];
 
   configureFlags = [

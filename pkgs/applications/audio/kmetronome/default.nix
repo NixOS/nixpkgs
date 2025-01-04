@@ -14,11 +14,11 @@
 
 stdenv.mkDerivation rec {
   pname = "kmetronome";
-  version = "1.4.0";
+  version = "1.4.1";
 
   src = fetchurl {
     url = "mirror://sourceforge/${pname}/${version}/${pname}-${version}.tar.bz2";
-    hash = "sha256-51uFAPR0xsY3z9rFc8SdSGu4ae/VzUmC1qC8RGdt48Y=";
+    hash = "sha256-FJVmSMu0KDoq8DHRxxGyHQQflPCvH1h+WdsV9wcPAPA=";
   };
 
   nativeBuildInputs = [

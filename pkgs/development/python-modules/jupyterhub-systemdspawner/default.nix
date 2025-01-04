@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jupyterhub";
     repo = "systemdspawner";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-obM8HGCHsisRV1+kHMWdA7d6eb6awwPMBuDUAf3k0uI=";
   };
 

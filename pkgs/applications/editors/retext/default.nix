@@ -25,7 +25,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "retext-project";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BToW9rPFEbgAErvJ5gtUpNadCLtlRihE7eKKFgO5N68=";
   };
 

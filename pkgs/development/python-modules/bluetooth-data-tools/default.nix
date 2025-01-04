@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Bluetooth-Devices";
     repo = "bluetooth-data-tools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-qg2QZc95DD2uTO0fTwoNaPfL+QSrcqDwJvx41lIZDRs=";
   };
 

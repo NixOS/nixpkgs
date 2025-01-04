@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "edgedb";
     repo = "edgedb-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-iB0ZWciEx/Xiq+pMg3nMJNHumoy5Z8dB6ev7UneHnVg=";
     fetchSubmodules = true;
   };

@@ -32,7 +32,7 @@ home-assistant.python.pkgs.buildPythonPackage (
       mkdir $out
       if [[ -f ./manifest.json ]]; then
         mkdir $out/custom_components
-        cp -R $(realpath .)  $out/custom_components/
+        cp -R "$(realpath .)" "$out/custom_components/${domain}"
       else
         cp -r ./custom_components/ $out/
       fi

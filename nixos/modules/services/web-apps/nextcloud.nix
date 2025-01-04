@@ -374,14 +374,18 @@ in {
       type = with types; attrsOf (oneOf [ str int bool ]);
       default = {
         "pm" = "dynamic";
-        "pm.max_children" = "32";
-        "pm.start_servers" = "2";
-        "pm.min_spare_servers" = "2";
-        "pm.max_spare_servers" = "4";
+        "pm.max_children" = "120";
+        "pm.start_servers" = "12";
+        "pm.min_spare_servers" = "6";
+        "pm.max_spare_servers" = "18";
         "pm.max_requests" = "500";
       };
       description = ''
-        Options for nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on configuration directives.
+        Options for nextcloud's PHP pool. See the documentation on `php-fpm.conf` for details on
+        configuration directives. The above are recommended for a server with 4GiB of RAM.
+
+        It's advisable to read the [section about PHPFPM tuning in the upstream manual](https://docs.nextcloud.com/server/30/admin_manual/installation/server_tuning.html#tune-php-fpm)
+        and consider customizing the values.
       '';
     };
 
@@ -416,7 +420,6 @@ in {
     config = {
       dbtype = mkOption {
         type = types.enum [ "sqlite" "pgsql" "mysql" ];
-        default = "sqlite";
         description = "Database type.";
       };
       dbname = mkOption {

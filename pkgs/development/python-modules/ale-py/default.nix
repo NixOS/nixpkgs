@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "Farama-Foundation";
     repo = "Arcade-Learning-Environment";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MDMCYnyLZYbQXwyr5VuPeVEop825nD++yQ7hhsW4BX8=";
   };
 

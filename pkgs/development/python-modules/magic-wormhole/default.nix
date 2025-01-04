@@ -42,7 +42,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "magic-wormhole";
     repo = "magic-wormhole";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-BxPF4iQ91wLBagdvQ/Y89VIZBkMxFiEHnK+BU55Bwr4=";
   };
 

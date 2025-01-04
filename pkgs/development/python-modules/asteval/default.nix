@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lmfit";
     repo = "asteval";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-PRmTbP3zRnkCxdeb45LBz5m/Ymoi4lq2poKuG9Esg9g=";
   };
 

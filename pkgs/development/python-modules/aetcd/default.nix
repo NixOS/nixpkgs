@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "martyanov";
     repo = "aetcd";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-g49ppfh8dyGpZeu/HdTDX8RAk5VTcZmqENRpNY12qkg=";
   };
 

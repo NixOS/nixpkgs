@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bdraco";
     repo = "kasa-crypt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-9uDloaf9w75O+7r27PK/xOf0TrK43ndxnTUcm4CmOXo=";
   };
 

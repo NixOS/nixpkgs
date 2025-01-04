@@ -12,7 +12,6 @@
   copyDesktopItems,
   makeDesktopItem,
   electron,
-  apple-sdk_11,
 }:
 
 buildNpmPackage rec {
@@ -22,7 +21,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "Dyalog";
     repo = "ride";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xR+HVC1JVrPkgPhIJZxdTVG52+QbanmD1c/uO5l84oc=";
   };
 
@@ -69,8 +68,6 @@ buildNpmPackage rec {
     zip
     makeWrapper
   ] ++ lib.optionals stdenv.hostPlatform.isLinux [ copyDesktopItems ];
-
-  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ apple-sdk_11 ];
 
   env.ELECTRON_SKIP_BINARY_DOWNLOAD = "1";
 

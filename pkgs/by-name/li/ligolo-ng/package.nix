@@ -10,7 +10,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "tnpitsecurity";
     repo = "ligolo-ng";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Qsz7eRy+gkmw+ORNlrtstiKjH6Cj6v76GDH3cQ/HoiU=";
   };
 
