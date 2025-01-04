@@ -12,7 +12,7 @@
 
 buildPythonPackage rec {
   pname = "jh2";
-  version = "5.0.4";
+  version = "5.0.5";
   pyproject = true;
 
   disabled = pythonOlder "3.10";
@@ -21,14 +21,14 @@ buildPythonPackage rec {
     owner = "jawah";
     repo = "h2";
     tag = "v${version}";
-    hash = "sha256-la1tZ+t6HeGqaua1f858mT1IRyqS0hnoOiKr656vthQ=";
+    hash = "sha256-H1i2lolctispLtQc+uqeE+NUeKr/dtgDq1zdTJH5gyU=";
     fetchSubmodules = true;
   };
 
   cargoDeps = rustPlatform.fetchCargoTarball {
     inherit src;
     name = "${pname}-${version}";
-    hash = "sha256-m1MkKhwTMDGsC0jt1skyFb23Ln5spa+vUEOyA5pHxP4=";
+    hash = "sha256-E/Ah1sEqKrJd49ZvvbhqWtV1Abd0S1Ab/AF4tOn2RPY=";
   };
 
   build-system = [
