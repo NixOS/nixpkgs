@@ -124,7 +124,6 @@ in {
   amazon-init-shell = handleTest ./amazon-init-shell.nix {};
   amazon-ssm-agent = handleTest ./amazon-ssm-agent.nix {};
   amd-sev = runTest ./amd-sev.nix;
-  anbox = runTest ./anbox.nix;
   angie-api = handleTest ./angie-api.nix {};
   anki-sync-server = handleTest ./anki-sync-server.nix {};
   anuko-time-tracker = handleTest ./anuko-time-tracker.nix {};
