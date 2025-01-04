@@ -8347,6 +8347,8 @@ with pkgs;
 
   inherit (callPackages ../development/tools/parsing/ragel { }) ragelStable ragelDev;
 
+  readexe = callPackage ../development/tools/misc/readexe { };
+
   redis-dump = callPackage ../development/tools/redis-dump { };
 
   inherit (regclient) regbot regctl regsync;
