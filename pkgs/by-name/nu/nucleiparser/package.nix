@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "sinkmanu";
     repo = "nucleiparser";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-/SLaRuO06rF7aLV7zY7tfIxkJRzsx+/Z+mc562RX2OQ=";
   };
 

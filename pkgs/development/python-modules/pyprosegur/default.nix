@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "dgomes";
     repo = "pyprosegur";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-A223aafa0eXNBVd2cVVV7p2wXg4Z2rcoggM3czmRsOE=";
   };
 

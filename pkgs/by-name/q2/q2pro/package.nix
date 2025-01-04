@@ -32,7 +32,7 @@ stdenv.mkDerivation (finalAttrs: rec {
   src = fetchFromGitHub {
     owner = "skullernet";
     repo = "q2pro";
-    rev = "refs/tags/r${version}";
+    tag = "r${version}";
     hash = "sha256-LNOrGJarXnf4QqFXDkUfUgLGrjSqbjncpIN2yttbMuk=";
   };
 

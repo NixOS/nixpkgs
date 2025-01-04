@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "kennedyshead";
     repo = "aioasuswrt";
-    rev = "refs/tags/V${version}";
+    tag = "V${version}";
     hash = "sha256-RQxIgAU9KsTbcTKc/Zl+aP77lbDSeiYzR48MtIVwacc=";
   };
 

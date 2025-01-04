@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "mondoohq";
     repo = "cnquery";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-WBzl3DyjPr5vV9oobqZx1pprs4gkVN9BafOMIMqqb7E=";
   };
 

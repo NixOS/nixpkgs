@@ -34,7 +34,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cvxpy";
     repo = "cvxpy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-6RaEyFckvF3WhbfeffysMB/zt+aU1NU6B7Nm06znt9k=";
   };
 

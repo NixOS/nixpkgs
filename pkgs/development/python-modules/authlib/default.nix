@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "lepture";
     repo = "authlib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-gaFnai5QzHhnyn73JB+QzybaolLWC9barBFdnlEMyMU=";
   };
 

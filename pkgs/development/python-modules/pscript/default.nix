@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "flexxui";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-AhVI+7FiWyH+DfAXnau4aAHJAJtsWEpmnU90ey2z35o=";
   };
 

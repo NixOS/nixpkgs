@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "bachya";
     repo = "pyoutbreaksnearme";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-oR/DApOxNSSczrBeH4sytd/vasbD4rA1poW4zNoeAnU=";
   };
 

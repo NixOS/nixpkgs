@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tensorflow";
     repo = "metadata";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-MP5P4kFACT1guZVU3f9YrnKeQaUK0Tnu7edKRy4yvlM=";
   };
 

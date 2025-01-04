@@ -2,6 +2,7 @@
 , gitUpdater
 , fetchFromGitHub
 , qt6Packages
+, stdenv
 , cmake
 , extra-cmake-modules
 , inotify-tools
@@ -18,7 +19,7 @@
 , libsysprof-capture
 }:
 
-qt6Packages.stdenv.mkDerivation rec {
+stdenv.mkDerivation rec {
   pname = "nextcloud-client";
   version = "3.15.2";
 

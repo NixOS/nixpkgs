@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "amplify-education";
     repo = "python-hcl2";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-SS0v1H91aTkJtGo9sICOF+/umIq5e01BR0/xNvIXkUU=";
   };
 

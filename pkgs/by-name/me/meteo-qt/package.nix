@@ -13,7 +13,7 @@ python3Packages.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "dglent";
     repo = "meteo-qt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-J9R6UGfj3vaPfn0vmjeRMsHryc/1pxoKyIE9wteVYbY=";
   };
 

@@ -19,7 +19,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cornellius-gp";
     repo = "linear_operator";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fKDVaHyaneV6MafJd/RT2InZO5cuYoC36YgzQhfIH8g=";
   };
 

@@ -16,7 +16,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "ngoduykhanh";
     repo = "wireguard-ui";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fK7l9I2s0zSxG1g1oQ1KjJZUcypwS9DxnNN7lhVI+1s=";
   };
 

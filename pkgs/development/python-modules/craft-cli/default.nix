@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "craft-cli";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-IqK+eU2z63yDMJrHAhETHWoTz5lWK1er9bwYH9Oml18=";
   };
 

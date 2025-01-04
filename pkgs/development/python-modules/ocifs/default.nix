@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "oracle";
     repo = "ocifs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-IGl9G4NyzhcqrfYfgeZin+wt1OwHmh6780MPfZBwsXA=";
   };
 

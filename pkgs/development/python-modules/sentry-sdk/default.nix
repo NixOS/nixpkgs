@@ -70,7 +70,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "getsentry";
     repo = "sentry-python";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-jrApaDZ+R/bMOqOuQZguP9ySt6nKJeJYNpJTNTxq3no=";
   };
 

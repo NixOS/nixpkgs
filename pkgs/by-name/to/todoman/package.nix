@@ -15,7 +15,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "pimutils";
     repo = "todoman";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-sk5LgFNo5Dc+oHCLu464Q1g0bk1QGsA7xMtMiits/8c=";
   };
 

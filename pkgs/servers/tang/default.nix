@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "latchset";
     repo = "tang";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nlC2hdNzQZrfirjS2gX4oFp2OD1OdxmLsN03hfxD3ug=";
   };
 

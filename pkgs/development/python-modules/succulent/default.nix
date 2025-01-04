@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "firefly-cpp";
     repo = "succulent";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-rD0qKYmWTu0LMRdWgul8OGp1FcczSY2/OxT8+oXO78E=";
   };
 

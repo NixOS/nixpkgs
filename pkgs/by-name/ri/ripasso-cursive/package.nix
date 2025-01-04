@@ -26,7 +26,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "cortex";
     repo = "ripasso";
-    rev = "refs/tags/release-${version}";
+    tag = "release-${version}";
     hash = "sha256-j98X/+UTea4lCtFfMpClnfcKlvxm4DpOujLc0xc3VUY=";
   };
 

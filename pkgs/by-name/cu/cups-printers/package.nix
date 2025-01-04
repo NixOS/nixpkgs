@@ -12,7 +12,7 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "audiusGmbH";
     repo = "cups-printers";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-HTR9t9ElQmCzJfdWyu+JQ8xBfDNpXl8XtNsJxGSfBXk=";
   };
 

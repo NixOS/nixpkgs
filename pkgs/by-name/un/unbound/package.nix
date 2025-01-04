@@ -58,7 +58,7 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "NLnetLabs";
     repo = "unbound";
-    rev = "refs/tags/release-${finalAttrs.version}";
+    tag = "release-${finalAttrs.version}";
     hash = "sha256-CFsd8tdFL+JbxmDZoWdStvWcs9azSaLtMG8Ih5oXE/A=";
   };
 

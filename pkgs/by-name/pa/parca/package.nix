@@ -13,7 +13,7 @@ let
   parca-src = fetchFromGitHub {
     owner = "parca-dev";
     repo = "parca";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-iuTlKUmugRum0qZRhuw0FR13iE2qrQegTgwpAvgJSXk=";
   };
 

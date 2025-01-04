@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pypa";
     repo = "setuptools";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-kmuKHHzTXZrJyfkFm1EIvH1tv/MF9/p/HQoqHXcJew0=";
   };
 

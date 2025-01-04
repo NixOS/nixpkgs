@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "tkdrob";
     repo = "pyefergy";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-4M3r/+C42X95/7BGZAJbkXKKFEkGzLlvX0Ynv+eL8qc=";
   };
 

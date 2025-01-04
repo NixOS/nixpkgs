@@ -11,7 +11,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "mozilla";
     repo = "grcov";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-1t+hzB9sSApLScCkjBnLk9i2dsoEwZmWCFukEOvHhZI=";
   };
 
