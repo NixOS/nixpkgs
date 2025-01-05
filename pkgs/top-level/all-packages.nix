@@ -15299,10 +15299,6 @@ with pkgs;
 
   smartdeblur = libsForQt5.callPackage ../applications/graphics/smartdeblur { };
 
-  snd = darwin.apple_sdk_11_0.callPackage ../applications/audio/snd {
-    inherit (darwin.apple_sdk_11_0.frameworks) CoreServices CoreMIDI;
-  };
-
   soci = callPackage ../development/libraries/soci { };
 
   socialscan = with python3.pkgs; toPythonApplication socialscan;
