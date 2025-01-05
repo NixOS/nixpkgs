@@ -1,0 +1,13 @@
+diff --git a/src/pins/tang/clevis-decrypt-tang b/src/pins/tang/clevis-decrypt-tang
+index 72393b4..40b660f 100755
+--- a/src/pins/tang/clevis-decrypt-tang
++++ b/src/pins/tang/clevis-decrypt-tang
+@@ -101,7 +101,7 @@ xfr="$(jose jwk exc -i '{"alg":"ECMR"}' -l- -r- <<< "$clt$eph")"
+ 
+ rec_url="$url/rec/$kid"
+ ct="Content-Type: application/jwk+json"
+-if ! rep="$(curl -sfg -X POST -H "$ct" --data-binary @- "$rec_url" <<< "$xfr")"; then
++if ! rep="$(curl --connect-timeout 10 -sfg -X POST -H "$ct" --data-binary @- "$rec_url" <<< "$xfr")"; then
+     echo "Error communicating with server $url" >&2
+     exit 1
+ fi
