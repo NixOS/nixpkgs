@@ -40,6 +40,7 @@ self: super: {
   process = null;
   rts = null;
   stm = null;
+  semaphore-compat = null;
   system-cxx-std-lib = null;
   template-haskell = null;
   # GHC only builds terminfo if it is a native compiler
