@@ -1,19 +1,22 @@
 {
   lib,
   stdenv,
-  fetchFromBitbucket,
+  fetchFromGitHub,
   autoreconfHook,
 }:
 
 stdenv.mkDerivation rec {
-  version = "20200125";
+  version = "20240729";
   pname = "m4ri";
 
-  src = fetchFromBitbucket {
+  src = fetchFromGitHub {
     owner = "malb";
     repo = "m4ri";
-    rev = "release-${version}";
-    sha256 = "1dxgbv6zdyki3h61qlv7003wzhy6x14zmcaz9x19md1i7ng07w1k";
+    # 20240729 has a broken m4ri.pc file, fixed in the next commit.
+    # TODO: remove if on update
+    rev =
+      if version == "20240729" then "775189bfea96ffaeab460513413fcf4fbcd64392" else "release-${version}";
+    hash = "sha256-untwo0go8O8zNO0EyZ4n/n7mngSXLr3Z/FSkXA8ptnU=";
   };
 
   doCheck = true;
