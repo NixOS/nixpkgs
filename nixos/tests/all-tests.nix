@@ -154,7 +154,9 @@ in {
   beanstalkd = handleTest ./beanstalkd.nix {};
   bees = handleTest ./bees.nix {};
   benchexec = handleTest ./benchexec.nix {};
-  binary-cache = handleTest ./binary-cache.nix {};
+  binary-cache = handleTest ./binary-cache.nix { compression = "zstd"; };
+  binary-cache-no-compression = handleTest ./binary-cache.nix { compression = "none"; };
+  binary-cache-xz = handleTest ./binary-cache.nix { compression = "xz"; };
   bind = handleTest ./bind.nix {};
   bird = handleTest ./bird.nix {};
   birdwatcher = handleTest ./birdwatcher.nix {};
