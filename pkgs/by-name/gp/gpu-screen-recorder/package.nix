@@ -89,7 +89,10 @@ stdenv.mkDerivation rec {
     homepage = "https://git.dec05eba.com/gpu-screen-recorder/about/";
     license = lib.licenses.gpl3Only;
     mainProgram = "gpu-screen-recorder";
-    maintainers = [ lib.maintainers.babbaj ];
+    maintainers = with lib.maintainers; [
+      babbaj
+      js6pak
+    ];
     platforms = [ "x86_64-linux" ];
   };
 }
