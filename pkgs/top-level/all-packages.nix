@@ -18522,10 +18522,6 @@ with pkgs;
     libsoup = libsoup_3;
   };
 
-  ejabberd = callPackage ../by-name/ej/ejabberd/package.nix {
-    erlang = erlang_26;
-  };
-
   wings = callPackage ../by-name/wi/wings/package.nix {
     erlang = erlang_25;
   };
