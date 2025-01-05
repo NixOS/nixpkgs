@@ -1,0 +1,54 @@
+diff --git a/cmake/dependencies.cmake b/cmake/dependencies.cmake
+index 2ec0205..c63faed 100644
+--- a/cmake/dependencies.cmake
++++ b/cmake/dependencies.cmake
+@@ -1,25 +1,8 @@
+-include(FetchContent)
++find_package(flatbuffers)
++add_library(Halide_flatbuffers ALIAS flatbuffers::flatbuffers)
+ 
+-FetchContent_Declare(
+-    flatbuffers
+-    GIT_REPOSITORY https://github.com/google/flatbuffers.git
+-    GIT_TAG 0100f6a5779831fa7a651e4b67ef389a8752bd9b # v23.5.26
+-    GIT_SHALLOW TRUE
+-)
+-
+-FetchContent_Declare(
+-    pybind11
+-    GIT_REPOSITORY https://github.com/pybind/pybind11.git
+-    GIT_TAG 5b0a6fc2017fcc176545afe3e09c9f9885283242 # v2.10.4
+-    GIT_SHALLOW TRUE
+-)
+-
+-FetchContent_Declare(
+-    wabt
+-    GIT_REPOSITORY https://github.com/WebAssembly/wabt.git
+-    GIT_TAG 3e826ecde1adfba5f88d10d361131405637e65a3 # 1.0.36
+-    GIT_SHALLOW TRUE
+-)
++find_package(pybind11)
++find_package(wabt 1.0.36)
+ 
+ macro(Halide_provide_dependency method dep_name)
+     set(${dep_name}_FOUND 1)
+@@ -42,7 +25,6 @@ macro(Halide_provide_dependency method dep_name)
+ 
+     if (${dep_name}_FOUND)
+         list(APPEND Halide_provide_dependency_args "${method}" "${dep_name}")
+-        FetchContent_MakeAvailable(${dep_name})
+         list(POP_BACK Halide_provide_dependency_args method dep_name)
+ 
+         ## Patches for broken packages
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 65a7046..758728d 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -593,7 +593,6 @@ if (MSVC AND Halide_WASM_BACKEND STREQUAL "wabt")
+ endif ()
+ 
+ if (Halide_WASM_BACKEND STREQUAL "wabt")
+-    find_package(wabt 1.0.36 REQUIRED)
+     _Halide_pkgdep(wabt)
+ 
+     if (Halide_BUNDLE_STATIC)

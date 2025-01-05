@@ -14,6 +14,7 @@
   openblas,
   blas,
   lapack,
+  wabt,
   pythonSupport ? false,
   python3Packages ? null,
 }:
@@ -22,14 +23,19 @@ assert blas.implementation == "openblas" && lapack.implementation == "openblas";
 
 stdenv.mkDerivation rec {
   pname = "halide";
-  version = "18.0.0";
+  version = "19.0.0";
 
   src = fetchFromGitHub {
     owner = "halide";
     repo = "Halide";
     rev = "v${version}";
-    hash = "sha256-BPalUh9EgdCqVaWC1HoreyyRcPQc4QMIYnLrRoNDDCI=";
+    hash = "sha256-0SFGX4G6UR8NS4UsdFOb99IBq2/hEkr/Cm2p6zkIh/8=";
   };
+
+  patches = [
+    # Disable FetchContent for dependencies and use the version from nixpkgs instead
+    ./no-fetchcontent.patch
+  ];
 
   postPatch = ''
     # See https://github.com/halide/Halide/issues/7785
@@ -50,9 +56,8 @@ stdenv.mkDerivation rec {
     # v16 release (See https://github.com/halide/Halide/commit/09c5d1d19ec8e6280ccbc01a8a12decfb27226ba)
     # These tests also fail to compile on Darwin because of some missing command line options...
     "-DWITH_TEST_FUZZ=OFF"
-    # Disable FetchContent for flatbuffers and use the version from nixpkgs instead
-    "-DFLATBUFFERS_USE_FETCHCONTENT=OFF"
-    "-DPYBIND11_USE_FETCHCONTENT=OFF"
+    # TODO: make this actually work... it really should not be needed
+    (lib.cmakeFeature "CMAKE_CXX_FLAGS" "-I${stdenv.cc.cc}/lib/gcc/x86_64-unknown-linux-gnu/14.2.1/include")
   ];
 
   doCheck = true;
@@ -84,6 +89,7 @@ stdenv.mkDerivation rec {
   # to get a hint howto setup atlas instead of openblas
   buildInputs =
     [
+      flatbuffers
       llvmPackages.llvm
       llvmPackages.lld
       llvmPackages.openmp
@@ -93,6 +99,7 @@ stdenv.mkDerivation rec {
       libjpeg
       eigen
       openblas
+      wabt
     ]
     ++ lib.optionals (!stdenv.hostPlatform.isDarwin) [
       libgbm
@@ -102,7 +109,7 @@ stdenv.mkDerivation rec {
   nativeBuildInputs =
     [
       cmake
-      flatbuffers
+      # flatbuffers
     ]
     ++ lib.optionals pythonSupport [
       python3Packages.python
