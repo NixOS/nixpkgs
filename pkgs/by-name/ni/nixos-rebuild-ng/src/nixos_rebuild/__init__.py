@@ -487,39 +487,37 @@ def execute(argv: list[str]) -> None:
                         sudo=args.sudo,
                     )
 
-            if action in (Action.SWITCH, Action.BOOT, Action.TEST, Action.DRY_ACTIVATE):
-                nix.switch_to_configuration(
-                    path_to_config,
-                    action,
-                    target_host=target_host,
-                    sudo=args.sudo,
-                    specialisation=args.specialisation,
-                    install_bootloader=args.install_bootloader,
-                )
-            elif action in (Action.BUILD_VM, Action.BUILD_VM_WITH_BOOTLOADER):
-                # If you get `not-found`, please open an issue
-                vm_path = next(path_to_config.glob("bin/run-*-vm"), "not-found")
-                print(
-                    "Done. The virtual machine can be started by running",
-                    end=" ",
-                    file=sys.stderr,
-                    flush=True,
-                )
-                print(vm_path, flush=True)
-            elif action == Action.BUILD_IMAGE:
-                image_name = variants[args.image_variant]
-                disk_path = path_to_config / image_name
-                print(
-                    "Done. The disk image can be found in",
-                    end=" ",
-                    file=sys.stderr,
-                    flush=True,
-                )
-                print(disk_path, flush=True)
+            # Print only the result to stdout to make it easier to script
+            def print_result(msg: str, result: str | Path) -> None:
+                print(msg, end=" ", file=sys.stderr, flush=True)
+                print(result, flush=True)
+
+            match action:
+                case Action.SWITCH | Action.BOOT | Action.TEST | Action.DRY_ACTIVATE:
+                    nix.switch_to_configuration(
+                        path_to_config,
+                        action,
+                        target_host=target_host,
+                        sudo=args.sudo,
+                        specialisation=args.specialisation,
+                        install_bootloader=args.install_bootloader,
+                    )
+                case Action.BUILD_VM | Action.BUILD_VM_WITH_BOOTLOADER:
+                    # If you get `not-found`, please open an issue
+                    vm_path = next(path_to_config.glob("bin/run-*-vm"), "not-found")
+                    print_result(
+                        "Done. The virtual machine can be started by running", vm_path
+                    )
+                case Action.BUILD_IMAGE:
+                    disk_path = path_to_config / variants[args.image_variant]
+                    print_result("Done. The disk image can be found in", disk_path)
+
         case Action.EDIT:
             nix.edit(flake, flake_build_flags)
+
         case Action.DRY_RUN:
-            assert False, "DRY_RUN should be a DRY_BUILD alias"
+            raise AssertionError("DRY_RUN should be a DRY_BUILD alias")
+
         case Action.LIST_GENERATIONS:
             generations = nix.list_generations(profile)
             if args.json:
@@ -535,11 +533,13 @@ def execute(argv: list[str]) -> None:
                     "current": "Current",
                 }
                 print(tabulate(generations, headers=headers))
+
         case Action.REPL:
             if flake:
                 nix.repl_flake("toplevel", flake, flake_build_flags)
             else:
                 nix.repl("system", build_attr, build_flags)
+
         case _:
             assert_never(action)
 
