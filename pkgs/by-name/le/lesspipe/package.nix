@@ -21,13 +21,13 @@
 
 stdenv.mkDerivation rec {
   pname = "lesspipe";
-  version = "2.14";
+  version = "2.17";
 
   src = fetchFromGitHub {
     owner = "wofr06";
     repo = "lesspipe";
     rev = "v${version}";
-    hash = "sha256-SEFyiKxfKC2Rx5tQ2OK8zEiCBFex2kZUY/vnnDsdCoc=";
+    hash = "sha256-afJuTByGUMU6kFqGGa3pbPaFVdYGcJYiR0RfDNYNgDk=";
   };
 
   nativeBuildInputs = [
@@ -162,11 +162,7 @@ stdenv.mkDerivation rec {
             "zlib-flate"
             "lessfilter"
             "snap"
-          ]
-          ++ lib.optional (stdenv.hostPlatform.isDarwin || stdenv.hostPlatform.isFreeBSD) [
-            # resholve only identifies this on darwin/bsd
-            # call site is guarded by || so it's safe to leave dynamic
-            "locale"
+            "locale" # call site is guarded by || so it's safe to leave dynamic
           ];
         builtin = [ "setopt" ];
       };
