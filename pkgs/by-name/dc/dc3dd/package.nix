@@ -1,7 +1,8 @@
-{ lib
-, stdenv
-, fetchzip
-, perlPackages
+{
+  lib,
+  stdenv,
+  fetchzip,
+  perlPackages,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -13,7 +14,10 @@ stdenv.mkDerivation (finalAttrs: {
     hash = "sha256-SYDoqGlsROHX1a0jJX11F+yp6CeFK+tZbYOOnScC6Ig=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   preConfigure = ''
     chmod +x configure

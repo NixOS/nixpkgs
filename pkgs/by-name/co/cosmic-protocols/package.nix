@@ -1,7 +1,8 @@
-{ lib
-, fetchFromGitHub
-, stdenv
-, wayland-scanner
+{
+  lib,
+  fetchFromGitHub,
+  stdenv,
+  wayland-scanner,
 }:
 
 stdenv.mkDerivation rec {
@@ -21,8 +22,11 @@ stdenv.mkDerivation rec {
   meta = with lib; {
     homepage = "https://github.com/pop-os/cosmic-protocols";
     description = "Additional wayland-protocols used by the COSMIC desktop environment";
-    license = [ licenses.mit licenses.gpl3Only ];
-    maintainers = with maintainers; [ nyanbinary ];
+    license = [
+      licenses.mit
+      licenses.gpl3Only
+    ];
+    maintainers = with maintainers; [ nyabinary ];
     platforms = platforms.linux;
   };
 }

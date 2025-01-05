@@ -1,27 +1,30 @@
-import ./make-test-python.nix ({ pkgs, ...} : {
-  name = "emacs-daemon";
-  meta = with pkgs.lib.maintainers; {
-    maintainers = [ ];
-  };
-
-  enableOCR = true;
-
-  nodes.machine =
-    { ... }:
-
-    { imports = [ ./common/x11.nix ];
-      services.emacs = {
-        enable = true;
-        defaultEditor = true;
-      };
-
-      # Important to get the systemd service running for root
-      environment.variables.XDG_RUNTIME_DIR = "/run/user/0";
-
-      environment.variables.TEST_SYSTEM_VARIABLE = "system variable";
+import ./make-test-python.nix (
+  { pkgs, ... }:
+  {
+    name = "emacs-daemon";
+    meta = with pkgs.lib.maintainers; {
+      maintainers = [ ];
     };
 
-  testScript = ''
+    enableOCR = true;
+
+    nodes.machine =
+      { ... }:
+
+      {
+        imports = [ ./common/x11.nix ];
+        services.emacs = {
+          enable = true;
+          defaultEditor = true;
+        };
+
+        # Important to get the systemd service running for root
+        environment.variables.XDG_RUNTIME_DIR = "/run/user/0";
+
+        environment.variables.TEST_SYSTEM_VARIABLE = "system variable";
+      };
+
+    testScript = ''
       machine.wait_for_unit("multi-user.target")
 
       # checks that the EDITOR environment variable is set
@@ -45,4 +48,5 @@ import ./make-test-python.nix ({ pkgs, ...} : {
 
       machine.screenshot("emacsclient")
     '';
-})
+  }
+)

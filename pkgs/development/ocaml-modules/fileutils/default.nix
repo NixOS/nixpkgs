@@ -1,4 +1,12 @@
-{ lib, fetchurl, ocaml, buildDunePackage, seq, stdlib-shims, ounit2 }:
+{
+  lib,
+  fetchurl,
+  ocaml,
+  buildDunePackage,
+  seq,
+  stdlib-shims,
+  ounit2,
+}:
 
 buildDunePackage rec {
   pname = "fileutils";

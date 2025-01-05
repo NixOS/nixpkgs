@@ -1,14 +1,15 @@
-{ stdenv
-, wrapCCWith
-, llvm
-, lld
-, clang-unwrapped
-, bintools
-, libc
-, libunwind
-, libcxxabi
-, libcxx
-, compiler-rt
+{
+  stdenv,
+  wrapCCWith,
+  llvm,
+  lld,
+  clang-unwrapped,
+  bintools,
+  libc,
+  libunwind,
+  libcxxabi,
+  libcxx,
+  compiler-rt,
 }:
 
 wrapCCWith rec {
@@ -39,7 +40,10 @@ wrapCCWith rec {
     '';
 
     passthru.isClang = true;
+    passthru.isROCm = true;
   });
+
+  gccForLibs = stdenv.cc.cc;
 
   extraPackages = [
     llvm

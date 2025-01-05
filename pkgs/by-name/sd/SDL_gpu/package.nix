@@ -30,6 +30,11 @@ stdenv.mkDerivation (finalAttrs: {
     libGLU
   ];
 
+  # error: incompatible function pointer types assigning to 'GPU_Image *(*)(GPU_Renderer *, SDL_Surface *, GPU_Rect *)'...
+  env.NIX_CFLAGS_COMPILE = lib.optionalString (
+    stdenv.cc.isClang && lib.versionAtLeast stdenv.cc.version "16"
+  ) "-Wno-error=incompatible-function-pointer-types";
+
   cmakeFlags = [
     (lib.cmakeBool "SDL_gpu_BUILD_DEMOS" false)
     (lib.cmakeBool "SDL_gpu_BUILD_TOOLS" false)
@@ -37,7 +42,10 @@ stdenv.mkDerivation (finalAttrs: {
     (lib.cmakeBool "SDL_gpu_BUILD_TESTS" false)
   ];
 
-  outputs = [ "out" "dev" ];
+  outputs = [
+    "out"
+    "dev"
+  ];
 
   strictDeps = true;
 
@@ -45,8 +53,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Library for high-performance, modern 2D graphics with SDL written in C";
     homepage = "https://grimfang4.github.io/sdl-gpu";
     license = lib.licenses.mit;
-    maintainers = lib.teams.sdl.members
-                  ++ (with lib.maintainers; [ ]);
+    maintainers = lib.teams.sdl.members ++ (with lib.maintainers; [ ]);
     inherit (SDL2.meta) platforms;
   };
 })

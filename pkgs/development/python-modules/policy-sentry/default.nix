@@ -4,6 +4,7 @@
   buildPythonPackage,
   click,
   fetchFromGitHub,
+  orjson,
   pytestCheckHook,
   pythonOlder,
   pyyaml,
@@ -14,16 +15,16 @@
 
 buildPythonPackage rec {
   pname = "policy-sentry";
-  version = "0.12.12";
+  version = "0.13.2";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "salesforce";
     repo = "policy_sentry";
-    rev = "refs/tags/${version}";
-    hash = "sha256-1LYcUlGoSalbdo4tiNIYbdA04IHRTImhdWScpiCZk50=";
+    tag = version;
+    hash = "sha256-J6dLKmfZJSU9k64PzOAOTgYvRf9NCpWtYuFEUxrfT5M=";
   };
 
   build-system = [ setuptools ];
@@ -31,8 +32,9 @@ buildPythonPackage rec {
   dependencies = [
     beautifulsoup4
     click
-    requests
+    orjson
     pyyaml
+    requests
     schema
   ];
 

@@ -42,7 +42,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "napalm-automation";
     repo = "napalm";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Abw3h69qTFwOOFeAfivqAIWLozErJ1yZZfx7CbMy1AI=";
   };
 

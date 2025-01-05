@@ -1,10 +1,11 @@
-{ lib
-, fetchFromGitHub
-, fetchYarnDeps
-, makeWrapper
-, matrix-sdk-crypto-nodejs
-, mkYarnPackage
-, nodejs
+{
+  lib,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  makeWrapper,
+  matrix-sdk-crypto-nodejs,
+  mkYarnPackage,
+  nodejs,
 }:
 
 let
@@ -29,7 +30,8 @@ mkYarnPackage rec {
     sha256 = data.yarnHash;
   };
   packageResolutions = {
-    "@matrix-org/matrix-sdk-crypto-nodejs" = "${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs";
+    "@matrix-org/matrix-sdk-crypto-nodejs" =
+      "${matrix-sdk-crypto-nodejs}/lib/node_modules/@matrix-org/matrix-sdk-crypto-nodejs";
   };
 
   nativeBuildInputs = [ makeWrapper ];
@@ -50,7 +52,10 @@ mkYarnPackage rec {
   meta = with lib; {
     description = "Matrix <--> Slack bridge";
     mainProgram = "matrix-appservice-slack";
-    maintainers = with maintainers; [ beardhatcode chvp ];
+    maintainers = with maintainers; [
+      beardhatcode
+      chvp
+    ];
     license = licenses.asl20;
   };
 }

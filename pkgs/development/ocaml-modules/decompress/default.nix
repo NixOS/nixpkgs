@@ -1,7 +1,20 @@
-{ lib, fetchurl, buildDunePackage
-, checkseum, optint, cmdliner
-, bigstringaf, alcotest, camlzip, base64, ctypes, fmt, crowbar, rresult
-, astring, bos
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  checkseum,
+  optint,
+  cmdliner,
+  bigstringaf,
+  alcotest,
+  camlzip,
+  base64,
+  ctypes,
+  fmt,
+  crowbar,
+  rresult,
+  astring,
+  bos,
 }:
 
 buildDunePackage rec {
@@ -16,8 +29,22 @@ buildDunePackage rec {
   };
 
   buildInputs = [ cmdliner ];
-  propagatedBuildInputs = [ optint checkseum ];
-  checkInputs = [ alcotest astring bigstringaf bos ctypes fmt camlzip base64 crowbar rresult ];
+  propagatedBuildInputs = [
+    optint
+    checkseum
+  ];
+  checkInputs = [
+    alcotest
+    astring
+    bigstringaf
+    bos
+    ctypes
+    fmt
+    camlzip
+    base64
+    crowbar
+    rresult
+  ];
   doCheck = true;
 
   meta = {

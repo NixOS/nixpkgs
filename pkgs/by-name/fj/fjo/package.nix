@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitea, rustPlatform, openssl, pkg-config }:
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  rustPlatform,
+  openssl,
+  pkg-config,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "fjo";
@@ -23,6 +30,6 @@ rustPlatform.buildRustPackage rec {
     license = lib.licenses.agpl3Only;
     mainProgram = "berg";
     maintainers = with lib.maintainers; [ ehmry ];
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

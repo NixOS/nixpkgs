@@ -1,5 +1,0 @@
-source 'https://rubygems.org'
-
-group :default do
-  gem 'gettext', '>= 3.3.5', '< 3.4'
-end

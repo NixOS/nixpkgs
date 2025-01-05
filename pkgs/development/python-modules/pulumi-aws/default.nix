@@ -12,23 +12,23 @@
 buildPythonPackage rec {
   pname = "pulumi-aws";
   # Version is independant of pulumi's.
-  version = "6.49.1";
-
+  version = "6.54.1";
   pyproject = true;
-  build-system = [ setuptools ];
 
   disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "pulumi";
     repo = "pulumi-aws";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-THgLOVCr+LWNO1SCGUrh8L/I75d2RSNw84FcovCSsBM=";
+    tag = "v${version}";
+    hash = "sha256-OFkXLH8r4BSvALv8kd7vm8k5TDJPBJSuJ04FzNdsrF8=";
   };
 
   sourceRoot = "${src.name}/sdk/python";
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools ];
+
+  dependencies = [
     parver
     pulumi
     semver

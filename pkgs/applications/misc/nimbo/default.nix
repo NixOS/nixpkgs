@@ -1,8 +1,9 @@
-{ lib
-, python3
-, fetchFromGitHub
-, installShellFiles
-, awscli
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  installShellFiles,
+  awscli,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -43,7 +44,10 @@ python3.pkgs.buildPythonApplication rec {
   pythonImportsCheck = [ "nimbo" ];
 
   makeWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ awscli ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [ awscli ])
   ];
 
   postInstall = ''

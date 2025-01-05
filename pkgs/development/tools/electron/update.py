@@ -182,18 +182,16 @@ class GitilesRepo(Repo):
     def __init__(self, url: str, rev: str) -> None:
         super().__init__()
         self.fetcher = "fetchFromGitiles"
-        # self.fetcher = 'fetchgit'
         self.args = {
             "url": url,
             "rev": rev,
-            # "fetchSubmodules": "false",
         }
 
         if url == "https://chromium.googlesource.com/chromium/src.git":
             self.args["postFetch"] = "rm -r $out/third_party/blink/web_tests; "
             self.args["postFetch"] += "rm -r $out/third_party/hunspell/tests; "
             self.args["postFetch"] += "rm -r $out/content/test/data; "
-            self.args["postFetch"] += "rm -r $out/courgette/testdata; "
+            self.args["postFetch"] += "rm -rf $out/courgette/testdata; "
             self.args["postFetch"] += "rm -r $out/extensions/test/data; "
             self.args["postFetch"] += "rm -r $out/media/test/data; "
 
@@ -321,7 +319,6 @@ class ElectronChromedriverRepo(ElectronBinRepo):
 # and it is rather pointless trying to update those.
 #
 # https://endoflife.date/electron
-@memory.cache
 def supported_version_range() -> range:
     """Returns a range of electron releases that have not reached end-of-life yet"""
     releases_json = json.loads(
@@ -399,7 +396,7 @@ def repo_from_dep(dep: dict) -> Optional[Repo]:
         if search_object:
             return GitHubRepo(search_object.group(1), search_object.group(2), rev)
 
-        if re.match(r"https://.+.googlesource.com", url):
+        if re.match(r"https://.+\.googlesource.com", url):
             return GitilesRepo(url, rev)
 
         return GitRepo(url, rev)

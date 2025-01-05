@@ -2,6 +2,7 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
+  fetchpatch2,
   cryptography,
   charset-normalizer,
   pythonOlder,
@@ -21,11 +22,18 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pdfminer";
     repo = "pdfminer.six";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-aY7GQADRxeiclr6/G3RRgrPcl8rGiC85JYEIjIa+vG0=";
   };
 
   patches = [
+    # https://github.com/pdfminer/pdfminer.six/pull/1027
+    (fetchpatch2 {
+      name = "fix-dereference-MediaBox.patch";
+      url = "https://github.com/pdfminer/pdfminer.six/pull/1027/commits/ad101c152c71431a21bfa5a8dbe33b3ba385ceec.patch?full_index=1";
+      excludes = [ "CHANGELOG.md" ];
+      hash = "sha256-fsSXvN92MVtNFpAst0ctvGrbxVvoe4Nyz4wMZqJ1aw8=";
+    })
     (substituteAll {
       src = ./disable-setuptools-git-versioning.patch;
       inherit version;
@@ -51,6 +59,12 @@ buildPythonPackage rec {
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTests = [
+    # The binary file samples/contrib/issue-1004-indirect-mediabox.pdf is
+    # stripped from fix-dereference-MediaBox.patch.
+    "test_contrib_issue_1004_mediabox"
+  ];
 
   passthru = {
     tests = {

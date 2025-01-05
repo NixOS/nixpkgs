@@ -20,7 +20,7 @@
 
 let
   # Bcftools needs perl
-  runtime =  [
+  runtime = [
     bcftools
     htslib
     my-python
@@ -45,7 +45,7 @@ stdenv.mkDerivation rec {
     owner = "Illumina";
     repo = pname;
     rev = "v${version}";
-    sha256 = "sha256-K8XXhioMGMHw56MKvp0Eo8S6R36JczBzGRaBz035zRQ=";
+    hash = "sha256-K8XXhioMGMHw56MKvp0Eo8S6R36JczBzGRaBz035zRQ=";
   };
   # For illumina script
   BOOST_ROOT = "${boost.out}";

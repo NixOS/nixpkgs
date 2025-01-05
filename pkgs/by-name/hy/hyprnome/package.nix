@@ -19,6 +19,10 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-oxIZTp5ZJRUjXLpMw2nOnPHYHhHN03HWFRhBZ82Ac10=";
 
+  # Upstream has 'missing_docs = "deny"', which trips up test builds for 0.3.1 release.
+  # Let's just treat lints as warnings.
+  env.RUSTFLAGS = "--cap-lints warn";
+
   nativeBuildInputs = [ installShellFiles ];
 
   postInstall = ''

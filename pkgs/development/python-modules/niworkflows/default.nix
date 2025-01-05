@@ -36,7 +36,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "nipreps";
     repo = "niworkflows";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-29ZxLuKrvgCIOMMCUpi0HHhlNlgqUrUrSCiikwecmKw=";
   };
 

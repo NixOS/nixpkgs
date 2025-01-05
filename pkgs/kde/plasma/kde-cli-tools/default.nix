@@ -5,5 +5,5 @@
 mkKdeDerivation {
   pname = "kde-cli-tools";
 
-  extraBuildInputs = [qtsvg];
+  extraBuildInputs = [ qtsvg ];
 }

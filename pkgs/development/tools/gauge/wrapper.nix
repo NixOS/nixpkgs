@@ -1,12 +1,13 @@
-{ gauge-unwrapped
-, gauge
-, makeWrapper
-, stdenvNoCC
-, lib
-, xorg
-, gaugePlugins
-, plugins ? []
-, runCommand
+{
+  gauge-unwrapped,
+  gauge,
+  makeWrapper,
+  stdenvNoCC,
+  lib,
+  xorg,
+  gaugePlugins,
+  plugins ? [ ],
+  runCommand,
 }:
 
 stdenvNoCC.mkDerivation {
@@ -44,18 +45,28 @@ stdenvNoCC.mkDerivation {
       --set GAUGE_HOME "$GAUGE_HOME"
   '';
 
-  nativeBuildInputs = [ gauge-unwrapped makeWrapper xorg.lndir ];
+  nativeBuildInputs = [
+    gauge-unwrapped
+    makeWrapper
+    xorg.lndir
+  ];
 
   passthru = {
     withPlugins = f: gauge.override { plugins = f gaugePlugins; };
-    fromManifest = path:
+    fromManifest =
+      path:
       let
         manifest = lib.importJSON path;
         requiredPlugins = with manifest; [ Language ] ++ Plugins;
-        manifestPlugins = plugins: map (name: plugins.${name} or (throw "Gauge plugin ${name} is not available!")) requiredPlugins;
-      in gauge.withPlugins manifestPlugins;
+        manifestPlugins =
+          plugins:
+          map (name: plugins.${name} or (throw "Gauge plugin ${name} is not available!")) requiredPlugins;
+      in
+      gauge.withPlugins manifestPlugins;
     # Builds gauge with all plugins and checks for successful installation
-    tests.allPlugins = gaugePlugins.testGaugePlugins { plugins = lib.filter lib.isDerivation (lib.attrValues gaugePlugins); };
+    tests.allPlugins = gaugePlugins.testGaugePlugins {
+      plugins = lib.filter lib.isDerivation (lib.attrValues gaugePlugins);
+    };
   };
 
   inherit (gauge-unwrapped) meta;

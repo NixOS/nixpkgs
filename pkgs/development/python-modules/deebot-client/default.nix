@@ -21,7 +21,7 @@
 
 buildPythonPackage rec {
   pname = "deebot-client";
-  version = "8.4.0";
+  version = "10.1.0";
   pyproject = true;
 
   disabled = pythonOlder "3.12";
@@ -29,8 +29,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DeebotUniverse";
     repo = "client.py";
-    rev = "refs/tags/${version}";
-    hash = "sha256-VWXJykG9XSrpTjnv5radUAp/OMCH2YVlmkT6L8S+wyI=";
+    tag = version;
+    hash = "sha256-qnXDr8+e13/VMFhFBbQJPdct5MjHwcBkLl+fo8xaEgY=";
   };
 
   pythonRelaxDeps = [

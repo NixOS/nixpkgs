@@ -5,6 +5,11 @@ let
   cfg = config.power.ups;
   defaultPort = 3493;
 
+  envVars = {
+    NUT_CONFPATH = "/etc/nut";
+    NUT_STATEPATH = "/var/lib/nut";
+  };
+
   nutFormat = {
 
     type = with lib.types; let
@@ -304,8 +309,10 @@ let
         defaultText = lib.literalMD ''
           {
             MINSUPPLIES = 1;
-            RUN_AS_USER = "root";
+            MONITOR = <generated from config.power.ups.upsmon.monitor>
             NOTIFYCMD = "''${pkgs.nut}/bin/upssched";
+            POWERDOWNFLAG = "/run/killpower";
+            RUN_AS_USER = "root";
             SHUTDOWNCMD = "''${pkgs.systemd}/bin/shutdown now";
           }
         '';
@@ -325,11 +332,12 @@ let
     config = {
       enable = lib.mkDefault (lib.elem cfg.mode [ "standalone" "netserver" "netclient" ]);
       settings = {
-        RUN_AS_USER = "root"; # TODO: replace 'root' by another username.
         MINSUPPLIES = lib.mkDefault 1;
-        NOTIFYCMD = lib.mkDefault "${pkgs.nut}/bin/upssched";
-        SHUTDOWNCMD = lib.mkDefault "${pkgs.systemd}/bin/shutdown now";
         MONITOR = lib.flip lib.mapAttrsToList cfg.upsmon.monitor (name: monitor: with monitor; [ system powerValue user "\"@upsmon_password_${name}@\"" type ]);
+        NOTIFYCMD = lib.mkDefault "${pkgs.nut}/bin/upssched";
+        POWERDOWNFLAG = lib.mkDefault "/run/killpower";
+        RUN_AS_USER = "root"; # TODO: replace 'root' by another username.
+        SHUTDOWNCMD = lib.mkDefault "${pkgs.systemd}/bin/shutdown now";
       };
     };
   };
@@ -493,13 +501,20 @@ in
       })
     ];
 
+    # For interactive use.
     environment.systemPackages = [ pkgs.nut ];
+    environment.variables = envVars;
 
     networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts =
         if cfg.upsd.listen == []
         then [ defaultPort ]
         else lib.unique (lib.forEach cfg.upsd.listen (listen: listen.port));
+    };
+
+    systemd.slices.system-ups = {
+      description = "Network UPS Tools (NUT) Slice";
+      documentation = [ "https://networkupstools.org/" ];
     };
 
     systemd.services.upsmon = let
@@ -516,9 +531,9 @@ in
         ExecStart = "${pkgs.nut}/sbin/upsmon";
         ExecReload = "${pkgs.nut}/sbin/upsmon -c reload";
         LoadCredential = lib.mapAttrsToList (name: monitor: "upsmon_password_${name}:${monitor.passwordFile}") cfg.upsmon.monitor;
+        Slice = "system-ups.slice";
       };
-      environment.NUT_CONFPATH = "/etc/nut";
-      environment.NUT_STATEPATH = "/var/lib/nut";
+      environment = envVars;
     };
 
     systemd.services.upsd = let
@@ -536,9 +551,9 @@ in
         ExecStart = "${pkgs.nut}/sbin/upsd -u root";
         ExecReload = "${pkgs.nut}/sbin/upsd -c reload";
         LoadCredential = lib.mapAttrsToList (name: user: "upsdusers_password_${name}:${user.passwordFile}") cfg.users;
+        Slice = "system-ups.slice";
       };
-      environment.NUT_CONFPATH = "/etc/nut";
-      environment.NUT_STATEPATH = "/var/lib/nut";
+      environment = envVars;
       restartTriggers = [
         config.environment.etc."nut/upsd.conf".source
       ];
@@ -554,12 +569,30 @@ in
         RemainAfterExit = true;
         # TODO: replace 'root' by another username.
         ExecStart = "${pkgs.nut}/bin/upsdrvctl -u root start";
+        Slice = "system-ups.slice";
       };
-      environment.NUT_CONFPATH = "/etc/nut";
-      environment.NUT_STATEPATH = "/var/lib/nut";
+      environment = envVars;
       restartTriggers = [
         config.environment.etc."nut/ups.conf".source
       ];
+    };
+
+    systemd.services.ups-killpower = lib.mkIf (cfg.upsmon.settings.POWERDOWNFLAG != null) {
+      enable = cfg.upsd.enable;
+      description = "UPS Kill Power";
+      wantedBy = [ "shutdown.target" ];
+      after = [ "shutdown.target" ];
+      before = [ "final.target" ];
+      unitConfig = {
+        ConditionPathExists = cfg.upsmon.settings.POWERDOWNFLAG;
+        DefaultDependencies = "no";
+      };
+      environment = envVars;
+      serviceConfig = {
+        Type = "oneshot";
+        ExecStart = "${pkgs.nut}/bin/upsdrvctl shutdown";
+        Slice = "system-ups.slice";
+      };
     };
 
     environment.etc = {

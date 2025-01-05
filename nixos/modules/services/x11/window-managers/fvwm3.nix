@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -17,18 +22,16 @@ in
     };
   };
 
-
   ###### implementation
 
   config = mkIf cfg.enable {
-    services.xserver.windowManager.session = singleton
-      { name = "fvwm3";
-        start =
-          ''
-            ${fvwm3}/bin/fvwm3 &
-            waitPID=$!
-          '';
-      };
+    services.xserver.windowManager.session = singleton {
+      name = "fvwm3";
+      start = ''
+        ${fvwm3}/bin/fvwm3 &
+        waitPID=$!
+      '';
+    };
 
     environment.systemPackages = [ fvwm3 ];
   };

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.services.emacs;
@@ -39,7 +44,6 @@ in
       '';
     };
 
-
     package = lib.mkPackageOption pkgs "emacs" { };
 
     defaultEditor = lib.mkOption {
@@ -62,24 +66,29 @@ in
   };
 
   config = lib.mkIf (cfg.enable || cfg.install) {
-    systemd.user.services.emacs = {
-      description = "Emacs: the extensible, self-documenting text editor";
+    systemd.user.services.emacs =
+      {
+        description = "Emacs: the extensible, self-documenting text editor";
 
-      serviceConfig = {
-        Type = "notify";
-        ExecStart = "${pkgs.runtimeShell} -c 'source ${config.system.build.setEnvironment}; exec ${cfg.package}/bin/emacs --fg-daemon'";
-        ExecStop = "${cfg.package}/bin/emacsclient --eval (kill-emacs)";
-        Restart = "always";
+        serviceConfig = {
+          Type = "notify";
+          ExecStart = "${pkgs.runtimeShell} -c 'source ${config.system.build.setEnvironment}; exec ${cfg.package}/bin/emacs --fg-daemon'";
+          ExecStop = "${cfg.package}/bin/emacsclient --eval (kill-emacs)";
+          Restart = "always";
+        };
+
+        unitConfig = lib.optionalAttrs cfg.startWithGraphical {
+          After = "graphical-session.target";
+        };
+      }
+      // lib.optionalAttrs cfg.enable {
+        wantedBy = if cfg.startWithGraphical then [ "graphical-session.target" ] else [ "default.target" ];
       };
 
-      unitConfig = lib.optionalAttrs cfg.startWithGraphical {
-        After = "graphical-session.target";
-      };
-    } // lib.optionalAttrs cfg.enable {
-      wantedBy = if cfg.startWithGraphical then [ "graphical-session.target" ] else [ "default.target" ];
-    };
-
-    environment.systemPackages = [ cfg.package editorScript ];
+    environment.systemPackages = [
+      cfg.package
+      editorScript
+    ];
 
     environment.variables.EDITOR = lib.mkIf cfg.defaultEditor (lib.mkOverride 900 "emacseditor");
   };

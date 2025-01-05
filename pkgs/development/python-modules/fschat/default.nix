@@ -40,7 +40,7 @@ buildPythonPackage {
   src = fetchFromGitHub {
     owner = "lm-sys";
     repo = "FastChat";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-tQuvQXzQbQjU16DfS1o55VHW6eklngEvIigzZGgrKB8=";
   };
 
@@ -63,7 +63,7 @@ buildPythonPackage {
     # ] ++ markdown2.optional-dependencies.all;
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     llm_judge = [
       anthropic
       openai

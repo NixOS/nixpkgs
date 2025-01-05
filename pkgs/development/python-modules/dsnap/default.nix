@@ -25,7 +25,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "RhinoSecurityLabs";
     repo = "dsnap";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yKch+tKjFhvZfzloazMH378dkERF8gnZEX1Som+d670=";
   };
 
@@ -42,7 +42,7 @@ buildPythonPackage rec {
     urllib3
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     cli = [ typer ];
     scannerd = [
       aws-sam-cli
@@ -55,7 +55,7 @@ buildPythonPackage rec {
     moto
     mypy-boto3-ebs
     pytestCheckHook
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   # https://github.com/RhinoSecurityLabs/dsnap/issues/26
   # ImportError: cannot import name 'mock_iam' from 'moto'

@@ -20,7 +20,10 @@ stdenv.mkDerivation (finalAttrs: {
 
   depsBuildBuild = [ buildPackages.stdenv.cc ];
 
-  nativeBuildInputs = [ bison installShellFiles ];
+  nativeBuildInputs = [
+    bison
+    installShellFiles
+  ];
 
   outputs = [
     "out"
@@ -34,7 +37,8 @@ stdenv.mkDerivation (finalAttrs: {
 
   installPhase = ''
     runHook preInstall
-    install -Dm755 a.out "$out/bin/nawk"
+    mv a.out nawk
+    installBin nawk
     mv awk.1 nawk.1
     installManPage nawk.1
     runHook postInstall

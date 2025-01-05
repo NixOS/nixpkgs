@@ -29,6 +29,11 @@ buildPythonPackage rec {
     pytestCheckHook
   ];
 
+  disabledTests = [
+    # aiohttp 3.10.6 compat
+    "test_errors"
+  ];
+
   pythonImportsCheck = [ "pytomorrowio" ];
 
   meta = {

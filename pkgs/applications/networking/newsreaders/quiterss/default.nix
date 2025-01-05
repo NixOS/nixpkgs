@@ -1,5 +1,14 @@
-{ lib, stdenv, fetchFromGitHub, qmake, pkg-config, wrapQtAppsHook
-, qtbase, qttools, qtwebkit, sqlite
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  qmake,
+  pkg-config,
+  wrapQtAppsHook,
+  qtbase,
+  qttools,
+  qtwebkit,
+  sqlite,
 }:
 
 stdenv.mkDerivation rec {
@@ -13,8 +22,17 @@ stdenv.mkDerivation rec {
     sha256 = "1cgvl67vhn5y7bj5gbjbgk26bhb0196bgrgsp3r5fmrislarj8s6";
   };
 
-  nativeBuildInputs = [ qmake pkg-config wrapQtAppsHook ];
-  buildInputs = [ qtbase qttools qtwebkit sqlite.dev ];
+  nativeBuildInputs = [
+    qmake
+    pkg-config
+    wrapQtAppsHook
+  ];
+  buildInputs = [
+    qtbase
+    qttools
+    qtwebkit
+    sqlite.dev
+  ];
 
   meta = with lib; {
     description = "Qt-based RSS/Atom news feed reader";

@@ -13,7 +13,8 @@ let
   djgppFtpMirror = "https://www.mirrorservice.org/sites/ftp.delorie.com/pub";
   gnuFtpMirror = "https://www.mirrorservice.org/sites/ftp.gnu.org/gnu";
 in
-{ fetchFromGitHub, fetchurl }: {
+{ fetchFromGitHub, fetchurl }:
+{
   inherit gccVersion;
 
   src = fetchFromGitHub {

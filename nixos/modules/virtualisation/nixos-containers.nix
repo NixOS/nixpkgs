@@ -85,8 +85,13 @@ let
 
   startScript = cfg:
     ''
-      mkdir -p -m 0755 "$root/etc" "$root/var/lib"
-      mkdir -p -m 0700 "$root/var/lib/private" "$root/root" /run/nixos-containers
+      # Declare root explicitly to avoid shellcheck warnings, it comes from the env
+      declare root
+
+      mkdir -p "$root/etc" "$root/var/lib"
+      chmod 0755 "$root/etc" "$root/var/lib"
+      mkdir -p "$root/var/lib/private" "$root/root" /run/nixos-containers
+      chmod 0700 "$root/var/lib/private" "$root/root" /run/nixos-containers
       if ! [ -e "$root/etc/os-release" ]; then
         touch "$root/etc/os-release"
       fi
@@ -95,19 +100,24 @@ let
         touch "$root/etc/machine-id"
       fi
 
-      mkdir -p -m 0755 \
+      mkdir -p \
+        "/nix/var/nix/profiles/per-container/$INSTANCE" \
+        "/nix/var/nix/gcroots/per-container/$INSTANCE"
+      chmod 0755 \
         "/nix/var/nix/profiles/per-container/$INSTANCE" \
         "/nix/var/nix/gcroots/per-container/$INSTANCE"
 
       cp --remove-destination /etc/resolv.conf "$root/etc/resolv.conf"
 
+      declare -a extraFlags
+
       if [ "$PRIVATE_NETWORK" = 1 ]; then
-        extraFlags+=" --private-network"
+        extraFlags+=("--private-network")
       fi
 
       if [ -n "$HOST_ADDRESS" ]  || [ -n "$LOCAL_ADDRESS" ] ||
          [ -n "$HOST_ADDRESS6" ] || [ -n "$LOCAL_ADDRESS6" ]; then
-        extraFlags+=" --network-veth"
+        extraFlags+=("--network-veth")
       fi
 
       if [ -n "$HOST_PORT" ]; then
@@ -115,30 +125,34 @@ let
         IFS=","
         for i in $HOST_PORT
         do
-            extraFlags+=" --port=$i"
+            extraFlags+=("--port=$i")
         done
         IFS=$OIFS
       fi
 
       if [ -n "$HOST_BRIDGE" ]; then
-        extraFlags+=" --network-bridge=$HOST_BRIDGE"
+        extraFlags+=("--network-bridge=$HOST_BRIDGE")
       fi
 
-      extraFlags+=" ${concatStringsSep " " (mapAttrsToList nspawnExtraVethArgs cfg.extraVeths)}"
+      if [ -n "$NETWORK_NAMESPACE_PATH" ]; then
+        extraFlags+=("--network-namespace-path=$NETWORK_NAMESPACE_PATH")
+      fi
+
+      extraFlags+=(${lib.escapeShellArgs (mapAttrsToList nspawnExtraVethArgs cfg.extraVeths)})
 
       for iface in $INTERFACES; do
-        extraFlags+=" --network-interface=$iface"
+        extraFlags+=("--network-interface=$iface")
       done
 
       for iface in $MACVLANS; do
-        extraFlags+=" --network-macvlan=$iface"
+        extraFlags+=("--network-macvlan=$iface")
       done
 
       # If the host is 64-bit and the container is 32-bit, add a
       # --personality flag.
       ${optionalString (pkgs.stdenv.hostPlatform.system == "x86_64-linux") ''
-        if [ "$(< ''${SYSTEM_PATH:-/nix/var/nix/profiles/per-container/$INSTANCE/system}/system)" = i686-linux ]; then
-          extraFlags+=" --personality=x86"
+        if [ "$(< "''${SYSTEM_PATH:-/nix/var/nix/profiles/per-container/$INSTANCE/system}/system")" = i686-linux ]; then
+          extraFlags+=("--personality=x86")
         fi
       ''}
 
@@ -149,9 +163,11 @@ let
       # Kill signal handling means systemd-nspawn will pass a system-halt signal
       # to the container systemd when it receives SIGTERM for container shutdown;
       # containerInit and stage2 have to handle this as well.
+      # TODO: fix shellcheck issue properly
+      # shellcheck disable=SC2086
       exec ${config.systemd.package}/bin/systemd-nspawn \
         --keep-unit \
-        -M "$INSTANCE" -D "$root" $extraFlags \
+        -M "$INSTANCE" -D "$root" "''${extraFlags[@]}" \
         $EXTRA_NSPAWN_FLAGS \
         --notify-ready=yes \
         --kill-signal=SIGRTMIN+3 \
@@ -203,33 +219,33 @@ let
         if cfg.${attribute} == null then
           ''
             if [ -n "${variable}" ]; then
-              ${ipcmd} add ${variable} dev $ifaceHost
+              ${ipcmd} add "${variable}" dev "$ifaceHost"
             fi
           ''
         else
-          "${ipcmd} add ${cfg.${attribute}} dev $ifaceHost";
+          ''${ipcmd} add ${cfg.${attribute}} dev "$ifaceHost"'';
       renderExtraVeth = name: cfg:
         if cfg.hostBridge != null then
           ''
             # Add ${name} to bridge ${cfg.hostBridge}
-            ip link set dev ${name} master ${cfg.hostBridge} up
+            ip link set dev "${name}" master "${cfg.hostBridge}" up
           ''
         else
           ''
             echo "Bring ${name} up"
-            ip link set dev ${name} up
+            ip link set dev "${name}" up
             # Set IPs and routes for ${name}
             ${optionalString (cfg.hostAddress != null) ''
-              ip addr add ${cfg.hostAddress} dev ${name}
+              ip addr add ${cfg.hostAddress} dev "${name}"
             ''}
             ${optionalString (cfg.hostAddress6 != null) ''
-              ip -6 addr add ${cfg.hostAddress6} dev ${name}
+              ip -6 addr add ${cfg.hostAddress6} dev "${name}"
             ''}
             ${optionalString (cfg.localAddress != null) ''
-              ip route add ${cfg.localAddress} dev ${name}
+              ip route add ${cfg.localAddress} dev "${name}"
             ''}
             ${optionalString (cfg.localAddress6 != null) ''
-              ip -6 route add ${cfg.localAddress6} dev ${name}
+              ip -6 route add ${cfg.localAddress6} dev "${name}"
             ''}
           '';
     in
@@ -238,7 +254,7 @@ let
            [ -n "$HOST_ADDRESS6" ] || [ -n "$LOCAL_ADDRESS6" ]; then
           if [ -z "$HOST_BRIDGE" ]; then
             ifaceHost=ve-$INSTANCE
-            ip link set dev $ifaceHost up
+            ip link set dev "$ifaceHost" up
 
             ${ipcall cfg "ip addr" "$HOST_ADDRESS" "hostAddress"}
             ${ipcall cfg "ip -6 addr" "$HOST_ADDRESS6" "hostAddress6"}
@@ -620,6 +636,20 @@ in
               '';
             };
 
+            networkNamespace = mkOption {
+              type = types.nullOr types.path;
+              default = null;
+              description = ''
+                Takes the path to a file representing a kernel network namespace that the container
+                shall run in. The specified path should refer to a (possibly bind-mounted) network
+                namespace file, as exposed by the kernel below /proc/<PID>/ns/net. This makes the
+                container enter the given network namespace. One of the typical use cases is to give
+                a network namespace under /run/netns created by ip-netns(8).
+                Note that this option cannot be used together with other network-related options,
+                such as --private-network or --network-interface=.
+              '';
+            };
+
             interfaces = mkOption {
               type = types.listOf types.str;
               default = [];
@@ -693,7 +723,7 @@ in
             allowedDevices = mkOption {
               type = with types; listOf (submodule allowedDeviceOpts);
               default = [];
-              example = [ { node = "/dev/net/tun"; modifier = "rw"; } ];
+              example = [ { node = "/dev/net/tun"; modifier = "rwm"; } ];
               description = ''
                 A list of device nodes to which the containers has access to.
               '';
@@ -781,6 +811,11 @@ in
     {
       warnings = optional (!config.boot.enableContainers && config.containers != {})
         "containers.<name> is used, but boot.enableContainers is false. To use containers.<name>, set boot.enableContainers to true.";
+
+      assertions = let
+        mapper = name: cfg: optional (cfg.networkNamespace != null && (cfg.privateNetwork || cfg.interfaces != []))
+          "containers.${name}.networkNamespace is mutally exclusive to containers.${name}.privateNetwork and containers.${name}.interfaces.";
+      in mkMerge (mapAttrsToList mapper config.containers);
     }
 
     (mkIf (config.boot.enableContainers) (let
@@ -823,7 +858,7 @@ in
             optionalAttrs cfg.enableTun
               {
                 allowedDevices = cfg.allowedDevices
-                  ++ [ { node = "/dev/net/tun"; modifier = "rw"; } ];
+                  ++ [ { node = "/dev/net/tun"; modifier = "rwm"; } ];
                 additionalCapabilities = cfg.additionalCapabilities
                   ++ [ "CAP_NET_ADMIN" ];
               }
@@ -884,6 +919,9 @@ in
                 ${optionalString (cfg.localAddress6 != null) ''
                   LOCAL_ADDRESS6=${cfg.localAddress6}
                 ''}
+              ''}
+              ${optionalString (cfg.networkNamespace != null) ''
+                NETWORK_NAMESPACE_PATH=${cfg.networkNamespace}
               ''}
               INTERFACES="${toString cfg.interfaces}"
               MACVLANS="${toString cfg.macvlans}"

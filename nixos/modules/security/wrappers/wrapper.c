@@ -170,15 +170,6 @@ static int make_caps_ambient(const char *self_path) {
     "MALLOC_ARENA_TEST\0"
 
 int main(int argc, char **argv) {
-    ASSERT(argc >= 1);
-
-    // argv[0] goes into a lot of places, to a far greater degree than other elements
-    // of argv. glibc has had buffer overflows relating to argv[0], eg CVE-2023-6246.
-    // Since we expect the wrappers to be invoked from either $PATH or /run/wrappers/bin,
-    // there should be no reason to pass any particularly large values here, so we can
-    // be strict for strictness' sake.
-    ASSERT(strlen(argv[0]) < 512);
-
     int debug = getenv(wrapper_debug) != NULL;
 
     // Drop insecure environment variables explicitly
@@ -209,10 +200,22 @@ int main(int argc, char **argv) {
         return 1;
     }
 
+    char *replacement_argv[2] = {SOURCE_PROG, NULL};
+    char *old_argv0;
+    // Replace untrusted or missing argv[0] by the wrapped program path.
+    // This mitigates vulnerabilities caused by incorrect handling in privileged code.
+    if (argv[0]) {
+        old_argv0 = argv[0];
+        argv[0] = SOURCE_PROG;
+    } else {
+        old_argv0 = "«nullptr»";
+        argv = replacement_argv;
+    }
+
     execve(SOURCE_PROG, argv, environ);
-    
+
     fprintf(stderr, "%s: cannot run `%s': %s\n",
-        argv[0], SOURCE_PROG, strerror(errno));
+        old_argv0, SOURCE_PROG, strerror(errno));
 
     return 1;
 }

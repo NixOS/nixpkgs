@@ -11,16 +11,16 @@
 
 buildGoModule rec {
   pname = "werf";
-  version = "2.10.5";
+  version = "2.12.1";
 
   src = fetchFromGitHub {
     owner = "werf";
     repo = "werf";
     rev = "v${version}";
-    hash = "sha256-pNKcBiZSZa8F8E5grEXbgPpqk9H+mu/TeiU3FSAalQE=";
+    hash = "sha256-EVFNUOvczsgU0t2hOfl4e5bFH4ByxmRsIk2idI+uquQ=";
   };
 
-  vendorHash = "sha256-OR2nIR2q3iRfaSQSQRKn+jbygETx2+WmkOIjOCIB9O8=";
+  vendorHash = "sha256-eJT3ROX/cAslWMNUdlFU6eQE8o2GlAFKrBaT//Pde1o=";
 
   proxyVendor = true;
 
@@ -29,10 +29,10 @@ buildGoModule rec {
   nativeBuildInputs = [ installShellFiles ];
 
   buildInputs =
-    lib.optionals stdenv.isLinux [ btrfs-progs ]
+    lib.optionals stdenv.hostPlatform.isLinux [ btrfs-progs ]
     ++ lib.optionals stdenv.hostPlatform.isGnu [ stdenv.cc.libc.static ];
 
-  CGO_ENABLED = if stdenv.isLinux then 1 else 0;
+  env.CGO_ENABLED = if stdenv.hostPlatform.isLinux then 1 else 0;
 
   ldflags =
     [
@@ -40,7 +40,7 @@ buildGoModule rec {
       "-w"
       "-X github.com/werf/werf/v2/pkg/werf.Version=v${version}"
     ]
-    ++ lib.optionals (CGO_ENABLED == 1) [
+    ++ lib.optionals (env.CGO_ENABLED == 1) [
       "-extldflags=-static"
       "-linkmode external"
     ];
@@ -53,7 +53,7 @@ buildGoModule rec {
       "dfrunsecurity"
       "dfssh"
     ]
-    ++ lib.optionals (CGO_ENABLED == 1) [
+    ++ lib.optionals (env.CGO_ENABLED == 1) [
       "cni"
       "exclude_graphdriver_devicemapper"
       "netgo"
@@ -73,7 +73,7 @@ buildGoModule rec {
         pkg/true_git/*test.go \
         test/e2e
     ''
-    + lib.optionalString (CGO_ENABLED == 0) ''
+    + lib.optionalString (env.CGO_ENABLED == 0) ''
       # A workaround for osusergo.
       export USER=nixbld
     '';

@@ -12,7 +12,7 @@ rustPlatform.buildRustPackage rec {
     owner = "lenivaya";
     repo = "qrrs";
     rev = "v${version}";
-    sha256 = "sha256-L8sqvLbh85b8Ds9EvXNkyGVXm8BF3ejFd8ZH7QoxJdU=";
+    hash = "sha256-L8sqvLbh85b8Ds9EvXNkyGVXm8BF3ejFd8ZH7QoxJdU=";
   };
 
   cargoHash = "sha256-RLxQ7tG5e3q4vqYJU0eNvvcEnnyNc9R9at0/ACLYJiY=";

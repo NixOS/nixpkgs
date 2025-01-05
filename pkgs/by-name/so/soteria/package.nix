@@ -21,7 +21,7 @@ rustPlatform.buildRustPackage {
   src = fetchFromGitHub {
     owner = "imvaskel";
     repo = "soteria";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-lhS+37DqSgZrgrYgKGUpKMC22Qjdq9LPNS5k/dqvkRY=";
   };
 
@@ -56,7 +56,6 @@ rustPlatform.buildRustPackage {
     mainProgram = "soteria";
     maintainers = with lib.maintainers; [
       NotAShelf
-      lychee
     ];
     inherit (polkit.meta) platforms;
   };

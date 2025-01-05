@@ -87,6 +87,8 @@ let
     RestrictAddressFamilies = [
       "AF_INET"
       "AF_INET6"
+      "AF_UNIX"
+      "AF_NETLINK"
     ];
     RestrictNamespaces = true;
     RestrictRealtime = true;
@@ -166,7 +168,7 @@ let
     # ensure all required lock files exist, but none more
     script = ''
       GLOBIGNORE="${lib.concatStringsSep ":" concurrencyLockfiles}"
-      rm -f *
+      rm -f -- *
       unset GLOBIGNORE
 
       xargs touch <<< "${toString concurrencyLockfiles}"
@@ -183,7 +185,6 @@ let
   certToConfig = cert: data: let
     acmeServer = data.server;
     useDns = data.dnsProvider != null;
-    useDnsOrS3 = useDns || data.s3Bucket != null;
     destPath = "/var/lib/acme/${cert}";
     selfsignedDeps = lib.optionals (cfg.preliminarySelfsigned) [ "acme-selfsigned-${cert}.service" ];
 
@@ -217,7 +218,7 @@ let
 
     protocolOpts = if useDns then (
       [ "--dns" data.dnsProvider ]
-      ++ lib.optionals (!data.dnsPropagationCheck) [ "--dns.disable-cp" ]
+      ++ lib.optionals (!data.dnsPropagationCheck) [ "--dns.propagation-disable-ans" ]
       ++ lib.optionals (data.dnsResolver != null) [ "--dns.resolvers" data.dnsResolver ]
     ) else if data.s3Bucket != null then [ "--http" "--http.s3-bucket" data.s3Bucket ]
     else if data.listenHTTP != null then [ "--http" "--http.port" data.listenHTTP ]
@@ -323,11 +324,11 @@ let
         cat key.pem fullchain.pem > full.pem
 
         # Group might change between runs, re-apply it
-        chown '${user}:${data.group}' *
+        chown '${user}:${data.group}' -- *
 
         # Default permissions make the files unreadable by group + anon
         # Need to be readable by group
-        chmod 640 *
+        chmod 640 -- *
       '';
     };
 
@@ -344,7 +345,7 @@ let
       serviceConfig = commonServiceConfig // {
         Group = data.group;
 
-        # Let's Encrypt Failed Validation Limit allows 5 retries per hour, per account, hostname and hour.
+        # Let's Encrypt Failed Validation Limit allows 5 retries per hour, per account, hostname and hour.
         # This avoids eating them all up if something is misconfigured upon the first try.
         RestartSec = 15 * 60;
 
@@ -367,13 +368,11 @@ let
           "/var/lib/acme/.lego/${cert}/${certDir}:/tmp/certificates"
         ];
 
-        EnvironmentFile = lib.mkIf useDnsOrS3 data.environmentFile;
+        EnvironmentFile = lib.mkIf (data.environmentFile != null) data.environmentFile;
 
-        Environment = lib.mkIf useDnsOrS3
-          (lib.mapAttrsToList (k: v: ''"${k}=%d/${k}"'') data.credentialFiles);
+        Environment = lib.mapAttrsToList (k: v: ''"${k}=%d/${k}"'') data.credentialFiles;
 
-        LoadCredential = lib.mkIf useDnsOrS3
-          (lib.mapAttrsToList (k: v: "${k}:${v}") data.credentialFiles);
+        LoadCredential = lib.mapAttrsToList (k: v: "${k}:${v}") data.credentialFiles;
 
         # Run as root (Prefixed with +)
         ExecStartPost = "+" + (pkgs.writeShellScript "acme-postrun" ''
@@ -410,7 +409,7 @@ let
 
           expiration_line="$(
             set -euxo pipefail
-            openssl x509 -noout -enddate <$pem \
+            openssl x509 -noout -enddate <"$pem" \
                   | grep notAfter \
                   | sed -e 's/^notAfter=//'
           )"
@@ -418,8 +417,8 @@ let
 
           expiration_date="$(date -d "$expiration_line" +%s)"
           now="$(date +%s)"
-          expiration_s=$[expiration_date - now]
-          expiration_days=$[expiration_s / (3600 * 24)]   # rounds down
+          expiration_s=$((expiration_date - now))
+          expiration_days=$((expiration_s / (3600 * 24)))   # rounds down
 
           [[ $expiration_days -gt ${toString data.validMinDays} ]]
         }
@@ -441,7 +440,7 @@ let
         # Check if we can renew.
         # We can only renew if the list of domains has not changed.
         # We also need an account key. Avoids #190493
-        if cmp -s domainhash.txt certificates/domainhash.txt && [ -e 'certificates/${keyName}.key' -a -e 'certificates/${keyName}.crt' -a -n "$(find accounts -name '${data.email}.key')" ]; then
+        if cmp -s domainhash.txt certificates/domainhash.txt && [ -e 'certificates/${keyName}.key' ] && [ -e 'certificates/${keyName}.crt' ] && [ -n "$(find accounts -name '${data.email}.key')" ]; then
 
           # Even if a cert is not expired, it may be revoked by the CA.
           # Try to renew, and silently fail if the cert is not expired.
@@ -968,6 +967,7 @@ in {
 
       users.users.acme = {
         home = "/var/lib/acme";
+        homeMode = "755";
         group = "acme";
         isSystemUser = true;
       };

@@ -1,29 +1,32 @@
-{ lib
-, bash
-, coreutils
-, fetchFromGitHub
-, findutils
-, gettext
-, gnused
-, installShellFiles
-, less
-, ncurses
-, nixos-option
-, stdenvNoCC
-, unixtools
-, unstableGitUpdater
+{
+  lib,
+  bash,
+  coreutils,
+  fetchFromGitHub,
+  findutils,
+  gettext,
+  gnused,
+  inetutils,
+  installShellFiles,
+  jq,
+  less,
+  ncurses,
+  nixos-option,
+  stdenvNoCC,
+  unixtools,
+  unstableGitUpdater,
 }:
 
 stdenvNoCC.mkDerivation (finalAttrs: {
   pname = "home-manager";
-  version = "0-unstable-2024-08-23";
+  version = "0-unstable-2025-01-02";
 
   src = fetchFromGitHub {
     name = "home-manager-source";
     owner = "nix-community";
     repo = "home-manager";
-    rev = "c2cd2a52e02f1dfa1c88f95abeb89298d46023be";
-    hash = "sha256-UNky3lJNGQtUEXT2OY8gMxejakSWPTfWKvpFkpFlAfM=";
+    rev = "5f6aa268e419d053c3d5025da740e390b12ac936";
+    hash = "sha256-C73gLFnEh8ZI0uDijUgCDWCd21T6I6tsaWgIBHcfAXg=";
   };
 
   nativeBuildInputs = [
@@ -40,9 +43,10 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     install -D -m755 home-manager/home-manager $out/bin/home-manager
     install -D -m755 lib/bash/home-manager.sh $out/share/bash/home-manager.sh
 
-    installShellCompletion --bash --name home-manager.bash home-manager/completion.bash
-    installShellCompletion --fish --name home-manager.fish home-manager/completion.fish
-    installShellCompletion --zsh --name _home-manager home-manager/completion.zsh
+    installShellCompletion --cmd home-manager \
+      --bash home-manager/completion.bash \
+      --fish home-manager/completion.fish \
+      --zsh home-manager/completion.zsh
 
     for pofile in home-manager/po/*.po; do
       lang="''${pofile##*/}"
@@ -63,15 +67,16 @@ stdenvNoCC.mkDerivation (finalAttrs: {
           findutils
           gettext
           gnused
+          jq
           less
           ncurses
           nixos-option
-          unixtools.hostname
+          inetutils # for `hostname`
         ]
       }" \
-      --subst-var-by HOME_MANAGER_LIB '${placeholder "out"}/share/bash/home-manager.sh' \
+      --subst-var-by HOME_MANAGER_LIB "$out/share/bash/home-manager.sh" \
       --subst-var-by HOME_MANAGER_PATH "${finalAttrs.src}" \
-      --subst-var-by OUT '${placeholder "out"}'
+      --subst-var-by OUT "$out"
   '';
 
   passthru.updateScript = unstableGitUpdater {
@@ -89,7 +94,7 @@ stdenvNoCC.mkDerivation (finalAttrs: {
     '';
     license = lib.licenses.mit;
     mainProgram = "home-manager";
-    maintainers = with lib.maintainers; [ AndersonTorres ];
+    maintainers = with lib.maintainers; [ bryango ];
     platforms = lib.platforms.unix;
   };
 })

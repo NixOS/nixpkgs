@@ -14,17 +14,17 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "SuperElastix";
     repo = "elastix";
-    rev = "refs/tags/${finalAttrs.version}";
+    tag = finalAttrs.version;
     hash = "sha256-edUMj8sjku8EVYaktteIDS+ouaN3kg+CXQCeSWKlLDI=";
   };
 
   nativeBuildInputs = [ cmake ];
-  buildInputs = [ itk ] ++ lib.optionals stdenv.isDarwin [ Cocoa ];
+  buildInputs = [ itk ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ Cocoa ];
 
-  doCheck = !stdenv.isDarwin; # usual dynamic linker issues
+  doCheck = !stdenv.hostPlatform.isDarwin; # usual dynamic linker issues
 
   meta = with lib; {
-    homepage = "https://elastix.lumc.nl";
+    homepage = "https://elastix.dev";
     description = "Image registration toolkit based on ITK";
     changelog = "https://github.com/SuperElastix/elastix/releases/tag/${finalAttrs.version}";
     maintainers = with maintainers; [ bcdarwin ];

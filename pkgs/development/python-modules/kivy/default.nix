@@ -7,7 +7,6 @@
   cython_0,
   docutils,
   kivy-garden,
-  mesa,
   mtdev,
   SDL2,
   SDL2_image,
@@ -49,11 +48,10 @@ buildPythonPackage rec {
       SDL2_ttf
       SDL2_mixer
     ]
-    ++ lib.optionals stdenv.isLinux [
-      mesa
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       mtdev
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       Accelerate
       ApplicationServices
       AVFoundation
@@ -84,9 +82,16 @@ buildPythonPackage rec {
   # prefer pkg-config over hardcoded framework paths
   USE_OSX_FRAMEWORKS = 0;
   # work around python distutils compiling C++ with $CC (see issue #26709)
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isGNU [
+      "-Wno-error=incompatible-pointer-types"
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      "-I${lib.getDev libcxx}/include/c++/v1"
+    ]
+  );
 
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace kivy/lib/mtdev.py \
       --replace "LoadLibrary('libmtdev.so.1')" "LoadLibrary('${mtdev}/lib/libmtdev.so.1')"
   '';

@@ -16,8 +16,8 @@ buildPythonPackage rec {
 
   src = fetchFromGitHub {
     owner = "rveachkc";
-    repo ="pymsteams";
-    rev = "refs/tags/${version}";
+    repo = "pymsteams";
+    tag = version;
     hash = "sha256-suPCAzjQp46+kKFiCtm65lxBbsn78Owq4dVmWCdhIpA=";
   };
 

@@ -14,7 +14,7 @@
 
 buildPythonPackage rec {
   pname = "niapy";
-  version = "2.3.1";
+  version = "2.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -22,8 +22,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NiaOrg";
     repo = "NiaPy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-cT5CU1r3LZ9ValJwRUA0PaISmF6kXAz40alXbWYogGA=";
+    tag = "v${version}";
+    hash = "sha256-+5tXwubKdhkcv5NjO/DglK+WJfsJ3AzVx/Y/byDBmGo=";
   };
 
   build-system = [ poetry-core ];
@@ -35,7 +35,10 @@ buildPythonPackage rec {
     pandas
   ];
 
-  nativeCheckInputs = [ pytest7CheckHook pytest-xdist ];
+  nativeCheckInputs = [
+    pytest7CheckHook
+    pytest-xdist
+  ];
 
   pythonImportsCheck = [ "niapy" ];
 

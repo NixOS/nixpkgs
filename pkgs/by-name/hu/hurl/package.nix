@@ -1,52 +1,49 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, fetchpatch
-, pkg-config
-, installShellFiles
-, libxml2
-, openssl
-, stdenv
-, curl
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  fetchpatch,
+  pkg-config,
+  installShellFiles,
+  libxml2,
+  openssl,
+  stdenv,
+  curl,
+  versionCheckHook,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "hurl";
-  version = "4.3.0";
+  version = "6.0.0";
 
   src = fetchFromGitHub {
     owner = "Orange-OpenSource";
-    repo = pname;
-    rev = version;
-    hash = "sha256-gSkiNwRR47CZ1YjVa5o8EByCzWBAYPfsMRXydTwFwp0=";
+    repo = "hurl";
+    tag = version;
+    hash = "sha256-zrZWYnXUuzf2cS3n56/hWDvyXVM4Y/34SOlMPrtAhJo=";
   };
 
-  cargoHash = "sha256-dY00xcMnOCWhdRzC+3mTHSIqeYEPUDBJeYd/GiLM/38=";
-
-  patches = [
-    # Fix for rust 1.79, see https://github.com/Orange-OpenSource/hurl/issues/3057
-    # We should be able to remove this at the next hurl version bump
-    (fetchpatch {
-      name = "hurl-fix-rust-1.79";
-      url = "https://github.com/Orange-OpenSource/hurl/commit/d51c275fc63d1ee5bbdc6fc70279ec8dae86a9c1.patch";
-      hash = "sha256-peA4Zq5J8ynL7trvydQ3ZqyHpJWrRmJeFeMKH9XT2n4=";
-    })
-  ];
+  cargoHash = "sha256-IuxTuIU9/6BpAXXunJ1Jjz3FPYRVPFNQhBqVAzMjNro=";
 
   nativeBuildInputs = [
     pkg-config
     installShellFiles
   ];
 
-  buildInputs = [
-    libxml2
-    openssl
-  ] ++ lib.optionals stdenv.isDarwin [
-    curl
-  ];
+  buildInputs =
+    [
+      libxml2
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      curl
+    ];
 
-  # Tests require network access to a test server
+  nativeInstallCheckInputs = [ versionCheckHook ];
+
+  # The actual tests require network access to a test server, but we can run an install check
   doCheck = false;
+  doInstallCheck = true;
 
   postInstall = ''
     installManPage docs/manual/hurl.1 docs/manual/hurlfmt.1
@@ -63,7 +60,10 @@ rustPlatform.buildRustPackage rec {
     description = "Command line tool that performs HTTP requests defined in a simple plain text format";
     homepage = "https://hurl.dev/";
     changelog = "https://github.com/Orange-OpenSource/hurl/blob/${version}/CHANGELOG.md";
-    maintainers = with maintainers; [ eonpatapon figsoda ];
+    maintainers = with maintainers; [
+      eonpatapon
+      figsoda
+    ];
     license = licenses.asl20;
     mainProgram = "hurl";
   };

@@ -17,7 +17,7 @@
 }:
 buildPythonPackage rec {
   pname = "sqlite-utils";
-  version = "3.37";
+  version = "3.38";
   pyproject = true;
 
   build-system = [ setuptools ];
@@ -27,7 +27,7 @@ buildPythonPackage rec {
   src = fetchPypi {
     inherit version;
     pname = "sqlite_utils";
-    hash = "sha256-VCpxAz1OeTb+kJIwrJeU0+IAAhg4q2Pbrzzo9bwic6Q=";
+    hash = "sha256-Gud7kxOEBSIFoVR41ClGT2xno6w7Tq/TxnSskA9iOqs=";
   };
 
   dependencies = [

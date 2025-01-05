@@ -1,4 +1,5 @@
-import ../make-test-python.nix ({ pkgs, ... }:
+import ../make-test-python.nix (
+  { pkgs, ... }:
   let
     name = "conduit";
   in
@@ -27,11 +28,11 @@ import ../make-test-python.nix ({ pkgs, ... }:
         };
         networking.firewall.allowedTCPPorts = [ 80 ];
       };
-      client = { pkgs, ... }: {
-        environment.systemPackages = [
-          (
-            pkgs.writers.writePython3Bin "do_test"
-              { libraries = [ pkgs.python3Packages.matrix-nio ]; } ''
+      client =
+        { pkgs, ... }:
+        {
+          environment.systemPackages = [
+            (pkgs.writers.writePython3Bin "do_test" { libraries = [ pkgs.python3Packages.matrix-nio ]; } ''
               import asyncio
 
               from nio import AsyncClient
@@ -78,10 +79,9 @@ import ../make-test-python.nix ({ pkgs, ... }:
                   await client.close()
 
               asyncio.get_event_loop().run_until_complete(main())
-            ''
-          )
-        ];
-      };
+            '')
+          ];
+        };
     };
 
     testScript = ''
@@ -94,4 +94,5 @@ import ../make-test-python.nix ({ pkgs, ... }:
       with subtest("ensure messages can be exchanged"):
             client.succeed("do_test")
     '';
-  })
+  }
+)

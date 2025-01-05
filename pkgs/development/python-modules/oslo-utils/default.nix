@@ -15,7 +15,7 @@
   pbr,
   pyparsing,
   pytz,
-  qemu,
+  qemu-utils,
   setuptools,
   stestr,
   testscenarios,
@@ -64,7 +64,7 @@ buildPythonPackage rec {
     eventlet
     fixtures
     oslotest
-    qemu
+    qemu-utils
     stestr
     testscenarios
     pyyaml

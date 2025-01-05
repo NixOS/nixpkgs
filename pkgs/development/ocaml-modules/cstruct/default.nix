@@ -1,4 +1,11 @@
-{ lib, fetchurl, buildDunePackage, fmt, alcotest, crowbar }:
+{
+  lib,
+  fetchurl,
+  buildDunePackage,
+  fmt,
+  alcotest,
+  crowbar,
+}:
 
 buildDunePackage rec {
   pname = "cstruct";
@@ -15,7 +22,10 @@ buildDunePackage rec {
   buildInputs = [ fmt ];
 
   doCheck = true;
-  checkInputs = [ alcotest crowbar ];
+  checkInputs = [
+    alcotest
+    crowbar
+  ];
 
   meta = {
     description = "Access C-like structures directly from OCaml";

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.livebook;
 in
@@ -13,7 +18,15 @@ in
     package = lib.mkPackageOption pkgs "livebook" { };
 
     environment = lib.mkOption {
-      type = with lib.types; attrsOf (nullOr (oneOf [ bool int str ]));
+      type =
+        with lib.types;
+        attrsOf (
+          nullOr (oneOf [
+            bool
+            int
+            str
+          ])
+        );
       default = { };
       description = ''
         Environment variables to set.
@@ -46,7 +59,7 @@ in
       type = with lib.types; nullOr lib.types.path;
       default = null;
       description = ''
-        Additional dnvironment file as defined in {manpage}`systemd.exec(5)`.
+        Additional environment file as defined in {manpage}`systemd.exec(5)`.
 
         Secrets like {env}`LIVEBOOK_PASSWORD` (which is used to specify the
         password needed to access the livebook site) or {env}`LIVEBOOK_COOKIE`
@@ -95,9 +108,9 @@ in
         # stuck running a `cat /dev/urandom | tr | fold` pipeline.
         IgnoreSIGPIPE = false;
       };
-      environment = lib.mapAttrs (name: value:
-        if lib.isBool value then lib.boolToString value else toString value)
-        cfg.environment;
+      environment = lib.mapAttrs (
+        name: value: if lib.isBool value then lib.boolToString value else toString value
+      ) cfg.environment;
       path = [ pkgs.bash ] ++ cfg.extraPackages;
       wantedBy = [ "default.target" ];
     };
@@ -105,6 +118,9 @@ in
 
   meta = {
     doc = ./livebook.md;
-    maintainers = with lib.maintainers; [ munksgaard scvalex ];
+    maintainers = with lib.maintainers; [
+      munksgaard
+      scvalex
+    ];
   };
 }

@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
 
   cfg = config.hardware.rasdaemon;
@@ -68,7 +73,7 @@ in
 
     extraModules = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [];
+      default = [ ];
       description = "extra kernel modules to load";
       example = [ "i7core_edac" ];
     };
@@ -83,7 +88,7 @@ in
         enable = cfg.mainboard != "";
         text = cfg.mainboard;
       };
-    # TODO, handle multiple cfg.labels.brand = " ";
+      # TODO, handle multiple cfg.labels.brand = " ";
       "ras/dimm_labels.d/labels" = {
         enable = cfg.labels != "";
         text = cfg.labels;
@@ -93,14 +98,19 @@ in
         text = cfg.config;
       };
     };
-    environment.systemPackages = [ pkgs.rasdaemon ]
-      ++ lib.optionals (cfg.testing) (with pkgs.error-inject; [
-        edac-inject
-        mce-inject
-        aer-inject
-      ]);
+    environment.systemPackages =
+      [ pkgs.rasdaemon ]
+      ++ lib.optionals (cfg.testing) (
+        with pkgs.error-inject;
+        [
+          edac-inject
+          mce-inject
+          aer-inject
+        ]
+      );
 
-    boot.initrd.kernelModules = cfg.extraModules
+    boot.initrd.kernelModules =
+      cfg.extraModules
       ++ lib.optionals (cfg.testing) [
         # edac_core and amd64_edac should get loaded automatically
         # i7core_edac may not be, and may not be required, but should load successfully
@@ -111,18 +121,20 @@ in
         "aer-inject"
       ];
 
-    boot.kernelPatches = lib.optionals (cfg.testing) [{
-      name = "rasdaemon-tests";
-      patch = null;
-      extraConfig = ''
-        EDAC_DEBUG y
-        X86_MCE_INJECT y
+    boot.kernelPatches = lib.optionals (cfg.testing) [
+      {
+        name = "rasdaemon-tests";
+        patch = null;
+        extraConfig = ''
+          EDAC_DEBUG y
+          X86_MCE_INJECT y
 
-        PCIEPORTBUS y
-        PCIEAER y
-        PCIEAER_INJECT y
-      '';
-    }];
+          PCIEPORTBUS y
+          PCIEAER y
+          PCIEAER_INJECT y
+        '';
+      }
+    ];
 
     # i tried to set up a group for this
     # but rasdaemon needs higher permissions?
@@ -138,8 +150,8 @@ in
         serviceConfig = {
           StateDirectory = lib.optionalString (cfg.record) "rasdaemon";
 
-          ExecStart = "${pkgs.rasdaemon}/bin/rasdaemon --foreground"
-            + lib.optionalString (cfg.record) " --record";
+          ExecStart =
+            "${pkgs.rasdaemon}/bin/rasdaemon --foreground" + lib.optionalString (cfg.record) " --record";
           ExecStop = "${pkgs.rasdaemon}/bin/rasdaemon --disable";
           Restart = "on-abort";
 

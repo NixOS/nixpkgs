@@ -1,8 +1,9 @@
-{ lib
-, buildGoModule
-, dmarc-report-converter
-, fetchFromGitHub
-, runCommand
+{
+  lib,
+  buildGoModule,
+  dmarc-report-converter,
+  fetchFromGitHub,
+  testers,
 }:
 
 buildGoModule rec {
@@ -18,23 +19,21 @@ buildGoModule rec {
 
   vendorHash = null;
 
+  checkFlags = [ "-mod=vendor ./cmd/... ./pkg/..." ];
+
   ldflags = [
     "-s"
     "-w"
     "-X main.version=${version}"
   ];
 
-  passthru.tests = {
-    simple = runCommand "dmarc-report-converter-test" { } ''
-      ${dmarc-report-converter}/bin/dmarc-report-converter -h > $out
-    '';
-  };
+  passthru.tests.version = testers.testVersion { package = dmarc-report-converter; };
 
-  meta = with lib; {
+  meta = {
     description = "Convert DMARC report files from xml to human-readable formats";
     homepage = "https://github.com/tierpod/dmarc-report-converter";
-    license = licenses.mit;
-    maintainers = with maintainers; [ Nebucatnetzer ];
+    license = lib.licenses.mit;
+    maintainers = [ lib.maintainers.Nebucatnetzer ];
     mainProgram = "dmarc-report-converter";
   };
 }

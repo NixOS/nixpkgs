@@ -5,8 +5,8 @@
   fonttools,
   protobuf,
   pytestCheckHook,
-  setuptools-scm,
   pythonOlder,
+  setuptools-scm,
 }:
 
 buildPythonPackage rec {
@@ -26,6 +26,8 @@ buildPythonPackage rec {
   # so we need to use protobuf 4 here as well to avoid a conflict
   # in the closure of fontbakery. It seems to be compatible enough.
   pythonRelaxDeps = [ "protobuf" ];
+
+  env.PROTOCOL_BUFFERS_PYTHON_IMPLEMENTATION = "python";
 
   build-system = [ setuptools-scm ];
 

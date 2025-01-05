@@ -1,5 +1,6 @@
-{ makeSetupHook
-, waf
+{
+  makeSetupHook,
+  waf,
 }:
 
 makeSetupHook {

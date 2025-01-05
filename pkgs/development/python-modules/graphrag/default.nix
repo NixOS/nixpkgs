@@ -12,27 +12,27 @@
   datashaper,
   devtools,
   environs,
-  fastparquet,
+  fnllm,
   graspologic,
   json-repair,
   lancedb,
+  matplotlib,
   networkx,
   nltk,
-  numba,
   numpy,
   openai,
+  pandas,
   pyaml-env,
+  pyarrow,
   pydantic,
   python-dotenv,
   pyyaml,
   rich,
-  scipy,
-  swifter,
   tenacity,
-  textual,
   tiktoken,
+  typer,
   typing-extensions,
-  uvloop,
+  umap-learn,
   nbformat,
   pytest-asyncio,
   pytestCheckHook,
@@ -40,14 +40,14 @@
 
 buildPythonPackage rec {
   pname = "graphrag";
-  version = "0.3.2";
+  version = "1.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "microsoft";
     repo = "graphrag";
     rev = "refs/tags/v${version}";
-    hash = "sha256-tfncCFQTeGpTBns+Gt/O7JnFVF5OcpWOwplD0hLWVvc=";
+    hash = "sha256-037PBiIyxcdJSut9kF4L23wNEJBdKM/M2I/0f4iVayo=";
   };
 
   build-system = [
@@ -66,27 +66,27 @@ buildPythonPackage rec {
     datashaper
     devtools
     environs
-    fastparquet
+    fnllm
     graspologic
     json-repair
     lancedb
+    matplotlib
     networkx
     nltk
-    numba
     numpy
     openai
+    pandas
     pyaml-env
+    pyarrow
     pydantic
     python-dotenv
     pyyaml
     rich
-    scipy
-    swifter
     tenacity
-    textual
     tiktoken
+    typer
     typing-extensions
-    uvloop
+    umap-learn
   ];
 
   env.NUMBA_CACHE_DIR = "$TMPDIR";
@@ -108,6 +108,7 @@ buildPythonPackage rec {
     "test_find"
     "test_run_extract_entities_multiple_documents"
     "test_run_extract_entities_single_document"
+    "test_sort_context"
     "test_sort_context_max_tokens"
   ];
 

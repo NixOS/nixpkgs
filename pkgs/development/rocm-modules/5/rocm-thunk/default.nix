@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, rocmUpdateScript
-, pkg-config
-, cmake
-, libdrm
-, numactl
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rocmUpdateScript,
+  pkg-config,
+  cmake,
+  libdrm,
+  numactl,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -46,9 +47,14 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Radeon open compute thunk interface";
     homepage = "https://github.com/ROCm/ROCT-Thunk-Interface";
-    license = with licenses; [ bsd2 mit ];
+    license = with licenses; [
+      bsd2
+      mit
+    ];
     maintainers = with maintainers; [ lovesegfault ] ++ teams.rocm.members;
     platforms = platforms.linux;
-    broken = versions.minor finalAttrs.version != versions.minor stdenv.cc.version || versionAtLeast finalAttrs.version "6.0.0";
+    broken =
+      versions.minor finalAttrs.version != versions.minor stdenv.cc.version
+      || versionAtLeast finalAttrs.version "6.0.0";
   };
 })

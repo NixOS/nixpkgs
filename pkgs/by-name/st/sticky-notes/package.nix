@@ -1,22 +1,23 @@
-{ lib
-, desktop-file-utils
-, fetchFromGitHub
-, fetchYarnDeps
-, fixup_yarn_lock
-, gjs
-, glib-networking
-, gobject-introspection
-, gst_all_1
-, gtk4
-, libadwaita
-, libsoup_3
-, meson
-, ninja
-, pkg-config
-, stdenv
-, wrapGAppsHook4
-, yarn
-, nodejs
+{
+  lib,
+  desktop-file-utils,
+  fetchFromGitHub,
+  fetchYarnDeps,
+  fixup_yarn_lock,
+  gjs,
+  glib-networking,
+  gobject-introspection,
+  gst_all_1,
+  gtk4,
+  libadwaita,
+  libsoup_3,
+  meson,
+  ninja,
+  pkg-config,
+  stdenv,
+  wrapGAppsHook4,
+  yarn,
+  nodejs,
 }:
 
 stdenv.mkDerivation rec {

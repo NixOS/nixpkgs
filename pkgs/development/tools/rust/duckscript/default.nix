@@ -1,29 +1,35 @@
-{ lib
-, stdenv
-, fetchCrate
-, rustPlatform
-, Security
-, openssl
-, pkg-config
-, SystemConfiguration
-, libiconv
+{
+  lib,
+  stdenv,
+  fetchCrate,
+  rustPlatform,
+  Security,
+  openssl,
+  pkg-config,
+  SystemConfiguration,
+  libiconv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "duckscript_cli";
-  version = "0.9.3";
+  version = "0.11.1";
 
   src = fetchCrate {
     inherit pname version;
-    hash = "sha256-2ouEmI7BH9J+PEN7l3rE8nmd0Khe2Bjq1Bg9SgGnB4E=";
+    hash = "sha256-afxzZkmmYnprUBquH681VHMDs3Co9C71chNoKbu6lEY=";
   };
 
   nativeBuildInputs = [ pkg-config ];
 
-  buildInputs = [ openssl ]
-    ++ lib.optionals stdenv.isDarwin [ Security SystemConfiguration libiconv ];
+  buildInputs =
+    [ openssl ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      Security
+      SystemConfiguration
+      libiconv
+    ];
 
-  cargoHash = "sha256-bBqcHETEWooMgQeqPOZIK/77DdTtGq1JusBKoRj5K6w=";
+  cargoHash = "sha256-TX/Xi57fn85GjHc74icxhsQ6n7FwqzGIr3Qoc2o681E=";
 
   meta = with lib; {
     description = "Simple, extendable and embeddable scripting language";

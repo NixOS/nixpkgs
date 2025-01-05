@@ -6,6 +6,7 @@
   coverage,
   fetchPypi,
   pdm-backend,
+  procps,
   pytest-sugar,
   pytest-xdist,
   pytestCheckHook,
@@ -17,14 +18,14 @@
 
 buildPythonPackage rec {
   pname = "typer";
-  version = "0.12.3";
+  version = "0.12.5";
   format = "pyproject";
 
   disabled = pythonOlder "3.6";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-SecxMUgdgEKI72JZjZehzu8wWJBapTahE0+QiRujVII=";
+    hash = "sha256-9ZLwib7cyOwbl0El1khRApw7GvFF8ErKZNaUEPDJtyI=";
   };
 
   nativeBuildInputs = [ pdm-backend ];
@@ -32,8 +33,8 @@ buildPythonPackage rec {
   propagatedBuildInputs = [
     click
     typing-extensions
-  # Build includes the standard optional by default
-  # https://github.com/tiangolo/typer/blob/0.12.3/pyproject.toml#L71-L72
+    # Build includes the standard optional by default
+    # https://github.com/tiangolo/typer/blob/0.12.3/pyproject.toml#L71-L72
   ] ++ optional-dependencies.standard;
 
   optional-dependencies = {
@@ -43,24 +44,32 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [
-    coverage # execs coverage in tests
-    pytest-sugar
-    pytest-xdist
-    pytestCheckHook
-  ];
+  nativeCheckInputs =
+    [
+      coverage # execs coverage in tests
+      pytest-sugar
+      pytest-xdist
+      pytestCheckHook
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      procps
+    ];
 
   preCheck = ''
     export HOME=$(mktemp -d);
   '';
 
-  disabledTests = [
-    "test_scripts"
-    # Likely related to https://github.com/sarugaku/shellingham/issues/35
-    # fails also on Linux
-    "test_show_completion"
-    "test_install_completion"
-  ] ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [ "test_install_completion" ];
+  disabledTests =
+    [
+      "test_scripts"
+      # Likely related to https://github.com/sarugaku/shellingham/issues/35
+      # fails also on Linux
+      "test_show_completion"
+      "test_install_completion"
+    ]
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
+      "test_install_completion"
+    ];
 
   pythonImportsCheck = [ "typer" ];
 

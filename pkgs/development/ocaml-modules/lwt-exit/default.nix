@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitLab
-, buildDunePackage
-, lwt
-, ptime
+{
+  lib,
+  fetchFromGitLab,
+  buildDunePackage,
+  lwt,
+  ptime,
 }:
 
 buildDunePackage rec {

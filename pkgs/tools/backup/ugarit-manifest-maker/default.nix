@@ -1,4 +1,9 @@
-{ pkgs, lib, eggDerivation, fetchegg }:
+{
+  pkgs,
+  lib,
+  eggDerivation,
+  fetchegg,
+}:
 
 let
   eggs = import ./eggs.nix { inherit eggDerivation fetchegg; };

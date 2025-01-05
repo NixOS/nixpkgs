@@ -1,4 +1,10 @@
-{ config, lib, pkgs, utils, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  utils,
+  ...
+}:
 
 let
   cfg = config.systemd.repart;
@@ -6,12 +12,12 @@ let
 
   format = pkgs.formats.ini { };
 
-  definitionsDirectory = utils.systemdUtils.lib.definitions
-    "repart.d"
-    format
-    (lib.mapAttrs (_n: v: { Partition = v; }) cfg.partitions);
+  definitionsDirectory = utils.systemdUtils.lib.definitions "repart.d" format (
+    lib.mapAttrs (_n: v: { Partition = v; }) cfg.partitions
+  );
 
-  partitionAssertions = lib.mapAttrsToList (fileName: definition:
+  partitionAssertions = lib.mapAttrsToList (
+    fileName: definition:
     let
       inherit (utils.systemdUtils.lib) GPTMaxLabelLength;
       labelLength = builtins.stringLength definition.Label;
@@ -64,7 +70,15 @@ in
       };
 
       partitions = lib.mkOption {
-        type = with lib.types; attrsOf (attrsOf (oneOf [ str int bool ]));
+        type =
+          with lib.types;
+          attrsOf (
+            attrsOf (oneOf [
+              str
+              int
+              bool
+            ])
+          );
         default = { };
         example = {
           "10-root" = {
@@ -128,9 +142,10 @@ in
               # When running in the initrd, systemd-repart by default searches
               # for definition files in /sysroot or /sysusr. We tell it to look
               # in the initrd itself.
-              ''${config.boot.initrd.systemd.package}/bin/systemd-repart \
-                  --definitions=/etc/repart.d \
-                  --dry-run=no ${lib.optionalString (initrdCfg.device != null) initrdCfg.device}
+              ''
+                ${config.boot.initrd.systemd.package}/bin/systemd-repart \
+                                  --definitions=/etc/repart.d \
+                                  --dry-run=no ${lib.optionalString (initrdCfg.device != null) initrdCfg.device}
               ''
             ];
           };
@@ -142,11 +157,7 @@ in
           # on. The service then needs to be ordered to run after this device
           # is available.
           requires = lib.mkIf (initrdCfg.device != null) [ deviceUnit ];
-          after =
-            if initrdCfg.device == null then
-              [ "sysroot.mount" ]
-            else
-              [ deviceUnit ];
+          after = if initrdCfg.device == null then [ "sysroot.mount" ] else [ deviceUnit ];
         };
     };
 

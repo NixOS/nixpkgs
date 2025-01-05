@@ -1,22 +1,26 @@
-{ lib
-, mkDerivation
-, extra-cmake-modules
-, qttools
-, qtwebengine
-, kcoreaddons
-, kconfigwidgets
-, sonnet
-, kxmlgui
-, hunspell
-, cmark
-, multimarkdown
-, pandoc
+{
+  lib,
+  mkDerivation,
+  extra-cmake-modules,
+  qttools,
+  qtwebengine,
+  kcoreaddons,
+  kconfigwidgets,
+  sonnet,
+  kxmlgui,
+  hunspell,
+  cmark,
+  multimarkdown,
+  pandoc,
 }:
 
 mkDerivation {
   pname = "ghostwriter";
 
-  nativeBuildInputs = [ extra-cmake-modules qttools ];
+  nativeBuildInputs = [
+    extra-cmake-modules
+    qttools
+  ];
 
   buildInputs = [
     qtwebengine
@@ -28,7 +32,14 @@ mkDerivation {
   ];
 
   qtWrapperArgs = [
-    "--prefix" "PATH" ":" (lib.makeBinPath [ cmark multimarkdown pandoc ])
+    "--prefix"
+    "PATH"
+    ":"
+    (lib.makeBinPath [
+      cmark
+      multimarkdown
+      pandoc
+    ])
   ];
 
   meta = with lib; {
@@ -37,6 +48,9 @@ mkDerivation {
     homepage = "https://ghostwriter.kde.org/";
     changelog = "https://invent.kde.org/office/ghostwriter/-/blob/master/CHANGELOG.md";
     license = licenses.gpl3Plus;
-    maintainers = with maintainers; [ dotlambda erictapen ];
+    maintainers = with maintainers; [
+      dotlambda
+      erictapen
+    ];
   };
 }

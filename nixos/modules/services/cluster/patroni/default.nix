@@ -1,5 +1,9 @@
-{ config, lib, pkgs, ... }:
-with lib;
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.patroni;
   defaultUser = "patroni";
@@ -21,20 +25,20 @@ in
 
   options.services.patroni = {
 
-    enable = mkEnableOption "Patroni";
+    enable = lib.mkEnableOption "Patroni";
 
-    postgresqlPackage = mkOption {
-      type = types.package;
-      example = literalExpression "pkgs.postgresql_14";
+    postgresqlPackage = lib.mkOption {
+      type = lib.types.package;
+      example = lib.literalExpression "pkgs.postgresql_14";
       description = ''
         PostgreSQL package to use.
         Plugins can be enabled like this `pkgs.postgresql_14.withPackages (p: [ p.pg_safeupdate p.postgis ])`.
       '';
     };
 
-    postgresqlDataDir = mkOption {
-      type = types.path;
-      defaultText = literalExpression ''"/var/lib/postgresql/''${config.services.patroni.postgresqlPackage.psqlSchema}"'';
+    postgresqlDataDir = lib.mkOption {
+      type = lib.types.path;
+      defaultText = lib.literalExpression ''"/var/lib/postgresql/''${config.services.patroni.postgresqlPackage.psqlSchema}"'';
       example = "/var/lib/postgresql/14";
       default = "/var/lib/postgresql/${cfg.postgresqlPackage.psqlSchema}";
       description = ''
@@ -45,16 +49,16 @@ in
       '';
     };
 
-    postgresqlPort = mkOption {
-      type = types.port;
+    postgresqlPort = lib.mkOption {
+      type = lib.types.port;
       default = 5432;
       description = ''
         The port on which PostgreSQL listens.
       '';
     };
 
-    user = mkOption {
-      type = types.str;
+    user = lib.mkOption {
+      type = lib.types.str;
       default = defaultUser;
       example = "postgres";
       description = ''
@@ -63,8 +67,8 @@ in
       '';
     };
 
-    group = mkOption {
-      type = types.str;
+    group = lib.mkOption {
+      type = lib.types.str;
       default = defaultGroup;
       example = "postgres";
       description = ''
@@ -73,64 +77,67 @@ in
       '';
     };
 
-    dataDir = mkOption {
-      type = types.path;
+    dataDir = lib.mkOption {
+      type = lib.types.path;
       default = "/var/lib/patroni";
       description = ''
         Folder where Patroni data will be written, this is where the pgpass password file will be written.
       '';
     };
 
-    scope = mkOption {
-      type = types.str;
+    scope = lib.mkOption {
+      type = lib.types.str;
       example = "cluster1";
       description = ''
         Cluster name.
       '';
     };
 
-    name = mkOption {
-      type = types.str;
+    name = lib.mkOption {
+      type = lib.types.str;
       example = "node1";
       description = ''
         The name of the host. Must be unique for the cluster.
       '';
     };
 
-    namespace = mkOption {
-      type = types.str;
+    namespace = lib.mkOption {
+      type = lib.types.str;
       default = "/service";
       description = ''
         Path within the configuration store where Patroni will keep information about the cluster.
       '';
     };
 
-    nodeIp = mkOption {
-      type = types.str;
+    nodeIp = lib.mkOption {
+      type = lib.types.str;
       example = "192.168.1.1";
       description = ''
         IP address of this node.
       '';
     };
 
-    otherNodesIps = mkOption {
-      type = types.listOf types.str;
-      example = [ "192.168.1.2" "192.168.1.3" ];
+    otherNodesIps = lib.mkOption {
+      type = lib.types.listOf lib.types.str;
+      example = [
+        "192.168.1.2"
+        "192.168.1.3"
+      ];
       description = ''
         IP addresses of the other nodes.
       '';
     };
 
-    restApiPort = mkOption {
-      type = types.port;
+    restApiPort = lib.mkOption {
+      type = lib.types.port;
       default = 8008;
       description = ''
         The port on Patroni's REST api listens.
       '';
     };
 
-    softwareWatchdog = mkOption {
-      type = types.bool;
+    softwareWatchdog = lib.mkOption {
+      type = lib.types.bool;
       default = false;
       description = ''
         This will configure Patroni to use the software watchdog built into the Linux kernel
@@ -138,7 +145,7 @@ in
       '';
     };
 
-    settings = mkOption {
+    settings = lib.mkOption {
       type = format.type;
       default = { };
       description = ''
@@ -148,8 +155,16 @@ in
       '';
     };
 
-    environmentFiles = mkOption {
-      type = with types; attrsOf (nullOr (oneOf [ str path package ]));
+    environmentFiles = lib.mkOption {
+      type =
+        with lib.types;
+        attrsOf (
+          nullOr (oneOf [
+            str
+            path
+            package
+          ])
+        );
       default = { };
       example = {
         PATRONI_REPLICATION_PASSWORD = "/secret/file";
@@ -159,7 +174,7 @@ in
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
 
     services.patroni.settings = {
       scope = cfg.scope;
@@ -179,22 +194,21 @@ in
         pgpass = "${cfg.dataDir}/pgpass";
       };
 
-      watchdog = mkIf cfg.softwareWatchdog {
+      watchdog = lib.mkIf cfg.softwareWatchdog {
         mode = "required";
         device = "/dev/watchdog";
         safety_margin = 5;
       };
     };
 
-
     users = {
-      users = mkIf (cfg.user == defaultUser) {
+      users = lib.mkIf (cfg.user == defaultUser) {
         patroni = {
           group = cfg.group;
           isSystemUser = true;
         };
       };
-      groups = mkIf (cfg.group == defaultGroup) {
+      groups = lib.mkIf (cfg.group == defaultGroup) {
         patroni = { };
       };
     };
@@ -207,11 +221,15 @@ in
         after = [ "network.target" ];
 
         script = ''
-          ${concatStringsSep "\n" (attrValues (mapAttrs (name: path: ''export ${name}="$(< ${escapeShellArg path})"'') cfg.environmentFiles))}
+          ${lib.concatStringsSep "\n" (
+            lib.attrValues (
+              lib.mapAttrs (name: path: ''export ${name}="$(< ${lib.escapeShellArg path})"'') cfg.environmentFiles
+            )
+          )}
           exec ${pkgs.patroni}/bin/patroni ${configFile}
         '';
 
-        serviceConfig = mkMerge [
+        serviceConfig = lib.mkMerge [
           {
             User = cfg.user;
             Group = cfg.group;
@@ -221,17 +239,23 @@ in
             ExecReload = "${pkgs.coreutils}/bin/kill -s HUP $MAINPID";
             KillMode = "process";
           }
-          (mkIf (cfg.postgresqlDataDir == "/var/lib/postgresql/${cfg.postgresqlPackage.psqlSchema}" && cfg.dataDir == "/var/lib/patroni") {
-            StateDirectory = "patroni postgresql postgresql/${cfg.postgresqlPackage.psqlSchema}";
-            StateDirectoryMode = "0750";
-          })
+          (lib.mkIf
+            (
+              cfg.postgresqlDataDir == "/var/lib/postgresql/${cfg.postgresqlPackage.psqlSchema}"
+              && cfg.dataDir == "/var/lib/patroni"
+            )
+            {
+              StateDirectory = "patroni postgresql postgresql/${cfg.postgresqlPackage.psqlSchema}";
+              StateDirectoryMode = "0750";
+            }
+          )
         ];
       };
     };
 
-    boot.kernelModules = mkIf cfg.softwareWatchdog [ "softdog" ];
+    boot.kernelModules = lib.mkIf cfg.softwareWatchdog [ "softdog" ];
 
-    services.udev.extraRules = mkIf cfg.softwareWatchdog ''
+    services.udev.extraRules = lib.mkIf cfg.softwareWatchdog ''
       KERNEL=="watchdog", OWNER="${cfg.user}", GROUP="${cfg.group}", MODE="0600"
     '';
 
@@ -247,5 +271,5 @@ in
     };
   };
 
-  meta.maintainers = [ maintainers.phfroidmont ];
+  meta.maintainers = [ lib.maintainers.phfroidmont ];
 }

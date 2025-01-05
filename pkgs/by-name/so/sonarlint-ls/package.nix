@@ -1,17 +1,18 @@
-{ lib
-, fetchFromGitHub
-, jre_headless
-, maven
-, jdk17
-, makeWrapper
-, writeShellApplication
-, runCommand
-, sonarlint-ls
-, curl
-, pcre
-, common-updater-scripts
-, jq
-, gnused
+{
+  lib,
+  fetchFromGitHub,
+  jre_headless,
+  maven,
+  jdk17,
+  makeWrapper,
+  writeShellApplication,
+  runCommand,
+  sonarlint-ls,
+  curl,
+  pcre,
+  common-updater-scripts,
+  jq,
+  gnused,
 }:
 
 maven.buildMavenPackage rec {
@@ -34,7 +35,6 @@ maven.buildMavenPackage rec {
   mvnHash = "sha256-ZhAQtpi0wQP8+QPeYaor2MveY+DZ9RPENb3kITnuWd8=";
 
   buildOffline = true;
-
 
   # disable node and npm module installation because the need network access
   # for the tests.
@@ -87,7 +87,13 @@ maven.buildMavenPackage rec {
       in
       lib.getExe (writeShellApplication {
         name = "update-${pname}";
-        runtimeInputs = [ curl pcre common-updater-scripts jq gnused ];
+        runtimeInputs = [
+          curl
+          pcre
+          common-updater-scripts
+          jq
+          gnused
+        ];
         text = ''
           LATEST_TAG=$(curl https://api.github.com/repos/${src.owner}/${src.repo}/tags | \
             jq -r '[.[] | select(.name | test("^[0-9]"))] | sort_by(.name | split(".") |
@@ -115,4 +121,3 @@ maven.buildMavenPackage rec {
     maintainers = with lib.maintainers; [ tricktron ];
   };
 }
-

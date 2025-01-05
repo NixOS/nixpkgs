@@ -29,7 +29,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/quadrapassel/${lib.versions.major version}/quadrapassel-${version}.tar.xz";
-    sha256 = "C9giQUIHxzEj7WpJ9yPaWsjdTfXTXtwJn/6i4TmcwAo=";
+    hash = "sha256-C9giQUIHxzEj7WpJ9yPaWsjdTfXTXtwJn/6i4TmcwAo=";
   };
 
   nativeBuildInputs = [
@@ -65,6 +65,7 @@ stdenv.mkDerivation rec {
     description = "Classic falling-block game, Tetris";
     mainProgram = "quadrapassel";
     homepage = "https://gitlab.gnome.org/GNOME/quadrapassel";
+    changelog = "https://gitlab.gnome.org/GNOME/quadrapassel/-/blob/${version}/NEWS?ref_type=tags";
     license = licenses.gpl2Plus;
     maintainers = teams.gnome.members;
     platforms = platforms.linux;

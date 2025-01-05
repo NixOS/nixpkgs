@@ -32,7 +32,7 @@ buildPythonPackage rec {
       pyspnego
     ]
     # Avoid broken Python krb5 package on Darwin
-    ++ lib.optionals (!stdenv.isDarwin) pyspnego.optional-dependencies.kerberos;
+    ++ lib.optionals (!stdenv.hostPlatform.isDarwin) pyspnego.optional-dependencies.kerberos;
 
   nativeCheckInputs = [
     pytestCheckHook

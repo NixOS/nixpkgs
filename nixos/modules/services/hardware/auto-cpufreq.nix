@@ -1,11 +1,17 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.auto-cpufreq;
   cfgFilename = "auto-cpufreq.conf";
   cfgFile = format.generate cfgFilename cfg.settings;
 
-  format = pkgs.formats.ini {};
-in {
+  format = pkgs.formats.ini { };
+in
+{
   options = {
     services.auto-cpufreq = {
       enable = lib.mkEnableOption "auto-cpufreq daemon";
@@ -15,9 +21,9 @@ in {
           Configuration for `auto-cpufreq`.
 
           The available options can be found in [the example configuration file](https://github.com/AdnanHodzic/auto-cpufreq/blob/v${pkgs.auto-cpufreq.version}/auto-cpufreq.conf-example).
-          '';
+        '';
 
-        default = {};
+        default = { };
         type = lib.types.submodule { freeformType = format.type; };
       };
     };
@@ -31,7 +37,10 @@ in {
       services.auto-cpufreq = {
         # Workaround for https://github.com/NixOS/nixpkgs/issues/81138
         wantedBy = [ "multi-user.target" ];
-        path = with pkgs; [ bash coreutils ];
+        path = with pkgs; [
+          bash
+          coreutils
+        ];
 
         serviceConfig.WorkingDirectory = "";
         serviceConfig.ExecStart = [

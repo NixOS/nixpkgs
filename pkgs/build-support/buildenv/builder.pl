@@ -77,7 +77,7 @@ for my $p (@pathsToLink) {
 sub findFiles;
 
 sub findFilesInDir {
-    my ($relName, $target, $ignoreCollisions, $checkCollisionContents, $priority) = @_;
+    my ($relName, $target, $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $priority) = @_;
 
     opendir DIR, "$target" or die "cannot open `$target': $!";
     my @names = readdir DIR or die;
@@ -85,7 +85,7 @@ sub findFilesInDir {
 
     foreach my $name (@names) {
         next if $name eq "." || $name eq "..";
-        findFiles("$relName/$name", "$target/$name", $name, $ignoreCollisions, $checkCollisionContents, $priority);
+        findFiles("$relName/$name", "$target/$name", $name, $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $priority);
     }
 }
 
@@ -115,11 +115,16 @@ sub prependDangling {
 }
 
 sub findFiles {
-    my ($relName, $target, $baseName, $ignoreCollisions, $checkCollisionContents, $priority) = @_;
+    my ($relName, $target, $baseName, $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $priority) = @_;
 
-    # The store path must not be a file
+    # The store path must not be a file when not ignoreSingleFileOutputs
     if (-f $target && isStorePath $target) {
-        die "The store path $target is a file and can't be merged into an environment using pkgs.buildEnv!";
+        if ($ignoreSingleFileOutputs) {
+            warn "The store path $target is a file and can't be merged into an environment using pkgs.buildEnv";
+            return;
+        } else {
+            die "The store path $target is a file and can't be merged into an environment using pkgs.buildEnv!";
+        }
     }
 
     # Urgh, hacky...
@@ -188,8 +193,8 @@ sub findFiles {
         }
     }
 
-    findFilesInDir($relName, $oldTarget, $ignoreCollisions, $checkCollisionContents, $oldPriority) unless $oldTarget eq "";
-    findFilesInDir($relName, $target, $ignoreCollisions, $checkCollisionContents, $priority);
+    findFilesInDir($relName, $oldTarget, $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $oldPriority) unless $oldTarget eq "";
+    findFilesInDir($relName, $target, $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $priority);
 
     $symlinks{$relName} = ["", $priority]; # denotes directory
 }
@@ -199,12 +204,12 @@ my %done;
 my %postponed;
 
 sub addPkg {
-    my ($pkgDir, $ignoreCollisions, $checkCollisionContents, $priority)  = @_;
+    my ($pkgDir, $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $priority)  = @_;
 
     return if (defined $done{$pkgDir});
     $done{$pkgDir} = 1;
 
-    findFiles("", $pkgDir, "", $ignoreCollisions, $checkCollisionContents, $priority);
+    findFiles("", $pkgDir, "", $ignoreCollisions, $ignoreSingleFileOutputs, $checkCollisionContents, $priority);
 
     my $propagatedFN = "$pkgDir/nix-support/propagated-user-env-packages";
     if (-e $propagatedFN) {
@@ -235,6 +240,7 @@ for my $pkg (@{decode_json $pkgs}) {
     for my $path (@{$pkg->{paths}}) {
         addPkg($path,
                $ENV{"ignoreCollisions"} eq "1",
+               $ENV{"ignoreSingleFileOutputs"} eq "1",
                $ENV{"checkCollisionContents"} eq "1",
                $pkg->{priority})
            if -e $path;
@@ -251,10 +257,26 @@ while (scalar(keys %postponed) > 0) {
     my @pkgDirs = keys %postponed;
     %postponed = ();
     foreach my $pkgDir (sort @pkgDirs) {
-        addPkg($pkgDir, 2, $ENV{"checkCollisionContents"} eq "1", $priorityCounter++);
+        addPkg($pkgDir, 2, $ENV{"ignoreSingleFileOutputs"} eq "1", $ENV{"checkCollisionContents"} eq "1", $priorityCounter++);
     }
 }
 
+my $extraPathsFilePath = $ENV{"extraPathsFrom"};
+if ($extraPathsFilePath) {
+    open FILE, $extraPathsFilePath or die "cannot open extra paths file $extraPathsFilePath: $!";
+
+    while(my $line = <FILE>) {
+        chomp $line;
+        addPkg($line,
+               $ENV{"ignoreCollisions"} eq "1",
+               $ENV{"ignoreSingleFileOutputs"} eq "1",
+               $ENV{"checkCollisionContents"} eq "1",
+               1000)
+            if -d $line;
+    }
+
+    close FILE;
+}
 
 # Create the symlinks.
 my $nrLinks = 0;

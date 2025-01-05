@@ -1,31 +1,35 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, testers
-, pinact
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  testers,
+  nix-update-script,
+  pinact,
 }:
 
 let
   pname = "pinact";
-  version = "0.2.1";
+  version = "1.0.0";
   src = fetchFromGitHub {
     owner = "suzuki-shunsuke";
     repo = "pinact";
     rev = "v${version}";
-    hash = "sha256-HfeHfKXDBHPgxisWSVnrLOQf/4NXtnehkIjQqiCoFIc=";
+    hash = "sha256-fOmQDfqG1aWzpL80Nc8JA6HWQR+z9mhqtwU4rC2g2Gg=";
   };
 in
 buildGoModule {
   inherit pname version src;
 
-  vendorHash = "sha256-L9EGygiJ40f7Yw46KdaAof5O/ren6inTK7XerB/uv1g=";
+  vendorHash = "sha256-AFlkzs5mL/x9CwfF2apLcQbiu60GD33oFH6lQDHAL1M=";
 
   doCheck = true;
 
-  passthru.tests.version = testers.testVersion {
-    package = pinact;
-    command = "pinact --version";
-    version = src.rev;
+  passthru = {
+    tests.version = testers.testVersion {
+      package = pinact;
+    };
+
+    updateScript = nix-update-script { };
   };
 
   ldflags = [

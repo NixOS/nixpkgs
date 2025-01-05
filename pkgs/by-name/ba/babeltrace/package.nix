@@ -11,7 +11,7 @@
   elfutils,
   enablePython ? false,
   pythonPackages ? null,
-  swig4,
+  swig,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -20,7 +20,7 @@ stdenv.mkDerivation (finalAttrs: {
 
   src = fetchurl {
     url = "https://www.efficios.com/files/babeltrace/babeltrace-${finalAttrs.version}.tar.bz2";
-    sha256 = "Z7Q6qu9clR+nrxpVfPcgGhH+iYdrfCK6CgPLwxbbWpw=";
+    hash = "sha256-Z7Q6qu9clR+nrxpVfPcgGhH+iYdrfCK6CgPLwxbbWpw=";
   };
 
   nativeBuildInputs =
@@ -34,7 +34,7 @@ stdenv.mkDerivation (finalAttrs: {
       pkg-config
     ]
     ++ lib.optionals enablePython [
-      swig4
+      swig
       pythonPackages.setuptools
     ];
   buildInputs = [

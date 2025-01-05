@@ -1,13 +1,14 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, asio
-, boost
-, cmake
-, hwloc
-, gperftools
-, pkg-config
-, python3
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  asio,
+  boost,
+  cmake,
+  hwloc,
+  gperftools,
+  pkg-config,
+  python3,
 }:
 
 stdenv.mkDerivation rec {
@@ -22,8 +23,16 @@ stdenv.mkDerivation rec {
   };
 
   propagatedBuildInputs = [ hwloc ];
-  buildInputs = [ asio boost gperftools ];
-  nativeBuildInputs = [ cmake pkg-config python3 ];
+  buildInputs = [
+    asio
+    boost
+    gperftools
+  ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+    python3
+  ];
 
   strictDeps = true;
 

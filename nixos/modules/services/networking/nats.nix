@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 with lib;
 
@@ -10,14 +15,18 @@ let
 
   configFile = format.generate "nats.conf" cfg.settings;
 
-  validateConfig = file:
-  pkgs.runCommand "validate-nats-conf" {
-    nativeBuildInputs = [ pkgs.nats-server ];
-  } ''
-    nats-server --config "${configFile}" -t
-    ln -s "${configFile}" "$out"
-  '';
-in {
+  validateConfig =
+    file:
+    pkgs.runCommand "validate-nats-conf"
+      {
+        nativeBuildInputs = [ pkgs.nats-server ];
+      }
+      ''
+        nats-server --config "${configFile}" -t
+        ln -s "${configFile}" "$out"
+      '';
+in
+{
 
   ### Interface
 
@@ -140,11 +149,17 @@ in {
           ProtectSystem = "strict";
           ReadOnlyPaths = [ ];
           ReadWritePaths = [ cfg.dataDir ];
-          RestrictAddressFamilies = [ "AF_INET" "AF_INET6" ];
+          RestrictAddressFamilies = [
+            "AF_INET"
+            "AF_INET6"
+          ];
           RestrictNamespaces = true;
           RestrictRealtime = true;
           RestrictSUIDSGID = true;
-          SystemCallFilter = [ "@system-service" "~@privileged" ];
+          SystemCallFilter = [
+            "@system-service"
+            "~@privileged"
+          ];
           UMask = "0077";
         }
       ];

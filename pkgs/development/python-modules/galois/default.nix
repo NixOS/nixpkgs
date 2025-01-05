@@ -13,23 +13,26 @@
 
 buildPythonPackage rec {
   pname = "galois";
-  version = "0.4.1";
-  format = "pyproject";
+  version = "0.4.3";
+  pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchFromGitHub {
     owner = "mhostetter";
     repo = "galois";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-ZNVBP/c1Q7635PbySk5Yxz7riYNLnBnJLG6AMxy/ZeA=";
+    tag = "v${version}";
+    hash = "sha256-1gKL97oS06vgq4gpQSXeMfKzAtjAGQnB48W5BOiMBHA=";
   };
 
-  nativeBuildInputs = [
-    setuptools-scm
+  pythonRelaxDeps = [
+    "numpy"
+    "numba"
   ];
 
-  propagatedBuildInputs = [
+  build-system = [ setuptools-scm ];
+
+  dependencies = [
     numpy
     numba
     typing-extensions
@@ -38,11 +41,6 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     pytestCheckHook
     pytest-xdist
-  ];
-
-  pythonRelaxDeps = [
-    "numpy"
-    "numba"
   ];
 
   pythonImportsCheck = [ "galois" ];

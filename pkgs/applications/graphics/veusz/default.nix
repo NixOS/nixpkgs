@@ -1,8 +1,9 @@
-{ lib
-, python3Packages
-, fetchPypi
-, wrapQtAppsHook
-, qtbase
+{
+  lib,
+  python3Packages,
+  fetchPypi,
+  wrapQtAppsHook,
+  qtbase,
 }:
 
 python3Packages.buildPythonApplication rec {

@@ -1,9 +1,10 @@
 { stdenv
 , lib
-, fetchurl
+, fetchFromGitHub
 , openssl
 , nettle
 , expat
+, flex
 , libevent
 , libsodium
 , protobufc
@@ -36,10 +37,12 @@
 , withRedis ? false
 # Avoid .lib depending on lib.getLib openssl
 # The build gets a little hacky, so in some cases we disable this approach.
-, withSlimLib ? stdenv.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP
+, withSlimLib ? stdenv.hostPlatform.isLinux && !stdenv.hostPlatform.isMusl && !withDNSTAP
 # enable support for python plugins in unbound: note this is distinct from pyunbound
 # see https://unbound.docs.nlnetlabs.nl/en/latest/developer/python-modules.html
 , withPythonModule ? false
+# enable support for .so plugins
+, withDynlibModule ? false
 , withLto ? !stdenv.hostPlatform.isStatic && !stdenv.hostPlatform.isMinGW
 , withMakeWrapper ? !stdenv.hostPlatform.isMinGW
 , libnghttp2
@@ -50,11 +53,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "unbound";
-  version = "1.21.0";
+  version = "1.22.0";
 
-  src = fetchurl {
-    url = "https://nlnetlabs.nl/downloads/unbound/unbound-${finalAttrs.version}.tar.gz";
-    hash = "sha256-59yn1rD4G9+m+mTr8QU7WpmaWukniofvGCQlBn6hRSE=";
+  src = fetchFromGitHub {
+    owner = "NLnetLabs";
+    repo = "unbound";
+    tag = "release-${finalAttrs.version}";
+    hash = "sha256-CFsd8tdFL+JbxmDZoWdStvWcs9azSaLtMG8Ih5oXE/A=";
   };
 
   outputs = [ "out" "lib" "man" ]; # "dev" would only split ~20 kB
@@ -62,7 +67,7 @@ stdenv.mkDerivation (finalAttrs: {
   nativeBuildInputs =
     lib.optionals withMakeWrapper [ makeWrapper ]
     ++ lib.optionals withDNSTAP [ protobufc ]
-    ++ [ pkg-config ]
+    ++ [ pkg-config flex bison ]
     ++ lib.optionals withPythonModule [ swig ];
 
   buildInputs = [ openssl nettle expat libevent ]
@@ -88,6 +93,8 @@ stdenv.mkDerivation (finalAttrs: {
     "--enable-systemd"
   ] ++ lib.optionals withPythonModule [
     "--with-pythonmodule"
+  ] ++ lib.optionals withDynlibModule [
+    "--with-dynlibmodule"
   ] ++ lib.optionals withDoH [
     "--with-libnghttp2=${libnghttp2.dev}"
   ] ++ lib.optionals withECS [
@@ -114,8 +121,6 @@ stdenv.mkDerivation (finalAttrs: {
     sed -E '/CONFCMDLINE/ s;${storeDir}/[a-z0-9]{32}-;${storeDir}/eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee-;g' -i config.h
   '';
 
-  nativeCheckInputs = [ bison ];
-
   doCheck = true;
 
   postPatch = lib.optionalString withPythonModule ''
@@ -140,7 +145,8 @@ stdenv.mkDerivation (finalAttrs: {
     # Build libunbound again, but only against nettle instead of openssl.
     # This avoids gnutls.out -> unbound.lib -> lib.getLib openssl.
     ''
-      configureFlags="$configureFlags --with-nettle=${nettle.dev} --with-libunbound-only"
+      appendToVar configureFlags "--with-nettle=${nettle.dev}"
+      appendToVar configureFlags "--with-libunbound-only"
       configurePhase
       buildPhase
       if [ -n "$doCheck" ]; then
@@ -164,7 +170,7 @@ stdenv.mkDerivation (finalAttrs: {
     description = "Validating, recursive, and caching DNS resolver";
     license = licenses.bsd3;
     homepage = "https://www.unbound.net";
-    maintainers = lib.teams.helsinki-systems.members;
+    maintainers = [ ];
     platforms = platforms.unix ++ platforms.windows;
   };
 })

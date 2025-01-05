@@ -52,8 +52,6 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [ pytestCheckHook ];
 
-  doCheck = true;
-
   disabledTests = [
     # https://github.com/google-research/google-research/issues/1203
     "testRougeLSumSentenceSplitting"

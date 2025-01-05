@@ -1,8 +1,9 @@
-{ lib
-, stdenv
-, fetchCrate
-, rustPlatform
-, Security
+{
+  lib,
+  stdenv,
+  fetchCrate,
+  rustPlatform,
+  Security,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -16,7 +17,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-QKSNbpVRtSKp2q1jVPYTS8XCMtQAyg3AWvD/6+OjI7Y=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ Security ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ Security ];
 
   doCheck = false;
 

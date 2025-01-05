@@ -4,7 +4,7 @@
 # Tester arguments
 { package,
   moduleNames ? package.meta.pkgConfigModules,
-  testName ? "check-pkg-config-${lib.concatStringsSep "-" moduleNames}",
+  testName ? "check-pkg-config-${package.pname or package.name}",
   version ? package.version or null,
   versionCheck ? false,
 }:

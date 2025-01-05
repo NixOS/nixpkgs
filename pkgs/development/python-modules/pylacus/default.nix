@@ -9,7 +9,7 @@
 
 buildPythonPackage rec {
   pname = "pylacus";
-  version = "1.10.0";
+  version = "1.12.0";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,8 +17,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "PyLacus";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-HPd/kF79Xb5kyYdOpm6ny6/rRNeu8WkTv7rM1Kpb7YI=";
+    tag = "v${version}";
+    hash = "sha256-M7xPJKM/8fY8RBU2ESzaYOfENICCRNexORJGkerD4FM=";
   };
 
   build-system = [ poetry-core ];

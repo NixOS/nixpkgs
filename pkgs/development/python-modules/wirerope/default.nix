@@ -4,20 +4,21 @@
   fetchFromGitHub,
   setuptools,
   six,
+  nix-update-script,
   pytestCheckHook,
   pytest-cov-stub,
 }:
 
 buildPythonPackage rec {
   pname = "wirerope";
-  version = "0.4.7";
+  version = "0.4.8";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "youknowone";
     repo = "wirerope";
     rev = version;
-    hash = "sha256-Xi6I/TXttjCregknmZUhV5GAiNR/HmEi4wCZiCmp0DQ=";
+    hash = "sha256-Qb0gTCtVWdvZnwS6+PHoBr0syHtpfRI8ugh7zO7k9rk=";
   };
 
   build-system = [ setuptools ];
@@ -30,6 +31,8 @@ buildPythonPackage rec {
     pytestCheckHook
     pytest-cov-stub
   ];
+
+  passthru.updateScript = nix-update-script { };
 
   meta = with lib; {
     description = "Wrappers for class callables";

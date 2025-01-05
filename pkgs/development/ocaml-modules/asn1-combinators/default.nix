@@ -1,20 +1,23 @@
-{ lib, buildDunePackage, fetchurl
-, cstruct, zarith, bigarray-compat, stdlib-shims, ptime, alcotest
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  ptime,
+  alcotest,
 }:
 
 buildDunePackage rec {
   minimalOCamlVersion = "4.08";
-  duneVersion = "3";
 
   pname = "asn1-combinators";
-  version = "0.2.6";
+  version = "0.3.1";
 
   src = fetchurl {
-    url = "https://github.com/mirleft/ocaml-asn1-combinators/releases/download/v${version}/asn1-combinators-v${version}.tbz";
-    sha256 = "sha256-ASreDYhp72IQY3UsHPjqAm9rxwL+0Q35r1ZojikbGpE=";
+    url = "https://github.com/mirleft/ocaml-asn1-combinators/releases/download/v${version}/asn1-combinators-${version}.tbz";
+    hash = "sha256-+imExupuHhxP4gM/AWWvYRljwkAM4roFEAS3ffxVfE4=";
   };
 
-  propagatedBuildInputs = [ cstruct zarith bigarray-compat stdlib-shims ptime ];
+  propagatedBuildInputs = [ ptime ];
 
   doCheck = true;
   checkInputs = [ alcotest ];

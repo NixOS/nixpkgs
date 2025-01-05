@@ -1,18 +1,19 @@
-{ stdenv
-, lib
-, fetchFromGitHub
-, pkg-config
-, mono
-, glib
-, pango
-, gtk2
-, libxml2
-, monoDLLFixer
-, autoconf
-, automake
-, libtool
-, which
-, fetchpatch
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  pkg-config,
+  mono,
+  glib,
+  pango,
+  gtk2,
+  libxml2,
+  monoDLLFixer,
+  autoconf,
+  automake,
+  libtool,
+  which,
+  fetchpatch,
 }:
 
 stdenv.mkDerivation rec {
@@ -43,10 +44,19 @@ stdenv.mkDerivation rec {
     popd
   '';
 
-  nativeBuildInputs = [ pkg-config autoconf automake libtool which ];
+  nativeBuildInputs = [
+    pkg-config
+    autoconf
+    automake
+    libtool
+    which
+  ];
 
   buildInputs = [
-    mono glib pango gtk2
+    mono
+    glib
+    pango
+    gtk2
     libxml2
   ];
 
@@ -54,9 +64,11 @@ stdenv.mkDerivation rec {
     ./bootstrap-${lib.versions.majorMinor version}
   '';
 
-  env.NIX_CFLAGS_COMPILE = toString (lib.optionals stdenv.cc.isClang [
-    "-Wno-error=int-conversion"
-  ]);
+  env.NIX_CFLAGS_COMPILE = toString (
+    lib.optionals stdenv.cc.isClang [
+      "-Wno-error=int-conversion"
+    ]
+  );
 
   dontStrip = true;
 

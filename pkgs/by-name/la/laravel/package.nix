@@ -4,21 +4,21 @@
   makeWrapper,
   php,
 }:
-php.buildComposerProject (finalAttrs: {
+php.buildComposerProject2 (finalAttrs: {
   pname = "laravel";
-  version = "5.8.3";
+  version = "5.9.2";
 
   src = fetchFromGitHub {
     owner = "laravel";
     repo = "installer";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-a7DbpjIcT1JbhuzpzQVQ/iiWLAVF/XisrTUsDbR78XQ=";
+    hash = "sha256-XE1KYOlWehj1peSNj3sKNr6CKchCxRNpIjXHq7slVME=";
   };
 
   nativeBuildInputs = [ makeWrapper ];
 
   composerLock = ./composer.lock;
-  vendorHash = "sha256-NyD/kyqGyE+yO7wCitMipTWnKbGSd/FSQ3iGcXvCv5Y=";
+  vendorHash = "sha256-jUg0hmkShzK1CAO3+Btqe3/5GFKVxRKDtIxmUuU3EdU=";
 
   postInstall = ''
     wrapProgram $out/bin/laravel \

@@ -22,38 +22,6 @@ let
   defaultSingularity = singularity;
 in
 lib.makeExtensible (final: {
-  # TODO(@ShamrockLee): Remove after Nixpkgs 24.11 branch-off.
-  shellScript =
-    lib.warn
-      "`singularity-tools.shellScript` is deprecated. Use `writeScript`, `writeShellScripts` or `writers.writeBash` instead."
-      (
-        name: text:
-        writeScript name ''
-          #!${runtimeShell}
-          set -e
-          ${text}
-        ''
-      );
-
-  # TODO(@ShamrockLee): Remove after Nixpkgs 24.11 branch-off.
-  mkLayer =
-    lib.warn
-      "`singularity-tools.mkLayer` is deprecated, as it is no longer used to implement `singularity-tools.buildImages`."
-      (
-        {
-          name,
-          contents ? [ ],
-          # May be "apptainer" instead of "singularity"
-          projectName ? (singularity.projectName or "singularity"),
-        }:
-        runCommand "${projectName}-layer-${name}" { inherit contents; } ''
-          mkdir $out
-          for f in $contents ; do
-            cp -ra $f $out/
-          done
-        ''
-      );
-
   buildImage =
     {
       name,
@@ -83,12 +51,14 @@ lib.makeExtensible (final: {
       result = vmTools.runInLinuxVM (
         runCommand "${projectName}-image-${name}.sif"
           {
+            __structuredAttrs = true;
             nativeBuildInputs = [
               singularity
               e2fsprogs
               util-linux
             ];
             strictDeps = true;
+            inherit contents;
             layerClosure = writeClosure ([ bashInteractive ] ++ runScriptReferences ++ contents);
             preVM = vmTools.createEmptyImage {
               size = diskSize;
@@ -99,7 +69,6 @@ lib.makeExtensible (final: {
             inherit memSize;
           }
           ''
-            rmdir "$out"
             mkdir workspace
             mkfs -t ext3 -b 4096 /dev/${vmTools.hd}
             mount /dev/${vmTools.hd} workspace
@@ -119,15 +88,10 @@ lib.makeExtensible (final: {
             mkdir -p bin ./${builtins.storeDir}
             # Loop over the line-separated paths in $layerClosure
             while IFS= read -r f; do
-              cp -r "$f" "./$f"
+              cp -ar "$f" "./$f"
             done < "$layerClosure"
 
-            # TODO(@ShamrockLee):
-            # Once vmTools.runInLinuxVMm works with `__structuredAttrs = true` (#334705),
-            # set __structuredAttrs = true and pass contents as an attribute
-            # so that we could loop with `for c in ''${contents[@]}`
-            # instead of expanding all the paths in contents into the Bash string.
-            for c in ${lib.escapeShellArgs contents} ; do
+            for c in "''${contents[@]}"; do
               for f in "$c"/bin/* ; do
                 if [ ! -e "bin/$(basename "$f")" ] ; then
                   ln -s "$f" bin/

@@ -4,8 +4,7 @@ with haskellLib;
 
 let
   inherit (pkgs.stdenv.hostPlatform) isDarwin;
-
-  disableParallelBuilding = haskellLib.overrideCabal (drv: { enableParallelBuilding = false; });
+  inherit (pkgs) lib;
 in
 
 self: super: {
@@ -55,9 +54,9 @@ self: super: {
   # Version upgrades
   #
   th-abstraction = doDistribute self.th-abstraction_0_7_0_0;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_2_20240223;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_8_3_20241022;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_8_0_2;
-  ghc-lib = doDistribute self.ghc-lib_9_8_2_20240223;
+  ghc-lib = doDistribute self.ghc-lib_9_8_3_20241022;
   megaparsec = doDistribute self.megaparsec_9_6_1;
   # aeson 2.2.3.0 seemingly unnecessesarily bumped the lower bound on hashable
   # https://github.com/haskell/aeson/commit/1a666febd0775d8e88d315ece1b97cd20602fb5f
@@ -119,6 +118,7 @@ self: super: {
   string-random = doJailbreak super.string-random; # text >=1.2.2.1 && <2.1
   inflections = doJailbreak super.inflections; # text >=0.2 && <2.1
   universe-some = doJailbreak super.universe-some; # th-abstraction < 0.7
+  broadcast-chan = doJailbreak super.broadcast-chan; # base <4.19  https://github.com/merijn/broadcast-chan/pull/19
 
   #
   # Test suite issues
@@ -146,7 +146,9 @@ self: super: {
     sha256 = "sha256-umjwgdSKebJdRrXjwHhsi8HBqotx1vFibY9ttLkyT/0=";
   }) super.reflex;
 
-  # https://gitlab.haskell.org/ghc/ghc/-/issues/23392
-  gi-gtk = disableParallelBuilding super.gi-gtk;
-
+}
+// lib.optionalAttrs (lib.versionAtLeast super.ghc.version "9.8.3") {
+  # Breakage related to GHC 9.8.3 / deepseq 1.5.1.0
+  # https://github.com/typeable/generic-arbitrary/issues/18
+  generic-arbitrary = dontCheck super.generic-arbitrary;
 }

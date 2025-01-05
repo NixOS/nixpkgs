@@ -17,6 +17,8 @@
   # env
   fetchurl,
 
+  versionCheckHook,
+
   testers,
   mistral-rs,
   nix-update-script,
@@ -63,7 +65,8 @@ let
 
   metalSupport =
     assert accelIsValid;
-    (acceleration == "metal") || (stdenv.isDarwin && stdenv.isAarch64 && (acceleration == null));
+    (acceleration == "metal")
+    || (stdenv.hostPlatform.isDarwin && stdenv.hostPlatform.isAarch64 && (acceleration == null));
 
   darwinBuildInputs =
     with darwin.apple_sdk.frameworks;
@@ -80,22 +83,17 @@ in
 
 rustPlatform.buildRustPackage rec {
   pname = "mistral-rs";
-  version = "0.3.0";
+  version = "0.3.2";
 
   src = fetchFromGitHub {
     owner = "EricLBuehler";
     repo = "mistral.rs";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-3o7Esn+hEXKOoHX6JeXu/sgkWeL6tLCoH+Ep81/LoeU=";
+    tag = "v${version}";
+    hash = "sha256-aflzpJZ48AFBqNTssZl2KxkspQb662nGkEU6COIluxk=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "bindgen_cuda-0.1.6" = "sha256-OWGcQxT+x5HyIFskNVWpPr6Qfkh6Mv/g4PVSm5oA27g=";
-      "candle-core-0.6.0" = "sha256-8UBDQfbVR4gsZRRCy899DA27saiC85+FRm6L4YBX2oA=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-USp8siEXVjtkPoCHfQjDYPtgLfNHcy02LSUNdwDbxgs=";
 
   nativeBuildInputs = [
     pkg-config
@@ -114,7 +112,7 @@ rustPlatform.buildRustPackage rec {
       cudaPackages.libcurand
     ]
     ++ lib.optionals mklSupport [ mkl ]
-    ++ lib.optionals stdenv.isDarwin darwinBuildInputs;
+    ++ lib.optionals stdenv.hostPlatform.isDarwin darwinBuildInputs;
 
   cargoBuildFlags =
     [
@@ -125,7 +123,7 @@ rustPlatform.buildRustPackage rec {
     ]
     ++ lib.optionals cudaSupport [ "--features=cuda" ]
     ++ lib.optionals mklSupport [ "--features=mkl" ]
-    ++ lib.optionals (stdenv.isDarwin && metalSupport) [ "--features=metal" ];
+    ++ lib.optionals (stdenv.hostPlatform.isDarwin && metalSupport) [ "--features=metal" ];
 
   env =
     {
@@ -178,6 +176,13 @@ rustPlatform.buildRustPackage rec {
     "--skip=util::tests::test_parse_image_url"
   ];
 
+  nativeInstallCheckInputs = [
+    versionCheckHook
+  ];
+  versionCheckProgram = "${placeholder "out"}/bin/mistralrs-server";
+  versionCheckProgramArg = [ "--version" ];
+  doInstallCheck = true;
+
   passthru = {
     tests = {
       version = testers.testVersion { package = mistral-rs; };
@@ -186,7 +191,9 @@ rustPlatform.buildRustPackage rec {
       withMkl = lib.optionalAttrs (stdenv.hostPlatform == "x86_64-linux") (
         mistral-rs.override { acceleration = "mkl"; }
       );
-      withCuda = lib.optionalAttrs stdenv.isLinux (mistral-rs.override { acceleration = "cuda"; });
+      withCuda = lib.optionalAttrs stdenv.hostPlatform.isLinux (
+        mistral-rs.override { acceleration = "cuda"; }
+      );
       withMetal = lib.optionalAttrs (stdenv.hostPlatform == "aarch64-darwin") (
         mistral-rs.override { acceleration = "metal"; }
       );

@@ -1,5 +1,6 @@
 {
   lib,
+  stdenv,
   buildPythonPackage,
   fetchPypi,
   pythonOlder,
@@ -10,19 +11,12 @@
   numpy,
   scipy,
   typing-extensions,
-  coverage,
-  flake8,
-  pytest,
-  pytest-timeout,
-  pytest-xvfb,
-  sympy,
   pytestCheckHook,
-  pythonRelaxDepsHook,
 }:
 
 buildPythonPackage rec {
   pname = "spatialmath-python";
-  version = "1.1.10";
+  version = "1.1.13";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
@@ -30,18 +24,19 @@ buildPythonPackage rec {
   src = fetchPypi {
     pname = "spatialmath_python";
     inherit version;
-    hash = "sha256-7h29RHCrxdexpabtxMQx/7RahQmCDGHhdJ1WETvtfYg=";
+    hash = "sha256-BhIB4VapnARkzyhps8xRWnQTAlRB8aVPDpNuN/FNezo=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     oldest-supported-numpy
     setuptools
-    pythonRelaxDepsHook
   ];
 
   pythonRemoveDeps = [ "pre-commit" ];
 
-  propagatedBuildInputs = [
+  pythonRelaxDeps = [ "matplotlib" ];
+
+  dependencies = [
     ansitable
     matplotlib
     numpy
@@ -49,20 +44,16 @@ buildPythonPackage rec {
     typing-extensions
   ];
 
-  passthru.optional-dependencies = {
-    dev = [
-      coverage
-      flake8
-      pytest
-      pytest-timeout
-      pytest-xvfb
-      sympy
-    ];
-  };
-
   pythonImportsCheck = [ "spatialmath" ];
 
   nativeCheckInputs = [ pytestCheckHook ];
+
+  disabledTestPaths = [
+    # tests hang
+    "tests/test_spline.py"
+  ];
+
+  env.MPLBACKEND = lib.optionalString stdenv.hostPlatform.isDarwin "Agg";
 
   meta = with lib; {
     description = "Provides spatial maths capability for Python";

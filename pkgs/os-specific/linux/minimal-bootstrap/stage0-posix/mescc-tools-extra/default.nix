@@ -1,15 +1,22 @@
-{ lib
-, derivationWithMeta
-, kaem-unwrapped
-, mescc-tools
-, src
-, version
-, platforms
-, m2libcArch
-, m2libcOS
+{
+  lib,
+  derivationWithMeta,
+  kaem-unwrapped,
+  mescc-tools,
+  src,
+  version,
+  platforms,
+  m2libcArch,
+  m2libcOS,
 }:
 derivationWithMeta {
-  inherit version src mescc-tools m2libcArch m2libcOS;
+  inherit
+    version
+    src
+    mescc-tools
+    m2libcArch
+    m2libcOS
+    ;
   pname = "mescc-tools-extra";
   builder = kaem-unwrapped;
   args = [

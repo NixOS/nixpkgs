@@ -493,7 +493,7 @@ in
                 };
                 "~* ^/.well-known/(caldav|carddav)$" = {
                   extraConfig = ''
-                    return 302 $http_x_forwarded_proto://$host/dav/;
+                    return 302 https://$host/dav/;
                   '';
                 };
                 "~ ^(.+\.php)(.*)$" = {
@@ -505,7 +505,7 @@ in
                     fastcgi_param            SCRIPT_FILENAME  $document_root$fastcgi_script_name;
                     fastcgi_param            PATH_INFO        $fastcgi_path_info;
                     fastcgi_split_path_info  ^(.+\.php)(.*)$;
-                    fastcgi_param            X-Forwarded-Proto $http_x_forwarded_proto;
+                    fastcgi_param            X-Forwarded-Proto https;
                     fastcgi_param            X-Forwarded-Port $http_x_forwarded_port;
                   '';
                 };

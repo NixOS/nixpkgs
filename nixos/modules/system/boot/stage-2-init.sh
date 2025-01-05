@@ -125,14 +125,6 @@ ln -sfn "$systemConfig" /run/booted-system
 @shell@ @postBootCommands@
 
 
-# Ensure systemd doesn't try to populate /etc, by forcing its first-boot
-# heuristic off. It doesn't matter what's in /etc/machine-id for this purpose,
-# and systemd will immediately fill in the file when it starts, so just
-# creating it is enough. This `: >>` pattern avoids forking and avoids changing
-# the mtime if the file already exists.
-: >> /etc/machine-id
-
-
 # No need to restore the stdout/stderr streams we never redirected and
 # especially no need to start systemd
 if [ "${IN_NIXOS_SYSTEMD_STAGE1:-}" != true ]; then

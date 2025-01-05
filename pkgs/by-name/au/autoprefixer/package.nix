@@ -5,8 +5,9 @@
   pnpm_9,
   fetchFromGitHub,
   callPackage,
-  nix-update-script
-}: stdenv.mkDerivation (finalAttrs: {
+  nix-update-script,
+}:
+stdenv.mkDerivation (finalAttrs: {
   pname = "autoprefixer";
   version = "10.4.20";
 
@@ -24,7 +25,7 @@
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-AKOcKly8uBohhxx9nSo8rMrm0Ebk06LHZ1Yt9yoZj7g=";
+    hash = "sha256-Gu2DRDx0YRlSb+EInOfmAOYKvOba6Lq1wkOW9t9fnbA=";
   };
 
   installPhase = ''

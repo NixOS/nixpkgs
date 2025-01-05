@@ -1,10 +1,11 @@
-{ lib
-, stdenv
-, fetchgit
-, qmake
-, wrapQtAppsHook
-, qtbase
-, xorg
+{
+  lib,
+  stdenv,
+  fetchgit,
+  qmake,
+  wrapQtAppsHook,
+  qtbase,
+  xorg,
 }:
 
 stdenv.mkDerivation {
@@ -56,6 +57,6 @@ stdenv.mkDerivation {
       powering on the computer via Wake On Lan is supported.
     '';
     # never built on aarch64-darwin, x86_64-darwin since first introduction in nixpkgs
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

@@ -1,6 +1,23 @@
-{ stdenv, lib, fetchFromGitLab, cmake, pkg-config, cairo, libxkbcommon
-, xcbutilcursor, xcbutilkeysyms, xcbutil, libXrandr, libXinerama, libXcursor
-, alsa-lib, libjack2, lv2, gcc-unwrapped, curl}:
+{
+  stdenv,
+  lib,
+  fetchFromGitLab,
+  cmake,
+  pkg-config,
+  cairo,
+  libxkbcommon,
+  xcbutilcursor,
+  xcbutilkeysyms,
+  xcbutil,
+  libXrandr,
+  libXinerama,
+  libXcursor,
+  alsa-lib,
+  libjack2,
+  lv2,
+  gcc-unwrapped,
+  curl,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "librearp";
@@ -14,7 +31,10 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
-  nativeBuildInputs = [ cmake pkg-config ];
+  nativeBuildInputs = [
+    cmake
+    pkg-config
+  ];
   buildInputs = [
     cairo
     libxkbcommon
@@ -43,8 +63,7 @@ stdenv.mkDerivation (finalAttrs: {
   '';
 
   meta = with lib; {
-    description =
-      "A pattern-based arpeggio generator plugin";
+    description = "A pattern-based arpeggio generator plugin";
     homepage = "https://librearp.gitlab.io/";
     license = licenses.gpl3Plus;
     platforms = [ "x86_64-linux" ];

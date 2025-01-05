@@ -46,10 +46,12 @@ stdenv.mkDerivation (finalAttrs: {
 
   buildInputs = [ openssl ];
 
-  preFixup = lib.optionalString stdenv.isDarwin ''
+  preFixup = lib.optionalString stdenv.hostPlatform.isDarwin ''
     install_name_tool -id "$out/lib/librandombytes-kernel.1.dylib" "$out/lib/librandombytes-kernel.1.dylib"
     install_name_tool -change "librandombytes-kernel.1.dylib" "$out/lib/librandombytes-kernel.1.dylib" "$out/bin/randombytes-info"
   '';
+
+  passthru.updateScript = ./update.sh;
 
   meta = {
     homepage = "https://randombytes.cr.yp.to/";

@@ -1,9 +1,10 @@
-{ buildOctavePackage
-, stdenv
-, lib
-, fetchurl
-, pkg-config
-, pcre2
+{
+  buildOctavePackage,
+  stdenv,
+  lib,
+  fetchurl,
+  pkg-config,
+  pcre2,
 }:
 
 buildOctavePackage rec {
@@ -40,6 +41,6 @@ buildOctavePackage rec {
     maintainers = with maintainers; [ KarlJoad ];
     description = "Additional functions for manipulation and analysis of strings";
     # Some pcre symbols claimed to be missing
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
   };
 }

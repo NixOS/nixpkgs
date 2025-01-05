@@ -37,7 +37,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "openstack";
     repo = "python-magnumclient";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-2JHI3CB/DSZZ4LXzL3PCUSmubTciUXtZkc5jpeEc4kk=";
   };
 

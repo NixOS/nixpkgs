@@ -1,18 +1,17 @@
-{ callPackage
-, fetchpatch
-}:
+{ callPackage, fetchurl }:
 
 callPackage ./generic.nix {
-  version = "3.6.0";
-  hash = "sha256-tCwAKoTvY8VCjcTPNwS3DeitflhpKHLr6ygHZDbR6wQ=";
-
+  version = "3.6.2";
+  hash = "sha256-tSWhF8i0Tx9QSFmyDEHdd2xveZvpyd+HXR+8xYj2Syo=";
   patches = [
-    # https://github.com/Mbed-TLS/mbedtls/pull/9000
-    # Remove at next version update
-    (fetchpatch {
-      name = "fix-darwin-memcpy-error.patch";
-      url = "https://github.com/Mbed-TLS/mbedtls/commit/b32d7ae0fee2f906be59780b42a0cd4468a39bd1.patch";
-      hash = "sha256-BTkJs9NEkCl+/Q8EwB/LW9uwF95jQOKWmoCK4B/7/sU=";
+    # Fixes the build with GCC 14.
+    #
+    # See:
+    # * <https://github.com/openwrt/openwrt/pull/15479>
+    # * <https://github.com/Mbed-TLS/mbedtls/issues/9003>
+    (fetchurl {
+      url = "https://raw.githubusercontent.com/openwrt/openwrt/52b6c9247997e51a97f13bb9e94749bc34e2d52e/package/libs/mbedtls/patches/100-fix-gcc14-build.patch";
+      hash = "sha256-20bxGoUHkrOEungN3SamYKNgj95pM8IjbisNRh68Wlw=";
     })
   ];
 }

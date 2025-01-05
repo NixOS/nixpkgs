@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 
 let
   cfg = config.programs.mouse-actions;
@@ -26,7 +31,7 @@ in
   config = lib.mkIf cfg.enable {
     environment.systemPackages = [ cfg.package ];
     services.udev.packages = [ cfg.package ];
-    systemd.user.services.mouse-actions =  lib.mkIf cfg.autorun {
+    systemd.user.services.mouse-actions = lib.mkIf cfg.autorun {
       description = "mouse-actions launcher";
       wantedBy = [ "graphical-session.target" ];
       bindsTo = [ "graphical-session.target" ];

@@ -1,15 +1,19 @@
-{ build-idris-package
-, fetchFromGitHub
-, contrib
-, lightyear
-, lib
+{
+  build-idris-package,
+  fetchFromGitHub,
+  contrib,
+  lightyear,
+  lib,
 }:
-build-idris-package  {
+build-idris-package {
   pname = "yaml";
   version = "2018-01-25";
 
   ipkgName = "Yaml";
-  idrisDeps = [ contrib lightyear ];
+  idrisDeps = [
+    contrib
+    lightyear
+  ];
 
   src = fetchFromGitHub {
     owner = "Heather";

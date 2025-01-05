@@ -1,10 +1,11 @@
-{ lib
-, buildNpmPackage
-, fetchFromGitHub
-, typescript
-, esbuild
-, makeWrapper
-, nodejs
+{
+  lib,
+  buildNpmPackage,
+  fetchFromGitHub,
+  typescript,
+  esbuild,
+  makeWrapper,
+  nodejs,
 }:
 buildNpmPackage rec {
   pname = "opcua-commander";
@@ -18,7 +19,11 @@ buildNpmPackage rec {
   };
 
   npmDepsHash = "sha256-g4WFLh+UnziQR2NZ4eL84Vrk+Mz99kFQiBkdGmBEMHE=";
-  nativeBuildInputs = [ esbuild typescript makeWrapper ];
+  nativeBuildInputs = [
+    esbuild
+    typescript
+    makeWrapper
+  ];
 
   postPatch = ''
     substituteInPlace package.json \
@@ -31,7 +36,7 @@ buildNpmPackage rec {
   # ./opcua-commander -e opc.tcp://opcuademo.sterfive.com:26543
   postFixup = ''
     wrapProgram $out/bin/opcua-commander \
-      --prefix PATH : "${lib.makeBinPath [nodejs]}"
+      --prefix PATH : "${lib.makeBinPath [ nodejs ]}"
   '';
 
   meta = with lib; {

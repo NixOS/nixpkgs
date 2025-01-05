@@ -1,7 +1,8 @@
-{ lib
-, buildGoModule
-, fetchFromGitHub
-, android-tools
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  android-tools,
 }:
 
 buildGoModule rec {

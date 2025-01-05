@@ -30,7 +30,7 @@ buildPythonPackage rec {
     pytz
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     fast = [ ujson ];
   };
 

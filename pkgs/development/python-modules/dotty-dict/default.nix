@@ -22,6 +22,6 @@ buildPythonPackage rec {
     description = "Dictionary wrapper for quick access to deeply nested keys";
     homepage = "https://dotty-dict.readthedocs.io";
     license = licenses.mit;
-    maintainers = with maintainers; [ AndersonTorres ];
+    maintainers = with maintainers; [ ];
   };
 }

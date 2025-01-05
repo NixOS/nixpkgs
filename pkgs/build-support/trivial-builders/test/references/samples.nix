@@ -1,11 +1,12 @@
-{ lib
-, runCommand
-, writeText
-, emptyFile
-, emptyDirectory
-, figlet
-, hello
-, zlib
+{
+  lib,
+  runCommand,
+  writeText,
+  emptyFile,
+  emptyDirectory,
+  figlet,
+  hello,
+  zlib,
 }:
 {
   inherit

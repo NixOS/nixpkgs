@@ -2,12 +2,13 @@
 , fetchFromGitHub
 , makeWrapper
 , mkDerivation
-, substituteAll
+, replaceVars
 , wrapGAppsHook3
 , wrapQtAppsHook
 
-, withGrass ? true
-, withWebKit ? false
+, withGrass
+, withServer
+, withWebKit
 
 , bison
 , cmake
@@ -29,7 +30,7 @@
 , postgresql
 , proj
 , protobuf
-, python311
+, python3
 , qca-qt5
 , qscintilla
 , qt3d
@@ -48,7 +49,7 @@
 }:
 
 let
-  py = python311.override {
+  py = python3.override {
     self = py;
     packageOverrides = self: super: {
       pyqt5 = super.pyqt5.override {
@@ -79,14 +80,14 @@ let
     urllib3
   ];
 in mkDerivation rec {
-  version = "3.38.2";
+  version = "3.40.2";
   pname = "qgis-unwrapped";
 
   src = fetchFromGitHub {
     owner = "qgis";
     repo = "QGIS";
     rev = "final-${lib.replaceStrings [ "." ] [ "_" ] version}";
-    hash = "sha256-lArwRtHR/KAsgjpjid6YnPA9BkcG1Mg/KeIIOWN75Kg=";
+    hash = "sha256-8bcCpNgw4FV++qye8G3QXA3k0QCgqByODzPUTw0VX/E=";
   };
 
   passthru = {
@@ -140,8 +141,7 @@ in mkDerivation rec {
     ++ pythonBuildInputs;
 
   patches = [
-    (substituteAll {
-      src = ./set-pyqt-package-dirs.patch;
+    (replaceVars ./set-pyqt-package-dirs.patch {
       pyQt5PackageDir = "${py.pkgs.pyqt5}/${py.pkgs.python.sitePackages}";
       qsciPackageDir = "${py.pkgs.qscintilla-qt5}/${py.pkgs.python.sitePackages}";
     })
@@ -152,13 +152,15 @@ in mkDerivation rec {
   env.QT_QPA_PLATFORM_PLUGIN_PATH="${qtbase}/${qtbase.qtPluginPrefix}/platforms";
 
   cmakeFlags = [
-    "-DCMAKE_BUILD_TYPE=Release"
     "-DWITH_3D=True"
     "-DWITH_PDAL=True"
     "-DENABLE_TESTS=False"
     "-DQT_PLUGINS_DIR=${qtbase}/${qtbase.qtPluginPrefix}"
   ] ++ lib.optional (!withWebKit) "-DWITH_QTWEBKIT=OFF"
-    ++ lib.optional withGrass (let
+    ++ lib.optional withServer [
+    "-DWITH_SERVER=True"
+    "-DQGIS_CGIBIN_SUBDIR=${placeholder "out"}/lib/cgi-bin"
+  ] ++ lib.optional withGrass (let
         gmajor = lib.versions.major grass.version;
         gminor = lib.versions.minor grass.version;
       in "-DGRASS_PREFIX${gmajor}=${grass}/grass${gmajor}${gminor}"

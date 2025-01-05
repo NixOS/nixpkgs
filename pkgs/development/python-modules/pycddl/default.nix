@@ -52,7 +52,7 @@ buildPythonPackage rec {
     cbor2
   ];
 
-  disabledTests =[
+  disabledTests = [
     # flaky
     "test_memory_usage"
   ];

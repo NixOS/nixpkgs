@@ -8,7 +8,7 @@
 # updater
 , python3, writeScript
 # Apple dependencies
-, cctools, libcxx, CoreFoundation, CoreServices, Foundation, sigtool
+, cctools, libcxx, sigtool
 # Allow to independently override the jdks used to build and run respectively
 , buildJdk, runJdk
 , runtimeShell
@@ -415,10 +415,6 @@ stdenv.mkDerivation rec {
       # Explicitly configure gcov since we don't have it on Darwin, so autodetection fails
       export GCOV=${coreutils}/bin/false
 
-      # Framework search paths aren't added by bintools hook
-      # https://github.com/NixOS/nixpkgs/pull/41914
-      export NIX_LDFLAGS+=" -F${CoreFoundation}/Library/Frameworks -F${CoreServices}/Library/Frameworks -F${Foundation}/Library/Frameworks"
-
       # libcxx includes aren't added by libcxx hook
       # https://github.com/NixOS/nixpkgs/pull/41589
       export NIX_CFLAGS_COMPILE="$NIX_CFLAGS_COMPILE -isystem ${lib.getDev libcxx}/include/c++/v1"
@@ -583,7 +579,7 @@ stdenv.mkDerivation rec {
     which
     zip
     python3.pkgs.absl-py   # Needed to build fish completion
-  ] ++ lib.optionals (stdenv.isDarwin) [ cctools libcxx sigtool CoreFoundation CoreServices Foundation ];
+  ] ++ lib.optionals (stdenv.hostPlatform.isDarwin) [ cctools libcxx sigtool ];
 
   # Bazel makes extensive use of symlinks in the WORKSPACE.
   # This causes problems with infinite symlinks if the build output is in the same location as the
@@ -622,7 +618,7 @@ stdenv.mkDerivation rec {
   '' +
   # disable execlog parser on darwin, since it fails to build
   # see https://github.com/NixOS/nixpkgs/pull/273774#issuecomment-1865322055
-  lib.optionalString (!stdenv.isDarwin) ''
+  lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     # need to change directory for bazel to find the workspace
     cd ./bazel_src
     # build execlog tooling
@@ -649,7 +645,7 @@ stdenv.mkDerivation rec {
   '' +
   # disable execlog parser on darwin, since it fails to build
   # see https://github.com/NixOS/nixpkgs/pull/273774#issuecomment-1865322055
-  (lib.optionalString (!stdenv.isDarwin) ''
+  (lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
     mkdir $out/share
     cp ./bazel_src/bazel-bin/src/tools/execlog/parser_deploy.jar $out/share/parser_deploy.jar
     cat <<EOF > $out/bin/bazel-execlog
@@ -730,7 +726,7 @@ stdenv.mkDerivation rec {
     # stored non-contiguously in the binary due to gcc optimisations, which leads
     # Nix to miss the hash when scanning for dependencies
     echo "${bazelRC}" >> $out/nix-support/depends
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     echo "${cctools}" >> $out/nix-support/depends
   '';
 

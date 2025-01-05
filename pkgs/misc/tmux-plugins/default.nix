@@ -2,6 +2,7 @@
 , fetchFromGitHub
 , pkgs
 , stdenv
+, config
 }:
 
 let
@@ -49,8 +50,6 @@ let
 
 in rec {
   inherit mkTmuxPlugin;
-
-  mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
 
   battery = mkTmuxPlugin {
     pluginName = "battery";
@@ -216,55 +215,34 @@ in rec {
 
   extrakto = mkTmuxPlugin {
     pluginName = "extrakto";
-    version = "unstable-2021-04-04";
+    version = "0-unstable-2024-08-25";
     src = fetchFromGitHub {
       owner = "laktak";
       repo = "extrakto";
-      rev = "de8ac3e8a9fa887382649784ed8cae81f5757f77";
-      sha256 = "0mkp9r6mipdm7408w7ls1vfn6i3hj19nmir2bvfcp12b69zlzc47";
+      rev = "bf9e666f2a6a8172ebe99fff61b574ba740cffc2";
+      sha256 = "sha256-kIhJKgo1BDTeFyAPa//f/TrhPfV9Rfk9y4qMhIpCydk=";
     };
     nativeBuildInputs = [ pkgs.makeWrapper ];
+    buildInputs = [ pkgs.python3 ];
     postInstall = ''
-    for f in extrakto.sh open.sh tmux-extrakto.sh; do
-      wrapProgram $target/scripts/$f \
-        --prefix PATH : ${with pkgs; lib.makeBinPath (
-        [ pkgs.fzf pkgs.python3 pkgs.xclip ]
-        )}
-    done
+     patchShebangs extrakto.py extrakto_plugin.py
 
+      wrapProgram $target/scripts/open.sh \
+        --prefix PATH : ${ with pkgs; lib.makeBinPath
+          [ fzf xclip wl-clipboard ]
+        }
     '';
     meta = {
       homepage = "https://github.com/laktak/extrakto";
       description = "Fuzzy find your text with fzf instead of selecting it by hand ";
       license = lib.licenses.mit;
       platforms = lib.platforms.unix;
-      maintainers = with lib.maintainers; [ kidd ];
+      maintainers = with lib.maintainers; [ kidd fnune ];
     };
   };
 
-  fingers = mkTmuxPlugin rec {
-    pluginName = "tmux-fingers";
-    rtpFilePath = "load-config.tmux";
-    version = "2.1.1";
-    src = fetchFromGitHub {
-      owner = "Morantron";
-      repo = "tmux-fingers";
-      rev = "${version}";
-      sha256 = "sha256-1YMh6m8M6FKf8RPXsOfWCVC5CXSr/MynguwkG7O+oEY=";
-    };
-    nativeBuildInputs = [ pkgs.makeWrapper pkgs.crystal pkgs.shards ];
-    postInstall = ''
-      shards build --production
-      rm -rf $target/* $target/.*
-      cp -r bin $target/bin
-      echo "$target/bin/${pluginName} load-config" > $target/${rtpFilePath}
-      chmod +x $target/${rtpFilePath}
-
-      wrapProgram $target/${rtpFilePath} \
-        --prefix PATH : ${with pkgs; lib.makeBinPath (
-          [ gawk ] ++ lib.optionals stdenv.isDarwin [ reattach-to-user-namespace ]
-        )}
-    '';
+  fingers = pkgs.callPackage ./tmux-fingers {
+    inherit mkTmuxPlugin;
   };
 
   fpp = mkTmuxPlugin {
@@ -399,14 +377,14 @@ in rec {
     };
   };
 
-  nord = mkTmuxPlugin rec {
+  nord = mkTmuxPlugin {
     pluginName = "nord";
-    version = "0.3.0";
+    version = "0.3.0-unstable-2023-03-03";
     src = pkgs.fetchFromGitHub {
       owner = "nordtheme";
       repo = "tmux";
-      rev = "v${version}";
-      hash = "sha256-s/rimJRGXzwY9zkOp9+2bAF1XCT9FcyZJ1zuHxOBsJM=";
+      rev = "f7b6da07ab55fe32ee5f7d62da56d8e5ac691a92";
+      hash = "sha256-mcmVYNWOUoQLiu4eM/EUudRg67Gcou13xuC6zv9aMKA=";
     };
     meta = {
       homepage = "https://www.nordtheme.com/ports/tmux";
@@ -420,6 +398,7 @@ in rec {
           theme in order to work properly.
       '';
       license = lib.licenses.mit;
+      maintainers = [ lib.maintainers.sigmasquadron ];
     };
   };
 
@@ -607,14 +586,14 @@ in rec {
 
   sensible = mkTmuxPlugin {
     pluginName = "sensible";
-    version = "unstable-2017-09-05";
+    version = "unstable-2022-08-14";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-sensible";
-      rev = "e91b178ff832b7bcbbf4d99d9f467f63fd1b76b5";
-      sha256 = "1z8dfbwblrbmb8sgb0k8h1q0dvfdz7gw57las8nwd5gj6ss1jyvx";
+      rev = "25cb91f42d020f675bb0a2ce3fbd3a5d96119efa";
+      sha256 = "sha256-sw9g1Yzmv2fdZFLJSGhx1tatQ+TtjDYNZI5uny0+5Hg=";
     };
-    postInstall = lib.optionalString stdenv.isDarwin ''
+    postInstall = lib.optionalString stdenv.hostPlatform.isDarwin ''
       sed -e 's:reattach-to-user-namespace:${pkgs.reattach-to-user-namespace}/bin/reattach-to-user-namespace:g' -i $target/sensible.tmux
     '';
   };
@@ -622,12 +601,12 @@ in rec {
   session-wizard = mkTmuxPlugin rec {
     pluginName = "session-wizard";
     rtpFilePath = "session-wizard.tmux";
-    version = "1.3.1";
+    version = "1.4.0";
     src = pkgs.fetchFromGitHub {
       owner = "27medkamal";
       repo = "tmux-session-wizard";
       rev = "V${version}";
-      sha256 = "sha256-nJaC5aX+cR/+ks3I/lW/tUnVG0CrEYfsIjPDisgMrTE=";
+      sha256 = "sha256-mLpZQSo8nildawsPxGwkcETNwlRq6O1pfy/VusMNMaw=";
     };
     meta = with lib; {
       homepage = "https://github.com/27medkamal/tmux-session-wizard";
@@ -792,6 +771,26 @@ in rec {
     };
   };
 
+  tmux-powerline = mkTmuxPlugin {
+    pluginName = "powerline";
+    version = "3.0.0";
+    src = fetchFromGitHub {
+      owner = "erikw";
+      repo = "tmux-powerline";
+      rev = "2480e5531e0027e49a90eaf540f973e624443937";
+      hash = "sha256-25uG7OI8OHkdZ3GrTxG1ETNeDtW1K+sHu2DfJtVHVbk=";
+    };
+    rtpFilePath = "main.tmux";
+    meta = {
+      homepage = "https://github.com/erikw/tmux-powerline";
+      description = "Empowering your tmux (status bar) experience!";
+      longDescription = "A tmux plugin giving you a hackable status bar consisting of dynamic & beautiful looking powerline segments, written purely in bash.";
+      license = lib.licenses.bsd3;
+      platforms = lib.platforms.unix;
+      maintainers = with lib.maintainers; [ thomasjm ];
+    };
+  };
+
   tmux-thumbs = pkgs.callPackage ./tmux-thumbs {
     inherit mkTmuxPlugin;
   };
@@ -865,6 +864,7 @@ in rec {
 
   weather = mkTmuxPlugin {
     pluginName = "weather";
+    rtpFilePath = "tmux-weather.tmux";
     version = "unstable-2020-02-08";
     src = fetchFromGitHub {
       owner = "xamut";
@@ -884,12 +884,12 @@ in rec {
 
   yank = mkTmuxPlugin {
     pluginName = "yank";
-    version = "unstable-2021-06-20";
+    version = "unstable-2023-07-19";
     src = fetchFromGitHub {
       owner = "tmux-plugins";
       repo = "tmux-yank";
-      rev = "1b1a436e19f095ae8f825243dbe29800a8acd25c";
-      sha256 = "hRvkBf+YrWycecnDixAsD4CAHg3KsioomfJ/nLl5Zgs=";
+      rev = "acfd36e4fcba99f8310a7dfb432111c242fe7392";
+      sha256 = "sha256-/5HPaoOx2U2d8lZZJo5dKmemu6hKgHJYq23hxkddXpA=";
     };
   };
 
@@ -911,4 +911,6 @@ in rec {
       maintainers = with maintainers; [ o0th ];
     };
   };
+} // lib.optionalAttrs config.allowAliases {
+  mkDerivation = throw "tmuxPlugins.mkDerivation is deprecated, use tmuxPlugins.mkTmuxPlugin instead"; # added 2021-03-14
 }

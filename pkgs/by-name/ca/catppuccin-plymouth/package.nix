@@ -20,13 +20,13 @@ lib.checkListOfEnum "${pname}: color variant" validVariants [ variant ]
   stdenvNoCC.mkDerivation
   (finalAttrs: {
     inherit pname;
-    version = "0-unstable-2024-05-28";
+    version = "0-unstable-2024-10-19";
 
     src = fetchFromGitHub {
       owner = "catppuccin";
       repo = "plymouth";
-      rev = "e13c348a0f47772303b2da1e9396027d8cda160d";
-      hash = "sha256-6DliqhRncvdPuKzL9LJec3PJWmK/jo9BrrML7g6YcH0=";
+      rev = "e0f58d6fcf3dbc2d35dfc4fec394217fbfa92666";
+      hash = "sha256-He6ER1QNrJCUthFoBBGHBINouW/tozxQy3R79F5tsuo=";
     };
 
     sourceRoot = "${finalAttrs.src.name}/themes/catppuccin-${variant}";

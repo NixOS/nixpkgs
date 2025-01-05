@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "aerosandbox";
-  version = "4.2.5";
+  version = "4.2.6";
   format = "wheel";
 
   src = fetchPypi {
@@ -25,7 +25,7 @@ buildPythonPackage rec {
 
     python = "py3";
     dist = "py3";
-    hash = "sha256-9WxeXmcOZpKpNn8r6REudQlDRXavym52tvKajYJIfXA=";
+    hash = "sha256-jS1Eh/+2WXZkQC4pt1Rwvw7plJC1NFFC08gqzEyGir4=";
   };
 
   build-system = [ setuptools ];

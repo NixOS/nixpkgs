@@ -4,7 +4,6 @@
   buildPythonPackage,
   fetchFromGitHub,
   fetchpatch2,
-  setuptools,
   cython_0,
   zfs,
 }:
@@ -32,7 +31,7 @@ buildPythonPackage rec {
   buildInputs = [ zfs ];
 
   # Passing CFLAGS in configureFlags does not work, see https://github.com/truenas/py-libzfs/issues/107
-  postPatch = lib.optionalString stdenv.isLinux ''
+  postPatch = lib.optionalString stdenv.hostPlatform.isLinux ''
     substituteInPlace configure \
       --replace-fail \
         'CFLAGS="-DCYTHON_FALLTHROUGH"' \

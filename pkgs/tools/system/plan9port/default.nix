@@ -1,19 +1,33 @@
-{ lib, stdenv, fetchFromGitHub
-, fontconfig, freetype, libX11, libXext, libXt, xorgproto
-, perl # For building web manuals
-, which, ed
-, Carbon, Cocoa, IOKit, Metal, QuartzCore, DarwinTools # For building on Darwin
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fontconfig,
+  freetype,
+  libX11,
+  libXext,
+  libXt,
+  xorgproto,
+  perl, # For building web manuals
+  which,
+  ed,
+  Carbon,
+  Cocoa,
+  IOKit,
+  Metal,
+  QuartzCore,
+  DarwinTools, # For building on Darwin
 }:
 
 stdenv.mkDerivation rec {
   pname = "plan9port";
-  version = "2023-03-31";
+  version = "2024-10-22";
 
   src = fetchFromGitHub {
     owner = "9fans";
     repo = pname;
-    rev = "cc4571fec67407652b03d6603ada6580de2194dc";
-    hash = "sha256-PZWjf0DJCNs5mjxtXgK4/BcstaOqG2WBKRo+Bh/9U7w=";
+    rev = "61e362add9e1485bec1ab8261d729016850ec270";
+    hash = "sha256-Hpz9yuBktgJEOQ4ZD03c37pO9wgbvtYjIreYusr0Dzw=";
   };
 
   postPatch = ''
@@ -35,13 +49,31 @@ stdenv.mkDerivation rec {
   '';
 
   nativeBuildInputs = [ ed ];
-  buildInputs = [ perl which ] ++ (if !stdenv.isDarwin then [
-    fontconfig freetype # fontsrv uses these
-    libX11 libXext libXt xorgproto
-  ] else [
-    Carbon Cocoa IOKit Metal QuartzCore
-    DarwinTools
-  ]);
+  buildInputs =
+    [
+      perl
+      which
+    ]
+    ++ (
+      if !stdenv.hostPlatform.isDarwin then
+        [
+          fontconfig
+          freetype # fontsrv uses these
+          libX11
+          libXext
+          libXt
+          xorgproto
+        ]
+      else
+        [
+          Carbon
+          Cocoa
+          IOKit
+          Metal
+          QuartzCore
+          DarwinTools
+        ]
+    );
 
   configurePhase = ''
     runHook preConfigure
@@ -49,7 +81,7 @@ stdenv.mkDerivation rec {
     CC9='$(command -v $CC)'
     CFLAGS='$NIX_CFLAGS_COMPILE'
     LDFLAGS='$(for f in $NIX_LDFLAGS; do echo "-Wl,$f"; done | xargs echo)'
-    ${lib.optionalString (!stdenv.isDarwin) "X11='${libXt.dev}/include'"}
+    ${lib.optionalString (!stdenv.hostPlatform.isDarwin) "X11='${libXt.dev}/include'"}
     EOF
 
     # make '9' available in the path so there's some way to find out $PLAN9
@@ -113,7 +145,12 @@ stdenv.mkDerivation rec {
     '';
     license = licenses.mit;
     maintainers = with maintainers; [
-      AndersonTorres bbarker ehmry ftrvxmtrx kovirobi ylh
+      bbarker
+      ehmry
+      ftrvxmtrx
+      kovirobi
+      matthewdargan
+      ylh
     ];
     mainProgram = "9";
     platforms = platforms.unix;

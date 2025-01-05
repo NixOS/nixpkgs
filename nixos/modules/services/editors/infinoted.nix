@@ -1,7 +1,13 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.infinoted;
-in {
+in
+{
   options.services.infinoted = {
     enable = lib.mkEnableOption "infinoted";
 
@@ -33,7 +39,11 @@ in {
     };
 
     securityPolicy = lib.mkOption {
-      type = lib.types.enum ["no-tls" "allow-tls" "require-tls"];
+      type = lib.types.enum [
+        "no-tls"
+        "allow-tls"
+        "require-tls"
+      ];
       default = "require-tls";
       description = ''
         How strictly to enforce clients connection with TLS.
@@ -58,7 +68,12 @@ in {
 
     plugins = lib.mkOption {
       type = lib.types.listOf lib.types.str;
-      default = [ "note-text" "note-chat" "logging" "autosave" ];
+      default = [
+        "note-text"
+        "note-chat"
+        "logging"
+        "autosave"
+      ];
       description = ''
         Plugins to enable
       '';
@@ -101,50 +116,50 @@ in {
   };
 
   config = lib.mkIf (cfg.enable) {
-    users.users = lib.optionalAttrs (cfg.user == "infinoted")
-      { infinoted = {
-          description = "Infinoted user";
-          group = cfg.group;
-          isSystemUser = true;
-        };
+    users.users = lib.optionalAttrs (cfg.user == "infinoted") {
+      infinoted = {
+        description = "Infinoted user";
+        group = cfg.group;
+        isSystemUser = true;
       };
-    users.groups = lib.optionalAttrs (cfg.group == "infinoted")
-      { infinoted = { };
+    };
+    users.groups = lib.optionalAttrs (cfg.group == "infinoted") {
+      infinoted = { };
+    };
+
+    systemd.services.infinoted = {
+      description = "Gobby Dedicated Server";
+
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+
+      serviceConfig = {
+        Type = "simple";
+        Restart = "always";
+        ExecStart = "${cfg.package.infinoted} --config-file=/var/lib/infinoted/infinoted.conf";
+        User = cfg.user;
+        Group = cfg.group;
+        PermissionsStartOnly = true;
       };
+      preStart = ''
+        mkdir -p /var/lib/infinoted
+        install -o ${cfg.user} -g ${cfg.group} -m 0600 /dev/null /var/lib/infinoted/infinoted.conf
+        cat >>/var/lib/infinoted/infinoted.conf <<EOF
+        [infinoted]
+        ${lib.optionalString (cfg.keyFile != null) "key-file=${cfg.keyFile}"}
+        ${lib.optionalString (cfg.certificateFile != null) "certificate-file=${cfg.certificateFile}"}
+        ${lib.optionalString (cfg.certificateChain != null) "certificate-chain=${cfg.certificateChain}"}
+        port=${toString cfg.port}
+        security-policy=${cfg.securityPolicy}
+        root-directory=${cfg.rootDirectory}
+        plugins=${lib.concatStringsSep ";" cfg.plugins}
+        ${lib.optionalString (cfg.passwordFile != null) "password=$(head -n 1 ${cfg.passwordFile})"}
 
-    systemd.services.infinoted =
-      { description = "Gobby Dedicated Server";
+        ${cfg.extraConfig}
+        EOF
 
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
-
-        serviceConfig = {
-          Type = "simple";
-          Restart = "always";
-          ExecStart = "${cfg.package.infinoted} --config-file=/var/lib/infinoted/infinoted.conf";
-          User = cfg.user;
-          Group = cfg.group;
-          PermissionsStartOnly = true;
-        };
-        preStart = ''
-          mkdir -p /var/lib/infinoted
-          install -o ${cfg.user} -g ${cfg.group} -m 0600 /dev/null /var/lib/infinoted/infinoted.conf
-          cat >>/var/lib/infinoted/infinoted.conf <<EOF
-          [infinoted]
-          ${lib.optionalString (cfg.keyFile != null) "key-file=${cfg.keyFile}"}
-          ${lib.optionalString (cfg.certificateFile != null) "certificate-file=${cfg.certificateFile}"}
-          ${lib.optionalString (cfg.certificateChain != null) "certificate-chain=${cfg.certificateChain}"}
-          port=${toString cfg.port}
-          security-policy=${cfg.securityPolicy}
-          root-directory=${cfg.rootDirectory}
-          plugins=${lib.concatStringsSep ";" cfg.plugins}
-          ${lib.optionalString (cfg.passwordFile != null) "password=$(head -n 1 ${cfg.passwordFile})"}
-
-          ${cfg.extraConfig}
-          EOF
-
-          install -o ${cfg.user} -g ${cfg.group} -m 0750 -d ${cfg.rootDirectory}
-        '';
-      };
+        install -o ${cfg.user} -g ${cfg.group} -m 0750 -d ${cfg.rootDirectory}
+      '';
+    };
   };
 }

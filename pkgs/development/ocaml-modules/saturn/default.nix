@@ -1,9 +1,14 @@
-{ lib, buildDunePackage, ocaml
-, saturn_lockfree
-, domain_shims
-, dscheck
-, multicore-bench
-, qcheck, qcheck-alcotest, qcheck-stm
+{
+  lib,
+  buildDunePackage,
+  ocaml,
+  saturn_lockfree,
+  domain_shims,
+  dscheck,
+  multicore-bench,
+  qcheck,
+  qcheck-alcotest,
+  qcheck-stm,
 }:
 
 buildDunePackage rec {

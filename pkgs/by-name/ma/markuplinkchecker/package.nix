@@ -8,7 +8,7 @@
   darwin,
 }:
 let
-  version = "0.18.0";
+  version = "0.19.0";
 in
 rustPlatform.buildRustPackage {
   pname = "markuplinkchecker";
@@ -18,16 +18,16 @@ rustPlatform.buildRustPackage {
     owner = "becheran";
     repo = "mlc";
     rev = "v${version}";
-    hash = "sha256-hMS0ZX4Ta1xq5e8R7mvmOQCEW3UCk1nd2TGzWOyOGY8=";
+    hash = "sha256-Nh+P5+dvl2gBQuvo0iKjsJgz/2OYQqAWSIJBzE7yO6I=";
   };
 
-  cargoHash = "sha256-adJZcuUynxYpj2h6YKozb6W/2WjNsWq9IwxJaIVl0YI=";
+  cargoHash = "sha256-1WB8J3AMK4DVHrrrdwV7nFmNJfiIndC2k2VQXzKxEy8=";
 
   nativeBuildInputs = [ pkg-config ];
 
   buildInputs =
     [ openssl ]
-    ++ lib.optionals stdenv.isDarwin (
+    ++ lib.optionals stdenv.hostPlatform.isDarwin (
       with darwin.apple_sdk.frameworks;
       [
         Security

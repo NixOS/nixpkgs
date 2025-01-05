@@ -2,49 +2,64 @@ import ./make-test-python.nix {
   name = "sslh";
 
   nodes = {
-    server = { pkgs, lib, ... }: {
-      networking.firewall.allowedTCPPorts = [ 443 ];
-      networking.interfaces.eth1.ipv6.addresses = [
-        {
-          address = "fe00:aa:bb:cc::2";
-          prefixLength = 64;
-        }
-      ];
-      services.sslh = {
-        enable = true;
-        settings.transparent = true;
-        settings.protocols = [
-          { name = "ssh"; service = "ssh"; host = "localhost"; port = "22"; probe = "builtin"; }
-          { name = "http"; host = "localhost"; port = "80"; probe = "builtin"; }
+    server =
+      { pkgs, lib, ... }:
+      {
+        networking.firewall.allowedTCPPorts = [ 443 ];
+        networking.interfaces.eth1.ipv6.addresses = [
+          {
+            address = "fe00:aa:bb:cc::2";
+            prefixLength = 64;
+          }
         ];
-      };
-      services.openssh.enable = true;
-      users.users.root.openssh.authorizedKeys.keyFiles = [ ./initrd-network-ssh/id_ed25519.pub ];
-      services.nginx = {
-        enable = true;
-        virtualHosts."localhost" = {
-          addSSL = false;
-          default = true;
-          root = pkgs.runCommand "testdir" {} ''
-            mkdir "$out"
-            echo hello world > "$out/index.html"
-          '';
+        services.sslh = {
+          enable = true;
+          settings.transparent = true;
+          settings.protocols = [
+            {
+              name = "ssh";
+              service = "ssh";
+              host = "localhost";
+              port = "22";
+              probe = "builtin";
+            }
+            {
+              name = "http";
+              host = "localhost";
+              port = "80";
+              probe = "builtin";
+            }
+          ];
+        };
+        services.openssh.enable = true;
+        users.users.root.openssh.authorizedKeys.keyFiles = [ ./initrd-network-ssh/id_ed25519.pub ];
+        services.nginx = {
+          enable = true;
+          virtualHosts."localhost" = {
+            addSSL = false;
+            default = true;
+            root = pkgs.runCommand "testdir" { } ''
+              mkdir "$out"
+              echo hello world > "$out/index.html"
+            '';
+          };
         };
       };
-    };
-    client = { ... }: {
-      networking.interfaces.eth1.ipv6.addresses = [
-        {
-          address = "fe00:aa:bb:cc::1";
-          prefixLength = 64;
-        }
-      ];
-      networking.hosts."fe00:aa:bb:cc::2" = [ "server" ];
-      environment.etc.sshKey = {
-        source = ./initrd-network-ssh/id_ed25519; # dont use this anywhere else
-        mode = "0600";
+    client =
+      { ... }:
+      {
+        networking.interfaces.eth1.ipv6.addresses = [
+          {
+            address = "fe00:aa:bb:cc::1";
+            prefixLength = 64;
+          }
+        ];
+        networking.hosts."fe00:aa:bb:cc::2" = [ "server" ];
+        environment.etc.sshKey = {
+          source = ./initrd-network-ssh/id_ed25519; # dont use this anywhere else
+          mode = "0600";
+        };
       };
-    };
   };
 
   testScript = ''

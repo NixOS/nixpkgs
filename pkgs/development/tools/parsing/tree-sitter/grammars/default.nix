@@ -44,6 +44,7 @@
   tree-sitter-hjson = lib.importJSON ./tree-sitter-hjson.json;
   tree-sitter-html = lib.importJSON ./tree-sitter-html.json;
   tree-sitter-http = lib.importJSON ./tree-sitter-http.json;
+  tree-sitter-hyprlang = lib.importJSON ./tree-sitter-hyprlang.json;
   tree-sitter-janet-simple = lib.importJSON ./tree-sitter-janet-simple.json;
   tree-sitter-java = lib.importJSON ./tree-sitter-java.json;
   tree-sitter-javascript = lib.importJSON ./tree-sitter-javascript.json;
@@ -82,6 +83,7 @@
   tree-sitter-r = lib.importJSON ./tree-sitter-r.json;
   tree-sitter-regex = lib.importJSON ./tree-sitter-regex.json;
   tree-sitter-rego = lib.importJSON ./tree-sitter-rego.json;
+  tree-sitter-river = lib.importJSON ./tree-sitter-river.json;
   tree-sitter-rst = lib.importJSON ./tree-sitter-rst.json;
   tree-sitter-ruby = lib.importJSON ./tree-sitter-ruby.json;
   tree-sitter-rust = lib.importJSON ./tree-sitter-rust.json;
@@ -102,6 +104,7 @@
   tree-sitter-toml = lib.importJSON ./tree-sitter-toml.json;
   tree-sitter-tsq = lib.importJSON ./tree-sitter-tsq.json;
   tree-sitter-turtle = lib.importJSON ./tree-sitter-turtle.json;
+  tree-sitter-twig = lib.importJSON ./tree-sitter-twig.json;
   tree-sitter-typescript = lib.importJSON ./tree-sitter-typescript.json;
   tree-sitter-typst = lib.importJSON ./tree-sitter-typst.json;
   tree-sitter-uiua = lib.importJSON ./tree-sitter-uiua.json;

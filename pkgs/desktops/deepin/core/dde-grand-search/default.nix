@@ -3,9 +3,8 @@
   lib,
   fetchFromGitHub,
   cmake,
-  qttools,
+  libsForQt5,
   pkg-config,
-  wrapQtAppsHook,
   dtkwidget,
   dde-qt-dbus-factory,
   dde-tray-loader,
@@ -18,7 +17,6 @@
   pcre,
   lucenepp,
   boost,
-  dbus,
 }:
 
 stdenv.mkDerivation rec {
@@ -34,9 +32,9 @@ stdenv.mkDerivation rec {
 
   nativeBuildInputs = [
     cmake
-    qttools
+    libsForQt5.qttools
     pkg-config
-    wrapQtAppsHook
+    libsForQt5.wrapQtAppsHook
   ];
 
   buildInputs = [

@@ -1,18 +1,19 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, cstruct
-, lwt
-, shared-memory-ring-lwt
-, xenstore
-, lwt-dllist
-, mirage-profile
-, mirage-runtime
-, logs
-, fmt
-, bheap
-, duration
-, io-page
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  cstruct,
+  lwt,
+  shared-memory-ring-lwt,
+  xenstore,
+  lwt-dllist,
+  mirage-profile,
+  mirage-runtime,
+  logs,
+  fmt,
+  bheap,
+  duration,
+  io-page,
 }:
 
 buildDunePackage rec {

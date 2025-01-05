@@ -8,6 +8,7 @@
   libmamba,
   pybind11,
   setuptools,
+  scikit-build,
   fmt,
   spdlog,
   tl-expected,
@@ -20,36 +21,41 @@
   bzip2,
   wheel,
 }:
+
 buildPythonPackage rec {
   pname = "libmambapy";
-  version = "2024.08.31";
   pyproject = true;
 
-  src = fetchFromGitHub {
-    owner = "mamba-org";
-    repo = "mamba";
-    rev = "refs/tags/${version}";
-    hash = "sha256-RRHu0JM1okFprNIrQLLIYN7xZdZ+A6OuCZM5E1oPoFg=";
-  };
+  inherit (libmamba) version src;
 
   nativeBuildInputs = [
     cmake
     ninja
   ];
 
+  env = {
+    NIX_CFLAGS_COMPILE = toString [
+      "-Wno-error=deprecated-declarations"
+    ];
+  };
+
   buildInputs = [
     (libmamba.override { python3Packages = pythonPackages; })
-    pybind11
-    fmt
+    curl
+    zstd
+    bzip2
     spdlog
+    fmt
     tl-expected
     nlohmann_json
     yaml-cpp
     reproc
     libsolv
-    curl
-    zstd
-    bzip2
+  ];
+
+  dependencies = [
+    scikit-build
+    pybind11
   ];
 
   build-system = [
@@ -76,7 +82,6 @@ buildPythonPackage rec {
     cd ../libmambapy
     pypaBuildPhase
   '';
-
 
   pythonImportsCheck = [
     "libmambapy"

@@ -1,8 +1,14 @@
-{ pkgs, lib, config, ... }:
+{
+  pkgs,
+  lib,
+  config,
+  ...
+}:
 let
   cfg = config.hardware.new-lg4ff;
   kernelPackages = config.boot.kernelPackages;
-in {
+in
+{
   options.hardware.new-lg4ff = {
     enable = lib.mkOption {
       type = lib.types.bool;

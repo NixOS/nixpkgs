@@ -3,6 +3,7 @@
 , atk
 , autoPatchelfHook
 , buildEnv
+, buildPackages
 , cairo
 , cups
 , dbus
@@ -23,7 +24,7 @@
 , libxcb
 , libxkbcommon
 , makeWrapper
-, mesa
+, libgbm
 , nspr
 , nss
 , pango
@@ -32,12 +33,11 @@
 , stdenv
 , systemd
 , udev
-, wrapGAppsHook3
 , xorg
 }:
 
 let
-  bits = if stdenv.hostPlatform.system == "x86_64-linux" then "x64" else "ia32";
+  bits = if stdenv.hostPlatform.is64bit then "x64" else "ia32";
 
   nwEnv = buildEnv {
     name = "nwjs-env";
@@ -59,7 +59,7 @@ let
       libGL
       libnotify
       libxkbcommon
-      mesa
+      libgbm
       nspr
       nss
       pango
@@ -107,7 +107,9 @@ stdenv.mkDerivation {
 
   nativeBuildInputs = [
     autoPatchelfHook
-    (wrapGAppsHook3.override { inherit makeWrapper; })
+    # override doesn't preserve splicing https://github.com/NixOS/nixpkgs/issues/132651
+    # Has to use `makeShellWrapper` from `buildPackages` even though `makeShellWrapper` from the inputs is spliced because `propagatedBuildInputs` would pick the wrong one because of a different offset.
+    (buildPackages.wrapGAppsHook3.override { makeWrapper = buildPackages.makeShellWrapper; })
   ];
 
   buildInputs = [ nwEnv ];
@@ -115,7 +117,7 @@ stdenv.mkDerivation {
 
   preFixup = ''
     gappsWrapperArgs+=(
-      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations}}"
+      --add-flags "\''${NIXOS_OZONE_WL:+\''${WAYLAND_DISPLAY:+--ozone-platform-hint=auto --enable-features=WaylandWindowDecorations --enable-wayland-ime=true}}"
     )
   '';
 
@@ -137,13 +139,13 @@ stdenv.mkDerivation {
       runHook postInstall
     '';
 
-  meta = with lib; {
+  meta = {
     description = "App runtime based on Chromium and node.js";
     homepage = "https://nwjs.io/";
     platforms = [ "i686-linux" "x86_64-linux" ];
-    sourceProvenance = with sourceTypes; [ binaryNativeCode ];
-    maintainers = [ maintainers.mikaelfangel ];
+    sourceProvenance = [ lib.sourceTypes.binaryNativeCode ];
+    maintainers = [ lib.maintainers.mikaelfangel ];
     mainProgram = "nw";
-    license = licenses.bsd3;
+    license = lib.licenses.mit;
   };
 }

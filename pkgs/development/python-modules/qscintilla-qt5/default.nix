@@ -35,7 +35,7 @@ buildPythonPackage rec {
     pythonPackages.setuptools
   ];
   buildInputs = [ qtbase ];
-  propagatedBuildInputs = [ pyqt5 ] ++ lib.optionals stdenv.isDarwin [ qtmacextras ];
+  propagatedBuildInputs = [ pyqt5 ] ++ lib.optionals stdenv.hostPlatform.isDarwin [ qtmacextras ];
 
   dontWrapQtApps = true;
 
@@ -47,7 +47,7 @@ buildPythonPackage rec {
       echo 'sip-include-dirs = [ "${pyqt5}/${python.sitePackages}/PyQt5/bindings"]' \
          >> pyproject.toml
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       substituteInPlace project.py \
         --replace \
         "if self.project.qsci_external_lib:

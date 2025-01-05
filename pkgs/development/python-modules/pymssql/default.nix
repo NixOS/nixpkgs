@@ -16,12 +16,12 @@
 
 buildPythonPackage rec {
   pname = "pymssql";
-  version = "2.3.0";
+  version = "2.3.2";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-8DTka1aAYdFxSPHe3qZI+dX2tzQOjP/g7bqhcTy0q6s=";
+    hash = "sha256-GAiWQbaHvh69D2Tw0f+XdHijl/+hrzcr3xDb7CnPbS4=";
   };
 
   build-system = [

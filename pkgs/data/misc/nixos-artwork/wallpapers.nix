@@ -1,70 +1,76 @@
-{ lib, stdenv, fetchurl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+}:
 
 let
-  mkNixBackground = {
-    name,
-    src,
-    description,
-    license ? lib.licenses.free
-  }:
+  mkNixBackground =
+    {
+      name,
+      src,
+      description,
+      license ? lib.licenses.free,
+    }:
 
-  let
-    pkg = stdenv.mkDerivation {
-      inherit name src;
+    let
+      pkg = stdenv.mkDerivation {
+        inherit name src;
 
-      dontUnpack = true;
+        dontUnpack = true;
 
-      installPhase = ''
-        runHook preInstall
+        installPhase = ''
+                  runHook preInstall
 
-        # GNOME
-        mkdir -p $out/share/backgrounds/nixos
-        ln -s $src $out/share/backgrounds/nixos/${src.name}
+                  # GNOME
+                  mkdir -p $out/share/backgrounds/nixos
+                  ln -s $src $out/share/backgrounds/nixos/${src.name}
 
-        mkdir -p $out/share/gnome-background-properties/
-        cat <<EOF > $out/share/gnome-background-properties/${name}.xml
-<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd">
-<wallpapers>
-  <wallpaper deleted="false">
-    <name>${name}</name>
-    <filename>${src}</filename>
-    <options>zoom</options>
-    <shade_type>solid</shade_type>
-    <pcolor>#ffffff</pcolor>
-    <scolor>#000000</scolor>
-  </wallpaper>
-</wallpapers>
-EOF
+                  mkdir -p $out/share/gnome-background-properties/
+                  cat <<EOF > $out/share/gnome-background-properties/${name}.xml
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE wallpapers SYSTEM "gnome-wp-list.dtd">
+          <wallpapers>
+            <wallpaper deleted="false">
+              <name>${name}</name>
+              <filename>${src}</filename>
+              <options>zoom</options>
+              <shade_type>solid</shade_type>
+              <pcolor>#ffffff</pcolor>
+              <scolor>#000000</scolor>
+            </wallpaper>
+          </wallpapers>
+          EOF
 
-        # TODO: is this path still needed?
-        mkdir -p $out/share/artwork/gnome
-        ln -s $src $out/share/artwork/gnome/${src.name}
+                  # TODO: is this path still needed?
+                  mkdir -p $out/share/artwork/gnome
+                  ln -s $src $out/share/artwork/gnome/${src.name}
 
-        # KDE
-        mkdir -p $out/share/wallpapers/${name}/contents/images
-        ln -s $src $out/share/wallpapers/${name}/contents/images/${src.name}
-        cat >>$out/share/wallpapers/${name}/metadata.desktop <<_EOF
-[Desktop Entry]
-Name=${name}
-X-KDE-PluginInfo-Name=${name}
-_EOF
+                  # KDE
+                  mkdir -p $out/share/wallpapers/${name}/contents/images
+                  ln -s $src $out/share/wallpapers/${name}/contents/images/${src.name}
+                  cat >>$out/share/wallpapers/${name}/metadata.desktop <<_EOF
+          [Desktop Entry]
+          Name=${name}
+          X-KDE-PluginInfo-Name=${name}
+          _EOF
 
-        runHook postInstall
-      '';
+                  runHook postInstall
+        '';
 
-      passthru = {
-        gnomeFilePath = "${pkg}/share/backgrounds/nixos/${src.name}";
-        kdeFilePath = "${pkg}/share/wallpapers/${name}/contents/images/${src.name}";
+        passthru = {
+          gnomeFilePath = "${pkg}/share/backgrounds/nixos/${src.name}";
+          kdeFilePath = "${pkg}/share/wallpapers/${name}/contents/images/${src.name}";
+        };
+
+        meta = with lib; {
+          inherit description license;
+          homepage = "https://github.com/NixOS/nixos-artwork";
+          platforms = platforms.all;
+        };
       };
-
-      meta = with lib; {
-        inherit description license;
-        homepage = "https://github.com/NixOS/nixos-artwork";
-        platforms = platforms.all;
-      };
-    };
-in pkg;
+    in
+    pkg;
 
 in
 

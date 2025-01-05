@@ -3,46 +3,47 @@
   buildPythonPackage,
   fetchFromGitHub,
   setuptools,
+  click,
   icalendar,
-  pytz,
+  tzdata,
   pytestCheckHook,
   restructuredtext-lint,
   pygments,
+  pytz,
+  pytest-click,
 }:
 
 buildPythonPackage rec {
   pname = "x-wr-timezone";
-  version = "0.0.7";
+  version = "2.0.0";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "niccokunzmann";
     repo = "x-wr-timezone";
-    rev = "v${version}";
-    hash = "sha256-itqsVYYUcpbKTh0BM6IHk6F9xhB+pAQnnJsnZAVpNL4=";
+    tag = "v${version}";
+    hash = "sha256-F/bNETgscbhEkpG/D1eSJaBNdpi0+xEYuNL4RURGST0=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
-  propagatedBuildInputs = [
+  dependencies = [
+    click
     icalendar
-    pytz
+    tzdata
   ];
 
   nativeCheckInputs = [
     pytestCheckHook
     restructuredtext-lint
     pygments
+    pytz
+    pytest-click
   ];
 
   preCheck = ''
     export PATH=$out/bin:$PATH
   '';
-
-  disabledTests = [
-    "test_input_to_output"
-    "test_output_stays_the_same"
-  ];
 
   pythonImportsCheck = [ "x_wr_timezone" ];
 

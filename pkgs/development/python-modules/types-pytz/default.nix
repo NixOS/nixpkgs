@@ -7,15 +7,15 @@
 
 buildPythonPackage rec {
   pname = "types-pytz";
-  version = "2024.1.0.20240417";
+  version = "2024.2.0.20241003";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-aBDIofaPIf3w9PN0pDJIfHdkWgrAsx3kv0aQzyGtOYE=";
+    hash = "sha256-V13DjzhakiohK6wAp9bS4W4UETKjyVUHj0pP0T7Wy0Q=";
   };
 
-  nativeBuildInputs = [ setuptools ];
+  build-system = [ setuptools ];
 
   # Modules doesn't have tests
   doCheck = false;

@@ -8,11 +8,14 @@
 stdenv.mkDerivation {
   name = "hello-cpp";
   src = ./src;
-  nativeBuildInputs = [ cmake ninja ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+  ];
   meta = {
     description = "Basic sanity check that C++ and cmake infrastructure are working";
     platforms = lib.platforms.all;
-    maintainers = stdenv.meta.maintainers or [];
+    maintainers = stdenv.meta.maintainers or [ ];
     mainProgram = "hello-cpp";
   };
 }

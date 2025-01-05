@@ -228,7 +228,6 @@ in
         ProtectKernelModules = true;
         ProtectKernelTunables = true;
         ProtectProc = "invisible";
-        ProcSubset = "pid";
 
         RestrictAddressFamilies = [
           "AF_UNIX"
@@ -240,12 +239,10 @@ in
         RestrictRealtime = true;
 
         LockPersonality = true;
-        MemoryDenyWriteExecute = true;
 
         SystemCallFilter = [
+          "@sandbox"
           "@system-service"
-          "~@resources"
-          "~@privileged"
         ];
         SystemCallArchitectures = "native";
 

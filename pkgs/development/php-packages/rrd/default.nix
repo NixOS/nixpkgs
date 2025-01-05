@@ -11,9 +11,12 @@ buildPecl {
   version = "2.0.3";
   hash = "sha256-pCFh5YzcioU7cs/ymJidy96CsPdkVt1ZzgKFTJK3MPc=";
 
+  buildInputs = [
+    rrdtool
+  ];
+
   nativeBuildInputs = [
     pkg-config
-    rrdtool
   ];
 
   meta = {

@@ -1,4 +1,9 @@
-{ lib, stdenv, fetchFromGitHub, Carbon }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  Carbon,
+}:
 
 stdenv.mkDerivation {
   pname = "qes";
@@ -7,7 +12,7 @@ stdenv.mkDerivation {
   src = fetchFromGitHub {
     owner = "koekeishiya";
     repo = "qes";
-    rev = "ddedf008f0c38b134501ad9f328447b671423d34";  # no tag
+    rev = "ddedf008f0c38b134501ad9f328447b671423d34"; # no tag
     sha256 = "1w9ppid7jg6f4q7pq40lhm0whg7xmnxcmf3pb9xqfkq2zj2f7dxv";
   };
 
@@ -23,4 +28,3 @@ stdenv.mkDerivation {
     license = licenses.mit;
   };
 }
-

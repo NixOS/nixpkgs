@@ -2,6 +2,8 @@
   lib,
   agate,
   buildPythonPackage,
+  dbt-adapters,
+  dbt-common,
   dbt-core,
   fetchFromGitHub,
   google-cloud-bigquery,
@@ -14,16 +16,16 @@
 
 buildPythonPackage rec {
   pname = "dbt-bigquery";
-  version = "1.8.2";
+  version = "1.9.0";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.8";
 
   src = fetchFromGitHub {
     owner = "dbt-labs";
     repo = "dbt-bigquery";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-SYQAFvu7nw54X4jxicEA9+lnvMgj/Yp460xz3BFGYCM=";
+    tag = "v${version}";
+    hash = "sha256-jn4U01aUpnjBnOJNyzJXPqmXJZc16pSLN9WkRxsC0zo=";
   };
 
   pythonRelaxDeps = [ "agate" ];
@@ -34,6 +36,8 @@ buildPythonPackage rec {
 
   dependencies = [
     agate
+    dbt-common
+    dbt-adapters
     dbt-core
     google-cloud-bigquery
     google-cloud-storage

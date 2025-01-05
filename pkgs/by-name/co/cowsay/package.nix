@@ -10,7 +10,7 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "cowsay";
-  version = "3.8.3";
+  version = "3.8.4";
 
   outputs = [
     "out"
@@ -21,7 +21,7 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "cowsay-org";
     repo = "cowsay";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-Bca+/a9jXsNnuBeYEjjtvZ1LsMMraLKiCn04CiS+uXU=";
+    hash = "sha256-m3Rndw0rnTBLhs15KqokzIOWuYl6aoPqEu2MHWpXRCs=";
   };
 
   nativeBuildInputs = [ makeWrapper ];

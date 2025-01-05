@@ -1,36 +1,41 @@
-{ stdenv
-, lib
-, desktop-file-utils
-, fetchurl
-, gettext
-, glib
-, gtk4
-, json-glib
-, itstool
-, libadwaita
-, libdex
-, libpanel
-, libunwind
-, libxml2
-, meson
-, ninja
-, pkg-config
-, polkit
-, shared-mime-info
-, systemd
-, wrapGAppsHook4
-, gnome
+{
+  stdenv,
+  lib,
+  desktop-file-utils,
+  fetchurl,
+  gettext,
+  glib,
+  gtk4,
+  json-glib,
+  itstool,
+  libadwaita,
+  libdex,
+  libpanel,
+  libunwind,
+  libxml2,
+  meson,
+  ninja,
+  pkg-config,
+  polkit,
+  shared-mime-info,
+  systemd,
+  wrapGAppsHook4,
+  gnome,
 }:
 
 stdenv.mkDerivation rec {
   pname = "sysprof";
-  version = "46.0";
+  version = "47.0";
 
-  outputs = [ "out" "lib" "dev" ];
+  outputs = [
+    "out"
+    "lib"
+    "dev"
+  ];
 
   src = fetchurl {
     url = "mirror://gnome/sources/${pname}/${lib.versions.major version}/${pname}-${version}.tar.xz";
-    hash = "sha256-c6p+deurPk4JRqBacj335u5CSeO56ITbo1UAq6Kh0XY=";
+    hash = "sha256-dCTGKUNGYGVCiMBCSJmMNX0c6H7hVZ/UTfGYCZLvXfU=";
   };
 
   nativeBuildInputs = [

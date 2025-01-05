@@ -1,14 +1,15 @@
-{ fetchFromSourcehut
-, file
-, installShellFiles
-, less
-, lib
-, offpunk
-, python3Packages
-, testers
-, timg
-, xdg-utils
-, xsel
+{
+  fetchFromSourcehut,
+  file,
+  installShellFiles,
+  less,
+  lib,
+  offpunk,
+  python3Packages,
+  testers,
+  timg,
+  xdg-utils,
+  xsel,
 }:
 
 let
@@ -32,7 +33,7 @@ let
 in
 python3Packages.buildPythonApplication rec {
   pname = "offpunk";
-  version = "2.3";
+  version = "2.4";
   pyproject = true;
 
   disabled = python3Packages.pythonOlder "3.7";
@@ -41,10 +42,13 @@ python3Packages.buildPythonApplication rec {
     owner = "~lioploum";
     repo = "offpunk";
     rev = "v${version}";
-    hash = "sha256-Tiby+JjPc7eFQKziQFUdqcNgx9UhU4GNeRcI/aAzcvk=";
+    hash = "sha256-ttR8S7FQQs8DkgAEvTIhuQ5zZrHtovy2W8TOw0xhSGk=";
   };
 
-  nativeBuildInputs = [ python3Packages.hatchling installShellFiles ];
+  nativeBuildInputs = [
+    python3Packages.hatchling
+    installShellFiles
+  ];
   propagatedBuildInputs = otherDependencies ++ pythonDependencies;
 
   postInstall = ''

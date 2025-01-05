@@ -1,31 +1,32 @@
-{ stdenv
-, lib
-, fetchurl
-, meson
-, ninja
-, pkg-config
-, wrapGAppsHook4
-, libgweather
-, geoclue2
-, gettext
-, libxml2
-, gnome
-, gtk4
-, evolution-data-server-gtk4
-, libical
-, libsoup_3
-, glib
-, gsettings-desktop-schemas
-, libadwaita
+{
+  stdenv,
+  lib,
+  fetchurl,
+  meson,
+  ninja,
+  pkg-config,
+  wrapGAppsHook4,
+  libgweather,
+  geoclue2,
+  gettext,
+  libxml2,
+  gnome,
+  gtk4,
+  evolution-data-server-gtk4,
+  libical,
+  libsoup_3,
+  glib,
+  gsettings-desktop-schemas,
+  libadwaita,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-calendar";
-  version = "46.1";
+  version = "47.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-calendar/${lib.versions.major version}/gnome-calendar-${version}.tar.xz";
-    hash = "sha256-mGH/e4q9W3sgaQulXrdULH7FNLVmJp4ptbHoWMFhCJc=";
+    hash = "sha256-OwMxPxxNEtyCHgfiCdFZbVPq+iVdSS0s5av5LtG1HnY=";
   };
 
   nativeBuildInputs = [

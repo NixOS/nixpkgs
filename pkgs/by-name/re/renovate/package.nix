@@ -7,27 +7,22 @@
   overrideSDK,
   pnpm_9,
   python3,
-  renovate,
   testers,
   xcbuild,
   nixosTests,
   nix-update-script,
+  yq-go,
 }:
 
-let
-  # fix build error, `no member named 'aligned_alloc'` on x86_64-darwin
-  # https://github.com/NixOS/nixpkgs/issues/272156#issuecomment-1839904283
-  stdenv' = if stdenv.hostPlatform.isDarwin then overrideSDK stdenv "11.0" else stdenv;
-in
-stdenv'.mkDerivation (finalAttrs: {
+stdenv.mkDerivation (finalAttrs: {
   pname = "renovate";
-  version = "38.62.0";
+  version = "39.90.2";
 
   src = fetchFromGitHub {
     owner = "renovatebot";
     repo = "renovate";
-    rev = "refs/tags/${finalAttrs.version}";
-    hash = "sha256-Wv7kSKuiyqVpl0EQIygF0R8h9PMH6yI5ezXhz1hbzd8=";
+    tag = finalAttrs.version;
+    hash = "sha256-D0VoBkP+zMsJK5ZgoU4USF0qhrmLi2V1BU6k6czSr+o=";
   };
 
   postPatch = ''
@@ -40,11 +35,12 @@ stdenv'.mkDerivation (finalAttrs: {
     nodejs
     pnpm_9.configHook
     python3
-  ] ++ lib.optional stdenv'.hostPlatform.isDarwin xcbuild;
+    yq-go
+  ] ++ lib.optional stdenv.hostPlatform.isDarwin xcbuild;
 
   pnpmDeps = pnpm_9.fetchDeps {
     inherit (finalAttrs) pname version src;
-    hash = "sha256-n2CnyjabKQ9D72OBdEqeHoxOJsKlLD2rJPRs50AWCXU=";
+    hash = "sha256-JkdfI7P4zWf0hYgurDrETAGic5nz38zQsAuBoFi9C8w=";
   };
 
   env.COREPACK_ENABLE_STRICT = 0;
@@ -52,6 +48,9 @@ stdenv'.mkDerivation (finalAttrs: {
   buildPhase =
     ''
       runHook preBuild
+
+      # relax nodejs version
+      yq '.engines.node = "${nodejs.version}"' -i package.json
 
       pnpm build
       pnpm prune --prod --ignore-scripts
@@ -91,7 +90,7 @@ stdenv'.mkDerivation (finalAttrs: {
 
   passthru = {
     tests = {
-      version = testers.testVersion { package = renovate; };
+      version = testers.testVersion { package = finalAttrs.finalPackage; };
       vm-test = nixosTests.renovate;
     };
     updateScript = nix-update-script { };

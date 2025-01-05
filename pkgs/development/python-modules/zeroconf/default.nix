@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "zeroconf";
-  version = "0.133.0";
+  version = "0.136.2";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -24,8 +24,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "jstasiak";
     repo = "python-zeroconf";
-    rev = "refs/tags/${version}";
-    hash = "sha256-nS3zr+56K819GujzA4uLqcZJb4OxbAOV3FfxssDEEQA=";
+    tag = version;
+    hash = "sha256-gSoxrG+5LCI0DCEGqrQvzFfnKhlJV5kyqLH6IrN7Zjs=";
   };
 
   build-system = [

@@ -1,8 +1,9 @@
-{ lib
-, buildDunePackage
-, fetchFromGitHub
-, alcotest
-, qcheck-core
+{
+  lib,
+  buildDunePackage,
+  fetchFromGitHub,
+  alcotest,
+  qcheck-core,
 }:
 
 buildDunePackage rec {
@@ -19,7 +20,10 @@ buildDunePackage rec {
   };
 
   doCheck = true;
-  checkInputs = [ alcotest qcheck-core ];
+  checkInputs = [
+    alcotest
+    qcheck-core
+  ];
 
   meta = {
     description = "Reusable Effects-Based Components";

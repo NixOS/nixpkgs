@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, scheme, texinfo, unzip }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  scheme,
+  texinfo,
+  unzip,
+}:
 
 stdenv.mkDerivation rec {
   pname = "slib";
@@ -19,7 +26,11 @@ stdenv.mkDerivation rec {
       --replace " clrnamdb.scm" ""
   '';
 
-  nativeBuildInputs = [ scheme texinfo unzip ];
+  nativeBuildInputs = [
+    scheme
+    texinfo
+    unzip
+  ];
   buildInputs = [ scheme ];
 
   postInstall = ''

@@ -1,7 +1,8 @@
-{ lib
-, rustPlatform
-, fetchFromGitHub
-, ccloader
+{
+  lib,
+  rustPlatform,
+  fetchFromGitHub,
+  ccloader,
 }:
 
 let

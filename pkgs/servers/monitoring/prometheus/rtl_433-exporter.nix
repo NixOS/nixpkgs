@@ -1,4 +1,10 @@
-{ lib, buildGoModule, fetchFromGitHub, bash, nixosTests }:
+{
+  lib,
+  buildGoModule,
+  fetchFromGitHub,
+  bash,
+  nixosTests,
+}:
 
 buildGoModule rec {
   pname = "rtl_433-exporter";

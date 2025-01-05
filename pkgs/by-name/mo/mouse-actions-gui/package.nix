@@ -1,6 +1,5 @@
 {
   lib,
-  stdenv,
   fetchFromGitHub,
 
   npmHooks,
@@ -8,39 +7,34 @@
   nodejs,
 
   rustPlatform,
-  cargo,
-  rustc,
-  cargo-tauri,
+  cargo-tauri_1,
 
   pkg-config,
   wrapGAppsHook3,
   libXtst,
   libevdev,
   gtk3,
-  libsoup,
-  webkitgtk,
+  libsoup_2_4,
+  webkitgtk_4_0,
 }:
 
-stdenv.mkDerivation (finalAttrs: {
+rustPlatform.buildRustPackage rec {
   pname = "mouse-actions-gui";
-  version = "0.4.4";
+  version = "0.4.5";
 
   src = fetchFromGitHub {
     owner = "jersou";
     repo = "mouse-actions";
-    rev = "v${finalAttrs.version}";
-    hash = "sha256-02E4HrKIoBV3qZPVH6Tjz9Bv/mh5C8amO1Ilmd+YO5g=";
+    tag = "v${version}";
+    hash = "sha256-44F4CdsDHuN2FuijnpfmoFy4a/eAbYOoBYijl9mOctg=";
   };
 
-  sourceRoot = "${finalAttrs.src.name}/config-editor";
+  sourceRoot = "${src.name}/config-editor";
 
   nativeBuildInputs = [
     npmHooks.npmConfigHook
     nodejs
-    rustPlatform.cargoSetupHook
-    cargo
-    rustc
-    cargo-tauri
+    cargo-tauri_1.hook
     pkg-config
     wrapGAppsHook3
   ];
@@ -52,41 +46,26 @@ stdenv.mkDerivation (finalAttrs: {
 
     # Tauri deps
     gtk3
-    libsoup
-    webkitgtk
+    libsoup_2_4
+    webkitgtk_4_0
   ];
 
   npmDeps = fetchNpmDeps {
-    inherit (finalAttrs) src sourceRoot;
-    hash = "sha256-Rnr5jRupdUu6mIsWvdN6AnQnsxB5h31n/24pYslGs5g=";
+    inherit src sourceRoot;
+    hash = "sha256-amDTYAvEoDHb7+dg39+lUne0dv0M9vVe1vHoXk2agZA=";
   };
 
   cargoRoot = "src-tauri";
+  buildAndTestSubdir = cargoRoot;
 
-  cargoDeps = rustPlatform.fetchCargoTarball {
-    name = "${finalAttrs.pname}-${finalAttrs.version}";
-    inherit (finalAttrs) src;
-    sourceRoot = "${finalAttrs.sourceRoot}/${finalAttrs.cargoRoot}";
-    hash = "sha256-VQFRatnxzmywAiMLfkVgB7g8AFoqfWFYjt/vezpE1o8=";
-  };
+  cargoHash = "sha256-H8TMpYFJWp227jPA5H2ZhSqTMiT/U6pT6eLyjibuoLU=";
 
-  buildPhase = ''
-    runHook preBuild
-    cargo-tauri build -b deb
-    runHook postBuild
-  '';
-
-  installPhase = ''
-    runHook preInstall
-
+  postInstall = ''
     install -Dm644 ${./80-mouse-actions.rules} $out/etc/udev/rules.d/80-mouse-actions.rules
-    cp -r src-tauri/target/release/bundle/deb/*/data/usr/* $out
-
-    runHook postInstall
   '';
 
   meta = {
-    changelog = "https://github.com/jersou/mouse-actions/blob/${finalAttrs.src.rev}/CHANGELOG.md";
+    changelog = "https://github.com/jersou/mouse-actions/blob/${src.rev}/CHANGELOG.md";
     description = "Mouse event based command executor, a mix between Easystroke and Comiz edge commands";
     homepage = "https://github.com/jersou/mouse-actions";
     license = lib.licenses.mit;
@@ -94,4 +73,4 @@ stdenv.mkDerivation (finalAttrs: {
     maintainers = with lib.maintainers; [ tomasajt ];
     platforms = lib.platforms.linux;
   };
-})
+}

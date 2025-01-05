@@ -1,34 +1,35 @@
-{ lib
-, stdenv
-, gettext
-, fetchurl
-, pkg-config
-, gtkmm4
-, libxml2
-, bash
-, gtk4
-, libadwaita
-, glib
-, wrapGAppsHook4
-, meson
-, ninja
-, gsettings-desktop-schemas
-, itstool
-, gnome
-, adwaita-icon-theme
-, librsvg
-, gdk-pixbuf
-, libgtop
-, systemd
+{
+  lib,
+  stdenv,
+  gettext,
+  fetchurl,
+  pkg-config,
+  gtkmm4,
+  libxml2,
+  bash,
+  gtk4,
+  libadwaita,
+  glib,
+  wrapGAppsHook4,
+  meson,
+  ninja,
+  gsettings-desktop-schemas,
+  itstool,
+  gnome,
+  adwaita-icon-theme,
+  librsvg,
+  gdk-pixbuf,
+  libgtop,
+  systemd,
 }:
 
 stdenv.mkDerivation rec {
   pname = "gnome-system-monitor";
-  version = "46.0";
+  version = "47.0";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-system-monitor/${lib.versions.major version}/gnome-system-monitor-${version}.tar.xz";
-    hash = "sha256-U3YkgVjGhsMIJVRy6MKp5MFyVWQsFJ/HGYxtA05UdZk=";
+    hash = "sha256-7ee5JetxTYs8K/v3QFobcUSU/kfgLwrwj1g3s+JWVH8=";
   };
 
   patches = [

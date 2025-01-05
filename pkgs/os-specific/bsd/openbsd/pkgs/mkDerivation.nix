@@ -2,7 +2,7 @@
   lib,
   stdenv,
   stdenvNoCC,
-  crossLibcStdenv,
+  stdenvNoLibc,
   stdenvLibcMinimal,
   runCommand,
   rsync,
@@ -22,7 +22,7 @@ lib.makeOverridable (
       if attrs.noCC or false then
         stdenvNoCC
       else if attrs.noLibc or false then
-        crossLibcStdenv
+        stdenvNoLibc
       else if attrs.libcMinimal or false then
         stdenvLibcMinimal
       else
@@ -53,7 +53,7 @@ lib.makeOverridable (
         install
         tsort
         lorder
-      ];
+      ] ++ (attrs.extraNativeBuildInputs or [ ]);
 
       HOST_SH = stdenv'.shell;
 
@@ -93,6 +93,6 @@ lib.makeOverridable (
       dontBuild = true;
     }
     // lib.optionalAttrs stdenv'.hostPlatform.isStatic { NOLIBSHARED = true; }
-    // attrs
+    // (builtins.removeAttrs attrs [ "extraNativeBuildInputs" ])
   )
 )

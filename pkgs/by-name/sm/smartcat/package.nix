@@ -1,40 +1,40 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
 
-, darwin
-, libX11
-, openssl
-, pkg-config
-, stdenv
+  darwin,
+  openssl,
+  pkg-config,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "smartcat";
-  version = "1.4.1";
+  version = "2.2.0";
 
   src = fetchFromGitHub {
     owner = "efugier";
     repo = "smartcat";
-    rev = "refs/tags/${version}";
-    hash = "sha256-/BJdLHK8rb9QVlkLbRCXIPlHiI2eThAZvhIhJWW43Q4=";
+    tag = version;
+    hash = "sha256-nXuMyHV5Sln3qWXIhIDdV0thSY4YbvzGqNWGIw4QLdM=";
   };
 
-  cargoHash = "sha256-mMoLFlY4mExG7MCu2uXPzmG3krKIWOLwcnth8gt40eg=";
+  cargoHash = "sha256-tR7+SecTS1FWwcPF25PclT6lEjY9NUEj/2EBhbgg0tw=";
 
   nativeBuildInputs = [
     pkg-config
   ];
 
-  buildInputs = [
-    openssl
-    libX11
-  ]
-  ++ lib.optionals stdenv.isDarwin [
-    darwin.apple_sdk.frameworks.AppKit
-    darwin.apple_sdk.frameworks.Security
-    darwin.apple_sdk.frameworks.SystemConfiguration
-  ];
+  buildInputs =
+    [
+      openssl
+    ]
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
+      darwin.apple_sdk.frameworks.AppKit
+      darwin.apple_sdk.frameworks.Security
+      darwin.apple_sdk.frameworks.SystemConfiguration
+    ];
 
   meta = {
     description = "Integrate large language models into the command line";

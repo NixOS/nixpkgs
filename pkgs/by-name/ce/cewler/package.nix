@@ -1,7 +1,8 @@
-{ lib
-, python3
-, fetchFromGitHub
-, gitUpdater
+{
+  lib,
+  python3,
+  fetchFromGitHub,
+  gitUpdater,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -19,7 +20,6 @@ python3.pkgs.buildPythonApplication rec {
   nativeBuildInputs = with python3.pkgs; [
     setuptools
     wheel
-    pythonRelaxDepsHook
   ];
 
   propagatedBuildInputs = with python3.pkgs; [

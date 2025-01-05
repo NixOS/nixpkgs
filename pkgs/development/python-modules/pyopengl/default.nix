@@ -25,7 +25,7 @@ buildPythonPackage rec {
     let
       ext = stdenv.hostPlatform.extensions.sharedLibrary;
     in
-    lib.optionalString (!stdenv.isDarwin) ''
+    lib.optionalString (!stdenv.hostPlatform.isDarwin) ''
       # Theses lines are patching the name of dynamic libraries
       # so pyopengl can find them at runtime.
       substituteInPlace OpenGL/platform/glx.py \

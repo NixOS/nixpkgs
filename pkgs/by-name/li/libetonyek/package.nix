@@ -3,8 +3,7 @@
 , fetchFromGitHub
 , autoreconfHook
 , pkg-config
-# fails on older Boost due to https://github.com/boostorg/phoenix/issues/111
-, boost184
+, boost
 , cppunit
 , glm
 , gperf
@@ -17,13 +16,13 @@
 
 stdenv.mkDerivation rec {
   pname = "libetonyek";
-  version = "0.1.10";
+  version = "0.1.12";
 
   src = fetchFromGitHub {
     owner = "LibreOffice";
     repo = "libetonyek";
     rev = "libetonyek-${version}";
-    hash = "sha256-wgyeQj1sY78sbbZT+NZuq9HEKB+ta7wwipbfN3JkyyU=";
+    hash = "sha256-dvYbV+7IakgOkGsZ+zaW+qgn/QoD6Jwq/juaE+7iYug=";
   };
 
   nativeBuildInputs = [
@@ -32,7 +31,7 @@ stdenv.mkDerivation rec {
   ];
 
   buildInputs = [
-    boost184
+    boost
     cppunit
     glm
     gperf

@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchurl, apr, jdk, openssl }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  apr,
+  jdk,
+  openssl,
+}:
 
 stdenv.mkDerivation rec {
   pname = "tomcat-native";
@@ -11,7 +18,11 @@ stdenv.mkDerivation rec {
 
   sourceRoot = "${pname}-${version}-src/native";
 
-  buildInputs = [ apr jdk openssl ];
+  buildInputs = [
+    apr
+    jdk
+    openssl
+  ];
 
   configureFlags = [
     "--with-apr=${apr.dev}"

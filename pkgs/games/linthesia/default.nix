@@ -1,20 +1,21 @@
-{ lib
-, SDL2
-, SDL2_image
-, SDL2_ttf
-, alsa-lib
-, fetchFromGitHub
-, glibmm
-, gtk3
-, libGL
-, libGLU
-, meson
-, ninja
-, pkg-config
-, python3
-, sqlite
-, stdenv
-, wrapGAppsHook3
+{
+  lib,
+  SDL2,
+  SDL2_image,
+  SDL2_ttf,
+  alsa-lib,
+  fetchFromGitHub,
+  glibmm,
+  gtk3,
+  libGL,
+  libGLU,
+  meson,
+  ninja,
+  pkg-config,
+  python3,
+  sqlite,
+  stdenv,
+  wrapGAppsHook3,
 }:
 
 stdenv.mkDerivation rec {
@@ -32,7 +33,13 @@ stdenv.mkDerivation rec {
     patchShebangs meson_post_install.py
   '';
 
-  nativeBuildInputs = [ meson ninja pkg-config python3 wrapGAppsHook3 ];
+  nativeBuildInputs = [
+    meson
+    ninja
+    pkg-config
+    python3
+    wrapGAppsHook3
+  ];
   buildInputs = [
     libGL
     libGLU

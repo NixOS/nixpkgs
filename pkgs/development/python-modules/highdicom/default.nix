@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "MGHComputationalPathology";
     repo = "highdicom";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-KHSJWEnm8u0xHkeeLF/U7MY4FfiWb6Q0GQQy2w1mnKw=";
   };
 
@@ -41,7 +41,7 @@ buildPythonPackage rec {
     pydicom
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     libjpeg = [
       pylibjpeg
       pylibjpeg-libjpeg
@@ -49,7 +49,7 @@ buildPythonPackage rec {
     ];
   };
 
-  nativeCheckInputs = [ pytestCheckHook ] ++ passthru.optional-dependencies.libjpeg;
+  nativeCheckInputs = [ pytestCheckHook ] ++ optional-dependencies.libjpeg;
   preCheck = ''
     export HOME=$TMP/test-home
     mkdir -p $HOME/.pydicom/

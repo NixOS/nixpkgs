@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 let
   cfg = config.services.confd;
 
@@ -12,14 +17,20 @@ let
     watch = ${lib.boolToString cfg.watch}
   '';
 
-in {
+in
+{
   options.services.confd = {
     enable = lib.mkEnableOption "confd, a service to manage local application configuration files using templates and data from etcd/consul/redis/zookeeper";
 
     backend = lib.mkOption {
       description = "Confd config storage backend to use.";
       default = "etcd";
-      type = lib.types.enum ["etcd" "consul" "redis" "zookeeper"];
+      type = lib.types.enum [
+        "etcd"
+        "consul"
+        "redis"
+        "zookeeper"
+      ];
     };
 
     interval = lib.mkOption {
@@ -49,7 +60,10 @@ in {
     logLevel = lib.mkOption {
       description = "Confd log level.";
       default = "info";
-      type = lib.types.enum ["info" "debug"];
+      type = lib.types.enum [
+        "info"
+        "debug"
+      ];
     };
 
     confDir = lib.mkOption {

@@ -16,7 +16,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "RustScan";
     repo = "RustScan";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-6heC/bHo4IqKNvPjch7AiyWTCZDCv4MZHC7DTEX3U5c=";
   };
 
@@ -28,7 +28,7 @@ rustPlatform.buildRustPackage rec {
     patchShebangs fixtures/.rustscan_scripts/*
   '';
 
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  buildInputs = lib.optional stdenv.hostPlatform.isDarwin Security;
 
   nativeCheckInputs = [
     perl

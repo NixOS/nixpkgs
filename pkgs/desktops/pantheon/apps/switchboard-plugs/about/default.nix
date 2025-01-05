@@ -1,35 +1,37 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nix-update-script
-, meson
-, ninja
-, pkg-config
-, vala
-, libadwaita
-, libgee
-, libgtop
-, libgudev
-, granite7
-, gtk4
-, packagekit
-, polkit
-, switchboard
-, udisks2
-, fwupd
-, appstream
-, elementary-settings-daemon
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nix-update-script,
+  meson,
+  ninja,
+  pkg-config,
+  vala,
+  libadwaita,
+  libgee,
+  libgtop,
+  libgudev,
+  libsoup_3,
+  granite7,
+  gtk4,
+  packagekit,
+  polkit,
+  switchboard,
+  udisks2,
+  fwupd,
+  appstream,
+  elementary-settings-daemon,
 }:
 
 stdenv.mkDerivation rec {
   pname = "switchboard-plug-about";
-  version = "8.0.0";
+  version = "8.1.0";
 
   src = fetchFromGitHub {
     owner = "elementary";
     repo = pname;
     rev = version;
-    sha256 = "sha256-6b6nuOp4pEufHEmTraSfKpbtPuO3Z9hQJfvKuuyy7as=";
+    sha256 = "sha256-Z+dhNUGDDLxzPLAaFkvWA+d6YvfM5NayOMu3SKjswLs=";
   };
 
   nativeBuildInputs = [
@@ -49,6 +51,7 @@ stdenv.mkDerivation rec {
     libgee
     libgtop
     libgudev
+    libsoup_3
     packagekit
     polkit
     switchboard

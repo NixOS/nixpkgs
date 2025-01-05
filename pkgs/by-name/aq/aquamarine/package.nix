@@ -11,7 +11,7 @@
   libffi,
   libGL,
   libinput,
-  mesa,
+  libgbm,
   nix-update-script,
   pixman,
   pkg-config,
@@ -23,13 +23,13 @@
 }:
 stdenv.mkDerivation (finalAttrs: {
   pname = "aquamarine";
-  version = "0.4.0";
+  version = "0.5.1";
 
   src = fetchFromGitHub {
     owner = "hyprwm";
     repo = "aquamarine";
     rev = "v${finalAttrs.version}";
-    hash = "sha256-EaKtf4mESHvHF2ak5Lt7ycSTLqdjI+Ry+zWpQaPqgD8=";
+    hash = "sha256-Gxv1kTz5jEvIzmkF6XgsdKglL2jmjJOQdZ+hO9uVnlQ=";
   };
 
   nativeBuildInputs = [
@@ -46,7 +46,7 @@ stdenv.mkDerivation (finalAttrs: {
     libffi
     libGL
     libinput
-    mesa
+    libgbm
     pixman
     seatd
     udev

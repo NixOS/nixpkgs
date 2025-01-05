@@ -1,23 +1,24 @@
-{ stdenv
-, lib
-, gettext
-, libxml2
-, libhandy
-, fetchurl
-, fetchpatch
-, pkg-config
-, libcanberra-gtk3
-, gtk3
-, glib
-, meson
-, ninja
-, python3
-, wrapGAppsHook3
-, appstream-glib
-, desktop-file-utils
-, gnome
-, adwaita-icon-theme
-, gsettings-desktop-schemas
+{
+  stdenv,
+  lib,
+  gettext,
+  libxml2,
+  libhandy,
+  fetchurl,
+  fetchpatch,
+  pkg-config,
+  libcanberra-gtk3,
+  gtk3,
+  glib,
+  meson,
+  ninja,
+  python3,
+  wrapGAppsHook3,
+  appstream-glib,
+  desktop-file-utils,
+  gnome,
+  adwaita-icon-theme,
+  gsettings-desktop-schemas,
 }:
 
 stdenv.mkDerivation rec {
@@ -26,7 +27,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-screenshot/${lib.versions.major version}/gnome-screenshot-${version}.tar.xz";
-    sha256 = "Stt97JJkKPdCY9V5ZnPPFC5HILbnaPVGio0JM/mMlZc=";
+    hash = "sha256-Stt97JJkKPdCY9V5ZnPPFC5HILbnaPVGio0JM/mMlZc=";
   };
 
   patches = [
@@ -34,7 +35,7 @@ stdenv.mkDerivation rec {
     # https://gitlab.gnome.org/GNOME/gnome-screenshot/-/issues/186
     (fetchpatch {
       url = "https://gitlab.gnome.org/GNOME/gnome-screenshot/-/commit/b60dad3c2536c17bd201f74ad8e40eb74385ed9f.patch";
-      sha256 = "Js83h/3xxcw2hsgjzGa5lAYFXVrt6MPhXOTh5dZTx/w=";
+      hash = "sha256-Js83h/3xxcw2hsgjzGa5lAYFXVrt6MPhXOTh5dZTx/w=";
     })
   ];
 

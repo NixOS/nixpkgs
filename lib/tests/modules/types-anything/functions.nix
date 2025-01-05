@@ -1,4 +1,5 @@
-{ lib, config, ... }: {
+{ lib, config, ... }:
+{
 
   options.valueIsFunction = lib.mkOption {
     default = lib.mapAttrs (name: lib.isFunction) config.value;

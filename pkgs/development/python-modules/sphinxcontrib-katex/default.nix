@@ -5,7 +5,7 @@
   pythonOlder,
   setuptools,
   sphinx,
-  pytestCheckHook
+  pytestCheckHook,
 }:
 
 buildPythonPackage rec {

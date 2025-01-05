@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "home-assistant-libs";
     repo = "aiowebostv";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-RrSEl/U6UzPoE2151opDe0QRmj6M6wAtsQyF4/dd8ek=";
   };
 

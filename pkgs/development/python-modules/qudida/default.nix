@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   numpy,
-  opencv4,
+  opencv-python,
   pythonOlder,
   scikit-learn,
   typing-extensions,
@@ -21,12 +21,9 @@ buildPythonPackage rec {
     hash = "sha256-2xmOKIerDJqgAj5WWvv/Qd+3azYfhf1eE/eA11uhjMg=";
   };
 
-
-  pythonRemoveDeps = [ "opencv-python" ];
-
   propagatedBuildInputs = [
     numpy
-    opencv4
+    opencv-python
     scikit-learn
     typing-extensions
   ];

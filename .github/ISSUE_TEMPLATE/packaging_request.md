@@ -7,16 +7,20 @@ assignees: ''
 
 ---
 
-**Project description**
+## Project description
 
 <!-- Describe the project a little: -->
 
-**Metadata**
+## Metadata
 
 * homepage URL:
 * source URL:
 * license: mit, bsd, gpl2+ , ...
 * platforms: unix, linux, darwin, ...
+
+---
+
+Note for maintainers: Please tag this issue in your PR.
 
 ---
 

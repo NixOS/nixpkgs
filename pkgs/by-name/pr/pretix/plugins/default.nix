@@ -1,5 +1,6 @@
-{ callPackage
-, ...
+{
+  callPackage,
+  ...
 }:
 
 {

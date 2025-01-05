@@ -16,15 +16,15 @@
 
 buildPythonPackage rec {
   pname = "mkdocs-jupyter";
-  version = "0.24.8";
+  version = "0.25.1";
   pyproject = true;
 
-  disabled = pythonOlder "3.7";
+  disabled = pythonOlder "3.9";
 
   src = fetchPypi {
     pname = "mkdocs_jupyter";
     inherit version;
-    hash = "sha256-Cadi9ITVQNnA6UTTSyjLU2oyhp4iS0YOL8eRsUP3aUA=";
+    hash = "sha256-DpJy/0lH4OxoPJJCOkv7QqJkd8EDqxpquCd+LcyPev4=";
   };
 
   pythonRelaxDeps = [ "nbconvert" ];

@@ -11,8 +11,8 @@
 
   Any unmatched variable names in the file at the provided path will cause a build failure.
 
-  Any remaining text that matches `@[A-Za-z_][0-9A-Za-z_'-]@` in the output after replacement
-  has occurred will cause a build failure.
+  By default, any remaining text that matches `@[A-Za-z_][0-9A-Za-z_'-]@` in the output after replacement
+  has occurred will cause a build failure. Variables can be excluded from this check by passing "null" for them.
 
   # Inputs
 
@@ -20,7 +20,8 @@
   : The file in which to replace variables.
 
   `attrs` (AttrsOf String)
-  : Each entry in this set corresponds to a `--subst-var-by` entry in [`substitute`](https://nixos.org/manual/nixpkgs/stable/#fun-substitute).
+  : Each entry in this set corresponds to a `--subst-var-by` entry in [`substitute`](https://nixos.org/manual/nixpkgs/stable/#fun-substitute) or
+    null to keep it unchanged.
 
   # Example
 
@@ -36,13 +37,19 @@ path: attrs:
 
 let
   # We use `--replace-fail` instead of `--subst-var-by` so that if the thing isn't there, we fail.
-  subst-var-by = name: value: [
-    "--replace-fail"
-    (lib.escapeShellArg "@${name}@")
-    (lib.escapeShellArg value)
-  ];
+  subst-var-by =
+    name: value:
+    lib.optionals (value != null) [
+      "--replace-fail"
+      (lib.escapeShellArg "@${name}@")
+      (lib.escapeShellArg value)
+    ];
 
   replacements = lib.concatLists (lib.mapAttrsToList subst-var-by attrs);
+
+  left-overs = map ({ name, ... }: name) (
+    builtins.filter ({ value, ... }: value == null) (lib.attrsToList attrs)
+  );
 in
 
 stdenvNoCC.mkDerivation {
@@ -62,13 +69,15 @@ stdenvNoCC.mkDerivation {
   # Look for Nix identifiers surrounded by `@` that aren't substituted.
   checkPhase =
     let
-      regex = lib.escapeShellArg "@[a-zA-Z_][0-9A-Za-z_'-]*@";
+      lookahead =
+        if builtins.length left-overs == 0 then "" else "(?!${builtins.concatStringsSep "|" left-overs}@)";
+      regex = lib.escapeShellArg "@${lookahead}[a-zA-Z_][0-9A-Za-z_'-]*@";
     in
     ''
       runHook preCheck
-      if grep -qe ${regex} "$out"; then
+      if grep -Pqe ${regex} "$out"; then
         echo The following look like unsubstituted Nix identifiers that remain in "$out":
-        grep -oe ${regex} "$out"
+        grep -Poe ${regex} "$out"
         echo Use the more precise '`substitute`' function if this check is in error.
         exit 1
       fi

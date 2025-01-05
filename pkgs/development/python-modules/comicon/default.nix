@@ -13,22 +13,25 @@
 
 buildPythonPackage rec {
   pname = "comicon";
-  version = "1.2.0";
+  version = "1.2.1";
   pyproject = true;
   disabled = pythonOlder "3.10";
 
   src = fetchFromGitHub {
     owner = "potatoeggy";
     repo = "comicon";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-oiEzZRgyG/RQCo2zSTqwlOhkwz76lSImR0ZtSlIUp4Y=";
+    tag = "v${version}";
+    hash = "sha256-FvAgcpYvUTTE24jJB2ZxSNcNjAIyUBa3BaysjWXurtg=";
   };
 
   nativeBuildInputs = [
     poetry-core
   ];
 
-  pythonRelaxDeps = [ "pypdf" ];
+  pythonRelaxDeps = [
+    "pillow"
+    "pypdf"
+  ];
 
   propagatedBuildInputs = [
     ebooklib

@@ -17,7 +17,6 @@
 , bamf
 , libcanberra-gtk3
 , gnome-desktop
-, mesa
 , mutter
 , gnome-settings-daemon
 , wrapGAppsHook3
@@ -77,7 +76,6 @@ stdenv.mkDerivation rec {
     gtk3
     libcanberra-gtk3
     libgee
-    mesa # for libEGL
     mutter
     systemd
   ];

@@ -5,7 +5,7 @@
   fetchPypi,
   hatchling,
   psutil,
-  pytest-cov,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   sybil,
@@ -33,7 +33,7 @@ buildPythonPackage rec {
 
   nativeCheckInputs = [
     pytestCheckHook
-    pytest-cov
+    pytest-cov-stub
     sybil
   ];
 

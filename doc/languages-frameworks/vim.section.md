@@ -232,6 +232,51 @@ To add a new plugin, run `nix-shell -p vimPluginsUpdater --run 'vim-plugins-upda
 
 Finally, there are some plugins that are also packaged in nodePackages because they have Javascript-related build steps, such as running webpack. Those plugins are not listed in `vim-plugin-names` or managed by `vimPluginsUpdater` at all, and are included separately in `overrides.nix`. Currently, all these plugins are related to the `coc.nvim` ecosystem of the Language Server Protocol integration with Vim/Neovim.
 
+### Testing Neovim plugins {#testing-neovim-plugins}
+
+#### neovimRequireCheck {#testing-neovim-plugins-neovim-require-check}
+`neovimRequireCheck` is a simple test which checks if Neovim can requires lua modules without errors. This is often enough to catch missing dependencies.
+
+It accepts a single string for a module, or a list of module strings to test.
+- `nvimRequireCheck = MODULE;`
+- `nvimRequireCheck = [ MODULE1 MODULE2 ];`
+
+When `nvimRequireCheck` is not specified, we will search the plugin's directory for lua modules to attempt loading. This quick smoke test can catch obvious dependency errors that might be missed.
+The check hook will fail the build if any failures are detected to encourage inspecting the logs to identify potential issues.
+
+If you would like to only check a specific module, this can be manually added through plugin definition overrides in the [overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vim/plugins/overrides.nix).
+
+```nix
+  gitsigns-nvim = super.gitsigns-nvim.overrideAttrs {
+    dependencies = [ self.plenary-nvim ];
+    nvimRequireCheck = "gitsigns";
+  };
+```
+Some plugins will have lua modules that require a user configuration to function properly or can contain optional lua modules that we dont want to test requiring.
+We can skip specific modules using `nvimSkipModule`. Similar to `nvimRequireCheck`, it accepts a single string or a list of strings.
+- `nvimSkipModule = MODULE;`
+- `nvimSkipModule = [ MODULE1 MODULE2 ];`
+
+```nix
+  asyncrun-vim = super.asyncrun-vim.overrideAttrs {
+    nvimSkipModule = [
+      # vim plugin with optional toggleterm integration
+      "asyncrun.toggleterm"
+      "asyncrun.toggleterm2"
+    ];
+  };
+```
+
+In rare cases, we might not want to actually test loading lua modules for a plugin. In those cases, we can disable `neovimRequireCheck` with `doCheck = false;`.
+
+This can be manually added through plugin definition overrides in the [overrides.nix](https://github.com/NixOS/nixpkgs/blob/master/pkgs/applications/editors/vim/plugins/overrides.nix).
+```nix
+  vim-test = super.vim-test.overrideAttrs {
+    # Vim plugin with a test lua file
+    doCheck = false;
+  };
+```
+
 ### Plugin optional configuration {#vim-plugin-required-snippet}
 
 Some plugins require specific configuration to work. We choose not to
@@ -251,8 +296,13 @@ nix-shell -p vimPluginsUpdater --run 'vim-plugins-updater --github-token=mytoken
 Alternatively, set the number of processes to a lower count to avoid rate-limiting.
 
 ```sh
-
 nix-shell -p vimPluginsUpdater --run 'vim-plugins-updater --proc 1'
+```
+
+If you want to update only certain plugins, you can specify them after the `update` command. Note that you must use the same plugin names as the `pkgs/applications/editors/vim/plugins/vim-plugin-names` file.
+
+```sh
+nix-shell -p vimPluginsUpdater --run 'vim-plugins-updater update "nvim-treesitter" "LazyVim"'
 ```
 
 ## How to maintain an out-of-tree overlay of vim plugins ? {#vim-out-of-tree-overlays}

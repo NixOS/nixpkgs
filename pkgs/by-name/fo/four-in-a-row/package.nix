@@ -24,7 +24,7 @@ stdenv.mkDerivation rec {
 
   src = fetchurl {
     url = "mirror://gnome/sources/four-in-a-row/${lib.versions.majorMinor version}/four-in-a-row-${version}.tar.xz";
-    sha256 = "10ji60bdfdzb6wk5dkwjc3yww7hqi3yjcx1k1z7x2521h2dpdli1";
+    hash = "sha256-IdJ2m4BBFNHPDzN0Jv2IGB7O/WCSz1YmN+s31xYwUYI=";
   };
 
   nativeBuildInputs = [
@@ -57,6 +57,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     homepage = "https://gitlab.gnome.org/GNOME/four-in-a-row";
+    changelog = "https://gitlab.gnome.org/GNOME/four-in-a-row/-/blob/${version}/NEWS?ref_type=tags";
     description = "Make lines of the same color to win";
     mainProgram = "four-in-a-row";
     maintainers = teams.gnome.members;

@@ -1,16 +1,17 @@
-{ lib
-, symlinkJoin
-, callPackage
-, fetchFromGitHub
-, buildGoModule
-, makeWrapper
-, jq
-, curl
-, kubectl
-, eksctl
-, kind
-, k3sup
-, coreutils
+{
+  lib,
+  symlinkJoin,
+  callPackage,
+  fetchFromGitHub,
+  buildGoModule,
+  makeWrapper,
+  jq,
+  curl,
+  kubectl,
+  eksctl,
+  kind,
+  k3sup,
+  coreutils,
 }:
 
 let
@@ -31,7 +32,11 @@ buildGoModule {
   subPackages = [ "." ];
   vendorHash = "sha256-JkQbQ2NEaumXbAfsv0fNiQf/EwMs3SDLHvu7c/bU7fU=";
 
-  nativeBuildInputs = [ makeWrapper jq curl ];
+  nativeBuildInputs = [
+    makeWrapper
+    jq
+    curl
+  ];
 
   ldflags = [
     "-s"
@@ -43,20 +48,22 @@ buildGoModule {
   # false because tests require some modifications inside nix-env
   doCheck = false;
 
-  postInstall = let
-    nuv-bin = symlinkJoin {
-      name = "nuv-bin";
-      paths = [
-        coreutils
-        kubectl
-        eksctl
-        kind
-        k3sup
-      ];
-    };
-  in ''
-    wrapProgram $out/bin/nuv --set NUV_BIN "${nuv-bin}/bin"
-  '';
+  postInstall =
+    let
+      nuv-bin = symlinkJoin {
+        name = "nuv-bin";
+        paths = [
+          coreutils
+          kubectl
+          eksctl
+          kind
+          k3sup
+        ];
+      };
+    in
+    ''
+      wrapProgram $out/bin/nuv --set NUV_BIN "${nuv-bin}/bin"
+    '';
 
   passthru.tests = {
     simple = callPackage ./tests.nix { inherit version; };
@@ -67,6 +74,9 @@ buildGoModule {
     description = "A CLI tool for running tasks using the Nuvolaris serverless engine";
     license = lib.licenses.asl20;
     mainProgram = "nuv";
-    maintainers = with lib.maintainers; [ msciabarra d4rkstar ];
+    maintainers = with lib.maintainers; [
+      msciabarra
+      d4rkstar
+    ];
   };
 }

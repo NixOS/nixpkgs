@@ -21,14 +21,14 @@
 
 buildPythonPackage rec {
   pname = "pvlib";
-  version = "0.11.0";
+  version = "0.11.2";
   pyproject = true;
 
   disabled = pythonOlder "3.7";
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-iLMcRNwH8ENa8eLV3crAZ+bOFZFyUanycDZvYem9AVs=";
+    hash = "sha256-NxZF9OZsJ45s8rGySHxiwrrUef9iom7YRCFtD4Q89cw=";
   };
 
   build-system = [

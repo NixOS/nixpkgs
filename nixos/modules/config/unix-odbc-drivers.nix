@@ -9,13 +9,14 @@ let
     Driver = ${pkg}/${pkg.driver}
   '';
 
-in {
+in
+{
   ###### interface
 
   options = {
     environment.unixODBCDrivers = lib.mkOption {
       type = lib.types.listOf lib.types.package;
-      default = [];
+      default = [ ];
       example = lib.literalExpression "with pkgs.unixODBCDrivers; [ sqlite psql ]";
       description = ''
         Specifies Unix ODBC drivers to be registered in
@@ -28,8 +29,10 @@ in {
 
   ###### implementation
 
-  config = lib.mkIf (config.environment.unixODBCDrivers != []) {
-    environment.etc."odbcinst.ini".text = lib.concatMapStringsSep "\n" iniDescription config.environment.unixODBCDrivers;
+  config = lib.mkIf (config.environment.unixODBCDrivers != [ ]) {
+    environment.etc."odbcinst.ini".text =
+      lib.concatMapStringsSep "\n" iniDescription
+        config.environment.unixODBCDrivers;
   };
 
 }

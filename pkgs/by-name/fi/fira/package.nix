@@ -1,7 +1,8 @@
-{ lib
-, symlinkJoin
-, fira-mono
-, fira-sans
+{
+  lib,
+  symlinkJoin,
+  fira-mono,
+  fira-sans,
 }:
 
 symlinkJoin rec {

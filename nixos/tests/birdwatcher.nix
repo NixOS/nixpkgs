@@ -1,7 +1,11 @@
 # This test does a basic functionality check for birdwatcher
 
-{ system ? builtins.currentSystem
-, pkgs ? import ../.. { inherit system; config = { }; }
+{
+  system ? builtins.currentSystem,
+  pkgs ? import ../.. {
+    inherit system;
+    config = { };
+  },
 }:
 
 let

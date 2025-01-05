@@ -1,11 +1,12 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, swig4
-, lua
-, elastix
-, itk
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  swig,
+  lua,
+  elastix,
+  itk,
 }:
 
 stdenv.mkDerivation (finalAttrs: {
@@ -15,13 +16,13 @@ stdenv.mkDerivation (finalAttrs: {
   src = fetchFromGitHub {
     owner = "SimpleITK";
     repo = "SimpleITK";
-    rev = "refs/tags/v${finalAttrs.version}";
+    tag = "v${finalAttrs.version}";
     hash = "sha256-/FV5NAM9DJ54Vg6/5yn9DCybry+a8lS3fQ3HWLOeOTA=";
   };
 
   nativeBuildInputs = [
     cmake
-    swig4
+    swig
   ];
   buildInputs = [
     elastix

@@ -1,4 +1,12 @@
-{ lib, stdenv, fetchFromGitLab, SDL, SDL_image, SDL_mixer, zlib }:
+{
+  lib,
+  stdenv,
+  fetchFromGitLab,
+  SDL,
+  SDL_image,
+  SDL_mixer,
+  zlib,
+}:
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "meritous";
@@ -20,7 +28,12 @@ stdenv.mkDerivation (finalAttrs: {
       --replace "filename[64]" "filename[256]"
   '';
 
-  buildInputs = [ SDL SDL_image SDL_mixer zlib ];
+  buildInputs = [
+    SDL
+    SDL_image
+    SDL_mixer
+    zlib
+  ];
 
   installPhase = ''
     install -m 555 -D meritous $out/bin/meritous
@@ -28,7 +41,10 @@ stdenv.mkDerivation (finalAttrs: {
     cp -r dat/* $out/share/meritous/
   '';
 
-  hardeningDisable = [ "stackprotector" "fortify" ];
+  hardeningDisable = [
+    "stackprotector"
+    "fortify"
+  ];
 
   meta = with lib; {
     description = "Action-adventure dungeon crawl game";

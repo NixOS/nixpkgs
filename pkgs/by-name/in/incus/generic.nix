@@ -1,7 +1,7 @@
 {
   hash,
   lts ? false,
-  patches,
+  patches ? [ ],
   updateScriptArgs ? "",
   vendorHash,
   version,
@@ -124,12 +124,12 @@ buildGoModule rec {
         ;
     };
 
-    tests = if lts then nixosTests.incus-lts else nixosTests.incus;
+    tests = if lts then nixosTests.incus-lts.all else nixosTests.incus.all;
 
     ui = callPackage ./ui.nix { };
 
-    updateScript = writeScript "ovs-update.nu" ''
-      ${./update.nu} ${updateScriptArgs}
+    updateScript = writeScript "ovs-update.py" ''
+      ${./update.py} ${updateScriptArgs}
     '';
   };
 

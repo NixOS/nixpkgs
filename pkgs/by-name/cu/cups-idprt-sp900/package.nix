@@ -34,10 +34,13 @@ stdenvNoCC.mkDerivation (finalAttrs: {
 
   installPhase =
     let
-      arch = builtins.getAttr stdenvNoCC.hostPlatform.system {
-        x86_64-linux = "x64";
-        x86-linux = "x86";
-      };
+      arch =
+        {
+          x86_64-linux = "x64";
+          x86-linux = "x86";
+        }
+        ."${stdenvNoCC.hostPlatform.system}"
+          or (throw "cups-idprt-sp900: No prebuilt filters for system: ${stdenvNoCC.hostPlatform.system}");
     in
     ''
       runHook preInstall

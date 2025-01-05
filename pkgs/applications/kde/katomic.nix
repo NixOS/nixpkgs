@@ -1,4 +1,13 @@
-{ mkDerivation, lib, extra-cmake-modules, kdoctools, ki18n, kio, libkdegames, knewstuff }:
+{
+  mkDerivation,
+  lib,
+  extra-cmake-modules,
+  kdoctools,
+  ki18n,
+  kio,
+  libkdegames,
+  knewstuff,
+}:
 
 mkDerivation {
   pname = "katomic";

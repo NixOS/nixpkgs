@@ -1,12 +1,11 @@
-{ lib
-, stdenv
-, fetchFromSourcehut
-, rustPlatform
-, installShellFiles
-, scdoc
-, Security
-, nixosTests
-, nix-update-script
+{
+  lib,
+  fetchFromSourcehut,
+  rustPlatform,
+  installShellFiles,
+  scdoc,
+  nixosTests,
+  nix-update-script,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -27,9 +26,10 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script { };
   };
 
-  nativeBuildInputs = [ installShellFiles scdoc ];
-
-  buildInputs = lib.optional stdenv.isDarwin Security;
+  nativeBuildInputs = [
+    installShellFiles
+    scdoc
+  ];
 
   postInstall = ''
     scdoc < doc/stargazer.scd  > stargazer.1

@@ -15,12 +15,14 @@ lib.packagesFromDirectoryRecursive {
     inherit (pkgs) codeium;
   };
 
-  consult-gh = callPackage ./manual-packages/consult-gh {
-    inherit (pkgs) gh;
-  };
-
   lsp-bridge = callPackage ./manual-packages/lsp-bridge {
-    inherit (pkgs) basedpyright git go gopls python3;
+    inherit (pkgs)
+      basedpyright
+      git
+      go
+      gopls
+      python3
+      ;
   };
 
   structured-haskell-mode = self.shm;
@@ -28,6 +30,8 @@ lib.packagesFromDirectoryRecursive {
   texpresso = callPackage ./manual-packages/texpresso { inherit (pkgs) texpresso; };
 
   tree-sitter-langs = callPackage ./manual-packages/tree-sitter-langs { final = self; };
+
+  zstd = callPackage ./manual-packages/zstd { inherit (pkgs) zstd; };
 
   # From old emacsPackages (pre emacsPackagesNg)
   cedille = callPackage ./manual-packages/cedille { inherit (pkgs) cedille; };

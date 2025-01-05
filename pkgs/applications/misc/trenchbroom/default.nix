@@ -1,9 +1,32 @@
-{ lib, stdenv, fetchFromGitHub, writeText
-, cmake, ninja, curl, git, pandoc, pkg-config, unzip, zip
-, libGL, libGLU, freeimage, freetype, assimp
-, catch2, fmt, glew, miniz, tinyxml-2, xorg
-, qtbase, qtwayland, wrapQtAppsHook
-, copyDesktopItems, makeDesktopItem
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  writeText,
+  cmake,
+  ninja,
+  curl,
+  git,
+  pandoc,
+  pkg-config,
+  unzip,
+  zip,
+  libGL,
+  libGLU,
+  freeimage,
+  freetype,
+  assimp,
+  catch2,
+  fmt,
+  glew,
+  miniz,
+  tinyxml-2,
+  xorg,
+  qtbase,
+  qtwayland,
+  wrapQtAppsHook,
+  copyDesktopItems,
+  makeDesktopItem,
 }:
 
 stdenv.mkDerivation rec {
@@ -40,8 +63,10 @@ stdenv.mkDerivation rec {
           Architecture : ${vcpkg_target}
           Version : 1.0
           Status : is installed
-        '') vcpkg_pkgs);
-    in ''
+        '') vcpkg_pkgs
+      );
+    in
+    ''
       export VCPKG_ROOT="$TMP/vcpkg"
 
       mkdir -p $VCPKG_ROOT/.vcpkg-root
@@ -71,11 +96,33 @@ stdenv.mkDerivation rec {
       --replace 'set(CPACK_PACKAGING_INSTALL_PREFIX "/usr")' 'set(CPACK_PACKAGING_INSTALL_PREFIX "'$out'")'
   '';
 
-  nativeBuildInputs = [ cmake ninja curl git pandoc wrapQtAppsHook copyDesktopItems pkg-config unzip zip ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    curl
+    git
+    pandoc
+    wrapQtAppsHook
+    copyDesktopItems
+    pkg-config
+    unzip
+    zip
+  ];
   buildInputs = [
-    libGL libGLU xorg.libXxf86vm xorg.libSM
-    freeimage freetype qtbase qtwayland catch2 fmt
-    glew miniz tinyxml-2 assimp
+    libGL
+    libGLU
+    xorg.libXxf86vm
+    xorg.libSM
+    freeimage
+    freetype
+    qtbase
+    qtwayland
+    catch2
+    fmt
+    glew
+    miniz
+    tinyxml-2
+    assimp
   ];
   QT_PLUGIN_PATH = "${qtbase}/${qtbase.qtPluginPrefix}";
   QT_QPA_PLATFORM = "offscreen";

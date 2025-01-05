@@ -1,4 +1,8 @@
-{ lib, fetchFromGitHub, python3Packages }:
+{
+  lib,
+  fetchFromGitHub,
+  python3Packages,
+}:
 
 python3Packages.buildPythonApplication rec {
   pname = "bmaptool";
@@ -8,7 +12,7 @@ python3Packages.buildPythonApplication rec {
     owner = "yoctoproject";
     repo = "bmaptool";
     rev = "v${version}";
-    sha256 = "sha256-YPY3sNuZ/TASNBPH94iqG6AuBRq5KjioKiuxAcu94+I=";
+    hash = "sha256-YPY3sNuZ/TASNBPH94iqG6AuBRq5KjioKiuxAcu94+I=";
   };
 
   propagatedBuildInputs = with python3Packages; [ six ];

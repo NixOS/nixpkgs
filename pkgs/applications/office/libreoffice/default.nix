@@ -34,12 +34,12 @@
 , which
 , icu
 , boost
-, jdk17
+, jdk21
 , ant
 , cups
 , xorg
 , fontforge
-, jre17_minimal
+, jre21_minimal
 , openssl
 , gperf
 , cppunit
@@ -99,7 +99,7 @@
 , libetonyek
 , liborcus
 , libpng
-, langs ? [ "ar" "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fi" "fr" "hu" "it" "ja" "ko" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sk" "sl" "tr" "uk" "zh-CN" ]
+, langs ? [ "ar" "ca" "cs" "da" "de" "en-GB" "en-US" "eo" "es" "fi" "fr" "hu" "it" "ja" "ko" "nl" "pl" "pt" "pt-BR" "ro" "ru" "sk" "sl" "tr" "uk" "zh-CN" "zh-TW" ]
 , withFonts ? false
 , withHelp ? true
 , kdeIntegration ? false
@@ -177,7 +177,7 @@ let
     ];
   };
 
-  jre' = jre17_minimal.override {
+  jre' = jre21_minimal.override {
     modules = [ "java.base" "java.desktop" "java.logging" "java.sql" ];
   };
 
@@ -298,7 +298,7 @@ in stdenv.mkDerivation (finalAttrs: {
     bison
     fontforge
     gdb
-    jdk17
+    jdk21
     libtool
     pkg-config
   ];
@@ -461,7 +461,7 @@ in stdenv.mkDerivation (finalAttrs: {
     "--enable-dbus"
     "--enable-release-build"
     "--enable-epm"
-    "--with-ant-home=${getLib ant}/lib/ant"
+    "--with-ant-home=${ant.home}"
 
     # Without these, configure does not finish
     "--without-junit"
@@ -548,7 +548,9 @@ in stdenv.mkDerivation (finalAttrs: {
 
   buildTargets = [ "build-nocheck" ];
 
-  doCheck = true;
+  # Disable tests for the Qt5 build, as they seem even more flaky
+  # than usual, and we will drop the Qt5 build after 24.11 anyway.
+  doCheck = !(kdeIntegration && qtMajor == "5");
 
   preCheck = ''
     export HOME=$(pwd)

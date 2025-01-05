@@ -4,15 +4,18 @@
   dataclasses-json,
   fetchFromGitHub,
   langchain-core,
+  langgraph-sdk,
+  msgpack,
   poetry-core,
   pytest-asyncio,
+  pytest-mock,
   pytestCheckHook,
   pythonOlder,
 }:
 
 buildPythonPackage rec {
   pname = "langgraph-checkpoint";
-  version = "1.0.3";
+  version = "2.0.8";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -20,8 +23,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "langchain-ai";
     repo = "langgraph";
-    rev = "refs/tags/checkpoint==${version}";
-    hash = "sha256-5JP9f2uHNo71btQ96sBPlS7JPqo35C3VEMeHN1cJSro=";
+    tag = "checkpoint==${version}";
+    hash = "sha256-obDK6wn+oo8zDQsidogwKTIgT5wuUH/l4y+12cttkd0=";
   };
 
   sourceRoot = "${src.name}/libs/checkpoint";
@@ -30,13 +33,27 @@ buildPythonPackage rec {
 
   dependencies = [ langchain-core ];
 
+  propagatedBuildInputs = [ msgpack ];
+
+  pythonRelaxDeps = [ "msgpack" ]; # Can drop after msgpack 1.0.10 lands in nixpkgs
+
   pythonImportsCheck = [ "langgraph.checkpoint" ];
 
   nativeCheckInputs = [
     dataclasses-json
     pytest-asyncio
+    pytest-mock
     pytestCheckHook
   ];
+
+  disabledTests = [
+    # AssertionError
+    "test_serde_jsonplus"
+  ];
+
+  passthru = {
+    updateScript = langgraph-sdk.updateScript;
+  };
 
   meta = {
     changelog = "https://github.com/langchain-ai/langgraph/releases/tag/checkpoint==${version}";

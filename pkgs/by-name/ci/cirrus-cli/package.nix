@@ -1,21 +1,22 @@
-{ lib
-, fetchFromGitHub
-, buildGoModule
-, installShellFiles
+{
+  lib,
+  fetchFromGitHub,
+  buildGoModule,
+  installShellFiles,
 }:
 
 buildGoModule rec {
   pname = "cirrus-cli";
-  version = "0.124.2";
+  version = "0.133.2";
 
   src = fetchFromGitHub {
     owner = "cirruslabs";
-    repo = pname;
+    repo = "cirrus-cli";
     rev = "v${version}";
-    hash = "sha256-S57ApSuO3Mo/GpoaXx0dKOU3CfdQXmPM8AWi8fZ9MfY=";
+    hash = "sha256-TPrniVxGRgbbe9g+WUD3kvfT65t2Bop9G7ruiitZju8=";
   };
 
-  vendorHash = "sha256-BbBwia47E6EtoEzO2c2fhjg6WHGHTnzl5VyVYxIMu6E=";
+  vendorHash = "sha256-+OMhaAGA+pmiDUyXDo9UfQ0SFEAN9zuNZjnLkgr7a+0=";
 
   ldflags = [
     "-X github.com/cirruslabs/cirrus-cli/internal/version.Version=v${version}"

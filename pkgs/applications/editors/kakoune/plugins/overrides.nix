@@ -1,8 +1,20 @@
-{ lib, stdenv, fetchFromGitHub, fetchFromGitLab, fetchgit
-, buildKakounePluginFrom2Nix
-, kakoune-lsp, parinfer-rust, rep
-, fzf, git, guile, kakoune-unwrapped, lua5_3, plan9port
-, rustPlatform
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  fetchFromGitLab,
+  fetchgit,
+  buildKakounePluginFrom2Nix,
+  kakoune-lsp,
+  parinfer-rust,
+  rep,
+  fzf,
+  git,
+  guile,
+  kakoune-unwrapped,
+  lua5_3,
+  plan9port,
+  rustPlatform,
 }:
 
 self: super: {
@@ -20,7 +32,7 @@ self: super: {
     meta.homepage = "https://gitlab.com/FlyingWombat/case.kak";
   };
 
-  fzf-kak = super.fzf-kak.overrideAttrs(oldAttrs: rec {
+  fzf-kak = super.fzf-kak.overrideAttrs (oldAttrs: rec {
     preFixup = ''
       if [[ -x "${fzf}/bin/fzf" ]]; then
         fzfImpl='${fzf}/bin/fzf'
@@ -45,21 +57,24 @@ self: super: {
     };
 
     installPhase = ''
-      mkdir -p $out/bin $out/share/kak/autoload/plugins/
-      cp kak-ansi-filter $out/bin/
-      # Hard-code path of filter and don't try to build when Kakoune boots
-      sed '
-        /^declare-option.* ansi_filter /i\
-declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
-        /^declare-option.* ansi_filter /,/^}/d
-      ' rc/ansi.kak >$out/share/kak/autoload/plugins/ansi.kak
+            mkdir -p $out/bin $out/share/kak/autoload/plugins/
+            cp kak-ansi-filter $out/bin/
+            # Hard-code path of filter and don't try to build when Kakoune boots
+            sed '
+              /^declare-option.* ansi_filter /i\
+      declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
+              /^declare-option.* ansi_filter /,/^}/d
+            ' rc/ansi.kak >$out/share/kak/autoload/plugins/ansi.kak
     '';
 
     meta = with lib; {
       description = "Kakoune support for rendering ANSI code";
       homepage = "https://github.com/eraserhd/kak-ansi";
       license = licenses.unlicense;
-      maintainers = with maintainers; [ eraserhd philiptaron ];
+      maintainers = with maintainers; [
+        eraserhd
+        philiptaron
+      ];
       platforms = platforms.all;
     };
   };
@@ -89,12 +104,15 @@ declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
       description = "Kakoune integration with the Plan 9 plumber";
       homepage = "https://github.com/eraserhd/kak-plumb";
       license = licenses.unlicense;
-      maintainers = with maintainers; [ eraserhd philiptaron ];
+      maintainers = with maintainers; [
+        eraserhd
+        philiptaron
+      ];
       platforms = platforms.all;
     };
   };
 
-  kakoune-rainbow = super.kakoune-rainbow.overrideAttrs(oldAttrs: rec {
+  kakoune-rainbow = super.kakoune-rainbow.overrideAttrs (oldAttrs: rec {
     preFixup = ''
       mkdir -p $out/bin
       mv $out/share/kak/autoload/plugins/kakoune-rainbow/bin/kak-rainbow.scm $out/bin
@@ -120,12 +138,15 @@ declare-option -hidden str ansi_filter %{'"$out"'/bin/kak-ansi-filter}
       description = "Help Kakoune save and restore state between sessions";
       homepage = "https://gitlab.com/Screwtapello/kakoune-state-save";
       license = licenses.mit;
-      maintainers = with maintainers; [ Flakebi philiptaron ];
+      maintainers = with maintainers; [
+        Flakebi
+        philiptaron
+      ];
       platforms = platforms.all;
     };
   };
 
-  powerline-kak = super.powerline-kak.overrideAttrs(oldAttrs: rec {
+  powerline-kak = super.powerline-kak.overrideAttrs (oldAttrs: rec {
     preFixup = ''
       substituteInPlace $out/share/kak/autoload/plugins/powerline-kak/rc/modules/git.kak \
         --replace ' git ' ' ${git}/bin/git '

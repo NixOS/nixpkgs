@@ -1,46 +1,66 @@
-{ lib, stdenv, ocaml_oasis, ocaml, findlib, ocamlbuild }:
+{
+  lib,
+  stdenv,
+  ocaml_oasis,
+  ocaml,
+  findlib,
+  ocamlbuild,
+}:
 
-{ pname, version, nativeBuildInputs ? [], meta ? { platforms = ocaml.meta.platforms or []; },
+{
+  pname,
+  version,
+  nativeBuildInputs ? [ ],
+  meta ? {
+    platforms = ocaml.meta.platforms or [ ];
+  },
   minimumOCamlVersion ? null,
   createFindlibDestdir ? true,
   dontStrip ? true,
   ...
 }@args:
 
-if args ? minimumOCamlVersion &&
-   lib.versionOlder ocaml.version args.minimumOCamlVersion
-then throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
+if args ? minimumOCamlVersion && lib.versionOlder ocaml.version args.minimumOCamlVersion then
+  throw "${pname}-${version} is not available for OCaml ${ocaml.version}"
 else
 
-stdenv.mkDerivation (args // {
-  name = "ocaml${ocaml.version}-${pname}-${version}";
+  stdenv.mkDerivation (
+    args
+    // {
+      name = "ocaml${ocaml.version}-${pname}-${version}";
 
-  nativeBuildInputs = [ ocaml findlib ocamlbuild ocaml_oasis ] ++ nativeBuildInputs;
+      nativeBuildInputs = [
+        ocaml
+        findlib
+        ocamlbuild
+        ocaml_oasis
+      ] ++ nativeBuildInputs;
 
-  inherit createFindlibDestdir;
-  inherit dontStrip;
+      inherit createFindlibDestdir;
+      inherit dontStrip;
 
-  strictDeps = true;
+      strictDeps = true;
 
-  buildPhase = ''
-    runHook preBuild
-    oasis setup
-    ocaml setup.ml -configure --prefix $OCAMLFIND_DESTDIR --exec-prefix $out
-    ocaml setup.ml -build
-    runHook postBuild
-  '';
+      buildPhase = ''
+        runHook preBuild
+        oasis setup
+        ocaml setup.ml -configure --prefix $OCAMLFIND_DESTDIR --exec-prefix $out
+        ocaml setup.ml -build
+        runHook postBuild
+      '';
 
-  checkPhase = ''
-    runHook preCheck
-    ocaml setup.ml -test
-    runHook postCheck
-  '';
+      checkPhase = ''
+        runHook preCheck
+        ocaml setup.ml -test
+        runHook postCheck
+      '';
 
-  installPhase = ''
-    runHook preInstall
-    mkdir -p $out
-    ocaml setup.ml -install
-    runHook postInstall
-  '';
+      installPhase = ''
+        runHook preInstall
+        mkdir -p $out
+        ocaml setup.ml -install
+        runHook postInstall
+      '';
 
-})
+    }
+  )

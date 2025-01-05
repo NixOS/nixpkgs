@@ -1,20 +1,19 @@
 # This module creates netboot media containing the given NixOS
 # configuration.
 
-{ config, lib, pkgs, ... }:
+{ config, lib, pkgs, modulesPath, ... }:
 
 with lib;
 
 {
+  imports = [
+    ../../image/file-options.nix
+  ];
+
   options = {
 
     netboot.squashfsCompression = mkOption {
-      default = with pkgs.stdenv.hostPlatform; "xz -Xdict-size 100% "
-                + lib.optionalString isx86 "-Xbcj x86"
-                # Untested but should also reduce size for these platforms
-                + lib.optionalString isAarch "-Xbcj arm"
-                + lib.optionalString (isPower && is32bit && isBigEndian) "-Xbcj powerpc"
-                + lib.optionalString (isSparc) "-Xbcj sparc";
+      default = "zstd -Xcompression-level 19";
       description = ''
         Compression settings to use for the squashfs nix store.
       '';
@@ -47,7 +46,7 @@ with lib;
     fileSystems."/nix/.ro-store" = mkImageMediaOverride
       { fsType = "squashfs";
         device = "../nix-store.squashfs";
-        options = [ "loop" ];
+        options = [ "loop" ] ++ lib.optional (config.boot.kernelPackages.kernel.kernelAtLeast "6.2") "threads=multi";
         neededForBoot = true;
       };
 
@@ -134,20 +133,47 @@ with lib;
       }
     ];
 
+    image.extension = "tar.xz";
+    image.filePath = "tarball/${config.image.fileName}";
+    system.nixos.tags = [ "kexec" ];
+    system.build.image = config.system.build.kexecTarball;
+    system.build.kexecTarball = pkgs.callPackage "${toString modulesPath}/../lib/make-system-tarball.nix" {
+      fileName = config.image.baseName;
+      storeContents = [
+        {
+          object = config.system.build.kexecScript;
+          symlink = "/kexec_nixos";
+        }
+      ];
+      contents = [];
+    };
+
     boot.loader.timeout = 10;
 
-    boot.postBootCommands =
-      ''
-        # After booting, register the contents of the Nix store
-        # in the Nix database in the tmpfs.
-        ${config.nix.package}/bin/nix-store --load-db < /nix/store/nix-path-registration
+    boot.postBootCommands = ''
+      # After booting, register the contents of the Nix store
+      # in the Nix database in the tmpfs.
+      ${config.nix.package}/bin/nix-store --load-db < /nix/store/nix-path-registration
 
-        # nixos-rebuild also requires a "system" profile and an
-        # /etc/NIXOS tag.
-        touch /etc/NIXOS
-        ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
-      '';
+      # nixos-rebuild also requires a "system" profile and an
+      # /etc/NIXOS tag.
+      touch /etc/NIXOS
+      ${config.nix.package}/bin/nix-env -p /nix/var/nix/profiles/system --set /run/current-system
 
+      # Set password for user nixos if specified on cmdline
+      # Allows using nixos-anywhere in headless environments
+      for o in $(</proc/cmdline); do
+        case "$o" in
+          live.nixos.passwordHash=*)
+            set -- $(IFS==; echo $o)
+            ${pkgs.gnugrep}/bin/grep -q "root::" /etc/shadow && ${pkgs.shadow}/bin/usermod -p "$2" root
+            ;;
+          live.nixos.password=*)
+            set -- $(IFS==; echo $o)
+            ${pkgs.gnugrep}/bin/grep -q "root::" /etc/shadow && echo "root:$2" | ${pkgs.shadow}/bin/chpasswd
+            ;;
+        esac
+      done
+    '';
   };
-
 }

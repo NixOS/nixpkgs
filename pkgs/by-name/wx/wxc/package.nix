@@ -1,9 +1,10 @@
-{ lib
-, stdenv
-, fetchFromGitea
-, cmake
-, libGL
-, wxGTK32
+{
+  lib,
+  stdenv,
+  fetchFromGitea,
+  cmake,
+  libGL,
+  wxGTK32,
 }:
 
 stdenv.mkDerivation (finalAttrs: {

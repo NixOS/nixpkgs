@@ -25,8 +25,8 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   buildInputs = [
-     ncurses
-     libxcrypt
+    ncurses
+    libxcrypt
   ];
 
   strictDeps = true;

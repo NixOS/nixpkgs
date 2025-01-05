@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "breathe-doc";
     repo = "breathe";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-LJXvtScyWRL8zfj877bJ4xuIbLV9IN3Sn9KPUTLMjMI=";
   };
 
@@ -44,6 +44,11 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     defusedxml
     pytestCheckHook
+  ];
+
+  disabledTestPaths = [
+    # tests fail with sphinx 7.4.x
+    "tests/test_renderer.py"
   ];
 
   pythonImportsCheck = [ "breathe" ];

@@ -10,12 +10,12 @@
 }:
 
 let
-  version = "3.8.2";
+  version = "3.8.7";
   src = fetchFromGitHub {
     owner = "openrefine";
     repo = "openrefine";
     rev = version;
-    hash = "sha256-3KCO9ooYN8PPVirU2wh7wu4feHqugc3JSXWR2aWIanE=";
+    hash = "sha256-ViksKZ57DCIPShrK4PDBK0o8OttQKYt5wsnQ4+aPUDE=";
   };
 
   npmPkg = buildNpmPackage {
@@ -53,7 +53,7 @@ in maven.buildMavenPackage {
 
   mvnJdk = jdk;
   mvnParameters = "-pl !packaging";
-  mvnHash = "sha256-AuZp+uq5bmb4gnzKvqXeTmBrsCT6qmJOrwtJq9iCkRQ=";
+  mvnHash = "sha256-SrEsJfiZrPy2zZ0Vzl7+d+8XUHGd2DOOs+PHBOZrbIU=";
 
   nativeBuildInputs = [ makeWrapper ];
 
@@ -120,7 +120,7 @@ in maven.buildMavenPackage {
       fromSource
       binaryBytecode  # maven dependencies
     ];
-    broken = stdenv.isDarwin;  # builds, doesn't run
+    broken = stdenv.hostPlatform.isDarwin;  # builds, doesn't run
     mainProgram = "refine";
   };
 }

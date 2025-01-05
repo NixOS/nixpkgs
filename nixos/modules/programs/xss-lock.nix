@@ -1,4 +1,9 @@
-{ config, pkgs, lib, ... }:
+{
+  config,
+  pkgs,
+  lib,
+  ...
+}:
 
 let
   cfg = config.programs.xss-lock;
@@ -31,13 +36,17 @@ in
       description = "XSS Lock Daemon";
       wantedBy = [ "graphical-session.target" ];
       partOf = [ "graphical-session.target" ];
-      serviceConfig.ExecStart =
-        builtins.concatStringsSep " " ([
-            "${pkgs.xss-lock}/bin/xss-lock" "--session \${XDG_SESSION_ID}"
-          ] ++ (builtins.map lib.escapeShellArg cfg.extraOptions) ++ [
-            "--"
-            cfg.lockerCommand
-        ]);
+      serviceConfig.ExecStart = builtins.concatStringsSep " " (
+        [
+          "${pkgs.xss-lock}/bin/xss-lock"
+          "--session \${XDG_SESSION_ID}"
+        ]
+        ++ (builtins.map lib.escapeShellArg cfg.extraOptions)
+        ++ [
+          "--"
+          cfg.lockerCommand
+        ]
+      );
       serviceConfig.Restart = "always";
     };
 

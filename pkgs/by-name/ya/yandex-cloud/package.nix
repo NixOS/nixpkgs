@@ -12,14 +12,13 @@
   nix,
   # tests
   testers,
-  yandex-cloud,
 }:
 let
   pname = "yandex-cloud";
   sources = lib.importJSON ./sources.json;
   inherit (sources) version binaries;
 in
-stdenv.mkDerivation {
+stdenv.mkDerivation (finalAttrs: {
   inherit pname version;
 
   src = fetchurl binaries.${stdenv.hostPlatform.system};
@@ -68,7 +67,7 @@ stdenv.mkDerivation {
         (lib.makeBinPath [ nix ])
       ];
     } ./update.py;
-    tests.version = testers.testVersion { package = yandex-cloud; };
+    tests.version = testers.testVersion { package = finalAttrs.finalPackage; };
   };
 
   meta = {
@@ -96,4 +95,4 @@ stdenv.mkDerivation {
     ];
     mainProgram = "yc";
   };
-}
+})

@@ -1,8 +1,38 @@
-{ lib, stdenv, fetchurl, wrapQtAppsHook
-, libglut, freealut, libGLU, libGL, libICE, libjpeg, openal, openscenegraph, plib
-, libSM, libunwind, libX11, xorgproto, libXext, libXi
-, libXmu, libXt, simgear, zlib, boost, cmake, libpng, udev, fltk13, apr
-, makeDesktopItem, qtbase, qtdeclarative, glew, curl
+{
+  lib,
+  stdenv,
+  fetchurl,
+  wrapQtAppsHook,
+  libglut,
+  freealut,
+  libGLU,
+  libGL,
+  libICE,
+  libjpeg,
+  openal,
+  openscenegraph,
+  plib,
+  libSM,
+  libunwind,
+  libX11,
+  xorgproto,
+  libXext,
+  libXi,
+  libXmu,
+  libXt,
+  simgear,
+  zlib,
+  boost,
+  cmake,
+  libpng,
+  udev,
+  fltk13,
+  apr,
+  makeDesktopItem,
+  qtbase,
+  qtdeclarative,
+  glew,
+  curl,
 }:
 
 let
@@ -35,12 +65,39 @@ stdenv.mkDerivation rec {
     sha256 = "sha256-Fn0I3pzA9yIYs3myPNflbH9u4Y19VZUS2lGjvWfzjm4=";
   };
 
-  nativeBuildInputs = [ cmake wrapQtAppsHook ];
+  nativeBuildInputs = [
+    cmake
+    wrapQtAppsHook
+  ];
   buildInputs = [
-    libglut freealut libGLU libGL libICE libjpeg openal openscenegraph plib
-    libSM libunwind libX11 xorgproto libXext libXi
-    libXmu libXt simgear zlib boost libpng udev fltk13 apr qtbase
-    glew qtdeclarative curl
+    libglut
+    freealut
+    libGLU
+    libGL
+    libICE
+    libjpeg
+    openal
+    openscenegraph
+    plib
+    libSM
+    libunwind
+    libX11
+    xorgproto
+    libXext
+    libXi
+    libXmu
+    libXt
+    simgear
+    zlib
+    boost
+    libpng
+    udev
+    fltk13
+    apr
+    qtbase
+    glew
+    qtdeclarative
+    curl
   ];
 
   qtWrapperArgs = [
@@ -51,7 +108,7 @@ stdenv.mkDerivation rec {
     description = "Flight simulator";
     maintainers = with maintainers; [ raskin ];
     platforms = platforms.linux;
-    hydraPlatforms = []; # disabled from hydra because it's so big
+    hydraPlatforms = [ ]; # disabled from hydra because it's so big
     license = licenses.gpl2Plus;
     mainProgram = "fgfs";
   };

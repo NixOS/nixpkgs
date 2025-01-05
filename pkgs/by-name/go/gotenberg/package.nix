@@ -28,7 +28,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "gotenberg";
     repo = "gotenberg";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-y54DtOYIzFAk05TvXFcLdStfAXim3sVHBkW+R8CrtMM=";
   };
 
@@ -88,6 +88,7 @@ buildGoModule rec {
 
   meta = {
     description = "Converts numerous document formats into PDF files";
+    mainProgram = "gotenberg";
     homepage = "https://gotenberg.dev";
     changelog = "https://github.com/gotenberg/gotenberg/releases/tag/v${version}";
     license = lib.licenses.mit;

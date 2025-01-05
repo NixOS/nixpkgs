@@ -1,6 +1,7 @@
 {
   lib,
   stdenv,
+  apple-sdk,
   bootstrapTools,
   hello,
 }:
@@ -30,7 +31,7 @@ builtins.derivation {
     mkdir -p $out/bin
 
     for exe in $tools/bin/*; do
-      [[ $exe =~ bunzip2|codesign.*|false|install_name_tool|ld|lipo|pbzx|ranlib|rewrite-tbd|sigtool ]] && continue
+      [[ $exe =~ bunzip2|codesign.*|false|install_name_tool|ld|lipo|pbzx|ranlib|sigtool ]] && continue
       $exe --version > /dev/null || { echo $exe failed >&2; exit 1; }
     done
 
@@ -44,7 +45,6 @@ builtins.derivation {
     lipo -info true
     pbzx -v
     # ranlib gets tested bulding hello
-    rewrite-tbd </dev/null
     sigtool -h
     rm true
 
@@ -52,51 +52,33 @@ builtins.derivation {
     # an SSL-capable curl
     curl --version | grep SSL
 
-    # This approximates a bootstrap version of libSystem can that be
-    # assembled via fetchurl. Adapted from main libSystem expression.
-    mkdir libSystem-boot
-    cp -vr \
-      ${stdenv.cc.libc_dev}/lib/libSystem.B.tbd \
-      ${stdenv.cc.libc_dev}/lib/system \
-      libSystem-boot
+    # The stdenv bootstrap builds the SDK in the bootstrap. Use an existing SDK to test the tools.
+    export SDKROOT='${apple-sdk.sdkroot}'
 
-    sed -i "s|/usr/lib/system/|$PWD/libSystem-boot/system/|g" libSystem-boot/libSystem.B.tbd
-    ln -s libSystem.B.tbd libSystem-boot/libSystem.tbd
-    # End of bootstrap libSystem
-
-    export flags="-idirafter $tools/include-Libsystem --sysroot=$tools -L$tools/lib -L$PWD/libSystem-boot"
+    export flags="-idirafter $SDKROOT/usr/include --sysroot=$SDKROOT -L$SDKROOT/usr/lib -L$tools/lib -DTARGET_OS_IPHONE=0"
 
     export CPP="clang -E $flags"
     export CC="clang $flags"
     export CXX="clang++ $flags --stdlib=libc++ -isystem$tools/include/c++/v1"
 
-    # NOTE: These tests do a separate 'install' step (using cp), because
-    # having clang write directly to the final location apparently will make
-    # running the executable fail signature verification. (SIGKILL'd)
-    #
-    # Suspect this is creating a corrupt entry in the kernel cache, but it is
-    # unique to cctools ld. (The problem goes away with `-fuse-ld=lld`.)
-
     echo '#include <stdio.h>' >> hello1.c
     echo '#include <float.h>' >> hello1.c
     echo '#include <limits.h>' >> hello1.c
     echo 'int main() { printf("Hello World\n"); return 0; }' >> hello1.c
-    $CC -o hello1 hello1.c
-    cp hello1 $out/bin/
+    $CC -o $out/bin/hello1 hello1.c
     $out/bin/hello1
 
     echo '#include <iostream>' >> hello3.cc
     echo 'int main() { std::cout << "Hello World\n"; }' >> hello3.cc
-    $CXX -v -o hello3 hello3.cc
-    cp hello3 $out/bin/
+    $CXX -v -o $out/bin/hello3 hello3.cc
     $out/bin/hello3
 
     # test that libc++.dylib rpaths are correct so it can reference libc++abi.dylib when linked.
     # using -Wl,-flat_namespace is required to generate an error
     mkdir libtest/
     ln -s $tools/lib/libc++.dylib libtest/
-    clang++ -Wl,-flat_namespace -idirafter $tools/include-Libsystem -isystem$tools/include/c++/v1 \
-      --sysroot=$tools -L./libtest -L$PWD/libSystem-boot hello3.cc
+    clang++ -Wl,-flat_namespace -idirafter $SDKROOT/usr/include -isystem$tools/include/c++/v1 \
+      --sysroot=$SDKROOT -L$SDKROOT/usr/lib  -L./libtest -L$PWD/libSystem-boot hello3.cc
 
     tar xvf ${hello.src}
     cd hello-*

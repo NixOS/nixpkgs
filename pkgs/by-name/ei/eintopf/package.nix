@@ -1,18 +1,19 @@
-{ lib
-, buildGoModule
-, fetchFromGitea
-, callPackage
-, nixosTests
+{
+  lib,
+  buildGoModule,
+  fetchFromGitea,
+  callPackage,
+  nixosTests,
 }:
 
 let
-  version = "0.14.1";
+  version = "0.14.3";
   src = fetchFromGitea {
     domain = "codeberg.org";
     owner = "Klasse-Methode";
     repo = "eintopf";
     rev = "v${version}";
-    hash = "sha256-+QEAUyAqFLcc3bhGI3v4FxhDt+3P6vBnxWsFPp56lfg=";
+    hash = "sha256-cWHWRxZFoArBB5PiuY6EQubKJKm3/79fwNhnABOtBrM=";
   };
   frontend = callPackage ./frontend.nix { inherit src version; };
 in
@@ -21,7 +22,7 @@ buildGoModule rec {
   pname = "eintopf";
   inherit version src;
 
-  vendorHash = "sha256-ODVCZWxkPWW8ZlONiVXwVQalsLIUl9x512JimLAUm6U=";
+  vendorHash = "sha256-ysAgyaewREI8TaMnKH+kh33QT6AN1eLhog35lv7CbVU=";
 
   ldflags = [
     "-s"
@@ -44,12 +45,11 @@ buildGoModule rec {
     inherit (nixosTests) eintopf;
   };
 
-  meta = with lib; {
+  meta = {
     description = "A calendar for Stuttgart, showing events, groups and places";
     homepage = "https://codeberg.org/Klasse-Methode/eintopf";
-    license = licenses.agpl3Only;
-    maintainers = with maintainers; [ onny ];
-    platforms = platforms.unix;
+    license = lib.licenses.agpl3Only;
+    maintainers = with lib.maintainers; [ onny ];
+    platforms = lib.platforms.unix;
   };
 }
-

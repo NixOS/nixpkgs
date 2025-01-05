@@ -1,7 +1,4 @@
 { config, pkgs, lib, ... }:
-
-with lib;
-
 let
   cfg = config.services.netdata;
 
@@ -25,16 +22,16 @@ let
 
   configDirectory = pkgs.runCommand "netdata-config-d" { } ''
     mkdir $out
-    ${concatStringsSep "\n" (mapAttrsToList (path: file: ''
+    ${lib.concatStringsSep "\n" (lib.mapAttrsToList (path: file: ''
         mkdir -p "$out/$(dirname ${path})"
-        ln -s "${file}" "$out/${path}"
+        ${if path == "apps_groups.conf" then "cp" else "ln -s"} "${file}" "$out/${path}"
       '') cfg.configDir)}
   '';
 
   localConfig = {
     global = {
       "config directory" = "/etc/netdata/conf.d";
-      "plugins directory" = concatStringsSep " " plugins;
+      "plugins directory" = lib.concatStringsSep " " plugins;
     };
     web = {
       "web files owner" = "root";
@@ -45,7 +42,7 @@ let
       "use unified cgroups" = "yes";
     };
   };
-  mkConfig = generators.toINI {} (recursiveUpdate localConfig cfg.config);
+  mkConfig = lib.generators.toINI {} (lib.recursiveUpdate localConfig cfg.config);
   configFile = pkgs.writeText "netdata.conf" (if cfg.configText != null then cfg.configText else mkConfig);
 
   defaultUser = "netdata";
@@ -54,24 +51,24 @@ let
 in {
   options = {
     services.netdata = {
-      enable = mkEnableOption "netdata";
+      enable = lib.mkEnableOption "netdata";
 
-      package = mkPackageOption pkgs "netdata" { };
+      package = lib.mkPackageOption pkgs "netdata" { };
 
-      user = mkOption {
-        type = types.str;
+      user = lib.mkOption {
+        type = lib.types.str;
         default = "netdata";
         description = "User account under which netdata runs.";
       };
 
-      group = mkOption {
-        type = types.str;
+      group = lib.mkOption {
+        type = lib.types.str;
         default = "netdata";
         description = "Group under which netdata runs.";
       };
 
-      configText = mkOption {
-        type = types.nullOr types.lines;
+      configText = lib.mkOption {
+        type = lib.types.nullOr lib.types.lines;
         description = "Verbatim netdata.conf, cannot be combined with config.";
         default = null;
         example = ''
@@ -83,26 +80,26 @@ in {
       };
 
       python = {
-        enable = mkOption {
-          type = types.bool;
+        enable = lib.mkOption {
+          type = lib.types.bool;
           default = true;
           description = ''
             Whether to enable python-based plugins
           '';
         };
-        recommendedPythonPackages = mkOption {
-          type = types.bool;
+        recommendedPythonPackages = lib.mkOption {
+          type = lib.types.bool;
           default = false;
           description = ''
             Whether to enable a set of recommended Python plugins
             by installing extra Python packages.
           '';
         };
-        extraPackages = mkOption {
-          type = types.functionTo (types.listOf types.package);
+        extraPackages = lib.mkOption {
+          type = lib.types.functionTo (lib.types.listOf lib.types.package);
           default = ps: [];
-          defaultText = literalExpression "ps: []";
-          example = literalExpression ''
+          defaultText = lib.literalExpression "ps: []";
+          example = lib.literalExpression ''
             ps: [
               ps.psycopg2
               ps.docker
@@ -116,10 +113,10 @@ in {
         };
       };
 
-      extraPluginPaths = mkOption {
-        type = types.listOf types.path;
+      extraPluginPaths = lib.mkOption {
+        type = lib.types.listOf lib.types.path;
         default = [ ];
-        example = literalExpression ''
+        example = lib.literalExpression ''
           [ "/path/to/plugins.d" ]
         '';
         description = ''
@@ -134,11 +131,11 @@ in {
         '';
       };
 
-      config = mkOption {
-        type = types.attrsOf types.attrs;
+      config = lib.mkOption {
+        type = lib.types.attrsOf lib.types.attrs;
         default = {};
         description = "netdata.conf configuration as nix attributes. cannot be combined with configText.";
-        example = literalExpression ''
+        example = lib.literalExpression ''
           global = {
             "debug log" = "syslog";
             "access log" = "syslog";
@@ -147,8 +144,8 @@ in {
         '';
       };
 
-      configDir = mkOption {
-        type = types.attrsOf types.path;
+      configDir = lib.mkOption {
+        type = lib.types.attrsOf lib.types.path;
         default = {};
         description = ''
           Complete netdata config directory except netdata.conf.
@@ -159,7 +156,7 @@ in {
           Its value is the absolute path and must be readable by netdata.
           Cannot be combined with configText.
         '';
-        example = literalExpression ''
+        example = lib.literalExpression ''
           "health_alarm_notify.conf" = pkgs.writeText "health_alarm_notify.conf" '''
             sendmail="/path/to/sendmail"
           ''';
@@ -167,8 +164,8 @@ in {
         '';
       };
 
-      claimTokenFile = mkOption {
-        type = types.nullOr types.path;
+      claimTokenFile = lib.mkOption {
+        type = lib.types.nullOr lib.types.path;
         default = null;
         description = ''
           If set, automatically registers the agent using the given claim token
@@ -176,8 +173,8 @@ in {
         '';
       };
 
-      enableAnalyticsReporting = mkOption {
-        type = types.bool;
+      enableAnalyticsReporting = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = ''
           Enable reporting of anonymous usage statistics to Netdata Inc. via either
@@ -187,8 +184,8 @@ in {
         '';
       };
 
-      deadlineBeforeStopSec = mkOption {
-        type = types.int;
+      deadlineBeforeStopSec = lib.mkOption {
+        type = lib.types.int;
         default = 120;
         description = ''
           In order to detect when netdata is misbehaving, we run a concurrent task pinging netdata (wait-for-netdata-up)
@@ -203,7 +200,7 @@ in {
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     assertions =
       [ { assertion = cfg.config != {} -> cfg.configText == null ;
           message = "Cannot specify both config and configText";
@@ -218,10 +215,9 @@ in {
       ps.psycopg2
       ps.python-ldap
       ps.netdata-pandas
-      ps.changefinder
     ]);
 
-    services.netdata.configDir.".opt-out-from-anonymous-statistics" = mkIf (!cfg.enableAnalyticsReporting) (pkgs.writeText ".opt-out-from-anonymous-statistics" "");
+    services.netdata.configDir.".opt-out-from-anonymous-statistics" = lib.mkIf (!cfg.enableAnalyticsReporting) (pkgs.writeText ".opt-out-from-anonymous-statistics" "");
     environment.etc."netdata/netdata.conf".source = configFile;
     environment.etc."netdata/conf.d".source = configDirectory;
 
@@ -382,7 +378,7 @@ in {
         permissions = "u+rx,g+x,o-rwx";
       };
 
-    } // optionalAttrs (cfg.package.withIpmi) {
+    } // lib.optionalAttrs (cfg.package.withIpmi) {
       "freeipmi.plugin" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/freeipmi.plugin.org";
         capabilities = "cap_dac_override,cap_fowner+ep";
@@ -390,7 +386,7 @@ in {
         group = cfg.group;
         permissions = "u+rx,g+x,o-rwx";
       };
-    } // optionalAttrs (cfg.package.withNetworkViewer) {
+    } // lib.optionalAttrs (cfg.package.withNetworkViewer) {
       "network-viewer.plugin" = {
         source = "${cfg.package}/libexec/netdata/plugins.d/network-viewer.plugin.org";
         capabilities = "cap_sys_admin,cap_dac_read_search,cap_sys_ptrace+ep";
@@ -405,7 +401,7 @@ in {
       { domain = "netdata"; type = "hard"; item = "nofile"; value = "30000"; }
     ];
 
-    users.users = optionalAttrs (cfg.user == defaultUser) {
+    users.users = lib.optionalAttrs (cfg.user == defaultUser) {
       ${defaultUser} = {
         group = defaultUser;
         isSystemUser = true;
@@ -414,7 +410,7 @@ in {
       };
     };
 
-    users.groups = optionalAttrs (cfg.group == defaultUser) {
+    users.groups = lib.optionalAttrs (cfg.group == defaultUser) {
       ${defaultUser} = { };
     };
 

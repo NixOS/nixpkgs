@@ -29,15 +29,15 @@
 , wrapGAppsHook3
 , scriptingSupport ? true
 , luajit
-, swig4
+, swig
 , python3
-, alsaSupport ? stdenv.isLinux
+, alsaSupport ? stdenv.hostPlatform.isLinux
 , alsa-lib
-, pulseaudioSupport ? config.pulseaudio or stdenv.isLinux
+, pulseaudioSupport ? config.pulseaudio or stdenv.hostPlatform.isLinux
 , libpulseaudio
 , libcef
 , pciutils
-, pipewireSupport ? stdenv.isLinux
+, pipewireSupport ? stdenv.hostPlatform.isLinux
 , withFdk ? true
 , pipewire
 , libdrm
@@ -73,6 +73,8 @@ stdenv.mkDerivation (finalAttrs: {
     fetchSubmodules = true;
   };
 
+  separateDebugInfo = true;
+
   patches = [
     # Lets obs-browser build against CEF 90.1.0+
     ./Enable-file-access-and-universal-access-for-file-URL.patch
@@ -85,6 +87,21 @@ stdenv.mkDerivation (finalAttrs: {
       hash = "sha256-yRSw4VWDwMwysDB3Hw/tsmTjEQUhipvrVRQcZkbtuoI=";
       includes = [ "*/CompilerConfig.cmake" ];
     })
+
+    (fetchpatch {
+      name = "qt-6.8.patch";
+      url = "https://github.com/obsproject/obs-websocket/commit/d9befb9e0a4898695eef5ccbc91a4fac02027854.patch";
+      extraPrefix = "plugins/obs-websocket/";
+      stripLen = 1;
+      hash = "sha256-7SDBRr9G40b9DfbgdaYJxTeiDSLUfVixtMtM3cLTVZs=";
+    })
+
+    # Fix lossless audio, ffmpeg 7,1 compatibility issue
+    (fetchpatch {
+      name = "fix-lossless-audio.patch";
+      url = "https://github.com/obsproject/obs-studio/commit/dfc3a69c5276edf84c933035ff2a7e278fa13c9a.patch";
+      hash = "sha256-wiF3nolBpZKp7LR7NloNfJ+v4Uq/nBgwCVoKZX+VEMA=";
+    })
   ];
 
   nativeBuildInputs = [
@@ -94,7 +111,7 @@ stdenv.mkDerivation (finalAttrs: {
     wrapGAppsHook3
     wrapQtAppsHook
   ]
-  ++ optional scriptingSupport swig4;
+  ++ optional scriptingSupport swig;
 
   buildInputs = [
     curl
@@ -161,7 +178,9 @@ stdenv.mkDerivation (finalAttrs: {
   ];
 
   env.NIX_CFLAGS_COMPILE = toString [
+    "-Wno-error=deprecated-declarations"
     "-Wno-error=sign-compare" # https://github.com/obsproject/obs-studio/issues/10200
+    "-Wno-error=stringop-overflow="
   ];
 
   dontWrapGApps = true;
@@ -183,7 +202,7 @@ stdenv.mkDerivation (finalAttrs: {
     )
   '';
 
-  postFixup = lib.optionalString stdenv.isLinux ''
+  postFixup = lib.optionalString stdenv.hostPlatform.isLinux ''
     addDriverRunpath $out/lib/lib*.so
     addDriverRunpath $out/lib/obs-plugins/*.so
 
@@ -201,7 +220,7 @@ stdenv.mkDerivation (finalAttrs: {
       video content, efficiently
     '';
     homepage = "https://obsproject.com";
-    maintainers = with maintainers; [ eclairevoyant jb55 materus fpletz ];
+    maintainers = with maintainers; [ jb55 materus fpletz ];
     license = with licenses; [ gpl2Plus ] ++ optional withFdk fraunhofer-fdk;
     platforms = [ "x86_64-linux" "i686-linux" "aarch64-linux" ];
     mainProgram = "obs";

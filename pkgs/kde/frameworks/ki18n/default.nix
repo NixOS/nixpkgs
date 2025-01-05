@@ -7,7 +7,7 @@
 mkKdeDerivation {
   pname = "ki18n";
 
-  extraNativeBuildInputs = [python3];
-  propagatedNativeBuildInputs = [gettext];
-  extraBuildInputs = [qtdeclarative];
+  extraNativeBuildInputs = [ python3 ];
+  propagatedNativeBuildInputs = [ gettext ];
+  extraBuildInputs = [ qtdeclarative ];
 }

@@ -1,8 +1,9 @@
-{ lib
-, fetchFromGitHub
-, rustPlatform
-, darwin
-, stdenv
+{
+  lib,
+  fetchFromGitHub,
+  rustPlatform,
+  darwin,
+  stdenv,
 }:
 
 rustPlatform.buildRustPackage rec {
@@ -18,7 +19,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-bw0VlPHjNZkpLVJZrB3aaQGkwvQpkJGIn+hi0yn2M4s=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     darwin.apple_sdk.frameworks.Security
   ];
 
@@ -30,4 +31,3 @@ rustPlatform.buildRustPackage rec {
     mainProgram = "dummyhttp";
   };
 }
-

@@ -28,14 +28,14 @@ buildPythonPackage rec {
     tabulate
   ] ++ tabulate.optional-dependencies.widechars;
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     styles = [ pygments ];
   };
 
   nativeCheckInputs = [
     pytestCheckHook
     mock
-  ] ++ lib.flatten (builtins.attrValues passthru.optional-dependencies);
+  ] ++ lib.flatten (builtins.attrValues optional-dependencies);
 
   meta = with lib; {
     description = "Python helpers for common CLI tasks";

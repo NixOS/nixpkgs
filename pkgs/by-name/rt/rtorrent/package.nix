@@ -1,35 +1,38 @@
-{ lib
-, stdenv
-, autoconf-archive
-, autoreconfHook
-, cppunit
-, curl
-, fetchFromGitHub
-, installShellFiles
-, libsigcxx
-, libtool
-, libtorrent
-, ncurses
-, openssl
-, pkg-config
-, xmlrpc_c
-, zlib
-, nixosTests
-, unstableGitUpdater
+{
+  lib,
+  stdenv,
+  autoconf-archive,
+  autoreconfHook,
+  cppunit,
+  curl,
+  fetchFromGitHub,
+  fetchpatch,
+  installShellFiles,
+  libtool,
+  libtorrent,
+  ncurses,
+  openssl,
+  pkg-config,
+  zlib,
+  nixosTests,
+  gitUpdater,
 }:
 
-stdenv.mkDerivation {
+stdenv.mkDerivation rec {
   pname = "rakshasa-rtorrent";
-  version = "0.9.8-unstable-2024-08-31";
+  version = "0.15.1";
 
   src = fetchFromGitHub {
     owner = "rakshasa";
     repo = "rtorrent";
-    rev = "4e246a401f2572d6c8a3295cbe0335baa316cd24";
-    hash = "sha256-tq/0Vq+rIyCn1UQlyo7lcTSVf6WW1I8MTfxiAwQYD/o=";
+    rev = "68fdb86c723a0ae67ebaffec416af99fec41dcbc";
+    hash = "sha256-/GWC28LsY7GcUH+SBzi01sOWVfA1lyM0r9OdUDTYbT8=";
   };
 
-  outputs = [ "out" "man" ];
+  outputs = [
+    "out"
+    "man"
+  ];
 
   passthru = {
     inherit libtorrent;
@@ -45,22 +48,20 @@ stdenv.mkDerivation {
   buildInputs = [
     cppunit
     curl
-    libsigcxx
     libtool
     libtorrent
     ncurses
     openssl
-    xmlrpc_c
     zlib
   ];
 
   configureFlags = [
-    "--with-xmlrpc-c"
+    "--with-xmlrpc-tinyxml2"
     "--with-posix-fallocate"
   ];
 
   passthru = {
-    updateScript = unstableGitUpdater { tagPrefix = "v"; };
+    updateScript = gitUpdater { rev-prefix = "v"; };
     tests = {
       inherit (nixosTests) rtorrent;
     };
@@ -77,7 +78,11 @@ stdenv.mkDerivation {
     homepage = "https://rakshasa.github.io/rtorrent/";
     description = "Ncurses client for libtorrent, ideal for use with screen, tmux, or dtach";
     license = lib.licenses.gpl2Plus;
-    maintainers = with lib.maintainers; [ ebzzry codyopel thiagokokada ];
+    maintainers = with lib.maintainers; [
+      ebzzry
+      codyopel
+      thiagokokada
+    ];
     platforms = lib.platforms.unix;
     mainProgram = "rtorrent";
   };

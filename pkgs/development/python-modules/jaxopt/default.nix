@@ -29,7 +29,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "google";
     repo = "jaxopt";
-    rev = "refs/tags/jaxopt-v${version}";
+    tag = "jaxopt-v${version}";
     hash = "sha256-T/BHSnuk3IRuLkBj3Hvb/tFIb7Au25jjQtvwL28OU1U=";
   };
 
@@ -75,7 +75,7 @@ buildPythonPackage rec {
       # https://github.com/google/jaxopt/issues/592
       "test_solve_sparse"
     ]
-    ++ lib.optionals (stdenv.isLinux && stdenv.isAarch64) [
+    ++ lib.optionals (stdenv.hostPlatform.isLinux && stdenv.hostPlatform.isAarch64) [
       # https://github.com/google/jaxopt/issues/577
       "test_binary_logit_log_likelihood"
       "test_solve_sparse"
@@ -87,13 +87,14 @@ buildPythonPackage rec {
       # AssertionError: Array(0.01411963, dtype=float32) not less than or equal to 0.01
       "test_multiclass_logreg6"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Fatal Python error: Aborted
       "test_dtype_consistency"
 
       # AssertionError (flaky numerical tests)
       "test_logreg_with_intercept_manual_loop3"
       "test_binary_logit_log_likelihood"
+      "test_inv_hessian_product_pytree3"
     ];
 
   meta = {

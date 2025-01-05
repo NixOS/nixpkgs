@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-llfuse";
     repo = "python-llfuse";
-    rev = "refs/tags/release-${version}";
+    tag = "release-${version}";
     hash = "sha256-wni/b1hEn6/G0RszCJi+wmBHx6F0Ov1cZ/sRf8PLmps=";
   };
 
@@ -46,7 +46,7 @@ buildPythonPackage rec {
   '';
 
   # On Darwin, the test requires macFUSE to be installed outside of Nix.
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
   nativeCheckInputs = [
     pytestCheckHook
     which

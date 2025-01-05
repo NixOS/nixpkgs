@@ -19,9 +19,8 @@ stdenv.mkDerivation (finalAttrs: {
     owner = "Wisser";
     repo = "Jailer";
     rev = "bc00c6883bac0d09b549e35a10e202da477e4cb1";
-    sha256 = "sha256-nXxTKbhvrBlorNqiF3wZDEgf1VrBamWw8ZSQSUqpGT8=";
+    hash = "sha256-nXxTKbhvrBlorNqiF3wZDEgf1VrBamWw8ZSQSUqpGT8=";
   };
-
 
   buildPhase = ''
     runHook preBuild
@@ -30,7 +29,14 @@ stdenv.mkDerivation (finalAttrs: {
     runHook postBuild
   '';
 
-  nativeBuildInputs = [ ant jdk stripJavaArchivesHook makeWrapper wrapGAppsHook4 copyDesktopItems ];
+  nativeBuildInputs = [
+    ant
+    jdk
+    stripJavaArchivesHook
+    makeWrapper
+    wrapGAppsHook4
+    copyDesktopItems
+  ];
 
   installPhase = ''
     runHook preInstall

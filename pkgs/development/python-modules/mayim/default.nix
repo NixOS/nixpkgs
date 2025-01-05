@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "ahopkins";
     repo = "mayim";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-nb0E9kMEJUihaCp8RnqGh0nSyDQo50eL1C4K5lBPlPQ=";
   };
 
@@ -33,7 +33,7 @@ buildPythonPackage rec {
     wheel
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     postgres = [ psycopg ] ++ psycopg.optional-dependencies.pool;
     mysql = [ asyncmy ];
     sqlite = [ aiosqlite ];
@@ -45,7 +45,7 @@ buildPythonPackage rec {
       pytest-asyncio
       pytest-cov-stub
     ]
-    ++ (with passthru.optional-dependencies; [
+    ++ (with optional-dependencies; [
       postgres
       mysql
       sqlite

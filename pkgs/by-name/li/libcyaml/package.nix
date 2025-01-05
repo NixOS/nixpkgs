@@ -1,5 +1,8 @@
-{ stdenv, lib, fetchFromGitHub
-, libyaml
+{
+  stdenv,
+  lib,
+  fetchFromGitHub,
+  libyaml,
 }:
 
 stdenv.mkDerivation rec {
@@ -10,12 +13,15 @@ stdenv.mkDerivation rec {
     owner = "tlsa";
     repo = "libcyaml";
     rev = "v${version}";
-    sha256 = "sha256-JIN/cvh9PRl4/K0Z3WZtSCA3casBxyaxNxjXZZdQRWQ=";
+    hash = "sha256-JIN/cvh9PRl4/K0Z3WZtSCA3casBxyaxNxjXZZdQRWQ=";
   };
 
   buildInputs = [ libyaml ];
 
-  makeFlags = [ "VARIANT=release" "PREFIX=$(out)" ];
+  makeFlags = [
+    "VARIANT=release"
+    "PREFIX=$(out)"
+  ];
 
   meta = with lib; {
     homepage = "https://github.com/tlsa/libcyaml";

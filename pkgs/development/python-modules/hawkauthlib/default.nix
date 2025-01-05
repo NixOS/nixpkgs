@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mozilla-services";
     repo = "hawkauthlib";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-UW++gLQX1U4jFwccL+O5wl2r/d2OZ5Ug0wcnSfqtIVc=";
   };
 

@@ -2,14 +2,14 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  flit-core,
   pydantic,
   pythonOlder,
+  setuptools,
 }:
 
 buildPythonPackage rec {
   pname = "sigstore-rekor-types";
-  version = "0.0.11";
+  version = "0.0.18";
   pyproject = true;
 
   disabled = pythonOlder "3.8";
@@ -17,11 +17,11 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "trailofbits";
     repo = "sigstore-rekor-types";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-oOFdRiDp9USc3A+aaPExprEO2i/RERNahiyi2kVpkns=";
+    tag = "v${version}";
+    hash = "sha256-vOGKDWhOg8dsgxyxOtM+czR+NOM26v0T0ctkFPUAYEo=";
   };
 
-  build-system = [ flit-core ];
+  build-system = [ setuptools ];
 
   dependencies = [ pydantic ] ++ pydantic.optional-dependencies.email;
 

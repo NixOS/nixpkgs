@@ -12,24 +12,24 @@
 
 buildPythonPackage rec {
   pname = "dissect-ntfs";
-  version = "3.11";
-  format = "pyproject";
+  version = "3.13";
+  pyproject = true;
 
   disabled = pythonOlder "3.11";
 
   src = fetchFromGitHub {
     owner = "fox-it";
     repo = "dissect.ntfs";
-    rev = "refs/tags/${version}";
-    hash = "sha256-rwn7nKfEmv92JdSMhKztMWptvggzlWhGA0gg5C0EbFM=";
+    tag = version;
+    hash = "sha256-DOxyPlHBv4PEbHeGC/pj2QzbGhKFjw6QOAJmhq6Fc3k=";
   };
 
-  nativeBuildInputs = [
+  build-system = [
     setuptools
     setuptools-scm
   ];
 
-  propagatedBuildInputs = [
+  dependencies = [
     dissect-cstruct
     dissect-util
   ];

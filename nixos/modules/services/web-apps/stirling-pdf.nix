@@ -59,6 +59,7 @@ in
           pngquant
           tesseract
           python3Packages.weasyprint
+          ghostscript_headless
         ]
         ++ lib.optional (cfg.environment.INSTALL_BOOK_AND_ADVANCED_HTML_OPS or "false" == "true") calibre;
 

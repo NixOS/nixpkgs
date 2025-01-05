@@ -11,12 +11,12 @@
 
 buildPythonPackage rec {
   pname = "oslo.context";
-  version = "5.6.0";
+  version = "5.7.0";
   pyproject = true;
 
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-UiLDJja+BwojDfnTFBoLJ6lfCjtpePTBSFvK2kekw8s=";
+    hash = "sha256-OYxGC5z3yzl+3nliIj5LiAePsvvFNmWkejThsoiQ9M4=";
   };
 
   postPatch = ''

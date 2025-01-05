@@ -1,11 +1,12 @@
-{ lib
-, mkDerivation
-, fetchzip
-, wrapQtAppsHook
-, autoPatchelfHook
-, qtbase
-, qtmultimedia
-, qtx11extras
+{
+  lib,
+  mkDerivation,
+  fetchzip,
+  wrapQtAppsHook,
+  autoPatchelfHook,
+  qtbase,
+  qtmultimedia,
+  qtx11extras,
 }:
 
 mkDerivation rec {

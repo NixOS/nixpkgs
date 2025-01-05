@@ -1,28 +1,35 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, nixosTests
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  nixosTests,
+  testers,
 }:
-
+let
+  tools = [
+    "apfsck"
+    "apfs-label"
+    "apfs-snap"
+    "mkapfs"
+  ];
+in
 stdenv.mkDerivation (finalAttrs: {
   pname = "apfsprogs";
-  version = "unstable-2023-11-30";
+  version = "0.2.0";
 
   src = fetchFromGitHub {
     owner = "linux-apfs";
     repo = "apfsprogs";
-    rev = "990163894d871f51ba102a75aed384a275c5991b";
-    hash = "sha256-yCShZ+ALzSe/svErt9/i1JyyEvbIeABGPbpS4lVil0A=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-rolbBLdE98jqlKC06fTo6eJU3abKzgB3QIlaw4bza9U=";
   };
 
-  postPatch = let
-    shortRev = builtins.substring 0 9 finalAttrs.src.rev;
-  in ''
+  postPatch = ''
     substituteInPlace \
-      apfs-snap/Makefile apfsck/Makefile mkapfs/Makefile \
+      apfs-snap/Makefile apfsck/Makefile mkapfs/Makefile apfs-label/Makefile \
       --replace-fail \
         '$(shell git describe --always HEAD | tail -c 9)' \
-        '${shortRev}'
+        'v${finalAttrs.version}'
   '';
 
   buildPhase = ''
@@ -30,6 +37,7 @@ stdenv.mkDerivation (finalAttrs: {
     make -C apfs-snap $makeFlags
     make -C apfsck $makeFlags
     make -C mkapfs $makeFlags
+    make -C apfs-label $makeFlags
     runHook postBuild
   '';
 
@@ -38,18 +46,34 @@ stdenv.mkDerivation (finalAttrs: {
     make -C apfs-snap install DESTDIR="$out" $installFlags
     make -C apfsck install DESTDIR="$out" $installFlags
     make -C mkapfs install DESTDIR="$out" $installFlags
+    make -C apfs-label install DESTDIR="$out" $installFlags
     runHook postInstall
   '';
 
-  passthru.tests = {
-    apfs = nixosTests.apfs;
-  };
+  passthru.tests =
+    let
+      mkVersionTest = tool: {
+        "version-${tool}" = testers.testVersion {
+          package = finalAttrs.finalPackage;
+          command = "${tool} -v";
+          version = "v${finalAttrs.version}";
+        };
+      };
+      versionTestList = builtins.map mkVersionTest tools;
+
+      versionTests = lib.mergeAttrsList versionTestList;
+    in
+    {
+      apfs = nixosTests.apfs;
+    }
+    // versionTests;
 
   strictDeps = true;
 
   meta = with lib; {
     description = "Experimental APFS tools for linux";
     homepage = "https://github.com/linux-apfs/apfsprogs";
+    changelog = "https://github.com/linux-apfs/apfsprogs/releases/tag/v${finalAttrs.version}";
     license = licenses.gpl2Only;
     platforms = platforms.linux;
     maintainers = with maintainers; [ Luflosi ];

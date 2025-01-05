@@ -3,8 +3,8 @@
   stdenv,
   buildPythonPackage,
   fetchFromGitHub,
+  hatchling,
   ncurses,
-  poetry-core,
   procps,
   pytest-rerunfailures,
   pytestCheckHook,
@@ -13,14 +13,14 @@
 
 buildPythonPackage rec {
   pname = "libtmux";
-  version = "0.37.0";
+  version = "0.40.1";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "tmux-python";
     repo = "libtmux";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-I0E6zkfQ6mx2svCaXEgKPhrrog3iLgXZ4E3CMMxPkIA=";
+    tag = "v${version}";
+    hash = "sha256-rddjRBofI5M28wvlBwH2VwuIgmulThxbfxiJSOCNkPY=";
   };
 
   postPatch = ''
@@ -28,7 +28,7 @@ buildPythonPackage rec {
       --replace-fail '"--doctest-docutils-modules",' ""
   '';
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   nativeCheckInputs = [
     procps
@@ -47,12 +47,12 @@ buildPythonPackage rec {
       # Assertion error
       "test_capture_pane_start"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # tests/test_pane.py:113: AssertionError
       "test_capture_pane_start"
     ];
 
-  disabledTestPaths = lib.optionals stdenv.isDarwin [
+  disabledTestPaths = lib.optionals stdenv.hostPlatform.isDarwin [
     "tests/test_test.py"
   ];
 

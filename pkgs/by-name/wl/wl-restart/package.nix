@@ -8,13 +8,13 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "wl-restart";
-  version = "0.2.0";
+  version = "0.3.0";
 
   src = fetchFromGitHub {
     owner = "Ferdi265";
     repo = "wl-restart";
-    rev = "refs/tags/v${finalAttrs.version}";
-    hash = "sha256-pMsYLU9pjN2cgz7FxJJwkDHKJt1mIAuagJSBjrPUMAM=";
+    tag = "v${finalAttrs.version}";
+    hash = "sha256-wLaZBqw/Yx0Oc7s3ffAmx3zakjhEBHM09uJcfsVHbnQ=";
   };
 
   cmakeFlags = [ (lib.cmakeBool "INSTALL_DOCUMENTATION" true) ];

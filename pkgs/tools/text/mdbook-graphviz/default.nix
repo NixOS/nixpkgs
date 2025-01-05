@@ -1,4 +1,11 @@
-{ lib, stdenv, fetchFromGitHub, rustPlatform, CoreServices, graphviz }:
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  rustPlatform,
+  CoreServices,
+  graphviz,
+}:
 
 rustPlatform.buildRustPackage rec {
   pname = "mdbook-graphviz";
@@ -13,7 +20,7 @@ rustPlatform.buildRustPackage rec {
 
   cargoHash = "sha256-cMCNZ8Ezp7bFx4EnuZCXhqoaE0yN3iK9KnCYBYGPHKc=";
 
-  buildInputs = lib.optionals stdenv.isDarwin [ CoreServices ];
+  buildInputs = lib.optionals stdenv.hostPlatform.isDarwin [ CoreServices ];
 
   nativeCheckInputs = [ graphviz ];
 
@@ -23,6 +30,9 @@ rustPlatform.buildRustPackage rec {
     homepage = "https://github.com/dylanowen/mdbook-graphviz";
     changelog = "https://github.com/dylanowen/mdbook-graphviz/releases/tag/v${version}";
     license = [ licenses.mpl20 ];
-    maintainers = with maintainers; [ lovesegfault matthiasbeyer ];
+    maintainers = with maintainers; [
+      lovesegfault
+      matthiasbeyer
+    ];
   };
 }

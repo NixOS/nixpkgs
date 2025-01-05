@@ -1,6 +1,7 @@
-{ lib
-, fetchFromGitHub
-, python3
+{
+  lib,
+  fetchFromGitHub,
+  python3,
 }:
 
 python3.pkgs.buildPythonApplication rec {
@@ -11,11 +12,12 @@ python3.pkgs.buildPythonApplication rec {
   src = fetchFromGitHub {
     owner = "ail-project";
     repo = "lacus";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-5KddApwaN4t+QRaQTqIXuYStuPxKq3v6pRknBusAcbM=";
   };
 
   pythonRelaxDeps = [
+    "gunicorn"
     "psutil"
     "redis"
   ];

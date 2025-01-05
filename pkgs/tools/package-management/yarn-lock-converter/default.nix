@@ -1,9 +1,10 @@
-{ lib
-, buildNpmPackage
-, fetchurl
-, nodejs
-, testers
-, yarn-lock-converter
+{
+  lib,
+  buildNpmPackage,
+  fetchurl,
+  nodejs,
+  testers,
+  yarn-lock-converter,
 }:
 
 let

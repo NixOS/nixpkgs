@@ -27,7 +27,7 @@ buildPythonPackage rec {
   ];
 
   # Work around Python distutils compiling C++ with $CC (see issue #26709)
-  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
+  env.NIX_CFLAGS_COMPILE = lib.optionalString stdenv.hostPlatform.isDarwin "-I${lib.getDev libcxx}/include/c++/v1";
 
   pythonImportsCheck = [ "pyexiv2" ];
 
@@ -35,7 +35,7 @@ buildPythonPackage rec {
   doCheck = false;
 
   meta = with lib; {
-    broken = stdenv.isDarwin;
+    broken = stdenv.hostPlatform.isDarwin;
     description = "Python binding to the library exiv2";
     homepage = "https://launchpad.net/py3exiv2";
     license = licenses.gpl3Plus;

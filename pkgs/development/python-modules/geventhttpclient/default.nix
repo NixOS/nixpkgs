@@ -23,7 +23,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "geventhttpclient";
     repo = "geventhttpclient";
-    rev = "refs/tags/${version}";
+    tag = version;
     # TODO: unvendor llhttp
     fetchSubmodules = true;
     hash = "sha256-uOGnwPbvTam14SFTUT0UrwxHfP4a5cn3a7EhLoGBUrA=";
@@ -44,7 +44,7 @@ buildPythonPackage rec {
   ];
 
   # lots of: [Errno 48] Address already in use: ('127.0.0.1', 54323)
-  doCheck = !stdenv.isDarwin;
+  doCheck = !stdenv.hostPlatform.isDarwin;
 
   __darwinAllowLocalNetworking = true;
 

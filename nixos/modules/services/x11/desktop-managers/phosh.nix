@@ -1,7 +1,4 @@
 { config, lib, pkgs, ... }:
-
-with lib;
-
 let
   cfg = config.services.xserver.desktopManager.phosh;
 
@@ -21,29 +18,29 @@ let
     };
   };
 
-  phocConfigType = types.submodule {
+  phocConfigType = lib.types.submodule {
     options = {
-      xwayland = mkOption {
+      xwayland = lib.mkOption {
         description = ''
           Whether to enable XWayland support.
 
           To start XWayland immediately, use `immediate`.
         '';
-        type = types.enum [ "true" "false" "immediate" ];
+        type = lib.types.enum [ "true" "false" "immediate" ];
         default = "false";
       };
-      cursorTheme = mkOption {
+      cursorTheme = lib.mkOption {
         description = ''
           Cursor theme to use in Phosh.
         '';
-        type = types.str;
+        type = lib.types.str;
         default = "default";
       };
-      outputs = mkOption {
+      outputs = lib.mkOption {
         description = ''
           Output configurations.
         '';
-        type = types.attrsOf phocOutputType;
+        type = lib.types.attrsOf phocOutputType;
         default = {
           DSI-1 = {
             scale = 2;
@@ -53,34 +50,34 @@ let
     };
   };
 
-  phocOutputType = types.submodule {
+  phocOutputType = lib.types.submodule {
     options = {
-      modeline = mkOption {
+      modeline = lib.mkOption {
         description = ''
           One or more modelines.
         '';
-        type = types.either types.str (types.listOf types.str);
+        type = lib.types.either lib.types.str (lib.types.listOf lib.types.str);
         default = [];
         example = [
           "87.25 720 776 848  976 1440 1443 1453 1493 -hsync +vsync"
           "65.13 768 816 896 1024 1024 1025 1028 1060 -HSync +VSync"
         ];
       };
-      mode = mkOption {
+      mode = lib.mkOption {
         description = ''
           Default video mode.
         '';
-        type = types.nullOr types.str;
+        type = lib.types.nullOr lib.types.str;
         default = null;
         example = "768x1024";
       };
-      scale = mkOption {
+      scale = lib.mkOption {
         description = ''
           Display scaling factor.
         '';
-        type = types.nullOr (
-          types.addCheck
-          (types.either types.int types.float)
+        type = lib.types.nullOr (
+          lib.types.addCheck
+          (lib.types.either lib.types.int lib.types.float)
           (x : x > 0)
         ) // {
           description = "null or positive integer or float";
@@ -88,11 +85,11 @@ let
         default = null;
         example = 2;
       };
-      rotate = mkOption {
+      rotate = lib.mkOption {
         description = ''
           Screen transformation.
         '';
-        type = types.enum [
+        type = lib.types.enum [
           "90" "180" "270" "flipped" "flipped-90" "flipped-180" "flipped-270" null
         ];
         default = null;
@@ -100,7 +97,7 @@ let
     };
   };
 
-  optionalKV = k: v: optionalString (v != null) "${k} = ${builtins.toString v}";
+  optionalKV = k: v: lib.optionalString (v != null) "${k} = ${builtins.toString v}";
 
   renderPhocOutput = name: output: let
     modelines = if builtins.isList output.modeline
@@ -109,18 +106,18 @@ let
     renderModeline = l: "modeline = ${l}";
   in ''
     [output:${name}]
-    ${concatStringsSep "\n" (map renderModeline modelines)}
+    ${lib.concatStringsSep "\n" (map renderModeline modelines)}
     ${optionalKV "mode" output.mode}
     ${optionalKV "scale" output.scale}
     ${optionalKV "rotate" output.rotate}
   '';
 
   renderPhocConfig = phoc: let
-    outputs = mapAttrsToList renderPhocOutput phoc.outputs;
+    outputs = lib.mapAttrsToList renderPhocOutput phoc.outputs;
   in ''
     [core]
     xwayland = ${phoc.xwayland}
-    ${concatStringsSep "\n" outputs}
+    ${lib.concatStringsSep "\n" outputs}
     [cursor]
     theme = ${phoc.cursorTheme}
   '';
@@ -129,37 +126,37 @@ in
 {
   options = {
     services.xserver.desktopManager.phosh = {
-      enable = mkOption {
-        type = types.bool;
+      enable = lib.mkOption {
+        type = lib.types.bool;
         default = false;
         description = "Enable the Phone Shell.";
       };
 
-      package = mkPackageOption pkgs "phosh" { };
+      package = lib.mkPackageOption pkgs "phosh" { };
 
-      user = mkOption {
+      user = lib.mkOption {
         description = "The user to run the Phosh service.";
-        type = types.str;
+        type = lib.types.str;
         example = "alice";
       };
 
-      group = mkOption {
+      group = lib.mkOption {
         description = "The group to run the Phosh service.";
-        type = types.str;
+        type = lib.types.str;
         example = "users";
       };
 
-      phocConfig = mkOption {
+      phocConfig = lib.mkOption {
         description = ''
           Configurations for the Phoc compositor.
         '';
-        type = types.oneOf [ types.lines types.path phocConfigType ];
+        type = lib.types.oneOf [ lib.types.lines lib.types.path phocConfigType ];
         default = {};
       };
     };
   };
 
-  config = mkIf cfg.enable {
+  config = lib.mkIf cfg.enable {
     systemd.defaultUnit = "graphical.target";
     # Inspired by https://gitlab.gnome.org/World/Phosh/phosh/-/blob/main/data/phosh.service
     systemd.services.phosh = {
@@ -216,7 +213,7 @@ in
 
     security.pam.services.phosh = {};
 
-    hardware.graphics.enable = mkDefault true;
+    hardware.graphics.enable = lib.mkDefault true;
 
     services.gnome.core-shell.enable = true;
     services.gnome.core-os-services.enable = true;

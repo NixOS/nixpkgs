@@ -1,12 +1,13 @@
-{ lib
-, stdenv
-, fetchurl
-, makeWrapper
-, pkg-config
-, dbus
-, efl
-, python3Packages
-, directoryListingUpdater
+{
+  lib,
+  stdenv,
+  fetchurl,
+  makeWrapper,
+  pkg-config,
+  dbus,
+  efl,
+  python3Packages,
+  directoryListingUpdater,
 }:
 
 stdenv.mkDerivation rec {
@@ -47,6 +48,12 @@ stdenv.mkDerivation rec {
     homepage = "https://enlightenment.org/";
     license = licenses.lgpl3;
     platforms = platforms.linux;
-    maintainers = with lib.maintainers; [ matejc ftrvxmtrx ] ++ teams.enlightenment.members;
+    maintainers =
+      with lib.maintainers;
+      [
+        matejc
+        ftrvxmtrx
+      ]
+      ++ teams.enlightenment.members;
   };
 }

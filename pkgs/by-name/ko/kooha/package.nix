@@ -1,23 +1,24 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, appstream-glib
-, cargo
-, desktop-file-utils
-, glib
-, gst_all_1
-, pipewire
-, gtk4
-, libadwaita
-, libpulseaudio
-, librsvg
-, meson
-, ninja
-, pkg-config
-, rustPlatform
-, rustc
-, wayland
-, wrapGAppsHook4
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  appstream-glib,
+  cargo,
+  desktop-file-utils,
+  glib,
+  gst_all_1,
+  pipewire,
+  gtk4,
+  libadwaita,
+  libpulseaudio,
+  librsvg,
+  meson,
+  ninja,
+  pkg-config,
+  rustPlatform,
+  rustc,
+  wayland,
+  wrapGAppsHook4,
 }:
 
 stdenv.mkDerivation rec {

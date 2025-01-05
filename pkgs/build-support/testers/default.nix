@@ -10,7 +10,7 @@
   runCommandWith,
   stdenv,
   stdenvNoCC,
-  substituteAll,
+  replaceVars,
   testers,
 }:
 # Documentation is in doc/build-helpers/testers.chapter.md
@@ -24,7 +24,7 @@
   testBuildFailure = drv: drv.overrideAttrs (orig: {
     builder = buildPackages.bash;
     args = [
-      (substituteAll { coreutils = buildPackages.coreutils; src = ./expect-failure.sh; })
+      (replaceVars ./expect-failure.sh { coreutils = buildPackages.coreutils; })
       orig.realBuilder or stdenv.shell
     ] ++ orig.args or ["-e" (orig.builder or ../../stdenv/generic/default-builder.sh)];
   });

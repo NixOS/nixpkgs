@@ -1,5 +1,6 @@
-{ piper-tts
-, python3
+{
+  piper-tts,
+  python3,
 }:
 
 let

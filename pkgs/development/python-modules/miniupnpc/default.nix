@@ -17,7 +17,7 @@ buildPythonPackage rec {
     hash = "sha256-KwpNVl+tZTZHHZKW9p3a/S0nZJW6lZftjBK9ECkRUMo=";
   };
 
-  nativeBuildInputs = lib.optionals stdenv.isDarwin [
+  nativeBuildInputs = lib.optionals stdenv.hostPlatform.isDarwin [
     cctools
     which
   ];

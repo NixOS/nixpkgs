@@ -120,6 +120,9 @@ rustPlatform.buildRustPackage {
     license = licenses.gpl3;
     mainProgram = "veloren-voxygen";
     platforms = platforms.linux;
-    maintainers = with maintainers; [ rnhmjoj tomodachi94 ];
+    maintainers = with maintainers; [
+      rnhmjoj
+      tomodachi94
+    ];
   };
 }

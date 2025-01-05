@@ -13,27 +13,22 @@
   vulkan-loader,
   wayland,
   xorg,
+  alsa-lib,
 }:
 
 rustPlatform.buildRustPackage rec {
   pname = "halloy";
-  version = "2024.8";
+  version = "2024.14";
 
   src = fetchFromGitHub {
     owner = "squidowl";
     repo = "halloy";
-    rev = "refs/tags/${version}";
-    hash = "sha256-OxxXjenZjP+3KrkxyXYxOXRFmrYm3deeiCuGrhpnF2I=";
+    tag = version;
+    hash = "sha256-Tns0Jd5v+lizU7NMVqS/hoqjHhmqrc9VVawjoZvhk78=";
   };
 
-  cargoLock = {
-    lockFile = ./Cargo.lock;
-    outputHashes = {
-      "dpi-0.1.1" = "sha256-25sOvEBhlIaekTeWvy3UhjPI1xrJbOQvw/OkTg12kQY=";
-      "glyphon-0.5.0" = "sha256-+z2my51aUeK9txLZKVAyQcWJ6f2YDY1mjxfc8Xsqi8E=";
-      "iced-0.13.0-dev" = "sha256-eHlauEZibbuqK5mdkNP6gsy1z9qxqEDn/xfFw7W5TcY=";
-    };
-  };
+  useFetchCargoVendor = true;
+  cargoHash = "sha256-K1xbJK7kJsDON+Nd8cUK+yZO2sAXAnA9bcYz7bTSbro=";
 
   nativeBuildInputs = [
     copyDesktopItems
@@ -43,15 +38,15 @@ rustPlatform.buildRustPackage rec {
 
   buildInputs =
     [
+      alsa-lib
       libxkbcommon
       openssl
       vulkan-loader
       xorg.libX11
       xorg.libXcursor
       xorg.libXi
-      xorg.libXrandr
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       darwin.apple_sdk.frameworks.AppKit
       darwin.apple_sdk.frameworks.CoreFoundation
       darwin.apple_sdk.frameworks.CoreGraphics
@@ -61,7 +56,7 @@ rustPlatform.buildRustPackage rec {
       darwin.apple_sdk.frameworks.QuartzCore
       darwin.apple_sdk.frameworks.Security
     ]
-    ++ lib.optionals stdenv.isLinux [ wayland ];
+    ++ lib.optionals stdenv.hostPlatform.isLinux [ wayland ];
 
   desktopItems = [
     (makeDesktopItem {
@@ -74,6 +69,7 @@ rustPlatform.buildRustPackage rec {
       mimeTypes = [
         "x-scheme-handler/irc"
         "x-scheme-handler/ircs"
+        "x-scheme-handler/halloy"
       ];
       categories = [
         "Network"
@@ -87,7 +83,7 @@ rustPlatform.buildRustPackage rec {
     })
   ];
 
-  postFixup = lib.optional stdenv.isLinux (
+  postFixup = lib.optional stdenv.hostPlatform.isLinux (
     let
       rpathWayland = lib.makeLibraryPath [
         wayland
@@ -104,7 +100,7 @@ rustPlatform.buildRustPackage rec {
   postInstall = ''
     install -Dm644 assets/linux/icons/hicolor/128x128/apps/org.squidowl.halloy.png \
       $out/share/icons/hicolor/128x128/apps/org.squidowl.halloy.png
-  '' + lib.optionalString stdenv.isDarwin ''
+  '' + lib.optionalString stdenv.hostPlatform.isDarwin ''
     APP_DIR="$out/Applications/Halloy.app/Contents"
 
     mkdir -p "$APP_DIR/MacOS"

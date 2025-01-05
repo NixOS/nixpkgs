@@ -18,7 +18,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "master-of-zen";
     repo = "av1an";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Mb5I+9IBwpfmK1w4LstNHI/qsJKlCuRxgSUiqpwUqF0=";
   };
 
@@ -44,7 +44,7 @@ rustPlatform.buildRustPackage rec {
     updateScript = nix-update-script {
       extraArgs = [
         "--version-regex"
-        "'^(\d*\.\d*\.\d*)$'"
+        "'^(\\d*\\.\\d*\\.\\d*)$'"
       ];
     };
   };

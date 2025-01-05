@@ -914,7 +914,7 @@ checksum = "213b7324336b53d2414b2db8537e56544d981803139155afa84f76eeebb7a546"
 
 [[package]]
 name = "yabridgectl"
-version = "5.1.0"
+version = "5.1.1"
 dependencies = [
  "anyhow",
  "clap",

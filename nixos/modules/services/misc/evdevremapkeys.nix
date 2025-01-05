@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   format = pkgs.formats.yaml { };
   cfg = config.services.evdevremapkeys;

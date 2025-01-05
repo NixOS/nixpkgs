@@ -9,7 +9,7 @@
   cffi,
   cloudpickle,
   cmake,
-  cython_0,
+  cython,
   fsspec,
   hypothesis,
   numpy,
@@ -37,7 +37,7 @@ buildPythonPackage rec {
 
   nativeBuildInputs = [
     cmake
-    cython_0
+    cython
     pkg-config
     setuptools
     setuptools-scm
@@ -80,7 +80,6 @@ buildPythonPackage rec {
   PARQUET_HOME = arrow-cpp;
 
   ARROW_TEST_DATA = lib.optionalString doCheck arrow-cpp.ARROW_TEST_DATA;
-
   doCheck = true;
 
   dontUseCmakeConfigure = true;
@@ -122,7 +121,7 @@ buildPythonPackage rec {
       # expects arrow-cpp headers to be bundled
       "--deselect=pyarrow/tests/test_cpp_internals.py::test_pyarrow_include"
     ]
-    ++ lib.optionals stdenv.isDarwin [
+    ++ lib.optionals stdenv.hostPlatform.isDarwin [
       # Requires loopback networking
       "--deselect=pyarrow/tests/test_ipc.py::test_socket_"
       "--deselect=pyarrow/tests/test_flight.py::test_never_sends_data"
@@ -136,7 +135,7 @@ buildPythonPackage rec {
       # Repr output is printing number instead of enum name so these tests fail
       "--deselect=pyarrow/tests/test_fs.py::test_get_file_info"
     ]
-    ++ lib.optionals stdenv.isLinux [
+    ++ lib.optionals stdenv.hostPlatform.isLinux [
       # this test requires local networking
       "--deselect=pyarrow/tests/test_fs.py::test_filesystem_from_uri_gcs"
     ];
@@ -152,7 +151,7 @@ buildPythonPackage rec {
       mv pyarrow/conftest.py pyarrow/tests/parent_conftest.py
       substituteInPlace pyarrow/tests/conftest.py --replace ..conftest .parent_conftest
     ''
-    + lib.optionalString stdenv.isDarwin ''
+    + lib.optionalString stdenv.hostPlatform.isDarwin ''
       # OSError: [Errno 24] Too many open files
       ulimit -n 1024
     '';

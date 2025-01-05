@@ -8,8 +8,6 @@ melpaBuild {
 
   files = ''("src/data/emacs-mode/*.el")'';
 
-  ignoreCompilationError = false;
-
   meta = {
     inherit (Agda.meta) homepage license;
     description = "Agda2-mode for Emacs extracted from Agda package";

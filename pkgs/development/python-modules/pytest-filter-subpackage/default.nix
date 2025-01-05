@@ -3,7 +3,7 @@
   buildPythonPackage,
   fetchPypi,
   pytest,
-  pytest-cov,
+  pytest-cov-stub,
   pytest-doctestplus,
   pytestCheckHook,
   pythonOlder,
@@ -28,7 +28,7 @@ buildPythonPackage rec {
 
   propagatedBuildInputs = [
     pytest-doctestplus
-    pytest-cov
+    pytest-cov-stub
   ];
 
   nativeCheckInputs = [ pytestCheckHook ];

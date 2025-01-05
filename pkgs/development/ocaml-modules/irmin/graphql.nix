@@ -1,5 +1,16 @@
-{ buildDunePackage, cohttp-lwt, cohttp-lwt-unix, graphql-cohttp, graphql-lwt, irmin, git-unix
-, alcotest, alcotest-lwt, logs, yojson, cacert
+{
+  buildDunePackage,
+  cohttp-lwt,
+  cohttp-lwt-unix,
+  graphql-cohttp,
+  graphql-lwt,
+  irmin,
+  git-unix,
+  alcotest,
+  alcotest-lwt,
+  logs,
+  yojson,
+  cacert,
 }:
 
 buildDunePackage rec {
@@ -8,7 +19,14 @@ buildDunePackage rec {
 
   inherit (irmin) version src;
 
-  propagatedBuildInputs = [ cohttp-lwt cohttp-lwt-unix graphql-cohttp graphql-lwt irmin git-unix ];
+  propagatedBuildInputs = [
+    cohttp-lwt
+    cohttp-lwt-unix
+    graphql-cohttp
+    graphql-lwt
+    irmin
+    git-unix
+  ];
 
   doCheck = true;
 

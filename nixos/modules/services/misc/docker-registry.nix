@@ -1,13 +1,16 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 let
   cfg = config.services.dockerRegistry;
 
-  blobCache = if cfg.enableRedisCache
-    then "redis"
-    else "inmemory";
+  blobCache = if cfg.enableRedisCache then "redis" else "inmemory";
 
   registryConfig = {
-    version =  "0.1";
+    version = "0.1";
     log.fields.service = "registry";
     storage = {
       cache.blobdescriptor = blobCache;
@@ -15,7 +18,7 @@ let
     } // (lib.optionalAttrs (cfg.storagePath != null) { filesystem.rootdirectory = cfg.storagePath; });
     http = {
       addr = "${cfg.listenAddress}:${builtins.toString cfg.port}";
-      headers.X-Content-Type-Options = ["nosniff"];
+      headers.X-Content-Type-Options = [ "nosniff" ];
     };
     health.storagedriver = {
       enabled = true;
@@ -39,7 +42,8 @@ let
   };
 
   configFile = cfg.configFile;
-in {
+in
+{
   options.services.dockerRegistry = {
     enable = lib.mkEnableOption "Docker Registry";
 
@@ -96,21 +100,28 @@ in {
 
     extraConfig = lib.mkOption {
       description = ''
-        Docker extra registry configuration via environment variables.
+        Docker extra registry configuration.
       '';
-      default = {};
+      example = lib.literalExpression ''
+        {
+          log.level = "debug";
+        }
+      '';
+      default = { };
       type = lib.types.attrs;
     };
 
     configFile = lib.mkOption {
-      default = pkgs.writeText "docker-registry-config.yml" (builtins.toJSON (lib.recursiveUpdate registryConfig cfg.extraConfig));
+      default = pkgs.writeText "docker-registry-config.yml" (
+        builtins.toJSON (lib.recursiveUpdate registryConfig cfg.extraConfig)
+      );
       defaultText = lib.literalExpression ''pkgs.writeText "docker-registry-config.yml" "# my custom docker-registry-config.yml ..."'';
       description = ''
-       Path to CNCF distribution config file.
+        Path to CNCF distribution config file.
 
-       Setting this option will override any configuration applied by the extraConfig option.
+        Setting this option will override any configuration applied by the extraConfig option.
       '';
-      type =  lib.types.path;
+      type = lib.types.path;
     };
 
     enableGarbageCollect = lib.mkEnableOption "garbage collect";
@@ -162,11 +173,12 @@ in {
       (lib.optionalAttrs (cfg.storagePath != null) {
         createHome = true;
         home = cfg.storagePath;
-      }) // {
+      })
+      // {
         group = "docker-registry";
         isSystemUser = true;
       };
-    users.groups.docker-registry = {};
+    users.groups.docker-registry = { };
 
     networking.firewall = lib.mkIf cfg.openFirewall {
       allowedTCPPorts = [ cfg.port ];

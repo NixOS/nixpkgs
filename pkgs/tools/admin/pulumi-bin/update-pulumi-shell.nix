@@ -1,4 +1,6 @@
-{ nixpkgs ? import ../../../.. { } }:
+{
+  nixpkgs ? import ../../../.. { },
+}:
 with nixpkgs;
 mkShell {
   packages = [

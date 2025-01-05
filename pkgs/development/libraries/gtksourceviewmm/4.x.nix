@@ -1,4 +1,13 @@
-{ lib, stdenv, fetchurl, pkg-config, gtkmm3, glibmm, gtksourceview4, gnome }:
+{
+  lib,
+  stdenv,
+  fetchurl,
+  pkg-config,
+  gtkmm3,
+  glibmm,
+  gtksourceview4,
+  gnome,
+}:
 
 stdenv.mkDerivation rec {
   pname = "gtksourceviewmm";
@@ -18,7 +27,11 @@ stdenv.mkDerivation rec {
   };
 
   nativeBuildInputs = [ pkg-config ];
-  propagatedBuildInputs = [ glibmm gtkmm3 gtksourceview4 ];
+  propagatedBuildInputs = [
+    glibmm
+    gtkmm3
+    gtksourceview4
+  ];
 
   meta = with lib; {
     platforms = platforms.linux;
@@ -28,4 +41,3 @@ stdenv.mkDerivation rec {
     maintainers = teams.gnome.members;
   };
 }
-

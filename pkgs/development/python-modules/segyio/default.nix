@@ -32,7 +32,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "equinor";
     repo = pname;
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+N2JvHBxpdbysn4noY/9LZ4npoQ9143iFEzaxoafnms=";
   };
 
@@ -42,7 +42,6 @@ buildPythonPackage rec {
     scikit-build
   ];
 
-  doCheck = true;
   # I'm not modifying the checkPhase nor adding a pytestCheckHook because the pytest is called
   # within the cmake test phase
   nativeCheckInputs = [

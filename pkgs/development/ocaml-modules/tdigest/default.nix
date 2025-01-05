@@ -1,7 +1,10 @@
-{ lib, fetchFromGitHub, nix-update-script
-, buildDunePackage
-, base
-, ppx_sexp_conv
+{
+  lib,
+  fetchFromGitHub,
+  nix-update-script,
+  buildDunePackage,
+  base,
+  ppx_sexp_conv,
 }:
 
 buildDunePackage rec {

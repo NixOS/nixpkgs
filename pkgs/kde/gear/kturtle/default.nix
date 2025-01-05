@@ -5,6 +5,6 @@
 mkKdeDerivation {
   pname = "kturtle";
 
-  extraBuildInputs = [qtsvg];
+  extraBuildInputs = [ qtsvg ];
   meta.mainProgram = "kturtle";
 }

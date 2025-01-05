@@ -9,6 +9,7 @@
   multidict,
   poetry-core,
   pytest-asyncio,
+  pytest-cov-stub,
   pytestCheckHook,
   pythonOlder,
   syrupy,
@@ -16,7 +17,7 @@
 
 buildPythonPackage rec {
   pname = "python-homewizard-energy";
-  version = "6.3.0";
+  version = "7.0.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -24,8 +25,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "DCSBL";
     repo = "python-homewizard-energy";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-etbYZKTNdlQCDc7LXir4D7LtRzYx9jhXZc1bJvsEb8E=";
+    tag = "v${version}";
+    hash = "sha256-HYfp4CSytRl46BWp5hdQFVf9avUwRcy0lqmqRK3lhdo=";
   };
 
   postPatch = ''
@@ -47,6 +48,7 @@ buildPythonPackage rec {
   nativeCheckInputs = [
     aresponses
     pytest-asyncio
+    pytest-cov-stub
     pytestCheckHook
     syrupy
   ];

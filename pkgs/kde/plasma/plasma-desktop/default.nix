@@ -18,55 +18,56 @@
   libcanberra,
   libxkbfile,
   ibus,
-}: let
+}:
+let
   # run gsettings with desktop schemas for using in "kcm_access" kcm
   # and in kaccess
-  gsettings-wrapper = runCommandLocal "gsettings-wrapper" {nativeBuildInputs = [makeWrapper];} ''
+  gsettings-wrapper = runCommandLocal "gsettings-wrapper" { nativeBuildInputs = [ makeWrapper ]; } ''
     mkdir -p $out/bin
     makeWrapper ${glib}/bin/gsettings $out/bin/gsettings --prefix XDG_DATA_DIRS : ${gsettings-desktop-schemas.out}/share/gsettings-schemas/${gsettings-desktop-schemas.name}
   '';
 in
-  mkKdeDerivation {
-    pname = "plasma-desktop";
+mkKdeDerivation {
+  pname = "plasma-desktop";
 
-    patches = [
-      (substituteAll {
-        src = ./hwclock-path.patch;
-        hwclock = "${lib.getBin util-linux}/bin/hwclock";
-      })
-      (substituteAll {
-        src = ./kcm-access.patch;
-        gsettings = "${gsettings-wrapper}/bin/gsettings";
-      })
-      ./tzdir.patch
-      ./no-discover-shortcut.patch
-      (substituteAll {
-        src = ./wallpaper-paths.patch;
-        wallpapers = "${lib.getBin breeze}/share/wallpapers";
-      })
-    ];
+  patches = [
+    (substituteAll {
+      src = ./hwclock-path.patch;
+      hwclock = "${lib.getBin util-linux}/bin/hwclock";
+    })
+    (substituteAll {
+      src = ./kcm-access.patch;
+      gsettings = "${gsettings-wrapper}/bin/gsettings";
+    })
+    ./tzdir.patch
+    ./no-discover-shortcut.patch
+    (substituteAll {
+      src = ./wallpaper-paths.patch;
+      wallpapers = "${lib.getBin breeze}/share/wallpapers";
+    })
+  ];
 
-    extraNativeBuildInputs = [pkg-config];
-    extraBuildInputs = [
-      qtsvg
-      qtwayland
+  extraNativeBuildInputs = [ pkg-config ];
+  extraBuildInputs = [
+    qtsvg
+    qtwayland
 
-      kaccounts-integration
+    kaccounts-integration
 
-      SDL2
-      libcanberra
-      libxkbfile
-      xkeyboard_config
+    SDL2
+    libcanberra
+    libxkbfile
+    xkeyboard_config
 
-      xorg.libXcursor
-      xorg.libXft
-      xorg.xf86inputlibinput
-      xorg.xf86inputevdev
-      xorg.xorgserver
+    xorg.libXcursor
+    xorg.libXft
+    xorg.xf86inputlibinput
+    xorg.xf86inputevdev
+    xorg.xorgserver
 
-      ibus
-    ];
+    ibus
+  ];
 
-    # wrap kaccess with wrapped gsettings so it can access accessibility schemas
-    qtWrapperArgs = ["--prefix PATH : ${lib.makeBinPath [gsettings-wrapper]}"];
-  }
+  # wrap kaccess with wrapped gsettings so it can access accessibility schemas
+  qtWrapperArgs = [ "--prefix PATH : ${lib.makeBinPath [ gsettings-wrapper ]}" ];
+}

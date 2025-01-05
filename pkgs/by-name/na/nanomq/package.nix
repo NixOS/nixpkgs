@@ -1,22 +1,23 @@
-{ lib
-, stdenv
-, fetchFromGitHub
-, cmake
-, ninja
-, pkg-config
-, cyclonedds
-, libmysqlclient
-, mariadb
-, mbedtls
-, sqlite
-, zeromq
-, flex
-, bison
+{
+  lib,
+  stdenv,
+  fetchFromGitHub,
+  cmake,
+  ninja,
+  pkg-config,
+  cyclonedds,
+  libmysqlclient,
+  mariadb,
+  mbedtls,
+  sqlite,
+  zeromq,
+  flex,
+  bison,
 
-# for tests
-, python3
-, mosquitto
-, netcat-gnu
+  # for tests
+  python3,
+  mosquitto,
+  netcat-gnu,
 }:
 
 let
@@ -34,13 +35,19 @@ let
       hash = "sha256-HM5TSMfEr4uv5BuNCQjyZganSQ/ZqT3xZQp0KLmjIEc=";
     };
 
-    nativeBuildInputs = [ cmake ninja flex bison ];
+    nativeBuildInputs = [
+      cmake
+      ninja
+      flex
+      bison
+    ];
 
     # https://github.com/nanomq/idl-serial/issues/36
     hardeningDisable = [ "fortify3" ];
   };
 
-in stdenv.mkDerivation (finalAttrs: {
+in
+stdenv.mkDerivation (finalAttrs: {
   pname = "nanomq";
   version = "0.22.1";
 
@@ -57,9 +64,21 @@ in stdenv.mkDerivation (finalAttrs: {
       --replace "DESTINATION /etc" "DESTINATION $out/etc"
   '';
 
-  nativeBuildInputs = [ cmake ninja pkg-config idl-serial ];
+  nativeBuildInputs = [
+    cmake
+    ninja
+    pkg-config
+    idl-serial
+  ];
 
-  buildInputs = [ cyclonedds libmysqlclient mariadb mbedtls sqlite zeromq ];
+  buildInputs = [
+    cyclonedds
+    libmysqlclient
+    mariadb
+    mbedtls
+    sqlite
+    zeromq
+  ];
 
   cmakeFlags = [
     (lib.cmakeBool "BUILD_BENCH" true)
@@ -79,7 +98,13 @@ in stdenv.mkDerivation (finalAttrs: {
   nativeInstallCheckInputs = [
     mosquitto
     netcat-gnu
-    (python3.withPackages (ps: with ps; [ jinja2 requests paho-mqtt ]))
+    (python3.withPackages (
+      ps: with ps; [
+        jinja2
+        requests
+        paho-mqtt
+      ]
+    ))
   ];
   installCheckPhase = ''
     runHook preInstallCheck
@@ -103,7 +128,9 @@ in stdenv.mkDerivation (finalAttrs: {
   '';
 
   passthru.tests = {
-    withInstallChecks = finalAttrs.finalPackage.overrideAttrs (_: { doInstallCheck = true; });
+    withInstallChecks = finalAttrs.finalPackage.overrideAttrs (_: {
+      doInstallCheck = true;
+    });
   };
 
   meta = with lib; {

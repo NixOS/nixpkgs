@@ -1,4 +1,12 @@
-{ stdenv, lib, fetchurl, fetchpatch, ocaml, findlib, libmysqlclient }:
+{
+  stdenv,
+  lib,
+  fetchurl,
+  fetchpatch,
+  ocaml,
+  findlib,
+  libmysqlclient,
+}:
 
 # TODO: la versione stabile da' un errore di compilazione dovuto a
 # qualche cambiamento negli header .h
@@ -18,11 +26,14 @@ stdenv.mkDerivation rec {
   };
 
   configureFlags = [
-     "--prefix=$out"
-     "--libdir=$out/lib/ocaml/${ocaml.version}/site-lib/mysql"
+    "--prefix=$out"
+    "--libdir=$out/lib/ocaml/${ocaml.version}/site-lib/mysql"
   ];
 
-  nativeBuildInputs = [ ocaml findlib ];
+  nativeBuildInputs = [
+    ocaml
+    findlib
+  ];
 
   createFindlibDestdir = true;
 

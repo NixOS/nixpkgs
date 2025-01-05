@@ -1,10 +1,18 @@
-{ config, lib, pkgs, ... }:
-let cfg = config.nix.sshServe;
-    command =
-      if cfg.protocol == "ssh"
-        then "nix-store --serve ${lib.optionalString cfg.write "--write"}"
-      else "nix-daemon --stdio";
-in {
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+let
+  cfg = config.nix.sshServe;
+  command =
+    if cfg.protocol == "ssh" then
+      "nix-store --serve ${lib.optionalString cfg.write "--write"}"
+    else
+      "nix-daemon --stdio";
+in
+{
   options = {
 
     nix.sshServe = {
@@ -23,13 +31,16 @@ in {
 
       keys = lib.mkOption {
         type = lib.types.listOf lib.types.str;
-        default = [];
+        default = [ ];
         example = [ "ssh-dss AAAAB3NzaC1k... alice@example.org" ];
         description = "A list of SSH public keys allowed to access the binary cache via SSH.";
       };
 
       protocol = lib.mkOption {
-        type = lib.types.enum [ "ssh" "ssh-ng" ];
+        type = lib.types.enum [
+          "ssh"
+          "ssh-ng"
+        ];
         default = "ssh";
         description = "The specific Nix-over-SSH protocol to use.";
       };
@@ -46,7 +57,7 @@ in {
       group = "nix-ssh";
       shell = pkgs.bashInteractive;
     };
-    users.groups.nix-ssh = {};
+    users.groups.nix-ssh = { };
 
     services.openssh.enable = true;
 

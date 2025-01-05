@@ -2,33 +2,42 @@
   lib,
   buildPythonPackage,
   fetchFromGitHub,
-  pythonOlder,
-  setuptools,
-  backports-zoneinfo,
+  replaceVars,
+  hatch-vcs,
+  hatchling,
   python-dateutil,
-  pytz,
+  tzdata,
   hypothesis,
   pytestCheckHook,
 }:
 
 buildPythonPackage rec {
-  version = "5.0.13";
+  version = "6.1.0";
   pname = "icalendar";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "collective";
     repo = "icalendar";
-    rev = "refs/tags/v${version}";
-    hash = "sha256-2gpWfLXR4HThw23AWxY2rY9oiK6CF3Qiad8DWHCs4Qk=";
+    tag = "v${version}";
+    hash = "sha256-P+cUwNFSBjyTzqdBnIricoM3rUWUXQc8k1912jil79Q=";
   };
 
-  build-system = [ setuptools ];
+  patches = [
+    (replaceVars ./no-dynamic-version.patch {
+      inherit version;
+    })
+  ];
+
+  build-system = [
+    hatch-vcs
+    hatchling
+  ];
 
   dependencies = [
     python-dateutil
-    pytz
-  ] ++ lib.optionals (pythonOlder "3.9") [ backports-zoneinfo ];
+    tzdata
+  ];
 
   nativeCheckInputs = [
     hypothesis

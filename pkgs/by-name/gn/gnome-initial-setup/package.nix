@@ -37,11 +37,11 @@
 
 stdenv.mkDerivation (finalAttrs: {
   pname = "gnome-initial-setup";
-  version = "46.3";
+  version = "47.2";
 
   src = fetchurl {
     url = "mirror://gnome/sources/gnome-initial-setup/${lib.versions.major finalAttrs.version}/gnome-initial-setup-${finalAttrs.version}.tar.xz";
-    hash = "sha256-o/AQgp9NTI1J+Dqxz6uCG2GyeA6eC15Wicfv8/hE7T4=";
+    hash = "sha256-T00Y61YnXMVqGZOlofTRPVpkJoad5nCWuS8rKcryIjw=";
   };
 
   patches = [
@@ -98,6 +98,7 @@ stdenv.mkDerivation (finalAttrs: {
   meta = with lib; {
     description = "Simple, easy, and safe way to prepare a new system";
     homepage = "https://gitlab.gnome.org/GNOME/gnome-initial-setup";
+    changelog = "https://gitlab.gnome.org/GNOME/gnome-initial-setup/-/blob/${finalAttrs.version}/NEWS?ref_type=tags";
     license = licenses.gpl2Plus;
     platforms = platforms.linux;
     maintainers = teams.gnome.members;

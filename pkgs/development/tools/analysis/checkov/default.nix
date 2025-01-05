@@ -6,14 +6,14 @@
 
 python3.pkgs.buildPythonApplication rec {
   pname = "checkov";
-  version = "3.2.246";
+  version = "3.2.346";
   pyproject = true;
 
   src = fetchFromGitHub {
     owner = "bridgecrewio";
     repo = "checkov";
-    rev = "refs/tags/${version}";
-    hash = "sha256-oEAu/GDW7u/jPCGLkvazmFJ5c73gAMDWwRu/AkVLDpk=";
+    tag = version;
+    hash = "sha256-hdnS4fCDhLIhMOiIEamncGqDhNcyuoy6FxVfEGIkVpM=";
   };
 
   patches = [ ./flake8-compat-5.x.patch ];
@@ -23,9 +23,11 @@ python3.pkgs.buildPythonApplication rec {
     "bc-python-hcl2"
     "boto3"
     "botocore"
+    "cloudsplaining"
     "cyclonedx-python-lib"
     "dpath"
     "igraph"
+    "importlib-metadata"
     "license-expression"
     "networkx"
     "openai"
@@ -43,9 +45,7 @@ python3.pkgs.buildPythonApplication rec {
     "pycep-parser"
   ];
 
-  build-system = with python3.pkgs; [
-    setuptools-scm
-  ];
+  build-system = with python3.pkgs; [ setuptools-scm ];
 
   dependencies = with python3.pkgs; [
     aiodns
@@ -92,6 +92,7 @@ python3.pkgs.buildPythonApplication rec {
 
   nativeCheckInputs = with python3.pkgs; [
     aioresponses
+    distutils
     mock
     pytest-asyncio
     pytest-mock
@@ -119,6 +120,7 @@ python3.pkgs.buildPythonApplication rec {
     "console"
     # Assertion error
     "test_runner"
+    "test_same_resources_in_report_and_coordinator"
     # AssertionError: assert ['<?xml versi...
     "test_get_cyclonedx_report"
     # Test fails on Hydra

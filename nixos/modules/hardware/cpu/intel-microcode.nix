@@ -1,4 +1,9 @@
-{ config, lib, pkgs, ... }:
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
 {
   ###### interface
   options = {
@@ -16,7 +21,7 @@
   ###### implementation
   config = lib.mkIf config.hardware.cpu.intel.updateMicrocode {
     # Microcode updates must be the first item prepended in the initrd
-    boot.initrd.prepend = lib.mkOrder 1 [ "${pkgs.microcodeIntel}/intel-ucode.img" ];
+    boot.initrd.prepend = lib.mkOrder 1 [ "${pkgs.microcode-intel}/intel-ucode.img" ];
   };
 
 }

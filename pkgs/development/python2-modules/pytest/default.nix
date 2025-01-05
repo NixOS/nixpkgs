@@ -1,6 +1,25 @@
-{ lib, buildPythonPackage, pythonOlder, fetchPypi, attrs, hypothesis, py
-, setuptools-scm, setuptools, six, pluggy, funcsigs, isPy3k, more-itertools
-, atomicwrites, mock, writeText, pathlib2, wcwidth, packaging, isPyPy
+{
+  lib,
+  buildPythonPackage,
+  pythonOlder,
+  fetchPypi,
+  attrs,
+  hypothesis,
+  py,
+  setuptools-scm,
+  setuptools,
+  six,
+  pluggy,
+  funcsigs,
+  isPy3k,
+  more-itertools,
+  atomicwrites,
+  mock,
+  writeText,
+  pathlib2,
+  wcwidth,
+  packaging,
+  isPyPy,
 }:
 buildPythonPackage rec {
   version = "4.6.11";
@@ -16,9 +35,23 @@ buildPythonPackage rec {
       --replace "pluggy>=0.12,<1.0" "pluggy>=0.12,<2.0"
   '';
 
-  nativeCheckInputs = [ hypothesis mock ];
+  nativeCheckInputs = [
+    hypothesis
+    mock
+  ];
   buildInputs = [ setuptools-scm ];
-  propagatedBuildInputs = [ attrs py setuptools six pluggy more-itertools atomicwrites wcwidth packaging ]
+  propagatedBuildInputs =
+    [
+      attrs
+      py
+      setuptools
+      six
+      pluggy
+      more-itertools
+      atomicwrites
+      wcwidth
+      packaging
+    ]
     ++ lib.optionals (!isPy3k) [ funcsigs ]
     ++ lib.optionals (pythonOlder "3.6") [ pathlib2 ];
 
@@ -42,7 +75,7 @@ buildPythonPackage rec {
         find $out -name .pytest_cache -type d -exec rm -rf {} +
     }
 
-    preDistPhases+=" pytestcachePhase"
+    appendToVar preDistPhases pytestcachePhase
 
     # pytest generates it's own bytecode files to improve assertion messages.
     # These files similar to cpython's bytecode files but are never laoded
@@ -55,13 +88,18 @@ buildPythonPackage rec {
         #    https://github.com/pytest-dev/pytest/blob/4.6.11/src/_pytest/assertion/rewrite.py#L32-L47
         find $out -name "*-PYTEST.py[co]" -delete
     }
-    preDistPhases+=" pytestRemoveBytecodePhase"
+    appendToVar preDistPhases pytestRemoveBytecodePhase
   '';
 
   meta = with lib; {
     homepage = "https://docs.pytest.org";
     description = "Framework for writing tests";
-    maintainers = with maintainers; [ domenkozar lovek323 madjar lsix ];
+    maintainers = with maintainers; [
+      domenkozar
+      lovek323
+      madjar
+      lsix
+    ];
     license = licenses.mit;
     platforms = platforms.unix;
   };

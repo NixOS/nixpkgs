@@ -4,9 +4,9 @@ __nixpkgs_setup_set_original=$-
 set -eu
 set -o pipefail
 
-if [[ -n "${BASH_VERSINFO-}" && "${BASH_VERSINFO-}" -lt 4 ]]; then
+if [[ -n "${BASH_VERSINFO-}" && "${BASH_VERSINFO-}" -lt 5 ]]; then
     echo "Detected Bash version that isn't supported by Nixpkgs (${BASH_VERSION})"
-    echo "Please install Bash 4 or greater to continue."
+    echo "Please install Bash 5 or greater to continue."
     exit 1
 fi
 
@@ -15,6 +15,7 @@ shopt -s inherit_errexit
 # $NIX_DEBUG must be a documented integer level, if set, so we can use it safely as an integer.
 # See the `Verbosity` enum in the Nix source for these levels.
 if ! [[ -z ${NIX_DEBUG-} || $NIX_DEBUG == [0-7] ]]; then
+    # shellcheck disable=SC2016
     printf 'The `NIX_DEBUG` environment variable has an unexpected value: %s\n' "${NIX_DEBUG}"
     echo "It can only be unset or an integer between 0 and 7."
     exit 1
@@ -387,12 +388,18 @@ appendToVar() {
 # Accumulate flags from the named variables $2+ into the indexed array $1.
 #
 # Arrays are simply concatenated, strings are split on whitespace.
+# Default values can be passed via name=default.
 concatTo() {
+    local -
+    set -o noglob
     local -n targetref="$1"; shift
-    local name type
-    for name in "$@"; do
-        if type=$(declare -p "$name" 2> /dev/null); then
-            local -n nameref="$name"
+    local arg default name type
+    for arg in "$@"; do
+        IFS="=" read -r name default <<< "$arg"
+        local -n nameref="$name"
+        if [[ -z "${nameref[*]}" && -n "$default" ]]; then
+            targetref+=( "$default" )
+        elif type=$(declare -p "$name" 2> /dev/null); then
             case "${type#* }" in
                 -A*)
                     echo "concatTo(): ERROR: trying to use concatTo on an associative array." >&2
@@ -425,6 +432,11 @@ concatTo() {
 # $ flags=("lorem ipsum" "dolor" "sit amet")
 # $ concatStringsSep ";" flags
 # lorem ipsum;dolor;sit amet
+#
+# Also supports multi-character separators;
+# $ flags=("lorem ipsum" "dolor" "sit amet")
+# $ concatStringsSep " and " flags
+# lorem ipsum and dolor and sit amet
 concatStringsSep() {
     local sep="$1"
     local name="$2"
@@ -436,11 +448,17 @@ concatStringsSep() {
                 echo "concatStringsSep(): ERROR: trying to use concatStringsSep on an associative array." >&2
                 return 1 ;;
             -a*)
-                local IFS="$sep"
-                echo -n "${nameref[*]}" ;;
+                # \036 is the "record separator" character. We assume that this will never need to be part of
+                # an argument string we create here. If anyone ever hits this limitation: Feel free to refactor.
+                # To avoid leaking an unescaped rs character when dumping the environment with nix, we use printf
+                # in a subshell.
+                local IFS="$(printf '\036')" ;;
             *)
-                echo -n "${nameref// /"${sep}"}" ;;
+                local IFS=" " ;;
+
         esac
+        local ifs_separated="${nameref[*]}"
+        echo -n "${ifs_separated//"$IFS"/"$sep"}"
     fi
 }
 
@@ -667,7 +685,7 @@ findInputs() {
     # shellcheck disable=SC1087
     local varSlice="$var[*]"
     # ${..-} to hack around old bash empty array problem
-    case "${!varSlice-}" in
+    case " ${!varSlice-} " in
         *" $pkg "*) return 0 ;;
     esac
     unset -v varSlice
@@ -1067,6 +1085,10 @@ substituteInPlace() {
         fileNames+=("$arg")
         shift
     done
+    if ! [[ "${#fileNames[@]}" -gt 0 ]]; then
+        echo >&2 "substituteInPlace called without any files to operate on (files must come before options!)"
+        return 1
+    fi
 
     for file in "${fileNames[@]}"; do
         substitute "$file" "$file" "$@"
@@ -1200,7 +1222,7 @@ _defaultUnpack() {
         # We can't preserve hardlinks because they may have been
         # introduced by store optimization, which might break things
         # in the build.
-        cp -pr --reflink=auto -- "$fn" "$destination"
+        cp -r --preserve=mode,timestamps --reflink=auto -- "$fn" "$destination"
 
     else
 
@@ -1340,8 +1362,7 @@ patchPhase() {
         esac
 
         local -a flagsArray
-        : "${patchFlags:=-p1}"
-        concatTo flagsArray patchFlags
+        concatTo flagsArray patchFlags=-p1
         # "2>&1" is a hack to make patch fail if the decompressor fails (nonexistent patch, etc.)
         # shellcheck disable=SC2086
         $uncompress < "$i" 2>&1 | patch "${flagsArray[@]}"
@@ -1493,8 +1514,7 @@ checkPhase() {
             SHELL="$SHELL"
         )
 
-        : "${checkFlags:=VERBOSE=y}"
-        concatTo flagsArray makeFlags makeFlagsArray checkFlags checkFlagsArray checkTarget
+        concatTo flagsArray makeFlags makeFlagsArray checkFlags=VERBOSE=y checkFlagsArray checkTarget
 
         echoCmd 'check flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1528,8 +1548,7 @@ installPhase() {
         SHELL="$SHELL"
     )
 
-    : "${installTargets:=install}"
-    concatTo flagsArray makeFlags makeFlagsArray installFlags installFlagsArray installTargets
+    concatTo flagsArray makeFlags makeFlagsArray installFlags installFlagsArray installTargets=install
 
     echoCmd 'install flags' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1612,9 +1631,8 @@ installCheckPhase() {
             SHELL="$SHELL"
         )
 
-        : "${installCheckTarget:=installcheck}"
         concatTo flagsArray makeFlags makeFlagsArray \
-          installCheckFlags installCheckFlagsArray installCheckTarget
+          installCheckFlags installCheckFlagsArray installCheckTarget=installcheck
 
         echoCmd 'installcheck flags' "${flagsArray[@]}"
         make ${makefile:+-f $makefile} "${flagsArray[@]}"
@@ -1629,8 +1647,7 @@ distPhase() {
     runHook preDist
 
     local flagsArray=()
-    : "${distTarget:=dist}"
-    concatTo flagsArray distFlags distFlagsArray distTarget
+    concatTo flagsArray distFlags distFlagsArray distTarget=dist
 
     echo 'dist flags: %q' "${flagsArray[@]}"
     make ${makefile:+-f $makefile} "${flagsArray[@]}"

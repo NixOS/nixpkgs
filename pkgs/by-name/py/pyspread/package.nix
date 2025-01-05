@@ -1,22 +1,24 @@
-{ lib
-, python3
-, fetchPypi
-, copyDesktopItems
-, libsForQt5
-, makeDesktopItem
+{
+  lib,
+  python3,
+  fetchPypi,
+  copyDesktopItems,
+  libsForQt5,
+  makeDesktopItem,
 }:
 
 let
   # get rid of rec
   pname = "pyspread";
-  version = "2.3";
+  version = "2.3.1";
   src = fetchPypi {
     inherit pname version;
-    hash = "sha256-vbDZo/kYtnxmOd3JSEG9+0yD0nfM/BGcAySfBD2xogw=";
+    hash = "sha256-l6b02CIUqPnT16zqOWl6gDdAobkhiqBMFvT+R1Dvtek=";
   };
   inherit (libsForQt5)
     qtsvg
-    wrapQtAppsHook;
+    wrapQtAppsHook
+    ;
 in
 python3.pkgs.buildPythonApplication {
   inherit pname version src;
@@ -54,7 +56,11 @@ python3.pkgs.buildPythonApplication {
       desktopName = "Pyspread";
       genericName = "Spreadsheet";
       comment = "A Python-oriented spreadsheet application";
-      categories = [ "Office" "Development" "Spreadsheet" ];
+      categories = [
+        "Office"
+        "Development"
+        "Spreadsheet"
+      ];
     })
   ];
 

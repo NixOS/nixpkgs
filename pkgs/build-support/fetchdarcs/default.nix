@@ -1,21 +1,37 @@
-{stdenvNoCC, darcs, cacert, lib}:
-
-lib.makeOverridable (
-{ url
-, rev ? null
-, context ? null
-, sha256 ? ""
-, name ? "fetchdarcs"
+{
+  stdenvNoCC,
+  darcs,
+  cacert,
+  lib,
 }:
 
-stdenvNoCC.mkDerivation {
-  builder = ./builder.sh;
-  nativeBuildInputs = [cacert darcs];
+lib.makeOverridable (
+  lib.fetchers.withNormalizedHash { } (
+    {
+      url,
+      rev ? null,
+      context ? null,
+      outputHash ? lib.fakeHash,
+      outputHashAlgo ? null,
+      name ? "fetchdarcs",
+    }:
 
-  outputHashAlgo = "sha256";
-  outputHashMode = "recursive";
-  outputHash = sha256;
+    stdenvNoCC.mkDerivation {
+      builder = ./builder.sh;
+      nativeBuildInputs = [
+        cacert
+        darcs
+      ];
 
-  inherit url rev context name;
-}
+      inherit outputHash outputHashAlgo;
+      outputHashMode = "recursive";
+
+      inherit
+        url
+        rev
+        context
+        name
+        ;
+    }
+  )
 )

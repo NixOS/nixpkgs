@@ -1,19 +1,20 @@
 {
   lib,
   aiohttp,
-  async-timeout,
   asyncclick,
   buildPythonPackage,
   cryptography,
   fetchFromGitHub,
+  hatchling,
   kasa-crypt,
+  mashumaro,
   orjson,
-  poetry-core,
   ptpython,
-  pydantic,
   pytest-asyncio,
   pytest-freezer,
   pytest-mock,
+  pytest-socket,
+  pytest-xdist,
   pytestCheckHook,
   pythonOlder,
   rich,
@@ -22,7 +23,7 @@
 
 buildPythonPackage rec {
   pname = "python-kasa";
-  version = "0.7.2";
+  version = "0.9.0";
   pyproject = true;
 
   disabled = pythonOlder "3.9";
@@ -30,29 +31,30 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "python-kasa";
     repo = "python-kasa";
-    rev = "refs/tags/${version}";
-    hash = "sha256-JfTFed591z1ZxTKP5FqYyaMBq8uCs4StlnqKp3Tc7Ug=";
+    tag = version;
+    hash = "sha256-xbyDiTnEeC/d2dpAxj/5tB27hFC3bKEO5JsUC1jmh18=";
   };
 
-  build-system = [ poetry-core ];
+  build-system = [ hatchling ];
 
   dependencies = [
     aiohttp
-    async-timeout
     asyncclick
     cryptography
-    pydantic
+    mashumaro
   ];
 
   nativeCheckInputs = [
     pytest-asyncio
     pytest-freezer
     pytest-mock
+    pytest-socket
+    pytest-xdist
     pytestCheckHook
     voluptuous
   ];
 
-  passthru.optional-dependencies = {
+  optional-dependencies = {
     shell = [
       ptpython
       rich
@@ -67,7 +69,7 @@ buildPythonPackage rec {
 
   disabledTestPaths = [
     # Skip the examples tests
-    "kasa/tests/test_readme_examples.py"
+    "tests/test_readme_examples.py"
   ];
 
   pythonImportsCheck = [ "kasa" ];

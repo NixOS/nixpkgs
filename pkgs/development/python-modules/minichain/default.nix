@@ -31,7 +31,6 @@ buildPythonPackage rec {
     substituteInPlace ./minichain/__init__.py --replace "from .gradio import GradioConf, show" ""
   '';
 
-
   pythonRemoveDeps = [
     # Only used in the examples:
     "datasets"

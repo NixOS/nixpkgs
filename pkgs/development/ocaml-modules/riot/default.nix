@@ -1,14 +1,15 @@
-{ lib
-, buildDunePackage
-, fetchurl
-, fetchpatch
-, mirage-crypto-rng
-, mtime
-, gluon
-, randomconv
-, rio
-, telemetry
-, tls
+{
+  lib,
+  buildDunePackage,
+  fetchurl,
+  fetchpatch,
+  mirage-crypto-rng,
+  mtime,
+  gluon,
+  randomconv,
+  rio,
+  telemetry,
+  tls,
 }:
 
 buildDunePackage rec {
@@ -47,5 +48,6 @@ buildDunePackage rec {
     changelog = "https://github.com/leostera/riot/blob/${version}/CHANGES.md";
     license = lib.licenses.mit;
     maintainers = [ ];
+    broken = true; # Not compatible with mirage-crypto ≥ 1.0
   };
 }
