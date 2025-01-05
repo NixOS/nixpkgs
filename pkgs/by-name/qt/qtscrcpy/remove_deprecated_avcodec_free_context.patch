@@ -1,0 +1,14 @@
+diff --git a/src/device/decoder/decoder.cpp b/src/device/decoder/decoder.cpp
+index 79dec15..5f6979b 100644
+--- a/src/device/decoder/decoder.cpp
++++ b/QtScrcpy/QtScrcpyCore/src/device/decoder/decoder.cpp
+@@ -51,9 +51,6 @@ void Decoder::close()
+     if (!m_codecCtx) {
+         return;
+     }
+-    if (m_isCodecCtxOpen) {
+-        avcodec_close(m_codecCtx);
+-    }
+     avcodec_free_context(&m_codecCtx);
+ }
+ 

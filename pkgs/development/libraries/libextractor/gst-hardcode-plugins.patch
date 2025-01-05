@@ -1,0 +1,11 @@
+--- a/src/plugins/gstreamer_extractor.c
++++ b/src/plugins/gstreamer_extractor.c
+@@ -2215,6 +2215,7 @@ void __attribute__ ((constructor))
+ gstreamer_init ()
+ {
+   gst_init (NULL, NULL);
++  @load_gst_plugins@
+   g_log_set_default_handler (&log_handler, NULL);
+   g_log_set_handler (NULL, G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION,
+                     &log_handler, NULL);
+

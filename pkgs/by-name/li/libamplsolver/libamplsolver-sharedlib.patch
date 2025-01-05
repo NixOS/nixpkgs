@@ -1,0 +1,39 @@
+Authors: Andrei Rozanski and Grace Dinh
+Last-Update: 2022-08-23
+Description: fix makefile.u in order to get libamplsover.so (Linux) or libamplsolver.dylib (Mac)
+
+--- a/makefile.u
++++ b/makefile.u
+
+@@ -26,8 +26,9 @@
+
+ .SUFFIXES: .c .o
+ CC = cc
+-CFLAGS = -O
++CFLAGS := $(CFLAGS) -pipe -DASL_BUILD -fPIC -DPIC
+ SHELL=/bin/sh
++OFILES=$(addsuffix .o,$(basename $(a)))
+
+ # Add -DNO_RUSAGE to the CFLAGS assignment if your system
+ # lacks getrusage().  This only matters for compiling xectim.c.
+@@ -86,7 +87,7 @@
+ .c.o:
+ 	$(CC) -c $(CFLAGS) $*.c
+
+-all: arith.h stdio1.h amplsolver.a funcadd0.o
++all: arith.h stdio1.h amplsolver.a funcadd0.o libamplsolver@sharedlibext@
+
+ a = \
+ 	asldate.c \
+@@ -189,6 +190,11 @@
+ # search path, e.g.
+ #	exec true
+ # or just comment out the ranlib invocation above.
++libamplsolver.so: $(OFILES)
++	$(CC) $^ -shared  -Wl,-soname,libamplsolver.so.0 $(LDFLAGS) -o $@.0
++	ln -s $@.0 $@
++libamplsolver.dylib: amplsolver.a
++	$(CC) -fpic -shared -Wl,-all_load amplsolver.a $(LDFLAGS) -o libamplsolver.dylib
+
+ Aslh = arith.h asl.h funcadd.h stdio1.h
+ auxinfo.o libnamsave.o: funcadd.h stdio1.h

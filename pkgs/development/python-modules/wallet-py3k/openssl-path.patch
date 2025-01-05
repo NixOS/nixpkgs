@@ -1,0 +1,13 @@
+diff --git a/wallet/models.py b/wallet/models.py
+index 1b75402..ad115de 100644
+--- a/wallet/models.py
++++ b/wallet/models.py
+@@ -320,7 +320,7 @@ class Pass(object):
+     def _createSignature(self, manifest, certificate, key,
+                          wwdr_certificate, password):
+         openssl_cmd = [
+-            'openssl',
++            '@openssl@',
+             'smime',
+             '-binary',
+             '-sign',
