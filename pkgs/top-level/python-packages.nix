@@ -2568,6 +2568,8 @@ self: super: with self; {
 
   commonmark = callPackage ../development/python-modules/commonmark { };
 
+  commonregex = callPackage ../development/python-modules/commonregex { };
+
   complycube = callPackage ../development/python-modules/complycube { };
 
   compreffor = callPackage ../development/python-modules/compreffor { };
