@@ -185,6 +185,17 @@ in
                   Setting it to null disables the timer, thus this instance can only be started manually.
                 '';
               };
+              snapshotOnly = mkOption {
+                type = types.bool;
+                default = false;
+                description = ''
+                  Whether to run in snapshot only mode. This skips backup creation and deletion steps.
+                  Useful when you want to manually backup to an external drive that might not always be connected.
+                  Use `btrbk -c /path/to/conf resume` to trigger manual backups.
+                  More examples [here](https://github.com/digint/btrbk#example-backups-to-usb-disk).
+                  See also `snapshot` subcommand in {manpage}`btrbk(1)`.
+                '';
+              };
               settings = mkOption {
                 type = types.submodule {
                   freeformType =
@@ -353,7 +364,9 @@ in
           User = "btrbk";
           Group = "btrbk";
           Type = "oneshot";
-          ExecStart = "${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/${name}.conf run";
+          ExecStart = "${pkgs.btrbk}/bin/btrbk -c /etc/btrbk/${name}.conf ${
+            if instance.snapshotOnly then "snapshot" else "run"
+          }";
           Nice = cfg.niceness;
           IOSchedulingClass = cfg.ioSchedulingClass;
           StateDirectory = "btrbk";
