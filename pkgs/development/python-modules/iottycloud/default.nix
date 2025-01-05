@@ -16,8 +16,8 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pburgio";
     repo = "iottyCloud";
-    tag = "v${version}";
-    hash = "sha256-EtAAUyVL7FTn0VoGmU5bU9XouMuEQUOx2t6j/wd1OEo=";
+    tag = version;
+    hash = "sha256-tsCa87BdwKumsv5N0lAPZmMIfm2W6Pw0LS3sF9c/oRA=";
   };
 
   build-system = [ hatchling ];
