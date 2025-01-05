@@ -8163,6 +8163,8 @@ self: super: with self; {
 
   midea-beautiful-air = callPackage ../development/python-modules/midea-beautiful-air { };
 
+  midea-local = callPackage ../development/python-modules/midea-local { };
+
   midiutil = callPackage ../development/python-modules/midiutil { };
 
   mido = callPackage ../development/python-modules/mido { };
