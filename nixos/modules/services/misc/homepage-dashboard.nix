@@ -240,7 +240,7 @@ in
 
         environment = {
           HOMEPAGE_CONFIG_DIR = configDir;
-          HOMEPAGE_CACHE_DIR = "/var/cache/homepage-dashboard";
+          NIXPKGS_HOMEPAGE_CACHE_DIR = "/var/cache/homepage-dashboard";
           PORT = toString cfg.listenPort;
           LOG_TARGETS = lib.mkIf managedConfig "stdout";
         };
