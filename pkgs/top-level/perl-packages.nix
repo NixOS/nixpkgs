@@ -2245,6 +2245,9 @@ with self; {
       url = "mirror://cpan/authors/id/X/XA/XAOC/Cairo-GObject-1.005.tar.gz";
       hash = "sha256-jYlkRNceHQvKPSTjHl2CvQ2VQqrtkdH7fqs2e85nXFA=";
     };
+    nativeBuildInputs = [
+      pkgs.pkg-config
+    ];
     buildInputs = [ pkgs.cairo ];
     propagatedBuildInputs = [ Cairo Glib ];
     meta = {
