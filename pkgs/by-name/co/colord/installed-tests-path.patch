@@ -1,0 +1,72 @@
+diff --git a/data/tests/meson.build b/data/tests/meson.build
+index 8b38f10..250582c 100644
+--- a/data/tests/meson.build
++++ b/data/tests/meson.build
+@@ -17,6 +17,6 @@ if get_option('installed_tests')
+       'test.ccss',
+       'test.sp',
+     ],
+-    install_dir: join_paths(libexecdir, 'installed-tests', 'colord')
++    install_dir: join_paths('@installed_tests_dir@', 'libexec', 'installed-tests', 'colord')
+   )
+ endif
+diff --git a/lib/colord/cd-test-shared.c b/lib/colord/cd-test-shared.c
+index c3b9d23..7577e13 100644
+--- a/lib/colord/cd-test-shared.c
++++ b/lib/colord/cd-test-shared.c
+@@ -45,7 +45,8 @@ cd_test_get_filename (const gchar *filename)
+ 
+ 	/* running in the installed system */
+ 	if (g_getenv ("INSTALLED_TESTS") != NULL) {
+-		return g_build_filename (LIBEXECDIR,
++		return g_build_filename ("@installed_tests_dir@",
++					 "libexec",
+ 					 "installed-tests",
+ 					 PACKAGE_NAME,
+ 					 filename,
+diff --git a/lib/colord/meson.build b/lib/colord/meson.build
+index 61f0518..df71358 100644
+--- a/lib/colord/meson.build
++++ b/lib/colord/meson.build
+@@ -214,20 +214,20 @@ endif
+ if get_option('installed_tests')
+ con2 = configuration_data()
+ con2.set('installedtestsdir',
+-         join_paths(libexecdir, 'installed-tests', 'colord'))
++         join_paths('@installed_tests_dir@', 'libexec', 'installed-tests', 'colord'))
+ configure_file(
+   input : 'colord-daemon.test.in',
+   output : 'colord-daemon.test',
+   configuration : con2,
+   install: true,
+-  install_dir: join_paths('share', 'installed-tests', 'colord'),
++  install_dir: join_paths('@installed_tests_dir@', 'share', 'installed-tests', 'colord'),
+ )
+ configure_file(
+   input : 'colord-private.test.in',
+   output : 'colord-private.test',
+   configuration : con2,
+   install: true,
+-  install_dir: join_paths('share', 'installed-tests', 'colord'),
++  install_dir: join_paths('@installed_tests_dir@', 'share', 'installed-tests', 'colord'),
+ )
+ endif
+ 
+@@ -254,7 +254,7 @@ if get_option('tests')
+       '-DTESTDATADIR="' + testdatadir + '"',
+     ],
+     install : get_option('installed_tests'),
+-    install_dir : join_paths(libexecdir, 'installed-tests', 'colord'),
++    install_dir : join_paths('@installed_tests_dir@','libexec', 'installed-tests', 'colord'),
+   )
+   test('colord-test-private', e)
+   e = executable(
+@@ -278,7 +278,7 @@ if get_option('tests')
+       '-DTESTDATADIR="' + testdatadir + '"',
+     ],
+     install : get_option('installed_tests'),
+-    install_dir : join_paths(libexecdir, 'installed-tests', 'colord'),
++    install_dir : join_paths('@installed_tests_dir@', 'libexec', 'installed-tests', 'colord'),
+   )
+   test('colord-test-daemon', e)
+ endif

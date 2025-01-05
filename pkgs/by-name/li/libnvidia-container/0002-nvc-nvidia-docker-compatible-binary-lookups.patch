@@ -1,0 +1,45 @@
+From 0000000000000000000000000000000000000000 Mon Sep 17 00:00:00 2001
+From: Moritz Sanft <58110325+msanft@users.noreply.github.com>
+Date: Fri, 20 Dec 2024 16:37:07 +0100
+Subject: [PATCH] nvc: nvidia-docker-compatible binary lookups
+
+This patch maintains compatibility with NixOS' `virtualisation.docker.enableNvidia` option (which is to be removed soon), while also enabling supplying a custom PATH, to work with the modern CDI-based approach.
+---
+ src/nvc_info.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/src/nvc_info.c b/src/nvc_info.c
+index cf4b1905fd2127c28ee16649501be122d3be5261..2ab552860ef98879b76398a6f9be95f07b2c8a4a 100644
+--- a/src/nvc_info.c
++++ b/src/nvc_info.c
+@@ -243,16 +243,28 @@ static int
+ find_binary_paths(struct error *err, struct dxcore_context* dxcore, struct nvc_driver_info* info,
+                   const char *root, const char * const bins[], size_t size)
+ {
+-        char *env, *ptr;
++        char *env, *ptr, *os_path;
+         const char *dir;
+         char tmp[PATH_MAX];
+         char path[PATH_MAX];
+         int rv = -1;
+ 
+-        if ((env = secure_getenv("PATH")) == NULL) {
++        if ((os_path = secure_getenv("PATH")) == NULL) {
+                 error_setx(err, "environment variable PATH not found");
+                 return (-1);
+         }
++
++        // TODO: Remove this patch once `virtualisation.docker.enableNvidia` is removed from NixOS.
++        // It only exists to maintain compatibility with the old nvidia-docker package.
++        int p_rv = snprintf(env, PATH_MAX, "/run/nvidia-docker/bin:/run/nvidia-docker/extras/bin:%s", os_path);
++        if (p_rv >= PATH_MAX) {
++                error_setx(err, "PATH environment variable too long");
++                return (-1);
++        } else if (p_rv < 0) {
++                error_setx(err, "error setting PATH environment variable");
++                return (-1);
++        }
++
+         if ((env = ptr = xstrdup(err, env)) == NULL)
+                 return (-1);
+ 
