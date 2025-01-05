@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
     owner = "fpco";
     repo = "amber";
     rev = "v${version}";
-    sha256 = "sha256-nduSnDhLvHpZD7Y1zeZC4nNL7P1qfLWc0yMpsdqrKHM=";
+    hash = "sha256-nduSnDhLvHpZD7Y1zeZC4nNL7P1qfLWc0yMpsdqrKHM=";
   };
 
   cargoHash = "sha256-DxTsbJ51TUMvc/NvsUYhRG9OxxEGrWfEPYCOYaG9PXo=";
@@ -25,6 +25,7 @@ rustPlatform.buildRustPackage rec {
   meta = with lib; {
     description = "Manage secret values in-repo via public key cryptography";
     homepage = "https://github.com/fpco/amber";
+    changelog = "https://github.com/fpco/amber/releases/tag/v${version}";
     license = licenses.mit;
     maintainers = with maintainers; [ psibi ];
     mainProgram = "amber";
