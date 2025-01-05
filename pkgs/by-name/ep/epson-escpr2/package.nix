@@ -10,14 +10,14 @@
 
 stdenv.mkDerivation rec {
   pname = "epson-inkjet-printer-escpr2";
-  version = "1.2.21";
+  version = "1.2.24";
 
   src = fetchurl {
     # To find the most recent version go to
     # https://support.epson.net/linux/Printer/LSB_distribution_pages/en/escpr2.php
     # and retreive the download link for source package for x86 CPU
-    url = "https://download3.ebz.epson.net/dsc/f/03/00/16/37/15/74a363ac972fde613c55618c2518f67e2a295cc8/epson-inkjet-printer-escpr2-1.2.21-1.src.rpm";
-    sha256 = "sha256-GwGR+K4VoLffAnI6wuJKOUCLnTrKEBK9j6rAzqKbX7U=";
+    url = "https://download3.ebz.epson.net/dsc/f/03/00/16/58/53/436aba09336f96ed31378f90848be6588a177439/epson-inkjet-printer-escpr2-1.2.24-1.src.rpm";
+    sha256 = "sha256-SI5vXdpxRu6/QdAMdgNpqgcTqyHntiS0zo38XPd4Xtg=";
   };
 
   unpackPhase = ''
