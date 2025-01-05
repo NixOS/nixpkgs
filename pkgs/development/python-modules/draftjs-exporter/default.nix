@@ -16,7 +16,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     repo = "draftjs_exporter";
     owner = "springload";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     sha256 = "sha256-4MmCVRx350p6N9XqTZSo8ROI/OJ0s4aKSYH9+Oxgvf4=";
   };
 

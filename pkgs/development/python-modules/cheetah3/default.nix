@@ -15,7 +15,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "CheetahTemplate3";
     repo = pname;
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-yIdswcCuoDR3R/Subl22fKB55pgw/sDkrPy+vwNgaxI=";
   };
 

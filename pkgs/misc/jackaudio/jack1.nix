@@ -9,7 +9,7 @@
   db ? null,
   libuuid ? null,
   libffado ? null,
-  celt ? null,
+  celt_0_7 ? null,
 
   testers,
 }:
@@ -22,15 +22,15 @@ let
   optDb = shouldUsePkg db;
   optLibuuid = shouldUsePkg libuuid;
   optLibffado = shouldUsePkg libffado;
-  optCelt = shouldUsePkg celt;
+  optCelt = shouldUsePkg celt_0_7;
 in
 stdenv.mkDerivation (finalAttrs: {
   pname = "jack1";
-  version = "0.125.0";
+  version = "0.126.0";
 
   src = fetchurl {
-    url = "https://jackaudio.org/downloads/jack-audio-connection-kit-${finalAttrs.version}.tar.gz";
-    sha256 = "0i6l25dmfk2ji2lrakqq9icnwjxklgcjzzk65dmsff91z2zva5rm";
+    url = "https://github.com/jackaudio/jack1/releases/download/${finalAttrs.version}/jack1-${finalAttrs.version}.tar.gz";
+    hash = "sha256-eykOnce5JirDKNQe74DBBTyXAT76y++jBHfLmypUReo=";
   };
 
   configureFlags = [

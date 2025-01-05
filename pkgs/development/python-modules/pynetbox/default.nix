@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "netbox-community";
     repo = "pynetbox";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-pP4DEHf4Dj3sQ7qx7tU0B0PaMCuzUM9R2pIYRI1Fpso=";
   };
 

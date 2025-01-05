@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "exxamalte";
     repo = "python-georss-ingv-centro-nazionale-terremoti-client";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-J72yd1D4mKCOsBRLMUXKnxmjr6g0IQApTTrWjklczN8=";
   };
 

@@ -28,7 +28,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "mmatl";
     repo = "pyrender";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-V2G8QWXMxFDQpT4XDOJhIFI2V9VhDQCaXYBb/QVLxgM=";
   };
 

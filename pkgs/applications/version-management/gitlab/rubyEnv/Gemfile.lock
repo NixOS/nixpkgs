@@ -1436,7 +1436,8 @@ GEM
       coderay
       parser
       unparser
-    prometheus-client-mmap (1.1.1)
+    prometheus-client-mmap (1.1.2)
+      base64
       rb_sys (~> 0.9.86)
     pry (0.14.2)
       coderay (~> 1.1)
@@ -2226,7 +2227,7 @@ DEPENDENCIES
   pg_query (~> 5.1.0)
   png_quantizator (~> 0.2.1)
   premailer-rails (~> 1.12.0)
-  prometheus-client-mmap (~> 1.1, >= 1.1.1)
+  prometheus-client-mmap (= 1.1.2)
   pry-byebug
   pry-rails (~> 0.3.9)
   pry-shell (~> 0.6.4)
@@ -2329,4 +2330,4 @@ DEPENDENCIES
   yajl-ruby (~> 1.4.3)
 
 BUNDLED WITH
-   2.5.11
+   2.5.22

@@ -18,7 +18,7 @@ jobs:
 
   nixos:
     name: nixfmt-check
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: get-merge-commit
     if: "needs.get-merge-commit.outputs.mergedSha && !contains(github.event.pull_request.title, '[skip treewide]')"
     steps:

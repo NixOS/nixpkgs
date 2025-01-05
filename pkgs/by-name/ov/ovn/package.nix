@@ -23,7 +23,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "ovn-org";
     repo = "ovn";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Fz/YNEbMZ2mB4Fv1nKE3H3XrihehYP7j0N3clnTJ5x8=";
     fetchSubmodules = true;
   };

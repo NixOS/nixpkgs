@@ -24,7 +24,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "canonical";
     repo = "lxd";
-    rev = "refs/tags/lxd-${version}";
+    tag = "lxd-${version}";
     hash = "sha256-3C5pLvO7oABWFhFiWtBr5ohFFWm20Gg36WBfVVJgKdc=";
   };
 

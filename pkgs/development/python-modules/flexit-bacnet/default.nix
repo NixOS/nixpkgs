@@ -13,7 +13,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "piotrbulinski";
     repo = "flexit_bacnet";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-Cy/WHKtJoZWSFOs+9rBYSLqZTF/68WRM1HiYXDyb9KM=";
   };
 

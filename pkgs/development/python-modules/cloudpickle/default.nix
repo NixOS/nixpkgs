@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "cloudpipe";
     repo = "cloudpickle";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-UeKVwzT0m4fhEVnG7TvQsFR99JsmwwoXmr+rWnTCeJU=";
   };
 

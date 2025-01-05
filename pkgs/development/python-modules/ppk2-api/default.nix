@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "IRNAS";
     repo = "ppk2-api-python";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-fubDFtOXiv2YFYUCOUbuyXs1sHgs0/6ZVK9sAwxQ+Pk=";
   };
 

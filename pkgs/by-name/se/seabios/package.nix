@@ -61,6 +61,7 @@ stdenv.mkDerivation (finalAttrs: {
   hardeningDisable = [
     "fortify"
     "pic"
+    "pie" # ld: warning: creating DT_TEXTREL in a PIE (and more)
     "stackprotector"
   ];
 

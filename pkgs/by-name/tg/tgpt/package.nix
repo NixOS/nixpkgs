@@ -11,7 +11,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "aandrew-me";
     repo = "tgpt";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Nk+iLsTXnw6RAc1VztW8ZqeUVsywFjMCOBY2yuWbUXQ=";
   };
 

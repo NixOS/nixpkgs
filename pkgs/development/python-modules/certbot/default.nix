@@ -30,7 +30,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "certbot";
     repo = "certbot";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-Qee7lUjgliG5fmUWWPm3MzpGJHUF/DXZ08UA6kkWjjk=";
   };
 

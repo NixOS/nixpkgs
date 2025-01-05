@@ -15,7 +15,7 @@ buildNpmPackage rec {
   src = fetchFromGitHub {
     owner = "factoriolab";
     repo = "factoriolab";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-vwcqUsqlggmqqlQ3fyn+s3NKQ0oNcVztfjTpJPW1mFs=";
   };
   buildInputs = [ vips ];

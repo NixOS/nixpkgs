@@ -17,7 +17,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pR0Ps";
     repo = "iterable-io";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-+PSINKS7/FeGHYvkOASA5m+1pBpKfURfylZ8CwKijgA=";
   };
 

@@ -52,7 +52,7 @@ stdenv.mkDerivation rec {
   src = fetchFromGitHub {
     owner = "wwmm";
     repo = "easyeffects";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-It+kldlhThWF9y/rTgKt9QlIouH1cQcCtSHQTsaGjfo=";
   };
 

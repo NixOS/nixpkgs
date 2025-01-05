@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "darvid";
     repo = "python-hyperscan";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-TNiGh89SnGi0WAqfYudsj7GaVhOifi8ZcmTrMtVbk+c=";
   };
 

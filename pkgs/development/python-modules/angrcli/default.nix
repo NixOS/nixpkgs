@@ -22,7 +22,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "fmagin";
     repo = "angr-cli";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-a5ajUBQwt3xUNkeSOeGOAFf47wd4UVk+LcuAHGqbq4s=";
   };
 

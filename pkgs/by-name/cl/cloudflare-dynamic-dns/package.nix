@@ -12,7 +12,7 @@ buildGoModule rec {
   src = fetchFromGitHub {
     owner = "zebradil";
     repo = "cloudflare-dynamic-dns";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-MeVLDgr332B9KWvahlhRz7Yf3R/j2KwR9ROhU3eQnwA=";
   };
 

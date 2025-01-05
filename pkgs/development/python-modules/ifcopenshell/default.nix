@@ -61,7 +61,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "IfcOpenShell";
     repo = "IfcOpenShell";
-    rev = "refs/tags/ifcopenshell-python-${version}";
+    tag = "ifcopenshell-python-${version}";
     fetchSubmodules = true;
     hash = "sha256-tnj14lBEkUZNDM9J1sRhNA7OkWTWa5JPTSF8hui3q7k=";
   };

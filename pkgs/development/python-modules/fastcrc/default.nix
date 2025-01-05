@@ -15,7 +15,7 @@ let
   src = fetchFromGitHub {
     owner = "overcat";
     repo = "fastcrc";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-yLrv/zqsjgygJAIJtztwxlm4s9o9EBVsCyx1jUXd7hA=";
   };
 in

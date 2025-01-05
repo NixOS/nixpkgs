@@ -19,7 +19,7 @@ let
   src = fetchFromGitHub {
     owner = "clash-verge-rev";
     repo = "clash-verge-rev";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-QLvJO1JFHPFOsVxNi6SCu2QuJQ9hCsO1+WKOjZL944w=";
   };
 

@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "praiskup";
     repo = "argparse-manpage";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-2GJDFLCaPTb8sQCAv9qZ+pIysFE7IaKh9co3Mb8Dutc=";
   };
 

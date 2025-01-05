@@ -20,7 +20,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "NowanIlfideme";
     repo = "pydantic-yaml";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-xlFSczMCEkSDhtzSl8qzZwwZd0IelPmjTEV+Jk9G0fI=";
   };
 

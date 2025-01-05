@@ -24,7 +24,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "enthought";
     repo = "apptools";
-    rev = "refs/tags/${version}";
+    tag = version;
     hash = "sha256-qNtDHmvl5HbtdbjnugVM7CKVCW+ysAwRB9e2Ounh808=";
   };
 

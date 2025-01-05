@@ -18,7 +18,7 @@ buildPythonPackage rec {
   src = fetchFromGitHub {
     owner = "pylessard";
     repo = "python-can-isotp";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-wfZMVfLBdYkFbb0DiDWmGaraykJ/QL64Zkl2/nBu4lY=";
   };
 

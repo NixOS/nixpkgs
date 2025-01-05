@@ -15,7 +15,7 @@ rustPlatform.buildRustPackage rec {
   src = fetchFromGitHub {
     owner = "WorksApplications";
     repo = "sudachi.rs";
-    rev = "refs/tags/v${version}";
+    tag = "v${version}";
     hash = "sha256-G+lJzOYxrR/Le2lgfZMXbbjCqPYmCKMy1pIomTP5NIg=";
   };
 
