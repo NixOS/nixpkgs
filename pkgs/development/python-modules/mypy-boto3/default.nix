@@ -462,8 +462,8 @@ rec {
       "sha256-K63rvMDWrOWjyizRLwSs5DQn3ysF/VBqK2tVtiINx/0=";
 
   mypy-boto3-ecs =
-    buildMypyBoto3Package "ecs" "1.35.83"
-      "sha256-ruY2UL5CAnjS04vJAwS1a5tTk34TlOuWubE2PIXb0Y0=";
+    buildMypyBoto3Package "ecs" "1.35.92"
+      "sha256-wdAUexTVWFFEdTmy2S5ugCYZKks7VVlIkI/Z/Ce5Q+M=";
 
   mypy-boto3-efs =
     buildMypyBoto3Package "efs" "1.35.65"
@@ -1150,8 +1150,8 @@ rec {
       "sha256-n4arbk3VN6P/7abnM5yhgOQFdLJwioOdyx2ILcc6Mag=";
 
   mypy-boto3-route53domains =
-    buildMypyBoto3Package "route53domains" "1.35.80"
-      "sha256-2zkKRakpeh2MwVeg3LLJ0QhKt+p4kGBVeUXXueFI5zM=";
+    buildMypyBoto3Package "route53domains" "1.35.92"
+      "sha256-5zgrNM8ZEJ/vtpeFrsJwpX6tfIZhPp1IpIJBJpI12IQ=";
 
   mypy-boto3-route53resolver =
     buildMypyBoto3Package "route53resolver" "1.35.63"
@@ -1162,8 +1162,8 @@ rec {
       "sha256-RwPNNFntNChLqbr86wd1bwp6OqWvs3oj3V+4X71J3Hw=";
 
   mypy-boto3-s3 =
-    buildMypyBoto3Package "s3" "1.35.81"
-      "sha256-/hpoYMDKcBbiQImBlDPA1YNdSldjW7QmKGRbcScblGw=";
+    buildMypyBoto3Package "s3" "1.35.92"
+      "sha256-msiNwPbYeJI0TtmbHloohCFVA6//OFlBe2AQsx3nzvY=";
 
   mypy-boto3-s3control =
     buildMypyBoto3Package "s3control" "1.35.73"

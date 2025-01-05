@@ -180,6 +180,12 @@ def update_rubyenv():
         cwd=rubyenv_dir,
     )
 
+    # update to 1.1.2 to fix https://gitlab.com/gitlab-org/ruby/gems/prometheus-client-mmap/-/issues/68
+    subprocess.check_output(
+        ["sed", "-i", "s:'prometheus-client-mmap', '~> 1.1', '>= 1.1.1':'prometheus-client-mmap', '1.1.2':g", "Gemfile"],
+        cwd=rubyenv_dir,
+    )
+
     # Un-vendor sidekiq
     #
     # The sidekiq dependency was vendored to maintain compatibility with Redis 6.0 (as

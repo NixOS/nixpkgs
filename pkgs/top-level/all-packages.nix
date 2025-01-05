@@ -8014,10 +8014,6 @@ with pkgs;
 
   edb = libsForQt5.callPackage ../development/tools/misc/edb { };
 
-  elf2uf2-rs = darwin.apple_sdk_11_0.callPackage ../development/embedded/elf2uf2-rs {
-    inherit (darwin.apple_sdk_11_0.frameworks) CoreFoundation DiskArbitration Foundation;
-  };
-
   license_finder = callPackage ../development/tools/license_finder { };
 
   # NOTE: Override and set useIcon = false to use Awk instead of Icon.
@@ -12751,8 +12747,6 @@ with pkgs;
     inherit (plasma5Packages) breeze-icons;
   };
 
-  iosevka = callPackage ../data/fonts/iosevka { };
-  iosevka-bin = callPackage ../data/fonts/iosevka/bin.nix { };
   iosevka-comfy = recurseIntoAttrs (callPackages ../data/fonts/iosevka/comfy.nix {});
 
   kde-rounded-corners = kdePackages.callPackage ../data/themes/kwin-decorations/kde-rounded-corners { };
@@ -16201,8 +16195,8 @@ with pkgs;
     fteqcc;
 
   heroic-unwrapped = callPackage ../games/heroic {
-    # Match the version used by the upstream package.
-    electron = electron_31;
+    # Upstream uses EOL Electron 31.  Use next oldest version.
+    electron = electron_32;
   };
 
   heroic = callPackage ../games/heroic/fhsenv.nix { };

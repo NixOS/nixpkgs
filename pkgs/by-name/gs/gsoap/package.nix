@@ -53,7 +53,7 @@ stdenv.mkDerivation rec {
 
   meta = with lib; {
     description = "C/C++ toolkit for SOAP web services and XML-based applications";
-    homepage = "http://www.cs.fsu.edu/~engelen/soap.html";
+    homepage = "https://www.genivia.com/products.html";
     # gsoap is dual/triple licensed (see homepage for details):
     # 1. gSOAP Public License 1.3 (based on Mozilla Public License 1.1).
     #    Components NOT covered by the gSOAP Public License are:
