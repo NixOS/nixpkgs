@@ -10989,6 +10989,8 @@ self: super: with self; {
 
   powerapi = callPackage ../development/python-modules/powerapi { };
 
+  powerfox = callPackage ../development/python-modules/powerfox { };
+
   powerline = callPackage ../development/python-modules/powerline { };
 
   powerline-mem-segment = callPackage ../development/python-modules/powerline-mem-segment { };
