@@ -18,7 +18,7 @@
 
 buildPythonPackage rec {
   pname = "demetriek";
-  version = "1.1.0";
+  version = "1.1.1";
   pyproject = true;
 
   disabled = pythonOlder "3.11";
@@ -27,7 +27,7 @@ buildPythonPackage rec {
     owner = "frenck";
     repo = "python-demetriek";
     tag = "v${version}";
-    hash = "sha256-MDGAhsLbJqvywQntlPfM/cPyltqsqnt2C31ACpMPn0Y=";
+    hash = "sha256-OTYQFw3Jy+sRGoPYVp5VKgCAzv9Gy2Fn2GjTGdsKjak=";
   };
 
   postPatch = ''
