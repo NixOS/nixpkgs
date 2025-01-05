@@ -13,7 +13,7 @@
 
 buildPythonPackage rec {
   pname = "comicon";
-  version = "1.2.1";
+  version = "1.3.0";
   pyproject = true;
   disabled = pythonOlder "3.10";
 
@@ -21,7 +21,7 @@ buildPythonPackage rec {
     owner = "potatoeggy";
     repo = "comicon";
     tag = "v${version}";
-    hash = "sha256-FvAgcpYvUTTE24jJB2ZxSNcNjAIyUBa3BaysjWXurtg=";
+    hash = "sha256-0AGCTnStyBVL7DVkrUFyD60xnuuO1dcl+Twdyy+uq1Y=";
   };
 
   nativeBuildInputs = [
