@@ -33,22 +33,13 @@ self: super: {
     Cabal-syntax = self.Cabal-syntax_3_14_1_0;
   });
 
-  # hackage-security == 0.6.2.6 has a wider support range in theory, but it only
-  # makes sense to use the non Stackage version if we want to use Cabal* >= 3.14
-  hackage-security_0_6_2_6 = super.hackage-security_0_6_2_6.override {
-    Cabal = self.Cabal_3_14_1_1;
-    Cabal-syntax = self.Cabal-syntax_3_14_1_0;
-  };
-
   # cabal-install needs most recent versions of Cabal and Cabal-syntax,
   # so we need to put some extra work for non-latest GHCs
   inherit (
     let
       # !!! Use cself/csuper inside for the actual overrides
       cabalInstallOverlay = cself: csuper:
-        {
-          hackage-security = self.hackage-security_0_6_2_6;
-        } // lib.optionalAttrs (lib.versionOlder self.ghc.version "9.12") {
+        lib.optionalAttrs (lib.versionOlder self.ghc.version "9.12") {
           Cabal = cself.Cabal_3_14_1_1;
           Cabal-syntax = cself.Cabal-syntax_3_14_1_0;
         };
@@ -168,7 +159,6 @@ self: super: {
 
   # jacinda needs latest version of alex and happy
   jacinda = super.jacinda.override {
-    alex = self.alex_3_5_1_0;
     happy = self.happy_2_1_3;
   };
 
@@ -524,7 +514,6 @@ self: super: {
   }) (lib.pipe
         (super.cachix.override {
           nix = self.hercules-ci-cnix-store.nixPackage;
-          hnix-store-core = self.hnix-store-core_0_8_0_0;
         })
         [
          (addBuildTool self.hercules-ci-cnix-store.nixPackage)
@@ -644,9 +633,6 @@ self: super: {
   # Too strict bounds on algebraic-graphs
   # https://github.com/haskell-nix/hnix-store/issues/180
   hnix-store-core_0_6_1_0 = doJailbreak super.hnix-store-core_0_6_1_0;
-
-  # 2024-09-27: dependent-sum-template pinned to 0.1.1.1, however 0.2.0.1+ required
-  hnix-store-core_0_8_0_0 = super.hnix-store-core_0_8_0_0.override { dependent-sum-template = self.dependent-sum-template_0_2_0_1; };
 
   # 2023-12-11: Needs older core
   hnix-store-remote = super.hnix-store-remote.override { hnix-store-core = self.hnix-store-core_0_6_1_0; };
@@ -1300,18 +1286,6 @@ self: super: {
     '';
   }) super.hpack;
 
-  stack = super.stack.overrideScope (lself: lsuper: {
-    # stack-3.1.1 requires the latest versions of these libraries
-    tar = lself.tar_0_6_3_0;
-
-    # Upstream stack-3.1.1 is compiled with hpack-0.37.0, and we make sure to
-    # keep the same hpack version in Nixpkgs.
-    hpack = lself.hpack_0_37_0;
-
-    # stack-3.1.1 requires >= 0.10
-    pantry = lself.pantry_0_10_0;
-  });
-
   # hslua has tests that break when using musl.
   # https://github.com/hslua/hslua/issues/106
   hslua-core = if pkgs.stdenv.hostPlatform.isMusl then dontCheck super.hslua-core else super.hslua-core;
@@ -1495,11 +1469,6 @@ self: super: {
       substituteInPlace hledger-flow.cabal --replace "-static" ""
     '';
   }) super.hledger-flow;
-
-  # xmonad-contrib >= 0.18.1 for latest XMonad
-  xmonad-contrib_0_18_1 = super.xmonad-contrib_0_18_1.override {
-    xmonad = self.xmonad_0_18_0;
-  };
 
   # Chart-tests needs and compiles some modules from Chart itself
   Chart-tests = overrideCabal (old: {
@@ -2451,13 +2420,6 @@ self: super: {
   # 2023-07-18: https://github.com/srid/ema/issues/156
   ema = doJailbreak super.ema;
 
-  glirc = super.glirc.override {
-    vty = self.vty_6_2;
-    vty-unix = super.vty-unix.override {
-      vty = self.vty_6_2;
-    };
-  };
-
   # Too strict bounds on text and tls
   # https://github.com/barrucadu/irc-conduit/issues/54
   # Use crypton-connection instead of connection
@@ -2847,11 +2809,6 @@ self: super: {
   # Too strict bounds on mtl, servant and servant-client
   unleash-client-haskell = doJailbreak super.unleash-client-haskell;
 
-  # Requires a newer zlib version than stackage provides
-  futhark = super.futhark.override {
-    zlib = self.zlib_0_7_1_0;
-  };
-
   # Tests rely on (missing) submodule
   unleash-client-haskell-core = dontCheck super.unleash-client-haskell-core;
 
@@ -2922,9 +2879,7 @@ self: super: {
   # https://github.com/isovector/type-errors/issues/9
   type-errors = dontCheck super.type-errors;
 
-  lzma = doJailbreak (super.lzma.overrideScope (self: super: {
-    tasty = super.tasty_1_5_2;
-  }));
+  lzma = doJailbreak super.lzma;
 
   # Fixes build on some platforms: https://github.com/obsidiansystems/commutative-semigroups/pull/18
   commutative-semigroups = appendPatch (fetchpatch {
@@ -2972,14 +2927,7 @@ self: super: {
       substituteInPlace src/Feedback/Loop/OptParse.hs \
         --replace-fail '(uncurry loopConfigLine)' '(pure . uncurry loopConfigLine)'
     '';
-  }) (doDistribute (super.feedback.overrideScope (self: super: {
-    # 2024-08-09: The stackage versions of safe-coloured-text* are old and broken
-    safe-coloured-text = unmarkBroken self.safe-coloured-text_0_3_0_2;
-    safe-coloured-text-gen = unmarkBroken self.safe-coloured-text-gen_0_0_0_3;
-    safe-coloured-text-layout = unmarkBroken self.safe-coloured-text-layout_0_2_0_1;
-    safe-coloured-text-layout-gen = unmarkBroken self.safe-coloured-text-layout-gen_0_0_0_1;
-    safe-coloured-text-terminfo = unmarkBroken self.safe-coloured-text-terminfo_0_3_0_0;
-  })));
+  }) super.feedback;
 
   quickcheck-state-machine = overrideCabal (drv: {
     # 2024-08-18: Remove a test which fails to build due to API changes.
