@@ -875,6 +875,12 @@
   "module-services-networking-dnsmasq-references": [
     "index.html#module-services-networking-dnsmasq-references"
   ],
+  "module-service-doh-server": [
+    "index.html#module-service-doh-server"
+  ],
+  "module-service-doh-server-quick-start": [
+    "index.html#module-service-doh-server-quick-start"
+  ],
   "module-services-samba": [
     "index.html#module-services-samba"
   ],
