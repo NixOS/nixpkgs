@@ -16,7 +16,7 @@
 
 buildPythonPackage rec {
   pname = "dicom2nifti";
-  version = "2.4.11";
+  version = "2.5.1";
   pyproject = true;
 
   disabled = pythonOlder "3.6";
@@ -26,7 +26,7 @@ buildPythonPackage rec {
     owner = "icometrix";
     repo = pname;
     tag = version;
-    hash = "sha256-/JauQZcCQDl1ukcSE3YPbf1SyhVxDNJUlqnFwdlwYQY=";
+    hash = "sha256-lPaBKqYO8B138fCgeKH6vpwGQhN3JCOnDj5PgaYfRPA=";
   };
 
   build-system = [ setuptools ];

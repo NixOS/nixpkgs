@@ -24,7 +24,7 @@ stdenv.mkDerivation (finalAttrs: {
   doCheck = !stdenv.hostPlatform.isDarwin; # usual dynamic linker issues
 
   meta = with lib; {
-    homepage = "https://elastix.lumc.nl";
+    homepage = "https://elastix.dev";
     description = "Image registration toolkit based on ITK";
     changelog = "https://github.com/SuperElastix/elastix/releases/tag/${finalAttrs.version}";
     maintainers = with maintainers; [ bcdarwin ];
