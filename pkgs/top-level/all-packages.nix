@@ -4654,8 +4654,6 @@ with pkgs;
 
   pakcs = callPackage ../development/compilers/pakcs { };
 
-  pandoc_3_6 = callPackage ../by-name/pa/pandoc/package.nix { selectPandocCLI = (p: p.pandoc-cli_3_6); };
-
   paperwork = callPackage ../applications/office/paperwork/paperwork-gtk.nix { };
 
   parallel = callPackage ../tools/misc/parallel { };
