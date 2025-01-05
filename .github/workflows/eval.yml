@@ -21,7 +21,7 @@ jobs:
 
   attrs:
     name: Attributes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: get-merge-commit
     # Skip this and dependent steps if the PR can't be merged
     if: needs.get-merge-commit.outputs.mergedSha
@@ -60,7 +60,7 @@ jobs:
 
   eval-aliases:
     name: Eval nixpkgs with aliases enabled
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [ attrs, get-merge-commit ]
     steps:
       - name: Check out the PR at the test merge commit
@@ -78,7 +78,7 @@ jobs:
 
   outpaths:
     name: Outpaths
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [ attrs, get-merge-commit ]
     strategy:
       fail-fast: false
@@ -118,7 +118,7 @@ jobs:
 
   process:
     name: Process
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [ outpaths, attrs, get-merge-commit ]
     outputs:
       baseRunId: ${{ steps.baseRunId.outputs.baseRunId }}
@@ -218,7 +218,7 @@ jobs:
   # Separate job to have a very tightly scoped PR write token
   tag:
     name: Tag
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     needs: [ attrs, process ]
     if: needs.process.outputs.baseRunId
     permissions:
