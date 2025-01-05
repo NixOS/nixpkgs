@@ -10,7 +10,7 @@
 buildPythonPackage rec {
   pname = "appdirs";
   version = "1.4.4";
-  pypoject = true;
+  pyproject = true;
 
   disabled = pythonOlder "3.8";
 
