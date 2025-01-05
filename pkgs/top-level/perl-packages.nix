@@ -10952,12 +10952,17 @@ with self; {
       url = "mirror://cpan/authors/id/X/XA/XAOC/Glib-1.3294.tar.gz";
       hash = "sha256-1xX1qGvMGHB13oXnrlvAewcU1u3BlqktpDmG76ROXLs=";
     };
+    nativeBuildInputs = [
+      pkgs.pkg-config
+    ];
     buildInputs = [ pkgs.glib ];
     propagatedBuildInputs = [ ExtUtilsDepends ExtUtilsPkgConfig ];
     meta = {
       description = "Perl wrappers for the GLib utility and Object libraries";
       homepage = "https://gtk2-perl.sourceforge.net";
       license = with lib.licenses; [ lgpl21Only ];
+      # Can't load module IO, dynamic loading not available in this perl.
+      broken = !stdenv.buildPlatform.canExecute stdenv.hostPlatform;
     };
   };
 
