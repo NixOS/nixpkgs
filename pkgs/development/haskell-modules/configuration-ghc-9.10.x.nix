@@ -68,8 +68,8 @@ self: super: {
   fourmolu = doDistribute self.fourmolu_0_16_2_0;
   hashable = doDistribute self.hashable_1_4_7_0;
   integer-conversion = doDistribute self.integer-conversion_0_1_1;
-  ghc-lib = doDistribute self.ghc-lib_9_10_1_20241103;
-  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_1_20241103;
+  ghc-lib = doDistribute self.ghc-lib_9_10_1_20250103;
+  ghc-lib-parser = doDistribute self.ghc-lib-parser_9_10_1_20250103;
   ghc-lib-parser-ex = doDistribute self.ghc-lib-parser-ex_9_10_0_0;
   http2 = doDistribute self.http2_5_3_9;
   http-semantics = doDistribute self.http-semantics_0_3_0;
